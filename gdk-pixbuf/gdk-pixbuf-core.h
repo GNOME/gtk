@@ -122,6 +122,11 @@ GdkPixbuf *gdk_pixbuf_new_from_file_at_size (const char *filename,
 					     int         width, 
 					     int         height,
 					     GError    **error);
+GdkPixbuf *gdk_pixbuf_new_from_file_at_scale (const char *filename,
+					      int         width, 
+					      int         height,
+					      gboolean    keep_aspect_ratio,
+					      GError    **error);
 
 GdkPixbuf *gdk_pixbuf_new_from_data (const guchar *data,
 				     GdkColorspace colorspace,

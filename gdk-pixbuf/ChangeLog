@@ -1,3 +1,12 @@
+Thu Aug 26 01:23:16 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-core.h: 
+	* gdk-pixbuf.symbols: 
+	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_file_at_scale): 
+	Add gdk_pixbuf_new_from_file_at_scale(), which is just
+	like gdk_pixbuf_new_from_file_at_size(), but optionally
+	ignores the aspect ratio.  (#136395, Dom  Lachowicz)
+
 Wed Aug 25 17:23:23 2004  Manish Singh  <yosh@gimp.org>
 
 	* io-gif.c: remove unused set_need_recomposite() function.
