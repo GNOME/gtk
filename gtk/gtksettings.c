@@ -43,7 +43,6 @@ struct _GtkSettingsPropertyValue
 };
 
 #ifdef GDK_WINDOWING_X11
-#include <X11/Xft/Xft.h>
 #include <pango/pangoxft.h>
 #include <gdk/x11/gdkx.h>
 #endif
