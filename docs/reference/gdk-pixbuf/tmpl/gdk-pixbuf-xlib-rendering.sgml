@@ -12,7 +12,7 @@ Rendering a pixbuf to an X drawable.
   </para>
 
   <para>
-    These functions are analogous to those for the Gdk version of
+    These functions are analogous to those for the GDK version of
     &gdk-pixbuf;.
   </para>
 
@@ -86,7 +86,7 @@ Rendering a pixbuf to an X drawable.
 @mask_return: 
 @alpha_threshold: <!--
 Local variables:
-mode: sgml
+Kode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->

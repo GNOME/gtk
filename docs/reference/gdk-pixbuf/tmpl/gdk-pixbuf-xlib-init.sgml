@@ -11,7 +11,7 @@ Initializing the &gdk-pixbuf; Xlib library.
     use #GdkPixbuf structures and render them to X drawables.  The
     functions in this section are used to initialize the &gdk-pixbuf;
     Xlib library.  This library must be initialized near the beginning
-    or the program or before calling any of the other &gdk-pixbuf;
+    of the program or before calling any of the other &gdk-pixbuf;
     Xlib functions; it cannot be initialized automatically since
     Xlib-only applications do not call gdk_rgb_init() like GNOME
     applications do.

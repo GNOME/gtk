@@ -6,7 +6,7 @@ Rendering RGB buffers to X drawables.
 
 <!-- ##### SECTION Long_Description ##### -->
   <para>
-    The XlibRGB set of functions is a port of the GdkRGB library to
+    The XlibRGB set of functions is a port of the #GdkRGB library to
     use plain Xlib and X drawables.  You can use these functions to
     render RGB buffers into drawables very quickly with high-quality
     dithering.
