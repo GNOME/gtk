@@ -1,3 +1,16 @@
+2002-04-30  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbtree.c (gtk_text_btree_remove_tag_info): assign
+	something to "prev" so that removing tag info succeeds.
+	Part of #77301
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_unref): reorder so that it
+	unrefs the tag table first, so that the btree is in a consistent
+	state when we're removing tags from it.	
+
+	* gtk/gtktexttagtable.c (_gtk_text_tag_table_remove_buffer): strip
+	all tags in the tag table out of the buffer. #77301
+
 2002-04-29  Alex Larsson  <alexl@redhat.com>
 
 	* gdk/gdkpango.c (gdk_draw_layout_line_with_colors):

@@ -498,19 +498,24 @@ _gtk_text_btree_unref (GtkTextBTree *tree)
   tree->refcount -= 1;
 
   if (tree->refcount == 0)
-    {
-      gtk_text_btree_node_destroy (tree, tree->root_node);
-
-      g_assert (g_hash_table_size (tree->mark_table) == 0);
-      g_hash_table_destroy (tree->mark_table);
-
-      g_object_unref (G_OBJECT (tree->insert_mark));
-      g_object_unref (G_OBJECT (tree->selection_bound_mark));
-
+    {      
       g_signal_handler_disconnect (G_OBJECT (tree->table),
                                    tree->tag_changed_handler);
 
       g_object_unref (G_OBJECT (tree->table));
+      tree->table = NULL;
+      
+      gtk_text_btree_node_destroy (tree, tree->root_node);
+      tree->root_node = NULL;
+      
+      g_assert (g_hash_table_size (tree->mark_table) == 0);
+      g_hash_table_destroy (tree->mark_table);
+      tree->mark_table = NULL;
+      
+      g_object_unref (G_OBJECT (tree->insert_mark));
+      tree->insert_mark = NULL;
+      g_object_unref (G_OBJECT (tree->selection_bound_mark));
+      tree->selection_bound_mark = NULL;
 
       g_free (tree);
     }
@@ -1678,7 +1683,7 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
           g_assert (seg != NULL);
           g_assert (indexable_seg != NULL);
           g_assert (seg != indexable_seg);
-
+          
           if ( (seg->type == &gtk_text_toggle_on_type ||
                 seg->type == &gtk_text_toggle_off_type) &&
                (seg->body.toggle.info == info) )
@@ -5773,6 +5778,12 @@ gtk_text_btree_get_tag_info (GtkTextBTree *tree,
       info->toggle_count = 0;
 
       tree->tag_infos = g_slist_prepend (tree->tag_infos, info);
+
+#if 0
+      g_print ("Created tag info %p for tag %s(%p)\n",
+               info, info->tag->name ? info->tag->name : "anon",
+               info->tag);
+#endif
     }
 
   return info;
@@ -5793,6 +5804,12 @@ gtk_text_btree_remove_tag_info (GtkTextBTree *tree,
       info = list->data;
       if (info->tag == tag)
         {
+#if 0
+          g_print ("Removing tag info %p for tag %s(%p)\n",
+                   info, info->tag->name ? info->tag->name : "anon",
+                   info->tag);
+#endif
+          
           if (prev != NULL)
             {
               prev->next = list->next;
@@ -5810,6 +5827,7 @@ gtk_text_btree_remove_tag_info (GtkTextBTree *tree,
           return;
         }
 
+      prev = list;
       list = g_slist_next (list);
     }
 }
