@@ -78,7 +78,6 @@ const int _gdk_event_mask_table[21] =
 const int _gdk_nenvent_masks = sizeof (_gdk_event_mask_table) / sizeof (int);
 
 /* Forward declarations */
-static gboolean gdk_window_gravity_works          (GdkWindow  *window);
 static void     gdk_window_set_static_win_gravity (GdkWindow  *window,
 						   gboolean    on);
 static gboolean gdk_window_have_shape_ext         (GdkDisplay *display);
@@ -4561,69 +4560,6 @@ gdk_window_merge_child_shapes (GdkWindow *window)
 #endif   
 }
 
-/* Support for windows that can be guffaw-scrolled
- * (See http://www.gtk.org/~otaylor/whitepapers/guffaw-scrolling.txt)
- */
-
-static gboolean
-gdk_window_gravity_works (GdkWindow *window)
-{
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_DRAWABLE_DISPLAY (window));
-  
-  if (display_x11->gravity_works == GDK_UNKNOWN)
-    {
-      GdkWindowAttr attr;
-      GdkWindow *parent;
-      GdkWindow *child;
-      gint y;
-      
-      /* This particular server apparently has a bug so that the test
-       * works but the actual code crashes it
-       */
-      if ((!strcmp (XServerVendor (display_x11->xdisplay),
-		    "Sun Microsystems, Inc.")) &&
-	  (VendorRelease (display_x11->xdisplay) == 3400))
-	{
-	  display_x11->gravity_works = GDK_NO;
-	  return FALSE;
-	}
-      
-      attr.window_type = GDK_WINDOW_TEMP;
-      attr.wclass = GDK_INPUT_OUTPUT;
-      attr.x = 0;
-      attr.y = 0;
-      attr.width = 100;
-      attr.height = 100;
-      attr.event_mask = 0;
-      
-      parent = gdk_window_new (gdk_screen_get_root_window (GDK_DRAWABLE_SCREEN (window)),
-			       &attr, GDK_WA_X | GDK_WA_Y);
-      
-      attr.window_type = GDK_WINDOW_CHILD;
-      child = gdk_window_new (parent, &attr, GDK_WA_X | GDK_WA_Y);
-      
-      gdk_window_set_static_win_gravity (child, TRUE);
-      
-      gdk_window_resize (parent, 100, 110);
-
-      gdk_window_move (parent, 0, -10);
-      gdk_window_move_resize (parent, 0, 0, 100, 100);
-      
-      gdk_window_resize (parent, 100, 110);
-      gdk_window_move (parent, 0, -10);
-      gdk_window_move_resize (parent, 0, 0, 100, 100);
-      
-      gdk_window_get_geometry (child, NULL, &y, NULL, NULL, NULL);
-      
-      gdk_window_destroy (parent);
-      gdk_window_destroy (child);
-      
-      display_x11->gravity_works = ((y == -20) ? GDK_YES : GDK_NO);
-    }
-  
-  return (display_x11->gravity_works == GDK_YES);
-}
-
 static void
 gdk_window_set_static_bit_gravity (GdkWindow *window, gboolean on)
 {
@@ -4683,10 +4619,7 @@ gdk_window_set_static_gravities (GdkWindow *window,
 
   if (!use_static == !private->guffaw_gravity)
     return TRUE;
-  
-  if (use_static && !gdk_window_gravity_works (window))
-    return FALSE;
-  
+
   private->guffaw_gravity = use_static;
   
   if (!GDK_WINDOW_DESTROYED (window))

@@ -190,7 +190,6 @@ gdk_display_open (const gchar *display_name)
 
   display_x11->leader_window_title_set = FALSE;
 
-  display_x11->gravity_works = GDK_UNKNOWN;
   display_x11->have_render = GDK_UNKNOWN;
 
   if (_gdk_synchronize)

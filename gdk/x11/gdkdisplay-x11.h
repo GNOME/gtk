@@ -77,7 +77,6 @@ struct _GdkDisplayX11
 
   gboolean use_xshm;
   gboolean have_shm_pixmaps;
-  GdkTristate gravity_works;
   GdkTristate have_render;
   
   /* Information about current pointer and keyboard grabs held by this
