@@ -1,3 +1,11 @@
+2002-02-23  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbuffer.c (save_range): change gravity of start/end
+	marks so that text added at either end of the range doesn't end up
+	inside the range.
+	(gtk_text_buffer_real_insert_range): fix to handle pasting a range
+	into itself. #71412
+	
 Sat Feb 23 19:05:34 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (validate_visible_area): Didn't refind node

@@ -665,18 +665,18 @@ save_range (GtkTextIter *range_start,
     gtk_text_buffer_create_mark (gtk_text_iter_get_buffer (range_start),
                                  NULL,
                                  range_start,
-                                 TRUE);
+                                 FALSE);
   r->end_mark = 
     gtk_text_buffer_create_mark (gtk_text_iter_get_buffer (range_start),
                                  NULL,
                                  range_end,
-                                 FALSE);
+                                 TRUE);
 
   r->whole_end_mark = 
     gtk_text_buffer_create_mark (gtk_text_iter_get_buffer (range_start),
                                  NULL,
                                  whole_end,
-                                 FALSE);
+                                 TRUE);
 
   r->range_start = range_start;
   r->range_end = range_end;
@@ -698,12 +698,23 @@ restore_range (Range *r)
       
   gtk_text_buffer_get_iter_at_mark (r->buffer,
                                     r->whole_end,
-                                    r->whole_end_mark);
-      
+                                    r->whole_end_mark);  
+  
   gtk_text_buffer_delete_mark (r->buffer, r->start_mark);
   gtk_text_buffer_delete_mark (r->buffer, r->end_mark);
   gtk_text_buffer_delete_mark (r->buffer, r->whole_end_mark);
 
+  /* Due to the gravities on the marks, the ordering could have
+   * gotten mangled; we switch to an empty range in that
+   * case
+   */
+  
+  if (gtk_text_iter_compare (r->range_start, r->range_end) > 0)
+    *r->range_start = *r->range_end;
+
+  if (gtk_text_iter_compare (r->range_end, r->whole_end) > 0)
+    *r->range_end = *r->whole_end;
+  
   g_object_unref (G_OBJECT (r->buffer));
   g_free (r); 
 }
@@ -821,11 +832,11 @@ insert_range_untagged (GtkTextBuffer     *buffer,
 }
 
 static void
-gtk_text_buffer_real_insert_range (GtkTextBuffer     *buffer,
-                                   GtkTextIter       *iter,
-                                   const GtkTextIter *orig_start,
-                                   const GtkTextIter *orig_end,
-                                   gboolean           interactive)
+insert_range_not_inside_self (GtkTextBuffer     *buffer,
+                              GtkTextIter       *iter,
+                              const GtkTextIter *orig_start,
+                              const GtkTextIter *orig_end,
+                              gboolean           interactive)
 {
   /* Find each range of uniformly-tagged text, insert it,
    * then apply the tags.
@@ -835,29 +846,16 @@ gtk_text_buffer_real_insert_range (GtkTextBuffer     *buffer,
   GtkTextIter range_start;
   GtkTextIter range_end;
   GtkTextBuffer *src_buffer;
-  Range *r;
   
   if (gtk_text_iter_equal (orig_start, orig_end))
     return;
-
-  if (interactive)
-    gtk_text_buffer_begin_user_action (buffer);
   
   src_buffer = gtk_text_iter_get_buffer (orig_start);
   
   gtk_text_iter_order (&start, &end);
 
   range_start = start;
-  range_end = start;
-
-
-  /* FIXME if you insert a range into itself, this can loop infinitely because
-   * the region being copied keeps growing as we insert. The fix is probably to create a
-   * copy of what's being inserted, or to save two regions, the region before
-   * the insertion point and the region after.
-   * 
-   * http://bugzilla.gnome.org/show_bug.cgi?id=71412
-   */
+  range_end = start;  
   
   while (TRUE)
     {
@@ -865,6 +863,7 @@ gtk_text_buffer_real_insert_range (GtkTextBuffer     *buffer,
       GtkTextIter start_iter;
       GSList *tags;
       GSList *tmp_list;
+      Range *r;
       
       if (gtk_text_iter_equal (&range_start, &end))
         break; /* All done */
@@ -908,7 +907,64 @@ gtk_text_buffer_real_insert_range (GtkTextBuffer     *buffer,
 
       range_start = range_end;
     }
+}
 
+static void
+gtk_text_buffer_real_insert_range (GtkTextBuffer     *buffer,
+                                   GtkTextIter       *iter,
+                                   const GtkTextIter *orig_start,
+                                   const GtkTextIter *orig_end,
+                                   gboolean           interactive)
+{
+  GtkTextBuffer *src_buffer;
+  
+  /* Find each range of uniformly-tagged text, insert it,
+   * then apply the tags.
+   */  
+  if (gtk_text_iter_equal (orig_start, orig_end))
+    return;
+
+  if (interactive)
+    gtk_text_buffer_begin_user_action (buffer);
+  
+  src_buffer = gtk_text_iter_get_buffer (orig_start);
+  
+  if (gtk_text_iter_get_buffer (iter) != src_buffer ||
+      !gtk_text_iter_in_range (iter, orig_start, orig_end))
+    {
+      insert_range_not_inside_self (buffer, iter, orig_start, orig_end, interactive);
+    }
+  else
+    {
+      /* If you insert a range into itself, it could loop infinitely
+       * because the region being copied keeps growing as we insert. So
+       * we have to separately copy the range before and after
+       * the insertion point.
+       */
+      GtkTextIter start = *orig_start;
+      GtkTextIter end = *orig_end;
+      GtkTextIter range_start;
+      GtkTextIter range_end;
+      Range *first_half;
+      Range *second_half;
+
+      gtk_text_iter_order (&start, &end);
+      
+      range_start = start;
+      range_end = *iter;
+      first_half = save_range (&range_start, &range_end, &end);
+
+      range_start = *iter;
+      range_end = end;
+      second_half = save_range (&range_start, &range_end, &end);
+
+      restore_range (first_half);
+      insert_range_not_inside_self (buffer, iter, &range_start, &range_end, interactive);
+
+      restore_range (second_half);
+      insert_range_not_inside_self (buffer, iter, &range_start, &range_end, interactive);
+    }
+  
   if (interactive)
     gtk_text_buffer_end_user_action (buffer);
 }
