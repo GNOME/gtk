@@ -1044,8 +1044,8 @@ gdk_event_translate (GdkEvent *event,
 	    }
 	  window_private->x = event->configure.x;
 	  window_private->y = event->configure.y;
-	  GDK_WINDOW_IMPL (window_private->impl)->width = xevent->xconfigure.width;
-	  GDK_WINDOW_IMPL (window_private->impl)->height = xevent->xconfigure.height;
+	  GDK_WINDOW_IMPL_X11 (window_private->impl)->width = xevent->xconfigure.width;
+	  GDK_WINDOW_IMPL_X11 (window_private->impl)->height = xevent->xconfigure.height;
 	  if (window_private->resize_count > 1)
 	    window_private->resize_count -= 1;
 	}

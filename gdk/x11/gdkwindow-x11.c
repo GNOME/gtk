@@ -80,20 +80,20 @@ static void     gdk_window_set_static_win_gravity (GdkWindow *window,
 						   gboolean   on);
 static gboolean gdk_window_have_shape_ext (void);
 
-static GdkColormap* gdk_window_impl_get_colormap (GdkDrawable *drawable);
-static void         gdk_window_impl_set_colormap (GdkDrawable *drawable,
+static GdkColormap* gdk_window_impl_x11_get_colormap (GdkDrawable *drawable);
+static void         gdk_window_impl_x11_set_colormap (GdkDrawable *drawable,
                                                   GdkColormap *cmap);
-static void         gdk_window_impl_get_size     (GdkDrawable *drawable,
+static void         gdk_window_impl_x11_get_size     (GdkDrawable *drawable,
                                                   gint *width,
                                                   gint *height);
-static void gdk_window_impl_init       (GdkWindowImpl      *window);
-static void gdk_window_impl_class_init (GdkWindowImplClass *klass);
-static void gdk_window_impl_finalize   (GObject            *object);
+static void gdk_window_impl_x11_init       (GdkWindowImplX11      *window);
+static void gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass);
+static void gdk_window_impl_x11_finalize   (GObject            *object);
 
 static gpointer parent_class = NULL;
 
 GType
-gdk_window_impl_get_type (void)
+gdk_window_impl_x11_get_type (void)
 {
   static GType object_type = 0;
 
@@ -101,58 +101,64 @@ gdk_window_impl_get_type (void)
     {
       static const GTypeInfo object_info =
       {
-        sizeof (GdkWindowImplClass),
+        sizeof (GdkWindowImplX11Class),
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_window_impl_class_init,
+        (GClassInitFunc) gdk_window_impl_x11_class_init,
         NULL,           /* class_finalize */
         NULL,           /* class_data */
-        sizeof (GdkWindowImpl),
+        sizeof (GdkWindowImplX11),
         0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_window_impl_init,
+        (GInstanceInitFunc) gdk_window_impl_x11_init,
       };
       
-      object_type = g_type_register_static (GDK_TYPE_DRAWABLE_IMPL,
-                                            "GdkWindowImpl",
+      object_type = g_type_register_static (GDK_TYPE_DRAWABLE_IMPL_X11,
+                                            "GdkWindowImplX11",
                                             &object_info);
     }
   
   return object_type;
 }
 
+GType
+_gdk_window_impl_get_type (void)
+{
+  return gdk_window_impl_x11_get_type ();
+}
+
 static void
-gdk_window_impl_init (GdkWindowImpl *impl)
+gdk_window_impl_x11_init (GdkWindowImplX11 *impl)
 {
   impl->width = 1;
   impl->height = 1;
 }
 
 static void
-gdk_window_impl_class_init (GdkWindowImplClass *klass)
+gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   
   parent_class = g_type_class_peek_parent (klass);
 
-  object_class->finalize = gdk_window_impl_finalize;
+  object_class->finalize = gdk_window_impl_x11_finalize;
 
-  drawable_class->set_colormap = gdk_window_impl_set_colormap;
-  drawable_class->get_colormap = gdk_window_impl_get_colormap;
-  drawable_class->get_size = gdk_window_impl_get_size;
+  drawable_class->set_colormap = gdk_window_impl_x11_set_colormap;
+  drawable_class->get_colormap = gdk_window_impl_x11_get_colormap;
+  drawable_class->get_size = gdk_window_impl_x11_get_size;
 }
 
 static void
-gdk_window_impl_finalize (GObject *object)
+gdk_window_impl_x11_finalize (GObject *object)
 {
   GdkWindowObject *wrapper;
-  GdkDrawableImpl *draw_impl;
-  GdkWindowImpl *window_impl;
+  GdkDrawableImplX11 *draw_impl;
+  GdkWindowImplX11 *window_impl;
   
-  g_return_if_fail (GDK_IS_WINDOW_IMPL (object));
+  g_return_if_fail (GDK_IS_WINDOW_IMPL_X11 (object));
 
-  draw_impl = GDK_DRAWABLE_IMPL (object);
-  window_impl = GDK_WINDOW_IMPL (object);
+  draw_impl = GDK_DRAWABLE_IMPL_X11 (object);
+  window_impl = GDK_WINDOW_IMPL_X11 (object);
   
   wrapper = (GdkWindowObject*) draw_impl->wrapper;
 
@@ -165,15 +171,15 @@ gdk_window_impl_finalize (GObject *object)
 }
 
 static GdkColormap*
-gdk_window_impl_get_colormap (GdkDrawable *drawable)
+gdk_window_impl_x11_get_colormap (GdkDrawable *drawable)
 {
-  GdkDrawableImpl *drawable_impl;
-  GdkWindowImpl *window_impl;
+  GdkDrawableImplX11 *drawable_impl;
+  GdkWindowImplX11 *window_impl;
   
-  g_return_val_if_fail (GDK_IS_WINDOW_IMPL (drawable), NULL);
+  g_return_val_if_fail (GDK_IS_WINDOW_IMPL_X11 (drawable), NULL);
 
-  drawable_impl = GDK_DRAWABLE_IMPL (drawable);
-  window_impl = GDK_WINDOW_IMPL (drawable);
+  drawable_impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+  window_impl = GDK_WINDOW_IMPL_X11 (drawable);
 
   if (!((GdkWindowObject *) drawable_impl->wrapper)->input_only && 
       drawable_impl->colormap == NULL)
@@ -191,17 +197,17 @@ gdk_window_impl_get_colormap (GdkDrawable *drawable)
 }
 
 static void
-gdk_window_impl_set_colormap (GdkDrawable *drawable,
+gdk_window_impl_x11_set_colormap (GdkDrawable *drawable,
                               GdkColormap *cmap)
 {
-  GdkWindowImpl *impl;
-  GdkDrawableImpl *draw_impl;
+  GdkWindowImplX11 *impl;
+  GdkDrawableImplX11 *draw_impl;
   
-  g_return_if_fail (GDK_IS_WINDOW_IMPL (drawable));
+  g_return_if_fail (GDK_IS_WINDOW_IMPL_X11 (drawable));
   g_return_if_fail (gdk_colormap_get_visual (cmap) != gdk_drawable_get_visual (drawable));
 
-  impl = GDK_WINDOW_IMPL (drawable);
-  draw_impl = GDK_DRAWABLE_IMPL (drawable);
+  impl = GDK_WINDOW_IMPL_X11 (drawable);
+  draw_impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
   GDK_DRAWABLE_GET_CLASS (draw_impl)->set_colormap (drawable, cmap);
   
@@ -216,24 +222,24 @@ gdk_window_impl_set_colormap (GdkDrawable *drawable,
 
 
 static void
-gdk_window_impl_get_size (GdkDrawable *drawable,
+gdk_window_impl_x11_get_size (GdkDrawable *drawable,
                           gint *width,
                           gint *height)
 {
-  g_return_if_fail (GDK_IS_WINDOW_IMPL (drawable));
+  g_return_if_fail (GDK_IS_WINDOW_IMPL_X11 (drawable));
 
   if (width)
-    *width = GDK_WINDOW_IMPL (drawable)->width;
+    *width = GDK_WINDOW_IMPL_X11 (drawable)->width;
   if (height)
-    *height = GDK_WINDOW_IMPL (drawable)->height;
+    *height = GDK_WINDOW_IMPL_X11 (drawable)->height;
 }
 
 void
 gdk_windowing_window_init (void)
 {
   GdkWindowObject *private;
-  GdkWindowImpl *impl;
-  GdkDrawableImpl *draw_impl;
+  GdkWindowImplX11 *impl;
+  GdkDrawableImplX11 *draw_impl;
   XWindowAttributes xattributes;
   unsigned int width;
   unsigned int height;
@@ -249,8 +255,8 @@ gdk_windowing_window_init (void)
 
   gdk_parent_root = GDK_WINDOW (g_type_create_instance (gdk_window_get_type ()));
   private = (GdkWindowObject *)gdk_parent_root;
-  impl = GDK_WINDOW_IMPL (private->impl);
-  draw_impl = GDK_DRAWABLE_IMPL (private->impl);
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
+  draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   
   draw_impl->xdisplay = gdk_display;
   draw_impl->xid = gdk_root_window;
@@ -274,8 +280,8 @@ gdk_window_new (GdkWindow     *parent,
   GdkWindow *window;
   GdkWindowObject *private;
   GdkWindowObject *parent_private;
-  GdkWindowImpl *impl;
-  GdkDrawableImpl *draw_impl;
+  GdkWindowImplX11 *impl;
+  GdkDrawableImplX11 *draw_impl;
   
   GdkVisual *visual;
   Window xparent;
@@ -307,8 +313,8 @@ gdk_window_new (GdkWindow     *parent,
   
   window = GDK_WINDOW (g_type_create_instance (gdk_window_get_type ()));
   private = (GdkWindowObject *)window;
-  impl = GDK_WINDOW_IMPL (private->impl);
-  draw_impl = GDK_DRAWABLE_IMPL (private->impl);
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
+  draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
   
   draw_impl->xdisplay = GDK_WINDOW_XDISPLAY (parent); 
@@ -562,8 +568,8 @@ gdk_window_foreign_new (guint32 anid)
   GdkWindow *window;
   GdkWindowObject *private;
   GdkWindowObject *parent_private;
-  GdkWindowImpl *impl;
-  GdkDrawableImpl *draw_impl;
+  GdkWindowImplX11 *impl;
+  GdkDrawableImplX11 *draw_impl;
   XWindowAttributes attrs;
   Window root, parent;
   Window *children = NULL;
@@ -587,8 +593,8 @@ gdk_window_foreign_new (guint32 anid)
   
   window = GDK_WINDOW (g_type_create_instance (gdk_window_get_type ()));
   private = (GdkWindowObject *)window;
-  impl = GDK_WINDOW_IMPL (private->impl);
-  draw_impl = GDK_DRAWABLE_IMPL (private->impl);
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
+  draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
   
   private->parent = gdk_xid_table_lookup (parent);
@@ -693,7 +699,7 @@ gdk_window_show (GdkWindow *window)
       XRaiseWindow (GDK_WINDOW_XDISPLAY (window),
 		    GDK_WINDOW_XID (window));
       
-      if (GDK_WINDOW_IMPL (private->impl)->position_info.mapped)
+      if (GDK_WINDOW_IMPL_X11 (private->impl)->position_info.mapped)
 	XMapWindow (GDK_WINDOW_XDISPLAY (window),
 		    GDK_WINDOW_XID (window));
     }
@@ -737,12 +743,12 @@ gdk_window_move (GdkWindow *window,
 		 gint       y)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindowImpl *impl;
+  GdkWindowImplX11 *impl;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  impl = GDK_WINDOW_IMPL (private->impl);
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
   
   gdk_window_move_resize (window, x, y,
 			  impl->width, impl->height);

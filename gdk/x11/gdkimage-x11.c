@@ -66,7 +66,7 @@ static void gdk_image_init       (GdkImage      *image);
 static void gdk_image_class_init (GdkImageClass *klass);
 static void gdk_image_finalize   (GObject       *object);
 
-#define PRIVATE_DATA(image) ((GdkImagePrivateData *) GDK_IMAGE (image)->windowing_data)
+#define PRIVATE_DATA(image) ((GdkImagePrivateX11 *) GDK_IMAGE (image)->windowing_data)
 
 GType
 gdk_image_get_type (void)
@@ -99,7 +99,7 @@ gdk_image_get_type (void)
 static void
 gdk_image_init (GdkImage *image)
 {
-  image->windowing_data = g_new0 (GdkImagePrivateData, 1);
+  image->windowing_data = g_new0 (GdkImagePrivateX11, 1);
   
 }
 
@@ -144,7 +144,7 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
 {
         Visual *xvisual;
         GdkImage *image;
-        GdkImagePrivateData *private;
+        GdkImagePrivateX11 *private;
         image = GDK_IMAGE (g_type_create_instance (gdk_image_get_type ()));
         private = PRIVATE_DATA (image);
         private->xdisplay = gdk_display;
@@ -209,7 +209,7 @@ gdk_image_new (GdkImageType  type,
 	       gint          height)
 {
   GdkImage *image;
-  GdkImagePrivateData *private;
+  GdkImagePrivateX11 *private;
 #ifdef USE_SHM
   XShmSegmentInfo *x_shm_info;
 #endif /* USE_SHM */
@@ -369,7 +369,7 @@ gdk_image_get (GdkWindow *window,
 	       gint       height)
 {
   GdkImage *image;
-  GdkImagePrivateData *private;
+  GdkImagePrivateX11 *private;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
@@ -412,7 +412,7 @@ gdk_image_get_pixel (GdkImage *image,
 		     gint y)
 {
   guint32 pixel;
-  GdkImagePrivateData *private;
+  GdkImagePrivateX11 *private;
 
   g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
 
@@ -429,7 +429,7 @@ gdk_image_put_pixel (GdkImage *image,
 		     gint y,
 		     guint32 pixel)
 {
-  GdkImagePrivateData *private;
+  GdkImagePrivateX11 *private;
 
   g_return_if_fail (GDK_IS_IMAGE (image));
 
@@ -441,7 +441,7 @@ gdk_image_put_pixel (GdkImage *image,
 static void
 gdk_x11_image_destroy (GdkImage *image)
 {
-  GdkImagePrivateData *private;
+  GdkImagePrivateX11 *private;
 #ifdef USE_SHM
   XShmSegmentInfo *x_shm_info;
 #endif /* USE_SHM */

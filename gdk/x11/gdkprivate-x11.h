@@ -34,7 +34,7 @@
 #include <gdk/gdkprivate.h>
 #include "gdkx.h"
 
-#define GDK_COLORMAP_PRIVATE_DATA(cmap) ((GdkColormapPrivateData *) GDK_COLORMAP (cmap)->windowing_data)
+#define GDK_COLORMAP_PRIVATE_DATA(cmap) ((GdkColormapPrivateX11 *) GDK_COLORMAP (cmap)->windowing_data)
 
 void          gdk_xid_table_insert     (XID             *xid,
 					gpointer         data);

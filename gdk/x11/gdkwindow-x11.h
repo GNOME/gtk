@@ -54,19 +54,19 @@ struct _GdkXPositionInfo
 /* Window implementation for X11
  */
 
-typedef struct _GdkWindowImpl GdkWindowImpl;
-typedef struct _GdkWindowImplClass GdkWindowImplClass;
+typedef struct _GdkWindowImplX11 GdkWindowImplX11;
+typedef struct _GdkWindowImplX11Class GdkWindowImplX11Class;
 
-#define GDK_TYPE_WINDOW_IMPL              (gdk_window_impl_get_type ())
-#define GDK_WINDOW_IMPL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL, GdkWindowImpl))
-#define GDK_WINDOW_IMPL_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW_IMPL, GdkWindowImplClass))
-#define GDK_IS_WINDOW_IMPL(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_IMPL))
-#define GDK_IS_WINDOW_IMPL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW_IMPL))
-#define GDK_WINDOW_IMPL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW_IMPL, GdkWindowImplClass))
+#define GDK_TYPE_WINDOW_IMPL_X11              (gdk_window_impl_x11_get_type ())
+#define GDK_WINDOW_IMPL_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL_X11, GdkWindowImplX11))
+#define GDK_WINDOW_IMPL_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW_IMPL_X11, GdkWindowImplX11Class))
+#define GDK_IS_WINDOW_IMPL_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_IMPL_X11))
+#define GDK_IS_WINDOW_IMPL_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW_IMPL_X11))
+#define GDK_WINDOW_IMPL_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW_IMPL_X11, GdkWindowImplX11Class))
 
-struct _GdkWindowImpl
+struct _GdkWindowImplX11
 {
-  GdkDrawableImpl parent_instance;
+  GdkDrawableImplX11 parent_instance;
 
   gint width;
   gint height;
@@ -74,13 +74,13 @@ struct _GdkWindowImpl
   GdkXPositionInfo position_info;
 };
  
-struct _GdkWindowImplClass 
+struct _GdkWindowImplX11Class 
 {
-  GdkDrawableImplClass parent_class;
+  GdkDrawableImplX11Class parent_class;
 
 };
 
-GType gdk_window_impl_get_type (void);
+GType gdk_window_impl_x11_get_type (void);
 
 #ifdef __cplusplus
 }

@@ -50,18 +50,18 @@ typedef struct
   gulong pixels[1];
 } _GdkPixmapInfo;
 
-static void gdk_pixmap_impl_get_size   (GdkDrawable        *drawable,
+static void gdk_pixmap_impl_x11_get_size   (GdkDrawable        *drawable,
                                         gint               *width,
                                         gint               *height);
 
-static void gdk_pixmap_impl_init       (GdkPixmapImpl      *pixmap);
-static void gdk_pixmap_impl_class_init (GdkPixmapImplClass *klass);
-static void gdk_pixmap_impl_finalize   (GObject            *object);
+static void gdk_pixmap_impl_x11_init       (GdkPixmapImplX11      *pixmap);
+static void gdk_pixmap_impl_x11_class_init (GdkPixmapImplX11Class *klass);
+static void gdk_pixmap_impl_x11_finalize   (GObject            *object);
 
 static gpointer parent_class = NULL;
 
 GType
-gdk_pixmap_impl_get_type (void)
+gdk_pixmap_impl_x11_get_type (void)
 {
   static GType object_type = 0;
 
@@ -69,50 +69,57 @@ gdk_pixmap_impl_get_type (void)
     {
       static const GTypeInfo object_info =
       {
-        sizeof (GdkPixmapImplClass),
+        sizeof (GdkPixmapImplX11Class),
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_pixmap_impl_class_init,
+        (GClassInitFunc) gdk_pixmap_impl_x11_class_init,
         NULL,           /* class_finalize */
         NULL,           /* class_data */
-        sizeof (GdkPixmapImpl),
+        sizeof (GdkPixmapImplX11),
         0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_pixmap_impl_init,
+        (GInstanceInitFunc) gdk_pixmap_impl_x11_init,
       };
       
-      object_type = g_type_register_static (GDK_TYPE_DRAWABLE_IMPL,
-                                            "GdkPixmapImpl",
+      object_type = g_type_register_static (GDK_TYPE_DRAWABLE_IMPL_X11,
+                                            "GdkPixmapImplX11",
                                             &object_info);
     }
   
   return object_type;
 }
 
+
+GType
+_gdk_pixmap_impl_get_type (void)
+{
+  return gdk_pixmap_impl_x11_get_type ();
+}
+
 static void
-gdk_pixmap_impl_init (GdkPixmapImpl *impl)
+gdk_pixmap_impl_x11_init (GdkPixmapImplX11 *impl)
 {
   impl->width = 1;
   impl->height = 1;
 }
 
 static void
-gdk_pixmap_impl_class_init (GdkPixmapImplClass *klass)
+gdk_pixmap_impl_x11_class_init (GdkPixmapImplX11Class *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   
   parent_class = g_type_class_peek_parent (klass);
 
-  object_class->finalize = gdk_pixmap_impl_finalize;
+  object_class->finalize = gdk_pixmap_impl_x11_finalize;
 
-  drawable_class->get_size = gdk_pixmap_impl_get_size;
+  drawable_class->get_size = gdk_pixmap_impl_x11_get_size;
 }
 
 static void
-gdk_pixmap_impl_finalize (GObject *object)
+gdk_pixmap_impl_x11_finalize (GObject *object)
 {
-  GdkPixmapImpl *impl = GDK_PIXMAP_IMPL (object);
-  GdkPixmap *wrapper = GDK_PIXMAP (GDK_DRAWABLE_IMPL (impl)->wrapper);
+  GdkPixmapImplX11 *impl = GDK_PIXMAP_IMPL_X11 (object);
+  GdkPixmap *wrapper = GDK_PIXMAP (GDK_DRAWABLE_IMPL_X11 (impl)->wrapper);
   
   XFreePixmap (GDK_PIXMAP_XDISPLAY (wrapper), GDK_PIXMAP_XID (wrapper));
   gdk_xid_table_remove (GDK_PIXMAP_XID (wrapper));
@@ -121,14 +128,14 @@ gdk_pixmap_impl_finalize (GObject *object)
 }
 
 static void
-gdk_pixmap_impl_get_size   (GdkDrawable *drawable,
+gdk_pixmap_impl_x11_get_size   (GdkDrawable *drawable,
                             gint *width,
                             gint *height)
 {
   if (width)
-    *width = GDK_PIXMAP_IMPL (drawable)->width;
+    *width = GDK_PIXMAP_IMPL_X11 (drawable)->width;
   if (height)
-    *height = GDK_PIXMAP_IMPL (drawable)->height;
+    *height = GDK_PIXMAP_IMPL_X11 (drawable)->height;
 }
 
 GdkPixmap*
@@ -138,8 +145,8 @@ gdk_pixmap_new (GdkWindow *window,
 		gint       depth)
 {
   GdkPixmap *pixmap;
-  GdkDrawableImpl *draw_impl;
-  GdkPixmapImpl *pix_impl;
+  GdkDrawableImplX11 *draw_impl;
+  GdkPixmapImplX11 *pix_impl;
   
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail ((window != NULL) || (depth != -1), NULL);
@@ -155,8 +162,8 @@ gdk_pixmap_new (GdkWindow *window,
     depth = gdk_drawable_get_depth (GDK_DRAWABLE (window));
 
   pixmap = GDK_PIXMAP (g_type_create_instance (gdk_pixmap_get_type ()));
-  draw_impl = GDK_DRAWABLE_IMPL (((GdkPixmapObject *) pixmap)->impl);
-  pix_impl = GDK_PIXMAP_IMPL (((GdkPixmapObject *) pixmap)->impl);
+  draw_impl = GDK_DRAWABLE_IMPL_X11 (((GdkPixmapObject *) pixmap)->impl);
+  pix_impl = GDK_PIXMAP_IMPL_X11 (((GdkPixmapObject *) pixmap)->impl);
   draw_impl->wrapper = GDK_DRAWABLE (pixmap);
   
   draw_impl->xdisplay = GDK_WINDOW_XDISPLAY (window);
@@ -180,8 +187,8 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
 			     gint         height)
 {
   GdkPixmap *pixmap;
-  GdkDrawableImpl *draw_impl;
-  GdkPixmapImpl *pix_impl;
+  GdkDrawableImplX11 *draw_impl;
+  GdkPixmapImplX11 *pix_impl;
   
   g_return_val_if_fail (data != NULL, NULL);
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
@@ -194,8 +201,8 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
     return NULL;
 
   pixmap = GDK_PIXMAP (g_type_create_instance (gdk_pixmap_get_type ()));
-  draw_impl = GDK_DRAWABLE_IMPL (((GdkPixmapObject *) pixmap)->impl);
-  pix_impl = GDK_PIXMAP_IMPL (((GdkPixmapObject *) pixmap)->impl);
+  draw_impl = GDK_DRAWABLE_IMPL_X11 (((GdkPixmapObject *) pixmap)->impl);
+  pix_impl = GDK_PIXMAP_IMPL_X11 (((GdkPixmapObject *) pixmap)->impl);
   draw_impl->wrapper = GDK_DRAWABLE (pixmap);
 
   pix_impl->width = width;
@@ -222,8 +229,8 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
 			     GdkColor    *bg)
 {
   GdkPixmap *pixmap;
-  GdkDrawableImpl *draw_impl;
-  GdkPixmapImpl *pix_impl;
+  GdkDrawableImplX11 *draw_impl;
+  GdkPixmapImplX11 *pix_impl;
 
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail (data != NULL, NULL);
@@ -242,8 +249,8 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
     depth = gdk_drawable_get_visual (window)->depth;
 
   pixmap = GDK_PIXMAP (g_type_create_instance (gdk_pixmap_get_type ()));
-  draw_impl = GDK_DRAWABLE_IMPL (((GdkPixmapObject *) pixmap)->impl);
-  pix_impl = GDK_PIXMAP_IMPL (((GdkPixmapObject *) pixmap)->impl);
+  draw_impl = GDK_DRAWABLE_IMPL_X11 (((GdkPixmapObject *) pixmap)->impl);
+  pix_impl = GDK_PIXMAP_IMPL_X11 (((GdkPixmapObject *) pixmap)->impl);
   draw_impl->wrapper = GDK_DRAWABLE (pixmap);
   
   pix_impl->width = width;
@@ -833,8 +840,8 @@ GdkPixmap*
 gdk_pixmap_foreign_new (guint32 anid)
 {
   GdkPixmap *pixmap;
-  GdkDrawableImpl *draw_impl;
-  GdkPixmapImpl *pix_impl;
+  GdkDrawableImplX11 *draw_impl;
+  GdkPixmapImplX11 *pix_impl;
   Pixmap xpixmap;
   Window root_return;
   unsigned int x_ret, y_ret, w_ret, h_ret, bw_ret, depth_ret;
@@ -854,8 +861,8 @@ gdk_pixmap_foreign_new (guint32 anid)
       return NULL;
 
   pixmap = GDK_PIXMAP (g_type_create_instance (gdk_pixmap_get_type ()));
-  draw_impl = GDK_DRAWABLE_IMPL (((GdkPixmapObject *) pixmap)->impl);
-  pix_impl = GDK_PIXMAP_IMPL (((GdkPixmapObject *) pixmap)->impl);
+  draw_impl = GDK_DRAWABLE_IMPL_X11 (((GdkPixmapObject *) pixmap)->impl);
+  pix_impl = GDK_PIXMAP_IMPL_X11 (((GdkPixmapObject *) pixmap)->impl);
   draw_impl->wrapper = GDK_DRAWABLE (pixmap);
   
 

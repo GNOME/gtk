@@ -151,7 +151,7 @@ gdk_pixmap_init (GdkPixmapObject *pixmap)
 {
   /* 0-initialization is good for all other fields. */
   pixmap->impl =
-    GDK_DRAWABLE (g_type_create_instance (gdk_pixmap_impl_get_type ()));
+    GDK_DRAWABLE (g_type_create_instance (_gdk_pixmap_impl_get_type ()));
 }
 
 static void

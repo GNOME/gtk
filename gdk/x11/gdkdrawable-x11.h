@@ -36,17 +36,17 @@ extern "C" {
 /* Drawable implementation for X11
  */
 
-typedef struct _GdkDrawableImpl GdkDrawableImpl;
-typedef struct _GdkDrawableImplClass GdkDrawableImplClass;
+typedef struct _GdkDrawableImplX11 GdkDrawableImplX11;
+typedef struct _GdkDrawableImplX11Class GdkDrawableImplX11Class;
 
-#define GDK_TYPE_DRAWABLE_IMPL              (gdk_drawable_impl_get_type ())
-#define GDK_DRAWABLE_IMPL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAWABLE_IMPL, GdkDrawableImpl))
-#define GDK_DRAWABLE_IMPL_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DRAWABLE_IMPL, GdkDrawableImplClass))
-#define GDK_IS_DRAWABLE_IMPL(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAWABLE_IMPL))
-#define GDK_IS_DRAWABLE_IMPL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DRAWABLE_IMPL))
-#define GDK_DRAWABLE_IMPL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DRAWABLE_IMPL, GdkDrawableImplClass))
+#define GDK_TYPE_DRAWABLE_IMPL_X11              (gdk_drawable_impl_x11_get_type ())
+#define GDK_DRAWABLE_IMPL_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAWABLE_IMPL_X11, GdkDrawableImplX11))
+#define GDK_DRAWABLE_IMPL_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DRAWABLE_IMPL_X11, GdkDrawableImplX11Class))
+#define GDK_IS_DRAWABLE_IMPL_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAWABLE_IMPL_X11))
+#define GDK_IS_DRAWABLE_IMPL_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DRAWABLE_IMPL_X11))
+#define GDK_DRAWABLE_IMPL_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DRAWABLE_IMPL_X11, GdkDrawableImplX11Class))
 
-struct _GdkDrawableImpl
+struct _GdkDrawableImplX11
 {
   GdkDrawable parent_instance;
 
@@ -58,13 +58,13 @@ struct _GdkDrawableImpl
   Display *xdisplay;
 };
  
-struct _GdkDrawableImplClass 
+struct _GdkDrawableImplX11Class 
 {
   GdkDrawableClass parent_class;
 
 };
 
-GType gdk_drawable_impl_get_type (void);
+GType gdk_drawable_impl_x11_get_type (void);
 
 #ifdef __cplusplus
 }

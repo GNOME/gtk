@@ -175,7 +175,7 @@ gdk_window_init (GdkWindowObject *window)
   window->window_type = GDK_WINDOW_CHILD;
 
   window->impl =
-    GDK_DRAWABLE (g_type_create_instance (gdk_window_impl_get_type ()));
+    GDK_DRAWABLE (g_type_create_instance (_gdk_window_impl_get_type ()));
 }
 
 static void

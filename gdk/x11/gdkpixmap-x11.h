@@ -37,31 +37,31 @@ extern "C" {
 /* Pixmap implementation for X11
  */
 
-typedef struct _GdkPixmapImpl GdkPixmapImpl;
-typedef struct _GdkPixmapImplClass GdkPixmapImplClass;
+typedef struct _GdkPixmapImplX11 GdkPixmapImplX11;
+typedef struct _GdkPixmapImplX11Class GdkPixmapImplX11Class;
 
-#define GDK_TYPE_PIXMAP_IMPL              (gdk_pixmap_impl_get_type ())
-#define GDK_PIXMAP_IMPL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_PIXMAP_IMPL, GdkPixmapImpl))
-#define GDK_PIXMAP_IMPL_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXMAP_IMPL, GdkPixmapImplClass))
-#define GDK_IS_PIXMAP_IMPL(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_PIXMAP_IMPL))
-#define GDK_IS_PIXMAP_IMPL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PIXMAP_IMPL))
-#define GDK_PIXMAP_IMPL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_PIXMAP_IMPL, GdkPixmapImplClass))
+#define GDK_TYPE_PIXMAP_IMPL_X11              (gdk_pixmap_impl_x11_get_type ())
+#define GDK_PIXMAP_IMPL_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_PIXMAP_IMPL_X11, GdkPixmapImplX11))
+#define GDK_PIXMAP_IMPL_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXMAP_IMPL_X11, GdkPixmapImplX11Class))
+#define GDK_IS_PIXMAP_IMPL_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_PIXMAP_IMPL_X11))
+#define GDK_IS_PIXMAP_IMPL_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PIXMAP_IMPL_X11))
+#define GDK_PIXMAP_IMPL_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_PIXMAP_IMPL_X11, GdkPixmapImplX11Class))
 
-struct _GdkPixmapImpl
+struct _GdkPixmapImplX11
 {
-  GdkDrawableImpl parent_instance;
+  GdkDrawableImplX11 parent_instance;
 
   gint width;
   gint height;
 };
  
-struct _GdkPixmapImplClass 
+struct _GdkPixmapImplX11Class 
 {
-  GdkDrawableImplClass parent_class;
+  GdkDrawableImplX11Class parent_class;
 
 };
 
-GType gdk_pixmap_impl_get_type (void);
+GType gdk_pixmap_impl_x11_get_type (void);
  
 #ifdef __cplusplus
 }

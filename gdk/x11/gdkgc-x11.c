@@ -24,14 +24,14 @@ static void gdk_x11_gc_set_dashes (GdkGC           *gc,
 				   gint8            dash_list[],
 				   gint             n);
 
-static void gdk_windowing_gc_init       (GdkWindowingGC      *windowing_gc);
-static void gdk_windowing_gc_class_init (GdkWindowingGCClass *klass);
-static void gdk_windowing_gc_finalize   (GObject           *object);
+static void gdk_gc_x11_init       (GdkGCX11      *windowing_gc);
+static void gdk_gc_x11_class_init (GdkGCX11Class *klass);
+static void gdk_gc_x11_finalize   (GObject           *object);
 
 static gpointer parent_class = NULL;
 
 GType
-gdk_windowing_gc_get_type (void)
+gdk_gc_x11_get_type (void)
 {
   static GType object_type = 0;
 
@@ -39,19 +39,19 @@ gdk_windowing_gc_get_type (void)
     {
       static const GTypeInfo object_info =
       {
-        sizeof (GdkWindowingGCClass),
+        sizeof (GdkGCX11Class),
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_windowing_gc_class_init,
+        (GClassInitFunc) gdk_gc_x11_class_init,
         NULL,           /* class_finalize */
         NULL,           /* class_data */
-        sizeof (GdkWindowingGC),
+        sizeof (GdkGCX11),
         0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_windowing_gc_init,
+        (GInstanceInitFunc) gdk_gc_x11_init,
       };
       
       object_type = g_type_register_static (GDK_TYPE_GC,
-                                            "GdkWindowingGC",
+                                            "GdkGCX11",
                                             &object_info);
     }
   
@@ -59,20 +59,20 @@ gdk_windowing_gc_get_type (void)
 }
 
 static void
-gdk_windowing_gc_init (GdkWindowingGC *windowing_gc)
+gdk_gc_x11_init (GdkGCX11 *windowing_gc)
 {
 
 }
 
 static void
-gdk_windowing_gc_class_init (GdkWindowingGCClass *klass)
+gdk_gc_x11_class_init (GdkGCX11Class *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkGCClass *gc_class = GDK_GC_CLASS (klass);
   
   parent_class = g_type_class_peek_parent (klass);
 
-  object_class->finalize = gdk_windowing_gc_finalize;
+  object_class->finalize = gdk_gc_x11_finalize;
 
   gc_class->get_values = gdk_x11_gc_get_values;
   gc_class->set_values = gdk_x11_gc_set_values;
@@ -80,9 +80,9 @@ gdk_windowing_gc_class_init (GdkWindowingGCClass *klass)
 }
 
 static void
-gdk_windowing_gc_finalize (GObject *object)
+gdk_gc_x11_finalize (GObject *object)
 {
-  GdkWindowingGC *windowing_gc = GDK_WINDOWING_GC (object);
+  GdkGCX11 *windowing_gc = GDK_GC_X11 (object);
   
   if (windowing_gc->clip_region)
     gdk_region_destroy (windowing_gc->clip_region);
@@ -99,7 +99,7 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
 		 GdkGCValuesMask   values_mask)
 {
   GdkGC *gc;
-  GdkWindowingGC *private;
+  GdkGCX11 *private;
   
   XGCValues xvalues;
   unsigned long xvalues_mask;
@@ -107,15 +107,15 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
   /* NOTICE that the drawable here has to be the impl drawable,
    * not the publically-visible drawables.
    */
-  g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL (drawable), NULL);
+  g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_X11 (drawable), NULL);
   
-  gc = GDK_GC (g_type_create_instance (gdk_windowing_gc_get_type ()));
-  private = GDK_WINDOWING_GC (gc);
+  gc = GDK_GC (g_type_create_instance (gdk_gc_x11_get_type ()));
+  private = GDK_GC_X11 (gc);
 
   private->dirty_mask = 0;
   private->clip_region = NULL;
     
-  private->xdisplay = GDK_DRAWABLE_IMPL (drawable)->xdisplay;
+  private->xdisplay = GDK_DRAWABLE_IMPL_X11 (drawable)->xdisplay;
 
   if (values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN))
     {
@@ -139,7 +139,7 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
   gdk_x11_gc_values_to_xvalues (values, values_mask, &xvalues, &xvalues_mask, TRUE);
   
   private->xgc = XCreateGC (GDK_GC_XDISPLAY (gc),
-                            GDK_DRAWABLE_IMPL (drawable)->xid,
+                            GDK_DRAWABLE_IMPL_X11 (drawable)->xid,
                             xvalues_mask, &xvalues);
 
   return gc;
@@ -148,7 +148,7 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
 GC
 _gdk_x11_gc_flush (GdkGC *gc)
 {
-  GdkWindowingGC *private = GDK_WINDOWING_GC (gc);
+  GdkGCX11 *private = GDK_GC_X11 (gc);
 
   if (private->dirty_mask & GDK_GC_DIRTY_CLIP)
     {
@@ -335,13 +335,13 @@ gdk_x11_gc_set_values (GdkGC           *gc,
 		       GdkGCValues     *values,
 		       GdkGCValuesMask  values_mask)
 {
-  GdkWindowingGC *windowing_gc;
+  GdkGCX11 *windowing_gc;
   XGCValues xvalues;
   unsigned long xvalues_mask = 0;
 
   g_return_if_fail (GDK_IS_GC (gc));
 
-  windowing_gc = GDK_WINDOWING_GC (gc);
+  windowing_gc = GDK_GC_X11 (gc);
 
   if (values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN))
     {
@@ -617,11 +617,11 @@ void
 gdk_gc_set_clip_rectangle (GdkGC	*gc,
 			   GdkRectangle *rectangle)
 {
-  GdkWindowingGC *windowing_gc;
+  GdkGCX11 *windowing_gc;
 
   g_return_if_fail (GDK_IS_GC (gc));
 
-  windowing_gc = GDK_WINDOWING_GC (gc);
+  windowing_gc = GDK_GC_X11 (gc);
 
   if (windowing_gc->clip_region)
     gdk_region_destroy (windowing_gc->clip_region);
@@ -644,11 +644,11 @@ void
 gdk_gc_set_clip_region (GdkGC	  *gc,
 			GdkRegion *region)
 {
-  GdkWindowingGC *windowing_gc;
+  GdkGCX11 *windowing_gc;
 
   g_return_if_fail (GDK_IS_GC (gc));
 
-  windowing_gc = GDK_WINDOWING_GC (gc);
+  windowing_gc = GDK_GC_X11 (gc);
 
   if (windowing_gc->clip_region)
     gdk_region_destroy (windowing_gc->clip_region);
@@ -671,8 +671,8 @@ gdk_gc_set_clip_region (GdkGC	  *gc,
 void
 gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
 {
-  g_return_if_fail (GDK_IS_WINDOWING_GC (dst_gc));
-  g_return_if_fail (GDK_IS_WINDOWING_GC (src_gc));
+  g_return_if_fail (GDK_IS_GC_X11 (dst_gc));
+  g_return_if_fail (GDK_IS_GC_X11 (src_gc));
   
   XCopyGC (GDK_GC_XDISPLAY (src_gc), GDK_GC_XGC (src_gc), ~((~1) << GCLastBit),
 	   GDK_GC_XGC (dst_gc));
