@@ -216,19 +216,19 @@ $(srcdir)/gtk.defs: @MAINT@ makeenums.awk makeenums.h gtk-boxed.defs
 	cat $(srcdir)/gtk-boxed.defs >> $@
 
 # generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
-$(srcdir)/gtktypebuiltins.h: @MAINT@ gtk.defs maketypes.awk
+$(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gtk.defs maketypes.awk
 	awk -f $(srcdir)/maketypes.awk $(srcdir)/gtk.defs macros > $@
 
 # generate type identifier variables (GTK_TYPE_WIDGET_FLAGS)
-$(srcdir)/gtktypebuiltins_vars.c: @MAINT@ gtk.defs maketypes.awk
+$(srcdir)/gtktypebuiltins_vars.c: @MAINT@ $(srcdir)/gtk.defs maketypes.awk
 	awk -f $(srcdir)/maketypes.awk $(srcdir)/gtk.defs variables > $@
 
 # generate type entries for type-id registration
-$(srcdir)/gtktypebuiltins_ids.c: @MAINT@ gtk.defs maketypes.awk
+$(srcdir)/gtktypebuiltins_ids.c: @MAINT@ $(srcdir)/gtk.defs maketypes.awk
 	awk -f $(srcdir)/maketypes.awk $(srcdir)/gtk.defs entries > $@
 
 # generate enum value arrays from gcc -E
-$(srcdir)/gtktypebuiltins_evals.c: @MAINT@ makeenums.awk makeenums.h gtk.defs
+$(srcdir)/gtktypebuiltins_evals.c: @MAINT@ makeenums.awk makeenums.h $(srcdir)/gtk.defs
 	$(COMPILE) -E -DG_CODE_GENERATION $(srcdir)/makeenums.h $(CFLAGS) | \
 	  awk -f $(srcdir)/makeenums.awk - arrays > $@
 
