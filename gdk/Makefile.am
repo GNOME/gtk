@@ -23,6 +23,7 @@ libgdk_1_1_la_SOURCES = \
 	gdkinputxfree.h	\
 	gdkpixmap.c	\
 	gdkproperty.c	\
+	gdkrgb.c	\
 	gdkrectangle.c	\
 	gdkregion.c	\
 	gdkselection.c	\
@@ -41,6 +42,7 @@ libgdk_1_1_la_SOURCES = \
 gdkinclude_HEADERS = \
 	gdk.h		\
 	gdkcursors.h	\
+	gdkrgb.h	\
  	gdki18n.h	\
 	gdkkeysyms.h	\
 	gdkprivate.h	\
