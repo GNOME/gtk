@@ -453,12 +453,6 @@ setup_menu_settings (GtkSettings * settings)
     if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 0)
       win95 = TRUE;
 
-  if (klazz) {
-    if (g_object_class_find_property (klazz, "gtk-button-images")) {
-      g_object_set (G_OBJECT (settings), "gtk-button-images", 0, NULL);
-    }
-  }
-
   if (!win95) {
     if (SystemParametersInfo (SPI_GETMENUSHOWDELAY, 0, &menu_delay, 0)) {
       if (klazz) {
