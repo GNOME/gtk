@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Jsh MacDonald
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -225,6 +225,12 @@ gtk_option_menu_init (GtkOptionMenu *option_menu)
   option_menu->menu_item = NULL;
   option_menu->width = 0;
   option_menu->height = 0;
+  /*
+   * Avoid centering the label that is reparented from the menuitem.
+   * Since gobject doesn't support overriding default values of
+   * properties in a convenient way yet, we simply set the value here.
+   */
+  gtk_button_set_alignment (GTK_BUTTON (option_menu), 0.0, 0.5);
 }
 
 GtkWidget*
