@@ -10,32 +10,33 @@ struct _ListSort
   const gchar *word_2;
   const gchar *word_3;
   const gchar *word_4;
+  gint number_1;
 };
 
 static ListSort data[] =
 {
-  { "Apples", "Transmogrify long word to demonstrate weirdness", "Exculpatory", "Gesundheit"},
-  { "Oranges", "Wicker", "Adamantine", "Convivial" },
-  { "Bovine Spongiform Encephilopathy", "Sleazebucket", "Mountaineer", "Pander" },
-  { "Foot and Mouth", "Lampshade", "Skim Milk\nFull Milk", "Viewless" },
-  { "Blood,\nsweat,\ntears", "The Man", "Horses", "Muckety-Muck" },
-  { "Rare Steak", "Siam", "Watchdog", "Xantippe" },
-  { "SIGINT", "Rabbit Breath", "Alligator", "Bloodstained" },
-  { "Google", "Chrysanthemums", "Hobnob", "Leapfrog"},
-  { "Technology fibre optic", "Turtle", "Academe", "Lonely"  },
-  { "Freon", "Harpes", "Quidditch", "Reagan" },
-  { "Transposition", "Fruit Basket", "Monkey Wort", "Glogg" },
-  { "Fern", "Glasnost and Perestroika", "Latitude", "Bomberman!!!" },
+  { "Apples", "Transmogrify long word to demonstrate weirdness", "Exculpatory", "Gesundheit", 30 },
+  { "Oranges", "Wicker", "Adamantine", "Convivial", 10 },
+  { "Bovine Spongiform Encephilopathy", "Sleazebucket", "Mountaineer", "Pander", 40 },
+  { "Foot and Mouth", "Lampshade", "Skim Milk\nFull Milk", "Viewless", 20 },
+  { "Blood,\nsweat,\ntears", "The Man", "Horses", "Muckety-Muck", 435 },
+  { "Rare Steak", "Siam", "Watchdog", "Xantippe" , 99999 },
+  { "SIGINT", "Rabbit Breath", "Alligator", "Bloodstained", 4123 },
+  { "Google", "Chrysanthemums", "Hobnob", "Leapfrog", 1 },
+  { "Technology fibre optic", "Turtle", "Academe", "Lonely", 3 },
+  { "Freon", "Harpes", "Quidditch", "Reagan", 6},
+  { "Transposition", "Fruit Basket", "Monkey Wort", "Glogg", 54 },
+  { "Fern", "Glasnost and Perestroika", "Latitude", "Bomberman!!!", 2 },
   {NULL, }
 };
 
 static ListSort childdata[] =
 {
-  { "Heineken", "Nederland", "Wanda de vis", "Electronische post"},
-  { "Hottentottententententoonstelling", "Rotterdam", "Ionentransport", "Palm"},
-  { "Fruitvlieg", "Eigenfrequentie", "Supernoodles", "Ramen"},
-  { "Gereedschapskist", "Stelsel van lineaire vergelijkingen", "Tulpen", "Badlaken"},
-  { "Stereoinstallatie", "Rood tapijt", "Het periodieke systeem der elementen", "Laaste woord"},
+  { "Heineken", "Nederland", "Wanda de vis", "Electronische post", 2},
+  { "Hottentottententententoonstelling", "Rotterdam", "Ionentransport", "Palm", 45},
+  { "Fruitvlieg", "Eigenfrequentie", "Supernoodles", "Ramen", 2002},
+  { "Gereedschapskist", "Stelsel van lineaire vergelijkingen", "Tulpen", "Badlaken", 1311},
+  { "Stereoinstallatie", "Rood tapijt", "Het periodieke systeem der elementen", "Laaste woord", 200},
   {NULL, }
 };
   
@@ -46,6 +47,7 @@ enum
   WORD_COLUMN_2,
   WORD_COLUMN_3,
   WORD_COLUMN_4,
+  NUMBER_COLUMN_1,
   NUM_COLUMNS
 };
 
@@ -78,7 +80,7 @@ main (int argc, char *argv[])
   gtk_signal_connect (GTK_OBJECT (window), "destroy", gtk_main_quit, NULL);
   vbox = gtk_vbox_new (FALSE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
-  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Jonathan and Kristian's list of cool words.\n\nThis is just a GtkTreeStore"), FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Jonathan and Kristian's list of cool words. (And Anders' cool list of numbers) \n\nThis is just a GtkTreeStore"), FALSE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
@@ -86,7 +88,7 @@ main (int argc, char *argv[])
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
 
-  model = gtk_tree_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+  model = gtk_tree_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
 
 /*
   smodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (model));
@@ -107,6 +109,7 @@ main (int argc, char *argv[])
 			  WORD_COLUMN_2, data[i].word_2,
 			  WORD_COLUMN_3, data[i].word_3,
 			  WORD_COLUMN_4, data[i].word_4,
+			  NUMBER_COLUMN_1, data[i].number_1,
 			  -1);
 
       gtk_tree_store_append (GTK_TREE_STORE (model), &child_iter, &iter);
@@ -115,7 +118,9 @@ main (int argc, char *argv[])
 			  WORD_COLUMN_2, data[i].word_2,
 			  WORD_COLUMN_3, data[i].word_3,
 			  WORD_COLUMN_4, data[i].word_4,
+			  NUMBER_COLUMN_1, data[i].number_1,
 			  -1);
+
       for (k = 0; childdata[k].word_1 != NULL; k++)
 	{
 	  gtk_tree_store_append (GTK_TREE_STORE (model), &child_iter, &iter);
@@ -124,8 +129,11 @@ main (int argc, char *argv[])
 			      WORD_COLUMN_2, childdata[k].word_2,
 			      WORD_COLUMN_3, childdata[k].word_3,
 			      WORD_COLUMN_4, childdata[k].word_4,
+			      NUMBER_COLUMN_1, childdata[k].number_1,
 			      -1);
+
 	}
+
     }
   
   smodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (model));
@@ -160,7 +168,13 @@ main (int argc, char *argv[])
 						     "text", WORD_COLUMN_4,
 						     NULL);
   gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_4);
-
+  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
+  
+  renderer = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes ("First Number", renderer,
+						     "text", NUMBER_COLUMN_1,
+						     NULL);
+  gtk_tree_view_column_set_sort_column_id (column, NUMBER_COLUMN_1);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
   /*  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (smodel),
@@ -170,7 +184,6 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
   gtk_widget_show_all (window);
-
 
   /**
    * Second window - GtkTreeModelSort wrapping the GtkTreeStore
@@ -273,7 +286,6 @@ main (int argc, char *argv[])
       tree_view3 = gtk_tree_view_new_with_model (ssmodel);
       gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_view3), TRUE);
       
-      
       renderer = gtk_cell_renderer_text_new ();
       column = gtk_tree_view_column_new_with_attributes ("First Word", renderer,
 							 "text", WORD_COLUMN_1,
@@ -313,7 +325,7 @@ main (int argc, char *argv[])
       gtk_window_set_default_size (GTK_WINDOW (window3), 400, 400);
       gtk_widget_show_all (window3);
     }
-#if 0  
+
   for (i = 0; data[i].word_1 != NULL; i++)
     {
       gint k;
@@ -338,7 +350,7 @@ main (int argc, char *argv[])
 			      -1);
 	}
     }
-#endif  
+
   gtk_main ();
   
   return 0;
