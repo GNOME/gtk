@@ -1,3 +1,14 @@
+2004-08-22  Robert Ögren  <gtk@roboros.com>
+
+	On Win32, make graphical tablets work on multi-monitor systems.
+	(#145467, reported by buttknock1@ya...)
+
+	* gdk/win32/gdkinput-win32.c (gdk_input_translate_coordinates):
+	Use dimensions of _gdk_parent_root as screen size.
+	(gdk_input_get_root_relative_geometry): Get coordinates relative
+	to GDK root window instead of Win32 coordinates.
+	(_gdk_input_other_event): Updated accordingly.
+
 Wed Aug 25 17:24:17 2004  Manish Singh  <yosh@gimp.org>
 
 	* gdk/x11/gdkfont-x11.c: remove unused gdk_font_charset_for_locale()
