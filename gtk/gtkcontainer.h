@@ -59,6 +59,8 @@ struct _GtkContainer
   GtkWidget *focus_child;
   
   guint border_width : 16;
+
+  /*< private >*/
   guint need_resize : 1;
   guint resize_mode : 2;
   guint reallocate_redraws : 1;
