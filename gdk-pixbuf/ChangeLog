@@ -1,5 +1,9 @@
 2005-02-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk-pixbuf-io.c: Document BMP saving support.
+
+	* io-bmp.c: Support saving as BMP. (168173, Ivan Wong)
+
 	* io-ico.c: Fix a typo.  (#168173, Ivan Wong)
 
 2005-02-15  Matthias Clasen  <mclasen@redhat.com>

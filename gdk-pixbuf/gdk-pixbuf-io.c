@@ -1528,8 +1528,8 @@ gdk_pixbuf_real_save_to_callback (GdkPixbuf         *pixbuf,
  * @error: return location for error, or %NULL
  * @Varargs: list of key-value save options
  *
- * Saves pixbuf to a file in format @type. By default, "jpeg", "png" and 
- * "ico" are possible file formats to save in, but more formats may be
+ * Saves pixbuf to a file in format @type. By default, "jpeg", "png", "ico" 
+ * and "bmp" are possible file formats to save in, but more formats may be
  * installed. The list of all writable formats can be determined in the 
  * following way:
  *
@@ -1608,7 +1608,7 @@ gdk_pixbuf_save (GdkPixbuf  *pixbuf,
  * @option_values: values for named options
  * @error: return location for error, or %NULL
  *
- * Saves pixbuf to a file in @type, which is currently "jpeg", "png" or "ico".
+ * Saves pixbuf to a file in @type, which is currently "jpeg", "png", "ico" or "bmp".
  * If @error is set, %FALSE will be returned. 
  * See gdk_pixbuf_save () for more details.
  *
@@ -1738,7 +1738,7 @@ gdk_pixbuf_save_to_callback    (GdkPixbuf  *pixbuf,
  * @error: return location for error, or %NULL
  *
  * Saves pixbuf to a callback in format @type, which is currently "jpeg",
- * "png" or "ico".  If @error is set, %FALSE will be returned. See
+ * "png", "ico" or "bmp".  If @error is set, %FALSE will be returned. See
  * gdk_pixbuf_save_to_callback () for more details.
  *
  * Return value: whether an error was set
@@ -1784,7 +1784,7 @@ gdk_pixbuf_save_to_callbackv   (GdkPixbuf  *pixbuf,
  * @Varargs: list of key-value save options
  *
  * Saves pixbuf to a new buffer in format @type, which is currently "jpeg",
- * "png" or "ico".  This is a convenience function that uses
+ * "png", "ico" or "bmp".  This is a convenience function that uses
  * gdk_pixbuf_save_to_callback() to do the real work. Note that the buffer 
  * is not nul-terminated and may contain embedded  nuls.
  * If @error is set, %FALSE will be returned and @string will be set to
@@ -1872,7 +1872,7 @@ save_to_buffer_callback (const gchar *data,
  * @error: return location for error, or %NULL
  *
  * Saves pixbuf to a new buffer in format @type, which is currently "jpeg",
- * "png" or "ico".  See gdk_pixbuf_save_to_buffer() for more details.
+ * "png", "ico" or "bmp".  See gdk_pixbuf_save_to_buffer() for more details.
  *
  * Return value: whether an error was set
  *
