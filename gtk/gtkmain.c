@@ -1032,7 +1032,37 @@ gtk_get_default_language (void)
   PangoLanguage *result;
   gchar *p;
   
+#ifdef G_OS_WIN32
+  /* Somebody might try to set the locale for this process using the
+   * LANG or LC_ environment variables. The Microsoft C library
+   * doesn't know anything about them. You set the locale in the
+   * Control Panel. Setting these env vars won't have any affect on
+   * locale-dependent C library functions like ctime. But just for
+   * kicks, do obey LC_ALL, LANG and LC_CTYPE in GTK. (This also makes
+   * it easier to test GTK and Pango in various default languages, you
+   * don't have to clickety-click in the Control Panel, you can simply
+   * start the program with LC_ALL=something on the command line.)
+   */
+  p = getenv ("LC_ALL");
+  if (p != NULL)
+    lang = g_strdup (p);
+  else
+    {
+      p = getenv ("LANG");
+      if (p != NULL)
+	lang = g_strdup (p);
+      else
+	{
+	  p = getenv ("LC_CTYPE");
+	  if (p != NULL)
+	    lang = g_strdup (p);
+	  else
+	    lang = g_win32_getlocale ();
+	}
+    }
+#else
   lang = g_strdup (setlocale (LC_CTYPE, NULL));
+#endif
   p = strchr (lang, '.');
   if (p)
     *p = '\0';

@@ -1,5 +1,10 @@
 2002-09-20  Tor Lillqvist  <tml@iki.fi>
 
+	* gtk/gtkmain.c (gtk_get_default_language): On Win32, look
+	explicitly for LANG, LC_ALL and LC_CTYPE, and if not found, use
+	g_win32_getlocale(). The setlocale() in msvcrt.dll would return a
+	locale name in the form Swedish_Finland for sv_FI.
+
 	* gdk/gdkfont.h: Delete leftover declarations of the obsolete
 	Win32-only functions gdk_font_full_name_get() and
 	gdk_font_full_name_free().
