@@ -261,7 +261,6 @@ get_default_icons (GtkIconFactory *factory)
 {
   /* KEEP IN SYNC with gtkstock.c */
 
-  add_sized (factory, dialog_default, GTK_ICON_DIALOG, GTK_STOCK_DIALOG_GENERIC);
   add_sized (factory, dialog_error, GTK_ICON_DIALOG, GTK_STOCK_DIALOG_ERROR);
   add_sized (factory, dialog_info, GTK_ICON_DIALOG, GTK_STOCK_DIALOG_INFO);
   add_sized (factory, dialog_question, GTK_ICON_DIALOG, GTK_STOCK_DIALOG_QUESTION);

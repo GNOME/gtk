@@ -70,7 +70,14 @@ GtkIconSet *    gtk_icon_factory_lookup   (GtkIconFactory *factory,
 void        gtk_push_default_icon_factory (GtkIconFactory  *factory);
 GtkIconSet *gtk_default_icon_lookup       (const gchar     *stock_id);
 
-/* Get real size from semantic size (eventually user-configurable) */
+/* Get preferred real size from semantic size (eventually
+ * user-configurable).  Note that themes SHOULD use this size, but they
+ * aren't required to; for size requests and such, you should get the
+ * actual pixbuf from the icon set and see what size it is.
+ *
+ * This function is intended for people who are scaling icons,
+ * rather than for people who are displaying already-scaled icons.
+ */
 void        gtk_get_icon_size             (GtkIconSizeType  semantic_size,
                                            gint            *width,
                                            gint            *height);

@@ -79,6 +79,7 @@ struct _GtkWindow
    */
   guint use_uposition : 1;
   guint modal : 1;
+  guint destroy_with_parent : 1;
 };
 
 struct _GtkWindowClass
@@ -87,6 +88,9 @@ struct _GtkWindowClass
 
   void (* set_focus)   (GtkWindow *window,
 			GtkWidget *focus);
+
+  void (* set_transient_for) (GtkWindow *window,
+                              GtkWindow *parent);
 };
 
 
@@ -112,6 +116,8 @@ gint	   gtk_window_activate_default	       (GtkWindow           *window);
 
 void       gtk_window_set_transient_for        (GtkWindow           *window, 
 						GtkWindow           *parent);
+void       gtk_window_set_destroy_with_parent  (GtkWindow           *window,
+                                                gboolean             setting);
 void       gtk_window_set_geometry_hints       (GtkWindow           *window,
 						GtkWidget           *geometry_widget,
 						GdkGeometry         *geometry,

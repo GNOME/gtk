@@ -51,6 +51,7 @@
 
 enum {
   SET_FOCUS,
+  SET_TRANSIENT_FOR,
   LAST_SIGNAL
 };
 enum {
@@ -124,6 +125,8 @@ static gint gtk_window_client_event	  (GtkWidget	     *widget,
 static void gtk_window_check_resize       (GtkContainer      *container);
 static void gtk_window_real_set_focus     (GtkWindow         *window,
 					   GtkWidget         *focus);
+static void gtk_window_real_set_transient_for (GtkWindow      *window,
+                                               GtkWindow      *parent);
 
 static void gtk_window_move_resize        (GtkWindow         *window);
 static gboolean gtk_window_compare_hints  (GdkGeometry       *geometry_a,
@@ -233,6 +236,15 @@ gtk_window_class_init (GtkWindowClass *klass)
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_WIDGET);
 
+  window_signals[SET_TRANSIENT_FOR] =
+    gtk_signal_new ("set_transient_for",
+                    GTK_RUN_LAST,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkWindowClass, set_transient_for),
+                    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+                    GTK_TYPE_WIDGET);
+  
   gtk_object_class_add_signals (object_class, window_signals, LAST_SIGNAL);
 
   object_class->set_arg = gtk_window_set_arg;
@@ -261,6 +273,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   container_class->check_resize = gtk_window_check_resize;
 
   klass->set_focus = gtk_window_real_set_focus;
+  klass->set_transient_for = gtk_window_real_set_transient_for;
 }
 
 static void
@@ -682,6 +695,35 @@ gtk_window_shutdown (GObject *object)
 }
 
 static void
+parent_destroyed_callback (GtkWindow *parent, GtkWindow *child)
+{
+  gtk_widget_destroy (GTK_WIDGET (child));
+}
+
+static void
+connect_parent_destroyed (GtkWindow *window)
+{
+  if (window->transient_parent)
+    {
+      gtk_signal_connect (GTK_OBJECT (window->transient_parent),
+                          "destroy",
+                          GTK_SIGNAL_FUNC (parent_destroyed_callback),
+                          window);
+    }  
+}
+
+static void
+disconnect_parent_destroyed (GtkWindow *window)
+{
+  if (window->transient_parent)
+    {
+      gtk_signal_disconnect_by_func (GTK_OBJECT (window->transient_parent),
+                                     GTK_SIGNAL_FUNC (parent_destroyed_callback),
+                                     window);
+    }
+}
+
+static void
 gtk_window_transient_parent_realized (GtkWidget *parent,
 				      GtkWidget *window)
 {
@@ -713,6 +755,8 @@ gtk_window_unset_transient_for  (GtkWindow *window)
 				     GTK_SIGNAL_FUNC (gtk_widget_destroyed),
 				     &window->transient_parent);
 
+      disconnect_parent_destroyed (window);
+      
       window->transient_parent = NULL;
     }
 }
@@ -721,38 +765,40 @@ void
 gtk_window_set_transient_for  (GtkWindow *window, 
 			       GtkWindow *parent)
 {
-  g_return_if_fail (window != 0);
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (parent != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (GTK_IS_WINDOW (parent));
+  g_return_if_fail (window != parent);
+  
+  gtk_signal_emit (GTK_OBJECT (window),
+                   window_signals[SET_TRANSIENT_FOR],
+                   parent);
+}
 
-  if (window->transient_parent)
+void
+gtk_window_set_destroy_with_parent  (GtkWindow *window,
+                                     gboolean   setting)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (window->destroy_with_parent == (setting != FALSE))
+    return;
+
+  if (window->destroy_with_parent)
     {
-      if (GTK_WIDGET_REALIZED (window) && 
-	  GTK_WIDGET_REALIZED (window->transient_parent) && 
-	  (!parent || !GTK_WIDGET_REALIZED (parent)))
-	gtk_window_transient_parent_unrealized (GTK_WIDGET (window->transient_parent),
-						GTK_WIDGET (window));
+      g_assert (!setting);
 
-      gtk_window_unset_transient_for (window);
+      disconnect_parent_destroyed (window);
     }
-
-  window->transient_parent = parent;
-
-  if (parent)
+  else
     {
-      gtk_signal_connect (GTK_OBJECT (parent), "destroy",
-			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
-			  &window->transient_parent);
-      gtk_signal_connect (GTK_OBJECT (parent), "realize",
-			  GTK_SIGNAL_FUNC (gtk_window_transient_parent_realized),
-			  window);
-      gtk_signal_connect (GTK_OBJECT (parent), "unrealize",
-			  GTK_SIGNAL_FUNC (gtk_window_transient_parent_unrealized),
-			  window);
+      g_assert (setting);
 
-      if (GTK_WIDGET_REALIZED (window) &&
-	  GTK_WIDGET_REALIZED (parent))
-	gtk_window_transient_parent_realized (GTK_WIDGET (parent),
-					      GTK_WIDGET (window));
+      connect_parent_destroyed (window);
     }
+  
+  window->destroy_with_parent = setting;
 }
 
 static void
@@ -853,7 +899,7 @@ gtk_window_destroy (GtkObject *object)
   window = GTK_WINDOW (object);
 
   if (window->transient_parent)
-    gtk_window_unset_transient_for (window);
+    gtk_window_set_transient_for (window, NULL);
 
   if (window->has_user_ref_count)
     {
@@ -1536,6 +1582,51 @@ gtk_window_real_set_focus (GtkWindow *window,
   if (window->default_widget &&
       (def_flags != GTK_WIDGET_FLAGS (window->default_widget)))
     gtk_widget_queue_draw (window->default_widget);
+}
+
+static void
+gtk_window_real_set_transient_for (GtkWindow *window,
+                                   GtkWindow *parent)
+{
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (parent != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (GTK_IS_WINDOW (parent));
+  g_return_if_fail (window != parent);
+  
+  if (window->transient_parent)
+    {
+      if (GTK_WIDGET_REALIZED (window) && 
+	  GTK_WIDGET_REALIZED (window->transient_parent) && 
+	  (!parent || !GTK_WIDGET_REALIZED (parent)))
+	gtk_window_transient_parent_unrealized (GTK_WIDGET (window->transient_parent),
+						GTK_WIDGET (window));
+
+      gtk_window_unset_transient_for (window);
+    }
+
+  window->transient_parent = parent;
+
+  if (parent)
+    {
+      gtk_signal_connect (GTK_OBJECT (parent), "destroy",
+			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+			  &window->transient_parent);
+      gtk_signal_connect (GTK_OBJECT (parent), "realize",
+			  GTK_SIGNAL_FUNC (gtk_window_transient_parent_realized),
+			  window);
+      gtk_signal_connect (GTK_OBJECT (parent), "unrealize",
+			  GTK_SIGNAL_FUNC (gtk_window_transient_parent_unrealized),
+			  window);
+
+      if (window->destroy_with_parent)
+        connect_parent_destroyed (window);
+      
+      if (GTK_WIDGET_REALIZED (window) &&
+	  GTK_WIDGET_REALIZED (parent))
+	gtk_window_transient_parent_realized (GTK_WIDGET (parent),
+					      GTK_WIDGET (window));
+    }
 }
 
 /*********************************

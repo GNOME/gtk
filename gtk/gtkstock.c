@@ -136,20 +136,19 @@ gtk_stock_item_free (GtkStockItem *item)
 
 static GtkStockItem builtin_items [] =
 {
-  /* KEEP IN SYNC with gtkiconfactory.c stock icons */
-  
-  { GTK_STOCK_DIALOG_GENERIC, N_("Message"), 0, 0, GTK_DOMAIN },
+  /* KEEP IN SYNC with gtkiconfactory.c stock icons */ 
+ 
   { GTK_STOCK_DIALOG_INFO, N_("Information"), 0, 0, GTK_DOMAIN },
   { GTK_STOCK_DIALOG_WARNING, N_("Warning"), 0, 0, GTK_DOMAIN },
   { GTK_STOCK_DIALOG_ERROR, N_("Error"), 0, 0, GTK_DOMAIN },
   { GTK_STOCK_DIALOG_QUESTION, N_("Question"), 0, 0, GTK_DOMAIN },
 
-  { GTK_STOCK_BUTTON_APPLY, N_("Apply"), GDK_CONTROL_MASK, 'a', GTK_DOMAIN },
-  { GTK_STOCK_BUTTON_OK, N_("OK"), GDK_CONTROL_MASK, 'o', GTK_DOMAIN },
-  { GTK_STOCK_BUTTON_CANCEL, N_("Cancel"), GDK_CONTROL_MASK, 'c', GTK_DOMAIN },
-  { GTK_STOCK_BUTTON_CLOSE, N_("Close"), GDK_CONTROL_MASK, 'c', GTK_DOMAIN },
-  { GTK_STOCK_BUTTON_YES, N_("Yes"), GDK_CONTROL_MASK, 'y', GTK_DOMAIN },
-  { GTK_STOCK_BUTTON_NO, N_("No"), GDK_CONTROL_MASK, 'n', GTK_DOMAIN },
+  { GTK_STOCK_BUTTON_APPLY, N_("_Apply"), 0, 0, GTK_DOMAIN },
+  { GTK_STOCK_BUTTON_OK, N_("OK"), 0, 0, GTK_DOMAIN },
+  { GTK_STOCK_BUTTON_CANCEL, N_("Cancel"), 0, 0, GTK_DOMAIN },
+  { GTK_STOCK_BUTTON_CLOSE, N_("_Close"), 0, 0, GTK_DOMAIN },
+  { GTK_STOCK_BUTTON_YES, N_("_Yes"), 0, 0, GTK_DOMAIN },
+  { GTK_STOCK_BUTTON_NO, N_("_No"), 0, 0, GTK_DOMAIN },
 
   { GTK_STOCK_CLOSE, N_("Close"), GDK_CONTROL_MASK, 'w', GTK_DOMAIN },
   { GTK_STOCK_QUIT, N_("Quit"), GDK_CONTROL_MASK, 'q', GTK_DOMAIN },

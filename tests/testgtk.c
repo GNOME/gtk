@@ -166,8 +166,13 @@ create_buttons (void)
 
   if (!window)
     {
+      GtkAccelGroup *accel_group;
+      
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
+      accel_group = gtk_accel_group_new ();
+      gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+      
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
 			  &window);
@@ -185,15 +190,17 @@ create_buttons (void)
       gtk_box_pack_start (GTK_BOX (box1), table, TRUE, TRUE, 0);
 
       button[0] = gtk_button_new_with_label ("button1");
-      button[1] = gtk_button_new_with_label ("button2");
+      button[1] = gtk_button_new_accel ("_button2", accel_group);
       button[2] = gtk_button_new_with_label ("button3");
-      button[3] = gtk_button_new_with_label ("button4");
+      button[3] = gtk_button_new_stock (GTK_STOCK_BUTTON_OK, NULL);
       button[4] = gtk_button_new_with_label ("button5");
       button[5] = gtk_button_new_with_label ("button6");
       button[6] = gtk_button_new_with_label ("button7");
-      button[7] = gtk_button_new_with_label ("button8");
+      button[7] = gtk_button_new_stock (GTK_STOCK_BUTTON_CLOSE, accel_group);
       button[8] = gtk_button_new_with_label ("button9");
 
+      gtk_accel_group_unref (accel_group);
+      
       gtk_signal_connect (GTK_OBJECT (button[0]), "clicked",
 			  GTK_SIGNAL_FUNC(button_window),
 			  button[1]);

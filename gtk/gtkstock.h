@@ -59,7 +59,6 @@ void          gtk_stock_item_free (GtkStockItem       *item);
 
 
 /* Stock IDs */
-#define GTK_STOCK_DIALOG_GENERIC   "Gtk_Message_Dialog"
 #define GTK_STOCK_DIALOG_INFO      "Gtk_Info_Dialog"
 #define GTK_STOCK_DIALOG_WARNING   "Gtk_Warning_Dialog"
 #define GTK_STOCK_DIALOG_ERROR     "Gtk_Error_Dialog"
