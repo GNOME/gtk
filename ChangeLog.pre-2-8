@@ -1,3 +1,8 @@
+2002-03-22  Richard Hult  <rhult@codefactory.se>
+
+	* gdk/gdkevents.c (gdk_event_get_root_coords): Fix typo, where x
+	value was assigned to both x and y.
+
 Fri Mar 22 11:29:11 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Partial fix for problem where keypad keys acted

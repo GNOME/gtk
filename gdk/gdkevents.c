@@ -661,7 +661,7 @@ gdk_event_get_root_coords (GdkEvent *event,
   if (x_root)
     *x_root = x;
   if (y_root)
-    *y_root = x;
+    *y_root = y;
 
   return fetched;
 }
