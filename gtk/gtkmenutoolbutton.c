@@ -261,6 +261,9 @@ button_state_changed_cb (GtkWidget         *widget,
   GtkWidget *other;
   GtkStateType state = GTK_WIDGET_STATE (widget);
 
+  if (state == GTK_STATE_INSENSITIVE)
+    return;
+  
   priv = GTK_MENU_TOOL_BUTTON_GET_PRIVATE (button);
 
   other = (widget == priv->arrow_button) ? priv->button : priv->arrow_button;
@@ -381,10 +384,17 @@ arrow_button_button_press_event_cb (GtkWidget         *widget,
                                     GdkEventButton    *event,
                                     GtkMenuToolButton *button)
 {
-  popup_menu_under_arrow (button, event);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+  if (event->button == 1)
+    {
+      popup_menu_under_arrow (button, event);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 
-  return TRUE;
+      return TRUE;
+    }
+  else
+    {
+      return FALSE;
+    }
 }
 
 static void
@@ -426,10 +436,12 @@ gtk_menu_tool_button_init (GtkMenuToolButton *button)
   button->priv->arrow_button = arrow_button;
   button->priv->box = box;
 
+#if 0
   g_signal_connect (real_button, "state_changed",
                     G_CALLBACK (button_state_changed_cb), button);
   g_signal_connect (arrow_button, "state_changed",
                     G_CALLBACK (button_state_changed_cb), button);
+#endif
   g_signal_connect (arrow_button, "toggled",
                     G_CALLBACK (arrow_button_toggled_cb), button);
   g_signal_connect (arrow_button, "button_press_event",
