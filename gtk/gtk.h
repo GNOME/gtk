@@ -104,6 +104,7 @@
 #include <gtk/gtkmodelsimple.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkobject.h>
+#include <gtk/gtkoldeditable.h>
 #include <gtk/gtkoptionmenu.h>
 #include <gtk/gtkpacker.h>
 #include <gtk/gtkpaned.h>
@@ -133,7 +134,6 @@
 #include <gtk/gtktext.h>
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextview.h>
-#include <gtk/gtkthemes.h>
 #include <gtk/gtktipsquery.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktoolbar.h>

@@ -148,6 +148,8 @@ gchar*		gtk_rc_find_pixmap_in_path	(GScanner    	*scanner,
 gchar*		gtk_rc_find_module_in_path	(const gchar 	*module_file);
 gchar*		gtk_rc_get_theme_dir		(void);
 gchar*		gtk_rc_get_module_dir		(void);
+gchar*		gtk_rc_get_im_module_path	(void);
+gchar*		gtk_rc_get_im_module_file	(void);
 
 /* private functions/definitions */
 typedef enum {
@@ -182,6 +184,8 @@ typedef enum {
   GTK_RC_TOKEN_HIGHEST,
   GTK_RC_TOKEN_ENGINE,
   GTK_RC_TOKEN_MODULE_PATH,
+  GTK_RC_TOKEN_IM_MODULE_PATH,
+  GTK_RC_TOKEN_IM_MODULE_FILE,
   GTK_RC_TOKEN_STOCK,
   GTK_RC_TOKEN_LTR,
   GTK_RC_TOKEN_RTL,

@@ -17,9 +17,18 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <string.h>
+
+#ifdef GDK_WINDOWING_X11
+#include <X11/Xlocale.h>	/* so we get the right setlocale */
+#else
+#include <locale.h>
+#endif
+
 #include "gtksignal.h"
 #include "gtkimmulticontext.h"
-#include "gtkimcontextsimple.h"
+#include "gtkimmodule.h"
+#include "gtkmenuitem.h"
 
 static void     gtk_im_multicontext_class_init         (GtkIMMulticontextClass  *class);
 static void     gtk_im_multicontext_init               (GtkIMMulticontext       *im_multicontext);
@@ -32,11 +41,13 @@ static void     gtk_im_multicontext_set_client_window  (GtkIMContext            
 							GdkWindow               *window);
 static void     gtk_im_multicontext_get_preedit_string (GtkIMContext            *context,
 							gchar                  **str,
-							PangoAttrList          **attrs);
+							PangoAttrList          **attrs,
+							gint                   *cursor_pos);
 static gboolean gtk_im_multicontext_filter_keypress    (GtkIMContext            *context,
 							GdkEventKey             *event);
 static void     gtk_im_multicontext_focus_in           (GtkIMContext            *context);
 static void     gtk_im_multicontext_focus_out          (GtkIMContext            *context);
+static void     gtk_im_multicontext_reset              (GtkIMContext            *context);
 
 void            gtk_im_multicontext_preedit_start_cb   (GtkIMContext            *slave,
 							GtkIMMulticontext       *multicontext);
@@ -49,6 +60,8 @@ void            gtk_im_multicontext_commit_cb          (GtkIMContext            
 							GtkIMMulticontext       *multicontext);
 
 static GtkIMContextClass *parent_class;
+
+static const gchar *global_context_id = NULL;
 
 GtkType
 gtk_im_multicontext_get_type (void)
@@ -88,6 +101,7 @@ gtk_im_multicontext_class_init (GtkIMMulticontextClass *class)
   im_context_class->filter_keypress = gtk_im_multicontext_filter_keypress;
   im_context_class->focus_in = gtk_im_multicontext_focus_in;
   im_context_class->focus_out = gtk_im_multicontext_focus_out;
+  im_context_class->reset = gtk_im_multicontext_reset;
 
   gobject_class->finalize = gtk_im_multicontext_finalize;
 }
@@ -141,6 +155,9 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
       gtk_signal_connect (GTK_OBJECT (multicontext->slave), "commit",
 			  GTK_SIGNAL_FUNC (gtk_im_multicontext_commit_cb),
 			  multicontext);
+
+      if (multicontext->client_window)
+	gtk_im_context_set_client_window (slave, multicontext->client_window);
     }
 }
 
@@ -148,7 +165,22 @@ static GtkIMContext *
 gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
 {
   if (!multicontext->slave)
-    gtk_im_multicontext_set_slave (multicontext, gtk_im_context_simple_new ());
+    {
+      if (!global_context_id)
+	{
+	  const char *locale;
+	  
+#ifdef HAVE_LC_MESSAGES
+	  locale = setlocale (LC_MESSAGES, NULL);
+#else
+	  locale = setlocale (LC_CTYPE, NULL);
+#endif
+	  global_context_id = _gtk_im_module_get_default_context_id (locale);
+	}
+	
+      gtk_im_multicontext_set_slave (multicontext, _gtk_im_module_create (global_context_id));
+      multicontext->context_id = global_context_id;
+    }
 
   return multicontext->slave;
 }
@@ -160,6 +192,8 @@ gtk_im_multicontext_set_client_window (GtkIMContext *context,
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
   GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
 
+  multicontext->client_window = window;
+  
   if (slave)
     gtk_im_context_set_client_window (slave, window);
 }
@@ -167,13 +201,14 @@ gtk_im_multicontext_set_client_window (GtkIMContext *context,
 static void
 gtk_im_multicontext_get_preedit_string (GtkIMContext   *context,
 					gchar         **str,
-					PangoAttrList **attrs)
+					PangoAttrList **attrs,
+					gint           *cursor_pos)
 {
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
   GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
 
   if (slave)
-    gtk_im_context_get_preedit_string (slave, str, attrs);
+    gtk_im_context_get_preedit_string (slave, str, attrs, cursor_pos);
   else
     {
       if (str)
@@ -200,7 +235,17 @@ static void
 gtk_im_multicontext_focus_in (GtkIMContext   *context)
 {
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
-  GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
+  GtkIMContext *slave;
+
+  /* If the global context type is different from the context we were
+   * using before, get rid of the old slave and create a new one
+   * for the new global context type.
+   */
+  if (!multicontext->context_id ||
+      strcmp (global_context_id, multicontext->context_id) != 0)
+    gtk_im_multicontext_set_slave (multicontext, NULL);
+
+  slave = gtk_im_multicontext_get_slave (multicontext);
 
   if (slave)
     gtk_im_context_focus_in (slave);
@@ -214,6 +259,16 @@ gtk_im_multicontext_focus_out (GtkIMContext   *context)
 
   if (slave)
     gtk_im_context_focus_out (slave);
+}
+
+static void
+gtk_im_multicontext_reset (GtkIMContext   *context)
+{
+  GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
+  GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
+
+  if (slave)
+    gtk_im_context_reset (slave);
 }
 
 void
@@ -243,5 +298,51 @@ gtk_im_multicontext_commit_cb (GtkIMContext      *slave,
 			       GtkIMMulticontext *multicontext)
 {
   gtk_signal_emit_by_name (GTK_OBJECT (multicontext), "commit", str);;
+}
+
+static void
+activate_cb (GtkWidget         *menuitem,
+	     GtkIMMulticontext *context)
+{
+  const gchar *id = gtk_object_get_data (GTK_OBJECT (menuitem), "gtk-context-id");
+
+  gtk_im_context_reset (GTK_IM_CONTEXT (context));
+
+  global_context_id = id;
+  gtk_im_multicontext_set_slave (context, NULL);
+}
+
+/**
+ * gtk_im_multicontext_append_menuitems:
+ * @context: a #GtkIMMultiContext
+ * @menushell: a #GtkMenuShell
+ * 
+ * Add menuitems for various available input methods to a menu;
+ * the menuitems, when selected, will switch the input method
+ * for the context and the global default input method.
+ **/
+void
+gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
+				      GtkMenuShell      *menushell)
+{
+  const GtkIMContextInfo **contexts;
+  gint n_contexts, i;
+  
+  _gtk_im_module_list (&contexts, &n_contexts);
+
+  for (i=0; i < n_contexts; i++)
+    {
+      GtkWidget *menuitem;
+
+      menuitem = gtk_menu_item_new_with_label (contexts[i]->context_name);
+
+      gtk_object_set_data (GTK_OBJECT (menuitem), "gtk-context-id",
+			   (char *)contexts[i]->context_id);
+      gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
+			  activate_cb, context);
+
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (menushell, menuitem);
+    }
 }
 

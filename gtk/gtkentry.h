@@ -51,50 +51,79 @@ typedef struct _GtkEntryClass  GtkEntryClass;
 
 struct _GtkEntry
 {
-  GtkEditable editable;
+  GtkWidget  widget;
 
-  GdkWindow *text_area;
-  GdkPixmap *backing_pixmap;
-  GdkCursor *cursor;
   gchar     *text;
 
-  guint16 text_size;	/* allocated size, in bytes */
+  guint      editable : 1;
+  guint      visible  : 1;
+  guint      overwrite_mode : 1;
 
   guint16 text_length;	/* length in use, in chars */
   guint16 text_max_length;
 
   /*< private >*/
+  GdkWindow *text_area;
+  GtkIMContext *im_context;
+  GtkWidget   *popup_menu;
+  
+  gint         current_pos;
+  gint         selection_bound;
+  
+  PangoLayout *cached_layout;
+  guint        cache_includes_preedit : 1;
+
+  guint        need_im_reset : 1;
+
   guint   button;
-  guint32 timer;
-  guint16 n_bytes;	/* length in use, in bytes */
-  PangoLayout *layout;
+  guint   timer;
+  guint   recompute_idle;
   gint    scroll_offset;
   gint    ascent;	/* font ascent, in pango units  */
   gint    descent;	/* font descent, in pango units  */
-  GtkIMContext *im_context;
+  
+  guint16 text_size;	/* allocated size, in bytes */
+  guint16 n_bytes;	/* length in use, in bytes */
+
+  guint16 preedit_length;	/* length of preedit string, in bytes */
+  guint16 preedit_cursor;	/* offset of cursor within preedit string, in bytes */
 };
 
 struct _GtkEntryClass
 {
-  GtkEditableClass parent_class;
+  GtkWidgetClass parent_class;
+  
+  /* Notification of changes
+   */
+  void (* changed)          (GtkEntry       *entry);
+  void (* insert_text)      (GtkEntry       *entry,
+			     const gchar    *text,
+			     gint            length,
+			     gint           *position);
+  void (* delete_text)      (GtkEntry       *entry,
+		    	     gint            start_pos,
+			     gint            end_pos);
+
+  /* Action signals
+   */
+  void (* activate)         (GtkEntry       *entry);
+  void (* move)             (GtkEntry       *entry,
+			     GtkMovementStep step,
+			     gint            count,
+			     gboolean        extend_selection);
+  void (* insert)           (GtkEntry       *entry,
+			     const gchar    *str);
+  void (* delete)           (GtkEntry       *entry,
+			     GtkDeleteType   type,
+			     gint            count);
+  void (* cut_clipboard)    (GtkEntry       *entry);
+  void (* copy_clipboard)   (GtkEntry       *entry);
+  void (* paste_clipboard)  (GtkEntry       *entry);
+  void (* toggle_overwrite) (GtkEntry       *entry);
 };
 
 GtkType    gtk_entry_get_type       		(void) G_GNUC_CONST;
 GtkWidget* gtk_entry_new            		(void);
-GtkWidget* gtk_entry_new_with_max_length	(guint16       max);
-void       gtk_entry_set_text       		(GtkEntry      *entry,
-						 const gchar   *text);
-void       gtk_entry_append_text    		(GtkEntry      *entry,
-						 const gchar   *text);
-void       gtk_entry_prepend_text   		(GtkEntry      *entry,
-						 const gchar   *text);
-void       gtk_entry_set_position   		(GtkEntry      *entry,
-						 gint           position);
-/* returns a reference to the text */
-gchar*     gtk_entry_get_text       		(GtkEntry      *entry);
-void       gtk_entry_select_region  		(GtkEntry      *entry,
-						 gint           start,
-						 gint           end);
 void       gtk_entry_set_visibility 		(GtkEntry      *entry,
 						 gboolean       visible);
 void       gtk_entry_set_editable   		(GtkEntry      *entry,
@@ -102,6 +131,26 @@ void       gtk_entry_set_editable   		(GtkEntry      *entry,
 /* text is truncated if needed */
 void       gtk_entry_set_max_length 		(GtkEntry      *entry,
 						 guint16        max);
+
+/* Somewhat more convenient than the GtkEditable generic functions
+ */
+void       gtk_entry_set_text       		(GtkEntry      *entry,
+						 const gchar   *text);
+/* returns a reference to the text */
+gchar*     gtk_entry_get_text       		(GtkEntry      *entry);
+
+/* Deprecated compatibility functions
+ */
+GtkWidget* gtk_entry_new_with_max_length	(guint16       max);
+void       gtk_entry_append_text    		(GtkEntry      *entry,
+						 const gchar   *text);
+void       gtk_entry_prepend_text   		(GtkEntry      *entry,
+						 const gchar   *text);
+void       gtk_entry_set_position   		(GtkEntry      *entry,
+						 gint           position);
+void       gtk_entry_select_region  		(GtkEntry      *entry,
+						 gint           start,
+						 gint           end);
 
 #ifdef __cplusplus
 }

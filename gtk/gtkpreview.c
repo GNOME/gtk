@@ -184,7 +184,6 @@ gtk_preview_init (GtkPreview *preview)
 void
 gtk_preview_uninit (void)
 {
-
   /* unimplemented */
 }
 

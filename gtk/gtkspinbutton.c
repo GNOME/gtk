@@ -113,10 +113,10 @@ static gint gtk_spin_button_key_release    (GtkWidget          *widget,
 					    GdkEventKey        *event);
 static gint gtk_spin_button_scroll         (GtkWidget          *widget,
 					    GdkEventScroll     *event);
-static void gtk_spin_button_activate       (GtkEditable        *editable);
+static void gtk_spin_button_activate       (GtkEntry           *entry);
 static void gtk_spin_button_snap           (GtkSpinButton      *spin_button,
 					    gfloat              val);
-static void gtk_spin_button_insert_text    (GtkEditable        *editable,
+static void gtk_spin_button_insert_text    (GtkEntry           *entry,
 					    const gchar        *new_text,
 					    gint                new_text_length,
 					    gint               *position);
@@ -161,11 +161,11 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   GObjectClass     *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass   *object_class;
   GtkWidgetClass   *widget_class;
-  GtkEditableClass *editable_class;
+  GtkEntryClass    *entry_class;
 
   object_class   = (GtkObjectClass*)   class;
   widget_class   = (GtkWidgetClass*)   class;
-  editable_class = (GtkEditableClass*) class; 
+  entry_class    = (GtkEntryClass*)    class; 
 
   parent_class = gtk_type_class (GTK_TYPE_ENTRY);
 
@@ -192,8 +192,8 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->leave_notify_event = gtk_spin_button_leave_notify;
   widget_class->focus_out_event = gtk_spin_button_focus_out;
 
-  editable_class->insert_text = gtk_spin_button_insert_text;
-  editable_class->activate = gtk_spin_button_activate;
+  entry_class->insert_text = gtk_spin_button_insert_text;
+  entry_class->activate = gtk_spin_button_activate;
 
   class->input = NULL;
   class->output = NULL;
@@ -756,7 +756,7 @@ gtk_spin_button_focus_out (GtkWidget     *widget,
   g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  if (GTK_EDITABLE (widget)->editable)
+  if (GTK_ENTRY (widget)->editable)
     gtk_spin_button_update (GTK_SPIN_BUTTON (widget));
 
   return GTK_WIDGET_CLASS (parent_class)->focus_out_event (widget, event);
@@ -813,7 +813,7 @@ gtk_spin_button_button_press (GtkWidget      *widget,
 	  gtk_grab_add (widget);
 	  spin->button = event->button;
 	  
-	  if (GTK_EDITABLE (widget)->editable)
+	  if (GTK_ENTRY (widget)->editable)
 	    gtk_spin_button_update (spin);
 	  
 	  if (event->y <= widget->requisition.height / 2)
@@ -1066,7 +1066,7 @@ gtk_spin_button_key_press (GtkWidget     *widget,
 
   key_repeat = (event->time == spin->ev_time);
 
-  if (GTK_EDITABLE (widget)->editable &&
+  if (GTK_ENTRY (widget)->editable &&
       (key == GDK_Up || key == GDK_Down || 
        key == GDK_Page_Up || key == GDK_Page_Down))
     gtk_spin_button_update (spin);
@@ -1204,30 +1204,21 @@ gtk_spin_button_snap (GtkSpinButton *spin_button,
 }
 
 static void
-gtk_spin_button_activate (GtkEditable *editable)
+gtk_spin_button_activate (GtkEntry *entry)
 {
-  g_return_if_fail (editable != NULL);
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (editable));
-
-  if (editable->editable)
-    gtk_spin_button_update (GTK_SPIN_BUTTON (editable));
+  if (entry->editable)
+    gtk_spin_button_update (GTK_SPIN_BUTTON (entry));
 }
 
 static void
-gtk_spin_button_insert_text (GtkEditable *editable,
+gtk_spin_button_insert_text (GtkEntry    *entry,
 			     const gchar *new_text,
 			     gint         new_text_length,
 			     gint        *position)
 {
-  GtkEntry *entry;
-  GtkSpinButton *spin;
+  GtkEditable *editable = GTK_EDITABLE (entry);
+  GtkSpinButton *spin = GTK_SPIN_BUTTON (editable);
  
-  g_return_if_fail (editable != NULL);
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (editable));
-
-  entry = GTK_ENTRY (editable);
-  spin  = GTK_SPIN_BUTTON (editable);
-
   if (spin->numeric)
     {
       struct lconv *lc;
@@ -1296,8 +1287,8 @@ gtk_spin_button_insert_text (GtkEditable *editable,
 	}
     }
 
-  GTK_EDITABLE_CLASS (parent_class)->insert_text (editable, new_text,
-						  new_text_length, position);
+  GTK_ENTRY_CLASS (parent_class)->insert_text (entry, new_text,
+					       new_text_length, position);
 }
 
 static void
@@ -1565,7 +1556,7 @@ gtk_spin_button_set_snap_to_ticks (GtkSpinButton *spin_button,
   if (new_val != spin_button->snap_to_ticks)
     {
       spin_button->snap_to_ticks = new_val;
-      if (new_val && GTK_EDITABLE (spin_button)->editable)
+      if (new_val && GTK_ENTRY (spin_button)->editable)
 	gtk_spin_button_update (spin_button);
     }
 }

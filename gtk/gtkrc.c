@@ -26,9 +26,6 @@
 
 #include "config.h"
 
-#include "glib.h"
-#include "gdkconfig.h"
-
 #ifdef GDK_WINDOWING_X11
 #include <X11/Xlocale.h>	/* so we get the right setlocale */
 #else
@@ -55,6 +52,9 @@
 #include <windows.h>		/* For GetWindowsDirectory */
 #include <io.h>
 #endif
+
+#include <glib.h>
+#include "gdkconfig.h"
 
 #include "gtkrc.h"
 #include "gtkbindings.h"
@@ -127,6 +127,8 @@ static guint       gtk_rc_parse_pixmap_path          (GScanner        *scanner);
 static void        gtk_rc_parse_pixmap_path_string   (gchar           *pix_path);
 static guint       gtk_rc_parse_module_path          (GScanner        *scanner);
 static void        gtk_rc_parse_module_path_string   (gchar           *mod_path);
+static guint       gtk_rc_parse_im_module_path       (GScanner        *scanner);
+static guint       gtk_rc_parse_im_module_file       (GScanner        *scanner);
 static guint       gtk_rc_parse_path_pattern         (GScanner        *scanner);
 static guint       gtk_rc_parse_stock                (GScanner        *scanner,
                                                       GtkRcStyle      *rc_style,
@@ -225,11 +227,16 @@ static const struct
   { "engine", GTK_RC_TOKEN_ENGINE },
   { "module_path", GTK_RC_TOKEN_MODULE_PATH },
   { "stock", GTK_RC_TOKEN_STOCK },
+  { "im_module_path", GTK_RC_TOKEN_IM_MODULE_PATH },
+  { "im_module_file", GTK_RC_TOKEN_IM_MODULE_FILE },
   { "LTR", GTK_RC_TOKEN_LTR },
   { "RTL", GTK_RC_TOKEN_RTL }
 };
 
 static const guint n_symbols = sizeof (symbols) / sizeof (symbols[0]);
+
+static gchar *im_module_path = NULL;
+static gchar *im_module_file = NULL;
 
 static GHashTable *rc_style_ht = NULL;
 static GHashTable *realized_style_ht = NULL;
@@ -304,6 +311,56 @@ get_themes_directory (void)
 
 #endif
  
+static gchar *
+gtk_rc_make_default_dir (const gchar *type)
+{
+  gchar *var, *path;
+
+#ifndef G_OS_WIN32
+  var = getenv("GTK_EXE_PREFIX");
+  if (var)
+    path = g_strdup_printf("%s%s%s", var, "/lib/gtk-2.0/" GTK_VERSION "/", type);
+  else
+    path = g_strdup_printf("%s%s%s", GTK_EXE_PREFIX, "/lib/gtk-2.0/" GTK_VERSION "/", type);
+#else
+  path = g_strdup_printf ("%s\\%s", get_themes_directory (), type);
+#endif
+
+  return path;
+}
+
+gchar *
+gtk_rc_get_im_module_path (void)
+{
+  gchar *result = g_getenv ("GTK_IM_MODULE_PATH");
+
+  if (!result)
+    {
+      if (im_module_path)
+	result = im_module_path;
+      else
+	return gtk_rc_make_default_dir ("immodules");
+    }
+
+  return g_strdup (result);
+}
+
+gchar *
+gtk_rc_get_im_module_file (void)
+{
+  gchar *result = g_getenv ("GTK_IM_MODULE_FILE");
+
+  if (!result)
+    {
+      if (im_module_file)
+	result = im_module_file;
+      else
+	result = GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk-2.0" G_DIR_SEPARATOR_S "gtk.immodules";
+    }
+
+  return g_strdup (result);
+}
+
 gchar *
 gtk_rc_get_theme_dir(void)
 {
@@ -325,19 +382,7 @@ gtk_rc_get_theme_dir(void)
 gchar *
 gtk_rc_get_module_dir(void)
 {
-  gchar *var, *path;
-
-#ifndef G_OS_WIN32
-  var = getenv("GTK_EXE_PREFIX");
-  if (var)
-    path = g_strdup_printf("%s%s", var, "/lib/gtk-2.0/" GTK_VERSION "/engines");
-  else
-    path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk-2.0/" GTK_VERSION "/engines");
-#else
-  path = g_strdup_printf ("%s%s", get_themes_directory (), "\\engines");
-#endif
-
-  return path;
+  return gtk_rc_make_default_dir ("engines");
 }
 
 static void
@@ -1544,6 +1589,12 @@ gtk_rc_parse_statement (GScanner *scanner)
     case GTK_RC_TOKEN_MODULE_PATH:
       return gtk_rc_parse_module_path (scanner);
        
+    case GTK_RC_TOKEN_IM_MODULE_PATH:
+      return gtk_rc_parse_im_module_path (scanner);
+       
+    case GTK_RC_TOKEN_IM_MODULE_FILE:
+      return gtk_rc_parse_im_module_file (scanner);
+       
     default:
       g_scanner_get_next_token (scanner);
       return /* G_TOKEN_SYMBOL */ GTK_RC_TOKEN_STYLE;
@@ -2120,7 +2171,7 @@ gtk_rc_parse_engine (GScanner	 *scanner,
       GtkRcStyleClass *new_class;
       
       new_style = gtk_theme_engine_create_rc_style (engine);
-      gtk_theme_engine_unref (engine);
+      g_type_module_unuse (G_TYPE_MODULE (engine));
 
       new_class = GTK_RC_STYLE_GET_CLASS (new_style);
 
@@ -2457,6 +2508,48 @@ gtk_rc_parse_module_path (GScanner *scanner)
   
   gtk_rc_parse_module_path_string (scanner->value.v_string);
   
+  return G_TOKEN_NONE;
+}
+
+static guint
+gtk_rc_parse_im_module_path (GScanner *scanner)
+{
+  guint token;
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != GTK_RC_TOKEN_IM_MODULE_FILE)
+    return GTK_RC_TOKEN_IM_MODULE_FILE;
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != G_TOKEN_STRING)
+    return G_TOKEN_STRING;
+
+  if (im_module_path)
+    g_free (im_module_path);
+    
+  im_module_path = g_strdup (scanner->value.v_string);
+
+  return G_TOKEN_NONE;
+}
+
+static guint
+gtk_rc_parse_im_module_file (GScanner *scanner)
+{
+  guint token;
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != GTK_RC_TOKEN_IM_MODULE_FILE)
+    return GTK_RC_TOKEN_IM_MODULE_FILE;
+  
+  token = g_scanner_get_next_token (scanner);
+  if (token != G_TOKEN_STRING)
+    return G_TOKEN_STRING;
+
+  if (im_module_file)
+    g_free (im_module_file);
+    
+  im_module_file = g_strdup (scanner->value.v_string);
+
   return G_TOKEN_NONE;
 }
 

@@ -60,7 +60,7 @@ static void gtk_cell_renderer_text_pixbuf_render     (GtkCellRenderer           
 						      guint                           flags);
 
 
-GtkCellRendererTextClass *parent_class = NULL;
+static GtkCellRendererTextClass *parent_class = NULL;
 
 
 GtkType

@@ -60,11 +60,13 @@ struct _GtkIMContextClass
 				  GdkWindow      *window);
   void     (*get_preedit_string) (GtkIMContext   *context,
 				  gchar         **str,
-				  PangoAttrList **attrs);
+				  PangoAttrList **attrs,
+				  gint           *cursor_pos);
   gboolean (*filter_keypress)    (GtkIMContext   *context,
 			          GdkEventKey    *event);
   void     (*focus_in)           (GtkIMContext   *context);
   void     (*focus_out)          (GtkIMContext   *context);
+  void     (*reset)              (GtkIMContext   *context);
 };
 
 GtkType       gtk_im_context_get_type           (void) G_GNUC_CONST;
@@ -72,12 +74,14 @@ GtkType       gtk_im_context_get_type           (void) G_GNUC_CONST;
 void          gtk_im_context_set_client_window  (GtkIMContext   *context,
 						 GdkWindow      *window);
 void          gtk_im_context_get_preedit_string (GtkIMContext   *context,
-						 char          **str,
-						 PangoAttrList **attrs);
+						 gchar         **str,
+						 PangoAttrList **attrs,
+						 gint           *cursor_pos);
 gboolean      gtk_im_context_filter_keypress    (GtkIMContext   *context,
 						 GdkEventKey    *event);
 void          gtk_im_context_focus_in           (GtkIMContext   *context);
 void          gtk_im_context_focus_out          (GtkIMContext   *context);
+void          gtk_im_context_reset              (GtkIMContext   *context);
 
 #ifdef __cplusplus
 }

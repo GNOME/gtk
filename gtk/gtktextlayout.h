@@ -156,6 +156,13 @@ struct _GtkTextLayout
   
   /* Whether to show the insertion cursor */
   guint cursor_visible : 1;
+
+  /* The preedit string and attributes, if any */
+
+  gchar *preedit_string;
+  PangoAttrList *preedit_attrs;
+  gint preedit_len;
+  gint preedit_cursor;
 };
 
 struct _GtkTextLayoutClass
@@ -221,6 +228,7 @@ struct _GtkTextLineDisplay
   gint right_margin;
   gint top_margin;
   gint bottom_margin;
+  gint insert_index;		/* Byte index of insert cursor within para or -1 */
 
   gboolean size_only;
   GtkTextLine *line;
@@ -238,8 +246,14 @@ void gtk_text_layout_set_contexts           (GtkTextLayout     *layout,
                                              PangoContext      *ltr_context,
                                              PangoContext      *rtl_context);
 void gtk_text_layout_default_style_changed  (GtkTextLayout     *layout);
+ 
 void gtk_text_layout_set_screen_width       (GtkTextLayout     *layout,
                                              gint               width);
+void gtk_text_layout_set_preedit_string     (GtkTextLayout     *layout,
+ 					     const gchar       *preedit_string,
+ 					     PangoAttrList     *preedit_attrs,
+ 					     gint               cursor_pos);
+
 void     gtk_text_layout_set_cursor_visible (GtkTextLayout     *layout,
                                              gboolean           cursor_visible);
 gboolean gtk_text_layout_get_cursor_visible (GtkTextLayout     *layout);
@@ -302,10 +316,6 @@ void     gtk_text_layout_validate        (GtkTextLayout *layout,
 GtkTextLineData* gtk_text_layout_wrap  (GtkTextLayout   *layout,
                                         GtkTextLine     *line,
                                         GtkTextLineData *line_data); /* may be NULL */
-void     gtk_text_layout_get_log_attrs (GtkTextLayout  *layout,
-                                        GtkTextLine    *line,
-                                        PangoLogAttr  **attrs,
-                                        gint           *n_attrs);
 void     gtk_text_layout_changed              (GtkTextLayout     *layout,
                                                gint               y,
                                                gint               old_height,

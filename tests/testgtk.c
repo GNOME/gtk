@@ -9229,11 +9229,14 @@ create_main_window (void)
   gtk_widget_show_all (window);
 }
 
-void
-pixbuf_init ()
+static void
+test_init ()
 {
   if (file_exists ("../gdk-pixbuf/.libs/libpixbufloader-pnm.so"))
-    putenv ("GDK_PIXBUF_MODULEDIR=../gdk-pixbuf/.libs");
+    {
+      putenv ("GDK_PIXBUF_MODULEDIR=../gdk-pixbuf/.libs");
+      putenv ("GTK_IM_MODULE_FILE=./gtk.immodules");
+    }
 }
 
 int
@@ -9243,7 +9246,7 @@ main (int argc, char *argv[])
 
   srand (time (NULL));
 
-  pixbuf_init ();
+  test_init ();
   gtk_set_locale ();
 
   /* Check to see if we are being run from the correct

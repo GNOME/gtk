@@ -35,7 +35,8 @@ static void gtk_im_context_init (GtkIMContext *im_context);
 
 static void     gtk_im_context_real_get_preedit_string (GtkIMContext       *context,
 							gchar             **str,
-							PangoAttrList     **attrs);
+							PangoAttrList     **attrs,
+							gint               *cursor_pos);
 static gboolean gtk_im_context_real_filter_keypress    (GtkIMContext       *context,
 							GdkEventKey        *event);
 
@@ -118,12 +119,15 @@ gtk_im_context_init (GtkIMContext *im_context)
 static void
 gtk_im_context_real_get_preedit_string (GtkIMContext       *context,
 					gchar             **str,
-					PangoAttrList     **attrs)
+					PangoAttrList     **attrs,
+					gint               *cursor_pos)
 {
   if (str)
     *str = g_strdup ("");
   if (attrs)
     *attrs = pango_attr_list_new ();
+  if (cursor_pos)
+    *cursor_pos = 0;
 }
 
 static gboolean
@@ -175,7 +179,8 @@ gtk_im_context_set_client_window (GtkIMContext *context,
 void
 gtk_im_context_get_preedit_string (GtkIMContext   *context,
 				   gchar         **str,
-				   PangoAttrList **attrs)
+				   PangoAttrList **attrs,
+				   gint           *cursor_pos)
 {
   GtkIMContextClass *klass;
   
@@ -183,7 +188,7 @@ gtk_im_context_get_preedit_string (GtkIMContext   *context,
   g_return_if_fail (GTK_IS_IM_CONTEXT (context));
   
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
-  klass->get_preedit_string (context, str, attrs);
+  klass->get_preedit_string (context, str, attrs, cursor_pos);
 }
 
 /**
@@ -235,7 +240,7 @@ gtk_im_context_focus_in (GtkIMContext   *context)
 }
 
 /**
- * gtk_im_context_focus_in:
+ * gtk_im_context_focus_out:
  * @context: a #GtkIMContext
  *
  * Notify the input method that the widget to which this
@@ -254,6 +259,27 @@ gtk_im_context_focus_out (GtkIMContext   *context)
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
   if (klass->focus_out)
     klass->focus_out (context);
+}
+
+/**
+ * gtk_im_context_reset:
+ * @context: a #GtkIMContext
+ *
+ * Notify the input method that a change such as a change in cursor
+ * position has been made. This will typically cause the input
+ * method to clear the preedit state.
+ **/
+void
+gtk_im_context_reset (GtkIMContext   *context)
+{
+  GtkIMContextClass *klass;
+  
+  g_return_if_fail (context != NULL);
+  g_return_if_fail (GTK_IS_IM_CONTEXT (context));
+
+  klass = GTK_IM_CONTEXT_GET_CLASS (context);
+  if (klass->reset)
+    klass->reset (context);
 }
 
 

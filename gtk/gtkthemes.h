@@ -32,21 +32,17 @@
 #include <gtk/gtkstyle.h>
 #include <gtk/gtkwidget.h>
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-GtkThemeEngine * gtk_theme_engine_get             (const gchar     *name);
-void             gtk_theme_engine_ref             (GtkThemeEngine  *engine);
-void             gtk_theme_engine_unref           (GtkThemeEngine  *engine);
-GtkRcStyle     * gtk_theme_engine_create_rc_style (GtkThemeEngine  *engine);
+#define GTK_TYPE_THEME_ENGINE             (gtk_theme_engine_get_type ())
+#define GTK_THEME_ENGINE(theme_engine)    (G_TYPE_CHECK_INSTANCE_CAST ((theme_engine), GTK_TYPE_THEME_ENGINE, GtkThemeEngine))
+#define GTK_IS_THEME_ENGINE(theme_engine) (G_TYPE_CHECK_INSTANCE_TYPE ((theme_engine), GTK_TYPE_THEME_ENGINE))
 
-GType            gtk_theme_engine_register_type   (GtkThemeEngine  *engine,
-						   GType            parent_type,
-						   const gchar     *type_name,
-						   const GTypeInfo *type_info);
-
+GType           gtk_theme_engine_get_type        (void);
+GtkThemeEngine *gtk_theme_engine_get             (const gchar     *name);
+GtkRcStyle     *gtk_theme_engine_create_rc_style (GtkThemeEngine  *engine);
 
 #ifdef __cplusplus
 }

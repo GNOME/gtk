@@ -70,13 +70,12 @@ struct _GtkTextView
   guint selection_drag_scan_timeout;
   gint scrolling_accel_factor;
 
-  gboolean overwrite_mode;
-
   GtkWrapMode wrap_mode;        /* Default wrap mode */
 
-  gboolean editable;            /* default editability */
-
-  gboolean cursor_visible;
+  guint editable : 1;           /* default editability */
+  guint overwrite_mode : 1;
+  guint cursor_visible : 1;
+  guint  need_im_reset : 1;	/* If we have reset the IM since the last character entered */
 
   GtkTextWindow *text_window;
   GtkTextWindow *left_window;
@@ -114,6 +113,7 @@ struct _GtkTextView
   guint incremental_validate_idle;      /* Idle to revalidate offscreen portions, runs after redraw */
 
   GtkIMContext *im_context;
+  GtkWidget *popup_menu;
 
   gint drag_start_x;
   gint drag_start_y;
