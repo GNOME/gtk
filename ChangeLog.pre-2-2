@@ -1,3 +1,9 @@
+2000-12-20  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkinvisible.c (gtk_invisible_realize):
+	Attach the style to the window so that the style it is not
+	leaked when unrealizing the window.
+
 2000-12-18  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_delete_from_cursor): do

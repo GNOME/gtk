@@ -134,6 +134,8 @@ gtk_invisible_realize (GtkWidget *widget)
 
   widget->window = gdk_window_new (NULL, &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, widget);
+  
+  widget->style = gtk_style_attach (widget->style, widget->window);
 }
 
 static void
