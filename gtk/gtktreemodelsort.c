@@ -113,6 +113,10 @@ static void         gtk_tree_model_sort_unref_iter      (GtkTreeModel          *
 							 GtkTreeIter           *iter);
 
 /* Internal functions */
+static gint         gtk_tree_model_sort_array_find_insert (GtkTreeModelSort *tree_model_sort,
+							   GArray           *array,
+							   GtkTreeIter      *iter,
+							   gboolean          skip_sort_elt);
 static GtkTreePath *gtk_tree_model_sort_convert_path_real (GtkTreeModelSort *tree_model_sort,
 							   GtkTreePath      *child_path,
 							   gboolean          build_children);
@@ -360,7 +364,10 @@ gtk_tree_model_sort_changed (GtkTreeModel *s_model,
   GtkTreeModelSort *tree_model_sort = GTK_TREE_MODEL_SORT (data);
   GtkTreePath *path;
   GtkTreeIter iter;
+  SortElt *elt;
+  GArray *array;
   gboolean free_s_path = FALSE;
+  gint index;
 
   g_return_if_fail (s_path != NULL || s_iter != NULL);
 
@@ -377,7 +384,22 @@ gtk_tree_model_sort_changed (GtkTreeModel *s_model,
 	gtk_tree_path_free (s_path);
       return;
     }
+
   gtk_tree_model_get_iter (GTK_TREE_MODEL (data), &iter, path);
+  elt = (SortElt *) iter.tree_node;
+  array = get_array (elt, tree_model_sort);
+
+  /* FIXME: as an optimization for when the column other then the one we're
+   * sorting is changed, we can check the prev and next element to see if
+   * they're different.
+   */
+  
+  /* Now we need to resort things. */
+  index = gtk_tree_model_sort_array_find_insert (tree_model_sort,
+						 array,
+						 (GtkTreeIter *) elt,
+						 TRUE);
+  g_print ("index is %d\n", index);
   gtk_signal_emit_by_name (GTK_OBJECT (data), "changed", path, &iter);
 
   gtk_tree_path_free (path);
@@ -393,15 +415,15 @@ gtk_tree_model_sort_insert_value (GtkTreeModelSort *sort,
 {
   GtkTreePath *tmp_path;
   GArray *array;
+  gint index;
   GtkTreeIter iter;
   SortElt elt;
-  SortElt *tmp_elt;
   gint offset;
   gint middle, j;
   GValueCompareFunc func;
   GValue s_value = {0, };
   GValue tmp_value = {0, };
-
+  SortElt *tmp_elt;
   offset = gtk_tree_path_get_indices (s_path)[gtk_tree_path_get_depth (s_path) - 1];
 
   elt.iter = *s_iter;
@@ -440,61 +462,9 @@ gtk_tree_model_sort_insert_value (GtkTreeModelSort *sort,
     }
   gtk_tree_path_free (tmp_path);
 
-  func = (GValueCompareFunc) gtk_tree_model_sort_get_func (sort);
+  index = gtk_tree_model_sort_array_find_insert (sort, array, (GtkTreeIter *) &elt, FALSE);
 
-  g_return_val_if_fail (func != NULL, FALSE);
-
-  gtk_tree_model_get_value (sort->child_model, s_iter, sort->sort_col, &s_value);
-
-#if 0
-  /* FIXME: we can, as we are an array, do binary search to find the correct
-   * location to insert the element.  However, I'd rather get it working.  The
-   * below is quite wrong, but a step in the right direction.
-   */
-  low = 0;
-  high = array->len;
-  middle = (low + high)/2;
-
-  /* Insert the value into the array */
-  while (low != high)
-    {
-      gint cmp;
-      tmp_elt = &(g_array_index (array, SortElt, middle));
-      gtk_tree_model_get_value (sort->child_model,
-				(GtkTreeIter *) tmp_elt,
-				sort->sort_col,
-				&tmp_value);
-
-      cmp = ((func) (&tmp_value, &s_value));
-      g_value_unset (&tmp_value);
-
-      if (cmp < 0)
-	high = middle;
-      else if (cmp > 0)
-	low = middle;
-      else if (cmp == 0)
-	break;
-      middle = (low + high)/2;
-    }
-#endif
-  for (middle = 0; middle < array->len; middle++)
-    {
-      gint cmp;
-
-      tmp_elt = &(g_array_index (array, SortElt, middle));
-      gtk_tree_model_get_value (sort->child_model,
-				(GtkTreeIter *) tmp_elt,
-				sort->sort_col,
-				&tmp_value);
-
-      cmp = ((func) (&s_value, &tmp_value));
-      g_value_unset (&tmp_value);
-
-      if (cmp >= 0)
-	break;
-    }
-
-  g_array_insert_vals (array, middle, &elt, 1);
+  g_array_insert_vals (array, index, &elt, 1);
 
   g_value_unset (&s_value);
 
@@ -503,7 +473,7 @@ gtk_tree_model_sort_insert_value (GtkTreeModelSort *sort,
   for (j = 0; j < array->len; j++, tmp_elt++)
 	{
 	  if ((tmp_elt->offset >= offset) &&
-	      j != middle)
+	      j != index)
 	    tmp_elt->offset ++;
 	}
 
@@ -913,6 +883,47 @@ gtk_tree_model_sort_unref_iter (GtkTreeModel *tree_model,
 }
 
 /* Internal functions */
+
+static gint
+gtk_tree_model_sort_array_find_insert (GtkTreeModelSort *tree_model_sort,
+				       GArray           *array,
+				       GtkTreeIter      *iter,
+				       gboolean          skip_sort_elt)
+{
+  gint middle;
+  gint cmp;
+  GValueCompareFunc func;
+  GValue value = {0, };
+  GValue tmp_value = {0, };
+  SortElt *tmp_elt;
+
+  func = (GValueCompareFunc) gtk_tree_model_sort_get_func (tree_model_sort);
+
+  g_return_val_if_fail (func != NULL, 0);
+
+  gtk_tree_model_get_value (tree_model_sort->child_model, iter, tree_model_sort->sort_col, &value);
+
+  for (middle = 0; middle < array->len; middle++)
+    {
+      tmp_elt = &(g_array_index (array, SortElt, middle));
+      if (!skip_sort_elt &&
+	  (SortElt *) iter == tmp_elt)
+	  continue;
+      gtk_tree_model_get_value (tree_model_sort->child_model,
+				(GtkTreeIter *) tmp_elt,
+				tree_model_sort->sort_col,
+				&tmp_value);
+
+      cmp = ((func) (&value, &tmp_value));
+      g_value_unset (&tmp_value);
+
+      if (cmp >= 0)
+	break;
+    }
+  return middle;
+}
+
+
 static GtkTreePath *
 gtk_tree_model_sort_convert_path_real (GtkTreeModelSort *tree_model_sort,
 				       GtkTreePath      *child_path,
@@ -1131,3 +1142,38 @@ g_value_int_compare_func (const GValue *a,
 {
   return g_value_get_int (a) < g_value_get_int (b);
 }
+
+
+/* DEAD CODE */
+
+#if 0
+  /* FIXME: we can, as we are an array, do binary search to find the correct
+   * location to insert the element.  However, I'd rather get it working.  The
+   * below is quite wrong, but a step in the right direction.
+   */
+  low = 0;
+  high = array->len;
+  middle = (low + high)/2;
+
+  /* Insert the value into the array */
+  while (low != high)
+    {
+      gint cmp;
+      tmp_elt = &(g_array_index (array, SortElt, middle));
+      gtk_tree_model_get_value (sort->child_model,
+				(GtkTreeIter *) tmp_elt,
+				sort->sort_col,
+				&tmp_value);
+
+      cmp = ((func) (&tmp_value, &s_value));
+      g_value_unset (&tmp_value);
+
+      if (cmp < 0)
+	high = middle;
+      else if (cmp > 0)
+	low = middle;
+      else if (cmp == 0)
+	break;
+      middle = (low + high)/2;
+    }
+#endif
