@@ -1,5 +1,11 @@
 2001-06-04  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkrange.c (gtk_range_adjustment_value_changed): 
+	Process updates immediately, to prevent funny lag effect
+	when scrolling, at some mild potential efficiency cost.
+
+2001-06-04  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkrange.c (gtk_range_button_press): on middle click, center
 	slider on the click.
 
