@@ -1436,7 +1436,10 @@ gtk_widget_unrealize (GtkWidget *widget)
     gtk_widget_shape_combine_mask (widget, NULL, -1, -1);
 
   if (GTK_WIDGET_REALIZED (widget))
-    gtk_signal_emit (GTK_OBJECT (widget), widget_signals[UNREALIZE]);
+    {
+      gtk_signal_emit (GTK_OBJECT (widget), widget_signals[UNREALIZE]);
+      GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
+    }
 }
 
 /*****************************************
@@ -3449,7 +3452,7 @@ gtk_widget_real_show (GtkWidget *widget)
       
       if (widget->parent)
 	{
-	  gtk_widget_queue_resize (widget);
+	  gtk_widget_queue_resize (widget->parent);
 	  
 	  if (GTK_WIDGET_MAPPED (widget->parent))
 	    gtk_widget_map (widget);

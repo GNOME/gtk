@@ -1464,6 +1464,7 @@ create_handle_box ()
 {
   static GtkWidget* window = NULL;
   GtkWidget *handle_box;
+  GtkWidget *handle_box2;
   GtkWidget *hbox;
   GtkWidget *toolbar;
   GtkWidget *label;
@@ -1512,8 +1513,20 @@ create_handle_box ()
 			"detached");
     gtk_widget_show (handle_box);
 
+    handle_box2 = gtk_handle_box_new ();
+    gtk_container_add (GTK_CONTAINER (handle_box), handle_box2);
+    gtk_signal_connect (GTK_OBJECT (handle_box2),
+			"child_attached",
+			GTK_SIGNAL_FUNC (handle_box_child_signal),
+			"attached");
+    gtk_signal_connect (GTK_OBJECT (handle_box2),
+			"child_detached",
+			GTK_SIGNAL_FUNC (handle_box_child_signal),
+			"detached");
+    gtk_widget_show (handle_box2);
+
     label = gtk_label_new ("Fooo!");
-    gtk_container_add (GTK_CONTAINER (handle_box), label);
+    gtk_container_add (GTK_CONTAINER (handle_box2), label);
     gtk_widget_show (label);
   }
 
