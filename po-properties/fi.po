@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-15 01:02+0300\n"
-"PO-Revision-Date: 2004-08-15 01:01+0300\n"
+"POT-Creation-Date: 2004-08-18 00:22+0300\n"
+"PO-Revision-Date: 2004-08-18 00:10+0300\n"
 "Last-Translator: Sami Pesonen <sampeson@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -40,7 +40,7 @@ msgstr "On alpha"
 
 #: gdk-pixbuf/gdk-pixbuf.c:124
 msgid "Whether the pixbuf has an alpha channel"
-msgstr "Onko pixbuffilla alpha-kanava"
+msgstr "Onko pixbuffilla alfakanava"
 
 #: gdk-pixbuf/gdk-pixbuf.c:132
 msgid "Bits per Sample"
@@ -179,7 +179,7 @@ msgid ""
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
 msgstr ""
 "Pidetäänkö toimintoa tärkeänä. Jos TOSI, työkalukohdat tälle toiminnolle "
-"näyttää tekstinGTK_TOOLBAR_BOTH_HORIZ-tilassa."
+"näyttää tekstin GTK_TOOLBAR_BOTH_HORIZ-tilassa."
 
 #: gtk/gtkaction.c:250
 msgid "Hide if empty"
@@ -215,7 +215,7 @@ msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
 msgstr ""
-"Gtk-toimintaryhmä mihin Gtk-toiminto on liitetty, tai NULL (sisäiseen "
+"Gtk-toimintoryhmä mihin Gtk-toiminto on liitetty, tai NULL (sisäiseen "
 "käyttöön)."
 
 #: gtk/gtkactiongroup.c:134
@@ -236,7 +236,7 @@ msgstr "Arvo"
 
 #: gtk/gtkadjustment.c:108
 msgid "The value of the adjustment"
-msgstr "Säädön arvo"
+msgstr "Koonmuutosarvo"
 
 #: gtk/gtkadjustment.c:117
 msgid "Minimum Value"
@@ -244,7 +244,7 @@ msgstr "Minimiarvo"
 
 #: gtk/gtkadjustment.c:118
 msgid "The minimum value of the adjustment"
-msgstr "Säädön minimiarvo"
+msgstr "Koonmuutoksen minimiarvo"
 
 #: gtk/gtkadjustment.c:127
 msgid "Maximum Value"
@@ -252,7 +252,7 @@ msgstr "Maksimiarvo"
 
 #: gtk/gtkadjustment.c:128
 msgid "The maximum value of the adjustment"
-msgstr "Säädön maksimiarvo"
+msgstr "Koonmuutoksen maksimiarvo"
 
 #: gtk/gtkadjustment.c:137
 msgid "Step Increment"
@@ -260,15 +260,15 @@ msgstr "Askellisäys"
 
 #: gtk/gtkadjustment.c:138
 msgid "The step increment of the adjustment"
-msgstr "Säädön askellisäys"
+msgstr "Koonmuutoksen askellisäys"
 
 #: gtk/gtkadjustment.c:147
 msgid "Page Increment"
-msgstr "Svunlisäys"
+msgstr "Sivunlisäys"
 
 #: gtk/gtkadjustment.c:148
 msgid "The page increment of the adjustment"
-msgstr "Säädön sivunlisäys"
+msgstr "Koonmuutoksen sivunlisäys"
 
 #: gtk/gtkadjustment.c:157
 msgid "Page Size"
@@ -276,7 +276,7 @@ msgstr "Sivukoko"
 
 #: gtk/gtkadjustment.c:158
 msgid "The page size of the adjustment"
-msgstr "Säädön sivukoko"
+msgstr "Koonmuutoksen sivukoko"
 
 #: gtk/gtkalignment.c:117
 msgid "Horizontal alignment"
@@ -396,7 +396,7 @@ msgstr "Suhde"
 
 #: gtk/gtkaspectframe.c:124
 msgid "Aspect ratio if obey_child is FALSE"
-msgstr "Reunasuhde, jos lapsen mukaan on EPÄTOSI"
+msgstr "Reunasuhde, jos obey_child (lapsen mukaan) on EPÄTOSI"
 
 #: gtk/gtkaspectframe.c:130
 msgid "Obey child"
@@ -828,7 +828,7 @@ msgstr "Koko"
 
 #: gtk/gtkcellrendererpixbuf.c:170
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
-msgstr "GtkIconSize-arvo mikä määrittelee piirtyneen kuvakkeen koon"
+msgstr "GtkIconSize-arvo, joka määrittelee piirtyneen kuvakkeen koon"
 
 #: gtk/gtkcellrendererpixbuf.c:179
 msgid "Detail"
@@ -1203,7 +1203,7 @@ msgstr "Käytä alfaa"
 
 #: gtk/gtkcolorbutton.c:203
 msgid "Whether or not to give the color an alpha value"
-msgstr "Annetaanko väri alfa-arvona"
+msgstr "Annetaanko värille alfa-arvo"
 
 #: gtk/gtkcolorbutton.c:217 gtk/gtkfontbutton.c:175
 #: gtk/gtktreeviewcolumn.c:287
@@ -1910,8 +1910,8 @@ msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 msgstr ""
-"Määräytyykö voimassa oleva arvo telakointireunan vai kahvan sijainnin "
-"perusteella"
+"Määräytyykö voimassa oleva arvo telakointireunan (snap_edge) vai kahvan "
+"sijainnin (handle_position) perusteella"
 
 #: gtk/gtkimage.c:136
 msgid "Pixbuf"
@@ -1976,7 +1976,7 @@ msgstr "Animaatio"
 
 #: gtk/gtkimage.c:203
 msgid "GdkPixbufAnimation to display"
-msgstr "Näkyvä GdkAnimation"
+msgstr "Näkyvä GdkPixbufAnimation"
 
 #: gtk/gtkimage.c:210
 msgid "Storage type"
@@ -2008,7 +2008,7 @@ msgstr "Näyttö"
 
 #: gtk/gtkinvisible.c:116 gtk/gtkwindow.c:544
 msgid "The screen where this window will be displayed"
-msgstr "Ruutu, jolle tämä ikkuna näkyy"
+msgstr "Näyttö, jolle tämä ikkuna näkyy"
 
 #: gtk/gtklabel.c:293
 msgid "The text of the label"
@@ -2077,7 +2077,7 @@ msgstr "Säädin, joka aktivoituu, kun nimiön pikavalintanäppäintä painetaan
 
 #: gtk/gtklayout.c:632 gtk/gtkviewport.c:135
 msgid "Horizontal adjustment"
-msgstr "Vaakasäätö"
+msgstr "Vaakakoonmuutos"
 
 #: gtk/gtklayout.c:633 gtk/gtkscrolledwindow.c:238
 msgid "The GtkAdjustment for the horizontal position"
@@ -2085,7 +2085,7 @@ msgstr "Vaakasijainnin GtkAdjustment"
 
 #: gtk/gtklayout.c:640 gtk/gtkviewport.c:143
 msgid "Vertical adjustment"
-msgstr "Pystysäätö"
+msgstr "Pystykoonmuutos"
 
 #: gtk/gtklayout.c:641 gtk/gtkscrolledwindow.c:245
 msgid "The GtkAdjustment for the vertical position"
@@ -2427,7 +2427,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:561 gtk/gtkscrollbar.c:98
 msgid "Backward stepper"
-msgstr "Taapäin askellin"
+msgstr "Taaksepäin askellin"
 
 #: gtk/gtknotebook.c:562 gtk/gtkscrollbar.c:99
 msgid "Display the standard backward arrow button"
@@ -2565,7 +2565,7 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:293 gtk/gtkspinbutton.c:241
 msgid "Adjustment"
-msgstr "Säätö"
+msgstr "Koonmuutos"
 
 #: gtk/gtkprogressbar.c:143
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
@@ -2833,11 +2833,11 @@ msgstr ""
 
 #: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:545
 msgid "Horizontal Adjustment"
-msgstr "Vaakasäätö"
+msgstr "Vaakakoonmuutos"
 
 #: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:553
 msgid "Vertical Adjustment"
-msgstr "Pystysäätö"
+msgstr "Pystykoonmuutos"
 
 #: gtk/gtkscrolledwindow.c:251
 msgid "Horizontal Scrollbar Policy"
@@ -2998,23 +2998,23 @@ msgstr "Luettelo kuvakeko'oista (gtk-menu=16,16;gtk-button=20,20..."
 
 #: gtk/gtksettings.c:365
 msgid "Xft Antialias"
-msgstr "Xft pehmennys"
+msgstr "Xft-pehmennys"
 
 #: gtk/gtksettings.c:366
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
-msgstr "Pehmennetäänkö Xft kirjasimet; 0=ei, 1=kyllä, -1=oletus"
+msgstr "Pehmennetäänkö Xft-kirjasimet; 0=ei, 1=kyllä, -1=oletus"
 
 #: gtk/gtksettings.c:375
 msgid "Xft Hinting"
-msgstr "Xft vihjaus"
+msgstr "Xft-vihjaus"
 
 #: gtk/gtksettings.c:376
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
-msgstr "Vihjataanko Xft kirjasimet; 0=ei, 1=kyllä, -1=oletus"
+msgstr "Vihjataanko Xft-kirjasimet; 0=ei, 1=kyllä, -1=oletus"
 
 #: gtk/gtksettings.c:385
 msgid "Xft Hint Style"
-msgstr "Xft vihjaustyyli"
+msgstr "Xft-vihjaustyyli"
 
 #: gtk/gtksettings.c:386
 msgid "What degree of hinting to use; none, slight, medium, or full"
@@ -3023,7 +3023,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:395
 msgid "Xft RGBA"
-msgstr "Xft RGBA"
+msgstr "Xft-RGBA"
 
 #: gtk/gtksettings.c:396
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
@@ -3031,11 +3031,11 @@ msgstr "Alikuvapisteen pehmennystapa; ei mitään, rgb, bgr, vrgb, vbgr"
 
 #: gtk/gtksettings.c:405
 msgid "Xft DPI"
-msgstr "Xft DPI (pistettä tuumalle)"
+msgstr "Xft-DPI (pistettä tuumalle)"
 
 #: gtk/gtksettings.c:406
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
-msgstr "Xft resoluutio 1024xpistettä/tuuma. Oletusvalinta arvolla -1"
+msgstr "Xft-resoluutio 1024xpistettä/tuuma. Oletusvalinta arvolla -1"
 
 #: gtk/gtksizegroup.c:242
 msgid "Mode"
@@ -3051,7 +3051,7 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:242
 msgid "The adjustment that holds the value of the spinbutton"
-msgstr "Säätö, joka sisältää kiertopainikkeen arvon"
+msgstr "Koonmuutos, joka sisältää kiertopainikkeen arvon"
 
 #: gtk/gtkspinbutton.c:249
 msgid "Climb Rate"
@@ -3228,11 +3228,11 @@ msgstr ""
 
 #: gtk/gtktext.c:603
 msgid "Horizontal adjustment for the text widget"
-msgstr "Tekstisäätimen vaakasäätö"
+msgstr "Tekstisäätimen vaakakoonmuutos"
 
 #: gtk/gtktext.c:611
 msgid "Vertical adjustment for the text widget"
-msgstr "Tekstisäätimen pystysäätö"
+msgstr "Tekstisäätimen pystykoonmuutos"
 
 #: gtk/gtktext.c:618
 msgid "Line Wrap"
@@ -3458,7 +3458,7 @@ msgstr "Edustan kuviopeite asetettu"
 
 #: gtk/gtktexttag.c:526
 msgid "Whether this tag affects the foreground stipple"
-msgstr "Vaikottaako tämä lappu edustan kuviopeitteeseen"
+msgstr "Vaikuttaako tämä lappu edustan kuviopeitteeseen"
 
 #: gtk/gtktexttag.c:561
 msgid "Justification set"
@@ -3763,11 +3763,11 @@ msgstr "Puunäkymän malli"
 
 #: gtk/gtktreeview.c:546
 msgid "Horizontal Adjustment for the widget"
-msgstr "Säätimen vaakasäätö"
+msgstr "Säätimen vaakakoonmuutos"
 
 #: gtk/gtktreeview.c:554
 msgid "Vertical Adjustment for the widget"
-msgstr "Säätimen pystysäätö"
+msgstr "Säätimen pystykoonmuutos"
 
 #: gtk/gtktreeview.c:562
 msgid "Show the column header buttons"
@@ -4205,7 +4205,7 @@ msgstr "Minkä värisenä syöttökohdistin piirtyy"
 
 #: gtk/gtkwidget.c:1409
 msgid "Secondary cursor color"
-msgstr "Toissijainen kohdistimen väri"
+msgstr "Toissijaisen kohdistimen väri"
 
 #: gtk/gtkwidget.c:1410
 msgid ""
