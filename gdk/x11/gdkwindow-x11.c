@@ -337,7 +337,7 @@ gdk_window_new (GdkWindow     *parent,
   unsigned int class;
   char *title;
   int i;
-  int pid;
+  long pid;
   
   g_return_val_if_fail (attributes != NULL, NULL);
   
@@ -2763,9 +2763,9 @@ void
 gdk_window_set_icon_list (GdkWindow *window,
 			  GList     *pixbufs)
 {
-  guint *data;
+  gulong *data;
   guchar *pixels;
-  guint *p;
+  gulong *p;
   gint size;
   GList *l;
   GdkPixbuf *pixbuf;
@@ -2794,7 +2794,7 @@ gdk_window_set_icon_list (GdkWindow *window,
       l = g_list_next (l);
     }
 
-  data = g_malloc (size*4);
+  data = g_malloc (size * sizeof (gulong));
 
   l = pixbufs;
   p = data;
