@@ -461,7 +461,11 @@ gtk_real_tree_column_clicked (GtkTreeViewColumn *tree_column)
 }
 
 
-
+static void
+gtk_tree_view_column_button_clicked (GtkWidget *widget, gpointer data)
+{
+  g_signal_emit_by_name (G_OBJECT (data), "clicked");
+}
 
 void
 _gtk_tree_view_column_create_button (GtkTreeViewColumn *column)
@@ -483,9 +487,9 @@ _gtk_tree_view_column_create_button (GtkTreeViewColumn *column)
   /* make sure we own a reference to it as well. */
   gtk_widget_set_parent (column->button, GTK_WIDGET (tree_view));
   
-  /*  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-      (GtkSignalFunc) gtk_tree_view_button_clicked,
-      (gpointer) tree_view);*/
+  gtk_signal_connect (GTK_OBJECT (column->button), "clicked",
+		      (GtkSignalFunc) gtk_tree_view_column_button_clicked,
+		      (gpointer) column);
 
   column->alignment = gtk_alignment_new (column->xalign, 0.5, 0.0, 0.0);
 

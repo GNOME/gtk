@@ -1,3 +1,10 @@
+Tue Mar  6 17:25:07 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_button_clicked):
+	Add "clicked" signal back to columns.
+
+	* ChangeLog: remove conflict markers.
+
 Tue Mar  6 10:45:45 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkbutton.c: Add animation of activation by, on 
@@ -88,7 +95,6 @@ Mon Mar  5 14:38:54 2001  Jonathan Blandford  <jrb@redhat.com>
 	parent_class pointer in pixbuf_style_class_init().
 	(Will commit the fix to the pixbuf-engine too).
 
->>>>>>> 1.1779
 2001-03-05  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/gdkwindow.h:
