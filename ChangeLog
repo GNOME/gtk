@@ -1,3 +1,9 @@
+Wed Feb 27 14:45:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Go
+	back to old style of drawing children over the bevel.
+	(#58615)
+
 Wed Feb 27 14:08:26 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/imxim.c: Add ko and zh to the locales

@@ -657,8 +657,8 @@ gtk_toolbar_size_request (GtkWidget      *widget,
   /* Extra spacing */
   gtk_widget_style_get (widget, "internal_padding", &ipadding, NULL);
   
-  requisition->width += 2 * (widget->style->xthickness + ipadding);
-  requisition->height += 2 * (widget->style->ythickness + ipadding);
+  requisition->width += 2 * ipadding;
+  requisition->height += 2 * ipadding;
   
   toolbar->button_maxw = button_maxw;
   toolbar->button_maxh = button_maxh;
@@ -689,8 +689,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 
   gtk_widget_style_get (widget, "internal_padding", &ipadding, NULL);
   
-  x_border_width += 2 * (widget->style->xthickness + ipadding);
-  y_border_width += 2 * (widget->style->ythickness + ipadding);
+  x_border_width += ipadding;
+  y_border_width += ipadding;
   
   if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
     alloc.x = allocation->x + x_border_width;
