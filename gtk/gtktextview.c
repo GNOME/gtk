@@ -136,6 +136,7 @@ enum
   PROP_TABS,
   PROP_CURSOR_VISIBLE,
   PROP_BUFFER,
+  PROP_OVERWRITE,
   LAST_PROP
 };
 
@@ -650,6 +651,14 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 							_("The buffer which is displayed"),
 							GTK_TYPE_TEXT_BUFFER,
 							G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_OVERWRITE,
+                                   g_param_spec_boolean ("overwrite",
+							 _("Overwrite mode"),
+							 _("Whether entered text overwrites existing contents"),
+							 FALSE,
+							 G_PARAM_READWRITE));
 
   
   /*
@@ -2558,6 +2567,10 @@ gtk_text_view_set_property (GObject         *object,
       gtk_text_view_set_cursor_visible (text_view, g_value_get_boolean (value));
       break;
 
+    case PROP_OVERWRITE:
+      gtk_text_view_set_overwrite (text_view, g_value_get_boolean (value));
+      break;
+
     case PROP_BUFFER:
       gtk_text_view_set_buffer (text_view, GTK_TEXT_BUFFER (g_value_get_object (value)));
       break;
@@ -2628,6 +2641,10 @@ gtk_text_view_get_property (GObject         *object,
       g_value_set_object (value, get_buffer (text_view));
       break;
 
+    case PROP_OVERWRITE:
+      g_value_set_boolean (value, text_view->overwrite_mode);
+      break;
+      
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -5005,6 +5022,49 @@ static void
 gtk_text_view_toggle_overwrite (GtkTextView *text_view)
 {
   text_view->overwrite_mode = !text_view->overwrite_mode;
+  g_object_notify (G_OBJECT (text_view), "overwrite");
+}
+
+/**
+ * gtk_text_view_get_overwrite:
+ * @text_view: a #GtkTextView
+ *
+ * Returns whether the #GtkTextView is in overwrite mode or not.
+ *
+ * Return value: whether @text_view is in overwrite mode or not.
+ * 
+ * Since: 2.4
+ **/
+gboolean
+gtk_text_view_get_overwrite (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+
+  return text_view->overwrite_mode;
+}
+
+/**
+ * gtk_text_view_set_overwrite:
+ * @text_view: a #GtkTextView
+ * @overwrite: %TRUE to turn on overwrite mode, %FALSE to turn it off
+ *
+ * Changes the #GtkTextView overwrite mode.
+ *
+ * Since: 2.4
+ **/
+void
+gtk_text_view_set_overwrite (GtkTextView *text_view,
+			     gboolean     overwrite)
+{
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  overwrite = overwrite != FALSE;
+
+  if (text_view->overwrite_mode != overwrite)
+    {
+      text_view->overwrite_mode = overwrite;
+
+      g_object_notify (G_OBJECT (text_view), "overwrite");
+    }
 }
 
 static void

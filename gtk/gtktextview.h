@@ -323,6 +323,9 @@ GtkWrapMode      gtk_text_view_get_wrap_mode          (GtkTextView      *text_vi
 void             gtk_text_view_set_editable           (GtkTextView      *text_view,
                                                        gboolean          setting);
 gboolean         gtk_text_view_get_editable           (GtkTextView      *text_view);
+void             gtk_text_view_set_overwrite          (GtkTextView      *text_view,
+						       gboolean          overwrite);
+gboolean         gtk_text_view_get_overwrite          (GtkTextView      *text_view);
 void             gtk_text_view_set_pixels_above_lines (GtkTextView      *text_view,
                                                        gint              pixels_above_lines);
 gint             gtk_text_view_get_pixels_above_lines (GtkTextView      *text_view);

@@ -1,3 +1,11 @@
+2003-06-10  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.c (gtk_text_view_class_init): Install boolean
+	property "overwrite".
+	(gtk_text_view_[gs]et_property): Handle "overwrite".
+	* gtk/gtktextview.[hc] (gtk_text_view_[gs]et_overwrite): Getter
+	and setter for "overwrite" property.  (#110241, Jeroen Zwartepoorte)
+
 2003-06-09  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkpaned.c (gtk_paned_class_init): Install boolean child
