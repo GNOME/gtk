@@ -117,6 +117,7 @@ enum
   PASTE_CLIPBOARD,
   TOGGLE_OVERWRITE,
   MOVE_FOCUS,
+  SELECT_ALL,
   LAST_SIGNAL
 };
 
@@ -185,6 +186,8 @@ static void gtk_text_view_draw_focus           (GtkWidget        *widget);
 static void gtk_text_view_grab_focus           (GtkWidget        *widget);
 static gboolean gtk_text_view_focus            (GtkWidget        *widget,
                                                 GtkDirectionType  direction);
+static void gtk_text_view_select_all           (GtkWidget        *widget,
+                                                gboolean          select);
 
 
 /* Source side drag signals */
@@ -771,6 +774,17 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_MENU);
   
+  signals[SELECT_ALL] =
+    _gtk_binding_signal_new ("select_all",
+			     G_OBJECT_CLASS_TYPE (object_class),
+			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+			     G_CALLBACK (gtk_text_view_select_all),
+			     NULL, NULL,
+			     _gtk_marshal_VOID__BOOLEAN,
+			     G_TYPE_NONE, 1,
+			     G_TYPE_BOOLEAN, TRUE);
+
+  
   /*
    * Key bindings
    */
@@ -874,37 +888,19 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (binding_set, GDK_KP_Page_Down, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_HORIZONTAL_PAGES, 1);
 
-  /* Select all
-   */
+  /* Select all */
   gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
-				"move_cursor", 3,
-				GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
-				G_TYPE_INT, -1,
-				G_TYPE_BOOLEAN, FALSE);
-  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
-				"move_cursor", 3,
-				GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
-				G_TYPE_INT, 1,
-				G_TYPE_BOOLEAN, TRUE);
+				"select_all", 1,
+  				G_TYPE_BOOLEAN, TRUE);
 
   gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK,
-				"move_cursor", 3,
-				GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
-				G_TYPE_INT, -1,
-				G_TYPE_BOOLEAN, FALSE);
-  gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK,
-				"move_cursor", 3,
-				GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
-				G_TYPE_INT, 1,
-				G_TYPE_BOOLEAN, TRUE);
-
-  /* Unselect all
-   */
+				"select_all", 1,
+  				G_TYPE_BOOLEAN, TRUE);
+  
+  /* Unselect all */
   gtk_binding_entry_add_signal (binding_set, GDK_backslash, GDK_CONTROL_MASK,
-				"move_cursor", 3,
-				GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
-				G_TYPE_INT, 0,
-				G_TYPE_BOOLEAN, FALSE);
+				 "select_all", 1,
+				 G_TYPE_BOOLEAN, FALSE);
 
   /* Deleting text */
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, 0,
@@ -6424,17 +6420,33 @@ append_action_signal (GtkTextView  *text_view,
 }
 
 static void
+gtk_text_view_select_all (GtkWidget *widget,
+			  gboolean select)
+{
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+  GtkTextBuffer *buffer;
+  GtkTextIter start_iter, end_iter, insert;
+
+  buffer = text_view->buffer;
+  if (select) 
+    {
+      gtk_text_buffer_get_bounds (buffer, &start_iter, &end_iter);
+      gtk_text_buffer_move_mark_by_name (buffer, "insert", &start_iter);
+      gtk_text_buffer_move_mark_by_name (buffer, "selection_bound", &end_iter);
+    }
+  else 
+    {
+      gtk_text_buffer_get_iter_at_mark (buffer, &insert,
+					gtk_text_buffer_get_insert (buffer));
+      gtk_text_buffer_move_mark_by_name (buffer, "selection_bound", &insert);
+    }
+}
+
+static void
 select_all_cb (GtkWidget   *menuitem,
 	       GtkTextView *text_view)
 {
-  GtkTextBuffer *buffer;
-  GtkTextIter start_iter, end_iter;
-
-  buffer = text_view->buffer;
-  gtk_text_buffer_get_bounds (buffer, &start_iter, &end_iter);
-  gtk_text_buffer_move_mark_by_name (buffer, "insert", &start_iter);
-  gtk_text_buffer_move_mark_by_name (buffer, "selection_bound", &end_iter);
-  gtk_text_buffer_copy_clipboard (buffer, gtk_clipboard_get (GDK_NONE));
+  gtk_text_view_select_all (GTK_WIDGET (text_view), TRUE);
 }
 
 static void

@@ -1,5 +1,8 @@
 2003-06-05  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtktextview.c (select_all): New keybinding signal for
+	(un)selecting the whole buffer. Bound to C-a/C-\.  (see #107889)
+
 	* gtk/gtkcalendar.c (calendar_timer): 
 	(stop_spinning): Replace deprecated gtk_timeout_* functions by
 	their GLib counterparts.  (#114429)
