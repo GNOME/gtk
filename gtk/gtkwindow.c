@@ -3724,9 +3724,11 @@ gtk_window_show (GtkWidget *widget)
        * then we created it with widget->allocation anyhow.
        */
       if (!was_realized)
-	gdk_window_resize (widget->window,
-                           configure_request.width,
-                           configure_request.height);
+	gdk_window_move_resize (widget->window,
+				configure_request.x,
+				configure_request.y,
+				configure_request.width,
+				configure_request.height);
     }
   
   gtk_container_check_resize (container);

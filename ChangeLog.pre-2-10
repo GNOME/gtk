@@ -1,3 +1,13 @@
+Mon May 31 02:16:37 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkhandlebox.c: Make detached handleboxes work when their
+	parent is minimized, porting the fix from 1.2.  (#1923, #57182)
+
+Mon May 31 02:03:17 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwindow.c (gtk_window_show): Make moving realized, 
+	unmapped windows work. 
+
 Mon May 31 00:27:33 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilechooserutils.c (_gtk_file_chooser_set_delegate): Fix
