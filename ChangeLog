@@ -1,3 +1,12 @@
+Fri Aug 29 21:40:01 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkactiongroup.c (gtk_action_group_add_radio_actions_full):
+	Fix use of uninitialized variable.
+
+	* gtk/gtktextutil.c
+	(_gtk_text_util_append_special_char_menuitems): add const cast to
+	get rid of warning
+
 2003-08-29  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_class_init): Install "draw_as_radio"
