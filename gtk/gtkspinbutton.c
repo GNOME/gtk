@@ -1498,7 +1498,7 @@ gtk_spin_button_default_input (GtkSpinButton *spin_button,
 {
   gchar *err = NULL;
 
-  *new_val = strtod (gtk_entry_get_text (GTK_ENTRY (spin_button)), &err);
+  *new_val = g_strtod (gtk_entry_get_text (GTK_ENTRY (spin_button)), &err);
   if (*err)
     return GTK_INPUT_ERROR;
   else
