@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>November 5th 2003</date>
+  <date>November 13th 2003</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -295,7 +295,7 @@ post questions is to the GTK+ mailing list.</para>
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>How to report bugs in GTK+</title>
+<title>How to report bugs in GTK+ <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>Bugs should be reported to the GNOME bug tracking system
 (<ulink url="http://bugzilla.gnome.org">http://bugzilla.gnome.org</ulink>).
@@ -311,10 +311,11 @@ that may prove useful includes:</para>
 <listitem><simpara> How to reproduce the bug.</simpara>
 <simpara>If you can reproduce it with the testgtk program
 that is built in the gtk/ subdirectory, that will be most
-convenient. Otherwise, please include a short test program
-that exhibits the behavior. As a last resort, you can also
+convenient. Otherwise, please include a complete, short test
+program that exhibits the behavior. As a last resort, you can also
 provide a pointer to a larger piece of software that can
 be downloaded.</simpara>
+
 <simpara>(Bugs that can be reproduced within the GIMP are
 almost as good as bugs that can be reproduced in
 testgtk. If you are reporting a bug found with the GIMP,
@@ -323,11 +324,13 @@ using)</simpara>
 </listitem>
 
 <listitem><simpara> If the bug was a crash, the exact text that was
-printed out when the crash occurred.</simpara>
+printed out when the crash occurred. If you can easily reproduce this
+crash then running the program under a debugger (e.g. gdb) and getting
+a backtrace when the crash occurs is very useful.</simpara>
 </listitem>
 
 <listitem><simpara> Further information such as stack traces
-may be useful, but are not necessary. If you do send a stack trace,
+may be useful. If you do send a stack trace,
 and the error is an X error, it will be more useful if the stacktrace is
 produced running the test program with the <literal>--sync</literal>
 command line option.</simpara>
@@ -339,33 +342,31 @@ command line option.</simpara>
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>Is there a Windows version of GTK+?</title>
+<title>Is there a Windows version of GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>There is an on going port of GTK+ to the Windows
-platform which is making impressive progress.</para>
+<para>The Win32 port of GTK+ is maintained concurrently with the Xwindows
+version in CVS. As such it is a supported architecture.</para>
 
-<para>See <ulink
-url="http://www.iki.fi/tml/gimp/win32">
-http://www.iki.fi/tml/gimp/win32</ulink>
-for more information.</para>
+<para>The Win32 port has been predominately done by Tor Lillqvist. Tor
+maintains some information on <ulink url="http://www.gimp.org/~tml/gimp/win32/">
+GTK+ and GIMP for Windows</ulink>.</para>
+
+<para>There is a pre-compiled, easy-to-install version of GTK+ for
+windows on the <ulink url="http://www.dropline.net/gtk/">
+Dropline GTK+</ulink> site.</para>
 
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>What applications have been written with GTK+?</title>
+<title>What applications have been written with GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>A list of some GTK+ based application can be found on
-the GTK+ web server at <ulink
-url="http://www.gtk.org/apps/">http://www.gtk.org/apps/</ulink>
-and contains more than 350 applications.</para>
+<para>The GNOME software map contains a catalogue of software that is
+built using GNOME and GTK+. The catalogue is searchable and browsable, so
+provides easy access.</para>
 
-<para>Failing that, look for a project to work on for the
-GNOME project, <ulink
-url="http://www.gnome.org/">http://www.gnome.org/</ulink>
-Write a game. Write something that is useful.</para>
-<para>Some of these are:</para>
+<para>Some of the best known projects utilising GTK+ are:</para>
 
 <itemizedlist>
 <listitem><simpara> GIMP (<ulink
@@ -373,51 +374,34 @@ url="http://www.gimp.org/">http://www.gimp.org/</ulink>), an
 image manipulation program</simpara>
 </listitem>
 <listitem><simpara> AbiWord (<ulink
-url="http://www.abisource.com/">http://www.abisource.com/</ulink>),
+url="http://www.abiword.org/">http://www.abiword.com/</ulink>),
 a professional word processor</simpara>
 </listitem>
-<listitem><simpara> Gzilla (<ulink
-url="http://www.levien.com/gzilla/">http://www.levien.com/gzilla/</ulink>),
-a web browser</simpara>
+<listitem><simpara> Dia (<ulink
+url="http://www.lysator.liu.se/~alla/dia/dia.html">
+http://www.lysator.liu.se/~alla/dia/dia.html</ulink>),
+a diagram creation program</simpara>
 </listitem>
-<listitem><simpara> XQF (<ulink
-url="http://www.botik.ru/~roma/quake/">
-http://www.botik.ru/~roma/quake/</ulink>),
-a QuakeWorld/Quake2 server browser and launcher</simpara>
+<listitem><simpara> GnuCash (<ulink
+url="http://www.gnucash.org/">
+http://www.gnucash.org/</ulink>),
+a personal finance manager</simpara>
 </listitem>
-<listitem><simpara> GDK Imlib (<ulink
-url="http://www.rasterman.com/imlib.html">
-http://www.rasterman.com/imlib.html</ulink>),
-a fast image loading and manipulation library for GDK</simpara>
+<listitem><simpara> Gnumeric (<ulink
+url="http://www.gnome.org/projects/gnumeric/">
+http://www.gnome.org/projects/gnumeric/</ulink>),
+the GNOME spreadsheet application</simpara>
 </listitem>
 <listitem><simpara> Glade (<ulink
-url="http://glade.pn.org/">http://glade.pn.org/</ulink>), a
-GTK+ based RAD tool which produces GTK+ applications</simpara>
+url="http://glade.gnome.org/">http://glade.gnome.org/</ulink>), a
+GTK+ based RAD tool which produces GTK+ and GNOME applications</simpara>
+</listitem>
+<listitem><simpara> Anjuta (<ulink
+url="http://anjuta.sourceforge.net/">http://anjuta.sourceforge.net/</ulink>),
+a versatile Integrated Development Environment (IDE) using C and C++ for GTK+
+and GIMP.</simpara>
 </listitem>
 </itemizedlist>
-</sect1>
-
-<!-- ----------------------------------------------------------------- -->
-
-<sect1>
-<title>I'm looking for an application to write in GTK+. How
-about an IRC client?</title>
-
-<para>Ask on gtk-list for suggestions. There are at least
-three IRC clients already under development (probably more in fact. The
-server at <ulink url="http://www.forcix.cx/irc-clients.html">
-http://www.forcix.cx/irc-clients.html</ulink> list a bunch of
-them).</para>
-
-<itemizedlist spacing=compact>
-<listitem><simpara> X-Chat.</simpara>
-</listitem>
-<listitem><simpara> girc. (Included with GNOME)</simpara>
-</listitem>
-<listitem><simpara> gsirc. (In the gnome CVS tree)</simpara>
-</listitem>
-</itemizedlist>
-
 </sect1>
 
 </chapter>

@@ -1,3 +1,7 @@
+Thu Nov 13 12:55:29 GMT 2003  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgml: Update the rest of Section 2
+
 Thu Nov 13 01:46:32 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkicontheme.c (gtk_icon_theme_init): Use 
