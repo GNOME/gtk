@@ -181,7 +181,7 @@ sanitize-la:
 	@true
 endif
 
-install-exec-local: gdkconfig.h sanitize-la
+install-exec-hook: gdkconfig.h sanitize-la
 	$(mkinstalldirs) $(DESTDIR)$(configexecincludedir)
 	file=$(DESTDIR)$(configexecincludedir)/gdkconfig.h; \
 	if test -r $$file && cmp -s gdkconfig.h $$file; then :; \
@@ -205,7 +205,7 @@ stamp-gc-h: ../config.status
 	cd .. && CONFIG_FILES= CONFIG_HEADERS= CONFIG_OTHER=gdk/gdkconfig.h ./config.status
 	echo timestamp > stamp-gc-h
 
-install-data-local: install-ms-lib install-libtool-import-lib
+install-data-hook: install-ms-lib install-libtool-import-lib
 
 uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
 

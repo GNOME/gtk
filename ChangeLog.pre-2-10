@@ -1,3 +1,10 @@
+2002-03-05  Manish Singh  <yosh@gimp.org>
+
+	* gdk/Makefile.am
+	* gtk/Makefile.am: use install-foo-hook instead of install-foo-local,
+        since foo-local is run before the their respective builtin targets
+	in automake 1.5
+
 2002-03-05  jacob berkman  <jacob@ximian.com>
 
 	* configure.in: change an == to =
