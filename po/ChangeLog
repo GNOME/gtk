@@ -1,3 +1,7 @@
+2004-02-22  Mətin Əmirov  <metin@karegen.com>
+
+	* az.po: Updated Azerbaijani translation.
+
 2004-02-21  Christian Rose  <menthos@menthos.com>
 
 	* sv.po: Use %m instead of %b for month in gtkfilechooser
