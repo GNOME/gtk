@@ -86,7 +86,7 @@ struct _GtkListClass
 };
 
 
-GtkType	   gtk_list_get_type		  (void);
+GtkType	   gtk_list_get_type		  (void) G_GNUC_CONST;
 GtkWidget* gtk_list_new			  (void);
 void	   gtk_list_insert_items	  (GtkList	    *list,
 					   GList	    *items,

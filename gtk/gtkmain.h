@@ -123,8 +123,8 @@ gint	   gtk_main_iteration	 (void);
 /* gtk_main_iteration() calls gtk_main_iteration_do(TRUE) */
 gint	   gtk_main_iteration_do (gboolean blocking);
 
-gint	   gtk_true		   (void);
-gint	   gtk_false		   (void);
+gint	   gtk_true		   (void) G_GNUC_CONST;
+gint	   gtk_false		   (void) G_GNUC_CONST;
 
 void	   gtk_grab_add		   (GtkWidget	       *widget);
 GtkWidget* gtk_grab_get_current	   (void);

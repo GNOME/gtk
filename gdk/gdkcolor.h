@@ -55,7 +55,7 @@ struct _GdkColormapClass
 
 };
 
-GType        gdk_colormap_get_type (void);
+GType        gdk_colormap_get_type (void) G_GNUC_CONST;
 
 GdkColormap* gdk_colormap_new	  (GdkVisual   *visual,
 				   gboolean	allocate);

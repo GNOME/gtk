@@ -106,7 +106,7 @@ struct _GtkContainerClass
 
 /* Application-level methods */
 
-GtkType gtk_container_get_type		 (void);
+GtkType gtk_container_get_type		 (void) G_GNUC_CONST;
 void    gtk_container_set_border_width	 (GtkContainer	   *container,
 					  guint		    border_width);
 void    gtk_container_add		 (GtkContainer	   *container,

@@ -65,7 +65,7 @@ struct _GtkPixmapClass
 };
 
 
-GtkType	   gtk_pixmap_get_type	 (void);
+GtkType	   gtk_pixmap_get_type	 (void) G_GNUC_CONST;
 GtkWidget* gtk_pixmap_new	 (GdkPixmap  *pixmap,
 				  GdkBitmap  *mask);
 void	   gtk_pixmap_set	 (GtkPixmap  *pixmap,

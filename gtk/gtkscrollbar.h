@@ -59,7 +59,7 @@ struct _GtkScrollbarClass
 };
 
 
-GtkType gtk_scrollbar_get_type (void);
+GtkType gtk_scrollbar_get_type (void) G_GNUC_CONST;
 
 
 #ifdef __cplusplus

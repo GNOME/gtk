@@ -436,7 +436,7 @@ struct _GtkCell
   } u;
 };
 
-GtkType gtk_clist_get_type (void);
+GtkType gtk_clist_get_type (void) G_GNUC_CONST;
 
 /* constructors useful for gtk-- wrappers */
 void gtk_clist_construct (GtkCList *clist,

@@ -107,7 +107,7 @@ struct _GtkCalendarClass
 };
 
 
-GtkType	   gtk_calendar_get_type	(void);
+GtkType	   gtk_calendar_get_type	(void) G_GNUC_CONST;
 GtkWidget* gtk_calendar_new		(void);
 
 gint	   gtk_calendar_select_month	(GtkCalendar *calendar, 

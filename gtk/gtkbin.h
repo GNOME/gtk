@@ -61,7 +61,7 @@ struct _GtkBinClass
 };
 
 
-GtkType  gtk_bin_get_type   (void);
+GtkType  gtk_bin_get_type   (void) G_GNUC_CONST;
 
 
 #ifdef __cplusplus

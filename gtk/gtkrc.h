@@ -119,7 +119,7 @@ void	  gtk_rc_add_widget_class_style (GtkRcStyle  *rc_style,
 void	  gtk_rc_add_class_style	(GtkRcStyle  *rc_style,
 					 const gchar *pattern);
 
-GType       gtk_rc_style_get_type   (void);
+GType       gtk_rc_style_get_type   (void) G_GNUC_CONST;
 GtkRcStyle* gtk_rc_style_new        (void);
 GtkRcStyle *gtk_rc_style_copy       (GtkRcStyle *orig);
 void        gtk_rc_style_ref        (GtkRcStyle *rc_style);

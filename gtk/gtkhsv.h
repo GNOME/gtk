@@ -66,7 +66,7 @@ struct _GtkHSVClass
 };
 
 
-GtkType    gtk_hsv_get_type     (void);
+GtkType    gtk_hsv_get_type     (void) G_GNUC_CONST;
 GtkWidget* gtk_hsv_new          (void);
 void       gtk_hsv_set_color    (GtkHSV    *hsv,
 				 double     h,

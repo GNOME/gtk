@@ -177,7 +177,7 @@ struct _GtkTextClass
 };
 
 
-GtkType    gtk_text_get_type        (void);
+GtkType    gtk_text_get_type        (void) G_GNUC_CONST;
 GtkWidget* gtk_text_new             (GtkAdjustment *hadj,
 				     GtkAdjustment *vadj);
 void       gtk_text_set_editable    (GtkText       *text,

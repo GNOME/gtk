@@ -64,7 +64,7 @@ struct _GtkDialogClass
 };
 
 
-GtkType    gtk_dialog_get_type (void);
+GtkType    gtk_dialog_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_dialog_new      (void);
 
 

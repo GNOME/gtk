@@ -61,7 +61,7 @@ struct _GtkDataClass
 };
 
 
-GtkType gtk_data_get_type (void);
+GtkType gtk_data_get_type (void) G_GNUC_CONST;
 
 
 #ifdef __cplusplus

@@ -68,7 +68,7 @@ struct _GtkLabelClass
   GtkMiscClass parent_class;
 };
 
-GtkType    gtk_label_get_type      (void);
+GtkType    gtk_label_get_type      (void) G_GNUC_CONST;
 GtkWidget *gtk_label_new           (const char       *str);
 void       gtk_label_set_text      (GtkLabel         *label,
 				    const char       *str);

@@ -59,7 +59,7 @@ struct _GtkVRulerClass
 };
 
 
-GtkType    gtk_vruler_get_type (void);
+GtkType    gtk_vruler_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_vruler_new      (void);
 
 

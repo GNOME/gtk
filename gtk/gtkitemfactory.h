@@ -125,7 +125,7 @@ struct _GtkItemFactoryItem
 };
 
 
-GtkType		gtk_item_factory_get_type	    (void);
+GtkType		gtk_item_factory_get_type	    (void) G_GNUC_CONST;
 
 /* `container_type' must be of GTK_TYPE_MENU_BAR, GTK_TYPE_MENU,
  * or GTK_TYPE_OPTION_MENU.

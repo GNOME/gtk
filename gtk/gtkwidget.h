@@ -406,7 +406,7 @@ struct _GtkWidgetShapeInfo
   GdkBitmap *shape_mask;
 };
 
-GtkType	   gtk_widget_get_type		  (void);
+GtkType	   gtk_widget_get_type		  (void) G_GNUC_CONST;
 GtkWidget* gtk_widget_new		  (GtkType		type,
 					   const gchar	       *first_arg_name,
 					   ...);

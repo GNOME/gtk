@@ -73,7 +73,7 @@ struct _GtkTreeItemClass
 };
 
 
-GtkType    gtk_tree_item_get_type       (void);
+GtkType    gtk_tree_item_get_type       (void) G_GNUC_CONST;
 GtkWidget* gtk_tree_item_new            (void);
 GtkWidget* gtk_tree_item_new_with_label (const gchar *label);
 void       gtk_tree_item_set_subtree    (GtkTreeItem *tree_item,

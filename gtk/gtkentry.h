@@ -79,7 +79,7 @@ struct _GtkEntryClass
   GtkEditableClass parent_class;
 };
 
-GtkType    gtk_entry_get_type       		(void);
+GtkType    gtk_entry_get_type       		(void) G_GNUC_CONST;
 GtkWidget* gtk_entry_new            		(void);
 GtkWidget* gtk_entry_new_with_max_length	(guint16       max);
 void       gtk_entry_set_text       		(GtkEntry      *entry,

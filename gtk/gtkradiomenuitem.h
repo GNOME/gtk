@@ -61,7 +61,7 @@ struct _GtkRadioMenuItemClass
 };
 
 
-GtkType    gtk_radio_menu_item_get_type	      (void);
+GtkType    gtk_radio_menu_item_get_type	      (void) G_GNUC_CONST;
 GtkWidget* gtk_radio_menu_item_new	      (GSList		*group);
 GtkWidget* gtk_radio_menu_item_new_with_label (GSList		*group,
 					       const gchar	*label);

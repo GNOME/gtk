@@ -66,7 +66,7 @@ struct _GtkScaleClass
   void (* draw_value) (GtkScale *scale);
 };
 
-GtkType gtk_scale_get_type        (void);
+GtkType gtk_scale_get_type        (void) G_GNUC_CONST;
 void    gtk_scale_set_digits      (GtkScale        *scale,
 				   gint             digits);
 void    gtk_scale_set_draw_value  (GtkScale        *scale,

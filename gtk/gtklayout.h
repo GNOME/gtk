@@ -82,7 +82,7 @@ struct _GtkLayoutClass {
 				     GtkAdjustment  *vadjustment);
 };
 
-GtkType        gtk_layout_get_type        (void);
+GtkType        gtk_layout_get_type        (void) G_GNUC_CONST;
 GtkWidget*     gtk_layout_new             (GtkAdjustment *hadjustment,
 				           GtkAdjustment *vadjustment);
 void           gtk_layout_put             (GtkLayout     *layout, 

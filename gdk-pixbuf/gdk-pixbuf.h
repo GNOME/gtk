@@ -60,7 +60,7 @@ typedef void (* GdkPixbufDestroyNotify) (guchar *pixels, gpointer data);
 
 
 
-GType gdk_pixbuf_get_type (void);
+GType gdk_pixbuf_get_type (void) G_GNUC_CONST;
 
 /* Reference counting */
 
@@ -195,7 +195,7 @@ typedef enum {
 	GDK_PIXBUF_FRAME_REVERT
 } GdkPixbufFrameAction;
 
-GType               gdk_pixbuf_animation_get_type        (void);
+GType               gdk_pixbuf_animation_get_type        (void) G_GNUC_CONST;
 
 GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file   (const char         *filename);
 

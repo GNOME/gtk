@@ -76,7 +76,7 @@ struct _GdkDragContextClass {
 
 /* Drag and Drop */
 
-GType            gdk_drag_context_get_type   (void);
+GType            gdk_drag_context_get_type   (void) G_GNUC_CONST;
 GdkDragContext * gdk_drag_context_new        (void);
 void             gdk_drag_context_ref        (GdkDragContext *context);
 void             gdk_drag_context_unref      (GdkDragContext *context);

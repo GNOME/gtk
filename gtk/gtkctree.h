@@ -170,7 +170,7 @@ struct _GtkCTreeNode {
  *           Creation, insertion, deletion                 *
  ***********************************************************/
 
-GtkType gtk_ctree_get_type                       (void);
+GtkType gtk_ctree_get_type                       (void) G_GNUC_CONST;
 void gtk_ctree_construct                         (GtkCTree     *ctree,
 						  gint          columns, 
 						  gint          tree_column,

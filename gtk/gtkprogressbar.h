@@ -87,7 +87,7 @@ struct _GtkProgressBarClass
 };
 
 
-GtkType    gtk_progress_bar_get_type             (void);
+GtkType    gtk_progress_bar_get_type             (void) G_GNUC_CONST;
 GtkWidget* gtk_progress_bar_new                  (void);
 
 /*

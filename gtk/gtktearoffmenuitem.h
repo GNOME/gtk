@@ -61,7 +61,7 @@ struct _GtkTearoffMenuItemClass
 };
 
 
-GtkType	   gtk_tearoff_menu_item_get_type     (void);
+GtkType	   gtk_tearoff_menu_item_get_type     (void) G_GNUC_CONST;
 GtkWidget* gtk_tearoff_menu_item_new	      (void);
 
 #ifdef __cplusplus

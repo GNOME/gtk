@@ -68,7 +68,7 @@ struct _GtkFrameClass
 };
 
 
-GtkType    gtk_frame_get_type         (void);
+GtkType    gtk_frame_get_type         (void) G_GNUC_CONST;
 GtkWidget* gtk_frame_new              (const gchar   *label);
 void       gtk_frame_set_label        (GtkFrame      *frame,
 				       const gchar   *label);

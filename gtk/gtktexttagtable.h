@@ -36,7 +36,7 @@ struct _GtkTextTagTableClass {
   void (* tag_removed) (GtkTextTagTable *table, GtkTextTag *tag);
 };
 
-GtkType          gtk_text_tag_table_get_type (void);
+GtkType          gtk_text_tag_table_get_type (void) G_GNUC_CONST;
 
 GtkTextTagTable *gtk_text_tag_table_new      (void);
 void             gtk_text_tag_table_add      (GtkTextTagTable        *table,

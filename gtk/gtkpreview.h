@@ -91,7 +91,7 @@ struct _GtkPreviewClass
 };
 
 
-GtkType         gtk_preview_get_type           (void);
+GtkType         gtk_preview_get_type           (void) G_GNUC_CONST;
 void            gtk_preview_uninit             (void);
 GtkWidget*      gtk_preview_new                (GtkPreviewType   type);
 void            gtk_preview_size               (GtkPreview      *preview,

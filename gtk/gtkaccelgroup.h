@@ -86,7 +86,7 @@ struct _GtkAccelEntry
 /* Accelerators
  */
 gboolean gtk_accelerator_valid		      (guint	        keyval,
-					       GdkModifierType  modifiers);
+					       GdkModifierType  modifiers) G_GNUC_CONST;
 void	 gtk_accelerator_parse		      (const gchar     *accelerator,
 					       guint	       *accelerator_key,
 					       GdkModifierType *accelerator_mods);

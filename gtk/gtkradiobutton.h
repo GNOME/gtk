@@ -61,7 +61,7 @@ struct _GtkRadioButtonClass
 };
 
 
-GtkType	    gtk_radio_button_get_type	     (void);
+GtkType	    gtk_radio_button_get_type	     (void) G_GNUC_CONST;
 GtkWidget*  gtk_radio_button_new	     (GSList	     *group);
 GtkWidget*  gtk_radio_button_new_from_widget (GtkRadioButton *group);
 GtkWidget*  gtk_radio_button_new_with_label  (GSList	     *group,

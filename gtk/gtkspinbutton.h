@@ -110,7 +110,7 @@ struct _GtkSpinButtonClass
 };
 
 
-GtkType		gtk_spin_button_get_type	   (void);
+GtkType		gtk_spin_button_get_type	   (void) G_GNUC_CONST;
 
 void		gtk_spin_button_configure	   (GtkSpinButton  *spin_button,
 						    GtkAdjustment  *adjustment,

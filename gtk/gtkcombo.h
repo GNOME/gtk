@@ -71,7 +71,7 @@ struct _GtkComboClass {
 	GtkHBoxClass parent_class;
 };
 
-GtkType    gtk_combo_get_type              (void);
+GtkType    gtk_combo_get_type              (void) G_GNUC_CONST;
 
 GtkWidget* gtk_combo_new                   (void);
 /* the text in the entry must be or not be in the list */

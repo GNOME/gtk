@@ -55,7 +55,7 @@ struct _GtkVPanedClass
   GtkPanedClass parent_class;
 };
 
-GtkType    gtk_vpaned_get_type (void);
+GtkType    gtk_vpaned_get_type (void) G_GNUC_CONST;
 GtkWidget *gtk_vpaned_new      (void);
 
 

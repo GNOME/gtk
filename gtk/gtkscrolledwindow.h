@@ -75,7 +75,7 @@ struct _GtkScrolledWindowClass
 };
 
 
-GtkType        gtk_scrolled_window_get_type          (void);
+GtkType        gtk_scrolled_window_get_type          (void) G_GNUC_CONST;
 GtkWidget*     gtk_scrolled_window_new               (GtkAdjustment     *hadjustment,
 						      GtkAdjustment     *vadjustment);
 void           gtk_scrolled_window_set_hadjustment   (GtkScrolledWindow *scrolled_window,

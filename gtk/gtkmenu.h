@@ -84,7 +84,7 @@ struct _GtkMenuClass
 };
 
 
-GtkType	   gtk_menu_get_type		  (void);
+GtkType	   gtk_menu_get_type		  (void) G_GNUC_CONST;
 GtkWidget* gtk_menu_new			  (void);
 
 /* Wrappers for the Menu Shell operations */

@@ -140,7 +140,7 @@ struct _GtkTextLineDisplay
 
 extern PangoAttrType gtk_text_attr_appearance_type;
 
-GtkType        gtk_text_layout_get_type (void);
+GtkType        gtk_text_layout_get_type (void) G_GNUC_CONST;
 GtkTextLayout *gtk_text_layout_new      (void);
 
 void gtk_text_layout_set_buffer            (GtkTextLayout      *layout,

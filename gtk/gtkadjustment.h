@@ -69,7 +69,7 @@ struct _GtkAdjustmentClass
 };
 
 
-GtkType	   gtk_adjustment_get_type		(void);
+GtkType	   gtk_adjustment_get_type		(void) G_GNUC_CONST;
 GtkObject* gtk_adjustment_new			(gfloat		  value,
 						 gfloat		  lower,
 						 gfloat		  upper,

@@ -186,7 +186,7 @@ struct _GdkGCClass
 };
 
 
-GType  gdk_gc_get_type            (void);
+GType  gdk_gc_get_type            (void) G_GNUC_CONST;
 GdkGC *gdk_gc_new		  (GdkDrawable	    *drawable);
 GdkGC *gdk_gc_new_with_values	  (GdkDrawable	    *drawable,
 				   GdkGCValues	    *values,

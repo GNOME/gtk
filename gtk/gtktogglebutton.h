@@ -66,7 +66,7 @@ struct _GtkToggleButtonClass
 };
 
 
-GtkType    gtk_toggle_button_get_type       (void);
+GtkType    gtk_toggle_button_get_type       (void) G_GNUC_CONST;
 GtkWidget* gtk_toggle_button_new            (void);
 GtkWidget* gtk_toggle_button_new_with_label (const gchar     *label);
 void       gtk_toggle_button_set_mode       (GtkToggleButton *toggle_button,

@@ -99,7 +99,7 @@ struct _GtkTableRowCol
 };
 
 
-GtkType	   gtk_table_get_type	      (void);
+GtkType	   gtk_table_get_type	      (void) G_GNUC_CONST;
 GtkWidget* gtk_table_new	      (guint		rows,
 				       guint		columns,
 				       gboolean		homogeneous);

@@ -78,7 +78,7 @@ struct _GtkProgressClass
  * directly.
  */
 
-GtkType    gtk_progress_get_type            (void);
+GtkType    gtk_progress_get_type            (void) G_GNUC_CONST;
 void       gtk_progress_set_show_text       (GtkProgress   *progress,
 					     gint           show_text);
 void       gtk_progress_set_text_alignment  (GtkProgress   *progress,

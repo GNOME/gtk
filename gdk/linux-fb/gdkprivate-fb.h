@@ -93,7 +93,7 @@ typedef struct {
   GdkDrawableFBClass klass;
 } GdkPixmapFBClass;
 
-GType gdk_drawable_impl_fb_get_type (void);
+GType gdk_drawable_impl_fb_get_type (void) G_GNUC_CONST;
 
 typedef struct {
   gulong length;
@@ -185,12 +185,7 @@ typedef struct {
   GdkGCClass parent_class;
 } GdkGCFBClass;
 
-GType gdk_gc_fb_get_type (void);
-#if 0
-GdkGC *       _gdk_fb_gc_new          (GdkDrawable     *drawable,
-				       GdkGCValues     *values,
-				       GdkGCValuesMask  values_mask);
-#endif
+GType gdk_gc_fb_get_type (void) G_GNUC_CONST;
 
 /* Routines from gdkgeometry-fb.c */
 
@@ -319,7 +314,7 @@ typedef struct {
   int hbearing;
 } PangoFBGlyphInfo;
 
-GType pango_fb_font_get_type (void);
+GType pango_fb_font_get_type (void) G_GNUC_CONST;
 gboolean pango_fb_has_glyph(PangoFont *font, PangoGlyph glyph);
 PangoGlyph pango_fb_get_unknown_glyph(PangoFont *font);
 PangoFBGlyphInfo *pango_fb_font_get_glyph_info(PangoFont *font, PangoGlyph glyph);

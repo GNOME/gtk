@@ -55,7 +55,7 @@ struct _GnomeCanvasPixbufClass {
 };
 
 
-GtkType gnome_canvas_pixbuf_get_type (void);
+GtkType gnome_canvas_pixbuf_get_type (void) G_GNUC_CONST;
 
 
 

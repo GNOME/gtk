@@ -34,7 +34,7 @@ struct _GdkPixmapObjectClass
 
 };
 
-GType      gdk_pixmap_get_type          (void);
+GType      gdk_pixmap_get_type          (void) G_GNUC_CONST;
 
 /* Pixmaps
  */

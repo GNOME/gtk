@@ -63,7 +63,7 @@ struct _GtkItemClass
 };
 
 
-GtkType gtk_item_get_type (void);
+GtkType gtk_item_get_type (void) G_GNUC_CONST;
 void    gtk_item_select   (GtkItem *item);
 void    gtk_item_deselect (GtkItem *item);
 void    gtk_item_toggle   (GtkItem *item);

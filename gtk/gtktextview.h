@@ -125,7 +125,7 @@ struct _GtkTextViewClass {
 				     GtkAdjustment  *vadjustment);
 };
 
-GtkType        gtk_text_view_get_type              (void);
+GtkType        gtk_text_view_get_type              (void) G_GNUC_CONST;
 GtkWidget *    gtk_text_view_new                   (void);
 GtkWidget *    gtk_text_view_new_with_buffer       (GtkTextBuffer *buffer);
 void           gtk_text_view_set_buffer            (GtkTextView   *text_view,

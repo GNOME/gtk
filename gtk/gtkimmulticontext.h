@@ -50,7 +50,7 @@ struct _GtkIMMulticontextClass
   GtkIMContextClass parent_class;
 };
 
-GtkType       gtk_im_multicontext_get_type (void);
+GtkType       gtk_im_multicontext_get_type (void) G_GNUC_CONST;
 GtkIMContext *gtk_im_multicontext_new      (void);
 
 #ifdef __cplusplus

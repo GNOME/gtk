@@ -89,7 +89,7 @@ struct _GtkTreeClass
 };
 
 
-GtkType    gtk_tree_get_type           (void);
+GtkType    gtk_tree_get_type           (void) G_GNUC_CONST;
 GtkWidget* gtk_tree_new                (void);
 void       gtk_tree_append             (GtkTree          *tree,
 				        GtkWidget        *tree_item);

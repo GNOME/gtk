@@ -196,7 +196,7 @@ struct _GdkWindowObjectClass
 
 /* Windows
  */
-GType         gdk_window_object_get_type       (void);
+GType         gdk_window_object_get_type       (void) G_GNUC_CONST;
 GdkWindow*    gdk_window_new                   (GdkWindow     *parent,
                                                 GdkWindowAttr *attributes,
                                                 gint           attributes_mask);

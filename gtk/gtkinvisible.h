@@ -59,7 +59,7 @@ struct _GtkInvisibleClass
   GtkWidgetClass parent_class;
 };
 
-GtkType	       gtk_invisible_get_type	     (void);
+GtkType	       gtk_invisible_get_type	     (void) G_GNUC_CONST;
 GtkWidget*     gtk_invisible_new	     (void);
 
 #ifdef __cplusplus

@@ -111,7 +111,7 @@ struct _GtkNotebookPage
  *           Creation, insertion, deletion                 *
  ***********************************************************/
 
-GtkType gtk_notebook_get_type       (void);
+GtkType gtk_notebook_get_type       (void) G_GNUC_CONST;
 GtkWidget * gtk_notebook_new        (void);
 void gtk_notebook_append_page       (GtkNotebook *notebook,
 				     GtkWidget   *child,

@@ -56,7 +56,7 @@ struct _GdkImageClass
   GObjectClass parent_class;
 };
 
-GType     gdk_image_get_type   (void);
+GType     gdk_image_get_type   (void) G_GNUC_CONST;
 
 GdkImage* gdk_image_new_bitmap (GdkVisual     *visual,
 				gpointer      data,

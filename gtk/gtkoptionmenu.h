@@ -65,7 +65,7 @@ struct _GtkOptionMenuClass
 };
 
 
-GtkType    gtk_option_menu_get_type    (void);
+GtkType    gtk_option_menu_get_type    (void) G_GNUC_CONST;
 GtkWidget* gtk_option_menu_new         (void);
 GtkWidget* gtk_option_menu_get_menu    (GtkOptionMenu *option_menu);
 void       gtk_option_menu_set_menu    (GtkOptionMenu *option_menu,

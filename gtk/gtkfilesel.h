@@ -83,7 +83,7 @@ struct _GtkFileSelectionClass
 };
 
 
-GtkType    gtk_file_selection_get_type            (void);
+GtkType    gtk_file_selection_get_type            (void) G_GNUC_CONST;
 GtkWidget* gtk_file_selection_new                 (const gchar      *title);
 void       gtk_file_selection_set_filename        (GtkFileSelection *filesel,
 						   const gchar      *filename);

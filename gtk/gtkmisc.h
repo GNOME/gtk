@@ -65,7 +65,7 @@ struct _GtkMiscClass
 };
 
 
-GtkType gtk_misc_get_type      (void);
+GtkType gtk_misc_get_type      (void) G_GNUC_CONST;
 void	gtk_misc_set_alignment (GtkMisc *misc,
 				gfloat	 xalign,
 				gfloat	 yalign);

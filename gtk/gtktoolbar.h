@@ -106,7 +106,7 @@ struct _GtkToolbarClass
 };
 
 
-GtkType    gtk_toolbar_get_type        (void);
+GtkType    gtk_toolbar_get_type        (void) G_GNUC_CONST;
 GtkWidget* gtk_toolbar_new             (GtkOrientation   orientation,
 					GtkToolbarStyle  style);
 

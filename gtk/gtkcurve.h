@@ -80,7 +80,7 @@ struct _GtkCurveClass
 };
 
 
-GtkType		gtk_curve_get_type	(void);
+GtkType		gtk_curve_get_type	(void) G_GNUC_CONST;
 GtkWidget*	gtk_curve_new		(void);
 void		gtk_curve_reset		(GtkCurve *curve);
 void		gtk_curve_set_gamma	(GtkCurve *curve, gfloat gamma);

@@ -61,7 +61,7 @@ struct _GtkMenuBarClass
 };
 
 
-GtkType    gtk_menu_bar_get_type        (void);
+GtkType    gtk_menu_bar_get_type        (void) G_GNUC_CONST;
 GtkWidget* gtk_menu_bar_new             (void);
 void       gtk_menu_bar_append          (GtkMenuBar    *menu_bar,
 					 GtkWidget     *child);

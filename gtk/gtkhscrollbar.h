@@ -59,7 +59,7 @@ struct _GtkHScrollbarClass
 };
 
 
-GtkType    gtk_hscrollbar_get_type (void);
+GtkType    gtk_hscrollbar_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_hscrollbar_new      (GtkAdjustment *adjustment);
 
 

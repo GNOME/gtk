@@ -141,13 +141,13 @@ guint    gdk_keyval_from_name    (const gchar *keyval_name);
 void     gdk_keyval_convert_case (guint        symbol,
 				  guint       *lower,
 				  guint       *upper);
-guint    gdk_keyval_to_upper     (guint        keyval);
-guint    gdk_keyval_to_lower     (guint        keyval);
-gboolean gdk_keyval_is_upper     (guint        keyval);
-gboolean gdk_keyval_is_lower     (guint        keyval);
+guint    gdk_keyval_to_upper     (guint        keyval) G_GNUC_CONST;
+guint    gdk_keyval_to_lower     (guint        keyval) G_GNUC_CONST;
+gboolean gdk_keyval_is_upper     (guint        keyval) G_GNUC_CONST;
+gboolean gdk_keyval_is_lower     (guint        keyval) G_GNUC_CONST;
 
-guint32  gdk_keyval_to_unicode   (guint        keyval);
-guint    gdk_unicode_to_keyval   (guint32      wc);
+guint32  gdk_keyval_to_unicode   (guint        keyval) G_GNUC_CONST;
+guint    gdk_unicode_to_keyval   (guint32      wc) G_GNUC_CONST;
 
 /* Threading
  */

@@ -72,7 +72,7 @@ struct	_GtkSignalQuery
 /* Application-level methods */
 guint  gtk_signal_lookup		  (const gchar	       *name,
 					   GtkType		object_type);
-gchar* gtk_signal_name			  (guint		signal_id);
+gchar* gtk_signal_name			  (guint		signal_id) G_GNUC_CONST;
 guint  gtk_signal_n_emissions		  (GtkObject   	       *object,
 					   guint                signal_id);
 guint  gtk_signal_n_emissions_by_name	  (GtkObject   	       *object,

@@ -67,7 +67,7 @@ struct _GtkIMContextClass
   void     (*focus_out)          (GtkIMContext   *context);
 };
 
-GtkType       gtk_im_context_get_type           (void);
+GtkType       gtk_im_context_get_type           (void) G_GNUC_CONST;
 
 void          gtk_im_context_set_client_window  (GtkIMContext   *context,
 						 GdkWindow      *window);

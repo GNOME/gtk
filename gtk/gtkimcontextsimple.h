@@ -52,7 +52,7 @@ struct _GtkIMContextSimpleClass
   GtkIMContextClass parent_class;
 };
 
-GtkType       gtk_im_context_simple_get_type (void);
+GtkType       gtk_im_context_simple_get_type (void) G_GNUC_CONST;
 GtkIMContext *gtk_im_context_simple_new      (void);
 
 #ifdef __cplusplus

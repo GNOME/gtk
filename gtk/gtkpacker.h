@@ -123,7 +123,7 @@ struct _GtkPackerClass
 };
 
 
-GtkType    gtk_packer_get_type		       (void);
+GtkType    gtk_packer_get_type		       (void) G_GNUC_CONST;
 GtkWidget* gtk_packer_new        	       (void);
 void       gtk_packer_add_defaults	       (GtkPacker       *packer, 
 						GtkWidget       *child,

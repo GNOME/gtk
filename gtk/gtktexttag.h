@@ -94,7 +94,7 @@ struct _GtkTextTagClass {
                   const GtkTextIter *iter);        /* location of event in buffer */
 };
 
-GtkType      gtk_text_tag_get_type     (void);
+GtkType      gtk_text_tag_get_type     (void) G_GNUC_CONST;
 GtkTextTag  *gtk_text_tag_new          (const gchar       *name);
 gint         gtk_text_tag_get_priority (GtkTextTag        *tag);
 void         gtk_text_tag_set_priority (GtkTextTag        *tag,

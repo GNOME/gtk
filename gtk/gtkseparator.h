@@ -60,7 +60,7 @@ struct _GtkSeparatorClass
 };
 
 
-GtkType  gtk_separator_get_type (void);
+GtkType  gtk_separator_get_type (void) G_GNUC_CONST;
 
 
 #ifdef __cplusplus

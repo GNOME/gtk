@@ -64,7 +64,7 @@ struct _GtkAlignmentClass
 };
 
 
-GtkType    gtk_alignment_get_type   (void);
+GtkType    gtk_alignment_get_type   (void) G_GNUC_CONST;
 GtkWidget* gtk_alignment_new        (gfloat             xalign,
 				     gfloat             yalign,
 				     gfloat             xscale,

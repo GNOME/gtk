@@ -62,7 +62,7 @@ struct _GtkImageClass
 };
 
 
-GtkType    gtk_image_get_type (void);
+GtkType    gtk_image_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_image_new      (GdkImage   *val,
 			       GdkBitmap  *mask);
 void       gtk_image_set      (GtkImage   *image,

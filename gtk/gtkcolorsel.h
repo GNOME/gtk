@@ -69,7 +69,7 @@ struct _GtkColorSelectionClass
 
 /* ColorSelection */ 
 
-GtkType     gtk_color_selection_get_type          (void);
+GtkType     gtk_color_selection_get_type          (void) G_GNUC_CONST;
 GtkWidget * gtk_color_selection_new               (void);
 void        gtk_color_selection_set_update_policy (GtkColorSelection *colorsel,
 						   GtkUpdateType      policy);

@@ -58,7 +58,7 @@ struct _GtkEventBoxClass
   GtkBinClass parent_class;
 };
 
-GtkType	       gtk_event_box_get_type	     (void);
+GtkType	       gtk_event_box_get_type	     (void) G_GNUC_CONST;
 GtkWidget*     gtk_event_box_new	     (void);
 
 #ifdef __cplusplus

@@ -121,7 +121,7 @@ struct _GtkFontSelectionDialogClass
  *   see the comments in the GtkFontSelectionDialog functions.
  *****************************************************************************/
 
-GtkType	   gtk_font_selection_get_type		(void);
+GtkType	   gtk_font_selection_get_type		(void) G_GNUC_CONST;
 GtkWidget* gtk_font_selection_new		(void);
 gchar*	   gtk_font_selection_get_font_name	(GtkFontSelection *fontsel);
 GdkFont*   gtk_font_selection_get_font		(GtkFontSelection *fontsel);
@@ -139,7 +139,7 @@ void	   gtk_font_selection_set_preview_text	(GtkFontSelection *fontsel,
  *   GtkFontSelection.
  *****************************************************************************/
 
-GtkType	   gtk_font_selection_dialog_get_type	(void);
+GtkType	   gtk_font_selection_dialog_get_type	(void) G_GNUC_CONST;
 GtkWidget* gtk_font_selection_dialog_new	(const gchar	  *title);
 
 /* This returns the X Logical Font Description fontname, or NULL if no font

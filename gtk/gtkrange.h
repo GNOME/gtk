@@ -115,7 +115,7 @@ struct _GtkRangeClass
 };
 
 
-GtkType        gtk_range_get_type               (void);
+GtkType        gtk_range_get_type               (void) G_GNUC_CONST;
 GtkAdjustment* gtk_range_get_adjustment         (GtkRange      *range);
 void           gtk_range_set_update_policy      (GtkRange      *range,
 						 GtkUpdateType  policy);

@@ -84,7 +84,7 @@ struct _GtkMenuShellClass
 };
 
 
-GtkType gtk_menu_shell_get_type	  (void);
+GtkType gtk_menu_shell_get_type	  (void) G_GNUC_CONST;
 void	gtk_menu_shell_append	  (GtkMenuShell *menu_shell,
 				   GtkWidget	*child);
 void	gtk_menu_shell_prepend	  (GtkMenuShell *menu_shell,

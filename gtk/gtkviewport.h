@@ -70,7 +70,7 @@ struct _GtkViewportClass
 };
 
 
-GtkType        gtk_viewport_get_type        (void);
+GtkType        gtk_viewport_get_type        (void) G_GNUC_CONST;
 GtkWidget*     gtk_viewport_new             (GtkAdjustment *hadjustment,
 					     GtkAdjustment *vadjustment);
 GtkAdjustment* gtk_viewport_get_hadjustment (GtkViewport   *viewport);

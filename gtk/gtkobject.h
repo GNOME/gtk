@@ -165,7 +165,7 @@ struct _GtkObjectClass
 
 /* Application-level methods */
 
-GtkType	gtk_object_get_type		(void);
+GtkType	gtk_object_get_type		(void) G_GNUC_CONST;
 
 /* Append a user defined signal without default handler to a class. */
 guint	gtk_object_class_user_signal_new  (GtkObjectClass     *klass,

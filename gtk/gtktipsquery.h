@@ -88,7 +88,7 @@ struct	_GtkTipsQueryClass
 
 
 /* --- prototypes --- */
-GtkType		gtk_tips_query_get_type		(void);
+GtkType		gtk_tips_query_get_type		(void) G_GNUC_CONST;
 GtkWidget*	gtk_tips_query_new		(void);
 void		gtk_tips_query_start_query	(GtkTipsQuery	*tips_query);
 void		gtk_tips_query_stop_query	(GtkTipsQuery	*tips_query);

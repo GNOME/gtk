@@ -65,7 +65,7 @@ struct _GtkCheckButtonClass
 };
 
 
-GtkType    gtk_check_button_get_type       (void);
+GtkType    gtk_check_button_get_type       (void) G_GNUC_CONST;
 GtkWidget* gtk_check_button_new            (void);
 GtkWidget* gtk_check_button_new_with_label (const gchar *label);
 

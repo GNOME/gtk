@@ -90,7 +90,7 @@ struct _GtkWindowClass
 };
 
 
-GtkType    gtk_window_get_type                 (void);
+GtkType    gtk_window_get_type                 (void) G_GNUC_CONST;
 GtkWidget* gtk_window_new                      (GtkWindowType        type);
 void       gtk_window_set_title                (GtkWindow           *window,
 						const gchar         *title);

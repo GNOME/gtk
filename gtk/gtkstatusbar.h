@@ -82,7 +82,7 @@ struct _GtkStatusbarMsg
   guint message_id;
 };
 
-GtkType    gtk_statusbar_get_type     	(void);
+GtkType    gtk_statusbar_get_type     	(void) G_GNUC_CONST;
 GtkWidget* gtk_statusbar_new          	(void);
 /* If you don't want to use contexts, 0 is a predefined global
  * context_id you can pass to push/pop/remove

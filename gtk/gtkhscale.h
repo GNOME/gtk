@@ -59,7 +59,7 @@ struct _GtkHScaleClass
 };
 
 
-GtkType    gtk_hscale_get_type (void);
+GtkType    gtk_hscale_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_hscale_new      (GtkAdjustment *adjustment);
 
 

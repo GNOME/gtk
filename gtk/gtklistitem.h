@@ -77,7 +77,7 @@ struct _GtkListItemClass
 };
 
 
-GtkType    gtk_list_item_get_type       (void);
+GtkType    gtk_list_item_get_type       (void) G_GNUC_CONST;
 GtkWidget* gtk_list_item_new            (void);
 GtkWidget* gtk_list_item_new_with_label (const gchar      *label);
 void       gtk_list_item_select         (GtkListItem      *list_item);

@@ -69,7 +69,7 @@ struct _GtkFixedChild
 };
 
 
-GtkType    gtk_fixed_get_type          (void);
+GtkType    gtk_fixed_get_type          (void) G_GNUC_CONST;
 GtkWidget* gtk_fixed_new               (void);
 void       gtk_fixed_put               (GtkFixed       *fixed,
                                         GtkWidget      *widget,

@@ -75,7 +75,7 @@ struct _GtkTooltipsClass
   GtkDataClass parent_class;
 };
 
-GtkType		 gtk_tooltips_get_type	   (void);
+GtkType		 gtk_tooltips_get_type	   (void) G_GNUC_CONST;
 GtkTooltips*	 gtk_tooltips_new	   (void);
 
 void		 gtk_tooltips_enable	   (GtkTooltips   *tooltips);

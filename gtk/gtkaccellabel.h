@@ -76,7 +76,7 @@ struct _GtkAccelLabelClass
 };
 
 
-GtkType	   gtk_accel_label_get_type	     (void);
+GtkType	   gtk_accel_label_get_type	     (void) G_GNUC_CONST;
 GtkWidget* gtk_accel_label_new		     (const gchar   *string);
 guint	   gtk_accel_label_get_accel_width   (GtkAccelLabel *accel_label);
 void	   gtk_accel_label_set_accel_widget  (GtkAccelLabel *accel_label,

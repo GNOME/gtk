@@ -65,7 +65,7 @@ struct _GtkButtonBoxClass
 };
 
 
-GtkType gtk_button_box_get_type (void);
+GtkType gtk_button_box_get_type (void) G_GNUC_CONST;
 
 void gtk_button_box_get_child_size_default (gint *min_width, gint *min_height);
 void gtk_button_box_get_child_ipadding_default (gint *ipad_x, gint *ipad_y);

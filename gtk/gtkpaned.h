@@ -86,7 +86,7 @@ struct _GtkPanedClass
 };
 
 
-GtkType gtk_paned_get_type        (void);
+GtkType gtk_paned_get_type        (void) G_GNUC_CONST;
 void    gtk_paned_add1            (GtkPaned  *paned,
 				   GtkWidget *child);
 void    gtk_paned_add2            (GtkPaned  *paned,

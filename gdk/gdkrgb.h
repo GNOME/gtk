@@ -45,7 +45,7 @@ struct _GdkRgbCmap {
 
 void gdk_rgb_init (void);
 
-gulong gdk_rgb_xpixel_from_rgb   (guint32      rgb);
+gulong gdk_rgb_xpixel_from_rgb   (guint32      rgb) G_GNUC_CONST;
 void   gdk_rgb_gc_set_foreground (GdkGC       *gc,
 				  guint32      rgb);
 void   gdk_rgb_gc_set_background (GdkGC       *gc,
