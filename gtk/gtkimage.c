@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <math.h>
 #include "gtkcontainer.h"
 #include "gtkimage.h"
 #include "gtkiconfactory.h"
@@ -1202,6 +1203,7 @@ gtk_image_expose (GtkWidget      *widget,
       GtkImage *image;
       GtkMisc *misc;
       GdkRectangle area, image_bound;
+      gfloat xalign;
       gint x, y;
       GdkBitmap *mask = NULL;
       GdkPixbuf *stock_pixbuf = NULL;
@@ -1209,15 +1211,18 @@ gtk_image_expose (GtkWidget      *widget,
       image = GTK_IMAGE (widget);
       misc = GTK_MISC (widget);
 
-      x = (widget->allocation.x * (1.0 - misc->xalign) +
-	   (widget->allocation.x + widget->allocation.width
-	    - (widget->requisition.width - misc->xpad * 2)) *
-	   misc->xalign) + 0.5;
-      y = (widget->allocation.y * (1.0 - misc->yalign) +
-	   (widget->allocation.y + widget->allocation.height
-	    - (widget->requisition.height - misc->ypad * 2)) *
-	   misc->yalign) + 0.5;
-
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+	xalign = misc->xalign;
+      else
+	xalign = 1.0 - misc->xalign;
+  
+      x = floor (widget->allocation.x + misc->xpad
+		 + ((widget->allocation.width - widget->requisition.width) * xalign)
+		 + 0.5);
+      y = floor (widget->allocation.y + misc->ypad 
+		 + ((widget->allocation.height - widget->requisition.height) * misc->yalign)
+		 + 0.5);
+      
       image_bound.x = x;
       image_bound.y = y;      
 

@@ -1,3 +1,11 @@
+Thu Dec 27 16:05:30 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkarrow.c gtk/gtkimage.c gtkpixmap.c: Make interpretation
+	of misc->xpad/ypad consistent with GtkLabel. Do 
+	directional flipping when interpreting misc->xalign/yalign.
+	Fix off-by-one error for negative x,y. (#67472, reported
+	by Mathieu Lacage)
+
 Thu Dec 27 15:45:41 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_set_style_internal):

@@ -27,6 +27,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <math.h>
 #include "gtkcontainer.h"
 #include "gtkpixmap.h"
 
@@ -190,6 +191,7 @@ gtk_pixmap_expose (GtkWidget      *widget,
   GtkPixmap *pixmap;
   GtkMisc *misc;
   gint x, y;
+  gfloat xalign;
 
   g_return_val_if_fail (GTK_IS_PIXMAP (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -199,15 +201,18 @@ gtk_pixmap_expose (GtkWidget      *widget,
       pixmap = GTK_PIXMAP (widget);
       misc = GTK_MISC (widget);
 
-      x = (widget->allocation.x * (1.0 - misc->xalign) +
-	   (widget->allocation.x + widget->allocation.width
-	    - (widget->requisition.width - misc->xpad * 2)) *
-	   misc->xalign) + 0.5;
-      y = (widget->allocation.y * (1.0 - misc->yalign) +
-	   (widget->allocation.y + widget->allocation.height
-	    - (widget->requisition.height - misc->ypad * 2)) *
-	   misc->yalign) + 0.5;
-
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+	xalign = misc->xalign;
+      else
+	xalign = 1.0 - misc->xalign;
+  
+      x = floor (widget->allocation.x + misc->xpad
+		 + ((widget->allocation.width - widget->requisition.width) * xalign)
+		 + 0.5);
+      y = floor (widget->allocation.y + misc->ypad 
+		 + ((widget->allocation.height - widget->requisition.height) * misc->yalign)
+		 + 0.5);
+      
       if (pixmap->mask)
 	{
 	  gdk_gc_set_clip_mask (widget->style->black_gc, pixmap->mask);

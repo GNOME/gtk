@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <math.h>
 #include "gtkarrow.h"
 #include "gtkintl.h"
 
@@ -231,6 +232,7 @@ gtk_arrow_expose (GtkWidget      *widget,
   gint width, height;
   gint x, y;
   gint extent;
+  gfloat xalign;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_ARROW (widget), FALSE);
@@ -245,11 +247,18 @@ gtk_arrow_expose (GtkWidget      *widget,
       height = widget->allocation.height - misc->ypad * 2;
       extent = MIN (width, height);
 
-      x = ((widget->allocation.x + misc->xpad) * (1.0 - misc->xalign) +
-	   (widget->allocation.x + widget->allocation.width - extent - misc->xpad) * misc->xalign);
-      y = ((widget->allocation.y + misc->ypad) * (1.0 - misc->yalign) +
-	   (widget->allocation.y + widget->allocation.height - extent - misc->ypad) * misc->yalign);
-
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+	xalign = misc->xalign;
+      else
+	xalign = 1.0 - misc->xalign;
+  
+      x = floor (widget->allocation.x + misc->xpad
+		 + ((widget->allocation.width - extent) * xalign)
+		 + 0.5);
+      y = floor (widget->allocation.y + misc->ypad 
+		 + ((widget->allocation.height - extent) * misc->yalign)
+		 + 0.5);
+      
       shadow_type = arrow->shadow_type;
 
       if (widget->state == GTK_STATE_ACTIVE)
