@@ -1079,63 +1079,80 @@ convert_to_format (guchar        *src_buf,
 	  }
 	case FORMAT_ARGB_MASK:
 	  {
-	    guint *p = (guint *)(src_buf + i * src_rowstride);
-	    guint *q = (guint *)(dest_buf + i * dest_rowstride);
-	    guint *end = p + width;
+	    guchar *row = src_buf + i * src_rowstride;
+	    if (((gsize)row & 3) != 0)
+	      {
+		guchar *p = row;
+		guint32 *q = (guint32 *)(dest_buf + i * dest_rowstride);
+		guchar *end = p + 4 * width;
+
+		while (p < end)
+		  {
+		    *q = (p[3] << 24) | (p[0] << 16) | (p[1] << 8) | p[2];
+		    p += 4;
+		    q++;
+		  }
+	      }
+	    else
+	      {
+		guint32 *p = (guint32 *)row;
+		guint32 *q = (guint32 *)(dest_buf + i * dest_rowstride);
+		guint32 *end = p + width;
 
 #if G_BYTE_ORDER == G_LITTLE_ENDIAN	    
-	    if (dest_byteorder == GDK_LSB_FIRST)
-	      {
-		/* ABGR => ARGB */
-		
-		while (p < end)
+		if (dest_byteorder == GDK_LSB_FIRST)
 		  {
-		    *q = ( (*p & 0xff00ff00) |
-			  ((*p & 0x000000ff) << 16) |
-			  ((*p & 0x00ff0000) >> 16));
-		    q++;
-		    p++;
-		  }
-	      }
-	    else
-	      {
-		/* ABGR => BGRA */
+		    /* ABGR => ARGB */
 		
-		while (p < end)
-		  {
-		    *q = (((*p & 0xff000000) >> 24) |
-			  ((*p & 0x00ffffff) << 8));
-		    q++;
-		    p++;
+		    while (p < end)
+		      {
+			*q = ( (*p & 0xff00ff00) |
+			       ((*p & 0x000000ff) << 16) |
+			       ((*p & 0x00ff0000) >> 16));
+			q++;
+			p++;
+		      }
 		  }
-	      }
+		else
+		  {
+		    /* ABGR => BGRA */
+		
+		    while (p < end)
+		      {
+			*q = (((*p & 0xff000000) >> 24) |
+			      ((*p & 0x00ffffff) << 8));
+			q++;
+			p++;
+		      }
+		  }
 #else /* G_BYTE_ORDER == G_BIG_ENDIAN */
-	    if (dest_byteorder == GDK_LSB_FIRST)
-	      {
-		/* RGBA => BGRA */
-		
-		while (p < end)
+		if (dest_byteorder == GDK_LSB_FIRST)
 		  {
-		    *q = ( (*p & 0x00ff00ff) |
-			  ((*p & 0x0000ff00) << 16) |
-			  ((*p & 0xff000000) >> 16));
-		    q++;
-		    p++;
-		  }
-	      }
-	    else
-	      {
-		/* RGBA => ARGB */
+		    /* RGBA => BGRA */
 		
-		while (p < end)
-		  {
-		    *q = (((*p & 0xffffff00) >> 8) |
-			  ((*p & 0x000000ff) << 24));
-		    q++;
-		    p++;
+		    while (p < end)
+		      {
+			*q = ( (*p & 0x00ff00ff) |
+			       ((*p & 0x0000ff00) << 16) |
+			       ((*p & 0xff000000) >> 16));
+			q++;
+			p++;
+		      }
 		  }
-	      }
+		else
+		  {
+		    /* RGBA => ARGB */
+		
+		    while (p < end)
+		      {
+			*q = (((*p & 0xffffff00) >> 8) |
+			      ((*p & 0x000000ff) << 24));
+			q++;
+			p++;
+		      }
+		  }
 #endif /* G_BYTE_ORDER*/	    
+	      }
 	    break;
 	  }
 	case FORMAT_ARGB:
