@@ -1,3 +1,7 @@
+2003-03-04  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkobject.sgml: Add deprecation notes.
+
 2003-02-24  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtktreemodel.sgml: Fix self-referential documenation of

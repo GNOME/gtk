@@ -165,7 +165,7 @@ each child.  Used by #GtkContainer.
 <!-- ##### FUNCTION gtk_object_new ##### -->
 <para>
 Constructs an object given its arguments, enumerated in the call to the
-function. Deprecated in favor of g_object_new().
+function.
 </para>
 
 @type: the type identifying this object.  Returned by gtk_type_unique()
@@ -176,6 +176,7 @@ a #GTK_TYPE_FOO macro.)
 @Varargs: the first argument's value, followed by any number of
 name/argument-value pairs, terminated with %NULL.
 @Returns: the new #GtkObject.
+@Deprecated: Use g_object_new() instead.
 
 
 <!-- ##### FUNCTION gtk_object_sink ##### -->
@@ -191,27 +192,26 @@ the top of the page.
 <!-- ##### FUNCTION gtk_object_ref ##### -->
 <para>
 Increases the reference count of the object.
-Deprecated in favor of g_object_ref().
 </para>
 
 @object: the object to reference.
 @Returns: @object.
+@Deprecated: Use g_object_ref() instead.
 
 
 <!-- ##### FUNCTION gtk_object_unref ##### -->
 <para>
 Decreases the reference count of an object.  When its reference count drops 
-to 0, the object is finalized (i.e. its memory is freed).  Deprecated in 
-favor of g_object_unref(). 
+to 0, the object is finalized (i.e. its memory is freed).  
 </para>
 
 @object: the object to dereference.
+@Deprecated: Use g_object_unref() instead.
 
 
 <!-- ##### FUNCTION gtk_object_weakref ##### -->
 <para>
-Adds a weak reference callback to an object. Deprecated in favor of
-g_object_weak_ref(). Weak references are used for notification when an object is
+Adds a weak reference callback to an object. Weak references are used for notification when an object is
 finalized. They are called "weak references" because they allow you to safely
 hold a pointer to an object without calling g_object_ref() (g_object_ref() adds
 a strong reference, that is, forces the object to stay alive).
@@ -220,6 +220,7 @@ a strong reference, that is, forces the object to stay alive).
 @object: object to weakly reference.
 @notify: callback to invoke before the object is freed.
 @data: extra data to pass to #notify.
+@Deprecated: Use g_object_weak_ref() instead.
 
 
 <!-- ##### FUNCTION gtk_object_weakunref ##### -->
@@ -230,6 +231,7 @@ Removes a weak reference callback to an object.
 @object: object stop weakly referencing.
 @notify: callback to search for.
 @data: data to search for.
+@Deprecated: Use g_object_weak_unref() instead.
 
 
 <!-- ##### FUNCTION gtk_object_destroy ##### -->
@@ -249,17 +251,17 @@ reference holders to release their references, it does not free the object.
 
 <!-- ##### FUNCTION gtk_object_get ##### -->
 <para>
-Gets properties of an object. Deprecated in favor of g_object_get().  
+Gets properties of an object. 
 </para>
 
 @object: a #GtkObject.
 @first_property_name: name of first property to get the value for.
 @Varargs: %NULL-terminated list of name-return location pairs.
-
+@Deprecated: Use g_object_get() instead.  
 
 <!-- ##### FUNCTION gtk_object_set ##### -->
 <para>
-Sets properties on an object. Deprecated in favor of g_object_set().
+Sets properties on an object. 
 </para>
 <para>
 <informalexample>
@@ -278,11 +280,11 @@ void set_box_properties (GtkBox* box)
 @first_property_name: name of the first property to set
 @Varargs: the value of the first argument, followed optionally
 by more name/value pairs, followed by %NULL.
+@Deprecated: Use g_object_set() instead.  
 
 
 <!-- ##### FUNCTION gtk_object_set_data ##### -->
 <para>
-Deprecated in favor of g_object_set_data().
 Each object carries around a table of associations from
 strings to pointers.  This function lets you set an association.
 </para>
@@ -294,11 +296,11 @@ the old association will be destroyed.
 @object: object containing the associations.
 @key: name of the key.
 @data: data to associate with that key.
+@Deprecated: Use g_object_set_data() instead.
 
 
 <!-- ##### FUNCTION gtk_object_set_data_full ##### -->
 <para>
-Deprecated in favor of g_object_set_data_full().
 Like gtk_object_set_data() except it adds notification
 for when the association is destroyed, either by
 gtk_object_remove_data() or when the object is destroyed.
@@ -308,11 +310,11 @@ gtk_object_remove_data() or when the object is destroyed.
 @key: name of the key.
 @data: data to associate with that key.
 @destroy: function to call when the association is destroyed.
+@Deprecated: Use g_object_set_data_full() instead.
 
 
 <!-- ##### FUNCTION gtk_object_remove_data ##### -->
 <para>
-Deprecated in favor of setting object data to %NULL using g_object_set_data().
 Removes a specified datum from the object's data associations (the object_data).
 Subsequent calls to gtk_object_get_data() will return %NULL.
 </para>
@@ -323,22 +325,22 @@ it will be invoked.
 
 @object: the object maintaining the association.
 @key: name of the key for that association.
+@Deprecated: Use g_object_set_data() to set the object data to %NULL instead.
 
 
 <!-- ##### FUNCTION gtk_object_get_data ##### -->
 <para>
-Deprecated in favor of g_object_get_data().
 Get a named field from the object's table of associations (the object_data).
 </para>
 
 @object: the object maintaining the associations.
 @key: name of the key for that association.
 @Returns: the data if found, or %NULL if no such data exists.
+@Deprecated: Use g_object_get_data() instead.
 
 
 <!-- ##### FUNCTION gtk_object_remove_no_notify ##### -->
 <para>
-Deprecated in favor of g_object_steal_data().
 Remove a specified datum from the object's data associations (the object_data),
 without invoking the association's destroy handler.
 </para>
@@ -350,11 +352,11 @@ Therefore this only affects data set using gtk_object_set_data_full().
 
 @object: the object maintaining the association.
 @key: name of the key for that association.
+@Deprecated: Use g_object_steal_data() instead.
 
 
 <!-- ##### FUNCTION gtk_object_set_user_data ##### -->
 <para>
-Deprecated in favor of g_object_set_data().
 For convenience, every object offers a generic user data
 pointer.  This function sets it.
 </para>
@@ -365,11 +367,11 @@ This function is equivalent to
 
 @object: the object whose user data should be set.
 @data: the new value for the user data.
+@Deprecated: Use g_object_set_data() instead.
 
 
 <!-- ##### FUNCTION gtk_object_get_user_data ##### -->
 <para>
-Deprecated in favor of g_object_get_data().
 Get the object's user data pointer.
 </para>
 <para>
@@ -379,6 +381,7 @@ writing applications.
 
 @object: the object.
 @Returns: the user data field for object.
+@Deprecated: Use g_object_get_data() instead.
 
 
 <!-- ##### FUNCTION gtk_object_add_arg_type ##### -->
@@ -398,7 +401,6 @@ settable or gettable, whether it is set when the object is constructed.)
 
 <!-- ##### FUNCTION gtk_object_set_data_by_id ##### -->
 <para>
-Deprecated in favor of g_object_set_qdata().
 Just like gtk_object_set_data() except that it takes
 a #GQuark instead of a string, so it is slightly faster.
 </para>
@@ -410,11 +412,11 @@ to get an id from a string.
 @object: object containing the associations.
 @data_id: quark of the key.
 @data: data to associate with that key.
+@Deprecated: Use g_object_set_qdata() instead.
 
 
 <!-- ##### FUNCTION gtk_object_set_data_by_id_full ##### -->
 <para>
-Deprecated in favor of g_object_set_qdata_full().
 Just like gtk_object_set_data_full() except that it takes
 a #GQuark instead of a string, so it is slightly faster.
 </para>
@@ -427,11 +429,11 @@ to get an id from a string.
 @data_id: quark of the key.
 @data: data to associate with that key.
 @destroy: function to call when the association is destroyed.
+@Deprecated: Use g_object_set_qdata_full() instead.
 
 
 <!-- ##### FUNCTION gtk_object_get_data_by_id ##### -->
 <para>
-Deprecated in favor of g_object_get_qdata().
 Just like gtk_object_get_data() except that it takes
 a #GQuark instead of a string, so it is slightly faster.
 </para>
@@ -443,11 +445,11 @@ to get an id from a string.
 @object: object containing the associations.
 @data_id: quark of the key.
 @Returns: the data if found, or %NULL if no such data exists.
+@Deprecated: Use g_object_get_qdata() instead.
 
 
 <!-- ##### FUNCTION gtk_object_remove_data_by_id ##### -->
 <para>
-Deprecated in favor of g_object_set_qdata() called with data of %NULL.
 Just like gtk_object_remove_data() except that it takes
 a #GQuark instead of a string, so it is slightly faster.
 </para>
@@ -462,11 +464,11 @@ to get an id from a string.
 
 @object: object containing the associations.
 @data_id: quark of the key.
+@Deprecated: Use g_object_set_qdata() with data of %NULL instead.
 
 
 <!-- ##### FUNCTION gtk_object_remove_no_notify_by_id ##### -->
 <para>
-Deprecated in favor of g_object_steal_qdata().
 Just like gtk_object_remove_no_notify() except that it takes
 a #GQuark instead of a string, so it is slightly faster.
 </para>
@@ -477,8 +479,7 @@ to get an id from a string.
 
 @object: object containing the associations.
 @key_id: quark of the key.
-<!-- # Unused Parameters # -->
-@data_id: 
+@Deprecated: Use g_object_steal_qdata() instead.
 
 
 <!-- ##### MACRO gtk_object_data_try_key ##### -->

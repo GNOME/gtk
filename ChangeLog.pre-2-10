@@ -1,3 +1,7 @@
+2003-03-04  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkobject.h: Add deprecation guards for gtk_object_new ().
+
 Sun Mar  2 23:35:57 2003  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_get_size):

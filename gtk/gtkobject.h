@@ -127,10 +127,6 @@ struct _GtkObjectClass
 
 GtkType	gtk_object_get_type		(void) G_GNUC_CONST;
 
-GtkObject*	gtk_object_new		  (GtkType	       type,
-					   const gchar	      *first_property_name,
-					   ...);
-
 void gtk_object_sink	  (GtkObject *object);
 void gtk_object_destroy	  (GtkObject *object);
 
@@ -138,6 +134,9 @@ void gtk_object_destroy	  (GtkObject *object);
 
 #ifndef GTK_DISABLE_DEPRECATED 
 
+GtkObject*	gtk_object_new		  (GtkType	       type,
+					   const gchar	      *first_property_name,
+					   ...);
 GtkObject*	gtk_object_ref		  (GtkObject	      *object);
 void		gtk_object_unref	  (GtkObject	      *object);
 void gtk_object_weakref	  (GtkObject	    *object,
