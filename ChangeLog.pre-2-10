@@ -1,5 +1,9 @@
 2004-01-06  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilesel.c (gtk_file_selection_create_dir_confirmed): Use
+	0777 as the mode for mkdir() and let the umask do the right
+	thing.  Fixes #121819.
+
 	* gtk/gtkfilesystemunix.c (filename_is_root): g_path_skip_root()
 	can return NULL; handle this.  Fixes #129565.
 

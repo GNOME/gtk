@@ -1445,7 +1445,7 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
       goto out;
     }
 
-  if (mkdir (sys_full_path, 0755) < 0) 
+  if (mkdir (sys_full_path, 0777) < 0)
     {
       buf = g_strdup_printf (_("Error creating folder \"%s\": %s\n"), dirname,
 			     g_strerror (errno));
