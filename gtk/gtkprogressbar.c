@@ -52,7 +52,9 @@ enum {
   ARG_BAR_STYLE,
   ARG_ACTIVITY_STEP,
   ARG_ACTIVITY_BLOCKS,
-  ARG_DISCRETE_BLOCKS
+  ARG_DISCRETE_BLOCKS,
+  ARG_FRACTION,
+  ARG_PULSE_STEP
 };
 
 static void gtk_progress_bar_class_init    (GtkProgressBarClass *klass);
@@ -130,7 +132,15 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 			   GTK_TYPE_UINT,
 			   GTK_ARG_READWRITE,
 			   ARG_DISCRETE_BLOCKS);
-
+  gtk_object_add_arg_type ("GtkProgressBar::fraction",
+			   GTK_TYPE_FLOAT,
+			   GTK_ARG_READWRITE,
+			   ARG_FRACTION);
+  gtk_object_add_arg_type ("GtkProgressBar::pulse_step",
+			   GTK_TYPE_FLOAT,
+			   GTK_ARG_READWRITE,
+			   ARG_FRACTION);
+  
   object_class->set_arg = gtk_progress_bar_set_arg;
   object_class->get_arg = gtk_progress_bar_get_arg;
 
@@ -148,6 +158,7 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
   pbar->blocks = 10;
   pbar->in_block = -1;
   pbar->orientation = GTK_PROGRESS_LEFT_TO_RIGHT;
+  pbar->pulse_fraction = 0.1;
   pbar->activity_pos = 0;
   pbar->activity_dir = 1;
   pbar->activity_step = 3;
@@ -183,6 +194,12 @@ gtk_progress_bar_set_arg (GtkObject           *object,
     case ARG_DISCRETE_BLOCKS:
       gtk_progress_bar_set_discrete_blocks (pbar, GTK_VALUE_UINT (*arg));
       break;
+    case ARG_FRACTION:
+      gtk_progress_bar_set_fraction (pbar, GTK_VALUE_FLOAT (*arg));
+      break;
+    case ARG_PULSE_STEP:
+      gtk_progress_bar_set_pulse_step (pbar, GTK_VALUE_FLOAT (*arg));
+      break;
     default:
       break;
     }
@@ -216,6 +233,12 @@ gtk_progress_bar_get_arg (GtkObject           *object,
       break;
     case ARG_DISCRETE_BLOCKS:
       GTK_VALUE_UINT (*arg) = pbar->blocks;
+      break;
+    case ARG_FRACTION:
+      GTK_VALUE_FLOAT (*arg) = gtk_progress_get_current_percentage (GTK_PROGRESS (pbar));
+      break;
+    case ARG_PULSE_STEP:
+      GTK_VALUE_FLOAT (*arg) = pbar->pulse_fraction;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -266,12 +289,16 @@ gtk_progress_bar_real_update (GtkProgress *progress)
       if (GTK_PROGRESS (pbar)->activity_mode)
 	{
 	  guint size;
-
+          
 	  /* advance the block */
 
 	  if (pbar->orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
 	      pbar->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
 	    {
+              /* Update our activity step. */
+              
+              pbar->activity_step = widget->allocation.width * pbar->pulse_fraction;
+              
 	      size = MAX (2, widget->allocation.width / pbar->activity_blocks);
 
 	      if (pbar->activity_dir == 0)
@@ -298,6 +325,10 @@ gtk_progress_bar_real_update (GtkProgress *progress)
 	    }
 	  else
 	    {
+              /* Update our activity step. */
+              
+              pbar->activity_step = widget->allocation.height * pbar->pulse_fraction;
+              
 	      size = MAX (2, widget->allocation.height / pbar->activity_blocks);
 
 	      if (pbar->activity_dir == 0)
@@ -747,16 +778,77 @@ gtk_progress_bar_paint (GtkProgress *progress)
 /*******************************************************************/
 
 void
+gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
+                               gfloat          fraction)
+{
+  g_return_if_fail (pbar != NULL);
+  g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
+
+  /* If we know the percentage, we don't want activity mode. */
+  gtk_progress_set_activity_mode (GTK_PROGRESS (pbar), FALSE);
+  
+  /* We use the deprecated GtkProgress interface internally.
+   * Once everything's been deprecated for a good long time,
+   * we can clean up all this code.
+   */
+  gtk_progress_set_percentage (GTK_PROGRESS (pbar), fraction);
+}
+
+void
+gtk_progress_bar_pulse (GtkProgressBar *pbar)
+{  
+  g_return_if_fail (pbar != NULL);
+  g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
+
+  /* If we don't know the percentage, we must want activity mode. */
+  gtk_progress_set_activity_mode (GTK_PROGRESS (pbar), TRUE);
+
+  /* Sigh. */
+  gtk_progress_bar_real_update (GTK_PROGRESS (pbar));
+}
+
+void
+gtk_progress_bar_set_text (GtkProgressBar *pbar,
+                           const gchar *text)
+{
+  g_return_if_fail (pbar != NULL);
+  g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
+  
+  /* We don't support formats in this interface */
+  GTK_PROGRESS (pbar)->use_text_format = FALSE;
+  
+  if (text && *text)
+    {
+      gtk_progress_set_show_text (GTK_PROGRESS (pbar), TRUE);
+      gtk_progress_set_format_string (GTK_PROGRESS (pbar), text);
+    }
+  else
+    {
+      gtk_progress_set_show_text (GTK_PROGRESS (pbar), FALSE);
+      gtk_progress_set_format_string (GTK_PROGRESS (pbar), "");
+    }
+}
+
+void
+gtk_progress_bar_set_pulse_step   (GtkProgressBar *pbar,
+                                   gfloat          fraction)
+{
+  g_return_if_fail (pbar != NULL);
+  g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
+  
+  pbar->pulse_fraction = fraction;
+}
+
+void
 gtk_progress_bar_update (GtkProgressBar *pbar,
 			 gfloat          percentage)
 {
   g_return_if_fail (pbar != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
-  /***********************************************************************
-   *          Use of gtk_progress_bar_update() is deprecated !	         * 
-   * Use gtk_progress_set_value or gtk_progress_set_percentage instead.  *
-   ***********************************************************************/
+  /* Use of gtk_progress_bar_update() is deprecated ! 
+   * Use gtk_progress_bar_set_percentage ()
+   */   
 
   gtk_progress_set_percentage (GTK_PROGRESS (pbar), percentage);
 }

@@ -1,3 +1,23 @@
+2000-07-25  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkprogressbar.h: Implement new sane, 5-function API for
+	using GtkProgressBar. See Changes-2.0.txt for details.
+
+	* gtk/gtkprogressbar.c: Add object arguments "fraction" and
+	"pulse_step" which are the equivalent of
+	gtk_progress_bar_set_pulse_step and gtk_progress_bar_set_fraction.
+	Implement new API.
+	
+	* gtk/gtkprogress.h (struct _GtkProgress): Add a field
+	(use_text_format) to mark whether text set on the progress bar is
+	a format string. Deprecate entire GtkProgress interface.
+
+	* gtk/gtkprogress.c (gtk_progress_init): init use_text_format to TRUE
+	(gtk_progress_build_string): make this a no-op if use_text_format
+	is FALSE
+
+	* docs/Changes-2.0.txt: Describe progress bar changes.
+
 2000-07-25  Tor Lillqvist  <tml@iki.fi>
 
 	* Makefile.am: Include the build directory.

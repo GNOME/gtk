@@ -62,6 +62,7 @@ struct _GtkProgress
 
   guint          show_text : 1;
   guint          activity_mode : 1;
+  guint          use_text_format : 1;
 };
 
 struct _GtkProgressClass
@@ -73,6 +74,9 @@ struct _GtkProgressClass
   void (* act_mode_enter)   (GtkProgress *progress);
 };
 
+/* This entire interface is deprecated. Use GtkProgressBar
+ * directly.
+ */
 
 GtkType    gtk_progress_get_type            (void);
 void       gtk_progress_set_show_text       (GtkProgress   *progress,
