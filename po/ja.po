@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-09 11:17+0900\n"
-"PO-Revision-Date: 2005-01-09 11:10+0900\n"
+"POT-Creation-Date: 2005-01-15 21:56+0900\n"
+"PO-Revision-Date: 2005-01-15 21:54+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -835,8 +835,8 @@ msgstr "プログラムのライセンス"
 
 #. Add the credits button
 #: gtk/gtkaboutdialog.c:482
-msgid "_Credits"
-msgstr "クレジット(_C)"
+msgid "C_redits"
+msgstr "クレジット(_R)"
 
 #. Add the license button
 #: gtk/gtkaboutdialog.c:491
@@ -904,7 +904,7 @@ msgstr "[ALT]"
 #. * so if you have a default text direction of RTL and YM, then
 #. * the year will appear on the right.
 #.
-#: gtk/gtkcalendar.c:700
+#: gtk/gtkcalendar.c:703
 msgid "calendar:MY"
 msgstr "calendar:YM"
 
@@ -912,14 +912,15 @@ msgstr "calendar:YM"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:710
+#: gtk/gtkcalendar.c:717
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
-#: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
+#. do not translate the part before the |
+#: gtk/gtkcellrendererprogress.c:236 gtk/gtkcellrendererprogress.c:294
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "プログレスバーのラベル|%d %%"
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -1483,32 +1484,32 @@ msgstr "ファイル名を変換できませんでした"
 msgid "(Empty)"
 msgstr "(空)"
 
-#: gtk/gtkfilesystemunix.c:415 gtk/gtkfilesystemunix.c:429
-#: gtk/gtkfilesystemunix.c:626 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemunix.c:440 gtk/gtkfilesystemunix.c:632
+#: gtk/gtkfilesystemunix.c:1739 gtk/gtkfilesystemwin32.c:482
 #: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1530
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "'%s' の情報を取得する際にエラー: %s"
 
-#: gtk/gtkfilesystemunix.c:495 gtk/gtkfilesystemwin32.c:537
+#: gtk/gtkfilesystemunix.c:501 gtk/gtkfilesystemwin32.c:537
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "フォルダ '%s' を作成する際にエラー: %s"
 
-#: gtk/gtkfilesystemunix.c:575 gtk/gtkfilesystemwin32.c:597
+#: gtk/gtkfilesystemunix.c:581 gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr "このファイル・システムでは mount をサポートしていません"
 
-#: gtk/gtkfilesystemunix.c:583
+#: gtk/gtkfilesystemunix.c:589
 msgid "Filesystem"
 msgstr "ファイルシステム"
 
-#: gtk/gtkfilesystemunix.c:740
+#: gtk/gtkfilesystemunix.c:746
 #, c-format
 msgid "Could not get a stock icon for %s"
 msgstr "%s のストック・アイコンを取得できませんでした"
 
-#: gtk/gtkfilesystemunix.c:835
+#: gtk/gtkfilesystemunix.c:841
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1517,25 +1518,25 @@ msgstr ""
 "\"%s\" という名前に \"%s\" という文字が含まれているため正しくありません (別の"
 "名前を使用して下さい)"
 
-#: gtk/gtkfilesystemunix.c:1443 gtk/gtkfilesystemwin32.c:1004
+#: gtk/gtkfilesystemunix.c:1446 gtk/gtkfilesystemwin32.c:1004
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "ブックマークの保存に失敗: %s"
 
-#: gtk/gtkfilesystemunix.c:1495
+#: gtk/gtkfilesystemunix.c:1498
 #, c-format
 msgid "'%s' already exists in the bookmarks list"
 msgstr "既に '%s' がブックマーク一覧にあります"
 
-#: gtk/gtkfilesystemunix.c:1557
+#: gtk/gtkfilesystemunix.c:1560
 #, c-format
 msgid "'%s' does not exist in the bookmarks list"
 msgstr "'%s' はブックマーク一覧にありません"
 
-#: gtk/gtkfilesystemunix.c:1739
+#: gtk/gtkfilesystemunix.c:1699
 #, c-format
-msgid "Error getting information for '%s'"
-msgstr "'%s' の情報を取得する際にエラー"
+msgid "Error getting information for '/': %s"
+msgstr "'/' の情報を取得する際にエラー: %s"
 
 #: gtk/gtkfontbutton.c:178 gtk/gtkfontbutton.c:295
 msgid "Pick a Font"
@@ -1694,7 +1695,7 @@ msgstr "(不明)"
 msgid "clear"
 msgstr "クリア"
 
-#: gtk/gtklabel.c:3930
+#: gtk/gtklabel.c:3931
 msgid "Select All"
 msgstr "全て選択"
 
@@ -2129,22 +2130,22 @@ msgstr "module_path にはテーマ・エンジンがありません: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Tip なし ---"
 
-#: gtk/gtkuimanager.c:1132
+#: gtk/gtkuimanager.c:1137
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "%2$d 行目 %3$d 文字目の不明な属性 '%1$s'"
 
-#: gtk/gtkuimanager.c:1332
+#: gtk/gtkuimanager.c:1337
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "%2$d 行目 %3$d 文字目の予想外の開始タグ '%1$s'"
 
-#: gtk/gtkuimanager.c:1417
+#: gtk/gtkuimanager.c:1422
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "%d 行の %d 文字目の文字データは予想外です"
 
-#: gtk/gtkuimanager.c:2209
+#: gtk/gtkuimanager.c:2214
 msgid "Empty"
 msgstr "空"
 
