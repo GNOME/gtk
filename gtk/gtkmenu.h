@@ -74,6 +74,12 @@ struct _GtkMenu
   GtkWidget *toplevel;
   GtkWidget *tearoff_window;
 
+  /* When a submenu of this menu is popped up, motion in this
+   * region is ignored
+   */
+  GdkRegion *navigation_region;
+  guint navigation_timeout;
+
   guint needs_destruction_ref_count : 1;
   guint torn_off : 1;
 };

@@ -441,7 +441,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="small" status="40%" target="2.0">
+    <entry size="small" status="99%" target="2.0">
       <title>Improve Submenu Navigation</title>
       <description>
 	<p>

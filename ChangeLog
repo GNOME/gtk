@@ -1,3 +1,14 @@
+Fri Sep  1 22:39:07 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.[ch] TODO.xml: Apply patch from
+	Nils Barth and David Santiago to improve submenu
+	navigation. The patch does this by creating a triangular
+	region from the point where the pointer leaves the
+	menu to the submenu.  While the pointer is in
+	that region and a timeout has not expired, events 
+	that would cause the active submenu to change are
+	ignored.
+
 Fri Sep  1 15:34:46 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_move): Fix bug where

@@ -38,6 +38,9 @@
 #define MENU_ITEM_CLASS(w)   GTK_MENU_ITEM_GET_CLASS (w)
 #define	MENU_NEEDS_RESIZE(m) GTK_MENU_SHELL (m)->menu_flag
 
+#define SUBMENU_NAV_REGION_PADDING 2
+#define SUBMENU_NAV_HYSTERESIS_TIMEOUT 333
+
 typedef struct _GtkMenuAttachData	GtkMenuAttachData;
 
 struct _GtkMenuAttachData
@@ -47,23 +50,37 @@ struct _GtkMenuAttachData
 };
 
 
-static void gtk_menu_class_init	    (GtkMenuClass      *klass);
-static void gtk_menu_init	    (GtkMenu	       *menu);
-static void gtk_menu_destroy	    (GtkObject	       *object);
-static void gtk_menu_realize	    (GtkWidget	       *widget);
-static void gtk_menu_size_request   (GtkWidget	       *widget,
-				     GtkRequisition    *requisition);
-static void gtk_menu_size_allocate  (GtkWidget	       *widget,
-				     GtkAllocation     *allocation);
-static void gtk_menu_paint	    (GtkWidget	       *widget);
-static void gtk_menu_draw	    (GtkWidget	       *widget,
-				     GdkRectangle      *area);
-static gint gtk_menu_expose	    (GtkWidget	       *widget,
-				     GdkEventExpose    *event);
-static gint gtk_menu_key_press	    (GtkWidget	       *widget,
-				     GdkEventKey       *event);
-static gint gtk_menu_motion_notify  (GtkWidget	       *widget,
-				     GdkEventMotion    *event);
+static void	gtk_menu_class_init    (GtkMenuClass	  *klass);
+static void	gtk_menu_init	       (GtkMenu		  *menu);
+static void	gtk_menu_destroy       (GtkObject	  *object);
+static void	gtk_menu_realize       (GtkWidget	  *widget);
+static void	gtk_menu_size_request  (GtkWidget	  *widget,
+					GtkRequisition    *requisition);
+static void	gtk_menu_size_allocate (GtkWidget	  *widget,
+					GtkAllocation     *allocation);
+static void	gtk_menu_paint	       (GtkWidget	  *widget);
+static void	gtk_menu_draw	       (GtkWidget	  *widget,
+					GdkRectangle      *area);
+static gboolean gtk_menu_expose	       (GtkWidget	  *widget,
+					GdkEventExpose    *event);
+static gboolean gtk_menu_key_press     (GtkWidget	  *widget,
+					GdkEventKey       *event);
+static gboolean gtk_menu_motion_notify (GtkWidget	  *widget,
+					GdkEventMotion    *event);
+static gboolean gtk_menu_enter_notify  (GtkWidget         *widget,
+					GdkEventCrossing  *event); 
+static gboolean gtk_menu_leave_notify  (GtkWidget         *widget,
+					GdkEventCrossing  *event);
+
+static void     gtk_menu_stop_navigating_submenu       (GtkMenu          *menu);
+static gboolean gtk_menu_stop_navigating_submenu_cb    (gpointer          user_data);
+static gboolean gtk_menu_navigating_submenu            (GtkMenu          *menu,
+							gint              event_x,
+							gint              event_y);
+static void     gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
+							GtkMenuItem      *menu_item,
+							GdkEventCrossing *event);
+ 
 static void gtk_menu_deactivate	    (GtkMenuShell      *menu_shell);
 static void gtk_menu_show_all       (GtkWidget         *widget);
 static void gtk_menu_hide_all       (GtkWidget         *widget);
@@ -75,7 +92,6 @@ static void gtk_menu_reparent       (GtkMenu           *menu,
 static GtkMenuShellClass *parent_class = NULL;
 static const gchar	 *attach_data_key = "gtk-menu-attach-data";
 static GQuark             quark_uline_accel_group = 0;
-
 
 GtkType
 gtk_menu_get_type (void)
@@ -129,6 +145,8 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->motion_notify_event = gtk_menu_motion_notify;
   widget_class->show_all = gtk_menu_show_all;
   widget_class->hide_all = gtk_menu_hide_all;
+  widget_class->enter_notify_event = gtk_menu_enter_notify;
+  widget_class->leave_notify_event = gtk_menu_leave_notify;
   
   menu_shell_class->submenu_placement = GTK_LEFT_RIGHT;
   menu_shell_class->deactivate = gtk_menu_deactivate;
@@ -156,7 +174,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 				GTK_MENU_DIR_CHILD);
 }
 
-static gint
+static gboolean
 gtk_menu_window_event (GtkWidget *window,
 		       GdkEvent  *event,
 		       GtkWidget *menu)
@@ -227,6 +245,8 @@ gtk_menu_destroy (GtkObject *object)
   if (data)
     gtk_menu_detach (menu);
   
+  gtk_menu_stop_navigating_submenu (menu);
+
   gtk_menu_set_accel_group (menu, NULL);
 
   if (menu->old_active_menu_item)
@@ -524,6 +544,8 @@ gtk_menu_popdown (GtkMenu *menu)
   menu_shell->active = FALSE;
   menu_shell->ignore_enter = FALSE;
   
+  gtk_menu_stop_navigating_submenu (menu);
+  
   if (menu_shell->active_menu_item)
     {
       if (menu->old_active_menu_item)
@@ -558,7 +580,7 @@ gtk_menu_popdown (GtkMenu *menu)
     }
   else
     gtk_widget_hide (GTK_WIDGET (menu));
-        
+
   menu_shell->have_xgrab = FALSE;
   gtk_grab_remove (GTK_WIDGET (menu));
 }
@@ -978,7 +1000,7 @@ gtk_menu_draw (GtkWidget    *widget,
     }
 }
 
-static gint
+static gboolean
 gtk_menu_expose (GtkWidget	*widget,
 		 GdkEventExpose *event)
 {
@@ -1016,7 +1038,7 @@ gtk_menu_expose (GtkWidget	*widget,
   return FALSE;
 }
 
-static gint
+static gboolean
 gtk_menu_key_press (GtkWidget	*widget,
 		    GdkEventKey *event)
 {
@@ -1028,6 +1050,8 @@ gtk_menu_key_press (GtkWidget	*widget,
   g_return_val_if_fail (event != NULL, FALSE);
       
   menu_shell = GTK_MENU_SHELL (widget);
+
+  gtk_menu_stop_navigating_submenu (GTK_MENU (widget));
 
   if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
     return TRUE;
@@ -1102,19 +1126,48 @@ gtk_menu_key_press (GtkWidget	*widget,
   return TRUE;
 }
 
-static gint 
+static gboolean
 gtk_menu_motion_notify  (GtkWidget	   *widget,
 			 GdkEventMotion    *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
-  
-  if (GTK_MENU_SHELL (widget)->ignore_enter)
-    GTK_MENU_SHELL (widget)->ignore_enter = FALSE;
-  else 
-    {
-      gint width, height;
+  GtkWidget *menu_item;
+  GtkMenu *menu;
+  GtkMenuShell *menu_shell;
 
+  gboolean need_enter;
+
+  /* We received the event for one of two reasons:
+   *
+   * a) We are the active menu, and did gtk_grab_add()
+   * b) The widget is a child of ours, and the event was propagated
+   *
+   * Since for computation of navigation regions, we want the menu which
+   * is the parent of the menu item, for a), we need to find that menu,
+   * which may be different from 'widget'.
+   */
+  
+  menu_item = gtk_get_event_widget ((GdkEvent*) event);
+  if (!menu_item || !GTK_IS_MENU_ITEM (menu_item) || !GTK_WIDGET_IS_SENSITIVE (menu_item) ||
+      !GTK_IS_MENU (menu_item->parent))
+    return FALSE;
+
+  menu_shell = GTK_MENU_SHELL (menu_item->parent);
+  menu = GTK_MENU (menu_shell);
+  
+  need_enter = (menu->navigation_region != NULL || menu_shell->ignore_enter);
+
+  /* Check to see if we are within an active submenu's navigation region
+   */
+  if (gtk_menu_navigating_submenu (menu, event->x_root, event->y_root))
+    return TRUE; 
+
+  if (need_enter)
+    {
+      /* The menu is now sensitive to enter events on its items, but
+       * was previously sensitive.  So we fake an enter event.
+       */
+      gint width, height;
+      
       gdk_window_get_size (event->window, &width, &height);
       if (event->x >= 0 && event->x < width &&
 	  event->y >= 0 && event->y < height)
@@ -1125,12 +1178,220 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
 	  send_event.crossing.window = event->window;
 	  send_event.crossing.time = event->time;
 	  send_event.crossing.send_event = TRUE;
-	  
-	  gtk_widget_event (widget, &send_event);
+	  send_event.crossing.x_root = event->x_root;
+	  send_event.crossing.y_root = event->y_root;
+	  send_event.crossing.x = event->x;
+	  send_event.crossing.y = event->y;
+
+	  /* We send the event to 'widget', the currently active menu,
+	   * instead of 'menu', the menu that the pointer is in. This
+	   * will ensure that the event will be ignored unless the
+	   * menuitem is a child of the active menu or some parent
+	   * menu of the active menu.
+	   */
+	  return gtk_widget_event (widget, &send_event);
 	}
+      
+      menu_shell->ignore_enter = FALSE; 
     }
 
   return FALSE;
+}
+
+static gboolean
+gtk_menu_enter_notify (GtkWidget        *widget,
+		       GdkEventCrossing *event)
+{
+  GtkWidget *menu_item;
+
+  /* If this is a faked enter (see gtk_menu_motion_notify), 'widget'
+   * will not correspond to the event widget's parent.  Check to see
+   * if we are in the parent's navigation region.
+   */
+  menu_item = gtk_get_event_widget ((GdkEvent*) event);
+  if (menu_item && GTK_IS_MENU_ITEM (menu_item) && GTK_IS_MENU (menu_item->parent) &&
+      gtk_menu_navigating_submenu (GTK_MENU (menu_item->parent), event->x_root, event->y_root))
+    return TRUE; 
+
+  return GTK_WIDGET_CLASS (parent_class)->enter_notify_event (widget, event); 
+}
+
+static gboolean
+gtk_menu_leave_notify (GtkWidget        *widget,
+		       GdkEventCrossing *event)
+{
+  GtkMenuShell *menu_shell;
+  GtkMenu *menu;
+  GtkMenuItem *menu_item;
+  GtkWidget *event_widget; 
+
+  menu = GTK_MENU (widget);
+  menu_shell = GTK_MENU_SHELL (widget); 
+  
+  if (gtk_menu_navigating_submenu (menu, event->x_root, event->y_root))
+    return TRUE; 
+  
+  event_widget = gtk_get_event_widget ((GdkEvent*) event);
+  
+  if (!event_widget || !GTK_IS_MENU_ITEM (event_widget))
+    return TRUE;
+  
+  menu_item = GTK_MENU_ITEM (event_widget); 
+  
+  /* Here we check to see if we're leaving an active menu item with a submenu, 
+   * in which case we enter submenu navigation mode. 
+   */
+  if (menu_shell->active_menu_item != NULL
+      && menu_item->submenu != NULL
+      && menu_item->submenu_placement == GTK_LEFT_RIGHT)
+    {
+      if (menu_item->submenu->window != NULL) 
+	{
+	  gtk_menu_set_submenu_navigation_region (menu, menu_item, event);
+	  return TRUE;
+	}
+    }
+  
+  return GTK_WIDGET_CLASS (parent_class)->leave_notify_event (widget, event); 
+}
+
+static void 
+gtk_menu_stop_navigating_submenu (GtkMenu *menu)
+{
+  if (menu->navigation_region) 
+    {
+      gdk_region_destroy (menu->navigation_region);
+      menu->navigation_region = NULL;
+    }
+  
+  if (menu->navigation_timeout)
+    {
+      gtk_timeout_remove (menu->navigation_timeout);
+      menu->navigation_timeout = 0;
+    }
+}
+
+/* When the timeout is elapsed, the navigation region is destroyed
+ * and the menuitem under the pointer (if any) is selected.
+ */
+static gboolean
+gtk_menu_stop_navigating_submenu_cb (gpointer user_data)
+{
+  GdkEventCrossing send_event;
+
+  GtkMenu *menu = user_data;
+  GdkWindow *child_window;
+
+  gtk_menu_stop_navigating_submenu (menu);
+  
+  if (GTK_WIDGET_REALIZED (menu))
+    {
+      child_window = gdk_window_get_pointer (GTK_WIDGET (menu)->window, NULL, NULL, NULL);
+
+      if (child_window)
+	{
+	  send_event.window = child_window;
+	  send_event.type = GDK_ENTER_NOTIFY;
+	  send_event.time = GDK_CURRENT_TIME; /* Bogus */
+	  send_event.send_event = TRUE;
+
+	  GTK_WIDGET_CLASS (parent_class)->enter_notify_event (GTK_WIDGET (menu), &send_event); 
+	}
+    }
+
+  return FALSE; 
+}
+
+static gboolean
+gtk_menu_navigating_submenu (GtkMenu *menu,
+			     gint     event_x,
+			     gint     event_y)
+{
+  if (menu->navigation_region)
+    {
+      if (gdk_region_point_in (menu->navigation_region, event_x, event_y))
+	return TRUE;
+      else
+	{
+	  gtk_menu_stop_navigating_submenu (menu);
+	  return FALSE;
+	}
+    }
+  return FALSE;
+}
+
+static void
+gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
+					GtkMenuItem      *menu_item,
+					GdkEventCrossing *event)
+{
+  gint submenu_left = 0;
+  gint submenu_right = 0;
+  gint submenu_top = 0;
+  gint submenu_bottom = 0;
+  gint width = 0;
+  gint height = 0;
+  GdkPoint point[3];
+  GtkWidget *event_widget;
+
+  g_return_if_fail (menu_item->submenu != NULL);
+  g_return_if_fail (event != NULL);
+  
+  event_widget = gtk_get_event_widget ((GdkEvent*) event);
+  
+  gdk_window_get_origin (menu_item->submenu->window, &submenu_left, &submenu_top);
+  gdk_window_get_size (menu_item->submenu->window, &width, &height);
+  submenu_right = submenu_left + width;
+  submenu_bottom = submenu_top + height;
+  
+  gdk_window_get_size (event_widget->window, &width, &height);
+  
+  if (event->x >= 0 && event->x < width)
+    {
+      /* Set navigation region */
+      /* We fudge/give a little padding in case the user
+       * ``misses the vertex'' of the triangle/is off by a pixel or two.
+       */ 
+      if (menu_item->submenu_direction == GTK_DIRECTION_RIGHT)
+	point[0].x = event->x_root - SUBMENU_NAV_REGION_PADDING; 
+      else                             
+	point[0].x = event->x_root + SUBMENU_NAV_REGION_PADDING;  
+      
+      /* Exiting the top or bottom? */ 
+      if (event->y < 0)
+        { /* top */
+	  point[0].y = event->y_root + SUBMENU_NAV_REGION_PADDING;
+	  point[1].y = submenu_top;
+
+	  if (point[0].y <= point[1].y)
+	    return;
+	}
+      else
+        { /* bottom */
+	  point[0].y = event->y_root - SUBMENU_NAV_REGION_PADDING; 
+	  point[1].y = submenu_bottom;
+
+	  if (point[0].y >= point[1].y)
+	    return;
+	}
+      
+      /* Submenu is to the left or right? */ 
+      if (menu_item->submenu_direction == GTK_DIRECTION_RIGHT)
+	point[1].x = submenu_left;  /* right */
+      else
+	point[1].x = submenu_right; /* left */
+      
+      point[2].x = point[1].x;
+      point[2].y = point[0].y;
+
+      if (menu->navigation_region)
+	gdk_region_destroy (menu->navigation_region);
+      
+      menu->navigation_region = gdk_region_polygon (point, 3, GDK_WINDING_RULE);
+
+      menu->navigation_timeout = gtk_timeout_add (SUBMENU_NAV_HYSTERESIS_TIMEOUT, 
+						  gtk_menu_stop_navigating_submenu_cb, menu);
+    }
 }
 
 static void
@@ -1149,7 +1410,6 @@ gtk_menu_deactivate (GtkMenuShell *menu_shell)
   if (parent)
     gtk_menu_shell_deactivate (GTK_MENU_SHELL (parent));
 }
-
 
 static void
 gtk_menu_position (GtkMenu *menu)
