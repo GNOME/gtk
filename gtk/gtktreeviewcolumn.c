@@ -94,6 +94,9 @@ static gint gtk_tree_view_column_button_event                  (GtkWidget       
 								gpointer                 data);
 static void gtk_tree_view_column_button_clicked                (GtkWidget               *widget,
 								gpointer                 data);
+static gboolean gtk_tree_view_column_mnemonic_activate         (GtkWidget *widget,
+					                        gboolean   group_cycling,
+								gpointer   data);
 
 /* Property handlers */
 static void gtk_tree_view_model_sort_column_changed            (GtkTreeSortable         *sortable,
@@ -535,14 +538,14 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   if (tree_view->priv->header_window)
     gtk_widget_set_parent_window (tree_column->button, tree_view->priv->header_window);
   gtk_widget_set_parent (tree_column->button, GTK_WIDGET (tree_view));
-  
-  gtk_signal_connect (GTK_OBJECT (tree_column->button), "event",
-		      (GtkSignalFunc) gtk_tree_view_column_button_event,
-		      (gpointer) tree_column);
-  
-  gtk_signal_connect (GTK_OBJECT (tree_column->button), "clicked",
-		      (GtkSignalFunc) gtk_tree_view_column_button_clicked,
-		      (gpointer) tree_column);
+
+  g_signal_connect (G_OBJECT (tree_column->button), "event",
+		    G_CALLBACK (gtk_tree_view_column_button_event),
+		    (gpointer) tree_column);
+
+  g_signal_connect (G_OBJECT (tree_column->button), "clicked",
+		    (GtkSignalFunc) gtk_tree_view_column_button_clicked,
+		    (gpointer) tree_column);
 
   tree_column->alignment = gtk_alignment_new (tree_column->xalign, 0.5, 0.0, 0.0);
 
@@ -556,6 +559,10 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
       child = gtk_label_new (tree_column->title);
       gtk_widget_show (child);
     }
+
+  g_signal_connect (G_OBJECT (child), "mnemonic_activate",
+		    G_CALLBACK (gtk_tree_view_column_mnemonic_activate),
+		    (gpointer) tree_column);
 
   if (tree_column->xalign <= 0.5)
     gtk_box_pack_end (GTK_BOX (hbox), tree_column->arrow, FALSE, FALSE, 0);
@@ -622,11 +629,11 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
       g_return_if_fail (GTK_IS_LABEL (current_child));
 
       if (tree_column->title)
-	gtk_label_set_text (GTK_LABEL (current_child),
-			    tree_column->title);
+	gtk_label_set_text_with_mnemonic (GTK_LABEL (current_child),
+					  tree_column->title);
       else
-	gtk_label_set_text (GTK_LABEL (current_child),
-			    "");
+	gtk_label_set_text_with_mnemonic (GTK_LABEL (current_child),
+					  "");
     }
 
   switch (tree_column->sort_order)
@@ -793,6 +800,30 @@ static void
 gtk_tree_view_column_button_clicked (GtkWidget *widget, gpointer data)
 {
   g_signal_emit_by_name (G_OBJECT (data), "clicked");
+}
+
+static gboolean
+gtk_tree_view_column_mnemonic_activate (GtkWidget *widget,
+					gboolean   group_cycling,
+					gpointer   data)
+{
+  GtkTreeViewColumn *column = (GtkTreeViewColumn *)data;
+
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), FALSE);
+
+  if (column->clickable)
+    gtk_button_clicked (GTK_BUTTON (column->button));
+  else if (GTK_WIDGET_CAN_FOCUS (column->button))
+    gtk_widget_grab_focus (column->button);
+  else
+    {
+      GTK_TREE_VIEW (column->tree_view)->priv->focus_column = column;
+      GTK_TREE_VIEW_SET_FLAG (GTK_TREE_VIEW (column->tree_view),
+			      GTK_TREE_VIEW_DRAW_KEYFOCUS);
+      gtk_widget_grab_focus (column->tree_view);
+    }
+
+  return TRUE;
 }
 
 static void

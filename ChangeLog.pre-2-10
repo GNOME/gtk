@@ -1,3 +1,19 @@
+Tue Feb 19 22:10:59 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtktreeviewcolumn.c (gtk_tree_view_column_mnemonic_activate): new
+	function
+	(gtk_tree_view_column_create_button): use g_signal_* instead of
+	gtk_signal_*, hook up _mnemonic_activate callback
+	(gtk_tree_view_column_update_button): use
+	gtk_label_set_text_width_mnemonic instead of gtk_label_set_text
+	(#69095)
+
+	* gtktreeview.c (gtk_tree_view_class_init): remove key bindings
+	for C-f and C-b, let treeview search use C-f (instead of C-s)
+	(#61886)
+
+	* gtkrc.key.emacs: add some GtkTreeView bindings
+
 Tue Feb 19 20:56:32 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/theme-bits/decompose-bits.c (do_part): fix bug (skipping all

@@ -818,14 +818,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				GTK_TYPE_INT, -1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_f, GDK_CONTROL_MASK, "move_cursor", 2,
-				GTK_TYPE_ENUM, GTK_MOVEMENT_LOGICAL_POSITIONS,
-				GTK_TYPE_INT, 1);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_b, GDK_CONTROL_MASK, "move_cursor", 2,
-				GTK_TYPE_ENUM, GTK_MOVEMENT_LOGICAL_POSITIONS,
-				GTK_TYPE_INT, -1);
-
   gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_CONTROL_MASK, "toggle_cursor_row", 0);
 
   gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK, "select_all", 0);
@@ -886,9 +878,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, 0, "select_cursor_parent", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_s, GDK_CONTROL_MASK, "start_interactive_search", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_f, GDK_CONTROL_MASK, "start_interactive_search", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_S, GDK_CONTROL_MASK, "start_interactive_search", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_F, GDK_CONTROL_MASK, "start_interactive_search", 0);
 }
 
 static void

@@ -50,6 +50,17 @@ binding "gtk-emacs-text-view"
   bind "<ctrl>KP_Space" { "set-anchor" () }
 }
 
+#
+# Bindings for GtkTreeView
+#
+binding "gtk-emacs-tree-view"
+{
+  bind "<ctrl>s" { "start-interactive-search" () }
+  bind "<ctrl>f" { "move-cursor" (logical-positions, 1) }
+  bind "<ctrl>b" { "move-cursor" (logical-positions, -1) }
+}
+
 class "GtkEntry" binding "gtk-emacs-text-entry"
 class "GtkTextView" binding "gtk-emacs-text-entry"
 class "GtkTextView" binding "gtk-emacs-text-view"
+class "GtkTreeView" binding "gtk-emacs-tree-view"
