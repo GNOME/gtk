@@ -2592,15 +2592,12 @@ gtk_tree_view_button_release_column_resize (GtkWidget      *widget,
 {
   GtkTreeView *tree_view;
   gpointer drag_data;
-  gint x;
-  gint i;
 
   tree_view = GTK_TREE_VIEW (widget);
 
-  i = tree_view->priv->drag_pos;
   tree_view->priv->drag_pos = -1;
 
-      /* unblock attached dnd signal handler */
+  /* unblock attached dnd signal handler */
   drag_data = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
   if (drag_data)
     g_signal_handlers_unblock_matched (widget,
@@ -2609,7 +2606,6 @@ gtk_tree_view_button_release_column_resize (GtkWidget      *widget,
 				       drag_data);
 
   GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_IN_COLUMN_RESIZE);
-  gtk_widget_get_pointer (widget, &x, NULL);
   gtk_grab_remove (widget);
   gdk_display_pointer_ungrab (gdk_drawable_get_display (event->window),
 			      event->time);
@@ -3444,6 +3440,8 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   gboolean has_special_cell;
   gboolean rtl;
   gint n_visible_columns;
+  gint pointer_x, pointer_y;
+  gboolean got_pointer = FALSE;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
 
@@ -3705,12 +3703,17 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 						   flags);
 	      if ((node->flags & GTK_RBNODE_IS_PARENT) == GTK_RBNODE_IS_PARENT)
 		{
-		  gint x, y;
-		  gdk_window_get_pointer (tree_view->priv->bin_window, &x, &y, NULL);
+		  if (!got_pointer)
+		    {
+		      gdk_window_get_pointer (tree_view->priv->bin_window, 
+					      &pointer_x, &pointer_y, NULL);
+		      got_pointer = TRUE;
+		    }
+
 		  gtk_tree_view_draw_arrow (GTK_TREE_VIEW (widget),
-                                            tree,
+					    tree,
 					    node,
-					    x, y);
+					    pointer_x, pointer_y);
 		}
 	    }
 	  else
