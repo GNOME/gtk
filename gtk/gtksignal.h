@@ -27,6 +27,7 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
   
@@ -131,14 +132,23 @@ void   gtk_signal_connect_while_alive	     (GtkObject	       *object,
 
 void   gtk_signal_disconnect		  (GtkObject	       *object,
 					   guint		handler_id);
+void   gtk_signal_disconnect_by_func	  (GtkObject	       *object,
+					   GtkSignalFunc	func,
+					   gpointer		data);
 void   gtk_signal_disconnect_by_data	  (GtkObject	       *object,
 					   gpointer		data);
 void   gtk_signal_handler_block		  (GtkObject	       *object,
 					   guint		handler_id);
+void   gtk_signal_handler_block_by_func	  (GtkObject	       *object,
+					   GtkSignalFunc	func,
+					   gpointer		data);
 void   gtk_signal_handler_block_by_data	  (GtkObject	       *object,
 					   gpointer		data);
 void   gtk_signal_handler_unblock	  (GtkObject	       *object,
 					   guint		handler_id);
+void   gtk_signal_handler_unblock_by_func (GtkObject	       *object,
+					   GtkSignalFunc	func,
+					   gpointer		data);
 void   gtk_signal_handler_unblock_by_data (GtkObject	       *object,
 					   gpointer		data);
 guint  gtk_signal_handler_pending	  (GtkObject	       *object,

@@ -56,8 +56,8 @@ struct _GtkSignal
 
 struct _GtkHandler
 {
-  guint id : 28;
-  guint blocked : 1;
+  guint id;
+  guint blocked : 20;
   guint object_signal : 1;
   guint after : 1;
   guint no_marshal : 1;
@@ -674,7 +674,7 @@ gtk_signal_disconnect (GtkObject *object,
       if (handler->id == handler_id)
 	{
 	  handler->id = 0;
-	  handler->blocked = TRUE;
+	  handler->blocked += 1;
 	  gtk_signal_handler_unref (handler, object);
 	  return;
 	}
@@ -682,6 +682,41 @@ gtk_signal_disconnect (GtkObject *object,
     }
   
   g_warning ("gtk_signal_disconnect(): could not find handler (%u)", handler_id);
+}
+
+void
+gtk_signal_disconnect_by_func (GtkObject     *object,
+			       GtkSignalFunc  func,
+			       gpointer       data)
+{
+  GtkHandler *handler;
+  gint found_one;
+  
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (func != NULL);
+  
+  found_one = FALSE;
+  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  
+  while (handler)
+    {
+      GtkHandler *handler_next;
+      
+      handler_next = handler->next;
+      if ((handler->id > 0) &&
+	  (handler->func == func) &&
+	  (handler->func_data == data))
+	{
+	  found_one = TRUE;
+	  handler->id = 0;
+	  handler->blocked += 1;
+	  gtk_signal_handler_unref (handler, object);
+	}
+      handler = handler_next;
+    }
+  
+  if (!found_one)
+    g_warning ("gtk_signal_disconnect_by_func(): could not find handler (0x%0lX) containing data (0x%0lX)", (long) func, (long) data);
 }
 
 void
@@ -701,12 +736,12 @@ gtk_signal_disconnect_by_data (GtkObject *object,
       GtkHandler *handler_next;
       
       handler_next = handler->next;
-      if (handler->func_data == data &&
-	  handler->id > 0)
+      if ((handler->id > 0) &&
+	  (handler->func_data == data))
 	{
 	  found_one = TRUE;
 	  handler->id = 0;
-	  handler->blocked = TRUE;
+	  handler->blocked += 1;
 	  gtk_signal_handler_unref (handler, object);
 	}
       handler = handler_next;
@@ -720,25 +755,54 @@ void
 gtk_signal_handler_block (GtkObject *object,
 			  guint	     handler_id)
 {
-  GtkHandler *tmp;
+  GtkHandler *handler;
   
   g_return_if_fail (object != NULL);
   g_return_if_fail (handler_id > 0);
   
-  tmp = gtk_object_get_data_by_id (object, handler_key_id);
+  handler = gtk_object_get_data_by_id (object, handler_key_id);
   
-  while (tmp)
+  while (handler)
     {
-      if (tmp->id == handler_id)
+      if (handler->id == handler_id)
 	{
-	  tmp->blocked = TRUE;
+	  handler->blocked += 1;
 	  return;
 	}
-      
-      tmp = tmp->next;
+      handler = handler->next;
     }
   
   g_warning ("gtk_signal_handler_block(): could not find handler (%u)", handler_id);
+}
+
+void
+gtk_signal_handler_block_by_func (GtkObject     *object,
+				  GtkSignalFunc  func,
+				  gpointer       data)
+{
+  GtkHandler *handler;
+  gint found_one;
+  
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (func != NULL);
+  
+  found_one = FALSE;
+  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  
+  while (handler)
+    {
+      if ((handler->id > 0) &&
+	  (handler->func == func) &&
+	  (handler->func_data == data))
+	{
+	  found_one = TRUE;
+	  handler->blocked += 1;
+	}
+      handler = handler->next;
+    }
+  
+  if (!found_one)
+    g_warning ("gtk_signal_handler_block_by_func(): could not find handler (0x%0lX) containing data (0x%0lX)", (long) func, (long) data);
 }
 
 void
@@ -750,21 +814,17 @@ gtk_signal_handler_block_by_data (GtkObject *object,
   
   g_return_if_fail (object != NULL);
   
-  if (initialize)
-    gtk_signal_init ();
-  
   found_one = FALSE;
   handler = gtk_object_get_data_by_id (object, handler_key_id);
   
   while (handler)
     {
-      if (handler->func_data == data &&
-	  handler->id > 0)
+      if ((handler->id > 0) &&
+	  (handler->func_data == data))
 	{
 	  found_one = TRUE;
-	  handler->blocked = TRUE;
+	  handler->blocked += 1;
 	}
-      
       handler = handler->next;
     }
   
@@ -790,14 +850,47 @@ gtk_signal_handler_unblock (GtkObject *object,
     {
       if (handler->id == handler_id)
 	{
-	  handler->blocked = FALSE;
+	  if (handler->blocked > 0)
+	    handler->blocked -= 1;
+	  else
+	    g_warning ("gtk_signal_handler_unblock(): handler (%u) is not blocked", handler_id);
 	  return;
 	}
-      
       handler = handler->next;
     }
   
   g_warning ("gtk_signal_handler_unblock(): could not find handler (%u)", handler_id);
+}
+
+void
+gtk_signal_handler_unblock_by_func (GtkObject     *object,
+				    GtkSignalFunc  func,
+				    gpointer       data)
+{
+  GtkHandler *handler;
+  gint found_one;
+  
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (func != NULL);
+  
+  found_one = FALSE;
+  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  
+  while (handler)
+    {
+      if ((handler->id > 0) &&
+	  (handler->func == func) &&
+	  (handler->func_data == data) &&
+	  (handler->blocked > 0))
+	{
+	  handler->blocked -= 1;
+	  found_one = TRUE;
+	}
+      handler = handler->next;
+    }
+  
+  if (!found_one)
+    g_warning ("gtk_signal_handler_unblock_by_func(): could not find blocked handler (0x%0lX) containing data (0x%0lX)", (long) func, (long) data);
 }
 
 void
@@ -809,26 +902,23 @@ gtk_signal_handler_unblock_by_data (GtkObject *object,
   
   g_return_if_fail (object != NULL);
   
-  if (initialize)
-    gtk_signal_init ();
-  
   found_one = FALSE;
   handler = gtk_object_get_data_by_id (object, handler_key_id);
   
   while (handler)
     {
-      if (handler->func_data == data &&
-	  handler->id > 0)
+      if ((handler->id > 0) &&
+	  (handler->func_data == data) &&
+          (handler->blocked > 0))
 	{
+	  handler->blocked -= 1;
 	  found_one = TRUE;
-	  handler->blocked = FALSE;
 	}
-      
       handler = handler->next;
     }
   
   if (!found_one)
-    g_warning ("gtk_signal_handler_unblock_by_data(): could not find handler containing data (0x%0lX)", (long) data);
+    g_warning ("gtk_signal_handler_unblock_by_data(): could not find blocked handler containing data (0x%0lX)", (long) data);
 }
 
 void
@@ -932,12 +1022,12 @@ gtk_signal_handler_new ()
   handler = g_chunk_new (GtkHandler, handler_mem_chunk);
   
   handler->id = 0;
-  handler->ref_count = 1;
+  handler->blocked = 0;
   handler->signal_type = 0;
-  handler->blocked = FALSE;
   handler->object_signal = FALSE;
   handler->after = FALSE;
   handler->no_marshal = FALSE;
+  handler->ref_count = 1;
   handler->func = NULL;
   handler->func_data = NULL;
   handler->destroy_func = NULL;
@@ -957,13 +1047,6 @@ static void
 gtk_signal_handler_unref (GtkHandler *handler,
 			  GtkObject  *object)
 {
-  if (!handler->ref_count)
-    {
-      /* FIXME: i wanna get removed some when */
-      g_warning ("gtk_signal_handler_unref(): handler with ref_count==0!");
-      return;
-    }
-  
   handler->ref_count -= 1;
   if (handler->ref_count == 0)
     {
@@ -1151,8 +1234,7 @@ gtk_signal_handler_pending (GtkObject           *object,
   while (handlers && handlers->signal_type == signal_id)
     {
       if (handlers->id > 0 &&
-	  (may_be_blocked ||
-	   !handlers->blocked))
+	  (may_be_blocked || handlers->blocked == 0))
 	{
 	  handler_id = handlers->id;
 	  break;
@@ -1334,7 +1416,7 @@ gtk_handlers_run (GtkHandler     *handlers,
       
       gtk_signal_handler_ref (handlers);
       
-      if (!handlers->blocked && (handlers->after == after))
+      if (handlers->blocked == 0 && (handlers->after == after))
 	{
 	  if (handlers->func)
 	    {
