@@ -1,3 +1,11 @@
+Thu Jul 17 19:06:34 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_realize_button):
+	Don't set attr.event_mask twice, those things were meant to be
+	ORred. (#115139, pointed out by Morten Welinder).
+
 Thu Jul 17 16:11:21 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.
