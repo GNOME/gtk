@@ -3308,6 +3308,9 @@ gtk_widget_grab_focus (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+    return;
+  
   g_object_ref (G_OBJECT (widget));
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[GRAB_FOCUS]);
   g_object_notify (G_OBJECT (widget), "has_focus");

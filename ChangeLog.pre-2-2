@@ -1,3 +1,20 @@
+Tue Feb 26 18:01:10 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_grab_focus): Don't
+	to focus insensitive widgets. (#68203)
+
+	* gtk/gtkentry.c (gtk_entry_state_changed): Clear any
+	current selection if we become insensitive. (#68203)
+
+	* gtk/gtkentry.c (gtk_entry_grab_focus): Don't
+	select the text if the entry isn't editable. (#67203)
+
+	* gtk/gtkentry.c: Activate keybindings when not editable,
+	but supress keybindings that change the text. (#65848, #68203)
+
+	* gtk/gtkentry.c (gtk_entry_set_property): Reset the
+	IM context for the entry when it is made not editable.
+
 Tue Feb 26 17:04:44 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcolorsel.c (update_color): Emit ::color_changed

@@ -292,6 +292,8 @@ static void         gtk_entry_do_popup                 (GtkEntry       *entry,
 							GdkEventButton *event);
 static gboolean     gtk_entry_mnemonic_activate        (GtkWidget      *widget,
 							gboolean        group_cycling);
+static void         gtk_entry_state_changed            (GtkWidget      *widget,
+							GtkStateType    previous_state);
 static void         gtk_entry_check_cursor_blink       (GtkEntry       *entry);
 static void         gtk_entry_pend_cursor_blink        (GtkEntry       *entry);
 static void         get_text_area_size                 (GtkEntry       *entry,
@@ -767,6 +769,9 @@ gtk_entry_set_property (GObject         *object,
 	  {
 	    entry->editable = new_value;
 	    gtk_entry_queue_draw (entry);
+
+	    if (!entry->editable)
+	      gtk_entry_reset_im_context (entry);
 	  }
       }
       break;
@@ -1524,18 +1529,19 @@ gtk_entry_key_press (GtkWidget   *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
 
-  if (!entry->editable)
-    return FALSE;
-
   gtk_entry_pend_cursor_blink (entry);
-  
-  if (gtk_im_context_filter_keypress (entry->im_context, event))
+
+  if (entry->editable)
     {
-      gtk_entry_obscure_mouse_cursor (entry);
-      entry->need_im_reset = TRUE;
-      return TRUE;
+      if (gtk_im_context_filter_keypress (entry->im_context, event))
+	{
+	  gtk_entry_obscure_mouse_cursor (entry);
+	  entry->need_im_reset = TRUE;
+	  return TRUE;
+	}
     }
-  else if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
+
+  if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
     /* Activate key bindings
      */
     return TRUE;
@@ -1550,15 +1556,15 @@ gtk_entry_key_release (GtkWidget   *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
 
   if (!entry->editable)
-    return FALSE;
-
-  if (gtk_im_context_filter_keypress (entry->im_context, event))
     {
-      entry->need_im_reset = TRUE;
-      return TRUE;
+      if (gtk_im_context_filter_keypress (entry->im_context, event))
+	{
+	  entry->need_im_reset = TRUE;
+	  return TRUE;
+	}
     }
-  else
-    return GTK_WIDGET_CLASS (parent_class)->key_release_event (widget, event);
+
+  return GTK_WIDGET_CLASS (parent_class)->key_release_event (widget, event);
 }
 
 static gint
@@ -1604,6 +1610,7 @@ gtk_entry_focus_out (GtkWidget     *widget,
 static void
 gtk_entry_grab_focus (GtkWidget        *widget)
 {
+  GtkEntry *entry = GTK_ENTRY (widget);
   gboolean select_on_focus;
   
   GTK_WIDGET_CLASS (parent_class)->grab_focus (widget);
@@ -1613,7 +1620,7 @@ gtk_entry_grab_focus (GtkWidget        *widget)
 		&select_on_focus,
 		NULL);
   
-  if (select_on_focus && !GTK_ENTRY (widget)->in_click)
+  if (select_on_focus && entry->editable && !entry->in_click)
     gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
 }
 
@@ -1632,12 +1639,20 @@ static void
 gtk_entry_state_changed (GtkWidget      *widget,
 			 GtkStateType    previous_state)
 {
+  GtkEntry *entry = GTK_ENTRY (widget);
+  
   if (GTK_WIDGET_REALIZED (widget))
     {
       gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
-      gdk_window_set_background (GTK_ENTRY (widget)->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+      gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
     }
 
+  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+    {
+      /* Clear any selection */
+      gtk_editable_select_region (GTK_EDITABLE (entry), entry->current_pos, entry->current_pos);      
+    }
+  
   gtk_widget_queue_clear (widget);
 }
 
@@ -2064,10 +2079,13 @@ gtk_entry_insert_at_cursor (GtkEntry    *entry,
   GtkEditable *editable = GTK_EDITABLE (entry);
   gint pos = entry->current_pos;
 
-  gtk_entry_reset_im_context (entry);
+  if (entry->editable)
+    {
+      gtk_entry_reset_im_context (entry);
 
-  gtk_editable_insert_text (editable, str, -1, &pos);
-  gtk_editable_set_position (editable, pos);
+      gtk_editable_insert_text (editable, str, -1, &pos);
+      gtk_editable_set_position (editable, pos);
+    }
 }
 
 static void
@@ -2164,14 +2182,19 @@ gtk_entry_cut_clipboard (GtkEntry *entry)
   gint start, end;
 
   gtk_entry_copy_clipboard (entry);
-  if (gtk_editable_get_selection_bounds (editable, &start, &end))
-    gtk_editable_delete_text (editable, start, end);
+
+  if (entry->editable)
+    {
+      if (gtk_editable_get_selection_bounds (editable, &start, &end))
+	gtk_editable_delete_text (editable, start, end);
+    }
 }
 
 static void
 gtk_entry_paste_clipboard (GtkEntry *entry)
 {
-  gtk_entry_paste (entry, GDK_NONE);
+  if (entry->editable)
+    gtk_entry_paste (entry, GDK_NONE);
 }
 
 static void
@@ -3767,7 +3790,8 @@ unichar_chosen_func (const char *text,
 {
   GtkEntry *entry = GTK_ENTRY (data);
 
-  gtk_entry_enter_text (entry, text);
+  if (entry->editable)
+    gtk_entry_enter_text (entry, text);
 }
 
 typedef struct
