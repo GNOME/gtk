@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-11 09:20-0400\n"
+"POT-Creation-Date: 2004-06-23 05:14+0200\n"
 "PO-Revision-Date: 2004-03-03 10:48+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -392,9 +392,10 @@ msgstr "Drejtimi Horizontal"
 msgid "X alignment of the child"
 msgstr "Drejtimi X i birit"
 
+#. GRUT modified this item
 #: gtk/gtkaspectframe.c:116
 msgid "Vertical Alignment"
-msgstr "Drejtimi Vertikal"
+msgstr "Renditje vertikale"
 
 #: gtk/gtkaspectframe.c:117
 msgid "Y alignment of the child"
@@ -870,9 +871,10 @@ msgstr "Markues"
 msgid "Marked up text to render"
 msgstr "Teksti i markuar që duhet vizatuar"
 
+#. GRUT modified this item
 #: gtk/gtkcellrenderertext.c:209 gtk/gtklabel.c:299
 msgid "Attributes"
-msgstr "Vetitë"
+msgstr "Pronësitë"
 
 #: gtk/gtkcellrenderertext.c:210
 msgid "A list of style attributes to apply to the text of the renderer"
@@ -910,9 +912,10 @@ msgstr "Emri i ngjyrës së planit të parë"
 msgid "Foreground color as a string"
 msgstr "Ngjyra e përparme e shprehur si vlerë"
 
+#. GRUT modified this item
 #: gtk/gtkcellrenderertext.c:250 gtk/gtktexttag.c:248
 msgid "Foreground color"
-msgstr "Ngjyra e përparme"
+msgstr "Ngjyra ballore"
 
 #: gtk/gtkcellrenderertext.c:251
 msgid "Foreground color as a GdkColor"
@@ -1672,13 +1675,15 @@ msgstr ""
 "Një instrument që do të shfaqet në vend të etiketës së zakonshme të "
 "shpalosësit"
 
+#. GRUT modified this item
 #: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
 msgid "Expander Size"
-msgstr "Madhësia e zgjeruesit"
+msgstr "Madhësia e shpalosësit"
 
+#. GRUT modified this item
 #: gtk/gtkexpander.c:247 gtk/gtktreeview.c:643
 msgid "Size of the expander arrow"
-msgstr "Madhësia e shigjetës së zgjeruesit"
+msgstr "Madhësia e shigjetës së shpalosësit"
 
 #: gtk/gtkexpander.c:256
 msgid "Spacing around expander arrow"
@@ -1767,11 +1772,11 @@ msgstr "Shfaq të padukshmit"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Nëse files dhe kartelat e padukshme duhen shfaqur"
 
-#: gtk/gtkfilechooserdefault.c:560
+#: gtk/gtkfilechooserdefault.c:563
 msgid "Default file chooser backend"
 msgstr "Zgjedhësi backend i prezgjedhur i file"
 
-#: gtk/gtkfilechooserdefault.c:561
+#: gtk/gtkfilechooserdefault.c:564
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Emri i GtkFileChooser backend që duhet përdorur si i prezgjedhur"
 
@@ -1799,9 +1804,10 @@ msgstr "Zgjedhje shumëfishe"
 msgid "X position"
 msgstr "Pozicioni X"
 
+#. GRUT modified this item
 #: gtk/gtkfixed.c:122 gtk/gtklayout.c:613
 msgid "X position of child widget"
-msgstr "X i widget bir"
+msgstr "Pozicioni X i widget bir"
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
 msgid "Y position"
@@ -2818,9 +2824,10 @@ msgstr "Madhësia më e madhe"
 msgid "Maximum size of the ruler"
 msgstr "Madhësia më e madhe e vizores"
 
+#. GRUT modified this item
 #: gtk/gtkscale.c:171 gtk/gtkspinbutton.c:259
 msgid "Digits"
-msgstr "Shifrat"
+msgstr "Shifra"
 
 #: gtk/gtkscale.c:172
 msgid "The number of decimal places that are displayed in the value"
@@ -3965,9 +3972,10 @@ msgstr "Ngjyra që duhet përdorur për rreshtat tek"
 msgid "Whether to display the column"
 msgstr "Nëse duhet të shfaqet kollona"
 
+#. GRUT modified this item
 #: gtk/gtktreeviewcolumn.c:231 gtk/gtkwindow.c:482
 msgid "Resizable"
-msgstr "E ripërmasueshëm"
+msgstr "E ripërmasueshme"
 
 #: gtk/gtktreeviewcolumn.c:232
 msgid "Column is user-resizable"
@@ -4499,3 +4507,4 @@ msgstr "Gjendja e stilit IM"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Tregon si duhet shfaqur metod e input e panelit të gjendjes"
+
