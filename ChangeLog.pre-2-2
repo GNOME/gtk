@@ -1,3 +1,10 @@
+Tue Apr  7 23:06:00 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* Changes for GTK+ 0.99.10
+	
+	* examples/find-examples.sh: Script to find all the
+	files we need to distribute from the examples directory.
+
 Tue Apr  7 19:14:03 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gdk/gdkpixmap.c: Added maximum field widths to prevent

@@ -1,3 +1,10 @@
+Overview of Changes in GTK+ 0.99.10:
+
+* Lots of bug fixes
+* Documentation improvements
+* Better looking handlebox
+* A few convenience functions
+
 Overview of Changes in GTK+ 0.99.9:
 
 * Added examples directory, even more examples soon
