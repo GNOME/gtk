@@ -206,11 +206,25 @@ gdk_keymap_get_for_display (GdkDisplay *display)
 }
 
 /* Find the index of the group/level pair within the keysyms for a key.
+ * We round up the number of keysyms per keycode to the next even number,
+ * otherwise we lose a whole group of keys
  */
 #define KEYSYM_INDEX(keymap_impl, group, level) \
-  (2 * ((group) % (keymap_impl->keysyms_per_keycode / 2)) + (level))
+  (2 * ((group) % (int)((keymap_impl->keysyms_per_keycode + 1) / 2)) + (level))
 #define KEYSYM_IS_KEYPAD(s) (((s) >= 0xff80 && (s) <= 0xffbd) || \
                              ((s) >= 0x11000000 && (s) <= 0x1100ffff))
+
+static int
+get_symbol (const KeySym *syms, GdkKeymapX11 *keymap_x11, int group, int level)
+{
+  int index;
+
+  index = KEYSYM_INDEX(keymap_x11, group, level);
+  if (index > keymap_x11->keysyms_per_keycode)
+      return NoSymbol;
+
+  return syms[index];
+}
 
 static void
 update_keymaps (GdkKeymapX11 *keymap_x11)
@@ -256,7 +270,7 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
 	  /* Check both groups */
 	  for (i = 0 ; i < 2 ; i++)
 	    {
-	      if (syms[KEYSYM_INDEX (keymap_x11, i, 0)] == GDK_Tab)
+	      if (get_symbol (syms, keymap_x11, i, 0) == GDK_Tab)
 		syms[KEYSYM_INDEX (keymap_x11, i, 1)] = GDK_ISO_Left_Tab;
 	    }
 
@@ -264,12 +278,12 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
            * If there is one keysym and the key symbol has upper and lower
            * case variants fudge the keymap
            */
-          if (syms[KEYSYM_INDEX (keymap_x11, 0, 1)] == 0)
+          if (get_symbol (syms, keymap_x11, 0, 1) == 0)
             {
               guint lower;
               guint upper;
 
-              gdk_keyval_convert_case (syms[KEYSYM_INDEX (keymap_x11, 0, 0)], &lower, &upper);
+              gdk_keyval_convert_case (get_symbol (syms, keymap_x11, 0, 0), &lower, &upper);
               if (lower != upper)
                 {
                   syms[KEYSYM_INDEX (keymap_x11, 0, 0)] = lower;
@@ -845,7 +859,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
     {
       const KeySym *map = get_keymap (keymap_x11);
       const KeySym *syms = map + (key->keycode - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
-      return syms [KEYSYM_INDEX (keymap_x11, key->group, key->level)];
+      return get_symbol (syms, keymap_x11, key->group, key->level);
     }
 }
 
@@ -995,7 +1009,7 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
   const KeySym *map = get_keymap (keymap_x11);
   const KeySym *syms = map + (hardware_keycode - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
 
-#define SYM(k,g,l) syms[KEYSYM_INDEX (k,g,l)]
+#define SYM(k,g,l) get_symbol (syms, k,g,l)
 
   GdkModifierType shift_modifiers;
   gint shift_level;
