@@ -65,7 +65,7 @@ generic pointers.  These are filled in by the model in a model-specific
 way.  One can convert a path to an iterator by calling
 gtk_tree_model_get_iter().  These iterators are the primary way of
 accessing a model and are similar to the iterators used by
-#GtkTextBuffer.  They are generally statically allocated on the heap and
+#GtkTextBuffer.  They are generally statically allocated on the stack and
 only used for a short time.  The model interface defines a set of
 operations using them for navigating the model.
 </para>
