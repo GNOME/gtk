@@ -183,7 +183,7 @@ gtk_type_init (void)
 	  if (builtin_info[i].parent == G_TYPE_ENUM)
 	    type_id = g_enum_register_static (builtin_info[i].type_name, builtin_info[i].values);
 	  else if (builtin_info[i].parent == G_TYPE_FLAGS)
-	    type_id = g_flags_register_static (builtin_info[i].type_name, builtin_info[i].values);
+	    type_id = g_flags_register_static (builtin_info[i].type_name, (const GFlagsValue *)builtin_info[i].values);
 	  else if (builtin_info[i].parent == GTK_TYPE_BOXED)
 	    type_id = g_type_register_static (GTK_TYPE_BOXED, builtin_info[i].type_name, &tinfo);
 	  else
