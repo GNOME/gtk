@@ -575,7 +575,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, parent_set),
 		    gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_OBJECT);
+		    GTK_TYPE_WIDGET);
   widget_signals[HIERARCHY_CHANGED] =
     gtk_signal_new ("hierarchy_changed",
 		    GTK_RUN_LAST,

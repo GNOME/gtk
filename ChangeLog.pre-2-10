@@ -1,3 +1,8 @@
+2001-10-15  Murray Cumming <murrayc@usa.net
+
+	* gtk/gtkinputdialog.c, gtk/gtktoolbar.c,  gtk/gtkwidget.c:
+	  Corrected the type names used in some calls to g_signal_new().
+	
 Sat Oct 13 07:09:30 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkbindings.c (gtk_binding_set_add_path): to compare pattern
