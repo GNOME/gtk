@@ -1280,7 +1280,7 @@ gtk_ui_manager_add_ui_from_file (GtkUIManager *self,
 				 GError      **error)
 {
   gchar *buffer;
-  gint length;
+  gsize length;
   guint res;
 
   g_return_val_if_fail (GTK_IS_UI_MANAGER (self), 0);

@@ -1,3 +1,15 @@
+Mon Oct 27 15:47:58 2003  Manish Singh  <yosh@gimp.org>
+
+	* gdk/x11/gdkscreen-x11.c: #include <X11/extensions/Xrandr.h> if
+	we have RandR support, for XRRUpdateConfiguration declaration.
+
+	* gtk/gtkfilefilter.c: #include "gtkprivate.h" for _gtk_fnmatch
+	declaration.
+
+	* gtk/gtkuimanager.c (gtk_ui_manager_add_ui_from_file): Make
+	length a gsize variable, since that's what g_file_get_contents()
+	expects.
+
 Mon Oct 27 12:18:49 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* NEWS: Fix attribution for above/below EWMH work.

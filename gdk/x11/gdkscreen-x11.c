@@ -39,6 +39,10 @@
 #include <X11/extensions/Xinerama.h>
 #endif
 
+#ifdef HAVE_RANDR
+#include <X11/extensions/Xrandr.h>
+#endif
+
 static void         gdk_screen_x11_class_init  (GdkScreenX11Class *klass);
 static void         gdk_screen_x11_dispose     (GObject		  *object);
 static void         gdk_screen_x11_finalize    (GObject		  *object);

@@ -22,6 +22,7 @@
 
 #include "gtkfilefilter.h"
 #include "gtkobject.h"
+#include "gtkprivate.h"
 
 typedef struct _GtkFileFilterClass GtkFileFilterClass;
 typedef struct _FilterRule FilterRule;
