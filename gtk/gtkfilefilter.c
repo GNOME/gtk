@@ -381,7 +381,7 @@ gtk_file_filter_get_needed (GtkFileFilter *filter)
  * 
  * Tests whether a file should be displayed according to @filter.
  * The #GtkFileFilterInfo structure @filter_info should include
- * the fields returned feom gtk_file_filter_get_needed().
+ * the fields returned from gtk_file_filter_get_needed().
  *
  * This function will not typically be used by applications; it
  * is intended principally for use in the implementation of

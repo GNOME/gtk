@@ -1,5 +1,8 @@
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilefilter.c (gtk_file_filter_filter): Fix typo in
+	docs.
+
 	* gtk/gtklabel.c (gtk_label_do_popup): Adjust to the current
 	entry popup menu.
 	(gtk_label_button_press, gtk_label_button_release) 
