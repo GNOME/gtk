@@ -1,3 +1,15 @@
+2000-06-10  Federico Mena Quintero  <federico@helixcode.com>
+
+	* demo/pixbuf-demo.c: It was cold and rainy this Saturday morning,
+	so I needed something to warm my thighs.  Running plain infinite
+	loops on your laptop to make it hot is not very much fun.  A demo
+	of the gdk-pixbuf scaling functions is way better, and looks
+	prettier, too.
+
+	* configure.in (AC_OUTPUT): Added the demo Makefile.
+
+	* Makefile.am (SUBDIRS): Added the demo directory.
+
 2000-06-09  Larry Ewing  <lewing@helixcode.com>
 
 	* gdk-pixbuf/io-png.c (gdk_pixbuf__png_image_load_increment):

@@ -29,19 +29,41 @@ gboolean
 expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
   GdkPixbuf *dest;
+  GdkGC *gc;
+  GdkColormap *colormap;
+  GdkColor color;
+
+  color.red = 0xffff;
+  color.green = 0xffff;
+  color.blue = 0xffff;
+  
+  gc = gdk_gc_new (widget->window);
+  colormap = gdk_window_get_colormap (widget->window);
+  gdk_colormap_alloc_color (colormap, &color, TRUE, TRUE);
+  gdk_gc_set_foreground (gc, &color);
+  gdk_draw_rectangle (widget->window, gc,	
+		      TRUE,
+		      event->area.x, 
+		      event->area.y, 
+		      event->area.width, event->area.height);
 
   gdk_window_set_back_pixmap (widget->window, NULL, FALSE);
+
+
+  dest = gdk_pixbuf_get_from_drawable(NULL,
+				      widget->window,
+				      gdk_window_get_colormap (widget->window),
+				      event->area.x, 
+				      event->area.y, 
+				      0, 0, event->area.width, event->area.height);
+
+  gdk_pixbuf_composite (pixbuf, dest,
+			0, 0, event->area.width, event->area.height,
+			-event->area.x, -event->area.y,
+			(double) widget->allocation.width / gdk_pixbuf_get_width (pixbuf),
+			(double) widget->allocation.height / gdk_pixbuf_get_height (pixbuf),
+			interp_type, overall_alpha);
   
-  dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, event->area.width, event->area.height);
-
-  gdk_pixbuf_composite_color (pixbuf, dest,
-			      0, 0, event->area.width, event->area.height,
-			      -event->area.x, -event->area.y,
-			      (double) widget->allocation.width / gdk_pixbuf_get_width (pixbuf),
-			      (double) widget->allocation.height / gdk_pixbuf_get_height (pixbuf),
-			      interp_type, overall_alpha,
-			      event->area.x, event->area.y, 16, 0xaaaaaa, 0x555555);
-
   gdk_pixbuf_render_to_drawable (dest, widget->window, widget->style->fg_gc[GTK_STATE_NORMAL],
 				 0, 0, event->area.x, event->area.y,
 				 event->area.width, event->area.height,
