@@ -1,3 +1,22 @@
+2003-09-07  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c (update_node): Fix a C99ism.  (#121640,
+	Josh Beam)
+
+	Fixes for accelerator handling during (un)merging:
+	
+	* gtk/gtkuimanager.c (update_node): Move setting info-action
+	after the switch, since the old action is needed in some cases.
+	In cases of proxy type mismatch, disconnect the old proxy from
+	the old action.
+
+	* gtk/gtkaction.c (remove_proxy): Renamed from 
+	gtk_action_remove_proxy(). Move unsetting of the accelerator
+	here from disconnect_proxy() in order to catch all cases of 
+	removing a proxy.
+	(gtk_action_disconnect_proxy): Fix logic in g_return_if_fail()
+	to fail if proxy isn't a proxy of action.
+
 2003-09-07  Pablo Saratxaga  <pablo@mandrakesoft.com>
 
 	* configure.in: Added Uzbek latin (uz) and cyrillic (uz@Cyrl) to

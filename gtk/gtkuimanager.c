@@ -1616,12 +1616,6 @@ update_node (GtkUIManager *self,
 	  goto recurse_children;
 	}
       
-      if (info->action)
-	g_object_unref (info->action);
-      info->action = action;
-      if (info->action)
-	g_object_ref (info->action);
-
       switch (info->type)
 	{
 	case NODE_TYPE_MENUBAR:
@@ -1647,7 +1641,7 @@ update_node (GtkUIManager *self,
 	    GList *siblings;
 	    /* remove the proxy if it is of the wrong type ... */
 	    if (info->proxy &&  G_OBJECT_TYPE (info->proxy) !=
-		GTK_ACTION_GET_CLASS (info->action)->menu_item_type)
+		GTK_ACTION_GET_CLASS (action)->menu_item_type)
 	      {
 		prev_submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
 		if (prev_submenu)
@@ -1655,6 +1649,7 @@ update_node (GtkUIManager *self,
 		    g_object_ref (prev_submenu);
 		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), NULL);
 		  }
+		gtk_action_disconnect_proxy (info->action, info->proxy);
 		gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
 				      info->proxy);
 		info->proxy = NULL;
@@ -1667,9 +1662,11 @@ update_node (GtkUIManager *self,
 		
 		if (find_menu_position (node, &menushell, &pos))
 		  {
-		    info->proxy = gtk_action_create_menu_item (info->action);
+		    GtkWidget *tearoff;
+
+		    info->proxy = gtk_action_create_menu_item (action);
 		    menu = gtk_menu_new ();
-		    GtkWidget *tearoff = gtk_tearoff_menu_item_new ();
+		    tearoff = gtk_tearoff_menu_item_new ();
 		    gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
 		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
 		    gtk_menu_set_accel_group (GTK_MENU (menu), self->private_data->accel_group);
@@ -1677,7 +1674,7 @@ update_node (GtkUIManager *self,
 		  }
 	      }
 	    else
-	      gtk_action_connect_proxy (info->action, info->proxy);
+	      gtk_action_connect_proxy (action, info->proxy);
 	    if (prev_submenu)
 	      {
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy),
@@ -1709,13 +1706,17 @@ update_node (GtkUIManager *self,
 	      !GTK_IS_SEPARATOR_MENU_ITEM (info->extra))
 	    {
 	      if (info->proxy)
-		gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
-				      info->proxy);
+		{
+		  gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+					info->proxy);
+		  info->proxy = NULL;
+		}
 	      if (info->extra)
-		gtk_container_remove (GTK_CONTAINER (info->extra->parent),
-				      info->extra);
-	      info->proxy = NULL;
-	      info->extra = NULL;
+		{
+		  gtk_container_remove (GTK_CONTAINER (info->extra->parent),
+					info->extra);
+		  info->extra = NULL;
+		}
 	    }
 	  if (info->proxy == NULL)
 	    {
@@ -1740,13 +1741,17 @@ update_node (GtkUIManager *self,
 	      !GTK_IS_SEPARATOR_TOOL_ITEM (info->extra))
 	    {
 	      if (info->proxy)
-		gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
-				      info->proxy);
+		{
+		  gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+					info->proxy);
+		  info->proxy = NULL;
+		}
 	      if (info->extra)
-		gtk_container_remove (GTK_CONTAINER (info->extra->parent),
-				      info->extra);
-	      info->proxy = NULL;
-	      info->extra = NULL;
+		{
+		  gtk_container_remove (GTK_CONTAINER (info->extra->parent),
+					info->extra);
+		  info->extra = NULL;
+		}
 	    }
 	  if (info->proxy == NULL)
 	    {
@@ -1770,8 +1775,9 @@ update_node (GtkUIManager *self,
 	case NODE_TYPE_MENUITEM:
 	  /* remove the proxy if it is of the wrong type ... */
 	  if (info->proxy &&  G_OBJECT_TYPE (info->proxy) !=
-	      GTK_ACTION_GET_CLASS (info->action)->menu_item_type)
+	      GTK_ACTION_GET_CLASS (action)->menu_item_type)
 	    {
+	      gtk_action_disconnect_proxy (info->action, info->proxy);
 	      gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
 				    info->proxy);
 	      info->proxy = NULL;
@@ -1784,7 +1790,7 @@ update_node (GtkUIManager *self,
 
 	      if (find_menu_position (node, &menushell, &pos))
 		{
-		  info->proxy = gtk_action_create_menu_item (info->action);
+		  info->proxy = gtk_action_create_menu_item (action);
 
 		  gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
 					 info->proxy, pos);
@@ -1793,14 +1799,15 @@ update_node (GtkUIManager *self,
 	  else
 	    {
 	      gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), NULL);
-	      gtk_action_connect_proxy (info->action, info->proxy);
+	      gtk_action_connect_proxy (action, info->proxy);
 	    }
 	  break;
 	case NODE_TYPE_TOOLITEM:
 	  /* remove the proxy if it is of the wrong type ... */
 	  if (info->proxy &&  G_OBJECT_TYPE (info->proxy) !=
-	      GTK_ACTION_GET_CLASS (info->action)->toolbar_item_type)
+	      GTK_ACTION_GET_CLASS (action)->toolbar_item_type)
 	    {
+	      gtk_action_disconnect_proxy (info->action, info->proxy);
 	      gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
 				    info->proxy);
 	      info->proxy = NULL;
@@ -1813,7 +1820,7 @@ update_node (GtkUIManager *self,
 
 	      if (find_toolbar_position (node, &toolbar, &pos))
 		{
-		  info->proxy = gtk_action_create_tool_item (info->action);
+		  info->proxy = gtk_action_create_tool_item (action);
 
 		  gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
 					        GTK_TOOL_ITEM (info->proxy), pos);
@@ -1821,7 +1828,7 @@ update_node (GtkUIManager *self,
 	    }
 	  else
 	    {
-	      gtk_action_connect_proxy (info->action, info->proxy);
+	      gtk_action_connect_proxy (action, info->proxy);
 	    }
 	  break;
 	case NODE_TYPE_SEPARATOR:
@@ -1869,7 +1876,11 @@ update_node (GtkUIManager *self,
 	  break;
 	}
 
-      /* if this node has a widget, but it is the wrong type, remove it */
+      if (action)
+	g_object_ref (action);
+      if (info->action)
+	g_object_unref (info->action);
+      info->action = action;
     }
 
  recurse_children:

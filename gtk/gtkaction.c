@@ -437,10 +437,13 @@ create_tool_item (GtkAction *action)
 }
 
 static void
-gtk_action_remove_proxy (GtkWidget *widget, 
-			 GtkAction *action)
+remove_proxy (GtkWidget *proxy, 
+	      GtkAction *action)
 {
-  action->private_data->proxies = g_slist_remove (action->private_data->proxies, widget);
+  if (GTK_IS_MENU_ITEM (proxy))
+    gtk_menu_item_set_accel_path (GTK_MENU_ITEM (proxy), NULL);
+
+  action->private_data->proxies = g_slist_remove (action->private_data->proxies, proxy);
 }
 
 static void
@@ -531,7 +534,7 @@ connect_proxy (GtkAction *action,
   /* add this widget to the list of proxies */
   action->private_data->proxies = g_slist_prepend (action->private_data->proxies, proxy);
   g_signal_connect (proxy, "destroy",
-		    G_CALLBACK (gtk_action_remove_proxy), action);
+		    G_CALLBACK (remove_proxy), action);
 
   g_signal_connect_object (action, "notify::sensitive",
 			   G_CALLBACK (gtk_action_sync_property), proxy, 0);
@@ -661,9 +664,9 @@ disconnect_proxy (GtkAction *action,
 
   /* remove proxy from list of proxies */
   g_signal_handlers_disconnect_by_func (proxy,
-					G_CALLBACK (gtk_action_remove_proxy),
+					G_CALLBACK (remove_proxy),
 					action);
-  gtk_action_remove_proxy (proxy, action);
+  remove_proxy (proxy, action);
 
   /* disconnect the activate handler */
   g_signal_handlers_disconnect_by_func (proxy,
@@ -683,9 +686,6 @@ disconnect_proxy (GtkAction *action,
 					G_CALLBACK (gtk_action_sync_label),
 					proxy);
   
-  if (GTK_IS_MENU_ITEM (widget))
-    gtk_menu_item_set_accel_path (GTK_MENU_ITEM (widget), NULL);
-
   /* toolbar button specific synchronisers ... */
   g_signal_handlers_disconnect_by_func (action,
 					G_CALLBACK (gtk_action_sync_short_label),
@@ -833,7 +833,7 @@ gtk_action_disconnect_proxy (GtkAction *action,
   g_return_if_fail (GTK_IS_ACTION (action));
   g_return_if_fail (GTK_IS_WIDGET (proxy));
 
-  g_return_if_fail (g_object_get_data (G_OBJECT (proxy), "gtk-action") != action);
+  g_return_if_fail (g_object_get_data (G_OBJECT (proxy), "gtk-action") == action);
 
   (* GTK_ACTION_GET_CLASS (action)->disconnect_proxy) (action, proxy);  
 }
