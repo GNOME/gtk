@@ -1,3 +1,9 @@
+2000-06-05	Mathieu Lacage  <mathieu@gnome.org>
+
+	* configure.in: add some gtk parameters to the
+	GDK_PIXBUF_LIB²S and GDK_PIXBUG_INCLUDEDIR vars. One more
+	fight in my crusade for strange prefix compile...
+
 2000-05-30  Not Zed  <NotZed@HelixCode.com>
 
 	* gdk-pixbuf/io-jpeg.c (gdk_pixbuf__jpeg_image_begin_load):
