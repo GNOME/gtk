@@ -1111,7 +1111,7 @@ aspect of the #GtkCList widget.
 
 <!-- ##### FUNCTION gtk_clist_set_reorderable ##### -->
 <para>
-Sets whether the CList's columns are re-orderable.
+Sets whether the CList's rows are re-orderable using drag-and-drop.
 </para>
 
 @clist: The #GtkCList to affect.

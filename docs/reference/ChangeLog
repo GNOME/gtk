@@ -1,3 +1,8 @@
+2000-03-07  Damon Chaplin  <damon@helixcode.com>
+
+	* gtk/tmpl/gtkclist.sgml: fix to gtk_clist_set_reorderable(). It
+	reorders rows, not columns. From Guy Harris <gharris@flashcom.net>.
+
 2000-02-29  Damon Chaplin  <damon@helixcode.com>
 
 	* gtk/tmpl/gtkmenuitem.sgml: minor fix from Nicolas GEORGE
