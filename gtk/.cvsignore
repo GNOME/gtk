@@ -11,7 +11,7 @@ testselection
 testrgb
 simple
 testtree
-gtkfeatures.h
+gtkcompat.h
 testthreads
 libgtk.la
 gtkmarshal.h

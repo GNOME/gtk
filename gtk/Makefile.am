@@ -138,7 +138,6 @@ source_headers = \
 	gtkclist.h		\
 	gtkcolorsel.h		\
 	gtkcombo.h		\
-	gtkcompat.h		\
 	gtkcontainer.h		\
 	gtkctree.h		\
 	gtkcurve.h		\
@@ -231,7 +230,7 @@ source_headers = \
 
 gtkinclude_HEADERS = 		\
 	$(source_headers) 	\
-	gtkfeatures.h		\
+	gtkcompat.h		\
 	gtkmarshal.h		\
 	gtktypebuiltins.h
 
@@ -333,7 +332,7 @@ EXTRA_DIST = \
 	testgtk.1 		\
 	testgtkrc 		\
 	testgtkrc2 		\
-	gtkfeatures.h.in	\
+	gtkcompat.h.in		\
 	makeenums.pl		\
 	makeenums.awk		\
 	maketypes.awk		\

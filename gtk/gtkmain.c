@@ -37,7 +37,7 @@
 #include <gmodule.h>
 #include "gtkbutton.h"
 #include "gtkdnd.h"
-#include "gtkfeatures.h"
+#include "gtkcompat.h"
 #include "gtkhscrollbar.h"
 #include "gtkhseparator.h"
 #include "gtkmain.h"
