@@ -514,8 +514,8 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 	}
       else
 	{
-	  child_allocation.width = widget->allocation.width - 2 * border_width;
-	  child_allocation.height = widget->allocation.height - 2 * border_width;
+	  child_allocation.width = MAX (0, widget->allocation.width - 2 * border_width);
+	  child_allocation.height = MAX (0, widget->allocation.height - 2 * border_width);
 
 	  if (hb->handle_position == GTK_POS_LEFT ||
 	      hb->handle_position == GTK_POS_RIGHT)

@@ -641,7 +641,7 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 			    widget->style->klass->xthickness);
       child_allocation.y = (GTK_CONTAINER (menu)->border_width +
 			    widget->style->klass->ythickness);
-      child_allocation.width = allocation->width - child_allocation.x * 2;
+      child_allocation.width = MAX (0, allocation->width - child_allocation.x * 2);
 
       children = menu_shell->children;
       while (children)

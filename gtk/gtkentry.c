@@ -637,6 +637,7 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 {
   GtkEntry *entry;
   GtkEditable *editable;
+  gint offset;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
@@ -658,8 +659,17 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 			      allocation->width - (widget->style->klass->xthickness + INNER_BORDER) * 2,
 			      widget->requisition.height - (widget->style->klass->ythickness + INNER_BORDER) * 2);
 
-      entry->scroll_offset = 0;
+      /* Display as much text as we can */
+      offset = MAX(0, entry->char_offset[entry->nchars] - 
+	           (allocation->width -
+	               (widget->style->klass->xthickness + INNER_BORDER) * 2));
+
+      if (entry->scroll_offset > offset)
+	entry->scroll_offset = offset;
+
+      /* And make sure the cursor is on screen */
       gtk_entry_adjust_scroll (entry);
+      
 #ifdef USE_XIM
       if (editable->ic && (gdk_ic_get_style (editable->ic) & GdkIMPreeditPosition))
 	{

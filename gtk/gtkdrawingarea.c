@@ -23,6 +23,7 @@ static void gtk_drawing_area_init          (GtkDrawingArea      *darea);
 static void gtk_drawing_area_realize       (GtkWidget           *widget);
 static void gtk_drawing_area_size_allocate (GtkWidget           *widget,
 					    GtkAllocation       *allocation);
+static void gtk_drawing_area_send_configure (GtkDrawingArea     *darea);
 
 
 guint
@@ -117,14 +118,14 @@ gtk_drawing_area_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+
+  gtk_drawing_area_send_configure (GTK_DRAWING_AREA (widget));
 }
 
 static void
 gtk_drawing_area_size_allocate (GtkWidget     *widget,
 				GtkAllocation *allocation)
 {
-  GdkEventConfigure event;
-
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_DRAWING_AREA (widget));
   g_return_if_fail (allocation != NULL);
@@ -137,13 +138,24 @@ gtk_drawing_area_size_allocate (GtkWidget     *widget,
 			      allocation->x, allocation->y,
 			      allocation->width, allocation->height);
 
-      event.type = GDK_CONFIGURE;
-      event.window = widget->window;
-      event.x = allocation->x;
-      event.y = allocation->y;
-      event.width = allocation->width;
-      event.height = allocation->height;
-
-      gtk_widget_event (widget, (GdkEvent*) &event);
+      gtk_drawing_area_send_configure (GTK_DRAWING_AREA (widget));
     }
+}
+
+static void
+gtk_drawing_area_send_configure (GtkDrawingArea *darea)
+{
+  GtkWidget *widget;
+  GdkEventConfigure event;
+
+  widget = GTK_WIDGET (darea);
+
+  event.type = GDK_CONFIGURE;
+  event.window = widget->window;
+  event.x = widget->allocation.x;
+  event.y = widget->allocation.y;
+  event.width = widget->allocation.width;
+  event.height = widget->allocation.height;
+  
+  gtk_widget_event (widget, (GdkEvent*) &event);
 }

@@ -162,8 +162,8 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
 
   child_allocation.x = 0;
   child_allocation.y = 0;
-  child_allocation.width = allocation->width - GTK_CONTAINER (widget)->border_width * 2;
-  child_allocation.height = allocation->height - GTK_CONTAINER (widget)->border_width * 2;
+  child_allocation.width = MAX (allocation->width - GTK_CONTAINER (widget)->border_width * 2, 0);
+  child_allocation.height = MAX (allocation->height - GTK_CONTAINER (widget)->border_width * 2, 0);
 
   if (GTK_WIDGET_REALIZED (widget))
     {

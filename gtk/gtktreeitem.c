@@ -551,11 +551,11 @@ gtk_tree_item_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (item->pixmaps_box, &child_allocation);
 
       child_allocation.y = GTK_CONTAINER (widget)->border_width;
-      child_allocation.height = allocation->height - child_allocation.y * 2;
+      child_allocation.height = MAX (0, allocation->height - child_allocation.y * 2);
       child_allocation.x += item->pixmaps_box->requisition.width+DEFAULT_DELTA;
 
       child_allocation.width = 
-	allocation->width - (child_allocation.x + border_width);
+	MAX (0, allocation->width - (child_allocation.x + border_width));
 
       gtk_widget_size_allocate (bin->child, &child_allocation);
     }

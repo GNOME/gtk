@@ -679,7 +679,7 @@ gtk_list_motion_notify (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_LIST (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  g_print ("gtk_list_motion_notify\n");
+  /* g_print ("gtk_list_motion_notify\n"); */
 
   return FALSE;
 }
@@ -789,7 +789,7 @@ gtk_list_size_allocate (GtkWidget     *widget,
     {
       child_allocation.x = GTK_CONTAINER (list)->border_width;
       child_allocation.y = GTK_CONTAINER (list)->border_width;
-      child_allocation.width = allocation->width - child_allocation.x * 2;
+      child_allocation.width = MAX (0, allocation->width - child_allocation.x * 2);
 
       children = list->children;
 

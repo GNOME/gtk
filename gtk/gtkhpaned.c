@@ -177,7 +177,7 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
 			     paned->groove_rectangle.height);
     }
   
-  child1_allocation.height = child2_allocation.height = allocation->height - border_width * 2;
+  child1_allocation.height = child2_allocation.height = MAX (0, allocation->height - border_width * 2);
   child1_allocation.width = paned->child1_size;
   child1_allocation.x = border_width;
   child1_allocation.y = child2_allocation.y = border_width;
@@ -189,8 +189,8 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
   paned->groove_rectangle.height = allocation->height;
       
   child2_allocation.x = paned->groove_rectangle.x + paned->gutter_size / 2 + 1;
-  child2_allocation.width = allocation->width
-    - child2_allocation.x - border_width;
+  child2_allocation.width = MAX (0, allocation->width
+    - child2_allocation.x - border_width);
   
   /* Now allocate the childen, making sure, when resizing not to
    * overlap the windows */

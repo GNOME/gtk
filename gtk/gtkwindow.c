@@ -561,7 +561,6 @@ gtk_window_map (GtkWidget *widget)
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
-  gtk_window_move_resize (widget);
   window = GTK_WINDOW (widget);
 
   if (window->bin.child &&
@@ -569,7 +568,6 @@ gtk_window_map (GtkWidget *widget)
       !GTK_WIDGET_MAPPED (window->bin.child))
     gtk_widget_map (window->bin.child);
 
-  gtk_window_set_hints (widget, &widget->requisition);
   gdk_window_show (widget->window);
 }
 
@@ -639,6 +637,8 @@ gtk_window_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+
+  gtk_window_set_hints (widget, &widget->requisition);
 }
 
 static void
@@ -744,7 +744,7 @@ gtk_window_configure_event (GtkWidget         *widget,
     gtk_widget_map (window->bin.child);
   
   if (window->resize_count > 0)
-    window->resize_count -= 1;
+      window->resize_count -= 1;
   
   window->handling_resize = FALSE;
   
@@ -1044,15 +1044,26 @@ gtk_real_window_move_resize (GtkWindow *window,
   g_return_val_if_fail ((x != NULL) || (y != NULL), FALSE);
   
   widget = GTK_WIDGET (window);
-  
-  if ((*x != -1) && (*y != -1))
-    gdk_window_move (widget->window, *x, *y);
-  
+
   if ((widget->requisition.width == 0) ||
       (widget->requisition.height == 0))
     {
       widget->requisition.width = 200;
       widget->requisition.height = 200;
+    }
+  
+  if (!GTK_WIDGET_REALIZED (window))
+    {
+      GtkAllocation allocation;
+
+      allocation.x = 0;
+      allocation.y = 0;
+      allocation.width = widget->requisition.width;
+      allocation.height = widget->requisition.height;
+      
+      gtk_widget_size_allocate (widget, &allocation);
+
+      return FALSE;
     }
   
   gdk_window_get_geometry (widget->window, NULL, NULL, &width, &height, NULL);
@@ -1064,9 +1075,14 @@ gtk_real_window_move_resize (GtkWindow *window,
       (height < widget->requisition.height))
     {
       window->resize_count += 1;
-      gdk_window_resize (widget->window,
-			 widget->requisition.width,
-			 widget->requisition.height);
+      if ((*x != -1) && (*y != -1))
+	gdk_window_move_resize (widget->window, *x, *y,
+				widget->requisition.width,
+				widget->requisition.height);
+      else
+        gdk_window_resize (widget->window,
+			   widget->requisition.width,
+			   widget->requisition.height);
     }
   else
     {
@@ -1085,6 +1101,9 @@ gtk_real_window_move_resize (GtkWindow *window,
       GSList *resize_containers;
       GSList *node;
       
+      if ((*x != -1) && (*y != -1))
+	gdk_window_move (widget->window, *x, *y);
+
       resize_widgets = GTK_CONTAINER (window)->resize_widgets;
       GTK_CONTAINER (window)->resize_widgets = NULL;
       
@@ -1167,61 +1186,56 @@ gtk_window_move_resize (GtkWidget *widget)
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
 
+  window = GTK_WINDOW (widget);
   return_val = FALSE;
 
-  if (GTK_WIDGET_REALIZED (widget))
-    {
-      window = GTK_WINDOW (widget);
-
-      /* Remember old size, to know if we have to reset hints */
-      width = widget->requisition.width;
-      height = widget->requisition.height;
-      gtk_widget_size_request (widget, &widget->requisition);
-
-      if (GTK_WIDGET_MAPPED (widget) &&
-	  (width != widget->requisition.width ||
-	   height != widget->requisition.height))
-	gtk_window_set_hints (widget, &widget->requisition);
-
-      x = -1;
-      y = -1;
-      width = widget->requisition.width;
-      height = widget->requisition.height;
-
-      if (window->use_uposition)
-	switch (window->position)
-	  {
-	  case GTK_WIN_POS_CENTER:
-	    x = (gdk_screen_width () - width) / 2;
-	    y = (gdk_screen_height () - height) / 2;
-	    gtk_widget_set_uposition (widget, x, y);
-	    break;
-	  case GTK_WIN_POS_MOUSE:
-	    gdk_window_get_pointer (NULL, &x, &y, NULL);
-
-	    x -= width / 2;
-	    y -= height / 2;
-
-	    screen_width = gdk_screen_width ();
-	    screen_height = gdk_screen_height ();
-
-	    if (x < 0)
-	      x = 0;
-	    else if (x > (screen_width - width))
-	      x = screen_width - width;
-
-	    if (y < 0)
-	      y = 0;
-	    else if (y > (screen_height - height))
-	      y = screen_height - height;
-
-	    gtk_widget_set_uposition (widget, x, y);
-	    break;
-	  }
-
-      gtk_signal_emit (GTK_OBJECT (widget), window_signals[MOVE_RESIZE],
-                       &x, &y, width, height, &return_val);
-    }
+  /* Remember old size, to know if we have to reset hints */
+  width = widget->requisition.width;
+  height = widget->requisition.height;
+  gtk_widget_size_request (widget, &widget->requisition);
+  
+  if ((width != widget->requisition.width ||
+       height != widget->requisition.height))
+    gtk_window_set_hints (widget, &widget->requisition);
+  
+  x = -1;
+  y = -1;
+  width = widget->requisition.width;
+  height = widget->requisition.height;
+  
+  if (window->use_uposition)
+    switch (window->position)
+      {
+      case GTK_WIN_POS_CENTER:
+	x = (gdk_screen_width () - width) / 2;
+	y = (gdk_screen_height () - height) / 2;
+	gtk_widget_set_uposition (widget, x, y);
+	break;
+      case GTK_WIN_POS_MOUSE:
+	gdk_window_get_pointer (NULL, &x, &y, NULL);
+	
+	x -= width / 2;
+	y -= height / 2;
+	
+	screen_width = gdk_screen_width ();
+	screen_height = gdk_screen_height ();
+	
+	if (x < 0)
+	  x = 0;
+	else if (x > (screen_width - width))
+	  x = screen_width - width;
+	
+	if (y < 0)
+	  y = 0;
+	else if (y > (screen_height - height))
+	  y = screen_height - height;
+	
+	gtk_widget_set_uposition (widget, x, y);
+	break;
+      }
+  
+  gtk_signal_emit (GTK_OBJECT (widget), window_signals[MOVE_RESIZE],
+		   &x, &y, width, height, &return_val);
 
   return return_val;
 }
