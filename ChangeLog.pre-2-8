@@ -1,3 +1,8 @@
+2004-09-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkuimanager.c (gtk_ui_manager_add_ui): Use the proper node type
+	for placeholders in toolbars.  (#151963, Olivier Andrieu)
+
 2004-09-06  Kjartan Maraas  <kmaraas@gnome.org>
 
 	gtk/gtkfilesystemmodel.c (do_files_added): Use the correct
