@@ -9,6 +9,8 @@ testcalendar
 testdnd
 testgtk
 testinput
+testmultidisplay
+testmultiscreen
 testrgb
 testselection
 testtext
@@ -22,3 +24,4 @@ testtreefocus
 testtreesort
 treestoretest
 testtreeflow
+testxinerama
