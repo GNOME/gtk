@@ -530,10 +530,11 @@ gdk_pointer_grab (GdkWindow    *window,
 	  p_grab_owner_events = (owner_events != 0);
 	  p_grab_automatic = FALSE;
 	  
-#if 1 /* Menus don't work if we use mouse capture. Pity, because many other
+#if 0 /* Menus don't work if we use mouse capture. Pity, because many other
        * things work better with mouse capture.
        */
 	  SetCapture (GDK_WINDOW_HWND (window));
+#       pragma message("Warning: SetCapture call, menus won't work!")
 #endif
 	  return_val = GDK_GRAB_SUCCESS;
 	}
@@ -2458,6 +2459,12 @@ gdk_event_translate (GdkEvent *event,
           break;
         }
 
+      /* HB: don't generate GDK_EXPOSE events for InputOnly
+       * windows -> backing store now works!
+       */
+      if (GDK_WINDOW_OBJECT (window)->input_only)
+	break;
+
       hdc = BeginPaint (msg->hwnd, &paintstruct);
 
       GDK_NOTE (EVENTS,
@@ -2743,7 +2750,7 @@ gdk_event_translate (GdkEvent *event,
 
       return_val = window != NULL && !GDK_WINDOW_DESTROYED (window);
 
-      if (window != NULL)
+      if ((window != NULL) && (gdk_root_window != msg->hwnd))
 	gdk_window_destroy_notify (window);
 
       break;

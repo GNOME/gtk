@@ -380,9 +380,17 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
    * realized it's much easier to do it using gdk...:
    */
 
-  GdkPixmap *result = gdk_pixmap_new (window, width, height, depth);
-  GdkPixmap *source = gdk_bitmap_create_from_data (window, data, width, height);
-  GdkGC *gc = gdk_gc_new (result);
+  GdkPixmap *result;
+  GdkPixmap *source;
+  GdkGC *gc;
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return NULL;
+
+  result = gdk_pixmap_new (window, width, height, depth);
+  source = gdk_bitmap_create_from_data (window, data, width, height);
+  gc = gdk_gc_new (result);
+
   gdk_gc_set_foreground (gc, fg);
   gdk_gc_set_background (gc, bg);
   gdk_draw_drawable (result, gc, source, 0, 0, 0, 0, width, height);

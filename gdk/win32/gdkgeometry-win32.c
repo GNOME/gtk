@@ -353,11 +353,17 @@ _gdk_window_move_resize_child (GdkWindow *window,
 	  tmp_list = tmp_list->next;
 	}
 
+      /*
+       * HB: Passing TRUE(=Redraw) to MoveWindow here fixes some
+       * redraw problems with (e.g. testgtk main buttons)
+       * scrolling. AFAIK the non flicker optimization would
+       * be done by the GDI anyway, if the window is SW_HIDE.
+       */
       if (is_resize)
 	{
 	  if (!MoveWindow (GDK_WINDOW_HWND (window),
 			   new_info.x, new_info.y, new_info.width, new_info.height,
-			   FALSE))
+			   TRUE /*FALSE*/))
 	    WIN32_API_FAILED ("MoveWindow");
 	}
       else
@@ -366,7 +372,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
 	  if (!MoveWindow (GDK_WINDOW_HWND (window),
 			   new_info.x, new_info.y,
 			   rect.right - rect.left, rect.bottom - rect.top,
-			   FALSE))
+			   TRUE /*FALSE*/))
 	    WIN32_API_FAILED ("MoveWindow");
 	}
 

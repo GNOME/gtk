@@ -172,8 +172,8 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   g_return_val_if_fail (fg != NULL, NULL);
   g_return_val_if_fail (bg != NULL, NULL);
 
-  source_impl = GDK_PIXMAP_IMPL_WIN32 (source);
-  mask_impl   = GDK_PIXMAP_IMPL_WIN32 (mask);
+  source_impl = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (source)->impl);
+  mask_impl = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (mask)->impl);
 
   g_return_val_if_fail (source_impl->width == mask_impl->width
 			&& source_impl->height == mask_impl->height,

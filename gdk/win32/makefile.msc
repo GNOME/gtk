@@ -74,7 +74,7 @@ gdk-win32.lib : $(gdk_win32_OBJECTS)
 .c.obj :
 	$(CC) $(CFLAGS) -GD -c -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $<
 
-clean:
+clean::
 	del *.obj
 	del *.lib
 	del *.err

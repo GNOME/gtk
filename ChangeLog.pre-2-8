@@ -1,3 +1,38 @@
+2000-11-12 Hans Breuer <Hans@Breuer.Org>
+
+	* gdk/win32/makefile.msc : reflect build module changes
+
+	* gdk/win32/gdkcursor-win32.c : can't cast to impl type directly
+	from GdkPixmap*, cast implementation member instead.
+
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_drawable) : The
+	passed in drawable is of type GdkDrawableImplWin32, the GdkPixmap *src 
+	maybe either GdkDrawable or GdkDrawableImpl. Corrected all casts, add
+	more Gdi functions return value checking. 
+	(gdk_win32_draw_image) : use IMAGE_PRIVATE_DATA to get on the
+	GdkImagePrivateWin32 *.
+
+	* gdk/win32/gdkevents-win32.c : Disable the SetCapture call to make
+	menus useable again. Add #pragma message to keep reminded on this issue.
+	(gdk_event_translate) : don't generate GDK_EXPOSE events for InputOnly
+	windows. This allows to enable backing store on Win32!
+
+	* gdk/win32/gdkimage-win32.c (_gdk_win32_get_image) : the passed
+	in drawable is of impl type. Correct specific type checks appropriate.
+ 
+	* gdk/win32/gdkpixmap-win32.c (gdk_pixmap_create_from_data) : check 
+	GDK_WINDOW_DESTROYED before allocating new resources.
+
+	* gdk/win32/gdkselection-win32.c : Handle GDK_WINDOW_DESTROYED case
+
+	* gdk/win32/gdkwindow-win32.c : more Gdi return value checking,
+	(gdk_window_foreign_new) initialize parent handle.
+	(gdk_window_destroy_notify) add GDK_IS_WINDOW check
+
+	* gdk/win32/gdkgeometry-win32.c (_gdk_window_move_resize_child) :
+	Let the GDI invalidate the window on MoveWindow call to fix scrolling
+	problems (e.g. main buttons in testgtk). 
+
 Sat Nov 11 23:07:30 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_key_press): Call 

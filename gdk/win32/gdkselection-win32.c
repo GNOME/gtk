@@ -98,7 +98,12 @@ gdk_selection_owner_set (GdkWindow *owner,
     return FALSE;
 
   if (owner != NULL)
-    xwindow = GDK_WINDOW_HWND (owner);
+    {
+      if (GDK_WINDOW_DESTROYED (owner))
+	return FALSE;
+
+      xwindow = GDK_WINDOW_HWND (owner);
+    }
   else
     xwindow = NULL;
 

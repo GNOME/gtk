@@ -362,7 +362,7 @@ _gdk_win32_get_image (GdkDrawable *drawable,
   /* This function is called both to blit from a window and from
    * a pixmap.
    */
-  if (GDK_IS_PIXMAP (drawable))
+  if (GDK_IS_PIXMAP_IMPL_WIN32 (drawable))
     {
       if ((hdc = CreateCompatibleDC (NULL)) == NULL)
 	{
@@ -517,7 +517,7 @@ _gdk_win32_get_image (GdkDrawable *drawable,
   if (!DeleteDC (memdc))
     WIN32_GDI_FAILED ("DeleteDC");
 
-  if (GDK_IS_PIXMAP (drawable))
+  if (GDK_IS_PIXMAP_IMPL_WIN32 (drawable))
     {
       SelectObject (hdc, oldbitmap1);
       DeleteDC (hdc);

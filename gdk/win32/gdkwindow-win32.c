@@ -135,7 +135,8 @@ gdk_window_impl_win32_finalize (GObject *object)
 
   if (window_impl->hcursor != NULL)
     {
-      DestroyCursor (window_impl->hcursor);
+      if (!DestroyCursor (window_impl->hcursor))
+        WIN32_GDI_FAILED("DestroyCursor");
       window_impl->hcursor = NULL;
     }
 
@@ -178,7 +179,6 @@ gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,
   GDK_DRAWABLE_GET_CLASS (draw_impl)->set_colormap (drawable, cmap);
   
   /* XXX */
-
 }
 
 static void
@@ -676,6 +676,7 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (private->impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
+  parent = GetParent ((HWND)anid);
   
   private->parent = gdk_win32_handle_table_lookup ((GdkNativeWindow) parent);
   
@@ -750,6 +751,7 @@ void
 gdk_window_destroy_notify (GdkWindow *window)
 {
   g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
 
   GDK_NOTE (EVENTS,
 	    g_print ("gdk_window_destroy_notify: %#x  %s\n",

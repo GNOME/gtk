@@ -607,6 +607,14 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
   RECT r;
   gint src_width, src_height;
   gboolean ok = TRUE;
+  GdkDrawableImplWin32 *impl;
+  HANDLE src_handle;
+
+  impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
+  if (GDK_IS_DRAWABLE_IMPL_WIN32(src))
+    src_handle = GDK_DRAWABLE_IMPL_WIN32 (src)->handle;
+  else
+    src_handle = GDK_DRAWABLE_HANDLE (src);
 
   GDK_NOTE (MISC, g_print ("gdk_draw_pixmap: dest: %#x @+%d+%d"
 			   "src: %#x %dx%d@+%d+%d\n",
@@ -621,7 +629,7 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
   src_rgn = CreateRectRgn (0, 0, src_width + 1, src_height + 1);
   draw_rgn = CreateRectRgn (xsrc, ysrc, xsrc + width + 1, ysrc + height + 1);
   
-  if (GDK_IS_WINDOW (drawable))
+  if (GDK_IS_WINDOW_IMPL_WIN32 (drawable))
     {
       /* If we are drawing on a window, calculate the region that is
        * outside the source pixmap, and invalidate that, causing it to
@@ -631,22 +639,26 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
       outside_rgn = CreateRectRgnIndirect (&r);
       if (CombineRgn (outside_rgn, draw_rgn, src_rgn, RGN_DIFF) != NULLREGION)
 	{
-	  OffsetRgn (outside_rgn, xdest, ydest);
+	  if (ERROR == OffsetRgn (outside_rgn, xdest, ydest))
+	    WIN32_GDI_FAILED ("OffsetRgn");
 	  GDK_NOTE (MISC, (GetRgnBox (outside_rgn, &r),
 			   g_print ("...calling InvalidateRgn, "
 				    "bbox: %ldx%ld@+%ld+%ld\n",
 				    r.right - r.left - 1, r.bottom - r.top - 1,
 				    r.left, r.top)));
-	  InvalidateRgn (GDK_DRAWABLE_HANDLE (drawable), outside_rgn, TRUE);
+	  if (!InvalidateRgn (impl->handle, outside_rgn, TRUE))
+	    WIN32_GDI_FAILED ("InvalidateRgn");
 	}
-      DeleteObject (outside_rgn);
+      if (!DeleteObject (outside_rgn))
+	WIN32_GDI_FAILED ("DeleteObject");
     }
 
 #if 1 /* Don't know if this is necessary  */
   if (CombineRgn (draw_rgn, draw_rgn, src_rgn, RGN_AND) == COMPLEXREGION)
     g_warning ("gdk_win32_draw_drawable: CombineRgn returned a COMPLEXREGION");
 
-  GetRgnBox (draw_rgn, &r);
+  if (0 == GetRgnBox (draw_rgn, &r))
+    WIN32_GDI_FAILED("GetRgnBox");
   if (r.left != xsrc
       || r.top != ysrc
       || r.right != xsrc + width + 1
@@ -666,17 +678,19 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
     }
 #endif
 
-  DeleteObject (src_rgn);
-  DeleteObject (draw_rgn);
+  if (!DeleteObject (src_rgn))
+    WIN32_GDI_FAILED ("DeleteObject");
+  if (!DeleteObject (draw_rgn))
+    WIN32_GDI_FAILED ("DeleteObject");
 
   /* This function is called also to bitblt from a window.
    */
-  if (GDK_IS_PIXMAP (src))
+  if (GDK_IS_PIXMAP_IMPL_WIN32 (src) || GDK_IS_PIXMAP(src))
     {
       if ((srcdc = CreateCompatibleDC (hdc)) == NULL)
 	WIN32_GDI_FAILED ("CreateCompatibleDC"), ok = FALSE;
       
-      if (ok && (hgdiobj = SelectObject (srcdc, GDK_PIXMAP_HBITMAP (src))) == NULL)
+      if (ok && (hgdiobj = SelectObject (srcdc, src_handle)) == NULL)
 	WIN32_GDI_FAILED ("SelectObject"), ok = FALSE;
       
       if (ok && !BitBlt (hdc, xdest, ydest, width, height,
@@ -689,7 +703,7 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
       if (srcdc != NULL && !DeleteDC (srcdc))
 	WIN32_GDI_FAILED ("DeleteDC");
     }
-  else if (GDK_DRAWABLE_HANDLE (drawable) == GDK_DRAWABLE_HANDLE (src))
+  else if (impl->handle == src_handle)
     {
       /* Blitting inside a window, use ScrollDC */
       RECT scrollRect, clipRect, emptyRect;
@@ -711,21 +725,23 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 		     &scrollRect, &clipRect,
 		     updateRgn, NULL))
 	WIN32_GDI_FAILED ("ScrollDC"), ok = FALSE;
-      if (ok && !InvalidateRgn (GDK_WINDOW_HWND (drawable), updateRgn, FALSE))
+      if (ok && !InvalidateRgn (impl->handle, updateRgn, FALSE))
 	WIN32_GDI_FAILED ("InvalidateRgn"), ok = FALSE;
-      if (ok && !UpdateWindow (GDK_WINDOW_HWND (drawable)))
+      if (ok && !UpdateWindow (impl->handle))
 	WIN32_GDI_FAILED ("UpdateWindow");
-      DeleteObject (updateRgn);
+      if (!DeleteObject (updateRgn))
+        WIN32_GDI_FAILED ("DeleteObject");
     }
   else
     {
-      if ((srcdc = GetDC (GDK_WINDOW_HWND (src))) == NULL)
+      if ((srcdc = GetDC (src_handle)) == NULL)
 	WIN32_GDI_FAILED ("GetDC"), ok = FALSE;
       
       if (ok && !BitBlt (hdc, xdest, ydest, width, height,
 			 srcdc, xsrc, ysrc, SRCCOPY))
 	WIN32_GDI_FAILED ("BitBlt");
-      ReleaseDC (GDK_WINDOW_HWND (src), srcdc);
+      if (ok && !ReleaseDC (src_handle, srcdc))
+	WIN32_GDI_FAILED ("ReleaseDC");
     }
   gdk_win32_hdc_release (drawable, gc, 0);
 }
@@ -897,7 +913,7 @@ gdk_win32_draw_image (GdkDrawable     *drawable,
 		      gint             height)
 {
   GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
-  GdkImagePrivateWin32 *image_private = (GdkImagePrivateWin32 *) image;
+  GdkImagePrivateWin32 *image_private = IMAGE_PRIVATE_DATA (image);
   GdkColormapPrivateWin32 *colormap_private = (GdkColormapPrivateWin32 *) impl->colormap;
   HDC hdc, memdc;
   HGDIOBJ oldbitmap;
