@@ -266,7 +266,7 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer *cell,
 	}
     }
 
-  if (calc_width)
+  if (width)
     *width = calc_width;
   
   if (height)
