@@ -15,6 +15,7 @@ Obsoletes: gtk
 Packager: Marc Ewing <marc@redhat.com>
 URL: http://www.gtk.org
 Prereq: /sbin/install-info
+Requires: glib
 Docdir: %{prefix}/doc
 
 %description
@@ -35,7 +36,19 @@ structures, GDK is a drawing toolkit which provides a thin layer over
 Xlib to help automate things like dealing with different color depths,
 and GTK is a widget set for creating user interfaces.
 
+%package -n glib
+Summary: Handy library of utility functions
+Group: Libraries
+
+%description -n glib
+Handy library of utility functions.  Development libs and headers
+are in gtk+-devel.
+
 %changelog
+
+* Mon Apr 13 1998 Marc Ewing <marc@redhat.com>
+
+- Split out glib package
 
 * Tue Apr  8 1998 Shawn T. Amundson <amundson@gtk.org>
 
@@ -111,6 +124,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %postun -p /sbin/ldconfig
 
+%post -n glib -p /sbin/ldconfig
+
+%postun -n glib -p /sbin/ldconfig
+
 %post devel
 /sbin/install-info %{prefix}/info/gdk.info.gz %{prefix}/info/dir
 /sbin/install-info %{prefix}/info/gtk.info.gz %{prefix}/info/dir
@@ -125,7 +142,12 @@ fi
 %defattr(-, root, root)
 
 %doc AUTHORS COPYING ChangeLog NEWS README TODO
-%{prefix}/lib/lib*.so.*
+%{prefix}/lib/libgtk.so.*
+%{prefix}/lib/libgdk.so.*
+
+%files -n glib
+%defattr(-, root, root)
+%{prefix}/lib/libglib.so.*
 
 %files devel
 %defattr(-, root, root)
