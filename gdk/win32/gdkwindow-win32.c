@@ -1594,6 +1594,7 @@ gdk_window_set_cursor (GdkWindow *window,
 {
   GdkWindowImplWin32 *impl;
   GdkCursorPrivate *cursor_private;
+  GdkWindowObject *parent_window;
   HCURSOR hcursor;
   HCURSOR hprevcursor;
   
@@ -1637,9 +1638,10 @@ gdk_window_set_cursor (GdkWindow *window,
 			       hcursor, impl->hcursor));
     }
 
-   /* Set new cursor in all cases if we're over our window */
+  /* If the pointer is over our window, set new cursor if given */
   if (gdk_window_get_pointer(window, NULL, NULL, NULL) == window)
-    SetCursor (impl->hcursor);
+    if (impl->hcursor != NULL)
+      SetCursor (impl->hcursor);
 
   /* Destroy the previous cursor: Need to make sure it's no longer in
    * use before we destroy it, in case we're not over our window but
@@ -1648,7 +1650,25 @@ gdk_window_set_cursor (GdkWindow *window,
   if (hprevcursor != NULL)
     {
       if (GetCursor() == hprevcursor)
- 	SetCursor (NULL);
+	{
+	  /* Look for a suitable cursor to use instead */
+	  hcursor = NULL;
+          parent_window = GDK_WINDOW_OBJECT (window)->parent;
+          while (hcursor == NULL)
+	    {
+	      if (parent_window)
+		{
+		  impl = GDK_WINDOW_IMPL_WIN32 (parent_window->impl);
+		  hcursor = impl->hcursor;
+		  parent_window = parent_window->parent;
+		}
+	      else
+		{
+		  hcursor = LoadCursor (NULL, IDC_ARROW);
+		}
+	    }
+          SetCursor (hcursor);
+        }
 
       GDK_NOTE (MISC, g_print ("...DestroyCursor (%p)\n",
 			       hprevcursor));

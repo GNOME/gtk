@@ -1011,6 +1011,8 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
       if ((hrgn = ExtCreateRegion (NULL, nbytes, rgndata)) == NULL)
 	WIN32_API_FAILED ("ExtCreateRegion"), ok = FALSE;
 
+      g_free (rgndata);
+
       /*
        * XXX: combine the fillmode-stipple with the clip region possibly 
        *  this needs to be done with the hcliprgn below as well, but 

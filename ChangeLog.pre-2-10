@@ -1,3 +1,19 @@
+2002-05-30  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkmain-win32.c (gdk_screen_width_mm,
+	gdk_screen_height_mm): Use the "logical dpi" to calculate
+	(pseudo) physical sizes. Similar to the use of "logical dpi" in
+	Pango as suggested by Joaquin Cuenca Abela.
+
+	Two fixes by Florent Duguet:
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_cursor): Correct
+	semantics for setting cursor to NULL (should use cursor of parent
+	window).
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_hdc_get): Plug memory
+	leak.
+
 2002-05-29  Dave Camp  <dave@ximian.com>
 
 	* gtk/gtkdnd.c (gtk_drag_end): Disconnect from keypress events.
