@@ -1,3 +1,8 @@
+2005-01-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* modules/input/gtkimcontextxim.c: Use NULL, not 0 to terminate 
+	NULL-terminated va lists.  (#165683)
+
 Thu Jan 27 14:25:45 2005  Manish Singh  <yosh@gimp.org>
 
 	* README.cvs-commits: update ancient IRC info.
