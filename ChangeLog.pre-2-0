@@ -1,3 +1,11 @@
+Sat Jan 22 12:40:48 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpixmap.c (gdk_pixmap_seek_string): Rewrite
+	  to account for the fact that feof() does _not_ 
+	  return TRUE on errors, and thus avoid infinite loops
+	  when trying to use gdk_pixmap_create_from_xpm()
+	  on unreadable values.
+
 Fri Jan 21 18:32:43 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaspectframe.h (struct _GtkAspectFrame): s/gint/gboolean/.
