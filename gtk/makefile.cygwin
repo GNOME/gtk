@@ -12,25 +12,24 @@ PTHREAD_INC = -I $(PTHREADS)
 
 OPTIMIZE = -g
 
+TOP = ../..
+
+include $(TOP)/build/win32/make.mingw
+
 ################################################################
 
 # Nothing much configurable below
 
-CC = gcc -mno-cygwin -mpentium -fnative-struct
-
 # Perl and awk are needed to generate some source files.
-# These generated source files are distribuyted with the Win32 GTk+ source
+# These generated source files are distributed with the Win32 GTk+ source
 # distributions, so don't worry if you don't have perl and awk.
 PERL = perl
 AWK = awk
 
-GLIB_VER=1.3
-GTK_VER=1.3
+INCLUDES = -I . -I .. -I ../gdk -I $(GLIB) -I $(GLIB)/gmodule -I $(INTL)
+DEFINES = -DGTK_DISABLE_COMPAT_H -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" -DG_LOG_DOMAIN=\"Gtk\" 
 
-GLIB = ../../glib
-INTL = ../../intl
-
-CFLAGS = $(OPTIMIZE) -I . -I .. -I ../gdk -I $(GLIB) -I $(GLIB)/gmodule -I $(INTL) -DGTK_DISABLE_COMPAT_H
+WIN32APIHEADERS=$(shell echo "\#include <winver.h>" | $(CC) -M -E - | tail -1 | sed -e 's![\\/]winver.h!!' | tr -d '\015')
 
 all : \
 	../config.h	\
@@ -336,57 +335,48 @@ gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
 gtk-$(GTK_VER).dll : generated $(gtk_OBJECTS) gtk.def 
 	$(GLIB)/build-dll gtk $(GTK_VER) gtk.def $(gtk_OBJECTS) -L ../gdk -lgdk-$(GTK_VER) -L$(INTL) -lgnu-intl -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gmodule -lgmodule-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER) -luser32
 
-.SUFFIXES: .c .o .i
-
-# General rule for compiling the objects into the DLL
-.c.o :
-	$(CC) $(CFLAGS) -c -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" $<
-
-.c.i :
-	$(CC) $(CFLAGS) -E -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" $< >$@
-
 #
 # Test programs:
 #
 testdnd.exe : testdnd.o
-	$(CC) $(CFLAGS) -o $@ testdnd.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ testdnd.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) $(GLIB_LIBS) $(LDFLAGS)
 
 # Must have separate rules for these objects that don't go in the DLL
 testdnd.o : testdnd.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testdnd\" testdnd.c
 
 testgtk.exe : testgtk.o
-	$(CC) $(CFLAGS) -o $@  testgtk.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testgtk.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) $(GLIB_LIBS) $(LDFLAGS)
 
 testgtk.o : testgtk.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testgtk\" testgtk.c
 
 testinput.exe : testinput.o
-	$(CC) $(CFLAGS) -o $@  testinput.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testinput.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) $(GLIB_LIBS) $(LDFLAGS)
 
 testinput.o : testinput.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testinput\" testinput.c
 
 testrgb.exe : testrgb.o
-	$(CC) $(CFLAGS) -o $@  testrgb.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testrgb.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) $(GLIB_LIBS) $(LDFLAGS)
 
 testrgb.o : testrgb.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testrgb\" testrgb.c
 
 testselection.exe : testselection.o
-	$(CC) $(CFLAGS) -o $@  testselection.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER)    $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testselection.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) $(GLIB_LIBS) $(LDFLAGS)
 
 testselection.o : testselection.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testselection\" testselection.c
 
 testthreads.exe : testthreads.o
-	$(CC) $(CFLAGS) -o $@  testthreads.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gthread -lgthread-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER) $(PTHREAD_LIB) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  testthreads.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) $(GLIB_LIBS) $(PTHREAD_LIB) $(LDFLAGS)
 
 testthreads.o : testthreads.c
 	$(CC) $(CFLAGS) -I$(PTHREAD_INC) -c -DG_LOG_DOMAIN=\"testthreads\" -DUSE_PTHREADS=1 testthreads.c
 
 simple.exe : simple.o
-	$(CC) $(CFLAGS) -o $@  simple.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) -L $(GLIB) -lglib-$(GLIB_VER) -L $(GLIB)/gobject -lgobject-$(GLIB_VER) $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@  simple.o -L . -lgtk-$(GTK_VER) -L ../gdk -lgdk-$(GTK_VER) $(GLIB_LIBS) $(LDFLAGS)
 
 simple.o : simple.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"simple\" simple.c
@@ -394,7 +384,3 @@ simple.o : simple.c
 # The rmgen target removes just the generated source files
 rmgen:
 	-rm $(GENERATED)
-
-# The clean target doesn't remove the generated sources
-clean:
-	-rm *.exe *.o *.dll *.a *.exp *.base

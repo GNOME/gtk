@@ -316,7 +316,6 @@ struct _GdkVisualPrivate
 
 struct _GdkColormapPrivateWin32
 {
-  GdkColormapPrivate base;
   Colormap xcolormap;
   gint private_val;
 
@@ -327,7 +326,6 @@ struct _GdkColormapPrivateWin32
 
 struct _GdkImagePrivateWin32
 {
-  GdkImagePrivate base;
   HBITMAP ximage;
 };
 
@@ -352,5 +350,22 @@ GdkWindow    *gdk_window_foreign_new (guint32     anid);
 
 /* Return the Gdk* for a particular HANDLE */
 gpointer      gdk_xid_table_lookup     (HANDLE handle);
+
+/* Return a device context to draw in a drawable, given a GDK GC,
+ * and a mask indicating which GC values might be used (for efficiency,
+ * no need to muck around with text-related stuff if we aren't going
+ * to output text, for instance).
+ */
+HDC           gdk_win32_hdc_get (GdkDrawable    *drawable,
+				 GdkGC          *gc,
+				 GdkGCValuesMask usage);
+
+
+/* Each HDC returned from gdk_win32_hdc_get must be released with
+ * this function
+ */
+void          gdk_win32_hdc_release (GdkDrawable    *drawable,
+				     GdkGC          *gc,
+				     GdkGCValuesMask usage);
 
 #endif /* __GDK_WIN32_H__ */

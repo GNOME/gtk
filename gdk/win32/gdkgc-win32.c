@@ -411,16 +411,6 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
   GdkGC *gc;
   GdkGCPrivate *private;
   GdkGCWin32Data *data;
-  static GdkColor black;
-  static GdkColor white;
-  static gboolean beenhere = FALSE;
-
-  if (!beenhere)
-    {
-      gdk_color_black (gdk_colormap_get_system (), &black);
-      gdk_color_white (gdk_colormap_get_system (), &white);
-      beenhere = TRUE;
-    }
 
   gc = gdk_gc_alloc ();
   private = (GdkGCPrivate *)gc;
@@ -430,15 +420,18 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
     
   data->clip_region = NULL;
 
-  data->foreground = black.pixel;
-  data->background = white.pixel;
+  /* Use the same default values as X11 does, even if they don't make
+   * sense per se. But apps always set fg and bg anyway.
+   */
+  data->foreground = 0;
+  data->background = 1;
   data->font = NULL;
   data->rop2 = R2_COPYPEN;
   data->fill_style = GDK_SOLID;
   data->tile = NULL;
   data->stipple = NULL;
-  data->pen_style = PS_GEOMETRIC;
-  data->pen_width = 1;
+  data->pen_style = PS_GEOMETRIC|PS_ENDCAP_FLAT|PS_JOIN_MITER;
+  data->pen_width = 0;
 
   data->values_mask = GDK_GC_FUNCTION | GDK_GC_FILL;
 
@@ -829,7 +822,8 @@ predraw_set_foreground (GdkGCPrivate            *gc_private,
   logbrush.lbStyle = BS_SOLID;
   logbrush.lbColor = fg;
 
-  if (*ok && (hpen = ExtCreatePen (data->pen_style, data->pen_width,
+  if (*ok && (hpen = ExtCreatePen (data->pen_style,
+				   (data->pen_width > 0 ? data->pen_width : 1),
 				   &logbrush, 0, NULL)) == NULL)
     WIN32_GDI_FAILED ("ExtCreatePen");
   
@@ -1110,6 +1104,22 @@ gdk_gc_postdraw (GdkDrawable    *drawable,
       WIN32_GDI_FAILED ("DeleteObject");
 
   data->xgc = NULL;
+}
+
+HDC
+gdk_win32_hdc_get (GdkDrawable     *drawable,
+		   GdkGC           *gc,
+		   GdkGCValuesMask usage)
+{
+  return gdk_gc_predraw (drawable, (GdkGCPrivate *) gc, usage);
+}
+
+void
+gdk_win32_hdc_release (GdkDrawable     *drawable,
+		       GdkGC           *gc,
+		       GdkGCValuesMask usage)
+{
+  gdk_gc_postdraw (drawable, (GdkGCPrivate *) gc, usage);
 }
 
 /* This function originally from Jean-Edouard Lachand-Robert, and

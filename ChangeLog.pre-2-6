@@ -1,3 +1,30 @@
+2000-07-12  Tor Lillqvist  <tml@iki.fi>
+
+	Win32 changes, still doesn't build though.
+
+	* gdk/makefile.cygwin
+	* gdk/win32/makefile.cygwin
+	* gtk/makefile.cygwin: Updates.
+
+	* gdk/win32/gdkgc-win32.c (_gdk_win32_gc_new): Use the same
+	default values for fg and bg pixel as X11 does (0 and 1), not
+	black and white. Use PS_ENDCAP_FLAT and PS_JOIN_MITER by default.
+	Use 0 for pen width by default (treated as 1 anyway later, but for
+	apps that might check the value in the GdkGC).
+	(gdk_win32_hdc_get, gdk_win32_hdc_release): New functions, public
+	interface to gdk_gc_predraw and _postdraw.
+
+	* gdk/win32/gdkwin32.h
+	* gdk/gdk.def: Add gdk_win32_hdc_{get,release}.
+
+	* gdk/win32/gdkcolor-win32.c (gdk_colormap_alloc1): Remove
+	extraneous semicolon.
+
+	* gdk/win32/gdkdrawable-win32.c: Check also for pen_width == 0.
+
+	* gdk/win32/gdkimage-win32.c (gdk_image_new): Use the visual's depth,
+	not the Win32 bitspixel value.
+
 Tue Jul 11 20:59:35 2000  Tim Janik  <timj@gtk.org>
 
 	* docs/tutorial/gtk_tut_12.es.sgml (name): 

@@ -7,17 +7,17 @@ WTKIT = ../../../wtkit126
 
 OPTIMIZE = -g
 
+TOP = ../../..
+
+include $(TOP)/build/win32/make.mingw
+
 ################################################################
 
 # Nothing much configurable below
 
-CC = gcc -mno-cygwin -mpentium -fnative-struct
-
-GLIB_VER=1.3
-GTK_VER=1.3
-
-GLIB = ../../../glib
-CFLAGS = $(OPTIMIZE) -I . -I .. -I ../.. -I $(WTKIT)/include -I $(GLIB) -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
+INCLUDES = -I ../.. -I .. -I $(WTKIT)/include
+DEPCFLAGS = $(GLIB_CFLAGS) $(PANGO_CFLAGS)
+DEFINES =  -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
 
 all: \
 	../../config.h \
@@ -43,8 +43,6 @@ gdk_win32_OBJECTS = \
 	gdkmain-win32.o \
 	gdkpixmap-win32.o \
 	gdkproperty-win32.o \
-	gdkpolyreg-generic.o \
-	gdkregion-generic.o \
 	gdkselection-win32.o \
 	gdkvisual-win32.o \
 	gdkwin32id.o \
@@ -55,21 +53,6 @@ gdk_win32_OBJECTS = \
 
 ../gdkconfig.h : ../gdkconfig.h.win32
 	cp $< $@
-
-gdkregion-generic.c: ../x11/gdkregion-generic.c
-	cp $< $@
-
-gdkpolyreg-generic.c: ../x11/gdkpolyreg-generic.c
-	cp $< $@
-
-gdkregion-generic.h: ../x11/gdkregion-generic.h
-	cp $< $@
-
-gdkpoly-generic.h: ../x11/gdkpoly-generic.h
-	cp $< $@
-
-gdkgc-win32.o:: gdkregion-generic.h
-gdkpolyreg-generic.o:: gdkpoly-generic.h
 
 # Kludge to get the path to the win32 headers
 WIN32APIHEADERS = $(shell echo "\#include <winver.h>" | $(CC) -M -E - | tail -1 | sed -e 's![\\/]winver.h!!' | tr -d '\015')
@@ -99,14 +82,3 @@ libgdk-win32.a : $(gdk_win32_OBJECTS)
 
 libwntab32x.a : $(WTKIT)/lib/i386/wntab32x.lib
 	cp $(WTKIT)/lib/i386/wntab32x.lib libwntab32x.a
-
-.SUFFIXES: .c .o .i
-
-.c.o :
-	$(CC) $(CFLAGS) -c -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $<
-
-.c.i :
-	$(CC) $(CFLAGS) -E -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $< >$@
-
-clean:
-	-rm *.exe *.o *.dll *.a *.exp *.base

@@ -791,7 +791,7 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
 	    WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
 	  
 	  /* Draw end pixel */
-	  if (ok && gc_data->pen_width == 1)
+	  if (ok && gc_data->pen_width <= 1)
 	    if (!LineTo (hdc, segs[i].x2 + 1, segs[i].y2))
 	      WIN32_GDI_FAILED ("LineTo"), ok = FALSE;
 	}
@@ -819,7 +819,7 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
 	    WIN32_GDI_FAILED ("LineTo");
 	  
 	  /* Draw end pixel */
-	  if (gc_data->pen_width == 1)
+	  if (gc_data->pen_width <= 1)
 	    if (!LineTo (hdc, segs[i].x2 + 1, segs[i].y2))
 	      WIN32_GDI_FAILED ("LineTo");
 	}
@@ -859,7 +859,7 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
   g_free (pts);
   
   /* Draw end pixel */
-  if (gc_data->pen_width == 1)
+  if (gc_data->pen_width <= 1)
     {
       MoveToEx (hdc, points[npoints-1].x, points[npoints-1].y, NULL);
       if (!LineTo (hdc, points[npoints-1].x + 1, points[npoints-1].y))
@@ -876,7 +876,7 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
    * we draw the end pixel separately... With wider pens we don't care.
    * //HB: But the NT developers don't read their API documentation ...
    */
-  if (gc_data->pen_width == 1 && windows_version > 0x80000000)
+  if (gc_data->pen_width <= 1 && windows_version > 0x80000000)
     if (!LineTo (hdc, points[npoints-1].x + 1, points[npoints-1].y))
       WIN32_GDI_FAILED ("LineTo");
 #endif	

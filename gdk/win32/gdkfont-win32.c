@@ -454,7 +454,7 @@ gdk_font_list_free (gchar **font_list)
  * Blocks.txt from ftp.unicode.org. The bit number field is the bitfield
  * number as in the FONTSIGNATURE struct's fsUsb field.
  * There are some grave bugs in the table in the books. For instance
- * it claims there are Hangul  at U+3400..U+4DFF while this range in
+ * it claims there are Hangul at U+3400..U+4DFF while this range in
  * fact contains CJK Unified Ideographs Extension A. Also, the whole
  * block of Hangul Syllables U+AC00..U+D7A3 is missing from the book.
  */

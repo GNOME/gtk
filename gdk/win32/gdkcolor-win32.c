@@ -1727,7 +1727,7 @@ gdk_colormap_alloc1 (GdkColormap *colormap,
   if (alloc_color (private->xcolormap, &xcolor, &ret->pixel))
     {
       ret->red = (xcolor.peRed * 65535) / 255;
-      ret->green = (xcolor.peGreen * 65535) / 255;;
+      ret->green = (xcolor.peGreen * 65535) / 255;
       ret->blue = (xcolor.peBlue * 65535) / 255;
       
       if ((guint) ret->pixel < colormap->size)

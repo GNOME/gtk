@@ -285,6 +285,8 @@ EXPORTS
 	gdk_visual_ref
 	gdk_visual_unref
 	gdk_wcstombs
+	gdk_win32_hdc_get
+	gdk_win32_hdc_release
 	gdk_window_add_filter
 	gdk_window_at_pointer
 	gdk_window_begin_paint_rect
