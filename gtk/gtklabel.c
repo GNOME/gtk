@@ -132,6 +132,8 @@ gtk_label_init (GtkLabel *label)
   label->label = NULL;
   label->row = NULL;
   label->jtype = GTK_JUSTIFY_CENTER;
+
+  gtk_label_set (label, "");
 }
 
 GtkWidget*

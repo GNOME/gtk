@@ -15,7 +15,12 @@ Forthcoming Changes for GTK+ 0.99.4:
   simple callback functions as well.
 * Idle functions are now prioritized.
 * Many enhancements to GtkNotebook.
+* New widget GtkTipsQuery for letting the user query tooltips of widgets.
 * Access masks for widget arguments (GTK_ARG_READABLE/GTK_ARG_WRITABLE).
+* Function replacements:
+  g_string_hash() -> g_str_hash()
+  g_string_equal() -> g_str_equal()
+  gtk_tooltips_set_tips() -> gtk_tooltips_set_tip()
 * Clean ups and many many bug fixes by a lot of people all over the place.
 * New, long and descriptive ChangeLog entries for bored readers ;)
 

@@ -90,6 +90,7 @@
 #include <gtk/gtkstatusbar.h>
 #include <gtk/gtktable.h>
 #include <gtk/gtktext.h>
+#include <gtk/gtktipsquery.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktoolbar.h>
 #include <gtk/gtktooltips.h>

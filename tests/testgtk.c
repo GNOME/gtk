@@ -1038,19 +1038,47 @@ create_pixmap ()
     gtk_widget_destroy (window);
 }
 
+static gint
+tips_query_widget_selected (GtkObject      *object,
+			    GtkWidget      *widget,
+			    const gchar    *tip_text,
+			    const gchar    *tip_private,
+			    GdkEventButton *event,
+			    gpointer        func_data)
+{
+  if (widget)
+    g_print ("Help \"%s\" requested for <%s>\n",
+	     tip_private ? tip_private : "None",
+	     gtk_type_name (widget->object.klass->type));
+
+  return TRUE;
+}
+
 static void
 create_tooltips ()
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
   GtkWidget *box2;
+  GtkWidget *box3;
   GtkWidget *button;
+  GtkWidget *frame;
+  GtkWidget *tips_query;
   GtkWidget *separator;
   GtkTooltips *tooltips;
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window =
+	gtk_widget_new (gtk_window_get_type (),
+			"GtkWindow::type", GTK_WINDOW_TOPLEVEL,
+			"GtkContainer::border_width", 0,
+			"GtkWindow::title", "Tooltips",
+			"GtkWindow::allow_shrink", TRUE,
+			"GtkWindow::allow_grow", FALSE,
+			"GtkWindow::auto_shrink", TRUE,
+			"GtkWidget::width", 200,
+			NULL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
                           GTK_SIGNAL_FUNC (destroy_tooltips),
@@ -1058,9 +1086,6 @@ create_tooltips ()
       gtk_signal_connect (GTK_OBJECT (window), "delete_event",
                           GTK_SIGNAL_FUNC (gtk_true),
                           &window);
-
-      gtk_window_set_title (GTK_WINDOW (window), "tooltips");
-      gtk_container_border_width (GTK_CONTAINER (window), 0);
 
       tooltips=gtk_tooltips_new();
       gtk_object_set_data (GTK_OBJECT (window), "tooltips", tooltips);
@@ -1080,19 +1105,64 @@ create_tooltips ()
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
 
-      gtk_tooltips_set_tips(tooltips,button,"This is button 1");
+      gtk_tooltips_set_tip (tooltips,button,"This is button 1", "ContextHelp/buttons/1");
 
       button = gtk_toggle_button_new_with_label ("button2");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
 
-      gtk_tooltips_set_tips(tooltips,button,"This is button 2");
+      gtk_tooltips_set_tip (tooltips,button,"This is button 2", "ContextHelp/buttons/2");
 
       button = gtk_toggle_button_new_with_label ("button3");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
 
-      gtk_tooltips_set_tips (tooltips, button, "This is button 3. This is also a really long tooltip which probably won't fit on a single line and will therefore need to be wrapped. Hopefully the wrapping will work correctly.");
+      gtk_tooltips_set_tip (tooltips,
+			    button,
+			    "This is button 3. This is also a really long tooltip which probably won't fit on a single line and will therefore need to be wrapped. Hopefully the wrapping will work correctly.",
+			    "ContextHelp/buttons/3_long");
+
+      box3 =
+	gtk_widget_new (gtk_vbox_get_type (),
+			"GtkBox::homogeneous", FALSE,
+			"GtkBox::spacing", 5,
+			"GtkContainer::border_width", 5,
+			"GtkWidget::visible", TRUE,
+			NULL);
+
+      tips_query = gtk_tips_query_new ();
+
+      button =
+	gtk_widget_new (gtk_button_get_type (),
+			"GtkButton::label", "[?]",
+			"GtkWidget::visible", TRUE,
+			"GtkWidget::parent", box3,
+			"GtkObject::object_signal::clicked", gtk_tips_query_start_query, tips_query,
+			NULL);
+      gtk_box_set_child_packing (GTK_BOX (box3), button, FALSE, FALSE, 0, GTK_PACK_START);
+      gtk_tooltips_set_tip (tooltips,
+			    button,
+			    "Push this button to start the Tooltips Inspector",
+			    "ContextHelp/buttons/?");
+      
+      
+      gtk_widget_set (tips_query,
+		      "GtkWidget::visible", TRUE,
+		      "GtkWidget::parent", box3,
+		      "GtkTipsQuery::caller", button,
+		      "GtkObject::signal::widget_selected", tips_query_widget_selected, NULL,
+		      NULL);
+      
+      frame =
+	gtk_widget_new (gtk_frame_get_type (),
+			"GtkFrame::label", "ToolTips Inspector",
+			"GtkFrame::label_xalign", (double) 0.5,
+			"GtkContainer::border_width", 0,
+			"GtkWidget::visible", TRUE,
+			"GtkWidget::parent", box2,
+			"GtkContainer::child", box3,
+			NULL);
+      gtk_box_set_child_packing (GTK_BOX (box2), frame, TRUE, TRUE, 10, GTK_PACK_START);
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
@@ -1114,7 +1184,7 @@ create_tooltips ()
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
 
-      gtk_tooltips_set_tips (tooltips, button, "Push this button to close window");
+      gtk_tooltips_set_tip (tooltips, button, "Push this button to close window", "ContextHelp/buttons/Close");
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
@@ -4260,6 +4330,7 @@ main (int argc, char *argv[])
   gtk_set_locale ();
 
   gtk_init (&argc, &argv);
+  /* gle_init (&argc, &argv); */
   gtk_rc_parse ("testgtkrc");
 
   create_main_window ();

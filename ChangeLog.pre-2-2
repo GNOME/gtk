@@ -1,3 +1,16 @@
+Fri Feb 20 06:40:00 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtktipsquery.h: 
+	* gtk/gtktipsquery.c:
+ 	New widget GtkTipsQuery for letting the user query tooltips of widgets.
+
+	* gtk/testgtk.c: add example for GtkTipsQuery.
+
+	* gtk/gtk.h: include gtk/gtktipsquery.h.
+
+	* gtk/gtklabel.c: enable default constructing.
+	
+
 Thu Feb 19 18:53:51 1998  Larry Ewing  <lewing@discord.isc.tamu.edu>
 
 	* removed g_warnings from the common XShm failure cases in gdkimage.c
