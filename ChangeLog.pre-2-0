@@ -1,3 +1,10 @@
+2001-09-12  Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtktextview.c
+	Add support for Ctrl+Up/Down arrow to move cursor to beginning
+	of previous/next paragraph. If within a paragraph cursor moves to
+	beginning of that paragraph.
+
 2001-09-12  Jakub Steiner <jimmac@ximian.com>
 
 	* gtk/stock-icons/dialog_question.png: replacing the shaky

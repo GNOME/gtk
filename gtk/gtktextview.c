@@ -763,6 +763,18 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (binding_set, GDK_n, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_DISPLAY_LINES, 1);
 
+  add_move_binding (binding_set, GDK_Up, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_PARAGRAPHS, -1);
+
+  add_move_binding (binding_set, GDK_KP_Up, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_PARAGRAPHS, -1);
+  
+  add_move_binding (binding_set, GDK_Down, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_PARAGRAPHS, 1);
+
+  add_move_binding (binding_set, GDK_KP_Down, GDK_CONTROL_MASK,
+                    GTK_MOVEMENT_PARAGRAPHS, 1);
+  
   add_move_binding (binding_set, GDK_a, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_PARAGRAPH_ENDS, -1);
 
@@ -3914,9 +3926,8 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
       break;
 
     case GTK_MOVEMENT_PARAGRAPHS:
-      /* This should almost certainly instead be doing the parallel thing to WORD */
-      /*       gtk_text_iter_down_lines (&newplace, count); */
-      /* FIXME */
+      gtk_text_iter_forward_lines (&newplace, count);
+      gtk_text_iter_set_line_offset (&newplace, 0);
       break;
 
     case GTK_MOVEMENT_PARAGRAPH_ENDS:
