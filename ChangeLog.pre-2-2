@@ -1,5 +1,7 @@
 Fri Apr 19 23:38:16 2002  Kristian Rietveld  <kris@gtk.org>
 
+	Fixes #50310.
+
 	* gtk/gtktreeprivate.h: add _gtk_tree_view_column_autosize
 
 	* gtk/gtktreeview.c: privately export _gtk_tree_view_column_autosize,
