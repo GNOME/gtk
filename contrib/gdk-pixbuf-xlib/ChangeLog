@@ -1,6 +1,6 @@
 Mon Jan  8 11:41:41 2001  Owen Taylor  <otaylor@redhat.com>
 
-	* Makefile.am (INCLUDES): Add @x_cflags@
+	* Makefile.am (INCLUDES): Add @x_cflags@ (#36310)
 
 2001-01-02  Havoc Pennington  <hp@redhat.com>
 
