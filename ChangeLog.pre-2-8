@@ -1,3 +1,10 @@
+1998-06-16  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkhandlebox.c (draw_textured_frame): Now accepts an extra
+	"clip" parameter, which is the clipping rectangle to use.  This
+	eliminates the extremely annoying flicker when exposing parts of
+	the handlebox.
+
 Tue Jun 16 14:08:08 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/gtktable.c: fix from TimJ for off-by-one error in table
