@@ -1,3 +1,7 @@
+2001-05-29  Darin Adler  <darin@eazel.com>
+
+	* gdk-pixbuf.h: Fix prototype to use "(void)" instead of "()".
+
 Mon May 28 14:21:35 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* io-bmp.c: Patch from Helmethead <hoshem@mel.comcen.com.au> to
