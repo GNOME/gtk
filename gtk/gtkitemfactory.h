@@ -99,24 +99,22 @@ struct _GtkItemFactoryEntry
    * ""			-> "<Item>"
    * "<Title>"		-> create a title item
    * "<Item>"		-> create a simple item
-   * "<ImageItem>"	-> create an item holding an image
-   * "<StockItem>"	-> create an item holding a stock image
    * "<CheckItem>"	-> create a check item
    * "<ToggleItem>"	-> create a toggle item
    * "<RadioItem>"	-> create a radio item
    * <path>		-> path of a radio item to link against
    * "<Separator>"	-> create a separator
-   * "<Tearoff>"	-> create a tearoff separator
    * "<Branch>"		-> create an item to hold sub items
    * "<LastBranch>"	-> create a right justified item to hold sub items
    */
   gchar		 *item_type;
 
   /* Extra data for some item types:
-   *  ImageItem  -> pointer to inlined pixbuf stream
+   *  ImageItem  -> pointer to inline pixbuf + inline pixbuf length
    *  StockItem  -> name of stock item
    */
-  gconstpointer extra_data;
+  gpointer extra_data;
+  guint    extra_data2;
 };
 
 struct _GtkItemFactoryItem

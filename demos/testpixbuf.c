@@ -543,8 +543,7 @@ main (int argc, char **argv)
 	i = 1;
 	if (argc == 1) {
                 const gchar*** xpmp;
-                GError *error = NULL;
-		
+                
 		pixbuf = gdk_pixbuf_new_from_data (default_image, GDK_COLORSPACE_RGB, FALSE, 8,
 						   DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_WIDTH * 3,
 						   NULL, NULL);
@@ -558,18 +557,11 @@ main (int argc, char **argv)
                 }
 
                 /* Test loading from inline data. */
-                pixbuf = gdk_pixbuf_new_from_stream (-1, apple_red, FALSE, &error);
-		if (!pixbuf)
-		  {
-		    fprintf (stderr, "failed to construct \"red apple\" pixbuf: %s\n",
-			     error->message);
-		    g_error_free (error);
-		  }
-		else
-		  new_testrgb_window (pixbuf, "Red apple from inlined RLE data");
+                pixbuf = gdk_pixbuf_new_from_inline (apple_red, FALSE, -1, NULL);
+                new_testrgb_window (pixbuf, "Red apple from inline data");
 
-                pixbuf = gdk_pixbuf_new_from_stream (sizeof (gnome_foot), gnome_foot, TRUE, NULL);
-                new_testrgb_window (pixbuf, "GNOME Foot from inlined RLE data");
+                pixbuf = gdk_pixbuf_new_from_inline (gnome_foot, TRUE, sizeof (gnome_foot), NULL);
+                new_testrgb_window (pixbuf, "Foot from inline data");
                 
 		found_valid = TRUE;
 	} else {

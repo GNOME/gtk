@@ -75,12 +75,6 @@ typedef void (* GdkPixbufDestroyNotify) (guchar *pixels, gpointer data);
 #define GDK_PIXBUF_ERROR gdk_pixbuf_error_quark ()
 
 typedef enum {
-        /* stream header corrupt */
-	GDK_PIXBUF_ERROR_HEADER_CORRUPT,
-        /* stream pixel data corrupt */
-	GDK_PIXBUF_ERROR_PIXEL_CORRUPT,
-        /* stream header corrupt */
-	GDK_PIXBUF_ERROR_UNKNOWN_FORMAT,
         /* image data hosed */
         GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
         /* no mem to load image */
@@ -148,11 +142,13 @@ GdkPixbuf *gdk_pixbuf_new_from_data (const guchar *data,
 				     gpointer destroy_fn_data);
 
 GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const char **data);
-GdkPixbuf* gdk_pixbuf_new_from_stream	(gint          stream_length,
-					 const guint8 *stream,
-					 gboolean      copy_pixels,
-					 GError      **error);
-       
+
+/* Read an inline pixbuf */
+GdkPixbuf *gdk_pixbuf_new_from_inline   (const guchar *inline_pixbuf,
+                                         gboolean      copy_pixels,
+                                         int           length,
+                                         GError      **error);
+
 /* Mutations */
 void       gdk_pixbuf_fill              (GdkPixbuf    *pixbuf,
                                          guint32       pixel);

@@ -164,15 +164,12 @@ TESTS = test-gdk-pixbuf test-loaders
 noinst_PROGRAMS = $(TESTS)
 
 DEPS = libgdk_pixbuf-1.3.la
-INCLUDES = @STRIP_BEGIN@ \
-	-I$(top_srcdir) -I$(top_builddir) 	\
+INCLUDES = -I$(top_srcdir) -I$(top_builddir) 	\
 	-I$(top_srcdir)/gdk-pixbuf 		\
 	-I$(top_builddir)/gdk-pixbuf 		\
 	@INCLUDED_LOADER_DEFINE@ 		\
 	@GTK_DEBUG_FLAGS@			\
-	@GDK_PIXBUF_DEP_CFLAGS@			\
-@STRIP_END@
-
+	@GDK_PIXBUF_DEP_CFLAGS@
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(loaderdir)\"" "-DBUILT_MODULES_DIR=\"$(srcdir)/.libs\""
 
 LDADDS = libgdk_pixbuf-1.3.la
@@ -182,13 +179,12 @@ test_loaders_LDADD = $(LDADDS)
 
 test_loaders_SOURCES = test-loaders.c test-images.h
 
-#noinst_PROGRAMS=make-inline-pixbuf
-#make_inline_pixbuf_SOURCES=make-inline-pixbuf.c
-#make_inline_pixbuf_LDADD = $(LDADDS)
+bin_PROGRAMS=make-inline-pixbuf
 
-bin_PROGRAMS = gdk-pixbuf-csource
-gdk_pixbuf_csource_SOURCES = gdk-pixbuf-csource.c
-gdk_pixbuf_csource_LDADD = $(LDADDS)
+make_inline_pixbuf_SOURCES=make-inline-pixbuf.c
+
+make_inline_pixbuf_LDADD = $(LDADDS)
+
 
 
 #
@@ -199,7 +195,7 @@ BUILT_SOURCES=gdk-pixbuf-marshal.h gdk-pixbuf-marshal.c
 
 libgdk_pixbufincludedir = $(includedir)/gtk-2.0/gdk-pixbuf
 
-libgdk_pixbuf_1_3_la_SOURCES = @STRIP_BEGIN@ \
+libgdk_pixbuf_1_3_la_SOURCES = 	\
 	gdk-pixbuf-i18n.h	\
 	gdk-pixbuf.c		\
 	gdk-pixbuf-animation.c	\
@@ -207,26 +203,20 @@ libgdk_pixbuf_1_3_la_SOURCES = @STRIP_BEGIN@ \
 	gdk-pixbuf-io.c		\
 	gdk-pixbuf-loader.c	\
 	gdk-pixbuf-scale.c	\
-	gdk-pixbuf-util.c	\
-	gdk-pixdata.c		\
-@STRIP_END@
-
+	gdk-pixbuf-util.c
 
 $(libgdk_pixbuf_1_3_la_OBJECTS): gdk-pixbuf-marshal.h gdk-pixbuf-marshal.c
 
-libgdk_pixbuf_1_3_la_LDFLAGS = @STRIP_BEGIN@ \
+libgdk_pixbuf_1_3_la_LDFLAGS = 				        \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)    \
-	@LIBTOOL_EXPORT_OPTIONS@				\
-@STRIP_END@
-
+	@LIBTOOL_EXPORT_OPTIONS@
 libgdk_pixbuf_1_3_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(GDK_PIXBUF_DEP_LIBS)
 libgdk_pixbuf_1_3_la_DEPENDENCIES = $(builtin_objs)
 
-libgdk_pixbufinclude_HEADERS =  \
+libgdk_pixbufinclude_HEADERS =	\
 	gdk-pixbuf.h		\
 	gdk-pixbuf-loader.h	\
-	gdk-pixbuf-features.h	\
-	gdk-pixdata.h
+	gdk-pixbuf-features.h
 
 noinst_HEADERS = 		\
 	gdk-pixbuf-io.h		\

@@ -154,8 +154,8 @@ CLEANFILES += $(noinst_DATA)
 
 pixbuf_dir = $(top_builddir)/gdk-pixbuf
 
-gtkstockpixbufs.h: $(pixbuf_dir)/gdk-pixbuf-csource $(IMAGES)
+gtkstockpixbufs.h: $(pixbuf_dir)/make-inline-pixbuf $(IMAGES)
 	GDK_PIXBUF_MODULEDIR=$(pixbuf_dir)/.libs \
-	   $(pixbuf_dir)/gdk-pixbuf-csource --raw --build-list $(VARIABLES) >$(srcdir)/gtkstockpixbufs.h
+	   $(pixbuf_dir)/make-inline-pixbuf $(srcdir)/gtkstockpixbufs.h $(VARIABLES)
 
 EXTRA_DIST = $(IMAGES)

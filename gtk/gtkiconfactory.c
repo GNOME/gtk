@@ -335,7 +335,7 @@ sized_icon_set_from_inline (const guchar *inline_data,
 
   set = gtk_icon_set_new ();
 
-  source.pixbuf = gdk_pixbuf_new_from_stream (-1, inline_data, FALSE, NULL);
+  source.pixbuf = gdk_pixbuf_new_from_inline (inline_data, FALSE, -1, NULL);
 
   g_assert (source.pixbuf);
 
@@ -361,7 +361,7 @@ sized_with_fallback_icon_set_from_inline (const guchar *fallback_data,
 
   set = gtk_icon_set_new ();
 
-  source.pixbuf = gdk_pixbuf_new_from_stream (-1, inline_data, FALSE, NULL);
+  source.pixbuf = gdk_pixbuf_new_from_inline (inline_data, FALSE, -1, NULL);
 
   g_assert (source.pixbuf);
 
@@ -371,7 +371,7 @@ sized_with_fallback_icon_set_from_inline (const guchar *fallback_data,
   
   source.any_size = TRUE;
 
-  source.pixbuf = gdk_pixbuf_new_from_stream (-1, fallback_data, FALSE, NULL);
+  source.pixbuf = gdk_pixbuf_new_from_inline (fallback_data, FALSE, -1, NULL);
 
   g_assert (source.pixbuf);
 
@@ -393,7 +393,7 @@ unsized_icon_set_from_inline (const guchar *inline_data)
 
   set = gtk_icon_set_new ();
 
-  source.pixbuf = gdk_pixbuf_new_from_stream (-1, inline_data, FALSE, NULL);
+  source.pixbuf = gdk_pixbuf_new_from_inline (inline_data, FALSE, -1, NULL);
 
   g_assert (source.pixbuf);
 
@@ -1090,7 +1090,7 @@ render_fallback_image (GtkStyle          *style,
   static GtkIconSource fallback_source = { NULL, NULL, 0, 0, 0, TRUE, TRUE, TRUE };
 
   if (fallback_source.pixbuf == NULL)
-    fallback_source.pixbuf = gdk_pixbuf_new_from_stream (-1, MISSING_IMAGE_INLINE, FALSE, NULL);
+    fallback_source.pixbuf = gdk_pixbuf_new_from_inline (MISSING_IMAGE_INLINE, FALSE, -1, NULL);
   
   return gtk_style_render_icon (style,
                                 &fallback_source,
