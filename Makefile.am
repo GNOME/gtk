@@ -1,7 +1,7 @@
 ## Makefile.am for GTK+
 
 SRC_SUBDIRS = gdk gtk
-SUBDIRS = po $(SRC_SUBDIRS) docs
+SUBDIRS = po $(SRC_SUBDIRS) build # docs
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA= gdk-1.3-win32-production.pc gtk+-1.3-win32-production.pc
@@ -21,8 +21,7 @@ EXTRA_DIST =	\
 	README.win32	\
 	gtk+-1.3-win32-production.pc.in \
 	gdk-1.3-win32-production.pc.in \
-	intl/libgettext.h	\
-	intl/po2tbl.sed.in	\
+	gtk+-zip.sh \
 	examples/aspectframe/Makefile  \
 	examples/aspectframe/aspectframe.c  \
 	examples/Makefile  \
@@ -35,7 +34,7 @@ EXTRA_DIST =	\
 	examples/buttons/buttons.c  \
 	examples/buttons/info.xpm  \
 	examples/calendar/Makefile  \
-	examples/calendar/gcalendar.c  \
+	examples/calendar/calendar.c  \
 	examples/clist/Makefile  \
 	examples/clist/clist.c  \
 	examples/entry/Makefile  \
