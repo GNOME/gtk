@@ -330,22 +330,22 @@ install-data-local:
 	echo "# Empty gtkrc for default theme" > \
 	    $(DESTDIR)$(datadir)/themes/Default/gtk/gtkrc
 	cd $(DESTDIR)$(gtkconfdir) ; \
-	    ln gtkrc.iso88592 gtkrc.cs ; \
-	    ln gtkrc.iso88592 gtkrc.hr ; \
-	    ln gtkrc.iso88592 gtkrc.hu ; \
-	    ln gtkrc.iso88592 gtkrc.pl ; \
-	    ln gtkrc.iso88592 gtkrc.ro ; \
-	    ln gtkrc.iso88592 gtkrc.sk ; \
-	    ln gtkrc.iso88592 gtkrc.sl ; \
-	    ln gtkrc.iso88592 gtkrc.sq ; \
-	    ln gtkrc.iso88592 gtkrc.sr_YU.iso88592 ; \
-	    ln gtkrc.iso88595 gtkrc.bg ; \
-	    ln gtkrc.iso88595 gtkrc.mk ; \
-	    ln gtkrc.iso88595 gtkrc.sr ; \
-	    ln gtkrc.iso88595 gtkrc.ru_RU.iso88595 ; \
+	    $(LN_S) gtkrc.iso88592 gtkrc.cs ; \
+	    $(LN_S) gtkrc.iso88592 gtkrc.hr ; \
+	    $(LN_S) gtkrc.iso88592 gtkrc.hu ; \
+	    $(LN_S) gtkrc.iso88592 gtkrc.pl ; \
+	    $(LN_S) gtkrc.iso88592 gtkrc.ro ; \
+	    $(LN_S) gtkrc.iso88592 gtkrc.sk ; \
+	    $(LN_S) gtkrc.iso88592 gtkrc.sl ; \
+	    $(LN_S) gtkrc.iso88592 gtkrc.sq ; \
+	    $(LN_S) gtkrc.iso88592 gtkrc.sr_YU.iso88592 ; \
+	    $(LN_S) gtkrc.iso88595 gtkrc.bg ; \
+	    $(LN_S) gtkrc.iso88595 gtkrc.mk ; \
+	    $(LN_S) gtkrc.iso88595 gtkrc.sr ; \
+	    $(LN_S) gtkrc.iso88595 gtkrc.ru_RU.iso88595 ; \
 	    $(LN_S) gtkrc.ka_GE.georgianacademy gtkrc.ka ; \
-	    ln gtkrc.vi_VN.viscii gtkrc.vi_VN.viscii111 ; \
-	    ln gtkrc.vi_VN.tcvn gtkrc.vi_VN.tcvn5712 ; \
+	    $(LN_S) gtkrc.vi_VN.viscii gtkrc.vi_VN.viscii111 ; \
+	    $(LN_S) gtkrc.vi_VN.tcvn gtkrc.vi_VN.tcvn5712 ; \
 	    $(LN_S) gtkrc.vi_VN.tcvn5712 gtkrc.vi
 
 
