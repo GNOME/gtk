@@ -1,3 +1,9 @@
+2005-03-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-bmp.c (DoCompressed): Use the correct update regions for
+	compressed bmps.  (#150664, Owen Taylor, test images provided
+	by David Costanzo)
+
 Sun Mar 27 19:59:52 2005  Manish Singh  <yosh@gimp.org>
 
 	* io-bmp.c (grow_buffer): reject 0-sized buffers as corrupt header

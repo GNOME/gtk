@@ -1044,7 +1044,7 @@ DoCompressed(struct bmp_progressive_state *context, GError **error)
 			gint new_y = MIN (context->compr.y, context->Header.height);
 			(*context->updated_func) (context->pixbuf,
 						  0,
-						  y,
+						  context->Header.height - new_y,
 						  context->Header.width,
 						  new_y - y,
 						  context->user_data);
