@@ -1,3 +1,9 @@
+Sat Oct  5 18:25:11 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_draw_tab): Fix 
+	&expose_event vs expose_event problem (#94898,
+	reported by Jon-Kare Hellan)
+
 Sat Oct  5 16:47:03 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* docs/reference/gtk/tmpl/gtkfontseldlg.sgml, gdk/gdkwindow.c,

@@ -2787,10 +2787,9 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
           expose_event->expose.area = child_area;
           expose_event->expose.region = gdk_region_rectangle (&child_area);
           expose_event->expose.send_event = TRUE;
-          expose_event->expose.type = GDK_EXPOSE;
           expose_event->expose.count = 0;
 
-	  gtk_container_propagate_expose (GTK_CONTAINER (notebook), page->tab_label, (GdkEventExpose *)&expose_event);
+	  gtk_container_propagate_expose (GTK_CONTAINER (notebook), page->tab_label, (GdkEventExpose *)expose_event);
 
 	  gdk_event_free (expose_event);
         }
