@@ -1,3 +1,8 @@
+2000-04-01  Federico Mena Quintero  <federico@helixcode.com>
+
+	* gdk-pixbuf/gdk-pixbuf.c: Reverted Mark's change.  The refcount
+	is private information, and the art_pixbuf will go away soon.
+
 2000-03-31  Mark Crichton  <crichton@gimp.org>
 
 	* gdk-pixbuf/gdk-pixbuf.c: Added gdk_pixbuf_get_refcount
