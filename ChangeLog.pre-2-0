@@ -1,3 +1,11 @@
+Sat Jul 25 02:25:03 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.c (gtk_ctree_sort_recursive)
+	(gtk_ctree_sort_recursive): test for node != NULL
+	(gtk_ctree_is_visible) (gtk_ctree_realize) (gtk_ctree_unrealize)
+	(gtk_ctree_last) : added sanity checks
+	* gtk/gtkclist.c (gtk_clist_button_press): removed "no_focus_row"
+
 Fri Jul 24 18:15:49 1998  Lars Hamann  <lars@gtk.org>
 
         * gtk/gtkclist.c (toggle_focus_row): mini code cleanup

@@ -2604,13 +2604,9 @@ gtk_clist_button_press (GtkWidget * widget,
       if (get_selection_info (clist, x, y, &row, &column))
 	{
 	  gint old_row = clist->focus_row;
-	  gboolean no_focus_row = FALSE;
 
 	  if (clist->focus_row == -1)
-	    {
-	      old_row = row;
-	      no_focus_row = TRUE;
-	    }
+	    old_row = row;
 
 	  if (event->type == GDK_BUTTON_PRESS)
 	    {
