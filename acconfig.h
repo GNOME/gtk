@@ -20,7 +20,6 @@
 
 #undef HAVE_CATGETS
 #undef HAVE_DIMM_H
-#undef HAVE_DIRENT_H
 #undef HAVE_GETTEXT
 #undef HAVE_IPC_H
 #undef HAVE_LC_MESSAGES

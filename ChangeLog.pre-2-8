@@ -1,3 +1,16 @@
+2001-11-26  Tor Lillqvist  <tml@iki.fi>
+
+	* demos/pixbuf-demo.c
+	* demos/gtk-demo/pixbufs.c: M_PI -> G_PI.
+
+	* demos/gtk-demo/main.c (read_line): No flockfile() or
+	getc_unlocked() on Win32.
+
+2001-11-25  Tor Lillqvist  <tml@iki.fi>
+
+	* configure.in
+	* acconfig.h: As we now use GDir, no need to check for dirent.h.
+
 Sun Nov 25 23:18:39 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtktexttag.c (gtk_text_tag_set_property): free font_desc

@@ -151,17 +151,17 @@ timeout (gpointer data)
       GdkRectangle r1, r2, dest;
       double k;
 
-      ang = 2.0 * M_PI * (double) i / N_IMAGES - f * 2.0 * M_PI;
+      ang = 2.0 * G_PI * (double) i / N_IMAGES - f * 2.0 * G_PI;
 
       iw = gdk_pixbuf_get_width (images[i]);
       ih = gdk_pixbuf_get_height (images[i]);
 
-      r = radius + (radius / 3.0) * sin (f * 2.0 * M_PI);
+      r = radius + (radius / 3.0) * sin (f * 2.0 * G_PI);
 
       xpos = floor (xmid + r * cos (ang) - iw / 2.0 + 0.5);
       ypos = floor (ymid + r * sin (ang) - ih / 2.0 + 0.5);
 
-      k = (i & 1) ? sin (f * 2.0 * M_PI) : cos (f * 2.0 * M_PI);
+      k = (i & 1) ? sin (f * 2.0 * G_PI) : cos (f * 2.0 * G_PI);
       k = 2.0 * k * k;
       k = MAX (0.25, k);
 
@@ -184,8 +184,8 @@ timeout (gpointer data)
 			      k, k,
 			      GDK_INTERP_NEAREST,
 			      ((i & 1)
-			       ? MAX (127, fabs (255 * sin (f * 2.0 * M_PI)))
-			       : MAX (127, fabs (255 * cos (f * 2.0 * M_PI)))));
+			       ? MAX (127, fabs (255 * sin (f * 2.0 * G_PI)))
+			       : MAX (127, fabs (255 * cos (f * 2.0 * G_PI)))));
     }
 
   gtk_widget_queue_draw (da);

@@ -87,7 +87,9 @@ read_line (FILE *stream, GString *str)
 {
   int n_read = 0;
   
+#ifndef G_OS_WIN32
   flockfile (stream);
+#endif
 
   g_string_truncate (str, 0);
   
@@ -95,7 +97,11 @@ read_line (FILE *stream, GString *str)
     {
       int c;
       
+#ifndef G_OS_WIN32
       c = getc_unlocked (stream);
+#else
+      c = getc (stream);
+#endif
 
       if (c == EOF)
 	goto done;
@@ -107,7 +113,11 @@ read_line (FILE *stream, GString *str)
 	case '\r':
 	case '\n':
 	  {
+#ifndef G_OS_WIN32
 	    int next_c = getc_unlocked (stream);
+#else
+	    int next_c = getc (stream);
+#endif
 	    
 	    if (!(next_c == EOF ||
 		  (c == '\r' && next_c == '\n') ||
@@ -123,7 +133,9 @@ read_line (FILE *stream, GString *str)
 
  done:
 
+#ifndef G_OS_WIN32
   funlockfile (stream);
+#endif
 
   return n_read > 0;
 }
