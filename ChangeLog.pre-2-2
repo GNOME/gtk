@@ -1,3 +1,8 @@
+2002-03-03  Tor Lillqvist  <tml@iki.fi>
+
+	* config.h.win32.in: Update to match a recent configure-generated
+	config.h
+
 Sun Mar  3 15:16:07 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktable.c: When increasing the row or column
