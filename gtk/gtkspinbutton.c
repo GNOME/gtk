@@ -616,6 +616,40 @@ compute_double_length (double val, int digits)
   return a + digits + extra;
 }
 
+/* Keep in sync with gtkentry.c !
+ */
+static void
+get_borders (GtkEntry *entry,
+             gint     *xborder,
+             gint     *yborder)
+{
+  GtkWidget *widget = GTK_WIDGET (entry);
+  gint focus_width;
+  gboolean interior_focus;
+
+  gtk_widget_style_get (widget,
+			"interior-focus", &interior_focus,
+			"focus-line-width", &focus_width,
+			NULL);
+
+  if (entry->has_frame)
+    {
+      *xborder = widget->style->xthickness;
+      *yborder = widget->style->ythickness;
+    }
+  else
+    {
+      *xborder = 0;
+      *yborder = 0;
+    }
+
+  if (!interior_focus)
+    {
+      *xborder += focus_width;
+      *yborder += focus_width;
+    }
+}
+
 static void
 gtk_spin_button_size_request (GtkWidget      *widget,
 			      GtkRequisition *requisition)
@@ -641,6 +675,7 @@ gtk_spin_button_size_request (GtkWidget      *widget,
       gint digit_width;
       gboolean interior_focus;
       gint focus_width;
+      gint xborder, yborder;
 
       gtk_widget_style_get (widget,
 			    "interior-focus", &interior_focus,
@@ -673,9 +708,11 @@ gtk_spin_button_size_request (GtkWidget      *widget,
       w = PANGO_PIXELS (MIN (string_len, max_string_len) * digit_width);
       width = MAX (width, w);
       
-      requisition->width = width + /* INNER_BORDER */ 2 * 2;
-      if (!interior_focus)
-	requisition->width += 2 * focus_width;
+      get_borders (entry, &xborder, &yborder);
+      
+      xborder += 2; /* INNER_BORDER */
+
+      requisition->width = width + xborder * 2;
     }
 
   requisition->width += arrow_size + 2 * widget->style->xthickness;

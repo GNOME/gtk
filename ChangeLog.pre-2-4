@@ -1,3 +1,9 @@
+Thu Mar 11 22:12:14 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_size_request): Use the same
+	logic as GtkEntry when calculating border width.  (#116368, reported
+	by Morten Welinder)
+
 Thu Mar 11 15:59:05 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/testgtk.c (create_spins): Use gtk_entry_set_width_chars()
@@ -110,10 +116,10 @@ Thu Mar 11 01:08:25 2004  Jonathan Blandford  <jrb@gnome.org>
 
 Wed Mar 10 23:40:15 2004  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkentrycompletion.c (_gtk_entry_completion_popup): Set the background
-	on the action view cell renderer here, not in init, so that a) we catch 
-	style changes, and b) we get the real style, not the default one. 
-	Partial fix for #127648, reported by Dave Bordoley.
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_popup): Set the
+	background on the action view cell renderer here, not in init, so 
+	that a) we catch style changes, and b) we get the real style, not 
+	the default one. Partial fix for #127648, reported by Dave Bordoley.
 
 2004-03-10  Tor Lillqvist  <tml@iki.fi>
 
