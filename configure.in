@@ -285,7 +285,7 @@ AC_MSG_CHECKING([Whether to write dependencies into .pc files])
 case $enable_explicit_deps in
   auto)
     deplib_check_method=`(./libtool --config; echo eval echo \\$deplib_check_method) | sh`
-    if test "X$deplib_check_method" == Xnone || test "x$enable_static" = xyes ; then
+    if test "X$deplib_check_method" = Xnone || test "x$enable_static" = xyes ; then
       enable_explicit_deps=yes  
     else
       enable_explicit_deps=no  
