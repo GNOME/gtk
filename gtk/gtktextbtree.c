@@ -2268,7 +2268,7 @@ redisplay_region (GtkTextBTree      *tree,
   BTreeView *view;
   GtkTextLine *start_line, *end_line;
 
-  if (gtk_text_iter_compare (start, end) < 0)
+  if (gtk_text_iter_compare (start, end) > 0)
     {
       const GtkTextIter *tmp = start;
       start = end;
@@ -2305,12 +2305,17 @@ static void
 redisplay_mark(GtkTextLineSegment *mark)
 {
   GtkTextIter iter;
+  GtkTextIter end;
     
   gtk_text_btree_get_iter_at_mark(mark->body.mark.tree,
                                   &iter,
                                   mark);
 
-  redisplay_region (mark->body.mark.tree, &iter, &iter);
+  end = iter;
+  gtk_text_iter_forward_char(&end);
+
+  gtk_text_btree_invalidate_region(mark->body.mark.tree,
+                                   &iter, &end);
 }
 
 static void

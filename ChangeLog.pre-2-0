@@ -1,3 +1,12 @@
+Thu May 18 18:47:25 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextbtree.c (redisplay_mark): We need to invalidate
+	the region not just redisplay it after-all, since we store the
+	cursors in the LineDisplay. (Ugly interactions here between
+	GtkLayout and GtkTextBTree here.)
+	
+	* gtk/gtktextbtree.c (redisplay_region): Fixed reversed comparison.
+
 Thu May 18 18:43:21 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.h gdk/x11/gdkgeometry-x11.c (gdk_window_scroll): 
