@@ -2047,6 +2047,7 @@ static struct
 } settings_map[] = {
   { "Net/DoubleClickTime", "gtk-double-click-time" },
   { "Net/DndDragThreshold", "gtk-dnd-drag-threshold" },
+  { "Gtk/CanChangeAccels", "gtk-can-change-accels" },
   { "Gtk/ColorPalette", "gtk-color-palette" },
   { "Gtk/ToolbarStyle", "gtk-toolbar-style" },
   { "Gtk/ToolbarIconSize", "gtk-toolbar-icon-size" },

@@ -1,3 +1,8 @@
+Wed Feb 20 16:19:49 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c: Add a XSETTING mapping for
+	gtk-can-change-accels. (#70218, Thomas Leonard.)
+
 2002-02-20  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkcolorsel.c (gtk_color_selection_finalize): check
