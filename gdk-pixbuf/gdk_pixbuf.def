@@ -37,6 +37,7 @@ EXPORTS
 	gdk_pixbuf_new_from_file
 	gdk_pixbuf_new_from_inline
 	gdk_pixbuf_new_from_xpm_data
+	gdk_pixbuf_new_subpixbuf
 	gdk_pixbuf_postinit
 	gdk_pixbuf_preinit
 	gdk_pixbuf_ref

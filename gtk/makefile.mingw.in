@@ -34,7 +34,7 @@ AWK = awk
 
 INCLUDES = -I . -I .. -I ../gdk -I ../gdk-pixbuf
 DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) $(INTL_CFLAGS)
-DEFINES = -DGTK_DISABLE_COMPAT_H -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\"
+DEFINES = -DGTK_DISABLE_COMPAT_H -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" -DGTK_VERSION=\"@GTK_VERSION@\"
 
 all :						\
 	../config.h				\
@@ -168,6 +168,7 @@ gtk_OBJECTS =					\
 	gtktooltips.o				\
 	gtktree.o				\
 	gtktreeitem.o				\
+	gtktreemodel.o				\
 	gtktypeutils.o				\
 	gtkvbbox.o				\
 	gtkvbox.o				\
@@ -463,5 +464,6 @@ rmgen:
 makefile.mingw: makefile.mingw.in
 	sed -e 's,@GTK_MAJOR[_]VERSION@,@GTK_MAJOR_VERSION@,' \
 	    -e 's,@GTK_MINOR[_]VERSION@,@GTK_MINOR_VERSION@,' \
+	    -e 's,@GTK[_]VERSION@,@GTK_VERSION@,' \
 	    -e 's,@GDK_PIXBUF[_]MAJOR@,@GDK_PIXBUF_MAJOR@,'   \
 	    -e 's,@GDK_PIXBUF[_]MINOR@,@GDK_PIXBUF_MINOR@,'     <$< >$@

@@ -139,7 +139,7 @@ gdk_drawable_impl_win32_get_type (void)
       
       object_type = g_type_register_static (GDK_TYPE_DRAWABLE,
                                             "GdkDrawableImplWin32",
-                                            &object_info);
+                                            &object_info, 0);
     }
   
   return object_type;
@@ -223,8 +223,7 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
   GdkGCWin32 *gc_private = GDK_GC_WIN32 (gc);
   const GdkGCValuesMask mask = GDK_GC_FOREGROUND|GDK_GC_BACKGROUND;
   HDC hdc;
-  HGDIOBJ oldpen, oldbrush;
-  HBRUSH hbr = NULL;
+  HGDIOBJ old_pen_or_brush;
   POINT pts[4];
   gboolean ok = TRUE;
 
@@ -291,25 +290,18 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 	  
       if (ok && !FillPath (hdc))
 	WIN32_GDI_FAILED ("FillPath"), ok = FALSE;
-
-      if (hbr != NULL)
-	if (!DeleteObject (hbr))
-	  WIN32_GDI_FAILED ("DeleteObject");
     }
   else
     {
       if (filled)
-	oldpen = SelectObject (hdc, GetStockObject (NULL_PEN));
+	old_pen_or_brush = SelectObject (hdc, GetStockObject (NULL_PEN));
       else
-	oldbrush = SelectObject (hdc, GetStockObject (HOLLOW_BRUSH));
+	old_pen_or_brush = SelectObject (hdc, GetStockObject (HOLLOW_BRUSH));
   
       if (!Rectangle (hdc, x, y, x+width+1, y+height+1))
 	WIN32_GDI_FAILED ("Rectangle");
   
-      if (filled)
-	SelectObject (hdc, oldpen);
-      else
-	SelectObject (hdc, oldbrush);
+      SelectObject (hdc, old_pen_or_brush);
     }
 
   gdk_win32_hdc_release (drawable, gc, mask);
@@ -397,7 +389,6 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
   GdkGCWin32 *gc_private = GDK_GC_WIN32 (gc);
   const GdkGCValuesMask mask = GDK_GC_FOREGROUND|GDK_GC_BACKGROUND;
   HDC hdc;
-  HBRUSH hbr = NULL;
   POINT *pts;
   gboolean ok = TRUE;
   int i;
@@ -445,10 +436,6 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
 	  
       if (ok && !FillPath (hdc))
 	WIN32_GDI_FAILED ("FillPath"), ok = FALSE;
-
-      if (hbr != NULL)
-	if (!DeleteObject (hbr))
-	  WIN32_GDI_FAILED ("DeleteObject");
     }
   else
     {
@@ -778,7 +765,6 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
   GdkGCWin32 *gc_private = GDK_GC_WIN32 (gc);
   const GdkGCValuesMask mask = GDK_GC_FOREGROUND|GDK_GC_BACKGROUND;
   HDC hdc;
-  HBRUSH hbr = NULL;
   gboolean ok = TRUE;
   int i;
 
@@ -813,10 +799,6 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
 	  
       if (ok && !FillPath (hdc))
 	WIN32_GDI_FAILED ("FillPath"), ok = FALSE;
-
-      if (hbr != NULL)
-	if (!DeleteObject (hbr))
-	  WIN32_GDI_FAILED ("DeleteObject");
     }
   else
     {

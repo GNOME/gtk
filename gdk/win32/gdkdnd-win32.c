@@ -130,7 +130,7 @@ gdk_drag_context_get_type (void)
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
                                             "GdkDragContext",
-                                            &object_info);
+                                            &object_info, 0);
     }
   
   return object_type;
@@ -1231,12 +1231,13 @@ gdk_drop_finish (GdkDragContext *context,
   GDK_NOTE (DND, g_print ("gdk_drop_finish\n"));
 }
 
+#ifdef OLE2_DND
+
 static GdkFilterReturn
 gdk_destroy_filter (GdkXEvent *xev,
 		    GdkEvent  *event,
 		    gpointer   data)
 {
-#ifdef OLE2_DND
   MSG *msg = (MSG *) xev;
 
   if (msg->message == WM_DESTROY)
@@ -1250,9 +1251,9 @@ gdk_destroy_filter (GdkXEvent *xev,
       RevokeDragDrop (msg->hwnd);
       CoLockObjectExternal (idtp, FALSE, TRUE);
     }
-#endif
   return GDK_FILTER_CONTINUE;
 }
+#endif
 
 void
 gdk_window_register_dnd (GdkWindow *window)

@@ -136,6 +136,7 @@ static GdkWindow *current_window = NULL;
 static gint current_x, current_y;
 static gdouble current_x_root, current_y_root;
 static UINT gdk_ping_msg;
+static UINT msh_mousewheel_msg;
 static gboolean ignore_wm_char = FALSE;
 static gboolean is_altgr_key = FALSE;
 
@@ -296,8 +297,15 @@ gdk_events_init (void)
 #endif
 
   gdk_ping_msg = RegisterWindowMessage ("gdk-ping");
-  GDK_NOTE (EVENTS, g_print ("gdk-ping = %#.03x\n",
-			     gdk_ping_msg));
+  GDK_NOTE (EVENTS, g_print ("gdk-ping = %#x\n", gdk_ping_msg));
+
+  /* This is the string MSH_MOUSEWHEEL from zmouse.h,
+   * http://www.microsoft.com/mouse/intellimouse/sdk/zmouse.h
+   * This message is used by mouse drivers than cannot generate WM_MOUSEWHEEL
+   * or on Win95.
+   */
+  msh_mousewheel_msg = RegisterWindowMessage ("MSWHEEL_ROLLMSG");
+  GDK_NOTE (EVENTS, g_print ("MSH_MOUSEWHEEL = %#x\n", msh_mousewheel_msg));
 
   g_source_add (GDK_PRIORITY_EVENTS, TRUE, &event_funcs, NULL, NULL, NULL);
 
@@ -1454,7 +1462,7 @@ gdk_event_translate (GdkEvent *event,
 
       return_val = !GDK_WINDOW_DESTROYED (window);
 
-      /* Will pass through switch below without match */
+      goto done;
     }
   else if (msg->message == gdk_selection_request_msg)
     {
@@ -1471,7 +1479,7 @@ gdk_event_translate (GdkEvent *event,
 
       return_val = !GDK_WINDOW_DESTROYED (window);
 
-      /* Again, will pass through switch below without match */
+      goto done;
     }
   else if (msg->message == gdk_selection_clear_msg)
     {
@@ -1485,7 +1493,64 @@ gdk_event_translate (GdkEvent *event,
 
       return_val = !GDK_WINDOW_DESTROYED (window);
 
-      /* Once again, we will pass through switch below without match */
+      goto done;
+    }
+  else if (msg->message == msh_mousewheel_msg)
+    {
+      GDK_NOTE (EVENTS, g_print ("MSH_MOUSEWHEEL: %#lx %d\n",
+				 (gulong) msg->hwnd, msg->wParam));
+      
+      event->scroll.type = GDK_SCROLL;
+
+      /* MSG_MOUSEWHEEL is delivered to the foreground window.  Work
+       * around that. Also, the position is in screen coordinates, not
+       * client coordinates as with the button messages.
+       */
+      pt.x = LOWORD (msg->lParam);
+      pt.y = HIWORD (msg->lParam);
+      if ((hwnd = WindowFromPoint (pt)) == NULL)
+	goto done;
+
+      msg->hwnd = hwnd;
+      if ((new_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) msg->hwnd)) == NULL)
+	goto done;
+
+      if (new_window != window)
+	{
+	  gdk_drawable_unref (window);
+	  ASSIGN_WINDOW (new_window);
+	  gdk_drawable_ref (window);
+	}
+
+      if (GDK_WINDOW_OBJECT (window)->extension_events != 0
+	  && gdk_input_ignore_core)
+	{
+	  GDK_NOTE (EVENTS, g_print ("...ignored\n"));
+	  goto done;
+	}
+
+      if (!propagate (&window, msg,
+		      p_grab_window, p_grab_owner_events, p_grab_mask,
+		      doesnt_want_scroll))
+	goto done;
+
+      ASSIGN_WINDOW (window);
+
+      ScreenToClient (msg->hwnd, &pt);
+      event->button.window = window;
+      event->scroll.direction = ((int) msg->wParam > 0) ?
+	GDK_SCROLL_UP : GDK_SCROLL_DOWN;
+      event->scroll.window = window;
+      event->scroll.time = msg->time;
+      event->scroll.x = (gint16) pt.x;
+      event->scroll.y = (gint16) pt.y;
+      event->scroll.x_root = (gint16) LOWORD (msg->lParam);
+      event->scroll.y_root = (gint16) HIWORD (msg->lParam);
+      event->scroll.state = 0;	/* No state information with MSH_MOUSEWHEEL */
+      event->scroll.device = gdk_core_pointer;
+      return_val = !GDK_WINDOW_DESTROYED (window);
+
+      goto done;
     }
   else
     {
@@ -2139,7 +2204,31 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_MOUSEWHEEL:
-      GDK_NOTE (EVENTS, g_print ("WM_MOUSEWHEEL: %#lx\n", (gulong) msg->hwnd));
+      GDK_NOTE (EVENTS, g_print ("WM_MOUSEWHEEL: %#lx %d\n",
+				 (gulong) msg->hwnd, HIWORD (msg->wParam)));
+
+      event->scroll.type = GDK_SCROLL;
+
+      /* WM_MOUSEWHEEL is delivered to the focus window Work around
+       * that. Also, the position is in screen coordinates, not client
+       * coordinates as with the button messages. I love the
+       * consistency of Windows.
+       */
+      pt.x = LOWORD (msg->lParam);
+      pt.y = HIWORD (msg->lParam);
+      if ((hwnd = WindowFromPoint (pt)) == NULL)
+	break;
+
+      msg->hwnd = hwnd;
+      if ((new_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) msg->hwnd)) == NULL)
+	break;
+
+      if (new_window != window)
+	{
+	  gdk_drawable_unref (window);
+	  ASSIGN_WINDOW (new_window);
+	  gdk_drawable_ref (window);
+	}
 
       if (GDK_WINDOW_OBJECT (window)->extension_events != 0
 	  && gdk_input_ignore_core)
@@ -2148,33 +2237,14 @@ gdk_event_translate (GdkEvent *event,
 	  break;
 	}
 
-      event->scroll.type = GDK_SCROLL;
-
-      /* WM_MOUSEWHEEL seems to be delivered to top-level windows
-       * only, for some reason. Work around that. Also, the position
-       * is in screen coordinates, not client coordinates as with the
-       * button messages. I love the consistency of Windows.
-       */
-      pt.x = LOWORD (msg->lParam);
-      pt.y = HIWORD (msg->lParam);
-      if ((hwnd = WindowFromPoint (pt)) == NULL)
-	break;
-      msg->hwnd = hwnd;
-      if ((new_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) msg->hwnd)) == NULL)
-	break;
-      if (new_window != window)
-	{
-	  gdk_drawable_unref (window);
-	  ASSIGN_WINDOW (new_window);
-	  gdk_drawable_ref (window);
-	}
-      ScreenToClient (msg->hwnd, &pt);
       if (!propagate (&window, msg,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
 		      doesnt_want_scroll))
 	break;
+
       ASSIGN_WINDOW (window);
 
+      ScreenToClient (msg->hwnd, &pt);
       event->button.window = window;
       event->scroll.direction = (((short) HIWORD (msg->wParam)) > 0) ?
 	GDK_SCROLL_UP : GDK_SCROLL_DOWN;
@@ -2183,7 +2253,7 @@ gdk_event_translate (GdkEvent *event,
       event->scroll.x = (gint16) pt.x;
       event->scroll.y = (gint16) pt.y;
       event->scroll.x_root = (gint16) LOWORD (msg->lParam);
-      event->scroll.y_root = (gint16) LOWORD (msg->lParam);
+      event->scroll.y_root = (gint16) HIWORD (msg->lParam);
       event->scroll.state = build_pointer_event_state (msg);
       event->scroll.device = gdk_core_pointer;
       return_val = !GDK_WINDOW_DESTROYED (window);
@@ -2204,7 +2274,7 @@ gdk_event_translate (GdkEvent *event,
       event->crossing.x = current_x;
       event->crossing.y = current_y;
       event->crossing.x_root = current_xroot;
-      event->crossing.y_root = curYroot;
+      event->crossing.y_root = current_yroot;
       event->crossing.mode = GDK_CROSSING_NORMAL;
       if (current_window
 	  && IsChild (GDK_WINDOW_HWND (current_window), GDK_WINDOW_HWND (window)))

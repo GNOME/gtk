@@ -72,7 +72,7 @@ gdk_gc_win32_get_type (void)
       
       object_type = g_type_register_static (GDK_TYPE_GC,
                                             "GdkGCWin32",
-                                            &object_info);
+                                            &object_info, 0);
     }
   
   return object_type;
@@ -1454,3 +1454,101 @@ BitmapToRegion (HBITMAP hBmp)
 
   return hRgn;
 }
+
+#ifdef G_ENABLE_DEBUG
+
+gchar *
+gdk_win32_cap_style_to_string (GdkCapStyle cap_style)
+{
+  switch (cap_style)
+    {
+#define CASE(x) case x: return #x + strlen ("GDK_CAP_")
+    CASE (GDK_CAP_NOT_LAST);
+    CASE (GDK_CAP_BUTT);
+    CASE (GDK_CAP_ROUND);
+    CASE (GDK_CAP_PROJECTING);
+#undef CASE
+    default: return ("illegal GdkCapStyle value");
+    }
+  /* NOTREACHED */
+  return NULL;
+}
+
+gchar *
+gdk_win32_fill_style_to_string (GdkFill fill)
+{
+  switch (fill)
+    {
+#define CASE(x) case x: return #x + strlen ("GDK_")
+    CASE (GDK_SOLID);
+    CASE (GDK_TILED);
+    CASE (GDK_STIPPLED);
+    CASE (GDK_OPAQUE_STIPPLED);
+#undef CASE
+    default: return ("illegal GdkFill value");
+    }
+  /* NOTREACHED */
+  return NULL;
+}
+
+gchar *
+gdk_win32_function_to_string (GdkFunction function)
+{
+  switch (function)
+    {
+#define CASE(x) case x: return #x + strlen ("GDK_")
+    CASE (GDK_COPY);
+    CASE (GDK_INVERT);
+    CASE (GDK_XOR);
+    CASE (GDK_CLEAR);
+    CASE (GDK_AND);
+    CASE (GDK_AND_REVERSE);
+    CASE (GDK_AND_INVERT);
+    CASE (GDK_NOOP);
+    CASE (GDK_OR);
+    CASE (GDK_EQUIV);
+    CASE (GDK_OR_REVERSE);
+    CASE (GDK_COPY_INVERT);
+    CASE (GDK_OR_INVERT);
+    CASE (GDK_NAND);
+    CASE (GDK_SET);
+#undef CASE
+    default: return ("illegal GdkFunction value");
+    }
+  /* NOTREACHED */
+  return NULL; 
+}
+
+gchar *
+gdk_win32_join_style_to_string (GdkJoinStyle join_style)
+{
+  switch (join_style)
+    {
+#define CASE(x) case x: return #x + strlen ("GDK_JOIN_")
+    CASE (GDK_JOIN_MITER);
+    CASE (GDK_JOIN_ROUND);
+    CASE (GDK_JOIN_BEVEL);
+#undef CASE
+    default: return ("illegal GdkJoinStyle value");
+    }
+  /* NOTREACHED */
+  return NULL; 
+}
+
+gchar *
+gdk_win32_line_style_to_string (GdkLineStyle line_style)
+{
+  switch (line_style)
+    {
+#define CASE(x) case x: return #x + strlen ("GDK_LINE_")
+    CASE(GDK_LINE_SOLID);
+    CASE(GDK_LINE_ON_OFF_DASH);  
+    CASE(GDK_LINE_DOUBLE_DASH);  
+#undef CASE
+    default: return ("illegal GdkLineStyle value");
+    }
+  /* NOTREACHED */
+  return NULL; 
+}
+
+#endif

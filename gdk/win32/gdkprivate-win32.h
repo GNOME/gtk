@@ -89,8 +89,13 @@ void    gdk_wchar_text_handle    (GdkFont       *font,
 				  void          *arg);
 
 #ifdef G_ENABLE_DEBUG
-gchar *gdk_win32_color_to_string (const GdkColor *);
-gchar *gdk_win32_message_name    (UINT msg);
+gchar *gdk_win32_color_to_string      (const        GdkColor *color);
+gchar *gdk_win32_cap_style_to_string  (GdkCapStyle  cap_style);
+gchar *gdk_win32_fill_style_to_string (GdkFill      fill);
+gchar *gdk_win32_function_to_string   (GdkFunction  function);
+gchar *gdk_win32_join_style_to_string (GdkJoinStyle join_style);
+gchar *gdk_win32_line_style_to_string (GdkLineStyle line_style);
+gchar *gdk_win32_message_name         (UINT         msg);
 #endif
 
 gchar  *gdk_win32_last_error_string (void);

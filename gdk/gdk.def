@@ -92,6 +92,7 @@ EXPORTS
 	gdk_draw_text
 	gdk_draw_text_wc
 	gdk_drawable_get_colormap
+	gdk_drawable_get_image
 	gdk_drawable_get_size
 	gdk_drawable_get_type
 	gdk_drawable_get_visual
@@ -157,6 +158,8 @@ EXPORTS
 	gdk_gc_set_foreground
 	gdk_gc_set_function
 	gdk_gc_set_line_attributes
+	gdk_gc_set_rgb_bg_color
+	gdk_gc_set_rgb_fg_color
 	gdk_gc_set_stipple
 	gdk_gc_set_subwindow
 	gdk_gc_set_tile

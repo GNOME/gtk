@@ -436,8 +436,14 @@ EXPORTS
 	gtk_curve_set_vector
 	gtk_data_get_type
 	gtk_debug_flags
+	gtk_dialog_add_action_widget
+	gtk_dialog_add_button
+	gtk_dialog_add_buttons
 	gtk_dialog_get_type
 	gtk_dialog_new
+	gtk_dialog_new_with_buttons
+	gtk_dialog_response
+	gtk_dialog_run
 	gtk_drag_begin
 	gtk_drag_dest_handle_event
 	gtk_drag_dest_set
@@ -642,6 +648,8 @@ EXPORTS
 	gtk_label_parse_uline
 	gtk_label_set_justify
 	gtk_label_set_line_wrap
+	gtk_label_set_markup
+	gtk_label_set_markup_with_accel
 	gtk_label_set_pattern
 	gtk_label_set_text
 	gtk_layout_freeze
@@ -738,7 +746,6 @@ EXPORTS
 	gtk_marshal_VOID__UINT_POINTER_UINT_FLAGS_FLAGS
 	gtk_marshal_VOID__UINT_POINTER_UINT_UINT_ENUM
 	gtk_marshal_VOID__VOID
-	gtk_menu_append
 	gtk_menu_attach_to_widget
 	gtk_menu_bar_append
 	gtk_menu_bar_get_type
@@ -761,7 +768,6 @@ EXPORTS
 	gtk_menu_get_attach_widget
 	gtk_menu_get_type
 	gtk_menu_get_uline_accel_group
-	gtk_menu_insert
 	gtk_menu_item_activate
 	gtk_menu_item_configure
 	gtk_menu_item_deselect
@@ -776,7 +782,6 @@ EXPORTS
 	gtk_menu_new
 	gtk_menu_popdown
 	gtk_menu_popup
-	gtk_menu_prepend
 	gtk_menu_reorder_child
 	gtk_menu_reposition
 	gtk_menu_set_accel_group
@@ -1060,6 +1065,7 @@ EXPORTS
 	gtk_selection_request
 	gtk_separator_get_type
 	gtk_set_locale
+	gtk_signal_compat_matched
 	gtk_signal_connect_full
 	gtk_signal_connect_object_while_alive
 	gtk_signal_connect_while_alive
@@ -1122,10 +1128,13 @@ EXPORTS
 	gtk_text_backward_delete
 	gtk_text_buffer_apply_tag
 	gtk_text_buffer_apply_tag_by_name
+	gtk_text_buffer_create_child_anchor
 	gtk_text_buffer_create_mark
 	gtk_text_buffer_create_tag
 	gtk_text_buffer_delete
+	gtk_text_buffer_delete_interactive
 	gtk_text_buffer_delete_mark
+	gtk_text_buffer_delete_mark_by_name
 	gtk_text_buffer_get_bounds
 	gtk_text_buffer_get_char_count
 	gtk_text_buffer_get_insert
@@ -1138,12 +1147,22 @@ EXPORTS
 	gtk_text_buffer_get_mark
 	gtk_text_buffer_get_selection_bounds
 	gtk_text_buffer_get_slice
-	gtk_text_buffer_get_tag_table 
+	gtk_text_buffer_get_tag_table
+	gtk_text_buffer_get_text
 	gtk_text_buffer_insert
+	gtk_text_buffer_insert_at_cursor
+	gtk_text_buffer_insert_interactive
+	gtk_text_buffer_insert_interactive_at_cursor
 	gtk_text_buffer_insert_pixbuf
+	gtk_text_buffer_insert_range
+	gtk_text_buffer_insert_range_interactive
+	gtk_text_buffer_insert_with_tags
+	gtk_text_buffer_insert_with_tags_by_name
 	gtk_text_buffer_modified
 	gtk_text_buffer_move_mark
+	gtk_text_buffer_move_mark_by_name
 	gtk_text_buffer_new
+	gtk_text_buffer_place_cursor
 	gtk_text_buffer_remove_tag
 	gtk_text_buffer_remove_tag_by_name
 	gtk_text_buffer_set_modified
@@ -1154,11 +1173,14 @@ EXPORTS
 	gtk_text_get_type
 	gtk_text_insert
 	gtk_text_iter_backward_chars
+	gtk_text_iter_backward_find_char
+	gtk_text_iter_backward_search
 	gtk_text_iter_backward_to_tag_toggle
 	gtk_text_iter_begins_tag
 	gtk_text_iter_ends_tag
 	gtk_text_iter_equal
 	gtk_text_iter_forward_chars
+	gtk_text_iter_forward_find_char
 	gtk_text_iter_forward_line
 	gtk_text_iter_forward_search
 	gtk_text_iter_forward_to_tag_toggle
@@ -1167,9 +1189,11 @@ EXPORTS
 	gtk_text_iter_get_offset
 	gtk_text_iter_get_text
 	gtk_text_iter_get_toggled_tags
+	gtk_text_iter_in_range
 	gtk_text_iter_is_last
 	gtk_text_iter_next_char
 	gtk_text_iter_prev_char
+	gtk_text_iter_reorder
 	gtk_text_iter_spew
 	gtk_text_iter_toggles_tag
 	gtk_text_new

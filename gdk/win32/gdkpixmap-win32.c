@@ -67,7 +67,7 @@ gdk_pixmap_impl_win32_get_type (void)
       
       object_type = g_type_register_static (GDK_TYPE_DRAWABLE_IMPL_WIN32,
                                             "GdkPixmapImplWin32",
-                                            &object_info);
+                                            &object_info, 0);
     }
   
   return object_type;

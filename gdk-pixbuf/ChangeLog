@@ -1,5 +1,7 @@
 2000-11-11  Tor Lillqvist  <tml@iki.fi>
 
+	* gdk_pixbuf.def: Add gdk_pixbuf_new_subpixbuf.
+
 	* io-tiff.c (gdk_pixbuf__tiff_image_begin_load): Use
 	g_file_open_tmp() (just added to GLib) instead of mkstemp() (or
 	mktemp() and open()).

@@ -148,9 +148,11 @@ gint             _gdk_input_other_event      (GdkEvent         *event,
 
 GdkInputWindow   *gdk_input_window_find      (GdkWindow        *window);
 
-gint             _gdk_input_enable_window     (GdkWindow        *window,
+void              gdk_input_window_destroy   (GdkWindow *window);
+
+gint             _gdk_input_enable_window    (GdkWindow        *window,
 					      GdkDevicePrivate *gdkdev);
-gint             _gdk_input_disable_window    (GdkWindow        *window,
+gint             _gdk_input_disable_window   (GdkWindow        *window,
 					      GdkDevicePrivate *gdkdev);
 gint             _gdk_input_grab_pointer     (GdkWindow        *window,
 					      gint              owner_events,
