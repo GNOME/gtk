@@ -1,4 +1,4 @@
-2000-10-17    <jrb@redhat.com>
+2000-10-17  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c: Draw the arrows correctly.
 
@@ -12,7 +12,7 @@
 	* gtk/gtkmarshal.list: Added four more marshallers: INT:NONE,
 	POINTER:NONE, POINTER:POINTER, and POINTER:POINTER,INT.
 
-2000-10-16    <jrb@redhat.com>
+2000-10-16  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.h (struct _GtkTreeModelIface): Move
 	GtkTreeModel from object to interface.
