@@ -221,6 +221,23 @@ animation_timer (GtkEntryCompletion *completion)
   return TRUE;
 }
 
+gboolean 
+match_selected_cb (GtkEntryCompletion *completion,
+		   GtkTreeModel       *model,
+		   GtkTreeIter        *iter)
+{
+  gchar *str;
+  GtkWidget *entry;
+
+  entry = gtk_entry_completion_get_entry (completion);
+  gtk_tree_model_get (GTK_TREE_MODEL (model), iter, 1, &str, -1);
+  gtk_entry_set_text (GTK_ENTRY (entry), str);
+  gtk_editable_set_position (GTK_EDITABLE (entry), -1);
+  g_free (str);
+
+  return TRUE;
+}
+
 int 
 main (int argc, char *argv[])
 {
@@ -295,6 +312,8 @@ main (int argc, char *argv[])
 				  "text", 1, NULL); 
   
   gtk_entry_completion_set_match_func (completion, match_func, NULL, NULL);
+  g_signal_connect (G_OBJECT (completion), "match-selected", 
+		    G_CALLBACK (match_selected_cb), NULL);
 
   gtk_entry_completion_insert_action_text (completion, 100, "action!");
   gtk_entry_completion_insert_action_text (completion, 101, "'nother action!");

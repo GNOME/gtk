@@ -1,5 +1,8 @@
 2004-05-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testentrycompletion.c: Make the second example use the 
+	::match-selected signal to make it actually work.
+
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_init): 
 	* gtk/gtkcombobox.c (gtk_combo_box_list_setup): Use hover selection
 	mode.  (#127648, Dave Bordoley)
