@@ -604,8 +604,8 @@ gdk_colors_alloc (GdkColormap   *colormap,
 /**
  * gdk_colors_free:
  * @colormap: a #GdkColormap.
- * @in_pixels: the pixel values of the colors to free.
- * @in_npixels: the number of values in @pixels.
+ * @pixels: the pixel values of the colors to free.
+ * @npixels: the number of values in @pixels.
  * @planes: the plane masks for all planes to free, OR'd together.
  * 
  * Frees colors allocated with gdk_colors_alloc(). This
@@ -613,17 +613,17 @@ gdk_colors_alloc (GdkColormap   *colormap,
  **/
 void
 gdk_colors_free (GdkColormap *colormap,
-		 gulong      *in_pixels,
-		 gint         in_npixels,
+		 gulong      *pixels,
+		 gint         npixels,
 		 gulong       planes)
 {
   GdkColormapPrivateX11 *private;
-  gulong *pixels;
-  gint npixels = 0;
+  gulong *pixels_to_free;
+  gint npixels_to_free = 0;
   gint i;
 
   g_return_if_fail (GDK_IS_COLORMAP (colormap));
-  g_return_if_fail (in_pixels != NULL);
+  g_return_if_fail (pixels != NULL);
 
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
 
@@ -631,11 +631,11 @@ gdk_colors_free (GdkColormap *colormap,
       (colormap->visual->type != GDK_VISUAL_GRAYSCALE))
     return;
   
-  pixels = g_new (gulong, in_npixels);
+  pixels_to_free = g_new (gulong, npixels);
 
-  for (i=0; i<in_npixels; i++)
+  for (i=0; i<npixels; i++)
     {
-      gulong pixel = in_pixels[i];
+      gulong pixel = pixels[i];
       
       if (private->info[pixel].ref_count)
 	{
@@ -643,7 +643,7 @@ gdk_colors_free (GdkColormap *colormap,
 
 	  if (private->info[pixel].ref_count == 0)
 	    {
-	      pixels[npixels++] = pixel;
+	      pixels_to_free[npixels_to_free++] = pixel;
 	      if (!(private->info[pixel].flags & GDK_COLOR_WRITEABLE))
 		g_hash_table_remove (private->hash, &colormap->colors[pixel]);
 	      private->info[pixel].flags = 0;
@@ -651,10 +651,10 @@ gdk_colors_free (GdkColormap *colormap,
 	}
     }
 
-  if (npixels && !private->screen->closed)
+  if (npixels_to_free && !private->screen->closed)
     XFreeColors (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap,
-		 pixels, npixels, planes);
-  g_free (pixels);
+		 pixels_to_free, npixels_to_free, planes);
+  g_free (pixels_to_free);
 }
 
 /* This is almost identical to gdk_colors_free.

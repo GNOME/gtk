@@ -82,8 +82,6 @@ gdk_colormap_get_visual (GdkColormap *colormap)
  * Changes the value of the first @ncolors colors in
  * a private colormap. This function is obsolete and
  * should not be used. See gdk_color_change().
- * 
- * Return value: 
  **/     
 void
 gdk_colors_store (GdkColormap   *colormap,

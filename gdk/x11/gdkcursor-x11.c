@@ -151,19 +151,19 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
  *   0x80, 0x01, 0x40, 0x02, 0x20, 0x04, 0x10, 0x08, 0x08, 0x10, 0x04, 0x20,
  *   0x82, 0x41, 0x41, 0x82, 0x41, 0x82, 0x82, 0x41, 0x04, 0x20, 0x08, 0x10,
  *   0x10, 0x08, 0x20, 0x04, 0x40, 0x02, 0x80, 0x01};
- *
+ *  
  * static unsigned char cursor1mask_bits[] = {
  *   0x80, 0x01, 0xc0, 0x03, 0x60, 0x06, 0x30, 0x0c, 0x18, 0x18, 0x8c, 0x31,
  *   0xc6, 0x63, 0x63, 0xc6, 0x63, 0xc6, 0xc6, 0x63, 0x8c, 0x31, 0x18, 0x18,
  *   0x30, 0x0c, 0x60, 0x06, 0xc0, 0x03, 0x80, 0x01};
- *
- *
+ *  
+ *  
  *  GdkCursor *cursor;
  *  GdkPixmap *source, *mask;
  *  GdkColor fg = { 0, 65535, 0, 0 }; /<!-- -->* Red. *<!-- -->/
  *  GdkColor bg = { 0, 0, 0, 65535 }; /<!-- -->* Blue. *<!-- -->/
- *
- *
+ *  
+ *  
  *  source = gdk_bitmap_create_from_data (NULL, cursor1_bits,
  *                                        cursor1_width, cursor1_height);
  *  mask = gdk_bitmap_create_from_data (NULL, cursor1mask_bits,
@@ -171,8 +171,8 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
  *  cursor = gdk_cursor_new_from_pixmap (source, mask, &amp;fg, &amp;bg, 8, 8);
  *  gdk_pixmap_unref (source);
  *  gdk_pixmap_unref (mask);
- *
- *
+ *  
+ *  
  *  gdk_window_set_cursor (widget->window, cursor);
  * </programlisting>
  * </example>
