@@ -42,7 +42,8 @@ static LPCWSTR class_descriptors[] =
   L"Progress",
   L"Tooltip",
   L"Rebar",
-  L"Toolbar"
+  L"Toolbar",
+  L"Globals"
 };
 
 static const short element_part_map[]=
@@ -83,6 +84,12 @@ static const short element_part_map[]=
   RP_GRIPPERVERT,
   RP_CHEVRON,
   TP_BUTTON
+
+#if UXTHEME_HAS_LINES
+  ,
+  GP_LINEHORZ,
+  GP_LINEVERT
+#endif
 };
 
 static HINSTANCE uxtheme_dll = NULL;
@@ -107,8 +114,6 @@ static EnableThemeDialogTextureFunc enable_theme_dialog_texture_func = NULL;
 void
 xp_theme_init()
 {
-  int i;
-
   if (uxtheme_dll)
     return;
 
@@ -127,7 +132,7 @@ xp_theme_exit()
 {
   int i;
 
-  if(! uxtheme_dll)
+  if(!uxtheme_dll)
     return;
 
   for (i=0; i<XP_THEME_CLASS__SIZEOF; i++)
@@ -180,6 +185,11 @@ xp_theme_get_handle_by_element(XpThemeElement element)
 
     case XP_THEME_ELEMENT_TOOLBAR:
       klazz = XP_THEME_CLASS_TOOLBAR;
+      break;
+
+    case XP_THEME_ELEMENT_HLINE:
+    case XP_THEME_ELEMENT_VLINE:
+      klazz = XP_THEME_CLASS_GLOBALS;
       break;
 
     case XP_THEME_ELEMENT_PRESSED_CHECKBOX:
@@ -247,7 +257,6 @@ xp_theme_get_handle_by_element(XpThemeElement element)
   return ret;
 }
 
-
 static int
 xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
 {
@@ -265,9 +274,9 @@ xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
       ret = 0;
       break;
 
-	case XP_THEME_ELEMENT_CHEVRON:
-		switch (state)
-		{
+    case XP_THEME_ELEMENT_CHEVRON:
+      switch (state)
+	{
         case GTK_STATE_PRELIGHT:
           ret =  CHEVS_HOT;
           break;
@@ -277,7 +286,8 @@ xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
           break;
         default:
           ret =  CHEVS_NORMAL;
-		}
+	}
+      break;
 
     case XP_THEME_ELEMENT_TOOLBAR:
       ret = 1;
@@ -512,6 +522,36 @@ xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
       ret = 1;
       break;
 
+#if UXTHEME_HAS_LINES
+
+    case XP_THEME_ELEMENT_HLINE:
+      switch(state) {
+      case GTK_STATE_ACTIVE:
+	ret = LHS_RAISED;
+	break;
+      case GTK_STATE_INSENSITIVE:
+	ret = LHS_SUNKEN;
+	break;
+      default:
+	ret = LHS_FLAT;
+      }
+      break;
+
+    case XP_THEME_ELEMENT_VLINE:
+      switch(state) {
+      case GTK_STATE_ACTIVE:
+	ret = LVS_RAISED;
+	break;
+      case GTK_STATE_INSENSITIVE:
+	ret = LVS_SUNKEN;
+	break;
+      default:
+	ret = LHS_FLAT;
+      }
+      break;
+
+#endif
+
     default:
       switch(state)
         {
@@ -533,10 +573,11 @@ xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
 
 gboolean
 xp_theme_draw(GdkWindow *win, XpThemeElement element, GtkStyle *style,
-              int x, int y, int width, int height, GtkStateType state_type)
+              int x, int y, int width, int height, GtkStateType state_type,
+	      GdkRectangle *area)
 {
   HTHEME theme;
-  RECT rect;
+  RECT rect, clip, *pClip;
   int xoff, yoff, state;
   HDC dc;
   GdkDrawable *drawable;
@@ -567,13 +608,27 @@ xp_theme_draw(GdkWindow *win, XpThemeElement element, GtkStyle *style,
   rect.right = rect.left + width;
   rect.bottom = rect.top + height;
 
+  if (area)
+    {
+      clip.left = area->x - xoff;
+      clip.top = area->y - yoff;
+      clip.right = rect.left + area->width;
+      clip.bottom = rect.top + area->height;
+
+      pClip = &clip;
+    }
+  else
+    {
+      pClip = NULL;
+    }
+
   gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
   dc = gdk_win32_hdc_get(drawable, style->dark_gc[state_type], 0);
   if (!dc)
     return FALSE;
 
   part_state = xp_theme_map_gtk_state(element, state_type);
-  draw_theme_background_func(theme, dc, element_part_map[element], part_state, &rect, 0);
+  draw_theme_background_func(theme, dc, element_part_map[element], part_state, &rect, pClip);
   gdk_win32_hdc_release(drawable, style->dark_gc[state_type], 0);
 
   return TRUE;
@@ -582,23 +637,19 @@ xp_theme_draw(GdkWindow *win, XpThemeElement element, GtkStyle *style,
 gboolean
 xp_theme_is_drawable(XpThemeElement element)
 {
-  gboolean ret = FALSE;
-
   if (uxtheme_dll)
     {
-      ret = xp_theme_get_handle_by_element(element) != NULL;
+      return (xp_theme_get_handle_by_element(element) != NULL);
     }
-  return ret;
+  return FALSE;
 }
 
 gboolean
-xp_theme_get_system_font(LOGFONT *lf)
+xp_theme_get_system_font(int fontId, LOGFONT *lf)
 {
-  gboolean ret = FALSE;
   if (get_theme_sys_font_func != NULL)
     {
-      HRESULT hr = (*get_theme_sys_font_func)(NULL, TMT_MSGBOXFONT, lf);
-      ret = (hr == S_OK);
+      return ((*get_theme_sys_font_func)(NULL, fontId, lf) == S_OK);
     }
-  return ret;
+  return FALSE;
 }
