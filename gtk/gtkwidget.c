@@ -3133,6 +3133,8 @@ gtk_widget_grab_default (GtkWidget *widget)
   
   if (window && gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
     gtk_window_set_default (GTK_WINDOW (window), widget);
+  else
+    g_warning("gtk_widget_grab_default() called on a widget not within a GtkWindow");
 }
 
 /*****************************************
