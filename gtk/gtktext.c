@@ -4022,7 +4022,7 @@ gtk_text_move_cursor (GtkEditable *editable,
       while (y-- != 0)
 	move_cursor_ver (GTK_TEXT (editable), 1);
     }
-  else if (x < 0)
+  else if (y < 0)
     {
       while (y++ != 0)
 	move_cursor_ver (GTK_TEXT (editable), -1);
