@@ -978,7 +978,7 @@ gtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
  * @n: Then index of the desired child.
  *
  * Sets @iter to be the child of @parent, using the given index.  The first
- * index is 0.  If @index_ is too big, or @parent has no children, @iter is set
+ * index is 0.  If @n is too big, or @parent has no children, @iter is set
  * to an invalid iterator and %FALSE is returned.  @parent will remain a valid
  * node after this function has been called.  As a special case, if @parent is
  * %NULL, then the @n<!-- -->th root node is set.

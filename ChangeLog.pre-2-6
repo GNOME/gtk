@@ -1,5 +1,8 @@
 2002-11-21  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtktreemodel.c (gtk_tree_model_iter_nth_child): Fix doc 
+	comment typos.  (#98158, Vitaly Tishkov)
+
 	* gtk/gtkmenu.c (gtk_menu_set_screen): Fix doc comment
 	typos.  (#98480, Vitaly Tishkov)
 
