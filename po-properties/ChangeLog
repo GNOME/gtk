@@ -1,3 +1,7 @@
+Sun Jan 18 01:52:04 2004  Alastair McKinstry <mckinstry@computer.org>
+
+	* ga.po: Updated Irish translation.
+
 Sun Jan 18 01:52:04 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* Makefile.in.in (subdir): Define appropriately.
@@ -20,4 +24,6 @@ Sat Jan 17 23:07:06 2004  Matthias Clasen  <maclas@gmx.de>
 	- Change the xgettext invokation to use --keyword --keyword=P_
 
 	- Only keep the property nick and blurb translations in the
+	  
+	  
 	  po files

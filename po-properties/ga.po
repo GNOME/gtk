@@ -6,6 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-01-17 01:51+0100\n"
 "PO-Revision-Date: 2004-01-14 07:18+0000\n"
 "Last-Translator: Alastair McKinstry <mckinstry@computer.org\n"
@@ -13,7 +14,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "Number of Channels"
@@ -57,7 +57,7 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:153 gtk/gtklayout.c:656
 msgid "Height"
-msgstr ""
+msgstr "Airde"
 
 #: gdk-pixbuf/gdk-pixbuf.c:154
 msgid "The number of rows of the pixbuf"
@@ -115,7 +115,7 @@ msgstr ""
 #: gtk/gtkaction.c:201 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
 msgid "Label"
-msgstr ""
+msgstr "Leibéil"
 
 #: gtk/gtkaction.c:202
 msgid "The label used for menu items and buttons that activate this action."
@@ -450,7 +450,7 @@ msgstr ""
 #: gtk/gtkbox.c:174 gtk/gtknotebook.c:490 gtk/gtkpaned.c:238
 #: gtk/gtkruler.c:138
 msgid "Position"
-msgstr ""
+msgstr "Áit"
 
 #: gtk/gtkbox.c:175 gtk/gtknotebook.c:491
 msgid "The index of the child in the parent"
@@ -601,9 +601,8 @@ msgid "If TRUE, week numbers are displayed"
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:150
-#, fuzzy
 msgid "mode"
-msgstr "Modh: "
+msgstr "modh"
 
 #: gtk/gtkcellrenderer.c:151
 msgid "Editable mode of the CellRenderer"
@@ -747,7 +746,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:177
 msgid "Detail"
-msgstr ""
+msgstr "Sonraí"
 
 #: gtk/gtkcellrendererpixbuf.c:178
 msgid "Render detail to pass to the theme engine"
@@ -787,7 +786,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:225 gtk/gtkcellview.c:179 gtk/gtktexttag.c:205
 msgid "Background color name"
-msgstr ""
+msgstr "Ainm dath chúlra"
 
 #: gtk/gtkcellrenderertext.c:226 gtk/gtkcellview.c:180 gtk/gtktexttag.c:206
 msgid "Background color as a string"
@@ -795,7 +794,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:233 gtk/gtkcellview.c:186 gtk/gtktexttag.c:213
 msgid "Background color"
-msgstr ""
+msgstr "Dath Chúlra"
 
 #: gtk/gtkcellrenderertext.c:234 gtk/gtkcellview.c:187
 msgid "Background color as a GdkColor"
@@ -803,7 +802,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:241 gtk/gtktexttag.c:239
 msgid "Foreground color name"
-msgstr ""
+msgstr "Ainm Dath Dulra"
 
 #: gtk/gtkcellrenderertext.c:242 gtk/gtktexttag.c:240
 msgid "Foreground color as a string"
@@ -811,7 +810,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:249 gtk/gtktexttag.c:247
 msgid "Foreground color"
-msgstr ""
+msgstr "Dath Dulra"
 
 #: gtk/gtkcellrenderertext.c:250
 msgid "Foreground color as a GdkColor"
@@ -1062,7 +1061,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:167
 msgid "Radio state"
-msgstr ""
+msgstr "Stádas na Raidio"
 
 #: gtk/gtkcellrenderertoggle.c:168
 msgid "Draw the toggle button as a radio button"
@@ -1127,7 +1126,7 @@ msgstr ""
 
 #: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1775
 msgid "Current Color"
-msgstr ""
+msgstr "Dath Reatha"
 
 #: gtk/gtkcolorbutton.c:233
 msgid "The selected color"
@@ -1135,7 +1134,7 @@ msgstr "An dath tógtha"
 
 #: gtk/gtkcolorbutton.c:247 gtk/gtkcolorsel.c:1782
 msgid "Current Alpha"
-msgstr ""
+msgstr "Alpha Reatha"
 
 #: gtk/gtkcolorbutton.c:248
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
@@ -1641,7 +1640,7 @@ msgstr ""
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
 msgid "X position"
-msgstr ""
+msgstr "Áit X"
 
 #: gtk/gtkfixed.c:121 gtk/gtklayout.c:612
 msgid "X position of child widget"
@@ -1649,7 +1648,7 @@ msgstr ""
 
 #: gtk/gtkfixed.c:130 gtk/gtklayout.c:621
 msgid "Y position"
-msgstr ""
+msgstr "Áit Y"
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:622
 msgid "Y position of child widget"
@@ -1660,9 +1659,8 @@ msgid "The title of the font selection dialog"
 msgstr ""
 
 #: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:210
-#, fuzzy
 msgid "Font name"
-msgstr "Teaghlach:"
+msgstr "Ainm clófhoireann"
 
 #: gtk/gtkfontbutton.c:192
 msgid "The name of the selected font"
@@ -1670,7 +1668,7 @@ msgstr ""
 
 #: gtk/gtkfontbutton.c:193
 msgid "Sans 12"
-msgstr ""
+msgstr "Sans 12"
 
 #: gtk/gtkfontbutton.c:207
 msgid "Use font in label"
@@ -1689,18 +1687,16 @@ msgid "Whether the label is drawn with the selected font size"
 msgstr ""
 
 #: gtk/gtkfontbutton.c:240
-#, fuzzy
 msgid "Show style"
-msgstr "Stíl:"
+msgstr "Taispeán stíl"
 
 #: gtk/gtkfontbutton.c:241
 msgid "Whether the selected font style is shown in the label"
 msgstr ""
 
 #: gtk/gtkfontbutton.c:256
-#, fuzzy
 msgid "Show size"
-msgstr "Méid:"
+msgstr "Taispeán méid"
 
 #: gtk/gtkfontbutton.c:257
 msgid "Whether selected font size is shown in the label"
@@ -1715,9 +1711,8 @@ msgid "The GdkFont that is currently selected"
 msgstr ""
 
 #: gtk/gtkfontsel.c:224
-#, fuzzy
 msgid "Preview text"
-msgstr "Réamhthaispeántas:"
+msgstr "Teacs Réamhthaispeántas:"
 
 #: gtk/gtkfontsel.c:225
 msgid "The text to display in order to demonstrate the selected font"
@@ -1813,9 +1808,8 @@ msgid "A GdkPixmap to display"
 msgstr ""
 
 #: gtk/gtkimage.c:151
-#, fuzzy
 msgid "Image"
-msgstr "Leathanach %u"
+msgstr "Íomhá"
 
 #: gtk/gtkimage.c:152
 msgid "A GdkImage to display"
@@ -1847,7 +1841,7 @@ msgstr ""
 
 #: gtk/gtkimage.c:192
 msgid "Icon size"
-msgstr ""
+msgstr "Méid d'Íomha"
 
 #: gtk/gtkimage.c:193
 msgid "Size to use for stock icon or icon set"
@@ -1855,16 +1849,15 @@ msgstr ""
 
 #: gtk/gtkimage.c:201
 msgid "Animation"
-msgstr ""
+msgstr "Beochán"
 
 #: gtk/gtkimage.c:202
 msgid "GdkPixbufAnimation to display"
 msgstr ""
 
 #: gtk/gtkimage.c:209
-#, fuzzy
 msgid "Storage type"
-msgstr "Déan"
+msgstr ""
 
 #: gtk/gtkimage.c:210
 msgid "The representation being used for image data"
@@ -1906,9 +1899,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtklabel.c:328
-#, fuzzy
 msgid "Pattern"
-msgstr "Pailéid Féindheánamh"
+msgstr ""
 
 #: gtk/gtklabel.c:329
 msgid ""
@@ -1925,9 +1917,8 @@ msgid "If set, wrap lines if the text becomes too wide"
 msgstr ""
 
 #: gtk/gtklabel.c:343
-#, fuzzy
 msgid "Selectable"
-msgstr "Scrios"
+msgstr ""
 
 #: gtk/gtklabel.c:344
 msgid "Whether the label text can be selected with the mouse"
@@ -1984,9 +1975,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkmenu.c:359
-#, fuzzy
 msgid "Vertical Padding"
-msgstr "Teaghlach:"
+msgstr ""
 
 #: gtk/gtkmenu.c:360
 msgid "Extra space at the top and bottom of the menu"
@@ -2003,9 +1993,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkmenu.c:377
-#, fuzzy
 msgid "Horizontal Offset"
-msgstr "Teaghlach:"
+msgstr ""
 
 #: gtk/gtkmenu.c:378
 msgid ""
@@ -2103,7 +2092,7 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:115
 msgid "Message Type"
-msgstr ""
+msgstr "Saghas Teachtaireacht"
 
 #: gtk/gtkmessagedialog.c:116
 msgid "The type of message"
@@ -2152,9 +2141,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtknotebook.c:396
-#, fuzzy
 msgid "Page"
-msgstr "Leathanach %u"
+msgstr "Leathanach"
 
 #: gtk/gtknotebook.c:397
 msgid "The index of the current page"
@@ -2162,7 +2150,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:405
 msgid "Tab Position"
-msgstr ""
+msgstr "Áit Chluaisín"
 
 #: gtk/gtknotebook.c:406
 msgid "Which side of the notebook holds the tabs"
@@ -2202,7 +2190,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:447
 msgid "Show Border"
-msgstr ""
+msgstr "Taispeáin "
 
 #: gtk/gtknotebook.c:448
 msgid "Whether the border should be shown or not"
@@ -2302,7 +2290,7 @@ msgstr ""
 
 #: gtk/gtkoptionmenu.c:192
 msgid "Menu"
-msgstr ""
+msgstr "Roghclár"
 
 #: gtk/gtkoptionmenu.c:193
 msgid "The menu of options"
@@ -2354,9 +2342,8 @@ msgid "Largest possible value for the \"position\" property"
 msgstr ""
 
 #: gtk/gtkpaned.c:307
-#, fuzzy
 msgid "Resize"
-msgstr "Míchumasach"
+msgstr ""
 
 #: gtk/gtkpaned.c:308
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
@@ -2388,7 +2375,7 @@ msgstr ""
 
 #: gtk/gtkprogress.c:137
 msgid "Show text"
-msgstr ""
+msgstr "Taispeán teacs"
 
 #: gtk/gtkprogress.c:138
 msgid "Whether the progress is shown as text"
@@ -2424,7 +2411,7 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:441
 msgid "Orientation"
-msgstr ""
+msgstr "Treosuíomh"
 
 #: gtk/gtkprogressbar.c:151
 msgid "Orientation and growth direction of the progress bar"
@@ -2467,9 +2454,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkprogressbar.c:198
-#, fuzzy
 msgid "Fraction"
-msgstr "Sáithiú:"
+msgstr ""
 
 #: gtk/gtkprogressbar.c:199
 msgid "The fraction of total work that has been completed"
@@ -2489,7 +2475,7 @@ msgstr ""
 
 #: gtk/gtkradioaction.c:138
 msgid "The value"
-msgstr ""
+msgstr "Luach"
 
 #: gtk/gtkradioaction.c:139
 msgid ""
@@ -2499,7 +2485,7 @@ msgstr ""
 
 #: gtk/gtkradioaction.c:155 gtk/gtkradiobutton.c:109
 msgid "Group"
-msgstr ""
+msgstr "Grupa"
 
 #: gtk/gtkradioaction.c:156
 msgid "The radio action whose group this action belongs."
@@ -2562,9 +2548,8 @@ msgid "Spacing between step buttons and thumb"
 msgstr ""
 
 #: gtk/gtkrange.c:337
-#, fuzzy
 msgid "Arrow X Displacement"
-msgstr "Fuinneog"
+msgstr ""
 
 #: gtk/gtkrange.c:338
 msgid ""
@@ -2572,9 +2557,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkrange.c:345
-#, fuzzy
 msgid "Arrow Y Displacement"
-msgstr "Fuinneog"
+msgstr ""
 
 #: gtk/gtkrange.c:346
 msgid ""
@@ -2684,9 +2668,8 @@ msgid "Vertical Adjustment"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:249
-#, fuzzy
 msgid "Horizontal Scrollbar Policy"
-msgstr "Teaghlach:"
+msgstr ""
 
 #: gtk/gtkscrolledwindow.c:250
 msgid "When the horizontal scrollbar is displayed"
@@ -2701,18 +2684,16 @@ msgid "When the vertical scrollbar is displayed"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:266
-#, fuzzy
 msgid "Window Placement"
-msgstr "Fuinneog"
+msgstr ""
 
 #: gtk/gtkscrolledwindow.c:267
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:274
-#, fuzzy
 msgid "Shadow Type"
-msgstr "Fuinneog"
+msgstr ""
 
 #: gtk/gtkscrolledwindow.c:275
 msgid "Style of bevel around the contents"
@@ -2755,18 +2736,16 @@ msgid ""
 msgstr ""
 
 #: gtk/gtksettings.c:186
-#, fuzzy
 msgid "Cursor Blink"
-msgstr "Míchumasach"
+msgstr ""
 
 #: gtk/gtksettings.c:187
 msgid "Whether the cursor should blink"
 msgstr ""
 
 #: gtk/gtksettings.c:194
-#, fuzzy
 msgid "Cursor Blink Time"
-msgstr "Míchumasach"
+msgstr ""
 
 #: gtk/gtksettings.c:195
 msgid "Length of the cursor blink cycle, in milleseconds"
@@ -2823,9 +2802,8 @@ msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 
 #: gtk/gtksettings.c:253
-#, fuzzy
 msgid "Font Name"
-msgstr "Teaghlach:"
+msgstr "Ainm Clófhoireann"
 
 #: gtk/gtksettings.c:254
 msgid "Name of default font to use"
@@ -2840,9 +2818,8 @@ msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 msgstr ""
 
 #: gtk/gtksizegroup.c:241
-#, fuzzy
 msgid "Mode"
-msgstr "Modh: "
+msgstr "Modh"
 
 #: gtk/gtksizegroup.c:242
 msgid ""
@@ -2902,9 +2879,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkspinbutton.c:301
-#, fuzzy
 msgid "Value"
-msgstr "Luach:"
+msgstr "Luach"
 
 #: gtk/gtkspinbutton.c:302
 msgid "Reads the current value, or sets a new value"
@@ -2991,9 +2967,8 @@ msgid "Bottom attachment"
 msgstr ""
 
 #: gtk/gtktable.c:230
-#, fuzzy
 msgid "Horizontal options"
-msgstr "Teaghlach:"
+msgstr ""
 
 #: gtk/gtktable.c:231
 msgid "Options specifying the horizontal behaviour of the child"
@@ -3008,9 +2983,8 @@ msgid "Options specifying the vertical behaviour of the child"
 msgstr ""
 
 #: gtk/gtktable.c:244
-#, fuzzy
 msgid "Horizontal padding"
-msgstr "Teaghlach:"
+msgstr ""
 
 #: gtk/gtktable.c:245
 msgid ""
@@ -3103,9 +3077,8 @@ msgid "Bitmap to use as a mask when drawing the text foreground"
 msgstr ""
 
 #: gtk/gtktexttag.c:264
-#, fuzzy
 msgid "Text direction"
-msgstr "Déan Eolaire"
+msgstr "Treosuíomh Teacs"
 
 #: gtk/gtktexttag.c:265
 msgid "Text direction, e.g. right-to-left or left-to-right"
@@ -3213,7 +3186,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:490 gtk/gtktextview.c:641
 msgid "Tabs"
-msgstr ""
+msgstr "Cluaisíní"
 
 #: gtk/gtktexttag.c:491 gtk/gtktextview.c:642
 msgid "Custom tabs for this text"
@@ -3352,9 +3325,8 @@ msgid "Right Margin"
 msgstr ""
 
 #: gtk/gtktextview.c:649
-#, fuzzy
 msgid "Cursor Visible"
-msgstr "Míchumasach"
+msgstr ""
 
 #: gtk/gtktextview.c:650
 msgid "If the insertion cursor is shown"
@@ -3658,9 +3630,8 @@ msgid "Whether to display the column"
 msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:230 gtk/gtkwindow.c:481
-#, fuzzy
 msgid "Resizable"
-msgstr "Míchumasach"
+msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:231
 msgid "Column is user-resizable"
@@ -3787,9 +3758,8 @@ msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
 
 #: gtk/gtkwidget.c:406
-#, fuzzy
 msgid "Widget name"
-msgstr "Athainmnigh"
+msgstr ""
 
 #: gtk/gtkwidget.c:407
 msgid "The name of the widget"
@@ -3996,18 +3966,16 @@ msgid "The type of the window"
 msgstr ""
 
 #: gtk/gtkwindow.c:448
-#, fuzzy
 msgid "Window Title"
-msgstr "Fuinneog"
+msgstr "Tidéal Fhuinneoga"
 
 #: gtk/gtkwindow.c:449
 msgid "The title of the window"
 msgstr ""
 
 #: gtk/gtkwindow.c:456
-#, fuzzy
 msgid "Window Role"
-msgstr "Fuinneog"
+msgstr ""
 
 #: gtk/gtkwindow.c:457
 msgid "Unique identifier for the window to be used when restoring a session"
@@ -4081,16 +4049,15 @@ msgstr ""
 
 #: gtk/gtkwindow.c:534
 msgid "Icon"
-msgstr ""
+msgstr "Dealbh"
 
 #: gtk/gtkwindow.c:535
 msgid "Icon for this window"
 msgstr ""
 
 #: gtk/gtkwindow.c:550
-#, fuzzy
 msgid "Is Active"
-msgstr "(míchumasach)"
+msgstr ""
 
 #: gtk/gtkwindow.c:551
 msgid "Whether the toplevel is the current active window"

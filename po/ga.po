@@ -6,20 +6,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-01-17 01:16+0100\n"
-"PO-Revision-Date: 2004-01-14 07:18+0000\n"
+"PO-Revision-Date: 2004-01-18 20:18+0000\n"
 "Last-Translator: Alastair McKinstry <mckinstry@computer.org\n"
 "Language-Team: Gaeilge <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:736
 #: gdk-pixbuf/gdk-pixbuf-io.c:869 tests/testfilechooser.c:198
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr ""
+msgstr "Teip as oscáil comhad '%s': %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:746
 #, c-format
@@ -69,12 +69,12 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:791
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr ""
+msgstr "Teip ag lódáil íomhá '%s': %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1095
 #, c-format
 msgid "Error writing to image file: %s"
-msgstr ""
+msgstr "Teip ag scríobh comhad d'íomha: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1139 gdk-pixbuf/gdk-pixbuf-io.c:1255
 #, c-format
@@ -163,7 +163,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-ani.c:676
 msgid "The ANI image format"
-msgstr ""
+msgstr "An formóid d'íomhá ANI"
 
 #: gdk-pixbuf/io-bmp.c:224 gdk-pixbuf/io-bmp.c:352
 msgid "Not enough memory to load bitmap image"
@@ -179,12 +179,12 @@ msgstr ""
 
 #: gdk-pixbuf/io-bmp.c:1092
 msgid "The BMP image format"
-msgstr ""
+msgstr "An formóid d'íomhá BMP"
 
 #: gdk-pixbuf/io-gif.c:220
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr ""
+msgstr "Teip ag leámh GIF: %s"
 
 #: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1442 gdk-pixbuf/io-gif.c:1603
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
@@ -241,7 +241,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:1650
 msgid "The GIF image format"
-msgstr ""
+msgstr "An formóid d'íomhá GIF"
 
 #: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
 #: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
@@ -287,7 +287,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-ico.c:1202
 msgid "The ICO image format"
-msgstr ""
+msgstr "An formóid d'íomhá ICO"
 
 #: gdk-pixbuf/io-jpeg.c:114
 #, c-format
@@ -325,7 +325,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:1069
 msgid "The JPEG image format"
-msgstr ""
+msgstr "An formóid d'íomhá JPEG"
 
 #: gdk-pixbuf/io-pcx.c:190
 msgid "Couldn't allocate memory for header"
@@ -370,7 +370,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-pcx.c:757
 msgid "The PCX image format"
-msgstr ""
+msgstr "An formóid d'íomhá PCX"
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
@@ -434,7 +434,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
-msgstr ""
+msgstr "An formóid d'íomhá PNG"
 
 #: gdk-pixbuf/io-pnm.c:249
 msgid "PNM loader expected to find an integer, but didn't"
@@ -583,7 +583,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:994
 msgid "The Targa image format"
-msgstr ""
+msgstr "An formóid d'íommhá Targa"
 
 #: gdk-pixbuf/io-tiff.c:192
 msgid "Could not get image width (bad TIFF file)"
@@ -627,7 +627,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:602
 msgid "The TIFF image format"
-msgstr ""
+msgstr "An formôid d'íomhá TIFF"
 
 #: gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
@@ -699,7 +699,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-xpm.c:1543
 msgid "The XPM image format"
-msgstr ""
+msgstr "An formôid d'íomhá XPM"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -841,9 +841,8 @@ msgid "Amount of blue light in the color."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1888
-#, fuzzy
 msgid "_Opacity:"
-msgstr "Teimhneacht:"
+msgstr "_Teimhneacht:"
 
 #: gtk/gtkcolorsel.c:1896 gtk/gtkcolorsel.c:1907
 msgid "Transparency of the color."
@@ -883,7 +882,7 @@ msgstr ""
 #: gtk/gtkfilechooser.c:1571 gtk/gtkfilechooser.c:1615
 #, c-format
 msgid "Invalid filename: %s"
-msgstr ""
+msgstr "Comhad neamhbhailí: %s"
 
 #: gtk/gtkfilechooserdefault.c:428
 #, c-format
@@ -972,9 +971,8 @@ msgstr "Réamhthaispeántas"
 
 #. Change the current folder label
 #: gtk/gtkfilechooserdefault.c:1972
-#, fuzzy, c-format
 msgid "Current folder: %s"
-msgstr "Tóg Dath"
+msgstr "Fillteán reatha: %s"
 
 #: gtk/gtkfilechooserdefault.c:2173 gtk/gtkfilechooserdefault.c:2750
 #, c-format
@@ -1043,9 +1041,8 @@ msgid "_Files"
 msgstr "_Comhaid"
 
 #: gtk/gtkfilesel.c:853 gtk/gtkfilesel.c:2243
-#, fuzzy, c-format
 msgid "Folder unreadable: %s"
-msgstr "Eolaire doléite: %s"
+msgstr "Fillteán doléite: %s"
 
 #: gtk/gtkfilesel.c:984
 #, c-format
@@ -1057,17 +1054,15 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1115
 msgid "_New Folder"
-msgstr ""
+msgstr "Fillteán _Nua"
 
 #: gtk/gtkfilesel.c:1126
-#, fuzzy
 msgid "De_lete File"
-msgstr "Scrios Comhad"
+msgstr "_Dealaigh Comhad"
 
 #: gtk/gtkfilesel.c:1137
-#, fuzzy
 msgid "_Rename File"
-msgstr "Athainmnigh Comhad"
+msgstr "_Athainmnigh Comhad"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
@@ -1089,16 +1084,15 @@ msgstr ""
 #: gtk/gtkfilesel.c:1450
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
-msgstr ""
+msgstr "Earraidh ag cruthaigh fillteán \"%s\": %s\n"
 
 #: gtk/gtkfilesel.c:1484
 msgid "New Folder"
-msgstr ""
+msgstr "Fillteán Nua"
 
 #: gtk/gtkfilesel.c:1499
-#, fuzzy
 msgid "_Folder name:"
-msgstr "Athainmnigh"
+msgstr "Ainm _Fillteán:"
 
 #: gtk/gtkfilesel.c:1523
 msgid "C_reate"
@@ -1123,16 +1117,16 @@ msgstr ""
 #: gtk/gtkfilesel.c:1580
 #, c-format
 msgid "Error deleting file \"%s\": %s"
-msgstr ""
+msgstr "Earraidh ag dealaigh comhad \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1623
-#, fuzzy, c-format
+#,  c-format
 msgid "Really delete file \"%s\"?"
-msgstr "Athainmnigh Comhad"
+msgstr ""
 
 #: gtk/gtkfilesel.c:1628
 msgid "Delete File"
-msgstr "Scrios Comhad"
+msgstr "Dealaigh Comhad"
 
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
@@ -1163,19 +1157,17 @@ msgid "Rename File"
 msgstr "Athainmnigh Comhad"
 
 #: gtk/gtkfilesel.c:1762
-#, fuzzy, c-format
+#,  c-format
 msgid "Rename file \"%s\" to:"
-msgstr "Athainmnigh Comhad"
+msgstr "Athainmnigh comhad \"%s\" do: "
 
 #: gtk/gtkfilesel.c:1791
-#, fuzzy
 msgid "_Rename"
-msgstr "Athainmnigh"
+msgstr "_Athainmnigh"
 
 #: gtk/gtkfilesel.c:2223
-#, fuzzy
 msgid "_Selection: "
-msgstr "Rogha: "
+msgstr "_Rogha: "
 
 #: gtk/gtkfilesel.c:3139
 #, c-format
@@ -1186,11 +1178,11 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:3142
 msgid "Invalid UTF-8"
-msgstr ""
+msgstr "UTF-8 Neamhbhailí"
 
 #: gtk/gtkfilesel.c:4019
 msgid "Name too long"
-msgstr ""
+msgstr "Ainm ró-fhada"
 
 #: gtk/gtkfilesel.c:4021
 msgid "Couldn't convert filename"
@@ -1198,7 +1190,7 @@ msgstr ""
 
 #: gtk/gtkfilesystemmodel.c:1021
 msgid "(Empty)"
-msgstr ""
+msgstr "(Folamh)"
 
 #: gtk/gtkfilesystemunix.c:335 gtk/gtkfilesystemwin32.c:417
 #, c-format
@@ -1210,9 +1202,8 @@ msgid "This file system does not support mounting"
 msgstr ""
 
 #: gtk/gtkfilesystemunix.c:386
-#, fuzzy
 msgid "Filesystem"
-msgstr "Comhaid"
+msgstr "Corás Comhaid"
 
 #: gtk/gtkfilesystemunix.c:648
 msgid "This file system does not support icons"
@@ -1238,12 +1229,12 @@ msgstr ""
 
 #: gtk/gtkfontbutton.c:177 gtk/gtkfontbutton.c:294
 msgid "Pick a Font"
-msgstr ""
+msgstr "Roghnaigh Clófhoireann"
 
 #. Initialize fields
 #: gtk/gtkfontbutton.c:288
 msgid "Sans 12"
-msgstr ""
+msgstr "Sans 12"
 
 #: gtk/gtkfontbutton.c:806
 msgid "Font"
@@ -1256,25 +1247,21 @@ msgid "abcdefghijk ABCDEFGHIJK"
 msgstr ""
 
 #: gtk/gtkfontsel.c:332
-#, fuzzy
 msgid "_Family:"
-msgstr "Teaghlach:"
+msgstr "_Clann:"
 
 #: gtk/gtkfontsel.c:338
-#, fuzzy
 msgid "_Style:"
-msgstr "Stíl:"
+msgstr "_Stíl:"
 
 #: gtk/gtkfontsel.c:344
-#, fuzzy
 msgid "Si_ze:"
-msgstr "Méid:"
+msgstr "_Méid:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:469
-#, fuzzy
 msgid "_Preview:"
-msgstr "Réamhthaispeántas:"
+msgstr "_Réamhthaispeántas:"
 
 #: gtk/gtkfontsel.c:1285
 msgid "Font Selection"
@@ -1285,9 +1272,8 @@ msgid "Gamma"
 msgstr "Gamma"
 
 #: gtk/gtkgamma.c:409
-#, fuzzy
 msgid "_Gamma value"
-msgstr "Luach Gamma"
+msgstr "Luach _Gamma"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -1295,7 +1281,7 @@ msgstr "Luach Gamma"
 #: gtk/gtkiconfactory.c:1551
 #, c-format
 msgid "Error loading icon: %s"
-msgstr ""
+msgstr "Earraidh ag lódáil dealbh: %s"
 
 #: gtk/gtkicontheme.c:1217
 #, c-format
@@ -1303,23 +1289,20 @@ msgid "Icon '%s' not present in theme"
 msgstr ""
 
 #: gtk/gtkimmodule.c:419
-#, fuzzy
 msgid "Default"
-msgstr "default:LTR"
+msgstr "Loicead"
 
 #: gtk/gtkinputdialog.c:233
 msgid "Input"
 msgstr "Ionchur"
 
 #: gtk/gtkinputdialog.c:242
-#, fuzzy
 msgid "No extended input devices"
-msgstr "Níl aon ghaireas ionchuir ann"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:254
-#, fuzzy
 msgid "_Device:"
-msgstr "Gaireas:"
+msgstr "_Gaireas:"
 
 #: gtk/gtkinputdialog.c:271
 msgid "Disabled"
@@ -1334,21 +1317,18 @@ msgid "Window"
 msgstr "Fuinneog"
 
 #: gtk/gtkinputdialog.c:292
-#, fuzzy
 msgid "_Mode: "
-msgstr "Modh: "
+msgstr "_Modh: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:323
-#, fuzzy
 msgid "_Axes"
-msgstr "Ais"
+msgstr "_Ais"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:340
-#, fuzzy
 msgid "_Keys"
-msgstr "Eochracha"
+msgstr "_Eochracha"
 
 #: gtk/gtkinputdialog.c:560
 msgid "X"
@@ -1372,7 +1352,7 @@ msgstr "Claonadh Y"
 
 #: gtk/gtkinputdialog.c:565
 msgid "Wheel"
-msgstr ""
+msgstr "Rothar"
 
 #: gtk/gtkinputdialog.c:605
 msgid "none"
@@ -1392,9 +1372,8 @@ msgid "clear"
 msgstr "bánaigh"
 
 #: gtk/gtklabel.c:3225
-#, fuzzy
 msgid "Select All"
-msgstr "Scrios"
+msgstr "Roghnaigh Gach Rud"
 
 #: gtk/gtklabel.c:3235
 msgid "Input Methods"
@@ -1407,7 +1386,7 @@ msgstr ""
 #.
 #: gtk/gtkmain.c:851
 msgid "default:LTR"
-msgstr "default:LTR"
+msgstr "loicead:LTR"
 
 #: gtk/gtknotebook.c:2679 gtk/gtknotebook.c:5072
 #, c-format
@@ -1432,11 +1411,11 @@ msgstr ""
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
 msgid "Information"
-msgstr ""
+msgstr "Eolas"
 
 #: gtk/gtkstock.c:268
 msgid "Warning"
-msgstr ""
+msgstr "Aire"
 
 #: gtk/gtkstock.c:269
 msgid "Error"
@@ -1451,53 +1430,47 @@ msgstr ""
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr ""
+msgstr "_Suimigh"
 
 #: gtk/gtkstock.c:276
-#, fuzzy
 msgid "_Apply"
-msgstr "Cuir i bhfeidhm"
+msgstr "_Cuir i bhfeidhm"
 
 #: gtk/gtkstock.c:277
 msgid "_Bold"
-msgstr ""
+msgstr "_Trom"
 
 #: gtk/gtkstock.c:278
-#, fuzzy
 msgid "_Cancel"
-msgstr "Cealaigh"
+msgstr "_Cealaigh"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
 msgstr ""
 
 #: gtk/gtkstock.c:280
-#, fuzzy
 msgid "_Clear"
-msgstr "bánaigh"
+msgstr "_Bánaigh"
 
 #: gtk/gtkstock.c:281
-#, fuzzy
 msgid "_Close"
-msgstr "Druid"
+msgstr "_Dún"
 
 #: gtk/gtkstock.c:282
-#, fuzzy
 msgid "_Convert"
-msgstr "Déan"
+msgstr ""
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
-msgstr ""
+msgstr "_Cóip"
 
 #: gtk/gtkstock.c:284
 msgid "Cu_t"
-msgstr ""
+msgstr "_Gearr"
 
 #: gtk/gtkstock.c:285
-#, fuzzy
 msgid "_Delete"
-msgstr "Scrios"
+msgstr "_Dealaigh"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
@@ -1505,29 +1478,27 @@ msgstr ""
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
-msgstr ""
+msgstr "_Cuardaigh"
 
 #: gtk/gtkstock.c:288
 msgid "Find and _Replace"
 msgstr ""
 
 #: gtk/gtkstock.c:289
-#, fuzzy
 msgid "_Floppy"
-msgstr "Cuir i bhfeidhm"
+msgstr "Diosca _Flapach"
 
 #: gtk/gtkstock.c:290
 msgid "_Bottom"
-msgstr ""
+msgstr "_Bun"
 
 #: gtk/gtkstock.c:291
 msgid "_First"
 msgstr ""
 
 #: gtk/gtkstock.c:292
-#, fuzzy
 msgid "_Last"
-msgstr "Pailéid Féindheánamh"
+msgstr ""
 
 #: gtk/gtkstock.c:293
 msgid "_Top"
@@ -1535,120 +1506,111 @@ msgstr ""
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
-msgstr ""
+msgstr "_Siar"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr ""
+msgstr "S_ios"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
-msgstr ""
+msgstr "_Aniar"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr ""
+msgstr "S_uas"
 
 #: gtk/gtkstock.c:298
 msgid "_Harddisk"
 msgstr ""
 
 #: gtk/gtkstock.c:299
-#, fuzzy
 msgid "_Help"
-msgstr "Cuidigh"
+msgstr "_Cuidiú"
 
 #: gtk/gtkstock.c:300
-#, fuzzy
 msgid "_Home"
-msgstr "Cuidigh"
+msgstr "_Baile"
 
 #: gtk/gtkstock.c:301
 msgid "_Index"
-msgstr ""
+msgstr "_Inneacs"
 
 #: gtk/gtkstock.c:302
 msgid "_Italic"
-msgstr ""
+msgstr "_Iodálach"
 
 #: gtk/gtkstock.c:303
 msgid "_Jump to"
 msgstr ""
 
 #: gtk/gtkstock.c:304
-#, fuzzy
 msgid "_Center"
-msgstr "Déan"
+msgstr "Sa _Lár"
 
 #: gtk/gtkstock.c:305
-#, fuzzy
 msgid "_Fill"
-msgstr "Teaghlach:"
+msgstr ""
 
 #: gtk/gtkstock.c:306
 msgid "_Left"
-msgstr ""
+msgstr "iAr _Clé"
 
 #: gtk/gtkstock.c:307
 msgid "_Right"
-msgstr ""
+msgstr "Ar _Deis"
 
 #: gtk/gtkstock.c:308
 msgid "_New"
-msgstr ""
+msgstr "_Nua"
 
 #: gtk/gtkstock.c:309
 msgid "_No"
-msgstr ""
+msgstr "_Níl"
 
 #: gtk/gtkstock.c:310
-#, fuzzy
 msgid "_OK"
-msgstr "Ceart go leor"
+msgstr "Ceart go _Leor"
 
 #: gtk/gtkstock.c:311
 msgid "_Open"
-msgstr ""
+msgstr "_Oscáil"
 
 #: gtk/gtkstock.c:312
-#, fuzzy
 msgid "_Paste"
-msgstr "Pailéid Féindheánamh"
+msgstr "_Greamaigh"
 
 #: gtk/gtkstock.c:313
 msgid "_Preferences"
-msgstr ""
+msgstr "_Roghnachais"
 
 #: gtk/gtkstock.c:314
 msgid "_Print"
-msgstr ""
+msgstr "_Priontáil"
 
 #: gtk/gtkstock.c:315
-#, fuzzy
 msgid "Print Pre_view"
-msgstr "Réamhthaispeántas:"
+msgstr "_Réamhthaispeántas:"
 
 #: gtk/gtkstock.c:316
 msgid "_Properties"
-msgstr ""
+msgstr "_Álbachtaí"
 
 #: gtk/gtkstock.c:317
 msgid "_Quit"
-msgstr ""
+msgstr "_Ealu"
 
 #: gtk/gtkstock.c:318
-#, fuzzy
 msgid "_Redo"
-msgstr "Dearg:"
+msgstr "_Athdeanamh"
 
 #: gtk/gtkstock.c:319
 msgid "_Refresh"
 msgstr ""
 
 #: gtk/gtkstock.c:320
-#, fuzzy
 msgid "_Remove"
-msgstr "Dearg:"
+msgstr "_Scríos"
 
 #: gtk/gtkstock.c:321
 msgid "_Revert"
@@ -1691,9 +1653,8 @@ msgid "_Strikethrough"
 msgstr ""
 
 #: gtk/gtkstock.c:331
-#, fuzzy
 msgid "_Undelete"
-msgstr "Scrios"
+msgstr ""
 
 #: gtk/gtkstock.c:332
 msgid "_Underline"
@@ -1705,11 +1666,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:334
 msgid "_Yes"
-msgstr ""
+msgstr "_Tá"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom _100%"
-msgstr ""
+msgstr "Súmáil _100%"
 
 #: gtk/gtkstock.c:336
 msgid "Zoom to _Fit"
@@ -1717,11 +1678,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _In"
-msgstr ""
+msgstr "Súmáil _Isteach"
 
 #: gtk/gtkstock.c:338
 msgid "Zoom _Out"
-msgstr ""
+msgstr "Súmáil _Amach"
 
 #: gtk/gtktextutil.c:46
 msgid "LRM _Left-to-right mark"
@@ -1764,7 +1725,7 @@ msgid "ZWNJ Zero width _non-joiner"
 msgstr ""
 
 #: gtk/gtkthemes.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Ní rabhthas ábalta modúl inlódáil a aimsiú in module_path: \"%s\","
 
@@ -1789,7 +1750,7 @@ msgstr ""
 
 #: gtk/gtkuimanager.c:2136
 msgid "Empty"
-msgstr ""
+msgstr "Folamh"
 
 #. ID
 #: modules/input/imam-et.c:453
@@ -1819,7 +1780,7 @@ msgstr ""
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr ""
+msgstr "Téalainnis (Bríste)"
 
 #. ID
 #: modules/input/imti-er.c:452
@@ -1834,7 +1795,7 @@ msgstr ""
 #. ID
 #: modules/input/imviqr.c:243
 msgid "Vietnamese (VIQR)"
-msgstr ""
+msgstr "Vítneaimis (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:27
