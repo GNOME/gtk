@@ -32,6 +32,8 @@
 
 #include <pango/pangoxft.h>
 
+#include <cairo-xlib.h>
+
 #include <stdlib.h>
 #include <string.h>		/* for memcpy() */
 

@@ -1,3 +1,7 @@
+Thu Feb  3 19:15:55 2005  Manish Singh  <yosh@gimp.org>
+
+	* gdk/x11/gdkdrawable-x11.c: #include cairo-xlib.h
+
 2005-02-03  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdrawable.[ch] gdkpixmap.c gdkwindow.c: Add
