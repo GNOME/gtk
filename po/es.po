@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.12\n"
-"POT-Creation-Date: 1999-01-12 10:38-0800\n"
+"POT-Creation-Date: 1999-01-10 02:52+0100\n"
 "PO-Revision-Date: 1999-01-10 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: \n"
@@ -70,7 +70,7 @@ msgstr "Directorios"
 msgid "Files"
 msgstr "Archivos"
 
-#: gtk/gtkfilesel.c:500 gtk/gtkfilesel.c:1454
+#: gtk/gtkfilesel.c:500 gtk/gtkfilesel.c:1455
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Directorio ilegible: %s"
@@ -123,11 +123,6 @@ msgstr "Borrar"
 #: gtk/gtkfilesel.c:1050
 msgid "Rename"
 msgstr "Renombrar"
-
-#: gtk/gtkfilesel.c:1433
-#, fuzzy
-msgid "Selection: "
-msgstr "Selección de Fuentes"
 
 #: gtk/gtkfontsel.c:203
 msgid "Foundry:"
@@ -312,8 +307,7 @@ msgstr "La fuente seleccionada no es una fuente válida."
 
 #: gtk/gtkfontsel.c:1834
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr ""
-"Esta es una fuente de 2-bytes y es posible que no se visualize correctamente."
+msgstr "Esta es una fuente de 2-bytes y es posible que no se visualize correctamente."
 
 #: gtk/gtkfontsel.c:1926 gtk/gtkinputdialog.c:599
 msgid "(unknown)"
@@ -437,7 +431,7 @@ msgstr "(desactivado)"
 msgid "clear"
 msgstr "limpiar"
 
-#: gtk/gtknotebook.c:1966 gtk/gtknotebook.c:3985
+#: gtk/gtknotebook.c:1946 gtk/gtknotebook.c:3966
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -445,8 +439,7 @@ msgstr "Página %u"
 #: gtk/gtkrc.c:1507
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr ""
-"Imposible de encontrar un archivo imágen en pixmap_path: \"%s\" línea %s"
+msgstr "Imposible de encontrar un archivo imágen en pixmap_path: \"%s\" línea %s"
 
 #: gtk/gtkrc.c:1510
 #, c-format
