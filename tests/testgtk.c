@@ -1213,6 +1213,17 @@ statusbar_push (GtkWidget *button,
 }
 
 static void
+statusbar_push_long (GtkWidget *button,
+                     GtkStatusbar *statusbar)
+{
+  gchar text[1024];
+
+  sprintf (text, "Just because a system has menu choices written with English words, phrases or sentences, that is no guarantee, that it is comprehensible. Individual words may not be familiar to some users (for example, \"repaginate\"), and two menu items may appear to satisfy the users's needs, whereas only one does (for example, \"put away\" or \"eject\").");
+
+  gtk_statusbar_push (statusbar, 1, text);
+}
+
+static void
 statusbar_pop (GtkWidget *button,
 	       GtkStatusbar *statusbar)
 {
@@ -1334,6 +1345,14 @@ create_statusbar (GtkWidget *widget)
 						 "parent", box2,
 						 NULL),
 				 "swapped_signal_after::clicked", statusbar_contexts, statusbar,
+				 NULL);
+
+      button = g_object_connect (gtk_widget_new (gtk_button_get_type (),
+						 "label", "push something long",
+						 "visible", TRUE,
+						 "parent", box2,
+						 NULL),
+				 "signal_after::clicked", statusbar_push_long, statusbar,
 				 NULL);
       
       separator = gtk_hseparator_new ();
@@ -2021,7 +2040,7 @@ create_handle_box (GtkWidget *widget)
     
     gtk_window_set_screen (GTK_WINDOW (window),
 			   gtk_widget_get_screen (widget));
-
+    gtk_window_set_modal (GTK_WINDOW (window), TRUE);
     gtk_window_set_title (GTK_WINDOW (window),
 			  "Handle Box Test");
     gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
@@ -2557,21 +2576,25 @@ void create_labels (GtkWidget *widget)
 
       frame = gtk_frame_new ("Normal Label");
       label = gtk_label_new ("This is a Normal label");
+      gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_START);
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       frame = gtk_frame_new ("Multi-line Label");
       label = gtk_label_new ("This is a Multi-line label.\nSecond line\nThird line");
+      gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       frame = gtk_frame_new ("Left Justified Label");
       label = gtk_label_new ("This is a Left-Justified\nMulti-line label.\nThird      line");
+      gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_MIDDLE);
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       frame = gtk_frame_new ("Right Justified Label");
+      gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_START);
       label = gtk_label_new ("This is a Right-Justified\nMulti-line label.\nFourth line, (j/k)");
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_RIGHT);
       gtk_container_add (GTK_CONTAINER (frame), label);
@@ -10955,6 +10978,7 @@ create_progress_bar (GtkWidget *widget)
 
       pdata->pbar = gtk_widget_new (GTK_TYPE_PROGRESS_BAR,
 				    "adjustment", adj,
+				    "ellipsize", PANGO_ELLIPSIZE_MIDDLE,
 				    NULL);
       gtk_progress_set_format_string (GTK_PROGRESS (pdata->pbar),
 				      "%v from [%l,%u] (=%p%%)");
