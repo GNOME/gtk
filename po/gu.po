@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: gtk\n"
 "POT-Creation-Date: 2004-07-20 02:54+0200\n"
 "PO-Revision-Date: 2004-03-25 01:10+0530\n"
-"Last-Translator: \n"
-"Language-Team:  <en@li.org>\n"
+"Last-Translator: Kartik Mistry <kartik_m@magnet-i.com> \n"
+"Language-Team:  Gujarati<utkarsh@magnet-i.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -207,7 +207,6 @@ msgid "Stack overflow"
 msgstr "સ્ટેક વધારેપડતુ ભરાઈ ગયુ છે"
 
 #: gdk-pixbuf/io-gif.c:635
-#, fuzzy
 msgid "GIF image loader cannot understand this image."
 msgstr "GIF ચિત્ર લાવનાર આ ચિત્રને સમજી શકતુ નથી"
 
@@ -444,7 +443,7 @@ msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG લેખનના કટકાઓ માટેની કી ASCII અક્ષરોમાં હોવી જરૂરી છે."
 
 #: gdk-pixbuf/io-png.c:854
-#, fuzzy, c-format
+#, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 "PNG લેખનના કટકા %s માટેની કિંમતને ISO-8859-1 સંગ્રહપધ્ધતિમાં રૂપાંતરિત કરી શકાતુ નથી."
@@ -482,7 +481,6 @@ msgid "Maximum color value in PNM file is too large"
 msgstr "PNM ફાઈલમાં રંગની મહત્તમ કિંંમત બહુ મોટી છે"
 
 #: gdk-pixbuf/io-pnm.c:396
-#, fuzzy
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr "૨૫૫ કરતાં વધારે રંગની કિંમત ધરાવતી PNM ફાઈલને સંભાળી શકાતી નથી"
 
@@ -507,7 +505,6 @@ msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "PNMના કાચા બંધારણ માટે નમૂનાની માહિતી પહેલા એક જ ખાલી જગ્યા જરૂરી છે"
 
 #: gdk-pixbuf/io-pnm.c:770
-#, fuzzy
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "PNM લાવવા માટે મેમરી ફાળવી શકતુ નથી"
 
@@ -548,37 +545,30 @@ msgid "The Sun raster image format"
 msgstr "સન રાસ્ટર ચિત્ર બંધારણ"
 
 #: gdk-pixbuf/io-tga.c:159
-#, fuzzy
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "IO બફર સંરચના માટે મેમરી ફાળવી શકાતી નથી"
 
 #: gdk-pixbuf/io-tga.c:178
-#, fuzzy
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "IO બફર માહિતી માટે મેમરી ફાળવી શકાતી નથી"
 
 #: gdk-pixbuf/io-tga.c:189
-#, fuzzy
 msgid "Cannot realloc IOBuffer data"
 msgstr "IO બફર માહિતીને ફરીથી ફાળવી શકાઇ નહિ"
 
 #: gdk-pixbuf/io-tga.c:219
-#, fuzzy
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "કામપૂરતી IO બફર માહિતી ફાળવી શકાતી નથી"
 
 #: gdk-pixbuf/io-tga.c:353
-#, fuzzy
 msgid "Cannot allocate new pixbuf"
 msgstr "નવુ Pixbuf ફાળવી શકાતુ નથી"
 
 #: gdk-pixbuf/io-tga.c:692
-#, fuzzy
 msgid "Cannot allocate colormap structure"
 msgstr "રંગનક્શાની સંરચના ફાળવી શકાતુ નથી"
 
 #: gdk-pixbuf/io-tga.c:699
-#, fuzzy
 msgid "Cannot allocate colormap entries"
 msgstr "રંગનક્શાના પ્રવેશો ફાળવી શકાતા નથી"
 
@@ -587,7 +577,6 @@ msgid "Unexpected bitdepth for colormap entries"
 msgstr "રંગનક્શાના પ્રવેશો માટે અણધારી બીટની ઊંડાઈ"
 
 #: gdk-pixbuf/io-tga.c:739
-#, fuzzy
 msgid "Cannot allocate TGA header memory"
 msgstr "TGA હેડર મેમરી ફાળવી શકાતી નથી"
 
@@ -601,7 +590,6 @@ msgid "TGA image type not supported"
 msgstr "TGA ચિત્રના પ્રકાર માટે આધાર નથી"
 
 #: gdk-pixbuf/io-tga.c:861
-#, fuzzy
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "TGAના સંદર્ભની સંરચના માટે મેમરી ફાળવી શકાતી નથી"
 
@@ -711,12 +699,10 @@ msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM પાસે પ્રતિ પીક્સેલ અયોગ્ય શબ્દની સંખ્યા."
 
 #: gdk-pixbuf/io-xpm.c:1279
-#, fuzzy
 msgid "Cannot read XPM colormap"
 msgstr "XPM રંગનક્શો વાંચી શકતુ નથી."
 
 #: gdk-pixbuf/io-xpm.c:1317
-#, fuzzy
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "XPM ચિત્રને લાવવા માટે પૂરતી મેમરી ફાળવી શકાતી નથી."
 
@@ -733,44 +719,43 @@ msgid "License"
 msgstr ""
 
 #: gtk/gtkaboutdialog.c:210
-#, fuzzy
 msgid "The license of the program"
 msgstr "પ્રવેશના સમાવિષ્ટો"
 
 #. Add the credits button
 #: gtk/gtkaboutdialog.c:349
 msgid "_Credits"
-msgstr ""
+msgstr "યશ"
 
 #. Add the license button
 #: gtk/gtkaboutdialog.c:358
 msgid "_License"
-msgstr ""
+msgstr "લાયસન્સ"
 
 #: gtk/gtkaboutdialog.c:532
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "વિશે %s"
 
 #: gtk/gtkaboutdialog.c:1647
 msgid "Credits"
-msgstr ""
+msgstr "યશ"
 
 #: gtk/gtkaboutdialog.c:1670
 msgid "Written by"
-msgstr ""
+msgstr "લખાયેલ"
 
 #: gtk/gtkaboutdialog.c:1673
 msgid "Documented by"
-msgstr ""
+msgstr "દસ્તાવેજીત"
 
 #: gtk/gtkaboutdialog.c:1684
 msgid "Translated by"
-msgstr ""
+msgstr "અનુવાદિત"
 
 #: gtk/gtkaboutdialog.c:1688
 msgid "Artwork by"
-msgstr ""
+msgstr "કલાકામ"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -791,7 +776,7 @@ msgstr "કેલેન્ડર:MY"
 #.
 #: gtk/gtkcalendar.c:722
 msgid "calendar:week_start:0"
-msgstr "કેલેન્ડર: અઠવાડિયાની શરુઆત:૦"
+msgstr "કેલેન્ડર: અઠવાડિયાની શરુઆત:૧"
 
 #: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
 msgid "Pick a Color"
@@ -918,7 +903,6 @@ msgid "_Palette"
 msgstr "પેલેટ (_P)"
 
 #: gtk/gtkcolorsel.c:1987
-#, fuzzy
 msgid "Color Wheel"
 msgstr "પૈડંુ"
 
@@ -968,7 +952,7 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:776
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not change the current folder to %s:\n"
 "%s"
@@ -1014,7 +998,7 @@ msgstr "%s માટે બૂકમાર્ક ઉમેરી શકાતે
 
 #: gtk/gtkfilechooserdefault.c:2525
 msgid "Shortcuts"
-msgstr ""
+msgstr "ટૂંકા રસ્તા"
 
 #: gtk/gtkfilechooserdefault.c:2579
 msgid "Folder"
@@ -1030,7 +1014,7 @@ msgstr "કાઢી નાખો(_R)"
 
 #: gtk/gtkfilechooserdefault.c:2715
 msgid "Show _Hidden Files"
-msgstr ""
+msgstr "સંતાડેલ ફાઇલો બતાવો"
 
 #: gtk/gtkfilechooserdefault.c:2830 gtk/gtkfilesel.c:766
 msgid "Files"
@@ -1050,7 +1034,6 @@ msgstr "સુધારેલ"
 
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:2936
-#, fuzzy
 msgid "Create Fo_lder"
 msgstr "ફોલ્ડર બનાવો (_F)"
 
@@ -1064,22 +1047,18 @@ msgid "_Browse for other folders"
 msgstr "બીજા ફોલ્ડરો માટે શોધો (_B)"
 
 #: gtk/gtkfilechooserdefault.c:3327
-#, fuzzy
 msgid "Save in _folder:"
 msgstr "ફોલ્ડરમાં સંગ્રહ કરો: (_F)"
 
 #: gtk/gtkfilechooserdefault.c:3329
-#, fuzzy
 msgid "Create in _folder:"
 msgstr "ફોલ્ડર બનાવો (_F)"
 
 #: gtk/gtkfilechooserdefault.c:3973
-#, fuzzy
 msgid "Cannot change to folder because it is not local"
 msgstr "તમે સ્પષ્ટ કરેલ ફોલ્ડરમાં બદલી શકાતુ નથી કારણકે તે અયોગ્ય પથ છે."
 
 #: gtk/gtkfilechooserdefault.c:4111
-#, fuzzy
 msgid "Could not find the path"
 msgstr "બાકીનું સંગ્રહી શકાતુ નથી"
 
@@ -1133,7 +1112,7 @@ msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "તમે સ્પષ્ટ કરેલ ફોલ્ડરમાં બદલી શકાતુ નથી કારણકે તે અયોગ્ય પથ છે."
 
 #: gtk/gtkfilechooserdefault.c:5391
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not select %s:\n"
 "%s"
@@ -1146,7 +1125,6 @@ msgid "Open Location"
 msgstr "જગ્યા ખોલો"
 
 #: gtk/gtkfilechooserdefault.c:5437
-#, fuzzy
 msgid "Save in Location"
 msgstr "જગ્યા ખોલો"
 
@@ -1308,7 +1286,7 @@ msgid "_Selection: "
 msgstr "પસંદગી: (_S)"
 
 #: gtk/gtkfilesel.c:3139
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
@@ -1335,7 +1313,7 @@ msgstr "(ખાલી)"
 #: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemwin32.c:386
 #, c-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #: gtk/gtkfilesystemunix.c:426 gtk/gtkfilesystemunix.c:617
 #: gtk/gtkfilesystemwin32.c:393 gtk/gtkfilesystemwin32.c:1357
@@ -1357,16 +1335,17 @@ msgid "Filesystem"
 msgstr "ફાઈલસિસ્ટમ"
 
 #: gtk/gtkfilesystemunix.c:731
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "ફાઈલ '%s' માટેની જાણકારી મેળવી શકાતી નથી: %s"
+msgstr "ફાઈલ '%s' માટેની જાણકારી મેળવી શકાતી નથી"
 
 #: gtk/gtkfilesystemunix.c:826
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr ""
+msgstr "નામ \"%s\" યોગ્ય નથી, કારણ કે તે \"%s\" અક્ષર ધરાવે છે."
+"મહેરબાની કરી બીજું નામ વાપરો."
 
 #: gtk/gtkfilesystemunix.c:1434 gtk/gtkfilesystemwin32.c:923
 #, c-format
@@ -1374,9 +1353,9 @@ msgid "Bookmark saving failed (%s)"
 msgstr "બૂકમાર્કનો સંગ્રહ કરવાનુ નિષ્ફળ (%s)"
 
 #: gtk/gtkfilesystemunix.c:1730
-#, fuzzy, c-format
+#, c-format
 msgid "error getting information for '%s'"
-msgstr "'%s' માટે જાણકારી મેળવવામાં ભૂલ: %s"
+msgstr "'%s' માટે જાણકારી મેળવવામાં ભૂલ"
 
 #: gtk/gtkfilesystemwin32.c:1119
 msgid "This file system does not support icons for everything"
@@ -1606,7 +1585,7 @@ msgstr "પ્રશ્ર્ન"
 #.
 #: gtk/gtkstock.c:293
 msgid "_About"
-msgstr ""
+msgstr "વિશે"
 
 #: gtk/gtkstock.c:295
 msgid "_Apply"
@@ -1653,7 +1632,6 @@ msgid "_Execute"
 msgstr "ચલાવો(_E)"
 
 #: gtk/gtkstock.c:306
-#, fuzzy
 msgid "_Edit"
 msgstr "બદલી શકાય તેવુ"
 
@@ -1750,32 +1728,28 @@ msgid "_Right"
 msgstr "જમણે(_R)"
 
 #: gtk/gtkstock.c:331
-#, fuzzy
 msgid "_Next"
 msgstr "નવુ(_N)"
 
 #: gtk/gtkstock.c:332
-#, fuzzy
 msgid "P_ause"
 msgstr "ચોટાડો(_P)"
 
 #: gtk/gtkstock.c:333
 msgid "_Play"
-msgstr ""
+msgstr "ચલાવો"
 
 #: gtk/gtkstock.c:334
 msgid "Pre_vious"
-msgstr ""
+msgstr "પાછળનું"
 
 #: gtk/gtkstock.c:335
-#, fuzzy
 msgid "_Record"
-msgstr "લાલ(_R):"
+msgstr "રેકોર્ડ(_R):"
 
 #: gtk/gtkstock.c:336
-#, fuzzy
 msgid "R_ewind"
-msgstr "શોધો(_F)"
+msgstr "ફરી ચલાવો(_F)"
 
 #: gtk/gtkstock.c:337 gtk/gtkstock.c:360
 msgid "_Stop"
@@ -1927,7 +1901,7 @@ msgstr "RLO જમણેથી ડાબે ઉપર ચઢવુ(_v)"
 
 #: gtk/gtktextutil.c:53
 msgid "PDF _Pop directional formatting"
-msgstr "PDF _Pop directional formatting(_P)"
+msgstr "PDF _Pop દિશાકીય ફોરમેટિંગ(_P)"
 
 #: gtk/gtktextutil.c:54
 msgid "ZWS _Zero width space"
@@ -2028,13 +2002,13 @@ msgstr "ફાઈલ '%s' માટેની જાણકારી મેળવ�
 #~ msgstr "નિરાધારીત TIFF ચલ"
 
 #~ msgid "Shift"
-#~ msgstr "Shift"
+#~ msgstr "શીફ્ટ"
 
 #~ msgid "Ctrl"
-#~ msgstr "Ctrl"
+#~ msgstr "કંટ્રોલ"
 
 #~ msgid "Alt"
-#~ msgstr "Alt"
+#~ msgstr "અલ્ટર"
 
 #~ msgid "Could not set current folder: %s"
 #~ msgstr "વર્તમાન ફોલ્ડરને સુયોજિત કરી શકાતુ નથી: %s"
@@ -4608,34 +4582,34 @@ msgstr "ફાઈલ '%s' માટેની જાણકારી મેળવ�
 #~ msgstr "ઈનપુટ પધ્ધતિની સ્થિતિ દર્શાવતી પટ્ટી કેવી રીતે દોરવી"
 
 #~ msgid "GIF image contained a frame with height or width 0."
-#~ msgstr "GIF इमेज में शून्य ऊंचाई या चौड़ाई की एक फ्रेम शामिल है"
+#~ msgstr "GIF ચિત્રમાં ૦ ઊંચાઇ અથવા પહોળાઇ ધરાવતું ચોકઠું સમાવેશ છે."
 
 #~ msgid "The leftmost column of the child"
-#~ msgstr "विन्डो की शीर्षक"
+#~ msgstr "વિન્ડોનું શીર્ષક"
 
 #~ msgid "The rightmost column of the child"
-#~ msgstr "विन्डो की प्रारंभिक स्थिति"
+#~ msgstr "વિન્ડોની આરંભિક સ્થિતિ"
 
 #~ msgid "The uppermost row of the child"
-#~ msgstr "टेबल में पंक्तियों की संख्या"
+#~ msgstr "કોષ્ટકમાં સૌથી ઉપરની હરોળ"
 
 #~ msgid "The lowest row of the child"
-#~ msgstr "विन्डो की शीर्षक"
+#~ msgstr "કોષ્ટકમાં સૌથી નીચેની હરોળ"
 
 #~ msgid "Don't know how to load the animation in file '%s'"
-#~ msgstr "यह ग्यात नहीं है कि पाइल %s में एनीमेशन कैसे लोड करें"
+#~ msgstr "ફાઇલ '%s' માં એનિમેશન કેવી રીતે લાવવું તે ખબર નથી"
 
 #~ msgid "Don't know how to load the image in file '%s'"
-#~ msgstr "यह ग्यात नहीं है कि फाइल %s में इमेज कैसे लोड करें"
+#~ msgstr "ફાઇલ '%s' માં ચિત્ર કેવી રીતે લાવવું તે ખબર નથી"
 
 #~ msgid "Failure reading ICO: %s"
-#~ msgstr "ICO %s को पढ़ने में असफल"
+#~ msgstr "ICO %s ને વાંચવામાં અસફળ"
 
 #~ msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr "ICO फाइल का कुछ डाटा नहीं मिल रहा है (शायद अब यह इस फाइल में नहीं है)"
+#~ msgstr "ICO ફાઇલને કોઇ માહિતી મળતી નથી."
 
 #~ msgid "Insufficient memory to load TGA image"
-#~ msgstr "TGA इमेज को लोड करने के लिए अपर्याप्त मेमोरी"
+#~ msgstr "TGA ચિત્ર લાવવામાટે અપૂરતી મેમરી"
 
 #~ msgid "Language engine code to use for rendering the text"
-#~ msgstr "पाठ्य की रैण्डरिंग के लिए प्रयुक्त भाषा इंजिन का कोड"
+#~ msgstr "લખાણ રેન્ડર કરવામાટેનો ભાષાનો કોડ"
