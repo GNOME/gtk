@@ -177,8 +177,8 @@ gtk_tree_item_subtree_button_click (GtkWidget *widget)
 {
   GtkTreeItem* item;
   
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_EVENT_BOX (widget));
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_EVENT_BOX (widget), FALSE);
   
   item = (GtkTreeItem*) gtk_object_get_user_data (GTK_OBJECT (widget));
   if (!GTK_WIDGET_IS_SENSITIVE (item))

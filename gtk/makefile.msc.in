@@ -4,7 +4,7 @@
 ## There is no install target, you have to decide where and 
 ## how to install for yourself.
 
-TOP = ../..
+TOP = ..\..
 !INCLUDE $(TOP)/build/win32/make.msc
 
 ################################################################
@@ -116,6 +116,7 @@ gtk_OBJECTS = 					\
 	gtklayout.obj				\
 	gtklist.obj				\
 	gtklistitem.obj				\
+	gtkliststore.obj				\
 	gtkmain.obj				\
 	gtkmenu.obj				\
 	gtkmenubar.obj				\
@@ -147,6 +148,7 @@ gtk_OBJECTS = 					\
 	gtkselection.obj			\
 	gtkseparator.obj			\
 	gtkseparatormenuitem.obj \
+	gtksettings.obj \
 	gtksignal.obj				\
 	gtksocket.obj				\
 	gtkspinbutton.obj			\
@@ -178,9 +180,10 @@ gtk_OBJECTS = 					\
 	gtktreednd.obj				\
 	gtktreeitem.obj				\
 	gtktreemodel.obj			\
-	gtktreemodelsimple.obj			\
+#	gtktreemodelsimple.obj			\
 	gtktreemodelsort.obj			\
 	gtktreeselection.obj			\
+	gtktreesortable.obj \
 	gtktreestore.obj			\
 	gtktreeview.obj			\
 	gtktreeviewcolumn.obj			\
@@ -351,7 +354,6 @@ gdk_headers =			\
 	..\gdk\gdkevents.h	\
 	..\gdk\gdkfont.h	\
 	..\gdk\gdkgc.h		\
-	..\gdk\gdkim.h		\
 	..\gdk\gdkimage.h	\
 	..\gdk\gdkinput.h	\
 	..\gdk\gdkpixmap.h	\
@@ -396,10 +398,13 @@ gtktypebuiltins_evals.c: makeenums.pl gtk.defs
 	$(PERL) makeenums.pl arrays $(gtk_public_h_sources) $(gdk_headers) >gtktypebuiltins_evals.c
 
 gtkmarshal.h : gtkmarshal.list
-	glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --header >gtkmarshal.h
+	$(GLIB)\gobject\glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --header >gtkmarshal.h
 
 gtkmarshal.c : gtkmarshal.list
-	glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --body >gtkmarshal.c
+	$(GLIB)\gobject\glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --body >gtkmarshal.c
+
+gtksignal.obj : gtksignal.c gtkmarshal.c gtkmarshal.h
+	$(CC) $(CFLAGS) -GD -c -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" gtksignal.c
 
 #
 # Linking:

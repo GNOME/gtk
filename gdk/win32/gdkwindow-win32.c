@@ -832,7 +832,7 @@ gdk_window_show (GdkWindow *window)
 	    }
           else
             {
-	      GdkWindow *parent = private->parent;
+	      GdkWindow *parent = GDK_WINDOW (private->parent);
 
 	      ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
 	      ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
@@ -1705,6 +1705,39 @@ gdk_window_get_root_origin (GdkWindow *window,
 			   pt.x, pt.y));
 }
 
+void
+gdk_window_get_frame_extents (GdkWindow    *window,
+                              GdkRectangle *rect)
+{
+  GdkWindowObject *private;
+  HWND hwnd;
+  RECT r;
+
+  rect->x = 0;
+  rect->y = 0;
+  rect->width = 1;
+  rect->height = 1;
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  hwnd = GDK_WINDOW_HWND (window);
+  /* find the frame window */
+  while (HWND_DESKTOP != GetParent (hwnd))
+    {
+      hwnd = GetParent (hwnd);
+      g_return_if_fail (NULL != hwnd);
+    }
+
+  if (GetWindowRect (hwnd, &r))
+    WIN32_API_FAILED ("GetWindowRect");
+
+  rect->x = r.left;
+  rect->y = r.right;
+  rect->width = r.right - r.left;
+  rect->height = r.bottom - r.top;
+}
+
 GdkWindow*
 gdk_window_get_pointer (GdkWindow       *window,
 			gint            *x,
@@ -2441,4 +2474,35 @@ gdk_window_shape_combine_region (GdkWindow *window,
     return;
 
   /* XXX: even on X implemented conditional ... */  
+}
+
+void
+gdk_window_begin_resize_drag (GdkWindow     *window,
+                              GdkWindowEdge  edge,
+                              gint           button,
+                              gint           root_x,
+                              gint           root_y,
+                              guint32        timestamp)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  /* XXX: isn't all this default on win32 ... */  
+}
+
+void
+gdk_window_begin_move_drag (GdkWindow *window,
+                            gint       button,
+                            gint       root_x,
+                            gint       root_y,
+                            guint32    timestamp)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  /* XXX: isn't all this default on win32 ... */  
 }

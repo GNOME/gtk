@@ -220,9 +220,9 @@ EXPORTS
 	gtk_button_get_type
 	gtk_button_leave
 	gtk_button_new
-	gtk_button_new_accel
-	gtk_button_new_stock
+	gtk_button_new_from_stock
 	gtk_button_new_with_label
+	gtk_button_new_with_mnemonic
 	gtk_button_pressed
 	gtk_button_released
 	gtk_button_set_relief
@@ -250,6 +250,7 @@ EXPORTS
 	gtk_check_button_get_type
 	gtk_check_button_new
 	gtk_check_button_new_with_label
+	gtk_check_button_new_with_mnemonic
 	gtk_check_menu_item_get_type
 	gtk_check_menu_item_new
 	gtk_check_menu_item_new_with_label
@@ -376,6 +377,7 @@ EXPORTS
 	gtk_container_remove
 	gtk_container_resize_children
 	gtk_container_set_border_width
+	gtk_container_set_focus_chain
 	gtk_container_set_focus_child
 	gtk_container_set_focus_hadjustment
 	gtk_container_set_focus_vadjustment
@@ -608,6 +610,7 @@ EXPORTS
 	gtk_image_get_storage_type
 	gtk_image_get_type
 	gtk_image_menu_item_new
+	gtk_image_menu_item_new_from_stock
 	gtk_image_new
 	gtk_image_new_from_file
 	gtk_image_new_from_icon_set
@@ -671,13 +674,15 @@ EXPORTS
 	gtk_key_snooper_install
 	gtk_key_snooper_remove
 	gtk_label_get
+	gtk_label_get_mnemonic_keyval
 	gtk_label_get_type
 	gtk_label_new
+	gtk_label_new_with_mnemonic
 	gtk_label_parse_uline
 	gtk_label_set_justify
 	gtk_label_set_line_wrap
 	gtk_label_set_markup
-	gtk_label_set_markup_with_accel
+	gtk_label_set_markup_with_mnemonic
 	gtk_label_set_pattern
 	gtk_label_set_selectable
 	gtk_label_set_selectable
@@ -736,7 +741,6 @@ EXPORTS
 	gtk_marshal_BOOLEAN__OBJECT_STRING_STRING_BOXED
 	gtk_marshal_BOOLEAN__VOID
 	gtk_marshal_ENUM__ENUM
-	gtk_marshal_INT__OBJECT_BOXED_BOXED
 	gtk_marshal_INT__POINTER
 	gtk_marshal_VOID__BOOLEAN
 	gtk_marshal_VOID__BOXED
@@ -775,7 +779,6 @@ EXPORTS
 	gtk_menu_bar_prepend
 	gtk_menu_bar_set_shadow_type
 	gtk_menu_detach
-	gtk_menu_ensure_uline_accel_group
 	gtk_menu_factory_add_entries
 	gtk_menu_factory_add_subfactory
 	gtk_menu_factory_destroy
@@ -788,7 +791,6 @@ EXPORTS
 	gtk_menu_get_active
 	gtk_menu_get_attach_widget
 	gtk_menu_get_type
-	gtk_menu_get_uline_accel_group
 	gtk_menu_item_activate
 	gtk_menu_item_configure
 	gtk_menu_item_deselect
@@ -1094,6 +1096,7 @@ EXPORTS
 	gtk_spin_button_get_value_as_float
 	gtk_spin_button_get_value_as_int
 	gtk_spin_button_new
+	gtk_spin_button_new_with_range
 	gtk_spin_button_set_adjustment
 	gtk_spin_button_set_digits
 	gtk_spin_button_set_numeric
@@ -1280,6 +1283,7 @@ EXPORTS
 	gtk_toolbar_insert_element
 	gtk_toolbar_insert_item
 	gtk_toolbar_insert_space
+	gtk_toolbar_insert_stock
 	gtk_toolbar_insert_widget
 	gtk_toolbar_new
 	gtk_toolbar_prepend_element
@@ -1287,6 +1291,7 @@ EXPORTS
 	gtk_toolbar_prepend_space
 	gtk_toolbar_prepend_widget
 	gtk_toolbar_set_button_relief
+	gtk_toolbar_set_icon_size
 	gtk_toolbar_set_orientation
 	gtk_toolbar_set_space_size
 	gtk_toolbar_set_space_style
@@ -1360,7 +1365,6 @@ EXPORTS
 	gtk_tree_store_prepend
 	gtk_tree_store_remove
 	gtk_tree_store_set
-	gtk_tree_store_set_cell
 	gtk_tree_store_set_column_type
 	gtk_tree_store_set_n_columns
 	gtk_tree_store_set_valist
@@ -1553,7 +1557,7 @@ EXPORTS
 	gtk_window_add_accel_group
 	gtk_window_add_embedded_xid
 	gtk_window_deiconify
-	gtk_window_get_default_accel_group
+	gtk_window_get_location
 	gtk_window_get_type
 	gtk_window_iconify
 	gtk_window_maximize
@@ -1566,12 +1570,16 @@ EXPORTS
 	gtk_window_set_default_size
 	gtk_window_set_focus
 	gtk_window_set_geometry_hints
+	gtk_window_set_gravity
+	gtk_window_set_location
 	gtk_window_set_modal
 	gtk_window_set_policy
 	gtk_window_set_position
+	gtk_window_set_size
 	gtk_window_set_title
 	gtk_window_set_transient_for
 	gtk_window_set_wmclass
 	gtk_window_stick
 	gtk_window_unmaximize
 	gtk_window_unstick
+

@@ -1,0 +1,89 @@
+TOP = ..\..
+PRJ_TOP = ..
+PACKAGE = gdk_pixbuf
+PKG_VER = $(GDK_PIXBUF_VER)
+
+!INCLUDE $(TOP)/build/win32/make.msc
+
+GDK_PIXBUF_VER = 1.3
+
+# force inclusion of gdk-pixbuf-io-include.h
+# to get _working_ include modules ...
+
+PKG_CFLAGS = -I. -I.. $(GLIB_CFLAGS) \
+	-FIgdk-pixbuf-io-include.h \
+	$(JPEG_CFLAGS) $(PNG_CFLAGS) $(TIFF_CFLAGS) $(INTL_CFLAGS) \
+	-UUSE_GMODULE # use built-in
+#	-DUSE_GMODULE -DPIXBUF_LIBDIR=\".\"
+
+
+PKG_LINK = $(GLIB_LIBS) \
+	$(JPEG_LIBS) $(PNG_LIBS) $(TIFF_LIBS) $(INTL_LIBS) \
+	pixops\pixops.lib
+ 
+OBJECTS = \
+	gdk-pixbuf-animation.obj \
+	gdk-pixbuf-data.obj \
+	gdk-pixbuf-io.obj \
+	gdk-pixbuf-loader.obj \
+	gdk-pixbuf-scale.obj \
+	gdk-pixbuf-util.obj \
+	gdk-pixbuf.obj \
+	io-bmp.obj \
+	io-wbmp.obj \
+	io-gif.obj \
+	io-ico.obj \
+	io-png.obj \
+	io-pnm.obj \
+	io-ras.obj \
+	io-tiff.obj \
+	io-xpm.obj \
+	io-jpeg.obj \
+
+gdk-pixbuf-marshal.h: gdk-pixbuf-marshal.list
+	..\..\glib\gobject\glib-genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >gdk-pixbuf-marshal.h
+
+gdk-pixbuf-marshal.c: gdk-pixbuf-marshal.list
+	..\..\glib\gobject\glib-genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >gdk-pixbuf-marshal.c
+
+## common stuff
+
+# cl -? describes the options
+CC = cl -G5 -GF $(OPTIMIZE) -W3 -nologo
+
+# No general LDFLAGS needed
+LDFLAGS = /link $(LINKDEBUG)
+INSTALL = copy
+
+CFLAGS = -I. -DHAVE_CONFIG_H
+
+## targets
+all : \
+	$(PRJ_TOP)\config.h \
+	gdk-pixbuf-marshal.c \
+	gdk-pixbuf-marshal.h \
+	$(PACKAGE)-$(PKG_VER).dll \
+	make-inline-pixbuf.exe \
+	test-gdk-pixbuf.exe
+
+$(PACKAGE).lib : $(OBJECTS)
+	lib /out:$(PACKAGE).lib $(OBJECTS)
+
+$(PACKAGE)-$(PKG_VER).dll : $(OBJECTS) $(PACKAGE).def
+	$(CC) $(CFLAGS) -LD -Fe$(PACKAGE)-$(PKG_VER).dll $(OBJECTS) $(PKG_LINK) user32.lib advapi32.lib wsock32.lib $(LDFLAGS) /def:$(PACKAGE).def
+
+make-inline-pixbuf.exe : make-inline-pixbuf.c
+	$(CC) $(PKG_CFLAGS) -Femake-inline-pixbuf.exe make-inline-pixbuf.c $(PKG_LINK) $(PACKAGE)-$(PKG_VER).lib
+
+test-gdk-pixbuf.exe : test-gdk-pixbuf.c
+	$(CC) $(PKG_CFLAGS) -Fetest-gdk-pixbuf.exe test-gdk-pixbuf.c $(PKG_LINK) $(PACKAGE)-$(PKG_VER).lib
+
+$(PRJ_TOP)\config.h: $(PRJ_TOP)\config.h.win32
+	copy $(PRJ_TOP)\config.h.win32 $(PRJ_TOP)\config.h
+
+.c.obj :
+	$(CC) $(CFLAGS) -GD -c $(PKG_CFLAGS) $<
+
+clean::
+	del config.h
+

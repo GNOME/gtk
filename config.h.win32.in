@@ -193,8 +193,10 @@
 */
 /* #define HAVE_DIMM_H 1 */
 
+#ifndef _MSC_VER
 #define USE_GMODULE 1
 #define USE_MMX 1
+#endif
 
 /* #undef HAVE_SIGSETJMP */
 

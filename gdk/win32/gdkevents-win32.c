@@ -2512,6 +2512,14 @@ gdk_event_translate (GdkEvent *event,
       if (GDK_WINDOW_OBJECT (window)->input_only)
 	break;
 
+      if (GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->position_info.no_bg)
+	{
+	  /* improves scolling effect, e.g. main buttons of testgtk */
+	  *ret_val_flagp = TRUE;
+	  *ret_valp = 1;
+	  break;
+	}
+
       colormap = GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap;
       if (colormap)
 	colormap_private = GDK_COLORMAP_PRIVATE_DATA (colormap);

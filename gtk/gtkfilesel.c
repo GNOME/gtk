@@ -2417,7 +2417,6 @@ open_new_dir (gchar       *dir_name,
 	  g_warning (_("The filename %s couldn't be converted to UTF-8. Try setting the environment variable G_BROKEN_FILENAMES."), dirent_ptr->d_name);
 	  continue;
 	}
-      n_entries++;
 
       g_string_assign (path, sys_dir_name);
       if (path->str[path->len-1] != G_DIR_SEPARATOR)
@@ -2438,6 +2437,8 @@ open_new_dir (gchar       *dir_name,
 	}
       else
 	sent->entries[n_entries].is_dir = 1;
+
+      n_entries++;
     }
   sent->entry_count = n_entries;
   

@@ -808,8 +808,12 @@ gdk_window_tmp_unset_bg (GdkWindow *window)
 
   impl->position_info.no_bg = TRUE;
 
+  /*
+   * The X version sets background = None to avoid updateing for a moment.
+   * Not sure if this could really emulate it.
+   */
   if (obj->bg_pixmap != GDK_NO_BG)
-    /* ??? */;
+    /* handled in WM_ERASEBKGRND proceesing */;
 }
 
 static void

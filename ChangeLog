@@ -1,3 +1,42 @@
+2001-03-31  Hans Breuer  <hans@breuer.org>
+
+	* config.h.win32.in : disable USE_MMX for msvc build cause
+	the assembler doesn't fit and is out of my scope. Disable
+	USE_GMODULE for msvc build as wel. The right way to share
+	binaries on win32 would be to use libtiff.dll etc. To reduce
+	installation hassles IMO it's better to include all fileformats
+	builtin to gdk-pixbuf
+
+	* gdk-pixbuf/makefile.msc : new file
+
+	* gdk/gdk.def : updated
+
+	* gdk/win32/gdkevents-win32.c : don't erase the background if
+	.no_bg is set. It improves the scrolling (e.g. of testgtk main
+	buttons
+	* gdk/win32/gdkgeometry-win32.c : added comment about the above
+
+	* gdk/win32/gdkwindow-win32.c : added three new functions like
+	the X version. Only one is implemented, because the other two
+	"gdk_window_begin_(resize|move)_drag" got no docs and appear to
+	be default behaviour on win32 anyway ...
+
+	* gtk/gtk.def : updated
+
+	* gtk/makefile.msc.in : update for new files, use glib-genmarshal
+	from where it was built and add an additional rule to automagically
+	build gtkmarshal.[hc]
+
+	* gtk/gtkfilesel.c (open_new_dir) : don't increase n_entries
+	before array access for the current entry isn't finished
+
+	* gtk/gtktreeitem.c (gtk_tree_item_subtree_button_click) :
+	use g_return_val_if_fail
+
+	* gtk/testgtk.c (window_controls) : don't use the *wrong* size
+	for the static array, but let the compiler calculate it. It
+	makes me wonder if gcc isn't capable to catch bugs like this ...
+
 2001-03-31  James Henstridge  <james@daa.com.au>
 
 	* gtk/gtkwidget.c (gtk_widget_size_adjust): fix use of magic

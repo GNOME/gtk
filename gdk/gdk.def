@@ -376,3 +376,7 @@ EXPORTS
 	gdk_window_stick
 	gdk_window_unmaximize
 	gdk_window_unstick
+gdk_window_begin_move_drag
+gdk_window_begin_resize_drag
+gdk_window_constrain_size
+gdk_window_get_frame_extents
