@@ -260,8 +260,9 @@ gtk_paned_expose (GtkWidget      *widget,
 	    gtk_widget_event (paned->child2, (GdkEvent*) &child_event);
 
 	  /* redraw the groove if necessary */
-	  child_event.area = paned->groove_rectangle;
-	  if (gtk_widget_intersect (widget, &event->area, &child_event.area))
+	  if (gdk_rectangle_intersect (&paned->groove_rectangle, 
+				       &event->area, 
+				       &child_event.area))
 	    gtk_widget_draw (widget, &child_event.area);
 	}
     }

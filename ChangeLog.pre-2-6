@@ -1,3 +1,7 @@
+Sun Mar 22 21:00:43 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkpaned.c: Fix so children don't get bogus draws.
+
 Mon Mar 23 01:08:30 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkclist.c (gtk_clist_class_init): leave container_class->add and
