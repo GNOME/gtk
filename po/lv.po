@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-08-22 05:09+0200\n"
-"PO-Revision-Date: 2002-08-31 08:37+0200\n"
-"Last-Translator: Artis Trops <hornet@navigators.lv>\n"
+"POT-Creation-Date: 2002-09-30 05:05+0200\n"
+"PO-Revision-Date: 2002-10-01 00:10+0200\n"
+"Last-Translator: Artis Trops <hornet@navigator.lv>\n"
 "Language-Team: Latvian <ll10nt@os.lv>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -240,31 +240,37 @@ msgstr "Kompresētas ikonas nav atbalstītas"
 msgid "Unsupported icon type"
 msgstr "Neatbalstīts ikonu tips"
 
-#: gdk-pixbuf/io-ico.c:499
+#: gdk-pixbuf/io-ico.c:500
 msgid "Not enough memory to load ICO file"
 msgstr "Nepietiekami atmiņas, lai ielādētu ICO failu"
 
-#: gdk-pixbuf/io-jpeg.c:126
+#: gdk-pixbuf/io-jpeg.c:111
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Kļūda interpretējot JPEG attēla failu (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:307
+#: gdk-pixbuf/io-jpeg.c:346
 msgid "Insufficient memory to load image, try exiting some applications to free memory"
 msgstr "Pietrūkst atmiņas, lai ielādētu attēlu, pamēģini iziet no dažām aplikācijām, lai atbrīvotu atmiņu"
 
-#: gdk-pixbuf/io-jpeg.c:417
-#: gdk-pixbuf/io-jpeg.c:600
-#: gdk-pixbuf/io-jpeg.c:767
+#: gdk-pixbuf/io-jpeg.c:380
+#: gdk-pixbuf/io-jpeg.c:730
+#, c-format
+msgid "Unsupported JPEG color space (%s)"
+msgstr "Neatbalstīta JPEG krāsu telpa (%s)"
+
+#: gdk-pixbuf/io-jpeg.c:476
+#: gdk-pixbuf/io-jpeg.c:668
+#: gdk-pixbuf/io-jpeg.c:844
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Nevarēju piešķirt atmiņu, lai ielādētu JPEG failu"
 
-#: gdk-pixbuf/io-jpeg.c:721
+#: gdk-pixbuf/io-jpeg.c:798
 #, c-format
 msgid "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
 msgstr "JPEG kvalitātei jābūt apzīmētai ar vērtību no 0 līdz 100: vērtība '%s' nevar tikt parsēta."
 
-#: gdk-pixbuf/io-jpeg.c:736
+#: gdk-pixbuf/io-jpeg.c:813
 #, c-format
 msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG kvalitātei jābūt apzīmētai ar vērtību no 0 līdz 100: vērtība '%d' nav atļauta."
@@ -1732,68 +1738,68 @@ msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Vai izvēlēties ieraksta saturu, kad tas tiek fokusēts."
 
 #: gtk/gtkentry.c:3877
-#: gtk/gtklabel.c:3177
+#: gtk/gtklabel.c:3179
 msgid "Select All"
 msgstr "Izvēlēties Visu"
 
 #: gtk/gtkentry.c:3887
-#: gtk/gtklabel.c:3187
+#: gtk/gtklabel.c:3189
 msgid "Input Methods"
 msgstr "Ievades Metodes"
 
 #: gtk/gtkentry.c:3897
-#: gtk/gtktextview.c:6425
+#: gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
 msgstr "_Ievietot Unicdoe kontroles rakstzīmi"
 
-#: gtk/gtkfilesel.c:536
-#: gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:513
+#: gtk/gtkimage.c:163
 msgid "Filename"
 msgstr "Faila nosaukums"
 
-#: gtk/gtkfilesel.c:537
+#: gtk/gtkfilesel.c:514
 msgid "The currently selected filename."
 msgstr "Pašreiz izvēlētais faila nosaukums."
 
-#: gtk/gtkfilesel.c:543
+#: gtk/gtkfilesel.c:520
 msgid "Show file operations"
 msgstr "Parādīt operācijas ar failiem"
 
-#: gtk/gtkfilesel.c:544
+#: gtk/gtkfilesel.c:521
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr "Vai pogas failu izveidošanai/manipulācijai būtu jāparāda."
 
-#: gtk/gtkfilesel.c:551
+#: gtk/gtkfilesel.c:528
 msgid "Select multiple"
 msgstr "Izvēlēties vairākus"
 
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:529
 msgid "Whether to allow multiple files to be selected."
 msgstr "Vai ļaut izvēlēties vairākus failus."
 
-#: gtk/gtkfilesel.c:707
+#: gtk/gtkfilesel.c:684
 msgid "Folders"
 msgstr "Mapes"
 
-#: gtk/gtkfilesel.c:711
+#: gtk/gtkfilesel.c:688
 msgid "Fol_ders"
 msgstr "Ma_pes"
 
-#: gtk/gtkfilesel.c:742
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "Faili"
 
-#: gtk/gtkfilesel.c:746
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "_Faili"
 
-#: gtk/gtkfilesel.c:822
-#: gtk/gtkfilesel.c:2152
+#: gtk/gtkfilesel.c:799
+#: gtk/gtkfilesel.c:2138
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Mape neaizsniedzama: %s"
 
-#: gtk/gtkfilesel.c:953
+#: gtk/gtkfilesel.c:930
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be available to this program.\n"
@@ -1802,24 +1808,24 @@ msgstr ""
 "Fails \"%s\" atrodas uz citas mašīnas (saukta %s) un varētu būt nepieejams šai programmai.\n"
 "Vai jūs esat pārliecināts, ka vēlaties izvēlēties to?"
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1063
 msgid "_New Folder"
 msgstr "_Jauna Mape"
 
-#: gtk/gtkfilesel.c:1097
+#: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
 msgstr "Dzēs_t Failu"
 
-#: gtk/gtkfilesel.c:1108
+#: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
 msgstr "_Pārsaukt Failu"
 
-#: gtk/gtkfilesel.c:1386
+#: gtk/gtkfilesel.c:1363
 #, c-format
 msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Mapes nosaukums \"%s\" satur simbolus, kas nav atļauti failu nosaukumos"
 
-#: gtk/gtkfilesel.c:1388
+#: gtk/gtkfilesel.c:1365
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1828,12 +1834,12 @@ msgstr ""
 "Kļūda veidojot mapi \"%s\" : %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1389
-#: gtk/gtkfilesel.c:1625
+#: gtk/gtkfilesel.c:1366
+#: gtk/gtkfilesel.c:1602
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Jūs, iespējams, izmantojāt neatļautus simbolus failu nosaukumos."
 
-#: gtk/gtkfilesel.c:1397
+#: gtk/gtkfilesel.c:1374
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1842,24 +1848,24 @@ msgstr ""
 "Kļūda veidojot mapi \"%s\": %s\n"
 ""
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1408
 msgid "New Folder"
 msgstr "Jauna Mape"
 
-#: gtk/gtkfilesel.c:1446
+#: gtk/gtkfilesel.c:1423
 msgid "_Folder name:"
 msgstr "_Mapes nosaukums:"
 
-#: gtk/gtkfilesel.c:1472
+#: gtk/gtkfilesel.c:1449
 msgid "Create"
 msgstr "Izveidot"
 
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1490
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Faila nosaukums \"%s\" satur simbolus, kas nav atļauti failu nosaukumos"
 
-#: gtk/gtkfilesel.c:1516
+#: gtk/gtkfilesel.c:1493
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1868,32 +1874,32 @@ msgstr ""
 "Kļūda dzēšot failu \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1518
-#: gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:1495
+#: gtk/gtkfilesel.c:1616
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Tas, iespējams, satur simbolus, kas nav atļauti failu nosaukumos."
 
-#: gtk/gtkfilesel.c:1527
+#: gtk/gtkfilesel.c:1504
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Kļūda dzēšot failu \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1547
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Patiešām dzēst failu \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1575
+#: gtk/gtkfilesel.c:1552
 msgid "Delete File"
 msgstr "Dzēst Failu"
 
-#: gtk/gtkfilesel.c:1621
-#: gtk/gtkfilesel.c:1635
+#: gtk/gtkfilesel.c:1598
+#: gtk/gtkfilesel.c:1612
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Faila nosaukums \"%s\" satur simbolus, kas nav atļauti failu nosaukumos"
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1600
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1902,7 +1908,7 @@ msgstr ""
 "Kļūda pārsaucot failu \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1637
+#: gtk/gtkfilesel.c:1614
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1911,42 +1917,42 @@ msgstr ""
 "Kļūda pārsaucot failu \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1647
+#: gtk/gtkfilesel.c:1624
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Kļūda pārsaucot failu \"%s\" uz \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1694
+#: gtk/gtkfilesel.c:1671
 msgid "Rename File"
 msgstr "Pārsaukt Failu"
 
-#: gtk/gtkfilesel.c:1709
+#: gtk/gtkfilesel.c:1686
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Pārsaukt failu \"%s\" par:"
 
-#: gtk/gtkfilesel.c:1740
+#: gtk/gtkfilesel.c:1717
 msgid "Rename"
 msgstr "Pārsaukt"
 
-#: gtk/gtkfilesel.c:2131
+#: gtk/gtkfilesel.c:2117
 msgid "Selection: "
 msgstr "Izvēle: "
 
-#: gtk/gtkfilesel.c:3011
+#: gtk/gtkfilesel.c:3004
 #, c-format
 msgid "The filename \"%s\" couldn't be converted to UTF-8 (try setting the environment variable G_BROKEN_FILENAMES): %s"
 msgstr "Faila nosaukums \"%s\" nevarēja tikt pārveidots uz UTF-8 (izmēģiniet uzstādīt vides mainīgo G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3014
+#: gtk/gtkfilesel.c:3007
 msgid "Invalid Utf-8"
 msgstr "Nepareizs Utf-8"
 
-#: gtk/gtkfilesel.c:3880
+#: gtk/gtkfilesel.c:3873
 msgid "Name too long"
 msgstr "Nosaukums par garu"
 
-#: gtk/gtkfilesel.c:3882
+#: gtk/gtkfilesel.c:3875
 msgid "Couldn't convert filename"
 msgstr "Nevarēju pārveidot faila nosaukumu"
 
@@ -2102,79 +2108,79 @@ msgstr "Rokturkastes puse, kas nostādīta rindā ar noenkurošanās punktu doka
 msgid "Error loading icon: %s"
 msgstr "Kļūda ielādējot ikonu: %s"
 
-#: gtk/gtkimage.c:129
+#: gtk/gtkimage.c:131
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:130
+#: gtk/gtkimage.c:132
 msgid "A GdkPixbuf to display."
 msgstr "GdkPixbuf, ko parādīt."
 
-#: gtk/gtkimage.c:137
+#: gtk/gtkimage.c:139
 msgid "Pixmap"
 msgstr "Pikseļkarte"
 
-#: gtk/gtkimage.c:138
+#: gtk/gtkimage.c:140
 msgid "A GdkPixmap to display."
 msgstr "Pikseļkarte, ko parādīt (GdkPixmap)."
 
-#: gtk/gtkimage.c:145
+#: gtk/gtkimage.c:147
 msgid "Image"
 msgstr "Attēls"
 
-#: gtk/gtkimage.c:146
+#: gtk/gtkimage.c:148
 msgid "A GdkImage to display."
 msgstr "Attēls, ko parādīt (GdkImage)."
 
-#: gtk/gtkimage.c:153
+#: gtk/gtkimage.c:155
 msgid "Mask"
 msgstr "Maska"
 
-#: gtk/gtkimage.c:154
+#: gtk/gtkimage.c:156
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Maskas bitkarte, ko izmantot ar GdkImage vai GdkPixmap"
 
-#: gtk/gtkimage.c:162
+#: gtk/gtkimage.c:164
 msgid "Filename to load and display."
 msgstr "Faila nosaukums, kuru ielādēt un attēlot."
 
-#: gtk/gtkimage.c:170
+#: gtk/gtkimage.c:172
 msgid "Stock ID"
 msgstr "Krājuma ID"
 
-#: gtk/gtkimage.c:171
+#: gtk/gtkimage.c:173
 msgid "Stock ID for a stock image to display."
 msgstr "Skrājuma ID, ko parādīt krājumā esošajam attēlam."
 
-#: gtk/gtkimage.c:178
+#: gtk/gtkimage.c:180
 msgid "Icon set"
 msgstr "Ikonu kopa"
 
-#: gtk/gtkimage.c:179
+#: gtk/gtkimage.c:181
 msgid "Icon set to display."
 msgstr "Ikonu kopa, ko attēlot."
 
-#: gtk/gtkimage.c:186
+#: gtk/gtkimage.c:188
 msgid "Icon size"
 msgstr "Ikonas izmērs"
 
-#: gtk/gtkimage.c:187
+#: gtk/gtkimage.c:189
 msgid "Size to use for stock icon or icon set."
 msgstr "Izmērs, kuru lietot krājuma ikonai vai ikou kopai."
 
-#: gtk/gtkimage.c:195
+#: gtk/gtkimage.c:197
 msgid "Animation"
 msgstr "Animācija"
 
-#: gtk/gtkimage.c:196
+#: gtk/gtkimage.c:198
 msgid "GdkPixbufAnimation to display."
 msgstr "Animācija, ko parādīt (GdkPixbufAnimation)."
 
-#: gtk/gtkimage.c:203
+#: gtk/gtkimage.c:205
 msgid "Storage type"
 msgstr "Glabātuves tips"
 
-#: gtk/gtkimage.c:204
+#: gtk/gtkimage.c:206
 msgid "The representation being used for image data."
 msgstr "Attēla datiem lietotais attēlojums."
 
@@ -2540,8 +2546,8 @@ msgstr "Ja PATIESS, nospiežot labo peles pogu uz piezīmjgrāmatas, tiek parād
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Vai sadaļām jābūt pēc vienādiem izmēriem"
 
-#: gtk/gtknotebook.c:2440
-#: gtk/gtknotebook.c:4696
+#: gtk/gtknotebook.c:2450
+#: gtk/gtknotebook.c:4706
 #, c-format
 msgid "Page %u"
 msgstr "Lapa %u"
@@ -3140,8 +3146,8 @@ msgid "_Copy"
 msgstr "_Kopēt"
 
 #: gtk/gtkstock.c:284
-msgid "C_ut"
-msgstr "_Izgriezt"
+msgid "Cu_t"
+msgstr "Iz_griezt"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
@@ -3735,7 +3741,7 @@ msgstr "Kursors Redzams"
 msgid "If the insertion cursor is shown"
 msgstr "Vai ievietošanas kursors tiek parādīts"
 
-#: gtk/gtktextview.c:6416
+#: gtk/gtktextview.c:6417
 msgid "Input _Methods"
 msgstr "Ievades _Metodes"
 
