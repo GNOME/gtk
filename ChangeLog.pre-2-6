@@ -1,3 +1,9 @@
+Thu Aug 12 01:35:46 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconview.c: Make the icon view accessible by
+	implementing the necesssary ATK interfaces.  (#149728,
+	Padraig O'Briain)
+
 Thu Aug 12 00:02:29 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaction.c (gtk_action_new): Link to information about

@@ -20,6 +20,8 @@
 #include <config.h>
 #include <string.h>
 
+#include <atk/atk.h>
+
 #include <gdk/gdkkeysyms.h>
 
 #include "gtkalias.h"
@@ -30,6 +32,9 @@
 #include "gtkmain.h"
 #include "gtksignal.h"
 #include "gtkintl.h"
+#include "gtkaccessible.h"
+#include "gtkwindow.h"
+#include "gtktextbuffer.h"
 
 #define MINIMUM_ICON_ITEM_WIDTH 100
 #define ICON_TEXT_PADDING 3
@@ -253,8 +258,8 @@ static GtkIconViewItem *gtk_icon_view_get_item_at_pos (GtkIconView *icon_view,
 						       gint         y);
 
 
-
-
+/* Accessibility Support */
+static AtkObject       *gtk_icon_view_get_accessible  (GtkWidget   *widget);
 
 static GtkContainerClass *parent_class = NULL;
 static guint icon_view_signals[LAST_SIGNAL] = { 0 };
@@ -293,6 +298,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->motion_notify_event = gtk_icon_view_motion;
   widget_class->button_press_event = gtk_icon_view_button_press;
   widget_class->button_release_event = gtk_icon_view_button_release;
+  widget_class->get_accessible = gtk_icon_view_get_accessible;
 
   klass->set_scroll_adjustments = gtk_icon_view_set_adjustments;
   klass->select_all = gtk_icon_view_real_select_all;
@@ -1952,6 +1958,9 @@ static void
 gtk_icon_view_set_cursor_item (GtkIconView     *icon_view,
 			       GtkIconViewItem *item)
 {
+  AtkObject *obj;
+  AtkObject *item_obj;
+
   if (icon_view->priv->cursor_item == item)
     return;
 
@@ -1960,6 +1969,12 @@ gtk_icon_view_set_cursor_item (GtkIconView     *icon_view,
   
   icon_view->priv->cursor_item = item;
   gtk_icon_view_queue_draw_item (icon_view, item);
+  
+  /* Notify that accessible focus object has changed */
+  obj = gtk_widget_get_accessible (GTK_WIDGET (icon_view));
+  item_obj = atk_object_ref_accessible_child (obj, item->index);
+  atk_focus_tracker_notify (item_obj);
+  g_object_unref (item_obj); 
 }
 
 
@@ -3448,3 +3463,2246 @@ gtk_icon_view_get_orientation (GtkIconView *icon_view)
 
   return icon_view->priv->orientation;
 }
+
+/* Accessibility Support */
+
+static gpointer accessible_parent_class;
+static gpointer accessible_item_parent_class;
+static GQuark accessible_private_data_quark = 0;
+
+#define GTK_TYPE_ICON_VIEW_ITEM_ACCESSIBLE      (gtk_icon_view_item_accessible_get_type ())
+#define GTK_ICON_VIEW_ITEM_ACCESSIBLE(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ICON_VIEW_ITEM_ACCESSIBLE, GtkIconViewItemAccessible))
+#define GTK_IS_ICON_VIEW_ITEM_ACCESSIBLE(obj)   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ICON_VIEW_ITEM_ACCESSIBLE))
+
+static GType gtk_icon_view_item_accessible_get_type (void);
+
+enum {
+    ACTION_ACTIVATE,
+    LAST_ACTION
+};
+
+typedef struct
+{
+  AtkObject parent;
+
+  GtkIconViewItem *item;
+
+  GtkWidget *widget;
+
+  AtkStateSet *state_set;
+
+  gchar *text;
+
+  GtkTextBuffer *text_buffer;
+
+  gchar *action_descriptions[LAST_ACTION];
+  gchar *image_description;
+  guint action_idle_handler;
+} GtkIconViewItemAccessible;
+
+static const gchar *gtk_icon_view_item_accessible_action_names[] = 
+{
+  "activate",
+  NULL
+};
+
+static const gchar *gtk_icon_view_item_accessible_action_descriptions[] =
+{
+  "Activate item",
+  NULL
+};
+typedef struct _GtkIconViewItemAccessibleClass
+{
+  AtkObjectClass parent_class;
+
+} GtkIconViewItemAccessibleClass;
+
+static gboolean gtk_icon_view_item_accessible_is_showing (GtkIconViewItemAccessible *item);
+
+static gboolean
+gtk_icon_view_item_accessible_idle_do_action (gpointer data)
+{
+  GtkIconViewItemAccessible *item;
+  GtkIconView *icon_view;
+  GtkTreePath *path;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (data);
+  item->action_idle_handler = NULL;
+
+  if (item->widget == NULL)
+    return FALSE;
+
+  icon_view = GTK_ICON_VIEW (item->widget);
+
+  path = gtk_tree_path_new_from_indices (item->item->index, -1);
+  gtk_icon_view_item_activated (icon_view, path);
+  gtk_tree_path_free (path);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_icon_view_item_accessible_action_do_action (AtkAction *action,
+                                                gint       i)
+{
+  GtkIconViewItemAccessible *item;
+  GtkIconView *icon_view;
+
+  if (i < 0 || i >= LAST_ACTION) 
+    return FALSE;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (action);
+
+  if (!GTK_IS_ICON_VIEW (item->widget))
+    return FALSE;
+
+  if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
+    return FALSE;
+
+  icon_view = GTK_ICON_VIEW (item->widget);
+
+  switch (i)
+    {
+    case ACTION_ACTIVATE:
+      if (!item->action_idle_handler)
+        item->action_idle_handler = g_idle_add (gtk_icon_view_item_accessible_idle_do_action, item);
+      break;
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+
+    }        
+  return TRUE;
+}
+
+static gint
+gtk_icon_view_item_accessible_action_get_n_actions (AtkAction *action)
+{
+        return LAST_ACTION;
+}
+
+static const gchar *
+gtk_icon_view_item_accessible_action_get_description (AtkAction *action,
+                                                      gint       i)
+{
+  GtkIconViewItemAccessible *item;
+
+  if (i < 0 || i >= LAST_ACTION) 
+    return NULL;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (action);
+
+  if (item->action_descriptions[i])
+    return item->action_descriptions[i];
+  else
+    return gtk_icon_view_item_accessible_action_descriptions[i];
+}
+
+static const gchar *
+gtk_icon_view_item_accessible_action_get_name (AtkAction *action,
+                                               gint       i)
+{
+  if (i < 0 || i >= LAST_ACTION) 
+    return NULL;
+
+  return gtk_icon_view_item_accessible_action_names[i];
+}
+
+static gboolean
+gtk_icon_view_item_accessible_action_set_description (AtkAction   *action,
+                                                      gint         i,
+                                                      const gchar *description)
+{
+  GtkIconViewItemAccessible *item;
+
+  if (i < 0 || i >= LAST_ACTION) 
+    return FALSE;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (action);
+
+  if (item->action_descriptions[i])
+    g_free (item->action_descriptions[i]);
+
+  item->action_descriptions[i] = g_strdup (description);
+
+  return TRUE;
+}
+
+static void
+atk_action_item_interface_init (AtkActionIface *iface)
+{
+  iface->do_action = gtk_icon_view_item_accessible_action_do_action;
+  iface->get_n_actions = gtk_icon_view_item_accessible_action_get_n_actions;
+  iface->get_description = gtk_icon_view_item_accessible_action_get_description;
+  iface->get_name = gtk_icon_view_item_accessible_action_get_name;
+  iface->set_description = gtk_icon_view_item_accessible_action_set_description;
+}
+
+static const gchar *
+gtk_icon_view_item_accessible_image_get_image_description (AtkImage *image)
+{
+  GtkIconViewItemAccessible *item;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (image);
+
+  return item->image_description;
+}
+
+static gboolean
+gtk_icon_view_item_accessible_image_set_image_description (AtkImage    *image,
+                                                           const gchar *description)
+{
+  GtkIconViewItemAccessible *item;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (image);
+
+  g_free (item->image_description);
+  item->image_description = g_strdup (item->image_description);
+
+  return TRUE;
+}
+
+static void
+gtk_icon_view_item_accessible_image_get_image_size (AtkImage *image,
+                                                    gint     *width,
+                                                    gint     *height)
+{
+  GtkIconViewItemAccessible *item;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (image);
+
+  if (!GTK_IS_ICON_VIEW (item->widget))
+    return;
+
+  if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
+    return;
+
+  *width = item->item->pixbuf_width;  
+  *height = item->item->pixbuf_height;  
+}
+
+static void
+gtk_icon_view_item_accessible_image_get_image_position (AtkImage    *image,
+                                                        gint        *x,
+                                                        gint        *y,
+                                                        AtkCoordType coord_type)
+{
+  GtkIconViewItemAccessible *item;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (image);
+
+  if (!GTK_IS_ICON_VIEW (item->widget))
+    return;
+
+  if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
+    return;
+
+  atk_component_get_position (ATK_COMPONENT (image), x, y, coord_type);
+  *x+= item->item->pixbuf_x - item->item->x;
+  *y+= item->item->pixbuf_y - item->item->y;
+}
+
+static void
+atk_image_item_interface_init (AtkImageIface *iface)
+{
+  iface->get_image_description = gtk_icon_view_item_accessible_image_get_image_description;
+  iface->set_image_description = gtk_icon_view_item_accessible_image_set_image_description;
+  iface->get_image_size = gtk_icon_view_item_accessible_image_get_image_size;
+  iface->get_image_position = gtk_icon_view_item_accessible_image_get_image_position;
+}
+
+static gchar *
+gtk_icon_view_item_accessible_text_get_text (AtkText *text,
+                                             gint     start_pos,
+                                             gint     end_pos)
+{
+  GtkIconViewItemAccessible *item;
+  GtkTextIter start, end;
+  GtkTextBuffer *buffer;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
+
+  if (!GTK_IS_ICON_VIEW (item->widget))
+    return NULL;
+
+  if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
+    return NULL;
+
+  buffer = item->text_buffer;
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, start_pos);
+  if (end_pos < 0)
+    gtk_text_buffer_get_end_iter (buffer, &end);
+  else
+    gtk_text_buffer_get_iter_at_offset (buffer, &end, end_pos);
+
+  return gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+}
+
+static gunichar
+gtk_icon_view_item_accessible_text_get_character_at_offset (AtkText *text,
+                                                            gint     offset)
+{
+  GtkIconViewItemAccessible *item;
+  GtkTextIter start, end;
+  GtkTextBuffer *buffer;
+  gchar *string;
+  gunichar unichar;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
+
+  if (!GTK_IS_ICON_VIEW (item->widget))
+    return '\0';
+
+  if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
+    return '\0';
+
+  buffer = item->text_buffer;
+  if (offset >= gtk_text_buffer_get_char_count (buffer))
+    return '\0';
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, offset);
+  end = start;
+  gtk_text_iter_forward_char (&end);
+  string = gtk_text_buffer_get_slice (buffer, &start, &end, FALSE);
+  unichar = g_utf8_get_char (string);
+  g_free(string);
+
+  return unichar;
+}
+
+static void
+get_pango_text_offsets (PangoLayout     *layout,
+                        GtkTextBuffer   *buffer,
+                        gint             function,
+                        AtkTextBoundary  boundary_type,
+                        gint             offset,
+                        gint            *start_offset,
+                        gint            *end_offset,
+                        GtkTextIter     *start_iter,
+                        GtkTextIter     *end_iter)
+{
+  PangoLayoutIter *iter;
+  PangoLayoutLine *line, *prev_line = NULL, *prev_prev_line = NULL;
+  gint index, start_index, end_index;
+  const gchar *text;
+  gboolean found = FALSE;
+
+  text = pango_layout_get_text (layout);
+  index = g_utf8_offset_to_pointer (text, offset) - text;
+  iter = pango_layout_get_iter (layout);
+  do
+    {
+      line = pango_layout_iter_get_line (iter);
+      start_index = line->start_index;
+      end_index = start_index + line->length;
+
+      if (index >= start_index && index <= end_index)
+        {
+          /*
+           * Found line for offset
+           */
+          switch (function)
+            {
+            case 0:
+                  /*
+                   * We want the previous line
+                   */
+              if (prev_line)
+                {
+                  switch (boundary_type)
+                    {
+                    case ATK_TEXT_BOUNDARY_LINE_START:
+                      end_index = start_index;
+                      start_index = prev_line->start_index;
+                      break;
+                    case ATK_TEXT_BOUNDARY_LINE_END:
+                      if (prev_prev_line)
+                        start_index = prev_prev_line->start_index + 
+                                  prev_prev_line->length;
+                      end_index = prev_line->start_index + prev_line->length;
+                      break;
+                    default:
+                      g_assert_not_reached();
+                    }
+                }
+              else
+                start_index = end_index = 0;
+              break;
+            case 1:
+              switch (boundary_type)
+                {
+                case ATK_TEXT_BOUNDARY_LINE_START:
+                  if (pango_layout_iter_next_line (iter))
+                    end_index = pango_layout_iter_get_line (iter)->start_index;
+                  break;
+                case ATK_TEXT_BOUNDARY_LINE_END:
+                  if (prev_line)
+                    start_index = prev_line->start_index + 
+                                  prev_line->length;
+                  break;
+                default:
+                  g_assert_not_reached();
+                }
+              break;
+            case 2:
+               /*
+                * We want the next line
+                */
+              if (pango_layout_iter_next_line (iter))
+                {
+                  line = pango_layout_iter_get_line (iter);
+                  switch (boundary_type)
+                    {
+                    case ATK_TEXT_BOUNDARY_LINE_START:
+                      start_index = line->start_index;
+                      if (pango_layout_iter_next_line (iter))
+                        end_index = pango_layout_iter_get_line (iter)->start_index;
+                      else
+                        end_index = start_index + line->length;
+                      break;
+                    case ATK_TEXT_BOUNDARY_LINE_END:
+                      start_index = end_index;
+                      end_index = line->start_index + line->length;
+                      break;
+                    default:
+                      g_assert_not_reached();
+                    }
+                }
+              else
+                start_index = end_index;
+              break;
+            }
+          found = TRUE;
+          break;
+        }
+      prev_prev_line = prev_line; 
+      prev_line = line; 
+    }
+  while (pango_layout_iter_next_line (iter));
+
+  if (!found)
+    {
+      start_index = prev_line->start_index + prev_line->length;
+      end_index = start_index;
+    }
+  pango_layout_iter_free (iter);
+  *start_offset = g_utf8_pointer_to_offset (text, text + start_index);
+  *end_offset = g_utf8_pointer_to_offset (text, text + end_index);
+ 
+  gtk_text_buffer_get_iter_at_offset (buffer, start_iter, *start_offset);
+  gtk_text_buffer_get_iter_at_offset (buffer, end_iter, *end_offset);
+}
+
+static gchar*
+gtk_icon_view_item_accessible_text_get_text_before_offset (AtkText         *text,
+                                                           gint            offset,
+                                                           AtkTextBoundary boundary_type,
+                                                           gint            *start_offset,
+                                                           gint            *end_offset)
+{
+  GtkIconViewItemAccessible *item;
+  GtkTextIter start, end;
+  GtkTextBuffer *buffer;
+  GtkIconView *icon_view;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
+
+  if (!GTK_IS_ICON_VIEW (item->widget))
+    return NULL;
+
+  if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
+    return NULL;
+
+  buffer = item->text_buffer;
+
+  if (!gtk_text_buffer_get_char_count (buffer))
+    {
+      *start_offset = 0;
+      *end_offset = 0;
+      return g_strdup ("");
+    }
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, offset);
+   
+  end = start;
+
+  switch (boundary_type)
+    {
+    case ATK_TEXT_BOUNDARY_CHAR:
+      gtk_text_iter_backward_char(&start);
+      break;
+    case ATK_TEXT_BOUNDARY_WORD_START:
+      if (!gtk_text_iter_starts_word (&start))
+        gtk_text_iter_backward_word_start (&start);
+      end = start;
+      gtk_text_iter_backward_word_start(&start);
+      break;
+    case ATK_TEXT_BOUNDARY_WORD_END:
+      if (gtk_text_iter_inside_word (&start) &&
+          !gtk_text_iter_starts_word (&start))
+        gtk_text_iter_backward_word_start (&start);
+      while (!gtk_text_iter_ends_word (&start))
+        {
+          if (!gtk_text_iter_backward_char (&start))
+            break;
+        }
+      end = start;
+      gtk_text_iter_backward_word_start(&start);
+      while (!gtk_text_iter_ends_word (&start))
+        {
+          if (!gtk_text_iter_backward_char (&start))
+            break;
+        }
+      break;
+    case ATK_TEXT_BOUNDARY_SENTENCE_START:
+      if (!gtk_text_iter_starts_sentence (&start))
+        gtk_text_iter_backward_sentence_start (&start);
+      end = start;
+      gtk_text_iter_backward_sentence_start (&start);
+      break;
+    case ATK_TEXT_BOUNDARY_SENTENCE_END:
+      if (gtk_text_iter_inside_sentence (&start) &&
+          !gtk_text_iter_starts_sentence (&start))
+        gtk_text_iter_backward_sentence_start (&start);
+      while (!gtk_text_iter_ends_sentence (&start))
+        {
+          if (!gtk_text_iter_backward_char (&start))
+            break;
+        }
+      end = start;
+      gtk_text_iter_backward_sentence_start (&start);
+      while (!gtk_text_iter_ends_sentence (&start))
+        {
+          if (!gtk_text_iter_backward_char (&start))
+            break;
+        }
+      break;
+   case ATK_TEXT_BOUNDARY_LINE_START:
+   case ATK_TEXT_BOUNDARY_LINE_END:
+      icon_view = GTK_ICON_VIEW (item->widget);
+      gtk_icon_view_update_item_text (icon_view, item->item);
+      get_pango_text_offsets (icon_view->priv->layout,
+                              buffer,
+                              0,
+                              boundary_type,
+                              offset,
+                              start_offset,
+                              end_offset,
+                              &start,
+                              &end);
+      break;
+    }
+
+  *start_offset = gtk_text_iter_get_offset (&start);
+  *end_offset = gtk_text_iter_get_offset (&end);
+
+  return gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+}
+
+static gchar*
+gtk_icon_view_item_accessible_text_get_text_at_offset (AtkText         *text,
+                                                       gint            offset,
+                                                       AtkTextBoundary boundary_type,
+                                                       gint            *start_offset,
+                                                       gint            *end_offset)
+{
+  GtkIconViewItemAccessible *item;
+  GtkTextIter start, end;
+  GtkTextBuffer *buffer;
+  GtkIconView *icon_view;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
+
+  if (!GTK_IS_ICON_VIEW (item->widget))
+    return NULL;
+
+  if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
+    return NULL;
+
+  buffer = item->text_buffer;
+
+  if (!gtk_text_buffer_get_char_count (buffer))
+    {
+      *start_offset = 0;
+      *end_offset = 0;
+      return g_strdup ("");
+    }
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, offset);
+   
+  end = start;
+
+  switch (boundary_type)
+    {
+    case ATK_TEXT_BOUNDARY_CHAR:
+      gtk_text_iter_forward_char (&end);
+      break;
+    case ATK_TEXT_BOUNDARY_WORD_START:
+      if (!gtk_text_iter_starts_word (&start))
+        gtk_text_iter_backward_word_start (&start);
+      if (gtk_text_iter_inside_word (&end))
+        gtk_text_iter_forward_word_end (&end);
+      while (!gtk_text_iter_starts_word (&end))
+        {
+          if (!gtk_text_iter_forward_char (&end))
+            break;
+        }
+      break;
+    case ATK_TEXT_BOUNDARY_WORD_END:
+      if (gtk_text_iter_inside_word (&start) &&
+          !gtk_text_iter_starts_word (&start))
+        gtk_text_iter_backward_word_start (&start);
+      while (!gtk_text_iter_ends_word (&start))
+        {
+          if (!gtk_text_iter_backward_char (&start))
+            break;
+        }
+      gtk_text_iter_forward_word_end (&end);
+      break;
+    case ATK_TEXT_BOUNDARY_SENTENCE_START:
+      if (!gtk_text_iter_starts_sentence (&start))
+        gtk_text_iter_backward_sentence_start (&start);
+      if (gtk_text_iter_inside_sentence (&end))
+        gtk_text_iter_forward_sentence_end (&end);
+      while (!gtk_text_iter_starts_sentence (&end))
+        {
+          if (!gtk_text_iter_forward_char (&end))
+            break;
+        }
+      break;
+    case ATK_TEXT_BOUNDARY_SENTENCE_END:
+      if (gtk_text_iter_inside_sentence (&start) &&
+          !gtk_text_iter_starts_sentence (&start))
+        gtk_text_iter_backward_sentence_start (&start);
+      while (!gtk_text_iter_ends_sentence (&start))
+        {
+          if (!gtk_text_iter_backward_char (&start))
+            break;
+        }
+      gtk_text_iter_forward_sentence_end (&end);
+      break;
+   case ATK_TEXT_BOUNDARY_LINE_START:
+   case ATK_TEXT_BOUNDARY_LINE_END:
+      icon_view = GTK_ICON_VIEW (item->widget);
+      gtk_icon_view_update_item_text (icon_view, item->item);
+      get_pango_text_offsets (icon_view->priv->layout,
+                              buffer,
+                              1,
+                              boundary_type,
+                              offset,
+                              start_offset,
+                              end_offset,
+                              &start,
+                              &end);
+      break;
+    }
+
+
+  *start_offset = gtk_text_iter_get_offset (&start);
+  *end_offset = gtk_text_iter_get_offset (&end);
+
+  return gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+}
+
+static gchar*
+gtk_icon_view_item_accessible_text_get_text_after_offset (AtkText         *text,
+                                                          gint            offset,
+                                                          AtkTextBoundary boundary_type,
+                                                          gint            *start_offset,
+                                                          gint            *end_offset)
+{
+  GtkIconViewItemAccessible *item;
+  GtkTextIter start, end;
+  GtkTextBuffer *buffer;
+  GtkIconView *icon_view;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
+
+  if (!GTK_IS_ICON_VIEW (item->widget))
+    return NULL;
+
+  if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
+    return NULL;
+
+  buffer = item->text_buffer;
+
+  if (!gtk_text_buffer_get_char_count (buffer))
+    {
+      *start_offset = 0;
+      *end_offset = 0;
+      return g_strdup ("");
+    }
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, offset);
+   
+  end = start;
+
+  switch (boundary_type)
+    {
+    case ATK_TEXT_BOUNDARY_CHAR:
+      gtk_text_iter_forward_char(&start);
+      gtk_text_iter_forward_chars(&end, 2);
+      break;
+    case ATK_TEXT_BOUNDARY_WORD_START:
+      if (gtk_text_iter_inside_word (&end))
+        gtk_text_iter_forward_word_end (&end);
+      while (!gtk_text_iter_starts_word (&end))
+        {
+          if (!gtk_text_iter_forward_char (&end))
+            break;
+        }
+      start = end;
+      if (!gtk_text_iter_is_end (&end))
+        {
+          gtk_text_iter_forward_word_end (&end);
+          while (!gtk_text_iter_starts_word (&end))
+            {
+              if (!gtk_text_iter_forward_char (&end))
+                break;
+            }
+        }
+      break;
+    case ATK_TEXT_BOUNDARY_WORD_END:
+      gtk_text_iter_forward_word_end (&end);
+      start = end;
+      if (!gtk_text_iter_is_end (&end))
+        gtk_text_iter_forward_word_end (&end);
+      break;
+    case ATK_TEXT_BOUNDARY_SENTENCE_START:
+      if (gtk_text_iter_inside_sentence (&end))
+        gtk_text_iter_forward_sentence_end (&end);
+      while (!gtk_text_iter_starts_sentence (&end))
+        {
+          if (!gtk_text_iter_forward_char (&end))
+            break;
+        }
+      start = end;
+      if (!gtk_text_iter_is_end (&end))
+        {
+          gtk_text_iter_forward_sentence_end (&end);
+          while (!gtk_text_iter_starts_sentence (&end))
+            {
+              if (!gtk_text_iter_forward_char (&end))
+                break;
+            }
+        }
+      break;
+    case ATK_TEXT_BOUNDARY_SENTENCE_END:
+      gtk_text_iter_forward_sentence_end (&end);
+      start = end;
+      if (!gtk_text_iter_is_end (&end))
+        gtk_text_iter_forward_sentence_end (&end);
+      break;
+   case ATK_TEXT_BOUNDARY_LINE_START:
+   case ATK_TEXT_BOUNDARY_LINE_END:
+      icon_view = GTK_ICON_VIEW (item->widget);
+      gtk_icon_view_update_item_text (icon_view, item->item);
+      get_pango_text_offsets (icon_view->priv->layout,
+                              buffer,
+                              2,
+                              boundary_type,
+                              offset,
+                              start_offset,
+                              end_offset,
+                              &start,
+                              &end);
+      break;
+    }
+  *start_offset = gtk_text_iter_get_offset (&start);
+  *end_offset = gtk_text_iter_get_offset (&end);
+
+  return gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+}
+
+static gint
+gtk_icon_view_item_accessible_text_get_character_count (AtkText *text)
+{
+  GtkIconViewItemAccessible *item;
+  GtkTextIter start, end;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
+
+  if (!GTK_IS_ICON_VIEW (item->widget))
+    return 0;
+
+  if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
+    return 0;
+
+  return gtk_text_buffer_get_char_count (item->text_buffer);
+}
+
+static void
+gtk_icon_view_item_accessible_text_get_character_extents (AtkText      *text,
+                                                          gint         offset,
+                                                          gint         *x,
+                                                          gint         *y,
+                                                          gint         *width,
+                                                          gint         *height,
+                                                          AtkCoordType coord_type)
+{
+  GtkIconViewItemAccessible *item;
+  GtkIconView *icon_view;
+  PangoRectangle char_rect;
+  const gchar *item_text;
+  gint index;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
+
+  if (!GTK_IS_ICON_VIEW (item->widget))
+    return;
+
+  if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
+    return;
+
+  icon_view = GTK_ICON_VIEW (item->widget);
+  gtk_icon_view_update_item_text (icon_view, item->item);
+  item_text = pango_layout_get_text (icon_view->priv->layout);
+  index = g_utf8_offset_to_pointer (item_text, offset) - item_text;
+  pango_layout_index_to_pos (icon_view->priv->layout, index, &char_rect);
+
+  atk_component_get_position (ATK_COMPONENT (text), x, y, coord_type);
+  *x += item->item->layout_x - item->item->x + char_rect.x / PANGO_SCALE;
+  /* Look at gtk_icon_view_paint_item() to see where the text is. */
+  *x -=  ((item->item->width - item->item->layout_width) / 2) + (MAX (item->item->pixbuf_width, MINIMUM_ICON_ITEM_WIDTH) - item->item->width) / 2,
+  *y += item->item->layout_y - item->item->y + char_rect.y / PANGO_SCALE;
+  *width = char_rect.width / PANGO_SCALE;
+  *height = char_rect.height / PANGO_SCALE;
+}
+
+static gint
+gtk_icon_view_item_accessible_text_get_offset_at_point (AtkText      *text,
+                                                        gint          x,
+                                                        gint          y,
+                                                        AtkCoordType coord_type)
+{
+  GtkIconViewItemAccessible *item;
+  GtkIconView *icon_view;
+  const gchar *item_text;
+  gint index;
+  gint offset;
+  gint l_x, l_y;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (text);
+
+  if (!GTK_IS_ICON_VIEW (item->widget))
+    return -1;
+
+  if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
+    return -1;
+
+  icon_view = GTK_ICON_VIEW (item->widget);
+  gtk_icon_view_update_item_text (icon_view, item->item);
+  atk_component_get_position (ATK_COMPONENT (text), &l_x, &l_y, coord_type);
+  x -= l_x + item->item->layout_x - item->item->x;
+  x +=  ((item->item->width - item->item->layout_width) / 2) + (MAX (item->item->pixbuf_width, MINIMUM_ICON_ITEM_WIDTH) - item->item->width) / 2,
+  y -= l_y + item->item->layout_y - item->item->y;
+  item_text = pango_layout_get_text (icon_view->priv->layout);
+  if (!pango_layout_xy_to_index (icon_view->priv->layout, 
+                                x * PANGO_SCALE,
+                                y * PANGO_SCALE,
+                                &index, NULL))
+    {
+      if (x < 0 || y < 0)
+        index = 0;
+      else
+        index = -1;
+    } 
+  if (index == -1)
+    offset = g_utf8_strlen (item_text, -1);
+  else
+    offset = g_utf8_pointer_to_offset (item_text, item_text + index);
+
+  return offset;
+}
+
+static void
+atk_text_item_interface_init (AtkTextIface *iface)
+{
+  iface->get_text = gtk_icon_view_item_accessible_text_get_text;
+  iface->get_character_at_offset = gtk_icon_view_item_accessible_text_get_character_at_offset;
+  iface->get_text_before_offset = gtk_icon_view_item_accessible_text_get_text_before_offset;
+  iface->get_text_at_offset = gtk_icon_view_item_accessible_text_get_text_at_offset;
+  iface->get_text_after_offset = gtk_icon_view_item_accessible_text_get_text_after_offset;
+  iface->get_character_count = gtk_icon_view_item_accessible_text_get_character_count;
+  iface->get_character_extents = gtk_icon_view_item_accessible_text_get_character_extents;
+  iface->get_offset_at_point = gtk_icon_view_item_accessible_text_get_offset_at_point;
+}
+
+static void
+gtk_icon_view_item_accessible_get_extents (AtkComponent *component,
+                                           gint         *x,
+                                           gint         *y,
+                                           gint         *width,
+                                           gint         *height,
+                                           AtkCoordType  coord_type)
+{
+  GtkIconViewItemAccessible *item;
+  AtkObject *parent_obj;
+  gint l_x, l_y;
+
+  g_return_if_fail (GTK_IS_ICON_VIEW_ITEM_ACCESSIBLE (component));
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (component);
+  if (!GTK_IS_WIDGET (item->widget))
+    return;
+
+  if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
+    return;
+
+  *width = item->item->width;
+  *height = item->item->height;
+  if (gtk_icon_view_item_accessible_is_showing (item))
+    {
+      parent_obj = gtk_widget_get_accessible (item->widget);
+      atk_component_get_position (ATK_COMPONENT (parent_obj), &l_x, &l_y, coord_type);
+      *x = l_x + item->item->x;
+      *y = l_y + item->item->y;
+    }
+  else
+    {
+      *x = G_MININT;
+      *y = G_MININT;
+    }
+}
+
+static gboolean
+gtk_icon_view_item_accessible_grab_focus (AtkComponent *component)
+{
+  GtkIconViewItemAccessible *item;
+  GtkWidget *toplevel;
+
+  g_return_val_if_fail (GTK_IS_ICON_VIEW_ITEM_ACCESSIBLE (component), FALSE);
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (component);
+  if (!GTK_IS_WIDGET (item->widget))
+    return FALSE;
+
+  gtk_widget_grab_focus (item->widget);
+  gtk_icon_view_set_cursor_item (GTK_ICON_VIEW (item->widget), item->item);
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (item->widget));
+  if (GTK_WIDGET_TOPLEVEL (toplevel))
+    gtk_window_present (GTK_WINDOW (toplevel));
+
+  return TRUE;
+}
+
+static void
+atk_component_item_interface_init (AtkComponentIface *iface)
+{
+  iface->get_extents = gtk_icon_view_item_accessible_get_extents;
+  iface->grab_focus = gtk_icon_view_item_accessible_grab_focus;
+}
+
+static gboolean
+gtk_icon_view_item_accessible_add_state (GtkIconViewItemAccessible *item,
+                                         AtkStateType               state_type,
+                                         gboolean                   emit_signal)
+{
+  gboolean rc;
+
+  rc = atk_state_set_add_state (item->state_set, state_type);
+  /*
+   * The signal should only be generated if the value changed,
+   * not when the item is set up.  So states that are set
+   * initially should pass FALSE as the emit_signal argument.
+   */
+
+  if (emit_signal)
+    {
+      atk_object_notify_state_change (ATK_OBJECT (item), state_type, TRUE);
+      /* If state_type is ATK_STATE_VISIBLE, additional notification */
+      if (state_type == ATK_STATE_VISIBLE)
+        g_signal_emit_by_name (item, "visible_data_changed");
+    }
+
+  return rc;
+}
+
+static gboolean
+gtk_icon_view_item_accessible_remove_state (GtkIconViewItemAccessible *item,
+                                            AtkStateType               state_type,
+                                            gboolean                   emit_signal)
+{
+  if (atk_state_set_contains_state (item->state_set, state_type))
+    {
+      gboolean rc;
+
+      rc = atk_state_set_remove_state (item->state_set, state_type);
+      /*
+       * The signal should only be generated if the value changed,
+       * not when the item is set up.  So states that are set
+       * initially should pass FALSE as the emit_signal argument.
+       */
+
+      if (emit_signal)
+        {
+          atk_object_notify_state_change (ATK_OBJECT (item), state_type, FALSE);
+          /* If state_type is ATK_STATE_VISIBLE, additional notification */
+          if (state_type == ATK_STATE_VISIBLE)
+            g_signal_emit_by_name (item, "visible_data_changed");
+        }
+
+      return rc;
+    }
+  else
+    return FALSE;
+}
+
+static gboolean
+gtk_icon_view_item_accessible_is_showing (GtkIconViewItemAccessible *item)
+{
+  GtkIconView *icon_view;
+  GdkRectangle visible_rect;
+  gboolean is_showing;
+
+  /*
+   * An item is considered "SHOWING" if any part of the item is in the
+   * visible rectangle.
+   */
+
+  if (!GTK_IS_ICON_VIEW (item->widget))
+    return FALSE;
+
+  if (item->item == NULL)
+    return FALSE;
+
+  icon_view = GTK_ICON_VIEW (item->widget);
+  visible_rect.x = 0;
+  if (icon_view->priv->hadjustment)
+    visible_rect.x += icon_view->priv->hadjustment->value;
+  visible_rect.y = 0;
+  if (icon_view->priv->hadjustment)
+    visible_rect.y += icon_view->priv->vadjustment->value;
+  visible_rect.width = item->widget->allocation.width;
+  visible_rect.height = item->widget->allocation.height;
+
+  if (((item->item->x + item->item->width) < visible_rect.x) ||
+     ((item->item->y + item->item->height) < (visible_rect.y)) ||
+     (item->item->x > (visible_rect.x + visible_rect.width)) ||
+     (item->item->y > (visible_rect.y + visible_rect.height)))
+    is_showing =  FALSE;
+  else
+    is_showing = TRUE;
+
+  return is_showing;
+}
+
+static gboolean
+gtk_icon_view_item_accessible_set_visibility (GtkIconViewItemAccessible *item,
+                                              gboolean                   emit_signal)
+{
+  if (gtk_icon_view_item_accessible_is_showing (item))
+    gtk_icon_view_item_accessible_add_state (item, ATK_STATE_SHOWING, emit_signal);
+  else
+    gtk_icon_view_item_accessible_remove_state (item, ATK_STATE_SHOWING, emit_signal);
+}
+
+static void
+gtk_icon_view_item_accessible_object_init (GtkIconViewItemAccessible *item)
+{
+  gint i;
+
+  item->state_set = atk_state_set_new ();
+
+  atk_state_set_add_state (item->state_set, ATK_STATE_ENABLED);
+  atk_state_set_add_state (item->state_set, ATK_STATE_FOCUSABLE);
+  atk_state_set_add_state (item->state_set, ATK_STATE_SENSITIVE);
+  atk_state_set_add_state (item->state_set, ATK_STATE_SELECTABLE);
+  atk_state_set_add_state (item->state_set, ATK_STATE_VISIBLE);
+
+  for (i = 0; i < LAST_ACTION; i++)
+    item->action_descriptions[i] = NULL;
+
+  item->image_description = NULL;
+
+  item->action_idle_handler = 0;
+}
+
+static void
+gtk_icon_view_item_accessible_finalize (GObject *object)
+{
+  GtkIconViewItemAccessible *item;
+  gint i;
+
+  g_return_if_fail (GTK_IS_ICON_VIEW_ITEM_ACCESSIBLE (object));
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (object);
+
+  if (item->widget)
+    g_object_remove_weak_pointer (G_OBJECT (item->widget), (gpointer) &item->widget);
+
+  if (item->state_set)
+    g_object_unref (item->state_set);
+
+  if (item->text_buffer)
+     g_object_unref (item->text_buffer);
+
+  for (i = 0; i < LAST_ACTION; i++)
+    g_free (item->action_descriptions[i]);
+
+  g_free (item->image_description);
+
+  if (item->action_idle_handler)
+    {
+      g_source_remove (item->action_idle_handler);
+      item->action_idle_handler = 0;
+    }
+
+  G_OBJECT_CLASS (accessible_item_parent_class)->finalize (object);
+}
+
+static G_CONST_RETURN gchar*
+gtk_icon_view_item_accessible_get_name (AtkObject *obj)
+{
+  if (obj->name)
+    return obj->name;
+  else
+    {
+      GtkIconViewItemAccessible *item;
+      GtkTextIter start_iter;
+      GtkTextIter end_iter;
+
+      item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (obj);
+ 
+      gtk_text_buffer_get_start_iter (item->text_buffer, &start_iter); 
+      gtk_text_buffer_get_end_iter (item->text_buffer, &end_iter); 
+
+      return gtk_text_buffer_get_text (item->text_buffer, &start_iter, &end_iter, FALSE);
+    }
+}
+
+static AtkObject*
+gtk_icon_view_item_accessible_get_parent (AtkObject *obj)
+{
+  GtkIconViewItemAccessible *item;
+
+  g_return_val_if_fail (GTK_IS_ICON_VIEW_ITEM_ACCESSIBLE (obj), NULL);
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (obj);
+
+  if (item->widget)
+    return gtk_widget_get_accessible (item->widget);
+  else
+    return NULL;
+}
+
+static gint
+gtk_icon_view_item_accessible_get_index_in_parent (AtkObject *obj)
+{
+  GtkIconViewItemAccessible *item;
+
+  g_return_val_if_fail (GTK_IS_ICON_VIEW_ITEM_ACCESSIBLE (obj), 0);
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (obj);
+
+  return item->item->index; 
+}
+
+static AtkStateSet *
+gtk_icon_view_item_accessible_ref_state_set (AtkObject *obj)
+{
+  GtkIconViewItemAccessible *item;
+  GtkIconView *icon_view;
+
+  item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (obj);
+  g_return_val_if_fail (item->state_set, NULL);
+
+  if (!item->widget)
+    return NULL;
+
+  icon_view = GTK_ICON_VIEW (item->widget);
+  if (icon_view->priv->cursor_item == item->item)
+    atk_state_set_add_state (item->state_set, ATK_STATE_FOCUSED);
+  else
+    atk_state_set_remove_state (item->state_set, ATK_STATE_FOCUSED);
+
+  return g_object_ref (item->state_set);
+}
+
+static void
+gtk_icon_view_item_accessible_class_init (AtkObjectClass *klass)
+{
+  GObjectClass *gobject_class;
+
+  accessible_item_parent_class = g_type_class_peek_parent (klass);
+
+  gobject_class = (GObjectClass *)klass;
+
+  gobject_class->finalize = gtk_icon_view_item_accessible_finalize;
+
+  klass->get_index_in_parent = gtk_icon_view_item_accessible_get_index_in_parent; 
+  klass->get_name = gtk_icon_view_item_accessible_get_name; 
+  klass->get_parent = gtk_icon_view_item_accessible_get_parent; 
+  klass->ref_state_set = gtk_icon_view_item_accessible_ref_state_set; 
+}
+
+static GType
+gtk_icon_view_item_accessible_get_type (void)
+{
+  static GType type = 0;
+
+  if (!type)
+    {
+      static const GTypeInfo tinfo =
+      {
+        sizeof (GtkIconViewItemAccessibleClass),
+        (GBaseInitFunc) NULL, /* base init */
+        (GBaseFinalizeFunc) NULL, /* base finalize */
+        (GClassInitFunc) gtk_icon_view_item_accessible_class_init, /* class init */
+        (GClassFinalizeFunc) NULL, /* class finalize */
+        NULL, /* class data */
+        sizeof (GtkIconViewItemAccessible), /* instance size */
+        0, /* nb preallocs */
+        (GInstanceInitFunc) gtk_icon_view_item_accessible_object_init, /* instance init */
+        NULL /* value table */
+      };
+
+      static const GInterfaceInfo atk_component_info =
+      {
+        (GInterfaceInitFunc) atk_component_item_interface_init,
+        (GInterfaceFinalizeFunc) NULL,
+        NULL
+      };
+      static const GInterfaceInfo atk_action_info =
+      {
+        (GInterfaceInitFunc) atk_action_item_interface_init,
+        (GInterfaceFinalizeFunc) NULL,
+        NULL
+      };
+      static const GInterfaceInfo atk_image_info =
+      {
+        (GInterfaceInitFunc) atk_image_item_interface_init,
+        (GInterfaceFinalizeFunc) NULL,
+        NULL
+      };
+      static const GInterfaceInfo atk_text_info =
+      {
+        (GInterfaceInitFunc) atk_text_item_interface_init,
+        (GInterfaceFinalizeFunc) NULL,
+        NULL
+      };
+
+      type = g_type_register_static (ATK_TYPE_OBJECT,
+                                     "GtkIconViewItemAccessible", &tinfo, 0);
+      g_type_add_interface_static (type, ATK_TYPE_COMPONENT,
+                                   &atk_component_info);
+      g_type_add_interface_static (type, ATK_TYPE_ACTION,
+                                   &atk_action_info);
+      g_type_add_interface_static (type, ATK_TYPE_IMAGE,
+                                   &atk_image_info);
+      g_type_add_interface_static (type, ATK_TYPE_TEXT,
+                                   &atk_text_info);
+    }
+
+  return type;
+}
+
+#define GTK_TYPE_ICON_VIEW_ACCESSIBLE      (gtk_icon_view_accessible_get_type ())
+#define GTK_ICON_VIEW_ACCESSIBLE(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ICON_VIEW_ACCESSIBLE, GtkIconViewAccessible))
+#define GTK_IS_ICON_VIEW_ACCESSIBLE(obj)   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ICON_VIEW_ACCESSIBLE))
+
+static GType gtk_icon_view_accessible_get_type (void);
+
+typedef struct
+{
+   AtkObject parent;
+} GtkIconViewAccessible;
+
+typedef struct
+{
+  AtkObject *item;
+  gint       index;
+} GtkIconViewItemAccessibleInfo;
+
+typedef struct
+{
+  GList *items;
+
+  GtkAdjustment *old_hadj;
+  GtkAdjustment *old_vadj;
+
+  GtkTreeModel *model;
+
+} GtkIconViewAccessiblePrivate;
+
+static GtkIconViewAccessiblePrivate *
+gtk_icon_view_accessible_get_priv (AtkObject *accessible)
+{
+  return g_object_get_qdata (G_OBJECT (accessible),
+                             accessible_private_data_quark);
+}
+
+static void
+gtk_icon_view_item_accessible_info_new (AtkObject *accessible,
+                                        AtkObject *item,
+                                        gint       index)
+{
+  GtkIconViewItemAccessibleInfo *info;
+  GtkIconViewItemAccessibleInfo *tmp_info;
+  GtkIconViewAccessiblePrivate *priv;
+  GList *items;
+
+  info = g_new (GtkIconViewItemAccessibleInfo, 1);
+  info->item = item;
+  info->index = index;
+
+  priv = gtk_icon_view_accessible_get_priv (accessible);
+  items = priv->items;
+  while (items)
+    {
+      tmp_info = items->data;
+      if (tmp_info->index > index)
+        break;
+      items = items->next;
+    }
+  priv->items = g_list_insert_before (priv->items, items, info);
+  priv->old_hadj = NULL;
+  priv->old_vadj = NULL;
+}
+
+static gint
+gtk_icon_view_accessible_get_n_children (AtkObject *accessible)
+{
+  GtkIconView *icon_view;
+  GtkWidget *widget;
+  gint i;
+
+  widget = GTK_ACCESSIBLE (accessible)->widget;
+  if (!widget)
+      return 0;
+
+  icon_view = GTK_ICON_VIEW (widget);
+
+  return g_list_length (icon_view->priv->items);
+}
+
+static AtkObject *
+gtk_icon_view_accessible_find_child (AtkObject *accessible,
+                                     gint       index)
+{
+  GtkIconViewAccessiblePrivate *priv;
+  GtkIconViewItemAccessibleInfo *info;
+  GList *items;
+
+  priv = gtk_icon_view_accessible_get_priv (accessible);
+  items = priv->items;
+
+  while (items)
+    {
+      info = items->data;
+      if (info->index == index)
+        return info->item;
+      items = items->next; 
+    }
+  return NULL;
+}
+
+static AtkObject *
+gtk_icon_view_accessible_ref_child (AtkObject *accessible,
+                                    gint       index)
+{
+  GtkIconView *icon_view;
+  GtkWidget *widget;
+  GList *icons;
+  AtkObject *obj;
+  GtkIconViewItemAccessible *a11y_item;
+
+  widget = GTK_ACCESSIBLE (accessible)->widget;
+  if (!widget)
+    return NULL;
+
+  icon_view = GTK_ICON_VIEW (widget);
+  icons = g_list_nth (icon_view->priv->items, index);
+  obj = NULL;
+  if (icons)
+    {
+      GtkIconViewItem *item = icons->data;
+   
+      g_return_val_if_fail (item->index == index, NULL);
+      obj = gtk_icon_view_accessible_find_child (accessible, index);
+      if (!obj)
+        {
+          obj = g_object_new (gtk_icon_view_item_accessible_get_type (), NULL);
+          gtk_icon_view_item_accessible_info_new (accessible,
+                                                  obj,
+                                                  index);
+          obj->role = ATK_ROLE_ICON;
+          a11y_item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (obj);
+          a11y_item->item = item;
+          a11y_item->widget = widget;
+          a11y_item->text_buffer = gtk_text_buffer_new (NULL);
+          gtk_icon_view_update_item_text (icon_view, item);
+          gtk_text_buffer_set_text (a11y_item->text_buffer, 
+                                    pango_layout_get_text (icon_view->priv->layout), 
+                                    -1);
+          gtk_icon_view_item_accessible_set_visibility (a11y_item, FALSE);
+          g_object_add_weak_pointer (G_OBJECT (widget), (gpointer) &(a11y_item->widget));
+       }
+      g_object_ref (obj);
+    }
+  return obj;
+}
+
+static void
+gtk_icon_view_accessible_traverse_items (GtkIconViewAccessible *view,
+                                         GList                 *list)
+{
+  GtkIconViewAccessiblePrivate *priv;
+  GtkIconViewItemAccessibleInfo *info;
+  GtkIconViewItemAccessible *item;
+  GList *items;
+  
+  priv =  gtk_icon_view_accessible_get_priv (ATK_OBJECT (view));
+  if (priv->items)
+    {
+      GtkWidget *widget;
+      gboolean act_on_item;
+
+      widget = GTK_ACCESSIBLE (view)->widget;
+      if (widget == NULL)
+        return;
+
+      items = priv->items;
+
+      act_on_item = (list == NULL);
+
+      while (items)
+        {
+
+          info = (GtkIconViewItemAccessibleInfo *)items->data;
+          item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (info->item);
+
+          if (act_on_item == FALSE && list == items)
+            act_on_item = TRUE;
+
+          if (act_on_item)
+	    gtk_icon_view_item_accessible_set_visibility (item, TRUE);
+
+          items = items->next;
+       }
+   }
+}
+
+static void
+gtk_icon_view_accessible_adjustment_changed (GtkAdjustment *adjustment,
+                                             GtkIconView   *icon_view)
+{
+  AtkObject *obj;
+  GtkIconViewAccessible *view;
+
+  /*
+   * The scrollbars have changed
+   */
+  obj = gtk_widget_get_accessible (GTK_WIDGET (icon_view));
+  view = GTK_ICON_VIEW_ACCESSIBLE (obj);
+
+  gtk_icon_view_accessible_traverse_items (view, NULL);
+}
+
+static void
+gtk_icon_view_accessible_set_scroll_adjustments (GtkWidget      *widget,
+                                                 GtkAdjustment *hadj,
+                                                 GtkAdjustment *vadj)
+{
+  AtkObject *atk_obj;
+  GtkIconViewAccessiblePrivate *priv;
+
+  atk_obj = gtk_widget_get_accessible (widget);
+  priv = gtk_icon_view_accessible_get_priv (atk_obj);
+
+  if (priv->old_hadj != hadj)
+    {
+      if (priv->old_hadj)
+        {
+          g_object_remove_weak_pointer (G_OBJECT (priv->old_hadj),
+                                        (gpointer *)&priv->old_hadj);
+          
+          g_signal_handlers_disconnect_by_func (priv->old_hadj,
+                                                (gpointer) gtk_icon_view_accessible_adjustment_changed,
+                                                widget);
+        }
+      priv->old_hadj = hadj;
+      if (priv->old_hadj)
+        {
+          g_object_add_weak_pointer (G_OBJECT (priv->old_hadj),
+                                     (gpointer *)&priv->old_hadj);
+          g_signal_connect (hadj,
+                            "value-changed",
+                            G_CALLBACK (gtk_icon_view_accessible_adjustment_changed),
+                            widget);
+        }
+    }
+  if (priv->old_vadj != vadj)
+    {
+      if (priv->old_vadj)
+        {
+          g_object_remove_weak_pointer (G_OBJECT (priv->old_vadj),
+                                        (gpointer *)&priv->old_vadj);
+          
+          g_signal_handlers_disconnect_by_func (priv->old_vadj,
+                                                (gpointer) gtk_icon_view_accessible_adjustment_changed,
+                                                widget);
+        }
+      priv->old_vadj = vadj;
+      if (priv->old_vadj)
+        {
+          g_object_add_weak_pointer (G_OBJECT (priv->old_vadj),
+                                     (gpointer *)&priv->old_vadj);
+          g_signal_connect (vadj,
+                            "value-changed",
+                            G_CALLBACK (gtk_icon_view_accessible_adjustment_changed),
+                            widget);
+        }
+    }
+}
+
+static void
+gtk_icon_view_accessible_model_row_changed (GtkTreeModel *tree_model,
+                                            GtkTreePath  *path,
+                                            GtkTreeIter  *iter,
+                                            gpointer     user_data)
+{
+  AtkObject *atk_obj;
+
+  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
+  g_signal_emit_by_name (atk_obj, "visible-data-changed");
+
+  return;
+}
+
+static void
+gtk_icon_view_accessible_model_row_inserted (GtkTreeModel *tree_model,
+                                             GtkTreePath  *path,
+                                             GtkTreeIter  *iter,
+                                             gpointer     user_data)
+{
+  GtkIconViewAccessiblePrivate *priv;
+  GtkIconViewItemAccessibleInfo *info;
+  GtkIconViewAccessible *view;
+  GtkIconViewItemAccessible *item;
+  GList *items;
+  GList *tmp_list;
+  AtkObject *atk_obj;
+  gint index;
+
+  index = gtk_tree_path_get_indices(path)[0];
+  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
+  view = GTK_ICON_VIEW_ACCESSIBLE (atk_obj);
+  priv = gtk_icon_view_accessible_get_priv (atk_obj);
+
+  items = priv->items;
+  tmp_list = NULL;
+  while (items)
+    {
+      info = items->data;
+      item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (info->item);
+      if (info->index != item->item->index)
+        {
+          if (info->index < index)
+            g_warning ("Unexpected index value on insetion %d %d", index, info->index);
+ 
+          if (tmp_list = NULL)
+            tmp_list = items;
+   
+          info->index = item->item->index;
+        }
+
+      items = items->next;
+    }
+  gtk_icon_view_accessible_traverse_items (view, tmp_list);
+  g_signal_emit_by_name (atk_obj, "children_changed::add",
+                         index, NULL, NULL);
+  return;
+}
+
+static void
+gtk_icon_view_accessible_model_row_deleted (GtkTreeModel *tree_model,
+                                            GtkTreePath  *path,
+                                            gpointer     user_data)
+{
+  GtkIconViewAccessiblePrivate *priv;
+  GtkIconViewItemAccessibleInfo *info;
+  GtkIconViewAccessible *view;
+  GtkIconViewItemAccessible *item;
+  GList *items;
+  GList *tmp_list;
+  GList *deleted_item;
+  AtkObject *atk_obj;
+  gint index;
+
+  index = gtk_tree_path_get_indices(path)[0];
+  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
+  view = GTK_ICON_VIEW_ACCESSIBLE (atk_obj);
+  priv = gtk_icon_view_accessible_get_priv (atk_obj);
+
+  items = priv->items;
+  tmp_list = NULL;
+  deleted_item = NULL;
+  while (items)
+    {
+      info = items->data;
+      item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (info->item);
+      if (info->index == index)
+        {
+          deleted_item = items;
+        }
+      if (info->index != item->item->index)
+        {
+          if (tmp_list = NULL)
+            tmp_list = items;
+          else    
+            info->index = item->item->index;
+        }
+
+      items = items->next;
+    }
+  gtk_icon_view_accessible_traverse_items (view, tmp_list);
+  if (deleted_item)
+    {
+      info = deleted_item->data;
+      gtk_icon_view_item_accessible_add_state (GTK_ICON_VIEW_ITEM_ACCESSIBLE (info->item), ATK_STATE_DEFUNCT, TRUE);
+    }
+  g_signal_emit_by_name (atk_obj, "children_changed::remove",
+                         index, NULL, NULL);
+  if (deleted_item)
+    {
+      priv->items = g_list_remove_link (priv->items, deleted_item);
+      g_free (info);
+    }
+
+  return;
+}
+
+gint
+gtk_icon_view_accessible_item_compare (GtkIconViewItemAccessibleInfo *i1,
+                                       GtkIconViewItemAccessibleInfo *i2)
+{
+  return i1->index - i2->index;
+}
+
+static void
+gtk_icon_view_accessible_model_rows_reordered (GtkTreeModel *tree_model,
+                                               GtkTreePath  *path,
+                                               GtkTreeIter  *iter,
+                                               gint         *new_order,
+                                               gpointer     user_data)
+{
+  GtkIconViewAccessiblePrivate *priv;
+  GtkIconViewItemAccessibleInfo *info;
+  GtkIconViewAccessible *view;
+  GtkIconView *icon_view;
+  GtkIconViewItemAccessible *item;
+  GList *items;
+  GList *tmp_list;
+  GList *new_list;
+  AtkObject *atk_obj;
+
+  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
+  icon_view = GTK_ICON_VIEW (user_data);
+  view = GTK_ICON_VIEW_ACCESSIBLE (atk_obj);
+  priv = gtk_icon_view_accessible_get_priv (atk_obj);
+
+  items = priv->items;
+  tmp_list = NULL;
+  while (items)
+    {
+      info = items->data;
+      item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (info->item);
+      info->index = new_order[info->index];
+      tmp_list = g_list_nth (icon_view->priv->items, info->index);
+      item->item = tmp_list->data;
+      items = items->next;
+    }
+  priv->items = g_list_sort (priv->items, 
+                             (GCompareFunc)gtk_icon_view_accessible_item_compare);
+
+  return;
+}
+
+static void
+gtk_icon_view_accessible_disconnect_model_signals (GtkTreeModel *model,
+                                                   GtkWidget *widget)
+{
+  GObject *obj;
+
+  obj = G_OBJECT (model);
+  g_signal_handlers_disconnect_by_func (obj, (gpointer) gtk_icon_view_accessible_model_row_changed, widget);
+  g_signal_handlers_disconnect_by_func (obj, (gpointer) gtk_icon_view_accessible_model_row_inserted, widget);
+  g_signal_handlers_disconnect_by_func (obj, (gpointer) gtk_icon_view_accessible_model_row_deleted, widget);
+  g_signal_handlers_disconnect_by_func (obj, (gpointer) gtk_icon_view_accessible_model_rows_reordered, widget);
+}
+
+static void
+gtk_icon_view_accessible_connect_model_signals (GtkIconView *icon_view)
+{
+  GObject *obj;
+
+  obj = G_OBJECT (icon_view->priv->model);
+  g_signal_connect_data (obj, "row-changed",
+                         (GCallback) gtk_icon_view_accessible_model_row_changed,
+                         icon_view, NULL, 0);
+  g_signal_connect_data (obj, "row-inserted",
+                         (GCallback) gtk_icon_view_accessible_model_row_inserted, 
+                         icon_view, NULL, G_CONNECT_AFTER);
+  g_signal_connect_data (obj, "row-deleted",
+                         (GCallback) gtk_icon_view_accessible_model_row_deleted, 
+                         icon_view, NULL, G_CONNECT_AFTER);
+  g_signal_connect_data (obj, "rows-reordered",
+                         (GCallback) gtk_icon_view_accessible_model_rows_reordered, 
+                         icon_view, NULL, G_CONNECT_AFTER);
+}
+
+static void
+gtk_icon_view_accessible_clear_cache (GtkIconViewAccessiblePrivate *priv)
+{
+  GtkIconViewItemAccessibleInfo *info;
+  GList *items;
+
+  items = priv->items;
+  while (items)
+    {
+      info = (GtkIconViewItemAccessibleInfo *) items->data;
+      g_object_unref (info->item);
+      g_free (items->data);
+      items = items->next;
+    }
+  g_list_free (priv->items);
+  priv->items = NULL;
+}
+
+static void
+gtk_icon_view_accessible_notify_gtk (GObject *obj,
+                                     GParamSpec *pspec)
+{
+  GtkIconView *icon_view;
+  GtkWidget *widget;
+  AtkObject *atk_obj;
+  GtkIconViewAccessible *view;
+  GtkIconViewAccessiblePrivate *priv;
+
+  if (strcmp (pspec->name, "model") == 0)
+    {
+      widget = GTK_WIDGET (obj); 
+      atk_obj = gtk_widget_get_accessible (widget);
+      view = GTK_ICON_VIEW_ACCESSIBLE (atk_obj);
+      priv = gtk_icon_view_accessible_get_priv (atk_obj);
+      if (priv->model)
+        {
+          g_object_remove_weak_pointer (G_OBJECT (priv->model),
+                                        (gpointer *)&priv->model);
+          gtk_icon_view_accessible_disconnect_model_signals (priv->model, widget);
+        }
+      gtk_icon_view_accessible_clear_cache (priv);
+
+      icon_view = GTK_ICON_VIEW (obj);
+      priv->model = icon_view->priv->model;
+      /* If there is no model the GtkIconView is probably being destroyed */
+      if (priv->model)
+        {
+          g_object_add_weak_pointer (G_OBJECT (priv->model), (gpointer *)&priv->model);
+          gtk_icon_view_accessible_connect_model_signals (icon_view);
+        }
+    }
+
+  return;
+}
+
+static void
+gtk_icon_view_accessible_initialize (AtkObject *accessible,
+                                     gpointer   data)
+{
+  GtkIconViewAccessiblePrivate *priv;
+  GtkIconView *icon_view;
+
+  if (ATK_OBJECT_CLASS (accessible_parent_class)->initialize)
+    ATK_OBJECT_CLASS (accessible_parent_class)->initialize (accessible, data);
+
+  priv = g_new0 (GtkIconViewAccessiblePrivate, 1);
+  g_object_set_qdata (G_OBJECT (accessible),
+                      accessible_private_data_quark,
+                      priv);
+
+  icon_view = GTK_ICON_VIEW (data);
+  if (icon_view->priv->hadjustment)
+    {
+      priv->old_hadj = icon_view->priv->hadjustment;
+      g_object_add_weak_pointer (G_OBJECT (priv->old_hadj), (gpointer *)&priv->old_hadj);
+      g_signal_connect (icon_view->priv->hadjustment,
+                        "value-changed",
+                        G_CALLBACK (gtk_icon_view_accessible_adjustment_changed),
+                        icon_view);
+    } 
+  if (icon_view->priv->vadjustment)
+    {
+      priv->old_vadj = icon_view->priv->vadjustment;
+      g_object_add_weak_pointer (G_OBJECT (priv->old_vadj), (gpointer *)&priv->old_vadj);
+      g_signal_connect (icon_view->priv->vadjustment,
+                        "value-changed",
+                        G_CALLBACK (gtk_icon_view_accessible_adjustment_changed),
+                        icon_view);
+    }
+  g_signal_connect_after (data,
+                          "set_scroll_adjustments",
+                          G_CALLBACK (gtk_icon_view_accessible_set_scroll_adjustments),
+                          NULL);
+  g_signal_connect (data,
+                    "notify",
+                    G_CALLBACK (gtk_icon_view_accessible_notify_gtk),
+                    NULL);
+
+  priv->model = icon_view->priv->model;
+  if (priv->model)
+    {
+      g_object_add_weak_pointer (G_OBJECT (priv->model), (gpointer *)&priv->model);
+      gtk_icon_view_accessible_connect_model_signals (icon_view);
+    }
+                          
+  accessible->role = ATK_ROLE_LAYERED_PANE;
+}
+
+static void
+gtk_icon_view_accessible_finalize (GObject *object)
+{
+  GtkIconViewAccessiblePrivate *priv;
+
+  priv = gtk_icon_view_accessible_get_priv (ATK_OBJECT (object));
+  gtk_icon_view_accessible_clear_cache (priv);
+
+  g_free (priv);
+
+  G_OBJECT_CLASS (accessible_parent_class)->finalize (object);
+}
+
+static void
+gtk_icon_view_accessible_destroyed (GtkWidget *widget,
+                                    GtkAccessible *accessible)
+{
+  AtkObject *atk_obj;
+  GtkIconViewAccessiblePrivate *priv;
+
+  atk_obj = ATK_OBJECT (accessible);
+  priv = gtk_icon_view_accessible_get_priv (atk_obj);
+  if (priv->old_hadj)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (priv->old_hadj),
+                                    (gpointer *)&priv->old_hadj);
+          
+      g_signal_handlers_disconnect_by_func (priv->old_hadj,
+                                            (gpointer) gtk_icon_view_accessible_adjustment_changed,
+                                            widget);
+      priv->old_hadj = NULL;
+    }
+  if (priv->old_vadj)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (priv->old_vadj),
+                                    (gpointer *)&priv->old_vadj);
+          
+      g_signal_handlers_disconnect_by_func (priv->old_vadj,
+                                            (gpointer) gtk_icon_view_accessible_adjustment_changed,
+                                            widget);
+      priv->old_vadj = NULL;
+    }
+}
+
+static void
+gtk_icon_view_accessible_connect_widget_destroyed (GtkAccessible *accessible)
+{
+  if (accessible->widget)
+    {
+      g_signal_connect_after (accessible->widget,
+                              "destroy",
+                              G_CALLBACK (gtk_icon_view_accessible_destroyed),
+                              accessible);
+    }
+  GTK_ACCESSIBLE_CLASS (accessible_parent_class)->connect_widget_destroyed (accessible);
+}
+
+static void
+gtk_icon_view_accessible_class_init (AtkObjectClass *klass)
+{
+  GObjectClass *gobject_class;
+  GtkAccessibleClass *accessible_class;
+
+  accessible_parent_class = g_type_class_peek_parent (klass);
+
+  gobject_class = (GObjectClass *)klass;
+  accessible_class = (GtkAccessibleClass *)klass;
+
+  gobject_class->finalize = gtk_icon_view_accessible_finalize;
+
+  klass->get_n_children = gtk_icon_view_accessible_get_n_children;
+  klass->ref_child = gtk_icon_view_accessible_ref_child;
+  klass->initialize = gtk_icon_view_accessible_initialize;
+
+  accessible_class->connect_widget_destroyed = gtk_icon_view_accessible_connect_widget_destroyed;
+
+  accessible_private_data_quark = g_quark_from_static_string ("icon_view-accessible-private-data");
+}
+
+static AtkObject*
+gtk_icon_view_accessible_ref_accessible_at_point (AtkComponent *component,
+                                                  gint          x,
+                                                  gint          y,
+                                                  AtkCoordType  coord_type)
+{
+  GtkWidget *widget;
+  GtkIconView *icon_view;
+  GtkIconViewItem *item;
+  gint x_pos, y_pos;
+
+  widget = GTK_ACCESSIBLE (component)->widget;
+  if (widget == NULL)
+  /* State is defunct */
+    return NULL;
+
+  icon_view = GTK_ICON_VIEW (widget);
+  atk_component_get_extents (component, &x_pos, &y_pos, NULL, NULL, coord_type);
+  item = gtk_icon_view_get_item_at_pos (icon_view, x - x_pos, y - y_pos);
+  if (item)
+    return gtk_icon_view_accessible_ref_child (ATK_OBJECT (component), item->index);
+
+  return NULL;
+}
+
+static void
+atk_component_interface_init (AtkComponentIface *iface)
+{
+  iface->ref_accessible_at_point = gtk_icon_view_accessible_ref_accessible_at_point;
+}
+
+static gboolean
+gtk_icon_view_accessible_add_selection (AtkSelection *selection,
+                                        gint i)
+{
+  GtkWidget *widget;
+  GtkIconView *icon_view;
+  GtkIconViewItem *item;
+  GList *l;
+
+  widget = GTK_ACCESSIBLE (selection)->widget;
+  if (widget == NULL)
+    return FALSE;
+
+  icon_view = GTK_ICON_VIEW (widget);
+
+  l = g_list_nth (icon_view->priv->items, i);
+  if (!l)
+    return FALSE;
+
+  item = l->data;
+  gtk_icon_view_select_item (icon_view, item);
+
+  return TRUE;
+}
+
+static gboolean
+gtk_icon_view_accessible_clear_selection (AtkSelection *selection)
+{
+  GtkWidget *widget;
+  GtkIconView *icon_view;
+
+  widget = GTK_ACCESSIBLE (selection)->widget;
+  if (widget == NULL)
+    return FALSE;
+
+  icon_view = GTK_ICON_VIEW (widget);
+  gtk_icon_view_unselect_all (icon_view);
+
+  return TRUE;
+}
+
+static AtkObject*
+gtk_icon_view_accessible_ref_selection (AtkSelection *selection,
+                                        gint          i)
+{
+  GtkWidget *widget;
+  GtkIconView *icon_view;
+  GtkIconViewItem *item;
+  GList *l;
+
+  widget = GTK_ACCESSIBLE (selection)->widget;
+  if (widget == NULL)
+    return FALSE;
+
+  icon_view = GTK_ICON_VIEW (widget);
+
+  l = icon_view->priv->items;
+  while (l)
+    {
+      item = l->data;
+      if (item->selected)
+        {
+          if (i == 0)
+	    return atk_object_ref_accessible_child (gtk_widget_get_accessible (widget), item->index);
+          else
+            i--;
+        }
+      l = l->next;
+    }
+
+  return NULL;
+}
+
+static gint
+gtk_icon_view_accessible_get_selection_count (AtkSelection *selection)
+{
+  GtkWidget *widget;
+  GtkIconView *icon_view;
+  GtkIconViewItem *item;
+  GList *l;
+  gint count;
+
+  widget = GTK_ACCESSIBLE (selection)->widget;
+  if (widget == NULL)
+    return 0;
+
+  icon_view = GTK_ICON_VIEW (widget);
+
+  l = icon_view->priv->items;
+  count = 0;
+  while (l)
+    {
+      item = l->data;
+
+      if (item->selected)
+	count++;
+
+      l = l->next;
+    }
+
+  return count;
+}
+
+static gboolean
+gtk_icon_view_accessible_is_child_selected (AtkSelection *selection,
+                                            gint          i)
+{
+  GtkWidget *widget;
+  GtkIconView *icon_view;
+  GtkIconViewItem *item;
+  GList *l;
+
+  widget = GTK_ACCESSIBLE (selection)->widget;
+  if (widget == NULL)
+    return FALSE;
+
+  icon_view = GTK_ICON_VIEW (widget);
+  l = g_list_nth (icon_view->priv->items, i);
+  if (!l)
+    return FALSE;
+
+  item = l->data;
+
+  return item->selected;
+}
+
+static gboolean
+gtk_icon_view_accessible_remove_selection (AtkSelection *selection,
+                                           gint          i)
+{
+  GtkWidget *widget;
+  GtkIconView *icon_view;
+  GtkIconViewItem *item;
+  GList *l;
+  gint count;
+
+  widget = GTK_ACCESSIBLE (selection)->widget;
+  if (widget == NULL)
+    return FALSE;
+
+  icon_view = GTK_ICON_VIEW (widget);
+  l = icon_view->priv->items;
+  count = 0;
+  while (l)
+    {
+      item = l->data;
+      if (item->selected)
+        {
+          if (count == i)
+            {
+              gtk_icon_view_unselect_item (icon_view, item);
+              return TRUE;
+            }
+          count++;
+        }
+      l = l->next;
+    }
+
+  return FALSE;
+}
+ 
+static gboolean
+gtk_icon_view_accessible_select_all_selection (AtkSelection *selection)
+{
+  GtkWidget *widget;
+  GtkIconView *icon_view;
+  GList *l;
+
+  widget = GTK_ACCESSIBLE (selection)->widget;
+  if (widget == NULL)
+    return FALSE;
+
+  icon_view = GTK_ICON_VIEW (widget);
+  gtk_icon_view_select_all (icon_view);
+  return TRUE;
+}
+
+static void
+gtk_icon_view_accessible_selection_interface_init (AtkSelectionIface *iface)
+{
+  iface->add_selection = gtk_icon_view_accessible_add_selection;
+  iface->clear_selection = gtk_icon_view_accessible_clear_selection;
+  iface->ref_selection = gtk_icon_view_accessible_ref_selection;
+  iface->get_selection_count = gtk_icon_view_accessible_get_selection_count;
+  iface->is_child_selected = gtk_icon_view_accessible_is_child_selected;
+  iface->remove_selection = gtk_icon_view_accessible_remove_selection;
+  iface->select_all_selection = gtk_icon_view_accessible_select_all_selection;
+}
+
+static GType
+gtk_icon_view_accessible_get_type (void)
+{
+  static GType type = 0;
+
+  if (!type)
+    {
+      static GTypeInfo tinfo =
+      {
+        0, /* class size */
+        (GBaseInitFunc) NULL, /* base init */
+        (GBaseFinalizeFunc) NULL, /* base finalize */
+        (GClassInitFunc) gtk_icon_view_accessible_class_init,
+        (GClassFinalizeFunc) NULL, /* class finalize */
+        NULL, /* class data */
+        0, /* instance size */
+        0, /* nb preallocs */
+        (GInstanceInitFunc) NULL, /* instance init */
+        NULL /* value table */
+      };
+      static const GInterfaceInfo atk_component_info =
+      {
+        (GInterfaceInitFunc) atk_component_interface_init,
+        (GInterfaceFinalizeFunc) NULL,
+        NULL
+      };
+      static GInterfaceInfo atk_selection_info = 
+      {
+        (GInterfaceInitFunc) gtk_icon_view_accessible_selection_interface_init,
+        (GInterfaceFinalizeFunc) NULL,
+        NULL
+      };
+
+      /*
+       * Figure out the size of the class and instance
+       * we are deriving from
+       */
+      AtkObjectFactory *factory;
+      GType derived_type;
+      GTypeQuery query;
+      GType derived_atk_type;
+
+      derived_type = g_type_parent (GTK_TYPE_ICON_VIEW);
+      factory = atk_registry_get_factory (atk_get_default_registry (), 
+                                          derived_type);
+      derived_atk_type = atk_object_factory_get_accessible_type (factory);
+      g_type_query (derived_atk_type, &query);
+      tinfo.class_size = query.class_size;
+      tinfo.instance_size = query.instance_size;
+ 
+      type = g_type_register_static (derived_atk_type, 
+                                     "GtkIconViewAccessible", 
+                                     &tinfo, 0);
+      g_type_add_interface_static (type, ATK_TYPE_COMPONENT,
+                                   &atk_component_info);
+      g_type_add_interface_static (type, ATK_TYPE_SELECTION,
+                                   &atk_selection_info);
+    }
+  return type;
+}
+
+AtkObject *
+gtk_icon_view_accessible_new (GObject *obj)
+{
+  AtkObject *accessible;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (obj), NULL);
+
+  accessible = g_object_new (gtk_icon_view_accessible_get_type (), NULL);
+  atk_object_initialize (accessible, obj);
+
+  return accessible;
+}
+
+static GType
+gtk_icon_view_accessible_factory_get_accessible_type (void)
+{
+  return gtk_icon_view_accessible_get_type ();
+}
+
+static AtkObject*
+gtk_icon_view_accessible_factory_create_accessible (GObject *obj)
+{
+  return gtk_icon_view_accessible_new (obj);
+}
+
+static void
+gtk_icon_view_accessible_factory_class_init (AtkObjectFactoryClass *klass)
+{
+  klass->create_accessible = gtk_icon_view_accessible_factory_create_accessible;
+  klass->get_accessible_type = gtk_icon_view_accessible_factory_get_accessible_type;
+}
+
+static GType
+gtk_icon_view_accessible_factory_get_type (void)
+{
+  static GType type = 0;
+
+  if (!type)
+    {
+      static const GTypeInfo tinfo =
+      {
+        sizeof (AtkObjectFactoryClass),
+        NULL,           /* base_init */
+        NULL,           /* base_finalize */
+        (GClassInitFunc) gtk_icon_view_accessible_factory_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (AtkObjectFactory),
+        0,             /* n_preallocs */
+        NULL, NULL
+      };
+
+      type = g_type_register_static (ATK_TYPE_OBJECT_FACTORY, 
+                                    "GtkIconViewAccessibleFactory",
+                                    &tinfo, 0);
+    }
+  return type;
+}
+
+static AtkObject *
+gtk_icon_view_get_accessible (GtkWidget *widget)
+{
+  static gboolean first_time = TRUE;
+
+  if (first_time)
+    {
+      AtkObjectFactory *factory;
+      AtkRegistry *registry;
+      GType derived_type; 
+      GType derived_atk_type; 
+
+      /*
+       * Figure out whether accessibility is enabled by looking at the
+       * type of the accessible object which would be created for
+       * the parent type of GtkIconView.
+       */
+      derived_type = g_type_parent (GTK_TYPE_ICON_VIEW);
+
+      registry = atk_get_default_registry ();
+      factory = atk_registry_get_factory (registry,
+                                          derived_type);
+      derived_atk_type = atk_object_factory_get_accessible_type (factory);
+      if (g_type_is_a (derived_atk_type, GTK_TYPE_ACCESSIBLE)) 
+	atk_registry_set_factory_type (registry, 
+				       GTK_TYPE_ICON_VIEW,
+				       gtk_icon_view_accessible_factory_get_type ());
+      first_time = FALSE;
+    } 
+  return GTK_WIDGET_CLASS (parent_class)->get_accessible (widget);
+}
+
