@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk-is\n"
 "POT-Creation-Date: 2003-08-14 19:16+0000\n"
 "PO-Revision-Date: 2003-08-19 09:15+0000\n"
-"Last-Translator: Hordur Mar Gestsson <zbot@kuntnet.org>\n"
+"Last-Translator: Richard Allen <ra@ra.is>\n"
 "Language-Team: Icelandic <is@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -853,19 +853,19 @@ msgstr "Lágmarks hæð hnappa innan rammans"
 
 #: gtk/gtkbbox.c:137
 msgid "Child internal width padding"
-msgstr ""
+msgstr "Innvær breykkun barna"
 
 #: gtk/gtkbbox.c:138
 msgid "Amount to increase child's size on either side"
-msgstr ""
+msgstr "Hversu mikið á að auka breydd barna á hvorri hlið"
 
 #: gtk/gtkbbox.c:146
 msgid "Child internal height padding"
-msgstr ""
+msgstr "Innvær hækkun barna"
 
 #: gtk/gtkbbox.c:147
 msgid "Amount to increase child's size on the top and bottom"
-msgstr ""
+msgstr "Hversu mikið á að auka hæð barna á hvorri hlið"
 
 #: gtk/gtkbbox.c:155
 msgid "Layout style"
@@ -929,7 +929,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:161
 msgid "Extra space to put between the child and its neighbors, in pixels"
-msgstr ""
+msgstr "Auka pláss til að hafa á milli barna og nágranna þeirra í myndeiningum"
 
 #: gtk/gtkbox.c:167
 msgid "Pack type"
@@ -944,11 +944,11 @@ msgstr ""
 #: gtk/gtkbox.c:174 gtk/gtknotebook.c:472 gtk/gtkpaned.c:218
 #: gtk/gtkruler.c:138
 msgid "Position"
-msgstr ""
+msgstr "Staðsetning"
 
 #: gtk/gtkbox.c:175 gtk/gtknotebook.c:473
 msgid "The index of the child in the parent"
-msgstr ""
+msgstr "Númer barnsins í foreldrinu"
 
 #: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:290
 msgid "Label"
@@ -959,6 +959,7 @@ msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr ""
+"Textinn í merkisgræjunni sem er inní hnappnum ef hnappurinn er með merki"
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:311
 msgid "Use underline"
@@ -1038,63 +1039,63 @@ msgstr "Sýna selluna"
 
 #: gtk/gtkcellrenderer.c:135
 msgid "xalign"
-msgstr ""
+msgstr "xalign"
 
 #: gtk/gtkcellrenderer.c:136
 msgid "The x-align"
-msgstr ""
+msgstr "Gildi x-align"
 
 #: gtk/gtkcellrenderer.c:146
 msgid "yalign"
-msgstr ""
+msgstr "yalign"
 
 #: gtk/gtkcellrenderer.c:147
 msgid "The y-align"
-msgstr ""
+msgstr "Gildi y-align"
 
 #: gtk/gtkcellrenderer.c:157
 msgid "xpad"
-msgstr ""
+msgstr "xpad"
 
 #: gtk/gtkcellrenderer.c:158
 msgid "The xpad"
-msgstr ""
+msgstr "Gildi xpad"
 
 #: gtk/gtkcellrenderer.c:168
 msgid "ypad"
-msgstr ""
+msgstr "ypad"
 
 #: gtk/gtkcellrenderer.c:169
 msgid "The ypad"
-msgstr ""
+msgstr "Gildi ypad"
 
 #: gtk/gtkcellrenderer.c:179
 msgid "width"
-msgstr ""
+msgstr "breydd"
 
 #: gtk/gtkcellrenderer.c:180
 msgid "The fixed width"
-msgstr ""
+msgstr "Föst breydd"
 
 #: gtk/gtkcellrenderer.c:190
 msgid "height"
-msgstr ""
+msgstr "hæð"
 
 #: gtk/gtkcellrenderer.c:191
 msgid "The fixed height"
-msgstr ""
+msgstr "Föst hæð"
 
 #: gtk/gtkcellrenderer.c:201
 msgid "Is Expander"
-msgstr ""
+msgstr "Er Expander"
 
 #: gtk/gtkcellrenderer.c:202
 msgid "Row has children"
-msgstr ""
+msgstr "Röðin hefur börn"
 
 #: gtk/gtkcellrenderer.c:211
 msgid "Is Expanded"
-msgstr ""
+msgstr "Er Expanded"
 
 #: gtk/gtkcellrenderer.c:212
 msgid "Row is an expander row, and is expanded"
@@ -1182,7 +1183,7 @@ msgstr "textinn sem teikna á"
 
 #: gtk/gtkcellrenderertext.c:183
 msgid "Markup"
-msgstr ""
+msgstr "Merking"
 
 #: gtk/gtkcellrenderertext.c:184
 msgid "Marked up text to render"
@@ -4672,39 +4673,39 @@ msgstr ""
 
 #: gtk/gtkwindow.c:516
 msgid "Default Width"
-msgstr ""
+msgstr "Sjálfgefin breydd"
 
 #: gtk/gtkwindow.c:517
 msgid "The default width of the window, used when initially showing the window"
-msgstr ""
+msgstr "Sjálfgefin breydd gluggans þegar hann birtist fyrst"
 
 #: gtk/gtkwindow.c:526
 msgid "Default Height"
-msgstr ""
+msgstr "Sjálfgefin hæð"
 
 #: gtk/gtkwindow.c:527
 msgid "The default height of the window, used when initially showing the window"
-msgstr ""
+msgstr "Sjálfgefin hæð gluggans þegar hann birtist fyrst"
 
 #: gtk/gtkwindow.c:536
 msgid "Destroy with Parent"
-msgstr ""
+msgstr "Eyða með foreldri"
 
 #: gtk/gtkwindow.c:537
 msgid "If this window should be destroyed when the parent is destroyed"
-msgstr ""
+msgstr "Hvort eyða skuli þessum glugga þegar glugga foreldris er eytt"
 
 #: gtk/gtkwindow.c:544
 msgid "Icon"
-msgstr ""
+msgstr "Táknmynd"
 
 #: gtk/gtkwindow.c:545
 msgid "Icon for this window"
-msgstr ""
+msgstr "Táknmynd þessa glugga"
 
 #: gtk/gtkwindow.c:560
 msgid "Is Active"
-msgstr ""
+msgstr "Er virkur"
 
 #: gtk/gtkwindow.c:561
 msgid "Whether the toplevel is the current active window"
@@ -4730,59 +4731,59 @@ msgstr ""
 
 #: gtk/gtkwindow.c:585
 msgid "Skip taskbar"
-msgstr ""
+msgstr "Sleppa tækjastiku"
 
 #: gtk/gtkwindow.c:586
 msgid "TRUE if the window should not be in the task bar."
-msgstr ""
+msgstr "TRUE ef glugginn á ekki a'vera í tækjastikunni"
 
 #: gtk/gtkwindow.c:593
 msgid "Skip pager"
-msgstr ""
+msgstr "Sleppa síðuskoðara"
 
 #: gtk/gtkwindow.c:594
 msgid "TRUE if the window should not be in the pager."
-msgstr ""
+msgstr "TRUE ef glugginn á ekki að vera í síðuskoðaranum"
 
 #. ID
 #: modules/input/imam-et.c:453
 msgid "Amharic (EZ+)"
-msgstr ""
+msgstr "Amharic (EZ+)"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
 msgid "Cyrillic (Transliterated)"
-msgstr ""
+msgstr "Cyrillic (Transliterated)"
 
 #. ID
 #: modules/input/iminuktitut.c:126
 msgid "Inukitut (Transliterated)"
-msgstr ""
+msgstr "Inukitut (Transliterated)"
 
 #. ID
 #: modules/input/imipa.c:144
 msgid "IPA"
-msgstr ""
+msgstr "IPA"
 
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr ""
+msgstr "Thai (Broken)"
 
 #. ID
 #: modules/input/imti-er.c:452
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr ""
+msgstr "Tigrigna-Eritrean (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:452
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr ""
+msgstr "Tigrigna-Ethiopian (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:243
 msgid "Vietnamese (VIQR)"
-msgstr ""
+msgstr "Vietnamese (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:27
