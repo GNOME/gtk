@@ -361,7 +361,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 	    {
 	      g_free (win32_gc->pen_dashes);
 	      win32_gc->pen_dashes = NULL;
-            win32_gc->pen_num_dashes = 0;
+	      win32_gc->pen_num_dashes = 0;
 	    }
           win32_gc->pen_style &= ~(PS_STYLE_MASK);
 	  win32_gc->pen_style |= PS_SOLID;
@@ -593,6 +593,8 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
 
   win32_gc->pen_style |= (PS_GEOMETRIC | PS_USERSTYLE);
   win32_gc->pen_num_dashes = n;
+  if (win32_gc->pen_dashes != NULL)
+    g_free (win32_gc->pen_dashes);
   win32_gc->pen_dashes = g_new (DWORD, n);
   for (i = 0; i < n; i++)
     win32_gc->pen_dashes[i] = dash_list[i];

@@ -1,3 +1,8 @@
+2004-04-29  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_gc_set_dashes): Plug memory
+	leak. (#140775, John Ehresman)
+
 Thu Apr 29 01:09:50 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdkdraw.c (_gdk_drawable_get_scratch_gc): Use depth - 1
