@@ -1,5 +1,10 @@
 2001-02-20  Alexander Larsson  <alexl@redhat.com>
 
+	* gtk/gtklabel.c (gtk_label_set_selectable):
+	Queue a redraw if the selectable setting was changed.
+
+2001-02-20  Alexander Larsson  <alexl@redhat.com>
+
 	* gdk/linux-fb/gdkgc-fb.c (gdk_gc_copy):
 	Actually copy the whole gc, not just the public parts.
 	

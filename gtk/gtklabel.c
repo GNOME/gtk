@@ -1273,10 +1273,13 @@ void
 gtk_label_set_selectable (GtkLabel *label,
                           gboolean  setting)
 {
+  gboolean old_setting;
+  
   g_return_if_fail (GTK_IS_LABEL (label));
   
   setting = setting != FALSE;
-
+  old_setting = label->select_info != NULL;
+  
   if (setting)
     {
       if (label->select_info == NULL)
@@ -1306,6 +1309,8 @@ gtk_label_set_selectable (GtkLabel *label,
           label->select_info = NULL;
         }
     }
+  if (setting != old_setting)
+    gtk_widget_queue_draw (GTK_WIDGET (label));
 }
 
 gboolean
