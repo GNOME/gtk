@@ -8,6 +8,7 @@ demos =						\
 	appwindow.c				\
 	button_box.c				\
 	changedisplay.c				\
+	clipboard.c				\
 	colorsel.c				\
 	dialog.c				\
 	drawingarea.c				\

@@ -1,3 +1,10 @@
+2004-07-29  Anders Carlsson  <andersca@gnome.org>
+
+	* demos/gtk-demo/Makefile.am:
+	* demos/gtk-demo/clipboard.c: (copy_button_clicked),
+	(paste_received), (paste_button_clicked), (do_clipboard):
+	Add clipboard demo.
+	
 2004-07-28  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault):
