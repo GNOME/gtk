@@ -85,15 +85,12 @@ struct _GtkToolbar
   GList           *children;
   GtkOrientation   orientation;
   GtkToolbarStyle  style;
-  gint             space_size; /* big optional space between buttons */
-  GtkToolbarSpaceStyle space_style;
   GtkIconSize      icon_size;
 
   GtkTooltips     *tooltips;
 
   gint             button_maxw;
   gint             button_maxh;
-  GtkReliefStyle   relief;
 };
 
 struct _GtkToolbarClass
@@ -206,16 +203,8 @@ void       gtk_toolbar_set_orientation       (GtkToolbar           *toolbar,
 					      GtkOrientation        orientation);
 void       gtk_toolbar_set_style             (GtkToolbar           *toolbar,
 					      GtkToolbarStyle       style);
-void       gtk_toolbar_set_space_size        (GtkToolbar           *toolbar,
-					      gint                  space_size);
-void       gtk_toolbar_set_space_style       (GtkToolbar           *toolbar,
-					      GtkToolbarSpaceStyle  space_style);
 void       gtk_toolbar_set_tooltips          (GtkToolbar           *toolbar,
 					      gboolean		    enable);
-void       gtk_toolbar_set_button_relief     (GtkToolbar           *toolbar,
-					      GtkReliefStyle        relief);
-GtkReliefStyle gtk_toolbar_get_button_relief (GtkToolbar           *toolbar);
-
 
 #ifdef __cplusplus
 }

@@ -52,7 +52,7 @@ struct _GtkMenuBar
 {
   GtkMenuShell menu_shell;
 
-  GtkShadowType shadow_type;
+  GtkWidget *toplevel;
 };
 
 struct _GtkMenuBarClass
@@ -70,9 +70,6 @@ void       gtk_menu_bar_prepend         (GtkMenuBar    *menu_bar,
 void       gtk_menu_bar_insert          (GtkMenuBar    *menu_bar,
 					 GtkWidget     *child,
 					 gint           position);
-void       gtk_menu_bar_set_shadow_type (GtkMenuBar    *menu_bar,
-					 GtkShadowType  type);
-
 
 #ifdef __cplusplus
 }

@@ -35,6 +35,7 @@
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
 #include "gtkimage.h"
+#include "gtkintl.h"
 
 
 #define DEFAULT_SPACE_SIZE  5
@@ -86,6 +87,8 @@ static void gtk_toolbar_size_request             (GtkWidget       *widget,
 				                  GtkRequisition  *requisition);
 static void gtk_toolbar_size_allocate            (GtkWidget       *widget,
 				                  GtkAllocation   *allocation);
+static void gtk_toolbar_style_set                (GtkWidget       *widget,
+                                                  GtkStyle        *prev_style);
 static void gtk_toolbar_add                      (GtkContainer    *container,
 				                  GtkWidget       *widget);
 static void gtk_toolbar_remove                   (GtkContainer    *container,
@@ -120,6 +123,13 @@ static GtkWidget * gtk_toolbar_internal_insert_item (GtkToolbar    *toolbar,
                                                      gpointer       user_data,
                                                      gint           position,
                                                      gboolean       has_mnemonic);
+
+static void        gtk_toolbar_update_button_relief (GtkToolbar *toolbar);
+
+static GtkReliefStyle       get_button_relief (GtkToolbar *toolbar);
+static gint                 get_space_size    (GtkToolbar *toolbar);
+static GtkToolbarSpaceStyle get_space_style   (GtkToolbar *toolbar);
+
 
 static GtkContainerClass *parent_class;
 
@@ -173,7 +183,8 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   widget_class->expose_event = gtk_toolbar_expose;
   widget_class->size_request = gtk_toolbar_size_request;
   widget_class->size_allocate = gtk_toolbar_size_allocate;
-
+  widget_class->style_set = gtk_toolbar_style_set;
+  
   container_class->add = gtk_toolbar_add;
   container_class->remove = gtk_toolbar_remove;
   container_class->forall = gtk_toolbar_forall;
@@ -203,12 +214,31 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
 			   GTK_ARG_READWRITE, ARG_ORIENTATION);
   gtk_object_add_arg_type ("GtkToolbar::toolbar_style", GTK_TYPE_TOOLBAR_STYLE,
 			   GTK_ARG_READWRITE, ARG_TOOLBAR_STYLE);
-  gtk_object_add_arg_type ("GtkToolbar::space_size", GTK_TYPE_UINT,
-			   GTK_ARG_READWRITE, ARG_SPACE_SIZE);
-  gtk_object_add_arg_type ("GtkToolbar::space_style", GTK_TYPE_TOOLBAR_SPACE_STYLE,
-			   GTK_ARG_READWRITE, ARG_SPACE_STYLE);
-  gtk_object_add_arg_type ("GtkToolbar::relief", GTK_TYPE_RELIEF_STYLE,
-			   GTK_ARG_READWRITE, ARG_RELIEF);
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("space_size",
+							     _("Spacer size"),
+							     _("Size of spacers"),
+							     0,
+							     G_MAXINT,
+                                                             DEFAULT_SPACE_SIZE,
+							     G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_enum ("space_style",
+							     _("Space style"),
+							     _("Whether spacers are vertical lines or just blank"),
+                                                              GTK_TYPE_TOOLBAR_SPACE_STYLE,
+                                                              DEFAULT_SPACE_STYLE,
+                                                              
+                                                              G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_enum ("button_relief",
+							     _("Button relief"),
+							     _("Type of bevel around toolbar buttons"),
+                                                              GTK_TYPE_RELIEF_STYLE,
+                                                              GTK_RELIEF_NORMAL,
+                                                              G_PARAM_READABLE));
 }
 
 static void
@@ -221,9 +251,6 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   toolbar->children     = NULL;
   toolbar->orientation  = GTK_ORIENTATION_HORIZONTAL;
   toolbar->style        = GTK_TOOLBAR_ICONS;
-  toolbar->relief       = GTK_RELIEF_NORMAL;
-  toolbar->space_size   = DEFAULT_SPACE_SIZE;
-  toolbar->space_style  = DEFAULT_SPACE_STYLE;
   toolbar->icon_size    = DEFAULT_ICON_SIZE;
   toolbar->tooltips     = gtk_tooltips_new ();
   toolbar->button_maxw  = 0;
@@ -245,15 +272,6 @@ gtk_toolbar_set_arg (GtkObject *object,
     case ARG_TOOLBAR_STYLE:
       gtk_toolbar_set_style (toolbar, GTK_VALUE_ENUM (*arg));
       break;
-    case ARG_SPACE_SIZE:
-      gtk_toolbar_set_space_size (toolbar, GTK_VALUE_UINT (*arg));
-      break;
-    case ARG_SPACE_STYLE:
-      gtk_toolbar_set_space_style (toolbar, GTK_VALUE_ENUM (*arg));
-      break;	  
-    case ARG_RELIEF:
-      gtk_toolbar_set_button_relief (toolbar, GTK_VALUE_ENUM (*arg));
-      break;
     }
 }
 
@@ -272,15 +290,6 @@ gtk_toolbar_get_arg (GtkObject *object,
     case ARG_TOOLBAR_STYLE:
       GTK_VALUE_ENUM (*arg) = toolbar->style;
       break;
-    case ARG_SPACE_SIZE:
-      GTK_VALUE_UINT (*arg) = toolbar->space_size;
-      break;		
-    case ARG_SPACE_STYLE:
-      GTK_VALUE_ENUM (*arg) = toolbar->space_style;
-      break;
-    case ARG_RELIEF:
-      GTK_VALUE_ENUM (*arg) = toolbar->relief;
-      break;	
     default:
       arg->type = GTK_TYPE_INVALID;
       break;
@@ -393,7 +402,8 @@ gtk_toolbar_paint_space_line (GtkWidget       *widget,
 {
   GtkToolbar *toolbar;
   GtkToolbarChildSpace *child_space;
-
+  gint space_size;
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (widget));
   g_return_if_fail (child != NULL);
@@ -402,7 +412,8 @@ gtk_toolbar_paint_space_line (GtkWidget       *widget,
   toolbar = GTK_TOOLBAR (widget);
 
   child_space = (GtkToolbarChildSpace *) child;
-
+  space_size = get_space_size (toolbar);
+  
   if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
     gtk_paint_vline (widget->style, widget->window,
 		     GTK_WIDGET_STATE (widget), area, widget,
@@ -412,7 +423,7 @@ gtk_toolbar_paint_space_line (GtkWidget       *widget,
 		     child_space->alloc_y + toolbar->button_maxh *
 		     SPACE_LINE_END / SPACE_LINE_DIVISION,
 		     child_space->alloc_x +
-		     (toolbar->space_size -
+		     (space_size -
 		      widget->style->xthickness) / 2);
   else
     gtk_paint_hline (widget->style, widget->window,
@@ -423,7 +434,7 @@ gtk_toolbar_paint_space_line (GtkWidget       *widget,
 		     child_space->alloc_x + toolbar->button_maxw *
 		     SPACE_LINE_END / SPACE_LINE_DIVISION,
 		     child_space->alloc_y +
-		     (toolbar->space_size -
+		     (space_size -
 		      widget->style->ythickness) / 2);
 }
 
@@ -449,7 +460,7 @@ gtk_toolbar_expose (GtkWidget      *widget,
 
 	  if (child->type == GTK_TOOLBAR_CHILD_SPACE)
 	    {
-	      if (toolbar->space_style == GTK_TOOLBAR_SPACE_LINE)
+	      if (get_space_style (toolbar) == GTK_TOOLBAR_SPACE_LINE)
 		gtk_toolbar_paint_space_line (widget, &event->area, child);
 	    }
 	  else
@@ -473,7 +484,8 @@ gtk_toolbar_size_request (GtkWidget      *widget,
   gint button_maxw, button_maxh;
   gint widget_maxw, widget_maxh;
   GtkRequisition child_requisition;
-
+  gint space_size;
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (widget));
   g_return_if_fail (requisition != NULL);
@@ -488,6 +500,8 @@ gtk_toolbar_size_request (GtkWidget      *widget,
   widget_maxw = 0;
   widget_maxh = 0;
 
+  space_size = get_space_size (toolbar);
+  
   for (children = toolbar->children; children; children = children->next)
     {
       child = children->data;
@@ -496,9 +510,9 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 	{
 	case GTK_TOOLBAR_CHILD_SPACE:
 	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    requisition->width += toolbar->space_size;
+	    requisition->width += space_size;
 	  else
-	    requisition->height += toolbar->space_size;
+	    requisition->height += space_size;
 
 	  break;
 
@@ -506,7 +520,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 	case GTK_TOOLBAR_CHILD_RADIOBUTTON:
 	case GTK_TOOLBAR_CHILD_TOGGLEBUTTON:
 	  if (GTK_WIDGET_VISIBLE (child->widget))
-	    {
+	    {              
 	      gtk_widget_size_request (child->widget, &child_requisition);
 
 	      nbuttons++;
@@ -563,6 +577,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   GtkAllocation alloc;
   GtkRequisition child_requisition;
   gint border_width;
+  gint space_size;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (widget));
@@ -578,6 +593,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   else
     alloc.y = allocation->y + border_width;
 
+  space_size = get_space_size (toolbar);
+  
   for (children = toolbar->children; children; children = children->next)
     {
       child = children->data;
@@ -592,13 +609,13 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	    {
 	      child_space->alloc_x = alloc.x;
 	      child_space->alloc_y = allocation->y + (allocation->height - toolbar->button_maxh) / 2;
-	      alloc.x += toolbar->space_size;
+	      alloc.x += space_size;
 	    }
 	  else
 	    {
 	      child_space->alloc_x = allocation->x + (allocation->width - toolbar->button_maxw) / 2;
 	      child_space->alloc_y = alloc.y;
-	      alloc.y += toolbar->space_size;
+	      alloc.y += space_size;
 	    }
 
 	  break;
@@ -653,6 +670,14 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	  g_assert_not_reached ();
 	}
     }
+}
+
+static void
+gtk_toolbar_style_set (GtkWidget  *widget,
+                       GtkStyle   *prev_style)
+{
+  if (prev_style)
+    gtk_toolbar_update_button_relief (GTK_TOOLBAR (widget));
 }
 
 static void
@@ -1086,12 +1111,12 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
       if (type == GTK_TOOLBAR_CHILD_BUTTON)
 	{
 	  child->widget = gtk_button_new ();
-	  gtk_button_set_relief (GTK_BUTTON (child->widget), toolbar->relief);
+	  gtk_button_set_relief (GTK_BUTTON (child->widget), get_button_relief (toolbar));
 	}
       else if (type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON)
 	{
 	  child->widget = gtk_toggle_button_new ();
-	  gtk_button_set_relief (GTK_BUTTON (child->widget), toolbar->relief);
+	  gtk_button_set_relief (GTK_BUTTON (child->widget), get_button_relief (toolbar));
 	  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (child->widget),
 				      FALSE);
 	}
@@ -1100,7 +1125,7 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
 	  child->widget = gtk_radio_button_new (widget
 						? gtk_radio_button_group (GTK_RADIO_BUTTON (widget))
 						: NULL);
-	  gtk_button_set_relief (GTK_BUTTON (child->widget), toolbar->relief);
+	  gtk_button_set_relief (GTK_BUTTON (child->widget), get_button_relief (toolbar));
 	  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (child->widget), FALSE);
 	}
 
@@ -1192,34 +1217,6 @@ gtk_toolbar_set_style (GtkToolbar      *toolbar,
 }
 
 void
-gtk_toolbar_set_space_size (GtkToolbar *toolbar,
-			    gint        space_size)
-{
-  g_return_if_fail (toolbar != NULL);
-  g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
-
-  if (toolbar->space_size != space_size)
-    {
-      toolbar->space_size = space_size;
-      gtk_widget_queue_resize (GTK_WIDGET (toolbar));
-    }
-}
-
-void
-gtk_toolbar_set_space_style (GtkToolbar           *toolbar,
-			     GtkToolbarSpaceStyle  space_style)
-{
-  g_return_if_fail (toolbar != NULL);
-  g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
-
-  if (toolbar->space_style != space_style)
-    {
-      toolbar->space_style = space_style;
-      gtk_widget_queue_resize (GTK_WIDGET (toolbar));
-    }
-}
-
-void
 gtk_toolbar_set_tooltips (GtkToolbar *toolbar,
 			  gboolean    enable)
 {
@@ -1232,40 +1229,26 @@ gtk_toolbar_set_tooltips (GtkToolbar *toolbar,
     gtk_tooltips_disable (toolbar->tooltips);
 }
 
-void
-gtk_toolbar_set_button_relief (GtkToolbar *toolbar,
-			       GtkReliefStyle relief)
+static void
+gtk_toolbar_update_button_relief (GtkToolbar *toolbar)
 {
   GList *children;
   GtkToolbarChild *child;
+  GtkReliefStyle relief;
   
   g_return_if_fail (toolbar != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
 
-  if (toolbar->relief != relief)
+  relief = get_button_relief (toolbar);
+  
+  for (children = toolbar->children; children; children = children->next)
     {
-      toolbar->relief = relief;
-      
-      for (children = toolbar->children; children; children = children->next)
-	{
-	  child = children->data;
-	  if (child->type == GTK_TOOLBAR_CHILD_BUTTON ||
-	      child->type == GTK_TOOLBAR_CHILD_RADIOBUTTON ||
-	      child->type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON)
-	    gtk_button_set_relief (GTK_BUTTON (child->widget), relief);
-	}
-      
-      gtk_widget_queue_resize (GTK_WIDGET (toolbar));
+      child = children->data;
+      if (child->type == GTK_TOOLBAR_CHILD_BUTTON ||
+          child->type == GTK_TOOLBAR_CHILD_RADIOBUTTON ||
+          child->type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON)
+        gtk_button_set_relief (GTK_BUTTON (child->widget), relief);
     }
-}
-
-GtkReliefStyle
-gtk_toolbar_get_button_relief (GtkToolbar *toolbar)
-{
-  g_return_val_if_fail (toolbar != NULL, GTK_RELIEF_NORMAL);
-  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), GTK_RELIEF_NORMAL);
-
-  return toolbar->relief;
 }
 
 static void
@@ -1420,4 +1403,42 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 		
       gtk_widget_queue_resize (GTK_WIDGET (toolbar));
     }
+}
+
+
+static GtkReliefStyle
+get_button_relief (GtkToolbar *toolbar)
+{
+  GtkReliefStyle button_relief = GTK_RELIEF_NORMAL;
+  
+  gtk_widget_style_get (GTK_WIDGET (toolbar),
+                        "button_relief", &button_relief,
+                        NULL);
+
+  return button_relief;
+}
+
+static gint
+get_space_size (GtkToolbar *toolbar)
+{
+  gint space_size = DEFAULT_SPACE_SIZE;
+
+  gtk_widget_style_get (GTK_WIDGET (toolbar),
+                        "space_size", &space_size,
+                        NULL);
+
+  return space_size;
+}
+
+static GtkToolbarSpaceStyle
+get_space_style (GtkToolbar *toolbar)
+{
+  GtkToolbarSpaceStyle space_style = DEFAULT_SPACE_STYLE;
+
+  gtk_widget_style_get (GTK_WIDGET (toolbar),
+                        "space_style", &space_style,
+                        NULL);
+
+
+  return space_style;  
 }

@@ -56,18 +56,3 @@ Adds a new #GtkMenuItem to the GtkMenuBar at the position defined by @position
 @position: the position in the item list where the @child is added.
 
 
-<!-- ##### FUNCTION gtk_menu_bar_set_shadow_type ##### -->
-<para>
-Sets the shadow type to use on the GtkMenuBar. The shadow types to use are:
-GTK_SHADOW_NONE, GTK_SHADOW_IN, GTK_SHADOW_OUT, GTK_SHADOW_ETCHED_IN, and GTK_SHADOW_ETCHED_OUT
-</para>
-
-@menu_bar: a #GtkMenuBar
-@type: the GtkShadowtype
-
-
-<!-- ##### ARG GtkMenuBar:shadow ##### -->
-<para>
-Used by #GtkMenuBar to determine the shadow type.
-</para>
-

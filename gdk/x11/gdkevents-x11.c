@@ -1903,8 +1903,8 @@ static struct
   const char *xsettings_name;
   const char *gdk_name;
 } settings_map[] = {
-  { "Net/DoubleClickTime", "double-click-timeout" },
-  { "Net/DragThreshold", "drag-threshold" }
+  { "Net/DoubleClickTime", "gtk-double-click-timeout" },
+  { "Net/DragThreshold", "gtk-drag-threshold" }
 };
 
 static void

@@ -25,17 +25,16 @@
  */
 
 #include "gtkbbox.h"
+#include "gtkintl.h"
 
 
 static void gtk_button_box_class_init    (GtkButtonBoxClass   *klass);
 static void gtk_button_box_init          (GtkButtonBox        *box);
 
-
-static gint default_child_min_width = 85;
-static gint default_child_min_height = 27;
-static gint default_child_ipad_x = 7;
-static gint default_child_ipad_y = 0;
-
+#define DEFAULT_CHILD_MIN_WIDTH 85
+#define DEFAULT_CHILD_MIN_HEIGHT 27
+#define DEFAULT_CHILD_IPAD_X 7
+#define DEFAULT_CHILD_IPAD_Y 0
 
 GtkType
 gtk_button_box_get_type (void)
@@ -72,6 +71,42 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   /* FIXME we need to override the "spacing" property on GtkBox once
    * libgobject allows that.
    */
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("child_min_width",
+							     _("Minimum child width"),
+							     _("Minimum width of buttons inside the box"),
+							     0,
+							     G_MAXINT,
+                                                             DEFAULT_CHILD_MIN_WIDTH,
+							     G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("child_min_height",
+							     _("Minimum child height"),
+							     _("Minimum height of buttons inside the box"),
+							     0,
+							     G_MAXINT,
+                                                             DEFAULT_CHILD_MIN_HEIGHT,
+							     G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("child_internal_pad_x",
+							     _("Child internal width padding"),
+							     _("Amount to increase child's size on either side"),
+							     0,
+							     G_MAXINT,
+                                                             DEFAULT_CHILD_IPAD_X,
+							     G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("child_internal_pad_y",
+							     _("Child internal height padding"),
+							     _("Amount to increase child's size on the top and bottom"),
+							     0,
+							     G_MAXINT,
+                                                             DEFAULT_CHILD_IPAD_Y,
+							     G_PARAM_READABLE));
 }
 
 static void
@@ -166,10 +201,15 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
 
   bbox = GTK_BUTTON_BOX (widget);
 
-  width_default = default_child_min_width;
-  height_default = default_child_min_height;
-  ipad_x_default = default_child_ipad_x;
-  ipad_y_default = default_child_ipad_y;
+  gtk_widget_style_get (widget,
+                        "child_min_width",
+                        &width_default,
+                        "child_min_height",
+                        &height_default,
+                        "child_internal_pad_x",
+                        &ipad_x_default,
+                        "child_internal_pad_y",
+                        &ipad_y_default, NULL);
   
   child_min_width = bbox->child_min_width   != GTK_BUTTONBOX_DEFAULT
 	  ? bbox->child_min_width : width_default;

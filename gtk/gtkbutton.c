@@ -376,10 +376,10 @@ gtk_button_new_from_stock (const gchar   *stock_id)
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), button);
 
       image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
-      hbox = gtk_hbox_new (FALSE, 0);
+      hbox = gtk_hbox_new (FALSE, 1);
 
-      gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 2);
-      gtk_box_pack_end (GTK_BOX (hbox), label, TRUE, TRUE, 2);
+      gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (hbox), label, TRUE, TRUE, 0);
       
       gtk_container_add (GTK_CONTAINER (button), hbox);
       gtk_widget_show_all (hbox);

@@ -347,6 +347,9 @@ gtk_option_menu_get_props (GtkOptionMenu       *option_menu,
     props->indicator_spacing = *indicator_spacing;
   else
     props->indicator_spacing = default_props.indicator_spacing;
+
+  g_free (indicator_size);
+  g_free (indicator_spacing);
 }
 
 static void

@@ -33,6 +33,11 @@ style "global-style-properties"
 #  xthickness = 20
   GtkSpinButton::shadow_type = etched-out
   GtkEntry::cursor_color = "#ff0000"
+  GtkToolbar::space_size = 10
+  GtkToolbar::space_style = line
+  GtkToolbar::button_relief = none
+  GtkButtonBox::child_min_width = 0
+  GtkButtonBox::child_min_height = 0
 }
 class "GtkWidget" style "global-style-properties"
 

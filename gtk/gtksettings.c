@@ -15,16 +15,13 @@
  * License along with this library; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#include	"gtksettings.h"
 
-
+#include "gtksettings.h"
+#include "gtkintl.h"
 
 enum {
   PROP_0,
-  PROP_DOUBLE_CLICK_TIMEOUT,
-  PROP_BELL_PITCH,
-  PROP_BELL_DURATION,
-  PROP_BELL_PERCENT
+  PROP_DOUBLE_CLICK_TIMEOUT
 };
 
 
@@ -114,6 +111,7 @@ static void
 gtk_settings_class_init (GtkSettingsClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  guint result;
   
   parent_class = g_type_class_peek_parent (class);
 
@@ -127,30 +125,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
   quark_property_id = g_quark_try_string ("GObject-property-id");
   g_assert (quark_property_id != 0);	/* special quarks from GObjectClass */
 
-  g_assert (PROP_DOUBLE_CLICK_TIMEOUT ==
-	    settings_install_property_parser (class,
-					      g_param_spec_int ("double-click-timeout", "Double Click Timeout", NULL,
-								0, G_MAXINT, 1000,
-								G_PARAM_READWRITE),
-					      NULL));
-  g_assert (PROP_BELL_PITCH ==
-	    settings_install_property_parser (class,
-					      g_param_spec_int ("bell-pitch", "Bell Pitch", NULL,
-								0, G_MAXINT, 440,
-								G_PARAM_READWRITE),
-					      NULL));
-  g_assert (PROP_BELL_DURATION ==
-	    settings_install_property_parser (class,
-					      g_param_spec_int ("bell_duration", "Bell Duration", NULL,
-								1, G_MAXINT, 250,
-								G_PARAM_READWRITE),
-					      NULL));
-  g_assert (PROP_BELL_PERCENT ==
-	    settings_install_property_parser (class,
-					      g_param_spec_float ("bell_percent", "Bell Percent", NULL,
-								  0, 100, 80,
-								  G_PARAM_READWRITE),
-					      NULL));
+  result = settings_install_property_parser (class,
+                                             g_param_spec_int ("gtk-double-click-timeout",
+                                                               _("Double Click Timeout"),
+                                                               _("Maximum time allowed between two clicks for them to be considered a double click"),
+                                                               0, G_MAXINT, 1000,
+                                                               G_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_DOUBLE_CLICK_TIMEOUT);
 }
 
 static void
@@ -242,15 +224,6 @@ gtk_settings_notify (GObject    *object,
     case PROP_DOUBLE_CLICK_TIMEOUT:
       g_object_get (object, pspec->name, &double_click_time, NULL);
       gdk_set_double_click_time (double_click_time);
-      break;
-    case PROP_BELL_PITCH:
-      g_print ("settings-notify: %s = \"%s\"\n", pspec->name, contents);
-      break;
-    case PROP_BELL_DURATION:
-      g_print ("settings-notify: %s = \"%s\"\n", pspec->name, contents);
-      break;
-    case PROP_BELL_PERCENT:
-      g_print ("settings-notify: %s = \"%s\"\n", pspec->name, contents);
       break;
     }
 

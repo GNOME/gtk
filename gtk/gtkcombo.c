@@ -500,7 +500,7 @@ gtk_combo_popup_button_press (GtkWidget        *button,
     gtk_widget_grab_focus (combo->entry);
 
   if (event->button != 1)
-    return;
+    return FALSE;
 
   combo->current_button = event->button;
 

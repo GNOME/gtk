@@ -258,24 +258,6 @@ alters the view of @toolbar to display either icons only, text only, or both.
 @style: the new style for @toolbar.
 
 
-<!-- ##### FUNCTION gtk_toolbar_set_space_size ##### -->
-<para>
-should be used to set the number of pixels each item of space takes up in a toolbar.
-</para>
-
-@toolbar: a #GtkToolbar.
-@space_size: the new number of pixels that spaces should consume.
-
-
-<!-- ##### FUNCTION gtk_toolbar_set_space_style ##### -->
-<para>
-sets whether a 'space' in the toolbar appears as a line or just plain empty space.
-</para>
-
-@toolbar: a #GtkToolbar.
-@space_style: the new style for the toolbar's spaces.
-
-
 <!-- ##### FUNCTION gtk_toolbar_set_tooltips ##### -->
 <para>
 sets if the tooltips of a toolbar should be active or not.
@@ -283,24 +265,6 @@ sets if the tooltips of a toolbar should be active or not.
 
 @toolbar: a #GtkToolbar.
 @enable: set to 0 to disable the tooltips, or 1 to enable them.
-
-
-<!-- ##### FUNCTION gtk_toolbar_set_button_relief ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@relief: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_get_button_relief ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@Returns: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_insert_stock ##### -->
@@ -351,21 +315,6 @@ should be used if you wish to perform an action when ever the style of a toolbar
 </para>
 
 <!-- ##### ARG GtkToolbar:toolbar-style ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:space-size ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:space-style ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:relief ##### -->
 <para>
 
 </para>

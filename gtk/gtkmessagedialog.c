@@ -94,7 +94,8 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   dialog->image = gtk_image_new_from_stock (NULL, GTK_ICON_SIZE_DIALOG);
   
   gtk_label_set_line_wrap (GTK_LABEL (dialog->label), TRUE);
-
+  gtk_label_set_selectable (GTK_LABEL (dialog->label), TRUE);
+  
   hbox = gtk_hbox_new (FALSE, 6);
 
   gtk_box_pack_start (GTK_BOX (hbox), dialog->image,

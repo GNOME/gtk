@@ -1694,43 +1694,6 @@ gtk_entry_style_set	(GtkWidget      *widget,
     }
 }
 
-static char *
-strstr_len (const char *haystack,
-	    int         haystack_len,
-	    const char *needle)
-{
-  int i;
-
-  g_return_val_if_fail (haystack != NULL, NULL);
-  g_return_val_if_fail (needle != NULL, NULL);
-  
-  if (haystack_len < 0)
-    return strstr (haystack, needle);
-  else
-    {
-      const char *p = haystack;
-      int needle_len = strlen (needle);
-      const char *end = haystack + haystack_len - needle_len;
-
-      if (needle_len == 0)
-	return (char *)haystack;
-
-      while (*p && p <= end)
-	{
-	  for (i = 0; i < needle_len; i++)
-	    if (p[i] != needle[i])
-	      goto next;
-
-	  return (char *)p;
-
-	next:
-	  p++;
-	}
-    }
-
-  return NULL;
-}
-
 /* Default signal handlers
  */
 static void
@@ -1741,25 +1704,9 @@ gtk_entry_real_insert_text (GtkEntry    *entry,
 {
   gint index;
   gint n_chars;
-  gchar line_separator[7];
-  gint len;
-  gchar *p;
 
   if (new_text_length < 0)
     new_text_length = strlen (new_text);
-
-  /* We don't want to allow inserting paragraph delimeters
-   */
-  pango_find_paragraph_boundary (new_text, new_text_length, &new_text_length, NULL);
-
-  /* Or line separators - this is really painful
-   */
-  len = g_unichar_to_utf8 (0x2028, line_separator); /* 0x2028 == LS */
-  line_separator[len] = '\0';
-  
-  p = strstr_len (new_text, new_text_length, line_separator);
-  if (p)
-    new_text_length = p - new_text;
 
   n_chars = g_utf8_strlen (new_text, new_text_length);
   if (entry->text_max_length > 0 && n_chars + entry->text_length > entry->text_max_length)
@@ -2167,6 +2114,8 @@ gtk_entry_create_layout (GtkEntry *entry,
   gint preedit_length = 0;
   PangoAttrList *preedit_attrs = NULL;
 
+  pango_layout_set_single_paragraph_mode (layout, TRUE);
+  
   if (include_preedit)
     {
       gtk_im_context_get_preedit_string (entry->im_context,

@@ -424,6 +424,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
 {
   GtkTextIter iter, iter2;
   GtkTextTag *tag;
+  GtkTextChildAnchor *anchor;
   GdkColor color;
   GdkColor color2;
   GdkPixbuf *pixbuf;
@@ -513,7 +514,6 @@ fill_example_buffer (GtkTextBuffer *buffer)
                 NULL);
 
 
-#if 0
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
 
   anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
@@ -522,7 +522,6 @@ fill_example_buffer (GtkTextBuffer *buffer)
   
   g_object_set_data_full (G_OBJECT (buffer), "anchor", anchor,
                           (GDestroyNotify) g_object_unref);
-#endif
   
   pixbuf = gdk_pixbuf_new_from_xpm_data (book_closed_xpm);
   
@@ -2199,9 +2198,10 @@ view_add_example_widgets (View *view)
   GtkTextChildAnchor *anchor;
   Buffer *buffer;
 
-  return;
-  
   buffer = view->buffer;
+
+  /* REMOVE to test widgets */
+  return;
   
   anchor = g_object_get_data (G_OBJECT (buffer->buffer),
                               "anchor");
@@ -2209,9 +2209,6 @@ view_add_example_widgets (View *view)
   if (anchor && !gtk_text_child_anchor_get_deleted (anchor))
     {
       GtkWidget *widget;
-      
-      widget = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
-                                         GTK_ICON_SIZE_DIALOG);
 
       widget = gtk_button_new_with_label ("Foo");
       

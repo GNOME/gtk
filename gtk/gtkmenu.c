@@ -36,6 +36,7 @@
 #include "gtkwindow.h"
 #include "gtkhbox.h"
 #include "gtkvscrollbar.h"
+#include "gtksettings.h"
 
 
 #define MENU_ITEM_CLASS(w)   GTK_MENU_ITEM_GET_CLASS (w)
@@ -1372,19 +1373,54 @@ gtk_menu_key_press (GtkWidget	*widget,
 		    GdkEventKey *event)
 {
   GtkMenuShell *menu_shell;
+  GtkMenu *menu;
   gboolean delete = FALSE;
-
+  gchar *accel = NULL;
+  
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
       
   menu_shell = GTK_MENU_SHELL (widget);
-
-  gtk_menu_stop_navigating_submenu (GTK_MENU (widget));
+  menu = GTK_MENU (widget);
+  
+  gtk_menu_stop_navigating_submenu (menu);
 
   if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
     return TRUE;
+    
+  g_object_get (G_OBJECT (gtk_settings_get_global ()),
+                "gtk-menu-bar-accel",
+                &accel,
+                NULL);
 
+  if (accel)
+    {
+      guint keyval = 0;
+      GdkModifierType mods = 0;
+      gboolean handled = FALSE;
+      
+      gtk_accelerator_parse (accel, &keyval, &mods);
+
+      if (keyval == 0)
+        g_warning ("Failed to parse menu bar accelerator '%s'\n", accel);
+
+      /* FIXME this is wrong, needs to be in the global accel resolution
+       * thing, to properly consider i18n etc., but that probably requires
+       * AccelGroup changes etc.
+       */
+      if (event->keyval == keyval &&
+          (mods & event->state) == mods)
+        {
+          gtk_signal_emit_by_name (GTK_OBJECT (menu), "cancel");
+        }
+
+      g_free (accel);
+
+      if (handled)
+        return TRUE;
+    }
+  
   switch (event->keyval)
     {
     case GDK_Delete:

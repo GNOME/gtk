@@ -1,3 +1,47 @@
+2001-04-27  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkcombo.c (gtk_combo_popup_button_press): fix warning
+
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_init): make messages selectable
+
+	* gtk/gtkentry.c (gtk_entry_real_insert_text): don't strip
+	line/para separators
+	(gtk_entry_create_layout): set single paragraph mode on the layout
+
+	* gtk/gtkbutton.c (gtk_button_new_from_stock): don't put much
+	spacing between the image and label; instead, inside a button box 
+	the button will get extra space that will go there, but if people 
+	configure button box for 0 chubbiness, then there's no spacing.
+
+	* gtk/gtkbbox.c (gtk_button_box_class_init): Make child ipadding
+	and min/max size style properties, so people can tune their
+	chubbiness.
+
+	* tests/testgtk.c (make_toolbar): remove calls to removed toolbar
+	functions
+
+	* gtk/gtktoolbar.c (gtk_toolbar_class_init): Make space_size,
+	space_style, and button_relief into style properties, remove
+	functions for setting them
+	
+	* gtk/gtkmenu.c (gtk_menu_key_press): handle menu bar accel to pop 
+	it back down
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_get_props): free boxed
+	types from gtk_widget_style_get
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_set_shadow_type): Remove, replace
+	with a style property.
+
+	* gdk/x11/gdkevents-x11.c: namespace the settings
+
+	* gtk/gtkmenubar.c: Add F10 accelerator to move between menubars.
+
+	* gtk/gtksettings.c (gtk_settings_class_init): remove code with
+	side effects from inside g_assert(), so that G_DISABLE_ASSERT can
+	be used. Also, translate doc strings for settings. Also, namespace
+	the double-click-time property. Also, remove bell properties crap.
+
 2001-04-27  Sven Neumann  <sven@gimp.org>
 
 	* Makefile.am: before creating links, check if pkg-config files

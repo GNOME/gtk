@@ -29,6 +29,10 @@
 #include "gtkmain.h"
 #include "gtkmenubar.h"
 #include "gtkmenuitem.h"
+#include "gtksettings.h"
+#include "gtkintl.h"
+#include "gtkwindow.h"
+#include "gtksignal.h"
 
 enum {
   ARG_0,
@@ -41,13 +45,6 @@ enum {
 
 
 static void gtk_menu_bar_class_init    (GtkMenuBarClass *klass);
-static void gtk_menu_bar_init          (GtkMenuBar      *menu_bar);
-static void gtk_menu_bar_set_arg       (GtkObject      *object,
-					GtkArg         *arg,
-					guint           arg_id);
-static void gtk_menu_bar_get_arg       (GtkObject      *object,
-					GtkArg         *arg,
-					guint           arg_id);
 static void gtk_menu_bar_size_request  (GtkWidget       *widget,
 					GtkRequisition  *requisition);
 static void gtk_menu_bar_size_allocate (GtkWidget       *widget,
@@ -56,7 +53,8 @@ static void gtk_menu_bar_paint         (GtkWidget       *widget,
 					GdkRectangle    *area);
 static gint gtk_menu_bar_expose        (GtkWidget       *widget,
 					GdkEventExpose  *event);
-
+static void gtk_menu_bar_hierarchy_changed (GtkWidget   *widget);                                            
+static GtkShadowType get_shadow_type   (GtkMenuBar      *menubar);
 
 static GtkMenuShellClass *parent_class = NULL;
 
@@ -73,7 +71,7 @@ gtk_menu_bar_get_type (void)
 	sizeof (GtkMenuBar),
 	sizeof (GtkMenuBarClass),
 	(GtkClassInitFunc) gtk_menu_bar_class_init,
-	(GtkObjectInitFunc) gtk_menu_bar_init,
+	(GtkObjectInitFunc) NULL,
 	/* reserved_1 */ NULL,
         /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
@@ -100,15 +98,11 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   widget_class = (GtkWidgetClass*) class;
   menu_shell_class = (GtkMenuShellClass*) class;
 
-  gtk_object_add_arg_type ("GtkMenuBar::shadow", GTK_TYPE_SHADOW_TYPE, GTK_ARG_READWRITE, ARG_SHADOW);
-
-  object_class->set_arg = gtk_menu_bar_set_arg;
-  object_class->get_arg = gtk_menu_bar_get_arg;
-  
   widget_class->size_request = gtk_menu_bar_size_request;
   widget_class->size_allocate = gtk_menu_bar_size_allocate;
   widget_class->expose_event = gtk_menu_bar_expose;
-
+  widget_class->hierarchy_changed = gtk_menu_bar_hierarchy_changed;
+  
   menu_shell_class->submenu_placement = GTK_TOP_BOTTOM;
 
   binding_set = gtk_binding_set_by_class (class);
@@ -132,51 +126,21 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 				"move_current", 1,
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_CHILD);
-}
 
-static void
-gtk_menu_bar_init (GtkMenuBar *menu_bar)
-{
-  menu_bar->shadow_type = GTK_SHADOW_OUT;
-}
+  gtk_settings_install_property (gtk_settings_get_global (),
+                                 g_param_spec_string ("gtk-menu-bar-accel",
+                                                      _("Menu bar accelerator"),
+                                                      _("Keybinding to activate the menu bar"),
+                                                      "F10",
+                                                      G_PARAM_READWRITE));
 
-static void
-gtk_menu_bar_set_arg (GtkObject      *object,
-		      GtkArg         *arg,
-		      guint           arg_id)
-{
-  GtkMenuBar *menu_bar;
-
-  menu_bar = GTK_MENU_BAR (object);
-
-  switch (arg_id)
-    {
-    case ARG_SHADOW:
-      gtk_menu_bar_set_shadow_type (menu_bar, GTK_VALUE_ENUM (*arg));
-      break;
-    default:
-      break;
-    }
-}
-
-static void
-gtk_menu_bar_get_arg (GtkObject      *object,
-		      GtkArg         *arg,
-		      guint           arg_id)
-{
-  GtkMenuBar *menu_bar;
-
-  menu_bar = GTK_MENU_BAR (object);
-
-  switch (arg_id)
-    {
-    case ARG_SHADOW:
-      GTK_VALUE_ENUM (*arg) = menu_bar->shadow_type;
-      break;
-    default:
-      arg->type = GTK_TYPE_INVALID;
-      break;
-    }
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_enum ("shadow_type",
+                                                              _("Shadow type"),
+                                                              _("Style of bevel around the menubar"),
+                                                              GTK_TYPE_SHADOW_TYPE,
+                                                              GTK_SHADOW_OUT,
+                                                              G_PARAM_READABLE));
 }
  
 GtkWidget*
@@ -347,25 +311,6 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
     }
 }
 
-void
-gtk_menu_bar_set_shadow_type (GtkMenuBar    *menu_bar,
-			      GtkShadowType  type)
-{
-  g_return_if_fail (menu_bar != NULL);
-  g_return_if_fail (GTK_IS_MENU_BAR (menu_bar));
-
-  if ((GtkShadowType) menu_bar->shadow_type != type)
-    {
-      menu_bar->shadow_type = type;
-
-      if (GTK_WIDGET_DRAWABLE (menu_bar))
-        {
-          gtk_widget_queue_clear (GTK_WIDGET (menu_bar));
-        }
-      gtk_widget_queue_resize (GTK_WIDGET (menu_bar));
-    }
-}
-
 static void
 gtk_menu_bar_paint (GtkWidget *widget, GdkRectangle *area)
 {
@@ -377,7 +322,7 @@ gtk_menu_bar_paint (GtkWidget *widget, GdkRectangle *area)
       gtk_paint_box (widget->style,
 		     widget->window,
 		     GTK_STATE_NORMAL,
-		     GTK_MENU_BAR (widget)->shadow_type,
+                     get_shadow_type (GTK_MENU_BAR (widget)),
 		     area, widget, "menubar",
 		     0, 0,
 		     -1,-1);
@@ -400,4 +345,142 @@ gtk_menu_bar_expose (GtkWidget      *widget,
     }
 
   return FALSE;
+}
+
+static gboolean
+window_key_press_handler (GtkWidget   *widget,
+                          GdkEventKey *event,
+                          gpointer     data)
+{
+  gchar *accel = NULL;
+  gboolean retval = FALSE;
+  
+  g_object_get (G_OBJECT (gtk_settings_get_global ()),
+                "gtk-menu-bar-accel",
+                &accel,
+                NULL);
+
+  if (accel)
+    {
+      guint keyval = 0;
+      GdkModifierType mods = 0;
+
+      gtk_accelerator_parse (accel, &keyval, &mods);
+
+      if (keyval == 0)
+        g_warning ("Failed to parse menu bar accelerator '%s'\n", accel);
+
+      /* FIXME this is wrong, needs to be in the global accel resolution
+       * thing, to properly consider i18n etc., but that probably requires
+       * AccelGroup changes etc.
+       */
+      if (event->keyval == keyval &&
+          (mods & event->state) == mods)
+        {
+          GtkMenuBar *menubar;
+          GtkMenuShell *menushell;
+          
+          menubar = GTK_MENU_BAR (data);
+          menushell = GTK_MENU_SHELL (menubar);
+
+          if (menushell->children)
+            {
+              gtk_signal_emit_by_name (GTK_OBJECT (menushell->children->data),
+                                       "activate_item");
+              
+              retval = TRUE;
+            }
+        }
+
+      g_free (accel);
+    }
+
+  return retval;
+}
+
+static void
+add_to_window (GtkWindow  *window,
+               GtkMenuBar *menubar)
+{
+  GtkMenuBar *old_menubar;
+
+  old_menubar = g_object_get_data (G_OBJECT (window),
+                                   "gtk-menu-bar");
+  
+  if (old_menubar)
+    return; /* ignore this case; app programmer on crack, but
+             * shouldn't spew stuff, just don't support the accel
+             * for menubar #2
+             */
+
+  g_object_set_data (G_OBJECT (window),
+                     "gtk-menu-bar",
+                     menubar);
+
+  g_signal_connect_data (G_OBJECT (window),
+                         "key_press_event",
+                         G_CALLBACK (window_key_press_handler),
+                         menubar,
+                         NULL, FALSE, FALSE);
+
+  menubar->toplevel = GTK_WIDGET (window);
+}
+
+/* Hack-around */
+#define g_signal_handlers_disconnect_by_func(obj, func, data) g_signal_handlers_disconnect_matched (obj, G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, 0, 0, NULL, func, data)
+
+static void
+remove_from_window (GtkWindow  *window,
+                    GtkMenuBar *menubar)
+{
+  g_return_if_fail (menubar->toplevel == GTK_WIDGET (window));
+
+  g_signal_handlers_disconnect_by_func (G_OBJECT (window),
+                                        G_CALLBACK (window_key_press_handler),
+                                        menubar);
+
+  /* dnotify zeroes menubar->toplevel */
+  g_object_set_data (G_OBJECT (window),
+                     "gtk-menu-bar",
+                     NULL);
+
+  menubar->toplevel = NULL;
+}
+
+static void
+gtk_menu_bar_hierarchy_changed (GtkWidget *widget)
+{
+  GtkWidget *toplevel;  
+  GtkMenuBar *menubar;
+
+  menubar = GTK_MENU_BAR (widget);
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (menubar->toplevel &&
+      toplevel != menubar->toplevel)
+    {
+      remove_from_window (GTK_WINDOW (menubar->toplevel),
+                          menubar);
+    }
+  
+  if (toplevel &&
+      GTK_IS_WINDOW (toplevel))
+    {
+      add_to_window (GTK_WINDOW (toplevel),
+                     menubar);
+    }
+}
+
+static GtkShadowType
+get_shadow_type (GtkMenuBar *menubar)
+{
+  GtkShadowType shadow_type = GTK_SHADOW_OUT;
+  
+  gtk_widget_style_get (GTK_WIDGET (menubar),
+			"shadow_type", &shadow_type,
+			NULL);
+
+
+  return shadow_type;
 }
