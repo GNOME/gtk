@@ -1684,6 +1684,7 @@ gtk_list_store_sort (GtkListStore *list_store)
 	g_array_index (sort_array, SortTuple, i + 1).el;
   g_array_index (sort_array, SortTuple, list_store->length - 1).el->next = NULL;
   list_store->root = g_array_index (sort_array, SortTuple, 0).el;
+  list_store->tail = g_array_index (sort_array, SortTuple, list_store->length - 1).el;
 
   /* Let the world know about our new order */
   new_order = g_new (gint, list_store->length);

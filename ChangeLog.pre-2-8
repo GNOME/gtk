@@ -1,3 +1,10 @@
+Fri Jul  5 12:51:39 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from HEAD.
+
+	* gtk/gtkliststore.c (gtk_list_store_sort): also update ->tail after	
+	sorting.
+
 2002-07-02 Padraig O'Briain <padraig.obriain@sun.com>
 
 	* gtk/gtksocket.c (gtk_socket_hierarchy_changed):
