@@ -2944,7 +2944,7 @@ gtk_toolbar_get_drop_index (GtkToolbar *toolbar,
 			    gint        x,
 			    gint        y)
 {
-  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), FALSE);
+  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), -1);
   
   if (!gtk_toolbar_check_new_api (toolbar))
     return -1;

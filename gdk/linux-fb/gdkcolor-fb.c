@@ -753,7 +753,7 @@ gdk_colors_alloc (GdkColormap	*colormap,
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
   
   if (nplanes > 0)
-    return 0;
+    return FALSE;
 
   found = 0;
   for (i = 1; i < colormap->size; i++)

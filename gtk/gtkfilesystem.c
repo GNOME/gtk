@@ -480,7 +480,7 @@ gtk_file_system_volume_render_icon (GtkFileSystem        *file_system,
   g_return_val_if_fail (volume != NULL, NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (pixel_size > 0, NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   return GTK_FILE_SYSTEM_GET_IFACE (file_system)->volume_render_icon (file_system,
 								      volume,
@@ -536,7 +536,7 @@ gtk_file_system_make_path (GtkFileSystem    *file_system,
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
   g_return_val_if_fail (base_path != NULL, NULL);
   g_return_val_if_fail (display_name != NULL, NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   return GTK_FILE_SYSTEM_GET_IFACE (file_system)->make_path (file_system, base_path, display_name, error);
 }

@@ -528,7 +528,7 @@ gtk_file_system_win32_make_path (GtkFileSystem     *file_system,
       g_error_free (tmp_error);
       g_free (base_filename);
 
-      return FALSE;
+      return NULL;
     }
     
   full_filename = g_build_filename (base_filename, filename, NULL);

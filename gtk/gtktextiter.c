@@ -1649,7 +1649,7 @@ gtk_text_iter_get_chars_in_line (const GtkTextIter   *iter)
   gint count;
   GtkTextLineSegment *seg;
 
-  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (iter != NULL, 0);
 
   real = gtk_text_iter_make_surreal (iter);
 
@@ -1701,7 +1701,7 @@ gtk_text_iter_get_bytes_in_line (const GtkTextIter   *iter)
   gint count;
   GtkTextLineSegment *seg;
 
-  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (iter != NULL, 0);
 
   real = gtk_text_iter_make_surreal (iter);
 
