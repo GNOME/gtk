@@ -1,3 +1,28 @@
+2005-01-05  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkpathbar.c (_gtk_path_bar_set_path): Don't call
+	button_data_free() explicitly; the button is weak-reffed and the
+	callback will free the button data.  Fixes #163010.
+	(_gtk_path_bar_set_path): Don't ref/sink the button.  And for the
+	failure case, call gtk_widget_destroy() on it.
+
+	* gtk/gtkfilechooserdefault.c (check_is_folder): Use
+	gtk_file_system_get_folder() again (see the ChangeLog entry from
+	2004-08-25).  We can't first get the parent folder and then
+	request the info for the path in question, as the parent folder
+	may not be readable.  See bug #162617.
+	(gtk_file_chooser_default_set_current_folder): Assert that the
+	passed-in path is not null.
+	(shortcuts_find_current_folder): Likewise.
+	(shortcuts_add_current_folder): Likewise.
+	(set_list_model): Likewise.
+	(gtk_file_chooser_default_map): Only reload the current folder if
+	it exists.
+	(bookmarks_check_add_sensitivity): Check for the current folder
+	being NULL.
+	(browse_files_select_first_row): Don't set the cursor if there is
+	no model loaded.
+
 2005-01-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c: Don't construct errors from 

@@ -1066,6 +1066,7 @@ shortcuts_find_current_folder (GtkFileChooserDefault *impl)
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view));
 
+  g_assert (impl->current_folder != NULL);
   pos = shortcut_find_position (impl, impl->current_folder);
   if (pos == -1)
     {
@@ -1130,32 +1131,14 @@ check_is_folder (GtkFileSystem      *file_system,
 		 const GtkFilePath  *path, 
 		 GError            **error)
 {
-  GtkFileInfo *info;
-  gboolean is_folder;
+  GtkFileFolder *folder;
 
-  /* Use get_file_info() rather than trying get_folder() and checking
-   * for an error directly because older versions of the gnome-vfs
-   * backend don't return an error immediately. This way is also
-   * more efficient if we already have the parent folder. 
-   */
-  info = get_file_info (file_system, path, FALSE, error);
-  
-  if (!info)
+  folder = gtk_file_system_get_folder (file_system, path, 0, error);
+  if (!folder)
     return FALSE;
-  
-  is_folder = gtk_file_info_get_is_folder (info);
 
-  if (!is_folder)
-    g_set_error (error,
-		 GTK_FILE_CHOOSER_ERROR,
-		 GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
-		 "%s: %s", 
-		 gtk_file_info_get_display_name (info),
-		 g_strerror (ENOTDIR));
-
-  gtk_file_info_free (info);
-
-  return is_folder;
+  g_object_unref (folder);
+  return TRUE;
 }
 
 /* Inserts a path in the shortcuts tree, making a copy of it; alternatively,
@@ -1502,6 +1485,8 @@ shortcuts_add_current_folder (GtkFileChooserDefault *impl)
   g_assert (!impl->shortcuts_current_folder_active);
 
   success = TRUE;
+
+  g_assert (impl->current_folder != NULL);
 
   pos = shortcut_find_position (impl, impl->current_folder);
   if (pos == -1)
@@ -2128,7 +2113,7 @@ bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl)
   selection_check (impl, &num_selected, NULL, &all_folders);
 
   if (num_selected == 0)
-    active = (shortcut_find_position (impl, impl->current_folder) == -1);
+    active = (impl->current_folder != NULL) && (shortcut_find_position (impl, impl->current_folder) == -1);
   else if (num_selected == 1)
     {
       const GtkFilePath *path;
@@ -4092,7 +4077,9 @@ gtk_file_chooser_default_map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (parent_class)->map (widget);
 
-  change_folder_and_display_error (impl, impl->current_folder);
+  if (impl->current_folder)
+    change_folder_and_display_error (impl, impl->current_folder);
+
   bookmarks_changed_cb (impl->file_system, impl);
 }
 
@@ -4345,6 +4332,9 @@ browse_files_select_first_row (GtkFileChooserDefault *impl)
 {
   GtkTreePath *path;
 
+  if (!impl->sort_model)
+    return;
+
   path = gtk_tree_path_new_from_indices (0, -1);
   gtk_tree_view_set_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view), path, NULL, FALSE);
   gtk_tree_path_free (path);
@@ -4429,6 +4419,8 @@ static gboolean
 set_list_model (GtkFileChooserDefault *impl,
 		GError               **error)
 {
+  g_assert (impl->current_folder != NULL);
+
   load_remove_timer (impl);
 
   if (impl->browse_files_model)
@@ -4503,6 +4495,8 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
   gboolean result;
+
+  g_assert (path != NULL);
 
   if (impl->local_only &&
       !gtk_file_system_path_is_local (impl->file_system, path))
