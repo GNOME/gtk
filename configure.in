@@ -1323,6 +1323,7 @@ docs/faq/Makefile
 docs/tutorial/Makefile
 gdk-pixbuf/Makefile
 gdk-pixbuf/makefile.mingw
+gdk-pixbuf/gdk_pixbuf.rc
 gdk-pixbuf/gdk-pixbuf-features.h
 gdk-pixbuf/pixops/Makefile
 gdk-pixbuf/pixops/makefile.mingw

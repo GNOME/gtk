@@ -1,5 +1,7 @@
 2002-03-03  Tor Lillqvist  <tml@iki.fi>
 
+	* configure.in: Output gdk-pixbuf/gdk_pixbuf.rc.
+
 	* gdk/gdk.def
 	* gdk/win32/gdkevents-win32.c: Add and (trivially) implement
 	gdk_pointer_grab_info_libgtk_only() and
