@@ -787,20 +787,20 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
       gtk_container_add (GTK_CONTAINER (child->widget), vbox);
       gtk_widget_show (vbox);
 
-      if (icon)
-	{
-	  child->icon = GTK_WIDGET (icon);
-	  gtk_box_pack_start (GTK_BOX (vbox), child->icon, FALSE, FALSE, 0);
-	  if (toolbar->style != GTK_TOOLBAR_TEXT)
-	    gtk_widget_show (child->icon);
-	}
-
       if (text)
 	{
 	  child->label = gtk_label_new (text);
-	  gtk_box_pack_start (GTK_BOX (vbox), child->label, FALSE, FALSE, 0);
+	  gtk_box_pack_end (GTK_BOX (vbox), child->label, FALSE, FALSE, 0);
 	  if (toolbar->style != GTK_TOOLBAR_ICONS)
 	    gtk_widget_show (child->label);
+	}
+
+      if (icon)
+	{
+	  child->icon = GTK_WIDGET (icon);
+	  gtk_box_pack_end (GTK_BOX (vbox), child->icon, FALSE, FALSE, 0);
+	  if (toolbar->style != GTK_TOOLBAR_TEXT)
+	    gtk_widget_show (child->icon);
 	}
 
       gtk_widget_show (child->widget);
