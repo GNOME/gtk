@@ -1,5 +1,8 @@
 2004-08-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down): Fix
+	an off-by-one error.  (#141809, Markku Vire)
+
 	* gtk/gtkdnd.c (gtk_drag_dest_set, gtk_drag_source_set): Really
 	fix the initialization of the target list.
 

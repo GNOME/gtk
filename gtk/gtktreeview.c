@@ -8420,7 +8420,7 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
     y += ROW_HEIGHT (tree_view, GTK_RBNODE_GET_HEIGHT (cursor_node));
   y = CLAMP (y, (gint)tree_view->priv->vadjustment->lower,  (gint)tree_view->priv->vadjustment->upper - vertical_separator);
 
-  if (y > tree_view->priv->height)
+  if (y >= tree_view->priv->height)
     y = tree_view->priv->height - 1;
 
   _gtk_rbtree_find_offset (tree_view->priv->tree, y, &cursor_tree, &cursor_node);
