@@ -33,7 +33,7 @@ msgstr ""
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:703

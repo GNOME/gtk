@@ -11,7 +11,7 @@ msgstr ""
 "Last-Translator: Ronald Hummelink <ronald@hummelink.xs4all.nl>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-15\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:703
@@ -287,7 +287,7 @@ msgid ""
 "parsed."
 msgstr ""
 "JPEG-kwaliteit moet een waarde tussen 0 en 100 zijn: waarde '%s' kan niet "
-"geÃ¯nterpreteerd worden"
+"geÃƒÂ¯nterpreteerd worden"
 
 #: gdk-pixbuf/io-jpeg.c:827
 #, c-format
@@ -1175,7 +1175,7 @@ msgstr "Achtergrond set"
 #: gtk/gtkcellrenderer.c:244
 #, fuzzy
 msgid "Whether this tag affects the cell background color"
-msgstr "Of dit label de achtergrond kleur beïnvloedt"
+msgstr "Of dit label de achtergrond kleur beÃ¯nvloedt"
 
 #: gtk/gtkcellrendererpixbuf.c:132
 msgid "Pixbuf Object"
@@ -1391,7 +1391,7 @@ msgstr "Achtergrond set"
 
 #: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:509
 msgid "Whether this tag affects the background color"
-msgstr "Of dit label de achtergrond kleur beïnvloedt"
+msgstr "Of dit label de achtergrond kleur beÃ¯nvloedt"
 
 #: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:520
 msgid "Foreground set"
@@ -1407,7 +1407,7 @@ msgstr "Editbare set"
 
 #: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:529
 msgid "Whether this tag affects text editability"
-msgstr "Of dit label de editbaarheid van de tekst beïnvloedt"
+msgstr "Of dit label de editbaarheid van de tekst beÃ¯nvloedt"
 
 #: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:532
 msgid "Font family set"
@@ -1415,7 +1415,7 @@ msgstr "Lettertype familie set"
 
 #: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:533
 msgid "Whether this tag affects the font family"
-msgstr "Of dit label de font familie beïnvloedt"
+msgstr "Of dit label de font familie beÃ¯nvloedt"
 
 #: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:536
 msgid "Font style set"
@@ -1423,7 +1423,7 @@ msgstr "Lettertype stijl set:"
 
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font style"
-msgstr "Of dit label de font stijl beïnvloedt"
+msgstr "Of dit label de font stijl beÃ¯nvloedt"
 
 #: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:540
 msgid "Font variant set"
@@ -1431,7 +1431,7 @@ msgstr "Font variant set"
 
 #: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font variant"
-msgstr "Of dit label de font variant beïnvloedt"
+msgstr "Of dit label de font variant beÃ¯nvloedt"
 
 #: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:544
 msgid "Font weight set"
@@ -1439,7 +1439,7 @@ msgstr "Letterdikte set"
 
 #: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font weight"
-msgstr "Of dit label de letterdikte beïnvloedt"
+msgstr "Of dit label de letterdikte beÃ¯nvloedt"
 
 #: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:548
 msgid "Font stretch set"
@@ -1447,7 +1447,7 @@ msgstr "Letterbreedte set"
 
 #: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font stretch"
-msgstr "Of dit label de letterbreedte beïnvloedt"
+msgstr "Of dit label de letterbreedte beÃ¯nvloedt"
 
 #: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:552
 msgid "Font size set"
@@ -1455,7 +1455,7 @@ msgstr "Lettertype grootte set"
 
 #: gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font size"
-msgstr "Of dit label de lettertype grootte beïnvloedt"
+msgstr "Of dit label de lettertype grootte beÃ¯nvloedt"
 
 #: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:556
 msgid "Font scale set"
@@ -1471,7 +1471,7 @@ msgstr "Verhoging set"
 
 #: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:577
 msgid "Whether this tag affects the rise"
-msgstr "Of dit label de verhoging beïnvloedt"
+msgstr "Of dit label de verhoging beÃ¯nvloedt"
 
 #: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:592
 msgid "Strikethrough set"
@@ -1479,7 +1479,7 @@ msgstr "Doorstreep set"
 
 #: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:593
 msgid "Whether this tag affects strikethrough"
-msgstr "Of dit label de doorstreping beïnvloedt"
+msgstr "Of dit label de doorstreping beÃ¯nvloedt"
 
 #: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:600
 msgid "Underline set"
@@ -1487,7 +1487,7 @@ msgstr "Onderstreep set"
 
 #: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:601
 msgid "Whether this tag affects underlining"
-msgstr "Of dit label de onderstreping beïnvloedt"
+msgstr "Of dit label de onderstreping beÃ¯nvloedt"
 
 #: gtk/gtkcellrenderertoggle.c:131
 msgid "Toggle state"
@@ -2555,7 +2555,7 @@ msgid ""
 "GtkMisc::xalign for that"
 msgstr ""
 "De uitlijning van de lijnen in de tekst van het lebel relatief tot elkaar. "
-"Dit beïnvloed NIET de uitlijning van het label in zijn huidige plaatsing. "
+"Dit beÃ¯nvloed NIET de uitlijning van het label in zijn huidige plaatsing. "
 "Bekijk daarvoor GtkMisc::xalign."
 
 #: gtk/gtklabel.c:325
@@ -3715,7 +3715,7 @@ msgstr "Eigenschappen"
 
 #: gtk/gtkstock.c:316
 msgid "_Quit"
-msgstr "Beëindigen"
+msgstr "BeÃ«indigen"
 
 #: gtk/gtkstock.c:317
 msgid "_Redo"
@@ -4139,7 +4139,7 @@ msgstr "Achtergrond volle hoogte set"
 
 #: gtk/gtktexttag.c:513
 msgid "Whether this tag affects background height"
-msgstr "Of dit label de achtergrond hoogte beïnvloedt"
+msgstr "Of dit label de achtergrond hoogte beÃ¯nvloedt"
 
 #: gtk/gtktexttag.c:516
 msgid "Background stipple set"
@@ -4147,7 +4147,7 @@ msgstr "Achtergrond masker set"
 
 #: gtk/gtktexttag.c:517
 msgid "Whether this tag affects the background stipple"
-msgstr "Of dit label het achtergrond masker beïnvloedt"
+msgstr "Of dit label het achtergrond masker beÃ¯nvloedt"
 
 #: gtk/gtktexttag.c:524
 msgid "Foreground stipple set"
@@ -4155,7 +4155,7 @@ msgstr "Voorgrond masker set"
 
 #: gtk/gtktexttag.c:525
 msgid "Whether this tag affects the foreground stipple"
-msgstr "Of dit label het voorgrond masker beïnvloedt"
+msgstr "Of dit label het voorgrond masker beÃ¯nvloedt"
 
 #: gtk/gtktexttag.c:560
 msgid "Justification set"
@@ -4163,7 +4163,7 @@ msgstr "Uitlijnen set"
 
 #: gtk/gtktexttag.c:561
 msgid "Whether this tag affects paragraph justification"
-msgstr "Of dit label de paragraaf uitlijning beïnvloedt"
+msgstr "Of dit label de paragraaf uitlijning beÃ¯nvloedt"
 
 #: gtk/gtktexttag.c:564
 msgid "Language set"
@@ -4171,7 +4171,7 @@ msgstr "Taal set"
 
 #: gtk/gtktexttag.c:565
 msgid "Whether this tag affects the language the text is rendered as"
-msgstr "Of dit label de taal als welke de tekst gerenderd wordt beïnvloedt"
+msgstr "Of dit label de taal als welke de tekst gerenderd wordt beÃ¯nvloedt"
 
 #: gtk/gtktexttag.c:568
 msgid "Left margin set"
@@ -4179,7 +4179,7 @@ msgstr "Linker marge set"
 
 #: gtk/gtktexttag.c:569
 msgid "Whether this tag affects the left margin"
-msgstr "Of dit label de linker marge beïnvloedt"
+msgstr "Of dit label de linker marge beÃ¯nvloedt"
 
 #: gtk/gtktexttag.c:572
 msgid "Indent set"
@@ -4187,7 +4187,7 @@ msgstr "Inspringen set"
 
 #: gtk/gtktexttag.c:573
 msgid "Whether this tag affects indentation"
-msgstr "If dit label het inspringen beïnvloedt"
+msgstr "If dit label het inspringen beÃ¯nvloedt"
 
 #: gtk/gtktexttag.c:580
 msgid "Pixels above lines set"
@@ -4195,7 +4195,7 @@ msgstr "Pixels boven lijnen set"
 
 #: gtk/gtktexttag.c:581 gtk/gtktexttag.c:585
 msgid "Whether this tag affects the number of pixels above lines"
-msgstr "Of dit label het aantal pixels boven lijnen beïnvloedt"
+msgstr "Of dit label het aantal pixels boven lijnen beÃ¯nvloedt"
 
 #: gtk/gtktexttag.c:584
 msgid "Pixels below lines set"
@@ -4208,7 +4208,7 @@ msgstr "Pixels tussen lijnen met regelomloop set"
 #: gtk/gtktexttag.c:589
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr ""
-"Of dit label het aantal pixels tussen lijnen met regelomloop beïnvloedt"
+"Of dit label het aantal pixels tussen lijnen met regelomloop beÃ¯nvloedt"
 
 #: gtk/gtktexttag.c:596
 msgid "Right margin set"
@@ -4216,7 +4216,7 @@ msgstr "Rechter marge set"
 
 #: gtk/gtktexttag.c:597
 msgid "Whether this tag affects the right margin"
-msgstr "Of dit label de rechter marge beïnvloedt"
+msgstr "Of dit label de rechter marge beÃ¯nvloedt"
 
 #: gtk/gtktexttag.c:604
 msgid "Wrap mode set"
@@ -4224,7 +4224,7 @@ msgstr "Regelomloop modes set"
 
 #: gtk/gtktexttag.c:605
 msgid "Whether this tag affects line wrap mode"
-msgstr "Of dit label de regelomloop beïnvloedt"
+msgstr "Of dit label de regelomloop beÃ¯nvloedt"
 
 #: gtk/gtktexttag.c:608
 msgid "Tabs set"
@@ -4232,7 +4232,7 @@ msgstr "Tabs set"
 
 #: gtk/gtktexttag.c:609
 msgid "Whether this tag affects tabs"
-msgstr "Of dit label de tabs beïnvloedt"
+msgstr "Of dit label de tabs beÃ¯nvloedt"
 
 #: gtk/gtktexttag.c:612
 msgid "Invisible set"
@@ -4240,7 +4240,7 @@ msgstr "Onzichtbaar set"
 
 #: gtk/gtktexttag.c:613
 msgid "Whether this tag affects text visibility"
-msgstr "Of dit label zichtbaarheid van tekst beïnvloedt"
+msgstr "Of dit label zichtbaarheid van tekst beÃ¯nvloedt"
 
 #: gtk/gtktextutil.c:46
 msgid "LRM _Left-to-right mark"

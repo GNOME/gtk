@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: Gediminas Paulauskas <menesis@delfi.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-13\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 0.9.5\n"
 
@@ -22,14 +22,14 @@ msgstr "Nepavyko atidaryti bylos '%s: %s"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:157 gdk-pixbuf/gdk-pixbuf-io.c:713
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr "Paveikslëlio byloje ¥%s´ nëra duomenø"
+msgstr "PaveikslÄ—lio byloje â€%sâ€œ nÄ—ra duomenÅ³"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:197 gdk-pixbuf/gdk-pixbuf-io.c:747
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
-"Nepavyko ákelti paveikslëlio ¥%s´: neşinoma prieşastis, tikriausiai "
+"Nepavyko Ä¯kelti paveikslÄ—lio â€%sâ€œ: neÅ¾inoma prieÅ¾astis, tikriausiai "
 "sugadinta byla"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:225
@@ -38,13 +38,13 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"Nepavyko ákelti animacijos ¥%s´: neşinoma prieşastis, tikriausiai sugadinta "
+"Nepavyko Ä¯kelti animacijos â€%sâ€œ: neÅ¾inoma prieÅ¾astis, tikriausiai sugadinta "
 "byla"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:377
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "Nepavyko ákelti paveikslëliø kelties modulio: %s: %s"
+msgstr "Nepavyko Ä¯kelti paveikslÄ—liÅ³ kelties modulio: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:392
 #, c-format
@@ -52,27 +52,27 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"Paveikslëliø kelties modulis %s neeksportuoja teisingo interfeiso; galbût "
-"jis yra iğ kitos GTK versijos?"
+"PaveikslÄ—liÅ³ kelties modulis %s neeksportuoja teisingo interfeiso; galbÅ«t "
+"jis yra iÅ¡ kitos GTK versijos?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:531 gdk-pixbuf/gdk-pixbuf-io.c:579
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr "Paveikslëlio tipas '%s' nepalaikomas"
+msgstr "PaveikslÄ—lio tipas '%s' nepalaikomas"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:611
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Negalëjau atpaşinti paveikslëlio bylos '%s' formato"
+msgstr "NegalÄ—jau atpaÅ¾inti paveikslÄ—lio bylos '%s' formato"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:617
 msgid "Unrecognized image file format"
-msgstr "Neatpaşintas paveikslëlio bylos formatas"
+msgstr "NeatpaÅ¾intas paveikslÄ—lio bylos formatas"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:758
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr "Nepavyko ákelti paveikslëlio ¥%s´: %s"
+msgstr "Nepavyko Ä¯kelti paveikslÄ—lio â€%sâ€œ: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:864
 #, c-format
@@ -82,7 +82,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:969
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr "Nepavyko atidaryti ¥%s´ árağymui: %s"
+msgstr "Nepavyko atidaryti â€%sâ€œ Ä¯raÅ¡ymui: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:990
 #, c-format
@@ -105,16 +105,16 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixdata.c:145
 msgid "Image header corrupt"
-msgstr "Paveikslëlio antrağtë sugadinta"
+msgstr "PaveikslÄ—lio antraÅ¡tÄ— sugadinta"
 
 #: gdk-pixbuf/gdk-pixdata.c:150
 msgid "Image format unknown"
-msgstr "Paveikslëlio formatas neşinomas"
+msgstr "PaveikslÄ—lio formatas neÅ¾inomas"
 
 #: gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:456
 #, fuzzy
 msgid "Image pixel data corrupt"
-msgstr "Paveikslëlis tağkelis"
+msgstr "PaveikslÄ—lis taÅ¡kelis"
 
 #: gdk-pixbuf/gdk-pixdata.c:402
 #, c-format
@@ -149,7 +149,7 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:500
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr "Vidinë klaida GIF kelties programoje (%s)"
+msgstr "VidinÄ— klaida GIF kelties programoje (%s)"
 
 #: gdk-pixbuf/io-gif.c:572
 msgid "Stack overflow"
@@ -157,7 +157,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:631
 msgid "GIF image loader can't understand this image."
-msgstr "GIF kelties programa negali suprasti ğio paveikslëlio."
+msgstr "GIF kelties programa negali suprasti Å¡io paveikslÄ—lio."
 
 #: gdk-pixbuf/io-gif.c:660
 msgid "Bad code encountered"
@@ -170,7 +170,7 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:803 gdk-pixbuf/io-gif.c:1413 gdk-pixbuf/io-gif.c:1459
 #: gdk-pixbuf/io-gif.c:1574
 msgid "Not enough memory to load GIF file"
-msgstr "Nepakanka atminties ákelti GIF bylai"
+msgstr "Nepakanka atminties Ä¯kelti GIF bylai"
 
 #: gdk-pixbuf/io-gif.c:1050
 msgid "GIF image is corrupt (incorrect LZW compression)"
@@ -183,7 +183,7 @@ msgstr "Atrodo, kad tai ne GIF byla"
 #: gdk-pixbuf/io-gif.c:1112
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr "GIF formato versijs %s nëra palaikoma"
+msgstr "GIF formato versijs %s nÄ—ra palaikoma"
 
 #: gdk-pixbuf/io-gif.c:1185
 msgid "GIF image contained a frame with height or width 0."
@@ -210,12 +210,12 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:1633
 #, fuzzy
 msgid "The GIF image format"
-msgstr "Paveikslëlio formatas neşinomas"
+msgstr "PaveikslÄ—lio formatas neÅ¾inomas"
 
 #: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:338
 #: gdk-pixbuf/io-ico.c:401 gdk-pixbuf/io-ico.c:418
 msgid "Not enough memory to load icon"
-msgstr "Nepakanka atminties ákelti ikonai"
+msgstr "Nepakanka atminties Ä¯kelti ikonai"
 
 #: gdk-pixbuf/io-ico.c:262
 msgid "Invalid header in icon"
@@ -227,12 +227,12 @@ msgstr "Ikonos plotis yra nulinis"
 
 #: gdk-pixbuf/io-ico.c:309
 msgid "Icon has zero height"
-msgstr "Ikonos aukğtis yra nulinis"
+msgstr "Ikonos aukÅ¡tis yra nulinis"
 
 #: gdk-pixbuf/io-ico.c:353
 #, fuzzy
 msgid "Compressed icons are not supported"
-msgstr "Paveikslëlio tipas '%s' nepalaikomas"
+msgstr "PaveikslÄ—lio tipas '%s' nepalaikomas"
 
 #: gdk-pixbuf/io-ico.c:386
 msgid "Unsupported icon type"
@@ -240,17 +240,17 @@ msgstr "Nepalaikomas ikonos tipas"
 
 #: gdk-pixbuf/io-ico.c:466
 msgid "Not enough memory to load ICO file"
-msgstr "Nepakanka atminties ákelti ICO bylai"
+msgstr "Nepakanka atminties Ä¯kelti ICO bylai"
 
 #: gdk-pixbuf/io-ico.c:871
 #, fuzzy
 msgid "The ICO image format"
-msgstr "Paveikslëlio formatas neşinomas"
+msgstr "PaveikslÄ—lio formatas neÅ¾inomas"
 
 #: gdk-pixbuf/io-jpeg.c:114
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr "Klaida interpretuojant JPEG paveikslëlio bylà (%s)"
+msgstr "Klaida interpretuojant JPEG paveikslÄ—lio bylÄ… (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:349
 msgid ""
@@ -311,7 +311,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:301
 msgid "Insufficient memory to load PNG file"
-msgstr "Nepakanka atminties ákelti PNG bylai"
+msgstr "Nepakanka atminties Ä¯kelti PNG bylai"
 
 #: gdk-pixbuf/io-png.c:605
 #, c-format
@@ -347,7 +347,7 @@ msgstr ""
 #: gdk-pixbuf/io-png.c:919
 #, fuzzy
 msgid "The PNG image format"
-msgstr "PNM paveikslëlio formatas yra neteisingas"
+msgstr "PNM paveikslÄ—lio formatas yra neteisingas"
 
 #: gdk-pixbuf/io-pnm.c:248
 msgid "PNM loader expected to find an integer, but didn't"
@@ -387,7 +387,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:554 gdk-pixbuf/io-pnm.c:596
 msgid "PNM image format is invalid"
-msgstr "PNM paveikslëlio formatas yra neteisingas"
+msgstr "PNM paveikslÄ—lio formatas yra neteisingas"
 
 #: gdk-pixbuf/io-pnm.c:655
 msgid "PNM image loader does not support this PNM subformat"
@@ -428,17 +428,17 @@ msgstr ""
 #: gdk-pixbuf/io-ras.c:147
 #, fuzzy
 msgid "RAS image has unknown type"
-msgstr "Paveikslëlio formatas neşinomas"
+msgstr "PaveikslÄ—lio formatas neÅ¾inomas"
 
 #: gdk-pixbuf/io-ras.c:155
 #, fuzzy
 msgid "unsupported RAS image variation"
-msgstr "Nepalaikomas TGA paveikslëlio tipas"
+msgstr "Nepalaikomas TGA paveikslÄ—lio tipas"
 
 #: gdk-pixbuf/io-ras.c:170 gdk-pixbuf/io-ras.c:190
 #, fuzzy
 msgid "Not enough memory to load RAS image"
-msgstr "Nepakanka atminties ákelti paveisklëliui"
+msgstr "Nepakanka atminties Ä¯kelti paveisklÄ—liui"
 
 #: gdk-pixbuf/io-ras.c:532
 msgid "The Sun raster image format"
@@ -499,7 +499,7 @@ msgstr ""
 #: gdk-pixbuf/io-tga.c:734 gdk-pixbuf/io-tga.c:743 gdk-pixbuf/io-tga.c:753
 #: gdk-pixbuf/io-tga.c:763 gdk-pixbuf/io-tga.c:770
 msgid "TGA image type not supported"
-msgstr "TGA paveikslëlio tipas nepalaikomas"
+msgstr "TGA paveikslÄ—lio tipas nepalaikomas"
 
 #: gdk-pixbuf/io-tga.c:816
 msgid "Can't allocate memory for TGA context struct"
@@ -547,7 +547,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:1295 gdk-pixbuf/io-tga.c:1324
 msgid "Unsupported TGA image type"
-msgstr "Nepalaikomas TGA paveikslëlio tipas"
+msgstr "Nepalaikomas TGA paveikslÄ—lio tipas"
 
 #: gdk-pixbuf/io-tga.c:1370
 msgid "The Targa image format"
@@ -555,15 +555,15 @@ msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:191
 msgid "Could not get image width (bad TIFF file)"
-msgstr "Negalëjau gauti paveikslëlio ploèio (bloga TIFF byla)"
+msgstr "NegalÄ—jau gauti paveikslÄ—lio ploÄio (bloga TIFF byla)"
 
 #: gdk-pixbuf/io-tiff.c:198
 msgid "Could not get image height (bad TIFF file)"
-msgstr "Negalëjau gauti paveikslëlio aukğèio (bloga TIFF byla)"
+msgstr "NegalÄ—jau gauti paveikslÄ—lio aukÅ¡Äio (bloga TIFF byla)"
 
 #: gdk-pixbuf/io-tiff.c:206
 msgid "Width or height of TIFF image is zero"
-msgstr "TIFF paveikslëlio plotis ar aukğtis yra nulis"
+msgstr "TIFF paveikslÄ—lio plotis ar aukÅ¡tis yra nulis"
 
 #: gdk-pixbuf/io-tiff.c:215 gdk-pixbuf/io-tiff.c:224
 msgid "Dimensions of TIFF image too large"
@@ -575,12 +575,12 @@ msgstr "Nepakanka atminties atidaryti TIFF bylai"
 
 #: gdk-pixbuf/io-tiff.c:258
 msgid "Failed to load RGB data from TIFF file"
-msgstr "Nepavyko ákelti RGB duomenø iğ TIFF bylos"
+msgstr "Nepavyko Ä¯kelti RGB duomenÅ³ iÅ¡ TIFF bylos"
 
 #: gdk-pixbuf/io-tiff.c:266
 #, fuzzy
 msgid "Unsupported TIFF variant"
-msgstr "Nepalaikomas TGA paveikslëlio tipas"
+msgstr "Nepalaikomas TGA paveikslÄ—lio tipas"
 
 #: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
@@ -592,7 +592,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:483 gdk-pixbuf/io-tiff.c:496
 msgid "Failed to load TIFF image"
-msgstr "Nepavyko ákelti TIFF paveikslëlio"
+msgstr "Nepavyko Ä¯kelti TIFF paveikslÄ—lio"
 
 #: gdk-pixbuf/io-tiff.c:591
 msgid "The TIFF image format"
@@ -600,15 +600,15 @@ msgstr ""
 
 #: gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
-msgstr "Paveikslëlio plotis yra nulinis"
+msgstr "PaveikslÄ—lio plotis yra nulinis"
 
 #: gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
-msgstr "Paveikslëlio aukğtis yra nulinis"
+msgstr "PaveikslÄ—lio aukÅ¡tis yra nulinis"
 
 #: gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
-msgstr "Nepakanka atminties ákelti paveisklëliui"
+msgstr "Nepakanka atminties Ä¯kelti paveisklÄ—liui"
 
 #: gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
@@ -624,7 +624,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-xbm.c:295
 msgid "Insufficient memory to load XBM image file"
-msgstr "Nepakanka atminties ákelti XBM paveikslëlio bylai"
+msgstr "Nepakanka atminties Ä¯kelti XBM paveikslÄ—lio bylai"
 
 #: gdk-pixbuf/io-xbm.c:439
 msgid "Failed to write to temporary file when loading XBM image"
@@ -649,7 +649,7 @@ msgstr ""
 #: gdk-pixbuf/io-xpm.c:1253
 #, fuzzy
 msgid "XPM file has invalid number of colors"
-msgstr "Maşiausias spalvø skaièius:"
+msgstr "MaÅ¾iausias spalvÅ³ skaiÄius:"
 
 #: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
@@ -670,12 +670,12 @@ msgstr ""
 #: gdk-pixbuf/io-xpm.c:1543
 #, fuzzy
 msgid "The XPM image format"
-msgstr "PNM paveikslëlio formatas yra neteisingas"
+msgstr "PNM paveikslÄ—lio formatas yra neteisingas"
 
 #: gdk/gdkdisplaymanager.c:117
 #, fuzzy
 msgid "Default Display"
-msgstr "Áprastas"
+msgstr "Ä®prastas"
 
 #: gdk/gdkdisplaymanager.c:118
 msgid "The default display for GDK"
@@ -711,7 +711,7 @@ msgstr "Alt"
 #: gtk/gtkaccellabel.c:137
 #, fuzzy
 msgid "Accelerator Closure"
-msgstr "Spartusis klaviğas"
+msgstr "Spartusis klaviÅ¡as"
 
 #: gtk/gtkaccellabel.c:138
 msgid "The closure to be monitored for accelerator changes"
@@ -720,7 +720,7 @@ msgstr ""
 #: gtk/gtkaccellabel.c:144
 #, fuzzy
 msgid "Accelerator Widget"
-msgstr "Spartusis klaviğas"
+msgstr "Spartusis klaviÅ¡as"
 
 #: gtk/gtkaccellabel.c:145
 msgid "The widget to be monitored for accelerator changes"
@@ -729,14 +729,14 @@ msgstr ""
 #: gtk/gtkalignment.c:102
 #, fuzzy
 msgid "Horizontal alignment"
-msgstr "Gulsèias"
+msgstr "GulsÄias"
 
 #: gtk/gtkalignment.c:103
 #, fuzzy
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
-msgstr "Gulsèias yra yra"
+msgstr "GulsÄias yra yra"
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
@@ -770,19 +770,19 @@ msgstr ""
 
 #: gtk/gtkarrow.c:98
 msgid "Arrow direction"
-msgstr "Rodyklës kryptis"
+msgstr "RodyklÄ—s kryptis"
 
 #: gtk/gtkarrow.c:99
 msgid "The direction the arrow should point"
-msgstr "Kryptis, á kurià rodyklë turëtø rodyti"
+msgstr "Kryptis, Ä¯ kuriÄ… rodyklÄ— turÄ—tÅ³ rodyti"
 
 #: gtk/gtkarrow.c:106
 msgid "Arrow shadow"
-msgstr "Rodyklës ğeğëlis"
+msgstr "RodyklÄ—s Å¡eÅ¡Ä—lis"
 
 #: gtk/gtkarrow.c:107
 msgid "Appearance of the shadow surrounding the arrow"
-msgstr "Ğeğëlio, gaubianèio rodyklæ, iğvaizda"
+msgstr "Å eÅ¡Ä—lio, gaubianÄio rodyklÄ™, iÅ¡vaizda"
 
 #: gtk/gtkaspectframe.c:108
 msgid "Horizontal Alignment"
@@ -822,15 +822,15 @@ msgstr "Minimalus vaiko plotis"
 
 #: gtk/gtkbbox.c:120
 msgid "Minimum width of buttons inside the box"
-msgstr "Minimalus mygtukø, esanèiø dëşutës viduje, plotis"
+msgstr "Minimalus mygtukÅ³, esanÄiÅ³ dÄ—Å¾utÄ—s viduje, plotis"
 
 #: gtk/gtkbbox.c:128
 msgid "Minimum child height"
-msgstr "Minimalus vaiko aukğtis"
+msgstr "Minimalus vaiko aukÅ¡tis"
 
 #: gtk/gtkbbox.c:129
 msgid "Minimum height of buttons inside the box"
-msgstr "Minimalus mygtukø, esanèiø dëşutës viduje, aukğtis"
+msgstr "Minimalus mygtukÅ³, esanÄiÅ³ dÄ—Å¾utÄ—s viduje, aukÅ¡tis"
 
 #: gtk/gtkbbox.c:137
 msgid "Child internal width padding"
@@ -850,7 +850,7 @@ msgstr ""
 
 #: gtk/gtkbbox.c:155
 msgid "Layout style"
-msgstr "Iğdëstymo stilius"
+msgstr "IÅ¡dÄ—stymo stilius"
 
 #: gtk/gtkbbox.c:156
 msgid ""
@@ -875,7 +875,7 @@ msgstr "Tarpai"
 #: gtk/gtkbox.c:129
 #, fuzzy
 msgid "The amount of space between children"
-msgstr "Tarpai tarp vaikø"
+msgstr "Tarpai tarp vaikÅ³"
 
 #: gtk/gtkbox.c:138 gtk/gtknotebook.c:435
 msgid "Homogeneous"
@@ -884,7 +884,7 @@ msgstr ""
 #: gtk/gtkbox.c:139
 #, fuzzy
 msgid "Whether the children should all be the same size"
-msgstr "Ar visi vaikai turëtø bûti to paties dydşio."
+msgstr "Ar visi vaikai turÄ—tÅ³ bÅ«ti to paties dydÅ¾io."
 
 #: gtk/gtkbox.c:146 gtk/gtkpreview.c:129
 msgid "Expand"
@@ -893,12 +893,12 @@ msgstr "Sutraukti"
 #: gtk/gtkbox.c:147
 #, fuzzy
 msgid "Whether the child should receive extra space when the parent grows"
-msgstr "Ar visi vaikai turëtø bûti to paties dydşio."
+msgstr "Ar visi vaikai turÄ—tÅ³ bÅ«ti to paties dydÅ¾io."
 
 #: gtk/gtkbox.c:153
 #, fuzzy
 msgid "Fill"
-msgstr "_Uşpildyti"
+msgstr "_UÅ¾pildyti"
 
 #: gtk/gtkbox.c:154
 msgid ""
@@ -917,7 +917,7 @@ msgstr ""
 #: gtk/gtkbox.c:167
 #, fuzzy
 msgid "Pack type"
-msgstr "ádëti"
+msgstr "Ä¯dÄ—ti"
 
 #: gtk/gtkbox.c:168 gtk/gtknotebook.c:479
 msgid ""
@@ -933,7 +933,7 @@ msgstr "Pozicija"
 #: gtk/gtkbox.c:175 gtk/gtknotebook.c:458
 #, fuzzy
 msgid "The index of the child in the parent"
-msgstr "Sustabdyti esamo tinklapio ákëlimà"
+msgstr "Sustabdyti esamo tinklapio Ä¯kÄ—limÄ…"
 
 #: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:287
 msgid "Label"
@@ -947,7 +947,7 @@ msgstr ""
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:308
 msgid "Use underline"
-msgstr "Naudoti pabraukimà"
+msgstr "Naudoti pabraukimÄ…"
 
 #: gtk/gtkbutton.c:198 gtk/gtklabel.c:309
 #, fuzzy
@@ -968,17 +968,17 @@ msgstr "Jeigu nurodyti yra"
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
-msgstr "Rëmelio reljefas"
+msgstr "RÄ—melio reljefas"
 
 #: gtk/gtkbutton.c:214
 #, fuzzy
 msgid "The border relief style"
-msgstr "Rëmelio reljefo stilius"
+msgstr "RÄ—melio reljefo stilius"
 
 #: gtk/gtkbutton.c:271
 #, fuzzy
 msgid "Default Spacing"
-msgstr "Áprastas"
+msgstr "Ä®prastas"
 
 #: gtk/gtkbutton.c:272
 msgid "Extra space to add for CAN_DEFAULT buttons"
@@ -987,7 +987,7 @@ msgstr ""
 #: gtk/gtkbutton.c:278
 #, fuzzy
 msgid "Default Outside Spacing"
-msgstr "Áprastas"
+msgstr "Ä®prastas"
 
 #: gtk/gtkbutton.c:279
 msgid ""
@@ -1030,7 +1030,7 @@ msgstr "Matomas"
 
 #: gtk/gtkcellrenderer.c:133
 msgid "Display the cell"
-msgstr "Ar rodyti langelá"
+msgstr "Ar rodyti langelÄ¯"
 
 #: gtk/gtkcellrenderer.c:141
 msgid "xalign"
@@ -1080,12 +1080,12 @@ msgstr "Fiksuotas plotis."
 
 #: gtk/gtkcellrenderer.c:196
 msgid "height"
-msgstr "aukğtis"
+msgstr "aukÅ¡tis"
 
 #: gtk/gtkcellrenderer.c:197
 #, fuzzy
 msgid "The fixed height"
-msgstr "Fiksuotas aukğtis."
+msgstr "Fiksuotas aukÅ¡tis."
 
 #: gtk/gtkcellrenderer.c:207
 #, fuzzy
@@ -1095,16 +1095,16 @@ msgstr "Yra"
 #: gtk/gtkcellrenderer.c:208
 #, fuzzy
 msgid "Row has children"
-msgstr "Eilutë turi vaikø."
+msgstr "EilutÄ— turi vaikÅ³."
 
 #: gtk/gtkcellrenderer.c:217
 msgid "Is Expanded"
-msgstr "Yra iğskleista"
+msgstr "Yra iÅ¡skleista"
 
 #: gtk/gtkcellrenderer.c:218
 #, fuzzy
 msgid "Row is an expander row, and is expanded"
-msgstr "Eilutë yra yra"
+msgstr "EilutÄ— yra yra"
 
 #: gtk/gtkcellrenderer.c:226
 #, fuzzy
@@ -1114,7 +1114,7 @@ msgstr "Fono spalvos pavadinimas"
 #: gtk/gtkcellrenderer.c:227
 #, fuzzy
 msgid "Cell background color as a string"
-msgstr "Fono spalva kaip eilutë"
+msgstr "Fono spalva kaip eilutÄ—"
 
 #: gtk/gtkcellrenderer.c:234
 #, fuzzy
@@ -1134,7 +1134,7 @@ msgstr "Fonas nustatytas"
 #: gtk/gtkcellrenderer.c:244
 #, fuzzy
 msgid "Whether this tag affects the cell background color"
-msgstr "Pasirink fono spalvà"
+msgstr "Pasirink fono spalvÄ…"
 
 #: gtk/gtkcellrendererpixbuf.c:132
 #, fuzzy
@@ -1149,12 +1149,12 @@ msgstr "Tekstas"
 #: gtk/gtkcellrendererpixbuf.c:141
 #, fuzzy
 msgid "Pixbuf Expander Open"
-msgstr "Iğplësti iki didesnio dydşio"
+msgstr "IÅ¡plÄ—sti iki didesnio dydÅ¾io"
 
 #: gtk/gtkcellrendererpixbuf.c:142
 #, fuzzy
 msgid "Pixbuf for open expander"
-msgstr "Iğplësti iki didesnio dydşio"
+msgstr "IÅ¡plÄ—sti iki didesnio dydÅ¾io"
 
 #: gtk/gtkcellrendererpixbuf.c:150
 msgid "Pixbuf Expander Closed"
@@ -1163,7 +1163,7 @@ msgstr ""
 #: gtk/gtkcellrendererpixbuf.c:151
 #, fuzzy
 msgid "Pixbuf for closed expander"
-msgstr "Iğplësti iki didesnio dydşio"
+msgstr "IÅ¡plÄ—sti iki didesnio dydÅ¾io"
 
 #: gtk/gtkcellrendererpixbuf.c:159 gtk/gtkimage.c:174
 msgid "Stock ID"
@@ -1181,7 +1181,7 @@ msgstr "D_ydis:"
 #: gtk/gtkcellrendererpixbuf.c:168
 #, fuzzy
 msgid "The size of the rendered icon"
-msgstr "Şemiau kitø langø"
+msgstr "Å½emiau kitÅ³ langÅ³"
 
 #: gtk/gtkcellrendererpixbuf.c:176
 msgid "Detail"
@@ -1216,7 +1216,7 @@ msgstr "Atributai"
 #: gtk/gtkcellrenderertext.c:191
 #, fuzzy
 msgid "A list of style attributes to apply to the text of the renderer"
-msgstr "A sàrağas tekstas."
+msgstr "A sÄ…raÅ¡as tekstas."
 
 #: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:205
 msgid "Background color name"
@@ -1224,7 +1224,7 @@ msgstr "Fono spalvos pavadinimas"
 
 #: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:206
 msgid "Background color as a string"
-msgstr "Fono spalva kaip eilutë"
+msgstr "Fono spalva kaip eilutÄ—"
 
 #: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:213
 msgid "Background color"
@@ -1240,7 +1240,7 @@ msgstr "Priekinio plano spalvos pavadinimas"
 
 #: gtk/gtkcellrenderertext.c:215 gtk/gtktexttag.c:240
 msgid "Foreground color as a string"
-msgstr "Priekinio plano spalva kaip eilutë"
+msgstr "Priekinio plano spalva kaip eilutÄ—"
 
 #: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:247
 msgid "Foreground color"
@@ -1257,73 +1257,73 @@ msgstr "Taisomas"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:274 gtk/gtktextview.c:569
 msgid "Whether the text can be modified by the user"
-msgstr "Ar tekstas gali bûti keièiamas vartotojo"
+msgstr "Ar tekstas gali bÅ«ti keiÄiamas vartotojo"
 
 #: gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
 #: gtk/gtkfontsel.c:215 gtk/gtktexttag.c:281 gtk/gtktexttag.c:289
 msgid "Font"
-msgstr "Ğriftas"
+msgstr "Å riftas"
 
 #: gtk/gtkcellrenderertext.c:240
 msgid "Font description as a string"
-msgstr "Ğrifto aprağymas kaip eilutë"
+msgstr "Å rifto apraÅ¡ymas kaip eilutÄ—"
 
 #: gtk/gtkcellrenderertext.c:248 gtk/gtktexttag.c:290
 msgid "Font description as a PangoFontDescription struct"
-msgstr "Ğrifto aprağymas kaip PangoFontDescription struktûra"
+msgstr "Å rifto apraÅ¡ymas kaip PangoFontDescription struktÅ«ra"
 
 #: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:298
 msgid "Font family"
-msgstr "Ğriftø ğeima"
+msgstr "Å riftÅ³ Å¡eima"
 
 #: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:299
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr "Ğriftø ğeimos pavadinimas, pvz. Sans, Helvetica, Times, Monospace"
+msgstr "Å riftÅ³ Å¡eimos pavadinimas, pvz. Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:264 gtk/gtkcellrenderertext.c:265
 #: gtk/gtktexttag.c:306
 msgid "Font style"
-msgstr "Ğrifto stilius"
+msgstr "Å rifto stilius"
 
 #: gtk/gtkcellrenderertext.c:273 gtk/gtkcellrenderertext.c:274
 #: gtk/gtktexttag.c:315
 msgid "Font variant"
-msgstr "Ğrifto variantas"
+msgstr "Å rifto variantas"
 
 #: gtk/gtkcellrenderertext.c:282 gtk/gtkcellrenderertext.c:283
 #: gtk/gtktexttag.c:324
 msgid "Font weight"
-msgstr "Ğrifto svoris"
+msgstr "Å rifto svoris"
 
 #: gtk/gtkcellrenderertext.c:292 gtk/gtkcellrenderertext.c:293
 #: gtk/gtktexttag.c:335
 #, fuzzy
 msgid "Font stretch"
-msgstr "Ğriftas"
+msgstr "Å riftas"
 
 #: gtk/gtkcellrenderertext.c:301 gtk/gtkcellrenderertext.c:302
 #: gtk/gtktexttag.c:344
 msgid "Font size"
-msgstr "Ğrifto dydis"
+msgstr "Å rifto dydis"
 
 #: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:364
 #, fuzzy
 msgid "Font points"
-msgstr "Ğriftas"
+msgstr "Å riftas"
 
 #: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:365
 msgid "Font size in points"
-msgstr "Ğriftas dydis tağkais"
+msgstr "Å riftas dydis taÅ¡kais"
 
 #: gtk/gtkcellrenderertext.c:321 gtk/gtktexttag.c:354
 #, fuzzy
 msgid "Font scale"
-msgstr "Ğriftas"
+msgstr "Å riftas"
 
 #: gtk/gtkcellrenderertext.c:322
 #, fuzzy
 msgid "Font scaling factor"
-msgstr "Ğriftas"
+msgstr "Å riftas"
 
 #: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:423
 msgid "Rise"
@@ -1341,7 +1341,7 @@ msgstr "Perbrauktas"
 
 #: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:464
 msgid "Whether to strike through the text"
-msgstr "Ar perbraukti tekstà"
+msgstr "Ar perbraukti tekstÄ…"
 
 #: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:471
 msgid "Underline"
@@ -1349,7 +1349,7 @@ msgstr "Pabrauktas"
 
 #: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:472
 msgid "Style of underline for this text"
-msgstr "Ğio teksto pabraukimo stilius"
+msgstr "Å io teksto pabraukimo stilius"
 
 #: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:508
 msgid "Background set"
@@ -1358,7 +1358,7 @@ msgstr "Fonas nustatytas"
 #: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:509
 #, fuzzy
 msgid "Whether this tag affects the background color"
-msgstr "Pasirink fono spalvà"
+msgstr "Pasirink fono spalvÄ…"
 
 #: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:520
 msgid "Foreground set"
@@ -1379,7 +1379,7 @@ msgstr "tekstas"
 
 #: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:532
 msgid "Font family set"
-msgstr "Ğriftø ğeima nustatyta"
+msgstr "Å riftÅ³ Å¡eima nustatyta"
 
 #: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:533
 msgid "Whether this tag affects the font family"
@@ -1387,7 +1387,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:536
 msgid "Font style set"
-msgstr "Ğrifto stilius nustatytas"
+msgstr "Å rifto stilius nustatytas"
 
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font style"
@@ -1395,7 +1395,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:540
 msgid "Font variant set"
-msgstr "Ğrifto variantas nustatytas"
+msgstr "Å rifto variantas nustatytas"
 
 #: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font variant"
@@ -1403,7 +1403,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:544
 msgid "Font weight set"
-msgstr "Ğrifto svoris nustatytas"
+msgstr "Å rifto svoris nustatytas"
 
 #: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font weight"
@@ -1412,7 +1412,7 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:548
 #, fuzzy
 msgid "Font stretch set"
-msgstr "Ğriftas"
+msgstr "Å riftas"
 
 #: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font stretch"
@@ -1420,7 +1420,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:552
 msgid "Font size set"
-msgstr "Ğrifto dydis nustatytas"
+msgstr "Å rifto dydis nustatytas"
 
 #: gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font size"
@@ -1429,7 +1429,7 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:556
 #, fuzzy
 msgid "Font scale set"
-msgstr "Ğriftas"
+msgstr "Å riftas"
 
 #: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:557
 #, fuzzy
@@ -1463,11 +1463,11 @@ msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:131
 msgid "Toggle state"
-msgstr "Varnelës bûsena"
+msgstr "VarnelÄ—s bÅ«sena"
 
 #: gtk/gtkcellrenderertoggle.c:132
 msgid "The toggle state of the button"
-msgstr "Ar varnelë yra padëta"
+msgstr "Ar varnelÄ— yra padÄ—ta"
 
 #: gtk/gtkcellrenderertoggle.c:140
 msgid "Activatable"
@@ -1479,11 +1479,11 @@ msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:149
 msgid "Radio state"
-msgstr "Perjungiklio bûsena"
+msgstr "Perjungiklio bÅ«sena"
 
 #: gtk/gtkcellrenderertoggle.c:150
 msgid "Draw the toggle button as a radio button"
-msgstr "Pieğti varnelæ kaip perjungiklá"
+msgstr "PieÅ¡ti varnelÄ™ kaip perjungiklÄ¯"
 
 #: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:197
 msgid "Indicator Size"
@@ -1510,7 +1510,7 @@ msgstr "Aktyvus"
 #: gtk/gtkcheckmenuitem.c:118
 #, fuzzy
 msgid "Whether the menu item is checked"
-msgstr "Ar meniu punktas yra paşymëtas"
+msgstr "Ar meniu punktas yra paÅ¾ymÄ—tas"
 
 #: gtk/gtkcheckmenuitem.c:125 gtk/gtktogglebutton.c:140
 msgid "Inconsistent"
@@ -1526,46 +1526,46 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"Anksèiau buvusi spalva, palyginimui su spalva, kurià pasirenki dabar. Tu "
-"gali nutempti ğià spalvà á paletës langelá, arba pasirinkti ğià spalvà "
-"nutempiant jà á greta esantá langelá."
+"AnksÄiau buvusi spalva, palyginimui su spalva, kuriÄ… pasirenki dabar. Tu "
+"gali nutempti Å¡iÄ… spalvÄ… Ä¯ paletÄ—s langelÄ¯, arba pasirinkti Å¡iÄ… spalvÄ… "
+"nutempiant jÄ… Ä¯ greta esantÄ¯ langelÄ¯."
 
 #: gtk/gtkcolorsel.c:541
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
-"Spalva, kurià pasirinkai. Tu gali nutempti ğià spalvà á paletës langelá, kad "
-"iğsaugotum naudojimui ateityje."
+"Spalva, kuriÄ… pasirinkai. Tu gali nutempti Å¡iÄ… spalvÄ… Ä¯ paletÄ—s langelÄ¯, kad "
+"iÅ¡saugotum naudojimui ateityje."
 
 #: gtk/gtkcolorsel.c:903
 msgid "_Save color here"
-msgstr "Iğ_saugoti spalvà èia"
+msgstr "IÅ¡_saugoti spalvÄ… Äia"
 
 #: gtk/gtkcolorsel.c:1115
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"Paspausk ant ğio paletës langelio, kad padarytum jà esama spalva. Kad "
-"pakeistum ğá langelá, nutempk spalvos langelá èia arba paspausk değiná "
-"mygtukà ir pasirink ¥Iğsaugoti spalvà èia´."
+"Paspausk ant Å¡io paletÄ—s langelio, kad padarytum jÄ… esama spalva. Kad "
+"pakeistum Å¡Ä¯ langelÄ¯, nutempk spalvos langelÄ¯ Äia arba paspausk deÅ¡inÄ¯ "
+"mygtukÄ… ir pasirink â€IÅ¡saugoti spalvÄ… Äiaâ€œ."
 
 #: gtk/gtkcolorsel.c:1729
 msgid "Has Opacity Control"
-msgstr "Rodyti skaidrumo keitiklá"
+msgstr "Rodyti skaidrumo keitiklÄ¯"
 
 #: gtk/gtkcolorsel.c:1730
 msgid "Whether the color selector should allow setting opacity"
-msgstr "Ar spalvø parinkiklis leidşia keisti skaidrumà"
+msgstr "Ar spalvÅ³ parinkiklis leidÅ¾ia keisti skaidrumÄ…"
 
 #: gtk/gtkcolorsel.c:1736
 msgid "Has palette"
-msgstr "Rodyti paletæ"
+msgstr "Rodyti paletÄ™"
 
 #: gtk/gtkcolorsel.c:1737
 msgid "Whether a palette should be used"
-msgstr "Ar paletë bus naudojama"
+msgstr "Ar paletÄ— bus naudojama"
 
 #: gtk/gtkcolorsel.c:1743
 msgid "Current Color"
@@ -1585,27 +1585,27 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1765
 msgid "Custom palette"
-msgstr "Tinkinta paletë"
+msgstr "Tinkinta paletÄ—"
 
 #: gtk/gtkcolorsel.c:1766
 msgid "Palette to use in the color selector"
-msgstr "Paletë, naudojama spalvø parinkiklyje"
+msgstr "PaletÄ—, naudojama spalvÅ³ parinkiklyje"
 
 #: gtk/gtkcolorsel.c:1807
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"Pasirink norimà spalvà iğ iğorinio şiedo. Pasirink spalvos ğviesumà ir "
-"sodrumà naudodamasis vidiniu trikampiu."
+"Pasirink norimÄ… spalvÄ… iÅ¡ iÅ¡orinio Å¾iedo. Pasirink spalvos Å¡viesumÄ… ir "
+"sodrumÄ… naudodamasis vidiniu trikampiu."
 
 #: gtk/gtkcolorsel.c:1832
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"Paspausk ant teptuko, tada paspausk ant spalvos, esanèios bet kurioje ekrano "
-"vietoje, kad pasirinktum jà."
+"Paspausk ant teptuko, tada paspausk ant spalvos, esanÄios bet kurioje ekrano "
+"vietoje, kad pasirinktum jÄ…."
 
 #: gtk/gtkcolorsel.c:1841
 msgid "_Hue:"
@@ -1613,7 +1613,7 @@ msgstr "_Atspalvis:"
 
 #: gtk/gtkcolorsel.c:1842
 msgid "Position on the color wheel."
-msgstr "Vieta spalvø rate"
+msgstr "Vieta spalvÅ³ rate"
 
 #: gtk/gtkcolorsel.c:1843
 msgid "_Saturation:"
@@ -1625,11 +1625,11 @@ msgstr "Spalvos \"gilumas\""
 
 #: gtk/gtkcolorsel.c:1845
 msgid "_Value:"
-msgstr "_Ğviesumas:"
+msgstr "_Å viesumas:"
 
 #: gtk/gtkcolorsel.c:1846
 msgid "Brightness of the color."
-msgstr "Spalvos ğviesumas."
+msgstr "Spalvos Å¡viesumas."
 
 #: gtk/gtkcolorsel.c:1847
 msgid "_Red:"
@@ -1637,23 +1637,23 @@ msgstr "_Raudona:"
 
 #: gtk/gtkcolorsel.c:1848
 msgid "Amount of red light in the color."
-msgstr "Raudonos ğviesos kiekis spalvoje."
+msgstr "Raudonos Å¡viesos kiekis spalvoje."
 
 #: gtk/gtkcolorsel.c:1849
 msgid "_Green:"
-msgstr "_Şalia:"
+msgstr "_Å½alia:"
 
 #: gtk/gtkcolorsel.c:1850
 msgid "Amount of green light in the color."
-msgstr "Şalios ğviesos kiekis spalvoje."
+msgstr "Å½alios Å¡viesos kiekis spalvoje."
 
 #: gtk/gtkcolorsel.c:1851
 msgid "_Blue:"
-msgstr "_Mëlyna:"
+msgstr "_MÄ—lyna:"
 
 #: gtk/gtkcolorsel.c:1852
 msgid "Amount of blue light in the color."
-msgstr "Mëlynos ğviesos kiekis spalvoje."
+msgstr "MÄ—lynos Å¡viesos kiekis spalvoje."
 
 #: gtk/gtkcolorsel.c:1855
 #, fuzzy
@@ -1673,20 +1673,20 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"Èia gali árağyti HTML stiliaus ğeğioliktainæ spalvos iğraiğkà, arba tiesiog "
-"spalvos pavadinimà, pvz. ¥white´."
+"ÄŒia gali Ä¯raÅ¡yti HTML stiliaus Å¡eÅ¡ioliktainÄ™ spalvos iÅ¡raiÅ¡kÄ…, arba tiesiog "
+"spalvos pavadinimÄ…, pvz. â€whiteâ€œ."
 
 #: gtk/gtkcolorsel.c:1909
 msgid "_Palette"
-msgstr "_Paletë"
+msgstr "_PaletÄ—"
 
 #: gtk/gtkcombo.c:140
 msgid "Enable arrow keys"
-msgstr "Leisti rodykliø klaviğus"
+msgstr "Leisti rodykliÅ³ klaviÅ¡us"
 
 #: gtk/gtkcombo.c:141
 msgid "Whether the arrow keys move through the list of items"
-msgstr "Ar spaudşiant rodykliø klaviğus judama sàrağe"
+msgstr "Ar spaudÅ¾iant rodykliÅ³ klaviÅ¡us judama sÄ…raÅ¡e"
 
 #: gtk/gtkcombo.c:147
 msgid "Always enable arrows"
@@ -1695,11 +1695,11 @@ msgstr "Visada leisti rodykles"
 #: gtk/gtkcombo.c:148
 msgid ""
 "Whether the arrow keys work, even if the entry contents are not in the list"
-msgstr "Ar rodyklës veikia net tada, kai ávesties lauko turinio nëra sàrağe."
+msgstr "Ar rodyklÄ—s veikia net tada, kai Ä¯vesties lauko turinio nÄ—ra sÄ…raÅ¡e."
 
 #: gtk/gtkcombo.c:154
 msgid "Case sensitive"
-msgstr "Skirti raidşiø dydá"
+msgstr "Skirti raidÅ¾iÅ³ dydÄ¯"
 
 #: gtk/gtkcombo.c:155
 msgid "Whether list item matching is case sensitive"
@@ -1707,24 +1707,24 @@ msgstr ""
 
 #: gtk/gtkcombo.c:162
 msgid "Allow empty"
-msgstr "Leisti tuğèià"
+msgstr "Leisti tuÅ¡ÄiÄ…"
 
 #: gtk/gtkcombo.c:163
 msgid "Whether an empty value may be entered in this field"
-msgstr "Ar ğis laukas gali bûti paliktas tuğèias"
+msgstr "Ar Å¡is laukas gali bÅ«ti paliktas tuÅ¡Äias"
 
 #: gtk/gtkcombo.c:170
 msgid "Value in list"
-msgstr "Reikğmë sàrağe"
+msgstr "ReikÅ¡mÄ— sÄ…raÅ¡e"
 
 #: gtk/gtkcombo.c:171
 msgid "Whether entered values must already be present in the list"
-msgstr "Ar ávestos reikğmës bûtinai turi bûti sàrağe"
+msgstr "Ar Ä¯vestos reikÅ¡mÄ—s bÅ«tinai turi bÅ«ti sÄ…raÅ¡e"
 
 #: gtk/gtkcontainer.c:202
 #, fuzzy
 msgid "Resize mode"
-msgstr "Pakeisti dydá"
+msgstr "Pakeisti dydÄ¯"
 
 #: gtk/gtkcontainer.c:203
 msgid "Specify how resize events are handled"
@@ -1732,12 +1732,12 @@ msgstr ""
 
 #: gtk/gtkcontainer.c:210
 msgid "Border width"
-msgstr "Rëmelio storis"
+msgstr "RÄ—melio storis"
 
 #: gtk/gtkcontainer.c:211
 #, fuzzy
 msgid "The width of the empty border outside the containers children"
-msgstr "plotis tuğèia."
+msgstr "plotis tuÅ¡Äia."
 
 #: gtk/gtkcontainer.c:219
 msgid "Child"
@@ -1746,11 +1746,11 @@ msgstr "Vaikas"
 #: gtk/gtkcontainer.c:220
 #, fuzzy
 msgid "Can be used to add a new child to the container"
-msgstr "Gali bûti naudojamas pridëti naujà vaikà á konteinerá."
+msgstr "Gali bÅ«ti naudojamas pridÄ—ti naujÄ… vaikÄ… Ä¯ konteinerÄ¯."
 
 #: gtk/gtkcurve.c:121
 msgid "Curve type"
-msgstr "Kreivës tipas"
+msgstr "KreivÄ—s tipas"
 
 #: gtk/gtkcurve.c:122
 msgid "Is this curve linear, spline interpolated, or free-form"
@@ -1795,11 +1795,11 @@ msgstr "kol"
 
 #: gtk/gtkdialog.c:127
 msgid "Has separator"
-msgstr "Turi skyriklá"
+msgstr "Turi skyriklÄ¯"
 
 #: gtk/gtkdialog.c:128
 msgid "The dialog has a separator bar above its buttons"
-msgstr "Dialoge virğ mygtukø yra skyriklis"
+msgstr "Dialoge virÅ¡ mygtukÅ³ yra skyriklis"
 
 #: gtk/gtkdialog.c:153
 #, fuzzy
@@ -1813,11 +1813,11 @@ msgstr "Plotis"
 
 #: gtk/gtkdialog.c:161
 msgid "Button spacing"
-msgstr "Tarpai tarp mygtukø"
+msgstr "Tarpai tarp mygtukÅ³"
 
 #: gtk/gtkdialog.c:162
 msgid "Spacing between buttons"
-msgstr "Tarpai tarp mygtukø"
+msgstr "Tarpai tarp mygtukÅ³"
 
 #: gtk/gtkdialog.c:170
 #, fuzzy
@@ -1830,27 +1830,27 @@ msgstr ""
 
 #: gtk/gtkentry.c:436 gtk/gtklabel.c:365
 msgid "Cursor Position"
-msgstr "Şymeklio vieta"
+msgstr "Å½ymeklio vieta"
 
 #: gtk/gtkentry.c:437 gtk/gtklabel.c:366
 #, fuzzy
 msgid "The current position of the insertion cursor in chars"
-msgstr "Esama áterpimo şymeklio vieta simboliais"
+msgstr "Esama Ä¯terpimo Å¾ymeklio vieta simboliais"
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:375
 #, fuzzy
 msgid "Selection Bound"
-msgstr "Paşymëjimas"
+msgstr "PaÅ¾ymÄ—jimas"
 
 #: gtk/gtkentry.c:447 gtk/gtklabel.c:376
 #, fuzzy
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
-msgstr "Esama áterpimo şymeklio vieta simboliais"
+msgstr "Esama Ä¯terpimo Å¾ymeklio vieta simboliais"
 
 #: gtk/gtkentry.c:457
 msgid "Whether the entry contents can be edited"
-msgstr "Ar ávesties lauko turinys gali bûti keièiamas"
+msgstr "Ar Ä¯vesties lauko turinys gali bÅ«ti keiÄiamas"
 
 #: gtk/gtkentry.c:464
 msgid "Maximum length"
@@ -1859,7 +1859,7 @@ msgstr "Maksimalus ilgis"
 #: gtk/gtkentry.c:465
 #, fuzzy
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "Maksimalus simboliø skaièius ğiame lauke. 0 jei neribojamas."
+msgstr "Maksimalus simboliÅ³ skaiÄius Å¡iame lauke. 0 jei neribojamas."
 
 #: gtk/gtkentry.c:473
 msgid "Visibility"
@@ -1873,7 +1873,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:481
 msgid "Has Frame"
-msgstr "Turi rëmelá"
+msgstr "Turi rÄ—melÄ¯"
 
 #: gtk/gtkentry.c:482
 msgid "FALSE removes outside bevel from entry"
@@ -1890,7 +1890,7 @@ msgstr ""
 #: gtk/gtkentry.c:497
 #, fuzzy
 msgid "Activates default"
-msgstr "Padaryti áprastu"
+msgstr "Padaryti Ä¯prastu"
 
 #: gtk/gtkentry.c:498
 #, fuzzy
@@ -1906,22 +1906,22 @@ msgstr "Plotis simboliais"
 #: gtk/gtkentry.c:505
 #, fuzzy
 msgid "Number of characters to leave space for in the entry"
-msgstr "Kokiam simboliø kiekiui palikti vietos laukelyje."
+msgstr "Kokiam simboliÅ³ kiekiui palikti vietos laukelyje."
 
 #: gtk/gtkentry.c:514
 #, fuzzy
 msgid "Scroll offset"
-msgstr "Slinkti per vienà şingsná"
+msgstr "Slinkti per vienÄ… Å¾ingsnÄ¯"
 
 #: gtk/gtkentry.c:515
 #, fuzzy
 msgid "Number of pixels of the entry scrolled off the screen to the left"
-msgstr "Numeris tağkeliai iğjungtas"
+msgstr "Numeris taÅ¡keliai iÅ¡jungtas"
 
 #: gtk/gtkentry.c:525
 #, fuzzy
 msgid "The contents of the entry"
-msgstr "Rodyti ğiukğlinës turiná"
+msgstr "Rodyti Å¡iukÅ¡linÄ—s turinÄ¯"
 
 #: gtk/gtkentry.c:756
 #, fuzzy
@@ -1931,19 +1931,19 @@ msgstr "Pasirinkti lygiai"
 #: gtk/gtkentry.c:757
 #, fuzzy
 msgid "Whether to select the contents of an entry when it is focused"
-msgstr "Ar ávesties lauko turinys gali bûti keièiamas"
+msgstr "Ar Ä¯vesties lauko turinys gali bÅ«ti keiÄiamas"
 
 #: gtk/gtkentry.c:3950 gtk/gtklabel.c:3217
 msgid "Select All"
-msgstr "Paşymëti viskà"
+msgstr "PaÅ¾ymÄ—ti viskÄ…"
 
 #: gtk/gtkentry.c:3960 gtk/gtklabel.c:3227
 msgid "Input Methods"
-msgstr "Ávesties metodai"
+msgstr "Ä®vesties metodai"
 
 #: gtk/gtkentry.c:3970 gtk/gtktextview.c:6485
 msgid "_Insert Unicode control character"
-msgstr "Áterpt_i Unicode valdantá simbolá"
+msgstr "Ä®terpt_i Unicode valdantÄ¯ simbolÄ¯"
 
 #: gtk/gtkfilesel.c:516 gtk/gtkimage.c:165
 msgid "Filename"
@@ -1961,7 +1961,7 @@ msgstr "Veiksmai su bylomis"
 #: gtk/gtkfilesel.c:524
 #, fuzzy
 msgid "Whether buttons for creating/manipulating files should be displayed"
-msgstr "Ar mygtukai sukurti/dirbti su bylomis turëtø bûti rodomi."
+msgstr "Ar mygtukai sukurti/dirbti su bylomis turÄ—tÅ³ bÅ«ti rodomi."
 
 #: gtk/gtkfilesel.c:531
 msgid "Select multiple"
@@ -1970,7 +1970,7 @@ msgstr "Daugybinis pasirinkimas"
 #: gtk/gtkfilesel.c:532
 #, fuzzy
 msgid "Whether to allow multiple files to be selected"
-msgstr "Ar leidşiama pasirinkti keletà bylø."
+msgstr "Ar leidÅ¾iama pasirinkti keletÄ… bylÅ³."
 
 #: gtk/gtkfilesel.c:687
 msgid "Folders"
@@ -1991,7 +1991,7 @@ msgstr "_Bylos"
 #: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2208
 #, c-format
 msgid "Folder unreadable: %s"
-msgstr "Aplankas neáskaitomas: %s"
+msgstr "Aplankas neÄ¯skaitomas: %s"
 
 #: gtk/gtkfilesel.c:941
 #, c-format
@@ -2007,11 +2007,11 @@ msgstr "_Naujas aplankas"
 
 #: gtk/gtkfilesel.c:1083
 msgid "De_lete File"
-msgstr "Iğ_trinti bylà"
+msgstr "IÅ¡_trinti bylÄ…"
 
 #: gtk/gtkfilesel.c:1094
 msgid "_Rename File"
-msgstr "Pe_rvadinti bylà"
+msgstr "Pe_rvadinti bylÄ…"
 
 #: gtk/gtkfilesel.c:1390
 #, c-format
@@ -2025,17 +2025,17 @@ msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
-"Klaida kuriant aplankà ¥%s´: %s\n"
+"Klaida kuriant aplankÄ… â€%sâ€œ: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1393 gtk/gtkfilesel.c:1634
 msgid "You probably used symbols not allowed in filenames."
-msgstr "Tu tikriausiai naudojai bylø varduose neleidşiamus simbolius."
+msgstr "Tu tikriausiai naudojai bylÅ³ varduose neleidÅ¾iamus simbolius."
 
 #: gtk/gtkfilesel.c:1401
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
-msgstr "Klaida kuriant aplankà ¥%s´: %s\n"
+msgstr "Klaida kuriant aplankÄ… â€%sâ€œ: %s\n"
 
 #: gtk/gtkfilesel.c:1435
 msgid "New Folder"
@@ -2053,7 +2053,7 @@ msgstr "Sukurti"
 #: gtk/gtkfilesel.c:1522
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Bylos varde ¥%s´ yra varduose neleidşiamø simboliø."
+msgstr "Bylos varde â€%sâ€œ yra varduose neleidÅ¾iamÅ³ simboliÅ³."
 
 #: gtk/gtkfilesel.c:1525
 #, c-format
@@ -2061,7 +2061,7 @@ msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
 msgstr ""
-"Klaida trinant bylà ¥%s´: %s\n"
+"Klaida trinant bylÄ… â€%sâ€œ: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1527 gtk/gtkfilesel.c:1648
@@ -2071,21 +2071,21 @@ msgstr ""
 #: gtk/gtkfilesel.c:1536
 #, c-format
 msgid "Error deleting file \"%s\": %s"
-msgstr "Klaida trinant bylà ¥%s´: %s"
+msgstr "Klaida trinant bylÄ… â€%sâ€œ: %s"
 
 #: gtk/gtkfilesel.c:1579
 #, c-format
 msgid "Really delete file \"%s\" ?"
-msgstr "Tikrai iğtrinti bylà·¥%s´?"
+msgstr "Tikrai iÅ¡trinti bylÄ…Â·â€%sâ€œ?"
 
 #: gtk/gtkfilesel.c:1584
 msgid "Delete File"
-msgstr "Iğtrinti bylà"
+msgstr "IÅ¡trinti bylÄ…"
 
 #: gtk/gtkfilesel.c:1630 gtk/gtkfilesel.c:1644
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Bylos varde ¥%s´ yra varduose neleidşiamø simboliø."
+msgstr "Bylos varde â€%sâ€œ yra varduose neleidÅ¾iamÅ³ simboliÅ³."
 
 #: gtk/gtkfilesel.c:1632
 #, c-format
@@ -2093,7 +2093,7 @@ msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
-"Klaida pervadinant bylà á ¥%s´: %s\n"
+"Klaida pervadinant bylÄ… Ä¯ â€%sâ€œ: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1646
@@ -2102,22 +2102,22 @@ msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
-"Klaida pervadinant bylà ¥%s´: %s\n"
+"Klaida pervadinant bylÄ… â€%sâ€œ: %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1656
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Klaida pervadinant bylà ¥%s´ á ¥%s´: %s"
+msgstr "Klaida pervadinant bylÄ… â€%sâ€œ Ä¯ â€%sâ€œ: %s"
 
 #: gtk/gtkfilesel.c:1703
 msgid "Rename File"
-msgstr "Pervadinti bylà"
+msgstr "Pervadinti bylÄ…"
 
 #: gtk/gtkfilesel.c:1718
 #, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "Pervadinti bylà ¥%s´ á:"
+msgstr "Pervadinti bylÄ… â€%sâ€œ Ä¯:"
 
 #: gtk/gtkfilesel.c:1749
 #, fuzzy
@@ -2147,7 +2147,7 @@ msgstr "Vardas per ilgas"
 #: gtk/gtkfilesel.c:3945
 #, fuzzy
 msgid "Couldn't convert filename"
-msgstr "Negaliu iğmesti temos"
+msgstr "Negaliu iÅ¡mesti temos"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
 msgid "X position"
@@ -2169,11 +2169,11 @@ msgstr ""
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:68
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr "aàbcèeæëfgh AÀBCÈEÆËFGH"
+msgstr "aÄ…bcÄeÄ™Ä—fgh AÄ„BCÄŒEÄ˜Ä–FGH"
 
 #: gtk/gtkfontsel.c:208
 msgid "Font name"
-msgstr "Ğrifto pavadinimas"
+msgstr "Å rifto pavadinimas"
 
 #: gtk/gtkfontsel.c:209
 msgid "The X string that represents this font"
@@ -2186,7 +2186,7 @@ msgstr "Dabar pasirinktos bylos vardas."
 
 #: gtk/gtkfontsel.c:222
 msgid "Preview text"
-msgstr "Perşiûros tekstas"
+msgstr "PerÅ¾iÅ«ros tekstas"
 
 #: gtk/gtkfontsel.c:223
 msgid "The text to display in order to demonstrate the selected font"
@@ -2194,7 +2194,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:330
 msgid "_Family:"
-msgstr "Ğ_eima:"
+msgstr "Å _eima:"
 
 #: gtk/gtkfontsel.c:336
 msgid "_Style:"
@@ -2207,11 +2207,11 @@ msgstr "D_ydis:"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:467
 msgid "_Preview:"
-msgstr "_Perşiûra:"
+msgstr "_PerÅ¾iÅ«ra:"
 
 #: gtk/gtkfontsel.c:1313
 msgid "Font Selection"
-msgstr "Ğrifto pasirinkimas"
+msgstr "Å rifto pasirinkimas"
 
 #: gtk/gtkframe.c:126
 #, fuzzy
@@ -2236,7 +2236,7 @@ msgstr "Punkto lygiavimas:"
 #: gtk/gtkframe.c:144
 #, fuzzy
 msgid "The vertical alignment of the label"
-msgstr "Atidaryti vertikalià matuoklio versijà."
+msgstr "Atidaryti vertikaliÄ… matuoklio versijÄ…."
 
 #: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:186
 msgid "Deprecated property, use shadow_type instead"
@@ -2245,12 +2245,12 @@ msgstr ""
 #: gtk/gtkframe.c:160
 #, fuzzy
 msgid "Frame shadow"
-msgstr "Rëmelis"
+msgstr "RÄ—melis"
 
 #: gtk/gtkframe.c:161
 #, fuzzy
 msgid "Appearance of the frame border"
-msgstr "Iğvaizda."
+msgstr "IÅ¡vaizda."
 
 #: gtk/gtkframe.c:169
 #, fuzzy
@@ -2275,12 +2275,12 @@ msgstr "_Gama"
 #: gtk/gtktoolbar.c:282 gtk/gtkviewport.c:150
 #, fuzzy
 msgid "Shadow type"
-msgstr "Rodyti datà"
+msgstr "Rodyti datÄ…"
 
 #: gtk/gtkhandlebox.c:194
 #, fuzzy
 msgid "Appearance of the shadow that surrounds the container"
-msgstr "Iğvaizda."
+msgstr "IÅ¡vaizda."
 
 #: gtk/gtkhandlebox.c:202
 #, fuzzy
@@ -2302,7 +2302,7 @@ msgstr "Sujungta"
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
-msgstr "su tağkas."
+msgstr "su taÅ¡kas."
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2325,7 +2325,7 @@ msgstr "A."
 #: gtk/gtkimage.c:141
 #, fuzzy
 msgid "Pixmap"
-msgstr "Paveikslëlis"
+msgstr "PaveikslÄ—lis"
 
 #: gtk/gtkimage.c:142
 #, fuzzy
@@ -2335,7 +2335,7 @@ msgstr "A."
 #: gtk/gtkimage.c:149
 #, fuzzy
 msgid "Image"
-msgstr "Paveikslëlis"
+msgstr "PaveikslÄ—lis"
 
 #: gtk/gtkimage.c:150
 #, fuzzy
@@ -2354,7 +2354,7 @@ msgstr "su"
 #: gtk/gtkimage.c:166
 #, fuzzy
 msgid "Filename to load and display"
-msgstr "Bylos vardas ákeliant."
+msgstr "Bylos vardas Ä¯keliant."
 
 #: gtk/gtkimage.c:175
 #, fuzzy
@@ -2394,7 +2394,7 @@ msgstr "A."
 #: gtk/gtkimage.c:207
 #, fuzzy
 msgid "Storage type"
-msgstr "Kreivës tipas"
+msgstr "KreivÄ—s tipas"
 
 #: gtk/gtkimage.c:208
 #, fuzzy
@@ -2404,7 +2404,7 @@ msgstr "kol vaizdas."
 #: gtk/gtkimagemenuitem.c:124
 #, fuzzy
 msgid "Image widget"
-msgstr "Paveikslëlis"
+msgstr "PaveikslÄ—lis"
 
 #: gtk/gtkimagemenuitem.c:125
 #, fuzzy
@@ -2415,21 +2415,21 @@ msgstr "Vaikas"
 #: gtk/gtkinputdialog.c:187
 #, fuzzy
 msgid "Input"
-msgstr "Ávestis"
+msgstr "Ä®vestis"
 
 #: gtk/gtkinputdialog.c:195
 msgid "No input devices"
-msgstr "Nëra ávesties irenginiø"
+msgstr "NÄ—ra Ä¯vesties irenginiÅ³"
 
 #: gtk/gtkinputdialog.c:225
 #, fuzzy
 msgid "_Device:"
-msgstr "Árenginys:"
+msgstr "Ä®renginys:"
 
 #: gtk/gtkinputdialog.c:242
 #, fuzzy
 msgid "Disabled"
-msgstr "Iğjungtas"
+msgstr "IÅ¡jungtas"
 
 #: gtk/gtkinputdialog.c:250 gtk/gtkinvisible.c:114 gtk/gtkwindow.c:550
 msgid "Screen"
@@ -2442,19 +2442,19 @@ msgstr "Langas"
 #: gtk/gtkinputdialog.c:266
 #, fuzzy
 msgid "_Mode: "
-msgstr "Reşi_mas "
+msgstr "ReÅ¾i_mas "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:297
 #, fuzzy
 msgid "_Axes"
-msgstr "Ağys"
+msgstr "AÅ¡ys"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:314
 #, fuzzy
 msgid "_Keys"
-msgstr "Klaviğai"
+msgstr "KlaviÅ¡ai"
 
 #: gtk/gtkinputdialog.c:484
 msgid "X"
@@ -2467,7 +2467,7 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:486
 msgid "Pressure"
-msgstr "Slëgis"
+msgstr "SlÄ—gis"
 
 #: gtk/gtkinputdialog.c:487
 msgid "X Tilt"
@@ -2488,16 +2488,16 @@ msgstr "jokio"
 
 #: gtk/gtkinputdialog.c:564 gtk/gtkinputdialog.c:600
 msgid "(disabled)"
-msgstr "(iğjungtas)"
+msgstr "(iÅ¡jungtas)"
 
 #: gtk/gtkinputdialog.c:593
 msgid "(unknown)"
-msgstr "(neşinomas)"
+msgstr "(neÅ¾inomas)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:677
 msgid "clear"
-msgstr "iğvalyti"
+msgstr "iÅ¡valyti"
 
 #: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:551
 msgid "The screen where this window will be displayed"
@@ -2511,22 +2511,22 @@ msgstr "tekstas."
 #: gtk/gtklabel.c:295
 #, fuzzy
 msgid "A list of style attributes to apply to the text of the label"
-msgstr "A sàrağas tekstas."
+msgstr "A sÄ…raÅ¡as tekstas."
 
 #: gtk/gtklabel.c:301
 #, fuzzy
 msgid "Use markup"
-msgstr "Perkelti şymelæ aukğtyn"
+msgstr "Perkelti Å¾ymelÄ™ aukÅ¡tyn"
 
 #: gtk/gtklabel.c:302
 #, fuzzy
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
-msgstr "tekstas Şiûrëti."
+msgstr "tekstas Å½iÅ«rÄ—ti."
 
 #: gtk/gtklabel.c:316 gtk/gtktexttag.c:374 gtk/gtktextview.c:585
 #, fuzzy
 msgid "Justification"
-msgstr "Praneğimas:"
+msgstr "PraneÅ¡imas:"
 
 #: gtk/gtklabel.c:317
 #, fuzzy
@@ -2534,7 +2534,7 @@ msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that"
-msgstr "eiluèiø tekstas kitoks NE Şiûrëti kol."
+msgstr "eiluÄiÅ³ tekstas kitoks NE Å½iÅ«rÄ—ti kol."
 
 #: gtk/gtklabel.c:325
 msgid "Pattern"
@@ -2555,12 +2555,12 @@ msgstr "Linija"
 #: gtk/gtklabel.c:334
 #, fuzzy
 msgid "If set, wrap lines if the text becomes too wide"
-msgstr "Jeigu nurodyti eiluèiø tekstas."
+msgstr "Jeigu nurodyti eiluÄiÅ³ tekstas."
 
 #: gtk/gtklabel.c:340
 #, fuzzy
 msgid "Selectable"
-msgstr "Pasirink bylà"
+msgstr "Pasirink bylÄ…"
 
 #: gtk/gtklabel.c:341
 #, fuzzy
@@ -2588,7 +2588,7 @@ msgstr "yra."
 #: gtk/gtklayout.c:631 gtk/gtkviewport.c:134
 #, fuzzy
 msgid "Horizontal adjustment"
-msgstr "Gulsèias"
+msgstr "GulsÄias"
 
 #: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:236
 #, fuzzy
@@ -2598,7 +2598,7 @@ msgstr "kol."
 #: gtk/gtklayout.c:639 gtk/gtkviewport.c:142
 #, fuzzy
 msgid "Vertical adjustment"
-msgstr "Staèias"
+msgstr "StaÄias"
 
 #: gtk/gtklayout.c:640 gtk/gtkscrolledwindow.c:243
 #, fuzzy
@@ -2616,12 +2616,12 @@ msgstr "plotis."
 
 #: gtk/gtklayout.c:656
 msgid "Height"
-msgstr "Aukğtis"
+msgstr "AukÅ¡tis"
 
 #: gtk/gtklayout.c:657
 #, fuzzy
 msgid "The height of the layout"
-msgstr "aukğtis."
+msgstr "aukÅ¡tis."
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -2631,7 +2631,7 @@ msgstr "aukğtis."
 #: gtk/gtkmain.c:805
 #, fuzzy
 msgid "default:LTR"
-msgstr "<áprastas>"
+msgstr "<Ä¯prastas>"
 
 #: gtk/gtkmenu.c:235
 msgid "Tearoff Title"
@@ -2642,12 +2642,12 @@ msgstr ""
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
-msgstr "A yra iğjungtas."
+msgstr "A yra iÅ¡jungtas."
 
 #: gtk/gtkmenu.c:308
 #, fuzzy
 msgid "Can change accelerators"
-msgstr "Meniu spartieji klaviğai"
+msgstr "Meniu spartieji klaviÅ¡ai"
 
 #: gtk/gtkmenu.c:309
 msgid ""
@@ -2681,7 +2681,7 @@ msgstr "Stilius"
 #: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:256
 #, fuzzy
 msgid "Internal padding"
-msgstr "Vidinë"
+msgstr "VidinÄ—"
 
 #: gtk/gtkmenubar.c:165
 msgid "Amount of border space between the menubar shadow and the menu items"
@@ -2698,7 +2698,7 @@ msgstr ""
 #: gtk/gtkmessagedialog.c:106
 #, fuzzy
 msgid "Image/label border"
-msgstr "Paveikslëlis"
+msgstr "PaveikslÄ—lis"
 
 #: gtk/gtkmessagedialog.c:107
 #, fuzzy
@@ -2708,7 +2708,7 @@ msgstr "Plotis vaizdas"
 #: gtk/gtkmessagedialog.c:115
 #, fuzzy
 msgid "Message Type"
-msgstr "Praneğimas"
+msgstr "PraneÅ¡imas"
 
 #: gtk/gtkmessagedialog.c:116
 #, fuzzy
@@ -2718,12 +2718,12 @@ msgstr "tipas"
 #: gtk/gtkmessagedialog.c:123
 #, fuzzy
 msgid "Message Buttons"
-msgstr "Praneğimas"
+msgstr "PraneÅ¡imas"
 
 #: gtk/gtkmessagedialog.c:124
 #, fuzzy
 msgid "The buttons shown in the message dialog"
-msgstr "Kità kartà neberodyti ğios şinutës."
+msgstr "KitÄ… kartÄ… neberodyti Å¡ios Å¾inutÄ—s."
 
 #: gtk/gtkmisc.c:98
 #, fuzzy
@@ -2767,12 +2767,12 @@ msgstr "lygiai"
 
 #: gtk/gtknotebook.c:363
 msgid "Page"
-msgstr "Puslapá"
+msgstr "PuslapÄ¯"
 
 #: gtk/gtknotebook.c:364
 #, fuzzy
 msgid "The index of the current page"
-msgstr "Sustabdyti esamo tinklapio ákëlimà"
+msgstr "Sustabdyti esamo tinklapio Ä¯kÄ—limÄ…"
 
 #: gtk/gtknotebook.c:372
 #, fuzzy
@@ -2786,7 +2786,7 @@ msgstr ""
 #: gtk/gtknotebook.c:380
 #, fuzzy
 msgid "Tab Border"
-msgstr "Lentelës rëmeliai"
+msgstr "LentelÄ—s rÄ—meliai"
 
 #: gtk/gtknotebook.c:381
 #, fuzzy
@@ -2796,7 +2796,7 @@ msgstr "Plotis"
 #: gtk/gtknotebook.c:389
 #, fuzzy
 msgid "Horizontal Tab Border"
-msgstr "Gulsèias"
+msgstr "GulsÄias"
 
 #: gtk/gtknotebook.c:390
 #, fuzzy
@@ -2806,7 +2806,7 @@ msgstr "Plotis"
 #: gtk/gtknotebook.c:398
 #, fuzzy
 msgid "Vertical Tab Border"
-msgstr "Staèias"
+msgstr "StaÄias"
 
 #: gtk/gtknotebook.c:399
 #, fuzzy
@@ -2834,7 +2834,7 @@ msgstr ""
 #: gtk/gtknotebook.c:421
 #, fuzzy
 msgid "Scrollable"
-msgstr "Keièiamo dydşio"
+msgstr "KeiÄiamo dydÅ¾io"
 
 #: gtk/gtknotebook.c:422
 #, fuzzy
@@ -2844,7 +2844,7 @@ msgstr "Jeigu"
 #: gtk/gtknotebook.c:428
 #, fuzzy
 msgid "Enable Popup"
-msgstr "Ájungti"
+msgstr "Ä®jungti"
 
 #: gtk/gtknotebook.c:429
 #, fuzzy
@@ -2889,7 +2889,7 @@ msgstr ""
 #: gtk/gtknotebook.c:472
 #, fuzzy
 msgid "Wheather the childs tab should fill the allocated area or not"
-msgstr "Ar visi vaikai turëtø bûti to paties dydşio."
+msgstr "Ar visi vaikai turÄ—tÅ³ bÅ«ti to paties dydÅ¾io."
 
 #: gtk/gtknotebook.c:478
 msgid "Tab pack type"
@@ -2923,7 +2923,7 @@ msgstr "Tarpai"
 #, fuzzy
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
-msgstr "Pozicija tağkeliai"
+msgstr "Pozicija taÅ¡keliai"
 
 #: gtk/gtkpaned.c:227
 #, fuzzy
@@ -2962,7 +2962,7 @@ msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something that you don't know how long it will take"
-msgstr "Jeigu yra yra kà nors yra yra finished yra tu kà nors tu."
+msgstr "Jeigu yra yra kÄ… nors yra yra finished yra tu kÄ… nors tu."
 
 #: gtk/gtkprogress.c:133
 #, fuzzy
@@ -3018,7 +3018,7 @@ msgstr "Orientacija"
 #: gtk/gtkprogressbar.c:150
 #, fuzzy
 msgid "Bar style"
-msgstr "Staèias brûkğnys"
+msgstr "StaÄias brÅ«kÅ¡nys"
 
 #: gtk/gtkprogressbar.c:151
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
@@ -3102,7 +3102,7 @@ msgstr "Inversija"
 #: gtk/gtkrange.c:299
 #, fuzzy
 msgid "Slider Width"
-msgstr "Nustatyti plotá:"
+msgstr "Nustatyti plotÄ¯:"
 
 #: gtk/gtkrange.c:300
 #, fuzzy
@@ -3112,7 +3112,7 @@ msgstr "Plotis"
 #: gtk/gtkrange.c:307
 #, fuzzy
 msgid "Trough Border"
-msgstr "Siøsti per serverá"
+msgstr "SiÅ³sti per serverÄ¯"
 
 #: gtk/gtkrange.c:308
 #, fuzzy
@@ -3122,7 +3122,7 @@ msgstr "Tarpai"
 #: gtk/gtkrange.c:315
 #, fuzzy
 msgid "Stepper Size"
-msgstr "Şin_gsnio dydis"
+msgstr "Å½in_gsnio dydis"
 
 #: gtk/gtkrange.c:316
 msgid "Length of step buttons at ends"
@@ -3168,21 +3168,21 @@ msgstr ""
 #: gtk/gtkrc.c:2996 gtk/gtkrc.c:2999
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Negaliu rasti paveikslëlio bylos pixmap_path: ¥%s´"
+msgstr "Negaliu rasti paveikslÄ—lio bylos pixmap_path: â€%sâ€œ"
 
 #: gtk/gtkrc.c:3434
 #, fuzzy, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Paveikslëlis"
+msgstr "PaveikslÄ—lis"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
-msgstr "Şemesnis"
+msgstr "Å½emesnis"
 
 #: gtk/gtkruler.c:119
 #, fuzzy
 msgid "Lower limit of ruler"
-msgstr "Şemesnis"
+msgstr "Å½emesnis"
 
 #: gtk/gtkruler.c:128
 #, fuzzy
@@ -3220,7 +3220,7 @@ msgstr ""
 #: gtk/gtkscale.c:166
 #, fuzzy
 msgid "Draw Value"
-msgstr "Stalèiaus rankena"
+msgstr "StalÄiaus rankena"
 
 #: gtk/gtkscale.c:167
 #, fuzzy
@@ -3230,7 +3230,7 @@ msgstr "yra"
 #: gtk/gtkscale.c:174
 #, fuzzy
 msgid "Value Position"
-msgstr "Reikğmë"
+msgstr "ReikÅ¡mÄ—"
 
 #: gtk/gtkscale.c:175
 #, fuzzy
@@ -3240,7 +3240,7 @@ msgstr "yra"
 #: gtk/gtkscale.c:182
 #, fuzzy
 msgid "Slider Length"
-msgstr "Siera Leonë"
+msgstr "Siera LeonÄ—"
 
 #: gtk/gtkscale.c:183
 msgid "Length of scale's slider"
@@ -3249,7 +3249,7 @@ msgstr ""
 #: gtk/gtkscale.c:191
 #, fuzzy
 msgid "Value spacing"
-msgstr "Reikğmë"
+msgstr "ReikÅ¡mÄ—"
 
 #: gtk/gtkscale.c:192
 #, fuzzy
@@ -3277,7 +3277,7 @@ msgstr "dydis"
 #: gtk/gtkscrollbar.c:97
 #, fuzzy
 msgid "Backward stepper"
-msgstr "Ieğkoti atbulyn"
+msgstr "IeÅ¡koti atbulyn"
 
 #: gtk/gtkscrollbar.c:98
 #, fuzzy
@@ -3303,7 +3303,7 @@ msgstr "Antrinis atbulyn"
 #, fuzzy
 msgid ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
-msgstr "Rodymas sekundë atbulyn lygiai"
+msgstr "Rodymas sekundÄ— atbulyn lygiai"
 
 #: gtk/gtkscrollbar.c:121
 #, fuzzy
@@ -3319,17 +3319,17 @@ msgstr "Rodymas lygiai"
 #: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:598 gtk/gtktreeview.c:525
 #, fuzzy
 msgid "Horizontal Adjustment"
-msgstr "Gulsèias"
+msgstr "GulsÄias"
 
 #: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:606 gtk/gtktreeview.c:533
 #, fuzzy
 msgid "Vertical Adjustment"
-msgstr "Staèias"
+msgstr "StaÄias"
 
 #: gtk/gtkscrolledwindow.c:249
 #, fuzzy
 msgid "Horizontal Scrollbar Policy"
-msgstr "Gulsèias"
+msgstr "GulsÄias"
 
 #: gtk/gtkscrolledwindow.c:250
 #, fuzzy
@@ -3339,7 +3339,7 @@ msgstr "yra"
 #: gtk/gtkscrolledwindow.c:257
 #, fuzzy
 msgid "Vertical Scrollbar Policy"
-msgstr "Staèias"
+msgstr "StaÄias"
 
 #: gtk/gtkscrolledwindow.c:258
 #, fuzzy
@@ -3359,7 +3359,7 @@ msgstr "Kur su"
 #: gtk/gtkscrolledwindow.c:274
 #, fuzzy
 msgid "Shadow Type"
-msgstr "Rodyti datà"
+msgstr "Rodyti datÄ…"
 
 #: gtk/gtkscrolledwindow.c:275
 #, fuzzy
@@ -3369,12 +3369,12 @@ msgstr "Stilius"
 #: gtk/gtkscrolledwindow.c:282
 #, fuzzy
 msgid "Scrollbar spacing"
-msgstr "Tarpai tarp stulpeliø"
+msgstr "Tarpai tarp stulpeliÅ³"
 
 #: gtk/gtkscrolledwindow.c:283
 #, fuzzy
 msgid "Number of pixels between the scrollbars and the scrolled window"
-msgstr "Numeris tağkeliai iğjungtas"
+msgstr "Numeris taÅ¡keliai iÅ¡jungtas"
 
 #: gtk/gtksettings.c:160
 #, fuzzy
@@ -3386,12 +3386,12 @@ msgstr "Dvigubi"
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
-msgstr "dviakë kol"
+msgstr "dviakÄ— kol"
 
 #: gtk/gtksettings.c:168
 #, fuzzy
 msgid "Cursor Blink"
-msgstr "&Mirksintá şymeklá"
+msgstr "&MirksintÄ¯ Å¾ymeklÄ¯"
 
 #: gtk/gtksettings.c:169
 msgid "Whether the cursor should blink"
@@ -3400,7 +3400,7 @@ msgstr ""
 #: gtk/gtksettings.c:176
 #, fuzzy
 msgid "Cursor Blink Time"
-msgstr "&Mirksintá şymeklá"
+msgstr "&MirksintÄ¯ Å¾ymeklÄ¯"
 
 #: gtk/gtksettings.c:177
 msgid "Length of the cursor blink cycle, in milleseconds"
@@ -3416,7 +3416,7 @@ msgstr "Atskirti"
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
-msgstr "dviakë kol"
+msgstr "dviakÄ— kol"
 
 #: gtk/gtksettings.c:192
 msgid "Theme Name"
@@ -3430,7 +3430,7 @@ msgstr "Vardas"
 #: gtk/gtksettings.c:200
 #, fuzzy
 msgid "Key Theme Name"
-msgstr "Klaviğas Tema"
+msgstr "KlaviÅ¡as Tema"
 
 #: gtk/gtksettings.c:201
 #, fuzzy
@@ -3453,12 +3453,12 @@ msgstr ""
 #: gtk/gtksettings.c:219
 #, fuzzy
 msgid "Number of pixels the cursor can move before dragging"
-msgstr "Numeris tağkeliai prieğ"
+msgstr "Numeris taÅ¡keliai prieÅ¡"
 
 #: gtk/gtksettings.c:227
 #, fuzzy
 msgid "Font Name"
-msgstr "Ğriftas"
+msgstr "Å riftas"
 
 #: gtk/gtksettings.c:228
 #, fuzzy
@@ -3477,14 +3477,14 @@ msgstr ""
 #: gtk/gtksizegroup.c:241
 #, fuzzy
 msgid "Mode"
-msgstr "Reşimas"
+msgstr "ReÅ¾imas"
 
 #: gtk/gtksizegroup.c:242
 #, fuzzy
 msgid ""
 "The directions in which the size group effects the requested sizes of its "
 "component widgets"
-msgstr "dydis grupë component."
+msgstr "dydis grupÄ— component."
 
 #: gtk/gtkspinbutton.c:241
 msgid "The adjustment that holds the value of the spinbutton"
@@ -3503,12 +3503,12 @@ msgstr "tu"
 #: gtk/gtkspinbutton.c:259
 #, fuzzy
 msgid "The number of decimal places to display"
-msgstr "Vaizduojamo uşduoèiø aplanko URI"
+msgstr "Vaizduojamo uÅ¾duoÄiÅ³ aplanko URI"
 
 #: gtk/gtkspinbutton.c:268
 #, fuzzy
 msgid "Snap to Ticks"
-msgstr "Iğsaugoti á diskà"
+msgstr "IÅ¡saugoti Ä¯ diskÄ…"
 
 #: gtk/gtkspinbutton.c:269
 msgid ""
@@ -3529,7 +3529,7 @@ msgstr " simboliu"
 #: gtk/gtkspinbutton.c:284
 #, fuzzy
 msgid "Wrap"
-msgstr "Lauşyti"
+msgstr "LauÅ¾yti"
 
 #: gtk/gtkspinbutton.c:285
 msgid "Whether a spin button should wrap upon reaching its limits"
@@ -3548,12 +3548,12 @@ msgstr "yra"
 
 #: gtk/gtkspinbutton.c:301
 msgid "Value"
-msgstr "Reikğmë"
+msgstr "ReikÅ¡mÄ—"
 
 #: gtk/gtkspinbutton.c:302
 #, fuzzy
 msgid "Reads the current value, or sets a new value"
-msgstr "Iğsaugoti esamà paletæ á bylà"
+msgstr "IÅ¡saugoti esamÄ… paletÄ™ Ä¯ bylÄ…"
 
 #: gtk/gtkstatusbar.c:162
 #, fuzzy
@@ -3567,7 +3567,7 @@ msgstr "Informacija"
 
 #: gtk/gtkstock.c:268
 msgid "Warning"
-msgstr "Perspëjimas"
+msgstr "PerspÄ—jimas"
 
 #: gtk/gtkstock.c:269
 msgid "Error"
@@ -3582,7 +3582,7 @@ msgstr "Klausimas"
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr "_Pridëti"
+msgstr "_PridÄ—ti"
 
 #: gtk/gtkstock.c:276
 #, fuzzy
@@ -3595,7 +3595,7 @@ msgstr "Pus_juodis"
 
 #: gtk/gtkstock.c:278
 msgid "_Cancel"
-msgstr "_Atğaukti"
+msgstr "_AtÅ¡aukti"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
@@ -3603,11 +3603,11 @@ msgstr "_CD-ROM"
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
-msgstr "Iğ_valyti"
+msgstr "IÅ¡_valyti"
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
-msgstr "_Uşdaryti"
+msgstr "_UÅ¾daryti"
 
 #: gtk/gtkstock.c:282
 #, fuzzy
@@ -3621,16 +3621,16 @@ msgstr "_Kopijuoti"
 #: gtk/gtkstock.c:284
 #, fuzzy
 msgid "Cu_t"
-msgstr "_Iğkirpti"
+msgstr "_IÅ¡kirpti"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
-msgstr "_Iğtrinti"
+msgstr "_IÅ¡trinti"
 
 #: gtk/gtkstock.c:286
 #, fuzzy
 msgid "_Execute"
-msgstr "Ávykdyti"
+msgstr "Ä®vykdyti"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
@@ -3649,7 +3649,7 @@ msgstr "Diskelis"
 #: gtk/gtkstock.c:290
 #, fuzzy
 msgid "_Bottom"
-msgstr "_Apaèioje"
+msgstr "_ApaÄioje"
 
 #: gtk/gtkstock.c:291
 msgid "_First"
@@ -3662,7 +3662,7 @@ msgstr "_Paskutinis"
 #: gtk/gtkstock.c:293
 #, fuzzy
 msgid "_Top"
-msgstr "_Virğuje"
+msgstr "_VirÅ¡uje"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
@@ -3670,7 +3670,7 @@ msgstr "_Atgal"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr "_Şemyn"
+msgstr "_Å½emyn"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
@@ -3678,7 +3678,7 @@ msgstr "_Pirmyn"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr "A_ukğtyn"
+msgstr "A_ukÅ¡tyn"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
@@ -3698,7 +3698,7 @@ msgstr "Kursyv_inis"
 
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
-msgstr "Ğo_kti á:"
+msgstr "Å o_kti Ä¯:"
 
 #: gtk/gtkstock.c:303
 msgid "_Center"
@@ -3706,15 +3706,15 @@ msgstr "_Centruoti"
 
 #: gtk/gtkstock.c:304
 msgid "_Fill"
-msgstr "_Uşpildyti"
+msgstr "_UÅ¾pildyti"
 
 #: gtk/gtkstock.c:305
 msgid "_Left"
-msgstr "_Kairën"
+msgstr "_KairÄ—n"
 
 #: gtk/gtkstock.c:306
 msgid "_Right"
-msgstr "_Değinën"
+msgstr "_DeÅ¡inÄ—n"
 
 #: gtk/gtkstock.c:307
 msgid "_New"
@@ -3734,7 +3734,7 @@ msgstr "Ati_daryti"
 
 #: gtk/gtkstock.c:311
 msgid "_Paste"
-msgstr "Á_dëti"
+msgstr "Ä®_dÄ—ti"
 
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
@@ -3746,15 +3746,15 @@ msgstr "S_pausdinti"
 
 #: gtk/gtkstock.c:314
 msgid "Print Pre_view"
-msgstr "Spa_udinio perşiûra"
+msgstr "Spa_udinio perÅ¾iÅ«ra"
 
 #: gtk/gtkstock.c:315
 msgid "_Properties"
-msgstr "_Savybës"
+msgstr "_SavybÄ—s"
 
 #: gtk/gtkstock.c:316
 msgid "_Quit"
-msgstr "I_ğeiti"
+msgstr "I_Å¡eiti"
 
 #: gtk/gtkstock.c:317
 msgid "_Redo"
@@ -3766,7 +3766,7 @@ msgstr "_Atnaujinti"
 
 #: gtk/gtkstock.c:319
 msgid "_Remove"
-msgstr "_Pağalinti"
+msgstr "_PaÅ¡alinti"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
@@ -3774,11 +3774,11 @@ msgstr "Atsta_tyti"
 
 #: gtk/gtkstock.c:321
 msgid "_Save"
-msgstr "Iğ_saugoti"
+msgstr "IÅ¡_saugoti"
 
 #: gtk/gtkstock.c:322
 msgid "Save _As"
-msgstr "Iğsaugoti k_aip"
+msgstr "IÅ¡saugoti k_aip"
 
 #: gtk/gtkstock.c:323
 msgid "_Color"
@@ -3786,19 +3786,19 @@ msgstr "_Spalva"
 
 #: gtk/gtkstock.c:324
 msgid "_Font"
-msgstr "Ğri_ftas"
+msgstr "Å ri_ftas"
 
 #: gtk/gtkstock.c:325
 msgid "_Ascending"
-msgstr "_Didëjanèiai"
+msgstr "_DidÄ—janÄiai"
 
 #: gtk/gtkstock.c:326
 msgid "_Descending"
-msgstr "_Maşëjanèiai"
+msgstr "_MaÅ¾Ä—janÄiai"
 
 #: gtk/gtkstock.c:327
 msgid "_Spell Check"
-msgstr "_Rağybos tikrinimas"
+msgstr "_RaÅ¡ybos tikrinimas"
 
 #: gtk/gtkstock.c:328
 msgid "_Stop"
@@ -3810,7 +3810,7 @@ msgstr "Perbraukta_s"
 
 #: gtk/gtkstock.c:330
 msgid "_Undelete"
-msgstr "_Sugràşinti"
+msgstr "_SugrÄ…Å¾inti"
 
 #: gtk/gtkstock.c:331
 msgid "_Underline"
@@ -3818,7 +3818,7 @@ msgstr "Pabra_uktas"
 
 #: gtk/gtkstock.c:332
 msgid "_Undo"
-msgstr "Atğa_ukti"
+msgstr "AtÅ¡a_ukti"
 
 #: gtk/gtkstock.c:333
 msgid "_Yes"
@@ -3827,7 +3827,7 @@ msgstr "_Taip"
 #: gtk/gtkstock.c:334
 #, fuzzy
 msgid "Zoom _100%"
-msgstr "Keisti mastelá"
+msgstr "Keisti mastelÄ¯"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
@@ -3841,16 +3841,16 @@ msgstr "Pa_didinti"
 #: gtk/gtkstock.c:337
 #, fuzzy
 msgid "Zoom _Out"
-msgstr "Su_maşinti"
+msgstr "Su_maÅ¾inti"
 
 #: gtk/gtktable.c:158
 msgid "Rows"
-msgstr "Eilutës"
+msgstr "EilutÄ—s"
 
 #: gtk/gtktable.c:159
 #, fuzzy
 msgid "The number of rows in the table"
-msgstr "eiluèiø"
+msgstr "eiluÄiÅ³"
 
 #: gtk/gtktable.c:167
 msgid "Columns"
@@ -3859,25 +3859,25 @@ msgstr "Stulpeliai"
 #: gtk/gtktable.c:168
 #, fuzzy
 msgid "The number of columns in the table"
-msgstr "Làsteliø stulpeliø skaièius:"
+msgstr "LÄ…steliÅ³ stulpeliÅ³ skaiÄius:"
 
 #: gtk/gtktable.c:176
 msgid "Row spacing"
-msgstr "Tarpai tarp eiluèiø"
+msgstr "Tarpai tarp eiluÄiÅ³"
 
 #: gtk/gtktable.c:177
 #, fuzzy
 msgid "The amount of space between two consecutive rows"
-msgstr "dviakë"
+msgstr "dviakÄ—"
 
 #: gtk/gtktable.c:185
 msgid "Column spacing"
-msgstr "Tarpai tarp stulpeliø"
+msgstr "Tarpai tarp stulpeliÅ³"
 
 #: gtk/gtktable.c:186
 #, fuzzy
 msgid "The amount of space between two consecutive columns"
-msgstr "dviakë"
+msgstr "dviakÄ—"
 
 #: gtk/gtktable.c:194
 msgid "Homogenous"
@@ -3923,7 +3923,7 @@ msgstr ""
 #: gtk/gtktable.c:230
 #, fuzzy
 msgid "Horizontal options"
-msgstr "Gulsèias"
+msgstr "GulsÄias"
 
 #: gtk/gtktable.c:231
 msgid "Options specifying the horizontal behaviour of the child"
@@ -3932,7 +3932,7 @@ msgstr ""
 #: gtk/gtktable.c:237
 #, fuzzy
 msgid "Vertical options"
-msgstr "Staèias"
+msgstr "StaÄias"
 
 #: gtk/gtktable.c:238
 msgid "Options specifying the vertical behaviour of the child"
@@ -3941,7 +3941,7 @@ msgstr ""
 #: gtk/gtktable.c:244
 #, fuzzy
 msgid "Horizontal padding"
-msgstr "Gulsèias"
+msgstr "GulsÄias"
 
 #: gtk/gtktable.c:245
 #, fuzzy
@@ -3953,7 +3953,7 @@ msgstr "lygiai"
 #: gtk/gtktable.c:251
 #, fuzzy
 msgid "Vertical padding"
-msgstr "Vidinë"
+msgstr "VidinÄ—"
 
 #: gtk/gtktable.c:252
 msgid ""
@@ -3964,12 +3964,12 @@ msgstr ""
 #: gtk/gtktext.c:599
 #, fuzzy
 msgid "Horizontal adjustment for the text widget"
-msgstr "Gulsèias kol tekstas"
+msgstr "GulsÄias kol tekstas"
 
 #: gtk/gtktext.c:607
 #, fuzzy
 msgid "Vertical adjustment for the text widget"
-msgstr "Staèias kol tekstas"
+msgstr "StaÄias kol tekstas"
 
 #: gtk/gtktext.c:614
 #, fuzzy
@@ -3979,11 +3979,11 @@ msgstr "Linija"
 #: gtk/gtktext.c:615
 #, fuzzy
 msgid "Whether lines are wrapped at widget edges"
-msgstr "eiluèiø"
+msgstr "eiluÄiÅ³"
 
 #: gtk/gtktext.c:622
 msgid "Word Wrap"
-msgstr "Şodşiø lauşymas"
+msgstr "Å½odÅ¾iÅ³ lauÅ¾ymas"
 
 #: gtk/gtktext.c:623
 msgid "Whether words are wrapped at widget edges"
@@ -4014,7 +4014,7 @@ msgstr "Fonas"
 msgid ""
 "Whether the background color fills the entire line height or only the height "
 "of the tagged characters"
-msgstr "aukğtis aukğtis"
+msgstr "aukÅ¡tis aukÅ¡tis"
 
 #: gtk/gtktexttag.c:230
 #, fuzzy
@@ -4024,7 +4024,7 @@ msgstr "Fonas"
 #: gtk/gtktexttag.c:231
 #, fuzzy
 msgid "Bitmap to use as a mask when drawing the text background"
-msgstr "Tağkinis kaukë tekstas"
+msgstr "TaÅ¡kinis kaukÄ— tekstas"
 
 #: gtk/gtktexttag.c:248
 #, fuzzy
@@ -4034,12 +4034,12 @@ msgstr "Priekinio plano spalva kaip GdkColor"
 #: gtk/gtktexttag.c:256
 #, fuzzy
 msgid "Foreground stipple mask"
-msgstr "Raidës"
+msgstr "RaidÄ—s"
 
 #: gtk/gtktexttag.c:257
 #, fuzzy
 msgid "Bitmap to use as a mask when drawing the text foreground"
-msgstr "Tağkinis kaukë tekstas"
+msgstr "TaÅ¡kinis kaukÄ— tekstas"
 
 #: gtk/gtktexttag.c:264
 #, fuzzy
@@ -4054,7 +4054,7 @@ msgstr "Tekstas e"
 #: gtk/gtktexttag.c:282
 #, fuzzy
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr "Ğrifto aprağymas kaip eilutë"
+msgstr "Å rifto apraÅ¡ymas kaip eilutÄ—"
 
 #: gtk/gtktexttag.c:307
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
@@ -4077,7 +4077,7 @@ msgstr ""
 #: gtk/gtktexttag.c:345
 #, fuzzy
 msgid "Font size in Pango units"
-msgstr "Ğriftas dydis tağkais"
+msgstr "Å riftas dydis taÅ¡kais"
 
 #: gtk/gtktexttag.c:355
 msgid ""
@@ -4089,7 +4089,7 @@ msgstr ""
 #: gtk/gtktexttag.c:375 gtk/gtktextview.c:586
 #, fuzzy
 msgid "Left, right, or center justification"
-msgstr "Kairëje"
+msgstr "KairÄ—je"
 
 #: gtk/gtktexttag.c:383
 msgid "Language"
@@ -4105,7 +4105,7 @@ msgstr ""
 #: gtk/gtktexttag.c:391
 #, fuzzy
 msgid "Left margin"
-msgstr "Kairëje"
+msgstr "KairÄ—je"
 
 #: gtk/gtktexttag.c:392 gtk/gtktextview.c:595
 #, fuzzy
@@ -4115,7 +4115,7 @@ msgstr "Plotis"
 #: gtk/gtktexttag.c:401
 #, fuzzy
 msgid "Right margin"
-msgstr "Değinëje"
+msgstr "DeÅ¡inÄ—je"
 
 #: gtk/gtktexttag.c:402 gtk/gtktextview.c:605
 #, fuzzy
@@ -4124,12 +4124,12 @@ msgstr "Plotis"
 
 #: gtk/gtktexttag.c:412 gtk/gtktextview.c:614
 msgid "Indent"
-msgstr "Átraukti"
+msgstr "Ä®traukti"
 
 #: gtk/gtktexttag.c:413 gtk/gtktextview.c:615
 #, fuzzy
 msgid "Amount to indent the paragraph, in pixels"
-msgstr "Maşiau átraukia pastraipà"
+msgstr "MaÅ¾iau Ä¯traukia pastraipÄ…"
 
 #: gtk/gtktexttag.c:424
 #, fuzzy
@@ -4141,43 +4141,43 @@ msgstr "Poslinkis tekstas yra"
 #: gtk/gtktexttag.c:433
 #, fuzzy
 msgid "Pixels above lines"
-msgstr "Tağkeliø"
+msgstr "TaÅ¡keliÅ³"
 
 #: gtk/gtktexttag.c:434 gtk/gtktextview.c:539
 #, fuzzy
 msgid "Pixels of blank space above paragraphs"
-msgstr "Tağkeliø"
+msgstr "TaÅ¡keliÅ³"
 
 #: gtk/gtktexttag.c:443
 #, fuzzy
 msgid "Pixels below lines"
-msgstr "Tağkeliø"
+msgstr "TaÅ¡keliÅ³"
 
 #: gtk/gtktexttag.c:444 gtk/gtktextview.c:549
 #, fuzzy
 msgid "Pixels of blank space below paragraphs"
-msgstr "Tağkeliø"
+msgstr "TaÅ¡keliÅ³"
 
 #: gtk/gtktexttag.c:453
 #, fuzzy
 msgid "Pixels inside wrap"
-msgstr "Tağkeliø"
+msgstr "TaÅ¡keliÅ³"
 
 #: gtk/gtktexttag.c:454 gtk/gtktextview.c:559
 #, fuzzy
 msgid "Pixels of blank space between wrapped lines in a paragraph"
-msgstr "Tağkeliø eiluèiø"
+msgstr "TaÅ¡keliÅ³ eiluÄiÅ³"
 
 #: gtk/gtktexttag.c:480
 #, fuzzy
 msgid "Wrap mode"
-msgstr "Lauşyti"
+msgstr "LauÅ¾yti"
 
 #: gtk/gtktexttag.c:481 gtk/gtktextview.c:577
 #, fuzzy
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
-msgstr "eiluèiø"
+msgstr "eiluÄiÅ³"
 
 #: gtk/gtktexttag.c:490 gtk/gtktextview.c:624
 msgid "Tabs"
@@ -4200,7 +4200,7 @@ msgstr "tekstas yra"
 #: gtk/gtktexttag.c:512
 #, fuzzy
 msgid "Background full height set"
-msgstr "Fonas aukğtis"
+msgstr "Fonas aukÅ¡tis"
 
 #: gtk/gtktexttag.c:513
 msgid "Whether this tag affects background height"
@@ -4218,7 +4218,7 @@ msgstr ""
 #: gtk/gtktexttag.c:524
 #, fuzzy
 msgid "Foreground stipple set"
-msgstr "Raidës"
+msgstr "RaidÄ—s"
 
 #: gtk/gtktexttag.c:525
 msgid "Whether this tag affects the foreground stipple"
@@ -4227,7 +4227,7 @@ msgstr ""
 #: gtk/gtktexttag.c:560
 #, fuzzy
 msgid "Justification set"
-msgstr "Praneğimas:"
+msgstr "PraneÅ¡imas:"
 
 #: gtk/gtktexttag.c:561
 msgid "Whether this tag affects paragraph justification"
@@ -4246,7 +4246,7 @@ msgstr "tekstas yra"
 #: gtk/gtktexttag.c:568
 #, fuzzy
 msgid "Left margin set"
-msgstr "Kairëje"
+msgstr "KairÄ—je"
 
 #: gtk/gtktexttag.c:569
 msgid "Whether this tag affects the left margin"
@@ -4255,7 +4255,7 @@ msgstr ""
 #: gtk/gtktexttag.c:572
 #, fuzzy
 msgid "Indent set"
-msgstr "Átraukti"
+msgstr "Ä®traukti"
 
 #: gtk/gtktexttag.c:573
 msgid "Whether this tag affects indentation"
@@ -4264,32 +4264,32 @@ msgstr ""
 #: gtk/gtktexttag.c:580
 #, fuzzy
 msgid "Pixels above lines set"
-msgstr "Tağkeliø eiluèiø"
+msgstr "TaÅ¡keliÅ³ eiluÄiÅ³"
 
 #: gtk/gtktexttag.c:581 gtk/gtktexttag.c:585
 #, fuzzy
 msgid "Whether this tag affects the number of pixels above lines"
-msgstr "tağkeliai"
+msgstr "taÅ¡keliai"
 
 #: gtk/gtktexttag.c:584
 #, fuzzy
 msgid "Pixels below lines set"
-msgstr "Tağkeliø eiluèiø"
+msgstr "TaÅ¡keliÅ³ eiluÄiÅ³"
 
 #: gtk/gtktexttag.c:588
 #, fuzzy
 msgid "Pixels inside wrap set"
-msgstr "Tağkeliø"
+msgstr "TaÅ¡keliÅ³"
 
 #: gtk/gtktexttag.c:589
 #, fuzzy
 msgid "Whether this tag affects the number of pixels between wrapped lines"
-msgstr "tağkeliai"
+msgstr "taÅ¡keliai"
 
 #: gtk/gtktexttag.c:596
 #, fuzzy
 msgid "Right margin set"
-msgstr "Değinëje"
+msgstr "DeÅ¡inÄ—je"
 
 #: gtk/gtktexttag.c:597
 msgid "Whether this tag affects the right margin"
@@ -4298,7 +4298,7 @@ msgstr ""
 #: gtk/gtktexttag.c:604
 #, fuzzy
 msgid "Wrap mode set"
-msgstr "Lauşyti"
+msgstr "LauÅ¾yti"
 
 #: gtk/gtktexttag.c:605
 msgid "Whether this tag affects line wrap mode"
@@ -4307,7 +4307,7 @@ msgstr ""
 #: gtk/gtktexttag.c:608
 #, fuzzy
 msgid "Tabs set"
-msgstr "Kortelës"
+msgstr "KortelÄ—s"
 
 #: gtk/gtktexttag.c:609
 msgid "Whether this tag affects tabs"
@@ -4326,32 +4326,32 @@ msgstr "tekstas"
 #: gtk/gtktextutil.c:46
 #, fuzzy
 msgid "LRM _Left-to-right mark"
-msgstr "Kairëje"
+msgstr "KairÄ—je"
 
 #: gtk/gtktextutil.c:47
 #, fuzzy
 msgid "RLM _Right-to-left mark"
-msgstr "Değinëje"
+msgstr "DeÅ¡inÄ—je"
 
 #: gtk/gtktextutil.c:48
 #, fuzzy
 msgid "LRE Left-to-right _embedding"
-msgstr "Kairëj_e"
+msgstr "KairÄ—j_e"
 
 #: gtk/gtktextutil.c:49
 #, fuzzy
 msgid "RLE Right-to-left e_mbedding"
-msgstr "Değinëje"
+msgstr "DeÅ¡inÄ—je"
 
 #: gtk/gtktextutil.c:50
 #, fuzzy
 msgid "LRO Left-to-right _override"
-msgstr "Kairëje"
+msgstr "KairÄ—je"
 
 #: gtk/gtktextutil.c:51
 #, fuzzy
 msgid "RLO Right-to-left o_verride"
-msgstr "Değinëje"
+msgstr "DeÅ¡inÄ—je"
 
 #: gtk/gtktextutil.c:52
 #, fuzzy
@@ -4376,32 +4376,32 @@ msgstr "plotis"
 #: gtk/gtktextview.c:538
 #, fuzzy
 msgid "Pixels Above Lines"
-msgstr "Tağkeliø Virğ"
+msgstr "TaÅ¡keliÅ³ VirÅ¡"
 
 #: gtk/gtktextview.c:548
 #, fuzzy
 msgid "Pixels Below Lines"
-msgstr "Tağkeliø Şemiau"
+msgstr "TaÅ¡keliÅ³ Å½emiau"
 
 #: gtk/gtktextview.c:558
 #, fuzzy
 msgid "Pixels Inside Wrap"
-msgstr "Tağkeliø"
+msgstr "TaÅ¡keliÅ³"
 
 #: gtk/gtktextview.c:576
 #, fuzzy
 msgid "Wrap Mode"
-msgstr "Lauşyti"
+msgstr "LauÅ¾yti"
 
 #: gtk/gtktextview.c:594
 #, fuzzy
 msgid "Left Margin"
-msgstr "Kairëje"
+msgstr "KairÄ—je"
 
 #: gtk/gtktextview.c:604
 #, fuzzy
 msgid "Right Margin"
-msgstr "Değinëje"
+msgstr "DeÅ¡inÄ—je"
 
 #: gtk/gtktextview.c:632
 #, fuzzy
@@ -4415,16 +4415,16 @@ msgstr "Jeigu yra"
 
 #: gtk/gtktextview.c:6476
 msgid "Input _Methods"
-msgstr "Ávesties _metodai"
+msgstr "Ä®vesties _metodai"
 
 #: gtk/gtkthemes.c:69
 #, fuzzy, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "Negaliu rasti keliamojo modulio module_path: ¥%s´,"
+msgstr "Negaliu rasti keliamojo modulio module_path: â€%sâ€œ,"
 
 #: gtk/gtktipsquery.c:182
 msgid "--- No Tip ---"
-msgstr "-Nëra pagalbos-"
+msgstr "-NÄ—ra pagalbos-"
 
 #: gtk/gtktogglebutton.c:133
 #, fuzzy
@@ -4449,20 +4449,20 @@ msgstr "Jeigu yra"
 #: gtk/gtktoolbar.c:230
 #, fuzzy
 msgid "The orientation of the toolbar"
-msgstr "Perjungti árankiø juostos rodymà"
+msgstr "Perjungti Ä¯rankiÅ³ juostos rodymÄ…"
 
 #: gtk/gtktoolbar.c:238
 msgid "Toolbar Style"
-msgstr "Árankinës stilius"
+msgstr "Ä®rankinÄ—s stilius"
 
 #: gtk/gtktoolbar.c:239
 msgid "How to draw the toolbar"
-msgstr "Kaip pieğti árankiø juostà"
+msgstr "Kaip pieÅ¡ti Ä¯rankiÅ³ juostÄ…"
 
 #: gtk/gtktoolbar.c:247
 #, fuzzy
 msgid "Spacer size"
-msgstr "Keğo dydis"
+msgstr "KeÅ¡o dydis"
 
 #: gtk/gtktoolbar.c:248
 #, fuzzy
@@ -4476,17 +4476,17 @@ msgstr ""
 #: gtk/gtktoolbar.c:265
 #, fuzzy
 msgid "Space style"
-msgstr "ádëti"
+msgstr "Ä¯dÄ—ti"
 
 #: gtk/gtktoolbar.c:266
 #, fuzzy
 msgid "Whether spacers are vertical lines or just blank"
-msgstr "eiluèiø"
+msgstr "eiluÄiÅ³"
 
 #: gtk/gtktoolbar.c:274
 #, fuzzy
 msgid "Button relief"
-msgstr "Átaisyti atsakymai"
+msgstr "Ä®taisyti atsakymai"
 
 #: gtk/gtktoolbar.c:275
 #, fuzzy
@@ -4500,7 +4500,7 @@ msgstr "Stilius"
 
 #: gtk/gtktoolbar.c:289
 msgid "Toolbar style"
-msgstr "Árankinës stilius"
+msgstr "Ä®rankinÄ—s stilius"
 
 #: gtk/gtktoolbar.c:290
 #, fuzzy
@@ -4510,11 +4510,11 @@ msgstr "tekstas tekstas."
 
 #: gtk/gtktoolbar.c:296
 msgid "Toolbar icon size"
-msgstr "Árankiniø ikonø dydis"
+msgstr "Ä®rankiniÅ³ ikonÅ³ dydis"
 
 #: gtk/gtktoolbar.c:297
 msgid "Size of icons in default toolbars"
-msgstr "Ikonø dydis áprastose árankiø juostose"
+msgstr "IkonÅ³ dydis Ä¯prastose Ä¯rankiÅ³ juostose"
 
 #: gtk/gtktreemodelsort.c:306
 msgid "TreeModelSort Model"
@@ -4537,12 +4537,12 @@ msgstr "kol"
 #: gtk/gtktreeview.c:526
 #, fuzzy
 msgid "Horizontal Adjustment for the widget"
-msgstr "Gulsèias Derinimas kol"
+msgstr "GulsÄias Derinimas kol"
 
 #: gtk/gtktreeview.c:534
 #, fuzzy
 msgid "Vertical Adjustment for the widget"
-msgstr "Staèias Derinimas kol"
+msgstr "StaÄias Derinimas kol"
 
 #: gtk/gtktreeview.c:541 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:426
 msgid "Visible"
@@ -4575,7 +4575,7 @@ msgstr "Nustatyti kol"
 #: gtk/gtktreeview.c:565 gtk/gtktreeviewcolumn.c:284
 #, fuzzy
 msgid "Reorderable"
-msgstr "Vël ákelti rëmelá"
+msgstr "VÄ—l Ä¯kelti rÄ—melÄ¯"
 
 #: gtk/gtktreeview.c:566
 #, fuzzy
@@ -4585,17 +4585,17 @@ msgstr "Rodinys yra"
 #: gtk/gtktreeview.c:573
 #, fuzzy
 msgid "Rules Hint"
-msgstr "Taisyklës"
+msgstr "TaisyklÄ—s"
 
 #: gtk/gtktreeview.c:574
 #, fuzzy
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
-msgstr "Nustatyti eiluèiø"
+msgstr "Nustatyti eiluÄiÅ³"
 
 #: gtk/gtktreeview.c:581
 #, fuzzy
 msgid "Enable Search"
-msgstr "Ájungti"
+msgstr "Ä®jungti"
 
 #: gtk/gtktreeview.c:582
 #, fuzzy
@@ -4605,7 +4605,7 @@ msgstr "Rodinys"
 #: gtk/gtktreeview.c:589
 #, fuzzy
 msgid "Search Column"
-msgstr "Paieğka"
+msgstr "PaieÅ¡ka"
 
 #: gtk/gtktreeview.c:590
 #, fuzzy
@@ -4615,7 +4615,7 @@ msgstr "Modelis"
 #: gtk/gtktreeview.c:603
 #, fuzzy
 msgid "Expander Size"
-msgstr "Iğplësti iki didesnio dydşio"
+msgstr "IÅ¡plÄ—sti iki didesnio dydÅ¾io"
 
 #: gtk/gtktreeview.c:604
 #, fuzzy
@@ -4625,37 +4625,37 @@ msgstr "Dydis."
 #: gtk/gtktreeview.c:612
 #, fuzzy
 msgid "Vertical Separator Width"
-msgstr "Staèias Skyriklis"
+msgstr "StaÄias Skyriklis"
 
 #: gtk/gtktreeview.c:613
 #, fuzzy
 msgid "Vertical space between cells.  Must be an even number"
-msgstr "Staèias."
+msgstr "StaÄias."
 
 #: gtk/gtktreeview.c:621
 #, fuzzy
 msgid "Horizontal Separator Width"
-msgstr "Gulsèias Skyriklis"
+msgstr "GulsÄias Skyriklis"
 
 #: gtk/gtktreeview.c:622
 #, fuzzy
 msgid "Horizontal space between cells.  Must be an even number"
-msgstr "Gulsèias."
+msgstr "GulsÄias."
 
 #: gtk/gtktreeview.c:630
 #, fuzzy
 msgid "Allow Rules"
-msgstr "Pripaşinti"
+msgstr "PripaÅ¾inti"
 
 #: gtk/gtktreeview.c:631
 #, fuzzy
 msgid "Allow drawing of alternating color rows"
-msgstr "Pripaşinti eiluèiø."
+msgstr "PripaÅ¾inti eiluÄiÅ³."
 
 #: gtk/gtktreeview.c:637
 #, fuzzy
 msgid "Indent Expanders"
-msgstr "Átraukti"
+msgstr "Ä®traukti"
 
 #: gtk/gtktreeview.c:638
 msgid "Make the expanders indented"
@@ -4684,7 +4684,7 @@ msgstr ""
 #: gtk/gtktreeviewcolumn.c:193 gtk/gtkwindow.c:489
 #, fuzzy
 msgid "Resizable"
-msgstr "Pakeisti dydá"
+msgstr "Pakeisti dydÄ¯"
 
 #: gtk/gtktreeviewcolumn.c:194
 #, fuzzy
@@ -4704,7 +4704,7 @@ msgstr "Svingas"
 #: gtk/gtktreeviewcolumn.c:211
 #, fuzzy
 msgid "Resize mode of the column"
-msgstr "Pakeisti dydá"
+msgstr "Pakeisti dydÄ¯"
 
 #: gtk/gtktreeviewcolumn.c:219
 #, fuzzy
@@ -4719,7 +4719,7 @@ msgstr "Esama fixed plotis"
 #: gtk/gtktreeviewcolumn.c:229
 #, fuzzy
 msgid "Minimum Width"
-msgstr "Sumaşintas"
+msgstr "SumaÅ¾intas"
 
 #: gtk/gtktreeviewcolumn.c:230
 #, fuzzy
@@ -4729,7 +4729,7 @@ msgstr "plotis"
 #: gtk/gtktreeviewcolumn.c:239
 #, fuzzy
 msgid "Maximum Width"
-msgstr "Didşiausias veido plotis: "
+msgstr "DidÅ¾iausias veido plotis: "
 
 #: gtk/gtktreeviewcolumn.c:240
 #, fuzzy
@@ -4784,7 +4784,7 @@ msgstr "Rikiuoti"
 #: gtk/gtktreeviewcolumn.c:293
 #, fuzzy
 msgid "Whether to show a sort indicator"
-msgstr "Perjungti, ar rodyti trumpiø juostà"
+msgstr "Perjungti, ar rodyti trumpiÅ³ juostÄ…"
 
 #: gtk/gtktreeviewcolumn.c:300
 msgid "Sort order"
@@ -4822,12 +4822,12 @@ msgstr "Bylos vardas"
 #: gtk/gtkwidget.c:394
 #, fuzzy
 msgid "The name of the widget"
-msgstr "Padvigubinti atvaizdo dydá"
+msgstr "Padvigubinti atvaizdo dydÄ¯"
 
 #: gtk/gtkwidget.c:400
 #, fuzzy
 msgid "Parent widget"
-msgstr "Spausdinti atvaizdà"
+msgstr "Spausdinti atvaizdÄ…"
 
 #: gtk/gtkwidget.c:401
 msgid "The parent widget of this widget. Must be a Container widget"
@@ -4848,14 +4848,14 @@ msgstr "kol plotis."
 #: gtk/gtkwidget.c:417
 #, fuzzy
 msgid "Height request"
-msgstr "Aukğtis"
+msgstr "AukÅ¡tis"
 
 #: gtk/gtkwidget.c:418
 #, fuzzy
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
-msgstr "kol aukğtis."
+msgstr "kol aukÅ¡tis."
 
 #: gtk/gtkwidget.c:427
 #, fuzzy
@@ -4884,7 +4884,7 @@ msgstr "lygiai"
 #: gtk/gtkwidget.c:447
 #, fuzzy
 msgid "Can focus"
-msgstr "Siøsti fokusà"
+msgstr "SiÅ³sti fokusÄ…"
 
 #: gtk/gtkwidget.c:448
 msgid "Whether the widget can accept the input focus"
@@ -4901,7 +4901,7 @@ msgstr ""
 #: gtk/gtkwidget.c:461
 #, fuzzy
 msgid "Is focus"
-msgstr "Siøsti fokusà"
+msgstr "SiÅ³sti fokusÄ…"
 
 #: gtk/gtkwidget.c:462
 #, fuzzy
@@ -4911,7 +4911,7 @@ msgstr "yra"
 #: gtk/gtkwidget.c:468
 #, fuzzy
 msgid "Can default"
-msgstr " (áprasta)"
+msgstr " (Ä¯prasta)"
 
 #: gtk/gtkwidget.c:469
 msgid "Whether the widget can be the default widget"
@@ -4920,7 +4920,7 @@ msgstr ""
 #: gtk/gtkwidget.c:475
 #, fuzzy
 msgid "Has default"
-msgstr "Padaryti áprastu"
+msgstr "Padaryti Ä¯prastu"
 
 #: gtk/gtkwidget.c:476
 #, fuzzy
@@ -4966,7 +4966,7 @@ msgstr "Elementai"
 #: gtk/gtkwidget.c:504
 #, fuzzy
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
-msgstr "kaukë."
+msgstr "kaukÄ—."
 
 #: gtk/gtkwidget.c:511
 #, fuzzy
@@ -4976,17 +4976,17 @@ msgstr "Priesaga"
 #: gtk/gtkwidget.c:512
 #, fuzzy
 msgid "The mask that decides what kind of extension events this widget gets"
-msgstr "kaukë."
+msgstr "kaukÄ—."
 
 #: gtk/gtkwidget.c:1082
 #, fuzzy
 msgid "Interior Focus"
-msgstr "Ávadiniai dokumentai"
+msgstr "Ä®vadiniai dokumentai"
 
 #: gtk/gtkwidget.c:1083
 #, fuzzy
 msgid "Whether to draw the focus indicator inside widgets"
-msgstr "Plotis tağkeliai."
+msgstr "Plotis taÅ¡keliai."
 
 #: gtk/gtkwidget.c:1089
 msgid "Focus linewidth"
@@ -4995,7 +4995,7 @@ msgstr ""
 #: gtk/gtkwidget.c:1090
 #, fuzzy
 msgid "Width, in pixels, of the focus indicator line"
-msgstr "Plotis tağkeliai."
+msgstr "Plotis taÅ¡keliai."
 
 #: gtk/gtkwidget.c:1096
 msgid "Focus line dash pattern"
@@ -5012,7 +5012,7 @@ msgstr ""
 #: gtk/gtkwidget.c:1103
 #, fuzzy
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
-msgstr "Plotis tağkeliai."
+msgstr "Plotis taÅ¡keliai."
 
 #: gtk/gtkwidget.c:1108
 #, fuzzy
@@ -5063,12 +5063,12 @@ msgstr "Langas"
 #: gtk/gtkwindow.c:465
 #, fuzzy
 msgid "The title of the window"
-msgstr "Şemiau kitø langø"
+msgstr "Å½emiau kitÅ³ langÅ³"
 
 #: gtk/gtkwindow.c:472
 #, fuzzy
 msgid "Allow Shrink"
-msgstr "Pripaşinti"
+msgstr "PripaÅ¾inti"
 
 #: gtk/gtkwindow.c:474
 #, fuzzy, no-c-format
@@ -5080,7 +5080,7 @@ msgstr "Jeigu ne dydis yra."
 #: gtk/gtkwindow.c:481
 #, fuzzy
 msgid "Allow Grow"
-msgstr "Pripaşinti"
+msgstr "PripaÅ¾inti"
 
 #: gtk/gtkwindow.c:482
 #, fuzzy
@@ -5111,11 +5111,11 @@ msgstr "Lango vieta"
 #: gtk/gtkwindow.c:506
 #, fuzzy
 msgid "The initial position of the window"
-msgstr "Lango X koordinatë"
+msgstr "Lango X koordinatÄ—"
 
 #: gtk/gtkwindow.c:514
 msgid "Default Width"
-msgstr "Áprastas plotis"
+msgstr "Ä®prastas plotis"
 
 #: gtk/gtkwindow.c:515
 #, fuzzy
@@ -5124,13 +5124,13 @@ msgstr "plotis."
 
 #: gtk/gtkwindow.c:524
 msgid "Default Height"
-msgstr "Áprastas aukğtis"
+msgstr "Ä®prastas aukÅ¡tis"
 
 #: gtk/gtkwindow.c:525
 #, fuzzy
 msgid ""
 "The default height of the window, used when initially showing the window"
-msgstr "aukğtis."
+msgstr "aukÅ¡tis."
 
 #: gtk/gtkwindow.c:534
 #, fuzzy
@@ -5219,7 +5219,7 @@ msgstr "IPA"
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr "Kinieèiø (Sugadinta)"
+msgstr "KinieÄiÅ³ (Sugadinta)"
 
 #. ID
 #: modules/input/imti-er.c:452
@@ -5234,12 +5234,12 @@ msgstr ""
 #. ID
 #: modules/input/imviqr.c:243
 msgid "Vietnamese (VIQR)"
-msgstr "Vietnameèiø (VIQR)"
+msgstr "VietnameÄiÅ³ (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:27
 msgid "X Input Method"
-msgstr "X ávesties metodas"
+msgstr "X Ä¯vesties metodas"
 
 #: modules/input/gtkimcontextxim.c:257
 msgid "IM Preedit style"
@@ -5252,41 +5252,41 @@ msgstr ""
 #: modules/input/gtkimcontextxim.c:266
 #, fuzzy
 msgid "IM Status style"
-msgstr "ádëti"
+msgstr "Ä¯dÄ—ti"
 
 #: modules/input/gtkimcontextxim.c:267
 #, fuzzy
 msgid "How to draw the input method statusbar"
-msgstr "Kaip pieğti árankiø juostà"
+msgstr "Kaip pieÅ¡ti Ä¯rankiÅ³ juostÄ…"
 
 #, fuzzy
 #~ msgid "The leftmost column of the child"
-#~ msgstr "Şemiau kitø langø"
+#~ msgstr "Å½emiau kitÅ³ langÅ³"
 
 #, fuzzy
 #~ msgid "The rightmost column of the child"
-#~ msgstr "Lango X koordinatë"
+#~ msgstr "Lango X koordinatÄ—"
 
 #, fuzzy
 #~ msgid "The uppermost row of the child"
-#~ msgstr "eiluèiø"
+#~ msgstr "eiluÄiÅ³"
 
 #, fuzzy
 #~ msgid "The lowest row of the child"
-#~ msgstr "Şemiau kitø langø"
+#~ msgstr "Å½emiau kitÅ³ langÅ³"
 
 #~ msgid "Don't know how to load the animation in file '%s'"
-#~ msgstr "Neşinau kaip ákelti animacijà iğ bylos ¥%s´"
+#~ msgstr "NeÅ¾inau kaip Ä¯kelti animacijÄ… iÅ¡ bylos â€%sâ€œ"
 
 #~ msgid "Don't know how to load the image in file '%s'"
-#~ msgstr "Neşinau kaip ákelti paveikslëlá iğ bylos ¥%s´"
+#~ msgstr "NeÅ¾inau kaip Ä¯kelti paveikslÄ—lÄ¯ iÅ¡ bylos â€%sâ€œ"
 
 #~ msgid "Failure reading ICO: %s"
 #~ msgstr "Klaida skaitant ICO: %s"
 
 #, fuzzy
 #~ msgid "Insufficient memory to load TGA image"
-#~ msgstr "Nepakanka atminties ákelti PNG bylai"
+#~ msgstr "Nepakanka atminties Ä¯kelti PNG bylai"
 
 #, fuzzy
 #~ msgid "Language engine code to use for rendering the text"
