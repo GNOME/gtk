@@ -1,3 +1,8 @@
+Thu Jan  8 22:01:14 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* queryloaders.c (loader_sanity_check): Don't use bitwise operators
+	on booleans.  (#130923, reported by Telsa Gwynne, fix by Dave Jones)
+
 2004-01-06  Federico Mena Quintero  <federico@ximian.com>
 
 	* gdk-pixbuf-io.c (gdk_pixbuf_save): Escape an ampersand in the
