@@ -168,7 +168,7 @@ _xdg_mime_magic_read_to_newline (FILE *magic_file,
 
   while (TRUE)
     {
-      c = fgetc (magic_file);
+      c = getc_unlocked (magic_file);
       if (c == EOF)
 	{
 	  *end_of_file = TRUE;
@@ -203,7 +203,7 @@ _xdg_mime_magic_read_a_number (FILE *magic_file,
 
   while (TRUE)
     {
-      c = fgetc (magic_file);
+      c = getc_unlocked (magic_file);
 
       if (c == EOF)
 	{
@@ -247,7 +247,7 @@ _xdg_mime_magic_parse_header (FILE *magic_file, XdgMimeMagicMatch *match)
   assert (magic_file != NULL);
   assert (match != NULL);
 
-  c = fgetc (magic_file);
+  c = getc_unlocked (magic_file);
   if (c == EOF)
     return XDG_MIME_MAGIC_EOF;
   if (c != '[')
@@ -259,7 +259,7 @@ _xdg_mime_magic_parse_header (FILE *magic_file, XdgMimeMagicMatch *match)
   if (match->priority == -1)
     return XDG_MIME_MAGIC_ERROR;
 
-  c = fgetc (magic_file);
+  c = getc_unlocked (magic_file);
   if (c == EOF)
     return XDG_MIME_MAGIC_EOF;
   if (c != ':')
@@ -292,7 +292,7 @@ _xdg_mime_magic_parse_error (FILE *magic_file)
 
   while (1)
     {
-      c = fgetc (magic_file);
+      c = getc_unlocked (magic_file);
       if (c == EOF)
 	return XDG_MIME_MAGIC_EOF;
       if (c == '\n')
@@ -317,7 +317,7 @@ _xdg_mime_magic_parse_magic_line (FILE              *magic_file,
   assert (magic_file != NULL);
 
   /* Sniff the buffer to make sure it's a valid line */
-  c = fgetc (magic_file);
+  c = getc_unlocked (magic_file);
   if (c == EOF)
     return XDG_MIME_MAGIC_EOF;
   else if (c == '[')
@@ -338,7 +338,7 @@ _xdg_mime_magic_parse_magic_line (FILE              *magic_file,
 	return XDG_MIME_MAGIC_EOF;
       if (indent == -1)
 	return XDG_MIME_MAGIC_ERROR;
-      c = fgetc (magic_file);
+      c = getc_unlocked (magic_file);
       if (c == EOF)
 	return XDG_MIME_MAGIC_EOF;
     }
@@ -359,7 +359,7 @@ _xdg_mime_magic_parse_magic_line (FILE              *magic_file,
       _xdg_mime_magic_matchlet_free (matchlet);
       return XDG_MIME_MAGIC_ERROR;
     }
-  c = fgetc (magic_file);
+  c = getc_unlocked (magic_file);
   if (c == EOF)
     {
       _xdg_mime_magic_matchlet_free (matchlet);
@@ -373,7 +373,7 @@ _xdg_mime_magic_parse_magic_line (FILE              *magic_file,
 
   /* Next two bytes determine how long the value is */
   matchlet->value_length = 0;
-  c = fgetc (magic_file);
+  c = getc_unlocked (magic_file);
   if (c == EOF)
     {
       _xdg_mime_magic_matchlet_free (matchlet);
@@ -382,7 +382,7 @@ _xdg_mime_magic_parse_magic_line (FILE              *magic_file,
   matchlet->value_length = c & 0xFF;
   matchlet->value_length = matchlet->value_length << 8;
 
-  c = fgetc (magic_file);
+  c = getc_unlocked (magic_file);
   if (c == EOF)
     {
       _xdg_mime_magic_matchlet_free (matchlet);
@@ -408,7 +408,7 @@ _xdg_mime_magic_parse_magic_line (FILE              *magic_file,
 	return XDG_MIME_MAGIC_ERROR;
     }
 
-  c = fgetc (magic_file);
+  c = getc_unlocked (magic_file);
   if (c == '&')
     {
       matchlet->mask = malloc (matchlet->value_length);
@@ -427,7 +427,7 @@ _xdg_mime_magic_parse_magic_line (FILE              *magic_file,
 	  else
 	    return XDG_MIME_MAGIC_ERROR;
 	}
-      c = fgetc (magic_file);
+      c = getc_unlocked (magic_file);
     }
 
   if (c == '~')
@@ -446,7 +446,7 @@ _xdg_mime_magic_parse_magic_line (FILE              *magic_file,
 	  _xdg_mime_magic_matchlet_free (matchlet);
 	  return XDG_MIME_MAGIC_ERROR;
 	}
-      c = fgetc (magic_file);
+      c = getc_unlocked (magic_file);
     }
 
   if (c == '+')
@@ -462,7 +462,7 @@ _xdg_mime_magic_parse_magic_line (FILE              *magic_file,
 	  _xdg_mime_magic_matchlet_free (matchlet);
 	  return XDG_MIME_MAGIC_ERROR;
 	}
-      c = fgetc (magic_file);
+      c = getc_unlocked (magic_file);
     }
 
 
@@ -692,13 +692,13 @@ _xdg_mime_magic_matchlet_mirror (XdgMimeMagicMatchlet *matchlets)
 {
   XdgMimeMagicMatchlet *new_list;
   XdgMimeMagicMatchlet *tmp;
-  
-  if ((matchlets == NULL) || (matchlets->next == NULL)) 
+
+  if ((matchlets == NULL) || (matchlets->next == NULL))
     return matchlets;
 
   new_list = NULL;
   tmp = matchlets;
-  while (tmp != NULL) 
+  while (tmp != NULL)
     {
       XdgMimeMagicMatchlet *matchlet;
 
@@ -709,7 +709,7 @@ _xdg_mime_magic_matchlet_mirror (XdgMimeMagicMatchlet *matchlets)
     }
 
   return new_list;
-  
+
 }
 
 static void
@@ -733,7 +733,8 @@ _xdg_mime_magic_read_magic_file (XdgMimeMagic *mime_magic,
 	  break;
 	case XDG_MIME_MAGIC_MAGIC:
 	  state = _xdg_mime_magic_parse_magic_line (magic_file, match);
-	  if (state == XDG_MIME_MAGIC_SECTION) 
+	  if (state == XDG_MIME_MAGIC_SECTION ||
+	      (state == XDG_MIME_MAGIC_EOF && match->mime_type))
 	    {
 	      match->matchlet = _xdg_mime_magic_matchlet_mirror (match->matchlet);
 	      _xdg_mime_magic_insert_match (mime_magic, match);

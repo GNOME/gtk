@@ -1,3 +1,7 @@
+Thu May 27 15:23:17 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* Sync from upstream
+
 Fri Apr 30 00:19:11 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* xdgmimemagic.c (_xdg_mime_magic_read_a_number): Make sure
