@@ -63,11 +63,7 @@ INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
 	$(GLIB_CFLAGS) $(LIBART_CFLAGS) $(GTK_CFLAGS)
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
 
-if INSIDE_GNOME_LIBS
 LDADDS = libgdk_pixbuf.la $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
-else
-LDADDS = libgdk_pixbuf.la libgnomecanvaspixbuf.la $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
-endif
 
 if INSIDE_GNOME_LIBS
 testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) -lgmodule
