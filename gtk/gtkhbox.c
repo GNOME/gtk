@@ -35,26 +35,28 @@ static void gtk_hbox_size_allocate (GtkWidget      *widget,
 				    GtkAllocation  *allocation);
 
 
-GtkType
+GType
 gtk_hbox_get_type (void)
 {
-  static GtkType hbox_type = 0;
+  static GType hbox_type = 0;
 
   if (!hbox_type)
     {
-      static const GtkTypeInfo hbox_info =
+      static const GTypeInfo hbox_info =
       {
-	"GtkHBox",
-	sizeof (GtkHBox),
 	sizeof (GtkHBoxClass),
-	(GtkClassInitFunc) gtk_hbox_class_init,
-	(GtkObjectInitFunc) gtk_hbox_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_hbox_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkHBox),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_hbox_init,
       };
 
-      hbox_type = gtk_type_unique (GTK_TYPE_BOX, &hbox_info);
+      hbox_type = g_type_register_static (GTK_TYPE_BOX, "GtkHBox",
+					  &hbox_info, 0);
     }
 
   return hbox_type;
@@ -82,7 +84,7 @@ gtk_hbox_new (gboolean homogeneous,
 {
   GtkHBox *hbox;
 
-  hbox = gtk_type_new (gtk_hbox_get_type ());
+  hbox = g_object_new (GTK_TYPE_HBOX, NULL);
 
   GTK_BOX (hbox)->spacing = spacing;
   GTK_BOX (hbox)->homogeneous = homogeneous ? TRUE : FALSE;

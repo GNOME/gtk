@@ -40,11 +40,11 @@ extern "C" {
 
 
 #define GTK_TYPE_CONTAINER              (gtk_container_get_type ())
-#define GTK_CONTAINER(obj)              (GTK_CHECK_CAST ((obj), GTK_TYPE_CONTAINER, GtkContainer))
-#define GTK_CONTAINER_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CONTAINER, GtkContainerClass))
-#define GTK_IS_CONTAINER(obj)           (GTK_CHECK_TYPE ((obj), GTK_TYPE_CONTAINER))
-#define GTK_IS_CONTAINER_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CONTAINER))
-#define GTK_CONTAINER_GET_CLASS(obj)    (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_CONTAINER, GtkContainerClass))
+#define GTK_CONTAINER(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CONTAINER, GtkContainer))
+#define GTK_CONTAINER_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CONTAINER, GtkContainerClass))
+#define GTK_IS_CONTAINER(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CONTAINER))
+#define GTK_IS_CONTAINER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CONTAINER))
+#define GTK_CONTAINER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CONTAINER, GtkContainerClass))
 
 #define GTK_IS_RESIZE_CONTAINER(widget) (GTK_IS_CONTAINER (widget) && ((GtkContainer*) (widget))->resize_mode != GTK_RESIZE_PARENT)
 
@@ -80,7 +80,7 @@ struct _GtkContainerClass
 				 gpointer	  callback_data);
   void    (*set_focus_child)	(GtkContainer	 *container,
 				 GtkWidget	 *widget);
-  GtkType (*child_type)		(GtkContainer	 *container);
+  GType   (*child_type)		(GtkContainer	 *container);
   gchar*  (*composite_name)	(GtkContainer	 *container,
 				 GtkWidget	 *child);
   void    (*set_child_property) (GtkContainer    *container,
@@ -103,7 +103,7 @@ struct _GtkContainerClass
 
 /* Application-level methods */
 
-GtkType gtk_container_get_type		 (void) G_GNUC_CONST;
+GType   gtk_container_get_type		 (void) G_GNUC_CONST;
 void    gtk_container_set_border_width	 (GtkContainer	   *container,
 					  guint		    border_width);
 guint   gtk_container_get_border_width   (GtkContainer     *container);
@@ -159,7 +159,7 @@ GtkAdjustment *gtk_container_get_focus_hadjustment (GtkContainer *container);
 
 void    gtk_container_resize_children      (GtkContainer     *container);
 
-GtkType gtk_container_child_type	   (GtkContainer     *container);
+GType   gtk_container_child_type	   (GtkContainer     *container);
 
 
 void         gtk_container_class_install_child_property (GtkContainerClass *cclass,

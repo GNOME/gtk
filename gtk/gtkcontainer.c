@@ -30,7 +30,6 @@
 
 #include "gtkcontainer.h"
 #include "gtkprivate.h"
-#include "gtksignal.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"
@@ -111,19 +110,20 @@ extern GObjectNotifyContext *_gtk_widget_child_property_notify_context;
 
 
 /* --- functions --- */
-GtkType
+GType
 gtk_container_get_type (void)
 {
-  static GtkType container_type = 0;
+  static GType container_type = 0;
 
   if (!container_type)
     {
-      static GTypeInfo container_info = {
+      static const GTypeInfo container_info =
+      {
 	sizeof (GtkContainerClass),
 	(GBaseInitFunc) gtk_container_base_class_init,
 	(GBaseFinalizeFunc) gtk_container_base_class_finalize,
 	(GClassInitFunc) gtk_container_class_init,
-	NULL        /* class_destroy */,
+	NULL        /* class_finalize */,
 	NULL        /* class_data */,
 	sizeof (GtkContainer),
 	0           /* n_preallocs */,
@@ -131,8 +131,9 @@ gtk_container_get_type (void)
 	NULL,       /* value_table */
       };
 
-      container_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkContainer", 
-					       &container_info, G_TYPE_FLAG_ABSTRACT);
+      container_type =
+	g_type_register_static (GTK_TYPE_WIDGET, "GtkContainer", 
+				&container_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return container_type;
@@ -220,36 +221,40 @@ gtk_container_class_init (GtkContainerClass *class)
                                                       GTK_TYPE_WIDGET,
 						      G_PARAM_WRITABLE));
   container_signals[ADD] =
-    gtk_signal_new ("add",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkContainerClass, add),
-                    _gtk_marshal_VOID__OBJECT,
-		    GTK_TYPE_NONE, 1,
-                    GTK_TYPE_WIDGET);
+    g_signal_new ("add",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkContainerClass, add),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_WIDGET);
   container_signals[REMOVE] =
-    gtk_signal_new ("remove",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkContainerClass, remove),
-                    _gtk_marshal_VOID__OBJECT,
-		    GTK_TYPE_NONE, 1,
-                    GTK_TYPE_WIDGET);
+    g_signal_new ("remove",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkContainerClass, remove),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_WIDGET);
   container_signals[CHECK_RESIZE] =
-    gtk_signal_new ("check_resize",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkContainerClass, check_resize),
-		    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("check_resize",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkContainerClass, check_resize),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   container_signals[SET_FOCUS_CHILD] =
-    gtk_signal_new ("set-focus-child",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkContainerClass, set_focus_child),
-                    _gtk_marshal_VOID__OBJECT,
-		    GTK_TYPE_NONE, 1,
-                    GTK_TYPE_WIDGET);
+    g_signal_new ("set-focus-child",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkContainerClass, set_focus_child),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_WIDGET);
 }
 
 /**
@@ -258,16 +263,16 @@ gtk_container_class_init (GtkContainerClass *class)
  *
  * Returns the type of the children supported by the container.
  *
- * Note that this may return %GTK_TYPE_NONE to indicate that no more
+ * Note that this may return %G_TYPE_NONE to indicate that no more
  * children can be added, e.g. for a #GtkPaned which already has two 
  * children.
  *
- * Return value: a #GtkType.
+ * Return value: a #GType.
  **/
-GtkType
+GType
 gtk_container_child_type (GtkContainer *container)
 {
-  GtkType slot;
+  GType slot;
   GtkContainerClass *class;
 
   g_return_val_if_fail (GTK_IS_CONTAINER (container), 0);
@@ -276,7 +281,7 @@ gtk_container_child_type (GtkContainer *container)
   if (class->child_type)
     slot = class->child_type (container);
   else
-    slot = GTK_TYPE_NONE;
+    slot = G_TYPE_NONE;
 
   return slot;
 }
@@ -572,11 +577,11 @@ gtk_container_add_with_properties (GtkContainer *container,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->parent == NULL);
 
-  gtk_widget_ref (GTK_WIDGET (container));
-  gtk_widget_ref (widget);
+  g_object_ref (container);
+  g_object_ref (widget);
   gtk_widget_freeze_child_notify (widget);
 
-  gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
+  g_signal_emit (container, container_signals[ADD], 0, widget);
   if (widget->parent)
     {
       va_list var_args;
@@ -587,8 +592,8 @@ gtk_container_add_with_properties (GtkContainer *container,
     }
 
   gtk_widget_thaw_child_notify (widget);
-  gtk_widget_unref (widget);
-  gtk_widget_unref (GTK_WIDGET (container));
+  g_object_unref (widget);
+  g_object_unref (container);
 }
 
 void
@@ -706,14 +711,14 @@ static void
 gtk_container_add_unimplemented (GtkContainer     *container,
 				 GtkWidget        *widget)
 {
-  g_warning ("GtkContainerClass::add not implemented for `%s'", gtk_type_name (GTK_OBJECT_TYPE (container)));
+  g_warning ("GtkContainerClass::add not implemented for `%s'", g_type_name (G_TYPE_FROM_INSTANCE (container)));
 }
 
 static void
 gtk_container_remove_unimplemented (GtkContainer     *container,
 				    GtkWidget        *widget)
 {
-  g_warning ("GtkContainerClass::remove not implemented for `%s'", gtk_type_name (GTK_OBJECT_TYPE (container)));
+  g_warning ("GtkContainerClass::remove not implemented for `%s'", g_type_name (G_TYPE_FROM_INSTANCE (container)));
 }
 
 static void
@@ -874,7 +879,7 @@ gtk_container_add (GtkContainer *container,
       return;
     }
 
-  gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
+  g_signal_emit (container, container_signals[ADD], 0, widget);
 }
 
 /**
@@ -897,7 +902,7 @@ gtk_container_remove (GtkContainer *container,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->parent == GTK_WIDGET (container));
   
-  gtk_signal_emit (GTK_OBJECT (container), container_signals[REMOVE], widget);
+  g_signal_emit (container, container_signals[REMOVE], 0, widget);
 }
 
 void
@@ -1092,7 +1097,7 @@ gtk_container_check_resize (GtkContainer *container)
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
   
-  gtk_signal_emit (GTK_OBJECT (container), container_signals[CHECK_RESIZE]);
+  g_signal_emit (container, container_signals[CHECK_RESIZE], 0);
 }
 
 static void
@@ -1214,12 +1219,12 @@ gtk_container_foreach_unmarshal (GtkWidget *child,
   
   /* first argument */
   args[0].name = NULL;
-  args[0].type = GTK_OBJECT_TYPE (child);
+  args[0].type = G_TYPE_FROM_INSTANCE (child);
   GTK_VALUE_OBJECT (args[0]) = GTK_OBJECT (child);
   
   /* location for return value */
   args[1].name = NULL;
-  args[1].type = GTK_TYPE_NONE;
+  args[1].type = G_TYPE_NONE;
   
   fdata->callback (fdata->container, fdata->callback_data, 1, args);
 }
@@ -1262,7 +1267,7 @@ gtk_container_set_focus_child (GtkContainer *container,
   if (widget)
     g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_signal_emit (GTK_OBJECT (container), container_signals[SET_FOCUS_CHILD], widget);
+  g_signal_emit (container, container_signals[SET_FOCUS_CHILD], 0, widget);
 }
 
 /**
@@ -1321,7 +1326,7 @@ gtk_container_child_default_composite_name (GtkContainer *container,
 			&data);
   
   name = g_strdup_printf ("%s-%u",
-			  gtk_type_name (GTK_OBJECT_TYPE (child)),
+			  g_type_name (G_TYPE_FROM_INSTANCE (child)),
 			  data.index);
 
   return name;
@@ -1343,7 +1348,7 @@ _gtk_container_child_composite_name (GtkContainer *container,
       if (!quark_composite_name)
 	quark_composite_name = g_quark_from_static_string ("gtk-composite-name");
 
-      name = gtk_object_get_data_by_id (GTK_OBJECT (child), quark_composite_name);
+      name = g_object_get_qdata (G_OBJECT (child), quark_composite_name);
       if (!name)
 	{
 	  GtkContainerClass *class;
@@ -1372,10 +1377,10 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
   if (child != container->focus_child)
     {
       if (container->focus_child)
-	gtk_widget_unref (container->focus_child);
+	g_object_unref (container->focus_child);
       container->focus_child = child;
       if (container->focus_child)
-	gtk_widget_ref (container->focus_child);
+	g_object_ref (container->focus_child);
     }
 
 
@@ -1385,14 +1390,14 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
     {
       GtkAdjustment *adjustment;
       
-      adjustment = gtk_object_get_data_by_id (GTK_OBJECT (container), vadjustment_key_id);
+      adjustment = g_object_get_qdata (G_OBJECT (container), vadjustment_key_id);
       if (adjustment)
 	gtk_adjustment_clamp_page (adjustment,
 				   container->focus_child->allocation.y,
 				   (container->focus_child->allocation.y +
 				    container->focus_child->allocation.height));
 
-      adjustment = gtk_object_get_data_by_id (GTK_OBJECT (container), hadjustment_key_id);
+      adjustment = g_object_get_qdata (G_OBJECT (container), hadjustment_key_id);
       if (adjustment)
 	gtk_adjustment_clamp_page (adjustment,
 				   container->focus_child->allocation.x,
@@ -1953,8 +1958,8 @@ chain_widget_destroyed (GtkWidget *widget,
 
   chain = g_list_remove (chain, widget);
 
-  g_signal_handlers_disconnect_by_func (G_OBJECT (widget),
-                                        (gpointer) chain_widget_destroyed,
+  g_signal_handlers_disconnect_by_func (widget,
+                                        chain_widget_destroyed,
                                         user_data);
   
   g_object_set_data (G_OBJECT (container),
@@ -2004,10 +2009,10 @@ gtk_container_set_focus_chain (GtkContainer *container,
 
       chain = g_list_prepend (chain, tmp_list->data);
 
-      gtk_signal_connect (GTK_OBJECT (tmp_list->data),
-                          "destroy",
-                          GTK_SIGNAL_FUNC (chain_widget_destroyed),
-                          container);
+      g_signal_connect (tmp_list->data,
+                        "destroy",
+                        G_CALLBACK (chain_widget_destroyed),
+                        container);
       
       tmp_list = g_list_next (tmp_list);
     }
@@ -2080,8 +2085,8 @@ gtk_container_unset_focus_chain (GtkContainer  *container)
       tmp_list = chain;
       while (tmp_list != NULL)
         {
-          g_signal_handlers_disconnect_by_func (G_OBJECT (tmp_list->data),
-                                                (gpointer) chain_widget_destroyed,
+          g_signal_handlers_disconnect_by_func (tmp_list->data,
+                                                chain_widget_destroyed,
                                                 container);
           
           tmp_list = g_list_next (tmp_list);
@@ -2100,12 +2105,12 @@ gtk_container_set_focus_vadjustment (GtkContainer  *container,
     g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   if (adjustment)
-    gtk_object_ref (GTK_OBJECT(adjustment));
+    g_object_ref (adjustment);
 
-  gtk_object_set_data_by_id_full (GTK_OBJECT (container),
-				  vadjustment_key_id,
-				  adjustment,
-				  (GtkDestroyNotify) gtk_object_unref);
+  g_object_set_qdata_full (G_OBJECT (container),
+			   vadjustment_key_id,
+			   adjustment,
+			   g_object_unref);
 }
 
 /**
@@ -2125,8 +2130,7 @@ gtk_container_get_focus_vadjustment (GtkContainer *container)
     
   g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
 
-  vadjustment = gtk_object_get_data_by_id (GTK_OBJECT (container),
-					   vadjustment_key_id);
+  vadjustment = g_object_get_qdata (G_OBJECT (container), vadjustment_key_id);
 
   return vadjustment;
 }
@@ -2140,12 +2144,12 @@ gtk_container_set_focus_hadjustment (GtkContainer  *container,
     g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
   if (adjustment)
-    gtk_object_ref (GTK_OBJECT (adjustment));
+    g_object_ref (adjustment);
 
-  gtk_object_set_data_by_id_full (GTK_OBJECT (container),
-				  hadjustment_key_id,
-				  adjustment,
-				  (GtkDestroyNotify) gtk_object_unref);
+  g_object_set_qdata_full (G_OBJECT (container),
+			   hadjustment_key_id,
+			   adjustment,
+			   g_object_unref);
 }
 
 /**
@@ -2165,8 +2169,7 @@ gtk_container_get_focus_hadjustment (GtkContainer *container)
 
   g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
 
-  hadjustment = gtk_object_get_data_by_id (GTK_OBJECT (container),
-		  			   hadjustment_key_id);
+  hadjustment = g_object_get_qdata (G_OBJECT (container), hadjustment_key_id);
 
   return hadjustment;
 }

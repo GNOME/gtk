@@ -70,31 +70,31 @@ static void gtk_box_get_child_property (GtkContainer    *container,
 					guint            property_id,
 					GValue          *value,
 					GParamSpec      *pspec);
-static GtkType gtk_box_child_type (GtkContainer   *container);
+static GType gtk_box_child_type (GtkContainer   *container);
      
 
 static GtkContainerClass *parent_class = NULL;
 
 
-GtkType
+GType
 gtk_box_get_type (void)
 {
-  static GtkType box_type = 0;
+  static GType box_type = 0;
 
   if (!box_type)
     {
       static const GTypeInfo box_info =
       {
 	sizeof (GtkBoxClass),
-	NULL,            /* base_init */
-	NULL,            /* base_finalize */
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
 	(GClassInitFunc) gtk_box_class_init,
-	NULL,            /* class_finalize */
-	NULL,            /* class_data */
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
 	sizeof (GtkBox),
-	0,               /* n_preallocs */
+	0,		/* n_preallocs */
 	(GInstanceInitFunc) gtk_box_init,
-	NULL,            /* value_table */
+	NULL,		/* value_table */
       };
 
       box_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkBox", 
@@ -235,8 +235,8 @@ static void gtk_box_get_property (GObject         *object,
     }
 }
 
-static GtkType
-gtk_box_child_type	(GtkContainer   *container)
+static GType
+gtk_box_child_type (GtkContainer   *container)
 {
   return GTK_TYPE_WIDGET;
 }

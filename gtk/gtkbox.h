@@ -38,11 +38,11 @@ extern "C" {
 
 
 #define GTK_TYPE_BOX            (gtk_box_get_type ())
-#define GTK_BOX(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_BOX, GtkBox))
-#define GTK_BOX_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_BOX, GtkBoxClass))
-#define GTK_IS_BOX(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_BOX))
-#define GTK_IS_BOX_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BOX))
-#define GTK_BOX_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_BOX, GtkBoxClass))
+#define GTK_BOX(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_BOX, GtkBox))
+#define GTK_BOX_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_BOX, GtkBoxClass))
+#define GTK_IS_BOX(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_BOX))
+#define GTK_IS_BOX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BOX))
+#define GTK_BOX_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_BOX, GtkBoxClass))
 
 
 typedef struct _GtkBox	      GtkBox;
@@ -74,7 +74,7 @@ struct _GtkBoxChild
 };
 
 
-GtkType	   gtk_box_get_type	       (void) G_GNUC_CONST;
+GType	   gtk_box_get_type	       (void) G_GNUC_CONST;
 void	   gtk_box_pack_start	       (GtkBox	     *box,
 					GtkWidget    *child,
 					gboolean      expand,

@@ -1,13 +1,18 @@
+Sun Oct  6 21:23:29 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkcontainer.[ch] gtk/gtkbox.[ch] gtk/gtkhbox.[ch]
+	gtk/gtkvbox.[ch]: Deprecation cleanup
+
 Sun Oct  6 18:32:11 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkcelleditable.c gtk/gtkcellrenderer.[ch]
 	gtk/gtkcellrendererpixbuf.[ch] gtk/gtkcellrenderertext.[ch]
-	gtk/gtkcellrenderertoggle.[ch]: deprecation cleanup
+	gtk/gtkcellrenderertoggle.[ch]: Deprecation cleanup
 
 Sat Oct  5 16:11:22 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkmisc.[ch] gtk/gtklabel.[ch] gtk/gtkimage.[ch]
-	gtk/gtkdrawingarea.[ch] gtk/gtknotebook.[ch]: deprecation cleanup
+	gtk/gtkdrawingarea.[ch] gtk/gtknotebook.[ch]: Deprecation cleanup
 
 Sat Oct  5 18:30:50 2002  Owen Taylor  <otaylor@redhat.com>
 
