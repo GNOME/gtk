@@ -372,10 +372,10 @@ setup_system_styles(GtkStyle *style)
      TODO: use GetThemeMetric for the border and outside border */
   sprintf(buf, "style \"wimp-button\" = \"wimp-default\"\n"
 	  "{fg[NORMAL] = { %d, %d, %d }\n"
-	  "default_border = { 1, 1, 1, 1 }\n"
-	  "default_outside_border = { 0, 0, 0, 0 }\n"
-	  "child_displacement_x = 1\n"
-  	  "child_displacement_y = 1\n"
+	  "GtkButton::default_border = { 1, 1, 1, 1 }\n"
+	  "GtkButton::default_outside_border = { 0, 0, 0, 0 }\n"
+	  "GtkButton::child_displacement_x = 1\n"
+  	  "GtkButton::child_displacement_y = 1\n"
 	  "}widget_class \"*GtkButton*\" style \"wimp-button\"\n",
 	  btn_fore.red,
       btn_fore.green,

@@ -1,9 +1,10 @@
 2003-09-14  Raymond Penners  <raymond@dotsphinx.com>
 
-	* === Released 0.4.1 ===
+	* src/wimp_style.c: Fixed console message complaining about
+	"default_border".
 	
 	* src/wimp_style.c: Due to a bug lots of console message
-	complaining about "unexpected keyword `fg'" occured, fixed.
+	complaining about "unexpected keyword `fg'" and occured, fixed.
 
 2003-09-11  Dom Lachowicz <cinamod@hotmail.com>
 
