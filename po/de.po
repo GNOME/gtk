@@ -2501,7 +2501,7 @@ msgstr "(ausgeschaltet)"
 msgid "(unknown)"
 msgstr "(unbekannt)"
 
-# CHECK - löschen?
+# CHECK - lÃ¶schen?
 #. and clear button
 #: gtk/gtkinputdialog.c:754
 msgid "clear"

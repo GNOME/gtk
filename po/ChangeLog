@@ -1,3 +1,7 @@
+2002-11-26  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	* de.po: Fix invalid UTF-8 in comment.
+
 2002-11-25 Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>
 
 	* nl.po: Massive copy-paste from stable branch.
