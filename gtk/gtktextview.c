@@ -866,7 +866,27 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 				G_TYPE_INT, 1,
 				G_TYPE_BOOLEAN, TRUE);
 
+  gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK,
+				"move_cursor", 3,
+				GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
+				G_TYPE_INT, -1,
+				G_TYPE_BOOLEAN, FALSE);
+  gtk_binding_entry_add_signal (binding_set, GDK_slash, GDK_CONTROL_MASK,
+				"move_cursor", 3,
+				GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
+				G_TYPE_INT, 1,
+				G_TYPE_BOOLEAN, TRUE);
+
+  /* Unselect all
+   */
+  gtk_binding_entry_add_signal (binding_set, GDK_backslash, GDK_CONTROL_MASK,
+				"move_cursor", 3,
+				GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
+				G_TYPE_INT, 0,
+				G_TYPE_BOOLEAN, FALSE);
+
   
+
   gtk_binding_entry_add_signal (binding_set, GDK_Page_Up, GDK_CONTROL_MASK,
 				"page_horizontally", 2,
 				G_TYPE_INT, -1,
@@ -4574,7 +4594,7 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
         gtk_text_buffer_get_end_iter (get_buffer (text_view), &newplace);
       else if (count < 0)
         gtk_text_buffer_get_iter_at_offset (get_buffer (text_view), &newplace, 0);
-      break;
+     break;
       
     default:
       break;

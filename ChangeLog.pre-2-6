@@ -1,5 +1,8 @@
 2003-01-07  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtktextview.c (gtk_text_view_class_init): Bind C-/ and C-\
+	to "select all" and "unselect all".  (#102065)
+
 	* gtk/gtktextview.h (struct _GtkTextView): Add a comment that
 	the just_selected_element is unused.
 
