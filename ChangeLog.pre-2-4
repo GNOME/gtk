@@ -1,3 +1,14 @@
+Wed Dec 31 02:05:39 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkactiongroup.c (gtk_action_group_add_actions_full): 
+	(gtk_action_group_add_toggle_actions_full):
+	(gtk_action_group_add_radio_actions_full): Pull accelerator key
+	from the stock item if stock_id is given, but accelerator 
+	not.  (Noticed by Jeff Franks and Jody Goldberg)
+
+	* tests/testmerge.c: Remove the accelerator from the "Open" entry
+	to test the above change.
+	
 2003-12-29  Federico Mena Quintero  <federico@ximian.com>
 
 	Make show_all() work for the extra and preview widgets; reported

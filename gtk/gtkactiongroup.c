@@ -31,6 +31,7 @@
 #include <config.h>
 
 #include "gtkactiongroup.h"
+#include "gtkstock.h"
 #include "gtktoggleaction.h"
 #include "gtkradioaction.h"
 #include "gtkaccelmap.h"
@@ -395,6 +396,10 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
 				   gpointer        user_data,
 				   GDestroyNotify  destroy)
 {
+
+  /* Keep this in sync with the other 
+   * gtk_action_group_add_..._actions_full() functions.
+   */
   guint i;
   GtkTranslateFunc translate_func;
   gpointer translate_data;
@@ -408,6 +413,9 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
     {
       GtkAction *action;
       gchar *accel_path;
+      guint accel_key = 0;
+      GdkModifierType accel_mods;
+      GtkStockItem stock_item;
       gchar *label;
       gchar *tooltip;
 
@@ -437,16 +445,18 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
       /* set the accel path for the menu item */
       accel_path = g_strconcat ("<Actions>/", action_group->private_data->name, "/",
 				entries[i].name, NULL);
-      if (entries[i].accelerator)
-	{
-	  guint accel_key = 0;
-	  GdkModifierType accel_mods;
 
-	  gtk_accelerator_parse (entries[i].accelerator, &accel_key,
-				 &accel_mods);
-	  if (accel_key)
-	    gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
+      if (entries[i].accelerator)
+	gtk_accelerator_parse (entries[i].accelerator, &accel_key, &accel_mods);
+      else if (entries[i].stock_id &&
+	       gtk_stock_lookup (entries[i].stock_id, &stock_item))
+	{
+	  accel_key = stock_item.keyval;
+	  accel_mods = stock_item.modifier;
 	}
+
+      if (accel_key)
+	gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
 
       gtk_action_set_accel_path (action, accel_path);
       g_free (accel_path);
@@ -504,6 +514,9 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
 					  gpointer              user_data,
 					  GDestroyNotify        destroy)
 {
+  /* Keep this in sync with the other 
+   * gtk_action_group_add_..._actions_full() functions.
+   */
   guint i;
   GtkTranslateFunc translate_func;
   gpointer translate_data;
@@ -517,6 +530,9 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
     {
       GtkAction *action;
       gchar *accel_path;
+      guint accel_key = 0;
+      GdkModifierType accel_mods;
+      GtkStockItem stock_item;
       gchar *label;
       gchar *tooltip;
 
@@ -549,16 +565,18 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
       /* set the accel path for the menu item */
       accel_path = g_strconcat ("<Actions>/", action_group->private_data->name, "/",
 				entries[i].name, NULL);
-      if (entries[i].accelerator)
-	{
-	  guint accel_key = 0;
-	  GdkModifierType accel_mods;
 
-	  gtk_accelerator_parse (entries[i].accelerator, &accel_key,
-				 &accel_mods);
-	  if (accel_key)
-	    gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
+      if (entries[i].accelerator)
+	gtk_accelerator_parse (entries[i].accelerator, &accel_key, &accel_mods);
+      else if (entries[i].stock_id &&
+	       gtk_stock_lookup (entries[i].stock_id, &stock_item))
+	{
+	  accel_key = stock_item.keyval;
+	  accel_mods = stock_item.modifier;
 	}
+
+      if (accel_key)
+	gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
 
       gtk_action_set_accel_path (action, accel_path);
       g_free (accel_path);
@@ -626,6 +644,9 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
 					 gpointer             user_data,
 					 GDestroyNotify       destroy)
 {
+  /* Keep this in sync with the other 
+   * gtk_action_group_add_..._actions_full() functions.
+   */
   guint i;
   GtkTranslateFunc translate_func;
   gpointer translate_data;
@@ -641,6 +662,9 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
     {
       GtkAction *action;
       gchar *accel_path;
+      guint accel_key = 0;
+      GdkModifierType accel_mods;
+      GtkStockItem stock_item;
       gchar *label;
       gchar *tooltip; 
 
@@ -676,16 +700,18 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
       accel_path = g_strconcat ("<Actions>/", 
 				action_group->private_data->name, "/",
 				entries[i].name, NULL);
-      if (entries[i].accelerator)
-	{
-	  guint accel_key = 0;
-	  GdkModifierType accel_mods;
 
-	  gtk_accelerator_parse (entries[i].accelerator, &accel_key,
-				 &accel_mods);
-	  if (accel_key)
-	    gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
+      if (entries[i].accelerator)
+	gtk_accelerator_parse (entries[i].accelerator, &accel_key, &accel_mods);
+      else if (entries[i].stock_id &&
+	       gtk_stock_lookup (entries[i].stock_id, &stock_item))
+	{
+	  accel_key = stock_item.keyval;
+	  accel_mods = stock_item.modifier;
 	}
+
+      if (accel_key)
+	gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
 
       gtk_action_set_accel_path (action, accel_path);
       g_free (accel_path);

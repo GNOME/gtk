@@ -138,7 +138,7 @@ static GtkActionEntry entries[] = {
   { "QuitAction",  GTK_STOCK_QUIT,  NULL,     "<control>q", "Quit", G_CALLBACK (gtk_main_quit) },
   { "NewAction",   GTK_STOCK_NEW,   NULL,     "<control>n", "Create something", G_CALLBACK (activate_action) },
   { "New2Action",  GTK_STOCK_NEW,   NULL,     "<control>m", "Create something else", G_CALLBACK (activate_action) },
-  { "OpenAction",  GTK_STOCK_OPEN,  NULL,     "<control>o", "Open it", G_CALLBACK (activate_action) },
+  { "OpenAction",  GTK_STOCK_OPEN,  NULL,     NULL,         "Open it", G_CALLBACK (activate_action) },
   { "CutAction",   GTK_STOCK_CUT,   NULL,     "<control>x", "Knive", G_CALLBACK (activate_action) },
   { "CopyAction",  GTK_STOCK_COPY,  NULL,     "<control>c", "Copy", G_CALLBACK (activate_action) },
   { "PasteAction", GTK_STOCK_PASTE, NULL,     "<control>v", "Paste", G_CALLBACK (activate_action) },
