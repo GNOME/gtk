@@ -157,7 +157,7 @@ gdk_c_sources = @STRIP_BEGIN@ 	\
 @STRIP_END@
 
 #
-# setup GDK sources and their dependancies
+# setup GDK sources and their dependencies
 #
 
 gdkincludedir = $(includedir)/gtk-2.0/gdk
