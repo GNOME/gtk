@@ -38,7 +38,8 @@ gtk_vseparator_get_type ()
 	sizeof (GtkVSeparatorClass),
 	(GtkClassInitFunc) gtk_vseparator_class_init,
 	(GtkObjectInitFunc) gtk_vseparator_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       vseparator_type = gtk_type_unique (gtk_separator_get_type (), &vseparator_info);

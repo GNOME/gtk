@@ -34,7 +34,8 @@ gtk_scrollbar_get_type ()
 	sizeof (GtkScrollbarClass),
 	(GtkClassInitFunc) gtk_scrollbar_class_init,
 	(GtkObjectInitFunc) gtk_scrollbar_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       scrollbar_type = gtk_type_unique (gtk_range_get_type (), &scrollbar_info);

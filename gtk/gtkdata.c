@@ -45,7 +45,8 @@ gtk_data_get_type ()
 	sizeof (GtkDataClass),
 	(GtkClassInitFunc) gtk_data_class_init,
 	(GtkObjectInitFunc) NULL,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       data_type = gtk_type_unique (gtk_object_get_type (), &data_info);

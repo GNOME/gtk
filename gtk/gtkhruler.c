@@ -51,7 +51,8 @@ gtk_hruler_get_type ()
 	sizeof (GtkHRulerClass),
 	(GtkClassInitFunc) gtk_hruler_class_init,
 	(GtkObjectInitFunc) gtk_hruler_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       hruler_type = gtk_type_unique (gtk_ruler_get_type (), &hruler_info);

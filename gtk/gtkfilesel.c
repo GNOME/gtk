@@ -308,7 +308,8 @@ gtk_file_selection_get_type ()
 	sizeof (GtkFileSelectionClass),
 	(GtkClassInitFunc) gtk_file_selection_class_init,
 	(GtkObjectInitFunc) gtk_file_selection_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       file_selection_type = gtk_type_unique (gtk_window_get_type (), &filesel_info);

@@ -53,7 +53,8 @@ gtk_box_get_type ()
 	sizeof (GtkBoxClass),
 	(GtkClassInitFunc) gtk_box_class_init,
 	(GtkObjectInitFunc) gtk_box_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       box_type = gtk_type_unique (gtk_container_get_type (), &box_info);

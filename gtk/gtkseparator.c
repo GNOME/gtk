@@ -36,7 +36,8 @@ gtk_separator_get_type ()
 	sizeof (GtkSeparatorClass),
 	(GtkClassInitFunc) gtk_separator_class_init,
 	(GtkObjectInitFunc) gtk_separator_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       separator_type = gtk_type_unique (gtk_widget_get_type (), &separator_info);

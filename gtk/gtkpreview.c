@@ -140,7 +140,8 @@ gtk_preview_get_type ()
         sizeof (GtkPreviewClass),
         (GtkClassInitFunc) gtk_preview_class_init,
         (GtkObjectInitFunc) gtk_preview_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       preview_type = gtk_type_unique (gtk_widget_get_type (), &preview_info);

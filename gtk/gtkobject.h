@@ -186,7 +186,8 @@ void gtk_object_setv (GtkObject *obj,
 		      GtkArg    *args);
 
 void gtk_object_add_arg_type (const char *arg_name,
-			      GtkType     arg_type);
+			      GtkType     arg_type,
+			      guint	  arg_id);
 
 GtkType gtk_object_get_arg_type (const char *arg_name);
 

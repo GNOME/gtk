@@ -40,7 +40,8 @@ gtk_vbox_get_type ()
 	sizeof (GtkVBoxClass),
 	(GtkClassInitFunc) gtk_vbox_class_init,
 	(GtkObjectInitFunc) gtk_vbox_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       vbox_type = gtk_type_unique (gtk_box_get_type (), &vbox_info);

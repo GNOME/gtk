@@ -46,7 +46,8 @@ gtk_scale_get_type ()
 	sizeof (GtkScaleClass),
 	(GtkClassInitFunc) gtk_scale_class_init,
 	(GtkObjectInitFunc) gtk_scale_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       scale_type = gtk_type_unique (gtk_range_get_type (), &scale_info);

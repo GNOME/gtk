@@ -42,7 +42,8 @@ gtk_vbutton_box_get_type ()
 	sizeof (GtkVButtonBoxClass),
 	(GtkClassInitFunc) gtk_vbutton_box_class_init,
 	(GtkObjectInitFunc) gtk_vbutton_box_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       vbutton_box_type = gtk_type_unique (gtk_button_box_get_type (), &vbutton_box_info);

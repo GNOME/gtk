@@ -51,7 +51,8 @@ gtk_item_get_type ()
 	sizeof (GtkItemClass),
 	(GtkClassInitFunc) gtk_item_class_init,
 	(GtkObjectInitFunc) gtk_item_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       item_type = gtk_type_unique (gtk_bin_get_type (), &item_info);

@@ -90,7 +90,8 @@ gtk_range_get_type ()
 	sizeof (GtkRangeClass),
 	(GtkClassInitFunc) gtk_range_class_init,
 	(GtkObjectInitFunc) gtk_range_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       range_type = gtk_type_unique (gtk_widget_get_type (), &range_info);

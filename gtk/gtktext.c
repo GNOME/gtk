@@ -325,7 +325,8 @@ gtk_text_get_type ()
 	sizeof (GtkTextClass),
 	(GtkClassInitFunc) gtk_text_class_init,
 	(GtkObjectInitFunc) gtk_text_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       text_type = gtk_type_unique (gtk_widget_get_type (), &text_info);

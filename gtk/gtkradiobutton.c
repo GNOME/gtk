@@ -48,7 +48,8 @@ gtk_radio_button_get_type ()
 	sizeof (GtkRadioButtonClass),
 	(GtkClassInitFunc) gtk_radio_button_class_init,
 	(GtkObjectInitFunc) gtk_radio_button_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       radio_button_type = gtk_type_unique (gtk_check_button_get_type (), &radio_button_info);

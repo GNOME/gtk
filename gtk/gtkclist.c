@@ -252,7 +252,8 @@ gtk_clist_get_type ()
 	sizeof (GtkCListClass),
 	(GtkClassInitFunc) gtk_clist_class_init,
 	(GtkObjectInitFunc) gtk_clist_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       clist_type = gtk_type_unique (gtk_container_get_type (), &clist_info);

@@ -49,7 +49,8 @@ gtk_vpaned_get_type ()
 	sizeof (GtkVPanedClass),
 	(GtkClassInitFunc) gtk_vpaned_class_init,
 	(GtkObjectInitFunc) gtk_vpaned_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       vpaned_type = gtk_type_unique (gtk_paned_get_type (), &vpaned_info);

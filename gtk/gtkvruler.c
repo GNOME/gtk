@@ -51,7 +51,8 @@ gtk_vruler_get_type ()
 	sizeof (GtkVRulerClass),
 	(GtkClassInitFunc) gtk_vruler_class_init,
 	(GtkObjectInitFunc) gtk_vruler_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       vruler_type = gtk_type_unique (gtk_ruler_get_type (), &vruler_info);

@@ -40,7 +40,8 @@ gtk_radio_menu_item_get_type ()
         sizeof (GtkRadioMenuItemClass),
         (GtkClassInitFunc) gtk_radio_menu_item_class_init,
         (GtkObjectInitFunc) gtk_radio_menu_item_init,
-        (GtkArgFunc) NULL,
+        (GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       radio_menu_item_type = gtk_type_unique (gtk_check_menu_item_get_type (), &radio_menu_item_info);

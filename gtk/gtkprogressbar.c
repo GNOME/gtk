@@ -47,7 +47,8 @@ gtk_progress_bar_get_type ()
 	sizeof (GtkProgressBarClass),
 	(GtkClassInitFunc) gtk_progress_bar_class_init,
 	(GtkObjectInitFunc) gtk_progress_bar_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       progress_bar_type = gtk_type_unique (gtk_widget_get_type (), &progress_bar_info);

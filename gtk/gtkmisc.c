@@ -38,7 +38,8 @@ gtk_misc_get_type ()
 	sizeof (GtkMiscClass),
 	(GtkClassInitFunc) gtk_misc_class_init,
 	(GtkObjectInitFunc) gtk_misc_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       misc_type = gtk_type_unique (gtk_widget_get_type (), &misc_info);

@@ -28,7 +28,14 @@ enum {
   SET_FOCUS,
   LAST_SIGNAL
 };
-
+enum {
+  ARG_0,
+  ARG_TYPE,
+  ARG_TITLE,
+  ARG_AUTO_SHRINK,
+  ARG_ALLOW_SHRINK,
+  ARG_ALLOW_GROW
+};
 
 typedef gint (*GtkWindowSignal1) (GtkObject *object,
 				  gpointer   arg1,
@@ -50,8 +57,9 @@ static void gtk_window_marshal_signal_2 (GtkObject      *object,
 					 GtkArg         *args);
 static void gtk_window_class_init         (GtkWindowClass    *klass);
 static void gtk_window_init               (GtkWindow         *window);
-static void gtk_window_arg                (GtkWindow         *window,
-					   GtkArg            *arg);
+static void gtk_window_set_arg            (GtkWindow         *window,
+					   GtkArg            *arg,
+					   guint	      arg_id);
 static void gtk_window_destroy            (GtkObject         *object);
 static void gtk_window_show               (GtkWidget         *widget);
 static void gtk_window_hide               (GtkWidget         *widget);
@@ -114,7 +122,8 @@ gtk_window_get_type ()
 	sizeof (GtkWindowClass),
 	(GtkClassInitFunc) gtk_window_class_init,
 	(GtkObjectInitFunc) gtk_window_init,
-	(GtkArgFunc) gtk_window_arg,
+	(GtkArgSetFunc) gtk_window_set_arg,
+	(GtkArgGetFunc) NULL,
       };
 
       window_type = gtk_type_unique (gtk_bin_get_type (), &window_info);
@@ -136,11 +145,11 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   parent_class = gtk_type_class (gtk_bin_get_type ());
 
-  gtk_object_add_arg_type ("GtkWindow::type", GTK_TYPE_WINDOW_TYPE);
-  gtk_object_add_arg_type ("GtkWindow::title", GTK_TYPE_STRING);
-  gtk_object_add_arg_type ("GtkWindow::auto_shrink", GTK_TYPE_BOOL);
-  gtk_object_add_arg_type ("GtkWindow::allow_shrink", GTK_TYPE_BOOL);
-  gtk_object_add_arg_type ("GtkWindow::allow_grow", GTK_TYPE_BOOL);
+  gtk_object_add_arg_type ("GtkWindow::type", GTK_TYPE_WINDOW_TYPE, ARG_TYPE);
+  gtk_object_add_arg_type ("GtkWindow::title", GTK_TYPE_STRING, ARG_TITLE);
+  gtk_object_add_arg_type ("GtkWindow::auto_shrink", GTK_TYPE_BOOL, ARG_AUTO_SHRINK);
+  gtk_object_add_arg_type ("GtkWindow::allow_shrink", GTK_TYPE_BOOL, ARG_ALLOW_SHRINK);
+  gtk_object_add_arg_type ("GtkWindow::allow_grow", GTK_TYPE_BOOL, ARG_ALLOW_GROW);
 
   window_signals[MOVE_RESIZE] =
     gtk_signal_new ("move_resize",
@@ -212,28 +221,29 @@ gtk_window_init (GtkWindow *window)
 }
 
 static void
-gtk_window_arg (GtkWindow *window,
-		GtkArg    *arg)
+gtk_window_set_arg (GtkWindow  *window,
+		    GtkArg     *arg,
+		    guint	arg_id)
 {
-  if (strcmp (arg->name, "type") == 0)
+  switch (arg_id)
     {
+    case ARG_TYPE:
       window->type = GTK_VALUE_ENUM(*arg);
-    }
-  else if (strcmp (arg->name, "title") == 0)
-    {
+      break;
+    case ARG_TITLE:
       gtk_window_set_title (window, GTK_VALUE_STRING(*arg));
-    }
-  else if (strcmp (arg->name, "auto_shrink") == 0)
-    {
+      break;
+    case ARG_AUTO_SHRINK:
       window->auto_shrink = (GTK_VALUE_BOOL(*arg) != FALSE);
-    }
-  else if (strcmp (arg->name, "allow_shrink") == 0)
-    {
+      break;
+    case ARG_ALLOW_SHRINK:
       window->allow_shrink = (GTK_VALUE_BOOL(*arg) != FALSE);
-    }
-  else if (strcmp (arg->name, "allow_grow") == 0)
-    {
+      break;
+    case ARG_ALLOW_GROW:
       window->allow_grow = (GTK_VALUE_BOOL(*arg) != FALSE);
+      break;
+    default:
+      g_assert_not_reached ();
     }
 }
 

@@ -53,7 +53,8 @@ gtk_vscrollbar_get_type ()
 	sizeof (GtkVScrollbarClass),
 	(GtkClassInitFunc) gtk_vscrollbar_class_init,
 	(GtkObjectInitFunc) gtk_vscrollbar_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       vscrollbar_type = gtk_type_unique (gtk_scrollbar_get_type (), &vscrollbar_info);

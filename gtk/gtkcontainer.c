@@ -28,6 +28,13 @@ enum {
   FOCUS,
   LAST_SIGNAL
 };
+enum {
+  ARG_0,
+  ARG_BORDER_WIDTH,
+  ARG_AUTO_RESIZE,
+  ARG_BLOCK_RESIZE,
+  ARG_CHILD
+};
 
 
 typedef void (*GtkContainerSignal1) (GtkObject *object,
@@ -64,8 +71,9 @@ static void gtk_container_marshal_signal_4 (GtkObject      *object,
 
 static void gtk_container_class_init        (GtkContainerClass *klass);
 static void gtk_container_init              (GtkContainer      *container);
-static void gtk_container_arg               (GtkContainer      *container,
-					     GtkArg            *arg);
+static void gtk_container_set_arg           (GtkContainer      *container,
+					     GtkArg            *arg,
+					     guint		arg_id);
 static gint gtk_real_container_need_resize  (GtkContainer      *container);
 static gint gtk_real_container_focus        (GtkContainer      *container,
 					     GtkDirectionType   direction);
@@ -105,7 +113,8 @@ gtk_container_get_type ()
 	sizeof (GtkContainerClass),
 	(GtkClassInitFunc) gtk_container_class_init,
 	(GtkObjectInitFunc) gtk_container_init,
-	(GtkArgFunc) gtk_container_arg,
+	(GtkArgSetFunc) gtk_container_set_arg,
+	(GtkArgGetFunc) NULL,
       };
 
       container_type = gtk_type_unique (gtk_widget_get_type (), &container_info);
@@ -123,10 +132,10 @@ gtk_container_class_init (GtkContainerClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
-  gtk_object_add_arg_type ("GtkContainer::border_width", GTK_TYPE_LONG);
-  gtk_object_add_arg_type ("GtkContainer::auto_resize", GTK_TYPE_BOOL);
-  gtk_object_add_arg_type ("GtkContainer::block_resize", GTK_TYPE_BOOL);
-  gtk_object_add_arg_type ("GtkContainer::child", GTK_TYPE_WIDGET);
+  gtk_object_add_arg_type ("GtkContainer::border_width", GTK_TYPE_LONG, ARG_BORDER_WIDTH);
+  gtk_object_add_arg_type ("GtkContainer::auto_resize", GTK_TYPE_BOOL, ARG_AUTO_RESIZE);
+  gtk_object_add_arg_type ("GtkContainer::block_resize", GTK_TYPE_BOOL, ARG_BLOCK_RESIZE);
+  gtk_object_add_arg_type ("GtkContainer::child", GTK_TYPE_WIDGET, ARG_CHILD);
 
   container_signals[ADD] =
     gtk_signal_new ("add",
@@ -193,30 +202,32 @@ gtk_container_init (GtkContainer *container)
 }
 
 static void
-gtk_container_arg (GtkContainer *container,
-		   GtkArg       *arg)
+gtk_container_set_arg (GtkContainer *container,
+		       GtkArg       *arg,
+		       guint	     arg_id)
 {
-  if (strcmp (arg->name, "border_width") == 0)
+  switch (arg_id)
     {
+    case ARG_BORDER_WIDTH:
       gtk_container_border_width (container, GTK_VALUE_LONG (*arg));
-    }
-  else if (strcmp (arg->name, "auto_resize") == 0)
-    {
+      break;
+    case ARG_AUTO_RESIZE:
       if (GTK_VALUE_BOOL (*arg))
 	gtk_container_enable_resize (container);
       else
 	gtk_container_disable_resize (container);
-    }
-  else if (strcmp (arg->name, "block_resize") == 0)
-    {
+      break;
+    case ARG_BLOCK_RESIZE:
       if (GTK_VALUE_BOOL (*arg))
 	gtk_container_block_resize (container);
       else
 	gtk_container_unblock_resize (container);
-    }
-  else if (strcmp (arg->name, "child") == 0)
-    {
+      break;
+    case ARG_CHILD:
       gtk_container_add (container, GTK_WIDGET (GTK_VALUE_OBJECT (*arg)));
+      break;
+    default:
+      g_assert_not_reached ();
     }
 }
 

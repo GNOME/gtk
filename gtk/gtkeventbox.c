@@ -46,7 +46,8 @@ gtk_event_box_get_type ()
 	sizeof (GtkEventBoxClass),
 	(GtkClassInitFunc) gtk_event_box_class_init,
 	(GtkObjectInitFunc) gtk_event_box_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       event_box_type = gtk_type_unique (gtk_bin_get_type (), &event_box_info);

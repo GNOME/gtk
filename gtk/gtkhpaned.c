@@ -49,7 +49,8 @@ gtk_hpaned_get_type ()
 	sizeof (GtkHPanedClass),
 	(GtkClassInitFunc) gtk_hpaned_class_init,
 	(GtkObjectInitFunc) gtk_hpaned_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       hpaned_type = gtk_type_unique (gtk_paned_get_type (), &hpaned_info);

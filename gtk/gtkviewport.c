@@ -56,7 +56,8 @@ gtk_viewport_get_type ()
 	sizeof (GtkViewportClass),
 	(GtkClassInitFunc) gtk_viewport_class_init,
 	(GtkObjectInitFunc) gtk_viewport_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       viewport_type = gtk_type_unique (gtk_bin_get_type (), &viewport_info);

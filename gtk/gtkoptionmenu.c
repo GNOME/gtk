@@ -75,7 +75,8 @@ gtk_option_menu_get_type ()
 	sizeof (GtkOptionMenuClass),
 	(GtkClassInitFunc) gtk_option_menu_class_init,
 	(GtkObjectInitFunc) gtk_option_menu_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       option_menu_type = gtk_type_unique (gtk_button_get_type (), &option_menu_info);

@@ -45,7 +45,8 @@ gtk_label_get_type ()
 	sizeof (GtkLabelClass),
 	(GtkClassInitFunc) gtk_label_class_init,
 	(GtkObjectInitFunc) gtk_label_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       label_type = gtk_type_unique (gtk_misc_get_type (), &label_info);

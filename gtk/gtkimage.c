@@ -39,7 +39,8 @@ gtk_image_get_type ()
 	sizeof (GtkImageClass),
 	(GtkClassInitFunc) gtk_image_class_init,
 	(GtkObjectInitFunc) gtk_image_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       image_type = gtk_type_unique (gtk_misc_get_type (), &image_info);

@@ -61,7 +61,8 @@ gtk_handle_box_get_type ()
 	sizeof (GtkHandleBoxClass),
 	(GtkClassInitFunc) gtk_handle_box_class_init,
 	(GtkObjectInitFunc) gtk_handle_box_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       handle_box_type = gtk_type_unique (gtk_event_box_get_type (), &handle_box_info);

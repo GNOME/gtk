@@ -41,7 +41,8 @@ gtk_pixmap_get_type ()
 	sizeof (GtkPixmapClass),
 	(GtkClassInitFunc) gtk_pixmap_class_init,
 	(GtkObjectInitFunc) gtk_pixmap_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       pixmap_type = gtk_type_unique (gtk_misc_get_type (), &pixmap_info);

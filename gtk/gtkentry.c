@@ -227,7 +227,8 @@ gtk_entry_get_type ()
 	sizeof (GtkEntryClass),
 	(GtkClassInitFunc) gtk_entry_class_init,
 	(GtkObjectInitFunc) gtk_entry_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+	(GtkArgGetFunc) NULL,
       };
 
       entry_type = gtk_type_unique (gtk_widget_get_type (), &entry_info);

@@ -50,7 +50,8 @@ gtk_aspect_frame_get_type ()
 	sizeof (GtkAspectFrameClass),
 	(GtkClassInitFunc) gtk_aspect_frame_class_init,
 	(GtkObjectInitFunc) gtk_aspect_frame_init,
-	(GtkArgFunc) NULL,
+        (GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       aspect_frame_type = gtk_type_unique (gtk_frame_get_type (), &aspect_frame_info);

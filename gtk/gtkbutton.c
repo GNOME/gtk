@@ -36,12 +36,18 @@ enum {
   LEAVE,
   LAST_SIGNAL
 };
+enum {
+  ARG_0,
+  ARG_LABEL
+};
+  
 
 
 static void gtk_button_class_init     (GtkButtonClass   *klass);
 static void gtk_button_init           (GtkButton        *button);
-static void gtk_button_arg            (GtkButton        *button,
-				       GtkArg           *arg);
+static void gtk_button_set_arg        (GtkButton        *button,
+				       GtkArg           *arg,
+				       guint		 arg_id);
 static void gtk_button_destroy        (GtkObject        *object);
 static void gtk_button_map            (GtkWidget        *widget);
 static void gtk_button_unmap          (GtkWidget        *widget);
@@ -101,7 +107,8 @@ gtk_button_get_type ()
 	sizeof (GtkButtonClass),
 	(GtkClassInitFunc) gtk_button_class_init,
 	(GtkObjectInitFunc) gtk_button_init,
-	(GtkArgFunc) gtk_button_arg,
+	(GtkArgSetFunc) gtk_button_set_arg,
+	(GtkArgGetFunc) NULL,
       };
 
       button_type = gtk_type_unique (gtk_container_get_type (), &button_info);
@@ -123,7 +130,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   parent_class = gtk_type_class (gtk_container_get_type ());
 
-  gtk_object_add_arg_type ("GtkButton::label", GTK_TYPE_STRING);
+  gtk_object_add_arg_type ("GtkButton::label", GTK_TYPE_STRING, ARG_LABEL);
 
   button_signals[PRESSED] =
     gtk_signal_new ("pressed",
@@ -204,23 +211,28 @@ gtk_button_init (GtkButton *button)
 }
 
 static void
-gtk_button_arg (GtkButton *button,
-		GtkArg    *arg)
+gtk_button_set_arg (GtkButton *button,
+		    GtkArg    *arg,
+		    guint      arg_id)
 {
-  if (strcmp (arg->name, "label") == 0)
+  GtkWidget *label;
+
+  switch (arg_id)
     {
-      GtkWidget *label;
-
+    case ARG_LABEL:
       gtk_container_disable_resize (GTK_CONTAINER (button));
-
+      
       if (button->child)
 	gtk_widget_destroy (button->child);
-
+      
       label = gtk_label_new (GTK_VALUE_STRING(*arg));
       gtk_widget_show (label);
-
+      
       gtk_container_add (GTK_CONTAINER (button), label);
       gtk_container_enable_resize (GTK_CONTAINER (button));
+      break;
+    default:
+      g_assert_not_reached ();
     }
 }
 

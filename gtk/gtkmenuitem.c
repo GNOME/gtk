@@ -86,7 +86,8 @@ gtk_menu_item_get_type ()
 	sizeof (GtkMenuItemClass),
 	(GtkClassInitFunc) gtk_menu_item_class_init,
 	(GtkObjectInitFunc) gtk_menu_item_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       menu_item_type = gtk_type_unique (gtk_item_get_type (), &menu_item_info);

@@ -77,7 +77,8 @@ typedef struct _GtkTypeInfo    GtkTypeInfo;
 
 typedef void (*GtkClassInitFunc)  (gpointer klass);
 typedef void (*GtkObjectInitFunc) (gpointer object);
-typedef void (*GtkArgFunc) (GtkObject *object, GtkArg *arg);
+typedef void (*GtkArgGetFunc) (GtkObject *object, GtkArg *arg, guint arg_id);
+typedef void (*GtkArgSetFunc) (GtkObject *object, GtkArg *arg, guint arg_id);
 typedef gint (*GtkFunction) (gpointer data);
 typedef void (*GtkRemoveFunction) (gpointer data);
 typedef void (*GtkCallbackMarshal) (GtkObject *object,
@@ -89,7 +90,7 @@ typedef void (*GtkDestroyNotify) (gpointer data);
 struct _GtkArg
 {
   GtkType type;
-  char *name;
+  gchar *name;
 
   union {
     gchar char_data;
@@ -166,7 +167,8 @@ struct _GtkTypeInfo
   guint class_size;
   GtkClassInitFunc class_init_func;
   GtkObjectInitFunc object_init_func;
-  GtkArgFunc arg_func;
+  GtkArgSetFunc arg_set_func;
+  GtkArgGetFunc arg_get_func;
 };
 
 
@@ -185,7 +187,8 @@ gint     gtk_type_is_a              (GtkType      type,
 				     GtkType      is_a_type);
 void     gtk_type_set_arg           (GtkObject   *object,
 				     GtkType      type,
-				     GtkArg      *arg);
+				     GtkArg      *arg,
+				     guint	  arg_id);
 
 
 #ifdef __cplusplus

@@ -82,7 +82,8 @@ gtk_combo_box_get_type ()
 	sizeof (GtkComboBoxClass),
 	(GtkClassInitFunc) gtk_combo_box_class_init,
 	(GtkObjectInitFunc) gtk_combo_box_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       combo_box_type = gtk_type_unique (gtk_entry_get_type (), &combo_box_info);

@@ -66,7 +66,8 @@ gtk_table_get_type ()
 	sizeof (GtkTableClass),
 	(GtkClassInitFunc) gtk_table_class_init,
 	(GtkObjectInitFunc) gtk_table_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       table_type = gtk_type_unique (gtk_container_get_type (), &table_info);

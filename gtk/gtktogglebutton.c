@@ -58,7 +58,8 @@ gtk_toggle_button_get_type ()
 	sizeof (GtkToggleButtonClass),
 	(GtkClassInitFunc) gtk_toggle_button_class_init,
 	(GtkObjectInitFunc) gtk_toggle_button_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       toggle_button_type = gtk_type_unique (gtk_button_get_type (), &toggle_button_info);

@@ -61,7 +61,8 @@ gtk_fixed_get_type ()
 	sizeof (GtkFixedClass),
 	(GtkClassInitFunc) gtk_fixed_class_init,
 	(GtkObjectInitFunc) gtk_fixed_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       fixed_type = gtk_type_unique (gtk_container_get_type (), &fixed_info);

@@ -58,7 +58,8 @@ gtk_hscale_get_type ()
 	sizeof (GtkHScaleClass),
 	(GtkClassInitFunc) gtk_hscale_class_init,
 	(GtkObjectInitFunc) gtk_hscale_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       hscale_type = gtk_type_unique (gtk_scale_get_type (), &hscale_info);

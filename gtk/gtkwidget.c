@@ -80,6 +80,21 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+  ARG_0,
+  ARG_X,
+  ARG_Y,
+  ARG_WIDTH,
+  ARG_HEIGHT,
+  ARG_VISIBLE,
+  ARG_SENSITIVE,
+  ARG_EVENTS,
+  ARG_EXTENSION_EVENTS,
+  ARG_NAME,
+  ARG_STYLE,
+  ARG_PARENT
+};
+
 
 typedef void (*GtkWidgetSignal1) (GtkObject *object,
 				  gpointer   arg1,
@@ -116,8 +131,9 @@ static void gtk_widget_marshal_signal_4 (GtkObject	*object,
 
 static void gtk_widget_class_init		 (GtkWidgetClass    *klass);
 static void gtk_widget_init			 (GtkWidget	    *widget);
-static void gtk_widget_arg			 (GtkWidget	    *widget,
-						  GtkArg	    *arg);
+static void gtk_widget_set_arg			 (GtkWidget	    *widget,
+						  GtkArg	    *arg,
+						  guint		     arg_id);
 static void gtk_real_widget_destroy		 (GtkObject	    *object);
 static void gtk_real_widget_show		 (GtkWidget	    *widget);
 static void gtk_real_widget_hide		 (GtkWidget	    *widget);
@@ -205,7 +221,8 @@ gtk_widget_get_type ()
 	sizeof (GtkWidgetClass),
 	(GtkClassInitFunc) gtk_widget_class_init,
 	(GtkObjectInitFunc) gtk_widget_init,
-	(GtkArgFunc) gtk_widget_arg,
+	(GtkArgSetFunc) gtk_widget_set_arg,
+	(GtkArgGetFunc) NULL,
       };
       
       widget_type = gtk_type_unique (gtk_object_get_type (), &widget_info);
@@ -231,17 +248,17 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   
   parent_class = gtk_type_class (gtk_object_get_type ());
   
-  gtk_object_add_arg_type ("GtkWidget::x", GTK_TYPE_INT);
-  gtk_object_add_arg_type ("GtkWidget::y", GTK_TYPE_INT);
-  gtk_object_add_arg_type ("GtkWidget::width", GTK_TYPE_INT);
-  gtk_object_add_arg_type ("GtkWidget::height", GTK_TYPE_INT);
-  gtk_object_add_arg_type ("GtkWidget::visible", GTK_TYPE_BOOL);
-  gtk_object_add_arg_type ("GtkWidget::sensitive", GTK_TYPE_BOOL);
-  gtk_object_add_arg_type ("GtkWidget::events", GTK_TYPE_GDK_EVENT_MASK);
-  gtk_object_add_arg_type ("GtkWidget::extension_events", GTK_TYPE_GDK_EVENT_MASK);
-  gtk_object_add_arg_type ("GtkWidget::name", GTK_TYPE_STRING);
-  gtk_object_add_arg_type ("GtkWidget::style", GTK_TYPE_STYLE);
-  gtk_object_add_arg_type ("GtkWidget::parent", GTK_TYPE_CONTAINER);
+  gtk_object_add_arg_type ("GtkWidget::x", GTK_TYPE_INT, ARG_X);
+  gtk_object_add_arg_type ("GtkWidget::y", GTK_TYPE_INT, ARG_Y);
+  gtk_object_add_arg_type ("GtkWidget::width", GTK_TYPE_INT, ARG_WIDTH);
+  gtk_object_add_arg_type ("GtkWidget::height", GTK_TYPE_INT, ARG_HEIGHT);
+  gtk_object_add_arg_type ("GtkWidget::visible", GTK_TYPE_BOOL, ARG_VISIBLE);
+  gtk_object_add_arg_type ("GtkWidget::sensitive", GTK_TYPE_BOOL, ARG_SENSITIVE);
+  gtk_object_add_arg_type ("GtkWidget::events", GTK_TYPE_GDK_EVENT_MASK, ARG_EVENTS);
+  gtk_object_add_arg_type ("GtkWidget::extension_events", GTK_TYPE_GDK_EVENT_MASK, ARG_EXTENSION_EVENTS);
+  gtk_object_add_arg_type ("GtkWidget::name", GTK_TYPE_STRING, ARG_NAME);
+  gtk_object_add_arg_type ("GtkWidget::style", GTK_TYPE_STYLE, ARG_STYLE);
+  gtk_object_add_arg_type ("GtkWidget::parent", GTK_TYPE_CONTAINER, ARG_PARENT);
   
   widget_signals[SHOW] =
     gtk_signal_new ("show",
@@ -651,7 +668,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 }
 
 /*****************************************
- * gtk_widget_arg:
+ * gtk_widget_set_arg:
  *
  *   arguments:
  *
@@ -659,55 +676,50 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  *****************************************/
 
 static void
-gtk_widget_arg (GtkWidget *widget,
-		GtkArg	  *arg)
+gtk_widget_set_arg (GtkWidget	*widget,
+		    GtkArg	*arg,
+		    guint	 arg_id)
 {
-  if (strcmp (arg->name, "x") == 0)
+  switch (arg_id)
     {
+    case ARG_X:
       gtk_widget_set_uposition (widget, GTK_VALUE_INT(*arg), -2);
-    }
-  else if (strcmp (arg->name, "y") == 0)
-    {
+      break;
+    case ARG_Y:
       gtk_widget_set_uposition (widget, -2, GTK_VALUE_INT(*arg));
-    }
-  else if (strcmp (arg->name, "width") == 0)
-    {
+      break;
+    case ARG_WIDTH:
       gtk_widget_set_usize (widget, GTK_VALUE_INT(*arg), -1);
-    }
-  else if (strcmp (arg->name, "height") == 0)
-    {
+      break;
+    case ARG_HEIGHT:
       gtk_widget_set_usize (widget, -1, GTK_VALUE_INT(*arg));
-    }
-  else if (strcmp (arg->name, "visible") == 0)
-    {
+      break;
+    case ARG_VISIBLE:
       if (GTK_VALUE_BOOL(*arg))
 	gtk_widget_show (widget);
       else
 	gtk_widget_hide (widget);
-    }
-  else if (strcmp (arg->name, "sensitive") == 0)
-    {
+      break;
+    case ARG_SENSITIVE:
       gtk_widget_set_sensitive (widget, GTK_VALUE_BOOL(*arg));
-    }
-  else if (strcmp (arg->name, "events") == 0)
-    {
+      break;
+    case ARG_EVENTS:
       gtk_widget_set_events (widget, GTK_VALUE_FLAGS(*arg));
-    }
-  else if (strcmp (arg->name, "extension_events") == 0)
-    {
+      break;
+    case ARG_EXTENSION_EVENTS:
       gtk_widget_set_extension_events (widget, GTK_VALUE_FLAGS(*arg));
-    }
-  else if (strcmp (arg->name, "name") == 0)
-    {
+      break;
+    case ARG_NAME:
       gtk_widget_set_name (widget, GTK_VALUE_STRING(*arg));
-    }
-  else if (strcmp (arg->name, "style") == 0)
-    {
+      break;
+    case ARG_STYLE:
       gtk_widget_set_style (widget, (GtkStyle*)GTK_VALUE_BOXED(*arg));
-    }
-  else if (strcmp (arg->name, "parent") == 0)
-    {
+      break;
+    case ARG_PARENT:
       gtk_container_add (GTK_CONTAINER (GTK_VALUE_OBJECT(*arg)), widget);
+      break;
+    default:
+      g_assert_not_reached ();
     }
 }
 

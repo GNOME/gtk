@@ -54,7 +54,8 @@ gtk_hscrollbar_get_type ()
 	sizeof (GtkHScrollbarClass),
 	(GtkClassInitFunc) gtk_hscrollbar_class_init,
 	(GtkObjectInitFunc) gtk_hscrollbar_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       hscrollbar_type = gtk_type_unique (gtk_scrollbar_get_type (), &hscrollbar_info);

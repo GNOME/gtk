@@ -38,7 +38,8 @@ gtk_hseparator_get_type ()
 	sizeof (GtkHSeparatorClass),
 	(GtkClassInitFunc) gtk_hseparator_class_init,
 	(GtkObjectInitFunc) gtk_hseparator_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       hseparator_type = gtk_type_unique (gtk_separator_get_type (), &hseparator_info);

@@ -51,7 +51,8 @@ gtk_frame_get_type ()
 	sizeof (GtkFrameClass),
 	(GtkClassInitFunc) gtk_frame_class_init,
 	(GtkObjectInitFunc) gtk_frame_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       frame_type = gtk_type_unique (gtk_bin_get_type (), &frame_info);

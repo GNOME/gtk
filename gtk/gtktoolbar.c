@@ -104,7 +104,8 @@ gtk_toolbar_get_type (void)
 	sizeof (GtkToolbarClass),
 	(GtkClassInitFunc) gtk_toolbar_class_init,
 	(GtkObjectInitFunc) gtk_toolbar_init,
-	(GtkArgFunc) NULL
+	(GtkArgSetFunc) NULL,
+	(GtkArgGetFunc) NULL,
       };
 
       toolbar_type = gtk_type_unique (gtk_container_get_type (), &toolbar_info);

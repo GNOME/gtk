@@ -59,7 +59,8 @@ gtk_check_button_get_type ()
 	sizeof (GtkCheckButtonClass),
 	(GtkClassInitFunc) gtk_check_button_class_init,
 	(GtkObjectInitFunc) gtk_check_button_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       check_button_type = gtk_type_unique (gtk_toggle_button_get_type (), &check_button_info);

@@ -43,7 +43,8 @@ gtk_hbutton_box_get_type ()
 	sizeof (GtkHButtonBoxClass),
 	(GtkClassInitFunc) gtk_hbutton_box_class_init,
 	(GtkObjectInitFunc) gtk_hbutton_box_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       hbutton_box_type = gtk_type_unique (gtk_button_box_get_type (), &hbutton_box_info);

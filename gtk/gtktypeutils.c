@@ -271,8 +271,9 @@ gtk_type_is_a (GtkType type,
 
 void
 gtk_type_set_arg (GtkObject *object,
-		  GtkType      type,
-		  GtkArg    *arg)
+		  GtkType    type,
+		  GtkArg    *arg,
+		  guint	     arg_id)
 {
   GtkTypeNode *node;
 
@@ -281,8 +282,8 @@ gtk_type_set_arg (GtkObject *object,
 
   node = g_hash_table_lookup (type_hash_table, &type);
 
-  if (node->type_info.arg_func)
-    (* node->type_info.arg_func) (object, arg);
+  if (node && node->type_info.arg_set_func)
+    (* node->type_info.arg_set_func) (object, arg, arg_id);
 }
 
 static void
@@ -390,7 +391,8 @@ gtk_type_register_builtin (char   *name,
   info.object_size = info.class_size = 0;
   info.class_init_func = NULL;
   info.object_init_func = NULL;
-  info.arg_func = NULL;
+  info.arg_set_func = NULL;
+  info.arg_get_func = NULL;
 
   return gtk_type_unique (parent, &info);
 }

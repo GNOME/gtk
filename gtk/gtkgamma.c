@@ -210,7 +210,8 @@ gtk_gamma_curve_get_type (void)
 	sizeof (GtkGammaCurveClass),
 	(GtkClassInitFunc) gtk_gamma_curve_class_init,
 	(GtkObjectInitFunc) gtk_gamma_curve_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       gamma_curve_type =

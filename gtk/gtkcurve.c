@@ -62,7 +62,8 @@ gtk_curve_get_type (void)
 	sizeof (GtkCurveClass),
 	(GtkClassInitFunc) gtk_curve_class_init,
 	(GtkObjectInitFunc) gtk_curve_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       curve_type = gtk_type_unique (gtk_drawing_area_get_type (), &curve_info);

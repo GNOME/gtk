@@ -140,7 +140,8 @@ gtk_input_dialog_get_type ()
 	sizeof (GtkInputDialogClass),
 	(GtkClassInitFunc) gtk_input_dialog_class_init,
 	(GtkObjectInitFunc) gtk_input_dialog_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       input_dialog_type = gtk_type_unique (gtk_dialog_get_type (),
