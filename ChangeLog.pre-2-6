@@ -1,5 +1,9 @@
 2004-10-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c (location_entry_create): Backport 
+	the change from HEAD to not fill the entry with the currently
+	selected file or folder.
+
 	* gtk/gtkpaned.c (gtk_paned_compute_position): Reduce rounding 
 	error.  (#154658, John Cupitt)
 

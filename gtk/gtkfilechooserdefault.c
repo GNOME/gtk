@@ -5385,47 +5385,6 @@ _gtk_file_chooser_default_new (const char *file_system)
 			NULL);
 }
 
-/* Sets the file part of a file chooser entry from the file under the cursor */
-static void
-location_entry_set_from_list (GtkFileChooserDefault *impl,
-			      GtkFileChooserEntry   *entry)
-{
-  GtkTreePath *tree_path;
-  GtkTreeIter iter, child_iter;
-  const GtkFileInfo *info;
-  const char *name;
-
-  g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
-	    || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-
-  gtk_tree_view_get_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view), &tree_path, NULL);
-  if (!tree_path)
-    return;
-
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->sort_model), &iter, tree_path);
-  gtk_tree_path_free (tree_path);
-
-  gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model, &child_iter, &iter);
-
-  info = _gtk_file_system_model_get_info (impl->browse_files_model, &child_iter);
-  if (!info)
-    return;
-
-  name = gtk_file_info_get_display_name (info);
-  _gtk_file_chooser_entry_set_file_part (entry, name);
-}
-
-/* Sets the file part of a file chooser entry from the Name entry in save mode */
-static void
-location_entry_set_from_save_name (GtkFileChooserDefault *impl,
-				   GtkFileChooserEntry   *entry)
-{
-  g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
-	    || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
-
-  _gtk_file_chooser_entry_set_file_part (entry, gtk_entry_get_text (GTK_ENTRY (impl->save_file_name_entry)));
-}
-
 static GtkWidget *
 location_entry_create (GtkFileChooserDefault *impl)
 {
@@ -5440,10 +5399,11 @@ location_entry_create (GtkFileChooserDefault *impl)
   _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (entry), impl->action);
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
       || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-    location_entry_set_from_list (impl, GTK_FILE_CHOOSER_ENTRY (entry));
+    _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (entry), "");
   else if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-    location_entry_set_from_save_name (impl, GTK_FILE_CHOOSER_ENTRY (entry));
+    _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (entry),
+					   gtk_entry_get_text (GTK_ENTRY (impl->save_file_name_entry)));
   else
     g_assert_not_reached ();
 
