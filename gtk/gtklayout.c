@@ -23,8 +23,25 @@
 
 #include "gtklayout.h"
 #include "gtksignal.h"
+#include "gtkprivate.h"
 #include "gdk/gdkx.h"
 
+typedef struct _GtkLayoutAdjData GtkLayoutAdjData;
+typedef struct _GtkLayoutChild   GtkLayoutChild;
+
+struct _GtkLayoutAdjData {
+  gint dx;
+  gint dy;
+};
+
+struct _GtkLayoutChild {
+  GtkWidget *widget;
+  gint x;
+  gint y;
+};
+
+#define IS_ONSCREEN(x,y) ((x >= G_MINSHORT) && (x <= G_MAXSHORT) && \
+                          (y >= G_MINSHORT) && (y <= G_MAXSHORT))
 
 static void     gtk_layout_class_init         (GtkLayoutClass *class);
 static void     gtk_layout_init               (GtkLayout      *layout);
@@ -51,12 +68,19 @@ static void     gtk_layout_set_adjustments    (GtkLayout     *layout,
 					       GtkAdjustment *hadj,
 					       GtkAdjustment *vadj);
 
-static void     gtk_layout_realize_child      (GtkLayout      *layout,
-					       GtkLayoutChild *child);
 static void     gtk_layout_position_child     (GtkLayout      *layout,
-					       GtkLayoutChild *child,
-					       gboolean        force_allocate);
+					       GtkLayoutChild *child);
+static void     gtk_layout_allocate_child     (GtkLayout      *layout,
+					       GtkLayoutChild *child);
 static void     gtk_layout_position_children  (GtkLayout      *layout);
+
+static void     gtk_layout_adjust_allocations_recurse (GtkWidget *widget,
+						       gpointer   cb_data);
+static void     gtk_layout_adjust_allocations         (GtkLayout *layout,
+					               gint       dx,
+						       gint       dy);
+
+
 
 static void     gtk_layout_expose_area        (GtkLayout      *layout,
 					       gint            x, 
@@ -74,10 +98,18 @@ static GdkFilterReturn gtk_layout_main_filter (GdkXEvent      *gdk_xevent,
 
 static gboolean gtk_layout_gravity_works      (void);
 static void     gtk_layout_set_static_gravity (GdkWindow *win,
-					       gboolean   op);
+					       gboolean   is_parent,
+					       gboolean   on);
+
+static void     gtk_layout_add_child_cb    (GdkWindow *parent, 
+					    GdkWindow *child, 
+					    gpointer   data);
+static void     gtk_layout_remove_child_cb (GdkWindow *parent, 
+					    GdkWindow *child, 
+					    gpointer   data);
+
 
 static GtkWidgetClass *parent_class = NULL;
-static gboolean gravity_works;
 
 /* Public interface
  */
@@ -209,24 +241,33 @@ gtk_layout_put (GtkLayout     *layout,
   child = g_new (GtkLayoutChild, 1);
 
   child->widget = child_widget;
-  child->window = NULL;
   child->x = x;
   child->y = y;
   child->widget->requisition.width = 0;
   child->widget->requisition.height = 0;
-  child->mapped = FALSE;
 
   layout->children = g_list_append (layout->children, child);
   
   gtk_widget_set_parent (child_widget, GTK_WIDGET (layout));
+  if (GTK_WIDGET_REALIZED (layout))
+    gtk_widget_set_parent_window (child->widget, layout->bin_window);
 
-  gtk_widget_size_request (child->widget, &child->widget->requisition);
-  
-  if (GTK_WIDGET_REALIZED (layout) &&
-      !GTK_WIDGET_REALIZED (child_widget))
-    gtk_layout_realize_child (layout, child);
+  if (!IS_ONSCREEN (x, y))
+    GTK_PRIVATE_SET_FLAG (child_widget, GTK_IS_OFFSCREEN);
 
-  gtk_layout_position_child (layout, child, TRUE);
+  if (GTK_WIDGET_VISIBLE (layout))
+    {
+      if (GTK_WIDGET_REALIZED (layout) &&
+	  !GTK_WIDGET_REALIZED (child_widget))
+	gtk_widget_realize (child_widget);
+      
+      if (GTK_WIDGET_MAPPED (layout) &&
+	  !GTK_WIDGET_MAPPED (child_widget))
+	gtk_widget_map (child_widget);
+    }
+
+  if (GTK_WIDGET_VISIBLE (child_widget) && GTK_WIDGET_VISIBLE (layout))
+    gtk_widget_queue_resize (child_widget);
 }
 
 void           
@@ -245,15 +286,18 @@ gtk_layout_move (GtkLayout     *layout,
   while (tmp_list)
     {
       child = tmp_list->data;
+      tmp_list = tmp_list->next;
+
       if (child->widget == child_widget)
 	{
 	  child->x = x;
 	  child->y = y;
-	  
-	  gtk_layout_position_child (layout, child, TRUE);
+
+	  if (GTK_WIDGET_VISIBLE (child_widget) && GTK_WIDGET_VISIBLE (layout))
+	    gtk_widget_queue_resize (child_widget);
+
 	  return;
 	}
-      tmp_list = tmp_list->next;
     }
 }
 
@@ -353,8 +397,6 @@ gtk_layout_class_init (GtkLayoutClass *class)
 		    gtk_marshal_NONE__POINTER_POINTER,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 
-  gravity_works = gtk_layout_gravity_works ();
-
   container_class->remove = gtk_layout_remove;
   container_class->forall = gtk_layout_forall;
 
@@ -417,14 +459,12 @@ gtk_layout_realize (GtkWidget *widget)
 
   attributes.x = 0;
   attributes.y = 0;
-  attributes.event_mask = gtk_widget_get_events (widget);
+  attributes.event_mask = GDK_EXPOSURE_MASK | 
+                          gtk_widget_get_events (widget);
 
   layout->bin_window = gdk_window_new (widget->window,
 					&attributes, attributes_mask);
   gdk_window_set_user_data (layout->bin_window, widget);
-
-  if (gravity_works)
-    gtk_layout_set_static_gravity (layout->bin_window, TRUE);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
@@ -433,15 +473,15 @@ gtk_layout_realize (GtkWidget *widget)
   gdk_window_add_filter (widget->window, gtk_layout_main_filter, layout);
   gdk_window_add_filter (layout->bin_window, gtk_layout_filter, layout);
 
+  layout->gravity_works = gdk_window_set_static_gravities (layout->bin_window, TRUE);
+
   tmp_list = layout->children;
   while (tmp_list)
     {
       GtkLayoutChild *child = tmp_list->data;
-
-      if (GTK_WIDGET_VISIBLE (child->widget))
-	gtk_layout_realize_child (layout, child);
-	
       tmp_list = tmp_list->next;
+
+      gtk_widget_set_parent_window (child->widget, layout->bin_window);
     }
 }
 
@@ -462,17 +502,14 @@ gtk_layout_map (GtkWidget *widget)
   while (tmp_list)
     {
       GtkLayoutChild *child = tmp_list->data;
-
-      if (child->mapped && GTK_WIDGET_VISIBLE (child->widget))
-	{
-	  if (!GTK_WIDGET_MAPPED (child->widget))
-	    gtk_widget_map (child->widget);
-	  
-	  if (child->window)
-	    gdk_window_show (child->window);
-	}
-
       tmp_list = tmp_list->next;
+
+      if (GTK_WIDGET_VISIBLE (child->widget))
+	{
+	  if (!GTK_WIDGET_MAPPED (child->widget) && 
+	      !GTK_WIDGET_IS_OFFSCREEN (child->widget))
+	    gtk_widget_map (child->widget);
+	}
     }
 
   gdk_window_show (layout->bin_window);
@@ -482,47 +519,19 @@ gtk_layout_map (GtkWidget *widget)
 static void 
 gtk_layout_unrealize (GtkWidget *widget)
 {
-  GList *tmp_list;
   GtkLayout *layout;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_LAYOUT (widget));
 
   layout = GTK_LAYOUT (widget);
-
-  tmp_list = layout->children;
 
   gdk_window_set_user_data (layout->bin_window, NULL);
   gdk_window_destroy (layout->bin_window);
   layout->bin_window = NULL;
 
-  while (tmp_list)
-    {
-      GtkLayoutChild *child = tmp_list->data;
-
-      if (child->window)
-	{
-	  gdk_window_set_user_data (child->window, NULL);
-	  gdk_window_destroy (child->window);
-	  child->window = NULL;
-	}
-	
-      tmp_list = tmp_list->next;
-    }
-
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
-}
-
-static void 
-gtk_layout_draw (GtkWidget *widget, GdkRectangle *area)
-{
-  GtkLayout *layout;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_LAYOUT (widget));
-
-  layout = GTK_LAYOUT (widget);
 }
 
 static void     
@@ -545,9 +554,9 @@ gtk_layout_size_request (GtkWidget     *widget,
   while (tmp_list)
     {
       GtkLayoutChild *child = tmp_list->data;
-      gtk_widget_size_request (child->widget, &child->widget->requisition);
-      
       tmp_list = tmp_list->next;
+
+      gtk_widget_size_request (child->widget, &child->widget->requisition);
     }
 }
 
@@ -570,9 +579,10 @@ gtk_layout_size_allocate (GtkWidget     *widget,
   while (tmp_list)
     {
       GtkLayoutChild *child = tmp_list->data;
-      gtk_layout_position_child (layout, child, TRUE);
-      
       tmp_list = tmp_list->next;
+
+      gtk_layout_position_child (layout, child);
+      gtk_layout_allocate_child (layout, child);
     }
 
   if (GTK_WIDGET_REALIZED (widget))
@@ -587,11 +597,45 @@ gtk_layout_size_allocate (GtkWidget     *widget,
 
   layout->hadjustment->page_size = allocation->width;
   layout->hadjustment->page_increment = allocation->width / 2;
+  layout->hadjustment->lower = 0;
+  layout->hadjustment->upper = layout->width;
   gtk_signal_emit_by_name (GTK_OBJECT (layout->hadjustment), "changed");
 
   layout->vadjustment->page_size = allocation->height;
   layout->vadjustment->page_increment = allocation->height / 2;
+  layout->vadjustment->lower = 0;
+  layout->vadjustment->upper = layout->height;
   gtk_signal_emit_by_name (GTK_OBJECT (layout->vadjustment), "changed");
+}
+
+static void 
+gtk_layout_draw (GtkWidget *widget, GdkRectangle *area)
+{
+  GList *tmp_list;
+  GtkLayout *layout;
+  GdkRectangle child_area;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_LAYOUT (widget));
+
+  layout = GTK_LAYOUT (widget);
+
+  /* We don't have any way of telling themes about this properly,
+   * so we just assume a background pixmap
+   */
+  if (!GTK_WIDGET_APP_PAINTABLE (widget))
+    gdk_window_clear_area (layout->bin_window,
+			   area->x, area->y, area->width, area->height);
+  
+  tmp_list = layout->children;
+  while (tmp_list)
+    {
+      GtkLayoutChild *child = tmp_list->data;
+      tmp_list = tmp_list->next;
+
+      if (gtk_widget_intersect (child->widget, area, &child_area))
+	gtk_widget_draw (child->widget, &child_area);
+    }
 }
 
 static gint 
@@ -599,24 +643,27 @@ gtk_layout_expose (GtkWidget *widget, GdkEventExpose *event)
 {
   GList *tmp_list;
   GtkLayout *layout;
+  GdkEventExpose child_event;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_LAYOUT (widget), FALSE);
 
   layout = GTK_LAYOUT (widget);
 
-  if (event->window == layout->bin_window)
+  if (event->window != layout->bin_window)
     return FALSE;
   
   tmp_list = layout->children;
   while (tmp_list)
     {
       GtkLayoutChild *child = tmp_list->data;
-
-      if (event->window == child->window)
-	return gtk_widget_event (child->widget, (GdkEvent *)event);
-	
       tmp_list = tmp_list->next;
+
+      child_event = *event;
+      if (GTK_WIDGET_DRAWABLE (child->widget) &&
+	  GTK_WIDGET_NO_WINDOW (child->widget) &&
+	  gtk_widget_intersect (child->widget, &event->area, &child_event.area))
+	gtk_widget_event (child->widget, (GdkEvent*) &child_event);
     }
 
   return FALSE;
@@ -648,21 +695,14 @@ gtk_layout_remove (GtkContainer *container,
 
   if (tmp_list)
     {
-      if (child->window)
-	{
-	  /* FIXME: This will cause problems for reparenting NO_WINDOW
-	   * widgets out of a GtkLayout
-	   */
-	  gdk_window_set_user_data (child->window, NULL);
-	  gdk_window_destroy (child->window);
-	}
-
       gtk_widget_unparent (widget);
 
       layout->children = g_list_remove_link (layout->children, tmp_list);
       g_list_free_1 (tmp_list);
       g_free (child);
     }
+
+  GTK_PRIVATE_UNSET_FLAG (widget, GTK_IS_OFFSCREEN);
 }
 
 static void
@@ -695,122 +735,49 @@ gtk_layout_forall (GtkContainer *container,
  */
 
 static void
-gtk_layout_realize_child (GtkLayout *layout,
-			  GtkLayoutChild *child)
-{
-  GtkWidget *widget;
-  gint attributes_mask;
-
-  widget = GTK_WIDGET (layout);
-  
-  if (GTK_WIDGET_NO_WINDOW (child->widget))
-    {
-      GdkWindowAttr attributes;
-      
-      gint x = child->x - layout->xoffset;
-      gint y = child->y - layout->xoffset;
-
-      attributes.window_type = GDK_WINDOW_CHILD;
-      attributes.x = x;
-      attributes.y = y;
-      attributes.width = child->widget->requisition.width;
-      attributes.height = child->widget->requisition.height;
-      attributes.wclass = GDK_INPUT_OUTPUT;
-      attributes.visual = gtk_widget_get_visual (widget);
-      attributes.colormap = gtk_widget_get_colormap (widget);
-      attributes.event_mask = GDK_EXPOSURE_MASK;
- 
-      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-      child->window =  gdk_window_new (layout->bin_window,
- 				       &attributes, attributes_mask);
-      gdk_window_set_user_data (child->window, widget);
-
-      if (child->window)
-	gtk_style_set_background (widget->style, 
-				  child->window, 
-				  GTK_STATE_NORMAL);
-    }
-
-  gtk_widget_set_parent_window (child->widget,
-				child->window ? child->window : layout->bin_window);
-  
-  gtk_widget_realize (child->widget);
-  
-  if (gravity_works)
-    gtk_layout_set_static_gravity (child->window ? child->window : child->widget->window, TRUE);
-}
-
-static void
 gtk_layout_position_child (GtkLayout      *layout,
-			   GtkLayoutChild *child,
-			   gboolean        force_allocate)
+			   GtkLayoutChild *child)
 {
   gint x;
   gint y;
 
   x = child->x - layout->xoffset;
   y = child->y - layout->yoffset;
-  
-  if ((x >= G_MINSHORT) && (x <= G_MAXSHORT) &&
-      (y >= G_MINSHORT) && (y <= G_MAXSHORT))
+
+  if (IS_ONSCREEN (x,y))
     {
-      if (!child->mapped)
+      if (GTK_WIDGET_MAPPED (layout) &&
+	  GTK_WIDGET_VISIBLE (child->widget))
 	{
-	  child->mapped = TRUE;
-
-	  if (GTK_WIDGET_MAPPED (layout) &&
-	      GTK_WIDGET_VISIBLE (child->widget))
-	    {
-	      if (child->window)
-		gdk_window_show (child->window);
-	      if (!GTK_WIDGET_MAPPED (child->widget))
-		gtk_widget_map (child->widget);
-	      
-	      child->mapped = TRUE;
-	      force_allocate = TRUE;
-	    }
+	  if (!GTK_WIDGET_MAPPED (child->widget))
+	    gtk_widget_map (child->widget);
 	}
-      
-      if (force_allocate)
-	{
-	  GtkAllocation allocation;
 
-	  if (GTK_WIDGET_NO_WINDOW (child->widget))
-	    {
-	      if (child->window)
-		{
-		  gdk_window_move_resize (child->window,
-					  x, y, 
-					  child->widget->requisition.width,
-					  child->widget->requisition.height);
-		}
-
-	      allocation.x = 0;
-	      allocation.y = 0;
-	    }
-	  else
-	    {
-	      allocation.x = x;
-	      allocation.y = y;
-	    }
-
-	  allocation.width = child->widget->requisition.width;
-	  allocation.height = child->widget->requisition.height;
-	  
-	  gtk_widget_size_allocate (child->widget, &allocation);
-	}
+      if (GTK_WIDGET_IS_OFFSCREEN (child->widget))
+	GTK_PRIVATE_UNSET_FLAG (child->widget, GTK_IS_OFFSCREEN);
     }
   else
     {
-      if (child->mapped)
-	{
-	  child->mapped = FALSE;
-	  if (child->window)
-	    gdk_window_hide (child->window);
-	  else if (GTK_WIDGET_MAPPED (child->widget))
-	    gtk_widget_unmap (child->widget);
-	}
+      if (!GTK_WIDGET_IS_OFFSCREEN (child->widget))
+	GTK_PRIVATE_SET_FLAG (child->widget, GTK_IS_OFFSCREEN);
+
+      if (GTK_WIDGET_MAPPED (child->widget))
+	gtk_widget_unmap (child->widget);
     }
+}
+
+static void
+gtk_layout_allocate_child (GtkLayout      *layout,
+			   GtkLayoutChild *child)
+{
+  GtkAllocation allocation;
+
+  allocation.x = child->x - layout->xoffset;
+  allocation.y = child->y - layout->yoffset;
+  allocation.width = child->widget->requisition.width;
+  allocation.height = child->widget->requisition.height;
+  
+  gtk_widget_size_allocate (child->widget, &allocation);
 }
 
 static void
@@ -821,9 +788,54 @@ gtk_layout_position_children (GtkLayout *layout)
   tmp_list = layout->children;
   while (tmp_list)
     {
-      gtk_layout_position_child (layout, tmp_list->data, FALSE);
-
+      GtkLayoutChild *child = tmp_list->data;
       tmp_list = tmp_list->next;
+      
+      gtk_layout_position_child (layout, child);
+    }
+}
+
+static void
+gtk_layout_adjust_allocations_recurse (GtkWidget *widget,
+				       gpointer   cb_data)
+{
+  GtkLayoutAdjData *data = cb_data;
+
+  widget->allocation.x += data->dx;
+  widget->allocation.y += data->dy;
+
+  if (GTK_WIDGET_NO_WINDOW (widget) &&
+      GTK_IS_CONTAINER (widget))
+    gtk_container_forall (GTK_CONTAINER (widget), 
+			  gtk_layout_adjust_allocations_recurse,
+			  cb_data);
+}
+
+static void
+gtk_layout_adjust_allocations (GtkLayout *layout,
+			       gint       dx,
+			       gint       dy)
+{
+  GList *tmp_list;
+  GtkLayoutAdjData data;
+
+  data.dx = dx;
+  data.dy = dy;
+
+  tmp_list = layout->children;
+  while (tmp_list)
+    {
+      GtkLayoutChild *child = tmp_list->data;
+      tmp_list = tmp_list->next;
+      
+      child->widget->allocation.x += dx;
+      child->widget->allocation.y += dy;
+
+      if (GTK_WIDGET_NO_WINDOW (child->widget) &&
+	  GTK_IS_CONTAINER (child->widget))
+	gtk_container_forall (GTK_CONTAINER (child->widget), 
+			      gtk_layout_adjust_allocations_recurse,
+			      &data);
     }
 }
   
@@ -856,9 +868,6 @@ gtk_layout_expose_area (GtkLayout    *layout,
 }
 
 /* This function is used to find events to process while scrolling
- * Removing the GravityNotify events is a bit of a hack - currently
- * GTK uses a lot of time processing them as GtkEventOther - a
- * feature that is obsolete and will be removed. Until then...
  */
 
 static Bool 
@@ -866,7 +875,7 @@ gtk_layout_expose_predicate (Display *display,
 		  XEvent  *xevent, 
 		  XPointer arg)
 {
-  if ((xevent->type == Expose) || (xevent->type == GravityNotify) ||
+  if ((xevent->type == Expose) || 
       ((xevent->xany.window == *(Window *)arg) &&
        (xevent->type == ConfigureNotify)))
     return True;
@@ -926,9 +935,11 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
       return;
     }
 
+  gtk_layout_adjust_allocations (layout, -dx, -dy);
+
   if (dx > 0)
     {
-      if (gravity_works)
+      if (layout->gravity_works)
 	{
 	  gdk_window_resize (layout->bin_window,
 			     widget->allocation.width + dx,
@@ -945,14 +956,14 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 	}
 
       gtk_layout_expose_area (layout, 
-			      widget->allocation.width - dx,
+			      MAX ((gint)widget->allocation.width - dx, 0),
 			      0,
-			      dx,
+			      MIN (dx, widget->allocation.width),
 			      widget->allocation.height);
     }
   else if (dx < 0)
     {
-      if (gravity_works)
+      if (layout->gravity_works)
 	{
 	  gdk_window_move_resize (layout->bin_window,
 				  dx, 0,
@@ -971,13 +982,13 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
       gtk_layout_expose_area (layout,
 			      0,
 			      0,
-			      -dx,
+			      MIN (-dx, widget->allocation.width),
 			      widget->allocation.height);
     }
 
   if (dy > 0)
     {
-      if (gravity_works)
+      if (layout->gravity_works)
 	{
 	  gdk_window_resize (layout->bin_window,
 			     widget->allocation.width,
@@ -995,13 +1006,13 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 
       gtk_layout_expose_area (layout, 
 			      0,
-			      widget->allocation.height - dy,
+			      MAX ((gint)widget->allocation.height - dy, 0),
 			      widget->allocation.width,
-			      dy);
+			      MIN (dy, widget->allocation.width));
     }
   else if (dy < 0)
     {
-      if (gravity_works)
+      if (layout->gravity_works)
 	{
 	  gdk_window_move_resize (layout->bin_window,
 				  0, dy,
@@ -1020,7 +1031,7 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 			      0,
 			      0,
 			      widget->allocation.height,
-			      -dy);
+			      MIN (-dy, (gint)widget->allocation.width));
     }
 
   gtk_layout_position_children (layout);
@@ -1037,6 +1048,7 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
    */
 
   gdk_flush();
+  g_print ("==== %d =====\n", XPending(GDK_DISPLAY()));
   while (XCheckIfEvent(GDK_WINDOW_XDISPLAY (layout->bin_window),
 		       &xevent,
 		       gtk_layout_expose_predicate,
@@ -1045,6 +1057,8 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
       GdkEvent event;
       GtkWidget *event_widget;
 
+      g_print ("#");
+      
       if ((xevent.xany.window == GDK_WINDOW_XWINDOW (layout->bin_window)) &&
 	  (gtk_layout_filter (&xevent, &event, layout) == GDK_FILTER_REMOVE))
 	continue;
@@ -1070,6 +1084,7 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 	    }
 	}
     }
+  g_print ("\n");
 }
 
 /* The main event filter. Actually, we probably don't really need
@@ -1111,7 +1126,7 @@ gtk_layout_filter (GdkXEvent *gdk_xevent,
       break;
       
     case ConfigureNotify:
-      if ((xevent->xconfigure.x != 0) || (xevent->xconfigure.y != 0))
+       if ((xevent->xconfigure.x != 0) || (xevent->xconfigure.y != 0))
 	{
 	  layout->configure_serial = xevent->xconfigure.serial;
 	  layout->scroll_x = xevent->xconfigure.x;
@@ -1160,71 +1175,5 @@ gtk_layout_main_filter (GdkXEvent *gdk_xevent,
 
   
   return GDK_FILTER_CONTINUE;
-}
-
-/* Routines to set the window gravity, and check whether it is
- * functional. Extra capabilities need to be added to GDK, so
- * we don't have to use Xlib here.
- */
-static void
-gtk_layout_set_static_gravity (GdkWindow *win, gboolean on)
-{
-  XSetWindowAttributes xattributes;
-
-  xattributes.win_gravity = on ? StaticGravity : NorthWestGravity;
-  xattributes.bit_gravity = on ? StaticGravity : NorthWestGravity;
-  
-  XChangeWindowAttributes (GDK_WINDOW_XDISPLAY (win),
-			   GDK_WINDOW_XWINDOW (win),
-			   CWBitGravity | CWWinGravity,
-			   &xattributes);
-}
-
-static gboolean
-gtk_layout_gravity_works (void)
-{
-  GdkWindowAttr attr;
-  
-  GdkWindow *parent;
-  GdkWindow *child;
-  gint y;
-
-  /* This particular server apparently has a bug so that the test
-   * works but the actual code crashes it
-   */
-  if ((!strcmp (XServerVendor (GDK_DISPLAY()), "Sun Microsystems, Inc.")) &&
-      (VendorRelease (GDK_DISPLAY()) == 3400))
-    return FALSE;
-
-  attr.window_type = GDK_WINDOW_TEMP;
-  attr.wclass = GDK_INPUT_OUTPUT;
-  attr.x = 0;
-  attr.y = 0;
-  attr.width = 100;
-  attr.height = 100;
-  attr.event_mask = 0;
-  
-  parent = gdk_window_new (NULL, &attr, GDK_WA_X | GDK_WA_Y);
-
-  attr.window_type = GDK_WINDOW_CHILD;
-  child = gdk_window_new (parent, &attr, GDK_WA_X | GDK_WA_Y);
-
-  gtk_layout_set_static_gravity (parent, TRUE);
-  gtk_layout_set_static_gravity (child, TRUE);
-
-  gdk_window_resize (parent, 100, 110);
-  gdk_window_move (parent, 0, -10);
-  gdk_window_move_resize (parent, 0, 0, 100, 100);
-
-  gdk_window_resize (parent, 100, 110);
-  gdk_window_move (parent, 0, -10);
-  gdk_window_move_resize (parent, 0, 0, 100, 100);
-
-  gdk_window_get_geometry (child, NULL, &y, NULL, NULL, NULL);
-
-  gdk_window_destroy (parent);
-  gdk_window_destroy (child);
-  
-  return  (y == -20);
 }
 

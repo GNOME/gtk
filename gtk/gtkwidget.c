@@ -172,6 +172,8 @@ static void gtk_widget_set_style_internal	 (GtkWidget	*widget,
 static void gtk_widget_set_style_recurse	 (GtkWidget	*widget,
 						  gpointer	 client_data);
 
+static gboolean gtk_widget_is_offscreen           (GtkWidget     *widget);
+
 static GtkWidgetAuxInfo* gtk_widget_aux_info_new     (void);
 static void		 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info);
 
@@ -1214,8 +1216,13 @@ gtk_widget_queue_clear_child (GtkWidget *widget)
 {
   GtkWidget *parent;
 
+  /* We check for GTK_WIDGET_IS_OFFSCREEN (widget), 
+   * and queue_clear_area(parent...) will check the rest of
+   * way up the tree with gtk_widget_is_offscreen (parent)
+   */
   parent = widget->parent;
-  if (parent && GTK_WIDGET_DRAWABLE (parent))
+  if (parent && GTK_WIDGET_DRAWABLE (parent) &&
+      !GTK_WIDGET_IS_OFFSCREEN (widget))
     gtk_widget_queue_clear_area (parent,
 				 widget->allocation.x,
 				 widget->allocation.y,
@@ -1800,7 +1807,8 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (widget->window && gdk_window_is_viewable (widget->window))
+  if (widget->window && gdk_window_is_viewable (widget->window) &&
+      !gtk_widget_is_offscreen (widget))
     gtk_widget_queue_draw_data (widget, x, y, width, height, NULL);
 }
 
@@ -1810,7 +1818,8 @@ gtk_widget_queue_draw (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (widget->window && gdk_window_is_viewable (widget->window))
+  if (widget->window && gdk_window_is_viewable (widget->window) &&
+      !gtk_widget_is_offscreen (widget))
     gtk_widget_queue_draw_data (widget, 0, 0, -1, -1, NULL);
 }
 
@@ -1826,7 +1835,8 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (!(widget->window && gdk_window_is_viewable (widget->window)))
+  if (!(widget->window && gdk_window_is_viewable (widget->window)) ||
+      gtk_widget_is_offscreen (widget))
     return;
 
   /* Find the correct widget */
@@ -4585,6 +4595,29 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 	}
       gtk_widget_unref (widget);
     }
+}
+
+/*************************************************************
+ * gtk_widget_is_offscreen:
+ *     Check if a widget is "offscreen"
+ *   arguments:
+ *     widget: a widget
+ *   results:
+ *     TRUE if the widget or any of ancestors has the
+ *     PRIVATE_GTK_WIDGET_IS_OFFSCREEN set.
+ *************************************************************/
+
+static gboolean 
+gtk_widget_is_offscreen (GtkWidget *widget)
+{
+  while (widget)
+    {
+      if (GTK_WIDGET_IS_OFFSCREEN (widget))
+	return TRUE;
+      widget = widget->parent;
+    }
+
+  return FALSE;
 }
 
 /*****************************************

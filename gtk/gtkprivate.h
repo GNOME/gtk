@@ -39,7 +39,8 @@ typedef enum
   PRIVATE_GTK_RESIZE_NEEDED	= 1 <<  3,
   PRIVATE_GTK_LEAVE_PENDING	= 1 <<  4,
   PRIVATE_GTK_HAS_SHAPE_MASK	= 1 <<  5,
-  PRIVATE_GTK_IN_REPARENT       = 1 <<  6
+  PRIVATE_GTK_IN_REPARENT       = 1 <<  6,
+  PRIVATE_GTK_IS_OFFSCREEN      = 1 <<  7
 } GtkPrivateFlags;
 
 /* Macros for extracting a widgets private_flags from GtkWidget.
@@ -52,6 +53,7 @@ typedef enum
 #define GTK_WIDGET_LEAVE_PENDING(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_LEAVE_PENDING) != 0)
 #define GTK_WIDGET_HAS_SHAPE_MASK(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_HAS_SHAPE_MASK) != 0)
 #define GTK_WIDGET_IN_REPARENT(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_IN_REPARENT) != 0)
+#define GTK_WIDGET_IS_OFFSCREEN(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_IS_OFFSCREEN) != 0)
 
 /* Macros for setting and clearing private widget flags.
  * we use a preprocessor string concatenation here for a clear

@@ -8284,12 +8284,18 @@ void create_layout (void)
       
       layout = gtk_layout_new (NULL, NULL);
       gtk_container_add (GTK_CONTAINER (scrolledwindow), layout);
+
+      /* We set step sizes here since GtkLayout does not set
+       * them itself.
+       */
+      GTK_LAYOUT (layout)->hadjustment->step_increment = 10.0;
+      GTK_LAYOUT (layout)->vadjustment->step_increment = 10.0;
       
       gtk_widget_set_events (layout, GDK_EXPOSURE_MASK);
       gtk_signal_connect (GTK_OBJECT (layout), "expose_event",
 			  GTK_SIGNAL_FUNC (layout_expose_handler), NULL);
       
-      gtk_layout_set_size (GTK_LAYOUT (layout), 1600, 64000);
+      gtk_layout_set_size (GTK_LAYOUT (layout), 1600, 128000);
       
       for (i=0 ; i < 16 ; i++)
 	for (j=0 ; j < 16 ; j++)
@@ -8304,7 +8310,7 @@ void create_layout (void)
 			    j*100, i*100);
 	  }
 
-      for (i=16; i < 640; i++)
+      for (i=16; i < 1280; i++)
 	{
 	  sprintf(buf, "Button %d, %d", i, 0);
 	  if (i % 2)

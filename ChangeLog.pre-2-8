@@ -1,3 +1,43 @@
+Wed Jan 20 11:19:00 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c: Use floor() instead of truncating
+	to integer values so we get translation invariance.
+
+	* gtk/gtklayout.c (gtk_layout_size_allocate): Set upper
+	and lower values for adjustments in size_allocate().
+
+	* gdk/gdkwindow.c gdk/gdk.h gdk/gdkprivate.h: New
+	function gdk_window_set_static_gravities() to set
+	up a window for guffaw scrolling.
+	
+	* gdk/gdkwindow.c (gdk_window_internal_destroy): Set flags
+	indicating destroyed state before cleanup.
+
+	* gtk/gtkprivate.h gtk/gtkwidget.c: Add a new
+	private flag IS_OFFSCREEN. If set, this indicates
+	to GTK+ that the widget is not to be considered
+	viewable regardless of its map state. Queued draws
+	on offscreen widgets are suppressed.
+
+	Added new function static gtk_widget_is_offscreen() to
+	check this flag on a widget and its ancestors.
+
+	* gtk/gtklayout.[ch]: Major revisions.
+
+	- Use gdk_window_set_static_gravities to set static gravity 
+	on all child windows, and thus avoid having to create a window
+	for NO_WINDOW children.
+
+	- Adjust allocations of children as we scroll them
+	so queued draws work correctly.
+
+	- Don't allocate our children directly in a put()
+	or move(); just queue a resize() like every other
+	widget.
+
+	* gtk/testgtk.c: Make the arrows on the scrollbars
+	work, create a larger and more demanding test.
+	
 Wed Jan 27 09:19:07 1999  Tim Janik  <timj@gtk.org>
 
 	* gdk/gdkcolor.c (gdk_colormap_unref): assert ref_count>0.

@@ -40,15 +40,6 @@ extern "C" {
 
 typedef struct _GtkLayout        GtkLayout;
 typedef struct _GtkLayoutClass   GtkLayoutClass;
-typedef struct _GtkLayoutChild   GtkLayoutChild;
-
-struct _GtkLayoutChild {
-  GtkWidget *widget;
-  GdkWindow *window;	/* For NO_WINDOW widgets */
-  gint x;
-  gint y;
-  gboolean mapped : 1;
-};
 
 struct _GtkLayout {
   GtkContainer container;
@@ -72,6 +63,8 @@ struct _GtkLayout {
   gint scroll_y;
 
   guint freeze_count;
+
+  guint gravity_works : 1;
 };
 
 struct _GtkLayoutClass {
@@ -99,19 +92,23 @@ void           gtk_layout_set_size        (GtkLayout     *layout,
 			                   guint          width,
 			                   guint          height);
 
-/* These disable and enable moving and repainting the scrolling window of the GtkLayout,
- * respectively.  If you want to update the layout's offsets but do not want it to
- * repaint itself, you should use these functions.
- */
-void           gtk_layout_freeze          (GtkLayout     *layout);
-void           gtk_layout_thaw            (GtkLayout     *layout);
-
 GtkAdjustment* gtk_layout_get_hadjustment (GtkLayout     *layout);
 GtkAdjustment* gtk_layout_get_vadjustment (GtkLayout     *layout);
 void           gtk_layout_set_hadjustment (GtkLayout     *layout,
 					   GtkAdjustment *adjustment);
 void           gtk_layout_set_vadjustment (GtkLayout     *layout,
 					   GtkAdjustment *adjustment);
+
+/* These disable and enable moving and repainting the scrolling window
+ * of the GtkLayout, respectively.  If you want to update the layout's
+ * offsets but do not want it to repaint itself, you should use these
+ * functions.
+ *
+ * - I don't understand these are supposed to work, so I suspect
+ * - they don't now.                    OWT 1/20/98
+ */
+void           gtk_layout_freeze          (GtkLayout     *layout);
+void           gtk_layout_thaw            (GtkLayout     *layout);
 
 #ifdef __cplusplus
 }

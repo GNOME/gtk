@@ -227,6 +227,11 @@ void gdk_window_merge_child_shapes (GdkWindow *window);
 gboolean gdk_window_is_visible     (GdkWindow *window);
 gboolean gdk_window_is_viewable    (GdkWindow *window);
 
+/* Set static bit gravity on the parent, and static
+ * window gravity on all children.
+ */
+gboolean gdk_window_set_static_gravities (GdkWindow *window,
+					  gboolean   use_static);   
 /*
  * The following function adds a global filter for all client
  * messages of type message_type

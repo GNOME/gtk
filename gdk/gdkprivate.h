@@ -64,6 +64,7 @@ struct _GdkWindowPrivate
   guint ref_count;
   guint destroyed : 2;
   guint mapped : 1;
+  guint guffaw_gravity : 1;
 
   gint extension_events;
 

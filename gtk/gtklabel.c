@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#include <math.h>
 #include <string.h>
 #include "gtklabel.h"
 #include "gdk/gdkkeysyms.h"
@@ -926,14 +927,14 @@ gtk_label_expose (GtkWidget      *widget,
       gdk_gc_set_clip_rectangle (widget->style->white_gc, &event->area);
       gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state], &event->area);
       
-      x = widget->allocation.x + misc->xpad +
-	(widget->allocation.width - label->max_width - 2 * misc->xpad) 
-	* misc->xalign + 0.5;
+      x = floor (widget->allocation.x + misc->xpad +
+		 ((widget->allocation.width - label->max_width - 2 * misc->xpad) 
+		  * misc->xalign) + 0.5);
       
-      y = (widget->allocation.y
-	   + (widget->allocation.height
-	      - widget->requisition.height) * misc->yalign
-	   + misc->ypad + 0.5);
+      y = floor (widget->allocation.y
+		 + (widget->allocation.height
+		    - widget->requisition.height) * misc->yalign
+		 + misc->ypad + 0.5);
       for (word = label->words; word; word = word->next)
 	{
 	  gchar save = word->beginning[word->length];
