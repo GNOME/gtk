@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-07-10 00:22-0400\n"
-"PO-Revision-Date: 2004-04-21 17:13+0400\n"
+"PO-Revision-Date: 2004-07-22 09:08+0400\n"
 "Last-Translator: Dmitry G. Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1364,9 +1364,9 @@ msgid "Filesystem"
 msgstr "Файловая система"
 
 #: gtk/gtkfilesystemunix.c:731
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Не удалось получить информацию о файле \"%s\": %s"
+msgstr "Не удалось получить встроенный значок для \"%s\""
 
 #: gtk/gtkfilesystemunix.c:826
 #, c-format
