@@ -1,10 +1,11 @@
 # Slovenian translations of GTK+ messages
 # Copyright (C) 1999-2002 Free Software Foundation, Inc.
 # 
+ 
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 1.4.0\n"
-"POT-Creation-Date: 2002-02-27 18:10-0500\n"
+"POT-Creation-Date: 2002-02-26 00:34+0100\n"
 "PO-Revision-Date: 2002-02-26 00:23+0100\n"
 "Last-Translator: Andraž Tori <andraz.tori1@guest.arnes.si>\n"
 "Language-Team: slovenian <sl@li.org>\n"
@@ -117,6 +118,7 @@ msgstr ""
 #: gdk-pixbuf/io-bmp.c:267
 msgid "BMP image has unsupported header size"
 msgstr "Slika BMP ima nepodprto velikost glave"
+
 
 #: gdk-pixbuf/io-bmp.c:292 gdk-pixbuf/io-bmp.c:315
 msgid "BMP image has bogus header data"
@@ -590,46 +592,19 @@ msgstr "Podatki o pikslih slike so pokvarjeni"
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "nisem uspel rezervirati slikovnega medpomnilnika v velikosti %u bajtov"
 
-#. This is the text that should appear next to menu accelerators
-#. * that use the shift key. If the text on this key isn't typically
-#. * translated on keyboards used for your language, don't translate
-#. * this.
-#.
-#: gtk/gtkaccellabel.c:116
-msgid "Shift"
-msgstr ""
-
-#. This is the text that should appear next to menu accelerators
-#. * that use the control key. If the text on this key isn't typically
-#. * translated on keyboards used for your language, don't translate
-#. * this.
-#.
-#: gtk/gtkaccellabel.c:122
-msgid "Ctrl"
-msgstr ""
-
-#. This is the text that should appear next to menu accelerators
-#. * that use the alt key. If the text on this key isn't typically
-#. * translated on keyboards used for your language, don't translate
-#. * this.
-#.
-#: gtk/gtkaccellabel.c:128
-msgid "Alt"
-msgstr ""
-
-#: gtk/gtkaccellabel.c:136
+#: gtk/gtkaccellabel.c:121
 msgid "Accelerator Closure"
 msgstr "Zaprtje pospeševalnika"
 
-#: gtk/gtkaccellabel.c:137
+#: gtk/gtkaccellabel.c:122
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Zaprtje naj bo nadzorovano za spremembe pospeševalnika"
 
-#: gtk/gtkaccellabel.c:143
+#: gtk/gtkaccellabel.c:128
 msgid "Accelerator Widget"
 msgstr "Gradnik pospeševalnika"
 
-#: gtk/gtkaccellabel.c:144
+#: gtk/gtkaccellabel.c:129
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Gradnik, ki bo nadzorovan za spremembe pospeševalnika"
 
@@ -984,7 +959,7 @@ msgstr "Sličica zaprtja razširitve"
 msgid "Pixbuf for closed expander."
 msgstr "Sličica za zaprtje razširitve"
 
-#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
+#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:521 gtk/gtkprogressbar.c:207
 msgid "Text"
 msgstr "Besedilo"
 
@@ -1040,7 +1015,7 @@ msgstr "Barva ospredja"
 msgid "Foreground color as a GdkColor"
 msgstr "Barva ospredja kot GdkColor"
 
-#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
+#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:453 gtk/gtktexttag.c:277
 #: gtk/gtktextview.c:566
 msgid "Editable"
 msgstr "Uredljiv"
@@ -1328,49 +1303,49 @@ msgstr ""
 "vnosa, potegnite drugo barvo sem, ali kliknite z desnim gumbom in izberite "
 "\"Tu shrani barvo.\""
 
-#: gtk/gtkcolorsel.c:1704
+#: gtk/gtkcolorsel.c:1698
 msgid "Has Opacity Control"
 msgstr "Ima kontrolo prosojnosti"
 
-#: gtk/gtkcolorsel.c:1705
+#: gtk/gtkcolorsel.c:1699
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Ali izbirnik barv omogoča nastavljanje prosojnosti"
 
-#: gtk/gtkcolorsel.c:1711
+#: gtk/gtkcolorsel.c:1705
 msgid "Has palette"
 msgstr "Ima paleto"
 
-#: gtk/gtkcolorsel.c:1712
+#: gtk/gtkcolorsel.c:1706
 msgid "Whether a palette should be used"
 msgstr "Ali ima izbirnik barv paleto"
 
-#: gtk/gtkcolorsel.c:1718
+#: gtk/gtkcolorsel.c:1712
 msgid "Current Color"
 msgstr "Trenutna barva"
 
-#: gtk/gtkcolorsel.c:1719
+#: gtk/gtkcolorsel.c:1713
 msgid "The current color"
 msgstr "Trenutna barva"
 
-#: gtk/gtkcolorsel.c:1725
+#: gtk/gtkcolorsel.c:1719
 msgid "Current Alpha"
 msgstr "Trenutni alpha"
 
-#: gtk/gtkcolorsel.c:1726
+#: gtk/gtkcolorsel.c:1720
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Trenutna vrednost prosojnosti (0 popolnoma prosojno, 65535 popolnoma "
 "neprosojno)"
 
-#: gtk/gtkcolorsel.c:1739
+#: gtk/gtkcolorsel.c:1733
 msgid "Custom palette"
 msgstr "Poljubna paleta"
 
-#: gtk/gtkcolorsel.c:1740
+#: gtk/gtkcolorsel.c:1734
 msgid "Palette to use in the color selector"
 msgstr "Paleta, ki naj se uporabi v izbirniku barv"
 
-#: gtk/gtkcolorsel.c:1784
+#: gtk/gtkcolorsel.c:1778
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1378,74 +1353,74 @@ msgstr ""
 "Izberite barvo, ki jo želite, iz zunanjega obroča. Izberite temnost ali "
 "svetlost te barve z uporabno notranjega trikotnika."
 
-#: gtk/gtkcolorsel.c:1812
+#: gtk/gtkcolorsel.c:1806
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
 "Kliknite na pipalko, nato kliknite kjerkoli na zaslon za izbiro tiste barve."
 
-#: gtk/gtkcolorsel.c:1821
+#: gtk/gtkcolorsel.c:1815
 msgid "_Hue:"
 msgstr "_Odtenek:"
 
-#: gtk/gtkcolorsel.c:1822
+#: gtk/gtkcolorsel.c:1816
 msgid "Position on the color wheel."
 msgstr "Položaj na barvnem krogu"
 
-#: gtk/gtkcolorsel.c:1823
+#: gtk/gtkcolorsel.c:1817
 msgid "_Saturation:"
 msgstr "_Nasičenost:"
 
-#: gtk/gtkcolorsel.c:1824
+#: gtk/gtkcolorsel.c:1818
 msgid "\"Deepness\" of the color."
 msgstr "\"Globina\" barve."
 
-#: gtk/gtkcolorsel.c:1825
+#: gtk/gtkcolorsel.c:1819
 msgid "_Value:"
 msgstr "_Vrednost:"
 
-#: gtk/gtkcolorsel.c:1826
+#: gtk/gtkcolorsel.c:1820
 msgid "Brightness of the color."
 msgstr "Svetlost barve."
 
-#: gtk/gtkcolorsel.c:1827
+#: gtk/gtkcolorsel.c:1821
 msgid "_Red:"
 msgstr "_Rdeča:"
 
-#: gtk/gtkcolorsel.c:1828
+#: gtk/gtkcolorsel.c:1822
 msgid "Amount of red light in the color."
 msgstr "Količina rdeče luči v barvi."
 
-#: gtk/gtkcolorsel.c:1829
+#: gtk/gtkcolorsel.c:1823
 msgid "_Green:"
 msgstr "_Zelena:"
 
-#: gtk/gtkcolorsel.c:1830
+#: gtk/gtkcolorsel.c:1824
 msgid "Amount of green light in the color."
 msgstr "Količina zelene luči v barvi."
 
-#: gtk/gtkcolorsel.c:1831
+#: gtk/gtkcolorsel.c:1825
 msgid "_Blue:"
 msgstr "_Modra:"
 
-#: gtk/gtkcolorsel.c:1832
+#: gtk/gtkcolorsel.c:1826
 msgid "Amount of blue light in the color."
 msgstr "Količina modre luči v barvi."
 
-#: gtk/gtkcolorsel.c:1835
+#: gtk/gtkcolorsel.c:1829
 msgid "_Opacity:"
 msgstr "_Prosojnost:"
 
-#: gtk/gtkcolorsel.c:1843
+#: gtk/gtkcolorsel.c:1837
 msgid "Transparency of the currently-selected color."
 msgstr "Prosojnost trenutno izbrane barve."
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1852
 msgid "Color _Name:"
 msgstr "_Ime barve:"
 
-#: gtk/gtkcolorsel.c:1870
+#: gtk/gtkcolorsel.c:1864
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1453,7 +1428,7 @@ msgstr ""
 "V tem vnosu lahko vpišete šestajstiško vrednost (kot v HTML) ali enostavno "
 "ime barve (kot na primer 'oranžna')."
 
-#: gtk/gtkcolorsel.c:1889
+#: gtk/gtkcolorsel.c:1883
 msgid "_Palette"
 msgstr "Barvna paletaPaleta"
 
@@ -1594,40 +1569,40 @@ msgstr "Rob okoli področja dejavnosti"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Širina robu okoli področja gumbov na dnu dialoga"
 
-#: gtk/gtkentry.c:435 gtk/gtklabel.c:359
+#: gtk/gtkentry.c:433 gtk/gtklabel.c:359
 msgid "Cursor Position"
 msgstr "Položaj kazalca"
 
-#: gtk/gtkentry.c:436 gtk/gtklabel.c:360
+#: gtk/gtkentry.c:434 gtk/gtklabel.c:360
 msgid "The current position of the insertion cursor in chars."
 msgstr "Trenutni položaj kazalca vstavljanja v znakih."
 
-#: gtk/gtkentry.c:445 gtk/gtklabel.c:369
+#: gtk/gtkentry.c:443 gtk/gtklabel.c:369
 msgid "Selection Bound"
 msgstr "Meja izbire"
 
-#: gtk/gtkentry.c:446 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:444 gtk/gtklabel.c:370
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars."
 msgstr "Lega drugega konca izbire od kazalca (v znakih)."
 
-#: gtk/gtkentry.c:456
+#: gtk/gtkentry.c:454
 msgid "Whether the entry contents can be edited"
 msgstr "Ali je možno spremeniti vsebino vnosa"
 
-#: gtk/gtkentry.c:463
+#: gtk/gtkentry.c:461
 msgid "Maximum length"
 msgstr "Največja dolžina"
 
-#: gtk/gtkentry.c:464
+#: gtk/gtkentry.c:462
 msgid "Maximum number of characters for this entry"
 msgstr "Največje število znakov v tem vnosu"
 
-#: gtk/gtkentry.c:472
+#: gtk/gtkentry.c:470
 msgid "Visibility"
 msgstr "Vidnost"
 
-#: gtk/gtkentry.c:473
+#: gtk/gtkentry.c:471
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1635,28 +1610,28 @@ msgstr ""
 "NERESNIČNO prikaže \"nevidni znak\" namesto resničnega besedila (geselski "
 "način)"
 
-#: gtk/gtkentry.c:480
+#: gtk/gtkentry.c:478
 msgid "Has Frame"
 msgstr "Ima okvir"
 
-#: gtk/gtkentry.c:481
+#: gtk/gtkentry.c:479
 msgid "FALSE removes outside bevel from entry."
 msgstr "NERESNIČNO odstrani zunanjo obrobo vnosa"
 
-#: gtk/gtkentry.c:488
+#: gtk/gtkentry.c:486
 msgid "Invisible character"
 msgstr "Nevidni znak"
 
-#: gtk/gtkentry.c:489
+#: gtk/gtkentry.c:487
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Znak, ki naj se uporabi za maskiranje vsebine vnosa (za geselski način)"
 
-#: gtk/gtkentry.c:496
+#: gtk/gtkentry.c:494
 msgid "Activates default"
 msgstr "Aktiviraj privzetega"
 
-#: gtk/gtkentry.c:497
+#: gtk/gtkentry.c:495
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
@@ -1664,43 +1639,43 @@ msgstr ""
 "Ali se aktivira privzet gradnik (na primer privzet gumb dialoga), ko je "
 "pritisnjen Enter."
 
-#: gtk/gtkentry.c:503
+#: gtk/gtkentry.c:501
 msgid "Width in chars"
 msgstr "Širina v znakih"
 
-#: gtk/gtkentry.c:504
+#: gtk/gtkentry.c:502
 msgid "Number of characters to leave space for in the entry."
 msgstr "Število znakov prostora, ki naj bo puščen prazen za vnos."
 
-#: gtk/gtkentry.c:513
+#: gtk/gtkentry.c:511
 msgid "Scroll offset"
 msgstr "Drsni odmik"
 
-#: gtk/gtkentry.c:514
+#: gtk/gtkentry.c:512
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Število pikslov vnosa, ki drsijo mimo zaslona na levo"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:522
 msgid "The contents of the entry"
 msgstr "Vsebina vnosa"
 
-#: gtk/gtkentry.c:728
+#: gtk/gtkentry.c:726
 msgid "Select on focus"
 msgstr "Izbira fokusa"
 
-#: gtk/gtkentry.c:729
+#: gtk/gtkentry.c:727
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Ali naj se izbere vsebina vnosa, ko je fokusiran"
 
-#: gtk/gtkentry.c:3834 gtk/gtklabel.c:3211
+#: gtk/gtkentry.c:3809 gtk/gtklabel.c:3211
 msgid "Select All"
 msgstr "Izberi vse"
 
-#: gtk/gtkentry.c:3844 gtk/gtklabel.c:3221
+#: gtk/gtkentry.c:3819 gtk/gtklabel.c:3221
 msgid "Input Methods"
 msgstr "Načini vnosa"
 
-#: gtk/gtkentry.c:3854 gtk/gtktextview.c:6360
+#: gtk/gtkentry.c:3829 gtk/gtktextview.c:6360
 msgid "_Insert Unicode control character"
 msgstr "_Vstavi kontrolni znak Unicode"
 
@@ -1833,7 +1808,6 @@ msgid "Error deleting file \"%s\": %s"
 msgstr "Napaka ob brisanju datoteke \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1517
-#, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Resnično zbriši datoteko \"%s\" ?"
 
@@ -1875,7 +1849,6 @@ msgid "Rename File"
 msgstr "Preimenuj datoteko"
 
 #: gtk/gtkfilesel.c:1656
-#, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Preimenuj datoteko \"%s\" v:"
 
@@ -1919,12 +1892,6 @@ msgstr "Položaj Y"
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:608
 msgid "Y position of child widget"
 msgstr "Položaj Y gradnika otroka"
-
-#. This is the default text shown in the preview entry, though the user
-#. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:61
-msgid "abcdefghijk ABCDEFGHIJK"
-msgstr ""
 
 #: gtk/gtkfontsel.c:194
 msgid "Font name"
@@ -2045,7 +2012,7 @@ msgstr "Stran škatle z ročico, ki je poravnana z točko doka."
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1290
+#: gtk/gtkiconfactory.c:1282
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Napaka ob nalaganju ikone: %s"
@@ -2620,7 +2587,7 @@ msgstr ""
 "Število med 0.0 in 1.0, ki določa vodoravno poravnavo besedila v gradniku "
 "napredka"
 
-#: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:282 gtk/gtkspinbutton.c:237
+#: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:280 gtk/gtkspinbutton.c:237
 msgid "Adjustment"
 msgstr "Prilagoditev"
 
@@ -2698,79 +2665,57 @@ msgstr "Del celotnega napredka, ki naj premakne poskokujoč blok, ko je izzvan"
 msgid "Text to be displayed in the progress bar"
 msgstr "Besedilo, ki bo prikazano v merilniku napredka"
 
-#: gtk/gtkrange.c:273
+#: gtk/gtkrange.c:271
 msgid "Update policy"
 msgstr "Način osveževanja"
 
-#: gtk/gtkrange.c:274
+#: gtk/gtkrange.c:272
 msgid "How the range should be updated on the screen"
 msgstr "Kako naj bo meja osvežena na zaslonu"
 
-#: gtk/gtkrange.c:283
+#: gtk/gtkrange.c:281
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "GtkAdjustment, ki vsebuje trenutno vrednost tega predmeta"
 
-#: gtk/gtkrange.c:290
+#: gtk/gtkrange.c:288
 msgid "Inverted"
 msgstr "Obrnjen"
 
-#: gtk/gtkrange.c:291
+#: gtk/gtkrange.c:289
 msgid "Invert direction slider moves to increase range value"
 msgstr "Obrni smeri v katerih drsniki povečujejo rang"
 
-#: gtk/gtkrange.c:297
+#: gtk/gtkrange.c:295
 msgid "Slider Width"
 msgstr "Širina drsnika"
 
-#: gtk/gtkrange.c:298
+#: gtk/gtkrange.c:296
 msgid "Width of scrollbar or scale thumb"
 msgstr "Širina drsnika ali gumba za povečavo"
 
-#: gtk/gtkrange.c:305
+#: gtk/gtkrange.c:303
 msgid "Trough Border"
 msgstr "Čez rob"
 
-#: gtk/gtkrange.c:306
+#: gtk/gtkrange.c:304
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Razmik med sličico/koračnikom in obrobo"
 
-#: gtk/gtkrange.c:313
+#: gtk/gtkrange.c:311
 msgid "Stepper Size"
 msgstr "Velikost koračnika"
 
-#: gtk/gtkrange.c:314
+#: gtk/gtkrange.c:312
 msgid "Length of step buttons at ends"
 msgstr "Dolžina koračnih gumbov na koncih"
 
-#: gtk/gtkrange.c:321
+#: gtk/gtkrange.c:319
 msgid "Stepper Spacing"
 msgstr "Razmik korakov"
 
-#: gtk/gtkrange.c:322
+#: gtk/gtkrange.c:320
 msgid "Spacing between step buttons and thumb"
 msgstr "Razmik med gumbi korakov in sličico"
-
-#: gtk/gtkrange.c:329
-#, fuzzy
-msgid "Arrow X Displacement"
-msgstr "Premik otroka X"
-
-#: gtk/gtkrange.c:330
-#, fuzzy
-msgid ""
-"How far in the x direction to move the arrow when the button is depressed"
-msgstr "Kako daleč v smeri X naj se premakne otrok, ko je gumb spuščen"
-
-#: gtk/gtkrange.c:337
-#, fuzzy
-msgid "Arrow Y Displacement"
-msgstr "Premik otroka Y"
-
-#: gtk/gtkrange.c:338
-#, fuzzy
-msgid ""
-"How far in the y direction to move the arrow when the button is depressed"
-msgstr "Kako daleč v smeri Y naj se premakne otrok, ko je gumb spuščen"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
