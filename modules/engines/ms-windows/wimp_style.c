@@ -319,7 +319,7 @@ setup_system_styles(GtkStyle *style)
   gtk_rc_parse_string(buf);
 
   sprintf(buf, "style \"wimp-tooltips\"\n"
-	  {"bg[NORMAL] = { %d, %d, %d }\n"
+	  "{bg[NORMAL] = { %d, %d, %d }\n"
 	  "}widget \"gtk-tooltips*\" style \"wimp-tooltips\"\n",
           tooltip_back.red,
           tooltip_back.green,
