@@ -3,9 +3,9 @@
 # Sung-Hyun Nam <namsh@lgic.co.kr>, 1998
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.10\n"
-"POT-Creation-Date: 1999-01-12 10:38-0800\n"
-"PO-Revision-Date: 1999-01-04 03:29:06+0900\n"
+"Project-Id-Version: gtk+ 1.1.12\n"
+"POT-Creation-Date: 1999-01-16 10:48+0900\n"
+"PO-Revision-Date: 1999-01-17 02:15:42+0900\n"
 "Last-Translator: Sung-Hyun Nam <namsh@lgic.co.kr>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -122,9 +122,8 @@ msgid "Rename"
 msgstr "새이름"
 
 #: gtk/gtkfilesel.c:1433
-#, fuzzy
 msgid "Selection: "
-msgstr "글꼴 선택"
+msgstr "선택:"
 
 #: gtk/gtkfontsel.c:203
 msgid "Foundry:"
@@ -392,7 +391,7 @@ msgstr ""
 #. Keys listbox
 #: gtk/gtkinputdialog.c:315
 msgid "Keys"
-msgstr ""
+msgstr "글쇠"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
@@ -402,11 +401,11 @@ msgstr "저장"
 
 #: gtk/gtkinputdialog.c:492
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: gtk/gtkinputdialog.c:493
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: gtk/gtkinputdialog.c:494
 msgid "Pressure"
@@ -433,17 +432,17 @@ msgstr ""
 msgid "clear"
 msgstr ""
 
-#: gtk/gtknotebook.c:1966 gtk/gtknotebook.c:3985
+#: gtk/gtknotebook.c:1967 gtk/gtknotebook.c:3986
 #, c-format
 msgid "Page %u"
 msgstr "페이지 %u"
 
-#: gtk/gtkrc.c:1507
+#: gtk/gtkrc.c:1508
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "이미지 파일을 pixmap_path에서 찾을 수 없슴: \"%s\" 라인 %d"
 
-#: gtk/gtkrc.c:1510
+#: gtk/gtkrc.c:1511
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "이미지 파일을 pixmap_path에서 찾을 수 없슴: \"%s\""
