@@ -5969,6 +5969,7 @@ gtk_reset_shapes_recurse (GtkWidget *widget,
  * @widget: a #GtkWidget.
  *
  * Recursively resets the shape on this widget and its descendants.
+ **/
 void
 gtk_widget_reset_shapes (GtkWidget *widget)
 {

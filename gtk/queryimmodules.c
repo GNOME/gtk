@@ -142,7 +142,7 @@ int main (int argc, char **argv)
 	  GDir *dir = g_dir_open (dirs[i], 0, NULL);
 	  if (dir)
 	    {
-	      char *dent;
+	      const char *dent;
 
 	      while ((dent = g_dir_read_name (dir)))
 		{
