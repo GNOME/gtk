@@ -1662,7 +1662,7 @@ gdk_window_set_type_hint (GdkWindow        *window,
       atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_UTILITY");
       break;
     case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
-      atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_SPLASHSCREEN");
+      atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_SPLASH");
       break;
     case GDK_WINDOW_TYPE_HINT_DOCK:
       atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_WINDOW_TYPE_DOCK");
