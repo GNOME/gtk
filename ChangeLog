@@ -3,7 +3,7 @@
 	* gtk/gtktextview.c (gtk_text_view_update_adjustments): don't
 	create layout if we didn't have one
 	(gtk_text_view_set_buffer): invalidate so we get the idle handlers
-	as appropriate
+	as appropriate, avoids blanking the screen 
 	(gtk_text_view_invalidate): new function to do invalidation,
 	containing old guts of invalidated_handler
 
