@@ -2000,8 +2000,7 @@ gdk_event_prepare (gpointer  source_data,
 
   *timeout = -1;
 
-  gdk_events_queue ();
-  retval = (gdk_event_queue_find_first () != NULL);
+  retval = (gdk_event_queue_find_first () != NULL) || XPending (gdk_display);
 
   GDK_THREADS_LEAVE ();
 
@@ -2017,9 +2016,9 @@ gdk_event_check   (gpointer  source_data,
   GDK_THREADS_ENTER ();
 
   if (event_poll_fd.revents & G_IO_IN)
-      gdk_events_queue ();
-
-  retval = (gdk_event_queue_find_first () != NULL);
+    retval = (gdk_event_queue_find_first () != NULL) || XPending (gdk_display);
+  else
+    retval = FALSE;
 
   GDK_THREADS_LEAVE ();
 
@@ -2053,6 +2052,7 @@ gdk_event_dispatch (gpointer  source_data,
  
   GDK_THREADS_ENTER ();
 
+  gdk_events_queue();
   event = gdk_event_unqueue();
 
   if (event)
