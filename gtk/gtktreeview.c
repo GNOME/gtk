@@ -1180,7 +1180,7 @@ gtk_tree_view_destroy (GtkObject *object)
     gtk_tree_view_search_dialog_destroy (search_dialog,
 					 tree_view);
 
-  if (tree_view->priv->search_user_data)
+  if (tree_view->priv->search_destroy)
     {
       (* tree_view->priv->search_destroy) (tree_view->priv->search_user_data);
       tree_view->priv->search_user_data = NULL;
