@@ -1,3 +1,14 @@
+Fri Feb 22 20:28:18 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c: Applied patch from Thomas Leonard to make
+	stepper click to scroll take effect immediately, rather than after
+	a delay (#67649).
+
+	* gtk/gtkrange.c: Remove right-click == step in trough since it
+	isn't a useful binding and it's a large area to hit accidentally.
+	(Leave it on the steppers since its more useful there and less
+	likely to do accidentally.)
+
 2002-02-23  Pablo Saratxaga  <pablo@mandrakesoft.com>
 
 	* configure.in (ALL_LINGUAS): Add "cy" to the language list.
