@@ -105,6 +105,7 @@ static int num_targets = sizeof(targets)/sizeof(Target);
 
 static int have_selection = FALSE;
 
+GtkWidget *selection_widget;
 GtkWidget *selection_text;
 GtkWidget *selection_button;
 GString *selection_string = NULL;
@@ -367,7 +368,7 @@ paste (GtkWidget *widget, GtkWidget *entry)
       return;
     }
 
-  gtk_selection_convert (selection_button, GDK_SELECTION_PRIMARY, atom, 
+  gtk_selection_convert (selection_widget, GDK_SELECTION_PRIMARY, atom, 
 			 GDK_CURRENT_TIME);
 }
 
@@ -400,6 +401,8 @@ main (int argc, char *argv[])
 
   init_atoms();
 
+  selection_widget = gtk_invisible_new ();
+
   dialog = gtk_dialog_new ();
   gtk_widget_set_name (dialog, "Test Input");
   gtk_container_set_border_width (GTK_CONTAINER(dialog), 0);
@@ -425,15 +428,15 @@ main (int argc, char *argv[])
 
   gtk_signal_connect (GTK_OBJECT(selection_button), "toggled",
 		      GTK_SIGNAL_FUNC (selection_toggled), NULL);
-  gtk_signal_connect (GTK_OBJECT(selection_button), "selection_clear_event",
+  gtk_signal_connect (GTK_OBJECT(selection_widget), "selection_clear_event",
 		      GTK_SIGNAL_FUNC (selection_clear), NULL);
-  gtk_signal_connect (GTK_OBJECT(selection_button), "selection_received",
+  gtk_signal_connect (GTK_OBJECT(selection_widget), "selection_received",
 		      GTK_SIGNAL_FUNC (selection_received), NULL);
 
-  gtk_selection_add_targets (selection_button, GDK_SELECTION_PRIMARY,
+  gtk_selection_add_targets (selection_widget, GDK_SELECTION_PRIMARY,
 			     targetlist, ntargets);
 
-  gtk_signal_connect (GTK_OBJECT(selection_button), "selection_get",
+  gtk_signal_connect (GTK_OBJECT(selection_widget), "selection_get",
 		      GTK_SIGNAL_FUNC (selection_get), NULL);
 
   selection_text = gtk_text_new (NULL, NULL);

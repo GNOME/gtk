@@ -1,3 +1,17 @@
+Sun Feb 24 23:23:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/testselection.c (main): Convert over to using
+	an GtkInvisible - selections don't work properly
+	with now NO_WINDOW GtkToggleButton. (Example really
+	should be using GtkClipboard.)
+
+	* gdk/x11/gdkselection-x11.c (gdk_selection_property_get):
+	Fix  problems if sizeof(GdkAtom) != sizeof(Atom). (Unlikely)
+
+	* gdk/x11/gdkproperty-x11.c (gdk_property_get): Set 
+	actual_length when converting atoms as well.
+	(Gregory Merchan, #72074)
+
 2002-02-24  Havoc Pennington  <hp@pobox.com>
 	
 	* gtk/gtktextview.c (gtk_text_view_value_changed): add dx/dy to

@@ -397,6 +397,9 @@ gdk_property_get (GdkWindow   *window,
 
 	  for (i = 0; i < ret_nitems; i++)
 	    ret_atoms[i] = gdk_x11_xatom_to_atom (xatoms[i]);
+
+	  if (actual_length)
+	    *actual_length = ret_nitems * sizeof (GdkAtom);
 	}
       else
 	{
