@@ -163,3 +163,7 @@ GdkPixBuf *image_load(FILE * f)
 
     return pixbuf;
 }
+
+int image_save(GdkPixBuf *pixbuf, FILE *file)
+{
+     png_structp,

@@ -121,7 +121,7 @@ static struct {
 	gboolean   (*format_check)(unsigned char *buffer, int size);
 	GModule   *module;
 	GdkPixBuf *(*load)(FILE *f);
-	int        (*save)(char *filename, ...);
+	int        (*save)(GdkPixBuf, *p, FILE *f, ...);
 } file_formats [] = {
 	{ "png",  pixbuf_check_png,  NULL, NULL, NULL },
 	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL },
@@ -209,9 +209,3 @@ gdk_pixbuf_load_image (const char *file)
 	g_warning ("Unable to find handler for file: %s", file);
 	return NULL;
 }
-
-/*
- * Local variables:
- * c-basic-offset: 8
- * End:
- */

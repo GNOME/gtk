@@ -1,3 +1,11 @@
+1999-07-29  Mark Crichton  <crichton@gimp.org>
+
+	* src/io-png.c (image_save): Added PNG saving function
+
+	* src/gdk-pixbuf-io.c: Changed image_save function format.  Now it's
+	image_save(GdkPixBuf *p, FILE *f, ...)
+	
+
 1999-07-26  Michael Zucchi  <mzucchi@denr.sa.gov.au>
 
 	* src/Makefile.am (*_LIB): Only build the relevant loaders which
