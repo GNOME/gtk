@@ -1,5 +1,10 @@
 2004-11-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkrange.c (gtk_range_real_change_value): Make 
+	power a double.
+	(gtk_range_class_init): s/digits/decimal digits/ in doc 
+	comment.
+
 	* gtk/gtkfilechooserbutton.c (update_idler): Remove debugging
 	printfs. 
 

@@ -300,8 +300,8 @@ gtk_range_class_init (GtkRangeClass *class)
    *
    * The value parameter is unrounded.  An application that overrides
    * the ::change-value signal is responsible for clamping the value to
-   * the desired number of digits; the default GTK+ handler clamps the
-   * value based on @range->round_digits.
+   * the desired number of decimal digits; the default GTK+ handler 
+   * clamps the value based on @range->round_digits.
    *
    * It is not possible to use delayed update policies in an overridden
    * ::change-value handler.
@@ -2390,7 +2390,7 @@ gtk_range_real_change_value (GtkRange     *range,
 
   if (range->round_digits >= 0)
     {
-      glong power;
+      gdouble power;
       gint i;
 
       i = range->round_digits;
