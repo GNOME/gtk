@@ -840,7 +840,7 @@ gtk_socket_focus (GtkWidget *widget, GtkDirectionType direction)
   if (socket->plug_widget)
     return gtk_widget_child_focus (socket->plug_widget, direction);
 
-  if (!GTK_WIDGET_HAS_FOCUS (widget))
+  if (!gtk_widget_is_focus (widget))
     {
       switch (direction)
 	{
