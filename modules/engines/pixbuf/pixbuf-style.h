@@ -44,6 +44,6 @@ struct _PixbufStyleClass
   GtkStyleClass parent_class;
 };
 
-void pixbuf_style_register_type (GtkThemeEngine *engine);
+void pixbuf_style_register_type (GTypeModule *module);
 
 

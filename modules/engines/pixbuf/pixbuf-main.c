@@ -26,14 +26,14 @@
 #include <gmodule.h>
 
 G_MODULE_EXPORT void
-theme_init(GtkThemeEngine * engine)
+theme_init (GTypeModule *module)
 {
-  pixbuf_rc_style_register_type (engine);
-  pixbuf_style_register_type (engine);
+  pixbuf_rc_style_register_type (module);
+  pixbuf_style_register_type (module);
 }
 
 G_MODULE_EXPORT void
-theme_exit(void)
+theme_exit (void)
 {
 }
 

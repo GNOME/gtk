@@ -212,9 +212,15 @@ theme_pixbuf_set_stretch (ThemePixbuf *theme_pb,
 GdkPixbuf *
 pixbuf_cache_value_new (gchar *filename)
 {
-  GdkPixbuf *result = gdk_pixbuf_new_from_file (filename);
+  GError *err = NULL;
+    
+  GdkPixbuf *result = gdk_pixbuf_new_from_file (filename, &err);
   if (!result)
-    g_warning("Pixbuf theme: Cannot load pixmap file %s\n", filename);
+    {
+      g_warning ("Pixbuf theme: Cannot load pixmap file %s: %s\n",
+		 filename, err->message);
+      g_error_free (err);
+    }
 
   return result;
 }

@@ -1,3 +1,7 @@
+Wed Nov 15 21:56:28 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* src/pixbuf-*: A few updates for GTypePlugin.
+
 Tue Jul 18 12:13:19 2000  Owen Taylor  <otaylor@redhat.com>
 
         Updates to work with GTK+-2.0 theme engine architecture.

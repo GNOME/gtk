@@ -1069,7 +1069,7 @@ draw_handle (GtkStyle      *style,
 GType pixbuf_type_style = 0;
 
 void
-pixbuf_style_register_type (GtkThemeEngine *engine)
+pixbuf_style_register_type (GTypeModule *module)
 {
   static const GTypeInfo object_info =
   {
@@ -1084,10 +1084,10 @@ pixbuf_style_register_type (GtkThemeEngine *engine)
     (GInstanceInitFunc) pixbuf_style_init,
   };
   
-  pixbuf_type_style = gtk_theme_engine_register_type (engine,
-						      GTK_TYPE_STYLE,
-						      "PixbufStyle",
-						      &object_info);
+  pixbuf_type_style = g_type_module_register_type (module,
+						   GTK_TYPE_STYLE,
+						   "PixbufStyle",
+						   &object_info, 0);
 }
 
 static void

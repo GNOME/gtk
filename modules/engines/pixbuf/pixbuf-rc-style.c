@@ -117,7 +117,7 @@ static GtkRcStyleClass *parent_class;
 GType pixbuf_type_rc_style = 0;
 
 void
-pixbuf_rc_style_register_type (GtkThemeEngine *engine)
+pixbuf_rc_style_register_type (GTypeModule *module)
 {
   static const GTypeInfo object_info =
   {
@@ -132,10 +132,10 @@ pixbuf_rc_style_register_type (GtkThemeEngine *engine)
     (GInstanceInitFunc) pixbuf_rc_style_init,
   };
   
-  pixbuf_type_rc_style = gtk_theme_engine_register_type (engine,
-							 GTK_TYPE_RC_STYLE,
-							 "PixbufRcStyle",
-							 &object_info);
+  pixbuf_type_rc_style = g_type_module_register_type (module,
+						      GTK_TYPE_RC_STYLE,
+						      "PixbufRcStyle",
+						      &object_info, 0);
 }
 
 static void
