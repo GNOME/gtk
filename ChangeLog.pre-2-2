@@ -1,3 +1,10 @@
+Mon Aug 17 17:28:00  Raph Levien  <raph@gtk.org>
+
+	* gdk/gdkrgb.c: Further speedups of the 565_d case. It's
+	impressively fast now - about 4.65 Mpix/s on an IBM TP 600
+	running a PII 233. It's synced with the 0.0.5 release of
+	GdkRgb.
+
 Tue Aug 18 00:29:13 1998  Lars Hamann  <lars@gtk.org>
 
         * gtk/gtkclist.h:
