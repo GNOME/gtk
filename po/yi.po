@@ -428,7 +428,7 @@ msgstr "PNM בילד אַרײַנשטעל שטיצט ניט אונטער דעם 
 
 #: gdk-pixbuf/io-pnm.c:710
 msgid "Premature end-of-file encountered"
-msgstr "צו־פֿריִיקער טעקע־סוף"
+msgstr "צו־פֿריִיִקער טעקע־סוף"
 
 #: gdk-pixbuf/io-pnm.c:742 gdk-pixbuf/io-pnm.c:962
 msgid "Raw PNM formats require exactly one whitespace before sample data"
@@ -493,11 +493,11 @@ msgstr "ניט געקענט פֿאַרטײלן צײַטװײַליקע IOBuffer �
 
 #: gdk-pixbuf/io-tga.c:281
 msgid "fread() failed -- premature end-of-file probably encountered"
-msgstr "fread() דורכגעפֿאַלן; מסתּמא צו־פֿריִיקער טעקע־סוף"
+msgstr "fread() דורכגעפֿאַלן; מסתּמא צו־פֿריִיִקער טעקע־סוף"
 
 #: gdk-pixbuf/io-tga.c:291
 msgid "fseek() failed -- premature end-of-file probably encountered"
-msgstr "fseek() דורכגעפֿאַלן; מסתּמא צו־פֿריִיקער טעקע־סוף"
+msgstr "fseek() דורכגעפֿאַלן; מסתּמא צו־פֿריִיִקער טעקע־סוף"
 
 #: gdk-pixbuf/io-tga.c:324
 msgid "Can't allocate new pixbuf"
@@ -566,11 +566,11 @@ msgstr "אומדערװאַרטע ביט־טיפֿקײט פֿאַר TGA פֿאַ�
 
 #: gdk-pixbuf/io-tga.c:1030
 msgid "Pseudo-Color image without colormap"
-msgstr "פּסעװדאָ־בילד אָן קײן פֿאַרבמאַפּע"
+msgstr "פּסעװדאָפֿאַרב בילד אָן קײן פֿאַרבמאַפּע"
 
 #: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
-msgstr "ניט געגעבן זיך אָפּשטעלן בײַ בילד צולײג; מסתּמא צו־פֿריִיקער טעקע־סוף"
+msgstr "ניט געגעבן זיך אָפּשטעלן בײַ בילד צולײג; מסתּמא צו־פֿריִיִקער טעקע־סוף"
 
 #: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
@@ -1208,7 +1208,7 @@ msgstr "פֿאַרצײַכענונג"
 
 #: gtk/gtkcellrenderertext.c:184
 msgid "Marked up text to render"
-msgstr "פֿאַרצײַכענטער טעקסט צו פֿאָרמירן"
+msgstr "פֿאַרצײַכנטער טעקסט צו פֿאָרמירן"
 
 #: gtk/gtkcellrenderertext.c:191 gtk/gtklabel.c:297
 msgid "Attributes"
@@ -1466,7 +1466,7 @@ msgstr "דער מצבֿ שטימט ניט"
 
 #: gtk/gtkcellrenderertoggle.c:142
 msgid "The inconsistent state of the button"
-msgstr "דער ניט־שטימנדידער מצבֿ פֿונעם קנעפּל"
+msgstr "דער ניט־שטימענדיקער מצבֿ פֿונעם קנעפּל"
 
 #: gtk/gtkcellrenderertoggle.c:150
 msgid "Activatable"
@@ -1522,7 +1522,7 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"די פֿריער־אױסגעקליבענע פֿאַרב, אין צוגלײַך מיט דער פֿאַרב װאָס דו האַלטסט איצט אין "
+"די פֿריִער־אױסגעקליבענע פֿאַרב, אין צוגלײַך מיט דער פֿאַרב װאָס דו האַלטסט איצט אין "
 "אױסקלײַבן.  דו קענסט שלעפּן די פֿאַרב צו אַ פּאַליטרע פּאָזיציע, אָדער אױסקלײַבן די "
 "פֿאַרב װי די איצטיקע דורך זי שלעפּן צו דער דערבײַיִקער פֿאַרב מוסטער."
 
@@ -2981,7 +2981,7 @@ msgstr "גרופּע"
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
-msgstr "דאָס ראַדיאָ־קענפּעל װעלכעס גרופּע איז כּולל דאָס צעפּיכעסל"
+msgstr "דאָס ראַדיאָ־קנעפּל װעלכעס גרופּע איז כּולל דאָס צעפּיכעסל"
 
 #: gtk/gtkrange.c:275
 msgid "Update policy"
@@ -3009,7 +3009,7 @@ msgstr "גליטשער ברײט"
 
 #: gtk/gtkrange.c:300
 msgid "Width of scrollbar or scale thumb"
-msgstr "ברײט פֿון דורכבלעטערער אָדער מאָספֿינגער"
+msgstr "ברײט פֿון דורכבלעטערער אָדער סקאַליר־פֿינגער"
 
 #: gtk/gtkrange.c:307
 msgid "Trough Border"
@@ -3146,7 +3146,7 @@ msgstr "קלענסטע לענג פֿון דעם דורכבלעטערער גלי�
 
 #: gtk/gtkscrollbar.c:89
 msgid "Fixed slider size"
-msgstr "ניט־ענדערעװדיקע גליטשער גרײס"
+msgstr "גליטשער גרײס ניט צו ענדערן"
 
 #: gtk/gtkscrollbar.c:90
 msgid "Don't change slider size, just lock it to the minimum length"
@@ -3175,7 +3175,7 @@ msgstr "צװײטע צוריקװעגס־צוגעבער"
 #: gtk/gtkscrollbar.c:114
 msgid ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
-msgstr "װײַז אַ צװײטע צוריקװעגס־פֿײַל אױף דער צװײטער עק פֿונעם דדורכבלעטערער"
+msgstr "װײַז אַ צװײטע צוריקװעגס־פֿײַל אױף דער צװײטער עק פֿונעם דורכבלעטערער"
 
 #: gtk/gtkscrollbar.c:121
 msgid "Secondary forward stepper"
@@ -3184,7 +3184,7 @@ msgstr "צװײטע פֿאָרױס צוגעבער"
 #: gtk/gtkscrollbar.c:122
 msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
-msgstr "װײַז אַ צװײטע פֿאָרױס־פֿײַל אױף דער צװײטער עק פֿונעם דדורכבלעטערער"
+msgstr "װײַז אַ צװײטע פֿאָרױס־פֿײַל אױף דער צװײטער עק פֿונעם דורכבלעטערער"
 
 #: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:527
 msgid "Horizontal Adjustment"
@@ -3233,7 +3233,7 @@ msgstr "דורקבלעטערער אָפּרוקונג"
 #: gtk/gtkscrolledwindow.c:283
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
-"װיפֿל בילדצעלן ליגן צװישן דורקבלעטערערס און זײערע פֿענצטערס"
+"װיפֿל בילדצעלן ליגן צװישן דורכבלעטערערס און זײערע פֿענצטערס"
 
 #: gtk/gtksettings.c:168
 msgid "Double Click Time"
@@ -3244,7 +3244,7 @@ msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr ""
-"גרעסטע צײַט צװישן צװײ קליקס מען זאָל זײַ אָננעמען װי אַ טאָפּל־קליק (אין "
+"גרעסטע צײַט צװישן צװײ קליקס, מען זאָל זײ אָננעמען װי אַ טאָפּל־קליק (אין "
 "מיליסעקונדען)"
 
 #: gtk/gtksettings.c:176
@@ -3358,7 +3358,7 @@ msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
 msgstr ""
-"אױב אומלעקסיקע באַטרעפֿן װערן אױטאָמאַטיש פֿאַרװאַנדלט צו דעם נאָענטסטן צוגאָב פֿון אַ "
+"אױב אומלעקסיקע באַטרעפֿן װערן אױטאָמאַטיש פֿאַרװאַנדלט צו דעם נעענטסטן צוגאָב פֿון אַ "
 "דרײקנעפּל"
 
 #: gtk/gtkspinbutton.c:276
@@ -3490,7 +3490,7 @@ msgstr "ערשט"
 
 #: gtk/gtkstock.c:292
 msgid "_Last"
-msgstr "לעצט"
+msgstr "לעצטע"
 
 #: gtk/gtkstock.c:293
 msgid "_Top"
@@ -3526,7 +3526,7 @@ msgstr "אינדעקס"
 
 #: gtk/gtkstock.c:301
 msgid "_Italic"
-msgstr "איטאַליש"
+msgstr "קורסיװ"
 
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
@@ -3746,7 +3746,7 @@ msgstr "דער שורה־נומער װוּ דער פֿוס פֿון קינד ק�
 
 #: gtk/gtktable.c:230
 msgid "Horizontal options"
-msgstr "האָריזאָנטאַלע אָפּציעס"
+msgstr "האָריזאָנטאַלישע אָפּציעס"
 
 #: gtk/gtktable.c:231
 msgid "Options specifying the horizontal behaviour of the child"
@@ -3754,7 +3754,7 @@ msgstr "אָפּציעס װאָס באַשטעטיקט װי דאָס קינד ה
 
 #: gtk/gtktable.c:237
 msgid "Vertical options"
-msgstr "װערטיקאַלע אָפּציעס"
+msgstr "װערטיקאַלישע אָפּציעס"
 
 #: gtk/gtktable.c:238
 msgid "Options specifying the vertical behaviour of the child"
@@ -3762,7 +3762,7 @@ msgstr "אָפּציעס װאָס באַשטעטיקט װי דאָס קינד ה
 
 #: gtk/gtktable.c:244
 msgid "Horizontal padding"
-msgstr "האָריזאָנטאַל לײדיק אָרט"
+msgstr "האָריזאָנטאַליש לײדיק אָרט"
 
 #: gtk/gtktable.c:245
 msgid ""
@@ -3773,7 +3773,7 @@ msgstr ""
 
 #: gtk/gtktable.c:251
 msgid "Vertical padding"
-msgstr "װערטיקאַל לײדיק אָרט"
+msgstr "װערטיקאַליש לײדיק אָרט"
 
 #: gtk/gtktable.c:252
 msgid ""
@@ -3886,7 +3886,7 @@ msgstr "שריפֿט־װאָג װי אַ גאַנצער נומער; זע די פ
 
 #: gtk/gtktexttag.c:336
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
-msgstr "שריפֿט־שטרעך װי אַ PangoStretch, װי למשל PANGO_STRETCH_CONDENSED"
+msgstr "שריפֿט־שטרעק װי אַ PangoStretch, װי למשל PANGO_STRETCH_CONDENSED"
 
 #: gtk/gtktexttag.c:345
 msgid "Font size in Pango units"
@@ -3985,7 +3985,7 @@ msgstr "טאַבוליר גרענעצן"
 
 #: gtk/gtktexttag.c:491 gtk/gtktextview.c:627
 msgid "Custom tabs for this text"
-msgstr "פֿאַראײגנטע טאַבוליר־גרענעצן פֿאַר דעמ־אָ טעקסט"
+msgstr "פֿאַראײגנטע טאַבוליר־גרענעצן פֿאַר דעם־אָ טעקסט"
 
 #: gtk/gtktexttag.c:498
 msgid "Invisible"
@@ -4089,11 +4089,11 @@ msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער דע�
 
 #: gtk/gtktexttag.c:608
 msgid "Tabs set"
-msgstr "באַשטעטיק טאַבולר־גרענעצן"
+msgstr "באַשטעטיק טאַבוליר־גרענעצן"
 
 #: gtk/gtktexttag.c:609
 msgid "Whether this tag affects tabs"
-msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער די טאַבולר־גרענעצן"
+msgstr "אױב דאָס הענטל האָט אַן השפּעה איבער די טאַבוליר־גרענעצן"
 
 #: gtk/gtktexttag.c:612
 msgid "Invisible set"
@@ -4277,11 +4277,11 @@ msgstr "דער מאָדעל װאָס אַ בױם־מאָדעל זאָל סאָר
 
 #: gtk/gtktreeview.c:519
 msgid "TreeView Model"
-msgstr "בױמ־געשטאַלט מאָדעל"
+msgstr "בױם־געשטאַלט מאָדעל"
 
 #: gtk/gtktreeview.c:520
 msgid "The model for the tree view"
-msgstr "דער מאָדעל פֿאַר דעם בױמ־געשטאַלט"
+msgstr "דער מאָדעל פֿאַר דעם בױם־געשטאַלט"
 
 #: gtk/gtktreeview.c:528
 msgid "Horizontal Adjustment for the widget"
@@ -4812,7 +4812,7 @@ msgstr "פֿאַרטיליק מיט טאַטע־מאַמע"
 
 #: gtk/gtkwindow.c:537
 msgid "If this window should be destroyed when the parent is destroyed"
-msgstr "אױב דער פֿענצטער זאָל זיך פֿאַרטיליקן װען זײַן טאַטע־מעמע איז פֿאַרטיליקט"
+msgstr "אױב דער פֿענצטער זאָל זיך פֿאַרטיליקן װען זײַן טאַטע־מאַמע איז פֿאַרטיליקט"
 
 #: gtk/gtkwindow.c:544
 msgid "Icon"
@@ -4882,22 +4882,22 @@ msgstr "אינוקיטוט (טראַנסליטערירט)"
 #. ID
 #: modules/input/imipa.c:144
 msgid "IPA"
-msgstr "אַינטערנאַציִאָנאַלע פֿאָנעטיש אַלפֿאַבעט"
+msgstr "אַינטערנאַציִאָנאַלע פֿאָנעטישע אַלף־בית"
 
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr "טאַי (צעבראָכן)"
+msgstr "טײַלענדיש (צעבראָכן)"
 
 #. ID
 #: modules/input/imti-er.c:452
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr "טיגריניע־עריטרעיש (EZ+)"
+msgstr "טיגריניע־עריטרעיִש (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:452
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr "טיגריניע־עטיאָפּיש (EZ+)"
+msgstr "טיגריניע־עטיִאָפּיש (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:243
