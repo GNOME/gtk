@@ -1,3 +1,8 @@
+2004-06-02  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_init): Bail out if the
+	model is empty.  Fixes #143536.
+
 2004-06-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfontsel.c (gtk_font_selection_size_focus_out): Don't

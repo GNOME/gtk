@@ -12109,7 +12109,8 @@ gtk_tree_view_search_init (GtkWidget   *entry,
   if (len < 1)
     return;
 
-  gtk_tree_model_get_iter_first (model, &iter);
+  if (!gtk_tree_model_get_iter_first (model, &iter))
+    return;
 
   ret = gtk_tree_view_search_iter (model, selection,
 				   &iter, text,
