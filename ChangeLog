@@ -1,3 +1,8 @@
+Wed Dec  2 01:36:49 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkfeatures.h.in: lets #define GTK_HAVE_FEATURES_1_1_6 before
+	we release it this time
+
 Wed Dec  2 01:39:02 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtknotebook.h: 
