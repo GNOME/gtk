@@ -199,7 +199,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
  							 P_("Whether the rendered pixbuf should be "
 							    "colorized according to the state"),
  							 FALSE,
- 							 G_PARAM_READWRITE | STATIC_STRIGNS));
+ 							 G_PARAM_READWRITE | STATIC_STRINGS));
 
 
   g_type_class_add_private (object_class, sizeof (GtkCellRendererPixbufPrivate));
