@@ -23,6 +23,7 @@
 #include "gtk/gtksignal.h"
 #include "gtkimcontextxim.h"
 #include <gdk/x11/gdkdisplaymgr-x11.h>
+#include <gdk/x11/gdkdisplay-x11.h>
 #include <gdk/x11/gdkscreen-x11.h>
 
 struct _GtkXIMInfo
@@ -186,7 +187,7 @@ get_im (const char *locale)
       if (!XSetLocaleModifiers (""))
 	g_warning ("can not set locale modifiers");
       
-      im = XOpenIM (GDK_DISPLAY_IMPL_X11(gdk_get_default_display ())->xdisplay,
+      im = XOpenIM (GDK_DISPLAY_XDISPLAY(gdk_get_default_display ()),
 		    NULL, NULL, NULL);
       
       if (im)

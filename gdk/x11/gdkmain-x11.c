@@ -126,10 +126,11 @@ _gdk_windowing_init_check_for_display (int argc, char **argv, char *display_name
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
 
-  if (!gdk_display_manager)
-    gdk_display_manager = g_object_new (GDK_TYPE_DISPLAY_MANAGER, NULL);
+  if (!_gdk_display_manager)
+    _gdk_display_manager = g_object_new (GDK_TYPE_DISPLAY_MANAGER, NULL);
 
-  display = gdk_display_manager_open_display (gdk_display_manager, display_name);
+  display = gdk_display_manager_open_display (_gdk_display_manager,
+					      display_name);
   if (!display)
     return NULL;
   display_impl = GDK_DISPLAY_IMPL_X11 (display);
@@ -643,7 +644,7 @@ gdk_beep (void)
 void
 gdk_windowing_exit (void)
 {
-  GSList *tmp_list = gdk_display_manager->open_displays;
+  GSList *tmp_list = _gdk_display_manager->open_displays;
     
   while (tmp_list)
     {

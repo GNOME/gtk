@@ -144,16 +144,16 @@ gdk_font_load_for_display (GdkDisplay  *display,
   GdkFont *font;
   GdkFontPrivateX *private;
   XFontStruct *xfont;
-  GdkDisplayImplX11 *dpy_impl;
+  GdkDisplayImplX11 *display_impl;
 
   g_return_val_if_fail (font_name != NULL, NULL);
-  dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);
 
   font = gdk_font_hash_lookup (display, GDK_FONT_FONT, font_name);
   if (font)
     return font;
 
-  xfont = XLoadQueryFont (dpy_impl->xdisplay, font_name);
+  xfont = XLoadQueryFont (display_impl->xdisplay, font_name);
   if (xfont == NULL)
     return NULL;
 
@@ -162,7 +162,7 @@ gdk_font_load_for_display (GdkDisplay  *display,
     {
       private = (GdkFontPrivateX *) font;
       if (xfont != private->xfont)
-	XFreeFont (dpy_impl->xdisplay, xfont);
+	XFreeFont (display_impl->xdisplay, xfont);
 
       gdk_font_ref (font);
     }
@@ -302,7 +302,7 @@ gdk_fontset_load_for_display (GdkDisplay * display,
   gint  missing_charset_count;
   gchar **missing_charset_list;
   gchar *def_string;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
 
   font = gdk_font_hash_lookup (display, GDK_FONT_FONTSET, fontset_name);
   if (font)
@@ -312,7 +312,7 @@ gdk_fontset_load_for_display (GdkDisplay * display,
   font = (GdkFont*) private;
 
   private->display = display;
-  fontset = XCreateFontSet (dpy_impl->xdisplay, fontset_name,
+  fontset = XCreateFontSet (display_impl->xdisplay, fontset_name,
 			    &missing_charset_list, &missing_charset_count,
 			    &def_string);
 

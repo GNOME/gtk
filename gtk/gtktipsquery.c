@@ -341,7 +341,7 @@ gtk_tips_query_real_start_query (GtkTipsQuery *tips_query)
   
   g_return_if_fail (GTK_IS_TIPS_QUERY (tips_query));
   
-  tips_query->query_cursor = gdk_cursor_new (GDK_QUESTION_ARROW);
+  tips_query->query_cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (GTK_WIDGET (tips_query)), GDK_QUESTION_ARROW);
   failure = gdk_pointer_grab (GTK_WIDGET (tips_query)->window,
 			      TRUE,
 			      GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
@@ -365,7 +365,7 @@ gtk_tips_query_real_stop_query (GtkTipsQuery *tips_query)
   gtk_grab_remove (GTK_WIDGET (tips_query));
   if (tips_query->query_cursor)
     {
-      gdk_display_pointer_ungrab (gtk_widget_get_display (tips_query),
+      gdk_display_pointer_ungrab (gtk_widget_get_display (GTK_WIDGET (tips_query)),
 				  GDK_CURRENT_TIME);
       gdk_cursor_destroy (tips_query->query_cursor);
       tips_query->query_cursor = NULL;

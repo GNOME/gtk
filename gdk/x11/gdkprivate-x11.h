@@ -50,7 +50,7 @@ GdkGC *_gdk_x11_gc_new                  (GdkDrawable     *drawable,
 
 GdkColormap * gdk_colormap_lookup      (Colormap         xcolormap);
 GdkVisual *   gdk_visual_lookup        (Visual          *xvisual);
-GdkVisual *gdk_visual_lookup_for_screen (GdkScreen * scr,
+GdkVisual *gdk_visual_lookup_for_screen (GdkScreen * screen,
 					 Visual * xvisual);
 void gdk_window_add_colormap_windows (GdkWindow *window);
 

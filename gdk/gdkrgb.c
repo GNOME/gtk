@@ -3246,7 +3246,7 @@ static GdkRgbInfo *
 gdk_rgb_get_info_from_drawable (GdkDrawable *drawable)
 {
   GdkColormap *cmap = gdk_drawable_get_colormap (drawable);
-  GdkScreen *scr = gdk_drawable_get_screen (drawable);
+  GdkScreen *screen= gdk_drawable_get_screen (drawable);
 
   if (!cmap)
     {
@@ -3255,7 +3255,7 @@ gdk_rgb_get_info_from_drawable (GdkDrawable *drawable)
        */
 
       gint depth = gdk_drawable_get_depth (drawable);
-      GdkColormap *rgb_cmap = gdk_rgb_get_colormap_for_screen (scr);
+      GdkColormap *rgb_cmap = gdk_rgb_get_colormap_for_screen (screen);
       if (depth == gdk_colormap_get_visual (rgb_cmap)->depth)
 	cmap = rgb_cmap;
       else

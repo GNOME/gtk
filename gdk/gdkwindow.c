@@ -140,8 +140,8 @@ static void   gdk_window_real_get_size  (GdkDrawable     *drawable,
 
 static GdkVisual*   gdk_window_real_get_visual   (GdkDrawable *drawable);
 static gint         gdk_window_real_get_depth    (GdkDrawable *drawable);
-static GdkScreen *  gdk_window_real_get_screen   (GdkDrawable *drawable);
-static GdkDisplay * gdk_window_real_get_display  (GdkDrawable *drawable);
+static GdkScreen*   gdk_window_real_get_screen   (GdkDrawable *drawable);
+static GdkDisplay*  gdk_window_real_get_display  (GdkDrawable *drawable);
 static void         gdk_window_real_set_colormap (GdkDrawable *drawable,
                                              GdkColormap *cmap);
 static GdkColormap* gdk_window_real_get_colormap (GdkDrawable *drawable);
@@ -614,8 +614,8 @@ gboolean
 gdk_window_is_viewable (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkScreen *scr = gdk_drawable_get_screen (window);
-  GdkWindow *root_window = gdk_screen_get_root_window (scr);
+  GdkScreen *screen= gdk_drawable_get_screen (window);
+  GdkWindow *root_window = gdk_screen_get_root_window (screen);
   
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);

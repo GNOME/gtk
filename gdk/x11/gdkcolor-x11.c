@@ -181,7 +181,7 @@ gdk_colormap_new (GdkVisual *visual,
 	  
 	  XQueryColors (GDK_SCREEN_XDISPLAY (visual->screen),
 			DefaultColormap (GDK_SCREEN_XDISPLAY (visual->screen),
-					 GDK_SCREEN_IMPL_X11 (visual->screen)->scr_num),
+					 GDK_SCREEN_IMPL_X11 (visual->screen)->screen_num),
 			default_colors, colormap->size);
 
 	  for (i = 0; i < colormap->size; i++)
@@ -306,7 +306,7 @@ gdk_colormap_get_system_for_screen (GdkScreen * screen)
 
   colormap->screen = screen;
   private->xcolormap = DefaultColormap (GDK_SCREEN_XDISPLAY (screen),
-					GDK_SCREEN_IMPL_X11 (screen)->scr_num);
+					GDK_SCREEN_IMPL_X11 (screen)->screen_num);
   colormap->visual = gdk_visual_get_system_for_screen (screen);
   private->private_val = FALSE;
 
@@ -354,7 +354,7 @@ gdk_colormap_get_system_size (void)
 {
   GDK_NOTE (MULTIHEAD, g_message (" Use the DisplayCells X call instead\n"));
   return DisplayCells (GDK_SCREEN_XDISPLAY (gdk_get_default_screen()),
-		       GDK_SCREEN_IMPL_X11 (gdk_get_default_screen())->scr_num);
+		       GDK_SCREEN_IMPL_X11 (gdk_get_default_screen())->screen_num);
 }
 
 void

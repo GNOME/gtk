@@ -205,7 +205,7 @@ GdkDisplay*
 gdk_drawable_get_display(GdkDrawable *drawable)
 {
   g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), 0);
-  return GDK_DRAWABLE_GET_CLASS (drawable)->get_display (drawable);
+  return gdk_screen_get_display (gdk_drawable_get_screen (drawable));
 }
 	
 /**

@@ -43,10 +43,10 @@ typedef struct _GdkDisplayManagerClass GdkDisplayManagerClass;
 
 GType              gdk_display_manager_get_type            (void);
 
-GdkDisplay *       gdk_display_manager_get_default_display (GdkDisplayManager *dpy_mgr);
-GdkDisplay *       gdk_display_manager_open_display        (GdkDisplayManager *dpy_mgr,
+GdkDisplay *       gdk_display_manager_get_default_display (GdkDisplayManager *display_mgr);
+GdkDisplay *       gdk_display_manager_open_display        (GdkDisplayManager *display_mgr,
 							    gchar             *display_name);
-gint               gdk_display_manager_get_display_count   (GdkDisplayManager *dpy_mgr);
+gint               gdk_display_manager_get_display_count   (GdkDisplayManager *display_mgr);
 GdkDisplay *       gdk_get_default_display                 (void);
 GdkScreen *        gdk_get_default_screen                  (void);
 GdkDisplayManager *gdk_get_display_manager                 (void);

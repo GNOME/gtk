@@ -44,7 +44,7 @@ gdk_pango_context_get_for_screen (GdkScreen *screen)
   
   if (use_xft)
     context = pango_xft_get_context (GDK_SCREEN_XDISPLAY (screen),
-				     GDK_SCREEN_IMPL_X11 (screen)->scr_num);
+				     GDK_SCREEN_IMPL_X11 (screen)->screen_num);
   else
 #endif /* HAVE_XFT */
     context = pango_x_get_context (GDK_SCREEN_XDISPLAY (screen));

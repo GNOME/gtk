@@ -192,7 +192,7 @@ static void          gtk_drag_get_event_actions (GdkEvent        *event,
 					         GdkDragAction   *possible_actions);
 static GdkCursor *   gtk_drag_get_cursor         (GdkDragAction   action,
 						  GdkScreen      *screen);
-static GtkWidget    *gtk_drag_get_ipc_widget     (GdkScreen      *screen);
+static GtkWidget    *gtk_drag_get_ipc_widget     (GdkDisplay	 *display);
 static void          gtk_drag_release_ipc_widget (GtkWidget      *widget);
 
 static gboolean      gtk_drag_highlight_expose   (GtkWidget      *widget,
@@ -377,7 +377,7 @@ static const gint n_drag_cursors = sizeof (drag_cursors) / sizeof (drag_cursors[
  *************************************************************/
 
 static GtkWidget *
-gtk_drag_get_ipc_widget (GdkScreen *screen)
+gtk_drag_get_ipc_widget (GdkDisplay *display)
 {
   GtkWidget *result;
   
@@ -390,7 +390,7 @@ gtk_drag_get_ipc_widget (GdkScreen *screen)
     }
   else
     {
-      result = gtk_invisible_new_for_screen (screen);
+      result = gtk_invisible_new_for_screen (gdk_display_get_default_screen (display));
       gtk_widget_show (result);
     }
 
@@ -607,7 +607,7 @@ gtk_drag_get_data (GtkWidget      *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (context != NULL);
 
-  selection_widget = gtk_drag_get_ipc_widget (gtk_widget_get_screen (widget));
+  selection_widget = gtk_drag_get_ipc_widget (gtk_widget_get_display (widget));
 
   gdk_drag_context_ref (context);
   gtk_widget_ref (widget);
@@ -695,7 +695,7 @@ gtk_drag_finish (GdkDragContext *context,
   if (target != GDK_NONE)
     {
       GtkWidget *selection_widget = 
-	      gtk_drag_get_ipc_widget (gdk_drawable_get_screen (context->source_window));
+	      gtk_drag_get_ipc_widget (gdk_drawable_get_display (context->source_window));
 
       gdk_drag_context_ref (context);
       
@@ -1341,7 +1341,7 @@ gtk_drag_proxy_begin (GtkWidget       *widget,
       dest_info->proxy_source = NULL;
     }
   
-  ipc_widget = gtk_drag_get_ipc_widget (gtk_widget_get_screen (widget));
+  ipc_widget = gtk_drag_get_ipc_widget (gtk_widget_get_display (widget));
   context = gdk_drag_begin (ipc_widget->window,
 			    dest_info->context->targets);
 
@@ -1752,7 +1752,7 @@ gtk_drag_begin (GtkWidget         *widget,
       tmp_list = tmp_list->prev;
     }
 
-  ipc_widget = gtk_drag_get_ipc_widget (gtk_widget_get_screen (widget));
+  ipc_widget = gtk_drag_get_ipc_widget (gtk_widget_get_display (widget));
   source_widgets = g_slist_prepend (source_widgets, ipc_widget);
 
   context = gdk_drag_begin (ipc_widget->window, targets);
@@ -2131,12 +2131,14 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
   gint width, height;
   GdkPixmap *pixmap;
   GdkPixmap *mask;
-  
+  GdkScreen *screen;
+
   g_return_if_fail (context != NULL);
   g_return_if_fail (pixbuf != NULL || stock_id != NULL);
   g_return_if_fail (pixbuf == NULL || stock_id == NULL);
-
-  gtk_widget_push_colormap (gdk_rgb_get_colormap ());
+  
+  screen = gdk_drawable_get_screen (context->source_window);
+  gtk_widget_push_colormap (gdk_rgb_get_colormap_for_screen (screen));
   window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_screen (GTK_WINDOW (window), gdk_drawable_get_screen (context->source_window));
   gtk_widget_pop_colormap ();
@@ -2166,9 +2168,7 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
 			gdk_pixbuf_get_height (pixbuf));
   gtk_widget_realize (window);
 
-  gdk_pixbuf_render_pixmap_and_mask_for_screen (pixbuf,
-						gdk_drawable_get_screen (context->source_window),
-						&pixmap, &mask, 128);
+  gdk_pixbuf_render_pixmap_and_mask_for_screen (screen,	pixbuf, &pixmap, &mask, 128);
   
   gdk_window_set_back_pixmap (window->window, pixmap, FALSE);
   

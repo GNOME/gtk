@@ -64,29 +64,29 @@ gdk_display_class_init (GdkDisplayClass * class)
 GdkDisplay *
 gdk_display_new (gchar * display_name)
 {
-  return gdk_display_manager_open_display (gdk_display_manager, display_name);
+  return gdk_display_manager_open_display (_gdk_display_manager, display_name);
 }
 
 gchar *
-gdk_display_get_name (GdkDisplay * dpy)
+gdk_display_get_name (GdkDisplay * display)
 {
-  return GDK_DISPLAY_GET_CLASS (dpy)->get_display_name (dpy);
+  return GDK_DISPLAY_GET_CLASS (display)->get_display_name (display);
 }
 
 gint
-gdk_display_get_n_screens (GdkDisplay * dpy)
+gdk_display_get_n_screens (GdkDisplay * display)
 {
-  return GDK_DISPLAY_GET_CLASS (dpy)->get_n_screens (dpy);
+  return GDK_DISPLAY_GET_CLASS (display)->get_n_screens (display);
 }
 
 GdkScreen *
-gdk_display_get_screen (GdkDisplay * dpy, gint screen_num)
+gdk_display_get_screen (GdkDisplay * display, gint screen_num)
 {
-  return GDK_DISPLAY_GET_CLASS (dpy)->get_screen (dpy, screen_num);
+  return GDK_DISPLAY_GET_CLASS (display)->get_screen (display, screen_num);
 }
 
 GdkScreen *
-gdk_display_get_default_screen (GdkDisplay * dpy)
+gdk_display_get_default_screen (GdkDisplay * display)
 {
-  return GDK_DISPLAY_GET_CLASS (dpy)->get_default_screen (dpy);
+  return GDK_DISPLAY_GET_CLASS (display)->get_default_screen (display);
 }

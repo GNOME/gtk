@@ -60,7 +60,7 @@ gdk_input_find_device (guint32 id)
 }
 
 void
-gdk_input_get_root_relative_geometry(Display *dpy, Window w, int *x_ret, int *y_ret,
+gdk_input_get_root_relative_geometry(Display *display, Window w, int *x_ret, int *y_ret,
 				     int *width_ret, int *height_ret)
 {
   Window root, parent, child;
@@ -70,13 +70,13 @@ gdk_input_get_root_relative_geometry(Display *dpy, Window w, int *x_ret, int *y_
   guint width, height;
   guint border_widthc, depthc;
    
-  XQueryTree (dpy, w, &root, &parent, &children, &nchildren);
+  XQueryTree (display, w, &root, &parent, &children, &nchildren);
   if (children)
     XFree(children);
   
-  XGetGeometry (dpy, w, &root, &x, &y, &width, &height, &border_widthc, &depthc);
+  XGetGeometry (display, w, &root, &x, &y, &width, &height, &border_widthc, &depthc);
 
-  XTranslateCoordinates (dpy, w, root, 0, 0, &x, &y, &child);
+  XTranslateCoordinates (display, w, root, 0, 0, &x, &y, &child);
  
   if (x_ret)
     *x_ret = x;

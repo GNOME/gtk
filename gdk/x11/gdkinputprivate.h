@@ -177,7 +177,7 @@ gboolean         _gdk_device_get_history     (GdkDevice         *device,
 
 gint               gdk_input_common_init                (gint              include_core);
 GdkDevicePrivate * gdk_input_find_device                (guint32           id);
-void               gdk_input_get_root_relative_geometry (Display          *dpy,
+void               gdk_input_get_root_relative_geometry (Display          *display,
 							 Window            w,
 							 int              *x_ret,
 							 int              *y_ret,

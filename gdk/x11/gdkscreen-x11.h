@@ -52,7 +52,7 @@ struct _GdkScreenImplX11
   GdkDisplay *display;
   Display *xdisplay;
   Screen *xscreen;
-  gint scr_num;
+  gint screen_num;
   Window xroot_window;
   Window leader_window;
   GdkWindow *root_window;
@@ -83,8 +83,8 @@ GType gdk_X11_screen_impl_get_type ();
 
 #define DEFAULT_X_SCREEN    GDK_SCREEN_IMPL_X11(gdk_get_default_screen())->xscreen
 #define DEFAULT_GDK_SCREEN_IMPL_X11_FOR_DISPLAY(display)  GDK_SCREEN_IMPL_X11(GDK_DISPLAY_GET_CLASS(display)->get_default_screen(display))
-#define GDK_SCREEN_XDISPLAY(scr)  (GDK_SCREEN_IMPL_X11(scr)->xdisplay)
-#define GDK_SCREEN_XROOTWIN(scr)  (GDK_SCREEN_IMPL_X11(scr)->xroot_window)
+#define GDK_SCREEN_XDISPLAY(screen)  (GDK_SCREEN_IMPL_X11(screen)->xdisplay)
+#define GDK_SCREEN_XROOTWIN(screen)  (GDK_SCREEN_IMPL_X11(screen)->xroot_window)
 
 G_END_DECLS
 

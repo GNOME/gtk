@@ -243,7 +243,8 @@ gtk_paned_realize (GtkWidget *widget)
   attributes.y = paned->handle_ypos;
   attributes.width = paned->handle_width;
   attributes.height = paned->handle_height;
-  attributes.cursor = gdk_cursor_new (paned->cursor_type);
+  attributes.cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget),
+						 paned->cursor_type);
   attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK |
 			    GDK_POINTER_MOTION_MASK |

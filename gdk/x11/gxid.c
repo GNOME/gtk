@@ -22,8 +22,8 @@
 /* #define DEBUG_EVENTS */
 
 char *program_name;
-Display *dpy;
-Window root_window;		/* default root window of dpy */
+Display *display;
+Window root_window;		/* default root window of display*/
 int port = 0;		        /* port to listen on */
 int socket_fd = 0;		/* file descriptor of socket */
 typedef struct GxidWindow_ GxidWindow;
@@ -106,7 +106,7 @@ enable_device(GxidDevice *dev)
     {
       if (dev->ispointer) return;
 
-      dev->xdevice = XOpenDevice(dpy, dev->id);
+      dev->xdevice = XOpenDevice(display, dev->id);
       if (!dev->xdevice) return;
       
       DeviceMotionNotify (dev->xdevice, dev->motionnotify_type,
@@ -124,7 +124,7 @@ enable_device(GxidDevice *dev)
       }
       num_eventc = j;
       
-      XSelectExtensionEvent (dpy, root_window, xevc, num_eventc);
+      XSelectExtensionEvent (display, root_window, xevc, num_eventc);
     }
 }
 
@@ -154,7 +154,7 @@ switch_core_pointer(void)
   fprintf(stderr,"gxid: Switching core from %ld to %ld\n",
 	 old_pointer->id,new_pointer->id);
 #endif
-  result = XChangePointerDevice(dpy,new_pointer->xdevice, 0, 1);
+  result = XChangePointerDevice(display,new_pointer->xdevice, 0, 1);
   if (result != Success)
     {
       fprintf(stderr,"gxid: Error %d switching core from %ld to %ld\n",
@@ -178,7 +178,7 @@ disable_device(GxidDevice *dev)
     {
       if (dev->ispointer)
 	return;
-      XCloseDevice(dpy,dev->xdevice);
+      XCloseDevice(display,dev->xdevice);
       dev->xdevice = 0;
     }
 }
@@ -231,7 +231,7 @@ init_xinput(void)
   int num_extensions;
   int i;
 
-  extensions = XListExtensions(dpy, &num_extensions);
+  extensions = XListExtensions(display, &num_extensions);
   for (i = 0; i < num_extensions &&
 	 (strcmp(extensions[i], "XInputExtension") != 0); i++);
   XFreeExtensionList(extensions);
@@ -241,7 +241,7 @@ init_xinput(void)
       exit(1);
     }
 
-  xdevices = XListInputDevices(dpy, &num_xdevices);
+  xdevices = XListInputDevices(display, &num_xdevices);
   devices = (GxidDevice **)malloc(num_xdevices * sizeof(GxidDevice *));
 
   num_devices = 0;
@@ -258,7 +258,7 @@ init_xinput(void)
    in gdkinputgxi.h will need it too. */
 
 Window
-gxi_find_root_child(Display *dpy, Window w)
+gxi_find_root_child(Display *display, Window w)
 {
   Window root,parent;
   Window *children;
@@ -268,7 +268,7 @@ gxi_find_root_child(Display *dpy, Window w)
   do 
     {
       w = parent;
-      XQueryTree (dpy, w, &root, &parent, &children, &nchildren);
+      XQueryTree (display, w, &root, &parent, &children, &nchildren);
       if (children)
 	XFree (children);
     } 
@@ -349,7 +349,7 @@ handle_claim_device(GxidClaimDevice *msg)
 
       device->exclusive = 1;
       disable_device(device);
-      XSelectInput(dpy,winid,StructureNotifyMask);
+      XSelectInput(display,winid,StructureNotifyMask);
     }
   else				/* !exclusive */
     {
@@ -361,7 +361,7 @@ handle_claim_device(GxidClaimDevice *msg)
 	 (We do look for closings now...)
 	 */
       
-      XSelectInput(dpy,winid,EnterWindowMask|StructureNotifyMask);
+      XSelectInput(display,winid,EnterWindowMask|StructureNotifyMask);
     }
 
   for (i=0;i<num_windows;i++)
@@ -384,7 +384,7 @@ handle_claim_device(GxidClaimDevice *msg)
       windows[num_windows-1] = window;
 
       window->xwindow = winid;
-      window->root_child = gxi_find_root_child(dpy,winid);
+      window->root_child = gxi_find_root_child(display,winid);
       window->num_devices = 0;
       window->devices = 0;
     }
@@ -589,7 +589,7 @@ handle_motion_notify(XDeviceMotionEvent *event)
 	     calls. (Which is prone to happening since we get events
 	     on root just as the client exits) */
 	     
-	  XQueryPointer(dpy,w,&root,&child,&root_x,&root_y,
+	  XQueryPointer(display,w,&root,&child,&root_x,&root_y,
 			&x,&y,&mask);
 	}
       while (child != None);
@@ -601,7 +601,7 @@ handle_motion_notify(XDeviceMotionEvent *event)
 		return;
       
       /* FIXME: do something smarter with axes */
-      XChangePointerDevice(dpy,new_device->xdevice, 0, 1);
+      XChangePointerDevice(display,new_device->xdevice, 0, 1);
       new_device->ispointer = 1;
       
       old_device->ispointer = 0;
@@ -715,7 +715,7 @@ handle_xevent(void)
   int i;
   XEvent event;
 	
-  XNextEvent (dpy, &event);
+  XNextEvent (display, &event);
 
 #ifdef DEBUG_EVENTS
   fprintf(stderr,"Event - type = %d; window = 0x%lx\n",
@@ -813,20 +813,20 @@ main(int argc, char **argv)
   
   /* initialize the X connection */
   
-  dpy = XOpenDisplay (display_name);
-  if (!dpy)
+  display= XOpenDisplay (display_name);
+  if (!display)
     {
       fprintf (stderr, "%s:  unable to open display '%s'\n",
 	       program_name, XDisplayName (display_name));
       exit (1);
     }
   
-  root_window = DefaultRootWindow(dpy);
+  root_window = DefaultRootWindow(display);
 
   /* We'll want to do this in the future if we are to support
      gxid monitoring visibility information for clients */
 #if 0
-  XSelectInput(dpy,root_window,SubstructureNotifyMask);
+  XSelectInput(display,root_window,SubstructureNotifyMask);
 #endif
   init_xinput();
   
@@ -836,14 +836,14 @@ main(int argc, char **argv)
   
   /* main loop */
 
-  if (XPending(dpy))		/* this seems necessary to get things
+  if (XPending(display))		/* this seems necessary to get things
 				   in sync */
     handle_xevent();
   while (1) 
     {
 
       FD_ZERO(&readfds);
-      FD_SET(ConnectionNumber(dpy),&readfds);
+      FD_SET(ConnectionNumber(display),&readfds);
       FD_SET(socket_fd,&readfds);
 
       if (select(8*sizeof(readfds),&readfds,
@@ -856,10 +856,10 @@ main(int argc, char **argv)
       if (FD_ISSET(socket_fd,&readfds))
 	handle_connection();
 	
-      while (XPending(dpy))
+      while (XPending(display))
 	handle_xevent();
     }
 
-  XCloseDisplay (dpy);
+  XCloseDisplay (display);
   exit (0);
 }

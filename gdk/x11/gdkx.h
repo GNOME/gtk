@@ -147,11 +147,10 @@ GType gdk_gc_x11_get_type (void);
 #define GDK_WINDOW_XWINDOW    GDK_DRAWABLE_XID
 
 extern gchar		*gdk_display_name;
-extern GdkDisplayManager *gdk_display_manager;
 extern Atom		 gdk_selection_property;
 extern gchar		*gdk_progclass;
 
-GdkVisual* gdkx_visual_get_for_screen (GdkScreen *scr,
+GdkVisual* gdkx_visual_get_for_screen (GdkScreen *screen,
 				       VisualID   xvisualid);
 GdkVisual* gdkx_visual_get            (VisualID   xvisualid);
 
@@ -160,7 +159,7 @@ GdkVisual* gdkx_visual_get            (VisualID   xvisualid);
 GdkColormap* gdkx_colormap_get (Colormap xcolormap);
 /* Utility function in gdk.c - not sure where it belongs, but it's
    needed in more than one place, so make it public */
-Window        gdk_get_client_window      (Display  *dpy,
+Window        gdk_get_client_window      (Display  *display,
                                           Window    win);
 
 /* Functions to create pixmaps and windows from their X equivalents */
@@ -189,7 +188,7 @@ void          gdk_x11_ungrab_server    (GdkDisplay *display);
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
 
 GC _gdk_x11_gc_flush (GdkGC *gc);
-GList *gdk_list_visuals_for_screen (GdkScreen *scr);
+GList *gdk_list_visuals_for_screen (GdkScreen *screen);
 
 
 /* Functions to get the X Atom equivalent to the GdkAtom */

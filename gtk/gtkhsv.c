@@ -750,7 +750,8 @@ set_cross_grab (GtkHSV *hsv,
   
   priv = hsv->priv;
   
-  cursor = gdk_cursor_new (GDK_CROSSHAIR);
+  cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (hsv),
+				      GDK_CROSSHAIR);
   gdk_pointer_grab (priv->window, FALSE,
 		    (GDK_POINTER_MOTION_MASK
 		     | GDK_POINTER_MOTION_HINT_MASK

@@ -36,6 +36,7 @@
 #include "linux-fb/gdkfb.h"
 #endif
 
+#include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkcolorsel.h"
 #include "gtkhsv.h"
@@ -63,8 +64,7 @@
 #include "gtkmain.h"
 #include "gtksettings.h"
 #include "gtkintl.h"
-#include "gdk/gdkdisplay.h"
-#include "gdk/gdkscreen.h"
+#include "gtkimage.h"
 
 #include <string.h>
 
@@ -1740,12 +1740,10 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 {
   GtkWidget *top_hbox;
   GtkWidget *top_right_vbox;
-  GtkWidget *table, *label, *hbox, *frame, *vbox;
+  GtkWidget *table, *label, *hbox, *frame, *vbox, *button;
   GtkAdjustment *adjust;
-  GdkPixmap *dropper_pixmap;
-  GtkWidget *dropper_image;
-  GtkWidget *button;
-  GdkBitmap *mask = NULL;
+  GdkPixbuf *picker_pix = NULL;
+  GtkImage  *picker_image;
   gint i, j;
   ColorSelectionPrivate *priv;
   
@@ -1786,12 +1784,10 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_object_set_data (GTK_OBJECT (button), "COLORSEL", colorsel); 
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
                       GTK_SIGNAL_FUNC (get_screen_color), NULL);
-  dropper_pixmap = gdk_pixmap_colormap_create_from_xpm_d (NULL, gtk_widget_get_colormap (button), &mask, NULL, picker);
-  dropper_image = gtk_pixmap_new (dropper_pixmap, mask);
-  gdk_pixmap_unref (dropper_pixmap);
-  if (mask)
-    gdk_pixmap_unref (mask);
-  gtk_container_add (GTK_CONTAINER (button), dropper_image);
+  picker_pix = gdk_pixbuf_new_from_xpm_data (picker);
+  picker_image = gtk_image_new_from_pixbuf (picker_pix);
+  gtk_container_add (GTK_CONTAINER (button), picker_image);
+  gtk_widget_show (GTK_WIDGET (picker_image));
   gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
   gtk_tooltips_set_tip (priv->tooltips,

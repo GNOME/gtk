@@ -21,7 +21,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "gdkprivate.h"
+#include "gdkinternals.h"
 #include "gdkdisplaymgr.h"
 
 static void gdk_display_manager_class_init (GObjectClass * class);
@@ -29,18 +29,18 @@ static void gdk_display_manager_class_init (GObjectClass * class);
 GdkDisplay *
 gdk_get_default_display (void)
 {
-  return gdk_display_manager_get_default_display (gdk_display_manager);
+  return gdk_display_manager_get_default_display (_gdk_display_manager);
 }
 
 GdkScreen *
 gdk_get_default_screen (void)
 {
-  GdkDisplay *dpy = gdk_get_default_display ();
-  return gdk_display_get_default_screen (dpy);
+  GdkDisplay *display= gdk_get_default_display ();
+  return gdk_display_get_default_screen (display);
 }
 
 GdkDisplayManager *
 gdk_get_display_manager (void)
 {
-  return gdk_display_manager;
+  return _gdk_display_manager;
 }

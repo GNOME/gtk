@@ -51,11 +51,11 @@ struct _GdkDisplayClass
 {
   GObjectClass parent_class;
   
-  gchar *     (*get_display_name)   (GdkDisplay *dpy);
-  gint        (*get_n_screens)      (GdkDisplay *dpy);
-  GdkScreen * (*get_screen)         (GdkDisplay *dpy,
+  gchar *     (*get_display_name)   (GdkDisplay *display);
+  gint        (*get_n_screens)      (GdkDisplay *display);
+  GdkScreen * (*get_screen)         (GdkDisplay *display,
 				     gint        screen_num);
-  GdkScreen * (*get_default_screen) (GdkDisplay *dpy);
+  GdkScreen * (*get_default_screen) (GdkDisplay *display);
 };
 
 GType       gdk_display_get_type           (void);
@@ -63,11 +63,11 @@ GdkDisplay *gdk_display_init_new           (int          argc,
 					    char       **argv,
 					    char        *display_name);
 GdkDisplay *gdk_display_new                (gchar       *display_name);
-gchar *     gdk_display_get_name           (GdkDisplay  *dpy);
-gint        gdk_display_get_n_screens      (GdkDisplay  *dpy);
-GdkScreen * gdk_display_get_screen         (GdkDisplay  *dpy,
+gchar *     gdk_display_get_name           (GdkDisplay  *display);
+gint        gdk_display_get_n_screens      (GdkDisplay  *display);
+GdkScreen * gdk_display_get_screen         (GdkDisplay  *display,
 					    gint         screen_num);
-GdkScreen * gdk_display_get_default_screen (GdkDisplay  *dpy);
+GdkScreen * gdk_display_get_default_screen (GdkDisplay  *display);
 void        gdk_display_set_use_xshm       (GdkDisplay  *display,
 					    gboolean     use_xshm);
 gboolean    gdk_display_get_use_xshm       (GdkDisplay  *display);
@@ -78,6 +78,7 @@ void        gdk_display_keyboard_ungrab    (GdkDisplay  *display,
 gboolean    gdk_display_pointer_is_grabbed (GdkDisplay  *display);
 void        gdk_display_beep               (GdkDisplay  *display);
 void        gdk_display_sync               (GdkDisplay  *display);
+GdkAtom	    gdk_display_get_selection_property (GdkDisplay *display);
 
 
 #ifdef __cplusplus

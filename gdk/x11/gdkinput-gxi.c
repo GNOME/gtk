@@ -38,7 +38,7 @@ static void gdk_input_gxi_select_notify (GdkDevicePrivate *gdkdev);
 static gint gdk_input_is_extension_device (GdkDevicePrivate *device_private);
 static void gdk_input_gxi_update_device (GdkDevicePrivate *gdkdev);
 
-static Window gdk_input_find_root_child(Display *dpy, Window w);
+static Window gdk_input_find_root_child(Display *display, Window w);
 static void gdk_input_compute_obscuring(GdkInputWindow *input_window);
 static gint gdk_input_is_obscured(GdkInputWindow *input_window, gdouble x, 
 				  gdouble y);
@@ -429,7 +429,7 @@ gdk_input_is_obscured(GdkInputWindow *input_window, gdouble x, gdouble y)
    in gxid.c will need it too. */
 
 static Window 
-gdk_input_find_root_child(Display *dpy, Window w)
+gdk_input_find_root_child(Display *display, Window w)
 {
   Window root,parent;
   Window *children;
@@ -439,7 +439,7 @@ gdk_input_find_root_child(Display *dpy, Window w)
   do 
     {
       w = parent;
-      XQueryTree(dpy,w,&root,&parent,&children,&nchildren);
+      XQueryTree(display,w,&root,&parent,&children,&nchildren);
       if (children) XFree(children);
     } 
   while (parent != root);

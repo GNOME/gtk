@@ -5526,7 +5526,8 @@ text_window_realize (GtkTextWindow *win,
   if (win->type == GTK_TEXT_WINDOW_TEXT)
     {
       /* I-beam cursor */
-      cursor = gdk_cursor_new (GDK_XTERM);
+      cursor = gdk_cursor_new_for_screen (gdk_drawable_get_screen (parent),
+					  GDK_XTERM);
       gdk_window_set_cursor (win->bin_window, cursor);
       gdk_cursor_destroy (cursor);
 

@@ -1011,7 +1011,8 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
 	      hb->attach_allocation.height = height;
 
 	      hb->in_drag = TRUE;
-	      fleur = gdk_cursor_new (GDK_FLEUR);
+	      fleur = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget),
+						 GDK_FLEUR);
 	      if (gdk_pointer_grab (widget->window,
 				    FALSE,
 				    (GDK_BUTTON1_MOTION_MASK |

@@ -797,7 +797,8 @@ gtk_combo_init (GtkCombo * combo)
   gtk_widget_show (event_box);
 
   gtk_widget_realize (event_box);
-  cursor = gdk_cursor_new (GDK_TOP_LEFT_ARROW);
+  cursor = gdk_cursor_new_for_screen (gdk_drawable_get_screen (event_box->window),
+				      GDK_TOP_LEFT_ARROW);
   gdk_window_set_cursor (event_box->window, cursor);
   gdk_cursor_destroy (cursor);
 

@@ -26,6 +26,7 @@
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
+#include <glib.h>
 #include <gdk/gdkdisplay.h>
 #include <gdk/gdkkeys.h>
 #include "gdk/gdkwindow.h"
@@ -35,7 +36,7 @@ G_BEGIN_DECLS
 typedef struct _GdkDisplayImplX11 GdkDisplayImplX11;
 typedef struct _GdkDisplayImplX11Class GdkDisplayImplX11Class;
 
-#define GDK_TYPE_DISPLAY_IMPL_X11              (_gdk_x11_display_impl_get_type())
+#define GDK_TYPE_DISPLAY_IMPL_X11              (gdk_x11_display_impl_get_type())
 #define GDK_DISPLAY_IMPL_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY_IMPL_X11, GdkDisplayImplX11))
 #define GDK_DISPLAY_IMPL_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DISPLAY_IMPL_X11, GdkDisplayImplX11Class))
 #define GDK_IS_DISPLAY_IMPL_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DISPLAY_IMPL_X11))
@@ -109,15 +110,15 @@ struct _GdkDisplayImplX11Class
   GdkDisplayClass parent_class;
 };
 
-GType       _gdk_x11_display_impl_get_type           (void);
+GType       gdk_x11_display_impl_get_type           (void);
 
 GdkDisplay *_gdk_x11_display_impl_display_new        (gchar                  *display_name);
 
-gboolean    gdk_x11_display_is_root_window (GdkDisplay             *dpy,
+gboolean    gdk_x11_display_is_root_window (GdkDisplay             *display,
 					    Window                  xroot_window);
 
 #define DEFAULT_X_DISPLAY   GDK_DISPLAY_IMPL_X11(gdk_get_default_display())->xdisplay
-#define GDK_DISPLAY_XDISPLAY(dpy)  (GDK_DISPLAY_IMPL_X11(dpy)->xdisplay)
+#define GDK_DISPLAY_XDISPLAY(display)  (GDK_DISPLAY_IMPL_X11(display)->xdisplay)
 
 G_END_DECLS
 

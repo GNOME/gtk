@@ -804,8 +804,8 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
          * and LockMask for mods_rtrn, so this "fix" keeps this behavior 
          * and solves the VTS problem.
          */
-        if ((xkb->dpy)&&(xkb->dpy->xkb_info)&&
-            (xkb->dpy->xkb_info->xlib_ctrls&XkbLC_AlwaysConsumeShiftAndLock)) {            *mods_rtrn|= (ShiftMask|LockMask);
+        if ((xkb->display)&&(xkb->display->xkb_info)&&
+            (xkb->display->xkb_info->xlib_ctrls&XkbLC_AlwaysConsumeShiftAndLock)) {            *mods_rtrn|= (ShiftMask|LockMask);
         }
 #endif
         

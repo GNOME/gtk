@@ -211,7 +211,7 @@ gdk_image_new (GdkImageType  type,
   XShmSegmentInfo *x_shm_info;
 #endif /* USE_SHM */
   Visual *xvisual;
-  GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (visual->screen);
+  GdkScreenImplX11 *screen_impl = GDK_SCREEN_IMPL_X11 (visual->screen);
 
   switch (type)
     {
@@ -241,19 +241,19 @@ gdk_image_new (GdkImageType  type,
 	{
 	case GDK_IMAGE_SHARED:
 #ifdef USE_SHM
-	  if (GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm)
+	  if (GDK_DISPLAY_IMPL_X11 (screen_impl->display)->gdk_use_xshm)
 	    {
 	      private->x_shm_info = g_new (XShmSegmentInfo, 1);
 	      x_shm_info = private->x_shm_info;
 	      x_shm_info->shmid = -1;
 	      x_shm_info->shmaddr = (char*) -1;
 
-	      private->ximage = XShmCreateImage (scr_impl->xdisplay, xvisual, visual->depth,
+	      private->ximage = XShmCreateImage (screen_impl->xdisplay, xvisual, visual->depth,
 						 ZPixmap, NULL, x_shm_info, width, height);
 	      if (private->ximage == NULL)
 		{
 		  g_warning ("XShmCreateImage failed");
-		  GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = FALSE;
+		  GDK_DISPLAY_IMPL_X11 (screen_impl->display)->gdk_use_xshm = FALSE;
 
 		  goto error;
 		}
@@ -272,7 +272,7 @@ gdk_image_new (GdkImageType  type,
 		  if (errno != EINVAL)
 		    {
 		      g_warning ("shmget failed: error %d (%s)", errno, g_strerror (errno));
-		      GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = FALSE;
+		      GDK_DISPLAY_IMPL_X11 (screen_impl->display)->gdk_use_xshm = FALSE;
 		    }
 
 		  goto error;
@@ -289,7 +289,7 @@ gdk_image_new (GdkImageType  type,
 		   * EMFILE, which would mean that we've exceeded the per-process
 		   * Shm segment limit.
 		   */
-		  GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = FALSE;
+		  GDK_DISPLAY_IMPL_X11 (screen_impl->display)->gdk_use_xshm = FALSE;
 		  goto error;
 		}
 
@@ -301,7 +301,7 @@ gdk_image_new (GdkImageType  type,
 	      if (gdk_error_trap_pop ())
 		{
 		  /* this is the common failure case so omit warning */
-		  GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = FALSE;
+		  GDK_DISPLAY_IMPL_X11 (screen_impl->display)->gdk_use_xshm = FALSE;
 		  goto error;
 		}
 	      

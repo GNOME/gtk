@@ -57,8 +57,6 @@
 
 #if defined (GDK_WINDOWING_X11)
 #include "x11/gdkx.h"		/* For gdk_window_lookup() */
-#include "x11/gdkdisplay-x11.h"
-#include "x11/gdkscreen-x11.h"
 #elif defined (GDK_WINDOWING_WIN32)
 #include "win32/gdkwin32.h"	/* For gdk_window_lookup() */
 #elif defined (GDK_WINDOWING_FB)
@@ -1489,9 +1487,8 @@ gtk_selection_property_notify (GtkWidget	*widget,
       (event->atom != gdk_selection_property)) /* not the right property */
 #elif defined(GDK_WINDOWING_X11)	  
 if ((event->state != GDK_PROPERTY_NEW_VALUE) ||  /* property was deleted */
-    (event->atom !=     /* not the right property */
-     gdk_x11_get_virtual_atom (gtk_widget_get_display (widget),
-			       GDK_DISPLAY_IMPL_X11 (gtk_widget_get_display (widget))->gdk_selection_property)))
+    (event->atom !=  
+     gdk_display_get_selection_property (gtk_widget_get_display (widget))))  /* not the right property */
 #endif
 	  return FALSE;
   

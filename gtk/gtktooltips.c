@@ -319,7 +319,7 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   GtkRequisition requisition;
   GtkWidget *widget;
   GtkStyle *style;
-  gint x, y, w, h, scr_w, scr_h;
+  gint x, y, w, h, screen_w, screen_h;
   GtkTooltipsData *data;
   GdkScreen *screen;
 
@@ -334,8 +334,8 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   widget = tooltips->active_tips_data->widget;
   screen = gtk_widget_get_screen (screen);
 
-  scr_w = gdk_screen_get_width (screen);
-  scr_h = gdk_screen_get_height (screen);
+  screen_w = gdk_screen_get_width (screen);
+  screen_h = gdk_screen_get_height (screen);
 
   data = tooltips->active_tips_data;
 
@@ -353,12 +353,12 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
 
   x -= (w / 2 + 4);
 
-  if ((x + w) > scr_w)
-    x -= (x + w) - scr_w;
+  if ((x + w) > screen_w)
+    x -= (x + w) - screen_w;
   else if (x < 0)
     x = 0;
 
-  if ((y + h + widget->allocation.height + 4) > scr_h)
+  if ((y + h + widget->allocation.height + 4) > screen_h)
     y = y - h - 4;
   else
     y = y + widget->allocation.height + 4;

@@ -36,6 +36,6 @@ GList            *gdk_default_filters = NULL;
 GMutex           *gdk_threads_mutex = NULL;          /* Global GDK lock */
 GList            *gdk_queued_events = NULL;
 GList            *gdk_queued_tail = NULL;
-GdkDisplayManager *gdk_display_manager = NULL;
+GdkDisplayManager *_gdk_display_manager = NULL;
 
 

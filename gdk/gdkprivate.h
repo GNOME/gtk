@@ -74,7 +74,6 @@ void gdk_window_destroy_notify	     (GdkWindow *window);
 
 GDKVAR gint		 gdk_error_code;
 GDKVAR gint		 gdk_error_warnings;
-GDKVAR GdkDisplayManager *gdk_display_manager;
 
 #ifndef GDK_DISABLE_DEPRECATED
 

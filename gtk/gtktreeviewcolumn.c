@@ -895,7 +895,8 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
 		     GDK_POINTER_MOTION_HINT_MASK |
 		     GDK_KEY_PRESS_MASK);
   attributes_mask = GDK_WA_CURSOR | GDK_WA_X | GDK_WA_Y;
-  attr.cursor = gdk_cursor_new (GDK_SB_H_DOUBLE_ARROW);
+  attr.cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (column->button),
+					   GDK_SB_H_DOUBLE_ARROW);
   tree_view->priv->cursor_drag = attr.cursor;
 
   attr.y = 0;

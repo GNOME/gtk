@@ -308,21 +308,21 @@ gdk_pixmap_foreign_new_for_screen (GdkScreen       *screen,
   GdkPixmapImplX11 *pix_impl;
   Pixmap xpixmap;
   Window root_return;
-  GdkScreenImplX11 *scr_impl;
+  GdkScreenImplX11 *screen_impl;
   unsigned int x_ret, y_ret, w_ret, h_ret, bw_ret, depth_ret;
 
   /* check to make sure we were passed something at
      least a little sane */
   g_return_val_if_fail((anid != 0), NULL);
   
-  scr_impl = GDK_SCREEN_IMPL_X11 (screen);
+  screen_impl = GDK_SCREEN_IMPL_X11 (screen);
 
   /* set the pixmap to the passed in value */
   xpixmap = anid;
 
   /* get information about the Pixmap to fill in the structure for
      the gdk window */
-  if (!XGetGeometry (scr_impl->xdisplay,
+  if (!XGetGeometry (screen_impl->xdisplay,
 		     xpixmap, &root_return,
 		     &x_ret, &y_ret, &w_ret, &h_ret, &bw_ret, &depth_ret))
     return NULL;
