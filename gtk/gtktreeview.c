@@ -1988,7 +1988,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       GtkTreeViewColumn *column = NULL;
       GtkCellRenderer *focus_cell = NULL;
       gint column_handled_click = FALSE;
-      gboolean emit_row_activated = FALSE;
+      gboolean row_double_click = FALSE;
       gboolean rtl;
 
       /* are we in an arrow? */
@@ -2026,6 +2026,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       background_area.height = MAX (GTK_RBNODE_GET_HEIGHT (node),
 				    tree_view->priv->expander_size);
       background_area.x = 0;
+
 
       /* Let the column have a chance at selecting it. */
       rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
@@ -2140,24 +2141,30 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       /* select */
       pre_val = tree_view->priv->vadjustment->value;
 
-      focus_cell = _gtk_tree_view_column_get_cell_at_pos (column, event->x - background_area.x);
-      if (focus_cell)
-        gtk_tree_view_column_focus_cell (column, focus_cell);
+      /* we only handle selection modifications from the first button on
+       * the first button press
+       */
+      if (event->type == GDK_BUTTON_PRESS && event->button == 1)
+        {
+          focus_cell = _gtk_tree_view_column_get_cell_at_pos (column, event->x - background_area.x);
+          if (focus_cell)
+            gtk_tree_view_column_focus_cell (column, focus_cell);
 
-      if (event->state & GDK_CONTROL_MASK)
-	{
-	  gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
-	  gtk_tree_view_real_toggle_cursor_row (tree_view);
-	}
-      else if (event->state & GDK_SHIFT_MASK)
-	{
-	  gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
-	  gtk_tree_view_real_select_cursor_row (tree_view, FALSE);
-	}
-      else
-	{
-	  gtk_tree_view_real_set_cursor (tree_view, path, TRUE, TRUE);
-	}
+          if (event->state & GDK_CONTROL_MASK)
+            {
+              gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
+              gtk_tree_view_real_toggle_cursor_row (tree_view);
+            }
+          else if (event->state & GDK_SHIFT_MASK)
+            {
+              gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
+              gtk_tree_view_real_select_cursor_row (tree_view, FALSE);
+            }
+          else
+            {
+              gtk_tree_view_real_set_cursor (tree_view, path, TRUE, TRUE);
+            }
+        }
 
       /* the treeview may have been scrolled because of _set_cursor,
        * correct here
@@ -2179,38 +2186,48 @@ gtk_tree_view_button_press (GtkWidget      *widget,
           tree_view->priv->press_start_y = event->y;
         }
 
-      if (event->button == 1 && event->type == GDK_2BUTTON_PRESS &&
-	  tree_view->priv->last_button_press)
-	{
-	  GtkTreePath *lsc;
-
-	  lsc = gtk_tree_row_reference_get_path (tree_view->priv->last_button_press);
-
-	  if (tree_view->priv->last_button_press)
-	    gtk_tree_row_reference_free (tree_view->priv->last_button_press);
-	  if (tree_view->priv->last_button_press_2)
-	    gtk_tree_row_reference_free (tree_view->priv->last_button_press_2);
-	  tree_view->priv->last_button_press = NULL;
-	  tree_view->priv->last_button_press_2 = NULL;
-
-	  if (lsc)
-	    {
-	      if (!gtk_tree_path_compare (lsc, path))
-		emit_row_activated = TRUE;
-	      gtk_tree_path_free (lsc);
-	    }
-	}
-      else if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
+      /* Test if a double click happened on the same row. */
+      if (event->button == 1)
         {
-	  if (tree_view->priv->last_button_press)
-	    gtk_tree_row_reference_free (tree_view->priv->last_button_press);
-	  tree_view->priv->last_button_press = tree_view->priv->last_button_press_2;
-	  tree_view->priv->last_button_press_2 = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, path);
-	}
+          /* We also handle triple clicks here, because a user could have done
+           * a first click and a second double click on different rows.
+           */
+          if ((event->type == GDK_2BUTTON_PRESS
+               || event->type == GDK_3BUTTON_PRESS)
+              && tree_view->priv->last_button_press)
+            {
+              GtkTreePath *lsc;
+
+              lsc = gtk_tree_row_reference_get_path (tree_view->priv->last_button_press);
+
+              if (lsc)
+                {
+                  row_double_click = !gtk_tree_path_compare (lsc, path);
+                  gtk_tree_path_free (lsc);
+                }
+            }
+
+          if (row_double_click)
+            {
+              if (tree_view->priv->last_button_press)
+                gtk_tree_row_reference_free (tree_view->priv->last_button_press);
+              if (tree_view->priv->last_button_press_2)
+                gtk_tree_row_reference_free (tree_view->priv->last_button_press_2);
+              tree_view->priv->last_button_press = NULL;
+              tree_view->priv->last_button_press_2 = NULL;
+            }
+          else
+            {
+              if (tree_view->priv->last_button_press)
+                gtk_tree_row_reference_free (tree_view->priv->last_button_press);
+              tree_view->priv->last_button_press = tree_view->priv->last_button_press_2;
+              tree_view->priv->last_button_press_2 = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, path);
+            }
+        }
 
       GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
 
-      if (emit_row_activated)
+      if (row_double_click)
 	{
 	  gtk_grab_remove (widget);
 	  gtk_tree_view_row_activated (tree_view, path, column);

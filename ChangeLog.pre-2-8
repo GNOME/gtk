@@ -1,3 +1,12 @@
+Thu Aug 21 20:53:46 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Slightly modified patch from Yann Rouillard to improve selection
+	behavior with the mouse. Fixes #120187.
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): only
+	select/deselect items on the first button press of button 1,
+	expand checks for row_activated to include triple clicks.
+
 Thu Aug 21 01:33:51 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from stable.
