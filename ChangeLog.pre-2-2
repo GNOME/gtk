@@ -1,3 +1,7 @@
+Tue Jun  6 01:59:57 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_finalize): Unref the entry's layout.
+
 Mon Jun  5 16:00:09 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.c (gdk_init_check): Add call to g_type_init() - we'll

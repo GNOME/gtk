@@ -509,6 +509,9 @@ gtk_entry_finalize (GObject *object)
 
   entry = GTK_ENTRY (object);
 
+  if (entry->layout)
+    pango_layout_unref (entry->layout);
+
   gtk_object_unref (GTK_OBJECT (entry->im_context));
 
   if (entry->timer)
