@@ -601,6 +601,9 @@ if test "x$gdktarget" = "xx11"; then
 	if $have_xft = true ; then
             PANGO_LIBS="$PANGO_LIBS -lpangoxft"
         fi
+elif test "x$gdktarget" = "xlinux-fb"; then
+	PANGO_CFLAGS="`$PANGO_CONFIG --cflags pangoft2`"
+	PANGO_LIBS="`$PANGO_CONFIG --libs pangoft2`"
 else
 	PANGO_CFLAGS="`$PANGO_CONFIG --cflags pango`"
 	PANGO_LIBS="`$PANGO_CONFIG --libs pango`"
@@ -1116,7 +1119,6 @@ gtk/gtkcompat.h
 gtk/gtk-win32.rc
 gtk/stock-icons/Makefile
 modules/Makefile
-modules/linux-fb/Makefile
 modules/input/Makefile
 contrib/Makefile
 contrib/gdk-pixbuf-xlib/Makefile

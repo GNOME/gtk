@@ -1,3 +1,36 @@
+2000-12-21  Alexander Larsson  <alexl@redhat.com>
+
+	* configure.in:
+	For linux-fb get the pangoft2 cflags and libs. This needs a recent
+	pango version.
+	Remove modules/linux-fb/Makefile.
+
+	* gdk/linux-fb/gdkdrawable-fb2.c:
+	Render glyphs using freetype.
+
+	* gdk/linux-fb/gdkfb.h:
+	Add new fb-specific functions needed for managing windows.
+
+	* gdk/linux-fb/gdkmain-fb.c:
+	Remove gdk_font_init/fini() calls.
+
+	* gdk/linux-fb/gdkpango-fb.c:
+	Remove old implementation. Use pangoft2 instead.
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	Remove PangoFBFont and related stuff.
+
+	* gdk/linux-fb/gdkwindow-fb.c:
+	Implement drawable->get_visible_region.
+	Implement support for _gdk_window_set_child_handler () and
+	_gdk_window_get_decorations().
+
+	* modules/Makefile.am:
+	Remove linux-fb subdir.
+
+	* modules/linux-fb/*:
+	Removed all.
+	
 2000-12-20  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcellrenderer*.c (::get_property): remove g_value_init
