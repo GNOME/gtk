@@ -373,6 +373,19 @@ theme_pixbuf_compute_hints (ThemePixbuf *theme_pb)
   int i, j;
   gint width = gdk_pixbuf_get_width (theme_pb->pixbuf);
   gint height = gdk_pixbuf_get_height (theme_pb->pixbuf);
+
+  if (theme_pb->border_left + theme_pb->border_right >= width ||
+      theme_pb->border_top + theme_pb->border_bottom >= height)
+    {
+      g_warning ("Invalid borders specified for theme pixmap:\n"
+		 "        %s,\n"
+		 "there must be at least one pixel not in the border both horizontally\n"
+		 "and vertically", theme_pb->filename);
+      if (theme_pb->border_left + theme_pb->border_right >= width)
+	theme_pb->border_left = theme_pb->border_right = width / 2 + 1 - (width % 2);
+      if (theme_pb->border_bottom + theme_pb->border_top >= height)
+	theme_pb->border_bottom = theme_pb->border_top = height / 2 + 1 - (height % 2);
+    }
   
   for (i = 0; i < 3; i++)
     {
