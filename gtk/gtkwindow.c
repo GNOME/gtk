@@ -148,10 +148,14 @@ struct _GtkWindowMnemonic {
   GSList *targets;
 };
 
+#define GTK_WINDOW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_WINDOW, GtkWindowPrivate))
+
 typedef struct _GtkWindowPrivate GtkWindowPrivate;
 
 struct _GtkWindowPrivate
 {
+  guint above_initially : 1;
+  guint below_initially : 1;
   guint fullscreen_initially : 1;
   guint skips_taskbar : 1;
   guint skips_pager : 1;
@@ -162,7 +166,6 @@ static void gtk_window_init               (GtkWindow         *window);
 static void gtk_window_dispose            (GObject           *object);
 static void gtk_window_destroy            (GtkObject         *object);
 static void gtk_window_finalize           (GObject           *object);
-static void gtk_window_private_finalize   (GtkWindowPrivate  *priv);
 static void gtk_window_show               (GtkWidget         *widget);
 static void gtk_window_hide               (GtkWidget         *widget);
 static void gtk_window_map                (GtkWidget         *widget);
@@ -308,33 +311,6 @@ mnemonic_equal (gconstpointer a, gconstpointer b)
     (ka->keyval == kb->keyval);
 }
 
-GtkWindowPrivate*
-gtk_window_get_private (GtkWindow *window)
-{
-  GtkWindowPrivate *private;
-  static GQuark private_quark = 0;
-
-  if (!private_quark)
-    private_quark = g_quark_from_static_string ("gtk-window-private");
-
-  private = g_object_get_qdata (G_OBJECT (window), private_quark);
-
-  if (!private)
-    {
-      private = g_new0 (GtkWindowPrivate, 1);
-
-      private->fullscreen_initially = FALSE;
-      private->skips_pager = FALSE;
-      private->skips_taskbar = FALSE;
-      
-      g_object_set_qdata_full (G_OBJECT (window), private_quark,
-			       private,
-                               (GDestroyNotify) gtk_window_private_finalize);
-    }
-
-  return private;
-}
-
 GType
 gtk_window_get_type (void)
 {
@@ -451,6 +427,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   klass->activate_focus = gtk_window_real_activate_focus;
   klass->move_focus = gtk_window_move_focus;
   klass->keys_changed = gtk_window_keys_changed;
+  
+  g_type_class_add_private (gobject_class, sizeof (GtkWindowPrivate));
   
   /* Construct */
   g_object_class_install_property (gobject_class,
@@ -2001,7 +1979,7 @@ gtk_window_set_skip_taskbar_hint (GtkWindow *window,
 
   g_return_if_fail (GTK_IS_WINDOW (window));
   
-  priv = gtk_window_get_private (window);
+  priv = GTK_WINDOW_GET_PRIVATE (window);
 
   setting = setting != FALSE;
 
@@ -2032,7 +2010,7 @@ gtk_window_get_skip_taskbar_hint (GtkWindow *window)
 
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
   
-  priv = gtk_window_get_private (window);
+  priv = GTK_WINDOW_GET_PRIVATE (window);
 
   return priv->skips_taskbar;
 }
@@ -2058,7 +2036,7 @@ gtk_window_set_skip_pager_hint (GtkWindow *window,
 
   g_return_if_fail (GTK_IS_WINDOW (window));
   
-  priv = gtk_window_get_private (window);
+  priv = GTK_WINDOW_GET_PRIVATE (window);
 
   setting = setting != FALSE;
 
@@ -2089,7 +2067,7 @@ gtk_window_get_skip_pager_hint (GtkWindow *window)
 
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
   
-  priv = gtk_window_get_private (window);
+  priv = GTK_WINDOW_GET_PRIVATE (window);
 
   return priv->skips_pager;
 }
@@ -3494,13 +3472,6 @@ gtk_window_mnemonic_hash_remove (gpointer	key,
 }
 
 static void
-gtk_window_private_finalize (GtkWindowPrivate  *priv)
-{
-  
-  g_free (priv);
-}
-
-static void
 gtk_window_finalize (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
@@ -3634,11 +3605,9 @@ static void
 gtk_window_map (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
   GdkWindow *toplevel;
-  GtkWindowPrivate *priv;
 
-  priv = gtk_window_get_private (window);
-  
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
   if (window->bin.child &&
@@ -3671,9 +3640,9 @@ gtk_window_map (GtkWidget *widget)
   else
     gdk_window_unfullscreen (toplevel);
   
-  gdk_window_set_keep_above (toplevel, window->above_initially);
+  gdk_window_set_keep_above (toplevel, priv->above_initially);
 
-  gdk_window_set_keep_below (toplevel, window->below_initially);
+  gdk_window_set_keep_below (toplevel, priv->below_initially);
 
   /* No longer use the default settings */
   window->need_default_size = FALSE;
@@ -3696,6 +3665,7 @@ static void
 gtk_window_unmap (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (widget);
   GtkWindowGeometryInfo *info;    
   GdkWindowState state;
 
@@ -3725,8 +3695,8 @@ gtk_window_unmap (GtkWidget *widget)
   window->iconify_initially = state & GDK_WINDOW_STATE_ICONIFIED;
   window->maximize_initially = state & GDK_WINDOW_STATE_MAXIMIZED;
   window->stick_initially = state & GDK_WINDOW_STATE_STICKY;
-  window->above_initially = state & GDK_WINDOW_STATE_ABOVE;
-  window->below_initially = state & GDK_WINDOW_STATE_BELOW;
+  priv->above_initially = state & GDK_WINDOW_STATE_ABOVE;
+  priv->below_initially = state & GDK_WINDOW_STATE_BELOW;
 }
 
 static void
@@ -5907,7 +5877,7 @@ gtk_window_fullscreen (GtkWindow *window)
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   widget = GTK_WIDGET (window);
-  priv = gtk_window_get_private (window);
+  priv = GTK_WINDOW_GET_PRIVATE (window);
   
   priv->fullscreen_initially = TRUE;
 
@@ -5947,7 +5917,7 @@ gtk_window_unfullscreen (GtkWindow *window)
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   widget = GTK_WIDGET (window);
-  priv = gtk_window_get_private (window);
+  priv = GTK_WINDOW_GET_PRIVATE (window);
   
   priv->fullscreen_initially = FALSE;
 
@@ -5988,18 +5958,21 @@ gtk_window_unfullscreen (GtkWindow *window)
  * Since: 2.4
  **/
 void
-gtk_window_set_keep_above (GtkWindow *window, gboolean setting)
+gtk_window_set_keep_above (GtkWindow *window,
+			   gboolean   setting)
 {
   GtkWidget *widget;
+  GtkWindowPrivate *priv;
   GdkWindow *toplevel;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   widget = GTK_WIDGET (window);
+  priv = GTK_WINDOW_GET_PRIVATE (window);
 
-  window->above_initially = setting;
+  priv->above_initially = setting;
   if (setting)
-    window->below_initially = FALSE;
+    priv->below_initially = FALSE;
 
   if (window->frame)
     toplevel = window->frame;
@@ -6038,18 +6011,21 @@ gtk_window_set_keep_above (GtkWindow *window, gboolean setting)
  * Since: 2.4
  **/
 void
-gtk_window_set_keep_below (GtkWindow *window, gboolean setting)
+gtk_window_set_keep_below (GtkWindow *window,
+			   gboolean   setting)
 {
   GtkWidget *widget;
+  GtkWindowPrivate *priv;
   GdkWindow *toplevel;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   widget = GTK_WIDGET (window);
+  priv = GTK_WINDOW_GET_PRIVATE (window);
 
-  window->below_initially = setting;
+  priv->below_initially = setting;
   if (setting)
-    window->above_initially = FALSE;
+    priv->above_initially = FALSE;
 
   if (window->frame)
     toplevel = window->frame;

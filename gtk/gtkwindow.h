@@ -96,8 +96,6 @@ struct _GtkWindow
   guint stick_initially : 1;
   guint maximize_initially : 1;
   guint decorated : 1;
-  guint above_initially : 1;
-  guint below_initially : 1;
   
   guint type_hint : 3; /* GdkWindowTypeHint */ 
   guint gravity : 5; /* GdkGravity */
