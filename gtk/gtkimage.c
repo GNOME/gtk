@@ -191,6 +191,10 @@ gtk_image_new_from_file   (const gchar *filename)
  * pixbuf; you still need to unref it if you own references.
  * #GtkImage will add its own reference rather than adopting yours.
  * 
+ * Note that this function just creates an #GtkImage from the pixbuf.  The
+ * #GtkImage created will not react to state changes.  Should you want that, you
+ * should use @gtk_image_new_from_icon_set.
+ * 
  * Return value: a new #GtkImage
  **/
 GtkWidget*

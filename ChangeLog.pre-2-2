@@ -1,3 +1,8 @@
+Tue Feb 20 12:16:12 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkiconfactory.c (gtk_icon_set_new_from_pixbuf): New
+	function to create an icon set from a pixbuf.
+
 2001-02-20  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkcellrenderertext.[ch]:

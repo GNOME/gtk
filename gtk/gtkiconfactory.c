@@ -674,6 +674,34 @@ gtk_icon_set_new (void)
 }
 
 /**
+ * gtk_icon_set_new_from_pixbuf:
+ * @pixbuf: a #GdkPixbuf
+ * 
+ * Creates a new #GtkIconSet seeded with @pixbuf.
+ * 
+ * Return value: a new #GtkIconSet
+ **/
+GtkIconSet *
+gtk_icon_set_new_from_pixbuf (GdkPixbuf *pixbuf)
+{
+  GtkIconSet *set;
+
+  GtkIconSource source = { NULL, NULL, 0, 0, NULL,
+                           TRUE, TRUE, TRUE };
+
+  g_return_val_if_fail (pixbuf != NULL, NULL);
+
+  set = gtk_icon_set_new ();
+
+  source.pixbuf = pixbuf;
+
+  gtk_icon_set_add_source (set, &source);
+  
+  return set;
+}
+
+
+/**
  * gtk_icon_set_ref:
  * @icon_set: a #GtkIconSet
  * 

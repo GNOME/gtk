@@ -103,6 +103,7 @@ void     gtk_icon_size_register_alias (const gchar *alias,
 /* Icon sets */
 
 GtkIconSet* gtk_icon_set_new             (void);
+GtkIconSet* gtk_icon_set_new_from_pixbuf (GdkPixbuf       *pixbuf);
 
 GtkIconSet* gtk_icon_set_ref             (GtkIconSet      *icon_set);
 void        gtk_icon_set_unref           (GtkIconSet      *icon_set);
