@@ -953,6 +953,10 @@ structure directly (or, for that matter, any type derived from
 
 @subsection Description
 
+Ensure that the child window has a specified aspect ratio or, if
+obey_child, has the same aspect ratio as its requested size.  Derived
+from @pxref{GtkFrame}).
+
 @subsection Options
 
 @defopt label
@@ -1326,6 +1330,10 @@ function in the @var{widget} variable.
 
 @subsection Description
 
+A pressable button.  Contains a widget.  Changes its appearance
+(hilites) when it gets the focus.  Changes its appearance (pressed) when
+activated.  Derived from @pxref{GtkContainer}.
+
 @subsection Signals
 
 @deftypefn Signal void GtkButton::pressed (GtkButton *@var{button})
@@ -1386,6 +1394,10 @@ pointer to a @code{GtkWidget} object. @code{NULL} is returned on failure.
 
 @subsection Description
 
+Another form of toggle button (@pxref{GtkToggleButton}) with an
+indicator.  Contains a widget to the right of the indicator.  Changes
+its appearance (hilites) when it gets the focus.
+
 @subsection Options
 
 @subsection Signals
@@ -1425,6 +1437,11 @@ values @var{label}. The new widget is returned as a pointer to a
 @section The check menu item widget
 
 @subsection Description
+
+Derived from @pxref{GtkMenuItem}.  Very similar to a checkbutton
+(@pxref{GtkCheckButton}), except that it's a menu item.  Has a toggled
+state which is displayed in a small rectangle to the left of the
+contained widget.
 
 @subsection Options
 
@@ -1470,6 +1487,11 @@ object. @code{NULL} is returned on failure.
 @section The compound list widget
 
 @subsection Description
+
+A list of rows of columns, with a title row.  You can insert rows, and
+delete rows.  The user can scroll around and select a row.  Derived from
+@pxref{GtkContainer}.  Cells can be empty, have a text and/or pixmap, or
+be a widget.
 
 @subsection Options
 
@@ -1641,6 +1663,12 @@ This is much faster then removing each item separately with
 
 @subsection Description
 
+A widget that allows a user to pick a color in one of many ways.  They
+can click on a color wheel or saturation bar.  They can change hue,
+saturation, value, red, green, or blue with a slider, or by entering
+values.  Also allows the user to set an alpha (opacity) value.  Derived
+from @pxref{GtkVBox}.
+
 @subsection Options
 @defopt policy
 @itemize @bullet
@@ -1706,6 +1734,9 @@ to a @code{GtkWidget} object. @code{NULL} is returned on failure.
 
 @subsection Description
 
+Text input box which also lets you choose from pre-defined values from a
+drop-down menu.  Derived from @pxref{GtkHBox}.
+
 @subsection Options
 
 @subsection Signals
@@ -1742,11 +1773,16 @@ a @code{GtkWidget} object. @code{NULL} is returned on failure.
 @gtkstdmacros{Combo, COMBO}
 
 @page
-@node GtkContainer, GtkCurve, GtkCombo, Widgets
+@node GtkContainer, GtkGammaCurve, GtkCurve, GtkCombo, Widgets
 @comment node-name, next, previous, up
 @section The container widget
 
 @subsection Description
+
+A base class for objects that are built out of other widgets.  Many
+widgets are containers.  For example, a button contains a widget.  That
+widget might be a text label (usually is), or a pixmap, or even an hbox
+which has a label and a pixmap.
 
 @subsection Options
 
@@ -1817,11 +1853,13 @@ Remove @var{widget} from @var{container}.
 @gtkstdmacros{Container, CONTAINER}
 
 @page
-@node GtkCurve, GtkDialog, GtkContainer, Widgets
+@node GtkCurve, GtkGammaCurve, GtkDialog, GtkContainer, Widgets
 @comment node-name, next, previous, up
 @section The curve widget
 
 @subsection Description
+
+Derived from @pxref{GtkDrawingArea}.
 
 @subsection Options
 
@@ -1867,7 +1905,39 @@ Create a new @code{GtkCurve} returning the new widget as a pointer to a
 @gtkstdmacros{Curve, CURVE}
 
 @page
-@node GtkDialog, GtkDrawingArea, GtkCurve, Widgets
+@node GtkGammaCurve, GtkCurve, GtkDialog, GtkContainer, Widgets
+@comment node-name, next, previous, up
+@section The gamma curve widget
+
+@subsection Description
+
+Lets the user edit a gamma curve (a one-to-one mapping usually used to
+adjust the intensity of an image to the physical characteristics of the
+output device).  You can set the minimum and maximum values for input
+and output.  You can set the initial vector as well.  You are guaranteed
+that every input value will have a (not necessarily unique) output value
+specified.  Derived from @pxref{GtkVBox}.  Makes use of @pxref{GtkCurve} to
+draw the curve.
+
+@subsection Options
+
+@subsection Signals
+
+@subsection Functions
+
+@deftypefun guint gtk_gamma_curve_get_type (void)
+Returns the @code{GtkGamma} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_gamma_curve_new (void)
+Create a new @code{GtkGamma} returning the new widget as a pointer to a
+@code{GtkWidget} object.
+@end deftypefun
+
+@gtkstdmacros{GammaCurve, GAMMACURVE}
+
+@page
+@node GtkDialog, GtkDrawingArea, GtkGammaCurve, GtkCurve, Widgets
 @comment node-name, next, previous, up
 @section The dialog widget
 
@@ -1901,6 +1971,9 @@ to a @code{GtkWidget} object. @code{NULL} is returned on failure.
 @section The drawing area widget
 
 @subsection Description
+
+A base class for widgets that need a box to draw into.  So far, only
+used by GtkCurve.
 
 @subsection Options
 
@@ -1937,6 +2010,9 @@ Set the size of the @var{darea} widget, created previously, to @var{width} and @
 
 
 @subsection Description
+
+Enter text into this widget.  Derived from @pxref{GtkEditable}.  Can be
+set so it isn't editable.
 
 @subsection Options
 
@@ -2024,6 +2100,8 @@ Returns the text that is contained in the @code{GtkEntry} as a pointer to a
 @section The event box widget
 
 @subsection Description
+
+Derived from @pxref{GtkBin}.  Used by @pxref{GtkTreeItem}.
 
 @subsection Options
 
@@ -3581,6 +3659,10 @@ Create a new @code{GtkText} object initializing it with the values in
 
 
 @subsection Description
+
+Another form of button (@pxref{GtkButton}) with two states: on and off.
+The appearance is that of a button which stays pressed on the first
+click, and is released on the second click.
 
 @subsection Options
 

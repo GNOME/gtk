@@ -1,3 +1,8 @@
+Wed Mar 11 22:52:57 1998  Russell Nelson <nelson@crynwr.com>
+
+	* gtk/gtktest.c: new_pixmap wasn't using its filename argument.
+	* docs/gtk.texi: Add descriptions
+
 Wed Mar 11 14:36:48 PST 1998 Shawn T. Amundson <amundson@gimp.org>
 
 	* gtk/docs/: added tutorial, changed some files around to
@@ -47,6 +52,7 @@ Thu Mar 12 06:58:17 1998  Tim Janik  <timj@gimp.org>
 	to leak memory, for dynamically allocated keys (problem pinpointed by
 	Mattias Gronlund).
 
+>>>>>>> 1.218
 Tue Mar 10 23:02:42 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gdk/gdkdnd.c gtk/gtkclist.c gtk/gtksignal.c gtk/testgtk.c:

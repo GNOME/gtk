@@ -599,7 +599,7 @@ new_pixmap (char      *filename,
 
   pixmap = gdk_pixmap_create_from_xpm (window, &mask,
 				       background,
-				       "test.xpm");
+				       filename);
   wpixmap = gtk_pixmap_new (pixmap, mask);
 
   return wpixmap;
