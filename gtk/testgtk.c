@@ -2510,7 +2510,7 @@ create_spins (void)
       spinner = gtk_spin_button_new (adj, 0, 0);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
       gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-				       GTK_SHADOW_NONE);
+				       GTK_SHADOW_OUT);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
 
       vbox2 = gtk_vbox_new (FALSE, 0);
@@ -2714,9 +2714,8 @@ cursor_event (GtkWidget          *widget,
       ((event->button.button == 1) ||
        (event->button.button == 3)))
     {
-      gtk_spin_button_spin (spinner,
-			    event->button.button == 1 ? GTK_ARROW_UP : GTK_ARROW_DOWN,
-			    spinner->adjustment->step_increment);
+      gtk_spin_button_spin (spinner, event->button.button == 1 ?
+			    GTK_SPIN_STEP_FORWARD : GTK_SPIN_STEP_BACKWARD, 0);
       return TRUE;
     }
 

@@ -45,7 +45,18 @@ typedef enum
   GTK_UPDATE_IF_VALID
 } GtkSpinButtonUpdatePolicy;
   
-  
+typedef enum
+{
+  GTK_SPIN_STEP_FORWARD,
+  GTK_SPIN_STEP_BACKWARD,
+  GTK_SPIN_PAGE_FORWARD,
+  GTK_SPIN_PAGE_BACKWARD,
+  GTK_SPIN_HOME,
+  GTK_SPIN_END,
+  GTK_SPIN_USER_DEFINED
+} GtkSpinType;
+
+
 typedef struct _GtkSpinButton	    GtkSpinButton;
 typedef struct _GtkSpinButtonClass  GtkSpinButtonClass;
 
@@ -83,6 +94,7 @@ struct _GtkSpinButtonClass
   GtkEntryClass parent_class;
 };
 
+
 guint		gtk_spin_button_get_type	   (void);
 
 void		gtk_spin_button_construct	   (GtkSpinButton  *spin_button,
@@ -115,9 +127,9 @@ void		gtk_spin_button_set_update_policy  (GtkSpinButton  *spin_button,
 void		gtk_spin_button_set_numeric	   (GtkSpinButton  *spin_button,
 						    gint	    numeric);
 
-void		gtk_spin_button_spin		   (GtkSpinButton *spin_button,
-						    guint	   direction,
-						    gfloat	   step);
+void		gtk_spin_button_spin		   (GtkSpinButton  *spin_button,
+						    GtkSpinType     direction,
+						    gfloat	    increment);
 
 void		gtk_spin_button_set_wrap	   (GtkSpinButton  *spin_button,
 						    gint	    wrap);

@@ -1,3 +1,17 @@
+Fri Jun 19 14:46:56 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/gtkspinbutton.h gtk/gtkspinbutton.c gtk/testgtk.c:
+        - Bug fix for precision problem causing occasional double emission 
+	  of "value_changed" signal (hopefully works now).
+        - API change (should be binary compatible) : 
+	  new enum GtkSpinType; modified gtk_spin_button_spin to use it.
+	  Modified cursor example appropriately.
+	  To spin by something other than step_/page_increment, use
+	  gtk_spin_button_spin (spin, GTK_SPIN_USER_DEFINED, increment).
+	- Made GTK_SHADOW_NONE the default. ;)
+	- Fixed casting of GtkAdjustment* to GtkWidget* in
+	  gtk_spin_button_value_changed.
+
 Fri Jun 19 06:18:19 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkcontainer.c (gtk_container_set_resize_mode): fail silently
@@ -125,7 +139,6 @@ Thu Jun 18 01:37:31 1998  Owen Taylor  <otaylor@gtk.org>
 	- Set the resize-mode for viewports so that resizes within
 	  a viewport don't propagate out of it. 
 	
-
 1998-06-18  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkfontsel.c: Use pointer<->int conversion macros to avoid warnings.
