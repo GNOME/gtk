@@ -21,6 +21,8 @@
  * Authors: Alexander Larsson <alexl@redhat.com>
  */
 
+G_BEGIN_DECLS
+
 void gtk_decorated_window_init                 (GtkWindow   *window);
 void gtk_decorated_window_calculate_frame_size (GtkWindow   *window);
 void gtk_decorated_window_set_title            (GtkWindow   *window,
@@ -30,3 +32,5 @@ void gtk_decorated_window_move_resize_window   (GtkWindow   *window,
 						gint         y,
 						gint         width,
 						gint         height);
+
+G_END_DECLS

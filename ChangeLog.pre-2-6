@@ -1,3 +1,8 @@
+Mon Nov  3 22:45:58 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwindow-decorate.h: Add G_BEGIN_DECLS/G_END_DECLS to make 
+	these usable in C++. Forgot this file in my Oct 11 commit.
+
 2003-11-03  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (create_shortcuts_tree): Add a stock
