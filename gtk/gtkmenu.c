@@ -279,6 +279,9 @@ gtk_menu_popup (GtkMenu             *menu,
 		guint                button,
 		guint32              activate_time)
 {
+  GtkWidget *xgrab_shell;
+  GtkWidget *parent;
+
   g_return_if_fail (menu != NULL);
   g_return_if_fail (GTK_IS_MENU (menu));
 
@@ -292,6 +295,41 @@ gtk_menu_popup (GtkMenu             *menu,
   GTK_MENU_SHELL (menu)->activate_time = activate_time;
 
   gtk_widget_show (GTK_WIDGET (menu));
+
+  /* Find the last viewable ancestor, and make an X grab on it
+   */
+  parent = GTK_WIDGET (menu);
+  xgrab_shell = NULL;
+  while (parent)
+    {
+      gboolean viewable = TRUE;
+      GtkWidget *tmp = parent;
+      
+      while (tmp)
+	{
+	  if (!GTK_WIDGET_MAPPED (tmp))
+	    {
+	      viewable = FALSE;
+	      break;
+	    }
+	  tmp = tmp->parent;
+	}
+
+      if (viewable)
+	xgrab_shell = parent;
+
+      parent = GTK_MENU_SHELL (parent)->parent_menu_shell;
+    }
+
+  if (xgrab_shell && (!GTK_MENU_SHELL (xgrab_shell)->have_xgrab))
+    {
+      GTK_MENU_SHELL (xgrab_shell)->have_xgrab = 
+	(gdk_pointer_grab (xgrab_shell->window, TRUE,
+			   GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+			   GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK,
+			   NULL, NULL, activate_time) == 0);
+    }
+
   gtk_grab_add (GTK_WIDGET (menu));
 }
 
@@ -315,7 +353,11 @@ gtk_menu_popdown (GtkMenu *menu)
       menu_shell->active_menu_item = NULL;
     }
 
+  /* The X Grab, if present, will automatically be removed when we hide
+   * the window */
   gtk_widget_hide (GTK_WIDGET (menu));
+  menu_shell->have_xgrab = FALSE;
+
   gtk_grab_remove (GTK_WIDGET (menu));
 }
 

@@ -88,16 +88,19 @@ gtk_event_box_realize (GtkWidget *widget)
 {
   GdkWindowAttr attributes;
   gint attributes_mask;
+  gint border_width;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_EVENT_BOX (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+  border_width = GTK_CONTAINER (widget)->border_width;
+  
+  attributes.x = widget->allocation.x + border_width;
+  attributes.y = widget->allocation.y + border_width;
+  attributes.width = widget->allocation.width - 2*border_width;
+  attributes.height = widget->allocation.height - 2*border_width;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
@@ -182,19 +185,22 @@ gtk_event_box_draw (GtkWidget    *widget,
 		   GdkRectangle *area)
 {
   GtkBin *bin;
+  GdkRectangle tmp_area;
   GdkRectangle child_area;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_EVENT_BOX (widget));
-  g_return_if_fail (area != NULL);
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       bin = GTK_BIN (widget);
-
+      tmp_area = *area;
+      tmp_area.x -= GTK_CONTAINER (widget)->border_width;
+      tmp_area.y -= GTK_CONTAINER (widget)->border_width;
+      
       if (bin->child)
 	{
-	  if (gtk_widget_intersect (bin->child, area, &child_area))
+	  if (gtk_widget_intersect (bin->child, &tmp_area, &child_area))
 	    gtk_widget_draw (bin->child, &child_area);
 	}
     }

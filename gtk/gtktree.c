@@ -299,9 +299,12 @@ gtk_tree_button_press (GtkWidget      *widget,
   tree = GTK_TREE (widget);
   item = gtk_get_event_widget ((GdkEvent*) event);
 
-  while (!gtk_type_is_a (GTK_WIDGET_TYPE (item), gtk_tree_item_get_type ()))
+  while (item && !GTK_IS_TREE_ITEM (item))
     item = item->parent;
 
+  if (!item || (item->parent != widget))
+    return FALSE;
+  
   switch(event->button) 
     {
     case 1:

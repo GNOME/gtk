@@ -698,12 +698,12 @@ gtk_list_button_press (GtkWidget      *widget,
   list = GTK_LIST (widget);
   item = gtk_get_event_widget ((GdkEvent*) event);
   
-  if (!item)
-    return FALSE;
-  
-  while (!gtk_type_is_a (GTK_WIDGET_TYPE (item), gtk_list_item_get_type ()))
+  while (item && !GTK_IS_LIST_ITEM (item))
     item = item->parent;
 
+  if (!item || (item->parent != widget))
+    return FALSE;
+  
   gtk_list_select_child (list, item);
 
   return FALSE;

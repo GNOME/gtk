@@ -1,3 +1,27 @@
+Mon Mar 23 18:19:42 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmenu.c gtk/gtkmenushell.c: Instead of making
+	an X grab when the button is released, grab immediately.
+	This solves a problem where menus wouldn't pop down
+	if the caller didn't have the BUTTON_RELEASE mask on
+	their window, and and another where the X grab would
+	be released prematurely.
+
+	* gtk/gtklist.c gtk/gtktree.c: Do sanity checking on
+	button presses to make sure they occurred in a child item.
+	(From: "Damon Chaplin" <DAChaplin@email.msn.com>)
+
+	* gtk/gtkmenushell.c: Do sanity checking on button
+	press/releases. Handle button events on window widget
+	descendents of menu items correctly.
+	
+	* gtk/gtkclist.c gtk/gtkbutton.c gtk/gtkviewport.c 
+	  gtk/gtkeventbox.c:
+
+	Make the window size allocated in _realize() match that
+	in _size_allocate(). Take into account the border width
+	in the draw() handler.
+
 Mon Mar 23 15:26:25 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkentry.c (gtk_entry_append_text): check for text!=NULL.

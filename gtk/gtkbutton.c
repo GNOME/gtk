@@ -324,6 +324,7 @@ gtk_button_realize (GtkWidget *widget)
   GtkButton *button;
   GdkWindowAttr attributes;
   gint attributes_mask;
+  gint border_width;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_BUTTON (widget));
@@ -331,11 +332,13 @@ gtk_button_realize (GtkWidget *widget)
   button = GTK_BUTTON (widget);
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
+  border_width = GTK_CONTAINER (widget)->border_width;
+
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+  attributes.x = widget->allocation.x + border_width;
+  attributes.y = widget->allocation.y + border_width;
+  attributes.width = widget->allocation.width - border_width * 2;
+  attributes.height = widget->allocation.height - border_width * 2;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
@@ -482,6 +485,7 @@ gtk_button_draw (GtkWidget    *widget,
 {
   GtkButton *button;
   GdkRectangle child_area;
+  GdkRectangle tmp_area;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_BUTTON (widget));
@@ -491,9 +495,13 @@ gtk_button_draw (GtkWidget    *widget,
     {
       button = GTK_BUTTON (widget);
 
-      gtk_button_paint (widget, area);
+      tmp_area = *area;
+      tmp_area.x -= GTK_CONTAINER (button)->border_width;
+      tmp_area.y -= GTK_CONTAINER (button)->border_width;
 
-      if (button->child && gtk_widget_intersect (button->child, area, &child_area))
+      gtk_button_paint (widget, &tmp_area);
+
+      if (button->child && gtk_widget_intersect (button->child, &tmp_area, &child_area))
 	gtk_widget_draw (button->child, &child_area);
 
       gtk_widget_draw_default (widget);

@@ -53,6 +53,8 @@ static void gtk_menu_shell_foreach           (GtkContainer      *container,
 static void gtk_real_menu_shell_deactivate   (GtkMenuShell      *menu_shell);
 static gint gtk_menu_shell_is_item           (GtkMenuShell      *menu_shell,
 					      GtkWidget         *child);
+static GtkWidget *gtk_menu_shell_get_item    (GtkMenuShell      *menu_shell,
+					      GdkEvent          *event);
 
 
 static GtkContainerClass *parent_class = NULL;
@@ -302,14 +304,11 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 	  menu_shell->active = TRUE;
 	}
       menu_shell->button = event->button;
-      
-      menu_item = gtk_get_event_widget ((GdkEvent*) event);
 
-      if (!GTK_WIDGET_IS_SENSITIVE (menu_item))
-	return TRUE;
+      menu_item = gtk_menu_shell_get_item (menu_shell, (GdkEvent *)event);
 
-      if (menu_item && GTK_IS_MENU_ITEM (menu_item) &&
-	  gtk_menu_shell_is_item (menu_shell, menu_item))
+      if (menu_item &&
+	  GTK_WIDGET_IS_SENSITIVE (menu_item))
 	{
 	  if ((menu_item->parent == widget) &&
 	      (menu_item != menu_shell->active_menu_item))
@@ -358,16 +357,13 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 	}
       
       menu_shell->button = 0;
-      menu_item = gtk_get_event_widget ((GdkEvent*) event);
-      
-      if (!GTK_WIDGET_IS_SENSITIVE (menu_item))
-	return TRUE;
+      menu_item = gtk_menu_shell_get_item (menu_shell, (GdkEvent*) event);
 
       deactivate = TRUE;
 
       if ((event->time - menu_shell->activate_time) > MENU_SHELL_TIMEOUT)
 	{
-	  if (menu_shell->active_menu_item == menu_item)
+	  if (menu_item && (menu_shell->active_menu_item == menu_item))
 	    {
 	      if (GTK_MENU_ITEM (menu_item)->submenu == NULL)
 		{
@@ -385,15 +381,14 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 	}
       else
 	deactivate = FALSE;
-
-      if ((!deactivate || (menu_shell->active_menu_item == menu_item)) &&
-	  (gdk_pointer_grab (widget->window, TRUE,
-			     GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-			     GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK,
-			     NULL, NULL, event->time) == 0))
+      
+      /* If the button click was very fast, or we ended up on a submenu,
+       * leave the menu up
+       */
+      if (!deactivate || 
+	  (menu_item && (menu_shell->active_menu_item == menu_item)))
 	{
 	  deactivate = FALSE;
-	  menu_shell->have_xgrab = TRUE;
 	  menu_shell->ignore_leave = TRUE;
 	}
       else
@@ -607,3 +602,21 @@ gtk_menu_shell_is_item (GtkMenuShell *menu_shell,
 
   return FALSE;
 }
+
+static GtkWidget *
+gtk_menu_shell_get_item (GtkMenuShell *menu_shell,
+			 GdkEvent     *event)
+{
+  GtkWidget *menu_item;
+
+  menu_item = gtk_get_event_widget ((GdkEvent*) event);
+  
+  while (menu_item && !GTK_IS_MENU_ITEM (menu_item))
+    menu_item = menu_item->parent;
+
+  if (menu_item && gtk_menu_shell_is_item (menu_shell, menu_item))
+    return menu_item;
+  else
+    return NULL;
+}
+

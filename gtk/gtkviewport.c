@@ -391,6 +391,7 @@ gtk_viewport_draw (GtkWidget    *widget,
   GtkBin *bin;
   GdkRectangle tmp_area;
   GdkRectangle child_area;
+  gint border_width;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_VIEWPORT (widget));
@@ -401,13 +402,18 @@ gtk_viewport_draw (GtkWidget    *widget,
       viewport = GTK_VIEWPORT (widget);
       bin = GTK_BIN (widget);
 
-      gtk_viewport_paint (widget, area);
+      border_width = GTK_CONTAINER (widget)->border_width;
+      
+      tmp_area = *area;
+      tmp_area.x -= border_width;
+      tmp_area.y -= border_width;
+      
+      gtk_viewport_paint (widget, &tmp_area);
 
       if (bin->child)
 	{
-	  tmp_area = *area;
-	  tmp_area.x += viewport->hadjustment->value;
-	  tmp_area.y += viewport->vadjustment->value;
+	  tmp_area.x += viewport->hadjustment->value - widget->style->klass->xthickness;
+	  tmp_area.y += viewport->vadjustment->value - widget->style->klass->ythickness;
 
 	  if (gtk_widget_intersect (bin->child, &tmp_area, &child_area))
 	    gtk_widget_draw (bin->child, &child_area);
@@ -508,6 +514,7 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
   GtkBin *bin;
   GtkAllocation child_allocation;
   gint hval, vval;
+  gint border_width;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_VIEWPORT (widget));
@@ -516,6 +523,8 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
   widget->allocation = *allocation;
   viewport = GTK_VIEWPORT (widget);
   bin = GTK_BIN (widget);
+
+  border_width = GTK_CONTAINER (widget)->border_width;
 
   child_allocation.x = 0;
   child_allocation.y = 0;
@@ -526,16 +535,16 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
       child_allocation.y = GTK_WIDGET (viewport)->style->klass->ythickness;
     }
 
-  child_allocation.width = allocation->width - child_allocation.x * 2;
-  child_allocation.height = allocation->height - child_allocation.y * 2;
+  child_allocation.width = allocation->width - child_allocation.x * 2 - border_width * 2;
+  child_allocation.height = allocation->height - child_allocation.y * 2 - border_width * 2;
 
   if (GTK_WIDGET_REALIZED (widget))
     {
       gdk_window_move_resize (widget->window,
-			      allocation->x + GTK_CONTAINER (viewport)->border_width,
-			      allocation->y + GTK_CONTAINER (viewport)->border_width,
-			      allocation->width - GTK_CONTAINER (viewport)->border_width * 2,
-			      allocation->height - GTK_CONTAINER (viewport)->border_width * 2);
+			      allocation->x + border_width,
+			      allocation->y + border_width,
+			      allocation->width - border_width * 2,
+			      allocation->height - border_width * 2);
 
       gdk_window_move_resize (viewport->view_window,
 			      child_allocation.x,

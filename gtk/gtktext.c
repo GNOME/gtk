@@ -497,6 +497,7 @@ gtk_text_init (GtkText *text)
   text->tab_stops = g_list_prepend (text->tab_stops, (void*)8);
 
   text->line_wrap = TRUE;
+  text->word_wrap = FALSE;
   
   text->timer = 0;
   text->button = 0;

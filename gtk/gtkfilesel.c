@@ -1278,7 +1278,7 @@ gtk_file_selection_populate (GtkFileSelection *fs,
         {
           possible_count += 1;
 
-          filename = g_strdup (cmpl_this_completion (poss));
+          filename = cmpl_this_completion (poss);
 
 	  text[0] = filename;
 	  
