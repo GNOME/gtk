@@ -1,4 +1,4 @@
-# Dutch translation of gtk+.
+# Dutch translation of gtk+-properties.
 # Copyright © 2002 Free Software Foundation, Inc.
 # Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>, 2002.
 # Ronald Hummelink <ronald@hummelink.xs4all.nl>, 2002.
@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-14 02:53+0100\n"
+"POT-Creation-Date: 2004-01-24 21:21+0100\n"
+"PO-Revision-Date: 2004-01-25 02:54+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -1546,19 +1546,19 @@ msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Of de inhoud van een veld wordt geselecteerd als het veld focus krijgt"
 
 # aanvullen / completering
-#: gtk/gtkentrycompletion.c:196
+#: gtk/gtkentrycompletion.c:197
 msgid "Completion Model"
 msgstr "Aanvullingsmodel"
 
-#: gtk/gtkentrycompletion.c:197
+#: gtk/gtkentrycompletion.c:198
 msgid "The model to find matches in"
 msgstr "Het model waarin overeenkomsten worden gezocht"
 
-#: gtk/gtkentrycompletion.c:203
+#: gtk/gtkentrycompletion.c:204
 msgid "Minimum Key Length"
 msgstr "Minimum sleutellengte"
 
-#: gtk/gtkentrycompletion.c:204
+#: gtk/gtkentrycompletion.c:205
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimum lengte van de zoeksleutel voor het opzoeken van overeenkomsten"
 
@@ -2643,9 +2643,8 @@ msgid "Group"
 msgstr "Groep"
 
 #: gtk/gtkradioaction.c:156
-#, fuzzy
 msgid "The radio action whose group this action belongs."
-msgstr "De radioknop wiens groep dit widget toebehoort."
+msgstr "De radioknop wiens groep deze actie toebehoort."
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."

@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-14 02:53+0100\n"
+"POT-Creation-Date: 2004-01-24 21:21+0100\n"
+"PO-Revision-Date: 2004-01-25 02:59+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -961,7 +961,7 @@ msgstr ""
 "Kon geen favoriet toevoegen voor %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2917
+#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2937
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -990,12 +990,12 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:925
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not create folder %s:\n"
 "%s"
 msgstr ""
-"Kon niet naar de bovenliggende map gaan van %s:\n"
+"Kon map %s niet aanmaken:\n"
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:1001
@@ -1057,56 +1057,56 @@ msgid "Preview"
 msgstr "Voorbeeld"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2118
+#: gtk/gtkfilechooserdefault.c:2130
 #, c-format
 msgid "Current folder: %s"
 msgstr "Huidige map: %s"
 
-#: gtk/gtkfilechooserdefault.c:2521
+#: gtk/gtkfilechooserdefault.c:2533
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "Snelkoppeling %s bestaat niet"
 
-#: gtk/gtkfilechooserdefault.c:3063
+#: gtk/gtkfilechooserdefault.c:3083
 msgid "Type name of new folder"
-msgstr ""
+msgstr "Geef de naam van de nieuwe map"
 
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3110
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:3092
+#: gtk/gtkfilechooserdefault.c:3112
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3094
+#: gtk/gtkfilechooserdefault.c:3114
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3096
+#: gtk/gtkfilechooserdefault.c:3116
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3141
+#: gtk/gtkfilechooserdefault.c:3161
 msgid "Today"
 msgstr "Vandaag"
 
-#: gtk/gtkfilechooserdefault.c:3143
+#: gtk/gtkfilechooserdefault.c:3163
 msgid "Yesterday"
 msgstr "Gisteren"
 
 # d=dag b=afgekorte maand Y=jaar in 4 cijfers
-#: gtk/gtkfilechooserdefault.c:3151
+#: gtk/gtkfilechooserdefault.c:3171
 msgid "%d/%b/%Y"
 msgstr "%d/%b/%Y"
 
-#: gtk/gtkfilechooserdefault.c:3154
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "Unknown"
 msgstr "Onbekend"
 
@@ -1401,6 +1401,10 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
+"Kon het pictogram '%s' niet vinden. Het thema '%s'\n"
+"is ook niet gevonden, misschien moet u het installeren.\n"
+"U kunt een kopie verkrijgen bij:\n"
+"\t%s"
 
 #: gtk/gtkicontheme.c:1247
 #, c-format
@@ -1651,13 +1655,16 @@ msgstr "_Hulp"
 msgid "_Home"
 msgstr "_Thuis"
 
+# Inspringen verhogen
+# kan ook
 #: gtk/gtkstock.c:301
 msgid "Increase Indent"
-msgstr ""
+msgstr "Meer inspringen"
 
+# Inspringen verlagen kan ook
 #: gtk/gtkstock.c:302
 msgid "Decrease Indent"
-msgstr ""
+msgstr "Minder inspringen"
 
 #: gtk/gtkstock.c:303
 msgid "_Index"
