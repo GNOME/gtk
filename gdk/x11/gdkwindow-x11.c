@@ -947,13 +947,16 @@ x_event_mask_to_gdk_event_mask (long mask)
  * @anid: a native window handle.
  * 
  * Wraps a native window in a #GdkWindow.
- * This may fail if the window has been destroyed.
+ * This may fail if the window has been destroyed. If the window
+ * was already known to GDK, a new reference to the existing 
+ * #GdkWindow is returned.
  *
  * For example in the X backend, a native window handle is an Xlib
  * <type>XID</type>.
  * 
- * Return value: the newly-created #GdkWindow wrapper for the 
- *    native window or %NULL if the window has been destroyed.
+ * Return value: a #GdkWindow wrapper for the native window or 
+ *   %NULL if the window has been destroyed. The wrapper will be
+ *   newly created, if one doesn't exist already.
  *
  * Since: 2.2
  **/
@@ -975,7 +978,10 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   display_x11 = GDK_DISPLAY_X11 (display);
-  
+
+  if ((window = gdk_xid_table_lookup_for_display (display, anid)) != NULL)
+    return g_object_ref (window);
+
   gdk_error_trap_push ();
   result = XGetWindowAttributes (display_x11->xdisplay, anid, &attrs);
   if (gdk_error_trap_pop () || !result)

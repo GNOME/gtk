@@ -1,5 +1,11 @@
 2004-10-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_foreign_new_for_display): 
+	Return a new reference to an existing GdkWindow if one already
+	exists.  (#151378, Gustavo Carneiro)
+
+2004-10-05  Matthias Clasen  <mclasen@redhat.com>
+
 	Provide access to the string representation of accelerators used
 	in GtkAccelLabel.  (#154068, John Spray)
 
