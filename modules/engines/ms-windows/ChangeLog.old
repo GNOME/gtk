@@ -1,3 +1,8 @@
+2003-11-26  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Fix coloration for several GIMP widgets,
+	specifically their own OptionMenu-like widget.
+	
 2003-11-24  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/wimp_style.c: Get the coloration correct for menu bars (XP theme

@@ -501,7 +501,6 @@ setup_wimp_rc_style(void)
   GdkColor text_prelight;
 
   NONCLIENTMETRICS nc;
-  gint paned_size = 15;
 
   /* Prelight */
   sys_color_to_gtk_color(XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHTTEXT, &fg_prelight);
@@ -535,7 +534,7 @@ setup_wimp_rc_style(void)
 	     "fg[NORMAL] = { %d, %d, %d }\n"
 	     "bg[NORMAL] = { %d, %d, %d }\n"
 	     "%s = \"%s\"\n"
-	     "}widget_class \"*GtkMenu*\" style \"wimp-menu\"\n",
+	     "}widget_class \"*MenuItem*\" style \"wimp-menu\"\n",
 	     fg_prelight.red,
 	     fg_prelight.green,
 	     fg_prelight.blue,
@@ -564,7 +563,7 @@ setup_wimp_rc_style(void)
 	     "style \"wimp-menu-bar\" = \"wimp-menu\"\n"
 	     "{\n"
 	     "bg[NORMAL] = { %d, %d, %d }\n"
-	     "}widget_class \"*GtkMenuBar*\" style \"wimp-menu-bar\"\n",
+	     "}widget_class \"*MenuBar*\" style \"wimp-menu-bar\"\n",
 	     btn_face.red,
 	     btn_face.green,
 	     btn_face.blue);
@@ -599,7 +598,7 @@ setup_wimp_rc_style(void)
 	     "style \"wimp-status\" = \"wimp-default\"\n"
 	     "{%s = \"%s\"\n"
 	     "bg[NORMAL] = { %d, %d, %d }\n"
-	     "}widget_class \"*GtkStatus*\" style \"wimp-status\"\n",
+	     "}widget_class \"*Status*\" style \"wimp-status\"\n",
 	     (font_ptr ? "font_name" : "#"),
 	     (font_ptr ? font_ptr : " font name should go here"),
 	     btn_face.red, btn_face.green, btn_face.blue);
@@ -618,20 +617,20 @@ setup_wimp_rc_style(void)
 	     "GtkButton::default-outside-border = { 0, 0, 0, 0 }\n"
 	     "GtkButton::child-displacement-x = 1\n"
 	     "GtkButton::child-displacement-y = 1\n"
-	     "}widget_class \"*Gtk*Button*\" style \"wimp-button\"\n",
+	     "}widget_class \"*Button*\" style \"wimp-button\"\n",
 	     btn_face.red, btn_face.green, btn_face.blue,
 	     btn_face.red, btn_face.green, btn_face.blue,
 	     btn_face.red, btn_face.green, btn_face.blue,
 	     btn_fore.red, btn_fore.green, btn_fore.blue
 	     );
   gtk_rc_parse_string(buf);
-  
+
   /* enable coloring for progress bars */
   g_snprintf(buf, sizeof (buf),
 	     "style \"wimp-progress\" = \"wimp-default\"\n"
 	     "{bg[PRELIGHT] = { %d, %d, %d }\n"
 	     "bg[NORMAL] = { %d, %d, %d }\n"
-	     "}widget_class \"*GtkProgress*\" style \"wimp-progress\"\n",
+	     "}widget_class \"*Progress*\" style \"wimp-progress\"\n",
 	     progress_back.red,
 	     progress_back.green,
 	     progress_back.blue,
@@ -645,7 +644,7 @@ setup_wimp_rc_style(void)
 	     "GtkRange::stepper-size = %d\n"
 	     "GtkRange::stepper-spacing = 0\n"
 	     "GtkRange::trough_border = 0\n"
-	     "}widget_class \"*GtkVScrollbar*\" style \"wimp-vscrollbar\"\n",
+	     "}widget_class \"*VScrollbar*\" style \"wimp-vscrollbar\"\n",
 	     GetSystemMetrics(SM_CYVTHUMB),
 	     get_system_metric(XP_THEME_CLASS_SCROLLBAR, SM_CXVSCROLL));
   gtk_rc_parse_string(buf);
@@ -656,7 +655,7 @@ setup_wimp_rc_style(void)
 	     "GtkRange::stepper-size = %d\n"
 	     "GtkRange::stepper-spacing = 0\n"
 	     "GtkRange::trough_border = 0\n"
-	     "}widget_class \"*GtkHScrollbar*\" style \"wimp-hscrollbar\"\n",
+	     "}widget_class \"*HScrollbar*\" style \"wimp-hscrollbar\"\n",
 	     GetSystemMetrics(SM_CXHTHUMB),
 	     get_system_metric(XP_THEME_CLASS_SCROLLBAR, SM_CYHSCROLL));
   gtk_rc_parse_string(buf);
@@ -665,17 +664,8 @@ setup_wimp_rc_style(void)
   g_snprintf(buf, sizeof (buf),
 	     "style \"wimp-checkbutton\" = \"wimp-button\"\n"
 	     "{GtkCheckButton::indicator-size = 13\n"
-	     "}widget_class \"*GtkCheckButton*\" style \"wimp-checkbutton\"\n");
-  gtk_rc_parse_string(buf);
-  
-  /* the width/height of the paned resizer grippies */
-  nc.cbSize = sizeof(nc);
-  if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(nc), &nc, 0))
-    paned_size = abs(nc.lfStatusFont.lfHeight) + 4;
-  g_snprintf(buf, sizeof (buf),
-	     "style \"wimp-paned\" = \"wimp-default\"\n"
-	     "{GtkPaned::handle-size = %d\n"
-	     "}widget_class \"*GtkPaned*\" style \"wimp-paned\"\n", paned_size);
+	     "}widget_class \"*CheckButton*\" style \"wimp-checkbutton\"\n"
+	     "widget_class \"*RadioButton*\" style \"wimp-checkbutton\"\n");
   gtk_rc_parse_string(buf);
 }
 
