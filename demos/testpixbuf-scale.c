@@ -1,4 +1,3 @@
-#undef GTK_DISABLE_DEPRECATED
 #include <gtk/gtk.h>
 
 #include <stdio.h>
@@ -12,7 +11,12 @@ GtkWidget *darea;
 void
 set_interp_type (GtkWidget *widget, gpointer data)
 {
-  interp_type = GPOINTER_TO_UINT (data);
+  guint types[] = { GDK_INTERP_NEAREST,
+                    GDK_INTERP_BILINEAR,
+                    GDK_INTERP_TILES,
+                    GDK_INTERP_HYPER };
+
+  interp_type = types[gtk_combo_box_get_active (GTK_COMBO_BOX (widget))];
   gtk_widget_queue_draw (darea);
 }
 
@@ -59,7 +63,7 @@ int
 main(int argc, char **argv)
 {
 	GtkWidget *window, *vbox;
-	GtkWidget *menuitem, *optionmenu, *menu;
+        GtkWidget *combo_box;
 	GtkWidget *alignment;
 	GtkWidget *hbox, *label, *hscale;
 	GtkAdjustment *adjustment;
@@ -96,37 +100,18 @@ main(int argc, char **argv)
 	vbox = gtk_vbox_new (FALSE, 0);
 	gtk_container_add (GTK_CONTAINER (window), vbox);
 
-	menu = gtk_menu_new ();
-	
-	menuitem = gtk_menu_item_new_with_label ("NEAREST");
-	g_signal_connect (menuitem, "activate",
-			  G_CALLBACK (set_interp_type),
-			  GUINT_TO_POINTER (GDK_INTERP_NEAREST));
-	gtk_widget_show (menuitem);
-	gtk_container_add (GTK_CONTAINER (menu), menuitem);
-	
-	menuitem = gtk_menu_item_new_with_label ("BILINEAR");
-	g_signal_connect (menuitem, "activate",
-			  G_CALLBACK (set_interp_type),
-			  GUINT_TO_POINTER (GDK_INTERP_BILINEAR));
-	gtk_widget_show (menuitem);
-	gtk_container_add (GTK_CONTAINER (menu), menuitem);
-	
-	menuitem = gtk_menu_item_new_with_label ("TILES");
-	g_signal_connect (menuitem, "activate",
-			  G_CALLBACK (set_interp_type),
-			  GUINT_TO_POINTER (GDK_INTERP_TILES));
-	gtk_container_add (GTK_CONTAINER (menu), menuitem);
+        combo_box = gtk_combo_box_new_text ();
 
-	menuitem = gtk_menu_item_new_with_label ("HYPER");
-	g_signal_connect (menuitem, "activate",
-			  G_CALLBACK (set_interp_type),
-			  GUINT_TO_POINTER (GDK_INTERP_HYPER));
-	gtk_container_add (GTK_CONTAINER (menu), menuitem);
+        gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "NEAREST");
+        gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "BILINEAR");
+        gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "TILES");
+        gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "HYPER");
 
-	optionmenu = gtk_option_menu_new ();
-	gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu), menu);
-	gtk_option_menu_set_history (GTK_OPTION_MENU (optionmenu), 1);
+        gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 1);
+
+        g_signal_connect (combo_box, "changed",
+                          G_CALLBACK (set_interp_type),
+                          NULL);
 	
 	alignment = gtk_alignment_new (0.0, 0.0, 0.0, 0.5);
 	gtk_box_pack_start (GTK_BOX (vbox), alignment, FALSE, FALSE, 0);
@@ -145,7 +130,7 @@ main(int argc, char **argv)
 	gtk_scale_set_digits (GTK_SCALE (hscale), 0);
 	gtk_box_pack_start (GTK_BOX (hbox), hscale, TRUE, TRUE, 0);
 
-	gtk_container_add (GTK_CONTAINER (alignment), optionmenu);
+	gtk_container_add (GTK_CONTAINER (alignment), combo_box);
 	gtk_widget_show_all (vbox);
 
 	/* Compute the size without the drawing area, so we know how big to make the default size */
