@@ -1,3 +1,8 @@
+Tue Aug  5 10:07:08 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_get_property): 
+	Add a missing break. (#119156, Callum McKenzie)
+
 Mon Aug  4 14:53:46 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkimage-x11.c (_gdk_windowing_image_init): 
