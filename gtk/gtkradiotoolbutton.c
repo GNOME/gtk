@@ -1,0 +1,147 @@
+/* gtkradiotoolbutton.c
+ *
+ * Copyright (C) 2002 Anders Carlsson <andersca@codefactory.se>
+ * Copyright (C) 2002 James Henstridge <james@daa.com.au>
+ * Copyright (C) 2003 Soeren Sandmann <sandmann@daimi.au.dk>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#include "gtkradiotoolbutton.h"
+#include "gtkradiobutton.h"
+#include "gtkintl.h"
+
+static void gtk_radio_tool_button_init       (GtkRadioToolButton      *button);
+static void gtk_radio_tool_button_class_init (GtkRadioToolButtonClass *klass);
+
+GType
+gtk_radio_tool_button_get_type (void)
+{
+  static GType type = 0;
+
+  if (!type)
+    {
+      static const GTypeInfo type_info =
+	{
+	  sizeof (GtkRadioToolButtonClass),
+	  (GBaseInitFunc) NULL,
+	  (GBaseFinalizeFunc) NULL,
+	  (GClassInitFunc) gtk_radio_tool_button_class_init,
+	  (GClassFinalizeFunc) NULL,
+	  NULL,
+	  sizeof (GtkRadioToolButton),
+	  0, /* n_preallocs */
+	  (GInstanceInitFunc) gtk_radio_tool_button_init
+	};
+
+      type = g_type_register_static (GTK_TYPE_TOGGLE_TOOL_BUTTON,
+				     "GtkRadioToolButton", &type_info, 0);
+    }
+  return type;
+}
+
+     
+static void
+gtk_radio_tool_button_class_init (GtkRadioToolButtonClass *klass)
+{
+  GtkToolButtonClass *toolbutton_class;
+
+  toolbutton_class = (GtkToolButtonClass *)klass;
+  
+  toolbutton_class->button_type = GTK_TYPE_RADIO_BUTTON;  
+}
+
+static void
+gtk_radio_tool_button_init (GtkRadioToolButton *button)
+{
+  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (GTK_TOOL_BUTTON (button)->button), FALSE);
+}
+
+GtkToolItem *
+gtk_radio_tool_button_new (GSList *group)
+{
+  GtkRadioToolButton *button;
+  
+  button = g_object_new (GTK_TYPE_RADIO_TOOL_BUTTON,
+			 NULL);
+
+  gtk_radio_tool_button_set_group (button, group);
+  
+  return GTK_TOOL_ITEM (button);
+}
+
+GtkToolItem *
+gtk_radio_tool_button_new_from_stock (GSList      *group,
+				      const gchar *stock_id)
+{
+  GtkRadioToolButton *button;
+
+  g_return_val_if_fail (stock_id != NULL, NULL);
+  
+  button = g_object_new (GTK_TYPE_RADIO_TOOL_BUTTON,
+			 "stock_id", stock_id,
+			 NULL);
+
+
+  gtk_radio_tool_button_set_group (button, group);
+  
+  return GTK_TOOL_ITEM (button);
+}
+
+GtkToolItem *
+gtk_radio_tool_button_new_from_widget (GtkWidget   *group,
+				       const gchar *stock_id)
+{
+  GSList *list = NULL;
+  
+  g_return_val_if_fail (GTK_IS_RADIO_TOOL_BUTTON (group), NULL);
+
+  if (group)
+    list = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (group));
+  
+  return gtk_radio_tool_button_new_from_stock (list, stock_id);
+}
+
+GtkToolItem *
+gtk_radio_tool_button_new_with_stock_from_widget (GtkWidget *group)
+{
+  GSList *list = NULL;
+  
+  g_return_val_if_fail (GTK_IS_RADIO_TOOL_BUTTON (group), NULL);
+
+  if (group)
+    list = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (group));
+  
+  return gtk_radio_tool_button_new (list);
+}
+
+GSList *
+gtk_radio_tool_button_get_group (GtkRadioToolButton *button)
+{
+  g_return_val_if_fail (GTK_IS_RADIO_TOOL_BUTTON (button), NULL);
+
+  return gtk_radio_button_get_group (GTK_RADIO_BUTTON (GTK_TOOL_BUTTON (button)->button));
+}
+
+void
+gtk_radio_tool_button_set_group (GtkRadioToolButton *button,
+				 GSList             *group)
+{
+  g_return_if_fail (GTK_IS_RADIO_TOOL_BUTTON (button));
+
+  gtk_radio_button_set_group (GTK_RADIO_BUTTON (GTK_TOOL_BUTTON (button)->button), group);
+}
+

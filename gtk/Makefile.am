@@ -94,28 +94,27 @@ gtk_public_h_sources =          \
 	gtkalignment.h		\
 	gtkarrow.h		\
 	gtkaspectframe.h	\
+	gtkbbox.h		\
 	gtkbin.h		\
 	gtkbindings.h		\
-	gtkbbox.h		\
 	gtkbox.h		\
 	gtkbutton.h		\
 	gtkcalendar.h		\
+	gtkcelleditable.h	\
+	gtkcellrenderer.h	\
+	gtkcellrendererpixbuf.h	\
+	gtkcellrenderertext.h	\
+	gtkcellrenderertoggle.h	\
 	gtkcheckbutton.h	\
 	gtkcheckmenuitem.h	\
-	gtkseparatormenuitem.h	\
-	gtkclist.h		\
 	gtkclipboard.h		\
+	gtkclist.h		\
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
 	gtkcombo.h		\
 	gtkcontainer.h		\
 	gtkctree.h		\
 	gtkcurve.h		\
-	gtkcellrenderer.h	\
-	gtkcelleditable.h	\
-	gtkcellrenderertext.h	\
-	gtkcellrenderertoggle.h	\
-	gtkcellrendererpixbuf.h	\
 	gtkdebug.h              \
 	gtkdialog.h		\
 	gtkdnd.h		\
@@ -162,8 +161,8 @@ gtk_public_h_sources =          \
 	gtkmessagedialog.h	\
 	gtkmisc.h		\
 	gtknotebook.h		\
-	gtkoldeditable.h	\
 	gtkobject.h		\
+	gtkoldeditable.h	\
 	gtkoptionmenu.h		\
 	gtkpaned.h		\
 	gtkpixmap.h		\
@@ -174,6 +173,7 @@ gtk_public_h_sources =          \
 	gtkprogressbar.h	\
 	gtkradiobutton.h	\
 	gtkradiomenuitem.h	\
+	gtkradiotoolbutton.h	\
 	gtkrange.h		\
 	gtkrc.h			\
 	gtkruler.h		\
@@ -182,16 +182,19 @@ gtk_public_h_sources =          \
 	gtkscrolledwindow.h	\
 	gtkselection.h		\
 	gtkseparator.h		\
+	gtkseparatormenuitem.h	\
+	gtkseparatortoolitem.h	\
 	gtksettings.h		\
 	gtksignal.h		\
 	gtksizegroup.h		\
 	gtksocket.h		\
 	gtkspinbutton.h		\
-	gtkstyle.h		\
 	gtkstatusbar.h		\
 	gtkstock.h		\
+	gtkstyle.h		\
 	gtktable.h		\
 	gtktearoffmenuitem.h    \
+	gtktext.h		\
 	gtktextbuffer.h		\
 	gtktextchild.h		\
 	gtktextdisplay.h	\
@@ -201,10 +204,12 @@ gtk_public_h_sources =          \
 	gtktexttag.h		\
 	gtktexttagtable.h	\
 	gtktextview.h		\
-	gtktext.h		\
 	gtktipsquery.h		\
 	gtktogglebutton.h	\
+	gtktoggletoolbutton.h	\
 	gtktoolbar.h		\
+	gtktoolbutton.h		\
+	gtktoolitem.h		\
 	gtktooltips.h		\
 	gtktree.h		\
 	gtktreednd.h		\
@@ -249,6 +254,12 @@ gtk_c_sources =                 \
 	gtkaccelgroup.c		\
 	gtkaccelmap.c		\
 	gtkaccellabel.c		\
+	gtkradiotoolbutton.c	\
+	gtktoggletoolbutton.c	\
+	gtktoolbar.c		\
+	gtktoolbutton.c		\
+	gtkseparatortoolitem.c	\
+	gtktoolitem.c		\
 	gtkaccessible.c		\
 	gtkadjustment.c		\
 	gtkalignment.c		\
@@ -374,7 +385,6 @@ gtk_c_sources =                 \
 	gtkthemes.c		\
 	gtktipsquery.c		\
 	gtktogglebutton.c	\
-	gtktoolbar.c		\
 	gtktooltips.c		\
 	gtktree.c		\
 	gtktreeitem.c		\
