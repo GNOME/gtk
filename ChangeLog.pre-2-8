@@ -1,3 +1,7 @@
+Thu Feb 19 18:53:51 1998  Larry Ewing  <lewing@discord.isc.tamu.edu>
+
+	* removed g_warnings from the common XShm failure cases in gdkimage.c
+
 1998-02-19  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkcombo.c (gtk_combo_entry_key_press): Added M-p and M-n

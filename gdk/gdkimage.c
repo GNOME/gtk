@@ -136,7 +136,6 @@ gdk_image_init ()
     {
       if (!gdk_image_check_xshm (gdk_display))
 	{
-	  g_warning ("MIT-SHM Extension not availible on server");
 	  gdk_use_xshm = False;
 	}
     }
@@ -214,7 +213,6 @@ gdk_image_new (GdkImageType  type,
 		  g_free (image);
 
 		  gdk_use_xshm = False;
-		  gdk_use_xshm = False;
 		  return NULL;
 		}
 
@@ -249,8 +247,7 @@ gdk_image_new (GdkImageType  type,
 	      gdk_error_warnings = 1;
 	      if (gdk_error_code == -1)
 		{
-		  g_warning ("XShmAttach failed!");
-
+		  /* this is the common failure case so omit warning */
 		  XDestroyImage (private->ximage);
 		  shmdt (x_shm_info->shmaddr);
 		  shmctl (x_shm_info->shmid, IPC_RMID, 0);
