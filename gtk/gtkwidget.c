@@ -2169,9 +2169,9 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   
   if (aux_info)
     {
-      if (aux_info->x != -1)
+      if (aux_info->x_set)
 	real_allocation.x = aux_info->x;
-      if (aux_info->y != -1)
+      if (aux_info->y_set)
 	real_allocation.y = aux_info->y;
     }
 

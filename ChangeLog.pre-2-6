@@ -1,3 +1,8 @@
+2001-03-31  James Henstridge  <james@daa.com.au>
+
+	* gtk/gtkwidget.c (gtk_widget_size_adjust): fix use of magic
+	constant "-1" in the aux info structure.
+
 2001-03-30  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkbutton.c (gtk_button_get_property):
