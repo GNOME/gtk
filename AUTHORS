@@ -30,3 +30,24 @@ Owen Taylor       <otaylor@gtk.org>
 
 There are many others who have contributed patches; we thank them,
 GTK+ is much better because of them.
+
+
+Over time, TK+ has incorporated some pieces of software which 
+started as independent projects. We list the original authors here:
+
+
+MS-Windows theme engine
+-----------------------
+Raymond Penners
+Dom Lachowicz
+
+
+Pixbuf theme engine
+-------------------
+Owen Taylor
+
+
+IME input method
+----------------
+Takuro Ashie
+Kazuki IWAMOTO
