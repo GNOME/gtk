@@ -736,7 +736,7 @@ gtk_icon_view_realize (GtkWidget *widget)
     gtk_widget_get_events (widget);
   
   icon_view->priv->bin_window = gdk_window_new (widget->window,
-					  &attributes, attributes_mask);
+						&attributes, attributes_mask);
   gdk_window_set_user_data (icon_view->priv->bin_window, widget);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
@@ -2772,7 +2772,8 @@ gtk_icon_view_scroll_to_item (GtkIconView     *icon_view,
   gint y, height;
   gdouble value;
 
-  gdk_window_get_geometry (icon_view->priv->bin_window, NULL, &y, NULL, &height, NULL);
+  gdk_drawable_get_size (GDK_DRAWABLE (icon_view->priv->bin_window), NULL, &height);
+  gdk_window_get_position (icon_view->priv->bin_window, NULL, &y);
 
   if (y + item->y < 0)
     {
@@ -3282,7 +3283,7 @@ gtk_icon_view_unselect_path (GtkIconView *icon_view,
  * gtk_icon_view_get_selected_items:
  * @icon_view: A #GtkIconView.
  *
- * Creates a list of path of all selected items. Additionally, if you are
+ * Creates a list of paths of all selected items. Additionally, if you are
  * planning on modifying the model after calling this function, you may
  * want to convert the returned list into a list of #GtkTreeRowReference<!-- -->s.
  * To do this, you can use gtk_tree_row_reference_new().

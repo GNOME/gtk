@@ -1,5 +1,8 @@
 2004-11-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_scroll_to_item): Make
+	it work with *big* icon views.  (#154466)
+
 	* tests/testiconview.c: Add a real "Add many" button.
 
 	* gtk/gtkaction.[hc]: 
