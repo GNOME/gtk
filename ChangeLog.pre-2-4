@@ -1,3 +1,9 @@
+Mon Feb 25 18:59:27 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.c (start_keyboard_mode): Set the keyboard-mode
+	flag before popping up the tooltip so that pop it up
+	in the right place. (#71917, Narayani Pattipati)
+
 Mon Feb 25 22:11:34 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_visible): call

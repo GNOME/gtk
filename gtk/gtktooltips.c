@@ -491,10 +491,11 @@ start_keyboard_mode (GtkWidget *widget)
   if (GTK_IS_WINDOW (toplevel))
     {
       GtkWidget *focus = GTK_WINDOW (toplevel)->focus_widget;
+
+      g_object_set_data (G_OBJECT (toplevel), "gtk-tooltips-keyboard-mode", GUINT_TO_POINTER (TRUE));
+
       if (focus)
 	gtk_tooltips_show_tip (focus);
-      
-      g_object_set_data (G_OBJECT (toplevel), "gtk-tooltips-keyboard-mode", GUINT_TO_POINTER (TRUE));
     }
 }
 
