@@ -1,3 +1,7 @@
+Sun Aug  8 01:32:36 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk.def: Add gtk_cell_renderer_progress_get_type.
+
 Sun Aug  8 01:29:08 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk.def: Replace duplicate gtk_tree_view_get_hover_expand

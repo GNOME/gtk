@@ -235,6 +235,7 @@ EXPORTS
 	gtk_cell_renderer_mode_get_type
 	gtk_cell_renderer_pixbuf_get_type
 	gtk_cell_renderer_pixbuf_new
+	gtk_cell_renderer_progress_get_type
 	gtk_cell_renderer_progress_new
 	gtk_cell_renderer_render
 	gtk_cell_renderer_set_fixed_size
