@@ -234,6 +234,11 @@ static gboolean gtk_combo_box_scroll_event         (GtkWidget        *widget,
                                                     GdkEventScroll   *event);
 
 /* list */
+static void     gtk_combo_box_list_position        (GtkComboBox      *combo_box, 
+						    gint             *x, 
+						    gint             *y, 
+						    gint             *width,
+						    gint             *height);
 static void     gtk_combo_box_list_setup           (GtkComboBox      *combo_box);
 static void     gtk_combo_box_list_destroy         (GtkComboBox      *combo_box);
 
@@ -805,6 +810,50 @@ gtk_combo_box_menu_position (GtkMenu  *menu,
   *push_in = TRUE;
 }
 
+static void
+gtk_combo_box_list_position (GtkComboBox *combo_box, 
+			     gint        *x, 
+			     gint        *y, 
+			     gint        *width,
+			     gint        *height)
+{
+  GtkWidget *sample;
+  GdkScreen *screen;
+  gint monitor_num;
+  GdkRectangle monitor;
+  
+  sample = GTK_BIN (combo_box)->child;
+
+  *width = sample->allocation.width;
+  *height = sample->allocation.height;
+
+  gdk_window_get_origin (sample->window, x, y);
+
+  if (combo_box->priv->cell_view_frame)
+    {
+       *x -= GTK_CONTAINER (combo_box->priv->cell_view_frame)->border_width +
+	     GTK_WIDGET (combo_box->priv->cell_view_frame)->style->xthickness;
+       *width += 2 * (GTK_CONTAINER (combo_box->priv->cell_view_frame)->border_width +
+            GTK_WIDGET (combo_box->priv->cell_view_frame)->style->xthickness);
+    }
+
+  if (GTK_WIDGET_NO_WINDOW (sample))
+    {
+      *x += sample->allocation.x;
+      *y += sample->allocation.y;
+    }
+  
+  screen = gtk_widget_get_screen (GTK_WIDGET (combo_box));
+  monitor_num = gdk_screen_get_monitor_at_window (screen, 
+						  GTK_WIDGET (combo_box)->window);
+  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  
+  if (*x < monitor.x)
+    *x = monitor.x;
+  else if (*x + *width > monitor.x + monitor.width)
+    *x = monitor.x + monitor.width - *width;
+} 
+
 /**
  * gtk_combo_box_popup:
  * @combo_box: a #GtkComboBox
@@ -820,7 +869,6 @@ void
 gtk_combo_box_popup (GtkComboBox *combo_box)
 {
   gint x, y, width, height;
-  GtkWidget *sample;
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
@@ -846,33 +894,10 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
       return;
     }
 
-  /* size it */
-  sample = GTK_BIN (combo_box)->child;
+  gtk_combo_box_list_position (combo_box, &x, &y, &width, &height);
 
-  width = sample->allocation.width;
-  height = sample->allocation.height;
-
-  gdk_window_get_origin (sample->window,
-                         &x, &y);
-
-  if (combo_box->priv->cell_view_frame)
-    {
-       x -= GTK_CONTAINER (combo_box->priv->cell_view_frame)->border_width +
-            GTK_WIDGET (combo_box->priv->cell_view_frame)->style->xthickness;
-       width += 2 * (GTK_CONTAINER (combo_box->priv->cell_view_frame)->border_width +
-            GTK_WIDGET (combo_box->priv->cell_view_frame)->style->xthickness);
-    }
-
-  gtk_widget_set_size_request (combo_box->priv->popup_window, width, -1);
-  
-  if (GTK_WIDGET_NO_WINDOW (sample))
-    {
-      x += sample->allocation.x;
-      y += sample->allocation.y;
-    }
-
-  gtk_window_move (GTK_WINDOW (combo_box->priv->popup_window),
-                   x, y + height);
+  gtk_widget_set_size_request (combo_box->priv->popup_window, width, -1);  
+  gtk_window_move (GTK_WINDOW (combo_box->priv->popup_window), x, y + height);
 
   /* popup */
   gtk_widget_show_all (combo_box->priv->popup_window);
