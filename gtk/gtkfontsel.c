@@ -1391,10 +1391,11 @@ gtk_font_selection_show_available_sizes (GtkFontSelection *fontsel)
   FontInfo *font;
   FontStyle *styles, *style;
   const guint16 *standard_sizes;
-  guint16 *bitmapped_sizes, bitmap_size;
+  guint16 *bitmapped_sizes;
   gint nstandard_sizes, nbitmapped_sizes;
   gchar buffer[16], *size;
-  gfloat bitmap_size_float;
+  gfloat bitmap_size_float = 0.;
+  guint16 bitmap_size = 0;
   gboolean can_match;
   gint type_filter;
   
@@ -1437,18 +1438,20 @@ gtk_font_selection_show_available_sizes (GtkFontSelection *fontsel)
   while (nstandard_sizes || nbitmapped_sizes)
     {
       can_match = TRUE;
-      if (fontsel->metric == GTK_FONT_METRIC_POINTS)
-	{
-	  if (*bitmapped_sizes % 10 != 0)
-	    can_match = FALSE;
-	  bitmap_size = *bitmapped_sizes / 10;
-	  bitmap_size_float = *bitmapped_sizes / 10;
-	}
-      else
-	{
-	  bitmap_size = *bitmapped_sizes;
-	  bitmap_size_float = *bitmapped_sizes;
-	}
+
+      if (nbitmapped_sizes)
+	if (fontsel->metric == GTK_FONT_METRIC_POINTS)
+	  {
+	    if (*bitmapped_sizes % 10 != 0)
+	      can_match = FALSE;
+	    bitmap_size = *bitmapped_sizes / 10;
+	    bitmap_size_float = *bitmapped_sizes / 10;
+	  }
+	else
+	  {
+	    bitmap_size = *bitmapped_sizes;
+	    bitmap_size_float = *bitmapped_sizes;
+	  }
       
       if (can_match && nstandard_sizes && nbitmapped_sizes
 	  && *standard_sizes == bitmap_size)

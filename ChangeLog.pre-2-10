@@ -1,3 +1,9 @@
+Thu Feb 25 00:48:51 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfontsel.c: Don't access *bitmapped_sizes
+	if nbitmapped_sizes == 0. (Pointed out by
+	zucchi@zedzone.fsi.com.au (Michael Zucchi))
+
 Wed Feb 24 23:12:09 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.h gtk/gtkclist.c: Make prototypes 
