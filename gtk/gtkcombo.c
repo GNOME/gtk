@@ -494,12 +494,15 @@ gtk_combo_button_release (GtkWidget * widget, GdkEvent * event, GtkCombo * combo
 			    GDK_BUTTON_RELEASE_MASK |
 			    GDK_POINTER_MOTION_MASK, 
 			    NULL, NULL, GDK_CURRENT_TIME);
-	  
 	  return FALSE;
 	}
     }
   else
     {
+      /* Don't remove the popwin when the user adjusts the scrollbats */
+      if (!(GTK_LIST (combo->list)->button))
+	return FALSE;
+
       gtk_grab_remove (combo->popwin);
       gdk_pointer_ungrab (event->button.time);
     }

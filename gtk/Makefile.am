@@ -203,6 +203,7 @@ EXTRA_DIST = \
 	line-arrow.xbm 		\
 	line-wrap.xbm 		\
 	testgtkrc 		\
+	testgtkrc2 		\
 	gtk.defs		\
 	runelisp 		\
 	gentypeinfo.el 		\

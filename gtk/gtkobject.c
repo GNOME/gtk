@@ -72,7 +72,8 @@ static void           gtk_object_get_arg       (GtkObject      *object,
 static void           gtk_object_shutdown      (GtkObject      *object);
 static void           gtk_object_real_destroy  (GtkObject      *object);
 static void           gtk_object_finalize      (GtkObject      *object);
-static void           gtk_object_notify_weaks  (gpointer        data);
+static void           gtk_object_notify_weaks  (GtkObject      *object);
+
 static void           gtk_object_data_destroy  (GtkObjectData  *odata);
 static guint*         gtk_object_data_id_alloc (void);
 
@@ -91,7 +92,8 @@ static GHashTable *arg_info_ht = NULL;
 
 static const gchar *user_data_key = "user_data";
 static guint user_data_key_id = 0;
-
+static const gchar *weakrefs_key = "gtk-weakrefs";
+static guint weakrefs_key_id = 0;
 
 #ifdef G_ENABLE_DEBUG
 static guint obj_count = 0;
@@ -259,6 +261,8 @@ gtk_object_finalize (GtkObject *object)
 {
   GtkObjectData *odata, *next;
   
+  gtk_object_notify_weaks (object);
+
   odata = object->object_data;
   while (odata)
     {
@@ -443,14 +447,14 @@ gtk_object_sink (GtkObject *object)
  * referenced object is finalized.
  *  
  * They are not implemented as a signal because they really are
- * special and need to be used with great care.  Unlike signals, who
+ * special and need to be used with great care.  Unlike signals, which
  * should be able to execute any code whatsoever.
  * 
  * A weakref callback is not allowed to retain a reference to the
- * object.  In fact, the object is no longer there at all when it is
- * called.
+ * object.  Object data keys may be retrieved in a weak reference
+ * callback.
  * 
- * A weakref callback is called atmost once.
+ * A weakref callback is called at most once.
  *
  *****************************************/
 
@@ -463,8 +467,6 @@ struct _GtkWeakRef
   gpointer          data;
 };
 
-static const gchar *weakrefs_key = "gtk-weakrefs";
-
 void
 gtk_object_weakref (GtkObject        *object,
 		    GtkDestroyNotify  notify,
@@ -476,12 +478,14 @@ gtk_object_weakref (GtkObject        *object,
   g_return_if_fail (notify != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
 
+  if (!weakrefs_key_id)
+    weakrefs_key_id = gtk_object_data_force_id (weakrefs_key);
+
   weak = g_new (GtkWeakRef, 1);
-  weak->next = gtk_object_get_data (object, weakrefs_key);
+  weak->next = gtk_object_get_data_by_id (object, weakrefs_key_id);
   weak->notify = notify;
   weak->data = data;
-  gtk_object_set_data_full (object, weakrefs_key, weak, 
-			    gtk_object_notify_weaks);
+  gtk_object_set_data_by_id (object, weakrefs_key_id, weak);
 }
 
 void
@@ -494,15 +498,17 @@ gtk_object_weakunref (GtkObject        *object,
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
 
-  weaks = gtk_object_get_data (object, weakrefs_key);
+  if (!weakrefs_key_id)
+    return;
+
+  weaks = gtk_object_get_data_by_id (object, weakrefs_key_id);
   for (wp = &weaks; *wp; wp = &(*wp)->next)
     {
       w = *wp;
       if (w->notify == notify && w->data == data)
 	{
 	  if (w == weaks)
-	    gtk_object_set_data_full (object, weakrefs_key, w->next,
-				      gtk_object_notify_weaks);
+	    gtk_object_set_data_by_id (object, weakrefs_key_id, w->next);
 	  else
 	    *wp = w->next;
 	  g_free (w);
@@ -512,18 +518,21 @@ gtk_object_weakunref (GtkObject        *object,
 }
 
 static void
-gtk_object_notify_weaks (gpointer data)
+gtk_object_notify_weaks (GtkObject *object)
 {
-  GtkWeakRef *w1, *w2;
-
-  w1 = (GtkWeakRef *)data;
-
-  while (w1)
+  if (weakrefs_key_id)
     {
-      w1->notify (w1->data);
-      w2 = w1->next;
-      g_free (w1);
-      w1 = w2;
+      GtkWeakRef *w1, *w2;
+      
+      w1 = gtk_object_get_data_by_id (object, weakrefs_key_id);
+      
+      while (w1)
+	{
+	  w1->notify (w1->data);
+	  w2 = w1->next;
+	  g_free (w1);
+	  w1 = w2;
+	}
     }
 }
 

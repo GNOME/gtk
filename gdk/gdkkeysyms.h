@@ -1,21 +1,3 @@
-/* GDK - The GIMP Drawing Kit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- */
 #define GDK_VoidSymbol 0xFFFFFF
 #define GDK_BackSpace 0xFF08
 #define GDK_Tab 0xFF09
@@ -28,6 +10,9 @@
 #define GDK_Escape 0xFF1B
 #define GDK_Delete 0xFFFF
 #define GDK_Multi_key 0xFF20
+#define GDK_SingleCandidate 0xFF3C
+#define GDK_MultipleCandidate 0xFF3D
+#define GDK_PreviousCandidate 0xFF3E
 #define GDK_Kanji 0xFF21
 #define GDK_Muhenkan 0xFF22
 #define GDK_Henkan_Mode 0xFF23
@@ -45,6 +30,8 @@
 #define GDK_Kana_Shift 0xFF2E
 #define GDK_Eisu_Shift 0xFF2F
 #define GDK_Eisu_toggle 0xFF30
+#define GDK_Zen_Koho 0xFF3D
+#define GDK_Mae_Koho 0xFF3E
 #define GDK_Home 0xFF50
 #define GDK_Left 0xFF51
 #define GDK_Up 0xFF52
@@ -234,11 +221,23 @@
 #define GDK_dead_iota 0xFE5D
 #define GDK_dead_voiced_sound 0xFE5E
 #define GDK_dead_semivoiced_sound 0xFE5F
+#define GDK_dead_belowdot 0xFE60
 #define GDK_First_Virtual_Screen 0xFED0
 #define GDK_Prev_Virtual_Screen 0xFED1
 #define GDK_Next_Virtual_Screen 0xFED2
 #define GDK_Last_Virtual_Screen 0xFED4
 #define GDK_Terminate_Server 0xFED5
+#define GDK_AccessX_Enable 0xFE70
+#define GDK_AccessX_Feedback_Enable 0xFE71
+#define GDK_RepeatKeys_Enable 0xFE72
+#define GDK_SlowKeys_Enable 0xFE73
+#define GDK_BounceKeys_Enable 0xFE74
+#define GDK_StickyKeys_Enable 0xFE75
+#define GDK_MouseKeys_Enable 0xFE76
+#define GDK_MouseKeys_Accel_Enable 0xFE77
+#define GDK_Overlay1_Enable 0xFE78
+#define GDK_Overlay2_Enable 0xFE79
+#define GDK_AudibleBell_Enable 0xFE7A
 #define GDK_Pointer_Left 0xFEE0
 #define GDK_Pointer_Right 0xFEE1
 #define GDK_Pointer_Up 0xFEE2
@@ -264,6 +263,7 @@
 #define GDK_Pointer_Drag2 0xFEF6
 #define GDK_Pointer_Drag3 0xFEF7
 #define GDK_Pointer_Drag4 0xFEF8
+#define GDK_Pointer_Drag5 0xFEFD
 #define GDK_Pointer_EnableKeys 0xFEF9
 #define GDK_Pointer_Accelerate 0xFEFA
 #define GDK_Pointer_DfltBtnNext 0xFEFB

@@ -1436,7 +1436,13 @@ cmpl_last_valid_char (CompletionState* cmpl_state)
 static gchar*
 cmpl_completion_fullname (gchar* text, CompletionState* cmpl_state)
 {
-  if (text[0] == '/')
+  static char nothing[2] = "";
+
+  if (!cmpl_state_okay (cmpl_state))
+    {
+      return nothing;
+    }
+  else if (text[0] == '/')
     {
       strcpy (cmpl_state->updated_text, text);
     }
@@ -1515,9 +1521,13 @@ cmpl_init_state (void)
   if (!getcwd (getcwd_buf, MAXPATHLEN))
 #endif    
     {
-      cmpl_errno = errno;
-      return NULL;
+      /* Oh joy, we can't get the current directory. Um..., we should have
+       * a root directory, right? Right? (Probably not portable to non-Unix)
+       */
+      strcpy (getcwd_buf, "/");
     }
+
+tryagain:
 
   new_state->reference_dir = NULL;
   new_state->completion_dir = NULL;
@@ -1542,7 +1552,11 @@ cmpl_init_state (void)
   new_state->reference_dir =  open_dir (getcwd_buf, new_state);
 
   if (!new_state->reference_dir)
-    return NULL;
+    {
+      /* Directories changing from underneath us, grumble */
+      strcpy (getcwd_buf, "/");
+      goto tryagain;
+    }
 
   return new_state;
 }

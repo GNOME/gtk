@@ -2495,7 +2495,7 @@ draw_row (GtkCList * clist,
     {
       if (gdk_rectangle_intersect (area, &cell_rectangle, &intersect_rectangle))
 	gdk_draw_rectangle (clist->clist_window,
-			    widget->style->white_gc,
+			    widget->style->base_gc[GTK_STATE_NORMAL],
 			    TRUE,
 			    intersect_rectangle.x,
 			    intersect_rectangle.y,
@@ -2509,7 +2509,7 @@ draw_row (GtkCList * clist,
 
 	  if (gdk_rectangle_intersect (area, &cell_rectangle, &intersect_rectangle))
 	    gdk_draw_rectangle (clist->clist_window,
-				widget->style->white_gc,
+				widget->style->base_gc[GTK_STATE_NORMAL],
 				TRUE,
 				intersect_rectangle.x,
 				intersect_rectangle.y,
@@ -2538,7 +2538,7 @@ draw_row (GtkCList * clist,
   else
     {
       gdk_draw_rectangle (clist->clist_window,
-			  widget->style->white_gc,
+			  widget->style->base_gc[GTK_STATE_NORMAL],
 			  TRUE,
 			  cell_rectangle.x,
 			  cell_rectangle.y,
@@ -2551,7 +2551,7 @@ draw_row (GtkCList * clist,
 	  cell_rectangle.y += clist->row_height + CELL_SPACING;
 
 	  gdk_draw_rectangle (clist->clist_window,
-			      widget->style->white_gc,
+			      widget->style->base_gc[GTK_STATE_NORMAL],
 			      TRUE,
 			      cell_rectangle.x,
 			      cell_rectangle.y,

@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -23,34 +23,36 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkadjustment.h>
 
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_CONTAINER(obj)          (GTK_CHECK_CAST ((obj), gtk_container_get_type (), GtkContainer))
+#define GTK_CONTAINER(obj)	    (GTK_CHECK_CAST ((obj), gtk_container_get_type (), GtkContainer))
 #define GTK_CONTAINER_CLASS(klass)  (GTK_CHECK_CLASS_CAST ((klass), gtk_container_get_type (), GtkContainerClass))
-#define GTK_IS_CONTAINER(obj)       (GTK_CHECK_TYPE ((obj), gtk_container_get_type ()))
+#define GTK_IS_CONTAINER(obj)	    (GTK_CHECK_TYPE ((obj), gtk_container_get_type ()))
 
-#define GTK_TYPE_CONTAINER          (gtk_container_get_type ())
+#define GTK_TYPE_CONTAINER	    (gtk_container_get_type ())
 
-typedef struct _GtkContainer       GtkContainer;
+typedef struct _GtkContainer	   GtkContainer;
 typedef struct _GtkContainerClass  GtkContainerClass;
 
 struct _GtkContainer
 {
   GtkWidget widget;
-
+  
   GtkWidget *focus_child;
-
+  
   gint16 border_width;
   guint auto_resize : 1;
   guint need_resize : 1;
   guint block_resize : 1;
-
-
+  
+  
   /* The list of children that requested a resize
    */
   GSList *resize_widgets;
@@ -59,52 +61,59 @@ struct _GtkContainer
 struct _GtkContainerClass
 {
   GtkWidgetClass parent_class;
-
-  void (* add)         (GtkContainer     *container,
-			GtkWidget        *widget);
-  void (* remove)      (GtkContainer     *container,
-			GtkWidget        *widget);
-  gint (* need_resize) (GtkContainer     *container);
-  void (* foreach)     (GtkContainer     *container,
-			GtkCallback       callback,
-			gpointer          callbabck_data);
-  gint (* focus)       (GtkContainer     *container,
+  
+  void (* add)	       (GtkContainer	 *container,
+			GtkWidget	 *widget);
+  void (* remove)      (GtkContainer	 *container,
+			GtkWidget	 *widget);
+  gint (* need_resize) (GtkContainer	 *container);
+  void (* foreach)     (GtkContainer	 *container,
+			GtkCallback	  callback,
+			gpointer	  callbabck_data);
+  gint (* focus)       (GtkContainer	 *container,
 			GtkDirectionType  direction);
 };
 
 
 
-guint  gtk_container_get_type            (void);
-void   gtk_container_border_width        (GtkContainer     *container,
-					  gint              border_width);
-void   gtk_container_add                 (GtkContainer     *container,
-					  GtkWidget        *widget);
-void   gtk_container_remove              (GtkContainer     *container,
-					  GtkWidget        *widget);
-void   gtk_container_disable_resize      (GtkContainer     *container);
-void   gtk_container_enable_resize       (GtkContainer     *container);
-void   gtk_container_block_resize        (GtkContainer     *container);
-void   gtk_container_unblock_resize      (GtkContainer     *container);
-gint   gtk_container_need_resize         (GtkContainer     *container);
-void   gtk_container_foreach             (GtkContainer     *container,
-					  GtkCallback       callback,
-					  gpointer          callback_data);
-void   gtk_container_foreach_interp      (GtkContainer     *container,
+GtkType gtk_container_get_type		 (void);
+void    gtk_container_border_width	 (GtkContainer	   *container,
+					  gint		    border_width);
+void    gtk_container_add		 (GtkContainer	   *container,
+					  GtkWidget	   *widget);
+void    gtk_container_remove		 (GtkContainer	   *container,
+					  GtkWidget	   *widget);
+void    gtk_container_disable_resize	 (GtkContainer	   *container);
+void    gtk_container_enable_resize	 (GtkContainer	   *container);
+void    gtk_container_block_resize	 (GtkContainer	   *container);
+void    gtk_container_unblock_resize	 (GtkContainer	   *container);
+gint    gtk_container_need_resize	 (GtkContainer	   *container);
+void    gtk_container_foreach		 (GtkContainer	   *container,
+					  GtkCallback	    callback,
+					  gpointer	    callback_data);
+void    gtk_container_foreach_interp	 (GtkContainer	   *container,
 					  GtkCallbackMarshal marshal,
-					  gpointer          callback_data,
+					  gpointer	    callback_data,
 					  GtkDestroyNotify  notify);
-void   gtk_container_foreach_full        (GtkContainer     *container,
-					  GtkCallback       callback,
+void    gtk_container_foreach_full	 (GtkContainer	   *container,
+					  GtkCallback	    callback,
 					  GtkCallbackMarshal marshal,
-					  gpointer          callback_data,
+					  gpointer	    callback_data,
 					  GtkDestroyNotify  notify);
-gint   gtk_container_focus               (GtkContainer     *container,
-					  GtkDirectionType  direction);
-GList* gtk_container_children            (GtkContainer     *container);
+GList* gtk_container_children		 (GtkContainer	   *container);
+void   gtk_container_register_toplevel	 (GtkContainer	   *container);
+void   gtk_container_unregister_toplevel (GtkContainer	   *container);
+gint   gtk_container_focus		   (GtkContainer     *container,
+					    GtkDirectionType  direction);
+void   gtk_container_set_focus_vadjustment (GtkContainer     *container,
+					    GtkAdjustment    *adjustment);
+void   gtk_container_set_focus_hadjustment (GtkContainer     *container,
+					    GtkAdjustment    *adjustment);
 
-void   gtk_container_register_toplevel   (GtkContainer     *container);
-void   gtk_container_unregister_toplevel (GtkContainer     *container);
-     
+
+
+
+
 
 #ifdef __cplusplus
 }

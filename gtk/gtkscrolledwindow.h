@@ -49,6 +49,8 @@ struct _GtkScrolledWindow
 
   guint8 hscrollbar_policy;
   guint8 vscrollbar_policy;
+  gint hscrollbar_visible : 1;
+  gint vscrollbar_visible : 1;
 };
 
 struct _GtkScrolledWindowClass

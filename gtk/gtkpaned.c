@@ -349,20 +349,22 @@ gtk_paned_remove (GtkContainer *container,
 		  GtkWidget    *widget)
 {
   GtkPaned *paned;
+  gboolean was_visible;
 
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_PANED (container));
   g_return_if_fail (widget != NULL);
 
   paned = GTK_PANED (container);
-
+  was_visible = GTK_WIDGET_VISIBLE (widget);
+  
   if (paned->child1 == widget)
     {
       gtk_widget_unparent (widget);
 
       paned->child1 = NULL;
 
-      if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
+      if (was_visible && GTK_WIDGET_VISIBLE (container))
         gtk_widget_queue_resize (GTK_WIDGET (container));
     }
   else if (paned->child2 == widget)
@@ -371,7 +373,7 @@ gtk_paned_remove (GtkContainer *container,
 
       paned->child2 = NULL;
 
-      if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
+      if (was_visible && GTK_WIDGET_VISIBLE (container))
         gtk_widget_queue_resize (GTK_WIDGET (container));
     }
 }

@@ -355,7 +355,7 @@ struct _GtkWidgetShapeInfo
 };
 
 
-guint	   gtk_widget_get_type		  (void);
+GtkType	   gtk_widget_get_type		  (void);
 GtkWidget* gtk_widget_new		  (guint		type,
 					   ...);
 GtkWidget* gtk_widget_newv		  (guint		type,

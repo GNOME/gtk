@@ -51,6 +51,7 @@ typedef struct sTreeButtons {
   guint nb_item_add;
   GtkWidget* add_button;
   GtkWidget* remove_button;
+  GtkWidget* subtree_button;
 } sTreeButtons;
 /* end of tree section */
 
@@ -1066,6 +1067,22 @@ cb_remove_item(GtkWidget*w, GtkTree* tree)
 }
 
 static void
+cb_remove_subtree(GtkWidget*w, GtkTree* tree)
+{
+  GList* selected_list;
+  GtkTreeItem *item;
+  
+  selected_list = GTK_TREE_SELECTION(tree);
+
+  if (selected_list)
+    {
+      item = GTK_TREE_ITEM (selected_list->data);
+      if (item->subtree)
+	gtk_tree_item_remove_subtree (item);
+    }
+}
+
+static void
 cb_tree_changed(GtkTree* tree)
 {
   sTreeButtons* tree_buttons;
@@ -1084,11 +1101,13 @@ cb_tree_changed(GtkTree* tree)
       else
 	gtk_widget_set_sensitive(tree_buttons->add_button, FALSE);
       gtk_widget_set_sensitive(tree_buttons->remove_button, FALSE);
+      gtk_widget_set_sensitive(tree_buttons->subtree_button, FALSE);
     } 
   else 
     {
       gtk_widget_set_sensitive(tree_buttons->remove_button, TRUE);
       gtk_widget_set_sensitive(tree_buttons->add_button, (nb_selected == 1));
+      gtk_widget_set_sensitive(tree_buttons->subtree_button, (nb_selected == 1));
     }  
 }
 
@@ -1227,6 +1246,15 @@ create_tree_sample(guint selection_mode,
   gtk_box_pack_start(GTK_BOX(box2), button, TRUE, TRUE, 0);
   gtk_widget_show(button);
   tree_buttons->remove_button = button;
+
+  button = gtk_button_new_with_label("Remove Subtree");
+  gtk_widget_set_sensitive(button, FALSE);
+  gtk_signal_connect(GTK_OBJECT (button), "clicked",
+		     (GtkSignalFunc) cb_remove_subtree, 
+		     (gpointer)root_tree);
+  gtk_box_pack_start(GTK_BOX(box2), button, TRUE, TRUE, 0);
+  gtk_widget_show(button);
+  tree_buttons->subtree_button = button;
 
   /* create separator */
   separator = gtk_hseparator_new();
@@ -2080,6 +2108,31 @@ create_menus ()
  * GtkScrolledWindow
  */
 static void
+scrolled_windows_remove (GtkWidget *widget, GtkWidget *scrollwin)
+{
+  static GtkWidget *parent = NULL;
+  static GtkWidget *float_parent;
+
+  if (parent)
+    {
+      gtk_widget_reparent (scrollwin, parent);
+      gtk_widget_destroy (float_parent);
+      float_parent = NULL;
+      parent = NULL;
+    }
+  else
+    {
+      parent = widget->parent;
+      float_parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_widget_reparent (scrollwin, float_parent);
+      gtk_widget_show (float_parent);
+    }
+}
+
+/*
+ * GtkScrolledWindow
+ */
+static void
 create_scrolled_windows ()
 {
   static GtkWidget *window;
@@ -2114,6 +2167,10 @@ create_scrolled_windows ()
       gtk_table_set_row_spacings (GTK_TABLE (table), 10);
       gtk_table_set_col_spacings (GTK_TABLE (table), 10);
       gtk_container_add (GTK_CONTAINER (scrolled_window), table);
+      gtk_container_set_focus_hadjustment (GTK_CONTAINER (table),
+					   gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
+      gtk_container_set_focus_vadjustment (GTK_CONTAINER (table),
+					   gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
       gtk_widget_show (table);
 
       for (i = 0; i < 20; i++)
@@ -2136,6 +2193,17 @@ create_scrolled_windows ()
 			  button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
+
+      button = gtk_button_new_with_label ("remove");
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC(scrolled_windows_remove),
+				 GTK_OBJECT (scrolled_window));
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
+			  button, TRUE, TRUE, 0);
+      gtk_widget_grab_default (button);
+      gtk_widget_show (button);
+
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
@@ -2772,6 +2840,8 @@ create_list ()
       gtk_list_set_selection_mode (GTK_LIST (list), GTK_SELECTION_MULTIPLE);
       gtk_list_set_selection_mode (GTK_LIST (list), GTK_SELECTION_BROWSE);
       gtk_container_add (GTK_CONTAINER (scrolled_win), list);
+      gtk_container_set_focus_vadjustment (GTK_CONTAINER (list),
+					   gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_win)));
       gtk_widget_show (list);
 
       for (i = 0; i < nlist_items; i++)
@@ -3909,6 +3979,28 @@ static char * book_closed_xpm[] = {
 "                "};
 
 static void
+notebook_reparent (GtkWidget *widget, GtkWidget *scrollwin)
+{
+  static GtkWidget *parent = NULL;
+  static GtkWidget *float_parent;
+
+  if (parent)
+    {
+      gtk_widget_reparent (scrollwin, parent);
+      gtk_widget_destroy (float_parent);
+      float_parent = NULL;
+      parent = NULL;
+    }
+  else
+    {
+      parent = widget->parent;
+      float_parent = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_widget_show (float_parent);
+      gtk_widget_reparent (scrollwin, float_parent);
+    }
+}
+
+static void
 page_switch (GtkWidget *widget, GtkNotebookPage *page, gint page_num)
 {
   GtkNotebookPage *oldpage;
@@ -4187,6 +4279,13 @@ create_notebook ()
 			  GTK_SIGNAL_FUNC (rotate_notebook),
 			  notebook);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+
+      button = gtk_button_new_with_label ("reparent");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (notebook_reparent),
+			  notebook);
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
@@ -5718,6 +5817,7 @@ create_main_window ()
   int i;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_policy (GTK_WINDOW (window), FALSE, FALSE, FALSE);
   gtk_widget_set_name (window, "main window");
   gtk_widget_set_usize (window, 200, 400);
   gtk_widget_set_uposition (window, 20, 20);
@@ -5754,12 +5854,15 @@ create_main_window ()
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
      		                  GTK_POLICY_AUTOMATIC, 
                                   GTK_POLICY_AUTOMATIC);
+  GTK_WIDGET_UNSET_FLAGS (GTK_SCROLLED_WINDOW (scrolled_window)->vscrollbar, GTK_CAN_FOCUS);
   gtk_box_pack_start (GTK_BOX (box1), scrolled_window, TRUE, TRUE, 0);
   gtk_widget_show (scrolled_window);
 
   box2 = gtk_vbox_new (FALSE, 0);
   gtk_container_border_width (GTK_CONTAINER (box2), 10);
   gtk_container_add (GTK_CONTAINER (scrolled_window), box2);
+  gtk_container_set_focus_vadjustment (GTK_CONTAINER (box2),
+				       gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
   gtk_widget_show (box2);
 
   for (i = 0; i < nbuttons; i++)

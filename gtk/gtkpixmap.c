@@ -104,12 +104,16 @@ gtk_pixmap_set (GtkPixmap *pixmap,
 {
   gint width;
   gint height;
+  gint oldwidth;
+  gint oldheight;
 
   g_return_if_fail (pixmap != NULL);
   g_return_if_fail (GTK_IS_PIXMAP (pixmap));
 
   if (pixmap->pixmap != val)
     {
+      oldwidth = GTK_WIDGET (pixmap)->requisition.width;
+      oldheight = GTK_WIDGET (pixmap)->requisition.height;
       if (pixmap->pixmap)
 	gdk_pixmap_unref (pixmap->pixmap);
       pixmap->pixmap = val;
@@ -128,7 +132,13 @@ gtk_pixmap_set (GtkPixmap *pixmap,
 	  GTK_WIDGET (pixmap)->requisition.height = 0;
 	}
       if (GTK_WIDGET_VISIBLE (pixmap))
-	gtk_widget_queue_resize (GTK_WIDGET (pixmap));
+	{
+	  if ((GTK_WIDGET (pixmap)->requisition.width != oldwidth) ||
+	      (GTK_WIDGET (pixmap)->requisition.height != oldheight))
+	    gtk_widget_queue_resize (GTK_WIDGET (pixmap));
+	  else
+	    gtk_widget_queue_draw (GTK_WIDGET (pixmap));
+	}
     }
 
   if (pixmap->mask != mask)

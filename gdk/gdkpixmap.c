@@ -55,7 +55,7 @@ gdk_pixmap_new (GdkWindow *window,
     return NULL;
 
   if (depth == -1)
-    gdk_window_get_geometry (window, NULL, NULL, NULL, NULL, &depth);
+    depth = gdk_window_get_visual (window)->depth;
 
   private = g_new (GdkWindowPrivate, 1);
   pixmap = (GdkPixmap*) private;
@@ -64,6 +64,7 @@ gdk_pixmap_new (GdkWindow *window,
   private->window_type = GDK_WINDOW_PIXMAP;
   private->xwindow = XCreatePixmap (private->xdisplay, window_private->xwindow,
 				    width, height, depth);
+  private->colormap = NULL;
   private->parent = NULL;
   private->x = 0;
   private->y = 0;
@@ -148,7 +149,7 @@ gdk_pixmap_create_from_data (GdkWindow *window,
     return NULL;
 
   if (depth == -1)
-    gdk_window_get_geometry (window, NULL, NULL, NULL, NULL, &depth);
+    depth = gdk_window_get_visual (window)->depth;
 
   private = g_new (GdkWindowPrivate, 1);
   pixmap = (GdkPixmap*) private;

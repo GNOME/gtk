@@ -304,9 +304,6 @@ gtk_tree_item_set_subtree (GtkTreeItem *tree_item,
   tree_item->subtree = subtree; 
   GTK_TREE(subtree)->tree_owner = GTK_WIDGET(tree_item);
 
-  /* set root tree for selection list */
-  GTK_TREE(subtree)->root_tree = GTK_TREE(GTK_WIDGET(tree_item)->parent)->root_tree;
-
   /* show subtree button */
   if (tree_item->pixmaps_box)
     gtk_widget_show(tree_item->pixmaps_box);
@@ -994,25 +991,35 @@ gtk_tree_item_remove_subtree (GtkTreeItem* item)
   g_return_if_fail (item->subtree != NULL);
   
   if (GTK_TREE (item->subtree)->children)
-    gtk_tree_remove_items (GTK_TREE (item->subtree), 
-			   GTK_TREE (item->subtree)->children);
-  
+    {
+      /* The following call will remove the children and call
+       * gtk_tree_item_remove_subtree() again. So we are done.
+       */
+      gtk_tree_remove_items (GTK_TREE (item->subtree), 
+			     GTK_TREE (item->subtree)->children);
+      return;
+    }
+
   if (GTK_WIDGET_MAPPED (item->subtree))
     gtk_widget_unmap (item->subtree);
-
+      
   gtk_widget_unparent (item->subtree);
   
   if (item->pixmaps_box)
     gtk_widget_hide (item->pixmaps_box);
   
   item->subtree = NULL;
-  item->expanded = FALSE;
-  if (item->pixmaps_box)
+
+  if (item->expanded)
     {
-      gtk_container_remove (GTK_CONTAINER (item->pixmaps_box), 
-			    item->minus_pix_widget);
-      gtk_container_add (GTK_CONTAINER (item->pixmaps_box), 
-			 item->plus_pix_widget);
+      item->expanded = FALSE;
+      if (item->pixmaps_box)
+	{
+	  gtk_container_remove (GTK_CONTAINER (item->pixmaps_box), 
+				item->minus_pix_widget);
+	  gtk_container_add (GTK_CONTAINER (item->pixmaps_box), 
+			     item->plus_pix_widget);
+	}
     }
 }
 

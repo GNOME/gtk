@@ -1,3 +1,165 @@
+Merges from gtk-1-0
+===================
+	
+Thu Apr 30 23:32:51 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_size_allocate):
+	Check to catch the case when the viewport fits in either
+ 	direction or both, instead of flip-flopping infinitely.
+
+	Only show/hide the scrollbars once at the end.
+
+Thu Apr 30 21:56:07 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_foreach): 
+	Include the scrollbars in the foreach call.
+	(gtk-fortier-980405-0.patch; 
+ 	 Patrice Fortier <Patrice.Fortier@aquarel.fr>). 
+
+	The notebook widget
+	really should also include its tabs, but that might cause
+	problems for programs if they
+
+Thu Apr 30 21:51:52 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkpixmap.c (gtk_pixmap_set): Only request a
+	resize if the size actually changed. 
+	(gtk-johannes-980414-0.patch ;	
+	 johannes@nada.kth.se (Johannes Keukelaar) )
+
+Thu Apr 30 10:22:59 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* glib/ltmain.sh glib/ltconfig glib/config.sub glib/config.guess:
+	  ltmain.sh ltconfig config.sub config.guess:
+
+	Reverted back to libtool-1.2 (plus minor patches) so as not to
+	force the issue for everyone else.
+
+Thu Apr 30 10:22:59 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* glib/ltmain.sh glib/ltconfig glib/config.sub glib/config.guess:
+	Updated to libtool 1.2a.
+
+	* gtk/gtkclist.c: Draw the in-between lines with style->base
+	instead of style->white.
+	
+Wed Apr 29 15:46:13 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkprivate.h gdk/gdkwindow.c gdk/gdkpixmap.c: 
+	Cache the colormap and children of a window locally
+	instead of fetching them from the server when needed.
+	Huge performance difference for creating/destroying
+	windows.
+
+	* gtk/gtkstyle.c: Find the depth from the cached
+	visual, instead of asking the server.
+
+	* gtk.m4: Distribute the new version which tries to
+	figure out what went wrong and give helpful error
+	messages.
+
+	* ltmain.sh ltconfig config.sub config.sh: 
+	Updated to libtool 1.2a
+
+	* gtk/gtktext.c: Fixed a bug where the drawn level
+	was being messed up when the text was scrolled
+	during a deletion.
+	
+Thu Apr 30 02:42:11 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkfilesel.c: don't die when naughty people remove parts of
+	the filesystem under you (fix from Josh)
+
+Thu Apr 30 09:49:14 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_foreach): check
+	if the viewport already exists before iterating over it, maybe we
+	haven't been constructed yet.
+
+Thu Apr 30 01:51:00 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkbin.c (gtk_bin_add): made this function issue a warning if
+	the GtkBin widget already has a child.
+
+	* gtk/gtkbox.c (gtk_box_pack_{start|end}):
+ 	check that child->parent == NULL;
+
+Tue Apr 28 22:13:54 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkselection.c (gtk_selection_clear): Only return
+	FALSE when the clear event is been rejected, not when
+	widget has already lost the selection. (Which should
+	only happen when we are setting the selection to another
+	widget ourself.)
+	
+Fri Apr 24 19:07:32 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkfixed.c gtk/gtkpaned.c gtk/gtktable.c:
+
+	Removed the "check visibility after gtk_widget_unparent" bug 
+	in hopefully the last three places.
+
+Tue Apr 28 15:46:41 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkrc.c (gtk_rc_parse_statement): allow the inclusion of other
+	rc-files.
+
+Mon Apr 27 15:11:52 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_grab_focus): only allow grabbing of focus
+	for CAN_FOCUS widgets.
+
+	* gtk/testgtk.c (create_scrolled_windows): feature h/v focus
+	adjustments for the table.
+	(create_list): feature automatic adjustment of the scrolled window to
+	always contain the focused child.
+	(create_main_window): keep the focussed button always inside of the
+	scrolled windoww.
+
+	* gtk/gtkcontainer.c (gtk_real_container_focus): set the h/v focus
+	adjustments, to contain the allocation of the currently focused child.
+	(gtk_container_set_focus_hadjustment): new functin to set the
+ 	horizontal focus adjustment.
+	(gtk_container_set_focus_vadjustment): new functin to set the vertical
+ 	focus adjustment.
+
+	* gtk/gtkadjustment.c (gtk_adjustment_clamp_page): new fucntion to
+ 	clamp the currents adjustment page into a specific range.
+
+	* random GtkType fixups for gtk_*_get_type() functions.
+
+Fri Apr 24 18:37:16 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtktreeitem.c (gtk_tree_item_remove_subtree): 
+	Account for the fact that gtk_tree_item_remove_subtree
+	will be called recursively. 
+
+	Handle removing a collapsed subtree.
+
+	(From Andy Dustman <adustman@comstar.net>)
+	
+	* gtk/gtktree.c (gtk_tree_remove_items): Look for the
+	root tree when removing items from a non-previously
+	mapped tree.
+
+	* gtk/testgtk.c: Added a remove_subtree button.
+	
+Thu Apr 23 23:44:17 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkobject.c (gtk_object_finalize): Notify all weak references
+	before object removing data. This change fixes a bug where 
+	removing the last weak references would cause it to be 
+	triggered.
+
+Wed Apr 15 20:42:46 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/Makefile.am: Removed mostly useless dependency that
+	was causing problems for SGI's make, when used with
+	the 'make dist' form of GTK+. (Dependency caused dependencies
+        to be redone when BUILT_SOURCES changed)
+
+==========
+
 Thu Apr 30 11:18:00 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkcombo.[ch]: Allow the user to use the popup list

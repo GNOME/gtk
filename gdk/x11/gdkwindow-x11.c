@@ -191,6 +191,7 @@ gdk_window_init ()
   gdk_root_parent.window.user_data = NULL;
   gdk_root_parent.width = width;
   gdk_root_parent.height = height;
+  gdk_root_parent.children = NULL;
 }
 
 GdkWindow*
@@ -202,7 +203,6 @@ gdk_window_new (GdkWindow     *parent,
   GdkWindowPrivate *private;
   GdkWindowPrivate *parent_private;
   GdkVisual *visual;
-  GdkColormap *colormap;
   Display *parent_display;
   Window xparent;
   Visual *xvisual;
@@ -232,6 +232,10 @@ gdk_window_new (GdkWindow     *parent,
   window = (GdkWindow*) private;
 
   private->parent = parent;
+
+  if (parent_private != &gdk_root_parent)
+    parent_private->children = g_list_prepend (parent_private->children, window);
+
   private->xdisplay = parent_display;
   private->destroyed = FALSE;
   private->resize_count = 0;
@@ -264,6 +268,7 @@ gdk_window_new (GdkWindow     *parent,
   private->dnd_drag_eventmask = private->dnd_drag_savedeventmask = 0;
 
   private->filters = NULL;
+  private->children = NULL;
 
   window->user_data = NULL;
 
@@ -296,9 +301,9 @@ gdk_window_new (GdkWindow     *parent,
       depth = visual->depth;
 
       if (attributes_mask & GDK_WA_COLORMAP)
-	colormap = attributes->colormap;
+	private->colormap = attributes->colormap;
       else
-	colormap = gdk_colormap_get_system ();
+	private->colormap = gdk_colormap_get_system ();
 
       xattributes.background_pixel = BlackPixel (gdk_display, gdk_screen);
       xattributes.border_pixel = BlackPixel (gdk_display, gdk_screen);
@@ -307,26 +312,26 @@ gdk_window_new (GdkWindow     *parent,
       switch (private->window_type)
 	{
 	case GDK_WINDOW_TOPLEVEL:
-	  xattributes.colormap = ((GdkColormapPrivate*) colormap)->xcolormap;
+	  xattributes.colormap = ((GdkColormapPrivate*) private->colormap)->xcolormap;
 	  xattributes_mask |= CWColormap;
 
 	  xparent = gdk_root_window;
 	  break;
 
 	case GDK_WINDOW_CHILD:
-	  xattributes.colormap = ((GdkColormapPrivate*) colormap)->xcolormap;
+	  xattributes.colormap = ((GdkColormapPrivate*) private->colormap)->xcolormap;
 	  xattributes_mask |= CWColormap;
 	  break;
 
 	case GDK_WINDOW_DIALOG:
-	  xattributes.colormap = ((GdkColormapPrivate*) colormap)->xcolormap;
+	  xattributes.colormap = ((GdkColormapPrivate*) private->colormap)->xcolormap;
 	  xattributes_mask |= CWColormap;
 
 	  xparent = gdk_root_window;
 	  break;
 
 	case GDK_WINDOW_TEMP:
-	  xattributes.colormap = ((GdkColormapPrivate*) colormap)->xcolormap;
+	  xattributes.colormap = ((GdkColormapPrivate*) private->colormap)->xcolormap;
 	  xattributes_mask |= CWColormap;
 
 	  xparent = gdk_root_window;
@@ -348,7 +353,7 @@ gdk_window_new (GdkWindow     *parent,
     {
       depth = 0;
       class = InputOnly;
-      colormap = NULL;
+      private->colormap = NULL;
     }
 
   private->xwindow = XCreateWindow (private->xdisplay, xparent,
@@ -357,6 +362,9 @@ gdk_window_new (GdkWindow     *parent,
 				    xattributes_mask, &xattributes);
   gdk_window_ref (window);
   gdk_xid_table_insert (&private->xwindow, window);
+
+  if (private->colormap)
+    gdk_colormap_ref (private->colormap);
 
   gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
 				  (attributes->cursor) :
@@ -372,8 +380,8 @@ gdk_window_new (GdkWindow     *parent,
       break;
     case GDK_WINDOW_CHILD:
       if ((attributes->wclass == GDK_INPUT_OUTPUT) &&
-	  (colormap != gdk_colormap_get_system ()) &&
-	  (colormap != gdk_window_get_colormap (gdk_window_get_toplevel (window))))
+	  (private->colormap != gdk_colormap_get_system ()) &&
+	  (private->colormap != gdk_window_get_colormap (gdk_window_get_toplevel (window))))
 	{
 	  GDK_NOTE (MISC, g_print ("adding colormap window\n"));
 	  gdk_window_add_colormap_windows (window);
@@ -430,6 +438,7 @@ gdk_window_foreign_new (guint32 anid)
 {
   GdkWindow *window;
   GdkWindowPrivate *private;
+  GdkWindowPrivate *parent_private;
   XWindowAttributes attrs;
   Window root, parent;
   Window *children;
@@ -445,6 +454,11 @@ gdk_window_foreign_new (guint32 anid)
   XQueryTree (gdk_display, anid, &root, &parent, &children, &nchildren);
   XFree (children);
   private->parent = gdk_xid_table_lookup (parent);
+
+  parent_private = (GdkWindowPrivate *)private->parent;
+  
+  if (parent_private)
+    parent_private->children = g_list_prepend (parent_private->children, window);
 
   private->xwindow = anid;
   private->xdisplay = gdk_display;
@@ -469,6 +483,7 @@ gdk_window_foreign_new (guint32 anid)
   private->dnd_drag_eventmask = private->dnd_drag_savedeventmask = 0;
 
   private->filters = NULL;
+  private->children = NULL;
 
   window->user_data = NULL;
 
@@ -507,10 +522,17 @@ gdk_window_internal_destroy (GdkWindow *window, gboolean xdestroy,
     case GDK_WINDOW_FOREIGN:
       if (!private->destroyed)
 	{
+	  if (private->parent)
+	    {
+	      GdkWindowPrivate *parent_private = (GdkWindowPrivate *)private->parent;
+	      if (parent_private->children)
+		parent_private->children = g_list_remove (parent_private->children, window);
+	    }
+
 	  if (private->window_type != GDK_WINDOW_FOREIGN)
 	    {
-	      children = gdk_window_get_children (window);
-	      tmp = children;
+	      children = tmp = private->children;
+	      private->children = NULL;
 
 	      while (tmp)
 		{
@@ -522,7 +544,7 @@ gdk_window_internal_destroy (GdkWindow *window, gboolean xdestroy,
 		    gdk_window_internal_destroy (temp_window, FALSE,
 						 our_destroy);
 		}
-	      
+
 	      g_list_free (children);
 	    }
 
@@ -580,6 +602,9 @@ gdk_window_internal_destroy (GdkWindow *window, gboolean xdestroy,
 	    }
 	  else if (xdestroy)
 	    XDestroyWindow (private->xdisplay, private->xwindow);
+
+	  if (private->colormap)
+	    gdk_colormap_unref (private->colormap);
 
 	  private->destroyed = TRUE;
 	}
@@ -1059,6 +1084,11 @@ gdk_window_set_colormap (GdkWindow   *window,
       XSetWindowColormap (window_private->xdisplay,
 			  window_private->xwindow,
 			  colormap_private->xcolormap);
+
+      if (window_private->colormap)
+	gdk_colormap_unref (window_private->colormap);
+      window_private->colormap = colormap;
+      gdk_colormap_ref (window_private->colormap);
       
       if (window_private->window_type != GDK_WINDOW_TOPLEVEL)
 	gdk_window_add_colormap_windows (window);
@@ -1153,7 +1183,7 @@ gdk_window_get_visual (GdkWindow *window)
 {
   GdkWindowPrivate *window_private;
   XWindowAttributes window_attributes;
-  
+   
   g_return_val_if_fail (window != NULL, NULL);
   
   window_private = (GdkWindowPrivate*) window;
@@ -1162,11 +1192,15 @@ gdk_window_get_visual (GdkWindow *window)
   
   if (window_private && !window_private->destroyed)
     {
-      XGetWindowAttributes (window_private->xdisplay,
-			    window_private->xwindow,
-			    &window_attributes);
-      
-      return gdk_visual_lookup (window_attributes.visual);
+       if (window_private->window_type == GDK_WINDOW_FOREIGN)
+	 {
+	    XGetWindowAttributes (window_private->xdisplay,
+				  window_private->xwindow,
+				  &window_attributes);
+	    return gdk_visual_lookup (window_attributes.visual);
+	 }
+       else
+	 return ((GdkColormapPrivate *)window_private->colormap)->visual;
     }
   
   return NULL;
@@ -1176,7 +1210,6 @@ GdkColormap*
 gdk_window_get_colormap (GdkWindow *window)
 {
   GdkWindowPrivate *window_private;
-  XWindowAttributes window_attributes;
   
   g_return_val_if_fail (window != NULL, NULL);
   
@@ -1184,11 +1217,7 @@ gdk_window_get_colormap (GdkWindow *window)
   
   if (!window_private->destroyed)
     {
-      XGetWindowAttributes (window_private->xdisplay,
-			    window_private->xwindow,
-			    &window_attributes);
-      
-      return gdk_colormap_lookup (window_attributes.colormap);
+      return window_private->colormap;
     }
   
   return NULL;
