@@ -1696,8 +1696,8 @@ gtk_button_screen_changed (GtkWidget *widget,
   settings = gtk_widget_get_settings (widget);
 
   show_image_connection = 
-    GPOINTER_TO_INT (g_object_get_data (G_OBJECT (settings), 
-					"gtk-button-connection"));
+    GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (settings), 
+					 "gtk-button-connection"));
   
   if (show_image_connection)
     return;
@@ -1707,7 +1707,7 @@ gtk_button_screen_changed (GtkWidget *widget,
 		      G_CALLBACK (gtk_button_setting_changed), 0);
   g_object_set_data (G_OBJECT (settings), 
 		     "gtk-button-connection",
-		     GINT_TO_POINTER (show_image_connection));
+		     GUINT_TO_POINTER (show_image_connection));
 
   show_image_change_notify (GTK_BUTTON (widget));
 }

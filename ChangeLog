@@ -1,3 +1,10 @@
+2004-11-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_screen_changed): 
+	* gtk/gtkbutton.c (gtk_button_screen_changed): Use 
+	GPOINTER_TO_UINT()/GUINT_TO_POINTER() for guints.  (#158420,
+	Morten Welinder)
+
 Mon Nov 15 17:17:17 2004  Manish Singh  <yosh@gimp.org>
 
 	* configure.in: Output Makefile for the pixbuf engine directory.

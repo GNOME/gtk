@@ -589,8 +589,8 @@ gtk_image_menu_item_screen_changed (GtkWidget *widget,
   settings = gtk_widget_get_settings (widget);
   
   show_image_connection = 
-    GPOINTER_TO_INT (g_object_get_data (G_OBJECT (settings), 
-					"gtk-image-menu-item-connection"));
+    GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (settings), 
+					 "gtk-image-menu-item-connection"));
   
   if (show_image_connection)
     return;
@@ -600,7 +600,7 @@ gtk_image_menu_item_screen_changed (GtkWidget *widget,
 		      G_CALLBACK (gtk_image_menu_item_setting_changed), 0);
   g_object_set_data (G_OBJECT (settings), 
 		     "gtk-image-menu-item-connection",
-		     GINT_TO_POINTER (show_image_connection));
+		     GUINT_TO_POINTER (show_image_connection));
 
   show_image_change_notify (GTK_IMAGE_MENU_ITEM (widget));
 }
