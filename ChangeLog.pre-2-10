@@ -1,5 +1,8 @@
 2004-11-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkevents-x11.c (gdk_wm_protocols_filter): Don't crash on
+	broken ClientMessage events.  (#157056, Owen Taylor)
+
 	* gtk/gtkactiongroup.c (gtk_action_group_get_visible): Fix a typo in
 	the docs.  (#157044, Masao Mutoh)
 

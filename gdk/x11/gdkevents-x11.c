@@ -2039,8 +2039,14 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
 {
   XEvent *xevent = (XEvent *)xev;
   GdkWindow *win = event->any.window;
-  GdkDisplay *display = GDK_WINDOW_DISPLAY (win);
-  Atom atom = (Atom)xevent->xclient.data.l[0];
+  GdkDisplay *display;
+  Atom atom;
+
+  if (!win)
+      return GDK_FILTER_REMOVE;    
+
+  display = GDK_WINDOW_DISPLAY (win);
+  atom = (Atom)xevent->xclient.data.l[0];
 
   if (atom == gdk_x11_get_xatom_by_name_for_display (display, "WM_DELETE_WINDOW"))
     {
