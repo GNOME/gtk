@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-02-28 19:23+0200\n"
+"POT-Creation-Date: 2004-03-03 02:40+0200\n"
+"PO-Revision-Date: 2004-03-03 02:46+0200\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@hut.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:736
-#: gdk-pixbuf/gdk-pixbuf-io.c:869 tests/testfilechooser.c:195
+#: gdk-pixbuf/gdk-pixbuf-io.c:869 tests/testfilechooser.c:198
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Tiedoston \"%s\" avaus epäonnistui: %s"
@@ -30,7 +30,7 @@ msgid "Image file '%s' contains no data"
 msgstr "Kuvatiedostossa \"%s\" ei ole sisältöä"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:780
-#: gdk-pixbuf/gdk-pixbuf-io.c:906 tests/testfilechooser.c:234
+#: gdk-pixbuf/gdk-pixbuf-io.c:906 tests/testfilechooser.c:237
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -940,7 +940,7 @@ msgstr ""
 "Kirjanmerkkiä kohteelle \"%s\" ei voi lisätä:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:638 gtk/gtkfilechooserdefault.c:4010
+#: gtk/gtkfilechooserdefault.c:638 gtk/gtkfilechooserdefault.c:4001
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -957,7 +957,7 @@ msgstr "Koti"
 msgid "Desktop"
 msgstr "Työpöytä"
 
-#: gtk/gtkfilechooserdefault.c:1229
+#: gtk/gtkfilechooserdefault.c:1222
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -966,17 +966,16 @@ msgstr ""
 "Hakemiston \"%s\" luominen ei onnistunut:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1331 gtk/gtkfilechooserdefault.c:1854
-#, fuzzy
+#: gtk/gtkfilechooserdefault.c:1324 gtk/gtkfilechooserdefault.c:1847
 msgid "Name"
-msgstr "_Nimi:"
+msgstr "Nimi"
 
-#: gtk/gtkfilechooserdefault.c:1422
+#: gtk/gtkfilechooserdefault.c:1415
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Kohteelle %s ei voi luoda kirjanmerkkiä, koska se ei ole hakemisto."
 
-#: gtk/gtkfilechooserdefault.c:1514
+#: gtk/gtkfilechooserdefault.c:1507
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -985,117 +984,117 @@ msgstr ""
 "Kohteen %s kirjanmerkin poisto epäonnistui:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1677
+#: gtk/gtkfilechooserdefault.c:1670
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
 "Kohteelle %s ei voi lisätä kirjanmerkkiä, koska sen polku on virheellinen."
 
-#: gtk/gtkfilechooserdefault.c:1748
+#: gtk/gtkfilechooserdefault.c:1741
 msgid "Folder"
 msgstr "Hakemisto"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:1795 gtk/gtkstock.c:275
+#: gtk/gtkfilechooserdefault.c:1788 gtk/gtkstock.c:275
 msgid "_Add"
 msgstr "_Lisää"
 
-#: gtk/gtkfilechooserdefault.c:1805 gtk/gtkstock.c:323
+#: gtk/gtkfilechooserdefault.c:1798 gtk/gtkstock.c:323
 msgid "_Remove"
 msgstr "_Poista"
 
-#: gtk/gtkfilechooserdefault.c:1876
+#: gtk/gtkfilechooserdefault.c:1869
 msgid "Size"
 msgstr "Koko"
 
-#: gtk/gtkfilechooserdefault.c:1888
+#: gtk/gtkfilechooserdefault.c:1881
 msgid "Modified"
 msgstr "Muokattu"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:1938
+#: gtk/gtkfilechooserdefault.c:1931
 msgid "Create _Folder"
 msgstr "Luo _uusi hakemisto"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:2047
+#: gtk/gtkfilechooserdefault.c:2040
 msgid "_Name:"
 msgstr "_Nimi:"
 
 #. Folder combo
-#: gtk/gtkfilechooserdefault.c:2066
+#: gtk/gtkfilechooserdefault.c:2059
 msgid "Save in _Folder:"
 msgstr "Tallenna _hakemistoon:"
 
-#: gtk/gtkfilechooserdefault.c:2089
+#: gtk/gtkfilechooserdefault.c:2081
 msgid "_Browse for other folders"
 msgstr "_Selaa muita hakemistoja"
 
-#: gtk/gtkfilechooserdefault.c:3262
+#: gtk/gtkfilechooserdefault.c:3251
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "pikavalinta %s ei ole olemassa"
 
-#: gtk/gtkfilechooserdefault.c:3834
+#: gtk/gtkfilechooserdefault.c:3825
 msgid "Type name of new folder"
 msgstr "Kirjoita uuden hakemiston nimi"
 
-#: gtk/gtkfilechooserdefault.c:3863
+#: gtk/gtkfilechooserdefault.c:3854
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d tavu"
 msgstr[1] "%d tavua"
 
-#: gtk/gtkfilechooserdefault.c:3865
+#: gtk/gtkfilechooserdefault.c:3856
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f kt"
 
-#: gtk/gtkfilechooserdefault.c:3867
+#: gtk/gtkfilechooserdefault.c:3858
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f Mt"
 
-#: gtk/gtkfilechooserdefault.c:3869
+#: gtk/gtkfilechooserdefault.c:3860
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f Gt"
 
-#: gtk/gtkfilechooserdefault.c:3914
+#: gtk/gtkfilechooserdefault.c:3905
 msgid "Today"
 msgstr "Tänään"
 
-#: gtk/gtkfilechooserdefault.c:3916
+#: gtk/gtkfilechooserdefault.c:3907
 msgid "Yesterday"
 msgstr "Eilen"
 
 #. FIXME: Get the right format for the locale
-#: gtk/gtkfilechooserdefault.c:3925
+#: gtk/gtkfilechooserdefault.c:3916
 msgid "%d/%b/%Y"
 msgstr "%e.%m.%Y"
 
-#: gtk/gtkfilechooserdefault.c:3928
+#: gtk/gtkfilechooserdefault.c:3919
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: gtk/gtkfilechooserdefault.c:3973
+#: gtk/gtkfilechooserdefault.c:3964
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Valitsemaasi hakemistoon ei voi siirtyä, sillä antamasi polku on "
 "virheellinen."
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4056
 msgid "Open Location"
 msgstr "Avaa sijainti"
 
-#: gtk/gtkfilechooserdefault.c:4080
+#: gtk/gtkfilechooserdefault.c:4071
 msgid "_Location:"
 msgstr "_Sijainti:"
 
-#: gtk/gtkfilechooserdefault.c:4114
+#: gtk/gtkfilechooserdefault.c:4105
 #, c-format
 msgid ""
 "Could not go to the parent folder of %s:\n"
@@ -1918,7 +1917,7 @@ msgstr "Vietnam (VIQR)"
 msgid "X Input Method"
 msgstr "X-syöttötapa"
 
-#: tests/testfilechooser.c:182
+#: tests/testfilechooser.c:185
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Tiedoston \"%s\" tietojen saaminen epäonnistui: %s"
