@@ -1,23 +1,25 @@
-
 <!doctype linuxdoc system>
 <article>
 <title>GTK Tutorial
-<author>Ian Main, <tt><htmlurl url="mailto:imain@gimp.org"
-                              name="imain@gimp.org"></tt>
-
-<date>December 1, 1997 - Traduzione Aggiornata al 19 Gennaio 1998
+<author>Ian Main <tt><htmlurl url="mailto:imain@gtk.org"
+			      name="&lt;imain@gtk.org&gt;"></tt>,
+Tony Gale <tt><htmlurl url="mailto:gale@gtk.org"
+			      name="&lt;gale@gtk.org&gt;"></tt>
+<date>April 6th, 1998  - Traduzione aggiornata al 1 Maggio 1998
 
 <abstract>Tradotto da Michel Morelli, <tt><htmlurl url="mailto:ziobudda@chiara.dei.unipd.it" name="ziobudda@chiara.dei.unipd.it"></tt>, Daniele Canazza, <tt><htmlurl url="mailto:dcanazz@tin.it" name="dcanazz@tin.it"></tt> e Antonio Schifano, <tt><htmlurl url="mailto:schifano@cli.di.unipi.it" name="schifano@cli.di.unipi.it"></tt>
 </abstract>
-
+<!-- ***************************************************************** -->
 <sect>Introduzione
+<!-- ***************************************************************** -->
 <p>
-GTK (GIMP Toolkit) era orginariamente sviluppato come toolkit per il programma
-GIMP (General Image Manipulation Program). GTK &egrave; costruito sulla base del
-kit di disegno di GIMP, il GDK (GIMP Drawing Kit) il quale &egrave; costruito a sua
-volta attorno alle funzioni della Xlib. E' chiamato ``toolkit di GIMP'' perch&eacute;
-era inizialmente scritto per sviluppare GIMP, ma ora viene utilizzato nello
-sviluppo di molti progetti software liberi. Gli autori sono
+GTK (GIMP Toolkit) &egrave; stato orginariamente sviluppato come toolkit per
+il programma GIMP (General Image Manipulation Program). GTK &egrave; costruito
+sulla base del kit di disegno di GIMP, il GDK (GIMP Drawing Kit) il quale
+&egrave; costruito a sua volta attorno alle funzioni della Xlib. E' chiamato
+``toolkit di GIMP'' perch&eacute; era inizialmente scritto per sviluppare GIMP,
+ma ora viene utilizzato nello sviluppo di molti progetti software ``free''. 
+Gli autori sono
 <itemize>
 <item> Peter Mattis   <tt><htmlurl url="mailto:petm@xcf.berkeley.edu"
                            name="petm@xcf.berkeley.edu"></tt>     
@@ -37,42 +39,48 @@ classi e delle funzioni di callback (puntatori a funzioni).
 C'&egrave; anche una terza componente chiamata glib che contiene una serie di
 implementazioni differenti di alcune chiamate di funzioni standard e anche
 alcune funzioni aggiuntive, per esempio per la manipolazione delle liste 
-collegate, eccetera. Le funzioni sostitutive sono usate per migliorare la 
+collegate. Le funzioni sostitutive sono usate per migliorare la 
 portabilit&agrave; di GTK. Alcune delle funzioni implementate qui non sono
 disponibili o non sono standard,  altre sono uniche come g_strerror().
 Altre contengono miglioramenti alle stesse della libc come g_malloc che ha 
 delle utility di debugging migliorate.
 
 <p>
-Questo tutorial &egrave; un tentativo di documentare il meglio possibile la libreria gtk
-e non pretende di essere completo. Questo tutorial suppone una buona conoscenza del
-linugaggio C e di come creare programmi in C. Saranno facilitati i lettori che hanno una
-precedente esperienza nella programmazione in X. Se il GTK &egrave; il primo insieme di widget
-che studiate, siete pregati di dirmi come avete trovato questo tutorial e che tipo di problemi
-avete avuto.
-Notate che c'&egrave; anche una versione per il C++ della libreria GTK (chiamata GTK--), quindi
-se preferite utilizzare questo linguaggio al posto del C potreste cercare questa versione
-e non la GTK normale.
-Ci sono poi un ``wrapper'' Objective C e un collegamento a Guile, ma non ne seguo
-l'evoluzione.
+Questo tutorial &egrave; un tentativo di documentare il meglio possibile la
+libreria gtk e non pretende di essere completo. Questo tutorial suppone una
+buona conoscenza del linugaggio C e di come creare programmi in C. Saranno
+facilitati i lettori che hanno una precedente esperienza nella programmazione
+in X. Se il GTK &egrave; il primo insieme di widget che studiate, vi prego di
+dirmi come avete trovato questo tutorial e che tipo di problemi avete avuto.
+Notate che c'&egrave; anche una versione per il C++ della libreria GTK (chiamata
+GTK--), quindi se preferite utilizzare questo linguaggio al posto del C potreste
+cercare questa versione al posto della GTK normale.
+Ci sono poi un ``wrapper'' Objective C e un collegamento a Guile, ma non ne
+seguo l'evoluzione.
 
 <p>
-Mi farebbe molto piacere conoscere qualsiasi problema che abbiate avuto nell'imparare il GTK
-da questo documento e apprezzerei anche critiche sul come migliorarlo.
+Mi farebbe molto piacere conoscere qualsiasi problema che abbiate avuto
+nell'imparare il GTK da questo documento e apprezzerei anche critiche sul come
+migliorarlo.
 
+<!-- ***************************************************************** -->
 <sect>Iniziamo
+<!-- ***************************************************************** -->
 <p>
-La prima cosa da fare &egrave; certamente quella di scaricare il GTK e installarlo. Potete prendere
-l'ultima versione dal sito ftp.gimp.org nella directory /pub/gimp. Un'altra possibile sorgente
-di informazioni &egrave; il sito http://www.gimp.org/gtk. GTK usa il comando GNU autoconf per
-autoconfigurarsi. 
-Una volta estratti i file dall'archivio tar, eseguite configure --help per vedere una lista delle
-opzioni del comando configure.
+La prima cosa da fare &egrave; certamente quella di scaricare il GTK e installarlo.
+Potete prendere l'ultima versione dal sito ftp.gtk.org in /pub/gtk. Un'altra
+possibile sorgente di informazioni &egrave; il sito
+<htmlurl url="http://www.gtk.org/" name="http://www.gtk.org/">. 
+
+GTK usa il comando GNU autoconf per autoconfigurarsi. 
+Una volta estratti i file dall'archivio tar, eseguite configure --help per
+vedere una lista delle opzioni del comando configure.
 
 <p>
-Per iniziare la nostra introduzione a GTK, cominceremo con il pi&ugrave; semplice programma 
-possibile . Questo programma crea una finestra con dimensioni (in pixel) di 200x200 e 
-l'unica possibilit&agrave; di uscita &egrave; di ucciderlo ucciso usando la shell o il Window Manager.
+Per iniziare la nostra introduzione a GTK, cominceremo con il pi&ugrave; semplice
+programma possibile. Questo programma crea una finestra con dimensioni (in pixel)
+di 200x200 e l'unica possibilit&agrave; di uscita &egrave; di ucciderlo usando la
+shell o il Window Manager.
 
 <tscreen><verb>
 #include <gtk/gtk.h>
@@ -92,8 +100,9 @@ int main (int argc, char *argv[])
 }
 </verb></tscreen>
 
-Tutti i programmi certamente includeranno &lt;gtk/gtk.h&gt; che dichiara le variabili, le funzioni,
-le strutture, etc. che saranno usate nella tua applicazione GTK.
+Tutti i programmi GTK includeranno sicuramente &lt;gtk/gtk.h&gt; in cui vengono
+dichiarate le variabili, le funzioni, le strutture, etc. che saranno usate nella
+tua applicazione GTK.
 
 <p>
 La linea seguente: 
@@ -102,12 +111,13 @@ La linea seguente:
 gtk_init (&amp;argc, &amp;argv);
 </verb></tscreen>
 
-invoca la funzione gtk_init(gint *argc, gchar ***argv) che sar&agrave; usata in tutte le
-applicazioni GTK. Questa funzione sistema alcune cose al posto nostro, come la visuale
-predefinita e la mappa dei colori, e  procede poi chiamando gdk_init(gint *argc, gchar ***argv).
-Questa funzione inizializza la libreria per l'uso, setta il gestore predefinito dei segnali
-e guarda negli argomenti, passati via linea di comando alla tua applicazione, alla ricerca
-di uno di questi argomenti:
+invoca la funzione gtk_init(gint *argc, gchar ***argv) che sar&agrave; usata in
+tutte le applicazioni GTK. Questa funzione sistema alcune cose al posto nostro,
+come la visuale predefinita e la mappa dei colori, e  procede poi chiamando
+gdk_init(gint *argc, gchar ***argv).
+Questa funzione inizializza la libreria per l'uso, setta il gestore predefinito
+dei segnali e guarda negli argomenti, passati via linea di comando alla vostra
+applicazione, alla ricerca di uno di questi argomenti:
 <itemize>
 <item> <tt/--display/
 <item> <tt/--debug-level/
@@ -117,9 +127,11 @@ di uno di questi argomenti:
 <item> <tt/--no-show-events/
 </itemize>
 <p>
-Rimuove questi argomenti dalla lista degli argomenti passati, lasciando quelli non
-riconosciuti a disposizione della tua applicazione che potr&agrave; tenerne conto o ignorarli.
-In questo modo si crea un set di argomenti standard accettato da tutte le applicazione GTK.
+Rimuove poi questi argomenti dalla lista degli argomenti passati, lasciando
+quelli non riconosciuti a disposizione della vostra applicazione che potr&agrave;
+tenerne conto o ignorarli.
+In questo modo si crea un set di argomenti standard accettato da tutte le
+applicazioni GTK.
 
 <p>
 Le seguenti 2 linee di codice creano e mostrano la finestra.
@@ -129,12 +141,14 @@ Le seguenti 2 linee di codice creano e mostrano la finestra.
   gtk_widget_show (window);
 </verb></tscreen>
 
-L'argomento GTK_WINDOW_TOPLEVEL specifica che noi vogliamo che la nostra finestra si
-sottometta alle decorazioni del windows manager e alla posizione che quest'ultimo indicher&agrave;.
-Invece di creare una finestra avente dimensioni 0x0, la dimensione di una finestra senza
-figli (altri widget, come i bottoni, etc) &egrave; predefinita a 200x200 cos&igrave; che si possa manipolarla.
-La funzione gtk_widget_show()  fa s&igrave; che GTK sappia che abbiamo finito di settare gli
-attributi di questo widget e che quindi quest'ultimo pu&ograve; essere visualizzato.
+L'argomento GTK_WINDOW_TOPLEVEL specifica che noi vogliamo che la nostra finestra
+si sottometta alle decorazioni del windows manager e alla posizione che quest'ultimo
+indicher&agrave;. Invece di creare una finestra avente dimensioni 0x0, la dimensione
+di una finestra senza figli (altri widget, come i bottoni, etc) &egrave; predefinita
+a 200x200 cos&igrave; che si possa manipolarla.
+La funzione gtk_widget_show()  fa s&igrave; che GTK sappia che abbiamo finito di
+settare gli attributi di questo widget e che quindi quest'ultimo pu&ograve; essere
+visualizzato.
 
 <p>
 L'ultima linea ci fa entrare nel ciclo principale del GTK.
@@ -143,17 +157,21 @@ L'ultima linea ci fa entrare nel ciclo principale del GTK.
 gtk_main ();
 </verb></tscreen>
 
-gtk_main() &egrave; un'altra chiamata che tu vedrete in tutte le applicazioni GTK. Quando il controllo 
-raggiunge questo punto, l'applicazione si metter&agrave; a dormire aspettando che si verifichino eventi
-di X (come la pressione di un bottone o di un tasto), timeout o notifiche di Input/Output dei file
-Nel nostro esempio, comunque, tutti gli eventi sono ignorati.
+gtk_main() &egrave; un'altra chiamata che vedrete in tutte le applicazioni GTK.
+Quando il controllo raggiunge questo punto, l'applicazione si metter&agrave; a
+dormire aspettando che si verifichino eventi di X (come la pressione di un bottone
+o di un tasto), timeout o notifiche di Input/Output dai file
+Nel nostro esempio, comunque, tutti gli eventi vengono ignorati.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Hello World in GTK
+<!-- ----------------------------------------------------------------- -->
 <p>
-Ok, ora un programma con un widget (un bottone). E' il classico ``Hello World'' alla GTK. 
+Ok, ora un programma con un widget (un bottone). E' il classico ``Hello World''
+alla GTK. 
 
 <tscreen><verb>
-
+/* helloworld.c */
 #include <gtk/gtk.h>
 
 
@@ -169,10 +187,16 @@ void hello (GtkWidget *widget, gpointer data)
 gint delete_event(GtkWidget *widget, gpointer data)
   {
       g_print ("delete event occured\n");
-      /* Se si d&agrave; TRUE al manipolatore del segnale ``delete_event'', GTK emettera' il segnale
-        ``destroy''. Fornire FALSE significa non volere che la finestra sia distrutta. 
-	 Cambia FALSE con TRUE e la finestra principale sara' distrutta con un "delete_event"
+      /* Se si d&agrave; FALSE al gestore del segnale ``delete_event'', GTK emettera' il segnale
+       * ``destroy''. Fornire TRUE significa non volere che la finestra sia distrutta. 
+      * Questo e' utile per far uscire delle finestre di dialogo del tipo:
+      * 'sei sicuro di voler uscire ?'
+      * Cambia TRUE in FALSE e la finestra principale sara' distrutta con un "delete_event"
       */
+    return (TRUE);
+
+}
+
 
 /* Un'altra callback */
 void destroy (GtkWidget *widget, gpointer data)
@@ -200,11 +224,11 @@ int main (int argc, char *argv[])
      * Il dato passato come argomento alla funzione di ritorno &eacute; NULL
      * ed &eacute; ignorato dalla funzione stessa. */
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-			GTK_SIGNAL_FUNC (destroy), NULL);
+			GTK_SIGNAL_FUNC (delete_event), NULL);
     
     /* Qui connettiamo l'evento ``destroy'' al gestore del segnale.
      * Questo evento accade quando noi chiamimo la funzione gtk_widget_destroy() 
-     * sulla finestra o se ritorniamo TRUE dalla callback ``delete_event''. */
+     * sulla finestra o se ritorniamo FALSE dalla callback ``delete_event''. */
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
                         GTK_SIGNAL_FUNC (destroy), NULL);
 
@@ -240,62 +264,67 @@ int main (int argc, char *argv[])
     
     /* Tutte le applicazioni GTK devono avere la funzione gtk_main(). 
      * Il controllo finisce qui e attende un evento (come la pressione
-     * di un tasto o l'evento di un mouse).
+     * di un tasto o l'evento di un mouse). */
     gtk_main ();
     
     return 0;
 }
 </verb></tscreen>
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Compilare hello World
+<!-- ----------------------------------------------------------------- -->
 <p>
 Per compilare si utilizza :
 
 <tscreen><verb>
-gcc -Wall -g helloworld.c -o hello_world -L/usr/X11R6/lib \
-    -lglib -lgdk -lgtk -lX11 -lXext -lm
+
+gcc -Wall -g helloworld.c -o hello_world `gtk-config --cflags` \
+    `gtk-config --libs`
 </verb></tscreen>
+(N.d.T.: se lanciato da linea di comando, il precedente comando di
+compilazione va messo su di una unica linea eliminando il backslash) 
 <p>
-Le librerie sopra (glib, gtk,...) devono essere tutte nel percorso predefinito
-delle librerie. Se cosi' non fosse aggiungi ``-L&lt;directory&gt;'' e il gcc 
-guarder&agrave; in questa directory per cercare le librerie di cui necessita.
-Per esempio sul mio sistema debian-linux io ho dovuto aggiungere 
-<tt>-L/usr/X11R6/lib</> per riuscire a far trovare le librerie di X11.
+In questo modo, si usa il progamma <tt>gtk-config</>, che viene
+distribuito con gtk. Questo programma 'sa' che opzioni di compilatore
+sono necessarie per compilare i programmi che usano gtk.
+<tt>gtk-config --cflags</> d&agrave; come risultato una lista di directory
+in cui i file di include devono essere cercati, e <tt>gtk-config --libs</>
+fornisce invece la lista delle librerie che devono essere linkate con le
+directory in cui devono essere cercate.
 
 <p>
-L'odine della dichiarazione delle librerie &eacute; significativo. Il linker 
-sa quali funzioni di una libreria ha bisogno prima di processarla.
-
-<p>
-le librerie che noi linkiamo sono:
+Le librerie che normalmente vengono linkate sono:
 <itemize>
 <item> la libreria glib (-lglib), contiene varie funzioni, ma solo 
 g_print() &eacute; usato in questo esempio. GTK si appoggia a questa
-libreria cosi' devi sempre, comunque, linkarla. Vedi comunque la <ref 
-id="sec_glib" name="glib"> sezione sulla glib per altri dettagli.
+libreria, quindi essa viene sempre, comunque, linkata. Vedi comunque
+la  sezione sulla <ref id="sec_glib" name="glib"> per altri dettagli.
 <item>La libreria GDK (-lgdk), la copertura della X11.
 <item>La libreria GTK (-lgtk), la libreria dei widget, basata sulla GDK.
-<item>La libreria xlib(-lX11) la quale &egrave; usata dalla GDK.
+<item>La libreria Xlib(-lX11) la quale &egrave; usata dalla GDK.
 <item>La libreria Xext(-lXext). Questa contiene il codice per le pixmap a
 memoria condivisa e altre estensioni di X.
-<item>La libreria matematica (-lm). Questa &eacute; usata dalla GTK per vari scopi.
+<item>La libreria matematica (-lm). Questa &eacute; usata dalla GTK per
+vari scopi.
 </itemize>
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Teoria dei segnali e delle funzioni di ritorno (callback)
 <p>
-Prima di guardare in dettaglio ``Hello World'', discuteremo gli eventi e le 
-funzioni di ritorno. GTK  &egrave; un toolkit guidato dagli eventi, il che significa
-che se ne star&agrave; a dorimire in gtk_main finch&eacute; non succeder&agrave; un evento ed il
-controllo passer&agrave; alla funzione appropriata.
+Prima di guardare in dettaglio ``Hello World'', parleremo un po' degli eventi
+e delle funzioni di ritorno. GTK  &egrave; un toolkit guidato dagli eventi,
+il che significa che se ne star&agrave; a dorimire in gtk_main finch&eacute;
+non succede un evento ed il controllo viene passato alla funzione appropriata.
 
 <p>
-Questo passaggio di controllo &egrave; fatto usando l'idea dei segnali. Quando succede un 
-evento, come la pressione di un bottone del mouse, verr&agrave; emesso il segnale appropriato 
-dal widget che &eacute; stato premuto.
-Questo &egrave; il modo in cui GTK fa molto del suo utile lavoro. Per fare s&igrave; che un 
-bottone esegua una azione, noi prepareremo un gestore del segnale che catturi 
-questi segnali e chiami la funzione corretta. Questo &egrave; fatto usando una 
-funzione del tipo:
+Questo passaggio di controllo &egrave; basato sull'idea dei segnali.
+Quando si ha un evento, come la pressione di un bottone del mouse, verr&agrave;
+emesso il segnale appropriato, per esempio dal widget che &eacute; stato premuto.
+Questo &egrave; il modo in cui GTK fa molto del suo utile lavoro. Per far
+s&igrave; che un bottone esegua una azione, prepareremo un gestore del segnale
+che catturi questi segnali e chiami la funzione corretta. Questo viene fatto
+usando una funzione del tipo:
 
 <tscreen><verb>
 gint gtk_signal_connect (GtkObject *object,
@@ -303,25 +332,22 @@ gint gtk_signal_connect (GtkObject *object,
 			 GtkSignalFunc func,
 			 gpointer func_data);
 </verb></tscreen>
-
 <p>
-Dove, il primo argomento &egrave; il widget che emetter&agrave; il segnale, il secondo &egrave; il nome
-del segnale che si vuole catturare,il terzo &egrave; la funzione che verr&agrave; invocata
-quando il segnale sar&agrave; catturato e il quarto &egrave; il dato che potr essere passato a 
-questa funzione.
-
+in cui il primo argomento &egrave; il widget che emetter&agrave; il segnale,
+il secondo &egrave; il nome del segnale che si vuole catturare, il terzo &egrave;
+la funzione che verr&agrave; invocata quando il segnale sar&agrave; catturato e
+il quarto &egrave; il dato che potr&agrave; essere passato a questa funzione.
 <p>
-La funzione specificata come terzo argomento &egrave; chiamata ``funzione di ritorno (callback)'',
-e dovrebbe essere della forma:
+La funzione specificata come terzo argomento &egrave; chiamata ``funzione di
+ritorno (callback)'', e dovrebbe essere della forma:
 
 <tscreen><verb>
 void callback_func(GtkWidget *widget, gpointer *callback_data);
 </verb></tscreen>
 <p>
-Dove il primo argomento sar&agrave; un puntatore al widget che emette il segnale e il
-secondo un puntatore al dato passato come ultimo argomento della funzione 
+Dove il primo argomento sar&agrave; un puntatore al widget che emette il segnale
+e il secondo un puntatore al dato passato come ultimo argomento della funzione 
 gtk_signal_connect() come descritto sopra.
-
 <p>
 Un'altra chiamata usata nell'esempio Hello World &egrave;:
 
@@ -332,34 +358,34 @@ gint gtk_signal_connect_object (GtkObject *object,
 				GtkObject *slot_object);
 </verb></tscreen>
 <p>
-gtk_signal_connect_object() &egrave; uguale a gtk_signal_connect() eccetto che la 
-funzione di callback usa solo un argomento, un puntatore ad un'oggetto GTK.
-Cosi' quando usa questa funzione per connettere i segnali, la callback 
-potrebbe essere della forma :
+gtk_signal_connect_object() &egrave; uguale a gtk_signal_connect() eccetto che
+la funzione di callback usa solo un argomento, un puntatore ad un'oggetto GTK.
+Cos&igrave; quando si usa questa funzione per connettere i segnali, la callback 
+dovrebbe essere della forma :
 
 <tscreen><verb>
-    void callback_func (GtkObject *object);
+void callback_func (GtkObject *object);
 </verb></tscreen>
 <p>
-Dove object &egrave; di solito un widget. Noi, generalmente, non assegnamo una callback per 
-gtk_signal_connect_object.  Queste sono invocate ,usualmente, per chiamare 
-una funzione GTK che accetta un widget singolo o un oggetto come argomento, 
-come nel caso dell'esempio Hello World.
+dove object &egrave; normalmente un widget. Generalmente, non si assegna
+una callback per gtk_signal_connect_object.  Queste sono invocate, usualmente,
+per chiamare una funzione GTK che accetta un widget singolo o un oggetto come
+argomento, come nel caso dell'esempio Hello World.
 
-Lo scopo di avere due funzioni per connettere i segnali &egrave; semplicemente quello di 
-permettere alla funzione di callback di avere un numero di argomenti diverso.
-Molte funzioni della libreria GTK accettano solo un singolo puntatore ad un widget
-GTK come argomento, cos&igrave; per queste si pu&ograve; usare la funzione gtk_signal_connect_object(),
-mentre per le vostre funzioni potreste aver bisogno di passare dati supplementari alle
-funzioni di ritorno.
+Lo scopo di avere due funzioni per connettere i segnali &egrave; semplicemente
+quello di permettere alla funzione di callback di avere un numero di argomenti
+diverso. Molte funzioni della libreria GTK accettano solo un singolo puntatore
+ad un widget GTK come argomento, cos&igrave; per queste si pu&ograve; usare la
+funzione gtk_signal_connect_object(), mentre per le vostre funzioni potreste
+aver bisogno di passare dati supplementari alle funzioni di ritorno.
 
 <sect1>Attraverso Hello World passo per passo
 <p>
-Ora che conosciamo la teoria che vi &egrave; dietro, iniziamo ad essere pi&ugrave; chiari 
-camminando attraverso il programma di Hello World.
-
+Ora che conosciamo la teoria che vi &egrave; dietro, iniziamo ad essere pi&ugrave;
+chiari camminando attraverso il programma di Hello World.
 <p>
-Questa &egrave; la funzione di callback che sar&agrave; invocata quando il bottone &egrave; clickato.
+Questa &egrave; la funzione di callback che sar&agrave; invocata quando il bottone
+viene cliccato.
 Noi, in questo esempio, ignoriamo sia il widget che i dati passati, ma non &egrave; 
 difficile farci invece qualcosa. Il prossimo esempio user&agrave; l'argomento passato
 per dire quale bottone &egrave; stato premuto.
@@ -372,29 +398,29 @@ void hello (GtkWidget *widget, gpointer *data)
 </verb></tscreen>
 
 <p>
-Questa callback &egrave; un po' speciale. L'evento ``delete'' avviene quanto il Window Manager
-manda questo evento all'applicazione. Qui abbiamo una scelta da fare: cosa fare di questo evento. 
-Possiamo ignorarlo, creare qualche tipo di risposta, o semplicemente terminare 
-l'applicazione.
+Questa callback &egrave; un po' speciale. L'evento ``delete'' avviene quanto
+il Window Manager manda questo evento all'applicazione. Qui abbiamo una scelta
+da fare: cosa fare di questo evento. Possiamo ignorarlo, creare qualche tipo di
+risposta, o semplicemente terminare l'applicazione.
 
-Il valore che si restituisce in questa callback fa s&igrave; che la GTK sappia cosa fare.
-Restituire FALSE significa che noi non vogliamo che il segnale ``destroy'' sia emesso,
-quindi far s&igrave; che la nostra applicazione continui a procedere. Ritornare TRUE vuole dire
-far emettere il segnale ``destroy'' il quale chiamer&agrave; il gestore del segnale ``destroy''
-(o meglio : la nostra funzione di callback).
+Il valore che si restituisce in questa callback fa s&igrave; che la GTK sappia
+cosa fare. Restituire TRUE significa che non vogliamo che il segnale ``destroy''
+sia emesso, quindi far s&igrave; che la nostra applicazione proceda normalmente.
+Ritornare FALSE vuole dire far emettere il segnale ``destroy'' il quale
+chiamer&agrave; la nostra funzione di callback che gestisce il segnale ``destroy''.
 
 <tscreen><verb>
-       gint delete_event(GtkWidget *widget, gpointer data)
-       {
-           g_print ("delete event occured\n");
+gint delete_event(GtkWidget *widget, gpointer data)
+{
+   g_print ("delete event occured\n");
 
-           return (FALSE);
-       }
+   return (TRUE);
+}
 </verb></tscreen>
-
 <p>
-Questa &egrave; un'altra funzione di callback la quale fa uscire dal programma chiamando
-gtk_main_quit(). Non c'&egrave; molto da dire al riguardo, &egrave; abbastanza auto-esplicativa.
+Questa &egrave; un'altra funzione di callback la quale fa uscire dal programma
+chiamando gtk_main_quit(). Questa funzione dice a GTK che deve uscire da gtk_main
+quando gli viene restituito il controllo.
 
 <tscreen><verb>
 void destroy (GtkWidget *widget, gpointer *data)
@@ -410,57 +436,58 @@ anche le applicazioni GTK hanno questa funzione.
 int main (int argc, char *argv[])
 {
 </verb></tscreen>
-
 <p>
 Questa parte dichiara un puntatore ad una struttura di tipo GtkWidget. Queste sono
-usate sotto per creare una finestra ed un bottone.
+usate pi&ugrave; sotto per creare una finestra ed un bottone.
 
 <tscreen><verb>
     GtkWidget *window;
     GtkWidget *button;
 </verb></tscreen>
 <p>
-Qui vi &egrave; ancora la nostra gtk_init. Come prima questa inizializza il toolkit e 
-analizza gli argomenti trovati nella linea di comando_ Tutti gli argomenti riconosciuti
-nella linea di comando sono rimossi dalla lista degli argomenti e vengono cos&igrave; modificati 
-argc e argv per far s&igrave; che sembri che questi non siano mai esisitie permettere alla
-tua applicazione di analizzare gli argomenti rimasti.
+Qui vi &egrave; ancora la nostra gtk_init. Come prima questa inizializza il toolkit
+e analizza gli argomenti trovati nella linea di comando. Tutti gli argomenti
+riconosciuti nella linea di comando sono rimossi dalla lista degli argomenti e
+vengono cos&igrave; modificati argc e argv per far s&igrave; che sembri che questi
+non siano mai esisiti e permettere alla vostra applicazione di analizzare gli
+argomenti rimasti.
 
 <tscreen><verb>
     gtk_init (&amp;argc, &amp;argv);
 </verb></tscreen>
 <p>
-Crea una nuova finestra. Questo viene spiegato abbastanza approfonditamente pi&ugrave; avanti.
-Viene allocata la memoria per la struttura GtkWidget *window cos&igrave; che si punti ad una struttura
-valida. In questo modo si predispone la nuova finestra, ma non la si visualizza fino a sotto dove, quasi
-alla fine del nostro programma, invochiamo gtk_widget_show(window).
+Crea una nuova finestra. Questo viene spiegato abbastanza approfonditamente
+pi&ugrave; avanti. Viene allocata la memoria per la struttura GtkWidget *window
+cos&igrave; che si punti ad una struttura valida. In questo modo si predispone
+la nuova finestra, ma non la si visualizza fino a sotto dove, quasi alla fine
+del nostro programma, invochiamo gtk_widget_show(window).
 <tscreen><verb>
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 </verb></tscreen>
 <p>
-Questo &egrave; un esempio di come connettere un gestore dei segnali con un oggetto, in questo
-caso la finestra. Qui viene catturato il segnale ``destroy''. Questo &egrave; emesso quando usiamo
-il Window Manager per uccidere la finestra (e noi restituiamo TRUE dal gestore di ``delete_event'')
-o quando emettiamo la chiamata gtk_widget_destroy() passando l'oggetto finestra 
-come oggetto da distruggere. Sistemando le cose cos&igrave;, trattiamo entrambi i casi con una singola 
-chiamata. Qui &egrave; giusto invocare la funzione destroy() definita sopra con NULL come argomento,
-la quale termina l'applicazione GTK per noi.
+Questo &egrave; un esempio di come connettere un gestore dei segnali con un oggetto,
+in questo caso la finestra. Qui viene catturato il segnale ``destroy''. Questo
+viene emesso quando usiamo il Window Manager per uccidere la finestra (e noi
+restituiamo TRUE dal gestore di ``delete_event'') o quando emettiamo la chiamata
+gtk_widget_destroy() passando l'oggetto finestra come oggetto da distruggere.
+Sistemando le cose cos&igrave;, trattiamo entrambi i casi con una singola 
+chiamata. Qui &egrave; giusto invocare la funzione destroy() definita sopra con
+NULL come argomento, la quale termina l'applicazione GTK per noi.
 Questo ci permetter&agrave; di utilizzare il Window Manager per uccidere il programma.
-<!-- fino a qui -->
 <p>
-GTK_OBJECT e GTK_SIGNAL_FUNC sono macro che interpretano il casting e il controllo di tipo per noi,
-cos&igrave; da rendere piu' leggibile il codice.
+GTK_OBJECT e GTK_SIGNAL_FUNC sono macro che interpretano il casting e il controllo
+di tipo per noi, cos&igrave; da rendere piu' leggibile il codice.
 
 <tscreen><verb>
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			GTK_SIGNAL_FUNC (destroy), NULL);
 </verb></tscreen>
 <p>
-La prossima funzione &egrave; usata per settare un attributo di un oggetto contenitore. Questo
-sistema la finestra cos&igrave; da avere un'area vuota all'interno della finestrra larga 10 pixel dove
-non potr&agrave; andare nessun widget. Ci sono altre funzioni simili che vedremo nella
+La prossima funzione &egrave; usata per settare un attributo di un oggetto
+contenitore. Questo sistema la finestra cos&igrave; da avere un'area vuota
+all'interno della finestrra larga 10 pixel dove non potr&agrave; andare nessun
+widget. Ci sono altre funzioni simili che vedremo nella
 sezione <ref id="sec_setting_widget_attributes" name="Settare gli attributi del Widget.">
-
 <p>
 E ancora, GTK_CONTAINER &egrave; una macro per interpretare il casting di tipo.
 
@@ -468,8 +495,9 @@ E ancora, GTK_CONTAINER &egrave; una macro per interpretare il casting di tipo.
     gtk_container_border_width (GTK_CONTAINER (window), 10);
 </verb></tscreen>
 <p>
-Questa chiamata crea un nuovo bottone. Alloca spazio in memoria per un nuovo GtkWidget,
-inizializzandolo e facendo s&igrave; che il puntatore a bottone punti ad esso.
+Questa chiamata crea un nuovo bottone. Alloca spazio in memoria per un nuovo
+GtkWidget, inizializzandolo e facendo s&igrave; che il puntatore a bottone punti
+ad esso.
 Quando sar&agrave; visualizzato, avr&agrave; etichetta  ``Hello World''.
 
 <tscreen><verb>
@@ -477,25 +505,25 @@ Quando sar&agrave; visualizzato, avr&agrave; etichetta  ``Hello World''.
 </verb></tscreen>
 <p>
 Qui prendiamo il bottone e gli facciamo fare qualcosa di utile.
-Gli colleghiamo un un gestore di segnale  in modo che quando emetter&agrave; il 
-segnale ``clicked'', verr&agrave; invocata la nostra funzione hello(). Il dato passato
-alla funzione &egrave; ignorato, cosicch&eacute; alla funzione di callback hello() passiamo
-semplicemente NULL. Evidentemente il segnale ``clicked'' viene emesso quando 
-premiamo il bottone con il mouse.
+Gli colleghiamo un gestore di segnale  in modo che quando emetter&agrave; il 
+segnale ``clicked'', verr&agrave; invocata la nostra funzione hello(). Il
+dato passato alla funzione &egrave; ignorato, cosicch&eacute; alla funzione
+di callback hello() passiamo semplicemente NULL. Evidentemente il segnale
+``clicked'' viene emesso quando premiamo il bottone con il mouse.
 
 <tscreen><verb>
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			GTK_SIGNAL_FUNC (hello), NULL);
 </verb></tscreen>
 <p>
-Usiamo questo bottone anche per uscire dal programma. Questo illustrera' 
-come il segnale ``destroy'' pu&ograve; arrivare sia dal Window Manager che dal nostro programma. 
-Quando il bottone &egrave; ``clicked'', come sopra, chiamera' la funzione di callback
-hello() e poi questa nell'ordine in cui sono definite. Si possono avere
-tante funzioni di callback, quante sono necessarie, e saranno eseguite nell'ordine in cui 
-sono connesse. Visto che la funzione gtk_widget_destroy() accetta come argomento solo un 
-GtkWidget *widget, usiamo la funzione gtk_signal_connect_object()
-al posto della semplice gtk_signal_connect().
+Usiamo questo bottone anche per uscire dal programma. Questo illustrer&agrave; 
+come il segnale ``destroy'' pu&ograve; arrivare sia dal Window Manager che dal
+nostro programma. Quando il bottone viene cliccato come descritto sopra,
+chiamer&agrave; la funzione di callback hello() e poi quest'ultima nell'ordine
+in cui sono definite. Si possono cio&eacute; avere tante funzioni di callback
+quante sono necessarie, e saranno eseguite nell'ordine in cui sono connesse.
+Visto che la funzione gtk_widget_destroy() accetta come argomento solo un GtkWidget *widget, usiamo la funzione
+gtk_signal_connect_object() al posto della normale gtk_signal_connect().
 
 <tscreen><verb>
     gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
@@ -503,9 +531,10 @@ al posto della semplice gtk_signal_connect().
 			       GTK_OBJECT (window));
 </verb></tscreen>
 <p>
-Questa &eacute; una chiamata di ``impacchettamento'' che sar&agrave; spiegata pi&ugrave; avanti. 
-Ma &egrave; molto facile da capire. Semplicemente dice alla libreria GTK che il 
-bottone &egrave; da mettere nella finestra dove sar&agrave; visualizzato.
+Questa &eacute; una chiamata di ``impacchettamento'' che sar&agrave; spiegata
+pi&ugrave; avanti. Ma &egrave; molto facile da capire. Semplicemente dice alla
+libreria GTK che il bottone &egrave; da mettere nella finestra dove sar&agrave;
+visualizzato.
 
 <tscreen><verb>
     gtk_container_add (GTK_CONTAINER (window), button);
@@ -514,10 +543,11 @@ bottone &egrave; da mettere nella finestra dove sar&agrave; visualizzato.
 A questo punto abbiamo predisposto tutto quello che ci eravamo prefissati.
 Con tutti i gestori di segnale a posto e il bottone messo nella finestra in cui
 dovrebbe essere, possiamo dire a GTK di mostrare gli oggetti sullo schermo. 
-L'oggetto finestra viene mostrato per ultimo cos&igrave; che la finestra completa di tutti
-i suoi oggetti sar&agrave; mostrata in una volta sola, invece di vedere
-prima la finestra spoglia e poi la comparsa del bottone all'interno di essa.
-Per quanto, con questi semplici esempi, questo l'avrai gi&agrave; notato.
+L'oggetto finestra viene mostrato per ultimo cos&igrave; che la finestra
+completa di tutti i suoi oggetti verr&agrave; mostrata tutta in una volta,
+invece di vedere prima la finestra spoglia e poi la comparsa del bottone
+all'interno di essa. Per quanto, con questi semplici esempi, questo l'avrete
+gi&agrave; notato.
 <tscreen><verb>
     gtk_widget_show (button);
 
@@ -525,8 +555,8 @@ Per quanto, con questi semplici esempi, questo l'avrai gi&agrave; notato.
 </verb></tscreen>
 <p>
 E naturalmente chiamiamo gtk_main(), la quale aspetta l'arrivo degli eventi 
-dal server X e chiamer&agrave; l'oggetto interessato per fargli emettere il segnale
-adeguato.
+dal server X e chiama l'oggetto interessato per fargli emettere il segnale
+corrispondente.
 <tscreen><verb>
     gtk_main ();
 </verb></tscreen>
@@ -537,46 +567,51 @@ E il return finale. Il controllo ritorna qui dopo che viene invocata gtk_quit().
 </verb></tscreen>
 <p>
 Ora, quando premiamo il bottone del mouse su un bottone GTK, questo oggetto
-emette il segnale ``clicked''. Per poter utilizzare queste informazioni, il nostro
-programma predispone un gestore di segnale per catturare quel segnale, il quale 
-avvia la funzione da noi scelta. Nel nostro esempio, quando il bottone creato viene 
-clickato , la funzione hello() &egrave; invocata con un argomento NULL, dopoodich&eacute;
-viene invocato il successivo gestore di questo segnale. Questo chiama la funziona 
-gtk_widget_destroy(), passandole l'oggetto-finestra (window) come argomento, che 
-distrugger&agrave; la finestra. Questo fa s&igrave; che la finestra emetta il segnale
-``destroy'' che viene catturato e che fa invocare la funzione di ritorno 
-destroy(), che semplicemente esce dal programma GTK.
-
+emette il segnale ``clicked''. Per poter utilizzare queste informazioni, il
+nostro programma predispone un gestore di segnale per catturare quel segnale,
+il quale avvia la funzione da noi scelta. Nel nostro esempio, quando il
+bottone creato viene cliccato, la funzione hello() viene invocata con argomento
+NULL, dopoodich&eacute; viene invocato il successivo gestore di questo segnale.
+Questo chiama la funziona gtk_widget_destroy(), passandole l'oggetto-finestra
+(window) come argomento, che distrugger&agrave; la finestra. Questo fa s&igrave;
+che la finestra emetta il segnale ``destroy'' che viene catturato e che fa
+invocare la funzione di ritorno destroy(), che semplicemente esce dal programma GTK.
 <p>
-Un'altro modo in cui possono andare le cose &egrave; l'uso del window manager per uccidere
-la finestra. Questo causera' l'emissione del segnale ``delete_event'' che
+Un'altro modo in cui possono andare le cose &egrave; l'uso del window manager per
+uccidere la finestra. Questo causera' l'emissione del segnale ``delete_event'' che
 automaticamente chiamer&agrave; il gestore del segnale ``delete_event''. Se qui noi
-restituiamo il valore FALSE, la finestra non verr&agrave; toccata e tutto proceder&agrave; come
-se nulla fosse successo. Dare invece il valore TRUE causer&agrave; l'emissione da parte
-di GTK del segnale ``destroy'' il quale, a sua volta, invocher&agrave; la callback ``destroy'',
-uscendo dall'applicazione.
-
+restituiamo il valore TRUE, la finestra non verr&agrave; toccata e tutto
+proceder&agrave; come se nulla fosse successo. Dare invece il valore FALSE
+causer&agrave; l'emissione da parte di GTK del segnale ``destroy'' il quale, a sua
+volta, invocher&agrave; la callback ``destroy'', uscendo dall'applicazione.
 <p>
 Nota che questi segnali non sono gli stessi del sistema Unix e che non sono
-implementati usando quei segnali, anche se la terminologia &egrave; praticamente identica.
+implementati usando quei segnali, anche se la terminologia &egrave; praticamente
+identica.
 
+<!-- ***************************************************************** -->
 <sect>Proseguiamo
+<!-- ***************************************************************** -->
 <p>
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>Tipi di Dato
 <p>
 Ci sono alcune cose che avrete probabilmente notato nei precedenti esempi che
 hanno bisogno di una spiegazione. I gint, gchar ecc. che vedete sono tipi di dato
-riferiti rispettivamente a int e char. Questo viene fatto per rimediare alla brutta
-dipendenza dalle dimensioni di semplici tipi di dato quando si fanno dei calcoli.
-Un buon esempio &egrave; ``gint32'' il quale sar&agrave; un tipo di dato riferito ad un intero a
-32 bit per tutte le piattaforme x86 e ad un 64 bit per gli alpha.
-I tipi di dato sono ben spiegati pi&ugrave; avanti ed intuitivi. Sono definiti in
-glib/glib.h (il quale viene incluso da gtk.h).
-
+(typedef) riferiti rispettivamente a int e char. Questo viene fatto per rimediare
+alle scomode dipendenze dalle dimensioni di semplici tipi di dato quando si fanno
+dei calcoli. Un buon esempio &egrave; ``gint32'' il quale sar&agrave; un tipo di
+dato riferito ad un intero a 32 bit per tutte le piattaforme, sia per gli x86 che
+per gli per gli alpha a 64 bit.
+I tipi di dato sono ben spiegati pi&ugrave; avanti e molto intuitivi. Sono definiti
+in glib/glib.h (il quale viene incluso da gtk.h).
 <p>
-Noterete anche la possibilit&agrave; di utilizzare un GtkWidget quando la funzione richiede
-un GtkObject. GTK &egrave; una libreria orienta agli oggetti ed un widget &egrave; un oggetto.
+Noterete anche la possibilit&agrave; di utilizzare un GtkWidget quando la funzione
+richiede un GtkObject. GTK &egrave; una libreria orienta agli oggetti ed un widget
+&egrave; un oggetto.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Altri Dettagli sui Segnali
 <p>
 Diamo un'altra occhiata alla dichiarazione della funzione gtk_signal_connect.
@@ -585,38 +620,43 @@ Diamo un'altra occhiata alla dichiarazione della funzione gtk_signal_connect.
 gint gtk_signal_connect (GtkObject *object, gchar *name,
 			 GtkSignalFunc func, gpointer func_data);
 </verb></tscreen>
-Notate il valore di ritorno definito come gint? questo &egrave; un identificatore per
-la tua funzione di callback. Come detto sopra, si possono avere pi&ugrave; funzioni di 
-ritorno per ogni segnale e per ogni ogetto a seconda delle necessit&agrave;. ed ognuna sar&agrave;
-eseguita in sequenza, nell'ordine in cui sono state collegate. Questo identificatore
-ti permette di rimuovere una funzione dalla lista delle funzioni di ritorno tramite
-la seguente chiamata
+Notate il valore di ritorno definito come gint? Questo &egrave; un identificatore
+per la vostra funzione di callback. Come detto sopra, si possono avere pi&ugrave;
+funzioni di ritorno per ogni segnale e per ogni ogetto a seconda delle
+necessit&agrave;, ed ognuna sar&agrave; eseguita in sequenza, nell'ordine in cui
+&egrave; stata collegata. 
+
+Questo identificatore vi permette di rimuovere una funzione dalla lista delle 
+funzioni di ritorno tramite la seguente chiamata
+
 <tscreen><verb>
 void gtk_signal_disconnect (GtkObject *object,
                             gint id);
 </verb></tscreen>
-Cos&igrave; passando il widget da cui vuoi rimuovere il gestore di segnale, e
-l'identificativo restituito da una delle funzioni signal_connect, puoi rimuovere
-il gestore di segnale che desideri da quella del widget.
+Cos&igrave;, passando il widget da cui si vuole rimuovere il gestore di segnale e
+l'identificativo restituito da una delle funzioni signal_connect, si pu&ograve;
+rimuovere il gestore di segnale che si desidera dal widget.
 
-<p>
-Un'altra funzione per rimuovere tutti i segnali di un widget in una volta sola &egrave;:
+Un'altra funzione, usata per rimuovere tutti i segnali di un widget in una volta
+sola &egrave;:
 
 <tscreen><verb>
 gtk_signal_handlers_destroy (GtkObject *object);
 </verb></tscreen>
 <p>
-Questa chiamata &egrave; abbastanza auto esplicativa. Semplicemente rimuove tutti i segnali
-collegati al widget che passi alla funzione come argomento.
+Questa chiamata &egrave; abbastanza auto esplicativa. Semplicemente rimuove tutti
+i segnali collegati al widget che si passa alla funzione come argomento.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Miglioriamo Hello World
 
 <p>
-Diamo un'occhiata ad una migliorata versione di Hello World con altri esempi sulle
-callback. Questo anche ci introdurr&agrave; al nostro prossimo argomento,
+Diamo un'occhiata ad una versione migliorata di Hello World con altri esempi
+sulle callback. Questo ci introdurr&agrave; anche al nostro prossimo argomento,
 l'impacchettamento dei widget.
 
 <tscreen><verb>
+/* helloworld2.c */
 #include <gtk/gtk.h>
 
 /* La nostra funzione di callback migliorata. I dati passati a questa
@@ -708,54 +748,60 @@ int main (int argc, char *argv[])
     return 0;
 }
 </verb></tscreen>
-<p>
-Compilate questo programma usando gli stessi argomenti di link del nostro primo
-esempio. Noterete che questa volta non c'&egrave; un modo semplice per uscire dal programma,
-si deve usare il nostro window manager o la linea di comando per uccidere
-l'applicazione.
-Un buon esercizio per il lettore &egrave; quello di inserire un tezo bottone ``quit'' che
-faccia uscire dal programma. Potete anche divertirvi  con le opzioni di
-gtk_box_pack_start() mentre leggete il prossimo capitolo. Provate a ridimensionare
-la finestra ed a osservare cosa succede.
 
-<p>
-Solo una piccola nota, c'&egrave; un'altra definizione di gtk_window_new() - 
+Compilate questo programma usando gli stessi argomenti di link del nostro primo
+esempio. Noterete che questa volta non c'&egrave; un modo semplice per uscire
+dal programma, si deve usare il nostro window manager o la linea di comando per
+uccidere l'applicazione.
+Un buon esercizio per il lettore &egrave; quello di inserire un tezo bottone
+``quit'' che faccia uscire dal programma. Potete anche divertirvi  con le opzioni
+di gtk_box_pack_start() mentre leggete il prossimo capitolo. Provate a
+ridimensionare la finestra ed a osservare cosa succede.
+
+Solo una piccola nota: c'&egrave; un'altra definizione di gtk_window_new() - 
 GTK_WINDOW_DIALOG. Questa interagisce con il window manager in un modo un po' 
 diverso, e dovrebbe essere usata per finestre temporanee.
 
+<!-- ***************************************************************** -->
 <sect>Come ``Impacchettare'' i Widget 
+<!-- ***************************************************************** -->
 <p>
-Nel momento in cui si crea un'applicazione, normalmente si avr&agrave; la necessit&agrave; di mettere pi&ugrave;
-di un unico bottone all'interno di una finestra. Il nostro primo esempio ``Hello World'' 
-usava un solo oggetto, cosicch&eacute; abbiamo potuto usare semplicemente una chiamata
-a gtk_container_add per impacchettare il widget nella finestra. Quando invece si vuole
-inserire pi&ugrave; di un unico widget in una finestra, come si fa a controllare dove vengono
-posizionati i propri oggetti? E' qui che entra in gioco il meccanismo dell'``impacchettamento''.
+Nel momento in cui si crea un'applicazione, normalmente si avr&agrave; la
+necessit&agrave; di mettere pi&ugrave; di un unico bottone all'interno di
+una finestra. Il nostro primo esempio ``Hello World'' usava un solo oggetto,
+cosicch&eacute; abbiamo potuto usare semplicemente una chiamata a
+gtk_container_add per impacchettare il widget nella finestra. Quando invece
+si vuole inserire pi&ugrave; di un unico widget in una finestra, come si fa
+a controllare dove vengono posizionati i propri oggetti? E' qui che entra in
+gioco il meccanismo dell'``impacchettamento''.
+<!-- ----------------------------------------------------------------- -->
 <sect1>Teoria delle Scatole per Impacchettamento
 <p>
 La maggior parte dell'impacchettamento viene effettuata creando delle scatole
-come nell'esempio pi&ugrave; sopra. Le scatole sono dei contenitori invisibili di
-widget che possiamo usare per imballarci i nostri oggetti e che esistono in
-due variet&agrave;: in particolare si possono avere scatole orizzontali (hbox) e 
-verticali (vbox).
-Quando si impacchentano degli oggetti in una scatola orizzontale, gli oggetti vengono inseriti
-orizzontalmente da sinistra a destra oppure da destra a sinistra a seconda della
-chiamata di funzione che si usa. In una scatola verticale, gli oggetti vengono inseriti
-dall'alto in basso o viceversa. Si pu&ograve; usare qualsiasi combinazione di scatole
-all'interno o a fianco di altre scatole, fino ad ottenere l'effetto desiderato.
+come nell'esempio pi&ugrave; sopra. Le scatole sono dei contenitori invisibili
+di widget che possiamo usare per imballarci i nostri oggetti e che esistono in
+due variet&agrave;: in particolare si possono avere scatole orizzontali (hbox)
+e verticali (vbox).
+Quando si impacchentano degli oggetti in una scatola orizzontale, gli oggetti
+vengono inseriti orizzontalmente da sinistra a destra oppure da destra a sinistra
+a seconda della chiamata di funzione che si usa. In una scatola verticale, gli
+oggetti vengono inseriti dall'alto in basso o viceversa. Si pu&ograve; usare
+qualsiasi combinazione di scatole all'interno o a fianco di altre scatole, fino
+ad ottenere l'effetto desiderato.
 <p>
-Per creare una nuova scatola orizzontale, si usa una chiamata a gtk_hbox_new(), mentre
-per le scatole verticali si usa gtk_vbox_new(). Per inserire i widget
+Per creare una nuova scatola orizzontale, si usa una chiamata a gtk_hbox_new(),
+mentre per le scatole verticali si usa gtk_vbox_new(). Per inserire i widget
 all'interno di questi contenitori si usano le funzioni gtk_box_pack_start() e
-gtk_box_pack_end(). La funzione gtk_box_pack_start() comincer&agrave; dall'alto verso il
-basso in una vbox e da sinistra a destra in una hbox. gtk_box_pack_end() fa l'opposto,
-impacchettando dal basso verso l'alto in una vbox e da destra a sinistra in una hbox.
-Queste funzioni ci permettono di giustificare a destra o a sinistra i nostri
-widget, e possono essere mescolate in qualsiasi modo per ottenere l'effetto desiderato.
-Useremo gtk_box_pack_start() nella maggior parte dei nostri esempi. Un oggetto pu&ograve;
-essere costituito da un altro contenitore o da un oggetto grafico. Infatti, molti
-oggetti grafici sono a loro volta dei contenitori, compreso il bottone, anche se
-tipicamente all'interno del bottone mettiamo solo una etichetta.
+gtk_box_pack_end(). La funzione gtk_box_pack_start() comincer&agrave; dall'alto
+verso il basso in una vbox e da sinistra a destra in una hbox. gtk_box_pack_end()
+fa l'opposto, impacchettando dal basso verso l'alto in una vbox e da destra a
+sinistra in una hbox. Queste funzioni ci permettono di giustificare a destra o
+a sinistra i nostri widget, e possono essere mescolate in qualsiasi modo per
+ottenere l'effetto desiderato. Useremo gtk_box_pack_start() nella maggior parte
+dei nostri esempi. Un oggetto pu&ograve; essere costituito da un altro contenitore
+o da un oggetto grafico. Infatti, molti oggetti grafici sono a loro volta dei
+contenitori, compreso il bottone, anche se tipicamente all'interno del bottone
+mettiamo solo una etichetta.
 <p>
 
 Usando queste chiamate, GTK riesce a capire dove si vogliono piazzare i propri
@@ -764,6 +810,8 @@ automatico e altre cose interessanti. Esiste poi un insieme di opzioni che rigua
 il modo in cui i propri oggetti grafici dovrebbero essere impacchettati. Come
 si pu&ograve; immaginare, questo metodo d&agrave; una buona flessibilit&agrave; nella creazione e
 nella disposizione dei propri widget.
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>Dettagli sulle Scatole
 <p>
 A causa di questa flessibilit&agrave;, le scatole per impacchettamento del GTK
@@ -772,17 +820,18 @@ molte opzioni, e non &egrave; immediato il modo in cui si combinano l'una con l'
 Alla fine per&ograve;, si possono ottenere essenzialmente cinque diversi stili.
 
 <p>
-<?  
-<IMG ALIGN="center" SRC="gtk_tut_packbox1.gif"
-VSPACE="15" HSPACE="10" ALT="Box Packing Example Image" WIDTH="528"
-HEIGHT="235">
+<? <CENTER> >
+<?
+<IMG SRC="gtk_tut_packbox1.gif" VSPACE="15" HSPACE="10" WIDTH="528" HEIGHT="235"
+ALT="Box Packing Example Image">
 >
-
-
+<? </CENTER> >
+ 
 Ogni linea contiene una scatola orizzontale (hbox) con diversi bottoni. 
-La chiamata a  gtk_box_pack &egrave; una scorciatoia per la chiamata di impacchettamento
-di ognuno dei bottoni nella hbox. Ognuno dei bottoni viene impacchettato nella
-hbox nello stesso modo (cio&egrave;, con gli stessi argomenti per la funzione gtk_box_pack_start ()).
+La chiamata a  gtk_box_pack &egrave; una scorciatoia per la chiamata di
+impacchettamento di ognuno dei bottoni nella hbox. Ognuno dei bottoni viene
+impacchettato nella hbox nello stesso modo (cio&egrave;, con gli stessi
+argomenti per la funzione gtk_box_pack_start ()).
 <p>
 Questa &egrave; la dichiarazione della funzione gtk_box_pack_start.
 
@@ -799,13 +848,13 @@ bottoni, quindi quello che faremo sar&agrave; impacchettare bottoni in scatole.
 <p>
 L'argomento ``expand'' in  gtk_box_pack_start() o  gtk_box_pack_end() controlla
 se gli oggetti devono essere sistemati nella scatola in modo da riempire tutto
-lo spazio in diponibile presente nella scatola, in modo che la scatola si espanda fino
-ad occupare tutta l'area assegnatale (valore TRUE).
+lo spazio in diponibile presente nella scatola, in modo che la scatola si espanda
+fino ad occupare tutta l'area assegnatale (valore TRUE).
 La scatola pu&ograve; anche essere rimpiciolita in modo da contenere esattamente i
 widget (valore FALSE). Assegnare a expand il valore FALSE permette di giustificare
-a destra o sinistra i propri oggetti. In caso contrario, tutti gli ogetti si espandono
-fino ad adattarsi alla scatola, e il medesimo effetto si pu&ograve; ottenere usando solo una
-delle funzioni gtk_box_pack_start o pack_end.
+a destra o sinistra i propri oggetti. In caso contrario, tutti gli ogetti si
+espandono fino ad adattarsi alla scatola, e il medesimo effetto si pu&ograve;
+ottenere usando solo una delle funzioni gtk_box_pack_start o pack_end.
 <p>
 L'argomento ``fill'' delle funzioni gtk_box_pack stabilisce se lo spazio disponibile
 nella scatola deve essere allocato agli oggetti (TRUE) o se deve essere mantenuto
@@ -820,31 +869,35 @@ GtkWidget * gtk_hbox_new (gint homogeneous,
 </verb></tscreen>
 
 L'argomento homogeneous di gtk_hbox_new (la stesso per gtk_vbox_new)
-determina se ogni oggetto nella scatola deve avere la stessa dimensione (cio&egrave;
-la stessa ampiezza in una hbox o la stessa altezza in una vbox).  Se &egrave; settato,
-l'argomento expand delle routine gtk_box_pack &egrave; sempre attivato.
+determina se ogni oggetto nella scatola deve avere la stessa dimensione
+(cio&egrave; la stessa ampiezza in una hbox o la stessa altezza in una vbox).
+Se &egrave; settato, l'argomento expand delle routine gtk_box_pack &egrave;
+sempre attivato.
 <p>
-Qual &egrave; la differenza fra la spaziatura (che &egrave; stabilita quando la scatola
-viene creata) e il riempimento (che viene stabilito quando gli elementi vengono
-impacchettati)? La spaziatura viene inserita fra gli oggetti, mentre il
-riempimento viene aggiuno a ciascuno dei lati dell'oggetti. La seguente figura
-dovrebbe chiarire meglio questo punto:
-
-<?
-<IMG ALIGN="center" SRC="gtk_tut_packbox2.gif"
-VSPACE="15" HSPACE="10" ALT="Box Packing Example Image" WIDTH="509"
-HEIGHT="213">
+Qual &egrave; la differenza fra la spaziatura (che &egrave; stabilita quando
+la scatola viene creata) e il riempimento (che viene stabilito quando gli
+elementi vengono impacchettati)? La spaziatura viene inserita fra gli oggetti,
+mentre il riempimento viene aggiuno a ciascuno dei lati dell'oggetti. La seguente
+figura dovrebbe chiarire meglio questo punto:
+ 
+<? <CENTER> >
+ <?
+<IMG ALIGN="center" SRC="gtk_tut_packbox2.gif" WIDTH="509" HEIGHT="213"
+VSPACE="15" HSPACE="10" ALT="Box Packing Example Image">
 >
+<? </CENTER> >
 
 
 Di seguito &egrave; riportato il codice usato per creare le immagini precedenti.
 L'ho commentato in modo piuttosto pesante, in modo che non dovreste avere
-problemi nel seguirlo. Compilatelo voi stessi e preovate a giocarci un po'.
+problemi nel seguirlo. Compilatelo voi stessi e provate a giocarci un po'.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Programma Dimostrativo di Impacchettamento
 <p>
 
 <tscreen><verb>
+/* packbox.c */
 #include "gtk/gtk.h"
 
 void
@@ -856,7 +909,7 @@ delete_event (GtkWidget *widget, gpointer *data)
 /* Costruisco una nuova hbox riempita con bottoni-etichette. Gli
  * argomenti per le varabili che ci interessano sono passati
  * in questa funzione. Non mostriamo la scatola, ma mostriamo
- * tutto quello che c'&egrave; dentro. */
+ * tutto quello che c'e' dentro. */
 GtkWidget *make_box (gint homogeneous, gint spacing,
 		     gint expand, gint fill, gint padding) 
 {
@@ -891,8 +944,8 @@ GtkWidget *make_box (gint homogeneous, gint spacing,
     gtk_box_pack_start (GTK_BOX (box), button, expand, fill, padding);
     gtk_widget_show (button);
     
-    /* Questo &egrave; la stessa cosa della creazione del bottone per "expand"
-     * pi&ugrave; sopra, ma usa la forma breve. */
+    /* Questo e' la stessa cosa della creazione del bottone per "expand"
+     * piu' sopra, ma usa la forma breve. */
     button = gtk_button_new_with_label (fill ? "TRUE," : "FALSE,");
     gtk_box_pack_start (GTK_BOX (box), button, expand, fill, padding);
     gtk_widget_show (button);
@@ -933,7 +986,7 @@ main (int argc, char *argv[])
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
     /* Ci si dovrebbe sempre ricordare di connettere il segnale di destroy
-     * alla finestra principale. Ci&ograve; &egrave; molto importante per avere un funzionamento
+     * alla finestra principale. Cio' e' molto importante per avere un funzionamento
      * corretto dal punto di vista intuitivo */
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 			GTK_SIGNAL_FUNC (delete_event), NULL);
@@ -1016,7 +1069,7 @@ main (int argc, char *argv[])
 
     case 2:
 
-	/* creare una nuova etichetta, ricordare che box1 &egrave; la vbox creata 
+	/* creare una nuova etichetta, ricordare che box1 e' la vbox creata 
 	 * vicino all'inizio di main() */
 	label = gtk_label_new ("gtk_hbox_new (FALSE, 10);");
 	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
@@ -1061,14 +1114,13 @@ main (int argc, char *argv[])
     
     case 3:
 
-    /* Questo dimostra la possibilit&agrave; di usare use gtk_box_pack_end() per
-	 * giustificare gli oggetti a destra. Per prima cosa creiamo una
-
+        /* Questo dimostra la possibilita' di usare use gtk_box_pack_end() per
+         * giustificare gli oggetti a destra. Per prima cosa creiamo una
 	 * nuova scatola come prima. */
 	box2 = make_box (FALSE, 0, FALSE, FALSE, 0);
-	/* creiamo l'etichetta che sar&agrave; aggiunta alla fine. */
+	/* creiamo l'etichetta che sara' aggiunta alla fine. */
 	label = gtk_label_new ("end");
-	/* impacchettiamola usando gtk_box_pack_end(), cos&igrave; che viene inserita
+	/* impacchettiamola usando gtk_box_pack_end(), cosa' che viene inserita
 	 * sul lato destro della hbox creata nella chiamata a the make_box(). */
 	gtk_box_pack_end (GTK_BOX (box2), label, FALSE, FALSE, 0);
 	/* mostriamo l'etichetta. */
@@ -1081,10 +1133,10 @@ main (int argc, char *argv[])
 	/* un separatore per il fondo */
 	separator = gtk_hseparator_new ();
 	/* Questo assegna esplicitamente al separatore l'ampiezza di 400 pixel
-	 * e l'altezza di 5 pixel. Ci&ograve; fa s&igrave; che la hbox che abbiamo creato sia
+	 * e l'altezza di 5 pixel. Cio' fa si' che la hbox che abbiamo creato sia
 	 * anche essa larga 400 pixel, e che l'etichetta finale sia separata dalle
 	 * altre etichette nella hbox. In caso contrario, tutti gli oggetti nella
-	 * hbox sarebbero impacchettati il pi&ugrave; vicino possibile. */
+	 * hbox sarebbero impacchettati il piu' vicino possibile. */
 	gtk_widget_set_usize (separator, 400, 5);
 	/* impacchetta il separatore nella vbox (box1) creata vicino all'inizio 
 	 * di main() */
@@ -1103,7 +1155,7 @@ main (int argc, char *argv[])
      * ci&ograve; mander&agrave; alla finestra il segnale "destroy", che verr&agrave; catturato 
      * dal nostro gestore di segnali che abbiamo definito in precedenza. */
     gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			       GTK_SIGNAL_FUNC (gtk_widget_destroy),
+			       GTK_SIGNAL_FUNC (gtk_main_quit),
 			       GTK_OBJECT (window));
     /* impacchetta il bottone in quitbox.
      * Gli ultimi tre argomenti di gtk_box_pack_start sono: expand, fill, padding. */
@@ -1133,7 +1185,7 @@ main (int argc, char *argv[])
 }
 </verb></tscreen>
 
-<p>
+<!-- ----------------------------------------------------------------- -->
 <sect1>Impacchettamento con uso di Tabelle
 <p>
 Diamo ora un'occhiata ad un altro modo di impacchettare - le Tabelle.
@@ -1272,21 +1324,128 @@ void gtk_table_set_col_spacings (GtkTable  *table,
 Notate che con queste chiamate,  all'ultima riga e all'ultima colonna
 non viene assegnata alcuna spaziatura.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Esempio di Impacchettamento con Tabelle
+ <p>
+In questo esempio creiamo una finestra avente tre bottoni disposti
+in una tabella 2x2. I primi due bottoni li mettiamo nella riga superiore.
+Un terzo bottone, quit, lo mettiamo nella riga inferioe, in modo da
+comprendere entrambe le colonne. Ci&ograve; significa che dovremmo
+avere qualcosa di questo tipo:
 <p>
-Per il momento, si prega di fare riferimento all'esempio di tabella in
-testgtk.c distribuito con i sorgenti di gtk.
+<? <CENTER> >
+<?
+<IMG SRC="gtk_tut_table.gif" VSPACE="15" HSPACE="10" 
+ALT="Table Packing Example Image" WIDTH="180" HEIGHT="120">
+>
+<? </CENTER> >
+
+Ecco il codice sorgente:
+ 
+<tscreen><verb>
+/* table.c */
+#include <gtk/gtk.h>
+
+/* la nostra funzione di ritorno.
+ * i dati passati a questa funzione vengono stampati su stdout */
+void callback (GtkWidget *widget, gpointer *data)
+{
+    g_print ("Hello again - %s was pressed\n", (char *) data);
+}
+
+/* questa funzione fa uscire dal programma */
+void delete_event (GtkWidget *widget, gpointer *data)
+{
+    gtk_main_quit ();
+}
+
+int main (int argc, char *argv[])
+{
+    GtkWidget *window;
+    GtkWidget *button;
+    GtkWidget *table;
+
+    gtk_init (&amp;argc, &amp;argv);
+
+    /* creiamo una nova finestra */
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+    /* predisponiamo il titolo per la finestra */
+    gtk_window_set_title (GTK_WINDOW (window), "Table");
+
+    /* creiamo un gestore per delete_event che esca immediatamente
+     * da GTK. */
+    gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+                        GTK_SIGNAL_FUNC (delete_event), NULL);
+
+    /* regoliamo la larghezza del bordo della finestra. */
+    gtk_container_border_width (GTK_CONTAINER (window), 20);
+
+    /* creiamo una tabella 2x2 */
+    table = gtk_table_new (2, 2, TRUE);
+
+    /* mettiamo la tabella nella finesta principale */
+    gtk_container_add (GTK_CONTAINER (window), table);
+
+    /*creiamo il primo bottone */
+    button = gtk_button_new_with_label ("button 1");
+    /* quando viene premuto il bottone, chiamiamo la funzione di ritorno
+     * con un puntatore a "button 1"come argomento */
+    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+              GTK_SIGNAL_FUNC (callback), (gpointer) "button 1");
 
 
+    /* inseriamo il bottone 1 nel quadrante in alto a sinistra della tabella */
+    gtk_table_attach_defaults (GTK_TABLE(table), button, 0, 1, 0, 1);
+
+    gtk_widget_show (button);
+
+    /* creiamo il secondo bottone */
+
+    button = gtk_button_new_with_label ("button 2");
+
+    /* quando si preme il bottone, chiamamo la funzione di ritorno
+     * con un puntatore a "button 2"come argomento */
+    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+              GTK_SIGNAL_FUNC (callback), (gpointer) "button 2");
+    /* inseriamo il secondo bottone nel quadrate in alto a destra della tbella */
+    gtk_table_attach_defaults (GTK_TABLE(table), button, 1, 2, 0, 1);
+
+    gtk_widget_show (button);
+
+    /* creiamo il botone "Quit" */
+    button = gtk_button_new_with_label ("Quit");
+
+    /* quando viene premuto questo bottone, chiamiamo la funzione "delete_event"
+     * e si esce dal programma */
+    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                        GTK_SIGNAL_FUNC (delete_event), NULL);
+
+    /* inseriamo il pulsante quit nelle due casele in basso della tabella */
+    gtk_table_attach_defaults (GTK_TABLE(table), button, 0, 2, 1, 2);
+
+    gtk_widget_show (button);
+
+    gtk_widget_show (table);
+    gtk_widget_show (window);
+
+    gtk_main ();
+
+    return 0;
+}
+</verb></tscreen>
+
+<!-- ***************************************************************** -->
 <sect>Panoramica sui Widget
-<p>
+<!-- ***************************************************************** -->
+
 <p>
 La procedura generale di creazione di un widget in GTK prevede i seguenti passi:
 <enum>
 <item> gtk_*_new - una delle varie funzioni che servono per greare un nuovo widget.
 In questa sezione le vedremo tutte in dettaglio.
 
-<item> Connettere tutti i segnali che si vogliono usare alle funzione gestione appropriate.
+<item> Connettere tutti i segnali che si vogliono usare alle funzione gestione appfropriate.
 
 <item> Assegnare gli attributi all'oggetto.
 
@@ -1306,7 +1465,7 @@ formano. I figli di un oggetto grafico (anche una finestra &egrave; un oggetto g
 vengono infatti mostrati finch&eacute; la finestra stessa non viene mostrata usando la
 funzione gtk_widget_show().
 
-
+<!-- ----------------------------------------------------------------- -->
 <sect1> Casting
 <p>
 Noterete andando avanti che GTK usa un sistema di casting di tipo. Questa operazione
@@ -1352,89 +1511,96 @@ ma raccomando di dare un'occhiata ai file header di GTK. Pu&ograve; essere una c
 educativa. Infatti, non &egrave; difficile imparare come funziona un oggetto solo guardando
 le dichiarazioni delle funzioni.
 
-<p>
+<!-- ----------------------------------------------------------------- -->
 <sect1>Gerarchia degli Oggetti Grafici
 <p>
 Ecco, per vostro riferimento, la gerarchia delle classi usata per implementare gli
 oggetti grafici.
 
-<tscreen><verb>
-    GtkObject
-    +-- GtkData
-    |	\-- GtkAdjustment
-    |
-    \-- GtkWidget
-	+-- GtkContainer
-	|   +-- GtkBin
-	|   |	+-- GtkAlignment
-	|   |	+-- GtkFrame
-	|   |	|   *-- GtkAspectFrame
-	|   |	|
-	|   |	+-- GtkItem
-	|   |	|   +-- GtkListItem
-	|   |	|   +-- GtkMenuItem
-	|   |	|   |	+-- GtkCheckMenuItem
-	|   |	|   |	    *-- GtkRadioMenuItem
-	|   |	|   |
-	|   |	|   *-- GtkTreeItem
-	|   |	|
-	|   |	+-- GtkViewport
-	|   |	\-- GtkWindow
-	|   |	    +-- GtkDialog
-	|   |	    \-- GtkFileSelection
-	|   |
-	|   +-- GtkBox
-	|   |	+-- GtkHBox
-	|   |	\-- GtkVBox
-	|   |	    +-- GtkColorSelection
-	|   |	    \-- GtkCurve
-	|   |
-	|   +-- GtkButton
-	|   |	+-- GtkOptionMenu
-	|   |	\-- GtkToggleButton
-	|   |	    \-- GtkCheckButton
-	|   |		\-- GtkRadioButton
-	|   |
-	|   +-- GtkList
-	|   +-- GtkMenuShell
-	|   |	+-- GtkMenu
-	|   |	\-- GtkMenuBar
-	|   |
-	|   +-- GtkNotebook
-	|   +-- GtkScrolledWindow
-	|   +-- GtkTable
-	|   \-- GtkTree
-	|
-	+-- GtkDrawingArea
-	+-- GtkEntry
-	+-- GtkMisc
-	|   +-- GtkArrow
-	|   +-- GtkImage
-	|   +-- GtkLabel
-	|   \-- GtkPixmap
-	|
-	+-- GtkPreview
-	+-- GtkProgressBar
-	+-- GtkRange
-	|   +-- GtkScale
-	|   |	+-- GtkHScale
-	|   |	\-- GtkVScale
-	|   |
-	|   \-- GtkScrollbar
-	|	+-- GtkHScrollbar
-	|	\-- GtkVScrollbar
-	|
-	+-- GtkRuler
-	|   +-- GtkHRuler
-	|   \-- GtkVRuler
-	|
-	\-- GtkSeparator
-	    +-- GtkHSeparator
-	    \-- GtkVSeparator
-
+ <tscreen><verb>
+  GtkObject
+   +GtkData
+   | +GtkAdjustment
+   | `GtkTooltips
+   `GtkWidget
+     +GtkContainer
+     | +GtkBin
+     | | +GtkAlignment
+     | | +GtkEventBox
+     | | +GtkFrame
+     | | | `GtkAspectFrame
+     | | +GtkHandleBox
+     | | +GtkItem
+     | | | +GtkListItem
+     | | | +GtkMenuItem
+     | | | | `GtkCheckMenuItem
+     | | | |   `GtkRadioMenuItem
+     | | | `GtkTreeItem
+     | | +GtkViewport
+     | | `GtkWindow
+     | |   +GtkColorSelectionDialog
+     | |   +GtkDialog
+     | |   | `GtkInputDialog
+     | |   `GtkFileSelection
+     | +GtkBox
+     | | +GtkButtonBox
+     | | | +GtkHButtonBox
+     | | | `GtkVButtonBox
+     | | +GtkHBox
+     | | | +GtkCombo
+     | | | `GtkStatusbar
+     | | `GtkVBox
+     | |   +GtkColorSelection
+     | |   `GtkGammaCurve
+     | +GtkButton
+     | | +GtkOptionMenu
+     | | `GtkToggleButton
+     | |   `GtkCheckButton
+     | |     `GtkRadioButton
+     | +GtkCList
+     | +GtkFixed
+     | +GtkList
+     | +GtkMenuShell
+     | | +GtkMenuBar
+     | | `GtkMenu
+     | +GtkNotebook
+     | +GtkPaned
+     | | +GtkHPaned
+     | | `GtkVPaned
+     | +GtkScrolledWindow
+     | +GtkTable
+     | +GtkToolbar
+     | `GtkTree
+     +GtkDrawingArea
+     | `GtkCurve
+     +GtkEditable
+     | +GtkEntry
+     | | `GtkSpinButton
+     | `GtkText
+     +GtkMisc
+     | +GtkArrow
+     | +GtkImage
+     | +GtkLabel
+     | | `GtkTipsQuery
+     | `GtkPixmap
+     +GtkPreview
+     +GtkProgressBar
+     +GtkRange
+     | +GtkScale
+     | | +GtkHScale
+     | | `GtkVScale
+     | `GtkScrollbar
+     |   +GtkHScrollbar
+     |   `GtkVScrollbar
+     +GtkRuler
+     | +GtkHRuler
+     | `GtkVRuler
+     `GtkSeparator
+       +GtkHSeparator
+       `GtkVSeparator
 </verb></tscreen>
-<p>
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Oggetti senza Finestre
 <p>
 Gli oggetti seguenti non hanno una finestra associata. Se volete catturare 
@@ -1449,16 +1615,12 @@ GtkBox
 GtkImage
 GtkItem
 GtkLabel
-GtkPaned
 GtkPixmap
 GtkScrolledWindow
 GtkSeparator
 GtkTable
-GtkViewport
 GtkAspectFrame
 GtkFrame
-GtkVPaned
-GtkHPaned
 GtkVBox
 GtkHBox
 GtkVSeparator
@@ -1470,8 +1632,11 @@ gli oggetti, creando qualche semplice funzione per mostrarli. Un'altra
 buona sorgente &egrave; il programma testgtk.c che viene fornito con GTK. Potete
 trovarlo in gtk/testgtk.c.
 
+<!-- ***************************************************************** -->
 <sect>Il Widget Bottone (Button)
-<p>
+<!-- ***************************************************************** -->
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>Bottoni Normali
 <p>
 Ormai abbiamo visto tutto quello che c'&egrave; da vedere riguardo all'oggetto
@@ -1488,6 +1653,7 @@ un'immagine ed un'etichetta su di s&egrave;. Ho separato il codice usato per
 creare la scatola in modo che lo possiate usare nei vostri programmi.
 
 <tscreen><verb>
+/* buttons.c */
 #include <gtk/gtk.h>
 
 
@@ -1557,9 +1723,12 @@ int main (int argc, char *argv[])
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			GTK_SIGNAL_FUNC (gtk_exit), NULL);
 
+    gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+			GTK_SIGNAL_FUNC (gtk_exit), NULL);
 
     /* assegnamo lo spessore del bordo della finestra */
     gtk_container_border_width (GTK_CONTAINER (window), 10);
+    gtk_widget_realize(window);
 
     /* creiamo un nuovo bottone */
     button = gtk_button_new ();
@@ -1592,6 +1761,7 @@ int main (int argc, char *argv[])
 La funzione xpm_label_box pu&ograve; essere usata per impacchettare delle xpm
 e delle etichette su qualsiasi oggetto che pu&ograve; essere un contenitore.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1> Bottoni a Commutazione (Toggle Buttons)
 <p>
 I bottoni a commutazione sono molto simili ai bottoni normali, tranne che per il
@@ -1631,11 +1801,11 @@ void toggle_button_callback (GtkWidget *widget, gpointer   data)
      if (GTK_TOGGLE_BUTTON (widget)->active) 
      {
         /* Se il programma si &egrave; arrivato a questo punto, il bottone
-         * a commutazione &egrave; sollevato */
+         * a commutazione &egrave; premuto */
     
     } else {
     
-        /* il bottone &egrave; abbassato */
+        /* il bottone &egrave; sollevato */
      }
  }
  </verb></tscreen>
@@ -1681,6 +1851,7 @@ void       gtk_toggle_button_toggled (GtkToggleButton *toggle_button);
 <p>
 Questa funzione semplicemente commuta il bottone, ed emette il segnale ``toggled''.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1> Bottoni di Controllo (Check Buttons)
 <p>
 I bottoni di controllo ereditano molte propriet&agrave; e funzioni dal bottone a commutazione,
@@ -1703,6 +1874,7 @@ a fianco di esso.
 Per controllare lo stato del check button si opera in modo identico al bottone
 a commutazione.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1> Radio-Bottoni (Radio Buttons)
 <p>
 I radio-bottoni sono simili ai bottoni di controllo, tranne che per il
@@ -1729,10 +1901,9 @@ GSList* gtk_radio_button_group (GtkRadioButton *radio_button);
 </verb></tscreen>
 
 <p>
-A questo punto potete passare questo gruppo ad ogni chiamata successiva a
-gtk_radio_button_new o new_with_label. E' anche una buona idea specificare
-esplicitamente  quale dei bottoni dovr&agrave; essere quello premuto per difetto,
-usando:
+La cosa importante da ricordare &egrave; che gtk_radio_button_group va chiamata ogni volta che si aggiunge un nuovo bottone al gruppo, con il preceente bottone passato come argomento. Il risultato viene poi passato nella chiamata a gtk_radio_button_new o a gtk_radio_button_new_with_label. Ci&ograve; permette di creare una catena di bottoni. L'esempio pi&ugrave; sotto dovrebbe chiarire questo punto.
+
+E' poi una buona idea stabiire quale dev'essere il bottone premuto per difetto, usando:
 
 <tscreen><verb>
 void gtk_toggle_button_set_state (GtkToggleButton *toggle_button,
@@ -1743,12 +1914,100 @@ Questa funzione &egrave; descritta nella sezione sui bottoni a commutazione, e f
 nello stesso identico modo.
 
 <p>
-[Inserir&ograve; un esempio di come usare questi oggetti, penso che sarebbe molto
-utile]
+Nel seguente esempio creiamo un gruppo di tre radio-bottoni.
+ 
+<tscreen><verb>
+/* radiobuttons.c */
+
+#include <gtk/gtk.h>
+#include <glib.h>
+ 
+void close_application( GtkWidget *widget, gpointer *data ) {
+  gtk_main_quit();
+}
+
+main(int argc,char *argv[])
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *box1;
+  GtkWidget *box2;
+  GtkWidget *button;
+  GtkWidget *separator;
+  GSList *group;
+  
+  gtk_init(&amp;argc,&amp;argv);          
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  
+  gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+		      GTK_SIGNAL_FUNC(close_application),
+		      NULL);
+
+  gtk_window_set_title (GTK_WINDOW (window), "radio buttons");
+  gtk_container_border_width (GTK_CONTAINER (window), 0);
+
+  box1 = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (window), box1);
+  gtk_widget_show (box1);
+
+  box2 = gtk_vbox_new (FALSE, 10);
+  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+  gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
+  gtk_widget_show (box2);
+
+  button = gtk_radio_button_new_with_label (NULL, "button1");
+  gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+  gtk_widget_show (button);
+
+  group = gtk_radio_button_group (GTK_RADIO_BUTTON (button));
+  button = gtk_radio_button_new_with_label(group, "button2");
+  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (button), TRUE);
+  gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+  gtk_widget_show (button);
+
+  group = gtk_radio_button_group (GTK_RADIO_BUTTON (button));
+  button = gtk_radio_button_new_with_label(group, "button3");
+  gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+  gtk_widget_show (button);
+
+  separator = gtk_hseparator_new ();
+  gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
+  gtk_widget_show (separator);
+
+  box2 = gtk_vbox_new (FALSE, 10);
+  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+  gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
+  gtk_widget_show (box2);
+
+  button = gtk_button_new_with_label ("close");
+  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			     GTK_SIGNAL_FUNC(close_application),
+			     GTK_OBJECT (window));
+  gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_grab_default (button);
+  gtk_widget_show (button);
+  gtk_widget_show (window);
+     
+  gtk_main();
+  return(0);
+}
+</verb></tscreen>
+
+La cosa pu&ograve; essere accorciata un po' usando la seguente sintassi,
+che elimina la necessit&agrave; di una variabile per contenere la lista di bottoni:
+
+<tscreen><verb>
+     button2 = gtk_radio_button_new_with_label(
+                 gtk_radio_button_group (GTK_RADIO_BUTTON (button1)),
+                 "button2");
+</verb></tscreen>
 
 
+<!-- ***************************************************************** -->
 <sect> Alcuni Widget
-<p>
+<!-- ***************************************************************** -->
+
+<!-- ----------------------------------------------------------------- -->
 <sect1> L'Etichetta (Label)
 <p>
 Le etichette sono molto usate in GTK, e sono relativamente semplici. Le
@@ -1788,7 +2047,7 @@ void gtk_label_get (GtkLabel  *label,
 in cui il primo argomento &egrave; l'etichetta che avete creato, e il secondo
 &egrave; il valore di ritorno per la stringa.
 
-
+<!-- ----------------------------------------------------------------- -->
 <sect1>Il Widget Suggerimenti (Tooltips)
 <p>
 I suggerimenti sono piccole stringhe di testo che spuntano quando lasciate il
@@ -1882,12 +2141,14 @@ di come si specifichino i colori).
 <p>
 E questo &egrave; tutto riguardo alle funzioni relative ai suggerimenti. Pi&ugrave;
 di quanto avreste mai voluto sapere :)
-
+ 
+ 
+<!-- ----------------------------------------------------------------- -->
 <sect1> La Barra di Avanzamento (Progress Bar)
 <p>
 Le barre di avanzamento sono usate per mostrare lo stato di una operazione. Come potete
 vedere nel frammento di codice qui sotto, sono piuttosto semplici da usare.
-Ma prima vediamo come cominciare con la chiamata per creare una nuova progrss
+Ma prima vediamo come cominciare con la chiamata per creare una nuova progress
 bar.
 
 <tscreen><verb>
@@ -1914,6 +2175,8 @@ dei timeout. Questo codice vi mostra anche come riinizializzare le
 barre di avanzamento.
 
 <tscreen><verb>
+/* progressbar.c */
+
 #include <gtk/gtk.h>
 
 static int ptimer = 0;
@@ -2036,6 +2299,7 @@ Infine, questo codice aggiorna la barra di avanzamento con il valore di pvalue.
 
 Questo &egrave; tutto quanto c'&egrave; da sapere sulle barre di avanzamento, divertitevi.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1> Dialoghi
 <p>
 
@@ -2098,8 +2362,8 @@ bottone ``OK'' e un'etichetta nella vbox che chieda qualcosa all'utente o
 segnali un errore. Poi potreste collegare un diverso segnale a ciascun
 bottone ed eseguire l'operazione che l'utente che viene scelta dall'utente.
 
-
-<sect1> Pixmaps
+<!-- ----------------------------------------------------------------- -->
+<sect1> Le Pixmap
 <p>
 
 Le Pixmap sono strutture dati che contengono immagini. Queste immagini
@@ -2228,7 +2492,7 @@ managing.  ``val'' &egrave; la pixmap che &egrave; stata creata usando il GDK.
 Segue un esempio di uso di una pixmap in un bottone.
 
 <tscreen><verb>
-
+/* pixmap.c */
 #include <gtk/gtk.h>
 
 
@@ -2261,14 +2525,10 @@ void close_application( GtkWidget *widget, gpointer *data ) {
     gtk_main_quit();
 }
 
-
 /* invocata se il bottone &egrave; clickato. Stampa semplicemente un messaggio */
 void button_clicked( GtkWidget *widget, gpointer *data ) {
     printf( "button clicked\n" );
 }
-
-
-
 
 int main( int argc, char *argv[] )
 {
@@ -2343,10 +2603,8 @@ multicolore, possiamo evitare di sovrascriverla con un bordo rettangolare
 attorno all'icona. Il prossimo esempio mostra una carriola sul desktop.
 
 <tscreen><verb>
-
+/* wheelbarrow.c */
 #include <gtk/gtk.h>
-
-
 
 /* XPM */
 static char * WheelbarrowFull_xpm[] = {
@@ -2470,7 +2728,6 @@ void close_application( GtkWidget *widget, gpointer *data ) {
     gtk_main_quit();
 }
 
-
 int main (int argc, char *argv[])
 {
     /* il tipo di dato per i widget &egrave; GtkWidget */
@@ -2531,9 +2788,818 @@ gtk_signal_connect( GTK_OBJECT(window), "button_press_event",
                     GTK_SIGNAL_FUNC(close_application), NULL );
 </verb></tscreen>
 
+<!-- ----------------------------------------------------------------- -->
+<sect1>Righelli
+<p>
+I widget righello vengono usati per indicare la posizione del pontatore del
+mouse in una certa finestra. Una finestra pu&ograve; cio&eacute; avere un
+righello orizzontale che si estende per tutta la sua ampiezza e un righello verticale
+che ne comprende l'altezza. Un piccolo triangolo sui rghelli indica la posizione
+esatta del puntatore relativamente ai righelli.
 
+I righelli devono essere in primo luogo creati. I righlli orizzontali e verticali vengono
+creati usando
+
+<tscreen><verb>
+GtkWidget *gtk_hruler_new(void);    /* horizontal ruler */
+GtkWidget *gtk_vruler_new(void);    /* vertical ruler   */
+</verb></tscreen>
+
+Una volta che che si &egrave; creato il righello, si pu&ograve; l'unit&agrave; di
+misura. Le unit&agrave; di misura possono essere GTK_PIXELS,
+GTK_INCHES oppure GTK_CENTIMETERS. Ci&ograve; viene stabilito usando
+
+<tscreen><verb>
+void gtk_ruler_set_metric( GtkRuler        *ruler,
+                           GtkMetricType   metric );
+</verb></tscreen>
+
+La misura predefinita &egrave;  GTK_PIXELS.
+
+<tscreen><verb>
+gtk_ruler_set_metric( GTK_RULER(ruler), GTK_PIXELS );
+</verb></tscreen>
+
+Altre caratteritiche importanti di un righello sono il modo in cui vengono segnate
+le tacche delle unit&agrave; di misura e dove viene posto inizialmente l'indicatore
+di posizione. Questi vengono stabiliti usando
+
+<tscreen><verb>
+void  gtk_ruler_set_range  (GtkRuler       *ruler,
+                            gfloat          lower,
+                            gfloat          upper,
+                            gfloat          position,
+                            gfloat          max_size);
+</verb></tscreen>
+
+Gli argomenti lower e upper definiscono l'estensione del righello, e
+max_size rappresenta il numero massimo che verr&agrave; mostrato.
+Position definisce l posizione iniziale dell'indicatore del puntatore 
+all'interno del righello.
+
+Quindi, un righello che pu&ograve; stare su una finestra di 800 pixel sar&agrave;:
+
+<tscreen><verb>
+gtk_ruler_set_range( GTK_RULER(vruler), 0, 800, 0, 800);
+</verb></tscreen>
+
+Sul righello saranno presenti dei segni da 0 a 800, con un numero ogni 100 pixel.
+Se avessimo invece voluto che il righello fosse andato da 7 a 16, avremmo scritto:
+
+<tscreen><verb>
+gtk_ruler_set_range( GTK_RULER(vruler), 7, 16, 0, 20);
+</verb></tscreen>
+
+L'indicatore sul righello &egrave; un piccolo segno triangolare che indica
+la posizione del puntatore rispetto al righello. Se il righello viene usato
+per seguire il movimento del mouse, il segnale di motion_notify_event
+dovrebbe venir connesso al metodo motion_notify_event del righello.
+Per seguire tutti i movimenti del mouse all'interno dell'area di una finestra,
+useremmo:
+
+<tscreen><verb>
+#define EVENT_METHOD(i, x) GTK_WIDGET_CLASS(GTK_OBJECT(i)->klass)->x
+
+gtk_signal_connect_object( GTK_OBJECT(area), "motion_notify_event",
+         (GtkSignalFunc)EVENT_METHOD(ruler, motion_notify_event),
+         GTK_OBJECT(ruler) );
+</verb></tscreen>
+
+L'esempio seguente crea un'area di disegno con un reghello orizzontale nella
+parte superiore e un righello verticale nella parte sinistra. Le dimensioni
+di questa area di disegno sono di 600 e 400 pixel risettivamente per la larghezza
+e per l'altezza. Il righello orizzontale va da 7 a 13 con una tacca ogni 100 pixel,
+mentre quello verticale va da 0 a 400, ancora con una tacca ogni 100 pixel.
+La sistemazione dell'area di disegno e dei righelli viene fatta usando una tabella.
+
+<tscreen><verb>
+/* rulers.c */
+
+#include <gtk/gtk.h>
+
+#define EVENT_METHOD(i, x) GTK_WIDGET_CLASS(GTK_OBJECT(i)->klass)->x
+
+#define XSIZE  600
+#define YSIZE  400
+
+/* il controllo raggiunge questa routine quando si preme il bottone close 
+ */
+void close_application( GtkWidget *widget, gpointer *data ) {
+    gtk_main_quit();
+}
+
+/* la routine principale
+ */
+int main( int argc, char *argv[] ) {
+    GtkWidget *window, *table, *area, *hrule, *vrule;
+
+    /* inizializziamo gtk e creiamo la finestra principale */
+    gtk_init( &amp;argc, &amp;argv );
+
+    window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+    gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+            GTK_SIGNAL_FUNC( close_application ), NULL);
+    gtk_container_border_width (GTK_CONTAINER (window), 10);
+
+    /* creiamo una tabella in cui mettere righelli e area di disegno */
+    table = gtk_table_new( 3, 2, FALSE );
+    gtk_container_add( GTK_CONTAINER(window), table );
+
+    area = gtk_drawing_area_new();
+    gtk_drawing_area_size( (GtkDrawingArea *)area, XSIZE, YSIZE );
+    gtk_table_attach( GTK_TABLE(table), area, 1, 2, 1, 2,
+                      GTK_EXPAND|GTK_FILL, GTK_FILL, 0, 0 );
+    gtk_widget_set_events( area, GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK );
+
+    /* Il righello orizzontale va nella parte superiore. Quando il mouse si muove
+     * nell'area di disegno, si passa un motion_notify_event al gestore appropriato
+     * per il righello. */
+
+    hrule = gtk_hruler_new();
+    gtk_ruler_set_metric( GTK_RULER(hrule), GTK_PIXELS );
+    gtk_ruler_set_range( GTK_RULER(hrule), 7, 13, 0, 20 );
+    gtk_signal_connect_object( GTK_OBJECT(area), "motion_notify_event",
+                               (GtkSignalFunc)EVENT_METHOD(hrule, motion_notify_event),
+                               GTK_OBJECT(hrule) );
+    /*  GTK_WIDGET_CLASS(GTK_OBJECT(hrule)->klass)->motion_notify_event, */
+    gtk_table_attach( GTK_TABLE(table), hrule, 1, 2, 0, 1,
+                      GTK_EXPAND|GTK_SHRINK|GTK_FILL, GTK_FILL, 0, 0 );
+    
+    /* Il righello verticale va nella parte sinistra.  Quando il mouse si muove
+     * nell'area di disegno, si passa un motion_notify_event al gestore appropriato
+     * per il righello. */
+
+    vrule = gtk_vruler_new();
+    gtk_ruler_set_metric( GTK_RULER(vrule), GTK_PIXELS );
+    gtk_ruler_set_range( GTK_RULER(vrule), 0, YSIZE, 10, YSIZE );
+    gtk_signal_connect_object( GTK_OBJECT(area), "motion_notify_event",
+                               (GtkSignalFunc)
+                                  GTK_WIDGET_CLASS(GTK_OBJECT(vrule)->klass)-motion_notify_event,
+                               GTK_OBJECT(vrule) );
+    gtk_table_attach( GTK_TABLE(table), vrule, 0, 1, 1, 2,
+                      GTK_FILL, GTK_EXPAND|GTK_SHRINK|GTK_FILL, 0, 0 );
+
+    /* ora mostriamo tutto quanto */
+    gtk_widget_show( area );
+    gtk_widget_show( hrule );
+    gtk_widget_show( vrule );
+    gtk_widget_show( table );
+    gtk_widget_show( window );
+    gtk_main();
+
+    return 0;
+}
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Barre di Stato (Statusbar)
+<p>
+Le barre di stato sono dei semplici widget usati per mostrare messaggi di test.
+Hanno la caratteristica di mantenere uno stack dei messggi che vi vengono
+mostrati, cosicche&eacute; rimuovendo il messaggio corrente fa s&igrave; che
+torni ad essere mostrato il messaggio precedente..
+
+Per permettere a parti diverse di una stessa applicazione di usare la stessa barra di
+stato per mostrare messaggi, questo widget emette degli 'Identificatori di Contesto'
+che vengono usati per identificare i diversi 'utenti'. Quello che viene mostrato
+ &egrave; sempre il messaggio che si trova in cima allo stack, a prescindere in
+quale contesto si trovi. I messaggi vengono immagazzinati secondo l'ordine
+LIFO, e non secondo l'ordine stabilito dal contesto.
+
+Una barra di stato viene creata con una chiamata a:
+<tscreen><verb>
+GtkWidget* gtk_statusbar_new (void);
+</verb></tscreen>
+
+Per richiedere un nuovo identificatore di contesto, si usa una chiamata alla seguente
+funzione con una breve descrizione testuale:
+<tscreen><verb>
+guint gtk_statusbar_get_context_id (GtkStatusbar *statusbar,
+                                    const gchar  *context_description);
+</verb></tscreen>
+
+Le seguenti sono tre funzioni che possono operare sulle barre di stato:
+<tscreen><verb>
+guint       gtk_statusbar_push           (GtkStatusbar *statusbar,
+                                         guint          context_id,
+                                         gchar         *text);
+
+void       gtk_statusbar_pop            (GtkStatusbar *statusbar)
+                                         guint         context_id);
+void       gtk_statusbar_remove         (GtkStatusbar *statusbar,
+                                         guint         context_id,
+                                         guint         message_id); 
+</verb></tscreen>
+
+La prima, gtk_statusbar_push, viene usata per aggiungere un nuovo messaggio
+alla barra di stato. Questa restituisce un identificatore di messaggio, che pu&ograve;
+essere passato successivamente alla funzione gtk_statusbar_remove per rimuovere
+dallo stack il messggio con identificatore di messaggio e di contesto dati.
+
+La funzione gtk_statusbar_pop rimuove il messaggio che si trova in cima allo stack
+avente un dato identificatore di contesto.
+
+Nel seguente esempio si crea una barra di stato e due bottoni, uno per mettere
+elementi sulla barra di stato e l'altro per riuovere l'ultimo elemento..
+
+<tscreen><verb>
+/* statusbar.c */
+
+#include <gtk/gtk.h>
+#include <glib.h>
+
+GtkWidget *status_bar;
+ 
+void push_item (GtkWidget *widget, gpointer *data)
+{
+  static int count = 1;
+  char buff[20];
+
+  g_snprintf(buff, 20, "Item %d", count++);
+  gtk_statusbar_push( GTK_STATUSBAR(status_bar), (guint) &amp;data, buff);
+
+  return;
+}
+
+void pop_item (GtkWidget *widget, gpointer *data)
+{
+  gtk_statusbar_pop( GTK_STATUSBAR(status_bar), (guint) &amp;data );
+  return;
+}
+
+int main (int argc, char *argv[])
+{
+
+    GtkWidget *window;
+    GtkWidget *vbox;
+    GtkWidget *button;
+
+    int context_id;
+
+    gtk_init (&amp;argc, &amp;argv);
+
+    /* creazione di una nuova finestra */
+    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_widget_set_usize( GTK_WIDGET (window), 200, 100);
+    gtk_window_set_title(GTK_WINDOW (window), "GTK Statusbar Example");
+    gtk_signal_connect(GTK_OBJECT (window), "delete_event",
+                       (GtkSignalFunc) gtk_exit, NULL);
+ 
+    vbox = gtk_vbox_new(FALSE, 1);
+    gtk_container_add(GTK_CONTAINER(window), vbox);
+    gtk_widget_show(vbox);
+          
+    status_bar = gtk_statusbar_new();      
+    gtk_box_pack_start (GTK_BOX (vbox), status_bar, TRUE, TRUE, 0);
+    gtk_widget_show (status_bar);
+
+    context_id = gtk_statusbar_get_context_id( GTK_STATUSBAR(status_bar), "Statusbar example");
+
+    button = gtk_button_new_with_label("push item");
+    gtk_signal_connect(GTK_OBJECT(button), "clicked",
+        GTK_SIGNAL_FUNC (push_item), &amp;context_id);
+    gtk_box_pack_start(GTK_BOX(vbox), button, TRUE, TRUE, 2);
+    gtk_widget_show(button);              
+
+    button = gtk_button_new_with_label("pop last item");
+    gtk_signal_connect(GTK_OBJECT(button), "clicked",
+        GTK_SIGNAL_FUNC (pop_item), &amp;context_id);
+    gtk_box_pack_start(GTK_BOX(vbox), button, TRUE, TRUE, 2);
+    gtk_widget_show(button);              
+
+    /* la finestra va sempre mostrata come ultimo passo, in modo che venga
+     * sullo schermo tutta in una volta. */
+    gtk_widget_show(window);
+
+    gtk_main ();
+
+    return 0;
+}
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Inserimento di testo
+<p>
+Questo widget permette diinserire e mostrare del testo in una casella contenente una
+sola linea. Il testo pu&ograve; essere assegnato con chiamate di funzione che
+permettono a nuovo testo di sostituire, seguire o precedere il contenuto corrente
+del widget di inserimento testo.
+
+Per la creazione di un inserimento di testo, sono disponibili due funzioni:
+<tscreen><verb>
+GtkWidget* gtk_entry_new (void);
+
+GtkWidget* gtk_entry_new_with_max_length (guint16 max);
+</verb></tscreen>
+
+La prima crea solamente un inserimento di testo, mentre la seconda lo crea
+imponendo un limite alla lunghezza del testo inseribile..
+
+Per cambiaere il testo che si trova correntemente nel widget, sono disponibili diverse
+funzioni.
+<tscreen><verb>
+void gtk_entry_set_text       (GtkEntry    *entry,
+                               const gchar *text);
+void gtk_entry_append_text    (GtkEntry    *entry,
+                               const gchar *text);
+void gtk_entry_prepend_text   (GtkEntry    *entry,
+                               const gchar *text);
+</verb></tscreen>
+
+La funzione gtk_entry_set_text assegna il contenuto del widget di inserimento,
+sostituendo il contenuto corrente. Le funzioni gtk_entry_append_text e gtk_entry_prepend_text
+permettono di antemporre o posporre un testo al testo corrente..
+
+La prossima funzione permette di stabilire il punto di inserimento.
+<tscreen><verb>
+void gtk_entry_set_position   (GtkEntry *entry,
+                               gint     position);
+</verb></tscreen>
+
+Usando la seguente funzione, &egrave; possibile estrarre il contenuto di un widget di inserimento.
+Ci&ograve; pu&ograve; essere utile nelle funzioni di ritorno come descritto pi&ugrave; sotto.
+<tscreen><verb>
+gchar* gtk_entry_get_text (GtkEntry *entry);
+</verb></tscreen>
+
+Se non si vuole che qualcuno possa cambiare il contenuto di una entry sovrascrivendola,
+ne possiamo cambiare lo stato di "editabilit&agrave;"..
+<tscreen><verb>
+void gtk_entry_set_editable (GtkEntry *entry,
+                             gboolean editable);
+</verb></tscreen>
+
+Questa funzine ci permette di far passare un widget di inserimento dallo sato di editabile a
+quello di non editabile passando con l'argomento editable i valori TRUE o FALSE.
+
+Se stiamo usando l'entry in un punto in cui non vogliamo che il testo sia visibile, per
+esempio quando si digita una password, possiamo usare la seguente funzione, che
+accetta un parametro booleano..
+<tscreen><verb>
+void gtk_entry_set_visibility (GtkEntry *entry,
+                               gboolean visible);
+</verb></tscreen>
+
+Si pu&ograve; stabilire che una parte del testo  risulti selezionata usado la seguente funzione.
+Si user&agrave; di solito questa possibilit&agrave; dopo aver inserito nel widget un
+qualche valore predefinito, in modo che per l'utente sia semplice sostituirlo. 
+
+<tscreen><verb>
+void gtk_entry_select_region (GtkEntry *entry,
+                              gint     start,
+                              gint     end);
+</verb></tscreen>
+
+Se vogliamo accorgerci del momento in cui l'utente ha inserito del testo, possiamo connettere
+il segnale <tt/activate/ o <tt/changed/. <tt/activate/ viene reso attivo quando
+l'utente preme il tasto Enter mentre si trova nel widget. <tt/changed/ viene invece emesso ogni volta che
+il testo cambia, per esempio ogni volta che viene inserito o rimosso un carattere.
+
+Il seguente codice mostra un esempio di utilizzo del widget di inserimento.
+.
+<tscreen><verb>
+/* entry.c */
+
+#include <gtk/gtk.h>
+
+void enter_callback(GtkWidget *widget, GtkWidget *entry)
+{
+  gchar *entry_text;
+  entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
+  printf("Entry contents: %s\n", entry_text);
+}
+
+void entry_toggle_editable (GtkWidget *checkbutton,
+				   GtkWidget *entry)
+{
+  gtk_entry_set_editable(GTK_ENTRY(entry),
+			 GTK_TOGGLE_BUTTON(checkbutton)->active);
+}
+
+void entry_toggle_visibility (GtkWidget *checkbutton,
+				   GtkWidget *entry)
+{
+  gtk_entry_set_visibility(GTK_ENTRY(entry),
+			 GTK_TOGGLE_BUTTON(checkbutton)->active);
+}
+
+int main (int argc, char *argv[])
+{
+
+    GtkWidget *window;
+    GtkWidget *vbox, *hbox;
+    GtkWidget *entry;
+    GtkWidget *button;
+    GtkWidget *check;
+
+    gtk_init (&amp;argc, &amp;argv);
+
+    /* creiamo una nuova finestra */
+    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_widget_set_usize( GTK_WIDGET (window), 200, 100);
+    gtk_window_set_title(GTK_WINDOW (window), "GTK Entry");
+    gtk_signal_connect(GTK_OBJECT (window), "delete_event",
+                       (GtkSignalFunc) gtk_exit, NULL);
+
+    vbox = gtk_vbox_new (FALSE, 0);
+    gtk_container_add (GTK_CONTAINER (window), vbox);
+    gtk_widget_show (vbox);
+
+    entry = gtk_entry_new_with_max_length (50);
+    gtk_signal_connect(GTK_OBJECT(entry), "activate",
+		       GTK_SIGNAL_FUNC(enter_callback),
+		       entry);
+    gtk_entry_set_text (GTK_ENTRY (entry), "hello");
+    gtk_entry_append_text (GTK_ENTRY (entry), " world");
+    gtk_entry_select_region (GTK_ENTRY (entry),
+			     0, GTK_ENTRY(entry)->text_length);
+    gtk_box_pack_start (GTK_BOX (vbox), entry, TRUE, TRUE, 0);
+    gtk_widget_show (entry);
+
+    hbox = gtk_hbox_new (FALSE, 0);
+    gtk_container_add (GTK_CONTAINER (vbox), hbox);
+    gtk_widget_show (hbox);
+                                  
+    check = gtk_check_button_new_with_label("Editable");
+    gtk_box_pack_start (GTK_BOX (hbox), check, TRUE, TRUE, 0);
+    gtk_signal_connect (GTK_OBJECT(check), "toggled",
+			GTK_SIGNAL_FUNC(entry_toggle_editable), entry);
+    gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(check), TRUE);
+    gtk_widget_show (check);
+    
+    check = gtk_check_button_new_with_label("Visible");
+    gtk_box_pack_start (GTK_BOX (hbox), check, TRUE, TRUE, 0);
+    gtk_signal_connect (GTK_OBJECT(check), "toggled",
+			GTK_SIGNAL_FUNC(entry_toggle_visibility), entry);
+    gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(check), TRUE);
+    gtk_widget_show (check);
+                                   
+    button = gtk_button_new_with_label ("Close");
+    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+			       GTK_SIGNAL_FUNC(gtk_exit),
+			       GTK_OBJECT (window));
+    gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_widget_grab_default (button);
+    gtk_widget_show (button);
+    
+    gtk_widget_show(window);
+
+    gtk_main();
+    return(0);
+}
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1> Selettori di Colore
+<P>
+Il widget selettore di colore &egrave; chiaramente un widget che permtte di
+scegliere interattivamente dei colori. Questo widget composto permette all'utente
+di selezionare un colore agendo su terne RGB (Red, Green, Blue) e HSV
+(Hue, Saturation, Value). Questo lo si pu&ograve; fare o agendo sui singoli valori
+tramite degli slider o inserendoli da tastiera, oppure selezionando direttamente il
+colore da un cerchio (valori H e S) e da una barra (valore V). 
+Opzionalmente, &egrave; possibile anche stabilire il grado di trasparenza del
+colore.
+Il widget di selezione di colore emette per ora un solo segnale, "color_changed", che
+viene generato ogni volta che il colore corrente nel widget cambia, sia quando
+&egrave; l'utente a cambiarlo, sia quando viene modificato esplicitamente tramite
+una chiamata a gtk_color_selection_set_color().
+
+Diamo ora un'occhiata a cosa ha da offrirci il widget di selezione di colore. 
+Il widget &egrave; disponibile in due versioni, gtk_color_selection e
+gtk_color_selection_dialog:
+
+<tscreen><verb>
+GtkWidget *gtk_color_selection_new(void);
+</verb></tscreen>
+	
+E' probabile che non userete questo costruttore direttamente. Infatti esso crea un
+widget GtkColorSelection orfano a cui dovrete assegnare un genitore voi stessi.
+Il widget GtkColorSelection  eredita dal widget GtkVBox. 
+
+<tscreen><verb> 
+GtkWidget *gtk_color_selection_dialog_new(const gchar *title);
+</verb></tscreen>
+
+Questo &egrave; il pi&ugrave; comune fra i costruttori di selettori di colore. Esso
+crea un GtkColorSelectionDialog, che eredita da GtkDialog. Esso consiste di un
+GtkFrame che contiene un widget GtkColorSelection, un GtkHSeparator e un
+GtkHBox con tre bottoni, "Ok", "Cancel" e "Help". Si arriva a questi bottoni
+accedendo ai widget "ok_button", "cancel_button" e "help_button" nella 
+struttura GtkColorSelectionDialog (cio&egrave;  (GTK_COLOR_SELECTION_DIALOG(colorseldialog)->ok_button).
+
+<tscreen><verb>
+void gtk_color_selection_set_update_policy(GtkColorSelection *colorsel, 
+                                           GtkUpdateType policy);
+</verb></tscreen>
+
+Questa funzione stabilisce la politica di aggiornamento. Quella predefinita &egrave;
+GTK_UPDATE_CONTINOUS, che significa che il colore viene aggiornato
+continuamente mano a mano che l'utente trascina gli slider o preme e trascina il
+mouse nel cerchio della hue-saturation o nella relativa barra. Se si hanno problemi
+di prestazioni, si pu&ograve; decidere di usare la politica
+GTK_UPDATE_DISCONTINOUS
+o GTK_UPDATE_DELAYED.
+
+<tscreen><verb>
+void gtk_color_selection_set_opacity(GtkColorSelection *colorsel,
+                                     gint use_opacity);
+</verb></tscreen>
+
+Il widget di selezione di colore permette anche di variare l'opacit&agrave; di un
+colore (conosciuta anche come canale alfa). Questa caratteristica &egrave; 
+normalmente disabilitata. Chiamare la precedente funzione, con use_opacity uguale
+a TRUE abilita la manipolazione dell'opacit&agrave;. Analogamente, mettendo
+use_opacity uguale a FALSE la disabiliter&agrave;.
+
+<tscreen><verb>
+void gtk_color_selection_set_color(GtkColorSelection *colorsel,
+                                   gdouble *color);
+</verb></tscreen>
+
+Si pu&ograve; assegnare esplicitamente un colore chiamando questa funzione
+con un puntatore ad un vettore di colori (gdouble). La lunghezza del vettore
+dipende dall'attivazione o meno del controllo dell'opacit&agrave;. La posizione 0
+contiene la componente rossa, la 1 &grave; il verde, la 2 il blu e la 3 contiene
+l'opacit&agrave; (se questa &grave; attivata, come si &egrave; detto per
+gtk_color_selection_set_opacity()). Tutti i valori sono compresi fra 0.0 e 1.0.
+
+<tscreen><verb>
+void gtk_color_selection_get_color(GtkColorSelection *colorsel,
+                                   gdouble *color);
+</verb></tscreen>
+
+Questa funzione viene usata per ottenere il colore corrente, tipicamente quando
+si &egrave; ricevuto il segnale "color_changed". Color &egrave; un puntatore al
+vettore di colori da riempire. Vedi la descrizione di questo vettore nella funzione
+gtk_color_selection_set_color().
+
+<!-- C'e' bisogno di una sezione sul DnD - TRG
+
+Il Drag and Drop
+----------------
+
+Le aree con l'esempio del colore (sotto il cerchio H-S) supportano il drag and drop.
+Il tipo del drag and drop &egrave; "application/x-color". I dati del messaggio sono
+costituiti da un vettore di 4 valori gdouble (o 5 nel caso di attivazione
+dell'opacit&agrave;), in cui il valore alla posizione 0 &grave; pu&ograve;
+essere 0.0 (opacit&agrave; attivata) o 1.0 (disattivata) seguito dal rosso,
+dal verde e dal blu alle posizioni 1,2 e 3. Nel caso di opacit&agrave; attiva,
+il suo valore &egrave; passato alla posizione 4.
+-->
+
+Ecco un semplice esempio che mostra l'uso di  GtkColorSelectionDialog.
+Il programma mostra una finestra che contiene un'area di disegno. Cliccandoci
+sopra, si apre un dialogo di selezione di colore, e se si modifica il colore
+nella finestra di dialogo verr&agrave; cambiato anche il colore dello sfondo.
+
+<tscreen><verb>
+#include <glib.h>
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
+
+GtkWidget *colorseldlg = NULL;
+GtkWidget *drawingarea = NULL;
+
+/* gestore del cambiamento del colore */
+
+void color_changed_cb (GtkWidget *widget, GtkColorSelection *colorsel)
+{
+  gdouble color[3];
+  GdkColor gdk_color;
+  GdkColormap *colormap;
+
+  /* recupera la colormap dell'area di disegno */
+
+  colormap = gdk_window_get_colormap (drawingarea->window);
+
+  /* recupera il colore corrente */
+
+  gtk_color_selection_get_color (colorsel,color);
+
+  /* adattamento ad un intero unsigned di 16 bit (0..65535)
+   * e inseriscili nella struttura GdkColor */
+
+  gdk_color.red = (guint16)(color[0]*65535.0);
+  gdk_color.green = (guint16)(color[1]*65535.0);
+  gdk_color.blue = (guint16)(color[2]*65535.0);
+
+  /* Alloca il colore */
+
+  gdk_color_alloc (colormap, &amp;gdk_color);
+
+  /* assegna il colore di sfondo della finestra */
+
+  gdk_window_set_background (drawingarea->window, &amp;gdk_color);
+
+  /* pulisce la finestra */
+
+  gdk_window_clear (drawingarea->window);
+}
+
+/* gestore per l'area di disegno */
+
+gint area_event (GtkWidget *widget, GdkEvent *event, gpointer client_data)
+{
+  gint handled = FALSE;
+  GtkWidget *colorsel;
+
+  /* controlliamo se abbiamo ricevuto un evento di pressione di pulsante */
+
+  if (event->type == GDK_BUTTON_PRESS &amp;&amp; colorseldlg == NULL)
+    {
+      /* Si , c'e' l'evento e ancora non c'e' alcun colorseldlg! */
+
+      handled = TRUE;
+
+      /* Creiamo una finestra di dialogo per la selezione del colore */
+
+      colorseldlg = gtk_color_selection_dialog_new("Select background color");
+
+      /* Otteniamo il widget GtkColorSelection */
+
+      colorsel = GTK_COLOR_SELECTION_DIALOG(colorseldlg)->colorsel;
+
+      /* Facciamo la connessione al segnale "color_changed",
+       * ed assegnamo i dati-utente al widget di selezione di colore */
+
+      gtk_signal_connect(GTK_OBJECT(colorsel), "color_changed",
+        (GtkSignalFunc)color_changed_cb, (gpointer)colorsel);
+
+      /* Mostriamo il dialogo */
+
+      gtk_widget_show(colorseldlg);
+    }
+
+  return handled;
+}
+
+/* Chiusura ed uscita dal getore */
+
+void destroy_window (GtkWidget *widget, gpointer client_data)
+{
+  gtk_main_quit ();
+}
+
+/* Main */
+
+gint main (gint argc, gchar *argv[])
+{
+  GtkWidget *window;
+
+  /* Inizialliziamo il toolkit, remuoviamo gli argomenti sulla linea di
+   * comando legati a gtk */
+
+  gtk_init (&amp;argc,&amp;argv);
+
+  /* creiamo la finestra base, con titolo e politiche */
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW(window), "Color selection test");
+  gtk_window_set_policy (GTK_WINDOW(window), TRUE, TRUE, TRUE);
+
+  /* colleghiamo gli eventi "delete" e "destroy" per poter uscire */
+
+  gtk_signal_connect (GTK_OBJECT(window), "delete_event",
+    (GtkSignalFunc)destroy_window, (gpointer)window);
+
+  gtk_signal_connect (GTK_OBJECT(window), "destroy",
+    (GtkSignalFunc)destroy_window, (gpointer)window);
+  
+  /* crea un'area di disegna, stabilisce le dimensioni e raccogli 
+   * gli eventi */
+
+  drawingarea = gtk_drawing_area_new ();
+
+  gtk_drawing_area_size (GTK_DRAWING_AREA(drawingarea), 200, 200);
+
+  gtk_widget_set_events (drawingarea, GDK_BUTTON_PRESS_MASK);
+
+  gtk_signal_connect (GTK_OBJECT(drawingarea), "event", 
+    (GtkSignalFunc)area_event, (gpointer)drawingarea);
+  
+  /* aggiungi l'area di disegno alla finestra e mostrale entrambe */
+
+  gtk_container_add (GTK_CONTAINER(window), drawingarea);
+
+  gtk_widget_show (drawingarea);
+  gtk_widget_show (window);
+  
+  /* entra nel ciclo principale di gtk (che non cede mai il controllo */
+
+  gtk_main ();
+
+  /* soddisfa i compilatori brontoloni */
+
+  return 0;
+}
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1> Selezione di File (File Selections)
+
+<p>
+Il widget Selezione di File &egrave; un modo rapido e semplice per mostrare una
+finestra di dialogo `File'. Questa si presenta completa di bottoni Ok,
+Cancel e Help, un buon modo per tagliare i tempi di programmazione.
+
+Per creare una nuova finestra di selezione file usate:
+
+<tscreen><verb>
+GtkWidget* gtk_file_selection_new (gchar *title);
+</verb></tscreen>
+
+Per assegnare il nome del file, ad esempio per predisporre una certa
+directory o per dare un certo nome di file per difetto, usate la seguente
+funzione:
+
+<tscreen><verb>
+void gtk_file_selection_set_filename (GtkFileSelection *filesel, gchar *filename);
+</verb></tscreen>
+
+Per recuperare il testo che l'utente ha inserito o che ha selezionato con
+il mouse, si usa la funzione:
+
+<tscreen><verb>
+gchar* gtk_file_selection_get_filename (GtkFileSelection *filesel);
+</verb></tscreen>
+
+Ci sono anche dei puntatori ai widget che sono contenuti all'interno
+del widget di selezione file. Si tratta di:
+
+<itemize>
+<item>dir_list
+<item>file_list
+<item>selection_entry
+<item>selection_text
+<item>main_vbox
+<item>ok_button
+<item>cancel_button
+<item>help_button
+</itemize>
+
+Molto probabilmente potreste voler usare i puntatori a ok_button,
+cancel_button e help_button per segnalarne l'uso.
+
+Ecco un esempio rubato da testgtk.c, nodificato per essere eseguito da
+solo. Come potrete vedere, non c'&egrave; molto pi&ugrave; che la creazione di un
+widget di selezione file. In questo esempio, il bottone Help non fa nulla
+mentre &egrave; mostrato allo schermo, dal momento che non c'&egrave; alcun segnale
+collegato con esso. 
+
+<tscreen><verb>
+/* filesel.c */
+
+#include <gtk/gtk.h>
+
+/* Recupera il nome di file selezionato e stampalo a console */
+void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
+{
+    g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+}
+
+void destroy (GtkWidget *widget, gpointer *data)
+{
+    gtk_main_quit ();
+}
+
+int main (int argc, char *argv[])
+{
+    GtkWidget *filew;
+    
+    gtk_init (&amp;argc, &amp;argv);
+    
+    /* Crea un nuovo widget di selezione file */
+    filew = gtk_file_selection_new ("File selection");
+    
+    gtk_signal_connect (GTK_OBJECT (filew), "destroy",
+			(GtkSignalFunc) destroy, &amp;filew);
+    /* Connette ok_button alla funzione file_ok_sel */
+    gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (filew)->ok_button),
+			"clicked", (GtkSignalFunc) file_ok_sel, filew );
+    
+    /* Connette cancel_button alla funzione di distruzione del widget */
+    gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (filew)->cancel_button),
+			       "clicked", (GtkSignalFunc) gtk_widget_destroy,
+			       GTK_OBJECT (filew));
+    
+    /* Preassegnamo un nome di file, come se stessimo dando un valore per difetto in 
+    dialogo di tipo `` salva con nome '' */
+    gtk_file_selection_set_filename (GTK_FILE_SELECTION(filew), 
+				     "penguin.png");
+    
+    gtk_widget_show(filew);
+    gtk_main ();
+    return 0;
+}
+</verb></tscreen>
+
+<!-- ***************************************************************** -->
 <sect> Widget Contenitore
+<!-- ***************************************************************** -->
 
+<!-- ----------------------------------------------------------------- -->
 <sect1> Il widget Blocco Note (Notebook)
 <p>
 Il widget Blocco note &egrave; un insieme di pagine sovrapposte l'una con l'altra, 
@@ -2650,6 +3716,7 @@ intestazioni, aggiungere/rimuovere le intestazioni e i bordi, rimuovere una
 pagina, cambiare la pagina avanti e indietro e uscire dal programma.
 
 <tscreen><verb>
+/* notebook.c */
 
 #include <gtk/gtk.h>
 
@@ -2776,7 +3843,7 @@ int main (int argc, char *argv[])
     /* Crea un set di bottoni */
     button = gtk_button_new_with_label ("close");
     gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			       GTK_SIGNAL_FUNC (destroy), NULL);
+			       GTK_SIGNAL_FUNC (delete), NULL);
     gtk_table_attach_defaults(GTK_TABLE(table), button, 0,1,1,2);
     gtk_widget_show(button);
     
@@ -2825,6 +3892,7 @@ int main (int argc, char *argv[])
 <p>
 E speriamo che questo vi aiuti a creare i Blocco Note per le vostre applicazioni GTK!
 
+<!-- ----------------------------------------------------------------- -->
 <sect1> Finestre Scorribili (Scrolled Windows)
 <p>
 Le Finestre Scorribili sono usate per creare areee scorribili in una vera finestra.
@@ -2842,10 +3910,11 @@ Il primo argomento &egrave; l'aggiustamento (di quanto scendere ogni
 volta) orizzontale e il secondo &egrave; quello verticale.  A questi si assegna
 quasi sempre il valore NULL.
 
+
 <tscreen><verb>
-void gtk_scrolled_window_set_policy      (GtkScrolledWindow *scrolled_window,
-                                          GtkPolicyType      hscrollbar_policy,
-					  GtkPolicyType      vscrollbar_policy);
+void gtk_scrolled_window_set_policy (GtkScrolledWindow *scrolled_window,
+                                     GtkPolicyType      hscrollbar_policy,
+		     GtkPolicyType      vscrollbar_policy);
 </verb></tscreen>
 
 Questa funzione stabilisce la politica da usare nella barra di scorrimento. Il primo
@@ -2857,6 +3926,8 @@ GTK_POLICY_AUTOMATIC decide automaticamente se la barra di scorrimento deve esse
 visualizzata, mentre con GTK_POLICY_ALWAYS la barra verr&agrave; sempre mostrata.
 
 <tscreen><verb>
+/* scrolledwin.c */
+
 #include <gtk/gtk.h>
 
 void destroy(GtkWidget *widget, gpointer *data)
@@ -2885,7 +3956,8 @@ int main (int argc, char *argv[])
 			(GtkSignalFunc) destroy, NULL);
     gtk_window_set_title (GTK_WINDOW (window), "dialog");
     gtk_container_border_width (GTK_CONTAINER (window), 0);
-    
+    gtk_widget_set_usize(window, 300, 300);    
+
     /* crea una nuova finestra scorribile. */
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);
     
@@ -2915,13 +3987,13 @@ int main (int argc, char *argv[])
     /* questo semplicemente crea una griglia di bottoni nella tabelle per
        dimostrare il comportamento della finestra scorribile */
     for (i = 0; i < 10; i++)
-	    for (j = 0; j < 10; j++) {
-		sprintf (buffer, "button (%d,%d)\n", i, j);
-		button = gtk_toggle_button_new_with_label (buffer);
-		gtk_table_attach_defaults (GTK_TABLE (table), button,
-					   i, i+1, j, j+1);
-		gtk_widget_show (button);
-	    }
+       for (j = 0; j < 10; j++) {
+          sprintf (buffer, "button (%d,%d)\n", i, j);
+	  button = gtk_toggle_button_new_with_label (buffer);
+	  gtk_table_attach_defaults (GTK_TABLE (table), button,
+	                             i, i+1, j, j+1);
+          gtk_widget_show (button);
+       }
     
     /* Aggiunge un bottone "close" alla fine della finestra */
     button = gtk_button_new_with_label ("close");
@@ -2952,8 +4024,328 @@ barra di scorrimento. Potete anche usare la funzione gtk_widget_set_usize() per
 assegnare la dimensione predefinita della finestra o di un widget.
 <!-- (ndMichel: questa chiamata non funziona per i bottoni!) -->
 
+<!-- ----------------------------------------------------------------- -->   
+<sect1> Il widget "Finestra Frazionata" (Paned Window)
+<p>
+Le finestre frazionate tornano utili quando si vuole dividere un'area in due parti,
 
+le cui dimensioni relative siano sotto il controllo dell'utente. Fra le due zone
+
+viene disgnato un separatore dotato di una maniglia che l'utente pu&ograve;
+
+trascinare per cambiare la proporzione fra le aree. La divisione pu&ograve;
+
+essere sia di tipo orizzontale (HPaned) che verticale (VPaned).
+
+   
+Per creare una finestra frazionata, si chiama una delle seguenti:
+   
+<tscreen><verb>
+GtkWidget* gtk_hpaned_new (void)
+GtkWidget* gtk_vpaned_new (void)
+</verb></tscreen>
+
+
+Dopo aver creato il widget della finestra frazionata, si devono aggiungere dei
+
+widget figli alle due parti. Per farlo, si usano le funzioni:
+
+<tscreen><verb>
+void gtk_paned_add1 (GtkPaned *paned, GtkWidget *child)
+void gtk_paned_add2 (GtkPaned *paned, GtkWidget *child)
+</verb></tscreen>
+
+<tt/gtk_paned_add1()/ inserisce il widget figlo alla parte di sinistra o superiore
+
+della finestra. <tt/gtk_paned_add2()/ lo inserisce invece nella parte destra o
+
+inferore.
+
+   
+Per fare un esempio, creeremo una parte dell'interfaccia utente di un immaginario
+
+programma di email. Si divide una finestra in due verticalmente, <!-- sicuro ? -->
+
+con la parte superiore in cui si mette la lista dei messaggi, e quella inferiore con
+
+il testo. La maggior parte del programma &egrave; piuttosto banale. Un paio
+
+di punti da notare sono: Non si pu&ograve; scrivere su un widget di testo prima
+
+che esso venga "realizato". Questa operazione pu&ograve; essere fatta con una
+
+chiamata alla funzione <tt/gtk_widget_realize()/, ma per far vedere un metodo
+
+alternativo, connetteremo una funzione al segnale "realize" per aggiungere il testo.
+
+Inoltre, dobbiamo aggiungere l'opzione <tt/GTK_SHRINK/ ad alcuni degli
+
+elementi della tabella che contiene la finestra del testo e le barre di scorrimento, in
+
+modo che quando si riducono le dimensioni della parte inferiore, le parti coinvolte
+
+risultino proporzionalmente rimpicciolite invece di venir spinte fuori dal fondo
+
+della finestra.
+
+
+<tscreen><verb>
+/* paned.c */
+
+#include <gtk/gtk.h>
+   
+/*Creiamo la lista dei "messaggi" */
+GtkWidget *
+create_list (void)
+{
+
+    GtkWidget *scrolled_window;
+    GtkWidget *list;
+    GtkWidget *list_item;
+   
+    int i;
+    char buffer[16];
+   
+    /* Creiamo una nuova finestra scorribile con barre di scorrimento solo
+
+     * se necessarie */
+    scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+				    GTK_POLICY_AUTOMATIC, 
+				    GTK_POLICY_AUTOMATIC);
+   
+    /* Creiamo una nuova lista e la mettiamo nella finestra scorribile */
+    list = gtk_list_new ();
+    gtk_container_add (GTK_CONTAINER(scrolled_window), list);
+    gtk_widget_show (list);
+   
+    /* Aggiungiamo un po' di messaggi alla fiestra */
+    for (i=0; i<10; i++) {
+
+    	sprintf(buffer,"Message #%d",i);
+    	list_item = gtk_list_item_new_with_label (buffer);
+    	gtk_container_add (GTK_CONTAINER(list), list_item);
+    	gtk_widget_show (list_item);
+
+    }
+   
+    return scrolled_window;
+}
+   
+/* Aggiungiamo un po' di testo al nostro widget di testo - questa e' una
+
+funzione di callback che viene invocata quando la finestra viene "realizzata".
+
+Potremmo anche forzare la finestra ad essere realizzata con la funzione
+
+ gtk_widget_realize, ma dovrebbe prima essere parte di una certa cerarchia */
+
+
+void
+realize_text (GtkWidget *text, gpointer data)
+{
+    gtk_text_freeze (GTK_TEXT (text));
+    gtk_text_insert (GTK_TEXT (text), NULL, &amp;text->style->black, NULL,
+    "From: pathfinder@nasa.gov\n"
+    "To: mom@nasa.gov\n"
+    "Subject: Made it!\n"
+    "\n"
+    "We just got in this morning. The weather has been\n"
+    "great - clear but cold, and there are lots of fun sights.\n"
+    "Sojourner says hi. See you soon.\n"
+    " -Path\n", -1);
+   
+    gtk_text_thaw (GTK_TEXT (text));
+}
+   
+/* Creiamo un'area di testo scorribile che mostra un "messaggio" */
+GtkWidget *
+create_text (void)
+{
+    GtkWidget *table;
+    GtkWidget *text;
+    GtkWidget *hscrollbar;
+    GtkWidget *vscrollbar;
+   
+    /*Creiamo una tabella in cui mettere il widget di testo e le barre di scorrimento */
+    table = gtk_table_new (2, 2, FALSE);
+   
+    /* Mettiamo un widget di testo nella parte superiore destra. Notate l'uso di
+     * GTK_SHRINK nella direzione y */
+    text = gtk_text_new (NULL, NULL);
+    gtk_table_attach (GTK_TABLE (table), text, 0, 1, 0, 1,
+		      GTK_FILL | GTK_EXPAND,
+		      GTK_FILL | GTK_EXPAND | GTK_SHRINK, 0, 0);
+    gtk_widget_show (text);
+   
+    /* Mettiamo una HScrollbar nella parte in basso a sinistra */
+    hscrollbar = gtk_hscrollbar_new (GTK_TEXT (text)->hadj);
+    gtk_table_attach (GTK_TABLE (table), hscrollbar, 0, 1, 1, 2,
+		      GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
+    gtk_widget_show (hscrollbar);
+   
+    /* Aggiungiamo una VScrollbar in alto a sinistra */
+    vscrollbar = gtk_vscrollbar_new (GTK_TEXT (text)->vadj);
+    gtk_table_attach (GTK_TABLE (table), vscrollbar, 1, 2, 0, 1,
+		      GTK_FILL, GTK_EXPAND | GTK_FILL | GTK_SHRINK, 0, 0);
+    gtk_widget_show (vscrollbar);
+   
+    /* Aggiungiamo un gestore per mettere un messaggio nel wiget di testo
+
+     * viene reaizzato */
+    gtk_signal_connect (GTK_OBJECT (text), "realize",
+			GTK_SIGNAL_FUNC (realize_text), NULL);
+   
+    return table;
+}
+   
+int
+main (int argc, char *argv[])
+{
+    GtkWidget *window;
+    GtkWidget *vpaned;
+    GtkWidget *list;
+    GtkWidget *text;
+
+    gtk_init (&amp;argc, &amp;argv);
+   
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title (GTK_WINDOW (window), "Paned Windows");
+    gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+    gtk_container_border_width (GTK_CONTAINER (window), 10);
+   
+    /* Creiamo un widget frazionato verticalmente e aggiungiamolo alla
+
+     * finestra di piu' alto livello */
+   
+    vpaned = gtk_vpaned_new ();
+    gtk_container_add (GTK_CONTAINER(window), vpaned);
+    gtk_widget_show (vpaned);
+   
+    /* Creiamo il contenuto delle de parti della finestra */
+   
+    list = create_list ();
+    gtk_paned_add1 (GTK_PANED(vpaned), list);
+    gtk_widget_show (list);
+   
+    text = create_text ();
+    gtk_paned_add2 (GTK_PANED(vpaned), text);
+    gtk_widget_show (text);
+    gtk_widget_show (window);
+    gtk_main ();
+    return 0;
+}
+
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->   
+<sect1> Cornici ad aspetto fisso (Aspect Frames)
+<p>
+Il widget aspect frame &grave; analogo al widget "cornice", tranne che per il
+
+fatto che &egrave; in grado di forzare le finestre figlie ad avere un certo aspetto,
+
+cio&egrave; un certo rapporto fra altezza e larghezza, aggiungendo se necessario
+
+dello spazio in pi&ugrave;. Ci&ograve; pu&ograve; tornare utile se per esempio
+
+si vuole fare l'anteprima di un'immagine: le dimensioni dell'anteprima devono
+
+variare se l'utente ridimensiona la finestra, ma le proporzioni devono essere
+
+sempre quelle dell'immagine originale.
+   
+Per creare una nuova cornice ad aspetto fisso, si usa:
+   
+<tscreen><verb>
+GtkWidget* gtk_aspect_frame_new	 (const gchar *label,
+   					gfloat xalign,
+   					gfloat yalign,
+   					gfloat ratio,
+   					gint obey_child)
+</verb></tscreen>
+   
+<tt/xalign/ e <tt/yalign/ specificano l'allineamento come si fa con il widget di
+
+allineamento. Se <tt/obey_child/ &egrave; TRUE, le proporzioni di una finestra
+
+figlia saranno le stesse delle misure ideali richieste. In caso contrario, vengono
+
+stabilite da <tt/ratio/.
+
+
+Per cambiare le opzioni di una finestra esistente, si pu&ograve; usare:   
+To change the options of an existing aspect frame, you can use:
+   
+<tscreen><verb>
+void gtk_aspect_frame_set (GtkAspectFrame *aspect_frame,
+			   gfloat xalign,
+			   gfloat yalign,
+			   gfloat ratio,
+			   gint obey_child)
+</verb></tscreen>
+   
+<p>
+Per fare un esempio, il seguente programma usa un Aspect Frame per rendere
+
+disponibile un'area disegnabile che sia sempre di proporzioni 2:1, in quasiasi
+
+modo l'utente ridimensioni la finestra di base.
+
+   
+<tscreen><verb>
+/* aspectframe.c */
+
+#include <gtk/gtk.h>
+   
+int
+main (int argc, char *argv[])
+{
+    GtkWidget *window;
+    GtkWidget *aspect_frame;
+    GtkWidget *drawing_area;
+    gtk_init (&amp;argc, &amp;argv);
+   
+    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
+    gtk_signal_connect (GTK_OBJECT (window), "destroy",
+    GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+    gtk_container_border_width (GTK_CONTAINER (window), 10);
+   
+    /* Creiamo aspect_frame e lo mettiamo nella finestra di base */
+   
+    aspect_frame = gtk_aspect_frame_new ("2x1", /* etichetta */
+                                         0.5, /* x del centro */
+                                         0.5, /* y del centro */
+                                         2, /* xsize/ysize = 2 */
+                                         FALSE /* ignora le proporzioni del figlio */);
+   
+    gtk_container_add (GTK_CONTAINER(window), aspect_frame);
+    gtk_widget_show (aspect_frame);
+   
+    /* Aggiungamo un widget figlio alla nostra cornice */
+   
+    drawing_area = gtk_drawing_area_new ();
+   
+    /* Chiediamo una finestra 200x200, anche se l'AspectFrame ce ne dara' una 
+     * di 200x100 perche' forziamo l'aspetto 2:1 */
+    gtk_widget_set_usize (drawing_area, 200, 200);
+    gtk_container_add (GTK_CONTAINER(aspect_frame), drawing_area);
+    gtk_widget_show (drawing_area);
+   
+    gtk_widget_show (window);
+    gtk_main ();
+    return 0;
+}  
+</verb></tscreen>
+                              
+<!-- fin qui -->
+
+
+<!-- ***************************************************************** -->
 <sect> Il Widgets Lista
+<!-- ***************************************************************** -->
 <p>
 Il widget GtkList serve come contenitore verticale per altri widget che
 devono essere di tipo GtkListItem.
@@ -3010,10 +4402,11 @@ selection_mode pu&ograve; assumere uno dei seguenti valori:
 <p>
 Il valore per difetto &egrave;  GTK_SELECTION_MULTIPLE.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1> Segnali
 <p>
 <tscreen><verb>
-void GtkList::selection_changed (GtkList *LIST)
+void selection_changed (GtkList *LIST)
 </verb></tscreen>
 
 Questo segnale verr&agrave; invocato ogni volta che il campo di
@@ -3021,7 +4414,7 @@ selezione di una GtkList &egrave; cambiato. Questo accade quando
 un figlio della GtkList viene selezionato o deselezionato.
 
 <tscreen><verb>
-void GtkList::select_child (GtkList *LIST, GtkWidget *CHILD)
+void select_child (GtkList *LIST, GtkWidget *CHILD)
 </verb></tscreen>
 
 Questo segnale viene invocato quando un fuglio di una GtkList
@@ -3032,7 +4425,7 @@ in altre occasioni, in cui vengono aggiunti o rimossi dei figli
 dalla GtkList.
 
 <tscreen><verb>
-void GtkList::unselect_child (GtkList *LIST, GtkWidget *CHILD)
+void unselect_child (GtkList *LIST, GtkWidget *CHILD)
 </verb></tscreen>
 
 Questo segnale viene invocato quando un figlio della GtkList sta
@@ -3042,6 +4435,7 @@ di pressioni di bottoni, e a volte pu&ograve; venir fatto scattare indirettament
 in altre occasioni, in cui vengono aggiunti o rimossi dei figli
 dalla GtkList.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1> Funzioni
 <p>
 <tscreen><verb>
@@ -3107,27 +4501,27 @@ fra START ed END.
 void gtk_list_select_item (GtkList *LIST, gint ITEM)
 </verb></tscreen>
 
-Invoca il segnale GtkList::select_child per un elemento di lista
+Invoca il segnale select_child per un elemento di lista
 specificato dalla sua posizione corrente all'interno di LIST.
 
 <tscreen><verb>
 void gtk_list_unselect_item (GtkList *LIST, gint ITEM)
 </verb></tscreen>
 
-Invoca il segnale GtkList::unselect_child per un elemento di lista
+Invoca il segnale unselect_child per un elemento di lista
 specificato dalla sua posizione corrente all'interno di LIST.
 
 <tscreen><verb>
 void gtk_list_select_child (GtkList *LIST, GtkWidget *CHILD)
 </verb></tscreen>
 
-Invoca il segnale GtkList::select_child per uno specifico CHILD.
+Invoca il segnale select_child per uno specifico CHILD.
 
 <tscreen><verb>
 void gtk_list_unselect_child (GtkList *LIST, GtkWidget *CHILD)
 </verb></tscreen>
 
-Invoca il segnale GtkList::unselect_child per uno specifico CHILD.
+Invoca il segnale unselect_child per uno specifico CHILD.
 
 <tscreen><verb>
 gint gtk_list_child_position (GtkList *LIST, GtkWidget *CHILD)
@@ -3165,7 +4559,7 @@ gint GTK_IS_LIST (gpointer OBJ)
 Determina se un generico puntatore si riferisce ad un oggetto `GtkList'.
 Per maggiori informazioni vedere Standard Macros::.
 
-
+<!-- ----------------------------------------------------------------- -->
 <sect1> Esempio
 <p>
 Diamo di seguito un programma di esempio che stamper&agrave; i campbiamenti
@@ -3173,9 +4567,7 @@ della selezione di una GtkList, e vi lascia ``imprigionare'' gli elementi
 di una lista selezionandoli con il pulsante destro del mouse:
 
 <tscreen><verb>
-/* compilate questo programma con:
- * $ gcc -I/usr/local/include/ -lgtk -lgdk -lglib -lX11 -lm -Wall main.c
- */
+/* list.c */
 
 /* includiamo i file header di gtk+
  * includiamo stdio.h, ne abbiamo bisogno per printf()
@@ -3462,6 +4854,7 @@ sigh_print_selection    (GtkWidget      *gtklist,
 }
 </verb></tscreen>
 
+<!-- ----------------------------------------------------------------- -->
 <sect1> Il Widget Elemento di Lista (List Item)
 <p>
 Il widget GtkListItem &egrave; progettato allo scopo di essere un contenitore
@@ -3484,12 +4877,14 @@ alla GtkListItem.
 Dal momento che non si &egrave; obbligati a mettere una GtkLabel, si pu&ograve; anche
 aggiungere una GtkVBox  una GtkArrow ecc. alla GtkListItem.
 
+
+<!-- ----------------------------------------------------------------- -->
 <sect1> Segnali
 <p>
 Un GtkListItem non crea alcun nuovo segnale di per se, ma eredita
 i segnali di GtkItem. Per ulteriori informazioni, vedere GtkItem::.
 
-
+<!-- ----------------------------------------------------------------- -->
 <sect1> Funzioni
 <p>
 
@@ -3522,7 +4917,7 @@ void gtk_list_item_select (GtkListItem *LIST_ITEM)
 
 Questa funzione &egrave; essenzialmente un wrapper per una chiamata a
 gtk_item_select (GTK_ITEM (list_item)) che emetter&agrave; il segnale
-GtkItem::select.
+select.
 Vedere GtkItem:: per maggiori informazioni.
 
 <tscreen><verb>
@@ -3531,7 +4926,7 @@ void gtk_list_item_deselect (GtkListItem *LIST_ITEM)
 
 Questa funzione &egrave; essenzialmente un wrapper per una chiamata a
 gtk_item_deselect (GTK_ITEM (list_item)) che emetter&agrave; il segnale
-GtkItem::deselect.
+deselect.
 Vedere GtkItem:: per maggiori informazioni.
 
 <tscreen><verb>
@@ -3554,109 +4949,16 @@ gint GTK_IS_LIST_ITEM (gpointer OBJ)
 
 Determina se un puntatore generico si riferisce ad un oggetto
 `GtkListItem'. Vedere Standard Macros:: per maggiorni informazioni.
- 
+
+<!-- ----------------------------------------------------------------- --> 
 <sect1> Esempio
 <p>
 Come esempio su questo argomento, si veda quello relativo alla GtkList,
 che riguarda anche l'uso del GtkListItem.
 
-<sect> Selezione di File (File Selections)
-<p>
-
-Il widget Selezione di File &egrave; un modo rapido e semplice per mostrare una
-finestra di dialogo `File'. Questa si presenta completa di bottoni Ok,
-Cancel e Help, un buon modo per tagliare i tempi di programmazione.
-
-Per creare una nuova finestra di selezione file usate:
-
-<tscreen><verb>
-GtkWidget* gtk_file_selection_new (gchar *title);
-</verb></tscreen>
-
-Per assegnare il nome del file, ad esempio per predisporre una certa
-directory o per dare un certo nome di file per difetto, usate la seguente
-funzione:
-
-<tscreen><verb>
-void gtk_file_selection_set_filename (GtkFileSelection *filesel, gchar *filename);
-</verb></tscreen>
-
-Per recuperare il testo che l'utente ha inserito o che ha selezionato con
-il mouse, si usa la funzione:
-
-<tscreen><verb>
-gchar* gtk_file_selection_get_filename (GtkFileSelection *filesel);
-</verb></tscreen>
-
-Ci sono anche dei puntatori ai widget che sono contenuti all'interno
-del widget di selezione file. Si tratta di:
-
-<itemize>
-<item>dir_list
-<item>file_list
-<item>selection_entry
-<item>selection_text
-<item>main_vbox
-<item>ok_button
-<item>cancel_button
-<item>help_button
-</itemize>
-
-Molto probabilmente potreste voler usare i puntatori a ok_button,
-cancel_button e help_button per segnalarne l'uso.
-
-Ecco un esempio rubato da testgtk.c, nodificato per essere eseguito da
-solo. Come potrete vedere, non c'&egrave; molto pi&ugrave; che la creazione di un
-widget di selezione file. In questo esempio, il bottone Help non fa nulla
-mentre &egrave; mostrato allo schermo, dal momento che non c'&egrave; alcun segnale
-collegato con esso. 
-
-<tscreen><verb>
-#include <gtk/gtk.h>
-
-/* Recupera il nome di file selezionato e stampalo a console */
-void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
-{
-    g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-}
-
-void destroy (GtkWidget *widget, gpointer *data)
-{
-    gtk_main_quit ();
-}
-
-int main (int argc, char *argv[])
-{
-    GtkWidget *filew;
-    
-    gtk_init (&amp;argc, &amp;argv);
-    
-    /* Crea un nuovo widget di selezione file */
-    filew = gtk_file_selection_new ("File selection");
-    
-    gtk_signal_connect (GTK_OBJECT (filew), "destroy",
-			(GtkSignalFunc) destroy, &amp;filew);
-    /* Connette ok_button alla funzione file_ok_sel */
-    gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (filew)->ok_button),
-			"clicked", (GtkSignalFunc) file_ok_sel, filew );
-    
-    /* Connette cancel_button alla funzione di distruzione del widget */
-    gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (filew)->cancel_button),
-			       "clicked", (GtkSignalFunc) gtk_widget_destroy,
-			       GTK_OBJECT (filew));
-    
-    /* Preassegnamo un nome di file, come se stessimo dando un valore per difetto in 
-    dialogo di tipo `` salva con nome '' */
-    gtk_file_selection_set_filename (GTK_FILE_SELECTION(filew), 
-				     "penguin.png");
-    
-    gtk_widget_show(filew);
-    gtk_main ();
-    return 0;
-}
-</verb></tscreen>
-
+<!-- ***************************************************************** -->
 <sect>Il Widget Men&ugrave; (Menu Widgets)
+<!-- ***************************************************************** -->
 <p>
 Ci sono due modi per creare dei men&ugrave;, quello facile e quello difficile.
 Ognuno &egrave; pi&ugrave; adatto per certe circostanze, ma di solito si pu&ograve; usare il
@@ -3666,22 +4968,38 @@ Quello semplice &egrave; di usare le chiamate di tipo gtk_menu_factory. Anche se
 &egrave; un modo molto pi&ugrave; semplice, ci sono svantaggi e vantaggi per ciascuno
 dei due approcci.
 
-La menufactory &egrave; molto pi&ugrave; semplice da usare e per aggiungere dei nuovi
+La menu_factory &egrave; molto pi&ugrave; semplice da usare e per aggiungere dei nuovi
 men&ugrave;, anche se scriversi un po' di funzioni per creare dei men&ugrave; con il
 metodo manuale pu&ograve; dare risultati molto migliori dal punto di vista 
 dell'usabilit&agrave;. Con la menufactory, non &egrave; possibile mettere immagini o
-segni '/' nei men&ugrave;.
+caratteri '/' nei men&ugrave;.
 <p>
+<!-- ----------------------------------------------------------------- -->
 <sect1>Creazione Manuale di Men&ugrave;
 <p>
 Seguendo la tradizionale arte dell'insegnamento, partiamo dal modo
 difficile. <tt>:)</>
 <p>
-Diamo un'occhiata alle funzioni usate per creare dei men&ugrave;.
-Con questa prima funzione si crea un nuovo men&ugrave;:
+I widget che hanno a che fare con la creazione di una barra di men&ugrave; e di sottomen&ugrave; sono tre:
+<itemize>
+<item>un elemento di men&ugrave;, che &grave; quello che l'utente poi selezioner&agrave;, per esempio 'Salva'
+<item>un men&ugrave;, che fa la parte di contenitore per gli elementi di men&ugrave;, e
+<item>una barra dei men&ugrave;, che &egrave; un contenitore per ciascuno dei men&ugrave;
+</itemize>
+
+
+La cosa viene un po' complicata dal fatto che i widget elemento di men&ugrave; vngono usati per
+
+due scopi diversi. Essi sono sia i widget che vengono impacchettati nei men&ugrave;, che 
+
+quelli che vengono impacchettati nella barra dei men&ugrave; che, quando selezonati, attivano i men&ugrave;.
+
+Diamo un'occhiata alle funzioni usate per creare i men&ugrave; e le barre di men&ugrave;.
+Con questa prima funzione si crea un nuova barra di men&ugrave;:
+
 
 <tscreen><verb>
-GtkWidget *gtk_menu_bar_new()
+GtkWidget *gtk_menu_bar_new(void);
 </verb></tscreen>
 
 Questa funzione crea una nuova barra di men&ugrave;. Per impacchettarla in una
@@ -3694,61 +5012,144 @@ GtkWidget *gtk_menu_new();
 
 Questa funzione restituisce un puntatore ad un nuovo men&ugrave;, non viene mai
 realmente mostrato (con gtk_widget_show), serve solo per contenere gli
-elementi del men&ugrave;. Spero che il tutto risulti pi&ugrave; chiaro quando dare
+elementi del men&ugrave;. Spero che il tutto risulti pi&ugrave; chiaro quando daremo
 un'occhiata all'esempio pi&ugrave; sotto.
 <p>
 Le prossime due chiamate sono usate per creare degli elementi che poi
-vengono impacchettati nel men&ugrave;.
+vengono impacchettati nei men&ugrave; e nelle barre dei men&ugrave;..
 
 <tscreen><verb>
-GtkWidget *gtk_menu_item_new()
+GtkWidget *gtk_menu_item_new();
 </verb></tscreen>
 
 e
 
 <tscreen><verb>
-GtkWidget *gtk_menu_item_new_with_label(const char *label)
+GtkWidget *gtk_menu_item_new_with_label(const char *label);
 </verb></tscreen>
 
-Queste chiamate sono usate per creare i menu che devono essere mostrati.
+Queste chiamate sono usate per creare gli elementi di men&ugrave; che devono poi essere mostrati.
 Ricordate la differenza che esiste fra un ``men&ugrave;'' come quelli creati con
 gtk_menu_new e un ``elemento di men&ugrave;'' (menu item) come quelli creati con
-la funzione creata con gtk_menu_item_new. L'elemento di men&ugrave; sar&agrave; un bottone
-vero e proprio con una azione associata, mentre un men&ugrave; &egrave; solo un contenitore
-che li raccoglie.
+la funzione gtk_menu_item_new. L'elemento di men&ugrave; sar&agrave; un bottone
+vero e proprio con una azione associata, mentre un men&ugrave; &egrave; solo un contenitore che li raccoglie.
+Le funzioni gtk_menu_new_with_label e gtk_menu_new sono esattamente come vi aspettereste che siano dopo
+
+aver conosciuto i bottoni. Una crea un nuovo elemento di men&ugrave; con un'etichetta gi&agrave; impacchettata,
+
+mentre l'altra crea un elemento di men&ugrave; vuoto.
+
+
+Una volta che si &grave; creato un elemento di men&ugrave;, &egrave; necessario piazzarlo su di un men&ugrave;.
+
+Per fare ci&ograve; si usa la funzione gtk_menu_append. Per determinare quando l'utente ha selezionato un elemento, abbiamo bisogno di connettere il segnale <tt/activate/ nel solito modo.
+
+Quindi, se volessimo creare un normale men&ugrave; <tt/File/, con le opzioni <tt/Open/, <tt/Save/ e <tt/Quit/, il codice avrebbe pi&ugrave; o meno il seguente aspetto:
 
 <tscreen><verb>
-gtk_menu_item_append()
+file_menu = gtk_menu_new();    /* Non e' necessario mostrare i menu' */
 
-gtk_menu_item_set_submenu()
+/* Creiamo gli elementi del menu' */
+open_item = gtk_menu_item_new_with_label("Open");
+save_item = gtk_menu_item_new_with_label("Save");
+quit_item = gtk_menu_item_new_with_label("Quit");
+
+/* Aggiungiamoli al menu' */
+gtk_menu_append( GTK_MENU(file_menu), open_item);
+gtk_menu_append( GTK_MENU(file_menu), save_item);
+gtk_menu_append( GTK_MENU(file_menu), quit_item);
+
+
+/* Colleghiamo le funzioni di callback al segnale activate */
+gtk_signal_connect_object( GTK_OBJECT(open_items), "activate",
+		           GTK_SIGNAL_FUNC(menuitem_response), (gpointer) "file.open");
+gtk_signal_connect_object( GTK_OBJECT(save_items), "activate",
+		           GTK_SIGNAL_FUNC(menuitem_response), (gpointer) "file.save");
+
+/* Possiamo collegare l'elemento Quit alla nostra funzione di uscita */
+gtk_signal_connect_object( GTK_OBJECT(quit_items), "activate",
+		           GTK_SIGNAL_FUNC(destroy), (gpointer) "file.quit");
+
+/* Abbiamo bisogno di mostrare gli elementi di menu' */
+gtk_widget_show( open_item );
+gtk_widget_show( save_item );
+gtk_widget_show( quit_item );
+ </verb></tscreen>
+
+
+A questo punto abbiamo il nostro men&ugrave; Adesso abbiamo bisogno di creare una barra dei men&ugrave;
+
+e un elemento di men&ugrave; per <tt/File/, a cui aggiungeremo il nostro men&ugrave;. Il codice &egrave; questo:
+
+
+<tscreen><verb>
+menu_bar = gtk_menu_bar_new();
+gtk_container_add( GTK_CONTAINER(window), menu_bar);
+gtk_widget_show( menu_bar );
+
+file_item = gtk_menu_item_new_with_label("File");
+gtk_widget_show(file_item);
 </verb></tscreen>
 
-Le funzioni gtk_menu_item_new_with_label e gtk_menu_item_new si comportano esattamente come
-vi aspettereste dopo aver visto le funzioni che riguardano i bottoni. La prima
-crea un elemento di men&ugrave; con un'etichetta gi&agrave; applicata, mentre la seconda crea
-un nuovo elemento di men&ugrave; vuoto.
-<p>
-Ecco i passi necessari per creare una barra di men&ugrave; con i relativi men&ugrave; collegati:
+
+Ora dobbiamo associare il men&ugrave; con <tt/file_item/. Lo si pu&ograve; fare con la funzione
+
+<tscreen>
+void gtk_menu_item_set_submenu( GtkMenuItem *menu_item,
+                                GtkWidget *submenu);
+</tscreen>
+
+
+Quindi, il nostro esempio continuerebbe con
+
+<tscreen><verb>
+gtk_menu_item_set_submenu( GTK_MENU_ITEM(file_item), file_menu);
+</verb></tscreen>
+
+
+Ci&ograve; che manca a questo punto &egrave; di collegare il men&ugrave; alla barra, cosa che si pu&ograve; ottenere tramite la funzione
+
+<tscreen>
+void gtk_menu_bar_append( GtkMenuBar *menu_bar, GtkWidget *menu_item);
+</tscreen>
+
+che nel nostro caso &egrave;:
+
+<tscreen><verb>
+gtk_menu_bar_append( menu_bar, file_item );
+</verb></tscreen>
+
+
+Se volessimo il men&ugrave; giustificato a dstra, come sono spesso i men&ugrave; di aiuto, potremm
+
+usare la seguente funzioe (di nuovo su <tt/file_item/  in questo esempio) prima di fare il collegamento alla barra.
+
+
+<tscreen><verb>
+void gtk_menu_item_right_justify (GtkMenuItem *menu_item);
+</verb></tscreen>
+Ecco un riassunto dei passi necessari per creare una barra con i relativi men&ugrave; collegati:
+
 <itemize>
 <item>	Create un nuovo men&ugrave; con gtk_menu_new()
-<item>	Create un elementoa di men&ugrave; con using gtk_menu_item_new(). Questo  rappresenta
-  la base del men&ugrave;, e il testo che appare qui sar&agrave; sulla barra stessa.
 <item>	Usate delle chiamate multiple a gtk_menu_item_new() per ognuno degli
   elementi che volete mettere nel vostro men&ugrave;. Usate inoltre gtk_menu_item_append()
-  per mettere assieme ognuno di questi nuovo elementi. Si crea cos&igrave; una lista di
-  elementi di men&ugrave;.
-<item>	Usate gtk_menu_item_set_submenu() per attaccare gli elementi di men&ugrave;
-  creati all'elemento di men&ugrave; base (quello creato nel secondo passaggio).
+  per mettere ciascuno di questi nuovi elementi sul men&ugrave;..
+<item> Create un elemento di men&ugrave; usando gtk_menu_item_new(). Questo rappresenta l'elemento di base 
+
+delmen&ugrave;, e il testo relativo sar&agrave; il testo mostrato sulla barra dei men&ugrave; stessa.
+
+<item> Usate gtk_menu_item_set_submenu() per collegare i men&ugrave; all'elemento base del men&ugrave; (cio&egrave; quello creato al passaggio precedente).
+
 <item>	Create una nuova barra di men&ugrave; usando gtk_menu_bar_new. Questo passo
   necessita di essere effettuato una sola volta quando si crea una serie di
-  men&ugrave; su una serie di men&ugrave; su una sola barra.
+  men&ugrave; su una sola barra.
 <item> Usate gtk_menu_bar_append per mettere il men&ugrave; base sulla barra dei men&ugrave;.
 </itemize>
 <p>
 Creare un men&ugrave; a comparsa &egrave; pi&ugrave; o meno la stessa cosa. La differenza &egrave; che il
-il men&ugrave; non viene attivato ``automaticamente'' da una barra, bens&igrave; esplicitamente
-con la chiamata alla funzione gtk_menu_popup() da un evento di pressione di
-un pulsante.
+il men&ugrave; non viene attivato ``automaticamente'' da una barra, bens&igrave; per esempio
+con la chiamata espicita alla funzione gtk_menu_popup() da parte di un evento di pressione di un pulsante.
 Seguite questi passaggi:
 <itemize>
 <item>Create una funzione di gestione di un evento. Essa deve seguire il prototipo
@@ -3770,19 +5171,20 @@ in cui <tt>widget</tt> &egrave; il widget a cui state effettuando il collegament
 creato con gtk_menu_new(). Quest'ultimo pu&ograve; essere un men&ugrave; che viene anche
 attivato da una barra di men&ugrave;, come mostrato nel codice di esempio.
 </itemize>
-<p>
+
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>Esempio di Men&ugrave; Manuale
 <p>
 Per la teoria dovrebbe essere abbastanza. Diamo un'occhiata ad un esempio che
 ci aiuti a chiarire le cose.
 
 <tscreen><verb>
-
+/* menu.c */
 #include <gtk/gtk.h>
 
 static gint button_press (GtkWidget *, GdkEvent *);
 static void menuitem_response (gchar *);
-
 
 int main (int argc, char *argv[])
 {
@@ -3801,23 +5203,17 @@ int main (int argc, char *argv[])
 
     /* crea una nuova finestra */
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_widget_set_usize( GTK_WIDGET (window), 200, 100);
+
     gtk_window_set_title(GTK_WINDOW (window), "GTK Menu Test");
     gtk_signal_connect(GTK_OBJECT (window), "delete_event",
-                       (GtkSignalFunc) gtk_exit, NULL);
+                       (GtkSignalFunc) gtk_main_quit, NULL);
 
     /* Inizializziamo il men&ugrave;, e ricordate: mai applicare
      * gtk_show_widget() al widget men&ugrave;!!
      * Questo &egrave; il men&ugrave; che contiene gli elementi, quello che
      * spunta quando si fa click sul "Men&ugrave; radice" nell'applicazione */
     menu = gtk_menu_new();
-
-    /* Questo &egrave; il men&ugrave; radice, e l'etichetta sar&agrave; il nome del men&ugrave; che
-     * verr&agrave; mostrato sulla barra dei men&ugrave;. Non ci sar&agrave; alcun gestore di
-     * segnale collegato, dal momento che non fa altro che mostrare il resto
-     * del men&ugrave; quando viene premuto. */
-    root_menu = gtk_menu_item_new_with_label("Root Menu");
-
-    gtk_widget_show(root_menu);
 
     /* Ora creiamo un ciclo che crea tre elementi di menu per "test-menu".
      * Notete la chiamata a gtk_menu_append. In questo punto aggiungiamo una
@@ -3844,6 +5240,17 @@ int main (int argc, char *argv[])
             /* Mostra il widget */
             gtk_widget_show(menu_items);
         }
+
+    /* Questo &egrave; il men&ugrave; radice, e l'etichetta sar&agrave; il nome del men&ugrave; che
+     * verr&agrave; mostrato sulla barra dei men&ugrave;. Non ci sar&agrave; alcun gestore di
+     * segnale collegato, dal momento che non fa altro che mostrare il resto
+     * del men&ugrave; quando viene premuto. */
+    root_menu = gtk_menu_item_new_with_label("Root Menu");
+
+    gtk_widget_show(root_menu);
+
+
+
 
     /* Ora specifichiamo che vogliamo che il men&ugrave; che abbiamo appena creato
      * sia il men&ugrave; radice *//
@@ -3914,22 +5321,29 @@ static void menuitem_response (gchar *string)
 
 Si pu&ograve; anche fare in modo che un elemento di men&ugrave; sia insensibile e, usando
 una tabella di acelleratori, collegare dei tasti a delle funzioni di men&ugrave;.
-<p>
+
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>Usare GtkMenuFactory
 <p>
 Ora che vi abbiamo mostrato il modo difficile, ecco invece come si fa usando
 le chiamate di gtk_menu_factory.
-<p>
+
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>Esempio di Menu Factory
 <p>
 Ecco un esempio di utilizzo della ``Fabbrica'' di Men&ugrave; di GTK (Menu Factory). 
-Questo &egrave; il primo file, menus.h. Teniemo dei file menus.c e main.c separati
-a causa delle variabili globali usate nel file menus.c.
+Questo &egrave; il primo file, menufactoy.h. Teniemo dei file menufactory.c e main.c separati
+a causa delle variabili globali usate nel file menufactory.c.
 
 <tscreen><verb>
-#ifndef __MENUS_H__
-#define __MENUS_H__
 
+/* menufactory.h */
+
+#ifndef __MENUFACTORY_H__
+#define __MENUFACTORY_H__
+ 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -3941,18 +5355,18 @@ void menus_create(GtkMenuEntry *entries, int nmenu_entries);
 }
 #endif /* __cplusplus */
 
-#endif /* __MENUS_H__ */
+#endif /* __MENUFACTORY_H__ */
+
 </verb></tscreen>
 <p>
-Ed ecco il file menus.c.
+Ed ecco il file menufactory.c.
 
 <tscreen><verb>
-
+/* menufactory.c */
 #include <gtk/gtk.h>
 #include <strings.h>
 
-#include "main.h"
-
+#include "mfmain.h"
 
 static void menus_remove_accel(GtkWidget * widget, gchar * signal_name, gchar * path);
 static gint menus_install_accel(GtkWidget * widget, gchar * signal_name, gchar key, gchar modifiers, gchar * path);
@@ -3978,7 +5392,7 @@ static GtkMenuEntry menu_items[] =
 	{"<Main>/Options/Test", NULL, NULL, NULL}
 };
 
-/* calculail numero di menu_item */
+/* calcola il numero di menu_item */
 static int nmenu_items = sizeof(menu_items) / sizeof(menu_items[0]);
 
 static int initialize = TRUE;
@@ -4062,7 +5476,7 @@ static gint menus_install_accel(GtkWidget * widget, gchar * signal_name, gchar k
 	t1 = g_hash_table_lookup(entry_ht, path);
 	g_free(t1);
     } else
-	    entry_ht = g_hash_table_new(g_string_hash, g_string_equal);
+	    entry_ht = g_hash_table_new(g_str_hash, g_str_equal);
     
     g_hash_table_insert(entry_ht, path, g_strdup(accel));
     
@@ -4097,12 +5511,15 @@ void menus_set_sensitive(char *path, int sensitive)
 
 </verb></tscreen>
 <p>
-Ed ecco main.h
+Ed ecco mfmain.h
 
 <tscreen><verb>
-#ifndef __MAIN_H__
-#define __MAIN_H__
+/* mfmain.h */
 
+
+
+#ifndef __MFMAIN_H__
+#define __MFMAIN_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -4114,17 +5531,21 @@ void file_quit_cmd_callback(GtkWidget *widget, gpointer data);
 }
 #endif /* __cplusplus */
 
-#endif /* __MAIN_H__ */
+#endif /* __MFMAIN_H__ */
 
 </verb></tscreen>
 <p>
-E main.c
+E mfmain.c
 
 <tscreen><verb>
+/* mfmain.c */
+
+
+
 #include <gtk/gtk.h>
 
-#include "main.h"
-#include "menus.h"
+#include "mfmain.h"
+#include "menufactory.h"
 
 
 int main(int argc, char *argv[])
@@ -4174,14 +5595,18 @@ void file_quit_cmd_callback (GtkWidget *widget, gpointer data)
 Ed infine un bel makefile per semplificare la compilazione.
 
 <tscreen><verb>
+
+# Makefile.mf
+
+
 CC      = gcc
 PROF    = -g
 C_FLAGS =  -Wall $(PROF) -L/usr/local/include -DDEBUG
 L_FLAGS =  $(PROF) -L/usr/X11R6/lib -L/usr/local/lib 
 L_POSTFLAGS = -lgtk -lgdk -lglib -lXext -lX11 -lm
-PROGNAME = at
+PROGNAME = menufactory
 
-O_FILES = menus.o main.o
+O_FILES = menufactory.o mfmain.o
 
 $(PROGNAME): $(O_FILES)
 	rm -f $(PROGNAME)
@@ -4199,8 +5624,228 @@ distclean: clean
 Per il momento, accontentatevi di questo esempio. Pi&ugrave; avanti aggiungeremo
 una spiegazione ed un bel po' di commenti.
 
+ 
+<!-- ***************************************************************** -->
+<sect> Widget "Testo" (Text Widget)
+<!-- ***************************************************************** -->
+<p>
+Il widget di testo permette di mostrare e modificare del testo disposto su pi&ugrave;
+linee. Questo widget supporta sia la presenza di diversi colori che di diversi font
+contemporaneamente, permettendo di mischiarli nel modo in cui si desidera. Mette poi a
+disposizione un ampio gruppo di comandi basati sulla tastiera, che sono compatibili con
+Emacs.
 
+Il widget di testo d&agrave; la possibilit&agrave; di fare taglia e incolla in modo
+completo, compreso l'uso del doppio e triplo click per selezionare un'intera parola o
+un'intera linea.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Creazione e configurazione di una casella di testo
+<p>
+Esiste un'unica funzione per la creazione di un nuovo widget di testo:
+<tscreen><verb>
+GtkWidget* gtk_text_new (GtkAdjustment *hadj,
+                         GtkAdjustment *vadj);
+</verb></tscreen>
+
+Gli argomenti di questa chiamata ci permettono di assegnare dei puntatori a dei
+valori che stabiliscono il punto di vista del widget. Passare dei valori NULL all'uno
+o all'altro o ad entrambi questi argomenti, f&agrave; s&igrave; che gtk_text_new li
+crei automaticamente.
+
+<tscreen><verb>
+void gtk_text_set_adjustments (GtkText       *text,
+                               GtkAdjustment *hadj,
+                               GtkAdjustment *vadj);
+</verb></tscreen>
+
+La funzione precedente permette di cambiare gli aggiustamenti orizzontale e verticale
+di un widget di testo i ogni momento.
+
+Il widget di testo non &grave; di creare delle barre di scorrimento quando la
+quantit&agrave; &egrave; troppo grande per la finestra. Dobbiamo quindi crearle e
+aggiungerle alla finestra noi stessi.
+
+<tscreen><verb>
+  vscrollbar = gtk_vscrollbar_new (GTK_TEXT(text)->vadj);
+  gtk_box_pack_start(GTK_BOX(hbox), vscrollbar, FALSE, FALSE, 0);
+  gtk_widget_show (vscrollbar);
+</verb></tscreen>
+
+Il pezzetto di codice precedente crea una nuova barra di scorrimento verticale e la
+collega all'aggiustamento verticale del widget di testo, <tt/text/, dopodich&eacute; la
+impacchetta nella hbox al solito modo.
+
+Ci sono due modi principali di utilizzo di un widget di testo: per permettere all'utente
+di editare del testo, oppure per permettere a noi di mostrare all'utente del testo
+disposto su pi&ugrave; righe. Per passare dall'una all'altra di queste modalit&agrave;,
+il widget di testo ci mette a disposizione la seguente funzione:
+
+<tscreen><verb>
+void gtk_text_set_editable    (GtkText *text,
+                               gint    editable);
+</verb></tscreen>
+
+L'argomento <tt/editable/ &egrave; un valore TRUE o FALSE che specifica se l'utente
+pu&ograve; modificare o meno il contenuto del widgte. Quando il widget &egrave;
+modificabile, mostrer&agrave; un cursore nel punto di inserimento corrente.
+
+Niente per&ograve; vi obbliga ad usare il widget di testo in questi due soli modi. Si
+pu&ograve; passare dall'una all'altra delle due modalit&agrave; in qualsiasi momento,
+e si pu&ograve; inserire del testo in ogni momento.
+
+Il widget di testo &egrave; in grado di andare a capo automaticamente quando delle linee
+di testo sono troppo lunghe per stare su una sola linea della finestra. Il comportamento
+predefinito &egrave; di andare a capo automaticamente al termine della linea. Questo
+pu&ograve; essere cambiato con la seguente funzione:
+
+<tscreen><verb>
+void gtk_text_set_word_wrap (GtkText *text,
+                             gint    word_wrap);
+</verb></tscreen>
+
+L'uso di questa funzione ci permette di specificare se il widget di testo deve spezzare
+o no le linee lunghe ai bordi della finestra. L'argomento <tt/word_wrap/ &egrave; un
+valore di tipo TRUE o FALSE.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Manipolazione del testo
+<P>
+Il punto di inserimento corrente del widget pu&ograve; essere stabilito usando
+<tscreen><verb>
+void gtk_text_set_point (GtkText *text,
+                         guint   index);
+</verb></tscreen>
+in cui <tt/index/ &egrave; la posizione in cui mettere il punto di inserimento.
+
+La funzione per ottenere la posizione di inserimento corrente &egrave; analoga:
+<tscreen><verb>
+guint gtk_text_get_point (GtkText *text);
+</verb></tscreen>
+
+Una funzione che &egrave; utile in combinazione con le precedenti due &egrave;
+<tscreen><verb>
+guint gtk_text_get_length (GtkText *text);
+</verb></tscreen>
+la quale restituisce la lunghezza corrente del widget di testo. La lunghezza &egrave;
+definita come il numero di caratteri che si trovano nel blocco di testo della finestra,
+compresi i caratteri tipo CR, che marcano la fine delle linee.
+
+Per inserire del testo alla posizione corrente del widget di testo, si usa la funzione
+gtk_text_insert, che permette anche di specificare i colori di primo piano e di sfondo
+per il testo, oltre al font da usare.
+
+<tscreen><verb>
+void gtk_text_insert (GtkText    *text,
+                      GdkFont    *font,
+                      GdkColor   *fore,
+                      GdkColor   *back,
+                      const char *chars,
+                      gint       length);
+</verb></tscreen>
+
+Passare un valore di NULL come valore per il colore di primo piano (fore), di sfondo (back)
+o per il font, far&agrave; s&igrave; che vengano usati i valori che sono specifici dello
+stile del widget. Usare un valore di <tt/-1/ per il parametro lunghezza (length) avr&agrave;
+come risultato l'inserzione dell'intera stringa di testo.
+
+Il widget di testo &egrave; uno dei pochi in GTK che vengono disegnati dinamicamente, fuori
+dalla funzione gtk_main. Ci&ograve; significa che tutti i cambiamenti al suo contenuto
+avranno effetto immediato. Questo pu&ograve; essere un comportamento indesiderabile quando
+si stanno facendo delle modifiche multiple al contenuto del widget. Per permettere di 
+operare cambiamenti multipli sul widget senza che esso si ridisegni continuamente,
+si pu&ograve; congelare il contenuto della finestra, in modo che esso interrompa
+temporaneamente di ridisegnarsi. Potremo poi sbloccare il widget una volta che tutte
+le modifiche sono state completate.
+
+Le due seguenti funzioni fanno il congelamento e lo sbloccaggio (thaw) del widget:
+
+<tscreen><verb>
+void gtk_text_freeze (GtkText *text);
+void gtk_text_thaw   (GtkText *text);         
+</verb></tscreen>
+
+Il testo pu&ograve; essere cancellato nel widget di testo a partire dal punto di
+inserimento corrente usando le seguenti due funzioni, andando all'indietro (backward)
+o all'avanti (forward):
+
+<tscreen><verb>
+gint gtk_text_backward_delete (GtkText *text,
+                               guint   nchars);
+gint gtk_text_forward_delete  (GtkText *text,
+                               guint   nchars);
+</verb></tscreen>
+
+Quando si vuole recuperare il contenuto del widget di testo, &egrave;
+disponibile la macro <tt/GTK_TEXT_INDEX(t, index)/, che permette di
+ottenere il crattere alla posizione <tt/index/ all'interno del widget
+<tt/t/.
+
+Per ecuperare un blocco di testo pi&ugrave; ampio, si usa la funzione:
+
+<tscreen><verb>
+gchar *gtk_editable_get_chars (GtkEditable *editable,
+                               gint        start_pos,
+                               gint        end_pos);   
+</verb></tscreen>
+
+Questa &egrave; una funzione della classe madre del widget di testo. Un valore
+di -1 per <tt/end_pos/, sta ad indicare la fine del testo. L'indice per il
+testo parte da 0.
+
+Questa funzione alloca una nuova porzione di memoria per il blocco di testo,
+per cui non dimenticate di liberarla con una chiamata a g_free quando non
+ne avete pi&ugrave; bisogno.
+ 
+<!-- ----------------------------------------------------------------- -->
+<sect1>Keyboard Shortcuts
+<p>
+Il widget di testo mette a disposizione un certo numero di scorciatoie da tastiera
+per le pi&ugrave; comuni operazioni di modifica, movimento e selezione. Si possono
+utilizzare con delle combinazioni che comprendono i tasti Control e Alt.
+
+Oltre a queste, mantenendo premuto il pulsante Control mentre si usano i tasti di
+movimento del cursore, causer&agrave; lo spostamento parola per parola invece che
+carattere per carattere. Mantenere invece premuto il tasto Shift mentre si sposta il
+cursore, causer&agrave; l'estensione della selezione.
+
+<sect2>Scorciatoie per il movimento
+<p>
+<itemize>
+<item> Ctrl-A   Inizio della linea
+<item> Ctrl-E	Fine della linea
+<item> Ctrl-N   Prossima linea
+<item> Ctrl-P	Linea precedente
+<item> Ctrl-B   Indietro di un carattere
+<item> Ctrl-F   Avanti di un carattere
+<item> Alt-B    Indietro di una parola
+<item> Alt-F	Avanti di una parola
+</itemize>
+
+<sect2>Scorciatoie per la modifica
+<p>
+<itemize>
+<item> Ctrl-H   Cancella il carattere precedente (Backspace)
+<item> Ctrl-D   Cancella il carattere successivo (Delete)
+<item> Ctrl-W	Cancella la parola precedente
+<item> Alt-D    Cancella la parola successiva
+<item> Ctrl-K	Cancella fino alla fine della linea
+<item> Ctrl-U	Cancella la linea
+</itemize>
+
+<sect2>Scorciatoie per la selezione
+<p>
+<itemize>
+<item> Ctrl-X   Taglia
+<item> Ctrl-C   Copia
+<item> Ctrl-V	Incolla
+</itemize>
+
+
+<!-- ***************************************************************** -->
 <sect> Widget non documentati
+<!-- ***************************************************************** -->
+
 <p>
 Per questi sarebbe utile il contributo degli autori! :) Prendete in
 considerazione la possibilit&agrave; di contribuire al nostro tutorial.
@@ -4218,27 +5863,15 @@ di un widget non documentato, considerate la possibilit&agrave; di scrivere
 un tutorial su di esso, in modo che altri possano beneficiare del
 vostro lavoro.
 
-<sect1> Ingressi di testo (Text Entries)
-<p>
-
-<sect1> Selezioni di colore (Color Selections)
-<p>
-
+<!-- ----------------------------------------------------------------- -->
 <sect1> Controlli di intervallo (Range Controls)
-<p>
 
-<sect1> Righelli (Rulers)
-<p>
-
-<sect1> Caselle di testo (Text Boxes)
-<p>
-
+<!-- ----------------------------------------------------------------- -->
 <sect1> Anteprime
-<p>
-
+<!--
 (Potrebbe essere necessario riscrivere questa parte per conformarsi allo stile
 del resto del tutorial)
-
+-->
 <p>
 Le anteprime servono a un certo numero di cose in GIMP/GTK. La pi&ugrave;
 importante &egrave; questa: a risoluzioni molto alte le immagini possono
@@ -4702,14 +6335,13 @@ E' tutto!
 
 </verb></tscreen>
 
-
+<!-- ----------------------------------------------------------------- -->
 <sect1> Curve
 <p>
 
-
+<!-- ***************************************************************** -->
 <sect>Il Widget EventBox<label id="sec_The_EventBox_Widget">
-<p>
-E' disponibile solo a partire dalla distribuzione gtk+970916.tar.gz.
+<!-- ***************************************************************** -->
 <p> 
 Alcuni widget gtk non sono associati a finestre X, sicch&eacute;
 semplicemente disegnano sui loro genitori. Per questo motivo essi non possono 
@@ -4752,6 +6384,8 @@ un'etichetta limitata da un rettangolo piccolo, fatta in modo che
 cliccando con il mouse su di essa il programma termina.
 
 <tscreen><verb>
+/* eventbox.c */
+
 #include <gtk/gtk.h>
 
 int 
@@ -4805,7 +6439,9 @@ main (int argc, char *argv[])
 }
 </verb></tscreen>
 
+<!-- ***************************************************************** -->
 <sect>Selezionare gli Attributi dei Widget<label id="sec_setting_widget_attributes">
+<!-- ***************************************************************** -->
 <p>
 Qui si descrivono le funzioni per la gestione dei widget. Esse possono essere 
 usate per impostarne lo stile, il padding, le dimensioni, ...
@@ -4854,9 +6490,11 @@ void       gtk_widget_hide                (GtkWidget           *widget);
 </verb></tscreen>
 
 
-
+<!-- ***************************************************************** -->
 <sect>Funzioni periodiche, di I/O e di attesa<label id="sec_timeouts">
+<!-- ***************************************************************** -->
 <p>
+<!-- ----------------------------------------------------------------- -->
 <sect1>Funzioni periodiche
 <p>
 Probabilmente vi sarete chiesti come far fare qualcosa di utile a GTK
@@ -4891,6 +6529,7 @@ La dichiarazione della funzione periodica dovrebbe essere come questa:
 gint timeout_callback (gpointer data);
 </verb></tscreen>
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Controllo dell'I/O
 <p>
 Un'altra utile caratteristica di GTK &egrave; la possibilit&agrave; di fargli
@@ -4935,6 +6574,7 @@ void input_callback (gpointer data, gint source,
 </verb></tscreen>
 <p>
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Funzioni di attesa (``Idle'')
 <p>
 Cosa fare se si ha una funzione che si vuole venga chiamata quando non
@@ -4957,9 +6597,11 @@ ai precedenti. La funzione puntata dal primo argomento della gtk_idle_add
 viene chiamata non appena se ne presenta l'opportunit&agrave;; come 
 negli altri casi, se essa restituisce FALSE non viene pi&ugrave; chiamata.
 
-
+<!-- ***************************************************************** -->
 <sect>La gestione delle selezioni
+<!-- ***************************************************************** -->
 
+<!-- ----------------------------------------------------------------- -->
 <sect1> Overview
 
 <p>
@@ -5000,7 +6642,7 @@ Negli altri casi bisogna usare le funzioni <tt>gdk_atom_intern()</tt>
 per ottenere l'atomo corrispondente ad una stringa, e <tt>gdk_atom_name()</tt>
 per ottenere il nome di un atomo. Sia le selezioni sia gli obiettivi sono
 identificati da atomi.
-
+<!-- ----------------------------------------------------------------- -->
 <sect1> Recuperare le selezioni
 
 <p>
@@ -5063,6 +6705,8 @@ Nell'esempio che segue viene recuperato l'obiettivo speciale ``TARGETS'',
 che &egrave; una lista di tutti gli obiettivi in cui pu&ograve; essere
 convertita la selezione.
 <tscreen><verb>
+/* gettargets.c */
+
 #include <gtk/gtk.h>
 
 void selection_received (GtkWidget *widget, 
@@ -5161,6 +6805,7 @@ main (int argc, char *argv[])
 }
 </verb></tscreen>
 
+<!-- ----------------------------------------------------------------- -->
 <sect1> Fornire una selezione 
 
 <p>
@@ -5235,6 +6880,8 @@ richiesto questo obiettivo, viene restituita una rappresentazione stringa
 del tempo.
 
 <tscreen><verb>
+/* setselection.c */
+
 #include <gtk/gtk.h>
 #include <time.h>
 
@@ -5328,7 +6975,7 @@ main (int argc, char *argv[])
 
   gtk_selection_add_handler (selection_button, GDK_SELECTION_PRIMARY,
 			     GDK_SELECTION_TYPE_STRING,
-			     selection_handle, NULL, NULL);
+			     selection_handle, NULL);
 
   gtk_widget_show (selection_button);
   gtk_widget_show (window);
@@ -5339,9 +6986,9 @@ main (int argc, char *argv[])
 }
 </verb></tscreen>
 
-
-
+<!-- ***************************************************************** -->
 <sect>La glib<label id="sec_glib">
+<!-- ***************************************************************** -->
 <p>
 La glib fornisce molte funzioni e definizioni utili pronte all'uso quando si
 creano applicazioni GDK e GTK. Qui verranno elencate tutte, con una
@@ -5349,6 +6996,7 @@ breve spiegazione. Molte sono duplicati delle funzioni standard della libc,
 e quindi per queste non si scender&agrave; nei dettagli. Questa vuole essere una
 lista di riferimento, in modo che si sappia cosa &egrave; possibile usare.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Definizioni
 <p>
 Le definizioni per gli estremi di molti dei tipi standard sono:
@@ -5397,13 +7045,14 @@ gint32
 guint32
 </verb></tscreen>
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Liste a doppio collegamento
 <p>
 le seguenti funzioni sono usate per creare, gestire e distruggere liste a
 doppio collegamento. Si assume che il lettore sappia gi&agrave; cosa sono le liste
-collegate, poich&eacute; descriverle &egrave; fuori dagli scopi di questo documento.
-Naturalmente non &egrave; necessario conoscerle per l'uso generale di GTK, per
-quanto conoscerle sia comunque interessante.
+collegate (linked list), poich&eacute; descriverle &egrave; fuori dagli scopi di
+questo documento. Naturalmente non &egrave; necessario conoscerle per l'uso
+generale di GTK, per quanto conoscerle sia comunque interessante.
 
 <tscreen><verb>
 GList* g_list_alloc       (void);
@@ -5447,7 +7096,7 @@ void   g_list_foreach     (GList     *list,
 			   gpointer   user_data);
 </verb></tscreen>					      
 
-
+<!-- ----------------------------------------------------------------- -->
 <sect1>Liste a collegamento singolo
 <p>
 Molte delle funzioni per le liste a collegamento singolo sono identiche alle
@@ -5493,6 +7142,7 @@ void    g_slist_foreach     (GSList   *list,
 	
 </verb></tscreen>
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Gestione della memoria
 <p>
 <tscreen><verb>
@@ -5538,6 +7188,7 @@ Controlla che una locazione di memoria sia valida. Occorre ricompilare e
 reinstallare la libreria aggiungendo #define MEM_CHECK all'inizio del file
 gmem.c.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Timer
 <p>
 Funzioni legate ai timer...
@@ -5557,6 +7208,7 @@ gdouble g_timer_elapsed (GTimer  *timer,
                          gulong  *microseconds);
 </verb></tscreen>			 
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Gestione delle stringhe
 <p>
 Un'accozzaglia di funzioni per la gestione delle stringhe. Sembrano tutte molto
@@ -5595,6 +7247,7 @@ void     g_string_sprintfa  (GString *string,
 			     ...);
 </verb></tscreen>							  
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Funzioni d'utilit&agrave; e di errore
 <p>
 <tscreen><verb>
@@ -5660,13 +7313,17 @@ segnale. Utile nelle funzioni generiche di gestione dei segnali.
 Tutte le funzioni elencate sono pi&ugrave; o meno prese da glib.h. Se qualcuno volesse
 documentare qualche funzione, mandi una email all'autore!
 
+<!-- ***************************************************************** -->
 <sect>I file rc di GTK
+<!-- ***************************************************************** -->
+
 <p>
 GTK ha un suo modo di trattare le preferenze delle applicazioni, usando
 i file rc. Questi possono essere usati per scegliere i colori di quasi tutti
 i widget, e possono anche essere usati per inserire delle pixmap nello sfondo
 di alcuni widget.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Funzioni per i file rc
 <p>
 All'inizio della vostra applicazione dovrebbe esserci una chiamata a
@@ -5720,6 +7377,7 @@ che assegna a tutti i widget GtkButton nella finestra principale lo stile
 Come si pu&ograve; vedere, questo sistema &egrave; molto potente e flessibile. Usate la
 vostra immaginazione per trarre il massimo vantaggio da esso.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Il formato dei file rc di GTK
 <p>
 Nell'esempio che segue viene illustrato il formato del file GTK. Si tratta
@@ -5811,6 +7469,7 @@ Naturalmente, molti di questi attributi non sono applicabili a tutti i widget.
 E' veramente un semplice problema di buon senso. Tutto quello che potrebbe
 applicarsi, dovrebbe.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>Esempio di file rc 
 <p>
 
@@ -5946,10 +7605,11 @@ widget "main window.*GtkButton*" style "main_button"
 </verb></tscreen>
 
 
-
+<!-- ***************************************************************** -->
 <sect>Scrivere un proprio Widget
+<!-- ***************************************************************** -->
 
-<p>
+<!-- ----------------------------------------------------------------- -->
 <sect1> Panoramica
 <p>
 Anche se la distribuzione GTK contiene molto tipi di widget che possono
@@ -5964,7 +7624,15 @@ aiutare sia chi crea il codice che chi l'interfaccia per applicazioni GTK
 molto grosse. D'altra parte, quando hai finito di scrivere un widget, 
 annuncialo a tutto il mondo cos&igrave; che le altre persone ne possano
 beneficiare. Il miglioro modo dove farlo &egrave; la  <tt>gtk-list</tt>.
+ 
+I sorgenti completi per i widget di esempio possono essere presi dallo stesso
+sito da cui avete scaricato questo tutorial, oppure da:
 
+<htmlurl url="http://www.msc.cornell.edu/~otaylor/gtk-gimp/tutorial"
+name="http://www.msc.cornell.edu/~otaylor/gtk-gimp/tutorial">
+
+
+<!-- ----------------------------------------------------------------- -->
 <sect1> L'anatomia di un widget
 
 <p>
@@ -6028,8 +7696,10 @@ Si noti che, similmente alla struttura della classe, il primo campo
 &egrave; la struttura dell'oggetto della classe madre, cos&igrave; che, se necessario, si pu&ograve; fare il
 cast di questa struttura con quella dell'oggetto della classe madre.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1> Creare un Widget composto
 
+<!-- ----------------------------------------------------------------- -->
 <sect2> Introduzione
 
 <p>
@@ -6047,6 +7717,7 @@ Tictactoe, un vettore 3x3 di bottoni a commutazione il quale emette
 un segnale quando tutti e 3 i bottoni di una riga, colonna o di una
 diagonale sono premuti.
 
+<!-- ----------------------------------------------------------------- -->
 <sect2> Scegliere la classe madre
 
 <p>
@@ -6069,6 +7740,7 @@ Tictactoe, faremmo meglio a evitare di derivarlo dalla GtkTable. Per questa
 ragione lo deriviamo invece da GtkVBox, e uniamo la nostra tabella
 dentro il VBox.
 
+<!-- ----------------------------------------------------------------- -->
 <sect2> Il File Header
 
 <p>
@@ -6109,6 +7781,7 @@ di classe, e guarda se un oggetto &egrave; un widget Tictactoe.
 Qui vi &egrave; il file header completo:
 
 <tscreen><verb>
+/* tictactoe.h */
 
 #ifndef __TICTACTOE_H__
 #define __TICTACTOE_H__
@@ -6154,6 +7827,7 @@ void	       tictactoe_clear           (Tictactoe *ttt);
 
 </verb></tscreen>
 
+<!-- ----------------------------------------------------------------- -->
 <sect2> La funzione <tt/_get_type()/
 
 <p>
@@ -6178,7 +7852,8 @@ tictactoe_get_type ()
 	sizeof (TictactoeClass),
 	(GtkClassInitFunc) tictactoe_class_init,
 	(GtkObjectInitFunc) tictactoe_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL
       };
 
       ttt_type = gtk_type_unique (gtk_vbox_get_type (), &amp;ttt_info);
@@ -6199,18 +7874,21 @@ struct _GtkTypeInfo
   guint class_size;
   GtkClassInitFunc class_init_func;
   GtkObjectInitFunc object_init_func;
-  GtkArgFunc arg_func;
+  GtkArgSetFunc arg_set_func;
+  GtkArgGetFunc arg_get_func;
 };
 </verb></tscreen>
 
 <p>
 I campi di questa struttura sono abbastanza auto-esplicativi.
-Ignoreremo, per ora, il campo <tt/arg_func/: ha un ruolo importante, ma
-non ancora largamente implementato, nel permettere ai linguaggi interpretati
+Ignoreremo, per ora, i campi  <tt/arg_set_func/ e <tt/arg_get_func/:
+hanno un ruolo importante, ma ancora largamente non
+implementato, nel permettere ai linguaggi interpretati
 di settare convenientemente le opzioni del widget.
 Una volta che il GTK ha completato correttamente una copia di questa
 struttura, sa come creare un oggetto di un particolare widget.
 
+<!-- ----------------------------------------------------------------- -->
 <sect2> La funzione <tt/_class_init()/ 
 <p>
 La funzione <tt/WIDGETNAME_class_init()/ inizialiazza i campi della
@@ -6237,7 +7915,7 @@ tictactoe_class_init (TictactoeClass *class)
 					 GTK_RUN_FIRST,
 					 object_class->type,
 					 GTK_SIGNAL_OFFSET (TictactoeClass, tictactoe),
-					 gtk_signal_default_marshaller, GTK_ARG_NONE, 0);
+					 gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
 
 
   gtk_object_class_add_signals (object_class, tictactoe_signals, LAST_SIGNAL);
@@ -6255,14 +7933,15 @@ dal momento che a questo punto le cose diventano un po' complicate.
 
 La funzione:
 <tscreen><verb>
-gint   gtk_signal_new                     (gchar               *name,
-					   GtkSignalRunType     run_type,
-					   gint                 object_type,
-					   gint                 function_offset,
-					   GtkSignalMarshaller  marshaller,
-					   GtkArgType           return_val,
-					   gint                 nparams,
-					   ...);
+gint   gtk_signal_new (const gchar         *name,
+                       GtkSignalRunType    run_type,
+		       GtkType             object_type,
+		       gint                function_offset,
+		       GtkSignalMarshaller marshaller,
+		       GtkType             return_val,
+		       guint               nparams,
+		       ...);
+
 </verb></tscreen>
 
 crea un nuovo segnale. I parametri sono:
@@ -6286,22 +7965,38 @@ ai due predefiniti menzionati sopra)
 <item> <tt/.../: i tipi dei parametri
 </itemize>
 
-Quando si specificano i tipi, si usa l'enumerazione <tt/GtkArgType/:
+Quando si specificano i tipi, si usa l'enumerazione <tt/GtkType/:
 
 <tscreen><verb>
 typedef enum
 {
-  GTK_ARG_INVALID,
-  GTK_ARG_NONE,
-  GTK_ARG_CHAR,
-  GTK_ARG_SHORT,
-  GTK_ARG_INT,
-  GTK_ARG_LONG,
-  GTK_ARG_POINTER,
-  GTK_ARG_OBJECT,
-  GTK_ARG_FUNCTION,
-  GTK_ARG_SIGNAL
-} GtkArgType;
+  GTK_TYPE_INVALID,
+  GTK_TYPE_NONE,
+  GTK_TYPE_CHAR,
+  GTK_TYPE_BOOL,
+  GTK_TYPE_INT,
+  GTK_TYPE_UINT,
+  GTK_TYPE_LONG,
+  GTK_TYPE_ULONG,
+  GTK_TYPE_FLOAT,
+  GTK_TYPE_DOUBLE,
+  GTK_TYPE_STRING,
+  GTK_TYPE_ENUM,
+  GTK_TYPE_FLAGS,
+  GTK_TYPE_BOXED,
+  GTK_TYPE_FOREIGN,
+  GTK_TYPE_CALLBACK,
+  GTK_TYPE_ARGS,
+
+  GTK_TYPE_POINTER,
+
+  /* sarebbe bello poter togliere alla fine i prossimi due */
+  GTK_TYPE_SIGNAL,
+  GTK_TYPE_C_CALLBACK,
+
+  GTK_TYPE_OBJECT
+
+} GtkFundamentalType;
 </verb></tscreen>
 
 <p>
@@ -6318,6 +8013,7 @@ invocando <tt/gtk_object_class_add_signals()/. Settiamo quindi a NULL
 il puntatore che punta al gestore predefinito per il segnale 
 ``tictactoe'' a NULL, indicando che non ci sono azioni predefinite.
 
+<!-- ----------------------------------------------------------------- -->
 <sect2> La funzione <tt/_init()/
 
 <p>
@@ -6354,6 +8050,7 @@ tictactoe_init (Tictactoe *ttt)
 }
 </verb></tscreen>
 
+<!-- ----------------------------------------------------------------- -->
 <sect2> E il resto...
 
 <p>
@@ -6489,9 +8186,10 @@ main (int argc, char *argv[])
 
 </verb></tscreen>
 
-
+<!-- ----------------------------------------------------------------- -->
 <sect1> Creare un widget a partire da zero
 
+<!-- ----------------------------------------------------------------- -->
 <sect2> Introduzione
 
 <p>
@@ -6501,6 +8199,7 @@ e interagiscono con gli eventi. Come esempio, creeremo
 un widget di quadrante analogico con un puntatore che l'utente 
 pu&ograve; trascinare per assegnare il valore.
 
+<!-- ----------------------------------------------------------------- -->
 <sect2> Mostrare un widget sullo schermo
 
 <p>
@@ -6558,6 +8257,7 @@ una sola finestra, possiamo utilizzare il modo piu' semplice
 ed usare la funzione predefinita <tt/draw()/ e implementare
 solamente la funzione <tt/expose()/.
 
+<!-- ----------------------------------------------------------------- -->
 <sect2> Le origini del widget Dial
 
 <p>
@@ -6575,6 +8275,7 @@ con il funzionamento del widget Scale dal punto di vista di chi scrive
 un'applicazione, potrebbe essere una buona idea guardare indietro prima 
 di continuare.
 
+<!-- ----------------------------------------------------------------- -->
 <sect2> Le basi
 
 <p>
@@ -6671,14 +8372,11 @@ void           gtk_dial_set_adjustment         (GtkDial      *dial,
 
 
 #endif /* __GTK_DIAL_H__ */
-
 </verb></tscreen>
 
 Essendoci pi&ugrave; cose da fare con questo widget, rispetto al precedente,
 abbiamo pi&ugrave; cambi nella struttura dati, ma le altre cose sono 
 abbastamza simili.
-
-<p>
 
 Dopo aver incluso i file di header e aver dichiarato alcune costanti,
 dobbiamo fornire alcune funzioni circa il widget e la sua
@@ -6717,7 +8415,8 @@ gtk_dial_get_type ()
 	sizeof (GtkDialClass),
 	(GtkClassInitFunc) gtk_dial_class_init,
 	(GtkObjectInitFunc) gtk_dial_init,
-	(GtkArgFunc) NULL,
+	(GtkArgSetFunc) NULL,
+        (GtkArgGetFunc) NULL,
       };
 
       dial_type = gtk_type_unique (gtk_widget_get_type (), &amp;dial_info);
@@ -6858,6 +8557,7 @@ gtk_dial_set_adjustment (GtkDial      *dial,
 }
 </verb></tscreen>
 
+<!-- ----------------------------------------------------------------- -->
 <sect2> <tt/gtk_dial_realize()/
 
 <p>
@@ -6916,6 +8616,7 @@ gtk_dial_realize (GtkWidget *widget)
 }
 </verb></tscreen>
 
+<!-- ----------------------------------------------------------------- -->
 <sect2> Negoziazione della dimensione
 
 <p>
@@ -6973,6 +8674,7 @@ gtk_dial_size_allocate (GtkWidget     *widget,
 }
 </verb></tscreen>.
 
+<!-- ----------------------------------------------------------------- -->
 <sect2> <tt/gtk_dial_expose()/
 
 <p>
@@ -7054,7 +8756,8 @@ gtk_dial_expose (GtkWidget      *widget,
 }
 </verb></tscreen>
 
-<sect2> Gestore degli eventi
+<!-- ----------------------------------------------------------------- -->
+<sect2> Gestione degli eventi
 
 <p>
 
@@ -7340,8 +9043,8 @@ gtk_dial_adjustment_value_changed (GtkAdjustment *adjustment,
 }
 </verb></tscreen>
 
+<!-- ----------------------------------------------------------------- -->
 <sect2> Possibili Miglioramenti
-
 <p>
 
 Il widget Dial, da come l'abbiamo costruito, &egrave; lungo circa 670 linee
@@ -7378,6 +9081,7 @@ o un widget ``entry'' per mostrare il valore corrente del dial.
 
 </itemize>
 
+<!-- ----------------------------------------------------------------- -->
 <sect1> Impararne di pi&ugrave;
 
 <p> 
@@ -7390,9 +9094,11 @@ un widget precedente? Trovate poi un widget simile e iniziate a fargli
 delle modifiche.
 Buone Fortuna.
 
-
+<!-- ***************************************************************** -->
 <sect>Scribble, Un semplice esempio di Programma di Disegno
+<!-- ***************************************************************** -->
 
+<!-- ----------------------------------------------------------------- -->
 <sect1> Panoramica
 
 <p>
@@ -7404,6 +9110,7 @@ il supporto per i dispositivi XInput, per esempio le tavolette grafiche.
 Il GTK fornisce delle routine di supporto grazie alle quali risulta  piuttosto
 semplice ottenere informazioni estese, come la pressione o l'inclinazione.
 
+<!-- ----------------------------------------------------------------- -->
 <sect1> Gestione degli Eventi
 
 <p>
@@ -7506,16 +9213,12 @@ GtkBox
 GtkImage
 GtkItem
 GtkLabel
-GtkPaned
 GtkPixmap
 GtkScrolledWindow
 GtkSeparator
 GtkTable
-GtkViewport
 GtkAspectFrame
 GtkFrame
-GtkVPaned
-GtkHPaned
 GtkVBox
 GtkHBox
 GtkVSeparator
@@ -7622,7 +9325,7 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 }
 </verb></tscreen>
 
-
+<!-- ----------------------------------------------------------------- -->
 <sect1> Il widget Area di Disegno (DrawingArea) e il procedimento per Disegnare
 
 <p>
@@ -7841,8 +9544,13 @@ rilevanti sullo schermo.
 <p>
 Abbiamo a questo punto creato tutto il programma di disegno, tranne che
 per qualche dettaglio irrilevante come la creazione della finestra principale.
-Il codice sorgente completo &egrave; reperibile dove avete ottenuto questo tutorial.
+Il codice sorgente completo &egrave; reperibile dove avete ottenuto questo tutorial,
+oppure da:
 
+<htmlurl url="http://www.msc.cornell.edu/~otaylor/gtk-gimp/tutorial"
+name="http://www.msc.cornell.edu/~otaylor/gtk-gimp/tutorial">
+
+<!-- ----------------------------------------------------------------- -->
 <sect1> Aggiungere il supporto per XInput
 
 <p>
@@ -7861,7 +9569,7 @@ vantaggi, come:
 sia una ``gomma'')
 </itemize>
 
-Per ulteriori informazioni sulle estensioni XInput, vedere l'<url
+Per ulteriori informazioni sulle estensioni XInput, vedere l'<htmlurl
 url="http://www.msc.cornell.edu/~otaylor/xinput/XInput-HOWTO.html"
 name="XInput-HOWTO">.
 
@@ -8169,7 +9877,10 @@ print_button_press (guint32 deviceid)
 </verb></tscreen>
 Questo completa i cambiamenti necessari per usare gli XInput nel nostro
 programma. Come per la prima versione, i sorgenti completi sono prelevabili
-da dove avete prelevato questo tutorial.
+da dove avete prelevato questo tutorial, oppure da:
+
+<htmlurl url="http://www.msc.cornell.edu/~otaylor/gtk-gimp/tutorial"
+name="http://www.msc.cornell.edu/~otaylor/gtk-gimp/tutorial">
 
 <sect2> Ulteriori sofisticazioni <label id="sec_Further_Sophistications">
 
@@ -8227,7 +9938,9 @@ viene ottenuta selezionando gli eventi ``proximity_out''. Un esempio di
 disegno del proprio cursore si trova nel programma 'testinput' incluso nella
 distribuzione di GTK.
 
+<!-- ***************************************************************** -->
 <sect>Consigli per scrivere Applicazioni GTK
+<!-- ***************************************************************** -->
 
 <p>
 
@@ -8238,29 +9951,31 @@ inutile per ora perch&eacute; &egrave; solamente un appunto.
 Usa autoconf e automake! Sono tuoi amici :) Ho intenzione di fare una
 piccola introduzione su di loro qui.
 
+<!-- ***************************************************************** -->
 <sect>Contributi
-<p>
+<!-- ***************************************************************** -->
 
-Questo documento, come molti altri grandi software fuori di qui, &egrave; stato 
+<p>
+Questo documento, come molti altri grandi software l&agrave; fuori, &egrave; stato 
 creato da volontari. Se sai tutto quello che c'&egrave; da sapere su GTK e non
 lo hai trovato qui allora considera la possibilit&agrave; di contribuire a questo
 documento.
 
 <p>
-Se decidi di contribuire, per favore trasmettimi il tuo testo a 
-<tt><htmlurl url="mailto:imain@gimp.org"
-name="imain@gimp.org"></tt>. Inoltre, Si consapevole che l'intero 
-documento &egrave; ``free'', e ogni tua aggiunta sar&agrave; considerata allo stesso modo.
+Se decidi di contribuire, ti prego di trasmettere il tuo lavoro a Tony Gale, 
+<tt><htmlurl url="mailto:gale@gtk.org"
+name="gale@gtk.org"></tt>. Inoltre, ricorda  che l'intero documento &egrave;
+``free'', e che ogni tua aggiunta sar&agrave; considerata allo stesso modo.
 Per questo motivo le persone possono usare porzioni dei tuoi esempi nei loro
 programmi, copie di questo documento possono essere distribuite all'infinito,
 ecc...
-
 <p>
 
 Grazie.
 
-
+<!-- ***************************************************************** -->
 <sect>Credits
+<!-- ***************************************************************** -->
 <p>
 Voglio qui ringraziare le persone che seguono, per il loro contributo
 alla stesura di questo testo.
@@ -8313,28 +10028,63 @@ E a tutti voi che avete fatto commenti e avete aiutato a raffinare questo docume
 
 Thanks.
 
-<sect> Copying
+<!-- ***************************************************************** -->
+<sect> Dichiarazione di Copyright e Licenza
+<!-- ***************************************************************** -->
 <p>
-This tutorial is Copyright (c) 1997 Ian Main 
+A questa traduzione, Copyright (c) 1997-1998 di Michel Morelli,
+Daniele Canazza e Antonio Schifano, si applica la medesime licenza
+prevista dal lavoro originale di Ian Main e Tony Gale. Segue la traduzione
+di quelle disposizioni e la loro versione originale. In caso di discordanze
+fra traduzione e versione originale, fa fede quest'ultima.
+<p>
+Il GTK Tutorial &egrave; Copyright (c) 1997 Ian Main.
 
-La traduzione italiana &egrave; sotto Copyright (c) 1997-1998 di Michel Morelli,
-Daniele Canazza e Antonio Schifano.
+Copyright (c) 1998 Tony Gale.
+<p>
+E' permesso fare e distribuire copie non modificate di questo manuale,
+sotto la condizione che  la dichiarazione di copyright e queste disposizioni
+siano riportate su tutte le copie.
+<p>E' permesso fare e distribuire copie di versioni modificate di questo
+documento, sotto le stesse condizioni previste per la copia non modificata,
+e che questa dichiarazione di copyright sia inclusa esattamente come
+nell'originale, e che l'intero lavoro risultante sia distribuito sotto
+i termini di una licenza identica a questa.
+<p>E' permesso fare e distribuire copie di traduzioni di questo documento in
+altre lingue, sotto le stesse condizioni previste per le versioni modificate.
+<p>Nel caso si intenda includere questo documento in un lavoro pubblicato,
+si prega di contattarne il curatore, che cercher&agrave; di mettere a
+disposizione le informazioni pi&ugrave; aggiornate.
+<p>Non c'&egrave; garanzia che questo documento sia rispondente ai propri
+propositi. Esso viene semplicemente fornito come una risorsa "free" (libera e
+gratuita). In quanto tale, gli autori e i curatori delle informazioni contenute
+in esso, non possono dare alcuna garanzia nemmeno sul fatto che tali informazioni
+siano accurate.
 
+<p>---------------------
 <p>
+The GTK Tutorial is Copyright (C) 1997 Ian Main. 
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+Copyright (C) 1998 Tony Gale.
 <p>
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-<p>
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+Permission is granted to make and distribute verbatim copies of this 
+manual provided the copyright notice and this permission notice are 
+preserved on all copies.
+<P>Permission is granted to copy and distribute modified versions of 
+this document under the conditions for verbatim copying, provided that 
+this copyright notice is included exactly as in the original,
+and that the entire resulting derived work is distributed under 
+the terms of a permission notice identical to this one.
+<P>Permission is granted to copy and distribute translations of this 
+document into another language, under the above conditions for modified 
+versions.
+<P>If you are intending to incorporate this document into a published 
+work, please contact the maintainer, and we will make an effort 
+to ensure that you have the most up to date information available.
+<P>There is no guarentee that this document lives up to its intended
+purpose.  This is simply provided as a free resource.  As such,
+the authors and maintainers of the information provided within can
+not make any guarentee that the information is even accurate.
 
 </article>
 
