@@ -75,16 +75,16 @@ struct _GtkUIManagerClass {
 };
 
 typedef enum {
-  GTK_UI_MANAGER_AUTO,
-  GTK_UI_MANAGER_MENUBAR,
-  GTK_UI_MANAGER_MENU,
-  GTK_UI_MANAGER_TOOLBAR,
-  GTK_UI_MANAGER_PLACEHOLDER,
-  GTK_UI_MANAGER_POPUP,
-  GTK_UI_MANAGER_MENUITEM,
-  GTK_UI_MANAGER_TOOLITEM,
-  GTK_UI_MANAGER_SEPARATOR,
-  GTK_UI_MANAGER_ACCELERATOR
+  GTK_UI_MANAGER_AUTO         = 0,
+  GTK_UI_MANAGER_MENUBAR      = 1 << 0,
+  GTK_UI_MANAGER_MENU         = 1 << 1,
+  GTK_UI_MANAGER_TOOLBAR      = 1 << 2,
+  GTK_UI_MANAGER_PLACEHOLDER  = 1 << 3,
+  GTK_UI_MANAGER_POPUP        = 1 << 4,
+  GTK_UI_MANAGER_MENUITEM     = 1 << 5,
+  GTK_UI_MANAGER_TOOLITEM     = 1 << 6,
+  GTK_UI_MANAGER_SEPARATOR    = 1 << 7,
+  GTK_UI_MANAGER_ACCELERATOR  = 1 << 8
 } GtkUIManagerItemType;
 
 GType          gtk_ui_manager_get_type            (void);
@@ -101,6 +101,8 @@ GList         *gtk_ui_manager_get_action_groups   (GtkUIManager          *self);
 GtkAccelGroup *gtk_ui_manager_get_accel_group     (GtkUIManager          *self);
 GtkWidget     *gtk_ui_manager_get_widget          (GtkUIManager          *self,
 						   const gchar           *path);
+GSList        *gtk_ui_manager_get_toplevels       (GtkUIManager          *self,
+						   GtkUIManagerItemType   types);
 GtkAction     *gtk_ui_manager_get_action          (GtkUIManager          *self,
 						   const gchar           *path);
 guint          gtk_ui_manager_add_ui_from_string  (GtkUIManager          *self,

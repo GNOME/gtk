@@ -1,3 +1,15 @@
+Fri Jan  9 00:34:57 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.h:
+	* gtk/gtkuimanager.c (gtk_ui_manager_get_toplevels): New function to
+	obtain a list of toplevel widgets constructed by the ui manager.
+
+	* gtk/gtkuimanager.h (GtkUIManagerItemType): Change to flags, so that 
+	the values can be combined for gtk_ui_manager_get_toplevels().
+
+	* tests/testmerge.c: Add a "Dump toplevels" button to test 
+	gtk_ui_manager_get_toplevels().
+
 Wed Jan  7 23:20:06 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* demos/gtk-demo/Makefile.am (demos): Add entry_completion.c

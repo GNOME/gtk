@@ -35,6 +35,27 @@ dump_accels (void)
 }
 
 static void
+print_toplevel (GtkWidget *widget, gpointer user_data)
+{
+  g_print ("%s\n", G_OBJECT_TYPE_NAME (widget));
+}
+
+static void
+dump_toplevels (GtkWidget    *button, 
+		GtkUIManager *merge)
+{
+  GSList *toplevels;
+
+  toplevels = gtk_ui_manager_get_toplevels (merge, 
+					    GTK_UI_MANAGER_MENUBAR |
+					    GTK_UI_MANAGER_TOOLBAR |
+					    GTK_UI_MANAGER_POPUP);
+
+  g_slist_foreach (toplevels, print_toplevel, NULL);
+  g_slist_free (toplevels);
+}
+
+static void
 toggle_tearoffs (GtkWidget    *button, 
 		 GtkUIManager *merge)
 {
@@ -650,6 +671,10 @@ main (int argc, char **argv)
 
   button = gtk_button_new_with_label ("Dump Tree");
   g_signal_connect (button, "clicked", G_CALLBACK (dump_tree), merge);
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Dump Toplevels");
+  g_signal_connect (button, "clicked", G_CALLBACK (dump_toplevels), merge);
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Dump Accels");

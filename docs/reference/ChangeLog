@@ -1,3 +1,7 @@
+Fri Jan  9 00:38:58 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_ui_manager_get_toplevels.
+
 Thu Jan  8 00:14:02 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkmain.sgml (gtk_input_add_full): Fix link in deprecation

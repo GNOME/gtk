@@ -558,6 +558,70 @@ gtk_ui_manager_get_widget (GtkUIManager *self,
   return NODE_INFO (node)->proxy;
 }
 
+static void
+collect_toplevels (GNode   *node, 
+		   gpointer user_data)
+{
+  struct {
+    GtkUIManagerItemType types;
+    GSList *list;
+  } *data = user_data;
+
+  switch (NODE_INFO (node)->type) {
+  case NODE_TYPE_MENUBAR:
+    if (data->types & GTK_UI_MANAGER_MENUBAR)
+      data->list = g_slist_prepend (data->list, NODE_INFO (node)->proxy);
+    break;
+  case NODE_TYPE_TOOLBAR:
+    if (data->types & GTK_UI_MANAGER_TOOLBAR)
+      data->list = g_slist_prepend (data->list, NODE_INFO (node)->proxy);
+    break;
+  case NODE_TYPE_POPUP:
+    if (data->types & GTK_UI_MANAGER_POPUP)
+      data->list = g_slist_prepend (data->list, NODE_INFO (node)->proxy);
+    break;
+  default: ;
+  }
+}
+
+/**
+ * gtk_ui_manager_get_toplevels:
+ * @self: a #GtkUIManager
+ * @types: specifies the types of toplevel widgets to include. Allowed
+ *   types are #GTK_UI_MANAGER_MENUBAR, #GTK_UI_MANAGER_TOOLBAR and
+ *   #GTK_UI_MANAGER_POPUP.
+ * 
+ * Obtains a list of all toplevel widgets of the requested types.
+ * 
+ * Return value: a list of all toplevel widgets of the requested types. 
+ *
+ * Since: 2.4
+ **/
+GSList *
+gtk_ui_manager_get_toplevels (GtkUIManager         *self,
+			      GtkUIManagerItemType  types)
+{
+  struct {
+    GtkUIManagerItemType types;
+    GSList *list;
+  } data;
+
+  g_return_val_if_fail ((~(GTK_UI_MANAGER_MENUBAR | 
+			   GTK_UI_MANAGER_TOOLBAR |
+			   GTK_UI_MANAGER_POPUP) & types) == 0, NULL);
+  
+      
+  data.types = types;
+  data.list = NULL;
+
+  g_node_children_foreach (self->private_data->root_node, 
+			   G_TRAVERSE_ALL, 
+			   collect_toplevels, &data);
+
+  return data.list;
+}
+
+
 /**
  * gtk_ui_manager_get_action:
  * @self: a #GtkUIManager
@@ -1697,12 +1761,13 @@ static void
 update_smart_separators (GtkWidget *proxy)
 {
   GtkWidget *parent = NULL;
-
+  
   if (GTK_IS_MENU (proxy) || GTK_IS_TOOLBAR (proxy))
     parent = proxy;
   else if (GTK_IS_MENU_ITEM (proxy) || GTK_IS_TOOL_ITEM (proxy))
     parent = gtk_widget_get_parent (proxy);
 
+  
   if (parent) 
     {
       gboolean visible;
