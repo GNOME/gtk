@@ -1,3 +1,8 @@
+Wed Oct  3 20:29:29 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtktreemodelsort.[ch]: preparation for surgery
+	* tests/testtreesort.c: ditto
+
 2001-10-02  Havoc Pennington  <hp@redhat.com>
 
         Throughout: assorted docs
