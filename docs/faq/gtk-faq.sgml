@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>November 4th 2003</date>
+  <date>November 5th 2003</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -170,7 +170,7 @@ development..</para>
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>What is the + in GTK+?</title>
+<title>What is the + in GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>Peter Mattis informed the gtk mailing list that:</para>
 
@@ -184,14 +184,21 @@ version of gtk and the new version. You can think of it as
 being an enhancement to the original gtk that adds object
 oriented features.</quote></para>
 
+<para>Although much has changed with GTK+, and Peter, Spencer and Josh
+don't have any direct involvement these days, the name is kept to keep
+a link with the heritage of GTK+.</para>
+
+<para>GTK+ is now additionally based upon the Pango and ATK
+libraries, that provide text layout and rendering and accessibility
+interfaces.</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>Does the G in GTK+, GDK and GLib stand for?</title>
+<title>Does the G in GTK+, GDK and GLib stand for? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>GTK+ == Gimp Toolkit</para>
+<para>GTK+ == The GIMP Toolkit</para>
 <para>GDK == GTK+ Drawing Kit</para>
 <para>GLib == G Library</para>
 
@@ -200,14 +207,14 @@ oriented features.</quote></para>
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>Where is the documentation for GTK+?</title>
+<title>Where is the documentation for GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>In the GTK+ distribution's doc/ directory you will find
-the reference material for both GTK and GDK, this FAQ and the
+the API Reference for both GTK and GDK, this FAQ and the
 GTK Tutorial.</para>
 
 <para>In addition, you can find links to HTML versions of
-these documents  by going to <ulink url="http://www.gtk.org/">
+these documents by going to <ulink url="http://www.gtk.org/">
 http://www.gtk.org/</ulink>. A
 packaged version of the GTK Tutorial, with SGML, HTML,
 Postscript, DVI and text versions can be found in <ulink
@@ -215,8 +222,9 @@ url="ftp://ftp.gtk.org/pub/gtk/tutorial">
 ftp://ftp.gtk.org/pub/gtk/tutorial
 </ulink></para>
 
-<para>There are now a couple of books available that deal with
-programming GTK+, GDK and GNOME:</para>
+<para>There are now a few books available that deal with
+programming GTK+, GDK and GNOME. Unfortunately, they
+currently are all based upon GTK+ 1.x:</para>
 
 <itemizedlist>
 <listitem><simpara>Eric Harlows book entitled "Developing
@@ -241,6 +249,19 @@ url="http://pobox.com/~hp/gnome-app-devel.html">
 http://pobox.com/~hp/gnome-app-devel.html
 </ulink></simpara>
 </listitem>
+<listitem><simpara>"GTK+ Programming in C" by
+Syd Logan. ISBN: 0-1301-4264-6</simpara>
+</listitem>
+<listitem><simpara>"Linux GNOME/GTK+ Programming Bible" by
+Arthur Griffith. ISBN: 0-7645-4640-6</simpara>
+</listitem>
+<listitem><simpara>"Beginning GTK+/GNOME Programming" by
+Peter Wright. ISBN: 1-8610-0381-1</simpara>
+</listitem>
+<listitem><simpara>"Sams Teach Yourself GTK+ Programming
+in 21 Days" by Donna Martin
+. ISBN: 0-6723-1829-6</simpara>
+</listitem>
 </itemizedlist>
 
 </sect1>
@@ -249,7 +270,7 @@ http://pobox.com/~hp/gnome-app-devel.html
 
 <sect1>
 <title>Is there a mailing list (or mailing list archive) for
-GTK+?</title>
+GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>Information on mailing lists relating to GTK+ can be
 found at: <ulink
@@ -262,7 +283,7 @@ http://www.gtk.org/mailinglists.html
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>How to get help with GTK+</title>
+<title>How to get help with GTK+ <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>First, make sure your question isn't answered in the
 documentation, this FAQ or the tutorial. Done that? You're
