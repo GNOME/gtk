@@ -1,3 +1,33 @@
+2002-11-23  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/tmpl/x_interaction.sgml: 
+	* gdk/tmpl/pango_interaction.sgml: 
+	* gdk/tmpl/input_devices.sgml: 
+	* gdk/tmpl/input.sgml: 
+	* gdk/tmpl/threads.sgml: 
+	* gdk/tmpl/properties.sgml: 
+	* gdk/tmpl/dnd.sgml: 
+	* gdk/tmpl/selections.sgml: 
+	* gdk/tmpl/keys.sgml: 	
+	* gdk/tmpl/event_structs.sgml: 
+	* gdk/tmpl/events.sgml: 
+	* gdk/tmpl/windows.sgml: 
+	* gdk/tmpl/cursors.sgml: 
+	* gdk/tmpl/fonts.sgml: 
+	* gdk/tmpl/colors.sgml: 
+	* gdk/tmpl/pixbufs.sgml: 
+	* gdk/tmpl/images.sgml: 
+	* gdk/tmpl/pixmaps.sgml: 
+	* gdk/tmpl/drawing.sgml: 
+	* gdk/tmpl/regions.sgml: 
+	* gdk/tmpl/gdkdisplaymanager.sgml: 
+	* gdk/tmpl/gdkscreen.sgml: 
+	* gdk/tmpl/gdkdisplay.sgml: 
+	* gdk/tmpl/general.sgml:
+	Add missing short descriptions, standardize them to start with
+	a capital and end without a period. Also remove periods from
+	titles of examples.
+
 2002-11-22  Yanko Kaneti  <yaneti@declera.com>
 
 	* gtk/tmpl/gtkliststore.sgml: Fixup a typo to massage the build.

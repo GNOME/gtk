@@ -2,7 +2,7 @@
 Events
 
 <!-- ##### SECTION Short_Description ##### -->
-functions for handling events from the window system.
+Functions for handling events from the window system
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

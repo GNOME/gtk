@@ -141,7 +141,7 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
  * The standard cursor size is 16 by 16 pixels. You can create a bitmap 
  * from inline data as in the below example.
  * 
- * <example><title>Creating a custom cursor.</title>
+ * <example><title>Creating a custom cursor</title>
  * <programlisting>
  * /<!-- -->* This data is in X bitmap format, and can be created with the 'bitmap'
  *    utility. *<!-- -->/

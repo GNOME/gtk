@@ -1,3 +1,8 @@
+2002-11-23  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkcursor-x11.c (gdk_cursor_new_from_pixmap): 
+	Remove period from title of example in docs.
+
 2002-11-21 15:43:54 2002 Dan Mills  <thunder@ximian.com>
 
 	* configure.in: replace gtk-doc version check with an all-sh

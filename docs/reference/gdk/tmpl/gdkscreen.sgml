@@ -2,7 +2,7 @@
 GdkScreen
 
 <!-- ##### SECTION Short_Description ##### -->
-object representing a physical screen
+Object representing a physical screen
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

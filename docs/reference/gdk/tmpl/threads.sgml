@@ -2,7 +2,7 @@
 Threads
 
 <!-- ##### SECTION Short_Description ##### -->
-functions for using GDK in multi-threaded programs
+Functions for using GDK in multi-threaded programs
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

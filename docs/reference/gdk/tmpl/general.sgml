@@ -2,7 +2,7 @@
 General
 
 <!-- ##### SECTION Short_Description ##### -->
-library initialization and miscellaneous functions.
+Library initialization and miscellaneous functions
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -113,6 +113,13 @@ of g_atexit()).
 </para>
 
 @error_code: the error code to pass to the <function>exit()</function> call.
+
+
+<!-- ##### FUNCTION gdk_notify_startup_complete ##### -->
+<para>
+
+</para>
+
 
 
 <!-- ##### FUNCTION gdk_get_program_class ##### -->
@@ -330,7 +337,7 @@ of exiting the application. It should only be used if it is not possible to
 avoid the X error in any other way.
 </para>
 <example>
-<title>Trapping an X error.</title>
+<title>Trapping an X error</title>
 <programlisting>
   gdk_error_trap_push (<!-- -->);
 

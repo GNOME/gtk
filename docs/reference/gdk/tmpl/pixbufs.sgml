@@ -2,7 +2,7 @@
 Pixbufs
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Functions for rendering pixbufs on drawables
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

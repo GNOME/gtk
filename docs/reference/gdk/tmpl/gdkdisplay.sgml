@@ -2,7 +2,7 @@
 GdkDisplay
 
 <!-- ##### SECTION Short_Description ##### -->
-controls the keyboard/mouse pointer grabs and a set of <type>GdkScreen</type>s
+Controls the keyboard/mouse pointer grabs and a set of <type>GdkScreen</type>s
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
