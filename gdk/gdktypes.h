@@ -30,6 +30,7 @@
 /* GDK uses "glib". (And so does GTK).
  */
 #include <glib.h>
+#include <glib-object.h>
 
 #ifdef G_OS_WIN32
 #  ifdef GDK_COMPILATION

@@ -44,18 +44,13 @@ extern "C" {
 #define GDK_PARENT_RELATIVE_BG ((GdkPixmap *)1L)
 #define GDK_NO_BG ((GdkPixmap *)2L)
 
-#define GDK_DRAWABLE_TYPE(d) (((GdkDrawablePrivate *)d)->window_type)
-#define GDK_IS_WINDOW(d) (GDK_DRAWABLE_TYPE(d) <= GDK_WINDOW_TEMP || \
-                          GDK_DRAWABLE_TYPE(d) == GDK_WINDOW_FOREIGN)
-#define GDK_IS_PIXMAP(d) (GDK_DRAWABLE_TYPE(d) == GDK_DRAWABLE_PIXMAP)
-#define GDK_DRAWABLE_DESTROYED(d) (((GdkDrawablePrivate *)d)->destroyed)
+#define GDK_WINDOW_TYPE(d) ((GDK_WINDOW (d))->window_type)
+#define GDK_WINDOW_DESTROYED(d) ((GDK_WINDOW (d))->destroyed)
 
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
 #define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
 
-typedef struct _GdkDrawablePrivate     GdkDrawablePrivate;
-typedef struct _GdkWindowPrivate       GdkWindowPrivate;
 typedef struct _GdkImageClass	       GdkImageClass;
 typedef struct _GdkImagePrivate	       GdkImagePrivate;
 typedef struct _GdkGCPrivate	       GdkGCPrivate;
@@ -64,51 +59,6 @@ typedef struct _GdkColorInfo           GdkColorInfo;
 typedef struct _GdkFontPrivate	       GdkFontPrivate;
 typedef struct _GdkEventFilter	       GdkEventFilter;
 typedef struct _GdkClientFilter	       GdkClientFilter;
-
-struct _GdkDrawablePrivate
-{
-  GdkDrawable drawable;
-  GdkDrawableClass *klass;
-  gpointer klass_data;
-
-  guint ref_count;
-
-  gint width;
-  gint height;
-
-  GdkColormap *colormap;
-
-  guint8 window_type;
-  guint8 depth;
-  
-  guint destroyed : 2;
-};
-
-struct _GdkWindowPrivate
-{
-  GdkDrawablePrivate drawable;
-  
-  GdkWindow *parent;
-  gint x;
-  gint y;
-  guint8 resize_count;
-  guint mapped : 1;
-  guint guffaw_gravity : 1;
-  guint input_only : 1;
-
-  gint extension_events;
-
-  GList *filters;
-  GList *children;
-
-  GdkColor bg_color;
-  GdkPixmap *bg_pixmap;
-  
-  GSList *paint_stack;
-  
-  GdkRegion *update_area;
-  guint update_freeze_count;
-};
 
 struct _GdkImageClass 
 {

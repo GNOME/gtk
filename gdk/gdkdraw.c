@@ -28,31 +28,68 @@
 #include "gdkinternals.h"
 #include "gdkwindow.h"
 
+static void gdk_drawable_init       (GdkDrawable      *drawable);
+static void gdk_drawable_class_init (GdkDrawableClass *klass);
+static void gdk_drawable_finalize   (GObject          *object);
+
+static gpointer parent_class = NULL;
+
+GType
+gdk_drawable_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkDrawableClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_drawable_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkDrawable),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gdk_drawable_init,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_OBJECT,
+                                            "GdkDrawable",
+                                            &object_info);
+    }
+  
+  return object_type;
+}
+
+static void
+gdk_drawable_init (GdkDrawable *drawable)
+{
+
+
+}
+
+static void
+gdk_drawable_class_init (GdkDrawableClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  parent_class = g_type_class_peek (G_TYPE_OBJECT);
+
+  object_class->finalize = gdk_drawable_finalize;
+}
+
+static void
+gdk_drawable_finalize (GObject *object)
+{
+  GdkDrawable *drawable = GDK_DRAWABLE (object);
+
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
 /* Manipulation of drawables
  */
-GdkDrawable *
-gdk_drawable_alloc (void)
-{
-  GdkDrawablePrivate *private = g_new (GdkDrawablePrivate, 1);
-  GdkDrawable *drawable = (GdkDrawable*) private;
-  
-  drawable->user_data = NULL;
-
-  private->ref_count = 1;
-  private->destroyed = FALSE;
-  private->klass = NULL;
-  private->klass_data = NULL;
-  private->window_type = GDK_WINDOW_CHILD;
-
-  private->width = 1;
-  private->height = 1;
-
-  private->depth = 0;
-
-  private->colormap = NULL;
-
-  return drawable;
-}
 
 void          
 gdk_drawable_set_data (GdkDrawable   *drawable,
@@ -60,22 +97,22 @@ gdk_drawable_set_data (GdkDrawable   *drawable,
 		       gpointer	      data,
 		       GDestroyNotify destroy_func)
 {
-  g_dataset_set_data_full (drawable, key, data, destroy_func);
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  
+  g_object_set_qdata_full (G_OBJECT (drawable),
+                           g_quark_from_string (key),
+                           data,
+                           destroy_func);
 }
 
 gpointer
 gdk_drawable_get_data (GdkDrawable   *drawable,
 		       const gchar   *key)
 {
-  return g_dataset_get_data (drawable, key);
-}
-
-GdkDrawableType
-gdk_drawable_get_type (GdkDrawable *drawable)
-{
-  g_return_val_if_fail (drawable != NULL, (GdkDrawableType) -1);
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
   
-  return GDK_DRAWABLE_TYPE (drawable);
+  return g_object_get_qdata (G_OBJECT (drawable),
+                             g_quark_from_string (key));
 }
 
 void
@@ -83,63 +120,43 @@ gdk_drawable_get_size (GdkDrawable *drawable,
 		       gint        *width,
 		       gint        *height)
 {
-  GdkDrawablePrivate *drawable_private;
-  
-  g_return_if_fail (drawable != NULL);
-  
-  drawable_private = (GdkDrawablePrivate*) drawable;
-  
-  if (width)
-    *width = drawable_private->width;
-  if (height)
-    *height = drawable_private->height;
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+
+  GDK_DRAWABLE_GET_CLASS (drawable)->get_size (drawable, width, height);  
 }
 
 GdkVisual*
 gdk_drawable_get_visual (GdkDrawable *drawable)
 {
-  GdkColormap *colormap;
-
-  g_return_val_if_fail (drawable != NULL, NULL);
-
-  colormap = gdk_drawable_get_colormap (drawable);
-  return colormap ? gdk_colormap_get_visual (colormap) : NULL;
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  
+  return GDK_DRAWABLE_GET_CLASS (drawable)->get_visual (drawable);
 }
 
 gint
 gdk_drawable_get_depth (GdkDrawable *drawable)
 {
-  GdkDrawablePrivate *private = (GdkDrawablePrivate *)drawable;
-  g_return_val_if_fail (drawable != NULL, 0);
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
 
-  return private->depth;
+  return GDK_DRAWABLE_GET_CLASS (drawable)->get_depth (drawable);
 }
 
 GdkDrawable*
 gdk_drawable_ref (GdkDrawable *drawable)
 {
-  GdkDrawablePrivate *private = (GdkDrawablePrivate *)drawable;
-  g_return_val_if_fail (drawable != NULL, NULL);
-  
-  private->ref_count += 1;
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+
+  g_object_ref (G_OBJECT (drawable));
+
   return drawable;
 }
 
 void
 gdk_drawable_unref (GdkDrawable *drawable)
 {
-  GdkDrawablePrivate *private = (GdkDrawablePrivate *)drawable;
-  
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (private->ref_count > 0);
-  
-  private->ref_count -= 1;
-  if (private->ref_count == 0)
-    {
-      private->klass->destroy (drawable);
-      g_dataset_destroy (drawable);
-      g_free (drawable);
-    }
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+
+  g_object_unref (G_OBJECT (drawable));
 }
 
 /* Drawing
@@ -153,17 +170,15 @@ gdk_draw_point (GdkDrawable *drawable,
   GdkGCPrivate *gc_private;
   GdkPoint point;
 
-  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (gc != NULL);
 
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
   gc_private = (GdkGCPrivate*) gc;
 
   point.x = x;
   point.y = y;
   
-  ((GdkDrawablePrivate *)drawable)->klass->draw_points (drawable, gc, &point, 1);
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_points (drawable, gc, &point, 1);
 }
 
 void
@@ -177,18 +192,16 @@ gdk_draw_line (GdkDrawable *drawable,
   GdkGCPrivate *gc_private;
   GdkSegment segment;
 
-  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (gc != NULL);
 
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
   gc_private = (GdkGCPrivate*) gc;
 
   segment.x1 = x1;
   segment.y1 = y1;
   segment.x2 = x2;
   segment.y2 = y2;
-  ((GdkDrawablePrivate *)drawable)->klass->draw_segments (drawable, gc, &segment, 1);
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_segments (drawable, gc, &segment, 1);
 }
 
 void
@@ -200,22 +213,24 @@ gdk_draw_rectangle (GdkDrawable *drawable,
 		    gint         width,
 		    gint         height)
 {
-  GdkDrawablePrivate *drawable_private;
-
-  g_return_if_fail (drawable != NULL);
+  gint real_width;
+  gint real_height;
+  
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (gc != NULL);
 
-  drawable_private = (GdkDrawablePrivate*) drawable;
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
+  if (width < 0 || height < 0)
+    {
+      gdk_drawable_get_size (drawable, &real_width, &real_height);
 
-  if (width < 0)
-    width = drawable_private->width;
-  if (height < 0)
-    height = drawable_private->height;
+      if (width < 0)
+        width = real_width;
+      if (height < 0)
+        height = real_height;
+    }
 
-  ((GdkDrawablePrivate *)drawable)->klass->draw_rectangle (drawable, gc, filled, x, y,
-							   width, height);
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_rectangle (drawable, gc, filled, x, y,
+                                                     width, height);
 }
 
 void
@@ -232,12 +247,11 @@ gdk_draw_arc (GdkDrawable *drawable,
   GdkDrawablePrivate *drawable_private;
   GdkGCPrivate *gc_private;
 
-  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (gc != NULL);
 
   drawable_private = (GdkDrawablePrivate*) drawable;
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
+
   gc_private = (GdkGCPrivate*) gc;
 
   if (width < 0)
@@ -245,8 +259,8 @@ gdk_draw_arc (GdkDrawable *drawable,
   if (height < 0)
     height = drawable_private->height;
 
-  ((GdkDrawablePrivate *)drawable)->klass->draw_arc (drawable, gc, filled,
-						     x, y, width, height, angle1, angle2);
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_arc (drawable, gc, filled,
+                                               x, y, width, height, angle1, angle2);
 }
 
 void
@@ -256,13 +270,10 @@ gdk_draw_polygon (GdkDrawable *drawable,
 		  GdkPoint    *points,
 		  gint         npoints)
 {
-  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (gc != NULL);
 
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
-
-  ((GdkDrawablePrivate *)drawable)->klass->draw_polygon (drawable, gc, filled,
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_polygon (drawable, gc, filled,
 							 points, npoints);
 }
 
@@ -298,12 +309,12 @@ gdk_draw_text (GdkDrawable *drawable,
 	       const gchar *text,
 	       gint         text_length)
 {
-  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (font != NULL);
   g_return_if_fail (gc != NULL);
   g_return_if_fail (text != NULL);
 
-  ((GdkDrawablePrivate *)drawable)->klass->draw_text (drawable, font, gc, x, y, text, text_length);
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_text (drawable, font, gc, x, y, text, text_length);
 }
 
 void
@@ -315,12 +326,12 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
 		  const GdkWChar *text,
 		  gint		  text_length)
 {
-  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (font != NULL);
   g_return_if_fail (gc != NULL);
   g_return_if_fail (text != NULL);
 
-  ((GdkDrawablePrivate *)drawable)->klass->draw_text_wc (drawable, font, gc, x, y, text, text_length);
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_text_wc (drawable, font, gc, x, y, text, text_length);
 }
 
 void
@@ -334,19 +345,16 @@ gdk_draw_drawable (GdkDrawable *drawable,
 		   gint         width,
 		   gint         height)
 {
-  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (src != NULL);
   g_return_if_fail (gc != NULL);
-
-  if (GDK_DRAWABLE_DESTROYED (drawable) || GDK_DRAWABLE_DESTROYED (src))
-    return;
 
   if (width == -1)
     width = ((GdkDrawablePrivate *)src)->width;
   if (height == -1)
     height = ((GdkDrawablePrivate *)src)->height;
 
-  ((GdkDrawablePrivate *)drawable)->klass->draw_drawable (drawable, gc, src,
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable (drawable, gc, src,
 							  xsrc, ysrc, xdest, ydest,
 							  width, height);
 }
@@ -364,7 +372,7 @@ gdk_draw_image (GdkDrawable *drawable,
 {
   GdkImagePrivate *image_private;
 
-  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (image != NULL);
   g_return_if_fail (gc != NULL);
 
@@ -390,7 +398,7 @@ gdk_draw_points (GdkDrawable *drawable,
 		 GdkPoint    *points,
 		 gint         npoints)
 {
-  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail ((points != NULL) && (npoints > 0));
   g_return_if_fail (gc != NULL);
   g_return_if_fail (npoints >= 0);
@@ -398,10 +406,7 @@ gdk_draw_points (GdkDrawable *drawable,
   if (npoints == 0)
     return;
 
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
-
-  ((GdkDrawablePrivate *)drawable)->klass->draw_points (drawable, gc, points, npoints);
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_points (drawable, gc, points, npoints);
 }
 
 void
@@ -410,7 +415,7 @@ gdk_draw_segments (GdkDrawable *drawable,
 		   GdkSegment  *segs,
 		   gint         nsegs)
 {
-  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
 
   if (nsegs == 0)
     return;
@@ -419,10 +424,7 @@ gdk_draw_segments (GdkDrawable *drawable,
   g_return_if_fail (gc != NULL);
   g_return_if_fail (nsegs >= 0);
 
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
-
-  ((GdkDrawablePrivate *)drawable)->klass->draw_segments (drawable, gc, segs, nsegs);
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_segments (drawable, gc, segs, nsegs);
 }
 
 void
@@ -432,7 +434,7 @@ gdk_draw_lines (GdkDrawable *drawable,
 		gint         npoints)
 {
 
-  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (points != NULL);
   g_return_if_fail (gc != NULL);
   g_return_if_fail (npoints >= 0);
@@ -440,8 +442,5 @@ gdk_draw_lines (GdkDrawable *drawable,
   if (npoints == 0)
     return;
 
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
-
-  ((GdkDrawablePrivate *)drawable)->klass->draw_lines (drawable, gc, points, npoints);
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_lines (drawable, gc, points, npoints);
 }
