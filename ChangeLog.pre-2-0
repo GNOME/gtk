@@ -1,3 +1,9 @@
+2002-02-26            Vitaly Tishkov       <tvv@sparc.spb.su>
+
+        * gtk/gtktreemodel.c
+	misprints in documentation for gtk_tree_row_reference_inserted() 
+        and gtk_tree_path_new () are fixed
+
 Tue Feb 26 19:47:16 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (validate_visible_area): take into account

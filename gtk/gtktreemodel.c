@@ -124,7 +124,7 @@ gtk_tree_model_base_init (gpointer g_class)
 /**
  * gtk_tree_path_new:
  *
- * Creates a new #GtkTreePath.  This structure refers to a row 
+ * Creates a new #GtkTreePath.  This structure refers to a row.
  *
  * Return value: A newly created #GtkTreePath.
  **/
@@ -1693,7 +1693,7 @@ gtk_tree_row_reference_inserted (GObject     *proxy,
  * @path: The path position that was deleted
  * 
  * Lets a set of row reference created by gtk_tree_row_reference_new_proxy()
- * know that the model emitted the "row_deleted" signal.
+ * know that the model emitted the "row_inserted" signal.
  **/
 void
 gtk_tree_row_reference_deleted (GObject     *proxy,
