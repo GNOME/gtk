@@ -1,3 +1,47 @@
+2000-12-08  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gdk/linux-fb/gdkkeyboard-fb.c:
+	New file containing the abstracted keyboard driver. Most code
+	taken from gdkinput-ps2.c
+
+	* gdk/linux-fb/gdkinput-ps2.c:
+	Removed file.
+	
+	* gdk/linux-fb/Makefile.am:
+	Added gdkkeyboard-fb.c, removed gdkinput-ps2.c.
+
+	* gdk/linux-fb/gdkcolor-fb.c:
+	display->fb was renamed to display->fb_fd.
+
+	* gdk/linux-fb/gdkcursor-fb.c:
+	gdk_mouse_get_info -> gdk_fb_mouse_get_info
+
+	* gdk/linux-fb/gdkinput.c:
+	Moved gdk_input_init here from gdkinput-ps2.c
+
+	* gdk/linux-fb/gdkmain-fb.c:
+	display->fb was renamed to display->fb_fd.
+	Now the tty and the console is opened here instead
+	of in the keyboard driver. Also check GDK_VT to see what
+	tty to open.
+	Move gdk_beep () here from gdkinput-ps2.c
+	gdk_mouse_get_info -> gdk_fb_mouse_get_info
+
+	* gdk/linux-fb/gdkmouse-fb.c:
+	Add header.
+	gdk_mouse_get_info -> gdk_fb_mouse_get_info
+	Return correct keyboard modifiers.
+	GDK_MOUSETYPE -> GDK_MOUSE_TYPE for consistancy
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	Add tty and vt info to display.
+	Add orignal modeinfo storage to display
+	Update global functions
+
+	* gdk/linux-fb/gdkwindow-fb.c:
+	Added gdk_fb_window_find_focus().
+	gdk_mouse_get_info -> gdk_fb_mouse_get_info
+
 2000-12-07  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/x11/gdkkeys-x11.c (gdk_keymap_lookup_key): fix name of 

@@ -123,12 +123,17 @@ typedef struct {
 
 struct _GdkFBDisplay
 {
-  int fd;
+  int tty_fd;
+  int console_fd;
+  int vt, start_vt;
+  
+  int fb_fd;
   guchar *fbmem;
   gpointer active_cmap;
   gulong mem_len;
   struct fb_fix_screeninfo sinfo;
   struct fb_var_screeninfo modeinfo;
+  struct fb_var_screeninfo orig_modeinfo;
   int red_byte, green_byte, blue_byte; /* For truecolor */
 };
 
@@ -248,22 +253,21 @@ extern GdkGC *_gdk_fb_screen_gc;
 
 GType gdk_gc_fb_get_type (void) G_GNUC_CONST;
 
-/* Routines from gdkgeometry-fb.c */
+void       _gdk_selection_window_destroyed    (GdkWindow       *window);
+void       gdk_window_invalidate_region_clear (GdkWindow       *window,
+					       GdkRegion       *region);
+void       gdk_window_invalidate_rect_clear   (GdkWindow       *window,
+					       GdkRectangle    *rect);
+void       gdk_fb_window_send_crossing_events (GdkWindow       *dest,
+					       GdkCrossingMode  mode);
+void       gdk_fb_window_move_resize          (GdkWindow       *window,
+					       gint             x,
+					       gint             y,
+					       gint             width,
+					       gint             height,
+					       gboolean         send_expose_events);
+GdkWindow *gdk_fb_window_find_focus           (void);
 
-void      _gdk_window_init_position          (GdkWindow       *window);
-void      _gdk_selection_window_destroyed    (GdkWindow       *window);
-void      _gdk_window_move_resize_child      (GdkWindow       *window,
-					      gint             x,
-					      gint             y,
-					      gint             width,
-					      gint             height);
-void      _gdk_window_process_expose         (GdkWindow       *window,
-					      gulong           serial,
-					      GdkRectangle    *area);
-void      gdk_window_invalidate_region_clear (GdkWindow       *window,
-					      GdkRegion       *region);
-void      gdk_window_invalidate_rect_clear   (GdkWindow       *window,
-					      GdkRectangle    *rect);
 
 GdkGC *   _gdk_fb_gc_new                     (GdkDrawable     *drawable,
 					      GdkGCValues     *values,
@@ -386,14 +390,14 @@ void gdk_fb_cursor_hide(void);
 void gdk_fb_redraw_all(void);
 void gdk_fb_cursor_move (gint x, gint y, GdkWindow *in_window);
 
-void gdk_fb_window_send_crossing_events (GdkWindow *dest,
-					 GdkCrossingMode mode);
-
-gboolean gdk_fb_mouse_open  (void);
-void     gdk_fb_mouse_close (void);
-void     gdk_mouse_get_info (gint *x, 
-			     gint *y, 
-			     GdkModifierType *mask);
+guint gdk_fb_keyboard_modifiers (void);
+gboolean gdk_fb_keyboard_open  (void);
+void     gdk_fb_keyboard_close (void);
+gboolean gdk_fb_mouse_open     (void);
+void     gdk_fb_mouse_close    (void);
+void     gdk_fb_mouse_get_info (gint            *x,
+				gint            *y,
+				GdkModifierType *mask);
 
 
 #define PANGO_TYPE_FB_FONT              (pango_fb_font_get_type ())
@@ -420,13 +424,6 @@ typedef struct {
 GType             pango_fb_font_get_type       (void) G_GNUC_CONST;
 PangoFBGlyphInfo *pango_fb_font_get_glyph_info (PangoFont  *font,
 						PangoGlyph  glyph);
-
-void gdk_fb_window_move_resize (GdkWindow *window,
-				gint       x,
-				gint       y,
-				gint       width,
-				gint       height,
-				gboolean   send_expose_events);
 
 extern void CM(void); /* Check for general mem corruption */
 extern void RP(GdkDrawable *drawable); /* Same, for pixmaps */

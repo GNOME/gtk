@@ -517,6 +517,6 @@ gdk_fb_cursor_reset(void)
   GdkWindow *win = gdk_window_at_pointer (NULL, NULL);
   gint x, y;
 
-  gdk_mouse_get_info (&x, &y, NULL);
+  gdk_fb_mouse_get_info (&x, &y, NULL);
   gdk_fb_cursor_move (x, y, win);
 }

@@ -278,6 +278,13 @@ gdk_input_window_destroy (GdkWindow *window)
 }
 
 void
+gdk_input_init (void)
+{
+  gdk_input_devices = g_list_append (NULL, gdk_core_pointer);
+  gdk_input_ignore_core = FALSE;
+}
+
+void
 gdk_input_exit (void)
 {
   GList *tmp_list;

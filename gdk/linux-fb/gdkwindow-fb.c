@@ -440,6 +440,28 @@ gdk_fb_redraw_all (void)
   gdk_window_process_all_updates ();
 }
 
+
+/* Focus follows pointer */
+GdkWindow *
+gdk_fb_window_find_focus (void)
+{
+  if (_gdk_fb_keyboard_grab_window)
+    return _gdk_fb_keyboard_grab_window;
+  else if (gdk_fb_window_containing_pointer)
+    {
+      GdkWindowObject *priv = (GdkWindowObject *)gdk_fb_window_containing_pointer;
+      while (priv != (GdkWindowObject *)gdk_parent_root)
+	{
+	  if ((priv->parent == (GdkWindowObject *)gdk_parent_root) && priv->mapped)
+	    return (GdkWindow *)priv;
+	  priv = priv->parent;
+	}
+    }
+ 
+  return gdk_parent_root;
+}
+
+
 static GdkWindow *
 gdk_fb_find_common_ancestor (GdkWindow *win1,
 			     GdkWindow *win2)
@@ -513,7 +535,7 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
   if (a==b)
     return;
 
-  gdk_mouse_get_info (&x, &y, &my_mask);
+  gdk_fb_mouse_get_info (&x, &y, &my_mask);
 
   c = gdk_fb_find_common_ancestor (a, b);
 
@@ -1407,7 +1429,7 @@ gdk_window_get_pointer (GdkWindow       *window,
     window = gdk_parent_root;
   
   gdk_window_get_root_origin (window, &x_int, &y_int);
-  gdk_mouse_get_info (&winx, &winy, &my_mask);
+  gdk_fb_mouse_get_info (&winx, &winy, &my_mask);
 
   winx -= x_int;
   winy -= y_int;

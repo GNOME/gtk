@@ -155,7 +155,7 @@ gdk_colormap_new (GdkVisual *visual,
 	  fbc.green = green;
 	  fbc.blue = blue;
 
-	  if (ioctl (fbd->fd, FBIOGETCMAP, &fbc))
+	  if (ioctl (fbd->fb_fd, FBIOGETCMAP, &fbc))
 	    g_error("ioctl(FBIOGETCMAP) failed");
 
 	  for (i = 0; i < colormap->size; i++)
@@ -351,7 +351,7 @@ gdk_colormap_change (GdkColormap *colormap,
 	     colormap->colors[i].green +
 	     colormap->colors[i].blue)/3;
 	}
-      ioctl (gdk_display->fd, FBIOPUTCMAP, &fbc);
+      ioctl (gdk_display->fb_fd, FBIOPUTCMAP, &fbc);
       break;
 
     case GDK_VISUAL_PSEUDO_COLOR:
@@ -361,7 +361,7 @@ gdk_colormap_change (GdkColormap *colormap,
 	  green[i] = colormap->colors[i].green;
 	  blue[i] = colormap->colors[i].blue;
 	}
-      ioctl (gdk_display->fd, FBIOPUTCMAP, &fbc);
+      ioctl (gdk_display->fb_fd, FBIOPUTCMAP, &fbc);
       break;
 
     default:
@@ -565,7 +565,7 @@ gdk_colormap_alloc1 (GdkColormap *colormap,
 	  fbc.green = &green;
 	  fbc.blue = &blue;
 
-	  ioctl (gdk_display->fd, FBIOPUTCMAP, &fbc);
+	  ioctl (gdk_display->fb_fd, FBIOPUTCMAP, &fbc);
 
 	  ret->pixel = i;
 	  colormap->colors[ret->pixel] = *ret;
@@ -785,7 +785,7 @@ gdk_color_change (GdkColormap *colormap,
       fbc.red = &color->red;
       fbc.green = &color->green;
       fbc.blue = &color->blue;
-      ioctl (gdk_display->fd, FBIOPUTCMAP, &fbc);
+      ioctl (gdk_display->fb_fd, FBIOPUTCMAP, &fbc);
       break;
 
     default:

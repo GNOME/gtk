@@ -1,3 +1,22 @@
+/* GDK - The GIMP Drawing Kit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
 #include <gdk/gdk.h>
 #include <gdk/gdkinternals.h>
 #include "gdkprivate-fb.h"
@@ -32,9 +51,9 @@ struct _GdkFBMouse {
 static GdkFBMouse *gdk_fb_mouse = NULL;
 
 void
-gdk_mouse_get_info (gint *x,
-		    gint *y,
-		    GdkModifierType *mask)
+gdk_fb_mouse_get_info (gint *x,
+		       gint *y,
+		       GdkModifierType *mask)
 {
   if (x)
     *x = gdk_fb_mouse->x;
@@ -45,7 +64,7 @@ gdk_mouse_get_info (gint *x,
       (gdk_fb_mouse->button_pressed[0]?GDK_BUTTON1_MASK:0) |
       (gdk_fb_mouse->button_pressed[1]?GDK_BUTTON2_MASK:0) |
       (gdk_fb_mouse->button_pressed[2]?GDK_BUTTON3_MASK:0) |
-      /*keyboard->modifier_state*/0; //TODO
+      gdk_fb_keyboard_modifiers ();
 }
 
 static void
@@ -90,7 +109,7 @@ handle_mouse_movement(GdkFBMouse *mouse)
   state = (mouse->button_pressed[0]?GDK_BUTTON1_MASK:0) |
     (mouse->button_pressed[1]?GDK_BUTTON2_MASK:0) |
     (mouse->button_pressed[2]?GDK_BUTTON3_MASK:0) |
-    /*keyboard->modifier_state*/0; // TODO
+    gdk_fb_keyboard_modifiers ();
 
   event = gdk_event_make (grabwin, GDK_MOTION_NOTIFY, TRUE);
   if (event)
@@ -137,7 +156,7 @@ send_button_event (GdkFBMouse *mouse,
 	(mouse->button_pressed[1] ? GDK_BUTTON2_MASK : 0) |
 	(mouse->button_pressed[2] ? GDK_BUTTON3_MASK : 0) |
 	(1 << (button + 8)) /* badhack */ |
-	/*keyboard->modifier_state*/0; // TODO
+	gdk_fb_keyboard_modifiers ();
       event->button.device = gdk_core_pointer;
       event->button.x_root = mouse->x;
       event->button.y_root = mouse->y;
@@ -231,7 +250,7 @@ gdk_fb_mouse_open (void)
 
   mouse = g_new0 (GdkFBMouse, 1);
   mouse->fd = -1;
-  mouse_type = getenv ("GDK_MOUSETYPE");
+  mouse_type = getenv ("GDK_MOUSE_TYPE");
   if (!mouse_type)
     mouse_type = "ps2";
 
@@ -243,7 +262,7 @@ gdk_fb_mouse_open (void)
   
   if (i == G_N_ELEMENTS(mouse_devs))
     {
-      g_warning ("No mouse driver of type %s found\n", mouse_type);
+      g_warning ("No mouse driver of type %s found", mouse_type);
       return FALSE;
     }
 
@@ -256,7 +275,7 @@ gdk_fb_mouse_open (void)
 
   if (!device->open(mouse))
     {
-      g_warning ("Mouse driver open failed\n");
+      g_warning ("Mouse driver open failed");
       g_free (mouse);
       return FALSE;
     }

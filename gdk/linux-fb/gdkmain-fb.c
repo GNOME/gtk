@@ -35,6 +35,8 @@
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/vt.h>
+#include <sys/kd.h>
 
 #include "gdk.h"
 
@@ -308,7 +310,7 @@ fb_modes_parse_mode (GScanner *scanner,
 
   if (strcmp (modename, specified_modename)== 0) {
     if (!found_geometry)
-      g_warning ("Geometry not specified\n");
+      g_warning ("Geometry not specified");
 
     if (found_geometry)
       {
@@ -320,7 +322,7 @@ fb_modes_parse_mode (GScanner *scanner,
       }
     
     if (!found_timings)
-      g_warning ("Timing not specified\n");
+      g_warning ("Timing not specified");
     
     if (found_timings)
       {
@@ -371,7 +373,7 @@ gdk_fb_setup_mode_from_name (struct fb_var_screeninfo *modeinfo,
   fd = open (filename, O_RDONLY);
   if (fd < 0)
     {
-      g_warning ("Cannot read %s\n", filename);
+      g_warning ("Cannot read %s", filename);
       return retval;
     }
   
@@ -390,7 +392,7 @@ gdk_fb_setup_mode_from_name (struct fb_var_screeninfo *modeinfo,
     result = fb_modes_parse_mode (scanner, modeinfo, modename);
       
     if (result < 0) {
-      g_warning ("parse error in %s at line %d\n", filename, scanner->line);
+      g_warning ("parse error in %s at line %d", filename, scanner->line);
       break;
     }
     if (result > 0)
@@ -413,15 +415,22 @@ gdk_fb_set_mode (GdkFBDisplay *display)
 {
   char *env, *end;
   int depth, height, width;
+  gboolean changed;
   
-  if (ioctl (display->fd, FBIOGET_VSCREENINFO, &display->modeinfo) < 0)
+  if (ioctl (display->fb_fd, FBIOGET_VSCREENINFO, &display->modeinfo) < 0)
     return -1;
+
+  display->orig_modeinfo = display->modeinfo;
+
+  changed = FALSE;
   
   env = getenv ("GDK_DISPLAY_MODE");
   if (env)
     {
-      if (!gdk_fb_setup_mode_from_name (&display->modeinfo, env))
-	g_warning ("Couldn't find mode named '%s'\n", env);
+      if (gdk_fb_setup_mode_from_name (&display->modeinfo, env))
+	changed = TRUE;
+      else
+	g_warning ("Couldn't find mode named '%s'", env);
     }
 
   env = getenv ("GDK_DISPLAY_DEPTH");
@@ -429,7 +438,10 @@ gdk_fb_set_mode (GdkFBDisplay *display)
     {
       depth = strtol (env, &end, 10);
       if (env != end)
-	display->modeinfo.bits_per_pixel = depth;
+	{
+	  changed = TRUE;
+	  display->modeinfo.bits_per_pixel = depth;
+	}
     }
   
   env = getenv ("GDK_DISPLAY_WIDTH");
@@ -438,6 +450,7 @@ gdk_fb_set_mode (GdkFBDisplay *display)
       width = strtol (env, &end, 10);
       if (env != end)
 	{
+	  changed = TRUE;
 	  display->modeinfo.xres = width;
 	  display->modeinfo.xres_virtual = width;
 	}
@@ -449,74 +462,163 @@ gdk_fb_set_mode (GdkFBDisplay *display)
       height = strtol (env, &end, 10);
       if (env != end)
 	{
+	  changed = TRUE;
 	  display->modeinfo.yres = height;
 	  display->modeinfo.yres_virtual = height;
 	}
     }
 
-  if (ioctl (display->fd, FBIOPUT_VSCREENINFO, &display->modeinfo) < 0)
+  if (changed &&
+      (ioctl (display->fb_fd, FBIOPUT_VSCREENINFO, &display->modeinfo) < 0))
     {
-      g_warning ("Couldn't set specified mode\n");
+      g_warning ("Couldn't set specified mode");
       return -1;
     }
   
-  if (ioctl (display->fd, FBIOGET_FSCREENINFO, &display->sinfo) < 0)
+  if (ioctl (display->fb_fd, FBIOGET_FSCREENINFO, &display->sinfo) < 0)
     {
-      g_warning ("Error getting fixed screen info\n");
+      g_warning ("Error getting fixed screen info");
       return -1;
     }
   return 0;
 }
 
 static GdkFBDisplay *
-gdk_fb_display_new (const char *filename)
+gdk_fb_display_new ()
 {
-  int fd;
-  GdkFBDisplay *retval;
+  GdkFBDisplay *display;
+  gchar *fb_filename;
+  struct vt_stat vs;
+  int vt, n;
+  gchar *s, *send;
+  char buf[32];
 
-  fd = open (filename, O_RDWR);
-  if (fd < 0)
-    return NULL;
+  display = g_new0 (GdkFBDisplay, 1);
 
-  retval = g_new0 (GdkFBDisplay, 1);
-  retval->fd = fd;
-
-  if (gdk_fb_set_mode (retval) < 0)
+  display->console_fd = open ("/dev/console", O_RDWR);
+  if (display->console_fd < 0)
     {
-      g_free (retval);
+      g_warning ("Can't open /dev/console");
+      g_free (display);
+      return NULL;
+    }
+  
+  ioctl (display->console_fd, VT_GETSTATE, &vs);
+  display->start_vt = vs.v_active;
+
+  vt = display->start_vt;
+  s = getenv("GDK_VT");
+  if (s)
+    {
+      if (g_strcasecmp ("new", s)==0)
+	{
+	  n = ioctl (display->console_fd, VT_OPENQRY, &vt);
+	  if (n < 0 || vt == -1)
+	    g_error("Cannot allocate new VT");
+	}
+      else
+	{
+	  vt = strtol (s, &send, 10);
+	  if (s==send)
+	    {
+	      g_warning ("Cannot parse GDK_TTY");
+	      vt = display->start_vt;
+	    }
+	}
+      
+    }
+
+  display->vt = vt;
+  
+  /* Switch to the new VT */
+  if (vt != display->start_vt)
+    {
+      ioctl (display->console_fd, VT_ACTIVATE, vt);
+      ioctl (display->console_fd, VT_WAITACTIVE, vt);
+    }
+  
+  /* Open the tty */
+  g_snprintf (buf, sizeof(buf), "/dev/tty%d", vt);
+  display->tty_fd = open (buf, O_RDWR|O_NONBLOCK);
+  if (display->tty_fd < 0)
+    {
+      g_warning ("Can't open %s", buf);
+      close (display->console_fd);
+      g_free (display);
       return NULL;
     }
 
-  ioctl (retval->fd, FBIOBLANK, 0);
-
-  /* We used to use sinfo.smem_len, but that seemed to be broken in many cases */
-  retval->fbmem = mmap (NULL,
-			retval->modeinfo.yres * retval->sinfo.line_length,
-			PROT_READ|PROT_WRITE,
-			MAP_SHARED,
-			fd,
-			0);
-  g_assert (retval->fbmem != MAP_FAILED);
-
-  if (retval->sinfo.visual == FB_VISUAL_TRUECOLOR)
+  /* Set controlling tty */
+  ioctl (0, TIOCNOTTY, 0);
+  ioctl (display->tty_fd, TIOCSCTTY, 0);
+  
+  fb_filename = gdk_get_display ();
+  display->fb_fd = open (fb_filename, O_RDWR);
+  if (display->fb_fd < 0)
     {
-      retval->red_byte = retval->modeinfo.red.offset >> 3;
-      retval->green_byte = retval->modeinfo.green.offset >> 3;
-      retval->blue_byte = retval->modeinfo.blue.offset >> 3;
+      g_warning ("Can't open %s", fb_filename);
+      g_free (fb_filename);
+      close (display->tty_fd);
+      close (display->console_fd);
+      g_free (display);
+      return NULL;
+    }
+  g_free (fb_filename);
+
+  if (gdk_fb_set_mode (display) < 0)
+    {
+      close (display->fb_fd);
+      close (display->tty_fd);
+      close (display->console_fd);
+      g_free (display);
+      return NULL;
     }
 
-  return retval;
+  /* Disable normal text on the console */
+  ioctl (display->fb_fd, KDSETMODE, KD_GRAPHICS);
+
+  ioctl (display->fb_fd, FBIOBLANK, 0);
+
+  /* We used to use sinfo.smem_len, but that seemed to be broken in many cases */
+  display->fbmem = mmap (NULL,
+			 display->modeinfo.yres * display->sinfo.line_length,
+			 PROT_READ|PROT_WRITE,
+			 MAP_SHARED,
+			 display->fb_fd,
+			 0);
+  g_assert (display->fbmem != MAP_FAILED);
+
+  if (display->sinfo.visual == FB_VISUAL_TRUECOLOR)
+    {
+      display->red_byte = display->modeinfo.red.offset >> 3;
+      display->green_byte = display->modeinfo.green.offset >> 3;
+      display->blue_byte = display->modeinfo.blue.offset >> 3;
+    }
+
+  return display;
 }
 
 static void
-gdk_fb_display_destroy (GdkFBDisplay *fbd)
+gdk_fb_display_destroy (GdkFBDisplay *display)
 {
-  munmap (fbd->fbmem, fbd->modeinfo.yres * fbd->sinfo.line_length);
-  close (fbd->fd);
-  g_free (fbd);
-}
+  /* Restore old framebuffer mode */
+  ioctl (display->fb_fd, FBIOPUT_VSCREENINFO, &display->orig_modeinfo);
+  
+  /* Enable normal text on the console */
+  ioctl (display->fb_fd, KDSETMODE, KD_TEXT);
+  
+  munmap (display->fbmem, display->modeinfo.yres * display->sinfo.line_length);
+  close (display->fb_fd);
 
-extern void keyboard_init(void);
+  ioctl (display->console_fd, VT_ACTIVATE, display->start_vt);
+  ioctl (display->console_fd, VT_WAITACTIVE, display->start_vt);
+  if (display->vt != display->start_vt)
+    ioctl (display->console_fd, VT_DISALLOCATE, display->vt);
+  
+  close (display->tty_fd);
+  close (display->console_fd);
+  g_free (display);
+}
 
 gboolean
 _gdk_windowing_init_check (int argc, char **argv)
@@ -524,13 +626,32 @@ _gdk_windowing_init_check (int argc, char **argv)
   if (gdk_initialized)
     return TRUE;
 
-  keyboard_init ();
-  gdk_display = gdk_fb_display_new ("/dev/fb");
+  /* Create new session and become session leader */
+  setsid();
+
+  gdk_display = gdk_fb_display_new ();
 
   if (!gdk_display)
     return FALSE;
 
   gdk_fb_font_init ();
+
+  if (!gdk_fb_keyboard_open ())
+    {
+      g_warning ("Failed to initialize keyboard");
+      gdk_fb_display_destroy (gdk_display);
+      gdk_display = NULL;
+      return FALSE;
+    }
+  
+  if (!gdk_fb_mouse_open ())
+    {
+      g_warning ("Failed to initialize mouse");
+      gdk_fb_keyboard_close ();
+      gdk_fb_display_destroy (gdk_display);
+      gdk_display = NULL;
+      return FALSE;
+    }
 
   gdk_initialized = TRUE;
 
@@ -883,12 +1004,16 @@ extern void keyboard_shutdown(void);
 void
 gdk_windowing_exit (void)
 {
-  gdk_fb_display_destroy (gdk_display);
-  gdk_display = NULL;
 
+  gdk_fb_mouse_close ();
+  
+  gdk_fb_keyboard_close ();
+  
   gdk_fb_font_fini ();
 
-  keyboard_shutdown ();
+  gdk_fb_display_destroy (gdk_display);
+  
+  gdk_display = NULL;
 }
 
 gchar*
@@ -906,7 +1031,27 @@ gdk_keyval_from_name (const gchar *keyval_name)
 gchar *
 gdk_get_display(void)
 {
-  return g_strdup ("/dev/fb0");
+  gchar *s;
+
+  s = getenv ("GDK_DISPLAY");
+  if (s==0)
+    s = "/dev/fb";
+  
+  return g_strdup (s);
+}
+
+
+void
+gdk_beep (void)
+{
+  static int pitch = 600, duration = 100;
+  gulong arg;
+
+  /* Thank you XFree86 */
+  arg = ((1193190 / pitch) & 0xffff) |
+    (((unsigned long)duration) << 16);
+
+  ioctl (gdk_display->tty_fd, KDMKTONE, arg);
 }
 
 /* utils */
@@ -968,7 +1113,7 @@ gdk_event_make (GdkWindow *window,
     {
       GdkModifierType mask;
 
-      gdk_mouse_get_info (NULL, NULL, &mask);
+      gdk_fb_mouse_get_info (NULL, NULL, &mask);
 
       if (((mask & GDK_BUTTON1_MASK) && (evmask & GDK_BUTTON1_MOTION_MASK)) ||
 	  ((mask & GDK_BUTTON2_MASK) && (evmask & GDK_BUTTON2_MOTION_MASK)) ||
