@@ -1,3 +1,12 @@
+2002-06-07  Federico Mena Quintero  <federico@ximian.com>
+
+	* io-bmp.c (lsb_32):
+	(lsb_16): New functions to fetch 32 or 16-bit little-endian values
+	starting at a specific memory location.  We do this instead of
+	GINT32_FROM_LE() as the latter is simply dereferences a cast,
+	which doesn't work on platforms with alignment requirements.
+	Fixes #84083.
+
 2002-06-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-io.c (pixbuf_check_xbm): Accept xbms starting
