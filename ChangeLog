@@ -1,3 +1,10 @@
+Thu Oct 10 14:41:05 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtktextbtree.c gtk/gtktextbuffer.c gtk/gtktextdisplay.c
+	gtk/gtktextlayout.c gtk/gtktextmark.c gtk/gtktexttag.[ch]
+	gtk/gtktexttagtable.c gtk/gtktextutil.c gtk/gtktextview.[ch]:
+	Deprecation cleanup
+
 Thu Oct 10 14:35:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkscrolledwindow.[ch]: Privately export

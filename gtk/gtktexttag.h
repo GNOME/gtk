@@ -1,8 +1,12 @@
 #ifndef GTK_TEXT_TAG_H
 #define GTK_TEXT_TAG_H
 
-#include <gtk/gtkobject.h>
+#include <glib-object.h>
 #include <gdk/gdk.h>
+#include <gtk/gtkenums.h>
+
+/* Not needed, retained for compatibility -Yosh */
+#include <gtk/gtkobject.h>
 
 #ifdef __cplusplus
 extern "C" {

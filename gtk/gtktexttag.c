@@ -51,11 +51,9 @@
 #include "gtktexttag.h"
 #include "gtktexttypes.h"
 #include "gtktexttagtable.h"
-#include "gtksignal.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
-#include "gtktypebuiltins.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -171,10 +169,8 @@ gtk_text_tag_get_type (void)
         (GInstanceInitFunc) gtk_text_tag_init
       };
 
-      our_type = g_type_register_static (G_TYPE_OBJECT,
-                                         "GtkTextTag",
-                                         &our_info,
-                                         0);
+      our_type = g_type_register_static (G_TYPE_OBJECT, "GtkTextTag",
+                                         &our_info, 0);
     }
 
   return our_type;
@@ -620,7 +616,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
     g_signal_new ("event",
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
-                  GTK_SIGNAL_OFFSET (GtkTextTagClass, event),
+                  G_STRUCT_OFFSET (GtkTextTagClass, event),
                   _gtk_boolean_handled_accumulator, NULL,
                   _gtk_marshal_BOOLEAN__OBJECT_BOXED_BOXED,
                   G_TYPE_BOOLEAN,
@@ -653,9 +649,7 @@ gtk_text_tag_new (const gchar *name)
 {
   GtkTextTag *tag;
 
-  tag = GTK_TEXT_TAG (g_object_new (gtk_text_tag_get_type (),
-                                    "name", name,
-                                    NULL));
+  tag = g_object_new (GTK_TYPE_TEXT_TAG, "name", name, NULL);
 
   return tag;
 }
@@ -958,10 +952,10 @@ gtk_text_tag_set_property (GObject      *object,
         if (text_tag->values->appearance.bg_stipple != bitmap)
           {
             if (bitmap != NULL)
-              gdk_bitmap_ref (bitmap);
+              g_object_ref (bitmap);
 
             if (text_tag->values->appearance.bg_stipple)
-              gdk_bitmap_unref (text_tag->values->appearance.bg_stipple);
+              g_object_unref (text_tag->values->appearance.bg_stipple);
 
             text_tag->values->appearance.bg_stipple = bitmap;
           }
@@ -978,10 +972,10 @@ gtk_text_tag_set_property (GObject      *object,
         if (text_tag->values->appearance.fg_stipple != bitmap)
           {
             if (bitmap != NULL)
-              gdk_bitmap_ref (bitmap);
+              g_object_ref (bitmap);
 
             if (text_tag->values->appearance.fg_stipple)
-              gdk_bitmap_unref (text_tag->values->appearance.fg_stipple);
+              g_object_unref (text_tag->values->appearance.fg_stipple);
 
             text_tag->values->appearance.fg_stipple = bitmap;
           }
@@ -1215,7 +1209,7 @@ gtk_text_tag_set_property (GObject      *object,
       if (!text_tag->bg_stipple_set &&
           text_tag->values->appearance.bg_stipple)
         {
-          g_object_unref (G_OBJECT (text_tag->values->appearance.bg_stipple));
+          g_object_unref (text_tag->values->appearance.bg_stipple);
           text_tag->values->appearance.bg_stipple = NULL;
         }
       break;
@@ -1225,7 +1219,7 @@ gtk_text_tag_set_property (GObject      *object,
       if (!text_tag->fg_stipple_set &&
           text_tag->values->appearance.fg_stipple)
         {
-          g_object_unref (G_OBJECT (text_tag->values->appearance.fg_stipple));
+          g_object_unref (text_tag->values->appearance.fg_stipple);
           text_tag->values->appearance.fg_stipple = NULL;
         }
       break;
@@ -1350,7 +1344,7 @@ gtk_text_tag_set_property (GObject      *object,
    */
 
   if (text_tag->table)
-    g_signal_emit_by_name (G_OBJECT (text_tag->table),
+    g_signal_emit_by_name (text_tag->table,
                            "tag_changed",
                            text_tag, size_changed);
 }
@@ -1745,7 +1739,7 @@ gtk_text_tag_event (GtkTextTag        *tag,
   g_return_val_if_fail (G_IS_OBJECT (event_object), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  g_signal_emit (G_OBJECT (tag),
+  g_signal_emit (tag,
                  signals[EVENT],
                  0,
                  event_object,
@@ -1900,18 +1894,18 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
   /* Add refs */
 
   if (src->appearance.bg_stipple)
-    gdk_bitmap_ref (src->appearance.bg_stipple);
+    g_object_ref (src->appearance.bg_stipple);
 
   if (src->appearance.fg_stipple)
-    gdk_bitmap_ref (src->appearance.fg_stipple);
+    g_object_ref (src->appearance.fg_stipple);
 
   /* Remove refs */
 
   if (dest->appearance.bg_stipple)
-    gdk_bitmap_unref (dest->appearance.bg_stipple);
+    g_object_unref (dest->appearance.bg_stipple);
 
   if (dest->appearance.fg_stipple)
-    gdk_bitmap_unref (dest->appearance.fg_stipple);
+    g_object_unref (dest->appearance.fg_stipple);
 
   if (dest->font)
     pango_font_description_free (dest->font);
@@ -1967,10 +1961,10 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
       g_assert (!values->realized);
 
       if (values->appearance.bg_stipple)
-        gdk_bitmap_unref (values->appearance.bg_stipple);
+        g_object_unref (values->appearance.bg_stipple);
 
       if (values->appearance.fg_stipple)
-        gdk_bitmap_unref (values->appearance.fg_stipple);
+        g_object_unref (values->appearance.fg_stipple);
 
       if (values->tabs)
         pango_tab_array_free (values->tabs);
@@ -2054,9 +2048,9 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
       
       if (tag->bg_stipple_set)
         {
-          gdk_bitmap_ref (vals->appearance.bg_stipple);
+          g_object_ref (vals->appearance.bg_stipple);
           if (dest->appearance.bg_stipple)
-            gdk_bitmap_unref (dest->appearance.bg_stipple);
+            g_object_unref (dest->appearance.bg_stipple);
           dest->appearance.bg_stipple = vals->appearance.bg_stipple;
 
           dest->appearance.draw_bg = TRUE;
@@ -2064,9 +2058,9 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
 
       if (tag->fg_stipple_set)
         {
-          gdk_bitmap_ref (vals->appearance.fg_stipple);
+          g_object_ref (vals->appearance.fg_stipple);
           if (dest->appearance.fg_stipple)
-            gdk_bitmap_unref (dest->appearance.fg_stipple);
+            g_object_unref (dest->appearance.fg_stipple);
           dest->appearance.fg_stipple = vals->appearance.fg_stipple;
         }
 

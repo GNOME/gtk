@@ -77,7 +77,6 @@
  */
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
-#include "gtksignal.h"
 #include "gtkmarshalers.h"
 #include "gtktextlayout.h"
 #include "gtktextbtree.h"
@@ -149,10 +148,8 @@ gtk_text_layout_get_type (void)
         (GInstanceInitFunc) gtk_text_layout_init
       };
 
-      our_type = g_type_register_static (G_TYPE_OBJECT,
-                                         "GtkTextLayout",
-                                         &our_info,
-                                         0);
+      our_type = g_type_register_static (G_TYPE_OBJECT, "GtkTextLayout",
+                                         &our_info, 0);
     }
 
   return our_type;
@@ -178,7 +175,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   G_STRUCT_OFFSET (GtkTextLayoutClass, invalidated),
                   NULL, NULL,
                   _gtk_marshal_VOID__VOID,
-                  GTK_TYPE_NONE,
+                  G_TYPE_NONE,
                   0);
 
   signals[CHANGED] =
@@ -188,11 +185,11 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   G_STRUCT_OFFSET (GtkTextLayoutClass, changed),
                   NULL, NULL,
                   _gtk_marshal_VOID__INT_INT_INT,
-                  GTK_TYPE_NONE,
+                  G_TYPE_NONE,
                   3,
-                  GTK_TYPE_INT,
-                  GTK_TYPE_INT,
-                  GTK_TYPE_INT);
+                  G_TYPE_INT,
+                  G_TYPE_INT,
+                  G_TYPE_INT);
 
   signals[ALLOCATE_CHILD] =
     g_signal_new ("allocate_child",
@@ -201,11 +198,11 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   G_STRUCT_OFFSET (GtkTextLayoutClass, allocate_child),
                   NULL, NULL,
                   _gtk_marshal_VOID__OBJECT_INT_INT,
-                  GTK_TYPE_NONE,
+                  G_TYPE_NONE,
                   3,
                   GTK_TYPE_OBJECT,
-                  GTK_TYPE_INT,
-                  GTK_TYPE_INT);
+                  G_TYPE_INT,
+                  G_TYPE_INT);
 }
 
 static void
@@ -217,7 +214,7 @@ gtk_text_layout_init (GtkTextLayout *text_layout)
 GtkTextLayout*
 gtk_text_layout_new (void)
 {
-  return GTK_TEXT_LAYOUT (g_object_new (gtk_text_layout_get_type (), NULL));
+  return g_object_new (GTK_TYPE_TEXT_LAYOUT, NULL);
 }
 
 static void
@@ -245,12 +242,12 @@ gtk_text_layout_finalize (GObject *object)
 
   if (layout->ltr_context)
     {
-      g_object_unref (G_OBJECT (layout->ltr_context));
+      g_object_unref (layout->ltr_context);
       layout->ltr_context = NULL;
     }
   if (layout->rtl_context)
     {
-      g_object_unref (G_OBJECT (layout->rtl_context));
+      g_object_unref (layout->rtl_context);
       layout->rtl_context = NULL;
     }
   
@@ -281,7 +278,7 @@ gtk_text_layout_set_buffer (GtkTextLayout *layout,
       _gtk_text_btree_remove_view (_gtk_text_buffer_get_btree (layout->buffer),
                                   layout);
 
-      g_object_unref (G_OBJECT (layout->buffer));
+      g_object_unref (layout->buffer);
       layout->buffer = NULL;
     }
 
@@ -289,7 +286,7 @@ gtk_text_layout_set_buffer (GtkTextLayout *layout,
     {
       layout->buffer = buffer;
 
-      g_object_ref (G_OBJECT (buffer));
+      g_object_ref (buffer);
 
       _gtk_text_btree_add_view (_gtk_text_buffer_get_btree (buffer), layout);
     }
@@ -332,16 +329,16 @@ gtk_text_layout_set_contexts (GtkTextLayout *layout,
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
 
   if (layout->ltr_context)
-    g_object_unref (G_OBJECT (ltr_context));
+    g_object_unref (ltr_context);
 
   layout->ltr_context = ltr_context;
-  g_object_ref (G_OBJECT (ltr_context));
+  g_object_ref (ltr_context);
 
   if (layout->rtl_context)
-    g_object_unref (G_OBJECT (rtl_context));
+    g_object_unref (rtl_context);
 
   layout->rtl_context = rtl_context;
-  g_object_ref (G_OBJECT (rtl_context));
+  g_object_ref (rtl_context);
 
   DV (g_print ("invalidating all due to new pango contexts (%s)\n", G_STRLOC));
   gtk_text_layout_invalidate_all (layout);
@@ -518,7 +515,7 @@ gtk_text_layout_get_size (GtkTextLayout *layout,
 static void
 gtk_text_layout_invalidated (GtkTextLayout *layout)
 {
-  g_signal_emit (G_OBJECT (layout), signals[INVALIDATED], 0);
+  g_signal_emit (layout, signals[INVALIDATED], 0);
 }
 
 void
@@ -527,8 +524,7 @@ gtk_text_layout_changed (GtkTextLayout *layout,
                          gint           old_height,
                          gint           new_height)
 {
-  g_signal_emit (G_OBJECT (layout), signals[CHANGED], 0,
-                 y, old_height, new_height);
+  g_signal_emit (layout, signals[CHANGED], 0, y, old_height, new_height);
 }
 
 void
@@ -1189,9 +1185,9 @@ gtk_text_attr_appearance_destroy (PangoAttribute *attr)
   GtkTextAppearance *appearance = &((GtkTextAttrAppearance *)attr)->appearance;
 
   if (appearance->bg_stipple)
-    gdk_drawable_unref (appearance->bg_stipple);
+    g_object_unref (appearance->bg_stipple);
   if (appearance->fg_stipple)
-    gdk_drawable_unref (appearance->fg_stipple);
+    g_object_unref (appearance->fg_stipple);
 
   g_free (attr);
 }
@@ -1245,9 +1241,9 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
   result->appearance = *appearance;
 
   if (appearance->bg_stipple)
-    gdk_drawable_ref (appearance->bg_stipple);
+    g_object_ref (appearance->bg_stipple);
   if (appearance->fg_stipple)
-    gdk_drawable_ref (appearance->fg_stipple);
+    g_object_ref (appearance->fg_stipple);
 
   return (PangoAttribute *)result;
 }
@@ -1540,7 +1536,7 @@ allocate_child_widgets (GtkTextLayout      *text_layout,
                                                  NULL,
                                                  &extents);
               
-              g_signal_emit (G_OBJECT (text_layout),
+              g_signal_emit (text_layout,
                              signals[ALLOCATE_CHILD],
                              0,
                              shaped_object,
@@ -1973,7 +1969,7 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
   if (display != layout->one_display_cache)
     {
       if (display->layout)
-        g_object_unref (G_OBJECT (display->layout));
+        g_object_unref (display->layout);
 
       if (display->cursors)
         {

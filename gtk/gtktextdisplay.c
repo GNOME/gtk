@@ -124,8 +124,8 @@ gtk_text_render_state_new (GtkWidget    *widget,
 static void
 gtk_text_render_state_destroy (GtkTextRenderState *state)
 {
-  gdk_gc_unref (state->fg_gc);
-  gdk_gc_unref (state->bg_gc);
+  g_object_unref (state->fg_gc);
+  g_object_unref (state->bg_gc);
 
   g_free (state);
 }
@@ -410,7 +410,7 @@ render_layout_line (GdkDrawable        *drawable,
                     {
                       gdk_gc_set_clip_rectangle (render_state->fg_gc,
                                                  &render_state->clip_rect);
-                      g_object_unref (G_OBJECT (mask));
+                      g_object_unref (mask);
                     }
                 }
 
@@ -426,7 +426,7 @@ render_layout_line (GdkDrawable        *drawable,
 
               if (widgets)
                 {
-                  g_object_ref (G_OBJECT (widget));
+                  g_object_ref (widget);
                   *widgets = g_list_prepend (*widgets, widget);
                 }
             }

@@ -1,7 +1,6 @@
 
 #include "gtktexttagtable.h"
 #include "gtkmarshalers.h"
-#include "gtksignal.h"
 #include "gtktextbuffer.h" /* just for the lame notify_will_remove_tag hack */
 
 #include <stdlib.h>
@@ -52,10 +51,8 @@ gtk_text_tag_table_get_type (void)
         (GInstanceInitFunc) gtk_text_tag_table_init
       };
 
-      our_type = g_type_register_static (G_TYPE_OBJECT,
-                                         "GtkTextTagTable",
-                                         &our_info,
-                                         0);
+      our_type = g_type_register_static (G_TYPE_OBJECT, "GtkTextTagTable",
+                                         &our_info, 0);
     }
 
   return our_type;
@@ -87,23 +84,23 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
 
   signals[TAG_ADDED] =
     g_signal_new ("tag_added",
-                  GTK_CLASS_TYPE (object_class),
+                  G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_added),
                   NULL, NULL,
                   _gtk_marshal_VOID__OBJECT,
-                  GTK_TYPE_NONE,
+                  G_TYPE_NONE,
                   1,
                   GTK_TYPE_TEXT_TAG);
 
   signals[TAG_REMOVED] =
     g_signal_new ("tag_removed",                   
-                  GTK_CLASS_TYPE (object_class),
+                  G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_removed),
                   NULL, NULL,
                   _gtk_marshal_VOID__OBJECT,
-                  GTK_TYPE_NONE,
+                  G_TYPE_NONE,
                   1,
                   GTK_TYPE_TEXT_TAG);
 }
@@ -127,7 +124,7 @@ gtk_text_tag_table_new (void)
 {
   GtkTextTagTable *table;
 
-  table = GTK_TEXT_TAG_TABLE (g_object_new (gtk_text_tag_table_get_type (), NULL));
+  table = g_object_new (GTK_TYPE_TEXT_TAG_TABLE, NULL);
 
   return table;
 }
@@ -151,7 +148,7 @@ foreach_unref (GtkTextTag *tag, gpointer data)
     }
   
   tag->table = NULL;
-  g_object_unref (G_OBJECT (tag));
+  g_object_unref (tag);
 }
 
 static void
@@ -237,7 +234,7 @@ gtk_text_tag_table_add (GtkTextTagTable *table,
       return;
     }
   
-  g_object_ref (G_OBJECT (tag));
+  g_object_ref (tag);
 
   if (tag->name)
     g_hash_table_insert (table->hash, tag->name, tag);
@@ -256,7 +253,7 @@ gtk_text_tag_table_add (GtkTextTagTable *table,
   g_assert (size > 0);
   tag->priority = size - 1;
 
-  g_signal_emit (G_OBJECT (table), signals[TAG_ADDED], 0, tag);
+  g_signal_emit (table, signals[TAG_ADDED], 0, tag);
 }
 
 /**
@@ -324,9 +321,9 @@ gtk_text_tag_table_remove (GtkTextTagTable *table,
       table->anon_count -= 1;
     }
 
-  g_signal_emit (G_OBJECT (table), signals[TAG_REMOVED], 0, tag);
+  g_signal_emit (table, signals[TAG_REMOVED], 0, tag);
 
-  g_object_unref (G_OBJECT (tag));
+  g_object_unref (tag);
 }
 
 struct ForeachData

@@ -37,7 +37,6 @@
 #include "gtkmenuitem.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
-#include "gtksignal.h"
 #include "gtkstock.h"
 #include "gtktextdisplay.h"
 #include "gtktextview.h"
@@ -46,7 +45,6 @@
 #include "gtksizegroup.h"          /* FIXME http://bugzilla.gnome.org/show_bug.cgi?id=72258 */
 #include "gtktextutil.h"
 #include "gtkwindow.h"
-#include <string.h>
 
 /* How scrolling, validation, exposes, etc. work.
  *
@@ -415,26 +413,28 @@ static GtkTargetEntry target_table[] = {
 static GtkContainerClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
 
-GtkType
+GType
 gtk_text_view_get_type (void)
 {
-  static GtkType our_type = 0;
+  static GType our_type = 0;
 
   if (our_type == 0)
     {
-      static const GtkTypeInfo our_info =
+      static const GTypeInfo our_info =
       {
-        "GtkTextView",
-        sizeof (GtkTextView),
-        sizeof (GtkTextViewClass),
-        (GtkClassInitFunc) gtk_text_view_class_init,
-        (GtkObjectInitFunc) gtk_text_view_init,
-        /* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL
+	sizeof (GtkTextViewClass),
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_text_view_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkTextView),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_text_view_init,
       };
 
-      our_type = gtk_type_unique (GTK_TYPE_CONTAINER, &our_info);
+      our_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkTextView",
+					 &our_info, 0);
     }
 
   return our_type;
@@ -451,16 +451,16 @@ add_move_binding (GtkBindingSet  *binding_set,
 
   gtk_binding_entry_add_signal (binding_set, keyval, modmask,
                                 "move_cursor", 3,
-                                GTK_TYPE_ENUM, step,
-                                GTK_TYPE_INT, count,
-                                GTK_TYPE_BOOL, FALSE);
+                                G_TYPE_ENUM, step,
+                                G_TYPE_INT, count,
+                                G_TYPE_BOOLEAN, FALSE);
 
   /* Selection-extending version */
   gtk_binding_entry_add_signal (binding_set, keyval, modmask | GDK_SHIFT_MASK,
                                 "move_cursor", 3,
-                                GTK_TYPE_ENUM, step,
-                                GTK_TYPE_INT, count,
-                                GTK_TYPE_BOOL, TRUE);
+                                G_TYPE_ENUM, step,
+                                G_TYPE_INT, count,
+                                G_TYPE_BOOLEAN, TRUE);
 }
 
 static void
@@ -472,7 +472,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkBindingSet *binding_set;
 
-  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
+  parent_class = g_type_class_peek_parent (klass);
 
   /* Default handlers and virtual methods
    */
@@ -640,101 +640,125 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    */
 
   signals[MOVE_CURSOR] =
-    gtk_signal_new ("move_cursor",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextViewClass, move_cursor),
-                    _gtk_marshal_VOID__ENUM_INT_BOOLEAN,
-                    GTK_TYPE_NONE, 3, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT, GTK_TYPE_BOOL);
+    g_signal_new ("move_cursor",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkTextViewClass, move_cursor),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__ENUM_INT_BOOLEAN,
+		  G_TYPE_NONE, 3,
+		  GTK_TYPE_MOVEMENT_STEP,
+		  G_TYPE_INT,
+		  G_TYPE_BOOLEAN);
 
   signals[PAGE_HORIZONTALLY] =
-    gtk_signal_new ("page_horizontally",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextViewClass, page_horizontally),
-                    _gtk_marshal_VOID__INT_BOOLEAN,
-                    GTK_TYPE_NONE, 2, GTK_TYPE_INT, GTK_TYPE_BOOL);
+    g_signal_new ("page_horizontally",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkTextViewClass, page_horizontally),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__INT_BOOLEAN,
+		  G_TYPE_NONE, 2,
+		  G_TYPE_INT,
+		  G_TYPE_BOOLEAN);
   
   signals[SET_ANCHOR] =
-    gtk_signal_new ("set_anchor",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextViewClass, set_anchor),
-                    _gtk_marshal_VOID__VOID,
-                    GTK_TYPE_NONE, 0);
+    g_signal_new ("set_anchor",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkTextViewClass, set_anchor),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 
   signals[INSERT_AT_CURSOR] =
-    gtk_signal_new ("insert_at_cursor",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextViewClass, insert_at_cursor),
-                    _gtk_marshal_VOID__STRING,
-                    GTK_TYPE_NONE, 1, GTK_TYPE_STRING);
+    g_signal_new ("insert_at_cursor",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkTextViewClass, insert_at_cursor),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__STRING,
+		  G_TYPE_NONE, 1,
+		  G_TYPE_STRING);
 
   signals[DELETE_FROM_CURSOR] =
-    gtk_signal_new ("delete_from_cursor",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextViewClass, delete_from_cursor),
-                    _gtk_marshal_VOID__ENUM_INT,
-                    GTK_TYPE_NONE, 2, GTK_TYPE_DELETE_TYPE, GTK_TYPE_INT);
+    g_signal_new ("delete_from_cursor",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkTextViewClass, delete_from_cursor),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__ENUM_INT,
+		  G_TYPE_NONE, 2,
+		  GTK_TYPE_DELETE_TYPE,
+		  G_TYPE_INT);
 
   signals[CUT_CLIPBOARD] =
-    gtk_signal_new ("cut_clipboard",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextViewClass, cut_clipboard),
-                    _gtk_marshal_VOID__VOID,
-                    GTK_TYPE_NONE, 0);
+    g_signal_new ("cut_clipboard",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkTextViewClass, cut_clipboard),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 
   signals[COPY_CLIPBOARD] =
-    gtk_signal_new ("copy_clipboard",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextViewClass, copy_clipboard),
-                    _gtk_marshal_VOID__VOID,
-                    GTK_TYPE_NONE, 0);
+    g_signal_new ("copy_clipboard",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkTextViewClass, copy_clipboard),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 
   signals[PASTE_CLIPBOARD] =
-    gtk_signal_new ("paste_clipboard",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextViewClass, paste_clipboard),
-                    _gtk_marshal_VOID__VOID,
-                    GTK_TYPE_NONE, 0);
+    g_signal_new ("paste_clipboard",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkTextViewClass, paste_clipboard),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 
   signals[TOGGLE_OVERWRITE] =
-    gtk_signal_new ("toggle_overwrite",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextViewClass, toggle_overwrite),
-                    _gtk_marshal_VOID__VOID,
-                    GTK_TYPE_NONE, 0);
+    g_signal_new ("toggle_overwrite",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkTextViewClass, toggle_overwrite),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 
   signals[MOVE_FOCUS] =
-    gtk_signal_new ("move_focus",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextViewClass, move_focus),
-                    _gtk_marshal_VOID__ENUM,
-                    GTK_TYPE_NONE, 1, GTK_TYPE_DIRECTION_TYPE);
+    g_signal_new ("move_focus",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkTextViewClass, move_focus),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__ENUM,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_DIRECTION_TYPE);
   
   signals[SET_SCROLL_ADJUSTMENTS] =
-    gtk_signal_new ("set_scroll_adjustments",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextViewClass, set_scroll_adjustments),
-                    _gtk_marshal_VOID__OBJECT_OBJECT,
-                    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
+    g_signal_new ("set_scroll_adjustments",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkTextViewClass, set_scroll_adjustments),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_OBJECT,
+		  G_TYPE_NONE, 2,
+		  GTK_TYPE_ADJUSTMENT,
+		  GTK_TYPE_ADJUSTMENT);
   widget_class->set_scroll_adjustments_signal = signals[SET_SCROLL_ADJUSTMENTS];
 
   signals[POPULATE_POPUP] =
-    gtk_signal_new ("populate_popup",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextViewClass, populate_popup),
-                    _gtk_marshal_VOID__OBJECT,
-                    GTK_TYPE_NONE, 1, GTK_TYPE_MENU);
+    g_signal_new ("populate_popup",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkTextViewClass, populate_popup),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_MENU);
   
   /*
    * Key bindings
@@ -830,102 +854,102 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   /* Select all
    */
   gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
-                                "move_cursor", 3,
-                                GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
-                                GTK_TYPE_INT, -1,
-				GTK_TYPE_BOOL, FALSE);
+				"move_cursor", 3,
+				GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
+				G_TYPE_INT, -1,
+				G_TYPE_BOOLEAN, FALSE);
   gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK,
-                                "move_cursor", 3,
-                                GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
-                                GTK_TYPE_INT, 1,
-				GTK_TYPE_BOOL, TRUE);
+				"move_cursor", 3,
+				GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
+				G_TYPE_INT, 1,
+				G_TYPE_BOOLEAN, TRUE);
 
   
   gtk_binding_entry_add_signal (binding_set, GDK_Page_Up, GDK_CONTROL_MASK,
-                                "page_horizontally", 2,
-                                GTK_TYPE_INT, -1,
-                                GTK_TYPE_BOOL, FALSE);
+				"page_horizontally", 2,
+				G_TYPE_INT, -1,
+				G_TYPE_BOOLEAN, FALSE);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Page_Up, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-                                "page_horizontally", 2,
-                                GTK_TYPE_INT, -1,
-                                GTK_TYPE_BOOL, TRUE);
+				"page_horizontally", 2,
+				G_TYPE_INT, -1,
+				G_TYPE_BOOLEAN, TRUE);
 
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Up, GDK_CONTROL_MASK,
-                                "page_horizontally", 2,
-                                GTK_TYPE_INT, -1,
-                                GTK_TYPE_BOOL, FALSE);
+				"page_horizontally", 2,
+				G_TYPE_INT, -1,
+				G_TYPE_BOOLEAN, FALSE);
 
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Up, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-                                "page_horizontally", 2,
-                                GTK_TYPE_INT, -1,
-                                GTK_TYPE_BOOL, TRUE);
+				"page_horizontally", 2,
+				G_TYPE_INT, -1,
+				G_TYPE_BOOLEAN, TRUE);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Page_Down, GDK_CONTROL_MASK,
-                                "page_horizontally", 2,
-                                GTK_TYPE_INT, 1,
-                                GTK_TYPE_BOOL, FALSE);
+				"page_horizontally", 2,
+				G_TYPE_INT, 1,
+				G_TYPE_BOOLEAN, FALSE);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Page_Down, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-                                "page_horizontally", 2,
-                                GTK_TYPE_INT, 1,
-                                GTK_TYPE_BOOL, TRUE);
+				"page_horizontally", 2,
+				G_TYPE_INT, 1,
+				G_TYPE_BOOLEAN, TRUE);
 
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Down, GDK_CONTROL_MASK,
-                                "page_horizontally", 2,
-                                GTK_TYPE_INT, 1,
-                                GTK_TYPE_BOOL, FALSE);
+				"page_horizontally", 2,
+				G_TYPE_INT, 1,
+				G_TYPE_BOOLEAN, FALSE);
 
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Page_Down, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
-                                "page_horizontally", 2,
-                                GTK_TYPE_INT, 1,
-                                GTK_TYPE_BOOL, TRUE);
+				"page_horizontally", 2,
+				G_TYPE_INT, 1,
+				G_TYPE_BOOLEAN, TRUE);
   
   /* Deleting text */
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, 0,
-                                "delete_from_cursor", 2,
-                                GTK_TYPE_ENUM, GTK_DELETE_CHARS,
-                                GTK_TYPE_INT, 1);
+				"delete_from_cursor", 2,
+				G_TYPE_ENUM, GTK_DELETE_CHARS,
+				G_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Delete, 0,
-                                "delete_from_cursor", 2,
-                                GTK_TYPE_ENUM, GTK_DELETE_CHARS,
-                                GTK_TYPE_INT, 1);
+				"delete_from_cursor", 2,
+				G_TYPE_ENUM, GTK_DELETE_CHARS,
+				G_TYPE_INT, 1);
   
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, 0,
-                                "delete_from_cursor", 2,
-                                GTK_TYPE_ENUM, GTK_DELETE_CHARS,
-                                GTK_TYPE_INT, -1);
+				"delete_from_cursor", 2,
+				G_TYPE_ENUM, GTK_DELETE_CHARS,
+				G_TYPE_INT, -1);
 
   /* Make this do the same as Backspace, to help with mis-typing */
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_SHIFT_MASK,
-                                "delete_from_cursor", 2,
-                                GTK_TYPE_ENUM, GTK_DELETE_CHARS,
-                                GTK_TYPE_INT, -1);
+				"delete_from_cursor", 2,
+				G_TYPE_ENUM, GTK_DELETE_CHARS,
+				G_TYPE_INT, -1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, GDK_CONTROL_MASK,
-                                "delete_from_cursor", 2,
-                                GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
-                                GTK_TYPE_INT, 1);
+				"delete_from_cursor", 2,
+				G_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
+				G_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Delete, GDK_CONTROL_MASK,
-                                "delete_from_cursor", 2,
-                                GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
-                                GTK_TYPE_INT, 1);
+				"delete_from_cursor", 2,
+				G_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
+				G_TYPE_INT, 1);
   
   gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_CONTROL_MASK,
-                                "delete_from_cursor", 2,
-                                GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
-                                GTK_TYPE_INT, -1);
+				"delete_from_cursor", 2,
+				G_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
+				G_TYPE_INT, -1);
 
   /* Cut/copy/paste */
 
   gtk_binding_entry_add_signal (binding_set, GDK_x, GDK_CONTROL_MASK,
-                                "cut_clipboard", 0);
+				"cut_clipboard", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_c, GDK_CONTROL_MASK,
-                                "copy_clipboard", 0);
+				"copy_clipboard", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_v, GDK_CONTROL_MASK,
-                                "paste_clipboard", 0);
+				"paste_clipboard", 0);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, GDK_SHIFT_MASK,
 				"cut_clipboard", 0);
@@ -936,24 +960,24 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   /* Overwrite */
   gtk_binding_entry_add_signal (binding_set, GDK_Insert, 0,
-                                "toggle_overwrite", 0);
+				"toggle_overwrite", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Insert, 0,
-                                "toggle_overwrite", 0);
+				"toggle_overwrite", 0);
 
   /* Control-tab focus motion */
   gtk_binding_entry_add_signal (binding_set, GDK_Tab, GDK_CONTROL_MASK,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
+				"move_focus", 1,
+				GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, GDK_CONTROL_MASK,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
+				"move_focus", 1,
+				GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
   
   gtk_binding_entry_add_signal (binding_set, GDK_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
+				"move_focus", 1,
+				GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
+				"move_focus", 1,
+				GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
 }
 
 static void
@@ -990,13 +1014,13 @@ gtk_text_view_init (GtkTextView *text_view)
    */
   text_view->im_context = gtk_im_multicontext_new ();
 
-  g_signal_connect (G_OBJECT (text_view->im_context), "commit",
+  g_signal_connect (text_view->im_context, "commit",
                     G_CALLBACK (gtk_text_view_commit_handler), text_view);
-  g_signal_connect (G_OBJECT (text_view->im_context), "preedit_changed",
+  g_signal_connect (text_view->im_context, "preedit_changed",
  		    G_CALLBACK (gtk_text_view_preedit_changed_handler), text_view);
-  g_signal_connect (G_OBJECT (text_view->im_context), "retrieve_surrounding",
+  g_signal_connect (text_view->im_context, "retrieve_surrounding",
  		    G_CALLBACK (gtk_text_view_retrieve_surrounding_handler), text_view);
-  g_signal_connect (G_OBJECT (text_view->im_context), "delete_surrounding",
+  g_signal_connect (text_view->im_context, "delete_surrounding",
  		    G_CALLBACK (gtk_text_view_delete_surrounding_handler), text_view);
 
   text_view->cursor_visible = TRUE;
@@ -1026,7 +1050,7 @@ gtk_text_view_init (GtkTextView *text_view)
 GtkWidget*
 gtk_text_view_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_text_view_get_type ()));
+  return g_object_new (GTK_TYPE_TEXT_VIEW, NULL);
 }
 
 /**
@@ -1099,9 +1123,10 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
       g_slist_free (copy);
 
-      g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->buffer),
-                                            (gpointer) gtk_text_view_mark_set_handler, text_view);
-      g_object_unref (G_OBJECT (text_view->buffer));
+      g_signal_handlers_disconnect_by_func (text_view->buffer,
+					    gtk_text_view_mark_set_handler,
+					    text_view);
+      g_object_unref (text_view->buffer);
       text_view->dnd_mark = NULL;
 
       if (GTK_WIDGET_REALIZED (text_view))
@@ -1118,7 +1143,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
     {
       GtkTextIter start;
 
-      g_object_ref (G_OBJECT (buffer));
+      g_object_ref (buffer);
 
       if (text_view->layout)
         gtk_text_layout_set_buffer (text_view->layout, buffer);
@@ -1135,7 +1160,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
       text_view->first_para_pixels = 0;
 
-      g_signal_connect (G_OBJECT (text_view->buffer), "mark_set",
+      g_signal_connect (text_view->buffer, "mark_set",
 			G_CALLBACK (gtk_text_view_mark_set_handler), text_view);
 
       if (GTK_WIDGET_REALIZED (text_view))
@@ -1161,7 +1186,7 @@ get_buffer (GtkTextView *text_view)
       GtkTextBuffer *b;
       b = gtk_text_buffer_new (NULL);
       gtk_text_view_set_buffer (text_view, b);
-      g_object_unref (G_OBJECT (b));
+      g_object_unref (b);
     }
 
   return text_view->buffer;
@@ -1508,7 +1533,7 @@ free_pending_scroll (GtkTextPendingScroll *scroll)
   if (!gtk_text_mark_get_deleted (scroll->mark))
     gtk_text_buffer_delete_mark (gtk_text_mark_get_buffer (scroll->mark),
                                  scroll->mark);
-  g_object_unref (G_OBJECT (scroll->mark));
+  g_object_unref (scroll->mark);
   g_free (scroll);
 }
 
@@ -1549,7 +1574,7 @@ gtk_text_view_queue_scroll (GtkTextView   *text_view,
                                               &iter,
                                               gtk_text_mark_get_left_gravity (mark));
 
-  g_object_ref (G_OBJECT (scroll->mark));
+  g_object_ref (scroll->mark);
   
   cancel_pending_scroll (text_view);
 
@@ -1626,13 +1651,13 @@ gtk_text_view_set_adjustment_upper (GtkAdjustment *adj, gdouble upper)
           value_changed = TRUE;
         }
 
-      gtk_signal_emit_by_name (GTK_OBJECT (adj), "changed");
+      gtk_adjustment_changed (adj);
       DV(g_print(">Changed adj upper to %g ("G_STRLOC")\n", upper));
       
       if (value_changed)
         {
           DV(g_print(">Changed adj value because upper decreased ("G_STRLOC")\n"));
-          gtk_signal_emit_by_name (GTK_OBJECT (adj), "value_changed");
+	  gtk_adjustment_value_changed (adj);
         }
     }
 }
@@ -1672,8 +1697,8 @@ gtk_text_view_update_adjustments (GtkTextView *text_view)
       text_view->vadjustment->page_increment =
         SCREEN_HEIGHT (text_view) * 0.9;
 
-      gtk_signal_emit_by_name (GTK_OBJECT (get_hadjustment (text_view)), "changed");
-      gtk_signal_emit_by_name (GTK_OBJECT (get_hadjustment (text_view)), "changed");
+      gtk_adjustment_changed (get_hadjustment (text_view));
+      gtk_adjustment_changed (get_vadjustment (text_view));
     }
 }
 
@@ -2443,9 +2468,9 @@ gtk_text_view_finalize (GObject *object)
     pango_tab_array_free (text_view->tabs);
   
   if (text_view->hadjustment)
-    g_object_unref (G_OBJECT (text_view->hadjustment));
+    g_object_unref (text_view->hadjustment);
   if (text_view->vadjustment)
-    g_object_unref (G_OBJECT (text_view->vadjustment));
+    g_object_unref (text_view->vadjustment);
 
   text_window_free (text_view->text_window);
 
@@ -2461,7 +2486,7 @@ gtk_text_view_finalize (GObject *object)
   if (text_view->bottom_window)
     text_window_free (text_view->bottom_window);
 
-  g_object_unref (G_OBJECT (text_view->im_context));
+  g_object_unref (text_view->im_context);
   
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
@@ -2958,7 +2983,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   text_view->hadjustment->lower = 0;
   text_view->hadjustment->upper = MAX (SCREEN_WIDTH (text_view),
                                        text_view->width);
-  gtk_signal_emit_by_name (GTK_OBJECT (text_view->hadjustment), "changed");
+  gtk_adjustment_changed (text_view->hadjustment);
 
   text_view->vadjustment->page_size = SCREEN_HEIGHT (text_view);
   text_view->vadjustment->page_increment = SCREEN_HEIGHT (text_view) * 0.9;
@@ -2966,7 +2991,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   text_view->vadjustment->lower = 0;
   text_view->vadjustment->upper = MAX (SCREEN_HEIGHT (text_view),
                                        text_view->height);
-  gtk_signal_emit_by_name (GTK_OBJECT (text_view->vadjustment), "changed");
+  gtk_adjustment_changed (text_view->vadjustment);
 
   if (yoffset_changed)
     gtk_adjustment_value_changed (vadj);
@@ -3977,7 +4002,7 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
     }
 
   g_signal_handlers_disconnect_by_func (gdk_keymap_get_for_display (gtk_widget_get_display (widget)),
-					(gpointer) keymap_direction_changed,
+					keymap_direction_changed,
 					text_view);
 
   text_view->need_im_reset = TRUE;
@@ -4105,7 +4130,7 @@ gtk_text_view_paint (GtkWidget      *widget,
                                       child,
                                       event);
 
-      g_object_unref (G_OBJECT (child));
+      g_object_unref (child);
       
       tmp_list = tmp_list->next;
     }
@@ -5008,7 +5033,7 @@ gtk_text_view_move_focus (GtkTextView     *text_view,
     return;
 
   /* Propagate to toplevel */
-  g_signal_emit_by_name (G_OBJECT (toplevel), "move_focus", direction_type);
+  g_signal_emit_by_name (toplevel, "move_focus", direction_type);
 }
 
 /*
@@ -5187,10 +5212,10 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
       gtk_text_buffer_place_cursor (buffer, &newplace);
     }
 
-  text_view->selection_drag_handler = gtk_signal_connect (GTK_OBJECT (text_view),
-                                                          "motion_notify_event",
-                                                          GTK_SIGNAL_FUNC (selection_motion_event_handler),
-                                                          NULL);
+  text_view->selection_drag_handler = g_signal_connect (text_view,
+                                                        "motion_notify_event",
+                                                        G_CALLBACK (selection_motion_event_handler),
+                                                        NULL);
 }
 
 /* returns whether we were really dragging */
@@ -5200,7 +5225,7 @@ gtk_text_view_end_selection_drag (GtkTextView *text_view, GdkEventButton *event)
   if (text_view->selection_drag_handler == 0)
     return FALSE;
 
-  gtk_signal_disconnect (GTK_OBJECT (text_view), text_view->selection_drag_handler);
+  g_signal_handler_disconnect (text_view, text_view->selection_drag_handler);
   text_view->selection_drag_handler = 0;
 
   if (text_view->scroll_timeout != 0)
@@ -5281,17 +5306,17 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       
       text_view->layout = gtk_text_layout_new ();
 
-      g_signal_connect (G_OBJECT (text_view->layout),
+      g_signal_connect (text_view->layout,
 			"invalidated",
 			G_CALLBACK (invalidated_handler),
 			text_view);
 
-      g_signal_connect (G_OBJECT (text_view->layout),
+      g_signal_connect (text_view->layout,
 			"changed",
 			G_CALLBACK (changed_handler),
 			text_view);
 
-      g_signal_connect (G_OBJECT (text_view->layout),
+      g_signal_connect (text_view->layout,
 			"allocate_child",
 			G_CALLBACK (gtk_text_view_child_allocated),
 			text_view);
@@ -5311,8 +5336,8 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
 
       gtk_text_layout_set_contexts (text_view->layout, ltr_context, rtl_context);
 
-      g_object_unref (G_OBJECT (ltr_context));
-      g_object_unref (G_OBJECT (rtl_context));
+      g_object_unref (ltr_context);
+      g_object_unref (rtl_context);
 
       gtk_text_view_check_keymap_direction (text_view);
 
@@ -5393,11 +5418,11 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
 
       gtk_text_view_remove_validate_idles (text_view);
 
-      g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->layout),
-                                            (gpointer) invalidated_handler,
+      g_signal_handlers_disconnect_by_func (text_view->layout,
+					    invalidated_handler,
 					    text_view);
-      g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->layout),
-                                            (gpointer) changed_handler, 
+      g_signal_handlers_disconnect_by_func (text_view->layout,
+					    changed_handler, 
 					    text_view);
       
       /* Remove layout from all anchored children */
@@ -5418,7 +5443,7 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
       gtk_text_view_stop_cursor_blink (text_view);
       gtk_text_view_end_selection_drag (text_view, NULL);
 
-      g_object_unref (G_OBJECT (text_view->layout));
+      g_object_unref (text_view->layout);
       text_view->layout = NULL;
     }
 }
@@ -5828,37 +5853,41 @@ gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
 
   if (text_view->hadjustment && (text_view->hadjustment != hadj))
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (text_view->hadjustment), text_view);
-      g_object_unref (G_OBJECT (text_view->hadjustment));
+      g_signal_handlers_disconnect_by_func (text_view->hadjustment,
+					    gtk_text_view_value_changed,
+					    text_view);
+      g_object_unref (text_view->hadjustment);
     }
 
   if (text_view->vadjustment && (text_view->vadjustment != vadj))
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (text_view->vadjustment), text_view);
-      g_object_unref (G_OBJECT (text_view->vadjustment));
+      g_signal_handlers_disconnect_by_func (text_view->vadjustment,
+					    gtk_text_view_value_changed,
+					    text_view);
+      g_object_unref (text_view->vadjustment);
     }
 
   if (text_view->hadjustment != hadj)
     {
       text_view->hadjustment = hadj;
-      g_object_ref (G_OBJECT (text_view->hadjustment));
+      g_object_ref (text_view->hadjustment);
       gtk_object_sink (GTK_OBJECT (text_view->hadjustment));
       
-      gtk_signal_connect (GTK_OBJECT (text_view->hadjustment), "value_changed",
-                          (GtkSignalFunc) gtk_text_view_value_changed,
-                          text_view);
+      g_signal_connect (text_view->hadjustment, "value_changed",
+                        G_CALLBACK (gtk_text_view_value_changed),
+			text_view);
       need_adjust = TRUE;
     }
 
   if (text_view->vadjustment != vadj)
     {
       text_view->vadjustment = vadj;
-      g_object_ref (G_OBJECT (text_view->vadjustment));
+      g_object_ref (text_view->vadjustment);
       gtk_object_sink (GTK_OBJECT (text_view->vadjustment));
       
-      gtk_signal_connect (GTK_OBJECT (text_view->vadjustment), "value_changed",
-                          (GtkSignalFunc) gtk_text_view_value_changed,
-                          text_view);
+      g_signal_connect (text_view->vadjustment, "value_changed",
+                        G_CALLBACK (gtk_text_view_value_changed),
+			text_view);
       need_adjust = TRUE;
     }
 
@@ -6263,7 +6292,7 @@ activate_cb (GtkWidget   *menuitem,
 	     GtkTextView *text_view)
 {
   const gchar *signal = g_object_get_data (G_OBJECT (menuitem), "gtk-signal");
-  gtk_signal_emit_by_name (GTK_OBJECT (text_view), signal);
+  g_signal_emit_by_name (text_view, signal);
 }
 
 static void
@@ -6276,8 +6305,8 @@ append_action_signal (GtkTextView  *text_view,
   GtkWidget *menuitem = gtk_image_menu_item_new_from_stock (stock_id, NULL);
 
   g_object_set_data (G_OBJECT (menuitem), "gtk-signal", (char *)signal);
-  gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-		      GTK_SIGNAL_FUNC (activate_cb), text_view);
+  g_signal_connect (menuitem, "activate",
+		    G_CALLBACK (activate_cb), text_view);
 
   gtk_widget_set_sensitive (menuitem, sensitive);
   
@@ -6465,9 +6494,10 @@ popup_targets_received (GtkClipboard     *clipboard,
                                                     unichar_chosen_func,
                                                     text_view);
       
-      gtk_signal_emit (GTK_OBJECT (text_view),
-		       signals[POPULATE_POPUP],
-		       text_view->popup_menu);
+      g_signal_emit (text_view,
+		     signals[POPULATE_POPUP],
+		     0,
+		     text_view->popup_menu);
       
       if (info->button)
 	gtk_menu_popup (GTK_MENU (text_view->popup_menu), NULL, NULL,
@@ -6735,7 +6765,7 @@ text_window_invalidate_rect (GtkTextWindow *win,
     gdk_draw_rectangle (win->bin_window,
                         gc, TRUE, window_rect.x, window_rect.y,
                         window_rect.width, window_rect.height);
-    gdk_gc_unref (gc);
+    g_object_unref (gc);
   }
 #endif
 }
@@ -7334,8 +7364,8 @@ text_view_child_new_anchored (GtkWidget          *child,
   vc->from_top_of_line = 0;
   vc->from_left_of_buffer = 0;
   
-  g_object_ref (G_OBJECT (vc->widget));
-  g_object_ref (G_OBJECT (vc->anchor));
+  g_object_ref (vc->widget);
+  g_object_ref (vc->anchor);
 
   g_object_set_data (G_OBJECT (child),
                      "gtk-text-view-child",
@@ -7361,8 +7391,8 @@ text_view_child_new_window (GtkWidget          *child,
 
   vc->from_top_of_line = 0;
   vc->from_left_of_buffer = 0;
-  
-  g_object_ref (G_OBJECT (vc->widget));
+ 
+  g_object_ref (vc->widget);
 
   vc->type = type;
   vc->x = x;
@@ -7385,10 +7415,10 @@ text_view_child_free (GtkTextViewChild *child)
     {
       gtk_text_child_anchor_unregister_child (child->anchor,
                                               child->widget);
-      g_object_unref (G_OBJECT (child->anchor));
+      g_object_unref (child->anchor);
     }
 
-  g_object_unref (G_OBJECT (child->widget));
+  g_object_unref (child->widget);
 
   g_free (child);
 }

@@ -106,7 +106,7 @@ _gtk_text_util_append_special_char_menuitems (GtkMenuShell              *menushe
       g_object_set_data (G_OBJECT (menuitem), "gtk-unicode-menu-entry",
                          &bidi_menu_entries[i]);
       
-      g_signal_connect_data (G_OBJECT (menuitem), "activate",
+      g_signal_connect_data (menuitem, "activate",
                              G_CALLBACK (activate_cb),
                              info, (GClosureNotify) g_free, 0);
       

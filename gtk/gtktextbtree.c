@@ -57,7 +57,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "gtksignal.h"
 #include "gtktexttag.h"
 #include "gtktexttagtable.h"
 #include "gtktextlayout.h"
@@ -425,9 +424,9 @@ _gtk_text_btree_new (GtkTextTagTable *table,
   tree->end_iter_segment_byte_index = 0;
   tree->end_iter_segment_char_offset = 0;
   
-  g_object_ref (G_OBJECT (tree->table));
+  g_object_ref (tree->table);
 
-  tree->tag_changed_handler = g_signal_connect (G_OBJECT (tree->table),
+  tree->tag_changed_handler = g_signal_connect (tree->table,
 						"tag_changed",
 						G_CALLBACK (tag_changed_cb),
 						tree);
@@ -471,8 +470,8 @@ _gtk_text_btree_new (GtkTextTagTable *table,
 
     seg->body.mark.not_deleteable = TRUE;
 
-    g_object_ref (G_OBJECT (tree->insert_mark));
-    g_object_ref (G_OBJECT (tree->selection_bound_mark));
+    g_object_ref (tree->insert_mark);
+    g_object_ref (tree->selection_bound_mark);
   }
 
   tree->refcount = 1;
@@ -499,10 +498,10 @@ _gtk_text_btree_unref (GtkTextBTree *tree)
 
   if (tree->refcount == 0)
     {      
-      g_signal_handler_disconnect (G_OBJECT (tree->table),
+      g_signal_handler_disconnect (tree->table,
                                    tree->tag_changed_handler);
 
-      g_object_unref (G_OBJECT (tree->table));
+      g_object_unref (tree->table);
       tree->table = NULL;
       
       gtk_text_btree_node_destroy (tree, tree->root_node);
@@ -517,9 +516,9 @@ _gtk_text_btree_unref (GtkTextBTree *tree)
 	  tree->child_anchor_table = NULL;
 	}
 
-      g_object_unref (G_OBJECT (tree->insert_mark));
+      g_object_unref (tree->insert_mark);
       tree->insert_mark = NULL;
-      g_object_unref (G_OBJECT (tree->selection_bound_mark));
+      g_object_unref (tree->selection_bound_mark);
       tree->selection_bound_mark = NULL;
 
       g_free (tree);
@@ -2698,7 +2697,7 @@ _gtk_text_btree_release_mark_segment (GtkTextBTree       *tree,
   /* Remove the ref on the mark, which frees segment as a side effect
    * if this is the last reference.
    */
-  g_object_unref (G_OBJECT (segment->body.mark.obj));
+  g_object_unref (segment->body.mark.obj);
 }
 
 void
@@ -5778,7 +5777,7 @@ gtk_text_btree_get_tag_info (GtkTextBTree *tree,
       info = g_new (GtkTextTagInfo, 1);
 
       info->tag = tag;
-      g_object_ref (G_OBJECT (tag));
+      g_object_ref (tag);
       info->tag_root = NULL;
       info->toggle_count = 0;
 
@@ -5826,7 +5825,7 @@ gtk_text_btree_remove_tag_info (GtkTextBTree *tree,
           list->next = NULL;
           g_slist_free (list);
 
-          g_object_unref (G_OBJECT (info->tag));
+          g_object_unref (info->tag);
 
           g_free (info);
           return;
