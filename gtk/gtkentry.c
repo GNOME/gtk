@@ -4844,6 +4844,8 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
           g_signal_emit_by_name (completion, "action_activated",
                                  gtk_tree_path_get_indices (path)[0]);
           gtk_tree_path_free (path);
+
+          return TRUE;
         }
     }
 

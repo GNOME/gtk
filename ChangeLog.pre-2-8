@@ -1,3 +1,10 @@
+2004-03-08  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* gtk/gtkentry.c: (gtk_entry_completion_key_press):
+
+	When an action is selected stop the event to be propagated
+	otherwise the activate signal is emitted too. (Bug #133394)
+
 Mon Mar  8 04:50:12 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (create_path_bar): new function to
