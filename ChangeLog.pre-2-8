@@ -1,5 +1,9 @@
 2004-12-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilesystemunix.c: Clean up some cases of errno handling
+	(#162496, noted by Tor Lillqvist), and use g_filename_display_name()
+	for error messages.
+
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_set_property): 
 	Use g_value_get_boolean() for ellipsize_set.  (#162447, 
 	Brian Tarricone)

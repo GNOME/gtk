@@ -406,31 +406,31 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
     }
   else
     {
-      if (!g_file_test (filename, G_FILE_TEST_IS_DIR))
+      if (!g_file_test (filename, G_FILE_TEST_EXISTS))
 	{
-	  int save_errno = errno;
-	  gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+	  gchar *display_name = g_filename_display_name (filename);
+	  g_set_error (error,
+		       GTK_FILE_SYSTEM_ERROR,
+		       GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
+		       _("error getting information for '%s': %s"),
+		       display_name,
+		       g_strerror (ENOENT));
 
-	  /* If g_file_test() returned FALSE but not due to an error, it means
-	   * that the filename is not a directory.
-	   */
-	  if (save_errno == 0)
-	    /* ENOTDIR */
-	    g_set_error (error,
-			 GTK_FILE_SYSTEM_ERROR,
-			 GTK_FILE_SYSTEM_ERROR_NOT_FOLDER,
-			 _("%s: %s"),
-			 filename_utf8 ? filename_utf8 : "???",
-			 g_strerror (ENOTDIR));
-	  else
-	    g_set_error (error,
-			 GTK_FILE_SYSTEM_ERROR,
-			 GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
-			 _("error getting information for '%s': %s"),
-			 filename_utf8 ? filename_utf8 : "???",
-			 g_strerror (save_errno));
+	  g_free (display_name);
+	  g_free (filename_copy);
+	  return NULL;
+	}
+      else if (!g_file_test (filename, G_FILE_TEST_IS_DIR))
+	{
+	  gchar *display_name = g_filename_display_name (filename);
+	  g_set_error (error,
+		       GTK_FILE_SYSTEM_ERROR,
+		       GTK_FILE_SYSTEM_ERROR_NOT_FOLDER,
+		       _("%s: %s"),
+		       display_name,
+		       g_strerror (ENOTDIR));
 
-	  g_free (filename_utf8);
+	  g_free (display_name);
 	  g_free (filename_copy);
 	  return NULL;
 	}
@@ -472,6 +472,7 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
   const char *filename;
   gboolean result;
   char *parent, *tmp;
+  int save_errno = errno;
 
   system_unix = GTK_FILE_SYSTEM_UNIX (file_system);
 
@@ -480,20 +481,21 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
   g_return_val_if_fail (g_path_is_absolute (filename), FALSE);
 
   tmp = remove_trailing_slash (filename);
+  errno = 0;
   result = mkdir (tmp, 0777) == 0;
+  save_errno = errno;
   g_free (tmp);
 
   if (!result)
     {
-      int save_errno = errno;
-      gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+      gchar *display_name = g_filename_display_name (filename);
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
 		   _("error creating directory '%s': %s"),
-		   filename_utf8 ? filename_utf8 : "???",
+		   display_name,
 		   g_strerror (save_errno));
-      g_free (filename_utf8);
+      g_free (display_name);
       return FALSE;
     }
 
@@ -617,14 +619,14 @@ get_icon_type (const char *filename,
       if (errno != ENOENT || lstat (filename, &statbuf) != 0)
 	{
 	  int save_errno = errno;
-	  gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+	  gchar *display_name = g_filename_display_name (filename);
 	  g_set_error (error,
 		       GTK_FILE_SYSTEM_ERROR,
 		       GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
 		       _("error getting information for '%s': %s"),
-		       filename_utf8 ? filename_utf8 : "???",
+		       display_name,
 		       g_strerror (save_errno));
-	  g_free (filename_utf8);
+	  g_free (display_name);
 
 	  return ICON_NONE;
 	}
@@ -1730,13 +1732,13 @@ gtk_file_folder_unix_get_info (GtkFileFolder      *folder,
     }
   else
     {
-      gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+      gchar *display_name = g_filename_display_name (filename);
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
 		   _("error getting information for '%s'"),
-		   filename_utf8 ? filename_utf8 : "???");
-      g_free (filename_utf8);
+		   display_name);
+      g_free (display_name);
       info = NULL;
       types = 0;
     }
