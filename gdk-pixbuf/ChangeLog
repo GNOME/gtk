@@ -1,3 +1,8 @@
+2004-09-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-ico.c: 
+	* io-xpm.c: Fix some security issues discovered by Chris Evans. 
+
 Mon Sep 13 19:31:34 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* io-jpeg.c (real_save_jpeg): Drop the alpha channel 
