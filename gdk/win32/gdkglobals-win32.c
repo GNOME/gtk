@@ -66,3 +66,5 @@ DWORD		  _windows_version;
 
 gint		  _gdk_input_ignore_wintab = TRUE;
 gint		  _gdk_max_colors = 0;
+
+gboolean	  _sizemove_in_progress = FALSE;
