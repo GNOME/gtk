@@ -41,6 +41,8 @@ Bugs:
 
  * MappingNotify events produce warnings.
 
+ * gtk_widget_set_uposition can't handle negative x,y coordinates!
+
 Additions:
  * implement keyboard navigation in menus
 

@@ -519,7 +519,7 @@ gtk_type_class_init (GtkType type)
 	  if (node->type_info.class_size < parent->type_info.class_size)
 	    g_warning ("The `%s' class is smaller than its parent class `%s'",
 		       node->type_info.type_name,
-		       node->type_info.type_name);
+		       parent->type_info.type_name);
 	  
 	  if (!parent->klass)
 	    {
