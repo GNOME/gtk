@@ -1,3 +1,10 @@
+2000-01-05  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixbuf/pixops/pixops.c (pixops_process): Fix computation of end of run indices.
+	  
+	* gdk-pixbuf/pixops/pixops.c: Fix double increments when dest_channels == 4.
+	  (Pointed out by Tomas Ogren)
+
 2000-01-05  Mark Crichton  <crichton@gimp.org>
 
 	* gdk-pixbuf/gdk-pixbuf-loader.c (gdk_pixbuf_loader_eat_header_write): 

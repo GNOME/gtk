@@ -82,9 +82,9 @@ pixops_scale_nearest (art_u8        *dest_buf,
 	  if (DEST_CHANNELS == 4)				\
 	    {							\
 	      if (SRC_CHANNELS == 4)				\
-		*(dest++) = p[3];				\
+		dest[3] = p[3];					\
 	      else						\
-		*(dest++) = 0xff;				\
+		dest[3] = 0xff;					\
 	    }							\
 								\
 	  dest += DEST_CHANNELS;				\
@@ -200,7 +200,7 @@ pixops_composite_nearest (art_u8        *dest_buf,
 	      dest[2] = dest[2] + ((a0 * (p[2] - dest[2]) + 0xff) >> 8);
 
 	      if (dest_channels == 4)
-		*(dest++) = 0xff;
+		dest[3] = 0xff;
 	    }
 
 	  dest += dest_channels;
@@ -292,7 +292,7 @@ pixops_composite_color_nearest (art_u8        *dest_buf,
 	    }
 	  
 	  if (dest_channels == 4)
-	    *(dest++) = 0xff;
+	    dest[3] = 0xff;
 
 	  dest += dest_channels;
 	  x += x_step;
@@ -931,12 +931,12 @@ pixops_process (art_u8         *dest_buf,
   int y_step = (1 << SCALE_SHIFT) / scale_y;
 
   int dest_x;
+  int scaled_x_offset = floor (filter->x_offset * (1 << SCALE_SHIFT));
 
-  /* FIXME, this computation of run_end_index is not correct */
-  int run_end_index = ((src_width << SCALE_SHIFT) + (filter->n_x - 1) / 2 - filter->n_x) / x_step - render_x0;
+  int run_end_index = ((src_width - filter->n_x + 1 << SCALE_SHIFT) - scaled_x_offset - 1) / x_step + 1 - render_x0;
   int check_shift = check_size ? get_check_shift (check_size) : 0;
 
-  y = render_y0 * y_step + filter->y_offset * (1 << SCALE_SHIFT);
+  y = render_y0 * y_step + floor (filter->y_offset * (1 << SCALE_SHIFT));
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
       int y_start = y >> SCALE_SHIFT;
@@ -972,7 +972,7 @@ pixops_process (art_u8         *dest_buf,
 	}
 
       dest_x = check_x;
-      x = render_x0 * x_step + filter->x_offset * (1 << SCALE_SHIFT);
+      x = render_x0 * x_step + scaled_x_offset;
       x_start = x >> SCALE_SHIFT;
 
       while (x_start < 0 && outbuf < outbuf_end)
@@ -991,14 +991,14 @@ pixops_process (art_u8         *dest_buf,
 
       new_outbuf = (*line_func)(run_weights, filter->n_x, filter->n_y,
 				outbuf, dest_x,
-				MIN (outbuf_end, outbuf + run_end_index * dest_channels),
+				MIN (outbuf_end, dest_buf + dest_rowstride * i + run_end_index * dest_channels),
 				dest_channels, dest_has_alpha,
 				line_bufs, src_channels, src_has_alpha,
 				x, x_step, src_width, check_size, tcolor1, tcolor2);
 
       dest_x += (new_outbuf - outbuf) / dest_channels;
-      
-      x = dest_x * x_step + filter->x_offset * (1 << SCALE_SHIFT);
+
+      x = dest_x * x_step + scaled_x_offset;
       outbuf = new_outbuf;
 
       while (outbuf < outbuf_end)
