@@ -1,3 +1,8 @@
+Tue Jan 30 16:01:54 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkclist.sgml: Added note explaining how
+	the @button parameter is off by 1. (#6739)
+
 Mon Jan  8 15:21:15 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (SUBDIRS): Restore build.

@@ -1065,7 +1065,9 @@ on the CList.
 </para>
 
 @clist: The #GtkCList to affect.
-@button: The mouse button to set.
+@button: The mouse button to set. The values here, unlike in the
+         rest of GTK+ start from 0. For instance, the right mouse
+         button, which is 3 elsewhere, should be given as 2 here.
 @button_actions: A logically OR'd value of #GtkButtonAction values 
 for the button.
 
