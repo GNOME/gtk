@@ -3948,7 +3948,7 @@ resync_selection (GtkCList *clist,
   GList *list;
   GtkCListRow *clist_row;
 
-  if (clist->anchor < 0)
+  if (clist->anchor < 0 || clist->drag_pos < 0)
     return;
 
   gtk_clist_freeze (clist);
@@ -4942,6 +4942,10 @@ gtk_clist_button_press (GtkWidget      *widget,
 	      clist->click_cell.column = column;
 	      clist->drag_button = event->button;
 	    }
+	  /* FIXME FIXME FIXME: The following code is harmful, because it results in the
+	   * necessary cleanup not being done in gtk_clist_button_release()
+	   * when we get a GDK_BUTTON_PRESS GDK_2BUTTON_PRESS GDK_BUTTON_RELEASE sequence.
+	   */
 	  else
 	    {
 	      clist->click_cell.row = -1;

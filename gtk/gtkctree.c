@@ -5637,7 +5637,7 @@ resync_selection (GtkCList *clist, GdkEvent *event)
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
 
-  if (clist->anchor < 0)
+  if (clist->anchor < 0 || clist->drag_pos < 0)
     return;
 
   ctree = GTK_CTREE (clist);

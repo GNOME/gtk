@@ -1,3 +1,17 @@
+Fri Jan 28 12:28:17 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkctree.c (resync_selection): 
+	* gtk/gtkclist.c (resync_selection):
+
+	Return immediately if clist->drag_pos < 0. This is a workaround
+	for the corrupt state that the clist gets into when a
+	GDK_2BUTTON_PRESS occurs. See note in gtk_clist_button_press().
+
+	Bug #5487, #2051, #2677; fix suggested by David Helder and T. Alexander Popiel.
+	
+	* gtk/gtknotebook.c (gtk_notebook_size_request): Fix uninitialized
+	variable from recent commit.
+
 Thu Jan 27 15:22:09 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_begin): Fix stupid typo in last commit.
