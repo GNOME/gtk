@@ -369,7 +369,7 @@ gtk_handle_box_reparent      (GtkWidget *widget,
   else
     {
       GTK_HANDLE_BOX(widget)->is_onroot = FALSE;
-      g_print("Reparenting to parent %#x\n", widget->parent->window);
+      g_print("Reparenting to parent %#x\n", (gint)(widget->parent->window));
       gdk_window_reparent(widget->window, widget->parent->window,
 			  widget->allocation.x, widget->allocation.y);
       widget->requisition.height = 3;

@@ -1,3 +1,9 @@
+Fri Dec 26 11:20:03 1997  Scott Goehring  <scott@poverty.bloomington.in.us>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_reparent): eliminated a
+	compiler warning caused by not casting an argument in a debugging
+	message. :)
+
 Fri Dec 26 02:59:39 1997  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
 
 	* gdk/gdktypes.h gdk/gdk.c gdk/gdkwindow.c: Added new
