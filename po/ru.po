@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-05 16:46+0300\n"
-"PO-Revision-Date: 2004-02-05 16:51+0300\n"
+"POT-Creation-Date: 2004-02-10 08:14+0300\n"
+"PO-Revision-Date: 2004-02-13 08:17+0300\n"
 "Last-Translator: Dmitry G. Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -81,36 +81,36 @@ msgstr "Формат файла изображения не распознан"
 msgid "Failed to load image '%s': %s"
 msgstr "Произошёл сбой при загрузке изображения \"%s\": %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1095
+#: gdk-pixbuf/gdk-pixbuf-io.c:1094
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Произошла ошибка при записи файла изображения: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1139 gdk-pixbuf/gdk-pixbuf-io.c:1255
+#: gdk-pixbuf/gdk-pixbuf-io.c:1138 gdk-pixbuf/gdk-pixbuf-io.c:1254
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Эта сборка подсистемы \"gdk-pixbuf\" не поддерживает сохранение изображений "
 "в таком формате: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1168
+#: gdk-pixbuf/gdk-pixbuf-io.c:1167
 msgid "Insufficient memory to save image to callback"
 msgstr "Недостаточно памяти для сохранения файла изображения"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1180
+#: gdk-pixbuf/gdk-pixbuf-io.c:1179
 msgid "Failed to open temporary file"
 msgstr "Произошёл сбой при открытии временного файла"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1199
+#: gdk-pixbuf/gdk-pixbuf-io.c:1198
 msgid "Failed to read from temporary file"
 msgstr "Произошёл сбой при чтении из временного файла"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1379
+#: gdk-pixbuf/gdk-pixbuf-io.c:1378
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Произошёл сбой при открытии файла \"%s\" для записи: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1400
+#: gdk-pixbuf/gdk-pixbuf-io.c:1399
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -119,7 +119,7 @@ msgstr ""
 "Произошёл сбой при закрытии файла \"%s\" во время записи изображения, не все "
 "данные могли быть сохранены: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1586 gdk-pixbuf/gdk-pixbuf-io.c:1636
+#: gdk-pixbuf/gdk-pixbuf-io.c:1585 gdk-pixbuf/gdk-pixbuf-io.c:1635
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Недостаточно памяти для сохранения изображения в буфер"
 
@@ -971,7 +971,7 @@ msgstr ""
 "не удалось добавить закладку для \"%s\":\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2937
+#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2946
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -989,7 +989,7 @@ msgstr "Домашний каталог"
 msgid "Desktop"
 msgstr "Рабочий стол"
 
-#: gtk/gtkfilechooserdefault.c:876
+#: gtk/gtkfilechooserdefault.c:878
 #, c-format
 msgid ""
 "Could not go to the parent folder of %s:\n"
@@ -998,7 +998,7 @@ msgstr ""
 "Не удалось перейти в родительскую папку для папки \"%s\":\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:925
+#: gtk/gtkfilechooserdefault.c:927
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -1007,28 +1007,28 @@ msgstr ""
 "Не удалось создать папку \"%s\":\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1001
+#: gtk/gtkfilechooserdefault.c:1003
 msgid "Add"
 msgstr "Добавить"
 
-#: gtk/gtkfilechooserdefault.c:1011
+#: gtk/gtkfilechooserdefault.c:1013
 msgid "Remove"
 msgstr "Убрать"
 
-#: gtk/gtkfilechooserdefault.c:1021
+#: gtk/gtkfilechooserdefault.c:1023
 msgid "Up"
 msgstr "Вверх"
 
-#: gtk/gtkfilechooserdefault.c:1101 gtk/gtkfilechooserdefault.c:1456
+#: gtk/gtkfilechooserdefault.c:1103 gtk/gtkfilechooserdefault.c:1459
 msgid "File name"
 msgstr "Имя файла"
 
-#: gtk/gtkfilechooserdefault.c:1127
+#: gtk/gtkfilechooserdefault.c:1129
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Не удалось добавить закладку для \"%s\", так как это не папка"
 
-#: gtk/gtkfilechooserdefault.c:1175
+#: gtk/gtkfilechooserdefault.c:1177
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -1037,49 +1037,49 @@ msgstr ""
 "Не удалось убрать закладку для \"%s\":\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1330
+#: gtk/gtkfilechooserdefault.c:1332
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "Не удалось добавить закладку для \"%s\", так как этот путь недопустим."
 
-#: gtk/gtkfilechooserdefault.c:1403
+#: gtk/gtkfilechooserdefault.c:1405
 msgid "Folder"
 msgstr "Папка"
 
-#: gtk/gtkfilechooserdefault.c:1478
+#: gtk/gtkfilechooserdefault.c:1481
 msgid "Size"
 msgstr "Размер"
 
-#: gtk/gtkfilechooserdefault.c:1490
+#: gtk/gtkfilechooserdefault.c:1493
 msgid "Modified"
 msgstr "Изменён"
 
 #. Label and entry
-#: gtk/gtkfilechooserdefault.c:1513
+#: gtk/gtkfilechooserdefault.c:1516
 msgid "_Filename:"
 msgstr "_Имя файла:"
 
 #. Preview
-#: gtk/gtkfilechooserdefault.c:1598
+#: gtk/gtkfilechooserdefault.c:1601
 msgid "Preview"
 msgstr "Образец"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2130
+#: gtk/gtkfilechooserdefault.c:2127
 #, c-format
 msgid "Current folder: %s"
 msgstr "Текущая папка: %s"
 
-#: gtk/gtkfilechooserdefault.c:2533
+#: gtk/gtkfilechooserdefault.c:2542
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "ярлык %s не существует"
 
-#: gtk/gtkfilechooserdefault.c:3083
+#: gtk/gtkfilechooserdefault.c:3092
 msgid "Type name of new folder"
 msgstr "Введите имя новой папки"
 
-#: gtk/gtkfilechooserdefault.c:3110
+#: gtk/gtkfilechooserdefault.c:3119
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1087,34 +1087,34 @@ msgstr[0] "%d байт"
 msgstr[1] "%d байта"
 msgstr[2] "%d байтов"
 
-#: gtk/gtkfilechooserdefault.c:3112
+#: gtk/gtkfilechooserdefault.c:3121
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f Кб"
 
-#: gtk/gtkfilechooserdefault.c:3114
+#: gtk/gtkfilechooserdefault.c:3123
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f Мб"
 
-#: gtk/gtkfilechooserdefault.c:3116
+#: gtk/gtkfilechooserdefault.c:3125
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f Гб"
 
-#: gtk/gtkfilechooserdefault.c:3161
+#: gtk/gtkfilechooserdefault.c:3170
 msgid "Today"
 msgstr "Сегодня"
 
-#: gtk/gtkfilechooserdefault.c:3163
+#: gtk/gtkfilechooserdefault.c:3172
 msgid "Yesterday"
 msgstr "Вчера"
 
-#: gtk/gtkfilechooserdefault.c:3171
+#: gtk/gtkfilechooserdefault.c:3180
 msgid "%d/%b/%Y"
 msgstr "%d.%b.%Y"
 
-#: gtk/gtkfilechooserdefault.c:3174
+#: gtk/gtkfilechooserdefault.c:3183
 msgid "Unknown"
 msgstr "Неизвестен"
 
@@ -1300,26 +1300,26 @@ msgstr "Не удалось преобразовать имя файла"
 msgid "(Empty)"
 msgstr "(Пусто)"
 
-#: gtk/gtkfilesystemunix.c:351 gtk/gtkfilesystemwin32.c:373
+#: gtk/gtkfilesystemunix.c:382 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "произошла ошибка  создания каталога \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:392 gtk/gtkfilesystemwin32.c:414
+#: gtk/gtkfilesystemunix.c:443 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
 msgstr "Эта файловая система не поддерживает подсоединение"
 
-#: gtk/gtkfilesystemunix.c:400
+#: gtk/gtkfilesystemunix.c:451
 msgid "Filesystem"
 msgstr "Файловая система"
 
-#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemunix.c:1295
+#: gtk/gtkfilesystemunix.c:470 gtk/gtkfilesystemunix.c:1348
 #: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "произошла ошибка  при получении информации о \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:1005 gtk/gtkfilesystemwin32.c:777
+#: gtk/gtkfilesystemunix.c:1056 gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Произошёл сбой при сохранении закладки (%s)"
@@ -1803,12 +1803,12 @@ msgid "_Yes"
 msgstr "_Да"
 
 #: gtk/gtkstock.c:338
-msgid "Zoom _100%"
-msgstr "Восстановить ис_ходный масштаб"
+msgid "_Normal Size"
+msgstr "О_бычный размер"
 
 #: gtk/gtkstock.c:339
-msgid "Zoom to _Fit"
-msgstr "Подогнать масштаб по _ширине"
+msgid "Best _Fit"
+msgstr "Наилучшее _заполнение"
 
 #: gtk/gtkstock.c:340
 msgid "Zoom _In"
@@ -1940,6 +1940,12 @@ msgstr "Метод XInput"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Не удалось получить информацию о файле \"%s\": %s"
+
+#~ msgid "Zoom _100%"
+#~ msgstr "Восстановить ис_ходный масштаб"
+
+#~ msgid "Zoom to _Fit"
+#~ msgstr "Подогнать масштаб по _ширине"
 
 #~ msgid "This file system does not support bookmarks"
 #~ msgstr "Эта файловая система не поддерживает закладки"
