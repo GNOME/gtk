@@ -1,3 +1,17 @@
+Tue Dec  1 22:45:58 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.h (struct _GtkCListClass): new class method/signal
+	row_move.
+	* gtk/gtkclist.c (gtk_clist_row_move): new public function.
+	emit a row_move signal
+	(real_row_move): move source_row to dest_row
+	(gtk_clist_swap_rows): use gtk_clist_row_move calls.
+	(gtk_clist_columns_autosize): resize all columns to their optimal
+	width
+	* gtk/gtkctree.c (real_row_move): use gtk_ctree_move to move
+	entire sub-tree.
+	* gtk/gtknotebook.c (gtk_notebook_nth_page): get nth page widget.
+
 Tue Dec  1 02:40:22 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* configure.in

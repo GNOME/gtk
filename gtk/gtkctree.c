@@ -207,6 +207,9 @@ static void real_tree_move              (GtkCTree      *ctree,
 					 GtkCTreeNode  *node,
 					 GtkCTreeNode  *new_parent, 
 					 GtkCTreeNode  *new_sibling);
+static void real_row_move               (GtkCList      *clist,
+					 gint           source_row,
+					 gint           dest_row);
 static void gtk_ctree_link              (GtkCTree      *ctree,
 					 GtkCTreeNode  *node,
 					 GtkCTreeNode  *parent,
@@ -424,6 +427,7 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 
   clist_class->select_row = real_select_row;
   clist_class->unselect_row = real_unselect_row;
+  clist_class->row_move = real_row_move;
   clist_class->undo_selection = real_undo_selection;
   clist_class->resync_selection = resync_selection;
   clist_class->selection_find = selection_find;
@@ -2647,6 +2651,56 @@ gtk_ctree_unlink (GtkCTree     *ctree,
 	  GTK_CTREE_ROW (sibling)->sibling = GTK_CTREE_ROW (node)->sibling;
 	}
     }
+}
+
+static void
+real_row_move (GtkCList *clist,
+	       gint      source_row,
+	       gint      dest_row)
+{
+  GtkCTree *ctree;
+  GtkCTreeNode *node;
+
+  g_return_if_fail (clist != NULL);
+  g_return_if_fail (GTK_IS_CTREE (clist));
+
+  if (GTK_CLIST_AUTO_SORT (clist))
+    return;
+
+  if (source_row < 0 || source_row >= clist->rows ||
+      dest_row   < 0 || dest_row   >= clist->rows ||
+      source_row == dest_row)
+    return;
+
+  ctree = GTK_CTREE (clist);
+  node = GTK_CTREE_NODE (g_list_nth (clist->row_list, source_row));
+
+  if (source_row < dest_row)
+    {
+      GtkCTreeNode *work; 
+
+      dest_row++;
+      work = GTK_CTREE_ROW (node)->children;
+
+      while (work && GTK_CTREE_ROW (work)->level > GTK_CTREE_ROW (node)->level)
+	{
+	  work = GTK_CTREE_NODE_NEXT (work);
+	  dest_row++;
+	}
+
+      if (dest_row > clist->rows)
+	dest_row = clist->rows;
+    }
+
+  if (dest_row < clist->rows)
+    {
+      GtkCTreeNode *sibling;
+
+      sibling = GTK_CTREE_NODE (g_list_nth (clist->row_list, dest_row));
+      gtk_ctree_move (ctree, node, GTK_CTREE_ROW (sibling)->parent, sibling);
+    }
+  else
+    gtk_ctree_move (ctree, node, NULL, NULL);
 }
 
 static void

@@ -3565,6 +3565,23 @@ gtk_notebook_get_current_page (GtkNotebook *notebook)
   return g_list_index (notebook->children, notebook->cur_page);
 }
 
+GtkWidget *
+gtk_notebook_nth_page (GtkNotebook *notebook,
+		       gint         page_num)
+{
+  GtkNotebookPage *page;
+
+  g_return_val_if_fail (notebook != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
+
+  page = g_list_nth_data (notebook->children, page_num);
+
+  if (page)
+    return page->child;
+
+  return NULL;
+}
+
 gint
 gtk_notebook_page_num (GtkNotebook      *notebook,
 		       GtkWidget        *child)

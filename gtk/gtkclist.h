@@ -201,6 +201,9 @@ struct _GtkCListClass
 				 gint            row,
 				 gint            column,
 				 GdkEvent       *event);
+  void   (*row_move)            (GtkCList       *clist,
+				 gint            source_row,
+				 gint            dest_row);
   void   (*click_column)        (GtkCList       *clist,
 				 gint            column);
   void   (*resize_column)       (GtkCList       *clist,
@@ -464,6 +467,8 @@ void gtk_clist_set_column_auto_resize (GtkCList *clist,
 				       gint      column,
 				       gboolean  auto_resize);
 
+gint gtk_clist_columns_autosize (GtkCList *clist);
+
 /* return the optimal column width, i.e. maximum of all cell widths */
 gint gtk_clist_optimal_column_width (GtkCList *clist,
 				     gint      column);
@@ -680,6 +685,11 @@ void gtk_clist_unselect_all (GtkCList *clist);
 void gtk_clist_swap_rows (GtkCList *clist,
 			  gint      row1,
 			  gint      row2);
+
+/* move row from source_row position to dest_row position */
+void gtk_clist_row_move (GtkCList *clist,
+			 gint      source_row,
+			 gint      dest_row);
 
 /* sets a compare function different to the default */
 void gtk_clist_set_compare_func (GtkCList            *clist,

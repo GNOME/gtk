@@ -133,6 +133,8 @@ void gtk_notebook_remove_page       (GtkNotebook *notebook,
  ***********************************************************/
 
 gint gtk_notebook_get_current_page (GtkNotebook *notebook);
+GtkWidget * gtk_notebook_nth_page  (GtkNotebook *notebook,
+				    gint         page_num);
 gint gtk_notebook_page_num         (GtkNotebook *notebook,
 				    GtkWidget   *child);
 void gtk_notebook_set_page         (GtkNotebook *notebook,
