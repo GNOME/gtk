@@ -1,5 +1,9 @@
 2005-04-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_motion_resize_column) 
+	(gtk_tree_view_bin_expose): Avoid a few unnecessary calls
+	to gdk_window_get_pointer(). (#168015, Billy Biggs)
+
 	* gtk/gtkwindow.c (gtk_window_set_keep_below): Fix the EWMH link,
 	noticed by Kristof Vansant.
 
