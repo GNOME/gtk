@@ -72,7 +72,7 @@ PACKAGE=gtk+
 
 GETTEXT_PACKAGE=gtk20
 AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"gtk2")
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE")
 
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}

@@ -1,3 +1,9 @@
+2000-07-26  Robert Brady  <rwb197@zepler.org>
+
+	* configure.in: Cause GETTEXT_PACKAGE to be consistent in config.h
+	  and po/Makefile, was installing and looking for them under gtk20
+	  and gtk2 respectively.
+
 2000-07-25  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/testtext.c: Comment out some stuff that depends on the rest
@@ -104,6 +110,7 @@
 
 2000-07-25  Havoc Pennington  <hp@redhat.com>
 
+>>>>>>> 1.1355
 	* gtk/gtkprogressbar.h: Implement new sane, 5-function API for
 	using GtkProgressBar. See Changes-2.0.txt for details.
 
