@@ -1,3 +1,8 @@
+Mon Dec  3 21:04:13 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkmarshalers.list: remove VOID:BOXED,POINTER and
+	NONE:POINTER.
+
 2001-12-03  Alex Larsson  <alexl@redhat.com>
 
 	* gtk/gtkaccellabel.c:
