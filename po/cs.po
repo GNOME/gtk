@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-09 04:14+0100\n"
-"PO-Revision-Date: 2004-03-09 20:50+0100\n"
+"PO-Revision-Date: 2004-03-11 15:52+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1548,7 +1548,7 @@ msgstr "Informace"
 
 #: gtk/gtkstock.c:269
 msgid "Warning"
-msgstr "Varovaní"
+msgstr "Varování"
 
 #: gtk/gtkstock.c:270
 msgid "Error"
@@ -1564,7 +1564,7 @@ msgstr "_Použít"
 
 #: gtk/gtkstock.c:278
 msgid "_Bold"
-msgstr "_Tučný"
+msgstr "_Tučné"
 
 #: gtk/gtkstock.c:279
 msgid "_Cancel"
@@ -1592,7 +1592,7 @@ msgstr "_Kopírovat"
 
 #: gtk/gtkstock.c:285
 msgid "Cu_t"
-msgstr "Vyjmou_t"
+msgstr "_Vyjmout"
 
 #: gtk/gtkstock.c:286
 msgid "_Delete"
