@@ -155,7 +155,7 @@ struct _GtkCList
   GList *undo_unselection;
   gint undo_anchor;
   
-  /* scrollbars */
+  /* scroll adjustments */
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
   

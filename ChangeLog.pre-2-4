@@ -1,3 +1,17 @@
+Fri Nov  6 23:29:40 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (real_clear) (adjust_adjustments): resize clist
+ 	if adjustments are NULL and list size has changed
+	(gtk_clist_size_request): return real list requsition,
+ 	if adjustments are NULL.
+	(size_allocate_columns): use button->requisition.with, if column
+ 	width is not set.
+	(list_requisition_width): new function. return full list width.
+	(gtk_clist_set_hadjustment) (gtk_clist_set_vadjustment): do not
+	auto create adjustments.
+	(gtk_clist_motion) (move_vertical) (move_horizontal):
+ 	check adjustment != NULL.
+
 Thu Nov  5 12:06:16 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcheckbutton.c (gtk_check_button_draw_focus): Queue
