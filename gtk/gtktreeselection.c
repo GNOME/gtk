@@ -672,7 +672,7 @@ gtk_tree_selection_select_all (GtkTreeSelection *selection)
   g_return_if_fail (selection->tree_view != NULL);
   if (selection->tree_view->priv->tree == NULL)
     return;
-  g_return_if_fail (selection->type != GTK_SELECTION_MULTIPLE);
+  g_return_if_fail (selection->type == GTK_SELECTION_MULTIPLE);
 
   if (gtk_tree_selection_real_select_all (selection))
     g_signal_emit (G_OBJECT (selection), tree_selection_signals[CHANGED], 0);

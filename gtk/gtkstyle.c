@@ -3013,7 +3013,12 @@ gtk_default_draw_check (GtkStyle      *style,
   if (detail && strcmp (detail, "cellcheck") == 0)
     {
       gdk_draw_rectangle (window,
-			  widget->style->fg_gc[state_type],
+			  widget->style->base_gc[state_type],
+			  TRUE,
+                          x, y,
+			  width, height);
+      gdk_draw_rectangle (window,
+			  widget->style->text_gc[state_type],
 			  FALSE,
                           x, y,
 			  width, height);

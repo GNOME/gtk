@@ -1,3 +1,12 @@
+Thu Sep 27 16:46:36 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_select_cursor_row): only
+	start editing when you select with a keyboard.
+
+	(gtk_tree_view_button_press_event): much more graceful now.
+
+	* gtk/gtkstyle.c: Draw togglebutton better.
+
 2001-09-26  Havoc Pennington  <hp@redhat.com>
 
 	* demos/gtk-demo/dialog.c (interactive_dialog_clicked): add demo

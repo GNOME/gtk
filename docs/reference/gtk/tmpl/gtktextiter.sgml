@@ -31,18 +31,6 @@ types related to the text widget and how they work together.
 
 </para>
 
-@dummy1: 
-@dummy2: 
-@dummy3: 
-@dummy4: 
-@dummy5: 
-@dummy6: 
-@dummy7: 
-@dummy8: 
-@dummy9: 
-@dummy10: 
-@dummy11: 
-@dummy12: 
 
 <!-- ##### FUNCTION gtk_text_iter_get_buffer ##### -->
 <para>

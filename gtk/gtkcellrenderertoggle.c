@@ -303,7 +303,7 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
       else
 	state = GTK_STATE_ACTIVE;
     }
-  else if (celltoggle->activatable)
+  if (celltoggle->activatable)
     {
       state = GTK_STATE_NORMAL;
     }

@@ -102,6 +102,7 @@ enum
   ROW_COLLAPSED,
   COLUMNS_CHANGED,
   MOVE_CURSOR,
+  SELECT_ALL,
   SELECT_CURSOR_ROW,
   TOGGLE_CURSOR_ROW,
   EXPAND_COLLAPSE_CURSOR_ROW,
@@ -223,7 +224,9 @@ static void gtk_tree_view_set_adjustments                 (GtkTreeView     *tree
 static void gtk_tree_view_real_move_cursor                (GtkTreeView     *tree_view,
 							   GtkMovementStep  step,
 							   gint             count);
-static void gtk_tree_view_real_select_cursor_row          (GtkTreeView     *tree_view);
+static void gtk_tree_view_real_select_all                 (GtkTreeView     *tree_view);
+static void gtk_tree_view_real_select_cursor_row          (GtkTreeView     *tree_view,
+							   gboolean         start_editing);
 static void gtk_tree_view_real_toggle_cursor_row          (GtkTreeView     *tree_view);
 static void gtk_tree_view_real_expand_collapse_cursor_row (GtkTreeView     *tree_view,
 							   gboolean         logical,
@@ -481,6 +484,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   class->set_scroll_adjustments = gtk_tree_view_set_adjustments;
   class->move_cursor = gtk_tree_view_real_move_cursor;
+  class->select_all = gtk_tree_view_real_select_all;
   class->select_cursor_row = gtk_tree_view_real_select_cursor_row;
   class->toggle_cursor_row = gtk_tree_view_real_toggle_cursor_row;
   class->expand_collapse_cursor_row = gtk_tree_view_real_expand_collapse_cursor_row;
@@ -692,14 +696,24 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   gtk_marshal_VOID__ENUM_INT,
                   GTK_TYPE_NONE, 2, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT);
 
+  tree_view_signals[SELECT_ALL] =
+    g_signal_new ("select_all",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, select_all),
+                  NULL, NULL,
+                  gtk_marshal_NONE__NONE,
+                  GTK_TYPE_NONE, 0);
+
   tree_view_signals[SELECT_CURSOR_ROW] =
     g_signal_new ("select_cursor_row",
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
                   G_STRUCT_OFFSET (GtkTreeViewClass, select_cursor_row),
                   NULL, NULL,
-                  gtk_marshal_NONE__NONE,
-                  GTK_TYPE_NONE, 0);
+                  gtk_marshal_VOID__BOOLEAN,
+                  GTK_TYPE_NONE, 1,
+		  G_TYPE_BOOLEAN);
 
   tree_view_signals[TOGGLE_CURSOR_ROW] =
     g_signal_new ("toggle_cursor_row",
@@ -780,9 +794,13 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_CONTROL_MASK, "toggle_cursor_row", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_SHIFT_MASK, "select_cursor_row", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_a, GDK_CONTROL_MASK, "select_all", 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_space, 0, "select_cursor_row", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_SHIFT_MASK, "select_cursor_row", 1,
+				GTK_TYPE_BOOL, TRUE);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_space, 0, "select_cursor_row", 1,
+				GTK_TYPE_BOOL, TRUE);
 
   /* expand and collapse rows */
   gtk_binding_entry_add_signal (binding_set, GDK_plus, 0, "expand_collapse_cursor_row", 3,
@@ -1535,6 +1553,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       gint new_y;
       gint y_offset;
       GtkTreeViewColumn *column = NULL;
+      gint column_handled_click = FALSE;
 
       if (!GTK_WIDGET_HAS_FOCUS (widget))
 	gtk_widget_grab_focus (widget);
@@ -1579,11 +1598,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       /* Let the column have a chance at selecting it. */
       for (list = tree_view->priv->columns; list; list = list->next)
 	{
-	  GtkTreeIter iter;
-	  GtkCellEditable *cell_editable = NULL;
-	  /* FIXME: get the right flags */
-	  guint flags = 0;
-
 	  column = list->data;
 
 	  if (!column->visible)
@@ -1591,14 +1605,13 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 
 	  background_area.width = column->width;
 	  if ((background_area.x > (gint) event->x) ||
-	      (background_area.y > (gint) event->y) ||
-	      (background_area.x + background_area.width <= (gint) event->x) ||
-	      (background_area.y + background_area.height <= (gint) event->y))
+	      (background_area.x + background_area.width <= (gint) event->x))
 	    {
 	      background_area.x += background_area.width;
 	      continue;
 	    }
 
+	  /* we found the focus column */
 	  cell_area = background_area;
 	  cell_area.width -= horizontal_separator;
 	  cell_area.height -= vertical_separator;
@@ -1610,6 +1623,35 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	      cell_area.x += depth*tree_view->priv->tab_offset;
 	      cell_area.width -= depth*tree_view->priv->tab_offset;
 	    }
+	  break;
+	}
+
+      if (column == NULL)
+	return FALSE;
+
+      tree_view->priv->focus_column = column;
+      if (event->state & GDK_CONTROL_MASK)
+	{
+	  gtk_tree_view_real_set_cursor (tree_view, path, FALSE);
+	  gtk_tree_view_real_toggle_cursor_row (tree_view);
+	}
+      else if (event->state & GDK_SHIFT_MASK)
+	{
+	  gtk_tree_view_real_set_cursor (tree_view, path, FALSE);
+	  gtk_tree_view_real_select_cursor_row (tree_view, FALSE);
+	}
+      else
+	{
+	  gtk_tree_view_real_set_cursor (tree_view, path, TRUE);
+	}
+
+      if (event->type == GDK_BUTTON_PRESS &&
+	  !event->state)
+	{
+	  GtkCellEditable *cell_editable = NULL;
+	  /* FIXME: get the right flags */
+	  guint flags = 0;
+	  GtkTreeIter iter;
 
 	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
 	  gtk_tree_view_column_cell_set_cell_data (column,
@@ -1638,45 +1680,20 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 						    flags);
 
 		}
-	      g_free (path_string);
-	      gtk_tree_path_free (path);
-	      return TRUE;
+	      column_handled_click = TRUE;
 	    }
-	  else
-	    {
-	      g_free (path_string);
-	      break;
-	    }
+	  g_free (path_string);
 	}
-
-      if (column == NULL)
-	return FALSE;
-
-      /* The columns didn't want the event.  We handle it */
 
       /* Save press to possibly begin a drag
        */
-      if (tree_view->priv->pressed_button < 0)
+      if (!column_handled_click &&
+	  tree_view->priv->pressed_button < 0)
         {
           tree_view->priv->pressed_button = event->button;
           tree_view->priv->press_start_x = event->x;
           tree_view->priv->press_start_y = event->y;
         }
-
-      if (event->state & GDK_CONTROL_MASK)
-	{
-	  gtk_tree_view_real_set_cursor (tree_view, path, FALSE);
-	  gtk_tree_view_real_toggle_cursor_row (tree_view);
-	}
-      else if (event->state & GDK_SHIFT_MASK)
-	{
-	  gtk_tree_view_real_set_cursor (tree_view, path, FALSE);
-	  gtk_tree_view_real_select_cursor_row (tree_view);
-	}
-      else
-	{
-	  gtk_tree_view_real_set_cursor (tree_view, path, TRUE);
-	}
 
       if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
 	{
@@ -1692,6 +1709,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 
 	  gtk_tree_view_row_activated (tree_view, path, column);
 	}
+      GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
       gtk_tree_path_free (path);
       return TRUE;
     }
@@ -2668,6 +2686,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	    }
 	  if (node == cursor &&
 	      ((column == tree_view->priv->focus_column &&
+		GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS) &&
 		GTK_WIDGET_HAS_FOCUS (widget)) ||
 	       (column == tree_view->priv->edited_column)))
 	    {
@@ -4699,61 +4718,6 @@ gtk_tree_view_get_background_xrange (GtkTreeView       *tree_view,
         *x2 = total_width; /* width of 0 */
     }
 }
-
-static void
-gtk_tree_view_get_cell_xrange (GtkTreeView       *tree_view,
-                               GtkRBTree         *tree,
-                               GtkTreeViewColumn *column,
-                               gint              *x1,
-                               gint              *x2)
-{
-  GtkTreeViewColumn *tmp_column = NULL;
-  gint total_width;
-  GList *list;
-
-  if (x1)
-    *x1 = 0;
-
-  if (x2)
-    *x2 = 0;
-
-  total_width = 0;
-  for (list = tree_view->priv->columns; list; list = list->next)
-    {
-      tmp_column = list->data;
-
-      if (tmp_column == column)
-        break;
-
-      if (tmp_column->visible)
-        total_width += tmp_column->width;
-    }
-
-  if (tmp_column != column)
-    {
-      g_warning (G_STRLOC": passed-in column isn't in the tree");
-      return;
-    }
-
-  /* Remember we're getting the cell range, i.e. the cell_area passed
-   * to the cell renderer.
-   */
-
-  if (gtk_tree_view_is_expander_column (tree_view, column))
-    total_width += tree_view->priv->tab_offset * _gtk_rbtree_get_depth (tree);
-
-  if (x1)
-    *x1 = total_width;
-
-  if (x2)
-    {
-      if (column->visible)
-        *x2 = total_width + column->width;
-      else
-        *x2 = total_width; /* width of 0 */
-    }
-}
-
 static void
 gtk_tree_view_get_arrow_xrange (GtkTreeView *tree_view,
                                 gint        *x1,
@@ -5994,7 +5958,16 @@ gtk_tree_view_move_cursor_start_end (GtkTreeView *tree_view,
 }
 
 static void
-gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view)
+gtk_tree_view_real_select_all (GtkTreeView *tree_view)
+{
+  if (tree_view->priv->selection->type != GTK_SELECTION_MULTIPLE)
+    return;
+  gtk_tree_selection_select_all (tree_view->priv->selection);
+}
+
+static void
+gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view,
+				      gboolean     start_editing)
 {
   GtkRBTree *cursor_tree = NULL;
   GtkRBNode *cursor_node = NULL;
@@ -6017,7 +5990,9 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view)
       return;
     }
 
-  if (tree_view->priv->focus_column)
+  gtk_get_current_event_state (&state);
+
+  if (start_editing && tree_view->priv->focus_column)
     {
       if (gtk_tree_view_start_editing (tree_view, cursor_path))
 	{
@@ -6025,8 +6000,6 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view)
 	  return;
 	}
     }
-
-  gtk_get_current_event_state (&state);
   _gtk_tree_selection_internal_select_node (tree_view->priv->selection,
 					    cursor_node,
 					    cursor_tree,
@@ -7979,7 +7952,8 @@ gtk_tree_view_get_cursor (GtkTreeView        *tree_view,
  * @column is not %NULL, then focus is given to the column specified by it.
  * Additionally, if @column is specified, and @start_editing is %TRUE, then
  * editing should be started in the specified cell.  Keyboard focus is given to
- * the widget after this is called.
+ * the widget after this is called.  Please note that editing can only happen
+ * when the widget is realized.
  **/
 void
 gtk_tree_view_set_cursor (GtkTreeView       *tree_view,
@@ -8007,6 +7981,7 @@ gtk_tree_view_set_cursor (GtkTreeView       *tree_view,
 	    break;
 	  }
       g_return_if_fail (column_in_tree);
+      tree_view->priv->focus_column = focus_column;
       if (start_editing)
 	gtk_tree_view_start_editing (tree_view, path);
     }
@@ -9241,6 +9216,9 @@ gtk_tree_view_start_editing (GtkTreeView *tree_view,
   GtkRBNode *cursor_node;
 
   g_assert (tree_view->priv->focus_column);
+
+  if (! GTK_WIDGET_REALIZED (tree_view))
+    return FALSE;
 
   if (_gtk_tree_view_find_node (tree_view, cursor_path, &cursor_tree, &cursor_node) ||
       cursor_node == NULL)
