@@ -32,44 +32,10 @@
 #define INNER_BORDER     2
 
 enum {
-  INSERT_TEXT,
-  DELETE_TEXT,
-  UPDATE_TEXT,
-  GET_CHARS,
-  SET_SELECTION,
+  ACTIVATE,
   CHANGED,
   LAST_SIGNAL
 };
-
-
-typedef void (*GtkEditableSignal1) (GtkObject *object,
-				    gpointer   arg1,
-				    gint       arg2,
-				    gpointer   arg3,
-				    gpointer   data);
-typedef void (*GtkEditableSignal2) (GtkObject *object,
-				    gint       arg1,
-				    gint       arg2,
-				    gpointer   data);
-
-typedef gpointer (*GtkEditableSignal3) (GtkObject *object,
-					gint       arg1,
-					gint       arg2,
-					gpointer   data);
-
-
-static void gtk_editable_marshal_signal_1     (GtkObject         *object,
-					    GtkSignalFunc      func,
-					    gpointer           func_data,
-					    GtkArg            *args);
-static void gtk_editable_marshal_signal_2     (GtkObject         *object,
-					    GtkSignalFunc      func,
-					    gpointer           func_data,
-					    GtkArg            *args);
-static void gtk_editable_marshal_signal_3     (GtkObject         *object,
-					    GtkSignalFunc      func,
-					    gpointer           func_data,
-					    GtkArg            *args);
 
 static void gtk_editable_class_init          (GtkEditableClass     *klass);
 static void gtk_editable_init                (GtkEditable          *editable);
@@ -127,47 +93,14 @@ gtk_editable_class_init (GtkEditableClass *class)
 
   parent_class = gtk_type_class (gtk_widget_get_type ());
 
-  editable_signals[INSERT_TEXT] =
-    gtk_signal_new ("insert_text",
+  editable_signals[ACTIVATE] =
+    gtk_signal_new ("activate",
 		    GTK_RUN_LAST,
 		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkEditableClass, insert_text),
-		    gtk_editable_marshal_signal_1,
-		    GTK_TYPE_NONE, 3,
-		    GTK_TYPE_STRING, GTK_TYPE_INT,
-		    GTK_TYPE_POINTER);
-  editable_signals[DELETE_TEXT] =
-    gtk_signal_new ("delete_text",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkEditableClass, delete_text),
-		    gtk_editable_marshal_signal_2,
-		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_INT, GTK_TYPE_INT);
-  editable_signals[UPDATE_TEXT] =
-    gtk_signal_new ("update_text",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkEditableClass, update_text),
-		    gtk_editable_marshal_signal_2,
-		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_INT, GTK_TYPE_INT);
-  editable_signals[GET_CHARS] =
-    gtk_signal_new ("get_chars",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkEditableClass, get_chars),
-		    gtk_editable_marshal_signal_3,
-		    GTK_TYPE_POINTER, 2,
-		    GTK_TYPE_INT, GTK_TYPE_INT);
-  editable_signals[SET_SELECTION] =
-    gtk_signal_new ("set_selection",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkEditableClass, set_selection),
-		    gtk_editable_marshal_signal_2,
-		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_INT, GTK_TYPE_INT);
+		    GTK_SIGNAL_OFFSET (GtkEditableClass, activate),
+		    gtk_signal_default_marshaller,
+		    GTK_TYPE_NONE, 0);
+
   editable_signals[CHANGED] =
     gtk_signal_new ("changed",
 		    GTK_RUN_LAST,
@@ -242,53 +175,6 @@ gtk_editable_init (GtkEditable *editable)
 }
 
 static void
-gtk_editable_marshal_signal_1 (GtkObject      *object,
-			    GtkSignalFunc   func,
-			    gpointer        func_data,
-			    GtkArg         *args)
-{
-  GtkEditableSignal1 rfunc;
-
-  rfunc = (GtkEditableSignal1) func;
-
-  (* rfunc) (object, GTK_VALUE_STRING (args[0]), GTK_VALUE_INT (args[1]),
-	     GTK_VALUE_POINTER (args[2]), func_data);
-}
-
-static void
-gtk_editable_marshal_signal_2 (GtkObject      *object,
-			    GtkSignalFunc   func,
-			    gpointer        func_data,
-			    GtkArg         *args)
-{
-  GtkEditableSignal2 rfunc;
-
-  rfunc = (GtkEditableSignal2) func;
-
-  (* rfunc) (object, GTK_VALUE_INT (args[0]), GTK_VALUE_INT (args[1]),
-	     func_data);
-}
-
-static void
-gtk_editable_marshal_signal_3 (GtkObject      *object,
-			       GtkSignalFunc   func,
-			       gpointer        func_data,
-			       GtkArg         *args)
-{
-  GtkEditableSignal3 rfunc;
-  gpointer *return_val;
-
-  rfunc = (GtkEditableSignal3) func;
-
-  return_val = GTK_RETLOC_POINTER (args[2]);
-  
-  *return_val = (* rfunc) (object, 
-			   GTK_VALUE_INT (args[0]), 
-			   GTK_VALUE_INT (args[1]),
-			   func_data);
-}
-
-static void
 gtk_editable_finalize (GtkObject *object)
 {
   GtkEditable *editable;
@@ -315,11 +201,15 @@ gtk_editable_insert_text (GtkEditable *editable,
 			  gint         new_text_length,
 			  gint        *position)
 {
+  GtkEditableClass *klass;
+
   gchar buf[64];
   gchar *text;
 
   g_return_if_fail (editable != NULL);
   g_return_if_fail (GTK_IS_EDITABLE (editable));
+
+  klass = GTK_EDITABLE_CLASS (GTK_OBJECT (editable)->klass);
 
   if (new_text_length <= 64)
     text = buf;
@@ -328,8 +218,7 @@ gtk_editable_insert_text (GtkEditable *editable,
 
   strncpy (text, new_text, new_text_length);
 
-  gtk_signal_emit (GTK_OBJECT (editable), editable_signals[INSERT_TEXT],
-		   text, new_text_length, position);
+  klass->insert_text (editable, text, new_text_length, position);
   gtk_signal_emit (GTK_OBJECT (editable), editable_signals[CHANGED]);
 
   if (new_text_length > 64)
@@ -341,11 +230,14 @@ gtk_editable_delete_text (GtkEditable *editable,
 			  gint         start_pos,
 			  gint         end_pos)
 {
+  GtkEditableClass *klass;
+
   g_return_if_fail (editable != NULL);
   g_return_if_fail (GTK_IS_EDITABLE (editable));
 
-  gtk_signal_emit (GTK_OBJECT (editable), editable_signals[DELETE_TEXT],
-		   start_pos, end_pos);
+  klass = GTK_EDITABLE_CLASS (GTK_OBJECT (editable)->klass);
+
+  klass->delete_text (editable, start_pos, end_pos);
   gtk_signal_emit (GTK_OBJECT (editable), editable_signals[CHANGED]);
 }
 
@@ -354,11 +246,14 @@ gtk_editable_update_text (GtkEditable *editable,
 		       gint      start_pos,
 		       gint      end_pos)
 {
+  GtkEditableClass *klass;
+
   g_return_if_fail (editable != NULL);
   g_return_if_fail (GTK_IS_EDITABLE (editable));
 
-  gtk_signal_emit (GTK_OBJECT (editable), editable_signals[UPDATE_TEXT],
-		   start_pos, end_pos);
+  klass = GTK_EDITABLE_CLASS (GTK_OBJECT (editable)->klass);
+
+  klass->update_text (editable, start_pos, end_pos);
 }
 
 gchar *    
@@ -366,15 +261,14 @@ gtk_editable_get_chars      (GtkEditable      *editable,
 			     gint              start,
 			     gint              end)
 {
-  gchar *retval = NULL;
-  
+  GtkEditableClass *klass;
+
   g_return_val_if_fail (editable != NULL, NULL);
   g_return_val_if_fail (GTK_IS_EDITABLE (editable), NULL);
 
-  gtk_signal_emit (GTK_OBJECT (editable), editable_signals[GET_CHARS],
-		   start, end, &retval);
+  klass = GTK_EDITABLE_CLASS (GTK_OBJECT (editable)->klass);
 
-  return retval;
+  return klass->get_chars (editable, start, end);
 }
 
 static void
@@ -382,11 +276,14 @@ gtk_editable_set_selection (GtkEditable *editable,
 			    gint      start_pos,
 			    gint      end_pos)
 {
+  GtkEditableClass *klass;
+
   g_return_if_fail (editable != NULL);
   g_return_if_fail (GTK_IS_EDITABLE (editable));
 
-  gtk_signal_emit (GTK_OBJECT (editable), editable_signals[SET_SELECTION],
-		   start_pos, end_pos);
+  klass = GTK_EDITABLE_CLASS (GTK_OBJECT (editable)->klass);
+
+  klass->set_selection (editable, start_pos, end_pos);
 }
 
 static gint

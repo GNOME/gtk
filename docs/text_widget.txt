@@ -161,6 +161,16 @@ this index.  If you see or add a special case in the code for this
 end-of-buffer case, make sure to use LAST_INDEX if you can.  Very
 often, the last index is treated as a newline.
 
+[ One way the last index is special is that, although it is always
+  part of some property, it will never be part of a property of
+  length 1 unless there are no other characters in the text. That
+  is, its properties are always that of the preceding character,
+  if any.
+  
+  There is a fair bit of special case code to mantain this condition -
+  which is needed so that user has control over the properties of
+  characters inserted at the last position. OWT 2/9/98 ]
+
 Tab stops are variable width.  A list of tab stops is contained in the
 GtkText structure:
 

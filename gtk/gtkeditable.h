@@ -73,6 +73,7 @@ struct _GtkEditableClass
   void (* set_selection)(GtkEditable    *editable,
 			 gint            start_pos,
 			 gint            end_pos);
+  void (* activate)     (GtkEditable    *editable);
   void (* changed)      (GtkEditable    *editable);
 };
 

@@ -159,45 +159,17 @@ TODO AFTER GTK 1.0
 
   Bugs:
 
-  - In Entry and Text widget, you can ungrab while still
-    dragging by pressing button-1, pressing button 3, releaseing 3,
-    then releasing 1.
+  - Who knows?
 
-  - When selecting on a Text or Entry widget, the selection isn't
-    claimed until you release the button, and that shows by the
-    color of the selection. (Which is the real problem - it probably
-    is OK/better to delay claiming the selection) [fixed]
-
-  - Related to the above, when you Shift/arrow to select text, the
-    selected text doesn't show that you have the selection immediately.
-
-  - Selecting an entire line with triple-click doesn't work right - 
-    it should select the wrapped portion too.
-
-  - Selecting an entire line should probably select the newline as
-    well, so when the selection is cut/deleted, the newline goes
-    along.
-
-  - Inserting text in a different property - problems? Shouldn't
-    split the last position off in any case.
-
-  - Do something about the bg pixmap situation. (It will produce
-    garbage when editing is enabled)
-
-  - "Copy" removes selection
- 
   Improvements:
 
-  - Finish making the key bindings consistent between the Entry
-    and Text widgets
-
   - Unify the key binding support in some fashion between the
-    two widgets (???)
+    Entry and Text widget widgets (???)
 
-  - When inserting or deleting large chunks of text, do a freeze/thaw
-    automatically, to avoid scrolling around for ever on screen.
-
-  - Jump scroll on large insertions/deletions
+  - Figure out a way not to recompute the geometry on insertions/deletions
+    which are large, but not a significant fraction of the
+    entire text. (e.g., compute the changes as when the widget
+    is not frozen, but without the actual scrolling)
 
   - Prune the line start cache. But since it is only 68 bytes
     per line, and it is a lot faster when lines are in the cache,

@@ -51,13 +51,12 @@ struct _GtkEntry
   gint16  scroll_offset;
   guint   visible : 1;
   guint32 timer;
+  guint   button;
 };
 
 struct _GtkEntryClass
 {
   GtkEditableClass parent_class;
-
-  void (* activate)     (GtkEntry    *entry);
 };
 
 guint      gtk_entry_get_type       (void);

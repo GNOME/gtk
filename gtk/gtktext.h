@@ -145,7 +145,9 @@ struct _GtkText
   gint default_tab_width;
 
   /* Timer used for auto-scrolling off ends */
-  guint32 timer;
+  gint timer;
+  
+  guint button;			/* currently pressed mouse button */
 };
 
 struct _GtkTextClass

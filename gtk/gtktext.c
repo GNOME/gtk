@@ -41,6 +41,8 @@
 #define SCROLL_PIXELS            5
 #define KEY_SCROLL_PIXELS        10
 #define SCROLL_TIME              100
+#define FREEZE_LENGTH            1024        
+/* Freeze text when inserting or deleting more than this many characters */
 
 #define SET_PROPERTY_MARK(m, p, o)  do {                   \
                                       (m)->property = (p); \
@@ -224,7 +226,7 @@ static void find_line_containing_point (GtkText* text, guint point,
 static TextProperty* new_text_property (GdkFont* font, GdkColor* fore, GdkColor* back, guint length);
 
 /* Display */
-static void compute_lines_pixels (GtkText* text, gint char_count,
+static void compute_lines_pixels (GtkText* text, guint char_count,
 				  guint *lines, guint *pixels);
 
 static gint total_line_height (GtkText* text,
@@ -237,7 +239,7 @@ static LineParams find_line_params (GtkText* text,
 static void recompute_geometry (GtkText* text);
 static void insert_expose (GtkText* text, guint old_pixels, gint nchars, guint new_line_count);
 static void delete_expose (GtkText* text,
-			   gint  nchars,
+			   guint nchars,
 			   guint old_lines, 
 			   guint old_pixels);
 static void clear_area (GtkText *text, GdkRectangle *area);
@@ -283,6 +285,9 @@ static void gtk_text_move_forward_word         (GtkText          *text);
 static void gtk_text_move_backward_word        (GtkText          *text);
 static void gtk_text_move_beginning_of_line    (GtkText          *text);
 static void gtk_text_move_end_of_line          (GtkText          *text);
+static void gtk_text_move_next_line            (GtkText          *text);
+static void gtk_text_move_previous_line        (GtkText          *text);
+
 static void gtk_text_delete_forward_character  (GtkText          *text);
 static void gtk_text_delete_backward_character (GtkText          *text);
 static void gtk_text_delete_forward_word       (GtkText          *text);
@@ -359,9 +364,9 @@ static GtkTextFunction control_keys[26] =
   (GtkTextFunction)gtk_text_delete_to_line_end,        /* k */
   NULL,                                                /* l */
   NULL,                                                /* m */
-  NULL,                                                /* n */
+  (GtkTextFunction)gtk_text_move_next_line,            /* n */
   NULL,                                                /* o */
-  NULL,                                                /* p */
+  (GtkTextFunction)gtk_text_move_previous_line,        /* p */
   NULL,                                                /* q */
   NULL,                                                /* r */
   NULL,                                                /* s */
@@ -492,6 +497,7 @@ gtk_text_init (GtkText *text)
   text->line_wrap = TRUE;
   
   text->timer = 0;
+  text->button = 0;
 
   GTK_EDITABLE(text)->editable = FALSE;
 }
@@ -654,13 +660,15 @@ gtk_text_insert (GtkText    *text,
 		 GdkColor   *fore,
 		 GdkColor   *back,
 		 const char *chars,
-		 gint        length)
+		 gint        nchars)
 {
   gint i;
   GtkEditable *editable = GTK_EDITABLE (text);
+  gboolean frozen = FALSE;
 
   gint new_line_count = 1;
   guint old_height = 0;
+  guint length;
 
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
@@ -668,17 +676,25 @@ gtk_text_insert (GtkText    *text,
   /* This must be because we need to have the style set up. */
   g_assert (GTK_WIDGET_REALIZED(text));
 
+  if (nchars < 0)
+    length = strlen (chars);
+  else
+    length = nchars;
+
+  if (length == 0)
+    return;
+
+  if (!text->freeze && (length > FREEZE_LENGTH))
+    {
+      gtk_text_freeze (text);
+      frozen = TRUE;
+    }
+  
   if (fore == NULL)
     fore = &GTK_WIDGET (text)->style->text[GTK_STATE_NORMAL];
   if (back == NULL)
     back = &GTK_WIDGET (text)->style->base[GTK_STATE_NORMAL];
   
-  if (length < 0)
-    length = strlen (chars);
-
-  if (length == 0)
-    return;
-
   if (!text->freeze && (text->line_start_cache != NULL))
     {
       find_line_containing_point (text, text->point.index, TRUE);
@@ -695,6 +711,9 @@ gtk_text_insert (GtkText    *text,
     editable->selection_start_pos += length;
   if (text->point.index < editable->selection_end_pos)
     editable->selection_end_pos += length;
+  /* We'll reset the cursor later anyways if we aren't frozen */
+  if (text->point.index < text->cursor_mark.index)
+    text->cursor_mark.index += length;
 
   move_gap_to_point (text);
 
@@ -714,6 +733,9 @@ gtk_text_insert (GtkText    *text,
 
   if (!text->freeze && (text->line_start_cache != NULL))
     insert_expose (text, old_height, length, new_line_count);
+
+  if (frozen)
+    gtk_text_thaw (text);
 }
 
 gint
@@ -736,7 +758,8 @@ gtk_text_forward_delete (GtkText *text,
 			 guint    nchars)
 {
   guint old_lines, old_height;
-  GtkEditable *editable = GTK_EDITABLE (text); 
+  GtkEditable *editable = GTK_EDITABLE (text);
+  gboolean frozen = FALSE;
 
   g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (GTK_IS_TEXT (text), 0);
@@ -744,6 +767,12 @@ gtk_text_forward_delete (GtkText *text,
   if (text->point.index + nchars > TEXT_LENGTH (text) || nchars <= 0)
     return FALSE;
 
+  if (!text->freeze && (nchars > FREEZE_LENGTH))
+    {
+      gtk_text_freeze (text);
+      frozen = TRUE;
+    }
+  
   if (!text->freeze && (text->line_start_cache != NULL))
     {
       find_line_containing_point (text, text->point.index, TRUE);
@@ -768,6 +797,10 @@ gtk_text_forward_delete (GtkText *text,
     editable->selection_start_pos -= nchars;
   if (text->point.index < editable->selection_end_pos)
     editable->selection_end_pos -= nchars;
+  /* We'll reset the cursor later anyways if we aren't frozen */
+  if (text->point.index < text->cursor_mark.index)
+    text->cursor_mark.index -= nchars;
+
 
   move_gap_to_point (text);
 
@@ -777,6 +810,9 @@ gtk_text_forward_delete (GtkText *text,
 
   if (!text->freeze && (text->line_start_cache != NULL))
     delete_expose (text, nchars, old_lines, old_height);
+
+  if (frozen)
+    gtk_text_thaw (text);
 
   return TRUE;
 }
@@ -1307,20 +1343,31 @@ gtk_text_button_press (GtkWidget      *widget,
 
   text = GTK_TEXT (widget);
   editable = GTK_EDITABLE (widget);
+
+  if (text->button)
+    {
+      GdkEventButton release_event = *event;
+
+      release_event.type = GDK_BUTTON_RELEASE;
+      release_event.button = text->button;
+
+      gtk_text_button_release (widget, &release_event);
+    }
+
+  text->button = event->button;
   
   if (!GTK_WIDGET_HAS_FOCUS (widget))
     gtk_widget_grab_focus (widget);
-
-  if (event->type == GDK_BUTTON_PRESS && event->button != 2)
-    gtk_grab_add (widget);
 
   if (event->button == 1)
     {
       switch (event->type)
 	{
 	case GDK_BUTTON_PRESS:
+	  gtk_grab_add (widget);
+
 	  undraw_cursor (text, FALSE);
-	  find_mouse_cursor (text, event->x, event->y);
+	  find_mouse_cursor (text, (gint)event->x, (gint)event->y);
 	  draw_cursor (text, FALSE);
 
 	  /* Set it now, so we display things right. We'll unset it
@@ -1352,7 +1399,7 @@ gtk_text_button_press (GtkWidget      *widget,
 	      editable->has_selection)
 	    {
 	      undraw_cursor (text, FALSE);
-	      find_mouse_cursor (text, event->x, event->y);
+	      find_mouse_cursor (text, (gint)event->x, (gint)event->y);
 	      draw_cursor (text, FALSE);
 
 	    }
@@ -1362,6 +1409,8 @@ gtk_text_button_press (GtkWidget      *widget,
 	}
       else
 	{
+	  gtk_grab_add (widget);
+
 	  undraw_cursor (text, FALSE);
 	  find_mouse_cursor (text, event->x, event->y);
 	  draw_cursor (text, FALSE);
@@ -1390,6 +1439,13 @@ gtk_text_button_release (GtkWidget      *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   text = GTK_TEXT (widget);
+
+  gtk_grab_remove (widget);
+
+  if (text->button != event->button)
+    return FALSE;
+
+  text->button = 0;
 
   if (text->timer)
     {
@@ -1429,7 +1485,7 @@ gtk_text_button_release (GtkWidget      *widget,
   undraw_cursor (text, FALSE);
   find_cursor (text, TRUE);
   draw_cursor (text, FALSE);
-  
+
   return FALSE;
 }
 
@@ -1456,7 +1512,8 @@ gtk_text_motion_notify (GtkWidget      *widget,
       gdk_window_get_pointer (text->text_area, &x, &y, &mask);
     }
 
-  if (!(mask & (GDK_BUTTON1_MASK | GDK_BUTTON3_MASK)))
+  if ((text->button == 0) ||
+      !(mask & (GDK_BUTTON1_MASK | GDK_BUTTON3_MASK)))
     return FALSE;
 
   gdk_window_get_size (text->text_area, NULL, &height);
@@ -1552,16 +1609,26 @@ gtk_text_key_press (GtkWidget   *widget,
   key = event->keyval;
   return_val = TRUE;
 
-  if (GTK_EDITABLE(text)->editable == FALSE)
+  if ((GTK_EDITABLE(text)->editable == FALSE) || !text->has_cursor)
     {
       switch (event->keyval)
 	{
-	case GDK_Home:      scroll_int (text, -text->vadj->value); break;
-	case GDK_End:       scroll_int (text, +text->vadj->upper); break;
+	case GDK_Home:      
+	  if (event->state & GDK_CONTROL_MASK)
+	    scroll_int (text, -text->vadj->value); 
+	  break;
+	case GDK_End:
+	  if (event->state & GDK_CONTROL_MASK)
+	    scroll_int (text, +text->vadj->upper); 
+	  break;
 	case GDK_Page_Up:   scroll_int (text, -text->vadj->page_increment); break;
 	case GDK_Page_Down: scroll_int (text, +text->vadj->page_increment); break;
 	case GDK_Up:        scroll_int (text, -KEY_SCROLL_PIXELS); break;
 	case GDK_Down:      scroll_int (text, +KEY_SCROLL_PIXELS); break;
+	case GDK_Return:
+	  if (event->state & GDK_CONTROL_MASK)
+	    gtk_signal_emit_by_name (GTK_OBJECT (text), "activate");
+	  break;
 	default:
 	  return_val = FALSE;
 	  break;
@@ -1571,6 +1638,7 @@ gtk_text_key_press (GtkWidget   *widget,
     {
       gint extend_selection;
       gint extend_start;
+      guint initial_pos = editable->current_pos;
 
       text->point = find_mark (text, text->cursor_mark.index);
 
@@ -1592,54 +1660,79 @@ gtk_text_key_press (GtkWidget   *widget,
       
       switch (event->keyval)
 	{
-	case GDK_Home:      move_cursor_buffer_ver (text, -1); break;
-	case GDK_End:       move_cursor_buffer_ver (text, +1); break;
+	case GDK_Home:
+	  if (event->state & GDK_CONTROL_MASK)
+	    move_cursor_buffer_ver (text, -1);
+	  else
+	    gtk_text_move_beginning_of_line (text);
+	  break;
+	case GDK_End:
+	  if (event->state & GDK_CONTROL_MASK)
+	    move_cursor_buffer_ver (text, +1);
+	  else
+	    gtk_text_move_end_of_line (text);
+	  break;
 	case GDK_Page_Up:   move_cursor_page_ver (text, -1); break;
 	case GDK_Page_Down: move_cursor_page_ver (text, +1); break;
+	  /* CUA has Ctrl-Up/Ctrl-Down as paragraph up down */
 	case GDK_Up:        move_cursor_ver (text, -1); break;
 	case GDK_Down:      move_cursor_ver (text, +1); break;
-	case GDK_Left:      move_cursor_hor (text, -1); break;
-	case GDK_Right:     move_cursor_hor (text, +1); break;
+	case GDK_Left:
+	  if (event->state & GDK_CONTROL_MASK)
+	    gtk_text_move_backward_word (text);
+	  else
+	    move_cursor_hor (text, -1); 
+	  break;
+	case GDK_Right:     
+	  if (event->state & GDK_CONTROL_MASK)
+	    gtk_text_move_forward_word (text);
+	  else
+	    move_cursor_hor (text, +1); 
+	  break;
 
 	case GDK_BackSpace:
-	  if (editable->selection_start_pos != editable->selection_end_pos)
+	  if (event->state & GDK_CONTROL_MASK)
+	    gtk_text_delete_backward_word (text);
+	  else
+	    gtk_text_delete_backward_character (text);
+	  break;
+	case GDK_Clear:
+	  gtk_text_delete_line (text);
+	  break;
+	case GDK_Insert:
+	  if (event->state & GDK_SHIFT_MASK)
 	    {
-	      gtk_editable_delete_selection (editable);
-	      break;
+	      extend_selection = FALSE;
+	      gtk_editable_paste_clipboard (editable, event->time);
 	    }
-	  if (text->has_cursor && text->cursor_mark.index != 0)
+	  else if (event->state & GDK_CONTROL_MASK)
 	    {
-	      if (event->state & GDK_CONTROL_MASK)
-		gtk_text_delete_backward_word (text);
-	      else
-		gtk_text_backward_delete (text, 1);
+	      gtk_editable_copy_clipboard (editable, event->time);
+	    }
+	  else
+	    {
+	      /* gtk_toggle_insert(text) -- IMPLEMENT */
 	    }
 	  break;
 	case GDK_Delete:
-	  if (editable->selection_start_pos != editable->selection_end_pos)
+	  if (event->state & GDK_CONTROL_MASK)
+	    gtk_text_delete_forward_word (text);
+	  else if (event->state & GDK_SHIFT_MASK)
 	    {
-	      gtk_editable_delete_selection (editable);
-	      break;
+	      extend_selection = FALSE;
+	      gtk_editable_cut_clipboard (editable, event->time);
 	    }
-	  if (text->has_cursor && !LAST_INDEX(text, text->cursor_mark))
-	    {
-	      if (event->state & GDK_CONTROL_MASK)
-		gtk_text_delete_forward_word (text);
-	      else
-		gtk_text_forward_delete (text, 1);
-	    }
+	  else
+	    gtk_text_delete_forward_character (text);
 	  break;
 	case GDK_Tab:
-	  if (!text->has_cursor)
-	    break;
-
 	  gtk_text_insert_1_at_point (text, '\t');
 	  break;
 	case GDK_Return:
-	  if (!text->has_cursor)
-	    break;
-
-	  gtk_text_insert_1_at_point (text, '\n');
+	  if (event->state & GDK_CONTROL_MASK)
+	    gtk_signal_emit_by_name (GTK_OBJECT (text), "activate");
+	  else
+	    gtk_text_insert_1_at_point (text, '\n');
 	  break;
 	case GDK_Escape:
 	  /* Don't insert literally */
@@ -1648,9 +1741,6 @@ gtk_text_key_press (GtkWidget   *widget,
 
 	default:
 	  return_val = FALSE;
-
-	  if (!text->has_cursor)
-	    break;
 
 	  if (event->state & GDK_CONTROL_MASK)
 	    {
@@ -1695,7 +1785,7 @@ gtk_text_key_press (GtkWidget   *widget,
 	    return_val = FALSE;
 	}
 
-      if (return_val)
+      if (return_val && (editable->current_pos != initial_pos))
 	{
 	  if (extend_selection)
 	    {
@@ -1983,31 +2073,32 @@ fetch_lines_forward (GtkText* text, gint line_count)
  * starting from the point 
  */
 static void
-compute_lines_pixels (GtkText* text, gint char_count,
+compute_lines_pixels (GtkText* text, guint char_count,
 		      guint *lines, guint *pixels)
 {
   GList *line = text->current_line;
+  gint chars_left = char_count;
 
   *lines = 0;
   *pixels = 0;
 
-  /* If char_count == 0, that means we're joining two lines in a
+  /* If chars_left == 0, that means we're joining two lines in a
    * deletion, so add in the values for the next line as well 
    */
-  for (; line && char_count >= 0; line = line->next)
+  for (; line && chars_left >= 0; line = line->next)
     {
       *pixels += LINE_HEIGHT(CACHE_DATA(line));
 
       if (line == text->current_line)
-	char_count -= CACHE_DATA(line).end.index - text->point.index + 1;
+	chars_left -= CACHE_DATA(line).end.index - text->point.index + 1;
       else
-	char_count -= CACHE_DATA(line).end.index -CACHE_DATA(line).start.index + 1;
+	chars_left -= CACHE_DATA(line).end.index -CACHE_DATA(line).start.index + 1;
 
       if (!text->line_wrap || !CACHE_DATA(line).wraps)
 	*lines += 1;
       else
-	if (char_count < 0)
-	  char_count = 0;	/* force another loop */
+	if (chars_left < 0)
+	  chars_left = 0;	/* force another loop */
 
       if (!line->next)
 	fetch_lines_forward (text, 1);
@@ -2034,7 +2125,7 @@ total_line_height (GtkText* text, GList* line, gint line_count)
 }
 
 static void
-swap_lines (GtkText* text, GList* old, GList* new, gint old_line_count)
+swap_lines (GtkText* text, GList* old, GList* new, guint old_line_count)
 {
   if (old == text->line_start_cache)
     {
@@ -2104,9 +2195,15 @@ correct_cache_delete (GtkText* text, gint nchars, gint lines)
       start->index -= nchars;
       end->index -= nchars;
 
-      if (start->property == text->point.property)
+      if (LAST_INDEX (text, text->point) &&
+	  start->index == text->point.index)
+	*start = text->point;
+      else if (start->property == text->point.property)
 	start->offset = start->index - (text->point.index - text->point.offset);
 
+      if (LAST_INDEX (text, text->point) &&
+	  end->index == text->point.index)
+	*end = text->point;
       if (end->property == text->point.property)
 	end->offset = end->index - (text->point.index - text->point.offset);
 
@@ -2116,7 +2213,7 @@ correct_cache_delete (GtkText* text, gint nchars, gint lines)
 }
 
 static void
-delete_expose (GtkText* text, gint nchars, guint old_lines, guint old_pixels)
+delete_expose (GtkText* text, guint nchars, guint old_lines, guint old_pixels)
 {
   gint pixel_height;
   guint new_pixels = 0;
@@ -2199,7 +2296,10 @@ correct_cache_insert (GtkText* text, gint nchars)
       GtkPropertyMark *start = &CACHE_DATA(cache).start;
       GtkPropertyMark *end = &CACHE_DATA(cache).end;
 
-      if (start->index >= text->point.index - nchars)
+      if (LAST_INDEX (text, text->point) &&
+	  start->index == text->point.index)
+	*start = text->point;
+      else if (start->index >= text->point.index - nchars)
 	{
 	  if (start->property == text->point.property)
 	    move_mark_n(start, nchars);
@@ -2207,6 +2307,9 @@ correct_cache_insert (GtkText* text, gint nchars)
 	    start->index += nchars;
 	}
 
+      if (LAST_INDEX (text, text->point) &&
+	  end->index == text->point.index)
+	*end = text->point;
       if (end->index >= text->point.index - nchars)
 	{
 	  if (end->property == text->point.property)
@@ -2451,6 +2554,15 @@ insert_text_property (GtkText* text, GdkFont* font,
 
 	  backward_prop->length += len;
 	}
+      else if ((MARK_NEXT_LIST_PTR(mark) == NULL) &&
+	       (forward_prop->length == 1))
+	{
+	  /* Next property just has last position, take it over */
+	  forward_prop->font = get_text_font (font);
+	  forward_prop->fore_color = *fore;
+	  forward_prop->back_color = *back;
+	  forward_prop->length += len;
+	}
       else
 	{
 	  /* Splice a new property into the list. */
@@ -2477,6 +2589,22 @@ insert_text_property (GtkText* text, GdkFont* font,
       if (text_properties_equal (forward_prop, font, fore, back))
 	{
 	  forward_prop->length += len;
+	}
+      else if ((MARK_NEXT_LIST_PTR(mark) == NULL) &&
+	       (MARK_OFFSET(mark) == forward_prop->length - 1))
+	{
+	  /* Inserting before only the last position in the text */
+	  
+	  GList* new_prop;
+	  forward_prop->length -= 1;
+	  
+	  new_prop = g_list_alloc();
+	  new_prop->data = new_text_property (font, fore, back, len+1);
+	  new_prop->prev = MARK_LIST_PTR(mark);
+	  new_prop->next = NULL;
+	  MARK_NEXT_LIST_PTR(mark) = new_prop;
+
+	  SET_PROPERTY_MARK (mark, new_prop, 0);
 	}
       else
 	{
@@ -2543,6 +2671,7 @@ delete_text_property (GtkText* text, guint nchars)
 	  text->point.offset = 0;
 
 	  g_mem_chunk_free (text_property_chunk, prop);
+	  g_list_free_1 (tmp);
 
 	  prop = MARK_CURRENT_PROPERTY (&text->point);
 
@@ -2556,6 +2685,26 @@ delete_text_property (GtkText* text, guint nchars)
 	  MARK_LIST_PTR (&text->point) = MARK_NEXT_LIST_PTR (&text->point);
 	  text->point.offset = 0;
 	}
+    }
+
+  /* Check to see if we have just the single final position remaining
+   * along in a property; if so, combine it with the previous property
+   */
+  if (LAST_INDEX (text, text->point) && 
+      (MARK_OFFSET (&text->point) == 0) &&
+      (MARK_PREV_LIST_PTR(&text->point) != NULL))
+    {
+      tmp = MARK_LIST_PTR (&text->point);
+      prop = MARK_CURRENT_PROPERTY(&text->point);
+
+      MARK_LIST_PTR (&text->point) = MARK_PREV_LIST_PTR (&text->point);
+      MARK_CURRENT_PROPERTY(&text->point)->length += 1;
+      MARK_NEXT_LIST_PTR(&text->point) = NULL;
+
+      text->point.offset = MARK_CURRENT_PROPERTY(&text->point)->length - 1;
+      
+      g_mem_chunk_free (text_property_chunk, prop);
+      g_list_free_1 (tmp);
     }
 }
 
@@ -2859,8 +3008,9 @@ find_cursor_at_line (GtkText* text, const LineParams* start_line, gint pixel_hei
   text->cursor_char_offset = start_line->font_descent;
   text->cursor_mark        = mark;
 
-  ch = GTK_TEXT_INDEX (text, mark.index);
-
+  ch = LAST_INDEX (text, mark) ? 
+    LINE_DELIM : GTK_TEXT_INDEX (text, mark.index);
+  
   if (!isspace(ch))
     text->cursor_char = ch;
   else
@@ -2922,7 +3072,8 @@ find_mouse_cursor_at_line (GtkText *text, const LineParams* lp,
 
   for (;;)
     {
-      gchar ch = GTK_TEXT_INDEX (text, mark.index);
+        gchar ch = LAST_INDEX (text, mark) ? 
+	  LINE_DELIM : GTK_TEXT_INDEX (text, mark.index);
 
       if (button_x < pixel_width || mark.index == lp->end.index)
 	{
@@ -3025,10 +3176,25 @@ remove_cache_line (GtkText* text, GList* member)
 static void
 move_cursor_buffer_ver (GtkText *text, int dir)
 {
+  undraw_cursor (text, FALSE);
+
   if (dir > 0)
-    scroll_int (text, text->vadj->upper);
+    {
+      scroll_int (text, text->vadj->upper);
+      text->cursor_mark = find_this_line_start_mark (text,
+						     TEXT_LENGTH (text),
+						     &text->cursor_mark);
+    }
   else
-    scroll_int (text, - text->vadj->value);
+    {
+      scroll_int (text, - text->vadj->value);
+      text->cursor_mark = find_this_line_start_mark (text,
+						     0,
+						     &text->cursor_mark);
+    }
+
+  find_cursor (text, TRUE);
+  draw_cursor (text, FALSE);
 }
 
 static void
@@ -3126,6 +3292,18 @@ gtk_text_move_backward_character (GtkText *text)
 }
 
 static void
+gtk_text_move_next_line (GtkText *text)
+{
+  move_cursor_ver (text, 1);
+}
+
+static void
+gtk_text_move_previous_line (GtkText *text)
+{
+  move_cursor_ver (text, -1);
+}
+
+static void
 gtk_text_move_forward_word (GtkText *text)
 {
   undraw_cursor (text, FALSE);
@@ -3163,7 +3341,11 @@ static void
 gtk_text_move_beginning_of_line (GtkText *text)
 {
   undraw_cursor (text, FALSE);
-  text->cursor_mark = CACHE_DATA(text->current_line).start;
+  
+  while ((text->cursor_mark.index > 0) &&
+	 (GTK_TEXT_INDEX (text, text->cursor_mark.index - 1) != LINE_DELIM))
+    decrement_mark (&text->cursor_mark);
+	  
   find_cursor (text, TRUE);
   draw_cursor (text, FALSE);
 }
@@ -3172,7 +3354,11 @@ static void
 gtk_text_move_end_of_line (GtkText *text)
 {
   undraw_cursor (text, FALSE);
-  text->cursor_mark = CACHE_DATA(text->current_line).end;
+
+  while (!LAST_INDEX (text, text->cursor_mark) &&
+	 (GTK_TEXT_INDEX (text, text->cursor_mark.index) != LINE_DELIM))
+    advance_mark (&text->cursor_mark);
+	  
   find_cursor (text, TRUE);
   draw_cursor (text, FALSE);
 }
@@ -3221,7 +3407,8 @@ gtk_text_delete_forward_word (GtkText *text)
     {
       old_pos = text->cursor_mark.index;
       gtk_text_move_forward_word (text);
-      gtk_text_backward_delete (text, old_pos - text->cursor_mark.index);
+      gtk_text_set_point (text, text->cursor_mark.index);
+      gtk_text_backward_delete (text, text->cursor_mark.index - old_pos);
       gtk_editable_changed (editable);
     }
 }
@@ -3240,7 +3427,8 @@ gtk_text_delete_backward_word (GtkText *text)
     {
       old_pos = text->point.index;
       gtk_text_move_backward_word (text);
-      gtk_text_forward_delete (text, text->point.index - old_pos);
+      gtk_text_set_point (text, text->cursor_mark.index);
+      gtk_text_forward_delete (text, old_pos - text->cursor_mark.index);
       gtk_editable_changed (editable);
     }
 }
@@ -3248,10 +3436,18 @@ gtk_text_delete_backward_word (GtkText *text)
 static void
 gtk_text_delete_line (GtkText *text)
 {
-  gtk_text_set_point (text, CACHE_DATA(text->current_line).start.index);
-  gtk_text_forward_delete (text,
-			   CACHE_DATA(text->current_line).end.index -
-			   CACHE_DATA(text->current_line).start.index + 1);
+  gint start_pos;
+  gint end_pos;
+
+  gtk_text_move_beginning_of_line (text);
+  start_pos = text->cursor_mark.index;
+
+  gtk_text_move_end_of_line (text);
+  gtk_text_move_forward_character (text);
+  end_pos = text->cursor_mark.index;
+
+  gtk_text_set_point (text, start_pos);
+  gtk_text_forward_delete (text, end_pos - start_pos);
 
   gtk_editable_changed (GTK_EDITABLE (text));
 }
@@ -3259,9 +3455,19 @@ gtk_text_delete_line (GtkText *text)
 static void
 gtk_text_delete_to_line_end (GtkText *text)
 {
-  gtk_text_forward_delete (text,
-			   MAX(CACHE_DATA(text->current_line).end.index -
-			       text->point.index, 1));
+  gint start_pos;
+  gint end_pos;
+
+  start_pos = text->cursor_mark.index;
+
+  gtk_text_move_end_of_line (text);
+
+  if (start_pos == text->cursor_mark.index)
+    gtk_text_move_forward_character (text);
+  end_pos = text->cursor_mark.index;
+
+  gtk_text_set_point (text, start_pos);
+  gtk_text_forward_delete (text, end_pos - start_pos);
 
   gtk_editable_changed (GTK_EDITABLE (text));
 }
@@ -3287,9 +3493,20 @@ gtk_text_select_word (GtkText *text)
 static void
 gtk_text_select_line (GtkText *text)
 {
-  gtk_text_set_selection (GTK_EDITABLE (text),
-			  CACHE_DATA(text->current_line).end.index,
-			  CACHE_DATA(text->current_line).start.index);
+  gint start_pos;
+  gint end_pos;
+
+  GtkEditable *editable;
+  editable = GTK_EDITABLE (text);
+
+  gtk_text_move_beginning_of_line (text);
+  start_pos = text->cursor_mark.index;
+
+  gtk_text_move_end_of_line (text);
+  gtk_text_move_forward_character (text);
+  end_pos = text->cursor_mark.index;
+
+  gtk_text_set_selection (editable, start_pos, end_pos);
 }
 
 /**********************************************************************/
@@ -4480,7 +4697,7 @@ gtk_text_show_props (GtkText *text,
 
       proplen += p->length;
 
-      g_print ("[%d,%p,%p,%p,%p] ", p->length, p, p->font, p->fore_color, p->back_color);
+      g_print ("[%d,%p,%p,%ld,%ld] ", p->length, p, p->font, p->fore_color.pixel, p->back_color.pixel);
     }
 
   g_print ("\n");

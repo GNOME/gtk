@@ -31,11 +31,6 @@
 #define DRAW_TIMEOUT     20
 #define INNER_BORDER     2
 
-enum {
-  ACTIVATE,
-  LAST_SIGNAL
-};
-
 static void gtk_entry_class_init          (GtkEntryClass     *klass);
 static void gtk_entry_init                (GtkEntry          *entry);
 static void gtk_entry_finalize            (GtkObject         *object);
@@ -111,7 +106,6 @@ static void gtk_entry_set_selection       (GtkEditable       *editable,
 					   gint               end);
 
 static GtkWidgetClass *parent_class = NULL;
-static guint entry_signals[LAST_SIGNAL] = { 0 };
 static GdkAtom ctext_atom = GDK_NONE;
 
 static GtkTextFunction control_keys[26] =
@@ -212,16 +206,6 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   parent_class = gtk_type_class (gtk_editable_get_type ());
 
-  entry_signals[ACTIVATE] =
-    gtk_signal_new ("activate",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkEntryClass, activate),
-		    gtk_signal_default_marshaller,
-		    GTK_TYPE_NONE, 0);
-
-  gtk_object_class_add_signals (object_class, entry_signals, LAST_SIGNAL);
-
   object_class->finalize = gtk_entry_finalize;
 
   widget_class->realize = gtk_entry_realize;
@@ -244,7 +228,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   editable_class->get_chars   = gtk_entry_get_chars;
   editable_class->set_selection = gtk_entry_set_selection;
   editable_class->changed = (void (*)(GtkEditable *)) gtk_entry_adjust_scroll;
-  class->activate = NULL;
+  editable_class->activate = NULL;
 }
 
 static void
@@ -260,6 +244,7 @@ gtk_entry_init (GtkEntry *entry)
   entry->text_max_length = 0;
   entry->scroll_offset = 0;
   entry->timer = 0;
+  entry->button = 0;
   entry->visible = 1;
 
   gtk_entry_grow_text (entry);
@@ -720,6 +705,18 @@ gtk_entry_button_press (GtkWidget      *widget,
   entry = GTK_ENTRY (widget);
   editable = GTK_EDITABLE (widget);
   
+  if (entry->button)
+    {
+      GdkEventButton release_event = *event;
+
+      release_event.type = GDK_BUTTON_RELEASE;
+      release_event.button = entry->button;
+
+      gtk_entry_button_release (widget, &release_event);
+    }
+
+  entry->button = event->button;
+  
   if (!GTK_WIDGET_HAS_FOCUS (widget))
     gtk_widget_grab_focus (widget);
 
@@ -788,11 +785,16 @@ gtk_entry_button_release (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_ENTRY (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
+  entry = GTK_ENTRY (widget);
+  editable = GTK_EDITABLE (widget);
+
+  if (entry->button != event->button)
+    return FALSE;
+
+  entry->button = 0;
+  
   if (event->button == 1)
     {
-      entry = GTK_ENTRY (widget);
-      editable = GTK_EDITABLE (widget);
-
       gtk_grab_remove (widget);
 
       editable->has_selection = FALSE;
@@ -832,6 +834,9 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 
   entry = GTK_ENTRY (widget);
 
+  if (entry->button == 0)
+    return FALSE;
+
   x = event->x;
   if (event->is_hint || (entry->text_area != event->window))
     gdk_window_get_pointer (entry->text_area, &x, NULL, NULL);
@@ -853,7 +858,8 @@ gtk_entry_key_press (GtkWidget   *widget,
 
   gint return_val;
   gint key;
-  gint tmp_pos;
+  guint initial_pos;
+  guint tmp_pos;
   gint extend_selection;
   gint extend_start;
 
@@ -867,6 +873,8 @@ gtk_entry_key_press (GtkWidget   *widget,
 
   if(editable->editable == FALSE)
     return FALSE;
+
+  initial_pos = editable->current_pos;
 
   extend_selection = event->state & GDK_SHIFT_MASK;
   extend_start = FALSE;
@@ -886,9 +894,7 @@ gtk_entry_key_press (GtkWidget   *widget,
     {
     case GDK_BackSpace:
       return_val = TRUE;
-      if (editable->selection_start_pos != editable->selection_end_pos)
-	gtk_editable_delete_selection (editable);
-      else if (event->state & GDK_CONTROL_MASK)
+      if (event->state & GDK_CONTROL_MASK)
 	gtk_delete_backward_word (entry);
       else
 	gtk_delete_backward_character (entry);
@@ -897,28 +903,31 @@ gtk_entry_key_press (GtkWidget   *widget,
       return_val = TRUE;
       gtk_delete_line (entry);
       break;
-     case GDK_Insert:
-       return_val = TRUE;
-       if (event->state & GDK_SHIFT_MASK)
-	 {
-	   extend_selection = FALSE;
-	   gtk_editable_paste_clipboard (editable, event->time);
-	 }
-       else if (event->state & GDK_CONTROL_MASK)
-	 {
-	   gtk_editable_copy_clipboard (editable, event->time);
-	 }
-       else
-	 {
-	   /* gtk_toggle_insert(entry) -- IMPLEMENT */
-	 }
-       break;
+    case GDK_Insert:
+      return_val = TRUE;
+      if (event->state & GDK_SHIFT_MASK)
+	{
+	  extend_selection = FALSE;
+	  gtk_editable_paste_clipboard (editable, event->time);
+	}
+      else if (event->state & GDK_CONTROL_MASK)
+	{
+	  gtk_editable_copy_clipboard (editable, event->time);
+	}
+      else
+	{
+	  /* gtk_toggle_insert(entry) -- IMPLEMENT */
+	}
+      break;
     case GDK_Delete:
       return_val = TRUE;
       if (event->state & GDK_CONTROL_MASK)
-	gtk_delete_line (entry);
+	gtk_delete_forward_word (entry);
       else if (event->state & GDK_SHIFT_MASK)
-	gtk_editable_cut_clipboard (editable, event->time);
+	{
+	  extend_selection = FALSE;
+	  gtk_editable_cut_clipboard (editable, event->time);
+	}
       else
 	gtk_delete_forward_character (entry);
       break;
@@ -932,15 +941,21 @@ gtk_entry_key_press (GtkWidget   *widget,
       break;
     case GDK_Left:
       return_val = TRUE;
-      gtk_move_backward_character (entry);
+      if (event->state & GDK_CONTROL_MASK)
+	gtk_move_backward_word (entry);
+      else
+	gtk_move_backward_character (entry);
       break;
     case GDK_Right:
       return_val = TRUE;
-      gtk_move_forward_character (entry);
+      if (event->state & GDK_CONTROL_MASK)
+	gtk_move_forward_word (entry);
+      else
+	gtk_move_forward_character (entry);
       break;
     case GDK_Return:
       return_val = TRUE;
-      gtk_signal_emit (GTK_OBJECT (entry), entry_signals[ACTIVATE]);
+      gtk_signal_emit_by_name (GTK_OBJECT (entry), "activate");
       break;
     /* The next two keys should not be inserted literally. Any others ??? */
     case GDK_Tab:
@@ -990,7 +1005,7 @@ gtk_entry_key_press (GtkWidget   *widget,
       break;
     }
 
-  if (return_val)
+  if (return_val && (editable->current_pos != initial_pos))
     {
       if (extend_selection)
 	{

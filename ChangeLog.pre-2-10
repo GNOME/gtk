@@ -1,3 +1,25 @@
+Mon Mar  9 20:38:15 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkentry.c gtk/gtkeditable.c gtk/gtkspinbutton.c: 
+	  Moved "activate" to editable class. Made the vfuncs in 
+	  gtkeditable just vfuncs not signals.
+
+	* gtkentry.[ch] gtktext.[ch]: Made behavior when pressing
+	  multiple buttons at once more rational.
+
+	* gtkentry.c gtktext.c: Unified and rationalized key
+	  bindings. (Now are basically emacs+CUA)
+	
+	* gtktext.c: 
+          - Last position now always shares the property of the preceding
+	    character
+	  - Freeze the widget when inserting large amounts of text.
+	  - Selecting lines now selects the _whole_ line.
+          - Fixed bug with displaying the cursor
+	  - Ctrl-Home/End now move the cursor to the _absolute home/end
+	
+	* gtkmenuitem.c: Remove necessary code out of a g_return_if_fail
+
 1998-03-09  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkclist.c (gtk_clist_set_foreground): We now accept the

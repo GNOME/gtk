@@ -698,7 +698,11 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   screen_width = gdk_screen_width ();
   screen_height = gdk_screen_height ();
 
-  g_return_if_fail (gdk_window_get_origin (GTK_WIDGET (menu_item)->window, &tx, &ty));
+  if (!gdk_window_get_origin (GTK_WIDGET (menu_item)->window, &tx, &ty))
+    {
+      g_warning ("Menu not on screen");
+      return;
+    }
 
   switch (menu_item->submenu_placement)
     {

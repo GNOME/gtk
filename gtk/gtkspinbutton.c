@@ -74,7 +74,7 @@ static gint gtk_spin_button_key_press      (GtkWidget          *widget,
 					    GdkEventKey        *event);
 static void gtk_spin_button_update         (GtkSpinButton      *spin_button);
 static void gtk_spin_button_changed        (GtkEditable        *editable);
-static void gtk_spin_button_activate       (GtkEntry           *entry);
+static void gtk_spin_button_activate       (GtkEditable        *editable);
 
 
 static GtkWidgetClass *parent_class = NULL;
@@ -110,11 +110,9 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkEditableClass *editable_class;
-  GtkEntryClass  *entry_class;
 
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
-  entry_class  = (GtkEntryClass*)  class; 
   editable_class  = (GtkEditableClass*)  class; 
 
   parent_class = gtk_type_class (gtk_entry_get_type ());
@@ -138,7 +136,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->focus_out_event = gtk_spin_button_focus_out;
 
   editable_class->changed = gtk_spin_button_changed;
-  entry_class->activate = gtk_spin_button_activate;
+  editable_class->activate = gtk_spin_button_activate;
 }
 
 static void
@@ -942,13 +940,13 @@ gtk_spin_button_changed (GtkEditable *editable)
 }
 
 static void
-gtk_spin_button_activate (GtkEntry *entry)
+gtk_spin_button_activate (GtkEditable *editable)
 {
-  g_return_if_fail (entry != NULL);
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (entry));
+  g_return_if_fail (editable != NULL);
+  g_return_if_fail (GTK_IS_SPIN_BUTTON (editable));
 
-  if (GTK_EDITABLE(entry)->editable)
-    gtk_spin_button_update (GTK_SPIN_BUTTON (entry));
+  if (editable->editable)
+    gtk_spin_button_update (GTK_SPIN_BUTTON (editable));
 }
 
 void
