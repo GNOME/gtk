@@ -2897,6 +2897,7 @@ paste_from_buffer (ClipboardRequest    *request_data,
   post_paste_cleanup (request_data);
       
   g_object_unref (G_OBJECT (src_buffer));
+  g_free (request_data);
 }
 
 static void

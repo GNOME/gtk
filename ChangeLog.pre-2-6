@@ -1,3 +1,12 @@
+Tue Jan  8 15:53:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_find_widget): Fix coordinate
+	translations, once and for all.
+
+	* gtk/gtktextbuffer.c (paste_from_buffer): Free
+	the ClipboardRequest structure. (#66198, HideToshi
+	Tajima)
+
 2002-01-08  jacob berkman  <jacob@ximian.com>
 
 	* gtk/gtklayout.c (gtk_layout_move_internal): queue a resize on
@@ -7,6 +16,7 @@ Tue Jan  8 14:51:19 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkpaned.c (gtk_paned_expose): Don't draw
 	the handle if we aren't showing both children.
+	(#68135, Diego Gonzalez)
 
 Tue Jan  8 14:45:43 2002  Owen Taylor  <otaylor@redhat.com>
 

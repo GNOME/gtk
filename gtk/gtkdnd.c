@@ -1229,6 +1229,8 @@ gtk_drag_find_widget (GtkWidget       *widget,
 		      GtkDragFindData *data)
 {
   GtkAllocation new_allocation;
+  gint allocation_to_window_x = 0;
+  gint allocation_to_window_y = 0;
   gint x_offset = 0;
   gint y_offset = 0;
 
@@ -1253,38 +1255,36 @@ gtk_drag_find_widget (GtkWidget       *widget,
 
   if (widget->parent)
     {
-      gint tx, ty, twidth, theight;
+      gint tx, ty;
       GdkWindow *window = widget->window;
 
-      /* Correct for the fact that the allocation is relative
-       * to the parent window for window widgets, not to widget->window.
+      /* Compute the offset from allocation-relative to
+       * window-relative coordinates.
        */
+      allocation_to_window_x = widget->allocation.x;
+      allocation_to_window_y = widget->allocation.y;
+
       if (!GTK_WIDGET_NO_WINDOW (widget))
 	{
+	  /* The allocation is relative to the parent window for
+	   * window widgets, not to widget->window.
+	   */
           gdk_window_get_position (window, &tx, &ty);
 	  
-          new_allocation.x -= tx;
-	  new_allocation.y -= ty;
+          allocation_to_window_x -= tx;
+          allocation_to_window_y -= ty;
 	}
 
+      new_allocation.x = 0 + allocation_to_window_x;
+      new_allocation.y = 0 + allocation_to_window_y;
+      
       while (window && window != widget->parent->window)
-	{	
-	  gdk_window_get_size (window, &twidth, &theight);
+	{
+	  GdkRectangle window_rect = { 0, 0, 0, 0 };
+	  
+	  gdk_window_get_size (window, &window_rect.width, &window_rect.height);
 
-	  if (new_allocation.x < 0)
-	    {
-	      new_allocation.width += new_allocation.x;
-	      new_allocation.x = 0;
-	    }
-	  if (new_allocation.y < 0)
-	    {
-	      new_allocation.height += new_allocation.y;
-	      new_allocation.y = 0;
-	    }
-	  if (new_allocation.x + new_allocation.width > twidth)
-	    new_allocation.width = twidth - new_allocation.x;
-	  if (new_allocation.y + new_allocation.height > theight)
-	    new_allocation.height = theight - new_allocation.y;
+	  gdk_rectangle_intersect (&new_allocation, &window_rect, &new_allocation);
 
 	  gdk_window_get_position (window, &tx, &ty);
 	  new_allocation.x += tx;
@@ -1342,8 +1342,8 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	{
 	  data->found = data->callback (widget,
 					data->context,
-					data->x - new_allocation.x - x_offset,
-					data->y - new_allocation.y - y_offset,
+					data->x - x_offset - allocation_to_window_x,
+					data->y - y_offset - allocation_to_window_y,
 					data->time);
 	  /* If so, send a "drag_leave" to the last widget */
 	  if (data->found)
