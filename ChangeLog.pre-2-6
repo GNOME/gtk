@@ -1,3 +1,7 @@
+2001-06-27  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* gtk/gtktreeviewcolumn.c: Fix a typo.
+	
 2001-06-26  Joel Becker  <jlbec@evilplan.org>
 
 	* gdk-pixbuf/gdk-pixbuf-csource.c: remove '#include "x"' line

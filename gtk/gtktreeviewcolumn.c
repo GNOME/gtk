@@ -163,7 +163,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                    PROP_VISIBLE,
                                    g_param_spec_boolean ("visible",
                                                         _("Visible"),
-                                                        _("Whether to display the colomn"),
+                                                        _("Whether to display the column"),
                                                          TRUE,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
   
