@@ -260,6 +260,14 @@ void gtk_object_set_data (GtkObject   *object,
 			  const gchar *key,
 			  gpointer     data);
 
+/* Like gtk_object_set_data, but takes an additional argument
+ * which is a function to be called when the data is removed
+ */
+void gtk_object_set_data_full (GtkObject   *object,
+			       const gchar *key,
+			       gpointer     data,
+			       GtkDestroyNotify destroy);
+
 /* Get the data associated with "key".
  */
 gpointer gtk_object_get_data (GtkObject   *object,

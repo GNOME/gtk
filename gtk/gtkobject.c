@@ -45,6 +45,7 @@ struct _GtkObjectData
 {
   guint id;
   gpointer data;
+  GtkDestroyNotify destroy;
   GtkObjectData *next;
 };
 
@@ -68,7 +69,7 @@ static void           gtk_object_get_arg       (GtkObject      *object,
 						guint		arg_id);
 static void           gtk_object_real_destroy  (GtkObject      *object);
 static void           gtk_object_finalize      (GtkObject      *object);
-static void           gtk_object_notify_weaks  (GtkObject      *object);
+static void           gtk_object_notify_weaks  (gpointer        data);
 static void           gtk_object_data_init     (void);
 static GtkObjectData* gtk_object_data_new      (void);
 static void           gtk_object_data_destroy  (GtkObjectData  *odata);
@@ -392,19 +393,14 @@ gtk_object_class_add_user_signal (GtkObjectClass     *class,
 static void
 gtk_object_finalize (GtkObject *object)
 {
-  GtkObjectData *odata;
+  GtkObjectData *odata, *next;
   
-  gtk_object_notify_weaks (object);
-  
-  if (object->object_data)
+  odata = object->object_data;
+  while (odata)
     {
-      odata = object->object_data;
-      while (odata->next)
-	odata = odata->next;
-      
-      odata->next = object_data_free_list;
-      object_data_free_list = object->object_data;
-      object->object_data = NULL;
+      next = odata->next;
+      gtk_object_data_destroy (odata);
+      odata = next;
     }
   
   g_free (object);
@@ -497,7 +493,8 @@ gtk_object_weakref (GtkObject        *object,
   weak->next = gtk_object_get_data (object, weakrefs_key);
   weak->notify = notify;
   weak->data = data;
-  gtk_object_set_data (object, weakrefs_key, weak);
+  gtk_object_set_data_full (object, weakrefs_key, weak, 
+			    gtk_object_notify_weaks);
 }
 
 void
@@ -517,7 +514,8 @@ gtk_object_weakunref (GtkObject        *object,
       if (w->notify == notify && w->data == data)
 	{
 	  if (w == weaks)
-	    gtk_object_set_data (object, weakrefs_key, w->next);
+	    gtk_object_set_data_full (object, weakrefs_key, w->next,
+				      gtk_object_notify_weaks);
 	  else
 	    *wp = w->next;
 	  g_free (w);
@@ -527,12 +525,11 @@ gtk_object_weakunref (GtkObject        *object,
 }
 
 static void
-gtk_object_notify_weaks (GtkObject *object)
+gtk_object_notify_weaks (gpointer data)
 {
   GtkWeakRef *w1, *w2;
 
-  w1 = gtk_object_get_data (object, weakrefs_key);
-  gtk_object_set_data (object, weakrefs_key, NULL);
+  w1 = (GtkWeakRef *)data;
 
   while (w1)
     {
@@ -949,9 +946,26 @@ gtk_object_get_arg_type (const char *arg_name)
  *****************************************/
 
 void
-gtk_object_set_data (GtkObject   *object,
-		     const gchar *key,
-		     gpointer     data)
+gtk_object_set_data (GtkObject        *object,
+		     const gchar      *key,
+		     gpointer          data)
+{
+  gtk_object_set_data_full (object, key, data, NULL);
+}
+
+/*****************************************
+ * gtk_object_set_data_full:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+void
+gtk_object_set_data_full (GtkObject        *object,
+			  const gchar      *key,
+			  gpointer          data,
+			  GtkDestroyNotify  destroy)
 {
   GtkObjectData *odata;
   GtkObjectData *prev;
@@ -1005,6 +1019,7 @@ gtk_object_set_data (GtkObject   *object,
 	  if (odata->id == *id)
 	    {
 	      odata->data = data;
+	      odata->destroy = destroy;
 	      return;
 	    }
 
@@ -1014,6 +1029,7 @@ gtk_object_set_data (GtkObject   *object,
       odata = gtk_object_data_new ();
       odata->id = *id;
       odata->data = data;
+      odata->destroy = destroy;
 
       odata->next = object->object_data;
       object->object_data = odata;
@@ -1073,7 +1089,7 @@ gtk_object_remove_data (GtkObject   *object,
   g_return_if_fail (GTK_IS_OBJECT (object));
   g_return_if_fail (key != NULL);
 
-  gtk_object_set_data (object, key, NULL);
+  gtk_object_set_data_full (object, key, NULL, NULL);
 }
 
 /*****************************************
@@ -1091,7 +1107,7 @@ gtk_object_set_user_data (GtkObject *object,
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
 
-  gtk_object_set_data (object, user_data_key, data);
+  gtk_object_set_data_full (object, user_data_key, data, NULL);
 }
 
 /*****************************************
@@ -1197,6 +1213,7 @@ gtk_object_data_new ()
 
   odata->id = 0;
   odata->data = NULL;
+  odata->destroy = NULL;
   odata->next = NULL;
 
   return odata;
@@ -1214,6 +1231,9 @@ static void
 gtk_object_data_destroy (GtkObjectData *odata)
 {
   g_return_if_fail (odata != NULL);
+
+  if (odata->destroy)
+    odata->destroy (odata);
 
   g_mem_chunk_free (object_data_mem_chunk, odata);
 }
