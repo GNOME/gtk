@@ -317,6 +317,13 @@ GtkFileInfo *gtk_file_folder_get_info      (GtkFileFolder      *folder,
 					    const GtkFilePath  *path,
 					    GError            **error);
 
+
+/* GtkFilePath */
+#define GTK_TYPE_FILE_PATH             (gtk_file_path_get_type ())
+#define GTK_FILE_PATH(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FILE_PATH, GtkFilePath))
+#define GTK_IS_FILE_PATH(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FILE_PATH))
+
+GType   gtk_file_path_get_type (void);
 #ifdef __GNUC__
 #define gtk_file_path_new_dup(str) \
  ({ const gchar *__s = (str); (GtkFilePath *)g_strdup(__s); })

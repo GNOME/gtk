@@ -876,6 +876,39 @@ gtk_file_folder_get_info (GtkFileFolder     *folder,
   return GTK_FILE_FOLDER_GET_IFACE (folder)->get_info (folder, path, error);
 }
 
+
+/*****************************************
+ *         GtkFilePath modules           *
+ *****************************************/
+
+/* We make these real functions in case either copy or free are implemented as macros
+ */
+static gpointer
+gtk_file_path_real_copy (gpointer boxed)
+{
+  return gtk_file_path_new_dup (gtk_file_path_get_string ((GtkFilePath *) boxed));
+}
+
+static void
+gtk_file_path_real_free	(gpointer boxed)
+{
+  gtk_file_path_free (boxed);
+}
+
+GType
+gtk_file_path_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GtkFilePath",
+					     (GBoxedCopyFunc) gtk_file_path_real_copy,
+					     (GBoxedFreeFunc) gtk_file_path_real_free);
+
+  return our_type;
+}
+
+
 GSList *
 gtk_file_paths_sort (GSList *paths)
 {

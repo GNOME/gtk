@@ -403,7 +403,7 @@ main (int argc, char **argv)
 
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
 			 "action", action,
-			 "file-system-backend", "gnome-vfs",
+			 /* "file-system-backend", "gtk+",*/
 			 "select-multiple", multiple,
 			 NULL);
   switch (action)
@@ -457,8 +457,10 @@ main (int argc, char **argv)
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
 
   /* Preview widget */
+  /* THIS IS A TERRIBLE PREVIEW WIDGET, AND SHOULD NOT BE COPIED AT ALL.
+   */
   preview_vbox = gtk_vbox_new (0, FALSE);
-  gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (dialog), preview_vbox);
+  /*  gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (dialog), preview_vbox);*/
   
   preview_label = gtk_label_new (NULL);
   gtk_box_pack_start (GTK_BOX (preview_vbox), preview_label, TRUE, TRUE, 0);
