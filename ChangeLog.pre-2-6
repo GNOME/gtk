@@ -1,3 +1,57 @@
+Fri Jul 26 22:53:37 2002  Kristian Rietveld  <kris@gtk.org>
+
+	API additions: _move, _reorder and _swap for stores, path
+	constructor.
+
+	* gtk/gtktreemodel.[ch] (gtk_tree_path_new_from_indices): new function.
+
+	* gtk/gtkliststore.[ch]: added gtk_list_store_reorder_func (private),
+	gtk_list_store_reorder, gtk_list_store_swap, gtk_list_store_move.
+
+	* gtk/gtktreestore.[ch]: added gtk_tree_store_reorder_func (private),
+	gtk_tree_store_reorder, gtk_tree_store_swap, gtk_tree_store_move.
+
+Fri Jul 26 22:32:57 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from stable:
+
+	* gtk/gtktreestore.c (node_free): return FALSE,
+        (gtk_tree_store_finalize): use g_node_traverse instead of
+        g_node_children_foreach, so the whole tree will be freed (#88854,
+        patch from Emmanuel Briot).
+
+Fri Jul 26 22:32:24 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from stable:
+
+        * gtk/gtktreeview.c (gtk_tree_view_button_press): fix some memleaks,
+        (#84426, patch from Matthias Clasen).
+
+Fri Jul 26 22:31:25 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Merge from stable:
+
+        * gtk/gtktreeview.c (gtk_tree_view_unref_tree_helper): _iter_children
+        check shouldn't be in g_return_return_val_if_fail (pointed out by
+        Josh Green, #88997),
+        (gtk_tree_view_set_model): call _gtk_tree_view_column_unset_model
+        for each column when we unset the model (part of #82484),
+        (gtk_tree_view_get_cell_area): return if we ran out of tree or
+        if we got an invalid path (#82376).
+
+        * gtk/gtktreeprivate.h: add _gtk_tree_view_column_unset_model.
+
+        * gtk/gtktreeviewcolumn.c: implement _gtk_tree_view_column_unset_model
+        which disconnects the sort_column_changed_signal (part of #82484).
+
+        * gtk/gtkliststore.c (gtk_list_store_insert): append row if the
+        given postion is off the end of the tree (#85813).
+
+        * gtk/gtkentry.c (gtk_cell_editable_key_press_event): let's use
+        2-space indent, commit changes if up/down keys has been pressed,
+        this overrides the focus key foo so the user won't be surprised
+        (#84665).
+
 Fri Jul 26 16:34:34 2002  Shivram U  <shivaram.upadhyayula@wipro.com>
 
 	* gdk/gdkpixbuf-drawable.c (gdk_pixbuf_get_from_drawable),

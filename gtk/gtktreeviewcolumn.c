@@ -86,7 +86,7 @@ static void gtk_tree_view_column_get_property                  (GObject         
 								GParamSpec              *pspec);
 static void gtk_tree_view_column_finalize                      (GObject                 *object);
 
-/* Button handling code */ 
+/* Button handling code */
 static void gtk_tree_view_column_create_button                 (GtkTreeViewColumn       *tree_column);
 static void gtk_tree_view_column_update_button                 (GtkTreeViewColumn       *tree_column);
 
@@ -927,7 +927,7 @@ gtk_tree_view_column_setup_sort_column_id_callback (GtkTreeViewColumn *tree_colu
       GtkSortType real_order;
 
       if (tree_column->sort_column_changed_signal == 0)
-	tree_column->sort_column_changed_signal =
+        tree_column->sort_column_changed_signal =
 	  g_signal_connect (G_OBJECT (model), "sort_column_changed",
                             GTK_SIGNAL_FUNC (gtk_tree_view_model_sort_column_changed),
                             tree_column);
@@ -1006,6 +1006,16 @@ _gtk_tree_view_column_unrealize_button (GtkTreeViewColumn *column)
   gdk_window_set_user_data (column->window, NULL);
   gdk_window_destroy (column->window);
   column->window = NULL;
+}
+
+void
+_gtk_tree_view_column_unset_model (GtkTreeViewColumn *column,
+				   GtkTreeModel      *old_model)
+{
+  if (column->sort_column_changed_signal)
+    g_signal_handler_disconnect (G_OBJECT (old_model),
+				 column->sort_column_changed_signal);
+    column->sort_column_changed_signal = 0;
 }
 
 void

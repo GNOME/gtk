@@ -1817,16 +1817,25 @@ gtk_cell_editable_key_press_event (GtkEntry    *entry,
 				   GdkEventKey *key_event,
 				   gpointer     data)
 {
-    if (key_event->keyval == GDK_Escape)
-      {
-	entry->editing_canceled = TRUE;
-	gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
-	gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
+  if (key_event->keyval == GDK_Escape)
+    {
+      entry->editing_canceled = TRUE;
+      gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
+      gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
 
-	return TRUE;
-      }
+      return TRUE;
+    }
 
-    return FALSE;
+  /* override focus */
+  if (key_event->keyval == GDK_Up || key_event->keyval == GDK_Down)
+    {
+      gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
+      gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void

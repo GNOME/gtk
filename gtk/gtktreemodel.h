@@ -116,6 +116,8 @@ struct _GtkTreeModelIface
 /* GtkTreePath operations */
 GtkTreePath *gtk_tree_path_new              (void);
 GtkTreePath *gtk_tree_path_new_from_string  (const gchar       *path);
+GtkTreePath *gtk_tree_path_new_from_indices (gint               first_index,
+					     ...);
 gchar       *gtk_tree_path_to_string        (GtkTreePath       *path);
 #define gtk_tree_path_new_root() gtk_tree_path_new_first()
 GtkTreePath *gtk_tree_path_new_first        (void);

@@ -433,10 +433,11 @@ gtk_tree_store_set_column_type (GtkTreeStore *tree_store,
   tree_store->column_headers[column] = type;
 }
 
-static void
+static gboolean
 node_free (GNode *node, gpointer data)
 {
   _gtk_tree_data_list_free (node->data, (GType*)data);
+  return FALSE;
 }
 
 static void
@@ -444,7 +445,8 @@ gtk_tree_store_finalize (GObject *object)
 {
   GtkTreeStore *tree_store = GTK_TREE_STORE (object);
 
-  g_node_children_foreach (tree_store->root, G_TRAVERSE_ALL, node_free, tree_store->column_headers);
+  g_node_traverse (tree_store->root, G_POST_ORDER, G_TRAVERSE_ALL, -1,
+		   node_free, tree_store->column_headers);
   _gtk_tree_data_list_header_free (tree_store->sort_list);
   g_free (tree_store->column_headers);
 
@@ -1842,13 +1844,341 @@ gtk_tree_store_row_drop_possible (GtkTreeDragDest  *drag_dest,
   return retval;
 }
 
-/* Sorting */
+/* Sorting and reordering */
 typedef struct _SortTuple
 {
   gint offset;
   GNode *node;
 } SortTuple;
 
+/* Reordering */
+static gint
+gtk_tree_store_reorder_func (gconstpointer a,
+			     gconstpointer b,
+			     gpointer      user_data)
+{
+  SortTuple *a_reorder;
+  SortTuple *b_reorder;
+
+  a_reorder = (SortTuple *)a;
+  b_reorder = (SortTuple *)b;
+
+  if (a_reorder->offset < b_reorder->offset)
+    return -1;
+  if (a_reorder->offset > b_reorder->offset)
+    return 1;
+
+  return 0;
+}
+
+/**
+ * gtk_tree_store_reorder:
+ * @store: A #GtkTreeStore.
+ * @parent: A #GtkTreeIter.
+ * @new_order: An integer array indication the new order for the list.
+ *
+ * Reorders the children of @parent in @store to follow the order
+ * indicated by @new_order. Note that this function only works with
+ * unsorted stores.
+ **/
+void
+gtk_tree_store_reorder (GtkTreeStore *store,
+			GtkTreeIter  *parent,
+			gint         *new_order)
+{
+  gint i, length = 0;
+  GNode *level, *node;
+  GtkTreePath *path;
+  SortTuple *sort_array;
+
+  g_return_if_fail (GTK_IS_TREE_STORE (store));
+  g_return_if_fail (!GTK_TREE_STORE_IS_SORTED (store));
+  g_return_if_fail (parent == NULL || VALID_ITER (parent, store));
+  g_return_if_fail (new_order != NULL);
+
+  if (!parent)
+    level = G_NODE (store->root)->children;
+  else
+    level = G_NODE (parent->user_data)->children;
+
+  /* count nodes */
+  node = level;
+  while (node)
+    {
+      length++;
+      node = node->next;
+    }
+
+  /* set up sortarray */
+  sort_array = g_new (SortTuple, length);
+
+  node = level;
+  for (i = 0; i < length; i++)
+    {
+      sort_array[i].offset = new_order[i];
+      sort_array[i].node = node;
+
+      node = node->next;
+    }
+
+  g_qsort_with_data (sort_array,
+		     length,
+		     sizeof (SortTuple),
+		     gtk_tree_store_reorder_func,
+		     NULL);
+
+  /* fix up level */
+  for (i = 0; i < length - 1; i++)
+    {
+      sort_array[i].node->next = sort_array[i+1].node;
+      sort_array[i+1].node->prev = sort_array[i].node;
+    }
+
+  sort_array[length-1].node->next = NULL;
+  sort_array[0].node->prev = NULL;
+  if (parent)
+    G_NODE (parent->user_data)->children = sort_array[0].node;
+  else
+    G_NODE (store->root)->children = sort_array[0].node;
+
+  /* emit signal */
+  if (parent)
+    path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), parent);
+  else
+    path = gtk_tree_path_new ();
+  gtk_tree_model_rows_reordered (GTK_TREE_MODEL (store), path,
+				 parent, new_order);
+  gtk_tree_path_free (path);
+  g_free (sort_array);
+}
+
+/**
+ * gtk_tree_store_swap:
+ * @store: A #GtkTreeStore.
+ * @a: A #GtkTreeIter.
+ * @b: Another #GtkTreeIter.
+ *
+ * Swaps @a and @b in the same level of @store. Note that this function
+ * only works with unsorted stores.
+ **/
+void
+gtk_tree_store_swap (GtkTreeStore *store,
+		     GtkTreeIter  *a,
+		     GtkTreeIter  *b)
+{
+  GNode *tmp, *node_a, *node_b, *parent_node;
+  gint i, a_count, b_count, length, *order;
+  GtkTreePath *path_a, *path_b;
+  GtkTreeIter parent;
+
+  g_return_if_fail (GTK_IS_TREE_STORE (store));
+  g_return_if_fail (VALID_ITER (a, store));
+  g_return_if_fail (VALID_ITER (b, store));
+
+  node_a = G_NODE (a->user_data);
+  node_b = G_NODE (b->user_data);
+
+  /* basic sanity checking */
+  if (node_a == node_b)
+    return;
+
+  path_a = gtk_tree_model_get_path (GTK_TREE_MODEL (store), a);
+  path_b = gtk_tree_model_get_path (GTK_TREE_MODEL (store), b);
+
+  g_return_if_fail (path_a && path_b);
+
+  gtk_tree_path_up (path_a);
+  gtk_tree_path_up (path_b);
+
+  if (gtk_tree_path_compare (path_a, path_b))
+    {
+      gtk_tree_path_free (path_a);
+      gtk_tree_path_free (path_b);
+
+      g_warning ("Given childs are not in the same level\n");
+      return;
+    }
+
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &parent, path_a);
+  parent_node = G_NODE (parent.user_data);
+
+  gtk_tree_path_free (path_b);
+
+  /* counting nodes */
+  tmp = parent_node;
+  i = a_count = b_count = 0;
+  while (tmp)
+    {
+      if (tmp == node_a)
+	a_count = i;
+      if (tmp == node_b)
+	b_count = i;
+
+      tmp = tmp->next;
+      i++;
+    }
+  length = i;
+
+  /* hacking the tree */
+  if (!node_a->prev)
+    parent_node->children = node_b;
+  else
+    node_a->prev->next = node_b;
+
+  if (!node_b->prev)
+    parent_node->children = node_a;
+  else
+    node_b->prev->next = node_a;
+
+  if (node_a->next)
+    node_a->next->prev = node_b;
+
+  if (node_b->next)
+    node_b->next->prev = node_a;
+
+  tmp = node_a->next;
+  node_a->next = node_b->next;
+  node_b->next = tmp;
+
+  tmp = node_a->prev;
+  node_a->prev = node_b->prev;
+  node_b->prev = tmp;
+
+  /* emit signal */
+  order = g_new (gint, length);
+  for (i = 0; i < length; i++)
+    if (i == a_count)
+      order[i] = b_count;
+    else if (i == b_count)
+      order[i] = a_count;
+    else
+      order[i] = i;
+
+  gtk_tree_model_rows_reordered (GTK_TREE_MODEL (store), path_a,
+				 &parent, order);
+  gtk_tree_path_free (path_a);
+  g_free (order);
+}
+
+/**
+ * gtk_tree_store_move:
+ * @store: A #GtkTreeStore.
+ * @iter: A #GtkTreeIter.
+ * @position: A #GtkTreePath.
+ *
+ * Moves @iter in @store to the position before @position. @iter and
+ * @position should be in the same level. Note that this function only
+ * works with unsorted stores.
+ **/
+void
+gtk_tree_store_move (GtkTreeStore *store,
+		     GtkTreeIter  *iter,
+		     GtkTreePath  *position)
+{
+  GNode *tmp, *new_prev, *new_next, *old_prev, *old_next;
+  gint old_pos, new_pos, length, i, *order;
+  GtkTreePath *path, *tmppath;
+  GtkTreeIter parent, new_iter;
+
+  g_return_if_fail (GTK_IS_TREE_STORE (store));
+  g_return_if_fail (!GTK_TREE_STORE_IS_SORTED (store));
+  g_return_if_fail (VALID_ITER (iter, store));
+  g_return_if_fail (position != NULL);
+
+  /* sanity checks */
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), iter);
+
+  if (!gtk_tree_path_compare (path, position))
+    {
+      gtk_tree_path_free (path);
+      return;
+    }
+
+  if (gtk_tree_path_get_depth (path) != gtk_tree_path_get_depth (position))
+    {
+      gtk_tree_path_free (path);
+
+      g_warning ("Given childs are not in the same level\n");
+      return;
+    }
+
+  tmppath = gtk_tree_path_copy (position);
+  gtk_tree_path_up (path);
+  gtk_tree_path_up (tmppath);
+
+  if (gtk_tree_path_compare (path, tmppath))
+    {
+      gtk_tree_path_free (path);
+      gtk_tree_path_free (tmppath);
+
+      g_warning ("Given childs are not in the same level\n");
+      return;
+    }
+
+  gtk_tree_path_free (tmppath);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &parent, path);
+
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &new_iter, position);
+
+  new_prev = G_NODE (new_iter.user_data)->prev;
+  new_next = G_NODE (new_iter.user_data);
+
+  old_prev = G_NODE (iter->user_data)->prev;
+  old_next = G_NODE (iter->user_data)->next;
+
+  /* counting nodes */
+  tmp = G_NODE (parent.user_data);
+  length = old_pos = 0;
+  while (tmp)
+    {
+      if (tmp == iter->user_data)
+	old_pos = length;
+
+      tmp = tmp->next;
+      length++;
+    }
+
+  /* hacking the tree */
+  if (!old_prev)
+    G_NODE (parent.user_data)->children = old_next;
+  else
+    old_prev->next = old_next;
+
+  if (old_next)
+    old_next->prev = old_prev;
+
+  if (!new_prev)
+    G_NODE (parent.user_data)->children = iter->user_data;
+  else
+    new_prev->next = iter->user_data;
+
+  if (new_next)
+    new_next->prev = iter->user_data;
+
+  G_NODE (iter->user_data)->prev = new_prev;
+  G_NODE (iter->user_data)->next = new_next;
+
+  /* emit signal */
+  new_pos = gtk_tree_path_get_indices (position)[gtk_tree_path_get_depth (position)-1];
+  order = g_new (gint, length);
+  for (i = 0; i < length; i++)
+    if (i < old_pos)
+      order[i] = i;
+    else if (i >= old_pos && i < new_pos)
+      order[i] = i + 1;
+    else if (i == new_pos)
+      order[i] = old_pos;
+    else
+      order[i] = i;
+
+  path = gtk_tree_path_new ();
+  gtk_tree_model_rows_reordered (GTK_TREE_MODEL (store),
+				 path, NULL, order);
+  gtk_tree_path_free (path);
+  g_free (order);
+}
+
+/* Sorting */
 static gint
 gtk_tree_store_compare_func (gconstpointer a,
 			     gconstpointer b,

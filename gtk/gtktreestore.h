@@ -117,6 +117,15 @@ gint          gtk_tree_store_iter_depth       (GtkTreeStore *tree_store,
 void          gtk_tree_store_clear            (GtkTreeStore *tree_store);
 gboolean      gtk_tree_store_iter_is_valid    (GtkTreeStore *tree_store,
                                                GtkTreeIter  *iter);
+void          gtk_tree_store_reorder          (GtkTreeStore *tree_store,
+                                               GtkTreeIter  *parent,
+                                               gint         *new_order);
+void          gtk_tree_store_swap             (GtkTreeStore *store,
+                                               GtkTreeIter  *a,
+                                               GtkTreeIter  *b);
+void          gtk_tree_store_move             (GtkTreeStore *store,
+                                               GtkTreeIter  *iter,
+                                               GtkTreePath  *position);
 
 
 #ifdef __cplusplus

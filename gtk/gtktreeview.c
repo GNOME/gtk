@@ -1828,7 +1828,11 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	}
 
       if (column == NULL)
-	return FALSE;
+	{
+	  gtk_tree_path_free (path);
+
+	  return FALSE;
+	}
 
       /* decide if we edit */
       if (event->type == GDK_BUTTON_PRESS &&
@@ -1885,6 +1889,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 							&area,
 							(GdkEvent *)event,
 							flags);
+		      g_free (path_string);
 		      gtk_tree_path_free (path);
 		      gtk_tree_path_free (anchor);
 		      return TRUE;
@@ -3748,6 +3753,7 @@ validate_row (GtkTreeView *tree_view,
       gtk_tree_view_column_cell_get_size (column,
 					  NULL, NULL, NULL,
 					  &tmp_width, &tmp_height);
+
       height = MAX (height, tmp_height);
       height = MAX (height, tree_view->priv->expander_size);
 
@@ -6652,7 +6658,9 @@ gtk_tree_view_unref_tree_helper (GtkTreeModel *model,
 	  while (new_node && new_node->left != new_tree->nil)
 	    new_node = new_node->left;
 
-	  g_return_val_if_fail (gtk_tree_model_iter_children (model, &child, iter), FALSE);
+	  if (!gtk_tree_model_iter_children (model, &child, iter))
+	    return FALSE;
+
 	  retval = retval || gtk_tree_view_unref_tree_helper (model, &child, new_tree, new_node);
 	}
 
@@ -7716,6 +7724,8 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 
   if (tree_view->priv->model)
     {
+      GList *tmplist = tree_view->priv->columns;
+
       gtk_tree_view_unref_and_check_selection_tree (tree_view, tree_view->priv->tree);
 
       g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
@@ -7728,6 +7738,11 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 					    (gpointer) gtk_tree_view_row_deleted, tree_view);
       g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
 					    (gpointer) gtk_tree_view_rows_reordered, tree_view);
+
+      for (; tmplist; tmplist = tmplist->next)
+	_gtk_tree_view_column_unset_model (tmplist->data,
+					   tree_view->priv->model);
+
       if (tree_view->priv->tree)
 	{
 	  _gtk_rbtree_free (tree_view->priv->tree);
@@ -9717,9 +9732,10 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
 
   if (path)
     {
+      gboolean ret = _gtk_tree_view_find_node (tree_view, path, &tree, &node);
+
       /* Get vertical coords */
-      if (!_gtk_tree_view_find_node (tree_view, path, &tree, &node) &&
-	  tree == NULL)
+      if ((!ret && tree == NULL) || ret)
 	return;
 
       rect->y = CELL_FIRST_PIXEL (tree_view, tree, node, vertical_separator);

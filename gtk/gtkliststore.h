@@ -108,6 +108,14 @@ void          gtk_list_store_append           (GtkListStore *list_store,
 void          gtk_list_store_clear            (GtkListStore *list_store);
 gboolean      gtk_list_store_iter_is_valid    (GtkListStore *list_store,
                                                GtkTreeIter  *iter);
+void          gtk_list_store_reorder          (GtkListStore *store,
+                                               gint         *new_order);
+void          gtk_list_store_swap             (GtkListStore *store,
+                                               GtkTreeIter  *a,
+                                               GtkTreeIter  *b);
+void          gtk_list_store_move             (GtkListStore *store,
+                                               GtkTreeIter  *iter,
+                                               GtkTreePath  *position);
 
 
 #ifdef __cplusplus

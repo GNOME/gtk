@@ -200,6 +200,38 @@ gtk_tree_path_new_from_string (const gchar *path)
 }
 
 /**
+ * gtk_tree_path_new_from_indices:
+ * @first_index and @varargs: list of integers terminated by -1
+ *
+ * Creates a new path with @first_index and @varargs as indices.
+ *
+ * Return value: A newly created GtkTreePath.
+ **/
+GtkTreePath *
+gtk_tree_path_new_from_indices (gint first_index,
+				...)
+{
+  int arg;
+  va_list args;
+  GtkTreePath *path;
+
+  path = gtk_tree_path_new ();
+
+  va_start (args, first_index);
+  arg = first_index;
+
+  while (arg != -1)
+    {
+      gtk_tree_path_append_index (path, arg);
+      arg = va_arg (args, gint);
+    }
+
+  va_end (args);
+
+  return path;
+}
+
+/**
  * gtk_tree_path_to_string:
  * @path: A #GtkTreePath
  *
