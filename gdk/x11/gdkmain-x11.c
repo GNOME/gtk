@@ -2291,6 +2291,27 @@ gdk_event_translate (GdkEvent *event,
       else
 	event->crossing.subwindow = NULL;
 
+      event->crossing.time = xevent->xcrossing.time;
+      event->crossing.x = xevent->xcrossing.x;
+      event->crossing.y = xevent->xcrossing.y;
+      event->crossing.x_root = xevent->xcrossing.x_root;
+      event->crossing.y_root = xevent->xcrossing.y_root;
+
+      /* Translate the crossing mode into Gdk terms.
+       */
+      switch (xevent->xcrossing.mode)
+	{
+	case NotifyNormal:
+	  event->crossing.mode = GDK_CROSSING_NORMAL;
+	  break;
+	case NotifyGrab:
+	  event->crossing.mode = GDK_CROSSING_GRAB;
+	  break;
+	case NotifyUngrab:
+	  event->crossing.mode = GDK_CROSSING_UNGRAB;
+	  break;
+	};
+
       /* Translate the crossing detail into Gdk terms.
        */
       switch (xevent->xcrossing.detail)
@@ -2314,6 +2335,9 @@ gdk_event_translate (GdkEvent *event,
 	  event->crossing.detail = GDK_NOTIFY_UNKNOWN;
 	  break;
 	}
+
+      event->crossing.focus = xevent->xcrossing.focus;
+      event->crossing.state = xevent->xcrossing.state;
 
 #ifdef G_ENABLE_DEBUG
         if ((gdk_debug_flags & GDK_DEBUG_DND) & gdk_dnd.drag_perhaps)
@@ -2365,6 +2389,27 @@ gdk_event_translate (GdkEvent *event,
       else
 	event->crossing.subwindow = NULL;
 
+      event->crossing.time = xevent->xcrossing.time;
+      event->crossing.x = xevent->xcrossing.x;
+      event->crossing.y = xevent->xcrossing.y;
+      event->crossing.x_root = xevent->xcrossing.x_root;
+      event->crossing.y_root = xevent->xcrossing.y_root;
+
+      /* Translate the crossing mode into Gdk terms.
+       */
+      switch (xevent->xcrossing.mode)
+	{
+	case NotifyNormal:
+	  event->crossing.mode = GDK_CROSSING_NORMAL;
+	  break;
+	case NotifyGrab:
+	  event->crossing.mode = GDK_CROSSING_GRAB;
+	  break;
+	case NotifyUngrab:
+	  event->crossing.mode = GDK_CROSSING_UNGRAB;
+	  break;
+	};
+
       /* Translate the crossing detail into Gdk terms.
        */
       switch (xevent->xcrossing.detail)
@@ -2388,6 +2433,10 @@ gdk_event_translate (GdkEvent *event,
 	  event->crossing.detail = GDK_NOTIFY_UNKNOWN;
 	  break;
 	}
+
+      event->crossing.focus = xevent->xcrossing.focus;
+      event->crossing.state = xevent->xcrossing.state;
+
 #ifdef G_ENABLE_DEBUG
       if ((gdk_debug_flags & GDK_DEBUG_DND) & gdk_dnd.drag_perhaps)
 	{

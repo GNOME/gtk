@@ -412,6 +412,18 @@ typedef enum
   GDK_NOTIFY_UNKNOWN		= 5
 } GdkNotifyType;
 
+/* Enter/leave event modes.
+ *   NotifyNormal
+ *   NotifyGrab
+ *   NotifyUngrab
+ */
+typedef enum
+{
+  GDK_CROSSING_NORMAL,
+  GDK_CROSSING_GRAB,
+  GDK_CROSSING_UNGRAB
+} GdkCrossingMode;
+
 /* Types of modifiers.
  */
 typedef enum
@@ -999,7 +1011,15 @@ struct _GdkEventCrossing
   GdkWindow *window;
   gint8 send_event;
   GdkWindow *subwindow;
+  guint32 time;
+  gdouble x;
+  gdouble y;
+  gdouble x_root;
+  gdouble y_root;
+  GdkCrossingMode mode;
   GdkNotifyType detail;
+  gboolean focus;
+  guint state;
 };
 
 struct _GdkEventFocus

@@ -1,3 +1,16 @@
+1998-05-26  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gdk/gdktypes.h (GdkCrossingMode): New enumeration for the "mode"
+	field of crossing events.
+	(struct _GdkEventCrossing): Added the following fields: time, x,
+	y, x_root, y_root, mode, focus, state.
+
+	* gdk/gdk.c (gdk_event_translate): Fill in the new fields of the
+	crossing event structure.
+
+	* gtk/gtkfeatures.h (GDK_HAVE_FULL_CROSSING_EVENT): Annotate
+	changes to the crossing event structure.
+
 Tue May 26 15:51:28 1998  Radek Doulik  <gis@academy.cas.cz>
 
 	* gdk/gdk.c: include gdkx.h always (for GDK_ROOT_WINDOW)
