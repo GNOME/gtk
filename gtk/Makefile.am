@@ -80,7 +80,7 @@ gtk.def: gtk.symbols
 gtkalias.h: gtk.symbols
 	  $(PERL) $(srcdir)/makegtkalias.pl < $(srcdir)/gtk.symbols > gtkalias.h
 
-if OS_UNIX
+if OS_LINUX
 TESTS = abicheck.sh
 endif
 

@@ -52,7 +52,7 @@ gdk_pixbuf.def: gdk-pixbuf.symbols
 gdk-pixbuf-alias.h: gdk-pixbuf.symbols
 	 $(PERL) $(srcdir)/makegdkpixbufalias.pl < $(srcdir)/gdk-pixbuf.symbols > gdk-pixbuf-alias.h
 
-if OS_UNIX
+if OS_LINUX
 TESTS = abicheck.sh
 endif
 

@@ -1,3 +1,12 @@
+2005-01-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Add an OS_LINUX conditional.
+
+	* gdk/Makefile.am (TESTS):
+	* gdk-pixbuf/Makefile.am (TESTS):
+	* gtk/Makefile.am (TESTS): Only run abicheck on Linux.  (#163917,
+	Roger Leigh)
+
 2005-01-13  Matthias Clasen <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c: (gtk_tree_view_class_init),
