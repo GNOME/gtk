@@ -1,3 +1,8 @@
+2004-02-25  Federico Mena Quintero  <federico@ximian.com>
+
+	* configure.in (ALL_LINGUAS): Remove sr@ije until po-properties/
+	is fixed for it.
+
 Wed Feb 25 12:44:49 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.[ch]: Make realize and unrealize signals. (#73310)
