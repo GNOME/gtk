@@ -1,3 +1,11 @@
+Mon Feb 23 15:41:13 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwidget.c gtk/gtkmenu.c: Don't process configure events
+	that just move the window, and don't resize it. Because we need
+	to make sure that a widget gets redrawn after a size_allocate -
+	and that only happens when the configure event changes the size
+	of the window. Plus, it's inefficient.
+	
 Mon Feb 23 15:45:37 1998  Marc Ewing <marc@redhat.com>
 
 	* gtk/gtktoolbar.h:

@@ -710,6 +710,11 @@ gtk_menu_configure (GtkWidget         *widget,
   g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
+  /* If the window was merely moved, do nothing */
+  if ((widget->allocation.width == event->width) &&
+      (widget->allocation.height == event->height))
+    return FALSE;
+
   if (GTK_MENU_SHELL (widget)->menu_flag)
     {
       GTK_MENU_SHELL (widget)->menu_flag = FALSE;
