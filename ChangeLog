@@ -1,5 +1,9 @@
 2004-03-05  Tor Lillqvist  <tml@iki.fi>
 
+	* configure.in: Move check for native Win32 (mingw) a bit
+	earlier. If Win32, disable static builds (as in GLib). Remove
+	unnecessary AC_LIBTOOL_WIN32_DLL.
+
 	* gdk/gdk.def: Add missing entries, thanks to J. Ali Harlow.
 
 	* gdk/win32/gdkcursor-win32.c (color_is_white): const-correctness.
