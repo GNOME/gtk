@@ -1,3 +1,11 @@
+2003-08-02  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcolorsel.c (color_sample_drop_handle) 
+	(palette_drop_handle): 
+	* gtk/gtkcolorbutton.c (gtk_color_button_drag_data_received):  Accept drops with the 
+	wrong format, since the KDE color chooser incorrectly drops application/x-color with 
+	format 8.
+
 2003-08-02  Tor Lillqvist  <tml@iki.fi>
 
 	Fix gdk/win32 window geometry handling again. The window position

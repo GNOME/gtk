@@ -455,8 +455,10 @@ gtk_color_button_drag_data_received (GtkWidget        *widget,
   if (selection_data->length < 0)
     return;
 
-  if ((selection_data->format != 16) ||
-      (selection_data->length != 8)) 
+  /* We accept drops with the wrong format, since the KDE color
+   * chooser incorrectly drops application/x-color with format 8.
+   */
+  if (selection_data->length != 8) 
     {
       g_warning (_("Received invalid color data\n"));
       return;
