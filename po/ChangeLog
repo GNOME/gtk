@@ -1,3 +1,7 @@
+2000-07-14  Valek Filippov  <frob@df.ru>
+
+	* ru.po: microupdated russian translation.
+
 2000-07-12  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* POTFILES.in: Added gtkcolorseldialog.c
