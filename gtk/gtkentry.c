@@ -692,6 +692,12 @@ gtk_entry_class_init (GtkEntryClass *class)
 				GTK_TYPE_ENUM, GTK_DELETE_CHARS,
 				GTK_TYPE_INT, -1);
 
+  /* Make this do the same as Backspace, to help with mis-typing */
+  gtk_binding_entry_add_signal (binding_set, GDK_BackSpace, GDK_SHIFT_MASK,
+                                "delete_from_cursor", 2,
+                                GTK_TYPE_ENUM, GTK_DELETE_CHARS,
+                                GTK_TYPE_INT, -1);
+
   gtk_binding_entry_add_signal (binding_set, GDK_Delete, GDK_CONTROL_MASK,
 				"delete_from_cursor", 2,
 				GTK_TYPE_ENUM, GTK_DELETE_WORD_ENDS,
@@ -711,11 +717,16 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   gtk_binding_entry_add_signal (binding_set, GDK_x, GDK_CONTROL_MASK,
 				"cut_clipboard", 0);
-
   gtk_binding_entry_add_signal (binding_set, GDK_c, GDK_CONTROL_MASK,
 				"copy_clipboard", 0);
-  
   gtk_binding_entry_add_signal (binding_set, GDK_v, GDK_CONTROL_MASK,
+				"paste_clipboard", 0);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Delete, GDK_SHIFT_MASK,
+				"cut_clipboard", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_Insert, GDK_CONTROL_MASK,
+				"copy_clipboard", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_Insert, GDK_SHIFT_MASK,
 				"paste_clipboard", 0);
 
   /* Overwrite */
