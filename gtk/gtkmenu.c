@@ -51,10 +51,11 @@
 					 * extends below the submenu
 					 */
 
-#define MENU_SCROLL_STEP 10
+#define MENU_SCROLL_STEP1 8
+#define MENU_SCROLL_STEP2 15
 #define MENU_SCROLL_ARROW_HEIGHT 16
-#define MENU_SCROLL_FAST_ZONE 4
-#define MENU_SCROLL_TIMEOUT1 150
+#define MENU_SCROLL_FAST_ZONE 8
+#define MENU_SCROLL_TIMEOUT1 50
 #define MENU_SCROLL_TIMEOUT2 50
 
 typedef struct _GtkMenuAttachData	GtkMenuAttachData;
@@ -103,6 +104,10 @@ static gboolean gtk_menu_expose            (GtkWidget        *widget,
 					    GdkEventExpose   *event);
 static gboolean gtk_menu_key_press         (GtkWidget        *widget,
 					    GdkEventKey      *event);
+static gboolean gtk_menu_button_press      (GtkWidget        *widget,
+					    GdkEventButton   *event);
+static gboolean gtk_menu_button_release    (GtkWidget        *widget,
+					    GdkEventButton   *event);
 static gboolean gtk_menu_motion_notify     (GtkWidget        *widget,
 					    GdkEventMotion   *event);
 static gboolean gtk_menu_enter_notify      (GtkWidget        *widget,
@@ -111,8 +116,11 @@ static gboolean gtk_menu_leave_notify      (GtkWidget        *widget,
 					    GdkEventCrossing *event);
 static void     gtk_menu_scroll_to         (GtkMenu          *menu,
 					    gint              offset);
-static void     gtk_menu_stop_scrolling    (GtkMenu          *menu);
-static gboolean gtk_menu_scroll_timeout    (gpointer          data);
+
+static void     gtk_menu_stop_scrolling        (GtkMenu  *menu);
+static void     gtk_menu_remove_scroll_timeout (GtkMenu  *menu);
+static gboolean gtk_menu_scroll_timeout        (gpointer  data);
+
 static void     gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
 					      GtkWidget       *menu_item);
 static void     gtk_menu_select_item       (GtkMenuShell     *menu_shell,
@@ -246,11 +254,14 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->show = gtk_menu_show;
   widget_class->expose_event = gtk_menu_expose;
   widget_class->key_press_event = gtk_menu_key_press;
+  widget_class->button_press_event = gtk_menu_button_press;
+  widget_class->button_release_event = gtk_menu_button_release;
   widget_class->motion_notify_event = gtk_menu_motion_notify;
   widget_class->show_all = gtk_menu_show_all;
   widget_class->hide_all = gtk_menu_hide_all;
   widget_class->enter_notify_event = gtk_menu_enter_notify;
   widget_class->leave_notify_event = gtk_menu_leave_notify;
+  widget_class->motion_notify_event = gtk_menu_motion_notify;
   widget_class->style_set = gtk_menu_style_set;
   widget_class->focus = gtk_menu_focus;
 
@@ -1248,7 +1259,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 		GTK_ADJUSTMENT (gtk_adjustment_new (0,
 						    0,
 						    GTK_WIDGET (menu)->requisition.height,
-						    MENU_SCROLL_STEP,
+						    MENU_SCROLL_STEP2,
 						    height/2,
 						    height));
 	      g_object_connect (menu->tearoff_adjustment,
@@ -1843,6 +1854,40 @@ gtk_menu_show (GtkWidget *widget)
 }
 
 static gboolean
+gtk_menu_button_press (GtkWidget      *widget,
+			 GdkEventButton *event)
+{
+  /* Don't pop down the menu for releases over scroll arrows
+   */
+  if (GTK_IS_MENU (widget))
+    {
+      GtkMenu *menu = GTK_MENU (widget);
+
+      if (menu->upper_arrow_prelight ||  menu->lower_arrow_prelight)
+	return TRUE;
+    }
+
+  return GTK_WIDGET_CLASS (parent_class)->button_press_event (widget, event);
+}
+
+static gboolean
+gtk_menu_button_release (GtkWidget      *widget,
+			 GdkEventButton *event)
+{
+  /* Don't pop down the menu for releases over scroll arrows
+   */
+  if (GTK_IS_MENU (widget))
+    {
+      GtkMenu *menu = GTK_MENU (widget);
+
+      if (menu->upper_arrow_prelight ||  menu->lower_arrow_prelight)
+	return TRUE;
+    }
+
+  return GTK_WIDGET_CLASS (parent_class)->button_release_event (widget, event);
+}
+
+static gboolean
 gtk_menu_key_press (GtkWidget	*widget,
 		    GdkEventKey *event)
 {
@@ -2145,15 +2190,14 @@ gtk_menu_handle_scrolling (GtkMenu *menu, gboolean enter)
 	  /* Deselect the active item so that any submenus are poped down */
 	  gtk_menu_shell_deselect (menu_shell);
 
-	  gtk_menu_stop_scrolling (menu);
-	  menu->scroll_step = -MENU_SCROLL_STEP;
+	  gtk_menu_remove_scroll_timeout (menu);
+	  menu->scroll_step = (scroll_fast) ? -MENU_SCROLL_STEP2 : -MENU_SCROLL_STEP1;
 	  menu->timeout_id = g_timeout_add ((scroll_fast) ? MENU_SCROLL_TIMEOUT2 : MENU_SCROLL_TIMEOUT1,
 					    gtk_menu_scroll_timeout,
 					    menu);
 	}
       else if (!enter && !in_arrow && menu->upper_arrow_prelight)
 	{
-	  menu->upper_arrow_prelight = FALSE;
 	  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window, &rect, FALSE);
 	  
 	  gtk_menu_stop_scrolling (menu);
@@ -2185,15 +2229,14 @@ gtk_menu_handle_scrolling (GtkMenu *menu, gboolean enter)
 	  /* Deselect the active item so that any submenus are poped down */
 	  gtk_menu_shell_deselect (menu_shell);
 
-	  gtk_menu_stop_scrolling (menu);
-	  menu->scroll_step = MENU_SCROLL_STEP;
+	  gtk_menu_remove_scroll_timeout (menu);
+	  menu->scroll_step = (scroll_fast) ? MENU_SCROLL_STEP2 : MENU_SCROLL_STEP1;
 	  menu->timeout_id = g_timeout_add ((scroll_fast) ? MENU_SCROLL_TIMEOUT2 : MENU_SCROLL_TIMEOUT1,
 					    gtk_menu_scroll_timeout,
 					    menu);
 	}
       else if (!enter && !in_arrow && menu->lower_arrow_prelight)
 	{
-	  menu->lower_arrow_prelight = FALSE;
 	  gdk_window_invalidate_rect (GTK_WIDGET (menu)->window, &rect, FALSE);
 	  
 	  gtk_menu_stop_scrolling (menu);
@@ -2208,7 +2251,17 @@ gtk_menu_enter_notify (GtkWidget        *widget,
   GtkWidget *menu_item;
 
   if (widget && GTK_IS_MENU (widget))
-    gtk_menu_handle_scrolling (GTK_MENU (widget), TRUE);
+    {
+      GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
+
+      if (!menu_shell->ignore_enter)
+	{
+	  gtk_menu_handle_scrolling (GTK_MENU (widget), TRUE);
+	  return TRUE;
+	}
+      else
+	return FALSE;
+    }
       
   /* If this is a faked enter (see gtk_menu_motion_notify), 'widget'
    * will not correspond to the event widget's parent.  Check to see
@@ -2612,7 +2665,7 @@ gtk_menu_position (GtkMenu *menu)
 }
 
 static void
-gtk_menu_stop_scrolling (GtkMenu *menu)
+gtk_menu_remove_scroll_timeout (GtkMenu *menu)
 {
   if (menu->timeout_id)
     {
@@ -2621,6 +2674,14 @@ gtk_menu_stop_scrolling (GtkMenu *menu)
     }
 }
 
+static void
+gtk_menu_stop_scrolling (GtkMenu *menu)
+{
+  gtk_menu_remove_scroll_timeout (menu);
+
+  menu->upper_arrow_prelight = FALSE;
+  menu->lower_arrow_prelight = FALSE;
+}
 
 static void
 gtk_menu_scroll_to (GtkMenu *menu,

@@ -1,3 +1,20 @@
+Sat Nov  9 14:42:53 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_button_*): Block
+	button presses/releases over the scroll arrows
+	to avoid popping down the menu. (#73444, Ettore Perazzoli)
+
+	* gtk/gtkmenu.c (gtk_menu_enter_notify): Obey the
+	ignore_enter flag for scrolling as well.
+
+	* gtk/gtkmenu.c (gtk_menu_stop_scrolling): Clear
+	the upper_arrow_prelight, lower_arrow_prelight 
+	flags.
+
+	* gtk/gtkmenu.c: Tweak the scroll speeds,
+	timeouts, and fast-scroll area to make things
+	zippier. (#73445, Ettore Perazzoli)
+
 2002-11-09  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkwidget.c (gtk_widget_class_init): Use the correct
