@@ -1,3 +1,14 @@
+Thu May 10 19:22:28 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktogglebutton.c:  Patch from John Margaglione converting to
+	property API. (#51669)
+
+	* gtk/gtkscale.c: Patch from John Margaglione converting to
+	property API. (#51891)
+
+	* gtk/gtkaccellabel.c: Applied patch from Lee Mallabone, converting
+	to property API. (#50985)
+
 Fri May 11 20:13:44 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c (gtk_main_do_event): remember widget's double
@@ -54,6 +65,7 @@ Fri May 11 01:05:00 2001  Tim Janik  <timj@gtk.org>
 	* gdk/linux-fb/gdkwindow-fb.c (_gdk_windowing_window_clear_area):
 	Handle background pixmaps.
 
+>>>>>>> 1.1955
 Wed May  9 15:27:22 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_column_drag_function): New

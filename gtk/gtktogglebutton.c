@@ -28,7 +28,7 @@
 #include "gtkmain.h"
 #include "gtksignal.h"
 #include "gtktogglebutton.h"
-
+#include "gtkintl.h"
 
 #define DEFAULT_LEFT_POS  4
 #define DEFAULT_TOP_POS   4
@@ -40,36 +40,39 @@ enum {
 };
 
 enum {
-  ARG_0,
-  ARG_ACTIVE,
-  ARG_DRAW_INDICATOR
+  PROP_0,
+  PROP_ACTIVE,
+  PROP_INCONSISTENT,
+  PROP_DRAW_INDICATOR
 };
 
 
-static void gtk_toggle_button_class_init (GtkToggleButtonClass *klass);
-static void gtk_toggle_button_init       (GtkToggleButton      *toggle_button);
-static void gtk_toggle_button_paint      (GtkWidget            *widget,
-					  GdkRectangle         *area);
-static void gtk_toggle_button_size_allocate (GtkWidget         *widget,
-					     GtkAllocation     *allocation);
-static gint gtk_toggle_button_expose     (GtkWidget            *widget,
-					  GdkEventExpose       *event);
-static void gtk_toggle_button_pressed    (GtkButton            *button);
-static void gtk_toggle_button_released   (GtkButton            *button);
-static void gtk_toggle_button_clicked    (GtkButton            *button);
-static void gtk_toggle_button_enter      (GtkButton            *button);
-static void gtk_toggle_button_leave      (GtkButton            *button);
-static void gtk_toggle_button_set_arg	 (GtkObject	       *object,
-					  GtkArg    	       *arg,
-					  guint      		arg_id);
-static void gtk_toggle_button_get_arg	 (GtkObject	       *object,
-					  GtkArg    	       *arg,
-					  guint      		arg_id);
-static void gtk_toggle_button_leave      (GtkButton            *button);
-static void gtk_toggle_button_realize    (GtkWidget            *widget);
-static void gtk_toggle_button_unrealize  (GtkWidget            *widget);
-static void gtk_toggle_button_map        (GtkWidget            *widget);
-static void gtk_toggle_button_unmap      (GtkWidget            *widget);
+static void gtk_toggle_button_class_init    (GtkToggleButtonClass *klass);
+static void gtk_toggle_button_init          (GtkToggleButton      *toggle_button);
+static void gtk_toggle_button_paint         (GtkWidget            *widget,
+					     GdkRectangle         *area);
+static void gtk_toggle_button_size_allocate (GtkWidget            *widget,
+					     GtkAllocation        *allocation);
+static gint gtk_toggle_button_expose        (GtkWidget            *widget,
+					     GdkEventExpose       *event);
+static void gtk_toggle_button_pressed       (GtkButton            *button);
+static void gtk_toggle_button_released      (GtkButton            *button);
+static void gtk_toggle_button_clicked       (GtkButton            *button);
+static void gtk_toggle_button_enter         (GtkButton            *button);
+static void gtk_toggle_button_leave         (GtkButton            *button);
+static void gtk_toggle_button_set_property  (GObject              *object,
+					     guint                 prop_id,
+					     const GValue         *value,
+					     GParamSpec           *pspec);
+static void gtk_toggle_button_get_property  (GObject              *object,
+					     guint                 prop_id,
+					     GValue               *value,
+					     GParamSpec           *pspec);
+static void gtk_toggle_button_leave         (GtkButton            *button);
+static void gtk_toggle_button_realize       (GtkWidget            *widget);
+static void gtk_toggle_button_unrealize     (GtkWidget            *widget);
+static void gtk_toggle_button_map           (GtkWidget            *widget);
+static void gtk_toggle_button_unmap         (GtkWidget            *widget);
 
 static guint toggle_button_signals[LAST_SIGNAL] = { 0 };
 static GtkContainerClass *parent_class = NULL;
@@ -103,11 +106,13 @@ static void
 gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 {
   GtkObjectClass *object_class;
+  GObjectClass   *gobject_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
   GtkButtonClass *button_class;
 
   object_class = (GtkObjectClass*) class;
+  gobject_class = G_OBJECT_CLASS (class);
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
   button_class = (GtkButtonClass*) class;
@@ -115,8 +120,8 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   parent_class = gtk_type_class (GTK_TYPE_BUTTON);
 
 
-  object_class->set_arg = gtk_toggle_button_set_arg;
-  object_class->get_arg = gtk_toggle_button_get_arg;
+  gobject_class->set_property = gtk_toggle_button_set_property;
+  gobject_class->get_property = gtk_toggle_button_get_property;
 
   widget_class->size_allocate = gtk_toggle_button_size_allocate;
   widget_class->expose_event = gtk_toggle_button_expose;
@@ -133,8 +138,29 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
 
   class->toggled = NULL;
 
-  gtk_object_add_arg_type ("GtkToggleButton::active", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_ACTIVE);
-  gtk_object_add_arg_type ("GtkToggleButton::draw_indicator", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_DRAW_INDICATOR);
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACTIVE,
+                                   g_param_spec_boolean ("active",
+							 _("Active"),
+							 _("If the toggle button should be pressed in or not"),
+							 FALSE,
+							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_INCONSISTENT,
+                                   g_param_spec_boolean ("inconsistent",
+							 _("Inconsistent"),
+							 _("If the toggle button is in an \"in between\" state."),
+							 FALSE,
+							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_DRAW_INDICATOR,
+                                   g_param_spec_boolean ("draw_indicator",
+							 _("Draw Indicator"),
+							 _("If the toggle part of the button is displayed"),
+							 FALSE,
+							 G_PARAM_READWRITE));
 
   toggle_button_signals[TOGGLED] =
     gtk_signal_new ("toggled",
@@ -177,21 +203,25 @@ gtk_toggle_button_new_with_label (const gchar *label)
 }
 
 static void
-gtk_toggle_button_set_arg (GtkObject *object,
-			   GtkArg    *arg,
-			   guint      arg_id)
+gtk_toggle_button_set_property (GObject      *object,
+				guint         prop_id,
+				const GValue *value,
+				GParamSpec   *pspec)
 {
   GtkToggleButton *tb;
 
   tb = GTK_TOGGLE_BUTTON (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_ACTIVE:
-      gtk_toggle_button_set_active (tb, GTK_VALUE_BOOL (*arg));
+    case PROP_ACTIVE:
+      gtk_toggle_button_set_active (tb, g_value_get_boolean (value));
       break;
-    case ARG_DRAW_INDICATOR:
-      gtk_toggle_button_set_mode (tb, GTK_VALUE_BOOL (*arg));
+    case PROP_INCONSISTENT:
+      gtk_toggle_button_set_inconsistent (tb, g_value_get_boolean (value));
+      break;
+    case PROP_DRAW_INDICATOR:
+      gtk_toggle_button_set_mode (tb, g_value_get_boolean (value));
       break;
     default:
       break;
@@ -199,24 +229,28 @@ gtk_toggle_button_set_arg (GtkObject *object,
 }
 
 static void
-gtk_toggle_button_get_arg (GtkObject *object,
-			   GtkArg    *arg,
-			   guint      arg_id)
+gtk_toggle_button_get_property (GObject      *object,
+				guint         prop_id,
+				GValue       *value,
+				GParamSpec   *pspec)
 {
   GtkToggleButton *tb;
 
   tb = GTK_TOGGLE_BUTTON (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_ACTIVE:
-      GTK_VALUE_BOOL (*arg) = tb->active;
+    case PROP_ACTIVE:
+      g_value_set_boolean (value, tb->active);
       break;
-    case ARG_DRAW_INDICATOR:
-      GTK_VALUE_BOOL (*arg) = tb->draw_indicator;
+    case PROP_INCONSISTENT:
+      g_value_set_boolean (value, tb->inconsistent);
+      break;
+    case PROP_DRAW_INDICATOR:
+      g_value_set_boolean (value, tb->draw_indicator);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -268,6 +302,8 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
 
       if (GTK_WIDGET_VISIBLE (toggle_button))
 	gtk_widget_queue_resize (GTK_WIDGET (toggle_button));
+
+      g_object_notify (G_OBJECT (toggle_button), "draw_indicator");
     }
 }
 
@@ -279,7 +315,7 @@ gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
   g_return_if_fail (toggle_button != NULL);
   g_return_if_fail (GTK_IS_TOGGLE_BUTTON (toggle_button));
 
-  is_active = is_active != 0;
+  is_active = is_active != FALSE;
 
   if (toggle_button->active != is_active)
     gtk_button_clicked (GTK_BUTTON (toggle_button));
@@ -332,6 +368,8 @@ gtk_toggle_button_set_inconsistent (GtkToggleButton *toggle_button,
     {
       toggle_button->inconsistent = setting;
       gtk_widget_queue_draw (GTK_WIDGET (toggle_button));
+
+      g_object_notify (G_OBJECT (toggle_button), "inconsistent");      
     }
 }
 
@@ -554,6 +592,8 @@ gtk_toggle_button_clicked (GtkButton *button)
     gtk_widget_set_state (GTK_WIDGET (button), new_state);
   else
     gtk_widget_queue_draw (GTK_WIDGET (button));
+
+  g_object_notify (G_OBJECT (toggle_button), "active");
 }
 
 static void

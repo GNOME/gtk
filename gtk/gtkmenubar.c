@@ -34,11 +34,6 @@
 #include "gtkwindow.h"
 #include "gtksignal.h"
 
-enum {
-  ARG_0,
-  ARG_SHADOW
-};
-
 
 #define BORDER_SPACING  0
 #define CHILD_SPACING   3

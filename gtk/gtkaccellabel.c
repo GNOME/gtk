@@ -21,7 +21,7 @@
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-2001.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -32,28 +32,30 @@
 #include "gtkmain.h"
 #include "gtksignal.h"
 #include "gtkaccellabel.h"
-
+#include "gtkintl.h"
 
 enum {
-  ARG_0,
-  ARG_ACCEL_WIDGET
+  PROP_0,
+  PROP_ACCEL_WIDGET
 };
 
-static void gtk_accel_label_class_init	     (GtkAccelLabelClass *klass);
-static void gtk_accel_label_init	     (GtkAccelLabel  *accel_label);
-static void gtk_accel_label_set_arg	     (GtkObject	     *object,
-					      GtkArg	     *arg,
-					      guint	      arg_id);
-static void gtk_accel_label_get_arg	     (GtkObject      *object,
-					      GtkArg	     *arg,
-					      guint	      arg_id);
-static void gtk_accel_label_destroy	     (GtkObject	     *object);
-static void gtk_accel_label_finalize	     (GObject	     *object);
-static void gtk_accel_label_size_request     (GtkWidget	     *widget,
-					      GtkRequisition *requisition);
-static gboolean gtk_accel_label_expose_event (GtkWidget	     *widget,
-					      GdkEventExpose *event);
-static gboolean gtk_accel_label_refetch_idle (GtkAccelLabel  *accel_label);
+static void     gtk_accel_label_class_init   (GtkAccelLabelClass *klass);
+static void     gtk_accel_label_init         (GtkAccelLabel      *accel_label);
+static void     gtk_accel_label_set_property (GObject            *object,
+					      guint               prop_id,
+					      const GValue       *value,
+					      GParamSpec         *pspec);
+static void     gtk_accel_label_get_property (GObject            *object,
+					      guint               prop_id,
+					      GValue             *value,
+					      GParamSpec         *pspec);
+static void     gtk_accel_label_destroy      (GtkObject          *object);
+static void     gtk_accel_label_finalize     (GObject            *object);
+static void     gtk_accel_label_size_request (GtkWidget          *widget,
+					      GtkRequisition     *requisition);
+static gboolean gtk_accel_label_expose_event (GtkWidget          *widget,
+					      GdkEventExpose     *event);
+static gboolean gtk_accel_label_refetch_idle (GtkAccelLabel      *accel_label);
 
 static GtkAccelLabelClass *accel_label_class = NULL;
 static GtkLabelClass *parent_class = NULL;
@@ -101,14 +103,21 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   
   parent_class = gtk_type_class (GTK_TYPE_LABEL);
   
-  gtk_object_add_arg_type ("GtkAccelLabel::accel_widget", GTK_TYPE_WIDGET, GTK_ARG_READWRITE, ARG_ACCEL_WIDGET);
-
   gobject_class->finalize = gtk_accel_label_finalize;
-
-  object_class->set_arg = gtk_accel_label_set_arg;
-  object_class->get_arg = gtk_accel_label_get_arg;
+  gobject_class->set_property = gtk_accel_label_set_property;
+  gobject_class->get_property = gtk_accel_label_get_property;
+  
   object_class->destroy = gtk_accel_label_destroy;
   
+  g_object_class_install_property (G_OBJECT_CLASS(object_class),
+                                   PROP_ACCEL_WIDGET,
+                                   g_param_spec_object ("accel_widget",
+                                                        _("Accelerator widget"),
+                                                        _("The widget monitored by this accelerator label"),
+                                                        GTK_TYPE_WIDGET,
+                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+
+   
   widget_class->size_request = gtk_accel_label_size_request;
   widget_class->expose_event = gtk_accel_label_expose_event;
 
@@ -123,40 +132,42 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
 }
 
 static void
-gtk_accel_label_set_arg (GtkObject      *object,
-			 GtkArg		*arg,
-			 guint		 arg_id)
+gtk_accel_label_set_property (GObject      *object,
+			      guint         prop_id,
+			      const GValue *value,
+			      GParamSpec   *pspec)
 {
   GtkAccelLabel  *accel_label;
 
   accel_label = GTK_ACCEL_LABEL (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_ACCEL_WIDGET:
-      gtk_accel_label_set_accel_widget (accel_label, (GtkWidget*) GTK_VALUE_OBJECT (*arg));
+    case PROP_ACCEL_WIDGET:
+      gtk_accel_label_set_accel_widget (accel_label, (GtkWidget*) g_value_get_object (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
-static void
-gtk_accel_label_get_arg (GtkObject      *object,
-			 GtkArg		*arg,
-			 guint		 arg_id)
+static void gtk_accel_label_get_property (GObject    *object,
+					  guint       prop_id,
+					  GValue     *value,
+					  GParamSpec *pspec)
 {
   GtkAccelLabel  *accel_label;
 
   accel_label = GTK_ACCEL_LABEL (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_ACCEL_WIDGET:
-      GTK_VALUE_OBJECT (*arg) = (GtkObject*) accel_label->accel_widget;
+    case PROP_ACCEL_WIDGET:
+       g_value_set_object (value, G_OBJECT (accel_label->accel_widget));
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -359,6 +370,7 @@ gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
 					   GTK_SIGNAL_FUNC (gtk_accel_label_queue_refetch),
 					   GTK_OBJECT (accel_label));
 	}
+       g_object_notify (G_OBJECT (accel_label), "accel_widget");
     }
 }
 

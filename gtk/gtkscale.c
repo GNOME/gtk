@@ -30,10 +30,10 @@
 #include "gtkmarshal.h"
 
 enum {
-  ARG_0,
-  ARG_DIGITS,
-  ARG_DRAW_VALUE,
-  ARG_VALUE_POS
+  PROP_0,
+  PROP_DIGITS,
+  PROP_DRAW_VALUE,
+  PROP_VALUE_POS
 };
 
 enum {
@@ -43,16 +43,18 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
-static void gtk_scale_class_init      (GtkScaleClass *klass);
-static void gtk_scale_init            (GtkScale      *scale);
-static void gtk_scale_set_arg         (GtkObject     *object,
-				       GtkArg        *arg,
-				       guint          arg_id);
-static void gtk_scale_get_arg         (GtkObject     *object,
-				       GtkArg        *arg,
-				       guint          arg_id);
-static void gtk_scale_map             (GtkWidget     *widget);
-static void gtk_scale_unmap           (GtkWidget     *widget);
+static void gtk_scale_class_init   (GtkScaleClass *klass);
+static void gtk_scale_init         (GtkScale      *scale);
+static void gtk_scale_set_property (GObject       *object,
+				    guint          prop_id,
+				    const GValue  *value,
+				    GParamSpec    *pspec);
+static void gtk_scale_get_property (GObject       *object,
+				    guint          prop_id,
+				    GValue        *value,
+				    GParamSpec    *pspec);
+static void gtk_scale_map          (GtkWidget     *widget);
+static void gtk_scale_unmap        (GtkWidget     *widget);
 
 static void gtk_scale_draw_background (GtkRange      *range);
 
@@ -104,28 +106,44 @@ single_string_accumulator (GSignalInvocationHint *ihint,
 static void
 gtk_scale_class_init (GtkScaleClass *class)
 {
+  GObjectClass   *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkRangeClass *range_class;
 
+  gobject_class = G_OBJECT_CLASS (class);
   object_class = (GtkObjectClass*) class;
   range_class = (GtkRangeClass*) class;
   widget_class = (GtkWidgetClass*) class;
   
   parent_class = gtk_type_class (GTK_TYPE_RANGE);
   
-  gtk_object_add_arg_type ("GtkScale::digits",
-			   GTK_TYPE_INT,
-			   GTK_ARG_READWRITE,
-			   ARG_DIGITS);
-  gtk_object_add_arg_type ("GtkScale::draw_value",
-			   GTK_TYPE_BOOL,
-			   GTK_ARG_READWRITE,
-			   ARG_DRAW_VALUE);
-  gtk_object_add_arg_type ("GtkScale::value_pos",
-			   GTK_TYPE_POSITION_TYPE,
-			   GTK_ARG_READWRITE,
-			   ARG_VALUE_POS);
+  g_object_class_install_property (gobject_class,
+                                   PROP_DIGITS,
+                                   g_param_spec_int ("digits",
+						     _("Digits"),
+						     _("The number of decimal places that are displayed in the value"),
+						     0,
+						     G_MAXINT,
+						     0,
+						     G_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_DRAW_VALUE,
+                                   g_param_spec_boolean ("draw_value",
+							 _("Draw Value"),
+							 _("Whether the current value is displayed as a string next to the slider"),
+							 FALSE,
+							 G_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_VALUE_POS,
+                                   g_param_spec_enum ("value_pos",
+						      _("Value Position"),
+						      _("The position in which the current value is displayed"),
+						      GTK_TYPE_POSITION_TYPE,
+						      GTK_POS_LEFT,
+						      G_PARAM_READWRITE));
 
   signals[FORMAT_VALUE] =
     g_signal_newc ("format_value",
@@ -137,8 +155,9 @@ gtk_scale_class_init (GtkScaleClass *class)
 		   G_TYPE_STRING, 1,
 		   G_TYPE_DOUBLE);
   
-  object_class->set_arg = gtk_scale_set_arg;
-  object_class->get_arg = gtk_scale_get_arg;
+  
+  gobject_class->set_property = gtk_scale_set_property;
+  gobject_class->get_property = gtk_scale_get_property;
 
   widget_class->map = gtk_scale_map;
   widget_class->unmap = gtk_scale_unmap;
@@ -158,52 +177,55 @@ gtk_scale_class_init (GtkScaleClass *class)
 }
 
 static void
-gtk_scale_set_arg (GtkObject      *object,
-		   GtkArg         *arg,
-		   guint           arg_id)
+gtk_scale_set_property (GObject      *object,
+			guint         prop_id,
+			const GValue *value,
+			GParamSpec   *pspec)
 {
   GtkScale *scale;
 
   scale = GTK_SCALE (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_DIGITS:
-      gtk_scale_set_digits (scale, GTK_VALUE_INT (*arg));
+    case PROP_DIGITS:
+      gtk_scale_set_digits (scale, g_value_get_int (value));
       break;
-    case ARG_DRAW_VALUE:
-      gtk_scale_set_draw_value (scale, GTK_VALUE_BOOL (*arg));
+    case PROP_DRAW_VALUE:
+      gtk_scale_set_draw_value (scale, g_value_get_boolean (value));
       break;
-    case ARG_VALUE_POS:
-      gtk_scale_set_value_pos (scale, GTK_VALUE_ENUM (*arg));
+    case PROP_VALUE_POS:
+      gtk_scale_set_value_pos (scale, g_value_get_enum (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
 static void
-gtk_scale_get_arg (GtkObject      *object,
-		   GtkArg         *arg,
-		   guint           arg_id)
+gtk_scale_get_property (GObject      *object,
+			guint         prop_id,
+			GValue       *value,
+			GParamSpec   *pspec)
 {
   GtkScale *scale;
 
   scale = GTK_SCALE (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_DIGITS:
-      GTK_VALUE_INT (*arg) = GTK_RANGE (scale)->digits;
+    case PROP_DIGITS:
+      g_value_set_int (value, GTK_RANGE (scale)->digits);
       break;
-    case ARG_DRAW_VALUE:
-      GTK_VALUE_BOOL (*arg) = scale->draw_value;
+    case PROP_DRAW_VALUE:
+      g_value_set_boolean (value, scale->draw_value);
       break;
-    case ARG_VALUE_POS:
-      GTK_VALUE_ENUM (*arg) = scale->value_pos;
+    case PROP_VALUE_POS:
+      g_value_set_enum (value, scale->value_pos);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -263,6 +285,8 @@ gtk_scale_set_digits (GtkScale *scale,
       GTK_RANGE (scale)->digits = digits;
 
       gtk_widget_queue_resize (GTK_WIDGET (scale));
+
+      g_object_notify (G_OBJECT (scale), "digits");
     }
 }
 
@@ -280,6 +304,8 @@ gtk_scale_set_draw_value (GtkScale *scale,
       scale->draw_value = draw_value;
 
       gtk_widget_queue_resize (GTK_WIDGET (scale));
+
+      g_object_notify (G_OBJECT (scale), "draw_value");
     }
 }
 
@@ -296,6 +322,8 @@ gtk_scale_set_value_pos (GtkScale        *scale,
 
       if (GTK_WIDGET_VISIBLE (scale) && GTK_WIDGET_MAPPED (scale))
 	gtk_widget_queue_resize (GTK_WIDGET (scale));
+
+      g_object_notify (G_OBJECT (scale), "value_pos");
     }
 }
 
