@@ -87,6 +87,8 @@ struct _GtkContainerClass
 				 GtkWidget    	*child,
 				 GtkArg       	*arg,
 				 guint        	 arg_id);
+  gchar*  (*composite_name)	(GtkContainer	*container,
+				 GtkWidget	*child);
 };
 
 /* Application-level methods */
@@ -211,6 +213,8 @@ gchar*  gtk_container_child_arg_get_info   (GtkType       object_type,
 void    gtk_container_forall		   (GtkContainer *container,
 					    GtkCallback	  callback,
 					    gpointer	  callback_data);
+gchar*	gtk_container_child_composite_name (GtkContainer *container,
+					    GtkWidget	 *child);
 
 
 /* Deprecated methods */

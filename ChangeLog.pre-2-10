@@ -1,3 +1,26 @@
+Sun Nov 29 06:12:01 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.c (gtk_type_unique): removed default initialization
+	check, people must use gtk_type_init();
+
+	* gtk/gtkwidget.h: 
+	* gtk/gtkwidget.c: added gtk_widget_set_composite_name() which is meant
+	for internal use by containers, that want to assign specific composite
+	names to their composite children.
+	added gtk_widget_get_composite_name() which will return a newly
+ 	allocated string, containing the composite name of a widget. valid
+	composite names can only be retrived from widgets that have a parent
+	assigned and are flagged as GTK_COMPOSITE_CHILD.
+
+	* gtk/gtkcontainer.h:
+	* gtk/gtkcontainer.c: added a new function
+ 	gtk_container_child_default_composite_name() which will return a
+	newly allocated string, holding the composite name of a containers
+	child. a default implementation is provided which will compose the
+	composite name out of the widgets type and its sequential children
+ 	id. this implementation can be overidden through a new class function
+	*(composite_name)().
+
 Sat Nov 28 10:57:59 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_expose_event): Removed bogus

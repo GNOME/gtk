@@ -75,11 +75,11 @@ typedef enum
 #define GTK_WIDGET_REALIZED(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_REALIZED) != 0)
 #define GTK_WIDGET_MAPPED(wid)		  ((GTK_WIDGET_FLAGS (wid) & GTK_MAPPED) != 0)
 #define GTK_WIDGET_VISIBLE(wid)		  ((GTK_WIDGET_FLAGS (wid) & GTK_VISIBLE) != 0)
-#define GTK_WIDGET_DRAWABLE(wid)	  ((GTK_WIDGET_VISIBLE (wid) && GTK_WIDGET_MAPPED (wid)) != 0)
+#define GTK_WIDGET_DRAWABLE(wid)	  (GTK_WIDGET_VISIBLE (wid) && GTK_WIDGET_MAPPED (wid))
 #define GTK_WIDGET_SENSITIVE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_SENSITIVE) != 0)
 #define GTK_WIDGET_PARENT_SENSITIVE(wid)  ((GTK_WIDGET_FLAGS (wid) & GTK_PARENT_SENSITIVE) != 0)
-#define GTK_WIDGET_IS_SENSITIVE(wid)	  (((GTK_WIDGET_SENSITIVE (wid) && \
-					    GTK_WIDGET_PARENT_SENSITIVE (wid)) != 0) != 0)
+#define GTK_WIDGET_IS_SENSITIVE(wid)	  (GTK_WIDGET_SENSITIVE (wid) && \
+					   GTK_WIDGET_PARENT_SENSITIVE (wid))
 #define GTK_WIDGET_CAN_FOCUS(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_CAN_FOCUS) != 0)
 #define GTK_WIDGET_HAS_FOCUS(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_HAS_FOCUS) != 0)
 #define GTK_WIDGET_CAN_DEFAULT(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_CAN_DEFAULT) != 0)
@@ -542,6 +542,13 @@ void	   gtk_widget_restore_default_style (GtkWidget	*widget);
 void       gtk_widget_modify_style      (GtkWidget      *widget,
 					 GtkRcStyle     *style);
 
+/* handle composite names for GTK_COMPOSITE_CHILD widgets,
+ * the returned name is newly allocated.
+ */
+void   gtk_widget_set_composite_name	(GtkWidget	*widget,
+					 gchar     	*name);
+gchar* gtk_widget_get_composite_name	(GtkWidget	*widget);
+     
 /* Descend recursively and set rc-style on all widgets without user styles */
 void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
 

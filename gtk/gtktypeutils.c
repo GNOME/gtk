@@ -20,7 +20,7 @@
 #include "gtktypeutils.h"
 
 
-#define	TYPE_NODES_BLOCK_SIZE	(200)
+#define	TYPE_NODES_BLOCK_SIZE	(35)  /* needs to be > GTK_TYPE_FUNDAMENTAL_MAX */
 
 typedef struct _GtkTypeNode GtkTypeNode;
 
@@ -39,16 +39,20 @@ struct _GtkTypeNode
 
 
 #define	LOOKUP_TYPE_NODE(node_var, type)	{ \
-  if (type > 0) \
-  { \
-    register GtkType sqn = GTK_TYPE_SEQNO (type); \
-    if (sqn < n_type_nodes) \
-      node_var = type_nodes + sqn; \
-    else \
-      node_var = NULL; \
-  } \
-  else \
-    node_var = NULL; \
+    GtkTypeNode *__node = NULL; \
+    GtkType sqn = GTK_TYPE_SEQNO (type); \
+    if (sqn > 0) \
+      { \
+	sqn--; \
+	if (sqn < GTK_TYPE_FUNDAMENTAL_MAX) \
+	  { \
+	    if (sqn < n_ftype_nodes) \
+	      __node = type_nodes + sqn; \
+	  } \
+	else if (sqn < n_type_nodes) \
+	  __node = type_nodes + sqn; \
+      } \
+    node_var = __node; \
 }
 
 static void  gtk_type_class_init		(GtkType      node_type);
@@ -59,23 +63,23 @@ static void  gtk_type_init_builtin_types	(void);
 
 static GtkTypeNode *type_nodes = NULL;
 static guint	    n_type_nodes = 0;
+static guint	    n_ftype_nodes = 0;
 static GHashTable  *type_name_2_type_ht = NULL;
 
 
 static GtkTypeNode*
-gtk_type_node_next_and_invalidate (void)
+gtk_type_node_next_and_invalidate (GtkType parent_type)
 {
-  static guint	n_free_type_nodes = 0;
-  register GtkTypeNode	*node;
-  register GtkType new_type;
+  static guint n_free_type_nodes = 0;
+  GtkTypeNode *node;
   
   /* don't keep *any* GtkTypeNode pointers across invokation of this function!!!
    */
   
   if (n_free_type_nodes == 0)
     {
-      register guint i;
-      register guint size;
+      guint i;
+      guint size;
       
       /* nearest pow
        */
@@ -91,22 +95,28 @@ gtk_type_node_next_and_invalidate (void)
       n_free_type_nodes = size / sizeof (GtkTypeNode) - n_type_nodes;
       
       memset (type_nodes + n_type_nodes, 0, n_free_type_nodes * sizeof (GtkTypeNode));
+      if (!n_type_nodes)
+	{
+	  n_type_nodes = GTK_TYPE_FUNDAMENTAL_MAX;
+	  n_free_type_nodes -= GTK_TYPE_FUNDAMENTAL_MAX;
+	}
     }
-  
-  new_type = n_type_nodes++;
-  n_free_type_nodes--;
-  
-  /* This can't be used here - new_type can be over 256!
-   * LOOKUP_TYPE_NODE (node, new_type);
-   * Code copied from above (we may assume we are all right here):
-   */
 
-  if(new_type == 0) 
-    return NULL;
-  node = type_nodes + new_type;
+  if (!parent_type)
+    {
+      g_assert (n_ftype_nodes < GTK_TYPE_FUNDAMENTAL_MAX); /* paranoid */
 
-  if (node)
-    node->type = new_type;
+      node = type_nodes + n_ftype_nodes;
+      n_ftype_nodes++;
+      node->type = n_ftype_nodes;
+    }
+  else
+    {
+      node = type_nodes + n_type_nodes;
+      n_type_nodes++;
+      n_free_type_nodes--;
+      node->type = GTK_TYPE_MAKE (parent_type, n_type_nodes);
+    }
   
   return node;
 }
@@ -116,12 +126,8 @@ gtk_type_init (void)
 {
   if (n_type_nodes == 0)
     {
-      GtkTypeNode *zero;
-      
       g_assert (sizeof (GtkType) >= 4);
-      
-      zero = gtk_type_node_next_and_invalidate ();
-      g_assert (zero == NULL);
+      g_assert (TYPE_NODES_BLOCK_SIZE > GTK_TYPE_FUNDAMENTAL_MAX);
       
       type_name_2_type_ht = g_hash_table_new ((GHashFunc) gtk_type_name_hash,
 					      (GCompareFunc) gtk_type_name_compare);
@@ -182,16 +188,16 @@ gtk_type_create (GtkType      parent_type,
   
   /* relookup pointers afterwards.
    */
-  new_node = gtk_type_node_next_and_invalidate ();
+  new_node = gtk_type_node_next_and_invalidate (parent_type);
   
   if (parent_type)
     {
-      new_node->type = GTK_TYPE_MAKE (parent_type, new_node->type);
+      g_assert (GTK_TYPE_SEQNO (new_node->type) > GTK_TYPE_FUNDAMENTAL_MAX);
       LOOKUP_TYPE_NODE (parent, parent_type);
     }
   else
     {
-      g_assert (new_node->type <= 0xff);
+      g_assert (new_node->type <= GTK_TYPE_FUNDAMENTAL_MAX);
       parent = NULL;
     }
   
@@ -232,9 +238,13 @@ gtk_type_unique (GtkType      parent_type,
   g_return_val_if_fail (type_info != NULL, 0);
   g_return_val_if_fail (type_info->type_name != NULL, 0);
   
-  if (n_type_nodes == 0)
-    gtk_type_init ();
-  
+  if (!parent_type && n_ftype_nodes >= GTK_TYPE_FUNDAMENTAL_MAX)
+    {
+      g_warning ("gtk_type_unique(): maximum amount of fundamental types reached, "
+		 "try increasing GTK_TYPE_FUNDAMENTAL_MAX");
+      return 0;
+    }
+
   type_name = g_strdup (type_info->type_name);
   
   /* relookup pointers afterwards.
@@ -491,12 +501,12 @@ gtk_type_is_a (GtkType type,
     return TRUE;
   else
     {
-      register GtkTypeNode *node;
+      GtkTypeNode *node;
       
       LOOKUP_TYPE_NODE (node, type);
       if (node)
 	{
-	  register GtkTypeNode *a_node;
+	  GtkTypeNode *a_node;
 	  
 	  LOOKUP_TYPE_NODE (a_node, is_a_type);
 	  if (a_node)
@@ -572,7 +582,7 @@ gtk_type_class_init (GtkType type)
 	  
 	  for (walk = slist; walk; walk = walk->next)
 	    {
-	      register GtkClassInitFunc base_class_init;
+	      GtkClassInitFunc base_class_init;
 	      
 	      base_class_init = walk->data;
 	      base_class_init (node->klass);
@@ -948,7 +958,7 @@ gtk_type_init_builtin_types (void)
       
       /* relookup pointers afterwards.
        */
-      type_id = gtk_type_register_intern (fundamental_info[i].name, GTK_TYPE_INVALID, NULL);
+      type_id = gtk_type_register_intern (fundamental_info[i].name, 0, NULL);
       
       g_assert (type_id == fundamental_info[i].type_id);
     }
@@ -967,7 +977,7 @@ gtk_type_init_builtin_types (void)
 					  builtin_info[i].parent,
 					  builtin_info[i].values);
       
-      g_assert (type_id != GTK_TYPE_INVALID);
+      g_assert (GTK_TYPE_SEQNO (type_id) > GTK_TYPE_FUNDAMENTAL_MAX);
       
       (*builtin_info[i].type_id) = type_id;
     }

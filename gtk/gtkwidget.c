@@ -1642,7 +1642,7 @@ struct _GtkDrawData {
 static GMemChunk   *draw_data_mem_chunk = NULL;
 static GSList      *draw_data_free_list = NULL;
 static const gchar *draw_data_key  = "gtk-draw-data";
-static guint        draw_data_key_id = 0;
+static GQuark       draw_data_key_id = 0;
 
 static gint gtk_widget_idle_draw (gpointer data);
 
@@ -3812,6 +3812,52 @@ gtk_widget_is_ancestor (GtkWidget *widget,
   return FALSE;
 }
 
+static GQuark quark_composite_name = 0;
+
+void
+gtk_widget_set_composite_name (GtkWidget *widget,
+			       gchar     *name)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_WIDGET_COMPOSITE_CHILD (widget));
+  g_return_if_fail (name != NULL);
+
+  if (!quark_composite_name)
+    quark_composite_name = g_quark_from_static_string ("gtk-composite-name");
+
+  gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
+				  quark_composite_name,
+				  g_strdup (name),
+				  g_free);
+}
+
+gchar*
+gtk_widget_get_composite_name (GtkWidget *widget)
+{
+  g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  if (GTK_WIDGET_COMPOSITE_CHILD (widget) && widget->parent)
+    return gtk_container_child_composite_name (GTK_CONTAINER (widget->parent),
+					       widget);
+  else
+    return NULL;
+}
+
+void
+gtk_widget_push_composite_child (void)
+{
+  composite_child_stack++;
+}
+
+void
+gtk_widget_pop_composite_child (void)
+{
+  if (composite_child_stack)
+    composite_child_stack--;
+}
+
 /*****************************************
  * gtk_widget_push_colormap:
  *
@@ -3842,19 +3888,6 @@ gtk_widget_push_visual (GdkVisual *visual)
   g_return_if_fail (visual != NULL);
 
   visual_stack = g_slist_prepend (visual_stack, visual);
-}
-
-void
-gtk_widget_push_composite_child (void)
-{
-  composite_child_stack++;
-}
-
-void
-gtk_widget_pop_composite_child (void)
-{
-  if (composite_child_stack)
-    composite_child_stack--;
 }
 
 /*****************************************
