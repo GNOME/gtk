@@ -121,6 +121,16 @@ gdk_display_class_init (GdkDisplayClass *class)
   object_class->finalize = gdk_display_finalize;
   object_class->dispose = gdk_display_dispose;
 
+  /**
+   * GdkDisplay::closed:
+   * @display: the object on which the signal is emitted
+   * @is_error: %TRUE if the display was closed due to an error
+   *
+   * The ::closed signal is emitted when the connection to the windowing
+   * system for @display is closed.
+   *
+   * Since: 2.2
+   */   
   signals[CLOSED] =
     g_signal_new ("closed",
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -173,7 +183,7 @@ gdk_display_finalize (GObject *object)
  * gdk_display_close:
  * @display: a #GdkDisplay
  *
- * Closes the connection windowing system for the given display,
+ * Closes the connection to the windowing system for the given display,
  * and cleans up associated resources.
  *
  * Since: 2.2

@@ -1,3 +1,17 @@
+2003-09-30  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdkkeys.c (gdk_keymap_class_init): Document the
+	"direction-changed" and "keys-changed" signals.
+
+	* gdk/gdkscreen.c (gdk_screen_class_init): Document the 
+	"size-changed" signal.
+
+	* gdk/gdkdisplaymanager.c (gdk_display_manager_class_init): 
+	Document the "display-opened" signal.
+
+	* gdk/gdkdisplay.c (gdk_display_close): Doc tweak.
+	(gdk_display_class_init): Document the "closed" signal.
+
 Sat Sep 27 16:02:40 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktextview.[ch]: rename property tab_moves_focus to

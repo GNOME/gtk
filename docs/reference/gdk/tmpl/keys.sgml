@@ -30,8 +30,9 @@ Unicode characters with gdk_keyval_to_unicode() and gdk_unicode_to_keyval().
 </para>
 
 <para>
-One #GdkKeymap object exists for each user display. GTK 2 supports only one
-display, so gdk_keymap_get_default() returns the singleton #GdkKeymap.  A keymap
+One #GdkKeymap object exists for each user display. gdk_keymap_get_default() 
+returns the #GdkKeymap for the default display; to obtain keymaps for other 
+displays, use gdk_keymap_get_for_display(). A keymap
 is a mapping from #GdkKeymapKey to key values. You can think of a #GdkKeymapKey
 as a representation of a symbol printed on a physical keyboard key. That is, it
 contains three pieces of information. First, it contains the hardware keycode;
@@ -185,7 +186,7 @@ Returns the direction of the keymap.
 
 @keymap: a #GdkKeymap or %NULL to use the default keymap.
 Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL.
-@Returns: 
+@Returns: the direction of the keymap.
 
 
 <!-- ##### FUNCTION gdk_keyval_name ##### -->

@@ -72,6 +72,15 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  /**
+   * GdkKeymap::direction-changed:
+   * @keymap: the object on which the signal is emitted
+   * 
+   * The ::direction_changed signal gets emitted when the direction of
+   * the keymap changes. 
+   *
+   * Since: 2.0
+   */
   signals[DIRECTION_CHANGED] =
     g_signal_new ("direction_changed",
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -81,6 +90,15 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE,
 		  0);
+  /**
+   * GdkKeymap::keys-changed:
+   * @keymap: the object on which the signal is emitted
+   *
+   * The ::keys_changed signal is emitted when the mapping represented by
+   * @keymap changes.
+   *
+   * Since: 2.2
+   */
   signals[KEYS_CHANGED] =
     g_signal_new ("keys_changed",
 		  G_OBJECT_CLASS_TYPE (object_class),

@@ -148,13 +148,14 @@ gdk_display_get_maximal_cursor_size
 GDK_DISPLAY_OBJECT
 GDK_IS_DISPLAY
 GDK_TYPE_DISPLAY
-gdk_display_get_type
 GDK_DISPLAY_CLASS
 GDK_IS_DISPLAY_CLASS
 GDK_DISPLAY_GET_CLASS
 
 <SUBSECTION Private>
 gdk_display_open_default_libgtk_only
+gdk_display_get_type
+GdkDisplayClass
 </SECTION>
 
 <SECTION>
@@ -208,10 +209,12 @@ gdk_screen_get_setting
 GDK_SCREEN
 GDK_IS_SCREEN
 GDK_TYPE_SCREEN
-gdk_screen_get_type
 GDK_SCREEN_CLASS
 GDK_IS_SCREEN_CLASS
 GDK_SCREEN_GET_CLASS
+<SUBSECTION Private>
+GdkScreenClass
+gdk_screen_get_type
 </SECTION>
 
 <SECTION>

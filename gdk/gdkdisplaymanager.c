@@ -100,6 +100,15 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
   object_class->set_property = gdk_display_manager_set_property;
   object_class->get_property = gdk_display_manager_get_property;
 
+  /**
+   * GdkDisplayManager::display-opened:
+   * @display_manager: the object on which the signal is emitted
+   * @display: the opened display
+   *
+   * The ::display_opened signal is emitted when a display is opened.
+   *
+   * Since: 2.2
+   */
   signals[DISPLAY_OPENED] =
     g_signal_new ("display_opened",
 		  G_OBJECT_CLASS_TYPE (object_class),

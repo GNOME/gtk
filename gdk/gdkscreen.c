@@ -67,6 +67,15 @@ gdk_screen_get_type (void)
 static void
 gdk_screen_class_init (GdkScreenClass *klass)
 {
+  /**
+   * GdkScreen::size-changed:
+   * @screen: the object on which the signal is emitted
+   * 
+   * The ::size_changed signal is emitted when the pixel width or 
+   * height of a screen changes.
+   *
+   * Since: 2.2
+   */
   signals[SIZE_CHANGED] =
     g_signal_new ("size_changed",
                   G_OBJECT_CLASS_TYPE (klass),
