@@ -1,3 +1,21 @@
+Thu Jun 17 13:57:31 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* docs/gtk_tut.sgml: Removed references to
+	code examples in my directory on gtk.org as
+	they should all be in the tutorial now.
+
+	* docs/gtk_tut.sgml: Added sources for dial-test
+	and scribble-xinput programs that were previously
+	missing.
+
+Tue Jun 15 12:45:12 1999  Owen Taylor  <otaylor@redhat.com>
+
+        Fixes from Peter Wainwright <prw@wainpr.demon.co.uk>
+	
+	* gtk/gtkrc.c (gtk_rc_parse_engine): If rc_style->engine is
+	already set, call old engine's destroy function and
+	unref the old engine.
+
 Thu Jun 10 17:59:38 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkdrawingarea.c (gtk_drawing_area_size): queue a resize.
