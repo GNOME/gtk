@@ -474,7 +474,19 @@
 (define-enum GdkFunction
    (copy GDK_COPY)
    (invert GDK_INVERT)
-   (xor GDK_XOR))
+   (xor GDK_XOR)
+   (clear GDK_CLEAR)
+   (and GDK_AND)
+   (and-reverse GDK_AND_REVERSE)
+   (and-invert GDK_AND_INVERT)
+   (noop GDK_NOOP)
+   (or GDK_OR)
+   (equiv GDK_EQUIV)
+   (or-reverse GDK_OR_REVERSE)
+   (copy-invert GDK_COPY_INVERT)
+   (or-invert GDK_OR_INVERT)
+   (nand GDK_NAND)
+   (set GDK_SET))
 
 (define-enum GdkFill
    (solid GDK_SOLID)

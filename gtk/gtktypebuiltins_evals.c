@@ -501,6 +501,18 @@ static GtkEnumValue _gdk_function_values[] = {
   { GDK_COPY, "GDK_COPY", "copy" },
   { GDK_INVERT, "GDK_INVERT", "invert" },
   { GDK_XOR, "GDK_XOR", "xor" },
+  { GDK_CLEAR, "GDK_CLEAR", "clear" },
+  { GDK_AND, "GDK_AND", "and" },
+  { GDK_AND_REVERSE, "GDK_AND_REVERSE", "and-reverse" },
+  { GDK_AND_INVERT, "GDK_AND_INVERT", "and-invert" },
+  { GDK_NOOP, "GDK_NOOP", "noop" },
+  { GDK_OR, "GDK_OR", "or" },
+  { GDK_EQUIV, "GDK_EQUIV", "equiv" },
+  { GDK_OR_REVERSE, "GDK_OR_REVERSE", "or-reverse" },
+  { GDK_COPY_INVERT, "GDK_COPY_INVERT", "copy-invert" },
+  { GDK_OR_INVERT, "GDK_OR_INVERT", "or-invert" },
+  { GDK_NAND, "GDK_NAND", "nand" },
+  { GDK_SET, "GDK_SET", "set" },
   { 0, NULL, NULL }
 };
 static GtkEnumValue _gdk_fill_values[] = {

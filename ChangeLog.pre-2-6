@@ -1,3 +1,9 @@
+Tue Aug 11 20:52:58 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.c (gtk_type_class_init): relookup nodes after
+	external functions have been called. also relookup nodes after
+	this function has been invoked.
+
 Tue Aug 11 15:04:52 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.[ch]: Removed has_cursor, set the cursor

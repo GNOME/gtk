@@ -53,7 +53,7 @@ struct _GtkTypeNode
     node_var = NULL; \
 }
 
-static void  gtk_type_class_init		(GtkTypeNode *node);
+static void  gtk_type_class_init		(GtkType      node_type);
 static guint gtk_type_name_hash			(const char  *key);
 static gint  gtk_type_name_compare		(const char  *a,
 						 const char  *b);
@@ -296,7 +296,11 @@ gtk_type_parent_class (GtkType type)
       if (node)
 	{
 	  if (!node->klass)
-	    gtk_type_class_init (node);
+	    {
+	      type = node->type;
+	      gtk_type_class_init (type);
+	      LOOKUP_TYPE_NODE (node, type);
+	    }
 	  
 	  return node->klass;
 	}
@@ -314,7 +318,11 @@ gtk_type_class (GtkType type)
   g_return_val_if_fail (node != NULL, NULL);
   
   if (!node->klass)
-    gtk_type_class_init (node);
+    {
+      type = node->type;
+      gtk_type_class_init (type);
+      LOOKUP_TYPE_NODE (node, type);
+    }
   
   return node->klass;
 }
@@ -483,8 +491,13 @@ gtk_type_is_a (GtkType type,
 }
 
 static void
-gtk_type_class_init (GtkTypeNode *node)
+gtk_type_class_init (GtkType type)
 {
+  GtkTypeNode *node;
+
+  /* we need to relookup nodes everytime we called an external function */
+  LOOKUP_TYPE_NODE (node, type);
+  
   if (!node->klass && node->type_info.class_size)
     {
       GtkObjectClass *object_class;
@@ -501,7 +514,11 @@ gtk_type_class_init (GtkTypeNode *node)
 	  
 	  LOOKUP_TYPE_NODE (parent, node->parent_type);
 	  if (!parent->klass)
-	    gtk_type_class_init (parent);
+	    {
+	      gtk_type_class_init (parent->type);
+	      LOOKUP_TYPE_NODE (node, type);
+	      LOOKUP_TYPE_NODE (parent, node->parent_type);
+	    }
 	  
 	  if (parent->klass)
 	    memcpy (node->klass, parent->klass, parent->type_info.class_size);
@@ -531,6 +548,7 @@ gtk_type_class_init (GtkTypeNode *node)
 	      
 	      base_class_init = walk->data;
 	      base_class_init (node->klass);
+	      LOOKUP_TYPE_NODE (node, type);
 	    }
 	  g_slist_free (slist);
 	}
