@@ -31,10 +31,7 @@ insert_text_handler (GtkEditable *editable,
                      gpointer     data)
 {
   int i;
-  gchar *result = g_new (gchar, length);
-
-  for (i = 0; i &lt; length; i++)
-    result[i] = islower (text[i]) ? toupper (text[i]) : text[i];
+  gchar *result = g_utf8_strup (text, length);
 
   g_signal_handlers_block_by_func (editable,
 				   (gpointer) insert_text_handler, data);
