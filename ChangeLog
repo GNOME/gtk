@@ -1,3 +1,8 @@
+Thu Jul 31 23:09:02 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_class_init): make show_arrow
+	default to TRUE; ignore the property when api_mode != NEW_API
+
 2003-07-31  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwindow.c (gtk_window_set_default_icon): Rename parameter pixbuf to icon, to 

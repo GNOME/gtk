@@ -380,7 +380,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 				   g_param_spec_boolean ("show_arrow",
 							 _("Show Arrow"),
 							 _("If an arrow should be shown if the toolbar doesn't fit"),
-							 FALSE,
+							 TRUE,
 							 G_PARAM_READWRITE));
 
   /* child properties */
@@ -530,7 +530,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   priv->drag_highlight = NULL;
 
   priv->menu = NULL;
-
+  priv->show_arrow = TRUE;
   priv->settings = NULL;
 }
 
@@ -843,7 +843,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 	pack_front_size += size;
     }
   
-  if (priv->show_arrow)
+  if (priv->show_arrow && priv->api_mode == NEW_API)
     {
       gtk_widget_size_request (priv->arrow_button, &arrow_requisition);
       
@@ -1014,7 +1014,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	needed_size += get_item_size (toolbar, GTK_WIDGET (item));
     }
 
-  need_arrow = (needed_size > available_size) && priv->show_arrow;
+  need_arrow = (needed_size > available_size) && priv->show_arrow && priv->api_mode == NEW_API;
 
   if (need_arrow)
     size = available_size - arrow_size;
