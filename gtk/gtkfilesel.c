@@ -49,22 +49,23 @@
 
 #include "gdk/gdkkeysyms.h"
 #include "gtkbutton.h"
+#include "gtkcellrenderertext.h"
 #include "gtkentry.h"
 #include "gtkfilesel.h"
 #include "gtkhbox.h"
 #include "gtkhbbox.h"
 #include "gtklabel.h"
-#include "gtklist.h"
-#include "gtklistitem.h"
+#include "gtkliststore.h"
 #include "gtkmain.h"
 #include "gtkscrolledwindow.h"
 #include "gtkstock.h"
 #include "gtksignal.h"
+#include "gtktreeselection.h"
+#include "gtktreeview.h"
 #include "gtkvbox.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtkoptionmenu.h"
-#include "gtkclist.h"
 #include "gtkdialog.h"
 #include "gtkmessagedialog.h"
 #include "gtkintl.h"
@@ -233,6 +234,14 @@ enum {
   PROP_FILENAME
 };
 
+enum {
+  DIR_COLUMN
+};
+
+enum {
+  FILE_COLUMN
+};
+
 /* File completion functions which would be external, were they used
  * outside of this file.
  */
@@ -367,17 +376,16 @@ static gint gtk_file_selection_insert_text   (GtkWidget             *widget,
 					      gint                  *position,
 					      gpointer               user_data);
 
-static void gtk_file_selection_file_button (GtkWidget *widget,
-					    gint row, 
-					    gint column, 
-					    GdkEventButton *bevent,
-					    gpointer user_data);
-
-static void gtk_file_selection_dir_button (GtkWidget *widget,
-					   gint row, 
-					   gint column, 
-					   GdkEventButton *bevent,
-					   gpointer data);
+static void gtk_file_selection_file_activate (GtkTreeView       *tree_view,
+					      GtkTreePath       *path,
+					      GtkTreeViewColumn *column,
+					      gpointer           user_data);
+static void gtk_file_selection_file_changed  (GtkTreeSelection  *selection,
+					      gpointer           user_data);
+static void gtk_file_selection_dir_activate  (GtkTreeView       *tree_view,
+					      GtkTreePath       *path,
+					      GtkTreeViewColumn *column,
+					      gpointer           user_data);
 
 static void gtk_file_selection_populate      (GtkFileSelection      *fs,
 					      gchar                 *rel_path,
@@ -599,10 +607,10 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   GtkWidget *scrolled_win;
   GtkWidget *eventbox;
   GtkDialog *dialog;
-  
-  char *dir_title [2];
-  char *file_title [2];
 
+  GtkListStore *model;
+  GtkTreeViewColumn *column;
+  
   gtk_widget_push_composite_child ();
 
   dialog = GTK_DIALOG (filesel);
@@ -639,18 +647,31 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_box_pack_start (GTK_BOX (filesel->main_vbox), list_hbox, TRUE, TRUE, 0);
   gtk_widget_show (list_hbox);
 
-  /* The directories clist */
-  dir_title[0] = _("Directories");
-  dir_title[1] = NULL;
-  filesel->dir_list = gtk_clist_new_with_titles (1, (gchar**) dir_title);
+  /* The directories list */
+
+  model = gtk_list_store_new (1, G_TYPE_STRING);
+  filesel->dir_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
+  g_object_unref (model);
+
+  column = gtk_tree_view_column_new_with_attributes (_("Directories"),
+						     gtk_cell_renderer_text_new (),
+						     "text", DIR_COLUMN,
+						     NULL);
+  label = gtk_label_new_with_mnemonic (_("_Directories"));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), filesel->dir_list);
+  gtk_widget_show (label);
+  gtk_tree_view_column_set_widget (column, label);
+  gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (filesel->dir_list), column);
+
   gtk_widget_set_usize (filesel->dir_list, DIR_LIST_WIDTH, DIR_LIST_HEIGHT);
-  gtk_signal_connect (GTK_OBJECT (filesel->dir_list), "select_row",
-		      (GtkSignalFunc) gtk_file_selection_dir_button, 
-		      (gpointer) filesel);
-  gtk_clist_set_column_auto_resize (GTK_CLIST (filesel->dir_list), 0, TRUE);
-  gtk_clist_column_titles_passive (GTK_CLIST (filesel->dir_list));
+  g_signal_connect (filesel->dir_list, "row_activated",
+		    G_CALLBACK (gtk_file_selection_dir_activate), filesel);
+
+  /*  gtk_clist_column_titles_passive (GTK_CLIST (filesel->dir_list)); */
 
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_win), GTK_SHADOW_IN);  
   gtk_container_add (GTK_CONTAINER (scrolled_win), filesel->dir_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
@@ -659,18 +680,32 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_show (filesel->dir_list);
   gtk_widget_show (scrolled_win);
 
-  /* The files clist */
-  file_title[0] = _("Files");
-  file_title[1] = NULL;
-  filesel->file_list = gtk_clist_new_with_titles (1, (gchar**) file_title);
+  /* The files list */
+  model = gtk_list_store_new (1, G_TYPE_STRING);
+  filesel->file_list = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
+  g_object_unref (model);
+
+  column = gtk_tree_view_column_new_with_attributes (_("Files"),
+						     gtk_cell_renderer_text_new (),
+						     "text", FILE_COLUMN,
+						     NULL);
+  label = gtk_label_new_with_mnemonic (_("_Files"));
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), filesel->file_list);
+  gtk_widget_show (label);
+  gtk_tree_view_column_set_widget (column, label);
+  gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (filesel->file_list), column);
+
   gtk_widget_set_usize (filesel->file_list, FILE_LIST_WIDTH, FILE_LIST_HEIGHT);
-  gtk_signal_connect (GTK_OBJECT (filesel->file_list), "select_row",
-		      (GtkSignalFunc) gtk_file_selection_file_button, 
-		      (gpointer) filesel);
-  gtk_clist_set_column_auto_resize (GTK_CLIST (filesel->file_list), 0, TRUE);
-  gtk_clist_column_titles_passive (GTK_CLIST (filesel->file_list));
+  g_signal_connect (filesel->file_list, "row_activated",
+		    G_CALLBACK (gtk_file_selection_file_activate), filesel);
+  g_signal_connect (gtk_tree_view_get_selection (GTK_TREE_VIEW (filesel->file_list)), "changed",
+		    G_CALLBACK (gtk_file_selection_file_changed), filesel);
+
+  /* gtk_clist_column_titles_passive (GTK_CLIST (filesel->file_list)); */
 
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_win), GTK_SHADOW_IN);
   gtk_container_add (GTK_CONTAINER (scrolled_win), filesel->file_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
@@ -984,7 +1019,7 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
   /* delete, create directory, and rename */
   if (!filesel->fileop_c_dir) 
     {
-      filesel->fileop_c_dir = gtk_button_new_with_label (_("Create Dir"));
+      filesel->fileop_c_dir = gtk_button_new_with_mnemonic (_("Crea_te Dir"));
       gtk_signal_connect (GTK_OBJECT (filesel->fileop_c_dir), "clicked",
 			  (GtkSignalFunc) gtk_file_selection_create_dir, 
 			  (gpointer) filesel);
@@ -995,7 +1030,7 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
 	
   if (!filesel->fileop_del_file) 
     {
-      filesel->fileop_del_file = gtk_button_new_with_label (_("Delete File"));
+      filesel->fileop_del_file = gtk_button_new_with_mnemonic (_("De_lete File"));
       gtk_signal_connect (GTK_OBJECT (filesel->fileop_del_file), "clicked",
 			  (GtkSignalFunc) gtk_file_selection_delete_file, 
 			  (gpointer) filesel);
@@ -1006,7 +1041,7 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
 
   if (!filesel->fileop_ren_file)
     {
-      filesel->fileop_ren_file = gtk_button_new_with_label (_("Rename File"));
+      filesel->fileop_ren_file = gtk_button_new_with_mnemonic (_("_Rename File"));
       gtk_signal_connect (GTK_OBJECT (filesel->fileop_ren_file), "clicked",
 			  (GtkSignalFunc) gtk_file_selection_rename_file, 
 			  (gpointer) filesel);
@@ -1210,7 +1245,7 @@ gtk_file_selection_fileop_error (GtkFileSelection *fs,
   g_free (error_message);
 
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-
+ 
   gtk_signal_connect_object (GTK_OBJECT (dialog), "response",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);
@@ -1301,6 +1336,7 @@ gtk_file_selection_create_dir (GtkWidget *widget,
 		      (gpointer) fs);
   gtk_window_set_title (GTK_WINDOW (dialog), _("Create Directory"));
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (fs));
 
   /* If file dialog is grabbed, grab option dialog */
   /* When option dialog is closed, file dialog will be grabbed again */
@@ -1435,6 +1471,7 @@ gtk_file_selection_delete_file (GtkWidget *widget,
 		      (gpointer) fs);
   gtk_window_set_title (GTK_WINDOW (dialog), _("Delete File"));
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (fs));
 
   /* If file dialog is grabbed, grab option dialog */
   /* When option dialog is closed, file dialog will be grabbed again */
@@ -1581,6 +1618,7 @@ gtk_file_selection_rename_file (GtkWidget *widget,
 		      (gpointer) fs);
   gtk_window_set_title (GTK_WINDOW (dialog), _("Rename File"));
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (fs));
 
   /* If file dialog is grabbed, grab option dialog */
   /* When option dialog  closed, file dialog will be grabbed again */
@@ -1670,9 +1708,8 @@ gtk_file_selection_key_press (GtkWidget   *widget,
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  if (event->keyval == GDK_Tab ||
-      event->keyval == GDK_ISO_Left_Tab ||
-      event->keyval == GDK_KP_Tab)
+  if ((event->keyval == GDK_Tab || event->keyval == GDK_KP_Tab) &&
+      (event->state & gtk_accelerator_get_default_mod_mask ()) == 0)
     {
       fs = GTK_FILE_SELECTION (user_data);
 #ifdef G_WITH_CYGWIN
@@ -1796,24 +1833,9 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
   g_free (current_dir);
 }
 
-static void
-gtk_file_selection_file_button (GtkWidget      *widget,
-				gint            row, 
-				gint            column, 
-				GdkEventButton *bevent,
-				gpointer        user_data)
+static gchar *
+get_real_filename (gchar *filename)
 {
-  GtkFileSelection *fs = NULL;
-  gchar *filename, *temp = NULL;
-  
-  g_return_if_fail (GTK_IS_CLIST (widget));
-
-  fs = user_data;
-  g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
-  
-  gtk_clist_get_text (GTK_CLIST (fs->file_list), row, 0, &temp);
-  filename = g_strdup (temp);
-
 #ifdef G_WITH_CYGWIN
   /* Check to see if the selection was a drive selector */
   if (isalpha (filename[0]) && (filename[1] == ':'))
@@ -1821,62 +1843,82 @@ gtk_file_selection_file_button (GtkWidget      *widget,
       /* It is... map it to a CYGWIN32 drive */
       gchar *temp_filename = g_strdup_printf ("//%c/", tolower (filename[0]));
       g_free(filename);
-      filename = temp_filename;
+      return temp_filename;
     }
+#else
+  return filename;
 #endif /* G_WITH_CYGWIN */
+}
 
-  if (filename)
+static void
+gtk_file_selection_file_activate (GtkTreeView       *tree_view,
+				  GtkTreePath       *path,
+				  GtkTreeViewColumn *column,
+				  gpointer           user_data)
+{
+  GtkFileSelection *fs = GTK_FILE_SELECTION (user_data);
+  GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
+  GtkTreeIter iter;  
+  gchar *filename;
+  
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get (model, &iter, FILE_COLUMN, &filename, -1);
+  filename = get_real_filename (filename);
+
+  gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+  gtk_button_clicked (GTK_BUTTON (fs->ok_button));
+
+  g_free (filename);
+}
+
+static void
+gtk_file_selection_file_changed (GtkTreeSelection *selection,
+				 gpointer          user_data)
+{
+  GtkFileSelection *fs = GTK_FILE_SELECTION (user_data);
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  
+  if (gtk_tree_selection_get_selected (selection, &model, &iter))
     {
-      if (bevent)
-	switch (bevent->type)
-	  {
-	  case GDK_2BUTTON_PRESS:
-	    gtk_button_clicked (GTK_BUTTON (fs->ok_button));
-	    break;
-	    
-	  default:
-	    gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
-	    break;
-	  }
-      else
-	gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+      gchar *filename;
+      
+      gtk_tree_model_get (model, &iter, FILE_COLUMN, &filename, -1);
+      filename = get_real_filename (filename);
+
+      gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
 
       g_free (filename);
     }
 }
 
 static void
-gtk_file_selection_dir_button (GtkWidget      *widget,
-			       gint            row, 
-			       gint            column, 
-			       GdkEventButton *bevent,
-			       gpointer        user_data)
+gtk_file_selection_dir_activate (GtkTreeView       *tree_view,
+				 GtkTreePath       *path,
+				 GtkTreeViewColumn *column,
+				 gpointer           user_data)
 {
-  GtkFileSelection *fs = NULL;
-  gchar *filename = NULL;
+  GtkFileSelection *fs = GTK_FILE_SELECTION (user_data);
+  GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
+  GtkTreeIter iter;
+  gchar *filename;
 
-  g_return_if_fail (GTK_IS_CLIST (widget));
-
-  fs = GTK_FILE_SELECTION (user_data);
-  g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
-
-  gtk_clist_get_text (GTK_CLIST (fs->dir_list), row, 0, &filename);
-
-  if (filename && bevent && bevent->type == GDK_2BUTTON_PRESS)
-    gtk_file_selection_populate (fs, filename, FALSE, FALSE);
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get (model, &iter, DIR_COLUMN, &filename, -1);
+  gtk_file_selection_populate (fs, filename, FALSE, FALSE);
+  g_free (filename);
 }
 
 #if defined(G_OS_WIN32) || defined(G_WITH_CYGWIN)
 
 static void
-win32_gtk_add_drives_to_dir_list (GtkWidget *the_dir_list)
+win32_gtk_add_drives_to_dir_list (GtkListStore *model)
 {
-  gchar *text[2], *textPtr;
+  gchar *textPtr;
   gchar buffer[128];
   char volumeNameBuf[128];
   char formatBuffer[128];
-
-  text[1] = NULL;
+  GtkTreeIter iter;
 
   /* Get the Drives string */
   GetLogicalDriveStrings (sizeof (buffer), buffer);
@@ -1902,8 +1944,8 @@ win32_gtk_add_drives_to_dir_list (GtkWidget *the_dir_list)
 	  sprintf (formatBuffer, "%s (%s)", formatBuffer, volumeNameBuf);
 #endif
 	/* Add to the list */
-	text[0] = formatBuffer;
-	gtk_clist_append (GTK_CLIST (the_dir_list), text);
+	gtk_list_store_append (model, &iter);
+	gtk_list_store_set (model, &iter, DIR_COLUMN, formatBuffer, -1);
       }
     textPtr += (strlen (textPtr) + 1);
   }
@@ -1918,16 +1960,18 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 {
   CompletionState *cmpl_state;
   PossibleCompletion* poss;
+  GtkTreeIter iter;
+  GtkListStore *dir_model;
+  GtkListStore *file_model;
   gchar* filename;
   gchar* rem_path = rel_path;
   gchar* sel_text;
-  gchar* text[2];
   gint did_recurse = FALSE;
   gint possible_count = 0;
   gint selection_index = -1;
   
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
-  
+
   cmpl_state = (CompletionState*) fs->cmpl_state;
   poss = cmpl_completion_matches (rel_path, &rem_path, cmpl_state);
 
@@ -1940,18 +1984,17 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 
   g_assert (cmpl_state->reference_dir);
 
-  gtk_clist_freeze (GTK_CLIST (fs->dir_list));
-  gtk_clist_clear (GTK_CLIST (fs->dir_list));
-  gtk_clist_freeze (GTK_CLIST (fs->file_list));
-  gtk_clist_clear (GTK_CLIST (fs->file_list));
+  dir_model = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (fs->dir_list)));
+  file_model = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (fs->file_list)));
 
-  /* Set the dir_list to include ./ and ../ */
-  text[1] = NULL;
-  text[0] = "." G_DIR_SEPARATOR_S;
-  gtk_clist_append (GTK_CLIST (fs->dir_list), text);
+  gtk_list_store_clear (dir_model);
+  gtk_list_store_clear (file_model);
 
-  text[0] = ".." G_DIR_SEPARATOR_S;
-  gtk_clist_append (GTK_CLIST (fs->dir_list), text);
+  /* Set the dir list to include ./ and ../ */
+  gtk_list_store_append (dir_model, &iter);
+  gtk_list_store_set (dir_model, &iter, DIR_COLUMN, "." G_DIR_SEPARATOR_S, -1);
+  gtk_list_store_append (dir_model, &iter);
+  gtk_list_store_set (dir_model, &iter, DIR_COLUMN, ".." G_DIR_SEPARATOR_S, -1);
 
   while (poss)
     {
@@ -1961,17 +2004,19 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 
           filename = cmpl_this_completion (poss);
 
-	  text[0] = filename;
-	  
           if (cmpl_is_directory (poss))
             {
               if (strcmp (filename, "." G_DIR_SEPARATOR_S) != 0 &&
                   strcmp (filename, ".." G_DIR_SEPARATOR_S) != 0)
-		gtk_clist_append (GTK_CLIST (fs->dir_list), text);
+		{
+		  gtk_list_store_append (dir_model, &iter);
+		  gtk_list_store_set (dir_model, &iter, DIR_COLUMN, filename, -1);
+		}
 	    }
           else
 	    {
-	      gtk_clist_append (GTK_CLIST (fs->file_list), text);
+	      gtk_list_store_append (file_model, &iter);
+	      gtk_list_store_set (file_model, &iter, DIR_COLUMN, filename, -1);
             }
 	}
 
@@ -1980,11 +2025,8 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 
 #if defined(G_OS_WIN32) || defined(G_WITH_CYGWIN)
   /* For Windows, add drives as potential selections */
-  win32_gtk_add_drives_to_dir_list (fs->dir_list);
+  win32_gtk_add_drives_to_dir_list (dir_model);
 #endif
-
-  gtk_clist_thaw (GTK_CLIST (fs->dir_list));
-  gtk_clist_thaw (GTK_CLIST (fs->file_list));
 
   /* File lists are set. */
 

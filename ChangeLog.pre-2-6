@@ -1,3 +1,21 @@
+Tue Jan 29 15:24:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfontsel.[ch]: Switch over to GtkTreeView from
+	GtkCList. Remove the entries above the font/face lists 
+	since they were a little confusing. (Not sure about this 
+	change, so the code is still there the entries are
+	just hidden.) (#68890)
+
+	* gtk/gtkfilesel.c: Switch over to GtkTreeView from
+	GtkCList. Add mnemonics for fileops. Allow Control/Shift
+	Tab to focus out.
+
+	* gtk/gtkfilesel.c: Make fileop dialogs transient-for
+	the fileselector. (#69336, patch from Melvin Hadasht)
+
+	* gtk/gtkgamma.c (button_clicked_callback): Fix handling
+	of gamma dialog a bit. (#69336, Matthias Clasen.)
+
 Tue Jan 29 14:56:28 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksocket.c (toplevel_focus_out_handler): Return boolean

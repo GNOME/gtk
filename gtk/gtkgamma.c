@@ -353,7 +353,6 @@ gamma_cancel_callback (GtkWidget *w, gpointer data)
   GtkGammaCurve *c = data;
 
   gtk_widget_destroy (c->gamma_dialog);
-  c->gamma_dialog = 0;
 }
 
 static void
@@ -394,6 +393,9 @@ button_clicked_callback (GtkWidget *w, gpointer data)
 	  
 	  c->gamma_dialog = gtk_dialog_new ();
 	  gtk_window_set_title (GTK_WINDOW (c->gamma_dialog), _("Gamma"));
+	  g_object_add_weak_pointer (G_OBJECT (c->gamma_dialog),
+				     (gpointer *)&c->gamma_dialog);
+	  
 	  vbox = GTK_DIALOG (c->gamma_dialog)->vbox;
 	  
 	  hbox = gtk_hbox_new (/* homogeneous */ FALSE, 0);
