@@ -1,5 +1,4 @@
 #include <gtk/gtk.h>
-#include "gdk-pixbuf.h"
 
 #include <stdio.h>
 

@@ -1,7 +1,6 @@
 #include <config.h>
 #include <gtk/gtk.h>
-#include "x11/gdkx.h"
-#include "gdk-pixbuf.h"
+#include <gdk/x11/gdkx.h>
 
 int close_app(GtkWidget *widget, gpointer data)
 {
