@@ -15,7 +15,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:202
 msgid "Hue:"
-msgstr "Тон"
+msgstr "Тон:"
 
 #: gtk/gtkcolorsel.c:203
 msgid "Saturation:"
@@ -128,7 +128,7 @@ msgstr "Выбор: "
 
 #: gtk/gtkfontsel.c:203
 msgid "Foundry:"
-msgstr "Коллекция"
+msgstr "Коллекция:"
 
 #: gtk/gtkfontsel.c:204
 msgid "Family:"
@@ -136,27 +136,27 @@ msgstr "Семейство:"
 
 #: gtk/gtkfontsel.c:205
 msgid "Weight:"
-msgstr "Насыщенность"
+msgstr "Насыщенность:"
 
 #: gtk/gtkfontsel.c:206
 msgid "Slant:"
-msgstr "Наклон"
+msgstr "Наклон:"
 
 #: gtk/gtkfontsel.c:207
 msgid "Set Width:"
-msgstr "Задать ширину:"
+msgstr "Ширина:"
 
 #: gtk/gtkfontsel.c:208
 msgid "Add Style:"
-msgstr "Добавить стиль:"
+msgstr "Дополнительный стиль:"
 
 #: gtk/gtkfontsel.c:209
 msgid "Pixel Size:"
-msgstr "Размер в пикселах"
+msgstr "Размер в пикселах:"
 
 #: gtk/gtkfontsel.c:210
 msgid "Point Size:"
-msgstr "Поточечный размер"
+msgstr "Поточечный размер:"
 
 #: gtk/gtkfontsel.c:211
 msgid "Resolution X:"
@@ -168,7 +168,7 @@ msgstr "Разрешение по Y:"
 
 #: gtk/gtkfontsel.c:213
 msgid "Spacing:"
-msgstr "Пропорциональность"
+msgstr "Пропорциональность:"
 
 #: gtk/gtkfontsel.c:214
 msgid "Average Width:"
@@ -176,7 +176,7 @@ msgstr "Средняя ширина:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Charset:"
-msgstr "Кодировка"
+msgstr "Кодировка:"
 
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
