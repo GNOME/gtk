@@ -1,3 +1,8 @@
+2002-08-01  Sven Neumann  <sven@gimp.org>
+
+	* gdk/gdkrgb.c: trivial changes to some debug code so it compiles
+	with VERBOSE being defined.
+
 Wed Jul 31 16:42:03 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* Released 2.0.6
