@@ -370,7 +370,7 @@ static void DecodeHeader(guchar *Data, gint Bytes,
         else if (State->Type == 24)
 		State->LineWidth = State->Header.width * 3;
         else if (State->Type == 16)
-                State->LineWidth = State->Header.height * 2;
+                State->LineWidth = State->Header.width * 2;
         else if (State->Type == 8)
 		State->LineWidth = State->Header.width * 1;
         else if (State->Type == 4)
