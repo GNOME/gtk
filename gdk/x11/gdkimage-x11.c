@@ -652,6 +652,8 @@ _gdk_x11_copy_to_image (GdkDrawable    *drawable,
 	}
     }
 
+  gdk_error_trap_pop ();
+
  out:
   
   if (have_grab)
@@ -660,8 +662,6 @@ _gdk_x11_copy_to_image (GdkDrawable    *drawable,
       have_grab = FALSE;
     }
   
-  gdk_error_trap_pop ();
-
   if (success && !image)
     {
       /* We "succeeded", but could get no content for the image so return junk */
