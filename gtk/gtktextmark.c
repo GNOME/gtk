@@ -213,6 +213,26 @@ gtk_text_mark_get_buffer (GtkTextMark *mark)
     return _gtk_text_btree_get_buffer (seg->body.mark.tree);
 }
 
+/**
+ * gtk_text_mark_get_left_gravity:
+ * @mark: a #GtkTextMark
+ * 
+ * 
+ * 
+ * Return value: %TRUE if the mark has left gravity, %FALSE otherwise
+ **/
+gboolean
+gtk_text_mark_get_left_gravity (GtkTextMark *mark)
+{
+  GtkTextLineSegment *seg;
+
+  g_return_val_if_fail (GTK_IS_TEXT_MARK (mark), FALSE);
+  
+  seg = mark->segment;
+
+  return seg->type == &gtk_text_left_mark_type;
+}
+
 /*
  * Macro that determines the size of a mark segment:
  */

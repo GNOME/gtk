@@ -56,8 +56,9 @@ typedef enum
 typedef struct _GtkTextView GtkTextView;
 typedef struct _GtkTextViewClass GtkTextViewClass;
 
-/* Internal private type. */
+/* Internal private types. */
 typedef struct _GtkTextWindow GtkTextWindow;
+typedef struct _GtkTextPendingScroll GtkTextPendingScroll;
 
 struct _GtkTextView
 {
@@ -88,6 +89,11 @@ struct _GtkTextView
   guint  need_im_reset : 1;	/* If we have reset the IM since the last character entered */
   /* just selected a word or line via double/triple click */
   guint just_selected_element : 1;
+  
+  /* debug flag - means that we've validated onscreen since the
+   * last "invalidate" signal from the layout
+   */
+  guint onscreen_validated : 1;
   
   GtkTextWindow *text_window;
   GtkTextWindow *left_window;
@@ -132,6 +138,8 @@ struct _GtkTextView
   gint drag_start_y;
 
   GSList *children;
+
+  GtkTextPendingScroll *pending_scroll;
 };
 
 struct _GtkTextViewClass
@@ -172,13 +180,19 @@ GtkWidget *    gtk_text_view_new_with_buffer       (GtkTextBuffer *buffer);
 void           gtk_text_view_set_buffer            (GtkTextView   *text_view,
                                                     GtkTextBuffer *buffer);
 GtkTextBuffer *gtk_text_view_get_buffer            (GtkTextView   *text_view);
-gboolean       gtk_text_view_scroll_to_mark        (GtkTextView   *text_view,
+gboolean       gtk_text_view_scroll_to_iter        (GtkTextView   *text_view,
+                                                    GtkTextIter   *iter,
+                                                    gdouble        within_margin,
+                                                    gboolean       use_align,
+                                                    gdouble        xalign,
+                                                    gdouble        yalign);
+void           gtk_text_view_scroll_to_mark        (GtkTextView   *text_view,
                                                     GtkTextMark   *mark,
                                                     gdouble        within_margin,
                                                     gboolean       use_align,
                                                     gdouble        xalign,
                                                     gdouble        yalign);
-gboolean       gtk_text_view_scroll_mark_onscreen  (GtkTextView   *text_view,
+void           gtk_text_view_scroll_mark_onscreen  (GtkTextView   *text_view,
                                                     GtkTextMark   *mark);
 gboolean       gtk_text_view_move_mark_onscreen    (GtkTextView   *text_view,
                                                     GtkTextMark   *mark);

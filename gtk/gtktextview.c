@@ -40,12 +40,64 @@
 #include "gdk/gdkkeysyms.h"
 #include <string.h>
 
+/* How scrolling, validation, exposes, etc. work.
+ *
+ * The expose_event handler has the invariant that the onscreen lines
+ * have been validated.
+ *
+ * There are two ways that onscreen lines can become invalid. The first
+ * is to change which lines are onscreen. This happens when the value
+ * of a scroll adjustment changes. So the code path begins in
+ * gtk_text_view_value_changed() and goes like this:
+ *   - gdk_window_scroll() to reflect the new adjustment value
+ *   - validate the lines that were moved onscreen
+ *   - gdk_window_process_updates() to handle the exposes immediately
+ *
+ * The second way is that you get the "invalidated" signal from the layout,
+ * indicating that lines have become invalid. This code path begins in
+ * invalidated_handler() and goes like this:
+ *   - install high-priority idle which does the rest of the steps
+ *   - if a scroll is pending from scroll_to_mark(), do the scroll,
+ *     jumping to the gtk_text_view_value_changed() code path
+ *   - otherwise, validate the onscreen lines
+ *   - DO NOT process updates
+ *
+ * In both cases, validating the onscreen lines can trigger a scroll
+ * due to maintaining the first_para on the top of the screen.
+ * If validation triggers a scroll, we jump to the top of the code path
+ * for value_changed, and bail out of the current code path.
+ *
+ * Also, in size_allocate, if we invalidate some lines from changing
+ * the layout width, we need to go ahead and run the high-priority idle,
+ * because GTK sends exposes right after doing the size allocates without
+ * returning to the main loop. This is also why the high-priority idle
+ * is at a higher priority than resizing.
+ *
+ */
+
 #define FOCUS_EDGE_WIDTH 1
 #define DRAG_THRESHOLD 8
 
 #define SCREEN_WIDTH(widget) text_window_get_width (GTK_TEXT_VIEW (widget)->text_window)
 #define SCREEN_HEIGHT(widget) text_window_get_height (GTK_TEXT_VIEW (widget)->text_window)
 
+/* #define DEBUG_VALIDATION_AND_SCROLLING */
+
+#ifdef DEBUG_VALIDATION_AND_SCROLLING
+#define DV(x) (x)
+#else
+#define DV(x)
+#endif
+
+struct _GtkTextPendingScroll
+{
+  GtkTextMark   *mark;
+  gdouble        within_margin;
+  gboolean       use_align;
+  gdouble        xalign;
+  gdouble        yalign;
+};
+  
 enum
 {
   MOVE_CURSOR,
@@ -178,7 +230,7 @@ static void gtk_text_view_unselect         (GtkTextView           *text_view);
 static void     gtk_text_view_validate_onscreen     (GtkTextView        *text_view);
 static void     gtk_text_view_get_first_para_iter   (GtkTextView        *text_view,
                                                      GtkTextIter        *iter);
-static void     gtk_text_view_scroll_calc_now       (GtkTextView        *text_view);
+static void     gtk_text_view_update_layout_width       (GtkTextView        *text_view);
 static void     gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
                                                          GtkTextAttributes *values,
                                                          GtkStyle           *style);
@@ -221,6 +273,15 @@ static GtkAdjustment* get_vadjustment            (GtkTextView       *text_view);
 
 static void gtk_text_view_popup_menu             (GtkTextView       *text_view,
 						  GdkEventButton    *event);
+
+static void gtk_text_view_queue_scroll           (GtkTextView   *text_view,
+                                                  GtkTextMark   *mark,
+                                                  gdouble        within_margin,
+                                                  gboolean       use_align,
+                                                  gdouble        xalign,
+                                                  gdouble        yalign);
+
+static gboolean gtk_text_view_flush_scroll       (GtkTextView *text_view);
 
 /* Container methods */
 static void gtk_text_view_add    (GtkContainer *container,
@@ -994,7 +1055,7 @@ gtk_text_view_get_line_at_y (GtkTextView *text_view,
                                  line_top);
 }
 
-static void
+static gboolean
 set_adjustment_clamped (GtkAdjustment *adj, gfloat val)
 {
   /* We don't really want to clamp to upper; we want to clamp to
@@ -1006,159 +1067,47 @@ set_adjustment_clamped (GtkAdjustment *adj, gfloat val)
   if (val < adj->lower)
     val = adj->lower;
 
-  gtk_adjustment_set_value (adj, val);
-}
-
-static gboolean
-gtk_text_view_scroll_to_mark_adjusted (GtkTextView *text_view,
-                                       GtkTextMark *mark,
-                                       gint margin,
-                                       gfloat percentage)
-{
-  GtkTextIter iter;
-  GdkRectangle rect;
-  GdkRectangle screen;
-  gint screen_bottom;
-  gint screen_right;
-  GtkWidget *widget;
-  gboolean retval = FALSE;
-  gint scroll_inc;
-
-  gint current_x_scroll, current_y_scroll;
-
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
-  g_return_val_if_fail (mark != NULL, FALSE);
-
-  widget = GTK_WIDGET (text_view);
-
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (val != adj->value)
     {
-      g_warning ("FIXME need to implement scroll_to_mark for unmapped GtkTextView?");
-      return FALSE;
+      gtk_adjustment_set_value (adj, val);
+      return TRUE;
     }
-
-  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, mark);
-
-  gtk_text_layout_get_iter_location (text_view->layout,
-                                     &iter,
-                                     &rect);
-
-  /* Be sure the scroll region is up-to-date */
-  gtk_text_view_scroll_calc_now (text_view);
-
-  current_x_scroll = text_view->xoffset;
-  current_y_scroll = text_view->yoffset;
-
-  screen.x = current_x_scroll;
-  screen.y = current_y_scroll;
-  screen.width = SCREEN_WIDTH (widget);
-  screen.height = SCREEN_HEIGHT (widget);
-
-  {
-    /* Clamp margin so it's not too large. */
-    gint small_dimension = MIN (screen.width, screen.height);
-    gint max_rect_dim;
-
-    if (margin > (small_dimension/2 - 5)) /* 5 is arbitrary */
-      margin = (small_dimension/2 - 5);
-
-    if (margin < 0)
-      margin = 0;
-
-    /* make sure rectangle fits in the leftover space */
-
-    max_rect_dim = MAX (rect.width, rect.height);
-
-    if (max_rect_dim > (small_dimension - margin*2))
-      margin -= max_rect_dim - (small_dimension - margin*2);
-
-    if (margin < 0)
-      margin = 0;
-  }
-
-  g_assert (margin >= 0);
-
-  screen.x += margin;
-  screen.y += margin;
-
-  screen.width -= margin*2;
-  screen.height -= margin*2;
-
-  screen_bottom = screen.y + screen.height;
-  screen_right = screen.x + screen.width;
-
-  /* Vertical scroll (only vertical gets adjusted) */
-
-  scroll_inc = 0;
-  if (rect.y < screen.y)
-    {
-      gint scroll_dest = rect.y;
-      scroll_inc = (scroll_dest - screen.y) * percentage;
-    }
-  else if ((rect.y + rect.height) > screen_bottom)
-    {
-      gint scroll_dest = rect.y + rect.height;
-      scroll_inc = (scroll_dest - screen_bottom) * percentage;
-    }
-
-  if (scroll_inc != 0)
-    {
-      set_adjustment_clamped (get_vadjustment (text_view),
-                              current_y_scroll + scroll_inc);
-      retval = TRUE;
-    }
-
-  /* Horizontal scroll */
-
-  scroll_inc = 0;
-  if (rect.x < screen.x)
-    {
-      gint scroll_dest = rect.x;
-      scroll_inc = scroll_dest - screen.x;
-    }
-  else if ((rect.x + rect.width) > screen_right)
-    {
-      gint scroll_dest = rect.x + rect.width;
-      scroll_inc = scroll_dest - screen_right;
-    }
-
-  if (scroll_inc != 0)
-    {
-      set_adjustment_clamped (get_hadjustment (text_view),
-                              current_x_scroll + scroll_inc);
-      retval = TRUE;
-    }
-
-  return retval;
+  else
+    return FALSE;
 }
 
 /**
- * gtk_text_view_scroll_to_mark:
+ * gtk_text_view_scroll_to_iter:
  * @text_view: a #GtkTextView
- * @mark: a #GtkTextMark
+ * @iter: a #GtkTextIter
  * @within_margin: margin as a [0.0,0.5) fraction of screen size
  * @use_align: whether to use alignment arguments (if %FALSE, just get the mark onscreen)
  * @xalign: horizontal alignment of mark within visible area.
  * @yalign: vertical alignment of mark within visible area
  *
- * Scrolls @text_view so that @mark is on the screen in the position
+ * Scrolls @text_view so that @iter is on the screen in the position
  * indicated by @xalign and @yalign. An alignment of 0.0 indicates
  * left or top, 1.0 indicates right or bottom, 0.5 means center. If @use_align
  * is %FALSE, the text scrolls the minimal distance to get the mark onscreen,
  * possibly not scrolling at all. The effective screen for purposes
  * of this function is reduced by a margin of size @within_margin.
+ * NOTE: This function uses the currently-computed height of the
+ * lines in the text buffer. Note that line heights are computed
+ * in an idle handler; so this function may not have the desired effect
+ * if it's called before the height computations. To avoid oddness,
+ * consider using gtk_text_view_scroll_to_mark() which saves a point
+ * to be scrolled to after line validation.
  *
  * Return value: %TRUE if scrolling occurred
  **/
 gboolean
-gtk_text_view_scroll_to_mark (GtkTextView *text_view,
-                              GtkTextMark *mark,
-                              gdouble      within_margin,
-                              gboolean     use_align,
-                              gdouble      xalign,
-                              gdouble      yalign)
+gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
+                              GtkTextIter   *iter,
+                              gdouble        within_margin,
+                              gboolean       use_align,
+                              gdouble        xalign,
+                              gdouble        yalign)
 {
-  GtkTextIter iter;
   GdkRectangle rect;
   GdkRectangle screen;
   gint screen_bottom;
@@ -1169,29 +1118,26 @@ gtk_text_view_scroll_to_mark (GtkTextView *text_view,
   gint scroll_inc;
   gint screen_xoffset, screen_yoffset;
   gint current_x_scroll, current_y_scroll;
-
+  
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
-  g_return_val_if_fail (GTK_IS_TEXT_MARK (mark), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (within_margin >= 0.0 && within_margin < 0.5, FALSE);
   g_return_val_if_fail (xalign >= 0.0 && xalign <= 1.0, FALSE);
   g_return_val_if_fail (yalign >= 0.0 && yalign <= 1.0, FALSE);
   
   widget = GTK_WIDGET (text_view);
 
+  DV(g_print(G_STRLOC"\n"));
+  
   if (!GTK_WIDGET_MAPPED (widget))
     {
-      g_warning ("FIXME need to implement scroll_to_mark for unmapped GtkTextView?");
+      g_warning ("%s: calling this function before mapping the GtkTextView doesn't make sense, maybe try gtk_text_view_scroll_to_mark() instead", G_STRLOC);
       return FALSE;
     }
-
-  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, mark);
-
+  
   gtk_text_layout_get_iter_location (text_view->layout,
-                                     &iter,
+                                     iter,
                                      &rect);
-
-  /* Be sure the scroll region is up-to-date */
-  gtk_text_view_scroll_calc_now (text_view);
 
   current_x_scroll = text_view->xoffset;
   current_y_scroll = text_view->yoffset;
@@ -1257,9 +1203,8 @@ gtk_text_view_scroll_to_mark (GtkTextView *text_view,
   
   if (scroll_inc != 0)
     {
-      set_adjustment_clamped (get_vadjustment (text_view),
-                              current_y_scroll + scroll_inc);
-      retval = TRUE;
+      retval = set_adjustment_clamped (get_vadjustment (text_view),
+                                       current_y_scroll + scroll_inc);
     }
 
   /* Horizontal scroll */
@@ -1293,22 +1238,242 @@ gtk_text_view_scroll_to_mark (GtkTextView *text_view,
   
   if (scroll_inc != 0)
     {
-      set_adjustment_clamped (get_hadjustment (text_view),
-                              current_x_scroll + scroll_inc);
-      retval = TRUE;
+      retval = set_adjustment_clamped (get_hadjustment (text_view),
+                                       current_x_scroll + scroll_inc);
     }
+
+  if (retval)
+    DV(g_print (">Actually scrolled ("G_STRLOC")\n"));
+  else
+    DV(g_print (">Didn't end up scrolling ("G_STRLOC")\n"));
+  
+  return retval;
+}
+
+static void
+free_pending_scroll (GtkTextPendingScroll *scroll)
+{
+  if (!gtk_text_mark_get_deleted (scroll->mark))
+    gtk_text_buffer_delete_mark (gtk_text_mark_get_buffer (scroll->mark),
+                                 scroll->mark);
+  g_object_unref (G_OBJECT (scroll->mark));
+  g_free (scroll);
+}
+
+static void
+gtk_text_view_queue_scroll (GtkTextView   *text_view,
+                            GtkTextMark   *mark,
+                            gdouble        within_margin,
+                            gboolean       use_align,
+                            gdouble        xalign,
+                            gdouble        yalign)
+{
+  GtkTextIter iter;
+  GtkTextPendingScroll *scroll;
+
+  DV(g_print(G_STRLOC"\n"));
+  
+  scroll = g_new (GtkTextPendingScroll, 1);
+
+  scroll->within_margin = within_margin;
+  scroll->use_align = use_align;
+  scroll->xalign = xalign;
+  scroll->yalign = yalign;
+  
+  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, mark);
+
+  scroll->mark = gtk_text_buffer_create_mark (get_buffer (text_view),
+                                              NULL,
+                                              &iter,
+                                              gtk_text_mark_get_left_gravity (mark));
+
+  g_object_ref (G_OBJECT (scroll->mark));
+  
+  if (text_view->pending_scroll)
+    free_pending_scroll (text_view->pending_scroll);
+
+  text_view->pending_scroll = scroll;
+}
+
+static gboolean
+gtk_text_view_flush_scroll (GtkTextView *text_view)
+{
+  GtkTextIter iter, start, end;
+  GtkTextPendingScroll *scroll;
+  gint y0, y1, height;
+  gboolean retval;
+  
+  DV(g_print(G_STRLOC"\n"));
+  
+  if (text_view->pending_scroll == NULL)
+    return FALSE;
+
+  scroll = text_view->pending_scroll;
+
+  /* avoid recursion */
+  text_view->pending_scroll = NULL;
+  
+  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, scroll->mark);
+
+  start = iter;
+  end = iter;
+
+  /* Force-validate the region around the iterator, at least the lines
+   * on either side, so that we can meaningfully get the iter location
+   */
+  gtk_text_iter_backward_line (&start);
+  gtk_text_iter_forward_line (&end);
+  
+  gtk_text_layout_get_line_yrange (text_view->layout, &start, &y0, NULL);
+  gtk_text_layout_get_line_yrange (text_view->layout, &end, &y1, &height);
+
+  DV(g_print (">Validating scroll destination ("G_STRLOC")\n"));
+  gtk_text_layout_validate_yrange (text_view->layout, &start, y0, y1 + height);
+
+  DV(g_print (">Done validating scroll destination ("G_STRLOC")\n"));
+  
+  retval = gtk_text_view_scroll_to_iter (text_view,
+                                         &iter,
+                                         scroll->within_margin,
+                                         scroll->use_align,
+                                         scroll->xalign,
+                                         scroll->yalign);
+  
+  free_pending_scroll (scroll);
 
   return retval;
 }
 
-gboolean
+static void
+gtk_text_view_set_adjustment_upper (GtkAdjustment *adj, gfloat upper)
+{  
+  if (upper != adj->upper)
+    {
+      gfloat min = MAX (0., upper - adj->page_size);
+      gboolean value_changed = FALSE;
+
+      adj->upper = upper;
+
+      if (adj->value > min)
+        {
+          adj->value = min;
+          value_changed = TRUE;
+        }
+
+      gtk_signal_emit_by_name (GTK_OBJECT (adj), "changed");
+      DV(g_print(">Changed adj upper to %d ("G_STRLOC")\n", upper));
+      
+      if (value_changed)
+        {
+          DV(g_print(">Changed adj value because upper descreased ("G_STRLOC")\n"));
+          gtk_signal_emit_by_name (GTK_OBJECT (adj), "value_changed");
+        }
+    }
+}
+
+static void
+gtk_text_view_update_adjustments (GtkTextView *text_view)
+{
+  gint width = 0, height = 0;
+
+  DV(g_print(">Updating adjustments ("G_STRLOC")\n"));
+  
+  gtk_text_layout_get_size (text_view->layout, &width, &height);
+
+  if (text_view->width != width || text_view->height != height)
+    {
+      text_view->width = width;
+      text_view->height = height;
+
+      gtk_text_view_set_adjustment_upper (get_hadjustment (text_view),
+                                          MAX (SCREEN_WIDTH (text_view), width));
+      gtk_text_view_set_adjustment_upper (get_vadjustment (text_view),
+                                          MAX (SCREEN_HEIGHT (text_view), height));
+      
+      /* hadj/vadj exist since we called get_hadjustment/get_vadjustment above */
+
+      /* Set up the step sizes; we'll say that a page is
+         our allocation minus one step, and a step is
+         1/10 of our allocation. */
+      text_view->hadjustment->step_increment =
+        SCREEN_WIDTH (text_view) / 10.0;
+      text_view->hadjustment->page_increment =
+        SCREEN_WIDTH (text_view) * 0.9;
+      
+      text_view->vadjustment->step_increment =
+        SCREEN_HEIGHT (text_view) / 10.0;
+      text_view->vadjustment->page_increment =
+        SCREEN_HEIGHT (text_view) * 0.9;
+
+      gtk_signal_emit_by_name (GTK_OBJECT (get_hadjustment (text_view)), "changed");
+      gtk_signal_emit_by_name (GTK_OBJECT (get_hadjustment (text_view)), "changed");
+    }
+}
+
+static void
+gtk_text_view_update_layout_width (GtkTextView *text_view)
+{
+  DV(g_print(">Updating layout width ("G_STRLOC")\n"));
+  
+  gtk_text_view_ensure_layout (text_view);
+
+  gtk_text_layout_set_screen_width (text_view->layout,
+                                    SCREEN_WIDTH (text_view));
+}
+
+/**
+ * gtk_text_view_scroll_to_mark:
+ * @text_view: a #GtkTextView
+ * @mark: a #GtkTextMark
+ * @within_margin: margin as a [0.0,0.5) fraction of screen size
+ * @use_align: whether to use alignment arguments (if %FALSE, just get the mark onscreen)
+ * @xalign: horizontal alignment of mark within visible area.
+ * @yalign: vertical alignment of mark within visible area
+ *
+ * Scrolls @text_view so that @mark is on the screen in the position
+ * indicated by @xalign and @yalign. An alignment of 0.0 indicates
+ * left or top, 1.0 indicates right or bottom, 0.5 means center. If @use_align
+ * is %FALSE, the text scrolls the minimal distance to get the mark onscreen,
+ * possibly not scrolling at all. The effective screen for purposes
+ * of this function is reduced by a margin of size @within_margin.
+ *
+ **/
+void
+gtk_text_view_scroll_to_mark (GtkTextView *text_view,
+                              GtkTextMark *mark,
+                              gdouble      within_margin,
+                              gboolean     use_align,
+                              gdouble      xalign,
+                              gdouble      yalign)
+{  
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (GTK_IS_TEXT_MARK (mark));
+  g_return_if_fail (within_margin >= 0.0 && within_margin < 0.5);
+  g_return_if_fail (xalign >= 0.0 && xalign <= 1.0);
+  g_return_if_fail (yalign >= 0.0 && yalign <= 1.0);
+
+  gtk_text_view_queue_scroll (text_view, mark,
+                              within_margin,
+                              use_align,
+                              xalign,
+                              yalign);
+
+  /* If no validation is pending, we need to go ahead and force an
+   * immediate scroll.
+   */
+  if (text_view->layout &&
+      gtk_text_layout_is_valid (text_view->layout))
+    gtk_text_view_flush_scroll (text_view);
+}
+
+void
 gtk_text_view_scroll_mark_onscreen (GtkTextView *text_view,
                                     GtkTextMark *mark)
 {
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
-  g_return_val_if_fail (GTK_IS_TEXT_MARK (mark), FALSE);
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (GTK_IS_TEXT_MARK (mark));
 
-  return gtk_text_view_scroll_to_mark (text_view, mark, 0.0, FALSE, 0.0, 0.0);
+  gtk_text_view_scroll_to_mark (text_view, mark, 0.0, FALSE, 0.0, 0.0);
 }
 
 static gboolean
@@ -1378,6 +1543,12 @@ gtk_text_view_get_visible_rect (GtkTextView  *text_view,
       visible_rect->y = text_view->yoffset;
       visible_rect->width = SCREEN_WIDTH (widget);
       visible_rect->height = SCREEN_HEIGHT (widget);
+
+      DV(g_print(" visible rect: %d,%d %d x %d\n",
+                 visible_rect->x,
+                 visible_rect->y,
+                 visible_rect->width,
+                 visible_rect->height));
     }
 }
 
@@ -1789,6 +1960,15 @@ gtk_text_view_finalize (GObject *object)
 
   g_return_if_fail (text_view->buffer == NULL);
 
+  gtk_text_view_destroy_layout (text_view);
+  gtk_text_view_set_buffer (text_view, NULL);
+  
+  if (text_view->pending_scroll)
+    {
+      free_pending_scroll (text_view->pending_scroll);
+      text_view->pending_scroll = NULL;
+    }
+  
   if (text_view->hadjustment)
     g_object_unref (G_OBJECT (text_view->hadjustment));
   if (text_view->vadjustment)
@@ -2050,6 +2230,8 @@ gtk_text_view_validate_children (GtkTextView *text_view)
 {
   GSList *tmp_list;
 
+  DV(g_print(G_STRLOC"\n"));
+  
   tmp_list = text_view->children;
   while (tmp_list != NULL)
     {
@@ -2096,6 +2278,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   text_view = GTK_TEXT_VIEW (widget);
 
+  DV(g_print(G_STRLOC"\n"));
+  
   widget->allocation = *allocation;
 
   if (GTK_WIDGET_REALIZED (widget))
@@ -2187,14 +2371,10 @@ gtk_text_view_size_allocate (GtkWidget *widget,
     text_window_size_allocate (text_view->bottom_window,
                                &bottom_rect);
 
-  gtk_text_view_ensure_layout (text_view);
-  gtk_text_layout_set_screen_width (text_view->layout,
-                                    SCREEN_WIDTH (text_view));
-
+  gtk_text_view_update_layout_width (text_view);
+  
+  /* This is because validating children ends up size allocating them. */
   gtk_text_view_validate_children (text_view);
-
-  gtk_text_view_validate_onscreen (text_view);
-  gtk_text_view_scroll_calc_now (text_view);
 
   /* Now adjust the value of the adjustment to keep the cursor at the
    * same place in the buffer
@@ -2234,6 +2414,20 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   if (yoffset_changed)
     gtk_adjustment_value_changed (vadj);
+
+  if (text_view->first_validate_idle != 0)
+    {
+      /* The GTK resize loop processes all the pending exposes right
+       * after doing the resize stuff, so the idle sizer won't have a
+       * chance to run. So we do the work here. 
+       */
+
+      g_source_remove (text_view->first_validate_idle);
+      text_view->first_validate_idle = 0;
+      
+      if (!gtk_text_view_flush_scroll (text_view))
+        gtk_text_view_validate_onscreen (text_view);
+    }
 }
 
 static void
@@ -2248,10 +2442,17 @@ static void
 gtk_text_view_validate_onscreen (GtkTextView *text_view)
 {
   GtkWidget *widget = GTK_WIDGET (text_view);
-
+  
+  DV(g_print(">Validating onscreen ("G_STRLOC")\n"));
+  
   if (SCREEN_HEIGHT (widget) > 0)
     {
       GtkTextIter first_para;
+
+      /* Be sure we've validated the stuff onscreen; if we
+       * scrolled, these calls won't have any effect, because
+       * they were called in the recursive validate_onscreen
+       */
       gtk_text_view_get_first_para_iter (text_view, &first_para);
 
       gtk_text_layout_validate_yrange (text_view->layout,
@@ -2260,6 +2461,18 @@ gtk_text_view_validate_onscreen (GtkTextView *text_view)
                                        text_view->first_para_pixels +
                                        SCREEN_HEIGHT (widget));
     }
+
+  text_view->onscreen_validated = TRUE;
+
+  DV(g_print(">Done validating onscreen, onscreen_validated = TRUE ("G_STRLOC")\n"));
+  
+  /* This can have the odd side effect of triggering a scroll, which should
+   * flip "onscreen_validated" back to FALSE, but should also get us
+   * back into this function to turn it on again.
+   */
+  gtk_text_view_update_adjustments (text_view);
+
+  g_assert (text_view->onscreen_validated);
 }
 
 static gboolean
@@ -2267,9 +2480,43 @@ first_validate_callback (gpointer data)
 {
   GtkTextView *text_view = data;
 
-  gtk_text_view_validate_onscreen (text_view);
+  /* Note that some of this code is duplicated at the end of size_allocate,
+   * keep in sync with that.
+   */
+  
+  DV(g_print(G_STRLOC"\n"));
 
+  /* Do this first, which means that if an "invalidate"
+   * occurs during any of this process, a new first_validate_callback
+   * will be installed, and we'll start again.
+   */
   text_view->first_validate_idle = 0;
+  
+  /* be sure we have up-to-date screen size set on the
+   * layout.
+   */
+  gtk_text_view_update_layout_width (text_view);
+
+  /* Bail out if we invalidated stuff; scrolling right away will just
+   * confuse the issue.
+   */
+  if (text_view->first_validate_idle != 0)
+    {
+      DV(g_print(">Width change forced requeue ("G_STRLOC")\n"));
+      return FALSE;
+    }
+  
+  /* scroll to any marks, if that's pending. This can
+   * jump us to the validation codepath used for scrolling
+   * onscreen, if so we bail out.
+   */
+  if (!gtk_text_view_flush_scroll (text_view))
+    gtk_text_view_validate_onscreen (text_view);
+
+  DV(g_print(">Leaving first validate idle ("G_STRLOC")\n"));
+
+  g_assert (text_view->onscreen_validated);
+  
   return FALSE;
 }
 
@@ -2278,7 +2525,12 @@ incremental_validate_callback (gpointer data)
 {
   GtkTextView *text_view = data;
 
+  DV(g_print(G_STRLOC"\n"));
+  
   gtk_text_layout_validate (text_view->layout, 2000);
+
+  gtk_text_view_update_adjustments (text_view);
+  
   if (gtk_text_layout_is_valid (text_view->layout))
     {
       text_view->incremental_validate_idle = 0;
@@ -2296,6 +2548,10 @@ invalidated_handler (GtkTextLayout *layout,
 
   text_view = GTK_TEXT_VIEW (data);
 
+  text_view->onscreen_validated = FALSE;
+  
+  DV(g_print(">Invalidate, onscreen_validated = FALSE ("G_STRLOC")\n"));
+  
   if (!text_view->first_validate_idle)
     text_view->first_validate_idle = g_idle_add_full (GTK_PRIORITY_RESIZE - 1, first_validate_callback, text_view, NULL);
 
@@ -2317,6 +2573,8 @@ changed_handler (GtkTextLayout *layout,
 
   text_view = GTK_TEXT_VIEW (data);
   widget = GTK_WIDGET (data);
+  
+  DV(g_print(">Lines Validated ("G_STRLOC")\n"));
 
   if (GTK_WIDGET_REALIZED (text_view))
     {      
@@ -2337,6 +2595,12 @@ changed_handler (GtkTextLayout *layout,
           text_window_invalidate_rect (text_view->text_window,
                                        &redraw_rect);
 
+          DV(g_print(" invalidated rect: %d,%d %d x %d\n",
+                     redraw_rect.x,
+                     redraw_rect.y,
+                     redraw_rect.width,
+                     redraw_rect.height));
+          
           if (text_view->left_window)
             text_window_invalidate_rect (text_view->left_window,
                                          &redraw_rect);
@@ -2351,7 +2615,7 @@ changed_handler (GtkTextLayout *layout,
                                          &redraw_rect);
         }
     }
-
+  
   if (old_height != new_height)
     {
       gboolean yoffset_changed = FALSE;
@@ -2380,8 +2644,6 @@ changed_handler (GtkTextLayout *layout,
           tmp_list = g_slist_next (tmp_list);
         }
     }
-  
-  gtk_text_view_scroll_calc_now (text_view);
 }
 
 static void
@@ -2637,8 +2899,9 @@ gtk_text_view_event (GtkWidget *widget, GdkEvent *event)
       y += text_view->yoffset;
 
       /* FIXME this is slow and we do it twice per event.
-         My favorite solution is to have GtkTextLayout cache
-         the last couple lookups. */
+       * My favorite solution is to have GtkTextLayout cache
+       * the last couple lookups.
+       */
       gtk_text_layout_get_iter_at_pixel (text_view->layout,
                                          &iter,
                                          x, y);
@@ -2984,15 +3247,19 @@ gtk_text_view_paint (GtkWidget *widget, GdkRectangle *area)
   g_return_if_fail (text_view->layout != NULL);
   g_return_if_fail (text_view->xoffset >= 0);
   g_return_if_fail (text_view->yoffset >= 0);
-
-  gtk_text_view_validate_onscreen (text_view);
-
+  
+  if (!text_view->onscreen_validated)
+    {
+      G_BREAKPOINT ();
+      g_warning (G_STRLOC ": somehow some text lines were modified or scrolling occurred since the last validation of lines on the screen");
+    }
+  
 #if 0
   printf ("painting %d,%d  %d x %d\n",
           area->x, area->y,
           area->width, area->height);
 #endif
-
+  
   gtk_text_layout_draw (text_view->layout,
                         widget,
                         text_view->text_window->bin_window,
@@ -3005,9 +3272,26 @@ gtk_text_view_paint (GtkWidget *widget, GdkRectangle *area)
 static gint
 gtk_text_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
 {
+#if 0
+  {
+    GdkWindow *win = event->window;
+    GdkColor color = { 0, 0, 0, 65535 };
+    GdkGC *gc = gdk_gc_new (win);
+    gdk_gc_set_rgb_fg_color (gc, &color);
+    gdk_draw_rectangle (win,
+                        gc, TRUE,
+                        event->area.x, event->area.y,
+                        event->area.width, event->area.height);
+    gdk_gc_unref (gc);
+  }
+#endif
+  
   if (event->window == gtk_text_view_get_window (GTK_TEXT_VIEW (widget),
                                                  GTK_TEXT_WINDOW_TEXT))
-    gtk_text_view_paint (widget, &event->area);
+    {
+      DV(g_print (">Exposed ("G_STRLOC")\n"));
+      gtk_text_view_paint (widget, &event->area);
+    }
 
   if (event->window == widget->window)
     gtk_widget_draw_focus (widget);
@@ -3174,6 +3458,10 @@ static void
 gtk_text_view_start_cursor_blink(GtkTextView *text_view,
                                  gboolean     with_delay)
 {
+#ifdef DEBUG_VALIDATION_AND_SCROLLING
+  return;
+#endif
+  
   if (!text_view->cursor_visible)
     return;
   
@@ -3633,7 +3921,7 @@ gtk_text_view_unselect (GtkTextView *text_view)
                              &insert);
 }
 
-static gboolean
+static void
 move_mark_to_pointer_and_scroll (GtkTextView *text_view,
                                  const gchar *mark_name)
 {
@@ -3650,7 +3938,6 @@ move_mark_to_pointer_and_scroll (GtkTextView *text_view,
                                      y + text_view->yoffset);
 
   {
-    gboolean scrolled = FALSE;
     GtkTextMark *mark =
       gtk_text_buffer_get_mark (get_buffer (text_view), mark_name);
 
@@ -3658,9 +3945,7 @@ move_mark_to_pointer_and_scroll (GtkTextView *text_view,
                                mark,
                                &newplace);
 
-    scrolled = gtk_text_view_scroll_mark_onscreen (text_view, mark);
-
-    return scrolled;
+    gtk_text_view_scroll_mark_onscreen (text_view, mark);
   }
 }
 
@@ -3776,68 +4061,6 @@ gtk_text_view_end_selection_drag (GtkTextView *text_view, GdkEventButton *event)
  */
 
 static void
-gtk_text_view_set_adjustment_upper (GtkAdjustment *adj, gfloat upper)
-{
-  if (upper != adj->upper)
-    {
-      gfloat min = MAX (0., upper - adj->page_size);
-      gboolean value_changed = FALSE;
-
-      adj->upper = upper;
-
-      if (adj->value > min)
-        {
-          adj->value = min;
-          value_changed = TRUE;
-        }
-
-      gtk_signal_emit_by_name (GTK_OBJECT (adj), "changed");
-      if (value_changed)
-        gtk_signal_emit_by_name (GTK_OBJECT (adj), "value_changed");
-    }
-}
-
-static void
-gtk_text_view_scroll_calc_now (GtkTextView *text_view)
-{
-  gint width = 0, height = 0;
-
-  gtk_text_view_ensure_layout (text_view);
-
-
-  gtk_text_layout_set_screen_width (text_view->layout,
-                                    SCREEN_WIDTH (text_view));
-
-  gtk_text_layout_get_size (text_view->layout, &width, &height);
-
-  if (text_view->width != width || text_view->height != height)
-    {
-      text_view->width = width;
-      text_view->height = height;
-
-      gtk_text_view_set_adjustment_upper (get_hadjustment (text_view),
-                                          MAX (SCREEN_WIDTH (text_view), width));
-      gtk_text_view_set_adjustment_upper (get_vadjustment (text_view),
-                                          MAX (SCREEN_HEIGHT (text_view), height));
-
-      /* hadj/vadj exist since we called get_hadjustment/get_vadjustment above */
-
-      /* Set up the step sizes; we'll say that a page is
-         our allocation minus one step, and a step is
-         1/10 of our allocation. */
-      text_view->hadjustment->step_increment =
-        SCREEN_WIDTH (text_view) / 10.0;
-      text_view->hadjustment->page_increment =
-        SCREEN_WIDTH (text_view) * 0.9;
-
-      text_view->vadjustment->step_increment =
-        SCREEN_HEIGHT (text_view) / 10.0;
-      text_view->vadjustment->page_increment =
-        SCREEN_HEIGHT (text_view) * 0.9;
-    }
-}
-
-static void
 gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
                                          GtkTextAttributes *values,
                                          GtkStyle           *style)
@@ -3864,6 +4087,8 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       GtkTextAttributes *style;
       PangoContext *ltr_context, *rtl_context;
       GSList *tmp_list;
+
+      DV(g_print(G_STRLOC"\n"));
       
       text_view->layout = gtk_text_layout_new ();
 
@@ -4131,7 +4356,6 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
   GtkTextIter end;
   GdkRectangle target_rect;
   gint bx, by;
-  gboolean scrolled;
   
   text_view = GTK_TEXT_VIEW (widget);
 
@@ -4197,9 +4421,9 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
                              text_view->dnd_mark,
                              &newplace);
 
-  scrolled = gtk_text_view_scroll_to_mark (text_view,
-                                           text_view->dnd_mark,
-                                           DND_SCROLL_MARGIN, FALSE, 0.0, 0.0);
+  gtk_text_view_scroll_to_mark (text_view,
+                                text_view->dnd_mark,
+                                DND_SCROLL_MARGIN, FALSE, 0.0, 0.0);
   
   if (text_view->scroll_timeout != 0) /* reset on every motion event */
     gtk_timeout_remove (text_view->scroll_timeout);
@@ -4411,6 +4635,10 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
   gint dx = 0;
   gint dy = 0;
 
+  text_view->onscreen_validated = FALSE;
+
+  DV(g_print(">Scroll offset changed, onscreen_validated = FALSE ("G_STRLOC")\n"));
+  
   if (adj == text_view->hadjustment)
     {
       dx = text_view->xoffset - (gint)adj->value;
@@ -4430,7 +4658,7 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
           text_view->first_para_pixels = adj->value - line_top;
         }
     }
-
+  
   if (GTK_WIDGET_REALIZED (text_view) && (dx != 0 || dy != 0))
     {
       if (dy != 0)
@@ -4456,6 +4684,47 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
        */
       text_window_scroll (text_view->text_window, dx, dy);
     }
+
+  /* This could result in invalidation, which would install the
+   * first_validate_idle, which would validate onscreen;
+   * but we're going to go ahead and validate here, so
+   * first_validate_idle shouldn't have anything to do.
+   */
+  gtk_text_view_update_layout_width (text_view);
+  
+  /* note that validation of onscreen could invoke this function
+   * recursively, by scrolling to maintain first_para, or in response
+   * to updating the layout width, however there is no problem with
+   * that, or shouldn't be.
+   */
+  gtk_text_view_validate_onscreen (text_view);
+
+  /* process exposes */
+  if (GTK_WIDGET_REALIZED (text_view))
+    {
+      if (text_view->left_window)
+        gdk_window_process_updates (text_view->left_window->bin_window, TRUE);
+
+      if (text_view->right_window)
+        gdk_window_process_updates (text_view->right_window->bin_window, TRUE);
+
+      if (text_view->top_window)
+        gdk_window_process_updates (text_view->top_window->bin_window, TRUE);
+      
+      if (text_view->bottom_window)
+        gdk_window_process_updates (text_view->bottom_window->bin_window, TRUE);
+  
+      gdk_window_process_updates (text_view->text_window->bin_window, TRUE);
+    }
+
+  /* If this got installed, get rid of it, it's just a waste of time. */
+  if (text_view->first_validate_idle != 0)
+    {
+      g_source_remove (text_view->first_validate_idle);
+      text_view->first_validate_idle = 0;
+    }
+  
+  DV(g_print(">End scroll offset changed handler ("G_STRLOC")\n"));
 }
 
 static void
@@ -4799,11 +5068,10 @@ text_window_scroll        (GtkTextWindow *win,
   if (dx != 0 || dy != 0)
     {
       gdk_window_scroll (win->bin_window, dx, dy);
-      gdk_window_process_updates (win->bin_window, TRUE);
     }
 }
 
-static void
+void
 text_window_invalidate_rect (GtkTextWindow *win,
                              GdkRectangle  *rect)
 {
@@ -4845,6 +5113,18 @@ text_window_invalidate_rect (GtkTextWindow *win,
     }
           
   gdk_window_invalidate_rect (win->bin_window, &window_rect, FALSE);
+
+#if 0
+  {
+    GdkColor color = { 0, 65535, 0, 0 };
+    GdkGC *gc = gdk_gc_new (win->bin_window);
+    gdk_gc_set_rgb_fg_color (gc, &color);
+    gdk_draw_rectangle (win->bin_window,
+                        gc, TRUE, window_rect.x, window_rect.y,
+                        window_rect.width, window_rect.height);
+    gdk_gc_unref (gc);
+  }
+#endif
 }
 
 static gint

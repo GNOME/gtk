@@ -142,7 +142,11 @@ gdk_window_scroll (GdkWindow *window,
   
   if (GDK_WINDOW_DESTROYED (window))
     return;
-
+  
+  /* Move the current invalid region */
+  if (obj->update_area)
+    gdk_region_offset (obj->update_area, dx, dy);
+  
   /* We can guffaw scroll if we are a child window, and the parent
    * does not extend beyond our edges.
    */

@@ -89,6 +89,7 @@ gboolean       gtk_text_mark_get_visible (GtkTextMark *mark);
 const char  *  gtk_text_mark_get_name    (GtkTextMark *mark);
 gboolean       gtk_text_mark_get_deleted (GtkTextMark *mark);
 GtkTextBuffer* gtk_text_mark_get_buffer  (GtkTextMark *mark);
+gboolean       gtk_text_mark_get_left_gravity (GtkTextMark *mark);
 
 
 #ifdef __cplusplus

@@ -686,7 +686,7 @@ set_bg_color (GtkTextTag *tag, GdkColor *color)
       if (!tag->bg_color_set)
         {
           tag->bg_color_set = TRUE;
-          g_object_notify (G_OBJECT (tag), "bg_color_set");
+          g_object_notify (G_OBJECT (tag), "background_set");
         }
       
       tag->values->appearance.bg_color = *color;
@@ -696,7 +696,7 @@ set_bg_color (GtkTextTag *tag, GdkColor *color)
       if (tag->bg_color_set)
         {
           tag->bg_color_set = FALSE;
-          g_object_notify (G_OBJECT (tag), "bg_color_set");
+          g_object_notify (G_OBJECT (tag), "background_set");
         }
     }
 }
@@ -709,7 +709,7 @@ set_fg_color (GtkTextTag *tag, GdkColor *color)
       if (!tag->fg_color_set)
         {
           tag->fg_color_set = TRUE;
-          g_object_notify (G_OBJECT (tag), "fg_color_set");
+          g_object_notify (G_OBJECT (tag), "foreground_set");
         }
       tag->values->appearance.fg_color = *color;
     }
@@ -718,7 +718,7 @@ set_fg_color (GtkTextTag *tag, GdkColor *color)
       if (tag->fg_color_set)
         {
           tag->fg_color_set = FALSE;
-          g_object_notify (G_OBJECT (tag), "fg_color_set");
+          g_object_notify (G_OBJECT (tag), "foreground_set");
         }
     }
 }

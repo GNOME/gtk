@@ -1,3 +1,19 @@
+2001-01-12  Havoc Pennington  <hp@redhat.com>
+
+	* gdk/x11/gdkgeometry-x11.c (gdk_window_scroll): offset the 
+	current invalid region, fixes redraw bug while scrolling the 
+	text widget
+
+	* gtk/gtktextview.c, gtk/gtktextview.h:
+	Rearrange the scrolling/validation/etc. code in a major way, 
+	so it seems to make sense to me. Probably isn't genuinely that
+	much better, but...
+
+	* gtk/gtktexttag.c (set_fg_color): fix name of property used for
+	notifies
+
+	* gtk/gtktextmark.c (gtk_text_mark_get_left_gravity): new function
+
 2001-01-12  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkmain-fb.c (gdk_fb_set_rotation):
