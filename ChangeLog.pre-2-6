@@ -1,5 +1,10 @@
 1999-12-11  Tor Lillqvist  <tml@iki.fi>
 
+	* Makefile.am: Distribute README.win32.
+	
+	* gdk/Makefile.am
+	* gdk/win32/Makefile.am: Distribute gdk/win32.
+
 	* gdk/gdkprivate.h: Must mark also gdk_error_warnings and
 	gdk_error_code as GDKVAR, as they are referred outside GDK.
 

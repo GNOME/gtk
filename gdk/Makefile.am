@@ -1,6 +1,9 @@
 ## Makefile.am for gtk+/gdk
 
-SUBDIRS=x11
+SUBDIRS=x11 win32
+
+EXTRA_DIST =	\
+	gdkconfig.h.win32
 
 INCLUDES = @STRIP_BEGIN@ \
 	-DG_LOG_DOMAIN=\"Gdk\"	\
