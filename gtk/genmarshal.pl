@@ -8,7 +8,7 @@
 	   "ULONG"=>"gulong", "FLOAT"=>"gfloat",
 	   "DOUBLE"=>"gdouble", "STRING"=>"gpointer",
 	   "ENUM"=>"gint", "FLAGS"=>"gint",
-	   "BOXED"=>"gpointer", "FOREIGN"=>"gpointer",
+	   "BOXED"=>"gpointer",
 	   "POINTER"=>"gpointer",
 	   "OBJECT"=>"gpointer",
 

@@ -451,7 +451,7 @@ gdk_colors_alloc (GdkColormap   *colormap,
 static GMemChunk *color_chunk;
 
 GdkColor*
-gdk_color_copy (GdkColor *color)
+gdk_color_copy (const GdkColor *color)
 {
   GdkColor *new_color;
   

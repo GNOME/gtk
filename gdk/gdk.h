@@ -556,7 +556,7 @@ void         gdk_colormap_free_colors     (GdkColormap    *colormap,
 
 GdkVisual*   gdk_colormap_get_visual      (GdkColormap    *colormap);
 
-GdkColor*    gdk_color_copy               (GdkColor       *color);
+GdkColor*    gdk_color_copy               (const GdkColor *color);
 void         gdk_color_free               (GdkColor       *color);
 
 gboolean     gdk_color_parse	          (const gchar    *spec,

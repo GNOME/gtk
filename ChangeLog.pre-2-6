@@ -1,3 +1,14 @@
+Wed Jan 26 16:56:54 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c: Fix return values on mouse events.
+	(Bug #2686, Sky <seb_sky@yahoo.com>)
+
+	* gtk/genmarshal.pl: Fix up handling of FOREIGN.
+	(pointed out by George Lebl)
+
+ 	* gdk/gdkcolor.c (gdk_color_copy): Made const-safe.
+	(From Ettore Perazzoli  <ettore@helixcode.com>)
+ 
 Mon Jan 24 10:44:48 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcalendar.c (gtk_calendar_main_button): Handle

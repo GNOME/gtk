@@ -907,6 +907,8 @@ gtk_entry_button_press (GtkWidget      *widget,
 	default:
 	  break;
 	}
+
+      return TRUE;
     }
   else if (event->type == GDK_BUTTON_PRESS)
     {
@@ -930,6 +932,8 @@ gtk_entry_button_press (GtkWidget      *widget,
 	  if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget->window)
 	    gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, event->time);
 	}
+
+      return TRUE;
     }
 
   return FALSE;
@@ -973,10 +977,14 @@ gtk_entry_button_release (GtkWidget      *widget,
 	  if (gdk_selection_owner_get (GDK_SELECTION_PRIMARY) == widget->window)
 	    gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY, event->time);
 	}
+
+      return TRUE;
     }
   else if (event->button == 3)
     {
       gtk_grab_remove (widget);
+
+      return TRUE;
     }
 
   return FALSE;
@@ -1007,7 +1015,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
   entry_adjust_scroll (entry);
   gtk_entry_queue_draw (entry);
 
-  return FALSE;
+  return TRUE;
 }
 
 static gint
