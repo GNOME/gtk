@@ -41,10 +41,38 @@
 #include "gtk/gtkrc.h"
 #include "gtk/gtkimmodule.h"
 
+static char *
+escape_string (const char *str)
+{
+  GString *result = g_string_new ("");
+
+  while (TRUE)
+    {
+      char c = *str++;
+      
+      switch (c)
+	{
+	case '\0':
+	  goto done;
+	case '\n':
+	  g_string_append (result, "\\n");
+	  break;
+	case '\"':
+	  g_string_append (result, "\\\"");
+	  break;
+	default:
+	  g_string_append_c (result, c);
+	}
+    }
+
+ done:
+  return g_string_free (result, FALSE);
+}
+
 static void
 print_escaped (const char *str)
 {
-  char *tmp = g_strescape (str, NULL);
+  char *tmp = escape_string (str, NULL);
   printf ("\"%s\" ", tmp);
   g_free (tmp);
 }
