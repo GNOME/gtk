@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.15\n"
-"POT-Creation-Date: 2002-03-08 14:45-0500\n"
-"PO-Revision-Date: 2002-03-12 01:57+0900\n"
+"POT-Creation-Date: 2002-03-20 14:58+0900\n"
+"PO-Revision-Date: 2002-03-20 15:00+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -123,7 +123,7 @@ msgstr "비트맵 그림을 읽는데 메모리가 충분하지 않습니다"
 msgid "BMP image has unsupported header size"
 msgstr "BMP 그림이 지원되지 않는 헤더 크기를 가지고 있습니다"
 
-#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323
+#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "BMP 그림이 잘못된 헤더 데이타를 가지고 있습니다"
 
@@ -172,7 +172,7 @@ msgstr "ICO 파일을 읽는데 메모리가 충분하지 않습니다"
 msgid "Failure reading GIF: %s"
 msgstr "GIF 읽는 중 실패: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1371 gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1541
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF 파일에 데이타가 부족합니다 (중간에 잘린 파일?)"
 
@@ -193,8 +193,8 @@ msgstr "잘못된 코드 발견"
 msgid "Circular table entry in GIF file"
 msgstr "GIF 파일에 순환 테이블 항목"
 
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1359 gdk-pixbuf/io-gif.c:1404
-#: gdk-pixbuf/io-gif.c:1518
+#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
+#: gdk-pixbuf/io-gif.c:1529
 msgid "Not enough memory to load GIF file"
 msgstr "GIF 파일을 읽는데 메모리가 충분하지 않습니다"
 
@@ -211,22 +211,26 @@ msgstr "GIF 파일이 아닌 것 같습니다"
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF 파일 형식의 버전 %s은(는) 지원되지 않습니다."
 
-#: gdk-pixbuf/io-gif.c:1146
+#: gdk-pixbuf/io-gif.c:1144
+msgid "GIF image contained a frame with height or width 0."
+msgstr "GIF 그림에 높이나 너비가 0인 프레임이 들어 있습니다."
+
+#: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame appearing outside the image bounds."
-msgstr "GIF 그림에 그림의 경계 밖에 나타나는 프레임이 들어 있음."
+msgstr "GIF 그림에 그림의 경계 밖에 나타나는 프레임이 들어 있습니다."
 
 # FIXME: disposal?
-#: gdk-pixbuf/io-gif.c:1162
+#: gdk-pixbuf/io-gif.c:1173
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr "GIF의 첫 번째 프레임에 그 배치 모드가 '이전으로 되돌리기'입니다."
 
-#: gdk-pixbuf/io-gif.c:1197
+#: gdk-pixbuf/io-gif.c:1208
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr "GIF 그림에 전체 컬러맵이 없고, 프레임 내부에 부분 컬러맵이 없습니다."
 
-#: gdk-pixbuf/io-gif.c:1426
+#: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF 그림이 잘려져 있거나 불완전합니다"
 
@@ -371,108 +375,114 @@ msgstr "PNM 그림 데이타가 예기치 못하게 끝났습니다"
 msgid "Insufficient memory to load PNM file"
 msgstr "PNM 파일 읽는데 메모리 부족"
 
-#: gdk-pixbuf/io-tga.c:157
+#: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
 msgstr "IOBuffer 구조에 쓸 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:176
+#: gdk-pixbuf/io-tga.c:178
 msgid "Can't allocate memory for IOBuffer data"
 msgstr "IOBuffer 데이터에 쓸 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:187
+#: gdk-pixbuf/io-tga.c:189
 msgid "Can't realloc IOBuffer data"
 msgstr "IOBuffer 데이터를 재할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:216
+#: gdk-pixbuf/io-tga.c:218
 msgid "Can't allocate temporary IOBuffer data"
 msgstr "임시 IOBuffer 데이터를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:249
+#: gdk-pixbuf/io-tga.c:251
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr "fread() 실패 -- 중간에 갑자기 파일이 끝났습니다"
 
-#: gdk-pixbuf/io-tga.c:259
+#: gdk-pixbuf/io-tga.c:261
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr "fseek() 실패 -- 중간에 갑자기 파일이 끝났습니다"
 
-#: gdk-pixbuf/io-tga.c:288
+#: gdk-pixbuf/io-tga.c:295 gdk-pixbuf/io-tga.c:1029 gdk-pixbuf/io-tga.c:1141
+#: gdk-pixbuf/io-tga.c:1224
+msgid "Insufficient memory to load TGA image"
+msgstr "TGA 파일을 읽어들이는 데 메모리가 부족합니다"
+
+#: gdk-pixbuf/io-tga.c:305
 msgid "Can't allocate new pixbuf"
 msgstr "새 픽스버퍼를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:557
+#: gdk-pixbuf/io-tga.c:617
 msgid "Can't allocate colormap structure"
 msgstr "컬러맵 구조를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:564
+#: gdk-pixbuf/io-tga.c:624
 msgid "Can't allocate colormap entries"
 msgstr "컬러맵 항목을 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:587
+#: gdk-pixbuf/io-tga.c:647
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "예기치 못한 컬러맵 항목 색상 모드(bitdepth)"
 
-#: gdk-pixbuf/io-tga.c:607
+#: gdk-pixbuf/io-tga.c:667
 msgid "Can't allocate TGA header memory"
 msgstr "TGA 헤더 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:618
+#: gdk-pixbuf/io-tga.c:700
 msgid "TGA image has invalid dimensions"
 msgstr "TGA 그림의 크기가 잘못되었습니다"
 
-#: gdk-pixbuf/io-tga.c:624
+#: gdk-pixbuf/io-tga.c:706
 msgid "TGA image comment length is too long"
 msgstr "TGA 그림 설명의 길이가 너무 깁니다"
 
-#: gdk-pixbuf/io-tga.c:633 gdk-pixbuf/io-tga.c:647
+#: gdk-pixbuf/io-tga.c:715 gdk-pixbuf/io-tga.c:724 gdk-pixbuf/io-tga.c:734
+#: gdk-pixbuf/io-tga.c:744 gdk-pixbuf/io-tga.c:751
 msgid "TGA image type not supported"
 msgstr "TGA 그림 형식은 지원하지 않습니다"
 
-#: gdk-pixbuf/io-tga.c:692
+#: gdk-pixbuf/io-tga.c:796
 msgid "Can't allocate memory for TGA context struct"
 msgstr "TGA 컨텍스트 구조에 필요한 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:756
+#: gdk-pixbuf/io-tga.c:860
 msgid "Excess data in file"
 msgstr "파일에 너무 많은 데이타"
 
-#: gdk-pixbuf/io-tga.c:798
+#: gdk-pixbuf/io-tga.c:902
 msgid "Can't allocate memory for TGA header"
 msgstr "TGA 헤더에 필요한 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:808
+#: gdk-pixbuf/io-tga.c:912
 msgid "Too big value in the infolen field of TGA header."
 msgstr "TGA 헤더의 infolen 필드의 값이 너무 큽니다"
 
-#: gdk-pixbuf/io-tga.c:832
+#: gdk-pixbuf/io-tga.c:936
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr "TGA cmap 임시 버퍼에 필요한 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:844
+#: gdk-pixbuf/io-tga.c:948
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr "TGA 컬러맵 구조에 필요한 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:853
+#: gdk-pixbuf/io-tga.c:957
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr "TGA 컬러맵 항목에 필요한 메모리를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:863
+#: gdk-pixbuf/io-tga.c:967
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr "TGA 컬러맵에 예기치 못한 색상 모드(bitdedpth)"
 
 # FIXME: pseudo color 번역
-#: gdk-pixbuf/io-tga.c:903
+#: gdk-pixbuf/io-tga.c:1009
 msgid "Pseudo-Color image without colormap"
 msgstr "컬러맵이 없는 의사 색(pseudo color) 그림입니다"
 
-#: gdk-pixbuf/io-tga.c:910
+#: gdk-pixbuf/io-tga.c:1016
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr "그림 오프셋을 찾을 수 없습니다 -- 파일이 끝났을 것입니다"
 
-#: gdk-pixbuf/io-tga.c:919 gdk-pixbuf/io-tga.c:1015 gdk-pixbuf/io-tga.c:1081
+#: gdk-pixbuf/io-tga.c:1039 gdk-pixbuf/io-tga.c:1152 gdk-pixbuf/io-tga.c:1235
 msgid "Can't allocate pixbuf"
 msgstr "픽스버퍼를 할당할 수 없습니다"
 
-#: gdk-pixbuf/io-tga.c:1147 gdk-pixbuf/io-tga.c:1176
+#: gdk-pixbuf/io-tga.c:1307 gdk-pixbuf/io-tga.c:1336
 msgid "Unsupported TGA image type"
 msgstr "지원하지 않는 TGA 그림 형식"
 
@@ -2868,11 +2878,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "스크롤 막대의 반대쪽 끝에 표준 앞으로 가기 화살표 단추를 표시합니다"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:519
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
 msgid "Horizontal Adjustment"
 msgstr "가로 조정"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:527
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
 msgid "Vertical Adjustment"
 msgstr "세로 조정"
 
@@ -3799,115 +3809,115 @@ msgstr "트리모델소트 모델"
 msgid "The model for the TreeModelSort to sort"
 msgstr "트리모델소트에서 정렬할 때 쓰는 모델"
 
-#: gtk/gtktreeview.c:511
+#: gtk/gtktreeview.c:514
 msgid "TreeView Model"
 msgstr "트리보기 모델"
 
-#: gtk/gtktreeview.c:512
+#: gtk/gtktreeview.c:515
 msgid "The model for the tree view"
 msgstr "트리 보기를 위한 모델"
 
-#: gtk/gtktreeview.c:520
+#: gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment for the widget"
 msgstr "위젯의 가로 조정"
 
-#: gtk/gtktreeview.c:528
+#: gtk/gtktreeview.c:531
 msgid "Vertical Adjustment for the widget"
 msgstr "위젯의 세로 조정"
 
-#: gtk/gtktreeview.c:535 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "보임"
 
-#: gtk/gtktreeview.c:536
+#: gtk/gtktreeview.c:539
 msgid "Show the column header buttons"
 msgstr "열 헤더 단추 보여주기"
 
-#: gtk/gtktreeview.c:543
+#: gtk/gtktreeview.c:546
 msgid "Headers Clickable"
 msgstr "헤더 클릭 가능"
 
-#: gtk/gtktreeview.c:544
+#: gtk/gtktreeview.c:547
 msgid "Column headers respond to click events"
 msgstr "열 헤더가 클릭 이벤트에 반응하기"
 
-#: gtk/gtktreeview.c:551
+#: gtk/gtktreeview.c:554
 msgid "Expander Column"
 msgstr "확장 열"
 
-#: gtk/gtktreeview.c:552
+#: gtk/gtktreeview.c:555
 msgid "Set the column for the expander column"
 msgstr "이 열을 확장 열로 사용합니다."
 
-#: gtk/gtktreeview.c:559 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
 msgid "Reorderable"
 msgstr "순서 바꾸기 가능"
 
-#: gtk/gtktreeview.c:560
+#: gtk/gtktreeview.c:563
 msgid "View is reorderable"
 msgstr "뷰가 순서 바꾸기가 가능한지 여부"
 
-#: gtk/gtktreeview.c:567
+#: gtk/gtktreeview.c:570
 msgid "Rules Hint"
 msgstr "눈금자 힌트"
 
-#: gtk/gtktreeview.c:568
+#: gtk/gtktreeview.c:571
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "테마 엔진에 별도의 색으로 행을 그리는 힌트를 부여합니다"
 
-#: gtk/gtktreeview.c:575
+#: gtk/gtktreeview.c:578
 msgid "Enable Search"
 msgstr "찾기 사용"
 
-#: gtk/gtktreeview.c:576
+#: gtk/gtktreeview.c:579
 msgid "View allows user to search through columns interactively"
 msgstr "사용자가 뷰의 컬럼에서 대화적으로 찾기를 할 수 있도록 합니다"
 
-#: gtk/gtktreeview.c:583
+#: gtk/gtktreeview.c:586
 msgid "Search Column"
 msgstr "찾기 열"
 
-#: gtk/gtktreeview.c:584
+#: gtk/gtktreeview.c:587
 msgid "Model column to search through when searching through code"
 msgstr "찾기를 할 때 기준으로 삼을 모델 열"
 
-#: gtk/gtktreeview.c:597
+#: gtk/gtktreeview.c:600
 msgid "Expander Size"
 msgstr "확장 크기"
 
-#: gtk/gtktreeview.c:598
+#: gtk/gtktreeview.c:601
 msgid "Size of the expander arrow."
 msgstr "확장 화살표의 크기"
 
-#: gtk/gtktreeview.c:606
+#: gtk/gtktreeview.c:609
 msgid "Vertical Separator Width"
 msgstr "세로 구분선 너비"
 
-#: gtk/gtktreeview.c:607
+#: gtk/gtktreeview.c:610
 msgid "Vertical space between cells.  Must be an even number."
 msgstr "셀 사이의 세로 방향 공간.  짝수이어야 합니다."
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:618
 msgid "Horizontal Separator Width"
 msgstr "가로 구분선 너비"
 
-#: gtk/gtktreeview.c:616
+#: gtk/gtktreeview.c:619
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr "셀 사이의 가로 방향 공간.  짝수이어야 합니다."
 
-#: gtk/gtktreeview.c:624
+#: gtk/gtktreeview.c:627
 msgid "Allow Rules"
 msgstr "자 허용"
 
-#: gtk/gtktreeview.c:625
+#: gtk/gtktreeview.c:628
 msgid "Allow drawing of alternating color rows."
 msgstr "엇갈리는 색의 열을 그리도록 허용합니다."
 
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:634
 msgid "Indent Expanders"
 msgstr "확장 들여쓰기"
 
-#: gtk/gtktreeview.c:632
+#: gtk/gtktreeview.c:635
 msgid "Make the expanders indented."
 msgstr "확장을 들여쓸 것인지."
 
@@ -4051,7 +4061,9 @@ msgstr "너비 요청"
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used."
-msgstr "위젯의 너비 요청 값을 새로 정합니다.  또는 폭 요청을 그대로 사용할 경우 -1입니다."
+msgstr ""
+"위젯의 너비 요청 값을 새로 정합니다.  또는 폭 요청을 그대로 사용할 경우 -1입"
+"니다."
 
 #: gtk/gtkwidget.c:414
 msgid "Height request"
