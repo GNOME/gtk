@@ -1,3 +1,8 @@
+Thu Oct 23 01:09:04 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c: Convert GtkOptionMenu to
+	GtkComboBox.
+
 Wed Oct 22 23:20:04 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilechooser.[ch] gtk/gtkfilefilter.[ch] 

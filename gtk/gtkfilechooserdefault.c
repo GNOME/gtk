@@ -19,9 +19,11 @@
  */
 
 #include "gtkalignment.h"
+#include "gtkbutton.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcellrendererseptext.h"
 #include "gtkcellrenderertext.h"
+#include "gtkcombobox.h"
 #include "gtkentry.h"
 #include "gtkfilechooserdefault.h"
 #include "gtkfilechooserentry.h"
@@ -35,9 +37,6 @@
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkmenuitem.h"
-#undef GTK_DISABLE_DEPRECATED
-#include "gtkoptionmenu.h"
-#define GTK_DISABLE_DEPRECATED
 #include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
 #include "gtkstock.h"
@@ -93,7 +92,7 @@ struct _GtkFileChooserDefault
   GtkWidget *preview_frame;
 
   GtkWidget *filter_alignment;
-  GtkWidget *filter_option_menu;
+  GtkWidget *filter_combo;
   GtkWidget *tree_scrollwin;
   GtkWidget *tree;
   GtkWidget *shortcuts_scrollwin;
@@ -184,7 +183,7 @@ static void set_current_filter   (GtkFileChooserDefault *impl,
 				  GtkFileFilter         *filter);
 static void check_preview_change (GtkFileChooserDefault *impl);
 
-static void filter_option_menu_changed (GtkOptionMenu         *option_menu,
+static void filter_combo_changed       (GtkComboBox           *combo_box,
 					GtkFileChooserDefault *impl);
 static void tree_selection_changed     (GtkTreeSelection      *tree_selection,
 					GtkFileChooserDefault *impl);
@@ -610,7 +609,7 @@ create_shortcuts_model (GtkFileChooserDefault *impl)
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->shortcuts_tree), GTK_TREE_MODEL (impl->shortcuts_model));
 }
 
-/* Creates the widgets for the filter option menu */
+/* Creates the widgets for the filter combo box */
 static GtkWidget *
 create_filter (GtkFileChooserDefault *impl)
 {
@@ -629,16 +628,14 @@ create_filter (GtkFileChooserDefault *impl)
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
   gtk_widget_show (label);
 
-  impl->filter_option_menu = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (impl->filter_option_menu),
-			    gtk_menu_new ());
-  gtk_box_pack_start (GTK_BOX (hbox), impl->filter_option_menu, FALSE, FALSE, 0);
-  gtk_widget_show (impl->filter_option_menu);
+  impl->filter_combo = gtk_combo_box_new_text ();
+  gtk_box_pack_start (GTK_BOX (hbox), impl->filter_combo, FALSE, FALSE, 0);
+  gtk_widget_show (impl->filter_combo);
 
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), impl->filter_option_menu);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), impl->filter_combo);
 
-  g_signal_connect (impl->filter_option_menu, "changed",
-		    G_CALLBACK (filter_option_menu_changed), impl);
+  g_signal_connect (impl->filter_combo, "changed",
+		    G_CALLBACK (filter_combo_changed), impl);
 
   return impl->filter_alignment;
 }
@@ -1249,7 +1246,7 @@ gtk_file_chooser_default_get_property (GObject    *object,
 
 /* We override show-all since we have internal widgets that
  * shouldn't be shown when you call show_all(), like the filter
- * option menu.
+ * combo box.
  */
 static void
 gtk_file_chooser_default_show_all (GtkWidget *widget)
@@ -1648,42 +1645,11 @@ gtk_file_chooser_default_get_file_system (GtkFileChooser *chooser)
   return impl->file_system;
 }
 
-static GtkWidget *
-find_filter_menu_item (GtkFileChooserDefault *impl,
-		       GtkFileFilter         *filter,
-		       gint                  *index_return)
-{
-  GtkWidget *menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (impl->filter_option_menu));
-  GList *children = gtk_container_get_children (GTK_CONTAINER (menu));
-  GList *tmp_list;
-  int index = 0;
-
-  if (index_return)
-    *index_return = -1;
-
-  for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
-    {
-      if (g_object_get_data (tmp_list->data, "gtk-file-filter") == filter)
-	{
-	  if (index_return)
-	    *index_return = index;
-	  return tmp_list->data;
-	}
-      index++;
-    }
-
-  g_list_free (children);
-
-  return NULL;
-}
-
 static void
 gtk_file_chooser_default_add_filter (GtkFileChooser *chooser,
 				     GtkFileFilter  *filter)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
-  GtkWidget *menu;
-  GtkWidget *menu_item;
   const gchar *name;
 
   if (g_slist_find (impl->filters, filter))
@@ -1700,14 +1666,7 @@ gtk_file_chooser_default_add_filter (GtkFileChooser *chooser,
   if (!name)
     name = "Untitled filter";	/* Place-holder, doesn't need to be marked for translation */
 
-  menu_item = gtk_menu_item_new_with_label (name);
-  g_object_set_data (G_OBJECT (menu_item), "gtk-file-filter", filter);
-  gtk_widget_show (menu_item);
-
-  menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (impl->filter_option_menu));
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-  /* Option menus don't react to menu size changes properly */
-  gtk_widget_size_request (menu, NULL);
+  gtk_combo_box_append_text (GTK_COMBO_BOX (impl->filter_combo), name);
 
   if (!g_slist_find (impl->filters, impl->current_filter))
     set_current_filter (impl, filter);
@@ -1720,10 +1679,13 @@ gtk_file_chooser_default_remove_filter (GtkFileChooser *chooser,
 					GtkFileFilter  *filter)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
-  GtkWidget *menu;
-  GtkWidget *menu_item;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gint filter_index;
 
-  if (!g_slist_find (impl->filters, filter))
+  filter_index = g_slist_index (impl->filters, filter);
+
+  if (index < 0)
     {
       g_warning ("gtk_file_chooser_remove_filter() called on filter not in list\n");
       return;
@@ -1739,13 +1701,11 @@ gtk_file_chooser_default_remove_filter (GtkFileChooser *chooser,
 	set_current_filter (impl, NULL);
     }
 
-  menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (impl->filter_option_menu));
-  menu_item = find_filter_menu_item (impl, filter, NULL);
-  g_assert (menu_item);
-  gtk_widget_destroy (menu_item);
-  /* Option menus don't react to menu size changes properly */
-  gtk_widget_size_request (menu, NULL);
-
+  /* Remove row from the combo box */
+  model = gtk_combo_box_get_model (GTK_COMBO_BOX (impl->filter_combo));
+  gtk_tree_model_iter_nth_child  (model, &iter, NULL, filter_index);
+  gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
+  
   g_object_unref (filter);
 
   if (!impl->filters)
@@ -1875,12 +1835,12 @@ set_current_filter (GtkFileChooserDefault *impl,
 {
   if (impl->current_filter != filter)
     {
-      int menu_item_index;
+      int filter_index;
 
       /* If we have filters, new filter must be one of them
        */
-      find_filter_menu_item (impl, filter, &menu_item_index);
-      if (impl->filters && menu_item_index < 0)
+      filter_index = g_slist_index (impl->filters, filter);
+      if (impl->filters && filter_index < 0)
 	return;
 
       if (impl->current_filter)
@@ -1893,8 +1853,8 @@ set_current_filter (GtkFileChooserDefault *impl,
 	}
 
       if (impl->filters)
-	gtk_option_menu_set_history (GTK_OPTION_MENU (impl->filter_option_menu),
-				     menu_item_index);
+	gtk_combo_box_set_active (GTK_COMBO_BOX (impl->filter_combo),
+				  filter_index);
 
       install_list_model_filter (impl);
 
@@ -1960,10 +1920,10 @@ open_and_close (GtkTreeView *tree_view,
 }
 
 static void
-filter_option_menu_changed (GtkOptionMenu         *option_menu,
-			    GtkFileChooserDefault *impl)
+filter_combo_changed (GtkComboBox           *combo_box,
+		      GtkFileChooserDefault *impl)
 {
-  gint new_index = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+  gint new_index = gtk_combo_box_get_active (combo_box);
   GtkFileFilter *new_filter = g_slist_nth_data (impl->filters, new_index);
 
   set_current_filter (impl, new_filter);
