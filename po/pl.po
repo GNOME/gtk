@@ -1,427 +1,290 @@
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2000-08-10 21:20-0400\n"
-"PO-Revision-Date: 1999-09-03 05:00+0200\n"
+"POT-Creation-Date: 2000-10-25 21:20+0200\n"
+"PO-Revision-Date: 2000-10-29 23:44+0100\n"
 "Last-Translator: GNOME PL Team\n"
-"Language-Team: Polish <gnomepl@pandora.info.bielsko.pl>\n"
+"Language-Team: Polish <translators@gnome.pl>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtk/gtkcolorsel.c:1420
+#: gdk-pixbuf/io-gif.c:1
+msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+msgstr ""
+"Brakuje pewnych danych w pliku GIF (prawdopodobnie plik zosta³ obciêty)"
+
+#: gdk-pixbuf/io-gif.c:1
+#, c-format
+msgid "Internal error in the GIF loader (%s)"
+msgstr "Wewnêtrzny b³±d w module odczytu plików GIF (%s)"
+
+#: gdk-pixbuf/io-gif.c:1
+msgid "Circular table entry in GIF file"
+msgstr "Zapêtlony element tablicy w pliku GIF"
+
+#: gdk-pixbuf/io-gif.c:1
+msgid "File does not appear to be a GIF file"
+msgstr "Plik nie wygl±da na zawieraj±cy dane w formacie GIF"
+
+#: gdk-pixbuf/io-gif.c:1
+#, c-format
+msgid "Version %s of the GIF file format is not supported"
+msgstr "Wersja %s formatu pliku GIF nie jest obs³ugiwana"
+
+#: gdk-pixbuf/io-gif.c:1
+msgid "GIF animation contained a frame with an incorrect size"
+msgstr "Animacja GIMF zawiera ramkê o nieprawid³owym rozmiarze"
+
+#: gtk/gtkcolorsel.c:1
 msgid "Hue:"
 msgstr "Odcieñ:"
 
-#: gtk/gtkcolorsel.c:1421
+#: gtk/gtkcolorsel.c:1
 msgid "Saturation:"
 msgstr "Nasycenie:"
 
-#: gtk/gtkcolorsel.c:1422
+#: gtk/gtkcolorsel.c:1
 msgid "Value:"
 msgstr "Warto¶æ:"
 
-#: gtk/gtkcolorsel.c:1423
+#: gtk/gtkcolorsel.c:1
 msgid "Red:"
 msgstr "Czerwony:"
 
-#: gtk/gtkcolorsel.c:1424
+#: gtk/gtkcolorsel.c:1
 msgid "Green:"
 msgstr "Zielony:"
 
-#: gtk/gtkcolorsel.c:1425
+#: gtk/gtkcolorsel.c:1
 msgid "Blue:"
 msgstr "Niebieski:"
 
-#: gtk/gtkcolorsel.c:1428
+#: gtk/gtkcolorsel.c:1
 msgid "Opacity:"
 msgstr "Prze¼roczysto¶æ:"
 
-#: gtk/gtkcolorsel.c:1443
-#, fuzzy
+#: gtk/gtkcolorsel.c:1
 msgid "Hex Value:"
-msgstr "Warto¶æ:"
+msgstr "Warto¶æ szesnastkowa:"
 
-#: gtk/gtkcolorsel.c:1464
+#: gtk/gtkcolorsel.c:1
 msgid "Custom Palette"
-msgstr ""
+msgstr "Paleta u¿ytkownika"
 
-#: gtk/gtkcolorsel.c:1469
+#: gtk/gtkcolorsel.c:1
 msgid "Set Color"
-msgstr ""
+msgstr "Ustaw kolor"
 
-#. The OK button
-#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
-#: gtk/gtkgamma.c:415
+#: gtk/gtkcolorseldialog.c:1 gtk/gtkfilesel.c:1 gtk/gtkfontsel.c:1
+#: gtk/gtkgamma.c:1
 msgid "OK"
 msgstr "OK"
 
-#. The Cancel button
-#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
-#: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
-#: gtk/gtkgamma.c:423
+#: gtk/gtkcolorseldialog.c:1 gtk/gtkfilesel.c:1 gtk/gtkfilesel.c:1
+#: gtk/gtkfilesel.c:1 gtk/gtkfilesel.c:1 gtk/gtkfontsel.c:1
+#: gtk/gtkgamma.c:1
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: gtk/gtkcolorseldialog.c:116
+#: gtk/gtkcolorseldialog.c:1
 msgid "Help"
 msgstr "Pomoc"
 
-#. The directories clist
-#: gtk/gtkfilesel.c:514
+#: gtk/gtkfilesel.c:1
 msgid "Directories"
 msgstr "Katalogi"
 
-#. The files clist
-#: gtk/gtkfilesel.c:534
+#: gtk/gtkfilesel.c:1
 msgid "Files"
 msgstr "Pliki"
 
-#: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
+#: gtk/gtkfilesel.c:1 gtk/gtkfilesel.c:1
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Nie mo¿na odczytaæ katalogu: %s"
 
-#: gtk/gtkfilesel.c:637
+#: gtk/gtkfilesel.c:1
 msgid "Create Dir"
 msgstr "Utwórz katalog"
 
-#: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
+#: gtk/gtkfilesel.c:1 gtk/gtkfilesel.c:1
 msgid "Delete File"
 msgstr "Usuñ plik"
 
-#: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
+#: gtk/gtkfilesel.c:1 gtk/gtkfilesel.c:1
 msgid "Rename File"
 msgstr "Zmieñ nazwê"
 
-#.
-#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
-#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
-#. (gpointer) fs);
-#.
-#: gtk/gtkfilesel.c:828
+#: gtk/gtkfilesel.c:1
 msgid "Error"
 msgstr "B³±d"
 
-#. close button
-#: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
+#: gtk/gtkfilesel.c:1 gtk/gtkinputdialog.c:1
 msgid "Close"
 msgstr "Zamknij"
 
-#: gtk/gtkfilesel.c:927
+#: gtk/gtkfilesel.c:1
 msgid "Create Directory"
 msgstr "Utwórz katalog"
 
-#: gtk/gtkfilesel.c:941
+#: gtk/gtkfilesel.c:1
 msgid "Directory name:"
 msgstr "Nazwa katalogu:"
 
-#. buttons
-#: gtk/gtkfilesel.c:954
+#: gtk/gtkfilesel.c:1
 msgid "Create"
 msgstr "Utwórz"
 
-#. buttons
-#: gtk/gtkfilesel.c:1058
+#: gtk/gtkfilesel.c:1
 msgid "Delete"
 msgstr "Usuñ"
 
-#. buttons
-#: gtk/gtkfilesel.c:1173
+#: gtk/gtkfilesel.c:1
 msgid "Rename"
 msgstr "Zmieñ nazwê"
 
-#: gtk/gtkfilesel.c:1600
+#: gtk/gtkfilesel.c:1
 msgid "Selection: "
 msgstr "Wybór: "
 
-#: gtk/gtkfontsel.c:189
+#: gtk/gtkfontsel.c:1
 msgid "Family:"
 msgstr "Rodzina:"
 
-#: gtk/gtkfontsel.c:194
-#, fuzzy
+#: gtk/gtkfontsel.c:1
 msgid "Style:"
-msgstr "Dodaj styl:"
+msgstr "Styl:"
 
-#: gtk/gtkfontsel.c:199
+#: gtk/gtkfontsel.c:1
 msgid "Size:"
 msgstr "Rozmiar:"
 
-#. create the text entry widget
-#: gtk/gtkfontsel.c:309
+#: gtk/gtkfontsel.c:1
 msgid "Preview:"
-msgstr "Podgl±d"
+msgstr "Podgl±d:"
 
-#: gtk/gtkfontsel.c:959
+#: gtk/gtkfontsel.c:1
 msgid "Apply"
 msgstr "Zastosuj"
 
-#: gtk/gtkfontsel.c:981
+#: gtk/gtkfontsel.c:1
 msgid "Font Selection"
-msgstr "Wybór fontu"
+msgstr "Wybór czcionki"
 
-#: gtk/gtkgamma.c:395
+#: gtk/gtkgamma.c:1
 msgid "Gamma"
 msgstr "Gamma"
 
-#: gtk/gtkgamma.c:402
+#: gtk/gtkgamma.c:1
 msgid "Gamma value"
 msgstr "Warto¶æ gamma"
 
-#. shell and main vbox
-#: gtk/gtkinputdialog.c:185
+#: gtk/gtkinputdialog.c:1
 msgid "Input"
 msgstr "Wej¶cie"
 
-#: gtk/gtkinputdialog.c:193
+#: gtk/gtkinputdialog.c:1
 msgid "No input devices"
 msgstr "Brak urz±dzeñ wej¶ciowych"
 
-#: gtk/gtkinputdialog.c:222
+#: gtk/gtkinputdialog.c:1
 msgid "Device:"
 msgstr "Urz±dzenie:"
 
-#: gtk/gtkinputdialog.c:238
+#: gtk/gtkinputdialog.c:1
 msgid "Disabled"
 msgstr "Wy³±czone"
 
-#: gtk/gtkinputdialog.c:246
+#: gtk/gtkinputdialog.c:1
 msgid "Screen"
 msgstr "Ekran"
 
-#: gtk/gtkinputdialog.c:254
+#: gtk/gtkinputdialog.c:1
 msgid "Window"
 msgstr "Okno"
 
-#: gtk/gtkinputdialog.c:262
+#: gtk/gtkinputdialog.c:1
 msgid "Mode: "
 msgstr "Tryb: "
 
-#. The axis listbox
-#: gtk/gtkinputdialog.c:292
+#: gtk/gtkinputdialog.c:1
 msgid "Axes"
 msgstr "Osie"
 
-#. Keys listbox
-#: gtk/gtkinputdialog.c:308
+#: gtk/gtkinputdialog.c:1
 msgid "Keys"
 msgstr "Klawisze"
 
-#. We create the save button in any case, so that clients can
-#. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:329
+#: gtk/gtkinputdialog.c:1
 msgid "Save"
 msgstr "Zapisz"
 
-#: gtk/gtkinputdialog.c:471
+#: gtk/gtkinputdialog.c:1
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:472
+#: gtk/gtkinputdialog.c:1
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:473
+#: gtk/gtkinputdialog.c:1
 msgid "Pressure"
 msgstr "Nacisk"
 
-#: gtk/gtkinputdialog.c:474
+#: gtk/gtkinputdialog.c:1
 msgid "X Tilt"
 msgstr "Nachylenie poziome"
 
-#: gtk/gtkinputdialog.c:475
+#: gtk/gtkinputdialog.c:1
 msgid "Y Tilt"
 msgstr "Nachylenie pionowe"
 
-#: gtk/gtkinputdialog.c:476
+#: gtk/gtkinputdialog.c:1
 msgid "Wheel"
-msgstr ""
+msgstr "Ko³o"
 
-#: gtk/gtkinputdialog.c:516
+#: gtk/gtkinputdialog.c:1
 msgid "none"
 msgstr "brak"
 
-#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
+#: gtk/gtkinputdialog.c:1 gtk/gtkinputdialog.c:1
 msgid "(disabled)"
 msgstr "(wy³±czone)"
 
-#: gtk/gtkinputdialog.c:579
+#: gtk/gtkinputdialog.c:1
 msgid "(unknown)"
 msgstr "(nieznane)"
 
-#. and clear button
-#: gtk/gtkinputdialog.c:664
+#: gtk/gtkinputdialog.c:1
 msgid "clear"
 msgstr "wyczy¶æ"
 
-#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
+#: gtk/gtkmain.c:1
+msgid "default:LTR"
+msgstr "default:LTR"
+
+#: gtk/gtknotebook.c:1 gtk/gtknotebook.c:1
 #, c-format
 msgid "Page %u"
 msgstr "Strona %u"
 
-#: gtk/gtkrc.c:1872
+#: gtk/gtkrc.c:1
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Nie mo¿na odnale¼æ pliku z obrazem na ¶cie¿ce: \"%s\" wiersz %d"
 
-#: gtk/gtkrc.c:1875
+#: gtk/gtkrc.c:1
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nie mo¿na odnale¼æ pliku z obrazem na ¶cie¿ce: \"%s\""
 
-#: gtk/gtkthemes.c:117
+#: gtk/gtkthemes.c:1
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
 msgstr "Nie mo¿na odnale¼æ modu³u ³adowalnego na ¶cie¿ce: \"%s\","
 
-#: gtk/gtktipsquery.c:180
+#: gtk/gtktipsquery.c:1
 msgid "--- No Tip ---"
 msgstr "--- Brak podpowiedzi ---"
-
-#~ msgid "Foundry:"
-#~ msgstr "Druk:"
-
-#~ msgid "Weight:"
-#~ msgstr "Pogrubienie:"
-
-#~ msgid "Slant:"
-#~ msgstr "Nachylenie:"
-
-#~ msgid "Set Width:"
-#~ msgstr "Ustaw szeroko¶æ:"
-
-#~ msgid "Pixel Size:"
-#~ msgstr "Rozmiar w pikselach:"
-
-#~ msgid "Point Size:"
-#~ msgstr "Rozmiar w punktach:"
-
-#~ msgid "Resolution X:"
-#~ msgstr "Rozdzielczo¶æ pozioma:"
-
-#~ msgid "Resolution Y:"
-#~ msgstr "Rozdzielczo¶æ pionowa:"
-
-#~ msgid "Spacing:"
-#~ msgstr "Odstêpy:"
-
-#~ msgid "Average Width:"
-#~ msgstr "¦rednia szeroko¶æ:"
-
-#~ msgid "Charset:"
-#~ msgstr "Kodowanie:"
-
-#~ msgid "Font Property"
-#~ msgstr "W³a¶ciwo¶æ fontu"
-
-#~ msgid "Requested Value"
-#~ msgstr "¯±dana warto¶æ"
-
-#~ msgid "Actual Value"
-#~ msgstr "Rzeczywista warto¶æ"
-
-#~ msgid "Font"
-#~ msgstr "Font"
-
-#~ msgid "Font:"
-#~ msgstr "Font:"
-
-#~ msgid "Font Style:"
-#~ msgstr "Styl fontu:"
-
-#~ msgid "Reset Filter"
-#~ msgstr "Wyczy¶æ filtr"
-
-#~ msgid "Metric:"
-#~ msgstr "Jednostki:"
-
-#~ msgid "Points"
-#~ msgstr "Punkty"
-
-#~ msgid "Pixels"
-#~ msgstr "Piksele"
-
-#~ msgid "Font Information"
-#~ msgstr "Informacje o foncie"
-
-#~ msgid "Requested Font Name:"
-#~ msgstr "¯±dana nazwa fontu"
-
-#~ msgid "Actual Font Name:"
-#~ msgstr "Rzeczywista nazwa fontu:"
-
-#~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "dostêpnych fontów: %i, liczba stylów : %i."
-
-#~ msgid "Filter"
-#~ msgstr "Filtr"
-
-#~ msgid "Font Types:"
-#~ msgstr "Typy fontów"
-
-#~ msgid "Bitmap"
-#~ msgstr "Bitmapowe"
-
-#~ msgid "Scalable"
-#~ msgstr "Skalowalne"
-
-#~ msgid "Scaled Bitmap"
-#~ msgstr "Skalowane bitmapy"
-
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "(nil)"
-#~ msgstr "(pusty)"
-
-#~ msgid "regular"
-#~ msgstr "zwyk³e"
-
-#~ msgid "italic"
-#~ msgstr "italic"
-
-#~ msgid "oblique"
-#~ msgstr "pochylony"
-
-#~ msgid "reverse italic"
-#~ msgstr "odwrócony italic"
-
-#~ msgid "reverse oblique"
-#~ msgstr "odwrotnie pochylony"
-
-#~ msgid "other"
-#~ msgstr "inne"
-
-#~ msgid "[M]"
-#~ msgstr "[M]"
-
-#~ msgid "[C]"
-#~ msgstr "[C]"
-
-#~ msgid "The selected font is not available."
-#~ msgstr "Wybrany font nie jest dostêpny."
-
-#~ msgid "The selected font is not a valid font."
-#~ msgstr "Wybrany font nie jest poprawny."
-
-#~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "Ten 2-bajtowy font mo¿e nie byæ wy¶wietlany poprawnie."
-
-#~ msgid "roman"
-#~ msgstr "roman"
-
-#~ msgid "proportional"
-#~ msgstr "proporcjonalne"
-
-#~ msgid "monospaced"
-#~ msgstr "równomierne"
-
-#~ msgid "char cell"
-#~ msgstr "rozmiaru znaku"
-
-#~ msgid "Font: (Filter Applied)"
-#~ msgstr "Font: (z zastosowaniem filtra)"
-
-#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "Przekroczono warto¶æ MAX_FONTS. Mo¿e brakowaæ pewnych fontów."
