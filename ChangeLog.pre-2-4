@@ -1,3 +1,11 @@
+2002-01-01  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextview.c (changed_handler): Replace call to
+	gtk_widget_size_request() that expected to actually compute the
+	request with a direct use of widget_class->size_request, so we get
+	our size request right; fixes remaining part of #63065 reported by
+	Matthias Clasen
+
 2001-12-31  Havoc Pennington  <hp@pobox.com>
 
 	* tests/testtext.c (do_insert_and_scroll): remove backward_char
