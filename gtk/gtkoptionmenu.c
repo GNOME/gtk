@@ -369,7 +369,7 @@ gtk_option_menu_expose (GtkWidget      *widget,
 {
   GtkWidget *child;
   GdkEventExpose child_event;
-  gint remove_child;
+  /* gint remove_child; */
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_OPTION_MENU (widget), FALSE);
