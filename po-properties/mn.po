@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 13:24-0500\n"
+"POT-Creation-Date: 2005-01-08 02:01-0500\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -399,62 +399,62 @@ msgid "Whether the action group is visible."
 msgstr "Үйлдлийн бүлэг харагдахуйц эсэх."
 
 # gtk/gtkspinbutton.c:298
-#: gtk/gtkadjustment.c:108 gtk/gtkcellrendererprogress.c:115
+#: gtk/gtkadjustment.c:115 gtk/gtkcellrendererprogress.c:115
 #: gtk/gtkspinbutton.c:303
 msgid "Value"
 msgstr "Утга"
 
 # gtk/gtkwidget.c:391
-#: gtk/gtkadjustment.c:109
+#: gtk/gtkadjustment.c:116
 msgid "The value of the adjustment"
 msgstr "Зэрэгцүүлэлтийн утга"
 
 # gtk/gtkcurve.c:130
-#: gtk/gtkadjustment.c:118
+#: gtk/gtkadjustment.c:132
 msgid "Minimum Value"
 msgstr "Хамгийн бага утга"
 
 # gtk/gtkwidget.c:391
-#: gtk/gtkadjustment.c:119
+#: gtk/gtkadjustment.c:133
 msgid "The minimum value of the adjustment"
 msgstr "Зэрэгцүүлэлтийн хамгийн бага утга"
 
 # gtk/gtkentry.c:463
-#: gtk/gtkadjustment.c:128
+#: gtk/gtkadjustment.c:152
 msgid "Maximum Value"
 msgstr "Максимум утга"
 
 # gtk/gtkwidget.c:391
-#: gtk/gtkadjustment.c:129
+#: gtk/gtkadjustment.c:153
 msgid "The maximum value of the adjustment"
 msgstr "Зэрэгцүүлэлтийн хамгийн их утга"
 
 # gtk/gtkinputdialog.c:246
-#: gtk/gtkadjustment.c:138
+#: gtk/gtkadjustment.c:169
 msgid "Step Increment"
 msgstr "Алхам өсөлт"
 
 # gtk/gtkentry.c:524
-#: gtk/gtkadjustment.c:139
+#: gtk/gtkadjustment.c:170
 msgid "The step increment of the adjustment"
 msgstr "Зэрэгцүүлэлтийн алхам өсөлт"
 
-#: gtk/gtkadjustment.c:148
+#: gtk/gtkadjustment.c:186
 msgid "Page Increment"
 msgstr "Хуудас өсөлт"
 
 # gtk/gtkentry.c:524
-#: gtk/gtkadjustment.c:149
+#: gtk/gtkadjustment.c:187
 msgid "The page increment of the adjustment"
 msgstr "Зэрэгцүүлэлтийн хуудас өсөлт"
 
 # gtk/gtkruler.c:148
-#: gtk/gtkadjustment.c:158
+#: gtk/gtkadjustment.c:206
 msgid "Page Size"
 msgstr "Хуудсын хэмжээ"
 
 # gtk/gtkcellrenderertoggle.c:131
-#: gtk/gtkadjustment.c:159
+#: gtk/gtkadjustment.c:207
 msgid "The page size of the adjustment"
 msgstr "Зэрэгцүүлэлтийн хуудсын хэмжээ"
 
@@ -670,7 +670,7 @@ msgstr ""
 "хослолт тохирох."
 
 # gtk/gtkbox.c:125
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:447
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:449
 #: gtk/gtktreeviewcolumn.c:250
 msgid "Spacing"
 msgstr "Зайн хэмжээ"
@@ -777,7 +777,7 @@ msgstr ""
 "Хэрвээ идэвхитэй бол бичээс харагдахгүй харин стандарт эмблемийг хөтөлбөрөөс "
 "сонгоход хэрэглэгдэнэ."
 
-#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:675
+#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:678
 msgid "Focus on click"
 msgstr "Товшиход хараалах"
 
@@ -1389,7 +1389,7 @@ msgid ""
 msgstr ""
 
 # gtk/gtkentry.c:503
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:361
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
 #: gtk/gtklabel.c:453
 #, fuzzy
 msgid "Width In Characters"
@@ -1626,7 +1626,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Өнгө альпа утгаар өгөгдөх эсэх"
 
 # gtk/gtktreeviewcolumn.c:238
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:347
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:351
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Гарчиг"
@@ -1743,81 +1743,81 @@ msgstr "Жагсаалт дахь утга"
 msgid "Whether entered values must already be present in the list"
 msgstr "Оруулсан утгыг жагсаалтанд гаргасан байх эсэх"
 
-#: gtk/gtkcombobox.c:548
+#: gtk/gtkcombobox.c:551
 msgid "ComboBox model"
 msgstr "Комбобокс загвар"
 
-#: gtk/gtkcombobox.c:549
+#: gtk/gtkcombobox.c:552
 msgid "The model for the combo box"
 msgstr "Комбобоксын загвар"
 
 # gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:190
-#: gtk/gtkcombobox.c:565
+#: gtk/gtkcombobox.c:568
 msgid "Wrap width"
 msgstr "Өргөн таслах"
 
-#: gtk/gtkcombobox.c:566
+#: gtk/gtkcombobox.c:569
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Торонд объект байрлуулахад өргөн таслах"
 
 # gtk/gtktable.c:174
-#: gtk/gtkcombobox.c:588
+#: gtk/gtkcombobox.c:591
 msgid "Row span column"
 msgstr "Мөр дарах багана"
 
-#: gtk/gtkcombobox.c:589
+#: gtk/gtkcombobox.c:592
 msgid "TreeModel column containing the row span values"
 msgstr "Мөр хоорондын зайн утга агуулах TreeModel-багана"
 
 # gtk/gtktable.c:183
-#: gtk/gtkcombobox.c:610
+#: gtk/gtkcombobox.c:613
 msgid "Column span column"
 msgstr "Багана дарах багана"
 
-#: gtk/gtkcombobox.c:611
+#: gtk/gtkcombobox.c:614
 msgid "TreeModel column containing the column span values"
 msgstr "Багана хоорондын зайн утга агуулах TreeModel-багана"
 
 # gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
-#: gtk/gtkcombobox.c:631
+#: gtk/gtkcombobox.c:634
 msgid "Active item"
 msgstr "Идэвхжүүлэх"
 
 # gtk/gtkfontsel.c:210
-#: gtk/gtkcombobox.c:632
+#: gtk/gtkcombobox.c:635
 msgid "The item which is currently active"
 msgstr "Идэвхитэй байгаа элемент"
 
-#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:228
+#: gtk/gtkcombobox.c:654 gtk/gtkuimanager.c:228
 msgid "Add tearoffs to menus"
 msgstr "Цэс рүү тасалбар нэмэх"
 
-#: gtk/gtkcombobox.c:652
+#: gtk/gtkcombobox.c:655
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Tab - уудын хэмжээ ижил байх эсэх"
 
 # gtk/gtkentry.c:480
-#: gtk/gtkcombobox.c:667 gtk/gtkentry.c:530
+#: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "Кадртай"
 
-#: gtk/gtkcombobox.c:668
+#: gtk/gtkcombobox.c:671
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Толгой нь дараалалгүй багана"
 
 # gtk/gtklabel.c:334
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:679
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Хулганаар товшиход товчинд харааг шилжүүлж чадах эсэх"
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:685
 msgid "Appears as list"
 msgstr "Жагсаалтаар харуулах"
 
-#: gtk/gtkcombobox.c:683
+#: gtk/gtkcombobox.c:686
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "combobox dropdowns цэснээс илүү жагсаалт шиг харагдах эсэх"
@@ -2077,7 +2077,7 @@ msgid "Minimum length of the search key in order to look up matches"
 msgstr "Х/Б богино сонголтоор хайх түлхүүрийн урт"
 
 # gtk/gtktreeview.c:586
-#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:368
+#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:370
 #, fuzzy
 msgid "Text column"
 msgstr "Текст Багана"
@@ -2272,21 +2272,21 @@ msgstr "Далдласанг харуулах"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Далдласан файл эсвэл лавлахуудыг харуулах эсэх"
 
-#: gtk/gtkfilechooserbutton.c:332
+#: gtk/gtkfilechooserbutton.c:336
 msgid "Dialog"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:333
+#: gtk/gtkfilechooserbutton.c:337
 msgid "The file chooser dialog to use."
 msgstr ""
 
 # gtk/gtkwindow.c:417
-#: gtk/gtkfilechooserbutton.c:348
+#: gtk/gtkfilechooserbutton.c:352
 #, fuzzy
 msgid "The title of the file chooser dialog."
 msgstr "Бичиг сонгогч цонхны гарчиг"
 
-#: gtk/gtkfilechooserbutton.c:362
+#: gtk/gtkfilechooserbutton.c:366
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
@@ -2504,135 +2504,135 @@ msgstr ""
 "snap_edge онцлогийг эсвэл тодорхойлогчийн байрлалаас өвлөсөн утгыг хэрэглэх"
 
 # gtk/gtkentry.c:445 gtk/gtklabel.c:368
-#: gtk/gtkiconview.c:331
+#: gtk/gtkiconview.c:333
 #, fuzzy
 msgid "Selection mode"
 msgstr "Сонгогдсоны хязгаар"
 
 # gtk/gtkfilesel.c:537
-#: gtk/gtkiconview.c:332
+#: gtk/gtkiconview.c:334
 #, fuzzy
 msgid "The selection mode"
 msgstr "Сонгогдсон жил"
 
 # gtk/gtktreeview.c:586
-#: gtk/gtkiconview.c:350
+#: gtk/gtkiconview.c:352
 #, fuzzy
 msgid "Pixbuf column"
 msgstr "Текст Багана"
 
-#: gtk/gtkiconview.c:351
+#: gtk/gtkiconview.c:353
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr ""
 
-#: gtk/gtkiconview.c:369
+#: gtk/gtkiconview.c:371
 msgid "Model column used to retrieve the text from"
 msgstr ""
 
 # gtk/gtkcellrenderertext.c:182
-#: gtk/gtkiconview.c:388
+#: gtk/gtkiconview.c:390
 #, fuzzy
 msgid "Markup column"
 msgstr "Тэмдэглэгээ"
 
-#: gtk/gtkiconview.c:389
+#: gtk/gtkiconview.c:391
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 
-#: gtk/gtkiconview.c:396
+#: gtk/gtkiconview.c:398
 #, fuzzy
 msgid "Icon View Model"
 msgstr "Модчилж үзүүлэх загвар"
 
-#: gtk/gtkiconview.c:397
+#: gtk/gtkiconview.c:399
 #, fuzzy
 msgid "The model for the icon view"
 msgstr "Модоор харуулах загвар"
 
-#: gtk/gtkiconview.c:413
+#: gtk/gtkiconview.c:415
 #, fuzzy
 msgid "Number of columns"
 msgstr "Сувгийн тоо"
 
-#: gtk/gtkiconview.c:414
+#: gtk/gtkiconview.c:416
 #, fuzzy
 msgid "Number of columns to display"
 msgstr "Дүрслэгдэж буй аравтын оронгийн тоо"
 
 # gtk/gtknotebook.c:380
-#: gtk/gtkiconview.c:431
+#: gtk/gtkiconview.c:433
 #, fuzzy
 msgid "Width for each item"
 msgstr "Элементийн бичээсээр хэрэглэх виджет"
 
-#: gtk/gtkiconview.c:432
+#: gtk/gtkiconview.c:434
 msgid "The width used for each item"
 msgstr ""
 
-#: gtk/gtkiconview.c:448
+#: gtk/gtkiconview.c:450
 msgid "Space which is inserted between cells of an item"
 msgstr ""
 
 # gtk/gtktable.c:174
-#: gtk/gtkiconview.c:463
+#: gtk/gtkiconview.c:465
 #, fuzzy
 msgid "Row Spacing"
 msgstr "Мөрийн хэмжээ"
 
-#: gtk/gtkiconview.c:464
+#: gtk/gtkiconview.c:466
 msgid "Space which is inserted between grid rows"
 msgstr ""
 
 # gtk/gtktable.c:183
-#: gtk/gtkiconview.c:479
+#: gtk/gtkiconview.c:481
 #, fuzzy
 msgid "Column Spacing"
 msgstr "Баганы хэмжээ"
 
-#: gtk/gtkiconview.c:480
+#: gtk/gtkiconview.c:482
 msgid "Space which is inserted between grid column"
 msgstr ""
 
 # gtk/gtktextview.c:594
-#: gtk/gtkiconview.c:495
+#: gtk/gtkiconview.c:497
 #, fuzzy
 msgid "Margin"
 msgstr "Зүүн хязгаар "
 
-#: gtk/gtkiconview.c:496
+#: gtk/gtkiconview.c:498
 msgid "Space which is inserted at the edges of the icon view"
 msgstr ""
 
 # gtk/gtkprogressbar.c:139 gtk/gtktoolbar.c:224
-#: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
+#: gtk/gtkiconview.c:514 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "Чиглэл"
 
-#: gtk/gtkiconview.c:513
+#: gtk/gtkiconview.c:515
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
 # gtk/gtkentry.c:445 gtk/gtklabel.c:368
-#: gtk/gtkiconview.c:521
+#: gtk/gtkiconview.c:523
 #, fuzzy
 msgid "Selection Box Color"
 msgstr "Сонгогдсоны хязгаар"
 
 # gtk/gtkwindow.c:417
-#: gtk/gtkiconview.c:522
+#: gtk/gtkiconview.c:524
 #, fuzzy
 msgid "Color of the selection box"
 msgstr "Бичиг сонгогч цонхны гарчиг"
 
 # gtk/gtkentry.c:445 gtk/gtklabel.c:368
-#: gtk/gtkiconview.c:528
+#: gtk/gtkiconview.c:530
 #, fuzzy
 msgid "Selection Box Alpha"
 msgstr "Сонгогдсоны хязгаар"
 
 # gtk/gtkwindow.c:417
-#: gtk/gtkiconview.c:529
+#: gtk/gtkiconview.c:531
 #, fuzzy
 msgid "Opacity of the selection box"
 msgstr "Бичиг сонгогч цонхны гарчиг"
@@ -2894,115 +2894,115 @@ msgstr "Байрлалын өргөн"
 msgid "The height of the layout"
 msgstr "Байрлалын өндөр"
 
-#: gtk/gtkmenu.c:524
+#: gtk/gtkmenu.c:526
 msgid "Tearoff Title"
 msgstr "Буулгах гарчиг"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "Энэ цэс буусан үед цонхны удирдагчаар харуулагдах боломтой гарчиг"
 
-#: gtk/gtkmenu.c:539
+#: gtk/gtkmenu.c:541
 #, fuzzy
 msgid "Tearoff State"
 msgstr "Буулгах гарчиг"
 
-#: gtk/gtkmenu.c:540
+#: gtk/gtkmenu.c:542
 #, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Энэ цэс буусан үед цонхны удирдагчаар харуулагдах боломтой гарчиг"
 
-#: gtk/gtkmenu.c:546
+#: gtk/gtkmenu.c:548
 msgid "Vertical Padding"
 msgstr "Босоо доторлогоо"
 
-#: gtk/gtkmenu.c:547
+#: gtk/gtkmenu.c:549
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Цэсийн дээд ба доод зайн тусгай хэмжээ"
 
 # gtk/gtkalignment.c:130
-#: gtk/gtkmenu.c:555
+#: gtk/gtkmenu.c:557
 msgid "Vertical Offset"
 msgstr "Босоо оффсет"
 
-#: gtk/gtkmenu.c:556
+#: gtk/gtkmenu.c:558
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "Хэрэв цэс дэд цэс бол, босоогоор энэ тооны цэг байрлуулна."
 
 # gtk/gtkalignment.c:121
-#: gtk/gtkmenu.c:564
+#: gtk/gtkmenu.c:566
 msgid "Horizontal Offset"
 msgstr "Хэвтээ оффсет"
 
-#: gtk/gtkmenu.c:565
+#: gtk/gtkmenu.c:567
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "Хэрэв цэс дэд цэс бол, хэвтээгээр энэ тооны цэг байрлуулна."
 
-#: gtk/gtkmenu.c:575
+#: gtk/gtkmenu.c:577
 msgid "Left Attach"
 msgstr "Зүүн хавсралт"
 
-#: gtk/gtkmenu.c:576 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr "Элементийн харьяалагдах зүүн талын баганы дугаар"
 
-#: gtk/gtkmenu.c:583
+#: gtk/gtkmenu.c:585
 msgid "Right Attach"
 msgstr "баруун хавсралт"
 
-#: gtk/gtkmenu.c:584
+#: gtk/gtkmenu.c:586
 msgid "The column number to attach the right side of the child to"
 msgstr "Хүүгийн баруун талд харьяалагдах зүүн талын баганы дугаар"
 
-#: gtk/gtkmenu.c:591
+#: gtk/gtkmenu.c:593
 msgid "Top Attach"
 msgstr "Дээд хавсралт"
 
-#: gtk/gtkmenu.c:592
+#: gtk/gtkmenu.c:594
 msgid "The row number to attach the top of the child to"
 msgstr "Хүүгийн дээр харъяалагдах мөрийн дугаар"
 
-#: gtk/gtkmenu.c:599
+#: gtk/gtkmenu.c:601
 msgid "Bottom Attach"
 msgstr "Доод хавсралт"
 
-#: gtk/gtkmenu.c:600 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "Хүүгийн доор харъяалагдах мөрийн дугаар"
 
 # gtk/gtkmenu.c:260
-#: gtk/gtkmenu.c:687
+#: gtk/gtkmenu.c:689
 msgid "Can change accelerators"
 msgstr "Товчлууруудын комбинацийг өөрчилж болно."
 
-#: gtk/gtkmenu.c:688
+#: gtk/gtkmenu.c:690
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Цэсийн элемент дээр товч дарагдсан үед цэсийн хурдасгагч товчлууруудыг "
 "өөрчилж болох эсэх"
 
-#: gtk/gtkmenu.c:693
+#: gtk/gtkmenu.c:695
 msgid "Delay before submenus appear"
 msgstr "Дэд цэс харагдахаас өмнө түр завсарлах"
 
-#: gtk/gtkmenu.c:694
+#: gtk/gtkmenu.c:696
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Дэд цэс харагдахаас өмнө хулганын заагч цэс дээр байх хамгийн бага хугацаа."
 
-#: gtk/gtkmenu.c:701
+#: gtk/gtkmenu.c:703
 msgid "Delay before hiding a submenu"
 msgstr "Дэд цэс хаагдахаас өмнө түр завсарлах"
 
-#: gtk/gtkmenu.c:702
+#: gtk/gtkmenu.c:704
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4838,7 +4838,7 @@ msgstr "Задлах"
 #: gtk/gtktreeview.c:693
 #, fuzzy
 msgid ""
-"Whether rows should be expanded/collaped when the pointer moves over them"
+"Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "Хэрвээ цонх цонхны менежерээр чимэглэгдсэн бол ҮНЭН."
 
 # gtk/gtktreeview.c:609

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 13:24-0500\n"
+"POT-Creation-Date: 2005-01-08 02:01-0500\n"
 "PO-Revision-Date: 2004-03-02 22:17+0100\n"
 "Last-Translator: Alessio Dessi <alessiodessi@tiscali.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -375,52 +375,52 @@ msgstr "Indica se il gruppo dell'azione è abilitato."
 msgid "Whether the action group is visible."
 msgstr "Indica se il gruppo dell'azione è visibile."
 
-#: gtk/gtkadjustment.c:108 gtk/gtkcellrendererprogress.c:115
+#: gtk/gtkadjustment.c:115 gtk/gtkcellrendererprogress.c:115
 #: gtk/gtkspinbutton.c:303
 msgid "Value"
 msgstr "Valore"
 
-#: gtk/gtkadjustment.c:109
+#: gtk/gtkadjustment.c:116
 msgid "The value of the adjustment"
 msgstr "Il valore di aggiustamento"
 
-#: gtk/gtkadjustment.c:118
+#: gtk/gtkadjustment.c:132
 msgid "Minimum Value"
 msgstr "Valore minimo"
 
-#: gtk/gtkadjustment.c:119
+#: gtk/gtkadjustment.c:133
 msgid "The minimum value of the adjustment"
 msgstr "Il valore minimo di aggiustamento"
 
-#: gtk/gtkadjustment.c:128
+#: gtk/gtkadjustment.c:152
 msgid "Maximum Value"
 msgstr "Valore massimo"
 
-#: gtk/gtkadjustment.c:129
+#: gtk/gtkadjustment.c:153
 msgid "The maximum value of the adjustment"
 msgstr "Il valore massimo di aggiustamento"
 
-#: gtk/gtkadjustment.c:138
+#: gtk/gtkadjustment.c:169
 msgid "Step Increment"
 msgstr "Passo dell'incremento"
 
-#: gtk/gtkadjustment.c:139
+#: gtk/gtkadjustment.c:170
 msgid "The step increment of the adjustment"
 msgstr "Il passo dell'incremento dell'aggiustamento"
 
-#: gtk/gtkadjustment.c:148
+#: gtk/gtkadjustment.c:186
 msgid "Page Increment"
 msgstr "Incremento di pagina"
 
-#: gtk/gtkadjustment.c:149
+#: gtk/gtkadjustment.c:187
 msgid "The page increment of the adjustment"
 msgstr "L'incremento di pagina dell'aggiustamento"
 
-#: gtk/gtkadjustment.c:158
+#: gtk/gtkadjustment.c:206
 msgid "Page Size"
 msgstr "Dimensione pagina"
 
-#: gtk/gtkadjustment.c:159
+#: gtk/gtkadjustment.c:207
 msgid "The page size of the adjustment"
 msgstr "La dimensione di pagina dell'aggiustamento"
 
@@ -608,7 +608,7 @@ msgstr ""
 "Se TRUE, il widget appare in un gruppo secondario di widget figli, adatto ad "
 "es. per i pulsanti di aiuto"
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:447
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:449
 #: gtk/gtktreeviewcolumn.c:250
 msgid "Spacing"
 msgstr "Spaziatura"
@@ -709,7 +709,7 @@ msgstr ""
 "Se impostato, l'etichetta non sarà visualizzata, ma sarà usata per "
 "selezionare un oggetto nello stock"
 
-#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:675
+#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:678
 msgid "Focus on click"
 msgstr "Focus al clic"
 
@@ -1248,7 +1248,7 @@ msgid ""
 "have enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:361
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
 #: gtk/gtklabel.c:453
 #, fuzzy
 msgid "Width In Characters"
@@ -1462,7 +1462,7 @@ msgstr "Usa alfa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Indica se dare o meno un valore alfa al colore"
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:347
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:351
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Titolo"
@@ -1565,76 +1565,76 @@ msgstr "Valore nella lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Indica se il valore inserito dev'essere già presente nella lista"
 
-#: gtk/gtkcombobox.c:548
+#: gtk/gtkcombobox.c:551
 msgid "ComboBox model"
 msgstr "Modello ComboBox"
 
-#: gtk/gtkcombobox.c:549
+#: gtk/gtkcombobox.c:552
 msgid "The model for the combo box"
 msgstr "Il modello per il combo box"
 
-#: gtk/gtkcombobox.c:565
+#: gtk/gtkcombobox.c:568
 msgid "Wrap width"
 msgstr "Adatta larghezza"
 
-#: gtk/gtkcombobox.c:566
+#: gtk/gtkcombobox.c:569
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 "Adatta la larghezza per la visualizzazione degli elementi su una griglia"
 
-#: gtk/gtkcombobox.c:588
+#: gtk/gtkcombobox.c:591
 msgid "Row span column"
 msgstr "Spaziatura riga-colonna"
 
-#: gtk/gtkcombobox.c:589
+#: gtk/gtkcombobox.c:592
 msgid "TreeModel column containing the row span values"
 msgstr "Colonna di TreeModel contenente i valori di spaziatura della riga"
 
-#: gtk/gtkcombobox.c:610
+#: gtk/gtkcombobox.c:613
 msgid "Column span column"
 msgstr "Spaziatura colonna-colonna"
 
-#: gtk/gtkcombobox.c:611
+#: gtk/gtkcombobox.c:614
 msgid "TreeModel column containing the column span values"
 msgstr "Colonna di TreeModel contenente i valori di spaziatura della colonna"
 
-#: gtk/gtkcombobox.c:631
+#: gtk/gtkcombobox.c:634
 msgid "Active item"
 msgstr "Elemento attivo"
 
-#: gtk/gtkcombobox.c:632
+#: gtk/gtkcombobox.c:635
 msgid "The item which is currently active"
 msgstr "L'elemento attivo in questo momento"
 
-#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:228
+#: gtk/gtkcombobox.c:654 gtk/gtkuimanager.c:228
 msgid "Add tearoffs to menus"
 msgstr "Aggiunge gli elementi per staccare i menu"
 
-#: gtk/gtkcombobox.c:652
+#: gtk/gtkcombobox.c:655
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Indica se le linguette devono avere tutte la stessa dimensione"
 
-#: gtk/gtkcombobox.c:667 gtk/gtkentry.c:530
+#: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "Con bordo"
 
-#: gtk/gtkcombobox.c:668
+#: gtk/gtkcombobox.c:671
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Indica se la colonna può essere riordinata in base alle intestazioni"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:679
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Indica se il pulsante ottiene il focus dopo che è stato cliccato con il mouse"
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:685
 msgid "Appears as list"
 msgstr "Appare come una lista"
 
-#: gtk/gtkcombobox.c:683
+#: gtk/gtkcombobox.c:686
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
@@ -1867,7 +1867,7 @@ msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 "Lunghezza minima della chiave di ricerca nella ricerca delle corrispondenze"
 
-#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:368
+#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:370
 #, fuzzy
 msgid "Text column"
 msgstr "Colonna testo"
@@ -2051,20 +2051,20 @@ msgstr "Mostra nascosti"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Indica se devono essere visualizzati i file e le cartelle nascoste"
 
-#: gtk/gtkfilechooserbutton.c:332
+#: gtk/gtkfilechooserbutton.c:336
 msgid "Dialog"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:333
+#: gtk/gtkfilechooserbutton.c:337
 msgid "The file chooser dialog to use."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:348
+#: gtk/gtkfilechooserbutton.c:352
 #, fuzzy
 msgid "The title of the file chooser dialog."
 msgstr "Il titolo della finestra di selezione dei caratteri"
 
-#: gtk/gtkfilechooserbutton.c:362
+#: gtk/gtkfilechooserbutton.c:366
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
@@ -2260,123 +2260,123 @@ msgstr ""
 "Indica se utilizzare il valore della proprietà bordo_snap o il valore "
 "derivato dalla posizione_handle"
 
-#: gtk/gtkiconview.c:331
+#: gtk/gtkiconview.c:333
 #, fuzzy
 msgid "Selection mode"
 msgstr "Limite della selezione"
 
-#: gtk/gtkiconview.c:332
+#: gtk/gtkiconview.c:334
 #, fuzzy
 msgid "The selection mode"
 msgstr "L'anno selezionato"
 
-#: gtk/gtkiconview.c:350
+#: gtk/gtkiconview.c:352
 #, fuzzy
 msgid "Pixbuf column"
 msgstr "Colonna testo"
 
-#: gtk/gtkiconview.c:351
+#: gtk/gtkiconview.c:353
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr ""
 
-#: gtk/gtkiconview.c:369
+#: gtk/gtkiconview.c:371
 msgid "Model column used to retrieve the text from"
 msgstr ""
 
-#: gtk/gtkiconview.c:388
+#: gtk/gtkiconview.c:390
 #, fuzzy
 msgid "Markup column"
 msgstr "Marcatore"
 
-#: gtk/gtkiconview.c:389
+#: gtk/gtkiconview.c:391
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 
-#: gtk/gtkiconview.c:396
+#: gtk/gtkiconview.c:398
 #, fuzzy
 msgid "Icon View Model"
 msgstr "Modello TreeView"
 
-#: gtk/gtkiconview.c:397
+#: gtk/gtkiconview.c:399
 #, fuzzy
 msgid "The model for the icon view"
 msgstr "Il modello per la vista ad albero"
 
-#: gtk/gtkiconview.c:413
+#: gtk/gtkiconview.c:415
 #, fuzzy
 msgid "Number of columns"
 msgstr "Numero di canali"
 
-#: gtk/gtkiconview.c:414
+#: gtk/gtkiconview.c:416
 #, fuzzy
 msgid "Number of columns to display"
 msgstr "Il numero di cifre decimali da visualizzare"
 
-#: gtk/gtkiconview.c:431
+#: gtk/gtkiconview.c:433
 #, fuzzy
 msgid "Width for each item"
 msgstr "Widget utilizzato come elemento etichetta"
 
-#: gtk/gtkiconview.c:432
+#: gtk/gtkiconview.c:434
 msgid "The width used for each item"
 msgstr ""
 
-#: gtk/gtkiconview.c:448
+#: gtk/gtkiconview.c:450
 msgid "Space which is inserted between cells of an item"
 msgstr ""
 
-#: gtk/gtkiconview.c:463
+#: gtk/gtkiconview.c:465
 #, fuzzy
 msgid "Row Spacing"
 msgstr "Spaziatura riga"
 
-#: gtk/gtkiconview.c:464
+#: gtk/gtkiconview.c:466
 msgid "Space which is inserted between grid rows"
 msgstr ""
 
-#: gtk/gtkiconview.c:479
+#: gtk/gtkiconview.c:481
 #, fuzzy
 msgid "Column Spacing"
 msgstr "Spaziatura colonna"
 
-#: gtk/gtkiconview.c:480
+#: gtk/gtkiconview.c:482
 msgid "Space which is inserted between grid column"
 msgstr ""
 
-#: gtk/gtkiconview.c:495
+#: gtk/gtkiconview.c:497
 #, fuzzy
 msgid "Margin"
 msgstr "Margine sinistro"
 
-#: gtk/gtkiconview.c:496
+#: gtk/gtkiconview.c:498
 msgid "Space which is inserted at the edges of the icon view"
 msgstr ""
 
-#: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
+#: gtk/gtkiconview.c:514 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "Orientamento"
 
-#: gtk/gtkiconview.c:513
+#: gtk/gtkiconview.c:515
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
-#: gtk/gtkiconview.c:521
+#: gtk/gtkiconview.c:523
 #, fuzzy
 msgid "Selection Box Color"
 msgstr "Limite della selezione"
 
-#: gtk/gtkiconview.c:522
+#: gtk/gtkiconview.c:524
 #, fuzzy
 msgid "Color of the selection box"
 msgstr "Il titolo della finestra di selezione dei caratteri"
 
-#: gtk/gtkiconview.c:528
+#: gtk/gtkiconview.c:530
 #, fuzzy
 msgid "Selection Box Alpha"
 msgstr "Limite della selezione"
 
-#: gtk/gtkiconview.c:529
+#: gtk/gtkiconview.c:531
 #, fuzzy
 msgid "Opacity of the selection box"
 msgstr "Il titolo della finestra di selezione dei caratteri"
@@ -2617,11 +2617,11 @@ msgstr "La larghezza del layout"
 msgid "The height of the layout"
 msgstr "L'altezza del layout"
 
-#: gtk/gtkmenu.c:524
+#: gtk/gtkmenu.c:526
 msgid "Tearoff Title"
 msgstr "Nome del menu staccato"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2629,31 +2629,31 @@ msgstr ""
 "Titolo che può essere visualizzato dal gestore di finestre se il menu viene "
 "staccato"
 
-#: gtk/gtkmenu.c:539
+#: gtk/gtkmenu.c:541
 #, fuzzy
 msgid "Tearoff State"
 msgstr "Nome del menu staccato"
 
-#: gtk/gtkmenu.c:540
+#: gtk/gtkmenu.c:542
 #, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr ""
 "Titolo che può essere visualizzato dal gestore di finestre se il menu viene "
 "staccato"
 
-#: gtk/gtkmenu.c:546
+#: gtk/gtkmenu.c:548
 msgid "Vertical Padding"
 msgstr "Riempimento verticale"
 
-#: gtk/gtkmenu.c:547
+#: gtk/gtkmenu.c:549
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Spazio aggiuntivo al di sopra e al di sotto del menu"
 
-#: gtk/gtkmenu.c:555
+#: gtk/gtkmenu.c:557
 msgid "Vertical Offset"
 msgstr "Offset verticale"
 
-#: gtk/gtkmenu.c:556
+#: gtk/gtkmenu.c:558
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -2661,11 +2661,11 @@ msgstr ""
 "Numero di pixel di cui viene spostato verticalmente il menu quando è un "
 "sottomenu"
 
-#: gtk/gtkmenu.c:564
+#: gtk/gtkmenu.c:566
 msgid "Horizontal Offset"
 msgstr "Spostamento orizzontale"
 
-#: gtk/gtkmenu.c:565
+#: gtk/gtkmenu.c:567
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -2673,69 +2673,69 @@ msgstr ""
 "Numero di pixel di cui viene spostato orizzontalmente il menu quando è un "
 "sottomenu"
 
-#: gtk/gtkmenu.c:575
+#: gtk/gtkmenu.c:577
 msgid "Left Attach"
 msgstr "Inserimento a sinistra"
 
-#: gtk/gtkmenu.c:576 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr ""
 "Il numero di colonna in cui posizionare la parte sinistra del widget figlio"
 
-#: gtk/gtkmenu.c:583
+#: gtk/gtkmenu.c:585
 msgid "Right Attach"
 msgstr "Inserimento a destra"
 
-#: gtk/gtkmenu.c:584
+#: gtk/gtkmenu.c:586
 msgid "The column number to attach the right side of the child to"
 msgstr ""
 "Il numero di colonna in cui posizionare la parte sinistra del widget figlio"
 
-#: gtk/gtkmenu.c:591
+#: gtk/gtkmenu.c:593
 msgid "Top Attach"
 msgstr "Inserimento in alto"
 
-#: gtk/gtkmenu.c:592
+#: gtk/gtkmenu.c:594
 msgid "The row number to attach the top of the child to"
 msgstr ""
 "Il numero di riga in cui posizionare la parte superiore del widget figlio"
 
-#: gtk/gtkmenu.c:599
+#: gtk/gtkmenu.c:601
 msgid "Bottom Attach"
 msgstr "Inserimento in basso"
 
-#: gtk/gtkmenu.c:600 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr ""
 "Il numero di riga in cui posizionare la parte inferiore del widget figlio"
 
-#: gtk/gtkmenu.c:687
+#: gtk/gtkmenu.c:689
 msgid "Can change accelerators"
 msgstr "Acceleratori modificabili"
 
-#: gtk/gtkmenu.c:688
+#: gtk/gtkmenu.c:690
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Indica se gli acceleratori del menu possono essere modificati premendo un "
 "tasto quando la voce del menu è selezionata"
 
-#: gtk/gtkmenu.c:693
+#: gtk/gtkmenu.c:695
 msgid "Delay before submenus appear"
 msgstr "Ritardo prima che il sottomenu venga visualizzato"
 
-#: gtk/gtkmenu.c:694
+#: gtk/gtkmenu.c:696
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Tempo minimo di permanenza del puntatore sopra la voce del menu prima che il "
 "sottomenu appaia"
 
-#: gtk/gtkmenu.c:701
+#: gtk/gtkmenu.c:703
 msgid "Delay before hiding a submenu"
 msgstr "Ritardo prima che il sottomenu venga nascosto"
 
-#: gtk/gtkmenu.c:702
+#: gtk/gtkmenu.c:704
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4486,7 +4486,7 @@ msgstr "Espandi"
 #: gtk/gtktreeview.c:693
 #, fuzzy
 msgid ""
-"Whether rows should be expanded/collaped when the pointer moves over them"
+"Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "Se TRUE, la finestra può essere decorata dal window manager."
 
 #: gtk/gtktreeview.c:713

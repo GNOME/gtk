@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-06 12:23+0100\n"
+"POT-Creation-Date: 2005-01-08 02:01-0500\n"
 "PO-Revision-Date: 2005-01-06 20:45+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -1168,75 +1168,80 @@ msgstr "_Odstranit"
 msgid "Remove the selected bookmark"
 msgstr "Odstranit zvolenou záložku"
 
-#: gtk/gtkfilechooserdefault.c:2989
+#: gtk/gtkfilechooserdefault.c:2997
 msgid "_Add to Shortcuts"
 msgstr "_Přidat mezi záložky"
 
-#: gtk/gtkfilechooserdefault.c:3003
+#: gtk/gtkfilechooserdefault.c:3007
+#, fuzzy
+msgid "Open _Location"
+msgstr "Otevřít umístění"
+
+#: gtk/gtkfilechooserdefault.c:3019
 msgid "Show _Hidden Files"
 msgstr "Zobrazovat _skryté soubory"
 
-#: gtk/gtkfilechooserdefault.c:3127 gtk/gtkfilesel.c:767
+#: gtk/gtkfilechooserdefault.c:3143 gtk/gtkfilesel.c:767
 msgid "Files"
 msgstr "Soubory"
 
-#: gtk/gtkfilechooserdefault.c:3158
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "Name"
 msgstr "Název"
 
-#: gtk/gtkfilechooserdefault.c:3183
+#: gtk/gtkfilechooserdefault.c:3199
 msgid "Size"
 msgstr "Velikost"
 
-#: gtk/gtkfilechooserdefault.c:3196
+#: gtk/gtkfilechooserdefault.c:3212
 msgid "Modified"
 msgstr "Změněn"
 
-#: gtk/gtkfilechooserdefault.c:3228
+#: gtk/gtkfilechooserdefault.c:3244
 msgid "Select which types of files are shown"
 msgstr "Vyberte, které typy souborů zobrazovat"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3264
+#: gtk/gtkfilechooserdefault.c:3280
 msgid "Create Fo_lder"
 msgstr "Vytvořit _adresář"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3382
+#: gtk/gtkfilechooserdefault.c:3398
 msgid "_Name:"
 msgstr "_Název:"
 
-#: gtk/gtkfilechooserdefault.c:3422
+#: gtk/gtkfilechooserdefault.c:3438
 msgid "_Browse for other folders"
 msgstr "_Procházet jiné adresáře"
 
-#: gtk/gtkfilechooserdefault.c:3672
+#: gtk/gtkfilechooserdefault.c:3688
 msgid "Save in _folder:"
 msgstr "Uložit do _adresáře:"
 
-#: gtk/gtkfilechooserdefault.c:3674
+#: gtk/gtkfilechooserdefault.c:3690
 msgid "Create in _folder:"
 msgstr "Vytvořit v _adresáři:"
 
-#: gtk/gtkfilechooserdefault.c:4507
+#: gtk/gtkfilechooserdefault.c:4523
 msgid "Cannot change to folder because it is not local"
 msgstr "Nemohu přejít do adresáře, protože není místní"
 
-#: gtk/gtkfilechooserdefault.c:5032
+#: gtk/gtkfilechooserdefault.c:5048
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Zkratka %s neexistuje"
 
-#: gtk/gtkfilechooserdefault.c:5492
+#: gtk/gtkfilechooserdefault.c:5508
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nemohu připojit %s"
 
-#: gtk/gtkfilechooserdefault.c:5786
+#: gtk/gtkfilechooserdefault.c:5802
 msgid "Type name of new folder"
 msgstr "Napište název nového adresáře"
 
-#: gtk/gtkfilechooserdefault.c:5828
+#: gtk/gtkfilechooserdefault.c:5844
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1244,59 +1249,59 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajty"
 msgstr[2] "%d bajtů"
 
-#: gtk/gtkfilechooserdefault.c:5830
+#: gtk/gtkfilechooserdefault.c:5846
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5832
+#: gtk/gtkfilechooserdefault.c:5848
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5834
+#: gtk/gtkfilechooserdefault.c:5850
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5886
+#: gtk/gtkfilechooserdefault.c:5902
 msgid "Today"
 msgstr "Dnes"
 
-#: gtk/gtkfilechooserdefault.c:5888
+#: gtk/gtkfilechooserdefault.c:5904
 msgid "Yesterday"
 msgstr "Včera"
 
-#: gtk/gtkfilechooserdefault.c:5899
+#: gtk/gtkfilechooserdefault.c:5915
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: gtk/gtkfilechooserdefault.c:5969
+#: gtk/gtkfilechooserdefault.c:5985
 msgid "Cannot change folder"
 msgstr "Nemohu změnit adresář"
 
-#: gtk/gtkfilechooserdefault.c:5970
+#: gtk/gtkfilechooserdefault.c:5986
 msgid "The folder you specified is an invalid path."
 msgstr "Určený adresář je neplatná cesta."
 
-#: gtk/gtkfilechooserdefault.c:6009
+#: gtk/gtkfilechooserdefault.c:6025
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Nemohu sestavit název souboru z '%s' a '%s'"
 
-#: gtk/gtkfilechooserdefault.c:6045
+#: gtk/gtkfilechooserdefault.c:6061
 msgid "Could not select item"
 msgstr "Nemohu vybrat položku"
 
-#: gtk/gtkfilechooserdefault.c:6085
+#: gtk/gtkfilechooserdefault.c:6101
 msgid "Open Location"
 msgstr "Otevřít umístění"
 
-#: gtk/gtkfilechooserdefault.c:6092
+#: gtk/gtkfilechooserdefault.c:6108
 msgid "Save in Location"
 msgstr "Uložit do umístění"
 
-#: gtk/gtkfilechooserdefault.c:6116
+#: gtk/gtkfilechooserdefault.c:6132
 msgid "_Location:"
 msgstr "_Umístění:"
 

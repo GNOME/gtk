@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 13:24-0500\n"
+"POT-Creation-Date: 2005-01-08 02:01-0500\n"
 "PO-Revision-Date: 2003-06-28 20:55+0700\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <sukarelawan@gnome.linux.or.id>\n"
@@ -378,61 +378,61 @@ msgstr "Menentukan apakah widget terlihat atau tidak"
 msgid "Whether the action group is visible."
 msgstr "Menentukan apakah widget terlihat atau tidak"
 
-#: gtk/gtkadjustment.c:108 gtk/gtkcellrendererprogress.c:115
+#: gtk/gtkadjustment.c:115 gtk/gtkcellrendererprogress.c:115
 #: gtk/gtkspinbutton.c:303
 msgid "Value"
 msgstr "Nilai"
 
-#: gtk/gtkadjustment.c:109
+#: gtk/gtkadjustment.c:116
 #, fuzzy
 msgid "The value of the adjustment"
 msgstr "Nama widget"
 
-#: gtk/gtkadjustment.c:118
+#: gtk/gtkadjustment.c:132
 #, fuzzy
 msgid "Minimum Value"
 msgstr "X Minimum"
 
-#: gtk/gtkadjustment.c:119
+#: gtk/gtkadjustment.c:133
 #, fuzzy
 msgid "The minimum value of the adjustment"
 msgstr "Nama widget"
 
-#: gtk/gtkadjustment.c:128
+#: gtk/gtkadjustment.c:152
 #, fuzzy
 msgid "Maximum Value"
 msgstr "Panjang maksimum"
 
-#: gtk/gtkadjustment.c:129
+#: gtk/gtkadjustment.c:153
 #, fuzzy
 msgid "The maximum value of the adjustment"
 msgstr "Nama widget"
 
-#: gtk/gtkadjustment.c:138
+#: gtk/gtkadjustment.c:169
 #, fuzzy
 msgid "Step Increment"
 msgstr "Layar"
 
-#: gtk/gtkadjustment.c:139
+#: gtk/gtkadjustment.c:170
 #, fuzzy
 msgid "The step increment of the adjustment"
 msgstr "Isi"
 
-#: gtk/gtkadjustment.c:148
+#: gtk/gtkadjustment.c:186
 msgid "Page Increment"
 msgstr ""
 
-#: gtk/gtkadjustment.c:149
+#: gtk/gtkadjustment.c:187
 #, fuzzy
 msgid "The page increment of the adjustment"
 msgstr "Isi"
 
-#: gtk/gtkadjustment.c:158
+#: gtk/gtkadjustment.c:206
 #, fuzzy
 msgid "Page Size"
 msgstr "Ukuran Maksimum"
 
-#: gtk/gtkadjustment.c:159
+#: gtk/gtkadjustment.c:207
 #, fuzzy
 msgid "The page size of the adjustment"
 msgstr "Status togel tombol"
@@ -621,7 +621,7 @@ msgstr ""
 "Bila diisi TRUE, anak akan muncul pada grup anak sekunder, ini cocok untuk "
 "tombol bantuan dsb"
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:447
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:449
 #: gtk/gtktreeviewcolumn.c:250
 msgid "Spacing"
 msgstr "Jarak"
@@ -718,7 +718,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "Jika ini diisi, tulisan pada label akan dipilih dari item stok"
 
-#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:675
+#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:678
 msgid "Focus on click"
 msgstr "Klik untuk membuat fokus"
 
@@ -1256,7 +1256,7 @@ msgid ""
 "have enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:361
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
 #: gtk/gtklabel.c:453
 #, fuzzy
 msgid "Width In Characters"
@@ -1472,7 +1472,7 @@ msgstr "Gunakan markup"
 msgid "Whether or not to give the color an alpha value"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:347
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:351
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Judul"
@@ -1574,81 +1574,81 @@ msgstr "Nilai dalam daftar"
 msgid "Whether entered values must already be present in the list"
 msgstr "Menentukan apakah nilai yang dimasukan selalu ada pada daftar"
 
-#: gtk/gtkcombobox.c:548
+#: gtk/gtkcombobox.c:551
 msgid "ComboBox model"
 msgstr ""
 
-#: gtk/gtkcombobox.c:549
+#: gtk/gtkcombobox.c:552
 #, fuzzy
 msgid "The model for the combo box"
 msgstr "Model TreeView"
 
-#: gtk/gtkcombobox.c:565
+#: gtk/gtkcombobox.c:568
 #, fuzzy
 msgid "Wrap width"
 msgstr "Lebar"
 
-#: gtk/gtkcombobox.c:566
+#: gtk/gtkcombobox.c:569
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 
-#: gtk/gtkcombobox.c:588
+#: gtk/gtkcombobox.c:591
 #, fuzzy
 msgid "Row span column"
 msgstr "Jarak antar baris"
 
-#: gtk/gtkcombobox.c:589
+#: gtk/gtkcombobox.c:592
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:610
+#: gtk/gtkcombobox.c:613
 #, fuzzy
 msgid "Column span column"
 msgstr "Jarak antar kolom"
 
-#: gtk/gtkcombobox.c:611
+#: gtk/gtkcombobox.c:614
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:631
+#: gtk/gtkcombobox.c:634
 #, fuzzy
 msgid "Active item"
 msgstr "Aktif"
 
-#: gtk/gtkcombobox.c:632
+#: gtk/gtkcombobox.c:635
 #, fuzzy
 msgid "The item which is currently active"
 msgstr "GdkFont yang sedang dipilih"
 
-#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:228
+#: gtk/gtkcombobox.c:654 gtk/gtkuimanager.c:228
 msgid "Add tearoffs to menus"
 msgstr ""
 
-#: gtk/gtkcombobox.c:652
+#: gtk/gtkcombobox.c:655
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Menentukan apakah tab memiliki ukuran homogen"
 
-#: gtk/gtkcombobox.c:667 gtk/gtkentry.c:530
+#: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "Ada bingkai atau tidak"
 
-#: gtk/gtkcombobox.c:668
+#: gtk/gtkcombobox.c:671
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Menentukan apakah kolom dapat diurut kembali pada header"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:679
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Menentukan apakah tombol mendapatkan fokus pada saat diklik dengan mouse"
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:685
 msgid "Appears as list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:683
+#: gtk/gtkcombobox.c:686
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Menentukan apakah kemajuan aktivitas ditampilkan dalam bentuk teks"
@@ -1873,7 +1873,7 @@ msgstr "Panjang slider minimal"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:368
+#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:370
 #, fuzzy
 msgid "Text column"
 msgstr "Kolom pencarian"
@@ -2070,20 +2070,20 @@ msgid "Whether the hidden files and folders should be displayed"
 msgstr ""
 "Menentukan apakah tombol untuk membuat/edit file ditampilkan atau tidak"
 
-#: gtk/gtkfilechooserbutton.c:332
+#: gtk/gtkfilechooserbutton.c:336
 msgid "Dialog"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:333
+#: gtk/gtkfilechooserbutton.c:337
 msgid "The file chooser dialog to use."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:348
+#: gtk/gtkfilechooserbutton.c:352
 #, fuzzy
 msgid "The title of the file chooser dialog."
 msgstr "Judul window"
 
-#: gtk/gtkfilechooserbutton.c:362
+#: gtk/gtkfilechooserbutton.c:366
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
@@ -2282,123 +2282,123 @@ msgstr ""
 "Menentukan apakah menggunakan nilai dari snap_edge atau nilai dari "
 "handle_position"
 
-#: gtk/gtkiconview.c:331
+#: gtk/gtkiconview.c:333
 #, fuzzy
 msgid "Selection mode"
 msgstr "Batas seleksi"
 
-#: gtk/gtkiconview.c:332
+#: gtk/gtkiconview.c:334
 #, fuzzy
 msgid "The selection mode"
 msgstr "Tahun yang dipilih"
 
-#: gtk/gtkiconview.c:350
+#: gtk/gtkiconview.c:352
 #, fuzzy
 msgid "Pixbuf column"
 msgstr "Kolom pencarian"
 
-#: gtk/gtkiconview.c:351
+#: gtk/gtkiconview.c:353
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr ""
 
-#: gtk/gtkiconview.c:369
+#: gtk/gtkiconview.c:371
 msgid "Model column used to retrieve the text from"
 msgstr ""
 
-#: gtk/gtkiconview.c:388
+#: gtk/gtkiconview.c:390
 #, fuzzy
 msgid "Markup column"
 msgstr "Markup"
 
-#: gtk/gtkiconview.c:389
+#: gtk/gtkiconview.c:391
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 
-#: gtk/gtkiconview.c:396
+#: gtk/gtkiconview.c:398
 #, fuzzy
 msgid "Icon View Model"
 msgstr "Model TreeView"
 
-#: gtk/gtkiconview.c:397
+#: gtk/gtkiconview.c:399
 #, fuzzy
 msgid "The model for the icon view"
 msgstr "Model TreeView"
 
-#: gtk/gtkiconview.c:413
+#: gtk/gtkiconview.c:415
 #, fuzzy
 msgid "Number of columns"
 msgstr "Jumlah kolom dalam tabel"
 
-#: gtk/gtkiconview.c:414
+#: gtk/gtkiconview.c:416
 #, fuzzy
 msgid "Number of columns to display"
 msgstr "Jumlah tempat desimal yang ditampilkan"
 
-#: gtk/gtkiconview.c:431
+#: gtk/gtkiconview.c:433
 #, fuzzy
 msgid "Width for each item"
 msgstr "Lebar batas di sekeliling label tab"
 
-#: gtk/gtkiconview.c:432
+#: gtk/gtkiconview.c:434
 msgid "The width used for each item"
 msgstr ""
 
-#: gtk/gtkiconview.c:448
+#: gtk/gtkiconview.c:450
 msgid "Space which is inserted between cells of an item"
 msgstr ""
 
-#: gtk/gtkiconview.c:463
+#: gtk/gtkiconview.c:465
 #, fuzzy
 msgid "Row Spacing"
 msgstr "Jarak antar baris"
 
-#: gtk/gtkiconview.c:464
+#: gtk/gtkiconview.c:466
 msgid "Space which is inserted between grid rows"
 msgstr ""
 
-#: gtk/gtkiconview.c:479
+#: gtk/gtkiconview.c:481
 #, fuzzy
 msgid "Column Spacing"
 msgstr "Jarak antar kolom"
 
-#: gtk/gtkiconview.c:480
+#: gtk/gtkiconview.c:482
 msgid "Space which is inserted between grid column"
 msgstr ""
 
-#: gtk/gtkiconview.c:495
+#: gtk/gtkiconview.c:497
 #, fuzzy
 msgid "Margin"
 msgstr "Margin kiri"
 
-#: gtk/gtkiconview.c:496
+#: gtk/gtkiconview.c:498
 msgid "Space which is inserted at the edges of the icon view"
 msgstr ""
 
-#: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
+#: gtk/gtkiconview.c:514 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "Orientasi"
 
-#: gtk/gtkiconview.c:513
+#: gtk/gtkiconview.c:515
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
-#: gtk/gtkiconview.c:521
+#: gtk/gtkiconview.c:523
 #, fuzzy
 msgid "Selection Box Color"
 msgstr "Batas seleksi"
 
-#: gtk/gtkiconview.c:522
+#: gtk/gtkiconview.c:524
 #, fuzzy
 msgid "Color of the selection box"
 msgstr "Judul window"
 
-#: gtk/gtkiconview.c:528
+#: gtk/gtkiconview.c:530
 #, fuzzy
 msgid "Selection Box Alpha"
 msgstr "Batas seleksi"
 
-#: gtk/gtkiconview.c:529
+#: gtk/gtkiconview.c:531
 #, fuzzy
 msgid "Opacity of the selection box"
 msgstr "Judul window"
@@ -2637,122 +2637,122 @@ msgstr "Lebar layout"
 msgid "The height of the layout"
 msgstr "Tinggi layout"
 
-#: gtk/gtkmenu.c:524
+#: gtk/gtkmenu.c:526
 msgid "Tearoff Title"
 msgstr "Judul saat disobek"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "Judul yang ditampilkan window manager saat menu ini disobek"
 
-#: gtk/gtkmenu.c:539
+#: gtk/gtkmenu.c:541
 #, fuzzy
 msgid "Tearoff State"
 msgstr "Judul saat disobek"
 
-#: gtk/gtkmenu.c:540
+#: gtk/gtkmenu.c:542
 #, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Judul yang ditampilkan window manager saat menu ini disobek"
 
-#: gtk/gtkmenu.c:546
+#: gtk/gtkmenu.c:548
 #, fuzzy
 msgid "Vertical Padding"
 msgstr "Isian vertikal"
 
-#: gtk/gtkmenu.c:547
+#: gtk/gtkmenu.c:549
 #, fuzzy
 msgid "Extra space at the top and bottom of the menu"
 msgstr ""
 "Ruangan yang diisikan pada sisi atas dan bawah widget dalam satuan piksel"
 
-#: gtk/gtkmenu.c:555
+#: gtk/gtkmenu.c:557
 #, fuzzy
 msgid "Vertical Offset"
 msgstr "Skala vertikal"
 
-#: gtk/gtkmenu.c:556
+#: gtk/gtkmenu.c:558
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
-#: gtk/gtkmenu.c:564
+#: gtk/gtkmenu.c:566
 #, fuzzy
 msgid "Horizontal Offset"
 msgstr "Skala Horisontal"
 
-#: gtk/gtkmenu.c:565
+#: gtk/gtkmenu.c:567
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:575
+#: gtk/gtkmenu.c:577
 #, fuzzy
 msgid "Left Attach"
 msgstr "Pasangan kiri"
 
-#: gtk/gtkmenu.c:576 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr "Jumlah kolom yang dipasangkan pada sisi kiri anak"
 
-#: gtk/gtkmenu.c:583
+#: gtk/gtkmenu.c:585
 #, fuzzy
 msgid "Right Attach"
 msgstr "Pasangan kanan"
 
-#: gtk/gtkmenu.c:584
+#: gtk/gtkmenu.c:586
 #, fuzzy
 msgid "The column number to attach the right side of the child to"
 msgstr "Jumlah kolom yang dipasangkan pada sisi kiri anak"
 
-#: gtk/gtkmenu.c:591
+#: gtk/gtkmenu.c:593
 #, fuzzy
 msgid "Top Attach"
 msgstr "Pasangan atas"
 
-#: gtk/gtkmenu.c:592
+#: gtk/gtkmenu.c:594
 #, fuzzy
 msgid "The row number to attach the top of the child to"
 msgstr "Jumlah baris yang dipasangkan pada sisi bawah anak"
 
-#: gtk/gtkmenu.c:599
+#: gtk/gtkmenu.c:601
 #, fuzzy
 msgid "Bottom Attach"
 msgstr "Pasangan bawah"
 
-#: gtk/gtkmenu.c:600 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "Jumlah baris yang dipasangkan pada sisi bawah anak"
 
-#: gtk/gtkmenu.c:687
+#: gtk/gtkmenu.c:689
 msgid "Can change accelerators"
 msgstr "Dapat mengganti akselerator"
 
-#: gtk/gtkmenu.c:688
+#: gtk/gtkmenu.c:690
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Menentukan apakah akselerator menu dapat dirubah dengan menekan tombol lain "
 "pada menu"
 
-#: gtk/gtkmenu.c:693
+#: gtk/gtkmenu.c:695
 msgid "Delay before submenus appear"
 msgstr "Jeda sebelum sub menu ditampilkan"
 
-#: gtk/gtkmenu.c:694
+#: gtk/gtkmenu.c:696
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr "Waktu minimum saat pointer diam di atas menu sebelum submenu muncul"
 
-#: gtk/gtkmenu.c:701
+#: gtk/gtkmenu.c:703
 msgid "Delay before hiding a submenu"
 msgstr "Jeda sebelum menyembunyikan submenu"
 
-#: gtk/gtkmenu.c:702
+#: gtk/gtkmenu.c:704
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4482,7 +4482,7 @@ msgstr "Ekspansi"
 #: gtk/gtktreeview.c:693
 #, fuzzy
 msgid ""
-"Whether rows should be expanded/collaped when the pointer moves over them"
+"Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "TRUE jika window tidak muncul pada pager"
 
 #: gtk/gtktreeview.c:713

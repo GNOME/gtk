@@ -1,3 +1,43 @@
+Overview of Changes from GTK+ 2.6.0 to GTK+ 2.6.1
+=================================================
+* GtkFileChooser
+ - Fix some possible threading deadlocks [Matthias Clasen]
+ - Don't return errors from the private GTK_FILE_SYSTEM_ERROR
+   domain [Murray Cumming]
+ - Fix some crashes with unreadable directories [Federico Mena 
+   Quintero]
+ - Add an "Open Location" item to the context menu [Federico]
+* GtkTreeView
+ - Make sorting work again in list stores [Marcin Krzyzanowski]
+ - Restrict column reordering to button 1 [Jonathan Blandford]
+* GtkComboBox
+ - Make the button prelight [Ricardo Veguilla]
+ - Fix state propagation [Carlos Garnacho Parro]
+* GtkMessageDialog
+ - Don't show secondary label until it is set [Christian Persch]
+* GtkMenu
+ - Make items activate immediately on button release [Søren Sandmann]
+ - Submenus inherit their cascading direction [Matthias]
+* gdk-pixbuf
+ - Fix a possible threading deadlock when loading
+   animations [Callum McKenzie]
+ - Make Hyper interpolation work again [Dennis Nezic]
+* Win32
+  - Improve handling of UNC paths [Tor Lillqvist]
+  - Show the correct Desktop folder in the file chooser [Tor]
+  - Bug fixes [Tor]
+* Bug fixes [Torsten Schoenfeld, Morten Welinder,
+  Marcin, Seth Nickell, Jonathan, Owen Taylor, Søren, 
+  Iñigo Serna, John Finlay, Zeeshan Ali, Robert Ögren,
+  Billy Biggs, Brian Tarricone, Tor, Christian, Tristan 
+  Van Berkom, Elijah Newren, Federico, James M. Cape,
+  Matthias, Arnaud Charlet]
+* Documentation improvements [Masao Mutoh, Torsten,
+  Billy, Alessio Dessi, David Bourguignon, Tommi Komulainen,
+  Dave Bordoley, Robert Ancell, Kentaro Fukuchi, Matthias,
+  Christian Biere, Jonathan, Tommi, Stefan Kost]
+* New and improved translations (cs,cy,da,de,en_CA,es,ja,lt,nl,sq,sv,zh_CN)
+
 Overview of Changes from GTK+ 2.4.x to GTK+ 2.6.0
 =================================================
 
@@ -117,7 +157,8 @@ Overview of Changes from GTK+ 2.5.6 to GTK+ 2.6.0
 * Bug fixes [Kazuki IWAMOTO, Damon Chaplin, Matthias, Christian, 
   Michael Natterer, Jonathan Blandford, Manish Singh, John Finlay, 
   Robert Ögren, Mariano Suárez-Alvarez, Marco Pesenti Gritti,
-  Tommi Komulainen, R. McFarland, Jorn Baayen, Dennis Cranston]
+  Tommi Komulainen, R. McFarland, Alexander Larsson, Dennis Cranston,
+  Jorn Baayen]
 * Documentation improvements [Matthias, Jay Camp, Paolo Borelli,
   David Lodge]
 * New and improved translations (bg,nb,no,nso,pt_BR,zh_CN)

@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-01 14:36+0100\n"
+"POT-Creation-Date: 2005-01-08 02:01-0500\n"
 "PO-Revision-Date: 2005-01-01 14:37+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <es@li.org>\n"
@@ -625,7 +625,7 @@ msgstr ""
 "Si es TRUE, el hijo aparece en un grupo secundario de hijos, útil por "
 "ejemplo para botones de ayuda."
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:447
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:449
 #: gtk/gtktreeviewcolumn.c:250
 msgid "Spacing"
 msgstr "Espaciado"
@@ -1259,7 +1259,7 @@ msgstr ""
 "El lugar preferido para la elipsis de la cadena, si el renderizador de la "
 "celda no tiene espacio suficiente para mostrar la cadena completa"
 
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:361
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
 #: gtk/gtklabel.c:453
 msgid "Width In Characters"
 msgstr "Anchura en caracteres"
@@ -1473,7 +1473,7 @@ msgstr "Indica si debe darse o no un valor alfa al color"
 # #-#-#-#-#  memoria.po (memoria 1.0)  #-#-#-#-#
 # #-#-#-#-#  nautilus-es.po (Nautilus)  #-#-#-#-#
 # components/music/nautilus-music-view.c:198
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:347
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:351
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Título"
@@ -1872,7 +1872,7 @@ msgstr "Longitud mínima de clave"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Longitud mínima de la clave de búsqueda para buscar coincidencias"
 
-#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:368
+#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:370
 msgid "Text column"
 msgstr "Columna de texto"
 
@@ -2052,19 +2052,19 @@ msgstr "Mostrar ocultos"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Indica si los archivos y carpetas ocultas deben ser mostrados"
 
-#: gtk/gtkfilechooserbutton.c:332
+#: gtk/gtkfilechooserbutton.c:336
 msgid "Dialog"
 msgstr "Diálogo"
 
-#: gtk/gtkfilechooserbutton.c:333
+#: gtk/gtkfilechooserbutton.c:337
 msgid "The file chooser dialog to use."
 msgstr "El diálogo del selector de archivos a usar."
 
-#: gtk/gtkfilechooserbutton.c:348
+#: gtk/gtkfilechooserbutton.c:352
 msgid "The title of the file chooser dialog."
 msgstr "El título del diálogo de selección de archivos"
 
-#: gtk/gtkfilechooserbutton.c:362
+#: gtk/gtkfilechooserbutton.c:366
 msgid "The desired width of the button widget, in characters."
 msgstr "La anchura deseada del widget del botón, en caracteres."
 
@@ -2258,109 +2258,109 @@ msgstr ""
 "Indica si se debe usar el valor desde la propiedad snap_edge o un valor "
 "derivado de handle_position"
 
-#: gtk/gtkiconview.c:331
+#: gtk/gtkiconview.c:333
 msgid "Selection mode"
 msgstr "Modo de selección"
 
-#: gtk/gtkiconview.c:332
+#: gtk/gtkiconview.c:334
 msgid "The selection mode"
 msgstr "El modo de selección"
 
-#: gtk/gtkiconview.c:350
+#: gtk/gtkiconview.c:352
 msgid "Pixbuf column"
 msgstr "Columna de pixbuf"
 
-#: gtk/gtkiconview.c:351
+#: gtk/gtkiconview.c:353
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Columna modelo usada para obtener el pixbuf del icono"
 
-#: gtk/gtkiconview.c:369
+#: gtk/gtkiconview.c:371
 msgid "Model column used to retrieve the text from"
 msgstr "Columna modelo usada para obtener el texto"
 
-#: gtk/gtkiconview.c:388
+#: gtk/gtkiconview.c:390
 msgid "Markup column"
 msgstr "Columna de marcado"
 
-#: gtk/gtkiconview.c:389
+#: gtk/gtkiconview.c:391
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "Columna modelo usada para obtener el texto su se usa marcado Pango"
 
-#: gtk/gtkiconview.c:396
+#: gtk/gtkiconview.c:398
 msgid "Icon View Model"
 msgstr "Modelo de vista de icono"
 
-#: gtk/gtkiconview.c:397
+#: gtk/gtkiconview.c:399
 msgid "The model for the icon view"
 msgstr "El modelo para la vista de icono"
 
-#: gtk/gtkiconview.c:413
+#: gtk/gtkiconview.c:415
 msgid "Number of columns"
 msgstr "Número de columnas"
 
-#: gtk/gtkiconview.c:414
+#: gtk/gtkiconview.c:416
 msgid "Number of columns to display"
 msgstr "El número de columnas que se mostrarán"
 
-#: gtk/gtkiconview.c:431
+#: gtk/gtkiconview.c:433
 msgid "Width for each item"
 msgstr "Anchura de cada elemento"
 
-#: gtk/gtkiconview.c:432
+#: gtk/gtkiconview.c:434
 msgid "The width used for each item"
 msgstr "La anchura usada por cada elemento"
 
-#: gtk/gtkiconview.c:448
+#: gtk/gtkiconview.c:450
 msgid "Space which is inserted between cells of an item"
 msgstr "Espacio que se introduce entre las celdas de un elemento"
 
-#: gtk/gtkiconview.c:463
+#: gtk/gtkiconview.c:465
 msgid "Row Spacing"
 msgstr "Espaciado entre filas"
 
-#: gtk/gtkiconview.c:464
+#: gtk/gtkiconview.c:466
 msgid "Space which is inserted between grid rows"
 msgstr "Espacio que se introduce entre las filas de la rejilla"
 
-#: gtk/gtkiconview.c:479
+#: gtk/gtkiconview.c:481
 msgid "Column Spacing"
 msgstr "Espaciado entre columnas"
 
-#: gtk/gtkiconview.c:480
+#: gtk/gtkiconview.c:482
 msgid "Space which is inserted between grid column"
 msgstr "Espacio que se introduce entre las columnas de la rejilla"
 
-#: gtk/gtkiconview.c:495
+#: gtk/gtkiconview.c:497
 msgid "Margin"
 msgstr "Margen"
 
-#: gtk/gtkiconview.c:496
+#: gtk/gtkiconview.c:498
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Espacio que se introduce entre los bordes de la vista de icono"
 
-#: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
+#: gtk/gtkiconview.c:514 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "Orientación"
 
-#: gtk/gtkiconview.c:513
+#: gtk/gtkiconview.c:515
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "Cómo se sitúan el texto y el icono para cada elemento relativo a los demás"
 
-#: gtk/gtkiconview.c:521
+#: gtk/gtkiconview.c:523
 msgid "Selection Box Color"
 msgstr "Color de la caja de selección"
 
-#: gtk/gtkiconview.c:522
+#: gtk/gtkiconview.c:524
 msgid "Color of the selection box"
 msgstr "Color de la caja de selección"
 
-#: gtk/gtkiconview.c:528
+#: gtk/gtkiconview.c:530
 msgid "Selection Box Alpha"
 msgstr "Alfa de la caja de selección"
 
-#: gtk/gtkiconview.c:529
+#: gtk/gtkiconview.c:531
 msgid "Opacity of the selection box"
 msgstr "Opacidad de la caja de selección"
 
@@ -4449,7 +4449,9 @@ msgstr "Expandir al poner el cursor encima"
 #: gtk/gtktreeview.c:693
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
-msgstr "Indica si las filas deben expandirse/contraerse cuando el puntero se mueve sobre ellas"
+msgstr ""
+"Indica si las filas deben expandirse/contraerse cuando el puntero se mueve "
+"sobre ellas"
 
 #: gtk/gtktreeview.c:713
 msgid "Vertical Separator Width"

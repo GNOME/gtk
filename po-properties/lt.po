@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-06 12:54+0200\n"
+"POT-Creation-Date: 2005-01-08 02:01-0500\n"
 "PO-Revision-Date: 2005-01-06 19:45+0200\n"
 "Last-Translator: Žygimantas Beručka <uid0@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
@@ -151,8 +151,8 @@ msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
-"Nuorodos į programos tinklalapį pavadinimas. Jeigu jis nenurodytas, "
-"tada naudojamas adresas."
+"Nuorodos į programos tinklalapį pavadinimas. Jeigu jis nenurodytas, tada "
+"naudojamas adresas."
 
 #: gtk/gtkaboutdialog.c:310
 msgid "Authors"
@@ -185,8 +185,7 @@ msgstr "Padėkos vertėjams"
 #: gtk/gtkaboutdialog.c:363
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
-msgstr ""
-"Padėkos vertėjams. Ši eilutė turėtų būti pažymėta, kaip verstina"
+msgstr "Padėkos vertėjams. Ši eilutė turėtų būti pažymėta, kaip verstina"
 
 #: gtk/gtkaboutdialog.c:378
 msgid "Logo"
@@ -605,7 +604,7 @@ msgstr ""
 "Jei TRUE, susijęs objektas pasirodys antrinėje objektų grupėje, kuri gali "
 "tikti papildomiems, pvz. pagalbos mygtukams"
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:447
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:449
 #: gtk/gtktreeviewcolumn.c:250
 msgid "Spacing"
 msgstr "Tarpai"
@@ -1233,7 +1232,7 @@ msgid ""
 "have enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:361
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
 #: gtk/gtklabel.c:453
 msgid "Width In Characters"
 msgstr "Plotis simboliais"
@@ -1444,7 +1443,7 @@ msgstr "Naudoti alfa kanalus"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Ar priskirti spalvą alfa kanalui"
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:347
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:351
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Pavadinimas"
@@ -1749,8 +1748,7 @@ msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
-"FALSE išveda „nematomą simbolį“ vietoj paprasto teksto (slaptažodžio "
-"režimas)"
+"FALSE išveda „nematomą simbolį“ vietoj paprasto teksto (slaptažodžio režimas)"
 
 #: gtk/gtkentry.c:531
 msgid "FALSE removes outside bevel from entry"
@@ -1832,7 +1830,7 @@ msgstr "Mažiausias rakto ilgis"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Mažiausias paieškos rakto dydis naudojamas ieškant sutapimų"
 
-#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:368
+#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:370
 msgid "Text column"
 msgstr "Teksto stulpelis"
 
@@ -2003,19 +2001,19 @@ msgstr "Rodyti paslėptus"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Ar turėtų būti rodomos paslėptos bylos ir aplankai"
 
-#: gtk/gtkfilechooserbutton.c:332
+#: gtk/gtkfilechooserbutton.c:336
 msgid "Dialog"
 msgstr "Dialogas"
 
-#: gtk/gtkfilechooserbutton.c:333
+#: gtk/gtkfilechooserbutton.c:337
 msgid "The file chooser dialog to use."
 msgstr "Naudojamas bylų parinkiklio dialogas."
 
-#: gtk/gtkfilechooserbutton.c:348
+#: gtk/gtkfilechooserbutton.c:352
 msgid "The title of the file chooser dialog."
 msgstr "Bylų parinkiklio dialogo antraštė."
 
-#: gtk/gtkfilechooserbutton.c:362
+#: gtk/gtkfilechooserbutton.c:366
 msgid "The desired width of the button widget, in characters."
 msgstr "Pageidaujamas mygtuko plotis simboliais."
 
@@ -2201,109 +2199,109 @@ msgid ""
 "handle_position"
 msgstr "Naudoti snap_edge ar handle_position savybės reikšmę"
 
-#: gtk/gtkiconview.c:331
+#: gtk/gtkiconview.c:333
 msgid "Selection mode"
 msgstr "Pasirinkimo režimas"
 
-#: gtk/gtkiconview.c:332
+#: gtk/gtkiconview.c:334
 msgid "The selection mode"
 msgstr "Pasirinkimo modelis"
 
-#: gtk/gtkiconview.c:350
+#: gtk/gtkiconview.c:352
 msgid "Pixbuf column"
 msgstr "Pixbuf stulpelis"
 
-#: gtk/gtkiconview.c:351
+#: gtk/gtkiconview.c:353
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Modelio stulpelis iš kurio gaunamas ikonos pixbuf"
 
-#: gtk/gtkiconview.c:369
+#: gtk/gtkiconview.c:371
 msgid "Model column used to retrieve the text from"
 msgstr "Modelio stulpelis iš kurio gaunamas tekstas"
 
-#: gtk/gtkiconview.c:388
+#: gtk/gtkiconview.c:390
 msgid "Markup column"
 msgstr "Žymėjimo stulpelis"
 
-#: gtk/gtkiconview.c:389
+#: gtk/gtkiconview.c:391
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "Modelio stulpelis naudojamas gauti tekstui, kai naudojamas Pango žymėjimas"
 
-#: gtk/gtkiconview.c:396
+#: gtk/gtkiconview.c:398
 msgid "Icon View Model"
 msgstr "Ikonų vaizdo modelis"
 
-#: gtk/gtkiconview.c:397
+#: gtk/gtkiconview.c:399
 msgid "The model for the icon view"
 msgstr "Ikonų vaizdo modelis"
 
-#: gtk/gtkiconview.c:413
+#: gtk/gtkiconview.c:415
 msgid "Number of columns"
 msgstr "Stulpelių skaičius"
 
-#: gtk/gtkiconview.c:414
+#: gtk/gtkiconview.c:416
 msgid "Number of columns to display"
 msgstr "Rodomų stulpelių skaičius"
 
-#: gtk/gtkiconview.c:431
+#: gtk/gtkiconview.c:433
 msgid "Width for each item"
 msgstr "Kiekvieno elemento plotis"
 
-#: gtk/gtkiconview.c:432
+#: gtk/gtkiconview.c:434
 msgid "The width used for each item"
 msgstr "Kiekvieno elemento plotis"
 
-#: gtk/gtkiconview.c:448
+#: gtk/gtkiconview.c:450
 msgid "Space which is inserted between cells of an item"
 msgstr "Tarpas, įterpiamas tarp elemento ląstelių"
 
-#: gtk/gtkiconview.c:463
+#: gtk/gtkiconview.c:465
 msgid "Row Spacing"
 msgstr "Tarpai tarp eilučių"
 
-#: gtk/gtkiconview.c:464
+#: gtk/gtkiconview.c:466
 msgid "Space which is inserted between grid rows"
 msgstr "Tarpas, įterpiamas tarp grotelių eilučių"
 
-#: gtk/gtkiconview.c:479
+#: gtk/gtkiconview.c:481
 msgid "Column Spacing"
 msgstr "Tarpai tarp stulpelių"
 
-#: gtk/gtkiconview.c:480
+#: gtk/gtkiconview.c:482
 msgid "Space which is inserted between grid column"
 msgstr "Tarpas, įterpiamas tarp grotelių stulpelių"
 
-#: gtk/gtkiconview.c:495
+#: gtk/gtkiconview.c:497
 msgid "Margin"
 msgstr "Paraštė"
 
-#: gtk/gtkiconview.c:496
+#: gtk/gtkiconview.c:498
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Tarpas, įterpiamas ikonos vaizdo kraštuose"
 
-#: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
+#: gtk/gtkiconview.c:514 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "Orientacija"
 
-#: gtk/gtkiconview.c:513
+#: gtk/gtkiconview.c:515
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
-#: gtk/gtkiconview.c:521
+#: gtk/gtkiconview.c:523
 msgid "Selection Box Color"
 msgstr "Pažymėjimo dėžutės spalva"
 
-#: gtk/gtkiconview.c:522
+#: gtk/gtkiconview.c:524
 msgid "Color of the selection box"
 msgstr "Pažymėjimo dėžutės spalva"
 
-#: gtk/gtkiconview.c:528
+#: gtk/gtkiconview.c:530
 msgid "Selection Box Alpha"
 msgstr "Pažymėjimo dėžutės permatomumas"
 
-#: gtk/gtkiconview.c:529
+#: gtk/gtkiconview.c:531
 msgid "Opacity of the selection box"
 msgstr "Pažymėjimo dėžutės permatomumas"
 
@@ -3491,7 +3489,8 @@ msgstr "Alternatyvi mygtukų tvarka"
 
 #: gtk/gtksettings.c:433
 msgid "Whether buttons in dialogs should use the alternative button order"
-msgstr "Ar dialoguose mygtukai turi būti rodomos mygtukuose alternatyvia tvarka"
+msgstr ""
+"Ar dialoguose mygtukai turi būti rodomos mygtukuose alternatyvia tvarka"
 
 #: gtk/gtksizegroup.c:243
 msgid "Mode"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 13:24-0500\n"
+"POT-Creation-Date: 2005-01-08 02:01-0500\n"
 "PO-Revision-Date: 2003-05-28 17:57+0000\n"
 "Last-Translator: Mathieu van Woerkom <mathieu.brabants.org>\n"
 "Language-Team: Limburgish <li.org>\n"
@@ -375,61 +375,61 @@ msgstr "Of 't widget zichbaar moot zeen"
 msgid "Whether the action group is visible."
 msgstr "Of 't widget zichbaar moot zeen"
 
-#: gtk/gtkadjustment.c:108 gtk/gtkcellrendererprogress.c:115
+#: gtk/gtkadjustment.c:115 gtk/gtkcellrendererprogress.c:115
 #: gtk/gtkspinbutton.c:303
 msgid "Value"
 msgstr "Waerd"
 
-#: gtk/gtkadjustment.c:109
+#: gtk/gtkadjustment.c:116
 #, fuzzy
 msgid "The value of the adjustment"
 msgstr "De naam van 't widget"
 
-#: gtk/gtkadjustment.c:118
+#: gtk/gtkadjustment.c:132
 #, fuzzy
 msgid "Minimum Value"
 msgstr "Minimale X"
 
-#: gtk/gtkadjustment.c:119
+#: gtk/gtkadjustment.c:133
 #, fuzzy
 msgid "The minimum value of the adjustment"
 msgstr "De naam van 't widget"
 
-#: gtk/gtkadjustment.c:128
+#: gtk/gtkadjustment.c:152
 #, fuzzy
 msgid "Maximum Value"
 msgstr "Maksimumlengde"
 
-#: gtk/gtkadjustment.c:129
+#: gtk/gtkadjustment.c:153
 #, fuzzy
 msgid "The maximum value of the adjustment"
 msgstr "De naam van 't widget"
 
-#: gtk/gtkadjustment.c:138
+#: gtk/gtkadjustment.c:169
 #, fuzzy
 msgid "Step Increment"
 msgstr "Sjirm"
 
-#: gtk/gtkadjustment.c:139
+#: gtk/gtkadjustment.c:170
 #, fuzzy
 msgid "The step increment of the adjustment"
 msgstr "De inhaud van 't veldj"
 
-#: gtk/gtkadjustment.c:148
+#: gtk/gtkadjustment.c:186
 msgid "Page Increment"
 msgstr ""
 
-#: gtk/gtkadjustment.c:149
+#: gtk/gtkadjustment.c:187
 #, fuzzy
 msgid "The page increment of the adjustment"
 msgstr "De inhaud van 't veldj"
 
-#: gtk/gtkadjustment.c:158
+#: gtk/gtkadjustment.c:206
 #, fuzzy
 msgid "Page Size"
 msgstr "Maks Aafmaeting"
 
-#: gtk/gtkadjustment.c:159
+#: gtk/gtkadjustment.c:207
 #, fuzzy
 msgid "The page size of the adjustment"
 msgstr "De sjtandj van de sjakelknóp"
@@ -629,7 +629,7 @@ msgstr ""
 "Bie WAOR (TRUE), versjient de dochter in ein sekundaere gróp van kènjer, "
 "gesjik veur b.v. hulpknóppe"
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:447
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:230 gtk/gtkiconview.c:449
 #: gtk/gtktreeviewcolumn.c:250
 msgid "Spacing"
 msgstr "Sjpasiëring"
@@ -726,7 +726,7 @@ msgstr ""
 "Wen aangevink, weurt 't label gebroek veur ein veurraod-item te keze in "
 "plaats van getuind te waere"
 
-#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:675
+#: gtk/gtkbutton.c:244 gtk/gtkcombobox.c:678
 msgid "Focus on click"
 msgstr ""
 
@@ -1272,7 +1272,7 @@ msgid ""
 "have enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:361
+#: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
 #: gtk/gtklabel.c:453
 #, fuzzy
 msgid "Width In Characters"
@@ -1486,7 +1486,7 @@ msgstr "Opmaak gebroeke"
 msgid "Whether or not to give the color an alpha value"
 msgstr ""
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:347
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:351
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Tittel"
@@ -1590,80 +1590,80 @@ msgstr "Waerd in lies"
 msgid "Whether entered values must already be present in the list"
 msgstr "Of ingegaeve waerdes ummer in de lies dao mote zeen"
 
-#: gtk/gtkcombobox.c:548
+#: gtk/gtkcombobox.c:551
 msgid "ComboBox model"
 msgstr ""
 
-#: gtk/gtkcombobox.c:549
+#: gtk/gtkcombobox.c:552
 #, fuzzy
 msgid "The model for the combo box"
 msgstr "'t model van de TreeView"
 
-#: gtk/gtkcombobox.c:565
+#: gtk/gtkcombobox.c:568
 #, fuzzy
 msgid "Wrap width"
 msgstr "Breide"
 
-#: gtk/gtkcombobox.c:566
+#: gtk/gtkcombobox.c:569
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 
-#: gtk/gtkcombobox.c:588
+#: gtk/gtkcombobox.c:591
 #, fuzzy
 msgid "Row span column"
 msgstr "Riej-spasiëring"
 
-#: gtk/gtkcombobox.c:589
+#: gtk/gtkcombobox.c:592
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:610
+#: gtk/gtkcombobox.c:613
 #, fuzzy
 msgid "Column span column"
 msgstr "Kelóm-spasiëring"
 
-#: gtk/gtkcombobox.c:611
+#: gtk/gtkcombobox.c:614
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:631
+#: gtk/gtkcombobox.c:634
 #, fuzzy
 msgid "Active item"
 msgstr "Aktief"
 
-#: gtk/gtkcombobox.c:632
+#: gtk/gtkcombobox.c:635
 #, fuzzy
 msgid "The item which is currently active"
 msgstr "'t GdkFont det noe is geselekteerd."
 
-#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:228
+#: gtk/gtkcombobox.c:654 gtk/gtkuimanager.c:228
 msgid "Add tearoffs to menus"
 msgstr ""
 
-#: gtk/gtkcombobox.c:652
+#: gtk/gtkcombobox.c:655
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Of tabs gelieke aafmaetinge mote höbbe"
 
-#: gtk/gtkcombobox.c:667 gtk/gtkentry.c:530
+#: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "Haet kader"
 
-#: gtk/gtkcombobox.c:668
+#: gtk/gtkcombobox.c:671
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Of de kelóm róndj de köp geordend kèn waere"
 
-#: gtk/gtkcombobox.c:676
+#: gtk/gtkcombobox.c:679
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Of de labelteks geselekteerd kèn waere mit de moes"
 
-#: gtk/gtkcombobox.c:682
+#: gtk/gtkcombobox.c:685
 msgid "Appears as list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:683
+#: gtk/gtkcombobox.c:686
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Of de avvans getuind weurt es teks"
@@ -1892,7 +1892,7 @@ msgstr "Minimum sjuufobjeklengde"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:368
+#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:370
 #, fuzzy
 msgid "Text column"
 msgstr "Zeuk kelóm"
@@ -2085,20 +2085,20 @@ msgstr "Teks tuine"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Of knóppe veur 't make/verangere van besjtenj getuind mote waere"
 
-#: gtk/gtkfilechooserbutton.c:332
+#: gtk/gtkfilechooserbutton.c:336
 msgid "Dialog"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:333
+#: gtk/gtkfilechooserbutton.c:337
 msgid "The file chooser dialog to use."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:348
+#: gtk/gtkfilechooserbutton.c:352
 #, fuzzy
 msgid "The title of the file chooser dialog."
 msgstr "De tittel van 't vinster"
 
-#: gtk/gtkfilechooserbutton.c:362
+#: gtk/gtkfilechooserbutton.c:366
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
@@ -2297,123 +2297,123 @@ msgstr ""
 "Of de waerd van de snap_edge-eigesjap gebroek weurt, of ein waerd aafgeleijd "
 "van handle_position"
 
-#: gtk/gtkiconview.c:331
+#: gtk/gtkiconview.c:333
 #, fuzzy
 msgid "Selection mode"
 msgstr "Seleksie begrens"
 
-#: gtk/gtkiconview.c:332
+#: gtk/gtkiconview.c:334
 #, fuzzy
 msgid "The selection mode"
 msgstr "De noe geselekteerde besjtandjsnaam"
 
-#: gtk/gtkiconview.c:350
+#: gtk/gtkiconview.c:352
 #, fuzzy
 msgid "Pixbuf column"
 msgstr "Zeuk kelóm"
 
-#: gtk/gtkiconview.c:351
+#: gtk/gtkiconview.c:353
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr ""
 
-#: gtk/gtkiconview.c:369
+#: gtk/gtkiconview.c:371
 msgid "Model column used to retrieve the text from"
 msgstr ""
 
-#: gtk/gtkiconview.c:388
+#: gtk/gtkiconview.c:390
 #, fuzzy
 msgid "Markup column"
 msgstr "Opmaak"
 
-#: gtk/gtkiconview.c:389
+#: gtk/gtkiconview.c:391
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 
-#: gtk/gtkiconview.c:396
+#: gtk/gtkiconview.c:398
 #, fuzzy
 msgid "Icon View Model"
 msgstr "TreeView Model"
 
-#: gtk/gtkiconview.c:397
+#: gtk/gtkiconview.c:399
 #, fuzzy
 msgid "The model for the icon view"
 msgstr "'t model van de TreeView"
 
-#: gtk/gtkiconview.c:413
+#: gtk/gtkiconview.c:415
 #, fuzzy
 msgid "Number of columns"
 msgstr "'t deil kelómme in de tabel"
 
-#: gtk/gtkiconview.c:414
+#: gtk/gtkiconview.c:416
 #, fuzzy
 msgid "Number of columns to display"
 msgstr "'t deil te tuine desimale plaatse"
 
-#: gtk/gtkiconview.c:431
+#: gtk/gtkiconview.c:433
 #, fuzzy
 msgid "Width for each item"
 msgstr "Breide van 't kader róntelóm de tab-labels"
 
-#: gtk/gtkiconview.c:432
+#: gtk/gtkiconview.c:434
 msgid "The width used for each item"
 msgstr ""
 
-#: gtk/gtkiconview.c:448
+#: gtk/gtkiconview.c:450
 msgid "Space which is inserted between cells of an item"
 msgstr ""
 
-#: gtk/gtkiconview.c:463
+#: gtk/gtkiconview.c:465
 #, fuzzy
 msgid "Row Spacing"
 msgstr "Riej-spasiëring"
 
-#: gtk/gtkiconview.c:464
+#: gtk/gtkiconview.c:466
 msgid "Space which is inserted between grid rows"
 msgstr ""
 
-#: gtk/gtkiconview.c:479
+#: gtk/gtkiconview.c:481
 #, fuzzy
 msgid "Column Spacing"
 msgstr "Kelóm-spasiëring"
 
-#: gtk/gtkiconview.c:480
+#: gtk/gtkiconview.c:482
 msgid "Space which is inserted between grid column"
 msgstr ""
 
-#: gtk/gtkiconview.c:495
+#: gtk/gtkiconview.c:497
 #, fuzzy
 msgid "Margin"
 msgstr "Linkermarge"
 
-#: gtk/gtkiconview.c:496
+#: gtk/gtkiconview.c:498
 msgid "Space which is inserted at the edges of the icon view"
 msgstr ""
 
-#: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
+#: gtk/gtkiconview.c:514 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "Orjentasie"
 
-#: gtk/gtkiconview.c:513
+#: gtk/gtkiconview.c:515
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
-#: gtk/gtkiconview.c:521
+#: gtk/gtkiconview.c:523
 #, fuzzy
 msgid "Selection Box Color"
 msgstr "Seleksie begrens"
 
-#: gtk/gtkiconview.c:522
+#: gtk/gtkiconview.c:524
 #, fuzzy
 msgid "Color of the selection box"
 msgstr "De tittel van 't vinster"
 
-#: gtk/gtkiconview.c:528
+#: gtk/gtkiconview.c:530
 #, fuzzy
 msgid "Selection Box Alpha"
 msgstr "Seleksie begrens"
 
-#: gtk/gtkiconview.c:529
+#: gtk/gtkiconview.c:531
 #, fuzzy
 msgid "Opacity of the selection box"
 msgstr "De tittel van 't vinster"
@@ -2655,11 +2655,11 @@ msgstr "De breide van de opmaak"
 msgid "The height of the layout"
 msgstr "De huugde van de opmaak"
 
-#: gtk/gtkmenu.c:524
+#: gtk/gtkmenu.c:526
 msgid "Tearoff Title"
 msgstr "Aafsjeur-Tittel"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2667,117 +2667,117 @@ msgstr ""
 "Eine tittel die getuind kèn waere door de windowmanager wen dit menu "
 "losgesjeurd weurt"
 
-#: gtk/gtkmenu.c:539
+#: gtk/gtkmenu.c:541
 #, fuzzy
 msgid "Tearoff State"
 msgstr "Aafsjeur-Tittel"
 
-#: gtk/gtkmenu.c:540
+#: gtk/gtkmenu.c:542
 #, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr ""
 "Eine tittel die getuind kèn waere door de windowmanager wen dit menu "
 "losgesjeurd weurt"
 
-#: gtk/gtkmenu.c:546
+#: gtk/gtkmenu.c:548
 #, fuzzy
 msgid "Vertical Padding"
 msgstr "Vertikale opvölling"
 
-#: gtk/gtkmenu.c:547
+#: gtk/gtkmenu.c:549
 #, fuzzy
 msgid "Extra space at the top and bottom of the menu"
 msgstr "De toe te veuge ruumde baove en ónger ein widget, in pixels"
 
-#: gtk/gtkmenu.c:555
+#: gtk/gtkmenu.c:557
 #, fuzzy
 msgid "Vertical Offset"
 msgstr "Vertikale sjaal"
 
-#: gtk/gtkmenu.c:556
+#: gtk/gtkmenu.c:558
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
-#: gtk/gtkmenu.c:564
+#: gtk/gtkmenu.c:566
 #, fuzzy
 msgid "Horizontal Offset"
 msgstr "Horizontale sjaal"
 
-#: gtk/gtkmenu.c:565
+#: gtk/gtkmenu.c:567
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:575
+#: gtk/gtkmenu.c:577
 #, fuzzy
 msgid "Left Attach"
 msgstr "Linker verbènjing"
 
-#: gtk/gtkmenu.c:576 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr ""
 "'t kelómnómmer woemit de linkerkantj van 't dochterwidget weurt verbónje"
 
-#: gtk/gtkmenu.c:583
+#: gtk/gtkmenu.c:585
 #, fuzzy
 msgid "Right Attach"
 msgstr "Rechter verbènjing"
 
-#: gtk/gtkmenu.c:584
+#: gtk/gtkmenu.c:586
 #, fuzzy
 msgid "The column number to attach the right side of the child to"
 msgstr ""
 "'t kelómnómmer woemit de linkerkantj van 't dochterwidget weurt verbónje"
 
-#: gtk/gtkmenu.c:591
+#: gtk/gtkmenu.c:593
 #, fuzzy
 msgid "Top Attach"
 msgstr "Baoveverbènjing"
 
-#: gtk/gtkmenu.c:592
+#: gtk/gtkmenu.c:594
 #, fuzzy
 msgid "The row number to attach the top of the child to"
 msgstr "'t riejnómmer woemit de óngerkantj van 't dochterwidget weurt verbónje"
 
-#: gtk/gtkmenu.c:599
+#: gtk/gtkmenu.c:601
 #, fuzzy
 msgid "Bottom Attach"
 msgstr "Óngerverbènjing"
 
-#: gtk/gtkmenu.c:600 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "'t riejnómmer woemit de óngerkantj van 't dochterwidget weurt verbónje"
 
-#: gtk/gtkmenu.c:687
+#: gtk/gtkmenu.c:689
 msgid "Can change accelerators"
 msgstr "Kèn sjnaktósj verangere"
 
-#: gtk/gtkmenu.c:688
+#: gtk/gtkmenu.c:690
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Of sjnaktósje verangerd kènne waere door 't drökke van ein tósj euver 't "
 "menu-item"
 
-#: gtk/gtkmenu.c:693
+#: gtk/gtkmenu.c:695
 msgid "Delay before submenus appear"
 msgstr "Vertraging ierdet submenus versjiene"
 
-#: gtk/gtkmenu.c:694
+#: gtk/gtkmenu.c:696
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Minimumtied die de moesaanwiezer baove ein menu-item moot sjtaon ierdet 't "
 "submenu versjient"
 
-#: gtk/gtkmenu.c:701
+#: gtk/gtkmenu.c:703
 msgid "Delay before hiding a submenu"
 msgstr "Vertraging ierdet ein submenu verdwient"
 
-#: gtk/gtkmenu.c:702
+#: gtk/gtkmenu.c:704
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4495,7 +4495,7 @@ msgstr "Oetklappe"
 #: gtk/gtktreeview.c:693
 #, fuzzy
 msgid ""
-"Whether rows should be expanded/collaped when the pointer moves over them"
+"Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "WAOR (TRUE) wen 't vinster neet in de wirkblaadwisselaar huurt"
 
 #: gtk/gtktreeview.c:713

@@ -1,3 +1,9 @@
+2005-01-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.6.1 ===
+	
+	* gdk-pixbuf-2.0.pc.in: Require gmodule-no-export-2.0
+
 2005-01-07  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkselection-win32.c (_gdk_selection_property_store):

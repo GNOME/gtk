@@ -1,7 +1,7 @@
 General Information
 ===================
 
-This is GTK+ version 2.6.0. GTK+ is a multi-platform toolkit for
+This is GTK+ version 2.6.1. GTK+ is a multi-platform toolkit for
 creating graphical user interfaces. Offering a complete set of widgets,
 GTK+ is suitable for projects ranging from small one-off projects to
 complete application suites.
@@ -88,7 +88,7 @@ Release notes
   If you have filenames encoded in the encoding of your locale, then you 
   may want to set the G_FILENAME_ENCODING environment variable:
   
-   G_FILENAME_ENCODING=@local
+   G_FILENAME_ENCODING=@locale
    export G_FILENAME_ENCODING
 
   (Earlier versions of GLib 2.x required a different environment variable

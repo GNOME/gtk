@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-07 22:07+0100\n"
+"POT-Creation-Date: 2005-01-08 02:01-0500\n"
 "PO-Revision-Date: 2005-01-07 22:11+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -42,7 +42,8 @@ msgstr "El archivo de imagen «%s» no contiene datos"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:887
 #: gdk-pixbuf/gdk-pixbuf-io.c:1110 tests/testfilechooser.c:244
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "No se ha podido cargar la imagen «%s»: el motivo es desconocido, "
 "probablemente el archivo gráfico esté corrupto"
@@ -78,7 +79,8 @@ msgstr "El tipo de imagen «%s» no está soportado"
 #: gdk-pixbuf/gdk-pixbuf-io.c:720
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "No se ha podido reconocer el formato del archivo de imagen del archivo «%s»"
+msgstr ""
+"No se ha podido reconocer el formato del archivo de imagen del archivo «%s»"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:728
 msgid "Unrecognized image file format"
@@ -356,7 +358,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:909
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "La calidad JPEG debe ser un valor entre 0 y 100; el valor «%d» no está "
 "permitido."
@@ -460,7 +463,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Error fatal leyendo el archivo gráfico PNG: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Las claves para los bloques text de PNG debe tener al menos entre 1 y un "
 "máximo de 79 caracteres."
@@ -542,7 +546,8 @@ msgstr "No se puede asignar memoria para cargar la imagen PNM"
 
 #: gdk-pixbuf/io-pnm.c:820
 msgid "Insufficient memory to load PNM context struct"
-msgstr "No hay memoria suficiente para cargar la estructura de contexto del PNM"
+msgstr ""
+"No hay memoria suficiente para cargar la estructura de contexto del PNM"
 
 #: gdk-pixbuf/io-pnm.c:871
 msgid "Unexpected end of PNM image data"
@@ -635,7 +640,8 @@ msgstr "El formato de imagen Targa"
 
 #: gdk-pixbuf/io-tiff.c:173
 msgid "Could not get image width (bad TIFF file)"
-msgstr "No se ha podido obtener el ancho de la imagen (archivo TIFF incorrecto)"
+msgstr ""
+"No se ha podido obtener el ancho de la imagen (archivo TIFF incorrecto)"
 
 #: gdk-pixbuf/io-tiff.c:180
 msgid "Could not get image height (bad TIFF file)"
@@ -742,7 +748,8 @@ msgstr "No se puede leer el mapa de color de XPM"
 
 #: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr "No se ha podido escribir en el archivo temporal al cargar la imagen XPM"
+msgstr ""
+"No se ha podido escribir en el archivo temporal al cargar la imagen XPM"
 
 #: gdk-pixbuf/io-xpm.c:1559
 msgid "The XPM image format"
@@ -1165,7 +1172,8 @@ msgstr "Quitar el marcador «%s»"
 #: gtk/gtkfilechooserdefault.c:2591
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
-msgstr "No se pudo añadir un marcador para «%s» porque es un nombre de ruta inválido."
+msgstr ""
+"No se pudo añadir un marcador para «%s» porque es un nombre de ruta inválido."
 
 #: gtk/gtkfilechooserdefault.c:2769
 msgid "Shortcuts"
@@ -1368,7 +1376,8 @@ msgstr "_Renombrar archivo"
 
 #: gtk/gtkfilesel.c:1445
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "El nombre de la carpeta «%s» contiene símbolos que no están permitidos en "
 "los nombres de archivos"
@@ -1384,7 +1393,8 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1448 gtk/gtkfilesel.c:1684
 msgid "You probably used symbols not allowed in filenames."
-msgstr "Probablemente ha empleado símbolos no permitidos en nombres de archivo."
+msgstr ""
+"Probablemente ha empleado símbolos no permitidos en nombres de archivo."
 
 #: gtk/gtkfilesel.c:1456
 #, c-format
@@ -2270,4 +2280,3 @@ msgstr "No se ha podido obtener información para el archivo «%s» : %s"
 
 #~ msgid "Could not find the path"
 #~ msgstr "No se ha podido encontrar la ruta"
-

@@ -8,14 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-31 21:48+0200\n"
+"POT-Creation-Date: 2005-01-08 02:01-0500\n"
 "PO-Revision-Date: 2004-12-31 22:00+0200\n"
 "Last-Translator: Žygimantas Beručka <uid0@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
+"100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:838
 #: gdk-pixbuf/gdk-pixbuf-io.c:1069 tests/testfilechooser.c:199
@@ -181,20 +182,24 @@ msgstr "Blogai suformuotas animacijos blokas"
 msgid "The ANI image format"
 msgstr "ANI paveikslėlio formatas"
 
-#: gdk-pixbuf/io-bmp.c:225 gdk-pixbuf/io-bmp.c:374
+#: gdk-pixbuf/io-bmp.c:227 gdk-pixbuf/io-bmp.c:383
 msgid "Not enough memory to load bitmap image"
 msgstr "Nepakanka atminties įkelti rastrinį paveikslėlį"
 
-#: gdk-pixbuf/io-bmp.c:267
+#: gdk-pixbuf/io-bmp.c:269
 msgid "BMP image has unsupported header size"
 msgstr "BMP paveikslėlis turi nepalaikomą antraštės dydį"
 
-#: gdk-pixbuf/io-bmp.c:286 gdk-pixbuf/io-bmp.c:311 gdk-pixbuf/io-bmp.c:334
-#: gdk-pixbuf/io-bmp.c:405
+#: gdk-pixbuf/io-bmp.c:288 gdk-pixbuf/io-bmp.c:320 gdk-pixbuf/io-bmp.c:343
+#: gdk-pixbuf/io-bmp.c:424
 msgid "BMP image has bogus header data"
 msgstr "BMP paveikslėlis turi klaidinančią antraštę"
 
-#: gdk-pixbuf/io-bmp.c:1132
+#: gdk-pixbuf/io-bmp.c:307
+msgid "Topdown BMP images cannot be compressed"
+msgstr ""
+
+#: gdk-pixbuf/io-bmp.c:1154
 msgid "The BMP image format"
 msgstr "BMP paveikslėlio formatas"
 
@@ -1069,25 +1074,26 @@ msgstr "Įterpt_i Unicode valdymo simbolį"
 msgid "Invalid filename: %s"
 msgstr "Netinkamas bylos vardas: %s"
 
-#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1227
+#: gtk/gtkfilechooserbutton.c:65
+#, fuzzy
+msgid "Select A File"
+msgstr "Pasirinkite bylą"
+
+#: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1229
 #: gtk/gtkpathbar.c:982
 msgid "Home"
 msgstr "Namai"
 
-#: gtk/gtkfilechooserbutton.c:63 gtk/gtkfilechooserdefault.c:1250
+#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1256
 #: gtk/gtkpathbar.c:984
 msgid "Desktop"
 msgstr "Darbastalis"
 
-#: gtk/gtkfilechooserbutton.c:64
+#: gtk/gtkfilechooserbutton.c:68
 msgid "(None)"
 msgstr "(Joks)"
 
-#: gtk/gtkfilechooserbutton.c:349
-msgid "Select a File"
-msgstr "Pasirinkite bylą"
-
-#: gtk/gtkfilechooserbutton.c:1503
+#: gtk/gtkfilechooserbutton.c:1515
 msgid "Other..."
 msgstr "Kita..."
 
@@ -1115,122 +1121,132 @@ msgstr "Netinkamas bylos vardas"
 msgid "The folder contents could not be displayed"
 msgstr "Nepavyko parodyti aplanko turinio"
 
-#: gtk/gtkfilechooserdefault.c:2087
+#: gtk/gtkfilechooserdefault.c:1119
+#, fuzzy, c-format
+msgid "Could not get information about '%s': %s"
+msgstr "Nepavyko gauti bylos „%s“ informacijos: %s"
+
+#: gtk/gtkfilechooserdefault.c:2095
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Įdėti aplanką „%s“ į žymeles"
 
-#: gtk/gtkfilechooserdefault.c:2128
+#: gtk/gtkfilechooserdefault.c:2136
 msgid "Add the current folder to the bookmarks"
 msgstr "Įdėti esamą aplanką į žymeles"
 
-#: gtk/gtkfilechooserdefault.c:2130
+#: gtk/gtkfilechooserdefault.c:2138
 msgid "Add the selected folders to the bookmarks"
 msgstr "Įdėti pažymėtus aplankus į žymeles"
 
-#: gtk/gtkfilechooserdefault.c:2170
+#: gtk/gtkfilechooserdefault.c:2178
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Pašalinti žymelę „%s“"
 
-#: gtk/gtkfilechooserdefault.c:2583
+#: gtk/gtkfilechooserdefault.c:2591
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "Nepavyko įdėti %s žymelės, nes nurodytas kelias yra netinkamas."
 
-#: gtk/gtkfilechooserdefault.c:2761
+#: gtk/gtkfilechooserdefault.c:2769
 msgid "Shortcuts"
 msgstr "Nuorodos"
 
-#: gtk/gtkfilechooserdefault.c:2815
+#: gtk/gtkfilechooserdefault.c:2823
 msgid "Folder"
 msgstr "Aplankas"
 
-#: gtk/gtkfilechooserdefault.c:2867 gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:2875 gtk/gtkstock.c:295
 msgid "_Add"
 msgstr "_Pridėti"
 
-#: gtk/gtkfilechooserdefault.c:2874
+#: gtk/gtkfilechooserdefault.c:2882
 msgid "Add the selected folder to the bookmarks"
 msgstr "Įdėti pažymėtą aplanką į žymeles"
 
-#: gtk/gtkfilechooserdefault.c:2879 gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:2887 gtk/gtkstock.c:352
 msgid "_Remove"
 msgstr "_Pašalinti"
 
-#: gtk/gtkfilechooserdefault.c:2886
+#: gtk/gtkfilechooserdefault.c:2894
 msgid "Remove the selected bookmark"
 msgstr "Pašalinti pažymėtas žymeles"
 
-#: gtk/gtkfilechooserdefault.c:2981
+#: gtk/gtkfilechooserdefault.c:2997
 msgid "_Add to Shortcuts"
 msgstr "Į_dėti į nuorodas"
 
-#: gtk/gtkfilechooserdefault.c:2995
+#: gtk/gtkfilechooserdefault.c:3007
+#, fuzzy
+msgid "Open _Location"
+msgstr "Atidaryti vietą"
+
+#: gtk/gtkfilechooserdefault.c:3019
 msgid "Show _Hidden Files"
 msgstr "Rod_yti paslėptas bylas"
 
-#: gtk/gtkfilechooserdefault.c:3119 gtk/gtkfilesel.c:767
+#: gtk/gtkfilechooserdefault.c:3143 gtk/gtkfilesel.c:767
 msgid "Files"
 msgstr "Bylos"
 
-#: gtk/gtkfilechooserdefault.c:3150
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "Name"
 msgstr "Pavadinimas"
 
-#: gtk/gtkfilechooserdefault.c:3175
+#: gtk/gtkfilechooserdefault.c:3199
 msgid "Size"
 msgstr "Dydis"
 
-#: gtk/gtkfilechooserdefault.c:3188
+#: gtk/gtkfilechooserdefault.c:3212
 msgid "Modified"
 msgstr "Pakeista"
 
-#: gtk/gtkfilechooserdefault.c:3220
+#: gtk/gtkfilechooserdefault.c:3244
 msgid "Select which types of files are shown"
 msgstr "Pasirinkite kokių tipų bylas rodyti"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3256
+#: gtk/gtkfilechooserdefault.c:3280
 msgid "Create Fo_lder"
 msgstr "Sukurti ap_lanką"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3374
+#: gtk/gtkfilechooserdefault.c:3398
 msgid "_Name:"
 msgstr "_Pavadinimas:"
 
-#: gtk/gtkfilechooserdefault.c:3414
+#: gtk/gtkfilechooserdefault.c:3438
 msgid "_Browse for other folders"
 msgstr "_Naršyti kitų aplankų"
 
-#: gtk/gtkfilechooserdefault.c:3664
+#: gtk/gtkfilechooserdefault.c:3688
 msgid "Save in _folder:"
 msgstr "Išsaugoti _aplanke:"
 
-#: gtk/gtkfilechooserdefault.c:3666
+#: gtk/gtkfilechooserdefault.c:3690
 msgid "Create in _folder:"
 msgstr "Sukurti _aplanke:"
 
-#: gtk/gtkfilechooserdefault.c:4490
+#: gtk/gtkfilechooserdefault.c:4523
 msgid "Cannot change to folder because it is not local"
 msgstr "Negalima pakeisti į nurodytą aplanką, nes jis nėra vietinis"
 
-#: gtk/gtkfilechooserdefault.c:5015
+#: gtk/gtkfilechooserdefault.c:5048
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Nuoroda %s neegzistuoja"
 
-#: gtk/gtkfilechooserdefault.c:5475
+#: gtk/gtkfilechooserdefault.c:5508
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nepavyko prijungti %s"
 
-#: gtk/gtkfilechooserdefault.c:5768
+#: gtk/gtkfilechooserdefault.c:5802
 msgid "Type name of new folder"
 msgstr "Naujo aplanko tipo pavadinimas"
 
-#: gtk/gtkfilechooserdefault.c:5810
+#: gtk/gtkfilechooserdefault.c:5844
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1238,59 +1254,59 @@ msgstr[0] "%d baitas"
 msgstr[1] "%d baitai"
 msgstr[2] "%d baitų"
 
-#: gtk/gtkfilechooserdefault.c:5812
+#: gtk/gtkfilechooserdefault.c:5846
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5814
+#: gtk/gtkfilechooserdefault.c:5848
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5816
+#: gtk/gtkfilechooserdefault.c:5850
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5868
+#: gtk/gtkfilechooserdefault.c:5902
 msgid "Today"
 msgstr "Šiandien"
 
-#: gtk/gtkfilechooserdefault.c:5870
+#: gtk/gtkfilechooserdefault.c:5904
 msgid "Yesterday"
 msgstr "Vakar"
 
-#: gtk/gtkfilechooserdefault.c:5881
+#: gtk/gtkfilechooserdefault.c:5915
 msgid "Unknown"
 msgstr "Nežinomas"
 
-#: gtk/gtkfilechooserdefault.c:5951
+#: gtk/gtkfilechooserdefault.c:5985
 msgid "Cannot change folder"
 msgstr "Nepavyko pakeisti aplanko"
 
-#: gtk/gtkfilechooserdefault.c:5952
+#: gtk/gtkfilechooserdefault.c:5986
 msgid "The folder you specified is an invalid path."
 msgstr "Kelias iki nurodyto aplanko yra neteisingas."
 
-#: gtk/gtkfilechooserdefault.c:5991
+#: gtk/gtkfilechooserdefault.c:6025
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Nepavyko suformuoti bylos vardo iš „%s“ ir „%s“"
 
-#: gtk/gtkfilechooserdefault.c:6027
+#: gtk/gtkfilechooserdefault.c:6061
 msgid "Could not select item"
 msgstr "Nepavyko pasirinkti elemento"
 
-#: gtk/gtkfilechooserdefault.c:6067
+#: gtk/gtkfilechooserdefault.c:6101
 msgid "Open Location"
 msgstr "Atidaryti vietą"
 
-#: gtk/gtkfilechooserdefault.c:6074
+#: gtk/gtkfilechooserdefault.c:6108
 msgid "Save in Location"
 msgstr "Išsaugoti vietoje"
 
-#: gtk/gtkfilechooserdefault.c:6098
+#: gtk/gtkfilechooserdefault.c:6132
 msgid "_Location:"
 msgstr "_Vieta: "
 
@@ -1474,17 +1490,18 @@ msgid "(Empty)"
 msgstr "(Tuščia)"
 
 #: gtk/gtkfilesystemunix.c:415 gtk/gtkfilesystemunix.c:429
-#: gtk/gtkfilesystemunix.c:626
+#: gtk/gtkfilesystemunix.c:626 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1530
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Klaida bandant gauti „%s“ informaciją: %s"
 
-#: gtk/gtkfilesystemunix.c:495
+#: gtk/gtkfilesystemunix.c:495 gtk/gtkfilesystemwin32.c:537
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Klaida kuriant aplanką „%s“: %s"
 
-#: gtk/gtkfilesystemunix.c:575 gtk/gtkfilesystemwin32.c:515
+#: gtk/gtkfilesystemunix.c:575 gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr "Ši bylų sistema nepalaiko prijungimo"
 
@@ -1506,7 +1523,7 @@ msgstr ""
 "Vardas „%s“ yra netinkamas, nes jame yra simbolis „%s“. Prašom naudoti kitą "
 "vardą."
 
-#: gtk/gtkfilesystemunix.c:1443
+#: gtk/gtkfilesystemunix.c:1443 gtk/gtkfilesystemwin32.c:1004
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Nepavyko išsaugoti žymelės: %s"
@@ -1525,30 +1542,6 @@ msgstr "„%s“ nėra žymelių sąraše"
 #, c-format
 msgid "Error getting information for '%s'"
 msgstr "Klaida bandant gauti „%s“ informaciją"
-
-#: gtk/gtkfilesystemwin32.c:407
-#, c-format
-msgid "%s: %s"
-msgstr "%s: %s"
-
-#: gtk/gtkfilesystemwin32.c:414 gtk/gtkfilesystemwin32.c:1384
-#, c-format
-msgid "error getting information for '%s': %s"
-msgstr "klaida bandant gauti „%s“ informaciją: %s"
-
-#: gtk/gtkfilesystemwin32.c:455
-#, c-format
-msgid "error creating directory '%s': %s"
-msgstr "klaida kuriant aplanką „%s“: %s"
-
-#: gtk/gtkfilesystemwin32.c:928
-#, c-format
-msgid "Bookmark saving failed (%s)"
-msgstr "Nepavyko išsaugoti žymelės (%s)"
-
-#: gtk/gtkfilesystemwin32.c:1131
-msgid "This file system does not support icons for everything"
-msgstr "Ši bylų sistema nepalaiko ikonų priskyrimo viskam"
 
 #: gtk/gtkfontbutton.c:178 gtk/gtkfontbutton.c:295
 msgid "Pick a Font"
@@ -1606,7 +1599,7 @@ msgstr "_Gamos reikšmė"
 msgid "Error loading icon: %s"
 msgstr "Įvyko klaida įkeliant piktogramą: %s"
 
-#: gtk/gtkicontheme.c:1262
+#: gtk/gtkicontheme.c:1263
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1619,7 +1612,7 @@ msgstr ""
 "Jūs galite gauti kopiją:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1327
+#: gtk/gtkicontheme.c:1328
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Piktogramos „%s“ temoje nėra"
@@ -1766,17 +1759,17 @@ msgstr "Grupė"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Žymimosios akutės grupė, kuriai priklauso šis mygtukas."
 
-#: gtk/gtkrc.c:2438
+#: gtk/gtkrc.c:2399
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Nepavyko rasti įterpiamos bylos: \"%s\""
 
-#: gtk/gtkrc.c:3077 gtk/gtkrc.c:3080
+#: gtk/gtkrc.c:3038 gtk/gtkrc.c:3041
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Negaliu rasti paveikslėlio bylos pixmap_path: „%s“"
 
-#: gtk/gtkrc.c:3515
+#: gtk/gtkrc.c:3476
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
@@ -2216,6 +2209,21 @@ msgstr "X įvesties metodas"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nepavyko gauti bylos „%s“ informacijos: %s"
+
+#~ msgid "%s: %s"
+#~ msgstr "%s: %s"
+
+#~ msgid "error getting information for '%s': %s"
+#~ msgstr "klaida bandant gauti „%s“ informaciją: %s"
+
+#~ msgid "error creating directory '%s': %s"
+#~ msgstr "klaida kuriant aplanką „%s“: %s"
+
+#~ msgid "Bookmark saving failed (%s)"
+#~ msgstr "Nepavyko išsaugoti žymelės (%s)"
+
+#~ msgid "This file system does not support icons for everything"
+#~ msgstr "Ši bylų sistema nepalaiko ikonų priskyrimo viskam"
 
 #~ msgid ""
 #~ "Could not change the current folder to %s:\n"
