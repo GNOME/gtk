@@ -2833,34 +2833,77 @@ gtk_widget_intersect (GtkWidget	   *widget,
  *   results:
  *****************************************/
 
-void
-gtk_widget_grab_focus (GtkWidget *widget)
+static void
+reset_focus_recurse (GtkWidget *widget,
+		     gpointer   data)
 {
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (GTK_WIDGET_CAN_FOCUS (widget))
+  if (GTK_IS_CONTAINER (widget))
     {
-      GtkWidget *parent;
-      GtkWidget *child;
-      GtkType window_type;
+      GtkContainer *container;
+
+      container = GTK_CONTAINER (widget);
+      gtk_container_set_focus_child (container, NULL);
+
+      gtk_container_foreach (container,
+			     reset_focus_recurse,
+			     NULL);
+    }
+}
+
+void
+gtk_widget_grab_focus (GtkWidget *focus_widget)
+{
+  g_return_if_fail (focus_widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (focus_widget));
+  
+  if (GTK_WIDGET_CAN_FOCUS (focus_widget))
+    {
+      GtkWidget *toplevel;
+      GtkWidget *widget;
       
-      window_type = gtk_window_get_type ();
-      parent = widget->parent;
-      child = widget;
-      
-      while (parent && !gtk_type_is_a (GTK_WIDGET_TYPE (parent), window_type))
+      /* clear the current focus setting, break if the current widget
+       * is the focus widget's parent, since containers above that will
+       * be set by the next loop.
+       */
+      toplevel = gtk_widget_get_toplevel (focus_widget);
+      if (GTK_IS_WINDOW (toplevel))
 	{
-	  gtk_container_set_focus_child (GTK_CONTAINER (parent), child);
-	  child = parent;
-	  parent = parent->parent;
+	  widget = GTK_WINDOW (toplevel)->focus_widget;
+	  
+	  if (widget == focus_widget)
+	    return;
+	  
+	  if (widget)
+	    {
+	      while (widget->parent && widget->parent != focus_widget->parent)
+		{
+		  widget = widget->parent;
+		  gtk_container_set_focus_child (GTK_CONTAINER (widget), NULL);
+		}
+	    }
 	}
-      
-      if (parent && gtk_type_is_a (GTK_WIDGET_TYPE (parent), window_type))
+      else if (toplevel != focus_widget)
 	{
-	  gtk_container_set_focus_child (GTK_CONTAINER (parent), child);
-	  gtk_window_set_focus (GTK_WINDOW (parent), widget);
+	  /* gtk_widget_grab_focus() operates on a tree without window...
+	   * actually, this is very questionable behaviour.
+	   */
+	  
+	  gtk_container_foreach (GTK_CONTAINER (toplevel),
+				 reset_focus_recurse,
+				 NULL);
 	}
+
+      /* now propagate the new focus up the widget tree and finally
+       * set it on the window
+       */
+      widget = focus_widget;
+      while (widget->parent)
+	{
+	  gtk_container_set_focus_child (GTK_CONTAINER (widget->parent), widget);
+	  widget = widget->parent;
+	}
+      if (GTK_IS_WINDOW (widget))
+	gtk_window_set_focus (GTK_WINDOW (widget), focus_widget);
     }
 }
 

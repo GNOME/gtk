@@ -79,7 +79,7 @@ static gint gtk_window_focus_out_event    (GtkWidget         *widget,
 static gint gtk_window_client_event	  (GtkWidget	     *widget,
 					   GdkEventClient    *event);
 static void gtk_window_check_resize       (GtkContainer      *container);
-static void gtk_real_window_set_focus     (GtkWindow         *window,
+static void gtk_window_real_set_focus     (GtkWindow         *window,
 					   GtkWidget         *focus);
 static void gtk_window_move_resize        (GtkWindow         *window);
 static void gtk_window_set_hints          (GtkWidget         *widget,
@@ -184,7 +184,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    
   container_class->check_resize = gtk_window_check_resize;
 
-  klass->set_focus = gtk_real_window_set_focus;
+  klass->set_focus = gtk_window_real_set_focus;
 }
 
 static void
@@ -334,7 +334,16 @@ void
 gtk_window_set_focus (GtkWindow *window,
 		      GtkWidget *focus)
 {
-  gtk_signal_emit (GTK_OBJECT (window), window_signals[SET_FOCUS], focus);
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  if (focus)
+    {
+      g_return_if_fail (GTK_IS_WIDGET (focus));
+      g_return_if_fail (GTK_WIDGET_CAN_FOCUS (focus));
+    }
+
+  if (window->focus_widget != focus)
+    gtk_signal_emit (GTK_OBJECT (window), window_signals[SET_FOCUS], focus);
 }
 
 void
@@ -1225,7 +1234,7 @@ gtk_window_move_resize (GtkWindow *window)
 }
 
 static void
-gtk_real_window_set_focus (GtkWindow *window,
+gtk_window_real_set_focus (GtkWindow *window,
 			   GtkWidget *focus)
 {
   GdkEventFocus event;
@@ -1233,30 +1242,24 @@ gtk_real_window_set_focus (GtkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  if (focus && !GTK_WIDGET_CAN_FOCUS (focus))
-    return;
-
-  if (window->focus_widget != focus)
+  if (window->focus_widget)
     {
-      if (window->focus_widget)
-	{
-	  event.type = GDK_FOCUS_CHANGE;
-	  event.window = window->focus_widget->window;
-	  event.in = FALSE;
-
-	  gtk_widget_event (window->focus_widget, (GdkEvent*) &event);
-	}
-
-      window->focus_widget = focus;
-
-      if (window->focus_widget)
-	{
-	  event.type = GDK_FOCUS_CHANGE;
-	  event.window = window->focus_widget->window;
-	  event.in = TRUE;
-
-	  gtk_widget_event (window->focus_widget, (GdkEvent*) &event);
-	}
+      event.type = GDK_FOCUS_CHANGE;
+      event.window = window->focus_widget->window;
+      event.in = FALSE;
+      
+      gtk_widget_event (window->focus_widget, (GdkEvent*) &event);
+    }
+  
+  window->focus_widget = focus;
+  
+  if (window->focus_widget)
+    {
+      event.type = GDK_FOCUS_CHANGE;
+      event.window = window->focus_widget->window;
+      event.in = TRUE;
+      
+      gtk_widget_event (window->focus_widget, (GdkEvent*) &event);
     }
 }
 

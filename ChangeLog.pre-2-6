@@ -1,3 +1,20 @@
+Thu Dec  3 06:20:59 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c: moved checks upon focus setting from
+ 	gtk_window_real_set_focus to gtk_window_set_focus, so we don't
+	emit the signal if unneccessary.
+
+	* gtk/gtkwidget.c (gtk_widget_grab_focus): clear up the old focus
+	containers when grabbing focus on a new widget. this is based on
+	a patch from Alexis Mikhailov, submitted to gtk-list on 4 Nov 1998.
+
+	* gtk/gtkclist.c (gtk_clist_focus_out): set CLIST_CHILD_HAS_FOCUS
+	flag, so we take the buttons into consideration upon the next focus
+	request.
+
+	* gtk/gtkcontainer.c (gtk_container_set_focus_child): fixed an
+ 	assertment.
+
 Wed Dec  2 17:45:21 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* gtk/gtkpixmap.c: Fixes for low-color displays and a slight

@@ -6517,6 +6517,8 @@ gtk_clist_focus_out (GtkWidget     *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
+  GTK_CLIST_SET_FLAG (widget, CLIST_CHILD_HAS_FOCUS);
+
   gtk_widget_draw_focus (widget);
   
   clist = GTK_CLIST (widget);
@@ -6537,7 +6539,7 @@ gtk_clist_set_focus_child (GtkContainer *container,
   if (child)
     {
       g_return_if_fail (GTK_IS_WIDGET (child));
-      GTK_CLIST_SET_FLAG (GTK_CLIST (container), CLIST_CHILD_HAS_FOCUS);
+      GTK_CLIST_SET_FLAG (container, CLIST_CHILD_HAS_FOCUS);
     }
 
   parent_class->set_focus_child (container, child);

@@ -1206,13 +1206,13 @@ gtk_container_focus (GtkContainer     *container,
 }
 
 void
-gtk_container_set_focus_child (GtkContainer     *container,
-			       GtkWidget 	  *widget)
+gtk_container_set_focus_child (GtkContainer *container,
+			       GtkWidget    *widget)
 {
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
   if (widget)
-    g_return_if_fail (GTK_IS_WIDGET (container));
+    g_return_if_fail (GTK_IS_WIDGET (widget));
 
   gtk_signal_emit (GTK_OBJECT (container), container_signals[SET_FOCUS_CHILD], widget);
 }
