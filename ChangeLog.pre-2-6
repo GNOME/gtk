@@ -1,3 +1,12 @@
+Mon Mar  1 01:00:11 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.c (gtk_text_view_drag_data_received): 
+	Make DND operations within a buffer move the dragged 
+	text instead of copying it; also make DND operations 
+	a single user action for undo purposes.  (#135191, 
+	#93139, reported by Tommi Komulainen, patch by Paolo 
+	Borelly and Paolo Maggi)
+
 Mon Mar  1 00:51:11 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* NEWS: News for 2.3.5.

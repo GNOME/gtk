@@ -6099,18 +6099,25 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
   GtkTextIter drop_point;
   GtkTextView *text_view;
   gboolean success = FALSE;
+  GtkTextBuffer *buffer;
 
   text_view = GTK_TEXT_VIEW (widget);
 
   if (!text_view->dnd_mark)
     goto done;
 
-  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
+  buffer = get_buffer (text_view);
+
+  gtk_text_buffer_get_iter_at_mark (buffer,
                                     &drop_point,
                                     text_view->dnd_mark);
   
   if (!gtk_text_iter_can_insert (&drop_point, text_view->editable))
     goto done;
+
+  success = TRUE;
+
+  gtk_text_buffer_begin_user_action (buffer);
 
   if (selection_data->target == gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
     {
@@ -6129,7 +6136,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
       g_return_if_fail (GTK_IS_TEXT_BUFFER (src_buffer));
 
       if (gtk_text_buffer_get_tag_table (src_buffer) !=
-          gtk_text_buffer_get_tag_table (get_buffer (text_view)))
+          gtk_text_buffer_get_tag_table (buffer))
         copy_tags = FALSE;
 
       if (gtk_text_buffer_get_selection_bounds (src_buffer,
@@ -6137,7 +6144,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
                                                 &end))
         {
           if (copy_tags)
-            gtk_text_buffer_insert_range_interactive (get_buffer (text_view),
+            gtk_text_buffer_insert_range_interactive (buffer,
                                                       &drop_point,
                                                       &start,
                                                       &end,
@@ -6147,7 +6154,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
               gchar *str;
 
               str = gtk_text_iter_get_visible_text (&start, &end);
-              gtk_text_buffer_insert_interactive (get_buffer (text_view),
+              gtk_text_buffer_insert_interactive (buffer,
                                                   &drop_point, str, -1,
                                                   text_view->editable);
               g_free (str);
@@ -6156,15 +6163,21 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
     }
   else
     insert_text_data (text_view, &drop_point, selection_data);
-
-  gtk_text_buffer_place_cursor (get_buffer (text_view), &drop_point);
-
-  success = TRUE;
-
+ 
  done:
   gtk_drag_finish (context, success,
 		   success && context->action == GDK_ACTION_MOVE,
 		   time);
+
+  if (success)
+    {
+      gtk_text_buffer_get_iter_at_mark (buffer,
+                                        &drop_point,
+                                        text_view->dnd_mark);
+      gtk_text_buffer_place_cursor (buffer, &drop_point);
+
+      gtk_text_buffer_end_user_action (buffer);
+    }
 }
 
 static GtkAdjustment*
