@@ -61,6 +61,9 @@ static void     gtk_file_chooser_dialog_get_property (GObject               *obj
 static void     gtk_file_chooser_dialog_style_set    (GtkWidget             *widget,
 						      GtkStyle              *previous_style);
 
+static void response_cb (GtkDialog *dialog,
+			 gint       response_id);
+
 static GObjectClass *parent_class;
 
 GType
@@ -133,6 +136,14 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
   dialog->priv->resize_vertically = TRUE;
 
   gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
+
+  /* We do a signal connection here rather than overriding the method in
+   * class_init because GtkDialog::response is a RUN_LAST signal.  We want *our*
+   * handler to be run *first*, regardless of whether the user installs response
+   * handlers of his own.
+   */
+  g_signal_connect (dialog, "response",
+		    G_CALLBACK (response_cb), NULL);
 }
 
 static void
@@ -439,6 +450,29 @@ gtk_file_chooser_dialog_style_set (GtkWidget *widget,
 
   gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 0);
   gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+}
+
+/* GtkDialog::response handler */
+static void
+response_cb (GtkDialog *dialog,
+	     gint       response_id)
+{
+  GtkFileChooserDialogPrivate *priv;
+
+  priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
+
+  /* Ugh, try to filter out cancel-type responses */
+  if (response_id == GTK_RESPONSE_NONE
+      || response_id == GTK_RESPONSE_REJECT
+      || response_id == GTK_RESPONSE_DELETE_EVENT
+      || response_id == GTK_RESPONSE_CANCEL
+      || response_id == GTK_RESPONSE_CLOSE
+      || response_id == GTK_RESPONSE_NO
+      || response_id == GTK_RESPONSE_HELP)
+    return;
+
+  if (!_gtk_file_chooser_embed_should_respond (GTK_FILE_CHOOSER_EMBED (priv->widget)))
+    g_signal_stop_emission_by_name (dialog, "response");
 }
 
 static GtkWidget *

@@ -267,12 +267,14 @@ static gboolean       gtk_file_chooser_default_remove_shortcut_folder (GtkFileCh
 								       const GtkFilePath *path,
 								       GError           **error);
 static GSList *       gtk_file_chooser_default_list_shortcut_folders  (GtkFileChooser    *chooser);
+
 static void           gtk_file_chooser_default_get_default_size       (GtkFileChooserEmbed *chooser_embed,
 								       gint                *default_width,
 								       gint                *default_height);
 static void           gtk_file_chooser_default_get_resizable_hints    (GtkFileChooserEmbed *chooser_embed,
 								       gboolean            *resize_horizontally,
 								       gboolean            *resize_vertically);
+static gboolean       gtk_file_chooser_default_should_respond         (GtkFileChooserEmbed *chooser_embed);
 
 static void location_popup_handler (GtkFileChooserDefault *impl);
 static void up_folder_handler      (GtkFileChooserDefault *impl);
@@ -502,6 +504,7 @@ gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface *iface)
 {
   iface->get_default_size = gtk_file_chooser_default_get_default_size;
   iface->get_resizable_hints = gtk_file_chooser_default_get_resizable_hints;
+  iface->should_respond = gtk_file_chooser_default_should_respond;
 }
 static void
 gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
@@ -1432,6 +1435,21 @@ shortcuts_add_bookmark_from_path (GtkFileChooserDefault *impl,
     }
 }
 
+/* Returns the GtkTreeSelection that makes sense for the mode which the file chooser is in */
+static GtkTreeSelection *
+get_selection (GtkFileChooserDefault *impl)
+{
+  GtkWidget *tree_view;
+
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+    tree_view = impl->browse_directories_tree_view;
+  else
+    tree_view = impl->browse_files_tree_view;
+
+  return gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
+}
+
 static void
 add_bookmark_foreach_cb (GtkTreeModel *model,
 			 GtkTreePath  *path,
@@ -1466,16 +1484,10 @@ static void
 add_bookmark_button_clicked_cb (GtkButton *button,
 				GtkFileChooserDefault *impl)
 {
-  GtkWidget *tree_view;
   GtkTreeSelection *selection;
 
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-    tree_view = impl->browse_directories_tree_view;
-  else
-    tree_view = impl->browse_files_tree_view;
+  selection = get_selection (impl);
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
   if (gtk_tree_selection_count_selected_rows (selection) == 0)
     shortcuts_add_bookmark_from_path (impl, impl->current_folder);
   else
@@ -1517,46 +1529,86 @@ remove_bookmark_button_clicked_cb (GtkButton *button,
     }
 }
 
-struct is_folders_foreach_closure {
+struct selection_check_closure {
   GtkFileChooserDefault *impl;
+  gboolean empty;
+  gboolean all_files;
   gboolean all_folders;
 };
 
 /* Used from gtk_tree_selection_selected_foreach() */
 static void
-is_folders_foreach_cb (GtkTreeModel *model,
-		       GtkTreePath  *path,
-		       GtkTreeIter  *iter,
-		       gpointer      data)
+selection_check_foreach_cb (GtkTreeModel *model,
+			    GtkTreePath  *path,
+			    GtkTreeIter  *iter,
+			    gpointer      data)
 {
-  struct is_folders_foreach_closure *closure;
+  struct selection_check_closure *closure;
   GtkTreeIter child_iter;
   const GtkFileInfo *info;
+  gboolean is_folder;
 
   closure = data;
+  closure->empty = FALSE;
 
   gtk_tree_model_sort_convert_iter_to_child_iter (closure->impl->sort_model, &child_iter, iter);
 
   info = _gtk_file_system_model_get_info (closure->impl->browse_files_model, &child_iter);
-  closure->all_folders &= gtk_file_info_get_is_folder (info);
+  is_folder = gtk_file_info_get_is_folder (info);
+
+  closure->all_folders &= is_folder;
+  closure->all_files &= !is_folder;
 }
 
-/* Returns whether the selected items in the file list are all folders */
-static gboolean
-selection_is_folders (GtkFileChooserDefault *impl)
+/* Checks whether the selected items in the file list are all files or all folders */
+static void
+selection_check (GtkFileChooserDefault *impl,
+		 gboolean              *empty,
+		 gboolean              *all_files,
+		 gboolean              *all_folders)
 {
-  struct is_folders_foreach_closure closure;
+  struct selection_check_closure closure;
   GtkTreeSelection *selection;
 
-  closure.impl = impl;
-  closure.all_folders = TRUE;
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
+      || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+    {
+      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_directories_tree_view));
+      if (gtk_tree_selection_count_selected_rows (selection) == 0)
+	closure.empty = TRUE;
+      else
+	{
+	  closure.empty = FALSE;
+	  closure.all_files = FALSE;
+	  closure.all_folders = TRUE;
+	}
+    }
+  else
+    {
+      g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
+		|| impl->action == GTK_FILE_CHOOSER_ACTION_SAVE);
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-  gtk_tree_selection_selected_foreach (selection,
-				       is_folders_foreach_cb,
-				       &closure);
+      closure.impl = impl;
+      closure.empty = TRUE;
+      closure.all_files = TRUE;
+      closure.all_folders = TRUE;
 
-  return closure.all_folders;
+      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+      gtk_tree_selection_selected_foreach (selection,
+					   selection_check_foreach_cb,
+					   &closure);
+    }
+
+  g_assert (closure.empty || !(closure.all_files && closure.all_folders));
+
+  if (empty)
+    *empty = closure.empty;
+
+  if (all_files)
+    *all_files = closure.all_files;
+
+  if (all_folders)
+    *all_folders = closure.all_folders;
 }
 
 /* Sensitize the "add bookmark" button if all the selected items are folders, or
@@ -1566,26 +1618,24 @@ selection_is_folders (GtkFileChooserDefault *impl)
 static void
 bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl)
 {
-  GtkWidget *tree_view;
   GtkTreeSelection *selection;
   gboolean active;
 
   /* Check selection */
 
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-    tree_view = impl->browse_directories_tree_view;
-  else
-    tree_view = impl->browse_files_tree_view;
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
+  selection = get_selection (impl);
 
   if (gtk_tree_selection_count_selected_rows (selection) == 0)
     active = (shortcut_find_position (impl, impl->current_folder) == -1);
   else
-    active = (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-	      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER ||
-	      selection_is_folders (impl));
+    {
+      gboolean all_folders;
+
+      selection_check (impl, NULL, NULL, &all_folders);
+      active = (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+		impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER ||
+		all_folders);
+    }
 
   gtk_widget_set_sensitive (impl->browse_shortcuts_add_button, active);
 }
@@ -1833,7 +1883,7 @@ create_file_list (GtkFileChooserDefault *impl)
   impl->browse_files_tree_view = gtk_tree_view_new ();
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (impl->browse_files_tree_view), TRUE);
   gtk_container_add (GTK_CONTAINER (impl->browse_files_swin), impl->browse_files_tree_view);
-  g_signal_connect (impl->browse_files_tree_view, "row_activated",
+  g_signal_connect (impl->browse_files_tree_view, "row-activated",
 		    G_CALLBACK (list_row_activated), impl);
   gtk_widget_show (impl->browse_files_tree_view);
 
@@ -2744,7 +2794,7 @@ set_list_model (GtkFileChooserDefault *impl)
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (impl->sort_model), FILE_LIST_COL_NAME, GTK_SORT_ASCENDING);
   impl->list_sort_ascending = TRUE;
 
-  g_signal_connect (impl->sort_model, "sort_column_changed",
+  g_signal_connect (impl->sort_model, "sort-column-changed",
 		    G_CALLBACK (list_sort_column_changed_cb), impl);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
@@ -3001,6 +3051,44 @@ gtk_file_chooser_default_unselect_all (GtkFileChooser *chooser)
   gtk_tree_selection_unselect_all (selection);
 }
 
+/* Checks whether the filename entry for the Save modes contains a valid filename */
+static GtkFilePath *
+check_save_entry (GtkFileChooserDefault *impl,
+		  gboolean              *is_valid,
+		  gboolean              *is_empty)
+{
+  const char *filename;
+  GtkFilePath *path;
+  GError *error;
+
+  g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+	    || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
+
+  filename = gtk_entry_get_text (GTK_ENTRY (impl->save_file_name_entry));
+
+  if (!filename || filename[0] == '\0')
+    {
+      *is_valid = FALSE;
+      *is_empty = TRUE;
+      return NULL;
+    }
+
+  *is_empty = FALSE;
+
+  error = NULL;
+  path = gtk_file_system_make_path (impl->file_system, impl->current_folder, filename, &error);
+
+  if (!path)
+    {
+      error_building_filename_dialog (impl, impl->current_folder, filename, error);
+      *is_valid = FALSE;
+      return NULL;
+    }
+
+  *is_valid = TRUE;
+  return path;
+}
+
 struct get_paths_closure {
   GtkFileChooserDefault *impl;
   GSList *result;
@@ -3049,49 +3137,22 @@ gtk_file_chooser_default_get_paths (GtkFileChooser *chooser)
   info.result = NULL;
   info.path_from_entry = NULL;
 
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+      || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
-      const char *filename;
+      gboolean is_valid, is_empty;
 
-      filename = gtk_entry_get_text (GTK_ENTRY (impl->save_file_name_entry));
-
-      if (filename != NULL && filename[0] != '\0')
-	{
-	  GtkFilePath *selected;
-	  GError *error = NULL;
-
-	  selected = gtk_file_system_make_path (impl->file_system, impl->current_folder, filename, &error);
-
-	  if (!selected)
-	    {
-	      error_building_filename_dialog (impl, impl->current_folder, filename, error);
-	      return NULL;
-	    }
-
-	  info.path_from_entry = selected;
-	}
+      info.path_from_entry = check_save_entry (impl, &is_valid, &is_empty);
+      if (!is_valid && !is_empty)
+	return NULL;
     }
 
   if (!info.path_from_entry || impl->select_multiple)
     {
       GtkTreeSelection *selection;
 
-      selection = NULL;
-
-      if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-	  impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-	{
-	  if (impl->browse_directories_model)
-	    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_directories_tree_view));
-	}
-      else
-	{
-	  if (impl->sort_model)
-	    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-	}
-
-      if (selection)
-	gtk_tree_selection_selected_foreach (selection, get_paths_foreach, &info);
+      selection = get_selection (impl);
+      gtk_tree_selection_selected_foreach (selection, get_paths_foreach, &info);
     }
 
   if (info.path_from_entry)
@@ -3392,6 +3453,125 @@ gtk_file_chooser_default_get_resizable_hints (GtkFileChooserEmbed *chooser_embed
 	  *resize_vertically = FALSE;
 	}
     }
+}
+
+struct switch_folder_closure {
+  GtkFileChooserDefault *impl;
+  const GtkFilePath *path;
+  int num_selected;
+};
+
+/* Used from gtk_tree_selection_selected_foreach() in switch_to_selected_folder() */
+static void
+switch_folder_foreach_cb (GtkTreeModel      *model,
+			  GtkTreePath       *path,
+			  GtkTreeIter       *iter,
+			  gpointer           data)
+{
+  struct switch_folder_closure *closure;
+  GtkTreeIter child_iter;
+
+  closure = data;
+
+  gtk_tree_model_sort_convert_iter_to_child_iter (closure->impl->sort_model, &child_iter, iter);
+
+  closure->path = _gtk_file_system_model_get_path (closure->impl->browse_files_model, &child_iter);
+  closure->num_selected++;
+}
+
+/* Changes to the selected folder in the list view */
+static void
+switch_to_selected_folder (GtkFileChooserDefault *impl)
+{
+  GtkTreeSelection *selection;
+  struct switch_folder_closure closure;
+
+  g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
+	    || impl->action == GTK_FILE_CHOOSER_ACTION_SAVE);
+
+  /* We do this with foreach() rather than get_selected() as we may be in
+   * multiple selection mode
+   */
+
+  closure.impl = impl;
+  closure.path = NULL;
+  closure.num_selected = 0;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+  gtk_tree_selection_selected_foreach (selection, switch_folder_foreach_cb, &closure);
+
+  g_assert (closure.path && closure.num_selected == 1);
+
+  _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), closure.path);
+}
+
+/* Implementation for GtkFileChooserEmbed::should_respond() */
+static gboolean
+gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
+{
+  GtkFileChooserDefault *impl;
+  GtkTreeSelection *selection;
+  int num_selected;
+
+  impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
+
+  /* First, check the save entry.  If it has a valid name, we are done */
+
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+      || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+    {
+      GtkFilePath *path;
+      gboolean is_valid, is_empty;
+
+      path = check_save_entry (impl, &is_valid, &is_empty);
+
+      if (is_valid)
+	{
+	  gtk_file_path_free (path);
+	  return TRUE;
+	}
+      else if (!is_empty)
+	return FALSE;
+    }
+
+  /* Second, do we have an empty selection? */
+
+  selection = get_selection (impl);
+  num_selected = gtk_tree_selection_count_selected_rows (selection);
+  if (num_selected == 0)
+    return FALSE;
+
+  /* Third, should we return file names or folder names? */
+
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
+      || impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+    {
+      gboolean all_files, all_folders;
+
+      selection_check (impl, NULL, &all_files, &all_folders);
+
+      if (num_selected == 1)
+	{
+	  if (all_folders)
+	    {
+	      switch_to_selected_folder (impl);
+	      return FALSE;
+	    }
+	  else if (all_files)
+	    return TRUE;
+	}
+      else
+	return all_files;
+    }
+  else if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
+	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+    /* There can be no files selected in folder mode since we don't show them,
+     * anyway.
+     */
+    return TRUE;
+
+  g_assert_not_reached ();
+  return FALSE;
 }
 
 static void

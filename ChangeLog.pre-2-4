@@ -1,3 +1,36 @@
+2004-03-04  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdialog.c (response_cb):  New handler.  Ask the
+	GtkFileChooser widget if it wants to do something special rather
+	than letting us terminate the dialog.
+	(gtk_file_chooser_dialog_init): Connect to "response"; see the
+	comment in the sources to see why we don't override the method in
+	class_init.
+
+	* gtk/gtkfilechooserembed.h (struct _GtkFileChooserEmbedIface):
+	Added a ::should_respond() method.
+
+	* gtk/gtkfilechooserembed.c
+	(_gtk_file_chooser_embed_delegate_iface_init): Add a delegate for ::should_respond().
+	(delegate_should_respond): New delegate.
+	(_gtk_file_chooser_embed_should_respond): New function.
+
+	* gtk/gtkfilechooserdefault.c (set_list_model, create_file_list):
+	Use dashes in signal names rather than underscores.
+	(gtk_file_chooser_default_init): Hook up our ::should_respond() implementation.
+	(gtk_file_chooser_default_should_respond): Implement.  go into a
+	folder rather than responding if we are in File mode and the
+	selected file is a folder.
+	(get_selection): New helper function.
+	(add_bookmark_button_clicked_cb): Use get_selection().
+	(bookmarks_check_add_sensitivity): Likewise.
+	(gtk_file_chooser_default_get_paths): Likewise.
+	(check_save_entry): New helper function.
+	(gtk_file_chooser_default_get_paths): Use check_save_entry().
+	(selection_check): Renamed from selection_is_folders().  Now
+	checks whether the selection is empty, all files, all folders.
+	(bookmarks_check_add_sensitivity): Use selection_check().
+
 Fri Mar  5 00:05:59 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_list_setup): 

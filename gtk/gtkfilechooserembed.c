@@ -8,6 +8,7 @@ static void delegate_get_default_size         (GtkFileChooserEmbed *chooser_embe
 static void delegate_get_resizable_hints      (GtkFileChooserEmbed *chooser_embed,
 					       gboolean            *resize_horizontally,
 					       gboolean            *resize_vertically);
+static gboolean delegate_should_respond       (GtkFileChooserEmbed *chooser_embed);
 static void delegate_default_size_changed     (GtkFileChooserEmbed *chooser_embed,
 					       gpointer             data);
 
@@ -31,6 +32,7 @@ _gtk_file_chooser_embed_delegate_iface_init (GtkFileChooserEmbedIface *iface)
 {
   iface->get_default_size = delegate_get_default_size;
   iface->get_resizable_hints = delegate_get_resizable_hints;
+  iface->should_respond = delegate_should_respond;
 }
 
 /**
@@ -72,6 +74,12 @@ delegate_get_resizable_hints (GtkFileChooserEmbed *chooser_embed,
 			      gboolean            *resize_vertically)
 {
   _gtk_file_chooser_embed_get_resizable_hints (get_delegate (chooser_embed), resize_horizontally, resize_vertically);
+}
+
+static gboolean
+delegate_should_respond (GtkFileChooserEmbed *chooser_embed)
+{
+  return _gtk_file_chooser_embed_should_respond (get_delegate (chooser_embed));
 }
 
 static void
@@ -133,6 +141,14 @@ _gtk_file_chooser_embed_get_default_size (GtkFileChooserEmbed *chooser_embed,
   g_return_if_fail (default_height != NULL);
 
   GTK_FILE_CHOOSER_EMBED_GET_IFACE (chooser_embed)->get_default_size (chooser_embed, default_width, default_height);
+}
+
+gboolean
+_gtk_file_chooser_embed_should_respond (GtkFileChooserEmbed *chooser_embed)
+{
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER_EMBED (chooser_embed), FALSE);
+
+  return GTK_FILE_CHOOSER_EMBED_GET_IFACE (chooser_embed)->should_respond (chooser_embed);
 }
 
 void
