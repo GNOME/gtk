@@ -344,6 +344,8 @@ gtk_text_layout_set_buffer (GtkTextLayout *layout,
                               G_CALLBACK (gtk_text_layout_buffer_insert_text), layout);
       g_signal_connect_after (layout->buffer, "delete_range",
                               G_CALLBACK (gtk_text_layout_buffer_delete_range), layout);
+
+      gtk_text_layout_update_cursor_line (layout);
     }
 }
 
@@ -777,7 +779,7 @@ gtk_text_layout_invalidate_cursor_line (GtkTextLayout *layout)
 
   if (priv->cursor_line == NULL)
     return;
-  
+
   line_data = _gtk_text_line_get_data (priv->cursor_line, layout);
   if (line_data)
     {

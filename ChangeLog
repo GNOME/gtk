@@ -1,3 +1,10 @@
+2004-03-11  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+
+	* gtk/gtktextlayer.c: (gtk_text_layout_set_buffer): Added
+	call to gtk_text_layout_update_cursor_line() to solve in 
+	problem of switching keyboard direction at widget creation:
+	bug #136680
+
 Thu Mar 11 10:28:30 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilechooserembed.c (delegate_initial_focus): Remove
