@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.14\n"
-"POT-Creation-Date: 2002-03-28 18:26+0100\n"
+"POT-Creation-Date: 2002-03-29 18:18-0500\n"
 "PO-Revision-Date: 2002-03-28 20:40+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <no@li.org>\n"
@@ -288,18 +288,19 @@ msgstr "Transformert PNG er ikke RGB eller RGBA."
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr "Transformert PNG har et ikke-støttet antall kanaler, må være 3 eller 4."
+msgstr ""
+"Transformert PNG har et ikke-støttet antall kanaler, må være 3 eller 4."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
 msgstr "Fatal feil i PNG-bildefil: %s"
 
-#: gdk-pixbuf/io-png.c:308
+#: gdk-pixbuf/io-png.c:310
 msgid "Insufficient memory to load PNG file"
 msgstr "Ikke nok minne til å laste PNG-fil"
 
-#: gdk-pixbuf/io-png.c:632
+#: gdk-pixbuf/io-png.c:634
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -308,25 +309,25 @@ msgstr ""
 "Ikke nok minne til å lagre et %ld ganger %ld bilde; prøv å avslutte noen "
 "applikasjoner for å redusere minnebruken"
 
-#: gdk-pixbuf/io-png.c:683
+#: gdk-pixbuf/io-png.c:685
 msgid "Fatal error reading PNG image file"
 msgstr "Fatal feil under lesing av PNG-bildefil"
 
-#: gdk-pixbuf/io-png.c:732
+#: gdk-pixbuf/io-png.c:734
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Fatal feil under lesing av PNG-bildefil: %s"
 
-#: gdk-pixbuf/io-png.c:798
+#: gdk-pixbuf/io-png.c:800
 msgid ""
 "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr "Nøkler for PNG tEXt-biter må være mellom 1 og 79 tegn."
 
-#: gdk-pixbuf/io-png.c:806
+#: gdk-pixbuf/io-png.c:808
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
 msgstr "Nøkler for PNG tEXt-biter må bestå av ASCII-tegn."
 
-#: gdk-pixbuf/io-png.c:827
+#: gdk-pixbuf/io-png.c:829
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
 msgstr "Verdi for PNG tEXt-biter kan ikke konverteres til ISO-8859-1-koding."
 
@@ -1914,20 +1915,25 @@ msgstr "Gi nytt navn"
 msgid "Selection: "
 msgstr "Valg:"
 
-#: gtk/gtkfilesel.c:2981
-#, c-format
+#: gtk/gtkfilesel.c:2983
+#, fuzzy, c-format
 msgid ""
-"The filename %s couldn't be converted to UTF-8. Try setting the environment "
-"variable G_BROKEN_FILENAMES."
+"The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
+"environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
 "Filnavnet %s kunne ikke konverteres til UTF-8. Prøve å sette miljøvariabelen "
 "G_BROKEN_FILENAMES."
 
-#: gtk/gtkfilesel.c:3845
+#: gtk/gtkfilesel.c:2986
+#, fuzzy
+msgid "Invalid Utf-8"
+msgstr "Ugyldig XBM-fil"
+
+#: gtk/gtkfilesel.c:3852
 msgid "Name too long"
 msgstr "Navnet er for langt"
 
-#: gtk/gtkfilesel.c:3847
+#: gtk/gtkfilesel.c:3854
 msgid "Couldn't convert filename"
 msgstr "Kunne ikke konvertere filnavnet"
 
@@ -2073,7 +2079,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1308
+#: gtk/gtkiconfactory.c:1318
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Feil under lasting av ikon: %s"
@@ -2353,7 +2359,7 @@ msgstr "Høyde på plasseringen."
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:735
+#: gtk/gtkmain.c:731
 msgid "default:LTR"
 msgstr "default:LTR"
 

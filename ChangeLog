@@ -1,7 +1,6 @@
-Sat Mar 30 15:19:24 2002  Kristian Rietveld  <kris@gtk.org>
+Fri Mar 29 18:15:12 2002  Owen Taylor  <otaylor@redhat.com>
 
-	* gtk/gtktreemodelsort.c: revert the latest stamp increment changes,
-	as it broke stuff for trees
+	* ===== Released 2.0.1 ======
 
 Fri Mar 29 18:09:18 2002  Owen Taylor  <otaylor@redhat.com>
 

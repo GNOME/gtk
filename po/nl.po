@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2002-03-08 14:45-0500\n"
+"POT-Creation-Date: 2002-03-29 18:18-0500\n"
 "PO-Revision-Date: 2002-03-07 17:21+0100\n"
 "Last-Translator: Ronald Hummelink <ronald@hummelink.xs4all.nl>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -127,7 +127,7 @@ msgstr "Onvoldoende geheugen voor het laden van de bitmap-afbeelding"
 msgid "BMP image has unsupported header size"
 msgstr "BMP-afbeelding heeft een niet-ondersteunde headergrootte"
 
-#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323
+#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "BMP-afbeelding bevat onzinnige headerdata"
 
@@ -174,7 +174,7 @@ msgstr "Onvoldoende geheugen om ICO-bestand te laden"
 msgid "Failure reading GIF: %s"
 msgstr "Lezen van GIF mislukt: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1371 gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF-bestand miste data (misschien was het afgebroken?)"
 
@@ -195,8 +195,8 @@ msgstr "Foute code ontdekt"
 msgid "Circular table entry in GIF file"
 msgstr "Circulaire tabelwaarde in GIF-bestand"
 
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1359 gdk-pixbuf/io-gif.c:1404
-#: gdk-pixbuf/io-gif.c:1518
+#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
+#: gdk-pixbuf/io-gif.c:1530
 msgid "Not enough memory to load GIF file"
 msgstr "Onvoldoende geheugen om GIF-bestand te laden"
 
@@ -213,18 +213,24 @@ msgstr "Bestand lijkt geen GIF-bestand te zijn"
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Versie %s van het GIF-formaat wordt niet ondersteund"
 
-#: gdk-pixbuf/io-gif.c:1146
+#: gdk-pixbuf/io-gif.c:1144
+#, fuzzy
+msgid "GIF image contained a frame with height or width 0."
+msgstr ""
+"GIF-bestand bevatte een afbeelding die buiten het kader lijkt te vallen"
+
+#: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 "GIF-bestand bevatte een afbeelding die buiten het kader lijkt te vallen"
 
-#: gdk-pixbuf/io-gif.c:1162
+#: gdk-pixbuf/io-gif.c:1173
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "De eerste afbeelding in het GIF-bestand heeft 'terug naar vorige' als "
 "afsluiting"
 
-#: gdk-pixbuf/io-gif.c:1197
+#: gdk-pixbuf/io-gif.c:1208
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -232,7 +238,7 @@ msgstr ""
 "GIF-bestand heeft geen globaal kleurenpalet, en een afbeelding erin heeft "
 "geen lokaal kleurenpallet"
 
-#: gdk-pixbuf/io-gif.c:1426
+#: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-bestand is afgebroken of onvolledig"
 
@@ -269,16 +275,37 @@ msgid ""
 msgstr ""
 "JPEG-kwaliteit moet tussen 0 en 100 liggen; waar '%d' is niet toegestaan"
 
-#: gdk-pixbuf/io-png.c:161
+#: gdk-pixbuf/io-png.c:55
+#, fuzzy
+msgid "Bits per channel of PNG image is invalid."
+msgstr "Ruwe PNM bestands type is ongeldig"
+
+#: gdk-pixbuf/io-png.c:136
+msgid "Transformed PNG has zero width or height."
+msgstr ""
+
+#: gdk-pixbuf/io-png.c:144
+msgid "Bits per channel of transformed PNG is not 8."
+msgstr ""
+
+#: gdk-pixbuf/io-png.c:153
+msgid "Transformed PNG not RGB or RGBA."
+msgstr ""
+
+#: gdk-pixbuf/io-png.c:162
+msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+msgstr ""
+
+#: gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
 msgstr "Fatale fout in PNG-afbeelding: %s"
 
-#: gdk-pixbuf/io-png.c:273
+#: gdk-pixbuf/io-png.c:310
 msgid "Insufficient memory to load PNG file"
 msgstr "Onvoldoende geheugen om PNG-bestand te laden"
 
-#: gdk-pixbuf/io-png.c:591
+#: gdk-pixbuf/io-png.c:634
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -287,27 +314,27 @@ msgstr ""
 "Onvoldoende geheugen om een afbeelding van %ld bij %ld op te slaan; probeer "
 "enkele toepassingen af te sluiten om geheugen vrij te maken"
 
-#: gdk-pixbuf/io-png.c:642
+#: gdk-pixbuf/io-png.c:685
 msgid "Fatal error reading PNG image file"
 msgstr "Fatale fout bij het lezen van PNG afbeelding"
 
-#: gdk-pixbuf/io-png.c:691
+#: gdk-pixbuf/io-png.c:734
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Fatale fout bij het lezen van PNG afbeelding: %s"
 
-#: gdk-pixbuf/io-png.c:757
+#: gdk-pixbuf/io-png.c:800
 msgid ""
 "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Sleutels voor PNG tEXt blokken moeten minimaal 1 en maximaal 79 tekens "
 "hebben."
 
-#: gdk-pixbuf/io-png.c:765
+#: gdk-pixbuf/io-png.c:808
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
 msgstr "Sleutels voor PNG tEXt blokken moeten uit ASCII tekens bestaan."
 
-#: gdk-pixbuf/io-png.c:786
+#: gdk-pixbuf/io-png.c:829
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
 msgstr ""
 "Waarde voor PNG tEXt blok kan niet geconverteerd worden naar ISO-8859-1 "
@@ -381,109 +408,116 @@ msgstr "Voorbarig einde van PNM afbeeldings gegevens"
 msgid "Insufficient memory to load PNM file"
 msgstr "Onvoldoende geheugen om PNM bestand te laden"
 
-#: gdk-pixbuf/io-tga.c:157
+#: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
 msgstr "Allocatie van geheugen voor IOBuffer struct"
 
-#: gdk-pixbuf/io-tga.c:176
+#: gdk-pixbuf/io-tga.c:178
 msgid "Can't allocate memory for IOBuffer data"
 msgstr "Allocatie van geheugen voor IOBUFFER gegevens"
 
-#: gdk-pixbuf/io-tga.c:187
+#: gdk-pixbuf/io-tga.c:189
 msgid "Can't realloc IOBuffer data"
 msgstr "Kan IOBuffer gegevens niet heralloceren"
 
-#: gdk-pixbuf/io-tga.c:216
+#: gdk-pixbuf/io-tga.c:218
 msgid "Can't allocate temporary IOBuffer data"
 msgstr "Kan tijdelijke IOBuffer gegevens niet alloceren"
 
-#: gdk-pixbuf/io-tga.c:249
+#: gdk-pixbuf/io-tga.c:251
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr "fread() gefaald -- waarschijnlijk voorbarig bestandseinde gevonden"
 
-#: gdk-pixbuf/io-tga.c:259
+#: gdk-pixbuf/io-tga.c:261
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr "fseek() faalde -- waarschijnlijk voortijdig bestandseinde gevonden"
 
-#: gdk-pixbuf/io-tga.c:288
+#: gdk-pixbuf/io-tga.c:295 gdk-pixbuf/io-tga.c:1030 gdk-pixbuf/io-tga.c:1142
+#: gdk-pixbuf/io-tga.c:1225
+#, fuzzy
+msgid "Insufficient memory to load TGA image"
+msgstr "Onvoldoende geheugen om PNG-bestand te laden"
+
+#: gdk-pixbuf/io-tga.c:305
 msgid "Can't allocate new pixbuf"
 msgstr "Kan nieuwe pixbuf niet alloceren"
 
-#: gdk-pixbuf/io-tga.c:557
+#: gdk-pixbuf/io-tga.c:617
 msgid "Can't allocate colormap structure"
 msgstr "Kan kleurenkaart structuur niet alloceren"
 
-#: gdk-pixbuf/io-tga.c:564
+#: gdk-pixbuf/io-tga.c:624
 msgid "Can't allocate colormap entries"
 msgstr "Kan kleurenmap entries niet alloceren"
 
-#: gdk-pixbuf/io-tga.c:587
+#: gdk-pixbuf/io-tga.c:646
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Onverwachte bitdiepte voor kleurenkaart entries"
 
-#: gdk-pixbuf/io-tga.c:607
+#: gdk-pixbuf/io-tga.c:664
 msgid "Can't allocate TGA header memory"
 msgstr "Kan TGA kop geheugen niet alloceren"
 
-#: gdk-pixbuf/io-tga.c:618
+#: gdk-pixbuf/io-tga.c:697
 msgid "TGA image has invalid dimensions"
 msgstr "TGA afbeelding heeft ongedlige afmetingen"
 
-#: gdk-pixbuf/io-tga.c:624
+#: gdk-pixbuf/io-tga.c:703
 msgid "TGA image comment length is too long"
 msgstr "TGA afbeelding kommentaar is te lang"
 
-#: gdk-pixbuf/io-tga.c:633 gdk-pixbuf/io-tga.c:647
+#: gdk-pixbuf/io-tga.c:712 gdk-pixbuf/io-tga.c:721 gdk-pixbuf/io-tga.c:731
+#: gdk-pixbuf/io-tga.c:741 gdk-pixbuf/io-tga.c:748
 msgid "TGA image type not supported"
 msgstr "TGA bestands type wordt niet ondersteund"
 
-#: gdk-pixbuf/io-tga.c:692
+#: gdk-pixbuf/io-tga.c:793
 msgid "Can't allocate memory for TGA context struct"
 msgstr "Allocatie van geheugen voor TGA context struct mislukt"
 
-#: gdk-pixbuf/io-tga.c:756
+#: gdk-pixbuf/io-tga.c:857
 msgid "Excess data in file"
 msgstr "Overbodige data in bestand"
 
-#: gdk-pixbuf/io-tga.c:798
+#: gdk-pixbuf/io-tga.c:903
 msgid "Can't allocate memory for TGA header"
 msgstr "Allocatie van geheugen voor TGA header is mislukt"
 
-#: gdk-pixbuf/io-tga.c:808
+#: gdk-pixbuf/io-tga.c:913
 msgid "Too big value in the infolen field of TGA header."
 msgstr "Te grote waarde in het infolen veld van TGA kop."
 
-#: gdk-pixbuf/io-tga.c:832
+#: gdk-pixbuf/io-tga.c:937
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr "Allocatie van geheugen voor tijdelijke buffer voor TGA cmap is mislukt"
 
-#: gdk-pixbuf/io-tga.c:844
+#: gdk-pixbuf/io-tga.c:949
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr "Allocatie van geheugen voor TGA kleurenmap is mislukt"
 
-#: gdk-pixbuf/io-tga.c:853
+#: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr "Allocatie van geheugen voor TGA kleurenmap items is mislukt"
 
-#: gdk-pixbuf/io-tga.c:863
+#: gdk-pixbuf/io-tga.c:968
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr "Onverwachte bitdiepte voor TGA kleurenkaart"
 
-#: gdk-pixbuf/io-tga.c:903
+#: gdk-pixbuf/io-tga.c:1010
 msgid "Pseudo-Color image without colormap"
 msgstr "Pseudo-Kleuren afbeelding zonder kleurenkaart"
 
-#: gdk-pixbuf/io-tga.c:910
+#: gdk-pixbuf/io-tga.c:1017
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr ""
 "Kan niet zoeken naar plaats in afbeelding -- waarschijnlijk voortijdig "
 "bestandseinde gevonden"
 
-#: gdk-pixbuf/io-tga.c:919 gdk-pixbuf/io-tga.c:1015 gdk-pixbuf/io-tga.c:1081
+#: gdk-pixbuf/io-tga.c:1040 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1236
 msgid "Can't allocate pixbuf"
 msgstr "Kan pixbuf niet alloceren"
 
-#: gdk-pixbuf/io-tga.c:1147 gdk-pixbuf/io-tga.c:1176
+#: gdk-pixbuf/io-tga.c:1308 gdk-pixbuf/io-tga.c:1337
 msgid "Unsupported TGA image type"
 msgstr "Niet ondersteund TGA bestands type"
 
@@ -499,23 +533,23 @@ msgstr "Kon afbeeldings breedte niet vinden (fout TIFF bestand)"
 msgid "Width or height of TIFF image is zero"
 msgstr "Hoogte of breedte van TIFF afbeelding is nul"
 
-#: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:482
+#: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:485
 msgid "Insufficient memory to open TIFF file"
 msgstr "Onvoldoende geheugen om TIFF bestand te openen"
 
-#: gdk-pixbuf/io-tiff.c:201
+#: gdk-pixbuf/io-tiff.c:203
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Niet mogelijk om RGB gegevens te laden uit TIFF bestand"
 
-#: gdk-pixbuf/io-tiff.c:270
+#: gdk-pixbuf/io-tiff.c:273
 msgid "Failed to open TIFF image"
 msgstr "Niet mogelijk om TIFF bestand te openen"
 
-#: gdk-pixbuf/io-tiff.c:283
+#: gdk-pixbuf/io-tiff.c:286
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose operatie gefaald"
 
-#: gdk-pixbuf/io-tiff.c:416 gdk-pixbuf/io-tiff.c:430
+#: gdk-pixbuf/io-tiff.c:419 gdk-pixbuf/io-tiff.c:433
 msgid "Failed to load TIFF image"
 msgstr "Niet mogelijk om TIFF betsand te laden"
 
@@ -531,7 +565,7 @@ msgstr "Afbeelding heeft hoogte nul"
 msgid "Not enough memory to load image"
 msgstr "Onvoldoende geheugen voor het laden van de afbeelding"
 
-#: gdk-pixbuf/io-wbmp.c:365
+#: gdk-pixbuf/io-wbmp.c:366
 msgid "Couldn't save the rest"
 msgstr "Kon de rest niet opslaan"
 
@@ -1054,11 +1088,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Voorgrond kleur als een GdkColor"
 
 #: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 msgid "Editable"
 msgstr "Bewerkbaar"
 
-#: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:567
+#: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
 msgid "Whether the text can be modified by the user"
 msgstr "Of de tekst gewijzigd kan worden door de gebruiker"
 
@@ -1714,15 +1748,15 @@ msgstr "Selectie op activering"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Of de inhoud van een entry geselecteerd worden als het de focus krijgt"
 
-#: gtk/gtkentry.c:3843 gtk/gtklabel.c:3164
+#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3164
 msgid "Select All"
 msgstr "Selecteer Alles"
 
-#: gtk/gtkentry.c:3853 gtk/gtklabel.c:3174
+#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3174
 msgid "Input Methods"
 msgstr "Invoer methodes"
 
-#: gtk/gtkentry.c:3863 gtk/gtktextview.c:6344
+#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
 msgid "_Insert Unicode control character"
 msgstr "Voeg Unicode control teken in"
 
@@ -1915,20 +1949,25 @@ msgstr "Hernoem"
 msgid "Selection: "
 msgstr "Selectie: "
 
-#: gtk/gtkfilesel.c:2981
-#, c-format
+#: gtk/gtkfilesel.c:2983
+#, fuzzy, c-format
 msgid ""
-"The filename %s couldn't be converted to UTF-8. Try setting the environment "
-"variable G_BROKEN_FILENAMES."
+"The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
+"environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
 "De bestandsnaam %s kon niet geconverteerd worden naar UTF-8. Probeer de "
 "omgevings variabele G_BROKEN_FILENAMES te zetten."
 
-#: gtk/gtkfilesel.c:3845
+#: gtk/gtkfilesel.c:2986
+#, fuzzy
+msgid "Invalid Utf-8"
+msgstr "Ongeldig XBM bestand"
+
+#: gtk/gtkfilesel.c:3852
 msgid "Name too long"
 msgstr "Naam te lang"
 
-#: gtk/gtkfilesel.c:3847
+#: gtk/gtkfilesel.c:3854
 msgid "Couldn't convert filename"
 msgstr "Kon bestandsnaam niet converteren"
 
@@ -2077,7 +2116,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1308
+#: gtk/gtkiconfactory.c:1318
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Fout bij laden van icoon: %s"
@@ -2263,7 +2302,7 @@ msgstr "Gebruik markup"
 msgid "The text of the label includes XML markup. See pango_parse_markup()."
 msgstr "De tekst van het label bevat XML markup. Bekijk pango_parse_markup()."
 
-#: gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:583
+#: gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:585
 msgid "Justification"
 msgstr "Uitvullen"
 
@@ -2358,7 +2397,7 @@ msgstr "De hoogte van de opmaak."
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:734
+#: gtk/gtkmain.c:731
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2540,7 +2579,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Of tabs gelijke afmetingen moeten hebben"
 
-#: gtk/gtknotebook.c:2436 gtk/gtknotebook.c:4692
+#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
@@ -2589,17 +2628,17 @@ msgstr "Handle grootte"
 msgid "Width of handle"
 msgstr "Grootte van de handle"
 
-#: gtk/gtkrc.c:2253
+#: gtk/gtkrc.c:2270
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Kan include bestand \"%s\" niet vinden."
 
-#: gtk/gtkrc.c:2895 gtk/gtkrc.c:2898
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" niet vinden"
 
-#: gtk/gtkrc.c:3329
+#: gtk/gtkrc.c:3350
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Pixmap path element \"%s\" moet absoluut zijn, %s, lijn %d"
@@ -2957,11 +2996,11 @@ msgstr ""
 "Geef een secondaire voorwaardse pijlknop weer aan de overstande kant van de "
 "scrollbalk"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:519
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
 msgid "Horizontal Adjustment"
 msgstr "Horizontale aanpassing"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:527
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
 msgid "Vertical Adjustment"
 msgstr "Vertikale aanpassing"
 
@@ -3532,7 +3571,7 @@ msgstr "Tekst richting"
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Tekst richting: Rechts-naar-links of Links-naar-rechts"
 
-#: gtk/gtktexttag.c:379 gtk/gtktextview.c:584
+#: gtk/gtktexttag.c:379 gtk/gtktextview.c:586
 msgid "Left, right, or center justification"
 msgstr "Links, rechts of centreer uitlijning"
 
@@ -3548,7 +3587,7 @@ msgstr "Taal engine gebruikt voor het renderen van de tekst"
 msgid "Left margin"
 msgstr "Linker marge"
 
-#: gtk/gtktexttag.c:396 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:396 gtk/gtktextview.c:595
 msgid "Width of the left margin in pixels"
 msgstr "Breedte van de linker marge in pixels"
 
@@ -3556,15 +3595,15 @@ msgstr "Breedte van de linker marge in pixels"
 msgid "Right margin"
 msgstr "Rechter marge"
 
-#: gtk/gtktexttag.c:406 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:406 gtk/gtktextview.c:605
 msgid "Width of the right margin in pixels"
 msgstr "Breedte van de rechter marge in pixels"
 
-#: gtk/gtktexttag.c:416 gtk/gtktextview.c:612
+#: gtk/gtktexttag.c:416 gtk/gtktextview.c:614
 msgid "Indent"
 msgstr "Inspringen"
 
-#: gtk/gtktexttag.c:417 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:417 gtk/gtktextview.c:615
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Hoeveelheid om de paragraaf te laten inspringen, in pixels"
 
@@ -3572,7 +3611,7 @@ msgstr "Hoeveelheid om de paragraaf te laten inspringen, in pixels"
 msgid "Pixels above lines"
 msgstr "Pixels boven lijnen"
 
-#: gtk/gtktexttag.c:438 gtk/gtktextview.c:537
+#: gtk/gtktexttag.c:438 gtk/gtktextview.c:539
 msgid "Pixels of blank space above paragraphs"
 msgstr "Pixels met lege ruimte boven paragrafen"
 
@@ -3580,7 +3619,7 @@ msgstr "Pixels met lege ruimte boven paragrafen"
 msgid "Pixels below lines"
 msgstr "Pixels onder lijnen"
 
-#: gtk/gtktexttag.c:448 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:448 gtk/gtktextview.c:549
 msgid "Pixels of blank space below paragraphs"
 msgstr "Pixels met lege ruimte onder paragrafen"
 
@@ -3588,7 +3627,7 @@ msgstr "Pixels met lege ruimte onder paragrafen"
 msgid "Pixels inside wrap"
 msgstr "Pixels binnen regelomloop"
 
-#: gtk/gtktexttag.c:458 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:458 gtk/gtktextview.c:559
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Pixels lege ruimte tussen lijnen met regelomloop in een paragraaf"
 
@@ -3596,16 +3635,16 @@ msgstr "Pixels lege ruimte tussen lijnen met regelomloop in een paragraaf"
 msgid "Wrap mode"
 msgstr "Regelomloop modus"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:575
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:577
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Of lijnen nooit af te breken, op woord grenzen of op teken grenzen"
 
-#: gtk/gtktexttag.c:494 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
 msgid "Tabs"
 msgstr "Tabs"
 
-#: gtk/gtktexttag.c:495 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:495 gtk/gtktextview.c:625
 msgid "Custom tabs for this text"
 msgstr "Aangepaste tabs voor deze tekst"
 
@@ -3766,39 +3805,39 @@ msgstr "ZWN Nul breedte koppelaar"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ Nul breedte niet-koppelaar"
 
-#: gtk/gtktextview.c:536
+#: gtk/gtktextview.c:538
 msgid "Pixels Above Lines"
 msgstr "Pixels boven lijnen"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 msgid "Pixels Below Lines"
 msgstr "Pixels onder lijnen"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 msgid "Pixels Inside Wrap"
 msgstr "Pixels binnen regelomloop"
 
-#: gtk/gtktextview.c:574
+#: gtk/gtktextview.c:576
 msgid "Wrap Mode"
 msgstr "Regelomloop modus"
 
-#: gtk/gtktextview.c:592
+#: gtk/gtktextview.c:594
 msgid "Left Margin"
 msgstr "Linker marge"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 msgid "Right Margin"
 msgstr "Rechter marge"
 
-#: gtk/gtktextview.c:630
+#: gtk/gtktextview.c:632
 msgid "Cursor Visible"
 msgstr "Cursor zichtbaar"
 
-#: gtk/gtktextview.c:631
+#: gtk/gtktextview.c:633
 msgid "If the insertion cursor is shown"
 msgstr "Of de invoeg cursor weergegeven wordt"
 
-#: gtk/gtktextview.c:6335
+#: gtk/gtktextview.c:6366
 msgid "Input _Methods"
 msgstr "Invoer methoden"
 
@@ -3898,117 +3937,117 @@ msgstr "TreeModelSort Model"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Het model voor de TreeModelSort om te sorteren"
 
-#: gtk/gtktreeview.c:511
+#: gtk/gtktreeview.c:514
 msgid "TreeView Model"
 msgstr "TreeView Model"
 
-#: gtk/gtktreeview.c:512
+#: gtk/gtktreeview.c:515
 msgid "The model for the tree view"
 msgstr "Het model van de boom structuur"
 
-#: gtk/gtktreeview.c:520
+#: gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment for the widget"
 msgstr "Horizontale aanpassing voor de widget"
 
-#: gtk/gtktreeview.c:528
+#: gtk/gtktreeview.c:531
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertikale aanpassing voor de widget"
 
-#: gtk/gtktreeview.c:535 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Zichtbaar"
 
-#: gtk/gtktreeview.c:536
+#: gtk/gtktreeview.c:539
 msgid "Show the column header buttons"
 msgstr "Laat de kolom kop knoppen zien"
 
-#: gtk/gtktreeview.c:543
+#: gtk/gtktreeview.c:546
 msgid "Headers Clickable"
 msgstr "Koppen klikbaar"
 
-#: gtk/gtktreeview.c:544
+#: gtk/gtktreeview.c:547
 msgid "Column headers respond to click events"
 msgstr "Of kolom koppen naar kliks luisteren"
 
-#: gtk/gtktreeview.c:551
+#: gtk/gtktreeview.c:554
 msgid "Expander Column"
 msgstr "Uitklapper kolom"
 
-#: gtk/gtktreeview.c:552
+#: gtk/gtktreeview.c:555
 msgid "Set the column for the expander column"
 msgstr "Zet de kolom voor de uitklapper kolom"
 
-#: gtk/gtktreeview.c:559 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
 msgid "Reorderable"
 msgstr "Hersorteerbaar"
 
-#: gtk/gtktreeview.c:560
+#: gtk/gtktreeview.c:563
 msgid "View is reorderable"
 msgstr "Beeld is hersorteerbaar"
 
-#: gtk/gtktreeview.c:567
+#: gtk/gtktreeview.c:570
 #, fuzzy
 msgid "Rules Hint"
 msgstr "Regel hint"
 
-#: gtk/gtktreeview.c:568
+#: gtk/gtktreeview.c:571
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Vertel de thema \"engine\" om rijen in afwisselende kleuren te tekenen?"
 
-#: gtk/gtktreeview.c:575
+#: gtk/gtktreeview.c:578
 msgid "Enable Search"
 msgstr "Zet zoeken aan"
 
-#: gtk/gtktreeview.c:576
+#: gtk/gtktreeview.c:579
 msgid "View allows user to search through columns interactively"
 msgstr "Beeld laat gebruikers toe interactief door kolommen te zoeken"
 
-#: gtk/gtktreeview.c:583
+#: gtk/gtktreeview.c:586
 msgid "Search Column"
 msgstr "Zoek kolom"
 
-#: gtk/gtktreeview.c:584
+#: gtk/gtktreeview.c:587
 msgid "Model column to search through when searching through code"
 msgstr "Modeleer kolom om door te zoeken als er door code gezocht wordt"
 
-#: gtk/gtktreeview.c:597
+#: gtk/gtktreeview.c:600
 msgid "Expander Size"
 msgstr "Uitklapper grootte"
 
-#: gtk/gtktreeview.c:598
+#: gtk/gtktreeview.c:601
 msgid "Size of the expander arrow."
 msgstr "Grootte van de uitklapper pijl"
 
-#: gtk/gtktreeview.c:606
+#: gtk/gtktreeview.c:609
 msgid "Vertical Separator Width"
 msgstr "Vertikale deel"
 
-#: gtk/gtktreeview.c:607
+#: gtk/gtktreeview.c:610
 msgid "Vertical space between cells.  Must be an even number."
 msgstr "Vertikale ruimte tussen cellen. Moet een even getal zijn"
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:618
 msgid "Horizontal Separator Width"
 msgstr "Horizontale deler breedte"
 
-#: gtk/gtktreeview.c:616
+#: gtk/gtktreeview.c:619
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr "Horizontale breedte tussen cellen. Moet een even getal zijn"
 
-#: gtk/gtktreeview.c:624
+#: gtk/gtktreeview.c:627
 msgid "Allow Rules"
 msgstr "Laat regels toe"
 
-#: gtk/gtktreeview.c:625
+#: gtk/gtktreeview.c:628
 msgid "Allow drawing of alternating color rows."
 msgstr "Laat het tekenen van alternerende rij kleuren toe"
 
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:634
 msgid "Indent Expanders"
 msgstr "Spring uitklappers in"
 
-#: gtk/gtktreeview.c:632
+#: gtk/gtktreeview.c:635
 msgid "Make the expanders indented."
 msgstr "Maak de uitklappers ingesprongen"
 

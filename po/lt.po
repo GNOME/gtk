@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.11\n"
-"POT-Creation-Date: 2002-03-08 03:11+0200\n"
+"POT-Creation-Date: 2002-03-29 18:18-0500\n"
 "PO-Revision-Date: 2002-03-09 01:01+0200\n"
 "Last-Translator: Gediminas Paulauskas <menesis@delfi.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
@@ -31,15 +31,20 @@ msgstr "Neþinau kaip ákelti animacijà ið bylos ¥%s´"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:636
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Nepavyko ákelti paveikslëlio ¥%s´: neþinoma prieþastis, tikriausiai sugadinta byla"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Nepavyko ákelti paveikslëlio ¥%s´: neþinoma prieþastis, tikriausiai "
+"sugadinta byla"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr "Nepavyko ákelti animacijos ¥%s´: neþinoma prieþastis, tikriausiai sugadinta byla"
+msgstr ""
+"Nepavyko ákelti animacijos ¥%s´: neþinoma prieþastis, tikriausiai sugadinta "
+"byla"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:354
 #, c-format
@@ -52,8 +57,8 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"Paveikslëliø kelties modulis %s neeksportuoja teisingo interfeiso; galbût jis "
-"yra ið kitos GTK versijos?"
+"Paveikslëliø kelties modulis %s neeksportuoja teisingo interfeiso; galbût "
+"jis yra ið kitos GTK versijos?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:490 gdk-pixbuf/gdk-pixbuf-io.c:516
 #, c-format
@@ -116,7 +121,7 @@ msgstr ""
 msgid "BMP image has unsupported header size"
 msgstr ""
 
-#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323
+#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr ""
 
@@ -164,7 +169,7 @@ msgstr "Nepakanka atminties ákelti ICO bylai"
 msgid "Failure reading GIF: %s"
 msgstr "Klaida skaitant GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1371 gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 
@@ -185,8 +190,8 @@ msgstr ""
 msgid "Circular table entry in GIF file"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1359 gdk-pixbuf/io-gif.c:1404
-#: gdk-pixbuf/io-gif.c:1518
+#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
+#: gdk-pixbuf/io-gif.c:1530
 msgid "Not enough memory to load GIF file"
 msgstr "Nepakanka atminties ákelti GIF bylai"
 
@@ -203,21 +208,25 @@ msgstr "Atrodo, kad tai ne GIF byla"
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF formato versijs %s nëra palaikoma"
 
-#: gdk-pixbuf/io-gif.c:1146
+#: gdk-pixbuf/io-gif.c:1144
+msgid "GIF image contained a frame with height or width 0."
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1162
+#: gdk-pixbuf/io-gif.c:1173
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1197
+#: gdk-pixbuf/io-gif.c:1208
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1426
+#: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr ""
 
@@ -245,43 +254,65 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:679
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:161
+#: gdk-pixbuf/io-png.c:55
+msgid "Bits per channel of PNG image is invalid."
+msgstr ""
+
+#: gdk-pixbuf/io-png.c:136
+msgid "Transformed PNG has zero width or height."
+msgstr ""
+
+#: gdk-pixbuf/io-png.c:144
+msgid "Bits per channel of transformed PNG is not 8."
+msgstr ""
+
+#: gdk-pixbuf/io-png.c:153
+msgid "Transformed PNG not RGB or RGBA."
+msgstr ""
+
+#: gdk-pixbuf/io-png.c:162
+msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
+msgstr ""
+
+#: gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:273
+#: gdk-pixbuf/io-png.c:310
 msgid "Insufficient memory to load PNG file"
 msgstr "Nepakanka atminties ákelti PNG bylai"
 
-#: gdk-pixbuf/io-png.c:591
+#: gdk-pixbuf/io-png.c:634
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:642
+#: gdk-pixbuf/io-png.c:685
 msgid "Fatal error reading PNG image file"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:691
+#: gdk-pixbuf/io-png.c:734
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:757
-msgid "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
+#: gdk-pixbuf/io-png.c:800
+msgid ""
+"Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:765
+#: gdk-pixbuf/io-png.c:808
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
 msgstr ""
 
-#: gdk-pixbuf/io-png.c:786
+#: gdk-pixbuf/io-png.c:829
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
@@ -353,107 +384,114 @@ msgstr ""
 msgid "Insufficient memory to load PNM file"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:157
+#: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:176
+#: gdk-pixbuf/io-tga.c:178
 msgid "Can't allocate memory for IOBuffer data"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:187
+#: gdk-pixbuf/io-tga.c:189
 msgid "Can't realloc IOBuffer data"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:216
+#: gdk-pixbuf/io-tga.c:218
 msgid "Can't allocate temporary IOBuffer data"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:249
+#: gdk-pixbuf/io-tga.c:251
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:259
+#: gdk-pixbuf/io-tga.c:261
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:288
+#: gdk-pixbuf/io-tga.c:295 gdk-pixbuf/io-tga.c:1030 gdk-pixbuf/io-tga.c:1142
+#: gdk-pixbuf/io-tga.c:1225
+#, fuzzy
+msgid "Insufficient memory to load TGA image"
+msgstr "Nepakanka atminties ákelti PNG bylai"
+
+#: gdk-pixbuf/io-tga.c:305
 msgid "Can't allocate new pixbuf"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:557
+#: gdk-pixbuf/io-tga.c:617
 msgid "Can't allocate colormap structure"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:564
+#: gdk-pixbuf/io-tga.c:624
 msgid "Can't allocate colormap entries"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:587
+#: gdk-pixbuf/io-tga.c:646
 msgid "Unexpected bitdepth for colormap entries"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:607
+#: gdk-pixbuf/io-tga.c:664
 msgid "Can't allocate TGA header memory"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:618
+#: gdk-pixbuf/io-tga.c:697
 msgid "TGA image has invalid dimensions"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:624
+#: gdk-pixbuf/io-tga.c:703
 msgid "TGA image comment length is too long"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:633 gdk-pixbuf/io-tga.c:647
+#: gdk-pixbuf/io-tga.c:712 gdk-pixbuf/io-tga.c:721 gdk-pixbuf/io-tga.c:731
+#: gdk-pixbuf/io-tga.c:741 gdk-pixbuf/io-tga.c:748
 msgid "TGA image type not supported"
 msgstr "TGA paveikslëlio tipas nepalaikomas"
 
-#: gdk-pixbuf/io-tga.c:692
+#: gdk-pixbuf/io-tga.c:793
 msgid "Can't allocate memory for TGA context struct"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:756
+#: gdk-pixbuf/io-tga.c:857
 msgid "Excess data in file"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:798
+#: gdk-pixbuf/io-tga.c:903
 msgid "Can't allocate memory for TGA header"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:808
+#: gdk-pixbuf/io-tga.c:913
 msgid "Too big value in the infolen field of TGA header."
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:832
+#: gdk-pixbuf/io-tga.c:937
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:844
+#: gdk-pixbuf/io-tga.c:949
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:853
+#: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:863
+#: gdk-pixbuf/io-tga.c:968
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:903
+#: gdk-pixbuf/io-tga.c:1010
 msgid "Pseudo-Color image without colormap"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:910
+#: gdk-pixbuf/io-tga.c:1017
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:919 gdk-pixbuf/io-tga.c:1015 gdk-pixbuf/io-tga.c:1081
+#: gdk-pixbuf/io-tga.c:1040 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1236
 msgid "Can't allocate pixbuf"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:1147 gdk-pixbuf/io-tga.c:1176
+#: gdk-pixbuf/io-tga.c:1308 gdk-pixbuf/io-tga.c:1337
 msgid "Unsupported TGA image type"
 msgstr "Nepalaikomas TGA paveikslëlio tipas"
 
@@ -469,23 +507,23 @@ msgstr "Negalëjau gauti paveikslëlio aukðèio (bloga TIFF byla)"
 msgid "Width or height of TIFF image is zero"
 msgstr "TIFF paveikslëlio plotis ar aukðtis yra nulis"
 
-#: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:482
+#: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:485
 msgid "Insufficient memory to open TIFF file"
 msgstr "Nepakanka atminties atidaryti TIFF bylai"
 
-#: gdk-pixbuf/io-tiff.c:201
+#: gdk-pixbuf/io-tiff.c:203
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Nepavyko ákelti RGB duomenø ið TIFF bylos"
 
-#: gdk-pixbuf/io-tiff.c:270
+#: gdk-pixbuf/io-tiff.c:273
 msgid "Failed to open TIFF image"
 msgstr "Nepavyko atidaryti TIFF bylos"
 
-#: gdk-pixbuf/io-tiff.c:283
+#: gdk-pixbuf/io-tiff.c:286
 msgid "TIFFClose operation failed"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:416 gdk-pixbuf/io-tiff.c:430
+#: gdk-pixbuf/io-tiff.c:419 gdk-pixbuf/io-tiff.c:433
 msgid "Failed to load TIFF image"
 msgstr "Nepavyko ákelti TIFF paveikslëlio"
 
@@ -501,7 +539,7 @@ msgstr "Paveikslëlio aukðtis yra nulinis"
 msgid "Not enough memory to load image"
 msgstr "Nepakanka atminties ákelti paveisklëliui"
 
-#: gdk-pixbuf/io-wbmp.c:365
+#: gdk-pixbuf/io-wbmp.c:366
 msgid "Couldn't save the rest"
 msgstr ""
 
@@ -798,7 +836,8 @@ msgstr ""
 
 #: gtk/gtkbutton.c:206
 #, fuzzy
-msgid "If set, the label is used to pick a stock item instead of being displayed"
+msgid ""
+"If set, the label is used to pick a stock item instead of being displayed"
 msgstr "Jeigu nurodyti yra"
 
 #: gtk/gtkbutton.c:213
@@ -835,7 +874,8 @@ msgid "Child X Displacement"
 msgstr "Vaikas X"
 
 #: gtk/gtkbutton.c:279
-msgid "How far in the x direction to move the child when the button is depressed"
+msgid ""
+"How far in the x direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkbutton.c:286
@@ -844,7 +884,8 @@ msgid "Child Y Displacement"
 msgstr "Vaikas Y"
 
 #: gtk/gtkbutton.c:287
-msgid "How far in the y direction to move the child when the button is depressed"
+msgid ""
+"How far in the y direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:103
@@ -1018,11 +1059,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Priekinio plano spalva kaip GdkColor"
 
 #: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 msgid "Editable"
 msgstr "Taisomas"
 
-#: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:567
+#: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
 msgid "Whether the text can be modified by the user"
 msgstr "Ar tekstas gali bûti keièiamas vartotojo"
 
@@ -1098,7 +1139,8 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:332 gtk/gtktexttag.c:428
 #, fuzzy
-msgid "Offset of text above the baseline (below the baseline if rise is negative)"
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr "Poslinkis tekstas yra"
 
 #: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:467
@@ -1291,8 +1333,8 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"Anksèiau buvusi spalva, palyginimui su spalva, kurià pasirenki dabar. "
-"Tu gali nutempti ðià spalvà á paletës langelá, arba pasirinkti ðià spalvà "
+"Anksèiau buvusi spalva, palyginimui su spalva, kurià pasirenki dabar. Tu "
+"gali nutempti ðià spalvà á paletës langelá, arba pasirinkti ðià spalvà "
 "nutempiant jà á greta esantá langelá."
 
 #: gtk/gtkcolorsel.c:587
@@ -1300,8 +1342,8 @@ msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
-"Spalva, kurià pasirinkai. Tu gali nutempti ðià spalvà á paletës langelá, "
-"kad iðsaugotum naudojimui ateityje."
+"Spalva, kurià pasirinkai. Tu gali nutempti ðià spalvà á paletës langelá, kad "
+"iðsaugotum naudojimui ateityje."
 
 #: gtk/gtkcolorsel.c:910
 msgid "_Save color here"
@@ -1369,8 +1411,8 @@ msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"Paspausk ant teptuko, tada paspausk ant spalvos, esanèios bet kurioje "
-"ekrano vietoje, kad pasirinktum jà."
+"Paspausk ant teptuko, tada paspausk ant spalvos, esanèios bet kurioje ekrano "
+"vietoje, kad pasirinktum jà."
 
 #: gtk/gtkcolorsel.c:1821
 msgid "_Hue:"
@@ -1458,7 +1500,8 @@ msgid "Always enable arrows"
 msgstr "Visada leisti rodykles"
 
 #: gtk/gtkcombo.c:147
-msgid "Whether the arrow keys work, even if the entry contents are not in the list"
+msgid ""
+"Whether the arrow keys work, even if the entry contents are not in the list"
 msgstr "Ar rodyklës veikia net tada, kai ávesties lauko turinio nëra sàraðe."
 
 #: gtk/gtkcombo.c:153
@@ -1605,7 +1648,8 @@ msgid "Selection Bound"
 msgstr "Paþymëjimas"
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:369
-msgid "The position of the opposite end of the selection from the cursor in chars."
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars."
 msgstr ""
 
 #: gtk/gtkentry.c:456
@@ -1690,15 +1734,15 @@ msgstr "Pasirinkti lygiai"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
 
-#: gtk/gtkentry.c:3843 gtk/gtklabel.c:3164
+#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3164
 msgid "Select All"
 msgstr "Paþymëti viskà"
 
-#: gtk/gtkentry.c:3853 gtk/gtklabel.c:3174
+#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3174
 msgid "Input Methods"
 msgstr "Ávesties metodai"
 
-#: gtk/gtkentry.c:3863 gtk/gtktextview.c:6344
+#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
 msgid "_Insert Unicode control character"
 msgstr "Áterpt_i Unicode valdantá simbolá"
 
@@ -1726,28 +1770,28 @@ msgstr "Daugybinis pasirinkimas"
 msgid "Whether to allow multiple files to be selected."
 msgstr "Ar leidþiama pasirinkti keletà bylø."
 
-#: gtk/gtkfilesel.c:695
+#: gtk/gtkfilesel.c:707
 msgid "Folders"
 msgstr "Aplankai"
 
-#: gtk/gtkfilesel.c:699
+#: gtk/gtkfilesel.c:711
 msgid "Fol_ders"
 msgstr "_Aplankai"
 
-#: gtk/gtkfilesel.c:730
+#: gtk/gtkfilesel.c:742
 msgid "Files"
 msgstr "Bylos"
 
-#: gtk/gtkfilesel.c:734
+#: gtk/gtkfilesel.c:746
 msgid "_Files"
 msgstr "_Bylos"
 
-#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2112
+#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Aplankas neáskaitomas: %s"
 
-#: gtk/gtkfilesel.c:934
+#: gtk/gtkfilesel.c:946
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1755,24 +1799,25 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1064
+#: gtk/gtkfilesel.c:1076
 msgid "_New Folder"
 msgstr "_Naujas aplankas"
 
-#: gtk/gtkfilesel.c:1075
+#: gtk/gtkfilesel.c:1087
 msgid "De_lete File"
 msgstr "Ið_trinti bylà"
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1098
 msgid "_Rename File"
 msgstr "Pe_rvadinti bylà"
 
-#: gtk/gtkfilesel.c:1346
+#: gtk/gtkfilesel.c:1358
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1348
+#: gtk/gtkfilesel.c:1360
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1781,33 +1826,33 @@ msgstr ""
 "Klaida kuriant aplankà ¥%s´: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1349 gtk/gtkfilesel.c:1585
+#: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Tu tikriausiai naudojai bylø varduose neleidþiamus simbolius."
 
-#: gtk/gtkfilesel.c:1357
+#: gtk/gtkfilesel.c:1369
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Klaida kuriant aplankà ¥%s´: %s\n"
 
-#: gtk/gtkfilesel.c:1391
+#: gtk/gtkfilesel.c:1403
 msgid "New Folder"
 msgstr "Naujas aplankas"
 
-#: gtk/gtkfilesel.c:1406
+#: gtk/gtkfilesel.c:1418
 msgid "_Folder name:"
 msgstr "_Aplanko vardas:"
 
-#: gtk/gtkfilesel.c:1432
+#: gtk/gtkfilesel.c:1444
 msgid "Create"
 msgstr "Sukurti"
 
-#: gtk/gtkfilesel.c:1473
+#: gtk/gtkfilesel.c:1485
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Bylos varde ¥%s´ yra varduose neleidþiamø simboliø."
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1488
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1816,30 +1861,30 @@ msgstr ""
 "Klaida trinant bylà ¥%s´: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1478 gtk/gtkfilesel.c:1599
+#: gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 
-#: gtk/gtkfilesel.c:1487
+#: gtk/gtkfilesel.c:1499
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Klaida trinant bylà ¥%s´: %s"
 
-#: gtk/gtkfilesel.c:1530
+#: gtk/gtkfilesel.c:1542
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Tikrai iðtrinti bylà·¥%s´?"
 
-#: gtk/gtkfilesel.c:1535
+#: gtk/gtkfilesel.c:1547
 msgid "Delete File"
 msgstr "Iðtrinti bylà"
 
-#: gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Bylos varde ¥%s´ yra varduose neleidþiamø simboliø."
 
-#: gtk/gtkfilesel.c:1583
+#: gtk/gtkfilesel.c:1595
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1848,7 +1893,7 @@ msgstr ""
 "Klaida pervadinant bylà á ¥%s´: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1597
+#: gtk/gtkfilesel.c:1609
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1857,40 +1902,44 @@ msgstr ""
 "Klaida pervadinant bylà ¥%s´: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1607
+#: gtk/gtkfilesel.c:1619
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Klaida pervadinant bylà ¥%s´ á ¥%s´: %s"
 
-#: gtk/gtkfilesel.c:1654
+#: gtk/gtkfilesel.c:1666
 msgid "Rename File"
 msgstr "Pervadinti bylà"
 
-#: gtk/gtkfilesel.c:1669
+#: gtk/gtkfilesel.c:1681
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Pervadinti bylà ¥%s´ á:"
 
-#: gtk/gtkfilesel.c:1700
+#: gtk/gtkfilesel.c:1712
 msgid "Rename"
 msgstr "Pervadinti"
 
-#: gtk/gtkfilesel.c:2091
+#: gtk/gtkfilesel.c:2103
 msgid "Selection: "
 msgstr "Pasirinkimas: "
 
-#: gtk/gtkfilesel.c:2969
+#: gtk/gtkfilesel.c:2983
 #, c-format
 msgid ""
-"The filename %s couldn't be converted to UTF-8. Try setting the environment "
-"variable G_BROKEN_FILENAMES."
+"The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
+"environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:3833
+#: gtk/gtkfilesel.c:2986
+msgid "Invalid Utf-8"
+msgstr ""
+
+#: gtk/gtkfilesel.c:3852
 msgid "Name too long"
 msgstr "Vardas per ilgas"
 
-#: gtk/gtkfilesel.c:3835
+#: gtk/gtkfilesel.c:3854
 #, fuzzy
 msgid "Couldn't convert filename"
 msgstr "Negaliu iðmesti temos"
@@ -2052,7 +2101,7 @@ msgstr "su taðkas."
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1308
+#: gtk/gtkiconfactory.c:1318
 #, fuzzy, c-format
 msgid "Error loading icon: %s"
 msgstr "Klaida"
@@ -2267,7 +2316,7 @@ msgstr "Perkelti þymelæ aukðtyn"
 msgid "The text of the label includes XML markup. See pango_parse_markup()."
 msgstr "tekstas Þiûrëti."
 
-#: gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:583
+#: gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:585
 #, fuzzy
 msgid "Justification"
 msgstr "Praneðimas:"
@@ -2372,7 +2421,7 @@ msgstr "aukðtis."
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:734
+#: gtk/gtkmain.c:731
 #, fuzzy
 msgid "default:LTR"
 msgstr "<áprastas>"
@@ -2468,7 +2517,8 @@ msgstr "X"
 
 #: gtk/gtkmisc.c:118
 #, fuzzy
-msgid "The amount of space to add on the left and right of the widget, in pixels"
+msgid ""
+"The amount of space to add on the left and right of the widget, in pixels"
 msgstr "lygiai"
 
 #: gtk/gtkmisc.c:127
@@ -2478,7 +2528,8 @@ msgstr "Y"
 
 #: gtk/gtkmisc.c:128
 #, fuzzy
-msgid "The amount of space to add on the top and bottom of the widget, in pixels"
+msgid ""
+"The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "lygiai"
 
 #: gtk/gtknotebook.c:362
@@ -2573,7 +2624,7 @@ msgstr "Jeigu lygiai tu"
 msgid "Whether tabs should have homogeneous sizes"
 msgstr ""
 
-#: gtk/gtknotebook.c:2436 gtk/gtknotebook.c:4692
+#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
 #, c-format
 msgid "Page %u"
 msgstr "%u puslapis"
@@ -2603,7 +2654,8 @@ msgstr "Pozicija"
 
 #: gtk/gtkpaned.c:209
 #, fuzzy
-msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid ""
+"Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr "Pozicija taðkeliai"
 
 #: gtk/gtkpaned.c:217
@@ -2626,19 +2678,18 @@ msgstr "_Puslapio dydis"
 msgid "Width of handle"
 msgstr "Plotis"
 
-#: gtk/gtkrc.c:2253
+#: gtk/gtkrc.c:2270
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr ""
 
-#: gtk/gtkrc.c:2895 gtk/gtkrc.c:2898
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Negaliu rasti paveikslëlio bylos pixmap_path: ¥%s´"
 
-#: gtk/gtkrc.c:3329
-#, c-format
-#, fuzzy
+#: gtk/gtkrc.c:3350
+#, fuzzy, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Paveikslëlis"
 
@@ -2648,7 +2699,8 @@ msgstr "Sutraukti"
 
 #: gtk/gtkpreview.c:130
 #, fuzzy
-msgid "Whether the preview widget should take up the entire space it is allocated"
+msgid ""
+"Whether the preview widget should take up the entire space it is allocated"
 msgstr "yra"
 
 #: gtk/gtkprogress.c:122
@@ -2846,7 +2898,8 @@ msgstr "X"
 
 #: gtk/gtkrange.c:330
 #, fuzzy
-msgid "How far in the x direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
 msgstr "yra"
 
 #: gtk/gtkrange.c:337
@@ -2856,7 +2909,8 @@ msgstr "Y"
 
 #: gtk/gtkrange.c:338
 #, fuzzy
-msgid "How far in the y direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
 msgstr "t yra"
 
 #: gtk/gtkruler.c:118
@@ -2985,7 +3039,8 @@ msgstr "Antrinis atbulyn"
 
 #: gtk/gtkscrollbar.c:110
 #, fuzzy
-msgid "Display a second backward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr "Rodymas sekundë atbulyn lygiai"
 
 #: gtk/gtkscrollbar.c:117
@@ -2995,7 +3050,8 @@ msgstr "Antrinis"
 
 #: gtk/gtkscrollbar.c:118
 #, fuzzy
-msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Rodymas lygiai"
 
 #: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
@@ -3193,7 +3249,8 @@ msgstr "Atnaujinti"
 
 #: gtk/gtkspinbutton.c:290
 #, fuzzy
-msgid "Whether the spin button should update always, or only when the value is legal"
+msgid ""
+"Whether the spin button should update always, or only when the value is legal"
 msgstr "yra"
 
 #: gtk/gtkspinbutton.c:298
@@ -3617,7 +3674,7 @@ msgstr "Tekstas"
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Tekstas e"
 
-#: gtk/gtktexttag.c:379 gtk/gtktextview.c:584
+#: gtk/gtktexttag.c:379 gtk/gtktextview.c:586
 #, fuzzy
 msgid "Left, right, or center justification"
 msgstr "Kairëje"
@@ -3636,7 +3693,7 @@ msgstr "Kalba kol"
 msgid "Left margin"
 msgstr "Kairëje"
 
-#: gtk/gtktexttag.c:396 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:396 gtk/gtktextview.c:595
 #, fuzzy
 msgid "Width of the left margin in pixels"
 msgstr "Plotis"
@@ -3646,16 +3703,16 @@ msgstr "Plotis"
 msgid "Right margin"
 msgstr "Deðinëje"
 
-#: gtk/gtktexttag.c:406 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:406 gtk/gtktextview.c:605
 #, fuzzy
 msgid "Width of the right margin in pixels"
 msgstr "Plotis"
 
-#: gtk/gtktexttag.c:416 gtk/gtktextview.c:612
+#: gtk/gtktexttag.c:416 gtk/gtktextview.c:614
 msgid "Indent"
 msgstr "Átraukti"
 
-#: gtk/gtktexttag.c:417 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:417 gtk/gtktextview.c:615
 #, fuzzy
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Maþiau átraukia pastraipà"
@@ -3665,7 +3722,7 @@ msgstr "Maþiau átraukia pastraipà"
 msgid "Pixels above lines"
 msgstr "Taðkeliø"
 
-#: gtk/gtktexttag.c:438 gtk/gtktextview.c:537
+#: gtk/gtktexttag.c:438 gtk/gtktextview.c:539
 #, fuzzy
 msgid "Pixels of blank space above paragraphs"
 msgstr "Taðkeliø"
@@ -3675,7 +3732,7 @@ msgstr "Taðkeliø"
 msgid "Pixels below lines"
 msgstr "Taðkeliø"
 
-#: gtk/gtktexttag.c:448 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:448 gtk/gtktextview.c:549
 #, fuzzy
 msgid "Pixels of blank space below paragraphs"
 msgstr "Taðkeliø"
@@ -3685,7 +3742,7 @@ msgstr "Taðkeliø"
 msgid "Pixels inside wrap"
 msgstr "Taðkeliø"
 
-#: gtk/gtktexttag.c:458 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:458 gtk/gtktextview.c:559
 #, fuzzy
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Taðkeliø eiluèiø"
@@ -3695,16 +3752,17 @@ msgstr "Taðkeliø eiluèiø"
 msgid "Wrap mode"
 msgstr "Lauþyti"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:575
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:577
 #, fuzzy
-msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "eiluèiø"
 
-#: gtk/gtktexttag.c:494 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
 msgid "Tabs"
 msgstr "Tabai"
 
-#: gtk/gtktexttag.c:495 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:495 gtk/gtktextview.c:625
 #, fuzzy
 msgid "Custom tabs for this text"
 msgstr "Pasirinkta kol"
@@ -3894,47 +3952,47 @@ msgstr "plotis"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "plotis"
 
-#: gtk/gtktextview.c:536
+#: gtk/gtktextview.c:538
 #, fuzzy
 msgid "Pixels Above Lines"
 msgstr "Taðkeliø Virð"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 #, fuzzy
 msgid "Pixels Below Lines"
 msgstr "Taðkeliø Þemiau"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 #, fuzzy
 msgid "Pixels Inside Wrap"
 msgstr "Taðkeliø"
 
-#: gtk/gtktextview.c:574
+#: gtk/gtktextview.c:576
 #, fuzzy
 msgid "Wrap Mode"
 msgstr "Lauþyti"
 
-#: gtk/gtktextview.c:592
+#: gtk/gtktextview.c:594
 #, fuzzy
 msgid "Left Margin"
 msgstr "Kairëje"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 #, fuzzy
 msgid "Right Margin"
 msgstr "Deðinëje"
 
-#: gtk/gtktextview.c:630
+#: gtk/gtktextview.c:632
 #, fuzzy
 msgid "Cursor Visible"
 msgstr "Matoma"
 
-#: gtk/gtktextview.c:631
+#: gtk/gtktextview.c:633
 #, fuzzy
 msgid "If the insertion cursor is shown"
 msgstr "Jeigu yra"
 
-#: gtk/gtktextview.c:6335
+#: gtk/gtktextview.c:6366
 msgid "Input _Methods"
 msgstr "Ávesties _metodai"
 
@@ -4025,7 +4083,8 @@ msgstr "Árankinës stilius"
 
 #: gtk/gtktoolbar.c:285
 #, fuzzy
-msgid "Whether default toolbars have text only, text and icons, icons only, etc."
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr "tekstas tekstas."
 
 #: gtk/gtktoolbar.c:291
@@ -4564,8 +4623,7 @@ msgid "Allow Shrink"
 msgstr "Pripaþinti"
 
 #: gtk/gtkwindow.c:426
-#, no-c-format
-#, fuzzy
+#, fuzzy, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea."
@@ -4613,7 +4671,8 @@ msgstr "Áprastas plotis"
 
 #: gtk/gtkwindow.c:467
 #, fuzzy
-msgid "The default width of the window, used when initially showing the window."
+msgid ""
+"The default width of the window, used when initially showing the window."
 msgstr "plotis."
 
 #: gtk/gtkwindow.c:476
@@ -4622,7 +4681,8 @@ msgstr "Áprastas aukðtis"
 
 #: gtk/gtkwindow.c:477
 #, fuzzy
-msgid "The default height of the window, used when initially showing the window."
+msgid ""
+"The default height of the window, used when initially showing the window."
 msgstr "aukðtis."
 
 #: gtk/gtkwindow.c:486
@@ -4700,4 +4760,3 @@ msgstr "Vietnameèiø (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "X ávesties metodas"
-
