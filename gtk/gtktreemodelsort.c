@@ -1663,6 +1663,12 @@ gtk_tree_model_sort_insert_value (GtkTreeModelSort *tree_model_sort,
   elt.ref_count = 0;
   elt.children = NULL;
 
+  /* update all larger offsets */
+  tmp_elt = SORT_ELT (level->array->data);
+  for (i = 0; i < level->array->len; i++, tmp_elt++)
+    if (tmp_elt->offset >= offset)
+      tmp_elt->offset++;
+
   if (tree_model_sort->sort_column_id == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID &&
       tree_model_sort->default_sort_func == NO_SORT_FUNC)
     index = offset;
@@ -1672,16 +1678,10 @@ gtk_tree_model_sort_insert_value (GtkTreeModelSort *tree_model_sort,
                                                    FALSE);
 
   g_array_insert_vals (level->array, index, &elt, 1);
-
-  /* update all larger offsets */
   tmp_elt = SORT_ELT (level->array->data);
   for (i = 0; i < level->array->len; i++, tmp_elt++)
-    {
-      if ((tmp_elt->offset >= offset) && i != index)
-	tmp_elt->offset++;
-      if (tmp_elt->children)
-	tmp_elt->children->parent_elt = tmp_elt;
-    }
+    if (tmp_elt->children)
+      tmp_elt->children->parent_elt = tmp_elt;
 
   return TRUE;
 }

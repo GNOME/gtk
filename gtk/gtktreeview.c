@@ -3652,7 +3652,7 @@ validate_visible_area (GtkTreeView *tree_view)
   GtkTreeIter iter;
   GtkRBTree *tree = NULL;
   GtkRBNode *node = NULL;
-  gboolean validated_area = FALSE;
+  gboolean need_redraw = FALSE;
   gboolean size_changed = FALSE;
   gboolean modify_dy = FALSE;
   gint total_height;
@@ -3675,7 +3675,7 @@ validate_visible_area (GtkTreeView *tree_view)
 	  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
 	      GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
 	    {
-	      validated_area = TRUE;
+	      need_redraw = TRUE;
 	      if (validate_row (tree_view, tree, node, &iter, path))
 		size_changed = TRUE;
 	    }
@@ -3736,7 +3736,7 @@ validate_visible_area (GtkTreeView *tree_view)
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
 	  GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
 	{
-	  validated_area = TRUE;
+	  need_redraw = TRUE;
 	  if (validate_row (tree_view, tree, node, &iter, path))
 	    size_changed = TRUE;
 	}
@@ -3809,7 +3809,7 @@ validate_visible_area (GtkTreeView *tree_view)
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
 	  GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
 	{
-	  validated_area = TRUE;
+	  need_redraw = TRUE;
 	  if (validate_row (tree_view, tree, node, &iter, path))
 	    size_changed = TRUE;
 	}
@@ -3838,7 +3838,7 @@ validate_visible_area (GtkTreeView *tree_view)
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
 	  GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
 	{
-	  validated_area = TRUE;
+	  need_redraw = TRUE;
 	  if (validate_row (tree_view, tree, node, &iter, above_path))
 	    size_changed = TRUE;
 	}
@@ -3860,6 +3860,7 @@ validate_visible_area (GtkTreeView *tree_view)
       tree_view->priv->top_row =
 	gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, above_path);
       tree_view->priv->top_row_dy = - area_above;
+      need_redraw = TRUE;
     }
   else
     {
@@ -3881,7 +3882,7 @@ validate_visible_area (GtkTreeView *tree_view)
     }
   if (size_changed)
     gtk_widget_queue_resize (GTK_WIDGET (tree_view));
-  if (validated_area)
+  if (need_redraw)
     gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 }
 
