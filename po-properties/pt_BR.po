@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-16 14:27-0500\n"
-"PO-Revision-Date: 2004-02-09 21:57-0200\n"
+"POT-Creation-Date: 2004-03-17 20:18+0100\n"
+"PO-Revision-Date: 2004-03-17 20:50-0300\n"
 "Last-Translator: Gustavo Noronha Silva <kov@debian.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -237,58 +237,48 @@ msgid "Value"
 msgstr "Valor"
 
 #: gtk/gtkadjustment.c:108
-#, fuzzy
 msgid "The value of the adjustment"
-msgstr "O nome do widget"
+msgstr "O valor do ajuste"
 
 #: gtk/gtkadjustment.c:117
-#, fuzzy
 msgid "Minimum Value"
-msgstr "X Mínimo"
+msgstr "Valor Mínimo"
 
 #: gtk/gtkadjustment.c:118
-#, fuzzy
 msgid "The minimum value of the adjustment"
-msgstr "O nome do widget"
+msgstr "O valor mínimo do ajuste"
 
 #: gtk/gtkadjustment.c:127
-#, fuzzy
 msgid "Maximum Value"
-msgstr "Comprimento máximo"
+msgstr "Valor Máximo"
 
 #: gtk/gtkadjustment.c:128
-#, fuzzy
 msgid "The maximum value of the adjustment"
-msgstr "O nome do widget"
+msgstr "O valor máximo do ajuste"
 
 #: gtk/gtkadjustment.c:137
-#, fuzzy
 msgid "Step Increment"
-msgstr "Tela"
+msgstr "Incremento do Passo"
 
 #: gtk/gtkadjustment.c:138
-#, fuzzy
 msgid "The step increment of the adjustment"
-msgstr "Os conteudos da entrada"
+msgstr "O incremento de passo do ajuste"
 
 #: gtk/gtkadjustment.c:147
 msgid "Page Increment"
-msgstr ""
+msgstr "Incremento de Página"
 
 #: gtk/gtkadjustment.c:148
-#, fuzzy
 msgid "The page increment of the adjustment"
-msgstr "Os conteudos da entrada"
+msgstr "O incremento de página do ajuste"
 
 #: gtk/gtkadjustment.c:157
-#, fuzzy
 msgid "Page Size"
-msgstr "Tamanho Máx"
+msgstr "Tamanho da Página"
 
 #: gtk/gtkadjustment.c:158
-#, fuzzy
 msgid "The page size of the adjustment"
-msgstr "O estado de alternância do botão"
+msgstr "O tamanho da página do ajuste"
 
 #: gtk/gtkalignment.c:117
 msgid "Horizontal alignment"
@@ -640,12 +630,11 @@ msgstr ""
 
 #: gtk/gtkbutton.c:378
 msgid "Show button images"
-msgstr ""
+msgstr "Exibir imagens nos botões"
 
 #: gtk/gtkbutton.c:379
-#, fuzzy
 msgid "Whether stock icons should be shown in buttons"
-msgstr "Se os separadores deverão ou não ser mostrados"
+msgstr "Se os ícones de estoque devem ser mostrados nos botões"
 
 #: gtk/gtkcalendar.c:464
 msgid "Year"
@@ -848,9 +837,8 @@ msgid "Size"
 msgstr "Tamanho"
 
 #: gtk/gtkcellrendererpixbuf.c:170
-#, fuzzy
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
-msgstr "O tamanho do ícone renderizado"
+msgstr "O valor GtkIconSize que especifica o tamanho do ícone renderizado"
 
 #: gtk/gtkcellrendererpixbuf.c:179
 msgid "Detail"
@@ -1372,11 +1360,11 @@ msgstr "O item que está atualmente ativo"
 
 #: gtk/gtkcombobox.c:504
 msgid "Appears as list"
-msgstr ""
+msgstr "Aparece como lista"
 
 #: gtk/gtkcombobox.c:505
 msgid "Whether combobox dropdowns should look like lists rather than menus"
-msgstr ""
+msgstr "Se as opções do combobox devem ser exibidas como listas ao invés de como menus"
 
 #: gtk/gtkcomboboxentry.c:110
 msgid "Text Column"
@@ -1578,11 +1566,10 @@ msgid "X align"
 msgstr "Alinh x"
 
 #: gtk/gtkentry.c:554 gtk/gtkmisc.c:100
-#, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
-msgstr "O alinhamento horizontal, de 0 (esquerda) até 1 (direita)"
+msgstr "O alinhamento horizontal, de 0 (esquerda) para 1 (direita). Invertido para layouts RTL"
 
 #: gtk/gtkentry.c:787
 msgid "Select on focus"
@@ -1686,14 +1673,12 @@ msgid "The type of operation that the file selector is performing"
 msgstr "O tipo de operação que o seletor de arquivos está executando"
 
 #: gtk/gtkfilechooser.c:100
-#, fuzzy
 msgid "File System Backend"
-msgstr "Sistema de Arquivos"
+msgstr "Bakckend de Sistema de Arquivos"
 
 #: gtk/gtkfilechooser.c:101
-#, fuzzy
 msgid "Name of file system backend to use"
-msgstr "Nome do tema de ícones a ser usado"
+msgstr "Nome do backend de sistema de arquivos a ser usado"
 
 #: gtk/gtkfilechooser.c:106
 msgid "Filter"
@@ -1731,13 +1716,12 @@ msgstr ""
 "deve ser exibido."
 
 #: gtk/gtkfilechooser.c:130
-#, fuzzy
 msgid "Use Preview Label"
-msgstr "Usar tamanho na etiqueta"
+msgstr "Usar Etiqueta de Pré-visualização"
 
 #: gtk/gtkfilechooser.c:131
 msgid "Whether to display a stock label with the name of the previewed file."
-msgstr ""
+msgstr "Se deve-se exibir uma etiqueta com o nome do arquivo sendo pré-visualizado."
 
 #: gtk/gtkfilechooser.c:136
 msgid "Extra widget"
@@ -1765,12 +1749,11 @@ msgstr "Se os arquivos e pastas escondidos devem ser exibidos"
 
 #: gtk/gtkfilechooserdefault.c:550
 msgid "Default file chooser backend"
-msgstr ""
+msgstr "Backend padrão de escolha de arquivos"
 
 #: gtk/gtkfilechooserdefault.c:551
-#, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
-msgstr "Nome do tema de ícones a ser usado"
+msgstr "Nome do backend do GtkFileChooser a ser usado por padrão"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:168
 msgid "Filename"
@@ -2030,14 +2013,12 @@ msgid "Child widget to appear next to the menu text"
 msgstr "Widget filho a surgir ao lado do texto de menu"
 
 #: gtk/gtkimagemenuitem.c:144
-#, fuzzy
 msgid "Show menu images"
-msgstr "Exibir Números de Semana"
+msgstr "Exibir imagens nos menus"
 
 #: gtk/gtkimagemenuitem.c:145
-#, fuzzy
 msgid "Whether images should be shown in menus"
-msgstr "Se os separadores deverão ou não ser mostrados"
+msgstr "Se as imagens devem ser exibidas nos menus"
 
 #: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:543
 msgid "Screen"
@@ -3049,43 +3030,43 @@ msgstr "Lista de tamanhos de ícones (gtk-menu=16,16;gtk-button=20,20..."
 
 #: gtk/gtksettings.c:365
 msgid "Xft Antialias"
-msgstr ""
+msgstr "Antialias Xft"
 
 #: gtk/gtksettings.c:366
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
-msgstr ""
+msgstr "Se deve-se fazer antialias de fontes Xft; 0=não, 1=sim, -1=padrão"
 
 #: gtk/gtksettings.c:375
 msgid "Xft Hinting"
-msgstr ""
+msgstr "Dicas Xft"
 
 #: gtk/gtksettings.c:376
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
-msgstr ""
+msgstr "Se deve-se dar dicas a fontes Xft; 0=não, 1=sim, -1=padrão"
 
 #: gtk/gtksettings.c:385
 msgid "Xft Hint Style"
-msgstr ""
+msgstr "Estilo de Dicas para Xft"
 
 #: gtk/gtksettings.c:386
 msgid "What degree of hinting to use; none, slight, medium, or full"
-msgstr ""
+msgstr "Que grau de dicas usar; nenhuma, uma, pouco, médio ou completo"
 
 #: gtk/gtksettings.c:395
 msgid "Xft RGBA"
-msgstr ""
+msgstr "Xft RGBA"
 
 #: gtk/gtksettings.c:396
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
-msgstr ""
+msgstr "Tipo de antialiasing de subpixel; nenhum, rgb, bgr, vrgb, vbgr"
 
 #: gtk/gtksettings.c:405
 msgid "Xft DPI"
-msgstr ""
+msgstr "DPI Xft"
 
 #: gtk/gtksettings.c:406
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
-msgstr ""
+msgstr "Resolução para o Xft, em 1024 * pontos/polegada. -1 para usar valores padrão"
 
 #: gtk/gtksizegroup.c:242
 msgid "Mode"
@@ -3645,14 +3626,12 @@ msgid "Whether Tab will result in a tab character being entered"
 msgstr "Se a tecla Tab resultará na entrada de um caractere de Tab"
 
 #: gtk/gtktextview.c:684
-#, fuzzy
 msgid "Error underline color"
-msgstr "Cor de frente"
+msgstr "Cor de sublinhado de erro"
 
 #: gtk/gtktextview.c:685
-#, fuzzy
 msgid "Color with which to draw error-indication underlines"
-msgstr "Cor com que desenhar o cursor de inserção"
+msgstr "Cor com a qual deve-se desenhar os sublinhados de indicação de erros"
 
 #: gtk/gtktoggleaction.c:129
 msgid "Create the same proxies as a radio action"
