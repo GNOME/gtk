@@ -5,10 +5,10 @@
 <!-- Title information -->
 
 <title>GTK+ FAQ
-<author>Shawn T. Amundson, <tt/amundson@gimp.org/
-<author>Nathan Froyd, <tt/maestrox@geocities.com/
-<author>Tony Gale, <tt/gale@minotaur.dra.hmg.gb/
-<date>July 31, 1997
+<author>Nathan Froyd, <tt/maestrox@geocities.com/&gt;,
+Tony Gale, &lt;<tt/trogsta@geocities.com/&gt;, 
+Shawn T. Amundson, <tt/amundson@gimp.org/
+<date>January 27th 1998
 <abstract>
 This document is intended to answer questions that are likely to be 
 frequently asked by programmers using GTK+ or people who are just
@@ -24,45 +24,32 @@ looking at using GTK+.
 <sect>General Information
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>Authors and Copyright
+<sect1>Authors
 <p>
 The authors of GTK+ are:
 
-<verb>
-Peter Mattis    (petm@xcf.berkeley.edu)
-Spencer Kimball (spencer@xcf.berkeley.edu)
-Josh MacDonald  (jmacd@xcf.berkeley.edu)
-</verb>
-
-The copyright notice on the library files is the following:
-
-<tscreen><verb>
-/* GTK - The GIMP Toolkit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the Free
- * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
-</verb></tscreen>
+<itemize>
+<item>Peter Mattis    (petm@xcf.berkeley.edu)
+<item>Spencer Kimball (spencer@xcf.berkeley.edu)
+<item>Josh MacDonald  (jmacd@xcf.berkeley.edu)
+</itemize>
+GTK+ is distributed under the GNU Library General Public License
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>What is GTK?
+<sect1>What is GTK+?
 <p>
-GTK is a small and efficient widget set designed with the general look 
+GTK+ is a small and efficient widget set designed with the general look 
 and feel of Motif.  In reality, it looks much better than Motif.  It
 contains common widgets and some more complex widgets such as a file
 selection, and color selection widgets.
+
+GTK+ provides some unique features. (At least, I know of no other widget 
+library which provides them). For
+example, a button does not contain a label, it contains a child widget, 
+which in most instances will be a label.
+However, the child widget can also be a pixmap, image or any combination 
+possible the programmer desires.
+This flexibility is adhered to throughout the library. 
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>What is the + in GTK+?
@@ -79,7 +66,7 @@ enhancement to the original gtk that adds object oriented features."
 </quote>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>Does the G in GTK stand for General, Gimp, or GNU?
+<sect1>Does the G in GTK+ stand for General, Gimp, or GNU?
 <p>
 Peter Mattis informed the gtk mailing list that:
 <quote>
@@ -87,6 +74,49 @@ Peter Mattis informed the gtk mailing list that:
 GTK = Gimp ToolKit. But I don't know for sure. Its definately not
 GNU, though."
 </quote>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Where is the documentation for GTK+?
+<p>
+In the GTK+ distribution's doc/ directory you will find the
+reference material for both GTK and GDK, and this FAQ.
+
+There is also a GTK+ Tutorial which can be found at 
+<htmlurl url="http://www.levien.com/~slow/gtk/" 
+name="http://www.levien.com/~slow/gtk/">
+
+In addition, if you are
+on the web, you can browse all of the above by going to 
+<htmlurl url="http://www.gimp.org/gtk/docs" 
+name="http://www.gimp.org/gtk/docs">, where they
+are already converted to HTML format.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Is there a mailing list (or mailing list archive) for GTK+?
+<p>
+A mailing list is located at gtk-list@redhat.com . To subscribe send an
+email message to <htmlurl url="mailto:gtk-list-request@redhat.com" 
+name="gtk-list-request@redhat.com">
+with <em>subscribe</em> in the <bf>subject</bf>.
+
+A searchable archive of the mailing list can be found at <htmlurl url="http://www.redhat.com/linux-info/gtk/gtk-list/index.html" name="http://www.redhat.com/linux-info/gtk/gtk-list/index.html">
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>The gtk-list hasn't had any traffic for days, is it dead?
+<p>
+No, everyone's just busy coding.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How to get help with GTK+
+<p>
+First, make sure your question isn't answered in the documentation, this
+FAQ or the tutorial. Done that? You're sure you've done that, right? In
+that case, the best place to post questions is to the GTK+ mailing list.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How to report bugs in GTK+
+<p>
+Bug reports should be sent to the GTK+ mailing list.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>What applications have been written with GTK+?
@@ -104,29 +134,6 @@ Some applications which use GTK+ are:
 <item>SANE (<url url="http://www.azstarnet.com/~axplinux/sane/"> ),
       a universal scanner interface
 </itemize>
-
-<!-- ----------------------------------------------------------------- -->
-<sect1>How to get help with GTK+/Is there a mailing list and archive?
-<p>
-The best place is either the docs that come with GTK+ or the mailing list,
-&ltgtk-list@redhat.com&gt. If you need to check the archives, you can find them at:
-<verb>
-http://www.redhat.com/linux-info/gtk/gtk-list/index.html
-</verb>
-
-<!-- ----------------------------------------------------------------- -->
-<sect1>The gtk-list hasn't had any traffic for days, is it dead?
-<p>
-No, everyone's just busy coding.
-
-<!-- ----------------------------------------------------------------- -->
-<sect1>Where is the documentation for GTK+?
-<p>
-Look in the GTK distribution's doc/ directory. If you have World Wide
-Web access, you can view them at:
-<verb>
-http://www.gimp.org/gtk/
-</verb>
 
 <!-- ***************************************************************** -->
 <sect>How to find, configure, install, and troubleshoot GTK+
@@ -157,15 +164,22 @@ in the gtk+-version/ directory.
 <sect1>I've compiled and installed GTK+, but I can't get any programs to link
 with it!
 <p>
-This problem is most often encountered when compiling something like the GIMP
-on a RedHat Linux machine.  Generally, the compiler will complain about an
-'unresolved symbol'.  You want to edit /etc/ld.so.conf to include /usr/local/lib,
-so it looks something like:
+This problem is most often encountered when the GTK+ libraries can't be 
+found or are the wrong version. Generally, the compiler will complain about an
+'unresolved symbol'.  There are two things you need to check:
+<itemize>
+<item>Make sure that the libraries can be found. You want to edit 
+/etc/ld.so.conf to include /usr/local/lib (or whereever you installed GTK+),
+ so it looks something like:
 <verb>
 /usr/X11R6/lib
 /usr/local/lib
 </verb>
-Then you need to run /sbin/ldconfig as root. Now (assuming you have a RedHat
+Then you need to run /sbin/ldconfig as root. 
+<p>
+<item>Make sure the linker is finding the correct set of libraries. If you
+have a Linux distribution that installs GTK+ (e.g. RedHat 5.0) then this 
+older version may be used. Now (assuming you have a RedHat
 system), issue the command
 <verb>
 rpm -e gtk gtk-devel
@@ -174,23 +188,80 @@ You may also want to remove the packages that depend on gtk (rpm will tell you
 which ones they are).  If you don't have a RedHat Linux system, check to make sure
 that neither <verb>/usr/lib</verb> or <verb>/usr/local/lib</verb> contain any of
 the libraries libgtk, libgdk, libglib, or libgck.  If they do exist, remove them
+(and any gtk include files, such as /usr/include/gtk and /usr/include/gdk) 
 and reinstall gtk+.
+</itemize>
 
 <!-- ***************************************************************** -->
 <sect>Development of GTK+
+<!-- ***************************************************************** -->
 
 <sect1>When will it reach version 1.0?
+<p>
+The file 'TODO' in the gtk+ distribution lists the things that need to be done
+before version 1.0 is repleased. Not including bugs, this includes:
 
+<itemize>
+<item>New Features
+<itemize>
+<item>gdk_expose_compress: ala-Xt, this would really help for opaque moves and
+   such
+</itemize>
+<p>
+
+<item>Widgets
+<itemize>
+<item>Column-list (Jay Painter)
+<item>Text widget (needs to be finished)
+<item>Entry should have a password mode (and it should show stars
+   for user feedback)
+</itemize>
+<p>
+
+<item>Drag-and-Drop (DND)
+<itemize>
+<item>  It seems to be having problems again.  The way DND data types are set in
+  GtkWidget really needs to be fixed.  This is pretty high on my priority
+  list, and I'll get to it as soon as the column list widget is done.  The
+  correct way dnd data needs to be set is to have a additional keyed data
+  type with GtkWidget, which is applied to the widget's window upon realize.
+  There also needs to be a way to set dnd-data on widget windows which are
+  not the main window (for widgets that create more than one window).
+    -- Jay Painter
+<item>  DnD seems to work for me, but yes, there needs to be some sort of
+  gtk_widget layer that makes it easier... Also, adding support for drop
+  zones might be nice.
+    -- Elliot
+</itemize>
+</itemize>
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>How can I contribute to GTK+?
 <p>
 It's simple.  If something doesn't work like you think it should in a program,
 check the documentation to make sure you're not missing something.  If it is a true
 bug, track it down in the GTK+ source, change it, and then upload the patchfile to:
 <verb>
-ftp://ftp.gimp.org/pub/incoming
+ftp://ftp.gimp.org/incoming
 </verb>
-along with a README file.  Make sure you follow the naming conventions!
+along with a README file.  Make sure you follow the naming conventions or your
+will just be deleted! The filenames should be of this form:
+<verb>
+gtk-<username>-<date yymmdd-n>.patch.gz
+gtk-<username>-<date yymmdd-n>.patch.README
+</verb>
+The "n" in the date indicates a unique number (starting from 0)
+of patches you uploaded that day.  It should be 0, unless you
+upload more than one patch in the same day.
 
+Example:
+<verb>
+gtk-gale-982701-0.patch.gz
+gtk-gale-982701-0.patch.README
+</verb>
+Once you upload <em>anything</em>, send the README to ftp-admin@gimp.org
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>What is the policy on incorporating new widgets into the library?
 <p>
 This is up to the authors, so you will have to ask them once you
@@ -199,9 +270,11 @@ generally useful, work, and are not a disgrace to the widget set will
 gladly be included.
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>Is anyone working on C++ bindings?
+<sect1>Is anyone working on bindings for languages other than C?
 <p>
-Yes, there is a C++ wrapper for GTK+ called gtk--. You can find the home page at:
+Yes, there is 
+<itemize>
+<item>a C++ wrapper for GTK+ called gtk--. You can find the home page at:
 <verb>
 http://www.cs.tut.fi/~p150650/gtk/gtk--.html
 </verb>
@@ -209,16 +282,24 @@ The FTP site is:
 <verb>
 ftp://ftp.gimp.org/pub/gtk/gtk--/
 </verb>
-
-<sect1>Is anyone working on Guile bindings?
 <p>
-Yes, the home page is at:
+
+<item>Guile bindings. The home page is at:
 <verb>
 http://www.ping.de/sites/zagadka/guile-gtk/
 </verb>
 By the way, Guile is the GNU Project's implemention of R4RS Scheme (the
 standard). If you like Scheme, you may want to take a look at this.
+<p>
 
+<item>David Monniaux reports:
+<quote>I've started a gtk-O'Caml binding system.
+The basics of the system, including callbacks, work fine.
+
+The current development is in
+http://www.ens-lyon.fr/~dmonniau/arcs/
+</quote>
+</itemize>
 <!-- ***************************************************************** -->
 <sect>Widgets
 
@@ -474,14 +555,29 @@ gtk_menu_append(GTK_MENU(menu), menuitem);
 gtk_widget_show(menuitem);
 </verb></tscreen>
 
-
+<!-- ----------------------------------------------------------------- -->
 <sect>About glib
 
+<!-- ----------------------------------------------------------------- -->
 <sect1>What is glib?
+<p>
+glib is a library of useful functions and definitions available for use 
+when creating GDK and GTK applications. It provides replacements for some
+standard libc functions, such as malloc, which are buggy on some systems.
+<p>
+It also provides routines for handling:
+<itemize>
+<item>Doubly Linked Lists
+<item>Singly Linked Lists
+<item>Timers
+<item>String Handling
+<item>A Lexical Scanner
+<item>Error Functions
+</itemize>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Why use g_print, g_malloc, g_strdup and fellow glib functions ?  
-<P>
+<p>
 Thanks to Tim Janik who wrote to gtk-list: (slightly modified)
 <quote>
 Regarding g_malloc(), g_free() and siblings, these functions are much safer
@@ -505,15 +601,16 @@ showing the messages inside of a gtk window with your own handler
 </quote>
 
 <!-- ***************************************************************** -->
-<sect>Contributions and Maintainer 
+<sect>GTK+ FAQ Contributions and Maintainer 
 <p>
 If you would like to make a contribution to the FAQ, send either one of us
 an e-mail message with the exact text you think should be included (question and
 answer).  With your help, this document can grow and become more useful!
 
-This document is maintained by Nathan Froyd &ltmaestrox@geocities.com&gt
-and Tony Gale &ltgale@minotaur.dra.hmg.gb&gt.  Previously, Shawn T. Amundson,
-&ltamundson@gimp.org&gt took care of it.
+This document is maintained by Nathan Froyd <htmlurl url="mailto:maestrox@geocities.com" 
+name="&lt;maestrox@geocities.com&gt;">
+and Tony Gale <htmlurl url="mailto:trogsta@geocities.com" name="&lt;trogsta@geocities.com&gt;">. 
+Previously, Shawn T. Amundson, took care of it.
 
 There is no guarentee that this document lives up to its intended
 purpose.  This is simply provided as a free resource.  As such,
