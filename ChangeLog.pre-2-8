@@ -1,5 +1,7 @@
 Mon Apr  4 19:13:23 2005  Jonathan Blandford  <jrb@redhat.com>
 
+	Fix for #172319, Tristan Van Berkom:
+	
 	* gtk/gtktreeview.c (gtk_tree_view_expand_all): change to use
 	gtk_tree_view_real_expand_row() instead of doing this by hand.
 
