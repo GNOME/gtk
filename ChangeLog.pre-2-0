@@ -1,5 +1,18 @@
 2000-08-30  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gtkmarshal.list: Add marshallers for changed GtkTextBuffer
+	signals.
+
+	* gtk/gtktextbuffer.h: Add "interactive" arg to insert_text and
+	delete_text signals. This allows the signals to be used for
+	implementing undo.
+
+	* gtk/gtktextbuffer.c: Change signal handler signatures; 
+	provide "interactive" argument when emitting insert_text or
+	delete_text signal.
+	
+2000-08-30  Havoc Pennington  <hp@pobox.com>
+
 	* gtk/gtktextbuffer.c: Docs
 
 Fri Aug 25 12:16:15 2000  Owen Taylor  <otaylor@redhat.com>

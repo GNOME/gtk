@@ -52,12 +52,14 @@ struct _GtkTextBufferClass {
   void (* insert_text)     (GtkTextBuffer *buffer,
                             GtkTextIter *pos,
                             const gchar *text,
-                            gint length);
+                            gint length,
+                            gboolean interactive);
 
 
   void (* delete_text)     (GtkTextBuffer *buffer,
                             GtkTextIter *start,
-                            GtkTextIter *end);
+                            GtkTextIter *end,
+                            gboolean interactive);
 
   /* Only for text changed, marks/tags don't cause this
      to be emitted */
