@@ -1780,9 +1780,10 @@ gtk_signal_collect_params (GtkArg	       *params,
 
       params->type = *(param_types++);
       params->name = NULL;
-      error = gtk_arg_collect_value (GTK_FUNDAMENTAL_TYPE (params->type),
-				     params,
-				     &var_args);
+      GTK_ARG_COLLECT_VALUE (GTK_FUNDAMENTAL_TYPE (params->type),
+			     params,
+			     var_args,
+			     error);
       if (error)
 	{
 	  failed = TRUE;

@@ -955,7 +955,8 @@ gtk_widget_init (GtkWidget *widget)
  *****************************************/
 
 GtkWidget*
-gtk_widget_new (guint widget_type,
+gtk_widget_new (GtkType      widget_type,
+		const gchar *first_arg_name,
 		...)
 {
   GtkObject *object;
@@ -968,11 +969,12 @@ gtk_widget_new (guint widget_type,
   
   object = gtk_type_new (widget_type);
   
-  va_start (var_args, widget_type);
+  va_start (var_args, first_arg_name);
   error = gtk_object_args_collect (GTK_OBJECT_TYPE (object),
 				   &arg_list,
 				   &info_list,
-				   &var_args);
+				   first_arg_name,
+				   var_args);
   va_end (var_args);
   
   if (error)
@@ -1008,7 +1010,7 @@ gtk_widget_new (guint widget_type,
  *****************************************/
 
 GtkWidget*
-gtk_widget_newv (guint	 type,
+gtk_widget_newv (GtkType type,
 		 guint	 nargs,
 		 GtkArg *args)
 {
@@ -1060,7 +1062,8 @@ gtk_widget_getv (GtkWidget	*widget,
  *****************************************/
 
 void
-gtk_widget_set (GtkWidget *widget,
+gtk_widget_set (GtkWidget   *widget,
+		const gchar *first_arg_name,
 		...)
 {
   GtkObject *object;
@@ -1074,11 +1077,12 @@ gtk_widget_set (GtkWidget *widget,
 
   object = GTK_OBJECT (widget);
 
-  va_start (var_args, widget);
+  va_start (var_args, first_arg_name);
   error = gtk_object_args_collect (GTK_OBJECT_TYPE (object),
 				   &arg_list,
 				   &info_list,
-				   &var_args);
+				   first_arg_name,
+				   var_args);
   va_end (var_args);
 
   if (error)

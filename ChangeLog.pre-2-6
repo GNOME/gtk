@@ -1,3 +1,31 @@
+Mon Aug 24 02:36:53 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkarg.h:
+	* gtk/gtkarg.c:
+	* gtk/gtkwidget.h: 
+	* gtk/gtkwidget.c: 
+	* gtk/gtkobject.h:
+	* gtk/gtkobject.c:
+	* gtk/gtkcontainer.h: 
+	* gtk/gtkcontainer.c: 
+	(gtk_object_new):
+	(gtk_object_set):
+	(gtk_widget_new):
+	(gtk_widget_set): 
+	(gtk_container_add_with_args):
+	(gtk_container_child_set):
+	begin the parameter elipsis (...) after the first argument name. this
+	change is source compatible, since it was always required, even as NULL.
+ 	(gtk_args_collect): 
+	(gtk_object_args_collect): 
+	(gtk_container_child_args_collect):
+ 	changed prototypes to pass first_arg_name, also, pass va_list variable
+	by value (portability concerns). callers changed.
+
+	* gtk/gtkargcollector.c: implemented gtk_arg_collect_value() as
+	a huge macro GTK_ARG_COLLECT_VALUE() <shrug>. this is needed because we
+ 	can't pass va_list variables by reference for portability reasons.
+
 Fri Aug 21 22:40:00  Raph Levien  <raph@gtk.org>
 
 	* gdk/gdkrgb.c: added calls to gdk_rgb_init in the get_cmap and

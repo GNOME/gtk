@@ -250,6 +250,7 @@ gtk_container_child_type (GtkContainer      *container)
 void
 gtk_container_add_with_args (GtkContainer      *container,
 			     GtkWidget         *widget,
+			     const gchar       *first_arg_name,
 			     ...)
 {
   g_return_if_fail (container != NULL);
@@ -270,11 +271,12 @@ gtk_container_add_with_args (GtkContainer      *container,
       GSList *info_list = NULL;
       gchar *error;
       
-      va_start (var_args, widget);
+      va_start (var_args, first_arg_name);
       error = gtk_container_child_args_collect (GTK_OBJECT_TYPE (container),
 						&arg_list,
 						&info_list,
-						&var_args);
+						first_arg_name,
+						var_args);
       va_end (var_args);
 
       if (error)
@@ -375,6 +377,7 @@ gtk_container_child_getv (GtkContainer      *container,
 void
 gtk_container_child_set (GtkContainer      *container,
 			 GtkWidget         *child,
+			 const gchar       *first_arg_name,
 			 ...)
 {
   va_list var_args;
@@ -388,11 +391,12 @@ gtk_container_child_set (GtkContainer      *container,
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (child->parent != NULL);
 
-  va_start (var_args, child);
+  va_start (var_args, first_arg_name);
   error = gtk_container_child_args_collect (GTK_OBJECT_TYPE (container),
 					    &arg_list,
 					    &info_list,
-					    &var_args);
+					    first_arg_name,
+					    var_args);
   va_end (var_args);
 
   if (error)
@@ -541,13 +545,15 @@ gchar*
 gtk_container_child_args_collect (GtkType       object_type,
 				  GSList      **arg_list_p,
 				  GSList      **info_list_p,
-				  gpointer      var_args_p)
+				  const gchar  *first_arg_name,
+				  va_list	var_args)
 {
   return gtk_args_collect (object_type,
 			   container_child_arg_info_ht,
 			   arg_list_p,
 			   info_list_p,
-			   var_args_p);
+			   first_arg_name,
+			   var_args);
 }
 
 gchar*

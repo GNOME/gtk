@@ -174,6 +174,7 @@ void    gtk_container_child_setv   	   (GtkContainer      *container,
  */
 void    gtk_container_add_with_args	   (GtkContainer      *container,
 					    GtkWidget	      *widget,
+					    const gchar	      *first_arg_name,
 					    ...);
 void    gtk_container_addv		   (GtkContainer      *container,
 					    GtkWidget	      *widget,
@@ -181,6 +182,7 @@ void    gtk_container_addv		   (GtkContainer      *container,
 					    GtkArg	      *args);
 void	gtk_container_child_set		   (GtkContainer      *container,
 					    GtkWidget         *child,
+					    const gchar	      *first_arg_name,
 					    ...);
      
 
@@ -199,7 +201,8 @@ void    gtk_container_arg_get		   (GtkContainer *container,
 gchar*	gtk_container_child_args_collect   (GtkType       object_type,
 					    GSList      **arg_list_p,
 					    GSList      **info_list_p,
-					    gpointer      var_args_p);
+					    const gchar	 *first_arg_name,
+					    va_list       args);
 gchar*  gtk_container_child_arg_get_info   (GtkType       object_type,
 					    const gchar  *arg_name,
 					    GtkArgInfo  **info_p);

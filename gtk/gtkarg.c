@@ -233,12 +233,12 @@ gtk_args_collect (GtkType	  object_type,
 		  GHashTable     *arg_info_hash_table,
 		  GSList	**arg_list_p,
 		  GSList	**info_list_p,
-		  gpointer        var_args_p)
+		  const gchar   *first_arg_name,
+		  va_list	 var_args)
 {
   GSList *arg_list;
   GSList *info_list;
-  gchar *arg_name;
-  va_list *var_args = var_args_p;
+  const gchar *arg_name;
 
   g_return_val_if_fail (arg_list_p != NULL, NULL);
   *arg_list_p = NULL;
@@ -248,7 +248,7 @@ gtk_args_collect (GtkType	  object_type,
 
   arg_list = NULL;
   info_list = NULL;
-  arg_name = va_arg (*var_args, gchar*);
+  arg_name = first_arg_name;
   while (arg_name)
     {
       GtkArgInfo *info = NULL;
@@ -262,8 +262,8 @@ gtk_args_collect (GtkType	  object_type,
 	  info_list = g_slist_prepend (info_list, info);
 
 	  arg = gtk_arg_new (info->type);
-	  arg->name = arg_name;
-	  error = gtk_arg_collect_value (GTK_FUNDAMENTAL_TYPE (arg->type), arg, var_args);
+	  arg->name = (gchar*) arg_name;
+	  GTK_ARG_COLLECT_VALUE (GTK_FUNDAMENTAL_TYPE (arg->type), arg, var_args, error);
 	  arg_list = g_slist_prepend (arg_list, arg);
 	}
       if (error)
@@ -273,7 +273,7 @@ gtk_args_collect (GtkType	  object_type,
 	  return error;
 	}
 
-      arg_name = va_arg (*var_args, gchar*);
+      arg_name = va_arg (var_args, gchar*);
     }
 
   *arg_list_p = g_slist_reverse (arg_list);

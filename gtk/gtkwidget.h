@@ -360,9 +360,10 @@ struct _GtkWidgetShapeInfo
 
 
 GtkType	   gtk_widget_get_type		  (void);
-GtkWidget* gtk_widget_new		  (guint		type,
+GtkWidget* gtk_widget_new		  (GtkType		type,
+					   const gchar	       *first_arg_name,
 					   ...);
-GtkWidget* gtk_widget_newv		  (guint		type,
+GtkWidget* gtk_widget_newv		  (GtkType		type,
 					   guint		nargs,
 					   GtkArg	       *args);
 void	   gtk_widget_ref		  (GtkWidget	       *widget);
@@ -376,6 +377,7 @@ void	   gtk_widget_getv		  (GtkWidget	       *widget,
 					   guint		nargs,
 					   GtkArg	       *args);
 void	   gtk_widget_set		  (GtkWidget	       *widget,
+					   const gchar         *first_arg_name,
 					   ...);
 void	   gtk_widget_setv		  (GtkWidget	       *widget,
 					   guint		nargs,

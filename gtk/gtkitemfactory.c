@@ -1481,7 +1481,7 @@ gtk_item_factory_parse_statement (GScanner            *scanner,
 
       parser_func = scanner->value.v_symbol;
 
-      /* check whether this is a GtkItemFactory symbol...
+      /* check whether this is a GtkItemFactory symbol.
        */
       if (parser_func == gtk_item_factory_parse_menu_path)
 	expected_token = parser_func (scanner, class);
