@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk20.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-20 11:54+0100\n"
-"PO-Revision-Date: 2004-02-20 12:01+0100\n"
+"POT-Creation-Date: 2004-02-22 10:17+0100\n"
+"PO-Revision-Date: 2004-02-22 11:20+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -152,11 +152,11 @@ msgstr "Ikona rezervë"
 msgid "The stock icon displayed in widgets representing this action."
 msgstr "Ikona rezervë e dukshme në widgets që përfaqësojnë këtë veprim."
 
-#: gtk/gtkaction.c:229 gtk/gtktoolitem.c:154
+#: gtk/gtkaction.c:229 gtk/gtktoolitem.c:157
 msgid "Visible when horizontal"
 msgstr "I dukshëm nëse horizontal"
 
-#: gtk/gtkaction.c:230 gtk/gtktoolitem.c:155
+#: gtk/gtkaction.c:230 gtk/gtktoolitem.c:158
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -164,11 +164,11 @@ msgstr ""
 "Kur elementi i menu së instrumentëve është i dukshëm nëse menuja ndodhet në "
 "pozicion horizontal."
 
-#: gtk/gtkaction.c:236 gtk/gtktoolitem.c:161
+#: gtk/gtkaction.c:236 gtk/gtktoolitem.c:164
 msgid "Visible when vertical"
 msgstr "I dukshëm në vertikal"
 
-#: gtk/gtkaction.c:237 gtk/gtktoolitem.c:162
+#: gtk/gtkaction.c:237 gtk/gtktoolitem.c:165
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -176,7 +176,7 @@ msgstr ""
 "Tregon nëse elementi i menusë së instrumentëve është i dukshëm nëse menuja "
 "ndodhet në pozicion vertikal."
 
-#: gtk/gtkaction.c:243 gtk/gtktoolitem.c:168
+#: gtk/gtkaction.c:243 gtk/gtktoolitem.c:171
 msgid "Is important"
 msgstr "Është i rendësishëm"
 
@@ -1167,11 +1167,11 @@ msgstr "Gjendja radio"
 msgid "Draw the toggle button as a radio button"
 msgstr "Vizato butonin shkëmbyes si buton radio"
 
-#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:199
+#: gtk/gtkcheckbutton.c:98 gtk/gtkcheckmenuitem.c:139 gtk/gtkoptionmenu.c:199
 msgid "Indicator Size"
 msgstr "Madhësia e treguesit"
 
-#: gtk/gtkcheckbutton.c:99
+#: gtk/gtkcheckbutton.c:99 gtk/gtkcheckmenuitem.c:141
 msgid "Size of check or radio indicator"
 msgstr "Madhësia e treguesit kontroll ose radio"
 
@@ -1183,27 +1183,27 @@ msgstr "Hapësira e treguesit"
 msgid "Spacing around check or radio indicator"
 msgstr "Hapësira përreth treguesit kontroll ose radio"
 
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtktogglebutton.c:132
+#: gtk/gtkcheckmenuitem.c:116 gtk/gtktogglebutton.c:132
 msgid "Active"
 msgstr "Aktiv"
 
-#: gtk/gtkcheckmenuitem.c:119
+#: gtk/gtkcheckmenuitem.c:117
 msgid "Whether the menu item is checked"
 msgstr "Nëse zëri i menusë është shenjuar"
 
-#: gtk/gtkcheckmenuitem.c:126 gtk/gtktogglebutton.c:140
+#: gtk/gtkcheckmenuitem.c:124 gtk/gtktogglebutton.c:140
 msgid "Inconsistent"
 msgstr "E paqëndrueshme"
 
-#: gtk/gtkcheckmenuitem.c:127
+#: gtk/gtkcheckmenuitem.c:125
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "Nëse duhet shfaqur një gjendje \"e paqëndrueshme\" "
 
-#: gtk/gtkcheckmenuitem.c:134
+#: gtk/gtkcheckmenuitem.c:132
 msgid "Draw as radio menu item"
 msgstr "Vizatoje si menu radio"
 
-#: gtk/gtkcheckmenuitem.c:135
+#: gtk/gtkcheckmenuitem.c:133
 msgid "Whether the menu item looks like a radio menu item"
 msgstr "Nëse menuja e elementëve duhet paraqitur si një radio menu"
 
@@ -1570,19 +1570,19 @@ msgstr "Zgjidh në fokus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Nëse të zgjidhen përmbajtjet e një zëri kur ky fokusohet"
 
-#: gtk/gtkentrycompletion.c:197
+#: gtk/gtkentrycompletion.c:199
 msgid "Completion Model"
 msgstr "Modeli i plotësimit"
 
-#: gtk/gtkentrycompletion.c:198
+#: gtk/gtkentrycompletion.c:200
 msgid "The model to find matches in"
 msgstr "Modeli për gjetje përputhjesh në"
 
-#: gtk/gtkentrycompletion.c:204
+#: gtk/gtkentrycompletion.c:206
 msgid "Minimum Key Length"
 msgstr "Gjatësia më e Vogël e Kyçit"
 
-#: gtk/gtkentrycompletion.c:205
+#: gtk/gtkentrycompletion.c:207
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Gjatësia më e vogël e kyçit të kërkimit që të mund të kërkohen përputhje"
 
@@ -2891,11 +2891,11 @@ msgstr "Vizato"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Nëse ndarësi duhet vizatuar, apo thjesht bosh"
 
-#: gtk/gtksettings.c:170
+#: gtk/gtksettings.c:262
 msgid "Double Click Time"
 msgstr "Koha e dopjo klik-imit"
 
-#: gtk/gtksettings.c:171
+#: gtk/gtksettings.c:263
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -2903,11 +2903,11 @@ msgstr ""
 "Koha më e madhe e lejuar ndërmjet dy klikësh që këta të merren si klik i "
 "dyfishtë (në milisekonda)"
 
-#: gtk/gtksettings.c:178
+#: gtk/gtksettings.c:270
 msgid "Double Click Distance"
 msgstr "Largësia e dopjo klik-imit"
 
-#: gtk/gtksettings.c:179
+#: gtk/gtksettings.c:271
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -2915,27 +2915,27 @@ msgstr ""
 "Largësia më e madhe e lejuar ndërmjet dy klik-imeve që këta të merren si "
 "klik i dyfishtë (në pixels)"
 
-#: gtk/gtksettings.c:186
+#: gtk/gtksettings.c:278
 msgid "Cursor Blink"
 msgstr "Pulsimi i kursorit"
 
-#: gtk/gtksettings.c:187
+#: gtk/gtksettings.c:279
 msgid "Whether the cursor should blink"
 msgstr "Përcakton nëse kursori duhet të pulsojë"
 
-#: gtk/gtksettings.c:194
+#: gtk/gtksettings.c:286
 msgid "Cursor Blink Time"
 msgstr "Intervali i pulsimit të kursorit"
 
-#: gtk/gtksettings.c:195
+#: gtk/gtksettings.c:287
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Gjatësia e ciklit të pulsimit të kursorit, në milisekonda"
 
-#: gtk/gtksettings.c:202
+#: gtk/gtksettings.c:294
 msgid "Split Cursor"
 msgstr "Nda Kursorin"
 
-#: gtk/gtksettings.c:203
+#: gtk/gtksettings.c:295
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -2943,61 +2943,101 @@ msgstr ""
 "Nëse dy kursorë duhen shfaqur për tekst të përzierë nga - e majta - në të "
 "djathtë dhe nga - e djathta - në të majtë "
 
-#: gtk/gtksettings.c:210
+#: gtk/gtksettings.c:302
 msgid "Theme Name"
 msgstr "Emri i Temës"
 
-#: gtk/gtksettings.c:211
+#: gtk/gtksettings.c:303
 msgid "Name of theme RC file to load"
 msgstr "Emri i file teme RC për t'u ngarkuar"
 
-#: gtk/gtksettings.c:218
+#: gtk/gtksettings.c:310
 msgid "Icon Theme Name"
 msgstr "Emri i ikonës së temës"
 
-#: gtk/gtksettings.c:219
+#: gtk/gtksettings.c:311
 msgid "Name of icon theme to use"
 msgstr "Emri i ikonës së temës që duhet përdorur"
 
-#: gtk/gtksettings.c:226
+#: gtk/gtksettings.c:318
 msgid "Key Theme Name"
 msgstr "Emri i kyçit të temës"
 
-#: gtk/gtksettings.c:227
+#: gtk/gtksettings.c:319
 msgid "Name of key theme RC file to load"
 msgstr "Emri kyçit të temës RC për t'u ngarkuar"
 
-#: gtk/gtksettings.c:235
+#: gtk/gtksettings.c:327
 msgid "Menu bar accelerator"
 msgstr "Përshpejtues shtylle menuje"
 
-#: gtk/gtksettings.c:236
+#: gtk/gtksettings.c:328
 msgid "Keybinding to activate the menu bar"
 msgstr "Sekuencë pulsantësh për të aktivuar panelin e menu"
 
-#: gtk/gtksettings.c:244
+#: gtk/gtksettings.c:336
 msgid "Drag threshold"
 msgstr "Kufiri për zvarritjen"
 
-#: gtk/gtksettings.c:245
+#: gtk/gtksettings.c:337
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Numër pikselësh sa mund të lëvizë kursori para se të fillojë të tërheqë"
 
-#: gtk/gtksettings.c:253
+#: gtk/gtksettings.c:345
 msgid "Font Name"
 msgstr "Emri i Gërmave"
 
-#: gtk/gtksettings.c:254
+#: gtk/gtksettings.c:346
 msgid "Name of default font to use"
 msgstr "Emri i gërmave të prezgjedhura që duhen përdorur"
 
-#: gtk/gtksettings.c:262
+#: gtk/gtksettings.c:354
 msgid "Icon Sizes"
 msgstr "Madhësia e ikonave"
 
-#: gtk/gtksettings.c:263
+#: gtk/gtksettings.c:355
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
-msgstr "Listë e madhësive të ikonave (gtk-menu=16,16;gtk-button=20,20..."
+msgstr "Lista me madhësitë e ikonave (gtk-menu=16,16;gtk-button=20,20..."
+
+#: gtk/gtksettings.c:364
+msgid "Xft Antialias"
+msgstr "Antialias Xft"
+
+#: gtk/gtksettings.c:365
+msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
+msgstr "Nëse duhet përdorur antialias-imi për gërmat Xft; 0=jo, 1=po, -1=e prezgjedhur"
+
+#: gtk/gtksettings.c:374
+msgid "Xft Hinting"
+msgstr "Reformimi i Xft"
+
+#: gtk/gtksettings.c:375
+msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
+msgstr "Nëse duhen reformuar gërmat Xft; 0=jo, 1=po, -1=e prezgjedhur"
+
+#: gtk/gtksettings.c:384
+msgid "Xft Hint Style"
+msgstr "Stili i reformimit Xft"
+
+#: gtk/gtksettings.c:385
+msgid "What degree of hinting to use; none, slight, medium, or full"
+msgstr "Çfarë grade reformimi duhet përdorur; asnjë, e lehtë, mestare, ose e plotë"
+
+#: gtk/gtksettings.c:394
+msgid "Xft RGBA"
+msgstr "Xft RGBA"
+
+#: gtk/gtksettings.c:395
+msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
+msgstr "Lloji i subpixel të antialias-imit; asnjë, rgb, bgr, vrgb, vbgr"
+
+#: gtk/gtksettings.c:404
+msgid "Xft DPI"
+msgstr "DPI Xft"
+
+#: gtk/gtksettings.c:405
+msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
+msgstr "Qartësia për Xft, në 1024 * pikë/inch. -1 për të përdorur vlerën e prezgjedhur"
 
 #: gtk/gtksizegroup.c:241
 msgid "Mode"
@@ -3695,7 +3735,7 @@ msgstr "Ikona e widget"
 msgid "Icon widget to display in the item"
 msgstr "Ikona e widget që duhet shfaqur tek elementi"
 
-#: gtk/gtktoolitem.c:169
+#: gtk/gtktoolitem.c:172
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -3944,19 +3984,19 @@ msgstr "Rradha e renditjes"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Përcakto drejtimin që duhet të tregojë treguesi i renditjeve"
 
-#: gtk/gtkuimanager.c:217
+#: gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Shto shkëputës në menutë"
 
-#: gtk/gtkuimanager.c:218
+#: gtk/gtkuimanager.c:221
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Nëse shkëputësi i elementëve të menusë duhet t'u shtohet menuve"
 
-#: gtk/gtkuimanager.c:225
+#: gtk/gtkuimanager.c:228
 msgid "Merged UI definition"
 msgstr "Përcaktimi i UI së bashkuar"
 
-#: gtk/gtkuimanager.c:226
+#: gtk/gtkuimanager.c:229
 msgid "An XML string describing the merged UI"
 msgstr "Një string XML që përshkruan UI e bashkuar"
 
