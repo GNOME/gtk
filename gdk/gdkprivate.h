@@ -31,7 +31,6 @@
 #include <gdk/gdkevents.h>
 #include <gdk/gdkfont.h>
 #include <gdk/gdkgc.h>
-#include <gdk/gdkim.h>
 #include <gdk/gdkimage.h>
 #include <gdk/gdkregion.h>
 #include <gdk/gdkvisual.h>

@@ -27,7 +27,6 @@
 #include <X11/Xlocale.h>
 
 #include "gdk.h"		/* For gdk_flush() */
-#include "gdkim.h"
 #include "gdkpixmap.h"
 #include "gdki18n.h"
 #include "gdkinternals.h"
