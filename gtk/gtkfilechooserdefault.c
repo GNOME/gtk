@@ -4004,6 +4004,9 @@ get_is_file_filtered (GtkFileChooserDefault *impl,
   GtkFileFilterFlags needed;
   gboolean result;
 
+  if (!impl->current_filter)
+    return FALSE;
+
   filter_info.contains = GTK_FILE_FILTER_DISPLAY_NAME | GTK_FILE_FILTER_MIME_TYPE;
 
   needed = gtk_file_filter_get_needed (impl->current_filter);
