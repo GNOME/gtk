@@ -110,7 +110,8 @@ static	void	g_scanner_get_token_i	(GScanner	*scanner,
 static	void	g_scanner_free_value	(GTokenType	*token_p,
 					 GValue		*value_p);
 
-static  gint	g_scanner_char_2_num	(guchar		c,
+static	inline
+gint		g_scanner_char_2_num	(guchar		c,
 					 guchar		base);
 static	guchar	g_scanner_peek_next_char(GScanner	*scanner);
 static	guchar	g_scanner_get_char	(GScanner	*scanner,

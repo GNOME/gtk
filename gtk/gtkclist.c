@@ -17,6 +17,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include <stdlib.h>
+#include "../config.h"
 #include "gtkclist.h"
 
 /* the width of the column resize windows */
@@ -50,7 +51,7 @@
 
 /* returns the column index from a x pixel location in the 
  * context of the clist's hoffset */
-static gint
+static inline gint
 COLUMN_FROM_XPIXEL (GtkCList * clist,
 		    gint x)
 {

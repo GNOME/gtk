@@ -1,3 +1,16 @@
+Thu Jan  8 17:56:09 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* glib/gscanner.c
+	* gtk/gtclist.c
+	* config.h.in
+	* configure.in: added test for inline and put the inline keywords
+	back in
+
+	* gtk/gtklabel.c: made the prototypes match the definitions
+
+	* gtk/fnmatch.c: minor change to make sure the right config.h
+	gets included
+	
 1998-01-07  Elliot Lee  <sopwith@localhost.cs.cuc.edu>
 
 	* gtk/gtkcombobox.c gtk/gtkcombobox.h: New widget, GtkComboBox
