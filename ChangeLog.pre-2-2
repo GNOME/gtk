@@ -1,3 +1,7 @@
+2000-11-28  Elliot Lee  <sopwith@redhat.com>
+
+	* gdk/gdkregion-generic.c: Zap warning.
+
 2000-11-28  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkwindow-fb.c (gdk_fb_window_move_resize):

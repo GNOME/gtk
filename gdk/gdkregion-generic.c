@@ -1652,6 +1652,4 @@ gdk_region_spans_intersect_foreach (GdkRegion  *region,
        */
       pbox++;
     }
-  
-  return spans;
 }
