@@ -1,5 +1,5 @@
 # Note that this is NOT a relocatable package
-%define ver      1.0.4
+%define ver      1.1.0
 %define rel      SNAP
 %define prefix   /usr
 
@@ -37,6 +37,10 @@ Xlib to help automate things like dealing with different color depths,
 and GTK is a widget set for creating user interfaces.
 
 %changelog
+
+* Mon Jun 27 1998 Shawn T. Amundson
+
+- Changed version to 1.1.0
 
 * Thu Jun 11 1998 Dick Porter <dick@cymru.net>
 

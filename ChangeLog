@@ -1,3 +1,7 @@
+Mon Jul 27 00:46:21 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.1.0
+
 Mon Jul 27 04:18:26 1998  Tim Janik  <timj@gtk.org>
 
 	* gtkfeatures.h.in: revamped the definitions for 1-1-0, so that all
