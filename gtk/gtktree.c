@@ -1067,27 +1067,6 @@ gtk_real_tree_select_child (GtkTree   *tree,
       break;
       
     case GTK_SELECTION_MULTIPLE:
-      if (child->state == GTK_STATE_NORMAL)
-	{
-	  gtk_tree_item_select (GTK_TREE_ITEM (child));
-	  root_selection = g_list_prepend (root_selection, child);
-	  gtk_widget_ref (child);
-	  tree->root_tree->selection = root_selection;
-	  gtk_signal_emit (GTK_OBJECT (tree->root_tree), 
-			   tree_signals[SELECTION_CHANGED]);
-	}
-      else if (child->state == GTK_STATE_SELECTED)
-	{
-	  gtk_tree_item_deselect (GTK_TREE_ITEM (child));
-	  root_selection = g_list_remove (root_selection, child);
-	  gtk_widget_unref (child);
-	  tree->root_tree->selection = root_selection;
-	  gtk_signal_emit (GTK_OBJECT (tree->root_tree), 
-			   tree_signals[SELECTION_CHANGED]);
-	}
-      break;
-      
-    case GTK_SELECTION_EXTENDED:
       break;
     }
 }
@@ -1102,7 +1081,6 @@ gtk_real_tree_unselect_child (GtkTree   *tree,
   switch (tree->selection_mode)
     {
     case GTK_SELECTION_SINGLE:
-    case GTK_SELECTION_MULTIPLE:
     case GTK_SELECTION_BROWSE:
       if (child->state == GTK_STATE_SELECTED)
 	{
@@ -1115,7 +1093,7 @@ gtk_real_tree_unselect_child (GtkTree   *tree,
 	}
       break;
       
-    case GTK_SELECTION_EXTENDED:
+    case GTK_SELECTION_MULTIPLE:
       break;
     }
 }

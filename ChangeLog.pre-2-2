@@ -1,3 +1,17 @@
+Mon Aug 27 14:21:30 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkenums.h (GtkSelectionMode): deprecate
+	GTK_SELECTION_EXTENDED.
+
+	* gtk/gtkclist.c: Remove old GTK_SELECTION_MULTIPLE behavior.
+	Make GTK_SELECTION_EXTENDED be GTK_SELECTION_MULTIPLE.
+
+	* gtk/gtkctree.c: ditto
+
+	* gtk/gtklist.c: ditto
+
+	* gtk/gtktree.c: ditto
+
 Mon Aug 27 14:18:12 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenubar.h (gtk_menu_bar_prepend): Fix a cuple

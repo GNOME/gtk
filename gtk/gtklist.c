@@ -493,7 +493,7 @@ gtk_list_unmap (GtkWidget *widget)
     {
       gtk_list_end_drag_selection (list);
 
-      if (list->anchor != -1 && list->selection_mode == GTK_SELECTION_EXTENDED)
+      if (list->anchor != -1 && list->selection_mode == GTK_SELECTION_MULTIPLE)
 	gtk_list_end_selection (list);
     }
 
@@ -601,7 +601,7 @@ gtk_list_motion_notify (GtkWidget      *widget,
     case GTK_SELECTION_BROWSE:
       gtk_list_select_child (list, item);
       break;
-    case GTK_SELECTION_EXTENDED:
+    case GTK_SELECTION_MULTIPLE:
       gtk_list_update_extended_selection (list, row);
       break;
     default:
@@ -655,7 +655,6 @@ gtk_list_button_press (GtkWidget      *widget,
       switch (list->selection_mode)
 	{
 	case GTK_SELECTION_SINGLE:
-	case GTK_SELECTION_MULTIPLE:
 	  if (event->type != GDK_BUTTON_PRESS)
 	    gtk_list_select_child (list, item);
 	  else
@@ -665,7 +664,7 @@ gtk_list_button_press (GtkWidget      *widget,
 	case GTK_SELECTION_BROWSE:
 	  break;
 
-	case GTK_SELECTION_EXTENDED:
+	case GTK_SELECTION_MULTIPLE:
 	  focus_row = g_list_index (list->children, item);
 
 	  if (list->last_focus_child)
@@ -763,13 +762,12 @@ gtk_list_button_release (GtkWidget	*widget,
 
       switch (list->selection_mode)
 	{
-	case GTK_SELECTION_EXTENDED:
+	case GTK_SELECTION_MULTIPLE:
  	  if (!(event->state & GDK_SHIFT_MASK))
 	    gtk_list_end_selection (list);
 	  break;
 
 	case GTK_SELECTION_SINGLE:
-	case GTK_SELECTION_MULTIPLE:
 
 	  item = gtk_get_event_widget ((GdkEvent*) event);
   
@@ -918,7 +916,7 @@ gtk_list_set_focus_child (GtkContainer *container,
 	case GTK_SELECTION_BROWSE:
 	  gtk_list_select_child (list, child);
 	  break;
-	case GTK_SELECTION_EXTENDED:
+	case GTK_SELECTION_MULTIPLE:
 	  if (!list->last_focus_child && !list->add_mode)
 	    {
 	      list->undo_focus_child = list->last_focus_child;
@@ -958,7 +956,7 @@ gtk_list_focus (GtkWidget        *widget,
       GtkList *list;
 
       list =  GTK_LIST (container);
-      if (list->selection_mode == GTK_SELECTION_EXTENDED && list->anchor >= 0)
+      if (list->selection_mode == GTK_SELECTION_MULTIPLE && list->anchor >= 0)
 	gtk_list_end_selection (list);
 
       if (container->focus_child)
@@ -996,7 +994,7 @@ gtk_list_insert_items (GtkList *list,
     return;
 
   gtk_list_end_drag_selection (list);
-  if (list->selection_mode == GTK_SELECTION_EXTENDED && list->anchor >= 0)
+  if (list->selection_mode == GTK_SELECTION_MULTIPLE && list->anchor >= 0)
     gtk_list_end_selection (list);
 
   tmp_list = items;
@@ -1153,7 +1151,7 @@ gtk_list_clear_items (GtkList *list,
   container = GTK_CONTAINER (list);
 
   gtk_list_end_drag_selection (list);
-  if (list->selection_mode == GTK_SELECTION_EXTENDED)
+  if (list->selection_mode == GTK_SELECTION_MULTIPLE)
     {
       if (list->anchor >= 0)
 	gtk_list_end_selection (list);
@@ -1219,7 +1217,7 @@ gtk_list_clear_items (GtkList *list,
 	gtk_container_set_focus_child (container, new_focus_child);
 
       if ((list->selection_mode == GTK_SELECTION_BROWSE ||
-	   list->selection_mode == GTK_SELECTION_EXTENDED) && !list->selection)
+	   list->selection_mode == GTK_SELECTION_MULTIPLE) && !list->selection)
 	{
 	  list->last_focus_child = new_focus_child; 
 	  gtk_list_select_child (list, new_focus_child);
@@ -1281,7 +1279,7 @@ gtk_list_remove_items_internal (GtkList	 *list,
   container = GTK_CONTAINER (list);
 
   gtk_list_end_drag_selection (list);
-  if (list->selection_mode == GTK_SELECTION_EXTENDED)
+  if (list->selection_mode == GTK_SELECTION_MULTIPLE)
     {
       if (list->anchor >= 0)
 	gtk_list_end_selection (list);
@@ -1458,7 +1456,7 @@ gtk_list_select_all (GtkList *list)
   if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list))
     gtk_list_end_drag_selection (list);
 
-  if (list->selection_mode == GTK_SELECTION_EXTENDED && list->anchor >= 0)
+  if (list->selection_mode == GTK_SELECTION_MULTIPLE && list->anchor >= 0)
     gtk_list_end_selection (list);
 
   container = GTK_CONTAINER (list);
@@ -1472,7 +1470,7 @@ gtk_list_select_all (GtkList *list)
 	  return;
 	}
       break;
-    case GTK_SELECTION_EXTENDED:
+    case GTK_SELECTION_MULTIPLE:
       g_list_free (list->undo_selection);
       g_list_free (list->undo_unselection);
       list->undo_selection = NULL;
@@ -1488,13 +1486,6 @@ gtk_list_select_all (GtkList *list)
       list->undo_focus_child = container->focus_child;
       gtk_list_update_extended_selection (list, g_list_length(list->children));
       gtk_list_end_selection (list);
-      return;
-    case GTK_SELECTION_MULTIPLE:
-      for (work = list->children; work; work = work->next)
-	{
-	  if (GTK_WIDGET_STATE (work->data) == GTK_STATE_NORMAL)
-	    gtk_list_select_child (list, GTK_WIDGET (work->data));
-	}
       return;
     default:
       break;
@@ -1516,7 +1507,7 @@ gtk_list_unselect_all (GtkList *list)
   if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list))
     gtk_list_end_drag_selection (list);
 
-  if (list->selection_mode == GTK_SELECTION_EXTENDED && list->anchor >= 0)
+  if (list->selection_mode == GTK_SELECTION_MULTIPLE && list->anchor >= 0)
     gtk_list_end_selection (list);
 
   container = GTK_CONTAINER (list);
@@ -1530,7 +1521,7 @@ gtk_list_unselect_all (GtkList *list)
 	  return;
 	}
       break;
-    case GTK_SELECTION_EXTENDED:
+    case GTK_SELECTION_MULTIPLE:
       gtk_list_reset_extended_selection (list);
       break;
     default:
@@ -1558,7 +1549,7 @@ gtk_list_extend_selection (GtkList       *list,
   g_return_if_fail (GTK_IS_LIST (list));
 
   if ((gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list)) ||
-      list->selection_mode != GTK_SELECTION_EXTENDED)
+      list->selection_mode != GTK_SELECTION_MULTIPLE)
     return;
 
   container = GTK_CONTAINER (list);
@@ -1728,7 +1719,6 @@ gtk_list_toggle_row (GtkList   *list,
 
   switch (list->selection_mode)
     {
-    case GTK_SELECTION_EXTENDED:
     case GTK_SELECTION_MULTIPLE:
     case GTK_SELECTION_SINGLE:
       if (item->state == GTK_STATE_SELECTED)
@@ -1760,10 +1750,9 @@ gtk_list_toggle_focus_row (GtkList *list)
   switch (list->selection_mode)
     {
     case  GTK_SELECTION_SINGLE:
-    case  GTK_SELECTION_MULTIPLE:
       gtk_list_toggle_row (list, container->focus_child);
       break;
-    case GTK_SELECTION_EXTENDED:
+    case GTK_SELECTION_MULTIPLE:
       if ((focus_row = g_list_index (list->children, container->focus_child))
 	  < 0)
 	return;
@@ -1798,7 +1787,7 @@ gtk_list_toggle_add_mode (GtkList *list)
   g_return_if_fail (GTK_IS_LIST (list));
   
   if ((gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list)) ||
-      list->selection_mode != GTK_SELECTION_EXTENDED)
+      list->selection_mode != GTK_SELECTION_MULTIPLE)
     return;
   
   container = GTK_CONTAINER (list);
@@ -1822,7 +1811,7 @@ gtk_list_undo_selection (GtkList *list)
 
   g_return_if_fail (GTK_IS_LIST (list));
 
-  if (list->selection_mode != GTK_SELECTION_EXTENDED ||
+  if (list->selection_mode != GTK_SELECTION_MULTIPLE ||
       (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list)))
     return;
   
@@ -1916,7 +1905,7 @@ gtk_list_set_anchor (GtkList   *list,
 
   g_return_if_fail (GTK_IS_LIST (list));
   
-  if (list->selection_mode != GTK_SELECTION_EXTENDED || list->anchor >= 0)
+  if (list->selection_mode != GTK_SELECTION_MULTIPLE || list->anchor >= 0)
     return;
 
   g_list_free (list->undo_selection);
@@ -1995,7 +1984,7 @@ gtk_list_update_extended_selection (GtkList *list,
   if (row >= length)
     row = length - 1;
 
-  if (list->selection_mode != GTK_SELECTION_EXTENDED || !list->anchor < 0)
+  if (list->selection_mode != GTK_SELECTION_MULTIPLE || !list->anchor < 0)
     return;
 
   /* extending downwards */
@@ -2148,7 +2137,7 @@ gtk_list_scroll_vertical (GtkList       *list,
   if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (list))
     return;
 
-  if (list->selection_mode == GTK_SELECTION_EXTENDED)
+  if (list->selection_mode == GTK_SELECTION_MULTIPLE)
     {
       GtkContainer *container;
 
@@ -2528,17 +2517,9 @@ gtk_list_signal_item_select (GtkListItem *list_item,
 	}
       gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
       break;
-    case GTK_SELECTION_EXTENDED:
+    case GTK_SELECTION_MULTIPLE:
       if (list->anchor >= 0)
 	return;
-    case GTK_SELECTION_MULTIPLE:
-      if (!g_list_find (list->selection, list_item))
-	{
-	  list->selection = g_list_prepend (list->selection, list_item);
-	  gtk_widget_ref (GTK_WIDGET (list_item));
-	  gtk_signal_emit (GTK_OBJECT (list), list_signals[SELECTION_CHANGED]);
-	}
-      break;
     }
 }
 
@@ -2573,7 +2554,7 @@ gtk_list_signal_item_toggle (GtkListItem *list_item,
   g_return_if_fail (GTK_IS_LIST (list));
 
   if ((list->selection_mode == GTK_SELECTION_BROWSE ||
-       list->selection_mode == GTK_SELECTION_EXTENDED) &&
+       list->selection_mode == GTK_SELECTION_MULTIPLE) &&
       GTK_WIDGET (list_item)->state == GTK_STATE_NORMAL)
     {
       gtk_widget_set_state (GTK_WIDGET (list_item), GTK_STATE_SELECTED);
@@ -2621,11 +2602,10 @@ gtk_list_drag_begin (GtkWidget      *widget,
 
       switch (list->selection_mode)
 	{
-	case GTK_SELECTION_EXTENDED:
+	case GTK_SELECTION_MULTIPLE:
 	  gtk_list_end_selection (list);
 	  break;
 	case GTK_SELECTION_SINGLE:
-	case GTK_SELECTION_MULTIPLE:
 	  list->undo_focus_child = NULL;
 	  break;
 	default:
