@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
-"POT-Creation-Date: 2003-02-02 10:11-0500\n"
-"PO-Revision-Date: 2003-01-19 04:05+0100\n"
+"POT-Creation-Date: 2003-02-22 23:41+0100\n"
+"PO-Revision-Date: 2003-02-22 23:48+0100\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,9 +16,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:736
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "És impossible de carregar la imatge «%s»: «%s»"
+msgstr "No s'ha pogut obrir el fitxer «%s»: «%s»"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:157 gdk-pixbuf/gdk-pixbuf-io.c:746
 #, c-format
@@ -489,116 +489,116 @@ msgstr "No hi ha memòria suficient per carregar la imatge RAS"
 msgid "The Sun raster image format"
 msgstr "El format d'imatge Sun raster"
 
-#: gdk-pixbuf/io-tga.c:159
+#: gdk-pixbuf/io-tga.c:157
 msgid "Can't allocate memory for IOBuffer struct"
 msgstr "No es pot obtindre memòria per a l'estructura IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:178
+#: gdk-pixbuf/io-tga.c:176
 msgid "Can't allocate memory for IOBuffer data"
 msgstr "No es pot obtindre memòria per les dades del IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:189
+#: gdk-pixbuf/io-tga.c:187
 msgid "Can't realloc IOBuffer data"
 msgstr "No es pot reallotjar memòria per les dades IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:219
+#: gdk-pixbuf/io-tga.c:217
 msgid "Can't allocate temporary IOBuffer data"
 msgstr "No es poden allotjar les dades temporals del IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:283
+#: gdk-pixbuf/io-tga.c:281
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr ""
 "Ha fallat fread() -- segurament s'ha trobat un final-de-fitxer abans d'hora"
 
-#: gdk-pixbuf/io-tga.c:293
+#: gdk-pixbuf/io-tga.c:291
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr ""
 "Ha fallat fseek() -- segurament s'ha trobat un final-de-fitxer abans d'hora"
 
-#: gdk-pixbuf/io-tga.c:326
+#: gdk-pixbuf/io-tga.c:324
 msgid "Can't allocate new pixbuf"
 msgstr "No es pot allotjar un nou pixbuf"
 
-#: gdk-pixbuf/io-tga.c:639
+#: gdk-pixbuf/io-tga.c:637
 msgid "Can't allocate colormap structure"
 msgstr "No es pot allotjar l'estructura del mapa de colors"
 
-#: gdk-pixbuf/io-tga.c:646
+#: gdk-pixbuf/io-tga.c:644
 msgid "Can't allocate colormap entries"
 msgstr "No es poden allotjar les entrades del mapa de colors"
 
-#: gdk-pixbuf/io-tga.c:668
+#: gdk-pixbuf/io-tga.c:666
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Profunditat de color inesperada per les entrades del mapa de color"
 
-#: gdk-pixbuf/io-tga.c:686
+#: gdk-pixbuf/io-tga.c:684
 msgid "Can't allocate TGA header memory"
 msgstr "No es pot obtenir memòria per les capceleres TGA"
 
-#: gdk-pixbuf/io-tga.c:719
+#: gdk-pixbuf/io-tga.c:717
 msgid "TGA image has invalid dimensions"
 msgstr "La imatge TGA té unes dimensions no vàlides"
 
-#: gdk-pixbuf/io-tga.c:725
+#: gdk-pixbuf/io-tga.c:723
 msgid "TGA image comment length is too long"
 msgstr "La longitud del comentari de la imatge TGA és massa gran"
 
-#: gdk-pixbuf/io-tga.c:734 gdk-pixbuf/io-tga.c:743 gdk-pixbuf/io-tga.c:753
-#: gdk-pixbuf/io-tga.c:763 gdk-pixbuf/io-tga.c:770
+#: gdk-pixbuf/io-tga.c:732 gdk-pixbuf/io-tga.c:741 gdk-pixbuf/io-tga.c:751
+#: gdk-pixbuf/io-tga.c:761 gdk-pixbuf/io-tga.c:768
 msgid "TGA image type not supported"
 msgstr "El tipus d'imatge TGA no està permès"
 
-#: gdk-pixbuf/io-tga.c:816
+#: gdk-pixbuf/io-tga.c:814
 msgid "Can't allocate memory for TGA context struct"
 msgstr "No es pot obtenir memòria per al context de la estructura TGA"
 
-#: gdk-pixbuf/io-tga.c:880
+#: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
 msgstr "Excés de dades al fitxer"
 
-#: gdk-pixbuf/io-tga.c:926
+#: gdk-pixbuf/io-tga.c:924
 msgid "Can't allocate memory for TGA header"
 msgstr "No es pot obtenir memòria per la capçalera TGA"
 
-#: gdk-pixbuf/io-tga.c:936
+#: gdk-pixbuf/io-tga.c:934
 msgid "Too big value in the infolen field of TGA header."
 msgstr "El valor del camp infolen de la capçalera TGA és massa alt."
 
-#: gdk-pixbuf/io-tga.c:960
+#: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr "No es pot obtenir memòria pel buffer temporal cmap de TGA"
 
-#: gdk-pixbuf/io-tga.c:972
+#: gdk-pixbuf/io-tga.c:970
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr "No es pot obtenir memòria per l'estructura del mapa de colors de TGA"
 
-#: gdk-pixbuf/io-tga.c:981
+#: gdk-pixbuf/io-tga.c:979
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr "No puc obtenir memòria per les entrades del mapa de colors de TGA"
 
-#: gdk-pixbuf/io-tga.c:991
+#: gdk-pixbuf/io-tga.c:989
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr "Profunditat de color inesperada pel mapa de colors TGA"
 
-#: gdk-pixbuf/io-tga.c:1032
+#: gdk-pixbuf/io-tga.c:1030
 msgid "Pseudo-Color image without colormap"
 msgstr "Imatge de Pseudo-Color sense mapa de color"
 
-#: gdk-pixbuf/io-tga.c:1039
+#: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr ""
 "No es pot moure el desplaçament de la imatge -- probablement s'ha trobatel "
 "final del fitxer"
 
-#: gdk-pixbuf/io-tga.c:1053 gdk-pixbuf/io-tga.c:1155 gdk-pixbuf/io-tga.c:1225
+#: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
 msgstr "No es pot obtenir pixbuf"
 
-#: gdk-pixbuf/io-tga.c:1295 gdk-pixbuf/io-tga.c:1324
+#: gdk-pixbuf/io-tga.c:1293 gdk-pixbuf/io-tga.c:1322
 msgid "Unsupported TGA image type"
 msgstr "Tipus d'imatge TGA no implementada"
 
-#: gdk-pixbuf/io-tga.c:1370
+#: gdk-pixbuf/io-tga.c:1368
 msgid "The Targa image format"
 msgstr "El format d'imatge Targa"
 
@@ -721,9 +721,8 @@ msgid "The XPM image format"
 msgstr "El format d'imatge XPM"
 
 #: gdk/gdkdisplaymanager.c:117
-#, fuzzy
 msgid "Default Display"
-msgstr "Espaiat per defecte"
+msgstr "Pantalla per defecte"
 
 #: gdk/gdkdisplaymanager.c:118
 msgid "The default display for GDK"
@@ -1969,15 +1968,15 @@ msgstr "Seleccioneu en el focus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Com seleccionar els continguts des d'una entrada quan són enfocats"
 
-#: gtk/gtkentry.c:3957 gtk/gtklabel.c:3222
+#: gtk/gtkentry.c:3980 gtk/gtklabel.c:3222 gtk/gtktextview.c:6574
 msgid "Select All"
 msgstr "Seleccioneu tot"
 
-#: gtk/gtkentry.c:3967 gtk/gtklabel.c:3232
+#: gtk/gtkentry.c:3990 gtk/gtklabel.c:3232
 msgid "Input Methods"
 msgstr "Mètodes d'entrada"
 
-#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6543
+#: gtk/gtkentry.c:4000 gtk/gtktextview.c:6593
 msgid "_Insert Unicode control character"
 msgstr "_Inserta caràcters de control Unicode"
 
@@ -2690,7 +2689,7 @@ msgstr ""
 
 #: gtk/gtkmenu.c:385
 msgid "Delay before submenus appear"
-msgstr ""
+msgstr "Retard abans de que apareguen els submenús"
 
 #: gtk/gtkmenu.c:386
 msgid ""
@@ -2967,16 +2966,11 @@ msgid "Activity mode"
 msgstr "Mode Actiu"
 
 #: gtk/gtkprogress.c:128
-#, fuzzy
 msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something that you don't know how long it will take"
-msgstr ""
-"Si és veritat que el GtkProgress està en mode actiu, voldrà dir que hi han "
-"senyals que succeeixen, però no la quantitat d'activitat finalitzada. Això "
-"és utilitzat quan s'està fent alguna cosa però no es sap quant de temps "
-"trigarà."
+msgstr "Si és VERTADER, significa que el GtkProgress està en mode d'activitat, és a dir, que indica que està fent alguna cosa però no quina part de l'activitat ha finalitzat. Això s'utilitza quan esteu fent alguna cosa que no sabeu quant de temps trigarà"
 
 #: gtk/gtkprogress.c:135
 msgid "Show text"
@@ -3694,7 +3688,7 @@ msgstr "_Obre"
 
 #: gtk/gtkstock.c:311
 msgid "_Paste"
-msgstr "_Pega"
+msgstr "_Enganxa"
 
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
@@ -4011,7 +4005,7 @@ msgstr "Descripció del tipus de lletra com una cadena"
 
 #: gtk/gtktexttag.c:307
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr ""
+msgstr "Estil del tipus de lletra com un PangoStype, per exemple PANGO_STYLE_ITALIC"
 
 #: gtk/gtktexttag.c:316
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
@@ -4318,7 +4312,7 @@ msgstr "Cursor visible"
 msgid "If the insertion cursor is shown"
 msgstr "Si es mostra el cursor d'inserció"
 
-#: gtk/gtktextview.c:6534
+#: gtk/gtktextview.c:6584
 msgid "Input _Methods"
 msgstr "_Mètodes d'entrada"
 
