@@ -253,7 +253,7 @@ gtk_path_bar_size_request (GtkWidget      *widget,
   /* Theoretically, the slider could be bigger than the other button.  But we're
    * not going to worry about that now.
    */
-  path_bar->slider_width = requisition->height / 2 + 5;
+  path_bar->slider_width = MIN(requisition->height * 2 / 3 + 5, requisition->height);
   if (path_bar->button_list && path_bar->button_list->next != NULL)
     requisition->width += (path_bar->spacing + path_bar->slider_width) * 2;
 
