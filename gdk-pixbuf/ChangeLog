@@ -1,3 +1,7 @@
+2005-04-03  Hans Breuer  <hans@breuer.org>
+
+	* makefile.msc : follow .symbols changes
+
 2005-03-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-io.c: Document BMP saving support.
