@@ -692,7 +692,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                                            G_PARAM_READWRITE));
 
   /* Style properties */
-#define _TREE_VIEW_EXPANDER_SIZE 10
+#define _TREE_VIEW_EXPANDER_SIZE 12
 #define _TREE_VIEW_VERTICAL_SEPARATOR 2
 #define _TREE_VIEW_HORIZONTAL_SEPARATOR 2
     

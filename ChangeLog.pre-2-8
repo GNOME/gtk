@@ -1,5 +1,12 @@
 2004-09-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkexpander.c: 
+	* gtk/gtktreeview.c: Change the default expander size to 12 to compensate 
+	for the recent change to gtk_default_draw_expander().
+
+	* gtk/gtkstyle.c (gtk_default_draw_expander): Use a linewidth of one
+	for expander sizes up to 16.
+
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_get_model): Resize the
 	popup if the model is replaced.  (#152333)
 

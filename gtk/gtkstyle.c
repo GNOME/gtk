@@ -5040,7 +5040,7 @@ gtk_default_draw_expander (GtkStyle        *style,
   gtk_widget_style_get (widget,
 			"expander-size", &expander_size,
 			NULL);
-  line_width = MAX (1, expander_size/7);
+  line_width = MAX (1, expander_size/9);
 
   if (area)
     {
