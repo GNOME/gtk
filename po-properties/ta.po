@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ta\n"
 "POT-Creation-Date: 2004-08-14 20:18+0200\n"
-"PO-Revision-Date: 2004-08-17 19:43+0530\n"
+"PO-Revision-Date: 2004-08-19 16:16+0530\n"
 "Last-Translator: Jayaradha N <jaya@pune.redhat.com>\n"
 "Language-Team: Tamil <zhakanini@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -52,11 +52,11 @@ msgstr "ஒரு மாதிரியில் எத்தனை பிட்
 
 #: gdk-pixbuf/gdk-pixbuf.c:143 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:239
 msgid "Width"
-msgstr "அகளம்"
+msgstr "அகலம்"
 
 #: gdk-pixbuf/gdk-pixbuf.c:144
 msgid "The number of columns of the pixbuf"
-msgstr "பிக்ஸ்-பபரில் எத்தனை நெடுவரிசைகள்"
+msgstr "pixbufபபரில் எத்தனை நெடுவரிசைகள்"
 
 #: gdk-pixbuf/gdk-pixbuf.c:154 gtk/gtklayout.c:657
 msgid "Height"
@@ -64,7 +64,7 @@ msgstr "உயரம்"
 
 #: gdk-pixbuf/gdk-pixbuf.c:155
 msgid "The number of rows of the pixbuf"
-msgstr "பிக்ஸ்-பபரில் எத்தனை வரிகள்"
+msgstr "pixbuf எத்தனை வரிகள்"
 
 #: gdk-pixbuf/gdk-pixbuf.c:165
 msgid "Rowstride"
@@ -1662,61 +1662,55 @@ msgstr "முன்காட்சி விளக்க சீட்டை ப
 
 #: gtk/gtkfilechooser.c:213
 msgid "Whether to display a stock label with the name of the previewed file."
-msgstr ""
+msgstr "ஏற்கெனவே பார்க்கப்பட்ட கோப்பின் பெயரைக்கொண்டு தேக்கியின் அடையாளத்தை காட்ட வேண்டுமா"
 
 #: gtk/gtkfilechooser.c:218
-#, fuzzy
 msgid "Extra widget"
-msgstr "உருவ விட்செட்"
+msgstr "கூடுதல் சிறு சாளரம்"
 
 #: gtk/gtkfilechooser.c:219
 msgid "Application supplied widget for extra options."
-msgstr ""
+msgstr "கூடுதல் தேர்வுகளுக்காக பயன்பாடுகள் சிறுசாளரத்தை வினியோகிக்கின்றன"
 
 #: gtk/gtkfilechooser.c:224
-#, fuzzy
 msgid "Select Multiple"
-msgstr "பலவகை தெரிவுசெய்க"
+msgstr "பலவற்றைைதேர்வுசெய்க"
 
 #: gtk/gtkfilechooser.c:225 gtk/gtkfilesel.c:575
 msgid "Whether to allow multiple files to be selected"
-msgstr ""
+msgstr "பல கோப்புகளை அனுமதிக்க வேண்டுமா"
 
 #: gtk/gtkfilechooser.c:231
 msgid "Show Hidden"
 msgstr "மறைந்திருப்பதை காண்பிக்கவும்"
 
 #: gtk/gtkfilechooser.c:232
-#, fuzzy
 msgid "Whether the hidden files and folders should be displayed"
-msgstr "கோப்புகளை படைக்கும்/கையாளும் பொத்தான்களை காண்பிக்கப்பட வேண்டுமா."
+msgstr "காட்ட வேண்டிய கோப்புகள் மற்றும் அடைவுகளை மறைக்க வேண்டுமா"
 
 #: gtk/gtkfilechooserdefault.c:569
 msgid "Default file chooser backend"
-msgstr ""
+msgstr "இயல்பான பின்புல தேர்வு"
 
 #: gtk/gtkfilechooserdefault.c:570
-#, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
-msgstr "Name of theme RC file to load"
+msgstr "பின்புலத்தில் பொதுவாக பயன்படுத்தும் Gtkகோப்புதேர்வாளரின் பெயர்"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:168
 msgid "Filename"
 msgstr "கோப்புப்பெயர்"
 
 #: gtk/gtkfilesel.c:560
-#, fuzzy
 msgid "The currently selected filename"
-msgstr "தற்போது தெரிவு செய்யப்பட்ட கோப்புப்பெயர்."
+msgstr "தற்போது தேர்வு செய்யப்பட்ட கோப்பின் பெயர்"
 
 #: gtk/gtkfilesel.c:566
 msgid "Show file operations"
 msgstr "கோப்பு இயக்கங்களைக் காண்பி"
 
 #: gtk/gtkfilesel.c:567
-#, fuzzy
 msgid "Whether buttons for creating/manipulating files should be displayed"
-msgstr "கோப்புகளை படைக்கும்/கையாளும் பொத்தான்களை காண்பிக்கப்பட வேண்டுமா."
+msgstr "கோப்புகளை படைக்கும்/கையாளும் பட்டன்களை காட்ட வேண்டுமா."
 
 #: gtk/gtkfilesel.c:574
 msgid "Select multiple"
@@ -1739,18 +1733,16 @@ msgid "Y position of child widget"
 msgstr "சேய் விட்செட்டின் Y இடம்"
 
 #: gtk/gtkfontbutton.c:176
-#, fuzzy
 msgid "The title of the font selection dialog"
-msgstr "சாளரத்தின் தலைப்பு"
+msgstr "எழுத்துரு தேர்வாளர் உரையாடல் பெட்டியின் தலைப்பு"
 
 #: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
 msgstr "எழுத்து வகை பெயர்"
 
 #: gtk/gtkfontbutton.c:192
-#, fuzzy
 msgid "The name of the selected font"
-msgstr "விட்செட்டின் பெயர்"
+msgstr "தேர்வு செய்யப்பட்ட எழுத்துருவின் பெயர்"
 
 #: gtk/gtkfontbutton.c:193
 msgid "Sans 12"
@@ -1761,36 +1753,32 @@ msgid "Use font in label"
 msgstr "விளக்கச்சீட்டில் எழுத்துரு பயன்படுத்தவும்"
 
 #: gtk/gtkfontbutton.c:208
-#, fuzzy
 msgid "Whether the label is drawn in the selected font"
-msgstr "உரை அடையாளம் சுண்டெலியால் தெரிவு செய்ய முடியுமா"
+msgstr "விளக்கச்சீட்டு தேர்வு செய்யப்பட்ட எழுத்துருவை பயன்படுத்துகிறதா"
 
 #: gtk/gtkfontbutton.c:223
 msgid "Use size in label"
 msgstr "விளக்கச்சீட்டில் அளவு பயன்படுத்தவும்"
 
 #: gtk/gtkfontbutton.c:224
-#, fuzzy
 msgid "Whether the label is drawn with the selected font size"
-msgstr "உரை அடையாளம் சுண்டெலியால் தெரிவு செய்ய முடியுமா"
+msgstr "விளக்கச்சீட்டு தேர்வு செய்யப்பட்ட எழுத்துரு அளவை பயன்படுத்துகிறதா"
 
 #: gtk/gtkfontbutton.c:240
 msgid "Show style"
 msgstr "பாணி காண்பிக்கவும்"
 
 #: gtk/gtkfontbutton.c:241
-#, fuzzy
 msgid "Whether the selected font style is shown in the label"
-msgstr "முன்னேற்றம் உரையைக் காண்பிக்கப்படுமோ"
+msgstr "விளக்கச்சீட்டு தேர்வு செய்யப்பட்ட எழுத்துரு பாணியை பயன்படுத்துகிறதா"
 
 #: gtk/gtkfontbutton.c:256
 msgid "Show size"
 msgstr "«Ç× ¸¡ñÀ¢க்கவும்"
 
 #: gtk/gtkfontbutton.c:257
-#, fuzzy
 msgid "Whether selected font size is shown in the label"
-msgstr "முன்னேற்றம் உரையைக் காண்பிக்கப்படுமோ"
+msgstr "தேர்வு செய்யப்பட்ட எழுத்துரு அளவு விளக்கச்சீட்டில் காண்பிக்கப்படுகிறதா"
 
 #: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
@@ -1805,9 +1793,8 @@ msgid "Preview text"
 msgstr "உரை முன்-காட்சி"
 
 #: gtk/gtkfontsel.c:229
-#, fuzzy
 msgid "The text to display in order to demonstrate the selected font"
-msgstr "தெரிவு செய்யப்பட்டுல்ல எழுத்து வகையை எடுத்துக் காட்ட பயன்படுத்த வேண்டிய உரை."
+msgstr "தேர்வு செய்யப்பட்ட எழுத்துருவை விளக்கும் உரை காட்சி"
 
 #: gtk/gtkframe.c:127
 msgid "Text of the frame's label"
@@ -1818,36 +1805,32 @@ msgid "Label xalign"
 msgstr "xalign அடையாளம்"
 
 #: gtk/gtkframe.c:135
-#, fuzzy
 msgid "The horizontal alignment of the label"
-msgstr "அடையாளத்தின் கிடைதிசை நேர்ப்படுத்தம்"
+msgstr "விளக்கசீட்டின் கிடைமட்ட பொருத்தம்"
 
 #: gtk/gtkframe.c:144
 msgid "Label yalign"
 msgstr "yalign அடையாளம்"
 
 #: gtk/gtkframe.c:145
-#, fuzzy
 msgid "The vertical alignment of the label"
-msgstr "அடையாளத்தின் நெடுதிசை நேர்ப்படுத்தம்"
+msgstr "விளக்கச்சீட்டின் மேல் கீழ் பொருத்தம்"
 
 #: gtk/gtkframe.c:154 gtk/gtkhandlebox.c:196
 msgid "Deprecated property, use shadow_type instead"
-msgstr ""
+msgstr "(_t)நிழல்வகையின் மாறுபட்ட குணத்தை பயன்படுத்து"
 
 #: gtk/gtkframe.c:161
 msgid "Frame shadow"
 msgstr "சட்ட நிழல்"
 
 #: gtk/gtkframe.c:162
-#, fuzzy
 msgid "Appearance of the frame border"
-msgstr "சட்ட எல்லைபின் தோற்றம்"
+msgstr "சட்ட எல்லையின் தோற்றம்"
 
 #: gtk/gtkframe.c:171
-#, fuzzy
 msgid "A widget to display in place of the usual frame label"
-msgstr "வழக்கமாகன சட்ட அடையாளம் இருக்குமிடத்தில் காணபிக்க ஓர் விட்செட்."
+msgstr "வழக்கமாகன சட்ட அடையாளம் இருக்குமிடத்தில் காணபிக்கப்பட வேண்டிய சிறு சாளரம்"
 
 #: gtk/gtkhandlebox.c:203 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:200
 #: gtk/gtktoolbar.c:574 gtk/gtkviewport.c:151
@@ -1855,42 +1838,36 @@ msgid "Shadow type"
 msgstr "நிழல் வகை"
 
 #: gtk/gtkhandlebox.c:204
-#, fuzzy
 msgid "Appearance of the shadow that surrounds the container"
-msgstr "பாத்தர்த்தை சுற்றியுள்ள நிழலின் தோற்றம்"
+msgstr "கொள்கலனில் சூழப்பட்ட நிழலின் தோற்றம்"
 
 #: gtk/gtkhandlebox.c:212
 msgid "Handle position"
 msgstr "கைப்பிடியின் இடம்"
 
 #: gtk/gtkhandlebox.c:213
-#, fuzzy
 msgid "Position of the handle relative to the child widget"
-msgstr "சேய் விட்செடுக்கு சார்பாக கைப்பிடியின் இடம்"
+msgstr "துணை சாளரத்தோடு தொடர்புடைய கையாளியின் நிலை"
 
 #: gtk/gtkhandlebox.c:221
 msgid "Snap edge"
-msgstr "Snap edge"
+msgstr "பொருத்த விளிம்பு"
 
 #: gtk/gtkhandlebox.c:222
-#, fuzzy
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
-msgstr ""
-"Side of the handlebox that's lined up with the docking point to dock the "
-"handlebox."
+msgstr "கையாளள்பெட்டியில் ஓரத்தில் பொருத்தப்பட்டு நகர தயாராக இருக்கும் கையாளள் பெட்டி"
 
 #: gtk/gtkhandlebox.c:230
-#, fuzzy
 msgid "Snap edge set"
-msgstr "Snap edge"
+msgstr "பொருத்த விளிம்பை அமை"
 
 #: gtk/gtkhandlebox.c:231
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
-msgstr ""
+msgstr "பொருத்த விளிம்பு பண்புகளை பயன்படுத்த வேண்டுமா அல்லது கையாளம் நிலையிலிருந்து பயன்படுத்த வேண்டுமா"
 
 #: gtk/gtkimage.c:136
 msgid "Pixbuf"
@@ -1918,20 +1895,19 @@ msgstr "காண்பிக்க ஓர் GdkImage"
 
 #: gtk/gtkimage.c:160
 msgid "Mask"
-msgstr ""
+msgstr "முகமூடி"
 
 #: gtk/gtkimage.c:161
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
-msgstr ""
+msgstr "Gdkபிம்பம் அல்லது Gdkபிக்ஸ்வரைபடத்தோடு முகமூடி பிட் வரைபடத்தை பயன்படுத்த வேண்டுமா"
 
 #: gtk/gtkimage.c:169
-#, fuzzy
 msgid "Filename to load and display"
-msgstr "TIFF உருவத்தைத் ஏற்ற முடியவில்லை"
+msgstr "ஏற்ற மட்டும் காட்டப்பட வேண்டிய கோப்பின் பெயர்"
 
 #: gtk/gtkimage.c:178
 msgid "Stock ID for a stock image to display"
-msgstr ""
+msgstr "காட்ட வேண்டிய தேக்க அடையாளம் அல்லது தேக்க பிம்பம்"
 
 #: gtk/gtkimage.c:185
 msgid "Icon set"
@@ -1939,7 +1915,7 @@ msgstr "குறும்படம் அமை"
 
 #: gtk/gtkimage.c:186
 msgid "Icon set to display"
-msgstr ""
+msgstr "காட்டப்பட வேண்டிய சின்னங்கள்"
 
 #: gtk/gtkimage.c:193
 msgid "Icon size"
@@ -1947,7 +1923,7 @@ msgstr "குறும்படம் அளவு"
 
 #: gtk/gtkimage.c:194
 msgid "Size to use for stock icon or icon set"
-msgstr ""
+msgstr "தேக்க சின்னம் அல்லது சின்னங்களின் அளவு"
 
 #: gtk/gtkimage.c:202
 msgid "Animation"
@@ -1955,7 +1931,7 @@ msgstr "அசைவூட்டம்"
 
 #: gtk/gtkimage.c:203
 msgid "GdkPixbufAnimation to display"
-msgstr ""
+msgstr "காட்டப்பட வேண்டிய GdkPixbufAnimation "
 
 #: gtk/gtkimage.c:210
 msgid "Storage type"
@@ -1963,7 +1939,7 @@ msgstr "தேக்கம் வகை"
 
 #: gtk/gtkimage.c:211
 msgid "The representation being used for image data"
-msgstr ""
+msgstr "பிம்பதகவலில் விவரங்கள் பயன்படுத்தப்படுகிறது"
 
 #: gtk/gtkimagemenuitem.c:138
 msgid "Image widget"
@@ -1978,9 +1954,8 @@ msgid "Show menu images"
 msgstr "பட்டி உருவங்களை காட்டுக"
 
 #: gtk/gtkimagemenuitem.c:145
-#, fuzzy
 msgid "Whether images should be shown in menus"
-msgstr "தத்தல்கள் காண்பிப்பதா இல்லையா"
+msgstr "மெனுவில் பிம்பத்தை காட்ட வேண்டுமா"
 
 #: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:543
 msgid "Screen"
@@ -1988,210 +1963,188 @@ msgstr "திரை"
 
 #: gtk/gtkinvisible.c:116 gtk/gtkwindow.c:544
 msgid "The screen where this window will be displayed"
-msgstr ""
+msgstr "இந்த சாளரம் காட்டப்பட வேண்டிய திரை"
 
 #: gtk/gtklabel.c:293
 msgid "The text of the label"
 msgstr "அடையாளத்தின் உரை"
 
 #: gtk/gtklabel.c:300
-#, fuzzy
 msgid "A list of style attributes to apply to the text of the label"
-msgstr "A list of style attributes to apply to the text of the label."
+msgstr "விளக்கசீட்டில் உள்ள உரையில் பயன்படுத்தப்பட வேண்டிய பாணிகள்"
 
 #: gtk/gtklabel.c:321 gtk/gtktexttag.c:375 gtk/gtktextview.c:604
 msgid "Justification"
 msgstr "நேர்த்தி செய்தல்"
 
 #: gtk/gtklabel.c:322
-#, fuzzy
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that"
-msgstr ""
-"The alignment of the lines in the text of the label relative to each other. "
-"This does NOT affect the alignment of the label within its allocation. See "
-"GtkMisc::xalign for that."
+msgstr "விளக்கச்சீட்டில் உள்ள உரைகளின் வரிகளின் சீரமைப்பு ஒன்றோடொன்று தொடர்புடையதாகவும் விளக்கச்சீட்டின் ஒதுக்கத்தை பாதிக்காத வகையிலும் இருக்கும்.GtkMisc::xalign ஐ பார்க்கவும்"
 
 #: gtk/gtklabel.c:330
 msgid "Pattern"
 msgstr "Pattern"
 
 #: gtk/gtklabel.c:331
-#, fuzzy
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
-msgstr ""
-"A string with _ characters in positions correspond to characters in the text "
-"to underline."
+msgstr "_ னுடன்் உள்ள சரங்கள் அடிக்கோடிட்ட சரங்களாக கொள்ளப்படும்"
 
 #: gtk/gtklabel.c:338
 msgid "Line wrap"
 msgstr "வரி மடிப்பு"
 
 #: gtk/gtklabel.c:339
-#, fuzzy
 msgid "If set, wrap lines if the text becomes too wide"
-msgstr "அமைக்கப்பட்டுடிருந்தால், உரை மிக-அகலமானல் வரிகளை மடிப்புச் செய்"
+msgstr "அமைக்கப்பட்டால், உரை அதிக அகலமாக மடக்கப்படும்"
 
 #: gtk/gtklabel.c:345
 msgid "Selectable"
 msgstr "தெரிவு செய்யக்கூடியது"
 
 #: gtk/gtklabel.c:346
-#, fuzzy
 msgid "Whether the label text can be selected with the mouse"
-msgstr "உரை அடையாளம் சுண்டெலியால் தெரிவு செய்ய முடியுமா"
+msgstr "விளக்கச்சீட்டின் உரையை சுட்டியால் தேர்வு செய்யப்பட வேண்டுமா"
 
 #: gtk/gtklabel.c:352
 msgid "Mnemonic key"
 msgstr "நினைவுத்துணை விசை"
 
 #: gtk/gtklabel.c:353
-#, fuzzy
 msgid "The mnemonic accelerator key for this label"
-msgstr "இந்த அடையாளகிட்கான நினைவுத்துணை ஆர்முடுகல் விசை."
+msgstr "நினைவுக்குறிப்பு முடுக்க விசைக்கான விளக்கச்சீட்டு"
 
 #: gtk/gtklabel.c:361
 msgid "Mnemonic widget"
-msgstr "நினைவுத்துணை விட்செட்"
+msgstr "நினைவுக்குறிப்பு சிறுசாளரம்"
 
 #: gtk/gtklabel.c:362
-#, fuzzy
 msgid "The widget to be activated when the label's mnemonic key is pressed"
-msgstr "அடையாளத்தின் நினைவுத்துணை விசை அமுத்தப்பட்டால் தூண்டு செய்வேண்டிய விட்செட்"
+msgstr "விளக்கச்சீட்டின் நினைவுக்குறிப்பு விசையை அழுத்தினால் செயல்பட வேண்டிய சாளரம்"
 
 #: gtk/gtklayout.c:632 gtk/gtkviewport.c:135
 msgid "Horizontal adjustment"
 msgstr "கிடை ஒழிங்குபடுத்தல்"
 
 #: gtk/gtklayout.c:633 gtk/gtkscrolledwindow.c:238
-#, fuzzy
 msgid "The GtkAdjustment for the horizontal position"
-msgstr "The GtkAdjustment for the horizontal position."
+msgstr "மேல்கீழ் நிலைக்கான GtkAdjustment"
 
 #: gtk/gtklayout.c:640 gtk/gtkviewport.c:143
 msgid "Vertical adjustment"
 msgstr "நெடுக்கமாக ஒழிங்குபடுத்தல்"
 
 #: gtk/gtklayout.c:641 gtk/gtkscrolledwindow.c:245
-#, fuzzy
 msgid "The GtkAdjustment for the vertical position"
-msgstr "The GtkAdjustment for the vertical position."
+msgstr "கிடைமட்ட நிலைக்கான GtkAdjustment"
 
 #: gtk/gtklayout.c:649
-#, fuzzy
 msgid "The width of the layout"
-msgstr "இட அமைவின் அகலம்."
+msgstr "உருவரையின் அகலம்"
 
 #: gtk/gtklayout.c:658
-#, fuzzy
 msgid "The height of the layout"
-msgstr "இட அமைவின் உயரம்"
+msgstr "உருவரையின் உயரம்"
 
 #: gtk/gtkmenu.c:518
 msgid "Tearoff Title"
-msgstr ""
+msgstr "தலைப்பு கிழித்தல்"
 
 #: gtk/gtkmenu.c:519
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
-msgstr ""
+msgstr "மெனுவை நிறுத்தும் போது சாளர மேலாளர் காட்டும் தலைப்பு"
 
 #: gtk/gtkmenu.c:525
-#, fuzzy
 msgid "Vertical Padding"
-msgstr "உள்ளமை நிரப்பல்"
+msgstr "செங்குத்து இடைவெளி"
 
 #: gtk/gtkmenu.c:526
-#, fuzzy
 msgid "Extra space at the top and bottom of the menu"
-msgstr "பிக்செல்களில், விட்செட்டுக்கு மேல் பக்கத்திலும் கீழ் பக்கத்திலும் இருக்கும் இடைவெளியின் அளவு"
+msgstr "மெனுவின் மேலும் கீழும் உள்ள கூடுதல் இடங்கள்"
 
 #: gtk/gtkmenu.c:534
-#, fuzzy
 msgid "Vertical Offset"
-msgstr "செங்குத்தமான அளவுகோல்"
+msgstr "செங்குத்து நிரப்பல்"
 
 #: gtk/gtkmenu.c:535
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
-msgstr ""
+msgstr "மெனு துணை மெனுவாக இருந்தால், கிடைமட்டமாக இத்தனை பிக்செல்களில் பொருத்து"
 
 #: gtk/gtkmenu.c:543
-#, fuzzy
 msgid "Horizontal Offset"
-msgstr "கிடை அளவுகோல்"
+msgstr "கிடைமட்ட நிரப்பல்"
 
 #: gtk/gtkmenu.c:544
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
-msgstr ""
+msgstr "மெனு துணை மெனுவாக இருந்தால், செங்குத்தாக இத்தனை பிக்செல்களில் பொருத்து"
 
 #: gtk/gtkmenu.c:554
 msgid "Left Attach"
-msgstr ""
+msgstr "இடது இணைப்பு"
 
 #: gtk/gtkmenu.c:555 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
-msgstr ""
+msgstr "துணை செயலின் இடது பக்கத்தில் இணைக்க வேண்டிய நெடுவரிசை எண்"
 
 #: gtk/gtkmenu.c:562
 msgid "Right Attach"
-msgstr ""
+msgstr "வலது இணைப்பு"
 
 #: gtk/gtkmenu.c:563
 msgid "The column number to attach the right side of the child to"
-msgstr ""
+msgstr "துணை செயலின் வலது பக்கத்தில் இணைக்க வேண்டிய நெடுவரிசை எண்"
 
 #: gtk/gtkmenu.c:570
 msgid "Top Attach"
-msgstr ""
+msgstr "மேல் இணைப்பு"
 
 #: gtk/gtkmenu.c:571
 msgid "The row number to attach the top of the child to"
-msgstr ""
+msgstr "துணை செயலின் மேலேத்தில் இணைக்க வேண்டிய வரிசை எண்"
 
 #: gtk/gtkmenu.c:578
-#, fuzzy
 msgid "Bottom Attach"
-msgstr "_அடிவாரம்"
+msgstr "கீழ் இணைப்பு"
 
 #: gtk/gtkmenu.c:579 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
-msgstr ""
+msgstr "துணை செயலின் கீழே இணைக்க வேண்டிய வரிசை எண்"
 
 #: gtk/gtkmenu.c:666
-#, fuzzy
 msgid "Can change accelerators"
-msgstr "பட்டிப் பலகை ஆர்முடுகல்"
+msgstr "முடுக்கியை மாற்றலாம்"
 
 #: gtk/gtkmenu.c:667
 msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
-msgstr ""
+msgstr "மெனுவில் மேல் உள்ள உருப்படிகளை க்ளிக் செய்வதன் மூலம் மெனு முடக்கியை மாற்ற முடியுமா"
 
 #: gtk/gtkmenu.c:672
 msgid "Delay before submenus appear"
-msgstr ""
+msgstr "துணை மெனு தோன்றுவதற்கு முன் தாமதி"
 
 #: gtk/gtkmenu.c:673
 msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
-msgstr ""
+msgstr "துணை மெனு தோன்றுவதற்கு முன் மெனு உருப்படியின் மேல் அம்புக்குறி இருக்க வேண்டிய கால அளவு"
 
 #: gtk/gtkmenu.c:680
 msgid "Delay before hiding a submenu"
-msgstr ""
+msgstr "துணைமெனுவை மறைப்பதற்கு முன் தாமதி"
 
 #: gtk/gtkmenu.c:681
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
-msgstr ""
+msgstr "அம்புக்குறி துணைபட்டியலை நோக்கி நகரும் போது துணைப்பட்டியல் மறைக்கப்பட வேண்டிய கால அளவு"
 
 #: gtk/gtkmenubar.c:157
 msgid "Style of bevel around the menubar"
@@ -2207,11 +2160,11 @@ msgstr "பட்டிப் பட்டைக்கும் பட்டி 
 
 #: gtk/gtkmenubar.c:172
 msgid "Delay before drop down menus appear"
-msgstr ""
+msgstr "தேர்வு பட்டி தோன்றுவதற்கு முன் தாமதிக்க"
 
 #: gtk/gtkmenubar.c:173
 msgid "Delay before the submenus of a menu bar appear"
-msgstr ""
+msgstr "மெனுவில் துணைமெனு தோன்றுவதற்கு முன் தாமதிக்க வேண்டிய நேரம்"
 
 #: gtk/gtkmessagedialog.c:107
 msgid "Image/label border"
@@ -2222,22 +2175,20 @@ msgid "Width of border around the label and image in the message dialog"
 msgstr "தகவல் உரையாடலில்லிருக்கும் அடையாளத்திற்கும் உருவத்திற்கும் சுற்றியுள்ள எல்லையின் அகலம்"
 
 #: gtk/gtkmessagedialog.c:123
-#, fuzzy
 msgid "Use separator"
-msgstr "பிரிப்பு உண்டு"
+msgstr "பிரிப்பானை பயன்படுத்து"
 
 #: gtk/gtkmessagedialog.c:124
 msgid "Whether to put a separator between the message dialog's text and the buttons"
-msgstr ""
+msgstr "உரையாடல் பெட்டிக்கும் பட்டனுக்கும் இடையே பிரிப்பான் அவசியாமா"
 
 #: gtk/gtkmessagedialog.c:130
 msgid "Message Type"
 msgstr "தகவல் வகை"
 
 #: gtk/gtkmessagedialog.c:131
-#, fuzzy
 msgid "The type of message"
-msgstr "அடையாளத்தின் உரை"
+msgstr "செய்தியின் வகை"
 
 #: gtk/gtkmessagedialog.c:138
 msgid "Message Buttons"
@@ -2245,7 +2196,7 @@ msgstr "தகவல் பொத்தான்கள்"
 
 #: gtk/gtkmessagedialog.c:139
 msgid "The buttons shown in the message dialog"
-msgstr ""
+msgstr "செய்தி உரையாடலில் காட்டப்பட்ட பட்டன்"
 
 #: gtk/gtkmisc.c:109
 msgid "Y align"
@@ -2332,9 +2283,8 @@ msgid "Scrollable"
 msgstr "திரை உருளலக்கூடியது"
 
 #: gtk/gtknotebook.c:456
-#, fuzzy
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
-msgstr "மெய்யானால், கூடிய தத்தல்கள் இருந்தால் உருளல் அம்புகள் காண்பிக்கப்படும்"
+msgstr "மெய் எனில்,அதிக தத்தல்களை பொருத்த உருளை அம்புக்குறிகள் சேர்க்கப்படும் "
 
 #: gtk/gtknotebook.c:462
 msgid "Enable Popup"
@@ -2354,11 +2304,11 @@ msgstr "Whether tabs should have homogeneous sizes"
 
 #: gtk/gtknotebook.c:477
 msgid "Tab label"
-msgstr ""
+msgstr "தத்தல் விளக்கச்சீட்டு"
 
 #: gtk/gtknotebook.c:478
 msgid "The string displayed on the childs tab label"
-msgstr ""
+msgstr "துணை தத்தல் விளக்கச்சீட்டில் காட்டப்பட வேண்டிய சரம்"
 
 #: gtk/gtknotebook.c:484
 msgid "Menu label"
@@ -2366,48 +2316,43 @@ msgstr "பட்டி அடையாளம்"
 
 #: gtk/gtknotebook.c:485
 msgid "The string displayed in the childs menu entry"
-msgstr ""
+msgstr "துணை பட்டியலின் காட்டப்பட வேண்டிய சரம்"
 
 #: gtk/gtknotebook.c:498
-#, fuzzy
 msgid "Tab expand"
-msgstr "The xpad."
+msgstr "தத்தல் விரிவாக்கம்"
 
 #: gtk/gtknotebook.c:499
-#, fuzzy
 msgid "Whether to expand the childs tab or not"
-msgstr "எல்லையைக் காண்பிப்பதா இல்லையா"
+msgstr "துணை தத்தலை விரிவாக்க வேண்டுமா"
 
 #: gtk/gtknotebook.c:505
 msgid "Tab fill"
-msgstr ""
+msgstr "தத்தல் நிரப்பல்"
 
 #: gtk/gtknotebook.c:506
-#, fuzzy
 msgid "Wheather the childs tab should fill the allocated area or not"
-msgstr "சேய் அனைத்தும் ஒறே அளவில் இருக்க வேண்டுமா"
+msgstr "துணைத்தத்தல் ஒதுக்கப்பட்ட இடத்தில் நிரப்பப்பட வேண்டுமா"
 
 #: gtk/gtknotebook.c:512
 msgid "Tab pack type"
-msgstr ""
+msgstr "தத்தல் கட்டு வகை"
 
 #: gtk/gtknotebook.c:528 gtk/gtkscrollbar.c:114
 msgid "Secondary backward stepper"
 msgstr "Secondary backward stepper"
 
 #: gtk/gtknotebook.c:529
-#, fuzzy
 msgid "Display a second backward arrow button on the opposite end of the tab area"
-msgstr "Display a second backward arrow button on the opposite end of the scrollbar"
+msgstr "தத்தல் பரப்பின் எதிர் முனையில் இரண்டாவது பின்பக்க அம்புக்குறியை காட்ட வேண்டுமா"
 
 #: gtk/gtknotebook.c:545 gtk/gtkscrollbar.c:122
 msgid "Secondary forward stepper"
-msgstr "Secondary forward stepper"
+msgstr "இரண்டாவது முன் ஏற்றி"
 
 #: gtk/gtknotebook.c:546
-#, fuzzy
 msgid "Display a second forward arrow button on the opposite end of the tab area"
-msgstr "Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgstr "தத்தல் பரப்பின் எதிர் முனையில் இரண்டாவது முன்பக்க க அம்புக்குறியை காட்ட வேண்டுமா"
 
 #: gtk/gtknotebook.c:561 gtk/gtkscrollbar.c:98
 msgid "Backward stepper"
@@ -2431,7 +2376,7 @@ msgstr "பட்டி"
 
 #: gtk/gtkoptionmenu.c:194
 msgid "The menu of options"
-msgstr ""
+msgstr "தேர்வின் மெனு"
 
 #: gtk/gtkoptionmenu.c:201
 msgid "Size of dropdown indicator"
@@ -2442,9 +2387,8 @@ msgid "Spacing around indicator"
 msgstr "காட்டியைச் சுற்றிருக்கும் இடைவெளி அளவு"
 
 #: gtk/gtkpaned.c:240
-#, fuzzy
 msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
-msgstr "Position of paned separator in pixels(0 means all the way to the left/top)"
+msgstr "பிக்செல்லால் குறிப்பிடப்பட்ட பிரிப்பானின் நிலை(0 எனில் இடது/மேல்)"
 
 #: gtk/gtkpaned.c:248
 msgid "Position Set"
@@ -2463,22 +2407,20 @@ msgid "Width of handle"
 msgstr "கைப்பிடியின் அகலம்"
 
 #: gtk/gtkpaned.c:272
-#, fuzzy
 msgid "Minimal Position"
-msgstr "மதிப்பு இடம்"
+msgstr "குறைந்தபட்ச நிலை"
 
 #: gtk/gtkpaned.c:273
 msgid "Smallest possible value for the \"position\" property"
-msgstr ""
+msgstr "\"நிலை\" பண்பின் குறைந்த பட்ச மதிப்பு"
 
 #: gtk/gtkpaned.c:290
-#, fuzzy
 msgid "Maximal Position"
-msgstr "மதிப்பு இடம்"
+msgstr "அதிக பட்ச இடம்"
 
 #: gtk/gtkpaned.c:291
 msgid "Largest possible value for the \"position\" property"
-msgstr ""
+msgstr "\"நிலை\" பண்பின் அதிக பட்ச மதிப்பு"
 
 #: gtk/gtkpaned.c:308
 msgid "Resize"
@@ -2486,7 +2428,7 @@ msgstr "அளவு மாற்று"
 
 #: gtk/gtkpaned.c:309
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
-msgstr ""
+msgstr "உண்மையெனில், துணைசெயல் சிறுசாளரதோடு விரியும் மற்றும் சுருங்கும்"
 
 #: gtk/gtkpaned.c:324
 msgid "Shrink"
@@ -2494,7 +2436,7 @@ msgstr "சுருக்கவும்"
 
 #: gtk/gtkpaned.c:325
 msgid "If TRUE, the child can be made smaller than its requisition"
-msgstr ""
+msgstr "உண்மையெனில் துணை செயல் தேவையான அளவை விட சிறியதாகும்"
 
 #: gtk/gtkpreview.c:133
 msgid "Whether the preview widget should take up the entire space it is allocated"
@@ -2505,16 +2447,11 @@ msgid "Activity mode"
 msgstr "செயற்பாடு முறைமை"
 
 #: gtk/gtkprogress.c:131
-#, fuzzy
 msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something that you don't know how long it will take"
-msgstr ""
-"If true the GtkProgress is in activity mode, meaning that is signals "
-"something is happening, but not how much of the activity is finished. This "
-"is used when you're doing something that you don't know how long it will "
-"take."
+msgstr "உண்மையெனில் GtkProgres செயல்படும், அதாவது வேலை நடந்துகொண்டிருப்பதை தெரியப்படுத்தும் ஆனால் எவ்வளவு வேலை நடந்து முடிந்தது என்பதை தெரியப்படுத்தாது. இது நீங்கள் செய்துகொண்டிருக்கும் வேலையின் கால அளவு உங்களுக்கு தெரியாத நிலையில் பயன்படும்"
 
 #: gtk/gtkprogress.c:138
 msgid "Show text"
@@ -2529,13 +2466,10 @@ msgid "Text x alignment"
 msgstr "உரையின் x நேர்ப்படுத்தம்"
 
 #: gtk/gtkprogress.c:147
-#, fuzzy
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progress widget"
-msgstr ""
-"A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
-"in the progresswidget"
+msgstr "உரையின் கிடைமட்ட பொருத்தத்தை காட்டும் சாளரத்தில் உள்ள 0.0 மற்றும் 1.0 விற்கு இடைப்பட்ட எண்கள்"
 
 #: gtk/gtkprogress.c:155
 msgid "Text y alignment"
@@ -2551,20 +2485,19 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:142 gtk/gtkrange.c:293 gtk/gtkspinbutton.c:241
 msgid "Adjustment"
-msgstr "ஒழிங்குபடுத்தல்"
+msgstr "ஒழுங்குபடுத்துதல்"
 
 #: gtk/gtkprogressbar.c:143
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
-msgstr "The GtkAdjustment connected to the progress bar (Deprecated)"
+msgstr "முனேற்றப்பட்டியோடு இணைக்கப்பட்ட (மாறுபட்ட)"
 
 #: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:499
 msgid "Orientation"
 msgstr "திசை அமைவு"
 
 #: gtk/gtkprogressbar.c:151
-#, fuzzy
 msgid "Orientation and growth direction of the progress bar"
-msgstr "முன்னேற்ற பட்டையின் திசை அமைவும் வளர்ச்சியும்"
+msgstr "உங்கள் செயல்பாட்டு பெட்டியின் அமைப்பு மற்றும் வளரும் திசை"
 
 #: gtk/gtkprogressbar.c:159
 msgid "Bar style"
@@ -2599,11 +2532,10 @@ msgid "Discrete Blocks"
 msgstr "உதிரி கட்டங்கள்"
 
 #: gtk/gtkprogressbar.c:189
-#, fuzzy
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
-msgstr "முன்னேற்றப் பட்டையிலுள்ள பிரிநிலை கட்டங்களின் எண் (உதிரி வகையில் காண்பிக்கப்படும் போது"
+msgstr "முன்னேற்றப் பட்டையிலுள்ள கட்டங்களின் எண்ணிக்கை(தனி பாணியில் காட்டப்படும் போது)"
 
 #: gtk/gtkprogressbar.c:198
 msgid "Fraction"
@@ -2633,7 +2565,7 @@ msgstr "மதிப்பு"
 msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
-msgstr ""
+msgstr "இந்த செயல் குழுவின் தற்போதைய செயலாக இருக்கும் போது gtk_radio_action_get_current_value() கொடுத்த மதிப்பு"
 
 #: gtk/gtkradioaction.c:155 gtk/gtkradiobutton.c:112
 msgid "Group"
@@ -2641,11 +2573,11 @@ msgstr "தொகுப்பு"
 
 #: gtk/gtkradioaction.c:156
 msgid "The radio action whose group this action belongs."
-msgstr ""
+msgstr "இந்த குழுவிற்கு சொந்தமான ரேடியோ செயல்"
 
 #: gtk/gtkradiobutton.c:113
 msgid "The radio button whose group this widget belongs."
-msgstr ""
+msgstr "இந்த சிறுசாளரத்திற்கு சொந்தமான ரேடியோ பட்டன்"
 
 #: gtk/gtkrange.c:284
 msgid "Update policy"
@@ -2700,24 +2632,20 @@ msgid "Spacing between step buttons and thumb"
 msgstr "Spacing between step buttons and thumb"
 
 #: gtk/gtkrange.c:340
-#, fuzzy
 msgid "Arrow X Displacement"
-msgstr "Child X Displacement"
+msgstr "அம்புக்குறி X இடப்பெயர்வு"
 
 #: gtk/gtkrange.c:341
-#, fuzzy
 msgid "How far in the x direction to move the arrow when the button is depressed"
-msgstr "How far in the x direction to move the child when the button is depressed"
+msgstr "பட்டன் அழுத்தப்படும் போது எவ்வளவு தூரம் x திசையில் நகர வேண்டும்"
 
 #: gtk/gtkrange.c:348
-#, fuzzy
 msgid "Arrow Y Displacement"
-msgstr "Child Y Displacement"
+msgstr "அம்புக்குறி Y இடப்பெயர்சி"
 
 #: gtk/gtkrange.c:349
-#, fuzzy
 msgid "How far in the y direction to move the arrow when the button is depressed"
-msgstr "How far in the y direction to move the child when the button is depressed"
+msgstr "பட்டன் அழுத்தி இருக்கும் போது y திசையில் எவ்வளவு தூரம் நகர வேண்டும்"
 
 #: gtk/gtkruler.c:119
 msgid "Lower"
@@ -2820,59 +2748,52 @@ msgid "Vertical Adjustment"
 msgstr "நெடுதிசை ஒழிங்குபடுத்தல்"
 
 #: gtk/gtkscrolledwindow.c:251
-#, fuzzy
 msgid "Horizontal Scrollbar Policy"
-msgstr "கிடை அளவுகோல்"
+msgstr "கிடைமட்ட உருளள்"
 
 #: gtk/gtkscrolledwindow.c:252
 msgid "When the horizontal scrollbar is displayed"
-msgstr ""
+msgstr "கிடைமட்ட உருள்பட்டி காட்டப்படும்போது"
 
 #: gtk/gtkscrolledwindow.c:259
-#, fuzzy
 msgid "Vertical Scrollbar Policy"
-msgstr "செங்குத்தமான அளவுகோல்"
+msgstr "செங்குத்து உருள்பட்டிக்கான செயல்திட்டம்"
 
 #: gtk/gtkscrolledwindow.c:260
 msgid "When the vertical scrollbar is displayed"
-msgstr ""
+msgstr "செங்குத்து உருள்பட்டி காட்டப்படும் போது"
 
 #: gtk/gtkscrolledwindow.c:268
-#, fuzzy
 msgid "Window Placement"
-msgstr "சாளர தலைப்பு"
+msgstr "சாளர நகர்வுு"
 
 #: gtk/gtkscrolledwindow.c:269
 msgid "Where the contents are located with respect to the scrollbars"
-msgstr ""
+msgstr "உள்ளடக்கங்கள் உருள்பட்டியோடு சரியாக இடத்தில் உள்ளதா"
 
 #: gtk/gtkscrolledwindow.c:276
 msgid "Shadow Type"
 msgstr "நிழல் வகை"
 
 #: gtk/gtkscrolledwindow.c:277
-#, fuzzy
 msgid "Style of bevel around the contents"
-msgstr "பட்டிப் பலகையை சுற்றியுள்ள bevelயின் பாணி"
+msgstr "ஓரம் உள்ள உள்ளடக்கங்களின் பாணி"
 
 #: gtk/gtkscrolledwindow.c:284
-#, fuzzy
 msgid "Scrollbar spacing"
-msgstr "பத்தி இடைவெளி"
+msgstr "உருள்பட்டி்தி இடைவெளி"
 
 #: gtk/gtkscrolledwindow.c:285
-#, fuzzy
 msgid "Number of pixels between the scrollbars and the scrolled window"
-msgstr "Number of pixels of the entry scrolled off the screen to the left"
+msgstr "உருள்பட்டிக்கும் உருள் சாளரத்திற்கும் இடையே உள்ள பிக்செல்களின் எண்ணிக்கை"
 
 #: gtk/gtkseparatortoolitem.c:135
 msgid "Draw"
 msgstr "வரையுக"
 
 #: gtk/gtkseparatortoolitem.c:136
-#, fuzzy
 msgid "Whether the separator is drawn, or just blank"
-msgstr "Whether spacers are vertical lines or just blank"
+msgstr "பிரிப்பான் வரையப்பட்டதா அல்லது வெற்றாக உள்ளதா"
 
 #: gtk/gtksettings.c:262
 msgid "Double Click Time"
@@ -2887,18 +2808,14 @@ msgstr ""
 "இடைவெளி  (மில்லி-நிடிகள்)"
 
 #: gtk/gtksettings.c:270
-#, fuzzy
 msgid "Double Click Distance"
-msgstr "இரட்டை அமுக்கு நேரம்"
+msgstr "தூரத்தை இரண்டு முறை க்ளிக் செய்யவும்"
 
 #: gtk/gtksettings.c:271
-#, fuzzy
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
-msgstr ""
-"இரட்டை அமுக்கு என கருதுவதற்கு இரண்டு அமுக்குகள் நடைபெறும் நேரத்தின் மிகக்கூடிய "
-"இடைவெளி  (மில்லி-நிடிகள்)"
+msgstr "இரண்டு முறை க்ளிக்செய்யப்பட்டது என்பதை அறிந்து கொள்ள இரண்டு க்ளிக்கிற்கு இடைப்பட்ட காலஅளவு(பிக் செல்களில்)"
 
 #: gtk/gtksettings.c:278
 msgid "Cursor Blink"
@@ -2941,9 +2858,8 @@ msgid "Icon Theme Name"
 msgstr "குறும்படம் தோற்றப் பெயர்"
 
 #: gtk/gtksettings.c:311
-#, fuzzy
 msgid "Name of icon theme to use"
-msgstr "Name of theme RC file to load"
+msgstr "கருப்பொருள் பயன்படுத்த வேண்டிய சின்னத்தின் பெயர்"
 
 #: gtk/gtksettings.c:319
 msgid "Key Theme Name"
@@ -2963,11 +2879,11 @@ msgstr "Keybinding to activate the menu bar"
 
 #: gtk/gtksettings.c:337
 msgid "Drag threshold"
-msgstr ""
+msgstr "இழுத்தழ் துவக்கம்"
 
 #: gtk/gtksettings.c:338
 msgid "Number of pixels the cursor can move before dragging"
-msgstr ""
+msgstr "இழுப்பதற்கு முன் கர்சர் நகரவேண்டிய பிக்செல்களின் எண்ணிக்கை"
 
 #: gtk/gtksettings.c:346
 msgid "Font Name"
@@ -2975,7 +2891,7 @@ msgstr "எழுத்துரு பெயர்"
 
 #: gtk/gtksettings.c:347
 msgid "Name of default font to use"
-msgstr ""
+msgstr "இயல்பாக பயன்படுத்தப்பட்ட எழுத்துருவின் பெயர்"
 
 #: gtk/gtksettings.c:355
 msgid "Icon Sizes"
@@ -2983,60 +2899,57 @@ msgstr "குறும்படம் அளவுகள்"
 
 #: gtk/gtksettings.c:356
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
-msgstr ""
+msgstr "சின்ன அளவின் பட்டியல்(gtk-menu=16,16;gtk-button=20,20..."
 
 #: gtk/gtksettings.c:365
 msgid "Xft Antialias"
-msgstr ""
+msgstr "சமதளப்படுத்தல்"
 
 #: gtk/gtksettings.c:366
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
-msgstr ""
+msgstr "Xft எழுத்துருக்களை சமதளப்படுத்த வேண்டுமா  0=இல்லை, 1=ஆம், -1=இயல்பான"
 
 #: gtk/gtksettings.c:375
 msgid "Xft Hinting"
-msgstr ""
+msgstr "Xft குறிப்புதருதல்"
 
 #: gtk/gtksettings.c:376
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
-msgstr ""
+msgstr "Xft எழுத்துருக்களுக்கு குறிப்பு தேவையா; 0=இல்லை, 1=ஆம், -1=இயல்பான"
 
 #: gtk/gtksettings.c:385
 msgid "Xft Hint Style"
-msgstr ""
+msgstr "Xft குறிப்பு பாணி"
 
 #: gtk/gtksettings.c:386
 msgid "What degree of hinting to use; none, slight, medium, or full"
-msgstr ""
+msgstr "குறிப்பை பயன்படுத்த வேண்டிய அளவு, எதுவுமில்லை, குறைவாக, நடுநிலையாக மற்றும் முழுவதும்"
 
 #: gtk/gtksettings.c:395
 msgid "Xft RGBA"
-msgstr ""
+msgstr "Xft RGBA"
 
 #: gtk/gtksettings.c:396
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
-msgstr ""
+msgstr "உப பிக்செல்களை சமதள படுத்தும் வகை; எதுவுமில்லை, rgb, bgr, vrgb, vbgr"
 
 #: gtk/gtksettings.c:405
 msgid "Xft DPI"
-msgstr ""
+msgstr "Xft DPI"
 
 #: gtk/gtksettings.c:406
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
-msgstr ""
+msgstr "Xft தெளிவுத்திறம், 1024 * dots/inch இல். -1 இயல்பான மதிப்பை பயன்படுத்த"
 
 #: gtk/gtksizegroup.c:242
 msgid "Mode"
 msgstr "முறை"
 
 #: gtk/gtksizegroup.c:243
-#, fuzzy
 msgid ""
 "The directions in which the size group effects the requested sizes of its "
 "component widgets"
-msgstr ""
-"The the directions in which the size group effects the requested sizes of "
-"its component widgets."
+msgstr "சிறு சாளரத்தில் அளவுக்குழுவில் விளைவுக் தேவைப்படும் அளவில் மாற்றத்தை ஏற்படுத்துமா"
 
 #: gtk/gtkspinbutton.c:242
 msgid "The adjustment that holds the value of the spinbutton"
@@ -3095,18 +3008,16 @@ msgid "Reads the current value, or sets a new value"
 msgstr "தற்போதைய மதிப்பை வாசிக்கும், அல்லது புதிய மதிப்பை அமைக்கும்"
 
 #: gtk/gtkspinbutton.c:312
-#, fuzzy
 msgid "Style of bevel around the spin button"
-msgstr "பட்டிப் பலகையை சுற்றியுள்ள bevelயின் பாணி"
+msgstr "சுழற் பட்டனின் ஓரத்தின் பாணி"
 
 #: gtk/gtkstatusbar.c:173
 msgid "Has Resize Grip"
-msgstr ""
+msgstr "அளவு மாற்ற பிடிப்பு"
 
 #: gtk/gtkstatusbar.c:174
-#, fuzzy
 msgid "Whether the statusbar has a grip for resizing the toplevel"
-msgstr "Whether the widget is the default widget"
+msgstr "மேல் ஓரத்தை அளவு மாற்றம் செய்ய நிலைப்பட்டி தயாராக உள்ளதா"
 
 #: gtk/gtkstatusbar.c:201
 msgid "Style of bevel around the statusbar text"
@@ -3154,27 +3065,27 @@ msgstr "இது மெய்யானால், அட்டவணையின
 
 #: gtk/gtktable.c:203
 msgid "Left attachment"
-msgstr ""
+msgstr "இடது இணைப்பு"
 
 #: gtk/gtktable.c:210
 msgid "Right attachment"
-msgstr ""
+msgstr "வலது இணைப்பு"
 
 #: gtk/gtktable.c:211
 msgid "The column number to attach the right side of a child widget to"
-msgstr ""
+msgstr "சிறுசாளரத்தின் வலது பக்கத்தில் இணைக்கப்பட வேண்டிய நெடுவரிசை எண்"
 
 #: gtk/gtktable.c:217
 msgid "Top attachment"
-msgstr ""
+msgstr "மேல் இணைப்பு"
 
 #: gtk/gtktable.c:218
 msgid "The row number to attach the top of a child widget to"
-msgstr ""
+msgstr "சிறுசாளரத்தின் மேலே இணைக்கப்பட வேண்டிய நெடுவரிசை எண்"
 
 #: gtk/gtktable.c:224
 msgid "Bottom attachment"
-msgstr ""
+msgstr "கீழ் இணைப்பு"
 
 #: gtk/gtktable.c:231
 msgid "Horizontal options"
@@ -3182,7 +3093,7 @@ msgstr "கிடைதிசை விருப்பங்கள்"
 
 #: gtk/gtktable.c:232
 msgid "Options specifying the horizontal behaviour of the child"
-msgstr ""
+msgstr "துணைசெயலின் கிடைமட்ட நடத்தையின் தேர்வை குறிக்கும்"
 
 #: gtk/gtktable.c:238
 msgid "Vertical options"
@@ -3190,30 +3101,27 @@ msgstr "செங்குத்தகதிசை விருப்பங்�
 
 #: gtk/gtktable.c:239
 msgid "Options specifying the vertical behaviour of the child"
-msgstr ""
+msgstr "துணைசெயலின் இடவல நடத்தையின் தேர்வை குறிக்கும்"
 
 #: gtk/gtktable.c:245
-#, fuzzy
 msgid "Horizontal padding"
-msgstr "கிடை நேர்ப்படுத்தம்"
+msgstr "கிடைமட்ட நிரப்பல்"
 
 #: gtk/gtktable.c:246
-#, fuzzy
 msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
 "pixels"
-msgstr "பிக்செல்களில், விட்செட்டுக்கு வலது பக்கத்திலும் இடது பக்கத்திலும் இருக்கும் இடைவெளியின் அளவு"
+msgstr "துணை செயல் மற்றும் இடவல அருகாமை செயல்களுக்கு தரவேண்டிய இடைவெளி பிக்செல்லில்"
 
 #: gtk/gtktable.c:252
-#, fuzzy
 msgid "Vertical padding"
-msgstr "உள்ளமை நிரப்பல்"
+msgstr "செங்குத்து மை நிரப்பல்"
 
 #: gtk/gtktable.c:253
 msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
-msgstr ""
+msgstr "துணை செயல் மற்றும் மேல் மற்றும் கீழ் அருகாமை செயல்களுக்கு தரவேண்டிய இடைவெளி பிக்செல்லில்"
 
 #: gtk/gtktext.c:603
 msgid "Horizontal adjustment for the text widget"
@@ -3240,27 +3148,24 @@ msgid "Whether words are wrapped at widget edges"
 msgstr "Whether words are wrapped at widget edges"
 
 #: gtk/gtktextbuffer.c:181
-#, fuzzy
 msgid "Tag Table"
-msgstr "அடையாள ஒட்டுப் பெயர்"
+msgstr "குறி பட்டியல்"
 
 #: gtk/gtktextbuffer.c:182
 msgid "Text Tag Table"
-msgstr ""
+msgstr "உரை குறிப்பு அட்டவணை"
 
 #: gtk/gtktexttag.c:196
 msgid "Tag name"
 msgstr "அடையாள ஒட்டுப் பெயர்"
 
 #: gtk/gtktexttag.c:197
-#, fuzzy
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
-msgstr "உரை அடையாளத்தை குறிப்பிடுவதற்கு பயன்படுத்தப்படும் பெயர்"
+msgstr "உரை அடையாளத்தை குறிப்பிடுவதற்கு பயன்படுத்தப்படும் பெயர். பெயரற்ற குறிப்பிற்கு எதுவுமில்லை என கொள்க"
 
 #: gtk/gtktexttag.c:215
-#, fuzzy
 msgid "Background color as a (possibly unallocated) GdkColor"
-msgstr "பின்னணி வண்ணம் ஓர் GdkColorராக"
+msgstr "பின்னனி வண்ணம்(பூட்டப்படாத) GdkColor"
 
 #: gtk/gtktexttag.c:222
 msgid "Background full height"
@@ -3283,9 +3188,8 @@ msgid "Bitmap to use as a mask when drawing the text background"
 msgstr "உரை பின்னணியை வரையும்போது திரையாக பயன்படுத்தவேண்டிய பிட்-படம்"
 
 #: gtk/gtktexttag.c:249
-#, fuzzy
 msgid "Foreground color as a (possibly unallocated) GdkColor"
-msgstr "முன்னணி வண்ணம் ஓர் GdkColorராக"
+msgstr "முன்னணி வண்ணம் ஓர் GdkColor(பூட்டப்படாத)"
 
 #: gtk/gtktexttag.c:257
 msgid "Foreground stipple mask"
@@ -3304,39 +3208,37 @@ msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "உரை திசை, உதாரனம்: வலது-இடது அல்லது இடது-வலது"
 
 #: gtk/gtktexttag.c:283
-#, fuzzy
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr "எழுத்து வகையின் விவரணம் ஓர் சரமாக"
+msgstr "எழுத்து வகையின் விவரம் சரமாக உதாரனம் \"Sans Italic 12\""
 
 #: gtk/gtktexttag.c:308
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr ""
+msgstr "பாங்கோ பாணியின் எழுத்துரு பாணியை பார், உதாரணம் PANGO_STYLE_ITALIC"
 
 #: gtk/gtktexttag.c:317
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
-msgstr ""
+msgstr "பாங்கோ மாறியின் எழுத்துறு மாறியை பார், உதாரணம் PANGO_VARIANT_SMALL_CAPS"
 
 #: gtk/gtktexttag.c:326
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
-msgstr ""
+msgstr "எழுத்துருவின் தடிமன் எண்ணாக, பாங்கோ தடிமனில் மதிப்பை பார்; உதாரணம், PANGO_WEIGHT_BOLD "
 
 #: gtk/gtktexttag.c:337
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
-msgstr ""
+msgstr "பாங்கோ இழுப்பதற்கு ஏற்ப எழுத்துருவை இழு உதாரணம் PANGO_STRETCH_CONDENSED"
 
 #: gtk/gtktexttag.c:346
-#, fuzzy
 msgid "Font size in Pango units"
-msgstr "எழுத்துவகை அளவு புள்ளிகளில்"
+msgstr "எழுத்துவகை அளவு பாங்கோ அலகில்"
 
 #: gtk/gtktexttag.c:356
 msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
-msgstr ""
+msgstr "இயல்பான எழுத்துரு அளவுவோடு தொடர்புடைய அளவு மாற்ற எழுத்துரு அளவு, இது கருப்பொருள் மாற்றங்களை பொருத்து மாறும். அதனால் இதை பரிந்துரைக்கிறோம்.பாங்கோ சில அளவுகளை PANGO_SCALE_X_LARGE குறிப்பிடும்"
 
 #: gtk/gtktexttag.c:376 gtk/gtktextview.c:605
 msgid "Left, right, or center justification"
@@ -3367,11 +3269,10 @@ msgid "Amount to indent the paragraph, in pixels"
 msgstr "பிசெல்களில், பத்தியை உள்தள்ளும் அளவு"
 
 #: gtk/gtktexttag.c:425
-#, fuzzy
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in pixels"
-msgstr "Offset of text above the baseline (below the baseline if rise is negative)"
+msgstr "அடிகோடிற்கு மேல் மறையும் உரை(அடிக்கோடுக்கு கீழ் எனில் எதிர்மறை) பிக்செல்லில்"
 
 #: gtk/gtktexttag.c:434
 msgid "Pixels above lines"
@@ -3418,9 +3319,8 @@ msgid "Invisible"
 msgstr "பார்க்கமுடியாதது"
 
 #: gtk/gtktexttag.c:500
-#, fuzzy
 msgid "Whether this text is hidden. Not implemented in GTK 2.0"
-msgstr "இந்த உரை மறைந்ததா"
+msgstr "உரை மறைக்கப்பட்டதா. GTK 2.0 வில் செயல்படுத்தப்படவில்லை"
 
 #: gtk/gtktexttag.c:513
 msgid "Background full height set"
@@ -3560,7 +3460,7 @@ msgstr "இடையகம்"
 
 #: gtk/gtktextview.c:660
 msgid "The buffer which is displayed"
-msgstr ""
+msgstr "காட்டப்பட்ட தற்காலிக நினைவிடம்"
 
 #: gtk/gtktextview.c:667
 msgid "Overwrite mode"
@@ -3568,43 +3468,39 @@ msgstr "மேல் எழுதும் முறைமை"
 
 #: gtk/gtktextview.c:668
 msgid "Whether entered text overwrites existing contents"
-msgstr ""
+msgstr "உள்ளிடப்பட்ட உரை ஏற்கெனவே உள்ள உரையில் மேலெழுதப்படுமா"
 
 #: gtk/gtktextview.c:675
 msgid "Accepts tab"
-msgstr ""
+msgstr "ஏற்றுக்கொள் தத்தல்"
 
 #: gtk/gtktextview.c:676
 msgid "Whether Tab will result in a tab character being entered"
-msgstr ""
+msgstr "தத்தல் உள்ளிடப்பட்ட தத்தல் எழுத்துக்களை ஏற்கிறதா"
 
 #: gtk/gtktextview.c:685
-#, fuzzy
 msgid "Error underline color"
-msgstr "முன்னணி வண்ணம்"
+msgstr "அடிகோடு நிறத்தில் பிழை"
 
 #: gtk/gtktextview.c:686
-#, fuzzy
 msgid "Color with which to draw error-indication underlines"
-msgstr "செருகுமிட நிலை காட்டியை வரையவேண்டிய வண்ணம்"
+msgstr "பிழை அறிவிப்பை அடிக்கோடிட பயன்படுத்தும் வண்ணம்"
 
 #: gtk/gtktoggleaction.c:129
-#, fuzzy
 msgid "Create the same proxies as a radio action"
-msgstr "Draw the toggle button as a radio button"
+msgstr "ரேடியோ செயலுக்காக இதே ப்ராக்ஸியை பயன்படுத்து"
 
 #: gtk/gtktoggleaction.c:130
 msgid "Whether the proxies for this action look like radio action proxies"
-msgstr ""
+msgstr "இந்த செயலுக்கான ப்ராக்ஸி ரேடியோ செயல் ப்ராக்ஸி போல தெரிகிறதா"
 
 #: gtk/gtktogglebutton.c:134
 msgid "If the toggle button should be pressed in or not"
 msgstr "இருநிலைமாற்றி பொத்தான் உள் அழுத்த வேண்டுமா இல்லையா"
 
 #: gtk/gtktogglebutton.c:142
-#, fuzzy
 msgid "If the toggle button is in an \"in between\" state"
-msgstr "இருநிலைமாற்றி பொத்தான் \"நிலைகளுக்கு நடுவில்\" உள்ளதோ"
+msgstr "இருநிலைமாற்றி பட்டன்்தான் \"நிலைகளுக்கு நடுவில்\" உள்ளதோ"
 
 #: gtk/gtktogglebutton.c:149
 msgid "Draw Indicator"
@@ -3632,17 +3528,15 @@ msgstr "அம்பு காட்டுக"
 
 #: gtk/gtktoolbar.c:517
 msgid "If an arrow should be shown if the toolbar doesn't fit"
-msgstr ""
+msgstr "கருவிப்பட்டையில் காட்டப்பட்ட அம்புக்குறிகள் பொருந்தவில்லையெனில்"
 
 #: gtk/gtktoolbar.c:526
-#, fuzzy
 msgid "Whether the item should receive extra space when the toolbar grows"
-msgstr "சேய் அனைத்தும் ஒறே அளவில் இருக்க வேண்டுமா"
+msgstr "கருவிப்பட்டை வளரும் போது அதிக இடம் எடுத்துக்கொள்ள வேண்டுமாா"
 
 #: gtk/gtktoolbar.c:534
-#, fuzzy
 msgid "Whether the item should be the same size as other homogeneous items"
-msgstr "சேய் அனைத்தும் ஒறே அளவில் இருக்க வேண்டுமா"
+msgstr "மற்ற ஒத்த உருப்படிகளின் அளவையே இந்த உருப்படியும் கொண்டிருக்க வேண்டுமா"
 
 #: gtk/gtktoolbar.c:541
 msgid "Spacer size"
@@ -3695,57 +3589,48 @@ msgid "Size of icons in default toolbars"
 msgstr "கொடா நிலை கருவிப் பட்டைகளிலுள்ள குறும்படங்களின் அளவு"
 
 #: gtk/gtktoolbutton.c:181
-#, fuzzy
 msgid "Text to show in the item."
-msgstr "அட்டவணையிலுள்ள வரிசைகளின் எண்"
+msgstr "இந்த உருப்படியில் காட்ட வேண்டிய உரை"
 
 #: gtk/gtktoolbutton.c:188
-#, fuzzy
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
-msgstr ""
-"If set, an underline in the text indicates the next character should be used "
-"for the mnemonic accelerator key"
+msgstr "விளக்கசீட்டின் பண்புள் உள்ள உரையில் இருக்கும் அடிக்கோடு நீங்கள் வழியும் மெனுவில் உள்ள நினைவுக்குறிப்பு முடுக்கியை பயன்படுத்த வேண்டும் என்பதை குறிக்கும்."
 
 #: gtk/gtktoolbutton.c:195
-#, fuzzy
 msgid "Widget to use as the item label"
-msgstr "தத்தல் அடையாளத்தை சுற்றியுள்ள எல்லையின் அகலம்"
+msgstr "இந்த உருப்படியில் விளக்கசீட்டில் பயன்படுத்த வேண்டிய சாளரம்"
 
 #: gtk/gtktoolbutton.c:201
 msgid "Stock Id"
-msgstr ""
+msgstr "தேக்க அடையாளம்"
 
 #: gtk/gtktoolbutton.c:202
-#, fuzzy
 msgid "The stock icon displayed on the item"
-msgstr "முன்னேற்றப் பட்டையில் காண்பிக்கப்ட வேண்டிய உரை"
+msgstr "உருப்படியில் காட்டப்பட்ட தேக்க அடையாளம்"
 
 #: gtk/gtktoolbutton.c:208
 msgid "Icon widget"
 msgstr "குறும்படம் விஜட்"
 
 #: gtk/gtktoolbutton.c:209
-#, fuzzy
 msgid "Icon widget to display in the item"
-msgstr "வழக்கமாகன சட்ட அடையாளம் இருக்குமிடத்தில் காணபிக்க ஓர் விட்செட்."
+msgstr "இந்த உருப்படியில் காட்டப்பட்ட சிறு சாளர சின்னம்"
 
 #: gtk/gtktoolitem.c:173
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
-msgstr ""
+msgstr "கருவிப்பட்டி உருப்படி மிக முக்கியம் என கொள்ளப்பட வேண்டுமா.உண்மை எனில், கருவிப்பட்டி பட்டனில் GTK_TOOLBAR_BOTH_HORIZ பாங்கில் உரையை காட்டவும்"
 
 #: gtk/gtktreemodelsort.c:329
-#, fuzzy
 msgid "TreeModelSort Model"
-msgstr "TreeView படிமம்"
+msgstr "TreeModelSort மாதிரி"
 
 #: gtk/gtktreemodelsort.c:330
-#, fuzzy
 msgid "The model for the TreeModelSort to sort"
-msgstr "மரக்-காட்சியின் படிமம்"
+msgstr "TreeModelSort அடுக்க வேண்டிய மாதிரி"
 
 #: gtk/gtktreeview.c:537
 msgid "TreeView Model"
@@ -3816,64 +3701,60 @@ msgid "Model column to search through when searching through code"
 msgstr "Model column to search through when searching through code"
 
 #: gtk/gtktreeview.c:630
-#, fuzzy
 msgid "Fixed Height Mode"
-msgstr "மாற்றமுடியாத உயரம்"
+msgstr "நிலையான உயர பாங்கு"
 
 #: gtk/gtktreeview.c:631
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
-msgstr ""
+msgstr "GtkTreeView எல்லா உயரவரிகளும் ஒரே அளவாக இருப்பதாக கொண்டு வேகமாக செயல்படும்"
 
 #: gtk/gtktreeview.c:651
 msgid "Vertical Separator Width"
 msgstr "நெடு-பிரிப்பியின் அகலம்"
 
 #: gtk/gtktreeview.c:652
-#, fuzzy
 msgid "Vertical space between cells.  Must be an even number"
-msgstr "Vertical space between cells"
+msgstr "செல்களுக்கு இடைப்பட்ட கிடைமட்ட இடைவெளி, இரட்டை எண்ணாக இருக்க வேண்டும்"
 
 #: gtk/gtktreeview.c:660
 msgid "Horizontal Separator Width"
-msgstr "Horizontal Separator Width"
+msgstr "செங்குத்து பிரிப்பானுடன்"
 
 #: gtk/gtktreeview.c:661
-#, fuzzy
 msgid "Horizontal space between cells.  Must be an even number"
-msgstr "Horizontal space between cells"
+msgstr "செல்களுக்கு இடைப்பட்ட செங்குத்து இடைவெளி, ஒற்றை எண்ணாக இருக்க வேண்டும்"
 
 #: gtk/gtktreeview.c:669
 msgid "Allow Rules"
-msgstr ""
+msgstr "அம்புக்குறி விதிமுறைகள்"
 
 #: gtk/gtktreeview.c:670
 msgid "Allow drawing of alternating color rows"
-msgstr ""
+msgstr "மாற்று வண்ண வரிகளுக்கான வரைபடங்களை அனுமதி"
 
 #: gtk/gtktreeview.c:676
-#, fuzzy
 msgid "Indent Expanders"
-msgstr "Is Expander"
+msgstr "தள்ளல் விரிப்பான்"
 
 #: gtk/gtktreeview.c:677
 msgid "Make the expanders indented"
-msgstr ""
+msgstr "தள்ளல்களை விரிப்பான்களாக்கு"
 
 #: gtk/gtktreeview.c:683
 msgid "Even Row Color"
-msgstr ""
+msgstr "இரட்டை படை வரிகளின் நிறம்"
 
 #: gtk/gtktreeview.c:684
 msgid "Color to use for even rows"
-msgstr ""
+msgstr "ஒற்றைபடை வரிகள் பயன்படுத்த வேண்டிய நிறம்"
 
 #: gtk/gtktreeview.c:690
 msgid "Odd Row Color"
-msgstr ""
+msgstr "ஒற்றை வரி நிறம்"
 
 #: gtk/gtktreeview.c:691
 msgid "Color to use for odd rows"
-msgstr ""
+msgstr "ஒற்றை உயரவரி பயன்படுத்த வேண்டிய நிறம்"
 
 #: gtk/gtktreeviewcolumn.c:224
 msgid "Whether to display the column"
@@ -3885,7 +3766,7 @@ msgstr "அளவு மாற்றக்கூடியது"
 
 #: gtk/gtktreeviewcolumn.c:232
 msgid "Column is user-resizable"
-msgstr ""
+msgstr "காலம் அளவு பயனீட்டாளர்-அளவுமாற்றக்கூடிய"
 
 #: gtk/gtktreeviewcolumn.c:240
 msgid "Current width of the column"
@@ -3904,9 +3785,8 @@ msgid "Fixed Width"
 msgstr "மாற்றமுடியாத அகலம்"
 
 #: gtk/gtktreeviewcolumn.c:258
-#, fuzzy
 msgid "Current fixed width of the column"
-msgstr "பத்தியின் தற்போதைய அகளம்"
+msgstr "காலமின் தற்போதைய நிலையான அகலம்"
 
 #: gtk/gtktreeviewcolumn.c:267
 msgid "Minimum Width"
@@ -3930,7 +3810,7 @@ msgstr "பத்தியின் தலைப்பில் தோற்ற�
 
 #: gtk/gtktreeviewcolumn.c:296
 msgid "Column gets share of extra width allocated to the widget"
-msgstr ""
+msgstr "காலம் சிறுசாளரத்திற்கு ஒதுக்கப்பட்ட கூடுதல் அகலத்தை பகிர்ந்துகொள்ளும்"
 
 #: gtk/gtktreeviewcolumn.c:303
 msgid "Clickable"
@@ -3957,9 +3837,8 @@ msgid "X Alignment of the column header text or widget"
 msgstr "பத்தி தலைப்பகுதி உரையின் அல்லது விட்செடின் X நேர்ப்படுத்தம்"
 
 #: gtk/gtktreeviewcolumn.c:331
-#, fuzzy
 msgid "Whether the column can be reordered around the headers"
-msgstr "Wether the column can be reordered around the headers"
+msgstr "தலைப்புகளை சுற்றி காலம்கள் அடுக்குகளை மாற்ற வேண்டுமா"
 
 #: gtk/gtktreeviewcolumn.c:338
 msgid "Sort indicator"
@@ -3979,43 +3858,35 @@ msgstr "Sort direction the sort indicator should indicate"
 
 #: gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
-msgstr ""
+msgstr "பிளவுபட்ட மெனுவை சேர்"
 
 #: gtk/gtkuimanager.c:221
-#, fuzzy
 msgid "Whether tearoff menu items should be added to menus"
-msgstr "பட்டி உருப்படி தேர்வுசெய்யப்பட்டுள்ளதா"
+msgstr "பிளவு பட்ட மெனு உருப்படி மெனுவில் சேர்க்கப்பட வேண்டுமா"
 
 #: gtk/gtkuimanager.c:228
 msgid "Merged UI definition"
-msgstr ""
+msgstr "சேர்க்கப்பட்ட UI விளக்கங்கள்"
 
 #: gtk/gtkuimanager.c:229
 msgid "An XML string describing the merged UI"
-msgstr ""
+msgstr "UI சேர்ப்பை குறிக்கும் XML சரம்"
 
 #: gtk/gtkviewport.c:136
-#, fuzzy
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport"
-msgstr ""
-"The GtkAdjustment that determines the values of the horizontal position for "
-"this viewport."
+msgstr "இந்த வழிகாட்சிக்காக GtkAdjustment  கிடைமட்ட நிலை மதிப்பை கண்டுபிடிக்கும்"
 
 #: gtk/gtkviewport.c:144
-#, fuzzy
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport"
-msgstr ""
-"The GtkAdjustment that determines the values of the vertical position for "
-"this viewport."
+msgstr "இந்த வழிகாட்சிக்காக GtkAdjustment செங்குத்து நிலை மதிப்பை கண்டுபிடிக்கும்"
 
 #: gtk/gtkviewport.c:152
-#, fuzzy
 msgid "Determines how the shadowed box around the viewport is drawn"
-msgstr "Determines how the shadowed box around the viewport is drawn."
+msgstr "காட்சி மதிப்பின் நிழல் பெட்டி எப்படி வரையப்பட்டது என்பதை கண்டுபிடிக்கும்"
 
 #: gtk/gtkwidget.c:409
 msgid "Widget name"
@@ -4030,35 +3901,28 @@ msgid "Parent widget"
 msgstr "பெற்றோர் விட்செட்"
 
 #: gtk/gtkwidget.c:417
-#, fuzzy
 msgid "The parent widget of this widget. Must be a Container widget"
-msgstr "இந்த விட்செட்டின் பெற்றோர் விட்செட். ஓர் Container விட்செட்டாக இருக்கவேண்டும்"
+msgstr "இந்த சிறு சாளரத்தின் தாய் சாளரம். உள்ளடக்க சிறு சாளரமாக இருக்க வேண்டும்"
 
 #: gtk/gtkwidget.c:424
 msgid "Width request"
 msgstr "அகலம் வேண்டுகோள்"
 
 #: gtk/gtkwidget.c:425
-#, fuzzy
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
-msgstr ""
-"Override for width request of the widget, or -1 if natural request should be "
-"used."
+msgstr "சிறு சாளரத்தின் அகலமாற்ற கோரிக்கையை புறக்கணிக்கிறது அல்லது -1 எனில் கோரிக்கை ஏற்கப்பட்டது"
 
 #: gtk/gtkwidget.c:433
 msgid "Height request"
 msgstr "உயரம் வேண்டுகோள்"
 
 #: gtk/gtkwidget.c:434
-#, fuzzy
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
-msgstr ""
-"Override for height request of the widget, or -1 if natural request should "
-"be used."
+msgstr "சிறு சாளரத்தின் உயரமாற்ற கோரிக்கையை புறக்கணிக்கிறது அல்லது -1 எனில் கோரிக்கை ஏற்கப்பட்டது"
 
 #: gtk/gtkwidget.c:443
 msgid "Whether the widget is visible"
@@ -4093,14 +3957,12 @@ msgid "Whether the widget has the input focus"
 msgstr "Whether the widget has the input focus"
 
 #: gtk/gtkwidget.c:477
-#, fuzzy
 msgid "Is focus"
-msgstr "Has focus"
+msgstr "குறிப்பிட"
 
 #: gtk/gtkwidget.c:478
-#, fuzzy
 msgid "Whether the widget is the focus widget within the toplevel"
-msgstr "Whether the widget is the default widget"
+msgstr "சிறு சாளரம் மேல்மட்டத்தோடு குறிப்பிடப்படும் சாளரமாக உள்ளதா"
 
 #: gtk/gtkwidget.c:484
 msgid "Can default"
@@ -4123,93 +3985,84 @@ msgid "Receives default"
 msgstr "Receives default"
 
 #: gtk/gtkwidget.c:499
-#, fuzzy
 msgid "If TRUE, the widget will receive the default action when it is focused"
-msgstr "If TRUE, the widget will receive the default action when it is focused."
+msgstr "உண்மையெனில் சிறு சாளரம் குறிப்பிடப்படும் போது இயல்பான செயலை செய்யும்."
 
 #: gtk/gtkwidget.c:505
 msgid "Composite child"
 msgstr "Composite child"
 
 #: gtk/gtkwidget.c:506
-#, fuzzy
 msgid "Whether the widget is part of a composite widget"
-msgstr "Whether the widget is composed of other widgets"
+msgstr "சிறு சாளரம் குழு சாளரத்தின் பகுதியா"
 
 #: gtk/gtkwidget.c:512
 msgid "Style"
 msgstr "பாணி"
 
 #: gtk/gtkwidget.c:513
-#, fuzzy
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr ""
-"The style of the widget, which contains information about how it will look "
-"(colors etc)."
+"சிறுசாளரத்தின் பாணியில் ,அது பார்க்க எப்படி இருக்கும் என குறிப்பிடும் "
+"(வண்னங்கள் ..)."
 
 #: gtk/gtkwidget.c:519
 msgid "Events"
 msgstr "நிகழ்ச்சிகள்"
 
 #: gtk/gtkwidget.c:520
-#, fuzzy
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
-msgstr "The event mask that decides what kind of GdkEvents this widget gets."
+msgstr "இந்த சாளரத்திற்கு கிடைக்க வேண்டிய GdkEvents எப்படிபட்டது நிகழ்வு தீர்மானிக்கும்"
 
 #: gtk/gtkwidget.c:527
 msgid "Extension events"
 msgstr "நீடிப்பு நிகழ்ச்சிகள்"
 
 #: gtk/gtkwidget.c:528
-#, fuzzy
 msgid "The mask that decides what kind of extension events this widget gets"
-msgstr "The mask that decides what kind of extension events this widget gets."
+msgstr "இந்த சாளரத்திற்கு கிடைக்க வேண்டிய நீட்சி எப்படிபட்டது என்பதை இந்த நிகழ்வு தீர்மானிக்கும்"
 
 #: gtk/gtkwidget.c:535
 msgid "No show all"
-msgstr ""
+msgstr "இல்லை அனைத்தையும் காட்டு"
 
 #: gtk/gtkwidget.c:536
 msgid "Whether gtk_widget_show_all() should not affect this widget"
-msgstr ""
+msgstr "gtk_widget_show_all() இந்த சிறு சாளரத்தை பாதிக்குமா"
 
 #: gtk/gtkwidget.c:1377
 msgid "Interior Focus"
 msgstr "Interior Focus"
 
 #: gtk/gtkwidget.c:1378
-#, fuzzy
 msgid "Whether to draw the focus indicator inside widgets"
-msgstr "Whether to draw the focus indicator inside widgets."
+msgstr "சிறுசாளரத்திற்குள் குறிப்பிடும் அடையாளத்தை வரைய வேண்டுமா"
 
 #: gtk/gtkwidget.c:1384
 msgid "Focus linewidth"
-msgstr ""
+msgstr "குறிப்பிடும் வரிஅகலம்"
 
 #: gtk/gtkwidget.c:1385
-#, fuzzy
 msgid "Width, in pixels, of the focus indicator line"
-msgstr "Whether to draw the focus indicator inside widgets."
+msgstr "குறிப்பிடும் வரியின் அகலம், பிக்செல்லில்."
 
 #: gtk/gtkwidget.c:1391
 msgid "Focus line dash pattern"
-msgstr ""
+msgstr "குறிப்பிடும் வரி கோடு வடிவில்"
 
 #: gtk/gtkwidget.c:1392
-#, fuzzy
 msgid "Dash pattern used to draw the focus indicator"
-msgstr "Whether to draw the focus indicator inside widgets."
+msgstr "சிறுசாளரத்திற்குள் குறிப்பு குறியை வரைய வேண்டுமா"
 
 #: gtk/gtkwidget.c:1397
 msgid "Focus padding"
-msgstr ""
+msgstr "குறிப்பு நிரப்பல்"
 
 #: gtk/gtkwidget.c:1398
-#, fuzzy
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
-msgstr "Whether to draw the focus indicator inside widgets."
+msgstr "காட்டி அடையாளம் மற்றும் சிறு சாளரபெட்டியின் இடைவெளி அளவை பிக்செல்லாக காட்டு"
 
 #: gtk/gtkwidget.c:1403
 msgid "Cursor color"
@@ -4220,24 +4073,22 @@ msgid "Color with which to draw insertion cursor"
 msgstr "செருகுமிட நிலை காட்டியை வரையவேண்டிய வண்ணம்"
 
 #: gtk/gtkwidget.c:1409
-#, fuzzy
 msgid "Secondary cursor color"
-msgstr "நிலை காட்டி வண்ணம்"
+msgstr "இரண்டால் கர்சர் நிறம்"
 
 #: gtk/gtkwidget.c:1410
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
-msgstr ""
+msgstr "இடவலமாகவும் வலஇடமாகவும் திருத்தப்படும் போது இரண்டாவது செருகல் கர்சர் வரையப்படும் நிறத்தை காட்டவும்"
 
 #: gtk/gtkwidget.c:1415
 msgid "Cursor line aspect ratio"
-msgstr ""
+msgstr "கர்சர் வரியின் நோக்கு விகிதம்"
 
 #: gtk/gtkwidget.c:1416
-#, fuzzy
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr "செருகுமிட நிலை காட்டியை வரையவேண்டிய வண்ணம்"
+msgstr "கர்சர் செருகல் வரையப்பட வேண்டிய நோக்கு விகிதம்"
 
 #: gtk/gtkwindow.c:440
 msgid "Window Type"
@@ -4256,80 +4107,69 @@ msgid "The title of the window"
 msgstr "சாளரத்தின் தலைப்பு"
 
 #: gtk/gtkwindow.c:457
-#, fuzzy
 msgid "Window Role"
-msgstr "சாளர தலைப்பு"
+msgstr "சாளர பங்களிப்பு"
 
 #: gtk/gtkwindow.c:458
 msgid "Unique identifier for the window to be used when restoring a session"
-msgstr ""
+msgstr "அமர்வை மீட்கும் போது பயன்படுத்த வேண்டிய தனி அடையாளம்"
 
 #: gtk/gtkwindow.c:465
 msgid "Allow Shrink"
 msgstr "Allow Shrink"
 
 #: gtk/gtkwindow.c:467
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
-msgstr ""
-"If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
-"time a bad idea."
+msgstr "உண்மை எனில் சாளரம் குறைந்த பட்ச அளவில் தெரியும் . உண்மை என அமைப்பது 99% சரியான முடிவில்லை"
 
 #: gtk/gtkwindow.c:474
 msgid "Allow Grow"
 msgstr "வளர்ச்சி அநுமதி"
 
 #: gtk/gtkwindow.c:475
-#, fuzzy
 msgid "If TRUE, users can expand the window beyond its minimum size"
-msgstr "If TRUE, users can expand the window beyond its minimum size."
+msgstr "உண்மையெனில் பயனீட்டாளர் சாளரத்தை குறைந்த பட்ச அளவுக்கு மேல் பெரிதாக்க முடியும்"
 
 #: gtk/gtkwindow.c:483
-#, fuzzy
 msgid "If TRUE, users can resize the window"
-msgstr "TRUE என்றால், பயனரால் சாளரத்தின் அளவை மாற்ற முடியும்."
+msgstr "உண்மை எனில் சாளரத்தின் அளவை மாற்ற முடியும்"
 
 #: gtk/gtkwindow.c:490
 msgid "Modal"
 msgstr "Modal"
 
 #: gtk/gtkwindow.c:491
-#, fuzzy
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
-msgstr ""
-"If TRUE, the window is modal (other windows are not usable while this one is "
-"up)."
+msgstr "உண்மை எனில் சாளரம் முறையானது(இது செயலில் இருக்கும் போது மற்ற சாளரத்தை பயன்படுத்த முடியாது)."
 
 #: gtk/gtkwindow.c:498
 msgid "Window Position"
 msgstr "சாளரத்தின் இடம்"
 
 #: gtk/gtkwindow.c:499
-#, fuzzy
 msgid "The initial position of the window"
-msgstr "தொடங்கும்போது சாளரத்தின் இடம்"
+msgstr "சாளரத்தின் முதல் நிலை"
 
 #: gtk/gtkwindow.c:507
 msgid "Default Width"
 msgstr "கொடா நிலை அகளம்"
 
 #: gtk/gtkwindow.c:508
-#, fuzzy
 msgid "The default width of the window, used when initially showing the window"
-msgstr "சாளர்த்தை முதல்முறை காண்பக்கும்போது, சாளரத்தின் கொடா நிலை அகளம்."
+msgstr "சாளரத்தை காட்டும் போது பயன்படுத்தப்பட வேண்டிய சாளரத்தின் இயல்பான அகலம்"
 
 #: gtk/gtkwindow.c:517
 msgid "Default Height"
 msgstr "கொடா நிலை உயரம்"
 
 #: gtk/gtkwindow.c:518
-#, fuzzy
 msgid "The default height of the window, used when initially showing the window"
-msgstr "சாளர்த்தை முதல்முறை காண்பக்கும்போது, சாளரத்தின் கொடா நிலை உயரம்"
+msgstr "சாளரத்தை காட்டும் போது பயன்படுத்தப்பட வேண்டிய சாளரத்தின் இயல்பான உயரம்"
 
 #: gtk/gtkwindow.c:527
 msgid "Destroy with Parent"
@@ -4348,76 +4188,70 @@ msgid "Icon for this window"
 msgstr "இந்த சாளரத்தின் குறும்படம்"
 
 #: gtk/gtkwindow.c:551
-#, fuzzy
 msgid "Is Active"
-msgstr "Active"
+msgstr "செயலில் உள்ள"
 
 #: gtk/gtkwindow.c:552
-#, fuzzy
 msgid "Whether the toplevel is the current active window"
-msgstr "Whether the widget is the default widget"
+msgstr "மேல்மட்ட சாளரம் தற்போது செயலில் உள்ள சாளரமா"
 
 #: gtk/gtkwindow.c:559
 msgid "Focus in Toplevel"
-msgstr ""
+msgstr "மேல்மட்டத்தில் குறியிடு"
 
 #: gtk/gtkwindow.c:560
 msgid "Whether the input focus is within this GtkWindow"
-msgstr ""
+msgstr "GtkWindow சாளரத்திற்குள் உள்ளீட்டின் நிலையை குறிக்க வேண்டுமா"
 
 #: gtk/gtkwindow.c:567
 msgid "Type hint"
-msgstr ""
+msgstr "குறிப்பு வகை"
 
 #: gtk/gtkwindow.c:568
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
-msgstr ""
+msgstr "மேல்மேசை சூழல் எப்படிப்பட்ட சாளரத்தை பயன்படுத்துகிறது மற்றும் எப்படி நடத்தப்படுகிறது என்பதை குறிப்பிட வேண்டுமா"
 
 #: gtk/gtkwindow.c:576
 msgid "Skip taskbar"
-msgstr ""
+msgstr "பணிப்பட்டியை தவிர்"
 
 #: gtk/gtkwindow.c:577
 msgid "TRUE if the window should not be in the task bar."
-msgstr ""
+msgstr "சாளரம் பணிப்பட்டியில் இல்லையெனில் உண்மை "
 
 #: gtk/gtkwindow.c:584
 msgid "Skip pager"
-msgstr ""
+msgstr "பேஜரை தவிர்"
 
 #: gtk/gtkwindow.c:585
 msgid "TRUE if the window should not be in the pager."
-msgstr ""
+msgstr "சாளரம் பேஜரில் இல்லாத போது உண்மை"
 
 #: gtk/gtkwindow.c:599
-#, fuzzy
 msgid "Accept focus"
-msgstr "Has focus"
+msgstr "குறியை ஏற்றுக்கொள்"
 
 #: gtk/gtkwindow.c:600
-#, fuzzy
 msgid "TRUE if the window should receive the input focus."
-msgstr "If TRUE, the widget will receive the default action when it is focused."
+msgstr "உள்ளீட்டை பெறுவதற்காக குறிப்பிடப்பட்டால் உண்மை"
 
 #: gtk/gtkwindow.c:614
 msgid "Decorated"
-msgstr ""
+msgstr "அலங்காரமான"
 
 #: gtk/gtkwindow.c:615
-#, fuzzy
 msgid "Whether the window should be decorated by the window manager"
-msgstr "சேய் அனைத்தும் ஒறே அளவில் இருக்க வேண்டுமா"
+msgstr "சாளரம் சாளரமேலாளரால் அலங்காரப்படுத்தப்பட வேண்டுமா"
 
 #: gtk/gtkwindow.c:630
 msgid "Gravity"
-msgstr ""
+msgstr "ஈர்ப்பு விசை"
 
 #: gtk/gtkwindow.c:631
-#, fuzzy
 msgid "The window gravity of the window"
-msgstr "சாளரத்தின் வகை"
+msgstr "சாளரத்தின் ஈர்ப்பு விசை"
 
 #: modules/input/gtkimcontextxim.c:330
 msgid "IM Preedit style"
@@ -4425,14 +4259,13 @@ msgstr "IM முன்திருத்தம் பாணி"
 
 #: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method preedit string"
-msgstr ""
+msgstr "உள்ளீடு முறைமையின் முன் திருத்தத்தை எப்படி பெறுவது"
 
 #: modules/input/gtkimcontextxim.c:339
 msgid "IM Status style"
 msgstr "GTK IM நிகழ்நிலை பாணி"
 
 #: modules/input/gtkimcontextxim.c:340
-#, fuzzy
 msgid "How to draw the input method statusbar"
-msgstr "கருவிப் பட்டையை எப்படி வரைவது"
+msgstr "நிலைப்பட்டியின் உள்ளீடு முறையை பெறுவது எப்படி"
 
