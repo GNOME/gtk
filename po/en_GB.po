@@ -1,5 +1,5 @@
 # British translation
-# Copyright (C) 2000  Free Software Foundation, Inc.
+# Copyright (C) 2000 Free Software Foundation, Inc.
 # Robert Brady <rwb197@zepler.org>
 #
 msgid ""
