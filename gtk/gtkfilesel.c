@@ -46,8 +46,6 @@
 #include <pwd.h>
 #endif
 
-#include "fnmatch.h"
-
 #include "gdk/gdkkeysyms.h"
 #include "gtkbutton.h"
 #include "gtkentry.h"
@@ -58,6 +56,7 @@
 #include "gtklist.h"
 #include "gtklistitem.h"
 #include "gtkmain.h"
+#include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
 #include "gtksignal.h"
 #include "gtkvbox.h"
@@ -117,11 +116,6 @@ typedef struct _PossibleCompletion PossibleCompletion;
  * match by first_diff_index()
  */
 #define PATTERN_MATCH -1
-/* The arguments used by all fnmatch() calls below
- */
-#define FNMATCH_FLAGS (FNM_PATHNAME | FNM_PERIOD)
-
-#define CMPL_ERRNO_TOO_LONG ((1<<16)-1)
 
 /* This structure contains all the useful information about a directory
  * for the purposes of filename completion.  These structures are cached
@@ -365,6 +359,30 @@ static GtkWindowClass *parent_class = NULL;
 
 /* Saves errno when something cmpl does fails. */
 static gint cmpl_errno;
+
+/* Check that a string does not have UTF-8 encoded non-ASCII characters */
+static gboolean
+is_not_utf8 (const gchar *string)
+{
+  gunichar c;
+
+  while (*string)
+    {
+      c = g_utf8_get_char (string);
+      if (c & 0x80000000)
+	return TRUE;
+      if (c > 0x7F)
+	return FALSE;
+      string = g_utf8_next_char (string);
+    }
+  return TRUE;
+}
+
+static gboolean
+is_utf8 (const gchar *string)
+{
+  return g_utf8_validate (string, -1, NULL);
+}
 
 #ifdef G_WITH_CYGWIN
 /*
@@ -696,18 +714,20 @@ gtk_file_selection_hide_fileop_buttons (GtkFileSelection *filesel)
     }
 }
 
-
-
 void
 gtk_file_selection_set_filename (GtkFileSelection *filesel,
 				 const gchar      *filename)
 {
-  gchar *buf;
+  gchar *buf, *utf8_buf;
   const char *name, *last_slash;
 
   g_return_if_fail (filesel != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (filesel));
   g_return_if_fail (filename != NULL);
+
+#ifdef G_PLATFORM_WIN32
+  g_return_if_fail (is_not_utf8 (filename));
+#endif
 
   last_slash = strrchr (filename, G_DIR_SEPARATOR);
 
@@ -723,11 +743,13 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
       name = last_slash + 1;
     }
 
-  gtk_file_selection_populate (filesel, buf, FALSE);
+  utf8_buf = g_filename_to_utf8 (buf, -1, NULL, NULL, NULL);
+  gtk_file_selection_populate (filesel, utf8_buf, FALSE);
 
   if (filesel->selection_entry)
     gtk_entry_set_text (GTK_ENTRY (filesel->selection_entry), name);
   g_free (buf);
+  g_free (utf8_buf);
 }
 
 gchar*
@@ -1466,12 +1488,8 @@ win32_gtk_add_drives_to_dir_list(GtkWidget *the_dir_list)
 			     NULL, &maxComponentLength,
 			     &flags, NULL, 0);
 	/* Build the actual displayable string */
-
 	sprintf(formatBuffer, "%c:\\", toupper(textPtr[0]));
-#if 0 /* HB: removed to allow drive change AND directory update with one click */
-	if (strlen(volumeNameBuf) > 0)
-	  sprintf(formatBuffer, "%s (%s)", formatBuffer, volumeNameBuf);
-#endif
+
 	/* Add to the list */
 	text[0] = formatBuffer;
 	row = gtk_clist_append (GTK_CLIST (the_dir_list), text);
@@ -1501,7 +1519,10 @@ gtk_file_selection_populate (GtkFileSelection *fs,
   
   g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
-  
+#ifdef G_PLATFORM_WIN32  
+  g_return_if_fail (is_utf8 (rel_path));
+#endif
+
   cmpl_state = (CompletionState*) fs->cmpl_state;
   poss = cmpl_completion_matches (rel_path, &rem_path, cmpl_state);
 
@@ -2071,7 +2092,7 @@ open_ref_dir(gchar* text_to_complete,
 						   -1, NULL, NULL, NULL);
 
 	  g_free (sys_curdir);
-	  
+
 	  new_dir = open_dir(utf8_curdir, cmpl_state);
 
 	  if (new_dir)
@@ -2202,45 +2223,38 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
   path = g_string_sized_new (2*MAXPATHLEN + 10);
 
   sys_dir_name = g_filename_from_utf8 (dir_name, -1, NULL, NULL, NULL);
-  directory = opendir(sys_dir_name);
+  directory = opendir (sys_dir_name);
 
-  if(!directory)
+  if (!directory)
     {
       cmpl_errno = errno;
       g_free (sys_dir_name);
       return NULL;
     }
 
-  while((dirent_ptr = readdir(directory)) != NULL)
-    {
-      entry_count++;
-    }
-
+  while ((dirent_ptr = readdir (directory)) != NULL)
+    entry_count++;
+  rewinddir(directory);
+  
   sent->entries = g_new(CompletionDirEntry, entry_count);
   sent->entry_count = entry_count;
 
-  rewinddir(directory);
-
   for(i = 0; i < entry_count; i += 1)
     {
-      dirent_ptr = readdir(directory);
-
-      if(!dirent_ptr)
+      dirent_ptr = readdir (directory);
+      if (!dirent_ptr)
 	{
 	  cmpl_errno = errno;
-	  closedir(directory);
+	  closedir (directory);
 	  g_free (sys_dir_name);
 	  return NULL;
 	}
-
       sent->entries[i].entry_name = g_filename_to_utf8 (dirent_ptr->d_name,
 							-1, NULL, NULL, NULL);
-
       g_string_assign (path, sys_dir_name);
       if (path->str[path->len-1] != G_DIR_SEPARATOR)
-	{
-	  g_string_append_c (path, G_DIR_SEPARATOR);
-	}
+	g_string_append_c (path, G_DIR_SEPARATOR);
+
       g_string_append (path, dirent_ptr->d_name);
 
       if (stat_subdirs)
@@ -2724,11 +2738,12 @@ find_completion_dir(gchar* text_to_complete,
       strncpy(pat_buf, *remaining_text, len);
       pat_buf[len] = 0;
 
+      g_assert (is_utf8 (pat_buf));
+
       for(i = 0; i < dir->sent->entry_count; i += 1)
 	{
-	  if(dir->sent->entries[i].is_dir &&
-	     fnmatch(pat_buf, dir->sent->entries[i].entry_name,
-		     FNMATCH_FLAGS)!= FNM_NOMATCH)
+	  if (dir->sent->entries[i].is_dir &&
+	      _gtk_fnmatch (pat_buf, dir->sent->entries[i].entry_name))
 	    {
 	      if(found)
 		{
@@ -2873,12 +2888,13 @@ attempt_file_completion(CompletionState *cmpl_state)
 	strcpy(pat_buf + len, "*");
     }
 
+  g_assert (is_utf8 (pat_buf));
+
   if(first_slash)
     {
       if(dir->sent->entries[dir->cmpl_index].is_dir)
 	{
-	  if(fnmatch(pat_buf, dir->sent->entries[dir->cmpl_index].entry_name,
-		     FNMATCH_FLAGS) != FNM_NOMATCH)
+	  if (_gtk_fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name))
 	    {
 	      CompletionDir* new_dir;
 
@@ -2926,8 +2942,7 @@ attempt_file_completion(CompletionState *cmpl_state)
       append_completion_text(dir->sent->entries[dir->cmpl_index].entry_name, cmpl_state);
 
       cmpl_state->the_completion.is_a_completion =
-	(fnmatch(pat_buf, dir->sent->entries[dir->cmpl_index].entry_name,
-		 FNMATCH_FLAGS) != FNM_NOMATCH);
+	_gtk_fnmatch (pat_buf, dir->sent->entries[dir->cmpl_index].entry_name);
 
       cmpl_state->the_completion.is_directory = dir->sent->entries[dir->cmpl_index].is_dir;
       if(dir->sent->entries[dir->cmpl_index].is_dir)
@@ -3052,8 +3067,9 @@ cmpl_state_okay(CompletionState* cmpl_state)
 static gchar*
 cmpl_strerror(gint err)
 {
-  if(err == CMPL_ERRNO_TOO_LONG)
-    return "Name too long";
-  else
-    return g_strerror (err);
+  static gchar *buf = NULL;
+
+  g_free (buf);
+  buf = g_strdup (g_strerror (err));
+  return buf;
 }

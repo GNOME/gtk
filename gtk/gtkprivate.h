@@ -97,4 +97,7 @@ const gchar *_gtk_get_data_prefix ();
 
 #endif
 
+gboolean _gtk_fnmatch (const char *pattern,
+		       const char *string);
+
 #endif /* __GTK_PRIVATE_H__ */
