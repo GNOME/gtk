@@ -324,10 +324,7 @@ msgstr "Go bohlokwa"
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-msgstr ""
-"Ge eba mogato o tšewa o le bohlokwa. Ge eba e le THEREŠO, dikemedi tša selo "
-"sa sedirišwa bakeng sa mogato wo di bontšha sengwalwa go mokgwa wa GTK_BARA "
-"YA SEDIRIŠWA_BOBEDI_RAPAMEGO."
+msgstr "Ge eba mogato o tšewa o le bohlokwa. Ge eba e le THEREŠO, dikemedi tša selo sa sedirišwa bakeng sa mogato wo di bontšha sengwalwa go mokgwa wa GTK_TOOLBAR_BOTH_HORIZ."
 
 #: gtk/gtkaction.c:275
 msgid "Hide if empty"
@@ -550,7 +547,7 @@ msgstr "Kabo"
 
 #: gtk/gtkaspectframe.c:125
 msgid "Aspect ratio if obey_child is FALSE"
-msgstr "Kabo ya ponagalo ge o hlompha_ngwana ke MAAKA"
+msgstr "Kabo ya ponagalo ge obey_child ke MAAKA"
 
 #: gtk/gtkaspectframe.c:131
 msgid "Obey child"
@@ -759,9 +756,7 @@ msgstr "Go Dira Sekgoba ga Tlhaelelo"
 
 #: gtk/gtkbutton.c:374
 msgid "Extra space to add for CAN_DEFAULT buttons"
-msgstr ""
-"Sekgoba se oketšegilego seo se swanetšego go oketšwa bakeng sa dikope tša "
-"KHANSELA _TLHAELELO"
+msgstr "Sekgoba se oketšegilego seo se swanetšego go oketšwa bakeng sa dikonope tša CAN_DEFAULT"
 
 #: gtk/gtkbutton.c:380
 msgid "Default Outside Spacing"
@@ -771,9 +766,7 @@ msgstr "Go Dira Sekgoba ga ka Ntle ga Tlhaelelo"
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
-msgstr ""
-"Sekgoba se oketšegilego seo se swanetšego go oketšwa bakeng sa dikonope tša "
-"KHANSELA _TLHAELELO seo ka mehla se thalwago ka ntle ga mollwane"
+msgstr "Sekgoba se oketšegilego seo se swanetšego go oketšwa bakeng sa dikonope tša CAN_DEFAULT seo ka mehla se thalwago ka ntle ga mollwane"
 
 #: gtk/gtkbutton.c:386
 msgid "Child X Displacement"
@@ -1955,9 +1948,7 @@ msgstr "Diriša go swaya"
 
 #: gtk/gtkexpander.c:223 gtk/gtklabel.c:333
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
-msgstr ""
-"Sengwalwa sa leswao se akaretša go swaya ga XML. Bona pango_arola "
-"mantšu_swaya()"
+msgstr "Sengwalwa sa leswao se akaretša go swaya ga XML. Bona pango_parse_markup()"
 
 #: gtk/gtkexpander.c:231
 msgid "Space to put between the label and the child"
@@ -2103,9 +2094,7 @@ msgstr "Dira gore mafelelo a sekgethi sa faele a hlaelele"
 
 #: gtk/gtkfilechooserdefault.c:624
 msgid "Name of the GtkFileChooser backend to use by default"
-msgstr ""
-"Leina la mafelelo a Sekgethi sa Faele sa Gtk seo se tla dirišwago ke "
-"tlhaelelo"
+msgstr "Leina la mafelelo la GtkFileChooser leo le tla dirišwago ke tlhaelelo"
 
 #: gtk/gtkfilesel.c:560 gtk/gtkimage.c:190
 msgid "Filename"
@@ -2285,9 +2274,7 @@ msgstr "Peakanyo ya ntlha ya go akgofa"
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
-msgstr ""
-"Ge eba go swanetše go dirišwa boleng bja thoto ya ntlha ya _go akgofa goba "
-"boleng bjo bo hweditšwego boemong bja_go swara"
+msgstr "Ge eba go swanetše go dirišwa boleng bja thoto ya snap_edge goba boleng bjo bo hweditšwego go handle_position"
 
 #: gtk/gtkiconview.c:324
 #, fuzzy
@@ -2366,7 +2353,7 @@ msgstr "Pixbuf"
 
 #: gtk/gtkimage.c:159
 msgid "A GdkPixbuf to display"
-msgstr "Pixbuf ya Gdk yeo e swanetšego go bontšhwa"
+msgstr "GdkPixbuf yeo e swanetšego go bontšhwa"
 
 #: gtk/gtkimage.c:166
 msgid "Pixmap"
@@ -2374,7 +2361,7 @@ msgstr "Pixmap"
 
 #: gtk/gtkimage.c:167
 msgid "A GdkPixmap to display"
-msgstr "Pixmap ya Gdk yeo e swanetšego go bontšhwa"
+msgstr "GdkPixmap yeo e swanetšego go bontšhwa"
 
 #: gtk/gtkimage.c:174
 msgid "Image"
@@ -2382,7 +2369,7 @@ msgstr "Seswantšho"
 
 #: gtk/gtkimage.c:175
 msgid "A GdkImage to display"
-msgstr "Seswantšho sa Gdk seo se swanetšego go bontšhwa"
+msgstr "GdkImage yeo e swanetšego go bontšhwa"
 
 #: gtk/gtkimage.c:182
 msgid "Mask"
@@ -2390,8 +2377,7 @@ msgstr "Seširo"
 
 #: gtk/gtkimage.c:183
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
-msgstr ""
-"Bitmap ya seširo yeo e tla dirišwago le Seswantšho sa Gdk goba Pixmap ya Gdk"
+msgstr "Bitmap ya seširo yeo e tla dirišwago le GdkImage goba GdkPixmap"
 
 #: gtk/gtkimage.c:191
 msgid "Filename to load and display"
@@ -2440,7 +2426,7 @@ msgstr "Tsošološo"
 
 #: gtk/gtkimage.c:242
 msgid "GdkPixbufAnimation to display"
-msgstr "Tsošološo ya Pixbuf ya Gdk yeo e swanetšego go bontšhwa"
+msgstr "GdkPixbufAnimation yeo e swanetšego go bontšhwa"
 
 #: gtk/gtkimage.c:257 gtk/gtkwindow.c:566
 #, fuzzy
@@ -2497,10 +2483,7 @@ msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that"
-msgstr ""
-"Teka-tekanyo ya methaladi yeo e lego sengwalweng sa leswao leo le tswalanago "
-"le le lengwe. Se GA SE kgome teka-tekanyo ya leswao ka gare ga lefelo la "
-"lona. Bona GtkMisc::teka-tekanyo ya x bakeng sa seo"
+msgstr "Teka-tekanyo ya methaladi yeo e lego sengwalweng sa leswao leo le tswalanago le le lengwe. Se GA SE kgome teka-tekanyo ya leswao ka gare ga lefelo la lona. Bona GtkMisc::xalign bakeng sa seo"
 
 #: gtk/gtklabel.c:356
 msgid "Pattern"
@@ -2588,7 +2571,7 @@ msgstr "Tokišo e rapamego"
 
 #: gtk/gtklayout.c:636 gtk/gtkscrolledwindow.c:239
 msgid "The GtkAdjustment for the horizontal position"
-msgstr "Tokišo ya Gtk bakeng sa boemo bjo rapamego"
+msgstr "GtkAdjustment bakeng sa boemo bjo rapamego"
 
 #: gtk/gtklayout.c:643 gtk/gtkviewport.c:144
 msgid "Vertical adjustment"
@@ -2596,7 +2579,7 @@ msgstr "Tokišo e tsepamego"
 
 #: gtk/gtklayout.c:644 gtk/gtkscrolledwindow.c:246
 msgid "The GtkAdjustment for the vertical position"
-msgstr "Tokišo ya Gtk bakeng sa boemo bjo tsepamego"
+msgstr "GtkAdjustment bakeng sa boemo bjo tsepamego"
 
 #: gtk/gtklayout.c:652
 msgid "The width of the layout"
@@ -3085,11 +3068,7 @@ msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
 "is used when you're doing something that you don't know how long it will take"
-msgstr ""
-"Ge eba e le THEREŠO Tšwelopele ya Gtk e mokgweng wa go diragatša, e lego seo "
-"se bolelago gore e bontšha selo seo se diregago, eupša e sego bogolo bja "
-"tiragalo yeo e fedilego. Se se dirišwa ge o dira selo seo o sa tsebego gore "
-"se tla tšea nako e kaakang"
+msgstr "Ge eba e le THEREŠO GtkProgress e mokgweng wa go diragatša, e lego seo se bolelago gore e bontšha selo seo se diregago, eupša e sego bogolo bja tiragalo yeo e fedilego. Se se dirišwa ge o dira selo seo o sa tsebego gore se tla tšea nako e kaakang"
 
 #: gtk/gtkprogress.c:139
 msgid "Show text"
@@ -3129,7 +3108,7 @@ msgstr "Tokišo"
 
 #: gtk/gtkprogressbar.c:145
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
-msgstr "Tokišo ya Gtk e kgokagantšwego le bara ya tšwelopele (Kgaoditšwe)"
+msgstr "GtkAdjustment e kgokagantšwego le bara ya tšwelopele (Kgaoditšwe)"
 
 #: gtk/gtkprogressbar.c:153
 msgid "Orientation and growth direction of the progress bar"
@@ -3212,10 +3191,7 @@ msgstr "Boleng"
 msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
-msgstr ""
-"Boleng bjo bo bušitšwego ke gtk "
-"mogato_wa_radio_o_hwetšago_boleng_bja_gona_bjale() ge mogato wo e le mogato "
-"wa gona bjale wa sehlopha sa wona."
+msgstr "Boleng bjo bo bušitšwego ke gtk_radio_action_get_current_value() ge mogato wo e le mogato wa gona bjale wa sehlopha sa wona."
 
 #: gtk/gtkradioaction.c:156 gtk/gtkradiobutton.c:113
 msgid "Group"
@@ -3241,8 +3217,7 @@ msgstr "Kamoo mehuta e swanetšego go dirwa gore e be nakong sekirining"
 
 #: gtk/gtkrange.c:335
 msgid "The GtkAdjustment that contains the current value of this range object"
-msgstr ""
-"Tokišo ya Gtk yeo e nago le boleng bja gona bjale bja sedirišwa se sa mohuta"
+msgstr "GtkAdjustment yeo e nago le boleng bja gona bjale bja sedirišwa se sa mohuta"
 
 #: gtk/gtkrange.c:342
 msgid "Inverted"
@@ -3582,9 +3557,7 @@ msgstr "Bogolo bja Leswao"
 
 #: gtk/gtksettings.c:364
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
-msgstr ""
-"Lelokelelo la bogolo bja leswao (lelokelelo la dikagare la gtk=16,16;konope "
-"ya gtk=20,20..."
+msgstr "Lelokelelo la bogolo bja leswao (gtk-menu=16,16;gtk-button=20,20..."
 
 #: gtk/gtksettings.c:372
 msgid "GTK Modules"
@@ -3901,8 +3874,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:216
 msgid "Background color as a (possibly unallocated) GdkColor"
-msgstr ""
-"Mmala o bonagalago ka morago bjalo ka (mohlomongwe o sa abjwago) Mmala wa Gdk"
+msgstr "Mmala o bonagalago ka morago bjalo ka (mohlomongwe o sa abjwago) GdkColor"
 
 #: gtk/gtktexttag.c:223
 msgid "Background full height"
@@ -3928,8 +3900,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:250
 msgid "Foreground color as a (possibly unallocated) GdkColor"
-msgstr ""
-"Mmala o bonagalago ka pele bjalo ka (mohlomongwe o sa abjwago) Mmala wa Gdk"
+msgstr "Mmala o bonagalago ka pele bjalo ka (mohlomongwe o sa abjwago) GdkColor"
 
 #: gtk/gtktexttag.c:258
 msgid "Foreground stipple mask"
@@ -3958,29 +3929,21 @@ msgstr ""
 
 #: gtk/gtktexttag.c:309
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr ""
-"Setaele sa fonto bjalo ka Setaele sa Pango, ka mohlala, "
-"PANGO_SETAELE_SEKAMEGO"
+msgstr "Setaele sa fonto bjalo ka PangoStyle, ka mohlala, PANGO_STYLE_ITALIC"
 
 #: gtk/gtktexttag.c:318
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
-msgstr ""
-"Go fapana ga fonto bjalo ka go Fapana ga Pango, ka mohlala, PANGO_FAPANA_TŠE "
-"NYENYANE_TLHAKAKGOLO"
+msgstr "Go fapana ga fonto bjalo ka go PangoVariant, ka mohlala, PANGO_VARIANT_SMALL_CAPS"
 
 #: gtk/gtktexttag.c:327
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
-msgstr ""
-"Boima bja fonto bjalo ka palotlalo, bona dika tšeo di hlalositšwego e sa le "
-"pele go Boima bja Pango; ka mohlala, PANGO_BOIMA_MOKOTO"
+msgstr "Boima bja fonto bjalo ka palotlalo, bona dika tšeo di hlalositšwego e sa le pele go PangoWeight, ka mohlala, PANGO_WEIGHT_BOLD"
 
 #: gtk/gtktexttag.c:338
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
-msgstr ""
-"Go otlologa ga fonto bjalo ka go Otlologa ga Pango, ka mohlala, "
-"PANGO_OTLOLOGA_FOKODITŠWEGO"
+msgstr "Go otlologa ga fonto bjalo ka go PangoStretch, ka mohlala, PANGO_STRETCH_CONDENSED"
 
 #: gtk/gtktexttag.c:347
 msgid "Font size in Pango units"
@@ -3991,11 +3954,7 @@ msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
-msgstr ""
-"Bogolo bja fonto bjalo ka karolo ya sekala e tswalanago le bogolo bja fonto "
-"ya tlhaelelo. Se se tlwaelana ka mo go swanetšego le diphethogo tša sehlogo, "
-"bj.bj, ka gona se a eletšwa. Pango e hlalosa e sa le pele dikala tše dingwe "
-"tše bjalo ka PANGO_SEKALA_BOGOLO_BJO_OKETŠEGILEGO"
+msgstr "Bogolo bja fonto bjalo ka karolo ya sekala e tswalanago le bogolo bja fonto ya tlhaelelo. Se se tlwaelana ka mo go swanetšego le diphethogo tša sehlogo, bj.bj, ka gona se a eletšwa. Pango e hlalosa e sa le pele dikala tše dingwe tše bjalo ka PANGO_SCALE_X_LARGE"
 
 #: gtk/gtktexttag.c:377 gtk/gtktextview.c:595
 msgid "Left, right, or center justification"
@@ -4424,22 +4383,19 @@ msgstr "Sedirišwa sa leswao seo se swanetšego go bontšhwa selong"
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
-msgstr ""
-"Ge eba selo sa bara ya sedirišwa se tšewa e le sa bohlokwa. Ge eba e le "
-"THEREŠO, dikonope tša bara ya sedirišwa di bontšha sengwalwa go mokgwa wa "
-"GTK_BARA_YA_SEDIRIŠWA_BOBEDI_RAPAMEGO"
+msgstr "Ge eba selo sa bara ya sedirišwa se tšewa e le sa bohlokwa. Ge eba e le THEREŠO, dikonope tša bara ya sedirišwa di bontšha sengwalwa go mokgwa wa GTK_TOOLBAR_BOTH_HORIZ"
 
 #: gtk/gtktreemodelsort.c:330
 msgid "TreeModelSort Model"
-msgstr "Mohlala wa go Hlaola ga Mohlala wa Mohlare"
+msgstr "Mohlala wa TreeModelSort"
 
 #: gtk/gtktreemodelsort.c:331
 msgid "The model for the TreeModelSort to sort"
-msgstr "Mohlala wo o swanetšego go hlaolwa wa go Hlaola ga Mohlala ga Mohlare"
+msgstr "Mohlala wo o swanetšego go hlaolwa wa TreeModelSort"
 
 #: gtk/gtktreeview.c:558
 msgid "TreeView Model"
-msgstr "Mohlala wa go Lebelela ga Mohlare"
+msgstr "Mohlala wa TreeView"
 
 #: gtk/gtktreeview.c:559
 msgid "The model for the tree view"
@@ -4514,9 +4470,7 @@ msgstr "Mokgwa wa Bophagamo bjo Beilwego"
 
 #: gtk/gtktreeview.c:652
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
-msgstr ""
-"E akgofiša Pono ya Mohlare ya Gtk ka go gopola gore methalo ka moka e na le "
-"bophagamo bjo swanago"
+msgstr "E akgofiša GtkTreeView ka go gopola gore methalo ka moka e na le bophagamo bjo swanago"
 
 #: gtk/gtktreeview.c:672
 #, fuzzy
@@ -4543,7 +4497,7 @@ msgstr "Ge eba lefesetere le swanetše go kgabišwa ke molaodi wa lefesetere"
 
 #: gtk/gtktreeview.c:713
 msgid "Vertical Separator Width"
-msgstr ""
+msgstr "Bophara bja Searodi se Tsepamego"
 
 #: gtk/gtktreeview.c:714
 msgid "Vertical space between cells.  Must be an even number"
@@ -4718,17 +4672,13 @@ msgstr "Mothaladi wa XML o hlalosago UI e kopantšwego"
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport"
-msgstr ""
-"Tokišo ya Gtk yeo e hwetšago boleng bja boemo bjo rapamego bakeng sa lefelo "
-"le la go lebelela"
+msgstr "GtkAdjustment yeo e hwetšago boleng bja boemo bjo rapamego bakeng sa lefelo le la go lebelela"
 
 #: gtk/gtkviewport.c:145
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport"
-msgstr ""
-"Tokišo ya Gtk yeo e hwetšago boleng bja boemo bjo tsepamego bakeng sa lefelo "
-"le la go lebelela"
+msgstr "GtkAdjustment yeo e hwetšago boleng bja boemo bjo tsepamego bakeng sa lefelo le la go lebelela"
 
 #: gtk/gtkviewport.c:153
 msgid "Determines how the shadowed box around the viewport is drawn"
@@ -4892,9 +4842,7 @@ msgstr "Ga go na bontšha ka moka"
 
 #: gtk/gtkwidget.c:537
 msgid "Whether gtk_widget_show_all() should not affect this widget"
-msgstr ""
-"Ge eba sedirišwa_sa_ gtk_sa_bontšha_kamoka() ga se sa swanela go kgoma "
-"sedirišwa se"
+msgstr "Ge eba gtk_widget_show_all() ga e a swanela go kgoma sedirišwa se"
 
 #: gtk/gtkwidget.c:1378
 msgid "Interior Focus"
