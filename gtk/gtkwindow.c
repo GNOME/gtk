@@ -2619,12 +2619,14 @@ load_pixbuf_verbosely (const char *filename,
 /**
  * gtk_window_set_icon_from_file:
  * @window: a #GtkWindow
- * @list: a list of #GdkPixbuf
+ * @filename: location of icon file
  * @err: location to store error, or %NULL.
  *
- * Sets the icon for @wi
- * had gtk_window_set_icon_list() called on them as a single file.
+ * Sets the icon for @window.  
  * Warns on failure if @err is %NULL.
+ *
+ * This function is equivalent to calling gtk_window_set_icon()
+ * with a pixbuf created by loading the image from @filename.
  *
  * Returns: %TRUE if setting the icon succeeded.
  **/

@@ -120,10 +120,10 @@ gboolean      gtk_tree_store_iter_is_valid    (GtkTreeStore *tree_store,
 void          gtk_tree_store_reorder          (GtkTreeStore *tree_store,
                                                GtkTreeIter  *parent,
                                                gint         *new_order);
-void          gtk_tree_store_swap             (GtkTreeStore *store,
+void          gtk_tree_store_swap             (GtkTreeStore *tree_store,
                                                GtkTreeIter  *a,
                                                GtkTreeIter  *b);
-void          gtk_tree_store_move             (GtkTreeStore *store,
+void          gtk_tree_store_move             (GtkTreeStore *tree_store,
                                                GtkTreeIter  *iter,
                                                GtkTreePath  *position);
 

@@ -3110,7 +3110,7 @@ gtk_tree_view_column_cell_is_visible (GtkTreeViewColumn *tree_column)
 
 /**
  * gtk_tree_view_column_focus_cell:
- * @tree_view: A #GtkTreeView
+ * @tree_column: A #GtkTreeViewColumn
  * @cell: A #GtkCellRenderer
  *
  * Sets the current keyboard focus to be at @cell, if the column contains

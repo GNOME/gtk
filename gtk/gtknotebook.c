@@ -4154,7 +4154,7 @@ gtk_notebook_get_nth_page (GtkNotebook *notebook,
 }
 
 /**
- * gtk_notebook_get_nth_page:
+ * gtk_notebook_get_n_pages:
  * @notebook: a #GtkNotebook
  * 
  * Gets the number of pages in a notebook.

@@ -1188,7 +1188,7 @@ icon_size_lookup_intern (GtkSettings *settings,
 
 /**
  * gtk_icon_size_lookup_for_settings:
- * @GtkSettings: a #GtkSettings object, used to determine
+ * @settings: a #GtkSettings object, used to determine
  *   which set of user preferences to used.
  * @size: an icon size
  * @width: location to store icon width
@@ -1210,12 +1210,12 @@ icon_size_lookup_intern (GtkSettings *settings,
 gboolean
 gtk_icon_size_lookup_for_settings (GtkSettings *settings,
 				   GtkIconSize  size,
-				   gint        *widthp,
-				   gint        *heightp)
+				   gint        *width,
+				   gint        *height)
 {
   g_return_val_if_fail (GTK_IS_SETTINGS (settings), FALSE);
 
-  return icon_size_lookup_intern (settings, size, widthp, heightp);
+  return icon_size_lookup_intern (settings, size, width, height);
 }
 
 /**

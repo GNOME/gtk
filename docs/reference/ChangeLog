@@ -1,3 +1,7 @@
+2002-10-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add some missing symbols.
+
 2002-10-04  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/running.sgml: Document GDK_PIXBUF_MODULE_FILE.

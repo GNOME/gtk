@@ -425,7 +425,7 @@ typedef enum
   GTK_SORT_DESCENDING
 } GtkSortType;
 
-/* Style for gtk input method preeeit/status */
+/* Style for gtk input method preedit/status */
 typedef enum
 {
   GTK_IM_PREEDIT_NOTHING,

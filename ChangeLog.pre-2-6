@@ -1,3 +1,18 @@
+2002-10-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconfactory.c (gtk_icon_size_lookup_for_settings): 
+	* gtk/gtknotebook.c (gtk_notebook_get_n_pages): 
+	* gtk/gtkwindow.c (gtk_window_set_icon_from_file): 
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_focus_cell): Fix
+	doc comments.
+
+	* gtk/gtktreestore.c: 
+	* gtk/gtktreestore.h: Consistently name first parameter
+	tree_store, and make header and implementation agree on parameter 
+	names to silence gtk-doc.
+
+	* gtk/gtkenums.h (enum): Comment typo fix.
+
 Thu Oct 10 15:13:48 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkimcontext.[ch] gtk/gtkimcontextsimple.[ch] gtk/gtkimmodule.c

@@ -11,6 +11,7 @@ gtk_accel_group_unref
 gtk_accel_group_connect
 gtk_accel_group_connect_by_path
 GtkAccelGroupActivate
+GtkAccelGroupFindFunc
 gtk_accel_group_disconnect
 gtk_accel_group_disconnect_key
 gtk_accel_group_query
@@ -1578,6 +1579,7 @@ gtk_menu_shell_prepend
 gtk_menu_shell_insert
 gtk_menu_shell_deactivate
 gtk_menu_shell_select_item
+gtk_menu_shell_select_first
 gtk_menu_shell_deselect
 gtk_menu_shell_activate_item
 GtkMenuDirectionType
@@ -1658,6 +1660,7 @@ gtk_notebook_popup_disable
 gtk_notebook_get_current_page
 gtk_notebook_get_menu_label
 gtk_notebook_get_nth_page
+gtk_notebook_get_n_pages
 gtk_notebook_get_tab_label
 gtk_notebook_query_tab_label_packing
 gtk_notebook_set_homogeneous_tabs
@@ -2132,6 +2135,7 @@ GTK_SETTINGS_GET_CLASS
 GTK_TYPE_SETTINGS
 <SUBSECTION Private>
 gtk_settings_get_type
+GtkSettingsPropertyValue
 </SECTION>
 
 <SECTION>
@@ -2826,6 +2830,7 @@ GtkTreeModelForeachFunc
 GtkTreeModelFlags
 gtk_tree_path_new
 gtk_tree_path_new_from_string
+gtk_tree_path_new_from_indices
 gtk_tree_path_to_string
 gtk_tree_path_new_first
 gtk_tree_path_new_root
@@ -2847,6 +2852,7 @@ gtk_tree_row_reference_new_proxy
 gtk_tree_row_reference_get_path
 gtk_tree_row_reference_valid
 gtk_tree_row_reference_free
+gtk_tree_row_reference_copy
 gtk_tree_row_reference_inserted
 gtk_tree_row_reference_deleted
 gtk_tree_row_reference_reordered
@@ -2867,6 +2873,7 @@ gtk_tree_model_iter_has_child
 gtk_tree_model_iter_n_children
 gtk_tree_model_iter_nth_child
 gtk_tree_model_iter_parent
+gtk_tree_model_get_string_from_iter
 gtk_tree_model_ref_node
 gtk_tree_model_unref_node
 gtk_tree_model_get
@@ -2884,6 +2891,7 @@ GTK_TYPE_TREE_MODEL
 GTK_TREE_MODEL_GET_IFACE
 GTK_TYPE_TREE_ITER
 GTK_TYPE_TREE_PATH
+GTK_TYPE_TREE_ROW_REFERENCE
 <SUBSECTION Private>
 gtk_tree_model_get_type
 gtk_tree_iter_get_type
@@ -2902,6 +2910,7 @@ gtk_tree_model_sort_convert_path_to_child_path
 gtk_tree_model_sort_convert_iter_to_child_iter
 gtk_tree_model_sort_reset_default_sort_func
 gtk_tree_model_sort_clear_cache
+gtk_tree_model_sort_iter_is_valid
 <SUBSECTION Standard>
 GTK_TREE_MODEL_SORT
 GTK_IS_TREE_MODEL_SORT
@@ -2926,6 +2935,8 @@ gtk_tree_selection_get_user_data
 gtk_tree_selection_get_tree_view
 gtk_tree_selection_get_selected
 gtk_tree_selection_selected_foreach
+gtk_tree_selection_get_selected_rows
+gtk_tree_selection_count_selected_rows
 gtk_tree_selection_select_path
 gtk_tree_selection_unselect_path
 gtk_tree_selection_path_is_selected
@@ -2935,6 +2946,7 @@ gtk_tree_selection_iter_is_selected
 gtk_tree_selection_select_all
 gtk_tree_selection_unselect_all
 gtk_tree_selection_select_range
+gtk_tree_selection_unselect_range
 <SUBSECTION Standard>
 GTK_TREE_SELECTION
 GTK_IS_TREE_SELECTION
@@ -3015,6 +3027,10 @@ gtk_tree_store_append
 gtk_tree_store_is_ancestor
 gtk_tree_store_iter_depth
 gtk_tree_store_clear
+gtk_tree_store_iter_is_valid
+gtk_tree_store_reorder
+gtk_tree_store_swap
+gtk_tree_store_move
 <SUBSECTION Standard>
 GTK_TREE_STORE
 GTK_IS_TREE_STORE
@@ -3077,6 +3093,7 @@ gtk_tree_view_column_get_sort_order
 gtk_tree_view_column_cell_set_cell_data
 gtk_tree_view_column_cell_get_size
 gtk_tree_view_column_cell_is_visible
+gtk_tree_view_column_focus_cell
 <SUBSECTION Standard>
 GTK_TREE_VIEW_COLUMN
 GTK_IS_TREE_VIEW_COLUMN
@@ -3126,10 +3143,12 @@ gtk_tree_view_set_column_drag_function
 gtk_tree_view_scroll_to_point
 gtk_tree_view_scroll_to_cell
 gtk_tree_view_set_cursor
+gtk_tree_view_set_cursor_on_cell
 gtk_tree_view_get_cursor
 gtk_tree_view_row_activated
 gtk_tree_view_expand_all
 gtk_tree_view_collapse_all
+gtk_tree_view_expand_to_path
 gtk_tree_view_expand_row
 gtk_tree_view_collapse_row
 gtk_tree_view_map_expanded_rows
@@ -3301,6 +3320,10 @@ gtk_list_store_insert_after
 gtk_list_store_prepend
 gtk_list_store_append
 gtk_list_store_clear
+gtk_list_store_iter_is_valid
+gtk_list_store_reorder
+gtk_list_store_swap
+gtk_list_store_move
 <SUBSECTION Standard>
 GTK_LIST_STORE
 GTK_IS_LIST_STORE
@@ -3674,6 +3697,8 @@ gtk_window_stick
 gtk_window_unstick
 gtk_window_maximize
 gtk_window_unmaximize
+gtk_window_fullscreen
+gtk_window_unfullscreen
 gtk_window_begin_resize_drag
 gtk_window_begin_move_drag
 gtk_window_set_decorated
@@ -3682,6 +3707,8 @@ gtk_window_set_has_frame
 gtk_window_set_mnemonic_modifier
 gtk_window_set_role
 gtk_window_set_type_hint
+gtk_window_set_skip_taskbar_hint
+gtk_window_set_skip_pager_hint
 gtk_window_get_decorated
 gtk_window_get_default_icon_list
 gtk_window_get_default_size
@@ -3698,13 +3725,17 @@ gtk_window_get_size
 gtk_window_get_title
 gtk_window_get_transient_for
 gtk_window_get_type_hint
+gtk_window_get_skip_taskbar_hint
+gtk_window_get_skip_pager_hint
 gtk_window_move
 gtk_window_parse_geometry
 gtk_window_reshow_with_initial_size
 gtk_window_resize
 gtk_window_set_default_icon_list
+gtk_window_set_default_icon_from_file
 gtk_window_set_icon
 gtk_window_set_icon_list
+gtk_window_set_icon_from_file
 <SUBSECTION Standard>
 GTK_WINDOW
 GTK_IS_WINDOW
@@ -3764,6 +3795,7 @@ gtk_main_iteration_do
 gtk_main_do_event
 
 GtkModuleInitFunc
+GtkModuleDisplayInitFunc
 
 <SUBSECTION>
 gtk_true
@@ -4026,10 +4058,6 @@ gtk_selection_data_free
 <SUBSECTION Standard>
 GTK_TYPE_SELECTION_DATA
 <SUBSECTION Private>
-gtk_selection_incr_event
-gtk_selection_notify
-gtk_selection_property_notify
-gtk_selection_request
 gtk_selection_data_copy
 gtk_selection_data_get_type
 </SECTION>
@@ -4055,6 +4083,12 @@ gtk_clipboard_request_text
 gtk_clipboard_wait_for_contents
 gtk_clipboard_wait_for_text
 gtk_clipboard_wait_is_text_available
+<SUBSECTION Standard>
+GTK_CLIPBOARD
+GTK_TYPE_CLIPBOARD
+GTK_IS_CLIPBOARD
+<SUBSECTION Private>
+gtk_clipboard_get_type
 </SECTION>
 
 <SECTION>
@@ -4206,6 +4240,22 @@ gtk_type_enum_find_value
 gtk_type_flags_find_value
 <SUBSECTION Private>
 GTK_TYPE_IDENTIFIER
+GTK_TYPE_UINT
+GTK_TYPE_ULONG
+GTK_TYPE_LONG
+GTK_TYPE_STRING
+GTK_TYPE_INT
+GTK_TYPE_NONE
+GTK_TYPE_FLOAT
+GTK_TYPE_FLAGS
+GTK_TYPE_ENUM
+GTK_TYPE_UCHAR
+GTK_TYPE_POINTER
+GTK_TYPE_BOOL
+GTK_TYPE_CHAR
+GTK_TYPE_BOXED
+GTK_TYPE_DOUBLE
+GTK_TYPE_INVALID
 gtk_identifier_get_type
 </SECTION>
 
@@ -4294,6 +4344,7 @@ GTK_STOCK_CANCEL
 GTK_STOCK_CDROM
 GTK_STOCK_CLEAR
 GTK_STOCK_CLOSE
+GTK_STOCK_COLOR_PICKER
 GTK_STOCK_CONVERT
 GTK_STOCK_COPY
 GTK_STOCK_CUT
@@ -4383,6 +4434,7 @@ gtk_icon_set_ref
 gtk_icon_set_render_icon
 gtk_icon_set_unref
 gtk_icon_size_lookup
+gtk_icon_size_lookup_for_settings
 gtk_icon_size_register
 gtk_icon_size_register_alias
 gtk_icon_size_from_name
