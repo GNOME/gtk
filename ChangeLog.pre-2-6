@@ -1,3 +1,7 @@
+2003-09-18  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c (update_node): Robustness improvements.
+
 2003-09-17  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.c (text_handler): Report unexpected character

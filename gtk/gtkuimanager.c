@@ -1722,13 +1722,15 @@ update_node (GtkUIManager *self,
 
       /* Check if the node doesn't have an action and must have an action */
       if (action == NULL &&
+	  info->type != NODE_TYPE_ROOT &&
 	  info->type != NODE_TYPE_MENUBAR &&
 	  info->type != NODE_TYPE_TOOLBAR &&
 	  info->type != NODE_TYPE_SEPARATOR &&
 	  info->type != NODE_TYPE_MENU_PLACEHOLDER &&
 	  info->type != NODE_TYPE_TOOLBAR_PLACEHOLDER)
 	{
-	  /* FIXME: Should we warn here? */
+	  g_warning ("%s: missing action", info->name);
+
 	  goto recurse_children;
 	}
 
@@ -2063,12 +2065,14 @@ update_node (GtkUIManager *self,
       child = current->next;
       update_node (self, current, add_tearoffs && (info->type != NODE_TYPE_POPUP));
     }
-
-  if (info->type == NODE_TYPE_MENU) 
-    update_smart_separators (gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy)));
-  else if (info->type == NODE_TYPE_TOOLBAR)
-    update_smart_separators (info->proxy);
-
+  
+  if (info->proxy)
+    {
+      if (info->type == NODE_TYPE_MENU)
+	update_smart_separators (gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy)));
+      else if (info->type == NODE_TYPE_TOOLBAR)
+	update_smart_separators (info->proxy);
+    }
 
   /* handle cleanup of dead nodes */
   if (node->children == NULL && info->uifiles == NULL)
