@@ -1,5 +1,8 @@
 2004-09-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add some missing
+	declarations.
+
 	* gtk/running.sgml: Mention that modules can also
 	be specified in a setting.
 

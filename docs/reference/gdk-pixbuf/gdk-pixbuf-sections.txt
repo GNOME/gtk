@@ -6,10 +6,16 @@
 
 <SUBSECTION>
 gdk_pixbuf_version
+gdk_pixbuf_major_version
+gdk_pixbuf_minor_version
+gdk_pixbuf_micro_version
 GDK_PIXBUF_VERSION
 GDK_PIXBUF_MAJOR
 GDK_PIXBUF_MINOR
 GDK_PIXBUF_MICRO
+
+<SUBSECTION Private>
+GDK_PIXBUF_VAR
 </SECTION>
 
 <SECTION>
@@ -150,9 +156,11 @@ gdk_pixbuf_flip
 
 <SUBSECTION Standard>
 GDK_TYPE_INTERP_TYPE
+GDK_TYPE_PIXBUF_ROTATION
 
 <SUBSECTION Private>
 gdk_interp_type_get_type
+gdk_pixbuf_rotation_get_type
 </SECTION>
 
 <SECTION>
