@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-18 00:57+0100\n"
-"PO-Revision-Date: 2004-02-18 00:57+0100\n"
+"POT-Creation-Date: 2004-02-19 19:54+0100\n"
+"PO-Revision-Date: 2004-02-19 19:54+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -1649,12 +1649,12 @@ msgid "The type of operation that the file selector is performing"
 msgstr "Type operasjon om utføres av filutvalgsdialogen"
 
 #: gtk/gtkfilechooser.c:99
-msgid "File System"
-msgstr "Filsystem"
+msgid "File System Backend"
+msgstr "Filsystem-motor"
 
 #: gtk/gtkfilechooser.c:100
-msgid "File system object to use"
-msgstr "Filsystemobjekt som skal brukes"
+msgid "Name of file system backend to use"
+msgstr "Navn på filsystem-motor som skal brukes"
 
 #: gtk/gtkfilechooser.c:105
 msgid "Filter"
