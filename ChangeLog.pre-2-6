@@ -1,3 +1,7 @@
+2002-02-10  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* gtk/gtksizegroup.c: Fix a double «The» typo in a string.
+	
 2002-02-09  Matthias Clasen  <matthias@local>
 
 	* gtk/gtknotebook.c (gtk_notebook_set_focus_child): Avoid segfault
