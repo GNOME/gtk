@@ -1,3 +1,9 @@
+2002-11-07  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtkhpaned.c: (gtk_hpaned_size_allocate):
+	* gtk/gtkvpaned.c: (gtk_vpaned_size_allocate):
+	Check for NULL children, #97913.
+	
 Thu Nov  7 14:24:45 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkhandlebox.c: Add a snap_edge_set property to

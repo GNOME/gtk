@@ -212,9 +212,11 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
 
       if (GTK_WIDGET_REALIZED (widget))      
 	gdk_window_hide (paned->handle);
-	  
-      gtk_widget_set_child_visible (paned->child1, TRUE);
-      gtk_widget_set_child_visible (paned->child2, TRUE);
+
+      if (paned->child1)
+	gtk_widget_set_child_visible (paned->child1, TRUE);
+      if (paned->child2)
+	gtk_widget_set_child_visible (paned->child2, TRUE);
 
       child_allocation.x = widget->allocation.x + border_width;
       child_allocation.y = widget->allocation.y + border_width;
