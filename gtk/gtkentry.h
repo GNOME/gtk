@@ -75,19 +75,22 @@ struct _GtkEntryClass
 };
 
 
-guint      gtk_entry_get_type     (void);
-GtkWidget* gtk_entry_new          (void);
-GtkWidget* gtk_entry_new_with_max_length (guint16 max);
-void       gtk_entry_set_text     (GtkEntry      *entry,
-				   const gchar   *text);
-void       gtk_entry_append_text  (GtkEntry      *entry,
-				   const gchar   *text);
-void       gtk_entry_prepend_text (GtkEntry      *entry,
-				   const gchar   *text);
-void       gtk_entry_set_position (GtkEntry      *entry,
-				   gint           position);
-gchar*     gtk_entry_get_text     (GtkEntry      *entry);
-void       gtk_entry_set_visibility (GtkEntry    *entry,
+guint      gtk_entry_get_type       (void);
+GtkWidget* gtk_entry_new            (void);
+GtkWidget* gtk_entry_new_with_max_length (guint16   max);
+void       gtk_entry_set_text       (GtkEntry      *entry,
+				     const gchar   *text);
+void       gtk_entry_append_text    (GtkEntry      *entry,
+				     const gchar   *text);
+void       gtk_entry_prepend_text   (GtkEntry      *entry,
+				     const gchar   *text);
+void       gtk_entry_set_position   (GtkEntry      *entry,
+				     gint           position);
+gchar*     gtk_entry_get_text       (GtkEntry      *entry);
+void       gtk_entry_select_region  (GtkEntry      *entry,
+				     gint           start,
+				     gint           end);
+void       gtk_entry_set_visibility (GtkEntry      *entry,
 				     gint           visible);
 
 

@@ -134,9 +134,6 @@ static void gtk_delete_to_line_end        (GtkEntry          *entry);
 static void gtk_delete_selection          (GtkEntry          *entry);
 static void gtk_select_word               (GtkEntry          *entry);
 static void gtk_select_line               (GtkEntry          *entry);
-static void gtk_select_region             (GtkEntry          *entry,
-					   gint               start,
-					   gint               end);
 static void gtk_entry_cut_clipboard     (GtkEntry *entry, 
 					 GdkEventKey *event);
 static void gtk_entry_copy_clipboard    (GtkEntry *entry, 
@@ -844,19 +841,16 @@ gtk_entry_button_press (GtkWidget      *widget,
 	  gtk_grab_add (widget);
 
 	  tmp_pos = gtk_entry_position (entry, event->x + entry->scroll_offset);
-	  gtk_select_region (entry, tmp_pos, tmp_pos);
+	  gtk_entry_select_region (entry, tmp_pos, tmp_pos);
 	  entry->current_pos = entry->selection_start_pos;
-	  gtk_entry_queue_draw (entry);
 	  break;
 
 	case GDK_2BUTTON_PRESS:
 	  gtk_select_word (entry);
-	  gtk_entry_queue_draw (entry);
 	  break;
 
 	case GDK_3BUTTON_PRESS:
 	  gtk_select_line (entry);
-	  gtk_entry_queue_draw (entry);
 	  break;
 
 	default:
@@ -878,10 +872,9 @@ gtk_entry_button_press (GtkWidget      *widget,
 	  gtk_grab_add (widget);
 
 	  tmp_pos = gtk_entry_position (entry, event->x + entry->scroll_offset);
-	  gtk_select_region (entry, tmp_pos, tmp_pos);
+	  gtk_entry_select_region (entry, tmp_pos, tmp_pos);
 	  entry->have_selection = FALSE;
 	  entry->current_pos = entry->selection_start_pos;
-	  gtk_entry_queue_draw (entry);
 	}
     }
 
@@ -1115,6 +1108,11 @@ gtk_entry_key_press (GtkWidget   *widget,
 	      else
 		entry->selection_end_pos = entry->current_pos;
 	    }
+	}
+      else
+	{
+	  entry->selection_start_pos = 0;
+	  entry->selection_end_pos = 0;
 	}
 
       /* alex stuff */
@@ -1353,7 +1351,7 @@ gtk_entry_selection_received  (GtkWidget         *widget,
     }
 
   if (reselect)
-    gtk_select_region (entry, old_pos, entry->current_pos);
+    gtk_entry_select_region (entry, old_pos, entry->current_pos);
 
   gtk_entry_queue_draw (entry);
 }
@@ -1704,6 +1702,11 @@ gtk_real_entry_delete_text (GtkEntry *entry,
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
+  if (entry->selection_start_pos > start_pos)
+    entry->selection_start_pos -= MIN(end_pos, entry->selection_start_pos) - start_pos;
+  if (entry->selection_end_pos > start_pos)
+    entry->selection_end_pos -= MIN(end_pos, entry->selection_end_pos) - start_pos;
+
   if ((start_pos < end_pos) &&
       (start_pos >= 0) &&
       (end_pos <= entry->text_length))
@@ -1944,24 +1947,27 @@ gtk_select_word (GtkEntry *entry)
   gtk_move_forward_word (entry);
   end_pos = entry->current_pos;
 
-  gtk_select_region (entry, start_pos, end_pos);
+  gtk_entry_select_region (entry, start_pos, end_pos);
 }
 
 static void
 gtk_select_line (GtkEntry *entry)
 {
-  gtk_select_region (entry, 0, entry->text_length);
+  gtk_entry_select_region (entry, 0, entry->text_length);
   entry->current_pos = entry->selection_end_pos;
 }
 
-static void
-gtk_select_region (GtkEntry *entry,
+void
+gtk_entry_select_region (GtkEntry *entry,
 		   gint      start,
 		   gint      end)
 {
   entry->have_selection = TRUE;
+
   entry->selection_start_pos = start;
   entry->selection_end_pos = end;
+
+  gtk_widget_queue_draw (GTK_WIDGET (entry));
 }
 
 static void

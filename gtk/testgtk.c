@@ -1370,6 +1370,8 @@ create_entry ()
       entry = gtk_entry_new ();
       /* gtk_widget_set_usize (entry, 0, 25); */
       gtk_entry_set_text (GTK_ENTRY (entry), "hello world");
+      gtk_entry_select_region (GTK_ENTRY (entry), 
+			       0, GTK_ENTRY(entry)->text_length);
       gtk_box_pack_start (GTK_BOX (box2), entry, TRUE, TRUE, 0);
       gtk_widget_show (entry);
 

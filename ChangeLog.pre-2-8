@@ -1,3 +1,13 @@
+Tue Jan  6 17:07:29 1998  Owen Taylor  <owt1@cornell.edu>
+	* gtk/gtkentry.c gtk/gtkentry.h gtk/testgtk.c : 
+	   Fixed problem with deleting while text is selected.
+	   Changed behavior so that motion keys remove selection.
+	   Added new gtk_entry_select_region () call.
+
+Sat Jan  3 20:23:25 1998  Owen Taylor  <owt1@cornell.edu>
+	* glib/glib.h: Changed guint32 -> guint for bitfields. 
+	  (Bitfields must be int or unsigned int?)
+
 Sat Jan  3 15:39:45 PST 1998 Jay Painter <jpaint@serv.net>
 	* gtk/testgtk.c: better CList test
 
