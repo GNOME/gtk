@@ -1,3 +1,9 @@
+1998-11-23  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktoolbar.c: (gtk_toolbar_set_relief):
+	(gtk_toolbar_insert_element): When setting relief, also affect
+	toggle buttons.
+
 Sun Nov 22 20:37:06 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/gtkobject.h: remove extraneous comma
