@@ -1,3 +1,7 @@
+2001-10-31  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkstock.c: Add stock items for most stock icons. (#61757)
+
 Wed Oct 31 16:53:48 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreednd.c (gtk_tree_set_row_drag_data): rename
