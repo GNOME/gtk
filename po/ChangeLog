@@ -1,3 +1,9 @@
+Sat Sep  8 01:38:39 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* POTFILES.in: Remove a whole lot of duplicates 
+	introduced at some point, to prevent problems
+	like the last.  
+
 Sat Sep  8 01:44:32 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* POTFILES.in: missed one.
