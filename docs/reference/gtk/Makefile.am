@@ -81,7 +81,8 @@ content_files = 		\
 	text_widget.sgml	\
 	tree_widget.sgml	\
 	windows.sgml		\
-	x11.sgml
+	x11.sgml		\
+	gtk-query-immodules-2.0.xml
 
 # Images to copy into HTML directory
 HTML_IMAGES = \
@@ -158,6 +159,15 @@ HTML_IMAGES = \
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html --extra-dir=../gdk/html
+
+man_MANS = gtk-query-immodules-2.0.1 
+
+if ENABLE_MAN
+
+%.1 : %.xml 
+	@XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
+
+endif
 
 include $(top_srcdir)/gtk-doc.make
 

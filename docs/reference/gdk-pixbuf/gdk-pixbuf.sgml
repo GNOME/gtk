@@ -25,6 +25,8 @@
 <!ENTITY gdk-pixbuf "<application>gdk-pixbuf</application>">
 <!ENTITY Imlib "<application>Imlib</application>">
 <!ENTITY version SYSTEM "version.xml">
+<!ENTITY gdk-pixbuf-csource SYSTEM "gdk-pixbuf-csource.xml">
+<!ENTITY gdk-pixbuf-query-loaders SYSTEM "gdk-pixbuf-query-loaders.xml">
 ]>
 
 <book id="index">
@@ -112,6 +114,20 @@
     &gdk-pixbuf-gdk-pixbuf-xlib-rendering;
     &gdk-pixbuf-gdk-pixbuf-xlib-from-drawables;
     &gdk-pixbuf-gdk-pixbuf-xlib-rgb;
+  </reference>
+
+  <reference>
+    <title>Tools Reference</title>
+
+    <partintro>
+      <para>
+	This part presents the tools which are shipped with the
+	&gdk-pixbuf; library.  
+      </para>
+    </partintro>
+
+    &gdk-pixbuf-csource;
+    &gdk-pixbuf-query-loaders;
   </reference>
 
   <index/>

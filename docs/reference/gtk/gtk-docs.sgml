@@ -157,6 +157,7 @@
 <!ENTITY gtk-Changes-1-2 SYSTEM "changes-1.2.sgml">
 <!ENTITY gtk-Changes-2-0 SYSTEM "changes-2.0.sgml">
 <!ENTITY version SYSTEM "version.xml">
+<!ENTITY gtk-query-immodules SYSTEM "gtk-query-immodules-2.0.xml">
 ]>
 <book id="index">
   <bookinfo>
@@ -288,6 +289,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
 
   <part id="gtkobjects">
     <title>GTK+ Widgets and Objects</title>
+
     <chapter>
       <title>Object Hierarchy</title>
     &index-Object-Tree;
@@ -357,6 +359,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkListStore;
         &GtkTreeStore;
     </chapter>
+
     <chapter id="MenusAndCombos">
       <title>Menus, Combo Box, Toolbar</title>
         &GtkCombo;
@@ -478,9 +481,16 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkTree;
         &GtkTreeItem;
     </chapter>
+  </part>
 
+  <part>
+    <title>GTK+ Tools</title>
+
+     &gtk-query-immodules;
   </part>
 
   <index/>
 
 </book>
+
+

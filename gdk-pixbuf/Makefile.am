@@ -283,12 +283,6 @@ gdk_pixbuf_query_loaders_SOURCES = queryloaders.c
 
 
 #
-# manual pages to install
-#
-man_MANS = gdk-pixbuf-csource.1
-
-
-#
 # The GdkPixBuf library
 #
 libgdk_pixbufincludedir = $(includedir)/gtk-2.0/gdk-pixbuf

@@ -1,4 +1,33 @@
-2003-06-17  Matthias Clasen  <mc2@YAST_ASK>
+2003-06-17  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/Makefile.am: Add rule to regenerate man pages from 
+	Docbook.
+	(man_MANS): Add gdk-pixbuf-csource.1, gdk-pixbuf-query-loaders.1.
+	(content_files): Add gdk-pixbuf-csource.xml, 
+	gdk-pixbuf-query-loaders.xml.
+
+	* gdk-pixbuf/gdk-pixbuf-csource.xml: New refentry, containing the 
+	former gdk-pixbuf/gdk-pixbuf-csource.1, converted to Docbook.
+
+	* gdk-pixbuf/gdk-pixbuf-query-loaders.xml: New refentry.
+
+	* gdk-pixbuf/gdk-pixbuf-csource.1:
+	* gdk-pixbuf/gdk-pixbuf-query-loaders.1: Man pages generated from
+	the .xml sources.
+
+	* gdk-pixbuf/gdk-pixbuf.sgml: Include gdk-pixbuf-csource.xml and
+	gdk-pixbuf-query-loaders.xml.
+	
+	* gtk/Makefile.am: Add rule to regenerate man pages from Docbook.
+	(man_MANS): Add gtk-query-immodules-2.0.1
+	(content_files): Add gtk-query-immodules-2.0.xml
+
+	* gtk/gtk-query-immodules-2.0.xml: New refentry.
+
+	* gtk/gtk-query-immodules-2.0.1: Man page generated from the .xml 
+	source.
+
+	* gtk/gtk-docs.sgml: Include gtk-query-immodules-2.0.xml.
 
 	* gtk/gtk-docs.sgml: 
 	* gdk-pixbuf/gdk-pixbuf.sgml: 

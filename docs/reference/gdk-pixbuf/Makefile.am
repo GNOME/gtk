@@ -52,13 +52,24 @@ content_files =				\
 	gdk-pixbuf-from-drawables.sgml	\
 	gdk-pixbuf-rendering.sgml	\
 	gdk-pixbuf.sgml			\
-	porting-from-imlib.sgml
+	porting-from-imlib.sgml		\
+	gdk-pixbuf-csource.xml		\
+	gdk-pixbuf-query-loaders.xml
 
 # Images to copy into HTML directory
 HTML_IMAGES = 
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=
+
+man_MANS = gdk-pixbuf-csource.1 gdk-pixbuf-query-loaders.1 
+
+if ENABLE_MAN
+
+%.1 : %.xml 
+	@XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
+
+endif
 
 include $(top_srcdir)/gtk-doc.make
 
