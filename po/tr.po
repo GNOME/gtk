@@ -1,27 +1,28 @@
 # ---------------------------------------------------------------------
-# Copyright (C) 1998 Free Software Foundation, Inc.
-# Fatih Demir <kabalak@gmx.net> , 1999 .
+# Copyright (C) 1999-2001 Free Software Foundation, Inc.
+# Fatih Demir <kabalak@gmx.net> , 1999-2001.
 # ---------------------------------------------------------------------
+# 
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.3.1\n"
+"Project-Id-Version: gtk+ 1.3.2\n"
 "POT-Creation-Date: 2001-03-17 12:41+0100\n"
-"PO-Revision-Date: 2001-03-17 12:41+0100\n"
-"Last-Translator: Fatih Demir <kabalak@gmx.net>\n"
-"Language-Team: Turkish <tr@li.org>\n"
+"PO-Revision-Date: 2001-03-17 12:51+0100\n"
+"Last-Translator: Fatih Demir <kabalak@gtranslator.org>\n"
+"Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:125 gdk-pixbuf/gdk-pixbuf-io.c:516
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "Dosya '%s' a#_cilamad#_i: %s"
+msgstr "Dosya '%s' açilamadı: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:136 gdk-pixbuf/gdk-pixbuf-io.c:526
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr "Resim dosyas#_i '%s' hi#_c bilgi i#_cermiyor."
+msgstr "Resim dosyası '%s' hiç bilgi içermiyor."
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:165
 #, c-format
@@ -104,7 +105,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:295
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "Resim y�kleme mod�l� bulunamad#_i: %s: %s"
+msgstr "Resim yükleme modülü bulunamadı: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:314
 #, c-format
@@ -116,7 +117,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:425 gdk-pixbuf/gdk-pixbuf-io.c:451
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr ""
+msgstr "Resim türü '%s' desteklenmiyor"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:473
 #, c-format
@@ -125,7 +126,7 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:479
 msgid "Unrecognized image file format"
-msgstr "Bilinmeyen resim t�r�"
+msgstr "Bilinmeyen resim türü"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:549
 #, c-format
@@ -135,7 +136,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:582
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr "Resim '%s' y�klenemedi: %s"
+msgstr "Resim '%s' yüklenemedi: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:687
 #, c-format
@@ -185,12 +186,12 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:921
 msgid "File does not appear to be a GIF file"
-msgstr ""
+msgstr "Dosya bir GIF dosyasına benzemiyor"
 
 #: gdk-pixbuf/io-gif.c:933
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr ""
+msgstr "GIF dosya türünün %s sürümü desteklenmiyor"
 
 #: gdk-pixbuf/io-gif.c:985
 msgid "GIF animation contained a frame with an incorrect size"
@@ -340,7 +341,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderer.c:101
 msgid "can_activate"
-msgstr ""
+msgstr "can_activate"
 
 #: gtk/gtkcellrenderer.c:102
 msgid "Cell can get activate events."
@@ -348,11 +349,11 @@ msgstr ""
 
 #: gtk/gtkcellrenderer.c:110
 msgid "visible"
-msgstr "g�r�nebilir"
+msgstr "görünebilir"
 
 #: gtk/gtkcellrenderer.c:111
 msgid "Display the cell"
-msgstr "H�creyi g�ster"
+msgstr "Hücreyi göster"
 
 #: gtk/gtkcellrenderer.c:119
 msgid "xalign"
@@ -388,7 +389,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:102 gtk/gtkcellrenderertextpixbuf.c:125
 msgid "Pixbuf Object"
-msgstr ""
+msgstr "Pixbuf nesnesi"
 
 #: gtk/gtkcellrendererpixbuf.c:103 gtk/gtkcellrenderertextpixbuf.c:126
 msgid "The pixbuf to render."
@@ -428,7 +429,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:181 gtk/gtktexttag.c:240
 msgid "Foreground color name"
-msgstr "�nalan renk ismi"
+msgstr "Önalan renk ismi"
 
 #: gtk/gtkcellrenderertext.c:182 gtk/gtktexttag.c:241
 msgid "Foreground color as a string"
@@ -436,7 +437,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:189 gtk/gtktexttag.c:248
 msgid "Foreground color"
-msgstr "�n alan rengi"
+msgstr "Ön alan rengi"
 
 #: gtk/gtkcellrenderertext.c:190 gtk/gtktexttag.c:249
 msgid "Foreground color as a GdkColor"
@@ -444,7 +445,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:198 gtk/gtkentry.c:375 gtk/gtktexttag.c:274
 msgid "Editable"
-msgstr "De�i�tirebilinir"
+msgstr "Değiştirebilinir"
 
 #: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:275
 msgid "Whether the text can be modified by the user"
@@ -453,7 +454,7 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:206 gtk/gtkcellrenderertext.c:214
 #: gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
-msgstr "Yaz� tipi"
+msgstr "Yazı tipi"
 
 #: gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:283
 msgid "Font description as a string"
@@ -465,7 +466,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:223 gtk/gtktexttag.c:299
 msgid "Font family"
-msgstr "Yaz#_i tipi ailesi"
+msgstr "Yazı tipi ailesi"
 
 #: gtk/gtkcellrenderertext.c:224 gtk/gtktexttag.c:300
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
@@ -474,7 +475,7 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:231 gtk/gtkcellrenderertext.c:232
 #: gtk/gtktexttag.c:307 gtk/gtktexttag.c:308
 msgid "Font style"
-msgstr "Yaz#_i tipi stili"
+msgstr "Yazı tipi stili"
 
 #: gtk/gtkcellrenderertext.c:240 gtk/gtkcellrenderertext.c:241
 #: gtk/gtktexttag.c:316 gtk/gtktexttag.c:317
@@ -515,7 +516,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:300 gtk/gtktexttag.c:454
 msgid "Strikethrough"
-msgstr ""
+msgstr "Karalanmış"
 
 #: gtk/gtkcellrenderertext.c:301 gtk/gtktexttag.c:455
 msgid "Whether to strike through the text"
@@ -523,7 +524,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:308 gtk/gtktexttag.c:462
 msgid "Underline"
-msgstr ""
+msgstr "Altçizgili"
 
 #: gtk/gtkcellrenderertext.c:309 gtk/gtktexttag.c:463
 msgid "Style of underline for this text"
@@ -691,15 +692,15 @@ msgstr "Dolgunluk :"
 
 #: gtk/gtkcolorsel.c:1387
 msgid "Value:"
-msgstr "Değer:"
+msgstr "DeÄer:"
 
 #: gtk/gtkcolorsel.c:1388
 msgid "Red:"
-msgstr "Kırmızı :"
+msgstr "KÄ±rmÄ±zÄ± :"
 
 #: gtk/gtkcolorsel.c:1389
 msgid "Green:"
-msgstr "Yeşil :"
+msgstr "YeÅil :"
 
 #: gtk/gtkcolorsel.c:1390
 msgid "Blue:"
@@ -707,15 +708,15 @@ msgstr "Mavi :"
 
 #: gtk/gtkcolorsel.c:1393
 msgid "Opacity:"
-msgstr "Gözükürlük :"
+msgstr "GÃ¶zÃ¼kÃ¼rlÃ¼k :"
 
 #: gtk/gtkcolorsel.c:1408
 msgid "Hex Value:"
-msgstr "Onaltılı değer:"
+msgstr "OnaltÄ±lÄ± deÄer:"
 
 #: gtk/gtkcolorsel.c:1429
 msgid "Custom Palette"
-msgstr "Özel palet"
+msgstr "Ãzel palet"
 
 #: gtk/gtkcolorsel.c:1434
 msgid "Set Color"
@@ -723,7 +724,7 @@ msgstr "Rengi belirle"
 
 #: gtk/gtkentry.c:365
 msgid "Text Position"
-msgstr ""
+msgstr "Metin yerleşimi"
 
 #: gtk/gtkentry.c:366
 msgid "The current position of the insertion point"
@@ -735,15 +736,15 @@ msgstr ""
 
 #: gtk/gtkentry.c:383
 msgid "Maximum length"
-msgstr ""
+msgstr "Azami uzunluk"
 
 #: gtk/gtkentry.c:384
 msgid "Maximum number of characters for this entry"
-msgstr ""
+msgstr "Bu birim için geçerli azami karakter sayısı"
 
 #: gtk/gtkentry.c:392
 msgid "Visibility"
-msgstr ""
+msgstr "Görünebilirlik"
 
 #: gtk/gtkentry.c:393
 msgid ""
@@ -784,11 +785,11 @@ msgstr "Kes"
 
 #: gtk/gtkentry.c:3174 gtk/gtktextview.c:4905
 msgid "Copy"
-msgstr ""
+msgstr "Kopyala"
 
 #: gtk/gtkentry.c:3175 gtk/gtktextview.c:4906
 msgid "Paste"
-msgstr "Yap��t�r"
+msgstr "Yapıştır"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:533
@@ -803,7 +804,7 @@ msgstr "Dosyalar"
 #: gtk/gtkfilesel.c:621 gtk/gtkfilesel.c:1719
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "%s dizini okunamıyor "
+msgstr "%s dizini okunamÄ±yor "
 
 #: gtk/gtkfilesel.c:654
 msgid "Create Dir"
@@ -811,11 +812,11 @@ msgstr "Bir dizin yarat"
 
 #: gtk/gtkfilesel.c:665 gtk/gtkfilesel.c:1073
 msgid "Delete File"
-msgstr "Dosyayı sil"
+msgstr "DosyayÄ± sil"
 
 #: gtk/gtkfilesel.c:676 gtk/gtkfilesel.c:1217
 msgid "Rename File"
-msgstr "Adını değiştir"
+msgstr "AdÄ±nÄ± deÄiÅtir"
 
 #: gtk/gtkfilesel.c:895
 #, c-format
@@ -855,7 +856,7 @@ msgstr "Yarat"
 #: gtk/gtkfilesel.c:977 gtk/gtkfilesel.c:1104 gtk/gtkfilesel.c:1259
 #: gtk/gtkgamma.c:423 gtk/gtkstock.c:235
 msgid "Cancel"
-msgstr "Çık"
+msgstr "ÃÄ±k"
 
 #: gtk/gtkfilesel.c:1013
 #, c-format
@@ -911,11 +912,11 @@ msgstr ""
 #. buttons
 #: gtk/gtkfilesel.c:1250
 msgid "Rename"
-msgstr "Adını değiştir"
+msgstr "AdÄ±nÄ± deÄiÅtir"
 
 #: gtk/gtkfilesel.c:1698
 msgid "Selection: "
-msgstr "Işaretli olan :"
+msgstr "IÅaretli olan :"
 
 #: gtk/gtkfilesel.c:2310
 #, c-format
@@ -926,11 +927,11 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:3177
 msgid "Name too long"
-msgstr ""
+msgstr "Isim çok fazla uzun"
 
 #: gtk/gtkfilesel.c:3179
 msgid "Couldn't convert filename"
-msgstr ""
+msgstr "Dosya adını dönüştüremedim"
 
 #: gtk/gtkfontsel.c:190
 msgid "Family:"
@@ -938,7 +939,7 @@ msgstr "Aile :"
 
 #: gtk/gtkfontsel.c:195
 msgid "Style:"
-msgstr "Yapı:"
+msgstr "YapÄ±:"
 
 #: gtk/gtkfontsel.c:200
 msgid "Size:"
@@ -947,11 +948,11 @@ msgstr "Boyut :"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:310
 msgid "Preview:"
-msgstr "Ön görünüm :"
+msgstr "Ãn gÃ¶rÃ¼nÃ¼m :"
 
 #: gtk/gtkfontsel.c:971
 msgid "Font Selection"
-msgstr "Yazı tipi seçimi"
+msgstr "YazÄ± tipi seÃ§imi"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma"
@@ -959,7 +960,7 @@ msgstr "Gamma"
 
 #: gtk/gtkgamma.c:402
 msgid "Gamma value"
-msgstr "Gamma değeri"
+msgstr "Gamma deÄeri"
 
 #: gtk/gtkgamma.c:415 gtk/gtkstock.c:234
 msgid "OK"
@@ -967,28 +968,27 @@ msgstr "Oldu"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
-#.
 #: gtk/gtkiconfactory.c:884
 #, c-format
 msgid "Error loading icon: %s"
-msgstr ""
+msgstr "Simge yüklenirken hata oldu: %s"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:181
 msgid "Input"
-msgstr "Içerim"
+msgstr "IÃ§erim"
 
 #: gtk/gtkinputdialog.c:189
 msgid "No input devices"
-msgstr "Içerim yagıtları yok"
+msgstr "IÃ§erim yagÄ±tlarÄ± yok"
 
 #: gtk/gtkinputdialog.c:218
 msgid "Device:"
-msgstr "Aygıt :"
+msgstr "AygÄ±t :"
 
 #: gtk/gtkinputdialog.c:234
 msgid "Disabled"
-msgstr "Kaptıldı"
+msgstr "KaptÄ±ldÄ±"
 
 #: gtk/gtkinputdialog.c:242
 msgid "Screen"
@@ -1000,7 +1000,7 @@ msgstr "Pencere"
 
 #: gtk/gtkinputdialog.c:258
 msgid "Mode: "
-msgstr "Şekil: "
+msgstr "Åekil: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:288
@@ -1010,7 +1010,7 @@ msgstr "Eksenler"
 #. Keys listbox
 #: gtk/gtkinputdialog.c:304
 msgid "Keys"
-msgstr "Tuşlar"
+msgstr "TuÅlar"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
@@ -1032,15 +1032,15 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:469
 msgid "Pressure"
-msgstr "Baskı"
+msgstr "BaskÄ±"
 
 #: gtk/gtkinputdialog.c:470
 msgid "X Tilt"
-msgstr "X eğilimi"
+msgstr "X eÄilimi"
 
 #: gtk/gtkinputdialog.c:471
 msgid "Y Tilt"
-msgstr "Y eğilimi"
+msgstr "Y eÄilimi"
 
 #: gtk/gtkinputdialog.c:472
 msgid "Wheel"
@@ -1052,7 +1052,7 @@ msgstr "yok"
 
 #: gtk/gtkinputdialog.c:546 gtk/gtkinputdialog.c:582
 msgid "(disabled)"
-msgstr "(kapalı)"
+msgstr "(kapalÄ±)"
 
 #: gtk/gtkinputdialog.c:575
 msgid "(unknown)"
@@ -1067,10 +1067,9 @@ msgstr "temiz"
 #. * to be RTL, otherwise translate to default:LTR.
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
-#.
 #: gtk/gtkmain.c:473
 msgid "default:LTR"
-msgstr ""
+msgstr "default:LTR"
 
 #: gtk/gtknotebook.c:2011 gtk/gtknotebook.c:4329
 #, c-format
@@ -1080,21 +1079,21 @@ msgstr "%u'nci sayfa"
 #: gtk/gtkrc.c:2030
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "\"%s\" resimini pixmap_path'da bulunamadı . Satır %d"
+msgstr "\"%s\" resimini pixmap_path'da bulunamadÄ± . SatÄ±r %d"
 
 #: gtk/gtkrc.c:2033
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "\"%s\" resimini pixmap_path'da bulunamadı"
+msgstr "\"%s\" resimini pixmap_path'da bulunamadÄ±"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons
 #: gtk/gtkstock.c:228
 msgid "Information"
-msgstr ""
+msgstr "Bilgi"
 
 #: gtk/gtkstock.c:229
 msgid "Warning"
-msgstr ""
+msgstr "Ikaz"
 
 #: gtk/gtkstock.c:230
 msgid "Error"
@@ -1114,27 +1113,27 @@ msgstr "_Kapat"
 
 #: gtk/gtkstock.c:237
 msgid "_Yes"
-msgstr ""
+msgstr "_Evet"
 
 #: gtk/gtkstock.c:238
 msgid "_No"
-msgstr ""
+msgstr "_Hayır"
 
 #: gtk/gtkstock.c:241
 msgid "Quit"
-msgstr "��k"
+msgstr "Çık"
 
 #: gtk/gtkstock.c:242
 msgid "Help"
-msgstr "Yardım"
+msgstr "YardÄ±m"
 
 #: gtk/gtkstock.c:243
 msgid "New"
-msgstr ""
+msgstr "Yeni"
 
 #: gtk/gtkstock.c:244
 msgid "Open"
-msgstr "A�"
+msgstr "Aç"
 
 #: gtk/gtktexttag.c:196
 msgid "Tag name"
@@ -1172,7 +1171,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:265
 msgid "Text direction"
-msgstr "Metin y�n�"
+msgstr "Metin yönü"
 
 #: gtk/gtktexttag.c:266
 msgid "Text direction, e.g. right-to-left or left-to-right"
@@ -1188,7 +1187,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:374
 msgid "Language"
-msgstr ""
+msgstr "Dil"
 
 #: gtk/gtktexttag.c:375
 msgid "Language engine code to use for rendering the text"
@@ -1378,11 +1377,11 @@ msgstr ""
 #: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Yüklenebilir \"%s\" modülü module_path'da bulunamadı ,"
+msgstr "YÃ¼klenebilir \"%s\" modÃ¼lÃ¼ module_path'da bulunamadÄ± ,"
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "--- Yardımı yok ---"
+msgstr "--- YardÄ±mÄ± yok ---"
 
 #: gtk/gtktreeviewcolumn.c:129
 msgid "Cell renderer"
@@ -1394,7 +1393,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:137
 msgid "Visible"
-msgstr "G�r�nebilir"
+msgstr "Görünebilir"
 
 #: gtk/gtktreeviewcolumn.c:138
 msgid "Whether to display the colomn"
@@ -1410,7 +1409,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:154
 msgid "Width"
-msgstr ""
+msgstr "Genişlik"
 
 #: gtk/gtktreeviewcolumn.c:155
 msgid "Current width of the column"
@@ -1434,7 +1433,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:184
 msgid "Title"
-msgstr "�styaz#_i"
+msgstr "Üstyazı"
 
 #: gtk/gtktreeviewcolumn.c:185
 msgid "Title to appear in column header"
@@ -1450,7 +1449,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:201
 msgid "Widget"
-msgstr "Par�ac�k"
+msgstr "Parçacık"
 
 #: gtk/gtktreeviewcolumn.c:202
 msgid "Widget to put in column header button instead of column title"
