@@ -3714,6 +3714,8 @@ gtk_text_iter_set_visible_line_offset (GtkTextIter *iter,
 
   g_return_if_fail (iter != NULL);
   
+  gtk_text_iter_set_line_offset (iter, 0);
+
   pos = *iter;
 
   /* For now we use a ludicrously slow implementation */
@@ -3760,6 +3762,8 @@ gtk_text_iter_set_visible_line_index  (GtkTextIter *iter,
 
   g_return_if_fail (iter != NULL);
   
+  gtk_text_iter_set_line_offset (iter, 0);
+
   pos = *iter;
 
   /* For now we use a ludicrously slow implementation */

@@ -1,3 +1,10 @@
+Mon Aug 16 01:03:08 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextiter.c (gtk_text_iter_set_visible_line_offset): 
+	(gtk_text_iter_set_visible_line_index): Count from the 
+	beginning of the line, not from the current position.  (#150101,
+	Torsten Schoenfeld)
+
 2004-08-15  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk-zip.sh.in: Fix typo. The gtk.immodules file had never been
