@@ -135,6 +135,7 @@ struct _GtkFileChooserDefault
   GtkWidget *save_widgets;
 
   GtkWidget *entry;
+  GtkWidget *save_folder_label;
   GtkWidget *save_folder_combo;
 
   /* Flags */
@@ -1772,17 +1773,21 @@ file_pane_create (GtkFileChooserDefault *impl,
 }
 /* Callback used when the "Browse for more folders" expander is toggled */
 static void
-expander_activate_cb (GtkExpander           *expander,
-		      GtkFileChooserDefault *impl)
+expander_changed_cb (GtkExpander           *expander,
+		     GParamSpec            *pspec,
+		     GtkFileChooserDefault *impl)
 {
   gboolean active;
 
   active = gtk_expander_get_expanded (expander);
 
   if (active)
-    gtk_widget_hide (impl->hpaned);
-  else
     gtk_widget_show (impl->hpaned);
+  else
+    gtk_widget_hide (impl->hpaned);
+
+  gtk_widget_set_sensitive (impl->save_folder_label, !active);
+/*   gtk_widget_set_sensitive (impl->save_folder_combo, !active); */
 }
 
 /* Creates the widgets specific to Save mode */
@@ -1807,11 +1812,8 @@ save_widgets_create (GtkFileChooserDefault *impl)
 		    0, 0);
   gtk_widget_show (widget);
 
-  impl->entry = _gtk_file_chooser_entry_new ();
+  impl->entry = gtk_entry_new ();
   gtk_entry_set_activates_default (GTK_ENTRY (impl->entry), TRUE);
-  _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (impl->entry), impl->file_system);
-  _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->entry), impl->current_folder);
-
   gtk_table_attach (GTK_TABLE (table), impl->entry,
 		    1, 2, 0, 1,
 		    GTK_EXPAND | GTK_FILL, 0,
@@ -1821,13 +1823,13 @@ save_widgets_create (GtkFileChooserDefault *impl)
 
   /* Folder combo */
 
-  widget = gtk_label_new_with_mnemonic (_("Save in _Folder:"));
-  gtk_misc_set_alignment (GTK_MISC (widget), 0.0, 0.5);
-  gtk_table_attach (GTK_TABLE (table), widget,
+  impl->save_folder_label = gtk_label_new_with_mnemonic (_("Save in _Folder:"));
+  gtk_misc_set_alignment (GTK_MISC (impl->save_folder_label), 0.0, 0.5);
+  gtk_table_attach (GTK_TABLE (table), impl->save_folder_label,
 		    0, 1, 1, 2,
 		    GTK_FILL, GTK_FILL,
 		    0, 0);
-  gtk_widget_show (widget);
+  gtk_widget_show (impl->save_folder_label);
 
   /* FIXME: create the combo */
 
@@ -1843,8 +1845,8 @@ save_widgets_create (GtkFileChooserDefault *impl)
   widget = gtk_expander_new_with_mnemonic (_("_Browse for other folders"));
   gtk_container_add (GTK_CONTAINER (alignment), widget);
   gtk_widget_show (widget);
-  g_signal_connect (widget, "activate",
-		    G_CALLBACK (expander_activate_cb),
+  g_signal_connect (widget, "notify::expanded",
+		    G_CALLBACK (expander_changed_cb),
 		    impl);
 
   return table;  
@@ -2440,6 +2442,7 @@ update_chooser_entry (GtkFileChooserDefault *impl)
   if (impl->action != GTK_FILE_CHOOSER_ACTION_SAVE)
     return;
 
+  g_assert (!impl->select_multiple);
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
 
   if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
@@ -2452,8 +2455,8 @@ update_chooser_entry (GtkFileChooserDefault *impl)
   info = _gtk_file_system_model_get_info (impl->list_model, &child_iter);
 
   if (!gtk_file_info_get_is_folder (info))
-    _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->entry),
-					   gtk_file_info_get_display_name (info));
+    gtk_entry_set_text (GTK_ENTRY (impl->entry),
+			gtk_file_info_get_display_name (info));
 }
 
 static void
@@ -2481,10 +2484,6 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
       impl->changing_folder = FALSE;
     }
 
-  /* Notify the save entry */
-
-  _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->entry), impl->current_folder);
-
   /* Create a new list model */
   set_list_model (impl);
 
@@ -2494,7 +2493,6 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 
   g_signal_emit_by_name (impl, "current-folder-changed", 0);
 
-  update_chooser_entry (impl);
   check_preview_change (impl);
   bookmarks_check_add_sensitivity (impl);
 
@@ -2517,7 +2515,7 @@ gtk_file_chooser_default_set_current_name (GtkFileChooser *chooser,
 
   g_return_if_fail (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE);
 
-  _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->entry), name);
+  gtk_entry_set_text (GTK_ENTRY (impl->entry), name);
 }
 
 static void
@@ -2660,24 +2658,20 @@ gtk_file_chooser_default_get_paths (GtkFileChooser *chooser)
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
     {
-      GtkFileChooserEntry *chooser_entry;
-      const GtkFilePath *folder_path;
-      const gchar *file_part;
+      const char *filename;
 
-      chooser_entry = GTK_FILE_CHOOSER_ENTRY (impl->entry);
-      folder_path = _gtk_file_chooser_entry_get_current_folder (chooser_entry);
-      file_part = _gtk_file_chooser_entry_get_file_part (chooser_entry);
+      filename = gtk_entry_get_text (GTK_ENTRY (impl->entry));
 
-      if (file_part != NULL && file_part[0] != '\0')
+      if (filename != NULL && filename[0] != '\0')
 	{
 	  GtkFilePath *selected;
 	  GError *error = NULL;
 
-	  selected = gtk_file_system_make_path (impl->file_system, folder_path, file_part, &error);
+	  selected = gtk_file_system_make_path (impl->file_system, impl->current_folder, filename, &error);
 
 	  if (!selected)
 	    {
-	      error_building_filename_dialog (impl, folder_path, file_part, error);
+	      error_building_filename_dialog (impl, impl->current_folder, filename, error);
 	      return NULL;
 	    }
 

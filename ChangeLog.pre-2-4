@@ -1,3 +1,22 @@
+2004-02-24  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (save_widgets_create): Use a plain
+	GtkEntry for the filename, not a GtkFileChooserEntry.
+	(update_chooser_entry): Use gtk_entry_set_text() rather than
+	_gtk_file_chooser_entry_set_file_part().
+	(gtk_file_chooser_default_set_current_name): Likewise.
+	(gtk_file_chooser_default_set_current_folder): Don't set the base
+	folder of the entry, and don't call update_chooser_entry().
+	(gtk_file_chooser_default_get_paths): Use the plain entry.
+	(save_widgets_create): Store the "Save in Folder" label in the
+	impl structure.
+	(expander_activate_cb): Set the sensitivity of the label and
+	combo.
+	(save_widgets_create): Connect to "notify::expanded" rather than
+	"activate" on the expander.
+	(expander_changed_cb): Renamed from expander_activate_cb().  Flip
+	the conditions again...
+
 Tue Feb 24 14:43:07 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): only draw the sort
