@@ -609,7 +609,9 @@ gtk_disable_setlocale (void)
   do_setlocale = FALSE;
 }
 
+#ifdef G_PLATFORM_WIN32
 #undef gtk_init_check
+#endif
 
 static void
 default_display_notify_cb (GdkDisplayManager *display_manager)
@@ -891,7 +893,9 @@ gtk_parse_args (int    *argc,
   return TRUE;
 }
 
+#ifdef G_PLATFORM_WIN32
 #undef gtk_init_check
+#endif
 
 /**
  * gtk_init_check:
@@ -920,7 +924,9 @@ gtk_init_check (int	 *argc,
   return gdk_display_open_default_libgtk_only () != NULL;
 }
 
+#ifdef G_PLATFORM_WIN32
 #undef gtk_init
+#endif
 
 /**
  * gtk_init:
