@@ -12,17 +12,15 @@ extern "C"
 
 #define gtk_signal_default_marshaller gtk_marshal_NONE__NONE
 
-#define gtk_marshal_BOOL__GDK_EVENT gtk_marshal_BOOL__POINTER
+  void gtk_marshal_BOOL__NONE (GtkObject * object,
+			       GtkSignalFunc func,
+			       gpointer func_data,
+			       GtkArg * args);
 
   void gtk_marshal_BOOL__POINTER (GtkObject * object,
 				  GtkSignalFunc func,
 				  gpointer func_data,
 				  GtkArg * args);
-
-  void gtk_marshal_BOOL__NONE (GtkObject * object,
-			       GtkSignalFunc func,
-			       gpointer func_data,
-			       GtkArg * args);
 
   void gtk_marshal_BOOL__POINTER_POINTER_INT_INT (GtkObject * object,
 						  GtkSignalFunc func,
@@ -149,8 +147,6 @@ extern "C"
 					      GtkSignalFunc func,
 					      gpointer func_data,
 					      GtkArg * args);
-
-#define gtk_marshal_NONE__STYLE gtk_marshal_NONE__POINTER
 
 #define gtk_marshal_NONE__UINT gtk_marshal_NONE__INT
 

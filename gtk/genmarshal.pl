@@ -9,10 +9,16 @@
 	   "DOUBLE"=>"gdouble", "STRING"=>"gpointer",
 	   "ENUM"=>"gint", "FLAGS"=>"gint",
 	   "BOXED"=>"gpointer", "FOREIGN"=>"gpointer",
-	   "C_CALLBACK"=>"C_CALLBACK", "POINTER"=>"gpointer",
-	   "ARGS"=>"gpointer", "SIGNAL"=>"gpointer",
+	   "POINTER"=>"gpointer",
 	   "OBJECT"=>"gpointer",
-	   "STYLE"=>"gpointer", "GDK_EVENT"=>"gpointer");
+
+# complex types. These need special handling.
+		"FOREIGN"=>"FOREIGN",
+		"C_CALLBACK"=>"C_CALLBACK",
+		"SIGNAL"=>"SIGNAL",
+		"ARGS"=>"ARGS",
+		"CALLBACK"=>"CALLBACK"
+		);
 
 $srcdir = $ENV{'srcdir'} || '.';
 
@@ -100,7 +106,25 @@ EOT
   for (@params) { 
 	if($_ eq "C_CALLBACK") {
 		print OS "gpointer arg".$argn."a,\n";
-		print OS "gpointer arg".$argn++."b,\n";
+		print OS "gpointer arg".$argn."b,\n";
+		$argn++;
+	} elsif($_ eq "SIGNAL") {
+		print OS "gpointer arg".$argn."a,\n";
+		print OS "gpointer arg".$argn."b,\n";
+		$argn++;
+	} elsif($_ eq "ARGS") {
+		print OS "gpointer arg".$argn."a,\n";
+		print OS "gpointer arg".$argn."b,\n";
+		$argn++;
+	} elsif($_ eq "CALLBACK") {
+		print OS "gpointer arg".$argn."a,\n";
+		print OS "gpointer arg".$argn."b,\n";
+		print OS "gpointer arg".$argn."c,\n";
+		$argn++;
+	} elsif($_ eq "FOREIGN") {
+		print OS "gpointer arg".$argn."a,\n";
+		print OS "gpointer arg".$argn."b,\n";
+		$argn++;
 	} else {
 		print OS "$trans{$_} arg".$argn++.",\n" unless $_ eq "NONE";
 	}
@@ -118,7 +142,9 @@ EOT
 
   if($retval ne "NONE") {
       print OS "  $trans{$retval}  *return_val;\n";
-      print OS "  return_val = GTK_RETLOC_$retval (args[".(scalar @params)."]);\n";
+      $retn = 0;
+      $retn = scalar @params unless $params[0] eq "NONE";
+      print OS "  return_val = GTK_RETLOC_$retval (args[$retn]);\n";
   }
   print OS "  rfunc = (GtkSignal_$funcname) func;\n";
   print OS "  *return_val = " unless $retval eq "NONE";
@@ -129,6 +155,22 @@ EOT
 	print OS <<EOT;
 GTK_VALUE_C_CALLBACK(args[$i]).func,
 GTK_VALUE_C_CALLBACK(args[$i]).func_data,
+EOT
+      } elsif ($params[$i] eq "SIGNAL") {
+	print OS <<EOT;
+GTK_VALUE_SIGNAL(args[$i]).f,
+GTK_VALUE_SIGNAL(args[$i]).d,
+EOT
+      } elsif ($params[$i] eq "CALLBACK") {
+	print OS <<EOT;
+GTK_VALUE_CALLBACK(args[$i]).marshal,
+GTK_VALUE_CALLBACK(args[$i]).data,
+GTK_VALUE_CALLBACK(args[$i]).notify,
+EOT
+      } elsif ($params[$i] eq "FOREIGN") {
+	print OS <<EOT;
+GTK_VALUE_FOREIGN(args[$i]).data,
+GTK_VALUE_FOREIGN(args[$i]).notify,
 EOT
       } elsif ($params[$i] eq "NONE") {
       } else {

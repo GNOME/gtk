@@ -1,5 +1,21 @@
 #include "gtkmarshal.h"
 
+typedef gboolean (*GtkSignal_BOOL__NONE) (GtkObject * object,
+					  gpointer user_data);
+void 
+gtk_marshal_BOOL__NONE (GtkObject * object,
+			GtkSignalFunc func,
+			gpointer func_data,
+			GtkArg * args)
+{
+  GtkSignal_BOOL__NONE rfunc;
+  gboolean *return_val;
+  return_val = GTK_RETLOC_BOOL (args[0]);
+  rfunc = (GtkSignal_BOOL__NONE) func;
+  *return_val = (*rfunc) (object,
+			  func_data);
+}
+
 typedef gboolean (*GtkSignal_BOOL__POINTER) (GtkObject * object,
 					     gpointer arg1,
 					     gpointer user_data);
@@ -15,22 +31,6 @@ gtk_marshal_BOOL__POINTER (GtkObject * object,
   rfunc = (GtkSignal_BOOL__POINTER) func;
   *return_val = (*rfunc) (object,
 			  GTK_VALUE_POINTER (args[0]),
-			  func_data);
-}
-
-typedef gboolean (*GtkSignal_BOOL__NONE) (GtkObject * object,
-					  gpointer user_data);
-void 
-gtk_marshal_BOOL__NONE (GtkObject * object,
-			GtkSignalFunc func,
-			gpointer func_data,
-			GtkArg * args)
-{
-  GtkSignal_BOOL__NONE rfunc;
-  gboolean *return_val;
-  return_val = GTK_RETLOC_BOOL (args[1]);
-  rfunc = (GtkSignal_BOOL__NONE) func;
-  *return_val = (*rfunc) (object,
 			  func_data);
 }
 
