@@ -3289,7 +3289,7 @@ validate_visible_area (GtkTreeView *tree_view)
 						    &iter,
 						    &parent);
 	  TREE_VIEW_INTERNAL_ASSERT_VOID (has_child);
-	  gtk_tree_path_append_index (path, 0);
+	  gtk_tree_path_down (path);
 	}
       else
 	{
@@ -3904,7 +3904,7 @@ get_logical_dest_row (GtkTreeView *tree_view)
            pos == GTK_TREE_VIEW_DROP_INTO_OR_AFTER)
     {
       /* get first child, drop before it */
-      gtk_tree_path_append_index (path, 0);
+      gtk_tree_path_down (path);
     }
   else
     {
@@ -7787,7 +7787,7 @@ gtk_tree_view_collapse_all (GtkTreeView *tree_view)
   g_return_if_fail (tree_view->priv->tree != NULL);
 
   path = gtk_tree_path_new ();
-  gtk_tree_path_append_index (path, 0);
+  gtk_tree_path_down (path);
   indices = gtk_tree_path_get_indices (path);
 
   tree = tree_view->priv->tree;
@@ -7978,7 +7978,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
       GtkTreePath *child_path;
       gint child_count = 0;
       child_path = gtk_tree_path_copy (path);
-      gtk_tree_path_append_index (child_path, 0);
+      gtk_tree_path_down (child_path);
       if (node->children)
 	_gtk_rbtree_traverse (node->children, node->children->root, G_POST_ORDER, count_children_helper, &child_count);
       (* tree_view->priv->destroy_count_func) (tree_view, child_path, child_count, tree_view->priv->destroy_count_data);
@@ -8103,17 +8103,12 @@ gtk_tree_view_map_expanded_rows_helper (GtkTreeView            *tree_view,
 					gpointer                user_data)
 {
   GtkRBNode *node;
-  gint *indices;
-  gint depth;
   gint i = 0;
 
   if (tree == NULL || tree->root == NULL)
     return;
 
   node = tree->root;
-
-  indices = gtk_tree_path_get_indices (path);
-  depth = gtk_tree_path_get_depth (path);
 
   while (node && node->left != tree->nil)
     node = node->left;
@@ -8122,13 +8117,13 @@ gtk_tree_view_map_expanded_rows_helper (GtkTreeView            *tree_view,
     {
       if (node->children)
 	{
-	  gtk_tree_path_append_index (path, 0);
+	  gtk_tree_path_down (path);
 	  gtk_tree_view_map_expanded_rows_helper (tree_view, node->children, path, func, user_data);
 	  gtk_tree_path_up (path);
 	  (* func) (tree_view, path, user_data);
 	}
       i++;
-      indices[depth -1] = i;
+      gtk_tree_path_next (path);
       node = _gtk_rbtree_next (tree, node);
     }
 }
@@ -9521,7 +9516,7 @@ gtk_tree_view_search_iter (GtkTreeModel     *model,
 
 	  tmp = *iter;
 	  has_child = gtk_tree_model_iter_children (model, iter, &tmp);
-	  gtk_tree_path_append_index (path, 0);
+	  gtk_tree_path_down (path);
 
 	  /* sanity check */
 	  TREE_VIEW_INTERNAL_ASSERT (has_child, FALSE);
