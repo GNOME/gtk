@@ -267,13 +267,20 @@ _gdk_input_common_find_events(GdkWindow *window,
   XEventClass class;
   
   i = 0;
-  if (mask & GDK_BUTTON_PRESS_MASK || mask & GDK_BUTTON_RELEASE_MASK)
+  if (mask & GDK_BUTTON_PRESS_MASK)
     {
       DeviceButtonPress (gdkdev->xdevice, gdkdev->buttonpress_type,
 			     class);
       if (class != 0)
 	  classes[i++] = class;
       DeviceButtonPressGrab (gdkdev->xdevice, 0, class);
+      if (class != 0)
+	  classes[i++] = class;
+    }
+  if (mask & GDK_BUTTON_RELEASE_MASK)
+    {
+      DeviceButtonRelease (gdkdev->xdevice, gdkdev->buttonrelease_type,
+			   class);
       if (class != 0)
 	  classes[i++] = class;
     }
