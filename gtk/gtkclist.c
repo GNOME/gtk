@@ -50,7 +50,7 @@
 
 /* returns the column index from a x pixel location in the 
  * context of the clist's hoffset */
-static inline gint
+static gint
 COLUMN_FROM_XPIXEL (GtkCList * clist,
 		    gint x)
 {
@@ -518,7 +518,7 @@ gtk_clist_set_column_title (GtkCList * clist,
 			    gchar * title)
 {
   GtkWidget *old_widget;
-  GtkWidget *alignment;
+  GtkWidget *alignment = NULL;
   GtkWidget *label;
 
   g_return_if_fail (clist != NULL);
@@ -552,9 +552,6 @@ gtk_clist_set_column_title (GtkCList * clist,
 
     case GTK_JUSTIFY_FILL:
       alignment = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-      break;
-
-    default:
       break;
     }
 
