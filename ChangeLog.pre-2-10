@@ -1,3 +1,10 @@
+2004-10-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
+	Don't force the height of the action area, we don't scroll 
+	it anyway, and the current way of calculating the height can lead
+	to broken display.  (#156573, Christian Persch)
+
 2004-10-29  Robert Ögren  <gtk@roboros.com>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_begin_resize_drag),
