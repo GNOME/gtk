@@ -1,3 +1,8 @@
+2002-01-28  Duarte Loreto <happyguy_pt@hotmail.com>
+
+        * pt.po: Converted to UTF-8 (I read the README but 
+                 forgot to do it before).
+
 2002-01-27  Ole Laursen  <olau@hardworking.dk>
 
 	* da.po: Fixed a few type errors. :-)
