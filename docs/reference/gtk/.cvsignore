@@ -14,3 +14,4 @@ gtk-scan.lo
 *.stamp
 *.lo
 .libs
+version.xml

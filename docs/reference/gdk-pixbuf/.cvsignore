@@ -12,3 +12,4 @@ gdk-pixbuf-unused.txt
 *.stamp
 *.lo
 .libs
+version.xml
