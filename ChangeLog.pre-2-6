@@ -1,3 +1,10 @@
+Wed Jun 12 17:13:13 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Fix bug
+	where if CENTER_ON_PARENT was set, but there was
+	no parent, GDK_HINT_POS would be set, resulting
+	in a dialog at 0,0. (#83479, Havoc Pennington)
+
 Wed Jun 12 16:34:13 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenubar.c: When fetching the menubars for

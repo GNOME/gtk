@@ -4092,6 +4092,18 @@ gtk_window_compute_configure_request_size (GtkWindow *window,
     }
 }
 
+static GtkWindowPosition
+get_effective_position (GtkWindow *window)
+{
+  GtkWindowPosition pos = window->position;
+  if (pos == GTK_WIN_POS_CENTER_ON_PARENT &&
+      (window->transient_parent == NULL ||
+       !GTK_WIDGET_MAPPED (window->transient_parent)))
+    pos = GTK_WIN_POS_NONE;
+
+  return pos;
+}
+
 static void
 gtk_window_compute_configure_request (GtkWindow    *window,
                                       GdkRectangle *request,
@@ -4120,12 +4132,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
   parent_widget = (GtkWidget*) window->transient_parent;
   
-  pos = window->position;
-  if (pos == GTK_WIN_POS_CENTER_ON_PARENT &&
-      (parent_widget == NULL ||
-       !GTK_WIDGET_MAPPED (parent_widget)))
-    pos = GTK_WIN_POS_NONE;
-
+  pos = get_effective_position (window);
   info = gtk_window_get_geometry_info (window, TRUE);
 
   /* by default, don't change position requested */
@@ -4452,7 +4459,7 @@ gtk_window_move_resize (GtkWindow *window)
   if ((configure_request_pos_changed ||
        info->initial_pos_set ||
        (window->need_default_position &&
-        window->position != GTK_WIN_POS_NONE)) &&
+        get_effective_position (window) != GTK_WIN_POS_NONE)) &&
       (new_flags & GDK_HINT_POS) == 0)
     {
       new_flags |= GDK_HINT_POS;
