@@ -1,3 +1,9 @@
+Tue Feb  9 15:35:13 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_style_set): Added
+	  a style_set() function so that word lengths get
+	  recomputed on style change.
+
 Mon Feb  8 21:00:20 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (CLIST_OPTIMUM_SIZE): changed to 64

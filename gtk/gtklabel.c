@@ -68,6 +68,8 @@ static void gtk_label_get_arg	   (GtkObject      *object,
 static void gtk_label_finalize	   (GtkObject	   *object);
 static void gtk_label_size_request (GtkWidget	   *widget,
 				    GtkRequisition *requisition);
+static void gtk_label_style_set    (GtkWidget      *widget,
+				    GtkStyle       *previous_style);
 static gint gtk_label_expose	   (GtkWidget	   *widget,
 				    GdkEventExpose *event);
 
@@ -133,6 +135,7 @@ gtk_label_class_init (GtkLabelClass *class)
   object_class->finalize = gtk_label_finalize;
   
   widget_class->size_request = gtk_label_size_request;
+  widget_class->style_set = gtk_label_style_set;
   widget_class->expose_event = gtk_label_expose;
 }
 
@@ -261,9 +264,13 @@ gtk_label_set_text (GtkLabel *label,
       len = strlen (str);
       str_wc = g_new (GdkWChar, len + 1);
       wc_len = gdk_mbstowcs (str_wc, str, len + 1);
-      str_wc[wc_len] = '\0';
-      
-      gtk_label_set_text_internal (label, g_strdup (str), str_wc);
+      if (wc_len >= 0)
+	{
+	  str_wc[wc_len] = '\0';
+	  gtk_label_set_text_internal (label, g_strdup (str), str_wc);
+	}
+      else
+	g_free (str_wc);
     }
 }
 
@@ -873,6 +880,24 @@ gtk_label_size_request (GtkWidget      *widget,
     *requisition = widget->requisition;
 }
 
+static void 
+gtk_label_style_set (GtkWidget      *widget,
+		     GtkStyle       *previous_style)
+{
+  GtkLabel *label;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_LABEL (widget));
+
+  label = GTK_LABEL (widget);
+  
+  if (previous_style && label->words)
+    /* Clear the list of words so that they are recomputed on
+     * size_request
+     */
+    gtk_label_free_words (label);
+}
+
 static void
 gtk_label_paint_word (GtkLabel     *label,
 		      gint          x,
@@ -885,20 +910,21 @@ gtk_label_paint_word (GtkLabel     *label,
   gchar *tmp_str;
   
   tmp_str = gdk_wcstombs (word->beginning);
-  gtk_paint_string (widget->style, widget->window, widget->state,
-		    area, widget, "label", 
-		    x + word->x,
-		    y + word->y,
-		    tmp_str);
-  g_free (tmp_str);
+  if (tmp_str)
+    {
+      gtk_paint_string (widget->style, widget->window, widget->state,
+			area, widget, "label", 
+			x + word->x,
+			y + word->y,
+			tmp_str);
+      g_free (tmp_str);
+    }
   
   for (uline = word->uline; uline; uline = uline->next)
     gtk_paint_hline (widget->style, widget->window, 
 		     widget->state, area,
 		     widget, "label", 
 		     x + uline->x1, x + uline->x2, y + uline->y);
-  
-  
 }
 
 static gint
@@ -969,6 +995,12 @@ gtk_label_parse_uline (GtkLabel    *label,
   length = strlen (string);
   string_wc = g_new (GdkWChar, length + 1);
   wc_length = gdk_mbstowcs (string_wc, string, length + 1);
+  if (wc_length < 0)
+    {
+      g_free (string_wc);
+      return GDK_VoidSymbol;
+    }
+
   string_wc[wc_length] = '\0';
   
   pattern = g_new (gchar, length+1);
@@ -1016,3 +1048,4 @@ gtk_label_parse_uline (GtkLabel    *label,
   
   return accel_key;
 }
+
