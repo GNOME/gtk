@@ -337,7 +337,8 @@ gtkmarshal.h: @REBUILD@ # stamp-gtkmarshal.h
 	-test -e "$@" || touch $(srcdir)/gtkmarshal.h
 stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.h
 gtkmarshal.c stamp-gtkmarshal.h: @REBUILD@ genmarshal.pl gtkmarshal.list
-	$(PERL) genmarshal.pl gtkmarshal.list xgen-gmh xgen-gmc \
+	cd $(srcdir) \
+	&& $(PERL) genmarshal.pl gtkmarshal.list xgen-gmh xgen-gmc \
 	&& (test -z "$(INDENT)" || $(INDENT) xgen-gmh) \
 	&& (test -z "$(INDENT)" || $(INDENT) xgen-gmc) \
 	&& cp xgen-gmc gtkmarshal.c \
