@@ -1,3 +1,11 @@
+2001-12-10  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkcontainer.c (gtk_container_child_type): Close comment.
+
+2001-12-09  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkviewport.c: Add docs.
+
 Mon Dec 10 16:21:38 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkrbtree.c (_fixup_parity): New function to fixup parity.

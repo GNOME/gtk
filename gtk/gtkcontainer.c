@@ -265,6 +265,7 @@ gtk_container_class_init (GtkContainerClass *class)
  * children.
  *
  * Return value: a #GtkType.
+ **/
 GtkType
 gtk_container_child_type (GtkContainer *container)
 {

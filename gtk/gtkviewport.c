@@ -229,6 +229,15 @@ gtk_viewport_init (GtkViewport *viewport)
   viewport->vadjustment = NULL;
 }
 
+/**
+ * gtk_viewport_new:
+ * @hadjustment: horizontal adjustment.
+ * @vadjustment: vertical adjustment.
+ * @returns: a new #GtkViewport.
+ *
+ * Creates a new #GtkViewport with the given adjustments.
+ *
+ **/
 GtkWidget*
 gtk_viewport_new (GtkAdjustment *hadjustment,
 		  GtkAdjustment *vadjustment)
@@ -264,6 +273,14 @@ gtk_viewport_destroy (GtkObject *object)
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
+/**
+ * gtk_viewport_get_hadjustment:
+ * @viewport: a #GtkViewport.
+ * 
+ * Returns the horizontal adjustment of the viewport.
+ *
+ * Return value: the horizontal adjustment of @viewport.
+ **/
 GtkAdjustment*
 gtk_viewport_get_hadjustment (GtkViewport *viewport)
 {
@@ -275,6 +292,14 @@ gtk_viewport_get_hadjustment (GtkViewport *viewport)
   return viewport->hadjustment;
 }
 
+/**
+ * gtk_viewport_get_vadjustment:
+ * @viewport: a #GtkViewport.
+ * 
+ * Returns the vertical adjustment of the viewport.
+ *
+ * Return value: the vertical adjustment of @viewport.
+ **/
 GtkAdjustment*
 gtk_viewport_get_vadjustment (GtkViewport *viewport)
 {
@@ -286,6 +311,13 @@ gtk_viewport_get_vadjustment (GtkViewport *viewport)
   return viewport->vadjustment;
 }
 
+/**
+ * gtk_viewport_set_hadjustment:
+ * @viewport: a #GtkViewport.
+ * @adjustment: a #GtkAdjustment.
+ * 
+ * Sets the horizontal adjustment of the viewport.
+ **/
 void
 gtk_viewport_set_hadjustment (GtkViewport   *viewport,
 			      GtkAdjustment *adjustment)
@@ -324,6 +356,13 @@ gtk_viewport_set_hadjustment (GtkViewport   *viewport,
   g_object_notify (G_OBJECT (viewport), "hadjustment");
 }
 
+/**
+ * gtk_viewport_set_vadjustment:
+ * @viewport: a #GtkViewport.
+ * @adjustment: a #GtkAdjustment.
+ * 
+ * Sets the vertical adjustment of the viewport.
+ **/
 void
 gtk_viewport_set_vadjustment (GtkViewport   *viewport,
 			      GtkAdjustment *adjustment)
@@ -373,6 +412,13 @@ gtk_viewport_set_scroll_adjustments (GtkViewport      *viewport,
     gtk_viewport_set_vadjustment (viewport, vadjustment);
 }
 
+/** 
+ * gtk_viewport_set_shadow_type:
+ * @viewport: a #GtkViewport.
+ * @type: the new shadow type.
+ *
+ * Sets the shadow type of the viewport.
+ **/ 
 void
 gtk_viewport_set_shadow_type (GtkViewport   *viewport,
 			      GtkShadowType  type)
