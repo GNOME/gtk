@@ -85,15 +85,15 @@ void                   gtk_about_dialog_set_website            (GtkAboutDialog  
 G_CONST_RETURN gchar  *gtk_about_dialog_get_website_label      (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_website_label      (GtkAboutDialog  *about,
 								const gchar     *website_label);
-gchar                **gtk_about_dialog_get_authors            (GtkAboutDialog  *about);
+G_CONST_RETURN gchar * G_CONST_RETURN * gtk_about_dialog_get_authors            (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_authors            (GtkAboutDialog  *about,
-								gchar          **authors);
-gchar                **gtk_about_dialog_get_documenters        (GtkAboutDialog  *about);
+								const gchar    **authors);
+G_CONST_RETURN gchar * G_CONST_RETURN * gtk_about_dialog_get_documenters        (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_documenters        (GtkAboutDialog  *about,
-								gchar          **documenters);
-gchar **               gtk_about_dialog_get_artists            (GtkAboutDialog  *about);
+								const gchar    **documenters);
+G_CONST_RETURN gchar * G_CONST_RETURN * gtk_about_dialog_get_artists            (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_artists            (GtkAboutDialog  *about,
-								gchar          **artists);
+								const gchar    **artists);
 G_CONST_RETURN gchar  *gtk_about_dialog_get_translator_credits (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_translator_credits (GtkAboutDialog  *about,
 								const gchar     *translator_credits);

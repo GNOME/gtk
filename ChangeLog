@@ -1,5 +1,9 @@
 2004-11-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaboutdialog.[hc]: Change the return types of the 
+	gchar ** getters to be more const correct.  (#157566, Mariano 
+	Suárez-Alvarez)
+
 	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_init): Add
 	uri targets before text targets, to make file dnd work 
 	better.  (#157651, Christian Persch)

@@ -560,13 +560,13 @@ gtk_about_dialog_set_property (GObject      *object,
       gtk_about_dialog_set_logo (about, g_value_get_object (value));
       break; 
     case PROP_AUTHORS:
-      gtk_about_dialog_set_authors (about, (gchar**)g_value_get_boxed (value));
+      gtk_about_dialog_set_authors (about, (const gchar**)g_value_get_boxed (value));
       break;
     case PROP_DOCUMENTERS:
-      gtk_about_dialog_set_documenters (about, (gchar**)g_value_get_boxed (value));
+      gtk_about_dialog_set_documenters (about, (const gchar**)g_value_get_boxed (value));
       break;	
     case PROP_ARTISTS:
-      gtk_about_dialog_set_artists (about, (gchar**)g_value_get_boxed (value));
+      gtk_about_dialog_set_artists (about, (const gchar**)g_value_get_boxed (value));
       break;	
     case PROP_TRANSLATOR_CREDITS:
       gtk_about_dialog_set_translator_credits (about, g_value_get_string (value));
@@ -1114,7 +1114,7 @@ gtk_about_dialog_set_website_label (GtkAboutDialog *about,
  *
  * Since: 2.6
  **/
-gchar **
+G_CONST_RETURN gchar * G_CONST_RETURN *
 gtk_about_dialog_get_authors (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1123,7 +1123,7 @@ gtk_about_dialog_get_authors (GtkAboutDialog *about)
 
   priv = (GtkAboutDialogPrivate *)about->private_data;
 
-  return priv->authors;
+  return (const gchar * const *) priv->authors;
 }
 
 /**
@@ -1138,7 +1138,7 @@ gtk_about_dialog_get_authors (GtkAboutDialog *about)
  **/
 void
 gtk_about_dialog_set_authors (GtkAboutDialog  *about, 
-			      gchar          **authors)
+			      const gchar    **authors)
 {
   GtkAboutDialogPrivate *priv;
   gchar **tmp;
@@ -1148,7 +1148,7 @@ gtk_about_dialog_set_authors (GtkAboutDialog  *about,
   priv = (GtkAboutDialogPrivate *)about->private_data;
 
   tmp = priv->authors;
-  priv->authors = g_strdupv (authors);
+  priv->authors = g_strdupv ((gchar **)authors);
   g_strfreev (tmp);
 
   if (priv->authors != NULL)
@@ -1170,7 +1170,7 @@ gtk_about_dialog_set_authors (GtkAboutDialog  *about,
  *
  * Since: 2.6
  **/
-gchar **
+G_CONST_RETURN gchar * G_CONST_RETURN *
 gtk_about_dialog_get_documenters (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1179,7 +1179,7 @@ gtk_about_dialog_get_documenters (GtkAboutDialog *about)
 
   priv = (GtkAboutDialogPrivate *)about->private_data;
 
-  return priv->documenters;
+  return (const gchar * const *)priv->documenters;
 }
 
 /**
@@ -1194,7 +1194,7 @@ gtk_about_dialog_get_documenters (GtkAboutDialog *about)
  **/
 void
 gtk_about_dialog_set_documenters (GtkAboutDialog *about, 
-				  gchar         **documenters)
+				  const gchar   **documenters)
 {
   GtkAboutDialogPrivate *priv;
   gchar **tmp;
@@ -1204,7 +1204,7 @@ gtk_about_dialog_set_documenters (GtkAboutDialog *about,
   priv = (GtkAboutDialogPrivate *)about->private_data;
   
   tmp = priv->documenters;
-  priv->documenters = g_strdupv (documenters);
+  priv->documenters = g_strdupv ((gchar **)documenters);
   g_strfreev (tmp);
 
   if (priv->documenters != NULL)
@@ -1226,7 +1226,7 @@ gtk_about_dialog_set_documenters (GtkAboutDialog *about,
  *
  * Since: 2.6
  **/
-gchar **
+G_CONST_RETURN gchar * G_CONST_RETURN *
 gtk_about_dialog_get_artists (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1235,7 +1235,7 @@ gtk_about_dialog_get_artists (GtkAboutDialog *about)
 
   priv = (GtkAboutDialogPrivate *)about->private_data;
 
-  return priv->artists;
+  return (const gchar * const *)priv->artists;
 }
 
 /**
@@ -1250,7 +1250,7 @@ gtk_about_dialog_get_artists (GtkAboutDialog *about)
  **/
 void
 gtk_about_dialog_set_artists (GtkAboutDialog *about, 
-			      gchar         **artists)
+			      const gchar   **artists)
 {
   GtkAboutDialogPrivate *priv;
   gchar **tmp;
@@ -1260,7 +1260,7 @@ gtk_about_dialog_set_artists (GtkAboutDialog *about,
   priv = (GtkAboutDialogPrivate *)about->private_data;
   
   tmp = priv->artists;
-  priv->artists = g_strdupv (artists);
+  priv->artists = g_strdupv ((gchar **)artists);
   g_strfreev (tmp);
 
   if (priv->artists != NULL)
