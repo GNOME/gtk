@@ -277,9 +277,6 @@ static void        gtk_window_notify_keys_changed (GtkWindow   *window);
 static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
 static void        gtk_window_free_key_hash       (GtkWindow   *window);
 
-static gboolean    gtk_window_activate_key_after (GtkWindow    *window,
-						  GdkEventKey  *event);
-
 static GSList      *toplevel_list = NULL;
 static GHashTable  *mnemonic_hash_table = NULL;
 static GtkBinClass *parent_class = NULL;
@@ -4585,10 +4582,6 @@ gtk_window_key_press_event (GtkWidget   *widget,
   if (!handled)
     handled = GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
 
-  /* Fallback mnemonic handling if nothing else took the key */
-  if (!handled)
-    handled = gtk_window_activate_key_after (window, event);
-  
   return handled;
 }
 
@@ -7423,21 +7416,6 @@ gtk_window_free_key_hash (GtkWindow *window)
     }
 }
 
-static GtkWindowKeyEntry *
-find_mnemonic_entry (GSList *entries)
-{
-  GSList *tmp_list;
-  
-  for (tmp_list = entries; tmp_list; tmp_list = tmp_list->next)
-    {
-      GtkWindowKeyEntry *entry = tmp_list->data;
-      if (entry->is_mnemonic)
-	return entry;
-    }
-
-  return NULL;
-}
-
 /**
  * gtk_window_activate_key:
  * @window:  a #GtkWindow
@@ -7454,20 +7432,39 @@ gboolean
 gtk_window_activate_key (GtkWindow   *window,
 			 GdkEventKey *event)
 {
-  GtkKeyHash *key_hash = gtk_window_get_key_hash (window);
+  GtkKeyHash *key_hash = g_object_get_data (G_OBJECT (window), "gtk-window-key-hash");
   GtkWindowKeyEntry *found_entry = NULL;
 
-  GSList *entries = _gtk_key_hash_lookup (key_hash,
-					  event->hardware_keycode,
-					  event->state,
-					  gtk_accelerator_get_default_mod_mask (),
-					  event->group);
-
-  found_entry = find_mnemonic_entry (entries);
-  if (!found_entry && entries)
-    found_entry = entries->data;
+  if (!key_hash)
+    {
+      gtk_window_keys_changed (window);
+      key_hash = g_object_get_data (G_OBJECT (window), "gtk-window-key-hash");
+    }
   
-  g_slist_free (entries);
+  if (key_hash)
+    {
+      GSList *entries = _gtk_key_hash_lookup (key_hash,
+					      event->hardware_keycode,
+					      event->state,
+					      gtk_accelerator_get_default_mod_mask (),
+					      event->group);
+      GSList *tmp_list;
+
+      for (tmp_list = entries; tmp_list; tmp_list = tmp_list->next)
+	{
+	  GtkWindowKeyEntry *entry = tmp_list->data;
+	  if (entry->is_mnemonic)
+	    {
+	      found_entry = entry;
+	      break;
+	    }
+	}
+      
+      if (!found_entry && entries)
+	found_entry = entries->data;
+
+      g_slist_free (entries);
+    }
 
   if (found_entry)
     {
@@ -7476,53 +7473,6 @@ gtk_window_activate_key (GtkWindow   *window,
       else
 	return gtk_accel_groups_activate (G_OBJECT (window), found_entry->keyval, found_entry->modifiers);
     }
-  else
-    return FALSE;
-}
-
-/**
- * gtk_window_activate_key_after:
- * @window:  a #GtkWindow
- * @event:   a #GdkEventKey
- *
- * Activates fallback mnemonic and accelerator handling for this
- * #GtkWindow. This is normally called by the default
- * ::key_press_event handler for toplevel windows after all other key
- * press handling for the widget does not handle the key, however in some
- * cases it may be useful to call this directly when overriding the
- * standard key handling for a toplevel window. Currently, what
- * this function does is check for the user pressing a mnemonic key
- * unmodified; if that key is not consumed previously, then it will
- * activate the mnemonic.
- * 
- * Return value: %TRUE if a mnemonic or accelerator was found and activated.
- *
- * Since: 2.6
- **/
-static gboolean
-gtk_window_activate_key_after (GtkWindow   *window,
-			       GdkEventKey *event)
-{
-  GtkKeyHash *key_hash = gtk_window_get_key_hash (window);
-  GtkWindowKeyEntry *found_entry = NULL;
-  GSList *entries;
-  
-  if (window->mnemonic_modifier == 0 ||
-      ((gtk_accelerator_get_default_mod_mask () & event->state) != 0))
-    return FALSE;
-
-  entries = _gtk_key_hash_lookup (key_hash,
-				  event->hardware_keycode,
-				  event->state | window->mnemonic_modifier,
-				  gtk_accelerator_get_default_mod_mask (),
-				  event->group);
-
-  found_entry = find_mnemonic_entry (entries);
-  
-  g_slist_free (entries);
-  
-  if (found_entry)
-    return gtk_window_mnemonic_activate (window, found_entry->keyval, found_entry->modifiers);
   else
     return FALSE;
 }

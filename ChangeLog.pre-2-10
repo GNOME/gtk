@@ -1,3 +1,9 @@
+2004-12-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwindow.c: Revert the patch which added no-alt 
+	mnemonics, since it interfers badly with menus.  (#160911,
+	Jonathan Blandford)
+
 2004-12-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_class_init): Fix a property
