@@ -784,6 +784,12 @@ gtk_color_button_set_color (GtkColorButton *color_button,
   color_button->priv->color.green = color->green;
   color_button->priv->color.blue = color->blue;
 
+  if (color_button->priv->pixbuf != NULL)
+    g_object_unref (color_button->priv->pixbuf);
+  color_button->priv->pixbuf = NULL;
+
+  gtk_widget_queue_draw (color_button->priv->drawing_area);
+  
   g_object_notify (G_OBJECT (color_button), "color");
 }
 
@@ -804,7 +810,13 @@ gtk_color_button_set_alpha (GtkColorButton *color_button,
   g_return_if_fail (GTK_IS_COLOR_BUTTON (color_button));
 
   color_button->priv->alpha = alpha;
-  
+
+  if (color_button->priv->pixbuf != NULL)
+    g_object_unref (color_button->priv->pixbuf);
+  color_button->priv->pixbuf = NULL;
+
+  gtk_widget_queue_draw (color_button->priv->drawing_area);
+
   g_object_notify (G_OBJECT (color_button), "alpha");
 }
 

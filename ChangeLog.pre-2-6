@@ -1,3 +1,10 @@
+Wed Jan 21 18:10:40 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkcolorbutton.c (gtk_color_button_set_color):redraw the
+	color button when an alpha is set.
+	(gtk_color_button_set_alpha): redraw the color button when an
+	alpha is set.
+
 Wed Jan 21 23:27:14 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Fix #131869: 
