@@ -117,6 +117,7 @@ static void     gtk_ui_manager_get_property (GObject           *object,
 					     GParamSpec        *pspec);
 static void     queue_update                (GtkUIManager      *self);
 static void     dirty_all_nodes             (GtkUIManager      *self);
+static void     mark_node_dirty             (GNode             *node);
 static GNode *  get_child_node              (GtkUIManager      *self,
 					     GNode             *parent,
 					     const gchar       *childname,
@@ -129,10 +130,10 @@ static GNode *  get_node                    (GtkUIManager      *self,
 					     NodeType           node_type,
 					     gboolean           create);
 static gboolean free_node                   (GNode             *node);
-static void     node_prepend_ui_reference   (Node              *node,
+static void     node_prepend_ui_reference   (GNode             *node,
 					     guint              merge_id,
 					     GQuark             action_quark);
-static void     node_remove_ui_reference    (Node              *node,
+static void     node_remove_ui_reference    (GNode             *node,
 					     guint              merge_id);
 
 
@@ -395,7 +396,7 @@ gtk_ui_manager_init (GtkUIManager *self)
   merge_id = gtk_ui_manager_new_merge_id (self);
   node = get_child_node (self, NULL, "ui", 2,
 			 NODE_TYPE_ROOT, TRUE, FALSE);
-  node_prepend_ui_reference (NODE_INFO (node), merge_id, 0);
+  node_prepend_ui_reference (node, merge_id, 0);
 }
 
 static void
@@ -869,12 +870,13 @@ get_child_node (GtkUIManager *self,
 	  mnode = g_chunk_new0 (Node, merge_node_chunk);
 	  mnode->type = node_type;
 	  mnode->name = g_strndup (childname, childname_length);
-	  mnode->dirty = TRUE;
 
 	  if (top)
 	    child = g_node_prepend_data (parent, mnode);
 	  else
 	    child = g_node_append_data (parent, mnode);
+
+	  mark_node_dirty (child);
 	}
     }
   else
@@ -986,26 +988,33 @@ gtk_ui_manager_new_merge_id (GtkUIManager *self)
 }
 
 static void
-node_prepend_ui_reference (Node   *node,
+node_prepend_ui_reference (GNode  *gnode,
 			   guint   merge_id, 
 			   GQuark  action_quark)
 {
-  NodeUIReference *reference;
+  Node *node = NODE_INFO (gnode);
+  NodeUIReference *reference = NULL;
 
-  reference = g_new (NodeUIReference, 1);
-  reference->action_quark = action_quark;
+  if (node->uifiles && 
+      ((NodeUIReference *)node->uifiles->data)->merge_id == merge_id)
+    reference = node->uifiles->data;
+  else
+    {
+      reference = g_new (NodeUIReference, 1);
+      node->uifiles = g_list_prepend (node->uifiles, reference);
+    }
+
   reference->merge_id = merge_id;
+  reference->action_quark = action_quark;
 
-  /* Prepend the reference */
-  node->uifiles = g_list_prepend (node->uifiles, reference);
-
-  node->dirty = TRUE;
+  mark_node_dirty (gnode);
 }
 
 static void
-node_remove_ui_reference (Node  *node,
+node_remove_ui_reference (GNode  *gnode,
 			  guint  merge_id)
 {
+  Node *node = NODE_INFO (gnode);
   GList *p;
   
   for (p = node->uifiles; p != NULL; p = p->next)
@@ -1014,8 +1023,9 @@ node_remove_ui_reference (Node  *node,
       
       if (reference->merge_id == merge_id)
 	{
+	  if (p == node->uifiles)
+	    mark_node_dirty (gnode);
 	  node->uifiles = g_list_delete_link (node->uifiles, p);
-	  node->dirty = TRUE;
 	  g_free (reference);
 
 	  break;
@@ -1128,9 +1138,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (NODE_INFO (ctx->current)->action_name == 0)
 	    NODE_INFO (ctx->current)->action_name = action_quark;
 
-	  node_prepend_ui_reference (NODE_INFO (ctx->current),
-				     ctx->merge_id, action_quark);
-	  NODE_INFO (ctx->current)->dirty = TRUE;
+	  node_prepend_ui_reference (ctx->current, ctx->merge_id, action_quark);
 
 	  raise_error = FALSE;
 	}
@@ -1142,8 +1150,7 @@ start_element_handler (GMarkupParseContext *context,
 	  ctx->current = self->private_data->root_node;
 	  raise_error = FALSE;
 
-	  node_prepend_ui_reference (NODE_INFO (ctx->current),
-				     ctx->merge_id, action_quark);
+	  node_prepend_ui_reference (ctx->current, ctx->merge_id, action_quark);
 	}
       break;
     case 'm':
@@ -1157,9 +1164,8 @@ start_element_handler (GMarkupParseContext *context,
 	  if (NODE_INFO (ctx->current)->action_name == 0)
 	    NODE_INFO (ctx->current)->action_name = action_quark;
 
-	  node_prepend_ui_reference (NODE_INFO (ctx->current),
-				     ctx->merge_id, action_quark);
-	  NODE_INFO (ctx->current)->dirty = TRUE;
+	  node_prepend_ui_reference (ctx->current, ctx->merge_id, action_quark);
+	  mark_node_dirty (ctx->current);
 
 	  raise_error = FALSE;
 	}
@@ -1172,9 +1178,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (NODE_INFO (ctx->current)->action_name == 0)
 	    NODE_INFO (ctx->current)->action_name = action_quark;
 
-	  node_prepend_ui_reference (NODE_INFO (ctx->current),
-				     ctx->merge_id, action_quark);
-	  NODE_INFO (ctx->current)->dirty = TRUE;
+	  node_prepend_ui_reference (ctx->current, ctx->merge_id, action_quark);
 	  
 	  raise_error = FALSE;
 	}
@@ -1190,9 +1194,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (NODE_INFO (node)->action_name == 0)
 	    NODE_INFO (node)->action_name = action_quark;
 	  
-	  node_prepend_ui_reference (NODE_INFO (node),
-				     ctx->merge_id, action_quark);
-	  NODE_INFO (node)->dirty = TRUE;
+	  node_prepend_ui_reference (node, ctx->merge_id, action_quark);
 	  
 	  raise_error = FALSE;
 	}
@@ -1208,9 +1210,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (NODE_INFO (ctx->current)->action_name == 0)
 	    NODE_INFO (ctx->current)->action_name = action_quark;
 	  
-	  node_prepend_ui_reference (NODE_INFO (ctx->current),
-				     ctx->merge_id, action_quark);
-	  NODE_INFO (ctx->current)->dirty = TRUE;
+	  node_prepend_ui_reference (ctx->current, ctx->merge_id, action_quark);
 	  
 	  raise_error = FALSE;
 	}
@@ -1228,9 +1228,7 @@ start_element_handler (GMarkupParseContext *context,
 					   NODE_TYPE_MENU_PLACEHOLDER,
 					   TRUE, top);
 	  
-	  node_prepend_ui_reference (NODE_INFO (ctx->current),
-				     ctx->merge_id, action_quark);
-	  NODE_INFO (ctx->current)->dirty = TRUE;
+	  node_prepend_ui_reference (ctx->current, ctx->merge_id, action_quark);
 	  
 	  raise_error = FALSE;
 	}
@@ -1261,9 +1259,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (NODE_INFO (node)->action_name == 0)
 	    NODE_INFO (node)->action_name = action_quark;
 
-	  node_prepend_ui_reference (NODE_INFO (node),
-				     ctx->merge_id, action_quark);
-	  NODE_INFO (node)->dirty = TRUE;
+	  node_prepend_ui_reference (node, ctx->merge_id, action_quark);
 	  
 	  raise_error = FALSE;
 	}
@@ -1279,9 +1275,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (NODE_INFO (ctx->current)->action_name == 0)
 	    NODE_INFO (ctx->current)->action_name = action_quark;
 	  
-	  node_prepend_ui_reference (NODE_INFO (ctx->current),
-				     ctx->merge_id, action_quark);
-	  NODE_INFO (ctx->current)->dirty = TRUE;
+	  node_prepend_ui_reference (ctx->current, ctx->merge_id, action_quark);
 	  
 	  raise_error = FALSE;
 	}
@@ -1297,9 +1291,7 @@ start_element_handler (GMarkupParseContext *context,
 	  if (NODE_INFO (node)->action_name == 0)
 	    NODE_INFO (node)->action_name = action_quark;
 	  
-	  node_prepend_ui_reference (NODE_INFO (node),
-				     ctx->merge_id, action_quark);
-	  NODE_INFO (node)->dirty = TRUE;
+	  node_prepend_ui_reference (node, ctx->merge_id, action_quark);
 
 	  raise_error = FALSE;
 	}
@@ -1671,13 +1663,10 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
   if (action != NULL)
     action_quark = g_quark_from_string (action);
 
-  node_prepend_ui_reference (NODE_INFO (child), 
-			     merge_id, action_quark);
+  node_prepend_ui_reference (child, merge_id, action_quark);
 
   if (NODE_INFO (child)->action_name == 0)
     NODE_INFO (child)->action_name = action_quark;
-
-  NODE_INFO (child)->dirty = TRUE;
 
   queue_update (self);
 
@@ -1690,7 +1679,7 @@ remove_ui (GNode   *node,
 {
   guint merge_id = GPOINTER_TO_UINT (user_data);
 
-  node_remove_ui_reference (NODE_INFO (node), merge_id);
+  node_remove_ui_reference (node, merge_id);
 
   return FALSE; /* continue */
 }
@@ -2026,7 +2015,12 @@ update_smart_separators (GtkWidget *proxy)
 	  if (GTK_IS_MENU_ITEM (item))
 	    _gtk_action_sync_menu_visible (NULL, item, empty);
 	  if (GTK_IS_WIDGET (filler))
-	    g_object_set (G_OBJECT (filler), "visible", empty, NULL);
+	    {
+	      if (empty)
+		gtk_widget_show (filler);
+	      else
+		gtk_widget_hide (filler);
+	    }
 	}
 
       g_list_free (children);
@@ -2045,11 +2039,14 @@ update_node (GtkUIManager *self,
 #ifdef DEBUG_UI_MANAGER
   GList *tmp;
 #endif
-  
+
   g_return_if_fail (node != NULL);
   g_return_if_fail (NODE_INFO (node) != NULL);
 
   info = NODE_INFO (node);
+  
+  if (!info->dirty)
+    return;
 
   in_popup = in_popup || (info->type == NODE_TYPE_POPUP);
 
@@ -2066,442 +2063,439 @@ update_node (GtkUIManager *self,
   g_print (")\n");
 #endif
 
-  if (info->dirty)
+  const gchar *action_name;
+  NodeUIReference *ref;
+  
+  if (info->uifiles == NULL) {
+    /* We may need to remove this node.
+     * This must be done in post order
+     */
+    goto recurse_children;
+  }
+  
+  ref = info->uifiles->data;
+  action_name = g_quark_to_string (ref->action_quark);
+  action = get_action_by_name (self, action_name);
+  
+  info->dirty = FALSE;
+  
+  /* Check if the node doesn't have an action and must have an action */
+  if (action == NULL &&
+      info->type != NODE_TYPE_ROOT &&
+      info->type != NODE_TYPE_MENUBAR &&
+      info->type != NODE_TYPE_TOOLBAR &&
+      info->type != NODE_TYPE_POPUP &&
+      info->type != NODE_TYPE_SEPARATOR &&
+      info->type != NODE_TYPE_MENU_PLACEHOLDER &&
+      info->type != NODE_TYPE_TOOLBAR_PLACEHOLDER)
     {
-      const gchar *action_name;
-      NodeUIReference *ref;
-
-      if (info->uifiles == NULL) {
-	/* We may need to remove this node.
-	 * This must be done in post order
-	 */
-	goto recurse_children;
-      }
-
-      ref = info->uifiles->data;
-      action_name = g_quark_to_string (ref->action_quark);
-      action = get_action_by_name (self, action_name);
-
-      info->dirty = FALSE;
-
-      /* Check if the node doesn't have an action and must have an action */
-      if (action == NULL &&
-	  info->type != NODE_TYPE_ROOT &&
-	  info->type != NODE_TYPE_MENUBAR &&
-	  info->type != NODE_TYPE_TOOLBAR &&
-	  info->type != NODE_TYPE_POPUP &&
-	  info->type != NODE_TYPE_SEPARATOR &&
-	  info->type != NODE_TYPE_MENU_PLACEHOLDER &&
-	  info->type != NODE_TYPE_TOOLBAR_PLACEHOLDER)
+      g_warning ("%s: missing action", info->name);
+      
+      goto recurse_children;
+    }
+  
+  if (action)
+    gtk_action_set_accel_group (action, self->private_data->accel_group);
+  
+  /* If the widget already has a proxy and the action hasn't changed, then
+   * we only have to update the tearoff menu items.
+   */
+  if (info->proxy != NULL && action == info->action)
+    {
+      if (info->type == NODE_TYPE_MENU) 
 	{
-	  g_warning ("%s: missing action", info->name);
-
-	  goto recurse_children;
-	}
-
-      if (action)
-	gtk_action_set_accel_group (action, self->private_data->accel_group);
-
-      /* If the widget already has a proxy and the action hasn't changed, then
-       * we only have to update the tearoff menu items.
-       */
-      if (info->proxy != NULL && action == info->action)
-	{
-	  if (info->type == NODE_TYPE_MENU) 
-	    {
-	      GtkWidget *menu;
-	      GList *siblings;
-
-	      menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
-	      siblings = gtk_container_get_children (GTK_CONTAINER (menu));
-	      if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
-		g_object_set (G_OBJECT (siblings->data), 
-			      "visible", self->private_data->add_tearoffs && !in_popup, 
-			      NULL);
-	      g_list_free (siblings);
-	    }
-
-	  goto recurse_children;
+	  GtkWidget *menu;
+	  GList *siblings;
+	  
+	  menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
+	  siblings = gtk_container_get_children (GTK_CONTAINER (menu));
+	  if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
+	    g_object_set (G_OBJECT (siblings->data), 
+			  "visible", self->private_data->add_tearoffs && !in_popup, 
+			  NULL);
+	  g_list_free (siblings);
 	}
       
-      switch (info->type)
+      goto recurse_children;
+    }
+  
+  switch (info->type)
+    {
+    case NODE_TYPE_MENUBAR:
+      if (info->proxy == NULL)
 	{
-	case NODE_TYPE_MENUBAR:
-	  if (info->proxy == NULL)
-	    {
-	      info->proxy = gtk_menu_bar_new ();
-	      g_object_ref (info->proxy);
-	      gtk_object_sink (GTK_OBJECT (info->proxy));
-	      gtk_widget_set_name (info->proxy, info->name);
-	      gtk_widget_show (info->proxy);
-	      g_signal_emit (self, ui_manager_signals[ADD_WIDGET], 0, info->proxy);
-	    }
-	  break;
-	case NODE_TYPE_POPUP:
-	  if (info->proxy == NULL) 
-	    {
-	      info->proxy = gtk_menu_new ();
-	      g_object_ref (info->proxy);
-	      gtk_object_sink (GTK_OBJECT (info->proxy));
-	    }
+	  info->proxy = gtk_menu_bar_new ();
+	  g_object_ref (info->proxy);
+	  gtk_object_sink (GTK_OBJECT (info->proxy));
 	  gtk_widget_set_name (info->proxy, info->name);
-	  break;
-	case NODE_TYPE_MENU:
+	  gtk_widget_show (info->proxy);
+	  g_signal_emit (self, ui_manager_signals[ADD_WIDGET], 0, info->proxy);
+	}
+      break;
+    case NODE_TYPE_POPUP:
+      if (info->proxy == NULL) 
+	{
+	  info->proxy = gtk_menu_new ();
+	  g_object_ref (info->proxy);
+	  gtk_object_sink (GTK_OBJECT (info->proxy));
+	}
+      gtk_widget_set_name (info->proxy, info->name);
+      break;
+    case NODE_TYPE_MENU:
+      {
+	GtkWidget *prev_submenu = NULL;
+	GtkWidget *menu;
+	GList *siblings;
+	/* remove the proxy if it is of the wrong type ... */
+	if (info->proxy &&  
+	    G_OBJECT_TYPE (info->proxy) != GTK_ACTION_GET_CLASS (action)->menu_item_type)
 	  {
-	    GtkWidget *prev_submenu = NULL;
-	    GtkWidget *menu;
-	    GList *siblings;
-	    /* remove the proxy if it is of the wrong type ... */
-	    if (info->proxy &&  
-		G_OBJECT_TYPE (info->proxy) != GTK_ACTION_GET_CLASS (action)->menu_item_type)
-	      {
-		prev_submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
-		if (prev_submenu)
-		  {
-		    g_object_ref (prev_submenu);
-		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), NULL);
-		  }
-		gtk_action_disconnect_proxy (info->action, info->proxy);
-		gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
-				      info->proxy);
-		g_object_unref (info->proxy);
-		info->proxy = NULL;
-	      }
-	    /* create proxy if needed ... */
-	    if (info->proxy == NULL)
-	      {
-		GtkWidget *menushell;
-		gint pos;
-		
-		if (find_menu_position (node, &menushell, &pos))
-		  {
-		    GtkWidget *tearoff;
-		    GtkWidget *filler;
-
-		    info->proxy = gtk_action_create_menu_item (action);
-		    g_object_ref (info->proxy);
-		    gtk_object_sink (GTK_OBJECT (info->proxy));
-		    menu = gtk_menu_new ();
-		    gtk_widget_set_name (info->proxy, info->name);
-		    gtk_widget_set_name (menu, info->name);
-		    tearoff = gtk_tearoff_menu_item_new ();
-		    gtk_widget_set_no_show_all (tearoff, TRUE);
-		    gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
-		    filler = gtk_menu_item_new_with_label (_("Empty"));
-		    g_object_set_data (G_OBJECT (filler),
-				       "gtk-empty-menu-item",
-				       GINT_TO_POINTER (TRUE));
-		    gtk_widget_set_sensitive (filler, FALSE);
-		    gtk_widget_set_no_show_all (filler, TRUE);
-		    gtk_menu_shell_append (GTK_MENU_SHELL (menu), filler);
-		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
-		    gtk_menu_shell_insert (GTK_MENU_SHELL (menushell), info->proxy, pos);
-		    g_signal_connect (info->proxy, "notify::visible",
-				      G_CALLBACK (update_smart_separators), NULL);
-		  }
-	      }
-	    else
-	      gtk_action_connect_proxy (action, info->proxy);
-
+	    prev_submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
 	    if (prev_submenu)
 	      {
-		gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy),
-					   prev_submenu);
-		g_object_unref (prev_submenu);
+		g_object_ref (prev_submenu);
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), NULL);
 	      }
-	    menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
-	    siblings = gtk_container_get_children (GTK_CONTAINER (menu));
-	    if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
-	      g_object_set (G_OBJECT (siblings->data), 
-			    "visible", self->private_data->add_tearoffs && !in_popup, 
-			    NULL);
-	    g_list_free (siblings);
+	    gtk_action_disconnect_proxy (info->action, info->proxy);
+	    gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+				  info->proxy);
+	    g_object_unref (info->proxy);
+	    info->proxy = NULL;
 	  }
-	  break;
-	case NODE_TYPE_UNDECIDED:
-	  g_warning ("found undecided node!");
-	  break;
-	case NODE_TYPE_ROOT:
-	  break;
-	case NODE_TYPE_TOOLBAR:
-	  if (info->proxy == NULL)
+	/* create proxy if needed ... */
+	if (info->proxy == NULL)
+	  {
+	    GtkWidget *menushell;
+	    gint pos;
+	    
+	    if (find_menu_position (node, &menushell, &pos))
+	      {
+		GtkWidget *tearoff;
+		GtkWidget *filler;
+		
+		info->proxy = gtk_action_create_menu_item (action);
+		g_object_ref (info->proxy);
+		gtk_object_sink (GTK_OBJECT (info->proxy));
+		menu = gtk_menu_new ();
+		gtk_widget_set_name (info->proxy, info->name);
+		gtk_widget_set_name (menu, info->name);
+		tearoff = gtk_tearoff_menu_item_new ();
+		gtk_widget_set_no_show_all (tearoff, TRUE);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
+		filler = gtk_menu_item_new_with_label (_("Empty"));
+		g_object_set_data (G_OBJECT (filler),
+				   "gtk-empty-menu-item",
+				   GINT_TO_POINTER (TRUE));
+		gtk_widget_set_sensitive (filler, FALSE);
+		gtk_widget_set_no_show_all (filler, TRUE);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), filler);
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
+		gtk_menu_shell_insert (GTK_MENU_SHELL (menushell), info->proxy, pos);
+		g_signal_connect (info->proxy, "notify::visible",
+				  G_CALLBACK (update_smart_separators), NULL);
+	      }
+	  }
+	else
+	  gtk_action_connect_proxy (action, info->proxy);
+	
+	if (prev_submenu)
+	  {
+	    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy),
+				       prev_submenu);
+	    g_object_unref (prev_submenu);
+	  }
+	menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
+	siblings = gtk_container_get_children (GTK_CONTAINER (menu));
+	if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
+	  g_object_set (G_OBJECT (siblings->data), 
+			"visible", self->private_data->add_tearoffs && !in_popup, 
+			NULL);
+	g_list_free (siblings);
+      }
+      break;
+    case NODE_TYPE_UNDECIDED:
+      g_warning ("found undecided node!");
+      break;
+    case NODE_TYPE_ROOT:
+      break;
+    case NODE_TYPE_TOOLBAR:
+      if (info->proxy == NULL)
+	{
+	  info->proxy = gtk_toolbar_new ();
+	  g_object_ref (info->proxy);
+	  gtk_object_sink (GTK_OBJECT (info->proxy));
+	  gtk_widget_set_name (info->proxy, info->name);
+	  gtk_widget_show (info->proxy);
+	  g_signal_emit (self, ui_manager_signals[ADD_WIDGET], 0, info->proxy);
+	}
+      break;
+    case NODE_TYPE_MENU_PLACEHOLDER:
+      /* create menu items for placeholders if necessary ... */
+      if (!GTK_IS_SEPARATOR_MENU_ITEM (info->proxy) ||
+	  !GTK_IS_SEPARATOR_MENU_ITEM (info->extra))
+	{
+	  if (info->proxy)
 	    {
-	      info->proxy = gtk_toolbar_new ();
+	      gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+				    info->proxy);
+	      g_object_unref (info->proxy);
+	      info->proxy = NULL;
+	    }
+	  if (info->extra)
+	    {
+	      gtk_container_remove (GTK_CONTAINER (info->extra->parent),
+				    info->extra);
+	      g_object_unref (info->extra);
+	      info->extra = NULL;
+	    }
+	}
+      if (info->proxy == NULL)
+	{
+	  GtkWidget *menushell;
+	  gint pos;
+	  
+	  if (find_menu_position (node, &menushell, &pos))
+	    {
+	      info->proxy = gtk_separator_menu_item_new ();
+	      g_object_ref (info->proxy);
+	      gtk_object_sink (GTK_OBJECT (info->proxy));
+	      g_object_set_data (G_OBJECT (info->proxy),
+				 "gtk-separator-mode",
+				 GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
+	      gtk_widget_set_no_show_all (info->proxy, TRUE);
+	      gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
+				     NODE_INFO (node)->proxy, pos);
+	      
+	      info->extra = gtk_separator_menu_item_new ();
+	      g_object_ref (info->extra);
+	      gtk_object_sink (GTK_OBJECT (info->extra));
+	      g_object_set_data (G_OBJECT (info->extra),
+				 "gtk-separator-mode",
+				 GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
+	      gtk_widget_set_no_show_all (info->extra, TRUE);
+	      gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
+				     NODE_INFO (node)->extra, pos+1);
+	    }
+	}
+      break;
+    case NODE_TYPE_TOOLBAR_PLACEHOLDER:
+      /* create toolbar items for placeholders if necessary ... */
+      if (!GTK_IS_SEPARATOR_TOOL_ITEM (info->proxy) ||
+	  !GTK_IS_SEPARATOR_TOOL_ITEM (info->extra))
+	{
+	  if (info->proxy)
+	    {
+	      gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+				    info->proxy);
+	      g_object_unref (info->proxy);
+	      info->proxy = NULL;
+	    }
+	  if (info->extra)
+	    {
+	      gtk_container_remove (GTK_CONTAINER (info->extra->parent),
+				    info->extra);
+	      g_object_unref (info->extra);
+	      info->extra = NULL;
+	    }
+	}
+      if (info->proxy == NULL)
+	{
+	  GtkWidget *toolbar;
+	  gint pos;
+	  
+	  if (find_toolbar_position (node, &toolbar, &pos))
+	    {
+	      GtkToolItem *item;
+	      
+	      item = gtk_separator_tool_item_new ();
+	      gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, pos);
+	      info->proxy = GTK_WIDGET (item);
+	      g_object_ref (info->proxy);
+	      gtk_object_sink (GTK_OBJECT (info->proxy));
+	      g_object_set_data (G_OBJECT (info->proxy),
+				 "gtk-separator-mode",
+				 GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
+	      gtk_widget_set_no_show_all (info->proxy, TRUE);
+	      
+	      item = gtk_separator_tool_item_new ();
+	      gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, pos+1);
+	      info->extra = GTK_WIDGET (item);
+	      g_object_ref (info->extra);
+	      gtk_object_sink (GTK_OBJECT (info->extra));
+	      g_object_set_data (G_OBJECT (info->extra),
+				 "gtk-separator-mode",
+				 GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
+	      gtk_widget_set_no_show_all (info->extra, TRUE);
+	    }
+	}
+      break;
+    case NODE_TYPE_MENUITEM:
+      /* remove the proxy if it is of the wrong type ... */
+      if (info->proxy &&  
+	  G_OBJECT_TYPE (info->proxy) != GTK_ACTION_GET_CLASS (action)->menu_item_type)
+	{
+	  g_signal_handlers_disconnect_by_func (info->proxy,
+						G_CALLBACK (update_smart_separators),
+						NULL);  
+	  gtk_action_disconnect_proxy (info->action, info->proxy);
+	  gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+				info->proxy);
+	  g_object_unref (info->proxy);
+	  info->proxy = NULL;
+	}
+      /* create proxy if needed ... */
+      if (info->proxy == NULL)
+	{
+	  GtkWidget *menushell;
+	  gint pos;
+	  
+	  if (find_menu_position (node, &menushell, &pos))
+	    {
+	      info->proxy = gtk_action_create_menu_item (action);
 	      g_object_ref (info->proxy);
 	      gtk_object_sink (GTK_OBJECT (info->proxy));
 	      gtk_widget_set_name (info->proxy, info->name);
-	      gtk_widget_show (info->proxy);
-	      g_signal_emit (self, ui_manager_signals[ADD_WIDGET], 0, info->proxy);
+	      
+	      gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
+				     info->proxy, pos);
 	    }
-	  break;
-	case NODE_TYPE_MENU_PLACEHOLDER:
-	  /* create menu items for placeholders if necessary ... */
-	  if (!GTK_IS_SEPARATOR_MENU_ITEM (info->proxy) ||
-	      !GTK_IS_SEPARATOR_MENU_ITEM (info->extra))
-	    {
-	      if (info->proxy)
-		{
-		  gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
-					info->proxy);
-		  g_object_unref (info->proxy);
-		  info->proxy = NULL;
-		}
-	      if (info->extra)
-		{
-		  gtk_container_remove (GTK_CONTAINER (info->extra->parent),
-					info->extra);
-		  g_object_unref (info->extra);
-		  info->extra = NULL;
-		}
-	    }
-	  if (info->proxy == NULL)
-	    {
-	      GtkWidget *menushell;
-	      gint pos;
-
-	      if (find_menu_position (node, &menushell, &pos))
-		{
-		  info->proxy = gtk_separator_menu_item_new ();
-		  g_object_ref (info->proxy);
-		  gtk_object_sink (GTK_OBJECT (info->proxy));
-		  g_object_set_data (G_OBJECT (info->proxy),
-				     "gtk-separator-mode",
-				     GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
-		  gtk_widget_set_no_show_all (info->proxy, TRUE);
-		  gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
-					NODE_INFO (node)->proxy, pos);
-
-		  info->extra = gtk_separator_menu_item_new ();
-		  g_object_ref (info->extra);
-		  gtk_object_sink (GTK_OBJECT (info->extra));
-		  g_object_set_data (G_OBJECT (info->extra),
-				     "gtk-separator-mode",
-				     GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
-		  gtk_widget_set_no_show_all (info->extra, TRUE);
-		  gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
-					 NODE_INFO (node)->extra, pos+1);
-		}
-	    }
-	  break;
-	case NODE_TYPE_TOOLBAR_PLACEHOLDER:
-	  /* create toolbar items for placeholders if necessary ... */
-	  if (!GTK_IS_SEPARATOR_TOOL_ITEM (info->proxy) ||
-	      !GTK_IS_SEPARATOR_TOOL_ITEM (info->extra))
-	    {
-	      if (info->proxy)
-		{
-		  gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
-					info->proxy);
-		  g_object_unref (info->proxy);
-		  info->proxy = NULL;
-		}
-	      if (info->extra)
-		{
-		  gtk_container_remove (GTK_CONTAINER (info->extra->parent),
-					info->extra);
-		  g_object_unref (info->extra);
-		  info->extra = NULL;
-		}
-	    }
-	  if (info->proxy == NULL)
-	    {
-	      GtkWidget *toolbar;
-	      gint pos;
-
-	      if (find_toolbar_position (node, &toolbar, &pos))
-		{
-		  GtkToolItem *item;
-
-		  item = gtk_separator_tool_item_new ();
-		  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, pos);
-		  info->proxy = GTK_WIDGET (item);
-		  g_object_ref (info->proxy);
-		  gtk_object_sink (GTK_OBJECT (info->proxy));
-		  g_object_set_data (G_OBJECT (info->proxy),
-				     "gtk-separator-mode",
-				     GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
-		  gtk_widget_set_no_show_all (info->proxy, TRUE);
-
-		  item = gtk_separator_tool_item_new ();
-		  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, pos+1);
-		  info->extra = GTK_WIDGET (item);
-		  g_object_ref (info->extra);
-		  gtk_object_sink (GTK_OBJECT (info->extra));
-		  g_object_set_data (G_OBJECT (info->extra),
-				     "gtk-separator-mode",
-				     GINT_TO_POINTER (SEPARATOR_MODE_HIDDEN));
-		  gtk_widget_set_no_show_all (info->extra, TRUE);
-		}
-	    }
-	  break;
-	case NODE_TYPE_MENUITEM:
-	  /* remove the proxy if it is of the wrong type ... */
-	  if (info->proxy &&  
-	      G_OBJECT_TYPE (info->proxy) != GTK_ACTION_GET_CLASS (action)->menu_item_type)
-	    {
-	      g_signal_handlers_disconnect_by_func (info->proxy,
-						    G_CALLBACK (update_smart_separators),
-						    NULL);  
-	      gtk_action_disconnect_proxy (info->action, info->proxy);
-	      gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
-				    info->proxy);
-	      g_object_unref (info->proxy);
-	      info->proxy = NULL;
-	    }
-	  /* create proxy if needed ... */
-	  if (info->proxy == NULL)
-	    {
-	      GtkWidget *menushell;
-	      gint pos;
-
-	      if (find_menu_position (node, &menushell, &pos))
-		{
-		  info->proxy = gtk_action_create_menu_item (action);
-		  g_object_ref (info->proxy);
-		  gtk_object_sink (GTK_OBJECT (info->proxy));
-		  gtk_widget_set_name (info->proxy, info->name);
-		  
-		  gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
-					 info->proxy, pos);
-		}
-	    }
-	  else
-	    {
-	      g_signal_handlers_disconnect_by_func (info->proxy,
-						    G_CALLBACK (update_smart_separators),
-						    NULL);
-	      gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), NULL);
-	      gtk_action_connect_proxy (action, info->proxy);
-	    }
-	  g_signal_connect (info->proxy, "notify::visible",
-			    G_CALLBACK (update_smart_separators), NULL);
-	  if (in_popup) 
-	    {
-	      /* don't show accels in popups */
-	      GtkWidget *label = GTK_BIN (info->proxy)->child;
-	      g_object_set (G_OBJECT (label),
-			    "accel_closure", NULL,
-			    NULL);
-	    }
-
-	  break;
-	case NODE_TYPE_TOOLITEM:
-	  /* remove the proxy if it is of the wrong type ... */
-	  if (info->proxy &&  
-	      G_OBJECT_TYPE (info->proxy) != GTK_ACTION_GET_CLASS (action)->toolbar_item_type)
-	    {
-	      g_signal_handlers_disconnect_by_func (info->proxy,
-						    G_CALLBACK (update_smart_separators),
-						    NULL);
-	      gtk_action_disconnect_proxy (info->action, info->proxy);
-	      gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
-				    info->proxy);
-	      g_object_unref (info->proxy);
-	      info->proxy = NULL;
-	    }
-	  /* create proxy if needed ... */
-	  if (info->proxy == NULL)
-	    {
-	      GtkWidget *toolbar;
-	      gint pos;
-
-	      if (find_toolbar_position (node, &toolbar, &pos))
-		{
-		  info->proxy = gtk_action_create_tool_item (action);
-		  g_object_ref (info->proxy);
-		  gtk_object_sink (GTK_OBJECT (info->proxy));
-		  gtk_widget_set_name (info->proxy, info->name);
-
-		  gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
-				      GTK_TOOL_ITEM (info->proxy), pos);
-
-                 /* FIXME: we must trigger the notify::tooltip handler, since 
-		  * tooltips on toolitems can't be set before the toolitem 
-		  * is added to the toolbar.
-                  */
-		  g_object_get (G_OBJECT (action), "tooltip", &tooltip, NULL);
-		  g_object_set (G_OBJECT (action), "tooltip", tooltip, NULL);
-		  g_free (tooltip);
-		}
-	    }
-	  else
-	    {
-	      g_signal_handlers_disconnect_by_func (info->proxy,
-						    G_CALLBACK (update_smart_separators),
-						    NULL);
-	      gtk_action_connect_proxy (action, info->proxy);
-	    }
-	  g_signal_connect (info->proxy, "notify::visible",
-			    G_CALLBACK (update_smart_separators), NULL);
-	  break;
-	case NODE_TYPE_SEPARATOR:
-	  if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLBAR ||
-	      NODE_INFO (node->parent)->type == NODE_TYPE_TOOLBAR_PLACEHOLDER)
-	    {
-	      GtkWidget *toolbar;
-	      gint pos;
-
-	      if (GTK_IS_SEPARATOR_TOOL_ITEM (info->proxy))
-		{
-		  gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
-					info->proxy);
- 		  g_object_unref (info->proxy);
-		  info->proxy = NULL;
-		}
-
-	      if (find_toolbar_position (node, &toolbar, &pos))
-		{
-		  GtkToolItem *item = gtk_separator_tool_item_new ();
-		  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, pos);
-		  info->proxy = GTK_WIDGET (item);
-		  g_object_ref (info->proxy);
-		  gtk_object_sink (GTK_OBJECT (info->proxy));
-		  gtk_widget_set_no_show_all (info->proxy, TRUE);
-		  g_object_set_data (G_OBJECT (info->proxy),
-				     "gtk-separator-mode",
-				     GINT_TO_POINTER (SEPARATOR_MODE_SMART));
-		  gtk_widget_show (info->proxy);
-		}
-	    }
-	  else
-	    {
-	      GtkWidget *menushell;
-	      gint pos;
-
-	      if (GTK_IS_SEPARATOR_MENU_ITEM (info->proxy))
-		{
-		  gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
-					info->proxy);
-		  g_object_unref (info->proxy);
-		  info->proxy = NULL;
-		}
-
-	      if (find_menu_position (node, &menushell, &pos))
-		{
-		  info->proxy = gtk_separator_menu_item_new ();
-		  g_object_ref (info->proxy);
-		  gtk_object_sink (GTK_OBJECT (info->proxy));
-		  gtk_widget_set_no_show_all (info->proxy, TRUE);
-		  g_object_set_data (G_OBJECT (info->proxy),
-				     "gtk-separator-mode",
-				     GINT_TO_POINTER (SEPARATOR_MODE_SMART));
-		  gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
-					 info->proxy, pos);
-		  gtk_widget_show (info->proxy);
-		}
-	    }
-	  break;
-	case NODE_TYPE_ACCELERATOR:
-	  gtk_action_connect_accelerator (action);
-	  break;
 	}
-
-      if (action)
-	g_object_ref (action);
-      if (info->action)
-	g_object_unref (info->action);
-      info->action = action;
+      else
+	{
+	  g_signal_handlers_disconnect_by_func (info->proxy,
+						G_CALLBACK (update_smart_separators),
+						NULL);
+	  gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), NULL);
+	  gtk_action_connect_proxy (action, info->proxy);
+	}
+      g_signal_connect (info->proxy, "notify::visible",
+			G_CALLBACK (update_smart_separators), NULL);
+      if (in_popup) 
+	{
+	  /* don't show accels in popups */
+	  GtkWidget *label = GTK_BIN (info->proxy)->child;
+	  g_object_set (G_OBJECT (label),
+			"accel_closure", NULL,
+			NULL);
+	}
+      
+      break;
+    case NODE_TYPE_TOOLITEM:
+      /* remove the proxy if it is of the wrong type ... */
+      if (info->proxy &&  
+	  G_OBJECT_TYPE (info->proxy) != GTK_ACTION_GET_CLASS (action)->toolbar_item_type)
+	{
+	  g_signal_handlers_disconnect_by_func (info->proxy,
+						G_CALLBACK (update_smart_separators),
+						NULL);
+	  gtk_action_disconnect_proxy (info->action, info->proxy);
+	  gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+				info->proxy);
+	  g_object_unref (info->proxy);
+	  info->proxy = NULL;
+	}
+      /* create proxy if needed ... */
+      if (info->proxy == NULL)
+	{
+	  GtkWidget *toolbar;
+	  gint pos;
+	  
+	  if (find_toolbar_position (node, &toolbar, &pos))
+	    {
+	      info->proxy = gtk_action_create_tool_item (action);
+	      g_object_ref (info->proxy);
+	      gtk_object_sink (GTK_OBJECT (info->proxy));
+	      gtk_widget_set_name (info->proxy, info->name);
+	      
+	      gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
+				  GTK_TOOL_ITEM (info->proxy), pos);
+	      
+	      /* FIXME: we must trigger the notify::tooltip handler, since 
+	       * tooltips on toolitems can't be set before the toolitem 
+	       * is added to the toolbar.
+	       */
+	      g_object_get (G_OBJECT (action), "tooltip", &tooltip, NULL);
+	      g_object_set (G_OBJECT (action), "tooltip", tooltip, NULL);
+	      g_free (tooltip);
+	    }
+	}
+      else
+	{
+	  g_signal_handlers_disconnect_by_func (info->proxy,
+						G_CALLBACK (update_smart_separators),
+						NULL);
+	  gtk_action_connect_proxy (action, info->proxy);
+	}
+      g_signal_connect (info->proxy, "notify::visible",
+			G_CALLBACK (update_smart_separators), NULL);
+      break;
+    case NODE_TYPE_SEPARATOR:
+      if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLBAR ||
+	  NODE_INFO (node->parent)->type == NODE_TYPE_TOOLBAR_PLACEHOLDER)
+	{
+	  GtkWidget *toolbar;
+	  gint pos;
+	  
+	  if (GTK_IS_SEPARATOR_TOOL_ITEM (info->proxy))
+	    {
+	      gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+				    info->proxy);
+	      g_object_unref (info->proxy);
+	      info->proxy = NULL;
+	    }
+	  
+	  if (find_toolbar_position (node, &toolbar, &pos))
+	    {
+	      GtkToolItem *item = gtk_separator_tool_item_new ();
+	      gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, pos);
+	      info->proxy = GTK_WIDGET (item);
+	      g_object_ref (info->proxy);
+	      gtk_object_sink (GTK_OBJECT (info->proxy));
+	      gtk_widget_set_no_show_all (info->proxy, TRUE);
+	      g_object_set_data (G_OBJECT (info->proxy),
+				 "gtk-separator-mode",
+				 GINT_TO_POINTER (SEPARATOR_MODE_SMART));
+	      gtk_widget_show (info->proxy);
+	    }
+	}
+      else
+	{
+	  GtkWidget *menushell;
+	  gint pos;
+	  
+	  if (GTK_IS_SEPARATOR_MENU_ITEM (info->proxy))
+	    {
+	      gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+				    info->proxy);
+	      g_object_unref (info->proxy);
+	      info->proxy = NULL;
+	    }
+	  
+	  if (find_menu_position (node, &menushell, &pos))
+	    {
+	      info->proxy = gtk_separator_menu_item_new ();
+	      g_object_ref (info->proxy);
+	      gtk_object_sink (GTK_OBJECT (info->proxy));
+	      gtk_widget_set_no_show_all (info->proxy, TRUE);
+	      g_object_set_data (G_OBJECT (info->proxy),
+				 "gtk-separator-mode",
+				 GINT_TO_POINTER (SEPARATOR_MODE_SMART));
+	      gtk_menu_shell_insert (GTK_MENU_SHELL (menushell),
+				     info->proxy, pos);
+	      gtk_widget_show (info->proxy);
+	    }
+	}
+      break;
+    case NODE_TYPE_ACCELERATOR:
+      gtk_action_connect_accelerator (action);
+      break;
     }
+  
+  if (action)
+    g_object_ref (action);
+  if (info->action)
+    g_object_unref (info->action);
+  info->action = action;
 
  recurse_children:
   /* process children */
@@ -2509,12 +2503,12 @@ update_node (GtkUIManager *self,
   while (child)
     {
       GNode *current;
-
+      
       current = child;
       child = current->next;
       update_node (self, current, in_popup);
     }
-
+  
   if (info->proxy) 
     {
       if (info->type == NODE_TYPE_MENU) 
@@ -2522,7 +2516,7 @@ update_node (GtkUIManager *self,
       else if (info->type == NODE_TYPE_TOOLBAR || info->type == NODE_TYPE_POPUP) 
 	update_smart_separators (info->proxy);
     }
-
+  
   /* handle cleanup of dead nodes */
   if (node->children == NULL && info->uifiles == NULL)
     {
@@ -2629,6 +2623,16 @@ dirty_all_nodes (GtkUIManager *self)
 		   G_PRE_ORDER, G_TRAVERSE_ALL, -1,
 		   dirty_traverse_func, NULL);
   queue_update (self);
+}
+
+static void
+mark_node_dirty (GNode *node)
+{
+  GNode *p;
+
+  /* FIXME could optimize this */
+  for (p = node; p; p = p->parent)
+    NODE_INFO (p)->dirty = TRUE;  
 }
 
 static const gchar *open_tag_format[] = {

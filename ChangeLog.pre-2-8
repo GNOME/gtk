@@ -1,3 +1,21 @@
+2004-11-11  Matthias Clasen  <mclasen@redhat.com>
+
+	Considerably speed up GtkUIManager, by changing the semantics
+	of the dirty flag. It is now propagated up the tree, and
+	update_node() doesn't descend into clean subtrees.  (#143668,
+	Dave Neary, Michael Natterer, Sven Neumann, fix proposed
+	by Soeren Sandmann)
+	
+	* gtk/gtkuimanager.c (node_prepend_ui_reference): Only prepend 
+	a new node reference if the merge_id is different. Take a GNode,
+	so we can walk up the tree, adjust all callers. 
+	(node_remove_ui_reference): Only mark a node dirty if the first 
+	ui reference is removed. Take a GNode here as well for 
+	consistency. 
+	(update_node): Don't descend into clean subtrees.
+	(mark_node_dirty): New function to mark a node and its 
+	predecessors dirty.
+
 Thu Nov 11 11:34:32 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkfilechooserbutton.c (update_idler): return FALSE instead
