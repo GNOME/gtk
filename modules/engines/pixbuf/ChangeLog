@@ -1,3 +1,28 @@
+Sat Jan 19 00:32:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* examples/*: Add an extrodinarily ugly example.
+
+	* src/pixbuf-draw.c (draw_simple_image): Never shape
+	the window, even if we are allowed to. Shaping is
+	ugly -- if the widget isn't NO_WINDOW (most are),
+	you'll just have to draw it rectangular.
+
+	* src/pixbuf-render.c (pixbuf_render): Always use
+	gdk_pixbuf_render_alpha() with FULL_ALPHA() as the
+	type.
+
+	* pixbuf.h src/pixbuf-render.c (theme_pixbuf_compute_hints): To
+	speed up scaling, cache whether pixbufs have constant rows
+	or constant columns.
+
+	* src/pixbuf-render.c (pixbuf_render): Speed up scaling
+	by using the hints from compute_hints().
+
+Fri Jan 18 20:49:48 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Use pkg-config to get the binray version
+	of GTK+ that we use for an install path.
+
 Fri Jan 18 18:14:11 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* src/pixbuf-draw.c (draw_focus): Fix for changes to draw_focus.

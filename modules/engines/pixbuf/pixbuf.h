@@ -119,6 +119,11 @@ typedef enum {
   THEME_MATCH_ARROW_DIRECTION = 1 << 4
 } ThemeMatchFlags;
 
+typedef enum {
+  THEME_CONSTANT_ROWS = 1 << 0,
+  THEME_CONSTANT_COLS = 1 << 1
+} ThemeRenderHints;
+
 struct _ThemePixbuf
 {
   gchar     *filename;
@@ -128,6 +133,7 @@ struct _ThemePixbuf
   gint       border_right;
   gint       border_bottom;
   gint       border_top;
+  guint      hints[3][3];
 };
 
 struct _ThemeMatchData

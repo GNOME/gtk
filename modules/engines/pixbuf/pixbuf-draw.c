@@ -127,27 +127,11 @@ draw_simple_image(GtkStyle       *style,
     {
       if (image->background)
 	{
-	  GdkBitmap *mask = NULL;
-
-	  if (image->background->stretch && setbg &&
-	      !GDK_IS_PIXMAP (window))
-	    {
-	      GdkPixbuf *pixbuf = theme_pixbuf_get_pixbuf (image->background);
-	      if (pixbuf && gdk_pixbuf_get_has_alpha (pixbuf))
-		mask = gdk_pixmap_new (window, width, height, 1);
-	    }
-	  
 	  theme_pixbuf_render (image->background,
-			       window, mask, area,
+			       window, NULL, area,
 			       draw_center ? COMPONENT_ALL : COMPONENT_ALL | COMPONENT_CENTER,
 			       FALSE,
 			       x, y, width, height);
-	  
-	  if (mask)
-	    {
-	      gdk_window_shape_combine_mask (window, mask, 0, 0);
-	      gdk_pixmap_unref (mask);
-	    }
 	}
       
       if (image->overlay && draw_center)
