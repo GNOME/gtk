@@ -17,7 +17,7 @@ pixmap_path "."
 
 style "defaultfont"
 {
-  fontset = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*,*"
+  fontset = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*,*"
 #  font = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*,*"
 }
 

@@ -1439,15 +1439,29 @@ gtk_entry_draw_cursor_on_drawable (GtkEntry *entry, GdkDrawable *drawable)
 	  (editable->selection_start_pos == editable->selection_end_pos))
 	{
 	  gdk_draw_line (drawable, widget->style->fg_gc[GTK_STATE_NORMAL], 
-			 xoffset, 0, xoffset, text_area_height);
+			 xoffset, INNER_BORDER,
+			 xoffset, text_area_height - INNER_BORDER);
 	}
       else
 	{
+	  gint yoffset = 
+	    (text_area_height - 
+	     (widget->style->font->ascent + widget->style->font->descent)) / 2
+	    + widget->style->font->ascent;
+
 	  gtk_paint_flat_box (widget->style, drawable,
 			      GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
 			      NULL, widget, "entry_bg", 
-			      xoffset, 0, 1, text_area_height);
-	}
+			      xoffset, INNER_BORDER, 
+			      1, text_area_height - INNER_BORDER);
+	  /* Draw the character under the cursor again */
+
+	  gdk_draw_text_wc (drawable, widget->style->font,
+			    widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			    xoffset, yoffset,
+			    entry->text + editable->current_pos, 1);
+    }
+
 
 #ifdef USE_XIM
       if (GTK_WIDGET_HAS_FOCUS(widget) && gdk_im_ready() && editable->ic && 

@@ -1,3 +1,9 @@
+Wed Dec 16 15:36:19 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_draw_cursor_on_drawable):
+	Redraw the character under the cursor when removing
+	the cursor.
+
 Wed Dec 16 13:06:17 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.[ch] gtk/gtkmain.[ch] gtk/gtkprivate.h: Move main
