@@ -1794,14 +1794,7 @@ expander_changed_cb (GtkExpander           *expander,
   gboolean active;
 
   active = gtk_expander_get_expanded (expander);
-
-  if (active)
-    gtk_widget_show (impl->browse_widgets);
-  else
-    gtk_widget_hide (impl->browse_widgets);
-
-  gtk_widget_set_sensitive (impl->save_folder_label, !active);
-/*   gtk_widget_set_sensitive (impl->save_folder_combo, !active); */
+  update_appearance (impl);
 }
 
 /* Creates the widgets specific to Save mode */
@@ -1832,6 +1825,7 @@ save_widgets_create (GtkFileChooserDefault *impl)
   gtk_widget_show (widget);
 
   impl->save_file_name_entry = gtk_entry_new ();
+  gtk_entry_set_width_chars (GTK_ENTRY (impl->save_file_name_entry), 25);
   gtk_entry_set_activates_default (GTK_ENTRY (impl->save_file_name_entry), TRUE);
   gtk_table_attach (GTK_TABLE (table), impl->save_file_name_entry,
 		    1, 2, 0, 1,
@@ -2045,12 +2039,33 @@ update_appearance (GtkFileChooserDefault *impl)
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
     {
+      GtkWidget *top_level;
+
       gtk_widget_show (impl->save_widgets);
 
+      top_level = gtk_widget_get_toplevel (GTK_WIDGET (impl));
+
       if (gtk_expander_get_expanded (GTK_EXPANDER (impl->save_expander)))
-	gtk_widget_show (impl->browse_widgets);
+	{
+	  gtk_widget_set_sensitive (impl->save_folder_label, FALSE);
+	  /*gtk_widget_set_sensitive (impl->save_folder_combo, FALSE);*/
+	  gtk_widget_show (impl->browse_widgets);
+	  if (GTK_IS_WINDOW (top_level))
+	    gtk_window_set_resizable (GTK_WINDOW (top_level), TRUE);
+	}
       else
-	gtk_widget_hide (impl->browse_widgets);
+	{
+	  gtk_widget_set_sensitive (impl->save_folder_label, TRUE);
+	  /*gtk_widget_set_sensitive (impl->save_folder_combo, TRUE);*/
+	  gtk_widget_hide (impl->browse_widgets);
+	  gtk_widget_queue_resize (top_level);
+#if 0
+	  if (GTK_IS_WINDOW (top_level))
+	    gtk_window_set_resizable (GTK_WINDOW (top_level), FALSE);
+	  if (GTK_IS_WINDOW (top_level))
+	    gtk_window_set_resizable (GTK_WINDOW (top_level), TRUE);
+#endif
+	}
 
       gtk_widget_show (impl->browse_new_folder_button);
 
