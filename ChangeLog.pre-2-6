@@ -228,7 +228,6 @@ Fri Jun 25 00:32:15 2004  Matthias Clasen  <maclas@gmx.de>
 	(gtk_file_system_unix_uri_to_path): Likewise.
 	(filename_to_path): Use remove_trailing_slash().
 
->>>>>>> 1.5367.2.82
 2004-06-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaccelmap.c (_gtk_accel_path_is_valid): Accept
