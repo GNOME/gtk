@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-12-18 00:11+0100\n"
-"PO-Revision-Date: 2002-12-18 00:12+0100\n"
+"POT-Creation-Date: 2002-12-19 00:52+0100\n"
+"PO-Revision-Date: 2002-12-19 00:53+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -166,7 +166,7 @@ msgstr "BMP-bilden har felaktig huvuddata"
 
 #: gdk-pixbuf/io-bmp.c:1076
 msgid "The BMP image format"
-msgstr ""
+msgstr "Bildformatet BMP"
 
 #: gdk-pixbuf/io-gif.c:219
 #, c-format
@@ -322,7 +322,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:940
 msgid "The JPEG image format"
-msgstr ""
+msgstr "Bildformatet JPEG"
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
@@ -462,7 +462,7 @@ msgstr "Inte tillräckligt med minne för att läsa in PNM-fil"
 
 #: gdk-pixbuf/io-pnm.c:1070
 msgid "The PNM/PBM/PGM/PPM image format family"
-msgstr ""
+msgstr "Bildformatsfamiljen PNM/PBM/PGM/PPM"
 
 #: gdk-pixbuf/io-ras.c:125
 msgid "RAS image has bogus header data"
@@ -482,7 +482,7 @@ msgstr "Inte tillräckligt med minne för att läsa in RAS-bild"
 
 #: gdk-pixbuf/io-ras.c:532
 msgid "The Sun raster image format"
-msgstr ""
+msgstr "Bildformatet Sun-raster"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
@@ -591,7 +591,7 @@ msgstr "TGA-bildtypen stöds inte"
 
 #: gdk-pixbuf/io-tga.c:1370
 msgid "The Targa image format"
-msgstr ""
+msgstr "Bildformatet Targa"
 
 #: gdk-pixbuf/io-tiff.c:191
 msgid "Could not get image width (bad TIFF file)"
@@ -635,7 +635,7 @@ msgstr "Misslyckades med att läsa in TIFF-bild"
 
 #: gdk-pixbuf/io-tiff.c:591
 msgid "The TIFF image format"
-msgstr ""
+msgstr "Bildformatet TIFF"
 
 #: gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
@@ -655,7 +655,7 @@ msgstr "Kunde inte spara resten"
 
 #: gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
-msgstr ""
+msgstr "Bildformatet WBMP"
 
 #: gdk-pixbuf/io-xbm.c:285
 msgid "Invalid XBM file"
@@ -671,7 +671,7 @@ msgstr "Misslyckades med att skriva till temporär fil vid inläsning av XBM-fil
 
 #: gdk-pixbuf/io-xbm.c:474
 msgid "The XBM image format"
-msgstr ""
+msgstr "Bildformatet XBM"
 
 #: gdk-pixbuf/io-xpm.c:1229
 msgid "No XPM header found"
@@ -1717,7 +1717,7 @@ msgstr "Använd alltid pilar"
 
 #: gtk/gtkcombo.c:151
 msgid "Obsolete property, ignored"
-msgstr ""
+msgstr "Föråldrad egenskap, ignorerad"
 
 #: gtk/gtkcombo.c:157
 msgid "Case sensitive"
@@ -2630,7 +2630,7 @@ msgstr "Fördröjning innan en undermeny döljs"
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
-msgstr ""
+msgstr "Tiden innan en undermeny ska döljas när pekaren rör sig mot undermenyn"
 
 #: gtk/gtkmenubar.c:157
 msgid "Style of bevel around the menubar"
@@ -2646,11 +2646,11 @@ msgstr "Mängd kantutrymme mellan skuggan på menyraden och menyposterna"
 
 #: gtk/gtkmenubar.c:172
 msgid "Delay before drop down menus appear"
-msgstr ""
+msgstr "Fördröjning innan utfällningsmenyer visas"
 
 #: gtk/gtkmenubar.c:173
 msgid "Delay before the submenus of a menu bar appear"
-msgstr ""
+msgstr "Fördröjning innan undermenyer till en menyrad visas"
 
 #: gtk/gtkmessagedialog.c:106
 msgid "Image/label border"
@@ -2864,7 +2864,7 @@ msgstr "Inställd position"
 
 #: gtk/gtkpaned.c:228
 msgid "TRUE if the Position property should be used"
-msgstr "SANT om poitionsegenskapen ska användas"
+msgstr "SANT om positionsegenskapen ska användas"
 
 #: gtk/gtkpaned.c:234
 msgid "Handle Size"
@@ -3857,14 +3857,12 @@ msgid "Tag name"
 msgstr "Taggnamn"
 
 #: gtk/gtktexttag.c:196
-#, fuzzy
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
-msgstr "Namn som används för att peka på texttaggen"
+msgstr "Namn som används för att peka på texttaggen. NULL för anonyma taggar"
 
 #: gtk/gtktexttag.c:214
-#, fuzzy
 msgid "Background color as a (possibly unallocated) GdkColor"
-msgstr "Bakgrundsfärg som en GdkColor"
+msgstr "Bakgrundsfärg som en (möjligtvis oallokerad) GdkColor"
 
 #: gtk/gtktexttag.c:221
 msgid "Background full height"
@@ -3887,9 +3885,8 @@ msgid "Bitmap to use as a mask when drawing the text background"
 msgstr "Bitmappsbild att använda som mask när textbakgrunden ritas"
 
 #: gtk/gtktexttag.c:248
-#, fuzzy
 msgid "Foreground color as a (possibly unallocated) GdkColor"
-msgstr "Förgrundsfärg som en GdkColor"
+msgstr "Förgrundsfärg som en (möjligtvis oallokerad) GdkColor"
 
 #: gtk/gtktexttag.c:256
 msgid "Foreground stipple mask"
@@ -3908,32 +3905,32 @@ msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Textriktning, d.v.s. höger till vänster eller vänster till höger"
 
 #: gtk/gtktexttag.c:282
-#, fuzzy
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr "Typsnittsbeskrivning som en sträng"
+msgstr "Typsnittsbeskrivning som en sträng, t.ex. \"Sans Italic 12\""
 
 #: gtk/gtktexttag.c:307
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr ""
+msgstr "Typsnittsstil som en PangoStyle, t.ex. PANGO_STYLE_ITALIC"
 
 #: gtk/gtktexttag.c:316
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
-msgstr ""
+msgstr "Typsnittsvariant som en PangoVariant, t.ex. PANGO_VARIANT_SMALL_CAPS"
 
 #: gtk/gtktexttag.c:325
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
 msgstr ""
+"Typsnittsvikt som ett heltal, se fördefinierade värden i PangoWeight; t.ex. "
+"PANGO_WEIGHT_BOLD"
 
 #: gtk/gtktexttag.c:336
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
-msgstr ""
+msgstr "Typsnittsbredd som en PangoStretch, t.ex. PANGO_STRETCH_CONDENSED"
 
 #: gtk/gtktexttag.c:345
-#, fuzzy
 msgid "Font size in Pango units"
-msgstr "Typsnittsstorlek i punkter"
+msgstr "Typsnittsstorlek i Pango-enheter"
 
 #: gtk/gtktexttag.c:355
 msgid ""
@@ -3941,6 +3938,9 @@ msgid ""
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
 msgstr ""
+"Typsnittsstorlek som en skalfaktor relativt standardtypsnittsstorleken. "
+"Detta anpassar sig till temaändringar med mera och rekommenderas. Pango "
+"fördefinierar en del skalor som exempelvis PANGO_SCALE_X_LARGE"
 
 #: gtk/gtktexttag.c:375 gtk/gtktextview.c:584
 msgid "Left, right, or center justification"
@@ -3956,6 +3956,9 @@ msgid ""
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
 msgstr ""
+"Språket som denna text är i, angivet som ISO-kod. Pango kan använda detta "
+"som ett tips vid rendering av text. Om du inte förstår denna parameter "
+"behöver du den troligtvis inte"
 
 #: gtk/gtktexttag.c:391
 msgid "Left margin"
@@ -3982,13 +3985,12 @@ msgid "Amount to indent the paragraph, in pixels"
 msgstr "Hur mycket stycket ska dras in, i bildpunkter"
 
 #: gtk/gtktexttag.c:424
-#, fuzzy
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in pixels"
 msgstr ""
 "Offset för texten ovanför baslinjen (nedanför baslinjen om höjning är "
-"negativt)"
+"negativt) i bildpunkter"
 
 #: gtk/gtktexttag.c:433
 msgid "Pixels above lines"
@@ -4398,61 +4400,56 @@ msgid "Expander Size"
 msgstr "Storlek på expanderare"
 
 #: gtk/gtktreeview.c:604
-#, fuzzy
 msgid "Size of the expander arrow"
-msgstr "Storlek på expanderarpilen."
+msgstr "Storlek på expanderarpilen"
 
 #: gtk/gtktreeview.c:612
 msgid "Vertical Separator Width"
 msgstr "Vertikal avskiljarbredd"
 
 #: gtk/gtktreeview.c:613
-#, fuzzy
 msgid "Vertical space between cells.  Must be an even number"
-msgstr "Vertikalt mellanrum mellan celler. Måste vara ett jämnt tal."
+msgstr "Vertikalt mellanrum mellan celler. Måste vara ett jämnt tal"
 
 #: gtk/gtktreeview.c:621
 msgid "Horizontal Separator Width"
 msgstr "Horisontell avskiljarbredd"
 
 #: gtk/gtktreeview.c:622
-#, fuzzy
 msgid "Horizontal space between cells.  Must be an even number"
-msgstr "Horisontellt mellanrum mellan celler. Måsta vara ett jämnt tal."
+msgstr "Horisontellt mellanrum mellan celler. Måsta vara ett jämnt tal"
 
 #: gtk/gtktreeview.c:630
 msgid "Allow Rules"
 msgstr "Tillåt linjaler"
 
 #: gtk/gtktreeview.c:631
-#, fuzzy
 msgid "Allow drawing of alternating color rows"
-msgstr "Tillåt ritning av alternerande färgrader."
+msgstr "Tillåt ritning av alternerande färgrader"
 
 #: gtk/gtktreeview.c:637
 msgid "Indent Expanders"
 msgstr "Indentera expanderare"
 
 #: gtk/gtktreeview.c:638
-#, fuzzy
 msgid "Make the expanders indented"
-msgstr "Gör expanderarna indenterade."
+msgstr "Gör expanderarna indenterade"
 
 #: gtk/gtktreeview.c:644
 msgid "Even Row Color"
-msgstr ""
+msgstr "Färg på jämna rader"
 
 #: gtk/gtktreeview.c:645
 msgid "Color to use for even rows"
-msgstr ""
+msgstr "Färg som ska användas på jämna rader"
 
 #: gtk/gtktreeview.c:651
 msgid "Odd Row Color"
-msgstr ""
+msgstr "Färg på udda rader"
 
 #: gtk/gtktreeview.c:652
 msgid "Color to use for odd rows"
-msgstr ""
+msgstr "Färg som ska användas på udda rader"
 
 #: gtk/gtktreeviewcolumn.c:186
 msgid "Whether to display the column"
@@ -4555,27 +4552,24 @@ msgid "Sort direction the sort indicator should indicate"
 msgstr "Sorteringsriktning som sorteringsindikatorn ska indikera"
 
 #: gtk/gtkviewport.c:135
-#, fuzzy
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport"
 msgstr ""
 "Det GtkAdjustment som avgör värdena på den horisontella positionen för denna "
-"skrivbordsvy."
+"skrivbordsvy"
 
 #: gtk/gtkviewport.c:143
-#, fuzzy
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport"
 msgstr ""
 "Det GtkAdjustment som avgör värdena på den vertikala positionen för denna "
-"skrivbordsvy."
+"skrivbordsvy"
 
 #: gtk/gtkviewport.c:151
-#, fuzzy
 msgid "Determines how the shadowed box around the viewport is drawn"
-msgstr "Bestämmer hur den skuggade rutan runt skrivbordsvyn ritas."
+msgstr "Bestämmer hur den skuggade rutan runt skrivbordsvyn ritas"
 
 #: gtk/gtkwidget.c:400
 msgid "Widget name"
@@ -4590,35 +4584,32 @@ msgid "Parent widget"
 msgstr "Förälderwidget"
 
 #: gtk/gtkwidget.c:408
-#, fuzzy
 msgid "The parent widget of this widget. Must be a Container widget"
-msgstr "Förälderwidgeten till denna widget. Måste vara en behållarwidget."
+msgstr "Förälderwidgeten till denna widget. Måste vara en behållarwidget"
 
 #: gtk/gtkwidget.c:415
 msgid "Width request"
 msgstr "Breddbegäran"
 
 #: gtk/gtkwidget.c:416
-#, fuzzy
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr ""
 "Åsidosättande för breddbegäran av widgeten, eller -1 om naturlig begäran ska "
-"användas."
+"användas"
 
 #: gtk/gtkwidget.c:424
 msgid "Height request"
 msgstr "Höjdbegäran"
 
 #: gtk/gtkwidget.c:425
-#, fuzzy
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr ""
 "Åsidosättande för höjdbegäran av widgeten, eller -1 om naturlig begäran ska "
-"användas."
+"användas"
 
 #: gtk/gtkwidget.c:434
 msgid "Whether the widget is visible"
@@ -4657,14 +4648,12 @@ msgid "Whether the widget has the input focus"
 msgstr "Huruvida widgeten har inmatningsfokus"
 
 #: gtk/gtkwidget.c:468
-#, fuzzy
 msgid "Is focus"
-msgstr "Har fokus"
+msgstr "Är fokus"
 
 #: gtk/gtkwidget.c:469
-#, fuzzy
 msgid "Whether the widget is the focus widget within the toplevel"
-msgstr "Huruvida widgeten är standardwidgeten"
+msgstr "Huruvida widgeten är fokuswidgeten på toppnivån"
 
 #: gtk/gtkwidget.c:475
 msgid "Can default"
@@ -4687,9 +4676,8 @@ msgid "Receives default"
 msgstr "Mottar standard"
 
 #: gtk/gtkwidget.c:490
-#, fuzzy
 msgid "If TRUE, the widget will receive the default action when it is focused"
-msgstr "Om SANT kommer widgeten att motta standardåtgärden då den har fokus."
+msgstr "Om SANT kommer widgeten att motta standardåtgärden då den har fokus"
 
 #: gtk/gtkwidget.c:496
 msgid "Composite child"
@@ -4704,68 +4692,60 @@ msgid "Style"
 msgstr "Stil"
 
 #: gtk/gtkwidget.c:504
-#, fuzzy
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr ""
 "Stilen på widgeten, som innehåller information om hur den kommer att se ut "
-"(färger osv)."
+"(färger osv)"
 
 #: gtk/gtkwidget.c:510
 msgid "Events"
 msgstr "Händelser"
 
 #: gtk/gtkwidget.c:511
-#, fuzzy
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
-msgstr "Händelsemasken som avgör vilken typ av GdkEvent som denna widget får."
+msgstr "Händelsemasken som avgör vilken typ av GdkEvent som denna widget får"
 
 #: gtk/gtkwidget.c:518
 msgid "Extension events"
 msgstr "Utökningshändelser"
 
 #: gtk/gtkwidget.c:519
-#, fuzzy
 msgid "The mask that decides what kind of extension events this widget gets"
-msgstr ""
-"Masken som avgör vilken typ av utökningshändelser som denna widget får."
+msgstr "Masken som avgör vilken typ av utökningshändelser som denna widget får"
 
 #: gtk/gtkwidget.c:1098
 msgid "Interior Focus"
 msgstr "Interiörfokus"
 
 #: gtk/gtkwidget.c:1099
-#, fuzzy
 msgid "Whether to draw the focus indicator inside widgets"
-msgstr "Huruvida fokusindikatorn ritas inuti widgetar."
+msgstr "Huruvida fokusindikatorn ritas inuti widgetar"
 
 #: gtk/gtkwidget.c:1105
 msgid "Focus linewidth"
 msgstr "Fokuslinjebredd"
 
 #: gtk/gtkwidget.c:1106
-#, fuzzy
 msgid "Width, in pixels, of the focus indicator line"
-msgstr "Bredd, i bildpunkter, på fokusindikatorlinjen."
+msgstr "Bredd, i bildpunkter, på fokusindikatorlinjen"
 
 #: gtk/gtkwidget.c:1112
 msgid "Focus line dash pattern"
 msgstr "Punktmönster för fokuslinje"
 
 #: gtk/gtkwidget.c:1113
-#, fuzzy
 msgid "Dash pattern used to draw the focus indicator"
-msgstr "Punktmönster som används för att rita fokusindikatorn."
+msgstr "Punktmönster som används för att rita fokusindikatorn"
 
 #: gtk/gtkwidget.c:1118
 msgid "Focus padding"
 msgstr "Fokusmellanrum"
 
 #: gtk/gtkwidget.c:1119
-#, fuzzy
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
-msgstr "Bredd, i bildpunkter, mellan fokusindikatorn och \"widgetrutan\"."
+msgstr "Bredd, i bildpunkter, mellan fokusindikatorn och \"widgetrutan\""
 
 #: gtk/gtkwidget.c:1124
 msgid "Cursor color"
@@ -4780,13 +4760,12 @@ msgid "Secondary cursor color"
 msgstr "Sekundär markörfärg"
 
 #: gtk/gtkwidget.c:1131
-#, fuzzy
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr ""
 "Färg med vilken den sekundära insättningspekaren vid redigering av blandad "
-"höger-till-vänster- och vänster-till-höger-text ritas."
+"höger-till-vänster- och vänster-till-höger-text ritas"
 
 #: gtk/gtkwidget.c:1136
 msgid "Cursor line aspect ratio"
@@ -4817,68 +4796,62 @@ msgid "Allow Shrink"
 msgstr "Tillåt krympning"
 
 #: gtk/gtkwindow.c:476
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr ""
 "Om SANT har fönstret ingen minsta storlek. Att ställa in detta till SANT är "
-"en dum idé i 99% av fallen."
+"en dum idé i 99% av fallen"
 
 #: gtk/gtkwindow.c:483
 msgid "Allow Grow"
-msgstr "Tillåt växning"
+msgstr "Tillåt växande"
 
 #: gtk/gtkwindow.c:484
-#, fuzzy
 msgid "If TRUE, users can expand the window beyond its minimum size"
-msgstr "Om SANT kan användare utöka fönstret utöver dess minsta storlek."
+msgstr "Om SANT kan användare utöka fönstret utöver dess minsta storlek"
 
 #: gtk/gtkwindow.c:492
-#, fuzzy
 msgid "If TRUE, users can resize the window"
-msgstr "Om SANT kan användare storleksändra fönstret."
+msgstr "Om SANT kan användare storleksändra fönstret"
 
 #: gtk/gtkwindow.c:499
 msgid "Modal"
-msgstr "Modal"
+msgstr "Modalt"
 
 #: gtk/gtkwindow.c:500
-#, fuzzy
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 msgstr ""
 "Om SANT är fönstret modalt (andra fönster är inte användbara så länge detta "
-"fönster visas)."
+"fönster visas)"
 
 #: gtk/gtkwindow.c:507
 msgid "Window Position"
 msgstr "Fönsterposition"
 
 #: gtk/gtkwindow.c:508
-#, fuzzy
 msgid "The initial position of the window"
-msgstr "Den första positionen på fönstret."
+msgstr "Den första positionen på fönstret"
 
 #: gtk/gtkwindow.c:516
 msgid "Default Width"
 msgstr "Standardbredd"
 
 #: gtk/gtkwindow.c:517
-#, fuzzy
 msgid "The default width of the window, used when initially showing the window"
-msgstr "Standardbredden på fönstret, används då fönstret först visas."
+msgstr "Standardbredden på fönstret, används då fönstret först visas"
 
 #: gtk/gtkwindow.c:526
 msgid "Default Height"
 msgstr "Standardhöjd"
 
 #: gtk/gtkwindow.c:527
-#, fuzzy
 msgid ""
 "The default height of the window, used when initially showing the window"
-msgstr "Standardhöjden på fönstret, används då fönstret först visas."
+msgstr "Standardhöjden på fönstret, används då fönstret först visas"
 
 #: gtk/gtkwindow.c:536
 msgid "Destroy with Parent"
@@ -4897,49 +4870,48 @@ msgid "Icon for this window"
 msgstr "Ikon för detta fönster"
 
 #: gtk/gtkwindow.c:560
-#, fuzzy
 msgid "Is Active"
-msgstr "Aktiv"
+msgstr "Är aktiv"
 
 #: gtk/gtkwindow.c:561
-#, fuzzy
 msgid "Whether the toplevel is the current active window"
-msgstr "Huruvida widgeten är standardwidgeten"
+msgstr "Huruvida toppnivån är det för tillfället aktiva fönstret"
 
 #: gtk/gtkwindow.c:568
 msgid "Focus in Toplevel"
-msgstr ""
+msgstr "Fokus i toppnivå"
 
 #: gtk/gtkwindow.c:569
 msgid "Whether the input focus is within this GtkWindow"
-msgstr ""
+msgstr "Huruvida inmatningsfokus är inom detta GtkWindow"
 
 #: gtk/gtkwindow.c:576
 msgid "Type hint"
-msgstr ""
+msgstr "Typtips"
 
 #: gtk/gtkwindow.c:577
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
+"Tips för att hjälpa skrivbordmiljön förstå vad för typ av fönster detta är "
+"och hur det ska behandlas."
 
 #: gtk/gtkwindow.c:585
 msgid "Skip taskbar"
-msgstr ""
+msgstr "Hoppa över fönsterlista"
 
 #: gtk/gtkwindow.c:586
 msgid "TRUE if the window should not be in the task bar."
-msgstr ""
+msgstr "SANT om fönstret inte ska visas i fönsterlistan."
 
 #: gtk/gtkwindow.c:593
 msgid "Skip pager"
-msgstr ""
+msgstr "Hoppa över väljaren"
 
 #: gtk/gtkwindow.c:594
-#, fuzzy
 msgid "TRUE if the window should not be in the pager."
-msgstr "SANT om poitionsegenskapen ska användas"
+msgstr "SANT om fönstret inte ska vara i skrivbordsväljaren."
 
 #. ID
 #: modules/input/imam-et.c:453
@@ -4988,21 +4960,28 @@ msgstr "X-inmatningsmetod"
 
 #: modules/input/gtkimcontextxim.c:260
 msgid "IM Preedit style"
-msgstr ""
+msgstr "IM-förredigeringsstil"
 
 #: modules/input/gtkimcontextxim.c:261
 msgid "How to draw the input method preedit string"
-msgstr ""
+msgstr "Hur inmatningsmetodens förredigeringssträng ska ritas"
 
 #: modules/input/gtkimcontextxim.c:269
-#, fuzzy
 msgid "IM Status style"
-msgstr "Stil på utfyllnad"
+msgstr "IM-statusstil"
 
 #: modules/input/gtkimcontextxim.c:270
-#, fuzzy
 msgid "How to draw the input method statusbar"
-msgstr "Hur verktygsraden ska ritas"
+msgstr "Hur inmatningsmetodens statusrad ska ritas"
+
+#~ msgid "Skip task bar"
+#~ msgstr "Hoppa över fönsterlista"
+
+#~ msgid "TRUE if the window should not be in the task bar"
+#~ msgstr "SANT om fönstret inte ska visas i fönsterlistan"
+
+#~ msgid "TRUE if the window should not be in the pager"
+#~ msgstr "SANT om fönstret inte ska vara i skrivbordsväljaren"
 
 #~ msgid ""
 #~ "If TRUE, the child appears in a secondary group of children, suitable "
