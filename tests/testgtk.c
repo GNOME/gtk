@@ -1465,15 +1465,21 @@ create_handle_box ()
   static GtkWidget* window = NULL;
   GtkWidget *handle_box;
   GtkWidget *handle_box2;
+  GtkWidget *vbox;
   GtkWidget *hbox;
   GtkWidget *toolbar;
   GtkWidget *label;
+  GtkWidget *separator;
 	
   if (!window)
   {
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (window),
 			  "Handle Box Test");
+    gtk_window_set_policy (GTK_WINDOW (window),
+			   TRUE,
+			   TRUE,
+			   FALSE);
     
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			GTK_SIGNAL_FUNC(gtk_widget_destroyed),
@@ -1481,10 +1487,30 @@ create_handle_box ()
     
     gtk_container_border_width (GTK_CONTAINER (window), 20);
 
-    hbox = gtk_hbox_new (FALSE, 10);
-    gtk_container_add (GTK_CONTAINER (window), hbox);
-    gtk_widget_show (hbox);
+    vbox = gtk_vbox_new (FALSE, 0);
+    gtk_container_add (GTK_CONTAINER (window), vbox);
+    gtk_widget_show (vbox);
+
+    label = gtk_label_new ("Above");
+    gtk_container_add (GTK_CONTAINER (vbox), label);
+    gtk_widget_show (label);
+
+    separator = gtk_hseparator_new ();
+    gtk_container_add (GTK_CONTAINER (vbox), separator);
+    gtk_widget_show (separator);
     
+    hbox = gtk_hbox_new (FALSE, 10);
+    gtk_container_add (GTK_CONTAINER (vbox), hbox);
+    gtk_widget_show (hbox);
+
+    separator = gtk_hseparator_new ();
+    gtk_container_add (GTK_CONTAINER (vbox), separator);
+    gtk_widget_show (separator);
+
+    label = gtk_label_new ("Below");
+    gtk_container_add (GTK_CONTAINER (vbox), label);
+    gtk_widget_show (label);
+
     handle_box = gtk_handle_box_new ();
     gtk_container_add (GTK_CONTAINER (hbox), handle_box);
     gtk_signal_connect (GTK_OBJECT (handle_box),

@@ -53,6 +53,7 @@ struct _GtkHandleBox
   guint		  float_window_mapped : 1;
   guint		  child_detached : 1;
   guint		  in_drag : 1;
+  guint		  shrink_on_detach : 1;
   GdkCursor      *fleur_cursor;
 
   gint dragoff_x, dragoff_y; /* start drag position (wrt widget->window) */

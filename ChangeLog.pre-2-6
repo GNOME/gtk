@@ -1,3 +1,10 @@
+Tue Mar 24 14:59:50 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkhandlebox.h:
+	* gtk/gtkhandlebox.c: implemented new flag shrink_on_detach (TRUE by
+	default) which will cause the handle boxes requisition to collapse in
+	case the child is already detached.
+
 Tue Mar 24 00:17:42 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkcombo.c gtk/gtkmenu.c: Use reversed arrow for
@@ -11,30 +18,6 @@ Tue Mar 24 00:17:42 1998  Owen Taylor  <owt1@cornell.edu>
 	to refer to gtk-config.
 	(From: johannes@nada.kth.se (Johannes Keukelaar))
 	
-Mon Mar 23 18:19:42 1998  Owen Taylor  <owt1@cornell.edu>
-
-	* gtk/gtkmenu.c gtk/gtkmenushell.c: Instead of making
-	an X grab when the button is released, grab immediately.
-	This solves a problem where menus wouldn't pop down
-	if the caller didn't have the BUTTON_RELEASE mask on
-	their window, and and another where the X grab would
-	be released prematurely.
-
-	* gtk/gtklist.c gtk/gtktree.c: Do sanity checking on
-	button presses to make sure they occurred in a child item.
-	(From: "Damon Chaplin" <DAChaplin@email.msn.com>)
-
-	* gtk/gtkmenushell.c: Do sanity checking on button
-	press/releases. Handle button events on window widget
-	descendents of menu items correctly.
-	
-	* gtk/gtkclist.c gtk/gtkbutton.c gtk/gtkviewport.c 
-	  gtk/gtkeventbox.c:
-
-	Make the window size allocated in _realize() match that
-	in _size_allocate(). Take into account the border width
-	in the draw() handler.
-
 1998-03-23  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkclist.c (gtk_clist_size_allocate): Fixed xthickness ->
@@ -75,7 +58,6 @@ Mon Mar 23 18:19:42 1998  Owen Taylor  <owt1@cornell.edu>
 	in _size_allocate(). Take into account the border width
 	in the draw() handler.
 
->>>>>>> 1.285
 Mon Mar 23 15:26:25 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkentry.c (gtk_entry_append_text): check for text!=NULL.
