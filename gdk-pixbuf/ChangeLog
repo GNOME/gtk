@@ -1,3 +1,14 @@
+1999-12-13  Federico Mena Quintero  <federico@redhat.com>
+
+	* gdk-pixbuf/gnome-canvas-pixbuf.c
+	(gnome_canvas_pixbuf_class_init): Renamed arguments to
+	width_in_pixels, height_in_pixels, x_in_pixels, y_in_pixels, for
+	consistency with the new canvas.
+	(PixbufPrivate): Do the same renaming in the structure fields, for
+	consistency.
+
+	* doc/tmpl/gnome-canvas-pixbuf.sgml: Updated for new argument names.
+
 1999-12-12  Federico Mena Quintero  <federico@redhat.com>
 
 	* gdk-pixbuf/Makefile.am (libgdk_pixbuf_la_LDFLAGS): Use a
