@@ -297,6 +297,8 @@ _gdk_windowing_window_init (void)
   impl->width = width;
   impl->height = height;
   
+  _gdk_window_init_position (GDK_WINDOW (private));
+
   gdk_xid_table_insert (&_gdk_root_window, _gdk_parent_root);
 }
 
