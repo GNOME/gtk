@@ -40,10 +40,10 @@ GdkGC *  _gdk_win32_gc_new       (GdkDrawable        *drawable,
 COLORREF gdk_colormap_color      (GdkColormapPrivateWin32 *colormap_private,
 				  gulong                   pixel);
 HDC	gdk_gc_predraw           (GdkDrawable        *drawable,
-				  GdkGCPrivate       *gc_private,
+				  GdkGCWin32         *gcwin32,
 				  GdkGCValuesMask     usage);
 void	gdk_gc_postdraw          (GdkDrawable        *drawable,
-				  GdkGCPrivate       *gc_private,
+				  GdkGCWin32         *gcwin32,
 				  GdkGCValuesMask     usage);
 HRGN	BitmapToRegion           (HBITMAP hBmp);
 

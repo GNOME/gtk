@@ -25,6 +25,12 @@
 	* gdk/win32/gdkimage-win32.c (gdk_image_new): Use the visual's depth,
 	not the Win32 bitspixel value.
 
+	* gdk/win32/gdkcc-win32.c:
+	* gdk/win32/gdkcolor-win32.c 
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkwin32.h: Changes to make compilable, with new
+	GDK object structure.
+
 Tue Jul 11 20:59:35 2000  Tim Janik  <timj@gtk.org>
 
 	* docs/tutorial/gtk_tut_12.es.sgml (name): 

@@ -182,7 +182,6 @@ typedef struct {
   unsigned long base_pixel;
 } XStandardColormap;
 
-typedef struct _GdkGCWin32Data          GdkGCWin32Data;
 typedef struct _GdkDrawableWin32Data    GdkDrawableWin32Data;
 typedef struct _GdkWindowWin32Data      GdkWindowWin32Data;
 typedef struct _GdkWin32PositionInfo    GdkWin32PositionInfo;
@@ -197,39 +196,6 @@ typedef struct _GdkICPrivate            GdkICPrivate;
 
 #define GDK_DRAWABLE_WIN32DATA(win) ((GdkDrawableWin32Data *)(((GdkDrawablePrivate*)(win))->klass_data))
 #define GDK_WINDOW_WIN32DATA(win) ((GdkWindowWin32Data *)(((GdkDrawablePrivate*)(win))->klass_data))
-#define GDK_GC_WIN32DATA(gc) ((GdkGCWin32Data *)(((GdkGCPrivate*)(gc))->klass_data))
-
-struct _GdkGCWin32Data
-{
-  GdkRegion *clip_region;
-
-  /* A Windows Device Context (DC) is not equivalent to an X11
-   * GC. We can use a DC only in the window for which it was
-   * allocated, or (in the case of a memory DC) with the bitmap that
-   * has been selected into it. Thus, we have to release and
-   * reallocate a DC each time the GdkGC is used to paint into a new
-   * window or pixmap. We thus keep all the necessary values in the
-   * GdkGCWin32Data struct.
-   */
-  HDC xgc;
-  HRGN hcliprgn;
-  GdkGCValuesMask values_mask;
-  gulong foreground;		/* Pixel values from GdkColor, */
-  gulong background;		/* not Win32 COLORREFs */
-  GdkFont *font;
-  gint rop2;
-  GdkFill fill_style;
-  GdkPixmap *tile;
-  GdkPixmap *stipple;
-  GdkSubwindowMode subwindow_mode;
-  gint graphics_exposures;
-  gint pen_width;
-  DWORD pen_style;
-  HANDLE hwnd;			/* If a DC is allocated, for which window
-				 * or what bitmap is selected into it
-				 */
-  int saved_dc;
-};
 
 struct _GdkDrawableWin32Data
 {
@@ -329,6 +295,60 @@ struct _GdkImagePrivateWin32
   HBITMAP ximage;
 };
 
+typedef struct _GdkGCWin32      GdkGCWin32;
+typedef struct _GdkGCWin32Class GdkGCWin32Class;
+
+#define GDK_TYPE_GC_WIN32              (gdk_gc_win32_get_type ())
+#define GDK_GC_WIN32(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_WIN32, GdkGCWin32))
+#define GDK_GC_WIN32_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GC_WIN32, GdkGCWin32Class))
+#define GDK_IS_GC_WIN32(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_GC_WIN32))
+#define GDK_IS_GC_WIN32_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_GC_WIN32))
+#define GDK_GC_WIN32_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_GC_WIN32, GdkGCWin32Class))
+
+struct _GdkGCWin32
+{
+  GdkGC parent_instance;
+
+  /* A Windows Device Context (DC) is not equivalent to an X11
+   * GC. We can use a DC only in the window for which it was
+   * allocated, or (in the case of a memory DC) with the bitmap that
+   * has been selected into it. Thus, we have to release and
+   * reallocate a DC each time the GdkGC is used to paint into a new
+   * window or pixmap. We thus keep all the necessary values in the
+   * GdkGCWin32 object.
+   */
+  HDC xgc;
+
+  GdkRegion *clip_region;
+  HRGN hcliprgn;
+
+  GdkGCValuesMask values_mask;
+
+  gulong foreground;		/* Pixel values from GdkColor, */
+  gulong background;		/* not Win32 COLORREFs */
+
+  GdkFont *font;
+  gint rop2;
+  GdkFill fill_style;
+  GdkPixmap *tile;
+  GdkPixmap *stipple;
+  GdkSubwindowMode subwindow_mode;
+  gint graphics_exposures;
+  gint pen_width;
+  DWORD pen_style;
+  HANDLE hwnd;			/* If a HDC is allocated, for which window,
+				 * or what bitmap is selected into it
+				 */
+  int saved_dc;
+};
+
+struct _GdkGCWin32Class
+{
+  GdkGCClass parent_class;
+};
+
+GType gdk_gc_win32_get_type (void);
+
 #define GDK_ROOT_WINDOW()             ((guint32) HWND_DESKTOP)
 #define GDK_ROOT_PARENT()             ((GdkWindow *) gdk_parent_root)
 #define GDK_DISPLAY()                 NULL
@@ -359,7 +379,6 @@ gpointer      gdk_xid_table_lookup     (HANDLE handle);
 HDC           gdk_win32_hdc_get (GdkDrawable    *drawable,
 				 GdkGC          *gc,
 				 GdkGCValuesMask usage);
-
 
 /* Each HDC returned from gdk_win32_hdc_get must be released with
  * this function

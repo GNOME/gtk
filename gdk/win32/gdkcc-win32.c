@@ -339,7 +339,6 @@ init_true_color (GdkColorContext *cc)
     }
   
   cc->num_colors = (cc->visual->red_mask | cc->visual->green_mask | cc->visual->blue_mask) + 1;
-  
   cc->white_pixel = 0xffffff;
   cc->black_pixel = 0;
 }
@@ -348,7 +347,7 @@ static void
 init_palette (GdkColorContext *cc)
 {
   /* restore correct mode for this cc */
- 
+  
   switch (cc->visual->type)
     {
     case GDK_VISUAL_STATIC_GRAY:
@@ -389,7 +388,7 @@ init_palette (GdkColorContext *cc)
 			    free_hash_entry,
 			    NULL);
       g_hash_table_destroy (cc->color_hash);
-      cc->color_hash = g_hash_table_new (hash_color, compare_colors);
+      cc->color_hash = NULL;
     }
   
   cc->palette = NULL;
