@@ -1,3 +1,8 @@
+Wed Sep 22 00:54:34 2004  Matthias Clasen  <mclasen@redhat.com>
+
+	* demos/gtk-demo/pixbufs.c (do_pixbufs): Don't leak the frame
+	pixbuf.
+
 Tue Sep 21 16:55:38 2004  Manish Singh  <yosh@gimp.org>
 
 	* tests/testtreemodel.c: #include <config.h> for HAVE_MALLINFO define,
