@@ -4855,9 +4855,6 @@ gtk_clist_button_press (GtkWidget      *widget,
   /* selections on the list */
   if (event->window == clist->clist_window)
     {
-      if (clist->drag_button)
-	return FALSE;
-
       x = event->x;
       y = event->y;
 
@@ -4884,9 +4881,6 @@ gtk_clist_button_press (GtkWidget      *widget,
 	    }
 	  else
 	    {
-	      if (clist->click_cell.row >= 0 || clist->click_cell.column >= 0)
-		return FALSE;
-
 	      clist->click_cell.row = -1;
 	      clist->click_cell.column = -1;
 

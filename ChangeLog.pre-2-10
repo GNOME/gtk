@@ -1,3 +1,7 @@
+Sat Jan 16 05:02:22 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_button_press): fixed double click bug.
+
 Fri Jan 15 19:16:42 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/Makefile.am: define GTK_DISABLE_COMPAT_H for compilation of gtk
