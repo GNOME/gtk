@@ -3107,6 +3107,7 @@ gtk_tree_view_focus_out (GtkWidget     *widget,
 				       GTK_TREE_VIEW_SEARCH_DIALOG_KEY);
   if (search_dialog)
     gtk_tree_view_search_dialog_destroy (search_dialog, GTK_TREE_VIEW (widget));
+
   return FALSE;
 }
 
@@ -9450,13 +9451,16 @@ static void
 gtk_tree_view_remove_widget (GtkCellEditable *cell_editable,
 			     GtkTreeView     *tree_view)
 {
-  g_return_if_fail (tree_view->priv->edited_column != NULL);
+  if (tree_view->priv->edited_column == NULL)
+    return;
+
   _gtk_tree_view_column_stop_editing (tree_view->priv->edited_column);
   tree_view->priv->edited_column = NULL;
 
+  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+
   gtk_container_remove (GTK_CONTAINER (tree_view),
 			GTK_WIDGET (cell_editable));
-  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
 }
 
 static gboolean
