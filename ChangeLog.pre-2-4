@@ -1,3 +1,8 @@
+Sun Apr 12 19:35:09 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* INSTALL: typo, gtk-1.0.0 should be gtk+-1.0.0
+	* README: A little more intro on what gtk is...
+
 Sun Apr 12 22:43:22 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkmenuitem.c (gtk_menu_item_size_allocate):
