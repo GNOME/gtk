@@ -264,6 +264,14 @@ gtk_text_buffer_init (GtkTextBuffer *buffer)
 			     targets, n_targets);
 }
 
+/**
+ * gtk_text_buffer_new:
+ * @table: a tag table, or NULL to create a new one
+ * 
+ * Creates a new text buffer.
+ * 
+ * Return value: a new text buffer
+ **/
 GtkTextBuffer*
 gtk_text_buffer_new (GtkTextTagTable *table)
 {
@@ -347,6 +355,14 @@ _gtk_text_buffer_get_btree (GtkTextBuffer *buffer)
   return get_btree (buffer);
 }
 
+/**
+ * gtk_text_buffer_get_tag_table:
+ * @buffer: a #GtkTextBuffer
+ * 
+ * Get the #GtkTextTagTable associated with this buffer.
+ * 
+ * Return value: the buffer's tag table
+ **/
 GtkTextTagTable*
 gtk_text_buffer_get_tag_table (GtkTextBuffer  *buffer)
 {
@@ -395,6 +411,22 @@ gtk_text_buffer_emit_insert(GtkTextBuffer *buffer,
     }
 }
 
+/**
+ * gtk_text_buffer_insert:
+ * @buffer: a #GtkTextBuffer
+ * @iter: a position in the buffer
+ * @text: UTF-8 format text to insert
+ * @len: length of text in bytes, or -1
+ * 
+ * Inserts @len bytes of @text at position @iter.  If @len is -1,
+ * @text must be nul-terminated and will be inserted in its
+ * entirety. Emits the "insert_text" signal; insertion actually occurs
+ * in the default handler for the signal. @iter is invalidated when
+ * insertion occurs (because the buffer contents change), but the
+ * default signal handler revalidates it to point to the end of the
+ * inserted text.
+ * 
+ **/
 void
 gtk_text_buffer_insert (GtkTextBuffer *buffer,
                         GtkTextIter *iter,
@@ -408,6 +440,15 @@ gtk_text_buffer_insert (GtkTextBuffer *buffer,
   gtk_text_buffer_emit_insert(buffer, iter, text, len);
 }
 
+/**
+ * gtk_text_buffer_insert_at_cursor:
+ * @buffer: a #GtkTextBuffer
+ * @text: some text in UTF-8 format
+ * @len: length of text, in bytes
+ * 
+ * Simply calls gtk_text_buffer_insert(), using the current
+ * cursor position as the insertion point.
+ **/
 void
 gtk_text_buffer_insert_at_cursor (GtkTextBuffer *buffer,
                                   const gchar *text,
@@ -425,6 +466,21 @@ gtk_text_buffer_insert_at_cursor (GtkTextBuffer *buffer,
   gtk_text_buffer_insert(buffer, &iter, text, len);
 }
 
+/**
+ * gtk_text_buffer_insert_interactive:
+ * @buffer: a #GtkTextBuffer
+ * @iter: a position in @buffer
+ * @text: some UTF-8 text
+ * @len: length of text in bytes, or -1
+ * @editable_by_default: default editability of buffer
+ * 
+ * Like gtk_text_buffer_insert(), but the insertion will not occur if
+ * @iter is at a non-editable location in the buffer.  Usually you
+ * want to prevent insertions at ineditable locations if the insertion
+ * results from a user action (is interactive).
+ * 
+ * Return value: whether text was actually inserted
+ **/
 gboolean
 gtk_text_buffer_insert_interactive(GtkTextBuffer *buffer,
                                    GtkTextIter   *iter,
@@ -444,6 +500,18 @@ gtk_text_buffer_insert_interactive(GtkTextBuffer *buffer,
     return FALSE;
 }
 
+/**
+ * gtk_text_buffer_insert_interactive_at_cursor:
+ * @buffer: a #GtkTextBuffer
+ * @text: text in UTF-8 format
+ * @len: length of text in bytes, or -1
+ * @default_editable: default editability of buffer
+ * 
+ * Calls gtk_text_buffer_insert_interactive() at the cursor
+ * position.
+ * 
+ * Return value: whether text was actually inserted
+ **/
 gboolean
 gtk_text_buffer_insert_interactive_at_cursor (GtkTextBuffer *buffer,
                                               const gchar   *text,
@@ -499,12 +567,37 @@ gtk_text_buffer_emit_delete(GtkTextBuffer *buffer,
     return;
 
   gtk_text_iter_reorder (start, end);
+
+  /* FIXME if the final newline is in the deletion range,
+   * shorten the range. (i.e. if end is the end iterator,
+   * move it backward by one)
+   */
   
   gtk_signal_emit(GTK_OBJECT(buffer),
                   signals[DELETE_TEXT],
                   start, end);
 }
 
+/**
+ * gtk_text_buffer_delete:
+ * @buffer: a #GtkTextBuffer
+ * @start: a position in @buffer
+ * @end: another position in @buffer
+ *
+ * Deletes text between @start and @end. The order of @start and @end
+ * is not actually relevant; gtk_text_buffer_delete() will reorder
+ * them. This function actually emits the "delete_text" signal, and
+ * the default handler of that signal deletes the text. Because the
+ * buffer is modified, all outstanding iterators become invalid after
+ * calling this function; however, the @start and @end will be
+ * re-initialized to point to the location where text was deleted.
+ *
+ * Note that the final newline in the buffer may not be deleted; a
+ * #GtkTextBuffer always contains at least one newline.  You can
+ * safely include the final newline in the range [@start,@end) but it
+ * won't be affected by the deletion.
+ * 
+ **/
 void
 gtk_text_buffer_delete (GtkTextBuffer *buffer,
                         GtkTextIter *start,
@@ -517,6 +610,19 @@ gtk_text_buffer_delete (GtkTextBuffer *buffer,
   gtk_text_buffer_emit_delete(buffer, start, end);
 }
 
+/**
+ * gtk_text_buffer_delete_interactive:
+ * @buffer: a #GtkTextBuffer
+ * @start_iter: start of range to delete
+ * @end_iter: end of range
+ * @default_editable: whether the buffer is editable by default 
+ * 
+ * Deletes all <emphasis>editable</emphasis> text in the given range.
+ * Calls gtk_text_buffer_delete() for each editable sub-range of
+ * [@start,@end).
+ * 
+ * Return value: whether some text was actually deleted
+ **/
 gboolean
 gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
                                     GtkTextIter   *start_iter,
@@ -627,6 +733,23 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
  * Extracting textual buffer contents
  */
 
+/**
+ * gtk_text_buffer_get_text:
+ * @buffer: a #GtkTextBuffer
+ * @start: start of a range
+ * @end: end of a range
+ * @include_hidden_chars: whether to include invisible text
+ * 
+ * Returns the text in the range [@start,@end). Excludes undisplayed
+ * text (text marked with tags that set the invisibility attribute) if
+ * @include_hidden_chars is FALSE. Does not include characters
+ * representing embedded images, so byte and character indexes into
+ * the returned string do <emphasis>not</emphasis> correspond to byte
+ * and character indexes into the buffer. Contrast with
+ * gtk_text_buffer_get_slice().
+ * 
+ * Return value: an allocated UTF-8 string
+ **/
 gchar*
 gtk_text_buffer_get_text (GtkTextBuffer      *buffer,
                           const GtkTextIter *start,
@@ -643,6 +766,24 @@ gtk_text_buffer_get_text (GtkTextBuffer      *buffer,
     return gtk_text_iter_get_visible_text(start, end);
 }
 
+/**
+ * gtk_text_buffer_get_slice:
+ * @buffer: a #GtkTextBuffer
+ * @start: start of a range
+ * @end: end of a range
+ * @include_hidden_chars: whether to include invisible text 
+ *
+ * Returns the text in the range [@start,@end). Excludes undisplayed
+ * text (text marked with tags that set the invisibility attribute) if
+ * @include_hidden_chars is FALSE. The returned string includes a
+ * 0xFFFD character whenever the buffer contains
+ * embedded images, so byte and character indexes into
+ * the returned string <emphasis>do</emphasis> correspond to byte
+ * and character indexes into the buffer. Contrast with
+ * gtk_text_buffer_get_text().
+ * 
+ * Return value: an allocated UTF-8 string
+ **/
 gchar*
 gtk_text_buffer_get_slice (GtkTextBuffer      *buffer,
                            const GtkTextIter *start,
@@ -754,6 +895,29 @@ gtk_text_buffer_set_mark(GtkTextBuffer *buffer,
   return (GtkTextMark*)mark;
 }
 
+/**
+ * gtk_text_buffer_create_mark:
+ * @buffer: a #GtkTextBuffer
+ * @mark_name: name for mark, or %NULL
+ * @where: location to place mark
+ * @left_gravity: whether the mark has left gravity
+ * 
+ * Creates a mark at position @where. If @mark_name is %NULL, the mark
+ * is anonymous; otherwise, the mark can be retrieved by name using
+ * gtk_text_buffer_get_mark(). If a mark has left gravity, and text is
+ * inserted at the mark's current location, the mark will be moved to
+ * the left of the newly-inserted text. If the mark has right gravity
+ * (@left_gravity = %FALSE), the mark will end up on the right of
+ * newly-inserted text. The standard left-to-right cursor is a mark
+ * with right gravity (when you type, the cursor stays on the right
+ * side of the text you're typing).
+ *
+ * The caller of this function does <emphasis>not</emphasis> own a reference
+ * to the returned #GtkTextMark, so you can ignore the return value
+ * if you like.
+ * 
+ * Return value: the new #GtkTextMark object
+ **/
 GtkTextMark*
 gtk_text_buffer_create_mark(GtkTextBuffer *buffer,
                             const gchar *mark_name,
@@ -766,6 +930,14 @@ gtk_text_buffer_create_mark(GtkTextBuffer *buffer,
                                   left_gravity, FALSE);
 }
 
+/**
+ * gtk_text_buffer_move_mark:
+ * @buffer: 
+ * @mark: 
+ * @where: 
+ * 
+ * 
+ **/
 void
 gtk_text_buffer_move_mark(GtkTextBuffer *buffer,
                           GtkTextMark *mark,
@@ -823,6 +995,18 @@ gtk_text_buffer_get_mark (GtkTextBuffer      *buffer,
   return mark;
 }
 
+/**
+ * gtk_text_buffer_place_cursor:
+ * @buffer: a #GtkTextBuffer 
+ * @where: where to put the cursor
+ * 
+ * This function moves the "insert" and "selection_bound" marks
+ * simultaneously.  If you move them to the same place in two steps
+ * with gtk_text_buffer_move_mark(), you will temporarily select a
+ * region in between their old and new locations, which marks part of
+ * the buffer invalid and can be inefficient. This function moves
+ * them as a unit, which can be optimized.
+ **/
 void
 gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
                               const GtkTextIter *where)
@@ -849,6 +1033,20 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
  * Tags
  */
 
+/**
+ * gtk_text_buffer_create_tag:
+ * @buffer: a #GtkTextBuffer
+ * @tag_name: name of the new tag, or %NULL
+ * 
+ * Creates a tag and adds it to the tag table for @buffer.
+ * Equivalent to calling gtk_text_tag_new() and then adding the
+ * tag to the buffer's tag table. The returned tag has its refcount
+ * incremented, as if you'd called gtk_text_tag_new().
+ *
+ * If @tag_name is %NULL, the tag is anonymous.
+ * 
+ * Return value: a new tag
+ **/
 GtkTextTag*
 gtk_text_buffer_create_tag(GtkTextBuffer *buffer,
                            const gchar *tag_name)
