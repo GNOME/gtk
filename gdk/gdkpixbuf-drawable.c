@@ -345,7 +345,7 @@ rgb8a (GdkImage    *image,
       remap[xx] = 0xff
 	| (colormap->colors[xx].red   & 0xff00) << 16
 	| (colormap->colors[xx].green & 0xff00) << 8
-	| (colormap->colors[xx].blue  & 0xff00));
+	| (colormap->colors[xx].blue  & 0xff00);
 #endif
     }
 
