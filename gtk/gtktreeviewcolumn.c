@@ -2621,6 +2621,9 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn *tree_column,
 /* rendering, event handling and rendering focus are somewhat complicated, and
  * quite a bit of code.  Rather than duplicate them, we put them together to
  * keep the code in one place.
+ *
+ * To better understand what's going on, check out
+ * docs/tree-column-sizing.png
  */
 enum {
   CELL_ACTION_RENDER,
@@ -2713,10 +2716,10 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       if (info->expand == TRUE)
 	expand_cell_count ++;
       full_requested_width += info->requested_width;
+      /* FIXME: We prolly need to include tree_column->spacing here */
     }
 
-  extra_space = cell_area->width + horizontal_separator - full_requested_width;
-
+  extra_space = cell_area->width - full_requested_width;
   if (extra_space < 0)
     extra_space = 0;
   else if (extra_space > 0 && expand_cell_count > 0)
@@ -2740,13 +2743,26 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
       info->real_width = info->requested_width + (info->expand?extra_space:0);
 
+      /* We constrain ourselves to only the width available */
+      if (real_cell_area.x + info->real_width > cell_area->x + cell_area->width)
+	{
+	  info->real_width = cell_area->x + cell_area->width - real_cell_area.x;
+	}   
+
+      if (real_cell_area.x > cell_area->x + cell_area->width)
+	break;
+
       real_cell_area.width = info->real_width;
+
       real_background_area.width=
         real_cell_area.x + real_cell_area.width - real_background_area.x;
       real_cell_area.width -= 2 * focus_line_width;
 
       rtl_cell_area = real_cell_area;
       rtl_background_area = real_background_area;
+
+
+      
       if (rtl)
 	{
 	  rtl_cell_area.x = cell_area->x + cell_area->width - (real_cell_area.x - cell_area->x) - real_cell_area.width;
@@ -2894,6 +2910,15 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
         flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
       info->real_width = info->requested_width + (info->expand?extra_space:0);
+
+      /* We constrain ourselves to only the width available */
+      if (real_cell_area.x + info->real_width > cell_area->x + cell_area->width)
+	{
+	  info->real_width = cell_area->x + cell_area->width - real_cell_area.x;
+	}   
+
+      if (real_cell_area.x > cell_area->x + cell_area->width)
+	break;
 
       real_cell_area.width = info->real_width;
       real_background_area.width =

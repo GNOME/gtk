@@ -1382,11 +1382,31 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
 
   pango_layout_get_pixel_extents (layout, NULL, &rect);
   
-  if (width)
-    *width = GTK_CELL_RENDERER (celltext)->xpad * 2 + rect.width;
-
   if (height)
     *height = GTK_CELL_RENDERER (celltext)->ypad * 2 + rect.height;
+
+  /* The minimum size for ellipsized labels is ~ 3 chars */
+  if (width)
+    {
+      if (priv->ellipsize)
+	{
+	  PangoContext *context;
+	  PangoFontMetrics *metrics;
+	  gint char_width;
+
+	  context = pango_layout_get_context (layout);
+	  metrics = pango_context_get_metrics (context, widget->style->font_desc, NULL);
+
+	  char_width = pango_font_metrics_get_approximate_char_width (metrics);
+	  pango_font_metrics_unref (metrics);
+
+	  *width += (PANGO_PIXELS (char_width) * 3);
+	}
+      else
+	{
+	  *width = GTK_CELL_RENDERER (celltext)->xpad * 2 + rect.width;
+	}	  
+    }
 
   if (cell_area)
     {

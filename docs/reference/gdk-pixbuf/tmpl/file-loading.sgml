@@ -52,6 +52,19 @@ End:
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_new_from_file_at_scale ##### -->
+<para>
+
+</para>
+
+@filename: 
+@width: 
+@height: 
+@keep_aspect_ratio: 
+@error: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_pixbuf_get_file_info ##### -->
 <para>
 

@@ -1,3 +1,14 @@
+Tue Aug 31 17:07:41 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c
+	(gtk_tree_view_column_cell_process_action): constrain cell area to
+	passed in cell_area, #147867
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_get_size): if
+	ellipsizing, get_size is only 3 chars wide.
+
+	* docs/tree-column-sizing.png: Add Matthias's excellent image.
+
 2004-08-28  Robert Ögren  <gtk@roboros.com>
 
 	On Win32, do not produce tablet motion or button events while a
