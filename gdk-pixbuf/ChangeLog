@@ -1,3 +1,14 @@
+2003-02-14  Matthias Clasen  <maclas@gmx.de>
+
+	* io-tga.c (try_preload): 
+	(gdk_pixbuf__tga_load): Actually reject images with origin
+	not in the upper-left corner.  (#105912)  
+
+2003-02-06  Matthias Clasen  <maclas@gmx.de>
+
+	* queryloaders.c (query_module): Better error message if
+	module_open() fails.  (#105349, Tim Mooney)
+
 Mon Jan 27 17:10:30 2003  Owen Taylor  <otaylor@redhat.com>
  
  	* Makefile.am (gdk-pixbuf.loaders): Rewrite to run

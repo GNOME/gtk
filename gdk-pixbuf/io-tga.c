@@ -50,9 +50,7 @@
 #define TGA_INTERLEAVE_4WAY     0x80
 
 #define TGA_ORIGIN_MASK         0x30
-#define TGA_ORIGIN_LEFT         0x00
 #define TGA_ORIGIN_RIGHT        0x10
-#define TGA_ORIGIN_LOWER        0x00
 #define TGA_ORIGIN_UPPER        0x20
 
 enum {
@@ -727,8 +725,8 @@ static gboolean try_preload(TGAContext *ctx, GError **err)
 			}
 			if ((ctx->hdr->flags & TGA_INTERLEAVE_MASK) != 
 			    TGA_INTERLEAVE_NONE ||
-			    ctx->hdr->flags & TGA_ORIGIN_RIGHT || 
-			    ctx->hdr->flags & TGA_ORIGIN_LOWER) {
+			    (ctx->hdr->flags & TGA_ORIGIN_RIGHT) || 
+			    !(ctx->hdr->flags & TGA_ORIGIN_UPPER)) {
 				g_set_error(err, GDK_PIXBUF_ERROR, 
 					    GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
 					    _("TGA image type not supported"));
@@ -1289,7 +1287,7 @@ static GdkPixbuf *gdk_pixbuf__tga_load(FILE *f, GError **err)
 	if (!hdr)
 		return NULL;
 	if ((hdr->flags & TGA_INTERLEAVE_MASK) != TGA_INTERLEAVE_NONE ||
-	    hdr->flags & TGA_ORIGIN_RIGHT || hdr->flags & TGA_ORIGIN_LOWER) {
+	    (hdr->flags & TGA_ORIGIN_RIGHT) || !(hdr->flags & TGA_ORIGIN_UPPER)) {
 		g_set_error(err, GDK_PIXBUF_ERROR, 
 			    GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
 			    _("Unsupported TGA image type"));
