@@ -21,8 +21,8 @@
 #include "glib.h"
 
 
-/* #define MEM_PROFILE */
-/* #define MEM_CHECK */
+#define MEM_PROFILE
+#define MEM_CHECK
 
 
 #define MAX_MEM_AREA  65536L
@@ -728,7 +728,7 @@ g_mem_chunk_print (GMemChunk *mem_chunk)
       mem_areas = mem_areas->next;
     }
 
-  g_print ("%s: %ld bytes using %d mem areas", rmem_chunk->name, mem, rmem_chunk->num_mem_areas);
+  g_print ("%s: %ld bytes using %d mem areas\n", rmem_chunk->name, mem, rmem_chunk->num_mem_areas);
 }
 
 void
@@ -745,7 +745,7 @@ g_mem_chunk_info (void)
       mem_chunk = mem_chunk->next;
     }
 
-  g_print ("%d mem chunks", count);
+  g_print ("%d mem chunks\n", count);
 
   mem_chunk = mem_chunks;
   while (mem_chunk)
