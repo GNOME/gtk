@@ -1,4 +1,9 @@
-2001-08-07    <matthiasc@waldgeist.poet.de>
+2001-08-08  Matthias Clasen  <matthiasc@waldgeist.poet.de>
+
+	* gtk/gtktreestore.c (gtk_tree_store_iter_n_children): Don't
+	fail if iter is NULL. (#58347)
+
+2001-08-07  Matthias Clasen  <matthiasc@waldgeist.poet.de>
 
 	* gtk/gtktextdisplay.c (render_para, gtk_text_layout_draw): Fix
 	some off-by-one issues, fixing selection of line-ends. (#50323)

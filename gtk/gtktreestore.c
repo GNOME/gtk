@@ -609,8 +609,7 @@ gtk_tree_store_iter_n_children (GtkTreeModel *tree_model,
   gint i = 0;
 
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), 0);
-  g_return_val_if_fail (iter != NULL, FALSE);
-  g_return_val_if_fail (iter->user_data != NULL, FALSE);
+  g_return_val_if_fail (iter == NULL || iter->user_data != NULL, FALSE);
 
   if (iter == NULL)
     node = G_NODE (GTK_TREE_STORE (tree_model)->root)->children;
