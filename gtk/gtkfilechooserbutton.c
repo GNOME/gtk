@@ -284,7 +284,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 							 FALSE, G_PARAM_READWRITE));
 
   /**
-   * GtkFileChooserButton:
+   * GtkFileChooserButton:width-chars:
    * 
    * The width of the entry and label inside the button, in characters.
    *
