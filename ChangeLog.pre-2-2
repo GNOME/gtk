@@ -1,3 +1,8 @@
+Fri Jan  8 00:55:00 PST 1998 Jay Painter <jpaint@serv.net>
+	* gtk/gtkclist.c:
+	* gtk/gtkclist.h: modifications to GtkCList so it's look and 
+	feel is the same as scrolled windows.
+
 Thu Jan  8 17:56:09 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* glib/gscanner.c

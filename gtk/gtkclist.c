@@ -1,7 +1,7 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball, Josh MacDonald, 
  * Copyright (C) 1997-1998 Jay Painter <jpaint@serv.net><jpaint@gimp.org>                     
- *Sn
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -32,6 +32,8 @@
 /* added the horizontal space at the beginning and end of a row*/
 #define COLUMN_INSET 3
 
+/* scrollbar spacing class macro */
+#define SCROLLBAR_SPACING(w) (GTK_CLIST_CLASS (GTK_OBJECT (w)->klass)->scrollbar_spacing)
 
 /* gives the top pixel of the given row in context of
  * the clist's voffset */
@@ -315,6 +317,8 @@ gtk_clist_class_init (GtkCListClass * klass)
   klass->select_row = gtk_clist_real_select_row;
   klass->unselect_row = gtk_clist_real_unselect_row;
   klass->click_column = NULL;
+
+  klass->scrollbar_spacing = 5;
 }
 
 static void
@@ -940,11 +944,11 @@ gtk_clist_append (GtkCList * clist,
     clist->row_list_end = (g_list_append (clist->row_list_end, clist_row))->next;
 
   /* set the text in the row's columns */
-  if(text)
+  if (text)
     for (i = 0; i < clist->columns; i++)
       if (text[i])
         gtk_clist_cell_set_text (clist, clist_row, i, text[i]);
-
+  
   /* redraw the list if it's not frozen */
   if (!GTK_CLIST_FROZEN (clist))
     {
@@ -969,9 +973,7 @@ gtk_clist_insert (GtkCList * clist,
   g_return_if_fail (clist != NULL);
   g_return_if_fail (text != NULL);
 
-  /*
-   * return if out of bounds
-   */
+  /* return if out of bounds */
   if (row < 0 || row > (clist->rows - 1))
     return;
 
@@ -988,9 +990,10 @@ gtk_clist_insert (GtkCList * clist,
   clist->rows++;
 
   /* set the text in the row's columns */
-  for (i = 0; i < clist->columns; i++)
-    if (text[i])
-      gtk_clist_cell_set_text (clist, clist_row, i, text[i]);
+  if (text)
+    for (i = 0; i < clist->columns; i++)
+      if (text[i])
+	gtk_clist_cell_set_text (clist, clist_row, i, text[i]);
 
   /* redraw the list if it isn't frozen */
   if (!GTK_CLIST_FROZEN (clist))
@@ -1653,9 +1656,7 @@ gtk_clist_draw_row (GtkCList * clist,
 	  break;
 	};
 
-      /*
-       * Draw Text or Pixmap
-       */
+      /* Draw Text or Pixmap */
       switch (clist_row->cell[i].type)
 	{
 	case GTK_CELL_EMPTY:
@@ -1980,7 +1981,10 @@ gtk_clist_draw (GtkWidget * widget,
       /* draw list shadow/border */
       gtk_draw_shadow (widget->style, widget->window,
 		       GTK_STATE_NORMAL, clist->shadow_type,
-		       0, 0, -1, -1);
+		       0, 0, 
+		       clist->clist_window_width + (2 * widget->style->klass->xthickness),
+		       clist->clist_window_height + (2 * widget->style->klass->ythickness) +
+		       clist->column_title_area.height);
 
       gdk_window_clear_area (clist->clist_window,
 			     0, 0, -1, -1);
@@ -2007,7 +2011,10 @@ gtk_clist_expose (GtkWidget * widget,
       if (event->window == widget->window)
 	gtk_draw_shadow (widget->style, widget->window,
 			 GTK_STATE_NORMAL, clist->shadow_type,
-			 0, 0, -1, -1);
+			 0, 0,
+			 clist->clist_window_width + (2 * widget->style->klass->xthickness),
+			 clist->clist_window_height + (2 * widget->style->klass->ythickness) +
+			 clist->column_title_area.height);
 
       /* exposure events on the list */
       if (event->window == clist->clist_window)
@@ -2076,7 +2083,7 @@ gtk_clist_size_request (GtkWidget * widget,
     {
       gtk_widget_size_request (clist->vscrollbar, &clist->vscrollbar->requisition);
 
-      requisition->width += clist->vscrollbar->requisition.width;
+      requisition->width += clist->vscrollbar->requisition.width + SCROLLBAR_SPACING (clist);
       requisition->height = MAX (requisition->height,
 				 clist->vscrollbar->requisition.height);
     }
@@ -2087,7 +2094,7 @@ gtk_clist_size_request (GtkWidget * widget,
     {
       gtk_widget_size_request (clist->hscrollbar, &clist->hscrollbar->requisition);
 
-      requisition->height += clist->hscrollbar->requisition.height;
+      requisition->height += clist->hscrollbar->requisition.height + SCROLLBAR_SPACING (clist);
       requisition->width = MAX (clist->hscrollbar->requisition.width, 
 				requisition->width - 
 				clist->vscrollbar->requisition.width);
@@ -2124,39 +2131,24 @@ gtk_clist_size_allocate (GtkWidget * widget,
 			      allocation->width - GTK_CONTAINER (widget)->border_width * 2,
 			      allocation->height - GTK_CONTAINER (widget)->border_width * 2);
 
-      /*
-       * calculate internal size of the clist, compensating if
-       * there is no border
-       */
-      if (clist->shadow_type == GTK_SHADOW_NONE)
-	{
-	  clist->internal_allocation.x = 0;
-	  clist->internal_allocation.y = 0;
-	  clist->internal_allocation.width = allocation->width -
-	    GTK_CONTAINER (widget)->border_width * 2;
-	  clist->internal_allocation.height = allocation->height -
-	    GTK_CONTAINER (widget)->border_width * 2;
-	}
-      else
-	{
-	  clist->internal_allocation.x = widget->style->klass->xthickness;
-	  clist->internal_allocation.y = widget->style->klass->ythickness;
-	  clist->internal_allocation.width = allocation->width -
-	    GTK_CONTAINER (widget)->border_width * 2 -
-	    widget->style->klass->xthickness * 2;
-	  clist->internal_allocation.height = allocation->height -
-	    GTK_CONTAINER (widget)->border_width * 2 -
-	    widget->style->klass->ythickness * 2;
-	}
-
-      /*
-       * get the clist cell window allocated correctly
-       */
-      clist_allocation.x = clist->internal_allocation.x;
-      clist_allocation.y = clist->internal_allocation.y +
+      /* use internal allocation structure for all the math
+       * because it's easier than always subtracting the container
+       * border width */
+      clist->internal_allocation.x = 0;
+      clist->internal_allocation.y = 0;
+      clist->internal_allocation.width = allocation->width -
+	GTK_CONTAINER (widget)->border_width * 2;
+      clist->internal_allocation.height = allocation->height -
+	GTK_CONTAINER (widget)->border_width * 2;
+	
+      /* allocate clist window assuming no scrollbars */
+      clist_allocation.x = clist->internal_allocation.x + widget->style->klass->xthickness;
+      clist_allocation.y = clist->internal_allocation.y + widget->style->klass->ythickness +
 	clist->column_title_area.height;
-      clist_allocation.width = clist->internal_allocation.width;
+      clist_allocation.width = clist->internal_allocation.width - 
+	(2 * widget->style->klass->xthickness);
       clist_allocation.height = clist->internal_allocation.height -
+	(2 * widget->style->klass->xthickness) -
 	clist->column_title_area.height;
 
       /* 
@@ -2177,7 +2169,8 @@ gtk_clist_size_allocate (GtkWidget * widget,
 	      if (!vscrollbar_vis)
 		{
 		  vscrollbar_vis = 1;
-		  clist_allocation.width -= clist->vscrollbar->requisition.width;
+		  clist_allocation.width -= clist->vscrollbar->requisition.width +
+		    SCROLLBAR_SPACING (clist);
 		}  
 	    }
 	  
@@ -2191,7 +2184,8 @@ gtk_clist_size_allocate (GtkWidget * widget,
 	      if (!hscrollbar_vis)
 		{
 		  hscrollbar_vis = 1;
-		  clist_allocation.height -= clist->hscrollbar->requisition.height;	
+		  clist_allocation.height -= clist->hscrollbar->requisition.height + 
+		    SCROLLBAR_SPACING (clist);	
 		}  
 	    }
 	}
@@ -2205,30 +2199,22 @@ gtk_clist_size_allocate (GtkWidget * widget,
 			      clist_allocation.width,
 			      clist_allocation.height);
 
-
-      /*
-       * position the window which holds the column title buttons
-       */
-      clist->column_title_area.x = 0;
-      clist->column_title_area.y = 0;
-      clist->column_title_area.width = clist->internal_allocation.width -
-	(vscrollbar_vis ? clist->vscrollbar->requisition.width : 0);
+      /* position the window which holds the column title buttons */
+      clist->column_title_area.x = widget->style->klass->xthickness;
+      clist->column_title_area.y = widget->style->klass->ythickness;
+      clist->column_title_area.width = clist_allocation.width;
 
       gdk_window_move_resize (clist->title_window,
-			      clist->internal_allocation.x,
-			      clist->internal_allocation.y,
+			      clist->column_title_area.x,
+			      clist->column_title_area.y,
 			      clist->column_title_area.width,
 			      clist->column_title_area.height);
 
-      /*
-       * column button allocation
-       */
+      /* column button allocation */
       gtk_clist_size_allocate_title_buttons (clist);
       gtk_clist_size_allocate_columns (clist);
 
-      /*
-       * allocate the vscrollbar
-       */
+      /* allocate the vscrollbar */
       if (vscrollbar_vis)
 	{
 	  if (!GTK_WIDGET_VISIBLE (clist->vscrollbar))
@@ -2240,6 +2226,7 @@ gtk_clist_size_allocate (GtkWidget * widget,
 	  child_allocation.y = clist->internal_allocation.y;
 	  child_allocation.width = clist->vscrollbar->requisition.width;
 	  child_allocation.height = clist->internal_allocation.height -
+	    SCROLLBAR_SPACING (clist) -
 	    (hscrollbar_vis ? clist->hscrollbar->requisition.height : 0);
 
 	  gtk_widget_size_allocate (clist->vscrollbar, &child_allocation);
@@ -2260,6 +2247,7 @@ gtk_clist_size_allocate (GtkWidget * widget,
 	    clist->internal_allocation.height -
 	    clist->hscrollbar->requisition.height;
 	  child_allocation.width = clist->internal_allocation.width - 
+	    SCROLLBAR_SPACING (clist) -
 	    (vscrollbar_vis ? clist->vscrollbar->requisition.width : 0);
 	  child_allocation.height = clist->hscrollbar->requisition.height;
 

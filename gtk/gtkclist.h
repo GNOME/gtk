@@ -162,6 +162,8 @@ struct _GtkCListClass
 			GdkEventButton * event);
   void (*click_column) (GtkCList * clist,
 			gint column);
+
+  gint scrollbar_spacing;
 };
 
 struct _GtkCListColumn
