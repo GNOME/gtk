@@ -113,7 +113,7 @@ typedef enum {
   NOT_ALLOCATED,
   NORMAL,
   HIDDEN,
-  OVERFLOWN,
+  OVERFLOWN
 } ItemState;
 
 struct _GtkToolbarPrivate

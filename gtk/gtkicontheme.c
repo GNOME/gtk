@@ -58,7 +58,7 @@ typedef enum
   ICON_SUFFIX_NONE = 0,
   ICON_SUFFIX_XPM = 1 << 0,
   ICON_SUFFIX_SVG = 1 << 1,
-  ICON_SUFFIX_PNG = 1 << 2,  
+  ICON_SUFFIX_PNG = 1 << 2
 } IconSuffix;
 
 

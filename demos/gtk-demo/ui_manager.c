@@ -89,7 +89,7 @@ static guint n_color_entries = G_N_ELEMENTS (color_entries);
 enum {
   SHAPE_SQUARE,
   SHAPE_RECTANGLE,
-  SHAPE_OVAL,
+  SHAPE_OVAL
 };
 
 static GtkRadioActionEntry shape_entries[] = {

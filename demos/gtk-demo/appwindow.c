@@ -95,18 +95,6 @@ about_cb (GtkAction *action,
     "Owen Taylor",
     "Tony Gale",
     "Matthias Clasen <mclasen@redhat.com>",
-    "nn",
-    "nn",
-    "nn",
-    "nn",
-    "nn",
-    "nn",
-    "nn",
-    "nn",
-    "nn",
-    "nn",
-    "nn",
-    "nn",
     "and many more...",
     NULL
   };
@@ -225,7 +213,7 @@ static guint n_color_entries = G_N_ELEMENTS (color_entries);
 enum {
   SHAPE_SQUARE,
   SHAPE_RECTANGLE,
-  SHAPE_OVAL,
+  SHAPE_OVAL
 };
 
 static GtkRadioActionEntry shape_entries[] = {

@@ -1,3 +1,8 @@
+Tue Jul 20 22:23:26 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-io.h: Remove trailing commas from 
+	enumerations.  (#148035)
+
 Sun Jul 18 20:17:41 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* === released 2.5.0 ==
