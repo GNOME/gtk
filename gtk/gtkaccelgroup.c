@@ -443,6 +443,8 @@ quick_accel_find (GtkAccelGroup  *accel_group,
   GtkAccelGroupEntry *entry;
   GtkAccelGroupEntry key;
 
+  *count_p = 0;
+
   if (!accel_group->n_accels)
     return NULL;
 
@@ -460,7 +462,7 @@ quick_accel_find (GtkAccelGroup  *accel_group,
 	entry[-1].key.accel_mods != accel_mods)
       break;
   /* count equal members */
-  for (*count_p = 0; entry + *count_p < accel_group->priv_accels + accel_group->n_accels; (*count_p)++)
+  for (; entry + *count_p < accel_group->priv_accels + accel_group->n_accels; (*count_p)++)
     if (entry[*count_p].key.accel_key != accel_key ||
 	entry[*count_p].key.accel_mods != accel_mods)
       break;
