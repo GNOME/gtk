@@ -156,7 +156,7 @@ This option is only available if GTK+ has been configured with
 <title><systemitem>--gxid-host <replaceable>host</replaceable></systemitem></title>
 
 <para>
-The host to contact the <application>gxid</application> daemon on; overwrites 
+The host to contact the <application>gxid</application> daemon on; overrides 
 the <link linkend="GXID"><envar>GXID_HOST</envar></link> environment variable.
 This option is only available if GTK+ has been configured with
 <option>--gdk-target=x11</option>.
@@ -167,7 +167,7 @@ This option is only available if GTK+ has been configured with
 <title><systemitem>--gxid-port <replaceable>port</replaceable></systemitem></title>
 
 <para>
-The port for the connection to <application>gxid</application>; overwrites 
+The port for the connection to <application>gxid</application>; overrides 
 the <link linkend="GXID"><envar>GXID_PORT</envar></link> environment variable.
 This option is only available if GTK+ has been configured with
 <option>--gdk-target=x11</option>.
@@ -276,8 +276,8 @@ or <envar>DISPLAY</envar>; mostly to determine paths to look for certain files.
 
   <para>
     Specifies the file listing the IM modules to load. This environment
-    variable overwrites the <literal>im_module_file</literal> specified in 
-    the RC files, which in turn overwrites the default value 
+    variable overrides the <literal>im_module_file</literal> specified in 
+    the RC files, which in turn overrides the default value 
     <filename><replaceable>sysconfdir</replaceable>/gtk-2.0/gtk.immodules</filename>
     (<replaceable>sysconfdir</replaceable> is the sysconfdir specified when GTK+ was configured, 
      usually <filename>/usr/local/etc</filename>.)
@@ -322,7 +322,7 @@ nevertheless.
 
   <para>
     Specifies the file listing the GdkPixbuf loader modules to load. 
-    This environment variable overwrites the default value 
+    This environment variable overrides the default value 
     <filename><replaceable>sysconfdir</replaceable>/gtk-2.0/gdk-pixbuf.loaders</filename>
     (<replaceable>sysconfdir</replaceable> is the sysconfdir specified when
 	  GTK+ was configured, usually <filename>/usr/local/etc</filename>.)
