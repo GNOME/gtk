@@ -368,7 +368,7 @@ alloc_color (GdkColormapPrivateWin32 *cmapp,
       *pixelp = index;
       cmapp->use[index] = GDK_WIN32_PE_INUSE;
       GDK_NOTE (COLORMAP, g_print ("alloc_color: %p: "
-				   "index=%-3d=%02x for %02x %02x %02x: "
+				   "index=%3d=%02x for %02x %02x %02x: "
 				   "%02x %02x %02x\n",
 				   cmapp->hpal, index, index,
 				   entry.peRed, entry.peGreen, entry.peBlue,
@@ -381,11 +381,10 @@ alloc_color (GdkColormapPrivateWin32 *cmapp,
       GetPaletteEntries (cmapp->hpal, index, 1, &close_entry);
       *color = close_entry;
       *pixelp = index;
-      cmapp->use[index] = GDK_WIN32_PE_INUSE;
       GDK_NOTE (COLORMAP, g_print ("alloc_color %p: "
-				   "index=%-3d for %02x %02x %02x: "
+				   "index=%3d=%02x for %02x %02x %02x: "
 				   "%02x %02x %02x\n",
-				   cmapp->hpal, index,
+				   cmapp->hpal, index, index,
 				   entry.peRed, entry.peGreen, entry.peBlue,
 				   color->peRed, color->peGreen, color->peBlue));
       return TRUE;
@@ -477,41 +476,20 @@ create_colormap (GdkColormapPrivateWin32 *cmapp,
   HPALETTE hpal;
   gint i;
 
-#if 0
-  if (!writeable)
-    {
-      /* Allocate a starting palette with all the static colors. */
-      hpal = GetStockObject (DEFAULT_PALETTE);
-      lp.pal.palVersion = 0x300;
-      lp.pal.palNumEntries = GetPaletteEntries (hpal, 0, 256, lp.pal.palPalEntry);
-      for (i = 0; i < lp.pal.palNumEntries; i++)
-	lp.pal.palPalEntry[i].peFlags = 0;
-      GDK_NOTE (COLORMAP, (g_print ("Default palette %p: %d entries\n",
-				    hpal, lp.pal.palNumEntries),
-			   gdk_win32_print_paletteentries (lp.pal.palPalEntry,
-							   lp.pal.palNumEntries)));
-      DeleteObject (hpal);
-    }
-  else
-    {
-      /* Allocate a full-sized palette */
-      lp.pal.palVersion = 0x300;
-      lp.pal.palNumEntries = GetSystemPaletteEntries (gdk_DC, 0, 256, lp.pal.palPalEntry);
-      for (i = 0; i < lp.pal.palNumEntries; i++)
-	lp.pal.palPalEntry[i].peFlags = 0;
-      GDK_NOTE (COLORMAP, (g_print ("System palette: %d entries\n",
-				    lp.pal.palNumEntries),
-			   gdk_win32_print_paletteentries (lp.pal.palPalEntry,
-							   lp.pal.palNumEntries)));
-    }
-
-  cmapp->current_size = lp.pal.palNumEntries;
-
-#else
   /* Allocate a starting palette with all the static colors. */
   hpal = GetStockObject (DEFAULT_PALETTE);
   lp.pal.palVersion = 0x300;
   lp.pal.palNumEntries = GetPaletteEntries (hpal, 0, 256, lp.pal.palPalEntry);
+
+  if (cmapp->base.visual->type == GDK_VISUAL_STATIC_COLOR &&
+      cmapp->base.visual->depth == 4)
+    {
+      /* Use only 16 colors */
+      for (i = 8; i < 16; i++)
+	lp.pal.palPalEntry[i] = lp.pal.palPalEntry[i+4];
+      lp.pal.palNumEntries = 16;
+    }
+
   for (i = 0; i < lp.pal.palNumEntries; i++)
     lp.pal.palPalEntry[i].peFlags = 0;
   GDK_NOTE (COLORMAP, (g_print ("Default palette %p: %d entries\n",
@@ -519,7 +497,7 @@ create_colormap (GdkColormapPrivateWin32 *cmapp,
 		       gdk_win32_print_paletteentries (lp.pal.palPalEntry,
 						       lp.pal.palNumEntries)));
   DeleteObject (hpal);
-
+  
   /* For writeable colormaps, allow all 256 entries to be set. They won't
    * set all 256 system palette entries anyhow, of course, but we shouldn't
    * let the app see that, I think.
@@ -528,7 +506,6 @@ create_colormap (GdkColormapPrivateWin32 *cmapp,
     cmapp->current_size = 0;
   else
     cmapp->current_size = lp.pal.palNumEntries;
-#endif
 
   cmapp->private_val = writeable;
 

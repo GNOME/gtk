@@ -1,4 +1,3 @@
-#define PING() g_print (G_STRLOC "\n")
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2002 Tor Lillqvist
@@ -117,6 +116,10 @@ setup_pixmap_image (GdkPixmap *pixmap,
   switch (depth)
     {
     case 1:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
     case 8:
       image->bpp = 1;
       break;
@@ -136,6 +139,8 @@ setup_pixmap_image (GdkPixmap *pixmap,
     }
   if (depth == 1)
     image->bpl = ((width - 1)/32 + 1)*4;
+  else if (depth == 4)
+    image->bpl = ((width - 1)/8 + 1)*4;
   else
     image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
   image->mem = bits;
@@ -177,10 +182,6 @@ gdk_win32_pixmap_new (GdkWindow *window,
   if (GDK_DRAWABLE_DESTROYED (window))
     return NULL;
 
-  GDK_NOTE (PIXMAP, g_print ("gdk_win32_pixmap_new: %dx%dx%d "
-			     "window=%p visual=%p\n",
-			     width, height, depth, window, visual));
-
   if (!visual)
     {
       if (window)
@@ -191,6 +192,10 @@ gdk_win32_pixmap_new (GdkWindow *window,
 
   if (depth == -1)
     depth = visual->depth;
+
+  GDK_NOTE (PIXMAP, g_print ("gdk_win32_pixmap_new: %dx%dx%d "
+			     "window=%p visual=%p\n",
+			     width, height, depth, window, visual));
 
   pixmap = gdk_win32_pixmap_alloc ();
   private = (GdkDrawablePrivate *) pixmap;
@@ -206,14 +211,40 @@ gdk_win32_pixmap_new (GdkWindow *window,
   bmi.bmiHeader.biWidth = width;
   bmi.bmiHeader.biHeight = -height;
   bmi.bmiHeader.biPlanes = 1;
-  if (depth == 15)
-    bmi.bmiHeader.biBitCount = 16;
-  else
-    bmi.bmiHeader.biBitCount = depth;
-  if (depth == 16)
+  switch (depth)
+    {
+    case 1:
+    case 24:
+    case 32:
+      bmi.bmiHeader.biBitCount = depth;
+      break;
+
+    case 4:
+      bmi.bmiHeader.biBitCount = 4;
+      break;
+      
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+      bmi.bmiHeader.biBitCount = 8;
+      break;
+      
+    case 15:
+    case 16:
+      bmi.bmiHeader.biBitCount = 16;
+      break;
+
+    default:
+      g_warning ("gdk_win32_pixmap_new: depth = %d", depth);
+      g_assert_not_reached ();
+    }
+
+  if (bmi.bmiHeader.biBitCount == 16)
     bmi.bmiHeader.biCompression = BI_BITFIELDS;
   else
     bmi.bmiHeader.biCompression = BI_RGB;
+
   bmi.bmiHeader.biSizeImage = 0;
   bmi.bmiHeader.biXPelsPerMeter =
     bmi.bmiHeader.biYPelsPerMeter = 0;
@@ -236,7 +267,7 @@ gdk_win32_pixmap_new (GdkWindow *window,
     }
   else
     {
-      if (depth != visual->depth)
+      if (depth > 8 && depth != visual->depth)
 	g_warning ("gdk_win32_pixmap_new: depth %d doesn't match display depth %d",
 		   depth, visual->depth);
 
@@ -244,7 +275,7 @@ gdk_win32_pixmap_new (GdkWindow *window,
       if (private->colormap == NULL)
 	private->colormap = gdk_colormap_get_system ();
 
-      if (depth == 8)
+      if (depth <= 8)
 	{
 	  GdkColormapPrivateWin32 *cmapp =
 	    (GdkColormapPrivateWin32 *) private->colormap;
@@ -262,7 +293,7 @@ gdk_win32_pixmap_new (GdkWindow *window,
 	  for (i = 0; i < 256; i++)
 	    bmi.u.bmiIndices[i] = i;
 	}
-      else if (depth == 16)
+      else if (bmi.bmiHeader.biBitCount == 16)
 	{
 	  bmi.u.bmiMasks[0] = visual->red_mask;
 	  bmi.u.bmiMasks[1] = visual->green_mask;
@@ -433,7 +464,7 @@ gdk_pixmap_seek_string (FILE  *infile,
             fscanf (infile, "%1023s", instr);
           fscanf(infile, "%1023s", instr);
         }
-      if (strcmp (instr, str)==0)
+      if (strcmp (instr, str) == 0)
         return TRUE;
     }
 
@@ -642,7 +673,7 @@ gdk_xpm_destroy_notify (gpointer data)
   GdkColor color;
   int i;
 
-  for (i=0; i<info->ncolors; i++)
+  for (i = 0; i < info->ncolors; i++)
     {
       color.pixel = info->pixels[i];
       gdk_colormap_free_colors (info->colormap, &color, 1);
@@ -715,6 +746,18 @@ showpixmap (GdkPixmap *pm)
 	      if ((j%8) == 7)
 		p++;
 	      break;
+	    case 4:
+	      if (j&1)
+		{
+		  g_print ("%x", (*p)&0x0F);
+		  p++;
+		}
+	      else
+		g_print ("%x", ((*p)>>4)&0x0F);
+	      break;
+	    case 5:
+	    case 6:
+	    case 7:
 	    case 8:
 	      g_print ("%02x ", *p);
 	      p++;

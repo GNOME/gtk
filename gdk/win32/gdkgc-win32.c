@@ -401,7 +401,7 @@ gc_values_to_win32values (GdkGCValues    *values,
 	}
       data->values_mask |= GDK_GC_JOIN_STYLE;
     }
-  GDK_NOTE (GC, g_print ("}\n"));
+  GDK_NOTE (GC, g_print ("}"));
 }
 
 GdkGC*
@@ -607,6 +607,8 @@ gdk_win32_gc_set_values (GdkGC           *gc,
   GDK_NOTE (GC, g_print ("gdk_win32_gc_set_values: "));
 
   gc_values_to_win32values (values, mask, data);
+
+  GDK_NOTE (GC, g_print ("\n"));
 }
 
 static void
@@ -620,12 +622,10 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
   data->pen_style &= ~(PS_STYLE_MASK);
   data->pen_style |= PS_DASH;
 
-  /* 
-   * Set the extended line style. This could be done by 
-   * PS_USERSTYLE and ExtCreatePen; but ONLY on WinNT, 
-   * so let's make a guess (based on the implementation 
-   * in DIA). On Win9x this does only work for lines
-   * with width one ...
+  /* Set the extended line style. This could be done by PS_USERSTYLE
+   * and ExtCreatePen; but ONLY on WinNT, so let's make a guess (based
+   * on the implementation in DIA). On Win9x this does only work for
+   * lines with width one ...
    *
    * More workarounds for Win9x descibed at:
    * http://www.codeguru.com/gdi/dashed.shtml
@@ -882,6 +882,7 @@ release_pen (HPEN hpen)
 
   if (!DeleteObject (hpen))
      WIN32_GDI_FAILED ("DeleteObject");
+  GDK_NOTE (GC, g_print ("release_pen: deleted %p\n", hpen));
 }
   
 struct _GdkHDCCacheEntry
@@ -911,7 +912,7 @@ static gboolean gdk_hdc_clear_idle_proc_installed = FALSE;
 
 void
 gdk_win32_destroy_hdc (HWND hwnd,
-                       HDC hdc)
+                       HDC  hdc)
 {
   HPEN hpen;
   HBRUSH hbr;
@@ -940,13 +941,17 @@ gdk_win32_destroy_hdc (HWND hwnd,
 }
 
 static void
-clear_hdc_cache_entry (GdkHDCCacheEntry* entry)
+clear_hdc_cache_entry (GdkHDCCacheEntry *entry)
 {
   if (entry->hdc != NULL)
     {
       if (entry->holdbitmap != NULL)
-	if (SelectObject (entry->hdc, entry->holdbitmap) == NULL)
-	  WIN32_GDI_FAILED ("SelectObject");
+	{
+	  GDK_NOTE (GC, g_print ("clear_hdc_cache_entry: deselecting %p from %p\n",
+				 entry->hwnd, entry->hdc));
+	  if (SelectObject (entry->hdc, entry->holdbitmap) == NULL)
+	    WIN32_GDI_FAILED ("SelectObject");
+	}
 
       if (entry->offscreen)
         gdk_win32_destroy_hdc (NULL, entry->hdc);
@@ -964,7 +969,7 @@ clear_hdc_cache_entry (GdkHDCCacheEntry* entry)
   entry->pen_width = 0;
 }
 
-void gdk_win32_clear_hdc_cache ()
+void gdk_win32_clear_hdc_cache (void)
 {
   int i;
 
@@ -980,8 +985,8 @@ gdk_clear_hdc_cache_on_idle (gpointer arg)
   return FALSE;
 }
 
-static GdkHDCCacheEntry*  
-find_free_hdc_entry()
+static GdkHDCCacheEntry*
+find_free_hdc_entry (void)
 {
   int i;
   GdkHDCCacheEntry* not_in_use = NULL;
@@ -1041,7 +1046,7 @@ find_hdc_entry_for_hdc (HDC hdc)
 void
 gdk_win32_clear_hdc_cache_for_hwnd (HWND hwnd)
 {
-  GdkHDCCacheEntry* entry;
+  GdkHDCCacheEntry *entry;
 
   entry = find_hdc_entry_for_hwnd (hwnd);
   if (entry != NULL)
@@ -1052,7 +1057,7 @@ HDC
 gdk_win32_obtain_window_hdc (HWND hwnd)
 {
   HDC hdc;
-  GdkHDCCacheEntry* entry;
+  GdkHDCCacheEntry *entry;
 
   entry = find_hdc_entry_for_hwnd (hwnd);
   if (entry != NULL && !entry->in_use)
@@ -1061,20 +1066,18 @@ gdk_win32_obtain_window_hdc (HWND hwnd)
       return entry->hdc;
     }
 
-  hdc = GetDC(hwnd);
-  if (hdc == NULL)
+  if ((entry = find_free_hdc_entry ()) == NULL)
+    return NULL;
+
+  if ((hdc = GetDC(hwnd)) == NULL)
     WIN32_GDI_FAILED("GetDC");
-  else 
+  else
     {
-      entry = find_free_hdc_entry ();
-      if (entry != NULL)
-        {
-          entry->in_use = TRUE;
-          entry->offscreen = FALSE;
-          entry->hdc = hdc;
-          entry->hwnd = hwnd;
-	  entry->holdbitmap = NULL;
-        }
+      entry->in_use = TRUE;
+      entry->offscreen = FALSE;
+      entry->hdc = hdc;
+      entry->hwnd = hwnd;
+      entry->holdbitmap = NULL;
     }
 
   return hdc;
@@ -1084,13 +1087,11 @@ void
 gdk_win32_release_hdc (HWND hwnd,
                        HDC  hdc)
 {
-  GdkHDCCacheEntry* entry;
+  GdkHDCCacheEntry *entry;
 
   entry = find_hdc_entry_for_hdc (hdc);
   if (entry != NULL)
-    {
-      entry->in_use = FALSE;
-    }
+    entry->in_use = FALSE;
   else 
     gdk_win32_destroy_hdc (hwnd, hdc);
 }
@@ -1100,7 +1101,7 @@ gdk_win32_obtain_offscreen_hdc (HWND hwnd)
 {
   HDC hdc;
   HBITMAP holdbitmap;
-  GdkHDCCacheEntry* entry;
+  GdkHDCCacheEntry *entry;
 
   entry = find_hdc_entry_for_hwnd (hwnd);
   if (entry != NULL && !entry->in_use)
@@ -1108,6 +1109,10 @@ gdk_win32_obtain_offscreen_hdc (HWND hwnd)
       entry->in_use = TRUE;
       return entry->hdc;
     }
+
+  entry = find_free_hdc_entry ();
+  if (entry == NULL)
+    return NULL;
 
   if ((hdc = CreateCompatibleDC (NULL)) == NULL)
     {
@@ -1118,18 +1123,17 @@ gdk_win32_obtain_offscreen_hdc (HWND hwnd)
   if ((holdbitmap = SelectObject (hdc, hwnd)) == NULL)
     {
       WIN32_GDI_FAILED ("SelectObject");
+      DeleteDC (hdc);
       return NULL;
     }
+  GDK_NOTE (GC, g_print ("gdk_win32_obtain_offscreen_hdc: selected %p into %p\n",
+			 hwnd, hdc));
 
-  entry = find_free_hdc_entry ();
-  if (entry != NULL)
-    {
-      entry->in_use = TRUE;
-      entry->offscreen = TRUE;
-      entry->hdc = hdc;
-      entry->hwnd = hwnd;
-      entry->holdbitmap = holdbitmap;
-    }
+  entry->in_use = TRUE;
+  entry->offscreen = TRUE;
+  entry->hdc = hdc;
+  entry->hwnd = hwnd;
+  entry->holdbitmap = holdbitmap;
 
   return hdc;
 }
@@ -1141,7 +1145,7 @@ set_hdc_pen (HDC          hdc,
 	     gint         width)
 {
   HPEN hpen, old_hpen;
-  GdkHDCCacheEntry* entry;
+  GdkHDCCacheEntry *entry;
 
   if (width < 1)
     width = 1;
@@ -1165,6 +1169,7 @@ set_hdc_pen (HDC          hdc,
     }
   else
     {
+      GDK_NOTE (GC, g_print ("set_hdc_pen: selected %p into %p\n", hpen, hdc));
       release_pen (old_hpen);
     }
     
@@ -1287,8 +1292,8 @@ predraw_set_foreground (GdkGCWin32Data          *data,
       if ((hbr = CreatePatternBrush (GDK_DRAWABLE_XID (data->stipple))) == NULL)
 	WIN32_GDI_FAILED ("CreatePatternBrush");
 	
-      SetBrushOrgEx(data->xgc, data->ts_x_origin,
-		    data->ts_y_origin, NULL);
+      SetBrushOrgEx (data->xgc, data->ts_x_origin,
+		     data->ts_y_origin, NULL);
 
       break;
 
@@ -1369,10 +1374,10 @@ gdk_gc_predraw (GdkDrawable    *drawable,
       if (data->values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN))
 	OffsetRgn (data->clip_region,
 		   data->clip_x_origin, data->clip_y_origin);
-      gc_complex = GetRgnBox(data->clip_region, &gc_rect);
-      hdc_complex = GetClipBox(data->xgc,  &hdc_rect);
-      if (gc_complex != SIMPLEREGION || hdc_complex != SIMPLEREGION
-          || !EqualRect(&gc_rect, &hdc_rect))
+      gc_complex = GetRgnBox (data->clip_region, &gc_rect);
+      hdc_complex = GetClipBox (data->xgc,  &hdc_rect);
+      if (gc_complex != SIMPLEREGION || hdc_complex != SIMPLEREGION ||
+	  !EqualRect(&gc_rect, &hdc_rect))
         SelectClipRgn (data->xgc, data->clip_region);
     }
   else 
@@ -1435,15 +1440,14 @@ gdk_win32_hdc_release (GdkDrawable     *drawable,
 }
 
 /* This function originally from Jean-Edouard Lachand-Robert, and
- * available at www.codeguru.com. Simplified for our needs, now
- * handles just one-bit deep bitmaps (in Window parlance, ie those
- * that GDK calls bitmaps (and not pixmaps), with zero pixels being
- * transparent.
+ * available at www.codeguru.com. Simplified for our needs, not sure
+ * how much of the original code left any longer. Now handles just
+ * one-bit deep bitmaps (in Window parlance, ie those that GDK calls
+ * bitmaps (and not pixmaps), with zero pixels being transparent.
  */
 
-/*
- *  gdk_win32_bitmap_to_region : Create a region from the
- *  "non-transparent" pixels of a bitmap.
+/* gdk_win32_bitmap_to_region : Create a region from the
+ * "non-transparent" pixels of a bitmap.
  */
 
 HRGN
@@ -1478,7 +1482,7 @@ gdk_win32_bitmap_to_region (GdkPixmap *pixmap)
   for (y = 0; y < image->height; y++)
     {
       /* Scan each bitmap row from left to right*/
-      p = image->mem + y * image->bpl;
+      p = (guchar *) image->mem + y * image->bpl;
       for (x = 0; x < image->width; x++)
 	{
 	  /* Search for a continuous range of "non transparent pixels"*/

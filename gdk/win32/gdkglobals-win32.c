@@ -29,6 +29,7 @@
 
 HWND              gdk_root_window = NULL;
 gint              gdk_event_func_from_window_proc = FALSE;
+gint		  gdk_max_colors = 0;
 HDC		  gdk_DC;
 HINSTANCE	  gdk_DLLInstance;
 HINSTANCE	  gdk_ProgInstance;

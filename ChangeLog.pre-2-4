@@ -1,3 +1,102 @@
+2002-02-06  Tor Lillqvist  <tml@iki.fi>
+
+	A batch of changes mainly with improvements to 256-color mode. Add
+	possibility for the user to override size of palette used with
+	either the GDK_WIN32_MAX_COLORS environment variable, or a
+	-max-colors command line option. Plug some memory leaks.
+	
+	* gdk/gdkrgb.c: More debugging output added here and there, some
+	very verbose. I tried hard to also come up with a color cube and a
+	GdkRgbConvFunc that would use all the 16 static VGA colors if the
+	visual is such, but no. Will have to make do with the 2x2x2 color
+	cube in that case.
+
+	(gdk_rgb_cmap_fail): Drop the message argument, instead use
+	explicit GDK_NOTE calls before calling this function.
+
+	(gdk_rgb_do_colormaps): Use G_N_ELEMENTS().
+
+	(gdk_rgb_init): Use the 2x2x2 color cube only for depths 3 and 4.
+	Check return value from gdk_rgb_do_colormaps(), call g_error() if
+	fails.
+
+	(gdk_rgb_convert_4_pack): New GdkRgbConvFunc, for 4 bits-per-pixel
+	static color visuals.
+
+	(gdk_rgb_select_conv): Use correct bpp for 4 < depth < 8. Choose
+	gdk_rgb_convert_8() also for depth < 8. Choose
+	gdk_rgb_convert_4_pack() when bpp == depth == 4. Call g_error() if
+	no suitable conv function was found.
+
+	* gdk/win32/gdkcolor-win32.c: Minor debugging output
+	changes. Remove #if 0 code.
+
+	(create_colormap): If the visual indicates the static 16 VGA
+	colors only, use only those in the palette (and not the four
+	colors in the middle of the default palette).
+
+	* gdk/win32/gdkcursor-win32.c (gdk_cursor_new_from_pixmap):
+	Debugging output improvements.
+
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_blit): New function,
+	bulk of code from the old gdk_win32_draw_drawable(), with one
+	extra parameter use_fg_bg to indicate whether to use the fg and bg
+	pixel values (indexes) from the GC when blitting from bitmaps, or
+	0 and 1. The values from the GC are used only when being called
+	from gdk_image_put(). (Compare to XCopyArea(), XGetImage() and
+	XPutImage().)
+
+	Plug memory leak: always delete the outside_rgn HRGN.
+
+	(gdk_win32_draw_drawable): Just call gdk_win32_blit().
+
+	(blit_from_pixmap, blit_inside_window, blit_from_window): New
+	functions, containing code sections moved out from (what is now)
+	gdk_win32_blit().
+
+	(blit_from_pixmap): Gets passed the use_fg_bg parameter of
+	gdk_win32_blit(). Call gdk_win32_clear_hdc_cache_for_hwnd() for
+	the source bitmap to make sure it isn't selected into a DC in the
+	DC cache. Combine the branches for 1-bit and 8-bit bitmaps: Set
+	the source DIB section's color table appropriately before calling
+	BitBlt(), restore afterwards.
+
+	* gdk/win32/gdkgc-win32.c: Only cosmetics and debugging output changes.
+
+	* gdk/win32/gdkglobals-win32.c: New global variable: gdk_max_colors.
+
+	* gdk/win32/gdkimage-win32.c (gdk_image_get): Call
+	gdk_win32_blit() with use_fg_bg FALSE.
+
+	(gdk_image_get_pixel, gdk_image_put_pixel): Handle depth == 4 case
+	(two packed pixels per byte).
+
+	* gdk/win32/gdkmain-win32.c: New command-line option -max-colors.
+
+	* gdk/win32/gdkpixmap-win32.c (setup_pixmap_image): Handle also
+	depths 4, 5, 6 and 7, with depth 4 meaning two pixels per byte,
+	and 5, 6 and 7 meaning one pixel per byte, but restricting pixel
+	values to said number of bits.
+
+	(gdk_win32_pixmap_new, showpixmap): Ditto.
+
+	* gdk/win32/gdkprivate-win32.h: Declate gdk_win32_blit() and
+	gdk_max_colors.
+
+	* gdk/win32/gdkselection-win32.c (gdk_text_property_to_text_list): Fix lint.
+
+	* gdk/win32/gdkvisual-win32.c (gdk_visual_init): Look for a
+	GDK_WIN32_MAX_COLORS environment variable, and check the
+	gdk_max_colors variable possibly set by the command-line
+	option. They can be used to override the number of colormap
+	entries for 256-color "pseudocolor" mode. Set depth of visual
+	accordingly. If restricted to 16-color, say it's "static
+	color". Call gdk_rgb_min_colors() with an appropriate value for
+	the restricted colormaps.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_shape_combine_mask):
+	Plug memory leak: Delete temporary HRGN after use.
+	
 2002-01-28  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkcolor-win32.c (match_color): Don't square the diffs

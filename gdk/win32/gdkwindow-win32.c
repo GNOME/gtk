@@ -1906,9 +1906,9 @@ gdk_window_shape_combine_mask (GdkWindow *window,
       /* If this is a top-level window, add the title bar to the region */
       if (GDK_DRAWABLE_TYPE (window) == GDK_WINDOW_TOPLEVEL)
 	{
-	  CombineRgn (hrgn, hrgn,
-		      CreateRectRgn (0, 0, rect.right - rect.left, -rect.top),
-		      RGN_OR);
+	  HRGN tmp = CreateRectRgn (0, 0, rect.right - rect.left, -rect.top);
+	  CombineRgn (hrgn, hrgn, tmp, RGN_OR);
+	  DeleteObject (tmp);
 	}
       
       SetWindowRgn (GDK_DRAWABLE_XID (window), hrgn, TRUE);

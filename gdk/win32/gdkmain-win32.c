@@ -51,6 +51,7 @@ GdkArgDesc _gdk_windowing_args[] = {
   { "event-func-from-window-proc",
 		     GDK_ARG_BOOL, &gdk_event_func_from_window_proc,
 						     (GdkArgFunc) NULL},
+  { "max-colors",    GDK_ARG_INT,  &gdk_max_colors,  (GdkArgFunc) NULL},
   { NULL }
 };
 

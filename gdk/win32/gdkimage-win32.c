@@ -102,7 +102,7 @@ gdk_image_new_bitmap (GdkVisual *visual,
   if (data_bpl != image->bpl)
     {
       for (i = 0; i < height; i++)
-	memmove (image->mem + i*image->bpl, ((guchar *) data) + i*data_bpl,
+	memmove ((guchar *) image->mem + i*image->bpl, ((guchar *) data) + i*data_bpl,
 		 data_bpl);
     }
   else
@@ -176,7 +176,7 @@ gdk_image_get (GdkWindow *window,
     return NULL;
 
   gc = gdk_gc_new (pixmap);
-  gdk_win32_draw_drawable (pixmap, gc, window, x, y, 0, 0, width, height);
+  gdk_win32_blit (FALSE, pixmap, gc, window, x, y, 0, 0, width, height);
   gdk_gc_unref (gc);
 
   return GDK_DRAWABLE_WIN32DATA (pixmap)->image;
@@ -198,6 +198,15 @@ gdk_image_get_pixel (GdkImage *image,
   if (image->depth == 1)
     return (((char *) image->mem)[y * image->bpl + (x >> 3)] & (1 << (7 - (x & 0x7)))) != 0;
 
+  if (image->depth == 4)
+    {
+      pixelp = (guchar *) image->mem + y * image->bpl + (x >> 1);
+      if (x&1)
+	return (*pixelp) & 0x0F;
+
+      return (*pixelp) >> 4;
+    }
+    
   pixelp = (guchar *) image->mem + y * image->bpl + x * image->bpp;
       
   switch (image->bpp)
@@ -206,6 +215,7 @@ gdk_image_get_pixel (GdkImage *image,
       return *pixelp;
       
       /* Windows is always LSB, no need to check image->byte_order. */
+
     case 2:
       return pixelp[0] | (pixelp[1] << 8);
       
@@ -237,6 +247,21 @@ gdk_image_put_pixel (GdkImage *image,
       ((guchar *) image->mem)[y * image->bpl + (x >> 3)] |= (1 << (7 - (x & 0x7)));
     else
       ((guchar *) image->mem)[y * image->bpl + (x >> 3)] &= ~(1 << (7 - (x & 0x7)));
+  else if (image->depth == 4)
+    {
+      guchar *pixelp = (guchar *) image->mem + y * image->bpl + (x >> 1);
+
+      if (x&1)
+	{
+	  *pixelp &= 0xF0;
+	  *pixelp |= (pixel & 0x0F);
+	}
+      else
+	{
+	  *pixelp &= 0x0F;
+	  *pixelp |= (pixel << 4);
+	}
+    }
   else
     {
       guchar *pixelp = (guchar *) image->mem + y * image->bpl + x * image->bpp;
@@ -246,10 +271,13 @@ gdk_image_put_pixel (GdkImage *image,
 	{
 	case 4:
 	  pixelp[3] = 0;
+	  /* Fall-through */
 	case 3:
 	  pixelp[2] = ((pixel >> 16) & 0xFF);
+	  /* Fall-through */
 	case 2:
 	  pixelp[1] = ((pixel >> 8) & 0xFF);
+	  /* Fall-through */
 	case 1:
 	  pixelp[0] = (pixel & 0xFF);
 	}
@@ -282,7 +310,7 @@ gdk_image_put (GdkImage    *image,
   if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
 
-  gdk_win32_draw_drawable (drawable, gc,
-			   ((GdkImagePrivateWin32 *) image)->pixmap,
-			   xsrc, ysrc, xdest, ydest, width, height);
+  gdk_win32_blit (TRUE, drawable, gc,
+		  ((GdkImagePrivateWin32 *) image)->pixmap,
+		  xsrc, ysrc, xdest, ydest, width, height);
 }

@@ -3266,9 +3266,6 @@ gdk_win32_erase_background (GdkWindow *window,
                                  rect.left, rect.top,
                                  bg));
 
-      // if (colormap_private->base.visual->type == GDK_VISUAL_PSEUDO_COLOR)
-      //   gdk_win32_print_hpalette (colormap_private->hpal);
-
       if (!(hbr = CreateSolidBrush (bg)))
 	WIN32_GDI_FAILED ("CreateSolidBrush");
       else if (!FillRect (hdc, &rect, hbr))

@@ -150,8 +150,8 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   cursor_width = GetSystemMetrics (SM_CXCURSOR);
   cursor_height = GetSystemMetrics (SM_CYCURSOR);
 
-  g_return_val_if_fail (width <= cursor_width
-			&& height <= cursor_height, NULL);
+  g_return_val_if_fail (width <= cursor_width && height <= cursor_height,
+			NULL);
 
   residue = (1 << ((8-(width%8))%8)) - 1;
 
@@ -169,33 +169,38 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 #ifdef G_ENABLE_DEBUG
   if (gdk_debug_flags & GDK_DEBUG_CURSOR)
     {
-      g_print ("gdk_cursor_new_from_pixmap: source:\n");
+      g_print ("gdk_cursor_new_from_pixmap: source=%p:\n",
+	       GDK_DRAWABLE_XID (source));
       for (iy = 0; iy < height; iy++)
 	{
 	  if (iy == 16)
 	    break;
 
 	  p = (guchar *) source_image->mem + iy*source_image->bpl;
-	  for (ix = 0; ix < ((width-1)/8+1); ix++)
+	  for (ix = 0; ix < width; ix++)
 	    {
-	      if (ix == 32)
+	      if (ix == 79)
 		break;
-	      g_print ("%02x ", *p++);
+	      g_print ("%c", ".X"[((*p)>>(7-(ix%8)))&1]);
+	      if ((ix%8) == 7)
+		p++;
 	    }
 	  g_print ("\n");
 	}
-      g_print ("...mask:\n");
+      g_print ("...mask=%p:\n", GDK_DRAWABLE_XID (mask));
       for (iy = 0; iy < height; iy++)
 	{
 	  if (iy == 16)
 	    break;
 
 	  p = (guchar *) mask_image->mem + iy*source_image->bpl;
-	  for (ix = 0; ix < ((width-1)/8+1); ix++)
+	  for (ix = 0; ix < width; ix++)
 	    {
-	      if (ix == 32)
+	      if (ix == 79)
 		break;
-	      g_print ("%02x ", *p++);
+	      g_print ("%c", ".X"[((*p)>>(7-(ix%8)))&1]);
+	      if ((ix%8) == 7)
+		p++;
 	    }
 	  g_print ("\n");
 	}

@@ -29,6 +29,7 @@
 #include <stdlib.h>
 
 #include "gdkvisual.h"
+#include "gdkrgb.h"
 #include "gdkprivate-win32.h"
 
 static void  gdk_visual_decompose_mask (gulong     mask,
@@ -68,10 +69,54 @@ gdk_visual_init (void)
     {
       const int sizepalette = GetDeviceCaps (gdk_DC, SIZEPALETTE);
       const int numcolors = GetDeviceCaps (gdk_DC, NUMCOLORS);
+      gchar *max_colors = getenv ("GDK_WIN32_MAX_COLORS");
       system_visual->visual.type = GDK_VISUAL_PSEUDO_COLOR;
+
       GDK_NOTE (COLORMAP, g_print ("BITSPIXEL=%d NUMCOLORS=%d SIZEPALETTE=%d\n",
 				   bitspixel, numcolors, sizepalette));
-      map_entries = sizepalette;
+      g_assert (sizepalette == 256);
+
+      if (max_colors != NULL)
+	gdk_max_colors = atoi (max_colors);
+      
+      map_entries = gdk_max_colors;
+
+      if (map_entries >= 16 && map_entries < sizepalette)
+	{
+	  /* The calls to gdk_rgb_set_min_colors() here have knowledge
+	   * of what color cubes gdk_rgb_do_colormaps() will try, and
+	   * of the static system palette colors... XXX
+	   */
+	  if (map_entries < 32)
+	    {
+	      map_entries = 16;
+	      system_visual->visual.type = GDK_VISUAL_STATIC_COLOR;
+	      bitspixel = 4;
+	      gdk_rgb_set_min_colors (2*2*2);
+	    }
+	  else if (map_entries < 64)
+	    {
+	      map_entries = 32;
+	      bitspixel = 5;
+	      gdk_rgb_set_min_colors (3*3*3);
+	    }
+	  else if (map_entries < 128)
+	    {
+	      map_entries = 64;
+	      bitspixel = 6;
+	      gdk_rgb_set_min_colors (3*3*3);
+	    }
+	  else if (map_entries < 256)
+	    {
+	      map_entries = 128;
+	      bitspixel = 7;
+	      gdk_rgb_set_min_colors (5*5*4);
+	    }
+	  else
+	    g_assert_not_reached ();
+	}
+      else
+	map_entries = sizepalette;
     }
   else if (bitspixel == 1)
     {

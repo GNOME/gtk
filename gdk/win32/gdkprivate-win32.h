@@ -257,7 +257,6 @@ struct _GdkGCWin32Data
   HANDLE hwnd;			/* If a DC is allocated, for which window
 				 * or what bitmap is selected into it
 				 */
-  int saved_dc;
   HPALETTE holdpal;
 };
 
@@ -395,15 +394,16 @@ GdkPixmap* gdk_win32_pixmap_new (GdkWindow *window,
 				 gint       height,
 				 gint       depth);
 
-void     gdk_win32_draw_drawable (GdkDrawable    *drawable,
-				  GdkGC          *gc,
-				  GdkPixmap      *src,
-				  gint            xsrc,
-				  gint            ysrc,
-				  gint            xdest,
-				  gint            ydest,
-				  gint            width,
-				  gint            height);
+void     gdk_win32_blit         (gboolean     use_fg_bg,
+				 GdkDrawable *drawable,
+				 GdkGC       *gc,
+				 GdkPixmap   *src,
+				 gint         xsrc,
+				 gint         ysrc,
+				 gint         xdest,
+				 gint         ydest,
+				 gint         width,
+				 gint         height);
 
 GdkImagePrivateWin32 *gdk_win32_image_alloc (void);
 
@@ -475,6 +475,7 @@ extern GdkDrawableClass  _gdk_win32_drawable_class;
 extern HWND		 gdk_root_window;
 GDKVAR gchar		*gdk_progclass;
 extern gboolean		 gdk_event_func_from_window_proc;
+extern gint		 gdk_max_colors;
 
 extern HDC		 gdk_DC;
 extern HINSTANCE	 gdk_DLLInstance;

@@ -535,7 +535,7 @@ gdk_text_property_to_text_list (GdkAtom       encoding,
   if (!list)
     return 0;
 
-  *list = g_new (gchar **, 1);
+  *list = g_new (gchar *, 1);
   **list = g_strdup (text);
   
   return 1;
