@@ -1,5 +1,8 @@
 2005-03-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaboutdialog.c (add_credits_page): Don't crash on
+	style changes.  (#169334, Yury Puzis)
+
 	* gtk/gtkicontheme.c (gtk_icon_theme_set_custom_theme): Fix
 	the doc comments.  (#169967, Masao Mutoh)
 
