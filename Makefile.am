@@ -145,8 +145,8 @@ DISTCLEANFILES =				\
 DEFAULT_GDKTARGET=x11
 install-data-hook:
 	(cd $(DESTDIR)$(pkgconfigdir) && \
-	 test -e gdk-$(DEFAULT_GDKTARGET)-2.0.pc && \
-	 test -e gtk+-$(DEFAULT_GDKTARGET)-2.0.pc && \
+	 test -f gdk-$(DEFAULT_GDKTARGET)-2.0.pc && \
+	 test -f gtk+-$(DEFAULT_GDKTARGET)-2.0.pc && \
 	 rm -f gdk-2.0.pc && cp -f gdk-$(DEFAULT_GDKTARGET)-2.0.pc gdk-2.0.pc && \
 	 rm -f gtk+-2.0.pc && cp -f gtk+-$(DEFAULT_GDKTARGET)-2.0.pc gtk+-2.0.pc) || \
 	(cd $(DESTDIR)$(pkgconfigdir) && \
@@ -154,7 +154,7 @@ install-data-hook:
 	 rm -f gtk+-2.0.pc && cp -f gtk+-$(GDKTARGET)-2.0.pc gtk+-2.0.pc)
 
 dist-hook: gtk+.spec
-	if test -e $(srcdir)/INSTALL.in && test -e $(srcdir)/README.in ; then \
+	if test -f $(srcdir)/INSTALL.in && test -f $(srcdir)/README.in ; then \
 	     CONFIG_FILES="INSTALL:$(srcdir)/INSTALL.in README:$(srcdir)/README.in" \
 	     CONFIG_HEADERS= \
 	     $(SHELL) config.status \
