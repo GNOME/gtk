@@ -1,3 +1,12 @@
+Sun Jan 13 01:15:45 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c: various cleanups,
+	(get_child_iter_from_elt): removed,
+	(gtk_tree_model_sort_elt_get_path): rewritten to be a lot cleaner
+	and especially faster,
+	(gtk_tree_model_convert_iter_to_child_iter): use
+	gtk_tree_model_sort_elt_get_path
+
 Sat Jan 12 16:57:31 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_start_interactive_search):
