@@ -598,6 +598,49 @@ create_statusbar (void)
   return new_widget_info ("statusbar", vbox, SMALL);
 }
 
+static WidgetInfo *
+create_scales (void)
+{
+  GtkWidget *hbox;
+  GtkWidget *vbox;
+
+  vbox = gtk_vbox_new (FALSE, 3);
+  hbox = gtk_hbox_new (TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox),
+		      gtk_hscale_new_with_range (0.0, 100.0, 1.0),
+		      TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox),
+		      gtk_vscale_new_with_range (0.0, 100.0, 1.0),
+		      TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      g_object_new (GTK_TYPE_LABEL,
+				    "label", "Horizontal and Vertical\nScales",
+				    "justify", GTK_JUSTIFY_CENTER,
+				    NULL),
+		      FALSE, FALSE, 0);
+  return new_widget_info ("scales", vbox, MEDIUM);}
+
+static WidgetInfo *
+create_image (void)
+{
+  GtkWidget *widget;
+  GtkWidget *align, *vbox;
+
+  widget = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, 
+				     GTK_ICON_SIZE_DND);
+
+  vbox = gtk_vbox_new (FALSE, 3);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      gtk_label_new ("Image"),
+		      FALSE, FALSE, 0);
+
+  return new_widget_info ("image", vbox, SMALL);
+}
+
 GList *
 get_all_widgets (void)
 {
@@ -629,6 +672,8 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_scrolledwindow ());
   retval = g_list_prepend (retval, create_spinbutton ());
   retval = g_list_prepend (retval, create_statusbar ());
+  retval = g_list_prepend (retval, create_scales ());
+  retval = g_list_prepend (retval, create_image ());
 
   return retval;
 }

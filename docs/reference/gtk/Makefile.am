@@ -227,6 +227,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/scrolledwindow.png				\
 	$(srcdir)/images/spinbutton.png					\
 	$(srcdir)/images/statusbar.png					\
+	$(srcdir)/images/image.png					\
 	$(srcdir)/images/messagedialog.png
 
 # Extra options to supply to gtkdoc-fixref

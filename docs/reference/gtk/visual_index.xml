@@ -77,4 +77,10 @@
   <link linkend="GtkStatusbar">
     <inlinegraphic fileref="statusbar.png" format="PNG"></inlinegraphic>
   </link>
+  <link linkend="GtkScale">
+    <inlinegraphic fileref="scales.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkImage">
+    <inlinegraphic fileref="image.png" format="PNG"></inlinegraphic>
+  </link>
 </para>

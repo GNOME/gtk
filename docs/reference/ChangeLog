@@ -1,9 +1,12 @@
 2004-10-11  Matthias Clasen  <matthias@localhost.localdomain>
 
-	* gtk/images/statusbar.png: New image.
+	* gtk/images/image.png:
+	* gtk/images/scales.png:
+	* gtk/images/statusbar.png: New images.
 
 	* gtk/visual_index.xml:
-	* gtk/Makefile.am (HTML_IMAGES): Add statusbar image.
+	* gtk/Makefile.am (HTML_IMAGES): Add statusbar, scale 
+	and image images.
 
 2004-10-11  Matthias Clasen  <mclasen@redhat.com>
 

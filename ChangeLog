@@ -1,7 +1,7 @@
 2004-10-11  Matthias Clasen  <matthias@localhost.localdomain>
 
-	* docs/tools/widgets.c: Create scrolledwindow and statusbar 
-	images.
+	* docs/tools/widgets.c: Create scrolledwindow, statusbar, 
+	scale and image images. 
 
 2004-10-10  Matthias Clasen  <matthias@localhost.localdomain>
 
