@@ -698,7 +698,7 @@ _gdk_pixbuf_generic_image_load (GdkPixbufModule *module,
 		if (!context)
 			return NULL;
 		
-		while (!feof (f)) {
+		while (!feof (f) && !ferror (f)) {
 			length = fread (buffer, 1, sizeof (buffer), f);
 			if (length > 0)
 				if (!module->load_increment (context, buffer, length, error)) {
@@ -911,7 +911,7 @@ gdk_pixbuf_new_from_file_at_size (const char *filename,
 		
 	g_signal_connect (loader, "size-prepared", G_CALLBACK (size_prepared_cb), &info);
 
-	while (!feof (f)) {
+	while (!feof (f) && !ferror (f)) {
 		length = fread (buffer, 1, sizeof (buffer), f);
 		if (length > 0)
 			if (!gdk_pixbuf_loader_write (loader, buffer, length, error)) {
@@ -1012,7 +1012,7 @@ gdk_pixbuf_get_file_info (const gchar  *filename,
 		
 	g_signal_connect (loader, "size-prepared", G_CALLBACK (info_cb), &info);
 
-	while (!feof (f)) {
+	while (!feof (f) && !ferror (f)) {
 		length = fread (buffer, 1, sizeof (buffer), f);
 		if (length > 0) {
 			if (!gdk_pixbuf_loader_write (loader, buffer, length, NULL))

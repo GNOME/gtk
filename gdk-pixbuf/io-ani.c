@@ -626,7 +626,7 @@ gdk_pixbuf__ani_image_load_animation (FILE *f, GError **error)
 	if (!context)
                 return NULL;
 	
-	while (!feof (f)) {
+	while (!feof (f) && !ferror (f)) {
 		length = fread (buffer, 1, sizeof (buffer), f);
 		if (length > 0)
 			if (!gdk_pixbuf__ani_image_load_increment (context, buffer, length, error)) {

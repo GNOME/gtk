@@ -1,3 +1,12 @@
+2004-04-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-ani.c (gdk_pixbuf__ani_image_load_animation): 
+	* gdk-pixbuf-io.c (gdk_pixbuf_get_file_info) 
+	(_gdk_pixbuf_generic_image_load) 
+	(gdk_pixbuf_new_from_file_at_size): When calling fread()
+	in a loop, check for ferror() as well as for feof() to
+	avoid infinite loops on directories.  (#137804, Alex Converse)
+
 Mon Mar 15 15:01:59 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.4.0 ===
