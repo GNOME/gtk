@@ -100,6 +100,11 @@ static void  gtk_warning		 (gchar		     *str);
 static void  gtk_message		 (gchar		     *str);
 static void  gtk_print			 (gchar		     *str);
 
+static gint  gtk_idle_compare            (gpointer            a, 
+					  gpointer            b);
+
+static gint  gtk_timeout_compare         (gpointer            a, 
+					  gpointer            b);
 
 static gboolean iteration_done = FALSE;
 static guint main_level = 0;
@@ -699,6 +704,16 @@ gtk_timeout_remove (gint tag)
     }
 }
 
+/* We rely on some knowledge of how g_list_insert_sorted works to make
+ * sure that we insert at the _end_ of the idles of this priority
+ */
+static gint
+gtk_idle_compare (gpointer a, gpointer b)
+{
+  return (((GtkIdleFunction *)a)->priority < ((GtkIdleFunction *)b)->priority)
+    ? -1 : 1;
+}
+
 gint
 gtk_idle_add_full (gint		        priority,
 		   GtkFunction	        function,
@@ -707,8 +722,7 @@ gtk_idle_add_full (gint		        priority,
 		   GtkDestroyNotify     destroy)
 {
   static gint idle_tag = 1;
-  GtkIdleFunction *idlef, *temp;
-  GList *tmp_list, *new_list;
+  GtkIdleFunction *idlef;
   
   g_return_val_if_fail ((function != NULL) || (marshal != NULL), 0);
 
@@ -725,34 +739,7 @@ gtk_idle_add_full (gint		        priority,
   idlef->data = data;
   idlef->destroy = destroy;
 
-  /* Insert the idle function into the list of idle functions 
-   * sorted by priority. This really should just use
-   * glist_insert_sorted, but that ignores duplicates
-   */
-  tmp_list = idle_functions;
-  while (tmp_list)
-    {
-      temp = tmp_list->data;
-      if (idlef->priority < temp->priority)
-	{
-	  new_list = g_list_alloc ();
-	  new_list->data = idlef;
-	  new_list->next = tmp_list;
-	  new_list->prev = tmp_list->prev;
-	  if (tmp_list->prev)
-	    tmp_list->prev->next = new_list;
-	  tmp_list->prev = new_list;
-	  
-	  if (tmp_list == idle_functions)
-	    idle_functions = new_list;
-	  
-	  return idlef->tag;
-	}
-      
-      tmp_list = tmp_list->next;
-    }
-  
-  idle_functions = g_list_append (idle_functions, idlef);
+  idle_functions = g_list_insert_sorted (idle_functions, idlef, gtk_idle_compare);
   
   return idlef->tag;
 }
@@ -911,14 +898,14 @@ gtk_input_add_full (gint source,
       input->data = data;
       input->destroy = destroy;
 
-      return gdk_input_add_interp (source,
-				   condition,
-				   (GdkInputFunction) gtk_invoke_input_function,
-				   input,
-				   (GdkDestroyNotify) gtk_destroy_input_function);
+      return gdk_input_add_full (source,
+				 condition,
+				 (GdkInputFunction) gtk_invoke_input_function,
+				 input,
+				 (GdkDestroyNotify) gtk_destroy_input_function);
     }
   else
-    return gdk_input_add_interp (source, condition, function, data, destroy);
+    return gdk_input_add_full (source, condition, function, data, destroy);
 }
 
 gint
@@ -968,43 +955,29 @@ gtk_exit_func ()
     }
 }
 
+
+/* We rely on some knowledge of how g_list_insert_sorted works to make
+ * sure that we insert after timeouts of equal interval
+ */
+static gint
+gtk_timeout_compare (gpointer a, gpointer b)
+{
+  return (((GtkTimeoutFunction *)a)->interval < 
+	  ((GtkTimeoutFunction *)b)->interval)
+    ? -1 : 1;
+}
+
 static void
 gtk_timeout_insert (GtkTimeoutFunction *timeoutf)
 {
-  GtkTimeoutFunction *temp;
-  GList *temp_list;
-  GList *new_list;
-  
   g_assert (timeoutf != NULL);
   
   /* Insert the timeout function appropriately.
    * Appropriately meaning sort it into the list
    *  of timeout functions.
    */
-  temp_list = timeout_functions;
-  while (temp_list)
-    {
-      temp = temp_list->data;
-      if (timeoutf->interval < temp->interval)
-	{
-	  new_list = g_list_alloc ();
-	  new_list->data = timeoutf;
-	  new_list->next = temp_list;
-	  new_list->prev = temp_list->prev;
-	  if (temp_list->prev)
-	    temp_list->prev->next = new_list;
-	  temp_list->prev = new_list;
-	  
-	  if (temp_list == timeout_functions)
-	    timeout_functions = new_list;
-	  
-	  return;
-	}
-      
-      temp_list = temp_list->next;
-    }
-  
-  timeout_functions = g_list_append (timeout_functions, timeoutf);
+  timeout_functions = g_list_insert_sorted (timeout_functions, timeoutf,
+					    gtk_timeout_compare);
 }
 
 static gint
