@@ -42,7 +42,6 @@
 	try to focus the default_widget if there is 
 	none.  (#169881, Thomas Leonard)
 
->>>>>>> 1.6286.2.112
 2005-03-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaccelgroup.c (substitute_underscores): Remove
