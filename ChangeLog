@@ -1,3 +1,8 @@
+2004-09-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_default_draw_expander): Draw expanders a bit 
+	better.
+
 2004-09-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkuimanager.c (gtk_ui_manager_add_ui): Use the proper node type
