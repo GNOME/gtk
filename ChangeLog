@@ -1,3 +1,7 @@
+Sun Mar  1 18:29:58 PST 1998 Shawn T. amundson <amundson@gimp.org>
+
+        * Released GTK 0.99.4.
+
 Sun Mar  1 16:47:29 PST 1998 Shawn T. Amundson <amundson@gimp.org>
 
         * gtk/testgtk.c: small fix to notebook portion
