@@ -1,3 +1,9 @@
+Sun May  3 19:04:46 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtklabel.c (gtk_label_state_changed): Don't
+	force a clear until the widget is actually on
+	screen.
+
 Sun May  3 17:20:50 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* configure.in acheader.h gdk/gdkwindow.c 
