@@ -1,3 +1,10 @@
+Wed Jan  7 23:20:06 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* demos/gtk-demo/Makefile.am (demos): Add entry_completion.c
+	
+	* demos/gtk-demo/entry_completion.c: New demo for GtkEntryCompletion 
+	by Anders Carlsson  (#130464).
+
 Wed Jan  7 23:07:28 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkmain.h: 
