@@ -1,5 +1,10 @@
 2004-08-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaction.c (connect_proxy, disconnect_proxy): Handle 
+	action_group being NULL.  (#150869,  Tommi Komulainen)
+
+2004-08-24  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/gdkimage.c (allocate_scratch_images): Use the correct 
 	index variable.  (#150941, Tommi Komulainen)
 

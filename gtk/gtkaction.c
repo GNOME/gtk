@@ -743,8 +743,6 @@ static void
 connect_proxy (GtkAction     *action, 
 	       GtkWidget     *proxy)
 {
-  GtkActionGroup *group = action->private_data->action_group;
-
   g_object_ref (action);
   g_object_set_data_full (G_OBJECT (proxy), "gtk-action", action,
 			  g_object_unref);
@@ -904,15 +902,14 @@ connect_proxy (GtkAction     *action,
 			       G_CONNECT_SWAPPED);
     }
 
-  _gtk_action_group_emit_connect_proxy (group, action, proxy);
+  if (action->private_data->action_group)
+    _gtk_action_group_emit_connect_proxy (action->private_data->action_group, action, proxy);
 }
 
 static void
 disconnect_proxy (GtkAction *action, 
 		  GtkWidget *proxy)
 {
-  GtkActionGroup *group = action->private_data->action_group;
-
   g_object_set_data (G_OBJECT (proxy), "gtk-action", NULL);
 
   /* remove proxy from list of proxies */
@@ -951,7 +948,8 @@ disconnect_proxy (GtkAction *action,
 					G_CALLBACK (gtk_action_create_menu_proxy),
 					action);
 
-  _gtk_action_group_emit_disconnect_proxy (group, action, proxy);
+  if (action->private_data->action_group)
+    _gtk_action_group_emit_disconnect_proxy (action->private_data->action_group, action, proxy);
 }
 
 void
