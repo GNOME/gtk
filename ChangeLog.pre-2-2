@@ -1,3 +1,8 @@
+2002-01-14  Hasbullah Bin Pit
+
+	* configure.in (ALL_LINGUAS): Add "ms" to the language list.
+	* po/ms.po: Added Malay Translation.
+
 2001-10-17  Yanko Kaneti <yaneti@declera.com>
 
 	* configure.in (ALL_LINGUAS): Add "bg" to the language list.
