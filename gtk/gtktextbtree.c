@@ -394,9 +394,11 @@ gtk_text_btree_new (GtkTextTagTable *table,
   tree->views = NULL;
 
   /* Set these to values that are unlikely to be found
-     in random memory garbage. */
-  tree->chars_changed_stamp = 49;
-  tree->segments_changed_stamp = 243;
+   * in random memory garbage, and also avoid
+   * duplicates between tree instances.
+   */
+  tree->chars_changed_stamp = g_random_int ();
+  tree->segments_changed_stamp = g_random_int ();
 
   tree->end_iter_line_stamp = tree->chars_changed_stamp - 1;
   tree->end_iter_line = NULL;

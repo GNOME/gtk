@@ -2172,7 +2172,7 @@ gtk_text_iter_backward_line(GtkTextIter *iter)
 
   check_invariants(iter);
   
-  new_line = gtk_text_line_previous(real->line);
+  new_line = gtk_text_line_previous (real->line);
 
   offset_will_change = FALSE;
   if (real->line_char_offset > 0)
@@ -2182,7 +2182,7 @@ gtk_text_iter_backward_line(GtkTextIter *iter)
     {
       real->line = new_line;
       
-      adjust_line_number(real, -1);
+      adjust_line_number (real, -1);
     }
   else
     {
@@ -2200,19 +2200,18 @@ gtk_text_iter_backward_line(GtkTextIter *iter)
   
   /* Find first segment in line */
   real->any_segment = real->line->segments;
-  real->segment = gtk_text_line_byte_to_segment(real->line,
-                                                0, &offset);
+  real->segment = gtk_text_line_byte_to_segment (real->line,
+                                                 0, &offset);
 
   g_assert(offset == 0);
 
-  /* Note that if we are on the first line, we snap to the start
-     of the first line and return TRUE, so TRUE means the
-     iterator changed, not that the line changed; this is maybe
-     a bit weird. I'm not sure there's an obvious right thing
-     to do though.
-  */
+  /* Note that if we are on the first line, we snap to the start of
+   * the first line and return TRUE, so TRUE means the iterator
+   * changed, not that the line changed; this is maybe a bit
+   * weird. I'm not sure there's an obvious right thing to do though.
+   */
 
-  check_invariants(iter);
+  check_invariants (iter);
   
   return TRUE;
 }
@@ -3048,7 +3047,20 @@ gtk_text_iter_forward_search (const GtkTextIter *iter,
   g_return_val_if_fail (str != NULL, FALSE);
 
   if (*str == '\0')
-    return TRUE; /* we found the empty string */
+    {
+      /* If we can move one char, return the empty string there */
+      match = *iter;
+      if (gtk_text_iter_next_char (&match))
+        {
+          if (match_start)
+            *match_start = match;
+          if (match_end)
+            *match_end = match;
+          return TRUE;
+        }
+      else
+        return FALSE;
+    }
   
   /* locate all lines */
 
@@ -3085,17 +3097,332 @@ gtk_text_iter_forward_search (const GtkTextIter *iter,
   return retval;
 }
 
-gboolean
-gtk_text_iter_backward_search (GtkTextIter *iter,
-                               const char  *str,
-                               gboolean visible_only,
-                               gboolean slice)
+static gboolean
+vectors_equal_ignoring_trailing (gchar **vec1,
+                                 gchar **vec2)
 {
+  /* Ignores trailing chars in vec2's last line */
+
+  gchar **i1, **i2;
+
+  i1 = vec1;
+  i2 = vec2;
+
+  while (*i1 && *i2)
+    {      
+      if (strcmp (*i1, *i2) != 0)
+        {
+          if (*(i2 + 1) == NULL) /* if this is the last line */
+            {
+              gint len1 = strlen (*i1);
+              gint len2 = strlen (*i2);
+              
+              if (len2 >= len1 &&
+                  strncmp (*i1, *i2, len1) == 0)
+                {
+                  /* We matched ignoring the trailing stuff in vec2 */
+                  return TRUE;
+                }
+              else
+                {
+                  return FALSE;
+                }
+            }
+          else
+            {
+              return FALSE;
+            }
+        }
+      ++i1;
+      ++i2;
+    }
+
+  if (*i1 || *i2)
+    {
+      return FALSE;
+    }
+  else
+    return TRUE;
+}
+
+typedef struct _LinesWindow LinesWindow;
+
+struct _LinesWindow
+{
+  gint n_lines;
+  gchar **lines;
+  GtkTextIter first_line_start;
+  GtkTextIter first_line_end;
+  gboolean slice;
+  gboolean visible_only;
+};
+
+static void
+lines_window_init (LinesWindow       *win,
+                   const GtkTextIter *start)
+{
+  gint i;
+  GtkTextIter line_start;
+  GtkTextIter line_end;
+
+  /* If we start on line 1, there are 2 lines to search (0 and 1), so
+   * n_lines can be 2.
+   */  
+  if (gtk_text_iter_is_first (start) ||
+      gtk_text_iter_get_line (start) + 1 < win->n_lines)
+    {
+      /* Already at the end, or not enough lines to match */
+      win->lines = g_new0 (gchar*, 1);
+      *win->lines = NULL;
+      return;
+    }
+  
+  line_start = *start;
+  line_end = *start;
+
+  /* Move to start iter to start of line */
+  gtk_text_iter_set_line_offset (&line_start, 0);
+
+  if (gtk_text_iter_equal (&line_start, &line_end))
+    {
+      /* we were already at the start; so go back one line */
+      gtk_text_iter_backward_line (&line_start);
+    }
+  
+  win->first_line_start = line_start;
+  win->first_line_end = line_end;
+  
+  win->lines = g_new0 (gchar*, win->n_lines + 1);
+  
+  i = win->n_lines - 1;
+  while (i >= 0)
+    {
+      gchar *line_text;
+      
+      if (win->slice)
+        {
+          if (win->visible_only)
+            line_text = gtk_text_iter_get_visible_slice (&line_start, &line_end);
+          else
+            line_text = gtk_text_iter_get_slice (&line_start, &line_end);
+        }
+      else
+        {      
+          if (win->visible_only)
+            line_text = gtk_text_iter_get_visible_text (&line_start, &line_end);
+          else
+            line_text = gtk_text_iter_get_text (&line_start, &line_end);
+        }
+
+      win->lines[i] = line_text;
+
+      line_end = line_start;
+      gtk_text_iter_backward_line (&line_start);
+      
+      --i;
+    }
+}
+
+static gboolean
+lines_window_back (LinesWindow *win)
+{
+  GtkTextIter new_start;
+  gchar *line_text;
+  
+  new_start = win->first_line_start;
+
+  if (!gtk_text_iter_backward_line (&new_start))
+    return FALSE;
+  else 
+    {
+      win->first_line_start = new_start;
+      win->first_line_end = new_start;
+
+      gtk_text_iter_forward_line (&win->first_line_end);      
+    }
+
+  if (win->slice)
+    {
+      if (win->visible_only)
+        line_text = gtk_text_iter_get_visible_slice (&win->first_line_start, 
+                                                     &win->first_line_end);
+      else
+        line_text = gtk_text_iter_get_slice (&win->first_line_start, 
+                                             &win->first_line_end);
+    }
+  else
+    {      
+      if (win->visible_only)
+        line_text = gtk_text_iter_get_visible_text (&win->first_line_start, 
+                                                    &win->first_line_end);
+      else
+        line_text = gtk_text_iter_get_text (&win->first_line_start, 
+                                            &win->first_line_end);
+    }
+  
+  /* Move lines to make room for first line. */
+  g_memmove (win->lines + 1, win->lines, win->n_lines * sizeof (gchar*));
+
+  *win->lines = line_text;
+
+  /* Free old last line and NULL-terminate */
+  g_free (win->lines[win->n_lines]);
+  win->lines[win->n_lines] = NULL;
+
+  return TRUE;
+}
+
+static void
+lines_window_free (LinesWindow *win)
+{
+  g_strfreev (win->lines);
+}
+
+static gchar*
+my_strrstr (const gchar *haystack,
+            const gchar *needle)
+{
+  /* FIXME GLib should have a nice implementation in it, this
+   * is slow-ass crap.
+   */
+
+  gint haystack_len = strlen (haystack);
+  gint needle_len = strlen (needle);
+  const gchar *needle_end = needle + needle_len;
+  const gchar *haystack_rend = haystack - 1;
+  const gchar *needle_rend = needle - 1;
+  const gchar *p;
+  
+  p = haystack + haystack_len;
+  while (p != haystack)
+    {
+      const gchar *n = needle_end - 1;
+      const gchar *s = p - 1;
+      while (s != haystack_rend &&
+             n != needle_rend &&
+             *s == *n)
+        {
+          --n;
+          --s;
+        }
+
+      if (n == needle_rend)
+        return ++s;
+        
+      --p;
+    }
+
+  return NULL;
+}
+     
+gboolean
+gtk_text_iter_backward_search (const GtkTextIter *iter,
+                               const gchar       *str,
+                               gboolean           visible_only,
+                               gboolean           slice,
+                               GtkTextIter       *match_start,
+                               GtkTextIter       *match_end)
+{
+  gchar **lines = NULL;
+  gchar **l;
+  gint n_lines;
+  LinesWindow win;
+  gboolean retval = FALSE;
+  
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (str != NULL, FALSE);
 
+  if (*str == '\0')
+    {
+      /* If we can move one char, return the empty string there */
+      GtkTextIter match = *iter;
+      
+      if (gtk_text_iter_prev_char (&match))
+        {
+          if (match_start)
+            *match_start = match;
+          if (match_end)
+            *match_end = match;
+          return TRUE;
+        }
+      else
+        return FALSE;
+    }
   
+  /* locate all lines */
+
+  lines = strbreakup (str, "\n", -1);
+
+  l = lines;
+  n_lines = 0;
+  while (*l)
+    {
+      ++n_lines;
+      ++l;
+    }
+
+  win.n_lines = n_lines;
+  win.slice = slice;
+  win.visible_only = visible_only;
   
+  lines_window_init (&win, iter);
+
+  if (*win.lines == NULL)
+    goto out;
+  
+  do
+    {
+      gchar *first_line_match;
+
+      /* If there are multiple lines, the first line will
+       * end in '\n', so this will only match at the
+       * end of the first line, which is correct.
+       */
+      first_line_match = my_strrstr (*win.lines, *lines);
+      
+      if (first_line_match &&  
+          vectors_equal_ignoring_trailing (lines + 1, win.lines + 1))
+          {
+            /* Match! */
+            gint offset;
+            GtkTextIter next;
+
+            /* Offset to start of search string */
+            offset = g_utf8_strlen (*win.lines, first_line_match - *win.lines);
+
+            next = win.first_line_start;
+            if (match_start)
+              {
+                *match_start = next;
+                forward_chars_with_skipping (match_start, offset,
+                                             visible_only, !slice);
+              }
+
+            /* Go to end of search string */
+            l = lines;
+            while (*l)
+              {
+                offset += g_utf8_strlen (*l, -1);
+                ++l;
+              }
+                
+            forward_chars_with_skipping (&next, offset,
+                                         visible_only, !slice);
+
+            if (match_end)
+              *match_end = next;
+            
+            retval = TRUE;
+            goto out;
+          }
+    }
+  while (lines_window_back (&win));
+
+ out:
+  lines_window_free (&win);
+  g_strfreev (lines);
+  
+  return retval;  
 }
 
 /*
@@ -3103,7 +3430,8 @@ gtk_text_iter_backward_search (GtkTextIter *iter,
  */
 
 gboolean
-gtk_text_iter_equal(const GtkTextIter *lhs, const GtkTextIter *rhs)
+gtk_text_iter_equal (const GtkTextIter *lhs,
+                     const GtkTextIter *rhs)
 {
   GtkTextRealIter *real_lhs;
   GtkTextRealIter *real_rhs;

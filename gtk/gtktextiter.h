@@ -185,17 +185,20 @@ gboolean gtk_text_iter_backward_find_char     (GtkTextIter *iter,
 					       GtkTextCharPredicate pred,
 					       gpointer user_data);
 
-gboolean gtk_text_iter_forward_search         (const GtkTextIter *iter,
-                                               const gchar *str,
-                                               gboolean     visible_only,
-                                               gboolean     slice,
-                                               GtkTextIter *match_start,
-                                               GtkTextIter *match_end);
+gboolean gtk_text_iter_forward_search  (const GtkTextIter *iter,
+                                        const gchar       *str,
+                                        gboolean           visible_only,
+                                        gboolean           slice,
+                                        GtkTextIter       *match_start,
+                                        GtkTextIter       *match_end);
+gboolean gtk_text_iter_backward_search (const GtkTextIter *iter,
+                                        const gchar       *str,
+                                        gboolean           visible_only,
+                                        gboolean           slice,
+                                        GtkTextIter       *match_start,
+                                        GtkTextIter       *match_end);
 
-gboolean gtk_text_iter_backward_search        (GtkTextIter *iter,
-                                               const char  *str,
-                                               gboolean visible_only,
-                                               gboolean slice);
+
 
 /*
  * Comparisons

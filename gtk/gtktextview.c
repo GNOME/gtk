@@ -835,7 +835,7 @@ set_adjustment_clamped (GtkAdjustment *adj, gfloat val)
   gtk_adjustment_set_value (adj, val);
 }
 
-gboolean
+static gboolean
 gtk_text_view_scroll_to_mark_adjusted (GtkTextView *text_view,
                                        GtkTextMark *mark,
 				       gint margin,

@@ -5,6 +5,26 @@
  * Copyright (c) 2000 Red Hat, Inc.
  * Tk->Gtk port by Havoc Pennington
  *
+ * This file can be used under your choice of two licenses, the LGPL
+ * and the original Tk license.
+ * 
+ * LGPL:
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * Original Tk license:
  *
  * This software is copyrighted by the Regents of the University of
  * California, Sun Microsystems, Inc., and other parties.  The
@@ -45,7 +65,13 @@
  * foregoing, the authors grant the U.S. Government and others acting
  * in its behalf permission to use and distribute the software in
  * accordance with the terms specified in this license.
- * 
+ *
+ */
+/*
+ * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "gtktextdisplay.h"

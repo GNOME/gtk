@@ -47,6 +47,9 @@ static void     buffer_filename_set (Buffer *buffer);
 static void     buffer_search_forward (Buffer *buffer,
                                        const char *str,
                                        View *view);
+static void     buffer_search_backward (Buffer *buffer,
+                                       const char *str,
+                                       View *view);
 
 static View *view_from_widget (GtkWidget *widget);
 
@@ -930,6 +933,12 @@ do_apply_tabs (gpointer callback_data,
     }
 }
 
+enum
+{
+  RESPONSE_FORWARD,
+  RESPONSE_BACKWARD
+};
+
 static void
 dialog_response_callback (GtkWidget *dialog, gint response_id, gpointer data)
 {
@@ -937,6 +946,13 @@ dialog_response_callback (GtkWidget *dialog, gint response_id, gpointer data)
   View *view = data;
   GtkTextIter start, end;
   gchar *search_string;
+
+  if (response_id != RESPONSE_FORWARD &&
+      response_id != RESPONSE_BACKWARD)
+    {
+      gtk_widget_destroy (dialog);
+      return;
+    }
   
   buffer = gtk_object_get_data (GTK_OBJECT (dialog), "buffer");
 
@@ -948,9 +964,12 @@ dialog_response_callback (GtkWidget *dialog, gint response_id, gpointer data)
   search_string = gtk_text_iter_get_text (&start, &end);
 
   printf ("Searching for `%s'\n", search_string);
-  
-  buffer_search_forward (view->buffer, search_string, view);
 
+  if (response_id == RESPONSE_FORWARD)
+    buffer_search_forward (view->buffer, search_string, view);
+  else if (response_id == RESPONSE_BACKWARD)
+    buffer_search_backward (view->buffer, search_string, view);
+    
   g_free (search_string);
   
   gtk_widget_destroy (dialog);
@@ -969,7 +988,9 @@ do_search (gpointer callback_data,
   dialog = gtk_dialog_new_with_buttons ("Search",
                                         GTK_WINDOW (view->window),
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_STOCK_BUTTON_CLOSE,
+                                        "Forward", RESPONSE_FORWARD,
+                                        "Backward", RESPONSE_BACKWARD,
+                                        GTK_STOCK_BUTTON_CANCEL,
                                         GTK_RESPONSE_NONE, NULL);
 
 
@@ -1303,8 +1324,10 @@ buffer_filename_set (Buffer *buffer)
 }
 
 static void
-buffer_search_forward (Buffer *buffer, const char *str,
-                       View *view)
+buffer_search (Buffer     *buffer,
+               const char *str,
+               View       *view,
+               gboolean forward)
 {
   GtkTextIter iter;
   GtkTextIter start, end;
@@ -1324,15 +1347,30 @@ buffer_search_forward (Buffer *buffer, const char *str,
   if (*str != '\0')
     {
       GtkTextIter match_start, match_end;
-      
-      while (gtk_text_iter_forward_search (&iter, str, TRUE, FALSE,
-                                           &match_start, &match_end))
-        {
-          ++i;
-          gtk_text_buffer_apply_tag (buffer->buffer, buffer->found_text_tag,
-                                     &match_start, &match_end);
 
-          iter = match_end;
+      if (forward)
+        {
+          while (gtk_text_iter_forward_search (&iter, str, TRUE, FALSE,
+                                               &match_start, &match_end))
+            {
+              ++i;
+              gtk_text_buffer_apply_tag (buffer->buffer, buffer->found_text_tag,
+                                         &match_start, &match_end);
+              
+              iter = match_end;
+            }
+        }
+      else
+        {
+          while (gtk_text_iter_backward_search (&iter, str, TRUE, FALSE,
+                                                &match_start, &match_end))
+            {
+              ++i;
+              gtk_text_buffer_apply_tag (buffer->buffer, buffer->found_text_tag,
+                                         &match_start, &match_end);
+              
+              iter = match_start;
+            }
         }
     }
 
@@ -1349,6 +1387,20 @@ buffer_search_forward (Buffer *buffer, const char *str,
                              GTK_OBJECT (dialog));
   
   gtk_widget_show (dialog);
+}
+
+static void
+buffer_search_forward (Buffer *buffer, const char *str,
+                       View *view)
+{
+  buffer_search (buffer, str, view, TRUE);
+}
+
+static void
+buffer_search_backward (Buffer *buffer, const char *str,
+                        View *view)
+{
+  buffer_search (buffer, str, view, FALSE);
 }
 
 static void

@@ -1,3 +1,24 @@
+2000-10-26  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkmarshal.list: add new marshallers used by the text widget
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_class_init): fix marshaller
+	types
+
+	* gtk/gtktexttagtable.c (gtk_text_tag_table_class_init): fix
+	marshaller types
+
+	* gtk/gtktextlayout.h, gtk/gtktextlayout.c, gtk/gtktextdisplay.h,
+	gtk/gtktextdisplay.c: We need to preserve Tk copyrights and
+	license on these files.
+
+	* gtk/gtktextiter.c (gtk_text_iter_backward_search): Make this
+	work.
+
+	* gtk/gtktextbtree.c (gtk_text_btree_new): init stamps to 
+	runtime random number different for each tree, instead of 
+	a constant I made up.
+
 Thu Oct 26 07:36:16 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/Makefile.am: buncha cleanups, kludged build sources
