@@ -1,3 +1,9 @@
+2003-06-29  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* wa.po: Updated Walloon file
+	* az.po: Fixed syntax error
+	* mn.po,lt.po: fixed default:LTR
+
 2003-06-28  Artur Flinta  <aflinta@cvs.gnome.org>
 
 	* pl.po: Updated Polish translation.

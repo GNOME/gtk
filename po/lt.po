@@ -2680,9 +2680,8 @@ msgstr "aukštis."
 #. * it isn't default:LTR or default:RTL it will not work
 #.
 #: gtk/gtkmain.c:806
-#, fuzzy
 msgid "default:LTR"
-msgstr "<įprastas>"
+msgstr "default:LTR"
 
 #: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
