@@ -1,3 +1,11 @@
+Thu Feb 14 00:02:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcalendar.c (gtk_calendar_size_request): A bunch of
+	small allocation/drawing fixes.
+
+	* gtk/gtkcalendar.c: Replace DAY_XPAD, DAY_YPAD with
+	GtkWidget::focus-padding
+
 Wed Feb 13 23:01:20 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcalendar.c: Patch from Bill Haneman to draw
@@ -5,7 +13,8 @@ Wed Feb 13 23:01:20 2002  Owen Taylor  <otaylor@redhat.com>
 	GtkWidget::focus-width. (#63075)
 
 	* gtk/gtkcalendar.c (gtk_calendar_size_request): Initialize
-	label_char_ascent/descent to 0. (#56925)
+	label_char_ascent/descent to 0. (#56925, reported by
+	(Jean-Noel Guiheneuf)
 
 2002-02-13  Havoc Pennington  <hp@redhat.com>
 
