@@ -1,3 +1,9 @@
+Thu Nov 11 11:34:32 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkfilechooserbutton.c (update_idler): return FALSE instead
+	of TRUE.  This is just a quick fix to prevent the idle from
+	looping indefinitely.
+
 2004-11-11  J. Ali Harlow  <ali@juiblex.co.uk>
 
 	* gdk/Makefile.am:

@@ -1694,7 +1694,7 @@ update_idler (gpointer user_data)
       retval = FALSE;
     }
   else
-    retval = TRUE;
+    retval = FALSE;
   
   GDK_THREADS_LEAVE ();
 
