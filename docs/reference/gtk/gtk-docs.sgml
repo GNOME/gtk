@@ -298,7 +298,6 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkDialog;
         &GtkInvisible;
         &GtkMessageDialog;
-        &GtkPlug;
         &GtkWindow;
         &GtkWindowGroup;
     </chapter>
@@ -451,6 +450,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
 
     <chapter id="PlugSocket">
       <title>Cross-process Embedding</title>
+        &GtkPlug;
         &GtkSocket;
     </chapter>
 

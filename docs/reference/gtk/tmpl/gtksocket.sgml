@@ -137,7 +137,8 @@ never be set by an application.)
 
 <!-- ##### SIGNAL GtkSocket::plug-added ##### -->
 <para>
-
+This signal is emitted when a client is successfully
+added to the socket.
 </para>
 
 @socket: the object which received the signal.
@@ -146,7 +147,9 @@ never be set by an application.)
 
 <!-- ##### SIGNAL GtkSocket::plug-removed ##### -->
 <para>
-
+This signal is emitted when a client is removed from the socket. The
+default action is to destroy the #GtkSocket widget, so if you want to
+reuse it you must add a signal handler that returns %TRUE.
 </para>
 
 @socket: the object which received the signal.

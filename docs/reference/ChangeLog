@@ -1,3 +1,9 @@
+2003-05-05  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-docs.sgml: 
+	* gtk/tmpl/gtksocket.sgml: Improve the docs about cross-process
+	embedding a bit.  (#112101, #112006)
+
 2003-05-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-docs.sgml: 
