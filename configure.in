@@ -467,28 +467,18 @@ fi
 
 # Duplicate `widechar' tests from `glib'.
 # Check for wchar.h
-if test x = y; then
-  # will not be executed
-  # hack so as not to update `acconfig.h'
-  AC_CHECK_HEADERS(wchar.h wctype.h)
-  AC_CHECK_FUNCS(broken_wctype)
-fi
-
 AC_MSG_CHECKING(for wchar.h)
 AC_TRY_CPP([#include <wchar.h>], gtk_ok=yes, gtk_ok=no)
 if test $gtk_ok = yes; then
-   ac_kludge=HAVE_WCHAR_H
-   AC_DEFINE($ac_kludge)
+   AC_DEFINE(HAVE_WCHAR_H,1,[Define if wchar.h exists])
 fi
 AC_MSG_RESULT($gtk_ok)
 
 # Check for wctype.h (for iswalnum)
-
 AC_MSG_CHECKING(for wctype.h)
 AC_TRY_CPP([#include <wctype.h>], gtk_ok=yes, gtk_ok=no)
 if test $gtk_ok = yes; then
-   ac_kludge=HAVE_WCTYPE_H
-   AC_DEFINE($ac_kludge)
+   AC_DEFINE(HAVE_WCTYPE_H,1,[Define if wctype.h exists])
 fi
 AC_MSG_RESULT($gtk_ok)
 
@@ -517,8 +507,7 @@ iswalnum((wchar_t) 0);
 LIBS="$oLIBS"
 
 if test $gtk_ok = no; then
-   ac_kludge=HAVE_BROKEN_WCTYPE
-   AC_DEFINE($ac_kludge)
+   AC_DEFINE(HAVE_BROKEN_WCTYPE,1,[Define if the wctype function is broken])
    GDK_WLIBS=
 fi
 AC_MSG_RESULT($gtk_ok)
