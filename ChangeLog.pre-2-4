@@ -1,3 +1,19 @@
+2003-12-29  Anders Carlsson  <andersca@gnome.org>
+
+	* gtk/gtkradiotoolbutton.c:
+	* gtk/gtkradiotoolbutton.h:
+	* gtk/gtkseparatortoolitem.c:
+	* gtk/gtkseparatortoolitem.h:
+	* gtk/gtktoggletoolbutton.c:
+	* gtk/gtktoggletoolbutton.h:
+	* gtk/gtktoolbar.c:
+	* gtk/gtktoolbar.h:
+	* gtk/gtktoolbutton.c:
+	* gtk/gtktoolbutton.h:
+	* gtk/gtktoolitem.c:
+	* gtk/gtktoolitem.h:
+	Update my e-mail address.
+	
 Mon Dec 29 01:36:22 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaccelmap.[hc]: (gtk_accel_map_lock_path, 
