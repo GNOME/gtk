@@ -5,7 +5,7 @@ Thu Aug 21 16:00:36 2003  Owen Taylor  <otaylor@redhat.com>
  	files. Use that to catch recursion. (Part of
  	#114988)
  
-Thu Aug 21 21:27:45 2003  Kristian Rietveld  <kris@gtk.org>A
+Thu Aug 21 21:27:45 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from stable.
 
