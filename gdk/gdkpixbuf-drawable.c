@@ -127,7 +127,7 @@ rgb1a (GdkImage *image, art_u8 *pixels, int rowstride)
 		remap[xx] = 0xff
 			| colormap->colors[xx].red << 24
 			| colormap->colors[xx].green << 16
-			| colormap->colors[xx].red << 8;
+			| colormap->colors[xx].blue << 8;
 #endif
 	}
 
@@ -221,7 +221,7 @@ rgb8a (GdkImage *image, art_u8 *pixels, int rowstride)
 		remap[xx] = 0xff
 			| colormap->colors[xx].red << 24
 			| colormap->colors[xx].green << 16
-			| colormap->colors[xx].red << 8;
+			| colormap->colors[xx].blue << 8;
 #endif
 	}
 

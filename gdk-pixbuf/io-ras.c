@@ -63,16 +63,6 @@ struct rasterfile {
 	be32_to_cpu() ??
 */
 
-static unsigned int be32_to_cpu(guint i)
-{
-	unsigned int i2;
-	i2 =
-	    ((i & 255) << 24) | (((i >> 8) & 255) << 16) |
-	    (((i >> 16) & 255) << 8) | ((i >> 24) & 255);
-	return i2;
-}
-
-
 /* Progressive loading */
 
 struct ras_progressive_state {
@@ -142,12 +132,12 @@ GdkPixbuf *image_load(FILE * f)
 static void RAS2State(struct rasterfile *RAS,
 		      struct ras_progressive_state *State)
 {
-	State->Header.width = be32_to_cpu(RAS->width);
-	State->Header.height = be32_to_cpu(RAS->height);
-	State->Header.depth = be32_to_cpu(RAS->depth);
-	State->Header.type = be32_to_cpu(RAS->type);
-	State->Header.maptype = be32_to_cpu(RAS->maptype);
-	State->Header.maplength = be32_to_cpu(RAS->maplength);
+	State->Header.width = GUINT32_FROM_BE(RAS->width);
+	State->Header.height = GUINT32_FROM_BE(RAS->height);
+	State->Header.depth = GUINT32_FROM_BE(RAS->depth);
+	State->Header.type = GUINT32_FROM_BE(RAS->type);
+	State->Header.maptype = GUINT32_FROM_BE(RAS->maptype);
+	State->Header.maplength = GUINT32_FROM_BE(RAS->maplength);
 
 	g_assert(State->Header.maplength <= 768);	/* Otherwise, we are in trouble */
 

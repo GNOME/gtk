@@ -1,3 +1,10 @@
+1999-12-08  Arjan van de Ven <arjan@fenrus.demon.nl>
+
+	* gdk-pixbuf/gdk-pixbuf-drawable.c : Fixed the red/green/red 
+	bug on two occasions.
+	* gdk-pixbuf/io-ras.c: Changed from the custom be32_to_cpu 
+	function to the generic glib one.
+
 1999-12-08  Federico Mena Quintero  <federico@redhat.com>
 
 	* gdk-pixbuf/gdk-pixbuf-drawable.c: Fix includes.
