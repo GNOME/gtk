@@ -1,5 +1,11 @@
 2004-11-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwindow.c (gtk_window_activate_key_after): As
+	a last stage in GtkWindow key press handing, try adding
+	window->mnemonic_modifier to event->state and see if it
+	matches a mnemonic. (#53709, based on a patch by
+	Pasupathi Duraisamy, patch by Owen Taylor)
+
 	* gtk/gtkcellrenderercombo.c (gtk_cell_renderer_combo_class_init): 
 	Doc additions.
 
