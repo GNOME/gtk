@@ -18,10 +18,12 @@ gtk_button_get_type
 gtk_calendar_get_type
 gtk_cell_layout_get_type
 gtk_cell_renderer_get_type
+gtk_cell_renderer_combo_get_type
 gtk_cell_renderer_pixbuf_get_type
 gtk_cell_renderer_text_get_type
 gtk_cell_renderer_toggle_get_type
 gtk_cell_renderer_progress_get_type
+gtk_cell_view_get_type
 gtk_check_button_get_type
 gtk_check_menu_item_get_type
 gtk_clist_get_type
@@ -118,6 +120,7 @@ gtk_tearoff_menu_item_get_type
 gtk_text_buffer_get_type
 gtk_text_child_anchor_get_type
 gtk_text_get_type
+gtk_text_iter_get_type
 gtk_text_mark_get_type
 gtk_text_tag_get_type
 gtk_text_tag_table_get_type

@@ -24,3 +24,4 @@ stamp-gtkmarshalers.h
 gtk-query-immodules-2.0
 .saved
 gtkalias.h
+gtk-update-icon-cache

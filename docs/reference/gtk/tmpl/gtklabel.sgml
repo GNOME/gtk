@@ -230,6 +230,11 @@ described below.
 
 </para>
 
+<!-- ##### ARG GtkLabel:width-chars ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkLabel:wrap ##### -->
 <para>
 
@@ -308,6 +313,15 @@ The pattern of underlines you want under the existing text within the
 
 @label: 
 @mode: 
+
+
+<!-- ##### FUNCTION gtk_label_set_width_chars ##### -->
+<para>
+
+</para>
+
+@label: 
+@n_chars: 
 
 
 <!-- ##### FUNCTION gtk_label_get ##### -->
@@ -454,6 +468,15 @@ Gtk+ 1.0.x.
 
 
 <!-- ##### FUNCTION gtk_label_get_ellipsize ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_width_chars ##### -->
 <para>
 
 </para>

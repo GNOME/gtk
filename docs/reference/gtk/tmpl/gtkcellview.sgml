@@ -19,7 +19,21 @@ A widget displaying a single row of a GtkTreeModel
 
 </para>
 
-@parent_instance: 
+
+<!-- ##### ARG GtkCellView:background ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellView:background-gdk ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellView:background-set ##### -->
+<para>
+
+</para>
 
 <!-- ##### FUNCTION gtk_cell_view_new ##### -->
 <para>

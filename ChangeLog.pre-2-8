@@ -1,3 +1,42 @@
+2004-10-25  James M. Cape  <jcape@ignore-your.tv>
+
+	Rework of GtkFileChooserButton, some cleanups. Fixes #154388,
+	#154390, #154390, #156272.
+
+	* docs/reference/gtk/gtk-docs.sgml: Moved GtkFileChooserButton
+	below GtkFileChooser.
+	* docs/reference/gtk/gtk-sections.txt: Added
+	gtk_file_chooser_button_get_width_chars(),
+	gtk_file_chooser_button_set_width_chars(),
+	gtk_label_set_width_chars(), gtk_label_get_width_chars().
+	* docs/reference/gtk/gtk.types: Added
+	gtk_cell_renderer_combo_get_type,
+	gtk_cell_view_get_type,
+	gtk_text_iter_get_type.
+	* docs/reference/gtk/tmpl/gtkaboutdialog.sgml: Add
+	"logo-icon-name" property.
+	* docs/reference/gtk/tmpl/gtkcellview.sgml: Updates for properties
+	(b/c of get_type() inclusion above).
+	* docs/reference/gtk/tmpl/gtkfilechooserbutton.sgml:
+	* docs/reference/gtk/tmpl/gtklabel.sgml: Add "width-chars" property,
+	getters/setters.
+	* docs/reference/gtk/tmpl/gtkcellrenderercombo.sgml: Added.
+	* gtk/gtkentrycompletion.c:
+	(_gtk_entry_completion_popdown): Don't show if the entry isn't
+	mapped.
+	* gtk/gtkfilechooserbutton.[c,h]: (*): About 45%
+	rewritten, adds "width-chars" property, icons, working save modes,
+	volume/Home/Desktop friendly-naming support.
+	* gtk/gtklabel.[c,h]:
+	(gtk_label_class_init), (gtk_label_init),
+	(gtk_label_get_property), (gtk_label_set_property),
+	(gtk_label_get_width_chars), (gtk_label_set_width_chars),
+	(gtk_label_size_request): Add "width-chars" property.
+	* tests/testfilechooserbutton.c: Update, use 4 different buttons for
+	the different ACTIONs.
+	* gtk/.cvsignore: Ignore gtk-update-icon-cache.
+	* tests/.cvsignore: Ignore testimage.
+
 2004-10-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcellrenderercombo.c (find_text): Don't leak text. (#156325,

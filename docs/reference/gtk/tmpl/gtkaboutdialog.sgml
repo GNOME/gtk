@@ -67,6 +67,11 @@ only private fields and should not be directly accessed.
 
 </para>
 
+<!-- ##### ARG GtkAboutDialog:logo-icon-name ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkAboutDialog:name ##### -->
 <para>
 

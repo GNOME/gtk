@@ -1285,6 +1285,8 @@ gtk_file_chooser_button_get_title
 gtk_file_chooser_button_set_title
 gtk_file_chooser_button_get_active
 gtk_file_chooser_button_set_active
+gtk_file_chooser_button_get_width_chars
+gtk_file_chooser_button_set_width_chars
 <SUBSECTION Standard>
 GTK_FILE_CHOOSER_BUTTON
 GTK_IS_FILE_CHOOSER_BUTTON
@@ -1903,6 +1905,7 @@ gtk_label_set_markup_with_mnemonic
 gtk_label_set_pattern
 gtk_label_set_justify
 gtk_label_set_ellipsize
+gtk_label_set_width_chars
 gtk_label_get
 gtk_label_parse_uline
 gtk_label_set_line_wrap
@@ -1919,6 +1922,7 @@ gtk_label_set_text_with_mnemonic
 gtk_label_get_attributes
 gtk_label_get_justify
 gtk_label_get_ellipsize
+gtk_label_get_width_chars
 gtk_label_get_label
 gtk_label_get_layout
 gtk_label_get_line_wrap
@@ -5532,4 +5536,3 @@ gtk_icon_factory_get_type
 gtk_icon_set_get_type
 gtk_icon_source_get_type
 </SECTION>
-

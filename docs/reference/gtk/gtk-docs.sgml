@@ -444,8 +444,8 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkColorSelection;
         &GtkColorSelectionDialog;
         &GtkFileSelection;
-	&GtkFileChooserButton;
 	&GtkFileChooser;
+	&GtkFileChooserButton;
 	&GtkFileChooserDialog;
 	&GtkFileChooserWidget;
 	&GtkFileFilter;
@@ -599,5 +599,3 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
   </index>  
 
 </book>
-
-

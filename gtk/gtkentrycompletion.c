@@ -1258,7 +1258,10 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   GtkTreePath *path;
   gboolean above;
   gint width;
-  
+
+  if (!completion->priv->entry->window)
+    return FALSE;
+
   gdk_window_get_origin (completion->priv->entry->window, &x, &y);
   _gtk_entry_get_borders (GTK_ENTRY (completion->priv->entry), &x_border, &y_border);
 
@@ -1343,6 +1346,9 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
   if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
     return;
 
+  if (!GTK_WIDGET_MAPPED (completion->priv->entry))
+    return;
+
   completion->priv->ignore_enter = TRUE;
     
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0);
@@ -1358,7 +1364,7 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
   _gtk_entry_completion_resize_popup (completion);
 
   gtk_widget_show (completion->priv->popup_window);
-
+    
   gtk_grab_add (completion->priv->popup_window);
   gdk_pointer_grab (completion->priv->popup_window->window, TRUE,
                     GDK_BUTTON_PRESS_MASK |

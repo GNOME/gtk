@@ -42,6 +42,14 @@
 #include "gtkstock.h"
 #include "gtkbindings.h"
 
+#define GTK_LABEL_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_LABEL, GtkLabelPrivate))
+
+typedef struct
+{
+  gint width_chars;
+}
+GtkLabelPrivate;
+
 struct _GtkLabelSelectionInfo
 {
   GdkWindow *window;
@@ -71,7 +79,8 @@ enum {
   PROP_MNEMONIC_WIDGET,
   PROP_CURSOR_POSITION,
   PROP_SELECTION_BOUND,
-  PROP_ELLIPSIZE
+  PROP_ELLIPSIZE,
+  PROP_WIDTH_CHARS
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -391,10 +400,10 @@ gtk_label_class_init (GtkLabelClass *class)
    *
    * Note that setting this property to a value other than %PANGO_ELLIPSIZE_NONE 
    * has the side-effect that the label requests only enough space to display the
-   * ellipsis "...". Ellipsizing labels must be packed in a container which 
-   * ensures that the label gets a reasonable size allocated. In particular, 
-   * this means that ellipsizing labels don't work well in notebook tabs, unless
-   * the tab's ::tab-expand property is set to %TRUE.
+   * ellipsis "...". In particular, this means that ellipsizing labels don't
+   * work well in notebook tabs, unless the tab's ::tab-expand property is set
+   * to %TRUE. Other means to set a label's width are
+   * gtk_widget_set_size_request() and gtk_label_set_width_chars().
    *
    * Since: 2.6
    */
@@ -406,6 +415,25 @@ gtk_label_class_init (GtkLabelClass *class)
 						      PANGO_TYPE_ELLIPSIZE_MODE,
 						      PANGO_ELLIPSIZE_NONE,
                                                       G_PARAM_READWRITE));
+
+  /**
+   * GtkLabel:width-chars:
+   * 
+   * The desired width of the label, in characters. If this property is set to
+   * %-1, the width will be calculated automatically, otherwise the label will
+   * request either 3 characters or the property value, whichever is greater.
+   * 
+   * Since: 2.6
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_WIDTH_CHARS,
+                                   g_param_spec_int ("width_chars",
+                                                     P_("Width In Chararacters"),
+                                                     P_("The desired width of the label, in characters"),
+                                                     -1,
+                                                     G_MAXINT,
+                                                     -1,
+                                                     G_PARAM_READWRITE));
   
   /*
    * Key bindings
@@ -483,6 +511,8 @@ gtk_label_class_init (GtkLabelClass *class)
   /* copy */
   gtk_binding_entry_add_signal (binding_set, GDK_c, GDK_CONTROL_MASK,
 				"copy_clipboard", 0);
+				
+  g_type_class_add_private (class, sizeof (GtkLabelPrivate));
 }
 
 static void 
@@ -526,6 +556,9 @@ gtk_label_set_property (GObject      *object,
       break;
     case PROP_ELLIPSIZE:
       gtk_label_set_ellipsize (label, g_value_get_enum (value));
+      break;
+    case PROP_WIDTH_CHARS:
+      gtk_label_set_width_chars (label, g_value_get_int (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -595,6 +628,9 @@ gtk_label_get_property (GObject     *object,
     case PROP_ELLIPSIZE:
       g_value_set_enum (value, label->ellipsize);
       break;
+    case PROP_WIDTH_CHARS:
+      g_value_set_enum (value, gtk_label_get_width_chars (label));
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -605,8 +641,13 @@ gtk_label_get_property (GObject     *object,
 static void
 gtk_label_init (GtkLabel *label)
 {
+  GtkLabelPrivate *priv;
+
   GTK_WIDGET_SET_FLAGS (label, GTK_NO_WINDOW);
-  
+
+  priv = GTK_LABEL_GET_PRIVATE (label);
+  priv->width_chars = -1;
+
   label->label = NULL;
 
   label->jtype = GTK_JUSTIFY_LEFT;
@@ -1356,6 +1397,52 @@ gtk_label_get_ellipsize (GtkLabel *label)
 }
 
 /**
+ * gtk_label_set_width_chars:
+ * @label: a #GtkLabel
+ * @n_chars: the new desired width, in characters.
+ * 
+ * Sets the desired width in characters of @label to @n_chars.
+ * 
+ * Since: 2.6
+ **/
+void
+gtk_label_set_width_chars (GtkLabel *label,
+			   gint      n_chars)
+{
+  GtkLabelPrivate *priv;
+
+  g_return_if_fail (GTK_IS_LABEL (label));
+
+  priv = GTK_LABEL_GET_PRIVATE (label);
+
+  if (priv->width_chars != n_chars)
+    {
+      priv->width_chars = n_chars;
+      g_object_notify (G_OBJECT (label), "width-chars");
+      gtk_widget_queue_resize (GTK_WIDGET (label));
+    }
+}
+
+/**
+ * gtk_label_get_width_chars:
+ * @label: a #GtkLabel
+ * 
+ * Retrieves the desired width of @label, in characters. See
+ * gtk_label_set_width_chars().
+ * 
+ * Return value: the width of a label in characters.
+ * 
+ * Since: 2.6
+ **/
+gint
+gtk_label_get_width_chars (GtkLabel *label)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), -1);
+
+  return GTK_LABEL_GET_PRIVATE (label)->width_chars;
+}
+
+/**
  * gtk_label_set_line_wrap:
  * @label: a #GtkLabel
  * @wrap: the setting
@@ -1624,6 +1711,7 @@ gtk_label_size_request (GtkWidget      *widget,
 			GtkRequisition *requisition)
 {
   GtkLabel *label;
+  GtkLabelPrivate *priv;
   gint width, height;
   PangoRectangle logical_rect;
   GtkWidgetAuxInfo *aux_info;
@@ -1632,6 +1720,7 @@ gtk_label_size_request (GtkWidget      *widget,
   g_return_if_fail (requisition != NULL);
   
   label = GTK_LABEL (widget);
+  priv = GTK_LABEL_GET_PRIVATE (widget);
 
   /*  
    * If word wrapping is on, then the height requisition can depend
@@ -1657,7 +1746,7 @@ gtk_label_size_request (GtkWidget      *widget,
   pango_layout_get_extents (label->layout, NULL, &logical_rect);
   aux_info = _gtk_widget_get_aux_info (widget, FALSE);
 
-  if (label->ellipsize)
+  if (label->ellipsize || priv->width_chars > 0)
     {
       PangoContext *context;
       PangoFontMetrics *metrics;
@@ -1670,7 +1759,7 @@ gtk_label_size_request (GtkWidget      *widget,
       char_width = pango_font_metrics_get_approximate_char_width (metrics);
       pango_font_metrics_unref (metrics);
 
-      width += (PANGO_PIXELS (char_width) * 3);
+      width += (PANGO_PIXELS (char_width) * MAX (priv->width_chars, 3));
     }
   else
     {

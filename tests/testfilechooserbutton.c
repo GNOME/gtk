@@ -56,7 +56,7 @@ chooser_current_folder_changed_cb (GtkFileChooser *chooser, gpointer user_data)
 
   folder = gtk_file_chooser_get_current_folder (chooser);
   filename = gtk_file_chooser_get_filename (chooser);
-  g_message ("%s:%s:\n`%s`\n\tFolder: `%s'\n\tFilename: `%s'", G_STRFUNC, G_STRLOC,
+  g_message ("%s::current-folder-changed\n\tFolder: `%s'\n\tFilename: `%s'\nDone.\n",
 	     G_OBJECT_TYPE_NAME (chooser), folder, filename);
   g_free (folder);
   g_free (filename);
@@ -66,16 +66,12 @@ chooser_current_folder_changed_cb (GtkFileChooser *chooser, gpointer user_data)
 static void
 chooser_selection_changed_cb (GtkFileChooser *chooser, gpointer user_data)
 {
-  GSList *selection;
+  gchar *filename;
 
-  g_message ("%s:%s:\n`%s` Selection:", G_STRFUNC, G_STRLOC, G_OBJECT_TYPE_NAME (chooser));
-  for (selection = gtk_file_chooser_get_filenames (chooser); selection != NULL;
-       selection = g_slist_remove_link (selection, selection))
-    {
-      g_print ("`%s'\n", (const gchar *) selection->data);
-      g_free (selection->data);
-    }
-  g_print ("Done.\n");
+  filename = gtk_file_chooser_get_filename (chooser);
+  g_message ("%s::selection-changed\n\tSelection:`%s'\nDone.\n",
+	     G_OBJECT_TYPE_NAME (chooser), filename);
+  g_free (filename);
 }
 
 
@@ -86,7 +82,8 @@ chooser_file_activated_cb (GtkFileChooser *chooser, gpointer user_data)
 
   folder = gtk_file_chooser_get_current_folder (chooser);
   filename = gtk_file_chooser_get_filename (chooser);
-  g_message ("%s:%s:\n`%s`\nFolder: `%s'\nFilename: `%s'", G_STRFUNC, G_STRLOC, G_OBJECT_TYPE_NAME (chooser), folder, filename);
+  g_message ("%s::file-activated\n\tFolder: `%s'\n\tFilename: `%s'\nDone.\n",
+	     G_OBJECT_TYPE_NAME (chooser), folder, filename);
   g_free (folder);
   g_free (filename);
 }
@@ -98,17 +95,17 @@ chooser_update_preview_cb (GtkFileChooser *chooser, gpointer user_data)
   gchar *filename;
 
   filename = gtk_file_chooser_get_preview_filename (chooser);
-  g_message ("%s:%s:\n`%s`\nPreview Filename: `%s'", G_STRFUNC, G_STRLOC, G_OBJECT_TYPE_NAME (chooser), filename);
+  g_message ("%s::update-preview\n\tPreview Filename: `%s'\nDone.\n",
+	     G_OBJECT_TYPE_NAME (chooser), filename);
   g_free (filename);
 }
-
 
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *win, *vbox, *frame, *alignment, *group_box, *hbox, *label, *chooser, *button;
+  GtkWidget *win, *vbox, *frame, *alignment, *group_box;
+  GtkWidget *hbox, *label, *chooser, *button;
   GtkSizeGroup *label_group;
-
   gtk_init (&argc, &argv);
 
   /* to test rtl layout, set RTL=1 in the environment */
@@ -138,15 +135,80 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (alignment), group_box);
 
   hbox = gtk_hbox_new (FALSE, 12);
-  gtk_container_add (GTK_CONTAINER (group_box), hbox);
+  gtk_box_pack_start (GTK_BOX (group_box), hbox, FALSE, FALSE, 0);
 
   label = gtk_label_new_with_mnemonic ("_Open:");
   gtk_size_group_add_widget (GTK_SIZE_GROUP (label_group), label);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
-  chooser = gtk_file_chooser_button_new_with_backend ("Select A File - testfilechooserbutton",
-						      "gtk+");
+  chooser = gtk_file_chooser_button_new ("Select A File - testfilechooserbutton");
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), chooser);
+  g_signal_connect (chooser, "current-folder-changed",
+		    G_CALLBACK (chooser_current_folder_changed_cb), NULL);
+  g_signal_connect (chooser, "selection-changed", G_CALLBACK (chooser_selection_changed_cb), NULL);
+  g_signal_connect (chooser, "file-activated", G_CALLBACK (chooser_file_activated_cb), NULL);
+  g_signal_connect (chooser, "update-preview", G_CALLBACK (chooser_update_preview_cb), NULL);
+  gtk_container_add (GTK_CONTAINER (hbox), chooser);
+
+  button = gtk_button_new_with_label ("Properties...");
+  g_signal_connect (button, "clicked", G_CALLBACK (properties_button_clicked_cb), chooser);
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+
+  hbox = gtk_hbox_new (FALSE, 12);
+  gtk_box_pack_start (GTK_BOX (group_box), hbox, FALSE, FALSE, 0);
+
+  label = gtk_label_new_with_mnemonic ("Select _Folder:");
+  gtk_size_group_add_widget (GTK_SIZE_GROUP (label_group), label);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+  chooser = gtk_file_chooser_button_new ("Select A File - testfilechooserbutton");
+  gtk_file_chooser_set_action (GTK_FILE_CHOOSER (chooser), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), chooser);
+  g_signal_connect (chooser, "current-folder-changed",
+		    G_CALLBACK (chooser_current_folder_changed_cb), NULL);
+  g_signal_connect (chooser, "selection-changed", G_CALLBACK (chooser_selection_changed_cb), NULL);
+  g_signal_connect (chooser, "file-activated", G_CALLBACK (chooser_file_activated_cb), NULL);
+  g_signal_connect (chooser, "update-preview", G_CALLBACK (chooser_update_preview_cb), NULL);
+  gtk_container_add (GTK_CONTAINER (hbox), chooser);
+
+  button = gtk_button_new_with_label ("Properties...");
+  g_signal_connect (button, "clicked", G_CALLBACK (properties_button_clicked_cb), chooser);
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+
+  hbox = gtk_hbox_new (FALSE, 12);
+  gtk_box_pack_start (GTK_BOX (group_box), hbox, FALSE, FALSE, 0);
+
+  label = gtk_label_new_with_mnemonic ("_Save:");
+  gtk_size_group_add_widget (GTK_SIZE_GROUP (label_group), label);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+  chooser = gtk_file_chooser_button_new ("Select A File - testfilechooserbutton");
+  gtk_file_chooser_set_action (GTK_FILE_CHOOSER (chooser), GTK_FILE_CHOOSER_ACTION_SAVE);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), chooser);
+  g_signal_connect (chooser, "current-folder-changed",
+		    G_CALLBACK (chooser_current_folder_changed_cb), NULL);
+  g_signal_connect (chooser, "selection-changed", G_CALLBACK (chooser_selection_changed_cb), NULL);
+  g_signal_connect (chooser, "file-activated", G_CALLBACK (chooser_file_activated_cb), NULL);
+  g_signal_connect (chooser, "update-preview", G_CALLBACK (chooser_update_preview_cb), NULL);
+  gtk_container_add (GTK_CONTAINER (hbox), chooser);
+
+  button = gtk_button_new_with_label ("Properties...");
+  g_signal_connect (button, "clicked", G_CALLBACK (properties_button_clicked_cb), chooser);
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+
+  hbox = gtk_hbox_new (FALSE, 12);
+  gtk_box_pack_start (GTK_BOX (group_box), hbox, FALSE, FALSE, 0);
+
+  label = gtk_label_new_with_mnemonic ("_Create Folder:");
+  gtk_size_group_add_widget (GTK_SIZE_GROUP (label_group), label);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+  chooser = gtk_file_chooser_button_new ("Select A File - testfilechooserbutton");
+  gtk_file_chooser_set_action (GTK_FILE_CHOOSER (chooser), GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), chooser);
   g_signal_connect (chooser, "current-folder-changed",
 		    G_CALLBACK (chooser_current_folder_changed_cb), NULL);
