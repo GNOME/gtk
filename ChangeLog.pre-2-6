@@ -1,3 +1,9 @@
+Thu Feb 26 19:53:32 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/xsettings-common.h (xsettings_client_process_event): 
+	Add xsettings_client_set_grab_func,
+	Add xsettings_client_set_ungrab_func to the list of renames.
+
 Thu Feb 26 19:48:39 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/xsettings-client.c (read_settings): Fix memory leak

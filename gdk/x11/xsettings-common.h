@@ -29,19 +29,21 @@ extern "C" {
 
 /* Renames for GDK inclusion */
 
-#define xsettings_byte_order           _gdk_xsettings_byte_order
-#define xsettings_client_destroy       _gdk_xsettings_client_destroy
-#define xsettings_client_get_setting   _gdk_xsettings_client_get_setting
-#define xsettings_client_new           _gdk_xsettings_client_new
-#define xsettings_client_process_event _gdk_xsettings_client_process_event
-#define xsettings_list_copy            _gdk_xsettings_list_copy
-#define xsettings_list_delete          _gdk_xsettings_list_delete
-#define xsettings_list_free            _gdk_xsettings_list_free
-#define xsettings_list_insert          _gdk_xsettings_list_insert
-#define xsettings_list_lookup          _gdk_xsettings_list_lookup
-#define xsettings_setting_copy         _gdk_xsettings_setting_copy
-#define xsettings_setting_equal        _gdk_xsettings_setting_equal
-#define xsettings_setting_free         _gdk_xsettings_setting_free
+#define xsettings_byte_order             _gdk_xsettings_byte_order
+#define xsettings_client_destroy         _gdk_xsettings_client_destroy
+#define xsettings_client_get_setting     _gdk_xsettings_client_get_setting
+#define xsettings_client_new             _gdk_xsettings_client_new
+#define xsettings_client_set_grab_func   _gdk_xsettings_client_set_grab_func
+#define xsettings_client_set_ungrab_func _gdk_xsettings_client_set_ungrab_func
+#define xsettings_client_process_event   _gdk_xsettings_client_process_event
+#define xsettings_list_copy              _gdk_xsettings_list_copy
+#define xsettings_list_delete            _gdk_xsettings_list_delete
+#define xsettings_list_free              _gdk_xsettings_list_free
+#define xsettings_list_insert            _gdk_xsettings_list_insert
+#define xsettings_list_lookup            _gdk_xsettings_list_lookup
+#define xsettings_setting_copy           _gdk_xsettings_setting_copy
+#define xsettings_setting_equal          _gdk_xsettings_setting_equal
+#define xsettings_setting_free           _gdk_xsettings_setting_free
 
 
 typedef struct _XSettingsBuffer  XSettingsBuffer;
