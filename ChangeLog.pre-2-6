@@ -1,3 +1,11 @@
+2003-05-22  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_create_dir): 
+	(gtk_file_selection_rename_file): Some keynav improvements for the
+	"Rename File" and "Create Directory" subdialogs: Enter in entry
+	activates default, default is "Create"/"Rename", Escape cancels
+	dialog.  (#113110)
+
 Wed May 21 15:53:14 2003  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkprogress.c (gtk_progress_set_format_string,
