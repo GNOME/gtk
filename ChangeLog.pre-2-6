@@ -5,6 +5,9 @@ Mon Jul 27 09:18:13 BST 1998  Tony Gale  <gale@gtk.org>
 	  add a GtkText widget example
 	* examples/text/* example/tree/* : new examples for the
 	  GtkTree and GtkText widgets
+	* docs/gtk_tut.sgml: added an appendix to hold complete code
+	  examples that aren't in a full form elsewhere in the
+	  tutorial (e.g. scribble)
 
 Mon Jul 27 00:46:21 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
