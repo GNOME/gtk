@@ -1,5 +1,6 @@
 2004-10-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_class_init): 
 	* gtk/gtkcellrenderercombo.c (gtk_cell_renderer_combo_class_init): 
 	Update doc comments.
 

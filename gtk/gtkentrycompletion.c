@@ -198,8 +198,8 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * @widget: the object which received the signal
    * @prefix: the common prefix of all possible completions
    * 
-   * The ::insert-prefix signal is emitted when the inline autocompletion
-   * is triggered. The default behaviour is to make the entry display the 
+   * Gets emitted when the inline autocompletion is triggered. 
+   * The default behaviour is to make the entry display the 
    * whole prefix and select the newly inserted part.
    *
    * Applications may connect to this signal in order to insert only a
@@ -227,10 +227,10 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * @model: the #GtkTreeModel containing the matches
    * @iter: a #GtkTreeIter positioned at the selected match
    * 
-   * The ::match-selected signal is emitted when a match from the list
-   * is selected. The default behaviour is to replace the contents of the
-   * entry with the contents of the text column in the row pointed to by
-   * @iter.
+   * Gets emitted when a match from the list is selected. 
+   * The default behaviour is to replace the contents of the 
+   * entry with the contents of the text column in the row 
+   * pointed to by @iter.
    *
    * Return value: %TRUE if the signal has been handled
    * 
@@ -252,8 +252,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * @widget: the object which received the signal
    * @index: the index of the activated action
    *
-   * The ::action-activated signal is emitted when an action
-   * is activated.
+   * Gets emitted when an action is activated.
    * 
    * Since: 2.4
    */
@@ -301,11 +300,10 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                                                      G_PARAM_READWRITE));
 
   /**
-   * GtkEntryCompletion:inline_completion:
+   * GtkEntryCompletion:inline-completion:
    * 
-   * The boolean :inline_completion property determines whether the
-   * common prefix of the possible completions should be inserted 
-   * automatically in the entry.
+   * Determines whether the common prefix of the possible completions 
+   * should be inserted automatically in the entry.
    *
    * Since: 2.6
    **/
@@ -317,10 +315,10 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
  							 FALSE,
  							 G_PARAM_READWRITE));
   /**
-   * GtkEntryCompletion:popup_completion:
+   * GtkEntryCompletion:popup-completion:
    * 
-   * The boolean :popup_completion property determines whether the
-   * possible completions should be shown in a popup window. 
+   * Determines whether the possible completions should be 
+   * shown in a popup window. 
    *
    * Since: 2.6
    **/
