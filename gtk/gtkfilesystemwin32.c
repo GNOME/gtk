@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * gtkfilesystemunix.c: Default implementation of GtkFileSystem for UNIX-like systems
+ * gtkfilesystemwin32.c: Default implementation of GtkFileSystem for Windows
  * Copyright (C) 2003, Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
  */
 
 #include "gtkfilesystem.h"
-#include "gtkfilesystemunix.h"
+#include "gtkfilesystemwin32.h"
 #include "gtkintl.h"
 #include "gtkstock.h"
 
@@ -38,38 +38,38 @@
 #error "The implementation is win32 only yet."
 #endif /* G_OS_WIN32 */
 
-typedef struct _GtkFileSystemUnixClass GtkFileSystemUnixClass;
+typedef struct _GtkFileSystemWin32Class GtkFileSystemWin32Class;
 
-#define GTK_FILE_SYSTEM_UNIX_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_SYSTEM_UNIX, GtkFileSystemUnixClass))
-#define GTK_IS_FILE_SYSTEM_UNIX_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FILE_SYSTEM_UNIX))
-#define GTK_FILE_SYSTEM_UNIX_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FILE_SYSTEM_UNIX, GtkFileSystemUnixClass))
+#define GTK_FILE_SYSTEM_WIN32_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_SYSTEM_WIN32, GtkFileSystemWin32Class))
+#define GTK_IS_FILE_SYSTEM_WIN32_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FILE_SYSTEM_WIN32))
+#define GTK_FILE_SYSTEM_WIN32_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FILE_SYSTEM_WIN32, GtkFileSystemWin32Class))
 
-struct _GtkFileSystemUnixClass
+struct _GtkFileSystemWin32Class
 {
   GObjectClass parent_class;
 };
 
-struct _GtkFileSystemUnix
+struct _GtkFileSystemWin32
 {
   GObject parent_instance;
 };
 
-#define GTK_TYPE_FILE_FOLDER_UNIX             (gtk_file_folder_unix_get_type ())
-#define GTK_FILE_FOLDER_UNIX(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FILE_FOLDER_UNIX, GtkFileFolderUnix))
-#define GTK_IS_FILE_FOLDER_UNIX(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FILE_FOLDER_UNIX))
-#define GTK_FILE_FOLDER_UNIX_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_FOLDER_UNIX, GtkFileFolderUnixClass))
-#define GTK_IS_FILE_FOLDER_UNIX_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FILE_FOLDER_UNIX))
-#define GTK_FILE_FOLDER_UNIX_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FILE_FOLDER_UNIX, GtkFileFolderUnixClass))
+#define GTK_TYPE_FILE_FOLDER_WIN32             (gtk_file_folder_win32_get_type ())
+#define GTK_FILE_FOLDER_WIN32(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FILE_FOLDER_WIN32, GtkFileFolderWin32))
+#define GTK_IS_FILE_FOLDER_WIN32(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FILE_FOLDER_WIN32))
+#define GTK_FILE_FOLDER_WIN32_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_FOLDER_WIN32, GtkFileFolderWin32Class))
+#define GTK_IS_FILE_FOLDER_WIN32_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FILE_FOLDER_WIN32))
+#define GTK_FILE_FOLDER_WIN32_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FILE_FOLDER_WIN32, GtkFileFolderWin32Class))
 
-typedef struct _GtkFileFolderUnix      GtkFileFolderUnix;
-typedef struct _GtkFileFolderUnixClass GtkFileFolderUnixClass;
+typedef struct _GtkFileFolderWin32      GtkFileFolderWin32;
+typedef struct _GtkFileFolderWin32Class GtkFileFolderWin32Class;
 
-struct _GtkFileFolderUnixClass
+struct _GtkFileFolderWin32Class
 {
   GObjectClass parent_class;
 };
 
-struct _GtkFileFolderUnix
+struct _GtkFileFolderWin32
 {
   GObject parent_instance;
 
@@ -80,174 +80,168 @@ struct _GtkFileFolderUnix
 static GObjectClass *system_parent_class;
 static GObjectClass *folder_parent_class;
 
-static void gtk_file_system_unix_class_init   (GtkFileSystemUnixClass *class);
-static void gtk_file_system_unix_iface_init   (GtkFileSystemIface     *iface);
-static void gtk_file_system_unix_init         (GtkFileSystemUnix      *impl);
-static void gtk_file_system_unix_finalize     (GObject                *object);
+static void           gtk_file_system_win32_class_init       (GtkFileSystemWin32Class  *class);
+static void           gtk_file_system_win32_iface_init       (GtkFileSystemIface       *iface);
+static void           gtk_file_system_win32_init             (GtkFileSystemWin32       *impl);
+static void           gtk_file_system_win32_finalize         (GObject                  *object);
+static GSList *       gtk_file_system_win32_list_roots       (GtkFileSystem            *file_system);
+static GtkFileInfo *  gtk_file_system_win32_get_root_info    (GtkFileSystem            *file_system,
+							      const GtkFilePath        *path,
+							      GtkFileInfoType           types,
+							      GError                  **error);
+static GtkFileFolder *gtk_file_system_win32_get_folder       (GtkFileSystem            *file_system,
+							      const GtkFilePath        *path,
+							      GtkFileInfoType           types,
+							      GError                  **error);
+static gboolean       gtk_file_system_win32_create_folder    (GtkFileSystem            *file_system,
+							      const GtkFilePath        *path,
+							      GError                  **error);
+static gboolean       gtk_file_system_win32_get_parent       (GtkFileSystem            *file_system,
+							      const GtkFilePath        *path,
+							      GtkFilePath             **parent,
+							      GError                  **error);
+static GtkFilePath *  gtk_file_system_win32_make_path        (GtkFileSystem            *file_system,
+							      const GtkFilePath        *base_path,
+							      const gchar              *display_name,
+							      GError                  **error);
+static gboolean       gtk_file_system_win32_parse            (GtkFileSystem            *file_system,
+							      const GtkFilePath        *base_path,
+							      const gchar              *str,
+							      GtkFilePath             **folder,
+							      gchar                   **file_part,
+							      GError                  **error);
+static gchar *        gtk_file_system_win32_path_to_uri      (GtkFileSystem            *file_system,
+							      const GtkFilePath        *path);
+static gchar *        gtk_file_system_win32_path_to_filename (GtkFileSystem            *file_system,
+							      const GtkFilePath        *path);
+static GtkFilePath *  gtk_file_system_win32_uri_to_path      (GtkFileSystem            *file_system,
+							      const gchar              *uri);
+static GtkFilePath *  gtk_file_system_win32_filename_to_path (GtkFileSystem            *file_system,
+							      const gchar              *filename);
+static gboolean       gtk_file_system_win32_add_bookmark     (GtkFileSystem            *file_system,
+							      const GtkFilePath        *path,
+							      GError                  **error);
+static gboolean       gtk_file_system_win32_remove_bookmark  (GtkFileSystem            *file_system,
+							      const GtkFilePath        *path,
+							      GError                  **error);
+static GSList *       gtk_file_system_win32_list_bookmarks   (GtkFileSystem            *file_system);
+static GType          gtk_file_folder_win32_get_type         (void);
+static void           gtk_file_folder_win32_class_init       (GtkFileFolderWin32Class  *class);
+static void           gtk_file_folder_win32_iface_init       (GtkFileFolderIface       *iface);
+static void           gtk_file_folder_win32_init             (GtkFileFolderWin32       *impl);
+static void           gtk_file_folder_win32_finalize         (GObject                  *object);
+static GtkFileInfo *  gtk_file_folder_win32_get_info         (GtkFileFolder            *folder,
+							      const GtkFilePath        *path,
+							      GError                  **error);
+static gboolean       gtk_file_folder_win32_list_children    (GtkFileFolder            *folder,
+							      GSList                  **children,
+							      GError                  **error);
+static gchar *        filename_from_path                     (const GtkFilePath        *path);
+static GtkFilePath *  filename_to_path                       (const gchar              *filename);
+static gboolean       filename_is_root                       (const char               *filename);
+static GtkFileInfo *  filename_get_info                      (const gchar              *filename,
+							      GtkFileInfoType           types,
+							      GError                  **error);
 
-static GSList *       gtk_file_system_unix_list_roots    (GtkFileSystem      *file_system);
-static GtkFileInfo *  gtk_file_system_unix_get_root_info (GtkFileSystem      *file_system,
-							  const GtkFilePath  *path,
-							  GtkFileInfoType     types,
-							  GError            **error);
-static GtkFileFolder *gtk_file_system_unix_get_folder    (GtkFileSystem      *file_system,
-							  const GtkFilePath  *path,
-							  GtkFileInfoType     types,
-							  GError            **error);
-static gboolean       gtk_file_system_unix_create_folder (GtkFileSystem      *file_system,
-							  const GtkFilePath  *path,
-							  GError            **error);
-static gboolean       gtk_file_system_unix_get_parent    (GtkFileSystem      *file_system,
-							  const GtkFilePath  *path,
-							  GtkFilePath       **parent,
-							  GError            **error);
-static GtkFilePath *  gtk_file_system_unix_make_path     (GtkFileSystem      *file_system,
-							  const GtkFilePath  *base_path,
-							  const gchar        *display_name,
-							  GError            **error);
-static gboolean       gtk_file_system_unix_parse         (GtkFileSystem      *file_system,
-							  const GtkFilePath  *base_path,
-							  const gchar        *str,
-							  GtkFilePath       **folder,
-							  gchar             **file_part,
-							  GError            **error);
-
-static gchar *      gtk_file_system_unix_path_to_uri      (GtkFileSystem     *file_system,
-							   const GtkFilePath *path);
-static gchar *      gtk_file_system_unix_path_to_filename (GtkFileSystem     *file_system,
-							   const GtkFilePath *path);
-static GtkFilePath *gtk_file_system_unix_uri_to_path      (GtkFileSystem     *file_system,
-							   const gchar       *uri);
-static GtkFilePath *gtk_file_system_unix_filename_to_path (GtkFileSystem     *file_system,
-							   const gchar       *filename);
-
-static gboolean gtk_file_system_unix_add_bookmark    (GtkFileSystem     *file_system,
-						      const GtkFilePath *path,
-						      GError           **error);
-static gboolean gtk_file_system_unix_remove_bookmark (GtkFileSystem     *file_system,
-						      const GtkFilePath *path,
-						      GError           **error);
-static GSList * gtk_file_system_unix_list_bookmarks  (GtkFileSystem *file_system);
-
-static GType gtk_file_folder_unix_get_type   (void);
-static void  gtk_file_folder_unix_class_init (GtkFileFolderUnixClass *class);
-static void  gtk_file_folder_unix_iface_init (GtkFileFolderIface     *iface);
-static void  gtk_file_folder_unix_init       (GtkFileFolderUnix      *impl);
-static void  gtk_file_folder_unix_finalize   (GObject                *object);
-
-static GtkFileInfo *gtk_file_folder_unix_get_info      (GtkFileFolder  *folder,
-							const GtkFilePath    *path,
-							GError        **error);
-static gboolean     gtk_file_folder_unix_list_children (GtkFileFolder  *folder,
-							GSList        **children,
-							GError        **error);
-
-static gchar *      filename_from_path (const GtkFilePath *path);
-static GtkFilePath *filename_to_path   (const gchar       *filename);
-
-static gboolean     filename_is_root  (const char       *filename);
-static GtkFileInfo *filename_get_info (const gchar      *filename,
-				       GtkFileInfoType   types,
-				       GError          **error);
 
 /*
- * GtkFileSystemUnix
+ * GtkFileSystemWin32
  */
 GType
-gtk_file_system_unix_get_type (void)
+gtk_file_system_win32_get_type (void)
 {
-  static GType file_system_unix_type = 0;
+  static GType file_system_win32_type = 0;
 
-  if (!file_system_unix_type)
+  if (!file_system_win32_type)
     {
-      static const GTypeInfo file_system_unix_info =
+      static const GTypeInfo file_system_win32_info =
       {
-	sizeof (GtkFileSystemUnixClass),
+	sizeof (GtkFileSystemWin32Class),
 	NULL,		/* base_init */
 	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_file_system_unix_class_init,
+	(GClassInitFunc) gtk_file_system_win32_class_init,
 	NULL,		/* class_finalize */
 	NULL,		/* class_data */
-	sizeof (GtkFileSystemUnix),
+	sizeof (GtkFileSystemWin32),
 	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_file_system_unix_init,
+	(GInstanceInitFunc) gtk_file_system_win32_init,
       };
       
       static const GInterfaceInfo file_system_info =
       {
-	(GInterfaceInitFunc) gtk_file_system_unix_iface_init, /* interface_init */
-	NULL,			                              /* interface_finalize */
-	NULL			                              /* interface_data */
+	(GInterfaceInitFunc) gtk_file_system_win32_iface_init, /* interface_init */
+	NULL,			                               /* interface_finalize */
+	NULL			                               /* interface_data */
       };
 
-      file_system_unix_type = g_type_register_static (G_TYPE_OBJECT,
-						      "GtkFileSystemUnix",
-						      &file_system_unix_info, 0);
-      g_type_add_interface_static (file_system_unix_type,
+      file_system_win32_type = g_type_register_static (G_TYPE_OBJECT,
+						       "GtkFileSystemWin32",
+						       &file_system_win32_info, 0);
+      g_type_add_interface_static (file_system_win32_type,
 				   GTK_TYPE_FILE_SYSTEM,
 				   &file_system_info);
     }
 
-  return file_system_unix_type;
+  return file_system_win32_type;
 }
 
 /**
- * gtk_file_system_unix_new:
+ * gtk_file_system_win32_new:
  * 
- * Creates a new #GtkFileSystemUnix object. #GtkFileSystemUnix
+ * Creates a new #GtkFileSystemWin32 object. #GtkFileSystemWin32
  * implements the #GtkFileSystem interface with direct access to
- * the filesystem using Unix/Linux API calls
+ * the filesystem using Windows API calls
  * 
- * Return value: the new #GtkFileSystemUnix object
+ * Return value: the new #GtkFileSystemWin32 object
  **/
 GtkFileSystem *
-gtk_file_system_unix_new (void)
+gtk_file_system_win32_new (void)
 {
-  return g_object_new (GTK_TYPE_FILE_SYSTEM_UNIX, NULL);
+  return g_object_new (GTK_TYPE_FILE_SYSTEM_WIN32, NULL);
 }
 
 static void
-gtk_file_system_unix_class_init (GtkFileSystemUnixClass *class)
+gtk_file_system_win32_class_init (GtkFileSystemWin32Class *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
   system_parent_class = g_type_class_peek_parent (class);
   
-  gobject_class->finalize = gtk_file_system_unix_finalize;
+  gobject_class->finalize = gtk_file_system_win32_finalize;
 }
 
 static void
-gtk_file_system_unix_iface_init   (GtkFileSystemIface *iface)
+gtk_file_system_win32_iface_init (GtkFileSystemIface *iface)
 {
-  iface->list_roots = gtk_file_system_unix_list_roots;
-  iface->get_folder = gtk_file_system_unix_get_folder;
-  iface->get_root_info = gtk_file_system_unix_get_root_info;
-  iface->create_folder = gtk_file_system_unix_create_folder;
-  iface->get_parent = gtk_file_system_unix_get_parent;
-  iface->make_path = gtk_file_system_unix_make_path;
-  iface->parse = gtk_file_system_unix_parse;
-  iface->path_to_uri = gtk_file_system_unix_path_to_uri;
-  iface->path_to_filename = gtk_file_system_unix_path_to_filename;
-  iface->uri_to_path = gtk_file_system_unix_uri_to_path;
-  iface->filename_to_path = gtk_file_system_unix_filename_to_path;
-  iface->add_bookmark = gtk_file_system_unix_add_bookmark;
-  iface->remove_bookmark = gtk_file_system_unix_remove_bookmark;
-  iface->list_bookmarks = gtk_file_system_unix_list_bookmarks;
+  iface->list_roots = gtk_file_system_win32_list_roots;
+  iface->get_folder = gtk_file_system_win32_get_folder;
+  iface->get_root_info = gtk_file_system_win32_get_root_info;
+  iface->create_folder = gtk_file_system_win32_create_folder;
+  iface->get_parent = gtk_file_system_win32_get_parent;
+  iface->make_path = gtk_file_system_win32_make_path;
+  iface->parse = gtk_file_system_win32_parse;
+  iface->path_to_uri = gtk_file_system_win32_path_to_uri;
+  iface->path_to_filename = gtk_file_system_win32_path_to_filename;
+  iface->uri_to_path = gtk_file_system_win32_uri_to_path;
+  iface->filename_to_path = gtk_file_system_win32_filename_to_path;
+  iface->add_bookmark = gtk_file_system_win32_add_bookmark;
+  iface->remove_bookmark = gtk_file_system_win32_remove_bookmark;
+  iface->list_bookmarks = gtk_file_system_win32_list_bookmarks;
 }
 
 static void
-gtk_file_system_unix_init (GtkFileSystemUnix *system_unix)
+gtk_file_system_win32_init (GtkFileSystemWin32 *system_win32)
 {
 }
 
 static void
-gtk_file_system_unix_finalize (GObject *object)
+gtk_file_system_win32_finalize (GObject *object)
 {
   system_parent_class->finalize (object);
 }
 
 static GSList *
-gtk_file_system_unix_list_roots (GtkFileSystem *file_system)
+gtk_file_system_win32_list_roots (GtkFileSystem *file_system)
 {
   gchar   drives[26*4];
   guint   len;
@@ -265,7 +259,7 @@ gtk_file_system_unix_list_roots (GtkFileSystem *file_system)
        /* skip floppy */
        if (p[0] != 'a' && p[0] != 'b')
          {
-	   //FIXME: gtk_fie_path_compare is case sensitive, we are not
+	   /*FIXME: gtk_file_path_compare() is case sensitive, we are not*/
 	   p[0] = toupper (p[0]);
 	   /* needed without the backslash */
 	   p[2] = '\0';
@@ -277,10 +271,10 @@ gtk_file_system_unix_list_roots (GtkFileSystem *file_system)
 }
 
 static GtkFileInfo *
-gtk_file_system_unix_get_root_info (GtkFileSystem    *file_system,
-				    const GtkFilePath      *path,
-				    GtkFileInfoType   types,
-				    GError          **error)
+gtk_file_system_win32_get_root_info (GtkFileSystem    *file_system,
+				    const GtkFilePath *path,
+				    GtkFileInfoType    types,
+				    GError           **error)
 {
   /* needed _with_ the trailing backslash */
   gchar *filename = g_strconcat(gtk_file_path_get_string (path), "\\", NULL);
@@ -315,18 +309,18 @@ gtk_file_system_unix_get_root_info (GtkFileSystem    *file_system,
       switch (dt)
         {
         case DRIVE_REMOVABLE :
-          //gtk_file_info_set_icon_type (info, GTK_STOCK_FLOPPY);
+          /*gtk_file_info_set_icon_type (info, GTK_STOCK_FLOPPY);*/
           break;
         case DRIVE_CDROM :
-          //gtk_file_info_set_icon_type (info, GTK_STOCK_CDROM);
+          /*gtk_file_info_set_icon_type (info, GTK_STOCK_CDROM);*/
           break;
         case DRIVE_REMOTE :
-          //FIXME: need a network stock icon
+          /*FIXME: need a network stock icon*/
         case DRIVE_FIXED :
-          //FIXME: need a hard disk stock icon
+          /*FIXME: need a hard disk stock icon*/
         case DRIVE_RAMDISK :
-          //FIXME: need a ram stock icon
-          //gtk_file_info_set_icon_type (info, GTK_STOCK_OPEN);
+          /*FIXME: need a ram stock icon
+            gtk_file_info_set_icon_type (info, GTK_STOCK_OPEN);*/
           break;
         default :
           g_assert_not_reached ();
@@ -337,28 +331,28 @@ gtk_file_system_unix_get_root_info (GtkFileSystem    *file_system,
 }
 
 static GtkFileFolder *
-gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
+gtk_file_system_win32_get_folder (GtkFileSystem    *file_system,
 				 const GtkFilePath *path,
 				 GtkFileInfoType    types,
 				 GError           **error)
 {
-  GtkFileFolderUnix *folder_unix;
+  GtkFileFolderWin32 *folder_win32;
   gchar *filename;
 
   filename = filename_from_path (path);
   g_return_val_if_fail (filename != NULL, NULL);
 
-  folder_unix = g_object_new (GTK_TYPE_FILE_FOLDER_UNIX, NULL);
-  folder_unix->filename = filename;
-  folder_unix->types = types;
+  folder_win32 = g_object_new (GTK_TYPE_FILE_FOLDER_WIN32, NULL);
+  folder_win32->filename = filename;
+  folder_win32->types = types;
 
-  return GTK_FILE_FOLDER (folder_unix);
+  return GTK_FILE_FOLDER (folder_win32);
 }
 
 static gboolean
-gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
-				    const GtkFilePath *path,
-				    GError           **error)
+gtk_file_system_win32_create_folder (GtkFileSystem     *file_system,
+				     const GtkFilePath *path,
+				     GError           **error)
 {
   gchar *filename;
   gboolean result;
@@ -386,10 +380,10 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
 }
 
 static gboolean
-gtk_file_system_unix_get_parent (GtkFileSystem     *file_system,
-				 const GtkFilePath *path,
-				 GtkFilePath      **parent,
-				 GError           **error)
+gtk_file_system_win32_get_parent (GtkFileSystem     *file_system,
+				  const GtkFilePath *path,
+				  GtkFilePath      **parent,
+				  GError           **error)
 {
   gchar *filename = filename_from_path (path);
   g_return_val_if_fail (filename != NULL, FALSE);
@@ -411,10 +405,10 @@ gtk_file_system_unix_get_parent (GtkFileSystem     *file_system,
 }
 
 static GtkFilePath *
-gtk_file_system_unix_make_path (GtkFileSystem    *file_system,
-			       const GtkFilePath *base_path,
-			       const gchar       *display_name,
-			       GError           **error)
+gtk_file_system_win32_make_path (GtkFileSystem     *file_system,
+			         const GtkFilePath *base_path,
+			         const gchar       *display_name,
+			         GError           **error)
 {
   gchar *base_filename;
   gchar *filename;
@@ -523,12 +517,12 @@ canonicalize_filename (gchar *filename)
 }
 
 static gboolean
-gtk_file_system_unix_parse (GtkFileSystem     *file_system,
-			    const GtkFilePath *base_path,
-			    const gchar       *str,
-			    GtkFilePath      **folder,
-			    gchar            **file_part,
-			    GError           **error)
+gtk_file_system_win32_parse (GtkFileSystem     *file_system,
+ 			     const GtkFilePath *base_path,
+			     const gchar       *str,
+			     GtkFilePath      **folder,
+			     gchar            **file_part,
+			     GError           **error)
 {
   char *base_filename;
   gchar *last_slash;
@@ -592,22 +586,22 @@ gtk_file_system_unix_parse (GtkFileSystem     *file_system,
 }
 
 static gchar *
-gtk_file_system_unix_path_to_uri (GtkFileSystem     *file_system,
-				  const GtkFilePath *path)
+gtk_file_system_win32_path_to_uri (GtkFileSystem     *file_system,
+				   const GtkFilePath *path)
 {
   return g_filename_to_uri (gtk_file_path_get_string (path), NULL, NULL);
 }
 
 static gchar *
-gtk_file_system_unix_path_to_filename (GtkFileSystem     *file_system,
-				       const GtkFilePath *path)
+gtk_file_system_win32_path_to_filename (GtkFileSystem     *file_system,
+				        const GtkFilePath *path)
 {
   return g_strdup (gtk_file_path_get_string (path));
 }
 
 static GtkFilePath *
-gtk_file_system_unix_uri_to_path (GtkFileSystem     *file_system,
-				  const gchar       *uri)
+gtk_file_system_win32_uri_to_path (GtkFileSystem     *file_system,
+				   const gchar       *uri)
 {
   gchar *filename = g_filename_from_uri (uri, NULL, NULL);
   if (filename)
@@ -617,8 +611,8 @@ gtk_file_system_unix_uri_to_path (GtkFileSystem     *file_system,
 }
 
 static GtkFilePath *
-gtk_file_system_unix_filename_to_path (GtkFileSystem *file_system,
-				       const gchar   *filename)
+gtk_file_system_win32_filename_to_path (GtkFileSystem *file_system,
+				        const gchar   *filename)
 {
   return gtk_file_path_new_dup (filename);
 }
@@ -694,11 +688,11 @@ bookmarks_serialize (GSList  **bookmarks,
 static GSList *_bookmarks = NULL;
 
 static gboolean
-gtk_file_system_unix_add_bookmark (GtkFileSystem     *file_system,
-				   const GtkFilePath *path,
-				   GError           **error)
+gtk_file_system_win32_add_bookmark (GtkFileSystem     *file_system,
+				    const GtkFilePath *path,
+				    GError           **error)
 {
-  gchar *uri = gtk_file_system_unix_path_to_uri (file_system, path);
+  gchar *uri = gtk_file_system_win32_path_to_uri (file_system, path);
   gboolean ret = bookmarks_serialize (&_bookmarks, uri, TRUE, error);
   g_free (uri);
   return ret;
@@ -706,29 +700,28 @@ gtk_file_system_unix_add_bookmark (GtkFileSystem     *file_system,
 }
 
 static gboolean
-gtk_file_system_unix_remove_bookmark (GtkFileSystem     *file_system,
-				      const GtkFilePath *path,
-				      GError           **error)
+gtk_file_system_win32_remove_bookmark (GtkFileSystem     *file_system,
+				       const GtkFilePath *path,
+				       GError           **error)
 {
-  gchar *uri = gtk_file_system_unix_path_to_uri (file_system, path);
+  gchar *uri = gtk_file_system_win32_path_to_uri (file_system, path);
   gboolean ret = bookmarks_serialize (&_bookmarks, uri, FALSE, error);
   g_free (uri);
   return ret;
 }
 
 static GSList *
-gtk_file_system_unix_list_bookmarks (GtkFileSystem *file_system)
+gtk_file_system_win32_list_bookmarks (GtkFileSystem *file_system)
 {
   GSList *list = NULL;
   GSList *entry;
 
+
   if (bookmarks_serialize (&_bookmarks, "", FALSE, NULL))
     {
-      GSList *entry;
-      
       for (entry = _bookmarks; entry != NULL; entry = entry->next)
         {
-	  GtkFilePath *path = gtk_file_system_unix_uri_to_path (
+	  GtkFilePath *path = gtk_file_system_win32_uri_to_path (
 			        file_system, (gchar *)entry->data);
 
           list = g_slist_append (list, path);
@@ -739,84 +732,84 @@ gtk_file_system_unix_list_bookmarks (GtkFileSystem *file_system)
 }
 
 /*
- * GtkFileFolderUnix
+ * GtkFileFolderWin32
  */
 static GType
-gtk_file_folder_unix_get_type (void)
+gtk_file_folder_win32_get_type (void)
 {
-  static GType file_folder_unix_type = 0;
+  static GType file_folder_win32_type = 0;
 
-  if (!file_folder_unix_type)
+  if (!file_folder_win32_type)
     {
-      static const GTypeInfo file_folder_unix_info =
+      static const GTypeInfo file_folder_win32_info =
       {
-	sizeof (GtkFileFolderUnixClass),
+	sizeof (GtkFileFolderWin32Class),
 	NULL,		/* base_init */
 	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_file_folder_unix_class_init,
+	(GClassInitFunc) gtk_file_folder_win32_class_init,
 	NULL,		/* class_finalize */
 	NULL,		/* class_data */
-	sizeof (GtkFileFolderUnix),
+	sizeof (GtkFileFolderWin32),
 	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_file_folder_unix_init,
+	(GInstanceInitFunc) gtk_file_folder_win32_init,
       };
       
       static const GInterfaceInfo file_folder_info =
       {
-	(GInterfaceInitFunc) gtk_file_folder_unix_iface_init, /* interface_init */
+	(GInterfaceInitFunc) gtk_file_folder_win32_iface_init, /* interface_init */
 	NULL,			                              /* interface_finalize */
 	NULL			                              /* interface_data */
       };
 
-      file_folder_unix_type = g_type_register_static (G_TYPE_OBJECT,
-						      "GtkFileFolderUnix",
-						      &file_folder_unix_info, 0);
-      g_type_add_interface_static (file_folder_unix_type,
+      file_folder_win32_type = g_type_register_static (G_TYPE_OBJECT,
+						      "GtkFileFolderWin32",
+						      &file_folder_win32_info, 0);
+      g_type_add_interface_static (file_folder_win32_type,
 				   GTK_TYPE_FILE_FOLDER,
 				   &file_folder_info);
     }
 
-  return file_folder_unix_type;
+  return file_folder_win32_type;
 }
 
 static void
-gtk_file_folder_unix_class_init (GtkFileFolderUnixClass *class)
+gtk_file_folder_win32_class_init (GtkFileFolderWin32Class *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
   folder_parent_class = g_type_class_peek_parent (class);
 
-  gobject_class->finalize = gtk_file_folder_unix_finalize;
+  gobject_class->finalize = gtk_file_folder_win32_finalize;
 }
 
 static void
-gtk_file_folder_unix_iface_init (GtkFileFolderIface *iface)
+gtk_file_folder_win32_iface_init (GtkFileFolderIface *iface)
 {
-  iface->get_info = gtk_file_folder_unix_get_info;
-  iface->list_children = gtk_file_folder_unix_list_children;
+  iface->get_info = gtk_file_folder_win32_get_info;
+  iface->list_children = gtk_file_folder_win32_list_children;
 }
 
 static void
-gtk_file_folder_unix_init (GtkFileFolderUnix *impl)
+gtk_file_folder_win32_init (GtkFileFolderWin32 *impl)
 {
 }
 
 static void
-gtk_file_folder_unix_finalize (GObject *object)
+gtk_file_folder_win32_finalize (GObject *object)
 {
-  GtkFileFolderUnix *folder_unix = GTK_FILE_FOLDER_UNIX (object);
+  GtkFileFolderWin32 *folder_win32 = GTK_FILE_FOLDER_WIN32 (object);
 
-  g_free (folder_unix->filename);
+  g_free (folder_win32->filename);
   
   folder_parent_class->finalize (object);
 }
 
 static GtkFileInfo *
-gtk_file_folder_unix_get_info (GtkFileFolder  *folder,
-			       const GtkFilePath    *path,
-			       GError        **error)
+gtk_file_folder_win32_get_info (GtkFileFolder     *folder,
+			        const GtkFilePath *path,
+			        GError           **error)
 {
-  GtkFileFolderUnix *folder_unix = GTK_FILE_FOLDER_UNIX (folder);
+  GtkFileFolderWin32 *folder_win32 = GTK_FILE_FOLDER_WIN32 (folder);
   GtkFileInfo *info;
   gchar *dirname;
   gchar *filename;
@@ -826,11 +819,11 @@ gtk_file_folder_unix_get_info (GtkFileFolder  *folder,
 
 #if 0
   dirname = g_path_get_dirname (filename);
-  g_return_val_if_fail (strcmp (dirname, folder_unix->filename) == 0, NULL);
+  g_return_val_if_fail (strcmp (dirname, folder_win32->filename) == 0, NULL);
   g_free (dirname);
 #endif
 
-  info = filename_get_info (filename, folder_unix->types, error);
+  info = filename_get_info (filename, folder_win32->types, error);
 
   g_free (filename);
 
@@ -838,17 +831,17 @@ gtk_file_folder_unix_get_info (GtkFileFolder  *folder,
 }
 
 static gboolean
-gtk_file_folder_unix_list_children (GtkFileFolder  *folder,
-				    GSList        **children,
-				    GError        **error)
+gtk_file_folder_win32_list_children (GtkFileFolder  *folder,
+				     GSList        **children,
+				     GError        **error)
 {
-  GtkFileFolderUnix *folder_unix = GTK_FILE_FOLDER_UNIX (folder);
+  GtkFileFolderWin32 *folder_win32 = GTK_FILE_FOLDER_WIN32 (folder);
   GError *tmp_error = NULL;
   GDir *dir;
 
   *children = NULL;
 
-  dir = g_dir_open (folder_unix->filename, 0, &tmp_error);
+  dir = g_dir_open (folder_win32->filename, 0, &tmp_error);
   if (!dir)
     {
       g_set_error (error,
@@ -870,7 +863,7 @@ gtk_file_folder_unix_list_children (GtkFileFolder  *folder,
       if (!filename)
 	break;
 
-      fullname = g_build_filename (folder_unix->filename, filename, NULL);
+      fullname = g_build_filename (folder_win32->filename, filename, NULL);
       *children = g_slist_prepend (*children, filename_to_path (fullname));
       g_free (fullname);
     }
@@ -932,7 +925,7 @@ filename_get_info (const gchar     *filename,
       
       if (types & GTK_FILE_INFO_IS_HIDDEN)
 	{
-            /* unix convention ... */
+            /* win32 convention ... */
             gboolean is_hidden = basename[0] == '.';
             /* ... _and_ windoze attribute */
             is_hidden = is_hidden || !!(wfad.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN);
@@ -977,7 +970,7 @@ filename_get_info (const gchar     *filename,
                        | ((guint64)wfad.ftLastWriteTime.dwHighDateTime) << 32;
       /* 100-nanosecond intervals since January 1, 1601, urgh! */
       time /= 10000000I64; /* now seconds */
-      time -= 134774I64 * 24 * 3600; /* good old unix time */
+      time -= 134774I64 * 24 * 3600; /* good old Unix time */
       gtk_file_info_set_modification_time (info, time);
     }
 

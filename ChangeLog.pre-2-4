@@ -1,3 +1,7 @@
+Tue Dec  9 00:12:36 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilesystemwin32.[hc]: s/Unix/Win32/g. 
+
 2003-12-08  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdisplay-win32.c: Use <multimon.h> when compiling
