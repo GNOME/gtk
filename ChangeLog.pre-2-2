@@ -1,3 +1,13 @@
+2001-04-18  Havoc Pennington  <hp@redhat.com>
+
+	* tests/testgtk.c (create_image): allow shrinking the image window
+	to test that we clip to allocation.
+
+	* gtk/gtkimage.c (gtk_image_expose): clip to allocation,
+	#9845
+
+	* gtk/gtkenums.h: move GtkWrapMode in here, #50472
+
 Wed Apr 18 14:23:14 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkimage-x11.c (gdk_image_new): Try changing

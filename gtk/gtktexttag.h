@@ -12,13 +12,6 @@ typedef struct _GtkTextIter GtkTextIter;
 typedef struct _GtkTextBTreeNode GtkTextBTreeNode;
 typedef struct _GtkTextTagTable GtkTextTagTable;
 
-typedef enum
-{
-  GTK_WRAP_NONE,
-  GTK_WRAP_CHAR,
-  GTK_WRAP_WORD
-} GtkWrapMode;
-
 typedef struct _GtkTextAttributes GtkTextAttributes;
 
 #define GTK_TYPE_TEXT_TAG            (gtk_text_tag_get_type ())

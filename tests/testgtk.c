@@ -2758,6 +2758,10 @@ create_image (void)
       GdkBitmap *mask;
         
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      /* this is bogus for testing drawing when allocation < request,
+       * don't copy into real code
+       */
+      gtk_window_set_policy (GTK_WINDOW (window), TRUE, TRUE, FALSE);
       
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),

@@ -790,9 +790,9 @@ gtk_image_expose (GtkWidget      *widget,
 
       area = event->area;
       
-      if (gdk_rectangle_intersect (&image_bound, &area, &intersection))
+      if (gdk_rectangle_intersect (&area, &widget->allocation, &area) &&
+          gdk_rectangle_intersect (&image_bound, &area, &image_bound))
         {
-
           switch (image->storage_type)
             {
             case GTK_IMAGE_PIXMAP:

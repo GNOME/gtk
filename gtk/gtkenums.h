@@ -363,6 +363,14 @@ typedef enum
   GTK_WINDOW_POPUP
 } GtkWindowType;
 
+/* Text wrap */
+typedef enum
+{
+  GTK_WRAP_NONE,
+  GTK_WRAP_CHAR,
+  GTK_WRAP_WORD
+} GtkWrapMode;
+
 /* How to sort */
 typedef enum
 {
