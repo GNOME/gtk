@@ -114,6 +114,14 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
   dialog->priv = priv;
 }
 
+/* Callback used when the user activates a file in the file chooser widget */
+static void
+file_chooser_widget_file_activated (GtkFileChooser       *chooser,
+				    GtkFileChooserDialog *dialog)
+{
+  gtk_window_activate_default (GTK_WINDOW (dialog));
+}
+
 static GObject*
 gtk_file_chooser_dialog_constructor (GType                  type,
 				     guint                  n_construct_properties,
@@ -135,6 +143,9 @@ gtk_file_chooser_dialog_constructor (GType                  type,
 				 NULL);
   else
     priv->widget = g_object_new (GTK_TYPE_FILE_CHOOSER_WIDGET, NULL);
+
+  g_signal_connect (priv->widget, "file-activated",
+		    G_CALLBACK (file_chooser_widget_file_activated), object);
   
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (object)->vbox), priv->widget, TRUE, TRUE, 0);
   gtk_widget_show (priv->widget);

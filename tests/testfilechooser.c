@@ -50,6 +50,32 @@ static void
 response_cb (GtkDialog *dialog,
 	     gint       response_id)
 {
+  if (response_id == GTK_RESPONSE_OK)
+    {
+      GSList *list;
+
+      list = gtk_file_chooser_get_uris (GTK_FILE_CHOOSER (dialog));
+
+      if (list)
+	{
+	  GSList *l;
+
+	  g_print ("Selected files:\n");
+
+	  for (l = list; l; l = l->next)
+	    {
+	      g_print ("%s\n", (char *) l->data);
+	      g_free (l->data);
+	    }
+
+	  g_slist_free (list);
+	}
+      else
+	g_print ("No selected files\n");
+    }
+  else
+    g_print ("Dialog was closed\n");
+  
   gtk_main_quit ();
 }
 

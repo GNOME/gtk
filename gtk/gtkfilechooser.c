@@ -440,14 +440,14 @@ gtk_file_chooser_unselect_filename (GtkFileChooser *chooser,
  * gtk_file_chooser_get_filenames:
  * @chooser: a #GtkFileChooser
  * 
- * Lists all the files and subfolders in the current folder of
- * @chooser. The returned names are full absolute paths. If files
- * in the current folder cannot be represented as local filenames
- * they will be ignored. (See gtk_file_chooser_get_uris())
+ * Lists all the selected files and subfolders in the current folder of
+ * @chooser. The returned names are full absolute paths. If files in the current
+ * folder cannot be represented as local filenames they will be ignored. (See
+ * gtk_file_chooser_get_uris())
  * 
- * Return value: a #GList containing the filenames of all
+ * Return value: a #GSList containing the filenames of all selected
  *   files and subfolders in the current folder. Free the returned list
- *   with g_lists_free(), and the filenames with g_free().
+ *   with g_slist_free(), and the filenames with g_free().
  **/
 GSList *
 gtk_file_chooser_get_filenames (GtkFileChooser *chooser)
@@ -687,15 +687,15 @@ gtk_file_chooser_unselect_all (GtkFileChooser *chooser)
 }
 
 /**
- * gtk_file_chooser_get_filenames:
+ * gtk_file_chooser_get_uris:
  * @chooser: a #GtkFileChooser
  * 
- * Lists all the files and subfolders in the current folder of
+ * Lists all the selected files and subfolders in the current folder of
  * @chooser. The returned names are full absolute URIs.
  * 
- * Return value: a #GList containing the URIs of all
+ * Return value: a #GSList containing the URIs of all selected
  *   files and subfolders in the current folder. Free the returned list
- *   with g_lists_free(), and the filenames with g_free().
+ *   with g_slist_free(), and the filenames with g_free().
  **/
 GSList *
 gtk_file_chooser_get_uris (GtkFileChooser *chooser)
@@ -853,13 +853,12 @@ _gtk_file_chooser_unselect_path (GtkFileChooser    *chooser,
  * _gtk_file_chooser_get_paths:
  * @chooser: a #GtkFileChooser
  * 
- * Lists all the files and subfolders in the current folder of
- * @chooser as #GtkFilePath. An internal function, see
- * gtk_file_chooser_get_uris().
+ * Lists all the selected files and subfolders in the current folder of @chooser
+ * as #GtkFilePath. An internal function, see gtk_file_chooser_get_uris().
  * 
- * Return value: a #GList containing a #GtkFilePath for each
- *   files and subfolder in the current folder. Free the returned list
- *   with g_lists_free(), and the paths with gtk_file_path_free().
+ * Return value: a #GSList containing a #GtkFilePath for each selected
+ *   file and subfolder in the current folder.  Free the returned list
+ *   with g_slist_free(), and the paths with gtk_file_path_free().
  **/
 GSList *
 _gtk_file_chooser_get_paths (GtkFileChooser *chooser)
