@@ -1,5 +1,9 @@
 2004-10-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_button_state_changed): Update the
+	state of the cell view when the state of the button changes (to 
+	get prelighted drawing right).  (#138650, Frances Keenan, Christian Persch)
+
 	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
 	Don't force the height of the action area, we don't scroll 
 	it anyway, and the current way of calculating the height can lead
