@@ -1,3 +1,8 @@
+Sun Feb 22 01:09:55 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* io-bmp.c (gdk_pixbuf__bmp_image_begin_load): Remove debugging
+	code.
+
 Fri Feb 20 22:25:32 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* io-bmp.c (DecodeHeader): Store and sanity-check the clrUsed field 

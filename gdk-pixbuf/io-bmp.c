@@ -514,8 +514,6 @@ decode_bitmasks (guchar *buf,
  * return context (opaque to user)
  */
 
-static struct bmp_progressive_state *d;
-
 static gpointer
 gdk_pixbuf__bmp_image_begin_load(GdkPixbufModuleSizeFunc size_func,
                                  GdkPixbufModulePreparedFunc prepared_func,
@@ -550,7 +548,6 @@ gdk_pixbuf__bmp_image_begin_load(GdkPixbufModuleSizeFunc size_func,
 
 	context->pixbuf = NULL;
 	
-	d = context;
 	return (gpointer) context;
 }
 
