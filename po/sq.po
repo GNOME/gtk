@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-4\n"
-"POT-Creation-Date: 2004-08-14 20:18+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-08-18 04:03+0200\n"
 "PO-Revision-Date: 2004-07-15 16:28+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:779
@@ -1331,8 +1331,8 @@ msgstr "(Bosh)"
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: gtk/gtkfilesystemunix.c:426 gtk/gtkfilesystemunix.c:617
-#: gtk/gtkfilesystemwin32.c:393 gtk/gtkfilesystemwin32.c:1358
+#: gtk/gtkfilesystemunix.c:426 gtk/gtkfilesystemunix.c:621
+#: gtk/gtkfilesystemwin32.c:393 gtk/gtkfilesystemwin32.c:1364
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "gabim gjatë marrjes së informacioneve për \"%s\": %s"
@@ -1350,12 +1350,12 @@ msgstr "Ky file sistemi nuk suporton montimin"
 msgid "Filesystem"
 msgstr "File i sistemit"
 
-#: gtk/gtkfilesystemunix.c:731
+#: gtk/gtkfilesystemunix.c:735
 #, c-format
 msgid "Could not get a stock icon for %s"
 msgstr "E pamundur marrja e një ikone rezervë për %s"
 
-#: gtk/gtkfilesystemunix.c:826
+#: gtk/gtkfilesystemunix.c:830
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1364,17 +1364,17 @@ msgstr ""
 "Emri \"%s\" është i pavlefshëm pasi përmban simbolin \"%s\". Ju lutem "
 "përdorni një emër tjetër."
 
-#: gtk/gtkfilesystemunix.c:1434 gtk/gtkfilesystemwin32.c:923
+#: gtk/gtkfilesystemunix.c:1438 gtk/gtkfilesystemwin32.c:923
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Ruajtja e libërshënuesit dështoi (%s)"
 
-#: gtk/gtkfilesystemunix.c:1730
+#: gtk/gtkfilesystemunix.c:1734
 #, c-format
 msgid "error getting information for '%s'"
 msgstr "gabim gjatë marrjes së informacioneve për '%s'"
 
-#: gtk/gtkfilesystemwin32.c:1120
+#: gtk/gtkfilesystemwin32.c:1126
 msgid "This file system does not support icons for everything"
 msgstr "Ky file sistemi nuk suporton ikona për gjithçka"
 
@@ -1774,21 +1774,24 @@ msgstr "Pamja e _parë e printimit"
 msgid "_Properties"
 msgstr "_Pronësitë"
 
+#. GRUT modified this item
 #: gtk/gtkstock.c:338
 msgid "_Quit"
-msgstr "_Dil"
+msgstr "_Dalja"
 
 #: gtk/gtkstock.c:339
 msgid "_Redo"
 msgstr "_Përsërit"
 
+#. GRUT modified this item
 #: gtk/gtkstock.c:340
 msgid "_Refresh"
-msgstr "_Fresko"
+msgstr "_Rifreskim"
 
+#. GRUT modified this item
 #: gtk/gtkstock.c:342
 msgid "_Revert"
-msgstr "_Rikthe"
+msgstr "_Kthe mbrapa"
 
 #: gtk/gtkstock.c:343
 msgid "_Save"
@@ -1980,3 +1983,4 @@ msgstr "Metodë Futjeje për X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "E pamundur marrja e informacioneve për file '%s': %s"
+
