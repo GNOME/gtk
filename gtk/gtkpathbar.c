@@ -24,6 +24,7 @@
 #include "gtktogglebutton.h"
 #include "gtkalignment.h"
 #include "gtkarrow.h"
+#include "gtkdnd.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtkicontheme.h"
@@ -1067,6 +1068,34 @@ find_button_type (GtkPathBar  *path_bar,
  return NORMAL_BUTTON;
 }
 
+static void
+button_drag_data_get_cb (GtkWidget          *widget,
+			 GdkDragContext     *context,
+			 GtkSelectionData   *selection_data,
+			 guint               info,
+			 guint               time_,
+			 gpointer            data)
+{
+  ButtonData *button_data;
+  GtkPathBar *path_bar;
+  char *uri;
+  char *uri_list;
+
+  button_data = data;
+  path_bar = GTK_PATH_BAR (widget->parent); /* the button's parent *is* the path bar */
+
+  uri = gtk_file_system_path_to_uri (path_bar->file_system, button_data->path);
+  uri_list = g_strconcat (uri, "\r\n", NULL);
+  g_free (uri);
+
+  gtk_selection_data_set (selection_data,
+			  selection_data->target,
+			  8,
+			  uri_list,
+			  strlen (uri_list));
+  g_free (uri_list);
+}
+
 static ButtonData *
 make_directory_button (GtkPathBar  *path_bar,
 		       const char  *dir_name,
@@ -1074,6 +1103,10 @@ make_directory_button (GtkPathBar  *path_bar,
 		       gboolean     current_dir,
 		       gboolean     file_is_hidden)
 {
+  const GtkTargetEntry targets[] = {
+    { "text/uri-list", 0, 0 }
+  };
+
   GtkWidget *child = NULL;
   GtkWidget *label_alignment = NULL;
   ButtonData *button_data;
@@ -1133,6 +1166,14 @@ make_directory_button (GtkPathBar  *path_bar,
 		    button_data);
   g_object_weak_ref (G_OBJECT (button_data->button),
 		     (GWeakNotify) button_data_free, button_data);
+
+  gtk_drag_source_set (button_data->button,
+		       GDK_BUTTON1_MASK,
+		       targets,
+		       G_N_ELEMENTS (targets),
+		       GDK_ACTION_COPY);
+  g_signal_connect (button_data->button, "drag-data-get",
+		    G_CALLBACK (button_drag_data_get_cb), button_data);
 
   return button_data;
 }
