@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
+"POT-Creation-Date: 2004-01-26 09:25+0100\n"
 "PO-Revision-Date: 2003-11-14 17:38+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -1304,25 +1304,23 @@ msgstr "Szerokość zawijania"
 
 #: gtk/gtkcombobox.c:350
 msgid "Wrap width for layouting the items in a grid"
-msgstr ""
+msgstr "Szerokość zawijania przy wyrównywaniu elementów do siatki"
 
 #: gtk/gtkcombobox.c:359
-#, fuzzy
 msgid "Row span column"
-msgstr "Odstępy wierszowe"
+msgstr "Kolumna odstępów wierszowych"
 
 #: gtk/gtkcombobox.c:360
 msgid "TreeModel column containing the row span values"
-msgstr ""
+msgstr "Kolumna drzewiasta zawierająca wartości odstępów wierszowych"
 
 #: gtk/gtkcombobox.c:369
-#, fuzzy
 msgid "Column span column"
-msgstr "Odstępy kolumnowe"
+msgstr "Kolumna odstępów kolumnowych"
 
 #: gtk/gtkcombobox.c:370
 msgid "TreeModel column containing the column span values"
-msgstr ""
+msgstr "Kolumna drzewiasta zawierająca wartości odstępów kolumnowych"
 
 #: gtk/gtkcombobox.c:379
 msgid "Active item"
@@ -1555,20 +1553,19 @@ msgstr ""
 "Określa, czy zawartość wejścia powinna być zaznaczana przy otrzymaniu "
 "skupienia"
 
-#: gtk/gtkentrycompletion.c:196
+#: gtk/gtkentrycompletion.c:197
 msgid "Completion Model"
 msgstr "Model uzupełniania"
 
-#: gtk/gtkentrycompletion.c:197
-#, fuzzy
+#: gtk/gtkentrycompletion.c:198
 msgid "The model to find matches in"
-msgstr "Model dla widoku drzewa"
+msgstr "Model wyszukiwania"
 
-#: gtk/gtkentrycompletion.c:203
+#: gtk/gtkentrycompletion.c:204
 msgid "Minimum Key Length"
 msgstr "Minimalna długość klucza"
 
-#: gtk/gtkentrycompletion.c:204
+#: gtk/gtkentrycompletion.c:205
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimalna długość klucza wyszukiwania w celu znalezienia dopasowań"
 
@@ -1581,6 +1578,8 @@ msgid ""
 "Whether the event box is visible, as opposed to invisible and only used to "
 "trap events."
 msgstr ""
+"Określa, czy odbiornik zdarzeń jest widoczny, w przeciwieństwie do "
+"niewidocznego i używanego tylko do przechwytywania zdarzeń."
 
 #: gtk/gtkeventbox.c:126
 msgid "Above child"
@@ -1591,6 +1590,8 @@ msgid ""
 "Whether the event-trapping window of the eventbox is above the window of the "
 "child widget as opposed to below it."
 msgstr ""
+"Określa czy okno przechwytywania zdarzeń odbiornika zdarzeń jest nad oknem "
+"widgetu potomnego czy poniżej."
 
 #: gtk/gtkexpander.c:194
 msgid "Expanded"
@@ -2481,9 +2482,11 @@ msgstr "Największa możliwa wartość właściwości \"position\""
 msgid "Resize"
 msgstr "Zmienny rozmiar"
 
+# FIXME - czy to o to chodzi?
 #: gtk/gtkpaned.c:308
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr ""
+"Jeżeli ustawione, potomek jest zwijany i rozwijany zgodnie z widgetem panelu"
 
 #: gtk/gtkpaned.c:323
 msgid "Shrink"
@@ -2641,13 +2644,9 @@ msgstr ""
 msgid "Group"
 msgstr "Grupa"
 
-# Wydaje mi się, że w tym bełkotliwym nieco zdaniu 
-# chodzi o to, do której grupy należy ów przycisk radiowy,
-# bo takowe przyciski mają sesn tylko jak są w grupie 
 #: gtk/gtkradioaction.c:156
-#, fuzzy
 msgid "The radio action whose group this action belongs."
-msgstr "Grupa, do której należy ten widget przycisku radiowego."
+msgstr "Grupa, do której należy ta akcja radiowa."
 
 # Wydaje mi się, że w tym bełkotliwym nieco zdaniu 
 # chodzi o to, do której grupy należy ów przycisk radiowy,
@@ -3574,16 +3573,17 @@ msgstr "Akceptowanie tabulacji"
 
 #: gtk/gtktextview.c:674
 msgid "Whether Tab will result in a tab character being entered"
-msgstr "Określa czy tabulacja powinna być uwzględniana jako wprowadzany znak"
+msgstr "Określa, czy tabulacja powinna być uwzględniana jako wprowadzany znak"
 
 #: gtk/gtktoggleaction.c:129
-#, fuzzy
 msgid "Create the same proxies as a radio action"
-msgstr "Powoduje rysowanie przełączanego przycisku jako przycisku radiowego"
+msgstr "Tworzenie takich samych pośredników jako akcji radiowej"
 
 #: gtk/gtktoggleaction.c:130
 msgid "Whether the proxies for this action look like radio action proxies"
 msgstr ""
+"Określa, czy pośrednicy dla tej akcji wyglądają jak pośrednicy akcji "
+"radiowych"
 
 #: gtk/gtktogglebutton.c:133
 msgid "If the toggle button should be pressed in or not"
