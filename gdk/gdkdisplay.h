@@ -40,7 +40,6 @@ typedef struct _GdkDisplayPointerHooks GdkDisplayPointerHooks;
 #define GDK_IS_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DISPLAY))
 #define GDK_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY, GdkDisplayClass))
 
-
 struct _GdkDisplay
 {
   GObject parent_instance;
@@ -62,6 +61,10 @@ struct _GdkDisplay
   const GdkDisplayPointerHooks *pointer_hooks; /* Current hooks for querying pointer */
   
   guint closed : 1;		/* Whether this display has been closed */
+
+  guint double_click_distance;	/* Maximum distance between clicks in pixels */
+  gint button_x[2];             /* The last 2 button click positions. */
+  gint button_y[2];
 };
 
 struct _GdkDisplayClass
@@ -129,8 +132,10 @@ void gdk_display_add_client_message_filter (GdkDisplay   *display,
 					    GdkFilterFunc func,
 					    gpointer      data);
 
-void gdk_display_set_double_click_time (GdkDisplay  *display,
-					guint        msec);
+void gdk_display_set_double_click_time     (GdkDisplay   *display,
+					    guint         msec);
+void gdk_display_set_double_click_distance (GdkDisplay   *display,
+					    guint         distance);
 
 GdkDisplay *gdk_display_get_default (void);
 

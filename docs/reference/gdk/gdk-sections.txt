@@ -135,6 +135,7 @@ gdk_display_peek_event
 gdk_display_put_event
 gdk_display_add_client_message_filter
 gdk_display_set_double_click_time
+gdk_display_set_double_click_distance
 gdk_display_get_pointer
 gdk_display_get_window_at_pointer
 GdkDisplayPointerHooks

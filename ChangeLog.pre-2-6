@@ -1,3 +1,24 @@
+Tue Dec 16 01:46:46 2003  Matthias Clasen  <maclas@gmx.de>
+
+	Do not interpret distant clicks as double-clicks  (#116541,
+	Bernhard Walle):
+	
+	* gdk/gdkdisplay.h (struct GdkDisplay): Add new fields
+	double_click_distance, button_x and button_y.
+	* gdk/gdkdisplay.c (gdk_display_init): Initialize the new fields.
+
+	* gdk/gdkdisplay.h: 
+	* gdk/gdkevents.c (gdk_display_set_double_click_distance): 
+	New function to set the double click distance on a display.
+
+	* gdk/gdkevents.c: Take double click distance into account
+	when generating single, double or triple clicks.
+
+	* gtk/gtksettings.c: Add new setting "gtk-double-click-distance".
+
+	* gdk/x11/gdkevents-x11.c: Add the XSetting 
+	"Net/DoubleClickDistance" and map it to "gtk-double-click-distance".
+
 2003-12-15  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkdialog.c: Sigh, revert the change.

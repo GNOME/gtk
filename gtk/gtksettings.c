@@ -45,6 +45,7 @@ struct _GtkSettingsPropertyValue
 enum {
   PROP_0,
   PROP_DOUBLE_CLICK_TIME,
+  PROP_DOUBLE_CLICK_DISTANCE,
   PROP_CURSOR_BLINK,
   PROP_CURSOR_BLINK_TIME,
   PROP_SPLIT_CURSOR,
@@ -75,7 +76,7 @@ static void	gtk_settings_notify		 (GObject		*object,
 static guint	settings_install_property_parser (GtkSettingsClass      *class,
 						  GParamSpec            *pspec,
 						  GtkRcPropertyParser    parser);
-static void    settings_update_double_click_time (GtkSettings           *settings);
+static void    settings_update_double_click      (GtkSettings           *settings);
 
 
 /* --- variables --- */
@@ -172,6 +173,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                G_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_DOUBLE_CLICK_TIME);
+  result = settings_install_property_parser (class,
+                                             g_param_spec_int ("gtk-double-click-distance",
+                                                               _("Double Click Distance"),
+                                                               _("Maximum distance allowed between two clicks for them to be considered a double click (in pixels)"),
+                                                               0, G_MAXINT, 5,
+                                                               G_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_DOUBLE_CLICK_DISTANCE);
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-cursor-blink",
 								   _("Cursor Blink"),
@@ -299,7 +308,7 @@ gtk_settings_get_for_screen (GdkScreen *screen)
       settings->screen = screen;
       g_object_set_data (G_OBJECT (screen), "gtk-settings", settings); 
       gtk_rc_reparse_all_for_settings (settings, TRUE);
-      settings_update_double_click_time (settings);
+      settings_update_double_click (settings);
     }
   
   return settings;
@@ -420,7 +429,8 @@ gtk_settings_notify (GObject    *object,
   switch (property_id)
     {
     case PROP_DOUBLE_CLICK_TIME:
-      settings_update_double_click_time (settings);
+    case PROP_DOUBLE_CLICK_DISTANCE:
+      settings_update_double_click (settings);
       break;
     }
 }
@@ -1162,16 +1172,20 @@ _gtk_settings_reset_rc_values (GtkSettings *settings)
 }
 
 static void
-settings_update_double_click_time (GtkSettings *settings)
+settings_update_double_click (GtkSettings *settings)
 {
   if (gdk_screen_get_number (settings->screen) == 0)
     {
       GdkDisplay *display = gdk_screen_get_display (settings->screen);
       gint double_click_time;
+      gint double_click_distance;
   
-      g_object_get (settings, "gtk-double-click-time",
-		    &double_click_time, NULL);
+      g_object_get (settings, 
+		    "gtk-double-click-time", &double_click_time, 
+		    "gtk-double-click-distance", &double_click_distance,
+		    NULL);
       
       gdk_display_set_double_click_time (display, double_click_time);
+      gdk_display_set_double_click_distance (display, double_click_distance);
     }
 }

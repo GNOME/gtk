@@ -1,3 +1,7 @@
+Tue Dec 16 01:57:13 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdk-sections.txt: Add gdk_display_set_double_click_distance.
+
 Mon Dec 15 01:03:08 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_button_[sg]et_alignment.

@@ -55,11 +55,6 @@ typedef struct _GdkIOClosure GdkIOClosure;
 typedef struct _GdkDisplaySource GdkDisplaySource;
 typedef struct _GdkEventTypeX11 GdkEventTypeX11;
 
-#define DOUBLE_CLICK_TIME      250
-#define TRIPLE_CLICK_TIME      500
-#define DOUBLE_CLICK_DIST      5
-#define TRIPLE_CLICK_DIST      5
-
 struct _GdkIOClosure
 {
   GdkInputFunction function;
@@ -2591,6 +2586,7 @@ static struct
   const char *gdk_name;
 } settings_map[] = {
   { "Net/DoubleClickTime", "gtk-double-click-time" },
+  { "Net/DoubleClickDistance", "gtk-double-click-distance" },
   { "Net/DndDragThreshold", "gtk-dnd-drag-threshold" },
   { "Gtk/CanChangeAccels", "gtk-can-change-accels" },
   { "Gtk/ColorPalette", "gtk-color-palette" },

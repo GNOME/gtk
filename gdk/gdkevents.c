@@ -46,10 +46,6 @@ GdkEventFunc   _gdk_event_func = NULL;    /* Callback for events */
 gpointer       _gdk_event_data = NULL;
 GDestroyNotify _gdk_event_notify = NULL;
 
-#define TRIPLE_CLICK_TIME(display) (2*display->double_click_time)
-#define DOUBLE_CLICK_DIST      5
-#define TRIPLE_CLICK_DIST      5
-
 /*********************************************
  * Functions for maintaining the event queue *
  *********************************************/
@@ -1031,22 +1027,28 @@ void
 _gdk_event_button_generate (GdkDisplay *display,
 			    GdkEvent   *event)
 {
-  if ((event->button.time < (display->button_click_time[1] + TRIPLE_CLICK_TIME (display))) &&
+  if ((event->button.time < (display->button_click_time[1] + 2*display->double_click_time)) &&
       (event->button.window == display->button_window[1]) &&
-      (event->button.button == display->button_number[1]))
-    {
+      (event->button.button == display->button_number[1]) &&
+      (ABS (event->button.x - display->button_x[1]) <= display->double_click_distance) &&
+      (ABS (event->button.y - display->button_y[1]) <= display->double_click_distance))
+{
       gdk_synthesize_click (display, event, 3);
-      
+            
       display->button_click_time[1] = 0;
       display->button_click_time[0] = 0;
       display->button_window[1] = NULL;
       display->button_window[0] = 0;
       display->button_number[1] = -1;
       display->button_number[0] = -1;
+      display->button_x[0] = display->button_x[1] = 0;
+      display->button_y[0] = display->button_y[1] = 0;
     }
   else if ((event->button.time < (display->button_click_time[0] + display->double_click_time)) &&
 	   (event->button.window == display->button_window[0]) &&
-	   (event->button.button == display->button_number[0]))
+	   (event->button.button == display->button_number[0]) &&
+	   (ABS (event->button.x - display->button_x[0]) <= display->double_click_distance) &&
+	   (ABS (event->button.y - display->button_y[0]) <= display->double_click_distance))
     {
       gdk_synthesize_click (display, event, 2);
       
@@ -1056,6 +1058,10 @@ _gdk_event_button_generate (GdkDisplay *display,
       display->button_window[0] = event->button.window;
       display->button_number[1] = display->button_number[0];
       display->button_number[0] = event->button.button;
+      display->button_x[1] = display->button_x[0];
+      display->button_x[0] = event->button.x;
+      display->button_y[1] = display->button_y[0];
+      display->button_y[0] = event->button.y;
     }
   else
     {
@@ -1065,6 +1071,10 @@ _gdk_event_button_generate (GdkDisplay *display,
       display->button_window[0] = event->button.window;
       display->button_number[1] = -1;
       display->button_number[0] = event->button.button;
+      display->button_x[1] = 0;
+      display->button_x[0] = event->button.x;
+      display->button_y[1] = 0;
+      display->button_y[0] = event->button.y;
     }
 }
 
@@ -1126,7 +1136,8 @@ gdk_synthesize_window_state (GdkWindow     *window,
  * 
  * Sets the double click time (two clicks within this time interval
  * count as a double click and result in a #GDK_2BUTTON_PRESS event).
- * Applications should NOT set this, it is a global user-configured setting.
+ * Applications should <emphasis>not</emphasis> set this, it is a global 
+ * user-configured setting.
  *
  * Since: 2.2
  **/
@@ -1142,13 +1153,35 @@ gdk_display_set_double_click_time (GdkDisplay *display,
  * @msec: double click time in milliseconds (thousandths of a second)
  *
  * Set the double click time for the default display. See
- * gdk_display_set_double_click_time(). Applications should NOT
- * set this, it is a global user-configured setting.
+ * gdk_display_set_double_click_time(). 
+ * See also gdk_display_set_double_click_distance().
+ * Applications should <emphasis>not</emphasis> set this, it is a 
+ * global user-configured setting.
  **/
 void
 gdk_set_double_click_time (guint msec)
 {
   gdk_display_set_double_click_time (gdk_display_get_default (), msec);
+}
+
+/**
+ * gdk_display_set_double_click_distance:
+ * @display: a #GdkDisplay
+ * @distance: distance in pixels
+ * 
+ * Sets the double click distance (two clicks within this distance
+ * count as a double click and result in a #GDK_2BUTTON_PRESS event).
+ * See also gdk_display_set_double_click_time().
+ * Applications should <emphasis>not</emphasis> set this, it is a global 
+ * user-configured setting.
+ *
+ * Since: 2.4
+ **/
+void
+gdk_display_set_double_click_distance (GdkDisplay *display,
+				       guint       distance)
+{
+  display->double_click_distance = distance;
 }
 
 GType

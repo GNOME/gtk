@@ -151,8 +151,11 @@ gdk_display_init (GdkDisplay *display)
   display->button_click_time[0] = display->button_click_time[1] = 0;
   display->button_window[0] = display->button_window[1] = NULL;
   display->button_number[0] = display->button_number[1] = -1;
+  display->button_x[0] = display->button_x[1] = 0;
+  display->button_y[0] = display->button_y[1] = 0;
 
   display->double_click_time = 250;
+  display->double_click_distance = 5;
 
   display->pointer_hooks = &default_pointer_hooks;
 }
