@@ -1,3 +1,11 @@
+2001-11-28  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/cursors.sgml: Document GdkCursor and standard cursors.
+
+2001-11-23  Matthias Clasen  <matthiasc@poet.de>
+
+        * gdk/tmpl/drawing.sgml: Minor markup fixes.
+
 Fri Nov 23 15:12:07 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am (content_files): Add windows.sgml

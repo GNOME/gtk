@@ -190,19 +190,6 @@ MAINTAINERCLEANFILES =
 EXTRA_HEADERS =
 
 #
-# rules to generate built sources
-#
-# we only need to remake these headers once a new X version is released
-X-derived-headers:
-	sed -e 's/^#define[ 	]*XC\([^ 	]*\)[ 	]*\([^ 	]*\)[ 	]*.*$$/GDK\1 = \2,/' \
-	    -e 'tb' -e 'd' -e ':b' \
-	    -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/' \
-	    < @x_includes@/X11/cursorfont.h > gdkcursors.h ; \
-	sed -e 's/^#define[ 	]*XK\([^ 	]*\)[ 	]*\([^ 	]*\)[ 	]*.*$$/#define GDK\1 \2/' \
-	    -e 'tb' -e 'd' -e ':b' -e 's/ 0X/ 0x/' \
-	    < @x_includes@/X11/keysymdef.h > gdkkeysyms.h
-
-#
 # Rule to install gdkconfig.h header file
 #
 configexecincludedir = $(libdir)/gtk-2.0/include

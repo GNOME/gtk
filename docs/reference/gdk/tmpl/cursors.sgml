@@ -16,7 +16,7 @@ standard and pixmap cursors.
 
 <!-- ##### STRUCT GdkCursor ##### -->
 <para>
-
+A <type>GdkCursor</type> structure represents a cursor.
 </para>
 
 @type: 
@@ -26,6 +26,88 @@ standard and pixmap cursors.
 <para>
 The standard cursors available.
 </para>
+
+
+@GDK_X_CURSOR: <inlinegraphic format="png" fileref="X_cursor.png"></inlinegraphic>
+@GDK_ARROW: <inlinegraphic format="png" fileref="arrow.png"></inlinegraphic>
+@GDK_BASED_ARROW_DOWN: <inlinegraphic format="png" fileref="based_arrow_down.png"></inlinegraphic>
+@GDK_BASED_ARROW_UP: <inlinegraphic format="png" fileref="based_arrow_up.png"></inlinegraphic>
+@GDK_BOAT: <inlinegraphic format="png" fileref="boat.png"></inlinegraphic>
+@GDK_BOGOSITY: <inlinegraphic format="png" fileref="bogosity.png"></inlinegraphic>
+@GDK_BOTTOM_LEFT_CORNER: <inlinegraphic format="png" fileref="bottom_left_corner.png"></inlinegraphic>
+@GDK_BOTTOM_RIGHT_CORNER: <inlinegraphic format="png" fileref="bottom_right_corner.png"></inlinegraphic>
+@GDK_BOTTOM_SIDE: <inlinegraphic format="png" fileref="bottom_side.png"></inlinegraphic>
+@GDK_BOTTOM_TEE: <inlinegraphic format="png" fileref="bottom_tee.png"></inlinegraphic>
+@GDK_BOX_SPIRAL: <inlinegraphic format="png" fileref="box_spiral.png"></inlinegraphic>
+@GDK_CENTER_PTR: <inlinegraphic format="png" fileref="center_ptr.png"></inlinegraphic>
+@GDK_CIRCLE: <inlinegraphic format="png" fileref="circle.png"></inlinegraphic>
+@GDK_CLOCK: <inlinegraphic format="png" fileref="clock.png"></inlinegraphic>
+@GDK_COFFEE_MUG: <inlinegraphic format="png" fileref="coffee_mug.png"></inlinegraphic>
+@GDK_CROSS: <inlinegraphic format="png" fileref="cross.png"></inlinegraphic>
+@GDK_CROSS_REVERSE: <inlinegraphic format="png" fileref="cross_reverse.png"></inlinegraphic>
+@GDK_CROSSHAIR: <inlinegraphic format="png" fileref="crosshair.png"></inlinegraphic>
+@GDK_DIAMOND_CROSS: <inlinegraphic format="png" fileref="diamond_cross.png"></inlinegraphic>
+@GDK_DOT: <inlinegraphic format="png" fileref="dot.png"></inlinegraphic>
+@GDK_DOTBOX: <inlinegraphic format="png" fileref="dotbox.png"></inlinegraphic>
+@GDK_DOUBLE_ARROW: <inlinegraphic format="png" fileref="double_arrow.png"></inlinegraphic>
+@GDK_DRAFT_LARGE: <inlinegraphic format="png" fileref="draft_large.png"></inlinegraphic>
+@GDK_DRAFT_SMALL: <inlinegraphic format="png" fileref="draft_small.png"></inlinegraphic>
+@GDK_DRAPED_BOX: <inlinegraphic format="png" fileref="draped_box.png"></inlinegraphic>
+@GDK_EXCHANGE: <inlinegraphic format="png" fileref="exchange.png"></inlinegraphic>
+@GDK_FLEUR: <inlinegraphic format="png" fileref="fleur.png"></inlinegraphic>
+@GDK_GOBBLER: <inlinegraphic format="png" fileref="gobbler.png"></inlinegraphic>
+@GDK_GUMBY: <inlinegraphic format="png" fileref="gumby.png"></inlinegraphic>
+@GDK_HAND1: <inlinegraphic format="png" fileref="hand1.png"></inlinegraphic>
+@GDK_HAND2: <inlinegraphic format="png" fileref="hand2.png"></inlinegraphic>
+@GDK_HEART: <inlinegraphic format="png" fileref="heart.png"></inlinegraphic>
+@GDK_ICON: <inlinegraphic format="png" fileref="icon.png"></inlinegraphic>
+@GDK_IRON_CROSS: <inlinegraphic format="png" fileref="iron_cross.png"></inlinegraphic>
+@GDK_LEFT_PTR: <inlinegraphic format="png" fileref="left_ptr.png"></inlinegraphic>
+@GDK_LEFT_SIDE: <inlinegraphic format="png" fileref="left_side.png"></inlinegraphic>
+@GDK_LEFT_TEE: <inlinegraphic format="png" fileref="left_tee.png"></inlinegraphic>
+@GDK_LEFTBUTTON: <inlinegraphic format="png" fileref="leftbutton.png"></inlinegraphic>
+@GDK_LL_ANGLE: <inlinegraphic format="png" fileref="ll_angle.png"></inlinegraphic>
+@GDK_LR_ANGLE: <inlinegraphic format="png" fileref="lr_angle.png"></inlinegraphic>
+@GDK_MAN: <inlinegraphic format="png" fileref="man.png"></inlinegraphic>
+@GDK_MIDDLEBUTTON: <inlinegraphic format="png" fileref="middlebutton.png"></inlinegraphic>
+@GDK_MOUSE: <inlinegraphic format="png" fileref="mouse.png"></inlinegraphic>
+@GDK_PENCIL: <inlinegraphic format="png" fileref="pencil.png"></inlinegraphic>
+@GDK_PIRATE: <inlinegraphic format="png" fileref="pirate.png"></inlinegraphic>
+@GDK_PLUS: <inlinegraphic format="png" fileref="plus.png"></inlinegraphic>
+@GDK_QUESTION_ARROW: <inlinegraphic format="png" fileref="question_arrow.png"></inlinegraphic>
+@GDK_RIGHT_PTR: <inlinegraphic format="png" fileref="right_ptr.png"></inlinegraphic>
+@GDK_RIGHT_SIDE: <inlinegraphic format="png" fileref="right_side.png"></inlinegraphic>
+@GDK_RIGHT_TEE: <inlinegraphic format="png" fileref="right_tee.png"></inlinegraphic></inlinegraphic>
+@GDK_RIGHTBUTTON: <inlinegraphic format="png" fileref="rightbutton.png"></inlinegraphic>
+@GDK_RTL_LOGO: <inlinegraphic format="png" fileref="rtl_logo.png"></inlinegraphic>
+@GDK_SAILBOAT: <inlinegraphic format="png" fileref="sailboat.png"></inlinegraphic>
+@GDK_SB_DOWN_ARROW: <inlinegraphic format="png" fileref="sb_down_arrow.png"></inlinegraphic>
+@GDK_SB_H_DOUBLE_ARROW: <inlinegraphic format="png" fileref="sb_h_double_arrow.png"></inlinegraphic>
+@GDK_SB_LEFT_ARROW: <inlinegraphic format="png" fileref="sb_left_arrow.png"></inlinegraphic>
+@GDK_SB_RIGHT_ARROW: <inlinegraphic format="png" fileref="sb_right_arrow.png"></inlinegraphic>
+@GDK_SB_UP_ARROW: <inlinegraphic format="png" fileref="sb_up_arrow.png"></inlinegraphic>
+@GDK_SB_V_DOUBLE_ARROW: <inlinegraphic format="png" fileref="sb_v_double_arrow.png"></inlinegraphic>
+@GDK_SHUTTLE: <inlinegraphic format="png" fileref="shuttle.png"></inlinegraphic>
+@GDK_SIZING: <inlinegraphic format="png" fileref="sizing.png"></inlinegraphic>
+@GDK_SPIDER: <inlinegraphic format="png" fileref="spider.png"></inlinegraphic>
+@GDK_SPRAYCAN: <inlinegraphic format="png" fileref="spraycan.png"></inlinegraphic>
+@GDK_STAR: <inlinegraphic format="png" fileref="star.png"></inlinegraphic>
+@GDK_TARGET: <inlinegraphic format="png" fileref="target.png"></inlinegraphic>
+@GDK_TCROSS: <inlinegraphic format="png" fileref="tcross.png"></inlinegraphic>
+@GDK_TOP_LEFT_ARROW: <inlinegraphic format="png" fileref="top_left_arrow.png"></inlinegraphic>
+@GDK_TOP_LEFT_CORNER: <inlinegraphic format="png" fileref="top_left_corner.png"></inlinegraphic>
+@GDK_TOP_RIGHT_CORNER: <inlinegraphic format="png" fileref="top_right_corner.png"></inlinegraphic>
+@GDK_TOP_SIDE: <inlinegraphic format="png" fileref="top_side.png"></inlinegraphic>
+@GDK_TOP_TEE: <inlinegraphic format="png" fileref="top_tee.png"></inlinegraphic>
+@GDK_TREK: <inlinegraphic format="png" fileref="trek.png"></inlinegraphic>
+@GDK_UL_ANGLE: <inlinegraphic format="png" fileref="ul_angle.png"></inlinegraphic>
+@GDK_UMBRELLA: <inlinegraphic format="png" fileref="umbrella.png"></inlinegraphic>
+@GDK_UR_ANGLE: <inlinegraphic format="png" fileref="ur_angle.png"></inlinegraphic>
+@GDK_WATCH: <inlinegraphic format="png" fileref="watch.png"></inlinegraphic>
+@GDK_XTERM: <inlinegraphic format="png" fileref="xterm.png"></inlinegraphic>
+@GDK_LAST_CURSOR:
+@GDK_CURSOR_IS_PIXMAP: type of cursors constructed with 
+    gdk_cursor_new_from_pixmap().
 
 
 <!-- ##### FUNCTION gdk_cursor_new ##### -->
