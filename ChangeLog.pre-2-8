@@ -1,3 +1,17 @@
+Tue Dec  4 18:38:35 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* demos/gtk-demo/main.c: (create_tree): Minor fix.
+
+	* docs/tree-column-sizing.txt: Update
+
+	* gtk/gtkrbtree.[ch]: Massive work to support validation.
+
+	* gtk/gtktreemodel.c: Doc fixes.
+
+	* gtk/gtktreeview.c: Incremental reflow added.
+	* gtk/gtktreeviewcolumn.c: ditto
+	* gtk/gtktreeviewcolumn.h: ditto
+
 2001-12-04  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktexttag.c (gtk_text_tag_set_property): add a warning for
