@@ -430,6 +430,25 @@ gdk_pixmap_get_image (GdkDrawable     *drawable,
                                  x, y, width, height);
 }
 
+static GdkBitmap *
+make_solid_mask (gint width, gint height)
+{
+  GdkBitmap *bitmap;
+  GdkGC *gc;
+  GdkGCValues gc_values;
+  
+  bitmap = gdk_pixmap_new (NULL, width, height, 1);
+
+  gc_values.foreground.pixel = 1;
+  gc = gdk_gc_new_with_values (bitmap, &gc_values, GDK_GC_FOREGROUND);
+  
+  gdk_draw_rectangle (bitmap, gc, TRUE, 0, 0, width, height);
+  
+  gdk_gc_unref (gc);
+  
+  return bitmap;
+}
+
 #define PACKED_COLOR(c) ((((c)->red & 0xff) << 8) | ((c)->green & 0xff) | ((c)->blue >> 8))
 
 static GdkPixmap *
@@ -473,6 +492,10 @@ gdk_pixmap_colormap_new_from_pixbuf (GdkColormap *colormap,
   if (mask)
     gdk_pixbuf_render_pixmap_and_mask (pixbuf, NULL, mask, 128);
 
+  if (mask && !*mask)
+    *mask = make_solid_mask (gdk_pixbuf_get_width (pixbuf),
+			     gdk_pixbuf_get_height (pixbuf));
+
   return pixmap;
 }
 
@@ -498,8 +521,9 @@ gdk_pixmap_colormap_create_from_xpm (GdkWindow   *window,
     return NULL;
 
   pixmap = gdk_pixmap_colormap_new_from_pixbuf (colormap, mask, transparent_color, pixbuf);
-  gdk_pixbuf_unref (pixbuf);
 
+  gdk_pixbuf_unref (pixbuf);
+  
   return pixmap;
 }
 
@@ -535,6 +559,7 @@ gdk_pixmap_colormap_create_from_xpm_d (GdkWindow  *window,
     return NULL;
 
   pixmap = gdk_pixmap_colormap_new_from_pixbuf (colormap, mask, transparent_color, pixbuf);
+
   gdk_pixbuf_unref (pixbuf);
 
   return pixmap;

@@ -1,3 +1,10 @@
+2001-02-23  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/gdkpixmap.c (gdk_pixmap_colormap_new_from_pixbuf):
+	return solid masks for xpms that have no transparent color.
+	This makes the ..._create_from_xpm... API backwards
+	compatible.
+
 2001-02-23  Tor Lillqvist  <tml@iki.fi>
 
 	* README.win32: Update. Mention the gtk-1-3-win32-production
