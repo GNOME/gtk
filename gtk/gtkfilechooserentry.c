@@ -20,6 +20,8 @@
 
 #include <string.h>
 
+#include "gtkcelllayout.h"
+#include "gtkcellrenderertext.h"
 #include "gtkentry.h"
 #include "gtkfilechooserentry.h"
 
@@ -46,6 +48,8 @@ struct _GtkFileChooserEntry
 
   GtkFileFolder *current_folder;
 
+  GtkListStore *completion_store;
+
   guint in_change : 1;
   guint has_completion : 1;
 };
@@ -65,6 +69,11 @@ static void     gtk_file_chooser_entry_do_insert_text (GtkEditable      *editabl
 
 static void clear_completion_callback (GtkFileChooserEntry *chooser_entry,
 				       GParamSpec          *pspec);
+
+static gboolean completion_match_func (GtkEntryCompletion *comp,
+				       const char         *key,
+				       GtkTreeIter        *iter,
+				       gpointer            data);
 
 static GObjectClass *parent_class;
 static GtkEditableClass *parent_editable_iface;
@@ -133,6 +142,24 @@ gtk_file_chooser_entry_iface_init (GtkEditableClass *iface)
 static void
 gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
 {
+  GtkEntryCompletion *comp;
+  GtkCellRenderer *renderer;
+
+  chooser_entry->completion_store = gtk_list_store_new (1, G_TYPE_STRING);
+
+  comp = gtk_entry_completion_new ();
+  gtk_entry_completion_set_model (comp, GTK_TREE_MODEL (chooser_entry->completion_store));
+  gtk_entry_completion_set_match_func (comp,
+				       completion_match_func,
+				       chooser_entry,
+				       NULL);
+
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (comp), renderer, TRUE);
+  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (comp), renderer, "text", 0);
+
+  gtk_entry_set_completion (GTK_ENTRY (chooser_entry), comp);
+
   g_signal_connect (chooser_entry, "notify::cursor-position",
 		    G_CALLBACK (clear_completion_callback), NULL);
   g_signal_connect (chooser_entry, "notify::selection-bound",
@@ -143,6 +170,9 @@ static void
 gtk_file_chooser_entry_finalize (GObject *object)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
+
+  if (chooser_entry->completion_store)
+    g_object_unref (chooser_entry->completion_store);
 
   if (chooser_entry->current_folder)
     g_object_unref (chooser_entry->current_folder);
@@ -157,6 +187,54 @@ gtk_file_chooser_entry_finalize (GObject *object)
   parent_class->finalize (object);
 }
 
+/* Match function for the GtkEntryCompletion */
+static gboolean
+completion_match_func (GtkEntryCompletion *comp,
+		       const char         *key,
+		       GtkTreeIter        *iter,
+		       gpointer            data)
+{
+  GtkFileChooserEntry *chooser_entry;
+  char *name;
+  gboolean result;
+
+  chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
+
+  gtk_tree_model_get (GTK_TREE_MODEL (chooser_entry->completion_store), iter, 0, &name, -1);
+  if (!name)
+    return FALSE; /* Uninitialized row, ugh */
+
+  /* We ignore the key because it is the contents of the entry.  Instead, we
+   * just use our precomputed file_part.
+   */
+
+  if (chooser_entry->file_part)
+    {
+      char *norm_file_part;
+      char *norm_name;
+
+      norm_file_part = g_utf8_normalize (chooser_entry->file_part, -1, G_NORMALIZE_ALL);
+      norm_name = g_utf8_normalize (name, -1, G_NORMALIZE_ALL);
+
+      result = (strncmp (norm_file_part, norm_name, strlen (norm_file_part)) == 0);
+
+      /* FIXME: Owen suggests first doing a case-folded comparison, then a
+       * non-case-folded one if the first one yielded more than one match.
+       */
+
+      g_free (norm_file_part);
+      g_free (norm_name);
+    }
+  else
+    result = FALSE;
+  
+
+  result = (strncmp (key, name, strlen (key)) == 0);
+
+  g_free (name);
+  return result;
+}
+
 static gboolean
 completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 {
@@ -165,6 +243,8 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
   GSList *tmp_list;
   gchar *common_prefix = NULL;
   GtkFilePath *unique_path = NULL;
+
+  g_print ("completion_idle_callback()\n");
 
   chooser_entry->completion_idle = NULL;
 
@@ -183,23 +263,36 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 				   &child_paths,
 				   NULL); /* NULL-GError */
 
+  chooser_entry->in_change = TRUE;
+  g_print ("Clearing list and filling it\n");
+  gtk_list_store_clear (chooser_entry->completion_store);
+
   for (tmp_list = child_paths; tmp_list; tmp_list = tmp_list->next)
     {
       GtkFileInfo *info;
+      GtkFilePath *path;
+
+      path = tmp_list->data;
       
       info = gtk_file_folder_get_info (chooser_entry->current_folder,
-				       tmp_list->data,
+				       path,
 				       NULL); /* NULL-GError */
       if (info)
 	{
 	  const gchar *display_name = gtk_file_info_get_display_name (info);
-	  
+	  GtkTreeIter iter;
+
+	  gtk_list_store_append (chooser_entry->completion_store, &iter);
+	  gtk_list_store_set (chooser_entry->completion_store, &iter,
+			      0, display_name,
+			      -1);
+
 	  if (g_str_has_prefix (display_name, chooser_entry->file_part))
 	    {
 	      if (!common_prefix)
 		{
 		  common_prefix = g_strdup (display_name);
-		  unique_path = gtk_file_path_copy (tmp_list->data);
+		  unique_path = gtk_file_path_copy (path);
 		}
 	      else
 		{
@@ -222,6 +315,8 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 	  gtk_file_info_free (info);
 	}
     }
+  g_print ("List filled\n");
+  chooser_entry->in_change = FALSE;
 
   if (unique_path)
     {
@@ -290,6 +385,11 @@ gtk_file_chooser_entry_do_insert_text (GtkEditable *editable,
 				       gint        *position)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
+  char *tmp;
+
+  tmp = g_strndup (new_text, new_text_length);
+  g_print ("gtk_file_chooser_entry_do_insert_text (%s)\n", tmp);
+  g_free (tmp);
   
   parent_editable_iface->do_insert_text (editable, new_text, new_text_length, position);
 
@@ -331,6 +431,8 @@ gtk_file_chooser_entry_changed (GtkEditable *editable)
   const gchar *text;
   GtkFilePath *folder_path;
   gchar *file_part;
+
+  g_print ("gtk_file_chooser_entry_changed ()\n");
 
   text = gtk_entry_get_text (GTK_ENTRY (editable));
 

@@ -1,3 +1,14 @@
+2003-11-07  Federico Mena Quintero  <federico@ximian.com>
+
+	Changing GtkFileChooserEntry to use GtkEntryCompletion.
+
+	* gtk/gtkfilechooserentry.c (gtk_file_chooser_entry_init): Create
+	a GtkListStore for the completion list.  Create a
+	GtkEntryCompletion and attach it to the chooser entry.
+	(gtk_file_chooser_entry_finalize): Unref the completion store.
+	(completion_match_func): New callback for the GtkEntryCompletion.
+	(completion_idle_callback): Fill the completion store with filenames.
+
 Fri Nov  7 22:55:49 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwindow.c (gtk_window_set_role): 
