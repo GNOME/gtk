@@ -957,7 +957,6 @@ gdk_window_get_size (GdkWindow *window,
     *height = window_private->height;
 }
 
-
 GdkVisual*
 gdk_window_get_visual (GdkWindow *window)
 {

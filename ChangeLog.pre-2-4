@@ -1,3 +1,9 @@
+Sat Feb  7 02:29:01 1998  Tim Janik  <timj@gimp.org>
+
+	* gdk/gdk.c (gdk_event_translate): don't wipe out window_private's x
+	  and y coordinates if the configure notify is only about resizing,
+	  query the correct origin instead.
+
 Wed Feb  4 23:05:28 1998  Scott Goehring  <scott@poverty.bloomington.in.us>
 
 	* gtk/gtkmenufactory.c: menufactories now ref&sink the menus they

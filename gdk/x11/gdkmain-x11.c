@@ -2463,46 +2463,70 @@ gdk_event_translate (GdkEvent *event,
     case ConfigureNotify:
       /* Print debugging info.
        */
-      while ((XPending(gdk_display) > 0) &&
-		XCheckTypedWindowEvent(gdk_display, xevent->xany.window,
-				       ConfigureNotify, xevent))
-	  /*XSync(gdk_display, 0)*/;
-
+      while ((XPending (gdk_display) > 0) &&
+	     XCheckTypedWindowEvent(gdk_display, xevent->xany.window,
+				    ConfigureNotify, xevent))
+	/*XSync (gdk_display, 0)*/;
+      
       if (gdk_show_events)
-	g_print ("configure notify:\twindow: %ld  x,y: %d %d  w,h: %d %d\n",
+	g_print ("configure notify:\twindow: %ld  x,y: %d %d  w,h: %d %d  b-w: %d  above: %ld  ovr: %d\n",
 		 xevent->xconfigure.window - base_id,
-		 xevent->xconfigure.x, xevent->xconfigure.y,
-		 xevent->xconfigure.width, xevent->xconfigure.height);
-
+		 xevent->xconfigure.x,
+		 xevent->xconfigure.y,
+		 xevent->xconfigure.width,
+		 xevent->xconfigure.height,
+		 xevent->xconfigure.border_width,
+		 xevent->xconfigure.above - base_id,
+		 xevent->xconfigure.override_redirect);
+      
       if (window_private)
 	{
 	  if ((window_private->extension_events != 0) &&
 	      gdk_input_vtable.configure_event)
 	    gdk_input_vtable.configure_event (&xevent->xconfigure, window);
-
-	  if ((window_private->window_type != GDK_WINDOW_CHILD) &&
-	      ((window_private->width != xevent->xconfigure.width) ||
-	       (window_private->height != xevent->xconfigure.height)))
+	  
+	  if (window_private->window_type != GDK_WINDOW_CHILD)
 	    {
 	      event->configure.type = GDK_CONFIGURE;
 	      event->configure.window = window;
-	      event->configure.x = xevent->xconfigure.x;
-	      event->configure.y = xevent->xconfigure.y;
 	      event->configure.width = xevent->xconfigure.width;
 	      event->configure.height = xevent->xconfigure.height;
+	      
+	      if (!xevent->xconfigure.x &&
+		  !xevent->xconfigure.y)
+		{
+		  gint tx = 0;
+		  gint ty = 0;
+		  Window child_window = 0;
 
-	      window_private->x = xevent->xconfigure.x;
-	      window_private->y = xevent->xconfigure.y;
+		  if (!XTranslateCoordinates (window_private->xdisplay,
+					      window_private->xwindow,
+					      gdk_root_window,
+					      0, 0,
+					      &tx, &ty,
+					      &child_window))
+		    g_warning ("GdkWindow %ld doesn't share root windows display?",
+			       window_private->xwindow - base_id);
+		  event->configure.x = tx;
+		  event->configure.y = ty;
+		}
+	      else
+		{
+		  event->configure.x = xevent->xconfigure.x;
+		  event->configure.y = xevent->xconfigure.y;
+		}
+	      window_private->x = event->configure.x;
+	      window_private->y = event->configure.y;
 	      window_private->width = xevent->xconfigure.width;
 	      window_private->height = xevent->xconfigure.height;
 	      if (window_private->resize_count > 1)
 		window_private->resize_count -= 1;
-
+	      
 	      return_val = !window_private->destroyed;
 	    }
 	}
       break;
-
+      
     case PropertyNotify:
       /* Print debugging info.
        */
