@@ -1,3 +1,10 @@
+Mon Aug  5 17:20:45 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c: Patch from Soeren Sandmann
+	to improve GtkLabel behavior when it gets
+	a too small allocation. (Always display the
+	initial portion.) (#71742)
+
 Mon Aug  5 17:01:30 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/Makefile.am (LDFLAGS): When overriding LDFLAGS,
