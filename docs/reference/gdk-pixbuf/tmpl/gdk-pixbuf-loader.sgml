@@ -71,7 +71,8 @@ Application-driven progressive image loading.
 
 <!-- ##### STRUCT GdkPixbufLoader ##### -->
 <para>
-
+The <structname>GdkPixbufLoader</structname> struct contains only private
+fields. 
 </para>
 
 
