@@ -128,6 +128,12 @@ struct _GtkCellRendererTextPrivate
 
   gulong focus_out_id;
   PangoLanguage *language;
+
+  gulong populate_popup_id;
+  gulong entry_menu_popdown_timeout;
+  gboolean in_entry_menu;
+
+  GtkWidget *entry;
 };
 
 
@@ -1449,10 +1455,24 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 
   priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (data);
 
+  priv->entry = NULL;
+
   if (priv->focus_out_id > 0)
     {
       g_signal_handler_disconnect (entry, priv->focus_out_id);
       priv->focus_out_id = 0;
+    }
+
+  if (priv->populate_popup_id > 0)
+    {
+      g_signal_handler_disconnect (entry, priv->populate_popup_id);
+      priv->populate_popup_id = 0;
+    }
+
+  if (priv->entry_menu_popdown_timeout)
+    {
+      g_source_remove (priv->entry_menu_popdown_timeout);
+      priv->entry_menu_popdown_timeout = 0;
     }
 
   if (GTK_ENTRY (entry)->editing_canceled)
@@ -1468,10 +1488,74 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 }
 
 static gboolean
+popdown_timeout (gpointer data)
+{
+  GtkCellRendererTextPrivate *priv;
+
+  GDK_THREADS_ENTER ();
+
+  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (data);
+
+  priv->entry_menu_popdown_timeout = 0;
+
+  if (!GTK_WIDGET_HAS_FOCUS (priv->entry))
+    gtk_cell_renderer_text_editing_done (GTK_CELL_EDITABLE (priv->entry), data);
+
+  GDK_THREADS_LEAVE ();
+
+  return FALSE;
+}
+
+static void
+gtk_cell_renderer_text_popup_unmap (GtkMenu *menu,
+                                    gpointer data)
+{
+  GtkCellRendererTextPrivate *priv;
+
+  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (data);
+
+  priv->in_entry_menu = FALSE;
+
+  if (priv->entry_menu_popdown_timeout)
+    return;
+
+  priv->entry_menu_popdown_timeout = g_timeout_add (500, popdown_timeout,
+                                                    data);
+}
+
+static void
+gtk_cell_renderer_text_populate_popup (GtkEntry *entry,
+                                       GtkMenu  *menu,
+                                       gpointer  data)
+{
+  GtkCellRendererTextPrivate *priv;
+
+  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (data);
+
+  if (priv->entry_menu_popdown_timeout)
+    {
+      g_source_remove (priv->entry_menu_popdown_timeout);
+      priv->entry_menu_popdown_timeout = 0;
+    }
+
+  priv->in_entry_menu = TRUE;
+
+  g_signal_connect (menu, "unmap",
+                    G_CALLBACK (gtk_cell_renderer_text_popup_unmap), data);
+}
+
+static gboolean
 gtk_cell_renderer_text_focus_out_event (GtkWidget *entry,
 		                        GdkEvent  *event,
 					gpointer   data)
 {
+  GtkCellRendererTextPrivate *priv;
+
+  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (data);
+
+  if (priv->in_entry_menu)
+    return FALSE;
+
   gtk_cell_renderer_text_editing_done (GTK_CELL_EDITABLE (entry), data);
 
   /* entry needs focus-out-event */
@@ -1487,7 +1571,6 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 				      GdkRectangle         *cell_area,
 				      GtkCellRendererState  flags)
 {
-  GtkWidget *entry;
   GtkCellRendererText *celltext;
   GtkCellRendererTextPrivate *priv;
 
@@ -1498,27 +1581,39 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
   if (celltext->editable == FALSE)
     return NULL;
 
-  entry = g_object_new (GTK_TYPE_ENTRY,
-			"has_frame", FALSE,
-			NULL);
+  priv->entry = g_object_new (GTK_TYPE_ENTRY,
+			      "has_frame", FALSE,
+			      NULL);
 
   if (celltext->text)
-    gtk_entry_set_text (GTK_ENTRY (entry), celltext->text);
-  g_object_set_data_full (G_OBJECT (entry), GTK_CELL_RENDERER_TEXT_PATH, g_strdup (path), g_free);
+    gtk_entry_set_text (GTK_ENTRY (priv->entry), celltext->text);
+  g_object_set_data_full (G_OBJECT (priv->entry), GTK_CELL_RENDERER_TEXT_PATH, g_strdup (path), g_free);
   
-  gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
+  gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
   
-  gtk_widget_show (entry);
-  g_signal_connect (entry,
+
+  priv->in_entry_menu = FALSE;
+  if (priv->entry_menu_popdown_timeout)
+    {
+      g_source_remove (priv->entry_menu_popdown_timeout);
+      priv->entry_menu_popdown_timeout = 0;
+    }
+
+  g_signal_connect (priv->entry,
 		    "editing_done",
 		    G_CALLBACK (gtk_cell_renderer_text_editing_done),
 		    celltext);
-  priv->focus_out_id = g_signal_connect (entry, "focus_out_event",
+  priv->focus_out_id = g_signal_connect (priv->entry, "focus_out_event",
 		         G_CALLBACK (gtk_cell_renderer_text_focus_out_event),
 		         celltext);
+  priv->populate_popup_id =
+    g_signal_connect (priv->entry, "populate_popup",
+                      G_CALLBACK (gtk_cell_renderer_text_populate_popup),
+                      celltext);
+ 
+  gtk_widget_show (priv->entry);
 
-  return GTK_CELL_EDITABLE (entry);
-
+  return GTK_CELL_EDITABLE (priv->entry);
 }
 
 /**
