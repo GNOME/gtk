@@ -1,3 +1,8 @@
+Wed Oct 29 13:29:15 GMT 2003  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgml: further 2.x updates:
+	mirrors,compiling,g_main_context_iteration
+
 Wed Oct 29 02:54:35 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.[ch] (gtk_toolbar_set_drop_highlight_item): Add this

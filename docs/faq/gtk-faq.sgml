@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>October 28th 2003</date>
+  <date>October 29th 2003</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -368,7 +368,7 @@ them).</para>
 
 <!-- ----------------------------------------------------------------- -->
 
-<sect1>
+<sect1 id="faq-Compile">
 <title>What do I need to compile GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>GTK+ is a large package that is dependent on a number of other
@@ -445,7 +445,7 @@ GTK+ Site</ulink>)</simpara>
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>Where can I get GTK+?</title>
+<title>Where can I get GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>The canonical site is <ulink
 url="ftp://ftp.gtk.org/pub/gtk">ftp://ftp.gtk.org/pub/gtk</ulink>.</para>
@@ -463,30 +463,31 @@ url="ftp://ftp.gtk.org/etc/mirrors">ftp://ftp.gtk.org/etc/mirrors
 <ulink url="ftp://ftp.is.co.za/applications/gimp">
 ftp://ftp.is.co.za/applications/gimp</ulink></simpara> 
 </listitem>
+
 <listitem><simpara> Australia -
 <ulink
-url="ftp://ftp.au.gimp.org/pub/gimp">
-ftp://ftp.au.gimp.org/pub/gimp</ulink></simpara> 
+url="ftp://ftp.planetmirror.com/pub/gimp/gtk">
+ftp://ftp.planetmirror.com/pub/gimp/gtk</ulink></simpara> 
 </listitem>
+
 <listitem><simpara> Finland -
-<ulink url="ftp://ftp.funet.fi/pub/sci/graphics/packages/gimp">
-ftp://ftp.funet.fi/pub/sci/graphics/packages/gimp</ulink></simpara> 
+<ulink url="ftp://ftp.funet.fi/pub/sci/graphics/packages/gimp/gtk">
+ftp://ftp.funet.fi/pub/sci/graphics/packages/gimp/gtk</ulink></simpara> 
 </listitem>
+
 <listitem><simpara> Germany -
-<ulink url="ftp://infosoc.uni-koeln.de/pub/ftp.gimp.org">
-ftp://infosoc.uni-koeln.de/pub/ftp.gimp.org"</ulink></simpara> 
+<ulink url="ftp://ftp.gwdg.de/pub/misc/grafik/gimp/gtk">
+ftp://ftp.gwdg.de/pub/misc/grafik/gimp/gtk</ulink></simpara> 
 </listitem>
+
 <listitem><simpara> Japan -
-<ulink url="ftp://SunSITE.sut.ac.jp/pub/archives/packages/gimp">
-ftp://SunSITE.sut.ac.jp/pub/archives/packages/gimp</ulink></simpara> 
+<ulink url="ftp://sunsite.sut.ac.jp/pub/archives/packages/gimp/gtk">
+ftp://sunsite.sut.ac.jp/pub/archives/packages/gimp/gtk</ulink></simpara> 
 </listitem>
+
 <listitem><simpara> UK - 
-<ulink url="ftp://ftp.flirble.org/pub/X/gimp">
-ftp://ftp.flirble.org/pub/X/gimp</ulink></simpara>
-</listitem>
-<listitem><simpara> US -
-<ulink url="ftp://ftp.insync.net/pub/mirrors/ftp.gimp.org">
-ftp://ftp.insync.net/pub/mirrors/ftp.gimp.org</ulink></simpara> 
+<ulink url="http://www.mirror.ac.uk/sites/ftp.gimp.org/pub/gtk/">
+http://www.mirror.ac.uk/sites/ftp.gimp.org/pub/gtk/</ulink></simpara>
 </listitem>
 </itemizedlist>
 </sect1>
@@ -494,21 +495,34 @@ ftp://ftp.insync.net/pub/mirrors/ftp.gimp.org</ulink></simpara>
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>How do I configure/compile GTK+?</title>
+<title>How do I configure/compile GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>Generally, all you will need to do is issue the commands:</para>
+<para>Generally, the minimum you need to do is issue the commands:</para>
 
 <para><literallayout><literal>./configure</literal>
-<literal>make</literal></literallayout></para>
+<literal>make</literal>
+<literal>make install</literal></literallayout></para>
 
-<para>in the gtk+-version/ directory.</para>
+<para>in the GTK+ source directory.</para>
+
+<para>This generally also holds true for each of the packages that GTK+
+depends upon, listed <link linkend="faq-Compile">above</link>.</para>
+
+<para>There are various options that you can pass to the configure script
+in order to change its default settings. The one that you are most likely
+to want to use is the <literal>--prefix</literal>
+argument, which defines where the package is to be install, e.g.</para>
+
+<para>
+<literallayout><literal>./configure --prefix=/usr</literal></literallayout>
+</para>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
 <title>When compiling GTK+ I get an error like: <literal>make:
-file `Makefile' line 456: Syntax error</literal></title>
+file `Makefile' line 456: Syntax error</literal> <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>Make sure that you are using GNU make
 (use <literal>make -v</literal>
@@ -2026,7 +2040,7 @@ do <literal>gtk_grab_remove(my_window)</literal>.</para>
 
 <sect1>
 <title>Why doesn't my widget (e.g. progressbar)
-update?</title>
+update? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>You are probably doing all the changes within a function without
 returning control to <literal>gtk_main()</literal>. This may
@@ -2037,7 +2051,7 @@ drawing queue to be processed using something like:</para>
 
 
 <programlisting role="C">
-while (g_main_iteration(FALSE));
+while (g_main_context_iteration(NULL, FALSE));
 </programlisting>
 
 <para>inside you're function that changes the widget.</para>
