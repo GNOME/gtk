@@ -202,6 +202,8 @@ gdk_window_impl_x11_get_colormap (GdkDrawable *drawable)
                             &window_attributes);
       drawable_impl->colormap =
         gdk_colormap_lookup (window_attributes.colormap);
+      if (drawable_impl->colormap)
+	g_object_ref (drawable_impl->colormap);
     }
   
   return drawable_impl->colormap;

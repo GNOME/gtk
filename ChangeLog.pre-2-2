@@ -1,3 +1,8 @@
+2002-11-13  Christopher James Lahey  <clahey@ximian.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_impl_x11_get_colormap): Ref
+	the colormap returned from gdk_colormap_lookup.
+
 2002-11-13  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdrawable-win32.c (bitblt_wrapper): New
