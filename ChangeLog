@@ -1,3 +1,8 @@
+Mon Mar 31 13:52:13 2003  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkrbtree.c (_gtk_rbtree_reorder): null initialize reorder's
+	members so Purify won't complain.
+
 2003-03-31  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwindow.c: Add a new property, role, corresponding to 

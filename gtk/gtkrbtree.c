@@ -989,7 +989,7 @@ _gtk_rbtree_reorder (GtkRBTree *tree,
 		     gint      *new_order,
 		     gint       length)
 {
-  GtkRBReorder reorder;
+  GtkRBReorder reorder = {0, };
   GArray *array;
   GtkRBNode *node;
   gint i;
