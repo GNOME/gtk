@@ -590,18 +590,18 @@ _gtk_file_system_model_new (GtkFileSystem     *file_system,
 	  
 	  g_signal_connect_object (model->root_folder, "deleted",
 				   G_CALLBACK (root_deleted_callback), model, 0);
-	  g_signal_connect_object (model->root_folder, "files_added",
+	  g_signal_connect_object (model->root_folder, "files-added",
 				   G_CALLBACK (root_files_added_callback), model, 0);
-	  g_signal_connect_object (model->root_folder, "files_changed",
+	  g_signal_connect_object (model->root_folder, "files-changed",
 				   G_CALLBACK (root_files_changed_callback), model, 0);
-	  g_signal_connect_object (model->root_folder, "files_removed",
+	  g_signal_connect_object (model->root_folder, "files-removed",
 				   G_CALLBACK (root_files_removed_callback), model, 0);
 	}
     }
   else
     {
       roots = gtk_file_system_list_roots (file_system);
-      g_signal_connect_object (file_system, "roots_changed",
+      g_signal_connect_object (file_system, "roots-changed",
 			       G_CALLBACK (roots_changed_callback), model, 0);
     }
 
@@ -1200,11 +1200,11 @@ file_model_node_get_children (GtkFileSystemModel *model,
 
 	  g_signal_connect (node->folder, "deleted",
 			    G_CALLBACK (deleted_callback), node);
-	  g_signal_connect (node->folder, "files_added",
+	  g_signal_connect (node->folder, "files-added",
 			    G_CALLBACK (files_added_callback), node);
-	  g_signal_connect (node->folder, "files_changed",
+	  g_signal_connect (node->folder, "files-changed",
 			    G_CALLBACK (files_changed_callback), node);
-	  g_signal_connect (node->folder, "files_removed",
+	  g_signal_connect (node->folder, "files-removed",
 			    G_CALLBACK (files_removed_callback), node);
 
 	  g_object_set_data (G_OBJECT (node->folder), "model-node", node);

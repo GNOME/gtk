@@ -307,7 +307,7 @@ gtk_file_system_base_init (gpointer g_class)
     {
       GType iface_type = G_TYPE_FROM_INTERFACE (g_class);
 
-      g_signal_new ("roots_changed",
+      g_signal_new ("roots-changed",
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkFileSystemIface, roots_changed),
@@ -553,7 +553,7 @@ gtk_file_folder_base_init (gpointer g_class)
 		    NULL, NULL,
 		    g_cclosure_marshal_VOID__VOID,
 		    G_TYPE_NONE, 0);
-      g_signal_new ("files_added",
+      g_signal_new ("files-added",
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkFileFolderIface, files_added),
@@ -561,7 +561,7 @@ gtk_file_folder_base_init (gpointer g_class)
 		    g_cclosure_marshal_VOID__POINTER,
 		    G_TYPE_NONE, 1,
 		    G_TYPE_POINTER);
-      g_signal_new ("files_changed",
+      g_signal_new ("files-changed",
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkFileFolderIface, files_changed),
@@ -569,7 +569,7 @@ gtk_file_folder_base_init (gpointer g_class)
 		    g_cclosure_marshal_VOID__POINTER,
 		    G_TYPE_NONE, 1,
 		    G_TYPE_POINTER);
-      g_signal_new ("files_removed",
+      g_signal_new ("files-removed",
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkFileFolderIface, files_removed),

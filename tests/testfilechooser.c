@@ -63,7 +63,7 @@ main (int argc, char **argv)
   
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
 			 "action", GTK_FILE_CHOOSER_ACTION_OPEN,
-			 "file_system", file_system,
+			 "file-system", file_system,
 			 "title", "Select a file",
 			 NULL);
 			 
@@ -73,9 +73,9 @@ main (int argc, char **argv)
 			  NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   
-  g_signal_connect (dialog, "selection_changed",
+  g_signal_connect (dialog, "selection-changed",
 		    G_CALLBACK (print_selected), NULL);
-  g_signal_connect (dialog, "current_folder_changed",
+  g_signal_connect (dialog, "current-folder-changed",
 		    G_CALLBACK (print_current_folder), NULL);
   g_signal_connect (dialog, "response",
 		    G_CALLBACK (response_cb), NULL);

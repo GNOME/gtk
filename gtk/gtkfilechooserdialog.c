@@ -131,7 +131,7 @@ gtk_file_chooser_dialog_constructor (GType                  type,
 
   if (priv->file_system)
     priv->widget = g_object_new (GTK_TYPE_FILE_CHOOSER_WIDGET,
-				 "file_system", priv->file_system,
+				 "file-system", priv->file_system,
 				 NULL);
   else
     priv->widget = g_object_new (GTK_TYPE_FILE_CHOOSER_WIDGET, NULL);

@@ -27,6 +27,8 @@
 static void           delegate_set_current_folder     (GtkFileChooser    *chooser,
 						       const GtkFilePath *path);
 static GtkFilePath *  delegate_get_current_folder     (GtkFileChooser    *chooser);
+static void           delegate_set_current_name       (GtkFileChooser    *chooser,
+						       const gchar       *name);
 static void           delegate_select_path            (GtkFileChooser    *chooser,
 						       const GtkFilePath *path);
 static void           delegate_unselect_path          (GtkFileChooser    *chooser,
@@ -61,37 +63,37 @@ _gtk_file_chooser_install_properties (GObjectClass *klass)
 							  G_PARAM_READWRITE));
   g_object_class_install_property (klass,
 				   GTK_FILE_CHOOSER_PROP_FILE_SYSTEM,
-				   g_param_spec_override ("file_system",
+				   g_param_spec_override ("file-system",
 							  GTK_TYPE_FILE_SYSTEM,
 							  G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (klass,
 				   GTK_FILE_CHOOSER_PROP_FOLDER_MODE,
-				   g_param_spec_override ("folder_mode",
+				   g_param_spec_override ("folder-mode",
 							  G_TYPE_BOOLEAN,
 							  G_PARAM_READWRITE));
   g_object_class_install_property (klass,
 				   GTK_FILE_CHOOSER_PROP_LOCAL_ONLY,
-				   g_param_spec_override ("local_only",
+				   g_param_spec_override ("local-only",
 							  G_TYPE_BOOLEAN,
 							  G_PARAM_READWRITE));
   g_object_class_install_property (klass,
 				   GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET,
-				   g_param_spec_override ("preview_widget",
+				   g_param_spec_override ("preview-widget",
 							  GTK_TYPE_WIDGET,
 							  G_PARAM_READWRITE));
   g_object_class_install_property (klass,
 				   GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE,
-				   g_param_spec_override ("preview_widget_active",
+				   g_param_spec_override ("preview-widget-active",
 							  G_TYPE_BOOLEAN,
 							  G_PARAM_READWRITE));
   g_object_class_install_property (klass,
 				   GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE,
-				   g_param_spec_override ("select_multiple",
+				   g_param_spec_override ("select-multiple",
 							  G_TYPE_BOOLEAN,
 							  G_PARAM_READWRITE));
   g_object_class_install_property (klass,
 				   GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN,
-				   g_param_spec_override ("show_hidden",
+				   g_param_spec_override ("show-hidden",
 							  G_TYPE_BOOLEAN,
 							  G_PARAM_READWRITE));
 }
@@ -112,6 +114,7 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
 {
   iface->set_current_folder = delegate_set_current_folder;
   iface->get_current_folder = delegate_get_current_folder;
+  iface->set_current_name = delegate_set_current_name;
   iface->select_path = delegate_select_path;
   iface->unselect_path = delegate_unselect_path;
   iface->select_all = delegate_select_all;
@@ -140,9 +143,9 @@ _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
   
   g_object_set_data (G_OBJECT (receiver), "gtk-file-chooser-delegate", delegate);
 
-  g_signal_connect (delegate, "current_folder_changed",
+  g_signal_connect (delegate, "current-folder-changed",
 		    G_CALLBACK (delegate_current_folder_changed), receiver);
-  g_signal_connect (delegate, "selection_changed",
+  g_signal_connect (delegate, "selection-changed",
 		    G_CALLBACK (delegate_selection_changed), receiver);
 }
 
@@ -194,25 +197,32 @@ static void
 delegate_set_current_folder (GtkFileChooser    *chooser,
 			     const GtkFilePath *path)
 {
-  _gtk_file_chooser_set_current_folder (chooser, path);
+  _gtk_file_chooser_set_current_folder_path (chooser, path);
 }
 
 static GtkFilePath *
 delegate_get_current_folder (GtkFileChooser *chooser)
 {
-  return _gtk_file_chooser_get_current_folder (get_delegate (chooser));
+  return _gtk_file_chooser_get_current_folder_path (get_delegate (chooser));
+}
+
+static void
+delegate_set_current_name (GtkFileChooser *chooser,
+			   const gchar    *name)
+{
+  gtk_file_chooser_set_current_name (get_delegate (chooser), name);
 }
 
 static void
 delegate_selection_changed (GtkFileChooser *chooser,
 			    gpointer        data)
 {
-  g_signal_emit_by_name (data, "selection_changed", 0);
+  g_signal_emit_by_name (data, "selection-changed", 0);
 }
 
 static void
 delegate_current_folder_changed (GtkFileChooser *chooser,
 				 gpointer        data)
 {
-  g_signal_emit_by_name (data, "current_folder_changed", 0);
+  g_signal_emit_by_name (data, "current-folder-changed", 0);
 }

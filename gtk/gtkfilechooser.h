@@ -56,6 +56,8 @@ gboolean             gtk_file_chooser_get_select_multiple (GtkFileChooser       
 
 /* Filename manipulation
  */
+void    gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
+					    const gchar    *name);
 gchar * gtk_file_chooser_get_filename      (GtkFileChooser *chooser);
 void    gtk_file_chooser_set_filename      (GtkFileChooser *chooser,
 					    const char     *filename);
