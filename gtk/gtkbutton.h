@@ -44,9 +44,8 @@ extern "C" {
 #define GTK_IS_BUTTON_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BUTTON))
 #define GTK_BUTTON_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_BUTTON, GtkButtonClass))
 
-
-typedef struct _GtkButton       GtkButton;
-typedef struct _GtkButtonClass  GtkButtonClass;
+typedef struct _GtkButton        GtkButton;
+typedef struct _GtkButtonClass   GtkButtonClass;
 
 struct _GtkButton
 {
@@ -114,6 +113,12 @@ gboolean              gtk_button_get_use_stock      (GtkButton      *button);
 void                  gtk_button_set_focus_on_click (GtkButton      *button,
 						     gboolean        focus_on_click);
 gboolean              gtk_button_get_focus_on_click (GtkButton      *button);
+void                  gtk_button_set_alignment      (GtkButton      *button,
+						     gfloat          xalign,
+						     gfloat          yalign);
+void                  gtk_button_get_alignment      (GtkButton      *button,
+						     gfloat         *xalign,
+						     gfloat         *yalign);
 
 
 void _gtk_button_set_depressed             (GtkButton     *button,
