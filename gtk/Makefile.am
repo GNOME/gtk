@@ -123,6 +123,7 @@ gtk_public_h_sources =          \
 	gtkentry.h		\
 	gtkenums.h		\
 	gtkeventbox.h		\
+	gtkexpander.h		\
 	gtkfilesel.h		\
 	gtkfixed.h		\
 	gtkfontsel.h		\
@@ -293,6 +294,7 @@ gtk_c_sources =                 \
 	gtkeditable.c           \
 	gtkentry.c		\
 	gtkeventbox.c		\
+	gtkexpander.c		\
 	gtkfilesel.c		\
 	gtkfixed.c		\
 	gtkfontsel.c            \

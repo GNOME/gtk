@@ -1,3 +1,14 @@
+2003-06-30  Mark McLoughlin  <mark@skynet.ie>
+
+	Add GtkExpander. See discussion in bug #60553.
+
+	* gtk/gtkexpander.[ch]: add.
+	
+	* gtk/Makefile.am: build gtk-expander.[ch].
+	
+	* docs/widget_geometry.txt: add info on the layout
+	of GtkExpander.
+
 Mon Jun 30 01:20:19 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtkradiotoolbutton.c

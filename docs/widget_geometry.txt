@@ -592,3 +592,145 @@ D: INNER_BORDER + (HAVE_FOCUS ? 0 : GtkWidget::focus-line-width
 
 Note - effect here for !interior_focus is that bevel moves in
 by focus-line-width when entry gains focus
+
+===============
+
+GtkExpander
+
+===============
+
+ Style properties
+  GtkWidget::focus_line_width
+  GtkWidget::focus_padding
+  GtkExpander::expander_size
+  GtkExpander::expander_spacing
+
+ Properties
+  GtkContainer::border_width
+  GtkExpander::spacing
+
+if (GTK_WIDGET_VISIBLE (bin->child) && interior_focus)
+
++-------------------------------------+
+|                  A                  |
+| +---------+-----------------------+ |
+| |    C    |##########E############| |
+| | +-----+ |#+-------------------+#| |
+| | |     | |#|        F          |#| |
+| | |     | |#| +---------------+ |#| |
+|A|C| BxB |C|E|F| label_widget  |F|E|A|
+| | |     | |#| +---------------+ |#| |
+| | |     | |#|        F          |#| |
+| | +-----+ |#+-------------------+#| |
+| |    C    |##########E############| |
+| +---------+-----------------------+ |
+| |                D                | |
+| +---------------------------------+ |
+| |                                 | |
+| |                                 | |
+| |                                 | |
+|A|             bin->child          |A|
+| |                                 | |
+| |                                 | |
+| |                                 | |
+| +---------------------------------+ |
+|                  A                  |
++-------------------------------------+
+
+ A: GtkContainer::border_width
+ B: GtkExpander::expander_size
+ C: GtkExpander::expander_spacing
+ D: GtkExpander::spacing
+ E: GtkWidget::focus_line_width
+ F: GtkWidget::focus_padding
+
+if (GTK_WIDGET_VISIBLE (bin->child) && !interior_focus)
+
++-------------------------------------------+
+|                    A                      |
+| +---------------------------------------+ |
+| |##################E####################| |
+| |#+-----------------------------------+#| |
+| |#|                F                  |#| |
+| |#| +---------+---------------------+ |#| |
+| |#| |    C    |                     | |#| |
+| |#| | +-----+ |                     | |#| |
+|A|E|F|C| BxB |C|    label_widget     |F|E|A|
+| |#| | +-----+ |                     | |#| |
+| |#| |    C    |                     | |#| |
+| |#| +---------+---------------------+ |#| |
+| |#|                F                  |#| |
+| |#+-----------------------------------+#| |
+| |##################E####################| |
+| +---------------------------------------+ |
+| |                  D                    | |
+| +---------------------------------------+ |
+| |                                       | |
+| |                                       | |
+| |                                       | |
+|A|               bin->child              |A|
+| |                                       | |
+| |                                       | |
+| |                                       | |
+| +---------------------------------------+ |
+|                     A                     |
++-------------------------------------------+
+
+ A: GtkContainer::border_width
+ B: GtkExpander::expander_size
+ C: GtkExpander::expander_spacing
+ D: GtkExpander::spacing
+ E: GtkWidget::focus_line_width
+ F: GtkWidget::focus_padding
+
+if (!GTK_WIDGET_VISIBLE (bin->child) && interior_focus)
+
++-------------------------------------+
+|                  A                  |
+| +---------+-----------------------+ |
+| |    C    |##########E############| |
+| | +-----+ |#+-------------------+#| |
+| | |     | |#|        F          |#| |
+| | |     | |#| +---------------+ |#| |
+|A|C| BxB |C|E|F| label_widget  |F|E|A|
+| | |     | |#| +---------------+ |#| |
+| | |     | |#|        F          |#| |
+| | +-----+ |#+-------------------+#| |
+| |    C    |##########E############| |
+| +---------+-----------------------+ |
+|                  A                  |
++-------------------------------------+
+
+ A: GtkContainer::border_width
+ B: GtkExpander::expander_size
+ C: GtkExpander::expander_spacing
+ E: GtkWidget::focus_line_width
+ F: GtkWidget::focus_padding
+
+if (!GTK_WIDGET_VISIBLE (bin->child) && !interior_focus)
+
++-------------------------------------------+
+|                    A                      |
+| +---------------------------------------+ |
+| |##################E####################| |
+| |#+-----------------------------------+#| |
+| |#|                F                  |#| |
+| |#| +---------+---------------------+ |#| |
+| |#| |    C    |                     | |#| |
+| |#| | +-----+ |                     | |#| |
+|A|E|F|C| BxB |C|     label_widget    |F|E|A|
+| |#| | +-----+ |                     | |#| |
+| |#| |    C    |                     | |#| |
+| |#| +---------+---------------------+ |#| |
+| |#|                F                  |#| |
+| |#+-----------------------------------+#| |
+| |##################E####################| |
+| +---------------------------------------+ |
+|                    A                      |
++-------------------------------------------+
+
+ A: GtkContainer::border_width
+ B: GtkExpander::expander_size
+ C: GtkExpander::expander_spacing
+ E: GtkWidget::focus_line_width
+ F: GtkWidget::focus_padding
