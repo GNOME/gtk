@@ -757,7 +757,6 @@ EXPORTS
 	gtk_file_info_free
 	gtk_file_info_get_display_key
 	gtk_file_info_get_display_name
-;	gtk_file_info_get_icon_type
 	gtk_file_info_get_is_folder
 	gtk_file_info_get_is_hidden
 	gtk_file_info_get_mime_type
@@ -765,9 +764,7 @@ EXPORTS
 	gtk_file_info_get_size
 	gtk_file_info_get_type
 	gtk_file_info_new
-;	gtk_file_info_render_icon
 	gtk_file_info_set_display_name
-;	gtk_file_info_set_icon_type
 	gtk_file_info_set_is_folder
 	gtk_file_info_set_is_hidden
 	gtk_file_info_set_mime_type
@@ -797,6 +794,7 @@ EXPORTS
 	gtk_file_system_list_bookmarks
 	gtk_file_system_list_volumes
 	gtk_file_system_make_path
+	gtk_file_system_module_get_type
 	gtk_file_system_parse
 	gtk_file_system_path_to_filename
 	gtk_file_system_path_to_uri
@@ -1386,8 +1384,8 @@ EXPORTS
 	gtk_paned_pack1
 	gtk_paned_pack2
 	gtk_paned_set_position
-	gtk_path_bar_get_type
 	gtk_parse_args
+	gtk_path_bar_get_type
 	gtk_path_priority_type_get_type
 	gtk_path_type_get_type
 	gtk_pixmap_get
@@ -2430,6 +2428,7 @@ EXPORTS
 	gtk_ui_manager_get_ui
 	gtk_ui_manager_get_widget
 	gtk_ui_manager_insert_action_group
+	gtk_ui_manager_item_type_get_type
 	gtk_ui_manager_new
 	gtk_ui_manager_new_merge_id
 	gtk_ui_manager_remove_action_group

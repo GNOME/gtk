@@ -1,3 +1,9 @@
+2004-03-08  Tor Lillqvist  <tml@iki.fi>
+
+	* README.win32: Update.
+
+	* gtk/gtk.def: Small update. Thanks to J. Ali Harlow. Re-sorted.
+
 Mon Mar  8 01:06:17 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/testentrycompletion.c: Test dynamic addition/removal. 

@@ -13,21 +13,35 @@ surprisingly well for the GIMP.)
 Building GTK+ on Win32
 ======================
 
-There are two ways to build GTK+ for win32:
+There are two ways to build GTK+ for win32.
 
 1) Use the autoconf-generated configure script, and the resulting
 Makefiles (which use libtool and gcc to do the compilation). I use
 this myself, but it might be hell to setup correctly. 
 
 Personally I run configure with:
-CC='gcc -mpentium -fnative-struct' CPPFLAGS='-I/target/include' CFLAGS=-O2 LDFLAGS='-L/target/lib' ./configure --disable-static --prefix=/target --with-gdktarget=win32 --with-wintab=/src/wtkit126 --with-ie55=/src/workshop/ie55_lib --host=i386-pc-mingw32 --enable-maintainer-mode
+CC='gcc -mpentium -fnative-struct' CPPFLAGS='-I/target/include' CFLAGS=-O2 LDFLAGS='-L/target/lib' ./configure --disable-static --prefix=/target --with-gdktarget=win32 --with-wintab=/src/wtkit126 --with-ie55=/src/workshop/ie55_lib --host=i386-pc-mingw32
 
-It might well be that in order for this to work, you will have to get
-a bleeding-edge version of libtool for Win32, run libtoolize yourself,
-and then run autoconf to generate the configure script.
+Then, in theory, you can just say "make", like on Unix. In reality,
+there are a few hickups that require manual intervention, and it's
+best to run make separately in each subdirectory. At least for me,
+when libtool creates an .exe file, it puts the real .exe in the .libs
+directory, and leaves a wrapper .exe in the work directory. For some
+reason that wrapper doesn't work for me, it doesn't do anything. So, I
+always do a "cp .libs/*.exe ." after running a make that has produced
+some exes.
+
+Another issue is with the gdk-pixbuf.loaders file. It's probably best
+to do a "make install" in the gdk-pixbuf directory, and let that set
+up a mostly correct gdk-pixbuf.loaders in the target directory. Then
+copy that back to the source directory. It's needed in gtk/stock-icons
+where make runs gdk-pixbuf-csource.
+
+Etc, you get the idea. It can be a bit of a pain.
 
 2) Use the Microsoft compiler, cl and Make, nmake. Say nmake -f
-makefile.msc in gdk and gtk.
+makefile.msc in gdk and gtk. Be prepared to manually edit various
+makefile.msc files, and the makefile snippets in build/win32.
 
 Alternative 1 also generates Microsoft import libraries (.lib), if you
 have lib.exe available. It might also work for cross-compilation from
