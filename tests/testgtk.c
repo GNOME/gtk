@@ -5057,6 +5057,19 @@ list_clear (GtkWidget *widget,
   gtk_list_clear_items (GTK_LIST (list), 0, -1);
 }
 
+static gchar *selection_mode_items[] =
+{
+  "Single",
+  "Browse",
+  "Multiple"
+};
+
+static const GtkSelectionMode selection_modes[] = {
+  GTK_SELECTION_SINGLE,
+  GTK_SELECTION_BROWSE,
+  GTK_SELECTION_MULTIPLE
+};
+
 static GtkWidget *list_omenu;
 
 static void 
@@ -5072,7 +5085,7 @@ list_toggle_sel_mode (GtkWidget *widget, gpointer data)
 
   i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
 
-  gtk_list_set_selection_mode (list, (GtkSelectionMode) i);
+  gtk_list_set_selection_mode (list, selection_modes[i]);
 }
 
 static void
@@ -5080,13 +5093,6 @@ create_list (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
 
-  static gchar *items[] =
-  {
-    "Single",
-    "Browse",
-    "Multiple"
-  };
-  
   if (!window)
     {
       GtkWidget *cbox;
@@ -5185,7 +5191,7 @@ create_list (GtkWidget *widget)
       label = gtk_label_new ("Selection Mode :");
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
-      list_omenu = build_option_menu (items, 3, 3, 
+      list_omenu = build_option_menu (selection_mode_items, 3, 3, 
 				      list_toggle_sel_mode,
 				      list);
       gtk_box_pack_start (GTK_BOX (hbox), list_omenu, FALSE, TRUE, 0);
@@ -5542,7 +5548,7 @@ clist_toggle_sel_mode (GtkWidget *widget, gpointer data)
 
   i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
 
-  gtk_clist_set_selection_mode (clist, (GtkSelectionMode) i);
+  gtk_clist_set_selection_mode (clist, selection_modes[i]);
 }
 
 static void 
@@ -5574,13 +5580,6 @@ create_clist (GtkWidget *widget)
     "auto resize", "not resizeable", "max width 100", "min width 50",
     "hide column", "Title 5", "Title 6", "Title 7",
     "Title 8",  "Title 9",  "Title 10", "Title 11"
-  };
-
-  static gchar *items[] =
-  {
-    "Single",
-    "Browse",
-    "Multiple",
   };
 
   char text[TESTGTK_CLIST_COLUMNS][50];
@@ -5696,7 +5695,7 @@ create_clist (GtkWidget *widget)
       label = gtk_label_new ("Selection Mode :");
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
-      clist_omenu = build_option_menu (items, 3, 3, 
+      clist_omenu = build_option_menu (selection_mode_items, 3, 3, 
 				       clist_toggle_sel_mode,
 				       clist);
       gtk_box_pack_start (GTK_BOX (hbox), clist_omenu, FALSE, TRUE, 0);
@@ -6250,7 +6249,7 @@ ctree_toggle_sel_mode (GtkWidget *widget, gpointer data)
 
   i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
 
-  gtk_clist_set_selection_mode (GTK_CLIST (ctree), (GtkSelectionMode) i);
+  gtk_clist_set_selection_mode (GTK_CLIST (ctree), selection_modes[i]);
   after_press (ctree, NULL);
 }
     
@@ -6442,13 +6441,6 @@ void create_ctree (GtkWidget *widget)
     "Right"
   };
   
-  static gchar *items4[] =
-  {
-    "Single",
-    "Browse",
-    "Multiple",
-  };
-
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -6661,7 +6653,7 @@ void create_ctree (GtkWidget *widget)
       gtk_tooltips_set_tip (tooltips, omenu3, "The tree's justification.",
 			    NULL);
 
-      omenu4 = build_option_menu (items4, 3, 3, 
+      omenu4 = build_option_menu (selection_mode_items, 3, 3, 
 				  ctree_toggle_sel_mode, ctree);
       gtk_box_pack_start (GTK_BOX (hbox), omenu4, FALSE, TRUE, 0);
       gtk_tooltips_set_tip (tooltips, omenu4, "The list's selection mode.",
