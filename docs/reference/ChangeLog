@@ -1,3 +1,12 @@
+Sat Feb  7 00:38:23 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add GtkAccelMap, gtk_accel_map_get,
+	and a bunch of standard and private accel map symbols.
+
+Sat Feb  7 00:38:03 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk.types: Add gtk_accel_map_get_type.
+
 Sun Feb  1 00:37:44 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkobject.sgml: Remove misleading documentation for 

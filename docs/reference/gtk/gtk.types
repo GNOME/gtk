@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 
 gtk_accel_group_get_type
+gtk_accel_map_get_type
 gtk_accel_label_get_type
 gtk_accessible_get_type
 gtk_action_get_type

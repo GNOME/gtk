@@ -21,6 +21,7 @@
 
 #include "gtkaccelmap.h"
 
+#include "gtkmarshalers.h"
 #include "gtkwindow.h"  /* in lack of GtkAcceleratable */
 
 #include <string.h>
@@ -36,6 +37,16 @@
 
 
 /* --- structures --- */
+struct _GtkAccelMap
+{
+  GObject parent_instance;
+};
+
+struct _GtkAccelMapClass
+{
+  GObjectClass parent_class;
+};
+
 typedef struct {
   const gchar *accel_path;
   guint        accel_key;
@@ -47,11 +58,21 @@ typedef struct {
   GSList      *groups;
 } AccelEntry;
 
+/* --- signals --- */
+enum {
+  CHANGED,
+  LAST_SIGNAL
+};
 
 /* --- variables --- */
-static GHashTable *accel_entry_ht = NULL;	/* accel_path -> AccelEntry */
-static GSList     *accel_filters = NULL;
-static GHookList  *change_hooks = NULL;
+
+static GHashTable  *accel_entry_ht = NULL;	/* accel_path -> AccelEntry */
+static GSList      *accel_filters = NULL;
+static gulong	    accel_map_signals[LAST_SIGNAL] = { 0, };
+static GtkAccelMap *accel_map;
+
+/* --- prototypes --- */
+static void do_accel_map_changed (AccelEntry *entry);
 
 /* --- functions --- */
 static guint
@@ -163,6 +184,8 @@ gtk_accel_map_add_entry (const gchar    *accel_path,
       entry->changed = FALSE;
       entry->lock_count = 0;
       g_hash_table_insert (accel_entry_ht, entry, entry);
+
+      do_accel_map_changed (entry);
     }
 }
 
@@ -242,6 +265,8 @@ internal_change_entry (const gchar    *accel_path,
 	  entry->accel_key = accel_key;
 	  entry->accel_mods = accel_mods;
 	  entry->changed = TRUE;
+
+	  do_accel_map_changed (entry);
 	}
       return TRUE;
     }
@@ -268,6 +293,8 @@ internal_change_entry (const gchar    *accel_path,
 	  entry->accel_key = accel_key;
 	  entry->accel_mods = accel_mods;
 	  entry->changed = TRUE;
+
+	  do_accel_map_changed (entry);
 	}
       return TRUE;
     }
@@ -379,6 +406,8 @@ internal_change_entry (const gchar    *accel_path,
       /* unref accel groups */
       for (slist = group_list; slist; slist = slist->next)
 	g_object_unref (slist->data);
+
+      do_accel_map_changed (entry);
     }
   g_slist_free (replace_list);
   g_slist_free (group_list);
@@ -900,3 +929,69 @@ gtk_accel_map_unlock_path (const gchar *accel_path)
   entry->lock_count -= 1;  
 }
 
+G_DEFINE_TYPE (GtkAccelMap, gtk_accel_map, G_TYPE_OBJECT);
+
+static void
+gtk_accel_map_class_init (GtkAccelMapClass *accel_map_class)
+{
+  /**
+   * GtkAccelMap::changed:
+   * @object: the global accel map object
+   * @accel_path: the path of the accelerator that changed
+   * @accel_key: the key value for the new accelerator
+   * @accel_mods: the modifier mask for the new accelerator
+   *
+   * Notifies of a change in the global accelerator map.
+   * The path is also used as the detail for the signal,
+   * so it is possible to connect to
+   * changed::<replaceable>accel_path</replaceable>.
+   *
+   * Since: 2.4
+   */
+  accel_map_signals[CHANGED] = g_signal_new ("changed",
+					     G_TYPE_FROM_CLASS (accel_map_class),
+					     G_SIGNAL_DETAILED|G_SIGNAL_RUN_LAST,
+					     0,
+					     NULL, NULL,
+					     _gtk_marshal_VOID__STRING_UINT_FLAGS,
+					     G_TYPE_NONE, 3,
+					     G_TYPE_STRING, G_TYPE_UINT, GDK_TYPE_MODIFIER_TYPE);
+}
+
+static void
+gtk_accel_map_init (GtkAccelMap *accel_map)
+{
+}
+
+/**
+ * gtk_accel_map_get:
+ * 
+ * Gets the singleton global #GtkAccelMap object. This object
+ * is useful only for notification of changes to the accelerator
+ * map via the ::changed signal; it isn't a parameter to the
+ * other accelerator map functions.
+ * 
+ * Return value: the global #GtkAccelMap object
+ *
+ * Since: 2.4
+ **/
+GtkAccelMap *
+gtk_accel_map_get (void)
+{
+  if (!accel_map)
+    accel_map = g_object_new (GTK_TYPE_ACCEL_MAP, NULL);
+
+  return accel_map;
+}
+
+static void
+do_accel_map_changed (AccelEntry *entry)
+{
+  if (accel_map)
+    g_signal_emit (accel_map,
+		   accel_map_signals[CHANGED],
+		   g_quark_from_string (entry->accel_path),
+		   entry->accel_path,
+		   entry->accel_key,
+		   entry->accel_mods);
+}

@@ -1,3 +1,12 @@
+Sat Feb  7 00:06:44 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkaccelmap.[hc]: Add change notification for GtkAccelMap,
+	by on-demand instantiating a singleton object with a "changed" 
+	signal. 
+
+	* gtk/gtkmarshalers.list (VOID:STRING,UINT,FLAGS): Add marshaller
+	for GtkAccelMap::changed.
+
 Fri Feb  6 23:08:29 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextbtree.c (_gtk_text_btree_check): 

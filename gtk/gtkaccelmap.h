@@ -24,6 +24,16 @@
 
 G_BEGIN_DECLS
 
+/* --- global GtkAccelMap object --- */
+#define GTK_TYPE_ACCEL_MAP                (gtk_accel_map_get_type ())
+#define GTK_ACCEL_MAP(accel_map)	  (G_TYPE_CHECK_INSTANCE_CAST ((accel_map), GTK_TYPE_ACCEL_MAP, GtkAccelMap))
+#define GTK_ACCEL_MAP_CLASS(klass)	  (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ACCEL_MAP, GtkAccelMapClass))
+#define GTK_IS_ACCEL_MAP(accel_map)	  (G_TYPE_CHECK_INSTANCE_TYPE ((accel_map), GTK_TYPE_ACCEL_MAP))
+#define GTK_IS_ACCEL_MAP_CLASS(klass)	  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ACCEL_MAP))
+#define GTK_ACCEL_MAP_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ACCEL_MAP, GtkAccelMapClass))
+
+typedef struct _GtkAccelMap      GtkAccelMap;
+typedef struct _GtkAccelMapClass GtkAccelMapClass;
 
 /* --- notifier --- */
 typedef void (*GtkAccelMapForeach)		(gpointer	 data,
@@ -58,6 +68,10 @@ void       gtk_accel_map_unlock_path    (const gchar            *accel_path);
 void	gtk_accel_map_add_filter	 (const gchar		*filter_pattern);
 void	gtk_accel_map_foreach_unfiltered (gpointer		 data,
 					  GtkAccelMapForeach	 foreach_func);
+
+/* --- notification --- */
+GType        gtk_accel_map_get_type (void);
+GtkAccelMap *gtk_accel_map_get      (void);
 
 
 /* --- internal API --- */
