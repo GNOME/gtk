@@ -1273,10 +1273,10 @@ gdk_pixbuf_real_save_to_callback (GdkPixbuf         *pixbuf,
  *   if (gdk_pixbuf_format_is_writable (data))
  *     *list = g_slist_prepend (*list, data);
  * }
- *
+ * <!-- -->
  * GSList *formats = gdk_pixbuf_get_formats (<!-- -->);
  * GSList *writable_formats = NULL;
- * g_slist_foreach (formats, add_if_writable, &writable_formats);
+ * g_slist_foreach (formats, add_if_writable, &amp;writable_formats);
  * g_slist_free (formats);
  * </programlisting></informalexample>
  *
