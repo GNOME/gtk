@@ -1,3 +1,8 @@
+Thu Mar 11 10:28:30 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilechooserembed.c (delegate_initial_focus): Remove
+	stray 'return' statement. (#136855, David L. Cooper II)
+
 2004-03-11  Mark McLoughlin  <mark@skynet.ie>
 
 	* gtk/gtkstyle.c: (gtk_default_draw_expander): Use the PRELIGHT

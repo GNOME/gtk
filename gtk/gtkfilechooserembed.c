@@ -88,7 +88,7 @@ delegate_should_respond (GtkFileChooserEmbed *chooser_embed)
 static void
 delegate_initial_focus (GtkFileChooserEmbed *chooser_embed)
 {
-  return _gtk_file_chooser_embed_initial_focus (get_delegate (chooser_embed));
+  _gtk_file_chooser_embed_initial_focus (get_delegate (chooser_embed));
 }
 
 static void
