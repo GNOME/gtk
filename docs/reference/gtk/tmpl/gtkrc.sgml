@@ -73,7 +73,7 @@ outermost to innermost. The difference is that in
 the widget path, the name assigned by
 gtk_widget_set_name() is used
 if present, otherwise the class name of the widget, while
-for the widget path, the class name is always used.
+for the class path, the class name is always used.
 </para>
 <para>
 So, if you have a #GtkEntry named
