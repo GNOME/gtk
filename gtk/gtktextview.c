@@ -7285,6 +7285,7 @@ text_view_child_new_anchored (GtkWidget          *child,
 
   vc = g_new (GtkTextViewChild, 1);
 
+  vc->type = GTK_TEXT_WINDOW_PRIVATE;
   vc->widget = child;
   vc->anchor = anchor;
 

@@ -121,7 +121,8 @@ static GList *gtk_tree_view_column_cell_next                   (GtkTreeViewColum
 								GList                  *current);
 static GList *gtk_tree_view_column_cell_prev                   (GtkTreeViewColumn      *tree_column,
 								GList                  *current);
-
+static void gtk_tree_view_column_clear_attributes_by_info      (GtkTreeViewColumn      *tree_column,
+					                        GtkTreeViewColumnCellInfo *info);
 
 static GtkObjectClass *parent_class = NULL;
 static guint tree_column_signals[LAST_SIGNAL] = { 0 };
@@ -346,7 +347,7 @@ gtk_tree_view_column_finalize (GObject *object)
 	  info->destroy = NULL;
 	  d (info->func_data);
 	}
-      gtk_tree_view_column_clear_attributes (tree_column, info->cell);
+      gtk_tree_view_column_clear_attributes_by_info (tree_column, info);
       g_object_unref (G_OBJECT (info->cell));
       g_free (info);
     }
@@ -1452,11 +1453,20 @@ gtk_tree_view_column_clear_attributes (GtkTreeViewColumn *tree_column,
 				       GtkCellRenderer   *cell_renderer)
 {
   GtkTreeViewColumnCellInfo *info;
-  GSList *list;
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell_renderer));
+
   info = gtk_tree_view_column_get_cell_info (tree_column, cell_renderer);
+
+  gtk_tree_view_column_clear_attributes_by_info (tree_column, info);
+}
+
+static void 
+gtk_tree_view_column_clear_attributes_by_info (GtkTreeViewColumn *tree_column,
+					       GtkTreeViewColumnCellInfo *info)
+{
+  GSList *list;
 
   list = info->attributes;
 
@@ -2285,9 +2295,9 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
 /**
  * gtk_tree_view_column_cell_get_size:
  * @tree_column: A #GtkTreeViewColumn.
- * @cell_area: The area a the column will be allocated, or %NULL
- * @x_offset: location to return x offset of cell relative to @cell_area, or %NULL
- * @y_offset: location to return y offset of cell relative to @cell_area, or %NULL
+ * @cell_area: The area a cell in the column will be allocated, or %NULL
+ * @x_offset: location to return x offset of a cell relative to @cell_area, or %NULL
+ * @y_offset: location to return y offset of a cell relative to @cell_area, or %NULL
  * @width: location to return width needed to render a cell, or %NULL
  * @height: location to return height needed to render a cell, or %NULL
  * 

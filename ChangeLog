@@ -1,3 +1,15 @@
+2002-06-07  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeviewcolumn.c
+	(gtk_tree_view_column_clear_attributes_by_info): New function,
+	split off from gtk_tree_view_column_clear_attributes.
+	(gtk_tree_view_column_clear_attributes):
+	(gtk_tree_view_column_finalize):  Call the new function, avoid
+	recalculating the info from the renderer.  (#84413) 
+	
+	* gtk/gtktextview.c (text_view_child_new_anchored): Initialize
+	vc->type in order to avoid a later UMR.  (#84415)
+
 2002-06-07  Mark McLoughlin  <mark@skynet.ie>
 
 	* gtk/gtkwindow.c: (gtk_window_compute_configure_request): use
