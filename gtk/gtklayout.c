@@ -1081,7 +1081,6 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 	    }
 	}
     }
-  g_print ("\n");
 }
 
 /* The main event filter. Actually, we probably don't really need
