@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-11-14 00:11+0100\n"
-"PO-Revision-Date: 2003-11-14 00:12+0100\n"
+"POT-Creation-Date: 2003-11-20 23:22+0100\n"
+"PO-Revision-Date: 2003-11-20 23:26+0100\n"
 "Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:731
-#: gdk-pixbuf/gdk-pixbuf-io.c:864 tests/testfilechooser.c:183
+#: gdk-pixbuf/gdk-pixbuf-io.c:864 tests/testfilechooser.c:198
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Ne može da otvori datoteku „%s“: %s"
@@ -30,7 +30,7 @@ msgstr "Slika „%s“ ne sadrži podatke"
 
 # ovo ima najviše smisla
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:775
-#: gdk-pixbuf/gdk-pixbuf-io.c:901 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-io.c:901 tests/testfilechooser.c:237
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -788,7 +788,7 @@ msgstr "Ime"
 msgid "A unique name for the action."
 msgstr "Jedinstveno ime za akciju."
 
-#: gtk/gtkaction.c:193 gtk/gtkbutton.c:190 gtk/gtkexpander.c:200
+#: gtk/gtkaction.c:193 gtk/gtkbutton.c:190 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Oznaka"
@@ -1052,7 +1052,7 @@ msgstr ""
 "Ukoliko je postavljeno, sadržani element se pojavljuje među drugim elementima, "
 "što je odgovarajuće za npr. dugmiće za pomoć."
 
-#: gtk/gtkbox.c:128 gtk/gtkexpander.c:216
+#: gtk/gtkbox.c:128 gtk/gtkexpander.c:226
 msgid "Spacing"
 msgstr "Razmaci"
 
@@ -1060,7 +1060,7 @@ msgstr "Razmaci"
 msgid "The amount of space between children"
 msgstr "Količina razmaka među sadržanim elementima"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:469
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:479
 msgid "Homogeneous"
 msgstr "Jednoobrazno"
 
@@ -1068,7 +1068,7 @@ msgstr "Jednoobrazno"
 msgid "Whether the children should all be the same size"
 msgstr "Da li svi sadržani elementi treba da budu iste veličine"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:461
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:471
 #: gtk/gtktreeviewcolumn.c:291
 msgid "Expand"
 msgstr "Raširi"
@@ -1124,12 +1124,12 @@ msgid ""
 "widget"
 msgstr "Sadržaj oznake unutar dugmeta, ukoliko dugme sadrži oznaku"
 
-#: gtk/gtkbutton.c:198 gtk/gtkexpander.c:208 gtk/gtklabel.c:311
+#: gtk/gtkbutton.c:198 gtk/gtkexpander.c:210 gtk/gtklabel.c:311
 #: gtk/gtktoolbutton.c:186
 msgid "Use underline"
 msgstr "Koristi podvlaku"
 
-#: gtk/gtkbutton.c:199 gtk/gtkexpander.c:209 gtk/gtklabel.c:312
+#: gtk/gtkbutton.c:199 gtk/gtkexpander.c:211 gtk/gtklabel.c:312
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1419,7 +1419,7 @@ msgstr "ID pripremljene"
 msgid "The stock ID of the stock icon to render"
 msgstr "ID pripremljene sličice koja se iscrtava"
 
-#: gtk/gtkcellrendererpixbuf.c:167 gtk/gtkfilechooserdefault.c:1082
+#: gtk/gtkcellrendererpixbuf.c:167 gtk/gtkfilechooserdefault.c:1096
 msgid "Size"
 msgstr "Veličina"
 
@@ -1736,7 +1736,7 @@ msgstr "Veličina pokazatelja"
 msgid "Size of check or radio indicator"
 msgstr "Veličina pokazatelja označavanja ili jednoizbornika"
 
-#: gtk/gtkcheckbutton.c:106 gtk/gtkexpander.c:242 gtk/gtkoptionmenu.c:205
+#: gtk/gtkcheckbutton.c:106 gtk/gtkexpander.c:252 gtk/gtkoptionmenu.c:205
 msgid "Indicator Spacing"
 msgstr "Razmaci pokazatelja"
 
@@ -2010,59 +2010,59 @@ msgstr "Vrednost sa spiska"
 msgid "Whether entered values must already be present in the list"
 msgstr "Da li unete vrednosti moraju već biti prisutne na spisku"
 
-#: gtk/gtkcombobox.c:335
+#: gtk/gtkcombobox.c:338
 msgid "ComboBox model"
 msgstr "Model padajuće liste"
 
-#: gtk/gtkcombobox.c:336
+#: gtk/gtkcombobox.c:339
 msgid "The model for the combo box"
 msgstr "Model za padajuću listu"
 
-#: gtk/gtkcombobox.c:343
+#: gtk/gtkcombobox.c:346
 msgid "Wrap width"
 msgstr "Širina za prelom"
 
-#: gtk/gtkcombobox.c:344
+#: gtk/gtkcombobox.c:347
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Širina za prelom pri raspoređivanju stavki u mreži"
 
-#: gtk/gtkcombobox.c:353
+#: gtk/gtkcombobox.c:356
 msgid "Row span column"
 msgstr "Red obuhvata kolonu"
 
-#: gtk/gtkcombobox.c:354
+#: gtk/gtkcombobox.c:357
 msgid "TreeModel column containing the row span values"
 msgstr "Model kolone drveta koji sadrži vrednosti obuhvatanja redova"
 
-#: gtk/gtkcombobox.c:363
+#: gtk/gtkcombobox.c:366
 msgid "Column span column"
 msgstr "Kolona obuhvata kolonu"
 
-#: gtk/gtkcombobox.c:364
+#: gtk/gtkcombobox.c:367
 msgid "TreeModel column containing the column span values"
 msgstr "Model kolone drveta koji sadrži vrednosti obuhvatanja kolona"
 
-#: gtk/gtkcombobox.c:373
+#: gtk/gtkcombobox.c:376
 msgid "Active item"
 msgstr "Aktivna stavka"
 
-#: gtk/gtkcombobox.c:374
+#: gtk/gtkcombobox.c:377
 msgid "The item which is currently active"
 msgstr "Stavka koja je trenutno aktivna"
 
-#: gtk/gtkcombobox.c:382
+#: gtk/gtkcombobox.c:385
 msgid "ComboBox appareance"
 msgstr "Izgled padajuće liste"
 
-#: gtk/gtkcombobox.c:383
+#: gtk/gtkcombobox.c:386
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Izgled padajuće liste, ako je postavljeno označava Windows stil."
 
-#: gtk/gtkcomboboxentry.c:106
+#: gtk/gtkcomboboxentry.c:104
 msgid "Text Column"
 msgstr "Tekstualna kolona"
 
-#: gtk/gtkcomboboxentry.c:107
+#: gtk/gtkcomboboxentry.c:105
 msgid "A column in the data source model to get the strings from"
 msgstr "Kolona u modelu izvora podataka iz kojeg se izvlače niske"
 
@@ -2311,40 +2311,48 @@ msgstr ""
 "Da li je prozor za praćenje događaja iznad prozora sadržanog elementa umesto "
 "ispod."
 
-#: gtk/gtkexpander.c:192
+#: gtk/gtkexpander.c:194
 msgid "Expanded"
 msgstr "Rašireno"
 
-#: gtk/gtkexpander.c:193
+#: gtk/gtkexpander.c:195
 msgid "Whether the expander has been opened to reveal the child widget"
 msgstr "Da li je otvoren razgranik radi prikaza sadržanih elemenata"
 
-#: gtk/gtkexpander.c:201
+#: gtk/gtkexpander.c:203
 msgid "Text of the expander's label"
 msgstr "Tekst oznake razgranika"
 
-#: gtk/gtkexpander.c:217
+#: gtk/gtkexpander.c:218 gtk/gtklabel.c:304
+msgid "Use markup"
+msgstr "Koristi oznake"
+
+#: gtk/gtkexpander.c:219 gtk/gtklabel.c:305
+msgid "The text of the label includes XML markup. See pango_parse_markup()"
+msgstr "Tekst oznake sadrži XML oznake. Videti pango_parse_markup()"
+
+#: gtk/gtkexpander.c:227
 msgid "Space to put between the label and the child"
 msgstr "Razmak koji se stavlja između oznake i sadržanog elementa"
 
-#: gtk/gtkexpander.c:226 gtk/gtkframe.c:169 gtk/gtktoolbutton.c:193
+#: gtk/gtkexpander.c:236 gtk/gtkframe.c:169 gtk/gtktoolbutton.c:193
 msgid "Label widget"
 msgstr "Element oznake"
 
-#: gtk/gtkexpander.c:227
+#: gtk/gtkexpander.c:237
 msgid "A widget to display in place of the usual expander label"
 msgstr "Element koji se prikazuje namesto uobičajene oznake razgranika"
 
 # Ovo je LOSE!
-#: gtk/gtkexpander.c:233 gtk/gtktreeview.c:607
+#: gtk/gtkexpander.c:243 gtk/gtktreeview.c:607
 msgid "Expander Size"
 msgstr "Veličina razgranika"
 
-#: gtk/gtkexpander.c:234 gtk/gtktreeview.c:608
+#: gtk/gtkexpander.c:244 gtk/gtktreeview.c:608
 msgid "Size of the expander arrow"
 msgstr "Veličina strelice za grananje"
 
-#: gtk/gtkexpander.c:243
+#: gtk/gtkexpander.c:253
 msgid "Spacing around expander arrow"
 msgstr "Razmaci oko strelica za grananje"
 
@@ -2435,7 +2443,7 @@ msgstr "Da li se prikazuju sakrivene datoteke i direktorijumi"
 msgid "Invalid filename: %s"
 msgstr "Neispravno ime datoteke: %s"
 
-#: gtk/gtkfilechooserdefault.c:513
+#: gtk/gtkfilechooserdefault.c:527
 #, c-format
 msgid ""
 "Could not retrieve information about %s:\n"
@@ -2445,17 +2453,17 @@ msgstr ""
 "%s"
 
 # bug: this sucks in terms of l10n
-#: gtk/gtkfilechooserdefault.c:528
+#: gtk/gtkfilechooserdefault.c:542
 #, c-format
 msgid "%s's Home"
 msgstr "Lični direktorijum (%s)"
 
 #. FIXME: What is the Right Way of finding the desktop directory?
-#: gtk/gtkfilechooserdefault.c:552
+#: gtk/gtkfilechooserdefault.c:565
 msgid "Desktop"
 msgstr "Radna površina"
 
-#: gtk/gtkfilechooserdefault.c:692
+#: gtk/gtkfilechooserdefault.c:705
 #, c-format
 msgid ""
 "Could not go to the parent folder of %s:\n"
@@ -2464,15 +2472,15 @@ msgstr ""
 "Ne mogu da uđem u naddirektorijum od %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:760
+#: gtk/gtkfilechooserdefault.c:774
 msgid "Files of _type:"
 msgstr "Datoteke _vrste:"
 
-#: gtk/gtkfilechooserdefault.c:816 gtk/gtkfilechooserdefault.c:1064
+#: gtk/gtkfilechooserdefault.c:830 gtk/gtkfilechooserdefault.c:1078
 msgid "File name"
 msgstr "Ime datoteke"
 
-#: gtk/gtkfilechooserdefault.c:835
+#: gtk/gtkfilechooserdefault.c:849
 #, c-format
 msgid ""
 "Could not add bookmark for %s:\n"
@@ -2481,7 +2489,7 @@ msgstr ""
 "Ne mogu da dodam obeleživač za %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:860
+#: gtk/gtkfilechooserdefault.c:874
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -2490,33 +2498,33 @@ msgstr ""
 "Ne mogu da uklonim obeleživač za %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:976
+#: gtk/gtkfilechooserdefault.c:990
 msgid "Folder"
 msgstr "Direktorijum"
 
-#: gtk/gtkfilechooserdefault.c:1006
+#: gtk/gtkfilechooserdefault.c:1020
 msgid "Add bookmark"
 msgstr "Dodaj obeleživač"
 
-#: gtk/gtkfilechooserdefault.c:1094
+#: gtk/gtkfilechooserdefault.c:1108
 msgid "Modified"
 msgstr "Izmenjen"
 
-#: gtk/gtkfilechooserdefault.c:1115
+#: gtk/gtkfilechooserdefault.c:1129
 msgid "_Location:"
 msgstr "_Putanja:"
 
 #. Preview
-#: gtk/gtkfilechooserdefault.c:1218
+#: gtk/gtkfilechooserdefault.c:1232
 msgid "Preview"
 msgstr "Pregled"
 
-#: gtk/gtkfilechooserdefault.c:1969
+#: gtk/gtkfilechooserdefault.c:1988
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "prečica %s ne postoji"
 
-#: gtk/gtkfilechooserdefault.c:2319
+#: gtk/gtkfilechooserdefault.c:2338
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -2526,39 +2534,39 @@ msgstr ""
 "%s"
 
 # bug: plural-forms
-#: gtk/gtkfilechooserdefault.c:2457
+#: gtk/gtkfilechooserdefault.c:2496
 #, c-format
 msgid "%d bytes"
 msgstr "%d bajtova"
 
-#: gtk/gtkfilechooserdefault.c:2459
+#: gtk/gtkfilechooserdefault.c:2498
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:2461
+#: gtk/gtkfilechooserdefault.c:2500
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:2463
+#: gtk/gtkfilechooserdefault.c:2502
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:2503
+#: gtk/gtkfilechooserdefault.c:2542
 msgid "Today"
 msgstr "Danas"
 
-#: gtk/gtkfilechooserdefault.c:2523
+#: gtk/gtkfilechooserdefault.c:2562
 msgid "Yesterday"
 msgstr "Juče"
 
-#: gtk/gtkfilechooserdefault.c:2526 gtk/gtkfilechooserdefault.c:2537
+#: gtk/gtkfilechooserdefault.c:2565 gtk/gtkfilechooserdefault.c:2576
 msgid "Unknown"
 msgstr "Nepoznato"
 
-#: gtk/gtkfilechooserdefault.c:2536
+#: gtk/gtkfilechooserdefault.c:2575
 msgid "%d/%b/%Y"
 msgstr "%d.%b.%Y."
 
@@ -2766,16 +2774,20 @@ msgstr "Ne može pretvoriti ime datoteke"
 msgid "(Empty)"
 msgstr "(Prazno)"
 
-#: gtk/gtkfilesystemunix.c:299
+#: gtk/gtkfilesystemunix.c:306
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "greška pri obrazovanju direktorijuma „%s“: %s"
 
-#: gtk/gtkfilesystemunix.c:557 gtk/gtkfilesystemunix.c:570
+#: gtk/gtkfilesystemunix.c:566
+msgid "This file system does not support icons"
+msgstr "Ovaj sistem datoteka ne podržava ikone"
+
+#: gtk/gtkfilesystemunix.c:579 gtk/gtkfilesystemunix.c:592
 msgid "This file system does not support bookmarks"
 msgstr "Ovaj sistem datoteka ne podržava obeleživače"
 
-#: gtk/gtkfilesystemunix.c:741
+#: gtk/gtkfilesystemunix.c:765
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "greška pri dobavljanju podataka o „%s“: %s"
@@ -2937,7 +2949,7 @@ msgid "_Gamma value"
 msgstr "_Gama vrednost"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:510 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:520 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Vrsta senke"
 
@@ -3163,14 +3175,6 @@ msgstr "Tekst oznake"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Spisak stilskih osobina koje se primenjuju na tekst oznake"
 
-#: gtk/gtklabel.c:304
-msgid "Use markup"
-msgstr "Koristi oznake"
-
-#: gtk/gtklabel.c:305
-msgid "The text of the label includes XML markup. See pango_parse_markup()"
-msgstr "Tekst oznake sadrži XML oznake. Videti pango_parse_markup()"
-
 #: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:602
 msgid "Justification"
 msgstr "Slaganje redova"
@@ -3381,7 +3385,7 @@ msgstr "Vreme pre skrivanja podmenija kada se pokazivač kreće prema podmeniju"
 msgid "Style of bevel around the menubar"
 msgstr "Stil udubljenja oko meni linije"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:486
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:496
 msgid "Internal padding"
 msgstr "Unutrašnja popuna"
 
@@ -3745,7 +3749,7 @@ msgstr "Popravka"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "GtkAdjustment vezan za element za prikaz napretka (prevaziđeno)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:435
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:445
 msgid "Orientation"
 msgstr "Pravac pružanja"
 
@@ -5099,84 +5103,84 @@ msgstr "Prikaz pokazatelja"
 msgid "If the toggle part of the button is displayed"
 msgstr "Da li se prikazuje pokazatelj žabice"
 
-#: gtk/gtktoolbar.c:436
+#: gtk/gtktoolbar.c:446
 msgid "The orientation of the toolbar"
 msgstr "Pravac pružanja linije sa alatkama"
 
-#: gtk/gtktoolbar.c:444
+#: gtk/gtktoolbar.c:454
 msgid "Toolbar Style"
 msgstr "Stil linije sa alatkama"
 
-#: gtk/gtktoolbar.c:445
+#: gtk/gtktoolbar.c:455
 msgid "How to draw the toolbar"
 msgstr "Kako iscrtati liniju sa alatkama"
 
-#: gtk/gtktoolbar.c:452
+#: gtk/gtktoolbar.c:462
 msgid "Show Arrow"
 msgstr "Prikaži strelicu"
 
-#: gtk/gtktoolbar.c:453
+#: gtk/gtktoolbar.c:463
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Da li treba da prikaže strelicu ukoliko ne stane linija sa alatkama"
 
-#: gtk/gtktoolbar.c:462
+#: gtk/gtktoolbar.c:472
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Da li stavka treba da dobije dodatni prostor kada raste linija sa alatkama"
 
-#: gtk/gtktoolbar.c:470
+#: gtk/gtktoolbar.c:480
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Da li stavka treba da bude iste veličine kao i ostale jednoobrazne stavke"
 
-#: gtk/gtktoolbar.c:477
+#: gtk/gtktoolbar.c:487
 msgid "Spacer size"
 msgstr "Veličina razmaka"
 
-#: gtk/gtktoolbar.c:478
+#: gtk/gtktoolbar.c:488
 msgid "Size of spacers"
 msgstr "Veličina razmaka"
 
-#: gtk/gtktoolbar.c:487
+#: gtk/gtktoolbar.c:497
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Količina ivičnog razmaka između senke linije sa alatima i dugmića"
 
-#: gtk/gtktoolbar.c:495
+#: gtk/gtktoolbar.c:505
 msgid "Space style"
 msgstr "Stil razmaka"
 
-#: gtk/gtktoolbar.c:496
+#: gtk/gtktoolbar.c:506
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Da li su razmaci uspravne linije ili samo praznine"
 
-#: gtk/gtktoolbar.c:503
+#: gtk/gtktoolbar.c:513
 msgid "Button relief"
 msgstr "Ivica dugmića"
 
-#: gtk/gtktoolbar.c:504
+#: gtk/gtktoolbar.c:514
 msgid "Type of bevel around toolbar buttons"
 msgstr "Vrsta udubljenja oko dugmića na liniji sa alatkama"
 
-#: gtk/gtktoolbar.c:511
+#: gtk/gtktoolbar.c:521
 msgid "Style of bevel around the toolbar"
 msgstr "Vrsta udubljenja oko linije sa alatkama"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:527
 msgid "Toolbar style"
 msgstr "Način prikaza linije sa alatkama"
 
-#: gtk/gtktoolbar.c:518
+#: gtk/gtktoolbar.c:528
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Da li uobičajene linije sa alatkama imaju samo tekst, tekst i ikone, samo "
 "ikone, itd."
 
-#: gtk/gtktoolbar.c:524
+#: gtk/gtktoolbar.c:534
 msgid "Toolbar icon size"
 msgstr "Veličina ikona za alatke"
 
-#: gtk/gtktoolbar.c:525
+#: gtk/gtktoolbar.c:535
 msgid "Size of icons in default toolbars"
 msgstr "Veličina ikona za uobičajene linije sa alatkama"
 
@@ -5498,7 +5502,7 @@ msgstr "Neočekivana početna oznaka „%s“ u %d. redu, %d. znak"
 msgid "Unexpected character data on line %d char %d"
 msgstr "Neočekivani znakovni podaci u %d. redu, %d. znak"
 
-#: gtk/gtkuimanager.c:1916
+#: gtk/gtkuimanager.c:1918
 msgid "Empty"
 msgstr "Prazno"
 
@@ -5961,7 +5965,7 @@ msgstr "Vijetnamski (VIQR)"
 msgid "X Input Method"
 msgstr "X način unosa (XIM)"
 
-#: tests/testfilechooser.c:170
+#: tests/testfilechooser.c:185
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Ne mogu da saznam podatke o datoteci „%s“: %s"
