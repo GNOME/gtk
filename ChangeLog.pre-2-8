@@ -1,3 +1,11 @@
+2004-07-20  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_class_init): Fix the
+	documentation comment for the editing-started signal.
+
+	* gtk/gtkmarshalers.list: Added VOID:OBJECT,STRING for
+	GtkCellRenderer::editing-started.
+
 2004-07-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/testactions.c (main): 

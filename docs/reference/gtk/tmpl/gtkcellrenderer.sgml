@@ -73,6 +73,15 @@ it cannot be individually modified.
 
 @cellrenderer: the object which received the signal.
 
+<!-- ##### SIGNAL GtkCellRenderer::editing-started ##### -->
+<para>
+
+</para>
+
+@cellrenderer: the object which received the signal.
+@arg1: 
+@arg2: 
+
 <!-- ##### ARG GtkCellRenderer:cell-background ##### -->
 <para>
 

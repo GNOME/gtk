@@ -176,9 +176,9 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    *   if (GTK_IS_ENTRY (editable)) 
    *     {
    *       GtkEntry *entry = GTK_ENTRY (editable);
-   *       
-   *       /* ... create a GtkEntryCompletion *<!-- -->/
-   *
+   *       <!-- -->
+   *       /<!-- -->* ... create a GtkEntryCompletion *<!-- -->/
+   *       <!-- -->
    *       gtk_entry_set_completion (entry, completion);
    *     }
    * }
