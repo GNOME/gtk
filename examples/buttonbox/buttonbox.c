@@ -3,12 +3,12 @@
 #include <gtk/gtk.h>
 
 /* Create a Button Box with the specified parameters */
-GtkWidget *create_bbox (gint  horizontal,
-			char* title,
-			gint  spacing,
-			gint  child_w,
-			gint  child_h,
-			gint  layout)
+GtkWidget *create_bbox( gint  horizontal,
+                        char *title,
+                        gint  spacing,
+                        gint  child_w,
+                        gint  child_h,
+                        gint  layout )
 {
   GtkWidget *frame;
   GtkWidget *bbox;

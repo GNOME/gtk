@@ -1,13 +1,15 @@
 /* example-start packbox packbox.c */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "gtk/gtk.h"
 
-void delete_event( GtkWidget *widget,
+gint delete_event( GtkWidget *widget,
                    GdkEvent  *event,
-		   gpointer   data )
+                   gpointer   data )
 {
-    gtk_main_quit ();
+    gtk_main_quit();
+    return(FALSE);
 }
 
 /* Make a new hbox filled with button-labels. Arguments for the 
@@ -82,7 +84,7 @@ int main( int   argc,
     
     if (argc != 2) {
 	fprintf (stderr, "usage: packbox num, where num is 1, 2, or 3.\n");
-	/* this just does cleanup in GTK, and exits with an exit status of 1. */
+	/* This just does cleanup in GTK and exits with an exit status of 1. */
 	gtk_exit (1);
     }
     
@@ -91,8 +93,8 @@ int main( int   argc,
     /* Create our window */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-    /* You should always remember to connect the destroy signal to the
-     * main window. This is very important for proper intuitive
+    /* You should always remember to connect the delete_event signal
+     * to the main window. This is very important for proper intuitive
      * behavior */
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 			GTK_SIGNAL_FUNC (delete_event), NULL);
@@ -128,7 +130,7 @@ int main( int   argc,
 	gtk_widget_show (box2);
 
 	/* Call our make box function - homogeneous = FALSE, spacing = 0,
-	 * expand = FALSE, fill = FALSE, padding = 0 */
+	 * expand = TRUE, fill = FALSE, padding = 0 */
 	box2 = make_box (FALSE, 0, TRUE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
 	gtk_widget_show (box2);
@@ -142,8 +144,8 @@ int main( int   argc,
 	 * but they are quite simple. */
 	separator = gtk_hseparator_new ();
 	
-	/* Cack the separator into the vbox. Remember each of these
-	 * widgets are being packed into a vbox, so they'll be stacked
+        /* Pack the separator into the vbox. Remember each of these
+         * widgets is being packed into a vbox, so they'll be stacked
 	 * vertically. */
 	gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 5);
 	gtk_widget_show (separator);
@@ -166,7 +168,8 @@ int main( int   argc,
 	
 	/* Another new separator. */
 	separator = gtk_hseparator_new ();
-	/* The last 3 arguments to gtk_box_pack_start are: expand, fill, padding. */
+	/* The last 3 arguments to gtk_box_pack_start are:
+	 * expand, fill, padding. */
 	gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 5);
 	gtk_widget_show (separator);
 	
@@ -192,7 +195,8 @@ int main( int   argc,
 	gtk_widget_show (box2);
 	
 	separator = gtk_hseparator_new ();
-	/* The last 3 arguments to gtk_box_pack_start are: expand, fill, padding. */
+	/* The last 3 arguments to gtk_box_pack_start are:
+	 * expand, fill, padding. */
 	gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 5);
 	gtk_widget_show (separator);
 	
@@ -255,14 +259,13 @@ int main( int   argc,
     /* Our quit button. */
     button = gtk_button_new_with_label ("Quit");
     
-    /* Setup the signal to destroy the window. Remember that this will send
-     * the "destroy" signal to the window which will be caught by our signal
-     * handler as defined above. */
+    /* Setup the signal to terminate the program when the button is clicked */
     gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			       GTK_SIGNAL_FUNC (gtk_main_quit),
 			       GTK_OBJECT (window));
     /* Pack the button into the quitbox.
-     * The last 3 arguments to gtk_box_pack_start are: expand, fill, padding. */
+     * The last 3 arguments to gtk_box_pack_start are:
+     * expand, fill, padding. */
     gtk_box_pack_start (GTK_BOX (quitbox), button, TRUE, FALSE, 0);
     /* pack the quitbox into the vbox (box1) */
     gtk_box_pack_start (GTK_BOX (box1), quitbox, FALSE, FALSE, 0);

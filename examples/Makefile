@@ -27,6 +27,7 @@ SUBDIRS = 	arrow \
 		rangewidgets \
 		rulers \
 		scribble-simple \
+		scribble-xinput \
 		scrolledwin \
 		selection \
 		spinbutton \

@@ -3,8 +3,7 @@
 #include <gtk/gtk.h>
    
 /* Create the list of "messages" */
-GtkWidget *
-create_list (void)
+GtkWidget *create_list( void )
 {
 
     GtkWidget *scrolled_window;
@@ -22,8 +21,8 @@ create_list (void)
    
     /* Create a new list and put it in the scrolled window */
     list = gtk_list_new ();
-    gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_window),
-                                           list);
+    gtk_scrolled_window_add_with_viewport (
+               GTK_SCROLLED_WINDOW (scrolled_window), list);
     gtk_widget_show (list);
    
     /* Add some messages to the window */
@@ -44,8 +43,8 @@ when our window is realized. We could also force our window to be
 realized with gtk_widget_realize, but it would have to be part of
 a hierarchy first */
 
-void
-realize_text (GtkWidget *text, gpointer data)
+void realize_text( GtkWidget *text,
+                   gpointer data )
 {
     gtk_text_freeze (GTK_TEXT (text));
     gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL,
@@ -62,8 +61,7 @@ realize_text (GtkWidget *text, gpointer data)
 }
    
 /* Create a scrolled text area that displays a "message" */
-GtkWidget *
-create_text (void)
+GtkWidget *create_text( void )
 {
     GtkWidget *table;
     GtkWidget *text;
@@ -100,8 +98,8 @@ create_text (void)
     return table;
 }
    
-int
-main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
     GtkWidget *window;
     GtkWidget *vpaned;

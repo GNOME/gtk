@@ -11,11 +11,12 @@ void callback( GtkWidget *widget,
 }
 
 /* another callback */
-void delete_event( GtkWidget *widget,
+gint delete_event( GtkWidget *widget,
                    GdkEvent  *event,
-		   gpointer   data )
+                   gpointer   data )
 {
-    gtk_main_quit ();
+    gtk_main_quit();
+    return(FALSE);
 }
 
 int main( int   argc,
@@ -33,7 +34,7 @@ int main( int   argc,
     /* Create a new window */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-    /* This is a new call, this just sets the title of our
+    /* This is a new call, which just sets the title of our
      * new window to "Hello Buttons!" */
     gtk_window_set_title (GTK_WINDOW (window), "Hello Buttons!");
 

@@ -59,6 +59,7 @@ struct _GtkDial
 
   /* Current angle */
   gfloat angle;
+  gfloat last_angle;
 
   /* Old values from adjustment stored so we know when something changes */
   gfloat old_value;

@@ -1,3 +1,18 @@
+Sat Nov 13 22:30:29 GMT 1999 Tony Gale  <gale@gtk.org>
+
+        * docs/gtkfaq.sgml: threads example from Erik Mouw.
+        New question on GtkLabel background colors.
+
+        * docs/gtk_tut.sgml:
+          - Correct the example code callback
+            function definitions.
+          - Update the gtkdial example code, from Frans van Schaik.
+          - Update setselection.c to current API.
+	  - Merge the various versions of this document.
+
+	* examples/Makefile examples/*/*.c: Update to code
+	listed in tutorial.
+
 Fri Nov 12 22:24:14 MET 1999  Sven Neumann <sven@gimp.org>
 
 	* gdk/gdkinputcommon.h

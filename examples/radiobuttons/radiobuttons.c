@@ -3,11 +3,12 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 
-void close_application( GtkWidget *widget,
+gint close_application( GtkWidget *widget,
                         GdkEvent  *event,
-			gpointer   data )
+                        gpointer   data )
 {
   gtk_main_quit();
+  return(FALSE);
 }
 
 int main( int   argc,

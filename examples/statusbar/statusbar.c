@@ -5,7 +5,8 @@
 
 GtkWidget *status_bar;
 
-void push_item (GtkWidget *widget, gpointer data)
+void push_item( GtkWidget *widget,
+                gpointer   data )
 {
   static int count = 1;
   char buff[20];
@@ -16,13 +17,15 @@ void push_item (GtkWidget *widget, gpointer data)
   return;
 }
 
-void pop_item (GtkWidget *widget, gpointer data)
+void pop_item( GtkWidget *widget,
+               gpointer   data )
 {
   gtk_statusbar_pop( GTK_STATUSBAR(status_bar), GPOINTER_TO_INT(data) );
   return;
 }
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
 
     GtkWidget *window;
@@ -48,7 +51,8 @@ int main (int argc, char *argv[])
     gtk_box_pack_start (GTK_BOX (vbox), status_bar, TRUE, TRUE, 0);
     gtk_widget_show (status_bar);
 
-    context_id = gtk_statusbar_get_context_id( GTK_STATUSBAR(status_bar), "Statusbar example");
+    context_id = gtk_statusbar_get_context_id(
+                          GTK_STATUSBAR(status_bar), "Statusbar example");
 
     button = gtk_button_new_with_label("push item");
     gtk_signal_connect(GTK_OBJECT(button), "clicked",

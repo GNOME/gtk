@@ -75,7 +75,6 @@ int main( int   argc,
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 			GTK_SIGNAL_FUNC (gtk_exit), NULL);
 
-
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     gtk_widget_realize(window);

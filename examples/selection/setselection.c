@@ -4,8 +4,8 @@
 #include <time.h>
 
 /* Callback when the user toggles the selection */
-void
-selection_toggled (GtkWidget *widget, gint *have_selection)
+void selection_toggled( GtkWidget *widget,
+                        gint      *have_selection )
 {
   if (GTK_TOGGLE_BUTTON(widget)->active)
     {
@@ -32,9 +32,9 @@ selection_toggled (GtkWidget *widget, gint *have_selection)
 }
 
 /* Called when another application claims the selection */
-gint
-selection_clear (GtkWidget *widget, GdkEventSelection *event,
-		 gint *have_selection)
+gint selection_clear( GtkWidget         *widget,
+                      GdkEventSelection *event,
+                      gint              *have_selection )
 {
   *have_selection = FALSE;
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget), FALSE);
@@ -43,15 +43,16 @@ selection_clear (GtkWidget *widget, GdkEventSelection *event,
 }
 
 /* Supplies the current time as the selection. */
-void
-selection_handle (GtkWidget *widget, 
-		  GtkSelectionData *selection_data,
-		  gpointer data)
+void selection_handle( GtkWidget        *widget, 
+                       GtkSelectionData *selection_data,
+                       guint             info,
+                       guint             time_stamp,
+                       gpointer          data )
 {
   gchar *timestr;
   time_t current_time;
 
-  current_time = time (NULL);
+  current_time = time(NULL);
   timestr = asctime (localtime(&current_time)); 
   /* When we return a single string, it should not be null terminated.
      That will be done for us */
@@ -60,11 +61,10 @@ selection_handle (GtkWidget *widget,
 			  8, timestr, strlen(timestr));
 }
 
-int
-main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
   GtkWidget *window;
-
   GtkWidget *selection_button;
 
   static int have_selection = FALSE;
@@ -91,9 +91,12 @@ main (int argc, char *argv[])
   gtk_signal_connect (GTK_OBJECT(selection_button), "selection_clear_event",
 		      GTK_SIGNAL_FUNC (selection_clear), &have_selection);
 
-  gtk_selection_add_handler (selection_button, GDK_SELECTION_PRIMARY,
-			     GDK_SELECTION_TYPE_STRING,
-			     selection_handle, NULL);
+  gtk_selection_add_target (selection_button,
+			    GDK_SELECTION_PRIMARY,
+			    GDK_SELECTION_TYPE_STRING,
+		            1);
+  gtk_signal_connect (GTK_OBJECT(selection_button), "selection_get",
+		      GTK_SIGNAL_FUNC (selection_handle), &have_selection);
 
   gtk_widget_show (selection_button);
   gtk_widget_show (window);

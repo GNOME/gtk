@@ -102,7 +102,7 @@ void create_range_controls( void )
     gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
     gtk_widget_show (box2);
 
-    /* calue, lower, upper, step_increment, page_increment, page_size */
+    /* value, lower, upper, step_increment, page_increment, page_size */
     /* Note that the page_size value only makes a difference for
      * scrollbar widgets, and the highest value you'll get is actually
      * (upper - page_size). */
@@ -218,7 +218,7 @@ void create_range_controls( void )
     box2 = gtk_hbox_new (FALSE, 10);
     gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
   
-    /* A GtkHScale widget for adjusting the number of digits on the
+    /* An HScale widget for adjusting the number of digits on the
      * sample scales. */
     label = gtk_label_new ("Scale Digits:");
     gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);
@@ -238,7 +238,7 @@ void create_range_controls( void )
     box2 = gtk_hbox_new (FALSE, 10);
     gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
   
-    /* And, one last GtkHScale widget for adjusting the page size of the
+    /* And, one last HScale widget for adjusting the page size of the
      * scrollbar. */
     label = gtk_label_new ("Scrollbar Page Size:");
     gtk_box_pack_start (GTK_BOX (box2), label, FALSE, FALSE, 0);

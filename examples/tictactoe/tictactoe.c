@@ -68,8 +68,10 @@ tictactoe_class_init (TictactoeClass *class)
   tictactoe_signals[TICTACTOE_SIGNAL] = gtk_signal_new ("tictactoe",
 					 GTK_RUN_FIRST,
 					 object_class->type,
-					 GTK_SIGNAL_OFFSET (TictactoeClass, tictactoe),
-					 gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
+					 GTK_SIGNAL_OFFSET (TictactoeClass,
+                                                            tictactoe),
+					 gtk_signal_default_marshaller,
+                                         GTK_TYPE_NONE, 0);
 
 
   gtk_object_class_add_signals (object_class, tictactoe_signals, LAST_SIGNAL);

@@ -3,15 +3,15 @@
 #include <gtk/gtk.h>
 #include "tictactoe.h"
 
-void
-win (GtkWidget *widget, gpointer data)
+void win( GtkWidget *widget,
+          gpointer   data )
 {
   g_print ("Yay!\n");
   tictactoe_clear (TICTACTOE (widget));
 }
 
-int 
-main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
   GtkWidget *window;
   GtkWidget *ttt;

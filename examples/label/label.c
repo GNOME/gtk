@@ -72,7 +72,7 @@ int main( int   argc,
   label = gtk_label_new ("This is an example of a line-wrapped, filled label.  " \
 			 "It should be taking "\
 			 "up the entire              width allocated to it.  " \
-			 "Here is a seneance to prove "\
+			 "Here is a sentence to prove "\
 			 "my point.  Here is another sentence. "\
 			 "Here comes the sun, do de do de do.\n"\
 			 "    This is a new paragraph.\n"\

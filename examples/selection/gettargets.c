@@ -2,13 +2,13 @@
 
 #include <gtk/gtk.h>
 
-void selection_received (GtkWidget *widget, 
-			 GtkSelectionData *selection_data, 
-			 gpointer data);
+void selection_received( GtkWidget        *widget, 
+                         GtkSelectionData *selection_data, 
+                         gpointer          data );
 
 /* Signal handler invoked when user clicks on the "Get Targets" button */
-void
-get_targets (GtkWidget *widget, gpointer data)
+void get_targets( GtkWidget *widget,
+                  gpointer data )
 {
   static GdkAtom targets_atom = GDK_NONE;
 
@@ -22,9 +22,9 @@ get_targets (GtkWidget *widget, gpointer data)
 }
 
 /* Signal handler called when the selections owner returns the data */
-void
-selection_received (GtkWidget *widget, GtkSelectionData *selection_data, 
-		    gpointer data)
+void selection_received( GtkWidget        *widget,
+                         GtkSelectionData *selection_data, 
+		         gpointer          data )
 {
   GdkAtom *atoms;
   GList *item_list;
@@ -60,8 +60,8 @@ selection_received (GtkWidget *widget, GtkSelectionData *selection_data,
   return;
 }
 
-int 
-main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
   GtkWidget *window;
   GtkWidget *button;

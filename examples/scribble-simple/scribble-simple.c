@@ -25,8 +25,8 @@
 static GdkPixmap *pixmap = NULL;
 
 /* Create a new backing pixmap of the appropriate size */
-static gint
-configure_event (GtkWidget *widget, GdkEventConfigure *event)
+static gint configure_event( GtkWidget         *widget,
+                             GdkEventConfigure *event )
 {
   if (pixmap)
     gdk_pixmap_unref(pixmap);
@@ -46,8 +46,8 @@ configure_event (GtkWidget *widget, GdkEventConfigure *event)
 }
 
 /* Redraw the screen from the backing pixmap */
-static gint
-expose_event (GtkWidget *widget, GdkEventExpose *event)
+static gint expose_event( GtkWidget      *widget,
+                          GdkEventExpose *event )
 {
   gdk_draw_pixmap(widget->window,
 		  widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
@@ -60,8 +60,9 @@ expose_event (GtkWidget *widget, GdkEventExpose *event)
 }
 
 /* Draw a rectangle on the screen */
-static void
-draw_brush (GtkWidget *widget, gdouble x, gdouble y)
+static void draw_brush( GtkWidget *widget,
+                        gdouble    x,
+                        gdouble    y)
 {
   GdkRectangle update_rect;
 
@@ -77,8 +78,8 @@ draw_brush (GtkWidget *widget, gdouble x, gdouble y)
   gtk_widget_draw (widget, &update_rect);
 }
 
-static gint
-button_press_event (GtkWidget *widget, GdkEventButton *event)
+static gint button_press_event( GtkWidget      *widget,
+                                GdkEventButton *event )
 {
   if (event->button == 1 && pixmap != NULL)
     draw_brush (widget, event->x, event->y);
@@ -86,8 +87,8 @@ button_press_event (GtkWidget *widget, GdkEventButton *event)
   return TRUE;
 }
 
-static gint
-motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
+static gint motion_notify_event( GtkWidget *widget,
+                                 GdkEventMotion *event )
 {
   int x, y;
   GdkModifierType state;
@@ -107,14 +108,13 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
   return TRUE;
 }
 
-void
-quit ()
+void quit ()
 {
   gtk_exit (0);
 }
 
-int
-main (int argc, char *argv[])
+int main( int   argc, 
+          char *argv[] )
 {
   GtkWidget *window;
   GtkWidget *drawing_area;

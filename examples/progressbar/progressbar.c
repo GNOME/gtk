@@ -115,7 +115,7 @@ int main( int   argc,
     gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 5);
     gtk_widget_show(align);
 
-    /* Create a GtkAdjusment object to hold the range of the
+    /* Create a Adjusment object to hold the range of the
      * progress bar */
     adj = (GtkAdjustment *) gtk_adjustment_new (0, 1, 150, 0, 0, 0);
 

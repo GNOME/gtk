@@ -3,17 +3,20 @@
 #include <gtk/gtk.h>
 
 /* Get the selected filename and print it to the console */
-void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
+void file_ok_sel( GtkWidget        *w,
+                  GtkFileSelection *fs )
 {
     g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 }
 
-void destroy (GtkWidget *widget, gpointer data)
+void destroy( GtkWidget *widget,
+              gpointer   data )
 {
     gtk_main_quit ();
 }
 
-int main (int argc, char *argv[])
+int main( int   argc,
+          char *argv[] )
 {
     GtkWidget *filew;
     
@@ -29,7 +32,8 @@ int main (int argc, char *argv[])
 			"clicked", (GtkSignalFunc) file_ok_sel, filew );
     
     /* Connect the cancel_button to destroy the widget */
-    gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (filew)->cancel_button),
+    gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION
+                                            (filew)->cancel_button),
 			       "clicked", (GtkSignalFunc) gtk_widget_destroy,
 			       GTK_OBJECT (filew));
     
