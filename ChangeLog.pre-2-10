@@ -56,7 +56,6 @@ Wed Oct 24 20:29:47 2001  Kristian Rietveld  <kristian@planet.nl>
 	remove hack to strip off the bogus newline, since we killed the
 	bogus newline; fixes #61779
 
->>>>>>> 1.2451
 2001-10-24  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_update_adjustments): don't
