@@ -1,3 +1,9 @@
+2005-03-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_key_press): Don't pop up
+	the context menu of the search entry if it is not visible.
+	(#169534, Billy Biggs)
+
 2005-03-27  Tor Lillqvist  <tml@novell.com>
 
 	* configure.in: Apparently AC_LIBTOOL_WIN32_DLL isn't deprecated
