@@ -589,6 +589,47 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb)
 }
 
 static void
+draw_textured_frame (GtkWidget *widget, GdkWindow *window, GdkRectangle *rect, GtkShadowType shadow)
+{
+  int x, y;
+  int xthick, ythick;
+  GdkGC *light_gc, *dark_gc;
+
+  gdk_draw_rectangle (window,
+		      widget->style->bg_gc[GTK_STATE_NORMAL],
+		      TRUE,
+		      rect->x, rect->y,
+		      rect->width, rect->height);
+
+  light_gc = widget->style->light_gc[GTK_STATE_NORMAL];
+  dark_gc = widget->style->dark_gc[GTK_STATE_NORMAL];
+
+  xthick = widget->style->klass->xthickness;
+  ythick = widget->style->klass->ythickness;
+
+  gdk_gc_set_clip_rectangle (light_gc, rect);
+  gdk_gc_set_clip_rectangle (dark_gc, rect);
+
+  for (y = rect->y + ythick; y < (rect->y + rect->height - ythick); y += 3)
+    for (x = rect->x + xthick; x < (rect->x + rect->width - xthick); x += 6)
+      {
+	gdk_draw_point (window, light_gc, x, y);
+	gdk_draw_point (window, dark_gc, x + 1, y + 1);
+
+	gdk_draw_point (window, light_gc, x + 3, y + 1);
+	gdk_draw_point (window, dark_gc, x + 4, y + 2);
+      }
+	
+  gdk_gc_set_clip_rectangle (light_gc, NULL);
+  gdk_gc_set_clip_rectangle (dark_gc, NULL);
+
+  gtk_draw_shadow (widget->style, window,
+		   GTK_STATE_NORMAL, shadow,
+		   rect->x, rect->y,
+		   rect->width, rect->height);
+}
+
+static void
 gtk_handle_box_paint (GtkWidget      *widget,
 		      GdkEventExpose *event,
 		      GdkRectangle   *area)
@@ -598,6 +639,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
   guint width;
   guint height;
   guint border_width;
+  GdkRectangle rect;
 
   bin = GTK_BIN (widget);
   hb = GTK_HANDLE_BOX (widget);
@@ -627,7 +669,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
 			   area->y,
 			   area->width,
 			   area->height);
-  
+
   gtk_draw_shadow (widget->style,
 		   hb->bin_window,
 		   GTK_WIDGET_STATE (widget),
@@ -637,58 +679,12 @@ gtk_handle_box_paint (GtkWidget      *widget,
 		   width,
 		   height);
 
-  if (hb->handle_position == GTK_POS_LEFT ||
-      hb->handle_position == GTK_POS_RIGHT)
-    {
-      guint x;
+  rect.x = 0;
+  rect.y = 0; 
+  rect.width = (hb->handle_position == GTK_POS_LEFT) ? DRAG_HANDLE_SIZE : width;
+  rect.height = (hb->handle_position == GTK_POS_TOP) ? DRAG_HANDLE_SIZE : height;
 
-      for (x = 1; x < DRAG_HANDLE_SIZE; x += 3)
-	
-	gtk_draw_vline (widget->style,
-			hb->bin_window,
-			GTK_WIDGET_STATE (widget),
-			widget->style->klass->ythickness,
-			height + DRAG_HANDLE_SIZE - widget->style->klass->ythickness,
-			hb->handle_position == GTK_POS_LEFT ? x : width + x);
-      gtk_draw_hline (widget->style,
-		      hb->bin_window,
-		      GTK_WIDGET_STATE (widget),
-		      hb->handle_position == GTK_POS_LEFT ? DRAG_HANDLE_SIZE : width,
-		      hb->handle_position == GTK_POS_LEFT ? 0 : width + DRAG_HANDLE_SIZE,
-		      0);
-      gtk_draw_hline (widget->style,
-		      hb->bin_window,
-		      GTK_WIDGET_STATE (widget),
-		      hb->handle_position == GTK_POS_LEFT ? DRAG_HANDLE_SIZE : width,
-		      hb->handle_position == GTK_POS_LEFT ? 0 : width + DRAG_HANDLE_SIZE,
-		      height - widget->style->klass->ythickness);
-    }
-  else
-    {
-      guint y;
-
-      for (y = 1; y < DRAG_HANDLE_SIZE; y += 3)
-	
-	gtk_draw_hline (widget->style,
-			hb->bin_window,
-			GTK_WIDGET_STATE (widget),
-			widget->style->klass->xthickness,
-			width + DRAG_HANDLE_SIZE - widget->style->klass->xthickness,
-			hb->handle_position == GTK_POS_TOP ? y : height + y);
-      gtk_draw_vline (widget->style,
-		      hb->bin_window,
-		      GTK_WIDGET_STATE (widget),
-		      hb->handle_position == GTK_POS_TOP ? DRAG_HANDLE_SIZE : height,
-		      hb->handle_position == GTK_POS_TOP ? 0 : height + DRAG_HANDLE_SIZE,
-		      0);
-      gtk_draw_vline (widget->style,
-		      hb->bin_window,
-		      GTK_WIDGET_STATE (widget),
-		      hb->handle_position == GTK_POS_TOP ? DRAG_HANDLE_SIZE : height,
-		      hb->handle_position == GTK_POS_TOP ? 0 : height + DRAG_HANDLE_SIZE,
-		      width - widget->style->klass->xthickness);
-    }
-  
+  draw_textured_frame (widget, hb->bin_window, &rect, GTK_SHADOW_OUT);
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {

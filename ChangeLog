@@ -1,3 +1,10 @@
+1998-04-03  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkhandlebox.c (draw_textured_frame): New function to draw a
+	nifty "textured metal" frame.  Could be useful in gtkstyle.c, maybe.
+	(gtk_handle_box_paint): Paint a handle that does not make you puke
+	when you look at it.
+
 Fri Apr  3 21:03:38 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtktext.c (gtk_text_realize): Call recompute_geometry()
