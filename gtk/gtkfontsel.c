@@ -34,6 +34,8 @@
 #include <glib/gprintf.h>
 #include <string.h>
 
+#include <atk/atk.h>
+
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
 
@@ -55,6 +57,7 @@
 #include "gtkvbox.h"
 #include "gtkscrolledwindow.h"
 #include "gtkintl.h"
+#include "gtkaccessible.h"
 
 /* We don't enable the font and style entries because they don't add
  * much in terms of visible effect and have a weird effect on keynav.
@@ -313,6 +316,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   GtkListStore *model;
   GtkTreeViewColumn *column;
   GList *focus_chain = NULL;
+  AtkObject *atk_obj;
 
   gtk_widget_push_composite_child ();
 
@@ -494,6 +498,50 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 
   g_signal_connect (gtk_tree_view_get_selection (GTK_TREE_VIEW (fontsel->size_list)), "changed",
 		    G_CALLBACK (gtk_font_selection_select_size), fontsel);
+  atk_obj = gtk_widget_get_accessible (fontsel->size_list);
+  if (GTK_IS_ACCESSIBLE (atk_obj))
+    {
+      /* Accessibility support is enabled.
+       * Make the label ATK_RELATON_LABEL_FOR for the size list as well.
+       */
+      AtkObject *atk_label;
+      AtkRelationSet *relation_set;
+      AtkRelation *relation;
+      AtkObject *obj_array[1];
+      GPtrArray *array;
+
+      atk_label = gtk_widget_get_accessible (label);
+      relation_set = atk_object_ref_relation_set (atk_obj);
+      relation = atk_relation_set_get_relation_by_type (relation_set, ATK_RELATION_LABELLED_BY);
+      if (relation)
+        {
+          array = atk_relation_get_target (relation);
+          g_ptr_array_add (array, atk_label);
+        }
+      else 
+        {
+          obj_array[0] = atk_label;
+          relation = atk_relation_new (obj_array, 1, ATK_RELATION_LABELLED_BY);
+          atk_relation_set_add (relation_set, relation);
+        }
+      g_object_unref (relation_set);
+
+      relation_set = atk_object_ref_relation_set (atk_label);
+      relation = atk_relation_set_get_relation_by_type (relation_set, ATK_RELATION_LABEL_FOR);
+      if (relation)
+        {
+          array = atk_relation_get_target (relation);
+          g_ptr_array_add (array, atk_obj);
+        }
+      else 
+        {
+          obj_array[0] = atk_obj;
+          relation = atk_relation_new (obj_array, 1, ATK_RELATION_LABEL_FOR);
+          atk_relation_set_add (relation_set, relation);
+        }
+      g_object_unref (relation_set);
+    }    
+      
 
   /* create the text entry widget */
   label = gtk_label_new_with_mnemonic (_("_Preview:"));
