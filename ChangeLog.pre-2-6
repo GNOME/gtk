@@ -1,3 +1,8 @@
+Mon Apr 24 19:34:18 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_move_cursor_visually): Fix problem
+	with deletion from last commit.
+
 Mon Apr 24 19:29:40 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_create_pango_context): Set the language

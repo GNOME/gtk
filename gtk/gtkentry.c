@@ -1642,21 +1642,42 @@ gtk_entry_move_cursor (GtkEditable *editable,
   
   /* Horizontal motion */
 
+  if ((gint)editable->current_pos < -x)
+    editable->current_pos = 0;
+  else if (editable->current_pos + x > entry->text_length)
+    editable->current_pos = entry->text_length;
+  else
+    editable->current_pos += x;
+
+  /* Ignore vertical motion */
+}
+
+static void 
+gtk_entry_move_cursor_visually (GtkEditable *editable,
+				gint         count)
+{
+  GtkEntry *entry;
+  gint index;
+
+  entry = GTK_ENTRY (editable);
+
+  index  = unicode_offset_to_index (entry->text, editable->current_pos);
+  
   gtk_entry_ensure_layout (entry);
 
-  while (x != 0)
+  while (count != 0)
     {
       int new_index, new_trailing;
       
-      if (x > 0)
+      if (count > 0)
 	{
 	  pango_layout_move_cursor_visually (entry->layout, index, 0, 1, &new_index, &new_trailing);
-	  x--;
+	  count--;
 	}
       else
 	{
 	  pango_layout_move_cursor_visually (entry->layout, index, 0, -1, &new_index, &new_trailing);
-	  x++;
+	  count++;
 	}
 
       if (new_index < 0 || new_index == G_MAXINT)
@@ -1669,29 +1690,18 @@ gtk_entry_move_cursor (GtkEditable *editable,
     }
 
   editable->current_pos = unicode_index_to_offset (entry->text, index);
-
-#if 0  
-  if ((gint)editable->current_pos < -x)
-    editable->current_pos = 0;
-  else if (editable->current_pos + x > entry->text_length)
-    editable->current_pos = entry->text_length;
-  else
-    editable->current_pos += x;
-#endif  
-
-  /* Ignore vertical motion */
 }
 
 static void
 gtk_move_forward_character (GtkEntry *entry)
 {
-  gtk_entry_move_cursor (GTK_EDITABLE (entry), 1, 0);
+  gtk_entry_move_cursor_visually (GTK_EDITABLE (entry), 1);
 }
 
 static void
 gtk_move_backward_character (GtkEntry *entry)
 {
-  gtk_entry_move_cursor (GTK_EDITABLE (entry), -1, 0);
+  gtk_entry_move_cursor_visually (GTK_EDITABLE (entry), -1);
 }
 
 static void 
