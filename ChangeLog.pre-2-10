@@ -1,3 +1,17 @@
+2002-02-14  Matthias Clasen  <matthias@YAST_ASK>
+
+	The following changes are the beginning of the work on #71430.
+	
+	* examples/extract.sh, examples/extract.awk: Make extraction work.
+	
+	* examples/Makefile (SUBDIRS): Remove packer.
+
+	* examples/packer/pack.c, examples/packer/Makefile: Removed.
+
+	* docs/tutorial/gtk-tut.sgml: Fix the included examples far
+	enough to make them compile and (mostly) work, remove the packer
+	example.
+
 Thu Feb 14 16:46:48 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c gtk/gtktextdisplay.c gtk/gtklabel.c

@@ -1923,7 +1923,6 @@ learn how a widget works just by looking at the function declarations.</para>
   | | +GtkMenuShell
   | | | +GtkMenuBar
   | | | `GtkMenu
-  | | +GtkPacker
   | | +GtkSocket
   | | +GtkTable
   | | +GtkToolbar
@@ -4714,7 +4713,7 @@ should be connected to the motion_notify_event method of the ruler.
 To follow all mouse movements within a window area, we would use</para>
 
 <programlisting role="C">
-#define EVENT_METHOD(i, x) GTK_WIDGET_CLASS(GTK_OBJECT(i)->klass)->x
+#define EVENT_METHOD(i, x) GTK_WIDGET_GET_CLASS(i)->x
 
     gtk_signal_connect_object( GTK_OBJECT(area), "motion_notify_event",
            (GtkSignalFunc)EVENT_METHOD(ruler, motion_notify_event),
@@ -4733,7 +4732,7 @@ Placement of the drawing area and the rulers is done using a table.</para>
 
 #include &lt;gtk/gtk.h&gt;
 
-#define EVENT_METHOD(i, x) GTK_WIDGET_CLASS(GTK_OBJECT(i)->klass)->x
+#define EVENT_METHOD(i, x) GTK_WIDGET_GET_CLASS(i)->x
 
 #define XSIZE  600
 #define YSIZE  400
@@ -4781,7 +4780,6 @@ int main( int   argc,
                                (GtkSignalFunc)EVENT_METHOD(hrule,
                                                         motion_notify_event),
                                GTK_OBJECT(hrule) );
-    /*  GTK_WIDGET_CLASS(GTK_OBJECT(hrule)->klass)->motion_notify_event, */
     gtk_table_attach( GTK_TABLE(table), hrule, 1, 2, 0, 1,
                       GTK_EXPAND|GTK_SHRINK|GTK_FILL, GTK_FILL, 0, 0 );
     
@@ -4792,9 +4790,8 @@ int main( int   argc,
     gtk_ruler_set_metric( GTK_RULER(vrule), GTK_PIXELS );
     gtk_ruler_set_range( GTK_RULER(vrule), 0, YSIZE, 10, YSIZE );
     gtk_signal_connect_object( GTK_OBJECT(area), "motion_notify_event",
-                               (GtkSignalFunc)
-                                  GTK_WIDGET_CLASS(GTK_OBJECT(vrule)->klass)->
-				                         motion_notify_event,
+                               (GtkSignalFunc)EVENT_METHOD(vrule,
+	                                        motion_notify_event),
                                GTK_OBJECT(vrule) );
     gtk_table_attach( GTK_TABLE(table), vrule, 0, 1, 1, 2,
                       GTK_FILL, GTK_EXPAND|GTK_SHRINK|GTK_FILL, 0, 0 );
@@ -5055,7 +5052,7 @@ removed.</para>
 void enter_callback( GtkWidget *widget,
                      GtkWidget *entry )
 {
-  gchar *entry_text;
+  const gchar *entry_text;
   entry_text = gtk_entry_get_text(GTK_ENTRY(entry));
   printf("Entry contents: %s\n", entry_text);
 }
@@ -5483,8 +5480,6 @@ int main( int   argc,
 					      5.0, 0.0);
   spinner = gtk_spin_button_new (adj, 0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-  gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-				   GTK_SHADOW_OUT);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
   
   vbox2 = gtk_vbox_new (FALSE, 0);
@@ -5498,8 +5493,6 @@ int main( int   argc,
 					      5.0, 0.0);
   spinner = gtk_spin_button_new (adj, 0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-  gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-				   GTK_SHADOW_ETCHED_IN);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
   
   vbox2 = gtk_vbox_new (FALSE, 0);
@@ -5513,8 +5506,6 @@ int main( int   argc,
 					      1.0, 100.0, 0.0);
   spinner = gtk_spin_button_new (adj, 0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-  gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-				   GTK_SHADOW_IN);
   gtk_widget_set_usize (spinner, 55, 0);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
   
@@ -6150,9 +6141,7 @@ void calendar_font_selection_ok( GtkWidget    *button,
       if (font) 
 	{
 	  style = gtk_style_copy (gtk_widget_get_style (calendar->window));
-	  gdk_font_unref (style->font);
-	  style->font = font;
-	  gdk_font_ref (style->font);
+	  gtk_style_set_font (style, font);
 	  gtk_widget_set_style (calendar->window, style);
 	}
     }
@@ -7312,20 +7301,6 @@ void gtk_paned_add2 (GtkPaned *paned, GtkWidget *child);
 the paned window. <literal>gtk_paned_add2()</literal> adds the child widget to the
 right or bottom half of the paned window.</para>
 
-<para>A paned widget can be changed visually using the following two
-functions.</para>
-
-<programlisting role="C">
-void gtk_paned_set_handle_size( GtkPaned *paned,
-                                guint16   size);
-
-void gtk_paned_set_gutter_size( GtkPaned *paned,
-                                guint16   size);
-</programlisting>
-
-<para>The first of these sets the size of the handle and the second sets the
-size of the gutter that is between the two parts of the paned window.</para>
-
 <para>As an example, we will create part of the user interface of an
 imaginary email program. A window is divided into two portions
 vertically, with the top portion being a list of email messages and
@@ -7343,6 +7318,7 @@ window.</para>
 <programlisting role="C">
 /* example-start paned paned.c */
 
+#define GTK_ENABLE_BROKEN
 #include &lt;stdio.h&gt;
 #include &lt;gtk/gtk.h&gt;
    
@@ -7463,10 +7439,6 @@ int main( int   argc,
    
     vpaned = gtk_vpaned_new ();
     gtk_container_add (GTK_CONTAINER(window), vpaned);
-    gtk_paned_set_handle_size (GTK_PANED(vpaned),
-                               10);
-    gtk_paned_set_gutter_size (GTK_PANED(vpaned),
-                               15);                       
     gtk_widget_show (vpaned);
    
     /* Now create the contents of the two halves of the window */
@@ -9796,7 +9768,7 @@ to the topmost Tree widget in a hierarchy, known as the "root tree".</para>
 
 <para>Thus, accessing the <literal>selection</literal> field directly in an arbitrary
 Tree widget is not a good idea unless you <emphasis>know</emphasis> it's the root
-tree. Instead, use the <literal>GTK_TREE_SELECTION (Tree)</literal> macro, which
+tree. Instead, use the <literal>GTK_TREE_SELECTION_OLD (Tree)</literal> macro, which
 gives the root tree's selection list as a GList pointer. Of course,
 this list can include items that are not in the subtree in question if
 the selection type is <literal>GTK_SELECTION_MULTIPLE</literal>.</para>
@@ -10076,7 +10048,7 @@ GtkTree *GTK_TREE_ROOT_TREE (gpointer obj)
 warning applies.</para>
 
 <programlisting role="C">
-GList *GTK_TREE_SELECTION( gpointer obj)
+GList *GTK_TREE_SELECTION_OLD( gpointer obj)
 </programlisting>
 
 <para>Return the selection list of the root tree of a "GtkTree" object. The
@@ -10328,6 +10300,7 @@ can see when they are emitted.</para>
 <programlisting role="C">
 /* example-start tree tree.c */
 
+#define GTK_ENABLE_BROKEN
 #include &lt;gtk/gtk.h&gt;
 
 /* for all the GtkItem:: and GtkTreeItem:: signals */
@@ -10372,7 +10345,7 @@ static void cb_selection_changed( GtkWidget *tree )
   g_print ("selection_change called for tree %p\n", tree);
   g_print ("selected objects are:\n");
 
-  i = GTK_TREE_SELECTION(tree);
+  i = GTK_TREE_SELECTION_OLD(tree);
   while (i){
     gchar *name;
     GtkLabel *label;
@@ -11315,6 +11288,7 @@ extend the selection.</para>
 
 /* text.c */
 
+#define GTK_ENABLE_BROKEN
 #include &lt;stdio.h&gt;
 #include &lt;gtk/gtk.h&gt;
 
@@ -11554,14 +11528,6 @@ from your time.</para>
 <!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Image">
 <title>Image</title>
-
-<para></para>
-
-</sect1>
-
-<!-- ----------------------------------------------------------------- -->
-<sect1 id="sec-Packer">
-<title>Packer</title>
 
 <para></para>
 
@@ -14008,7 +13974,7 @@ struct _TictactoeClass
   void (* tictactoe) (Tictactoe *ttt);
 };
 
-guint          tictactoe_get_type        (void);
+GtkType        tictactoe_get_type        (void);
 GtkWidget*     tictactoe_new             (void);
 void	       tictactoe_clear           (Tictactoe *ttt);
 
@@ -14032,7 +13998,7 @@ GTK about the widget class, and gets an ID that uniquely identifies
 the widget class. Upon subsequent calls, it just returns the ID.</para>
 
 <programlisting role="C">
-guint
+GtkType
 tictactoe_get_type ()
 {
   static guint ttt_type = 0;
@@ -14566,7 +14532,7 @@ struct _GtkDialClass
 
 
 GtkWidget*     gtk_dial_new                    (GtkAdjustment *adjustment);
-guint          gtk_dial_get_type               (void);
+GtkType        gtk_dial_get_type               (void);
 GtkAdjustment* gtk_dial_get_adjustment         (GtkDial      *dial);
 void           gtk_dial_set_update_policy      (GtkDial      *dial,
 						GtkUpdateType  policy);
@@ -14608,25 +14574,26 @@ and initialize it:</para>
 
 static GtkWidgetClass *parent_class = NULL;
 
-guint
+GtkType
 gtk_dial_get_type ()
 {
-  static guint dial_type = 0;
+  static GtkType dial_type = 0;
 
   if (!dial_type)
     {
-      GtkTypeInfo dial_info =
+      static const GtkTypeInfo dial_info =
       {
 	"GtkDial",
 	sizeof (GtkDial),
 	sizeof (GtkDialClass),
 	(GtkClassInitFunc) gtk_dial_class_init,
 	(GtkObjectInitFunc) gtk_dial_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	/* reserved_1 */ NULL,
+	/* reserved_1 */ NULL,
+	(GtkClassInitFunc) NULL
       };
 
-      dial_type = gtk_type_unique (gtk_widget_get_type (), &amp;dial_info);
+      dial_type = gtk_type_unique (GTK_TYPE_WIDGET, &amp;dial_info);
     }
 
   return dial_type;
@@ -17572,7 +17539,7 @@ struct _TictactoeClass
   void (* tictactoe) (Tictactoe *ttt);
 };
 
-guint          tictactoe_get_type        (void);
+GtkType        tictactoe_get_type        (void);
 GtkWidget*     tictactoe_new             (void);
 void	       tictactoe_clear           (Tictactoe *ttt);
 
@@ -17628,10 +17595,10 @@ static void tictactoe_toggle              (GtkWidget *widget, Tictactoe *ttt);
 
 static gint tictactoe_signals[LAST_SIGNAL] = { 0 };
 
-guint
+GtkType
 tictactoe_get_type ()
 {
-  static guint ttt_type = 0;
+  static GtkType ttt_type = 0;
 
   if (!ttt_type)
     {
@@ -17642,8 +17609,9 @@ tictactoe_get_type ()
 	sizeof (TictactoeClass),
 	(GtkClassInitFunc) tictactoe_class_init,
 	(GtkObjectInitFunc) tictactoe_init,
-        (GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL
+	/* reserved_1 */ NULL,
+	/* reserved_1 */ NULL,
+	(GtkClassInitFunc) NULL
       };
 
       ttt_type = gtk_type_unique (gtk_vbox_get_type (), &amp;ttt_info);
@@ -17661,14 +17629,12 @@ tictactoe_class_init (TictactoeClass *class)
   
   tictactoe_signals[TICTACTOE_SIGNAL] = gtk_signal_new ("tictactoe",
 					 GTK_RUN_FIRST,
-					 object_class->type,
+					 GTK_CLASS_TYPE (object_class),
 					 GTK_SIGNAL_OFFSET (TictactoeClass,
                                                             tictactoe),
 					 gtk_signal_default_marshaller,
                                          GTK_TYPE_NONE, 0);
 
-
-  gtk_object_class_add_signals (object_class, tictactoe_signals, LAST_SIGNAL);
 
   class->tictactoe = NULL;
 }
@@ -17901,7 +17867,7 @@ struct _GtkDialClass
 
 
 GtkWidget*     gtk_dial_new                    (GtkAdjustment *adjustment);
-guint          gtk_dial_get_type               (void);
+GtkType        gtk_dial_get_type               (void);
 GtkAdjustment* gtk_dial_get_adjustment         (GtkDial      *dial);
 void           gtk_dial_set_update_policy      (GtkDial      *dial,
 						GtkUpdateType  policy);
@@ -17985,10 +17951,10 @@ static void gtk_dial_adjustment_value_changed (GtkAdjustment    *adjustment,
 
 static GtkWidgetClass *parent_class = NULL;
 
-guint
+GtkType
 gtk_dial_get_type ()
 {
-  static guint dial_type = 0;
+  static GtkType dial_type = 0;
 
   if (!dial_type)
     {
@@ -17999,11 +17965,12 @@ gtk_dial_get_type ()
 	sizeof (GtkDialClass),
 	(GtkClassInitFunc) gtk_dial_class_init,
 	(GtkObjectInitFunc) gtk_dial_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL,
+	/* reserved_1 */ NULL,
+	/* reserved_1 */ NULL,
+	(GtkClassInitFunc) NULL
       };
 
-      dial_type = gtk_type_unique (gtk_widget_get_type (), &amp;dial_info);
+      dial_type = gtk_type_unique (GTK_TYPE_WIDGET, &amp;dial_info);
     }
 
   return dial_type;
@@ -18952,35 +18919,21 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
 }
 
 static void
-print_button_press (guint32 deviceid)
+print_button_press (GdkDevice *device)
 {
-  GList *tmp_list;
-
-  /* gdk_input_list_devices returns an internal list, so we shouldn't
-     free it afterwards */
-  tmp_list = gdk_input_list_devices();
-
-  while (tmp_list)
-    {
-      GdkDeviceInfo *info = (GdkDeviceInfo *)tmp_list->data;
-
-      if (info->deviceid == deviceid)
-        {
-          g_print("Button press on device '%s'\n", info->name);
-          return;
-        }
-
-      tmp_list = tmp_list->next;
-    }
+  g_print("Button press on device '%s'\n", device->name);
 }
 
 static gint
 button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
-  print_button_press (event->deviceid);
+  print_button_press (event->device);
   
-  if (event->button == 1 &amp;&amp; pixmap != NULL)
-    draw_brush (widget, event->source, event->x, event->y, event->pressure);
+  if (event->button == 1 &amp;&amp; pixmap != NULL) {
+    gdouble pressure;
+    gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &amp;pressure);
+    draw_brush (widget, event->device->source, event->x, event->y, pressure);
+  }
 
   return TRUE;
 }
@@ -18992,20 +18945,23 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
   gdouble pressure;
   GdkModifierType state;
 
-  if (event->is_hint)
-    gdk_input_window_get_pointer (event->window, event->deviceid,
-                                  &amp;x, &amp;y, &amp;pressure,
-				  NULL, NULL, &amp;state);
+  if (event->is_hint) 
+    {
+      gdk_device_get_state (event->device, event->window, NULL, &amp;state);
+      gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_X, &amp;x);
+      gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_Y, &amp;y);
+      gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &amp;pressure);
+    }
   else
     {
       x = event->x;
       y = event->y;
-      pressure = event->pressure;
+      gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &pressure);
       state = event->state;
     }
     
   if (state &amp; GDK_BUTTON1_MASK &amp;&amp; pixmap != NULL)
-    draw_brush (widget, event->source, x, y, pressure);
+    draw_brush (widget, event->device->source, x, y, pressure);
   
   return TRUE;
 }

@@ -19,7 +19,6 @@ SUBDIRS = 	arrow \
 		menu \
 		notebook \
 		packbox \
-		packer \
 		paned \
 		pixmap \
 		progressbar \
