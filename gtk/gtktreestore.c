@@ -2042,6 +2042,7 @@ gtk_tree_store_sort_iter_changed (GtkTreeStore *tree_store,
     prev->next = next;
   else
     node->parent->children = next;
+
   if (next)
     next->prev = prev;
 
@@ -2086,6 +2087,7 @@ gtk_tree_store_sort_iter_changed (GtkTreeStore *tree_store,
   else
     {
       G_NODE (iter->user_data)->next = G_NODE (iter->user_data)->parent->children;
+      G_NODE (iter->user_data)->next->prev = G_NODE (iter->user_data);
       G_NODE (iter->user_data)->parent->children = G_NODE (iter->user_data);
     }
 
