@@ -33,6 +33,8 @@
 #include "x11/gdkx.h"
 #elif defined (GDK_WINDOWING_WIN32)
 #include "win32/gdkwin32.h"
+#elif defined (GDK_WINDOWING_NANOX)
+#include "nanox/gdkprivate-nanox.h"
 #endif
 
 #include "gtkprivate.h"

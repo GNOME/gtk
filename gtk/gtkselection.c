@@ -59,6 +59,8 @@
 #include "x11/gdkx.h"		/* For gdk_window_lookup() */
 #elif defined (GDK_WINDOWING_WIN32)
 #include "win32/gdkwin32.h"	/* For gdk_window_lookup() */
+#elif defined (GDK_WINDOWING_NANOX)
+#include "nanox/gdkprivate-nanox.h"	/* For gdk_window_lookup() */
 #endif
 
 #include "gtkmain.h"

@@ -1,0 +1,154 @@
+Gtk port to nano-X
+
+STATUS
+
+Once upon a time I got a few apps working, then started merging
+the new features added by Owen (32 bit sizes for windows and buffering).
+Since then I haven't found the time to work on it:-/
+
+
+TODO
+
+Finish internal window manager abstraction or add proper support in nano-X.
+Fix event polling.
+Implement GdkImage, GdkRgb stuff.
+Put generic region code in generic gdk and/or use the region code from nano-X.
+Fix ugly automake stuff for make dist.
+
+TODO in nano-X
+
+We need to be able to clip and change the background of windows at runtime
+for apps to not look so ugly!
+Fonts: wait for better nano-X font implementation.
+Properties on windows.
+
+
+If you want to work on this port or get additional informnation, get in 
+touch with me.
+To get the beast to compile you also need to apply the patch below
+(any auto* wizard here?): the issue of having two gtk libraries in the
+system needs to be addressed too, maybe use libgtk-x11-1.4.so and 
+libgtk-nanox-1.4.so ...
+
+Paolo Molaro
+lupus@linuxcare.com
+
+
+Index: acconfig.h
+===================================================================
+RCS file: /cvs/gnome/gtk+/acconfig.h,v
+retrieving revision 1.16
+diff -u -r1.16 acconfig.h
+--- acconfig.h	1999/03/20 00:52:29	1.16
++++ acconfig.h	2000/05/06 11:52:38
+@@ -49,6 +49,8 @@
+ /* Most machines will be happy with int or void.  IRIX requires '...' */
+ #undef SIGNAL_ARG_TYPE
+ 
++#undef USE_NANOX
++
+ /* #undef PACKAGE */
+ /* #undef VERSION */
+ 
+Index: configure.in
+===================================================================
+RCS file: /cvs/gnome/gtk+/configure.in,v
+retrieving revision 1.142
+diff -u -r1.142 configure.in
+--- configure.in	2000/05/04 00:29:46	1.142
++++ configure.in	2000/05/06 11:52:38
+@@ -99,6 +99,8 @@
+ AC_ARG_WITH(locale, [  --with-locale=LOCALE    locale name you want to use ])
+ 
+ AC_ARG_WITH(xinput, [  --with-xinput=[no/gxi/xfree] support XInput ])
++AC_ARG_ENABLE(nanox, [  --enable-nanox            use nano-X instead of X11 [default=no]],
++			, enable_nanox="no")
+ 
+ if test "x$enable_debug" = "xyes"; then
+   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
+@@ -322,6 +324,8 @@
+ saved_cflags="$CFLAGS"
+ saved_ldflags="$LDFLAGS"
+ 
++if text "x$enable_nanox" = "xno"; then
++
+ CFLAGS="$CFLAGS $X_CFLAGS"
+ LDFLAGS="$LDFLAGS $X_LDFLAGS $X_LIBS"
+ 
+@@ -465,6 +469,13 @@
+   GTK_LOCALE_FLAGS="-DX_LOCALE"
+ fi
+ 
++else
++AC_CHECK_LIB(nano-X, GrOpen)
++LIBS="-lnano-X $LIBS"
++ AC_DEFINE(USE_NANOX)
++AM_CONDITIONAL(USE_NANOX, test x$enable_nanox = xyes)
++fi # if enable_nanox
++
+ # Checks for header files.
+ AC_HEADER_STDC
+ 
+@@ -602,8 +613,13 @@
+ esac
+ ],[
+ # Currently we always use X11 on those systems where we run configure...
++if test x$enable_nanox = xno; then
+ gdk_windowing='
+ #define GDK_WINDOWING_X11'
++else
++gdk_windowing='
++#define GDK_WINDOWING_NANOX'
++fi
+ if test x$gdk_wchar_h = xyes; then
+   gdk_wc='
+ #define GDK_HAVE_WCHAR_H 1'
+@@ -629,6 +645,7 @@
+ docs/Makefile
+ gdk/Makefile
+ gdk/x11/Makefile
++gdk/nanox/Makefile
+ gdk/win32/Makefile
+ gtk/Makefile
+ gtk/gtkfeatures.h
+Index: gdk/Makefile.am
+===================================================================
+RCS file: /cvs/gnome/gtk+/gdk/Makefile.am,v
+retrieving revision 1.41
+diff -u -r1.41 Makefile.am
+--- gdk/Makefile.am	2000/04/05 04:11:10	1.41
++++ gdk/Makefile.am	2000/05/06 11:52:38
+@@ -1,6 +1,10 @@
+ ## Makefile.am for gtk+/gdk
+ 
++if USE_NANOX
++SUBDIRS=win32 nanox
++else
+ SUBDIRS=x11 win32
++endif
+ 
+ EXTRA_DIST =	\
+ 	gdkconfig.h.win32 \
+@@ -36,8 +40,13 @@
+ 	-lm		\
+ @STRIP_END@
+ 
++if USE_NANOX
+ libgdk_la_LIBADD = \
++	nanox/libgdk-nanox.la	
++else
++libgdk_la_LIBADD = \
+ 	x11/libgdk-x11.la	
++endif
+ 
+ #
+ # setup source file variables
+@@ -138,3 +147,8 @@
+ 	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
+ 	  echo $$p; \
+ 	done
++
++noinst_PROGRAMS = simple
++simple_DEPENDENCIES = libgdk.la simple.c
++simple_LDADD = libgdk.la
++
