@@ -2,7 +2,7 @@
 GtkWindow
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Toplevel which can contain other widgets
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

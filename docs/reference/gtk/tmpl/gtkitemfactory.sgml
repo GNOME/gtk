@@ -2,7 +2,7 @@
 GtkItemFactory
 
 <!-- ##### SECTION Short_Description ##### -->
-
+A factory for menus
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

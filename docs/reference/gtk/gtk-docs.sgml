@@ -262,7 +262,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
 
   <part  id="gtkbase">
     <title>GTK+ Core Reference</title>
-
     &gtk-General;
     &GtkAccelGroup;
     &gtk-accel-map;
@@ -280,6 +279,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     &gtk-Feature-Test-Macros;
     &gtk-Signals;
     &gtk-Types;
+
   </part>
 
   <part id="gtkobjects">

@@ -2,7 +2,7 @@
 GtkContainer
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Base class for widgets which contain other widgets
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

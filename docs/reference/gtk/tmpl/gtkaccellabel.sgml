@@ -2,7 +2,7 @@
 GtkAccelLabel
 
 <!-- ##### SECTION Short_Description ##### -->
-a label which displays an accelerator key on the right of the text.
+A label which displays an accelerator key on the right of the text
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

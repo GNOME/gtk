@@ -1,9 +1,8 @@
 <!-- ##### SECTION Title ##### -->
-Keyboard Accelerator Groups
+Accelerator Groups
 
 <!-- ##### SECTION Short_Description ##### -->
-
-Groups of global keyboard accelerators for an entire #GtkWindow
+Groups of global keyboard accelerators for an entire GtkWindow
 
 <!-- ##### SECTION Long_Description ##### -->
 <para id="GtkAccelGroup">

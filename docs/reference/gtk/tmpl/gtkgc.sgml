@@ -2,7 +2,7 @@
 Graphics Contexts
 
 <!-- ##### SECTION Short_Description ##### -->
-provides access to a shared pool of #GdkGC objects.
+A shared pool of GdkGC objects
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

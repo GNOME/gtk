@@ -2,7 +2,7 @@
 GtkEditable
 
 <!-- ##### SECTION Short_Description ##### -->
-Base class for text-editing widgets.
+Interface for text-editing widgets.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

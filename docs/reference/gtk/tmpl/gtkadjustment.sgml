@@ -2,7 +2,7 @@
 GtkAdjustment
 
 <!-- ##### SECTION Short_Description ##### -->
-a #GtkObject representing an adjustable bounded value.
+A GtkObject representing an adjustable bounded value
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,7 +2,7 @@
 GtkAlignment
 
 <!-- ##### SECTION Short_Description ##### -->
-a widget which controls the alignment and size of its child.
+A widget which controls the alignment and size of its child
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

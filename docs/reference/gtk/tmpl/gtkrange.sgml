@@ -2,7 +2,7 @@
 GtkRange
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Base class for widgets which visualize an adjustment
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -1,5 +1,29 @@
 2002-11-29  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/tmpl/gtkalignment.sgml: 
+	* gtk/tmpl/gtkadjustment.sgml: 
+	* gtk/tmpl/gtkaccellabel.sgml: 
+	* gtk/tmpl/gtkoldeditable.sgml: 
+	* gtk/tmpl/gtkwidget.sgml: 
+	* gtk/tmpl/gtkrange.sgml: 
+	* gtk/tmpl/gtkeditable.sgml: 
+	* gtk/tmpl/gtkwindowgroup.sgml:
+	* gtk/tmpl/gtkwindow.sgml: 
+	* gtk/tmpl/gtktypeutils.sgml: 
+	* gtk/tmpl/gtksignal.sgml: 
+	* gtk/tmpl/gtkfeatures.sgml: 
+	* gtk/tmpl/gtkstyle.sgml: 
+	* gtk/tmpl/gtkselection.sgml: 
+	* gtk/tmpl/gtkgc.sgml: 
+	* gtk/tmpl/gtkenums.sgml: 
+	* gtk/tmpl/gtkbindings.sgml: 
+	* gtk/tmpl/gtksettings.sgml: 
+	* gtk/tmpl/gtkdnd.sgml: 
+	* gtk/tmpl/gtkclipboard.sgml: 
+	* gtk/tmpl/gtkaccelgroup.sgml: 
+	* gtk/tmpl/gtkaccelmap.sgml: 
+	Minor tweaks and completions of shortdescs.
+	
 	* gdk/tmpl/rgb.sgml: 
 	* gdk/tmpl/gcs.sgml: Minor tweaks.
 

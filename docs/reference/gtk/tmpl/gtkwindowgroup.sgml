@@ -2,7 +2,7 @@
 GtkWindowGroup
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Limit the effect of grabs
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

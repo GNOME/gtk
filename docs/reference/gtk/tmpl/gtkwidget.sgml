@@ -2,7 +2,7 @@
 GtkWidget
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Base class for all widgets
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
