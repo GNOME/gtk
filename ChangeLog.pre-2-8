@@ -1,3 +1,10 @@
+Wed Jun 21 23:04:17 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in (GDK_PIXBUF_MAJOR): Define version
+	numbers for GDK_PIXBUF_*, as they get substituted
+	into a header file. Need to consider versioning
+	for gdk-pixbuf more carefully later.
+
 2000-06-21  Raja R Harinath  <harinath@cs.umn.edu>
 
 	Work with srcdir != builddir.	
