@@ -1229,7 +1229,7 @@ mem_buffer (enum buf_op op, gpointer handle)
 static void
 free_buffer (guchar *pixels, gpointer data)
 {
-	free (pixels);
+	g_free (pixels);
 }
 
 /* This function does all the work. */
