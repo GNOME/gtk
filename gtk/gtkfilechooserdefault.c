@@ -2275,8 +2275,9 @@ gtk_file_chooser_default_unselect_all (GtkFileChooser *chooser)
 }
 
 struct get_paths_closure {
-  GSList *result;
   GtkFileChooserDefault *impl;
+  GSList *result;
+  GtkFilePath *path_from_entry;
 };
 
 static void
@@ -2304,58 +2305,69 @@ get_paths_foreach (GtkTreeModel *model,
     }
 
   file_path = _gtk_file_system_model_get_path (fs_model, &sel_iter);
-  info->result = g_slist_prepend (info->result, gtk_file_path_copy (file_path));
+
+  if (!info->path_from_entry
+      || gtk_file_path_compare (info->path_from_entry, file_path) != 0)
+    info->result = g_slist_prepend (info->result, gtk_file_path_copy (file_path));
 }
 
 static GSList *
 gtk_file_chooser_default_get_paths (GtkFileChooser *chooser)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
-  GtkTreeSelection *selection;
+  GtkFileChooserEntry *chooser_entry;
+  const GtkFilePath *folder_path;
+  const gchar *file_part;
   struct get_paths_closure info;
 
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-    {
-      GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (impl->entry);
-      const GtkFilePath *folder_path = _gtk_file_chooser_entry_get_current_folder (chooser_entry);
-      const gchar *file_part = _gtk_file_chooser_entry_get_file_part (chooser_entry);
-
-      if (file_part != NULL && file_part[0] != '\0')
-	{
-	  GtkFilePath *selected;
-	  GError *error = NULL;
-
-	  selected = gtk_file_system_make_path (impl->file_system, folder_path, file_part, &error);
-
-	  if (!selected)
-	    {
-	      error_building_filename_dialog (impl, folder_path, file_part, error);
-	      return NULL;
-	    }
-
-	  return g_slist_append (NULL, selected);
-	}
-    }
-
-  if (impl->folder_mode)
-    {
-      if (!impl->tree_model)
-	return NULL;
-
-      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->tree));
-    }
-  else
-    {
-      if (!impl->sort_model)
-	return NULL;
-
-      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
-    }
-
-  info.result = NULL;
   info.impl = impl;
+  info.result = NULL;
+  info.path_from_entry = NULL;
 
-  gtk_tree_selection_selected_foreach (selection, get_paths_foreach, &info);
+  chooser_entry = GTK_FILE_CHOOSER_ENTRY (impl->entry);
+  folder_path = _gtk_file_chooser_entry_get_current_folder (chooser_entry);
+  file_part = _gtk_file_chooser_entry_get_file_part (chooser_entry);
+
+  if (file_part != NULL && file_part[0] != '\0')
+    {
+      GtkFilePath *selected;
+      GError *error = NULL;
+
+      selected = gtk_file_system_make_path (impl->file_system, folder_path, file_part, &error);
+
+      if (!selected)
+	{
+	  error_building_filename_dialog (impl, folder_path, file_part, error);
+	  return NULL;
+	}
+
+      info.path_from_entry = selected;
+    }
+
+  if (!info.path_from_entry || impl->select_multiple)
+    {
+      GtkTreeSelection *selection;
+
+      selection = NULL;
+
+      if (impl->folder_mode)
+	{
+	  if (impl->tree_model)
+	    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->tree));
+	}
+      else
+	{
+	  if (impl->sort_model)
+	    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
+	}
+
+      if (selection)
+	gtk_tree_selection_selected_foreach (selection, get_paths_foreach, &info);
+    }
+
+  if (info.path_from_entry)
+    info.result = g_slist_prepend (info.result, info.path_from_entry);
+
   return g_slist_reverse (info.result);
 }
 

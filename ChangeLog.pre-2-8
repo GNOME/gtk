@@ -1,5 +1,17 @@
 2004-02-09  Federico Mena Quintero  <federico@ximian.com>
 
+	Fix #132256.
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_get_paths): Read the contents of the
+	filename entry in both OPEN and SAVE mode.  In multiple-selection
+	mode, add this to the selection from the file/folder list.
+	(struct get_paths_closure): Add a path_from_entry field.
+	(get_paths_foreach): Only add the iterated path if it is not the
+	same as the path from the entry.
+
+2004-02-09  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_get_folder): If
 	the folder is already open, add the requested info types to it.
 
