@@ -239,6 +239,9 @@ struct _GtkCList
   GtkSortType sort_type;
   GtkCListCompareFunc compare;
   gint sort_column;
+
+  gint drag_highlight_row;
+  GtkCListDragPos drag_highlight_pos;
 };
 
 struct _GtkCListClass

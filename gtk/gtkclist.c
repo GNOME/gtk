@@ -990,6 +990,8 @@ gtk_clist_init (GtkCList *clist)
   clist->compare = default_compare;
   clist->sort_type = GTK_SORT_ASCENDING;
   clist->sort_column = 0;
+
+  clist->drag_highlight_row = -1;
 }
 
 /* Constructor */
@@ -4799,6 +4801,13 @@ gtk_clist_expose (GtkWidget      *widget,
       /* exposure events on the list */
       if (event->window == clist->clist_window)
 	draw_rows (clist, &event->area);
+
+      if (event->window == clist->clist_window &&
+	  clist->drag_highlight_row >= 0)
+	GTK_CLIST_GET_CLASS (clist)->draw_drag_highlight
+	  (clist, g_list_nth (clist->row_list,
+			      clist->drag_highlight_row)->data,
+	   clist->drag_highlight_row, clist->drag_highlight_pos);
     }
 
   return FALSE;
@@ -7483,6 +7492,7 @@ gtk_clist_drag_leave (GtkWidget      *widget,
 		    (clist,
 		     g_list_nth (clist->row_list, dest_info->cell.row)->data,
 		     dest_info->cell.row, dest_info->insert_pos);
+		  clist->drag_highlight_row = -1;
 		  break;
 		}
 	      list = list->next;
@@ -7573,6 +7583,9 @@ gtk_clist_drag_motion (GtkWidget      *widget,
 		(clist, g_list_nth (clist->row_list,
 				    dest_info->cell.row)->data,
 		 dest_info->cell.row, dest_info->insert_pos);
+	      
+	      clist->drag_highlight_row = dest_info->cell.row;
+	      clist->drag_highlight_pos = dest_info->insert_pos;
 
 	      gdk_drag_status (context, context->suggested_action, time);
 	    }

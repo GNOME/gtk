@@ -1005,12 +1005,19 @@ gtk_notebook_arrow_button_press (GtkNotebook    *notebook,
   
   if (event->button == 1)
     {
+      GtkDirectionType dir;
       if (!notebook->focus_tab ||
 	  gtk_notebook_search_page (notebook, notebook->focus_tab,
 				    arrow == GTK_ARROW_LEFT ? STEP_PREV : STEP_NEXT,
 				    TRUE))
-	gtk_container_focus (GTK_CONTAINER (notebook),
-			     arrow == GTK_ARROW_LEFT ? GTK_DIR_LEFT : GTK_DIR_RIGHT);
+	{
+	  if (notebook->tab_pos == GTK_POS_LEFT ||
+	      notebook->tab_pos == GTK_POS_RIGHT)
+	    dir = (arrow == GTK_ARROW_LEFT) ? GTK_DIR_UP : GTK_DIR_DOWN;
+	  else
+	    dir = (arrow == GTK_ARROW_LEFT) ? GTK_DIR_LEFT : GTK_DIR_RIGHT;
+	  gtk_container_focus (GTK_CONTAINER (notebook), dir);
+	}
       
       if (!notebook->timer)
 	{

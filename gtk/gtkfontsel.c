@@ -288,9 +288,6 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_signal_connect (GTK_OBJECT (fontsel->font_clist), "key_press_event",
 		      GTK_SIGNAL_FUNC(gtk_font_selection_on_clist_key_press),
 		      fontsel);
-  gtk_signal_connect_after (GTK_OBJECT (fontsel->font_clist), "expose_event",
-			    GTK_SIGNAL_FUNC(gtk_font_selection_expose_list),
-			    fontsel);
   
   gtk_font_selection_show_available_styles (fontsel);
   

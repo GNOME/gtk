@@ -6084,6 +6084,9 @@ gtk_ctree_drag_motion (GtkWidget      *widget,
 		 g_list_nth (clist->row_list, dest_info->cell.row)->data,
 		 dest_info->cell.row, dest_info->insert_pos);
 
+	      clist->drag_highlight_row = dest_info->cell.row;
+	      clist->drag_highlight_pos = dest_info->insert_pos;
+
 	      gdk_drag_status (context, context->suggested_action, time);
 	    }
 	  return TRUE;
