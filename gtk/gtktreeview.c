@@ -579,7 +579,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   g_object_class_install_property (o_class,
                                    PROP_HEADERS_VISIBLE,
                                    g_param_spec_boolean ("headers_visible",
-							 P_("Visible"),
+							 P_("Headers Visible"),
 							 P_("Show the column header buttons"),
 							 TRUE,
 							 G_PARAM_READWRITE));
@@ -590,7 +590,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							 P_("Headers Clickable"),
 							 P_("Column headers respond to click events"),
 							 FALSE,
-							 G_PARAM_WRITABLE));
+							 G_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_EXPANDER_COLUMN,
@@ -9607,7 +9607,6 @@ gtk_tree_view_set_headers_clickable (GtkTreeView *tree_view,
   GList *list;
 
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  g_return_if_fail (tree_view->priv->model != NULL);
 
   for (list = tree_view->priv->columns; list; list = list->next)
     gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (list->data), setting);

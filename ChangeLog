@@ -1,3 +1,11 @@
+2005-01-13  Matthias Clasen <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c: (gtk_tree_view_class_init),
+	(gtk_tree_view_set_headers_clickable): Make the headers-visible
+	property readwrite instead of just writable, and remove the
+	g_return_if_fail check that there is a model when setting this
+	property. Also improve the blurb.  (#163851, Richard Hult)
+
 2005-01-12  Owen Taylor <otaylor@redhat.com>
 
 	* configure.in: Remove GLIB_DIVERT_BEFORE_HELP() on
