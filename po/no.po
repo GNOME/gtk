@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.14\n"
-"POT-Creation-Date: 2002-07-10 12:44+0200\n"
-"PO-Revision-Date: 2002-07-10 12:45+0200\n"
+"POT-Creation-Date: 2002-07-21 01:15+0200\n"
+"PO-Revision-Date: 2002-07-21 01:16+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <no@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -425,7 +425,11 @@ msgstr "RAS-bilde har ugyldige data i header"
 msgid "RAS image has unknown type"
 msgstr "RAS-bilde har ukjent type"
 
-#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#: gdk-pixbuf/io-ras.c:188
+msgid "unsupported RAS image variation"
+msgstr "Ikke-støttet variant av RAS-bilde"
+
+#: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
 msgstr "Ikke nok minne til å laste RAS-bilde"
 
