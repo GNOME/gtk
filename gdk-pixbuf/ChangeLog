@@ -1,3 +1,14 @@
+2005-03-03  Matthias Clasen  <mclasen@redhat.com>
+
+	Make the gif loader handle oom when loading 
+	animations.  (#168857, Tommi Komulainen)
+	
+	* io-gif-animation.c (gdk_pixbuf_gif_anim_frame_composite): 
+	Handle oom by returning NULL.
+
+	* io-gif.c (gif_get_lzw): Return an error if composite 
+	returns NULL.
+
 2005-02-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* pixops/*.S: Add .note.GNU-stack sections to Mark these as not 

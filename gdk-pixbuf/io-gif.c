@@ -920,6 +920,34 @@ gif_get_lzw (GifContext *context)
 
                         gdk_pixbuf_gif_anim_frame_composite (context->animation, prev_frame);
 
+                        /* Composite failed */
+                        if (prev_frame->composited == NULL) {
+                                GdkPixbufFrame *frame = NULL;
+                                link = g_list_first (context->animation->frames);
+                                while (link != NULL) {
+                                        frame = (GdkPixbufFrame *)link->data;
+                                        if (frame != NULL) {
+                                                if (frame->pixbuf != NULL)
+                                                        g_object_unref (frame->pixbuf);
+                                                if (frame->composited != NULL)
+                                                        g_object_unref (frame->composited);
+                                                if (frame->revert != NULL)
+                                                        g_object_unref (frame->revert);
+                                                g_free (frame);
+                                        }
+                                        link = link->next;
+                                }
+                                
+                                g_list_free (context->animation->frames);
+                                context->animation->frames = NULL;
+                                
+                                g_set_error (context->error,
+                                             GDK_PIXBUF_ERROR,
+                                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                             _("Not enough memory to composite a frame in GIF file"));
+                                return -2;
+                        }
+                    
                         x = context->frame->x_offset;
                         y = context->frame->y_offset;
                         w = gdk_pixbuf_get_width (context->frame->pixbuf);
