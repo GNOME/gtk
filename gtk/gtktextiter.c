@@ -2803,7 +2803,10 @@ inside_word_func (const PangoLogAttr *attrs,
          !(attrs[offset].is_word_start || attrs[offset].is_word_end))
     --offset;
 
-  return attrs[offset].is_word_start;
+  if (offset >= 0)
+    return attrs[offset].is_word_start;
+  else
+    return FALSE;
 }
 
 /* Sentence funcs */
