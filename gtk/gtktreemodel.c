@@ -1334,17 +1334,11 @@ gtk_tree_row_ref_deleted_callback (GObject     *object,
 	  gint i;
 
 	  if (path->depth > reference->path->depth)
-	    {
-	      tmp_list = g_slist_next (tmp_list);
-	      continue;
-	    }
+	    goto next;
 	  for (i = 0; i < path->depth - 1; i++)
 	    {
 	      if (path->indices[i] != reference->path->indices[i])
-		{
-		  tmp_list = g_slist_next (tmp_list);
-		  continue;
-		}
+		goto next;
 	    }
 
 	  /* We know it affects us. */
@@ -1359,6 +1353,8 @@ gtk_tree_row_ref_deleted_callback (GObject     *object,
 	      reference->path->indices[path->depth-1]-=1;
 	    }
 	}
+
+next:
       tmp_list = g_slist_next (tmp_list);
     }
 }

@@ -1,3 +1,13 @@
+Tue Feb 12 14:27:41 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_deleted): emit
+	row_deleted before we start unreffing the nodes ourselves
+	(gtk_tree_model_sort_increment_stamp): always increment the stamp,
+	and not only if the stamp equals 0 (pointed out by Darin Adler)
+
+	* gtk/gtktreemodel.c (gtk_tree_row_ref_deleted_callback): we want
+	to continue the while loop and not the nested for loop.
+
 Tue Feb 12 02:19:49 2002  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktable.c (gtk_table_size_allocate_pass1): always spread out
