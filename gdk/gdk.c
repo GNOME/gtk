@@ -331,7 +331,7 @@ gdk_init (int    *argc,
 		  (*argv)[i] = NULL;
 		}
 	    }
-	  else if (strcmp ("-name", (*argv)[i]) == 0)
+	  else if (strcmp ("--name", (*argv)[i]) == 0)
 	    {
 	      if ((i + 1) < *argc)
 		{
@@ -340,7 +340,7 @@ gdk_init (int    *argc,
 		  (*argv)[i] = NULL;
 		}
 	    }
-	  else if (strcmp ("-class", (*argv)[i]) == 0)
+	  else if (strcmp ("--class", (*argv)[i]) == 0)
 	    {
 	      if ((i + 1) < *argc)
 		{

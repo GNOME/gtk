@@ -278,6 +278,13 @@ Example code sequences that require reference wraps:
      gtk_widget_unref (GTK_WIDGET (tmp->data));
      g_slist_free_1 (tmp);
    }
+   
+   /* Alternatively to the removal above you could just use
+    * gtk_list_remove_items_no_unref() which will add the additional
+    * reference count to the widget.
+    */
+   gtk_list_remove_items_no_unref (list, item_list);
+   gtk_list_prepend_items (other_list, item_list);
 
 
 Now a (hopefully) complete list of functions that require
@@ -308,7 +315,6 @@ Events that a likely to trigger a missing check for the window pointer
 currently are (and correspond to the trailing signals):
 
 GDK_SELECTION_CLEAR     GtkWidget::selection_clear_event
-GDK_EXPOSE              GtkWidget::expose_event
 GDK_FOCUS_CHANGE        GtkWidget::focus_in_event
                         GtkWidget::focus_out_event
 

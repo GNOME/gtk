@@ -324,19 +324,39 @@ gtk_main_iteration_do (gboolean blocking)
 	    gdk_event_free (event);
 	    gdk_event_free (next_event);
 	    next_event = NULL;
-
-	    return done;
+	    
+	    goto event_handling_done;
 	  }
-
+      
+      /* Find the widget which got the event. We store the widget
+       *  in the user_data field of GdkWindow's.
+       *  Ignore the event if we don't have a widget for it, except
+       *  for GDK_PROPERTY_NOTIFY events which are handled specialy.
+       *  Though this happens rarely, bogus events can occour
+       *  for e.g. destroyed GdkWindows. 
+       */
+      event_widget = gtk_get_event_widget (event);
+      if (!event_widget)
+	{
+	  /* To handle selection INCR transactions, we select
+	   * PropertyNotify events on the requestor window and create
+	   * a corresponding (fake) GdkWindow so that events get
+	   * here. There won't be a widget though, so we have to handle
+	   * them specially
+	   */
+	  if (event->type == GDK_PROPERTY_NOTIFY)
+	    gtk_selection_incr_event (event->any.window,
+				      &event->property);
+	  
+	  gdk_event_free (event);
+	  
+	  goto event_handling_done;
+	}
+      
       /* Push the event onto a stack of current events for
        * gtk_current_event_get().
        */
       current_events = g_list_prepend (current_events, event);
-      
-      /* Find the widget which got the event. We store the widget
-       *  in the user_data field of GdkWindow's.
-       */
-      event_widget = gtk_get_event_widget (event);
       
       /* If there is a grab in effect...
        */
@@ -383,20 +403,6 @@ gtk_main_iteration_do (gboolean blocking)
 	  break;
 	  
 	case GDK_PROPERTY_NOTIFY:
-	  /* To handle selection INCR transactions, we select
-	   * PropertyNotify events on the requestor window and create
-	   * a corresponding (fake) GdkWindow so that events get
-	   * here. There won't be a widget though, so we have to handle
-	   * them specially
-	   */
-	  
-	  if (event_widget == NULL)
-	    {
-	      gtk_selection_incr_event (event->any.window,
-					&event->property);
-	      break;
-	    }
-	  /* otherwise fall through */
 	case GDK_EXPOSE:
 	case GDK_NO_EXPOSE:
 	case GDK_FOCUS_CHANGE:
@@ -436,21 +442,21 @@ gtk_main_iteration_do (gboolean blocking)
 	  break;
 	  
 	case GDK_ENTER_NOTIFY:
-	  if (grab_widget && GTK_WIDGET_IS_SENSITIVE (grab_widget))
+	  if (GTK_WIDGET_IS_SENSITIVE (grab_widget))
 	    {
 	      gtk_widget_event (grab_widget, event);
 	      if (event_widget == grab_widget)
 		GTK_PRIVATE_SET_FLAG (event_widget, GTK_LEAVE_PENDING);
 	    }
 	  break;
-
+	  
 	case GDK_LEAVE_NOTIFY:
-	  if (event_widget && GTK_WIDGET_LEAVE_PENDING (event_widget))
+	  if (GTK_WIDGET_LEAVE_PENDING (event_widget))
 	    {
 	      GTK_PRIVATE_UNSET_FLAG (event_widget, GTK_LEAVE_PENDING);
 	      gtk_widget_event (event_widget, event);
 	    }
-	  else if (grab_widget && GTK_WIDGET_IS_SENSITIVE (grab_widget))
+	  else if (GTK_WIDGET_IS_SENSITIVE (grab_widget))
 	    gtk_widget_event (grab_widget, event);
 	  break;
 	}
@@ -458,7 +464,7 @@ gtk_main_iteration_do (gboolean blocking)
       tmp_list = current_events;
       current_events = g_list_remove_link (current_events, tmp_list);
       g_list_free_1 (tmp_list);
-
+      
       gdk_event_free (event);
     }
   else
@@ -467,7 +473,9 @@ gtk_main_iteration_do (gboolean blocking)
 	gtk_handle_idle ();
     }
   
-  /* Handle a timeout functions that may have expired.
+event_handling_done:
+  
+  /* Handle timeout functions that may have expired.
    */
   gtk_handle_timeouts ();
   
@@ -490,7 +498,7 @@ void
 gtk_grab_add (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
-
+  
   if (!GTK_WIDGET_HAS_GRAB (widget))
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_GRAB);
@@ -504,11 +512,11 @@ void
 gtk_grab_remove (GtkWidget *widget)
 {
   g_return_if_fail (widget != NULL);
-
+  
   if (GTK_WIDGET_HAS_GRAB (widget))
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_GRAB);
-
+      
       grabs = g_slist_remove (grabs, widget);
       gtk_widget_unref (widget);
     }

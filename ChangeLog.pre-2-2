@@ -1,4 +1,42 @@
+Thu Feb  5 02:13:08 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtklist.h:
+	* gtk/gtklist.c (gtk_list_remove_items_no_unref): new function
+	  to perform the same actions as gtk_list_remove_items, but
+	  supply the removed widgets with an additional reference count.
+
+	* gtk/gtkmain.c (gtk_main_iteration_do): ignore events
+	  with event_widget == NULL, since they are bogus events
+	  from destroyed GdkWindows, exept for the case where
+ 	  event->type==GDK_PROPERTY_NOTIFY. Always handle expired
+ 	  timeout functions when returning from this function.
+
+	* gtk/gtkwidget.c (gtk_widget_event): ignore GDK_EXPOSE events
+	  if event->window == NULL. Also, if this function couldn't handle
+	  the event for any reason (including failing assumptions), make
+	  the return value to look as if the event had been handled to
+	  avoid further processing (and warnings).
+	  
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c: remove gtk_widget_sink, because there is
+	  no point in providing such a function.
+
+	* gdk/gdk.c (gdk_init): changed options `-name' and `-class'
+	  to `--name' and `--class', because the old names would
+	  confuse getopt(). these arguments have been introduced in the
+	  changes from gtk+970916 to gtk+970925 without a ChangeLog entry,
+	  changing argument names is painful, it would be nice if people
+	  would care about compatibility and consistency in the first place!
+
 Tue Feb  3 15:09:55 1998  Tim Janik  <timj@gimp.org>
+	
+	* docs/widget_system.txt: new file containing notes about
+	  the inner workings of the widget system of GTK+, a widget
+	  flag description and certain invariants about widget states.
+	
+	* docs/refcounting.txt: moved file (previously REFCOUNTING)
+	  introducing The Reference Counting Scheme of GDK an GTK+.
+	  lots of additions/corrections.
 
         * gtk/gtksignal.c (gtk_signal_real_emit): for the emission
           of AFTER signals, fetch the objects signals via
@@ -280,7 +318,6 @@ Sat Jan 31 23:55:03 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/testgtk.c: some changes because of all the above ;)
 
->>>>>>> 1.103
 Sat Jan 31 21:26:27 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkwidget.c: Added a new GTK_IN_REPARENT flag and revised

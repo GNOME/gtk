@@ -64,32 +64,34 @@ struct _GtkListClass
 };
 
 
-guint      gtk_list_get_type           (void);
-GtkWidget* gtk_list_new                (void);
-void       gtk_list_insert_items       (GtkList          *list,
-					GList            *items,
-					gint              position);
-void       gtk_list_append_items       (GtkList          *list,
-					GList            *items);
-void       gtk_list_prepend_items      (GtkList          *list,
-					GList            *items);
-void       gtk_list_remove_items       (GtkList          *list,
-					GList            *items);
-void       gtk_list_clear_items        (GtkList          *list,
-					gint              start,
-					gint              end);
-void       gtk_list_select_item        (GtkList          *list,
-					gint              item);
-void       gtk_list_unselect_item      (GtkList          *list,
-					gint              item);
-void       gtk_list_select_child       (GtkList          *list,
-					GtkWidget        *child);
-void       gtk_list_unselect_child     (GtkList          *list,
-					GtkWidget        *child);
-gint       gtk_list_child_position     (GtkList          *list,
-					GtkWidget        *child);
-void       gtk_list_set_selection_mode (GtkList          *list,
-					GtkSelectionMode  mode);
+guint      gtk_list_get_type              (void);
+GtkWidget* gtk_list_new                   (void);
+void       gtk_list_insert_items          (GtkList          *list,
+					   GList            *items,
+					   gint              position);
+void       gtk_list_append_items          (GtkList          *list,
+					   GList            *items);
+void       gtk_list_prepend_items         (GtkList          *list,
+					   GList            *items);
+void       gtk_list_remove_items          (GtkList          *list,
+					   GList            *items);
+void       gtk_list_remove_items_no_unref (GtkList          *list,
+					   GList            *items);
+void       gtk_list_clear_items           (GtkList          *list,
+					   gint              start,
+					   gint              end);
+void       gtk_list_select_item           (GtkList          *list,
+					   gint              item);
+void       gtk_list_unselect_item         (GtkList          *list,
+					   gint              item);
+void       gtk_list_select_child          (GtkList          *list,
+					   GtkWidget        *child);
+void       gtk_list_unselect_child        (GtkList          *list,
+					   GtkWidget        *child);
+gint       gtk_list_child_position        (GtkList          *list,
+					   GtkWidget        *child);
+void       gtk_list_set_selection_mode    (GtkList          *list,
+					   GtkSelectionMode  mode);
 
 
 #ifdef __cplusplus

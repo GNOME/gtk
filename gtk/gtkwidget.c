@@ -1675,7 +1675,7 @@ gtk_widget_event (GtkWidget *widget,
   gint return_val;
   gint signal_num;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (widget != NULL, TRUE);
 
   gtk_widget_ref (widget);
   return_val = FALSE;
@@ -1708,9 +1708,6 @@ gtk_widget_event (GtkWidget *widget,
       break;
     case GDK_DESTROY:
       signal_num = DESTROY_EVENT;
-      break;
-    case GDK_EXPOSE:
-      signal_num = EXPOSE_EVENT;
       break;
     case GDK_KEY_PRESS:
       signal_num = KEY_PRESS_EVENT;
@@ -1780,6 +1777,16 @@ gtk_widget_event (GtkWidget *widget,
       break;
     case GDK_CLIENT_EVENT:
       signal_num = CLIENT_EVENT;
+      break;
+    case GDK_EXPOSE:
+      /* there is no sense in providing a widget with bogus expose events
+       */
+      if (!event->any.window)
+	{
+	  gtk_widget_unref (widget);
+	  return TRUE;
+	}
+      signal_num = EXPOSE_EVENT;
       break;
     default:
       g_warning ("could not determine signal number for event: %d", event->type);
@@ -2223,7 +2230,8 @@ gtk_widget_set_parent (GtkWidget *widget,
   GtkStateData data;
   
   g_return_if_fail (widget != NULL);
-  g_assert (widget->parent == NULL);
+  g_return_if_fail (widget->parent == NULL);
+  g_return_if_fail (!GTK_WIDGET_TOPLEVEL (widget));
   g_return_if_fail (parent != NULL);
 
   /* keep this function in sync with gtk_menu_attach_to_widget()
@@ -3822,12 +3830,6 @@ gtk_widget_dnd_data_set (GtkWidget   *widget,
   g_return_if_fail (widget->window != NULL);
   
   gdk_window_dnd_data_set (widget->window, event, data, data_numbytes);
-}
-
-void
-gtk_widget_sink (GtkWidget *widget)
-{
-  gtk_object_sink (GTK_OBJECT (widget));
 }
 
 
