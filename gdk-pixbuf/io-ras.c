@@ -27,7 +27,9 @@
 
 Known bugs:
 	* "Indexed" (incl grayscale) sunras files don't work
-	* 1 bpp sunrasfiles don't work
+	  ( 1999/11/10 - Fixed for non-progressive loading )
+	* 1 bpp sunrasfiles don't work yet
+	* Compressed rasterfiles don't work yet
 
 */
 
@@ -146,9 +148,9 @@ static void OneLineMapped_file(FILE * f, guint Width, guchar * pixels,
 		(void) fread(&DummyByte, 1, 1, f);
 	X = 0;
 	while (X < Width) {
-		pixels[X * 3]   = Map[buffer[X]*3];
-		pixels[X * 3+1] = Map[buffer[X]*3];
-		pixels[X * 3+2] = Map[buffer[X]*3];
+		pixels[X * 3]   = Map[buffer[X]];
+		pixels[X * 3+1] = Map[buffer[X]+256];
+		pixels[X * 3+2] = Map[buffer[X]+512];
 
 		X++;
 	}

@@ -1,3 +1,8 @@
+1999-11-10  Jonathan Blandford  <jrb@redhat.com>
+
+	* src/io-ras.c (OneLineMapped_file): Now can handle indexing
+	correctly.  Patch from Arjan to do so.
+
 1999-11-10  Michael Fulbright  <drmike@redhat.com>
 
         * src/io-pnm.c (pnm_ascii_read_scanline): Fixed loading of ASCII PNM
