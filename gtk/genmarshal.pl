@@ -14,8 +14,8 @@
 	   "C_CALLBACK"=>"gpointer");
 
 open(IL, "<".$ENV{'srcdir'}."/gtkmarshal.list") || die("Open failed: $!");
-open(OH, "|indent > gtkmarshal.h") || die("Open failed: $!");
-open(OS, "|indent > gtkmarshal.c") || die("Open failed: $!");
+open(OH, "|indent >".$ENV{'srcdir'}."/gtkmarshal.h") || die("Open failed: $!");
+open(OS, "|indent >".$ENV{'srcdir'}."/gtkmarshal.c") || die("Open failed: $!");
 
 print OH <<EOT;
 #ifndef __GTKMARSHAL_H__

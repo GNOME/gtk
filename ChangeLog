@@ -1,3 +1,11 @@
+1998-06-21  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* gtk/Makefile.am (gtk.defs,gtktypebuiltins*): Remove $(srcdir)
+	from, and clean up, the dependencies.  Generate to intermediate
+	files to prevent problems with Ctrl-C.
+
+	* gtk/genmarshal.pl: Generate `gtkmarshal.[ch]' in $srcdir.
+
 Fri Jun 19 14:46:56 1998  Stefan Jeske  <stefan@gtk.org>
 
 	* gtk/gtkspinbutton.h gtk/gtkspinbutton.c gtk/testgtk.c:

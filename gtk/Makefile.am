@@ -206,56 +206,56 @@ gtkinclude_HEADERS = \
 	gtkwindow.h             \
 	gtktypebuiltins.h
 
+.PHONY: auto-files auto-files-1
 auto-files:
 	rm -f $(srcdir)/gtk.defs
-	make $(srcdir)/gtktypebuiltins_evals.c
-	make $(srcdir)/gtktypebuiltins_ids.c
-	make $(srcdir)/gtktypebuiltins_vars.c
-	make $(srcdir)/gtktypebuiltins.h
+	$(MAKE) auto-files-1
 
-# generate gtk.defs file from gtk-boxed.defs and gcc -E
-$(srcdir)/gtk.defs: @MAINT@ makeenums.pl gtk-boxed.defs
+auto-files-1: gtk.defs
+auto-files-1: gtktypebuiltins_evals.c gtktypebuiltins_ids.c
+auto-files-1: gtktypebuiltins_vars.c gtktypebuiltins.h
+
+# generate gtk.defs file from gtk-boxed.defs and *.h
+gtk.defs: @MAINT@ makeenums.pl gtk-boxed.defs
 	srcdir=$(srcdir) \
 	  perl $(srcdir)/makeenums.pl defs $(srcdir)/gtk*.h \
-               $(top_srcdir)/gdk/gdk*.h > $@
-	cat $(srcdir)/gtk-boxed.defs >> $@
+               $(top_srcdir)/gdk/gdk*.h > gd.tmp
+	cat $(srcdir)/gtk-boxed.defs >> gd.tmp
+	cp gd.tmp $(srcdir)/gtk.defs
+	rm -f gd.tmp
 
 # generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
-$(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gtk.defs maketypes.awk
-	awk -f $(srcdir)/maketypes.awk $(srcdir)/gtk.defs macros > $@
+gtktypebuiltins.h: @MAINT@ gtk.defs maketypes.awk
+	awk -f $(srcdir)/maketypes.awk $(srcdir)/gtk.defs macros > gtb.tmp
+	cp gtb.tmp $(srcdir)/gtktypebuiltins.h
+	rm -f gtb.tmp
 
 # generate type identifier variables (GTK_TYPE_WIDGET_FLAGS)
-$(srcdir)/gtktypebuiltins_vars.c: @MAINT@ $(srcdir)/gtk.defs maketypes.awk
-	awk -f $(srcdir)/maketypes.awk $(srcdir)/gtk.defs variables > $@
+gtktypebuiltins_vars.c: @MAINT@ gtk.defs maketypes.awk
+	awk -f $(srcdir)/maketypes.awk $(srcdir)/gtk.defs variables > gtbv.tmp
+	cp gtbv.tmp $(srcdir)/gtktypebuiltins_vars.c
+	rm -f gtbv.tmp
 
 # generate type entries for type-id registration
-$(srcdir)/gtktypebuiltins_ids.c: @MAINT@ $(srcdir)/gtk.defs maketypes.awk
-	awk -f $(srcdir)/maketypes.awk $(srcdir)/gtk.defs entries > $@
+gtktypebuiltins_ids.c: @MAINT@ gtk.defs maketypes.awk
+	awk -f $(srcdir)/maketypes.awk $(srcdir)/gtk.defs entries > gtbi.tmp
+	cp gtbi.tmp $(srcdir)/gtktypebuiltins_ids.c
+	rm -f gtbi.tmp
 
 # generate enum value arrays
-$(srcdir)/gtktypebuiltins_evals.c: @MAINT@ makeenums.pl $(srcdir)/gtk.defs
+gtktypebuiltins_evals.c: @MAINT@ makeenums.pl gtk.defs
 	srcdir=$(srcdir) \
 	  perl $(srcdir)/makeenums.pl arrays $(srcdir)/gtk*.h \
-               $(top_srcdir)/gdk/gdk*.h > $@
+               $(top_srcdir)/gdk/gdk*.h > gtbe.tmp
+	cp gtbe.tmp $(srcdir)/gtktypebuiltins_evals.c
+	rm -f gtbe.tmp
 
-gtkmarshal.c gtkmarshal.h: @MAINT@ gtkmarshal.list
+gtkmarshal.c gtkmarshal.h: @MAINT@ gtkmarshal.list genmarshal.pl
 	srcdir=$(srcdir) perl $(srcdir)/genmarshal.pl
 
+# ???
 # special remake rules
-#$(srcdir)/gtk.defs: @MAINT@ $(srcdir)/makeenums.awk
-#$(srcdir)/gtk.defs: @MAINT@ $(srcdir)/makeenums.h
-#$(srcdir)/gtk.defs: @MAINT@ $(srcdir)/gtk-boxed.defs
-#$(srcdir)/gtktypebuiltins_vars.c: @MAINT@ $(srcdir)/maketypes.awk
-#$(srcdir)/gtktypebuiltins_vars.c: @MAINT@ $(srcdir)/gtk.defs
-#$(srcdir)/gtktypebuiltins_ids.c: @MAINT@ $(srcdir)/maketypes.awk
-#$(srcdir)/gtktypebuiltins_ids.c: @MAINT@ $(srcdir)/gtk.defs
-#$(srcdir)/gtktypebuiltins_evals.c: @MAINT@ $(srcdir)/makeenums.awk
-#$(srcdir)/gtktypebuiltins_evals.c: @MAINT@ $(srcdir)/makeenums.h
-#$(srcdir)/gtktypebuiltins_evals.c: @MAINT@ $(srcdir)/gtk.defs
-#$(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/maketypes.awk
-#$(srcdir)/gtktypebuiltins.h: @MAINT@ $(srcdir)/gtk.defs
-$(srcdir)/makeenums.h: @MAINT@ $(srcdir)/gtk.h
-$(srcdir)/makeenums.h: @MAINT@ $(srcdir)/gtkprivate.h
+makeenums.h: @MAINT@ gtk.h gtkprivate.h
 
 libgtk_1_1_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
@@ -313,7 +313,6 @@ testinput_LDADD = $(LDADDS)
 testthreads_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
-
 
 .PHONY: files test test-debug
 
