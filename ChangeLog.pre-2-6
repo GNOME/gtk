@@ -1,3 +1,9 @@
+Sun Apr  5 09:35:55 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_events_pending): take expired timeouts into
+	account, otherwise things like e.g. spin-buttons don't work.
+	also, count gtk_main_quit() as an event.
+
 Sun Apr  5 08:03:01 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkspinbutton.c: fixed panel allocation and stacking order,

@@ -419,13 +419,38 @@ gtk_main_quit ()
 gint
 gtk_events_pending (void)
 {
-  gint result = gdk_events_pending() + ((next_event != NULL) ? 1 : 0);
+  gint result = 0;
+  
+  /* if this function is called from a timeout which will only return
+   * if gtk needs processor time, we need to take iteration_done==TRUE
+   * into account as well.
+   */
+  result = iteration_done;
+  result += next_event != NULL;
+  result += gdk_events_pending();
 
-  if (idle_functions &&
-      (((GtkIdleFunction *)idle_functions->data)->priority <=
-       GTK_PRIORITY_INTERNAL))
-    result += 1;
+  result += current_idles != NULL;
+  result += current_timeouts != NULL;
 
+  if (!result)
+    {
+      result += (idle_functions &&
+		 (((GtkIdleFunction *)idle_functions->data)->priority <=
+		  GTK_PRIORITY_INTERNAL));
+    }
+  
+  if (!result && timeout_functions)
+    {
+      guint32 the_time;
+      GtkTimeoutFunction *timeoutf;
+      
+      the_time = gdk_time_get ();
+      
+      timeoutf = timeout_functions->data;
+      
+      result += timeoutf->interval <= (the_time - timeoutf->start);
+    }
+  
   return result;
 }
 
@@ -1395,7 +1420,7 @@ gtk_handle_timeouts ()
 	}
       
       if (current_timeouts)
-	gtk_handle_current_timeouts(the_time);
+	gtk_handle_current_timeouts (the_time);
     }
 }
 
