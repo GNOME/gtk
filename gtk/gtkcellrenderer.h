@@ -69,10 +69,7 @@ struct _GtkCellRenderer
   guint visible : 1;
   guint is_expander : 1;
   guint is_expanded : 1;
-
   guint cell_background_set : 1;
-
-  GdkColor cell_background;
 };
 
 struct _GtkCellRendererClass
