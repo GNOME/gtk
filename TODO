@@ -89,7 +89,11 @@ TODO AFTER GTK 1.0
 ------------------
 
  * Make all widget attributes configurable after the widget is created (timj).
- 
+
+ * Seperate GtkObject and signaling system from Gdk dependancies?
+  
+ * move *_input_add (wrappers for select(2)) mechanism into glib.
+
  * Make sure a widget added to a list is a list item and a widget added
    to a menu is a menu item, etc. GTK_BASIC was a first attempt at this,
    but it fails with subsequent container_add()s. maybe have another
@@ -111,6 +115,8 @@ TODO AFTER GTK 1.0
    code. Maybe GtkStyle's should have 'draw_push_button', 'draw_check_button',
    etc, functions to draw the various widgets.
    This will be covered by upcoming themability, raster is working on it.
+ 
+ * make the gtk_main callbacks consistent in their add/remove behaviour.
  
  * More work on Documentation
 
