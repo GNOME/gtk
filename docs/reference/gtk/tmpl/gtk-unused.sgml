@@ -1873,6 +1873,14 @@ Sets the default size of child buttons.
 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_cell_view_set_cell_data ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@cellview: 
+
 <!-- ##### FUNCTION gtk_clist_construct ##### -->
 <para>
 Initializes a previously allocated #GtkCList widget for use.  This should not

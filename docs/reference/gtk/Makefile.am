@@ -202,7 +202,7 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/stock_media_next_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_media_pause_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_media_play_24.png		\
-	$(top_srcdir)/gtk/stock-icons/stock_media_play__rtl_24.png	\
+	$(top_srcdir)/gtk/stock-icons/stock_media_play_rtl_24.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_media_previous_24.png	\
 	$(top_srcdir)/gtk/stock-icons/stock_media_record_24.png		\
 	$(top_srcdir)/gtk/stock-icons/stock_media_rewind_24.png		\
