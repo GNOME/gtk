@@ -5202,31 +5202,11 @@ gtk_clist_motion (GtkWidget      *widget,
 	   x >= (COLUMN_LEFT_XPIXEL(clist, clist->click_cell.column) + 
 		 clist->column[clist->click_cell.column].area.width)))
 	{
-	  GdkDragContext *context;
 	  GtkTargetList  *target_list;
-	  gint button;
-
-	  button = clist->drag_button;
-	  clist->drag_button = 0;
-	  remove_grab (clist);
-
-	  switch (clist->selection_mode)
-	    {
-	    case GTK_SELECTION_EXTENDED:
-	      update_extended_selection (clist, clist->focus_row);
-	      GTK_CLIST_CLASS_FW (clist)->resync_selection
-		(clist, (GdkEvent *) event);
-	      break;
-	    case GTK_SELECTION_SINGLE:
-	    case GTK_SELECTION_MULTIPLE:
-	      clist->anchor = -1;
-	    case GTK_SELECTION_BROWSE:
-	      break;
-	    }
 
 	  target_list = gtk_target_list_new (&clist_target_table, 1);
-	  context = gtk_drag_begin (widget, target_list, GDK_ACTION_MOVE,
-				    button, (GdkEvent *)event);
+	  gtk_drag_begin (widget, target_list, GDK_ACTION_MOVE,
+			  clist->drag_button, (GdkEvent *)event);
 
 	}
       return TRUE;
@@ -5283,7 +5263,8 @@ gtk_clist_motion (GtkWidget      *widget,
 
   row = CLAMP (row, 0, clist->rows - 1);
 
-  if (button_actions & GTK_BUTTON_SELECTS)
+  if (button_actions & GTK_BUTTON_SELECTS &
+      !gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data"))
     {
       if (row == clist->focus_row)
 	return FALSE;
@@ -7356,6 +7337,22 @@ gtk_clist_drag_begin (GtkWidget	     *widget,
   g_return_if_fail (context != NULL);
 
   clist = GTK_CLIST (widget);
+
+  clist->drag_button = 0;
+  remove_grab (clist);
+
+  switch (clist->selection_mode)
+    {
+    case GTK_SELECTION_EXTENDED:
+      update_extended_selection (clist, clist->focus_row);
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
+      break;
+    case GTK_SELECTION_SINGLE:
+    case GTK_SELECTION_MULTIPLE:
+      clist->anchor = -1;
+    case GTK_SELECTION_BROWSE:
+      break;
+    }
 
   info = g_dataset_get_data (context, "gtk-clist-drag-source");
 

@@ -286,6 +286,7 @@ static void gtk_ctree_drag_data_received (GtkWidget        *widget,
 					  GtkSelectionData *selection_data,
 					  guint             info,
 					  guint32           time);
+static void remove_grab                  (GtkCList         *clist);
 
 
 enum
@@ -671,7 +672,7 @@ gtk_ctree_realize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CTREE (widget));
 
-  (* GTK_WIDGET_CLASS (parent_class)->realize) (widget);
+  GTK_WIDGET_CLASS (parent_class)->realize (widget);
 
   ctree = GTK_CTREE (widget);
   clist = GTK_CLIST (widget);
@@ -714,7 +715,7 @@ gtk_ctree_unrealize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CTREE (widget));
 
-  (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+  GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
 
   ctree = GTK_CTREE (widget);
   clist = GTK_CLIST (widget);
@@ -3868,7 +3869,7 @@ real_clear (GtkCList *clist)
     }
   GTK_CLIST_UNSET_FLAG (clist, CLIST_AUTO_RESIZE_BLOCKED);
 
-  (parent_class->clear) (clist);
+  parent_class->clear (clist);
 }
 
 
@@ -4753,6 +4754,28 @@ gtk_ctree_node_set_shift (GtkCTree     *ctree,
   tree_draw_node (ctree, node);
 }
 
+static void
+remove_grab (GtkCList *clist)
+{
+  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist))
+    {
+      gtk_grab_remove (GTK_WIDGET (clist));
+      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+    }
+
+  if (clist->htimer)
+    {
+      gtk_timeout_remove (clist->htimer);
+      clist->htimer = 0;
+    }
+
+  if (clist->vtimer)
+    {
+      gtk_timeout_remove (clist->vtimer);
+      clist->vtimer = 0;
+    }
+}
+
 void
 gtk_ctree_node_set_selectable (GtkCTree     *ctree,
 			       GtkCTreeNode *node,
@@ -4776,22 +4799,9 @@ gtk_ctree_node_set_selectable (GtkCTree     *ctree,
       if (clist->anchor >= 0 &&
 	  clist->selection_mode == GTK_SELECTION_EXTENDED)
 	{
-	  if ((gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_FOCUS (clist)))
-	    {
-	      clist->drag_button = 0;
-	      gtk_grab_remove (GTK_WIDGET (clist));
-	      gdk_pointer_ungrab (GDK_CURRENT_TIME);
-	      if (clist->htimer)
-		{
-		  gtk_timeout_remove (clist->htimer);
-		  clist->htimer = 0;
-		}
-	      if (clist->vtimer)
-		{
-		  gtk_timeout_remove (clist->vtimer);
-		  clist->vtimer = 0;
-		}
-	    }
+	  clist->drag_button = 0;
+	  remove_grab (clist);
+
 	  GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
 	}
       gtk_ctree_unselect (ctree, node);
@@ -5785,14 +5795,6 @@ check_drag (GtkCTree        *ctree,
 
 /************************************/
 static void
-drag_source_info_destroy (gpointer data)
-{
-  GtkCListCellInfo *info = data;
-
-  g_free (info);
-}
-
-static void
 drag_dest_info_destroy (gpointer data)
 {
   GtkCListDestInfo *info = data;
@@ -5806,7 +5808,7 @@ gtk_ctree_drag_begin (GtkWidget	     *widget,
 {
   GtkCList *clist;
   GtkCTree *ctree;
-  GtkCListCellInfo *info;
+  gboolean use_icons;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_CTREE (widget));
@@ -5815,28 +5817,17 @@ gtk_ctree_drag_begin (GtkWidget	     *widget,
   clist = GTK_CLIST (widget);
   ctree = GTK_CTREE (widget);
 
-  info = g_dataset_get_data (context, "gtk-clist-drag-source");
+  use_icons = GTK_CLIST_USE_DRAG_ICONS (clist);
+  GTK_CLIST_UNSET_FLAG (clist, CLIST_USE_DRAG_ICONS);
+  GTK_WIDGET_CLASS (parent_class)->drag_begin (widget, context);
 
-  if (!info)
-    {
-      info = g_new (GtkCListCellInfo, 1);
-
-      if (clist->click_cell.row < 0)
-	clist->click_cell.row = 0;
-      else if (clist->click_cell.row >= clist->rows)
-	clist->click_cell.row = clist->rows - 1;
-      info->row = clist->click_cell.row;
-      info->column = clist->click_cell.column;
-
-      g_dataset_set_data_full (context, "gtk-clist-drag-source", info,
-			       drag_source_info_destroy);
-    }
-
-  if (GTK_CLIST_USE_DRAG_ICONS (clist))
+  if (use_icons)
     {
       GtkCTreeNode *node;
 
-      node = GTK_CTREE_NODE (g_list_nth (clist->row_list, info->row));
+      GTK_CLIST_SET_FLAG (clist, CLIST_USE_DRAG_ICONS);
+      node = GTK_CTREE_NODE (g_list_nth (clist->row_list,
+					 clist->click_cell.row));
       if (node)
 	{
 	  if (GTK_CELL_PIXTEXT

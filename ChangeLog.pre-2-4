@@ -1,3 +1,17 @@
+Fri Jan  8 00:42:00 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_get_value_as_int)
+	(gtk_spin_button_get_value_as_float): call gtk_spin_button_update
+	before returning a value
+
+	* gtk/gtkclist.c (gtk_clist_motion): don't allow 'drag selections'
+	if clist is a drag source.
+	(gtk_clist_drag_begin): remove pointer grabs, end ongoing selections.
+
+	* gtk/gtkctree.c (remove_grab): copy of clist function.
+	(gtk_ctree_drag_begin): let clists drag_begin method set the
+	source info struct.
+
 Thu Jan  7 19:10:21 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkviewport.c (gtk_viewport_style_set): Fixes
