@@ -1,3 +1,8 @@
+Fri Jan 18 16:31:21 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): only resize the
+	window.
+
 Mon Jan 21 11:56:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_real_activate): Trap the 

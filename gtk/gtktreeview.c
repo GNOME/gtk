@@ -1581,10 +1581,9 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
       gdk_window_resize (tree_view->priv->header_window,
 			 MAX (tree_view->priv->width, allocation->width),
 			 tree_view->priv->header_height);
-      gdk_window_move_resize (tree_view->priv->bin_window,
-			      0, TREE_VIEW_HEADER_HEIGHT (tree_view),
-			      MAX (tree_view->priv->width, allocation->width),
-			      allocation->height - TREE_VIEW_HEADER_HEIGHT (tree_view));
+      gdk_window_resize (tree_view->priv->bin_window,
+			 MAX (tree_view->priv->width, allocation->width),
+			 allocation->height - TREE_VIEW_HEADER_HEIGHT (tree_view));
     }
 
   gtk_tree_view_size_allocate_columns (widget);
@@ -5757,6 +5756,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   gint x, y, width, height;
 
   g_return_if_fail (tree_view->priv->column_drag_info == NULL);
+  g_print ("start drag!\n");
 
   gtk_tree_view_set_column_drag_info (tree_view, column);
 

@@ -92,8 +92,6 @@ static void gtk_tree_view_column_update_button                 (GtkTreeViewColum
 static gint gtk_tree_view_column_button_event                  (GtkWidget               *widget,
 								GdkEvent                *event,
 								gpointer                 data);
-static void gtk_tree_view_column_button_realize                (GtkWidget               *widget,
-								gpointer                 data);
 static void gtk_tree_view_column_button_clicked                (GtkWidget               *widget,
 								gpointer                 data);
 
@@ -530,6 +528,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 
   gtk_widget_push_composite_child ();
   tree_column->button = gtk_button_new ();
+  gtk_widget_add_events (tree_column->button, GDK_POINTER_MOTION_MASK);
   gtk_widget_pop_composite_child ();
 
   /* make sure we own a reference to it as well. */
@@ -537,10 +536,6 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
     gtk_widget_set_parent_window (tree_column->button, tree_view->priv->header_window);
   gtk_widget_set_parent (tree_column->button, GTK_WIDGET (tree_view));
   
-  gtk_signal_connect (GTK_OBJECT (tree_column->button), "realize",
-		      (GtkSignalFunc) gtk_tree_view_column_button_realize,
-		      NULL);
-
   gtk_signal_connect (GTK_OBJECT (tree_column->button), "event",
 		      (GtkSignalFunc) gtk_tree_view_column_button_event,
 		      (gpointer) tree_column);
@@ -743,9 +738,12 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
 
   g_return_val_if_fail (event != NULL, FALSE);
 
+  g_print ("event->type: %d\ncolumn->reorderable: %d\n", event->type, column->reorderable);
+
   if (event->type == GDK_BUTTON_PRESS &&
       column->reorderable)
     {
+      g_print ("setting maybe_reordered\n");
       column->maybe_reordered = TRUE;
       gdk_window_get_pointer (widget->window,
 			      &column->drag_x,
@@ -758,6 +756,13 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
       column->maybe_reordered)
     column->maybe_reordered = FALSE;
 
+
+  if (event->type == GDK_MOTION_NOTIFY &&
+      (column->maybe_reordered))
+    {
+      g_print ("motion:\n");
+    }
+      
   if (event->type == GDK_MOTION_NOTIFY &&
       (column->maybe_reordered) &&
       (gtk_drag_check_threshold (widget,
@@ -789,11 +794,6 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
   return FALSE;
 }
 
-static void
-gtk_tree_view_column_button_realize (GtkWidget *widget, gpointer data)
-{
-  gdk_window_set_events (widget->window, gdk_window_get_events (widget->window) | GDK_POINTER_MOTION_MASK);
-}
 
 static void
 gtk_tree_view_column_button_clicked (GtkWidget *widget, gpointer data)
