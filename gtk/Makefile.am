@@ -425,6 +425,8 @@ gtk_c_sources =                 \
 	gtkmenutoolbutton.c	\
 	gtkmessagedialog.c	\
 	gtkmisc.c		\
+	gtkmnemonichash.c	\
+	gtkmnemonichash.h	\
 	gtkmodules.c		\
 	gtknotebook.c		\
 	gtkobject.c		\

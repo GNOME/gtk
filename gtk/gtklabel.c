@@ -833,27 +833,59 @@ static void
 gtk_label_setup_mnemonic (GtkLabel *label,
 			  guint     last_key)
 {
+  GtkWidget *widget = GTK_WIDGET (label);
   GtkWidget *toplevel;
-
-  if (last_key != GDK_VoidSymbol && label->mnemonic_window)
+  GtkWidget *mnemonic_menu;
+  
+  mnemonic_menu = g_object_get_data (G_OBJECT (label), "gtk-mnemonic-menu");
+  
+  if (last_key != GDK_VoidSymbol)
     {
-      gtk_window_remove_mnemonic  (label->mnemonic_window,
-				   last_key,
-				   GTK_WIDGET (label));
-      label->mnemonic_window = NULL;
+      if (label->mnemonic_window)
+	{
+	  gtk_window_remove_mnemonic  (label->mnemonic_window,
+				       last_key,
+				       widget);
+	  label->mnemonic_window = NULL;
+	}
+      if (mnemonic_menu)
+	{
+	  _gtk_menu_shell_remove_mnemonic (GTK_MENU_SHELL (mnemonic_menu),
+					   last_key,
+					   widget);
+	  label->mnemonic_window = NULL;
+	}
     }
   
   if (label->mnemonic_keyval == GDK_VoidSymbol)
     return;
-  
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (label));
+
+  toplevel = gtk_widget_get_toplevel (widget);
   if (GTK_WIDGET_TOPLEVEL (toplevel))
     {
-      gtk_window_add_mnemonic (GTK_WINDOW (toplevel),
-			       label->mnemonic_keyval,
-			       GTK_WIDGET (label));
-      label->mnemonic_window = GTK_WINDOW (toplevel);
+      GtkWidget *menu_shell;
+      
+      menu_shell = gtk_widget_get_ancestor (widget,
+					    GTK_TYPE_MENU_SHELL);
+
+      if (menu_shell)
+	{
+	  _gtk_menu_shell_add_mnemonic (GTK_MENU_SHELL (menu_shell),
+					label->mnemonic_keyval,
+					widget);
+	  mnemonic_menu = menu_shell;
+	}
+      
+      if (!(menu_shell && GTK_IS_MENU (menu_shell)))
+	{
+	  gtk_window_add_mnemonic (GTK_WINDOW (toplevel),
+				   label->mnemonic_keyval,
+				   widget);
+	  label->mnemonic_window = GTK_WINDOW (toplevel);
+	}
     }
+  
+  g_object_set_data (G_OBJECT (label), "gtk-mnemonic-menu", mnemonic_menu);
 }
 
 static void

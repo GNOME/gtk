@@ -118,6 +118,13 @@ void  _gtk_menu_shell_activate         (GtkMenuShell *menu_shell);
 gint  _gtk_menu_shell_get_popup_delay  (GtkMenuShell *menu_shell);
 void  gtk_menu_shell_cancel            (GtkMenuShell *menu_shell);
 
+void _gtk_menu_shell_add_mnemonic    (GtkMenuShell *menu_shell,
+				      guint         keyval,
+				      GtkWidget    *target);
+void _gtk_menu_shell_remove_mnemonic (GtkMenuShell *menu_shell,
+				      guint         keyval,
+				      GtkWidget    *target);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

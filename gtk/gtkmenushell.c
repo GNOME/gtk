@@ -30,11 +30,13 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkalias.h"
 #include "gtkbindings.h"
+#include "gtkkeyhash.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenubar.h"
 #include "gtkmenuitem.h"
 #include "gtkmenushell.h"
+#include "gtkmnemonichash.h"
 #include "gtktearoffmenuitem.h"
 #include "gtkwindow.h"
 
@@ -112,9 +114,20 @@ typedef void (*GtkMenuShellSignal2) (GtkObject *object,
  *     Cancels the current selection
  */
 
+#define GTK_MENU_SHELL_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_MENU_SHELL, GtkMenuShellPrivate))
+
+typedef struct _GtkMenuShellPrivate GtkMenuShellPrivate;
+
+struct _GtkMenuShellPrivate
+{
+  GtkMnemonicHash *mnemonic_hash;
+  GtkKeyHash *key_hash;
+};
+
 static void gtk_menu_shell_class_init        (GtkMenuShellClass *klass);
 static void gtk_menu_shell_init              (GtkMenuShell      *menu_shell);
 static void gtk_menu_shell_realize           (GtkWidget         *widget);
+static void gtk_menu_shell_finalize          (GObject           *object);
 static gint gtk_menu_shell_button_press      (GtkWidget         *widget,
 					      GdkEventButton    *event);
 static gint gtk_menu_shell_button_release    (GtkWidget         *widget,
@@ -125,6 +138,8 @@ static gint gtk_menu_shell_enter_notify      (GtkWidget         *widget,
 					      GdkEventCrossing  *event);
 static gint gtk_menu_shell_leave_notify      (GtkWidget         *widget,
 					      GdkEventCrossing  *event);
+static void gtk_menu_shell_screen_changed    (GtkWidget         *widget,
+					      GdkScreen         *previous_screen);
 static void gtk_menu_shell_add               (GtkContainer      *container,
 					      GtkWidget         *widget);
 static void gtk_menu_shell_remove            (GtkContainer      *container,
@@ -153,6 +168,10 @@ static void gtk_real_menu_shell_activate_current (GtkMenuShell      *menu_shell,
 static void gtk_real_menu_shell_cancel           (GtkMenuShell      *menu_shell);
 static void gtk_real_menu_shell_cycle_focus      (GtkMenuShell      *menu_shell,
 						  GtkDirectionType   dir);
+
+static void     gtk_menu_shell_reset_key_hash    (GtkMenuShell *menu_shell);
+static gboolean gtk_menu_shell_activate_mnemonic (GtkMenuShell *menu_shell,
+						  GdkEventKey  *event);
 
 static GtkContainerClass *parent_class = NULL;
 static guint menu_shell_signals[LAST_SIGNAL] = { 0 };
@@ -202,12 +221,15 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 
   parent_class = g_type_class_peek_parent (klass);
 
+  object_class->finalize = gtk_menu_shell_finalize;
+
   widget_class->realize = gtk_menu_shell_realize;
   widget_class->button_press_event = gtk_menu_shell_button_press;
   widget_class->button_release_event = gtk_menu_shell_button_release;
   widget_class->key_press_event = gtk_menu_shell_key_press;
   widget_class->enter_notify_event = gtk_menu_shell_enter_notify;
   widget_class->leave_notify_event = gtk_menu_shell_leave_notify;
+  widget_class->screen_changed = gtk_menu_shell_screen_changed;
 
   container_class->add = gtk_menu_shell_add;
   container_class->remove = gtk_menu_shell_remove;
@@ -308,6 +330,8 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 				GDK_F10, GDK_SHIFT_MASK,
 				"cycle_focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
+
+  g_type_class_add_private (object_class, sizeof (GtkMenuShellPrivate));
 }
 
 static GType
@@ -319,6 +343,8 @@ gtk_menu_shell_child_type (GtkContainer     *container)
 static void
 gtk_menu_shell_init (GtkMenuShell *menu_shell)
 {
+  GtkMenuShellPrivate *priv = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
+
   menu_shell->children = NULL;
   menu_shell->active_menu_item = NULL;
   menu_shell->parent_menu_shell = NULL;
@@ -327,7 +353,25 @@ gtk_menu_shell_init (GtkMenuShell *menu_shell)
   menu_shell->have_xgrab = FALSE;
   menu_shell->button = 0;
   menu_shell->activate_time = 0;
+
+  priv->mnemonic_hash = NULL;
+  priv->key_hash = NULL;
 }
+
+static void
+gtk_menu_shell_finalize (GObject *object)
+{
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (object);
+  GtkMenuShellPrivate *priv = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
+
+  if (priv->mnemonic_hash)
+    _gtk_mnemonic_hash_free (priv->mnemonic_hash);
+  if (priv->key_hash)
+    _gtk_key_hash_free (priv->key_hash);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
 
 void
 gtk_menu_shell_append (GtkMenuShell *menu_shell,
@@ -563,11 +607,10 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 }
 
 static gint
-gtk_menu_shell_key_press (GtkWidget	*widget,
+gtk_menu_shell_key_press (GtkWidget   *widget,
 			  GdkEventKey *event)
 {
   GtkMenuShell *menu_shell;
-  GtkWidget *toplevel;
   
   g_return_val_if_fail (GTK_IS_MENU_SHELL (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -580,12 +623,7 @@ gtk_menu_shell_key_press (GtkWidget	*widget,
   if (gtk_bindings_activate_event (GTK_OBJECT (widget), event))
     return TRUE;
 
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (GTK_IS_WINDOW (toplevel) &&
-      gtk_window_activate_key (GTK_WINDOW (toplevel), event))
-    return TRUE;
-
-  return FALSE;
+  return gtk_menu_shell_activate_mnemonic (menu_shell, event);
 }
 
 static gint
@@ -671,6 +709,13 @@ gtk_menu_shell_leave_notify (GtkWidget        *widget,
     }
 
   return TRUE;
+}
+
+static void
+gtk_menu_shell_screen_changed (GtkWidget *widget,
+			       GdkScreen *previous_screen)
+{
+  gtk_menu_shell_reset_key_hash (GTK_MENU_SHELL (widget));
 }
 
 static void
@@ -1218,3 +1263,120 @@ gtk_menu_shell_cancel (GtkMenuShell *menu_shell)
 
   g_signal_emit (menu_shell, menu_shell_signals[CANCEL], 0);
 }
+
+static GtkMnemonicHash *
+gtk_menu_shell_get_mnemonic_hash (GtkMenuShell *menu_shell,
+				  gboolean      create)
+{
+  GtkMenuShellPrivate *private = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
+
+  if (!private->mnemonic_hash && create)
+    private->mnemonic_hash = _gtk_mnemonic_hash_new ();
+  
+  return private->mnemonic_hash;
+}
+
+static void
+menu_shell_add_mnemonic_foreach (guint    keyval,
+				 GSList  *targets,
+				 gpointer data)
+{
+  GtkKeyHash *key_hash = data;
+
+  _gtk_key_hash_add_entry (key_hash, keyval, 0, GUINT_TO_POINTER (keyval));
+}
+
+static GtkKeyHash *
+gtk_menu_shell_get_key_hash (GtkMenuShell *menu_shell,
+			     gboolean      create)
+{
+  GtkMenuShellPrivate *private = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
+  GtkWidget *widget = GTK_WIDGET (menu_shell);
+
+  if (!private->key_hash && create && gtk_widget_has_screen (widget))
+    {
+      GtkMnemonicHash *mnemonic_hash = gtk_menu_shell_get_mnemonic_hash (menu_shell, FALSE);
+      GdkScreen *screen = gtk_widget_get_screen (widget);
+      GdkKeymap *keymap = gdk_keymap_get_for_display (gdk_screen_get_display (screen));
+
+      if (!mnemonic_hash)
+	return NULL;
+      
+      private->key_hash = _gtk_key_hash_new (keymap, NULL);
+
+      _gtk_mnemonic_hash_foreach (mnemonic_hash,
+				  menu_shell_add_mnemonic_foreach,
+				  private->key_hash);
+    }
+  
+  return private->key_hash;
+}
+
+static void
+gtk_menu_shell_reset_key_hash (GtkMenuShell *menu_shell)
+{
+  GtkMenuShellPrivate *private = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
+
+  if (private->key_hash)
+    {
+      _gtk_key_hash_free (private->key_hash);
+      private->key_hash = NULL;
+    }
+}
+
+static gboolean
+gtk_menu_shell_activate_mnemonic (GtkMenuShell *menu_shell,
+				  GdkEventKey  *event)
+{
+  GtkMnemonicHash *mnemonic_hash;
+  GtkKeyHash *key_hash;
+  GSList *entries;
+  gboolean result = FALSE;
+
+  mnemonic_hash = gtk_menu_shell_get_mnemonic_hash (menu_shell, FALSE);
+  if (!mnemonic_hash)
+    return FALSE;
+
+  key_hash = gtk_menu_shell_get_key_hash (menu_shell, TRUE);
+  if (!key_hash)
+    return FALSE;
+  
+  entries = _gtk_key_hash_lookup (key_hash,
+				  event->hardware_keycode,
+				  event->state,
+				  gtk_accelerator_get_default_mod_mask (),
+				  event->group);
+
+  if (entries)
+    result = _gtk_mnemonic_hash_activate (mnemonic_hash,
+					  GPOINTER_TO_UINT (entries->data));
+
+  return result;
+}
+
+void
+_gtk_menu_shell_add_mnemonic (GtkMenuShell *menu_shell,
+			      guint      keyval,
+			      GtkWidget *target)
+{
+  g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
+  g_return_if_fail (GTK_IS_WIDGET (target));
+
+  _gtk_mnemonic_hash_add (gtk_menu_shell_get_mnemonic_hash (menu_shell, TRUE),
+			  keyval, target);
+  gtk_menu_shell_reset_key_hash (menu_shell);
+}
+
+void
+_gtk_menu_shell_remove_mnemonic (GtkMenuShell *menu_shell,
+				 guint      keyval,
+				 GtkWidget *target)
+{
+  g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
+  g_return_if_fail (GTK_IS_WIDGET (target));
+  
+  _gtk_mnemonic_hash_remove (gtk_menu_shell_get_mnemonic_hash (menu_shell, TRUE),
+			     keyval, target);
+  gtk_menu_shell_reset_key_hash (menu_shell);
+}
+

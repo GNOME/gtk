@@ -38,6 +38,7 @@
 #include "gtkbindings.h"
 #include "gtkkeyhash.h"
 #include "gtkmain.h"
+#include "gtkmnemonichash.h"
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
@@ -147,21 +148,14 @@ struct _GtkWindowGeometryInfo
   GtkWindowLastGeometryInfo last;
 };
 
-typedef struct _GtkWindowMnemonic GtkWindowMnemonic;
-
-struct _GtkWindowMnemonic {
-  GtkWindow *window;
-  guint keyval;
-
-  GSList *targets;
-};
-
 #define GTK_WINDOW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_WINDOW, GtkWindowPrivate))
 
 typedef struct _GtkWindowPrivate GtkWindowPrivate;
 
 struct _GtkWindowPrivate
 {
+  GtkMnemonicHash *mnemonic_hash;
+  
   guint above_initially : 1;
   guint below_initially : 1;
   guint fullscreen_initially : 1;
@@ -278,7 +272,6 @@ static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
 static void        gtk_window_free_key_hash       (GtkWindow   *window);
 
 static GSList      *toplevel_list = NULL;
-static GHashTable  *mnemonic_hash_table = NULL;
 static GtkBinClass *parent_class = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
 static GList       *default_icon_list = NULL;
@@ -296,35 +289,6 @@ static void gtk_window_get_property (GObject         *object,
 				     GValue          *value,
 				     GParamSpec      *pspec);
 
-
-static guint
-mnemonic_hash (gconstpointer key)
-{
-  const GtkWindowMnemonic *k;
-  guint h;
-  
-  k = (GtkWindowMnemonic *)key;
-  
-  h = (gulong) k->window;
-  h ^= k->keyval << 16;
-  h ^= k->keyval >> 16;
-
-  return h;
-}
-
-static gboolean
-mnemonic_equal (gconstpointer a, gconstpointer b)
-{
-  const GtkWindowMnemonic *ka;
-  const GtkWindowMnemonic *kb;
-  
-  ka = (GtkWindowMnemonic *)a;
-  kb = (GtkWindowMnemonic *)b;
-
-  return
-    (ka->window == kb->window) &&
-    (ka->keyval == kb->keyval);
-}
 
 GType
 gtk_window_get_type (void)
@@ -402,8 +366,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   container_class = (GtkContainerClass*) klass;
   
   parent_class = g_type_class_peek_parent (klass);
-
-  mnemonic_hash_table = g_hash_table_new (mnemonic_hash, mnemonic_equal);
 
   gobject_class->dispose = gtk_window_dispose;
   gobject_class->finalize = gtk_window_finalize;
@@ -1404,6 +1366,17 @@ gtk_window_remove_accel_group (GtkWindow     *window,
   _gtk_accel_group_detach (accel_group, G_OBJECT (window));
 }
 
+static GtkMnemonicHash *
+gtk_window_get_mnemonic_hash (GtkWindow *window,
+			      gboolean   create)
+{
+  GtkWindowPrivate *private = GTK_WINDOW_GET_PRIVATE (window);
+  if (!private->mnemonic_hash && create)
+    private->mnemonic_hash = _gtk_mnemonic_hash_new ();
+  
+  return private->mnemonic_hash;
+}
+
 /**
  * gtk_window_add_mnemonic:
  * @window: a #GtkWindow
@@ -1417,28 +1390,11 @@ gtk_window_add_mnemonic (GtkWindow *window,
 			 guint      keyval,
 			 GtkWidget *target)
 {
-  GtkWindowMnemonic key;
-  GtkWindowMnemonic *mnemonic;
-
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (GTK_IS_WIDGET (target));
-  
-  key.window = window;
-  key.keyval = keyval;
-  mnemonic = g_hash_table_lookup (mnemonic_hash_table, &key);
 
-  if (mnemonic)
-    {
-      g_return_if_fail (g_slist_find (mnemonic->targets, target) == NULL);
-      mnemonic->targets = g_slist_append (mnemonic->targets, target);
-    }
-  else
-    {
-      mnemonic = g_new (GtkWindowMnemonic, 1);
-      *mnemonic = key;
-      mnemonic->targets = g_slist_prepend (NULL, target);
-      g_hash_table_insert (mnemonic_hash_table, mnemonic, mnemonic);
-    }
+  _gtk_mnemonic_hash_add (gtk_window_get_mnemonic_hash (window, TRUE),
+			  keyval, target);
   gtk_window_notify_keys_changed (window);
 }
 
@@ -1455,24 +1411,11 @@ gtk_window_remove_mnemonic (GtkWindow *window,
 			    guint      keyval,
 			    GtkWidget *target)
 {
-  GtkWindowMnemonic key;
-  GtkWindowMnemonic *mnemonic;
-
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (GTK_IS_WIDGET (target));
   
-  key.window = window;
-  key.keyval = keyval;
-  mnemonic = g_hash_table_lookup (mnemonic_hash_table, &key);
-
-  g_return_if_fail (mnemonic && g_slist_find (mnemonic->targets, target) != NULL);
-
-  mnemonic->targets = g_slist_remove (mnemonic->targets, target);
-  if (mnemonic->targets == NULL)
-    {
-      g_hash_table_remove (mnemonic_hash_table, mnemonic);
-      g_free (mnemonic);
-    }
+  _gtk_mnemonic_hash_remove (gtk_window_get_mnemonic_hash (window, TRUE),
+			     keyval, target);
   gtk_window_notify_keys_changed (window);
 }
 
@@ -1490,56 +1433,15 @@ gtk_window_mnemonic_activate (GtkWindow      *window,
 			      guint           keyval,
 			      GdkModifierType modifier)
 {
-  GtkWindowMnemonic key;
-  GtkWindowMnemonic *mnemonic;
-  GSList *list;
-  GtkWidget *widget, *chosen_widget;
-  gboolean overloaded;
-
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
-  if (window->mnemonic_modifier != (modifier & gtk_accelerator_get_default_mod_mask ()))
-    return FALSE;
-  
-  key.window = window;
-  key.keyval = keyval;
-  mnemonic = g_hash_table_lookup (mnemonic_hash_table, &key);
+  if (window->mnemonic_modifier == (modifier & gtk_accelerator_get_default_mod_mask ()))
+      {
+	GtkMnemonicHash *mnemonic_hash = gtk_window_get_mnemonic_hash (window, FALSE);
+	if (mnemonic_hash)
+	  return _gtk_mnemonic_hash_activate (mnemonic_hash, keyval);
+      }
 
-  if (!mnemonic)
-    return FALSE;
-  
-  overloaded = FALSE;
-  chosen_widget = NULL;
-  list = mnemonic->targets;
-  while (list)
-    {
-      widget = GTK_WIDGET (list->data);
-      
-      if (GTK_WIDGET_IS_SENSITIVE (widget) &&
-	  GTK_WIDGET_DRAWABLE (widget) &&
-	  gdk_window_is_viewable (widget->window))
-	{
-	  if (chosen_widget)
-	    {
-	      overloaded = TRUE;
-	      break;
-	    }
-	  else
-	    chosen_widget = widget;
-	}
-      list = g_slist_next (list);
-    }
-
-  if (chosen_widget)
-    {
-      /* For round robin we put the activated entry on
-       * the end of the list after activation
-       */
-      mnemonic->targets = g_slist_remove (mnemonic->targets, chosen_widget);
-      mnemonic->targets = g_slist_append (mnemonic->targets, chosen_widget);
-
-      return gtk_widget_mnemonic_activate (chosen_widget, overloaded);
-    }
   return FALSE;
 }
 
@@ -3847,45 +3749,21 @@ gtk_window_destroy (GtkObject *object)
    GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
-static gboolean
-gtk_window_mnemonic_hash_remove (gpointer	key,
-				 gpointer	value,
-				 gpointer	user)
-{
-  GtkWindowMnemonic *mnemonic = key;
-  GtkWindow *window = user;
-
-  if (mnemonic->window == window)
-    {
-      if (mnemonic->targets)
-	{
-	  gchar *name = gtk_accelerator_name (mnemonic->keyval, 0);
-
-	  g_warning ("mnemonic \"%s\" wasn't removed for widget (%p)",
-		     name, mnemonic->targets->data);
-	  g_free (name);
-	}
-      g_slist_free (mnemonic->targets);
-      g_free (mnemonic);
-      
-      return TRUE;
-    }
-  return FALSE;
-}
-
 static void
 gtk_window_finalize (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
+  GtkMnemonicHash *mnemonic_hash;
 
   g_free (window->title);
   g_free (window->wmclass_name);
   g_free (window->wmclass_class);
   g_free (window->wm_role);
 
-  g_hash_table_foreach_remove (mnemonic_hash_table,
-			       gtk_window_mnemonic_hash_remove,
-			       window);
+  mnemonic_hash = gtk_window_get_mnemonic_hash (window, FALSE);
+  if (mnemonic_hash)
+    _gtk_mnemonic_hash_free (mnemonic_hash);
+
   if (window->geometry_info)
     {
       if (window->geometry_info->widget)
@@ -4500,11 +4378,8 @@ _gtk_window_query_nonaccels (GtkWindow      *window,
   /* mnemonics are considered locked accels */
   if (accel_mods == window->mnemonic_modifier)
     {
-      GtkWindowMnemonic mkey;
-
-      mkey.window = window;
-      mkey.keyval = accel_key;
-      if (g_hash_table_lookup (mnemonic_hash_table, &mkey))
+      GtkMnemonicHash *mnemonic_hash = gtk_window_get_mnemonic_hash (window, FALSE);
+      if (mnemonic_hash && _gtk_mnemonic_hash_lookup (mnemonic_hash, accel_key))
 	return TRUE;
     }
 
@@ -7288,9 +7163,9 @@ gtk_window_parse_geometry (GtkWindow   *window,
 }
 
 static void
-gtk_window_mnemonic_hash_foreach (gpointer key,
-				  gpointer value,
-				  gpointer data)
+gtk_window_mnemonic_hash_foreach (guint      keyval,
+				  GSList    *targets,
+				  gpointer   data)
 {
   struct {
     GtkWindow *window;
@@ -7298,10 +7173,7 @@ gtk_window_mnemonic_hash_foreach (gpointer key,
     gpointer func_data;
   } *info = data;
 
-  GtkWindowMnemonic *mnemonic = value;
-
-  if (mnemonic->window == info->window)
-    (*info->func) (info->window, mnemonic->keyval, info->window->mnemonic_modifier, TRUE, info->func_data);
+  (*info->func) (info->window, keyval, info->window->mnemonic_modifier, TRUE, info->func_data);
 }
 
 void
@@ -7310,6 +7182,7 @@ _gtk_window_keys_foreach (GtkWindow                *window,
 			  gpointer                 func_data)
 {
   GSList *groups;
+  GtkMnemonicHash *mnemonic_hash;
 
   struct {
     GtkWindow *window;
@@ -7321,9 +7194,10 @@ _gtk_window_keys_foreach (GtkWindow                *window,
   info.func = func;
   info.func_data = func_data;
 
-  g_hash_table_foreach (mnemonic_hash_table,
-			gtk_window_mnemonic_hash_foreach,
-			&info);
+  mnemonic_hash = gtk_window_get_mnemonic_hash (window, FALSE);
+  if (mnemonic_hash)
+    _gtk_mnemonic_hash_foreach (mnemonic_hash,
+				gtk_window_mnemonic_hash_foreach, &info);
 
   groups = gtk_accel_groups_from_object (G_OBJECT (window));
   while (groups)

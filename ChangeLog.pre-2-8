@@ -1,3 +1,23 @@
+2004-12-10  Matthias Clasen  <mclasen@redhat.com>
+
+	Support no-Alt mnemnonics in menu bars  (#101309, Owen Taylor)
+	
+	* gtk/gtkwindow.c: Factor out mnemonic hash code into
+	a separate file.
+
+	* gtk/gtkmnemonichash.[hc]: Factored out mnemonic hash
+	code from gtkwindow.c.
+
+	* gtk/Makefile.am (gtk_c_sources): Add gtkmnemonichash.[hc].
+
+	* gtk/gtkmenushell.c (struct _GtkMenuShellPrivate): Give 
+	menu shells their own mnemonic hash.
+
+	* gtk/gtkmenushell.h: Add private api to support mnemonics.
+
+	* gtk/gtklabel.c (gtk_label_setup_mnemonic): Add mnemonic to
+	the menushell mnemonic hash when inside a menu.
+	
 Fri Dec 10 13:59:32 2004  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtk.symbols: add recent new functions.
