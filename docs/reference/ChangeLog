@@ -1,3 +1,7 @@
+2004-10-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add new named icon api in GtkImage.
+
 Sun Oct 24 02:54:36 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtk.types: Add GtkAboutDialog and GtkFileChooserButton

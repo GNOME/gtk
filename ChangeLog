@@ -1,6 +1,20 @@
+2004-10-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkimage.h: 
+	* gtk/gtkimage.c (gtk_image_new_from_icon_name)
+	(gtk_image_set_from_icon_name, gtk_image_get_icon_name)
+	(gtk_image_set_pixel_size, gtk_image_get_pixel_size):  Add a
+	new type GTK_IMAGE_ICON_NAME for named icons, update the size
+	and content of stock, icon set and named icon images upon style
+	changes, and allow to set a fixed pixel size for named icon
+	images.  (#155688, James Henstridge)
+
+	* tests/testimage.c: Test application for theming behaviour of
+	different image types and for image dnd.
+
 2004-10-24  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtkcellrenderercombo.c: Use G_DEFINE_TYPE, intialize the
+	* gtk/gtkcellrenderercombo.c: Use G_DEFINE_TYPE, initialize the
 	has_entry property, ref the model and add a finalizer.  (#156325,
 	Olivier Andrieu)
 	

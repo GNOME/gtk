@@ -53,6 +53,7 @@ typedef struct _GtkImagePixbufData  GtkImagePixbufData;
 typedef struct _GtkImageStockData   GtkImageStockData;
 typedef struct _GtkImageIconSetData GtkImageIconSetData;
 typedef struct _GtkImageAnimationData GtkImageAnimationData;
+typedef struct _GtkImageIconNameData  GtkImageIconNameData;
 
 struct _GtkImagePixmapData
 {
@@ -86,6 +87,13 @@ struct _GtkImageAnimationData
   guint frame_timeout;
 };
 
+struct _GtkImageIconNameData
+{
+  gchar *icon_name;
+  GdkPixbuf *pixbuf;
+  guint theme_change_id;
+};
+
 typedef enum
 {
   GTK_IMAGE_EMPTY,
@@ -94,7 +102,8 @@ typedef enum
   GTK_IMAGE_PIXBUF,
   GTK_IMAGE_STOCK,
   GTK_IMAGE_ICON_SET,
-  GTK_IMAGE_ANIMATION
+  GTK_IMAGE_ANIMATION,
+  GTK_IMAGE_ICON_NAME
 } GtkImageType;
 
 struct _GtkImage
@@ -111,12 +120,13 @@ struct _GtkImage
     GtkImageStockData stock;
     GtkImageIconSetData icon_set;
     GtkImageAnimationData anim;
+    GtkImageIconNameData name;
   } data;
 
   /* Only used with GTK_IMAGE_PIXMAP, GTK_IMAGE_IMAGE */
   GdkBitmap *mask;
 
-  /* Only used with GTK_IMAGE_STOCK, GTK_IMAGE_ICON_SET */
+  /* Only used with GTK_IMAGE_STOCK, GTK_IMAGE_ICON_SET, GTK_IMAGE_ICON_NAME */
   GtkIconSize icon_size;
 };
 
@@ -145,6 +155,8 @@ GtkWidget* gtk_image_new_from_stock     (const gchar     *stock_id,
 GtkWidget* gtk_image_new_from_icon_set  (GtkIconSet      *icon_set,
                                          GtkIconSize      size);
 GtkWidget* gtk_image_new_from_animation (GdkPixbufAnimation *animation);
+GtkWidget* gtk_image_new_from_icon_name (const gchar     *icon_name,
+					 GtkIconSize      size);
 
 void gtk_image_set_from_pixmap    (GtkImage        *image,
                                    GdkPixmap       *pixmap,
@@ -164,6 +176,11 @@ void gtk_image_set_from_icon_set  (GtkImage        *image,
                                    GtkIconSize      size);
 void gtk_image_set_from_animation (GtkImage           *image,
                                    GdkPixbufAnimation *animation);
+void gtk_image_set_from_icon_name (GtkImage        *image,
+				   const gchar     *icon_name,
+				   GtkIconSize      size);
+void gtk_image_set_pixel_size     (GtkImage        *image,
+				   gint             pixel_size);
 
 GtkImageType gtk_image_get_storage_type (GtkImage   *image);
 
@@ -181,7 +198,10 @@ void       gtk_image_get_icon_set (GtkImage         *image,
                                    GtkIconSet      **icon_set,
                                    GtkIconSize      *size);
 GdkPixbufAnimation* gtk_image_get_animation (GtkImage *image);
-
+void       gtk_image_get_icon_name (GtkImage        *image,
+				    gchar          **icon_name,
+				    GtkIconSize     *size);
+gint       gtk_image_get_pixel_size (GtkImage        *image);
 
 #ifndef GTK_DISABLE_DEPRECATED
 /* These three are deprecated */
