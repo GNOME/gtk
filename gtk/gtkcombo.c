@@ -679,7 +679,7 @@ gtk_combo_disable_activate (GtkCombo* combo)
   g_return_if_fail (GTK_IS_COMBO (combo));
 
   if ( combo->activate_id ) {
-    gtk_signal_disconnect(GTK_OBJECT(combo), combo->activate_id);
+    gtk_signal_disconnect(GTK_OBJECT(combo->entry), combo->activate_id);
     combo->activate_id = 0;
   }
 }

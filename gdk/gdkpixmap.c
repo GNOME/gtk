@@ -473,13 +473,16 @@ gdk_pixmap_colormap_create_from_xpm (GdkWindow   *window,
                       color = NULL;
                       ns = 0;
 
-                      while (color == NULL)
+                      while ((color == NULL) && (ns < num_cols))
                         {
                           if (strcmp (pixel_str, colors[ns].color_string) == 0)
                             color = &colors[ns];
                           else
                             ns++;
                         }
+
+		      if (!color) /* screwed up XPM file */
+			color = &colors[0];
 
                       gdk_image_put_pixel (image, xcnt, ycnt, color->color.pixel);
 
@@ -643,13 +646,16 @@ gdk_pixmap_colormap_create_from_xpm_d (GdkWindow  *window,
 	  color = NULL;
 	  ns = 0;
 
-	  while (color == NULL)
+	  while ((color == NULL) && (ns < num_cols))
 	    {
 	      if (strcmp (pixel_str, colors[ns].color_string) == 0)
 		color = &colors[ns];
 	      else
 		ns++;
 	    }
+
+	  if (!color) /* screwed up XPM file */
+	    color = &colors[0];
 
 	  gdk_image_put_pixel (image, xcnt, ycnt, color->color.pixel);
 

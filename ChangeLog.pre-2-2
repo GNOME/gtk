@@ -1,3 +1,12 @@
+Sat Mar 28 21:18:42 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkcombo.c (gtk_combo_disable_activate): 
+	Disconnect from combo->entry, not combo.
+	(From: Daniel Skarda <0rfelyus@atrey.karlin.mff.cuni.cz>)
+
+	* gdk/gdkpixmap.c (gdk_pixmap_colormap_create_from_xpm): Deal
+	better with xpm's with bad colors in them.
+	
 Fri Mar 27 21:01:17 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gdk/gdk.c (gdk_event_translate): Don't call
