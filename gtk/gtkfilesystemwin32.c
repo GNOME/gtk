@@ -416,9 +416,9 @@ gtk_file_system_win32_create_folder (GtkFileSystem     *file_system,
 
   filename = filename_from_path (path);
   g_return_val_if_fail (filename != NULL, FALSE);
-  
-  result = mkdir (filename, 0777) != 0;
-  
+
+  result = mkdir (filename, 0777) == 0;
+
   if (!result)
     {
       gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);

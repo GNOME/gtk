@@ -1,5 +1,11 @@
 2004-03-24  J. Ali Harlow  <ali@juiblex.co.uk>
 
+	* gtk/gtkfilesystemwin32.c
+	(gtk_file_system_win32_create_folder): Invert test for error in
+	mkdir.  Fixes #137945
+
+2004-03-24  J. Ali Harlow  <ali@juiblex.co.uk>
+
 	Fixed #138004 using Federico's code from #132327.
 
 	* gtk/gtkfilesystemwin32.c (struct _GtkFileSystemWin32): Add a
