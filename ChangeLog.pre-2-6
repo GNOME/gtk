@@ -1,3 +1,8 @@
+2004-04-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_class_init): 
+	* gtk/gtkbutton.c (gtk_button_class_init): Doc fixes.
+
 2004-04-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c: 

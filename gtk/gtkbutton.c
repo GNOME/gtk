@@ -328,6 +328,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   /**
    * GtkButton::activate:
+   * @widget: the object which received the signal.
    *
    * The "activate" signal on GtkButton is an action signal and
    * emitting it causes the button to animate press then release. 

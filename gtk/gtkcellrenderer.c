@@ -126,6 +126,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 
   /**
    * GtkCellRenderer::editing-canceled:
+   * @renderer: the object which received the signal
    *
    * This signal gets emitted when the user cancels the process of editing a
    * cell.  For example, an editable cell renderer could be written to cancel
