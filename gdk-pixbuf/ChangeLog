@@ -1,3 +1,8 @@
+2003-07-24  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_file_at_size): Preserve the aspect ratio.  (#118145, 
+	Owen Taylor) 
+
 2003-07-23  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_file_at_size): Close loader before unref'ing 

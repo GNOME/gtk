@@ -773,6 +773,31 @@ gdk_pixbuf_new_from_file (const char *filename,
 	return pixbuf;
 }
 
+static void
+size_prepared_cb (GdkPixbufLoader *loader, 
+		  int              width,
+		  int              height,
+		  gpointer         data)
+{
+	struct {
+		int width;
+		int height;
+	} *info = data;
+
+	g_return_if_fail (width > 0 && height > 0);
+
+	if ((double)height * (double)info->width >
+	    (double)width * (double)info->height) {
+		width = 0.5 + (double)width * (double)info->height / (double)height;
+		height = info->height;
+	} else {
+		height = 0.5 + (double)height * (double)info->width / (double)width;
+		width = info->width;
+	}
+
+	gdk_pixbuf_loader_set_size (loader, width, height);
+}
+
 /**
  * gdk_pixbuf_new_from_file_at_size:
  * @filename: Name of file to load.
@@ -783,7 +808,7 @@ gdk_pixbuf_new_from_file (const char *filename,
  * Creates a new pixbuf by loading an image from a file.  The file format is
  * detected automatically. If %NULL is returned, then @error will be set.
  * Possible errors are in the #GDK_PIXBUF_ERROR and #G_FILE_ERROR domains.
- * The image will be scaled to the requested size.
+ * The image will be scaled to fit in the requested size, preserving its aspect ratio.
  *
  * Return value: A newly-created pixbuf with a reference count of 1, or %NULL if
  * any of several error conditions occurred:  the file could not be opened,
@@ -804,6 +829,10 @@ gdk_pixbuf_new_from_file_at_size (const char *filename,
 	guchar buffer [4096];
 	int length;
 	FILE *f;
+	struct {
+		gint width;
+		gint height;
+	} info;
 
 	g_return_val_if_fail (filename != NULL, NULL);
         g_return_val_if_fail (width > 0 && height > 0, NULL);
@@ -819,7 +848,11 @@ gdk_pixbuf_new_from_file_at_size (const char *filename,
         }
 
 	loader = gdk_pixbuf_loader_new ();
-	gdk_pixbuf_loader_set_size (loader, width, height);
+
+	info.width = width;
+	info.height = height;
+		
+	g_signal_connect (loader, "size-prepared", G_CALLBACK (size_prepared_cb), &info);
 
 	while (!feof (f)) {
 		length = fread (buffer, 1, sizeof (buffer), f);
