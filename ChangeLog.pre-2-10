@@ -58,6 +58,9 @@
 
 	* gtk/makeenums.h: Include gdkprivate.h after gdk.h.
 
+	* gtk/maketypes.awk: Declare variables with a macro that expands to
+	necessary export/import magic in the case of Win32.
+		
 	* gtk/testrgb.c: Use dynamically allocated buffer. Use GTimers.
 
 1999-03-13  Raja R Harinath  <harinath@cs.umn.edu>
