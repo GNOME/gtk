@@ -1,3 +1,8 @@
+Sun Feb 22 14:28:43 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmain.c (gtk_events_pending): Count idle handlers
+	at internal priority as pending events.
+
 Sun Feb 22 00:20:12 MET 1998  Eckehard Berns  <eb@berns.prima.de>
 
 	* gdk/gdkcc.c (gdk_color_context_query_colors): fixed a bug for mode

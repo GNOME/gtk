@@ -309,7 +309,14 @@ gtk_main_quit ()
 gint
 gtk_events_pending (void)
 {
-  return gdk_events_pending() + (next_event != NULL) ? 1 : 0;
+  gint result = gdk_events_pending() + ((next_event != NULL) ? 1 : 0);
+
+  if (idle_functions &&
+      (((GtkIdleFunction *)idle_functions->data)->priority >=
+       GTK_PRIORITY_INTERNAL))
+    result += 1;
+
+  return result;
 }
 
 gint 
