@@ -1135,7 +1135,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       else
 	return FALSE;
     }
-  
+
   /* Ignore modifier key presses
    */
   for (i=0; i < G_N_ELEMENTS (gtk_compose_ignore); i++)

@@ -1,4 +1,9 @@
-Tue Feb 26 21:35:31 2002  Owen Taylor  <otaylor@redhat.com>
+Tue Feb 26 21:44:01 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* config.status config.guess: Remove these files
+	from CVS so we more-or-less current versions from
+	automake --add-missing. (Reported by Finlay Dobbie,
+	#60342)
 
 	* gdk/gdkkeyuni.c: Shouldn't map KP_Enter to '\n',
 	or KP_Tab to \t' since we don't map the corresponding
