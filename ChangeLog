@@ -1,3 +1,25 @@
+2005-01-10  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #162617.
+
+	* gtk/gtkfilesystemunix.c (STAT_NEEDED_MASK): Take out
+	GTK_FILE_INFO_IS_HIDDEN; we don't need to stat() to know this.
+	(gtk_file_system_unix_get_folder): Make error reporting more
+	accurate.  Don't bail out if we can't read the directory.
+	(fill_in_stats): Don't return an error; just assume we don't have
+	stat info for this folder's files.
+	(fill_in_names): Don't create the hash table for the names if we
+	can't open the directory.
+	(gtk_file_folder_unix_list_children): Don't emit the
+	"finished-loading" signal --- we don't do asynchronous loads, so
+	we are always finished loading.
+	(gtk_file_folder_unix_get_info): Use helper functions; handle the
+	case where we can't stat '/'.
+	(get_icon_type_from_path): Don't call fill_in_stats() here; only
+	use the info we have.
+	(fill_in_mime_type): Don't return an error.  Don't do anything if
+	we don't have the stat info.
+
 2005-01-10  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (EXTRA_DIST): Adding missing ChangeLog.pre*
