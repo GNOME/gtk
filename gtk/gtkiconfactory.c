@@ -2600,7 +2600,7 @@ add_to_cache (GtkIconSet      *icon_set,
   CachedIcon *icon;
 
   ensure_cache_up_to_date (icon_set);
-  
+
   g_object_ref (pixbuf);
 
   /* We have to ref the style, since if the style was finalized
@@ -2610,10 +2610,10 @@ add_to_cache (GtkIconSet      *icon_set,
   
   if (style)
     g_object_ref (style);
-  
 
   icon = g_new (CachedIcon, 1);
   icon_set->cache = g_slist_prepend (icon_set->cache, icon);
+  icon_set->cache_size++;
 
   icon->style = style;
   icon->direction = direction;
@@ -2627,7 +2627,6 @@ add_to_cache (GtkIconSet      *icon_set,
   if (icon_set->cache_size >= NUM_CACHED_ICONS)
     {
       /* Remove oldest item in the cache */
-      
       GSList *tmp_list;
       
       tmp_list = icon_set->cache;

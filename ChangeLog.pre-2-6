@@ -1,3 +1,8 @@
+Sun May  9 01:25:37 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconfactory.c (add_to_cache): Actually count the
+	cached icons.  (#135888, Crispin Flowerday)
+
 Sun May  9 00:03:03 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.c (gtk_ui_manager_get_widget): Make sure
