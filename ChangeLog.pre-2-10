@@ -1,3 +1,14 @@
+Wed Dec 12 16:18:26 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_realize): Remove support for
+	"prepainting" the menu before realizing other than
+	via gtk_style_set_background() - this was broken when
+	we added menu scroll support.
+
+	* gtk/gtkmenu.c (gtk_menu_paint): Pay attention to the
+	window in the expose event -- fixes problem with border
+	flashing during scrolling.
+
 Wed Dec 12 15:11:49 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksettings.c (gtk_settings_get_property): Support

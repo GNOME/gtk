@@ -84,7 +84,8 @@ static void     gtk_menu_size_request      (GtkWidget        *widget,
 					    GtkRequisition   *requisition);
 static void     gtk_menu_size_allocate     (GtkWidget        *widget,
 					    GtkAllocation    *allocation);
-static void     gtk_menu_paint             (GtkWidget        *widget);
+static void     gtk_menu_paint             (GtkWidget        *widget,
+					    GdkEventExpose   *expose);
 static void     gtk_menu_show              (GtkWidget        *widget);
 static gboolean gtk_menu_expose            (GtkWidget        *widget,
 					    GdkEventExpose   *event);
@@ -1223,8 +1224,6 @@ gtk_menu_realize (GtkWidget *widget)
   gtk_menu_scroll_item_visible (GTK_MENU_SHELL (widget),
 				GTK_MENU_SHELL (widget)->active_menu_item);
 
-  gtk_menu_paint (widget);
-  
   gdk_window_show (menu->bin_window);
   gdk_window_show (menu->view_window);
 }
@@ -1444,20 +1443,22 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 }
 
 static void
-gtk_menu_paint (GtkWidget *widget)
+gtk_menu_paint (GtkWidget      *widget,
+		GdkEventExpose *event)
 {
-  gint border_x;
-  gint border_y;
-  gint width, height;
-  gint menu_height;
-  gint top_pos;
   GtkMenu *menu;
+  gint width, height;
+  gint border_x, border_y;
   
   g_return_if_fail (GTK_IS_MENU (widget));
 
   menu = GTK_MENU (widget);
   
-  if (GTK_WIDGET_DRAWABLE (widget))
+  border_x = GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
+  border_y = GTK_CONTAINER (widget)->border_width + widget->style->ythickness;
+  gdk_window_get_size (widget->window, &width, &height);
+
+  if (event->window == widget->window)
     {
       gtk_paint_box (widget->style,
 		     widget->window,
@@ -1465,11 +1466,6 @@ gtk_menu_paint (GtkWidget *widget)
 		     GTK_SHADOW_OUT,
 		     NULL, widget, "menu",
 		     0, 0, -1, -1);
-
-      border_x = GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
-      border_y = GTK_CONTAINER (widget)->border_width + widget->style->ythickness;
-      gdk_window_get_size (widget->window, &width, &height);
-
       if (menu->upper_arrow_visible && !menu->tearoff_active)
 	{
 	  gtk_paint_box (widget->style,
@@ -1523,7 +1519,12 @@ gtk_menu_paint (GtkWidget *widget)
 			   MENU_SCROLL_ARROW_HEIGHT - 2 * border_y - 2,
 			   MENU_SCROLL_ARROW_HEIGHT - 2 * border_y - 2);
 	}
-
+    }
+  else if (event->window == menu->view_window)
+    {
+      gint menu_height;
+      gint top_pos;
+      
       if (menu->scroll_offset < 0)
 	gtk_paint_box (widget->style,
 		       menu->view_window,
@@ -1559,7 +1560,7 @@ gtk_menu_expose (GtkWidget	*widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      gtk_menu_paint (widget);
+      gtk_menu_paint (widget, event);
       
       (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
     }
