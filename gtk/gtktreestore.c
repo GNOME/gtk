@@ -2408,12 +2408,17 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
     }
 
   if (depth)
-    path = gtk_tree_model_get_path (GTK_TREE_MODEL (tree_store), &parent_iter);
+    {
+      path = gtk_tree_model_get_path (GTK_TREE_MODEL (tree_store), &parent_iter);
+      gtk_tree_model_rows_reordered (GTK_TREE_MODEL (tree_store),
+				     path, &parent_iter, order);
+    }
   else
-    path = gtk_tree_path_new ();
-
-  gtk_tree_model_rows_reordered (GTK_TREE_MODEL (tree_store),
-				 path, &parent_iter, order);
+    {
+      path = gtk_tree_path_new ();
+      gtk_tree_model_rows_reordered (GTK_TREE_MODEL (tree_store),
+				     path, NULL, order);
+    }
 
   gtk_tree_path_free (path);
   if (position)
