@@ -91,9 +91,9 @@ int main( int argc,
   
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   g_signal_connect (GTK_OBJECT (window), "destroy", 
-		      GTK_SIGNAL_FUNC (gtk_main_quit), 
-		      "WM destroy");
-  gtk_window_set_title (GTK_WINDOW(window), "Item Factory");
+		    GTK_SIGNAL_FUNC (gtk_main_quit), 
+		    "WM destroy");
+  gtk_window_set_title (GTK_WINDOW (window), "Item Factory");
   gtk_widget_set_size_request (GTK_WIDGET (window), 300, 200);
   
   main_vbox = gtk_vbox_new (FALSE, 1);
@@ -106,6 +106,7 @@ int main( int argc,
   gtk_widget_show (menubar);
   
   gtk_widget_show (window);
+
   gtk_main ();
   
   return 0;

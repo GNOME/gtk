@@ -9,15 +9,15 @@ GtkWidget *create_arrow_button( GtkArrowType  arrow_type,
   GtkWidget *button;
   GtkWidget *arrow;
 
-  button = gtk_button_new();
+  button = gtk_button_new ();
   arrow = gtk_arrow_new (arrow_type, shadow_type);
 
   gtk_container_add (GTK_CONTAINER (button), arrow);
   
-  gtk_widget_show(button);
-  gtk_widget_show(arrow);
+  gtk_widget_show (button);
+  gtk_widget_show (arrow);
 
-  return(button);
+  return button;
 }
 
 int main( int   argc,
@@ -49,18 +49,18 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), box);
 
   /* Pack and show all our widgets */
-  gtk_widget_show(box);
+  gtk_widget_show (box);
 
-  button = create_arrow_button(GTK_ARROW_UP, GTK_SHADOW_IN);
+  button = create_arrow_button (GTK_ARROW_UP, GTK_SHADOW_IN);
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 3);
 
-  button = create_arrow_button(GTK_ARROW_DOWN, GTK_SHADOW_OUT);
+  button = create_arrow_button (GTK_ARROW_DOWN, GTK_SHADOW_OUT);
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 3);
   
-  button = create_arrow_button(GTK_ARROW_LEFT, GTK_SHADOW_ETCHED_IN);
+  button = create_arrow_button (GTK_ARROW_LEFT, GTK_SHADOW_ETCHED_IN);
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 3);
   
-  button = create_arrow_button(GTK_ARROW_RIGHT, GTK_SHADOW_ETCHED_OUT);
+  button = create_arrow_button (GTK_ARROW_RIGHT, GTK_SHADOW_ETCHED_OUT);
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 3);
   
   gtk_widget_show (window);
@@ -68,5 +68,5 @@ int main( int   argc,
   /* Rest in gtk_main and wait for the fun to begin! */
   gtk_main ();
   
-  return(0);
+  return 0;
 }

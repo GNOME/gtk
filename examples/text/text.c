@@ -8,21 +8,21 @@
 void text_toggle_editable (GtkWidget *checkbutton,
 			   GtkWidget *text)
 {
-  gtk_text_set_editable(GTK_TEXT(text),
-			GTK_TOGGLE_BUTTON(checkbutton)->active);
+  gtk_text_set_editable (GTK_TEXT (text),
+			 GTK_TOGGLE_BUTTON (checkbutton)->active);
 }
 
 void text_toggle_word_wrap (GtkWidget *checkbutton,
 			    GtkWidget *text)
 {
-  gtk_text_set_word_wrap(GTK_TEXT(text),
-			 GTK_TOGGLE_BUTTON(checkbutton)->active);
+  gtk_text_set_word_wrap (GTK_TEXT (text),
+			  GTK_TOGGLE_BUTTON (checkbutton)->active);
 }
 
 void close_application( GtkWidget *widget,
                         gpointer   data )
 {
-       gtk_main_quit();
+       gtk_main_quit ();
 }
 
 int main( int argc,
@@ -48,9 +48,9 @@ int main( int argc,
  
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_size_request (window, 600, 500);
-  gtk_window_set_policy (GTK_WINDOW(window), TRUE, TRUE, FALSE);  
+  gtk_window_set_policy (GTK_WINDOW (window), TRUE, TRUE, FALSE);  
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC(close_application),
+		      GTK_SIGNAL_FUNC (close_application),
 		      NULL);
   gtk_window_set_title (GTK_WINDOW (window), "Text Widget Example");
   gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -88,12 +88,12 @@ int main( int argc,
   gtk_widget_show (vscrollbar);
 
   /* Get the system color map and allocate the color red */
-  cmap = gdk_colormap_get_system();
+  cmap = gdk_colormap_get_system ();
   color.red = 0xffff;
   color.green = 0;
   color.blue = 0;
-  if (!gdk_color_alloc(cmap, &color)) {
-    g_error("couldn't allocate color");
+  if (!gdk_color_alloc (cmap, &color)) {
+    g_error ("couldn't allocate color");
   }
 
   /* Load a fixed font */
@@ -118,7 +118,7 @@ int main( int argc,
   
   /* Load the file text.c into the text window */
 
-  infile = fopen("text.c", "r");
+  infile = fopen ("text.c", "r");
   
   if (infile) {
     char buffer[1024];
@@ -126,7 +126,7 @@ int main( int argc,
     
     while (1)
       {
-	nchars = fread(buffer, 1, 1024, infile);
+	nchars = fread (buffer, 1, 1024, infile);
 	gtk_text_insert (GTK_TEXT (text), fixed_font, NULL,
 			 NULL, buffer, nchars);
 	
@@ -144,17 +144,17 @@ int main( int argc,
   gtk_box_pack_start (GTK_BOX (box2), hbox, FALSE, FALSE, 0);
   gtk_widget_show (hbox);
 
-  check = gtk_check_button_new_with_label("Editable");
+  check = gtk_check_button_new_with_label ("Editable");
   gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, FALSE, 0);
-  gtk_signal_connect (GTK_OBJECT(check), "toggled",
-		      GTK_SIGNAL_FUNC(text_toggle_editable), text);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), TRUE);
+  gtk_signal_connect (GTK_OBJECT (check), "toggled",
+		      GTK_SIGNAL_FUNC (text_toggle_editable), text);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
   gtk_widget_show (check);
-  check = gtk_check_button_new_with_label("Wrap Words");
+  check = gtk_check_button_new_with_label ("Wrap Words");
   gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, TRUE, 0);
-  gtk_signal_connect (GTK_OBJECT(check), "toggled",
-		      GTK_SIGNAL_FUNC(text_toggle_word_wrap), text);
-  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), FALSE);
+  gtk_signal_connect (GTK_OBJECT (check), "toggled",
+		      GTK_SIGNAL_FUNC (text_toggle_word_wrap), text);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), FALSE);
   gtk_widget_show (check);
 
   separator = gtk_hseparator_new ();
@@ -167,9 +167,9 @@ int main( int argc,
   gtk_widget_show (box2);
   
   button = gtk_button_new_with_label ("close");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC(close_application),
-		      NULL);
+  g_signal_connect (GTK_OBJECT (button), "clicked",
+	            GTK_SIGNAL_FUNC (close_application),
+	            NULL);
   gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
   gtk_widget_grab_default (button);
@@ -179,5 +179,5 @@ int main( int argc,
 
   gtk_main ();
   
-  return(0);       
+  return 0;       
 }

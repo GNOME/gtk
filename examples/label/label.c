@@ -11,12 +11,12 @@ int main( int   argc,
   GtkWidget *label;
 
   /* Initialise GTK */
-  gtk_init(&argc, &argv);
+  gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   g_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC(gtk_main_quit),
-		      NULL);
+		    GTK_SIGNAL_FUNC (gtk_main_quit),
+		    NULL);
 
   gtk_window_set_title (GTK_WINDOW (window), "Label");
   vbox = gtk_vbox_new (FALSE, 5);

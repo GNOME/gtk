@@ -7,7 +7,7 @@
 void selection_toggled( GtkWidget *widget,
                         gint      *have_selection )
 {
-  if (GTK_TOGGLE_BUTTON(widget)->active)
+  if (GTK_TOGGLE_BUTTON (widget)->active)
     {
       *have_selection = gtk_selection_owner_set (widget,
 						 GDK_SELECTION_PRIMARY,
@@ -15,7 +15,7 @@ void selection_toggled( GtkWidget *widget,
       /* if claiming the selection failed, we return the button to
 	 the out state */
       if (!*have_selection)
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget), FALSE);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
     }
   else
     {
@@ -37,7 +37,7 @@ gint selection_clear( GtkWidget         *widget,
                       gint              *have_selection )
 {
   *have_selection = FALSE;
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget), FALSE);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
 
   return TRUE;
 }
@@ -52,13 +52,13 @@ void selection_handle( GtkWidget        *widget,
   gchar *timestr;
   time_t current_time;
 
-  current_time = time(NULL);
-  timestr = asctime (localtime(&current_time)); 
+  current_time = time (NULL);
+  timestr = asctime (localtime (&current_time)); 
   /* When we return a single string, it should not be null terminated.
      That will be done for us */
 
   gtk_selection_data_set (selection_data, GDK_SELECTION_TYPE_STRING,
-			  8, timestr, strlen(timestr));
+			  8, timestr, strlen (timestr));
 }
 
 int main( int   argc,
@@ -78,7 +78,7 @@ int main( int   argc,
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
   g_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (exit), NULL);
+		    GTK_SIGNAL_FUNC (exit), NULL);
 
   /* Create a toggle button to act as the selection */
 
@@ -86,17 +86,17 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), selection_button);
   gtk_widget_show (selection_button);
 
-  g_signal_connect (GTK_OBJECT(selection_button), "toggled",
-		      GTK_SIGNAL_FUNC (selection_toggled), &have_selection);
-  g_signal_connect (GTK_OBJECT(selection_button), "selection_clear_event",
-		      GTK_SIGNAL_FUNC (selection_clear), &have_selection);
+  g_signal_connect (GTK_OBJECT (selection_button), "toggled",
+		    GTK_SIGNAL_FUNC (selection_toggled), &have_selection);
+  g_signal_connect (GTK_OBJECT (selection_button), "selection_clear_event",
+		    GTK_SIGNAL_FUNC (selection_clear), &have_selection);
 
   gtk_selection_add_target (selection_button,
 			    GDK_SELECTION_PRIMARY,
 			    GDK_SELECTION_TYPE_STRING,
 		            1);
-  g_signal_connect (GTK_OBJECT(selection_button), "selection_get",
-		      GTK_SIGNAL_FUNC (selection_handle), &have_selection);
+  g_signal_connect (GTK_OBJECT (selection_button), "selection_get",
+		    GTK_SIGNAL_FUNC (selection_handle), &have_selection);
 
   gtk_widget_show (selection_button);
   gtk_widget_show (window);

@@ -141,33 +141,32 @@ int main (int argc,
      * the application.  Note that the main window will not have a titlebar
      * since we're making it a popup. */
     gtk_init (&argc, &argv);
-    window = gtk_window_new( GTK_WINDOW_POPUP );
+    window = gtk_window_new (GTK_WINDOW_POPUP);
     g_signal_connect (GTK_OBJECT (window), "delete_event",
-                        GTK_SIGNAL_FUNC (close_application), NULL);
+                      GTK_SIGNAL_FUNC (close_application), NULL);
     gtk_widget_show (window);
 
     /* Now for the pixmap and the pixmap widget */
     style = gtk_widget_get_default_style();
     gc = style->black_gc;
-    gdk_pixmap = gdk_pixmap_create_from_xpm_d( window->window, &mask,
-                                             &style->bg[GTK_STATE_NORMAL],
-                                             WheelbarrowFull_xpm );
+    gdk_pixmap = gdk_pixmap_create_from_xpm_d (window->window, &mask,
+                                               &style->bg[GTK_STATE_NORMAL],
+                                               WheelbarrowFull_xpm);
     pixmap = gtk_image_new_from_pixmap (gdk_pixmap, mask);
-    gtk_widget_show( pixmap );
+    gtk_widget_show (pixmap);
 
     /* To display the pixmap, we use a fixed widget to place the pixmap */
-    fixed = gtk_fixed_new();
+    fixed = gtk_fixed_new ();
     gtk_widget_set_size_request (fixed, 200, 200);
-    gtk_fixed_put( GTK_FIXED(fixed), pixmap, 0, 0 );
-    gtk_container_add( GTK_CONTAINER(window), fixed );
-    gtk_widget_show( fixed );
+    gtk_fixed_put (GTK_FIXED (fixed), pixmap, 0, 0);
+    gtk_container_add (GTK_CONTAINER (window), fixed);
+    gtk_widget_show (fixed);
 
     /* This masks out everything except for the image itself */
-    gtk_widget_shape_combine_mask( window, mask, 0, 0 );
+    gtk_widget_shape_combine_mask (window, mask, 0, 0);
     
     /* show the window */
-    /*gtk_widget_set_uposition( window, 20, 400 );*/
-    gtk_widget_show( window );
+    gtk_widget_show (window);
     gtk_main ();
           
     return 0;

@@ -47,7 +47,7 @@ void selection_received( GtkWidget        *widget,
   atoms = (GdkAtom *)selection_data->data;
 
   item_list = NULL;
-  for (i=0; i<selection_data->length/sizeof(GdkAtom); i++)
+  for (i = 0; i < selection_data->length / sizeof(GdkAtom); i++)
     {
       char *name;
       name = gdk_atom_name (atoms[i]);
@@ -75,7 +75,7 @@ int main( int   argc,
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
   g_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (exit), NULL);
+	            GTK_SIGNAL_FUNC (exit), NULL);
 
   /* Create a button the user can click to get targets */
 
@@ -83,9 +83,9 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), button);
 
   g_signal_connect (GTK_OBJECT(button), "clicked",
-		      GTK_SIGNAL_FUNC (get_targets), NULL);
+		    GTK_SIGNAL_FUNC (get_targets), NULL);
   g_signal_connect (GTK_OBJECT(button), "selection_received",
-		      GTK_SIGNAL_FUNC (selection_received), NULL);
+		    GTK_SIGNAL_FUNC (selection_received), NULL);
 
   gtk_widget_show (button);
   gtk_widget_show (window);

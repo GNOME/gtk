@@ -16,14 +16,14 @@ int main( int argc,
     gtk_window_set_title (GTK_WINDOW (window), "Event Box");
     
     g_signal_connect (GTK_OBJECT (window), "destroy",
-			GTK_SIGNAL_FUNC (exit), NULL);
+	              GTK_SIGNAL_FUNC (exit), NULL);
     
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     
     /* Create an EventBox and add it to our toplevel window */
     
     event_box = gtk_event_box_new ();
-    gtk_container_add (GTK_CONTAINER(window), event_box);
+    gtk_container_add (GTK_CONTAINER (window), event_box);
     gtk_widget_show (event_box);
     
     /* Create a long label */
@@ -37,8 +37,8 @@ int main( int argc,
     
     /* And bind an action to it */
     gtk_widget_set_events (event_box, GDK_BUTTON_PRESS_MASK);
-    g_signal_connect (GTK_OBJECT(event_box), "button_press_event",
-			GTK_SIGNAL_FUNC (exit), NULL);
+    g_signal_connect (GTK_OBJECT (event_box), "button_press_event",
+	              GTK_SIGNAL_FUNC (exit), NULL);
     
     /* Yet one more thing you need an X window for ... */
     

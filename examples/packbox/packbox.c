@@ -7,7 +7,7 @@ gint delete_event( GtkWidget *widget,
                    GdkEvent  *event,
                    gpointer   data )
 {
-    gtk_main_quit();
+    gtk_main_quit ();
     return FALSE;
 }
 
@@ -96,7 +96,7 @@ int main( int   argc,
      * to the main window. This is very important for proper intuitive
      * behavior */
     g_signal_connect (GTK_OBJECT (window), "delete_event",
-			GTK_SIGNAL_FUNC (delete_event), NULL);
+		      GTK_SIGNAL_FUNC (delete_event), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     
     /* We create a vertical box (vbox) to pack the horizontal boxes into.
@@ -260,8 +260,8 @@ int main( int   argc,
     
     /* Setup the signal to terminate the program when the button is clicked */
     g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			       GTK_SIGNAL_FUNC (gtk_main_quit),
-			       GTK_OBJECT (window));
+			      GTK_SIGNAL_FUNC (gtk_main_quit),
+			      GTK_OBJECT (window));
     /* Pack the button into the quitbox.
      * The last 3 arguments to gtk_box_pack_start are:
      * expand, fill, padding. */

@@ -17,7 +17,7 @@ gint progress_timeout( gpointer data )
     /* Calculate the value of the progress bar using the
      * value range set in the adjustment object */
 
-    new_val = gtk_progress_get_value( GTK_PROGRESS(data) ) + 1;
+    new_val = gtk_progress_get_value (GTK_PROGRESS (data)) + 1;
 
     adj = GTK_PROGRESS (data)->adjustment;
     if (new_val > adj->upper)
@@ -74,8 +74,8 @@ void destroy_progress( GtkWidget     *widget,
     gtk_timeout_remove (pdata->timer);
     pdata->timer = 0;
     pdata->window = NULL;
-    g_free(pdata);
-    gtk_main_quit();
+    g_free (pdata);
+    gtk_main_quit ();
 }
 
 int main( int   argc,
@@ -92,27 +92,27 @@ int main( int   argc,
 
     gtk_init (&argc, &argv);
 
-    /* Allocate memory for the data that is passwd to the callbacks */
-    pdata = g_malloc( sizeof(ProgressData) );
+    /* Allocate memory for the data that is passed to the callbacks */
+    pdata = g_malloc (sizeof (ProgressData));
   
     pdata->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_resizable (GTK_WINDOW (pdata->window), TRUE);
 
     g_signal_connect (GTK_OBJECT (pdata->window), "destroy",
-	                GTK_SIGNAL_FUNC (destroy_progress),
-                        pdata);
+	              GTK_SIGNAL_FUNC (destroy_progress),
+                      pdata);
     gtk_window_set_title (GTK_WINDOW (pdata->window), "GtkProgressBar");
     gtk_container_set_border_width (GTK_CONTAINER (pdata->window), 0);
 
     vbox = gtk_vbox_new (FALSE, 5);
     gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
     gtk_container_add (GTK_CONTAINER (pdata->window), vbox);
-    gtk_widget_show(vbox);
+    gtk_widget_show (vbox);
   
     /* Create a centering alignment object */
     align = gtk_alignment_new (0.5, 0.5, 0, 0);
     gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 5);
-    gtk_widget_show(align);
+    gtk_widget_show (align);
 
     /* Create a Adjusment object to hold the range of the
      * progress bar */
@@ -130,19 +130,19 @@ int main( int   argc,
     gtk_progress_set_format_string (GTK_PROGRESS (pdata->pbar),
 	                            "%v from [%l-%u] (=%p%%)");
     gtk_container_add (GTK_CONTAINER (align), pdata->pbar);
-    gtk_widget_show(pdata->pbar);
+    gtk_widget_show (pdata->pbar);
 
     /* Add a timer callback to update the value of the progress bar */
     pdata->timer = gtk_timeout_add (100, progress_timeout, pdata->pbar);
 
     separator = gtk_hseparator_new ();
     gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
-    gtk_widget_show(separator);
+    gtk_widget_show (separator);
 
     /* rows, columns, homogeneous */
     table = gtk_table_new (2, 3, FALSE);
     gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, TRUE, 0);
-    gtk_widget_show(table);
+    gtk_widget_show (table);
 
     /* Add a check button to select displaying of the trough text */
     check = gtk_check_button_new_with_label ("Show text");
@@ -150,9 +150,9 @@ int main( int   argc,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
     g_signal_connect (GTK_OBJECT (check), "clicked",
-                        GTK_SIGNAL_FUNC (toggle_show_text),
-                        pdata);
-    gtk_widget_show(check);
+                      GTK_SIGNAL_FUNC (toggle_show_text),
+                      pdata);
+    gtk_widget_show (check);
 
     /* Add a check button to toggle activity mode */
     check = gtk_check_button_new_with_label ("Activity mode");
@@ -160,15 +160,15 @@ int main( int   argc,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
     g_signal_connect (GTK_OBJECT (check), "clicked",
-                        GTK_SIGNAL_FUNC (toggle_activity_mode),
-                        pdata);
-    gtk_widget_show(check);
+                      GTK_SIGNAL_FUNC (toggle_activity_mode),
+                      pdata);
+    gtk_widget_show (check);
 
     separator = gtk_vseparator_new ();
     gtk_table_attach (GTK_TABLE (table), separator, 1, 2, 0, 2,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
-    gtk_widget_show(separator);
+    gtk_widget_show (separator);
 
     /* Add a radio button to select continuous display mode */
     button = gtk_radio_button_new_with_label (NULL, "Continuous");
@@ -176,8 +176,8 @@ int main( int   argc,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
     g_signal_connect (GTK_OBJECT (button), "clicked",
-                        GTK_SIGNAL_FUNC (set_continuous_mode),
-                        pdata);
+                      GTK_SIGNAL_FUNC (set_continuous_mode),
+                      pdata);
     gtk_widget_show (button);
 
     /* Add a radio button to select discrete display mode */
@@ -188,19 +188,19 @@ int main( int   argc,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
     g_signal_connect (GTK_OBJECT (button), "clicked",
-                        GTK_SIGNAL_FUNC (set_discrete_mode),
-                        pdata);
+                      GTK_SIGNAL_FUNC (set_discrete_mode),
+                      pdata);
     gtk_widget_show (button);
 
     separator = gtk_hseparator_new ();
     gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
-    gtk_widget_show(separator);
+    gtk_widget_show (separator);
 
     /* Add a button to exit the program */
     button = gtk_button_new_with_label ("close");
     g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-                               (GtkSignalFunc) gtk_widget_destroy,
-                               GTK_OBJECT (pdata->window));
+                              GTK_SIGNAL_FUNC (gtk_widget_destroy),
+                              GTK_OBJECT (pdata->window));
     gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
     /* This makes it so the button is the default. */
@@ -209,7 +209,7 @@ int main( int   argc,
     /* This grabs this button to be the default button. Simply hitting
      * the "Enter" key will cause this button to activate. */
     gtk_widget_grab_default (button);
-    gtk_widget_show(button);
+    gtk_widget_show (button);
 
     gtk_widget_show (pdata->window);
 

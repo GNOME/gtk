@@ -5,7 +5,7 @@
 void destroy( GtkWidget *widget,
               gpointer   data )
 {
-    gtk_main_quit();
+    gtk_main_quit ();
 }
 
 int main( int   argc,
@@ -24,7 +24,7 @@ int main( int   argc,
      * packed into.  */
     window = gtk_dialog_new ();
     g_signal_connect (GTK_OBJECT (window), "destroy",
-			(GtkSignalFunc) destroy, NULL);
+		      GTK_SIGNAL_FUNC (destroy), NULL);
     gtk_window_set_title (GTK_WINDOW (window), "GtkScrolledWindow example");
     gtk_container_set_border_width (GTK_CONTAINER (window), 0);
     gtk_widget_set_size_request (window, 300, 300);
@@ -72,8 +72,8 @@ int main( int   argc,
     /* Add a "close" button to the bottom of the dialog */
     button = gtk_button_new_with_label ("close");
     g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			       (GtkSignalFunc) gtk_widget_destroy,
-			       GTK_OBJECT (window));
+			      GTK_SIGNAL_FUNC (gtk_widget_destroy),
+			      GTK_OBJECT (window));
     
     /* this makes it so the button is the default. */
     

@@ -37,7 +37,7 @@ GtkWidget *create_bbox( gint  horizontal,
   button = gtk_button_new_with_label ("Help");
   gtk_container_add (GTK_CONTAINER (bbox), button);
 
-  return(frame);
+  return frame;
 }
 
 int main( int   argc,
@@ -51,13 +51,13 @@ int main( int   argc,
   GtkWidget *frame_vert;
 
   /* Initialize GTK */
-  gtk_init( &argc, &argv );
+  gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Button Boxes");
 
   g_signal_connect (GTK_OBJECT (window), "destroy",
-		    GTK_SIGNAL_FUNC(gtk_main_quit),
+		    GTK_SIGNAL_FUNC (gtk_main_quit),
 		    NULL);
 
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -116,5 +116,5 @@ int main( int   argc,
   /* Enter the event loop */
   gtk_main ();
     
-  return(0);
+  return 0;
 }

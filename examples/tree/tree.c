@@ -44,8 +44,8 @@ static void cb_selection_changed( GtkWidget *tree )
   g_print ("selection_change called for tree %p\n", tree);
   g_print ("selected objects are:\n");
 
-  i = GTK_TREE_SELECTION_OLD(tree);
-  while (i){
+  i = GTK_TREE_SELECTION_OLD (tree);
+  while (i) {
     gchar *name;
     GtkLabel *label;
     GtkWidget *item;
@@ -72,9 +72,9 @@ int main( int   argc,
 
   /* a generic toplevel window */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_signal_connect (GTK_OBJECT(window), "delete_event",
+  gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
-  gtk_container_set_border_width (GTK_CONTAINER(window), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
 
   /* A generic scrolled window */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
@@ -82,24 +82,24 @@ int main( int   argc,
 				  GTK_POLICY_AUTOMATIC,
 				  GTK_POLICY_AUTOMATIC);
   gtk_widget_set_size_request (scrolled_win, 150, 200);
-  gtk_container_add (GTK_CONTAINER(window), scrolled_win);
+  gtk_container_add (GTK_CONTAINER (window), scrolled_win);
   gtk_widget_show (scrolled_win);
   
   /* Create the root tree */
-  tree = gtk_tree_new();
+  tree = gtk_tree_new ();
   g_print ("root tree is %p\n", tree);
   /* connect all GtkTree:: signals */
-  gtk_signal_connect (GTK_OBJECT(tree), "select_child",
-		      GTK_SIGNAL_FUNC(cb_select_child), tree);
-  gtk_signal_connect (GTK_OBJECT(tree), "unselect_child",
-		      GTK_SIGNAL_FUNC(cb_unselect_child), tree);
+  gtk_signal_connect (GTK_OBJECT (tree), "select_child",
+		      GTK_SIGNAL_FUNC (cb_select_child), tree);
+  gtk_signal_connect (GTK_OBJECT (tree), "unselect_child",
+		      GTK_SIGNAL_FUNC (cb_unselect_child), tree);
   gtk_signal_connect (GTK_OBJECT(tree), "selection_changed",
 		      GTK_SIGNAL_FUNC(cb_selection_changed), tree);
   /* Add it to the scrolled window */
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW(scrolled_win),
+  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_win),
                                          tree);
   /* Set the selection mode */
-  gtk_tree_set_selection_mode (GTK_TREE(tree),
+  gtk_tree_set_selection_mode (GTK_TREE (tree),
 			       GTK_SELECTION_MULTIPLE);
   /* Show it */
   gtk_widget_show (tree);
@@ -111,44 +111,44 @@ int main( int   argc,
     /* Create a tree item */
     item = gtk_tree_item_new_with_label (itemnames[i]);
     /* Connect all GtkItem:: and GtkTreeItem:: signals */
-    gtk_signal_connect (GTK_OBJECT(item), "select",
-			GTK_SIGNAL_FUNC(cb_itemsignal), "select");
-    gtk_signal_connect (GTK_OBJECT(item), "deselect",
-			GTK_SIGNAL_FUNC(cb_itemsignal), "deselect");
-    gtk_signal_connect (GTK_OBJECT(item), "toggle",
-			GTK_SIGNAL_FUNC(cb_itemsignal), "toggle");
-    gtk_signal_connect (GTK_OBJECT(item), "expand",
-			GTK_SIGNAL_FUNC(cb_itemsignal), "expand");
-    gtk_signal_connect (GTK_OBJECT(item), "collapse",
-			GTK_SIGNAL_FUNC(cb_itemsignal), "collapse");
+    gtk_signal_connect (GTK_OBJECT (item), "select",
+			GTK_SIGNAL_FUNC (cb_itemsignal), "select");
+    gtk_signal_connect (GTK_OBJECT (item), "deselect",
+			GTK_SIGNAL_FUNC (cb_itemsignal), "deselect");
+    gtk_signal_connect (GTK_OBJECT (item), "toggle",
+			GTK_SIGNAL_FUNC (cb_itemsignal), "toggle");
+    gtk_signal_connect (GTK_OBJECT (item), "expand",
+			GTK_SIGNAL_FUNC (cb_itemsignal), "expand");
+    gtk_signal_connect (GTK_OBJECT (item), "collapse",
+			GTK_SIGNAL_FUNC (cb_itemsignal), "collapse");
     /* Add it to the parent tree */
-    gtk_tree_append (GTK_TREE(tree), item);
+    gtk_tree_append (GTK_TREE (tree), item);
     /* Show it - this can be done at any time */
     gtk_widget_show (item);
     /* Create this item's subtree */
-    subtree = gtk_tree_new();
+    subtree = gtk_tree_new ();
     g_print ("-> item %s->%p, subtree %p\n", itemnames[i], item,
 	     subtree);
 
     /* This is still necessary if you want these signals to be called
        for the subtree's children.  Note that selection_change will be 
        signalled for the root tree regardless. */
-    gtk_signal_connect (GTK_OBJECT(subtree), "select_child",
-			GTK_SIGNAL_FUNC(cb_select_child), subtree);
-    gtk_signal_connect (GTK_OBJECT(subtree), "unselect_child",
-			GTK_SIGNAL_FUNC(cb_unselect_child), subtree);
+    gtk_signal_connect (GTK_OBJECT (subtree), "select_child",
+			GTK_SIGNAL_FUNC (cb_select_child), subtree);
+    gtk_signal_connect (GTK_OBJECT (subtree), "unselect_child",
+			GTK_SIGNAL_FUNC (cb_unselect_child), subtree);
     /* This has absolutely no effect, because it is completely ignored 
        in subtrees */
-    gtk_tree_set_selection_mode (GTK_TREE(subtree),
+    gtk_tree_set_selection_mode (GTK_TREE (subtree),
 				 GTK_SELECTION_SINGLE);
     /* Neither does this, but for a rather different reason - the
        view_mode and view_line values of a tree are propagated to
        subtrees when they are mapped.  So, setting it later on would
        actually have a (somewhat unpredictable) effect */
-    gtk_tree_set_view_mode (GTK_TREE(subtree), GTK_TREE_VIEW_ITEM);
+    gtk_tree_set_view_mode (GTK_TREE (subtree), GTK_TREE_VIEW_ITEM);
     /* Set this item's subtree - note that you cannot do this until
        AFTER the item has been added to its parent tree! */
-    gtk_tree_item_set_subtree (GTK_TREE_ITEM(item), subtree);
+    gtk_tree_item_set_subtree (GTK_TREE_ITEM (item), subtree);
 
     for (j = 0; j < 5; j++){
       GtkWidget *subitem;
@@ -156,19 +156,19 @@ int main( int   argc,
       /* Create a subtree item, in much the same way */
       subitem = gtk_tree_item_new_with_label (itemnames[j]);
       /* Connect all GtkItem:: and GtkTreeItem:: signals */
-      gtk_signal_connect (GTK_OBJECT(subitem), "select",
-			  GTK_SIGNAL_FUNC(cb_itemsignal), "select");
-      gtk_signal_connect (GTK_OBJECT(subitem), "deselect",
-			  GTK_SIGNAL_FUNC(cb_itemsignal), "deselect");
-      gtk_signal_connect (GTK_OBJECT(subitem), "toggle",
-			  GTK_SIGNAL_FUNC(cb_itemsignal), "toggle");
-      gtk_signal_connect (GTK_OBJECT(subitem), "expand",
-			  GTK_SIGNAL_FUNC(cb_itemsignal), "expand");
-      gtk_signal_connect (GTK_OBJECT(subitem), "collapse",
-			  GTK_SIGNAL_FUNC(cb_itemsignal), "collapse");
+      gtk_signal_connect (GTK_OBJECT (subitem), "select",
+			  GTK_SIGNAL_FUNC (cb_itemsignal), "select");
+      gtk_signal_connect (GTK_OBJECT (subitem), "deselect",
+			  GTK_SIGNAL_FUNC (cb_itemsignal), "deselect");
+      gtk_signal_connect (GTK_OBJECT (subitem), "toggle",
+			  GTK_SIGNAL_FUNC (cb_itemsignal), "toggle");
+      gtk_signal_connect (GTK_OBJECT (subitem), "expand",
+			  GTK_SIGNAL_FUNC (cb_itemsignal), "expand");
+      gtk_signal_connect (GTK_OBJECT (subitem), "collapse",
+			  GTK_SIGNAL_FUNC (cb_itemsignal), "collapse");
       g_print ("-> -> item %s->%p\n", itemnames[j], subitem);
       /* Add it to its parent tree */
-      gtk_tree_append (GTK_TREE(subtree), subitem);
+      gtk_tree_append (GTK_TREE (subtree), subitem);
       /* Show it */
       gtk_widget_show (subitem);
     }
@@ -176,6 +176,8 @@ int main( int   argc,
 
   /* Show the window and loop endlessly */
   gtk_widget_show (window);
+
   gtk_main();
+
   return 0;
 }

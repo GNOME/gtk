@@ -22,7 +22,7 @@ GtkWidget *xpm_label_box( GtkWidget *parent,
 
     /* Get the style of the button to get the
      * background color. */
-    style = gtk_widget_get_style(parent);
+    style = gtk_widget_get_style (parent);
 
     /* Now on to the xpm stuff */
     pixmap = gdk_pixmap_create_from_xpm (parent->window, &mask,
@@ -39,10 +39,10 @@ GtkWidget *xpm_label_box( GtkWidget *parent,
 
     gtk_box_pack_start (GTK_BOX (box1), label, FALSE, FALSE, 3);
 
-    gtk_widget_show(pixmapwid);
-    gtk_widget_show(label);
+    gtk_widget_show (pixmapwid);
+    gtk_widget_show (label);
 
-    return(box1);
+    return box1;
 }
 
 /* Our usual callback function */
@@ -78,7 +78,7 @@ int main( int   argc,
 
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
-    gtk_widget_realize(window);
+    gtk_widget_realize (window);
 
     /* Create a new button */
     button = gtk_button_new ();
@@ -91,11 +91,11 @@ int main( int   argc,
     box1 = xpm_label_box(window, "info.xpm", "cool button");
 
     /* Pack and show all our widgets */
-    gtk_widget_show(box1);
+    gtk_widget_show (box1);
 
     gtk_container_add (GTK_CONTAINER (button), box1);
 
-    gtk_widget_show(button);
+    gtk_widget_show (button);
 
     gtk_container_add (GTK_CONTAINER (window), button);
 
@@ -104,5 +104,5 @@ int main( int   argc,
     /* Rest in gtk_main and wait for the fun to begin! */
     gtk_main ();
 
-    return(0);
+    return 0;
 }

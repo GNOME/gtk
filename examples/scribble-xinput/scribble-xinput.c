@@ -28,12 +28,12 @@ static gint
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
   if (pixmap)
-     g_object_unref(pixmap);
+     g_object_unref (pixmap);
 
-  pixmap = gdk_pixmap_new(widget->window,
-                          widget->allocation.width,
-                          widget->allocation.height,
-                          -1);
+  pixmap = gdk_pixmap_new (widget->window,
+                           widget->allocation.width,
+                           widget->allocation.height,
+                           -1);
   gdk_draw_rectangle (pixmap,
                       widget->style->white_gc,
                       TRUE,
@@ -48,12 +48,12 @@ configure_event (GtkWidget *widget, GdkEventConfigure *event)
 static gint
 expose_event (GtkWidget *widget, GdkEventExpose *event)
 {
-  gdk_draw_drawable(widget->window,
-                  widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-                  pixmap,
-                  event->area.x, event->area.y,
-                  event->area.x, event->area.y,
-                  event->area.width, event->area.height);
+  gdk_draw_drawable (widget->window,
+                     widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                     pixmap,
+                     event->area.x, event->area.y,
+                     event->area.x, event->area.y,
+                     event->area.width, event->area.height);
 
   return FALSE;
 }
@@ -97,7 +97,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
 static void
 print_button_press (GdkDevice *device)
 {
-  g_print("Button press on device '%s'\n", device->name);
+  g_print ("Button press on device '%s'\n", device->name);
 }
 
 static gint
@@ -157,22 +157,22 @@ create_input_dialog ()
     {
       inputd = gtk_input_dialog_new();
 
-      g_signal_connect (GTK_OBJECT(inputd), "destroy",
-                          (GtkSignalFunc)input_dialog_destroy, &inputd);
-      g_signal_connect_swapped (GTK_OBJECT(GTK_INPUT_DIALOG(inputd)->close_button),
-                                 "clicked",
-                                 (GtkSignalFunc)gtk_widget_hide,
-                                 GTK_OBJECT(inputd));
-      gtk_widget_hide ( GTK_INPUT_DIALOG(inputd)->save_button);
+      g_signal_connect (GTK_OBJECT (inputd), "destroy",
+                        GTK_SIGNAL_FUNC (input_dialog_destroy), &inputd);
+      g_signal_connect_swapped (GTK_OBJECT (GTK_INPUT_DIALOG (inputd)->close_button),
+                                "clicked",
+                                GTK_SIGNAL_FUNC (gtk_widget_hide),
+                                GTK_OBJECT (inputd));
+      gtk_widget_hide (GTK_INPUT_DIALOG (inputd)->save_button);
 
       gtk_widget_show (inputd);
     }
   else
     {
-      if (!GTK_WIDGET_MAPPED(inputd))
-        gtk_widget_show(inputd);
+      if (!GTK_WIDGET_MAPPED (inputd))
+        gtk_widget_show (inputd);
       else
-        gdk_window_raise(inputd->window);
+        gdk_window_raise (inputd->window);
     }
 }
 
@@ -201,7 +201,7 @@ main (int argc, char *argv[])
   gtk_widget_show (vbox);
 
   g_signal_connect (GTK_OBJECT (window), "destroy",
-                      GTK_SIGNAL_FUNC (quit), NULL);
+                    GTK_SIGNAL_FUNC (quit), NULL);
 
   /* Create the drawing area */
 
@@ -214,16 +214,16 @@ main (int argc, char *argv[])
   /* Signals used to handle backing pixmap */
 
   g_signal_connect (GTK_OBJECT (drawing_area), "expose_event",
-                      (GtkSignalFunc) expose_event, NULL);
+                    GTK_SIGNAL_FUNC (expose_event), NULL);
   g_signal_connect (GTK_OBJECT(drawing_area),"configure_event",
-                      (GtkSignalFunc) configure_event, NULL);
+                    GTK_SIGNAL_FUNC (configure_event), NULL);
 
   /* Event signals */
 
   g_signal_connect (GTK_OBJECT (drawing_area), "motion_notify_event",
-                      (GtkSignalFunc) motion_notify_event, NULL);
+                    GTK_SIGNAL_FUNC (motion_notify_event), NULL);
   g_signal_connect (GTK_OBJECT (drawing_area), "button_press_event",
-                      (GtkSignalFunc) button_press_event, NULL);
+                    GTK_SIGNAL_FUNC (button_press_event), NULL);
 
   gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK
                          | GDK_LEAVE_NOTIFY_MASK
@@ -247,8 +247,8 @@ main (int argc, char *argv[])
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
   g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-                             GTK_SIGNAL_FUNC (gtk_widget_destroy),
-                             GTK_OBJECT (window));
+                            GTK_SIGNAL_FUNC (gtk_widget_destroy),
+                            GTK_OBJECT (window));
   gtk_widget_show (button);
 
   gtk_widget_show (window);

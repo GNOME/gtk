@@ -23,7 +23,7 @@ int main( int argc,
                                          2, /* xsize/ysize = 2 */
                                          FALSE /* ignore child's aspect */);
    
-    gtk_container_add (GTK_CONTAINER(window), aspect_frame);
+    gtk_container_add (GTK_CONTAINER (window), aspect_frame);
     gtk_widget_show (aspect_frame);
    
     /* Now add a child widget to the aspect frame */
@@ -33,7 +33,7 @@ int main( int argc,
     /* Ask for a 200x200 window, but the AspectFrame will give us a 200x100
      * window since we are forcing a 2x1 aspect ratio */
     gtk_widget_set_size_request (drawing_area, 200, 200);
-    gtk_container_add (GTK_CONTAINER(aspect_frame), drawing_area);
+    gtk_container_add (GTK_CONTAINER (aspect_frame), drawing_area);
     gtk_widget_show (drawing_area);
    
     gtk_widget_show (window);

@@ -24,14 +24,14 @@ gint delete_event( GtkWidget *widget,
     /* Change TRUE to FALSE and the main window will be destroyed with
      * a "delete_event". */
 
-    return(TRUE);
+    return TRUE;
 }
 
 /* Another callback */
 void destroy( GtkWidget *widget,
               gpointer   data )
 {
-    gtk_main_quit();
+    gtk_main_quit ();
 }
 
 int main( int   argc,
@@ -43,7 +43,7 @@ int main( int   argc,
     
     /* This is called in all GTK applications. Arguments are parsed
      * from the command line and are returned to the application. */
-    gtk_init(&argc, &argv);
+    gtk_init (&argc, &argv);
     
     /* create a new window */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -54,13 +54,13 @@ int main( int   argc,
      * as defined above. The data passed to the callback
      * function is NULL and is ignored in the callback function. */
     g_signal_connect (GTK_OBJECT (window), "delete_event",
-			GTK_SIGNAL_FUNC (delete_event), NULL);
+		      GTK_SIGNAL_FUNC (delete_event), NULL);
     
     /* Here we connect the "destroy" event to a signal handler.  
      * This event occurs when we call gtk_widget_destroy() on the window,
      * or if we return FALSE in the "delete_event" callback. */
     g_signal_connect (GTK_OBJECT (window), "destroy",
-			GTK_SIGNAL_FUNC (destroy), NULL);
+		      GTK_SIGNAL_FUNC (destroy), NULL);
     
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -72,14 +72,14 @@ int main( int   argc,
      * function hello() passing it NULL as its argument.  The hello()
      * function is defined above. */
     g_signal_connect (GTK_OBJECT (button), "clicked",
-			GTK_SIGNAL_FUNC (hello), NULL);
+		      GTK_SIGNAL_FUNC (hello), NULL);
     
     /* This will cause the window to be destroyed by calling
      * gtk_widget_destroy(window) when "clicked".  Again, the destroy
      * signal could come from here, or the window manager. */
     g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			       GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			       GTK_OBJECT (window));
+			      GTK_SIGNAL_FUNC (gtk_widget_destroy),
+			      GTK_OBJECT (window));
     
     /* This packs the button into the window (a gtk container). */
     gtk_container_add (GTK_CONTAINER (window), button);

@@ -13,5 +13,5 @@ int main( int   argc,
     
     gtk_main ();
     
-    return(0);
+    return 0;
 }
