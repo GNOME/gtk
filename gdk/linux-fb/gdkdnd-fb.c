@@ -207,6 +207,8 @@ gdk_drag_find_window (GdkDragContext  *context,
   g_return_if_fail (context != NULL);
 
   *dest_window = gdk_window_get_pointer(NULL, &x_root, &y_root, NULL);
+  if(*dest_window)
+    gdk_window_ref(*dest_window);
 }
 
 gboolean        
