@@ -178,7 +178,7 @@ _gdk_input_enter_event (XCrossingEvent *xevent,
   input_window->root_y = root_y;
 }
 
-gint 
+gboolean 
 _gdk_input_other_event (GdkEvent *event, 
 			XEvent *xevent, 
 			GdkWindow *window)
@@ -190,7 +190,7 @@ _gdk_input_other_event (GdkEvent *event,
   GdkDisplayX11 *display_impl = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
 
   input_window = _gdk_input_window_find(window);
-  g_return_val_if_fail (window != NULL, -1);
+  g_return_val_if_fail (window != NULL, FALSE);
 
   /* This is a sort of a hack, as there isn't any XDeviceAnyEvent -
      but it's potentially faster than scanning through the types of
@@ -199,7 +199,7 @@ _gdk_input_other_event (GdkEvent *event,
   gdkdev = _gdk_input_find_device (GDK_WINDOW_DISPLAY (window),
 				   ((XDeviceButtonEvent *)xevent)->deviceid);
   if (!gdkdev)
-    return -1;			/* we don't handle it - not an XInput event */
+    return FALSE;			/* we don't handle it - not an XInput event */
 
   /* FIXME: It would be nice if we could just get rid of the events 
      entirely, instead of having to ignore them */
@@ -214,7 +214,7 @@ _gdk_input_other_event (GdkEvent *event,
   return_val = _gdk_input_common_other_event (event, xevent, 
 					      input_window, gdkdev);
 
-  if (return_val > 0 && event->type == GDK_PROXIMITY_OUT &&
+  if (return_val && event->type == GDK_PROXIMITY_OUT &&
       display_impl->input_ignore_core)
     gdk_input_check_proximity(GDK_WINDOW_DISPLAY (window));
 
@@ -357,9 +357,3 @@ _gdk_input_ungrab_pointer (GdkDisplay *display,
     }
 }
 
-gint 
-_gdk_input_window_none_event (GdkEvent         *event,
-			     XEvent           *xevent)
-{
-  return -1;
-}
