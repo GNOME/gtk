@@ -953,6 +953,7 @@ gtk_item_factory_parse_path (GtkItemFactory *ifactory,
 
   *path = g_strdup (str);
 
+  /* FIXME: This does not handle __ correctly !!! */
   p = q = *path;
   while (*p)
     {

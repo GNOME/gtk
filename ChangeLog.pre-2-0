@@ -1,3 +1,15 @@
+Wed Apr  5 00:08:36 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkgc-x11.c (_gdk_x11_gc_new): Fix screwy
+	indentation.
+
+	* Makefile.am (EXTRA_DIST): Fix typo.
+
+	* gdk[/x11]/Makefile.am (INCLUDES): Add $(top_builddir)/gdk
+	to catch gdkconfig.h
+
+	* gtk/gtkitemfactory.c: Added FIXME.
+
 2000-03-30  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkpaned.c (gtk_paned_get_position): oops.

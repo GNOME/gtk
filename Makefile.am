@@ -32,7 +32,7 @@ EXTRA_DIST =	\
 	examples/buttons/buttons.c  \
 	examples/buttons/info.xpm  \
 	examples/calendar/Makefile  \
-	examples/calendar/gcalendar.c  \
+	examples/calendar/calendar.c  \
 	examples/clist/Makefile  \
 	examples/clist/clist.c  \
 	examples/entry/Makefile  \

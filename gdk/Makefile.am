@@ -11,6 +11,7 @@ EXTRA_DIST =	\
 INCLUDES = @STRIP_BEGIN@ \
 	-DG_LOG_DOMAIN=\"Gdk\"	\
 	-I$(top_srcdir)		\
+	-I$(top_builddir)/gdk	\
 	@GTK_DEBUG_FLAGS@ 	\
 	@GTK_XIM_FLAGS@		\
 	@GTK_LOCALE_FLAGS@	\

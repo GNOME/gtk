@@ -75,8 +75,8 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
   gdk_x11_gc_values_to_xvalues (values, values_mask, &xvalues, &xvalues_mask);
   
   data->xgc = XCreateGC (GDK_GC_XDISPLAY (gc),
-				      GDK_DRAWABLE_XID (drawable),
-				      xvalues_mask, &xvalues);
+			 GDK_DRAWABLE_XID (drawable),
+			 xvalues_mask, &xvalues);
 
   return gc;
 }
