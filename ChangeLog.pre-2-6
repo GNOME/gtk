@@ -1,3 +1,8 @@
+2002-09-30  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	* gtk/gtktextbuffer.c: Add construct-only property "tag_table"
+	and make use of it in gtk_text_buffer_new().  (#70227)
+
 2002-09-30  Stanislav Brabec  <sbrabec@suse.cz>
 
 	* gtk/gtkimcontextsimple.c: Completed ISO-8859-2 characters

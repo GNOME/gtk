@@ -36,7 +36,7 @@
 #include "gtktextbuffer.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
-#include <string.h>
+#include "gtkintl.h"
 
 typedef struct _ClipboardRequest ClipboardRequest;
 
@@ -66,8 +66,10 @@ enum {
 };
 
 enum {
-  ARG_0,
-  LAST_ARG
+  PROP_0,
+
+  /* Construct */
+  PROP_TAG_TABLE
 };
 
 enum {
@@ -116,6 +118,16 @@ static void update_selection_clipboards           (GtkTextBuffer *buffer);
 static GObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
 
+static void gtk_text_buffer_set_property (GObject         *object,
+				          guint            prop_id,
+				          const GValue    *value,
+				          GParamSpec      *pspec);
+static void gtk_text_buffer_get_property (GObject         *object,
+				          guint            prop_id,
+				          GValue          *value,
+				          GParamSpec      *pspec);
+
+
 GType
 gtk_text_buffer_get_type (void)
 {
@@ -153,7 +165,9 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gtk_text_buffer_finalize;
-
+  object_class->set_property = gtk_text_buffer_set_property;
+  object_class->get_property = gtk_text_buffer_get_property;
+ 
   klass->insert_text = gtk_text_buffer_real_insert_text;
   klass->insert_pixbuf = gtk_text_buffer_real_insert_pixbuf;
   klass->insert_child_anchor = gtk_text_buffer_real_insert_anchor;
@@ -161,6 +175,15 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   klass->apply_tag = gtk_text_buffer_real_apply_tag;
   klass->remove_tag = gtk_text_buffer_real_remove_tag;
   klass->changed = gtk_text_buffer_real_changed;
+
+  /* Construct */
+  g_object_class_install_property (object_class,
+                                   PROP_TAG_TABLE,
+                                   g_param_spec_object ("tag_table",
+                                                        _("Tag Table"),
+                                                        _("Text Tag Table"),
+                                                        GTK_TYPE_TEXT_TAG_TABLE,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   signals[INSERT_TEXT] =
     g_signal_new ("insert_text",
@@ -305,6 +328,74 @@ static void
 gtk_text_buffer_init (GtkTextBuffer *buffer)
 {
   buffer->clipboard_contents_buffers = NULL;
+  buffer->tag_table = NULL;
+}
+
+static void
+set_table (GtkTextBuffer *buffer, GtkTextTagTable *table)
+{
+  g_return_if_fail (buffer->tag_table == NULL);
+
+  if (table)
+    {
+      buffer->tag_table = table;
+      g_object_ref (G_OBJECT (buffer->tag_table));
+      _gtk_text_tag_table_add_buffer (table, buffer);
+    }
+}
+
+static GtkTextTagTable*
+get_table (GtkTextBuffer *buffer)
+{
+  if (buffer->tag_table == NULL)
+    {
+      buffer->tag_table = gtk_text_tag_table_new ();
+      _gtk_text_tag_table_add_buffer (buffer->tag_table, buffer);
+    }
+
+  return buffer->tag_table;
+}
+
+static void
+gtk_text_buffer_set_property (GObject         *object,
+                              guint            prop_id,
+                              const GValue    *value,
+                              GParamSpec      *pspec)
+{
+  GtkTextBuffer *text_buffer;
+
+  text_buffer = GTK_TEXT_BUFFER (object);
+
+  switch (prop_id)
+    {
+    case PROP_TAG_TABLE:
+      set_table (text_buffer, g_value_get_object (value));
+      break;
+
+    default:
+      break;
+    }
+}
+
+static void
+gtk_text_buffer_get_property (GObject         *object,
+                              guint            prop_id,
+                              GValue          *value,
+                              GParamSpec      *pspec)
+{
+  GtkTextBuffer *text_buffer;
+
+  text_buffer = GTK_TEXT_BUFFER (object);
+
+  switch (prop_id)
+    {
+    case PROP_TAG_TABLE:
+      g_value_set_object (value, get_table (text_buffer));
+      break;
+
+    default:
+      break;
+    }
 }
 
 /**
@@ -320,17 +411,10 @@ gtk_text_buffer_new (GtkTextTagTable *table)
 {
   GtkTextBuffer *text_buffer;
 
-  text_buffer = GTK_TEXT_BUFFER (g_object_new (gtk_text_buffer_get_type (), NULL));
+  text_buffer = GTK_TEXT_BUFFER (g_object_new (GTK_TYPE_TEXT_BUFFER,
+                                               "tag_table", table,
+                                               NULL));
 
-  if (table)
-    {
-      text_buffer->tag_table = table;
-
-      g_object_ref (G_OBJECT (text_buffer->tag_table));
-
-      _gtk_text_tag_table_add_buffer (table, text_buffer);
-    }
-  
   return text_buffer;
 }
 
@@ -363,18 +447,6 @@ gtk_text_buffer_finalize (GObject *object)
   buffer->log_attr_cache = NULL;
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-static GtkTextTagTable*
-get_table (GtkTextBuffer *buffer)
-{
-  if (buffer->tag_table == NULL)
-    {
-      buffer->tag_table = gtk_text_tag_table_new ();
-      _gtk_text_tag_table_add_buffer (buffer->tag_table, buffer);
-    }
-
-  return buffer->tag_table;
 }
 
 static GtkTextBTree*
