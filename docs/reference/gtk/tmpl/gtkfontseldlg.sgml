@@ -1,0 +1,229 @@
+<!-- ##### SECTION Title ##### -->
+GtkFontSelectionDialog
+
+<!-- ##### SECTION Short_Description ##### -->
+a dialog box for selecting fonts.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkFontSelectionDialog widget is a dialog box for selecting a font.
+</para>
+<para>
+To set the font which is initially selected, use
+gtk_font_selection_dialog_set_font_name().
+</para>
+<para>
+To get the selected font use gtk_font_selection_dialog_get_font()
+or gtk_font_selection_dialog_get_font_name().
+</para>
+<para>
+To change the text which is shown in the preview area, use
+gtk_font_selection_dialog_set_preview_text().
+</para>
+<para>
+Filters can be used to limit the fonts shown. There are 2 filters in the
+#GtkFontSelectionDialog - a base filter and a user filter. The base filter
+can not be changed by the user, so this can be used when the user must choose
+from the restricted set of fonts (e.g. for a terminal-type application you may
+want to force the user to select a fixed-width font). The user filter can be
+changed or reset by the user, by using the 'Reset Filter' button or changing
+the options on the 'Filter' page of the dialog.
+</para>
+
+<example>
+<title>Setting a filter to show only fixed-width fonts.</title>
+<programlisting>
+  gchar *spacings[] = { "c", "m", NULL };
+  gtk_font_selection_dialog_set_filter (GTK_FONT_SELECTION_DIALOG (fontsel),
+				       GTK_FONT_FILTER_BASE, GTK_FONT_ALL,
+				       NULL, NULL, NULL, NULL, spacings, NULL);
+</programlisting>
+</example>
+
+<para>
+To allow only true scalable fonts to be selected use:
+</para>
+
+<example>
+<title>Setting a filter to show only true scalable fonts.</title>
+<programlisting>
+  gtk_font_selection_dialog_set_filter (GTK_FONT_SELECTION_DIALOG (fontsel),
+				       GTK_FONT_FILTER_BASE, GTK_FONT_SCALABLE,
+				       NULL, NULL, NULL, NULL, NULL, NULL);
+</programlisting>
+</example>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkFontSelection</term>
+<listitem><para>the underlying widget for selecting fonts.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### STRUCT GtkFontSelectionDialog ##### -->
+<para>
+The #GtkFontSelectionDialog struct contains private data only, and should
+only be accessed using the functions below.
+</para>
+
+@window: 
+@fontsel: 
+@main_vbox: 
+@action_area: 
+@ok_button: 
+@apply_button: 
+@cancel_button: 
+@dialog_width: 
+@auto_resize: 
+
+<!-- ##### FUNCTION gtk_font_selection_dialog_new ##### -->
+<para>
+Creates a new #GtkFontSelectionDialog.
+</para>
+
+@title: the title of the dialog box.
+@Returns: a new #GtkFontSelectionDialog.
+
+
+<!-- ##### FUNCTION gtk_font_selection_dialog_get_font ##### -->
+<para>
+Gets the currently-selected font.
+</para>
+
+@fsd: a #GtkFontSelectionDialog.
+@Returns: the currently-selected font, or NULL if no font is selected.
+
+
+<!-- ##### FUNCTION gtk_font_selection_dialog_get_font_name ##### -->
+<para>
+Gets the currently-selected font name.
+</para>
+
+@fsd: a #GtkFontSelectionDialog.
+@Returns: the currently-selected font name, or NULL if no font is selected.
+
+
+<!-- ##### FUNCTION gtk_font_selection_dialog_set_font_name ##### -->
+<para>
+Sets the currently-selected font.
+</para>
+
+@fsd: a #GtkFontSelectionDialog.
+@fontname: a fontname.
+@Returns: TRUE if the font was found.
+
+
+<!-- ##### FUNCTION gtk_font_selection_dialog_get_preview_text ##### -->
+<para>
+Gets the text displayed in the preview area.
+</para>
+
+@fsd: a #GtkFontSelectionDialog.
+@Returns: the text displayed in the preview area.
+
+
+<!-- ##### FUNCTION gtk_font_selection_dialog_set_preview_text ##### -->
+<para>
+Sets the text displayed in the preview area.
+</para>
+
+@fsd: a #GtkFontSelectionDialog.
+@text: the text to display in the preview area.
+
+
+<!-- ##### FUNCTION gtk_font_selection_dialog_set_filter ##### -->
+<para>
+Sets one of the two font filters, to limit the fonts shown.
+</para>
+
+@fsd: a #GtkFontSelectionDialog.
+@filter_type: which of the two font filters to set, either
+#GTK_FONT_FILTER_BASE or #GTK_FONT_FILTER_USER. The user filter
+can be changed by the user, but the base filter is permanent.
+@font_type: the types of font to be shown. This is a bitwise combination of
+#GTK_FONT_BITMAP, #GTK_FONT_SCALABLE and #GTK_FONT_SCALABLE_BITMAP,
+or #GTK_FONT_ALL to show all three font types.
+@foundries: a NULL-terminated array of strings containing foundry names which
+will be shown, or NULL to show all foundries.
+@weights: a NULL-terminated array of strings containing weight names which
+will be shown, or NULL to show all weights.
+@slants: a NULL-terminated array of strings containing slant names which
+will be shown, or NULL to show all slants.
+@setwidths: a NULL-terminated array of strings containing setwidth names which
+will be shown, or NULL to show all setwidths.
+@spacings: a NULL-terminated array of strings containing spacings which
+will be shown, or NULL to show all spacings.
+@charsets: a NULL-terminated array of strings containing charset names which
+will be shown, or NULL to show all charsets.
+
+
+<!-- ##### ENUM GtkFontType ##### -->
+<para>
+A set of bit flags used to specify the type of fonts shown
+when calling gtk_font_selection_dialog_set_filter() or
+gtk_font_selection_set_filter().
+
+<informaltable pgwide=1 frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>GTK_FONT_BITMAP</entry>
+<entry>bitmap fonts.</entry>
+</row>
+
+<row>
+<entry>GTK_FONT_SCALABLE</entry>
+<entry>scalable fonts.</entry>
+</row>
+
+<row>
+<entry>GTK_FONT_SCALED_BITMAP</entry>
+<entry>scaled bitmap fonts.</entry>
+</row>
+
+<row>
+<entry>GTK_FONT_ALL</entry>
+<entry>a bitwise combination of all of the above.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@GTK_FONT_BITMAP: 
+@GTK_FONT_SCALABLE: 
+@GTK_FONT_SCALABLE_BITMAP: 
+@GTK_FONT_ALL: 
+
+<!-- ##### ENUM GtkFontFilterType ##### -->
+<para>
+A set of bit flags used to specify the filter being set
+when calling gtk_font_selection_dialog_set_filter() or
+gtk_font_selection_set_filter().
+
+<informaltable pgwide=1 frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>GTK_FONT_FILTER_BASE</entry>
+<entry>the base filter, which can't be changed by the user.</entry>
+</row>
+
+<row>
+<entry>GTK_FONT_FILTER_USER</entry>
+<entry>the user filter, which can be changed from within the 'Filter' page
+of the #GtkFontSelection widget.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@GTK_FONT_FILTER_BASE: 
+@GTK_FONT_FILTER_USER: 
+

@@ -1,0 +1,202 @@
+<!-- ##### SECTION Title ##### -->
+GtkRange
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkRange ##### -->
+<para>
+
+</para>
+
+@widget: 
+@trough: 
+@slider: 
+@step_forw: 
+@step_back: 
+@x_click_point: 
+@y_click_point: 
+@button: 
+@digits: 
+@policy: 
+@scroll_type: 
+@in_child: 
+@click_child: 
+@need_timer: 
+@timer: 
+@old_value: 
+@old_lower: 
+@old_upper: 
+@old_page_size: 
+@adjustment: 
+
+<!-- ##### FUNCTION gtk_range_get_adjustment ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_set_update_policy ##### -->
+<para>
+
+</para>
+
+@range: 
+@policy: 
+
+
+<!-- ##### FUNCTION gtk_range_set_adjustment ##### -->
+<para>
+
+</para>
+
+@range: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_range_draw_background ##### -->
+<para>
+
+</para>
+
+@range: 
+
+
+<!-- ##### FUNCTION gtk_range_draw_trough ##### -->
+<para>
+
+</para>
+
+@range: 
+
+
+<!-- ##### FUNCTION gtk_range_draw_slider ##### -->
+<para>
+
+</para>
+
+@range: 
+
+
+<!-- ##### FUNCTION gtk_range_draw_step_forw ##### -->
+<para>
+
+</para>
+
+@range: 
+
+
+<!-- ##### FUNCTION gtk_range_draw_step_back ##### -->
+<para>
+
+</para>
+
+@range: 
+
+
+<!-- ##### FUNCTION gtk_range_slider_update ##### -->
+<para>
+
+</para>
+
+@range: 
+
+
+<!-- ##### FUNCTION gtk_range_trough_click ##### -->
+<para>
+
+</para>
+
+@range: 
+@x: 
+@y: 
+@jump_perc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_default_hslider_update ##### -->
+<para>
+
+</para>
+
+@range: 
+
+
+<!-- ##### FUNCTION gtk_range_default_vslider_update ##### -->
+<para>
+
+</para>
+
+@range: 
+
+
+<!-- ##### FUNCTION gtk_range_default_htrough_click ##### -->
+<para>
+
+</para>
+
+@range: 
+@x: 
+@y: 
+@jump_perc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_default_vtrough_click ##### -->
+<para>
+
+</para>
+
+@range: 
+@x: 
+@y: 
+@jump_perc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_default_hmotion ##### -->
+<para>
+
+</para>
+
+@range: 
+@xdelta: 
+@ydelta: 
+
+
+<!-- ##### FUNCTION gtk_range_default_vmotion ##### -->
+<para>
+
+</para>
+
+@range: 
+@xdelta: 
+@ydelta: 
+
+
+<!-- ##### FUNCTION gtk_range_clear_background ##### -->
+<para>
+
+</para>
+
+@range: 
+
+
+<!-- ##### ARG GtkRange:update_policy ##### -->
+<para>
+
+</para>
+

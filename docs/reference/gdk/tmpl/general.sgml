@@ -1,0 +1,265 @@
+<!-- ##### SECTION Title ##### -->
+General
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gdk_init ##### -->
+<para>
+
+</para>
+
+@argc: 
+@argv: 
+
+
+<!-- ##### FUNCTION gdk_init_check ##### -->
+<para>
+
+</para>
+
+@argc: 
+@argv: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_exit ##### -->
+<para>
+
+</para>
+
+@error_code: 
+
+
+<!-- ##### ENUM GdkStatus ##### -->
+<para>
+
+</para>
+
+@GDK_OK: 
+@GDK_ERROR: 
+@GDK_ERROR_PARAM: 
+@GDK_ERROR_FILE: 
+@GDK_ERROR_MEM: 
+
+<!-- ##### MACRO GDK_NONE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_CURRENT_TIME ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GDK_PRIORITY_EVENTS ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_set_locale ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_get_show_events ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_set_show_events ##### -->
+<para>
+
+</para>
+
+@show_events: 
+
+
+<!-- ##### FUNCTION gdk_add_client_message_filter ##### -->
+<para>
+
+</para>
+
+@message_type: 
+@func: 
+@data: 
+
+
+<!-- ##### FUNCTION gdk_set_sm_client_id ##### -->
+<para>
+
+</para>
+
+@sm_client_id: 
+
+
+<!-- ##### FUNCTION gdk_get_use_xshm ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_set_use_xshm ##### -->
+<para>
+
+</para>
+
+@use_xshm: 
+
+
+<!-- ##### FUNCTION gdk_get_display ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_width ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_height ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_width_mm ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_height_mm ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pointer_grab ##### -->
+<para>
+
+</para>
+
+@window: 
+@owner_events: 
+@event_mask: 
+@confine_to: 
+@cursor: 
+@time: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pointer_ungrab ##### -->
+<para>
+
+</para>
+
+@time: 
+
+
+<!-- ##### FUNCTION gdk_keyboard_grab ##### -->
+<para>
+
+</para>
+
+@window: 
+@owner_events: 
+@time: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_keyboard_ungrab ##### -->
+<para>
+
+</para>
+
+@time: 
+
+
+<!-- ##### FUNCTION gdk_pointer_is_grabbed ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_flush ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_beep ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_key_repeat_disable ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_key_repeat_restore ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_error_trap_push ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_error_trap_pop ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+

@@ -1,0 +1,42 @@
+<!-- ##### SECTION Title ##### -->
+Debugging
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM GtkDebugFlag ##### -->
+<para>
+
+</para>
+
+@GTK_DEBUG_OBJECTS: 
+@GTK_DEBUG_MISC: 
+@GTK_DEBUG_SIGNALS: 
+@GTK_DEBUG_DND: 
+@GTK_DEBUG_PLUGSOCKET: 
+
+<!-- ##### VARIABLE gtk_debug_flags ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GTK_NOTE ##### -->
+<para>
+
+</para>
+
+@type: 
+@action: 
+
+

@@ -1,0 +1,482 @@
+<!-- ##### SECTION Title ##### -->
+Signal Marshallers
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### MACRO gtk_signal_default_marshaller ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_BOOL__POINTER_INT_INT_UINT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_BOOL__POINTER_STRING_STRING_POINTER ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_ENUM__ENUM ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__BOXED ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__ENUM ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__ENUM_FLOAT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__ENUM_FLOAT_BOOL ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__OBJECT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_STRING_STRING ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT_ENUM ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_POINTER_UINT_UINT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_INT_INT_POINTER_UINT_UINT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT_UINT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__STRING ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__STRING_INT_POINTER ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__UINT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__UINT_POINTER_UINT_ENUM_ENUM_POINTER ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__UINT_POINTER_UINT_UINT_ENUM ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_marshal_NONE__UINT_STRING ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__NONE ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_INT_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_POINTER_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_POINTER_POINTER_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_INT__INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_INT__POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_INT__POINTER_CHAR_CHAR ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__BOOL ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK_C_CALLBACK ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_FLOAT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_FLOAT_BOOL ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_INT_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER_INT_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER_INT_INT_INT_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__NONE ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT_INT_POINTER_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER_INT_INT ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER_POINTER ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+

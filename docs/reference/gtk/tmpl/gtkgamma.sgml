@@ -1,0 +1,37 @@
+<!-- ##### SECTION Title ##### -->
+GtkGammaCurve
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkGammaCurve ##### -->
+<para>
+
+</para>
+
+@vbox: 
+@table: 
+@curve: 
+@button: 
+@gamma: 
+@gamma_dialog: 
+@gamma_text: 
+
+<!-- ##### FUNCTION gtk_gamma_curve_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+

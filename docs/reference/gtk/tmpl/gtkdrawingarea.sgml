@@ -1,0 +1,111 @@
+<!-- ##### SECTION Title ##### -->
+GtkDrawingArea
+
+<!-- ##### SECTION Short_Description ##### -->
+a widget for custom user interface elements.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkDrawingArea widget is used for creating custom
+user interface elements. After creating a drawing
+area, the application may want to connect to:
+<itemizedlist>
+  <listitem>
+    <para>
+    Mouse and button press signals to respond to input from
+    the user.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+    The "realize" signal to take any necessary actions
+    when the widget
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+    The "size_allocate" signal to take any necessary actions
+    when the widget changes size.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+    The "expose_event" signal to handle redrawing the
+    contents of the widget.
+    </para>
+  </listitem>
+</itemizedlist>
+As a convenience, the #GtkDrawingArea widget synthesizes
+a "configure_event" when the widget is realized
+and any time the size of a widget changes when it
+is realized. It often suffices to connect to this
+signal instead of "realize" and "size_allocate".
+</para>
+<para>
+The following code portion demonstrates using a drawing
+area to implement a widget that draws a circle.
+As this example demonstrates, an expose handler should
+draw only the pixels within the requested area and
+should draw or clear all these pixels.
+</para>
+<programlisting>
+gboolean
+expose_event (GdkWidget *widget, GdkEventExpose *event, gpointer data)
+{
+  gdk_window_clear_area (widget->window,
+                         event->area.x, event->area.y,
+                         event->area.width, event->area.height);
+  gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state],
+                             &amp;event->area);
+  gdk_draw_arc (widget->window,
+                widget->style->fg_gc[widget->state],
+                TRUE,
+                0, 0, widget->allocation->width, widget->allocation.height,
+                0, 64 * 360);
+  gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state]);
+
+  return TRUE;
+}
+[...]
+  GtkWidget *drawing_area = gdk_drawing_area_new ();
+  gdk_drawing_area_size (GTK_DRAWING_AREA (drawing_area),
+                         100, 100);
+  gtk_signal_connect (GTK_OBJECT (drawing_area), 
+</programlisting>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkDrawingArea ##### -->
+<para>
+The #GtkDrawingArea-struct struct contains private data only, and
+should be accessed using the functions below.
+</para>
+
+@widget: 
+@draw_data: 
+
+<!-- ##### FUNCTION gtk_drawing_area_new ##### -->
+<para>
+Create a new drawing area.
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_drawing_area_size ##### -->
+<para>
+Set the size that the drawing area will request
+in response to a "size_request" signal. The 
+drawing area may actually be allocated a size
+larger than this depending on how it is packed
+within the enclosing containers.
+</para>
+
+@darea: a #GtkDrawingArea.
+@width: the width to request.
+@height: the height to request.
+
+

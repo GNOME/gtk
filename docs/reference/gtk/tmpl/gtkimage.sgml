@@ -1,0 +1,55 @@
+<!-- ##### SECTION Title ##### -->
+GtkImage
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkImage ##### -->
+<para>
+
+</para>
+
+@misc: 
+@image: 
+@mask: 
+
+<!-- ##### FUNCTION gtk_image_new ##### -->
+<para>
+
+</para>
+
+@val: 
+@mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_set ##### -->
+<para>
+
+</para>
+
+@image: 
+@val: 
+@mask: 
+
+
+<!-- ##### FUNCTION gtk_image_get ##### -->
+<para>
+
+</para>
+
+@image: 
+@val: 
+@mask: 
+
+

@@ -1,0 +1,107 @@
+<!-- ##### SECTION Title ##### -->
+Images
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GdkImage ##### -->
+<para>
+
+</para>
+
+@type: 
+@visual: 
+@byte_order: 
+@width: 
+@height: 
+@depth: 
+@bpp: 
+@bpl: 
+@mem: 
+
+<!-- ##### ENUM GdkImageType ##### -->
+<para>
+
+</para>
+
+@GDK_IMAGE_NORMAL: 
+@GDK_IMAGE_SHARED: 
+@GDK_IMAGE_FASTEST: 
+
+<!-- ##### FUNCTION gdk_image_new_bitmap ##### -->
+<para>
+
+</para>
+
+@visual: 
+@data: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_new ##### -->
+<para>
+
+</para>
+
+@type: 
+@visual: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_put_pixel ##### -->
+<para>
+
+</para>
+
+@image: 
+@x: 
+@y: 
+@pixel: 
+
+
+<!-- ##### FUNCTION gdk_image_get_pixel ##### -->
+<para>
+
+</para>
+
+@image: 
+@x: 
+@y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_destroy ##### -->
+<para>
+
+</para>
+
+@image: 
+
+

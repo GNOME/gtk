@@ -1,0 +1,314 @@
+<!-- ##### SECTION Title ##### -->
+Keyboard Accelerators
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkAccelGroup ##### -->
+<para>
+
+</para>
+
+@ref_count: 
+@lock_count: 
+@modifier_mask: 
+@attach_objects: 
+
+<!-- ##### STRUCT GtkAccelEntry ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accelerator_key: 
+@accelerator_mods: 
+@accel_flags: 
+@object: 
+@signal_id: 
+
+<!-- ##### FUNCTION gtk_accel_group_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_get_default ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_ref ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_unref ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_activate ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_groups_activate ##### -->
+<para>
+
+</para>
+
+@object: 
+@accel_key: 
+@accel_mods: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_attach ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@object: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_detach ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@object: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_lock ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_unlock ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_get_entry ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_lock_entry ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_unlock_entry ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_add ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@accel_flags: 
+@object: 
+@accel_signal: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_remove ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@object: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_handle_add ##### -->
+<para>
+
+</para>
+
+@object: 
+@accel_signal_id: 
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@accel_flags: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_handle_remove ##### -->
+<para>
+
+</para>
+
+@object: 
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_create_add ##### -->
+<para>
+
+</para>
+
+@class_type: 
+@signal_flags: 
+@handler_offset: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_create_remove ##### -->
+<para>
+
+</para>
+
+@class_type: 
+@signal_flags: 
+@handler_offset: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_marshal_add ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_marshal_remove ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@func_data: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_accel_groups_from_object ##### -->
+<para>
+
+</para>
+
+@object: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_entries_from_object ##### -->
+<para>
+
+</para>
+
+@object: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accelerator_valid ##### -->
+<para>
+
+</para>
+
+@keyval: 
+@modifiers: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accelerator_parse ##### -->
+<para>
+
+</para>
+
+@accelerator: 
+@accelerator_key: 
+@accelerator_mods: 
+
+
+<!-- ##### FUNCTION gtk_accelerator_name ##### -->
+<para>
+
+</para>
+
+@accelerator_key: 
+@accelerator_mods: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accelerator_set_default_mod_mask ##### -->
+<para>
+
+</para>
+
+@default_mod_mask: 
+
+
+<!-- ##### FUNCTION gtk_accelerator_get_default_mod_mask ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+

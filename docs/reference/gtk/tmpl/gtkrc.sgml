@@ -1,0 +1,724 @@
+<!-- ##### SECTION Title ##### -->
+Resource Files
+
+<!-- ##### SECTION Short_Description ##### -->
+Routines for handling resource files
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+GTK+ provides resource file mechanism for configuring
+various aspects of the operation of a GTK+ program
+at runtime.
+</para>
+
+<refsect2><title>Default files</title>
+<para>
+An application can cause GTK+ to parse a specific RC
+file by calling gtk_rc_parse(). In addition to this,
+certain files will be read at the end of gtk_init().
+Unless modified, the files looked for will be <filename>.gtkrc</filename>
+in the users home directory, and 
+<filename>$localstatedir/gtk/gtkrc</filename> 
+(<literal>$localstatedir</literal> defaults to 
+<filename>/usr/local/etc</filename>).
+</para>
+
+<para>
+The set of these <firstterm>default</firstterm> files
+can be retrieved with gtk_rc_get_default_files()
+and modified with gtk_rc_add_default_file() and
+gtk_rc_set_default_files().
+</para>
+
+<para>
+For each default file, in addition to the file itself,
+GTK+ will look for a locale-specific file that will
+be parsed in addition to the main file. For instance,
+if <literal>LANG</literal> is set to <literal>ja_JP.ujis</literal>,
+when loading the default file <filename>~/.gtkrc</filename>
+then GTK+ looks for <filename>~/.gtkrc.ja_JP.ujis</filename>,
+<filename>~/.gtkrc.ja_JP</filename>, and
+<filename>~/.gtkrc.ja</filename>, and parses the
+first one it finds.
+</para>
+</refsect2>
+
+<refsect2><title>Toplevel declarations</title>
+<para>
+An RC file is a text file which is composed of a sequence
+of declarations. '#' characters delimit comments and
+the portion of a line after a '#' is ignored when parsing
+an RC file.
+</para>
+
+<para>
+The possible toplevel declarations are:
+
+<variablelist>
+  <varlistentry>
+    <term><literal>binding <replaceable>name</replaceable>
+     { ... }</literal></term>
+    <listitem>
+      <para>Declare a binding set</para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>class <replaceable>pattern</replaceable> 
+          [ style | binding [ : <replaceable>priority</replaceable> ]]
+          <replaceable>name</replaceable></literal></term>
+    <listitem>
+     <para>Specify a style or binding set for a particular
+     branch of the inheritance heirarchy.</para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>include <replaceable>filename</replaceable></literal></term>
+    <listitem>
+      <para>Parse another file at this point</para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>module_path <replaceable>path></replaceable></literal></term>
+    <listitem>
+      <para>Sets a path (a list of directories separated
+      by colons) that will be searched for theme engines referenced in
+      RC files.</para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>pixmap_path <replaceable>path></replaceable></literal></term>
+    <listitem>
+      <para>Sets a path (a list of directories separated
+      by colons) that will be searched for pixmaps referenced in
+      RC files.</para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>style <replaceable>name</replaceable> [ =
+    <replaceable>parent</replaceable> ] { ... }</literal></term>
+    <listitem>
+      <para>Declare a style</para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>widget <replaceable>pattern</replaceable> 
+          [ style | binding [ : <replaceable>priority</replaceable> ]]
+          <replaceable>name</replaceable></literal></term>
+    <listitem>
+     <para>Specify a style or binding set for a particular
+     group of widgets by matching on the widget path.</para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>widget_class <replaceable>pattern</replaceable> 
+          [ style | binding [ : <replaceable>priority</replaceable> ]]
+          <replaceable>name</replaceable></literal></term>
+    <listitem>
+     <para>Specify a style or binding set for a particular
+     group of widgets by matching on the class path.</para>
+    </listitem>
+  </varlistentry>
+</variablelist>
+</para>
+
+<refsect2><title>Styles</title>
+<para>
+A RC style is specified by a <literal>style</literal> 
+declaration in a RC file, and then bound to widgets
+with a <literal>widget</literal>, <literal>widget_class</literal>,
+or <literal>class</literal> declaration. All styles
+applying to a particular widget are composited together
+with <literal>widget</literal> declarations overriding
+<literal>widget_class</literal> declarations which, in
+turn, override <literal>widget</literal> declarations.
+Within each type of declaration, later declarations override
+earlier ones.
+</para>
+
+<para>
+Within a <literal>style</literal> declaration, the possible
+elements are:
+
+<variablelist>
+  <varlistentry>
+    <term><literal>bg[<replaceable>state</replaceable>] =
+      <replaceable>color</replaceable></literal></term>
+     <listitem>
+       <para>
+         Set color used for the background of most widgets.
+       </para>
+     </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>fg[<replaceable>state</replaceable>] =
+      <replaceable>color</replaceable></literal></term>
+     <listitem>
+       <para>
+         Set color used for the foreground of most widgets.
+       </para>
+     </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>base[<replaceable>state</replaceable>] =
+      <replaceable>color</replaceable></literal></term>
+     <listitem>
+       <para>
+         Set color used for the background of widgets displaying
+         editable text. This color is used for the background
+         of, among others, #GtkText, #GtkEntry, #GtkList, and #GtkClist.
+       </para>
+     </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>text[<replaceable>state</replaceable>] =
+      <replaceable>color</replaceable></literal></term>
+     <listitem>
+       <para>
+         Set color used for foreground of widgets using
+         <literal>base</literal> for the background color.
+       </para>
+     </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>bg_text[<replaceable>state</replaceable>] =
+      <replaceable>color</replaceable></literal></term>
+     <listitem>
+       <para>
+         Set a background pixmap to be used in place of
+         the <literal>bg</literal> color (or for #GtkText,
+         in place of the <literal>base</literal> color.
+       </para>
+     </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>font = <replaceable>font</replaceable></literal></term>
+     <listitem>
+       <para>
+         Set the font for a widget.
+       </para>
+     </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>fontset = <replaceable>font</replaceable></literal></term>
+     <listitem>
+       <para>
+         Set the fontset for a widget. Overrides any
+         <literal>font</literal> declarations.
+       </para>
+     </listitem>
+  </varlistentry>
+</variablelist>
+</para>
+<para>
+The colors and background pixmaps are specified as a function of the
+state of the widget. The states are:
+
+<variablelist>
+  <varlistentry>
+    <term><literal>NORMAL</literal></term>
+    <listitem>
+      <para>
+        A color used for a widget in its normal state
+      </para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>ACTIVE</literal></term>
+    <listitem>
+      <para>
+        A variant of the <literal>NORMAL</literal> color used when the
+        widget is in the %GTK_STATE_ACTIVE state, and also for
+        the trough of a ScrollBar, tabs of a NoteBook
+        other than the current tab and similar areas.
+        Frequently, this should be a darker variant
+        of the <literal>NORMAL</literal> color.
+      </para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>PRELIGHT</literal></term>
+    <listitem>
+      <para>
+        A color used for widgets in the %GTK_STATE_PRELIGHT state. This
+        state is the used for Buttons and MenuItems
+        that have the mouse cursor over them, and for 
+        their children.
+      </para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>SELECTED</literal></term>
+    <listitem>
+      <para>
+        A color used to highlight data selected by the user.
+        for instance, the selected ListItems in a List widget, and the
+        selection in an Editable widget.
+      </para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>INSENSITIVE</literal></term>
+    <listitem>
+      <para>
+        A color used for the background of widgets that have
+        been set insenstivie with gtk_widget_set_senstive()
+      </para>
+    </listitem>
+  </varlistentry>
+</variablelist>
+</para>
+
+<para>
+Colors can be specified as a string <literal>"#rrrrggggbbbb"</literal>,
+<literal>"#rrrgggbbb"</literal>, <literal>"#rrggbb"</literal>,
+or <literal>"#rgb"</literal>, where <literal>r</literal>
+<literal>g</literal>, and <literal>b</literal> are
+hex digits, or they can be specified as a triplet of floats
+<literal>{ <replaceable>r</replaceable>, <replaceable>g</replaceable>,
+<replaceable>b</replaceable>}</literal>.
+</para>
+</refsect2>
+
+<refsect2><title>Key bindings</title>
+<para>
+Key bindings allow the user to specify actions to be 
+taken on particular key presses. The form of a binding
+set declaration is:
+</para>
+
+<programlisting>
+binding <replaceable>name</replaceable> {
+  bind <replaceable>key</replaceable> { 
+    <replaceable>signalname</replaceable> (<replaceable>param</replaceable>, ...)
+    ...
+  }
+  ...
+}
+</programlisting>
+
+<para>
+<replaceable>key</replaceable> is a string consisting of a 
+series of modifiers followed by the name of a key. The
+modifiers can be:
+<simplelist>
+<member><literal>&lt;alt&gt;</literal></member>
+<member><literal>&lt;control&gt;</literal></member>
+<member><literal>&lt;mod1&gt;</literal></member>
+<member><literal>&lt;mod2&gt;</literal></member>
+<member><literal>&lt;mod3&gt;</literal></member>
+<member><literal>&lt;mod4&gt;</literal></member>
+<member><literal>&lt;mod5&gt;</literal></member>
+<member><literal>&lt;release&gt;</literal></member>
+<member><literal>&lt;shft&gt;</literal></member>
+<member><literal>&lt;shift&gt;</literal></member>
+</simplelist>
+<literal>&lt;shft&gt;</literal> is an alias for 
+<literal>&lt;shift&gt;</literal> and 
+<literal>&lt;alt&gt;</literal> is an alias for
+<literal>&lt;mod1&gt;</literal>.
+</para>
+
+<para>
+The action that is bound to the key is a sequence
+of signal names (strings) followed by parameters for 
+each signal. The signals must be action signals.
+(See gtk_signal_new()). Each parameter can be
+a float, integer, string, or unquoted string
+representing an enumeration value. The types of
+the parameters specified must match the types of the 
+parameters of the signal.
+</para>
+
+<para>
+Binding sets are connected to widgets in the
+same manner as styles, with one addition. 
+A priority can be specified for each pattern,
+and within each type of pattern, binding sets
+override other binding sets first by priority,
+and only then by order of specification. (Later
+overrides earlier). The priorities that can
+be specified are (highest to lowest):
+<simplelist>
+<member><literal>HIGHEST</literal></member>
+<member><literal>RC</literal></member>
+<member><literal>APPLICATION</literal></member>
+<member><literal>GTK</literal></member>
+<member><literal>LOWEST</literal></member>
+</simplelist>
+<literal>RC</literal> is the default for bindings
+read from an RC file, <literal>APPLICATION</literal>
+should be used for bindings an application sets
+up, and <literal>GTK</literal> is used for bindings
+that GTK+ creates internally.
+</para>
+</refsect2>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkRcStyle ##### -->
+<para>
+The #GtkRcStyle structure is used to represent a set
+of information about the appearance of a widget.
+This can later be composited together with other
+#GtkRcStyle structures to form a #GtkStyle.
+</para>
+
+@name: 
+@font_name: 
+@fontset_name: 
+@bg_pixmap_name: 
+@color_flags: 
+@fg: 
+@bg: 
+@text: 
+@base: 
+@engine: 
+@engine_data: 
+@ref_count: 
+
+<!-- ##### ENUM GtkRcFlags ##### -->
+<para>
+The #GtkRcFlags enumeration is used as a bitmask
+to specify which fields of a #GtkRcStyle have been
+set for each state.
+</para>
+<variablelist>
+ <varlistentry><term> %GTK_RC_FG </term>
+ <listitem>
+   <para>
+   If present, the foreground color has been set for this state.
+   </para>
+ </listitem>
+ </varlistentry>
+ <varlistentry><term> %GTK_RC_BG </term>
+ <listitem>
+   <para>
+   If present, the background color has been set for this state.
+   </para>
+ </listitem>
+ </varlistentry>
+ <varlistentry><term> %GTK_RC_TEXT </term>
+ <listitem>
+   <para>
+   If present, the text color has been set for this state.
+   </para>
+ </listitem>
+ </varlistentry>
+ <varlistentry><term> %GTK_RC_BASE </term>
+ <listitem>
+   <para>
+   If present, the base color has been set for this state.
+   </para>
+ </listitem>
+ </varlistentry>
+</variablelist>
+
+@GTK_RC_FG: 
+@GTK_RC_BG: 
+@GTK_RC_TEXT: 
+@GTK_RC_BASE: 
+
+<!-- ##### USER_FUNCTION GtkImageLoader ##### -->
+<para>
+A GtkImageLoader is used to load a filename found in
+a RC file.
+</para>
+
+@window: the window for creating image
+@colormap: the colormap for this image
+@mask: a pointer to the location to store the mask
+@transparent_color: the transparent color for the image
+@filename: filename to load
+@Returns: a #GtkPixmap representing @filename
+
+
+<!-- ##### ENUM GtkRcTokenType ##### -->
+<para>
+The #GtkRcTokenType enumeration represents the tokens
+in the RC file. It is exposed so that theme engines
+can reuse these tokens when parsing the theme-engine
+specific portions of a RC file.
+</para>
+
+@GTK_RC_TOKEN_INVALID: 
+@GTK_RC_TOKEN_INCLUDE: 
+@GTK_RC_TOKEN_NORMAL: 
+@GTK_RC_TOKEN_ACTIVE: 
+@GTK_RC_TOKEN_PRELIGHT: 
+@GTK_RC_TOKEN_SELECTED: 
+@GTK_RC_TOKEN_INSENSITIVE: 
+@GTK_RC_TOKEN_FG: 
+@GTK_RC_TOKEN_BG: 
+@GTK_RC_TOKEN_BASE: 
+@GTK_RC_TOKEN_TEXT: 
+@GTK_RC_TOKEN_FONT: 
+@GTK_RC_TOKEN_FONTSET: 
+@GTK_RC_TOKEN_BG_PIXMAP: 
+@GTK_RC_TOKEN_PIXMAP_PATH: 
+@GTK_RC_TOKEN_STYLE: 
+@GTK_RC_TOKEN_BINDING: 
+@GTK_RC_TOKEN_BIND: 
+@GTK_RC_TOKEN_WIDGET: 
+@GTK_RC_TOKEN_WIDGET_CLASS: 
+@GTK_RC_TOKEN_CLASS: 
+@GTK_RC_TOKEN_LOWEST: 
+@GTK_RC_TOKEN_GTK: 
+@GTK_RC_TOKEN_APPLICATION: 
+@GTK_RC_TOKEN_RC: 
+@GTK_RC_TOKEN_HIGHEST: 
+@GTK_RC_TOKEN_ENGINE: 
+@GTK_RC_TOKEN_MODULE_PATH: 
+@GTK_RC_TOKEN_LAST: 
+
+<!-- ##### FUNCTION gtk_rc_get_style ##### -->
+<para>
+Finds all matching RC styles for a given widget,
+composites them together, and then creates a 
+#GtkStyle representing the composite appearance.
+(GTK+ actually keeps a cache of previously 
+created styles, so a new style may not be
+created.)
+</para>
+
+@widget: a #GtkWidget
+@Returns: the resulting style. The caller should
+reference the result, since GTK+ will retain the
+initial reference count itself for the cache
+of created styles.
+
+
+<!-- ##### FUNCTION gtk_rc_add_widget_name_style ##### -->
+<para>
+Add a RcStyle that will be looked up by a match against
+the widget's pathname. This is equivalent to a:
+<programlisting>
+widget PATTERN style STYLE
+</programlisting>
+statement in a RC file.
+</para>
+
+@rc_style: the #GtkRcStyle to use for widgets matching @pattern
+@pattern: the pattern
+
+
+<!-- ##### FUNCTION gtk_rc_add_widget_class_style ##### -->
+<para>
+Add a RcStyle that will be looked up by a match against
+the widget's class pathname. This is equivalent to a:
+
+<programlisting>
+widget_class PATTERN style STYLE
+</programlisting>
+statement in a RC file.
+</para>
+
+@rc_style: the #GtkRcStyle to use for widgets matching @pattern
+@pattern: the pattern
+
+
+<!-- ##### FUNCTION gtk_rc_add_class_style ##### -->
+<para>
+Add a RcStyle that will be looked up by a matching against
+the class heirarchy of the widget. This is equivalent to a:
+<programlisting>
+class PATTERN style STYLE
+</programlisting>
+statement in a RC file.
+</para>
+
+@rc_style: the #GtkRcStyle to use for widgets deriving from @pattern
+@pattern: the pattern
+
+
+<!-- ##### FUNCTION gtk_rc_parse ##### -->
+<para>
+Parse a given resource file.
+</para>
+
+@filename: the filename of a file to parse.
+
+
+<!-- ##### FUNCTION gtk_rc_parse_string ##### -->
+<para>
+Parse resource information directly from a string.
+</para>
+
+@rc_string: a string to parse.
+
+
+<!-- ##### FUNCTION gtk_rc_reparse_all ##### -->
+<para>
+If the modification time on any previously read file
+has changed, discard all style information
+and then reread all previously read RC files.
+</para>
+
+@Returns: %TRUE if the files were reread.
+
+
+<!-- ##### FUNCTION gtk_rc_add_default_file ##### -->
+<para>
+Adds a file to the list of files to be parsed at the
+end of gtk_init().
+</para>
+
+@filename: the pathname to the file.
+
+
+<!-- ##### FUNCTION gtk_rc_get_default_files ##### -->
+<para>
+Retrieves the current list of RC files that will be parsed
+at the end of gtk_init()
+</para>
+
+@Returns: A NULL terminated array of filenames. This memory
+is owned by GTK+ and must not be freed by the application.
+If you want to store this information, you should make a 
+copy.
+
+
+<!-- ##### FUNCTION gtk_rc_set_default_files ##### -->
+<para>
+Sets the list of files that GTK+ will read at the
+end of gtk_init()
+</para>
+
+@filenames: A %NULL terminated list of filenames.
+
+
+<!-- ##### FUNCTION gtk_rc_parse_color ##### -->
+<para>
+Parses a color in the format expected in a RC file.
+</para>
+
+@scanner: a #GtkScanner
+@color: a pointer to a #GtkColor structure in which to store the result
+@Returns: %G_TOKEN_NONE if parsing suceeded, otherwise the token
+that was expected but not found.
+
+
+<!-- ##### FUNCTION gtk_rc_parse_state ##### -->
+<para>
+Parses a #GtkStateType variable from the format expected
+in a RC file.
+</para>
+
+@scanner: a #GtkScanner (must be initialized for parsing an RC file)
+@state: A pointer to a #GtkStateType variable in which to
+store the result.
+@Returns: %G_TOKEN_NONE if parsing suceeded, otherwise the token
+that was expected but not found.
+
+
+<!-- ##### FUNCTION gtk_rc_parse_priority ##### -->
+<para>
+Parses a #GtkPathPriorityType variable from the format expected
+in a RC file.
+</para>
+
+@scanner: a #GtkScanner (must be initialized for parsing an RC file)
+@priority: A pointer to #GtkPathPriorityType variable in which
+to store the result.
+@Returns: %G_TOKEN_NONE if parsing suceeded, otherwise the token
+that was expected but not found.
+
+
+<!-- ##### FUNCTION gtk_rc_find_module_in_path ##### -->
+<para>
+Looks up a file in the current module path.
+</para>
+
+@module_file: The name of the module to search for.
+@Returns: The filename, if found. (Must be freed with g_free()),
+otherwise %NULL.
+
+
+<!-- ##### FUNCTION gtk_rc_find_pixmap_in_path ##### -->
+<para>
+Looks up a file in the current pixmap path. If the file is
+not found, it outputs a warning message using g_warning()
+and returns %NULL.
+</para>
+
+@scanner: a #GtkScanner. Used for printing out warning messages
+if the file is not found.
+@pixmap_file: The name of the file to search for.
+@Returns: The filename, if found. (Must be freed with g_free()),
+otherwise %NULL.
+
+
+<!-- ##### FUNCTION gtk_rc_get_module_dir ##### -->
+<para>
+Returns the directory in which GTK+ will look for
+theme engines.
+</para>
+
+@Returns: The directory. (Must be freed with g_free())
+
+
+<!-- ##### FUNCTION gtk_rc_get_theme_dir ##### -->
+<para>
+Returns the standard directory in which themes should
+be installed. (GTK+ does not actually use this directory
+itself.)
+</para>
+
+@Returns: The directory. (Must be freed with g_free())
+
+
+<!-- ##### FUNCTION gtk_rc_set_image_loader ##### -->
+<para>
+Sets the function that GTK+ will use to load images 
+</para>
+
+@loader: the #GtkImageLoader to use
+
+
+<!-- ##### FUNCTION gtk_rc_load_image ##### -->
+<para>
+Internal function. Loads an image using the current
+image loader.
+</para>
+
+@colormap: the colormap to use for the image
+@transparent_color: the transparent color for the image
+@filename: the filename of the image file
+@Returns: a #GtkPixmap representing @filename
+
+
+<!-- ##### FUNCTION gtk_rc_style_new ##### -->
+<para>
+Create a new #GtkRcStyle with no fields set and
+a reference count of 1.
+</para>
+
+@Returns: the newly create #GtkRcStyle
+
+
+<!-- ##### FUNCTION gtk_rc_style_ref ##### -->
+<para>
+Increment the reference count of a #GtkRcStyle.
+</para>
+
+@rc_style: a #GtkRcStyle
+
+
+<!-- ##### FUNCTION gtk_rc_style_unref ##### -->
+<para>
+Decrement the reference count of a #GtkRcStyle and
+free if the result is 0.
+</para>
+
+@rc_style: a #GtkRcStyle
+
+
+<!-- ##### FUNCTION gtk_rc_init ##### -->
+<para>
+Internal function.
+</para>
+
+
+

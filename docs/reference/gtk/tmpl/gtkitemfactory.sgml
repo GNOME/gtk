@@ -1,0 +1,358 @@
+<!-- ##### SECTION Title ##### -->
+GtkItemFactory
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkItemFactory ##### -->
+<para>
+
+</para>
+
+@object: 
+@path: 
+@accel_group: 
+@widget: 
+@items: 
+@translate_func: 
+@translate_data: 
+@translate_notify: 
+
+<!-- ##### USER_FUNCTION GtkPrintFunc ##### -->
+<para>
+
+</para>
+
+@func_data: 
+@str: 
+
+
+<!-- ##### USER_FUNCTION GtkTranslateFunc ##### -->
+<para>
+
+</para>
+
+@path: 
+@func_data: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkItemFactoryCallback ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### USER_FUNCTION GtkItemFactoryCallback1 ##### -->
+<para>
+
+</para>
+
+@callback_data: 
+@callback_action: 
+@widget: 
+
+
+<!-- ##### USER_FUNCTION GtkItemFactoryCallback2 ##### -->
+<para>
+
+</para>
+
+@widget: 
+@callback_data: 
+@callback_action: 
+
+
+<!-- ##### STRUCT GtkItemFactoryEntry ##### -->
+<para>
+
+</para>
+
+@path: 
+@accelerator: 
+@callback: 
+@callback_action: 
+@item_type: 
+
+<!-- ##### STRUCT GtkItemFactoryItem ##### -->
+<para>
+
+</para>
+
+@path: 
+@accelerator_key: 
+@accelerator_mods: 
+@modified: 
+@in_propagation: 
+@dummy: 
+@widgets: 
+
+<!-- ##### FUNCTION gtk_item_factory_new ##### -->
+<para>
+
+</para>
+
+@container_type: 
+@path: 
+@accel_group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_construct ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@container_type: 
+@path: 
+@accel_group: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_parse_rc ##### -->
+<para>
+
+</para>
+
+@file_name: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_parse_rc_string ##### -->
+<para>
+
+</para>
+
+@rc_string: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_parse_rc_scanner ##### -->
+<para>
+
+</para>
+
+@scanner: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_from_widget ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_path_from_widget ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_get_widget ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_get_widget_by_action ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_dump_items ##### -->
+<para>
+
+</para>
+
+@path_pspec: 
+@modified_only: 
+@print_func: 
+@func_data: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_dump_rc ##### -->
+<para>
+
+</para>
+
+@file_name: 
+@path_pspec: 
+@modified_only: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_print_func ##### -->
+<para>
+
+</para>
+
+@FILE_pointer: 
+@string: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_create_item ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@entry: 
+@callback_data: 
+@callback_type: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_create_items ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@n_entries: 
+@entries: 
+@callback_data: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_create_items_ac ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@n_entries: 
+@entries: 
+@callback_data: 
+@callback_type: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_delete_item ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_delete_entry ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@entry: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_delete_entries ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@n_entries: 
+@entries: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_popup ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@x: 
+@y: 
+@mouse_button: 
+@time: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_popup_with_data ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@popup_data: 
+@destroy: 
+@x: 
+@y: 
+@mouse_button: 
+@time: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_popup_data ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_popup_data_from_widget ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_from_path ##### -->
+<para>
+
+</para>
+
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_create_menu_entries ##### -->
+<para>
+
+</para>
+
+@n_entries: 
+@entries: 
+
+
+<!-- ##### FUNCTION gtk_item_factories_path_delete ##### -->
+<para>
+
+</para>
+
+@ifactory_path: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_item_factory_set_translate_func ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@func: 
+@data: 
+@notify: 
+
+

@@ -1,0 +1,69 @@
+<!-- ##### SECTION Title ##### -->
+GtkAccelLabel
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkAccelLabel ##### -->
+<para>
+
+</para>
+
+@label: 
+@queue_id: 
+@accel_padding: 
+@accel_widget: 
+@accel_string: 
+@accel_string_width: 
+
+<!-- ##### FUNCTION gtk_accel_label_new ##### -->
+<para>
+
+</para>
+
+@string: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_label_set_accel_widget ##### -->
+<para>
+
+</para>
+
+@accel_label: 
+@accel_widget: 
+
+
+<!-- ##### FUNCTION gtk_accel_label_get_accel_width ##### -->
+<para>
+
+</para>
+
+@accel_label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_label_refetch ##### -->
+<para>
+
+</para>
+
+@accel_label: 
+@Returns: 
+
+
+<!-- ##### ARG GtkAccelLabel:accel_widget ##### -->
+<para>
+
+</para>
+

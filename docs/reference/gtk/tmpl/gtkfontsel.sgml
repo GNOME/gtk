@@ -1,0 +1,165 @@
+<!-- ##### SECTION Title ##### -->
+GtkFontSelection
+
+<!-- ##### SECTION Short_Description ##### -->
+a widget for selecting fonts.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkFontSelection widget lists the available fonts, styles and sizes,
+allowing the user to select a font.
+It is used in the #GtkFontSelectionDialog widget to provide a dialog box for
+selecting fonts.
+</para>
+<para>
+To set the font which is initially selected, use
+gtk_font_selection_set_font_name().
+</para>
+<para>
+To get the selected font use gtk_font_selection_get_font()
+or gtk_font_selection_get_font_name().
+</para>
+<para>
+To change the text which is shown in the preview area, use
+gtk_font_selection_set_preview_text().
+</para>
+<para>
+Filters can be used to limit the fonts shown. There are 2 filters in the
+#GtkFontSelection - a base filter and a user filter. The base filter
+can not be changed by the user, so this can be used when the user must choose
+from the restricted set of fonts (e.g. for a terminal-type application you may
+want to force the user to select a fixed-width font). The user filter can be
+changed or reset by the user, by using the 'Reset Filter' button or changing
+the options on the 'Filter' page of the widget.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkFontSelectionDialog</term>
+<listitem><para>a dialog box which uses #GtkFontSelection.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### STRUCT GtkFontSelection ##### -->
+<para>
+The #GtkFontSelection struct contains private data only, and should
+only be accessed using the functions below.
+</para>
+
+@notebook: 
+@main_vbox: 
+@font_label: 
+@font_entry: 
+@font_clist: 
+@font_style_entry: 
+@font_style_clist: 
+@size_entry: 
+@size_clist: 
+@pixels_button: 
+@points_button: 
+@filter_button: 
+@preview_entry: 
+@message_label: 
+@info_vbox: 
+@info_clist: 
+@requested_font_name: 
+@actual_font_name: 
+@filter_vbox: 
+@type_bitmaps_button: 
+@type_scalable_button: 
+@type_scaled_bitmaps_button: 
+@filter_clists: 
+@font: 
+@font_index: 
+@style: 
+@metric: 
+@size: 
+@selected_size: 
+@property_values: 
+@filters: 
+
+<!-- ##### FUNCTION gtk_font_selection_new ##### -->
+<para>
+Creates a new #GtkFontSelection.
+</para>
+
+@Returns: a new #GtkFontSelection.
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_font ##### -->
+<para>
+Gets the currently-selected font.
+</para>
+
+@fontsel: a #GtkFontSelection.
+@Returns: the currently-selected font, or NULL if no font is selected.
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_font_name ##### -->
+<para>
+Gets the currently-selected font name.
+</para>
+
+@fontsel: a #GtkFontSelection.
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_set_font_name ##### -->
+<para>
+Sets the currently-selected font.
+</para>
+
+@fontsel: a #GtkFontSelection.
+@fontname: a fontname.
+@Returns: TRUE if the font was found.
+
+
+<!-- ##### FUNCTION gtk_font_selection_get_preview_text ##### -->
+<para>
+Gets the text displayed in the preview area.
+</para>
+
+@fontsel: a #GtkFontSelection.
+@Returns: the text displayed in the preview area.
+
+
+<!-- ##### FUNCTION gtk_font_selection_set_preview_text ##### -->
+<para>
+Sets the text displayed in the preview area.
+</para>
+
+@fontsel: a #GtkFontSelection.
+@text: the text to display in the preview area.
+
+
+<!-- ##### FUNCTION gtk_font_selection_set_filter ##### -->
+<para>
+Sets one of the two font filters, to limit the fonts shown.
+</para>
+
+@fontsel: a #GtkFontSelection.
+@filter_type: which of the two font filters to set, either
+#GTK_FONT_FILTER_BASE or #GTK_FONT_FILTER_USER. The user filter
+can be changed by the user, but the base filter is permanent.
+@font_type: the types of font to be shown. This is a bitwise combination of
+#GTK_FONT_BITMAP, #GTK_FONT_SCALABLE and #GTK_FONT_SCALABLE_BITMAP,
+or #GTK_FONT_ALL to show all three font types.
+@foundries: a NULL-terminated array of strings containing foundry names which
+will be shown, or NULL to show all foundries.
+@weights: a NULL-terminated array of strings containing weight names which
+will be shown, or NULL to show all weights.
+@slants: a NULL-terminated array of strings containing slant names which
+will be shown, or NULL to show all slants.
+@setwidths: a NULL-terminated array of strings containing setwidth names which
+will be shown, or NULL to show all setwidths.
+@spacings: a NULL-terminated array of strings containing spacings which
+will be shown, or NULL to show all spacings.
+@charsets: a NULL-terminated array of strings containing charset names which
+will be shown, or NULL to show all charsets.
+
+

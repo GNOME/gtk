@@ -1,0 +1,96 @@
+<!-- ##### SECTION Title ##### -->
+GtkFrame
+
+<!-- ##### SECTION Short_Description ##### -->
+A bin with a decorative frame and optional label.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The frame widget is a Bin that surrounds its child
+with a decorative frame and an optional label.
+If present, the label is drawn in a gap in the
+top side of the frame. The position of the
+label can be controlled with gtk_frame_set_label_align().
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkFrame ##### -->
+<para>
+
+</para>
+
+@bin: 
+@label: 
+@shadow_type: 
+@label_width: 
+@label_height: 
+@label_xalign: 
+@label_yalign: 
+
+<!-- ##### FUNCTION gtk_frame_new ##### -->
+<para>
+Create a new Frame, with optional label @label.
+If @label is %NULL, the label is omitted.
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_frame_set_label ##### -->
+<para>
+
+Set the text of the label. If @label is %NULL,
+the current label, if any, is removed.
+</para>
+
+@frame: 
+@label: 
+
+
+<!-- ##### FUNCTION gtk_frame_set_label_align ##### -->
+<para>
+Set the alignment of the Frame widget's label. The
+default value for a newly created Frame is 0.0.
+</para>
+
+@frame: The Frame widget.
+@xalign: The position of the label along the top edge
+  of the widget. A value of 0.0 represents left alignment;
+  1.0 represents right alignment.
+@yalign: The y alignment of the label. Currently ignored.
+
+
+<!-- ##### FUNCTION gtk_frame_set_shadow_type ##### -->
+<para>
+Set the shadow type for the Frame widget.
+</para>
+
+@frame: The Frame widget.
+@type: New shadow type.
+
+
+<!-- ##### ARG GtkFrame:label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFrame:label_xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFrame:label_yalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFrame:shadow ##### -->
+<para>
+
+</para>
+

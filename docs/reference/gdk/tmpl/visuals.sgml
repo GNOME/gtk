@@ -1,0 +1,391 @@
+<!-- ##### SECTION Title ##### -->
+Visuals
+
+<!-- ##### SECTION Short_Description ##### -->
+manipulation of visuals.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The way that the data stored on the screen is stored
+in memory can vary considerably between different X
+servers; some X servers even support multiple formats
+used simultaneously. An X <firstterm>visual</firstterm>
+represents a particular format for screen data.
+It includes information about the number of bits
+used for each color, the way the bits are translated
+into an RGB value for display, and the way the bits
+are stored in memory.
+</para>
+<para>
+There are several standard visuals. The visual returned
+by gdk_visual_get_system() is the system's default
+visual. gdk_rgb_get_visual() return the visual most
+suited to displaying full-color image data. If you
+use the calls in GdkRGB, you should create your windows
+using this visual (and the colormap returned by
+gdk_rgb_get_colormap()).
+</para>
+<para>
+A number of functions are provided for determining
+the "best" available visual. For the purposes of
+making this determination, higher bit depths are
+considered better, and for visuals of the same
+bit depth, %GDK_VISUAL_PSEUDO_COLOR is preferred at
+8bpp, otherwise, the visual types are ranked in the
+order of (highest to lowest) %GDK_VISUAL_DIRECT_COLOR,
+%GDK_VISUAL_TRUE_COLOR, %GDK_VISUAL_PSEUDO_COLOR,
+%GDK_VISUAL_STATIC_COLOR, %GDK_VISUAL_GRAYSCALE, 
+then %GDK_VISUAL_STATIC_GRAY.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GdkVisual ##### -->
+<para>
+The GdkVisual structure contains information about
+a particular visual. It contains the following
+public fields.
+
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry><structfield>type</structfield></entry>
+<entry>The type of this visual.</entry>
+</row>
+
+<row>
+<entry><structfield>depth</structfield></entry>
+<entry>The number of bits per pixel.</entry>
+</row>
+
+<row>
+<entry><structfield>byte_order</structfield></entry>
+<entry>The byte-order for this visual.</entry>
+</row>
+
+<row>
+<entry><structfield>colormap_size</structfield></entry>
+<entry>The number of entries in the colormap, for
+visuals of type GDK_VISUAL_PSEUDO_COLOR or 
+GDK_VISUAL_GRAY_SCALE. For other visual types, it
+is the number of possible levels per color component.
+If the visual has different numbers of levels for
+different components, the value of this field is
+undefined.</entry>
+</row>
+
+<row>
+<entry><structfield>bits_per_rgb</structfield></entry>
+<entry>
+The number of significant bits per red, green, or blue
+when specifying colors for this visual. (For instance, 
+for gdk_colormap_alloc_color())
+</entry>
+</row>
+
+<row>
+<entry><structfield>red_mask</structfield></entry>
+<entry>
+A mask giving the bits in a pixel value that
+correspond to the red field. Significant only for 
+%GDK_VISUAL_PSEUDOCOLOR and %GDK_VISUAL_DIRECTCOLOR.
+</entry>
+</row>
+
+<row>
+<entry><structfield>red_shift, red_prec</structfield></entry>
+<entry>
+The <structfield>red_shift</structfield> and 
+<structfield>red_prec</structfield> give an alternate presentation
+of the information in <structfield>red_mask</structfield>.
+<structfield>red_mask</structfield> is a contiguous sequence
+of <structfield>red_prec</structfield> starting at bit
+number <structfield>red_shift</structfield>. For example,
+<xref linkend="rgbmask"> shows constructing a pixel value
+out of three 16 bit color values.
+
+</entry>
+</row>
+
+<row>
+<entry><structfield>green_mask</structfield></entry>
+<entry>
+A mask giving the bits in a pixel value that
+correspond to the green field.
+</entry>
+</row>
+
+<row>
+<entry><structfield>green_shift, green_prec</structfield></entry>
+<entry>
+The <structfield>green_shift</structfield> and 
+<structfield>green_prec</structfield> give an alternate presentation
+of the information in <structfield>green_mask</structfield>.
+</entry>
+</row>
+
+<row>
+<entry><structfield>blue_mask</structfield></entry>
+<entry>
+A mask giving the bits in a pixel value that
+correspond to the blue field.
+</entry>
+</row>
+
+<row>
+<entry><structfield>blue_shift, blue_prec</structfield></entry>
+<entry>
+The <structfield>blue_shift</structfield> and 
+<structfield>blue_prec</structfield> give an alternate presentation
+of the information in <structfield>blue_mask</structfield>.
+</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+<figure float="1" id="rgbmask">
+<title>Constructing a pixel value from components</title>
+<programlisting>
+guint 
+pixel_from_rgb (GdkVisual *visual,
+                guchar r, guchar b, guchar g) 
+{
+  return ((r >> (16 - visual->red_prec))   << visual->red_shift) |
+         ((g >> (16 - visual->green_prec)) << visual->green_shift) |
+         ((r >> (16 - visual->blue_prec))  << visual->blue_shift);
+}
+</programlisting>
+</figure>
+
+@type: 
+@depth: 
+@byte_order: 
+@colormap_size: 
+@bits_per_rgb: 
+@red_mask: 
+@red_shift: 
+@red_prec: 
+@green_mask: 
+@green_shift: 
+@green_prec: 
+@blue_mask: 
+@blue_shift: 
+@blue_prec: 
+
+<!-- ##### ENUM GdkVisualType ##### -->
+<para>
+A set of values that describe the manner in which the
+pixel values for a visual are converted into RGB
+values for display.
+
+<informaltable pgwide=1 frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>GDK_VISUAL_STATIC_GRAY</entry>
+<entry>Each pixel value indexes a grayscale value directly.</entry>
+</row>
+
+<row>
+<entry>GDK_VISUAL_GRAYSCALE</entry>
+<entry>Each pixel is an index into a color map that maps
+pixel values into grayscale values. The color map can
+be changed by an application.</entry>
+</row>
+
+<row>
+<entry>GDK_VISUAL_STATIC_COLOR</entry>
+<entry>Each pixel value is an index into a predefined,
+unmodifiable color map that maps pixel values into
+rgb values.</entry>
+</row>
+
+<row>
+<entry>GDK_VISUAL_PSEUDO_COLOR</entry>
+<entry>Each pixel is an index into a color map that maps
+pixel values into rgb values. The color map can
+be changed by an application.</entry>
+</row>
+
+<row>
+<entry>GDK_TRUE_COLOR</entry>
+<entry>Each pixel value directly contains red, green,
+and blue components. The <structfield>red_mask</structfield>,
+<structfield>green_mask</structfield>, and 
+<structfield>blue_mask</structfield> fields of the #GdkVisual
+structure describe how the components are assembled into
+a pixel value.
+.</entry>
+</row>
+
+<row>
+<entry>GDK_DIRECT_COLOR</entry>
+<entry>Each pixel value contains red, green, and blue
+components as for %GDK_TRUE_COLOR, but the components
+are mapped via a color table into the final output
+table instead of being converted directly..</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@GDK_VISUAL_STATIC_GRAY: 
+@GDK_VISUAL_GRAYSCALE: 
+@GDK_VISUAL_STATIC_COLOR: 
+@GDK_VISUAL_PSEUDO_COLOR: 
+@GDK_VISUAL_TRUE_COLOR: 
+@GDK_VISUAL_DIRECT_COLOR: 
+
+<!-- ##### ENUM GdkByteOrder ##### -->
+<para>
+A set of values describing the possible byte-orders
+for storing pixel values in memory.
+
+<informaltable pgwide=1 frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>GDK_LSB_FIRST</entry>
+<entry>The values are stored with the least-significant byte
+first. For instance, the 32-bit value 0xffeecc would be stored
+in memory as 0xcc, 0xee, 0xff, 0x00.</entry>
+</row>
+
+<row>
+<entry>GDK_MSB_FIRST</entry>
+<entry>The values are stored with the least-significant byte
+first. For instance, the 32-bit value 0xffeecc would be stored
+in memory as 0xff, 0xee, 0xcc, 0x00.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@GDK_LSB_FIRST: 
+@GDK_MSB_FIRST: 
+
+<!-- ##### FUNCTION gdk_query_depths ##### -->
+<para>
+Lists the available color depths. The returned values
+are pointers to static storage and should not be
+modified or freed.
+</para>
+
+@depths: a location to store a pointer to an array
+   holding the available color depths.
+@count: a location to store the number of values in @depths.
+
+
+<!-- ##### FUNCTION gdk_query_visual_types ##### -->
+<para>
+Lists the available visual types. The returned values
+are pointers to static storage and should not be
+modified or freed.
+</para>
+
+@visual_types: a location to store a pointer to an 
+   array holding the available visual types.
+@count: a location to store the number of values in @visual types.
+
+
+<!-- ##### FUNCTION gdk_list_visuals ##### -->
+<para>
+Lists the available visuals.
+</para>
+
+@Returns: A #GList of the available visuals. The list
+should be freed this list with g_list_free().
+
+
+<!-- ##### FUNCTION gdk_visual_get_best_depth ##### -->
+<para>
+Returns the best available color depth.
+</para>
+
+@Returns: the best available color depth.
+
+
+<!-- ##### FUNCTION gdk_visual_get_best_type ##### -->
+<para>
+Returns the best available visual type.
+</para>
+
+@Returns: the best available visual type.
+
+
+<!-- ##### FUNCTION gdk_visual_get_system ##### -->
+<para>
+Returns the system's default visual.
+</para>
+
+@Returns: the system's default visual.
+
+
+<!-- ##### FUNCTION gdk_visual_get_best ##### -->
+<para>
+Returns the best available visual.
+</para>
+
+@Returns: the best available visual.
+
+
+<!-- ##### FUNCTION gdk_visual_get_best_with_depth ##### -->
+<para>
+Returns the best available visual with a certain depth.
+</para>
+
+@depth: the desired color depth
+@Returns: the best available visual with @depth bits per pixel
+or %NULL if no visuals with that type are available.
+
+
+<!-- ##### FUNCTION gdk_visual_get_best_with_type ##### -->
+<para>
+Returns the best available visual of a certain visual type.
+</para>
+
+@visual_type: the desired visual type.
+@Returns: the visual of the given type with the highest depth
+or %NULL if no visuals of that type are available.
+
+
+<!-- ##### FUNCTION gdk_visual_get_best_with_both ##### -->
+<para>
+Returns the best available visual 
+</para>
+
+@depth: the desired visual type.
+@visual_type: the desired depth.
+@Returns: the best available visual with the given depth
+and visual type, or %NULL if no matching visuals are
+available.
+
+
+<!-- ##### FUNCTION gdk_visual_ref ##### -->
+<para>
+In theory, increases the reference count of a visual. However,
+the set of visuals is determined statically when GTK+ is
+initialized, so this operation does nothing.
+</para>
+
+@visual: a #GdkVisual.
+@Returns: @visual.
+
+
+<!-- ##### FUNCTION gdk_visual_unref ##### -->
+<para>
+In theory, decreases the reference count of a visual. Like
+gdk_visual_ref(), this operation does nothing.
+</para>
+
+@visual: a #GdkVisual.
+
+

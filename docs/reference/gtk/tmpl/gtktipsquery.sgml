@@ -1,0 +1,129 @@
+<!-- ##### SECTION Title ##### -->
+GtkTipsQuery
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkTipsQuery ##### -->
+<para>
+
+</para>
+
+@label: 
+@emit_always: 
+@in_query: 
+@label_inactive: 
+@label_no_tip: 
+@caller: 
+@last_crossed: 
+@query_cursor: 
+
+<!-- ##### FUNCTION gtk_tips_query_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tips_query_start_query ##### -->
+<para>
+
+</para>
+
+@tips_query: 
+
+
+<!-- ##### FUNCTION gtk_tips_query_stop_query ##### -->
+<para>
+
+</para>
+
+@tips_query: 
+
+
+<!-- ##### FUNCTION gtk_tips_query_set_caller ##### -->
+<para>
+
+</para>
+
+@tips_query: 
+@caller: 
+
+
+<!-- ##### FUNCTION gtk_tips_query_set_labels ##### -->
+<para>
+
+</para>
+
+@tips_query: 
+@label_inactive: 
+@label_no_tip: 
+
+
+<!-- ##### SIGNAL GtkTipsQuery::start-query ##### -->
+<para>
+
+</para>
+
+@tipsquery: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTipsQuery::stop-query ##### -->
+<para>
+
+</para>
+
+@tipsquery: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTipsQuery::widget-entered ##### -->
+<para>
+
+</para>
+
+@tipsquery: the object which received the signal.
+@widget: 
+@tip_text: 
+@tip_private: 
+
+<!-- ##### SIGNAL GtkTipsQuery::widget-selected ##### -->
+<para>
+
+</para>
+
+@tipsquery: the object which received the signal.
+@widget: 
+@tip_text: 
+@tip_private: 
+@event: 
+@Returns: 
+
+<!-- ##### ARG GtkTipsQuery:emit_always ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTipsQuery:caller ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTipsQuery:label_inactive ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTipsQuery:label_no_tip ##### -->
+<para>
+
+</para>
+

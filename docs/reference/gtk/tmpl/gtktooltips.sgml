@@ -1,0 +1,177 @@
+<!-- ##### SECTION Title ##### -->
+GtkTooltips
+
+<!-- ##### SECTION Short_Description ##### -->
+Add tips to your widgets.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+Tooltips are the messages that appear next to a widget when the mouse pointer is held over it for a short amount of time. They are especially helpful for adding more verbose descriptions of things such as buttons in a toolbar.
+</para>
+<para>
+An individual tooltip belongs to a group of tooltips. A group is created with a call to gtk_tooltips_new(). Every tooltip in the group can then be turned off with a call to gtk_tooltips_disable() and enabled with gtk_tooltips_enable().
+</para>
+<para>
+The length of time the user must keep the mouse over a widget before the tip is shown, can be altered with gtk_tooltips_set_delay(). This is set on a 'per group of tooltips' basis.
+</para>
+<para>
+To assign a tip to a particular #GtkWidget, gtk_tooltips_set_tip() is used.
+</para>
+<para>
+The default appearance of all tooltips in a program is determined by the current gtk theme that the user has selected. To change the tooltip appearance manually, use gtk_tooltips_set_colors(). Again, this is per group of tooltips.
+</para>
+<para>
+Information about the tooltip (if any) associated with an arbitrary widget can be retrieved using gtk_tooltips_data_get().
+</para>
+<para>
+<example>
+<title>Adding tooltips to buttons.</title>
+<programlisting>
+   GtkWidget *load_button, *save_button, *hbox;
+   GtkTooltips *button_bar_tips;
+   
+   button_bar_tips = gtk_tooltips_new();
+   
+   /* Create the buttons and pack them into a #GtkHBox */
+   hbox = gtk_hbox_new(TRUE, 2);
+   
+   load_button = gtk_button_new_with_label("Load a file");
+   gtk_box_pack_start(GTK_BOX (hbox), load_button, TRUE, TRUE, 2);
+   gtk_widget_show(load_button);
+   
+   save_button = gtk_button_new_with_label("Save a file");
+   gtk_box_pack_start(GTK_BOX (hbox), save_button, TRUE, TRUE, 2);
+   gtk_widget_show(save_button);
+   gtk_widget_show(hbox);
+   
+   /* Add the tips */
+   gtk_tooltips_set_tip(GTK_TOOLTIPS (button_bar_tips), load_button,
+				 "Load a new document into this window",
+				 "Requests the filename of a document.
+				  This will then be loaded into the current
+				  window, replacing the contents of whatever
+				  is already loaded.");
+   gtk_tooltips_set_tip(GTK_TOOLTIPS (button_bar_tips), save_button,
+				 "Saves the current document to a file",
+				 "If you have saved the document previously,
+				  then the new version will be saved over the
+				  old one. Otherwise, you will be prompted for
+				  a filename."); 
+</programlisting></example>
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+<varlistentry>
+<term>#GtkToolbar</term>
+<listitem><para>Create groups of widgets with their own tooltips.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>#GtkTipsQuery</term>
+<listitem><para>Query tooltips to create context-sensitive help.</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+<!-- ##### STRUCT GtkTooltips ##### -->
+<para>Holds information about a group of tooltips. Fields should be changed using the functions provided, rather than directly accessing the struct's members.
+</para>
+
+@data: 
+@tip_window: 
+@active_tips_data: 
+@tips_data_list: 
+@gc: 
+@foreground: 
+@background: 
+@delay: 
+@enabled: 
+@timer_tag: 
+
+<!-- ##### STRUCT GtkTooltipsData ##### -->
+<para>
+<structfield>tooltips</structfield> is the #GtkTooltips group that this tooltip belongs to. <structfield>widget</structfield> is the #GtkWidget that this tooltip data is associated with. <structfield>tip_text</structfield> is a string containing the tooltip message itself.</para>
+<para>
+<structfield>tip_private</structfield> is a string that is not shown as the default tooltip. Instead, this message may be more informative and go towards forming a context-sensitive help system for your application. (FIXME: how to actually "switch on" private tips?)
+</para>
+
+@tooltips: 
+@widget: 
+@tip_text: 
+@tip_private: 
+@font: 
+@width: 
+@row: 
+
+<!-- ##### FUNCTION gtk_tooltips_new ##### -->
+<para>
+Creates an empty group of tooltips. This function initialises a #GtkTooltips structure. Without at least one such structure, you can not add tips to your application.
+</para>
+
+@Returns: a new #GtkTooltips group for you to use.
+
+
+<!-- ##### FUNCTION gtk_tooltips_enable ##### -->
+<para>
+Allows the user to see your tooltips as they navigate your application.
+</para>
+
+@tooltips: a #GtkTooltips.
+
+
+<!-- ##### FUNCTION gtk_tooltips_disable ##### -->
+<para>
+Causes all tooltips in @tooltips to become inactive. Any widgets that have tips associated with that group will no longer display their tips until they are enabled again with gtk_tooltips_enable().
+</para>
+
+@tooltips: a #GtkTooltips.
+
+
+<!-- ##### FUNCTION gtk_tooltips_set_delay ##### -->
+<para>
+Sets the time between the user moving the mouse over a widget and the widget's tooltip appearing.
+</para>
+
+@tooltips: a #GtkTooltips.
+@delay: an integer value representing seconds (FIXME: double-check this).
+
+
+<!-- ##### FUNCTION gtk_tooltips_set_tip ##### -->
+<para>
+Adds a tooltip containing the message @tip_text to the specified #GtkWidget. 
+</para>
+
+@tooltips: a #GtkTooltips.
+@widget: the #GtkWidget you wish to associate the tip with.
+@tip_text: a string containing the tip itself.
+@tip_private: a string of any further information that may be useful if the user gets stuck.
+
+
+<!-- ##### FUNCTION gtk_tooltips_set_colors ##### -->
+<para>
+Changes the foreground and background colors of a #GtkTooltips.
+</para>
+
+@tooltips: a #GtkTooltip
+@background: a #GdkColor that your tooltip text will be shown in.
+@foreground: a #GdkColor that your tooltip backgrounds will be shown in.
+
+
+<!-- ##### FUNCTION gtk_tooltips_data_get ##### -->
+<para>
+Retrieves any #GtkTooltipsData previously associated with the given widget.
+</para>
+
+@widget: a #GtkWidget.
+@Returns: a #GtkTooltipsData struct, or NULL if the widget has no tooltip.
+
+
+<!-- ##### FUNCTION gtk_tooltips_force_window ##### -->
+<para>
+Soon as I play with this, I'll report what it does.
+</para>
+
+@tooltips: 
+
+

@@ -1,0 +1,260 @@
+<!-- ##### SECTION Title ##### -->
+Drawing Primitives
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM GdkFill ##### -->
+<para>
+
+</para>
+
+@GDK_SOLID: 
+@GDK_TILED: 
+@GDK_STIPPLED: 
+@GDK_OPAQUE_STIPPLED: 
+
+<!-- ##### ENUM GdkFillRule ##### -->
+<para>
+
+</para>
+
+@GDK_EVEN_ODD_RULE: 
+@GDK_WINDING_RULE: 
+
+<!-- ##### ENUM GdkLineStyle ##### -->
+<para>
+
+</para>
+
+@GDK_LINE_SOLID: 
+@GDK_LINE_ON_OFF_DASH: 
+@GDK_LINE_DOUBLE_DASH: 
+
+<!-- ##### ENUM GdkCapStyle ##### -->
+<para>
+
+</para>
+
+@GDK_CAP_NOT_LAST: 
+@GDK_CAP_BUTT: 
+@GDK_CAP_ROUND: 
+@GDK_CAP_PROJECTING: 
+
+<!-- ##### ENUM GdkJoinStyle ##### -->
+<para>
+
+</para>
+
+@GDK_JOIN_MITER: 
+@GDK_JOIN_ROUND: 
+@GDK_JOIN_BEVEL: 
+
+<!-- ##### FUNCTION gdk_draw_point ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_draw_line ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x1: 
+@y1: 
+@x2: 
+@y2: 
+
+
+<!-- ##### FUNCTION gdk_draw_rectangle ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@filled: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_draw_arc ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@filled: 
+@x: 
+@y: 
+@width: 
+@height: 
+@angle1: 
+@angle2: 
+
+
+<!-- ##### FUNCTION gdk_draw_polygon ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@filled: 
+@points: 
+@npoints: 
+
+
+<!-- ##### FUNCTION gdk_draw_string ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@font: 
+@gc: 
+@x: 
+@y: 
+@string: 
+
+
+<!-- ##### FUNCTION gdk_draw_text ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@font: 
+@gc: 
+@x: 
+@y: 
+@text: 
+@text_length: 
+
+
+<!-- ##### FUNCTION gdk_draw_text_wc ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@font: 
+@gc: 
+@x: 
+@y: 
+@text: 
+@text_length: 
+
+
+<!-- ##### FUNCTION gdk_draw_pixmap ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@src: 
+@xsrc: 
+@ysrc: 
+@xdest: 
+@ydest: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_draw_bitmap ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@src: 
+@xsrc: 
+@ysrc: 
+@xdest: 
+@ydest: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_draw_image ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@image: 
+@xsrc: 
+@ysrc: 
+@xdest: 
+@ydest: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_draw_points ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@points: 
+@npoints: 
+
+
+<!-- ##### FUNCTION gdk_draw_segments ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@segs: 
+@nsegs: 
+
+
+<!-- ##### STRUCT GdkSegment ##### -->
+<para>
+
+</para>
+
+@x1: 
+@y1: 
+@x2: 
+@y2: 
+
+<!-- ##### FUNCTION gdk_draw_lines ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@points: 
+@npoints: 
+
+

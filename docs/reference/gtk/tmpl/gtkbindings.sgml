@@ -1,0 +1,243 @@
+<!-- ##### SECTION Title ##### -->
+Bindings
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkPatternSpec ##### -->
+<para>
+
+</para>
+
+@match_type: 
+@pattern_length: 
+@pattern: 
+@pattern_reversed: 
+@user_data: 
+@seq_id: 
+
+<!-- ##### FUNCTION gtk_pattern_spec_init ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@pattern: 
+
+
+<!-- ##### FUNCTION gtk_pattern_spec_free_segs ##### -->
+<para>
+
+</para>
+
+@pspec: 
+
+
+<!-- ##### FUNCTION gtk_pattern_match ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@string_length: 
+@string: 
+@string_reversed: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_pattern_match_string ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@string: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_pattern_match_simple ##### -->
+<para>
+
+</para>
+
+@pattern: 
+@string: 
+@Returns: 
+
+
+<!-- ##### STRUCT GtkBindingSet ##### -->
+<para>
+
+</para>
+
+@set_name: 
+@priority: 
+@widget_path_pspecs: 
+@widget_class_pspecs: 
+@class_branch_pspecs: 
+@entries: 
+@current: 
+
+<!-- ##### STRUCT GtkBindingEntry ##### -->
+<para>
+
+</para>
+
+@keyval: 
+@modifiers: 
+@binding_set: 
+@destroyed: 
+@in_emission: 
+@set_next: 
+@hash_next: 
+@signals: 
+
+<!-- ##### STRUCT GtkBindingSignal ##### -->
+<para>
+
+</para>
+
+@next: 
+@signal_name: 
+@n_args: 
+@args: 
+
+<!-- ##### STRUCT GtkBindingArg ##### -->
+<para>
+
+</para>
+
+@arg_type: 
+
+<!-- ##### FUNCTION gtk_binding_set_new ##### -->
+<para>
+
+</para>
+
+@set_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_binding_set_by_class ##### -->
+<para>
+
+</para>
+
+@object_class: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_binding_set_find ##### -->
+<para>
+
+</para>
+
+@set_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_bindings_activate ##### -->
+<para>
+
+</para>
+
+@object: 
+@keyval: 
+@modifiers: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_binding_set_activate ##### -->
+<para>
+
+</para>
+
+@binding_set: 
+@keyval: 
+@modifiers: 
+@object: 
+@Returns: 
+
+
+<!-- ##### MACRO gtk_binding_entry_add ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_binding_entry_clear ##### -->
+<para>
+
+</para>
+
+@binding_set: 
+@keyval: 
+@modifiers: 
+
+
+<!-- ##### FUNCTION gtk_binding_entry_add_signal ##### -->
+<para>
+
+</para>
+
+@binding_set: 
+@keyval: 
+@modifiers: 
+@signal_name: 
+@n_args: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_binding_set_add_path ##### -->
+<para>
+
+</para>
+
+@binding_set: 
+@path_type: 
+@path_pattern: 
+@priority: 
+
+
+<!-- ##### FUNCTION gtk_binding_entry_remove ##### -->
+<para>
+
+</para>
+
+@binding_set: 
+@keyval: 
+@modifiers: 
+
+
+<!-- ##### FUNCTION gtk_binding_entry_add_signall ##### -->
+<para>
+
+</para>
+
+@binding_set: 
+@keyval: 
+@modifiers: 
+@signal_name: 
+@binding_args: 
+
+
+<!-- ##### FUNCTION gtk_binding_parse_binding ##### -->
+<para>
+
+</para>
+
+@scanner: 
+@Returns: 
+
+

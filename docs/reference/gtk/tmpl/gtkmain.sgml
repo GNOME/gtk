@@ -1,0 +1,414 @@
+<!-- ##### SECTION Title ##### -->
+General
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_set_locale ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_init ##### -->
+<para>
+
+</para>
+
+@argc: 
+@argv: 
+
+
+<!-- ##### FUNCTION gtk_init_check ##### -->
+<para>
+
+</para>
+
+@argc: 
+@argv: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_exit ##### -->
+<para>
+
+</para>
+
+@error_code: 
+
+
+<!-- ##### FUNCTION gtk_events_pending ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_main ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_main_level ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_main_quit ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_main_iteration ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_main_iteration_do ##### -->
+<para>
+
+</para>
+
+@blocking: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_main_do_event ##### -->
+<para>
+
+</para>
+
+@event: 
+
+
+<!-- ##### USER_FUNCTION GtkModuleInitFunc ##### -->
+<para>
+
+</para>
+
+@argc: 
+@argv: 
+
+
+<!-- ##### FUNCTION gtk_true ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_false ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_grab_add ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_grab_get_current ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_grab_remove ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_init_add ##### -->
+<para>
+
+</para>
+
+@function: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_quit_add_destroy ##### -->
+<para>
+
+</para>
+
+@main_level: 
+@object: 
+
+
+<!-- ##### FUNCTION gtk_quit_add ##### -->
+<para>
+
+</para>
+
+@main_level: 
+@function: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_quit_add_full ##### -->
+<para>
+
+</para>
+
+@main_level: 
+@function: 
+@marshal: 
+@data: 
+@destroy: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_quit_remove ##### -->
+<para>
+
+</para>
+
+@quit_handler_id: 
+
+
+<!-- ##### FUNCTION gtk_quit_remove_by_data ##### -->
+<para>
+
+</para>
+
+@data: 
+
+
+<!-- ##### FUNCTION gtk_timeout_add_full ##### -->
+<para>
+
+</para>
+
+@interval: 
+@function: 
+@marshal: 
+@data: 
+@destroy: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_timeout_add ##### -->
+<para>
+
+</para>
+
+@interval: 
+@function: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_timeout_remove ##### -->
+<para>
+
+</para>
+
+@timeout_handler_id: 
+
+
+<!-- ##### FUNCTION gtk_idle_add ##### -->
+<para>
+
+</para>
+
+@function: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_idle_add_priority ##### -->
+<para>
+
+</para>
+
+@priority: 
+@function: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_idle_add_full ##### -->
+<para>
+
+</para>
+
+@priority: 
+@function: 
+@marshal: 
+@data: 
+@destroy: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_idle_remove ##### -->
+<para>
+
+</para>
+
+@idle_handler_id: 
+
+
+<!-- ##### FUNCTION gtk_idle_remove_by_data ##### -->
+<para>
+
+</para>
+
+@data: 
+
+
+<!-- ##### FUNCTION gtk_input_add_full ##### -->
+<para>
+
+</para>
+
+@source: 
+@condition: 
+@function: 
+@marshal: 
+@data: 
+@destroy: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_input_remove ##### -->
+<para>
+
+</para>
+
+@input_handler_id: 
+
+
+<!-- ##### MACRO GTK_PRIORITY_REDRAW ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_PRIORITY_RESIZE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_PRIORITY_HIGH ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_PRIORITY_INTERNAL ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_PRIORITY_DEFAULT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_PRIORITY_LOW ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_key_snooper_install ##### -->
+<para>
+
+</para>
+
+@snooper: 
+@func_data: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkKeySnoopFunc ##### -->
+<para>
+
+</para>
+
+@grab_widget: 
+@event: 
+@func_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_key_snooper_remove ##### -->
+<para>
+
+</para>
+
+@snooper_handler_id: 
+
+
+<!-- ##### FUNCTION gtk_get_current_event ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_get_event_widget ##### -->
+<para>
+
+</para>
+
+@event: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_propagate_event ##### -->
+<para>
+
+</para>
+
+@widget: 
+@event: 
+
+

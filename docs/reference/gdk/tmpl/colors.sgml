@@ -1,0 +1,390 @@
+<!-- ##### SECTION Title ##### -->
+Colormaps and Colors
+
+<!-- ##### SECTION Short_Description ##### -->
+manipulation of colors and colormaps.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+These functions are used to modify colormaps.
+A colormap is an object that contains the mapping
+between the color values stored in memory and
+the RGB values that are used to display color
+values. In general, colormaps only contain
+significant information for pseudo-color visuals,
+but even for other visual types, a colormap object
+is required in some circumstances.
+</para>
+
+<para>
+There are a couple of special colormaps that can
+be retrieved. The system colormap (retrieved 
+with gdk_colormap_get_system()) is the default
+colormap of the system. If you are using GdkRGB,
+there is another colormap that is important - the
+colormap in which GdkRGB works, retrieved with
+gdk_rgb_get_cmap(). However, when using GdkRGB, 
+it is not generally necessary to allocate colors
+directly.
+</para>
+
+<para>
+In previous revisions of this interface, a number
+of functions that take a #GdkColormap parameter
+were replaced with functions whose names began
+with "gdk_colormap_". This process will probably
+be extended somewhat in the future - 
+gdk_color_white(), gdk_color_black(), and 
+gdk_color_change() will probably become aliases.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GdkColor ##### -->
+<para>
+The #GdkColor structure is used to describe an 
+allocated or unallocated color.
+
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry><structfield>pixel</structfield></entry>
+<entry>For allocated colors, the value used to
+draw this color on the screen.</entry>
+</row>
+
+<row>
+<entry><structfield>red</structfield></entry>
+<entry>The red component of the color. This is
+a value between 0 and 65535, with 65535 indicating
+full intensitiy.</entry>
+</row>
+
+<row>
+<entry><structfield>green</structfield></entry>
+<entry>the blue component of the color.</entry>
+</row>
+
+<row>
+<entry><structfield>blue</structfield></entry>
+<entry>the green component of the color..</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@pixel: 
+@red: 
+@green: 
+@blue: 
+
+<!-- ##### STRUCT GdkColormap ##### -->
+<para>
+The colormap structure contains the following public
+fields.
+
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry><structfield>size</structfield></entry>
+<entry>For pseudo-color colormaps, the number of colors
+in the colormap..</entry>
+</row>
+
+<row>
+<entry><structfield>colors</structfield></entry>
+<entry>An array containing the current values in the
+colormap. This can be used to map from pixel values
+back to RGB values. This is only meaningful for
+pseudo-color colormaps.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@size: 
+@colors: 
+
+<!-- ##### FUNCTION gdk_colormap_new ##### -->
+<para>
+Create a new colormap for the given visual.
+</para>
+
+@visual: a #GdkVisual.
+@allocate: if %TRUE, the newly created colormap will be
+  a private colormap, and all colors in it will be
+  allocated for the applications use.
+@Returns: the new #GdkColormap.
+
+
+<!-- ##### FUNCTION gdk_colormap_ref ##### -->
+<para>
+Increase the reference count of a colormap.
+</para>
+
+@cmap: a #GdkColormap.
+@Returns: @cmap
+
+
+<!-- ##### FUNCTION gdk_colormap_unref ##### -->
+<para>
+Decrease the reference count of a colormap. If the
+resulting reference count is zero, destroys the colormap.
+</para>
+
+@cmap: a #GdkColormap.
+
+
+<!-- ##### FUNCTION gdk_colormap_get_system ##### -->
+<para>
+Returns the system's default colormap.
+</para>
+
+@Returns: the default colormap.
+
+
+<!-- ##### FUNCTION gdk_colormap_get_system_size ##### -->
+<para>
+Returns the size of the system's default colormap.
+(See the description of struct #GdkColormap for an
+explanation of the size of a colormap.)
+</para>
+
+@Returns: the size of the system's default colormap.
+
+
+<!-- ##### FUNCTION gdk_colormap_change ##### -->
+<para>
+Change the value of the first @ncolors in a private colormap
+to match the values in the <structfield>colors</structfield>
+array in the color map. This function is obsolete and
+should not be used. See gdk_color_change().
+</para>
+
+@colormap: a #GdkColormap.
+@ncolors: the number of colors to change.
+
+
+<!-- ##### FUNCTION gdk_colormap_alloc_colors ##### -->
+<para>
+Allocates colors from a colormap.
+</para>
+
+@colormap: a #GdkColormap.
+@colors: The color values to allocate. On return, the pixel
+ values for allocated colors will be filled in.
+@ncolors: The number of colors in @colors.
+@writeable: If %TRUE, the colors are allocated writeable
+ (their values can later be changed using gdk_color_change()).
+ Writeable colors cannot be shared between applications.
+@best_match: If %TRUE, GDK will attempt to do matching against
+ existing colors if the colors cannot be allocated as
+ requested.
+@success: An array of length @ncolors. On return, this
+ indicates whether the corresponding color in @colors was
+ sucessfully allocated or not.
+@Returns: The number of colors that were not sucessfully 
+ allocated.
+
+
+<!-- ##### FUNCTION gdk_colormap_alloc_color ##### -->
+<para>
+Allocate a single color from a colormap.
+</para>
+
+@colormap: a #GdkColormap.
+@color: the color to allocate. On return the
+<structfield>pixel</structfield> field will be
+filled in if allocation succeeds.
+@writeable: If %TRUE, the color is allocated writeable
+ (their values can later be changed using gdk_color_change()).
+ Writeable colors cannot be shared between applications.
+@best_match: If %TRUE, GDK will attempt to do matching against
+ existing colors if the color cannot be allocated as
+ requested.
+@Returns: %TRUE if the allocation succeeded.
+
+
+<!-- ##### FUNCTION gdk_colormap_free_colors ##### -->
+<para>
+Free previously allocated colors.
+</para>
+
+@colormap: a #GdkColormap.
+@colors: the colors to free.
+@ncolors: the number of colors in @colors.
+
+
+<!-- ##### FUNCTION gdk_colormap_get_visual ##### -->
+<para>
+Return the visual for which a given colormap was created.
+</para>
+
+@colormap: a #GdkColormap.
+@Returns: the visual of the colormap.
+
+
+<!-- ##### FUNCTION gdk_colors_store ##### -->
+<para>
+Change the value of the first @ncolors colors in
+a private colormap. This function is obsolete and
+should not be used. See gdk_color_change().
+</para>
+
+@colormap: a #GdkColormap.
+@colors: the new color values.
+@ncolors: the number of colors to change.
+
+
+<!-- ##### FUNCTION gdk_color_copy ##### -->
+<para>
+Make a copy of a color structure. The result
+must be freed using gdk_color_free().
+</para>
+
+@color: a #GdkColor.
+@Returns: a copy of @color.
+
+
+<!-- ##### FUNCTION gdk_color_free ##### -->
+<para>
+Free a color structure created with 
+gdk_color_copy().
+</para>
+
+@color: a #GdkColor.
+
+
+<!-- ##### FUNCTION gdk_colors_alloc ##### -->
+<para>
+Allocate colors from a colormap. This function
+is obsolete. See gdk_colormap_alloc_colors().
+For full documentation of the fields, see 
+the Xlib documentation for XAllocColorCells.
+</para>
+
+@colormap: a #GdkColormap.
+@contiguous: if %TRUE, the colors should be allocated
+ in contiguous color cells.
+@planes: an array in which to store the plane masks.
+@nplanes: the number of planes to allocate. (Or zero,
+ to indicate that the color allocation should not be
+ planar.)
+@pixels: an array into which to store allocated pixel
+ values.
+@npixels: the number of pixels in each plane to allocate.
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_colors_free ##### -->
+<para>
+Free colors allocated with gdk_colors_alloc(). This
+function is obsolete. See gdk_colormap_free_colors().
+</para>
+
+@colormap: a #GdkColormap.
+@pixels: the pixel values of the colors to free.
+@npixels: the number of values in @pixels.
+@planes: the plane masks for all planes to free, OR'd
+ together.
+
+
+<!-- ##### FUNCTION gdk_color_white ##### -->
+<para>
+Return the white color for a given colormap. The resulting
+value has already allocated been allocated. 
+</para>
+
+@colormap: a #GdkColormap.
+@color: the location to store the color.
+@Returns: %TRUE if the allocation succeeded.
+
+
+<!-- ##### FUNCTION gdk_color_black ##### -->
+<para>
+Return the black color for a given colormap. The resulting
+value has already benn allocated. 
+</para>
+
+@colormap: a #GdkColormap.
+@color: the location to store the color.
+@Returns: %TRUE if the allocation succeeded.
+
+
+<!-- ##### FUNCTION gdk_color_parse ##### -->
+<para>
+Parse a textual specification of a color and fill in
+the <structfield>red</structfield>,
+<structfield>green</structfield>, and 
+<structfield>blue</structfield> fields of a 
+#GdkColor structure. The color is <emphasis>not</emphasis> 
+allocated, you must call gdk_colormap_alloc_color() yourself.
+The text string can be in any of the forms accepted
+by <function>XParseColor</function>; these include
+name for a color from <filename>rgb.txt</filename>, such as
+<literal>DarkSlateGray</literal>, or a hex specification
+such as <literal>305050</literal>.
+</para>
+
+@spec: the string specifying the color.
+@color: the #GdkColor to fill in
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_color_alloc ##### -->
+<para>
+Allocate a single color from a colormap.
+This function is obsolete. See gdk_colormap_alloc_color().
+</para>
+
+@colormap: a #GdkColormap.
+@color: The color to allocate. On return, the 
+<structfield>pixel</structfield> field will be
+filled in.
+@Returns: %TRUE if the allocation succeeded.
+
+
+<!-- ##### FUNCTION gdk_color_change ##### -->
+<para>
+Change the value of a color that has already
+been allocated. If @colormap is not a private
+colormap, then the color must have been allocated
+using gdk_colormap_alloc_colors() with the 
+@writeable set to %TRUE.
+</para>
+
+@colormap: a #GdkColormap.
+@color: a #GdkColor, with the color to change
+in the <structfield>pixel</structfield> field,
+and the new value in the remaining fields.
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_color_equal ##### -->
+<para>
+Compare two colors. 
+</para>
+
+@colora: a #GdkColor.
+@colorb: another #GdkColor.
+@Returns: %TRUE if the two colors compare equal
+
+
+<!-- ##### FUNCTION gdk_color_hash ##### -->
+<para>
+A hash function suitable for using for a hash
+table that stores #GdkColor's.
+</para>
+
+@colora: a #GdkColor.
+@colorb: NOT USED.
+@Returns: The hash function appled to @colora
+
+

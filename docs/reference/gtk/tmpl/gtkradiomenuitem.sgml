@@ -1,0 +1,61 @@
+<!-- ##### SECTION Title ##### -->
+GtkRadioMenuItem
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkRadioMenuItem ##### -->
+<para>
+
+</para>
+
+@check_menu_item: 
+@group: 
+
+<!-- ##### FUNCTION gtk_radio_menu_item_new ##### -->
+<para>
+
+</para>
+
+@group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_menu_item_new_with_label ##### -->
+<para>
+
+</para>
+
+@group: 
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_menu_item_group ##### -->
+<para>
+
+</para>
+
+@radio_menu_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_menu_item_set_group ##### -->
+<para>
+
+</para>
+
+@radio_menu_item: 
+@group: 
+
+

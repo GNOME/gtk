@@ -1,0 +1,198 @@
+<!-- ##### SECTION Title ##### -->
+Input Devices
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### MACRO GDK_CORE_POINTER ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### ENUM GdkExtensionMode ##### -->
+<para>
+
+</para>
+
+@GDK_EXTENSION_EVENTS_NONE: 
+@GDK_EXTENSION_EVENTS_ALL: 
+@GDK_EXTENSION_EVENTS_CURSOR: 
+
+<!-- ##### STRUCT GdkDeviceKey ##### -->
+<para>
+
+</para>
+
+@keyval: 
+@modifiers: 
+
+<!-- ##### STRUCT GdkDeviceInfo ##### -->
+<para>
+
+</para>
+
+@deviceid: 
+@name: 
+@source: 
+@mode: 
+@has_cursor: 
+@num_axes: 
+@axes: 
+@num_keys: 
+@keys: 
+
+<!-- ##### FUNCTION gdk_input_init ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_input_exit ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_input_list_devices ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_input_set_extension_events ##### -->
+<para>
+
+</para>
+
+@window: 
+@mask: 
+@mode: 
+
+
+<!-- ##### FUNCTION gdk_input_set_source ##### -->
+<para>
+
+</para>
+
+@deviceid: 
+@source: 
+
+
+<!-- ##### ENUM GdkInputSource ##### -->
+<para>
+
+</para>
+
+@GDK_SOURCE_MOUSE: 
+@GDK_SOURCE_PEN: 
+@GDK_SOURCE_ERASER: 
+@GDK_SOURCE_CURSOR: 
+
+<!-- ##### FUNCTION gdk_input_set_mode ##### -->
+<para>
+
+</para>
+
+@deviceid: 
+@mode: 
+@Returns: 
+
+
+<!-- ##### ENUM GdkInputMode ##### -->
+<para>
+
+</para>
+
+@GDK_MODE_DISABLED: 
+@GDK_MODE_SCREEN: 
+@GDK_MODE_WINDOW: 
+
+<!-- ##### FUNCTION gdk_input_set_axes ##### -->
+<para>
+
+</para>
+
+@deviceid: 
+@axes: 
+
+
+<!-- ##### ENUM GdkAxisUse ##### -->
+<para>
+
+</para>
+
+@GDK_AXIS_IGNORE: 
+@GDK_AXIS_X: 
+@GDK_AXIS_Y: 
+@GDK_AXIS_PRESSURE: 
+@GDK_AXIS_XTILT: 
+@GDK_AXIS_YTILT: 
+@GDK_AXIS_LAST: 
+
+<!-- ##### FUNCTION gdk_input_set_key ##### -->
+<para>
+
+</para>
+
+@deviceid: 
+@index: 
+@keyval: 
+@modifiers: 
+
+
+<!-- ##### FUNCTION gdk_input_window_get_pointer ##### -->
+<para>
+
+</para>
+
+@window: 
+@deviceid: 
+@x: 
+@y: 
+@pressure: 
+@xtilt: 
+@ytilt: 
+@mask: 
+
+
+<!-- ##### FUNCTION gdk_input_motion_events ##### -->
+<para>
+
+</para>
+
+@window: 
+@deviceid: 
+@start: 
+@stop: 
+@nevents_return: 
+@Returns: 
+
+
+<!-- ##### STRUCT GdkTimeCoord ##### -->
+<para>
+
+</para>
+
+@time: 
+@x: 
+@y: 
+@pressure: 
+@xtilt: 
+@ytilt: 
+

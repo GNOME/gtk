@@ -1,0 +1,115 @@
+<!-- ##### SECTION Title ##### -->
+GtkTreeItem
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkTreeItem ##### -->
+<para>
+
+</para>
+
+@item: 
+@subtree: 
+@pixmaps_box: 
+@pixmaps: 
+@expanded: 
+
+<!-- ##### MACRO GTK_TREE_ITEM_SUBTREE ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_new_with_label ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_set_subtree ##### -->
+<para>
+
+</para>
+
+@tree_item: 
+@subtree: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_remove_subtree ##### -->
+<para>
+
+</para>
+
+@tree_item: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_select ##### -->
+<para>
+
+</para>
+
+@tree_item: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_deselect ##### -->
+<para>
+
+</para>
+
+@tree_item: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_expand ##### -->
+<para>
+
+</para>
+
+@tree_item: 
+
+
+<!-- ##### FUNCTION gtk_tree_item_collapse ##### -->
+<para>
+
+</para>
+
+@tree_item: 
+
+
+<!-- ##### SIGNAL GtkTreeItem::collapse ##### -->
+<para>
+
+</para>
+
+@treeitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTreeItem::expand ##### -->
+<para>
+
+</para>
+
+@treeitem: the object which received the signal.
+

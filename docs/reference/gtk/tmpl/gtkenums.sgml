@@ -1,0 +1,361 @@
+<!-- ##### SECTION Title ##### -->
+Standard Enumerations
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM GtkAccelFlags ##### -->
+<para>
+
+</para>
+
+@GTK_ACCEL_VISIBLE: 
+@GTK_ACCEL_SIGNAL_VISIBLE: 
+@GTK_ACCEL_LOCKED: 
+@GTK_ACCEL_MASK: 
+
+<!-- ##### ENUM GtkArrowType ##### -->
+<para>
+
+</para>
+
+@GTK_ARROW_UP: 
+@GTK_ARROW_DOWN: 
+@GTK_ARROW_LEFT: 
+@GTK_ARROW_RIGHT: 
+
+<!-- ##### ENUM GtkAttachOptions ##### -->
+<para>
+
+</para>
+
+@GTK_EXPAND: 
+@GTK_SHRINK: 
+@GTK_FILL: 
+
+<!-- ##### ENUM GtkButtonBoxStyle ##### -->
+<para>
+
+</para>
+
+@GTK_BUTTONBOX_DEFAULT_STYLE: 
+@GTK_BUTTONBOX_SPREAD: 
+@GTK_BUTTONBOX_EDGE: 
+@GTK_BUTTONBOX_START: 
+@GTK_BUTTONBOX_END: 
+
+<!-- ##### ENUM GtkCornerType ##### -->
+<para>
+
+</para>
+
+@GTK_CORNER_TOP_LEFT: 
+@GTK_CORNER_BOTTOM_LEFT: 
+@GTK_CORNER_TOP_RIGHT: 
+@GTK_CORNER_BOTTOM_RIGHT: 
+
+<!-- ##### ENUM GtkCurveType ##### -->
+<para>
+
+</para>
+
+@GTK_CURVE_TYPE_LINEAR: 
+@GTK_CURVE_TYPE_SPLINE: 
+@GTK_CURVE_TYPE_FREE: 
+
+<!-- ##### ENUM GtkDirectionType ##### -->
+<para>
+
+</para>
+
+@GTK_DIR_TAB_FORWARD: 
+@GTK_DIR_TAB_BACKWARD: 
+@GTK_DIR_UP: 
+@GTK_DIR_DOWN: 
+@GTK_DIR_LEFT: 
+@GTK_DIR_RIGHT: 
+
+<!-- ##### ENUM GtkJustification ##### -->
+<para>
+
+</para>
+
+@GTK_JUSTIFY_LEFT: 
+@GTK_JUSTIFY_RIGHT: 
+@GTK_JUSTIFY_CENTER: 
+@GTK_JUSTIFY_FILL: 
+
+<!-- ##### ENUM GtkMatchType ##### -->
+<para>
+
+</para>
+
+@GTK_MATCH_ALL: 
+@GTK_MATCH_ALL_TAIL: 
+@GTK_MATCH_HEAD: 
+@GTK_MATCH_TAIL: 
+@GTK_MATCH_EXACT: 
+@GTK_MATCH_LAST: 
+
+<!-- ##### ENUM GtkMenuFactoryType ##### -->
+<para>
+
+</para>
+
+@GTK_MENU_FACTORY_MENU: 
+@GTK_MENU_FACTORY_MENU_BAR: 
+@GTK_MENU_FACTORY_OPTION_MENU: 
+
+<!-- ##### ENUM GtkMetricType ##### -->
+<para>
+
+</para>
+
+@GTK_PIXELS: 
+@GTK_INCHES: 
+@GTK_CENTIMETERS: 
+
+<!-- ##### ENUM GtkOrientation ##### -->
+<para>
+
+</para>
+
+@GTK_ORIENTATION_HORIZONTAL: 
+@GTK_ORIENTATION_VERTICAL: 
+
+<!-- ##### ENUM GtkPackType ##### -->
+<para>
+
+</para>
+
+@GTK_PACK_START: 
+@GTK_PACK_END: 
+
+<!-- ##### ENUM GtkPathPriorityType ##### -->
+<para>
+
+</para>
+
+@GTK_PATH_PRIO_LOWEST: 
+@GTK_PATH_PRIO_GTK: 
+@GTK_PATH_PRIO_APPLICATION: 
+@GTK_PATH_PRIO_RC: 
+@GTK_PATH_PRIO_HIGHEST: 
+@GTK_PATH_PRIO_MASK: 
+
+<!-- ##### ENUM GtkPathType ##### -->
+<para>
+
+</para>
+
+@GTK_PATH_WIDGET: 
+@GTK_PATH_WIDGET_CLASS: 
+@GTK_PATH_CLASS: 
+
+<!-- ##### ENUM GtkPolicyType ##### -->
+<para>
+
+</para>
+
+@GTK_POLICY_ALWAYS: 
+@GTK_POLICY_AUTOMATIC: 
+@GTK_POLICY_NEVER: 
+
+<!-- ##### ENUM GtkPositionType ##### -->
+<para>
+
+</para>
+
+@GTK_POS_LEFT: 
+@GTK_POS_RIGHT: 
+@GTK_POS_TOP: 
+@GTK_POS_BOTTOM: 
+
+<!-- ##### ENUM GtkPreviewType ##### -->
+<para>
+An enumeration which describes whether a preview
+contains grayscale or red-green-blue data.
+
+<informaltable pgwide=1 frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>GTK_PREVIEW_COLOR</entry>
+<entry>the preview contains red-green-blue data.</entry>
+</row>
+
+<row>
+<entry>GTK_PREVIEW_GRAYSCALE</entry>
+<entry>The preview contains grayscale data.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@GTK_PREVIEW_COLOR: 
+@GTK_PREVIEW_GRAYSCALE: 
+
+<!-- ##### ENUM GtkReliefStyle ##### -->
+<para>
+
+</para>
+
+@GTK_RELIEF_NORMAL: 
+@GTK_RELIEF_HALF: 
+@GTK_RELIEF_NONE: 
+
+<!-- ##### ENUM GtkResizeMode ##### -->
+<para>
+
+</para>
+
+@GTK_RESIZE_PARENT: 
+@GTK_RESIZE_QUEUE: 
+@GTK_RESIZE_IMMEDIATE: 
+
+<!-- ##### ENUM GtkSignalRunType ##### -->
+<para>
+
+</para>
+
+@GTK_RUN_FIRST: 
+@GTK_RUN_LAST: 
+@GTK_RUN_BOTH: 
+@GTK_RUN_NO_RECURSE: 
+@GTK_RUN_ACTION: 
+@GTK_RUN_NO_HOOKS: 
+
+<!-- ##### ENUM GtkScrollType ##### -->
+<para>
+
+</para>
+
+@GTK_SCROLL_NONE: 
+@GTK_SCROLL_STEP_BACKWARD: 
+@GTK_SCROLL_STEP_FORWARD: 
+@GTK_SCROLL_PAGE_BACKWARD: 
+@GTK_SCROLL_PAGE_FORWARD: 
+@GTK_SCROLL_JUMP: 
+
+<!-- ##### ENUM GtkSelectionMode ##### -->
+<para>
+
+</para>
+
+@GTK_SELECTION_SINGLE: 
+@GTK_SELECTION_BROWSE: 
+@GTK_SELECTION_MULTIPLE: 
+@GTK_SELECTION_EXTENDED: 
+
+<!-- ##### ENUM GtkShadowType ##### -->
+<para>
+
+</para>
+
+@GTK_SHADOW_NONE: 
+@GTK_SHADOW_IN: 
+@GTK_SHADOW_OUT: 
+@GTK_SHADOW_ETCHED_IN: 
+@GTK_SHADOW_ETCHED_OUT: 
+
+<!-- ##### ENUM GtkStateType ##### -->
+<para>
+
+</para>
+
+@GTK_STATE_NORMAL: 
+@GTK_STATE_ACTIVE: 
+@GTK_STATE_PRELIGHT: 
+@GTK_STATE_SELECTED: 
+@GTK_STATE_INSENSITIVE: 
+
+<!-- ##### ENUM GtkSubmenuDirection ##### -->
+<para>
+
+</para>
+
+@GTK_DIRECTION_LEFT: 
+@GTK_DIRECTION_RIGHT: 
+
+<!-- ##### ENUM GtkSubmenuPlacement ##### -->
+<para>
+
+</para>
+
+@GTK_TOP_BOTTOM: 
+@GTK_LEFT_RIGHT: 
+
+<!-- ##### ENUM GtkToolbarStyle ##### -->
+<para>
+
+</para>
+
+@GTK_TOOLBAR_ICONS: 
+@GTK_TOOLBAR_TEXT: 
+@GTK_TOOLBAR_BOTH: 
+
+<!-- ##### ENUM GtkTroughType ##### -->
+<para>
+
+</para>
+
+@GTK_TROUGH_NONE: 
+@GTK_TROUGH_START: 
+@GTK_TROUGH_END: 
+@GTK_TROUGH_JUMP: 
+
+<!-- ##### ENUM GtkUpdateType ##### -->
+<para>
+
+</para>
+
+@GTK_UPDATE_CONTINUOUS: 
+@GTK_UPDATE_DISCONTINUOUS: 
+@GTK_UPDATE_DELAYED: 
+
+<!-- ##### ENUM GtkVisibility ##### -->
+<para>
+
+</para>
+
+@GTK_VISIBILITY_NONE: 
+@GTK_VISIBILITY_PARTIAL: 
+@GTK_VISIBILITY_FULL: 
+
+<!-- ##### ENUM GtkWindowPosition ##### -->
+<para>
+
+</para>
+
+@GTK_WIN_POS_NONE: 
+@GTK_WIN_POS_CENTER: 
+@GTK_WIN_POS_MOUSE: 
+
+<!-- ##### ENUM GtkWindowType ##### -->
+<para>
+
+</para>
+
+@GTK_WINDOW_TOPLEVEL: 
+@GTK_WINDOW_DIALOG: 
+@GTK_WINDOW_POPUP: 
+
+<!-- ##### ENUM GtkSortType ##### -->
+<para>
+
+</para>
+
+@GTK_SORT_ASCENDING: 
+@GTK_SORT_DESCENDING: 
+

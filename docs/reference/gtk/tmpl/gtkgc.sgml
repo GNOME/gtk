@@ -1,0 +1,36 @@
+<!-- ##### SECTION Title ##### -->
+Graphics Contexts
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_gc_get ##### -->
+<para>
+
+</para>
+
+@depth: 
+@colormap: 
+@values: 
+@values_mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_gc_release ##### -->
+<para>
+
+</para>
+
+@gc: 
+
+

@@ -1,0 +1,216 @@
+<!-- ##### SECTION Title ##### -->
+GdkRGB
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GdkRgbCmap ##### -->
+<para>
+
+</para>
+
+@colors: 
+@lut: 
+
+<!-- ##### ENUM GdkRgbDither ##### -->
+<para>
+
+</para>
+
+@GDK_RGB_DITHER_NONE: 
+@GDK_RGB_DITHER_NORMAL: 
+@GDK_RGB_DITHER_MAX: 
+
+<!-- ##### FUNCTION gdk_rgb_init ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_rgb_cmap_new ##### -->
+<para>
+
+</para>
+
+@colors: 
+@n_colors: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_rgb_cmap_free ##### -->
+<para>
+
+</para>
+
+@cmap: 
+
+
+<!-- ##### FUNCTION gdk_rgb_gc_set_foreground ##### -->
+<para>
+
+</para>
+
+@gc: 
+@rgb: 
+
+
+<!-- ##### FUNCTION gdk_rgb_gc_set_background ##### -->
+<para>
+
+</para>
+
+@gc: 
+@rgb: 
+
+
+<!-- ##### FUNCTION gdk_draw_rgb_image ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@width: 
+@height: 
+@dith: 
+@rgb_buf: 
+@rowstride: 
+
+
+<!-- ##### FUNCTION gdk_draw_indexed_image ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@width: 
+@height: 
+@dith: 
+@buf: 
+@rowstride: 
+@cmap: 
+
+
+<!-- ##### FUNCTION gdk_draw_gray_image ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@width: 
+@height: 
+@dith: 
+@buf: 
+@rowstride: 
+
+
+<!-- ##### FUNCTION gdk_draw_rgb_32_image ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@width: 
+@height: 
+@dith: 
+@buf: 
+@rowstride: 
+
+
+<!-- ##### FUNCTION gdk_draw_rgb_image_dithalign ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@x: 
+@y: 
+@width: 
+@height: 
+@dith: 
+@rgb_buf: 
+@rowstride: 
+@xdith: 
+@ydith: 
+
+
+<!-- ##### FUNCTION gdk_rgb_xpixel_from_rgb ##### -->
+<para>
+
+</para>
+
+@rgb: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_rgb_set_verbose ##### -->
+<para>
+
+</para>
+
+@verbose: 
+
+
+<!-- ##### FUNCTION gdk_rgb_ditherable ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_rgb_set_install ##### -->
+<para>
+
+</para>
+
+@install: 
+
+
+<!-- ##### FUNCTION gdk_rgb_set_min_colors ##### -->
+<para>
+
+</para>
+
+@min_colors: 
+
+
+<!-- ##### FUNCTION gdk_rgb_get_visual ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_rgb_get_cmap ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+

@@ -1,0 +1,159 @@
+<!-- ##### SECTION Title ##### -->
+GtkButtonBox
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkButtonBox ##### -->
+<para>
+
+</para>
+
+@box: 
+@spacing: 
+@child_min_width: 
+@child_min_height: 
+@child_ipad_x: 
+@child_ipad_y: 
+@layout_style: 
+
+<!-- ##### MACRO GTK_BUTTONBOX_DEFAULT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_button_box_get_child_size_default ##### -->
+<para>
+
+</para>
+
+@min_width: 
+@min_height: 
+
+
+<!-- ##### FUNCTION gtk_button_box_get_child_ipadding_default ##### -->
+<para>
+
+</para>
+
+@ipad_x: 
+@ipad_y: 
+
+
+<!-- ##### FUNCTION gtk_button_box_set_child_size_default ##### -->
+<para>
+
+</para>
+
+@min_width: 
+@min_height: 
+
+
+<!-- ##### FUNCTION gtk_button_box_set_child_ipadding_default ##### -->
+<para>
+
+</para>
+
+@ipad_x: 
+@ipad_y: 
+
+
+<!-- ##### FUNCTION gtk_button_box_get_spacing ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_button_box_get_layout ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_button_box_get_child_size ##### -->
+<para>
+
+</para>
+
+@widget: 
+@min_width: 
+@min_height: 
+
+
+<!-- ##### FUNCTION gtk_button_box_get_child_ipadding ##### -->
+<para>
+
+</para>
+
+@widget: 
+@ipad_x: 
+@ipad_y: 
+
+
+<!-- ##### FUNCTION gtk_button_box_set_spacing ##### -->
+<para>
+
+</para>
+
+@widget: 
+@spacing: 
+
+
+<!-- ##### FUNCTION gtk_button_box_set_layout ##### -->
+<para>
+
+</para>
+
+@widget: 
+@layout_style: 
+
+
+<!-- ##### FUNCTION gtk_button_box_set_child_size ##### -->
+<para>
+
+</para>
+
+@widget: 
+@min_width: 
+@min_height: 
+
+
+<!-- ##### FUNCTION gtk_button_box_set_child_ipadding ##### -->
+<para>
+
+</para>
+
+@widget: 
+@ipad_x: 
+@ipad_y: 
+
+
+<!-- ##### FUNCTION gtk_button_box_child_requisition ##### -->
+<para>
+
+</para>
+
+@widget: 
+@nvis_children: 
+@width: 
+@height: 
+
+

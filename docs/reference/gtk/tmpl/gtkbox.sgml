@@ -1,0 +1,370 @@
+<!-- ##### SECTION Title ##### -->
+GtkBox
+
+<!-- ##### SECTION Short_Description ##### -->
+a base class for box containers
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+GtkBox is an abstract widget which encapsulates functionallity for a
+particular kind of container, one that organizes a variable number of
+widgets into a rectangular area.  GtkBox currently has two derived
+classes, #GtkHBox and #GtkVBox.
+</para>
+<para>
+The rectangular area of a GtkBox is organized into either a single row
+or a single column of child widgets depending upon whether the box is
+of type #GtkHBox or #GtkVBox, respectively.  Thus, all children of a
+GtkBox are allocated one dimension in common, which is the height of a
+row, or the width of a column.
+</para>
+<para>
+GtkBox uses a notion of <emphasis>packing</emphasis>.  Packing refers to
+adding widgets with reference to a particular position in a
+#GtkContainer.  For a GtkBox, there are two reference positions: the
+<emphasis>start</emphasis> and the <emphasis>end</emphasis> of the box.  For a
+#GtkVBox, the start is defined as the top of the box and the end is
+defined as the bottom.  For a #GtkHBox the start is defined as the
+left side and the end is defined as the right side.
+</para>
+<para>
+Use repeated calls to gtk_box_pack_start() to pack widgets into a
+GtkBox from start to end.  Use gtk_box_pack_end() to add widgets from
+end to start.  You may intersperse these calls and add widgets from
+both ends of the same GtkBox.
+</para>
+<para>
+Use gtk_box_pack_start_defaults() or gtk_box_pack_end_defaults()
+to pack widgets into a GtkBox if you do not need to specify the
+<structfield>expand</structfield>, <structfield>fill</structfield>, or
+<structfield>padding</structfield> attributes of the child to be
+added.
+</para>
+<para>
+Because GtkBox is a #GtkContainer, you may also use
+gtk_container_add() to insert widgets into the box, and they will be
+packed as if with gtk_box_pack_start_defaults().  Use
+gtk_container_remove() to remove widgets from the GtkBox.
+</para>
+<para>
+Use gtk_box_set_homogeneous() to specify whether or not all children
+of the GtkBox are forced to get the same amount of space.
+</para>
+<para>
+Use gtk_box_set_spacing() to determine how much space will be
+minimally placed between all children in the GtkBox.
+</para>
+<para>
+Use gtk_box_reorder_child() to move a GtkBox child to a different
+place in the box.
+</para>
+<para>
+Use gtk_box_set_child_packing() to reset the
+<structfield>expand</structfield>, <structfield>fill</structfield>,
+and <structfield>padding</structfield> attributes of any GtkBox child.
+Use gtk_box_query_child_packing() to query these fields.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkHBox</term>
+<listitem><para>a derived class that organizes widgets into a row.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GtkVBox</term>
+<listitem><para>a derived class that organizes widgets into a column.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GtkFrame</term>
+<listitem><para>a #GtkWidget useful for drawing a border around a GtkBox.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GtkTable</term>
+<listitem><para>a #GtkContainer for organizing widgets into a grid,
+rather than independent rows or columns.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GtkLayout</term>
+<listitem><para>a #GtkContainer for organizing widgets into arbitrary
+layouts.</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</para>
+
+<!-- ##### STRUCT GtkBox ##### -->
+<para>
+The #GtkBox-struct describes an instance of GtkBox and contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>#GList * <structfield>children</structfield>;</entry>
+<entry>a list of children belonging the GtkBox.  The data is a list of
+structures of type #GtkBoxChild-struct.</entry>
+</row>
+
+<row>
+<entry>#gint16 <structfield>spacing</structfield>;</entry>
+<entry>the number of pixels to put between children of the GtkBox, zero
+by default.  Use gtk_box_set_spacing() to set this field.</entry>
+</row>
+
+<row>
+<entry>#guint <structfield>homogeneous</structfield>;</entry>
+<entry>a flag that if %TRUE forces all children to get equal space in
+the GtkBox; %FALSE by default.  Use gtk_box_set_homogeneous() to set this
+field.</entry>
+</row>
+</informaltable>
+</para>
+
+@container: 
+@children: 
+@spacing: 
+@homogeneous: 
+
+<!-- ##### STRUCT GtkBoxChild ##### -->
+<para>
+The #GtkBoxChild-struct holds a child widget of GtkBox and describes
+how the child is to be packed into the GtkBox.  Use
+gtk_box_query_child_packing() and gtk_box_set_child_packing() to query
+and reset the <structfield>padding</structfield>,
+<structfield>expand</structfield>, <structfield>fill</structfield>,
+and <structfield>pack</structfield> fields.
+</para>
+<para>
+#GtkBoxChild-struct contains the following fields.  (These fields
+should be considered read-only. They should never be directly set by an
+application.)
+
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>#GtkWidget * <structfield>widget</structfield>;</entry>
+<entry>the child widget, packed into the GtkBox.</entry>
+</row>
+
+<row>
+<entry>#guint16 <structfield>padding</structfield>;</entry>
+<entry>the number of extra pixels to put between this child and its
+neighbors, set when packed, zero by default.</entry>
+</row>
+
+<row>
+<entry>#guint <structfield>expand</structfield>;</entry>
+<entry>flag indicates whether extra space should be given to this
+child.  Any extra space given to the parent GtkBox is divided up among
+all children with this attribute set to %TRUE; set when packed, %TRUE by
+default.</entry>
+</row>
+
+<row>
+<entry>#guint <structfield>fill</structfield>;</entry>
+<entry>flag indicates whether any extra space given to this child due to its
+<structfield>expand</structfield> attribute being set is actually
+allocated to the child, rather than being used as padding
+around the widget; set when packed, %TRUE by default.</entry>
+</row>
+
+<row>
+<entry>#guint <structfield>pack</structfield>;</entry> <entry>one of
+#GtkPackType indicating whether the child is packed with reference to
+the start (top/left) or end (bottom/right) of the GtkBox.</entry>
+</row>
+</informaltable>
+</para>
+
+@widget: 
+@padding: 
+@expand: 
+@fill: 
+@pack: 
+
+<!-- ##### FUNCTION gtk_box_pack_start ##### -->
+<para>
+Adds @child to @box, packed with reference to the start of @box.  The
+@child is packed after any other child packed with reference to the
+start of @box.
+</para>
+
+@box: a #GtkBox.
+@child: the #GtkWidget to be added to @box.
+@expand: %TRUE if the new child is to be given extra space allocated to
+@box.  The extra space will be divided evenly between all children of
+@box that use this option.
+@fill: %TRUE if space given to @child by the @expand option is
+actually allocated to @child, rather than just padding it.  This
+parameter has no effect if @expand is set to %FALSE.  A child is
+always allocated the full height of a #GtkHBox and the full width of a
+#GtkVBox.  This option affects the other dimension.
+@padding: extra space in pixels to put between this child and its
+neighbors, over and above the global amount specified by
+<structfield>spacing</structfield> in #GtkBox-struct.  If @child is a
+widget at one of the reference ends of @box, then @padding pixels are also put
+between @child and the reference edge of @box.
+
+
+<!-- ##### FUNCTION gtk_box_pack_end ##### -->
+<para>
+Adds @child to @box, packed with reference to the end of @box.  The
+@child is packed after (away from end of) any other child packed with reference to the
+end of @box.
+</para>
+
+@box: a #GtkBox.
+@child: the #GtkWidget to be added to @box.
+@expand: %TRUE if the new child is to be given extra space allocated to
+@box.  The extra space will be divided evenly between all children of
+@box that use this option.
+@fill: %TRUE if space given to @child by the @expand option is
+actually allocated to @child, rather than just padding it.  This
+parameter has no effect if @expand is set to %FALSE.  A child is
+always allocated the full height of a #GtkHBox and the full width of a
+#GtkVBox.  This option affects the other dimension.
+@padding: extra space in pixels to put between this child and its
+neighbors, over and above the global amount specified by
+<structfield>spacing</structfield> in #GtkBox-struct.  If @child is a
+widget at one of the reference ends of @box, then @padding pixels are also put
+between @child and the reference edge of @box.
+
+
+<!-- ##### FUNCTION gtk_box_pack_start_defaults ##### -->
+<para>
+Adds @widget to @box, packed with reference to the start of @box.  The
+child is packed after any other child packed with reference to the
+start of @box.
+</para>
+<para>
+Parameters for how to pack the child @widget,
+<structfield>expand</structfield>, <structfield>fill</structfield>,
+and <structfield>padding</structfield> in #GtkBoxChild-struct, are given their default
+values, %TRUE, %TRUE, and 0, respectively.
+</para>
+
+@box: a #GtkBox.
+@widget: the #GtkWidget to be added to @box.
+
+
+<!-- ##### FUNCTION gtk_box_pack_end_defaults ##### -->
+<para>
+Adds @widget to @box, packed with reference to the end of @box.  The
+child is packed after (away from end of) any other child packed with
+reference to the end of @box.
+</para>
+<para>
+Parameters for how to pack the child @widget,
+<structfield>expand</structfield>, <structfield>fill</structfield>,
+and <structfield>padding</structfield> in #GtkBoxChild-struct, are given their default
+values, %TRUE, %TRUE, and 0, respectively.
+</para>
+
+@box: a #GtkBox.
+@widget: the #GtkWidget to be added to @box.
+
+
+<!-- ##### FUNCTION gtk_box_set_homogeneous ##### -->
+<para>
+Sets the <structfield>homogeneous</structfield> field of
+#GtkBox-struct, controlling whether or not all children of @box are
+given equal space in the box.
+</para>
+
+@box: a #GtkBox.
+@homogeneous: a boolean value, %TRUE to create equal allotments,
+%FALSE for variable allotments.
+
+
+<!-- ##### FUNCTION gtk_box_set_spacing ##### -->
+<para>
+Sets the <structfield>spacing</structfield> field of #GtkBox-struct,
+which is the number of pixels to place between children of @box.
+</para>
+
+@box: a #GtkBox.
+@spacing: the number of pixels to put between children.
+
+
+<!-- ##### FUNCTION gtk_box_reorder_child ##### -->
+<para>
+Moves @child to a new @position in the list of @box children.  The
+list is the <structfield>children</structfield> field of
+#GtkBox-struct, and contains both widgets packed #GTK_PACK_START as
+well as widgets packed #GTK_PACK_END, in the order that these widgets
+were added to @box.
+</para>
+<para>
+A widget's position in the @box children list determines where the
+widget is packed into @box.  A child widget at some position in the
+list will be packed just after all other widgets of the same packing
+type that appear earlier in the list.  A negative value of @position is
+interpreted as position 0.
+</para>
+
+@box: a #GtkBox.
+@child: the #GtkWidget to move.
+@position: the new position for @child in the
+<structfield>children</structfield> list of #GtkBox-struct, starting
+from 0.
+
+
+<!-- ##### FUNCTION gtk_box_query_child_packing ##### -->
+<para>
+Returns information about how @child is packed into @box.
+</para>
+
+@box: a #GtkBox.
+@child: the #GtkWidget of the child to query.
+@expand: the returned value of the <structfield>expand</structfield>
+field in #GtkBoxChild-struct.
+@fill: the returned value of the <structfield>fill</structfield> field
+in #GtkBoxChild-struct.
+@padding: the returned value of the <structfield>padding</structfield>
+field in #GtkBoxChild-struct.
+@pack_type: the returned value of the <structfield>pack</structfield>
+field in #GtkBoxChild-struct.
+
+
+<!-- ##### FUNCTION gtk_box_set_child_packing ##### -->
+<para>
+Sets the way @child is packed into @box.
+</para>
+
+@box: a #GtkBox.
+@child: the #GtkWidget of the child to set.
+@expand: the new value of the <structfield>expand</structfield> field
+in #GtkBoxChild-struct.
+@fill: the new value of the <structfield>fill</structfield> field in
+#GtkBoxChild-struct.
+@padding: the new value of the <structfield>padding</structfield>
+field in #GtkBoxChild-struct.
+@pack_type: the new value of the <structfield>pack</structfield> field
+in #GtkBoxChild-struct.
+
+
+<!-- ##### ARG GtkBox:spacing ##### -->
+<para>
+the minimum amount of space to put between children.  Refers to the
+<structfield>spacing</structfield> field of #GtkBox-struct.
+</para>
+
+<!-- ##### ARG GtkBox:homogeneous ##### -->
+<para>
+how to allocate space for children, equally or variably.  Refers to
+the <structfield>homogeneous</structfield> field of #GtkBox-struct.
+</para>
+

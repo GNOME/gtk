@@ -1,0 +1,1268 @@
+<!-- ##### SECTION Title ##### -->
+GtkCList
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkCList ##### -->
+<para>
+
+</para>
+
+@container: 
+@flags: 
+@row_mem_chunk: 
+@cell_mem_chunk: 
+@freeze_count: 
+@internal_allocation: 
+@rows: 
+@row_center_offset: 
+@row_height: 
+@row_list: 
+@row_list_end: 
+@columns: 
+@column_title_area: 
+@title_window: 
+@column: 
+@clist_window: 
+@clist_window_width: 
+@clist_window_height: 
+@hoffset: 
+@voffset: 
+@shadow_type: 
+@selection_mode: 
+@selection: 
+@selection_end: 
+@undo_selection: 
+@undo_unselection: 
+@undo_anchor: 
+@button_actions: 
+@drag_button: 
+@click_cell: 
+@hadjustment: 
+@vadjustment: 
+@xor_gc: 
+@fg_gc: 
+@bg_gc: 
+@cursor_drag: 
+@x_drag: 
+@focus_row: 
+@anchor: 
+@anchor_state: 
+@drag_pos: 
+@htimer: 
+@vtimer: 
+@sort_type: 
+@compare: 
+@sort_column: 
+
+<!-- ##### ENUM GtkCellType ##### -->
+<para>
+
+</para>
+
+@GTK_CELL_EMPTY: 
+@GTK_CELL_TEXT: 
+@GTK_CELL_PIXMAP: 
+@GTK_CELL_PIXTEXT: 
+@GTK_CELL_WIDGET: 
+
+<!-- ##### ENUM GtkButtonAction ##### -->
+<para>
+
+</para>
+
+@GTK_BUTTON_IGNORED: 
+@GTK_BUTTON_SELECTS: 
+@GTK_BUTTON_DRAGS: 
+@GTK_BUTTON_EXPANDS: 
+
+<!-- ##### MACRO GTK_CLIST_FLAGS ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### MACRO GTK_CLIST_SET_FLAG ##### -->
+<para>
+
+</para>
+
+@clist: 
+@flag: 
+
+
+<!-- ##### MACRO GTK_CLIST_UNSET_FLAG ##### -->
+<para>
+
+</para>
+
+@clist: 
+@flag: 
+
+
+<!-- ##### MACRO GTK_CLIST_IN_DRAG ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### MACRO GTK_CLIST_ROW_HEIGHT_SET ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### MACRO GTK_CLIST_SHOW_TITLES ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### MACRO GTK_CLIST_CHILD_HAS_FOCUS ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### MACRO GTK_CLIST_ADD_MODE ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### MACRO GTK_CLIST_AUTO_SORT ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### MACRO GTK_CLIST_AUTO_RESIZE_BLOCKED ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### MACRO GTK_CLIST_REORDERABLE ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### MACRO GTK_CLIST_USE_DRAG_ICONS ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### MACRO GTK_CLIST_DRAW_DRAG_LINE ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### MACRO GTK_CLIST_DRAW_DRAG_RECT ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### MACRO GTK_CLIST_ROW ##### -->
+<para>
+
+</para>
+
+@_glist_: 
+
+
+<!-- ##### MACRO GTK_CELL_TEXT ##### -->
+<para>
+
+</para>
+
+@cell: 
+
+
+<!-- ##### MACRO GTK_CELL_PIXMAP ##### -->
+<para>
+
+</para>
+
+@cell: 
+
+
+<!-- ##### MACRO GTK_CELL_PIXTEXT ##### -->
+<para>
+
+</para>
+
+@cell: 
+
+
+<!-- ##### MACRO GTK_CELL_WIDGET ##### -->
+<para>
+
+</para>
+
+@cell: 
+
+
+<!-- ##### USER_FUNCTION GtkCListCompareFunc ##### -->
+<para>
+
+</para>
+
+@clist: 
+@ptr1: 
+@ptr2: 
+@Returns: 
+
+
+<!-- ##### STRUCT GtkCListColumn ##### -->
+<para>
+
+</para>
+
+@title: 
+@area: 
+@button: 
+@window: 
+@width: 
+@min_width: 
+@max_width: 
+@justification: 
+@visible: 
+@width_set: 
+@resizeable: 
+@auto_resize: 
+@button_passive: 
+
+<!-- ##### STRUCT GtkCListRow ##### -->
+<para>
+
+</para>
+
+@cell: 
+@state: 
+@foreground: 
+@background: 
+@style: 
+@data: 
+@destroy: 
+@fg_set: 
+@bg_set: 
+@selectable: 
+
+<!-- ##### STRUCT GtkCellText ##### -->
+<para>
+
+</para>
+
+@type: 
+@vertical: 
+@horizontal: 
+@style: 
+@text: 
+
+<!-- ##### STRUCT GtkCellPixmap ##### -->
+<para>
+
+</para>
+
+@type: 
+@vertical: 
+@horizontal: 
+@style: 
+@pixmap: 
+@mask: 
+
+<!-- ##### STRUCT GtkCellPixText ##### -->
+<para>
+
+</para>
+
+@type: 
+@vertical: 
+@horizontal: 
+@style: 
+@text: 
+@spacing: 
+@pixmap: 
+@mask: 
+
+<!-- ##### STRUCT GtkCellWidget ##### -->
+<para>
+
+</para>
+
+@type: 
+@vertical: 
+@horizontal: 
+@style: 
+@widget: 
+
+<!-- ##### STRUCT GtkCell ##### -->
+<para>
+
+</para>
+
+@type: 
+@vertical: 
+@horizontal: 
+@style: 
+@widget: 
+
+<!-- ##### STRUCT GtkCListCellInfo ##### -->
+<para>
+
+</para>
+
+@row: 
+@column: 
+
+<!-- ##### STRUCT GtkCListDestInfo ##### -->
+<para>
+
+</para>
+
+@cell: 
+@insert_pos: 
+
+<!-- ##### ENUM GtkCListDragPos ##### -->
+<para>
+
+</para>
+
+@GTK_CLIST_DRAG_NONE: 
+@GTK_CLIST_DRAG_BEFORE: 
+@GTK_CLIST_DRAG_INTO: 
+@GTK_CLIST_DRAG_AFTER: 
+
+<!-- ##### FUNCTION gtk_clist_construct ##### -->
+<para>
+
+</para>
+
+@clist: 
+@columns: 
+@titles: 
+
+
+<!-- ##### FUNCTION gtk_clist_new ##### -->
+<para>
+
+</para>
+
+@columns: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_new_with_titles ##### -->
+<para>
+
+</para>
+
+@columns: 
+@titles: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_shadow_type ##### -->
+<para>
+
+</para>
+
+@clist: 
+@type: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_selection_mode ##### -->
+<para>
+
+</para>
+
+@clist: 
+@mode: 
+
+
+<!-- ##### FUNCTION gtk_clist_freeze ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### FUNCTION gtk_clist_thaw ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### FUNCTION gtk_clist_column_titles_show ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### FUNCTION gtk_clist_column_titles_hide ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### FUNCTION gtk_clist_column_title_active ##### -->
+<para>
+
+</para>
+
+@clist: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_clist_column_title_passive ##### -->
+<para>
+
+</para>
+
+@clist: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_clist_column_titles_active ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### FUNCTION gtk_clist_column_titles_passive ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_title ##### -->
+<para>
+
+</para>
+
+@clist: 
+@column: 
+@title: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_widget ##### -->
+<para>
+
+</para>
+
+@clist: 
+@column: 
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_justification ##### -->
+<para>
+
+</para>
+
+@clist: 
+@column: 
+@justification: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_visibility ##### -->
+<para>
+
+</para>
+
+@clist: 
+@column: 
+@visible: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_resizeable ##### -->
+<para>
+
+</para>
+
+@clist: 
+@column: 
+@resizeable: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_auto_resize ##### -->
+<para>
+
+</para>
+
+@clist: 
+@column: 
+@auto_resize: 
+
+
+<!-- ##### FUNCTION gtk_clist_optimal_column_width ##### -->
+<para>
+
+</para>
+
+@clist: 
+@column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_width ##### -->
+<para>
+
+</para>
+
+@clist: 
+@column: 
+@width: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_min_width ##### -->
+<para>
+
+</para>
+
+@clist: 
+@column: 
+@min_width: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_column_max_width ##### -->
+<para>
+
+</para>
+
+@clist: 
+@column: 
+@max_width: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_row_height ##### -->
+<para>
+
+</para>
+
+@clist: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_clist_moveto ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@column: 
+@row_align: 
+@col_align: 
+
+
+<!-- ##### FUNCTION gtk_clist_row_is_visible ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_get_cell_type ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_text ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@column: 
+@text: 
+
+
+<!-- ##### FUNCTION gtk_clist_get_text ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@column: 
+@text: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_pixmap ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@column: 
+@pixmap: 
+@mask: 
+
+
+<!-- ##### FUNCTION gtk_clist_get_pixmap ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@column: 
+@pixmap: 
+@mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_pixtext ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@column: 
+@text: 
+@spacing: 
+@pixmap: 
+@mask: 
+
+
+<!-- ##### FUNCTION gtk_clist_get_pixtext ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@column: 
+@text: 
+@spacing: 
+@pixmap: 
+@mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_foreground ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@color: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_background ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@color: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_cell_style ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@column: 
+@style: 
+
+
+<!-- ##### FUNCTION gtk_clist_get_cell_style ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_row_style ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@style: 
+
+
+<!-- ##### FUNCTION gtk_clist_get_row_style ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_shift ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@column: 
+@vertical: 
+@horizontal: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_selectable ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@selectable: 
+
+
+<!-- ##### FUNCTION gtk_clist_get_selectable ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_prepend ##### -->
+<para>
+
+</para>
+
+@clist: 
+@text: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_append ##### -->
+<para>
+
+</para>
+
+@clist: 
+@text: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_insert ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@text: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_remove ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_row_data ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_row_data_full ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_clist_get_row_data ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_find_row_from_data ##### -->
+<para>
+
+</para>
+
+@clist: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_select_row ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_clist_unselect_row ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_clist_undo_selection ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### FUNCTION gtk_clist_clear ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### FUNCTION gtk_clist_get_selection_info ##### -->
+<para>
+
+</para>
+
+@clist: 
+@x: 
+@y: 
+@row: 
+@column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_select_all ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### FUNCTION gtk_clist_unselect_all ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### FUNCTION gtk_clist_swap_rows ##### -->
+<para>
+
+</para>
+
+@clist: 
+@row1: 
+@row2: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_compare_func ##### -->
+<para>
+
+</para>
+
+@clist: 
+@cmp_func: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_sort_column ##### -->
+<para>
+
+</para>
+
+@clist: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_sort_type ##### -->
+<para>
+
+</para>
+
+@clist: 
+@sort_type: 
+
+
+<!-- ##### FUNCTION gtk_clist_sort ##### -->
+<para>
+
+</para>
+
+@clist: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_auto_sort ##### -->
+<para>
+
+</para>
+
+@clist: 
+@auto_sort: 
+
+
+<!-- ##### FUNCTION gtk_clist_columns_autosize ##### -->
+<para>
+
+</para>
+
+@clist: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_get_column_title ##### -->
+<para>
+
+</para>
+
+@clist: 
+@column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_get_column_widget ##### -->
+<para>
+
+</para>
+
+@clist: 
+@column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_get_hadjustment ##### -->
+<para>
+
+</para>
+
+@clist: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_get_vadjustment ##### -->
+<para>
+
+</para>
+
+@clist: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clist_row_move ##### -->
+<para>
+
+</para>
+
+@clist: 
+@source_row: 
+@dest_row: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_button_actions ##### -->
+<para>
+
+</para>
+
+@clist: 
+@button: 
+@button_actions: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_hadjustment ##### -->
+<para>
+
+</para>
+
+@clist: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_reorderable ##### -->
+<para>
+
+</para>
+
+@clist: 
+@reorderable: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_use_drag_icons ##### -->
+<para>
+
+</para>
+
+@clist: 
+@use_icons: 
+
+
+<!-- ##### FUNCTION gtk_clist_set_vadjustment ##### -->
+<para>
+
+</para>
+
+@clist: 
+@adjustment: 
+
+
+<!-- ##### SIGNAL GtkCList::select-row ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+@row: 
+@column: 
+@event: 
+
+<!-- ##### SIGNAL GtkCList::unselect-row ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+@row: 
+@column: 
+@event: 
+
+<!-- ##### SIGNAL GtkCList::row-move ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkCList::click-column ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+@column: 
+
+<!-- ##### SIGNAL GtkCList::resize-column ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+@column: 
+@width: 
+
+<!-- ##### SIGNAL GtkCList::toggle-focus-row ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::select-all ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::unselect-all ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::undo-selection ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::start-selection ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::end-selection ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::toggle-add-mode ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::extend-selection ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+@scroll_type: 
+@position: 
+@auto_start_selection: 
+
+<!-- ##### SIGNAL GtkCList::scroll-vertical ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+@scroll_type: 
+@position: 
+
+<!-- ##### SIGNAL GtkCList::scroll-horizontal ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+@scroll_type: 
+@position: 
+
+<!-- ##### SIGNAL GtkCList::abort-column-resize ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### ARG GtkCList:n_columns ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCList:shadow_type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCList:selection_mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCList:row_height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCList:reorderable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCList:titles_active ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCList:use_drag_icons ##### -->
+<para>
+
+</para>
+

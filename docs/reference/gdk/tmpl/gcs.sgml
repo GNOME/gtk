@@ -1,0 +1,314 @@
+<!-- ##### SECTION Title ##### -->
+Graphics Contexts
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GdkGC ##### -->
+<para>
+
+</para>
+
+@dummy_var: 
+
+<!-- ##### STRUCT GdkGCValues ##### -->
+<para>
+
+</para>
+
+@foreground: 
+@background: 
+@font: 
+@function: 
+@fill: 
+@tile: 
+@stipple: 
+@clip_mask: 
+@subwindow_mode: 
+@ts_x_origin: 
+@ts_y_origin: 
+@clip_x_origin: 
+@clip_y_origin: 
+@graphics_exposures: 
+@line_width: 
+@line_style: 
+@cap_style: 
+@join_style: 
+
+<!-- ##### ENUM GdkGCValuesMask ##### -->
+<para>
+
+</para>
+
+@GDK_GC_FOREGROUND: 
+@GDK_GC_BACKGROUND: 
+@GDK_GC_FONT: 
+@GDK_GC_FUNCTION: 
+@GDK_GC_FILL: 
+@GDK_GC_TILE: 
+@GDK_GC_STIPPLE: 
+@GDK_GC_CLIP_MASK: 
+@GDK_GC_SUBWINDOW: 
+@GDK_GC_TS_X_ORIGIN: 
+@GDK_GC_TS_Y_ORIGIN: 
+@GDK_GC_CLIP_X_ORIGIN: 
+@GDK_GC_CLIP_Y_ORIGIN: 
+@GDK_GC_EXPOSURES: 
+@GDK_GC_LINE_WIDTH: 
+@GDK_GC_LINE_STYLE: 
+@GDK_GC_CAP_STYLE: 
+@GDK_GC_JOIN_STYLE: 
+
+<!-- ##### ENUM GdkFunction ##### -->
+<para>
+
+</para>
+
+@GDK_COPY: 
+@GDK_INVERT: 
+@GDK_XOR: 
+@GDK_CLEAR: 
+@GDK_AND: 
+@GDK_AND_REVERSE: 
+@GDK_AND_INVERT: 
+@GDK_NOOP: 
+@GDK_OR: 
+@GDK_EQUIV: 
+@GDK_OR_REVERSE: 
+@GDK_COPY_INVERT: 
+@GDK_OR_INVERT: 
+@GDK_NAND: 
+@GDK_SET: 
+
+<!-- ##### FUNCTION gdk_gc_new ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_gc_new_with_values ##### -->
+<para>
+
+</para>
+
+@window: 
+@values: 
+@values_mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_gc_ref ##### -->
+<para>
+
+</para>
+
+@gc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_gc_unref ##### -->
+<para>
+
+</para>
+
+@gc: 
+
+
+<!-- ##### FUNCTION gdk_gc_destroy ##### -->
+<para>
+
+</para>
+
+@gc: 
+
+
+<!-- ##### FUNCTION gdk_gc_get_values ##### -->
+<para>
+
+</para>
+
+@gc: 
+@values: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_foreground ##### -->
+<para>
+
+</para>
+
+@gc: 
+@color: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_background ##### -->
+<para>
+
+</para>
+
+@gc: 
+@color: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_font ##### -->
+<para>
+
+</para>
+
+@gc: 
+@font: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_function ##### -->
+<para>
+
+</para>
+
+@gc: 
+@function: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_fill ##### -->
+<para>
+
+</para>
+
+@gc: 
+@fill: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_tile ##### -->
+<para>
+
+</para>
+
+@gc: 
+@tile: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_stipple ##### -->
+<para>
+
+</para>
+
+@gc: 
+@stipple: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_ts_origin ##### -->
+<para>
+
+</para>
+
+@gc: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_clip_origin ##### -->
+<para>
+
+</para>
+
+@gc: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_clip_mask ##### -->
+<para>
+
+</para>
+
+@gc: 
+@mask: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_clip_rectangle ##### -->
+<para>
+
+</para>
+
+@gc: 
+@rectangle: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_clip_region ##### -->
+<para>
+
+</para>
+
+@gc: 
+@region: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_subwindow ##### -->
+<para>
+
+</para>
+
+@gc: 
+@mode: 
+
+
+<!-- ##### ENUM GdkSubwindowMode ##### -->
+<para>
+
+</para>
+
+@GDK_CLIP_BY_CHILDREN: 
+@GDK_INCLUDE_INFERIORS: 
+
+<!-- ##### FUNCTION gdk_gc_set_exposures ##### -->
+<para>
+
+</para>
+
+@gc: 
+@exposures: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_line_attributes ##### -->
+<para>
+
+</para>
+
+@gc: 
+@line_width: 
+@line_style: 
+@cap_style: 
+@join_style: 
+
+
+<!-- ##### FUNCTION gdk_gc_set_dashes ##### -->
+<para>
+
+</para>
+
+@gc: 
+@dash_offset: 
+@dash_list: 
+@n: 
+
+
+<!-- ##### FUNCTION gdk_gc_copy ##### -->
+<para>
+
+</para>
+
+@dst_gc: 
+@src_gc: 
+
+

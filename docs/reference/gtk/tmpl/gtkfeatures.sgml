@@ -1,0 +1,57 @@
+<!-- ##### SECTION Title ##### -->
+Feature Test Macros
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### VARIABLE gtk_major_version ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE gtk_minor_version ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE gtk_micro_version ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE gtk_binary_age ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### VARIABLE gtk_interface_age ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_check_version ##### -->
+<para>
+
+</para>
+
+@required_major: 
+@required_minor: 
+@required_micro: 
+@Returns: 
+
+

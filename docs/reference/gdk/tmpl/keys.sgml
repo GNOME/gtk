@@ -1,0 +1,93 @@
+<!-- ##### SECTION Title ##### -->
+Key Values
+
+<!-- ##### SECTION Short_Description ##### -->
+functions for manipulating keyboard codes.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+Key values are the codes which are sent whenever a key is pressed or released.
+They appear in the <structfield>keyval</structfield> field of the
+#GdkEventKey structure, which is passed to signal handlers for the
+"key-press-event" and "key-release-event" signals.
+The complete list of key values can be found in the &lt;gdk/gdkkeysyms.h&gt;
+header file.
+</para>
+<para>
+Key values can be converted into a string representation using
+gdk_keyval_name(). The reverse function, converting a string to a key value,
+is provided by gdk_keyval_from_name().
+</para>
+<para>
+The case of key values can be determined using gdk_keyval_is_upper() and
+gdk_keyval_is_lower(). Key values can be converted to upper or lower case
+using gdk_keyval_to_upper() and gdk_keyval_to_lower().
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gdk_keyval_name ##### -->
+<para>
+Converts a key value into a symbolic name.
+The names are the same as those in the &lt;gdk/gdkkeysyms.h&gt; header file
+but without the leading "GDK_".
+</para>
+
+@keyval: a key value.
+@Returns: a string containing the name of the key, or NULL if @keyval is not
+a valid key. The string should not be modified.
+
+
+<!-- ##### FUNCTION gdk_keyval_from_name ##### -->
+<para>
+Converts a key name to a key value.
+</para>
+
+@keyval_name: a key name.
+@Returns: the corresponding key value, or %GDK_VoidSymbol if the key name is
+not a valid key.
+
+
+<!-- ##### FUNCTION gdk_keyval_is_upper ##### -->
+<para>
+Returns TRUE if the given key value is in upper case.
+</para>
+
+@keyval: a key value.
+@Returns: TRUE if @keyval is in upper case, or if @keyval is not subject to
+case conversion.
+
+
+<!-- ##### FUNCTION gdk_keyval_is_lower ##### -->
+<para>
+Returns TRUE if the given key value is in lower case.
+</para>
+
+@keyval: a key value.
+@Returns: TRUE if @keyval is in lower case, or if @keyval is not subject to
+case conversion.
+
+
+<!-- ##### FUNCTION gdk_keyval_to_upper ##### -->
+<para>
+Converts a key value to upper case, if applicable.
+</para>
+
+@keyval: a key value.
+@Returns: the upper case form of @keyval, or @keyval itself if it is already
+in upper case or it is not subject to case conversion.
+
+
+<!-- ##### FUNCTION gdk_keyval_to_lower ##### -->
+<para>
+Converts a key value to lower case, if applicable.
+</para>
+
+@keyval: a key value.
+@Returns: the lower case form of @keyval, or @keyval itself if it is already
+in lower case or it is not subject to case conversion.
+
+

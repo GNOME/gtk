@@ -1,0 +1,93 @@
+<!-- ##### SECTION Title ##### -->
+GtkColorSelection
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkColorSelection ##### -->
+<para>
+
+</para>
+
+@vbox: 
+@wheel_area: 
+@value_area: 
+@sample_area: 
+@sample_area_eb: 
+@scales: 
+@entries: 
+@opacity_label: 
+@wheel_gc: 
+@value_gc: 
+@sample_gc: 
+@policy: 
+@use_opacity: 
+@timer_active: 
+@timer_tag: 
+@values: 
+@old_values: 
+@wheel_buf: 
+@value_buf: 
+@sample_buf: 
+
+<!-- ##### FUNCTION gtk_color_selection_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_set_update_policy ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@policy: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_set_opacity ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@use_opacity: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_set_color ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@color: 
+
+
+<!-- ##### FUNCTION gtk_color_selection_get_color ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@color: 
+
+
+<!-- ##### SIGNAL GtkColorSelection::color-changed ##### -->
+<para>
+
+</para>
+
+@colorselection: the object which received the signal.
+

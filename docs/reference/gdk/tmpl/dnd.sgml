@@ -1,0 +1,187 @@
+<!-- ##### SECTION Title ##### -->
+Drag and Drop
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gdk_drag_get_selection ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_abort ##### -->
+<para>
+
+</para>
+
+@context: 
+@time: 
+
+
+<!-- ##### FUNCTION gdk_drop_reply ##### -->
+<para>
+
+</para>
+
+@context: 
+@ok: 
+@time: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_drop ##### -->
+<para>
+
+</para>
+
+@context: 
+@time: 
+
+
+<!-- ##### FUNCTION gdk_drag_find_window ##### -->
+<para>
+
+</para>
+
+@context: 
+@drag_window: 
+@x_root: 
+@y_root: 
+@dest_window: 
+@protocol: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_ref ##### -->
+<para>
+
+</para>
+
+@context: 
+
+
+<!-- ##### FUNCTION gdk_drag_begin ##### -->
+<para>
+
+</para>
+
+@window: 
+@targets: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@actions: 
+
+
+<!-- ##### FUNCTION gdk_drag_motion ##### -->
+<para>
+
+</para>
+
+@context: 
+@dest_window: 
+@protocol: 
+@x_root: 
+@y_root: 
+@suggested_action: 
+@possible_actions: 
+@time: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@action: 
+
+
+<!-- ##### FUNCTION gdk_drop_finish ##### -->
+<para>
+
+</para>
+
+@context: 
+@success: 
+@time: 
+
+
+<!-- ##### FUNCTION gdk_drag_get_protocol ##### -->
+<para>
+
+</para>
+
+@xid: 
+@protocol: 
+@Returns: 
+
+
+<!-- ##### ENUM GdkDragProtocol ##### -->
+<para>
+
+</para>
+
+@GDK_DRAG_PROTO_MOTIF: 
+@GDK_DRAG_PROTO_XDND: 
+@GDK_DRAG_PROTO_ROOTWIN: 
+@GDK_DRAG_PROTO_NONE: 
+
+<!-- ##### FUNCTION gdk_drag_context_unref ##### -->
+<para>
+
+</para>
+
+@context: 
+
+
+<!-- ##### STRUCT GdkDragContext ##### -->
+<para>
+
+</para>
+
+@protocol: 
+@is_source: 
+@source_window: 
+@dest_window: 
+@targets: 
+@actions: 
+@suggested_action: 
+@action: 
+@start_time: 
+
+<!-- ##### ENUM GdkDragAction ##### -->
+<para>
+
+</para>
+
+@GDK_ACTION_DEFAULT: 
+@GDK_ACTION_COPY: 
+@GDK_ACTION_MOVE: 
+@GDK_ACTION_LINK: 
+@GDK_ACTION_PRIVATE: 
+@GDK_ACTION_ASK: 
+
+<!-- ##### FUNCTION gdk_drag_status ##### -->
+<para>
+
+</para>
+
+@context: 
+@action: 
+@time: 
+
+

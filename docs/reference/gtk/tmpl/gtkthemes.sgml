@@ -1,0 +1,73 @@
+<!-- ##### SECTION Title ##### -->
+Themes
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkThemeEngine ##### -->
+<para>
+
+</para>
+
+@parse_rc_style: 
+@merge_rc_style: 
+@rc_style_to_style: 
+@duplicate_style: 
+@realize_style: 
+@unrealize_style: 
+@destroy_rc_style: 
+@destroy_style: 
+@set_background: 
+
+<!-- ##### FUNCTION gtk_theme_engine_get ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_theme_engine_ref ##### -->
+<para>
+
+</para>
+
+@engine: 
+
+
+<!-- ##### FUNCTION gtk_theme_engine_unref ##### -->
+<para>
+
+</para>
+
+@engine: 
+
+
+<!-- ##### FUNCTION gtk_themes_init ##### -->
+<para>
+
+</para>
+
+@argc: 
+@argv: 
+
+
+<!-- ##### FUNCTION gtk_themes_exit ##### -->
+<para>
+
+</para>
+
+@error_code: 
+
+

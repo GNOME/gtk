@@ -1,0 +1,344 @@
+<!-- ##### SECTION Title ##### -->
+Drag and Drop
+
+<!-- ##### SECTION Short_Description ##### -->
+Functions for controlling drag and drop handling.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+GTK+ has a rich set of functions for doing inter-process
+communication via the drag-and-drop metaphore. GTK+
+can do drag and drop (DND) via multiple protocols.
+The currently supported protocols are the Xdnd and
+Motif protocols.
+
+As well as the functions listed here, applications
+may need to use some facilities provided for
+<link linkend="gtk-Selections">Selections</link>.
+Also, the Drag and Drop API makes use of signals
+in the #GtkWidget class.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM GtkDestDefaults ##### -->
+<para>
+The #GtkDestfaults enumeration specifies the various
+types of action that will be taken on behalf
+of the user for a drag destination site.
+</para>
+<informaltable pgwide=1 frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry><symbol>GTK_DEST_DEFAULT_MOTION</symbol></entry>
+<entry>
+   If set for a widget, GTK+, during a drag over this
+   widget will check if the drag matches this widget's
+   list of possible targets and actions.
+   GTK+ will then call gtk_drag_status() as appropriate.
+</entry>
+</row>
+
+<row>
+<entry><symbol>GTK_DEST_DEFAULT_HIGHLIGHT</symbol></entry>
+<entry>
+   If set for a widget, GTK+ will draw a highlight on
+   this widget as long as a drag is over this widget
+   and the wiget drag format and action is accetable.</entry>
+</row>
+
+<row>
+<entry><symbol>GTK_DEST_DEFAULT_DROP</symbol></entry>
+<entry>
+   If set for a widget, when a drop occurs, GTK+ will
+   will check if the drag matches this widget's
+   list of possible targets and actions. If so, 
+   GTK+ will call gtk_drag_data_get() on behalf 
+   of the widget. Whether or not the drop is succesful,
+   GTK+ will call gtk_drag_finish(). If the action
+   was a move, then if the drag was succesful, then
+   %TRUE will be passed for the @delete parameter
+   to gtk_drag_finish().
+</entry>
+</row>
+
+<row>
+<entry><symbol>GTK_DEST_DEFAULT_ALL</symbol></entry>
+<entry>
+   If set, specifies that all default actions should
+   be taken.
+</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+@GTK_DEST_DEFAULT_MOTION: 
+@GTK_DEST_DEFAULT_HIGHLIGHT: 
+@GTK_DEST_DEFAULT_DROP: 
+@GTK_DEST_DEFAULT_ALL: 
+
+<!-- ##### ENUM GtkTargetFlags ##### -->
+<para>
+The #GtkTargetFlags enumeration is used to specifies
+constraints on an entry in a GtkTargetTable. 
+<variablelist>
+ <varlistentry><term> %GTK_TARGET_SAME_APP </term>
+ <listitem>
+   <para>
+   If this is set, the target will only be selected
+   for drags within a single application.
+   </para>
+ </listitem>
+ </varlistentry>
+ <varlistentry><term> %GTK_TARGET_SAME_WIDGET </term>
+ <listitem>
+   <para>
+   If this is set, the target will only be selected
+   for drags within a single widget.
+   </para>
+ </listitem>
+ </varlistentry>
+</variablelist>
+
+@GTK_TARGET_SAME_APP: 
+@GTK_TARGET_SAME_WIDGET: 
+
+<!-- ##### FUNCTION gtk_drag_dest_set ##### -->
+<para>
+Set a widget as a potential drop destination.
+</para>
+
+@widget: a widget
+@flags: the flags that specify what actions GTK+ should take
+ on behalf of a widget for drops onto that widget. The @targets
+ and @actions fields only are used if %GTK_DEST_DEFAULT_MOTION
+ or %GTK_DEST_DEFAULT_DROP are given.
+@targets: a pointer to an array of #GtkTargetEntry indicating
+ the drop types that this widget will accept.
+@n_targets: the number of entries in @targets.
+@actions: a bitmask of possible actions for a drop onto this
+ widget.
+
+
+<!-- ##### FUNCTION gtk_drag_dest_set_proxy ##### -->
+<para>
+Set this widget as a proxy for drops to another window.
+</para>
+
+@widget: a #GtkWidget
+@proxy_window: the window to which to forward drag events
+@protocol: the drag protocol which the @proxy_window accepts
+           (You can use gdk_drag_get_protocol() to determine this)
+@use_coordinates: If true, send the same coordinates to the
+                  destination, because it is a embedded 
+                  subwindow.
+
+
+<!-- ##### FUNCTION gtk_drag_dest_unset ##### -->
+<para>
+Clear information about a drop destination set with
+gtk_drag_dest_set(). The widget will no longer receive
+notification of drags.
+</para>
+
+@widget: a #GtkWidget
+
+
+<!-- ##### FUNCTION gtk_drag_finish ##### -->
+<para>
+Inform the drag source that the drop is finished, and
+that the data of the drag will no longer be required.
+</para>
+
+@context: the drag context.
+@success: a flag indicating whether the drop was succesful
+@del: a flag indicating whether the source should delete the
+      original data. (This should be %TRUE for a move)
+@time: the timestamp from the "drag_data_drop" signal.
+
+
+<!-- ##### FUNCTION gtk_drag_get_data ##### -->
+<para>
+Get the data associated with a drag. When the data
+is received or the retrieval fails, GTK+ will emit a 
+"drag_data_received" signal. Failure of the retrieval
+is indicated by the length field of the @selection_data
+signal parameter being negative. However, when gtk_drag_get_data() 
+is called implicitely because the %GTK_DRAG_DEFAULT_DROP was set, 
+then the widget will not receive notification of failed
+drops.
+</para>
+
+@widget: the widget that will receive the "drag_data_received"
+ signal.
+@context: the drag context
+@target: the target (form of the data) to retrieve.
+@time: a timestamp for retrieving the data. This will
+       generally be the time received in a "drag_data_motion"
+       or "drag_data_drop" signal.
+
+
+<!-- ##### FUNCTION gtk_drag_get_source_widget ##### -->
+<para>
+Determine the source widget for a drag.
+</para>
+
+@context: a (destination side) drag context.
+@Returns: if the drag is occurring within a single application,
+          a pointer to the source widget. Otherwise, NULL.
+
+
+<!-- ##### FUNCTION gtk_drag_highlight ##### -->
+<para>
+Draw a highlight around a widget. This will attach
+handlers to  "expose_event" and "draw", so the highlight
+will continue to be displayed until gtk_drag_unhighlight
+is called.
+</para>
+
+@widget: a widget to highlight
+
+
+<!-- ##### FUNCTION gtk_drag_unhighlight ##### -->
+<para>
+Remove a highlight set by gtk_drag_highlight() from
+a widget.
+is called.
+</para>
+
+@widget: a widget to remove the highlight from.
+
+
+<!-- ##### FUNCTION gtk_drag_begin ##### -->
+<para>
+Initiate a drag on the source side. The function
+only needs to be used when the application is
+starting drags itself, and is not needed when
+gtk_drag_source_set() is used.
+</para>
+
+@widget: the source widget.
+@targets: The targets (data formats) in which the
+ source can provide the data.
+@actions: A bitmask of the allowed drag actions for this
+          drag.
+@button: The button the user clicked to start the drag.
+@event: The event that triggered the start of the
+        drag. Usually
+@Returns: The context for this drag.
+
+
+<!-- ##### FUNCTION gtk_drag_set_icon_widget ##### -->
+<para>
+Change the icon for a widget to a given widget. GTK+
+will not destroy the icon, so if you don't want
+it to persist, you should connect to the "drag_end" 
+signal and destroy it yourself.
+</para>
+
+@context: the context for a drag. (This must be called 
+          with a  context for the source side of a drag)
+@widget: A toplevel window to use as an icon.
+@hot_x: The X offset within @widget of the hotspot.
+@hot_y: The Y offset within @widget of the hotspot.
+
+
+<!-- ##### FUNCTION gtk_drag_set_icon_pixmap ##### -->
+<para>
+Sets a given pixmap as the icon for a given drag.
+GTK+ retains a reference count for the arguments, and 
+will release them when they are no longer needed.
+</para>
+
+@context: the context for a drag. (This must be called 
+          with a  context for the source side of a drag)
+@colormap: the colormap of the icon
+@pixmap: the image data for the icon
+@mask: the transparency mask for an image.
+@hot_x: The X offset within @widget of the hotspot.
+@hot_y: The Y offset within @widget of the hotspot.
+
+
+<!-- ##### FUNCTION gtk_drag_set_icon_default ##### -->
+<para>
+Set the icon for a particular drag to the default
+icon.
+</para>
+
+@context: the context for a drag. (This must be called 
+          with a  context for the source side of a drag)
+
+
+<!-- ##### FUNCTION gtk_drag_set_default_icon ##### -->
+<para>
+Change the default drag icon. GTK+ retains a reference count for the
+arguments, and will release them when they are no longer needed.
+</para>
+
+@colormap: the colormap of the icon
+@pixmap: the image data for the icon
+@mask: the transparency mask for an image.
+@hot_x: The X offset within @widget of the hotspot.
+@hot_y: The Y offset within @widget of the hotspot.
+
+
+<!-- ##### FUNCTION gtk_drag_source_set ##### -->
+<para>
+Sets up a widget so that GTK+ will start a drag
+operation when the user clicks and drags on the
+widget. The widget must have a window.
+</para>
+
+@widget: a #GtkWidget
+@start_button_mask: the bitmask of buttons that can start the drag
+@targets: the table of targets that the drag will support
+@n_targets: the number of items in @targets
+@actions: the bitmask of possible actions for a drag from this
+ widget.
+
+
+<!-- ##### FUNCTION gtk_drag_source_set_icon ##### -->
+<para>
+Sets the icon that will be used for drags from a 
+particular widget. GTK+ retains a reference count
+for the arguments, and will release them when
+they are no longer needed.
+</para>
+
+@widget: a #GtkWidget
+@colormap: the colormap of the icon
+@pixmap: the image data for the icon
+@mask: the transparency mask for an image.
+
+
+<!-- ##### FUNCTION gtk_drag_source_unset ##### -->
+<para>
+Undo the effects of gtk_drag_source_set().
+</para>
+
+@widget: a #GtkWidget
+
+
+<!-- ##### FUNCTION gtk_drag_source_handle_event ##### -->
+<para>
+Internal function.
+</para>
+
+@widget: 
+@event: 
+
+
+<!-- ##### FUNCTION gtk_drag_dest_handle_event ##### -->
+<para>
+Internal function.
+</para>
+
+@toplevel: 
+@event: 
+
+

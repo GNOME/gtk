@@ -1,0 +1,201 @@
+<!-- ##### SECTION Title ##### -->
+GtkEntry
+
+<!-- ##### SECTION Short_Description ##### -->
+a single line text entry field.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkEntry widget is a single line text entry
+widget. A fairly large set of key bindings are supported
+by default. If the entered text is longer than the allocation
+of the widget, the widget will scroll so that the cursor
+position is visible. 
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkText</term>
+<listitem><para>a widget for handling multi-line text entry.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### STRUCT GtkEntry ##### -->
+<para>
+The #GtkEntry-struct struct contains only private data.
+</para>
+
+@editable: 
+@text_area: 
+@backing_pixmap: 
+@cursor: 
+@text: 
+@text_size: 
+@text_length: 
+@text_max_length: 
+@scroll_offset: 
+@visible: 
+@timer: 
+@button: 
+@char_offset: 
+@text_mb: 
+@text_mb_dirty: 
+@use_wchar: 
+
+<!-- ##### FUNCTION gtk_entry_new ##### -->
+<para>
+Creates a new #GtkEntry widget.
+</para>
+
+@Returns: a new #GtkEntry.
+
+
+<!-- ##### FUNCTION gtk_entry_new_with_max_length ##### -->
+<para>
+Creates a new #GtkEntry widget with the given maximum
+length.
+</para>
+<para>
+Note: the existance of this function is inconsistent
+with the rest of the GTK+ API. The normal setup would
+be to just require the user to make an extra call
+to gtk_entry_set_max_length() instead. It is not
+expected that this function will be removed, but
+it would be better practice not to use it.
+</para>
+
+@max: the new maximum length.
+@Returns: a new #GtkEntry.
+
+
+<!-- ##### FUNCTION gtk_entry_set_text ##### -->
+<para>
+Sets the text in the widget to the given
+value, replacing the current contents.
+</para>
+
+@entry: a #GtkEntry.
+@text: the new text.
+
+
+<!-- ##### FUNCTION gtk_entry_append_text ##### -->
+<para>
+Appends the given text to the contents of the widget.
+</para>
+
+@entry: a #GtkEntry.
+@text: the text to append.
+
+
+<!-- ##### FUNCTION gtk_entry_prepend_text ##### -->
+<para>
+Prepends the given text to the contents of th ewidget.
+</para>
+
+@entry: a #GtkEntry.
+@text: the text to prepend.
+
+
+<!-- ##### FUNCTION gtk_entry_set_position ##### -->
+<para>
+Sets the cursor position in an entry to the given 
+value. This function is obsolete. You should use
+gtk_editable_set_position() instead.
+</para>
+
+@entry: a #GtkEntry.
+@position: the position of the cursor. The cursor is displayed
+           before the character with the given (base 0) index
+           in the widget. The value must be less than or
+           equal to the number of characters in the widget.
+           A value of -1 indicates that the position should
+           be set after the last character in the entry.
+           Note that this position is in characters, not in
+           bytes.
+
+
+<!-- ##### FUNCTION gtk_entry_get_text ##### -->
+<para>
+Retrieve the contents of the entry widget. The returned
+pointer points to internally allocated storage in the
+widget and must not be freed, modified or stored. For
+this reason, this function is deprecated. Use 
+gtk_editable_get_chars() instead.
+</para>
+
+@entry: a #GtkEntry.
+@Returns: the pointer the the contents of the text widget as a
+          string.
+
+
+<!-- ##### FUNCTION gtk_entry_select_region ##### -->
+<para>
+Selects a region of text. The characters that
+are selected are those characters at positions from
+@start_pos up to, but not including @end_pos. If 
+@end_pos is negative, then the the characters selected
+will be those characters from @start_pos to the end
+of the text. This function is obsolete. You should
+use gtk_editable_select_region() instead.
+</para>
+
+@entry: a #GtkEntry.
+@start: the starting position.
+@end: the end position.
+
+
+<!-- ##### FUNCTION gtk_entry_set_visibility ##### -->
+<para>
+Sets whether the contents of the entry are visible or
+not. When visibility is set to %FALSE, characters
+are displayed as asterisks (*'s), and will also appear
+that way when the text in the entry widget is copied
+elsewhere.
+</para>
+
+@entry: a #GtkEntry.
+@visible: %TRUE if the contents of the entry are displayd
+          as plaintext.
+
+
+<!-- ##### FUNCTION gtk_entry_set_editable ##### -->
+<para>
+Determines if the user can edit the text in the editable
+widget or not. This function is obsolete. You should
+use gtk_editable_set_editable() instead.
+</para>
+
+@entry: a #GtkEntry.
+@editable: %TRUE if the user is allowed to edit the text
+  in the widget.
+
+
+<!-- ##### FUNCTION gtk_entry_set_max_length ##### -->
+<para>
+Sets the maximum allowed length of the contents 
+of the widget. If the current contents are longer
+than the given length, then they will be truncated
+to fit.
+</para>
+
+@entry: a #GtkEntry.
+@max: the new maximum length.
+
+
+<!-- ##### ARG GtkEntry:max_length ##### -->
+<para>
+Determines the maximum allowed length of the contents
+of the widget. See gtk_entry_set_max_length().
+</para>
+
+<!-- ##### ARG GtkEntry:visibility ##### -->
+<para>
+Determines whether the contents of the entry widget
+are visible or not. See gtk_entry_set_visibility().
+</para>
+

@@ -1,0 +1,120 @@
+<!-- ##### SECTION Title ##### -->
+Private Information
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM GtkPrivateFlags ##### -->
+<para>
+
+</para>
+
+@PRIVATE_GTK_USER_STYLE: 
+@PRIVATE_GTK_REDRAW_PENDING: 
+@PRIVATE_GTK_RESIZE_PENDING: 
+@PRIVATE_GTK_RESIZE_NEEDED: 
+@PRIVATE_GTK_LEAVE_PENDING: 
+@PRIVATE_GTK_HAS_SHAPE_MASK: 
+@PRIVATE_GTK_IN_REPARENT: 
+@PRIVATE_GTK_IS_OFFSCREEN: 
+
+<!-- ##### MACRO GTK_PRIVATE_FLAGS ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_USER_STYLE ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GTK_WIDGET_REDRAW_PENDING ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GTK_CONTAINER_RESIZE_PENDING ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GTK_WIDGET_RESIZE_NEEDED ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GTK_WIDGET_LEAVE_PENDING ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GTK_WIDGET_HAS_SHAPE_MASK ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GTK_WIDGET_IN_REPARENT ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GTK_WIDGET_IS_OFFSCREEN ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GTK_PRIVATE_SET_FLAG ##### -->
+<para>
+
+</para>
+
+@wid: 
+@flag: 
+
+
+<!-- ##### MACRO GTK_PRIVATE_UNSET_FLAG ##### -->
+<para>
+
+</para>
+
+@wid: 
+@flag: 
+
+

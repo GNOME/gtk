@@ -1,0 +1,152 @@
+<!-- ##### SECTION Title ##### -->
+Properties and Atoms
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### TYPEDEF GdkAtom ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM GdkPropertyState ##### -->
+<para>
+
+</para>
+
+@GDK_PROPERTY_NEW_VALUE: 
+@GDK_PROPERTY_DELETE: 
+
+<!-- ##### ENUM GdkPropMode ##### -->
+<para>
+
+</para>
+
+@GDK_PROP_MODE_REPLACE: 
+@GDK_PROP_MODE_PREPEND: 
+@GDK_PROP_MODE_APPEND: 
+
+<!-- ##### ENUM GdkTarget ##### -->
+<para>
+
+</para>
+
+@GDK_TARGET_BITMAP: 
+@GDK_TARGET_COLORMAP: 
+@GDK_TARGET_DRAWABLE: 
+@GDK_TARGET_PIXMAP: 
+@GDK_TARGET_STRING: 
+
+<!-- ##### FUNCTION gdk_text_property_to_text_list ##### -->
+<para>
+
+</para>
+
+@encoding: 
+@format: 
+@text: 
+@length: 
+@list: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_free_text_list ##### -->
+<para>
+
+</para>
+
+@list: 
+
+
+<!-- ##### FUNCTION gdk_string_to_compound_text ##### -->
+<para>
+
+</para>
+
+@str: 
+@encoding: 
+@format: 
+@ctext: 
+@length: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_free_compound_text ##### -->
+<para>
+
+</para>
+
+@ctext: 
+
+
+<!-- ##### FUNCTION gdk_atom_intern ##### -->
+<para>
+
+</para>
+
+@atom_name: 
+@only_if_exists: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_atom_name ##### -->
+<para>
+
+</para>
+
+@atom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_property_get ##### -->
+<para>
+
+</para>
+
+@window: 
+@property: 
+@type: 
+@offset: 
+@length: 
+@pdelete: 
+@actual_property_type: 
+@actual_format: 
+@actual_length: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_property_change ##### -->
+<para>
+
+</para>
+
+@window: 
+@property: 
+@type: 
+@format: 
+@mode: 
+@data: 
+@nelements: 
+
+
+<!-- ##### FUNCTION gdk_property_delete ##### -->
+<para>
+
+</para>
+
+@window: 
+@property: 
+
+

@@ -1,0 +1,98 @@
+<!-- ##### SECTION Title ##### -->
+GtkViewport
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkViewport ##### -->
+<para>
+
+</para>
+
+@bin: 
+@shadow_type: 
+@view_window: 
+@bin_window: 
+@hadjustment: 
+@vadjustment: 
+
+<!-- ##### FUNCTION gtk_viewport_new ##### -->
+<para>
+
+</para>
+
+@hadjustment: 
+@vadjustment: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_viewport_get_hadjustment ##### -->
+<para>
+
+</para>
+
+@viewport: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_viewport_get_vadjustment ##### -->
+<para>
+
+</para>
+
+@viewport: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_viewport_set_hadjustment ##### -->
+<para>
+
+</para>
+
+@viewport: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_viewport_set_vadjustment ##### -->
+<para>
+
+</para>
+
+@viewport: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_viewport_set_shadow_type ##### -->
+<para>
+
+</para>
+
+@viewport: 
+@type: 
+
+
+<!-- ##### ARG GtkViewport:hadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkViewport:vadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkViewport:shadow_type ##### -->
+<para>
+
+</para>
+

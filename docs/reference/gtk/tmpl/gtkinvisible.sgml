@@ -1,0 +1,31 @@
+<!-- ##### SECTION Title ##### -->
+GtkInvisible
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkInvisible ##### -->
+<para>
+
+</para>
+
+@bin: 
+
+<!-- ##### FUNCTION gtk_invisible_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+

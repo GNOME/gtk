@@ -1,0 +1,38 @@
+<!-- ##### SECTION Title ##### -->
+GtkColorSelectionDialog
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkColorSelectionDialog ##### -->
+<para>
+
+</para>
+
+@window: 
+@colorsel: 
+@main_vbox: 
+@ok_button: 
+@reset_button: 
+@cancel_button: 
+@help_button: 
+
+<!-- ##### FUNCTION gtk_color_selection_dialog_new ##### -->
+<para>
+
+</para>
+
+@title: 
+@Returns: 
+
+

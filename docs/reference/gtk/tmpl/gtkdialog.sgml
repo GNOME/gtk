@@ -1,0 +1,122 @@
+<!-- ##### SECTION Title ##### -->
+GtkDialog
+
+<!-- ##### SECTION Short_Description ##### -->
+
+create popup windows.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+Dialog boxes are a convenient way to prompt the user for a small amount of
+input, eg. to display
+a message, ask a question, or anything else that does not require extensive
+effort on the user's part.
+</para>
+<para>
+Gtk+ treats a dialog as a window split horizontally. The top section is a
+#GtkVBox, and is where widgets such as a #GtkLabel or a #GtkEntry should be
+packed. The second area is known as the <structfield>action_area</structfield>. This is generally used
+for packing buttons into the dialog which may perform functions such as cancel, ok, or apply. The two
+areas are separated by a #GtkHSeparator.
+</para>
+<para>
+#GtkDialog boxes are created with a call to gtk_dialog_new().
+</para>
+<para>
+If 'dialog' is a newly created dialog, the two primary areas of the window 
+can be accessed as GTK_DIALOG(dialog)->vbox and GTK_DIALOG(dialog)->action_area,
+as can be seen from the example, below.
+</para>
+<para>
+A 'modal' dialog (that is, one which freezes the rest of the application
+from user input), can be created by calling gtk_window_set_modal() on the dialog. Use the
+GTK_WINDOW() macro to cast the widget returned from gtk_dialog_new() into a
+#GtkWindow.
+</para>
+<para>
+<example>
+<title>Using a #GtkDialog to keep the user informed.</title>
+<programlisting>
+
+/* Function to open a dialog box displaying the message provided. */
+
+void quick_message(#gchar *message) {
+
+   #GtkWidget *dialog, *label, *okay_button;
+   
+   /* Create the widgets */
+   
+   dialog = gtk_dialog_new();
+   label = gtk_label_new (message);
+   okay_button = gtk_button_new_with_label("Okay");
+   
+   /* Ensure that the dialog box is destroyed when the user clicks ok. */
+   
+   gtk_signal_connect_object (GTK_OBJECT (okay_button), "clicked",
+                              GTK_SIGNAL_FUNC (gtk_widget_destroy), dialog);
+   gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->action_area),
+                      okay_button);
+
+   /* Add the label, and show everything we've added to the dialog. */
+
+   gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox),
+                      label);
+   gtk_widget_show_all (dialog);
+}
+
+</programlisting>
+</example>
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+
+<para>
+<variablelist>
+<varlistentry>
+<term>#GtkVBox</term>
+<listitem><para>Pack widgets vertically.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>#GtkWindow</term>
+<listitem><para>Alter the properties of your dialog box.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>#GtkButton</term>
+<listitem><para>Add them to the <structfield>action_area</structfield> to get a
+response from the user.</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+<!-- ##### STRUCT GtkDialog ##### -->
+<para>
+<structfield>window</structfield> is a #GtkWindow, but should not be
+modified directly, (use the functions provided, such as
+gtk_window_set_title(). See the #GtkWindow section for more).
+</para>
+<para>
+<structfield>vbox</structfield> is a #GtkVBox - the main part of the dialog box.
+</para>
+<para>
+<structfield>action_area</structfield> is a #GtkHBox packed below the dividing #GtkHSeparator in the dialog. It is treated exactly the same as any other #GtkHBox.
+</para>
+
+@window: 
+@vbox: 
+@action_area: 
+
+<!-- ##### STRUCT GtkDialogButton ##### -->
+<para>
+Deprecated.
+</para>
+
+
+<!-- ##### FUNCTION gtk_dialog_new ##### -->
+<para>
+Creates a new dialog box. Widgets should not be packed into this #GtkWindow
+directly, but into the vbox and action_area, as described above. 
+</para>
+
+@Returns: a #GtkWidget - the newly created dialog box.
+
+

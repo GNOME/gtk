@@ -1,0 +1,31 @@
+<!-- ##### SECTION Title ##### -->
+GtkHSeparator
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkHSeparator ##### -->
+<para>
+
+</para>
+
+@separator: 
+
+<!-- ##### FUNCTION gtk_hseparator_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+

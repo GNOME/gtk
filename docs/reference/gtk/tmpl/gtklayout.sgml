@@ -1,0 +1,130 @@
+<!-- ##### SECTION Title ##### -->
+GtkLayout
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkLayout ##### -->
+<para>
+
+</para>
+
+@container: 
+@children: 
+@width: 
+@height: 
+@xoffset: 
+@yoffset: 
+@hadjustment: 
+@vadjustment: 
+@bin_window: 
+@visibility: 
+@configure_serial: 
+@scroll_x: 
+@scroll_y: 
+@freeze_count: 
+
+<!-- ##### FUNCTION gtk_layout_new ##### -->
+<para>
+
+</para>
+
+@hadjustment: 
+@vadjustment: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_layout_put ##### -->
+<para>
+
+</para>
+
+@layout: 
+@widget: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_layout_move ##### -->
+<para>
+
+</para>
+
+@layout: 
+@widget: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_layout_set_size ##### -->
+<para>
+
+</para>
+
+@layout: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_layout_freeze ##### -->
+<para>
+
+</para>
+
+@layout: 
+
+
+<!-- ##### FUNCTION gtk_layout_thaw ##### -->
+<para>
+
+</para>
+
+@layout: 
+
+
+<!-- ##### FUNCTION gtk_layout_get_hadjustment ##### -->
+<para>
+
+</para>
+
+@layout: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_layout_get_vadjustment ##### -->
+<para>
+
+</para>
+
+@layout: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_layout_set_hadjustment ##### -->
+<para>
+
+</para>
+
+@layout: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_layout_set_vadjustment ##### -->
+<para>
+
+</para>
+
+@layout: 
+@adjustment: 
+
+

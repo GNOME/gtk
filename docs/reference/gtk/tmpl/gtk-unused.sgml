@@ -1,0 +1,24 @@
+<!-- ##### ARG GtkPreview:expand ##### -->
+<para>
+Determines the way that the the preview widget behaves
+when the size it is allocated is larger than the requested
+size. See gtk_preview_set_expand().
+</para>
+
+
+<!-- ##### ARG GtkHandleBox:snap_edge ##### -->
+<para>
+Determines the snap edge of a handlebox. The snap edge is
+the edge of the detached child that must be aligned
+with the corresponding edge of the "ghost" left
+behind when the child was detached to reattach
+the torn-off window. See gtk_handle_box_set_snap_edge().
+</para>
+
+
+<!-- ##### ARG GtkHandleBox:handle_position ##### -->
+<para>
+Determines the side of the handlebox where the handle is drawn.
+</para>
+
+

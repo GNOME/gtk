@@ -1,0 +1,68 @@
+<!-- ##### SECTION Title ##### -->
+GtkItem
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkItem ##### -->
+<para>
+
+</para>
+
+@bin: 
+
+<!-- ##### FUNCTION gtk_item_select ##### -->
+<para>
+
+</para>
+
+@item: 
+
+
+<!-- ##### FUNCTION gtk_item_deselect ##### -->
+<para>
+
+</para>
+
+@item: 
+
+
+<!-- ##### FUNCTION gtk_item_toggle ##### -->
+<para>
+
+</para>
+
+@item: 
+
+
+<!-- ##### SIGNAL GtkItem::select ##### -->
+<para>
+
+</para>
+
+@item: the object which received the signal.
+
+<!-- ##### SIGNAL GtkItem::deselect ##### -->
+<para>
+
+</para>
+
+@item: the object which received the signal.
+
+<!-- ##### SIGNAL GtkItem::toggle ##### -->
+<para>
+
+</para>
+
+@item: the object which received the signal.
+

@@ -1,0 +1,196 @@
+<!-- ##### SECTION Title ##### -->
+Bitmaps and Pixmaps
+
+<!-- ##### SECTION Short_Description ##### -->
+Offscreen drawables.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+Pixmaps are offscreen drawables. They can be drawn upon with the
+standard drawing primitives, then copied to another drawable (such as
+a #GdkWindow) with gdk_pixmap_draw(). The depth of a pixmap
+is the number of bits per pixels. Bitmaps are simply pixmaps
+with a depth of 1. (That is, they are monochrome bitmaps - each
+pixel can be either on or off).
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+</para>
+
+<!-- ##### STRUCT GdkPixmap ##### -->
+<para>
+An opaque structure representing an offscreen drawable.
+Pointers to structures of type #GdkPixmap, #GdkBitmap,
+and #GdkWindow, can often be used interchangeably. 
+The type #GdkDrawable refers generically to any of
+these types.
+</para>
+
+@user_data: 
+
+<!-- ##### FUNCTION gdk_pixmap_new ##### -->
+<para>
+Create a new pixmap with a given size and depth.
+</para>
+
+@window: a #GdkWindow, used to determine default values for the
+  new pixmap. Can be %NULL if @depth is specified,
+@width: The width of the new pixmap in pixels.
+@height: The height of the new pixmap in pixels.
+@depth: The depth (number of bits per pixel) of the new pixmap. 
+  If -1, and @window is not %NULL, the depth of the new
+  pixmap will be equal to that of @window.
+@Returns: the #GdkBitmap
+
+
+<!-- ##### FUNCTION gdk_bitmap_create_from_data ##### -->
+<para>
+Creates a new bitmap from data in XBM format.
+</para>
+
+@window: a #GdkWindow, used to determine default values for the
+  new pixmap. Can be %NULL, in which case the root window is
+  used.
+@data: a pointer to the XBM data.
+@width: the width of the new pixmap in pixels.
+@height: the height of the new pixmap in pixels.
+@Returns: the #GdkBitmap
+
+
+<!-- ##### FUNCTION gdk_pixmap_create_from_data ##### -->
+<para>
+Create a two-color pixmap from data in XBM data.
+</para>
+
+@window: a #GdkWindow, used to determine default values for the
+  new pixmap. Can be %NULL, if the depth is given.
+@data: a pointer to the data.
+@width: the width of the new pixmap in pixels.
+@height: the height of the new pixmap in pixels.
+@depth: the depth (number of bits per pixel) of the new pixmap.
+@fg: the foreground color.
+@bg: the background color.
+@Returns: the #GdkPixmap
+
+
+<!-- ##### FUNCTION gdk_pixmap_create_from_xpm ##### -->
+<para>
+Create a pixmap from a XPM file.
+</para>
+
+@window: a #GdkWindow, used to determine default values for the
+  new pixmap.
+@mask: a pointer to a place to store a bitmap representing
+the transparency mask of the XPM file. Can be %NULL,
+in which case transparency will be ignored.
+@transparent_color: the color to be used for the pixels
+that are transparent in the input file. Can be %NULL,
+in which case a default color will be used.
+@filename: the filename of a file containing XPM data.
+@Returns: the #GdkPixmap
+
+
+<!-- ##### FUNCTION gdk_pixmap_colormap_create_from_xpm ##### -->
+<para>
+Create a pixmap from a XPM file using a particular colormap.
+</para>
+
+@window: a #GdkWindow, used to determine default values for the
+  new pixmap. Can be %NULL if @colormap is given.
+@colormap: the #GdkColormap that the new pixmap will be use.
+  If omitted, the colormap for @window will be used.
+@mask: a pointer to a place to store a bitmap representing
+the transparency mask of the XPM file. Can be %NULL,
+in which case transparency will be ignored.
+@transparent_color: the color to be used for the pixels
+that are transparent in the input file. Can be %NULL,
+in which case a default color will be used.
+@filename: the filename of a file containing XPM data.
+@Returns: the #GdkPixmap.
+
+
+<!-- ##### FUNCTION gdk_pixmap_create_from_xpm_d ##### -->
+<para>
+Create a pixmap from data in XPM format.
+</para>
+
+@window: a #GdkWindow, used to determine default values for the
+  new pixmap.
+@mask: Pointer to a place to store a bitmap representing
+the transparency mask of the XPM file. Can be %NULL,
+in which case transparency will be ignored.
+@transparent_color: This color will be used for the pixels
+that are transparent in the input file. Can be %NULL
+in which case a default color will be used.
+@data: Pointer to a string containing the XPM data.
+@Returns: the #GdkPixmap
+
+
+<!-- ##### FUNCTION gdk_pixmap_colormap_create_from_xpm_d ##### -->
+<para>
+Create a pixmap from data in XPM format using a particular
+colormap.
+</para>
+
+@window: a #GdkWindow, used to determine default values for the
+  new pixmap. Can be %NULL if @colormap is given.
+@colormap: the #GdkColormap that the new pixmap will be use.
+  If omitted, the colormap for @window will be used.
+@mask: a pointer to a place to store a bitmap representing
+the transparency mask of the XPM file. Can be %NULL,
+in which case transparency will be ignored.
+@transparent_color: the color to be used for the pixels
+that are transparent in the input file. Can be %NULL,
+in which case a default color will be used.
+@data: Pointer to a string containing the XPM data.
+@Returns: the #GdkPixmap.
+
+
+<!-- ##### FUNCTION gdk_pixmap_ref ##### -->
+<para>
+Increase the reference count of a pixmap.
+</para>
+
+@pixmap: a #GdkPixmap
+@Returns: @pixmap
+
+
+<!-- ##### FUNCTION gdk_pixmap_unref ##### -->
+<para>
+Decrease the reference count of a pixmap. If the resulting
+reference count is zero, destroy the pixmap.
+</para>
+
+@pixmap: a #GdkPixmap
+
+
+<!-- ##### STRUCT GdkBitmap ##### -->
+<para>
+An opaque structure representing an offscreen drawable of depth
+1. Pointers to structures of type GdkPixmap, #GdkBitmap, and
+#GdkWindow, can often be used interchangeably.  The type #GdkDrawable
+refers generically to any of these types.
+</para>
+
+@user_data: 
+
+<!-- ##### FUNCTION gdk_bitmap_ref ##### -->
+<para>
+Increase the reference count of a bitmap. An alias
+for gdk_pixmap_ref().
+</para>
+
+@pixmap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_bitmap_unref ##### -->
+<para>
+Decrease the reference count of a bitmap. An alias
+for gdk_pixmap_unref().
+</para>
+
+@pixmap: 
+
+

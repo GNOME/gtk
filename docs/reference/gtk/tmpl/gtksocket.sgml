@@ -1,0 +1,132 @@
+<!-- ##### SECTION Title ##### -->
+GtkSocket
+
+<!-- ##### SECTION Short_Description ##### -->
+Container for widgets from other processes.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+Together with #GtkPlug, #GtkSocket provides the ability
+to embed widgets from one process into another process
+in a fashion that is transparent to the user. One
+process creates a #GtkSocket widget and, passes the
+XID of that widget's window to the other process, 
+which then creates a #GtkPlug window with that XID.
+Any widgets contained in the #GtkPlug then will appear
+inside the first applications window.
+</para>
+
+<para>
+The XID of the socket's window is obtained by using
+the GTK_WINDOW_XWINDOW() macro from the header
+file &lt;gdk/gdkx.h&gt;. Before using this macro,
+the socket must have been realized, and for hence,
+have been added to its parent.
+
+<example>
+<title> Obtaining the XID of a socket </title>
+<programlisting>
+#include &lt;gdk/gdkx.h&gt;
+
+GtkWidget *socket = gtk_socket_new();
+gtk_widget_show (socket);
+gtk_container_add (GTK_CONTAINER (parent), socket);
+
+/* The following call is only necessary if one of
+ * the ancestors of the socket is not yet visible.
+ */
+gtk_widget_realize (socket);
+g_print ("The XID of the sockets window is %#x\n",
+         GDK_WINDOW_XWINDOW (socket->window));
+</programlisting>
+</example>
+</para>
+
+<para>
+Note that if you pass the XID of the socket to another
+process that will create a plug in the socket, you 
+must make sure that the socket widget is not destroyed
+until that plug is created. Violating this rule will
+cause unpredictable consequences, the most likely
+consequence being that the plug will appear as a 
+separate toplevel window. You can check if the plug
+has been created by examining the
+<StructField>plug_window</StructField> field of the
+#GtkSocket structure. If this field is non-NULL, 
+then the plug has been succesfully created inside
+of the socket.
+</para>
+
+<para>
+When GTK+ is notified that the embedded window has been
+destroyed, then it will destroy the socket as well. You
+should always, therefore, be prepared for your sockets
+to be destroyed at any time when the main event loop
+is running.
+</para>
+
+<para>
+A socket can also be used to swallow arbitrary 
+pre-existing top-level windows using gtk_socket_steal(),
+though the integration when this is done will not be as close
+as between a #GtkPlug and a #GtkSocket.</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkPlug</term>
+<listitem><para>the widget that plugs into a #GtkSocket.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### STRUCT GtkSocket ##### -->
+<para>
+The #GtkEditable structure contains the following field.
+(This field should be considered read-only. It should
+never be set by an application.)
+
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>#GdkWindow *plug_window;</entry>
+<entry>the window embedded inside this #GtkSocket.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@container: 
+@request_width: 
+@request_height: 
+@current_width: 
+@current_height: 
+@plug_window: 
+@same_app: 
+@focus_in: 
+@have_size: 
+@need_map: 
+
+<!-- ##### FUNCTION gtk_socket_new ##### -->
+<para>
+Create a new empty #GtkSocket.
+</para>
+
+@Returns: the new #GtkSocket.
+
+
+<!-- ##### FUNCTION gtk_socket_steal ##### -->
+<para>
+Reparents a pre-existing toplevel window into a
+#GtkSocket.
+</para>
+
+@socket: a #GtkSocket.
+@wid: the XID of an existing toplevel window.
+
+

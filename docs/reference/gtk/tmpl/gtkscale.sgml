@@ -1,0 +1,100 @@
+<!-- ##### SECTION Title ##### -->
+GtkScale
+
+<!-- ##### SECTION Short_Description ##### -->
+a base class for #GtkHScale and #GtkVScale.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkScale widget is an abstract class, used only for deriving the
+subclasses #GtkHScale and #GtkVScale.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkScale ##### -->
+<para>
+The #GtkScale-struct struct contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>#guint <structfield>draw_value</structfield>;</entry>
+<entry>non-zero if the scale's current value is displayed next to the
+slider.</entry>
+</row>
+
+<row>
+<entry>#guint <structfield>value_pos</structfield>;</entry>
+<entry>the position in which the textual value is displayed, selected from
+#GtkPositionType.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@range: 
+@draw_value: 
+@value_pos: 
+
+<!-- ##### FUNCTION gtk_scale_set_digits ##### -->
+<para>
+Sets the number of decimal places that are displayed in the value.
+</para>
+
+@scale: a #GtkScale.
+@digits: the number of decimal places to display, e.g. use 1 to display 1.0,
+2 to display 1.00 etc.
+
+
+<!-- ##### FUNCTION gtk_scale_set_draw_value ##### -->
+<para>
+Specifies whether the current value is displayed as a string next to the
+slider.
+</para>
+
+@scale: a #GtkScale.
+@draw_value: 
+
+
+<!-- ##### FUNCTION gtk_scale_set_value_pos ##### -->
+<para>
+Sets the position in which the current value is displayed.
+</para>
+
+@scale: a #GtkScale.
+@pos: the position in which the current value is displayed.
+
+
+<!-- ##### FUNCTION gtk_scale_get_value_width ##### -->
+<para>
+An internal function used to get the maximum width needed to display the value
+string.
+</para>
+
+@scale: a #GtkScale.
+@Returns: the maximum width needed to display the value string.
+
+
+<!-- ##### ARG GtkScale:digits ##### -->
+<para>
+The number of decimal places that are displayed in the value.
+</para>
+
+<!-- ##### ARG GtkScale:draw_value ##### -->
+<para>
+If the current value is displayed as a string next to the slider.
+</para>
+
+<!-- ##### ARG GtkScale:value_pos ##### -->
+<para>
+The position in which the current value is displayed.
+</para>
+

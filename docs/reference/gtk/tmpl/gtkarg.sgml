@@ -1,0 +1,147 @@
+<!-- ##### SECTION Title ##### -->
+Object Properties
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkArgInfo ##### -->
+<para>
+
+</para>
+
+@class_type: 
+@name: 
+@type: 
+@arg_flags: 
+@full_name: 
+@arg_id: 
+@seq_id: 
+
+<!-- ##### FUNCTION gtk_arg_new ##### -->
+<para>
+
+</para>
+
+@arg_type: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_arg_copy ##### -->
+<para>
+
+</para>
+
+@src_arg: 
+@dest_arg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_arg_free ##### -->
+<para>
+
+</para>
+
+@arg: 
+@free_contents: 
+
+
+<!-- ##### FUNCTION gtk_args_collect ##### -->
+<para>
+
+</para>
+
+@object_type: 
+@arg_info_hash_table: 
+@arg_list_p: 
+@info_list_p: 
+@first_arg_name: 
+@var_args: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_args_collect_cleanup ##### -->
+<para>
+
+</para>
+
+@arg_list: 
+@info_list: 
+
+
+<!-- ##### FUNCTION gtk_arg_get_info ##### -->
+<para>
+
+</para>
+
+@object_type: 
+@arg_info_hash_table: 
+@arg_name: 
+@info_p: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_arg_type_new_static ##### -->
+<para>
+
+</para>
+
+@base_class_type: 
+@arg_name: 
+@class_n_args_offset: 
+@arg_info_hash_table: 
+@arg_type: 
+@arg_flags: 
+@arg_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_args_query ##### -->
+<para>
+
+</para>
+
+@class_type: 
+@arg_info_hash_table: 
+@arg_flags: 
+@n_args_p: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_arg_name_strip_type ##### -->
+<para>
+
+</para>
+
+@arg_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_arg_info_equal ##### -->
+<para>
+
+</para>
+
+@arg_info_1: 
+@arg_info_2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_arg_info_hash ##### -->
+<para>
+
+</para>
+
+@arg_info: 
+@Returns: 
+
+

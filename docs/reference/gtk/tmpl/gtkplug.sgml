@@ -1,0 +1,60 @@
+<!-- ##### SECTION Title ##### -->
+GtkPlug
+
+<!-- ##### SECTION Short_Description ##### -->
+Toplevel for embedding into other processes.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+Together with #GtkSocket, #GtkPlug provides the ability
+to embed widgets from one process into another process
+in a fashion that is transparent to the user. One
+process creates a #GtkSocket widget and, passes the
+XID of that widgets window to the other process, 
+which then creates a #GtkPlug window with that XID.
+Any widgets contained in the #GtkPlug then will appear
+inside the first applications window.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkSocket</term>
+<listitem><para>the widget that a #GtkPlug plugs into.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+<!-- ##### STRUCT GtkPlug ##### -->
+<para>
+
+</para>
+
+@window: 
+@socket_window: 
+@same_app: 
+
+<!-- ##### FUNCTION gtk_plug_construct ##### -->
+<para>
+Finish the creation of a #GtkPlug widget. This function
+will generally only be used by classes deriving
+from #GtkPlug.
+</para>
+
+@plug: a #GtkPlug widget.
+@socket_id: the XID of the socket's window.
+
+
+<!-- ##### FUNCTION gtk_plug_new ##### -->
+<para>
+Create a new plug widget inside the #GtkSocket identified
+by @socket_id.
+</para>
+
+@socket_id: the XID of the socket's window.
+@Returns: the new #GtkPlug widget.
+
+

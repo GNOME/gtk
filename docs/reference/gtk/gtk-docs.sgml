@@ -1,0 +1,297 @@
+<!doctype book PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
+<!entity GtkAccelLabel SYSTEM "sgml/gtkaccellabel.sgml">
+<!entity GtkAdjustment SYSTEM "sgml/gtkadjustment.sgml">
+<!entity GtkAlignment SYSTEM "sgml/gtkalignment.sgml">
+<!entity GtkArrow SYSTEM "sgml/gtkarrow.sgml">
+<!entity GtkAspectFrame SYSTEM "sgml/gtkaspectframe.sgml">
+<!entity GtkButtonBox SYSTEM "sgml/gtkbbox.sgml">
+<!entity GtkBin SYSTEM "sgml/gtkbin.sgml">
+<!entity GtkBox SYSTEM "sgml/gtkbox.sgml">
+<!entity GtkButton SYSTEM "sgml/gtkbutton.sgml">
+<!entity GtkCalendar SYSTEM "sgml/gtkcalendar.sgml">
+<!entity GtkCheckButton SYSTEM "sgml/gtkcheckbutton.sgml">
+<!entity GtkCheckMenuItem SYSTEM "sgml/gtkcheckmenuitem.sgml">
+<!entity GtkCList SYSTEM "sgml/gtkclist.sgml">
+<!entity GtkColorSelection SYSTEM "sgml/gtkcolorsel.sgml">
+<!entity GtkColorSelectionDialog SYSTEM "sgml/gtkcolorseldlg.sgml">
+<!entity GtkCombo SYSTEM "sgml/gtkcombo.sgml">
+<!entity GtkContainer SYSTEM "sgml/gtkcontainer.sgml">
+<!entity GtkCTree SYSTEM "sgml/gtkctree.sgml">
+<!entity GtkCurve SYSTEM "sgml/gtkcurve.sgml">
+<!entity GtkData SYSTEM "sgml/gtkdata.sgml">
+<!entity GtkDialog SYSTEM "sgml/gtkdialog.sgml">
+<!entity GtkDrawingArea SYSTEM "sgml/gtkdrawingarea.sgml">
+<!entity GtkEditable SYSTEM "sgml/gtkeditable.sgml">
+<!entity GtkEntry SYSTEM "sgml/gtkentry.sgml">
+<!entity GtkEventBox SYSTEM "sgml/gtkeventbox.sgml">
+<!entity GtkFileSelection SYSTEM "sgml/gtkfilesel.sgml">
+<!entity GtkFixed SYSTEM "sgml/gtkfixed.sgml">
+<!entity GtkFontSelection SYSTEM "sgml/gtkfontsel.sgml">
+<!entity GtkFontSelectionDialog SYSTEM "sgml/gtkfontseldlg.sgml">
+<!entity GtkFrame SYSTEM "sgml/gtkframe.sgml">
+<!entity GtkGammaCurve SYSTEM "sgml/gtkgamma.sgml">
+<!entity GtkHandleBox SYSTEM "sgml/gtkhandlebox.sgml">
+<!entity GtkHButtonBox SYSTEM "sgml/gtkhbbox.sgml">
+<!entity GtkHBox SYSTEM "sgml/gtkhbox.sgml">
+<!entity GtkHPaned SYSTEM "sgml/gtkhpaned.sgml">
+<!entity GtkHRuler SYSTEM "sgml/gtkhruler.sgml">
+<!entity GtkHScale SYSTEM "sgml/gtkhscale.sgml">
+<!entity GtkHScrollbar SYSTEM "sgml/gtkhscrollbar.sgml">
+<!entity GtkHSeparator SYSTEM "sgml/gtkhseparator.sgml">
+<!entity GtkImage SYSTEM "sgml/gtkimage.sgml">
+<!entity GtkInputDialog SYSTEM "sgml/gtkinputdialog.sgml">
+<!entity GtkInvisible SYSTEM "sgml/gtkinvisible.sgml">
+<!entity GtkItem SYSTEM "sgml/gtkitem.sgml">
+<!entity GtkItemFactory SYSTEM "sgml/gtkitemfactory.sgml">
+<!entity GtkLabel SYSTEM "sgml/gtklabel.sgml">
+<!entity GtkLayout SYSTEM "sgml/gtklayout.sgml">
+<!entity GtkList SYSTEM "sgml/gtklist.sgml">
+<!entity GtkListItem SYSTEM "sgml/gtklistitem.sgml">
+<!entity GtkMenu SYSTEM "sgml/gtkmenu.sgml">
+<!entity GtkMenuBar SYSTEM "sgml/gtkmenubar.sgml">
+<!entity GtkMenuItem SYSTEM "sgml/gtkmenuitem.sgml">
+<!entity GtkMenuShell SYSTEM "sgml/gtkmenushell.sgml">
+<!entity GtkMisc SYSTEM "sgml/gtkmisc.sgml">
+<!entity GtkNotebook SYSTEM "sgml/gtknotebook.sgml">
+<!entity GtkObject SYSTEM "sgml/gtkobject.sgml">
+<!entity GtkOptionMenu SYSTEM "sgml/gtkoptionmenu.sgml">
+<!entity GtkPacker SYSTEM "sgml/gtkpacker.sgml">
+<!entity GtkPaned SYSTEM "sgml/gtkpaned.sgml">
+<!entity GtkPixmap SYSTEM "sgml/gtkpixmap.sgml">
+<!entity GtkPlug SYSTEM "sgml/gtkplug.sgml">
+<!entity GtkPreview SYSTEM "sgml/gtkpreview.sgml">
+<!entity GtkProgress SYSTEM "sgml/gtkprogress.sgml">
+<!entity GtkProgressBar SYSTEM "sgml/gtkprogressbar.sgml">
+<!entity GtkRadioButton SYSTEM "sgml/gtkradiobutton.sgml">
+<!entity GtkRadioMenuItem SYSTEM "sgml/gtkradiomenuitem.sgml">
+<!entity GtkRange SYSTEM "sgml/gtkrange.sgml">
+<!entity GtkRuler SYSTEM "sgml/gtkruler.sgml">
+<!entity GtkScale SYSTEM "sgml/gtkscale.sgml">
+<!entity GtkScrollbar SYSTEM "sgml/gtkscrollbar.sgml">
+<!entity GtkScrolledWindow SYSTEM "sgml/gtkscrolledwindow.sgml">
+<!entity GtkSeparator SYSTEM "sgml/gtkseparator.sgml">
+<!entity GtkSocket SYSTEM "sgml/gtksocket.sgml">
+<!entity GtkSpinButton SYSTEM "sgml/gtkspinbutton.sgml">
+<!entity GtkStatusbar SYSTEM "sgml/gtkstatusbar.sgml">
+<!entity GtkTable SYSTEM "sgml/gtktable.sgml">
+<!entity GtkTearoffMenuItem SYSTEM "sgml/gtktearoffmenuitem.sgml">
+<!entity GtkText SYSTEM "sgml/gtktext.sgml">
+<!entity GtkTipsQuery SYSTEM "sgml/gtktipsquery.sgml">
+<!entity GtkToggleButton SYSTEM "sgml/gtktogglebutton.sgml">
+<!entity GtkToolbar SYSTEM "sgml/gtktoolbar.sgml">
+<!entity GtkTooltips SYSTEM "sgml/gtktooltips.sgml">
+<!entity GtkTree SYSTEM "sgml/gtktree.sgml">
+<!entity GtkTreeItem SYSTEM "sgml/gtktreeitem.sgml">
+<!entity GtkVButtonBox SYSTEM "sgml/gtkvbbox.sgml">
+<!entity GtkVBox SYSTEM "sgml/gtkvbox.sgml">
+<!entity GtkViewport SYSTEM "sgml/gtkviewport.sgml">
+<!entity GtkVPaned SYSTEM "sgml/gtkvpaned.sgml">
+<!entity GtkVRuler SYSTEM "sgml/gtkvruler.sgml">
+<!entity GtkVScale SYSTEM "sgml/gtkvscale.sgml">
+<!entity GtkVScrollbar SYSTEM "sgml/gtkvscrollbar.sgml">
+<!entity GtkVSeparator SYSTEM "sgml/gtkvseparator.sgml">
+<!entity GtkWidget SYSTEM "sgml/gtkwidget.sgml">
+<!entity GtkWindow SYSTEM "sgml/gtkwindow.sgml">
+<!entity gtk-General SYSTEM "sgml/gtkmain.sgml">
+<!entity gtk-Feature-Test-Macros SYSTEM "sgml/gtkfeatures.sgml">
+<!entity gtk-Graphics-Contexts SYSTEM "sgml/gtkgc.sgml">
+<!entity gtk-Styles SYSTEM "sgml/gtkstyle.sgml">
+<!entity gtk-Themes SYSTEM "sgml/gtkthemes.sgml">
+<!entity gtk-Resource-Files SYSTEM "sgml/gtkrc.sgml">
+<!entity gtk-Keyboard-Accelerators SYSTEM "sgml/gtkaccelgroup.sgml">
+<!entity gtk-Selections SYSTEM "sgml/gtkselection.sgml">
+<!entity gtk-Drag-and-Drop SYSTEM "sgml/gtkdnd.sgml">
+<!entity gtk-Menu-Factory SYSTEM "sgml/gtkmenufactory.sgml">
+<!entity gtk-Signals SYSTEM "sgml/gtksignal.sgml">
+<!entity gtk-Signal-Marshallers SYSTEM "sgml/gtkmarshal.sgml">
+<!entity gtk-Object-Properties SYSTEM "sgml/gtkarg.sgml">
+<!entity gtk-Types SYSTEM "sgml/gtktypeutils.sgml">
+<!entity gtk-Bindings SYSTEM "sgml/gtkbindings.sgml">
+<!entity gtk-Standard-Enumerations SYSTEM "sgml/gtkenums.sgml">
+<!entity gtk-Debugging SYSTEM "sgml/gtkdebug.sgml">
+<!entity gtk-Private-Information SYSTEM "sgml/gtkprivate.sgml">
+
+<!entity index-Object-Tree SYSTEM "sgml/tree_index.sgml">
+
+<!entity index-Objects-Grouped SYSTEM "objects_grouped.sgml">
+]>
+<book id="index">
+  <bookinfo>
+    <title>GTK+ Reference Manual</title>
+  </bookinfo>
+
+  <chapter id="gtk">
+    <title>GTK+ </title>
+    <para>
+GTK+ is a multi-platform open source GUI Toolkit. Everything about
+GTK+ from the object-oriented design to the Free Software LGPL
+licensing allows you to code your project with the most freedom
+possible. You can develop open software, free software, or even
+commercial non-free software without having to spend a dime for
+licenses or royalties.
+    </para>
+    <para>
+GTK+ is a set of libraries to create graphical user interfaces. It
+works on many Unix-like platforms, and a Windows version is in
+development. GTK+ is released under the GNU Library General Public
+License (GNU LGPL), which allows for flexible licensing of client
+applications. GTK+ has a C-based object-oriented architecture that
+allows for maximum flexibility.  Bindings for other languages have
+been written, including C++, Objective-C, Guile/Scheme, Perl, Python,
+TOM, Ada95, Free Pascal, and Eiffel.
+    </para>
+    <para>
+GTK+ consists of the following component libraries:
+<variablelist>
+
+<varlistentry>
+<term>GLib</term>
+<listitem><para>
+Provides many useful data types, macros, type conversions,
+string utilities and a lexical scanner. Includes Win32 support.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GDK</term>
+<listitem><para>
+A wrapper for low-level windowing functions.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GTK+</term>
+<listitem><para>
+An advanced widget set.
+</para></listitem>
+</varlistentry>
+</variablelist>
+    </para>
+
+    &gtk-General;
+    &gtk-Feature-Test-Macros;
+    &gtk-Graphics-Contexts;
+    &gtk-Styles;
+    &gtk-Themes;
+    &gtk-Resource-Files;
+    &gtk-Keyboard-Accelerators;
+    &gtk-Selections;
+    &gtk-Drag-and-Drop;
+    &gtk-Menu-Factory;
+    &gtk-Signals;
+    &gtk-Signal-Marshallers;
+    &gtk-Object-Properties;
+    &gtk-Types;
+    &gtk-Bindings;
+    &gtk-Standard-Enumerations;
+    &gtk-Debugging;
+    &gtk-Private-Information;
+  </chapter>
+
+  <chapter id="gtkobjects">
+    <title>GTK+ Widgets and Objects</title>
+    &index-Objects-Grouped;
+
+    &GtkAccelLabel;
+    &GtkAdjustment;
+    &GtkAlignment;
+    &GtkArrow;
+    &GtkAspectFrame;
+    &GtkButtonBox;
+    &GtkBin;
+    &GtkBox;
+    &GtkButton;
+    &GtkCalendar;
+    &GtkCheckButton;
+    &GtkCheckMenuItem;
+    &GtkCList;
+    &GtkColorSelection;
+    &GtkColorSelectionDialog;
+    &GtkCombo;
+    &GtkContainer;
+    &GtkCTree;
+    &GtkCurve;
+    &GtkData;
+    &GtkDialog;
+    &GtkDrawingArea;
+    &GtkEditable;
+    &GtkEntry;
+    &GtkEventBox;
+    &GtkFileSelection;
+    &GtkFixed;
+    &GtkFontSelection;
+    &GtkFontSelectionDialog;
+    &GtkFrame;
+    &GtkGammaCurve;
+    &GtkHandleBox;
+    &GtkHButtonBox;
+    &GtkHBox;
+    &GtkHPaned;
+    &GtkHRuler;
+    &GtkHScale;
+    &GtkHScrollbar;
+    &GtkHSeparator;
+    &GtkImage;
+    &GtkInputDialog;
+    &GtkInvisible;
+    &GtkItem;
+    &GtkItemFactory;
+    &GtkLabel;
+    &GtkLayout;
+    &GtkList;
+    &GtkListItem;
+    &GtkMenu;
+    &GtkMenuBar;
+    &GtkMenuItem;
+    &GtkMenuShell;
+    &GtkMisc;
+    &GtkNotebook;
+    &GtkObject;
+    &GtkOptionMenu;
+    &GtkPacker;
+    &GtkPaned;
+    &GtkPixmap;
+    &GtkPlug;
+    &GtkPreview;
+    &GtkProgress;
+    &GtkProgressBar;
+    &GtkRadioButton;
+    &GtkRadioMenuItem;
+    &GtkRange;
+    &GtkRuler;
+    &GtkScale;
+    &GtkScrollbar;
+    &GtkScrolledWindow;
+    &GtkSeparator;
+    &GtkSocket;
+    &GtkSpinButton;
+    &GtkStatusbar;
+    &GtkTable;
+    &GtkTearoffMenuItem;
+    &GtkText;
+    &GtkTipsQuery;
+    &GtkToggleButton;
+    &GtkToolbar;
+    &GtkTooltips;
+    &GtkTree;
+    &GtkTreeItem;
+    &GtkVButtonBox;
+    &GtkVBox;
+    &GtkViewport;
+    &GtkVPaned;
+    &GtkVRuler;
+    &GtkVScale;
+    &GtkVScrollbar;
+    &GtkVSeparator;
+    &GtkWidget;
+    &GtkWindow;
+  </chapter>
+
+  <chapter id="gtk-index">
+    <title>Index</title>
+    <sect1>
+      <title>Object Hierarchy</title>
+    &index-Object-Tree;
+    </sect1>
+  </chapter>
+</book>

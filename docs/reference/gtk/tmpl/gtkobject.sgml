@@ -1,0 +1,531 @@
+<!-- ##### SECTION Title ##### -->
+GtkObject
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkObject ##### -->
+<para>
+
+</para>
+
+@klass: 
+@flags: 
+@ref_count: 
+@object_data: 
+
+<!-- ##### MACRO GTK_OBJECT_TYPE ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GTK_OBJECT_SIGNALS ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GTK_OBJECT_NSIGNALS ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### ENUM GtkObjectFlags ##### -->
+<para>
+
+</para>
+
+@GTK_DESTROYED: 
+@GTK_FLOATING: 
+@GTK_CONNECTED: 
+@GTK_CONSTRUCTED: 
+
+<!-- ##### MACRO GTK_OBJECT_FLAGS ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GTK_OBJECT_DESTROYED ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GTK_OBJECT_FLOATING ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GTK_OBJECT_CONNECTED ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GTK_OBJECT_CONSTRUCTED ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### MACRO GTK_OBJECT_SET_FLAGS ##### -->
+<para>
+
+</para>
+
+@obj: 
+@flag: 
+
+
+<!-- ##### MACRO GTK_OBJECT_UNSET_FLAGS ##### -->
+<para>
+
+</para>
+
+@obj: 
+@flag: 
+
+
+<!-- ##### ENUM GtkArgFlags ##### -->
+<para>
+
+</para>
+
+@GTK_ARG_READABLE: 
+@GTK_ARG_WRITABLE: 
+@GTK_ARG_CONSTRUCT: 
+@GTK_ARG_CONSTRUCT_ONLY: 
+@GTK_ARG_CHILD_ARG: 
+@GTK_ARG_MASK: 
+@GTK_ARG_READWRITE: 
+
+<!-- ##### FUNCTION gtk_object_class_user_signal_new ##### -->
+<para>
+
+</para>
+
+@klass: 
+@name: 
+@signal_flags: 
+@marshaller: 
+@return_val: 
+@nparams: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_object_class_user_signal_newv ##### -->
+<para>
+
+</para>
+
+@klass: 
+@name: 
+@signal_flags: 
+@marshaller: 
+@return_val: 
+@nparams: 
+@params: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_object_new ##### -->
+<para>
+
+</para>
+
+@type: 
+@first_arg_name: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_object_newv ##### -->
+<para>
+
+</para>
+
+@object_type: 
+@n_args: 
+@args: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_object_constructed ##### -->
+<para>
+
+</para>
+
+@object: 
+
+
+<!-- ##### FUNCTION gtk_object_default_construct ##### -->
+<para>
+
+</para>
+
+@object: 
+
+
+<!-- ##### FUNCTION gtk_object_sink ##### -->
+<para>
+
+</para>
+
+@object: 
+
+
+<!-- ##### FUNCTION gtk_object_ref ##### -->
+<para>
+
+</para>
+
+@object: 
+
+
+<!-- ##### FUNCTION gtk_object_unref ##### -->
+<para>
+
+</para>
+
+@object: 
+
+
+<!-- ##### FUNCTION gtk_object_weakref ##### -->
+<para>
+
+</para>
+
+@object: 
+@notify: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_object_weakunref ##### -->
+<para>
+
+</para>
+
+@object: 
+@notify: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_object_destroy ##### -->
+<para>
+
+</para>
+
+@object: 
+
+
+<!-- ##### FUNCTION gtk_object_getv ##### -->
+<para>
+
+</para>
+
+@object: 
+@n_args: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_object_set ##### -->
+<para>
+
+</para>
+
+@object: 
+@first_arg_name: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_object_setv ##### -->
+<para>
+
+</para>
+
+@object: 
+@n_args: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_object_query_args ##### -->
+<para>
+
+</para>
+
+@class_type: 
+@arg_flags: 
+@n_args: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_object_set_data ##### -->
+<para>
+
+</para>
+
+@object: 
+@key: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_object_set_data_full ##### -->
+<para>
+
+</para>
+
+@object: 
+@key: 
+@data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_object_remove_data ##### -->
+<para>
+
+</para>
+
+@object: 
+@key: 
+
+
+<!-- ##### FUNCTION gtk_object_get_data ##### -->
+<para>
+
+</para>
+
+@object: 
+@key: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_object_remove_no_notify ##### -->
+<para>
+
+</para>
+
+@object: 
+@key: 
+
+
+<!-- ##### FUNCTION gtk_object_set_user_data ##### -->
+<para>
+
+</para>
+
+@object: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_object_get_user_data ##### -->
+<para>
+
+</para>
+
+@object: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_object_class_add_signals ##### -->
+<para>
+
+</para>
+
+@klass: 
+@signals: 
+@nsignals: 
+
+
+<!-- ##### FUNCTION gtk_object_add_arg_type ##### -->
+<para>
+
+</para>
+
+@arg_name: 
+@arg_type: 
+@arg_flags: 
+@arg_id: 
+
+
+<!-- ##### FUNCTION gtk_object_set_data_by_id ##### -->
+<para>
+
+</para>
+
+@object: 
+@data_id: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_object_set_data_by_id_full ##### -->
+<para>
+
+</para>
+
+@object: 
+@data_id: 
+@data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_object_get_data_by_id ##### -->
+<para>
+
+</para>
+
+@object: 
+@data_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_object_remove_data_by_id ##### -->
+<para>
+
+</para>
+
+@object: 
+@data_id: 
+
+
+<!-- ##### FUNCTION gtk_object_remove_no_notify_by_id ##### -->
+<para>
+
+</para>
+
+@object: 
+@key_id: 
+
+
+<!-- ##### MACRO gtk_object_data_try_key ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_object_data_force_id ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_object_arg_set ##### -->
+<para>
+
+</para>
+
+@object: 
+@arg: 
+@info: 
+
+
+<!-- ##### FUNCTION gtk_object_arg_get ##### -->
+<para>
+
+</para>
+
+@object: 
+@arg: 
+@info: 
+
+
+<!-- ##### FUNCTION gtk_object_args_collect ##### -->
+<para>
+
+</para>
+
+@object_type: 
+@arg_list_p: 
+@info_list_p: 
+@first_arg_name: 
+@var_args: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_object_arg_get_info ##### -->
+<para>
+
+</para>
+
+@object_type: 
+@arg_name: 
+@info_p: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_trace_referencing ##### -->
+<para>
+
+</para>
+
+@object: 
+@func: 
+@dummy: 
+@line: 
+@do_ref: 
+
+
+<!-- ##### SIGNAL GtkObject::destroy ##### -->
+<para>
+
+</para>
+
+@object: the object which received the signal.
+
+<!-- ##### ARG GtkObject:user_data ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkObject:signal ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkObject:signal_after ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkObject:object_signal ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkObject:object_signal_after ##### -->
+<para>
+
+</para>
+

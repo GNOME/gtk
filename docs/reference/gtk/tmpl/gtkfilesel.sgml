@@ -1,0 +1,188 @@
+<!-- ##### SECTION Title ##### -->
+GtkFileSelection
+
+<!-- ##### SECTION Short_Description ##### -->
+prompt the user for a file or directory name.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+GtkFileSelection should be used to retrieve file or directory names from the user. It will create a new dialog window containing a directory list, and a file list corresponding to the current working directory. The filesystem can be navigated using the directory list or the drop-down history menu. Alternatively, the TAB key can be used to navigate using filename completion - common in text based editors such as emacs and jed.
+</para>
+<para>
+File selection dialogs are created with a call to gtk_file_selection_new().
+</para>
+<para>
+The default filename can be set using gtk_file_selection_set_filename() and the selected filename retrieved using gtk_file_selection_get_filename().
+</para>
+<para>
+Use gtk_file_selection_complete() to display files that match a given pattern. This can be used for example, to show only *.txt files, or only files beginning with gtk*.
+</para>
+<para>
+Simple file operations; create directory, delete file, and rename file, are available from buttons at the top of the dialog. These can be hidden using gtk_file_selection_hide_fileop_buttons() and shown again using gtk_file_selection_show_fileop_buttons().
+</para>
+<para>
+<example>
+<title>Getting a filename from the user</title>
+<programlisting>
+
+/* The file selection widget and the string to store the chosen filename */
+
+GtkWidget *file_selector;
+gchar *selected_filename;
+
+void store_filename(GtkFileSelection *selector, gpointer user_data) {
+   selected_filename = gtk_file_selection_get_filename (GTK_FILE_SELECTION(file_selector));
+}
+
+void create_file_selection(void) {
+
+   /* Create the selector */
+   
+   file_selector = gtk_file_selection_new("Please select a file for editing.");
+   
+   gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION(file_selector)->ok_button)),
+   			   "clicked", GTK_SIGNAL_FUNC (store_filename), NULL);
+   			   
+   /* Ensure that the dialog box is destroyed when the user clicks a button. */
+   
+   gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION(file_selector)->ok_button)),
+   					  "clicked", GTK_SIGNAL_FUNC (gtk_widget_destroy),
+   					  (gpointer) file_selector);
+
+   gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION(file_selector)->cancel_button)),
+   					  "clicked", GTK_SIGNAL_FUNC (gtk_widget_destroy),
+   					  (gpointer) file_selector);
+   
+   /* Display that dialog */
+   
+   gtk_widget_show (file_selector);
+}
+
+</programlisting>
+</example>
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+
+<para>
+<variablelist>
+<varlistentry>
+<term>#GtkDialog</term>
+<listitem><para>Add your own widgets into the #GtkFileSelection.</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+<!-- ##### STRUCT GtkFileSelection ##### -->
+<para>
+The #GtkFileSelection struct contains the following #GtkWidget fields:
+
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>*fileop_dialog;</entry>
+<entry>the dialog box used to display the #GtkFileSelection. It can be customized by adding/removing widgets from it using the standard #GtkDialog functions.</entry>
+</row>
+
+<row>
+<entry>*dir_list, *file_list;</entry>
+<entry>the two #GtkCList widgets corresponding to directories and files.</entry>
+</row>
+
+<row>
+<entry>*ok_button, *cancel_button;</entry>
+<entry>the two main buttons that signals should be connected to in order to perform an action when the user hits either OK or Cancel.</entry>
+</row>
+
+<row>
+<entry>*history_pulldown;</entry>
+<entry>the #GtkOptionMenu used to create the drop-down directory history.</entry>
+</row>
+
+<row>
+<entry>*fileop_c_dir, *fileop_del_file, *fileop_ren_file;</entry>
+<entry>the buttons that appear at the top of the file selection dialog. These "operation buttons" can be hidden and redisplayed with gtk_file_selection_hide_fileop_buttons() and  gtk_file_selection_show_fileop_buttons() respectively.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+</para>
+
+@window: 
+@dir_list: 
+@file_list: 
+@selection_entry: 
+@selection_text: 
+@main_vbox: 
+@ok_button: 
+@cancel_button: 
+@help_button: 
+@history_pulldown: 
+@history_menu: 
+@history_list: 
+@fileop_dialog: 
+@fileop_entry: 
+@fileop_file: 
+@cmpl_state: 
+@fileop_c_dir: 
+@fileop_del_file: 
+@fileop_ren_file: 
+@button_area: 
+@action_area: 
+
+<!-- ##### FUNCTION gtk_file_selection_new ##### -->
+<para>
+Creates a new file selection dialog box. By default it will contain a #GtkCList of the application's current working directory, and a file listing. Operation buttons that allow the user to create a directory, delete files and rename files, are also present.
+</para>
+
+@title: a message that will be placed in the file requestor's titlebar.
+@Returns: the new file selection.
+
+
+<!-- ##### FUNCTION gtk_file_selection_set_filename ##### -->
+<para>
+Sets a default path for the file requestor. If @filename includes a directory path, then the requestor will open with that path as its current working directory.
+
+</para>
+
+@filesel: a #GtkFileSelection.
+@filename: a string to set as the default file name.
+
+
+<!-- ##### FUNCTION gtk_file_selection_get_filename ##### -->
+<para>
+Retrieves the currently selected filename from the file selection dialog. If no file is selected then the selected directory path is returned.
+</para>
+
+@filesel: a #GtkFileSelection
+@Returns: a string containing the selected file's full path.
+
+
+<!-- ##### FUNCTION gtk_file_selection_complete ##### -->
+<para>
+Will attempt to match @pattern to a valid filename in the current directory. If a match can be made, the matched filename will appear in the text entry field of the file selection dialog.
+If a partial match can be made, the "Files" list will contain those file names which have been partially matched.
+</para>
+
+@filesel: a #GtkFileSelection.
+@pattern: a string of characters which may or may not match any filenames in the current directory.
+
+
+<!-- ##### FUNCTION gtk_file_selection_show_fileop_buttons ##### -->
+<para>
+Shows the file operation buttons, if they have previously been hidden. The rest of the widgets in the dialog will be resized accordingly.
+</para>
+
+@filesel: a #GtkFileSelection.
+
+
+<!-- ##### FUNCTION gtk_file_selection_hide_fileop_buttons ##### -->
+<para>
+Hides the file operation buttons that normally appear at the top of the dialog. Useful if you wish to create a custom file selector, based on #GtkFileSelection.
+</para>
+
+@filesel: a #GtkFileSelection.
+
+

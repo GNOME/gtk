@@ -1,0 +1,34 @@
+<!-- ##### SECTION Title ##### -->
+GtkEventBox
+
+<!-- ##### SECTION Short_Description ##### -->
+a widget used to catch events for widgets which do not have their own window.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkEventBox widget is a subclass of #GtkBin which also has its own window.
+It is useful since it allows you to catch events for widgets which do not
+have their own window.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkEventBox ##### -->
+<para>
+The #GtkEventBox-struct struct contains private data only, and
+should be accessed using the functions below.
+</para>
+
+@bin: 
+
+<!-- ##### FUNCTION gtk_event_box_new ##### -->
+<para>
+Creates a new #GtkEventBox.
+</para>
+
+@Returns: a new #GtkEventBox.
+
+

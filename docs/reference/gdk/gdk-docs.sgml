@@ -1,0 +1,59 @@
+<!doctype book PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
+<!entity gdk-General SYSTEM "sgml/general.sgml">
+<!entity gdk-Bitmaps-and-Pixmaps SYSTEM "sgml/pixmaps.sgml">
+<!entity gdk-Images SYSTEM "sgml/images.sgml">
+<!entity gdk-GdkRGB SYSTEM "sgml/rgb.sgml">
+<!entity gdk-Colormaps-and-Colors SYSTEM "sgml/colors.sgml">
+<!entity gdk-Fonts SYSTEM "sgml/fonts.sgml">
+<!entity gdk-Drawing-Primitives SYSTEM "sgml/drawing.sgml">
+<!entity gdk-Graphics-Contexts SYSTEM "sgml/gcs.sgml">
+<!entity gdk-Visuals SYSTEM "sgml/visuals.sgml">
+<!entity gdk-Windows SYSTEM "sgml/windows.sgml">
+<!entity gdk-Selections SYSTEM "sgml/selections.sgml">
+<!entity gdk-Properties-and-Atoms SYSTEM "sgml/properties.sgml">
+<!entity gdk-Input-Methods SYSTEM "sgml/input_methods.sgml">
+<!entity gdk-Input-Contexts SYSTEM "sgml/input_contexts.sgml">
+<!entity gdk-Color-Contexts SYSTEM "sgml/color_contexts.sgml">
+<!entity gdk-Points-Rectangles-and-Regions SYSTEM "sgml/regions.sgml">
+<!entity gdk-Threads SYSTEM "sgml/threads.sgml">
+<!entity gdk-Key-Values SYSTEM "sgml/keys.sgml">
+<!entity gdk-Input-Devices SYSTEM "sgml/input_devices.sgml">
+<!entity gdk-Events SYSTEM "sgml/events.sgml">
+<!entity gdk-Event-Structures SYSTEM "sgml/event_structs.sgml">
+<!entity gdk-Cursors SYSTEM "sgml/cursors.sgml">
+<!entity gdk-Input SYSTEM "sgml/input.sgml">
+<!entity gdk-Drag-and-Drop SYSTEM "sgml/dnd.sgml">
+]>
+<book id="index">
+  <bookinfo>
+    <title>GDK Reference Manual</title>
+  </bookinfo>
+
+  <chapter id="gdk">
+    <title>GDK</title>
+    &gdk-General;
+    &gdk-Bitmaps-and-Pixmaps;
+    &gdk-Images;
+    &gdk-GdkRGB;
+    &gdk-Colormaps-and-Colors;
+    &gdk-Fonts;
+    &gdk-Drawing-Primitives;
+    &gdk-Graphics-Contexts;
+    &gdk-Visuals;
+    &gdk-Windows;
+    &gdk-Selections;
+    &gdk-Properties-and-Atoms;
+    &gdk-Input-Methods;
+    &gdk-Input-Contexts;
+    &gdk-Color-Contexts;
+    &gdk-Points-Rectangles-and-Regions;
+    &gdk-Threads;
+    &gdk-Key-Values;
+    &gdk-Input-Devices;
+    &gdk-Events;
+    &gdk-Event-Structures;
+    &gdk-Cursors;
+    &gdk-Input;
+    &gdk-Drag-and-Drop;
+  </chapter>
+</book>

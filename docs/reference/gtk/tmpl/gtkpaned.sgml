@@ -1,0 +1,198 @@
+<!-- ##### SECTION Title ##### -->
+GtkPaned
+
+<!-- ##### SECTION Short_Description ##### -->
+Base class for widgets with two adjustable panes
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+GtkPaned is the base class for widgets with two panes,
+arranged either horizontally (#GtkHPaned) or
+vertically (#GtkVPaned). Child widgets are 
+added to the panes of the widget with
+gtk_paned_pack1() and gtk_paned_pack2(). The division
+beween the two children is set by default from the
+size requests of the children, but it can be adjusted
+by the user.
+</para>
+<para>
+A paned widget draws a separator between the two
+child widgets and a small handle that the user
+can drag to adjust the division. It does not
+draw any relief around the children or around
+the separator. (The space in which the separator
+is called the gutter). Often, it is useful
+to put each child inside a #GtkFrame with the
+shadow type set to %GTK_SHADOW_IN so that the
+gutter appears as a ridge.
+<para>
+Each child has two options that can be set, 
+@resize and @shrink. If @resize is true, then when the
+#GtkPaned is resized, that child will expand
+or shrink along with the paned widget. If @shrink
+is true, then when that child can be made smaller
+than it's requisition by the user. Setting @shrink
+to FALSE allows the application to set a minimum
+size. If @resize is false for both children, then
+this is treated as if @resize is true for both
+children.
+</para>
+<para>
+The application can set the position of the slider
+as if it were set by the user, by calling
+gtk_paned_set_position().
+</para>
+
+<example>
+<title> Creating a paned widget with minimum sizes </title>
+<programlisting>
+GtkWidget *hpaned = gtk_hpaned_new();
+GtkWidget *frame1 = gtk_frame_new(NULL);
+GtkWidget *frame2 = gtk_frame_new(NULL);
+gtk_frame_set_shadow_type (GTK_FRAME (frame1), GTK_SHADOW_IN);
+gtk_frame_set_shadow_type (GTK_FRAME (frame2), GTK_SHADOW_IN);
+
+gtk_widget_set_usize (hpaned, 200 + GTK_PANED (hpaned)->gutter_size, -1);
+
+gtk_paned_pack1 (GTK_PANED (hpaned), frame1, TRUE, FALSE);
+gtk_widget_set_usize (frame1, 50, -1);
+
+gtk_paned_pack2 (GTK_PANED (hpaned), frame1, FALSE, FALSE);
+gtk_widget_set_usize (frame1, 50, -1);
+</programlisting>
+</example>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkPaned ##### -->
+<para>
+</para>
+
+@container: 
+@child1: 
+@child2: 
+@handle: 
+@groove_rectangle: 
+@xor_gc: 
+@handle_size: 
+@gutter_size: 
+@child1_size: 
+@last_allocation: 
+@min_position: 
+@max_position: 
+@position_set: 
+@in_drag: 
+@child1_shrink: 
+@child1_resize: 
+@child2_shrink: 
+@child2_resize: 
+@handle_xpos: 
+@handle_ypos: 
+
+<!-- ##### FUNCTION gtk_paned_add1 ##### -->
+<para>
+Add a child to the top or left pane with
+default parameters. This is equivalent
+to
+<programlisting>
+gtk_paned_pack1(paned, FALSE, TRUE);
+</programlisting>
+</para>
+
+@paned: a paned widget
+@child: the child to add
+
+
+<!-- ##### FUNCTION gtk_paned_add2 ##### -->
+<para>
+Add a child to the bottom or right pane with default
+parameters. This is equivalent to 
+<programlisting>
+gtk_paned_pack1(paned, FALSE, FALSE);
+</programlisting>
+</para>
+
+@paned: a paned widget
+@child: the child to add
+
+
+<!-- ##### MACRO gtk_paned_handle_size ##### -->
+<para>
+Old name for gtk_paned_set_handle_size()
+</para>
+
+
+
+<!-- ##### MACRO gtk_paned_gutter_size ##### -->
+<para>
+Old name for gtk_paned_set_gutter_size()
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_paned_compute_position ##### -->
+<para>
+Internal function used by #GtkHPaned and #GtkVPaned
+</para>
+
+@paned: 
+@allocation: 
+@child1_req: 
+@child2_req: 
+
+
+<!-- ##### FUNCTION gtk_paned_pack1 ##### -->
+<para>
+Add a child to the top or left pane.
+</para>
+
+@paned: a paned widget
+@child: the child to add
+@resize: should this child expand when the paned widget is resized.
+@shrink: can this child be made smaller than its requsition.
+
+
+<!-- ##### FUNCTION gtk_paned_pack2 ##### -->
+<para>
+Add a child to the bottom or right pane.
+</para>
+
+@paned: a paned widget
+@child: the child to add
+@resize: should this child expand when the paned widget is resized.
+@shrink: can this child be made smaller than its requsition.
+
+
+<!-- ##### FUNCTION gtk_paned_set_gutter_size ##### -->
+<para>
+Set the width of the gutter. (The area between the two panes).
+</para>
+
+@paned: a paned widget
+@size: the width of the widget in pixels
+
+
+<!-- ##### FUNCTION gtk_paned_set_handle_size ##### -->
+<para>
+Set the the handle size to @size x @size pixels.
+</para>
+
+@paned: a paned widget
+@size: the size in pixels
+
+
+<!-- ##### FUNCTION gtk_paned_set_position ##### -->
+<para>
+Set the position of the separator, as if set by the user.
+If position is negative, the remembered position is
+forgotten, and the division is recomputed from the
+the requisitions of the children.
+</para>
+
+@paned: a paned widget
+@position: the new position of the separator.
+
+

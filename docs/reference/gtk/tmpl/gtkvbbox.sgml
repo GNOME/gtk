@@ -1,0 +1,63 @@
+<!-- ##### SECTION Title ##### -->
+GtkVButtonBox
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkVButtonBox ##### -->
+<para>
+
+</para>
+
+@button_box: 
+
+<!-- ##### FUNCTION gtk_vbutton_box_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_vbutton_box_get_spacing_default ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_vbutton_box_set_spacing_default ##### -->
+<para>
+
+</para>
+
+@spacing: 
+
+
+<!-- ##### FUNCTION gtk_vbutton_box_get_layout_default ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_vbutton_box_set_layout_default ##### -->
+<para>
+
+</para>
+
+@layout: 
+
+

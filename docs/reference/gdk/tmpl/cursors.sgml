@@ -1,0 +1,98 @@
+<!-- ##### SECTION Title ##### -->
+Cursors
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GdkCursor ##### -->
+<para>
+
+</para>
+
+@type: 
+
+<!-- ##### ENUM GdkCursorType ##### -->
+<para>
+The standard cursors available.
+</para>
+
+
+<!-- ##### FUNCTION gdk_cursor_new ##### -->
+<para>
+Creates a new standard cursor.
+</para>
+
+@cursor_type: the type of the cursor.
+@Returns: a new #GdkCursor.
+
+
+<!-- ##### FUNCTION gdk_cursor_new_from_pixmap ##### -->
+<para>
+Creates a new cursor from a given pixmap and mask. Both the pixmap and mask
+must have a depth of 1 (i.e. each pixel has only 2 values - on or off).
+</para>
+<example><title>Creating a custom cursor.</title>
+<programlisting>
+/* This data is in X bitmap format, and can be created with the 'bitmap'
+   utility. */
+#define cursor1_width 16
+#define cursor1_height 16
+static unsigned char cursor1_bits[] = {
+   0x80, 0x01, 0x40, 0x02, 0x20, 0x04, 0x10, 0x08, 0x08, 0x10, 0x04, 0x20,
+   0x82, 0x41, 0x41, 0x82, 0x41, 0x82, 0x82, 0x41, 0x04, 0x20, 0x08, 0x10,
+   0x10, 0x08, 0x20, 0x04, 0x40, 0x02, 0x80, 0x01};
+
+static unsigned char cursor1mask_bits[] = {
+   0x80, 0x01, 0xc0, 0x03, 0x60, 0x06, 0x30, 0x0c, 0x18, 0x18, 0x8c, 0x31,
+   0xc6, 0x63, 0x63, 0xc6, 0x63, 0xc6, 0xc6, 0x63, 0x8c, 0x31, 0x18, 0x18,
+   0x30, 0x0c, 0x60, 0x06, 0xc0, 0x03, 0x80, 0x01};
+
+
+  GdkCursor *cursor;
+  GdkPixmap *source, *mask;
+  GdkColor fg = { 0, 65535, 0, 0 }; /* Red. */
+  GdkColor bg = { 0, 0, 0, 65535 }; /* Blue. */
+
+
+  source = gdk_bitmap_create_from_data (NULL, cursor1_bits,
+					cursor1_width, cursor1_height);
+  mask = gdk_bitmap_create_from_data (NULL, cursor1mask_bits,
+				      cursor1_width, cursor1_height);
+  cursor = gdk_cursor_new_from_pixmap (source, mask, &amp;fg, &amp;bg, 8, 8);
+  gdk_pixmap_unref (source);
+  gdk_pixmap_unref (mask);
+
+
+  gdk_window_set_cursor (widget->window, cursor);
+</programlisting>
+</example>
+
+@source: the pixmap specifying the cursor.
+@mask: the pixmap specifying the mask, which must be the same size as @source.
+@fg: the foreground color, used for the bits in the source which are 1.
+The color does not have to be allocated first.
+@bg: the background color, used for the bits in the source which are 0.
+The color does not have to be allocated first.
+@x: the horizontal offset of the 'hotspot' of the cursor.
+@y: the vertical offset of the 'hotspot' of the cursor.
+@Returns: a new #GdkCursor.
+
+
+<!-- ##### FUNCTION gdk_cursor_destroy ##### -->
+<para>
+Destroys a cursor, freeing any resources allocated for it.
+</para>
+
+@cursor: a #GdkCursor.
+
+

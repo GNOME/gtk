@@ -1,0 +1,146 @@
+<!-- ##### SECTION Title ##### -->
+GtkLabel
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget that displays a small to medium amount of text.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkLabel widget is usually used directly by the programmer to display
+word(s) describing an adjacent widget or its use.  It is also used internally
+by Gtk+ as #GtkButton labels, #GtkMenu items, and many other widgets which
+use text.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkLabel ##### -->
+<para>
+This should not be accessed directly.  Use the accessor functions as
+described below.
+</para>
+
+@misc: 
+@label: 
+@label_wc: 
+@pattern: 
+@words: 
+@max_width: 
+@jtype: 
+@wrap: 
+
+<!-- ##### STRUCT GtkLabelWord ##### -->
+<para>
+Internal to #GtkLabel.
+</para>
+
+
+<!-- ##### FUNCTION gtk_label_new ##### -->
+<para>
+Creates a new label with the given string of text inside it.  You can
+pass NULL to get an empty label widget.
+</para>
+
+@str: The string you want to display in the #GtkLabel
+@Returns: The newly allocated #GtkLabel widget
+
+
+<!-- ##### MACRO gtk_label_set ##### -->
+<para>
+Aliases gtk_label_set_text.  Probably used for backward compatibility with
+Gtk+ 1.0.x.
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_label_set_pattern ##### -->
+<para>
+The pattern of underlines you want under the existing text within the
+#GtkLabel widget.  For example if the current text of the label says
+&quot;FooBarBaz&quot; passing a pattern of &quot;___   ___&quot; will underline
+&quot;Foo&quot; and &quot;Baz&quot; but not &quot;Bar&quot;.
+</para>
+
+@label: The #GtkLabel you want to set the pattern to.
+@pattern: The pattern as described above.
+
+
+<!-- ##### FUNCTION gtk_label_set_justify ##### -->
+<para>
+Set where the text within the #GtkLabel will align to.  This can be one of
+four values: GTK_JUSTIFY_LEFT, GTK_JUSTIFY_RIGHT, GTK_JUSTIFY_CENTER,
+and GTK_JUSTIFY_FILL.  GTK_JUSTIFY_CENTER is the default value when the
+widget is first created with gtk_label_new().
+</para>
+
+@label: The #GtkLabel widget you want to set justification for.
+@jtype: The #GtkJustification type as described above.
+
+
+<!-- ##### FUNCTION gtk_label_get ##### -->
+<para>
+Gets the current string of text within the #GtkLabel and writes it to
+the given str argument.  It does not make a copy of this string so you
+must not write to it.
+</para>
+
+@label: The #GtkLabel widget you want to get the text from.
+@str: The reference to the pointer you want to point to the text.
+
+
+<!-- ##### FUNCTION gtk_label_parse_uline ##### -->
+<para>
+Parses the given string for underscores and converts the next
+character to an underlined character.  The last character that
+was underlined will have its lower-cased accelerator keyval returned  (i.e.
+&quot;_File&quot; would return the keyval for &quot;f&quot;.  This is
+probably only used within the Gtk+ library itself for menu items and such.
+</para>
+
+@label: The #GtkLabel you want to affect.
+@string: The string you want to parse for underlines.
+@Returns: The lowercase keyval of the last character underlined.
+
+
+<!-- ##### FUNCTION gtk_label_set_line_wrap ##### -->
+<para>
+Toggles line wrapping within the #GtkLabel widget.  TRUE makes it break
+lines if text exceeds the widget's size.  FALSE lets the text get cut off
+by the edge of the widget if it exceeds the widget size.
+</para>
+
+@label: The #GtkLabel you want to set line wrapping for.
+@wrap: TRUE turns it on; FALSE turns it off.
+
+
+<!-- ##### FUNCTION gtk_label_set_text ##### -->
+<para>
+Sets the text within the #GtkLabel widget.  It overwrites any text that
+was there before.  Note that underlines that were there before do not
+get overwritten.  If you want to erase underlines just send NULL to
+gtk_label_set_pattern().
+</para>
+
+@label: The #GtkLabel you want to set the text for.
+@str: The text you want to add.
+
+
+<!-- ##### ARG GtkLabel:label ##### -->
+<para>
+The actual label text.  Do not write to this pointer, it is not copied.
+</para>
+
+<!-- ##### ARG GtkLabel:pattern ##### -->
+<para>
+The pattern of underlines under the existing text.  Do not change the
+pointer, it isn't copied.
+</para>
+
+<!-- ##### ARG GtkLabel:justify ##### -->
+<para>
+The #GtkJustification setting.  See gtk_label_set_justify() for more info.
+</para>
+

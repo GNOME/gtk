@@ -1,0 +1,132 @@
+<!-- ##### SECTION Title ##### -->
+GtkMenuItem
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkMenuItem ##### -->
+<para>
+
+</para>
+
+@item: 
+@submenu: 
+@accelerator_signal: 
+@toggle_size: 
+@accelerator_width: 
+@show_toggle_indicator: 
+@show_submenu_indicator: 
+@submenu_placement: 
+@submenu_direction: 
+@right_justify: 
+@timer: 
+
+<!-- ##### FUNCTION gtk_menu_item_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_new_with_label ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_set_submenu ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@submenu: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_remove_submenu ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_set_placement ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@placement: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_configure ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@show_toggle_indicator: 
+@show_submenu_indicator: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_select ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_deselect ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_activate ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_right_justify ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+
+
+<!-- ##### SIGNAL GtkMenuItem::activate ##### -->
+<para>
+
+</para>
+
+@menuitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkMenuItem::activate-item ##### -->
+<para>
+
+</para>
+
+@menuitem: the object which received the signal.
+

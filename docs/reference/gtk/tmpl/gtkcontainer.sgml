@@ -1,0 +1,410 @@
+<!-- ##### SECTION Title ##### -->
+GtkContainer
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkContainer ##### -->
+<para>
+
+</para>
+
+@widget: 
+@focus_child: 
+@border_width: 
+@need_resize: 
+@resize_mode: 
+@resize_widgets: 
+
+<!-- ##### MACRO GTK_IS_RESIZE_CONTAINER ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### MACRO gtk_container_border_width ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_container_add ##### -->
+<para>
+
+</para>
+
+@container: 
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_container_remove ##### -->
+<para>
+
+</para>
+
+@container: 
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_container_set_resize_mode ##### -->
+<para>
+
+</para>
+
+@container: 
+@resize_mode: 
+
+
+<!-- ##### FUNCTION gtk_container_check_resize ##### -->
+<para>
+
+</para>
+
+@container: 
+
+
+<!-- ##### FUNCTION gtk_container_foreach ##### -->
+<para>
+
+</para>
+
+@container: 
+@callback: 
+@callback_data: 
+
+
+<!-- ##### FUNCTION gtk_container_foreach_full ##### -->
+<para>
+
+</para>
+
+@container: 
+@callback: 
+@marshal: 
+@callback_data: 
+@notify: 
+
+
+<!-- ##### FUNCTION gtk_container_children ##### -->
+<para>
+
+</para>
+
+@container: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_container_focus ##### -->
+<para>
+
+</para>
+
+@container: 
+@direction: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_container_set_focus_child ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+
+
+<!-- ##### FUNCTION gtk_container_set_focus_vadjustment ##### -->
+<para>
+
+</para>
+
+@container: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_container_set_focus_hadjustment ##### -->
+<para>
+
+</para>
+
+@container: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_container_register_toplevel ##### -->
+<para>
+
+</para>
+
+@container: 
+
+
+<!-- ##### FUNCTION gtk_container_unregister_toplevel ##### -->
+<para>
+
+</para>
+
+@container: 
+
+
+<!-- ##### FUNCTION gtk_container_resize_children ##### -->
+<para>
+
+</para>
+
+@container: 
+
+
+<!-- ##### FUNCTION gtk_container_child_type ##### -->
+<para>
+
+</para>
+
+@container: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_container_add_child_arg_type ##### -->
+<para>
+
+</para>
+
+@arg_name: 
+@arg_type: 
+@arg_flags: 
+@arg_id: 
+
+
+<!-- ##### FUNCTION gtk_container_query_child_args ##### -->
+<para>
+
+</para>
+
+@class_type: 
+@arg_flags: 
+@nargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_container_child_getv ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@n_args: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_container_child_setv ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@n_args: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_container_add_with_args ##### -->
+<para>
+
+</para>
+
+@container: 
+@widget: 
+@first_arg_name: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_container_addv ##### -->
+<para>
+
+</para>
+
+@container: 
+@widget: 
+@n_args: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_container_child_set ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@first_arg_name: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_container_queue_resize ##### -->
+<para>
+
+</para>
+
+@container: 
+
+
+<!-- ##### FUNCTION gtk_container_clear_resize_widgets ##### -->
+<para>
+
+</para>
+
+@container: 
+
+
+<!-- ##### FUNCTION gtk_container_arg_set ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@arg: 
+@info: 
+
+
+<!-- ##### FUNCTION gtk_container_arg_get ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@arg: 
+@info: 
+
+
+<!-- ##### FUNCTION gtk_container_child_args_collect ##### -->
+<para>
+
+</para>
+
+@object_type: 
+@arg_list_p: 
+@info_list_p: 
+@first_arg_name: 
+@args: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_container_child_arg_get_info ##### -->
+<para>
+
+</para>
+
+@object_type: 
+@arg_name: 
+@info_p: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_container_forall ##### -->
+<para>
+
+</para>
+
+@container: 
+@callback: 
+@callback_data: 
+
+
+<!-- ##### FUNCTION gtk_container_child_composite_name ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_container_get_toplevels ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_container_set_border_width ##### -->
+<para>
+
+</para>
+
+@container: 
+@border_width: 
+
+
+<!-- ##### SIGNAL GtkContainer::add ##### -->
+<para>
+
+</para>
+
+@container: the object which received the signal.
+@widget: 
+
+<!-- ##### SIGNAL GtkContainer::remove ##### -->
+<para>
+
+</para>
+
+@container: the object which received the signal.
+@widget: 
+
+<!-- ##### SIGNAL GtkContainer::check-resize ##### -->
+<para>
+
+</para>
+
+@container: the object which received the signal.
+
+<!-- ##### SIGNAL GtkContainer::focus ##### -->
+<para>
+
+</para>
+
+@container: the object which received the signal.
+@direction: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkContainer::set-focus-child ##### -->
+<para>
+
+</para>
+
+@container: the object which received the signal.
+@widget: 
+
+<!-- ##### ARG GtkContainer:border_width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkContainer:resize_mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkContainer:child ##### -->
+<para>
+
+</para>
+

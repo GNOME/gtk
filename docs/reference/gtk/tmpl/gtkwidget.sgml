@@ -1,0 +1,1721 @@
+<!-- ##### SECTION Title ##### -->
+GtkWidget
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkWidget ##### -->
+<para>
+
+</para>
+
+@object: 
+@private_flags: 
+@state: 
+@saved_state: 
+@name: 
+@style: 
+@requisition: 
+@allocation: 
+@window: 
+@parent: 
+
+<!-- ##### ENUM GtkWidgetFlags ##### -->
+<para>
+
+</para>
+
+@GTK_TOPLEVEL: 
+@GTK_NO_WINDOW: 
+@GTK_REALIZED: 
+@GTK_MAPPED: 
+@GTK_VISIBLE: 
+@GTK_SENSITIVE: 
+@GTK_PARENT_SENSITIVE: 
+@GTK_CAN_FOCUS: 
+@GTK_HAS_FOCUS: 
+@GTK_CAN_DEFAULT: 
+@GTK_HAS_DEFAULT: 
+@GTK_HAS_GRAB: 
+@GTK_RC_STYLE: 
+@GTK_COMPOSITE_CHILD: 
+@GTK_NO_REPARENT: 
+@GTK_APP_PAINTABLE: 
+@GTK_RECEIVES_DEFAULT: 
+
+<!-- ##### MACRO GTK_WIDGET_TYPE ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_STATE ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_SAVED_STATE ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_FLAGS ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_TOPLEVEL ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_NO_WINDOW ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_REALIZED ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_MAPPED ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_VISIBLE ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_DRAWABLE ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_SENSITIVE ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_PARENT_SENSITIVE ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_IS_SENSITIVE ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_CAN_FOCUS ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_HAS_FOCUS ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_CAN_DEFAULT ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_RECEIVES_DEFAULT ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_HAS_DEFAULT ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_HAS_GRAB ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_RC_STYLE ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_COMPOSITE_CHILD ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_APP_PAINTABLE ##### -->
+<para>
+
+</para>
+
+@wid: 
+
+
+<!-- ##### MACRO GTK_WIDGET_SET_FLAGS ##### -->
+<para>
+
+</para>
+
+@wid: 
+@flag: 
+
+
+<!-- ##### MACRO GTK_WIDGET_UNSET_FLAGS ##### -->
+<para>
+
+</para>
+
+@wid: 
+@flag: 
+
+
+<!-- ##### USER_FUNCTION GtkCallback ##### -->
+<para>
+
+</para>
+
+@widget: 
+@data: 
+
+
+<!-- ##### STRUCT GtkRequisition ##### -->
+<para>
+
+</para>
+
+@width: 
+@height: 
+
+<!-- ##### STRUCT GtkAllocation ##### -->
+<para>
+
+</para>
+
+@x: 
+@y: 
+@width: 
+@height: 
+
+<!-- ##### STRUCT GtkSelectionData ##### -->
+<para>
+
+</para>
+
+@selection: 
+@target: 
+@type: 
+@format: 
+@data: 
+@length: 
+
+<!-- ##### STRUCT GtkWidgetAuxInfo ##### -->
+<para>
+
+</para>
+
+@x: 
+@y: 
+@width: 
+@height: 
+
+<!-- ##### STRUCT GtkWidgetShapeInfo ##### -->
+<para>
+
+</para>
+
+@offset_x: 
+@offset_y: 
+@shape_mask: 
+
+<!-- ##### FUNCTION gtk_widget_new ##### -->
+<para>
+
+</para>
+
+@type: 
+@first_arg_name: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_newv ##### -->
+<para>
+
+</para>
+
+@type: 
+@nargs: 
+@args: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_ref ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_unref ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_destroy ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_destroyed ##### -->
+<para>
+
+</para>
+
+@widget: 
+@widget_pointer: 
+
+
+<!-- ##### FUNCTION gtk_widget_get ##### -->
+<para>
+
+</para>
+
+@widget: 
+@arg: 
+
+
+<!-- ##### FUNCTION gtk_widget_getv ##### -->
+<para>
+
+</para>
+
+@widget: 
+@nargs: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_widget_set ##### -->
+<para>
+
+</para>
+
+@widget: 
+@first_arg_name: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_widget_setv ##### -->
+<para>
+
+</para>
+
+@widget: 
+@nargs: 
+@args: 
+
+
+<!-- ##### FUNCTION gtk_widget_unparent ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_show ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_show_now ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_hide ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_show_all ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_hide_all ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_map ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_unmap ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_realize ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_unrealize ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_queue_draw ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_queue_resize ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_draw ##### -->
+<para>
+
+</para>
+
+@widget: 
+@area: 
+
+
+<!-- ##### FUNCTION gtk_widget_draw_focus ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_draw_default ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_size_request ##### -->
+<para>
+
+</para>
+
+@widget: 
+@requisition: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_child_requisition ##### -->
+<para>
+
+</para>
+
+@widget: 
+@requisition: 
+
+
+<!-- ##### FUNCTION gtk_widget_size_allocate ##### -->
+<para>
+
+</para>
+
+@widget: 
+@allocation: 
+
+
+<!-- ##### FUNCTION gtk_widget_add_accelerator ##### -->
+<para>
+
+</para>
+
+@widget: 
+@accel_signal: 
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@accel_flags: 
+
+
+<!-- ##### FUNCTION gtk_widget_remove_accelerator ##### -->
+<para>
+
+</para>
+
+@widget: 
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+
+
+<!-- ##### FUNCTION gtk_widget_remove_accelerators ##### -->
+<para>
+
+</para>
+
+@widget: 
+@accel_signal: 
+@visible_only: 
+
+
+<!-- ##### FUNCTION gtk_widget_accelerator_signal ##### -->
+<para>
+
+</para>
+
+@widget: 
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_event ##### -->
+<para>
+
+</para>
+
+@widget: 
+@event: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_activate ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_reparent ##### -->
+<para>
+
+</para>
+
+@widget: 
+@new_parent: 
+
+
+<!-- ##### FUNCTION gtk_widget_popup ##### -->
+<para>
+
+</para>
+
+@widget: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_widget_intersect ##### -->
+<para>
+
+</para>
+
+@widget: 
+@area: 
+@intersection: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_grab_focus ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_grab_default ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_name ##### -->
+<para>
+
+</para>
+
+@widget: 
+@name: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_name ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_state ##### -->
+<para>
+
+</para>
+
+@widget: 
+@state: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_sensitive ##### -->
+<para>
+
+</para>
+
+@widget: 
+@sensitive: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_parent ##### -->
+<para>
+
+</para>
+
+@widget: 
+@parent: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_parent_window ##### -->
+<para>
+
+</para>
+
+@widget: 
+@parent_window: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_parent_window ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_uposition ##### -->
+<para>
+
+</para>
+
+@widget: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_usize ##### -->
+<para>
+
+</para>
+
+@widget: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_events ##### -->
+<para>
+
+</para>
+
+@widget: 
+@events: 
+
+
+<!-- ##### FUNCTION gtk_widget_add_events ##### -->
+<para>
+
+</para>
+
+@widget: 
+@events: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_extension_events ##### -->
+<para>
+
+</para>
+
+@widget: 
+@mode: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_extension_events ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_toplevel ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_ancestor ##### -->
+<para>
+
+</para>
+
+@widget: 
+@widget_type: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_colormap ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_colormap ##### -->
+<para>
+
+</para>
+
+@widget: 
+@colormap: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_visual ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_visual ##### -->
+<para>
+
+</para>
+
+@widget: 
+@visual: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_events ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_pointer ##### -->
+<para>
+
+</para>
+
+@widget: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_widget_is_ancestor ##### -->
+<para>
+
+</para>
+
+@widget: 
+@ancestor: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_hide_on_delete ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_style ##### -->
+<para>
+
+</para>
+
+@widget: 
+@style: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_rc_style ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_ensure_style ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_style ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_restore_default_style ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_reset_rc_styles ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_push_style ##### -->
+<para>
+
+</para>
+
+@style: 
+
+
+<!-- ##### FUNCTION gtk_widget_push_colormap ##### -->
+<para>
+
+</para>
+
+@cmap: 
+
+
+<!-- ##### FUNCTION gtk_widget_push_visual ##### -->
+<para>
+
+</para>
+
+@visual: 
+
+
+<!-- ##### FUNCTION gtk_widget_pop_style ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_widget_pop_colormap ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_widget_pop_visual ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_widget_set_default_style ##### -->
+<para>
+
+</para>
+
+@style: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_default_colormap ##### -->
+<para>
+
+</para>
+
+@colormap: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_default_visual ##### -->
+<para>
+
+</para>
+
+@visual: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_default_style ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_default_colormap ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_default_visual ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_shape_combine_mask ##### -->
+<para>
+
+</para>
+
+@widget: 
+@shape_mask: 
+@offset_x: 
+@offset_y: 
+
+
+<!-- ##### FUNCTION gtk_widget_path ##### -->
+<para>
+
+</para>
+
+@widget: 
+@path_length: 
+@path: 
+@path_reversed: 
+
+
+<!-- ##### FUNCTION gtk_widget_class_path ##### -->
+<para>
+
+</para>
+
+@widget: 
+@path_length: 
+@path: 
+@path_reversed: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_composite_name ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_lock_accelerators ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_modify_style ##### -->
+<para>
+
+</para>
+
+@widget: 
+@style: 
+
+
+<!-- ##### FUNCTION gtk_widget_pop_composite_child ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_widget_push_composite_child ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_widget_queue_clear ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_queue_clear_area ##### -->
+<para>
+
+</para>
+
+@widget: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_widget_queue_draw_area ##### -->
+<para>
+
+</para>
+
+@widget: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_widget_reset_shapes ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_app_paintable ##### -->
+<para>
+
+</para>
+
+@widget: 
+@app_paintable: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_composite_name ##### -->
+<para>
+
+</para>
+
+@widget: 
+@name: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_scroll_adjustments ##### -->
+<para>
+
+</para>
+
+@widget: 
+@hadjustment: 
+@vadjustment: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_unlock_accelerators ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### SIGNAL GtkWidget::show ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::hide ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::map ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::unmap ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::realize ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::unrealize ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::draw ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@area: 
+
+<!-- ##### SIGNAL GtkWidget::draw-focus ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::draw-default ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::size-request ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@requisition: 
+
+<!-- ##### SIGNAL GtkWidget::size-allocate ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@allocation: 
+
+<!-- ##### SIGNAL GtkWidget::state-changed ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@state: 
+
+<!-- ##### SIGNAL GtkWidget::parent-set ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@old_parent: 
+
+<!-- ##### SIGNAL GtkWidget::style-set ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@previous_style: 
+
+<!-- ##### SIGNAL GtkWidget::add-accelerator ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@accel_signal_id: 
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+@accel_flags: 
+
+<!-- ##### SIGNAL GtkWidget::remove-accelerator ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@accel_group: 
+@accel_key: 
+@accel_mods: 
+
+<!-- ##### SIGNAL GtkWidget::grab-focus ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWidget::event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::button-press-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::button-release-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::motion-notify-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::delete-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::destroy-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::expose-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::key-press-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::key-release-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::enter-notify-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::leave-notify-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::configure-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::focus-in-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::focus-out-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::map-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::unmap-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::property-notify-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::selection-clear-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::selection-request-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::selection-notify-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::selection-get ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@data: 
+@info: 
+@time: 
+
+<!-- ##### SIGNAL GtkWidget::selection-received ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@data: 
+@time: 
+
+<!-- ##### SIGNAL GtkWidget::proximity-in-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::proximity-out-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::drag-begin ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+
+<!-- ##### SIGNAL GtkWidget::drag-end ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+
+<!-- ##### SIGNAL GtkWidget::drag-data-delete ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+
+<!-- ##### SIGNAL GtkWidget::drag-leave ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+@time: 
+
+<!-- ##### SIGNAL GtkWidget::drag-motion ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+@x: 
+@y: 
+@time: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::drag-drop ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+@x: 
+@y: 
+@time: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::drag-data-get ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+@data: 
+@info: 
+@time: 
+
+<!-- ##### SIGNAL GtkWidget::drag-data-received ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@drag_context: 
+@x: 
+@y: 
+@data: 
+@info: 
+@time: 
+
+<!-- ##### SIGNAL GtkWidget::client-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::no-expose-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::visibility-notify-event ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWidget::debug-msg ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@message: 
+
+<!-- ##### ARG GtkWidget:name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:parent ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:y ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:sensitive ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:app_paintable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:can_focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:has_focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:can_default ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:has_default ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:receives_default ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:composite_child ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:events ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:extension_events ##### -->
+<para>
+
+</para>
+

@@ -1,0 +1,172 @@
+<!-- ##### SECTION Title ##### -->
+GtkProgress
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkProgress ##### -->
+<para>
+
+</para>
+
+@widget: 
+@adjustment: 
+@offscreen_pixmap: 
+@format: 
+@x_align: 
+@y_align: 
+@show_text: 
+@activity_mode: 
+
+<!-- ##### FUNCTION gtk_progress_set_show_text ##### -->
+<para>
+
+</para>
+
+@progress: 
+@show_text: 
+
+
+<!-- ##### FUNCTION gtk_progress_set_text_alignment ##### -->
+<para>
+
+</para>
+
+@progress: 
+@x_align: 
+@y_align: 
+
+
+<!-- ##### FUNCTION gtk_progress_set_format_string ##### -->
+<para>
+
+</para>
+
+@progress: 
+@format: 
+
+
+<!-- ##### FUNCTION gtk_progress_set_adjustment ##### -->
+<para>
+
+</para>
+
+@progress: 
+@adjustment: 
+
+
+<!-- ##### FUNCTION gtk_progress_set_percentage ##### -->
+<para>
+
+</para>
+
+@progress: 
+@percentage: 
+
+
+<!-- ##### FUNCTION gtk_progress_set_value ##### -->
+<para>
+
+</para>
+
+@progress: 
+@value: 
+
+
+<!-- ##### FUNCTION gtk_progress_get_value ##### -->
+<para>
+
+</para>
+
+@progress: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_set_activity_mode ##### -->
+<para>
+
+</para>
+
+@progress: 
+@activity_mode: 
+
+
+<!-- ##### FUNCTION gtk_progress_get_current_text ##### -->
+<para>
+
+</para>
+
+@progress: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_get_text_from_value ##### -->
+<para>
+
+</para>
+
+@progress: 
+@value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_get_current_percentage ##### -->
+<para>
+
+</para>
+
+@progress: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_get_percentage_from_value ##### -->
+<para>
+
+</para>
+
+@progress: 
+@value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_configure ##### -->
+<para>
+
+</para>
+
+@progress: 
+@value: 
+@min: 
+@max: 
+
+
+<!-- ##### ARG GtkProgress:activity_mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgress:show_text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgress:text_xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgress:text_yalign ##### -->
+<para>
+
+</para>
+

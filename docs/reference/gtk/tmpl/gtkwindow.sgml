@@ -1,0 +1,247 @@
+<!-- ##### SECTION Title ##### -->
+GtkWindow
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkWindow ##### -->
+<para>
+
+</para>
+
+@bin: 
+@title: 
+@wmclass_name: 
+@wmclass_class: 
+@type: 
+@focus_widget: 
+@default_widget: 
+@transient_parent: 
+@resize_count: 
+@allow_shrink: 
+@allow_grow: 
+@auto_shrink: 
+@handling_resize: 
+@position: 
+@use_uposition: 
+@modal: 
+
+<!-- ##### FUNCTION gtk_window_new ##### -->
+<para>
+
+</para>
+
+@type: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_set_title ##### -->
+<para>
+
+</para>
+
+@window: 
+@title: 
+
+
+<!-- ##### FUNCTION gtk_window_set_wmclass ##### -->
+<para>
+
+</para>
+
+@window: 
+@wmclass_name: 
+@wmclass_class: 
+
+
+<!-- ##### FUNCTION gtk_window_set_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@focus: 
+
+
+<!-- ##### FUNCTION gtk_window_set_default ##### -->
+<para>
+
+</para>
+
+@window: 
+@defaultw: 
+
+
+<!-- ##### FUNCTION gtk_window_set_policy ##### -->
+<para>
+
+</para>
+
+@window: 
+@allow_shrink: 
+@allow_grow: 
+@auto_shrink: 
+
+
+<!-- ##### FUNCTION gtk_window_add_accel_group ##### -->
+<para>
+
+</para>
+
+@window: 
+@accel_group: 
+
+
+<!-- ##### FUNCTION gtk_window_remove_accel_group ##### -->
+<para>
+
+</para>
+
+@window: 
+@accel_group: 
+
+
+<!-- ##### MACRO gtk_window_position ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_window_activate_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_activate_default ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_set_modal ##### -->
+<para>
+
+</para>
+
+@window: 
+@modal: 
+
+
+<!-- ##### FUNCTION gtk_window_add_embedded_xid ##### -->
+<para>
+
+</para>
+
+@window: 
+@xid: 
+
+
+<!-- ##### FUNCTION gtk_window_remove_embedded_xid ##### -->
+<para>
+
+</para>
+
+@window: 
+@xid: 
+
+
+<!-- ##### FUNCTION gtk_window_set_default_size ##### -->
+<para>
+
+</para>
+
+@window: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_window_set_geometry_hints ##### -->
+<para>
+
+</para>
+
+@window: 
+@geometry_widget: 
+@geometry: 
+@geom_mask: 
+
+
+<!-- ##### FUNCTION gtk_window_set_position ##### -->
+<para>
+
+</para>
+
+@window: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_window_set_transient_for ##### -->
+<para>
+
+</para>
+
+@window: 
+@parent: 
+
+
+<!-- ##### SIGNAL GtkWindow::set-focus ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+@widget: 
+
+<!-- ##### ARG GtkWindow:type ##### -->
+<para>
+The type of the window.
+</para>
+
+<!-- ##### ARG GtkWindow:title ##### -->
+<para>
+The title of the window.
+</para>
+
+<!-- ##### ARG GtkWindow:auto_shrink ##### -->
+<para>
+If the window shrinks automatically when widgets within it shrink.
+</para>
+
+<!-- ##### ARG GtkWindow:allow_shrink ##### -->
+<para>
+If the window can be resized to a smaller size by the user.
+</para>
+
+<!-- ##### ARG GtkWindow:allow_grow ##### -->
+<para>
+If the window can be resized to a larger size by the user.
+</para>
+
+<!-- ##### ARG GtkWindow:modal ##### -->
+<para>
+If the window is modal, i.e. it grabs all GTK+ events.
+</para>
+
+<!-- ##### ARG GtkWindow:window_position ##### -->
+<para>
+The position of the window.
+</para>
+

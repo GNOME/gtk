@@ -1,0 +1,45 @@
+<!-- ##### SECTION Title ##### -->
+GtkVScale
+
+<!-- ##### SECTION Short_Description ##### -->
+a vertical slider widget for selecting a value from a range.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkVScale widget is used to allow the user to select a value using
+a vertical slider.
+A #GtkAdjustment is used to set the initial value, the lower
+and upper bounds, and the step and page increments.
+</para>
+<para>
+The position to show the current value, and the number of decimal places
+shown can be set using the parent #GtkScale class's functions.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkVScale ##### -->
+<para>
+The #GtkVScale-struct struct contains private data only, and
+should be accessed using the functions below.
+</para>
+
+@scale: 
+
+<!-- ##### FUNCTION gtk_vscale_new ##### -->
+<para>
+Creates a new #GtkVScale.
+</para>
+
+@adjustment: the #GtkAdjustment which sets the range of the scale.
+@Returns: a new #GtkVScale.
+
+
+<!-- ##### ARG GtkVScale:adjustment ##### -->
+<para>
+the #GtkAdjustment which sets the range of the scale.
+</para>
+

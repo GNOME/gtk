@@ -1,0 +1,446 @@
+<!-- ##### SECTION Title ##### -->
+GtkNotebook
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkNotebook ##### -->
+<para>
+
+</para>
+
+@container: 
+@cur_page: 
+@children: 
+@first_tab: 
+@focus_tab: 
+@menu: 
+@panel: 
+@timer: 
+@tab_hborder: 
+@tab_vborder: 
+@show_tabs: 
+@homogeneous: 
+@show_border: 
+@tab_pos: 
+@scrollable: 
+@in_child: 
+@click_child: 
+@button: 
+@need_timer: 
+@child_has_focus: 
+@have_visible_child: 
+
+<!-- ##### MACRO GTK_NOTEBOOK_PAGE ##### -->
+<para>
+
+</para>
+
+@_glist_: 
+
+
+<!-- ##### STRUCT GtkNotebookPage ##### -->
+<para>
+
+</para>
+
+@child: 
+@tab_label: 
+@menu_label: 
+@default_menu: 
+@default_tab: 
+@expand: 
+@fill: 
+@pack: 
+@requisition: 
+@allocation: 
+
+<!-- ##### FUNCTION gtk_notebook_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_notebook_append_page ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@tab_label: 
+
+
+<!-- ##### FUNCTION gtk_notebook_append_page_menu ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@tab_label: 
+@menu_label: 
+
+
+<!-- ##### FUNCTION gtk_notebook_prepend_page ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@tab_label: 
+
+
+<!-- ##### FUNCTION gtk_notebook_prepend_page_menu ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@tab_label: 
+@menu_label: 
+
+
+<!-- ##### FUNCTION gtk_notebook_insert_page ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@tab_label: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_notebook_insert_page_menu ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@tab_label: 
+@menu_label: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_notebook_remove_page ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@page_num: 
+
+
+<!-- ##### MACRO gtk_notebook_current_page ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_notebook_page_num ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_notebook_set_page ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@page_num: 
+
+
+<!-- ##### FUNCTION gtk_notebook_next_page ##### -->
+<para>
+
+</para>
+
+@notebook: 
+
+
+<!-- ##### FUNCTION gtk_notebook_prev_page ##### -->
+<para>
+
+</para>
+
+@notebook: 
+
+
+<!-- ##### FUNCTION gtk_notebook_reorder_child ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_notebook_set_tab_pos ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@pos: 
+
+
+<!-- ##### FUNCTION gtk_notebook_set_show_tabs ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@show_tabs: 
+
+
+<!-- ##### FUNCTION gtk_notebook_set_show_border ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@show_border: 
+
+
+<!-- ##### FUNCTION gtk_notebook_set_scrollable ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@scrollable: 
+
+
+<!-- ##### FUNCTION gtk_notebook_set_tab_border ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@border_width: 
+
+
+<!-- ##### FUNCTION gtk_notebook_popup_enable ##### -->
+<para>
+
+</para>
+
+@notebook: 
+
+
+<!-- ##### FUNCTION gtk_notebook_popup_disable ##### -->
+<para>
+
+</para>
+
+@notebook: 
+
+
+<!-- ##### FUNCTION gtk_notebook_get_current_page ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_notebook_get_menu_label ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_notebook_get_nth_page ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@page_num: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_notebook_get_tab_label ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_notebook_query_tab_label_packing ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@expand: 
+@fill: 
+@pack_type: 
+
+
+<!-- ##### FUNCTION gtk_notebook_set_homogeneous_tabs ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@homogeneous: 
+
+
+<!-- ##### FUNCTION gtk_notebook_set_menu_label ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@menu_label: 
+
+
+<!-- ##### FUNCTION gtk_notebook_set_menu_label_text ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@menu_text: 
+
+
+<!-- ##### FUNCTION gtk_notebook_set_tab_hborder ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@tab_hborder: 
+
+
+<!-- ##### FUNCTION gtk_notebook_set_tab_label ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@tab_label: 
+
+
+<!-- ##### FUNCTION gtk_notebook_set_tab_label_packing ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@expand: 
+@fill: 
+@pack_type: 
+
+
+<!-- ##### FUNCTION gtk_notebook_set_tab_label_text ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@child: 
+@tab_text: 
+
+
+<!-- ##### FUNCTION gtk_notebook_set_tab_vborder ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@tab_vborder: 
+
+
+<!-- ##### SIGNAL GtkNotebook::switch-page ##### -->
+<para>
+
+</para>
+
+@notebook: the object which received the signal.
+@page: 
+@page_num: 
+
+<!-- ##### ARG GtkNotebook:page ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab_pos ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab_border ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab_hborder ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab_vborder ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:show_tabs ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:show_border ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:scrollable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:enable_popup ##### -->
+<para>
+
+</para>
+

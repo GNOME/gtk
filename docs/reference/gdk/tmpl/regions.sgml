@@ -1,0 +1,217 @@
+<!-- ##### SECTION Title ##### -->
+Points, Rectangles and Regions
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GdkPoint ##### -->
+<para>
+
+</para>
+
+@x: 
+@y: 
+
+<!-- ##### STRUCT GdkRectangle ##### -->
+<para>
+
+</para>
+
+@x: 
+@y: 
+@width: 
+@height: 
+
+<!-- ##### FUNCTION gdk_rectangle_intersect ##### -->
+<para>
+
+</para>
+
+@src1: 
+@src2: 
+@dest: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_rectangle_union ##### -->
+<para>
+
+</para>
+
+@src1: 
+@src2: 
+@dest: 
+
+
+<!-- ##### STRUCT GdkRegion ##### -->
+<para>
+
+</para>
+
+@user_data: 
+
+<!-- ##### FUNCTION gdk_region_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_region_destroy ##### -->
+<para>
+
+</para>
+
+@region: 
+
+
+<!-- ##### FUNCTION gdk_region_get_clipbox ##### -->
+<para>
+
+</para>
+
+@region: 
+@rectangle: 
+
+
+<!-- ##### FUNCTION gdk_region_empty ##### -->
+<para>
+
+</para>
+
+@region: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_region_equal ##### -->
+<para>
+
+</para>
+
+@region1: 
+@region2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_region_point_in ##### -->
+<para>
+
+</para>
+
+@region: 
+@x: 
+@y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_region_rect_in ##### -->
+<para>
+
+</para>
+
+@region: 
+@rect: 
+@Returns: 
+
+
+<!-- ##### ENUM GdkOverlapType ##### -->
+<para>
+
+</para>
+
+@GDK_OVERLAP_RECTANGLE_IN: 
+@GDK_OVERLAP_RECTANGLE_OUT: 
+@GDK_OVERLAP_RECTANGLE_PART: 
+
+<!-- ##### FUNCTION gdk_region_polygon ##### -->
+<para>
+
+</para>
+
+@points: 
+@npoints: 
+@fill_rule: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_region_offset ##### -->
+<para>
+
+</para>
+
+@region: 
+@dx: 
+@dy: 
+
+
+<!-- ##### FUNCTION gdk_region_shrink ##### -->
+<para>
+
+</para>
+
+@region: 
+@dx: 
+@dy: 
+
+
+<!-- ##### FUNCTION gdk_region_union_with_rect ##### -->
+<para>
+
+</para>
+
+@region: 
+@rect: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_regions_intersect ##### -->
+<para>
+
+</para>
+
+@source1: 
+@source2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_regions_union ##### -->
+<para>
+
+</para>
+
+@source1: 
+@source2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_regions_subtract ##### -->
+<para>
+
+</para>
+
+@source1: 
+@source2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_regions_xor ##### -->
+<para>
+
+</para>
+
+@source1: 
+@source2: 
+@Returns: 
+
+

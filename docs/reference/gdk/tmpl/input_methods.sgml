@@ -1,0 +1,101 @@
+<!-- ##### SECTION Title ##### -->
+Input Methods
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM GdkIMStyle ##### -->
+<para>
+
+</para>
+
+@GDK_IM_PREEDIT_AREA: 
+@GDK_IM_PREEDIT_CALLBACKS: 
+@GDK_IM_PREEDIT_POSITION: 
+@GDK_IM_PREEDIT_NOTHING: 
+@GDK_IM_PREEDIT_NONE: 
+@GDK_IM_PREEDIT_MASK: 
+@GDK_IM_STATUS_AREA: 
+@GDK_IM_STATUS_CALLBACKS: 
+@GDK_IM_STATUS_NOTHING: 
+@GDK_IM_STATUS_NONE: 
+@GDK_IM_STATUS_MASK: 
+
+<!-- ##### TYPEDEF GdkWChar ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gdk_im_ready ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_im_begin ##### -->
+<para>
+
+</para>
+
+@ic: 
+@window: 
+
+
+<!-- ##### FUNCTION gdk_im_end ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_im_decide_style ##### -->
+<para>
+
+</para>
+
+@supported_style: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_im_set_best_style ##### -->
+<para>
+
+</para>
+
+@best_allowed_style: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_wcstombs ##### -->
+<para>
+
+</para>
+
+@src: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_mbstowcs ##### -->
+<para>
+
+</para>
+
+@dest: 
+@src: 
+@dest_max: 
+@Returns: 
+
+

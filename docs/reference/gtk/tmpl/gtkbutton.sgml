@@ -1,0 +1,163 @@
+<!-- ##### SECTION Title ##### -->
+GtkButton
+
+<!-- ##### SECTION Short_Description ##### -->
+A widget that creates a signal when clicked on.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkButton widget is generally used to attach a function to that
+is called when the button is pressed.  The various signals and how to use
+them are outlined below.
+</para>
+<para>
+The #GtkButton widget can hold any valid child widget.  That is it can
+hold most any other standard #GtkWidget.  The most commonly used child is
+the #GtkLabel.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkButton ##### -->
+<para>
+This should not be accessed directly.  Use the accessor functions below.
+</para>
+
+@bin: 
+@child: 
+@in_button: 
+@button_down: 
+@relief: 
+
+<!-- ##### FUNCTION gtk_button_new ##### -->
+<para>
+Creates a new #GtkButton widget.
+</para>
+
+@Returns: The newly created #GtkButton widget.
+
+
+<!-- ##### FUNCTION gtk_button_new_with_label ##### -->
+<para>
+Creates a #GtkButton widget with a #GtkLabel child containing the given
+text.
+</para>
+
+@label: The text you want the #GtkLabel to hold.
+@Returns: The newly created #GtkButton widget.
+
+
+<!-- ##### FUNCTION gtk_button_pressed ##### -->
+<para>
+Emits a #GtkButton::pressed signal to the given #GtkButton.
+</para>
+
+@button: The #GtkButton you want to send the signal to.
+
+
+<!-- ##### FUNCTION gtk_button_released ##### -->
+<para>
+Emits a #GtkButton::released signal to the given #GtkButton.
+</para>
+
+@button: The #GtkButton you want to send the signal to.
+
+
+<!-- ##### FUNCTION gtk_button_clicked ##### -->
+<para>
+Emits a #GtkButton::clicked signal to the given #GtkButton.
+</para>
+
+@button: The #GtkButton you want to send the signal to.
+
+
+<!-- ##### FUNCTION gtk_button_enter ##### -->
+<para>
+Emits a #GtkButton::enter signal to the given #GtkButton.
+</para>
+
+@button: The #GtkButton you want to send the signal to.
+
+
+<!-- ##### FUNCTION gtk_button_leave ##### -->
+<para>
+Emits a #GtkButton::leave signal to the given #GtkButton.
+</para>
+
+@button: The #GtkButton you want to send the signal to.
+
+
+<!-- ##### FUNCTION gtk_button_set_relief ##### -->
+<para>
+Sets the relief style of the edges of the given #GtkButton widget.
+Three styles exist, GTK_RELIEF_NORMAL, GTK_RELIEF_HALF, GTK_RELIEF_NONE.
+The default style is, as one can guess, GTK_RELIEF_NORMAL.
+
+<!-- FIXME: put pictures of each style -->
+</para>
+
+@button: The #GtkButton you want to set relief styles of.
+@newstyle: The GtkReliefStyle as described above.
+
+
+<!-- ##### FUNCTION gtk_button_get_relief ##### -->
+<para>
+Returns the current relief style of the given #GtkButton.
+</para>
+
+@button: The #GtkButton you want the #GtkReliefStyle from.
+@Returns: The current #GtkReliefStyle
+
+
+<!-- ##### SIGNAL GtkButton::pressed ##### -->
+<para>
+Emitted when the button is initially pressed.
+</para>
+
+@button: the object which received the signal.
+
+<!-- ##### SIGNAL GtkButton::released ##### -->
+<para>
+Emitted when a button which is pressed is released, no matter where the
+mouse cursor is.
+</para>
+
+@button: the object which received the signal.
+
+<!-- ##### SIGNAL GtkButton::clicked ##### -->
+<para>
+Emitted when a button clicked on by the mouse and the cursor stays on the
+button.  If the cursor is not on the button when the mouse button is released,
+the signal is not emitted.
+</para>
+
+@button: the object which received the signal.
+
+<!-- ##### SIGNAL GtkButton::enter ##### -->
+<para>
+Emitted when the mouse cursor enters the region of the button.
+</para>
+
+@button: the object which received the signal.
+
+<!-- ##### SIGNAL GtkButton::leave ##### -->
+<para>
+Emitted when the mouse cursor leaves the region of the button.
+</para>
+
+@button: the object which received the signal.
+
+<!-- ##### ARG GtkButton:label ##### -->
+<para>
+The text within the child #GtkLabel of the #GtkButton.  Only useful if
+there is actually a #GtkLabel inside of the #GtkButton.
+</para>
+
+<!-- ##### ARG GtkButton:relief ##### -->
+<para>
+The #GtkReliefStyle as outlined in gtk_button_set_relief().
+</para>
+

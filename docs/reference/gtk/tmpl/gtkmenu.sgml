@@ -1,0 +1,287 @@
+<!-- ##### SECTION Title ##### -->
+GtkMenu
+
+<!-- ##### SECTION Short_Description ##### -->
+a drop down menu widget.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+A #GtkMenu is a #GtkMenuShell that implements a drop down menu consisting of
+a list of #GtkMenuItem objects which can be navigated and activated by the 
+user to perform application functions.
+</para>
+
+<para>
+A #GtkMenu is most commonly dropped down by activating a #GtkMenuItem in a 
+#GtkMenuBar or popped up by activating a #GtkMenuItem in another #GtkMenu.  
+</para>
+
+<para>
+A #GtkMenu can also be popped up by activating a #GtkOptionMenu.  
+Other composite widgets such as the #GtkNotebook can pop up a #GtkMenu 
+as well.
+</para>
+
+<para>
+Applications can display a #GtkMenu as a popup menu by calling the 
+gtk_menu_popup() function.  The example below shows how an application
+can pop up a menu when the 3rd mouse button is pressed.  
+</para>
+
+<example>
+<title>Connecting the popup signal handler.</title>
+<programlisting>
+    /* connect our handler which will popup the menu */
+    gtk_signal_connect_object(GTK_OBJECT(window), "button_press_event",
+	GTK_SIGNAL_FUNC (my_popup_handler), GTK_OBJECT(menu));
+</programlisting>
+</example>
+
+<example>
+<title>Signal handler which displays a popup menu.</title>
+<programlisting>
+static gint
+my_popup_handler(GtkWidget *widget, GdkEvent *event)
+{
+  GtkMenu *menu;
+  GdkEventButton *event_button;
+
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  /* The "widget" is the menu that was supplied when 
+   * gtk_signal_connect_object was called.
+   */
+  menu = GTK_MENU (widget);
+
+  if (event->type == GDK_BUTTON_PRESS)
+    {
+      event_button = (GdkEventButton *) event;
+      if (event_button->button == 3)
+	{
+	  gtk_menu_popup (menu, NULL, NULL, NULL, NULL, 
+			  event_button->button, event_button->time);
+	  return TRUE;
+	}
+    }
+
+  return FALSE;
+}
+</programlisting>
+</example>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkMenu ##### -->
+<para>
+The #GtkMenu-struct struct contains private data only, and
+should be accessed using the functions below.
+</para>
+
+@menu_shell: 
+@parent_menu_item: 
+@old_active_menu_item: 
+@accel_group: 
+@position_func: 
+@position_func_data: 
+@toplevel: 
+@tearoff_window: 
+@torn_off: 
+
+<!-- ##### FUNCTION gtk_menu_new ##### -->
+<para>
+Creates a new #GtkMenu.
+</para>
+
+@Returns: a new #GtkMenu.
+
+
+<!-- ##### FUNCTION gtk_menu_append ##### -->
+<para>
+Adds a new #GtkMenuItem to the end of the menu's item list.
+</para>
+
+@menu: a #GtkMenu.
+@child: The #GtkMenuItem to add.
+
+
+<!-- ##### FUNCTION gtk_menu_prepend ##### -->
+<para>
+Adds a new #GtkMenuItem to the beginning of the menu's item list.
+</para>
+
+@menu: a #GtkMenu.
+@child: The #GtkMenuItem to add.
+
+
+<!-- ##### FUNCTION gtk_menu_insert ##### -->
+<para>
+Adds a new #GtkMenuItem to the menu's item list at the position
+indicated by @position. 
+</para>
+
+@menu: a #GtkMenu.
+@child: The #GtkMenuItem to add.
+@position: The position in the item list where @child is added.
+Positions are numbered from 0 to n-1.
+
+
+<!-- ##### FUNCTION gtk_menu_reorder_child ##### -->
+<para>
+Moves a #GtkMenuItem to a new position within the #GtkMenu.
+</para>
+
+@menu: a #GtkMenu.
+@child: the #GtkMenuItem to move.
+@position: the new position to place @child.  Positions are numbered from 
+0 to n-1.
+
+
+<!-- ##### FUNCTION gtk_menu_popup ##### -->
+<para>
+Displays a menu and makes it available for selection.  Applications can use
+this function to display context-sensitive menus, and will typically supply
+NULL for the @parent_menu_shell, @parent_menu_item, @func and @data 
+parameters.  The default menu positioning function will position the menu
+at the current pointer position.
+</para>
+
+@menu: a #GtkMenu.
+@parent_menu_shell: the menu shell containing the triggering menu item.
+@parent_menu_item: the menu item whose activation triggered the popup.
+@func: a user supplied function used to position the menu.
+@data: user supplied data to be passed to @func.
+@button: the button which was pressed to initiate the event.
+@activate_time: the time at which the activation event occurred.
+
+
+<!-- ##### FUNCTION gtk_menu_set_accel_group ##### -->
+<para>
+Set the #GtkAccelGroup which holds global accelerators for the menu.
+</para>
+
+@menu: a #GtkMenu.
+@accel_group: the #GtkAccelGroup to be associated with the menu.
+
+
+<!-- ##### FUNCTION gtk_menu_set_title ##### -->
+<para>
+Sets the title string for the menu.  The title is displayed when the menu
+is shown as a tearoff menu.
+</para>
+
+@menu: a #GtkMenu.
+@title: a string containing the title for the menu.
+
+
+<!-- ##### FUNCTION gtk_menu_popdown ##### -->
+<para>
+Removes the menu from the screen.
+</para>
+
+@menu: a #GtkMenu.
+
+
+<!-- ##### FUNCTION gtk_menu_reposition ##### -->
+<para>
+Repositions the menu according to its position function.
+</para>
+
+@menu: a #GtkMenu.
+
+
+<!-- ##### FUNCTION gtk_menu_get_active ##### -->
+<para>
+Returns the selected menu item from the menu.  This is used by the 
+#GtkOptionMenu.
+</para>
+
+@menu: a #GtkMenu.
+@Returns: the #GtkMenuItem that was last selected in the menu.  If a 
+selection has not yet been made, the first menu item is selected.
+
+
+<!-- ##### FUNCTION gtk_menu_set_active ##### -->
+<para>
+Selects the specified menu item within the menu.  This is used by the
+#GtkOptionMenu.
+</para>
+
+@menu: a #GtkMenu.
+@index: the index of the menu item to select.  Index values are from
+0 to n-1.
+
+
+<!-- ##### FUNCTION gtk_menu_set_tearoff_state ##### -->
+<para>
+Changes the tearoff state of the menu.  A menu is normally displayed 
+as drop down menu which persists as long as the menu is active.  It can 
+also be displayed as a tearoff menu which persists until it is closed 
+or reattached.
+</para>
+
+@menu: a #GtkMenu.
+@torn_off: If TRUE, menu is displayed as a tearoff menu.
+
+
+<!-- ##### FUNCTION gtk_menu_attach_to_widget ##### -->
+<para>
+Attaches the menu to the widget and provides a callback function that will
+be invoked when the menu calls gtk_menu_detach() during its destruction.
+</para>
+
+@menu: a #GtkMenu.
+@attach_widget: the #GtkWidget that the menu will be attached to.
+@detacher: the user supplied callback function that will be called when 
+the menu calls gtk_menu_detach().
+
+
+<!-- ##### FUNCTION gtk_menu_detach ##### -->
+<para>
+Detaches the menu from the widget to which it had been attached.  
+This function will call the callback function, @detacher, provided
+when the gtk_menu_attach_to_widget() function was called.
+</para>
+
+@menu: a #GtkMenu.
+
+
+<!-- ##### FUNCTION gtk_menu_get_attach_widget ##### -->
+<para>
+Returns the #GtkWidget that the menu is attached to.
+</para>
+
+@menu: a #GtkMenu.
+@Returns: the #GtkWidget that the menu is attached to.
+
+
+<!-- ##### USER_FUNCTION GtkMenuPositionFunc ##### -->
+<para>
+A user function supplied when calling gtk_menu_popup() which controls the
+positioning of the menu when it is displayed.  The function sets the @x
+and @y parameters to the coordinates where the menu is to be drawn.
+</para>
+
+@menu: a #GtkMenu.
+@x: address of the #gint representing the horizontal position where the
+menu shall be drawn.  This is an output parameter.
+@y: address of the #gint representing the vertical position where the
+menu shall be drawn.  This is an output parameter.
+@user_data: the data supplied by the user in the gtk_menu_popup() @data
+parameter.
+
+
+<!-- ##### USER_FUNCTION GtkMenuDetachFunc ##### -->
+<para>
+A user function supplied when calling gtk_menu_attach_to_widget() which 
+will be called when the menu is later detached from the widget.
+</para>
+
+@attach_widget: the #GtkWidget that the menu is being detached from.
+@menu: the #GtkMenu being detached.
+
+

@@ -1,0 +1,150 @@
+<!-- ##### SECTION Title ##### -->
+GtkProgressBar
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkProgressBar ##### -->
+<para>
+
+</para>
+
+@progress: 
+@bar_style: 
+@orientation: 
+@blocks: 
+@in_block: 
+@activity_pos: 
+@activity_step: 
+@activity_blocks: 
+@activity_dir: 
+
+<!-- ##### ENUM GtkProgressBarStyle ##### -->
+<para>
+
+</para>
+
+@GTK_PROGRESS_CONTINUOUS: 
+@GTK_PROGRESS_DISCRETE: 
+
+<!-- ##### ENUM GtkProgressBarOrientation ##### -->
+<para>
+
+</para>
+
+@GTK_PROGRESS_LEFT_TO_RIGHT: 
+@GTK_PROGRESS_RIGHT_TO_LEFT: 
+@GTK_PROGRESS_BOTTOM_TO_TOP: 
+@GTK_PROGRESS_TOP_TO_BOTTOM: 
+
+<!-- ##### FUNCTION gtk_progress_bar_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_new_with_adjustment ##### -->
+<para>
+
+</para>
+
+@adjustment: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_bar_style ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@style: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_discrete_blocks ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@blocks: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_activity_step ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@step: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_activity_blocks ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@blocks: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_set_orientation ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@orientation: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_update ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@percentage: 
+
+
+<!-- ##### ARG GtkProgressBar:adjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:orientation ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:bar_style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:activity_step ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:activity_blocks ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgressBar:discrete_blocks ##### -->
+<para>
+
+</para>
+

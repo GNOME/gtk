@@ -1,0 +1,94 @@
+<!-- ##### SECTION Title ##### -->
+Selections
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM GdkSelection ##### -->
+<para>
+
+</para>
+
+@GDK_SELECTION_PRIMARY: 
+@GDK_SELECTION_SECONDARY: 
+
+<!-- ##### ENUM GdkSelectionType ##### -->
+<para>
+
+</para>
+
+@GDK_SELECTION_TYPE_ATOM: 
+@GDK_SELECTION_TYPE_BITMAP: 
+@GDK_SELECTION_TYPE_COLORMAP: 
+@GDK_SELECTION_TYPE_DRAWABLE: 
+@GDK_SELECTION_TYPE_INTEGER: 
+@GDK_SELECTION_TYPE_PIXMAP: 
+@GDK_SELECTION_TYPE_WINDOW: 
+@GDK_SELECTION_TYPE_STRING: 
+
+<!-- ##### FUNCTION gdk_selection_owner_set ##### -->
+<para>
+
+</para>
+
+@owner: 
+@selection: 
+@time: 
+@send_event: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_selection_owner_get ##### -->
+<para>
+
+</para>
+
+@selection: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_selection_convert ##### -->
+<para>
+
+</para>
+
+@requestor: 
+@selection: 
+@target: 
+@time: 
+
+
+<!-- ##### FUNCTION gdk_selection_property_get ##### -->
+<para>
+
+</para>
+
+@requestor: 
+@data: 
+@prop_type: 
+@prop_format: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_selection_send_notify ##### -->
+<para>
+
+</para>
+
+@requestor: 
+@selection: 
+@target: 
+@property: 
+@time: 
+
+

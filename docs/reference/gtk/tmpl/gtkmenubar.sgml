@@ -1,0 +1,74 @@
+<!-- ##### SECTION Title ##### -->
+GtkMenuBar
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkMenuBar ##### -->
+<para>
+
+</para>
+
+@menu_shell: 
+@shadow_type: 
+
+<!-- ##### FUNCTION gtk_menu_bar_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_bar_append ##### -->
+<para>
+
+</para>
+
+@menu_bar: 
+@child: 
+
+
+<!-- ##### FUNCTION gtk_menu_bar_prepend ##### -->
+<para>
+
+</para>
+
+@menu_bar: 
+@child: 
+
+
+<!-- ##### FUNCTION gtk_menu_bar_insert ##### -->
+<para>
+
+</para>
+
+@menu_bar: 
+@child: 
+@position: 
+
+
+<!-- ##### FUNCTION gtk_menu_bar_set_shadow_type ##### -->
+<para>
+
+</para>
+
+@menu_bar: 
+@type: 
+
+
+<!-- ##### ARG GtkMenuBar:shadow ##### -->
+<para>
+
+</para>
+

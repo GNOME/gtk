@@ -1,0 +1,30 @@
+<!-- ##### SECTION Title ##### -->
+GtkData
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkData ##### -->
+<para>
+
+</para>
+
+@object: 
+
+<!-- ##### SIGNAL GtkData::disconnect ##### -->
+<para>
+
+</para>
+
+@data: the object which received the signal.
+

@@ -1,0 +1,85 @@
+<!-- ##### SECTION Title ##### -->
+GtkRadioButton
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkRadioButton ##### -->
+<para>
+
+</para>
+
+@check_button: 
+@group: 
+
+<!-- ##### FUNCTION gtk_radio_button_new ##### -->
+<para>
+
+</para>
+
+@group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_button_new_from_widget ##### -->
+<para>
+
+</para>
+
+@group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_button_new_with_label ##### -->
+<para>
+
+</para>
+
+@group: 
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_button_new_with_label_from_widget ##### -->
+<para>
+
+</para>
+
+@group: 
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_button_group ##### -->
+<para>
+
+</para>
+
+@radio_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_button_set_group ##### -->
+<para>
+
+</para>
+
+@radio_button: 
+@group: 
+
+
+<!-- ##### ARG GtkRadioButton:group ##### -->
+<para>
+
+</para>
+

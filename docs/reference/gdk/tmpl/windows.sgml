@@ -1,0 +1,777 @@
+<!-- ##### SECTION Title ##### -->
+Windows
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GdkWindowAttr ##### -->
+<para>
+
+</para>
+
+@title: 
+@event_mask: 
+@x: 
+@y: 
+@width: 
+@height: 
+@wclass: 
+@visual: 
+@colormap: 
+@window_type: 
+@cursor: 
+@wmclass_name: 
+@wmclass_class: 
+@override_redirect: 
+
+<!-- ##### STRUCT GdkWindow ##### -->
+<para>
+
+</para>
+
+@user_data: 
+
+<!-- ##### ENUM GdkWindowType ##### -->
+<para>
+
+</para>
+
+@GDK_WINDOW_ROOT: 
+@GDK_WINDOW_TOPLEVEL: 
+@GDK_WINDOW_CHILD: 
+@GDK_WINDOW_DIALOG: 
+@GDK_WINDOW_TEMP: 
+@GDK_WINDOW_PIXMAP: 
+@GDK_WINDOW_FOREIGN: 
+
+<!-- ##### ENUM GdkWindowClass ##### -->
+<para>
+
+</para>
+
+@GDK_INPUT_OUTPUT: 
+@GDK_INPUT_ONLY: 
+
+<!-- ##### ENUM GdkWindowAttributesType ##### -->
+<para>
+
+</para>
+
+@GDK_WA_TITLE: 
+@GDK_WA_X: 
+@GDK_WA_Y: 
+@GDK_WA_CURSOR: 
+@GDK_WA_COLORMAP: 
+@GDK_WA_VISUAL: 
+@GDK_WA_WMCLASS: 
+@GDK_WA_NOREDIR: 
+
+<!-- ##### ENUM GdkWindowHints ##### -->
+<para>
+
+</para>
+
+@GDK_HINT_POS: 
+@GDK_HINT_MIN_SIZE: 
+@GDK_HINT_MAX_SIZE: 
+@GDK_HINT_BASE_SIZE: 
+@GDK_HINT_ASPECT: 
+@GDK_HINT_RESIZE_INC: 
+
+<!-- ##### STRUCT GdkGeometry ##### -->
+<para>
+
+</para>
+
+@min_width: 
+@min_height: 
+@max_width: 
+@max_height: 
+@base_width: 
+@base_height: 
+@width_inc: 
+@height_inc: 
+@min_aspect: 
+@max_aspect: 
+
+<!-- ##### FUNCTION gdk_window_new ##### -->
+<para>
+
+</para>
+
+@parent: 
+@attributes: 
+@attributes_mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_destroy ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_ref ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_unref ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_at_pointer ##### -->
+<para>
+
+</para>
+
+@win_x: 
+@win_y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_show ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_hide ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_is_visible ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_is_viewable ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_withdraw ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_move ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_window_resize ##### -->
+<para>
+
+</para>
+
+@window: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_window_move_resize ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_window_reparent ##### -->
+<para>
+
+</para>
+
+@window: 
+@new_parent: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_window_clear ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_clear_area ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_window_clear_area_e ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_window_copy_area ##### -->
+<para>
+
+</para>
+
+@window: 
+@gc: 
+@x: 
+@y: 
+@source_window: 
+@source_x: 
+@source_y: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_window_raise ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_lower ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_register_dnd ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_set_user_data ##### -->
+<para>
+
+</para>
+
+@window: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gdk_window_set_override_redirect ##### -->
+<para>
+
+</para>
+
+@window: 
+@override_redirect: 
+
+
+<!-- ##### FUNCTION gdk_window_add_filter ##### -->
+<para>
+
+</para>
+
+@window: 
+@function: 
+@data: 
+
+
+<!-- ##### FUNCTION gdk_window_remove_filter ##### -->
+<para>
+
+</para>
+
+@window: 
+@function: 
+@data: 
+
+
+<!-- ##### USER_FUNCTION GdkFilterFunc ##### -->
+<para>
+
+</para>
+
+@xevent: 
+@event: 
+@data: 
+@Returns: 
+
+
+<!-- ##### ENUM GdkFilterReturn ##### -->
+<para>
+
+</para>
+
+@GDK_FILTER_CONTINUE: 
+@GDK_FILTER_TRANSLATE: 
+@GDK_FILTER_REMOVE: 
+
+<!-- ##### FUNCTION gdk_window_shape_combine_mask ##### -->
+<para>
+
+</para>
+
+@window: 
+@shape_mask: 
+@offset_x: 
+@offset_y: 
+
+
+<!-- ##### FUNCTION gdk_window_set_child_shapes ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_merge_child_shapes ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_set_static_gravities ##### -->
+<para>
+
+</para>
+
+@window: 
+@use_static: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_set_hints ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@min_width: 
+@min_height: 
+@max_width: 
+@max_height: 
+@flags: 
+
+
+<!-- ##### FUNCTION gdk_window_set_title ##### -->
+<para>
+
+</para>
+
+@window: 
+@title: 
+
+
+<!-- ##### FUNCTION gdk_window_set_background ##### -->
+<para>
+
+</para>
+
+@window: 
+@color: 
+
+
+<!-- ##### FUNCTION gdk_window_set_back_pixmap ##### -->
+<para>
+
+</para>
+
+@window: 
+@pixmap: 
+@parent_relative: 
+
+
+<!-- ##### MACRO GDK_PARENT_RELATIVE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_window_set_cursor ##### -->
+<para>
+
+</para>
+
+@window: 
+@cursor: 
+
+
+<!-- ##### FUNCTION gdk_window_set_colormap ##### -->
+<para>
+
+</para>
+
+@window: 
+@colormap: 
+
+
+<!-- ##### FUNCTION gdk_window_get_user_data ##### -->
+<para>
+
+</para>
+
+@window: 
+@data: 
+
+
+<!-- ##### FUNCTION gdk_window_get_geometry ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@width: 
+@height: 
+@depth: 
+
+
+<!-- ##### FUNCTION gdk_window_set_geometry_hints ##### -->
+<para>
+
+</para>
+
+@window: 
+@geometry: 
+@flags: 
+
+
+<!-- ##### FUNCTION gdk_window_get_position ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_window_get_root_origin ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_window_get_size ##### -->
+<para>
+
+</para>
+
+@window: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gdk_window_get_visual ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_colormap ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_type ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_origin ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_deskrelative_origin ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_pointer ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@mask: 
+@Returns: 
+
+
+<!-- ##### ENUM GdkModifierType ##### -->
+<para>
+
+</para>
+
+@GDK_SHIFT_MASK: 
+@GDK_LOCK_MASK: 
+@GDK_CONTROL_MASK: 
+@GDK_MOD1_MASK: 
+@GDK_MOD2_MASK: 
+@GDK_MOD3_MASK: 
+@GDK_MOD4_MASK: 
+@GDK_MOD5_MASK: 
+@GDK_BUTTON1_MASK: 
+@GDK_BUTTON2_MASK: 
+@GDK_BUTTON3_MASK: 
+@GDK_BUTTON4_MASK: 
+@GDK_BUTTON5_MASK: 
+@GDK_RELEASE_MASK: 
+@GDK_MODIFIER_MASK: 
+
+<!-- ##### FUNCTION gdk_window_get_parent ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_toplevel ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_children ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_events ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_set_events ##### -->
+<para>
+
+</para>
+
+@window: 
+@event_mask: 
+
+
+<!-- ##### FUNCTION gdk_window_set_icon ##### -->
+<para>
+
+</para>
+
+@window: 
+@icon_window: 
+@pixmap: 
+@mask: 
+
+
+<!-- ##### FUNCTION gdk_window_set_icon_name ##### -->
+<para>
+
+</para>
+
+@window: 
+@name: 
+
+
+<!-- ##### FUNCTION gdk_window_set_transient_for ##### -->
+<para>
+
+</para>
+
+@window: 
+@leader: 
+
+
+<!-- ##### FUNCTION gdk_window_set_role ##### -->
+<para>
+
+</para>
+
+@window: 
+@role: 
+
+
+<!-- ##### FUNCTION gdk_window_set_group ##### -->
+<para>
+
+</para>
+
+@window: 
+@leader: 
+
+
+<!-- ##### FUNCTION gdk_window_set_decorations ##### -->
+<para>
+
+</para>
+
+@window: 
+@decorations: 
+
+
+<!-- ##### ENUM GdkWMDecoration ##### -->
+<para>
+
+</para>
+
+@GDK_DECOR_ALL: 
+@GDK_DECOR_BORDER: 
+@GDK_DECOR_RESIZEH: 
+@GDK_DECOR_TITLE: 
+@GDK_DECOR_MENU: 
+@GDK_DECOR_MINIMIZE: 
+@GDK_DECOR_MAXIMIZE: 
+
+<!-- ##### FUNCTION gdk_window_set_functions ##### -->
+<para>
+
+</para>
+
+@window: 
+@functions: 
+
+
+<!-- ##### ENUM GdkWMFunction ##### -->
+<para>
+
+</para>
+
+@GDK_FUNC_ALL: 
+@GDK_FUNC_RESIZE: 
+@GDK_FUNC_MOVE: 
+@GDK_FUNC_MINIMIZE: 
+@GDK_FUNC_MAXIMIZE: 
+@GDK_FUNC_CLOSE: 
+
+<!-- ##### FUNCTION gdk_window_get_toplevels ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### STRUCT GdkDrawable ##### -->
+<para>
+
+</para>
+
+@user_data: 
+
+<!-- ##### FUNCTION gdk_drawable_set_data ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@key: 
+@data: 
+@destroy_func: 
+
+

@@ -1,0 +1,104 @@
+<!-- ##### SECTION Title ##### -->
+GtkFixed
+
+<!-- ##### SECTION Short_Description ##### -->
+a container which supports fixed sizes and positions of its children.
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkFixed widget is a container which can place child widgets at fixed
+positions and with fixed sizes, given in pixels.
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkFixed ##### -->
+<para>
+The #GtkFixed-struct struct contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>#GList *children;</entry>
+<entry>a list of #GtkFixedChild elements, containing the child widgets and
+their positions.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@container: 
+@children: 
+
+<!-- ##### STRUCT GtkFixedChild ##### -->
+<para>
+The #GtkFixedChild-struct struct contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>#GtkWidget *widget;</entry>
+<entry>the child #GtkWidget.</entry>
+</row>
+
+<row>
+<entry>#gint16 x;</entry>
+<entry>the horizontal position of the widget within the #GtkFixed
+container.</entry>
+</row>
+
+<row>
+<entry>#gint16 y;</entry>
+<entry>the vertical position of the widget within the #GtkFixed
+container.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@widget: 
+@x: 
+@y: 
+
+<!-- ##### FUNCTION gtk_fixed_new ##### -->
+<para>
+Creates a new #GtkFixed.
+</para>
+
+@Returns: a new #GtkFixed.
+
+
+<!-- ##### FUNCTION gtk_fixed_put ##### -->
+<para>
+Adds a widget to a #GtkFixed container at the given position.
+</para>
+
+@fixed: a #GtkFixed.
+@widget: the widget to add.
+@x: the horizontal position to place the widget at.
+@y: the vertical position to place the widget at.
+
+
+<!-- ##### FUNCTION gtk_fixed_move ##### -->
+<para>
+Moves a child of a #GtkFixed container to the given position.
+</para>
+
+@fixed: a #GtkFixed.
+@widget: the child widget.
+@x: the horizontal position to move the widget to.
+@y: the vertical position to move the widget to.
+
+

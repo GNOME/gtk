@@ -1,0 +1,154 @@
+<!-- ##### SECTION Title ##### -->
+Input Contexts
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GdkIC ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GdkICAttr ##### -->
+<para>
+
+</para>
+
+@style: 
+@client_window: 
+@focus_window: 
+@filter_events: 
+@spot_location: 
+@line_spacing: 
+@cursor: 
+@preedit_fontset: 
+@preedit_area: 
+@preedit_area_needed: 
+@preedit_foreground: 
+@preedit_background: 
+@preedit_pixmap: 
+@preedit_colormap: 
+@status_fontset: 
+@status_area: 
+@status_area_needed: 
+@status_foreground: 
+@status_background: 
+@status_pixmap: 
+@status_colormap: 
+
+<!-- ##### ENUM GdkICAttributesType ##### -->
+<para>
+
+</para>
+
+@GDK_IC_STYLE: 
+@GDK_IC_CLIENT_WINDOW: 
+@GDK_IC_FOCUS_WINDOW: 
+@GDK_IC_FILTER_EVENTS: 
+@GDK_IC_SPOT_LOCATION: 
+@GDK_IC_LINE_SPACING: 
+@GDK_IC_CURSOR: 
+@GDK_IC_PREEDIT_FONTSET: 
+@GDK_IC_PREEDIT_AREA: 
+@GDK_IC_PREEDIT_AREA_NEEDED: 
+@GDK_IC_PREEDIT_FOREGROUND: 
+@GDK_IC_PREEDIT_BACKGROUND: 
+@GDK_IC_PREEDIT_PIXMAP: 
+@GDK_IC_PREEDIT_COLORMAP: 
+@GDK_IC_STATUS_FONTSET: 
+@GDK_IC_STATUS_AREA: 
+@GDK_IC_STATUS_AREA_NEEDED: 
+@GDK_IC_STATUS_FOREGROUND: 
+@GDK_IC_STATUS_BACKGROUND: 
+@GDK_IC_STATUS_PIXMAP: 
+@GDK_IC_STATUS_COLORMAP: 
+@GDK_IC_ALL_REQ: 
+@GDK_IC_PREEDIT_AREA_REQ: 
+@GDK_IC_PREEDIT_POSITION_REQ: 
+@GDK_IC_STATUS_AREA_REQ: 
+
+<!-- ##### FUNCTION gdk_ic_new ##### -->
+<para>
+
+</para>
+
+@attr: 
+@mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_ic_destroy ##### -->
+<para>
+
+</para>
+
+@ic: 
+
+
+<!-- ##### FUNCTION gdk_ic_get_style ##### -->
+<para>
+
+</para>
+
+@ic: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_ic_set_attr ##### -->
+<para>
+
+</para>
+
+@ic: 
+@attr: 
+@mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_ic_get_attr ##### -->
+<para>
+
+</para>
+
+@ic: 
+@attr: 
+@mask: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_ic_get_events ##### -->
+<para>
+
+</para>
+
+@ic: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_ic_attr_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_ic_attr_destroy ##### -->
+<para>
+
+</para>
+
+@attr: 
+
+

@@ -1,0 +1,257 @@
+<!-- ##### SECTION Title ##### -->
+Event Structures
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GdkEventAny ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+
+<!-- ##### STRUCT GdkEventExpose ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@area: 
+@count: 
+
+<!-- ##### STRUCT GdkEventNoExpose ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+
+<!-- ##### STRUCT GdkEventVisibility ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@state: 
+
+<!-- ##### ENUM GdkVisibilityState ##### -->
+<para>
+
+</para>
+
+@GDK_VISIBILITY_UNOBSCURED: 
+@GDK_VISIBILITY_PARTIAL: 
+@GDK_VISIBILITY_FULLY_OBSCURED: 
+
+<!-- ##### STRUCT GdkEventMotion ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@time: 
+@x: 
+@y: 
+@pressure: 
+@xtilt: 
+@ytilt: 
+@state: 
+@is_hint: 
+@source: 
+@deviceid: 
+@x_root: 
+@y_root: 
+
+<!-- ##### STRUCT GdkEventButton ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@time: 
+@x: 
+@y: 
+@pressure: 
+@xtilt: 
+@ytilt: 
+@state: 
+@button: 
+@source: 
+@deviceid: 
+@x_root: 
+@y_root: 
+
+<!-- ##### STRUCT GdkEventKey ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@time: 
+@state: 
+@keyval: 
+@length: 
+@string: 
+
+<!-- ##### STRUCT GdkEventCrossing ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@subwindow: 
+@time: 
+@x: 
+@y: 
+@x_root: 
+@y_root: 
+@mode: 
+@detail: 
+@focus: 
+@state: 
+
+<!-- ##### ENUM GdkCrossingMode ##### -->
+<para>
+
+</para>
+
+@GDK_CROSSING_NORMAL: 
+@GDK_CROSSING_GRAB: 
+@GDK_CROSSING_UNGRAB: 
+
+<!-- ##### ENUM GdkNotifyType ##### -->
+<para>
+
+</para>
+
+@GDK_NOTIFY_ANCESTOR: 
+@GDK_NOTIFY_VIRTUAL: 
+@GDK_NOTIFY_INFERIOR: 
+@GDK_NOTIFY_NONLINEAR: 
+@GDK_NOTIFY_NONLINEAR_VIRTUAL: 
+@GDK_NOTIFY_UNKNOWN: 
+
+<!-- ##### STRUCT GdkEventFocus ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@in: 
+
+<!-- ##### STRUCT GdkEventConfigure ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+<!-- ##### STRUCT GdkEventProperty ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@atom: 
+@time: 
+@state: 
+
+<!-- ##### STRUCT GdkEventSelection ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@selection: 
+@target: 
+@property: 
+@requestor: 
+@time: 
+
+<!-- ##### STRUCT GdkEventProximity ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@time: 
+@source: 
+@deviceid: 
+
+<!-- ##### STRUCT GdkEventClient ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@message_type: 
+@data_format: 
+
+<!-- ##### STRUCT GdkEventDND ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@context: 
+@time: 
+@x_root: 
+@y_root: 
+
+<!-- ##### UNION GdkEvent ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### TYPEDEF GdkXEvent ##### -->
+<para>
+
+</para>
+
+
