@@ -94,7 +94,7 @@ Selects the menu item from the menu shell.
 Deselects the currently selected item from the menu shell, if any.
 </para>
 
-@menu_shell: a #GtkMenuShell. 
+@menu_shell: a #GtkMenuShell.
 
 
 <!-- ##### FUNCTION gtk_menu_shell_activate_item ##### -->

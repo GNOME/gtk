@@ -1412,7 +1412,7 @@ gtk_tree_model_sort_sort_level (GtkTreeModelSort *tree_model_sort,
 	/* isn't supposed to happen */
 	break;
 
-      new_order[i] = j;
+      new_order[j] = i;
 
       /* copy ... */
       memcpy (&g_array_index (new_array, SortElt, j), elt1, sizeof (SortElt));

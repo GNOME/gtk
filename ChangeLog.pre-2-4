@@ -1,3 +1,8 @@
+Mon Oct 29 15:41:58 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_sort_level): Darn.
+	I can't believe this took this long to fix.
+
 Mon Oct 29 13:54:49 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_rows_reordered): fix

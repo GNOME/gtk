@@ -271,6 +271,20 @@ has the focus.
 </para>
 
 
+<!-- ##### MACRO GTK_IS_TIPS_QUERY ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+<!-- ##### MACRO GTK_IS_TIPS_QUERY_CLASS ##### -->
+<para>
+
+</para>
+
+@klass: 
+
 <!-- ##### MACRO GTK_OBJECT_CONSTRUCTED ##### -->
 <para>
 Test whether a GtkObject's arguments have been prepared.
@@ -327,6 +341,27 @@ Get the array of signals defined for this object.
 
 </para>
 
+
+<!-- ##### MACRO GTK_TIPS_QUERY ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+<!-- ##### MACRO GTK_TIPS_QUERY_CLASS ##### -->
+<para>
+
+</para>
+
+@klass: 
+
+<!-- ##### MACRO GTK_TIPS_QUERY_GET_CLASS ##### -->
+<para>
+
+</para>
+
+@obj: 
 
 <!-- ##### MACRO GTK_TREE_MODEL_GET_IFACE ##### -->
 <para>
@@ -390,6 +425,12 @@ The first structured enumerated type value.
 <!-- ##### MACRO GTK_TYPE_STRUCTURED_LAST ##### -->
 <para>
 The last structured enumerated type value.
+</para>
+
+
+<!-- ##### MACRO GTK_TYPE_TIPS_QUERY ##### -->
+<para>
+
 </para>
 
 
@@ -2511,6 +2552,13 @@ Creates a border around the arrows of a #GtkSpinButton. The type of border is de
 @text_view: 
 @width: 
 @height: 
+
+<!-- ##### FUNCTION gtk_tips_query_get_type ##### -->
+<para>
+
+</para>
+
+@Returns: 
 
 <!-- ##### FUNCTION gtk_trace_referencing ##### -->
 <para>

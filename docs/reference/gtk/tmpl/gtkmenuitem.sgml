@@ -122,7 +122,7 @@ Emits the "activate" signal on the given item
 Emits the "toggle_size_request" signal on the given item.
 </para>
 
-@menu_item: the menu item 
+@menu_item: the menu item
 @requisition: the requisition to use as signal data.
 
 
@@ -131,7 +131,7 @@ Emits the "toggle_size_request" signal on the given item.
 Emits the "toggle_size_allocate" signal on the given item.
 </para>
 
-@menu_item: the menu item. 
+@menu_item: the menu item.
 @allocation: the allocation to use as signal data.
 
 
