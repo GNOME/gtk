@@ -58,7 +58,7 @@ struct _GtkEntryCompletionPrivate
   gulong key_press_id;
   gulong key_release_id;
 
-  gboolean may_wrap;
+  gboolean ignore_enter;
 };
 
 gboolean            _gtk_entry_completion_resize_popup           (GtkEntryCompletion          *completion);
