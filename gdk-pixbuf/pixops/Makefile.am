@@ -5,7 +5,7 @@ INCLUDES = $(GLIB_CFLAGS)
 bin_PROGRAMS = timescale
 
 timescale_SOURCES = timescale.c
-timescale_LDADD = libpixops.la $(GLIB_LIBS)
+timescale_LDADD = libpixops.la $(GLIB_LIBS) -lm
 
 if USE_MMX
 mmx_sources =				\
