@@ -35,6 +35,10 @@
 #include "gtkiconfactory.h"
 #include "gtksettings.h"	/* _gtk_settings_parse_convert() */
 #include "gdk/gdkscreen.h"
+#include "gdk/gdkdisplay.h"
+#include "gdk/gdkdisplaymgr.h"
+#include "gdk/gdkprivate.h"
+
 
 #define LIGHTNESS_MULT  1.3
 #define DARKNESS_MULT   0.7
@@ -411,10 +415,47 @@ static GdkColor gtk_default_selected_bg =    { 0,      0,      0, 0x9c40 };
 static GdkColor gtk_default_insensitive_bg = { 0, 0xd6d6, 0xd6d6, 0xd6d6 };
 
 static gpointer parent_class = NULL;
-static GdkFont *static_default_font = NULL;
 
+static GSList *default_font_list = NULL;
+
+typedef struct {
+  GdkDisplay *display;
+  GdkFont *default_font;
+} GtkStyleDefaultFont;
 
 /* --- functions --- */
+
+static GdkFont * 
+gtk_style_default_font_add (GdkDisplay *display)
+{
+  GtkStyleDefaultFont *default_style_font = g_new0(GtkStyleDefaultFont,1);
+  default_style_font->default_font = 
+    gdk_font_from_description_for_display (display,
+		  	     pango_font_description_from_string ("Sans 10"));
+
+  if (!default_style_font->default_font) 
+    default_style_font->default_font = gdk_font_load ("fixed");
+
+  if (!default_style_font->default_font) 
+    g_error ("Unable to load \"fixed\" font");
+
+  default_style_font->display = display;
+  g_slist_append (default_font_list, default_style_font);
+  return default_style_font->default_font;
+}
+
+static GdkFont*
+gtk_style_default_font_get (GdkDisplay *display)
+{
+  GSList *tmp = default_font_list;
+  while(default_font_list)
+  {
+    if(((GtkStyleDefaultFont*)tmp->data)->display == display)
+      return ((GtkStyleDefaultFont*)tmp->data)->default_font;
+  }
+  return gtk_style_default_font_add(display);
+}
+
 GType
 gtk_style_get_type (void)
 {
@@ -448,22 +489,6 @@ gtk_style_init (GtkStyle *style)
 {
   gint i;
   
-  style->font_desc = pango_font_description_from_string ("Sans 10");
-
-  if (!static_default_font)
-    {
-      static_default_font = gdk_font_from_description (style->font_desc);
-
-      if (!static_default_font) 
-	static_default_font = gdk_font_load ("fixed");
-
-      if (!static_default_font) 
-	g_error ("Unable to load \"fixed\" font");
-    }
-  
-  style->font = static_default_font;
-  gdk_font_ref (style->font);
-
   style->attach_count = 0;
   style->colormap = NULL;
   style->depth = -1;
@@ -640,15 +665,25 @@ gtk_style_duplicate (GtkStyle *style)
   
   return new_style;
 }
-
 GtkStyle*
-gtk_style_new (void)
+gtk_style_new_for_display (GdkDisplay *display)
 {
   GtkStyle *style;
   
   style = g_object_new (GTK_TYPE_STYLE, NULL);
   
+  style->font_desc = pango_font_description_from_string ("Sans 10");
+  style->font = gtk_style_default_font_get(display);
+  style->display = display;
+  gdk_font_ref (style->font);
   return style;
+}
+
+GtkStyle*
+gtk_style_new (void)
+{
+  GTK_NOTE(MULTIHEAD, g_message("Use gtk_style_new_for_display instead\n"));
+  return gtk_style_new_for_display(DEFAULT_GDK_DISPLAY);
 }
 
 /*************************************************************
@@ -1410,7 +1445,7 @@ gtk_style_real_realize (GtkStyle *style)
     }
   else if (style->font->type == GDK_FONT_FONTSET)
     {
-      gc_values.font = static_default_font;
+      gc_values.font = gtk_style_default_font_get(gdk_screen_get_display(style->colormap->screen));
     }
   
   gc_values.foreground = style->black;

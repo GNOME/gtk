@@ -112,7 +112,7 @@ struct _GtkStyle
   
   gint depth;
   GdkColormap *colormap;
-  GdkScreen   *screen;
+  GdkDisplay  *display;
   
   /* the RcStyle from which this style was created */
   GtkRcStyle	 *rc_style;
@@ -415,6 +415,7 @@ struct _GtkBorder
 
 GType     gtk_style_get_type                 (void) G_GNUC_CONST;
 GtkStyle* gtk_style_new			     (void);
+GtkStyle* gtk_style_new_for_display	     (GdkDisplay    *display);
 GtkStyle* gtk_style_copy		     (GtkStyle	    *style);
 GtkStyle* gtk_style_attach		     (GtkStyle	    *style,
 					      GdkWindow	    *window);

@@ -182,7 +182,7 @@ static void gtk_widget_direction_changed	 (GtkWidget	    *widget,
 static void gtk_widget_real_grab_focus           (GtkWidget         *focus_widget);
 
 static GdkColormap*  gtk_widget_peek_colormap      (GdkScreen *screen);
-static GtkStyle*     gtk_widget_peek_style         (void);
+static GtkStyle*     gtk_widget_peek_style         (GtkWidget *widget);
 static PangoContext *gtk_widget_peek_pango_context (GtkWidget *widget);
 
 static void gtk_widget_reparent_container_child  (GtkWidget     *widget,
@@ -214,6 +214,13 @@ static gpointer         parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 
 static GMemChunk       *aux_info_mem_chunk = NULL;
+
+typedef struct {
+  GdkDisplay *display;
+  GtkStyle   *default_style;
+} GtkWidgetDefaultStyle;
+
+static GSList	       *gtk_default_style_list = NULL;
 static GtkStyle        *gtk_default_style = NULL;
 static GSList          *colormap_stack = NULL;
 static GSList          *style_stack = NULL;
@@ -1284,7 +1291,7 @@ gtk_widget_init (GtkWidget *widget)
 			(composite_child_stack ? GTK_COMPOSITE_CHILD : 0) |
 			GTK_DOUBLE_BUFFERED);
 
-  widget->style = gtk_widget_peek_style ();
+  widget->style = gtk_widget_peek_style (widget);
   gtk_style_ref (widget->style);
   
   colormap = gtk_widget_peek_colormap (widget->screen);
@@ -3894,29 +3901,54 @@ gtk_widget_reset_rc_styles (GtkWidget *widget)
   gtk_widget_set_style_recurse (widget, NULL);
 }
 
+static GtkStyle * 
+gtk_widget_default_style_get_in_list(GdkDisplay *dpy)
+{
+  GSList *tmp = gtk_default_style_list;
+  while(tmp)
+  {
+    if(((GtkWidgetDefaultStyle *)tmp->data)->display == dpy)
+      return ((GtkWidgetDefaultStyle *)tmp->data);
+
+    tmp = tmp->next;
+  }
+  return NULL;
+}
+
 void
 gtk_widget_set_default_style (GtkStyle *style)
 {
-  if (style != gtk_default_style)
+    GtkStyle * default_style = gtk_widget_default_style_get_in_list(style->display);
+    if (style != default_style)
      {
-       if (gtk_default_style)
+       if (default_style)
+       {
+	 g_slist_remove(gtk_default_style_list,default_style);
 	 gtk_style_unref (gtk_default_style);
-       gtk_default_style = style;
-       if (gtk_default_style)
-	 gtk_style_ref (gtk_default_style);
+       }
+       g_slist_append(gtk_default_style_list, style);
+       if (style)
+	 gtk_style_ref (style);
      }
+}
+
+GtkStyle*
+gtk_widget_get_default_style_for_display (GdkDisplay *display)
+{
+  GtkStyle * default_style = gtk_widget_default_style_get_in_list(display);
+  if(default_style)
+    return default_style;
+  default_style = gtk_style_new_for_display(display);
+  g_slist_append(gtk_default_style_list, default_style);
+  return default_style;
 }
 
 GtkStyle*
 gtk_widget_get_default_style (void)
 {
-  if (!gtk_default_style)
-    {
-      gtk_default_style = gtk_style_new ();
-      gtk_style_ref (gtk_default_style);
-    }
-  
-  return gtk_default_style;
+  GTK_NOTE(MULTIHEAD, 
+	   g_message("Use gtk_widget_get_default_style_for_display instead\n"));
+  return gtk_widget_get_default_style_for_display(DEFAULT_GDK_DISPLAY);
 }
 
 void
@@ -3929,12 +3961,12 @@ gtk_widget_push_style (GtkStyle *style)
 }
 
 static GtkStyle*
-gtk_widget_peek_style (void)
+gtk_widget_peek_style (GtkWidget *widget)
 {
   if (style_stack)
     return (GtkStyle*) style_stack->data;
   else
-    return gtk_widget_get_default_style ();
+    return gtk_widget_get_default_style_for_display (GTK_WIDGET_GET_DISPLAY(widget));
 }
 
 void
@@ -4158,6 +4190,9 @@ void	   gtk_widget_set_screen	  (GtkWidget	       *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   widget->screen = screen;
+  /* need to check if the style is Ok for the widget's display */
+  if(GTK_WIDGET_GET_DISPLAY(widget) != widget->style->display)
+    widget->style = gtk_widget_peek_style(widget);
 }
 /*************************************************************
  * gtk_widget_get_screen :
@@ -5026,7 +5061,7 @@ gtk_widget_real_destroy (GtkObject *object)
     }
 
   gtk_style_unref (widget->style);
-  widget->style = gtk_widget_peek_style ();
+  widget->style = gtk_widget_peek_style (widget);
   gtk_style_ref (widget->style);
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
