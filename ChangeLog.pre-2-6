@@ -1,3 +1,9 @@
+Sun Mar 26 03:21:28 2000  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtksignal.c (gtk_signal_handlers_destroy): when unref-ing
+        the handlers, also invalidate them. bug nailed down by Karl Nelson
+        <kenelson@ece.ucdavis.edu>.
+
 Fri May 19 06:49:23 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkfontsel.c (gtk_font_selection_get_font_name): handle
