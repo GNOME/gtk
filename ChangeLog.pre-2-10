@@ -1,3 +1,20 @@
+Fri Dec 12 Owen Taylor <owt1@cornell.edu>
+	* Removed warning when XGetWindowProperty fails - this can
+	  be the desired behavior.
+	
+Fri Dec 12 Owen Taylor <owt1@cornell.edu>
+	* gdk/makecursor* gdk/makekeysym* gdk/Makefile.am
+	  Removed old sed/awk code and replaced it with a 
+	  spiffier awk-only code from Art_Haas@dril-quip.com
+	
+Fri Dec 12 Owen Taylor <owt1@cornell.edu>
+	* gdk/gdkgc.c: If gdk_gc_set_clip_rectangle is called with
+	  rectangle = NULL, remove clip mask, instead of segfaulting.
+	* gtk/gtknotebook.c: Set clip mask before redrawing, so that
+	  we don't overwrite things outside of exposed areas when
+	  drawing the shadows. (Based on a patch from 
+	  Lars Hamann <hamann@braunschweig.netsurf.de>, and Stefan Jeske)
+	
 Thu Dec 11 10:57:29 CST 1997 Shawn T. Amundson <amundson@gimp.org>
 	* Change to ltconfig to remove -z text for Solaris x86	
 	* Change to configure stuff so compile works on Solaris x86
@@ -34,6 +51,20 @@ Mon Dec  8 Owen Taylor <owt1@cornell.edu>
 	* gtk/gtkimage.c: Fixes to expose() handler
 	  From Rob Browning <rlb@cs.utexas.edu>
 	
+Mon Dec  8 21:09:43 PST 1997 Geoffrey T. Dairiki <dairiki@alumni.caltech.edu>
+	* gtk/gtklabel.h:
+	* gtk/gtklabel.c: Add support for GTK_JUSTIFY_FILL.  This support
+	is used by the new gtktooltips.c.
+	* gtk/testgtk.c (create_labels, create_main_window): A new test
+	window for labels (to test the new GTK_JUSTIFY_FILL'ed labels.)
+
+Mon Dec  8 21:09:43 PST 1997 Geoffrey T. Dairiki <dairiki@alumni.caltech.edu>
+	* gtk/gtklabel.h:
+	* gtk/gtklabel.c: Add support for GTK_JUSTIFY_FILL.  This support
+	is used by the new gtktooltips.c.
+	* gtk/testgtk.c (create_labels, create_main_window): A new test
+	window for labels (to test the new GTK_JUSTIFY_FILL'ed labels.)
+
 Sun Dec  7 Owen Taylor <owt1@cornell.edu>
 	* gdk/gdk.c, gdk/gdk.h, gdk/gdktypes.h: 
 	  Remove dependencies of interfaces on USE_XIM

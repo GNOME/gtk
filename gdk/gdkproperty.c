@@ -96,7 +96,6 @@ gdk_property_get (GdkWindow   *window,
 		      &ret_data);
 
   if ((ret_prop_type == None) && (ret_format == 0)) {
-    g_warning("XGetWindowProperty failed\n");
     return FALSE;
   }
 
