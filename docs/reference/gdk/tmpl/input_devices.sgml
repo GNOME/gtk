@@ -96,6 +96,7 @@ sets of additional valuators than the pressure xtilt and ytilt.
 
 </para>
 
+@parent_instance: 
 @name: 
 @source: 
 @mode: 

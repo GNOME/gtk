@@ -19,6 +19,7 @@ Visuals
 
 </para>
 
+@parent_instance: 
 @type: 
 @depth: 
 @byte_order: 
@@ -140,20 +141,24 @@ Visuals
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_visual_ref ##### -->
+<!-- ##### MACRO gdk_visual_ref ##### -->
 <para>
 
 </para>
 
-@visual: 
+@v: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@visual: 
 
 
-<!-- ##### FUNCTION gdk_visual_unref ##### -->
+<!-- ##### MACRO gdk_visual_unref ##### -->
 <para>
 
 </para>
 
+@v: 
+<!-- # Unused Parameters # -->
 @visual: 
 
 

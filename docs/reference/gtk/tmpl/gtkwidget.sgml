@@ -819,7 +819,7 @@ GtkWidget
 @style: 
 
 
-<!-- ##### FUNCTION gtk_widget_set_rc_style ##### -->
+<!-- ##### MACRO gtk_widget_set_rc_style ##### -->
 <para>
 
 </para>
@@ -844,7 +844,7 @@ GtkWidget
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_widget_restore_default_style ##### -->
+<!-- ##### MACRO gtk_widget_restore_default_style ##### -->
 <para>
 
 </para>
@@ -860,27 +860,12 @@ GtkWidget
 @widget: 
 
 
-<!-- ##### FUNCTION gtk_widget_push_style ##### -->
-<para>
-
-</para>
-
-@style: 
-
-
 <!-- ##### FUNCTION gtk_widget_push_colormap ##### -->
 <para>
 
 </para>
 
 @cmap: 
-
-
-<!-- ##### FUNCTION gtk_widget_pop_style ##### -->
-<para>
-
-</para>
-
 
 
 <!-- ##### FUNCTION gtk_widget_pop_colormap ##### -->
@@ -1605,6 +1590,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 </para>
 
 @widget: the object which received the signal.
+@widget: 
 
 <!-- ##### SIGNAL GtkWidget::key-press-event ##### -->
 <para>

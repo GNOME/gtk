@@ -84,14 +84,14 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
   object_class->finalize = gdk_keymap_finalize;
 
   signals[DIRECTION_CHANGED] =
-    g_signal_newc ("direction_changed",
-                   G_OBJECT_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GdkKeymapClass, direction_changed),
-                   NULL, NULL,
-                   g_cclosure_marshal_VOID__VOID,
-                   G_TYPE_NONE,
-                   0);
+    g_signal_new ("direction_changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GdkKeymapClass, direction_changed),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+		  0);
 }
 
 static void

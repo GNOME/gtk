@@ -35,6 +35,7 @@ GtkTreeViewColumn
 @window: 
 @xalign: 
 @property_changed_signal: 
+@spacing: 
 @width: 
 @requested_width: 
 @min_width: 

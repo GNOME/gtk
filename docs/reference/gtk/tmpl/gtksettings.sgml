@@ -34,21 +34,14 @@ GtkSettings
 @origin: 
 @value: 
 
-<!-- ##### FUNCTION gtk_settings_get_global ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_settings_install_property ##### -->
 <para>
 
 </para>
 
-@settings: 
 @pspec: 
+<!-- # Unused Parameters # -->
+@settings: 
 
 
 <!-- ##### FUNCTION gtk_settings_install_property_parser ##### -->
@@ -56,9 +49,10 @@ GtkSettings
 
 </para>
 
-@settings: 
 @pspec: 
 @parser: 
+<!-- # Unused Parameters # -->
+@settings: 
 
 
 <!-- ##### FUNCTION gtk_rc_property_parse_color ##### -->

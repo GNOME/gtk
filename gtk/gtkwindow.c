@@ -110,7 +110,7 @@ typedef struct {
 
 static void gtk_window_class_init         (GtkWindowClass    *klass);
 static void gtk_window_init               (GtkWindow         *window);
-static void gtk_window_shutdown           (GObject           *object);
+static void gtk_window_dispose            (GObject           *object);
 static void gtk_window_destroy            (GtkObject         *object);
 static void gtk_window_finalize           (GObject           *object);
 static void gtk_window_show               (GtkWidget         *widget);
@@ -278,7 +278,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   
   parent_class = gtk_type_class (gtk_bin_get_type ());
 
-  gobject_class->shutdown = gtk_window_shutdown;
+  gobject_class->dispose = gtk_window_dispose;
   gobject_class->finalize = gtk_window_finalize;
 
   gobject_class->set_property = gtk_window_set_property;
@@ -1328,7 +1328,7 @@ _gtk_window_reposition (GtkWindow *window,
 }
 
 static void
-gtk_window_shutdown (GObject *object)
+gtk_window_dispose (GObject *object)
 {
   GtkWindow *window;
 
@@ -1339,7 +1339,7 @@ gtk_window_shutdown (GObject *object)
   gtk_window_set_focus (window, NULL);
   gtk_window_set_default (window, NULL);
 
-  G_OBJECT_CLASS (parent_class)->shutdown (object);
+  G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 static void

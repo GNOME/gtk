@@ -212,14 +212,6 @@ GtkContainer
 @border_width: 
 
 
-<!-- ##### FUNCTION gtk_container_dequeue_resize_handler ##### -->
-<para>
-
-</para>
-
-@container: 
-
-
 <!-- ##### FUNCTION gtk_container_propagate_expose ##### -->
 <para>
 

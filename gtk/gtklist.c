@@ -56,7 +56,7 @@ static void gtk_list_get_arg         (GtkObject      *object,
 				      GtkArg         *arg,
 				      guint           arg_id);
 /*** GtkObject Methods ***/
-static void gtk_list_shutdown	     (GObject	     *object);
+static void gtk_list_dispose	     (GObject	     *object);
 
 /*** GtkWidget Methods ***/
 static void gtk_list_size_request    (GtkWidget	     *widget,
@@ -213,7 +213,7 @@ gtk_list_class_init (GtkListClass *class)
   vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
   hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
 
-  gobject_class->shutdown = gtk_list_shutdown;
+  gobject_class->dispose = gtk_list_dispose;
 
 
   object_class->set_arg = gtk_list_set_arg;
@@ -336,14 +336,14 @@ gtk_list_new (void)
 
 /* Private GtkObject Methods :
  * 
- * gtk_list_shutdown
+ * gtk_list_dispose
  */
 static void
-gtk_list_shutdown (GObject *object)
+gtk_list_dispose (GObject *object)
 {
   gtk_list_clear_items (GTK_LIST (object), 0, -1);
 
-  G_OBJECT_CLASS (parent_class)->shutdown (object);
+  G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 

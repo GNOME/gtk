@@ -1,3 +1,16 @@
+Mon Jul  2 06:35:10 2001  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdkkeys.c (gdk_keymap_class_init): s/signal_newc/signal_new/
+
+	* gtk/gtkobject.c (gtk_object_destroy): invoke
+	g_object_run_dispose().
+
+	* gtk/gtkwindow.c: 
+	* gtk/gtkwidget.c: 
+	* gtk/gtkobject.c:
+	* gtk/gtklist.c: s/shutdown/dispose/ for the GObject
+	method.
+
 Sat Jun 30 20:44:48 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktypeutils.c (gtk_type_class): Remove

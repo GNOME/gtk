@@ -1365,6 +1365,13 @@ is enabled.
 @n_args: 
 @args: 
 
+<!-- ##### FUNCTION gtk_container_dequeue_resize_handler ##### -->
+<para>
+
+</para>
+
+@container: 
+
 <!-- ##### FUNCTION gtk_container_focus ##### -->
 <para>
 
@@ -1500,6 +1507,15 @@ Get the type of GtkIdentifier.
 @str: 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_list_store_new_with_types ##### -->
+<para>
+
+</para>
+
+@n_columns: 
+@Varargs: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_list_store_set_cell ##### -->
 <para>
 
@@ -1509,6 +1525,23 @@ Get the type of GtkIdentifier.
 @iter: 
 @column: 
 @value: 
+
+<!-- ##### FUNCTION gtk_list_store_set_column_type ##### -->
+<para>
+
+</para>
+
+@store: 
+@column: 
+@type: 
+
+<!-- ##### FUNCTION gtk_list_store_set_n_columns ##### -->
+<para>
+
+</para>
+
+@store: 
+@n_columns: 
 
 <!-- ##### FUNCTION gtk_menu_ensure_uline_accel_group ##### -->
 <para>
@@ -1810,6 +1843,13 @@ Sets the function that GTK+ will use to load images
 
 @ruler: the gtkruler
 
+<!-- ##### FUNCTION gtk_settings_get_global ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
 <!-- ##### FUNCTION gtk_signal_add_emission_hook ##### -->
 <para>
 Add an emission hook for a type of signal, for any object.
@@ -2011,6 +2051,15 @@ a gtk_object_unref().
 @tree_model: 
 @iter: 
 
+<!-- ##### FUNCTION gtk_tree_store_new_with_types ##### -->
+<para>
+
+</para>
+
+@n_columns: 
+@Varargs: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_tree_store_set_cell ##### -->
 <para>
 
@@ -2020,6 +2069,24 @@ a gtk_object_unref().
 @iter: 
 @column: 
 @value: 
+
+<!-- ##### FUNCTION gtk_tree_store_set_column_type ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@column: 
+@type: 
+@store: 
+
+<!-- ##### FUNCTION gtk_tree_store_set_n_columns ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@n_columns: 
 
 <!-- ##### FUNCTION gtk_tree_view_column_set_cell_data ##### -->
 <para>
@@ -2153,6 +2220,12 @@ fundamental type.
 @group_cycling: 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_widget_pop_style ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### FUNCTION gtk_widget_popup ##### -->
 <para>
 
@@ -2161,6 +2234,13 @@ fundamental type.
 @widget: 
 @x: 
 @y: 
+
+<!-- ##### FUNCTION gtk_widget_push_style ##### -->
+<para>
+
+</para>
+
+@style: 
 
 <!-- ##### FUNCTION gtk_window_activate_mnemonic ##### -->
 <para>

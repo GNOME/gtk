@@ -55,7 +55,7 @@ static void	  gtk_object_get_property	 (GObject	 *object,
 						  guint           property_id,
 						  GValue         *value,
 						  GParamSpec     *pspec);
-static void       gtk_object_shutdown            (GObject        *object);
+static void       gtk_object_dispose            (GObject        *object);
 static void       gtk_object_real_destroy        (GtkObject      *object);
 static void       gtk_object_finalize            (GObject        *object);
 static void       gtk_object_notify_weaks        (GtkObject      *object);
@@ -317,7 +317,7 @@ gtk_object_class_init (GtkObjectClass *class)
 
   gobject_class->set_property = gtk_object_set_property;
   gobject_class->get_property = gtk_object_get_property;
-  gobject_class->shutdown = gtk_object_shutdown;
+  gobject_class->dispose = gtk_object_dispose;
   gobject_class->finalize = gtk_object_finalize;
 
   class->destroy = gtk_object_real_destroy;
@@ -358,14 +358,12 @@ gtk_object_destroy (GtkObject *object)
       /* need to hold a reference count around all class method
        * invocations.
        */
-      gtk_object_ref (object);
-      G_OBJECT_GET_CLASS (object)->shutdown (G_OBJECT (object));
-      gtk_object_unref (object);
+      g_object_run_dispose (G_OBJECT (object));
     }
 }
 
 static void
-gtk_object_shutdown (GObject *gobject)
+gtk_object_dispose (GObject *gobject)
 {
   GtkObject *object = GTK_OBJECT (gobject);
 
@@ -381,7 +379,7 @@ gtk_object_shutdown (GObject *gobject)
       GTK_OBJECT_UNSET_FLAGS (object, GTK_DESTROYED);
     }
 
-  G_OBJECT_CLASS (parent_class)->shutdown (gobject);
+  G_OBJECT_CLASS (parent_class)->dispose (gobject);
 }
 
 static void

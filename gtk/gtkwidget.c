@@ -161,7 +161,7 @@ static void	gtk_widget_get_property		 (GObject           *object,
 						  guint              prop_id,
 						  GValue            *value,
 						  GParamSpec        *pspec);
-static void	gtk_widget_shutdown		 (GObject	    *object);
+static void	gtk_widget_dispose		 (GObject	    *object);
 static void	gtk_widget_real_destroy		 (GtkObject	    *object);
 static void	gtk_widget_finalize		 (GObject	    *object);
 static void	gtk_widget_real_show		 (GtkWidget	    *widget);
@@ -317,7 +317,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   cpn_context.dispatcher = child_property_notify_dispatcher;
   _gtk_widget_child_property_notify_context = &cpn_context;
 
-  gobject_class->shutdown = gtk_widget_shutdown;
+  gobject_class->dispose = gtk_widget_dispose;
   gobject_class->finalize = gtk_widget_finalize;
   gobject_class->set_property = gtk_widget_set_property;
   gobject_class->get_property = gtk_widget_get_property;
@@ -5082,7 +5082,7 @@ gtk_widget_get_default_direction (void)
 }
 
 static void
-gtk_widget_shutdown (GObject *object)
+gtk_widget_dispose (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
 
@@ -5093,7 +5093,7 @@ gtk_widget_shutdown (GObject *object)
   if (GTK_WIDGET_REALIZED (widget))
     gtk_widget_unrealize (widget);
   
-  G_OBJECT_CLASS (parent_class)->shutdown (object);
+  G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 static void
