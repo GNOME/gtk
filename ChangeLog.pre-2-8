@@ -1,3 +1,8 @@
+Thu May 27 00:07:47 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_list_destroy): only remove the
+	signal if the box exists.
+
 Wed May 26 23:26:51 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Support insensitive cells in tree views and combo boxes:

@@ -2467,11 +2467,12 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
                                         0, 0, NULL,
                                         gtk_combo_box_list_button_pressed,
                                         NULL);
-  g_signal_handlers_disconnect_matched (combo_box->priv->box,
-                                        G_SIGNAL_MATCH_DATA,
-                                        0, 0, NULL,
-                                        gtk_combo_box_list_button_pressed,
-                                        NULL);
+  if (combo_box->priv->box)
+    g_signal_handlers_disconnect_matched (combo_box->priv->box,
+					  G_SIGNAL_MATCH_DATA,
+					  0, 0, NULL,
+					  gtk_combo_box_list_button_pressed,
+					  NULL);
 
   /* destroy things (unparent will kill the latest ref from us)
    * last unref on button will destroy the arrow
