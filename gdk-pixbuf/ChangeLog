@@ -1,3 +1,8 @@
+Mon Sep 13 19:31:34 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* io-jpeg.c (real_save_jpeg): Drop the alpha channel 
+	when saving 4-channel pixbufs.  (#152450, Emmanuel Pacaud)
+
 2004-09-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* makegdkpixbufalias.pl: Use the short prefix "IA__" for 
