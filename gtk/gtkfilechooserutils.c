@@ -36,6 +36,7 @@ static void           delegate_unselect_path          (GtkFileChooser    *choose
 static void           delegate_select_all             (GtkFileChooser    *chooser);
 static void           delegate_unselect_all           (GtkFileChooser    *chooser);
 static GSList *       delegate_get_paths              (GtkFileChooser    *chooser);
+static GtkFilePath *  delegate_get_preview_path       (GtkFileChooser    *chooser);
 static GtkFileSystem *delegate_get_file_system        (GtkFileChooser    *chooser);
 static void           delegate_add_filter             (GtkFileChooser    *chooser,
 						       GtkFileFilter     *filter);
@@ -48,6 +49,8 @@ static void           delegate_notify                 (GObject           *object
 static void           delegate_current_folder_changed (GtkFileChooser    *chooser,
 						       gpointer           data);
 static void           delegate_selection_changed      (GtkFileChooser    *chooser,
+						       gpointer           data);
+static void           delegate_update_preview         (GtkFileChooser    *chooser,
 						       gpointer           data);
 
 /**
@@ -133,6 +136,7 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
   iface->select_all = delegate_select_all;
   iface->unselect_all = delegate_unselect_all;
   iface->get_paths = delegate_get_paths;
+  iface->get_preview_path = delegate_get_preview_path;
   iface->get_file_system = delegate_get_file_system;
   iface->add_filter = delegate_add_filter;
   iface->remove_filter = delegate_remove_filter;
@@ -165,6 +169,8 @@ _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
 		    G_CALLBACK (delegate_current_folder_changed), receiver);
   g_signal_connect (delegate, "selection-changed",
 		    G_CALLBACK (delegate_selection_changed), receiver);
+  g_signal_connect (delegate, "update-preview",
+		    G_CALLBACK (delegate_update_preview), receiver);
 }
 
 static GtkFileChooser *
@@ -203,6 +209,12 @@ static GSList *
 delegate_get_paths (GtkFileChooser *chooser)
 {
   return _gtk_file_chooser_get_paths (get_delegate (chooser));
+}
+
+static GtkFilePath *
+delegate_get_preview_path (GtkFileChooser *chooser)
+{
+  return _gtk_file_chooser_get_preview_path (get_delegate (chooser));
 }
 
 static GtkFileSystem *
@@ -267,12 +279,19 @@ static void
 delegate_selection_changed (GtkFileChooser *chooser,
 			    gpointer        data)
 {
-  g_signal_emit_by_name (data, "selection-changed", 0);
+  g_signal_emit_by_name (data, "selection-changed");
 }
 
 static void
 delegate_current_folder_changed (GtkFileChooser *chooser,
 				 gpointer        data)
 {
-  g_signal_emit_by_name (data, "current-folder-changed", 0);
+  g_signal_emit_by_name (data, "current-folder-changed");
+}
+
+static void
+delegate_update_preview (GtkFileChooser    *chooser,
+			 gpointer           data)
+{
+  g_signal_emit_by_name (data, "update-preview");
 }

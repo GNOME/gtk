@@ -98,8 +98,8 @@ void       gtk_file_chooser_set_preview_widget_active (GtkFileChooser *chooser,
 						       gboolean        active);
 gboolean   gtk_file_chooser_get_preview_widget_active (GtkFileChooser *chooser);
 
-const char *gtk_file_chooser_get_preview_filename (GtkFileChooser *file_chooser);
-const char *gtk_file_chooser_get_preview_uri      (GtkFileChooser *file_chooser);
+char *gtk_file_chooser_get_preview_filename (GtkFileChooser *file_chooser);
+char *gtk_file_chooser_get_preview_uri      (GtkFileChooser *file_chooser);
 
 /* List of user selectable filters
  */

@@ -48,6 +48,7 @@ struct _GtkFileChooserIface
   void           (*select_all)         (GtkFileChooser    *chooser);
   void           (*unselect_all)       (GtkFileChooser    *chooser);
   GSList *       (*get_paths)          (GtkFileChooser    *chooser);
+  GtkFilePath *  (*get_preview_path)   (GtkFileChooser    *chooser);
   GtkFileSystem *(*get_file_system)    (GtkFileChooser    *chooser);
   void           (*add_filter)         (GtkFileChooser    *chooser,
 					GtkFileFilter     *filter);
@@ -60,8 +61,7 @@ struct _GtkFileChooserIface
    */
   void (*current_folder_changed) (GtkFileChooser *chooser);
   void (*selection_changed)      (GtkFileChooser *chooser);
-  void (*update_preview)         (GtkFileChooser *chooser,
-				  const gchar     *uri);
+  void (*update_preview)         (GtkFileChooser *chooser);
 };
 
 GtkFileSystem *_gtk_file_chooser_get_file_system         (GtkFileChooser    *chooser);
@@ -73,6 +73,7 @@ void           _gtk_file_chooser_select_path             (GtkFileChooser    *cho
 void           _gtk_file_chooser_unselect_path           (GtkFileChooser    *chooser,
 							  const GtkFilePath *path);
 GSList *       _gtk_file_chooser_get_paths               (GtkFileChooser    *chooser);
+GtkFilePath *  _gtk_file_chooser_get_preview_path        (GtkFileChooser    *chooser);
 
 G_END_DECLS
 

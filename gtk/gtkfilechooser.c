@@ -28,7 +28,6 @@
 static void gtk_file_chooser_base_init (gpointer g_iface);
 
 static GtkFilePath *gtk_file_chooser_get_path         (GtkFileChooser *chooser);
-static GtkFilePath *gtk_file_chooser_get_preview_path (GtkFileChooser *chooser);
 
 GType
 gtk_file_chooser_get_type (void)
@@ -74,6 +73,13 @@ gtk_file_chooser_base_init (gpointer g_iface)
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkFileChooserIface, selection_changed),
+		    NULL, NULL,
+		    g_cclosure_marshal_VOID__VOID,
+		    G_TYPE_NONE, 0);
+      g_signal_new ("update-preview",
+		    iface_type,
+		    G_SIGNAL_RUN_LAST,
+		    G_STRUCT_OFFSET (GtkFileChooserIface, update_preview),
 		    NULL, NULL,
 		    g_cclosure_marshal_VOID__VOID,
 		    G_TYPE_NONE, 0);
@@ -771,7 +777,7 @@ gtk_file_chooser_get_current_folder_uri (GtkFileChooser *chooser)
  * @path: the #GtkFilePath for the new folder
  * 
  * Sets the current folder for @chooser from a #GtkFilePath.
- * Internal function, see _gtk_file_chooser_set_current_folder_uri().
+ * Internal function, see gtk_file_chooser_set_current_folder_uri().
  **/
 void
 _gtk_file_chooser_set_current_folder_path (GtkFileChooser    *chooser,
@@ -993,10 +999,22 @@ gtk_file_chooser_get_preview_widget_active (GtkFileChooser *chooser)
   return active;
 }
 
-static GtkFilePath *
-gtk_file_chooser_get_preview_path (GtkFileChooser *chooser)
+/**
+ * gtk_file_chooser_get_preview_filename:
+ * @chooser: a #GtkFileChooser
+ * 
+ * Gets the filename that should be previewed in a custom preview
+ * Internal function, see gtk_file_chooser_get_preview_uri().n
+ * 
+ * Return value: the #GtkFilePath for the file to preview, or %NULL if no file
+ *  is selected. Free with gtk_file_path_free().
+ **/
+GtkFilePath *
+_gtk_file_chooser_get_preview_path (GtkFileChooser *chooser)
 {
-  return NULL;
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
+
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_preview_path (chooser);
 }
 
 /**
@@ -1006,11 +1024,11 @@ gtk_file_chooser_get_preview_path (GtkFileChooser *chooser)
  * Gets the filename that should be previewed in a custom preview
  * widget. See gtk_file_chooser_set_preview_widget().
  * 
- * Return value: the filename to display, or %NULL if no file
+ * Return value: the filename to preview, or %NULL if no file
  *  is selected, or if the selected file cannot be represented
  *  as a local filename. Free with g_free()
  **/
-const char *
+char *
 gtk_file_chooser_get_preview_filename (GtkFileChooser *chooser)
 {
   GtkFileSystem *file_system;
@@ -1020,7 +1038,7 @@ gtk_file_chooser_get_preview_filename (GtkFileChooser *chooser)
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
   file_system = _gtk_file_chooser_get_file_system (chooser);
-  path = gtk_file_chooser_get_preview_path (chooser);
+  path = _gtk_file_chooser_get_preview_path (chooser);
   if (path)
     {
       result = gtk_file_system_path_to_filename (file_system, path);
@@ -1037,10 +1055,10 @@ gtk_file_chooser_get_preview_filename (GtkFileChooser *chooser)
  * Gets the URI that should be previewed in a custom preview
  * widget. See gtk_file_chooser_set_preview_widget().
  * 
- * Return value: the URI to display, or %NULL if no file
- *  is selected.
+ * Return value: the URI for the file to preview, or %NULL if no file
+ *  is selected. Free with g_free().
  **/
-const char *
+char *
 gtk_file_chooser_get_preview_uri (GtkFileChooser *chooser)
 {
   GtkFileSystem *file_system;
@@ -1050,7 +1068,7 @@ gtk_file_chooser_get_preview_uri (GtkFileChooser *chooser)
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
   file_system = _gtk_file_chooser_get_file_system (chooser);
-  path = gtk_file_chooser_get_path (chooser);
+  path = _gtk_file_chooser_get_preview_path (chooser);
   if (path)
     {
       result = gtk_file_system_path_to_uri (file_system, path);
@@ -1161,5 +1179,3 @@ gtk_file_chooser_get_filter (GtkFileChooser *chooser)
 
   return filter;
 }
-
-
