@@ -1,3 +1,9 @@
+Sun Feb  1 16:03:39 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Make sure
+	item_area is positioned correctly. Fix #133070, reported by Jeroen
+	Zwartepoorte.
+
 Sat Jan 31 23:13:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextchild.c (gtk_text_child_anchor_finalize): Don't

@@ -1444,8 +1444,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       arrow_allocation.y = border_width;
     }
   
-  item_area.x = 0;
-  item_area.y = 0;
+  item_area.x = border_width;
+  item_area.y = border_width;
   item_area.width = available_size - (need_arrow? arrow_size : 0);
   item_area.height = short_size;
 
