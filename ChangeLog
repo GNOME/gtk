@@ -1,3 +1,14 @@
+2003-08-07  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkevents-win32.c : finally use TrackMouseEvent
+	(only if the new window not known to Gdk) to get proper
+	leave notification, and get rid of the wrong placed 
+	tooltips, bug #102283
+ 
+	(gdk_event_translate) : small code reordering to not get
+	GDK_MOTION_NOTIFY for still mouse and get back tooltips on 
+	menus, bug #117367
+
 2003-08-07  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdk.def

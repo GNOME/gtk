@@ -31,6 +31,12 @@
  * otherwise would make it possible to reliably generate
  * GDK_LEAVE_NOTIFY events, which would help get rid of those pesky
  * tooltips sometimes popping up in the wrong place.
+ *
+ * Update: a combination of TrackMouseEvent, GetCursorPos and 
+ * GetWindowPos can and is actually used to get rid of those
+ * pesky tooltips. It should be possible to use this for the
+ * whole ENTER/LEAVE NOTIFY handling but some platforms may
+ * not have TrackMouseEvent at all (?) --hb
  */
 
 #include "config.h"
@@ -148,6 +154,46 @@ assign_object (gpointer lhsp,
       *(gpointer *)lhsp = rhs;
       if (rhs != NULL)
 	g_object_ref (rhs);
+    }
+}
+
+static void
+track_mouse_event (DWORD dwFlags, HWND hwnd)
+{
+  typedef BOOL (WINAPI *PFN_TrackMouseEvent) (LPTRACKMOUSEEVENT);
+  static PFN_TrackMouseEvent p_TrackMouseEvent = NULL;
+  static int once = 0;
+
+  if (!once)
+    {
+      HMODULE user32;
+      HINSTANCE commctrl32;
+
+      user32 = GetModuleHandle ("user32.dll");
+      if ((p_TrackMouseEvent = (PFN_TrackMouseEvent)GetProcAddress (user32, "TrackMouseEvent")) == NULL)
+        {
+          if ((commctrl32 = LoadLibrary ("commctrl32.dll")) != NULL)
+    	p_TrackMouseEvent = (PFN_TrackMouseEvent)
+    	  GetProcAddress (commctrl32, "_TrackMouseEvent");
+        }
+      if (p_TrackMouseEvent != NULL)
+        GDK_NOTE (EVENTS, g_print ("Using TrackMouseEvent to detect leave events\n"));
+
+      once = 1;
+    }
+
+  if (p_TrackMouseEvent)
+    {
+      TRACKMOUSEEVENT tme;
+      tme.cbSize = sizeof(TRACKMOUSEEVENT);
+      tme.dwFlags = dwFlags;
+      tme.hwndTrack = hwnd;
+      tme.dwHoverTime = HOVER_DEFAULT; /* not used */
+
+      if (!p_TrackMouseEvent (&tme))
+        WIN32_API_FAILED ("TrackMouseEvent");
+      else
+        GDK_NOTE (EVENTS, g_print("TrackMouseEvent (%p, %s)\n", hwnd, dwFlags == TME_CANCEL ? "cancel" : "leave"));
     }
 }
 
@@ -1196,6 +1242,11 @@ synthesize_leave_event (GdkWindow      *window,
   else
     synthesize_enter_or_leave_event (window, msg, GDK_LEAVE_NOTIFY, mode, detail, current_x, current_y);
 
+  /* This would only make sense if the WM_MOUSEMOVE messages would come
+   * before the respective WM_MOUSELEAVE message, which apparently they
+   * do not.
+  track_mouse_event (TME_CANCEL, msg->hwnd);
+   */
 }
   
 static void
@@ -1221,6 +1272,8 @@ synthesize_enter_event (GdkWindow      *window,
       ScreenToClient (GDK_WINDOW_HWND (window), &pt);
     }
   synthesize_enter_or_leave_event (window, msg, GDK_ENTER_NOTIFY, mode, detail, pt.x, pt.y);
+
+  track_mouse_event (TME_LEAVE, msg->hwnd);
 }
   
 static void
@@ -2435,6 +2488,12 @@ gdk_event_translate (GdkDisplay *display,
 		      doesnt_want_button_motion))
 	break;
 
+      if (GDK_WINDOW_DESTROYED (window))
+	break;
+
+      if (window != orig_window)
+	translate_mouse_coords (orig_window, window, msg);
+
       /* If we haven't moved, don't create any event.
        * Windows sends WM_MOUSEMOVE messages after button presses
        * even if the mouse doesn't move. This disturbs gtk.
@@ -2444,15 +2503,9 @@ gdk_event_translate (GdkDisplay *display,
 	  GET_Y_LPARAM (msg->lParam) == current_y)
 	break;
 
-      if (GDK_WINDOW_DESTROYED (window))
-	break;
-
       event = gdk_event_new (GDK_MOTION_NOTIFY);
       event->motion.window = window;
       event->motion.time = _gdk_win32_get_next_tick (msg->time);
-      if (window != orig_window)
-	translate_mouse_coords (orig_window, window, msg);
-
       event->motion.x = current_x = (gint16) GET_X_LPARAM (msg->lParam);
       event->motion.y = current_y = (gint16) GET_Y_LPARAM (msg->lParam);
       _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
@@ -2485,6 +2538,32 @@ gdk_event_translate (GdkDisplay *display,
 
       break;
 
+    case WM_MOUSELEAVE:
+      {
+        HWND wndnow;
+        POINT pt;
+
+        if (!GetCursorPos (&pt))
+          WIN32_API_FAILED ("GetCursorPos");
+        wndnow = WindowFromPoint (pt);
+
+        if (!gdk_win32_handle_table_lookup ((GdkNativeWindow) wndnow))
+          {
+            /* we are only interested if we don't know the new window */
+            GDK_NOTE (EVENTS, g_print ("WM_MOUSELEAVE: %p %d (%d,%d)\n",
+                                       msg->hwnd, HIWORD (msg->wParam), pt.x, pt.y));
+            synthesize_enter_or_leave_event (current_window, msg, 
+                GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_UNKNOWN, 
+                current_x, current_y);
+          }
+        else
+          {
+            GDK_NOTE (EVENTS, g_print ("WM_MOUSELEAVE: %p %d (%d,%d) ignored\n",
+                                       msg->hwnd, HIWORD (msg->wParam), pt.x, pt.y));
+          }
+      }
+      return_val = TRUE;
+      break;
     case WM_MOUSEWHEEL:
       GDK_NOTE (EVENTS, g_print ("WM_MOUSEWHEEL: %p %d\n",
 				 msg->hwnd, HIWORD (msg->wParam)));
