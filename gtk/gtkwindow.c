@@ -1020,11 +1020,14 @@ gtk_window_set_modal (GtkWindow *window,
 /**
  * gtk_window_list_toplevels:
  * 
- * Returns a list of all existing toplevel windows. Each widget
- * in the list has a reference added to it; to free the
- * list, first unref each widget in the list, then free the list.
+ * Returns a list of all existing toplevel windows. The widgets
+ * in the list are not individually referenced. If you want
+ * to iterate through the list and perform actions involving
+ * callbacks that might destroy the widgets, you MUST call
+ * g_list_foreach (result, (GFunc)g_object_ref, NULL) first, and
+ * then unref all the widgets afterwards.
  * 
- * Return value: list of referenced toplevel widgets
+ * Return value: list of toplevel widgets
  **/
 GList*
 gtk_window_list_toplevels (void)
@@ -1033,7 +1036,7 @@ gtk_window_list_toplevels (void)
   GSList *slist;
 
   for (slist = toplevel_list; slist; slist = slist->next)
-    list = g_list_prepend (list, gtk_widget_ref (slist->data));
+    list = g_list_prepend (list, slist->data);
 
   return list;
 }
@@ -2286,6 +2289,7 @@ gtk_window_read_rcfiles (GtkWidget *widget,
       _gtk_icon_set_invalidate_caches ();
       
       toplevels = gtk_window_list_toplevels ();
+      g_list_foreach (toplevels, (GFunc)g_object_ref, NULL);
       
       for (list = toplevels; list; list = list->next)
 	{

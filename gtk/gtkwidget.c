@@ -4630,6 +4630,8 @@ gtk_widget_set_default_direction (GtkTextDirection dir)
       gtk_default_direction = dir;
 
       tmp_list = toplevels = gtk_window_list_toplevels ();
+      g_list_foreach (toplevels, (GFunc)g_object_ref, NULL);
+      
       while (tmp_list)
 	{
 	  gtk_widget_set_default_direction_recurse (tmp_list->data,
@@ -4639,7 +4641,6 @@ gtk_widget_set_default_direction (GtkTextDirection dir)
 	}
 
       g_list_free (toplevels);
-      
     }
 }
 

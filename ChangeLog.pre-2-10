@@ -1,3 +1,12 @@
+Mon Mar 26 15:48:45 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_list_toplevels): Don't
+	reference the widgets in the resulting list. (#11821)
+	This makes this consistent with gtk_container_children.
+
+	* gtk/gtkwindow.c gtk/gtkwidget.c: Fix up the two
+	uses of gtk_window_list_toplevels.
+
 Mon Mar 26 15:26:17 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimcontext.c (gtk_im_context_set_use_preedit): Add
