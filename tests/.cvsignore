@@ -10,6 +10,7 @@ pixbuf-random-image
 pixbuf-random-seed
 pixbuf-randomly-modified
 pixbuf-read
+pixbuf-threads
 simple
 stresstest-toolbar
 testactions
