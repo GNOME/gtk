@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -119,8 +120,8 @@ gdk_selection_owner_set (GdkWindow *owner,
 
   GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
-	     g_print ("gdk_selection_owner_set: %#x %#x (%s)\n",
-		      (owner ? (guint) GDK_DRAWABLE_XID (owner) : 0),
+	     g_print ("gdk_selection_owner_set: %p %#x (%s)\n",
+		      (owner ? GDK_DRAWABLE_XID (owner) : 0),
 		      (guint) selection, sel_name),
 	     g_free (sel_name)));
 
@@ -202,9 +203,9 @@ gdk_selection_owner_get (GdkAtom selection)
 
   GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
-	     g_print ("gdk_selection_owner_get: %#x (%s) = %#x\n",
+	     g_print ("gdk_selection_owner_get: %#x (%s) = %p\n",
 		      (guint) selection, sel_name,
-		      (window ? (guint) GDK_DRAWABLE_XID (window) : 0)),
+		      (window ? GDK_DRAWABLE_XID (window) : 0)),
 	     g_free (sel_name)));
 
   return window;
@@ -248,8 +249,8 @@ gdk_selection_convert (GdkWindow *requestor,
   GDK_NOTE (DND,
 	    (sel_name = gdk_atom_name (selection),
 	     tgt_name = gdk_atom_name (target),
-	     g_print ("gdk_selection_convert: %#x %#x (%s) %#x (%s)\n",
-		      (guint) GDK_DRAWABLE_XID (requestor),
+	     g_print ("gdk_selection_convert: %p %#x (%s) %#x (%s)\n",
+		      GDK_DRAWABLE_XID (requestor),
 		      (guint) selection, sel_name,
 		      (guint) target, tgt_name),
 	     g_free (sel_name),
@@ -351,7 +352,7 @@ gdk_selection_convert (GdkWindow *requestor,
 				     buf, sizeof (buf)))
 		    {
 		      cp = atoi (buf);
-		      GDK_NOTE (DND, g_print ("...CF_LOCALE: %#x cp:%d\n",
+		      GDK_NOTE (DND, g_print ("...CF_LOCALE: %#lx cp:%d\n",
 					      *lcidptr, cp));
 		    }
 		  GlobalUnlock (hlcid);
@@ -428,8 +429,8 @@ gdk_selection_property_get (GdkWindow  *requestor,
   if (GDK_DRAWABLE_DESTROYED (requestor))
     return 0;
   
-  GDK_NOTE (DND, g_print ("gdk_selection_property_get: %#x\n",
-			   (guint) GDK_DRAWABLE_XID (requestor)));
+  GDK_NOTE (DND, g_print ("gdk_selection_property_get: %p\n",
+			   GDK_DRAWABLE_XID (requestor)));
 
   prop = g_hash_table_lookup (sel_prop_table, GDK_DRAWABLE_XID (requestor));
 
@@ -457,8 +458,8 @@ gdk_selection_property_delete (GdkWindow *window)
 {
   GdkSelProp *prop;
   
-  GDK_NOTE (DND, g_print ("gdk_selection_property_delete: %#x\n",
-			   (guint) GDK_DRAWABLE_XID (window)));
+  GDK_NOTE (DND, g_print ("gdk_selection_property_delete: %p\n",
+			   GDK_DRAWABLE_XID (window)));
 
   prop = g_hash_table_lookup (sel_prop_table, GDK_DRAWABLE_XID (window));
   if (prop != NULL)
@@ -482,7 +483,7 @@ gdk_selection_send_notify (guint32  requestor,
 	    (sel_name = gdk_atom_name (selection),
 	     tgt_name = gdk_atom_name (target),
 	     prop_name = gdk_atom_name (property),
-	     g_print ("gdk_selection_send_notify: %#x %#x (%s) %#x (%s) %#x (%s)\n",
+	     g_print ("gdk_selection_send_notify: %p %#x (%s) %#x (%s) %#x (%s)\n",
 		      requestor,
 		      (guint) selection, sel_name,
 		      (guint) target, tgt_name,

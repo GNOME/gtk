@@ -75,10 +75,17 @@ static const GDebugKey gdk_debug_keys[] = {
   {"misc",	    GDK_DEBUG_MISC},
   {"dnd",	    GDK_DEBUG_DND},
   {"color-context", GDK_DEBUG_COLOR_CONTEXT},
-  {"xim",	    GDK_DEBUG_XIM}
+  {"xim",	    GDK_DEBUG_XIM},
+  {"colormap",	    GDK_DEBUG_COLORMAP},
+  {"gdkrgb",	    GDK_DEBUG_GDKRGB},
+  {"gc",	    GDK_DEBUG_GC},
+  {"pixmap",	    GDK_DEBUG_PIXMAP},
+  {"image",	    GDK_DEBUG_IMAGE},
+  {"input",	    GDK_DEBUG_INPUT},
+  {"cursor",	    GDK_DEBUG_CURSOR},
 };
 
-static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
+static const int gdk_ndebug_keys = G_N_ELEMENTS (gdk_debug_keys);
 
 #endif /* G_ENABLE_DEBUG */
 
@@ -294,7 +301,9 @@ gdk_init_check (int    *argc,
 	{
 	  gchar *d;
 	  
-	  d = strrchr((*argv)[0],'/');
+	  d = strrchr((*argv)[0], G_DIR_SEPARATOR);
+	  if (d == NULL && G_DIR_SEPARATOR != '/')
+	    d = strrchr((*argv)[0], '/');
 	  if (d != NULL)
 	    g_set_prgname (d + 1);
 	  else

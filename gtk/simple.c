@@ -8,7 +8,12 @@
 void
 hello (void)
 {
+  static gint counter = 0;
+  
   g_print ("hello world\n");
+
+  if (++counter == 3)
+    gtk_main_quit ();
 }
 
 int
@@ -17,8 +22,6 @@ main (int argc, char *argv[])
   GtkWidget *window;
   GtkWidget *button;
 
-  /* FIXME: This is not allowable - what is this supposed to be? */
-  /*  gdk_progclass = g_strdup ("XTerm"); */
   gtk_init (&argc, &argv);
 
   window = gtk_widget_new (gtk_window_get_type (),

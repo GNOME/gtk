@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -70,7 +71,6 @@ gdk_image_new_bitmap (GdkVisual *visual,
  * Desc: create a new bitmap image
  */
 {
-  Visual *xvisual;
   GdkImage *image;
   GdkImagePrivateWin32 *private;
   struct {
@@ -94,9 +94,8 @@ gdk_image_new_bitmap (GdkVisual *visual,
   image->width = w;
   image->height = h;
   image->depth = 1;
-  xvisual = ((GdkVisualPrivate*) visual)->xvisual;
 
-  GDK_NOTE (MISC, g_print ("gdk_image_new_bitmap: %dx%d\n", w, h));
+  GDK_NOTE (IMAGE, g_print ("gdk_image_new_bitmap: %dx%d\n", w, h));
   
   bmi.bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
   bmi.bmiHeader.biWidth = w;
@@ -153,7 +152,6 @@ gdk_image_new_with_depth (GdkImageType  type,
 {
   GdkImage *image;
   GdkImagePrivateWin32 *private;
-  Visual *xvisual;
   struct {
     BITMAPINFOHEADER bmiHeader;
     union {
@@ -168,11 +166,8 @@ gdk_image_new_with_depth (GdkImageType  type,
   if (type == GDK_IMAGE_FASTEST || type == GDK_IMAGE_NORMAL)
     type = GDK_IMAGE_SHARED;
 
-  GDK_NOTE (MISC, g_print ("gdk_image_new_with_depth: %dx%dx%d %s\n",
-			   width, height, depth,
-			   (type == GDK_IMAGE_SHARED ? "shared" :
-			    (type == GDK_IMAGE_SHARED_PIXMAP ? "shared_pixmap" :
-			     "???"))));
+  GDK_NOTE (IMAGE, g_print ("gdk_image_new_with_depth: %dx%dx%d\n",
+			    width, height, depth));
 
   private = g_new (GdkImagePrivateWin32, 1);
   image = (GdkImage *) private;
@@ -186,8 +181,6 @@ gdk_image_new_with_depth (GdkImageType  type,
   image->height = height;
   image->depth = depth;
   
-  xvisual = ((GdkVisualPrivate*) visual)->xvisual;
-  
   bmi.bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
   bmi.bmiHeader.biWidth = width;
   bmi.bmiHeader.biHeight = -height;
@@ -196,11 +189,9 @@ gdk_image_new_with_depth (GdkImageType  type,
     bmi.bmiHeader.biBitCount = 16;
   else
     bmi.bmiHeader.biBitCount = depth;
-#if 1
   if (depth == 16)
     bmi.bmiHeader.biCompression = BI_BITFIELDS;
   else
-#endif
     bmi.bmiHeader.biCompression = BI_RGB;
   bmi.bmiHeader.biSizeImage = 0;
   bmi.bmiHeader.biXPelsPerMeter =
@@ -208,7 +199,9 @@ gdk_image_new_with_depth (GdkImageType  type,
   bmi.bmiHeader.biClrUsed = 0;
   bmi.bmiHeader.biClrImportant = 0;
 
-  if (image->visual->type == GDK_VISUAL_PSEUDO_COLOR)
+  if (image->visual->type == GDK_VISUAL_GRAYSCALE ||
+      image->visual->type == GDK_VISUAL_PSEUDO_COLOR ||
+      image->visual->type == GDK_VISUAL_STATIC_COLOR)
     {
       iUsage = DIB_PAL_COLORS;
       for (i = 0; i < 256; i++)
@@ -229,20 +222,17 @@ gdk_image_new_with_depth (GdkImageType  type,
 	  bmi.u.bmiColors[1].rgbReserved = 0x00;
 
 	}
-#if 1
       else if (depth == 16)
 	{
 	  bmi.u.bmiMasks[0] = visual->red_mask;
 	  bmi.u.bmiMasks[1] = visual->green_mask;
 	  bmi.u.bmiMasks[2] = visual->blue_mask;
 	}
-#endif
       iUsage = DIB_RGB_COLORS;
     }
 
-  private->ximage =
-    CreateDIBSection (gdk_DC, (BITMAPINFO *) &bmi, iUsage,
-		      &image->mem, NULL, 0);
+  private->ximage = CreateDIBSection (gdk_DC, (BITMAPINFO *) &bmi, iUsage,
+				      &image->mem, NULL, 0);
 
   if (private->ximage == NULL)
     {
@@ -277,8 +267,8 @@ gdk_image_new_with_depth (GdkImageType  type,
   else
     image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
 
-  GDK_NOTE (MISC, g_print ("... = %#x mem = %p, bpl = %d\n",
-			   (guint) private->ximage, image->mem, image->bpl));
+  GDK_NOTE (IMAGE, g_print ("... = %p mem = %p, bpl = %d\n",
+			    private->ximage, image->mem, image->bpl));
 
   return image;
 }
@@ -293,23 +283,12 @@ gdk_image_new (GdkImageType  type,
 }
 
 GdkImage*
-gdk_image_bitmap_new (GdkImageType  type,
-		      GdkVisual    *visual,
-		      gint          width,
-		      gint          height)
-{
-  return gdk_image_new_with_depth (type, visual, width, height, 1);
-}
-
-GdkImage*
 gdk_image_get (GdkWindow *window,
 	       gint       x,
 	       gint       y,
 	       gint       width,
 	       gint       height)
 {
-  GdkImage *image;
-  GdkImagePrivateWin32 *private;
   HDC hdc, memdc;
   struct {
     BITMAPINFOHEADER bmiHeader;
@@ -322,6 +301,10 @@ gdk_image_get (GdkWindow *window,
   HGDIOBJ oldbitmap2;
   UINT iUsage;
   BITMAP bm;
+  HPALETTE holdpalw = NULL, holdpali = NULL;
+  GdkImage *image;
+  GdkColormapPrivateWin32 *cmapp = NULL;
+  GdkImagePrivateWin32 *private;
   int i;
 
   g_return_val_if_fail (window != NULL, NULL);
@@ -329,8 +312,8 @@ gdk_image_get (GdkWindow *window,
   if (GDK_DRAWABLE_DESTROYED (window))
     return NULL;
 
-  GDK_NOTE (MISC, g_print ("gdk_image_get: %#x %dx%d@+%d+%d\n",
-			   (guint) GDK_DRAWABLE_XID (window), width, height, x, y));
+  GDK_NOTE (IMAGE, g_print ("gdk_image_get: %p %dx%d@+%d+%d\n",
+			    GDK_DRAWABLE_XID (window), width, height, x, y));
 
   private = g_new (GdkImagePrivateWin32, 1);
   image = (GdkImage*) private;
@@ -339,7 +322,7 @@ gdk_image_get (GdkWindow *window,
   private->base.klass = &image_class;
 
   image->type = GDK_IMAGE_SHARED;
-  image->visual = gdk_window_get_visual (window);
+  image->visual = gdk_drawable_get_visual (window);
   image->width = width;
   image->height = height;
 
@@ -354,19 +337,18 @@ gdk_image_get (GdkWindow *window,
 	  g_free (image);
 	  return NULL;
 	}
+      if (image->visual != NULL &&
+	  (image->visual->type == GDK_VISUAL_PSEUDO_COLOR ||
+	   image->visual->type == GDK_VISUAL_STATIC_COLOR))
+	{
+	  cmapp = (GdkColormapPrivateWin32 *) gdk_drawable_get_colormap (window);
+	}
+
       GetObject (GDK_DRAWABLE_XID (window), sizeof (BITMAP), &bm);
-      GDK_NOTE (MISC,
-		g_print ("gdk_image_get: bmWidth=%ld, bmHeight=%ld, bmWidthBytes=%ld, bmBitsPixel=%d\n",
+      GDK_NOTE (IMAGE,
+		g_print ("gdk_image_get: bmWidth=%ld bmHeight=%ld bmWidthBytes=%ld bmBitsPixel=%d\n",
 			 bm.bmWidth, bm.bmHeight, bm.bmWidthBytes, bm.bmBitsPixel));
       image->depth = bm.bmBitsPixel;
-      if (image->depth <= 8)
-	{
-	  iUsage = DIB_PAL_COLORS;
-	  for (i = 0; i < 256; i++)
-	    bmi.u.bmiIndices[i] = i;
-	}
-      else
-	iUsage = DIB_RGB_COLORS;
     }
   else
     {
@@ -377,15 +359,18 @@ gdk_image_get (GdkWindow *window,
 	  return NULL;
 	}
       image->depth = gdk_visual_get_system ()->depth;
-      if (image->visual->type == GDK_VISUAL_PSEUDO_COLOR)
-	{
-	  iUsage = DIB_PAL_COLORS;
-	  for (i = 0; i < 256; i++)
-	    bmi.u.bmiIndices[i] = i;
-	}
-      else
-	iUsage = DIB_RGB_COLORS;
     }
+
+#if 0
+  if (image->depth <= 8)
+    {
+      iUsage = DIB_PAL_COLORS;
+      for (i = 0; i < 256; i++)
+	bmi.u.bmiIndices[i] = i;
+    }
+  else
+#endif
+    iUsage = DIB_RGB_COLORS;
 
   if ((memdc = CreateCompatibleDC (hdc)) == NULL)
     {
@@ -421,19 +406,42 @@ gdk_image_get (GdkWindow *window,
 	}
     }
   else
-    bmi.bmiHeader.biCompression = BI_RGB;
+    {
+      if (image->depth == 1)
+	{
+	  bmi.u.bmiColors[0].rgbBlue =
+	    bmi.u.bmiColors[0].rgbGreen =
+	    bmi.u.bmiColors[0].rgbRed = 0x00;
+	  bmi.u.bmiColors[0].rgbReserved = 0x00;
+	  
+	  bmi.u.bmiColors[1].rgbBlue =
+	    bmi.u.bmiColors[1].rgbGreen =
+	    bmi.u.bmiColors[1].rgbRed = 0xFF;
+	  bmi.u.bmiColors[1].rgbReserved = 0x00;
+	}
+      bmi.bmiHeader.biCompression = BI_RGB;
+    }
   bmi.bmiHeader.biSizeImage = 0;
   bmi.bmiHeader.biXPelsPerMeter =
     bmi.bmiHeader.biYPelsPerMeter = 0;
   bmi.bmiHeader.biClrUsed = 0;
   bmi.bmiHeader.biClrImportant = 0;
 
-  if ((private->ximage =
-       CreateDIBSection (hdc, (BITMAPINFO *) &bmi, iUsage,
-			 &image->mem, NULL, 0)) == NULL)
+  if (cmapp != NULL)
+    if (!(holdpalw = SelectPalette (hdc, cmapp->hpal, FALSE)))
+      WIN32_GDI_FAILED ("SelectPalette");
+    else
+      GDK_NOTE (IMAGE, g_print ("gdk_image_get: hpal=%p hdc=%p\n",
+				cmapp->hpal, hdc));
+
+  if ((private->ximage = CreateDIBSection (hdc, (BITMAPINFO *) &bmi, iUsage,
+					   &image->mem, NULL, 0)) == NULL)
     {
       WIN32_GDI_FAILED ("CreateDIBSection");
       DeleteDC (memdc);
+      if (holdpalw != NULL)
+	if (!SelectPalette (hdc, holdpalw, FALSE))
+	  WIN32_GDI_FAILED ("SelectPalette");
       if (GDK_DRAWABLE_TYPE (window) == GDK_DRAWABLE_PIXMAP)
         gdk_win32_release_hdc (NULL, hdc);
       else
@@ -455,9 +463,22 @@ gdk_image_get (GdkWindow *window,
       return NULL;
     }
 
+  if (cmapp != NULL)
+    if (!(holdpali = SelectPalette (memdc, cmapp->hpal, FALSE)))
+      WIN32_GDI_FAILED ("SelectPalette");
+    else
+      GDK_NOTE (IMAGE, g_print ("gdk_image_get: hpal=%p memdc=%p\n",
+				cmapp->hpal, memdc));
+
   if (!BitBlt (memdc, 0, 0, width, height, hdc, x, y, SRCCOPY))
     {
       WIN32_GDI_FAILED ("BitBlt");
+      if (holdpalw != NULL)
+	if (!SelectPalette (hdc, holdpalw, FALSE))
+	  WIN32_GDI_FAILED ("SelectPalette");
+      if (holdpali != NULL)
+	if (!SelectPalette (memdc, holdpali, FALSE))
+	  WIN32_GDI_FAILED ("SelectPalette");
       SelectObject (memdc, oldbitmap2);
       DeleteObject (private->ximage);
       DeleteDC (memdc);
@@ -468,6 +489,14 @@ gdk_image_get (GdkWindow *window,
       g_free (image);
       return NULL;
     }
+
+  if (holdpalw != NULL)
+    if (!SelectPalette (hdc, holdpalw, FALSE))
+      WIN32_GDI_FAILED ("SelectPalette");
+
+  if (holdpali != NULL)
+    if (!SelectPalette (memdc, holdpali, FALSE))
+      WIN32_GDI_FAILED ("SelectPalette");
 
   if (SelectObject (memdc, oldbitmap2) == NULL)
     WIN32_GDI_FAILED ("SelectObject");
@@ -506,8 +535,8 @@ gdk_image_get (GdkWindow *window,
   else
     image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
 
-  GDK_NOTE (MISC, g_print ("... = %#x mem = %p, bpl = %d\n",
-			   (guint) private->ximage, image->mem, image->bpl));
+  GDK_NOTE (IMAGE, g_print ("... = %p mem=%p, bpl=%d\n",
+			    private->ximage, image->mem, image->bpl));
 
   return image;
 }
@@ -600,19 +629,11 @@ gdk_win32_image_destroy (GdkImage *image)
 
   private = (GdkImagePrivateWin32 *) image;
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_image_destroy: %#x%s\n",
-			   (guint) private->ximage,
-			   (image->type == GDK_IMAGE_SHARED_PIXMAP ?
-			    " (shared pixmap)" : "")));
+  GDK_NOTE (IMAGE, g_print ("gdk_win32_image_destroy: %p\n",
+			    private->ximage));
   
   switch (image->type)
     {
-    case GDK_IMAGE_SHARED_PIXMAP:
-      break;			/* The Windows bitmap has already been
-				 * (or will be) deleted when freeing
-				 * the corresponding pixmap.
-				 */
-
     case GDK_IMAGE_SHARED:
       if (!DeleteObject (private->ximage))
 	WIN32_GDI_FAILED ("DeleteObject");
@@ -653,9 +674,11 @@ gdk_image_put (GdkImage    *image,
   drawable_private = (GdkDrawablePrivate *) drawable;
   gc_private = (GdkGCPrivate *) gc;
 
-  hdc = gdk_gc_predraw (drawable, gc_private, 0);
+  hdc = gdk_gc_predraw (drawable, gc_private, GDK_GC_FOREGROUND);
   colormap_private = (GdkColormapPrivateWin32 *) drawable_private->colormap;
-  if (colormap_private && colormap_private->xcolormap->rc_palette)
+  if (colormap_private &&
+      (colormap_private->base.visual->type == GDK_VISUAL_PSEUDO_COLOR ||
+       colormap_private->base.visual->type == GDK_VISUAL_STATIC_COLOR))
     {
       DIBSECTION ds;
 
@@ -691,17 +714,17 @@ gdk_image_put (GdkImage    *image,
 	      if (i < drawable_private->colormap->size)
 		{
 		  bmi.u.bmiColors[i].rgbRed =
-		    (drawable_private->colormap->colors[i].red * 255) / 65535;
+		    drawable_private->colormap->colors[i].red >> 8;
 		  bmi.u.bmiColors[i].rgbGreen =
-		    (drawable_private->colormap->colors[i].green * 255) / 65535;
+		    drawable_private->colormap->colors[i].green >> 8;
 		  bmi.u.bmiColors[i].rgbBlue =
-		    (drawable_private->colormap->colors[i].blue * 255) / 65535;
+		    drawable_private->colormap->colors[i].blue >> 8;
 		}
 	      else
 		{
-		  bmi.u.bmiColors[i].rgbRed = 255;
-		  bmi.u.bmiColors[i].rgbGreen = 255;
-		  bmi.u.bmiColors[i].rgbBlue = 255;
+		  bmi.u.bmiColors[i].rgbRed = 
+		    bmi.u.bmiColors[i].rgbGreen = 
+		    bmi.u.bmiColors[i].rgbBlue = 0xFF;
 		}
 	    }
        
@@ -742,5 +765,5 @@ gdk_image_put (GdkImage    *image,
 	  gdk_win32_release_hdc (NULL, memdc);
 	}
     }
-  gdk_gc_postdraw (drawable, gc_private, 0);
+  gdk_gc_postdraw (drawable, gc_private, GDK_GC_FOREGROUND);
 }

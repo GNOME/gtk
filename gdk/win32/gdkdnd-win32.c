@@ -1,6 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1999 Peter Mattis, Spencer Kimball and Josh MacDonald
- * Copyright (C) 1998-1999 Tor Lillqvist
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -642,7 +642,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
   
   if (msg->message == WM_DROPFILES)
     {
-      GDK_NOTE (DND, g_print ("WM_DROPFILES: %#x\n", (guint) msg->hwnd));
+      GDK_NOTE (DND, g_print ("WM_DROPFILES: %p\n", msg->hwnd));
 
       context = gdk_drag_context_new ();
       private = (GdkDragContextPrivate *) context;
@@ -938,8 +938,8 @@ gdk_drag_find_window (GdkDragContext  *context,
   HWND recipient;
   POINT pt;
 
-  GDK_NOTE (DND, g_print ("gdk_drag_find_window: %#x +%d+%d\n",
-			  (drag_window ? (guint) GDK_DRAWABLE_XID (drag_window) : 0),
+  GDK_NOTE (DND, g_print ("gdk_drag_find_window: %p +%d+%d\n",
+			  (drag_window ? GDK_DRAWABLE_XID (drag_window) : 0),
 			  x_root, y_root));
 
   pt.x = x_root;
@@ -1196,7 +1196,7 @@ gdk_destroy_filter (GdkXEvent *xev,
     {
       IDropTarget *idtp = (IDropTarget *) data;
 
-      GDK_NOTE (DND, g_print ("gdk_destroy_filter: WM_DESTROY: %#x\n", (guint) msg->hwnd));
+      GDK_NOTE (DND, g_print ("gdk_destroy_filter: WM_DESTROY: %p\n", msg->hwnd));
       RevokeDragDrop (msg->hwnd);
       CoLockObjectExternal (idtp, FALSE, TRUE);
     }
@@ -1219,8 +1219,8 @@ gdk_window_register_dnd (GdkWindow      *window)
 
   gdk_drawable_set_data (window, "gdk-dnd-registered", GINT_TO_POINTER(TRUE), NULL);
 
-  GDK_NOTE (DND, g_print ("gdk_window_register_dnd: %#x\n",
-			  (guint) GDK_DRAWABLE_XID (window)));
+  GDK_NOTE (DND, g_print ("gdk_window_register_dnd: %p\n",
+			  GDK_DRAWABLE_XID (window)));
 
   /* We always claim to accept dropped files, but in fact we might not,
    * of course. This function is called in such a way that it cannot know

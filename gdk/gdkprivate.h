@@ -190,13 +190,21 @@ struct _GdkArgDesc
   GdkArgFunc callback;
 };
 
-
 typedef enum {
   GDK_DEBUG_MISC          = 1 << 0,
   GDK_DEBUG_EVENTS        = 1 << 1,
   GDK_DEBUG_DND           = 1 << 2,
   GDK_DEBUG_COLOR_CONTEXT = 1 << 3,
-  GDK_DEBUG_XIM           = 1 << 4
+  GDK_DEBUG_XIM           = 1 << 4,
+  GDK_DEBUG_COLORMAP	  = 1 << 5,
+  GDK_DEBUG_GDKRGB	  = 1 << 6,
+  GDK_DEBUG_GC		  = 1 << 7,
+  GDK_DEBUG_PIXMAP	  = 1 << 8,
+  GDK_DEBUG_IMAGE	  = 1 << 9,
+  GDK_DEBUG_INPUT	  = 1 <<10,
+  GDK_DEBUG_CURSOR	  = 1 <<11,
+  /* Some combinations */
+  GDK_DEBUG_EVENTS_AND_COLORMAP = (GDK_DEBUG_EVENTS|GDK_DEBUG_COLORMAP)
 } GdkDebugFlag;
 
 void gdk_event_button_generate (GdkEvent *event);
@@ -246,7 +254,6 @@ void gdk_dnd_display_drag_cursor(gint x,
 				 gboolean drag_ok,
 				 gboolean change_made);
 
-extern gint		 gdk_debug_level;
 extern gboolean		 gdk_show_events;
 extern gint		 gdk_screen;
 GDKVAR GdkWindow  	*gdk_parent_root;

@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -262,9 +263,9 @@ gdk_property_change (GdkWindow    *window,
   GDK_NOTE (DND,
 	    (prop_name = gdk_atom_name (property),
 	     type_name = gdk_atom_name (type),
-	     g_print ("gdk_property_change: %#x %#x (%s) %#x (%s) %s %d*%d bytes %.10s\n",
-		      (guint) GDK_DRAWABLE_XID (window), (guint) property, prop_name,
-		      (guint) type, type_name,
+	     g_print ("gdk_property_change: %p %p (%s) %#x (%s) %s %d*%d bytes %.10s\n",
+		      GDK_DRAWABLE_XID (window), (guint) property, prop_name,
+		      type, type_name,
 		      (mode == GDK_PROP_MODE_REPLACE ? "REPLACE" :
 		       (mode == GDK_PROP_MODE_PREPEND ? "PREPEND" :
 			(mode == GDK_PROP_MODE_APPEND ? "APPEND" :
@@ -466,8 +467,8 @@ gdk_property_delete (GdkWindow *window,
 
   GDK_NOTE (DND,
 	    (prop_name = gdk_atom_name (property),
-	     g_print ("gdk_property_delete: %#x %#x (%s)\n",
-		      (window ? (guint) GDK_DRAWABLE_XID (window) : 0),
+	     g_print ("gdk_property_delete: %p %#x (%s)\n",
+		      (window ? GDK_DRAWABLE_XID (window) : 0),
 		      (guint) property, prop_name),
 	     g_free (prop_name)));
 

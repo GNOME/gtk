@@ -55,15 +55,14 @@ gdk_visual_init (void)
   } bmi;
   HBITMAP hbm;
 
-  int rastercaps, numcolors, sizepalette, bitspixel;
+  int rastercaps, bitspixel, map_entries;
 
   system_visual = g_new (GdkVisualPrivate, 1);
 
+  GDK_NOTE (COLORMAP, g_print ("System visual: %p\n", system_visual));
+
   bitspixel = GetDeviceCaps (gdk_DC, BITSPIXEL);
   rastercaps = GetDeviceCaps (gdk_DC, RASTERCAPS);
-  system_visual->xvisual = g_new (Visual, 1);
-  system_visual->xvisual->visualid = 0;
-  system_visual->xvisual->bitspixel = bitspixel;
 
   if (rastercaps & RC_PALETTE)
     {
@@ -71,30 +70,32 @@ gdk_visual_init (void)
        * right, perhaps depending on creation order of image
        * vs. window.
        */
+      const int sizepalette = GetDeviceCaps (gdk_DC, SIZEPALETTE);
+      const int numcolors = GetDeviceCaps (gdk_DC, NUMCOLORS);
       if (!getenv ("GDK_WIN32_ENABLE_BROKEN_PSEUDOCOLOR_VISUAL"))
 	g_error ("Palettized display (%d-colour) mode poorly supported on Windows.\n"
 		 "Define environment variable GDK_WIN32_ENABLE_BROKEN_PSEUDOCOLOR_VISUAL\n"
 		 "to run anyway.",
-		 GetDeviceCaps (gdk_DC, SIZEPALETTE));
+		 sizepalette);
       system_visual->visual.type = GDK_VISUAL_PSEUDO_COLOR;
-      numcolors = GetDeviceCaps (gdk_DC, NUMCOLORS);
-      sizepalette = GetDeviceCaps (gdk_DC, SIZEPALETTE);
-      system_visual->xvisual->map_entries = sizepalette;
+      GDK_NOTE (COLORMAP, g_print ("BITSPIXEL=%d NUMCOLORS=%d SIZEPALETTE=%d\n",
+				   bitspixel, numcolors, sizepalette));
+      map_entries = sizepalette;
     }
   else if (bitspixel == 1)
     {
       system_visual->visual.type = GDK_VISUAL_STATIC_GRAY;
-      system_visual->xvisual->map_entries = 2;
+      map_entries = 2;
     }
   else if (bitspixel == 4)
     {
       system_visual->visual.type = GDK_VISUAL_STATIC_COLOR;
-      system_visual->xvisual->map_entries = 16;
+      map_entries = 16;
     }
   else if (bitspixel == 8)
     {
       system_visual->visual.type = GDK_VISUAL_STATIC_COLOR;
-      system_visual->xvisual->map_entries = 256;
+      map_entries = 256;
     }
   else if (bitspixel == 16)
     {
@@ -191,7 +192,7 @@ gdk_visual_init (void)
       gdk_visual_decompose_mask (system_visual->visual.blue_mask,
 				 &system_visual->visual.blue_shift,
 				 &system_visual->visual.blue_prec);
-      system_visual->xvisual->map_entries =
+      map_entries =
 	1 << (MAX (system_visual->visual.red_prec,
 		   MAX (system_visual->visual.green_prec,
 			system_visual->visual.blue_prec)));
@@ -210,7 +211,7 @@ gdk_visual_init (void)
       system_visual->visual.blue_shift = 0;
       system_visual->visual.blue_prec = 0;
     }
-  system_visual->visual.colormap_size = system_visual->xvisual->map_entries;
+  system_visual->visual.colormap_size = map_entries;
 
   available_depths[0] = system_visual->visual.depth;
   available_types[0] = system_visual->visual.type;

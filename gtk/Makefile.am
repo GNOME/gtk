@@ -33,7 +33,7 @@ gtk_symbols = -export-symbols gtk.def
 
 gtk_win32res_lo = gtk-win32res.lo
 
-gtk-win32res.lo : gtk.rc
+gtk-win32res.lo : gtk.rc gtk.def $(libgtk_la_OBJECTS)
 	$(top_srcdir)/build/win32/lt-compile-resource gtk.rc gtk-win32res.lo
 
 install-data-local-libtool-import-lib:
@@ -367,8 +367,8 @@ gdk_headers = @STRIP_BEGIN@ 	\
 #
 libgtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_built_public_sources)
 libgtk_la_SOURCES = $(gtk_c_sources)
-MAINTAINERCLEANFILES += $(gtk_built_public_sources) $(gtk_built_sources)
-EXTRA_HEADERS +=
+MAINTAINERCLEANFILES = $(gtk_built_public_sources) $(gtk_built_sources)
+EXTRA_HEADERS =
 EXTRA_DIST = $(gtk_private_h_sources)
 EXTRA_DIST += $(gtk_built_sources) $(gtk_built_public_sources) $(gtk_extra_sources)
 
@@ -377,7 +377,7 @@ EXTRA_DIST += $(gtk_built_sources) $(gtk_built_public_sources) $(gtk_extra_sourc
 #
 # setup autogeneration dependancies
 gen_sources = xgen-gdef xgen-gtbh xgen-gtbvc xgen-gtbic xgen-gtbec xgen-gmh xgen-gmc
-CLEANFILES += $(gen_sources)
+CLEANFILES = $(gen_sources)
 OLD_STAMP: $(gtk_built_public_sources) $(gtk_built_sources)
 $(OBJECTS): OLD_STAMP 	# this is our oldest-source-stamp
 # initial creation of the real stamp-* files

@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include <stdio.h>
+#include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifdef HAVE_SYS_PARAM_H
@@ -297,7 +298,9 @@ static CompletionDirSent* open_new_dir     (gchar* dir_name,
 static gint           correct_dir_fullname (CompletionDir* cmpl_dir);
 static gint           correct_parent       (CompletionDir* cmpl_dir,
 					    struct stat *sbuf);
+#ifndef G_OS_WIN32
 static gchar*         find_parent_dir_fullname    (gchar* dirname);
+#endif
 static CompletionDir* attach_dir           (CompletionDirSent* sent,
 					    gchar* dir_name,
 					    CompletionState *cmpl_state);
@@ -306,8 +309,10 @@ static void           free_dir      (CompletionDir  *dir);
 static void           prune_memory_usage(CompletionState *cmpl_state);
 
 /* Completion operations */
+#ifdef HAVE_PWD_H
 static PossibleCompletion* attempt_homedir_completion(gchar* text_to_complete,
 						      CompletionState *cmpl_state);
+#endif
 static PossibleCompletion* attempt_file_completion(CompletionState *cmpl_state);
 static CompletionDir* find_completion_dir(gchar* text_to_complete,
 					  gchar** remaining_text,

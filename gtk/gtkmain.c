@@ -471,6 +471,9 @@ gtk_init_check (int	 *argc,
 
 #ifdef ENABLE_NLS
   bindtextdomain("gtk+", GTK_LOCALEDIR);
+#if defined(HAVE_BIND_TEXTDOMAIN_CODESET) && defined(GDK_USE_UTF8_MBS)
+  bind_textdomain_codeset ("gtk+", "UTF-8");
+#endif
 #endif  
 
   /* Initialize the default visual and colormap to be

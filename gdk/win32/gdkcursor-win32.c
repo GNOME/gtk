@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,6 +20,7 @@
 
 #include "config.h"
 
+#include "gdkprivate.h"
 #include "gdkcursor.h"
 #include "gdkwin32.h"
 #include "xcursors.h"
@@ -95,7 +97,8 @@ gdk_cursor_new (GdkCursorType cursor_type)
   if (xcursor == NULL)
     g_warning ("gdk_cursor_new: no cursor %d found", cursor_type);
   else
-    GDK_NOTE (MISC, g_print ("gdk_cursor_new: %d: %#x\n", cursor_type, (guint) xcursor));
+    GDK_NOTE (CURSOR, g_print ("gdk_cursor_new: %d: %p\n",
+			       cursor_type, xcursor));
 
   private = g_new (GdkCursorPrivate, 1);
   private->xcursor = xcursor;
@@ -157,11 +160,47 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
   if (source_image->depth != 1 || mask_image->depth != 1)
     {
-    gdk_image_unref (source_image);
-    gdk_image_unref (mask_image);
-    g_return_val_if_fail (source_image->depth == 1 && mask_image->depth == 1,
-			  NULL);
+      gdk_image_unref (source_image);
+      gdk_image_unref (mask_image);
+      g_return_val_if_fail (source_image->depth == 1 && mask_image->depth == 1,
+			    NULL);
     }
+
+#ifdef G_ENABLE_DEBUG
+  if (gdk_debug_flags & GDK_DEBUG_CURSOR)
+    {
+      g_print ("gdk_cursor_new_from_pixmap: source:\n");
+      for (iy = 0; iy < height; iy++)
+	{
+	  if (iy == 16)
+	    break;
+
+	  p = (guchar *) source_image->mem + iy*source_image->bpl;
+	  for (ix = 0; ix < ((width-1)/8+1); ix++)
+	    {
+	      if (ix == 32)
+		break;
+	      g_print ("%02x ", *p++);
+	    }
+	  g_print ("\n");
+	}
+      g_print ("...mask:\n");
+      for (iy = 0; iy < height; iy++)
+	{
+	  if (iy == 16)
+	    break;
+
+	  p = (guchar *) mask_image->mem + iy*source_image->bpl;
+	  for (ix = 0; ix < ((width-1)/8+1); ix++)
+	    {
+	      if (ix == 32)
+		break;
+	      g_print ("%02x ", *p++);
+	    }
+	  g_print ("\n");
+	}
+    }
+#endif
 
   /* Such complex bit manipulation for this simple task, sigh.
    * The X cursor and Windows cursor concepts are quite different.
@@ -222,13 +261,13 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   xcursor = CreateCursor (gdk_ProgInstance, x, y, cursor_width, cursor_height,
 			  ANDmask, XORmask);
 
-  GDK_NOTE (MISC, g_print ("gdk_cursor_new_from_pixmap: "
-			   "%#x (%dx%d) %#x (%dx%d) = %#x (%dx%d)\n",
-			   (guint) GDK_DRAWABLE_XID (source),
-			   source_private->width, source_private->height,
-			   (guint) GDK_DRAWABLE_XID (mask),
-			   mask_private->width, mask_private->height,
-			   (guint) xcursor, cursor_width, cursor_height));
+  GDK_NOTE (CURSOR, g_print ("gdk_cursor_new_from_pixmap: "
+			     "%p (%dx%d) %p (%dx%d) = %p (%dx%d)\n",
+			     GDK_DRAWABLE_XID (source),
+			     source_private->width, source_private->height,
+			     GDK_DRAWABLE_XID (mask),
+			     mask_private->width, mask_private->height,
+			     xcursor, cursor_width, cursor_height));
 
   g_free (XORmask);
   g_free (ANDmask);
@@ -253,7 +292,7 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   g_return_if_fail (cursor != NULL);
   private = (GdkCursorPrivate *) cursor;
 
-  GDK_NOTE (MISC, g_print ("_gdk_cursor_destroy: %#x\n", (guint) private->xcursor));
+  GDK_NOTE (CURSOR, g_print ("_gdk_cursor_destroy: %p\n", private->xcursor));
 
   if (GetCursor() == private->xcursor)
     SetCursor(NULL);

@@ -76,7 +76,15 @@ typedef struct _GdkColorContextPrivate GdkColorContextPrivate;
 struct _GdkColorContextPrivate
 {
   GdkColorContext color_context;
-  XStandardColormap std_cmap;
+  struct {
+    unsigned long red_max;
+    unsigned long red_mult;
+    unsigned long green_max;
+    unsigned long green_mult;
+    unsigned long blue_max;
+    unsigned long blue_mult;
+    unsigned long base_pixel;
+  } std_cmap;
 };
 
 static guint
@@ -120,12 +128,13 @@ my_x_query_colors (GdkColormap *colormap,
   
   for (i = 0; i < ncolors; i++)
     {
-      PALETTEENTRY palentry;
+      PALETTEENTRY pe;
       
-      GetPaletteEntries (GDK_COLORMAP_WIN32COLORMAP (colormap)->palette, colors[i].pixel, 1, &palentry);
-      colors[i].red = (palentry.peRed * 65535) / 255;
-      colors[i].green = (palentry.peGreen * 65535) / 255;
-      colors[i].blue = (palentry.peBlue * 65535) / 255;
+      GetPaletteEntries (((GdkColormapPrivateWin32 *) colormap)->hpal,
+			 colors[i].pixel, 1, &pe);
+      colors[i].red = (pe.peRed * 65535) / 255;
+      colors[i].green = (pe.peGreen * 65535) / 255;
+      colors[i].blue = (pe.peBlue * 65535) / 255;
     }
 }
 
@@ -216,8 +225,6 @@ init_gray (GdkColorContext *cc)
   
   g_free (cstart);
   
-  /* XXX: is this the right thing to do? */
-  ccp->std_cmap.colormap = GDK_COLORMAP_WIN32COLORMAP (cc->colormap);
   ccp->std_cmap.base_pixel = 0;
   ccp->std_cmap.red_max = cc->num_colors - 1;
   ccp->std_cmap.green_max = 0;
@@ -241,7 +248,7 @@ init_color (GdkColorContext *cc)
   gint cubeval;
   
   cubeval = 1;
-  while ((cubeval * cubeval * cubeval) < GDK_VISUAL_XVISUAL (cc->visual)->map_entries)
+  while ((cubeval * cubeval * cubeval) < cc->visual->colormap_size)
     cubeval++;
   cubeval--;
   
@@ -255,8 +262,8 @@ init_color (GdkColorContext *cc)
   ccp->std_cmap.blue_mult  = 1;
   ccp->std_cmap.base_pixel = 0;
   
-  cc->white_pixel = 255;	/* ??? */
-  cc->black_pixel = 0;		/* ??? */
+  cc->white_pixel = 255;
+  cc->black_pixel = 0;
   
   /* a CLUT for storing allocated pixel indices */
   
@@ -351,7 +358,7 @@ init_palette (GdkColorContext *cc)
     {
     case GDK_VISUAL_STATIC_GRAY:
     case GDK_VISUAL_GRAYSCALE:
-      if (GDK_VISUAL_XVISUAL (cc->visual)->map_entries == 2)
+      if (cc->visual->colormap_size == 2)
 	cc->mode = GDK_CC_MODE_BW;
       else
 	cc->mode = GDK_CC_MODE_MY_GRAY;
@@ -436,17 +443,14 @@ gdk_color_context_new (GdkVisual   *visual,
       
       if (use_private_colormap
 	  || ((cc->visual != gdk_visual_get_system ()) /* default visual? */
-	      && (GDK_COLORMAP_WIN32COLORMAP (colormap) ==
-		  GDK_COLORMAP_WIN32COLORMAP (default_colormap))))
+	      && (colormap == (default_colormap))))
 	{
 	  g_warning ("gdk_color_context_new: non-default visual detected, "
 		     "using private colormap");
 	  
 	  cc->colormap = gdk_colormap_new (cc->visual, FALSE);
 	  
-	  cc->need_to_free_colormap =
-	    (GDK_COLORMAP_WIN32COLORMAP (colormap)
-	     != GDK_COLORMAP_WIN32COLORMAP (default_colormap));
+	  cc->need_to_free_colormap = (colormap != default_colormap);
 	}
       
       switch (visual->type)
@@ -459,7 +463,7 @@ gdk_color_context_new (GdkVisual   *visual,
 			       "GDK_VISUAL_STATIC_GRAY" :
 			       "GDK_VISUAL_GRAYSCALE"));
 	  
-	  if (GDK_VISUAL_XVISUAL (cc->visual)->map_entries == 2)
+	  if (cc->visual->colormap_size == 2)
 	    init_bw (cc);
 	  else
 	    init_gray (cc);

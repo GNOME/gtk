@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -125,10 +126,10 @@ gdk_drawable_get_colormap (GdkDrawable *drawable)
 
   if (!GDK_DRAWABLE_DESTROYED (drawable))
     {
-      if (drawable_private->colormap == NULL)
-	return gdk_colormap_get_system (); /* XXX ??? */
-      else
-	return drawable_private->colormap;
+      if (drawable_private->colormap == NULL &&
+	  GDK_IS_WINDOW (drawable))
+	drawable_private->colormap = gdk_colormap_get_system ();
+      return drawable_private->colormap;
     }
   
   return NULL;
@@ -154,9 +155,9 @@ gdk_drawable_set_colormap (GdkDrawable *drawable,
 	  g_return_if_fail (colormap_private->base.visual !=
 			    ((GdkColormapPrivate *) (drawable_private->colormap))->visual);
 	  /* XXX ??? */
-	  GDK_NOTE (MISC, g_print ("gdk_drawable_set_colormap: %#x %#x\n",
-				   (guint) GDK_DRAWABLE_XID (drawable),
-				   (guint) colormap_private->xcolormap));
+	  GDK_NOTE (MISC, g_print ("gdk_drawable_set_colormap: %p %p\n",
+				   GDK_DRAWABLE_XID (drawable),
+				   colormap_private->hpal));
 	}
       if (drawable_private->colormap)
 	gdk_colormap_unref (drawable_private->colormap);
@@ -191,17 +192,15 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
   HDC hdc;
   HGDIOBJ oldpen_or_brush;
   POINT pts[4];
-  HBRUSH stipple;
   gboolean ok = TRUE;
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_draw_rectangle: %#x (%p) %s%dx%d@+%d+%d\n",
-			   (guint) GDK_DRAWABLE_XID (drawable),
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_rectangle: %p (%p) %s%dx%d@+%d+%d\n",
+			   GDK_DRAWABLE_XID (drawable),
 			   gc_private,
 			   (filled ? "fill " : ""),
 			   width, height, x, y));
     
-  hdc = gdk_gc_predraw (drawable, gc_private,
-			GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
+  hdc = gdk_gc_predraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
 
   if (gc_data->fill_style == GDK_OPAQUE_STIPPLED)
     {
@@ -245,8 +244,8 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
     {
       HDC memdc = CreateCompatibleDC (hdc);
       HBITMAP hbm = CreateCompatibleBitmap (hdc, width, height);
-      HBRUSH hbr = CreateSolidBrush (gc_data->
-      stipple = CreatePatternBrush (GDK_DRAWABLE_XID (gc_data->stipple));
+      HBRUSH hbr = CreateSolidBrush (gc_data->....);
+      HBRUSH stipple = CreatePatternBrush (GDK_DRAWABLE_XID (gc_data->stipple));
       SetBrushOrgEx (hdc, gc_data->ts_x_origin, gc_data->ts_y_origin);
       oldpen_or_brush = Select
 
@@ -301,11 +300,16 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 	oldpen_or_brush = SelectObject (hdc, GetStockObject (NULL_PEN));
       else
 	oldpen_or_brush = SelectObject (hdc, GetStockObject (HOLLOW_BRUSH));
-  
+
+      if (oldpen_or_brush == NULL)
+	WIN32_GDI_FAILED ("SelectObject");
+      
       if (!Rectangle (hdc, x, y, x+width+1, y+height+1))
 	WIN32_GDI_FAILED ("Rectangle");
   
-      SelectObject (hdc, oldpen_or_brush);
+      if (oldpen_or_brush != NULL &&
+	  SelectObject (hdc, oldpen_or_brush) == NULL)
+	WIN32_GDI_FAILED ("SelectObject");
     }
 
   gdk_gc_postdraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
@@ -328,63 +332,62 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
 
   gc_private = (GdkGCPrivate*) gc;
 
-  GDK_NOTE (MISC, g_print ("gdk_draw_arc: %#x  %d,%d,%d,%d  %d %d\n",
-			   (guint) GDK_DRAWABLE_XID (drawable),
+  GDK_NOTE (MISC, g_print ("gdk_draw_arc: %p  %d,%d,%d,%d  %d %d\n",
+			   GDK_DRAWABLE_XID (drawable),
 			   x, y, width, height, angle1, angle2));
 
   /* Seems that drawing arcs with width or height <= 2 fails, at least
    * with my TNT card.
    */
-  if (width > 2 && height > 2 && angle2 != 0)
+  if (width <= 2 || height <= 2 || angle2 == 0)
+    return;
+
+  hdc = gdk_gc_predraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
+
+  if (angle2 >= 360*64)
     {
-      hdc = gdk_gc_predraw (drawable, gc_private,
-			    GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
-
-      if (angle2 >= 360*64)
-	{
-	  nXStartArc = nYStartArc = nXEndArc = nYEndArc = 0;
-	}
-      else if (angle2 > 0)
-	{
-	  /* The 100. is just an arbitrary value */
-	  nXStartArc = x + width/2 + 100. * cos(angle1/64.*2.*G_PI/360.);
-	  nYStartArc = y + height/2 + -100. * sin(angle1/64.*2.*G_PI/360.);
-	  nXEndArc = x + width/2 + 100. * cos((angle1+angle2)/64.*2.*G_PI/360.);
-	  nYEndArc = y + height/2 + -100. * sin((angle1+angle2)/64.*2.*G_PI/360.);
-	}
-      else
-	{
-	  nXEndArc = x + width/2 + 100. * cos(angle1/64.*2.*G_PI/360.);
-	  nYEndArc = y + height/2 + -100. * sin(angle1/64.*2.*G_PI/360.);
-	  nXStartArc = x + width/2 + 100. * cos((angle1+angle2)/64.*2.*G_PI/360.);
-	  nYStartArc = y + height/2 + -100. * sin((angle1+angle2)/64.*2.*G_PI/360.);
-	}
-
-      /* GDK_OPAQUE_STIPPLED arcs not implemented. */
-
-      if (filled)
-	{
-	  GDK_NOTE (MISC, g_print ("...Pie(hdc,%d,%d,%d,%d,%d,%d,%d,%d)\n",
-				   x, y, x+width, y+height,
-				   nXStartArc, nYStartArc,
-				   nXEndArc, nYEndArc));
-	  if (!Pie (hdc, x, y, x+width, y+height,
-		    nXStartArc, nYStartArc, nXEndArc, nYEndArc))
-	    WIN32_GDI_FAILED ("Pie");
-	}
-      else
-	{
-	  GDK_NOTE (MISC, g_print ("...Arc(hdc,%d,%d,%d,%d,%d,%d,%d,%d)\n",
-				   x, y, x+width, y+height,
-				   nXStartArc, nYStartArc,
-				   nXEndArc, nYEndArc));
-	  if (!Arc (hdc, x, y, x+width, y+height,
-		    nXStartArc, nYStartArc, nXEndArc, nYEndArc))
-	    WIN32_GDI_FAILED ("Arc");
-	}
-      gdk_gc_postdraw (drawable, gc_private,
-		       GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
+      nXStartArc = nYStartArc = nXEndArc = nYEndArc = 0;
     }
+  else if (angle2 > 0)
+    {
+      /* The 100. is just an arbitrary value */
+      nXStartArc = x + width/2 + 100. * cos(angle1/64.*2.*G_PI/360.);
+      nYStartArc = y + height/2 + -100. * sin(angle1/64.*2.*G_PI/360.);
+      nXEndArc = x + width/2 + 100. * cos((angle1+angle2)/64.*2.*G_PI/360.);
+      nYEndArc = y + height/2 + -100. * sin((angle1+angle2)/64.*2.*G_PI/360.);
+    }
+  else
+    {
+      nXEndArc = x + width/2 + 100. * cos(angle1/64.*2.*G_PI/360.);
+      nYEndArc = y + height/2 + -100. * sin(angle1/64.*2.*G_PI/360.);
+      nXStartArc = x + width/2 + 100. * cos((angle1+angle2)/64.*2.*G_PI/360.);
+      nYStartArc = y + height/2 + -100. * sin((angle1+angle2)/64.*2.*G_PI/360.);
+    }
+  
+  /* GDK_OPAQUE_STIPPLED arcs not implemented. */
+  
+  if (filled)
+    {
+      GDK_NOTE (MISC, g_print ("...Pie(hdc,%d,%d,%d,%d,%d,%d,%d,%d)\n",
+			       x, y, x+width, y+height,
+			       nXStartArc, nYStartArc,
+			       nXEndArc, nYEndArc));
+      if (!Pie (hdc, x, y, x+width, y+height,
+		nXStartArc, nYStartArc, nXEndArc, nYEndArc))
+	WIN32_GDI_FAILED ("Pie");
+    }
+  else
+    {
+      GDK_NOTE (MISC, g_print ("...Arc(hdc,%d,%d,%d,%d,%d,%d,%d,%d)\n",
+			       x, y, x+width, y+height,
+			       nXStartArc, nYStartArc,
+			       nXEndArc, nYEndArc));
+      if (!Arc (hdc, x, y, x+width, y+height,
+		nXStartArc, nYStartArc, nXEndArc, nYEndArc))
+	WIN32_GDI_FAILED ("Arc");
+    }
+  gdk_gc_postdraw (drawable, gc_private,
+		   GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
 }
 
 static void
@@ -401,15 +404,14 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
   gboolean ok = TRUE;
   int i;
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_draw_polygon: %#x (%p) %d\n",
-			   (guint) GDK_DRAWABLE_XID (drawable), gc_private,
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_polygon: %p (%p) %d\n",
+			   GDK_DRAWABLE_XID (drawable), gc_private,
 			   npoints));
 
   if (npoints < 2)
     return;
 
-  hdc = gdk_gc_predraw (drawable, gc_private,
-			GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
+  hdc = gdk_gc_predraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
   pts = g_new (POINT, npoints+1);
 
   for (i = 0; i < npoints; i++)
@@ -548,11 +550,10 @@ gdk_win32_draw_text (GdkDrawable *drawable,
   arg.x = x;
   arg.y = y;
 
-  arg.hdc = gdk_gc_predraw (drawable, gc_private,
-			    GDK_GC_FOREGROUND|GDK_GC_FONT);
+  arg.hdc = gdk_gc_predraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_FONT);
 
-  GDK_NOTE (MISC, g_print ("gdk_draw_text: %#x (%d,%d) \"%.*s\" (len %d)\n",
-			   (guint) GDK_DRAWABLE_XID (drawable),
+  GDK_NOTE (MISC, g_print ("gdk_draw_text: %p (%d,%d) \"%.*s\" (len %d)\n",
+			   GDK_DRAWABLE_XID (drawable),
 			   x, y,
 			   (text_length > 10 ? 10 : text_length),
 			   text, text_length));
@@ -581,7 +582,7 @@ gdk_win32_draw_text_wc (GdkDrawable	 *drawable,
 			gint		  text_length)
 {
   GdkGCPrivate *gc_private;
-  gint i, wlen;
+  gint i;
   wchar_t *wcstr;
   gdk_draw_text_arg arg;
 
@@ -599,11 +600,10 @@ gdk_win32_draw_text_wc (GdkDrawable	 *drawable,
   arg.x = x;
   arg.y = y;
 
-  arg.hdc = gdk_gc_predraw (drawable, gc_private,
-			    GDK_GC_FOREGROUND|GDK_GC_FONT);
+  arg.hdc = gdk_gc_predraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_FONT);
 
-  GDK_NOTE (MISC, g_print ("gdk_draw_text_wc: %#x (%d,%d) len: %d\n",
-			   (guint) GDK_DRAWABLE_XID (drawable),
+  GDK_NOTE (MISC, g_print ("gdk_draw_text_wc: %p (%d,%d) len: %d\n",
+			   GDK_DRAWABLE_XID (drawable),
 			   x, y, text_length));
       
   if (sizeof (wchar_t) != sizeof (GdkWChar))
@@ -639,7 +639,6 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
   GdkGCPrivate *gc_private;
   HDC hdc;
   HDC srcdc;
-  HGDIOBJ hgdiobj;
   HRGN src_rgn, draw_rgn, outside_rgn;
   RECT r;
 
@@ -647,13 +646,13 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
   gc_private = (GdkGCPrivate*) gc;
 
   GDK_NOTE (MISC, g_print ("gdk_win32_draw_drawable: "
-			   "src: %#x %dx%d@+%d+%d"
-			   " dest: %#x @+%d+%d\n",
-			   (guint) GDK_DRAWABLE_XID (src),
+			   "src: %p %dx%d@+%d+%d"
+			   " dest: %p @+%d+%d\n",
+			   GDK_DRAWABLE_XID (src),
 			   width, height, xsrc, ysrc,
-			   (guint) GDK_DRAWABLE_XID (drawable), xdest, ydest));
+			   GDK_DRAWABLE_XID (drawable), xdest, ydest));
 
-  hdc = gdk_gc_predraw (drawable, gc_private, 0);
+  hdc = gdk_gc_predraw (drawable, gc_private, GDK_GC_FOREGROUND);
 
   src_rgn = CreateRectRgn (0, 0, src_private->width + 1, src_private->height + 1);
   draw_rgn = CreateRectRgn (xsrc, ysrc, xsrc + width + 1, ysrc + height + 1);
@@ -711,66 +710,101 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
    */
   if (src_private->window_type == GDK_DRAWABLE_PIXMAP)
     {
+#if 0
       srcdc = gdk_win32_obtain_offscreen_hdc (GDK_DRAWABLE_XID (src));
+#else
+      GdkGC *srcgc = gdk_gc_new (src);
+      GdkGCPrivate *srcgc_private = (GdkGCPrivate *) srcgc;
+      srcdc = gdk_gc_predraw (src, srcgc_private, GDK_GC_FOREGROUND);
+#endif
+      GDK_NOTE (MISC, g_print ("gdk_win32_draw_drawable: from pixmap\n"));
       if (srcdc != NULL)
         {
           if (!BitBlt (hdc, xdest, ydest, width, height,
                        srcdc, xsrc, ysrc, SRCCOPY))
             WIN32_GDI_FAILED ("BitBlt");
+#if 0
           gdk_win32_release_hdc (NULL, srcdc);
+#else
+	  gdk_gc_postdraw (src, srcgc_private, GDK_GC_FOREGROUND);
+#endif
         }
+      gdk_gc_unref (srcgc);
+    }
+  else if (GDK_DRAWABLE_XID(drawable) == GDK_DRAWABLE_XID (src))
+    {
+      /* Blitting inside a window, use ScrollDC */
+      RECT scrollRect, clipRect, emptyRect;
+      HRGN updateRgn;
+      
+      GDK_NOTE (MISC, g_print ("gdk_win32_draw_drawable: scrolling a window\n"));
+
+      scrollRect.left = MIN (xsrc, xdest);
+      scrollRect.top = MIN (ysrc, ydest);
+      scrollRect.right = MAX (xsrc + width + 1, xdest + width + 1);
+      scrollRect.bottom = MAX (ysrc + height + 1, ydest + height + 1);
+      
+      clipRect.left = xdest;
+      clipRect.top = ydest;
+      clipRect.right = xdest + width + 1;
+      clipRect.bottom = ydest + height + 1;
+      
+      SetRectEmpty (&emptyRect);
+      updateRgn = CreateRectRgnIndirect (&emptyRect);
+      if (!ScrollDC (hdc, xdest - xsrc, ydest - ysrc,
+		     &scrollRect, &clipRect,
+		     updateRgn, NULL))
+	WIN32_GDI_FAILED ("ScrollDC");
+      if (!InvalidateRgn (GDK_DRAWABLE_XID (drawable), updateRgn, FALSE))
+	WIN32_GDI_FAILED ("InvalidateRgn");
+      if (GDK_WINDOW_WIN32DATA (drawable)->owner_thread_id != GetCurrentThreadId ())
+	{
+	  if (!PostThreadMessage (GDK_WINDOW_WIN32DATA (drawable)->owner_thread_id, WM_PAINT, 0, 0))
+	    WIN32_API_FAILED ("PostThreadMessage");
+	}
+      else
+	if (!UpdateWindow (GDK_DRAWABLE_XID (drawable)))
+	  WIN32_GDI_FAILED ("UpdateWindow");
+      if (!DeleteObject (updateRgn))
+	WIN32_GDI_FAILED ("DeleteObject");
     }
   else
     {
-      if (GDK_DRAWABLE_XID(drawable) == GDK_DRAWABLE_XID (src))
-	{
-	  /* Blitting inside a window, use ScrollDC */
-	  RECT scrollRect, clipRect, emptyRect;
-	  HRGN updateRgn;
-
-	  scrollRect.left = MIN (xsrc, xdest);
-	  scrollRect.top = MIN (ysrc, ydest);
-	  scrollRect.right = MAX (xsrc + width + 1, xdest + width + 1);
-	  scrollRect.bottom = MAX (ysrc + height + 1, ydest + height + 1);
-
-	  clipRect.left = xdest;
-	  clipRect.top = ydest;
-	  clipRect.right = xdest + width + 1;
-	  clipRect.bottom = ydest + height + 1;
-
-	  SetRectEmpty (&emptyRect);
-	  updateRgn = CreateRectRgnIndirect (&emptyRect);
-	  if (!ScrollDC (hdc, xdest - xsrc, ydest - ysrc,
-			 &scrollRect, &clipRect,
-			 updateRgn, NULL))
-	    WIN32_GDI_FAILED ("ScrollDC");
-	  if (!InvalidateRgn (GDK_DRAWABLE_XID (drawable), updateRgn, FALSE))
-	    WIN32_GDI_FAILED ("InvalidateRgn");
-	  if (GDK_WINDOW_WIN32DATA (drawable)->owner_thread_id != GetCurrentThreadId ())
-	    {
-	      if (!PostThreadMessage (GDK_WINDOW_WIN32DATA (drawable)->owner_thread_id, WM_PAINT, 0, 0))
-		WIN32_API_FAILED ("PostThreadMessage");
-	    }
-	  else
-	    if (!UpdateWindow (GDK_DRAWABLE_XID (drawable)))
-	      WIN32_GDI_FAILED ("UpdateWindow");
-	  if (!DeleteObject (updateRgn))
-	    WIN32_GDI_FAILED ("DeleteObject");
-	}
+      GDK_NOTE (MISC, g_print ("gdk_win32_draw_drawable: from window\n"));
+      if ((srcdc = GetDC (GDK_DRAWABLE_XID (src))) == NULL)
+	WIN32_GDI_FAILED ("GetDC");
       else
 	{
-	  if ((srcdc = GetDC (GDK_DRAWABLE_XID (src))) == NULL)
-	    WIN32_GDI_FAILED ("GetDC");
-	  else
+	  HPALETTE holdpal = NULL;
+	  GdkColormapPrivateWin32 *cmapp =
+	    (GdkColormapPrivateWin32 *) gdk_colormap_get_system ();
+
+	  if (cmapp->base.visual->type == GDK_VISUAL_PSEUDO_COLOR)
 	    {
-	      if (!BitBlt (hdc, xdest, ydest, width, height,
-			   srcdc, xsrc, ysrc, SRCCOPY))
-		WIN32_GDI_FAILED ("BitBlt");
-	      ReleaseDC (GDK_DRAWABLE_XID (src), srcdc);
+	      gint k;
+
+	      if (!(holdpal = SelectPalette (srcdc, cmapp->hpal, FALSE)))
+		WIN32_GDI_FAILED ("SelectPalette");
+	      else if ((k = RealizePalette (srcdc)) == GDI_ERROR)
+		WIN32_GDI_FAILED ("RealizePalette");
+	      else if (k > 0)
+		GDK_NOTE (COLORMAP,
+			  g_print ("gdk_win32_draw_drawable: realized %d\n",
+				   k));
 	    }
+	  
+	  if (!BitBlt (hdc, xdest, ydest, width, height,
+		       srcdc, xsrc, ysrc, SRCCOPY))
+	    WIN32_GDI_FAILED ("BitBlt");
+
+	  if (holdpal != NULL)
+	    SelectPalette (srcdc, holdpal, FALSE);
+
+	  if (!ReleaseDC (GDK_DRAWABLE_XID (src), srcdc))
+	    WIN32_GDI_FAILED ("ReleaseDC");
 	}
     }
-  gdk_gc_postdraw (drawable, gc_private, 0);
+  gdk_gc_postdraw (drawable, gc_private, GDK_GC_FOREGROUND);
 }
 
 static void
@@ -788,17 +822,17 @@ gdk_win32_draw_points (GdkDrawable *drawable,
     (GdkColormapPrivateWin32 *) drawable_private->colormap;
   int i;
 
-  hdc = gdk_gc_predraw (drawable, gc_private, 0);
+  hdc = gdk_gc_predraw (drawable, gc_private, GDK_GC_FOREGROUND);
   
   fg = gdk_colormap_color (colormap_private, gc_data->foreground);
 
-  GDK_NOTE (MISC, g_print ("gdk_draw_points: %#x %dx%.06x\n",
-			   (guint) GDK_DRAWABLE_XID (drawable), npoints, (guint) fg));
+  GDK_NOTE (MISC, g_print ("gdk_draw_points: %p %dx%.06x\n",
+			   GDK_DRAWABLE_XID (drawable), npoints, (guint) fg));
 
   for (i = 0; i < npoints; i++)
     SetPixel (hdc, points[i].x, points[i].y, fg);
 
-  gdk_gc_postdraw (drawable, gc_private, 0);
+  gdk_gc_postdraw (drawable, gc_private, GDK_GC_FOREGROUND);
 }
 
 static void
@@ -813,11 +847,10 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
   gboolean ok = TRUE;
   int i;
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_draw_segments: %#x nsegs: %d\n",
-			   (guint) GDK_DRAWABLE_XID (drawable), nsegs));
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_segments: %p nsegs: %d\n",
+			   GDK_DRAWABLE_XID (drawable), nsegs));
 
-  hdc = gdk_gc_predraw (drawable, gc_private,
-			GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
+  hdc = gdk_gc_predraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
 
   if (gc_data->fill_style == GDK_OPAQUE_STIPPLED)
     {
@@ -918,8 +951,7 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
   if (npoints < 2)
     return;
 
-  hdc = gdk_gc_predraw (drawable, gc_private,
-			GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
+  hdc = gdk_gc_predraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
 #if 1
   pts = g_new (POINT, npoints);
 
@@ -975,7 +1007,7 @@ gdk_win32_print_dc_attributes (HDC hdc)
 	   (guint) lbr.lbColor);
   g_print ("current pen: style = %s, width = %d, color = 0x%.08x\n",
 	   (lpen.lopnStyle == PS_SOLID ? "SOLID" : "???"),
-	   lpen.lopnWidth,
+	   lpen.lopnWidth.x,
 	   (guint) lpen.lopnColor);
 }
 

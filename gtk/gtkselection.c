@@ -897,7 +897,7 @@ gtk_selection_request (GtkWidget *widget,
       data.length = -1;
       
 #ifdef DEBUG_SELECTION
-      g_message ("Selection %ld, target %ld (%s) requested by 0x%x (property = %ld)",
+      g_message ("Selection 0x%lx, target 0x%lx (%s) requested by 0x%x (property = 0x%lx)",
 		 event->selection, info->conversions[i].target,
 		 gdk_atom_name(info->conversions[i].target),
 		 event->requestor, event->property);
@@ -1028,7 +1028,7 @@ gtk_selection_incr_event (GdkWindow	   *window,
     return FALSE;
   
 #ifdef DEBUG_SELECTION
-  g_message ("PropertyDelete, property %ld", event->atom);
+  g_message ("PropertyDelete, property 0x%lx", event->atom);
 #endif
   
   /* Now find the appropriate ongoing INCR */
@@ -1196,7 +1196,7 @@ gtk_selection_notify (GtkWidget	       *widget,
   gint	  format;
   
 #ifdef DEBUG_SELECTION
-  g_message ("Initial receipt of selection %ld, target %ld (property = %ld)",
+  g_message ("Initial receipt of selection 0x%lx, target 0x%lx (property = 0x%lx)",
 	     event->selection, event->target, event->property);
 #endif
   
@@ -1290,7 +1290,7 @@ gtk_selection_property_notify (GtkWidget	*widget,
     return FALSE;
   
 #ifdef DEBUG_SELECTION
-  g_message ("PropertyNewValue, property %ld",
+  g_message ("PropertyNewValue, property 0x%lx",
 	     event->atom);
 #endif
   
@@ -1469,7 +1469,6 @@ gtk_selection_invoke_handler (GtkWidget	       *widget,
   GtkTargetList *target_list;
   guint info;
   
-
   g_return_if_fail (widget != NULL);
 
   target_list = gtk_selection_target_list_get (widget, data->selection);

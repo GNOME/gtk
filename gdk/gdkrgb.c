@@ -235,6 +235,10 @@ gdk_rgb_try_colormap (gint nr, gint ng, gint nb)
     cmap = gdk_colormap_get_system ();
 
   colors_needed = nr * ng * nb;
+  GDK_NOTE (GDKRGB, g_print ("gdk_rgb_try_colormap: nr=%d ng=%d nb=%d "
+			     "cmap=%p colors_neded=%d\n",
+			     nr, ng, nb, cmap, colors_needed));
+
   for (i = 0; i < 256; i++)
     {
       best[i] = 192;
@@ -243,32 +247,35 @@ gdk_rgb_try_colormap (gint nr, gint ng, gint nb)
 
 #ifndef GAMMA
   if (!gdk_rgb_install_cmap)
-  /* find color cube colors that are already present */
-  for (i = 0; i < MIN (256, cmap->size); i++)
     {
-      r = cmap->colors[i].red >> 8;
-      g = cmap->colors[i].green >> 8;
-      b = cmap->colors[i].blue >> 8;
-      ri = (r * (nr - 1) + 128) >> 8;
-      gi = (g * (ng - 1) + 128) >> 8;
-      bi = (b * (nb - 1) + 128) >> 8;
-      r0 = ri * 255 / (nr - 1);
-      g0 = gi * 255 / (ng - 1);
-      b0 = bi * 255 / (nb - 1);
-      idx = ((ri * nr) + gi) * nb + bi;
-      d2 = (r - r0) * (r - r0) + (g - g0) * (g - g0) + (b - b0) * (b - b0);
-      if (d2 < best[idx]) {
-	if (pixels[idx] < 256)
-	  gdk_colors_free (cmap, pixels + idx, 1, 0);
-	else
-	  colors_needed--;
-	color = cmap->colors[i];
-	if (!gdk_color_alloc (cmap, &color))
-	  return gdk_rgb_cmap_fail ("error allocating system color\n",
-				    cmap, pixels);
-	pixels[idx] = color.pixel; /* which is almost certainly i */
-	best[idx] = d2;
-      }
+      /* find color cube colors that are already present */
+      for (i = 0; i < MIN (256, cmap->size); i++)
+	{
+	  r = cmap->colors[i].red >> 8;
+	  g = cmap->colors[i].green >> 8;
+	  b = cmap->colors[i].blue >> 8;
+	  ri = (r * (nr - 1) + 128) >> 8;
+	  gi = (g * (ng - 1) + 128) >> 8;
+	  bi = (b * (nb - 1) + 128) >> 8;
+	  r0 = ri * 255 / (nr - 1);
+	  g0 = gi * 255 / (ng - 1);
+	  b0 = bi * 255 / (nb - 1);
+	  idx = ((ri * nr) + gi) * nb + bi;
+	  d2 = (r - r0) * (r - r0) + (g - g0) * (g - g0) + (b - b0) * (b - b0);
+	  if (d2 < best[idx]) {
+	    if (pixels[idx] < 256)
+	      gdk_colors_free (cmap, pixels + idx, 1, 0);
+	    else
+	      colors_needed--;
+	    color = cmap->colors[i];
+	    if (!gdk_color_alloc (cmap, &color))
+	      return gdk_rgb_cmap_fail ("error allocating system color\n",
+					cmap, pixels);
+	    pixels[idx] = color.pixel; /* which is almost certainly i */
+	    best[idx] = d2;
+	  }
+	}
+      GDK_NOTE (GDKRGB, g_print ("gdk_rgb_try_colormap: still need %d colors\n", colors_needed));
     }
 #endif
 
@@ -325,6 +332,8 @@ gdk_rgb_try_colormap (gint nr, gint ng, gint nb)
   image_info->nblue_shades = nb;
   gdk_rgb_make_colorcube (pixels, nr, ng, nb);
   gdk_rgb_make_colorcube_d (pixels, nr, ng, nb);
+  GDK_NOTE (GDKRGB, g_print ("gdk_rgb_try_colormap...done\n"));
+
   return TRUE;
 }
 
@@ -366,6 +375,8 @@ gdk_rgb_colorcube_222 (void)
   else
     cmap = gdk_colormap_get_system ();
 
+  GDK_NOTE (GDKRGB, g_print ("gdk_rgb_colorcube_222: cmap=%p\n", cmap));
+
   colorcube_d = g_new (guchar, 512);
 
   for (i = 0; i < 8; i++)
@@ -376,6 +387,7 @@ gdk_rgb_colorcube_222 (void)
       gdk_color_alloc (cmap, &color);
       colorcube_d[((i & 4) << 4) | ((i & 2) << 2) | (i & 1)] = color.pixel;
     }
+  GDK_NOTE (GDKRGB, g_print ("gdk_rgb_colorcube_222...done\n"));
 }
 
 void
@@ -387,12 +399,15 @@ gdk_rgb_set_verbose (gboolean verbose)
 void
 gdk_rgb_set_install (gboolean install)
 {
+  GDK_NOTE (GDKRGB, g_print ("gdk_rgb_set_install: %s\n",
+			     install ? "TRUE" : "FALSE"));
   gdk_rgb_install_cmap = install;
 }
 
 void
 gdk_rgb_set_min_colors (gint min_colors)
 {
+  GDK_NOTE (GDKRGB, g_print ("gdk_rgb_set_min_colors: %d\n", min_colors));
   gdk_rgb_min_colors = min_colors;
 }
 
@@ -519,6 +534,8 @@ gdk_rgb_set_gray_cmap (GdkColormap *cmap)
   gulong pixels[256];
   gint r, g, b, gray;
 
+  GDK_NOTE (GDKRGB, g_print ("gdk_rgb_set_gray_cmap: cmap=%p\n", cmap));
+
   for (i = 0; i < 256; i++)
     {
       color.pixel = i;
@@ -549,6 +566,7 @@ gdk_rgb_set_gray_cmap (GdkColormap *cmap)
       gray = (g + ((r + b) >> 1)) >> 1;
       colorcube[i] = pixels[gray];
     }
+  GDK_NOTE (GDKRGB, g_print ("gdk_rgb_set_gray_cmap...done\n"));
 }
 
 void
@@ -565,6 +583,9 @@ gdk_rgb_init (void)
   if (((char *)byte_order)[0] != 1)
     g_error ("gdk_rgb_init: compiled for little endian, but this is a big endian machine.\n\n");
 #endif
+
+  if (gdk_debug_flags & GDK_DEBUG_GDKRGB)
+    gdk_rgb_verbose = TRUE;
 
   if (image_info == NULL)
     {

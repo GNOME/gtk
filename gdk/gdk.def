@@ -166,7 +166,6 @@ EXPORTS
 	gdk_im_end
 	gdk_im_ready
 	gdk_im_set_best_style
-	gdk_image_bitmap_new
 	gdk_image_get
 	gdk_image_get_pixel
 	gdk_image_new
@@ -208,7 +207,6 @@ EXPORTS
 	gdk_pixmap_create_from_data
 	gdk_pixmap_create_from_xpm
 	gdk_pixmap_create_from_xpm_d
-	gdk_pixmap_create_on_shared_image
 	gdk_pixmap_foreign_new
 	gdk_pixmap_new
 	gdk_pointer_grab

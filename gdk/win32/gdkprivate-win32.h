@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -200,17 +201,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-/* Define corresponding Windows types for some X11 types, just for laziness.
- */
-
-typedef PALETTEENTRY XColor;
-typedef guint VisualID;
-typedef int Status;
-
-/* Define some of the X11 constants also here, again just for laziness */
-
-/* Generic null resource */
-#define None 0
+/* Define some of the X11 constants also here, just for laziness */
 
 /* Error codes */
 #define Success            0
@@ -218,35 +209,6 @@ typedef int Status;
 /* Grabbing status */
 #define GrabSuccess	   0
 #define AlreadyGrabbed	   2
-
-/* Some structs are somewhat useful to emulate internally, just to
-   keep the code less #ifdefed.  */
-typedef struct {
-  HPALETTE palette;		/* Palette handle used when drawing. */
-  guint size;			/* Number of entries in the palette. */
-  gboolean stale;		/* 1 if palette needs to be realized,
-				 * otherwise 0. */
-  gboolean *in_use;
-  gboolean rc_palette;		/* If RC_PALETTE is on in the RASTERCAPS */
-  gulong sizepalette;		/* SIZEPALETTE if rc_palette */
-} ColormapStruct, *Colormap;
-  
-typedef struct {
-  gint map_entries;
-  guint visualid;
-  guint bitspixel;
-} Visual;
-
-typedef struct {
-  Colormap colormap;
-  unsigned long red_max;
-  unsigned long red_mult;
-  unsigned long green_max;
-  unsigned long green_mult;
-  unsigned long blue_max;
-  unsigned long blue_mult;
-  unsigned long base_pixel;
-} XStandardColormap;
 
 typedef struct _GdkGCWin32Data          GdkGCWin32Data;
 typedef struct _GdkDrawableWin32Data    GdkDrawableWin32Data;
@@ -296,6 +258,7 @@ struct _GdkGCWin32Data
 				 * or what bitmap is selected into it
 				 */
   int saved_dc;
+  HPALETTE holdpal;
 };
 
 struct _GdkDrawableWin32Data
@@ -363,15 +326,21 @@ struct _GdkFontPrivateWin32
 struct _GdkVisualPrivate
 {
   GdkVisual visual;
-  Visual *xvisual;
 };
+
+typedef enum {
+  GDK_WIN32_PE_STATIC,
+  GDK_WIN32_PE_AVAILABLE,
+  GDK_WIN32_PE_INUSE
+} GdkWin32PalEntryState;
 
 struct _GdkColormapPrivateWin32
 {
   GdkColormapPrivate base;
-  Colormap xcolormap;
+  HPALETTE hpal;
+  gint current_size;		/* Current size of hpal */
+  GdkWin32PalEntryState *use;
   gint private_val;
-
   GHashTable *hash;
   GdkColorInfo *info;
   time_t last_sync_time;
@@ -392,8 +361,6 @@ struct _GdkRegionPrivate
 void gdk_win32_selection_init (void);
 void gdk_win32_dnd_exit (void);
 
-GdkColormap* gdk_colormap_lookup (Colormap  xcolormap);
-GdkVisual*   gdk_visual_lookup	 (Visual   *xvisual);
 
 void	 gdk_xid_table_insert    (HANDLE   *hnd,
 				  gpointer data);
@@ -405,19 +372,19 @@ GdkGC *  _gdk_win32_gc_new       (GdkDrawable        *drawable,
 				  GdkGCValuesMask     values_mask);
 COLORREF gdk_colormap_color      (GdkColormapPrivateWin32 *colormap_private,
 				  gulong                   pixel);
-HDC	gdk_gc_predraw           (GdkDrawable        *drawable,
+HDC	 gdk_gc_predraw          (GdkDrawable        *drawable,
 				  GdkGCPrivate       *gc_private,
 				  GdkGCValuesMask     usage);
-void	gdk_gc_postdraw          (GdkDrawable        *drawable,
+void	 gdk_gc_postdraw         (GdkDrawable        *drawable,
 				  GdkGCPrivate       *gc_private,
 				  GdkGCValuesMask     usage);
 
 void    gdk_win32_clear_hdc_cache (void);
 void    gdk_win32_clear_hdc_cache_for_hwnd (HWND hwnd);
 
-HRGN	BitmapToRegion           (HBITMAP hBmp);
+HRGN	gdk_win32_bitmap_to_region (HBITMAP hBmp);
 
-void    gdk_win32_dropfiles_store(gchar     *data);
+void    gdk_win32_dropfiles_store(gchar *data);
 
 void    gdk_selection_property_delete (GdkWindow *);
 
@@ -468,7 +435,12 @@ gchar *gdk_win32_fill_style_to_string (GdkFill      fill);
 gchar *gdk_win32_function_to_string   (GdkFunction  function);
 gchar *gdk_win32_join_style_to_string (GdkJoinStyle join_style);
 gchar *gdk_win32_line_style_to_string (GdkLineStyle line_style);
-gchar *gdk_win32_message_name    (UINT msg);
+gchar *gdk_win32_message_name         (UINT msg);
+void   gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
+				       const int           nentries);
+void   gdk_win32_print_system_palette (void);
+void   gdk_win32_print_hpalette (HPALETTE hpal);
+
 #endif
 
 extern LRESULT CALLBACK gdk_WindowProc (HWND, UINT, WPARAM, LPARAM);

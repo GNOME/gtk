@@ -1156,9 +1156,9 @@ check_unicode_subranges (UINT           charset,
   return retval;
 }
 
-GdkWin32SingleFont*
-gdk_font_load_internal (GdkFont* font_set,
-		    const gchar *font_name)
+static GdkWin32SingleFont*
+gdk_font_load_internal (GdkFont     *font_set,
+			const gchar *font_name)
 {
   GdkWin32SingleFont *singlefont;
   HFONT hfont;

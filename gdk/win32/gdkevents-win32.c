@@ -1,6 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- * Copyright (C) 1998-1999 Tor Lillqvist
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -162,7 +162,6 @@ inner_window_proc (HWND hWnd,
   GdkEvent *eventp;
   MSG msg;
   DWORD pos;
-  LRESULT lres;
   gint ret_val;
   gboolean ret_val_flag;
 
@@ -267,6 +266,7 @@ inner_window_proc (HWND hWnd,
 #ifndef HAVE_DIMM_H
       return DefWindowProc (hWnd, message, wParam, lParam);
 #else      
+      LRESULT lres;
       if (paimmapp == NULL
 	  || (*paimmapp->lpVtbl->OnDefWindowProc) (paimmapp, hWnd, message, wParam, lParam, &lres) == S_FALSE)
 	return DefWindowProc (hWnd, message, wParam, lParam);
@@ -285,13 +285,13 @@ gdk_WindowProc (HWND hWnd,
   LRESULT retval;
   gint tid = GetCurrentThreadId ();
 
-  GDK_NOTE (EVENTS, g_print ("gdk_WindowProc: thread %#x hwnd %#x %s\n",
-			     (guint) tid, (guint) hWnd, gdk_win32_message_name (message)));
+  GDK_NOTE (EVENTS, g_print ("gdk_WindowProc: thread %#x hwnd %p %s\n",
+			     tid, hWnd, gdk_win32_message_name (message)));
 
   retval = inner_window_proc (hWnd, message, wParam, lParam);
 
-  GDK_NOTE (EVENTS, g_print ("gdk_WindowProc: thread %#x hwnd %#x returns %d\n",
-			     (guint) tid, (guint) hWnd, (int) retval));
+  GDK_NOTE (EVENTS, g_print ("gdk_WindowProc: thread %#x hwnd %p returns %d\n",
+			     tid, hWnd, (int) retval));
   return retval;
 }
 
@@ -299,20 +299,21 @@ void
 gdk_events_init (void)
 {
   GSource *source;
+#ifdef HAVE_DIMM_H
   HRESULT hres;
+#endif
 #ifdef USE_TRACKMOUSEEVENT
   HMODULE user32;
   HINSTANCE commctrl32;
 #endif
 
   gdk_ping_msg = RegisterWindowMessage ("gdk-ping");
-  GDK_NOTE (EVENTS, g_print ("gdk-ping = %#x\n",
-			     gdk_ping_msg));
+  GDK_NOTE (EVENTS, g_print ("gdk-ping = %#x\n", gdk_ping_msg));
 
   /* This is the string MSH_MOUSEWHEEL from zmouse.h,
-   * http://www.microsoft.com/mouse/intellimouse/sdk/zmouse.h
-   * This message is used by mouse drivers than cannot generate WM_MOUSEWHEEL
-   * or on Win95.
+   * http://www.microsoft.com/mouse/intellimouse/sdk/zmouse.h This
+   * message is used by mouse drivers than cannot generate
+   * WM_MOUSEWHEEL or on Win95.
    */
   msh_mousewheel_msg = RegisterWindowMessage ("MSWHEEL_ROLLMSG");
   GDK_NOTE (EVENTS, g_print ("MSH_MOUSEWHEEL = %#x\n",
@@ -545,10 +546,10 @@ gdk_pointer_grab (GdkWindow *	  window,
     {
       if (!GDK_DRAWABLE_DESTROYED (window))
 	{
-	  GDK_NOTE (EVENTS, g_print ("gdk_pointer_grab: %#x %s %#x %s\n",
-				     (guint) xwindow,
+	  GDK_NOTE (EVENTS, g_print ("gdk_pointer_grab: %p %s %p %s\n",
+				     xwindow,
 				     (owner_events ? "TRUE" : "FALSE"),
-				     (guint) xcursor,
+				     xcursor,
 				     event_mask_string (event_mask)));
 	  p_grab_mask = event_mask;
 	  p_grab_owner_events = (owner_events != 0);
@@ -648,9 +649,8 @@ find_window_for_pointer_event (GdkWindow*  reported_window,
   if (other_window == NULL)
     return reported_window;
 
-  GDK_NOTE (EVENTS, g_print ("Found window %#x for point (%ld, %ld)\n",
-			     (guint) hwnd,
-                             pt.x, pt.y));
+  GDK_NOTE (EVENTS, g_print ("Found window %p for point (%ld, %ld)\n",
+			     hwnd, pt.x, pt.y));
 
   gdk_window_unref(reported_window);
   gdk_window_ref(other_window);
@@ -709,8 +709,8 @@ gdk_keyboard_grab (GdkWindow *	   window,
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   
-  GDK_NOTE (EVENTS, g_print ("gdk_keyboard_grab %#x\n",
-			     (guint) GDK_DRAWABLE_XID (window)));
+  GDK_NOTE (EVENTS, g_print ("gdk_keyboard_grab %p\n",
+			     GDK_DRAWABLE_XID (window)));
 
   if (!GDK_DRAWABLE_DESTROYED (window))
     {
@@ -2641,7 +2641,7 @@ print_event (GdkEvent *event)
     CASE (SCROLL);
 #undef CASE
     }
-  g_print ("%#x ", (guint) GDK_DRAWABLE_XID (event->any.window));
+  g_print ("%p ", GDK_DRAWABLE_XID (event->any.window));
 
   switch (event->any.type)
     {
@@ -2939,6 +2939,97 @@ synthesize_crossing_events (GdkWindow *window,
 }
 
 static void
+synthesize_expose_event (GdkWindow *window)
+{
+  GdkEvent *event;
+  GdkWindowPrivate *window_private = (GdkWindowPrivate *) window;
+  
+  event = gdk_event_new ();
+  event->expose.type = GDK_EXPOSE;
+  event->expose.window = window;
+  gdk_window_ref (window);
+  event->expose.area.x = 0;
+  event->expose.area.y = 0;
+  event->expose.area.width = window_private->drawable.width;
+  event->expose.area.height = window_private->drawable.height;
+  event->expose.count = 0;
+  
+  gdk_event_queue_append (event);
+  
+  GDK_NOTE (EVENTS, print_event (event));
+}
+
+static void
+synthesize_expose_events_children (GdkWindow *window)
+{
+  GList *list = gdk_window_get_children (window);
+  GList *head = list;
+
+  while (list)
+    {
+      synthesize_expose_event (list->data);
+      list = list->next;
+    }
+
+  g_list_free (head);
+  synthesize_expose_event (window);
+}
+
+static void
+update_colors (GdkWindow *window)
+{
+  GList *list = g_list_append (gdk_window_get_children (window), window);
+  GList *head = list;
+
+  GDK_NOTE (COLORMAP, g_print ("...calling UpdateColors on %d windows\n",
+			       g_list_length (list)));
+  while (list)
+    {
+      GdkWindow *w = list->data;
+      HWND hwnd = GDK_DRAWABLE_XID (w);
+      HDC hdc;
+      
+      list = list->next;
+      GDK_NOTE (COLORMAP, g_print (" %p", hwnd));
+      if (!(hdc = GetDC (hwnd)))
+	WIN32_GDI_FAILED ("GetDC");
+      else
+	{
+	  gint k;
+	  GdkDrawablePrivate *drpp = (GdkDrawablePrivate *) w;
+	  GdkColormapPrivateWin32 *cmapp =
+	    (GdkColormapPrivateWin32 *) drpp->colormap;
+	  HPALETTE holdpal;
+
+	  if (cmapp == NULL)
+	    continue;
+
+	  if ((holdpal = SelectPalette (hdc, cmapp->hpal, TRUE)) == NULL)
+	    WIN32_GDI_FAILED ("SelectPalette");
+	  else if ((k = RealizePalette (hdc)) == GDI_ERROR)
+	    WIN32_GDI_FAILED ("RealizePalette");
+	  else
+	    {
+	      GDK_NOTE (COLORMAP,
+			(k > 0 ?
+			 g_print ("update_colors: hwnd=%p pal=%p: %d colors\n",
+				  hwnd, cmapp->hpal, k) :
+			 (void) 0));
+	      if (!UpdateColors (hdc))
+		WIN32_GDI_FAILED ("UpdateColors");
+	      SelectPalette (hdc, holdpal, TRUE);
+	      RealizePalette (hdc);
+	    }
+	  if (!ReleaseDC (hwnd, hdc))
+	    WIN32_GDI_FAILED ("ReleaseDC");
+	}
+    }
+  GDK_NOTE (COLORMAP, g_print ("\n"));
+  
+  g_list_free (head);
+}
+
+static void
 translate_mouse_coords (GdkWindow *window1,
 			GdkWindow *window2,
 			MSG       *xevent)
@@ -2973,8 +3064,8 @@ propagate (GdkWindow  **window,
 	}
       else
 	{
-	  GDK_NOTE (EVENTS, g_print ("...sending to grabber %#x\n",
-				     (guint) GDK_DRAWABLE_XID (grab_window)));
+	  GDK_NOTE (EVENTS, g_print ("...sending to grabber %p\n",
+				     GDK_DRAWABLE_XID (grab_window)));
 	  gdk_window_unref (*window);
 	  *window = grab_window;
 	  gdk_window_ref (*window);
@@ -3002,8 +3093,8 @@ propagate (GdkWindow  **window,
 		  else
 		    {
 		      /* Grabbed! */
-		      GDK_NOTE (EVENTS, g_print ("...sending to grabber %#x\n",
-						 (guint) GDK_DRAWABLE_XID (grab_window)));
+		      GDK_NOTE (EVENTS, g_print ("...sending to grabber %p\n",
+						 GDK_DRAWABLE_XID (grab_window)));
 		      gdk_window_unref (*window);
 		      *window = grab_window;
 		      gdk_window_ref (*window);
@@ -3021,8 +3112,8 @@ propagate (GdkWindow  **window,
 	      gdk_window_unref (*window);
 	      *window = ((GdkWindowPrivate *) *window)->parent;
 	      gdk_window_ref (*window);
-	      GDK_NOTE (EVENTS, g_print ("...propagating to %#x\n",
-					 (guint) GDK_DRAWABLE_XID (*window)));
+	      GDK_NOTE (EVENTS, g_print ("...propagating to %p\n",
+					 GDK_DRAWABLE_XID (*window)));
 	      /* The only branch where we actually continue the loop */
 	    }
 	}
@@ -3113,16 +3204,13 @@ gdk_win32_erase_background (GdkWindow *window,
                             HDC        hdc)
 {
   GdkColormapPrivateWin32 *colormap_private;
-  GdkPixmap *pixmap;
-  GdkDrawablePrivate *pixmap_private;
   HDC bgdc = NULL;
   HBRUSH hbr = NULL;
-  COLORREF bg;
+  HPALETTE holdpal = NULL;
   RECT rect;
   int i, j;
   int xoff, yoff;
   int xpos, ypos;
-  HBITMAP oldbitmap = NULL;
 
   if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_TRANSPARENT)
     return;
@@ -3132,29 +3220,20 @@ gdk_win32_erase_background (GdkWindow *window,
 
   colormap_private = (GdkColormapPrivateWin32 *) ((GdkWindowPrivate *) window)->drawable.colormap;
 
-#if 0
-  /* FIXME: This code causes bad screen flashing and should only
-   * happen if user has set window palette to non-system values.
-   */
-  if (colormap_private && colormap_private->xcolormap->rc_palette)
+  if (colormap_private &&
+      (colormap_private->base.visual->type == GDK_VISUAL_PSEUDO_COLOR ||
+       colormap_private->base.visual->type == GDK_VISUAL_STATIC_COLOR))
     {
       int k;
 
-      if (SelectPalette (hdc,  colormap_private->xcolormap->palette,
-			 FALSE) == NULL)
+      if (!(holdpal = SelectPalette (hdc,  colormap_private->hpal, FALSE)))
         WIN32_GDI_FAILED ("SelectPalette");
-      if (colormap_private->xcolormap->stale)
-	{
-	  if ((k = RealizePalette (hdc)) == GDI_ERROR)
-	    WIN32_GDI_FAILED ("RealizePalette");
-	  colormap_private->xcolormap->stale = FALSE;
-#if 0
-	  g_print ("WM_ERASEBKGND: selected %#x, realized %d colors\n",
-		   colormap_private->xcolormap->palette, k);
-#endif
-	}
+      else if ((k = RealizePalette (hdc)) == GDI_ERROR)
+	WIN32_GDI_FAILED ("RealizePalette");
+      else if (k > 0)
+	GDK_NOTE (COLORMAP, g_print ("gdk_win32_erase_background: realized %p: %d colors\n",
+				     colormap_private->hpal, k));
     }
-#endif
 
   if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PARENT_RELATIVE)
     {
@@ -3176,27 +3255,31 @@ gdk_win32_erase_background (GdkWindow *window,
 
   if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PIXEL)
     {
-      bg = gdk_colormap_color (colormap_private,
-                               GDK_WINDOW_WIN32DATA (window)->bg_pixel);
+      COLORREF bg = gdk_colormap_color (colormap_private,
+					GDK_WINDOW_WIN32DATA (window)->bg_pixel);
       
       GetClipBox (hdc, &rect);
-      GDK_NOTE (EVENTS, g_print ("...%ldx%ld@+%ld+%ld BG_PIXEL %.06x\n",
+      GDK_NOTE (EVENTS, g_print ("...%ldx%ld@+%ld+%ld BG_PIXEL %06lx\n",
 			         rect.right - rect.left,
 			         rect.bottom - rect.top,
                                  rect.left, rect.top,
-                                 (guint) bg));
-      hbr = CreateSolidBrush (bg);
-#if 0
-      g_print ("...CreateSolidBrush (%.08x) = %.08x\n", bg, hbr);
-#endif
-      if (!FillRect (hdc, &rect, hbr))
+                                 bg));
+
+      // if (colormap_private->base.visual->type == GDK_VISUAL_PSEUDO_COLOR)
+      //   gdk_win32_print_hpalette (colormap_private->hpal);
+
+      if (!(hbr = CreateSolidBrush (bg)))
+	WIN32_GDI_FAILED ("CreateSolidBrush");
+      else if (!FillRect (hdc, &rect, hbr))
         WIN32_GDI_FAILED ("FillRect");
-      DeleteObject (hbr);
+      if (hbr != NULL)
+	DeleteObject (hbr);
     }
   else if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PIXMAP)
     {
-      pixmap = GDK_WINDOW_WIN32DATA (window)->bg_pixmap;
-      pixmap_private = (GdkDrawablePrivate*) pixmap;
+      GdkPixmap *pixmap = GDK_WINDOW_WIN32DATA (window)->bg_pixmap;
+      GdkDrawablePrivate *pixmap_private = (GdkDrawablePrivate*) pixmap;
+
       GetClipBox (hdc, &rect);
       
       if ((pixmap_private->width <= 8) &&
@@ -3213,10 +3296,10 @@ gdk_win32_erase_background (GdkWindow *window,
         }
       else
         {
-          GDK_NOTE (EVENTS, g_print ("...blitting pixmap %#x (%dx%d) "
+          GDK_NOTE (EVENTS, g_print ("...blitting pixmap %p (%dx%d) "
                                      "all over the place,\n"
                                      "...clip box = %ldx%ld@+%ld+%ld\n",
-                                     (guint) GDK_DRAWABLE_XID (pixmap),
+                                     GDK_DRAWABLE_XID (pixmap),
                                      pixmap_private->width, pixmap_private->height,
                                      rect.right - rect.left, rect.bottom - rect.top,
                                      rect.left, rect.top));
@@ -3257,10 +3340,13 @@ gdk_win32_erase_background (GdkWindow *window,
     }
 
 cleanup:
-  if (oldbitmap != NULL && bgdc != NULL)
-    SelectObject (bgdc, oldbitmap);
   if (bgdc != NULL)
     gdk_win32_release_hdc (NULL, bgdc);
+  if (holdpal != NULL)
+    {
+      SelectPalette (hdc, holdpal, FALSE);
+      RealizePalette (hdc);
+    }
 }
 
 static gboolean
@@ -3285,6 +3371,8 @@ gdk_event_translate (GdkEvent *event,
 #if 0
   gboolean flag;
 #endif
+  static gint update_colors_counter = 0;
+  GList *list;
 
   return_val = FALSE;
   
@@ -3340,8 +3428,8 @@ gdk_event_translate (GdkEvent *event,
 
   if (xevent->message == msh_mousewheel_msg)
     {
-      GDK_NOTE (EVENTS, g_print ("MSH_MOUSEWHEEL: %#x %d\n",
-				 (guint) xevent->hwnd, xevent->wParam));
+      GDK_NOTE (EVENTS, g_print ("MSH_MOUSEWHEEL: %p %d\n",
+				 xevent->hwnd, xevent->wParam));
       
       event->scroll.type = GDK_SCROLL;
 
@@ -3441,8 +3529,8 @@ gdk_event_translate (GdkEvent *event,
     {
     case WM_INPUTLANGCHANGE:
       GDK_NOTE (EVENTS,
-		g_print ("WM_INPUTLANGCHANGE: %#x  charset %d locale %#lx\n",
-			 (guint) xevent->hwnd, xevent->wParam, xevent->lParam));
+		g_print ("WM_INPUTLANGCHANGE: %p  charset %d locale %#lx\n",
+			 xevent->hwnd, xevent->wParam, xevent->lParam));
       GDK_WINDOW_WIN32DATA (window)->input_locale = (HKL) xevent->lParam;
       TranslateCharsetInfo ((DWORD FAR *) xevent->wParam,
 			    &GDK_WINDOW_WIN32DATA (window)->charset_info,
@@ -3452,9 +3540,9 @@ gdk_event_translate (GdkEvent *event,
     case WM_SYSKEYUP:
     case WM_SYSKEYDOWN:
       GDK_NOTE (EVENTS,
-		g_print ("WM_SYSKEY%s: %#x  %s %#x %s\n",
+		g_print ("WM_SYSKEY%s: %p  %s %#x %s\n",
 			 (xevent->message == WM_SYSKEYUP ? "UP" : "DOWN"),
-			 (guint) xevent->hwnd,
+			 xevent->hwnd,
 			 (GetKeyNameText (xevent->lParam, buf,
 					  sizeof (buf)) > 0 ?
 			  buf : ""),
@@ -3480,9 +3568,9 @@ gdk_event_translate (GdkEvent *event,
     case WM_KEYUP:
     case WM_KEYDOWN:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_KEY%s: %#x  %s %#x %s\n",
+		g_print ("WM_KEY%s: %p  %s %#x %s\n",
 			 (xevent->message == WM_KEYUP ? "UP" : "DOWN"),
-			 (guint) xevent->hwnd,
+			 xevent->hwnd,
 			 (GetKeyNameText (xevent->lParam, buf,
 					  sizeof (buf)) > 0 ?
 			  buf : ""),
@@ -3761,24 +3849,24 @@ gdk_event_translate (GdkEvent *event,
     case WM_IME_COMPOSITION:
       if (!use_IME_COMPOSITION)
 	break;
-      GDK_NOTE (EVENTS, g_print ("WM_IME_COMPOSITION: %#x  %#lx\n",
-				 (guint) xevent->hwnd, xevent->lParam));
+      GDK_NOTE (EVENTS, g_print ("WM_IME_COMPOSITION: %p  %#lx\n",
+				 xevent->hwnd, xevent->lParam));
       if (xevent->lParam & GCS_RESULTSTR)
 	goto wm_char;
       break;
 
     case WM_IME_CHAR:
       GDK_NOTE (EVENTS,
-		g_print ("WM_IME_CHAR: %#x  bytes: %#.04x\n",
-			 (guint) xevent->hwnd, xevent->wParam));
+		g_print ("WM_IME_CHAR: %p  bytes: %#.04x\n",
+			 xevent->hwnd, xevent->wParam));
       goto wm_char;
       
     case WM_CHAR:
     case WM_SYSCHAR:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_%sCHAR: %#x  %#x %s %s\n",
+		g_print ("WM_%sCHAR: %p  %#x %s %s\n",
 			 (xevent->message == WM_CHAR ? "" : "SYS"),
-			 (guint) xevent->hwnd, xevent->wParam,
+			 xevent->hwnd, xevent->wParam,
 			 decode_key_lparam (xevent->lParam),
 			 (ignore_WM_CHAR ? "ignored" : "")));
 
@@ -3846,9 +3934,9 @@ gdk_event_translate (GdkEvent *event,
 
     buttondown0:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_%cBUTTONDOWN: %#x  (%d,%d)\n",
+		g_print ("WM_%cBUTTONDOWN: %p  (%d,%d)\n",
 			 " LMR"[button],
-			 (guint) xevent->hwnd,
+			 xevent->hwnd,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
       window = find_window_for_pointer_event(window, xevent);
@@ -3917,9 +4005,9 @@ gdk_event_translate (GdkEvent *event,
 
     buttonup0:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_%cBUTTONUP: %#x  (%d,%d)\n",
+		g_print ("WM_%cBUTTONUP: %p  (%d,%d)\n",
 			 " LMR"[button],
-			 (guint) xevent->hwnd,
+			 xevent->hwnd,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
       window = find_window_for_pointer_event(window, xevent);
@@ -3969,8 +4057,8 @@ gdk_event_translate (GdkEvent *event,
 
     case WM_MOUSEMOVE:
       GDK_NOTE (EVENTS,
-		g_print ("WM_MOUSEMOVE: %#x  %#x (%d,%d)\n",
-			 (guint) xevent->hwnd, xevent->wParam,
+		g_print ("WM_MOUSEMOVE: %p  %#x (%d,%d)\n",
+			 xevent->hwnd, xevent->wParam,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
       window = find_window_for_pointer_event(window, xevent);
@@ -4031,8 +4119,8 @@ gdk_event_translate (GdkEvent *event,
 
     case WM_NCMOUSEMOVE:
       GDK_NOTE (EVENTS,
-		g_print ("WM_NCMOUSEMOVE: %#x  x,y: %d %d\n",
-			 (guint) xevent->hwnd,
+		g_print ("WM_NCMOUSEMOVE: %p  x,y: %d %d\n",
+			 xevent->hwnd,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
       if (p_TrackMouseEvent != NULL)
@@ -4049,8 +4137,8 @@ gdk_event_translate (GdkEvent *event,
      * pointer leave events.
      */
     case WM_ACTIVATE:
-      GDK_NOTE (EVENTS, g_print ("WM_ACTIVATE: %#x %d\n",
-				 (guint) xevent->hwnd, xevent->wParam));
+      GDK_NOTE (EVENTS, g_print ("WM_ACTIVATE: %p %d\n",
+				 xevent->hwnd, xevent->wParam));
       /* If being activated, just ignore it, let other messages
        * generate the enter event when pointer is really in some of
        * our window.
@@ -4066,9 +4154,41 @@ gdk_event_translate (GdkEvent *event,
       break;
 #endif
 
+    case WM_QUERYNEWPALETTE:
+      GDK_NOTE (COLORMAP, g_print ("WM_QUERYNEWPALETTE: %p\n",
+				   xevent->hwnd));
+      synthesize_expose_events_children (window);
+      update_colors_counter = 0;
+      *ret_val_flagp = TRUE;
+      *ret_valp = FALSE;
+      break;
+
+    case WM_PALETTECHANGED:
+      GDK_NOTE (COLORMAP, g_print ("WM_PALETTECHANGED: %p %#x\n",
+				   xevent->hwnd,
+				   xevent->wParam));
+      *ret_val_flagp = TRUE;
+      *ret_valp = FALSE;
+
+      /* If this is a window from the same app that has set the
+       * palette, don't do anything.
+       */
+      if (gdk_window_lookup (xevent->wParam) != NULL)
+	break;
+
+      if (++update_colors_counter == 3)
+	{
+	  synthesize_expose_events_children (window);
+	  update_colors_counter = 0;
+	  break;
+	}
+      
+      update_colors (window);
+      break;
+
     case WM_CAPTURECHANGED:
-      GDK_NOTE (EVENTS, g_print ("WM_CAPTURECHANGED: %#x %#lx\n",
-				 (guint) xevent->hwnd, xevent->lParam));
+      GDK_NOTE (EVENTS, g_print ("WM_CAPTURECHANGED: %p %#lx\n",
+				 xevent->hwnd, xevent->lParam));
       if (p_grab_window != NULL)
 	{
 	  /* We aren't calling gdk_pointer_ungrab() ourselves. */
@@ -4093,8 +4213,8 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_MOUSEWHEEL:
-      GDK_NOTE (EVENTS, g_print ("WM_MOUSEWHEEL: %#x %d\n",
-				 (guint) xevent->hwnd, HIWORD (xevent->wParam)));
+      GDK_NOTE (EVENTS, g_print ("WM_MOUSEWHEEL: %p %d\n",
+				 xevent->hwnd, HIWORD (xevent->wParam)));
 
       event->scroll.type = GDK_SCROLL;
       
@@ -4153,8 +4273,7 @@ gdk_event_translate (GdkEvent *event,
 
 #ifdef USE_TRACKMOUSEEVENT
     case WM_MOUSELEAVE:
-      GDK_NOTE (EVENTS, g_print ("WM_MOUSELEAVE: %#x\n",
-				 (guint) xevent->hwnd));
+      GDK_NOTE (EVENTS, g_print ("WM_MOUSELEAVE: %p\n", xevent->hwnd));
 
       if (!(GDK_WINDOW_WIN32DATA (window)->event_mask & GDK_LEAVE_NOTIFY_MASK))
 	break;
@@ -4192,10 +4311,10 @@ gdk_event_translate (GdkEvent *event,
 	
     case WM_SETFOCUS:
     case WM_KILLFOCUS:
-      GDK_NOTE (EVENTS, g_print ("WM_%sFOCUS: %#x\n",
+      GDK_NOTE (EVENTS, g_print ("WM_%sFOCUS: %p\n",
 				 (xevent->message == WM_SETFOCUS ?
 				  "SET" : "KILL"),
-				 (guint) xevent->hwnd));
+				 xevent->hwnd));
       
       if (xevent->message == WM_SETFOCUS)
 	curFocusWnd = window;
@@ -4215,13 +4334,13 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_ERASEBKGND:
-      GDK_NOTE (EVENTS, g_print ("WM_ERASEBKGND: %#x  dc %#x\n",
-				 (guint) xevent->hwnd, xevent->wParam));
+      GDK_NOTE (EVENTS, g_print ("WM_ERASEBKGND: %p  dc %#x\n",
+				 xevent->hwnd, xevent->wParam));
       
       if (GDK_DRAWABLE_DESTROYED (window))
 	break;
 
-      gdk_win32_erase_background(window, (HDC) xevent->wParam);
+      gdk_win32_erase_background (window, (HDC) xevent->wParam);
       *ret_val_flagp = TRUE;
       *ret_valp = TRUE;
       break;
@@ -4230,8 +4349,8 @@ gdk_event_translate (GdkEvent *event,
       hdc = BeginPaint (xevent->hwnd, &paintstruct);
 
       GDK_NOTE (EVENTS,
-		g_print ("WM_PAINT: %#x  %ldx%ld@+%ld+%ld %s dc %#x\n",
-			 (guint) xevent->hwnd,
+		g_print ("WM_PAINT: %p  %ldx%ld@+%ld+%ld %s dc %#x\n",
+			 xevent->hwnd,
 			 paintstruct.rcPaint.right - paintstruct.rcPaint.left,
 			 paintstruct.rcPaint.bottom - paintstruct.rcPaint.top,
 			 paintstruct.rcPaint.left, paintstruct.rcPaint.top,
@@ -4254,7 +4373,7 @@ gdk_event_translate (GdkEvent *event,
       return_val = !GDK_DRAWABLE_DESTROYED (window);
       if (return_val)
 	{
-	  GList *list = gdk_queued_events;
+	  list = gdk_queued_events;
 	  while (list != NULL )
 	    {
 	      if ((((GdkEvent *)list->data)->any.type == GDK_EXPOSE) &&
@@ -4268,8 +4387,8 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_SETCURSOR:
-      GDK_NOTE (EVENTS, g_print ("WM_SETCURSOR: %#x %#x %#x\n",
-				 (guint) xevent->hwnd,
+      GDK_NOTE (EVENTS, g_print ("WM_SETCURSOR: %p %#x %#x\n",
+				 xevent->hwnd,
 				 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
       if (LOWORD (xevent->lParam) != HTCLIENT)
@@ -4287,7 +4406,7 @@ gdk_event_translate (GdkEvent *event,
 
       if (xcursor != NULL)
 	{
-	  GDK_NOTE (EVENTS, g_print ("...SetCursor(%#x)\n", (guint) xcursor));
+	  GDK_NOTE (EVENTS, g_print ("...SetCursor(%p)\n", xcursor));
 	  SetCursor (xcursor);
 	  *ret_val_flagp = TRUE;
 	  *ret_valp = TRUE;
@@ -4295,8 +4414,8 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_SHOWWINDOW:
-      GDK_NOTE (EVENTS, g_print ("WM_SHOWWINDOW: %#x  %d\n",
-				 (guint) xevent->hwnd,
+      GDK_NOTE (EVENTS, g_print ("WM_SHOWWINDOW: %p  %d\n",
+				 xevent->hwnd,
 				 xevent->wParam));
 
       if (!(GDK_WINDOW_WIN32DATA (window)->event_mask & GDK_STRUCTURE_MASK))
@@ -4318,8 +4437,8 @@ gdk_event_translate (GdkEvent *event,
 
     case WM_SIZE:
       GDK_NOTE (EVENTS,
-		g_print ("WM_SIZE: %#x  %s %dx%d\n",
-			 (guint) xevent->hwnd,
+		g_print ("WM_SIZE: %p  %s %dx%d\n",
+			 xevent->hwnd,
 			 (xevent->wParam == SIZE_MAXHIDE ? "MAXHIDE" :
 			  (xevent->wParam == SIZE_MAXIMIZED ? "MAXIMIZED" :
 			   (xevent->wParam == SIZE_MAXSHOW ? "MAXSHOW" :
@@ -4378,8 +4497,7 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_GETMINMAXINFO:
-      GDK_NOTE (EVENTS, g_print ("WM_GETMINMAXINFO: %#x\n",
-				 (guint) xevent->hwnd));
+      GDK_NOTE (EVENTS, g_print ("WM_GETMINMAXINFO: %p\n", xevent->hwnd));
 
       lpmmi = (MINMAXINFO*) xevent->lParam;
       if (GDK_WINDOW_WIN32DATA (window)->hint_flags & GDK_HINT_MIN_SIZE)
@@ -4398,8 +4516,8 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_MOVE:
-      GDK_NOTE (EVENTS, g_print ("WM_MOVE: %#x  (%d,%d)\n",
-				 (guint) xevent->hwnd,
+      GDK_NOTE (EVENTS, g_print ("WM_MOVE: %p  (%d,%d)\n",
+				 xevent->hwnd,
 				 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
       if (!(GDK_WINDOW_WIN32DATA (window)->event_mask & GDK_STRUCTURE_MASK))
@@ -4426,7 +4544,7 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_CLOSE:
-      GDK_NOTE (EVENTS, g_print ("WM_CLOSE: %#x\n", (guint) xevent->hwnd));
+      GDK_NOTE (EVENTS, g_print ("WM_CLOSE: %p\n", xevent->hwnd));
 
       event->any.type = GDK_DELETE;
       event->any.window = window;
@@ -4449,10 +4567,10 @@ gdk_event_translate (GdkEvent *event,
       flag = FALSE;
       GDK_NOTE (EVENTS, flag = TRUE);
       if (flag)
-	g_print ("WM_%s: %#x %#x (%s)\n",
+	g_print ("WM_%s: %p %#x (%s)\n",
 		 (xevent->message == WM_RENDERFORMAT ? "RENDERFORMAT" :
 		  "RENDERALLFORMATS"),
-		 (guint) xevent->hwnd,
+		 xevent->hwnd,
 		 xevent->wParam,
 		 (xevent->wParam == CF_TEXT ? "CF_TEXT" :
 		  (xevent->wParam == CF_DIB ? "CF_DIB" :
@@ -4494,7 +4612,7 @@ gdk_event_translate (GdkEvent *event,
 #endif /* No delayed rendering */
 
     case WM_DESTROY:
-      GDK_NOTE (EVENTS, g_print ("WM_DESTROY: %#x\n", (guint) xevent->hwnd));
+      GDK_NOTE (EVENTS, g_print ("WM_DESTROY: %p\n", xevent->hwnd));
 
       event->any.type = GDK_DESTROY;
       event->any.window = window;
@@ -4522,20 +4640,20 @@ gdk_event_translate (GdkEvent *event,
        * constants as case labels.
        */
     case WT_PACKET:
-      GDK_NOTE (EVENTS, g_print ("WT_PACKET: %#x %d %#lx\n",
-				 (guint) xevent->hwnd,
+      GDK_NOTE (EVENTS, g_print ("WT_PACKET: %p %d %#lx\n",
+				 xevent->hwnd,
 				 xevent->wParam, xevent->lParam));
       goto wintab;
       
     case WT_CSRCHANGE:
-      GDK_NOTE (EVENTS, g_print ("WT_CSRCHANGE: %#x %d %#lx\n",
-				 (guint) xevent->hwnd,
+      GDK_NOTE (EVENTS, g_print ("WT_CSRCHANGE: %p %d %#lx\n",
+				 xevent->hwnd,
 				 xevent->wParam, xevent->lParam));
       goto wintab;
       
     case WT_PROXIMITY:
-      GDK_NOTE (EVENTS, g_print ("WT_PROXIMITY: %#x %#x %d %d\n",
-				 (guint) xevent->hwnd, xevent->wParam,
+      GDK_NOTE (EVENTS, g_print ("WT_PROXIMITY: %p %#x %d %d\n",
+				 xevent->hwnd, xevent->wParam,
 				 LOWORD (xevent->lParam),
 				 HIWORD (xevent->lParam)));
       /* Fall through */
@@ -4546,9 +4664,9 @@ gdk_event_translate (GdkEvent *event,
 #endif
 
     default:
-      GDK_NOTE (EVENTS, g_print ("%s: %#x %#x %#lx\n",
+      GDK_NOTE (EVENTS, g_print ("%s: %p %#x %#lx\n",
 				 gdk_win32_message_name (xevent->message),
-				 (guint) xevent->hwnd,
+				 xevent->hwnd,
 				 xevent->wParam, xevent->lParam));
     }
 
@@ -4586,8 +4704,8 @@ gdk_events_queue (void)
   while (!gdk_event_queue_find_first ()
 	 && PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
     {
-      GDK_NOTE (EVENTS, g_print ("PeekMessage: %#x %s\n",
-				 (guint) msg.hwnd,
+      GDK_NOTE (EVENTS, g_print ("PeekMessage: %p %s\n",
+				 msg.hwnd,
 				 gdk_win32_message_name (msg.message)));
 #ifndef HAVE_DIMM_H
       TranslateMessage (&msg);
