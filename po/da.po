@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.6\n"
-"POT-Creation-Date: 1999-11-13 21:34+0100\n"
+"POT-Creation-Date: 1999-11-14 19:42+0100\n"
 "PO-Revision-Date: 1999-11-11 00:11+01:00\n"
 "Last-Translator: Birger Langkjer <birger.langkjer@image.dk>\n"
 "Language-Team: Danish <dltp@lists.wiktor.dk>\n"
@@ -466,29 +466,29 @@ msgstr "Kunne ikke finde modul i module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Ingen hjælp ---"
 
-#~ msgid "heavy"
-#~ msgstr "tung"
-
-#~ msgid "extrabold"
-#~ msgstr "ekstrafed"
-
-#~ msgid "bold"
-#~ msgstr "fed"
-
-#~ msgid "demibold"
-#~ msgstr "halvfed"
-
-#~ msgid "medium"
-#~ msgstr "medium"
-
-#~ msgid "normal"
-#~ msgstr "normal"
-
-#~ msgid "light"
-#~ msgstr "let"
+#~ msgid "thin"
+#~ msgstr "tynd"
 
 #~ msgid "extralight"
 #~ msgstr "ekstralet"
 
-#~ msgid "thin"
-#~ msgstr "tynd"
+#~ msgid "light"
+#~ msgstr "let"
+
+#~ msgid "normal"
+#~ msgstr "normal"
+
+#~ msgid "medium"
+#~ msgstr "medium"
+
+#~ msgid "demibold"
+#~ msgstr "halvfed"
+
+#~ msgid "bold"
+#~ msgstr "fed"
+
+#~ msgid "extrabold"
+#~ msgstr "ekstrafed"
+
+#~ msgid "heavy"
+#~ msgstr "tung"

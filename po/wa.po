@@ -10,7 +10,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.6\n"
-"POT-Creation-Date: 1999-11-13 21:34+0100\n"
+"POT-Creation-Date: 1999-11-14 19:42+0100\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: walon <linux-wa@chanae.alphanet.ch>\n"
@@ -472,29 +472,29 @@ msgstr "Dji n' pout nén trover on module tcherdjåve è module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Nole Racsegne ---"
 
-#~ msgid "thin"
-#~ msgstr "tenes"
-
-#~ msgid "extralight"
-#~ msgstr "foirt ledjîres"
-
-#~ msgid "light"
-#~ msgstr "ledjîres"
-
-#~ msgid "normal"
-#~ msgstr "miernuwes"
-
-#~ msgid "medium"
-#~ msgstr "moyénnes"
-
-#~ msgid "demibold"
-#~ msgstr "demi cråsses"
-
-#~ msgid "bold"
-#~ msgstr "cråsses"
+#~ msgid "heavy"
+#~ msgstr "pezantes"
 
 #~ msgid "extrabold"
 #~ msgstr "foirt cråsses"
 
-#~ msgid "heavy"
-#~ msgstr "pezantes"
+#~ msgid "bold"
+#~ msgstr "cråsses"
+
+#~ msgid "demibold"
+#~ msgstr "demi cråsses"
+
+#~ msgid "medium"
+#~ msgstr "moyénnes"
+
+#~ msgid "normal"
+#~ msgstr "miernuwes"
+
+#~ msgid "light"
+#~ msgstr "ledjîres"
+
+#~ msgid "extralight"
+#~ msgstr "foirt ledjîres"
+
+#~ msgid "thin"
+#~ msgstr "tenes"
