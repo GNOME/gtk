@@ -1,3 +1,9 @@
+Fri Feb  1 12:51:20 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (focus_child_in): Catch the
+	cur_page == NULL (no children) case. (#70287,
+	Paolo Maggi.)
+
 Fri Feb  1 12:12:12 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (attempt_file_completion): 

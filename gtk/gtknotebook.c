@@ -1866,7 +1866,8 @@ static gboolean
 focus_child_in (GtkNotebook     *notebook,
 		GtkDirectionType direction)
 {
-  return gtk_widget_child_focus (notebook->cur_page->child, direction);
+  if (notebook->cur_page)
+    return gtk_widget_child_focus (notebook->cur_page->child, direction);
 }
 
 /* Focus in the notebook can either be on the pages, or on
