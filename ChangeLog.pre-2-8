@@ -1,3 +1,9 @@
+Mon Oct  7 19:14:24 2002  Eric Warmenhoven <eric@warmenhoven.org>
+
+	* gdk/linux-fb/gdkwindow-fb.c: fix compilation
+
+	* gdk/linux-fb/gdkmain-fb.c: better display mode setting
+
 Mon Oct  7 18:50:46 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcolorsel.c (gtk_color_selection_finalize):

@@ -333,6 +333,13 @@ fb_modes_parse_mode (GScanner *scanner,
     }
 
   if (strcmp (modename, specified_modename)== 0) {
+    /* we really should be parsing for rgba. regardless, if rgba isn't found,
+     * we can't assume that the original colors are valid for the new mode */
+    memset (&modeinfo->red, 0, sizeof (modeinfo->red));
+    memset (&modeinfo->green, 0, sizeof (modeinfo->green));
+    memset (&modeinfo->blue, 0, sizeof (modeinfo->blue));
+    memset (&modeinfo->transp, 0, sizeof (modeinfo->transp));
+
     if (!found_geometry)
       g_warning ("Geometry not specified");
 
@@ -500,6 +507,13 @@ gdk_fb_set_mode (GdkFBDisplay *display)
       (ioctl (display->fb_fd, FBIOPUT_VSCREENINFO, &display->modeinfo) < 0))
     {
       g_warning ("Couldn't set specified mode");
+      return -1;
+    }
+  
+  /* ask for info back to make sure of what we got */
+  if (ioctl (display->fb_fd, FBIOGET_VSCREENINFO, &display->modeinfo) < 0)
+    {
+      g_warning ("Error getting var screen info");
       return -1;
     }
   

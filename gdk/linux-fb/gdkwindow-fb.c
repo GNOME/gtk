@@ -1621,7 +1621,8 @@ gdk_window_fb_get_visible_region (GdkDrawable *drawable)
 }
 
 GdkWindow *
-_gdk_windowing_window_get_pointer (GdkWindow       *window,
+_gdk_windowing_window_get_pointer (GdkDisplay      *display,
+				   GdkWindow       *window,
 				   gint            *x,
 				   gint            *y,
 				   GdkModifierType *mask)
@@ -1704,10 +1705,10 @@ _gdk_windowing_get_pointer (GdkDisplay       *display,
 			    GdkModifierType  *mask)
 {
   GdkScreen *default_screen = gdk_display_get_default_screen (display);
-  GdkWindow *root_window = gdk_screen_get_root_window (screen);
+  GdkWindow *root_window = gdk_screen_get_root_window (default_screen);
   
   *screen = default_screen;
-  _gdk_windowing_window_get_pointer (root_window, x, y, mask);
+  _gdk_windowing_window_get_pointer (display, root_window, x, y, mask);
 }
 
 GdkWindow*
