@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 1999-09-03 05:20+0200\n"
+"POT-Creation-Date: 1999-09-03 14:16-0500\n"
 "PO-Revision-Date: 1998-12-18 20:32+0100\n"
 "Last-Translator: Vincent Renardias <vincent@debian.org>\n"
 "Language-Team: Vincent Renardias <vincent@debian.org>\n"
