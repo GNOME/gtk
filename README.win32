@@ -8,7 +8,7 @@ although it works OK for the GIMP.)
 
 The Win32 port of GTk+ is a work in progress, and not as stable or
 correct as the Unix/X11 version. For more information about the Win32
-port, see http://www.gimp.org/tml/gimp/win32/ or
+port, see http://www.gimp.org/win32/ or
 http://www.iki.fi/tml/gimp/win32/ .
 
 To build GTk+ on Win32, you need either the Microsoft compiler and
@@ -21,8 +21,8 @@ really be called makefile.mingw.
 See the README.win32 file in the GLib distribution for instructions
 how to build with gcc.
 
-To use GTk+ on Win32, you also need either of the above mentioned
-compilers. Other compilers might work, but don't count on it.  The
+To use GTk+ on Win32, you also need either one of the above mentioned
+compilers. Other compilers might work, but don't count on it. The
 same instructions on how to set up a correct version of gcc should
 also be followed if you want to build applications that use GTk+ with
 gcc.
@@ -41,7 +41,7 @@ undefine ENABLE_NLS, HAVE_GETTEXT and HAVE_LIBINTL in the
 config.h.win32 file, and remove references to the gnu-intl library
 from the makefiles.
 
-Note that while the GNU gettext package is under the GPL, the "intl"
-part of it which is distributed with GNU libc is under the LGPL (like
-GTk+ or GLib). We want the LGPL one, even if they are the same, more
-or less.
+Note that while the GNU gettext package is under the GPL license, the
+"intl" part of it is also distributed as part of the GNU C library
+(glibc) where it is under the LGPL license (as is GTk+ or GLib). We
+want the LGPL licensed version. The code is more or less the same.

@@ -1,5 +1,7 @@
 2000-07-04  Tor Lillqvist  <tml@iki.fi>
 
+	* README.win32: Improve a bit.
+
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Handle also
 	WM_SYSCHAR, and other changes to get handling of Alt+nnn or
 	Alt+0nnn on the numpad (used to enter characters by numeric code
@@ -13,15 +15,15 @@
 	* gdk/win32/gdkwin32.h: Add also WM_MOUSEWHEEL and CopyCursor
 	definitions in case missing from headers.
 
-	* gdk/win32/gdkwindow-win32.c (gdk_win32_window_destroy): ALso
+	* gdk/win32/gdkwindow-win32.c (gdk_win32_window_destroy): Also
 	destroy the window-specific cursor.
 	(RegisterGdkClass): Use the global gdk_ProgInstance instead of
 	calling GetModuleHandle(NULL).
 	(gdk_window_set_cursor): Reworked to always copy the passed cursor
-	with CopyCursor before setting it. It is OK for the caller to
-	destroy the GdkCursor (and thus also the Windows cursor) after
-	calling this function. Also, destroy any previous cursor for this
-	window.
+	with CopyCursor before setting it as the window-specific
+	cursor. It is OK for the caller to destroy the GdkCursor (and thus
+	also its Windows cursor) after calling this function. Destroy any
+	previous window-specific cursor.
 
 Mon Jul  3 17:54:49 2000  Owen Taylor  <otaylor@redhat.com>
 
