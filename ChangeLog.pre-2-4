@@ -1,3 +1,16 @@
+Thu Jun  5 17:20:40 2003  Owen Taylor  <otaylor@redhat.com>
+	 
+	 #107883, Gustavo Giráldez
+
+	* gtk/gtktextlayout.c (gtk_text_layout_emit_changed):
+	Split out the case where we know we changed, and 
+	already dealt with our cached line being invalidated
+	from external calls to gtk_text_layout_changed.
+
+	* gtk/gtktextlayout.c (gtk_text_layout_changed):
+	Check if the invalidate yrange intersects our
+	cached line, and clear it if necessary.
+
 2003-06-05  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Handle global
