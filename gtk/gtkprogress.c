@@ -29,26 +29,29 @@
 #include <string.h>
 #include "gtkprogress.h" 
 #include "gtksignal.h"
+#include "gtkintl.h"
 
 #define EPSILON  1e-5
 
 enum {
-  ARG_0,
-  ARG_ACTIVITY_MODE,
-  ARG_SHOW_TEXT,
-  ARG_TEXT_XALIGN,
-  ARG_TEXT_YALIGN
+  PROP_0,
+  PROP_ACTIVITY_MODE,
+  PROP_SHOW_TEXT,
+  PROP_TEXT_XALIGN,
+  PROP_TEXT_YALIGN
 };
 
 
 static void gtk_progress_class_init      (GtkProgressClass *klass);
 static void gtk_progress_init            (GtkProgress      *progress);
-static void gtk_progress_set_arg	 (GtkObject        *object,
-					  GtkArg           *arg,
-					  guint             arg_id);
-static void gtk_progress_get_arg	 (GtkObject        *object,
-					  GtkArg           *arg,
-					  guint             arg_id);
+static void gtk_progress_set_property    (GObject          *object,
+					  guint             prop_id,
+					  const GValue     *value,
+					  GParamSpec       *pspec);
+static void gtk_progress_get_property    (GObject          *object,
+					  guint             prop_id,
+					  GValue           *value,
+					  GParamSpec       *pspec);
 static void gtk_progress_destroy         (GtkObject        *object);
 static void gtk_progress_finalize        (GObject          *object);
 static void gtk_progress_realize         (GtkWidget        *widget);
@@ -100,8 +103,8 @@ gtk_progress_class_init (GtkProgressClass *class)
 
   gobject_class->finalize = gtk_progress_finalize;
 
-  object_class->set_arg = gtk_progress_set_arg;
-  object_class->get_arg = gtk_progress_get_arg;
+  gobject_class->set_property = gtk_progress_set_property;
+  gobject_class->get_property = gtk_progress_get_property;
   object_class->destroy = gtk_progress_destroy;
 
   widget_class->realize = gtk_progress_realize;
@@ -113,77 +116,102 @@ gtk_progress_class_init (GtkProgressClass *class)
   class->update = NULL;
   class->act_mode_enter = NULL;
 
-  gtk_object_add_arg_type ("GtkProgress::activity_mode",
-			   GTK_TYPE_BOOL,
-			   GTK_ARG_READWRITE,
-			   ARG_ACTIVITY_MODE);
-  gtk_object_add_arg_type ("GtkProgress::show_text",
-			   GTK_TYPE_BOOL,
-			   GTK_ARG_READWRITE,
-			   ARG_SHOW_TEXT);
-  gtk_object_add_arg_type ("GtkProgress::text_xalign",
-			   GTK_TYPE_FLOAT,
-			   GTK_ARG_READWRITE,
-			   ARG_TEXT_XALIGN);
-  gtk_object_add_arg_type ("GtkProgress::text_yalign",
-			   GTK_TYPE_FLOAT,
-			   GTK_ARG_READWRITE,
-			   ARG_TEXT_YALIGN);
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACTIVITY_MODE,
+                                   g_param_spec_boolean ("activity_mode",
+							 _("Activity mode"),
+							 _("If true the GtkProgress is in activity mode, meaning that is signals something is happening, but not how much of the activity is finished. This is used when you're doing something that you don't know how long it will take."),
+							 FALSE,
+							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_SHOW_TEXT,
+                                   g_param_spec_boolean ("show_text",
+							 _("Show text"),
+							 _("Whether the progress is shown as text"),
+							 FALSE,
+							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+				   PROP_TEXT_XALIGN,
+				   g_param_spec_float ("text_xalign",
+						       _("Text x alignment"),
+						       _("A number between 0.0 and 1.0 specifying the horizontal alignment of the text in the progresswidget"),
+						       0.0,
+						       1.0,
+						       0.5,
+						       G_PARAM_READWRITE));  
+    g_object_class_install_property (gobject_class,
+				   PROP_TEXT_YALIGN,
+				   g_param_spec_float ("text_yalign",
+						       _("Text y alignment"),
+						       _("A number between 0.0 and 1.0 specifying the vertical alignment of the text in the progress widget"),
+						       0.0,
+						       1.0,
+						       0.5,
+						       G_PARAM_READWRITE));
 }
 
 static void
-gtk_progress_set_arg (GtkObject      *object,
-		      GtkArg         *arg,
-		      guint           arg_id)
+gtk_progress_set_property (GObject      *object,
+			   guint         prop_id,
+			   const GValue *value,
+			   GParamSpec   *pspec)
 {
   GtkProgress *progress;
   
   progress = GTK_PROGRESS (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_ACTIVITY_MODE:
-      gtk_progress_set_activity_mode (progress, GTK_VALUE_BOOL (*arg));
+    case PROP_ACTIVITY_MODE:
+      gtk_progress_set_activity_mode (progress, g_value_get_boolean (value));
       break;
-    case ARG_SHOW_TEXT:
-      gtk_progress_set_show_text (progress, GTK_VALUE_BOOL (*arg));
+    case PROP_SHOW_TEXT:
+      gtk_progress_set_show_text (progress, g_value_get_boolean (value));
       break;
-    case ARG_TEXT_XALIGN:
-      gtk_progress_set_text_alignment (progress, GTK_VALUE_FLOAT (*arg), progress->y_align);
+    case PROP_TEXT_XALIGN:
+      gtk_progress_set_text_alignment (progress,
+				       g_value_get_float (value),
+				       progress->y_align);
       break;
-    case ARG_TEXT_YALIGN:
-      gtk_progress_set_text_alignment (progress, progress->x_align, GTK_VALUE_FLOAT (*arg));
+    case PROP_TEXT_YALIGN:
+      gtk_progress_set_text_alignment (progress,
+				       progress->x_align,
+				       g_value_get_float (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
 static void
-gtk_progress_get_arg (GtkObject      *object,
-		      GtkArg         *arg,
-		      guint           arg_id)
+gtk_progress_get_property (GObject      *object,
+			   guint         prop_id,
+			   GValue       *value,
+			   GParamSpec   *pspec)
 {
   GtkProgress *progress;
   
   progress = GTK_PROGRESS (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_ACTIVITY_MODE:
-      GTK_VALUE_BOOL (*arg) = (progress->activity_mode != FALSE);
+    case PROP_ACTIVITY_MODE:
+      g_value_set_boolean (value, (progress->activity_mode != FALSE));
       break;
-    case ARG_SHOW_TEXT:
-      GTK_VALUE_BOOL (*arg) = (progress->show_text != FALSE);
+    case PROP_SHOW_TEXT:
+      g_value_set_boolean (value, (progress->show_text != FALSE));
       break;
-    case ARG_TEXT_XALIGN:
-      GTK_VALUE_FLOAT (*arg) = progress->x_align;
+    case PROP_TEXT_XALIGN:
+      g_value_set_float (value, progress->x_align);
       break;
-    case ARG_TEXT_YALIGN:
-      GTK_VALUE_FLOAT (*arg) = progress->y_align;
+    case PROP_TEXT_YALIGN:
+      g_value_set_float (value, progress->y_align);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -602,6 +630,8 @@ gtk_progress_set_show_text (GtkProgress *progress,
 
       if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (progress)))
 	gtk_widget_queue_resize (GTK_WIDGET (progress));
+
+      g_object_notify (G_OBJECT (progress), "show_text");
     }
 }
 
@@ -617,8 +647,17 @@ gtk_progress_set_text_alignment (GtkProgress *progress,
 
   if (progress->x_align != x_align || progress->y_align != y_align)
     {
-      progress->x_align = x_align;
-      progress->y_align = y_align;
+      if (progress->x_align != x_align)
+	{
+	  progress->x_align = x_align;
+	  g_object_notify (G_OBJECT (progress), "text_xalign");
+	}
+
+      if (progress->y_align != y_align)
+	{
+	  progress->y_align = y_align;
+	  g_object_notify (G_OBJECT (progress), "text_yalign");
+	}
 
       if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (progress)))
 	gtk_widget_queue_resize (GTK_WIDGET (progress));
@@ -691,5 +730,7 @@ gtk_progress_set_activity_mode (GtkProgress *progress,
 
       if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (progress)))
 	gtk_widget_queue_resize (GTK_WIDGET (progress));
+
+      g_object_notify (G_OBJECT (progress), "activity_mode");
     }
 }

@@ -306,12 +306,12 @@ gtk_button_get_property (GObject         *object,
     {
     case PROP_LABEL:
       if (GTK_BIN (button)->child && GTK_IS_LABEL (GTK_BIN (button)->child))
-	 g_value_set_string(value, g_strdup (GTK_LABEL (GTK_BIN (button)->child)->label)); 
+	 g_value_set_string (value, GTK_LABEL (GTK_BIN (button)->child)->label); 
       else
-	 g_value_set_string(value, NULL);
+	 g_value_set_string (value, NULL);
       break;
     case PROP_RELIEF:
-      g_value_set_enum(value, gtk_button_get_relief (button));
+      g_value_set_enum (value, gtk_button_get_relief (button));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

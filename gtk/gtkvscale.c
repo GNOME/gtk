@@ -28,24 +28,27 @@
 #include "gtkvscale.h"
 #include "gtksignal.h"
 #include "gdk/gdkkeysyms.h"
+#include "gtkintl.h"
 
 
 #define SCALE_CLASS(w)  GTK_SCALE_GET_CLASS (w)
 #define RANGE_CLASS(w)  GTK_RANGE_GET_CLASS (w)
 
 enum {
-  ARG_0,
-  ARG_ADJUSTMENT
+  PROP_0,
+  PROP_ADJUSTMENT
 };
 
 static void     gtk_vscale_class_init       (GtkVScaleClass *klass);
 static void     gtk_vscale_init             (GtkVScale      *vscale);
-static void     gtk_vscale_set_arg          (GtkObject      *object,
-					     GtkArg         *arg,
-					     guint           arg_id);
-static void     gtk_vscale_get_arg          (GtkObject      *object,
-					     GtkArg         *arg,
-					     guint           arg_id);
+static void     gtk_vscale_set_property     (GObject        *object,
+					     guint           prop_id,
+					     const GValue   *value,
+					     GParamSpec     *pspec);
+static void     gtk_vscale_get_property     (GObject        *object,
+					     guint           prop_id,
+					     GValue         *value,
+					     GParamSpec     *pspec);
 static void     gtk_vscale_realize          (GtkWidget      *widget);
 static void     gtk_vscale_size_request     (GtkWidget      *widget,
 					     GtkRequisition *requisition);
@@ -98,22 +101,19 @@ static void
 gtk_vscale_class_init (GtkVScaleClass *class)
 {
   GtkObjectClass *object_class;
+  GObjectClass   *gobject_class;
   GtkWidgetClass *widget_class;
   GtkRangeClass *range_class;
   GtkScaleClass *scale_class;
   
   object_class = (GtkObjectClass*) class;
+  gobject_class = G_OBJECT_CLASS (class);
   widget_class = (GtkWidgetClass*) class;
   range_class = (GtkRangeClass*) class;
   scale_class = (GtkScaleClass*) class;
   
-  gtk_object_add_arg_type ("GtkVScale::adjustment",
-                           GTK_TYPE_ADJUSTMENT,
-                           GTK_ARG_READWRITE,
-                           ARG_ADJUSTMENT);
-  
-  object_class->set_arg = gtk_vscale_set_arg;
-  object_class->get_arg = gtk_vscale_get_arg;
+  gobject_class->set_property = gtk_vscale_set_property;
+  gobject_class->get_property = gtk_vscale_get_property;
   
   widget_class->realize = gtk_vscale_realize;
   widget_class->size_request = gtk_vscale_size_request;
@@ -127,43 +127,55 @@ gtk_vscale_class_init (GtkVScaleClass *class)
   range_class->clear_background = gtk_vscale_clear_background;
   
   scale_class->draw_value = gtk_vscale_draw_value;
+
+  g_object_class_install_property (gobject_class,
+				   PROP_ADJUSTMENT,
+				   g_param_spec_object ("adjustment",
+							_("Adjustment"),
+							_("The GtkAdjustment that determines the values to use for this VScale."),
+							GTK_TYPE_ADJUSTMENT,
+							G_PARAM_READWRITE));
 }
 
 static void
-gtk_vscale_set_arg (GtkObject          *object,
-                    GtkArg             *arg,
-                    guint               arg_id)
+gtk_vscale_set_property (GObject         *object,
+			 guint            prop_id,
+			 const GValue    *value,
+			 GParamSpec      *pspec)
 {
   GtkVScale *vscale;
   
   vscale = GTK_VSCALE (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_ADJUSTMENT:
-      gtk_range_set_adjustment (GTK_RANGE (vscale), GTK_VALUE_POINTER (*arg));
+    case PROP_ADJUSTMENT:
+      gtk_range_set_adjustment (GTK_RANGE (vscale), g_value_get_object (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
 static void
-gtk_vscale_get_arg (GtkObject          *object,
-                    GtkArg             *arg,
-                    guint               arg_id)
+gtk_vscale_get_property (GObject         *object,
+			 guint            prop_id,
+			 GValue          *value,
+			 GParamSpec      *pspec)
 {
   GtkVScale *vscale;
   
   vscale = GTK_VSCALE (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_ADJUSTMENT:
-      GTK_VALUE_POINTER (*arg) = GTK_RANGE (vscale);
+    case PROP_ADJUSTMENT:
+      g_value_set_object (value,
+			  G_OBJECT (gtk_range_get_adjustment (GTK_RANGE (vscale))));
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }

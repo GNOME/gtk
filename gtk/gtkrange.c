@@ -28,6 +28,7 @@
 #include "gtkmain.h"
 #include "gtkrange.h"
 #include "gtksignal.h"
+#include "gtkintl.h"
 
 #define SCROLL_TIMER_LENGTH  20
 #define SCROLL_INITIAL_DELAY 250  /* must hold button this long before ... */
@@ -37,18 +38,20 @@
 #define RANGE_CLASS(w)  GTK_RANGE_GET_CLASS (w)
 
 enum {
-  ARG_0,
-  ARG_UPDATE_POLICY
+  PROP_0,
+  PROP_UPDATE_POLICY
 };
 
 static void gtk_range_class_init               (GtkRangeClass    *klass);
 static void gtk_range_init                     (GtkRange         *range);
-static void gtk_range_set_arg		       (GtkObject        *object,
-						GtkArg           *arg,
-						guint             arg_id);
-static void gtk_range_get_arg		       (GtkObject        *object,
-						GtkArg           *arg,
-						guint             arg_id);
+static void gtk_range_set_property             (GObject          *object,
+						guint             prop_id,
+						const GValue     *value,
+						GParamSpec       *pspec);
+static void gtk_range_get_property             (GObject          *object,
+						guint             prop_id,
+						GValue           *value,
+						GParamSpec       *pspec);
 static void gtk_range_destroy                  (GtkObject        *object);
 static void gtk_range_unrealize                (GtkWidget        *widget);
 static gint gtk_range_expose                   (GtkWidget        *widget,
@@ -122,16 +125,18 @@ gtk_range_get_type (void)
 static void
 gtk_range_class_init (GtkRangeClass *class)
 {
+  GObjectClass   *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
+  gobject_class = G_OBJECT_CLASS (class);
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
   parent_class = gtk_type_class (GTK_TYPE_WIDGET);
 
-  object_class->set_arg = gtk_range_set_arg;
-  object_class->get_arg = gtk_range_get_arg;
+  gobject_class->set_property = gtk_range_set_property;
+  gobject_class->get_property = gtk_range_get_property;
   object_class->destroy = gtk_range_destroy;
 
   widget_class->unrealize = gtk_range_unrealize;
@@ -164,47 +169,54 @@ gtk_range_class_init (GtkRangeClass *class)
   class->motion = NULL;
   class->timer = gtk_real_range_timer;
 
-  gtk_object_add_arg_type ("GtkRange::update_policy",
-			   GTK_TYPE_UPDATE_TYPE,
-			   GTK_ARG_READWRITE,
-			   ARG_UPDATE_POLICY);
+  g_object_class_install_property (gobject_class,
+                                   PROP_UPDATE_POLICY,
+                                   g_param_spec_enum ("update_policy",
+						      _("Update policy"),
+						      _("How the range should be updated on the screen"),
+						      GTK_TYPE_UPDATE_TYPE,
+						      GTK_UPDATE_CONTINUOUS,
+						      G_PARAM_READWRITE));  
 }
 
 static void
-gtk_range_set_arg (GtkObject      *object,
-		   GtkArg         *arg,
-		   guint           arg_id)
+gtk_range_set_property (GObject      *object,
+			guint         prop_id,
+			const GValue *value,
+			GParamSpec   *pspec)
 {
   GtkRange *range;
 
   range = GTK_RANGE (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_UPDATE_POLICY:
-      gtk_range_set_update_policy (range, GTK_VALUE_ENUM (*arg));
+    case PROP_UPDATE_POLICY:
+      gtk_range_set_update_policy (range, g_value_get_enum (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
 static void
-gtk_range_get_arg (GtkObject      *object,
-		   GtkArg         *arg,
-		   guint           arg_id)
+gtk_range_get_property (GObject      *object,
+			guint         prop_id,
+			GValue       *value,
+			GParamSpec   *pspec)
 {
   GtkRange *range;
 
   range = GTK_RANGE (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_UPDATE_POLICY:
-      GTK_VALUE_ENUM (*arg) = range->policy;
+    case PROP_UPDATE_POLICY:
+      g_value_set_enum (value, range->policy);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -254,7 +266,11 @@ gtk_range_set_update_policy (GtkRange      *range,
   g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
 
-  range->policy = policy;
+  if (range->policy != policy)
+    {
+      range->policy = policy;
+      g_object_notify (G_OBJECT (range), "update_policy");
+    }
 }
 
 void

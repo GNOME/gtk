@@ -36,6 +36,7 @@
 
 #include "gtkprogressbar.h"
 #include "gtksignal.h"
+#include "gtkintl.h"
 
 
 #define MIN_HORIZONTAL_BAR_WIDTH   150
@@ -46,30 +47,32 @@
 #define TEXT_SPACING               2
 
 enum {
-  ARG_0,
+  PROP_0,
 
   /* Supported args */
-  ARG_FRACTION,
-  ARG_PULSE_STEP,
-  ARG_ORIENTATION,
-  ARG_TEXT,
+  PROP_FRACTION,
+  PROP_PULSE_STEP,
+  PROP_ORIENTATION,
+  PROP_TEXT,
   
   /* Deprecated args */
-  ARG_ADJUSTMENT,
-  ARG_BAR_STYLE,
-  ARG_ACTIVITY_STEP,
-  ARG_ACTIVITY_BLOCKS,
-  ARG_DISCRETE_BLOCKS
+  PROP_ADJUSTMENT,
+  PROP_BAR_STYLE,
+  PROP_ACTIVITY_STEP,
+  PROP_ACTIVITY_BLOCKS,
+  PROP_DISCRETE_BLOCKS
 };
 
 static void gtk_progress_bar_class_init    (GtkProgressBarClass *klass);
 static void gtk_progress_bar_init          (GtkProgressBar      *pbar);
-static void gtk_progress_bar_set_arg       (GtkObject           *object,
-					    GtkArg              *arg,
-					    guint                arg_id);
-static void gtk_progress_bar_get_arg       (GtkObject           *object,
-					    GtkArg              *arg,
-					    guint                arg_id);
+static void gtk_progress_bar_set_property  (GObject             *object,
+					    guint                prop_id,
+					    const GValue        *value,
+					    GParamSpec          *pspec);
+static void gtk_progress_bar_get_property  (GObject             *object,
+					    guint                prop_id,
+					    GValue              *value,
+					    GParamSpec          *pspec);
 static void gtk_progress_bar_size_request  (GtkWidget           *widget,
 					    GtkRequisition      *requisition);
 static void gtk_progress_bar_real_update   (GtkProgress         *progress);
@@ -105,59 +108,107 @@ gtk_progress_bar_get_type (void)
 static void
 gtk_progress_bar_class_init (GtkProgressBarClass *class)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
   GtkProgressClass *progress_class;
   
-  object_class = (GtkObjectClass *) class;
+  gobject_class = G_OBJECT_CLASS (class);
   widget_class = (GtkWidgetClass *) class;
   progress_class = (GtkProgressClass *) class;
-  
-  gtk_object_add_arg_type ("GtkProgressBar::adjustment",
-			   GTK_TYPE_ADJUSTMENT,
-			   GTK_ARG_READWRITE,
-			   ARG_ADJUSTMENT);
-  gtk_object_add_arg_type ("GtkProgressBar::orientation",
-			   GTK_TYPE_PROGRESS_BAR_ORIENTATION,
-			   GTK_ARG_READWRITE,
-			   ARG_ORIENTATION);
-  gtk_object_add_arg_type ("GtkProgressBar::bar_style",
-			   GTK_TYPE_PROGRESS_BAR_STYLE,
-			   GTK_ARG_READWRITE,
-			   ARG_BAR_STYLE);
-  gtk_object_add_arg_type ("GtkProgressBar::activity_step",
-			   GTK_TYPE_UINT,
-			   GTK_ARG_READWRITE,
-			   ARG_ACTIVITY_STEP);
-  gtk_object_add_arg_type ("GtkProgressBar::activity_blocks",
-			   GTK_TYPE_UINT,
-			   GTK_ARG_READWRITE,
-			   ARG_ACTIVITY_BLOCKS);
-  gtk_object_add_arg_type ("GtkProgressBar::discrete_blocks",
-			   GTK_TYPE_UINT,
-			   GTK_ARG_READWRITE,
-			   ARG_DISCRETE_BLOCKS);
-  gtk_object_add_arg_type ("GtkProgressBar::fraction",
-			   GTK_TYPE_DOUBLE,
-			   GTK_ARG_READWRITE,
-			   ARG_FRACTION);
-  gtk_object_add_arg_type ("GtkProgressBar::pulse_step",
-			   GTK_TYPE_DOUBLE,
-			   GTK_ARG_READWRITE,
-			   ARG_PULSE_STEP);
-  gtk_object_add_arg_type ("GtkProgressBar::text",
-			   GTK_TYPE_STRING,
-			   GTK_ARG_READWRITE,
-			   ARG_TEXT);
-  
-  object_class->set_arg = gtk_progress_bar_set_arg;
-  object_class->get_arg = gtk_progress_bar_get_arg;
 
+  gobject_class->set_property = gtk_progress_bar_set_property;
+  gobject_class->get_property = gtk_progress_bar_get_property;
+  
   widget_class->size_request = gtk_progress_bar_size_request;
 
   progress_class->paint = gtk_progress_bar_paint;
   progress_class->update = gtk_progress_bar_real_update;
   progress_class->act_mode_enter = gtk_progress_bar_act_mode_enter;
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_ADJUSTMENT,
+                                   g_param_spec_object ("adjustment",
+                                                        _("Adjustment"),
+                                                        _("The GtkAdjustment connected to the progress bar (Deprecated)"),
+                                                        GTK_TYPE_ADJUSTMENT,
+                                                        G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_ORIENTATION,
+                                   g_param_spec_enum ("orientation",
+						      _("Orientation"),
+						      _("Orientation and growth of the progress bar"),
+						      GTK_TYPE_PROGRESS_BAR_ORIENTATION,
+						      GTK_PROGRESS_LEFT_TO_RIGHT,
+						      G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_BAR_STYLE,
+                                   g_param_spec_enum ("bar_style",
+						      _("Bar style"),
+						      _("Specifies the visual style of the bar in percentage mode (Deprecated)"),
+						      GTK_TYPE_PROGRESS_BAR_STYLE,
+						      GTK_PROGRESS_CONTINUOUS,
+						      G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACTIVITY_STEP,
+                                   g_param_spec_uint ("activity_step",
+						      _("Activity Step"),
+						      _("The increment used for each iteration in activity mode (Deprecated)"),
+						      -G_MAXUINT,
+						      G_MAXUINT,
+						      3,
+						      G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACTIVITY_BLOCKS,
+                                   g_param_spec_uint ("activity_blocks",
+						      _("Activity Blocks"),
+						      _("The number of blocks which can fit in the progress bar area in activity mode (Deprecated)"),
+						      2,
+						      G_MAXUINT,
+						      5,
+						      G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_DISCRETE_BLOCKS,
+                                   g_param_spec_uint ("discrete_blocks",
+						      _("Discrete Blocks"),
+						      _("The number of discrete blocks in a progress bar (when shown in the discrete style"),
+						      2,
+						      G_MAXUINT,
+						      10,
+						      G_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
+				   PROP_FRACTION,
+				   g_param_spec_double ("fraction",
+							_("Fraction"),
+							_("The fraction of total work that has been completed"),
+							0.0,
+							1.0,
+							0.0,
+							G_PARAM_READWRITE));  
+  
+  g_object_class_install_property (gobject_class,
+				   PROP_PULSE_STEP,
+				   g_param_spec_double ("pulse_step",
+							_("Pulse Step"),
+							_("The fraction of total progress to move the bouncing block when pulsed"),
+							0.0,
+							1.0,
+							0.1,
+							G_PARAM_READWRITE));  
+  
+  g_object_class_install_property (gobject_class,
+				   PROP_TEXT,
+				   g_param_spec_string ("text",
+							_("Text"),
+							_("Text to be displayed in the progress bar"),
+							"%P %%",
+							G_PARAM_READWRITE));
+
 }
 
 static void
@@ -175,88 +226,92 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
 }
 
 static void
-gtk_progress_bar_set_arg (GtkObject           *object,
-			  GtkArg              *arg,
-			  guint                arg_id)
+gtk_progress_bar_set_property (GObject      *object,
+			       guint         prop_id,
+			       const GValue *value,
+			       GParamSpec   *pspec)
 {
   GtkProgressBar *pbar;
 
   pbar = GTK_PROGRESS_BAR (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_ADJUSTMENT:
-      gtk_progress_set_adjustment (GTK_PROGRESS (pbar), GTK_VALUE_POINTER (*arg));
+    case PROP_ADJUSTMENT:
+      gtk_progress_set_adjustment (GTK_PROGRESS (pbar),
+				   GTK_ADJUSTMENT (g_value_get_object (value)));
       break;
-    case ARG_ORIENTATION:
-      gtk_progress_bar_set_orientation (pbar, GTK_VALUE_ENUM (*arg));
+    case PROP_ORIENTATION:
+      gtk_progress_bar_set_orientation (pbar, g_value_get_enum (value));
       break;
-    case ARG_BAR_STYLE:
-      gtk_progress_bar_set_bar_style (pbar, GTK_VALUE_ENUM (*arg));
+    case PROP_BAR_STYLE:
+      gtk_progress_bar_set_bar_style (pbar, g_value_get_enum (value));
       break;
-    case ARG_ACTIVITY_STEP:
-      gtk_progress_bar_set_activity_step (pbar, GTK_VALUE_UINT (*arg));
+    case PROP_ACTIVITY_STEP:
+      gtk_progress_bar_set_activity_step (pbar, g_value_get_uint (value));
       break;
-    case ARG_ACTIVITY_BLOCKS:
-      gtk_progress_bar_set_activity_blocks (pbar, GTK_VALUE_UINT (*arg));
+    case PROP_ACTIVITY_BLOCKS:
+      gtk_progress_bar_set_activity_blocks (pbar, g_value_get_uint (value));
       break;
-    case ARG_DISCRETE_BLOCKS:
-      gtk_progress_bar_set_discrete_blocks (pbar, GTK_VALUE_UINT (*arg));
+    case PROP_DISCRETE_BLOCKS:
+      gtk_progress_bar_set_discrete_blocks (pbar, g_value_get_uint (value));
       break;
-    case ARG_FRACTION:
-      gtk_progress_bar_set_fraction (pbar, GTK_VALUE_DOUBLE (*arg));
+    case PROP_FRACTION:
+      gtk_progress_bar_set_fraction (pbar, g_value_get_double (value));
       break;
-    case ARG_PULSE_STEP:
-      gtk_progress_bar_set_pulse_step (pbar, GTK_VALUE_DOUBLE (*arg));
+    case PROP_PULSE_STEP:
+      gtk_progress_bar_set_pulse_step (pbar, g_value_get_double (value));
       break;
-    case ARG_TEXT:
-      gtk_progress_bar_set_text (pbar, GTK_VALUE_STRING (*arg));
+    case PROP_TEXT:
+      gtk_progress_bar_set_text (pbar, g_value_get_string (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
 static void
-gtk_progress_bar_get_arg (GtkObject           *object,
-			  GtkArg              *arg,
-			  guint                arg_id)
+gtk_progress_bar_get_property (GObject      *object,
+			       guint         prop_id,
+			       GValue       *value,
+			       GParamSpec   *pspec)
 {
   GtkProgressBar *pbar;
 
   pbar = GTK_PROGRESS_BAR (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_ADJUSTMENT:
-      GTK_VALUE_POINTER (*arg) = GTK_PROGRESS (pbar)->adjustment;
+    case PROP_ADJUSTMENT:
+      g_value_set_object (value, G_OBJECT (GTK_PROGRESS (pbar)->adjustment));
       break;
-    case ARG_ORIENTATION:
-      GTK_VALUE_ENUM (*arg) = pbar->orientation;
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, pbar->orientation);
       break;
-    case ARG_BAR_STYLE:
-      GTK_VALUE_ENUM (*arg) = pbar->bar_style;
+    case PROP_BAR_STYLE:
+      g_value_set_enum (value, pbar->bar_style);
       break;
-    case ARG_ACTIVITY_STEP:
-      GTK_VALUE_UINT (*arg) = pbar->activity_step;
+    case PROP_ACTIVITY_STEP:
+      g_value_set_uint (value, pbar->activity_step);
       break;
-    case ARG_ACTIVITY_BLOCKS:
-      GTK_VALUE_UINT (*arg) = pbar->activity_blocks;
+    case PROP_ACTIVITY_BLOCKS:
+      g_value_set_uint (value, pbar->activity_blocks);
       break;
-    case ARG_DISCRETE_BLOCKS:
-      GTK_VALUE_UINT (*arg) = pbar->blocks;
+    case PROP_DISCRETE_BLOCKS:
+      g_value_set_uint (value, pbar->blocks);
       break;
-    case ARG_FRACTION:
-      GTK_VALUE_DOUBLE (*arg) = gtk_progress_get_current_percentage (GTK_PROGRESS (pbar));
+    case PROP_FRACTION:
+      g_value_set_double (value, gtk_progress_get_current_percentage (GTK_PROGRESS (pbar)));
       break;
-    case ARG_PULSE_STEP:
-      GTK_VALUE_DOUBLE (*arg) = pbar->pulse_fraction;
+    case PROP_PULSE_STEP:
+      g_value_set_double (value, pbar->pulse_fraction);
       break;
-    case ARG_TEXT:
-      GTK_VALUE_STRING (*arg) = g_strdup (gtk_progress_bar_get_text (pbar));
+    case PROP_TEXT:
+      g_value_set_string (value, gtk_progress_bar_get_text (pbar));
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -930,9 +985,9 @@ gtk_progress_bar_set_orientation (GtkProgressBar           *pbar,
 
       if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (pbar)))
 	gtk_widget_queue_resize (GTK_WIDGET (pbar));
-    }
 
-  g_object_notify (G_OBJECT (pbar), "orientation");
+      g_object_notify (G_OBJECT (pbar), "orientation");
+    }
 }
 
 /**
@@ -1018,6 +1073,8 @@ gtk_progress_bar_set_bar_style (GtkProgressBar     *pbar,
 
       if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (pbar)))
 	gtk_widget_queue_resize (GTK_WIDGET (pbar));
+
+      g_object_notify (G_OBJECT (pbar), "bar_style");
     }
 }
 
@@ -1035,6 +1092,8 @@ gtk_progress_bar_set_discrete_blocks (GtkProgressBar *pbar,
 
       if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (pbar)))
 	gtk_widget_queue_resize (GTK_WIDGET (pbar));
+
+      g_object_notify (G_OBJECT (pbar), "discrete_blocks");
     }
 }
 
@@ -1046,7 +1105,10 @@ gtk_progress_bar_set_activity_step (GtkProgressBar *pbar,
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
   if (pbar->activity_step != step)
-    pbar->activity_step = step;
+    {
+      pbar->activity_step = step;
+      g_object_notify (G_OBJECT (pbar), "activity_step");
+    }
 }
 
 void
@@ -1058,5 +1120,8 @@ gtk_progress_bar_set_activity_blocks (GtkProgressBar *pbar,
   g_return_if_fail (blocks > 1);
 
   if (pbar->activity_blocks != blocks)
-    pbar->activity_blocks = blocks;
+    {
+      pbar->activity_blocks = blocks;
+      g_object_notify (G_OBJECT (pbar), "activity_blocks");
+    }
 }

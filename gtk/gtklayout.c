@@ -33,6 +33,7 @@
 #include "gtklayout.h"
 #include "gtksignal.h"
 #include "gtkprivate.h"
+#include "gtkintl.h"
 
 typedef struct _GtkLayoutChild   GtkLayoutChild;
 
@@ -42,7 +43,23 @@ struct _GtkLayoutChild {
   gint y;
 };
 
+enum {
+   PROP_0,
+   PROP_HADJUSTMENT,
+   PROP_VADJUSTMENT,
+   PROP_WIDTH,
+   PROP_HEIGHT
+};
+
 static void     gtk_layout_class_init         (GtkLayoutClass *class);
+static void     gtk_layout_get_property       (GObject        *object,
+					       guint          prop_id,
+					       GValue         *value,
+					       GParamSpec     *pspec);
+static void     gtk_layout_set_property       (GObject        *object,
+					       guint          prop_id,
+					       const GValue   *value,
+					       GParamSpec     *pspec);
 static void     gtk_layout_init               (GtkLayout      *layout);
 
 static void     gtk_layout_finalize           (GObject        *object);
@@ -186,6 +203,7 @@ gtk_layout_set_hadjustment (GtkLayout     *layout,
   g_return_if_fail (GTK_IS_LAYOUT (layout));
 
   gtk_layout_set_adjustments (layout, adjustment, layout->vadjustment);
+  g_object_notify (G_OBJECT (layout), "hadjustment");
 }
  
 
@@ -197,6 +215,7 @@ gtk_layout_set_vadjustment (GtkLayout     *layout,
   g_return_if_fail (GTK_IS_LAYOUT (layout));
   
   gtk_layout_set_adjustments (layout, layout->hadjustment, adjustment);
+  g_object_notify (G_OBJECT (layout), "vadjustment");
 }
 
 
@@ -303,8 +322,16 @@ gtk_layout_set_size (GtkLayout     *layout,
 
   widget = GTK_WIDGET (layout);
   
-  layout->width = width;
-  layout->height = height;
+  if (width != layout->width)
+     {
+	layout->width = width;
+	g_object_notify (G_OBJECT (layout), "width");
+     }
+  if (height != layout->height)
+     {
+	layout->height = height;
+	g_object_notify (G_OBJECT (layout), "height");
+     }
 
   gtk_layout_set_adjustment_upper (layout->hadjustment, layout->width);
   gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height);
@@ -368,19 +395,56 @@ gtk_layout_get_type (void)
 static void
 gtk_layout_class_init (GtkLayoutClass *class)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
+  gobject_class = (GObjectClass*) class;
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
+  gobject_class->set_property = gtk_layout_set_property;
+  gobject_class->get_property = gtk_layout_get_property;
   gobject_class->finalize = gtk_layout_finalize;
 
+  g_object_class_install_property (gobject_class,
+				   PROP_HADJUSTMENT,
+				   g_param_spec_object ("hadjustment",
+							_("Horizontal adjustment"),
+							_("The GtkAdjustment for the horizontal position."),
+							GTK_TYPE_ADJUSTMENT,
+							G_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
+				   PROP_VADJUSTMENT,
+				   g_param_spec_object ("vadjustment",
+							_("Vertical adjustment"),
+							_("The GtkAdjustment for the vertical position."),
+							GTK_TYPE_ADJUSTMENT,
+							G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+				   PROP_WIDTH,
+				   g_param_spec_uint ("width",
+						     _("Width"),
+						     _("The width of the layout."),
+						     0,
+						     G_MAXINT,
+						     100,
+						     G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+				   PROP_HEIGHT,
+				   g_param_spec_uint ("height",
+						     _("Height"),
+						     _("The height of the layout."),
+						     0,
+						     G_MAXINT,
+						     100,
+						     G_PARAM_READWRITE));
   widget_class->realize = gtk_layout_realize;
   widget_class->unrealize = gtk_layout_unrealize;
   widget_class->map = gtk_layout_map;
@@ -401,6 +465,67 @@ gtk_layout_class_init (GtkLayoutClass *class)
 		    gtk_marshal_VOID__OBJECT_OBJECT,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 }
+
+static void
+gtk_layout_get_property (GObject     *object,
+			 guint        prop_id,
+			 GValue      *value,
+			 GParamSpec  *pspec)
+{
+  GtkLayout *layout = GTK_LAYOUT (object);
+  
+  switch (prop_id)
+    {
+    case PROP_HADJUSTMENT:
+      g_value_set_object (value, G_OBJECT (layout->hadjustment));
+      break;
+    case PROP_VADJUSTMENT:
+      g_value_set_object (value, G_OBJECT (layout->vadjustment));
+      break;
+    case PROP_WIDTH:
+      g_value_set_uint (value, layout->width);
+      break;
+    case PROP_HEIGHT:
+      g_value_set_uint (value, layout->height);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_layout_set_property (GObject      *object,
+			 guint         prop_id,
+			 const GValue *value,
+			 GParamSpec   *pspec)
+{
+  GtkLayout *layout = GTK_LAYOUT (object);
+  
+  switch (prop_id)
+    {
+    case PROP_HADJUSTMENT:
+      gtk_layout_set_hadjustment (layout, 
+				  (GtkAdjustment*) g_value_get_object (value));
+      break;
+    case PROP_VADJUSTMENT:
+      gtk_layout_set_vadjustment (layout, 
+				  (GtkAdjustment*) g_value_get_object (value));
+      break;
+    case PROP_WIDTH:
+      gtk_layout_set_size (layout, g_value_get_uint (value),
+			   layout->height);
+      break;
+    case PROP_HEIGHT:
+      gtk_layout_set_size (layout, layout->width,
+			   g_value_get_uint (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
 
 static void
 gtk_layout_init (GtkLayout *layout)

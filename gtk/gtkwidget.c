@@ -41,6 +41,7 @@
 #include "gdk/gdkprivate.h" /* Used in gtk_reset_shapes_recurse to avoid copy */
 #include "gobject/gvaluecollector.h"
 #include "gdk/gdkkeysyms.h"
+#include "gtkintl.h"
 
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
@@ -107,25 +108,25 @@ enum {
 };
 
 enum {
-  ARG_0,
-  ARG_NAME,
-  ARG_PARENT,
-  ARG_X,
-  ARG_Y,
-  ARG_WIDTH,
-  ARG_HEIGHT,
-  ARG_VISIBLE,
-  ARG_SENSITIVE,
-  ARG_APP_PAINTABLE,
-  ARG_CAN_FOCUS,
-  ARG_HAS_FOCUS,
-  ARG_CAN_DEFAULT,
-  ARG_HAS_DEFAULT,
-  ARG_RECEIVES_DEFAULT,
-  ARG_COMPOSITE_CHILD,
-  ARG_STYLE,
-  ARG_EVENTS,
-  ARG_EXTENSION_EVENTS
+  PROP_0,
+  PROP_NAME,
+  PROP_PARENT,
+  PROP_X,
+  PROP_Y,
+  PROP_WIDTH,
+  PROP_HEIGHT,
+  PROP_VISIBLE,
+  PROP_SENSITIVE,
+  PROP_APP_PAINTABLE,
+  PROP_CAN_FOCUS,
+  PROP_HAS_FOCUS,
+  PROP_CAN_DEFAULT,
+  PROP_HAS_DEFAULT,
+  PROP_RECEIVES_DEFAULT,
+  PROP_COMPOSITE_CHILD,
+  PROP_STYLE,
+  PROP_EVENTS,
+  PROP_EXTENSION_EVENTS
 };
 
 typedef	struct	_GtkStateData	 GtkStateData;
@@ -140,12 +141,14 @@ struct _GtkStateData
 
 static void gtk_widget_class_init		 (GtkWidgetClass    *klass);
 static void gtk_widget_init			 (GtkWidget	    *widget);
-static void gtk_widget_set_arg			 (GtkObject         *object,
-						  GtkArg	    *arg,
-						  guint		     arg_id);
-static void gtk_widget_get_arg			 (GtkObject         *object,
-						  GtkArg	    *arg,
-						  guint		     arg_id);
+static void gtk_widget_set_property		 (GObject           *object,
+						  guint              prop_id,
+						  const GValue      *value,
+						  GParamSpec        *pspec);
+static void gtk_widget_get_property		 (GObject           *object,
+						  guint              prop_id,
+						  GValue            *value,
+						  GParamSpec        *pspec);
 static void gtk_widget_shutdown			 (GObject	    *object);
 static void gtk_widget_real_destroy		 (GtkObject	    *object);
 static void gtk_widget_finalize			 (GObject	    *object);
@@ -291,9 +294,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   gobject_class->shutdown = gtk_widget_shutdown;
   gobject_class->finalize = gtk_widget_finalize;
+  gobject_class->set_property = gtk_widget_set_property;
+  gobject_class->get_property = gtk_widget_get_property;
 
-  object_class->set_arg = gtk_widget_set_arg;
-  object_class->get_arg = gtk_widget_get_arg;
   object_class->destroy = gtk_widget_real_destroy;
   
   klass->activate_signal = 0;
@@ -364,25 +367,162 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
 
-  gtk_object_add_arg_type ("GtkWidget::name", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_NAME);
-  gtk_object_add_arg_type ("GtkWidget::parent", GTK_TYPE_CONTAINER, GTK_ARG_READWRITE, ARG_PARENT);
-  gtk_object_add_arg_type ("GtkWidget::x", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_X);
-  gtk_object_add_arg_type ("GtkWidget::y", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_Y);
-  gtk_object_add_arg_type ("GtkWidget::width", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_WIDTH);
-  gtk_object_add_arg_type ("GtkWidget::height", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_HEIGHT);
-  gtk_object_add_arg_type ("GtkWidget::visible", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_VISIBLE);
-  gtk_object_add_arg_type ("GtkWidget::sensitive", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SENSITIVE);
-  gtk_object_add_arg_type ("GtkWidget::app_paintable", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_APP_PAINTABLE);
-  gtk_object_add_arg_type ("GtkWidget::can_focus", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_CAN_FOCUS);
-  gtk_object_add_arg_type ("GtkWidget::has_focus", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HAS_FOCUS);
-  gtk_object_add_arg_type ("GtkWidget::can_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_CAN_DEFAULT);
-  gtk_object_add_arg_type ("GtkWidget::has_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HAS_DEFAULT);
-  gtk_object_add_arg_type ("GtkWidget::receives_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_RECEIVES_DEFAULT);
-  gtk_object_add_arg_type ("GtkWidget::composite_child", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_COMPOSITE_CHILD);
-  gtk_object_add_arg_type ("GtkWidget::style", GTK_TYPE_STYLE, GTK_ARG_READWRITE, ARG_STYLE);
-  gtk_object_add_arg_type ("GtkWidget::events", GTK_TYPE_GDK_EVENT_MASK, GTK_ARG_READWRITE, ARG_EVENTS);
-  gtk_object_add_arg_type ("GtkWidget::extension_events", GTK_TYPE_GDK_EVENT_MASK, GTK_ARG_READWRITE, ARG_EXTENSION_EVENTS);
+  g_object_class_install_property (gobject_class,
+				   PROP_NAME,
+				   g_param_spec_string ("name",
+ 							_("Widget name"),
+							_("The name of the widget"),
+							NULL,
+							G_PARAM_READWRITE));
   
+  g_object_class_install_property (gobject_class,
+				   PROP_PARENT,
+				   g_param_spec_object ("parent",
+							_("Parent widget"),
+							_("The parent widget of this widget. Must be a Container widget."),
+							GTK_TYPE_CONTAINER,
+							G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_X,
+				   g_param_spec_int ("x",
+ 						     _("x coordinate"),
+ 						     _("The x coordinate of the top-left corner of the widget, or -1 if not set"),
+ 						     -G_MAXINT,
+ 						     G_MAXINT,
+ 						     -1,
+ 						     G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_Y,
+				   g_param_spec_int ("y",
+ 						     _("y coordinate"),
+ 						     _("The y coordinate of the top-left corner of the widget, or -1 if not set"),
+ 						     -G_MAXINT,
+ 						     G_MAXINT,
+ 						     -1,
+ 						     G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_WIDTH,
+				   g_param_spec_int ("width",
+ 						     _("Width"),
+ 						     _("The width of the widget, or -1 if unset."),
+ 						     -1,
+ 						     G_MAXINT,
+ 						     -1,
+ 						     G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_HEIGHT,
+				   g_param_spec_int ("height",
+ 						     _("Height"),
+ 						     _("The height of the widget, or -1 if unset."),
+ 						     -1,
+ 						     G_MAXINT,
+ 						     -1,
+ 						     G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_VISIBLE,
+				   g_param_spec_boolean ("visible",
+ 							 _("Visible"),
+ 							 _("Whether the widget is visible"),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_SENSITIVE,
+				   g_param_spec_boolean ("sensitive",
+ 							 _("Sensitive"),
+ 							 _("Whether the widget responds to input"),
+ 							 TRUE,
+ 							 G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_APP_PAINTABLE,
+				   g_param_spec_boolean ("app_paintable",
+ 							 _("Application paintable"),
+ 							 _("Whether the application will paint directly on the widget"),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_CAN_FOCUS,
+				   g_param_spec_boolean ("can_focus",
+ 							 _("Can focus"),
+ 							 _("Whether the widget can accept the input focus"),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_HAS_FOCUS,
+				   g_param_spec_boolean ("has_focus",
+ 							 _("Has focus"),
+ 							 _("Whether the widget has the input focus"),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_CAN_DEFAULT,
+				   g_param_spec_boolean ("can_default",
+ 							 _("Can default"),
+ 							 _("Whether the widget can be the default widget"),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_HAS_DEFAULT,
+				   g_param_spec_boolean ("has_default",
+ 							 _("Has default"),
+ 							 _("Whether the widget is the default widget"),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_RECEIVES_DEFAULT,
+				   g_param_spec_boolean ("receives_default",
+ 							 _("Receives default"),
+ 							 _("If TRUE, the widget will receive the default action when it is focused."),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_COMPOSITE_CHILD,
+				   g_param_spec_boolean ("composite_child",
+ 							 _("Composite child"),
+ 							 _("Whether the widget is composed of other widgets"),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
+ 
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_STYLE,
+				   g_param_spec_object ("style",
+ 							_("Style"),
+ 							_("The style of the widget, which contains information about how it will look (colors etc)."),
+ 							GTK_TYPE_STYLE,
+ 							G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_EVENTS,
+				   g_param_spec_flags ("events",
+ 						       _("Events"),
+ 						       _("The event mask that decides what kind of GdkEvents this widget gets."),
+ 						       GTK_TYPE_GDK_EVENT_MASK,
+ 						       GDK_STRUCTURE_MASK,
+ 						       G_PARAM_READWRITE));
+ 
+  g_object_class_install_property (gobject_class,
+				   PROP_EXTENSION_EVENTS,
+				   g_param_spec_enum ("extension_events",
+ 						      _("Extension events"),
+ 						      _("The mask that decides what kind of extension events this widget gets."),
+ 						      GTK_TYPE_GDK_EXTENSION_MODE,
+ 						      GDK_EXTENSION_EVENTS_NONE,
+ 						      G_PARAM_READWRITE));
+
+
   widget_signals[SHOW] =
     gtk_signal_new ("show",
 		    GTK_RUN_FIRST,
@@ -834,112 +974,113 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 }
 
 static void
-gtk_widget_set_arg (GtkObject   *object,
-		    GtkArg	*arg,
-		    guint	 arg_id)
+gtk_widget_set_property (GObject         *object,
+			 guint            prop_id,
+			 const GValue    *value,
+			 GParamSpec      *pspec)
 {
   GtkWidget *widget;
   GtkWidgetAuxInfo *aux_info;
 
   widget = GTK_WIDGET (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
       guint32 saved_flags;
       
-    case ARG_NAME:
-      gtk_widget_set_name (widget, GTK_VALUE_STRING (*arg));
+    case PROP_NAME:
+      gtk_widget_set_name (widget, g_value_get_string (value));
       break;
-    case ARG_PARENT:
-      gtk_container_add (GTK_CONTAINER (GTK_VALUE_OBJECT (*arg)), widget);
+    case PROP_PARENT:
+      gtk_container_add (GTK_CONTAINER (g_value_get_object (value)), widget);
       break;
-    case ARG_X:
+    case PROP_X:
       aux_info = _gtk_widget_get_aux_info (widget, TRUE);
-      if (GTK_VALUE_INT (*arg) == -1)
+      if (g_value_get_int (value) == -1)
 	aux_info->x_set = FALSE;
       else
 	{
 	  aux_info->x_set = TRUE;
-	  aux_info->x = GTK_VALUE_INT (*arg);
+	  aux_info->x = g_value_get_int (value);
 	}
       gtk_widget_do_uposition (widget);
       break;
-    case ARG_Y:
+    case PROP_Y:
       aux_info = _gtk_widget_get_aux_info (widget, TRUE);
-      if (GTK_VALUE_INT (*arg) == -1)
+      if (g_value_get_int (value) == -1)
 	aux_info->y_set = FALSE;
       else
 	{
 	  aux_info->y_set = TRUE;
-	  aux_info->y = GTK_VALUE_INT (*arg);
+	  aux_info->y = g_value_get_int (value);
 	}
       gtk_widget_do_uposition (widget);
       break;
-    case ARG_WIDTH:
-      gtk_widget_set_usize (widget, GTK_VALUE_INT (*arg), -2);
+    case PROP_WIDTH:
+      gtk_widget_set_usize (widget, g_value_get_int (value), -2);
       break;
-    case ARG_HEIGHT:
-      gtk_widget_set_usize (widget, -2, GTK_VALUE_INT (*arg));
+    case PROP_HEIGHT:
+      gtk_widget_set_usize (widget, -2, g_value_get_int (value));
       break;
-    case ARG_VISIBLE:
-      if (GTK_VALUE_BOOL(*arg))
+    case PROP_VISIBLE:
+      if (g_value_get_boolean (value))
 	gtk_widget_show (widget);
       else
 	gtk_widget_hide (widget);
       break;
-    case ARG_SENSITIVE:
-      gtk_widget_set_sensitive (widget, GTK_VALUE_BOOL (*arg));
+    case PROP_SENSITIVE:
+      gtk_widget_set_sensitive (widget, g_value_get_boolean (value));
       break;
-    case ARG_APP_PAINTABLE:
-      gtk_widget_set_app_paintable (widget, GTK_VALUE_BOOL (*arg));
+    case PROP_APP_PAINTABLE:
+      gtk_widget_set_app_paintable (widget, g_value_get_boolean (value));
       break;
-    case ARG_CAN_FOCUS:
+    case PROP_CAN_FOCUS:
       saved_flags = GTK_WIDGET_FLAGS (widget);
-      if (GTK_VALUE_BOOL (*arg))
+      if (g_value_get_boolean (value))
 	GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
       else
 	GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_FOCUS);
       if (saved_flags != GTK_WIDGET_FLAGS (widget))
 	gtk_widget_queue_resize (widget);
       break;
-    case ARG_HAS_FOCUS:
-      if (GTK_VALUE_BOOL (*arg))
+    case PROP_HAS_FOCUS:
+      if (g_value_get_boolean (value))
 	gtk_widget_grab_focus (widget);
       break;
-    case ARG_CAN_DEFAULT:
+    case PROP_CAN_DEFAULT:
       saved_flags = GTK_WIDGET_FLAGS (widget);
-      if (GTK_VALUE_BOOL (*arg))
+      if (g_value_get_boolean (value))
 	GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_DEFAULT);
       else
 	GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_DEFAULT);
       if (saved_flags != GTK_WIDGET_FLAGS (widget))
 	gtk_widget_queue_resize (widget);
       break;
-    case ARG_HAS_DEFAULT:
-      if (GTK_VALUE_BOOL (*arg))
+    case PROP_HAS_DEFAULT:
+      if (g_value_get_boolean (value))
 	gtk_widget_grab_default (widget);
       break;
-    case ARG_RECEIVES_DEFAULT:
-      if (GTK_VALUE_BOOL (*arg))
+    case PROP_RECEIVES_DEFAULT:
+      if (g_value_get_boolean (value))
 	GTK_WIDGET_SET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
       else
 	GTK_WIDGET_UNSET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
       break;
-    case ARG_COMPOSITE_CHILD:
-      if (GTK_VALUE_BOOL(*arg))
+    case PROP_COMPOSITE_CHILD:
+      if (g_value_get_boolean (value))
 	GTK_WIDGET_SET_FLAGS (widget, GTK_COMPOSITE_CHILD);
       else
 	GTK_WIDGET_UNSET_FLAGS (widget, GTK_COMPOSITE_CHILD);
       break;
-    case ARG_STYLE:
-      gtk_widget_set_style (widget, (GtkStyle*) GTK_VALUE_BOXED (*arg));
+    case PROP_STYLE:
+      gtk_widget_set_style (widget, g_value_get_object (value));
       break;
-    case ARG_EVENTS:
+    case PROP_EVENTS:
       if (!GTK_WIDGET_REALIZED (widget) && !GTK_WIDGET_NO_WINDOW (widget))
-	gtk_widget_set_events (widget, GTK_VALUE_FLAGS (*arg));
+	gtk_widget_set_events (widget, g_value_get_flags (value));
       break;
-    case ARG_EXTENSION_EVENTS:
-      gtk_widget_set_extension_events (widget, GTK_VALUE_FLAGS (*arg));
+    case PROP_EXTENSION_EVENTS:
+      gtk_widget_set_extension_events (widget, g_value_get_enum (value));
       break;
     default:
       break;
@@ -947,7 +1088,7 @@ gtk_widget_set_arg (GtkObject   *object,
 }
 
 /*****************************************
- * gtk_widget_get_arg:
+ * gtk_widget_get_property:
  *
  *   arguments:
  *
@@ -955,103 +1096,104 @@ gtk_widget_set_arg (GtkObject   *object,
  *****************************************/
 
 static void
-gtk_widget_get_arg (GtkObject   *object,
-		    GtkArg	*arg,
-		    guint	 arg_id)
+gtk_widget_get_property (GObject         *object,
+			 guint            prop_id,
+			 GValue          *value,
+			 GParamSpec      *pspec)
 {
   GtkWidget *widget;
 
   widget = GTK_WIDGET (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
       GtkWidgetAuxInfo *aux_info;
       gint *eventp;
       GdkExtensionMode *modep;
 
-    case ARG_NAME:
+    case PROP_NAME:
       if (widget->name)
-	GTK_VALUE_STRING (*arg) = g_strdup (widget->name);
+	g_value_set_string (value, widget->name);
       else
-	GTK_VALUE_STRING (*arg) = g_strdup ("");
+	g_value_set_string (value, "");
       break;
-    case ARG_PARENT:
-      GTK_VALUE_OBJECT (*arg) = (GtkObject*) widget->parent;
+    case PROP_PARENT:
+      g_value_set_object (value, G_OBJECT (widget->parent));
       break;
-    case ARG_X:
+    case PROP_X:
       aux_info =_gtk_widget_get_aux_info (widget, FALSE);
       if (!aux_info || !aux_info->x_set)
-	GTK_VALUE_INT (*arg) = -1;
+	g_value_set_int (value, -1);
       else
-	GTK_VALUE_INT (*arg) = aux_info->x;
+	g_value_set_int (value, aux_info->x);
       break;
-    case ARG_Y:
+    case PROP_Y:
       aux_info =_gtk_widget_get_aux_info (widget, FALSE);
       if (!aux_info || !aux_info->y_set)
-	GTK_VALUE_INT (*arg) = -1;
+	g_value_set_int (value, -1);
       else
-	GTK_VALUE_INT (*arg) = aux_info->y;
+	g_value_set_int (value, aux_info->y);
       break;
-    case ARG_WIDTH:
+    case PROP_WIDTH:
       aux_info =_gtk_widget_get_aux_info (widget, FALSE);
       if (!aux_info)
-	GTK_VALUE_INT (*arg) = -1;
+ 	g_value_set_int (value, -1);
       else
-	GTK_VALUE_INT (*arg) = aux_info->width;
+	g_value_set_int (value, aux_info->width);
       break;
-    case ARG_HEIGHT:
+    case PROP_HEIGHT:
       aux_info =_gtk_widget_get_aux_info (widget, FALSE);
       if (!aux_info)
-	GTK_VALUE_INT (*arg) = -1;
+ 	g_value_set_int (value, -1);
       else
-	GTK_VALUE_INT (*arg) = aux_info->height;
+ 	g_value_set_int (value, aux_info->height);
       break;
-    case ARG_VISIBLE:
-      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_VISIBLE (widget) != FALSE);
+    case PROP_VISIBLE:
+      g_value_set_boolean (value, (GTK_WIDGET_VISIBLE (widget) != FALSE));
       break;
-    case ARG_SENSITIVE:
-      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_SENSITIVE (widget) != FALSE);
+    case PROP_SENSITIVE:
+      g_value_set_boolean (value, (GTK_WIDGET_SENSITIVE (widget) != FALSE));
       break;
-    case ARG_APP_PAINTABLE:
-      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_APP_PAINTABLE (widget) != FALSE);
+    case PROP_APP_PAINTABLE:
+      g_value_set_boolean (value, (GTK_WIDGET_APP_PAINTABLE (widget) != FALSE));
       break;
-    case ARG_CAN_FOCUS:
-      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_CAN_FOCUS (widget) != FALSE);
+    case PROP_CAN_FOCUS:
+      g_value_set_boolean (value, (GTK_WIDGET_CAN_FOCUS (widget) != FALSE));
       break;
-    case ARG_HAS_FOCUS:
-      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_HAS_FOCUS (widget) != FALSE);
+    case PROP_HAS_FOCUS:
+      g_value_set_boolean (value, (GTK_WIDGET_HAS_FOCUS (widget) != FALSE));
       break;
-    case ARG_CAN_DEFAULT:
-      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_CAN_DEFAULT (widget) != FALSE);
+    case PROP_CAN_DEFAULT:
+      g_value_set_boolean (value, (GTK_WIDGET_CAN_DEFAULT (widget) != FALSE));
       break;
-    case ARG_HAS_DEFAULT:
-      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_HAS_DEFAULT (widget) != FALSE);
+    case PROP_HAS_DEFAULT:
+      g_value_set_boolean (value, (GTK_WIDGET_HAS_DEFAULT (widget) != FALSE));
       break;
-    case ARG_RECEIVES_DEFAULT:
-      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_RECEIVES_DEFAULT (widget) != FALSE);
+    case PROP_RECEIVES_DEFAULT:
+      g_value_set_boolean (value, (GTK_WIDGET_RECEIVES_DEFAULT (widget) != FALSE));
       break;
-    case ARG_COMPOSITE_CHILD:
-      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_COMPOSITE_CHILD (widget) != FALSE);
+    case PROP_COMPOSITE_CHILD:
+      g_value_set_boolean (value, (GTK_WIDGET_COMPOSITE_CHILD (widget) != FALSE));
       break;
-    case ARG_STYLE:
-      GTK_VALUE_BOXED (*arg) = (gpointer) gtk_widget_get_style (widget);
+    case PROP_STYLE:
+      g_value_set_object (value, G_OBJECT (gtk_widget_get_style (widget)));
       break;
-    case ARG_EVENTS:
+    case PROP_EVENTS:
       eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);
       if (!eventp)
-	GTK_VALUE_FLAGS (*arg) = 0;
+	g_value_set_int (value, 0);
       else
-	GTK_VALUE_FLAGS (*arg) = *eventp;
+	g_value_set_int (value, *eventp);
       break;
-    case ARG_EXTENSION_EVENTS:
+    case PROP_EXTENSION_EVENTS:
       modep = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_extension_event_mode);
       if (!modep)
-	GTK_VALUE_FLAGS (*arg) = 0;
+ 	g_value_set_flags (value, 0);
       else
-	GTK_VALUE_FLAGS (*arg) = *modep;
+ 	g_value_set_flags (value, (GdkExtensionMode) *modep);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -1302,6 +1444,7 @@ gtk_widget_unparent (GtkWidget *widget)
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], old_parent);
   gtk_widget_propagate_hierarchy_changed (widget, NULL);
   
+  g_object_notify (G_OBJECT (widget), "parent");
   gtk_widget_unref (widget);
 }
 
@@ -1388,6 +1531,7 @@ gtk_widget_show (GtkWidget *widget)
       if (!GTK_WIDGET_TOPLEVEL (widget))
 	gtk_widget_queue_resize (widget);
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SHOW]);
+      g_object_notify (G_OBJECT (widget), "visible");
     }
 }
 
@@ -1469,6 +1613,7 @@ gtk_widget_hide (GtkWidget *widget)
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[HIDE]);
       if (!GTK_WIDGET_TOPLEVEL (widget) && !GTK_OBJECT_DESTROYED (widget))
 	gtk_widget_queue_resize (widget);
+      g_object_notify (G_OBJECT (widget), "visible");
       gtk_widget_unref (widget);
     }
 }
@@ -2786,6 +2931,8 @@ gtk_widget_grab_focus (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[GRAB_FOCUS]);
+
+  g_object_notify (G_OBJECT (widget), "has_focus");
 }
 
 static void
@@ -2926,7 +3073,10 @@ gtk_widget_grab_default (GtkWidget *widget)
     window = window->parent;
   
   if (window && gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
-    gtk_window_set_default (GTK_WINDOW (window), widget);
+    {
+      gtk_window_set_default (GTK_WINDOW (window), widget);
+      g_object_notify (G_OBJECT (window), "has_default");
+    }
   else
     g_warning("gtk_widget_grab_default() called on a widget not within a GtkWindow");
 }
@@ -2955,6 +3105,8 @@ gtk_widget_set_name (GtkWidget	 *widget,
 
   if (GTK_WIDGET_RC_STYLE (widget))
     gtk_widget_set_rc_style (widget);
+
+  g_object_notify (G_OBJECT (widget), "name");
 }
 
 /**
@@ -3038,6 +3190,8 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
       if (GTK_WIDGET_DRAWABLE (widget))
 	gtk_widget_queue_clear (widget);
     }
+
+  g_object_notify (G_OBJECT (widget), "app_paintable");
 }
 
 /**
@@ -3119,6 +3273,8 @@ gtk_widget_set_sensitive (GtkWidget *widget,
   gtk_widget_propagate_state (widget, &data);
   if (GTK_WIDGET_DRAWABLE (widget))
     gtk_widget_queue_clear (widget);
+
+  g_object_notify (G_OBJECT (widget), "sensitive");
 }
 
 /**
@@ -3168,6 +3324,7 @@ gtk_widget_set_parent (GtkWidget *widget,
 
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], NULL);
   gtk_widget_propagate_hierarchy_changed (widget, NULL);
+  g_object_notify (G_OBJECT (widget), "parent");
 }
 
 /*****************************************
@@ -3210,6 +3367,8 @@ gtk_widget_set_style (GtkWidget *widget,
     }
 
   gtk_widget_set_style_internal (widget, style, initial_emission);
+
+  g_object_notify (G_OBJECT (widget), "style");
 }
 
 /**
@@ -3950,7 +4109,7 @@ gtk_widget_get_parent_window   (GtkWidget           *widget)
 }
 
 /* Update the position from aux_info. Used from gtk_widget_set_uposition
- * and gtk_widget_set_arg().
+ * and gtk_widget_set_property().
  */
 static void
 gtk_widget_do_uposition (GtkWidget *widget)
@@ -3962,6 +4121,11 @@ gtk_widget_do_uposition (GtkWidget *widget)
   
   if (GTK_WIDGET_VISIBLE (widget) && widget->parent)
     gtk_widget_size_allocate (widget, &widget->allocation);
+
+  if (aux_info->x_set)
+    g_object_notify (G_OBJECT (widget), "x");
+  if (aux_info->y_set)
+    g_object_notify (G_OBJECT (widget), "y");
 }
 
 /**
@@ -4070,6 +4234,11 @@ gtk_widget_set_usize (GtkWidget *widget,
   
   if (GTK_WIDGET_VISIBLE (widget))
     gtk_widget_queue_resize (widget);
+
+  if (width > -2)
+    g_object_notify (G_OBJECT (widget), "width");
+  if (height > -2)
+    g_object_notify (G_OBJECT (widget), "height");  
 }
 
 /**
@@ -4115,6 +4284,8 @@ gtk_widget_set_events (GtkWidget *widget,
       g_free (eventp);
       gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_event_mask);
     }
+
+  g_object_notify (G_OBJECT (widget), "events");
 }
 
 /**
@@ -4160,6 +4331,8 @@ gtk_widget_add_events (GtkWidget *widget,
       gdk_window_set_events (widget->window,
 			     gdk_window_get_events (widget->window) | events);
     }
+
+  g_object_notify (G_OBJECT (widget), "events");
 }
 
 /**
@@ -4187,6 +4360,7 @@ gtk_widget_set_extension_events (GtkWidget *widget,
   
   *modep = mode;
   gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_extension_event_mode, modep);
+  g_object_notify (G_OBJECT (widget), "extension_events");
 }
 
 /**

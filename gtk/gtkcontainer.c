@@ -33,6 +33,7 @@
 #include "gtksignal.h"
 #include "gtkmain.h"
 #include "gtkwindow.h"
+#include "gtkintl.h"
 
 enum {
   ADD,
@@ -44,11 +45,11 @@ enum {
 };
 
 enum {
-  ARG_0,
-  ARG_BORDER_WIDTH,
-  ARG_RESIZE_MODE,
-  ARG_CHILD,
-  ARG_REALLOCATE_REDRAWS
+  PROP_0,
+  PROP_BORDER_WIDTH,
+  PROP_RESIZE_MODE,
+  PROP_CHILD,
+  PROP_REALLOCATE_REDRAWS
 };
 
 typedef struct _GtkChildArgInfo	GtkChildArgInfo;
@@ -66,12 +67,14 @@ static void     gtk_container_base_class_init      (GtkContainerClass *klass);
 static void     gtk_container_class_init           (GtkContainerClass *klass);
 static void     gtk_container_init                 (GtkContainer      *container);
 static void     gtk_container_destroy              (GtkObject         *object);
-static void     gtk_container_get_arg              (GtkObject         *object,
-						    GtkArg            *arg,
-						    guint              arg_id);
-static void     gtk_container_set_arg              (GtkObject         *object,
-						    GtkArg            *arg,
-						    guint              arg_id);
+static void     gtk_container_set_property         (GObject         *object,
+						    guint            prop_id,
+						    const GValue    *value,
+						    GParamSpec      *pspec);
+static void     gtk_container_get_property         (GObject         *object,
+						    guint            prop_id,
+						    GValue          *value,
+						    GParamSpec      *pspec);
 static void     gtk_container_add_unimplemented    (GtkContainer      *container,
 						    GtkWidget         *widget);
 static void     gtk_container_remove_unimplemented (GtkContainer      *container,
@@ -154,9 +157,11 @@ gtk_container_base_class_init (GtkContainerClass *class)
 static void
 gtk_container_class_init (GtkContainerClass *class)
 {
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
+  gobject_class = G_OBJECT_CLASS (class);
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
@@ -168,9 +173,40 @@ gtk_container_class_init (GtkContainerClass *class)
   vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
   hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
   
+  gobject_class->set_property = gtk_container_set_property;
+  gobject_class->get_property = gtk_container_get_property;
 
-  object_class->get_arg = gtk_container_get_arg;
-  object_class->set_arg = gtk_container_set_arg;
+  g_object_class_install_property (gobject_class,
+                                   PROP_RESIZE_MODE,
+                                   g_param_spec_enum ("resize_mode",
+                                                      _("Resize mode"),
+                                                      _("Specify how resize events are handled"),
+                                                      GTK_TYPE_RESIZE_MODE,
+                                                      GTK_RESIZE_PARENT,
+                                                      G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_BORDER_WIDTH,
+                                   g_param_spec_uint ("border_width",
+                                                      _("Border width"),
+                                                      _("The width of the empty border outside the containers children."),
+						      0,
+						      G_MAXINT,
+						      0,
+                                                      G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_CHILD,
+                                   g_param_spec_object ("child",
+                                                      _("Child"),
+                                                      _("Can be used to add a new child to the container."),
+                                                      GTK_TYPE_WIDGET,
+						      G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_REALLOCATE_REDRAWS,
+                                   g_param_spec_boolean ("reallocate_redraws",
+							 _("Reallocate redraws"),
+							 _("Whether redraws should be reallocated"),
+							 FALSE,
+							 G_PARAM_READWRITE));
   object_class->destroy = gtk_container_destroy;
 
   widget_class->show_all = gtk_container_show_all;
@@ -185,11 +221,6 @@ gtk_container_class_init (GtkContainerClass *class)
   class->set_focus_child = gtk_container_real_set_focus_child;
   class->child_type = NULL;
   class->composite_name = gtk_container_child_default_composite_name;
-
-  gtk_object_add_arg_type ("GtkContainer::border_width", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_BORDER_WIDTH);
-  gtk_object_add_arg_type ("GtkContainer::resize_mode", GTK_TYPE_RESIZE_MODE, GTK_ARG_READWRITE, ARG_RESIZE_MODE);
-  gtk_object_add_arg_type ("GtkContainer::child", GTK_TYPE_WIDGET, GTK_ARG_WRITABLE, ARG_CHILD);
-  gtk_object_add_arg_type ("GtkContainer::reallocate_redraws", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_REALLOCATE_REDRAWS);
 
   container_signals[ADD] =
     gtk_signal_new ("add",
@@ -641,55 +672,59 @@ gtk_container_destroy (GtkObject *object)
 }
 
 static void
-gtk_container_set_arg (GtkObject    *object,
-		       GtkArg       *arg,
-		       guint	     arg_id)
+gtk_container_set_property (GObject         *object,
+			    guint            prop_id,
+			    const GValue    *value,
+			    GParamSpec      *pspec)
 {
   GtkContainer *container;
 
   container = GTK_CONTAINER (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_BORDER_WIDTH:
-      gtk_container_set_border_width (container, GTK_VALUE_UINT (*arg));
+    case PROP_BORDER_WIDTH:
+      gtk_container_set_border_width (container, g_value_get_uint (value));
       break;
-    case ARG_RESIZE_MODE:
-      gtk_container_set_resize_mode (container, GTK_VALUE_ENUM (*arg));
+    case PROP_RESIZE_MODE:
+      gtk_container_set_resize_mode (container, g_value_get_enum (value));
       break;
-    case ARG_REALLOCATE_REDRAWS:
-      gtk_container_set_reallocate_redraws (container, GTK_VALUE_BOOL (*arg));
+    case PROP_REALLOCATE_REDRAWS:
+      gtk_container_set_reallocate_redraws (container, 
+					    g_value_get_boolean (value));
       break;
-    case ARG_CHILD:
-      gtk_container_add (container, GTK_WIDGET (GTK_VALUE_OBJECT (*arg)));
+    case PROP_CHILD:
+      gtk_container_add (container, GTK_WIDGET (g_value_get_object (value)));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
 static void
-gtk_container_get_arg (GtkObject    *object,
-		       GtkArg       *arg,
-		       guint	     arg_id)
+gtk_container_get_property (GObject         *object,
+			    guint            prop_id,
+			    GValue          *value,
+			    GParamSpec      *pspec)
 {
   GtkContainer *container;
 
   container = GTK_CONTAINER (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_BORDER_WIDTH:
-      GTK_VALUE_UINT (*arg) = container->border_width;
+    case PROP_BORDER_WIDTH:
+      g_value_set_uint (value, container->border_width);
       break;
-    case ARG_RESIZE_MODE:
-      GTK_VALUE_ENUM (*arg) = container->resize_mode;
+    case PROP_RESIZE_MODE:
+      g_value_set_enum (value, container->resize_mode);
       break;
-    case ARG_REALLOCATE_REDRAWS:
-      GTK_VALUE_BOOL (*arg) = container->reallocate_redraws;
+    case PROP_REALLOCATE_REDRAWS:
+      g_value_set_boolean (value, container->reallocate_redraws);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -718,7 +753,8 @@ gtk_container_set_border_width (GtkContainer *container,
   if (container->border_width != border_width)
     {
       container->border_width = border_width;
-
+      g_object_notify (G_OBJECT (container), "border_width");
+      
       if (GTK_WIDGET_REALIZED (container))
 	gtk_widget_queue_resize (GTK_WIDGET (container));
     }
@@ -827,7 +863,10 @@ gtk_container_set_resize_mode (GtkContainer  *container,
   
   if (GTK_WIDGET_TOPLEVEL (container) &&
       resize_mode == GTK_RESIZE_PARENT)
-    resize_mode = GTK_RESIZE_QUEUE;
+    {
+      resize_mode = GTK_RESIZE_QUEUE;
+      g_object_notify (G_OBJECT (container), "resize_mode");
+    }
   
   if (container->resize_mode != resize_mode)
     {
@@ -840,6 +879,7 @@ gtk_container_set_resize_mode (GtkContainer  *container,
 	  gtk_container_clear_resize_widgets (container);
 	  gtk_widget_queue_resize (GTK_WIDGET (container));
 	}
+       g_object_notify (G_OBJECT (container), "resize_mode");
     }
 }
 
@@ -853,6 +893,8 @@ gtk_container_set_reallocate_redraws (GtkContainer *container,
   if (needs_redraws != container->reallocate_redraws)
     {
       container->reallocate_redraws = needs_redraws;
+      g_object_notify (G_OBJECT (container), "reallocate_redraws");
+      
       if (container->reallocate_redraws)
 	gtk_widget_queue_draw (GTK_WIDGET (container));
     }

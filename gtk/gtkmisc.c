@@ -26,25 +26,28 @@
 
 #include "gtkcontainer.h"
 #include "gtkmisc.h"
+#include "gtkintl.h"
 
 
 enum {
-  ARG_0,
-  ARG_XALIGN,
-  ARG_YALIGN,
-  ARG_XPAD,
-  ARG_YPAD
+  PROP_0,
+  PROP_XALIGN,
+  PROP_YALIGN,
+  PROP_XPAD,
+  PROP_YPAD
 };
 
 static void gtk_misc_class_init (GtkMiscClass *klass);
 static void gtk_misc_init       (GtkMisc      *misc);
 static void gtk_misc_realize    (GtkWidget    *widget);
-static void gtk_misc_set_arg    (GtkObject    *object,
-				 GtkArg       *arg,
-				 guint         arg_id);
-static void gtk_misc_get_arg    (GtkObject    *object,
-				 GtkArg       *arg,
-				 guint         arg_id);
+static void gtk_misc_set_property(GObject         *object,
+				  guint            prop_id,
+				  const GValue    *value,
+				  GParamSpec      *pspec);
+static void gtk_misc_get_property(GObject         *object,
+				  guint            prop_id,
+				  GValue          *value,
+				  GParamSpec      *pspec);
 
 
 GtkType
@@ -75,21 +78,58 @@ gtk_misc_get_type (void)
 static void
 gtk_misc_class_init (GtkMiscClass *class)
 {
+  GObjectClass   *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
+  gobject_class = G_OBJECT_CLASS (class);
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
-  gtk_object_add_arg_type ("GtkMisc::xalign", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_XALIGN);
-  gtk_object_add_arg_type ("GtkMisc::yalign", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_YALIGN);
-  gtk_object_add_arg_type ("GtkMisc::xpad", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_XPAD);
-  gtk_object_add_arg_type ("GtkMisc::ypad", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_YPAD);
-
-  object_class->set_arg = gtk_misc_set_arg;
-  object_class->get_arg = gtk_misc_get_arg;
+  gobject_class->set_property = gtk_misc_set_property;
+  gobject_class->get_property = gtk_misc_get_property;
   
   widget_class->realize = gtk_misc_realize;
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_XALIGN,
+                                   g_param_spec_float ("xalign",
+						       _("X align"),
+						       _("The horizontal alignment, from 0 (left) to 1 (right)"),
+						       0.0,
+						       1.0,
+						       0.5,
+						       G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_YALIGN,
+                                   g_param_spec_float ("yalign",
+						       _("Y align"),
+						       _("The vertical alignment, from 0 (top) to 1 (bottom)"),
+						       0.0,
+						       1.0,
+						       0.5,
+						       G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_XPAD,
+                                   g_param_spec_int ("xpad",
+						     _("X pad"),
+						     _("The amount of space to add on the left and right of the widget, in pixels"),
+						     0,
+						     G_MAXINT,
+						     0,
+						     G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_YPAD,
+                                   g_param_spec_int ("ypad",
+						     _("Y pad"),
+						     _("The amount of space to add on the top and bottom of the widget, in pixels"),
+						     0,
+						     G_MAXINT,
+						     0,
+						     G_PARAM_READWRITE));
 }
 
 static void
@@ -102,58 +142,61 @@ gtk_misc_init (GtkMisc *misc)
 }
 
 static void
-gtk_misc_set_arg (GtkObject      *object,
-		  GtkArg         *arg,
-		  guint           arg_id)
+gtk_misc_set_property (GObject      *object,
+		       guint         prop_id,
+		       const GValue *value,
+		       GParamSpec   *pspec)
 {
   GtkMisc *misc;
 
   misc = GTK_MISC (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_XALIGN:
-      gtk_misc_set_alignment (misc, GTK_VALUE_FLOAT (*arg), misc->yalign);
+    case PROP_XALIGN:
+      gtk_misc_set_alignment (misc, g_value_get_float (value), misc->yalign);
       break;
-    case ARG_YALIGN:
-      gtk_misc_set_alignment (misc, misc->xalign, GTK_VALUE_FLOAT (*arg));
+    case PROP_YALIGN:
+      gtk_misc_set_alignment (misc, misc->xalign, g_value_get_float (value));
       break;
-    case ARG_XPAD:
-      gtk_misc_set_padding (misc, GTK_VALUE_INT (*arg), misc->ypad);
+    case PROP_XPAD:
+      gtk_misc_set_padding (misc, g_value_get_int (value), misc->ypad);
       break;
-    case ARG_YPAD:
-      gtk_misc_set_padding (misc, misc->xpad, GTK_VALUE_INT (*arg));
+    case PROP_YPAD:
+      gtk_misc_set_padding (misc, misc->xpad, g_value_get_int (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
 static void
-gtk_misc_get_arg (GtkObject	 *object,
-		  GtkArg         *arg,
-		  guint           arg_id)
+gtk_misc_get_property (GObject      *object,
+		       guint         prop_id,
+		       GValue       *value,
+		       GParamSpec   *pspec)
 {
   GtkMisc *misc;
 
   misc = GTK_MISC (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_XALIGN:
-      GTK_VALUE_FLOAT (*arg) = misc->xalign;
+    case PROP_XALIGN:
+      g_value_set_float (value, misc->xalign);
       break;
-    case ARG_YALIGN:
-      GTK_VALUE_FLOAT (*arg) = misc->yalign;
+    case PROP_YALIGN:
+      g_value_set_float (value, misc->yalign);
       break;
-    case ARG_XPAD:
-      GTK_VALUE_INT (*arg) = misc->xpad;
+    case PROP_XPAD:
+      g_value_set_int (value, misc->xpad);
       break;
-    case ARG_YPAD:
-      GTK_VALUE_INT (*arg) = misc->ypad;
+    case PROP_YPAD:
+      g_value_set_int (value, misc->ypad);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -190,6 +233,12 @@ gtk_misc_set_alignment (GtkMisc *misc,
           widget = GTK_WIDGET (misc);
           gtk_widget_queue_clear (widget);
         }
+
+      if (xalign != misc->xalign)
+	g_object_notify (G_OBJECT (misc), "xalign");
+
+      if (yalign != misc->yalign)
+	g_object_notify (G_OBJECT (misc), "yalign");
     }
 }
 
@@ -222,6 +271,12 @@ gtk_misc_set_padding (GtkMisc *misc,
       
       if (GTK_WIDGET_DRAWABLE (misc))
 	gtk_widget_queue_resize (GTK_WIDGET (misc));
+
+      if (xpad != misc->xpad)
+	g_object_notify (G_OBJECT (misc), "xpad");
+
+      if (ypad != misc->ypad)
+	g_object_notify (G_OBJECT (misc), "ypad");
     }
 }
 

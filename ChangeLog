@@ -1,3 +1,24 @@
+2001-03-30  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkbutton.c (gtk_button_get_property):
+	* gtk/gtklabel.c:
+	Remove leaks.
+	
+	* gtk/gtkcontainer.c:
+	* gtk/gtkhscale.c:
+	* gtk/gtkhscrollbar.c:
+	* gtk/gtklayout.c:
+	* gtk/gtkmisc.c:
+	* gtk/gtkprogress.c:
+	* gtk/gtkprogressbar.c:
+	* gtk/gtkrange.c:
+	* gtk/gtktable.c:
+	* gtk/gtkviewport.c:
+	* gtk/gtkvscale.c:
+	* gtk/gtkvscrollbar.c:
+	* gtk/gtkwidget.c:
+	Property patches, based on patches from John Margaglione and Lee Mallabone.
+
 Thu Mar 29 21:20:38 2001  Mike Kestner  <mkestner@ameritech.net>
 
 	* gtk/gtkspinbutton.c : added value_changed signal which proxies for the

@@ -27,6 +27,7 @@
 #include "gtkvscrollbar.h"
 #include "gtksignal.h"
 #include "gdk/gdkkeysyms.h"
+#include "gtkintl.h"
 
 
 #define EPSILON 0.01
@@ -34,18 +35,20 @@
 #define RANGE_CLASS(w)  GTK_RANGE_GET_CLASS (w)
 
 enum {
-  ARG_0,
-  ARG_ADJUSTMENT
+  PROP_0,
+  PROP_ADJUSTMENT
 };
 
 static void     gtk_vscrollbar_class_init       (GtkVScrollbarClass *klass);
 static void     gtk_vscrollbar_init             (GtkVScrollbar      *vscrollbar);
-static void     gtk_vscrollbar_set_arg          (GtkObject          *object,
-						 GtkArg             *arg,
-						 guint               arg_id);
-static void     gtk_vscrollbar_get_arg          (GtkObject          *object,
-						 GtkArg             *arg,
-						 guint               arg_id);
+static void     gtk_vscrollbar_set_property	(GObject            *object,
+						 guint               prop_id,
+						 const GValue       *value,
+						 GParamSpec         *pspec);
+static void     gtk_vscrollbar_get_property     (GObject            *object,
+						 guint               prop_id,
+						 GValue             *value,
+						 GParamSpec         *pspec);
 static void     gtk_vscrollbar_realize          (GtkWidget          *widget);
 static void     gtk_vscrollbar_size_allocate    (GtkWidget          *widget,
 						 GtkAllocation      *allocation);
@@ -87,21 +90,16 @@ gtk_vscrollbar_get_type (void)
 static void
 gtk_vscrollbar_class_init (GtkVScrollbarClass *class)
 {
-  GtkObjectClass *object_class;
+  GObjectClass   *gobject_class;
   GtkWidgetClass *widget_class;
   GtkRangeClass *range_class;
   
-  object_class = (GtkObjectClass*) class;
+  gobject_class = G_OBJECT_CLASS (class);
   widget_class = (GtkWidgetClass*) class;
   range_class = (GtkRangeClass*) class;
   
-  gtk_object_add_arg_type ("GtkVScrollbar::adjustment",
-                           GTK_TYPE_ADJUSTMENT,
-                           GTK_ARG_READWRITE,
-                           ARG_ADJUSTMENT);
-  
-  object_class->set_arg = gtk_vscrollbar_set_arg;
-  object_class->get_arg = gtk_vscrollbar_get_arg;
+  gobject_class->set_property = gtk_vscrollbar_set_property;
+  gobject_class->get_property = gtk_vscrollbar_get_property;
   
   widget_class->realize = gtk_vscrollbar_realize;
   widget_class->size_allocate = gtk_vscrollbar_size_allocate;
@@ -112,43 +110,55 @@ gtk_vscrollbar_class_init (GtkVScrollbarClass *class)
   range_class->trough_click = _gtk_range_default_vtrough_click;
   range_class->trough_keys = gtk_vscrollbar_trough_keys;
   range_class->motion = _gtk_range_default_vmotion;
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_ADJUSTMENT,
+                                   g_param_spec_object ("adjustment",
+							_("Adjustment"),
+							_("The GtkAdjustment that determines the values to use for this scrollbar."),
+                                                        GTK_TYPE_ADJUSTMENT,
+                                                        G_PARAM_READWRITE));
+
 }
 
 static void
-gtk_vscrollbar_set_arg (GtkObject          *object,
-                        GtkArg             *arg,
-                        guint               arg_id)
+gtk_vscrollbar_set_property (GObject         *object,
+			     guint            prop_id,
+			     const GValue    *value,
+			     GParamSpec      *pspec)
 {
   GtkVScrollbar *vscrollbar;
   
   vscrollbar = GTK_VSCROLLBAR (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_ADJUSTMENT:
-      gtk_range_set_adjustment (GTK_RANGE (vscrollbar), GTK_VALUE_POINTER (*arg));
+    case PROP_ADJUSTMENT:
+      gtk_range_set_adjustment (GTK_RANGE (vscrollbar), g_value_get_object (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
 static void
-gtk_vscrollbar_get_arg (GtkObject          *object,
-                        GtkArg             *arg,
-                        guint               arg_id)
+gtk_vscrollbar_get_property (GObject         *object,
+			     guint            prop_id,
+			     GValue          *value,
+			     GParamSpec      *pspec)
 {
   GtkVScrollbar *vscrollbar;
   
   vscrollbar = GTK_VSCROLLBAR (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_ADJUSTMENT:
-      GTK_VALUE_POINTER (*arg) = GTK_RANGE (vscrollbar);
+    case PROP_ADJUSTMENT:
+      g_value_set_object (value, G_OBJECT (vscrollbar));
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }

@@ -25,15 +25,16 @@
  */
 
 #include "gtktable.h"
+#include "gtkintl.h"
 
 enum
 {
-  ARG_0,
-  ARG_N_ROWS,
-  ARG_N_COLUMNS,
-  ARG_COLUMN_SPACING,
-  ARG_ROW_SPACING,
-  ARG_HOMOGENEOUS
+  PROP_0,
+  PROP_N_ROWS,
+  PROP_N_COLUMNS,
+  PROP_COLUMN_SPACING,
+  PROP_ROW_SPACING,
+  PROP_HOMOGENEOUS
 };
 
 enum
@@ -67,12 +68,14 @@ static void gtk_table_forall	    (GtkContainer   *container,
 				     gboolean	     include_internals,
 				     GtkCallback     callback,
 				     gpointer	     callback_data);
-static void gtk_table_get_arg       (GtkObject      *object,
-				     GtkArg         *arg,
-				     guint           arg_id);
-static void gtk_table_set_arg       (GtkObject      *object,
-				     GtkArg         *arg,
-				     guint           arg_id);
+static void gtk_table_get_property  (GObject         *object,
+				     guint            prop_id,
+				     GValue          *value,
+				     GParamSpec      *pspec);
+static void gtk_table_set_property  (GObject         *object,
+				     guint            prop_id,
+				     const GValue    *value,
+				     GParamSpec      *pspec);
 static void gtk_table_set_child_arg (GtkContainer   *container,
 				     GtkWidget      *child,
 				     GtkArg         *arg,
@@ -138,8 +141,8 @@ gtk_table_class_init (GtkTableClass *class)
 
   gobject_class->finalize = gtk_table_finalize;
 
-  object_class->get_arg = gtk_table_get_arg;
-  object_class->set_arg = gtk_table_set_arg;
+  gobject_class->get_property = gtk_table_get_property;
+  gobject_class->set_property = gtk_table_set_property;
   
   widget_class->map = gtk_table_map;
   widget_class->unmap = gtk_table_unmap;
@@ -153,11 +156,55 @@ gtk_table_class_init (GtkTableClass *class)
   container_class->set_child_arg = gtk_table_set_child_arg;
   container_class->get_child_arg = gtk_table_get_child_arg;
   
-  gtk_object_add_arg_type ("GtkTable::n_rows", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_N_ROWS);
-  gtk_object_add_arg_type ("GtkTable::n_columns", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_N_COLUMNS);
-  gtk_object_add_arg_type ("GtkTable::row_spacing", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_ROW_SPACING);
-  gtk_object_add_arg_type ("GtkTable::column_spacing", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_COLUMN_SPACING);
-  gtk_object_add_arg_type ("GtkTable::homogeneous", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HOMOGENEOUS);
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_N_ROWS,
+                                   g_param_spec_uint ("n_rows",
+						     _("Rows"),
+						     _("The number of rows in the table"),
+						     0,
+						     G_MAXUINT,
+						     0,
+						     G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_N_COLUMNS,
+                                   g_param_spec_uint ("n_columns",
+						     _("Columns"),
+						     _("The number of columns in the table"),
+						     0,
+						     G_MAXUINT,
+						     0,
+						     G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_ROW_SPACING,
+                                   g_param_spec_uint ("row_spacing",
+						     _("Row spacing"),
+						     _("The amount of space between two consecutive rows"),
+						     0,
+						     G_MAXUINT,
+						     0,
+						     G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_COLUMN_SPACING,
+                                   g_param_spec_uint ("column_spacing",
+						     _("Column spacing"),
+						     _("The amount of space between two consecutive columns"),
+						     0,
+						     G_MAXUINT,
+						     0,
+						     G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_HOMOGENEOUS,
+                                   g_param_spec_boolean ("homogeneous",
+							 _("Homogenous"),
+							 _("If TRUE this means the table cells are all the same width/height"),
+							 FALSE,
+							 G_PARAM_READWRITE));
+
   gtk_container_add_child_arg_type ("GtkTable::left_attach", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_LEFT_ATTACH);
   gtk_container_add_child_arg_type ("GtkTable::right_attach", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_RIGHT_ATTACH);
   gtk_container_add_child_arg_type ("GtkTable::top_attach", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_TOP_ATTACH);
@@ -175,64 +222,67 @@ gtk_table_child_type (GtkContainer   *container)
 }
 
 static void
-gtk_table_get_arg (GtkObject      *object,
-		   GtkArg         *arg,
-		   guint           arg_id)
+gtk_table_get_property (GObject      *object,
+			guint         prop_id,
+			GValue       *value,
+			GParamSpec   *pspec)
 {
   GtkTable *table;
 
   table = GTK_TABLE (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_N_ROWS:
-      GTK_VALUE_UINT (*arg) = table->nrows;
+    case PROP_N_ROWS:
+      g_value_set_uint (value, table->nrows);
       break;
-    case ARG_N_COLUMNS:
-      GTK_VALUE_UINT (*arg) = table->ncols;
+    case PROP_N_COLUMNS:
+      g_value_set_uint (value, table->ncols);
       break;
-    case ARG_ROW_SPACING:
-      GTK_VALUE_UINT (*arg) = table->row_spacing;
+    case PROP_ROW_SPACING:
+      g_value_set_uint (value, table->row_spacing);
       break;
-    case ARG_COLUMN_SPACING:
-      GTK_VALUE_UINT (*arg) = table->column_spacing;
+    case PROP_COLUMN_SPACING:
+      g_value_set_uint (value, table->column_spacing);
       break;
-    case ARG_HOMOGENEOUS:
-      GTK_VALUE_BOOL (*arg) = table->homogeneous;
+    case PROP_HOMOGENEOUS:
+      g_value_set_boolean (value, table->homogeneous);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
 static void
-gtk_table_set_arg (GtkObject      *object,
-		   GtkArg         *arg,
-		   guint           arg_id)
+gtk_table_set_property (GObject      *object,
+			guint         prop_id,
+			const GValue *value,
+			GParamSpec   *pspec)
 {
   GtkTable *table;
 
   table = GTK_TABLE (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_N_ROWS:
-      gtk_table_resize (table, GTK_VALUE_UINT (*arg), table->ncols);
+    case PROP_N_ROWS:
+      gtk_table_resize (table, g_value_get_uint (value), table->ncols);
       break;
-    case ARG_N_COLUMNS:
-      gtk_table_resize (table, table->nrows, GTK_VALUE_UINT (*arg));
+    case PROP_N_COLUMNS:
+      gtk_table_resize (table, table->nrows, g_value_get_uint (value));
       break;
-    case ARG_ROW_SPACING:
-      gtk_table_set_row_spacings (table, GTK_VALUE_UINT (*arg));
+    case PROP_ROW_SPACING:
+      gtk_table_set_row_spacings (table, g_value_get_uint (value));
       break;
-    case ARG_COLUMN_SPACING:
-      gtk_table_set_col_spacings (table, GTK_VALUE_UINT (*arg));
+    case PROP_COLUMN_SPACING:
+      gtk_table_set_col_spacings (table, g_value_get_uint (value));
       break;
-    case ARG_HOMOGENEOUS:
-      gtk_table_set_homogeneous (table, GTK_VALUE_BOOL (*arg));
+    case PROP_HOMOGENEOUS:
+      gtk_table_set_homogeneous (table, g_value_get_boolean (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -458,6 +508,8 @@ gtk_table_resize (GtkTable *table,
 	      table->rows[i].expand = 0;
 	      table->rows[i].shrink = 0;
 	    }
+
+	  g_object_notify (G_OBJECT (table), "n_rows");
 	}
 
       if (n_cols != table->ncols)
@@ -478,6 +530,8 @@ gtk_table_resize (GtkTable *table,
 	      table->cols[i].expand = 0;
 	      table->cols[i].shrink = 0;
 	    }
+
+	  g_object_notify (G_OBJECT (table), "n_columns");
 	}
     }
 }
@@ -576,6 +630,8 @@ gtk_table_set_row_spacing (GtkTable *table,
       if (GTK_WIDGET_VISIBLE (table))
 	gtk_widget_queue_resize (GTK_WIDGET (table));
     }
+
+  g_object_notify (G_OBJECT (table), "row_spacing");
 }
 
 void
@@ -594,6 +650,8 @@ gtk_table_set_col_spacing (GtkTable *table,
       if (GTK_WIDGET_VISIBLE (table))
 	gtk_widget_queue_resize (GTK_WIDGET (table));
     }
+
+  g_object_notify (G_OBJECT (table), "column_spacing");
 }
 
 void

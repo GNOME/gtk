@@ -26,24 +26,27 @@
 
 #include "gtksignal.h"
 #include "gtkviewport.h"
+#include "gtkintl.h"
 
 enum {
-  ARG_0,
-  ARG_HADJUSTMENT,
-  ARG_VADJUSTMENT,
-  ARG_SHADOW_TYPE
+  PROP_0,
+  PROP_HADJUSTMENT,
+  PROP_VADJUSTMENT,
+  PROP_SHADOW_TYPE
 };
 
 
 static void gtk_viewport_class_init               (GtkViewportClass *klass);
 static void gtk_viewport_init                     (GtkViewport      *viewport);
 static void gtk_viewport_destroy                  (GtkObject        *object);
-static void gtk_viewport_set_arg		  (GtkObject        *object,
-						   GtkArg           *arg,
-						   guint             arg_id);
-static void gtk_viewport_get_arg		  (GtkObject        *object,
-						   GtkArg           *arg,
-						   guint             arg_id);
+static void gtk_viewport_set_property             (GObject         *object,
+						   guint            prop_id,
+						   const GValue    *value,
+						   GParamSpec      *pspec);
+static void gtk_viewport_get_property             (GObject         *object,
+						   guint            prop_id,
+						   GValue          *value,
+						   GParamSpec      *pspec);
 static void gtk_viewport_set_scroll_adjustments	  (GtkViewport	    *viewport,
 						   GtkAdjustment    *hadjustment,
 						   GtkAdjustment    *vadjustment);
@@ -99,16 +102,18 @@ static void
 gtk_viewport_class_init (GtkViewportClass *class)
 {
   GtkObjectClass *object_class;
+  GObjectClass   *gobject_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
   object_class = (GtkObjectClass*) class;
+  gobject_class = G_OBJECT_CLASS (class);
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
   parent_class = (GtkBinClass*) gtk_type_class (GTK_TYPE_BIN);
 
-  object_class->set_arg = gtk_viewport_set_arg;
-  object_class->get_arg = gtk_viewport_get_arg;
+  gobject_class->set_property = gtk_viewport_set_property;
+  gobject_class->get_property = gtk_viewport_get_property;
   object_class->destroy = gtk_viewport_destroy;
   
   widget_class->map = gtk_viewport_map;
@@ -124,18 +129,30 @@ gtk_viewport_class_init (GtkViewportClass *class)
 
   class->set_scroll_adjustments = gtk_viewport_set_scroll_adjustments;
 
-  gtk_object_add_arg_type ("GtkViewport::hadjustment",
-			   GTK_TYPE_ADJUSTMENT,
-			   GTK_ARG_READWRITE,
-			   ARG_HADJUSTMENT);
-  gtk_object_add_arg_type ("GtkViewport::vadjustment",
-			   GTK_TYPE_ADJUSTMENT,
-			   GTK_ARG_READWRITE,
-			   ARG_VADJUSTMENT);
-  gtk_object_add_arg_type ("GtkViewport::shadow_type",
-			   GTK_TYPE_SHADOW_TYPE,
-			   GTK_ARG_READWRITE,
-			   ARG_SHADOW_TYPE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_HADJUSTMENT,
+                                   g_param_spec_object ("hadjustment",
+							_("Horizontal adjustment"),
+							_("The GtkAdjustment that determines the values of the horizontal position for this viewport."),
+                                                        GTK_TYPE_ADJUSTMENT,
+                                                        G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_VADJUSTMENT,
+                                   g_param_spec_object ("vadjustment",
+							_("Vertical adjustment"),
+							_("The GtkAdjustment that determines the values of the vertical position for this viewport."),
+                                                        GTK_TYPE_ADJUSTMENT,
+                                                        G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_SHADOW_TYPE,
+                                   g_param_spec_enum ("shadow_type",
+						      _("Shadow type"),
+						      _("Determines how the shadowed box around the viewport is drawn."),
+						      GTK_TYPE_SHADOW_TYPE,
+						      GTK_SHADOW_IN,
+						      G_PARAM_READWRITE));
 
   widget_class->set_scroll_adjustments_signal =
     gtk_signal_new ("set_scroll_adjustments",
@@ -147,52 +164,55 @@ gtk_viewport_class_init (GtkViewportClass *class)
 }
 
 static void
-gtk_viewport_set_arg (GtkObject        *object,
-		      GtkArg           *arg,
-		      guint             arg_id)
+gtk_viewport_set_property (GObject         *object,
+			   guint            prop_id,
+			   const GValue    *value,
+			   GParamSpec      *pspec)
 {
   GtkViewport *viewport;
 
   viewport = GTK_VIEWPORT (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_HADJUSTMENT:
-      gtk_viewport_set_hadjustment (viewport, GTK_VALUE_POINTER (*arg));
+    case PROP_HADJUSTMENT:
+      gtk_viewport_set_hadjustment (viewport, g_value_get_object (value));
       break;
-    case ARG_VADJUSTMENT:
-      gtk_viewport_set_vadjustment (viewport, GTK_VALUE_POINTER (*arg));
+    case PROP_VADJUSTMENT:
+      gtk_viewport_set_vadjustment (viewport, g_value_get_object (value));
       break;
-    case ARG_SHADOW_TYPE:
-      gtk_viewport_set_shadow_type (viewport, GTK_VALUE_ENUM (*arg));
+    case PROP_SHADOW_TYPE:
+      gtk_viewport_set_shadow_type (viewport, g_value_get_enum (value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
 static void
-gtk_viewport_get_arg (GtkObject        *object,
-		      GtkArg           *arg,
-		      guint             arg_id)
+gtk_viewport_get_property (GObject         *object,
+			   guint            prop_id,
+			   GValue          *value,
+			   GParamSpec      *pspec)
 {
   GtkViewport *viewport;
 
   viewport = GTK_VIEWPORT (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_HADJUSTMENT:
-      GTK_VALUE_POINTER (*arg) = viewport->hadjustment;
+    case PROP_HADJUSTMENT:
+      g_value_set_object (value, viewport->hadjustment);
       break;
-    case ARG_VADJUSTMENT:
-      GTK_VALUE_POINTER (*arg) = viewport->vadjustment;
+    case PROP_VADJUSTMENT:
+      g_value_set_object (value, viewport->vadjustment);
       break;
-    case ARG_SHADOW_TYPE:
-      GTK_VALUE_ENUM (*arg) = viewport->shadow_type;
+    case PROP_SHADOW_TYPE:
+      g_value_set_enum (value, viewport->shadow_type);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -305,6 +325,8 @@ gtk_viewport_set_hadjustment (GtkViewport   *viewport,
 
       gtk_viewport_adjustment_changed (adjustment, viewport);
     }
+
+  g_object_notify (G_OBJECT (viewport), "hadjustment");
 }
 
 void
@@ -342,6 +364,8 @@ gtk_viewport_set_vadjustment (GtkViewport   *viewport,
 
       gtk_viewport_adjustment_changed (adjustment, viewport);
     }
+
+  g_object_notify (G_OBJECT (viewport), "vadjustment");
 }
 
 static void
@@ -372,6 +396,8 @@ gtk_viewport_set_shadow_type (GtkViewport   *viewport,
 	  gtk_widget_queue_draw (GTK_WIDGET (viewport));
 	}
     }
+
+  g_object_notify (G_OBJECT (viewport), "shadow_type");
 }
 
 

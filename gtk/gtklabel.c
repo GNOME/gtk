@@ -327,7 +327,7 @@ gtk_label_get_property (GObject     *object,
   switch (prop_id)
     {
     case PROP_LABEL:
-      g_value_set_string (value, g_strdup (label->label));
+      g_value_set_string (value, label->label);
       break;
     case PROP_ATTRIBUTES:
       g_value_set_boxed (value, label->attrs);
