@@ -841,7 +841,7 @@ gtk_plug_focus (GtkWidget        *widget,
     {
       /* Try to focus the first widget in the window */
       
-      if (gtk_widget_child_focus (bin->child, direction))
+      if (bin->child && gtk_widget_child_focus (bin->child, direction))
         return TRUE;
     }
 

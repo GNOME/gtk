@@ -1,3 +1,12 @@
+Thu Jan 31 10:21:05 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkplug.c (gtk_plug_focus): Handle the case where
+	bin->child is NULL. (#70153, Padraig O'Briain)
+
+	* gtk/gtktextutil.c (_gtk_text_util_append_special_char_menuitems): 
+	Actually call gettext() on the labels; previously they
+	were marked with N_() but we never called gettext().
+
 Wed Jan 30 20:15:49 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_set_valist): save last minute
