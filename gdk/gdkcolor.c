@@ -228,3 +228,21 @@ gdk_color_get_type (void)
 					     (GBoxedFreeFunc)gdk_color_free);
   return our_type;
 }
+
+gboolean
+gdk_color_parse (const gchar *spec,
+		 GdkColor    *color)
+{
+  PangoColor pango_color;
+
+  if (pango_color_parse (&pango_color, spec))
+    {
+      color->red = pango_color.red;
+      color->green = pango_color.green;
+      color->blue = pango_color.blue;
+
+      return TRUE;
+    }
+  else
+    return FALSE;
+}

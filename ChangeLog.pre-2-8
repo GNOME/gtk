@@ -1,3 +1,11 @@
+Sun Nov  4 19:16:23 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkcolor.c (gdk_color_parse): Implement gdk_color_parse()
+	in terms of pango_color_parse().
+
+	* gdk/{linux-fb,win32,x11}/gdkcolor-*.c: Remove port-specific
+	gdk_color_parse() implementations.
+
 Sun Nov  4 18:39:43 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksizegroup.c (gtk_size_group_set_mode): 

@@ -465,32 +465,6 @@ gdk_colors_alloc (GdkColormap   *colormap,
   return return_val != 0;
 }
 
-gboolean
-gdk_color_parse (const gchar *spec,
-		 GdkColor *color)
-{
-  Colormap xcolormap;
-  XColor xcolor;
-  gboolean return_val;
-
-  g_return_val_if_fail (spec != NULL, FALSE);
-  g_return_val_if_fail (color != NULL, FALSE);
-
-  xcolormap = DefaultColormap (gdk_display, _gdk_screen);
-
-  if (XParseColor (gdk_display, xcolormap, spec, &xcolor))
-    {
-      return_val = TRUE;
-      color->red = xcolor.red;
-      color->green = xcolor.green;
-      color->blue = xcolor.blue;
-    }
-  else
-    return_val = FALSE;
-
-  return return_val;
-}
-
 /* This is almost identical to gdk_colormap_free_colors.
  * Keep them in sync!
  */
