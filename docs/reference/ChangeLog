@@ -1,3 +1,10 @@
+Fri Mar  8 15:14:32 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/building.sgml: List -I/opt/gtk/include not
+	-I /opt/gtk/include.
+
+	* gtk/building.sgml: Add a gloss for XIM.
+
 2002-03-07  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/tmpl/animation.sgml, gdk-pixbuf/tmpl/gdk-pixbuf.sgml,

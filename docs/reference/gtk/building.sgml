@@ -98,7 +98,7 @@ How to compile GTK+ itself
       these variables as:
     </para>
     <programlisting>
-      CPPFLAGS="-I /opt/gtk/include"
+      CPPFLAGS="-I/opt/gtk/include"
       LDFLAGS="-L/opt/gtk/lib"
       PKG_CONFIG_PATH="/opt/gtk/lib/pkgconfig"
       export CPPFLAGS LDFLAGS PKG_CONFIG_PATH
@@ -431,8 +431,8 @@ How to compile GTK+ itself
  
         <para>
           These options can be used to control whether GTK+ will 
-          be compiled with support for XIM. 
-          The default is yes.
+          be compiled with support for XIM. (The X Input Method
+	  extension, used for Japanese input.) The default is yes.
         </para>
       </formalpara>
 
