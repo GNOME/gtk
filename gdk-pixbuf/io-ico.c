@@ -323,6 +323,14 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 	
 	State->HeaderSize+=I;
 	
+	if (State->HeaderSize < 0) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("Invalid header in icon"));
+		return;
+	}
+
  	if (State->HeaderSize>State->BytesInHeaderBuf) {
 	        guchar *tmp=g_try_realloc(State->HeaderBuf,State->HeaderSize);
 		if (!tmp) {
