@@ -1,3 +1,8 @@
+2003-06-03  Michael Natterer  <mitch@gimp.org>
+
+	* gdk/x11/gdkinput-x11.c (_gdk_input_common_find_events):
+	reenabled button_release events for xinput devices. (#113948)
+
 2003-06-03  Christian Rose  <menthos@menthos.com>
 
 	* configure.in: Added "li" to ALL_LINGUAS.
@@ -23,8 +28,8 @@ Mon Jun  2 18:58:54 2003  Owen Taylor  <otaylor@redhat.com>
 	an example to the docs.  (#98427)
 
 2003-05-30  Murray Cumming  <murrayc@usa.net>
-  
-  	* gtk/gtkalignment.[h|c]: Added 4-sided padding as properties with
+
+	* gtk/gtkalignment.[h|c]: Added 4-sided padding as properties with
   	gtk_alignment_get_padding() and gtk_aligment_set_padding(). This
   	uses the new private data system - see g_type_class_add_private() in
   	gtk_alignment_class_init() and the use of GTK_ALIGNMENT_GET_PRIVATE().
