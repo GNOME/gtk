@@ -18,7 +18,7 @@ Mon Feb  1 09:16:03 GMT 1999 Tony Gale  <gale@gtk.org>
 	* examples/arrow/*, examples/buttonbox/*, examples/label/*
 	  - New code examples
 
-Fri Jan 29 09:44:37 GMT 1999 Tony Gake  <gale@gtk.org>
+Fri Jan 29 09:44:37 GMT 1999 Tony Gale  <gale@gtk.org>
 
 	* examples/fixed/*, examples/frame/*
 	  - Examples from the Tutorial
