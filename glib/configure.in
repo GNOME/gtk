@@ -136,7 +136,7 @@ AC_MSG_RESULT($gtk_ok)
 
 # The following is necessary for Linux libc-5.4.38
 
-AC_MSG_CHECKING(If iswalnum() and friends are properly defined)
+AC_MSG_CHECKING(if iswalnum() and friends are properly defined)
 AC_TRY_LINK([#include <stdlib.h>],[
 #if (defined(HAVE_WCTYPE_H) || defined(HAVE_WCHAR_H))
 #  ifdef HAVE_WCTYPE_H
