@@ -430,6 +430,7 @@ object_changed (GObject *object, GParamSpec *pspec, gpointer data)
   label = GTK_WIDGET (children->data);
   button = GTK_WIDGET (children->next->data);
   g_object_get (object, pspec->name, &obj, NULL);
+  g_list_free (children);
 
   if (obj)
     name = g_type_name (G_TYPE_FROM_INSTANCE (obj));
@@ -850,6 +851,7 @@ create_prop_editor (GObject   *object,
       gtk_container_add (GTK_CONTAINER (win), properties);
       title = g_strdup_printf ("Properties of %s", g_type_name (type));
       gtk_window_set_title (GTK_WINDOW (win), title);
+      g_free (title);
     }
   
   gtk_window_set_default_size (GTK_WINDOW (win), -1, 400);
