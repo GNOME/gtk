@@ -3,17 +3,18 @@
 # 辛立仁 <hsin@med.cgu.edu.tw>, 2000.
 # Chih-Wei Huang <cwhuang@linux.org.tw>, 2000.
 # Abel Cheung <maddog@linux.org.hk>, 2001-2002.
+# Ben Wu <hpwu@redhat.com>, 2002
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.0.2\n"
-"POT-Creation-Date: 2002-07-31 16:57-0400\n"
-"PO-Revision-Date: 2002-04-22 06:14+0800\n"
-"Last-Translator: Abel Cheung <maddog@linux.org.hk>\n"
+"Project-Id-Version: gtk+ 2.0.6\n"
+"POT-Creation-Date: 2002-09-23 06:57+0800\n"
+"PO-Revision-Date: 2002-08-22 12:35+1000\n"
+"Last-Translator: Ben Wu <hpwu@redhat.com>\n"
 "Language-Team: traditional Chinese <zh-l10n@linux.org.tw>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8-bit\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:585
 #, c-format
@@ -53,7 +54,7 @@ msgstr "無法載入用來載入圖像的模組：%s：%s"
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
-msgstr "圖像載入模組 %s 沒有匯出正確的介面；它是否屬於另一個 GTK 版本？"
+msgstr "用來載入圖像模組 %s 沒有匯出正確的介面；它是否屬於另一個 GTK 版本？"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
@@ -157,7 +158,7 @@ msgstr "GIF 圖像載入模組無法分析此圖像。"
 
 #: gdk-pixbuf/io-gif.c:621
 msgid "Bad code encountered"
-msgstr ""
+msgstr "發現不當的圖像壓縮編碼"
 
 #: gdk-pixbuf/io-gif.c:630
 msgid "Circular table entry in GIF file"
@@ -406,9 +407,8 @@ msgid "RAS image has unknown type"
 msgstr "RAS 圖像類型不明"
 
 #: gdk-pixbuf/io-ras.c:188
-#, fuzzy
 msgid "unsupported RAS image variation"
-msgstr "不支援的 TGA 圖像類型"
+msgstr "不支援的 RAS 圖像類型"
 
 #: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
@@ -492,14 +492,12 @@ msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr "無法分配 TGA cmap 暫存緩衝區所需的記憶體"
 
 #: gdk-pixbuf/io-tga.c:970
-#, fuzzy
 msgid "Can't allocate memory for TGA colormap struct"
-msgstr "無法分配記憶體來載入 XPM 圖像"
+msgstr "無法分配記憶體來載入 TGA 圖像色盤結構"
 
 #: gdk-pixbuf/io-tga.c:979
-#, fuzzy
 msgid "Can't allocate memory for TGA colormap entries"
-msgstr "無法分配記憶體來載入 XPM 圖像"
+msgstr "無法分配記憶體來載入 TGA 圖像色彩項目"
 
 #: gdk-pixbuf/io-tga.c:989
 msgid "Unexpected bitdepth for TGA colormap"
@@ -546,9 +544,8 @@ msgid "Failed to load RGB data from TIFF file"
 msgstr "無法載入 TIFF 檔裡的 RGB 資料"
 
 #: gdk-pixbuf/io-tiff.c:266
-#, fuzzy
 msgid "Unsupported TIFF variant"
-msgstr "不支援的 TGA 圖像類型"
+msgstr "不支援的 TIFF 圖像類型"
 
 #: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
@@ -987,9 +984,8 @@ msgid "Pixbuf Expander Open"
 msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:114
-#, fuzzy
 msgid "Pixbuf for open expander."
-msgstr "要描繪的 pixbuf。"
+msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:122
 msgid "Pixbuf Expander Closed"
@@ -1490,7 +1486,7 @@ msgstr ""
 
 #: gtk/gtkcombo.c:161
 msgid "Allow empty"
-msgstr ""
+msgstr "允許留空"
 
 #: gtk/gtkcombo.c:162
 msgid "Whether an empty value may be entered in this field"
@@ -1606,7 +1602,7 @@ msgstr "游標位置"
 
 #: gtk/gtkentry.c:436 gtk/gtklabel.c:359
 msgid "The current position of the insertion cursor in chars."
-msgstr "插入游標目前的位置，以字元計。"
+msgstr "游標目前的位置，以字元計算。"
 
 #: gtk/gtkentry.c:445 gtk/gtklabel.c:368
 msgid "Selection Bound"
@@ -1626,9 +1622,8 @@ msgid "Maximum length"
 msgstr "最大長度"
 
 #: gtk/gtkentry.c:464
-#, fuzzy
 msgid "Maximum number of characters for this entry. Zero if no maximum."
-msgstr "此項目的最大長度"
+msgstr "此輸入欄位的最大字元長度。0 表示沒有限制。"
 
 #: gtk/gtkentry.c:472
 msgid "Visibility"
@@ -1668,11 +1663,11 @@ msgstr ""
 
 #: gtk/gtkentry.c:503
 msgid "Width in chars"
-msgstr ""
+msgstr "欄位寬度"
 
 #: gtk/gtkentry.c:504
 msgid "Number of characters to leave space for in the entry."
-msgstr ""
+msgstr "該欄位可顯示的字元數目。"
 
 #: gtk/gtkentry.c:513
 msgid "Scroll offset"
@@ -1691,70 +1686,67 @@ msgid "Select on focus"
 msgstr ""
 
 #: gtk/gtkentry.c:740
-#, fuzzy
 msgid "Whether to select the contents of an entry when it is focused."
-msgstr "可否編輯欄位的內容"
+msgstr "當選取後，可否編輯欄位的內容。"
 
-#: gtk/gtkentry.c:3870 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3177
 msgid "Select All"
 msgstr "選擇全部"
 
-#: gtk/gtkentry.c:3880 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3187
 msgid "Input Methods"
 msgstr "輸入法"
 
-#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
-msgstr ""
+msgstr "插入 Unicode 控制字元(_I)"
 
-#: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:161
 msgid "Filename"
 msgstr "檔案名稱"
 
-#: gtk/gtkfilesel.c:537
+#: gtk/gtkfilesel.c:514
 msgid "The currently selected filename."
 msgstr "現時所選擇的檔案名稱。"
 
-#: gtk/gtkfilesel.c:543
+#: gtk/gtkfilesel.c:520
 msgid "Show file operations"
 msgstr "顯示檔案處理"
 
-#: gtk/gtkfilesel.c:544
+#: gtk/gtkfilesel.c:521
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr "應否顯示用來建立或處理檔案的按鈕。"
 
-#: gtk/gtkfilesel.c:551
-#, fuzzy
+#: gtk/gtkfilesel.c:528
 msgid "Select multiple"
-msgstr "選擇全部"
+msgstr "選擇多項"
 
-#: gtk/gtkfilesel.c:552
-#, fuzzy
+#: gtk/gtkfilesel.c:529
 msgid "Whether to allow multiple files to be selected."
-msgstr "應否顯示用來建立或處理檔案的按鈕。"
+msgstr "是否允許同時選取多個檔案。"
 
-#: gtk/gtkfilesel.c:707
+#: gtk/gtkfilesel.c:684
 msgid "Folders"
 msgstr "資料夾"
 
-#: gtk/gtkfilesel.c:711
+#: gtk/gtkfilesel.c:688
 msgid "Fol_ders"
 msgstr "資料夾(_D)"
 
-#: gtk/gtkfilesel.c:742
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "檔案"
 
-#: gtk/gtkfilesel.c:746
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "檔案(_F)"
 
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2152
+#: gtk/gtkfilesel.c:799 gtk/gtkfilesel.c:2138
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "無法讀取資料夾：%s"
 
-#: gtk/gtkfilesel.c:953
+#: gtk/gtkfilesel.c:930
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1762,60 +1754,60 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1063
 msgid "_New Folder"
 msgstr "新增資料夾(_N)"
 
-#: gtk/gtkfilesel.c:1097
+#: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
 msgstr "刪除檔案(_L)"
 
-#: gtk/gtkfilesel.c:1108
+#: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
 msgstr "更改檔案名稱(_R)"
 
-#: gtk/gtkfilesel.c:1386
-#, fuzzy, c-format
+#: gtk/gtkfilesel.c:1363
+#, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "檔案名稱“%s”含有不允許存在於檔案名稱的符號"
+msgstr "資料夾名稱“%s”含有不允許存在於檔案名稱的符號"
 
-#: gtk/gtkfilesel.c:1388
-#, fuzzy, c-format
+#: gtk/gtkfilesel.c:1365
+#, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
-"更改檔案“%s”時發生錯誤：%s\n"
+"建立資料夾“%s”時發生錯誤：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1625
+#: gtk/gtkfilesel.c:1366 gtk/gtkfilesel.c:1602
 msgid "You probably used symbols not allowed in filenames."
 msgstr "你可能使用了不允許存在於檔案名稱的符號。"
 
-#: gtk/gtkfilesel.c:1397
-#, fuzzy, c-format
+#: gtk/gtkfilesel.c:1374
+#, c-format
 msgid "Error creating folder \"%s\": %s\n"
-msgstr "建立目錄“%s”時發生錯誤：%s\n"
+msgstr "建立資料夾“%s”時發生錯誤：%s\n"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1408
 msgid "New Folder"
 msgstr "新增資料夾"
 
-#: gtk/gtkfilesel.c:1446
+#: gtk/gtkfilesel.c:1423
 msgid "_Folder name:"
 msgstr "資料夾名稱(_F)："
 
-#: gtk/gtkfilesel.c:1472
+#: gtk/gtkfilesel.c:1449
 msgid "Create"
 msgstr "建立"
 
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1490
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "檔案名稱“%s”中含有不允許存在於檔案名稱的符號"
 
-#: gtk/gtkfilesel.c:1516
+#: gtk/gtkfilesel.c:1493
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1824,30 +1816,30 @@ msgstr ""
 "刪除檔案“%s”時發生錯誤：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1518 gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:1495 gtk/gtkfilesel.c:1616
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "它可能含有不允許存在於檔案名稱的符號。"
 
-#: gtk/gtkfilesel.c:1527
+#: gtk/gtkfilesel.c:1504
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "刪除檔案“%s”時發生錯誤：%s"
 
-#: gtk/gtkfilesel.c:1570
-#, fuzzy, c-format
+#: gtk/gtkfilesel.c:1547
+#, c-format
 msgid "Really delete file \"%s\" ?"
-msgstr "刪除檔案“%s”時發生錯誤：%s"
+msgstr "確定要刪除檔案“%s”嗎？"
 
-#: gtk/gtkfilesel.c:1575
+#: gtk/gtkfilesel.c:1552
 msgid "Delete File"
 msgstr "刪除檔案"
 
-#: gtk/gtkfilesel.c:1621 gtk/gtkfilesel.c:1635
+#: gtk/gtkfilesel.c:1598 gtk/gtkfilesel.c:1612
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "檔案名稱“%s”含有不允許存在於檔案名稱的符號"
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1600
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1856,7 +1848,7 @@ msgstr ""
 "更改檔案名稱至“%s”時發生錯誤：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1637
+#: gtk/gtkfilesel.c:1614
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1865,44 +1857,46 @@ msgstr ""
 "更改檔案“%s”時發生錯誤：%s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1647
+#: gtk/gtkfilesel.c:1624
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "更改檔案“%s”的名稱至“%s”時發生錯誤：%s"
 
-#: gtk/gtkfilesel.c:1694
+#: gtk/gtkfilesel.c:1671
 msgid "Rename File"
 msgstr "更改檔案名稱"
 
-#: gtk/gtkfilesel.c:1709
+#: gtk/gtkfilesel.c:1686
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "將檔案‘%s’改名為："
 
-#: gtk/gtkfilesel.c:1740
+#: gtk/gtkfilesel.c:1717
 msgid "Rename"
 msgstr "改名"
 
-#: gtk/gtkfilesel.c:2131
+#: gtk/gtkfilesel.c:2117
 msgid "Selection: "
 msgstr ""
 
-#: gtk/gtkfilesel.c:3011
-#, fuzzy, c-format
+#: gtk/gtkfilesel.c:2997
+#, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
-msgstr "檔案名稱 %s 無法轉換到 UTF-8。請嘗試設定環境變數 G_BROKEN_FILENAMES。"
+msgstr ""
+"檔案名稱“%s”無法轉換為 UTF-8 編碼 （請嘗試設定環境變數 "
+"G_BROKEN_FILENAMES）： %s"
 
-#: gtk/gtkfilesel.c:3014
+#: gtk/gtkfilesel.c:3000
 msgid "Invalid Utf-8"
 msgstr "無效的 UTF-8 資料"
 
-#: gtk/gtkfilesel.c:3880
+#: gtk/gtkfilesel.c:3866
 msgid "Name too long"
 msgstr "名稱過長"
 
-#: gtk/gtkfilesel.c:3882
+#: gtk/gtkfilesel.c:3868
 msgid "Couldn't convert filename"
 msgstr "無法轉換檔案名稱"
 
@@ -3045,11 +3039,11 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:298
 msgid "Value"
-msgstr ""
+msgstr "數值"
 
 #: gtk/gtkspinbutton.c:299
 msgid "Reads the current value, or sets a new value"
-msgstr ""
+msgstr "讀取目前的數值還是設定新的數值"
 
 #: gtk/gtkstatusbar.c:159
 msgid "Style of bevel around the statusbar text"
@@ -3153,7 +3147,7 @@ msgstr "頂端(_T)"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
-msgstr ""
+msgstr "上一步(_B)"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
@@ -3161,7 +3155,7 @@ msgstr "下(_D)"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
-msgstr ""
+msgstr "下一步(_F)"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
@@ -3604,7 +3598,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:608
 msgid "Wrap mode set"
-msgstr ""
+msgstr "自動換行模式設定"
 
 #: gtk/gtktexttag.c:609
 msgid "Whether this tag affects line wrap mode"
@@ -3698,7 +3692,7 @@ msgstr "可見游標"
 msgid "If the insertion cursor is shown"
 msgstr "是否顯示插入游標"
 
-#: gtk/gtktextview.c:6386
+#: gtk/gtktextview.c:6417
 msgid "Input _Methods"
 msgstr "輸入法(_M)"
 
@@ -4038,7 +4032,7 @@ msgstr "視窗主元件"
 
 #: gtk/gtkwidget.c:398
 msgid "The parent widget of this widget. Must be a Container widget."
-msgstr ""
+msgstr "此視窗元件的主元件。必須為 Container 元件。"
 
 #: gtk/gtkwidget.c:405
 msgid "Width request"
@@ -4125,9 +4119,8 @@ msgid "Composite child"
 msgstr ""
 
 #: gtk/gtkwidget.c:480
-#, fuzzy
 msgid "Whether the widget is part of a composite widget"
-msgstr "視窗元件是否預設元件"
+msgstr "這個元件是否為組合元件的一部分"
 
 #: gtk/gtkwidget.c:486
 msgid "Style"
@@ -4161,34 +4154,31 @@ msgstr "內部焦點"
 
 #: gtk/gtkwidget.c:1052
 msgid "Whether to draw the focus indicator inside widgets."
-msgstr "是否在視窗元件內部繪畫焦點指示器。"
+msgstr "是否在視窗元件內部繪畫焦點指示線條。"
 
 #: gtk/gtkwidget.c:1058
 msgid "Focus linewidth"
-msgstr ""
+msgstr "焦點線條寬度"
 
 #: gtk/gtkwidget.c:1059
-#, fuzzy
 msgid "Width, in pixels, of the focus indicator line."
-msgstr "是否在視窗元件內部繪畫焦點指示器。"
+msgstr "焦點指示線條行列的寬度，以像素計算。"
 
 #: gtk/gtkwidget.c:1065
 msgid "Focus line dash pattern"
-msgstr ""
+msgstr "焦點虛線樣式"
 
 #: gtk/gtkwidget.c:1066
-#, fuzzy
 msgid "Dash pattern used to draw the focus indicator."
-msgstr "是否在視窗元件內部繪畫焦點指示器。"
+msgstr "繪製焦點指示時使用的虛線樣式。"
 
 #: gtk/gtkwidget.c:1071
 msgid "Focus padding"
 msgstr ""
 
 #: gtk/gtkwidget.c:1072
-#, fuzzy
 msgid "Width, in pixels, between focus indicator and the widget 'box'."
-msgstr "是否在視窗元件內部繪畫焦點指示器。"
+msgstr "焦點指示線條與元件「盒」之間的寬度，以像素計算。"
 
 #: gtk/gtkwidget.c:1077
 msgid "Cursor color"
@@ -4196,7 +4186,7 @@ msgstr "游標顏色"
 
 #: gtk/gtkwidget.c:1078
 msgid "Color with which to draw insertion cursor"
-msgstr "繪畫插入游標使用的顏色"
+msgstr "繪製插入游標時使用的顏色"
 
 #: gtk/gtkwidget.c:1083
 msgid "Secondary cursor color"
@@ -4206,16 +4196,15 @@ msgstr "第二游標顏色"
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
-msgstr ""
+msgstr "當編輯「左至右」及「右至左」混文的文字時，繪製第二游標所使用的顏色。"
 
 #: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"
-msgstr ""
+msgstr "游標長寬比"
 
 #: gtk/gtkwidget.c:1090
-#, fuzzy
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr "繪畫插入游標使用的顏色"
+msgstr "繪製插入游標時使用的長寬比例"
 
 #: gtk/gtkwindow.c:411
 msgid "Window Type"
