@@ -1,3 +1,8 @@
+2002-09-28  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkwindow-x11.c (_gdk_windowing_window_init): Make
+	drawing to the root window work.  (#89492)
+
 Fri Sep 27 18:14:00 2002  Owen Taylor  <otaylor@redhat.com>
 
 	(#91249, Thomas Leonard)
