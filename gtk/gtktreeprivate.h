@@ -184,6 +184,8 @@ struct _GtkTreeViewPrivate
   GtkDestroyNotify search_destroy;
 };
 
+#ifdef __GNUC__
+
 #define TREE_VIEW_INTERNAL_ASSERT(expr, ret)     G_STMT_START{          \
      if (!(expr))                                                       \
        {                                                                \
@@ -217,6 +219,41 @@ struct _GtkTreeViewPrivate
                 #expr);                                                 \
          return;                                                        \
        };                               }G_STMT_END
+
+#else
+
+#define TREE_VIEW_INTERNAL_ASSERT(expr, ret)     G_STMT_START{          \
+     if (!(expr))                                                       \
+       {                                                                \
+         g_log (G_LOG_DOMAIN,                                           \
+                G_LOG_LEVEL_CRITICAL,                                   \
+		"file %s: line %d: assertion `%s' failed.\n"       \
+	        "There is a disparity between the internal view of the GtkTreeView,\n"    \
+		"and the GtkTreeModel.  This generally means that the model has changed\n"\
+		"without letting the view know.  Any display from now on is likely to\n"  \
+		"be incorrect.\n",                                                        \
+                __FILE__,                                               \
+                __LINE__,                                               \
+                #expr);                                                 \
+         return ret;                                                    \
+       };                               }G_STMT_END
+
+#define TREE_VIEW_INTERNAL_ASSERT_VOID(expr)     G_STMT_START{          \
+     if (!(expr))                                                       \
+       {                                                                \
+         g_log (G_LOG_DOMAIN,                                           \
+                G_LOG_LEVEL_CRITICAL,                                   \
+		"file %s: line %d: assertion '%s' failed.\n"            \
+	        "There is a disparity between the internal view of the GtkTreeView,\n"    \
+		"and the GtkTreeModel.  This generally means that the model has changed\n"\
+		"without letting the view know.  Any display from now on is likely to\n"  \
+		"be incorrect.\n",                                                        \
+                __FILE__,                                               \
+                __LINE__,                                               \
+                #expr);                                                 \
+         return;                                                        \
+       };                               }G_STMT_END
+#endif
 
 
 /* functions that shouldn't be exported */

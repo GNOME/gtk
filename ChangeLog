@@ -1,3 +1,8 @@
+Tue Dec  4 21:46:13 2001  HideToshi Tajima  <hidetoshi.tajima@sun.com>
+
+	* gtk/gtktreeprivate.h: restore the else case of #ifdef __GNUC__
+	#66225
+	
 2001-12-04  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkmain.c
