@@ -1,3 +1,7 @@
+1999-01-04  Sung-Hyun Nam  <namsh@lgic.co.kr>
+
+	* configure.in (ALL_LINGUAS): Added 'ko'.
+
 Sun Jan  3 17:41:22 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.c (real_tree_expand): fixed auto_resize bug

@@ -1,0 +1,453 @@
+# gtk+ ko.po
+# Copyright (C) 1998 Free Software Foundation, Inc.
+# Sung-Hyun Nam <namsh@lgic.co.kr>, 1998
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 1.1.10\n"
+"POT-Creation-Date: 1999-01-02 12:50+0900\n"
+"PO-Revision-Date: 1999-01-04 03:29:06+0900\n"
+"Last-Translator: Sung-Hyun Nam <namsh@lgic.co.kr>\n"
+"Language-Team: Korean <ko@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=euc-kr\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gtk/gtkcolorsel.c:202
+msgid "Hue:"
+msgstr "색상:"
+
+#: gtk/gtkcolorsel.c:203
+msgid "Saturation:"
+msgstr "채도:"
+
+#: gtk/gtkcolorsel.c:204
+msgid "Value:"
+msgstr "값:"
+
+#: gtk/gtkcolorsel.c:205
+msgid "Red:"
+msgstr "적색:"
+
+#: gtk/gtkcolorsel.c:206
+msgid "Green:"
+msgstr "녹색:"
+
+#: gtk/gtkcolorsel.c:207
+msgid "Blue:"
+msgstr "청색:"
+
+#: gtk/gtkcolorsel.c:208
+msgid "Opacity:"
+msgstr "불투명:"
+
+#. The OK button
+#: gtk/gtkcolorsel.c:1637 gtk/gtkfilesel.c:462 gtk/gtkfontsel.c:3465
+#: gtk/gtkgamma.c:408
+msgid "OK"
+msgstr "확인"
+
+#. The Cancel button
+#: gtk/gtkcolorsel.c:1643 gtk/gtkfilesel.c:469 gtk/gtkfilesel.c:844
+#: gtk/gtkfilesel.c:944 gtk/gtkfilesel.c:1059 gtk/gtkfontsel.c:3478
+#: gtk/gtkgamma.c:416
+msgid "Cancel"
+msgstr "취소"
+
+#: gtk/gtkcolorsel.c:1648
+msgid "Help"
+msgstr "도움말"
+
+#. The directories clist
+#: gtk/gtkfilesel.c:411
+msgid "Directories"
+msgstr "자료방"
+
+#. The files clist
+#: gtk/gtkfilesel.c:430
+msgid "Files"
+msgstr "파일"
+
+#: gtk/gtkfilesel.c:500 gtk/gtkfilesel.c:1455
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "자료방을 읽을 수 없슴: %s"
+
+#: gtk/gtkfilesel.c:532
+msgid "Create Dir"
+msgstr "자료방 생성"
+
+#: gtk/gtkfilesel.c:543 gtk/gtkfilesel.c:913
+msgid "Delete File"
+msgstr "파일 삭제"
+
+#: gtk/gtkfilesel.c:554 gtk/gtkfilesel.c:1017
+msgid "Rename File"
+msgstr "파일명 바꿈"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:715
+msgid "Error"
+msgstr "에러"
+
+#. close button
+#: gtk/gtkfilesel.c:733 gtk/gtkinputdialog.c:346
+msgid "Close"
+msgstr "닫기"
+
+#: gtk/gtkfilesel.c:808
+msgid "Create Directory"
+msgstr "자료방 생성"
+
+#: gtk/gtkfilesel.c:822
+msgid "Directory name:"
+msgstr "자료방 이름:"
+
+#. buttons
+#: gtk/gtkfilesel.c:835
+msgid "Create"
+msgstr "생성"
+
+#. buttons
+#: gtk/gtkfilesel.c:935
+msgid "Delete"
+msgstr "삭제"
+
+#. buttons
+#: gtk/gtkfilesel.c:1050
+msgid "Rename"
+msgstr "새이름"
+
+#: gtk/gtkfontsel.c:203
+msgid "Foundry:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:204
+msgid "Family:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:205
+msgid "Weight:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:206
+msgid "Slant:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:207
+msgid "Set Width:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:208
+msgid "Add Style:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:209
+msgid "Pixel Size:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:210
+msgid "Point Size:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:211
+msgid "Resolution X:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:212
+msgid "Resolution Y:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:213
+msgid "Spacing:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:214
+msgid "Average Width:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:215
+msgid "Charset:"
+msgstr ""
+
+#. Number of internationalized titles here must match number
+#. of NULL initializers above
+#: gtk/gtkfontsel.c:452
+msgid "Font Property"
+msgstr "글꼴 속성"
+
+#: gtk/gtkfontsel.c:453
+msgid "Requested Value"
+msgstr "요청된 값"
+
+#: gtk/gtkfontsel.c:454
+msgid "Actual Value"
+msgstr "실제 값"
+
+#: gtk/gtkfontsel.c:487
+msgid "Font"
+msgstr "글꼴"
+
+#: gtk/gtkfontsel.c:497 gtk/gtkfontsel.c:2146 gtk/gtkfontsel.c:2376
+msgid "Font:"
+msgstr "글꼴:"
+
+#: gtk/gtkfontsel.c:502
+msgid "Font Style:"
+msgstr "글꼴 스타일:"
+
+#: gtk/gtkfontsel.c:507
+msgid "Size:"
+msgstr "크기"
+
+#: gtk/gtkfontsel.c:639 gtk/gtkfontsel.c:861
+msgid "Reset Filter"
+msgstr "필터 리셋"
+
+#: gtk/gtkfontsel.c:653
+msgid "Metric:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:657
+msgid "Points"
+msgstr ""
+
+#: gtk/gtkfontsel.c:664
+msgid "Pixels"
+msgstr ""
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:680
+msgid "Preview:"
+msgstr "미리보기:"
+
+#: gtk/gtkfontsel.c:709
+msgid "Font Information"
+msgstr "글꼴 정보"
+
+#: gtk/gtkfontsel.c:742
+msgid "Requested Font Name:"
+msgstr "요청된 글꼴 이름:"
+
+#: gtk/gtkfontsel.c:753
+msgid "Actual Font Name:"
+msgstr "실제 글꼴 이름:"
+
+#: gtk/gtkfontsel.c:764
+#, c-format
+msgid "%i fonts available with a total of %i styles."
+msgstr ""
+
+#: gtk/gtkfontsel.c:779
+msgid "Filter"
+msgstr "필터"
+
+#: gtk/gtkfontsel.c:792
+msgid "Font Types:"
+msgstr "글꼴 유형"
+
+#: gtk/gtkfontsel.c:800
+msgid "Bitmap"
+msgstr "비트맵"
+
+#: gtk/gtkfontsel.c:806
+msgid "Scalable"
+msgstr ""
+
+#: gtk/gtkfontsel.c:812
+msgid "Scaled Bitmap"
+msgstr ""
+
+#. Convert '(nil)' weights to 'regular', since it looks nicer.
+#: gtk/gtkfontsel.c:1208
+msgid "regular"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1213 gtk/gtkfontsel.c:1938
+msgid "italic"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1214 gtk/gtkfontsel.c:1939
+msgid "oblique"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1215 gtk/gtkfontsel.c:1940
+msgid "reverse italic"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1216 gtk/gtkfontsel.c:1941
+msgid "reverse oblique"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1217 gtk/gtkfontsel.c:1942
+msgid "other"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1224
+msgid "[M]"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1225
+msgid "[C]"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1770
+msgid "The selected font is not available."
+msgstr "선택된 글꼴은 사용될 수 없습니다."
+
+#: gtk/gtkfontsel.c:1776
+msgid "The selected font is not a valid font."
+msgstr "선택된 글꼴은 정상적인 글꼴이 아닙니다."
+
+#: gtk/gtkfontsel.c:1834
+msgid "This is a 2-byte font and may not be displayed correctly."
+msgstr "이것은 2 바이트 글꼴이며 잘못 출력될 수도 있습니다."
+
+#: gtk/gtkfontsel.c:1926 gtk/gtkinputdialog.c:599
+msgid "(unknown)"
+msgstr "(모름)"
+
+#: gtk/gtkfontsel.c:1937
+msgid "roman"
+msgstr "로만"
+
+#: gtk/gtkfontsel.c:1949
+msgid "proportional"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1950
+msgid "monospaced"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1951
+msgid "char cell"
+msgstr ""
+
+#: gtk/gtkfontsel.c:2151
+msgid "Font: (Filter Applied)"
+msgstr "글꼴: (필터 적용)"
+
+#: gtk/gtkfontsel.c:2627
+msgid "MAX_FONTS exceeded. Some fonts may be missing."
+msgstr "MAX_FONTS 초과. 몇몇 글꼴은 잃어버릴 수 있슴."
+
+#: gtk/gtkfontsel.c:3472
+msgid "Apply"
+msgstr "적용"
+
+#: gtk/gtkfontsel.c:3494
+msgid "Font Selection"
+msgstr "글꼴 선택"
+
+#: gtk/gtkgamma.c:388
+msgid "Gamma"
+msgstr ""
+
+#: gtk/gtkgamma.c:395
+msgid "Gamma value"
+msgstr ""
+
+#. shell and main vbox
+#: gtk/gtkinputdialog.c:192
+msgid "Input"
+msgstr "입력"
+
+#: gtk/gtkinputdialog.c:200
+msgid "No input devices"
+msgstr "입력 장치 없슴"
+
+#: gtk/gtkinputdialog.c:229
+msgid "Device:"
+msgstr "장치:"
+
+#: gtk/gtkinputdialog.c:245
+msgid "Disabled"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:253
+msgid "Screen"
+msgstr "스크린"
+
+#: gtk/gtkinputdialog.c:261
+msgid "Window"
+msgstr "창"
+
+#: gtk/gtkinputdialog.c:269
+msgid "Mode: "
+msgstr "모드: "
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:299
+msgid "Axes"
+msgstr ""
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:315
+msgid "Keys"
+msgstr ""
+
+#. We create the save button in any case, so that clients can
+#. connect to it, without paying attention to whether it exits
+#: gtk/gtkinputdialog.c:337
+msgid "Save"
+msgstr "저장"
+
+#: gtk/gtkinputdialog.c:492
+msgid "X"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:493
+msgid "Y"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:494
+msgid "Pressure"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:495
+msgid "X Tilt"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:496
+msgid "Y Tilt"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:536
+msgid "none"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:570 gtk/gtkinputdialog.c:606
+msgid "(disabled)"
+msgstr ""
+
+#. and clear button
+#: gtk/gtkinputdialog.c:684
+msgid "clear"
+msgstr ""
+
+#: gtk/gtknotebook.c:1946 gtk/gtknotebook.c:3966
+#, c-format
+msgid "Page %u"
+msgstr "페이지 %u"
+
+#: gtk/gtkrc.c:1507
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr "이미지 파일을 pixmap_path에서 찾을 수 없슴: \"%s\" 라인 %d"
+
+#: gtk/gtkrc.c:1510
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "이미지 파일을 pixmap_path에서 찾을 수 없슴: \"%s\""
+
+#: gtk/gtkthemes.c:71
+#, c-format
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr "모듈을 module_path에서 찾을 수 없슴: \"%s\","
+
+#: gtk/gtktipsquery.c:172
+msgid "--- No Tip ---"
+msgstr "--- 팁 없슴 ---"
