@@ -8,10 +8,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
-"POT-Creation-Date: 2003-06-09 16:30-0400\n"
-"PO-Revision-Date: 2003-06-01 20:36+0200\n"
+"POT-Creation-Date: 2003-08-04 20:15+0300\n"
+"PO-Revision-Date: 2003-08-04 19:55+0200\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@hut.fi>\n"
-"Language-Team: Finnish <fi@li.org>\n"
+"Language-Team: Gnome Finnish Translation Team <gnome-fi-laatu@lists."
+"sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -167,68 +168,60 @@ msgstr "BMP-kuvan otsake on viallinen"
 msgid "The BMP image format"
 msgstr "BMP-kuvamuoto"
 
-#: gdk-pixbuf/io-gif.c:219
+#: gdk-pixbuf/io-gif.c:220
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "GIF:n luku epäonnistui: %s"
 
-#: gdk-pixbuf/io-gif.c:491 gdk-pixbuf/io-gif.c:1428 gdk-pixbuf/io-gif.c:1589
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1431 gdk-pixbuf/io-gif.c:1592
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "GIF-tiedostosta puuttuu joitakin osia (ehkä se on typistynyt jotenkin?)"
 
-#: gdk-pixbuf/io-gif.c:500
+#: gdk-pixbuf/io-gif.c:501
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Sisäinen virhe GIF-lataimessa (%s)"
 
-#: gdk-pixbuf/io-gif.c:574
+#: gdk-pixbuf/io-gif.c:575
 msgid "Stack overflow"
 msgstr "Pinon ylivuoto"
 
-#: gdk-pixbuf/io-gif.c:634
+#: gdk-pixbuf/io-gif.c:635
 msgid "GIF image loader can't understand this image."
 msgstr "GIF-kuvanlukija ei ymmärrä tätä kuvaa."
 
-#: gdk-pixbuf/io-gif.c:663
+#: gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
 msgstr "Havaitsi virheellisen koodin"
 
-#: gdk-pixbuf/io-gif.c:673
+#: gdk-pixbuf/io-gif.c:674
 msgid "Circular table entry in GIF file"
 msgstr "GIF-tiedostossa on taulukkokehämerkintä"
 
-#: gdk-pixbuf/io-gif.c:806 gdk-pixbuf/io-gif.c:1416 gdk-pixbuf/io-gif.c:1462
-#: gdk-pixbuf/io-gif.c:1577
+#: gdk-pixbuf/io-gif.c:826 gdk-pixbuf/io-gif.c:1419 gdk-pixbuf/io-gif.c:1465
+#: gdk-pixbuf/io-gif.c:1580
 msgid "Not enough memory to load GIF file"
 msgstr "Ei tarpeeksi muistia GIF-kuvan lataamiseksi"
 
-#: gdk-pixbuf/io-gif.c:1053
+#: gdk-pixbuf/io-gif.c:1074
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF-kuva on vioittunut (viallinen LZW-pakkaus)"
 
-#: gdk-pixbuf/io-gif.c:1103
+#: gdk-pixbuf/io-gif.c:1124
 msgid "File does not appear to be a GIF file"
 msgstr "Tiedosto ei vaikuta olevan GIF-tiedosto"
 
-#: gdk-pixbuf/io-gif.c:1115
+#: gdk-pixbuf/io-gif.c:1136
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF-tiedostomuodon versiota %s ei tueta"
 
-#: gdk-pixbuf/io-gif.c:1188
-msgid "GIF image contained a frame with height or width 0."
-msgstr "GIF-animaatio sisälsi kehyksen, jonka leveys tai korkeus oli 0."
-
-#: gdk-pixbuf/io-gif.c:1201
+#: gdk-pixbuf/io-gif.c:1211
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "GIF-kuva sisälsi kehyksen, joka oli kuvan reunojen ulkopuolella."
 
-#: gdk-pixbuf/io-gif.c:1217
-msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
-msgstr "GIF-kuvan ensimmäisen kehyksen saantitapa oli \"palauta edellinen\"."
-
-#: gdk-pixbuf/io-gif.c:1252
+#: gdk-pixbuf/io-gif.c:1255
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -236,44 +229,44 @@ msgstr ""
 "GIF-kuvalla ei ole yleistä värikarttaa, ja sen kehyksellä ei ole paikallista "
 "värikarttaa."
 
-#: gdk-pixbuf/io-gif.c:1484
+#: gdk-pixbuf/io-gif.c:1487
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-kuva oli typistynyt tai vaillinainen."
 
-#: gdk-pixbuf/io-gif.c:1636
+#: gdk-pixbuf/io-gif.c:1639
 msgid "The GIF image format"
 msgstr "GIF-kuvamuoto"
 
-#: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:338
-#: gdk-pixbuf/io-ico.c:401 gdk-pixbuf/io-ico.c:418
+#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:330
+#: gdk-pixbuf/io-ico.c:393 gdk-pixbuf/io-ico.c:410
 msgid "Not enough memory to load icon"
 msgstr "Ei tarpeeksi muistia kuvakkeen lataamiseksi"
 
-#: gdk-pixbuf/io-ico.c:262
+#: gdk-pixbuf/io-ico.c:254
 msgid "Invalid header in icon"
 msgstr "Virheellinen otsake kuvakkeessa"
 
-#: gdk-pixbuf/io-ico.c:299
+#: gdk-pixbuf/io-ico.c:291
 msgid "Icon has zero width"
 msgstr "Kuvakkeen leveys on nolla"
 
-#: gdk-pixbuf/io-ico.c:309
+#: gdk-pixbuf/io-ico.c:301
 msgid "Icon has zero height"
 msgstr "Kuvakkeen korkeus on nolla"
 
-#: gdk-pixbuf/io-ico.c:353
+#: gdk-pixbuf/io-ico.c:345
 msgid "Compressed icons are not supported"
 msgstr "Pakattuja kuvakkeita ei tueta"
 
-#: gdk-pixbuf/io-ico.c:386
+#: gdk-pixbuf/io-ico.c:378
 msgid "Unsupported icon type"
 msgstr "Tukematon kuvaketyyppi"
 
-#: gdk-pixbuf/io-ico.c:466
+#: gdk-pixbuf/io-ico.c:458
 msgid "Not enough memory to load ICO file"
 msgstr "Ei tarpeeksi muistia ICO-tiedoston lataamiseksi"
 
-#: gdk-pixbuf/io-ico.c:872
+#: gdk-pixbuf/io-ico.c:868
 msgid "The ICO image format"
 msgstr "ICO-kuvamuoto"
 
@@ -1523,7 +1516,7 @@ msgstr "Epämääräinen"
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "Näkyykö \"epämääräinen\" tila"
 
-#: gtk/gtkcolorsel.c:559
+#: gtk/gtkcolorsel.c:561
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1533,7 +1526,7 @@ msgstr ""
 "tämän värin paletin kohtaan tai valita sen nykyiseksi vetämällä sen vieressä "
 "olevaan värilaikkuun."
 
-#: gtk/gtkcolorsel.c:564
+#: gtk/gtkcolorsel.c:566
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1541,11 +1534,11 @@ msgstr ""
 "Valitsemasi väri. Voit vetää tämän värin paletin kohtaan tallentaaksesi sen "
 "myöhempää käyttöä varten."
 
-#: gtk/gtkcolorsel.c:925
+#: gtk/gtkcolorsel.c:927
 msgid "_Save color here"
 msgstr "_Tallenna väri tähän"
 
-#: gtk/gtkcolorsel.c:1128
+#: gtk/gtkcolorsel.c:1132
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1554,47 +1547,47 @@ msgstr ""
 "kohdan vedä väri tähän tai napsauta oikealla painikkeella ja valitse "
 "\"Tallenna väri tähän\"."
 
-#: gtk/gtkcolorsel.c:1752
+#: gtk/gtkcolorsel.c:1756
 msgid "Has Opacity Control"
 msgstr "Peittävyyssäädin on"
 
-#: gtk/gtkcolorsel.c:1753
+#: gtk/gtkcolorsel.c:1757
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Salliiko värivalitsin peittävyyden asettamisen"
 
-#: gtk/gtkcolorsel.c:1759
+#: gtk/gtkcolorsel.c:1763
 msgid "Has palette"
 msgstr "Paletti on"
 
-#: gtk/gtkcolorsel.c:1760
+#: gtk/gtkcolorsel.c:1764
 msgid "Whether a palette should be used"
 msgstr "Käytetäänkö palettia"
 
-#: gtk/gtkcolorsel.c:1766
+#: gtk/gtkcolorsel.c:1770
 msgid "Current Color"
 msgstr "Nykyinen väri"
 
-#: gtk/gtkcolorsel.c:1767
+#: gtk/gtkcolorsel.c:1771
 msgid "The current color"
 msgstr "Nykyinen väri"
 
-#: gtk/gtkcolorsel.c:1773
+#: gtk/gtkcolorsel.c:1777
 msgid "Current Alpha"
 msgstr "Nykyinen alfa-arvo"
 
-#: gtk/gtkcolorsel.c:1774
+#: gtk/gtkcolorsel.c:1778
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Nykyinen peittoarvo (0=kokonaan läpinäkyvä, 65535=täysin peittävä)"
 
-#: gtk/gtkcolorsel.c:1788
+#: gtk/gtkcolorsel.c:1792
 msgid "Custom palette"
 msgstr "Oma paletti"
 
-#: gtk/gtkcolorsel.c:1789
+#: gtk/gtkcolorsel.c:1793
 msgid "Palette to use in the color selector"
 msgstr "Värivalitsimessa käytettävä paletti"
 
-#: gtk/gtkcolorsel.c:1830
+#: gtk/gtkcolorsel.c:1834
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1602,7 +1595,7 @@ msgstr ""
 "Valitse haluamasi väri ulkorenkaasta ja kylläisyys sekä tummuus "
 "sisäkolmiosta."
 
-#: gtk/gtkcolorsel.c:1855
+#: gtk/gtkcolorsel.c:1859
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1610,67 +1603,67 @@ msgstr ""
 "Napsauta pipettiä ja sen jälkeen mitä tahansa ruudun kohtaa valitaksesi "
 "kyseisen kohdan värin."
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1868
 msgid "_Hue:"
 msgstr "_Sävy:"
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1869
 msgid "Position on the color wheel."
 msgstr "Sijainti väripyörällä."
 
-#: gtk/gtkcolorsel.c:1866
+#: gtk/gtkcolorsel.c:1870
 msgid "_Saturation:"
 msgstr "_Kylläisyys:"
 
-#: gtk/gtkcolorsel.c:1867
+#: gtk/gtkcolorsel.c:1871
 msgid "\"Deepness\" of the color."
 msgstr "Värin \"syvyys\"."
 
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1872
 msgid "_Value:"
 msgstr "_Arvo:"
 
-#: gtk/gtkcolorsel.c:1869
+#: gtk/gtkcolorsel.c:1873
 msgid "Brightness of the color."
 msgstr "Värin kirkkaus."
 
-#: gtk/gtkcolorsel.c:1870
+#: gtk/gtkcolorsel.c:1874
 msgid "_Red:"
 msgstr "_Punainen:"
 
-#: gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorsel.c:1875
 msgid "Amount of red light in the color."
 msgstr "Punaisen määrä värissä."
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1876
 msgid "_Green:"
 msgstr "_Vihreä:"
 
-#: gtk/gtkcolorsel.c:1873
+#: gtk/gtkcolorsel.c:1877
 msgid "Amount of green light in the color."
 msgstr "Virheän määrä värissä."
 
-#: gtk/gtkcolorsel.c:1874
+#: gtk/gtkcolorsel.c:1878
 msgid "_Blue:"
 msgstr "S_ininen:"
 
-#: gtk/gtkcolorsel.c:1875
+#: gtk/gtkcolorsel.c:1879
 msgid "Amount of blue light in the color."
 msgstr "Sinisen määrä värissä."
 
-#: gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorsel.c:1882
 msgid "_Opacity:"
 msgstr "P_eitto:"
 
-#: gtk/gtkcolorsel.c:1886
+#: gtk/gtkcolorsel.c:1890
 msgid "Transparency of the currently-selected color."
 msgstr "Valitun värin läpinäkyvyys."
 
-#: gtk/gtkcolorsel.c:1901
+#: gtk/gtkcolorsel.c:1905
 msgid "Color _Name:"
 msgstr "Värin _nimi:"
 
-#: gtk/gtkcolorsel.c:1916
+#: gtk/gtkcolorsel.c:1920
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1678,7 +1671,7 @@ msgstr ""
 "Voit kirjoittaa tähän kenttään HTML-tyylisen heksadesimaaliväriarvon, tai "
 "pelkästään värin nimen, esimerkiksi \"orange\"."
 
-#: gtk/gtkcolorsel.c:1935
+#: gtk/gtkcolorsel.c:1939
 msgid "_Palette"
 msgstr "Pa_letti"
 
@@ -1969,7 +1962,7 @@ msgid "_Files"
 msgstr "_Tiedostot"
 
 # , c-format
-#: gtk/gtkfilesel.c:845 gtk/gtkfilesel.c:2237
+#: gtk/gtkfilesel.c:845 gtk/gtkfilesel.c:2239
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Hakemistoa ei voi lukea: %s"
@@ -1997,14 +1990,14 @@ msgstr "Poista tie_dosto"
 msgid "_Rename File"
 msgstr "_Nimeä uudelleen"
 
-#: gtk/gtkfilesel.c:1429
+#: gtk/gtkfilesel.c:1431
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Hakemistonimi \"%s\" sisältää merkkejä, joita ei voi olla tiedostonimissä"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1433
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2013,34 +2006,34 @@ msgstr ""
 "Virhe luodessa hakemistoa \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1432 gtk/gtkfilesel.c:1668
+#: gtk/gtkfilesel.c:1434 gtk/gtkfilesel.c:1670
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Käytit luultavasti tiedostonimiin kelpaamattomia merkkejä."
 
-#: gtk/gtkfilesel.c:1440
+#: gtk/gtkfilesel.c:1442
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Virhe luodessa hakemistoa \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1474
+#: gtk/gtkfilesel.c:1476
 msgid "New Folder"
 msgstr "Uusi hakemisto"
 
-#: gtk/gtkfilesel.c:1489
+#: gtk/gtkfilesel.c:1491
 msgid "_Folder name:"
 msgstr "_Hakemiston nimi"
 
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1515
 msgid "C_reate"
 msgstr "_Luo"
 
-#: gtk/gtkfilesel.c:1556
+#: gtk/gtkfilesel.c:1558
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Tiedostonimi \"%s\" sisältää merkkejä, joita ei voi olla tiedostonimissä"
 
-#: gtk/gtkfilesel.c:1559
+#: gtk/gtkfilesel.c:1561
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2049,31 +2042,31 @@ msgstr ""
 "Virhe poistaessa tiedostoa \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1561 gtk/gtkfilesel.c:1682
+#: gtk/gtkfilesel.c:1563 gtk/gtkfilesel.c:1684
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Se luultavasti sisältää merkkejä, jotka eivät kelpaa tiedostonimiin."
 
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1572
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Virhe poistaessa tiedostoa \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1613
+#: gtk/gtkfilesel.c:1615
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Haluatko todella poistaa tiedoston \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1620
 msgid "Delete File"
 msgstr "Poista tiedosto"
 
-#: gtk/gtkfilesel.c:1664 gtk/gtkfilesel.c:1678
+#: gtk/gtkfilesel.c:1666 gtk/gtkfilesel.c:1680
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Tiedostonimi \"%s\" sisältää merkkejä, joita ei voi olla tiedostonimissä"
 
-#: gtk/gtkfilesel.c:1666
+#: gtk/gtkfilesel.c:1668
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2082,7 +2075,7 @@ msgstr ""
 "Virhe nimetessä tiedostoa nimelle \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1680
+#: gtk/gtkfilesel.c:1682
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2091,29 +2084,29 @@ msgstr ""
 "Virhe nimetessä tiedostoa nimelle \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1690
+#: gtk/gtkfilesel.c:1692
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Virhe nimetessä tiedostoa \"%s\" nimelle \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1737
+#: gtk/gtkfilesel.c:1739
 msgid "Rename File"
 msgstr "Nimeä tiedosto uudelleen"
 
-#: gtk/gtkfilesel.c:1752
+#: gtk/gtkfilesel.c:1754
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Nimeä tiedosto \"%s\" uudelleen:"
 
-#: gtk/gtkfilesel.c:1781
+#: gtk/gtkfilesel.c:1783
 msgid "_Rename"
 msgstr "_Nimeä uudelleen"
 
-#: gtk/gtkfilesel.c:2217
+#: gtk/gtkfilesel.c:2219
 msgid "_Selection: "
 msgstr "_Valinta: "
 
-#: gtk/gtkfilesel.c:3111
+#: gtk/gtkfilesel.c:3097
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2122,15 +2115,15 @@ msgstr ""
 "Ei voinut muuntaa tiedostonimeä \"%s\" UTF-8:ksi. (Kokeile "
 "ympäristömuuttujan G_BROKEN_FILENAMES asettamista): %s"
 
-#: gtk/gtkfilesel.c:3114
+#: gtk/gtkfilesel.c:3100
 msgid "Invalid Utf-8"
 msgstr "Virheellistä UTF-8:aa"
 
-#: gtk/gtkfilesel.c:3991
+#: gtk/gtkfilesel.c:3977
 msgid "Name too long"
 msgstr "Nimi on liian pitkä"
 
-#: gtk/gtkfilesel.c:3993
+#: gtk/gtkfilesel.c:3979
 msgid "Couldn't convert filename"
 msgstr "Ei voinut muuntaa tiedostonimeä"
 
@@ -2178,7 +2171,7 @@ msgstr "Kirjasinlajin esittelemiseksi näkyvä teksti"
 
 #: gtk/gtkfontsel.c:332
 msgid "_Family:"
-msgstr "_Perhe:"
+msgstr "Pe_rhe:"
 
 #: gtk/gtkfontsel.c:338
 msgid "_Style:"
@@ -2186,7 +2179,7 @@ msgstr "_Tyyli:"
 
 #: gtk/gtkfontsel.c:344
 msgid "Si_ze:"
-msgstr "K_oko:"
+msgstr "_Koko:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:469
@@ -4319,7 +4312,7 @@ msgstr "Säätimen vaakasäätö"
 msgid "Vertical Adjustment for the widget"
 msgstr "Säätimen pystysäätö"
 
-#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:433
+#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:505
 msgid "Visible"
 msgstr "Näkyvä"
 
@@ -4549,27 +4542,27 @@ msgstr "GtkAdjustment, joka määrää tämän näköaukon pystysijainnin arvot"
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "Määrää miten varjostettu laatikko näköaukon ympärille piirtyy"
 
-#: gtk/gtkwidget.c:400
+#: gtk/gtkwidget.c:472
 msgid "Widget name"
 msgstr "Säätimen nimi"
 
-#: gtk/gtkwidget.c:401
+#: gtk/gtkwidget.c:473
 msgid "The name of the widget"
 msgstr "Säätimen nimi"
 
-#: gtk/gtkwidget.c:407
+#: gtk/gtkwidget.c:479
 msgid "Parent widget"
 msgstr "Emosäädin"
 
-#: gtk/gtkwidget.c:408
+#: gtk/gtkwidget.c:480
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "Tämän säätimen emosäädin. Sen täytyy olla säilö."
 
-#: gtk/gtkwidget.c:415
+#: gtk/gtkwidget.c:487
 msgid "Width request"
 msgstr "Leveysvaatimus"
 
-#: gtk/gtkwidget.c:416
+#: gtk/gtkwidget.c:488
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -4577,11 +4570,11 @@ msgstr ""
 "Säätimen vaatiman koon sivuuttava koko tai -1 jos halutaan luonnollinen "
 "vaatimus"
 
-#: gtk/gtkwidget.c:424
+#: gtk/gtkwidget.c:496
 msgid "Height request"
 msgstr "Korkeusvaatimus"
 
-#: gtk/gtkwidget.c:425
+#: gtk/gtkwidget.c:497
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -4589,158 +4582,158 @@ msgstr ""
 "Säätimen vaatiman koon sivuuttava koko tai -1 jos halutaan luonnollinen "
 "vaatimus"
 
-#: gtk/gtkwidget.c:434
+#: gtk/gtkwidget.c:506
 msgid "Whether the widget is visible"
 msgstr "Onko tämä säädin näkyvä"
 
-#: gtk/gtkwidget.c:440
+#: gtk/gtkwidget.c:512
 msgid "Sensitive"
 msgstr "Herkkä"
 
-#: gtk/gtkwidget.c:441
+#: gtk/gtkwidget.c:513
 msgid "Whether the widget responds to input"
 msgstr "Reagoiko säädin syötteeseen"
 
-#: gtk/gtkwidget.c:447
+#: gtk/gtkwidget.c:519
 msgid "Application paintable"
 msgstr "Sovellus voi piirtää"
 
-#: gtk/gtkwidget.c:448
+#: gtk/gtkwidget.c:520
 msgid "Whether the application will paint directly on the widget"
 msgstr "Voiko sovellus piirtää itse tälle säätimelle"
 
-#: gtk/gtkwidget.c:454
+#: gtk/gtkwidget.c:526
 msgid "Can focus"
 msgstr "Voi kohdistua"
 
-#: gtk/gtkwidget.c:455
+#: gtk/gtkwidget.c:527
 msgid "Whether the widget can accept the input focus"
 msgstr "Voiko tällä säätimellä olla syöttökohdistus"
 
-#: gtk/gtkwidget.c:461
+#: gtk/gtkwidget.c:533
 msgid "Has focus"
 msgstr "Kohdistus on"
 
-#: gtk/gtkwidget.c:462
+#: gtk/gtkwidget.c:534
 msgid "Whether the widget has the input focus"
 msgstr "Onko tällä ikkunalla syöttökohdistus"
 
-#: gtk/gtkwidget.c:468
+#: gtk/gtkwidget.c:540
 msgid "Is focus"
 msgstr "Kohdistus on"
 
-#: gtk/gtkwidget.c:469
+#: gtk/gtkwidget.c:541
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Onko tämä säädin ylätasolla kohdistuva"
 
-#: gtk/gtkwidget.c:475
+#: gtk/gtkwidget.c:547
 msgid "Can default"
 msgstr "Voi olla oletus"
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:548
 msgid "Whether the widget can be the default widget"
 msgstr "Voiko säädin olla oletussäädin"
 
-#: gtk/gtkwidget.c:482
+#: gtk/gtkwidget.c:554
 msgid "Has default"
 msgstr "On oletus"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:555
 msgid "Whether the widget is the default widget"
 msgstr "Onko tämä säädin oletussäädin"
 
-#: gtk/gtkwidget.c:489
+#: gtk/gtkwidget.c:561
 msgid "Receives default"
 msgstr "Vastaanottaa oletuksen"
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:562
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Jos TRUE, tämä säädin vastaanottaa oletustapahtuman, kun se kohdistetaan"
 
-#: gtk/gtkwidget.c:496
+#: gtk/gtkwidget.c:568
 msgid "Composite child"
 msgstr "Säädinyhdistelmän osa"
 
-#: gtk/gtkwidget.c:497
+#: gtk/gtkwidget.c:569
 msgid "Whether the widget is part of a composite widget"
 msgstr "Onko tämä säädin osa säädinyhdistelmää"
 
-#: gtk/gtkwidget.c:503
+#: gtk/gtkwidget.c:575
 msgid "Style"
 msgstr "Tyyli"
 
-#: gtk/gtkwidget.c:504
+#: gtk/gtkwidget.c:576
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "Säätimen tyyli, joka sisältää tietoa sen ulkonäöstä (värit yms.)"
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:582
 msgid "Events"
 msgstr "Tapahtumat"
 
-#: gtk/gtkwidget.c:511
+#: gtk/gtkwidget.c:583
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Tapahtumapeite, joka määrittää, mitä GdkEventtejä tämä säädin vastaanottaa"
 
-#: gtk/gtkwidget.c:518
+#: gtk/gtkwidget.c:590
 msgid "Extension events"
 msgstr "Laajennostapahtumat"
 
-#: gtk/gtkwidget.c:519
+#: gtk/gtkwidget.c:591
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "Tapahtumapeite, joka määrittää, mitä laajennostapahtumia tämä säädin "
 "vastaanottaa"
 
-#: gtk/gtkwidget.c:1098
+#: gtk/gtkwidget.c:1170
 msgid "Interior Focus"
 msgstr "Kohdistus sisällä"
 
-#: gtk/gtkwidget.c:1099
+#: gtk/gtkwidget.c:1171
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Piirtyykö kohdistusilmaisin säätimien sisälle"
 
-#: gtk/gtkwidget.c:1105
+#: gtk/gtkwidget.c:1177
 msgid "Focus linewidth"
 msgstr "Kohdistusviivan leveys"
 
-#: gtk/gtkwidget.c:1106
+#: gtk/gtkwidget.c:1178
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Kohdistusilmaisimen viivan leveys kuvapisteinä"
 
-#: gtk/gtkwidget.c:1112
+#: gtk/gtkwidget.c:1184
 msgid "Focus line dash pattern"
 msgstr "Kohdistusviivan kuvio"
 
-#: gtk/gtkwidget.c:1113
+#: gtk/gtkwidget.c:1185
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Kohdistusilmaisimen viivakuvio"
 
-#: gtk/gtkwidget.c:1118
+#: gtk/gtkwidget.c:1190
 msgid "Focus padding"
 msgstr "Kohdistusväli"
 
-#: gtk/gtkwidget.c:1119
+#: gtk/gtkwidget.c:1191
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Säätimen \"laatikon\" ja kohdistusilmaisimen välinen leveys kuvapisteinä"
 
-#: gtk/gtkwidget.c:1124
+#: gtk/gtkwidget.c:1196
 msgid "Cursor color"
 msgstr "Kohdistimen väri"
 
-#: gtk/gtkwidget.c:1125
+#: gtk/gtkwidget.c:1197
 msgid "Color with which to draw insertion cursor"
 msgstr "Minkä värisenä syöttökohdistin piirtyy"
 
-#: gtk/gtkwidget.c:1130
+#: gtk/gtkwidget.c:1202
 msgid "Secondary cursor color"
 msgstr "Toissijainen kohdistimen väri"
 
-#: gtk/gtkwidget.c:1131
+#: gtk/gtkwidget.c:1203
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4748,11 +4741,11 @@ msgstr ""
 "Väri, jolla toissijainen lisäyskohdistin piirtyy, kun muokataan sekaisin "
 "vasemmalta oikealle ja oikealta vasemmalle kulkevaa tekstiä"
 
-#: gtk/gtkwidget.c:1136
+#: gtk/gtkwidget.c:1208
 msgid "Cursor line aspect ratio"
 msgstr "Kohdistinviivan sivusuhde"
 
-#: gtk/gtkwidget.c:1137
+#: gtk/gtkwidget.c:1209
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Lisäyskohdistimen piirrettävien sivujen suhde"
 
@@ -4940,18 +4933,18 @@ msgstr "Vietnam (VIQR)"
 msgid "X Input Method"
 msgstr "X-syöttötapa"
 
-#: modules/input/gtkimcontextxim.c:263
+#: modules/input/gtkimcontextxim.c:276
 msgid "IM Preedit style"
 msgstr "Syöttötavan esimuokkaustyyli"
 
-#: modules/input/gtkimcontextxim.c:264
+#: modules/input/gtkimcontextxim.c:277
 msgid "How to draw the input method preedit string"
 msgstr "Miten syöttötavan esimuokattava merkkijono piirtyy"
 
-#: modules/input/gtkimcontextxim.c:272
+#: modules/input/gtkimcontextxim.c:285
 msgid "IM Status style"
 msgstr "Syöttötavan tilan tyyli"
 
-#: modules/input/gtkimcontextxim.c:273
+#: modules/input/gtkimcontextxim.c:286
 msgid "How to draw the input method statusbar"
 msgstr "Miten syöttötapojen tilarivi piirtyy"
