@@ -499,5 +499,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (menushell, menuitem);
     }
+
+  g_free (contexts);
 }
 

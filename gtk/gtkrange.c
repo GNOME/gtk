@@ -413,6 +413,9 @@ gtk_range_init (GtkRange *range)
   range->need_recalc = TRUE;
   range->round_digits = -1;
   range->layout = g_new0 (GtkRangeLayout, 1);
+  range->layout->mouse_location = MOUSE_OUTSIDE;
+  range->layout->mouse_x = -1;
+  range->layout->mouse_y = -1;
   range->layout->grab_location = MOUSE_OUTSIDE;
   range->layout->grab_button = 0;
   range->timer = NULL;  

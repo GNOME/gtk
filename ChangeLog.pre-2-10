@@ -1,3 +1,11 @@
+Wed Jun 12 15:38:01 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimmulticontext.c (gtk_im_multicontext_append_menuitems):
+	Fix memory leak. (Patch from Matthias Clasen, #84926)
+
+	* gtk/gtkrange.c (gtk_range_init): Initialize
+	mouse_x, mouse_y to -1,-1. (#84871, Garrett Lesage)
+
 Wed Jun 12 15:08:37 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_get_style_by_paths): Allow 
