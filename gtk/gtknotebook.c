@@ -1309,9 +1309,14 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
       GdkRectangle position;
 
       if (gtk_notebook_get_event_window_position (notebook, &position))
-	gdk_window_move_resize (notebook->event_window,
-				position.x, position.y,
-				position.width, position.height);
+	{
+	  gdk_window_move_resize (notebook->event_window,
+				  position.x, position.y,
+				  position.width, position.height);
+	  gdk_window_show_unraised (notebook->event_window);
+	}
+      else
+	gdk_window_hide (notebook->event_window);
     }
 
   if (notebook->children)
@@ -2412,10 +2417,6 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
     }
   
   g_free (page);
-
-  if (!notebook->children && notebook->show_tabs &&
-      GTK_WIDGET_MAPPED (notebook))
-    gdk_window_hide (notebook->event_window);
 
   gtk_notebook_update_labels (notebook);
   if (need_resize)
@@ -4097,9 +4098,6 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
 			"mnemonic_activate",
 			G_CALLBACK (gtk_notebook_mnemonic_activate_switch_page),
 			notebook);
-
-  if (notebook->show_tabs && GTK_WIDGET_MAPPED (notebook))
-    gdk_window_show_unraised (notebook->event_window);
 
   gtk_widget_child_notify (child, "tab_expand");
   gtk_widget_child_notify (child, "tab_fill");
