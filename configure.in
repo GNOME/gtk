@@ -1,6 +1,17 @@
 # Process this file with autoconf to produce a configure script.
 AC_INIT(gdk/gdktypes.h)
 
+# In the following, there are a the following variants
+# of GLib cflags and libs variables
+#
+# GLIB_CFLAGS:  cflags for compiling libraries and example progs
+# GLIB_LIBS:    libraries for linking example programs
+# GLIB_DEPLIBS: libraries for linking libraries against
+# glib_cflags:  cflags to store in gtk-config
+# glib_libs:    libs to store in gtk-config
+# glib_thread_cflags: cflags to store in gtk-config for gtk-config gthread
+# glib_thread_libs:   libs to store in gtk-config for gtk-config gthread
+
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
 
@@ -193,7 +204,9 @@ if test x$with_glib = x ; then
 
   # we do not want to make all gtk progs to link to thread libraries.
   glib_cflags=`$GLIB_CONFIG glib gmodule --cflags`
+  glib_thread_cflags="$GLIB_CFLAGS"
   glib_libs=`$GLIB_CONFIG glib gmodule --libs`
+  glib_thread_libs="$GLIB_LIBS"
   GLIB_LIBS="$glib_libs"
   GLIB_DEPLIBS="$glib_libs"
 else
@@ -208,7 +221,9 @@ else
 
   # For use in gtk-config
   glib_cflags=`$GLIB_CONFIG --cflags gmodule`
+  glib_thread_cflags=`$GLIB_CONFIG --cflags gmodule gthread`
   glib_libs=`$GLIB_CONFIG --libs gmodule`
+  glib_thread_libs=`$GLIB_CONFIG --libs gmodule gthread`
 
   glib_release=`$GLIB_CONFIG --version | sed 's%\\.[[0-9]]*$%%'`
 
@@ -232,6 +247,8 @@ fi
 
 AC_SUBST(glib_cflags)
 AC_SUBST(glib_libs)
+AC_SUBST(glib_thread_cflags)
+AC_SUBST(glib_thread_libs)
 AC_SUBST(GLIB_DEPLIBS)
 
 # Find the X11 include and library directories
