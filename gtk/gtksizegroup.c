@@ -358,8 +358,13 @@ gtk_size_group_set_mode (GtkSizeGroup     *size_group,
 
   if (size_group->mode != mode)
     {
+      if (size_group->mode != GTK_SIZE_GROUP_NONE)
+	queue_resize_on_group (size_group);
       size_group->mode = mode;
-      queue_resize_on_group (size_group);
+      if (size_group->mode != GTK_SIZE_GROUP_NONE)
+	queue_resize_on_group (size_group);
+
+      g_object_notify (G_OBJECT (size_group), "mode");
     }
 }
 

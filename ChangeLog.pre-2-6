@@ -1,3 +1,10 @@
+Sun Nov  4 18:39:43 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksizegroup.c (gtk_size_group_set_mode): 
+	queue_resize_on_group with both the old and new mode, not
+	just the new mode. (#60171, Nicolas Setton). Also, notify
+	the "mode" property.
+	
 Sun Nov  4 16:02:08 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.[ch]: Add a function gdk_window_invalidate_maybe_recurse() 
