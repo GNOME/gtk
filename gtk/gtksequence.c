@@ -1008,11 +1008,7 @@ _gtk_sequence_node_insert_sorted (GtkSequenceNode *node,
   
   if (node_compare (new, closest, &info) > 0)
     closest = _gtk_sequence_node_next (closest);
-  
-  /* this can never fail since we have a bigger-than-everything
-   * end-node
-   */
-  g_assert (node_compare (new, closest, &info) <= 0);
+
   _gtk_sequence_node_insert_before (closest, new);
 }
 

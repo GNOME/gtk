@@ -1,3 +1,8 @@
+Sat Oct 23 16:14:37 2004  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtksequence.c (_gtk_sequence_node_insert_sorted): Remove
+	assertion that can get triggered by broken sort functions.
+
 Sat Oct 23 16:07:46 2004  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtksequence.c (_gtk_sequence_swap): Replace broken, overly
