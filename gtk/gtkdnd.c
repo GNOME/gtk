@@ -1812,24 +1812,16 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
  * Source side *
  ***************/
 
-/*************************************************************
- * gtk_drag_begin: Start a drag operation
- *     
- *   arguments:
- *     widget:   Widget from which drag starts
- *     handlers: List of handlers to supply the data for the drag
- *     button:   Button user used to start drag
- *     time:     Time of event starting drag
- *
- *   results:
- *************************************************************/
-
-GdkDragContext *
-gtk_drag_begin (GtkWidget         *widget,
-		GtkTargetList     *target_list,
-		GdkDragAction      actions,
-		gint               button,
-		GdkEvent          *event)
+/* Like GtkDragBegin, but also takes a GtkDragSourceSite,
+ * so that we can set the icon from the source site information
+ */
+static GdkDragContext *
+gtk_drag_begin_internal (GtkWidget         *widget,
+			 GtkDragSourceSite *site,
+			 GtkTargetList     *target_list,
+			 GdkDragAction      actions,
+			 gint               button,
+			 GdkEvent          *event)
 {
   GtkDragSourceInfo *info;
   GList *targets = NULL;
@@ -1840,10 +1832,6 @@ gtk_drag_begin (GtkWidget         *widget,
   GtkWidget *ipc_widget;
   GdkCursor *cursor;
  
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), NULL);
-  g_return_val_if_fail (target_list != NULL, NULL);
-
   ipc_widget = gtk_drag_get_ipc_widget (gtk_widget_get_screen (widget));
   
   gtk_drag_get_event_actions (event, button, actions,
@@ -1925,7 +1913,42 @@ gtk_drag_begin (GtkWidget         *widget,
 
   g_signal_emit_by_name (widget, "drag_begin",
 			 info->context);
-  
+
+  /* Ensure that we have an icon before we start the drag; the
+   * application may have set one in ::drag_begin, or it may
+   * not have set one.
+   */
+  if (!info->icon_window)
+    {
+      if (!site || site->icon_type == GTK_IMAGE_EMPTY)
+	gtk_drag_set_icon_default (context);
+      else
+	switch (site->icon_type)
+	  {
+	  case GTK_IMAGE_PIXMAP:
+	    gtk_drag_set_icon_pixmap (context,
+				      site->colormap,
+				      site->icon_data.pixmap.pixmap,
+				      site->icon_mask,
+				      -2, -2);
+	    break;
+	  case GTK_IMAGE_PIXBUF:
+	    gtk_drag_set_icon_pixbuf (context,
+				      site->icon_data.pixbuf.pixbuf,
+				      -2, -2);
+	    break;
+	  case GTK_IMAGE_STOCK:
+	    gtk_drag_set_icon_stock (context,
+				     site->icon_data.stock.stock_id,
+				     -2, -2);
+	    break;
+	  case GTK_IMAGE_EMPTY:
+	  default:
+	    g_assert_not_reached();
+	    break;
+	  }
+    }
+	      
   if (event && event->type == GDK_MOTION_NOTIFY)
     gtk_drag_motion_cb (info->ipc_widget, (GdkEventMotion *)event, info);
 
@@ -1947,6 +1970,37 @@ gtk_drag_begin (GtkWidget         *widget,
   info->grab_time = time;
 
   return info->context;
+}
+
+/**
+ * gtk_drag_begin:
+ * @widget: the source widget.
+ * @target_list: The targets (data formats) in which the
+ *    source can provide the data.
+ * @actions: A bitmask of the allowed drag actions for this drag.
+ * @button: The button the user clicked to start the drag.
+ * @event: The event that triggered the start of the drag.
+ * 
+ * Initiates a drag on the source side. The function
+ * only needs to be used when the application is
+ * starting drags itself, and is not needed when
+ * gtk_drag_source_set() is used.
+ * 
+ * Return value: the context for this drag.
+ **/
+GdkDragContext *
+gtk_drag_begin (GtkWidget         *widget,
+		GtkTargetList     *target_list,
+		GdkDragAction      actions,
+		gint               button,
+		GdkEvent          *event)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), NULL);
+  g_return_val_if_fail (target_list != NULL, NULL);
+
+  return gtk_drag_begin_internal (widget, NULL, target_list,
+				  actions, button, event);
 }
 
 /*************************************************************
@@ -2888,45 +2942,12 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 	  if (gtk_drag_check_threshold (widget, site->x, site->y,
 					event->motion.x, event->motion.y))
 	    {
-	      GtkDragSourceInfo *info;
 	      GdkDragContext *context;
 	      
 	      site->state = 0;
-	      context = gtk_drag_begin (widget, site->target_list,
-					site->actions, 
-					i, event);
-
-	      info = gtk_drag_get_source_info (context, FALSE);
-
-	      if (!info->icon_window)
-		{
-		  switch (site->icon_type)
-		    {
-		    case GTK_IMAGE_EMPTY:
-		      gtk_drag_set_icon_default (context);
-		      break;
-		    case GTK_IMAGE_PIXMAP:
-		      gtk_drag_set_icon_pixmap (context,
-						site->colormap,
-						site->icon_data.pixmap.pixmap,
-						site->icon_mask,
-						-2, -2);
-		      break;
-		    case GTK_IMAGE_PIXBUF:
-		      gtk_drag_set_icon_pixbuf (context,
-						site->icon_data.pixbuf.pixbuf,
-						-2, -2);
-		      break;
-		    case GTK_IMAGE_STOCK:
-		      gtk_drag_set_icon_stock (context,
-					       site->icon_data.stock.stock_id,
-					       -2, -2);
-		      break;
-		    default:
-		      g_assert_not_reached();
-		      break;
-		    }
-		}
+	      context = gtk_drag_begin_internal (widget, site, site->target_list,
+						 site->actions, 
+						 i, event);
 
 	      retval = TRUE;
 	    }
