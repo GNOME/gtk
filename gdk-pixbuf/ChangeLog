@@ -1,3 +1,10 @@
+2005-01-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_new_with_type) 
+	(gdk_pixbuf_loader_new_with_mime_type): Close the loader
+	before unreffing it in the error case.  (#164915, Crispin 
+	Flowerday)
+
 2005-01-12  Owen Taylor <otaylor@redhat.com>
 
 	* Makefile.am: 	Use grep | head -n 1 instead of grep -m 1 
