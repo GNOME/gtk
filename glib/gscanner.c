@@ -243,7 +243,7 @@ g_scanner_msg_handler (GScanner	        *scanner,
   fprintf (stdout, "%s:%d: ", scanner->input_name, scanner->line);
   if (is_error)
     fprintf (stdout, "error: ");
-  fprintf (stdout, "%s", message);
+  fprintf (stdout, "%s\n", message);
 }
 
 void
@@ -387,6 +387,39 @@ g_scanner_lookup_symbol (GScanner	*scanner,
     return hash_val->value;
   else
     return NULL;
+}
+
+static void
+g_scanner_foreach_internal (gpointer  key,
+			    gpointer  value,
+			    gpointer  user_data)
+{
+  register GScannerHashVal *hash_val;
+  register GHFunc func;
+  register gpointer func_data;
+  register gpointer *d;
+
+  d = user_data;
+  func = d[0];
+  func_data = d[1];
+  hash_val = value;
+
+  func (key, hash_val->value, func_data);
+}
+
+void
+g_scanner_foreach_symbol (GScanner       *scanner,
+			  GHFunc          func,
+			  gpointer        func_data)
+{
+  gpointer d[2];
+
+  g_return_if_fail (scanner != NULL);
+
+  d[0] = func;
+  d[1] = func_data;
+
+  g_hash_table_foreach (scanner->symbol_table, g_scanner_foreach_internal, d);
 }
 
 void
@@ -867,7 +900,7 @@ g_scanner_stat_mode (const gchar *filename)
 
   stat_buf = g_new0 (struct stat, 1);
 
-  stat (filename, stat_buf);
+  lstat (filename, stat_buf);
 
   st_mode = stat_buf->st_mode;
 

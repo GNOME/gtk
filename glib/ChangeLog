@@ -1,3 +1,13 @@
+Fri May 15 00:56:59 1998  Tim Janik  <timj@gtk.org>
+
+	* glib.h: further support for gcc function attributes: G_GNUC_FORMAT,
+	G_GNUC_NORETURN and G_GNUC_CONST.
+
+	* gscanner.c (g_scanner_stat_mode): changed stat() to lstat().
+	(g_scanner_msg_handler): "\n" at end of line!
+	(g_scanner_foreach_symbol): new function to iterate over the symbol
+ 	table (GScanner does value-wrapping).
+
 Thu May 14 04:14:12 1998  Tim Janik  <timj@gtk.org>
 
 	* glib.h: typedef gint gboolean;

@@ -668,11 +668,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_widget_marshal_signal_4,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
-  widget_signals[OTHER_EVENT] =
-    gtk_signal_new ("other_event",
+  widget_signals[VISIBILITY_NOTIFY_EVENT] =
+    gtk_signal_new ("visibility_notify_event",
 		    GTK_RUN_LAST,
 		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, other_event),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, visibility_notify_event),
 		    gtk_widget_marshal_signal_4,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
@@ -692,13 +692,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_widget_marshal_signal_4,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
-  widget_signals[VISIBILITY_NOTIFY_EVENT] =
-    gtk_signal_new ("visibility_notify_event",
+  widget_signals[OTHER_EVENT] =
+    gtk_signal_new ("other_event",
 		    GTK_RUN_LAST,
 		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, visibility_notify_event),
-		    gtk_widget_marshal_signal_1,
-		    GTK_TYPE_NONE, 1,
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, other_event),
+		    gtk_widget_marshal_signal_4,
+		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
 
   gtk_object_class_add_signals (object_class, widget_signals, LAST_SIGNAL);

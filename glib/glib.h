@@ -136,16 +136,25 @@
 #  endif
 #endif
 
-/* Provide macros to feature the GCC printf format function attribute.
+/* Provide macros to feature GCC function attributes.
  */
 #if	__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
 #define G_GNUC_PRINTF( format_idx, arg_idx )	\
   __attribute__((format (printf, format_idx, arg_idx)))
 #define G_GNUC_SCANF( format_idx, arg_idx )	\
   __attribute__((format (scanf, format_idx, arg_idx)))
+#define G_GNUC_FORMAT( arg_idx )		\
+  __attribute__((format_arg (arg_idx)))
+#define	G_GNUC_NORETURN				\
+  __attribute__((noreturn))
+#define	G_GNUC_CONST				\
+  __attribute__((const))
 #else   /* !__GNUC__ */
 #define G_GNUC_PRINTF( format_idx, arg_idx )
 #define G_GNUC_SCANF( format_idx, arg_idx )
+#define	G_GNUC_FORMAT( arg_idx )
+#define	G_GNUC_NORETURN
+#define	G_GNUC_CONST
 #endif  /* !__GNUC__ */
 
 /* Wrap the __PRETTY_FUNCTION__ and __FUNCTION__ variables with macros,
@@ -706,7 +715,7 @@ gdouble g_timer_elapsed (GTimer	 *timer,
 
 /* Output
  */
-void g_error   (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
+void g_error   (const gchar *format, ...) G_GNUC_PRINTF (1, 2) G_GNUC_NORETURN;
 void g_warning (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 void g_message (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 void g_print   (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
@@ -1031,6 +1040,9 @@ void		g_scanner_add_symbol		(GScanner	*scanner,
 						 gpointer	value);
 gpointer	g_scanner_lookup_symbol		(GScanner	*scanner,
 						 const gchar	*symbol);
+void		g_scanner_foreach_symbol	(GScanner	*scanner,
+						 GHFunc		 func,
+						 gpointer	 func_data);
 void		g_scanner_remove_symbol		(GScanner	*scanner,
 						 const gchar	*symbol);
 void		g_scanner_unexp_token		(GScanner	*scanner,

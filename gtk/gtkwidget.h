@@ -321,21 +321,20 @@ struct _GtkWidgetClass
 				    GdkEventDropEnter  *event);
   gint (* drop_leave_event)	   (GtkWidget	       *widget,
 				    GdkEventDropLeave  *event);
-  gint (* drop_data_available_event)   (GtkWidget	  *widget,
-					GdkEventDropDataAvailable *event);
+  gint (* drop_data_available_event)(GtkWidget	       *widget,
+				     GdkEventDropDataAvailable *event);
+  gint (* visibility_notify_event)  (GtkWidget	       *widget,
+				     GdkEventVisibility *event);
+  gint (* client_event)		   (GtkWidget	       *widget,
+				    GdkEventClient     *event);
+  gint (* no_expose_event)	   (GtkWidget	       *widget,
+				    GdkEventAny	       *event);
   gint (* other_event)		   (GtkWidget	       *widget,
 				    GdkEventOther      *event);
   
   /* selection */
   void (* selection_received)  (GtkWidget      *widget,
 				GtkSelectionData *selection_data);
-  
-  gint (* client_event)		   (GtkWidget	       *widget,
-				    GdkEventClient     *event);
-  gint (* no_expose_event)	   (GtkWidget	       *widget,
-				    GdkEventAny	       *event);
-  void (* visibility_notify_event) (GtkWidget	       *widget,
-				    GdkEventVisibility *event);
 };
 
 struct _GtkWidgetAuxInfo
