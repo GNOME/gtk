@@ -639,6 +639,20 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 								 TRUE,
 								 G_PARAM_READABLE));
 
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_boxed ("even_row_color",
+                                                               _("Even Row Color"),
+                                                               _("Color to use for even rows"),
+							       GDK_TYPE_COLOR,
+G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_boxed ("odd_row_color",
+                                                               _("Odd Row Color"),
+                                                               _("Color to use for odd rows"),
+							       GDK_TYPE_COLOR,
+G_PARAM_READABLE));
+
   /* Signals */
   widget_class->set_scroll_adjustments_signal =
     g_signal_new ("set_scroll_adjustments",

@@ -1,3 +1,41 @@
+Wed Oct 23 01:03:43 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Another feature to create truly ugly TreeViews!: style properties
+	for the even/odd colors used for row hinting. (#71595, reported
+	by Owen Taylor).
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): add even_row_color
+	and odd_row_color style properties.
+
+	* gtk/gtkstyle.c (get_darkened_gc): support darken_count == 0 case,
+	(gtk_default_draw_flat_box): rework cell coloring code to support
+	user-provided even/odd row colors.
+
+Wed Oct 23 01:01:52 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Cache signal IDs to speed up signal emission. This is a good speedup
+	because GtkTreeModel emits a big number of signals.
+
+	* gtk/gtktreemodel.c (gtk_tree_model_base_init): save IDs returned
+	by g_signal_new,
+	(gtk_tree_model_row_changed): use g_signal_emit instead of
+	g_signal_emit_by_name,
+	(gtk_tree_model_row_inserted): ditto,
+	(gtk_tree_model_row_has_child_toggled): ditto,
+	(gtk_tree_model_row_deleted): ditto,
+	(gtk_tree_model_rows_reordered): ditto.
+	
+Wed Oct 23 00:56:15 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeselection.c (model_changed): new function,
+	(gtk_tree_selection_selected_foreach): monitor changes in the model,
+	bail out if the model has been changed from the foreach func.
+	(#50263, reported by Havoc Pennington).
+
+	* gtk/gtktreeselection.c (_gtk_tree_selection_internal_select_node):
+	free anchor if applicable (#94868, reported and testcase provided by
+	Daniel Elstner).
+
 2002-10-23  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/linux-fb/gdkselection-fb.c (gdk_text_property_to_utf8_list_for_display): 

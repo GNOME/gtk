@@ -37,6 +37,18 @@
     }G_STMT_END
 
 
+enum {
+  ROW_CHANGED,
+  ROW_INSERTED,
+  ROW_HAS_CHILD_TOGGLED,
+  ROW_DELETED,
+  ROWS_REORDERED,
+  LAST_SIGNAL
+};
+
+static guint tree_model_signals[LAST_SIGNAL] = { 0 };
+
+
 struct _GtkTreePath
 {
   gint depth;
@@ -83,51 +95,56 @@ gtk_tree_model_base_init (gpointer g_class)
 
   if (! initialized)
     {
-      g_signal_new ("row_changed",
-                    GTK_TYPE_TREE_MODEL,
-                    G_SIGNAL_RUN_LAST,
-                    G_STRUCT_OFFSET (GtkTreeModelIface, row_changed),
-                    NULL, NULL,
-                    _gtk_marshal_VOID__BOXED_BOXED,
-                    G_TYPE_NONE, 2,
-                    GTK_TYPE_TREE_PATH,
-                    GTK_TYPE_TREE_ITER);
-      g_signal_new ("row_inserted",
-                    GTK_TYPE_TREE_MODEL,
-                    G_SIGNAL_RUN_LAST,
-                    G_STRUCT_OFFSET (GtkTreeModelIface, row_inserted),
-                    NULL, NULL,
-                    _gtk_marshal_VOID__BOXED_BOXED,
-                    G_TYPE_NONE, 2,
-                    GTK_TYPE_TREE_PATH,
-                    GTK_TYPE_TREE_ITER);
-      g_signal_new ("row_has_child_toggled",
-                    GTK_TYPE_TREE_MODEL,
-                    G_SIGNAL_RUN_LAST,
-                    G_STRUCT_OFFSET (GtkTreeModelIface, row_has_child_toggled),
-                    NULL, NULL,
-                    _gtk_marshal_VOID__BOXED_BOXED,
-                    G_TYPE_NONE, 2,
-                    GTK_TYPE_TREE_PATH,
-                    GTK_TYPE_TREE_ITER);
-      g_signal_new ("row_deleted",
-                    GTK_TYPE_TREE_MODEL,
-                    G_SIGNAL_RUN_LAST,
-                    G_STRUCT_OFFSET (GtkTreeModelIface, row_deleted),
-                    NULL, NULL,
-                    _gtk_marshal_VOID__BOXED,
-                    G_TYPE_NONE, 1,
-                    GTK_TYPE_TREE_PATH);
-      g_signal_new ("rows_reordered",
-                    GTK_TYPE_TREE_MODEL,
-                    G_SIGNAL_RUN_LAST,
-                    G_STRUCT_OFFSET (GtkTreeModelIface, rows_reordered),
-                    NULL, NULL,
-                    _gtk_marshal_VOID__BOXED_BOXED_POINTER,
-                    G_TYPE_NONE, 3,
-                    GTK_TYPE_TREE_PATH,
-                    GTK_TYPE_TREE_ITER,
-                    G_TYPE_POINTER);
+      tree_model_signals[ROW_CHANGED] =
+        g_signal_new ("row_changed",
+                      GTK_TYPE_TREE_MODEL,
+                      G_SIGNAL_RUN_LAST,
+                      G_STRUCT_OFFSET (GtkTreeModelIface, row_changed),
+                      NULL, NULL,
+                      _gtk_marshal_VOID__BOXED_BOXED,
+                      G_TYPE_NONE, 2,
+                      GTK_TYPE_TREE_PATH,
+                      GTK_TYPE_TREE_ITER);
+      tree_model_signals[ROW_INSERTED] =
+        g_signal_new ("row_inserted",
+                      GTK_TYPE_TREE_MODEL,
+                      G_SIGNAL_RUN_LAST,
+                      G_STRUCT_OFFSET (GtkTreeModelIface, row_inserted),
+                      NULL, NULL,
+                      _gtk_marshal_VOID__BOXED_BOXED,
+                      G_TYPE_NONE, 2,
+                      GTK_TYPE_TREE_PATH,
+                      GTK_TYPE_TREE_ITER);
+      tree_model_signals[ROW_HAS_CHILD_TOGGLED] =
+        g_signal_new ("row_has_child_toggled",
+                      GTK_TYPE_TREE_MODEL,
+                      G_SIGNAL_RUN_LAST,
+                      G_STRUCT_OFFSET (GtkTreeModelIface, row_has_child_toggled),
+                      NULL, NULL,
+                      _gtk_marshal_VOID__BOXED_BOXED,
+                      G_TYPE_NONE, 2,
+                      GTK_TYPE_TREE_PATH,
+                      GTK_TYPE_TREE_ITER);
+      tree_model_signals[ROW_DELETED] =
+        g_signal_new ("row_deleted",
+                      GTK_TYPE_TREE_MODEL,
+                      G_SIGNAL_RUN_LAST,
+                      G_STRUCT_OFFSET (GtkTreeModelIface, row_deleted),
+                      NULL, NULL,
+                      _gtk_marshal_VOID__BOXED,
+                      G_TYPE_NONE, 1,
+                      GTK_TYPE_TREE_PATH);
+      tree_model_signals[ROWS_REORDERED] =
+        g_signal_new ("rows_reordered",
+                      GTK_TYPE_TREE_MODEL,
+                      G_SIGNAL_RUN_LAST,
+                      G_STRUCT_OFFSET (GtkTreeModelIface, rows_reordered),
+                      NULL, NULL,
+                      _gtk_marshal_VOID__BOXED_BOXED_POINTER,
+                      G_TYPE_NONE, 3,
+                      GTK_TYPE_TREE_PATH,
+                      GTK_TYPE_TREE_ITER,
+                      G_TYPE_POINTER);
       initialized = TRUE;
     }
 }
@@ -1164,7 +1181,7 @@ gtk_tree_model_row_changed (GtkTreeModel *tree_model,
   g_return_if_fail (path != NULL);
   g_return_if_fail (iter != NULL);
 
-  g_signal_emit_by_name (tree_model, "row_changed", path, iter);
+  g_signal_emit (tree_model, tree_model_signals[ROW_CHANGED], NULL, path, iter);
 }
 
 /**
@@ -1184,7 +1201,7 @@ gtk_tree_model_row_inserted (GtkTreeModel *tree_model,
   g_return_if_fail (path != NULL);
   g_return_if_fail (iter != NULL);
 
-  g_signal_emit_by_name (tree_model, "row_inserted", path, iter);
+  g_signal_emit (tree_model, tree_model_signals[ROW_INSERTED], NULL, path, iter);
 }
 
 /**
@@ -1205,7 +1222,7 @@ gtk_tree_model_row_has_child_toggled (GtkTreeModel *tree_model,
   g_return_if_fail (path != NULL);
   g_return_if_fail (iter != NULL);
 
-  g_signal_emit_by_name (tree_model, "row_has_child_toggled", path, iter);
+  g_signal_emit (tree_model, tree_model_signals[ROW_HAS_CHILD_TOGGLED], NULL, path, iter);
 }
 
 /**
@@ -1225,7 +1242,7 @@ gtk_tree_model_row_deleted (GtkTreeModel *tree_model,
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (path != NULL);
 
-  g_signal_emit_by_name (tree_model, "row_deleted", path);
+  g_signal_emit (tree_model, tree_model_signals[ROW_DELETED], NULL, path);
 }
 
 /**
@@ -1249,7 +1266,7 @@ gtk_tree_model_rows_reordered (GtkTreeModel *tree_model,
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (new_order != NULL);
 
-  g_signal_emit_by_name (tree_model, "rows_reordered", path, iter, new_order);
+  g_signal_emit (tree_model, tree_model_signals[ROWS_REORDERED], NULL, path, iter, new_order);
 }
 
 

@@ -3340,7 +3340,7 @@ get_darkened_gc (GdkWindow *window,
                  gint       darken_count)
 {
   GdkColor src = *color;
-  GdkColor shaded;
+  GdkColor shaded = *color;
   GdkGC *gc;
   
   gc = gdk_gc_new (window);
@@ -3410,27 +3410,115 @@ gtk_default_draw_flat_box (GtkStyle      *style,
            * for that row.
            */
 
-          /* FIXME when we have style properties, clean this up.
-           */
-          
           else if (!strcmp ("cell_even", detail) ||
                    !strcmp ("cell_odd", detail) ||
                    !strcmp ("cell_even_ruled", detail))
             {
-	      gc1 = style->base_gc[state_type];
+	      GdkColor *color = NULL;
+
+	      gtk_widget_style_get (widget,
+		                    "even_row_color", &color,
+				    NULL);
+
+	      if (color)
+	        {
+		  freeme = get_darkened_gc (window, color, 0);
+		  gc1 = freeme;
+
+		  gdk_color_free (color);
+		}
+	      else
+	        gc1 = style->base_gc[state_type];
             }
+	  else if (!strcmp ("cell_odd_ruled", detail))
+	    {
+	      GdkColor *color;
+
+	      gtk_widget_style_get (widget,
+		                    "odd_row_color", &color,
+				    NULL);
+
+	      if (color)
+	        {
+		  freeme = get_darkened_gc (window, color, 0);
+		  gc1 = freeme;
+
+		  gdk_color_free (color);
+		}
+	      else
+	        {
+		  gtk_widget_style_get (widget,
+		                        "even_row_color", &color,
+					NULL);
+
+		  if (color)
+		    {
+		      freeme = get_darkened_gc (window, color, 1);
+		      gdk_color_free (color);
+		    }
+		  else
+		    freeme = get_darkened_gc (window, &style->base[state_type], 1);
+		  gc1 = freeme;
+		}
+	    }
           else if (!strcmp ("cell_even_sorted", detail) ||
                    !strcmp ("cell_odd_sorted", detail) ||
-                   !strcmp ("cell_odd_ruled", detail) ||
                    !strcmp ("cell_even_ruled_sorted", detail))
             {
-	      freeme = get_darkened_gc (window, &style->base[state_type], 1);
-              gc1 = freeme;
+	      GdkColor *color = NULL;
+
+	      if (!strcmp ("cell_odd_sorted", detail))
+	        gtk_widget_style_get (widget,
+		                      "odd_row_color", &color,
+				      NULL);
+	      else
+	        gtk_widget_style_get (widget,
+		                      "even_row_color", &color,
+				      NULL);
+
+	      if (color)
+	        {
+		  freeme = get_darkened_gc (window, color, 1);
+		  gc1 = freeme;
+
+		  gdk_color_free (color);
+		}
+	      else
+		{
+	          freeme = get_darkened_gc (window, &style->base[state_type], 1);
+                  gc1 = freeme;
+		}
             }
           else if (!strcmp ("cell_odd_ruled_sorted", detail))
             {
-              freeme = get_darkened_gc (window, &style->base[state_type], 2);
-              gc1 = freeme;
+	      GdkColor *color = NULL;
+
+	      gtk_widget_style_get (widget,
+		                    "odd_row_color", &color,
+				    NULL);
+
+	      if (color)
+	        {
+		  freeme = get_darkened_gc (window, color, 1);
+		  gc1 = freeme;
+
+		  gdk_color_free (color);
+		}
+	      else
+	        {
+		  gtk_widget_style_get (widget,
+		                        "even_row_color", &color,
+					NULL);
+
+		  if (color)
+		    {
+		      freeme = get_darkened_gc (window, color, 2);
+		      gdk_color_free (color);
+		    }
+		  else
+                    freeme = get_darkened_gc (window, &style->base[state_type], 2);
+                  gc1 = freeme;
+	        }
             }
           else
             gc1 = style->bg_gc[state_type];
