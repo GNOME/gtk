@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
-"PO-Revision-Date: 2004-04-16 03:57-0400\n"
-"Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
+"POT-Creation-Date: 2004-07-13 11:59-0400\n"
+"PO-Revision-Date: 2004-07-13 12:01-0400\n"
+"Last-Translator: Alexander Winston <alexander.winston@comcast.net>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -904,15 +904,15 @@ msgstr "Colour Wheel"
 msgid "Color Selection"
 msgstr "Colour Selection"
 
-#: gtk/gtkentry.c:4300 gtk/gtktextview.c:6933
+#: gtk/gtkentry.c:4312 gtk/gtktextview.c:6933
 msgid "Select _All"
 msgstr "Select _All"
 
-#: gtk/gtkentry.c:4310 gtk/gtktextview.c:6943
+#: gtk/gtkentry.c:4322 gtk/gtktextview.c:6943
 msgid "Input _Methods"
 msgstr "Input _Methods"
 
-#: gtk/gtkentry.c:4320 gtk/gtktextview.c:6954
+#: gtk/gtkentry.c:4332 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
 msgstr "_Insert Unicode Control Character"
 
@@ -1332,9 +1332,9 @@ msgid "Filesystem"
 msgstr "Filesystem"
 
 #: gtk/gtkfilesystemunix.c:731
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Could not get information for file '%s': %s"
+msgstr "Could not get a stock icon for %s"
 
 #: gtk/gtkfilesystemunix.c:826
 #, c-format
@@ -1546,17 +1546,17 @@ msgstr "Group"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "The radio tool button whose group this button belongs to."
 
-#: gtk/gtkrc.c:2390
+#: gtk/gtkrc.c:2391
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Unable to find include file: \"%s\""
 
-#: gtk/gtkrc.c:3029 gtk/gtkrc.c:3032
+#: gtk/gtkrc.c:3030 gtk/gtkrc.c:3033
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Unable to locate image file in pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3467
+#: gtk/gtkrc.c:3468
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Pixmap path element: \"%s\" must be absolute, %s, line %d"
