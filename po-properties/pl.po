@@ -9,87 +9,80 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2004-01-17 01:51+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-01-19 15:55+0100\n"
 "PO-Revision-Date: 2003-11-14 17:38+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "Number of Channels"
-msgstr ""
+msgstr "Liczba kanałów"
 
 #: gdk-pixbuf/gdk-pixbuf.c:101
-#, fuzzy
 msgid "The number of samples per pixel"
-msgstr "Plik XPM zawiera niepoprawną liczbę znaków na piksel"
+msgstr "Liczba próbek na piksel"
 
 #: gdk-pixbuf/gdk-pixbuf.c:111
-#, fuzzy
 msgid "Colorspace"
-msgstr "Nazwa _koloru:"
+msgstr "Przestrzeń kolorów"
 
 #: gdk-pixbuf/gdk-pixbuf.c:112
 msgid "The colorspace in which the samples are interpreted"
-msgstr ""
+msgstr "Przestrzeń kolorów w której będą interpretowane próbki"
 
 #: gdk-pixbuf/gdk-pixbuf.c:122
-#, fuzzy
 msgid "Has Alpha"
-msgstr "Używanie kanału alfa"
+msgstr "Kanał alfa"
 
 #: gdk-pixbuf/gdk-pixbuf.c:123
 msgid "Whether the pixbuf has an alpha channel"
-msgstr ""
+msgstr "Określa czy bufor piksmap posiada kanał alfa"
 
 #: gdk-pixbuf/gdk-pixbuf.c:131
 msgid "Bits per Sample"
-msgstr ""
+msgstr "Bity na próbkę"
 
 #: gdk-pixbuf/gdk-pixbuf.c:132
-#, fuzzy
 msgid "The number of bits per sample"
-msgstr "Liczba wierszy w tabeli"
+msgstr "Liczba bitów na próbkę"
 
 #: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:238
 msgid "Width"
 msgstr "Szerokość"
 
 #: gdk-pixbuf/gdk-pixbuf.c:143
-#, fuzzy
 msgid "The number of columns of the pixbuf"
-msgstr "Liczba kolumn w tabeli"
+msgstr "Liczba kolumn bufora piksmapy"
 
 #: gdk-pixbuf/gdk-pixbuf.c:153 gtk/gtklayout.c:656
 msgid "Height"
 msgstr "Wysokość"
 
 #: gdk-pixbuf/gdk-pixbuf.c:154
-#, fuzzy
 msgid "The number of rows of the pixbuf"
-msgstr "Liczba wierszy w tabeli"
+msgstr "Liczba wierszy bufora piksmapy"
 
 #: gdk-pixbuf/gdk-pixbuf.c:164
-#, fuzzy
 msgid "Rowstride"
-msgstr "Wiersze"
+msgstr "Krok wiersza"
 
 #: gdk-pixbuf/gdk-pixbuf.c:165
-#, fuzzy
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
-msgstr "Liczba pikseli pomiędzy paskami przewijania a przewijanym oknem"
+msgstr "Liczba bajtów pomiędzy początkami dwóch kolejnych wierszy"
 
+# FIXME - lub pikseli
 #: gdk-pixbuf/gdk-pixbuf.c:175
 msgid "Pixels"
-msgstr ""
+msgstr "Piksele"
 
 #: gdk-pixbuf/gdk-pixbuf.c:176
 msgid "A pointer to the pixel data of the pixbuf"
-msgstr ""
+msgstr "Wskaźnik do danych pikseli bufora piksmapy"
 
 #: gdk/gdkdisplaymanager.c:126
 msgid "Default Display"
@@ -188,7 +181,6 @@ msgstr "Jest ważna"
 
 # Określić co oznacza to proxy...
 #: gtk/gtkaction.c:244
-#, fuzzy
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
@@ -203,7 +195,6 @@ msgstr "Ukrywanie jeśli pusta"
 
 # j.w.
 #: gtk/gtkaction.c:251
-#, fuzzy
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 "Po ustawieniu wartości prawda, pośredniki pustego menu dla tej operacji będą "
@@ -227,29 +218,28 @@ msgid "Whether the action is visible."
 msgstr "Określa, czy operacja jest widoczna."
 
 #: gtk/gtkaction.c:271
-#, fuzzy
 msgid "Action Group"
-msgstr "Operacja"
+msgstr "Grupa operacji"
 
 #: gtk/gtkaction.c:272
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
 msgstr ""
+"GtkActionGroup z którą jest powiązana GtkAction, lub NULL (dla wewnętrznego "
+"użytku)."
 
 #: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
 msgstr "Nazwa dla grupy operacji."
 
 #: gtk/gtkactiongroup.c:142
-#, fuzzy
 msgid "Whether the action group is enabled."
-msgstr "Określa, czy operacja jest dostępna."
+msgstr "Określa, czy grupa operacji jest dostępna."
 
 #: gtk/gtkactiongroup.c:149
-#, fuzzy
 msgid "Whether the action group is visible."
-msgstr "Określa, czy operacja jest widoczna."
+msgstr "Określa, czy grupa operacji jest widoczna."
 
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
@@ -450,7 +440,7 @@ msgstr "Odstępy"
 msgid "The amount of space between children"
 msgstr "Ilość miejsca pomiędzy widgetami potomnymi"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:475
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:534
 msgid "Homogeneous"
 msgstr "Jednorodny"
 
@@ -459,7 +449,7 @@ msgid "Whether the children should all be the same size"
 msgstr ""
 "Określa, czy wszystkie widgety potomne powinny być tego samego rozmiaru"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:467
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:526
 #: gtk/gtktreeviewcolumn.c:294
 msgid "Expand"
 msgstr "Rozszerzanie"
@@ -561,14 +551,12 @@ msgid "The border relief style"
 msgstr "Styl uwypuklenia krawędzi"
 
 #: gtk/gtkbutton.c:253
-#, fuzzy
 msgid "Horizontal alignment for child"
-msgstr "Wyrównanie poziome"
+msgstr "Wyrównanie poziome potomka"
 
 #: gtk/gtkbutton.c:272
-#, fuzzy
 msgid "Vertical alignment for child"
-msgstr "Wyrównanie pionowe"
+msgstr "Wyrównanie pionowe potomka"
 
 #: gtk/gtkbutton.c:340
 msgid "Default Spacing"
@@ -851,12 +839,11 @@ msgstr "Lista atrybutów stylu stosowana do tekstu elementu renderującego"
 
 #: gtk/gtkcellrenderertext.c:216
 msgid "Single Paragraph Mode"
-msgstr ""
+msgstr "Tryb pojedynczego paragrafu"
 
 #: gtk/gtkcellrenderertext.c:217
-#, fuzzy
 msgid "Whether or not to keep all text in a single paragraph"
-msgstr "Określa czy należy nadawać kolorowi wartości alfa"
+msgstr "Określa czy należy trzymać tekst w jednym paragrafie"
 
 #: gtk/gtkcellrenderertext.c:225 gtk/gtkcellview.c:179 gtk/gtktexttag.c:205
 msgid "Background color name"
@@ -1606,13 +1593,14 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkexpander.c:194
-#, fuzzy
 msgid "Expanded"
-msgstr "Rozszerzanie"
+msgstr "Rozwinięty"
 
+# FIXME - bełkot, jak połowa zdań tutaj
 #: gtk/gtkexpander.c:195
 msgid "Whether the expander has been opened to reveal the child widget"
 msgstr ""
+"Określa, czy element rozwijający został otwarty do odkrycia widgetu potomnego"
 
 #: gtk/gtkexpander.c:203
 msgid "Text of the expander's label"
@@ -1627,19 +1615,16 @@ msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Tekst etykiety używa znaczników XML. Zobacz pango_parse_markup()"
 
 #: gtk/gtkexpander.c:227
-#, fuzzy
 msgid "Space to put between the label and the child"
-msgstr ""
-"Dodatkowa przestrzeń pomiędzy widgetem potomnym a jego sąsiadami, w pikselach"
+msgstr "Przestrzeń pomiędzy etykietą a potomkiem"
 
 #: gtk/gtkexpander.c:236 gtk/gtkframe.c:169 gtk/gtktoolbutton.c:193
 msgid "Label widget"
 msgstr "Widget etykiety"
 
 #: gtk/gtkexpander.c:237
-#, fuzzy
 msgid "A widget to display in place of the usual expander label"
-msgstr "Widget wyświetlany w miejscu zwykłej etykiety ramki"
+msgstr "Widget wyświetlany w miejscu zwykłej etykiety elementu rozwijającego"
 
 #: gtk/gtkexpander.c:243 gtk/gtktreeview.c:621
 msgid "Expander Size"
@@ -1876,7 +1861,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "Widget wyświetlany w miejscu zwykłej etykiety ramki"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:516 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:575 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Typ cienia"
 
@@ -2206,7 +2191,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr "Styl kantu wokół paska menu"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:492
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:551
 msgid "Internal padding"
 msgstr "Wewnętrzna wyściółka"
 
@@ -2415,12 +2400,11 @@ msgid "Secondary forward stepper"
 msgstr "Dodatkowy krok naprzód"
 
 #: gtk/gtknotebook.c:545
-#, fuzzy
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
-"Wyświetla dodatkowy przycisk ze strzałką naprzód po przeciwnej stronie paska "
-"przewijania"
+"Wyświetla dodatkowy przycisk ze strzałką naprzód po przeciwnej stronie "
+"obszaru zakładek"
 
 #: gtk/gtknotebook.c:560 gtk/gtkscrollbar.c:97
 msgid "Backward stepper"
@@ -2507,7 +2491,7 @@ msgstr "Możliwość zmniejszania"
 
 #: gtk/gtkpaned.c:324
 msgid "If TRUE, the child can be made smaller than its requisition"
-msgstr ""
+msgstr "Jeżeli ustawione, potomek może być mniejszy od swoich wymagań"
 
 #: gtk/gtkpreview.c:133
 msgid ""
@@ -2570,7 +2554,7 @@ msgstr "Widget dopasowania"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "Obiekt GtkAdjustment przyłączony do paska postępu (przestarzałe)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:441
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:500
 msgid "Orientation"
 msgstr "Ułożenie"
 
@@ -2895,11 +2879,11 @@ msgstr "Odstępy paska przewijania"
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Liczba pikseli pomiędzy paskami przewijania a przewijanym oknem"
 
-#: gtk/gtkseparatortoolitem.c:159
+#: gtk/gtkseparatortoolitem.c:134
 msgid "Draw"
 msgstr "Rysowanie"
 
-#: gtk/gtkseparatortoolitem.c:160
+#: gtk/gtkseparatortoolitem.c:135
 msgid "Whether the separator is drawn, or just blank"
 msgstr ""
 "Określa, czy separator wyświetlany jako linia, czy po prostu puste miejsce"
@@ -2917,18 +2901,16 @@ msgstr ""
 "dwukrotne kliknięcie (liczony w milisekundach)"
 
 #: gtk/gtksettings.c:178
-#, fuzzy
 msgid "Double Click Distance"
-msgstr "Czas dwukrotnego kliknięcia"
+msgstr "Odległość dwukrotnego kliknięcia"
 
 #: gtk/gtksettings.c:179
-#, fuzzy
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr ""
-"Maksymalny dopuszczalny czas pomiędzy dwoma kliknięciami, traktowanymi jako "
-"dwukrotne kliknięcie (liczony w milisekundach)"
+"Maksymalna dopuszczalna odległość pomiędzy dwoma kliknięciami, traktowanymi "
+"jako dwukrotne kliknięcie (w pikselach)"
 
 #: gtk/gtksettings.c:186
 msgid "Cursor Blink"
@@ -3094,9 +3076,8 @@ msgid "Reads the current value, or sets a new value"
 msgstr "Odczytuje bieżącą wartość lub ustawia nową"
 
 #: gtk/gtkspinbutton.c:311
-#, fuzzy
 msgid "Style of bevel around the spin button"
-msgstr "Styl kantu wokół zawartości"
+msgstr "Styl kantu wokół wejścia liczbowego"
 
 #: gtk/gtkstatusbar.c:167
 msgid "Has Resize Grip"
@@ -3589,7 +3570,7 @@ msgstr "Określa czy wprowadzony tekst nadpisuje istniejącą zawartość"
 
 #: gtk/gtktextview.c:673
 msgid "Accepts tab"
-msgstr "Akceptuowanie tabulacji"
+msgstr "Akceptowanie tabulacji"
 
 #: gtk/gtktextview.c:674
 msgid "Whether Tab will result in a tab character being entered"
@@ -3620,91 +3601,91 @@ msgstr "Rysowanie wskaźnika"
 msgid "If the toggle part of the button is displayed"
 msgstr "Określa, czy rysowana powinna być przełączalna część przycisku"
 
-#: gtk/gtktoolbar.c:442
+#: gtk/gtktoolbar.c:501
 msgid "The orientation of the toolbar"
 msgstr "Ułożenie paska narzędziowego"
 
-#: gtk/gtktoolbar.c:450
+#: gtk/gtktoolbar.c:509
 msgid "Toolbar Style"
 msgstr "Styl paska narzędziowego"
 
-#: gtk/gtktoolbar.c:451
+#: gtk/gtktoolbar.c:510
 msgid "How to draw the toolbar"
 msgstr "Sposób rysowania paska narzędziowego"
 
-#: gtk/gtktoolbar.c:458
+#: gtk/gtktoolbar.c:517
 msgid "Show Arrow"
 msgstr "Wyświetlanie strzałki"
 
-#: gtk/gtktoolbar.c:459
+#: gtk/gtktoolbar.c:518
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 "Czy strzałka powinna być widoczna gdy pasek narzędziowy nie mieści się w "
 "interfejsie"
 
-#: gtk/gtktoolbar.c:468
+#: gtk/gtktoolbar.c:527
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Określa czy element powinien otrzymywać dodatkową przestrzeń po zwiększeniu "
 "rozmiaru paska narzędziowego"
 
-#: gtk/gtktoolbar.c:476
+#: gtk/gtktoolbar.c:535
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Określa, czy element powinien posiadać ten sam rozmiar co inne elementy "
 "jednorodne"
 
-#: gtk/gtktoolbar.c:483
+#: gtk/gtktoolbar.c:542
 msgid "Spacer size"
 msgstr "Rozmiar elementu rozdzielającego"
 
-#: gtk/gtktoolbar.c:484
+#: gtk/gtktoolbar.c:543
 msgid "Size of spacers"
 msgstr "Rozmiary elementów rozdzielających"
 
-#: gtk/gtktoolbar.c:493
+#: gtk/gtktoolbar.c:552
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
 "Ilość miejsca na krawędzi pomiędzy cieniem paska narzędziowego i przyciskami"
 
-#: gtk/gtktoolbar.c:501
+#: gtk/gtktoolbar.c:560
 msgid "Space style"
 msgstr "Styl odstępów"
 
-#: gtk/gtktoolbar.c:502
+#: gtk/gtktoolbar.c:561
 msgid "Whether spacers are vertical lines or just blank"
 msgstr ""
 "Określa, czy odstępy wyświetlane są jako pionowe linie, czy po prostu puste "
 "miejsca"
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:568
 msgid "Button relief"
 msgstr "Uwypuklenie przycisku"
 
-#: gtk/gtktoolbar.c:510
+#: gtk/gtktoolbar.c:569
 msgid "Type of bevel around toolbar buttons"
 msgstr "Typ kantów wokół przycisków paska narzędziowego"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:576
 msgid "Style of bevel around the toolbar"
 msgstr "Styl kantu wokół paska narzędziowego"
 
-#: gtk/gtktoolbar.c:523
+#: gtk/gtktoolbar.c:582
 msgid "Toolbar style"
 msgstr "Styl paska narzędziowego"
 
-#: gtk/gtktoolbar.c:524
+#: gtk/gtktoolbar.c:583
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Określa, czy domyślnie paski narzędziowe zawierają tylko tekst, tekst i "
 "ikony, tylko ikony, itp."
 
-#: gtk/gtktoolbar.c:530
+#: gtk/gtktoolbar.c:589
 msgid "Toolbar icon size"
 msgstr "Rozmiar ikon paska narzędziowego"
 
-#: gtk/gtktoolbar.c:531
+#: gtk/gtktoolbar.c:590
 msgid "Size of icons in default toolbars"
 msgstr "Rozmiar ikon na pasku narzędziowym"
 
@@ -3830,13 +3811,14 @@ msgid "Model column to search through when searching through code"
 msgstr "Kolumna modelu, używana w trybie wyszukiwania."
 
 #: gtk/gtktreeview.c:609
-#, fuzzy
 msgid "Fixed Height Mode"
-msgstr "Ustalona wysokość"
+msgstr "Tryb ustalonej wysokości"
 
 #: gtk/gtktreeview.c:610
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
+"Przyspiesza GtkTreeView przez założenie, że wszystkie wiersze mają taką samą "
+"wysokość"
 
 #: gtk/gtktreeview.c:630
 msgid "Vertical Separator Width"
@@ -4395,15 +4377,12 @@ msgstr ""
 "Określa, czy okno powinno być pominięte w przełączniku obszarów roboczych."
 
 #: gtk/gtkwindow.c:598
-#, fuzzy
 msgid "Accept focus"
-msgstr "Akceptuowanie tabulacji"
+msgstr "Akceptowanie skupienia"
 
 #: gtk/gtkwindow.c:599
-#, fuzzy
 msgid "TRUE if the window should receive the input focus."
-msgstr ""
-"Określa, czy okno powinno być pominięte w przełączniku obszarów roboczych."
+msgstr "Jeżeli ustawione, okno powinno otrzymywać skupienie wejścia."
 
 #: gtk/gtkwindow.c:613
 msgid "Decorated"
