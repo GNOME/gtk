@@ -1,3 +1,8 @@
+Thu Apr 25 23:36:55 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_iter): make the search
+	dialog not scroll horizontally (prolly fixes #74806).
+
 2002-04-25  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkrange.c (gtk_range_calc_layout): Avoid a possible
