@@ -2022,7 +2022,7 @@ gtk_widget_clip_rect (GtkWidget *widget,
 	}
       if (rect->y < 0)
 	{
-	  rect->height = (rect->height > -rect->y) ? rect->width + rect->y : 0;
+	  rect->height = (rect->height > -rect->y) ? rect->height + rect->y : 0;
 	  rect->y = 0;
 	}
       if (rect->x + rect->width > width)
