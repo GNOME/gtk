@@ -1,3 +1,7 @@
+2001-12-28	Vitaly Tishkov <tvv@sparc.spb.su>
+	* gtkwindow.sgml: additional fix for #59314 ('<programlisting>' is
+	changed to '<literal>' in docs for gtk_window_set_policy ())
+
 Sat Dec 22 18:18:07 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am (IGNORE_HFILES): Add gtktextutil.h
