@@ -16,8 +16,9 @@ Without those packages make distcheck will *not* pass.
 0) Blow away your gtk+ directory, check a new version out
 1) autogen and build it, make sure to enable docs.
 2) Update NEWS based on the various ChangeLog files
-3) Update version in configure.in, increase micro and interface age by 1.
-(Note that this is critical, a slip-up here will cause the soname to change).
+3) Verify that the version in configure.in has been bumped after the last
+release. (Note that this is critical, a slip-up here will cause the soname 
+to change).
 4) Add === Released 2.x.y === at the top of all ChangeLog files
 5) make distcheck
 6) Fix broken stuff found by 5) repeat
@@ -34,3 +35,4 @@ create a new message in the same form, replacing version numbers, commentary
 at the top about "what this release is about" and the Summary of changes.
 12) Send it to gnome-announce-list, gtk-list, gtk-app-devel-list and
 gtk-devel-list. Set reply-to to gnome-hackers.
+13) Bump the version number in configure.in. 
