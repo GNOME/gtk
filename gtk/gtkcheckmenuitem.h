@@ -55,6 +55,7 @@ struct _GtkCheckMenuItem
   guint active : 1;
   guint always_show_toggle : 1;
   guint inconsistent : 1;
+  guint draw_as_radio : 1;
 };
 
 struct _GtkCheckMenuItemClass
@@ -74,17 +75,21 @@ struct _GtkCheckMenuItemClass
 
 
 GType	   gtk_check_menu_item_get_type	         (void) G_GNUC_CONST;
+
 GtkWidget* gtk_check_menu_item_new               (void);
 GtkWidget* gtk_check_menu_item_new_with_label    (const gchar      *label);
 GtkWidget* gtk_check_menu_item_new_with_mnemonic (const gchar      *label);
 void       gtk_check_menu_item_set_active        (GtkCheckMenuItem *check_menu_item,
-                                                  gboolean          is_active);
+						  gboolean          is_active);
 gboolean   gtk_check_menu_item_get_active        (GtkCheckMenuItem *check_menu_item);
 void       gtk_check_menu_item_toggled           (GtkCheckMenuItem *check_menu_item);
 void       gtk_check_menu_item_set_inconsistent  (GtkCheckMenuItem *check_menu_item,
-                                                  gboolean          setting);
+						  gboolean          setting);
 gboolean   gtk_check_menu_item_get_inconsistent  (GtkCheckMenuItem *check_menu_item);
-
+void       gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
+						  gboolean          draw_radio_indicator);
+gboolean   gtk_check_menu_item_get_draw_as_radio (GtkCheckMenuItem *check_menu_item);
+    
 
 #ifndef GTK_DISABLE_DEPRECATED
 void	   gtk_check_menu_item_set_show_toggle (GtkCheckMenuItem *menu_item,

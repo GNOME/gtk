@@ -554,12 +554,10 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
   else if (button->priv->stock_id && gtk_stock_lookup (button->priv->stock_id, &stock_item))
     {
       label = stock_item.label;
-      use_mnemonic = FALSE;
     }
   else
     {
       label = "";
-      use_mnemonic = FALSE;
     }
   
   if (use_mnemonic)

@@ -1,3 +1,29 @@
+Fri Aug 29 20:32:07 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c: Only treat buttons as homogeneous when they
+	are narrower than 13 time the estimated character width of the
+	font. (#107781, David Bordoley)
+
+	* gtk/gtktoggletoolbutton.c (gtk_toggle_tool_button_init): Check
+	here if the GtkToggleButton is active. This may be the case if it
+	is a radio button.
+
+	* gtk/gtktoolbar.c: Clarify documentation wrt. GtkSignalFunc
+	vs. void (*) (GtkWidget, gpointer). (#107495, Mariano
+	Suarez-Alvarez).
+
+	* gtk/gtkcheckmenuitem.[ch]: new "draw_as_radio"
+	property. (#111207, David Bordoley).
+
+	* gtk/gtktoggletoolbutton.c
+	(gtk_toggle_tool_button_create_menu_proxy): use new
+	"draw_as_radio" property on the menu item when the item is a radio
+	tool button
+
+	* gtk/gtktoolbutton.c (gtk_tool_button_create_menu_proxy): Fixes
+	to only pay attention to the "use_underline" property when the
+	button label comes from the "label" property.
+
 2003-08-29  Laurent Dhima  <laurenti@alblinux.net>
 
 	* configure.in: Added "sq" to ALL_LINGUAS.

@@ -32,8 +32,6 @@ static void gtk_radio_menu_item_class_init     (GtkRadioMenuItemClass *klass);
 static void gtk_radio_menu_item_init           (GtkRadioMenuItem      *radio_menu_item);
 static void gtk_radio_menu_item_destroy        (GtkObject             *object);
 static void gtk_radio_menu_item_activate       (GtkMenuItem           *menu_item);
-static void gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem      *check_menu_item,
-						GdkRectangle          *area);
 
 static GtkCheckMenuItemClass *parent_class = NULL;
 
@@ -185,25 +183,22 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
 {
   GtkObjectClass *object_class;
   GtkMenuItemClass *menu_item_class;
-  GtkCheckMenuItemClass *check_menu_item_class;
 
   object_class = (GtkObjectClass*) klass;
   menu_item_class = (GtkMenuItemClass*) klass;
-  check_menu_item_class = (GtkCheckMenuItemClass*) klass;
 
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->destroy = gtk_radio_menu_item_destroy;
 
   menu_item_class->activate = gtk_radio_menu_item_activate;
-
-  check_menu_item_class->draw_indicator = gtk_radio_menu_item_draw_indicator;
 }
 
 static void
 gtk_radio_menu_item_init (GtkRadioMenuItem *radio_menu_item)
 {
   radio_menu_item->group = g_slist_prepend (NULL, radio_menu_item);
+  gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (radio_menu_item), TRUE);
 }
 
 static void
@@ -294,77 +289,6 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
 
   if (toggled)
     gtk_check_menu_item_toggled (check_menu_item);
+
   gtk_widget_queue_draw (GTK_WIDGET (radio_menu_item));
 }
-
-static void
-gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
-				    GdkRectangle     *area)
-{
-  GtkWidget *widget;
-  GtkStateType state_type;
-  GtkShadowType shadow_type;
-  gint width, height;
-  gint x, y;
-  gint offset;
-
-  g_return_if_fail (GTK_IS_RADIO_MENU_ITEM (check_menu_item));
-
-  if (GTK_WIDGET_DRAWABLE (check_menu_item))
-    {
-      guint horizontal_padding;
-      guint toggle_spacing;
-      guint toggle_size;
-      
-      widget = GTK_WIDGET (check_menu_item);
-
-      gtk_widget_style_get (GTK_WIDGET (check_menu_item),
- 			    "toggle_spacing", &toggle_spacing,
- 			    "horizontal_padding", &horizontal_padding,
- 			    NULL);
-
-      width = 8;
-      height = 8;
-      toggle_size = GTK_MENU_ITEM (check_menu_item)->toggle_size;
-      offset = GTK_CONTAINER (check_menu_item)->border_width +
-	widget->style->xthickness + 2;
-
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
-	{
-	  x = widget->allocation.x + offset + horizontal_padding +
-	    (toggle_size - toggle_spacing - width) / 2;
-	}
-      else 
-	{
-	  x = widget->allocation.x + widget->allocation.width -
-	    offset - horizontal_padding - toggle_size + toggle_spacing +
-	    (toggle_size - toggle_spacing - width) / 2;
-	}
-
-      y = widget->allocation.y + (widget->allocation.height - height) / 2;
-
-      if (check_menu_item->active ||
-	  check_menu_item->always_show_toggle ||
-	  (GTK_WIDGET_STATE (check_menu_item) == GTK_STATE_PRELIGHT))
-	{
-	  state_type = GTK_WIDGET_STATE (widget);
-	  if (check_menu_item->active ||
-	      !check_menu_item->always_show_toggle)
-	    shadow_type = GTK_SHADOW_IN;
-	  else
-	    shadow_type = GTK_SHADOW_OUT;
-
-          if (check_menu_item->inconsistent)
-            shadow_type = GTK_SHADOW_ETCHED_IN;
-          
-	  if (!GTK_WIDGET_IS_SENSITIVE (widget))
-	    state_type = GTK_STATE_INSENSITIVE;
-              
-	  gtk_paint_option (widget->style, widget->window,
-			    state_type, shadow_type,
-			    area, widget, "option",
-			    x, y, width, height);
-	}
-    }
-}
-

@@ -25,6 +25,7 @@
 #include "gtktogglebutton.h"
 #include "gtkstock.h"
 #include "gtkintl.h"
+#include "gtkradiotoolbutton.h"
 
 #define MENU_ID "gtk-toggle-tool-button-menu-id"
 
@@ -115,9 +116,17 @@ gtk_toggle_tool_button_class_init (GtkToggleToolButtonClass *klass)
 static void
 gtk_toggle_tool_button_init (GtkToggleToolButton *button)
 {
+  GtkToolButton *tool_button = GTK_TOOL_BUTTON (button);
+  GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (_gtk_tool_button_get_button (tool_button));
+
   button->priv = GTK_TOGGLE_TOOL_BUTTON_GET_PRIVATE (button);
-  
-  g_signal_connect_object (_gtk_tool_button_get_button (GTK_TOOL_BUTTON (button)),
+
+  /* If the real button is a radio button, it may have been
+   * active at the time it was created.
+   */
+  button->priv->active = gtk_toggle_button_get_active (toggle_button);
+    
+  g_signal_connect_object (toggle_button,
 			   "toggled", G_CALLBACK (button_toggled), button, 0);
 }
 
@@ -129,24 +138,30 @@ gtk_toggle_tool_button_create_menu_proxy (GtkToolItem *item)
   GtkWidget *menu_item = NULL;
   GtkStockItem stock_item;
   gboolean use_mnemonic = TRUE;
-  const char *label = "";
+  const char *label;
 
   GtkWidget *label_widget = gtk_tool_button_get_label_widget (tool_button);
   const gchar *label_text = gtk_tool_button_get_label (tool_button);
-  gboolean use_underline = gtk_tool_button_get_use_underline (tool_button);
   const gchar *stock_id = gtk_tool_button_get_stock_id (tool_button);
 
   if (label_widget && GTK_IS_LABEL (label_widget))
     {
       label = gtk_label_get_label (GTK_LABEL (label_widget));
+      use_mnemonic = gtk_label_get_use_underline (GTK_LABEL (label_widget));
     }
   else if (label_text)
     {
       label = label_text;
-      use_mnemonic = use_underline;
+      use_mnemonic = gtk_tool_button_get_use_underline (tool_button);
     }
   else if (stock_id && gtk_stock_lookup (stock_id, &stock_item))
-    label = stock_item.label;
+    {
+      label = stock_item.label;
+    }
+  else
+    {
+      label = "";
+    }
   
   if (use_mnemonic)
     menu_item = gtk_check_menu_item_new_with_mnemonic (label);
@@ -155,6 +170,12 @@ gtk_toggle_tool_button_create_menu_proxy (GtkToolItem *item)
 
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
 				  toggle_tool_button->priv->active);
+
+  if (GTK_IS_RADIO_TOOL_BUTTON (toggle_tool_button))
+    {
+      gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (menu_item),
+					     TRUE);
+    }
 
   g_signal_connect_closure_by_id (menu_item,
 				  g_signal_lookup ("activate", G_OBJECT_TYPE (menu_item)), 0,

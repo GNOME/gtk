@@ -39,7 +39,8 @@ enum {
 enum {
   PROP_0,
   PROP_ACTIVE,
-  PROP_INCONSISTENT
+  PROP_INCONSISTENT,
+  PROP_DRAW_AS_RADIO
 };
 
 static void gtk_check_menu_item_class_init           (GtkCheckMenuItemClass *klass);
@@ -124,6 +125,14 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                    g_param_spec_boolean ("inconsistent",
                                                          _("Inconsistent"),
                                                          _("Whether to display an \"inconsistent\" state"),
+                                                         FALSE,
+                                                         G_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_INCONSISTENT,
+                                   g_param_spec_boolean ("draw_as_radio",
+                                                         _("Draw as radio menu item"),
+                                                         _("Whether the menu item looks like a radio menu item"),
                                                          FALSE,
                                                          G_PARAM_READWRITE));
   
@@ -306,6 +315,48 @@ gtk_check_menu_item_get_inconsistent (GtkCheckMenuItem *check_menu_item)
   return check_menu_item->inconsistent;
 }
 
+/**
+ * gtk_check_menu_item_set_draw_as_radio:
+ * @check_menu_item: a #GtkCheckMenuItem
+ * @draw_as_radio: whether @check_menu_item is drawn like a #GtkRadioMenuItem
+ *
+ * Sets whether @check_menu_item is drawn like a #GtkRadioMenuItem
+ *
+ **/
+void
+gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
+				       gboolean          draw_as_radio)
+{
+  g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
+  
+  draw_as_radio = draw_as_radio != FALSE;
+
+  if (draw_as_radio != check_menu_item->draw_as_radio)
+    {
+      check_menu_item->draw_as_radio = draw_as_radio;
+
+      gtk_widget_queue_draw (GTK_WIDGET (check_menu_item));
+
+      g_object_notify (G_OBJECT (check_menu_item), "draw_as_radio");
+    }
+}
+
+/**
+ * gtk_check_menu_item_get_draw_as_radio:
+ * @check_menu_item: a #GtkCheckMenuItem
+ * 
+ * Returns whether @check_menu_item looks like a #GtkRadioMenuItem
+ * 
+ * Return value: Whether @check_menu_item looks like a #GtkRadioMenuItem
+ **/
+gboolean
+gtk_check_menu_item_get_draw_as_radio (GtkCheckMenuItem *check_menu_item)
+{
+  g_return_val_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item), FALSE);
+  
+  return check_menu_item->draw_as_radio;
+}
+
 static void
 gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
 {
@@ -398,34 +449,30 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 	{
 	  state_type = GTK_WIDGET_STATE (widget);
 	  
-	  if (check_menu_item->always_show_toggle)
+	  if (check_menu_item->inconsistent)
+	    shadow_type = GTK_SHADOW_ETCHED_IN;
+	  else if (check_menu_item->active)
+	    shadow_type = GTK_SHADOW_IN;
+	  else 
+	    shadow_type = GTK_SHADOW_OUT;
+	  
+	  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+	    state_type = GTK_STATE_INSENSITIVE;
+
+	  if (check_menu_item->draw_as_radio)
 	    {
-	      shadow_type = GTK_SHADOW_OUT;
-	      if (check_menu_item->active)
-		shadow_type = GTK_SHADOW_IN;
+	      gtk_paint_option (widget->style, widget->window,
+				state_type, shadow_type,
+				area, widget, "option",
+				x, y, width, height);
 	    }
 	  else
 	    {
-	      shadow_type = GTK_SHADOW_IN;
-	      if (check_menu_item->active &&
-		  (state_type == GTK_STATE_PRELIGHT))
-		shadow_type = GTK_SHADOW_OUT;
+	      gtk_paint_check (widget->style, widget->window,
+			       state_type, shadow_type,
+			       area, widget, "check",
+			       x, y, width, height);
 	    }
-
-          if (check_menu_item->inconsistent)
-            {
-              shadow_type = GTK_SHADOW_ETCHED_IN;
-              if (state_type == GTK_STATE_ACTIVE)
-                state_type = GTK_STATE_NORMAL;
-            }
-
-	  if (!GTK_WIDGET_IS_SENSITIVE (widget))
-	    state_type = GTK_STATE_INSENSITIVE;
-              
-	  gtk_paint_check (widget->style, widget->window,
-			   state_type, shadow_type,
-			   area, widget, "check",
-			   x, y, width, height);
 	}
     }
 }

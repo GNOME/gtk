@@ -57,6 +57,11 @@
 #define DEFAULT_ICON_SIZE GTK_ICON_SIZE_LARGE_TOOLBAR
 #define DEFAULT_TOOLBAR_STYLE GTK_TOOLBAR_BOTH
 
+#define MAX_HOMOGENEOUS_N_CHARS 13 /* Items that are wider than this do not participate in
+				    * the homogeneous game. In units of
+				    * pango_font_get_estimated_char_width().
+				    */
+
 enum {
   PROP_0,
   PROP_ORIENTATION,
@@ -620,14 +625,29 @@ static gboolean
 toolbar_item_is_homogeneous (GtkToolbar  *toolbar,
 			     GtkToolItem *item)
 {
-  gboolean result = FALSE;
+  gboolean result;
+  GtkWidget *widget = GTK_WIDGET (item);
+  GtkRequisition requisition;
+  PangoContext *context;
+  PangoFontMetrics *metrics;
+  int char_width;
+  gint max_homogeneous_pixels;
 
-  if ((gtk_tool_item_get_homogeneous (item) && !GTK_IS_SEPARATOR_TOOL_ITEM (item)))
-    result = TRUE;
+  context = gtk_widget_get_pango_context (widget);
+  metrics = pango_context_get_metrics (context,
+				       widget->style->font_desc,
+				       pango_context_get_language (context));
+  char_width = pango_font_metrics_get_approximate_char_width (metrics);
+  max_homogeneous_pixels = PANGO_PIXELS (MAX_HOMOGENEOUS_N_CHARS * char_width);
+  
+  result = gtk_tool_item_get_homogeneous (item) && !GTK_IS_SEPARATOR_TOOL_ITEM (item);
 
-  if (gtk_tool_item_get_is_important (item) &&
-      toolbar->style == GTK_TOOLBAR_BOTH_HORIZ &&
-      toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+  gtk_widget_size_request (GTK_WIDGET (item), &requisition);
+
+  if ((gtk_tool_item_get_is_important (item) &&
+       toolbar->style == GTK_TOOLBAR_BOTH_HORIZ &&
+       toolbar->orientation == GTK_ORIENTATION_HORIZONTAL) ||
+      requisition.width > max_homogeneous_pixels)
     {
       result = FALSE;
     }
@@ -1447,7 +1467,7 @@ gtk_toolbar_move_focus (GtkToolbar       *toolbar,
 
   g_list_free (children);
 
-  return TRUE;
+  return FALSE;
 }
 
 /* The focus handler for the toolbar. It called when the user presses
@@ -2678,7 +2698,10 @@ gtk_toolbar_get_drop_index (GtkToolbar *toolbar,
  * 
  * Inserts a new item into the toolbar. You must specify the position
  * in the toolbar where it will be inserted.
- * 
+ *
+ * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
+ * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ *
  * Return value: the new toolbar item as a #GtkWidget.
  **/
 GtkWidget *
@@ -2708,6 +2731,9 @@ gtk_toolbar_append_item (GtkToolbar    *toolbar,
  * @user_data: a pointer to any data you wish to be passed to the callback.
  * 
  * Adds a new button to the beginning (top or left edges) of the given toolbar.
+ *
+ * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
+ * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
  *
  * Return value: the new toolbar item as a #GtkWidget.
  **/
@@ -2740,6 +2766,9 @@ gtk_toolbar_prepend_item (GtkToolbar    *toolbar,
  * 
  * Inserts a new item into the toolbar. You must specify the position in the
  * toolbar where it will be inserted.
+ *
+ * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
+ * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
  *
  * Return value: the new toolbar item as a #GtkWidget.
  **/
@@ -2774,6 +2803,9 @@ gtk_toolbar_insert_item (GtkToolbar    *toolbar,
  * Inserts a stock item at the specified position of the toolbar.  If
  * @stock_id is not a known stock item ID, it's inserted verbatim,
  * except that underscores used to mark mnemonics are removed.
+ *
+ * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
+ * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
  *
  * Returns: the inserted widget
  */
@@ -2965,6 +2997,9 @@ gtk_toolbar_insert_widget (GtkToolbar *toolbar,
  * the radio group for the new element. In all other cases, @widget must
  * be %NULL.
  * 
+ * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
+ * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ *
  * Return value: the new toolbar element as a #GtkWidget.
  **/
 GtkWidget*
@@ -3003,6 +3038,9 @@ gtk_toolbar_append_element (GtkToolbar          *toolbar,
  * the radio group for the new element. In all other cases, @widget must
  * be %NULL.
  * 
+ * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
+ * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ *
  * Return value: the new toolbar element as a #GtkWidget.
  **/
 GtkWidget *
@@ -3041,6 +3079,9 @@ gtk_toolbar_prepend_element (GtkToolbar          *toolbar,
  * If @type == %GTK_TOOLBAR_CHILD_RADIOBUTTON, @widget is used to determine
  * the radio group for the new element. In all other cases, @widget must
  * be %NULL.
+ *
+ * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
+ * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
  *
  * Return value: the new toolbar element as a #GtkWidget.
  **/
