@@ -1,3 +1,11 @@
+2004-11-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcolorsel.c (key_press): Implement keynav for the color
+	picker (only on X11 currently, since GDK doesn't support pointer 
+	warping). Space and Return pick a color, Esc cancels the picking, 
+	arrow keys move the pointer by single pixels, Alt-arrow combinations 
+	move the pointer by 20 pixels.  (#135385, Frances Keenan)
+
 Sat Nov 27 15:18:14 2004  Manish Singh  <yosh@gimp.org>
 
 	* contrib/gdk-pixbuf-xlib/gdk-pixbuf-xlib-drawable.c

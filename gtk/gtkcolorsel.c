@@ -63,6 +63,11 @@
 
 #include <string.h>
 
+#ifdef GDK_WINDOWING_X11
+#include <X11/Xlib.h>
+#include "x11/gdkx.h"
+#endif
+
 /* Number of elements in the custom palatte */
 #define GTK_CUSTOM_PALETTE_WIDTH 10
 #define GTK_CUSTOM_PALETTE_HEIGHT 2
@@ -1267,15 +1272,36 @@ static gboolean mouse_press (GtkWidget      *invisible,
                              GdkEventButton *event,
                              gpointer        data);
 
+#define BIG_STEP 20
+
 static gboolean
 key_press (GtkWidget   *invisible,
            GdkEventKey *event,
            gpointer     data)
 {  
-  if (event->keyval == GDK_Escape)
-    {
-      shutdown_eyedropper (data);
+  GdkDisplay *display = gtk_widget_get_display (invisible);
+  guint state = event->state & gtk_accelerator_get_default_mod_mask ();
+  gint x, y;
+  gint dx, dy;
 
+  dx = 0;
+  dy = 0;
+
+  switch (event->keyval) 
+    {
+    case GDK_space:
+    case GDK_Return:
+    case GDK_KP_Enter:
+    case GDK_KP_Space:
+      gdk_display_get_pointer (display, 
+			       NULL, &x, &y, NULL);
+      grab_color_at_mouse (gdk_event_get_screen ((GdkEvent *)event),
+			   x, y, data);
+      /* fall through */
+
+    case GDK_Escape:
+      shutdown_eyedropper (data);
+      
       g_signal_handlers_disconnect_by_func (invisible,
 					    mouse_press,
 					    data);
@@ -1284,9 +1310,40 @@ key_press (GtkWidget   *invisible,
 					    data);
       
       return TRUE;
+
+#ifdef GDK_WINDOWING_X11
+    case GDK_Up:
+    case GDK_KP_Up:
+      dy = state == GDK_MOD1_MASK ? -BIG_STEP : -1;
+      break;
+
+    case GDK_Down:
+    case GDK_KP_Down:
+      dy = state == GDK_MOD1_MASK ? BIG_STEP : 1;
+      break;
+
+    case GDK_Left:
+    case GDK_KP_Left:
+      dx = state == GDK_MOD1_MASK ? -BIG_STEP : -1;
+      break;
+
+    case GDK_Right:
+    case GDK_KP_Right:
+      dx = state == GDK_MOD1_MASK ? BIG_STEP : 1;
+      break;
+#endif
+
+    default:
+      return FALSE;
     }
 
-  return FALSE;
+#ifdef GDK_WINDOWING_X11
+  XWarpPointer (gdk_x11_display_get_xdisplay (display),
+		None, None, 0, 0, 0, 0, dx, dy);
+#endif
+  
+  return TRUE;
+
 }
 
 static gboolean
