@@ -1128,8 +1128,8 @@ check_is_folder (GtkFileSystem *file_system, const GtkFilePath *path, GError **e
 
   if (!is_folder)
     g_set_error (error,
-		 GTK_FILE_SYSTEM_ERROR,
-		 GTK_FILE_SYSTEM_ERROR_NOT_FOLDER,
+		 GTK_FILE_CHOOSER_ERROR,
+		 GTK_FILE_COOSER_ERROR_BAD_FILENAME,
 		 "%s: %s", 
 		 gtk_file_info_get_display_name (info),
 		 g_strerror (ENOTDIR));
@@ -2582,8 +2582,8 @@ shortcuts_drop_uris (GtkFileChooserDefault *impl,
 	  GError *error;
 
 	  g_set_error (&error,
-		       GTK_FILE_SYSTEM_ERROR,
-		       GTK_FILE_SYSTEM_ERROR_INVALID_URI,
+		       GTK_FILE_CHOOSER_ERROR,
+		       GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
 		       _("Could not add a bookmark for '%s' "
 			 "because it is an invalid path name."),
 		       uri);
@@ -4489,8 +4489,8 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
       !gtk_file_system_path_is_local (impl->file_system, path))
     {
       g_set_error (error,
-		   GTK_FILE_SYSTEM_ERROR,
-		   GTK_FILE_SYSTEM_ERROR_FAILED,
+		   GTK_FILE_CHOOSER_ERROR,
+		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
 		   _("Cannot change to folder because it is not local"));
 
       return FALSE;

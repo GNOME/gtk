@@ -1,11 +1,14 @@
+2005-01-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c: Don't construct errors from 
+	the GTK_FILE_SYSTEM_ERROR domain. Partial fix for #162911.
+
 Wed Jan  5 11:42:49 2005  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtkviewport.c (gtk_viewport_realize):
 	* gtk/gtktextview.c ((text_window_realize): Set the background of
 	the windows to None instead of adding EXPOSURE_MASK, as suggested
 	by Owen in #162112.
-
-2005-01-05  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_wm_protocols_filter): Update 
 	the user time when receiving a WM_DELETE message.  (#162980, 
