@@ -1,3 +1,11 @@
+Tue Jan 13 07:30:02 PST 1998 Jay Painter <jpaint@serv.net>
+	* gtk/gtkclist.c: minor updates
+	* gtk/gtktext.c: you can type in it!  It should also seg-fault *MUCH* less now,
+	because editing was never really turned off.  
+	* gtk/testgtk.c: changed the gtktext test a little
+	* gtk/testgtkrc: removed pixmap background for now, since I intend to break
+	that for a while
+
 1998-01-13  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtktoolbar.c: (gtk_real_toolbar_style_changed): Fixed
