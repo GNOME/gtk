@@ -125,8 +125,6 @@ GdkWindow*    gdk_window_new	     (GdkWindow	    *parent,
 				      gint	     attributes_mask);
 
 void	      gdk_window_destroy     (GdkWindow	    *window);
-GdkWindow*    gdk_window_ref	     (GdkWindow	    *window);
-void	      gdk_window_unref	     (GdkWindow	    *window);
 
 GdkWindow*    gdk_window_at_pointer  (gint	   *win_x,
 				      gint	   *win_y);
@@ -257,9 +255,6 @@ void	      gdk_window_get_geometry	 (GdkWindow	  *window,
 void	      gdk_window_get_position	 (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y);
-void	      gdk_window_get_size	 (GdkWindow	  *window,
-					  gint		  *width,
-					  gint		  *height);
 gint	      gdk_window_get_origin	 (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y);

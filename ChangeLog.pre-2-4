@@ -1,3 +1,8 @@
+2000-01-29  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkwindow.h
+	* gdk/gdkpixmap.h: Remove prototypes for renamed functions.
+
 Tue Jan 25 11:43:21 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkinvisible.h (struct _GtkInvisible[Class]): Fix
