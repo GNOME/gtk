@@ -1,7 +1,7 @@
 2003-08-29  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/*.c: Theme GTK toolbar arrows to XP chevrons, once my GTK patch is committed.
-	* src/wimp_style.c: Enable proper fonts/sizes for menus, status bars. Tooltips are giving me grief, though.
+	* src/wimp_style.c: Enable proper fonts/sizes for menus, status bars. Tooltips are waiting for my GTK patches, though.
 
 2003-08-28  Dom Lachowicz <cinamod@hotmail.com>
 

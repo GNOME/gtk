@@ -305,24 +305,22 @@ setup_system_styles(GtkStyle *style)
           (font_ptr ? font_ptr : " font name should go here"));
   gtk_rc_parse_string(buf);
 
-#if 0
-  /* enable tooltip fonts */
+  /* enable tooltip fonts - waiting for GTK 2.4 */
   font_ptr = sys_font_to_pango_font (CAPTION_FONT,font_buf);
-  sprintf(buf, "style \"wimp-tooltip-font\"\n"
-	  "{%s = \"%s\"\n"
-	  "}widget_class \"*GtkWindow.GtkLabel*\" style \"wimp-tooltip-font\"\n",
-          (font_ptr ? "font_name" : "#"),
-          (font_ptr ? font_ptr : " font name should go here"));
-  gtk_rc_parse_string(buf);
-#endif
-
-  sprintf(buf, "style \"wimp-tooltips\"\n"
+  sprintf(buf, "style \"wimp-tooltips-caption\"\n"
 	  "{fg[NORMAL] = { %d, %d, %d }\n"
-	  "bg[NORMAL] = { %d, %d, %d }\n"
-	  "}widget \"gtk-tooltips*\" style \"wimp-tooltips\"\n",
+	  "%s = \"%s\"\n"
+	  "}widget \"gtk-tooltips-caption*\" style \"wimp-tooltips-caption\"\n",
           tooltip_fore.red,
           tooltip_fore.green,
           tooltip_fore.blue,
+          (font_ptr ? "font_name" : "#"),
+          (font_ptr ? font_ptr : " font name should go here"));
+  gtk_rc_parse_string(buf);
+
+  sprintf(buf, "style \"wimp-tooltips\"\n"
+	  {"bg[NORMAL] = { %d, %d, %d }\n"
+	  "}widget \"gtk-tooltips*\" style \"wimp-tooltips\"\n",
           tooltip_back.red,
           tooltip_back.green,
           tooltip_back.blue);
@@ -846,6 +844,7 @@ draw_arrow (GtkStyle      *style,
     }
   else
     {
+      /* draw the toolbar chevrons - waiting for GTK 2.4 */
 	  if (name && !strcmp (name, "gtk-toolbar-arrow"))
 	  {
 		  if (xp_theme_draw(window, XP_THEME_ELEMENT_CHEVRON, style, x, y, width, height, state))
