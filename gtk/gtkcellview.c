@@ -1097,7 +1097,7 @@ gtk_cell_view_set_background_color (GtkCellView    *cell_view,
         }
     }
 
-  gtk_widget_queue_draw (GTK_WIDGET (cellview));
+  gtk_widget_queue_draw (GTK_WIDGET (cell_view));
 }
 
 /**
