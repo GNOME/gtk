@@ -731,7 +731,7 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
 	      cdata.static_prefix, cdata.const_prefix,
 	      cdata.dump_gtypes ? "guint8" : "unsigned char",
 	      name);
-      APPEND (gstring, "( \"\"\n  /* Pixbuf magic (0x%x) */\n  \"",
+      APPEND (gstring, "{ \"\"\n  /* Pixbuf magic (0x%x) */\n  \"",
 	      GDK_PIXBUF_MAGIC_NUMBER);
       cdata.pos = 3;
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
@@ -799,7 +799,7 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
   if (cdata.dump_struct)
     APPEND (gstring, "\",\n};\n\n");
   if (cdata.dump_stream)
-    APPEND (gstring, "\");\n\n");
+    APPEND (gstring, "\"};\n\n");
 
   /* dump RLE decoder for macros
    */
