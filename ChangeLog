@@ -1,3 +1,8 @@
+Thu Nov 20 15:41:56 2003  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkmenu.c (gtk_menu_set_tearoff_state): cast to GTK_WIDGET()
+	for the gtk_widget_hide() call.
+
 Thu Nov 20 14:51:41 2003  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreedatalist.c (gtk_tree_data_list_compare_func): Patch
@@ -20,6 +25,7 @@ Thu Nov 20 13:10:29 GMT 2003  Tony Gale <gale@gtk.org>
 	* gtk/gtkfilechooserdefault.c (shortcuts_append_desktop): Do not
 	throw up an error dialog if the desktop doesn't exist.
 	(error_message): Handle the case where there is no real toplevel
+
 	yet.
 	(list_model_filter_func): Always let folders pass through (patch
 	by Dave Malcolm).
