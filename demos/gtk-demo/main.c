@@ -408,6 +408,7 @@ load_file (const gchar *filename)
     {
       gchar *p = buffer->str;
       gchar *q;
+      gchar *r;
       
       switch (state)
 	{
@@ -415,6 +416,11 @@ load_file (const gchar *filename)
 	  /* Reading title */
 	  while (*p == '/' || *p == '*' || isspace (*p))
 	    p++;
+	  r = p;
+	  while (*r != '/' && strlen (r))
+	    r++;
+	  if (strlen (r) > 0)
+	    p = r + 1;
 	  q = p + strlen (p);
 	  while (q > p && isspace (*(q - 1)))
 	    q--;
@@ -532,28 +538,34 @@ button_press_event_cb (GtkTreeView    *tree_view,
 			      FUNC_COLUMN, &func,
 			      ITALIC_COLUMN, &italic,
 			      -1);
-	  gtk_tree_store_set (GTK_TREE_STORE (model),
-			      &iter,
-			      ITALIC_COLUMN, !italic,
-			      -1);
-	  window = (func) ();
-	  if (window != NULL)
+
+	  if (func)
 	    {
-	      CallbackData *cbdata;
-
-	      cbdata = g_new (CallbackData, 1);
-	      cbdata->model = model;
-	      cbdata->path = path;
-
-	      gtk_signal_connect (GTK_OBJECT (window),
-                                  "destroy",
-                                  GTK_SIGNAL_FUNC (window_closed_cb),
-                                  cbdata);
+	      gtk_tree_store_set (GTK_TREE_STORE (model),
+				  &iter,
+				  ITALIC_COLUMN, !italic,
+				  -1);
+	      window = (func) ();
+	      if (window != NULL)
+		{
+		  CallbackData *cbdata;
+		  
+		  cbdata = g_new (CallbackData, 1);
+		  cbdata->model = model;
+		  cbdata->path = path;
+		  
+		  gtk_signal_connect (GTK_OBJECT (window),
+				      "destroy",
+				      GTK_SIGNAL_FUNC (window_closed_cb),
+				      cbdata);
+		}
+	      else
+		{
+		  gtk_tree_path_free (path);
+		}
 	    }
 	  else
-	    {
-	      gtk_tree_path_free (path);
-	    }
+	    gtk_tree_path_free (path);
 	}
 
       gtk_signal_emit_stop_by_name (GTK_OBJECT (tree_view),
@@ -583,24 +595,28 @@ row_activated_cb (GtkTreeView       *tree_view,
 		      FUNC_COLUMN, &func,
 		      ITALIC_COLUMN, &italic,
 		      -1);
-  gtk_tree_store_set (GTK_TREE_STORE (model),
-		      &iter,
-		      ITALIC_COLUMN, !italic,
-		      -1);
-  window = (func) ();
 
-  if (window != NULL)
+  if (func)
     {
-      CallbackData *cbdata;
+      gtk_tree_store_set (GTK_TREE_STORE (model),
+			  &iter,
+			  ITALIC_COLUMN, !italic,
+			  -1);
+      window = (func) ();
       
-      cbdata = g_new (CallbackData, 1);
-      cbdata->model = model;
-      cbdata->path = gtk_tree_path_copy (path);
-      
-      gtk_signal_connect (GTK_OBJECT (window),
-			  "destroy",
-			  GTK_SIGNAL_FUNC (window_closed_cb),
-			  cbdata);
+      if (window != NULL)
+	{
+	  CallbackData *cbdata;
+	  
+	  cbdata = g_new (CallbackData, 1);
+	  cbdata->model = model;
+	  cbdata->path = gtk_tree_path_copy (path);
+	  
+	  gtk_signal_connect (GTK_OBJECT (window),
+			      "destroy",
+			      GTK_SIGNAL_FUNC (window_closed_cb),
+			      cbdata);
+	}
     }
 }
 
@@ -617,7 +633,8 @@ selection_cb (GtkTreeSelection *selection,
   gtk_tree_model_get_value (model, &iter,
 			    FILENAME_COLUMN,
 			    &value);
-  load_file (g_value_get_string (&value));
+  if (g_value_get_string (&value))
+    load_file (g_value_get_string (&value));
   g_value_unset (&value);
 }
 
@@ -668,7 +685,6 @@ create_text (GtkTextBuffer **buffer,
   return scrolled_window;
 }
 
-/* Technically a list, but if we do go to 80 demos, we may want to move to a tree */
 static GtkWidget *
 create_tree (void)
 {
@@ -678,7 +694,8 @@ create_tree (void)
   GtkTreeViewColumn *column;
   GtkTreeStore *model;
   GtkTreeIter iter;
-  gint i;
+
+  Demo *d = testgtk_demos;
 
   model = gtk_tree_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_BOOLEAN);
   tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
@@ -688,17 +705,44 @@ create_tree (void)
 			       GTK_SELECTION_BROWSE);
   gtk_widget_set_size_request (tree_view, 200, -1);
 
-  for (i=0; i < G_N_ELEMENTS (testgtk_demos); i++)
+  /* this code only supports 1 level of children. If we
+   * want more we probably have to use a recursing function.
+   */
+  while (d->title)
     {
+      Demo *children = d->children;
+
       gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
 
       gtk_tree_store_set (GTK_TREE_STORE (model),
 			  &iter,
-			  TITLE_COLUMN, testgtk_demos[i].title,
-			  FILENAME_COLUMN, testgtk_demos[i].filename,
-			  FUNC_COLUMN, testgtk_demos[i].func,
+			  TITLE_COLUMN, d->title,
+			  FILENAME_COLUMN, d->filename,
+			  FUNC_COLUMN, d->func,
 			  ITALIC_COLUMN, FALSE,
 			  -1);
+
+      d++;
+
+      if (!children)
+	continue;
+      
+      while (children->title)
+	{
+	  GtkTreeIter child_iter;
+
+	  gtk_tree_store_append (GTK_TREE_STORE (model), &child_iter, &iter);
+	  
+	  gtk_tree_store_set (GTK_TREE_STORE (model),
+			      &child_iter,
+			      TITLE_COLUMN, children->title,
+			      FILENAME_COLUMN, children->filename,
+			      FUNC_COLUMN, children->func,
+			      ITALIC_COLUMN, FALSE,
+			      -1);
+	  
+	  children++;
+	}
     }
 
   cell = gtk_cell_renderer_text_new ();
@@ -718,6 +762,8 @@ create_tree (void)
 
   g_signal_connect (G_OBJECT (selection), "changed", GTK_SIGNAL_FUNC (selection_cb), model);
   g_signal_connect (G_OBJECT (tree_view), "row_activated", GTK_SIGNAL_FUNC (row_activated_cb), model);
+
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
 
   return tree_view;
 }

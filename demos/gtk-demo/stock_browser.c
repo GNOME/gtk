@@ -1,4 +1,4 @@
-/* Stock Item/Icon Browser
+/* Stock Item and Icon Browser
  *
  * This source code for this demo doesn't demonstrate anything
  * particularly useful in applications. The purpose of the "demo" is
