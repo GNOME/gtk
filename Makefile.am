@@ -112,7 +112,7 @@ EXTRA_DIST =			\
 	examples/spinbutton/Makefile  \
 	examples/find-examples.sh
 
-pkgconfigdir = $(libexecdir)/pkgconfig
+pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA= gdk-pixbuf-2.0.pc gdk-2.0.pc gtk+-2.0.pc
 
 dist-hook: gtk+.spec
