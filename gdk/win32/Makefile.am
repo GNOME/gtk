@@ -68,8 +68,7 @@ libgdk_win32_la_SOURCES = \
 	gdkvisual-win32.c \
 	gdkwin32.h \
 	gdkwin32id.c \
-	gdkwindow-win32.c \
-	surrogate-dimm.h
+	gdkwindow-win32.c
 
 libgdk_win32_la_LIBADD = rc/gdk-win32res.lo
 

@@ -4,6 +4,9 @@
 
 	* gtk/gtkrc.ja: Add MS Gothic.
 
+	* gdk/win32/Makefile.am (libgdk_win32_la_SOURCES): Remove
+	surrogate-dimm.h.
+
 2001-11-08  Tor Lillqvist  <tml@iki.fi>
 
 	* README.win32: Add headers. Add section about ActiveIMM.
@@ -13,7 +16,7 @@
 	which contains, among other things, the Active IMM header dimm.h
 	and UUID library uuid.lib. Use test -f instead of AC_CHECK_FILE.
 	Require GLib 1.3.10.
-	
+
 	* acconfig.h: Add HAVE_DIMM_H.
 
 	* config.h.win32: Add comment regarding dimm.h.
