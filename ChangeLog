@@ -1,3 +1,8 @@
+Sun Feb 22 02:10:34 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_default_completion_func): 
+	Don't crash if item is NULL.  (#131542, Dan Damian)
+
 Sun Feb 22 02:04:03 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* configure.in: Add a check for a new enough fontconfig, since

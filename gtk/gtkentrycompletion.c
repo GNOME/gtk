@@ -507,15 +507,18 @@ gtk_entry_completion_default_completion_func (GtkEntryCompletion *completion,
                       completion->priv->text_column, &item,
                       -1);
 
-  normalized_string = g_utf8_normalize (item, -1, G_NORMALIZE_ALL);
-  case_normalized_string = g_utf8_casefold (normalized_string, -1);
-
-  if (!strncmp (key, case_normalized_string, strlen (key)))
-      ret = TRUE;
-
-  g_free (item);
-  g_free (normalized_string);
-  g_free (case_normalized_string);
+  if (item != NULL)
+    {
+      normalized_string = g_utf8_normalize (item, -1, G_NORMALIZE_ALL);
+      case_normalized_string = g_utf8_casefold (normalized_string, -1);
+      
+      if (!strncmp (key, case_normalized_string, strlen (key)))
+	ret = TRUE;
+      
+      g_free (item);
+      g_free (normalized_string);
+      g_free (case_normalized_string);
+    }
 
   return ret;
 }
