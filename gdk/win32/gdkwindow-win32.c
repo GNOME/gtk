@@ -2715,7 +2715,10 @@ gdk_window_focus (GdkWindow *window,
 			   GDK_WINDOW_HWND (window),
 			   _gdk_win32_window_state_to_string (((GdkWindowObject *) window)->state)));
 
-  ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
+  if (((GdkWindowObject *) window)->state & GDK_WINDOW_STATE_MAXIMIZED)
+    ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMAXIMIZED);
+  else
+    ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
   SetFocus (GDK_WINDOW_HWND (window));
 }
 
