@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 

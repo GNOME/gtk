@@ -1,5 +1,14 @@
 2003-09-27  Matthias Clasen  <maclas@gmx.de>
 
+	* tests/testtext.c: Turn off GTK_DISABLE_DEPRECATED, since
+	this test uses the soon-to-be-deprecated GtkItemFactory.
+
+	* demos/gtk-demo/Makefile.am (demos): Add ui_manager.c,
+	remove item_factory.c
+
+	* demos/gtk-demo/ui_manager.c: Duplicate of item_factory.c 
+	using GtkUIManager instead of GtkItemFactory.
+
 	* tests/testmerge.c: Demonstrate the use of the 
 	connect-proxy signal.
 
