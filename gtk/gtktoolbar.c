@@ -72,6 +72,10 @@ typedef struct _ToolbarContent ToolbarContent;
 				    */
 #define SLIDE_SPEED 600	   /* How fast the items slide, in pixels per second */
 
+#define MIXED_API_WARNING						\
+    "Mixing deprecated and non-deprecated GtkToolbar API is not allowed"
+
+
 /* Properties */
 enum {
   PROP_0,
@@ -3595,6 +3599,8 @@ internal_insert_element (GtkToolbar          *toolbar,
     g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   else if (type != GTK_TOOLBAR_CHILD_RADIOBUTTON)
     g_return_val_if_fail (widget == NULL, NULL);
+  if (GTK_IS_TOOL_ITEM (widget))
+    g_warning (MIXED_API_WARNING);
   
   if (!gtk_toolbar_check_old_api (toolbar))
     return NULL;
@@ -4586,9 +4592,6 @@ get_shadow_type (GtkToolbar *toolbar)
 /*
  * API checks
  */
-#define mixed_api_warning \
-    "mixing deprecated and non-deprecated GtkToolbar API is not allowed"
-
 static gboolean
 gtk_toolbar_check_old_api (GtkToolbar *toolbar)
 {
@@ -4596,7 +4599,7 @@ gtk_toolbar_check_old_api (GtkToolbar *toolbar)
   
   if (priv->api_mode == NEW_API)
     {
-      g_warning (mixed_api_warning);
+      g_warning (MIXED_API_WARNING);
       return FALSE;
     }
   
@@ -4611,7 +4614,7 @@ gtk_toolbar_check_new_api (GtkToolbar *toolbar)
   
   if (priv->api_mode == OLD_API)
     {
-      g_warning (mixed_api_warning);
+      g_warning (MIXED_API_WARNING);
       return FALSE;
     }
   
