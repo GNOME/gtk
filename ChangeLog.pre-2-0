@@ -1,3 +1,11 @@
+Mon Feb 14 12:29:38 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfontsel.c: Apply patch from
+	SHIRASAKI Yasuhiro <yasuhiro@awa.tohoku.ac.jp> to make font selector work a little
+	better with 2-byte fonts. (Load a fontset instead of a font for two byte fonts.)
+
+	Also, some cleanups in atom handling.
+
 Sun Feb 13 08:02:21 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksocket.c (gtk_socket_class_init): parent class is GtkContainer,
