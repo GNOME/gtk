@@ -754,6 +754,7 @@ gdk_x11_gc_get_xgc (GdkGC *gc)
   return gc_x11->xgc;
 }
 
+#ifdef HAVE_XFT
 /* Various bits of the below are roughly cribbed from XFree86
  * lib/Xft/xftdraw.c, Copyright 2000, Keith Packard
  */
@@ -781,7 +782,6 @@ foreground_format (GdkGC *gc)
 			    0);
 }
 
-#ifdef HAVE_XFT
 /**
  * _gdk_x11_gc_get_fg_picture:
  * @gc: a #GdkGC

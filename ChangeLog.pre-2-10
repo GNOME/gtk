@@ -1,3 +1,7 @@
+Tue Nov  6 10:13:16 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkgc-x11.c: Fix misplaced HAVE_XFT.
+
 2001-11-05  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_paint): expose the child
