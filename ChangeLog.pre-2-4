@@ -1,3 +1,23 @@
+Sat May 23 21:54:05 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* configure.in (LDFLAGS): Bombo out with a moderately
+	  helpful message if detection of X libraries fails.
+
+Sat May 23 18:57:06 1998  Owen Taylor  <otaylor@gtk.org>
+
+  [ Combination of:
+     gtk-rrh-980412-0.patch (Raja R Harinath <harinath@cs.umn.edu>)
+     gtk-jbuhler-980516-0 (Jeremy Buhler <jbuhler@cs.washington.edu>) ]
+
+	* gdk/gdk.h gdk/gdkcc.c gdk/gdkfont.c gtk/gtkmain.c
+	  gtk/gtksignal.c gtk/gtktext.c: 
+
+	  Fixups for warnings from adding const to type of GHashFunc,
+	  GCompareFunc
+	
+	* gtk/gtkcombo.c (gtk_combo_entry_key_press): Minor style/
+	  ansi-warnings fixups.
+
 Sat May 23 17:48:58 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkeventbox.c (gtk_event_box_size_allocate): 

@@ -143,9 +143,17 @@ saved_ldflags="$LDFLAGS"
 CFLAGS="$X_CFLAGS"
 LDFLAGS="$X_LDFLAGS $X_LIBS"
 
+if test "x$no_x" = "xyes"; then 
+  AC_MSG_ERROR([
+*** X libraries or include files not found. Check 'config.log' for 
+*** more details.])
+fi
+
 # Checks for libraries.
 # Check for the X11 library
-AC_CHECK_LIB(X11, XOpenDisplay, x_libs="-lX11 $X_EXTRA_LIBS", no_x11_lib=yes, $X_EXTRA_LIBS)
+AC_CHECK_LIB(X11, XOpenDisplay, x_libs="-lX11 $X_EXTRA_LIBS", 
+  AC_MSG_ERROR([*** libX11 not found. Check 'config.log' for more details.]),
+  $X_EXTRA_LIBS)
 
 if test "x$enable_shm" = "xyes"; then
   # Check for the Xext library (needed for XShm extention)
