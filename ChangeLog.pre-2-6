@@ -1,3 +1,10 @@
+2002-09-12  Tor Lillqvist  <tml@iki.fi>
+
+	Merge from gtk-2-0:
+
+	* gdk/win32/gdkdrawable-win32.c (render_line_horizontal,
+	render_line_vertical): Some spacing cleanup. Return TRUE.
+	
 Wed Sep 11 15:48:38 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_row_reference_get_type): Make
