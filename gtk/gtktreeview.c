@@ -8980,7 +8980,7 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
   gboolean found_focus = FALSE;
   GtkWidgetClass *entry_parent_class;
   
-  if (!tree_view->priv->enable_search)
+  if (!tree_view->priv->enable_search && !keybinding)
     return FALSE;
 
   if (GTK_WIDGET_VISIBLE (tree_view->priv->search_window))
@@ -9013,9 +9013,7 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
   gtk_tree_view_ensure_interactive_directory (tree_view);
 
   if (keybinding)
-    {
-      gtk_entry_set_text (GTK_ENTRY (tree_view->priv->search_entry), "");
-    }
+    gtk_entry_set_text (GTK_ENTRY (tree_view->priv->search_entry), "");
 
   /* done, show it */
   tree_view->priv->search_dialog_position_func (tree_view, tree_view->priv->search_window);
@@ -9027,13 +9025,11 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
 			  G_CALLBACK (gtk_tree_view_search_init),
 			  tree_view);
     }
-  if (! keybinding)
-    {
-      tree_view->priv->typeselect_flush_timeout =
-	g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
-		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
-		       tree_view);
-    }
+
+  tree_view->priv->typeselect_flush_timeout =
+    g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
+		   (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
+		   tree_view);
 
   /* Grab focus will select all the text.  We don't want that to happen, so we
    * call the parent instance and bypass the selection change.  This is probably
@@ -9053,7 +9049,7 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
 static gboolean
 gtk_tree_view_start_interactive_search (GtkTreeView *tree_view)
 {
-  return gtk_tree_view_real_start_interactive_search (tree_view, FALSE);
+  return gtk_tree_view_real_start_interactive_search (tree_view, TRUE);
 }
 /* this function returns the new width of the column being resized given
  * the column and x position of the cursor; the x cursor position is passed
