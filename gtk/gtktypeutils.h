@@ -58,8 +58,8 @@ typedef enum	/*< skip >*/
   GTK_TYPE_FLOAT	= G_TYPE_FLOAT,
   GTK_TYPE_DOUBLE	= G_TYPE_DOUBLE,
   GTK_TYPE_STRING	= G_TYPE_STRING,
-  GTK_TYPE_BOXED	= G_TYPE_GTK_BOXED,
-  GTK_TYPE_POINTER	= G_TYPE_GTK_POINTER,
+  GTK_TYPE_BOXED	= G_TYPE_BOXED,
+  GTK_TYPE_POINTER	= G_TYPE_POINTER,
   GTK_TYPE_SIGNAL	= G_TYPE_GTK_SIGNAL
 } GtkFundamentalType;
 
@@ -122,10 +122,7 @@ typedef void (*GtkCallbackMarshal)  (GtkObject    *object,
 				     guint         n_args,
 				     GtkArg       *args);
 typedef void (*GtkSignalFunc)       ();
-typedef void (*GtkSignalMarshaller) (GtkObject    *object,
-				     GtkSignalFunc func,
-				     gpointer      func_data,
-				     GtkArg       *args);
+typedef GSignalCMarshaller          GtkSignalMarshaller;
 #define GTK_SIGNAL_FUNC(f)	    ((GtkSignalFunc) (f))
 
 

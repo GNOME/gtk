@@ -285,7 +285,6 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtklistitem.c		\
 	gtkliststore.c		\
 	gtkmain.c		\
-	gtkmarshal.c		\
 	gtkmenu.c		\
 	gtkmenubar.c		\
 	gtkmenufactory.c	\
@@ -400,7 +399,7 @@ gtk_extra_sources = @STRIP_BEGIN@ \
 	makeenums.h		\
 	gtkargcollector.c	\
 	gtk-boxed.defs		\
-	genmarshal.pl		\
+	genmarshal.c		\
 	gtkmarshal.list		\
 @STRIP_END@
 # Extra headers that are used for enum type array/id generation
@@ -486,11 +485,10 @@ $(srcdir)/stamp-gtk.defs: @REBUILD@ makeenums.pl gtk.defs gtk-boxed.defs $(gtk_p
 	&& rm -f xgen-gdef \
 	&& echo timestamp > $(@F)
 $(srcdir)/gtkmarshal.c: stamp-gtkmarshal.h
-$(srcdir)/gtkmarshal.c $(srcdir)/stamp-gtkmarshal.h: @REBUILD@ genmarshal.pl gtkmarshal.list gtkmarshal.h
+$(srcdir)/gtkmarshal.c $(srcdir)/stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.list gtkmarshal.h
 	cd $(srcdir) \
-	&& $(PERL) genmarshal.pl gtkmarshal.list xgen-gmh xgen-gmc \
-	&& (test -z "$(INDENT)" || $(INDENT) xgen-gmh) \
-	&& (test -z "$(INDENT)" || $(INDENT) xgen-gmc) \
+	&& glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --header --skip-source >> xgen-gmh \
+	&& glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --body >> xgen-gmc \
 	&& cp xgen-gmc gtkmarshal.c \
 	&& (cmp -s xgen-gmh gtkmarshal.h || cp xgen-gmh gtkmarshal.h) \
 	&& rm -f xgen-gmh xgen-gmc xgen-gmh~ xgen-gmc~ \

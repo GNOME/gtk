@@ -89,21 +89,21 @@ gtk_item_class_init (GtkItemClass *class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkItemClass, select),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   item_signals[DESELECT] =
     gtk_signal_new ("deselect",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkItemClass, deselect),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   item_signals[TOGGLE] =
     gtk_signal_new ("toggle",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkItemClass, toggle),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (object_class, item_signals, LAST_SIGNAL);

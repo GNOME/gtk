@@ -145,7 +145,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkViewportClass, set_scroll_adjustments),
-		    gtk_marshal_NONE__POINTER_POINTER,
+		    gtk_marshal_VOID__POINTER_POINTER,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 }
 

@@ -95,7 +95,7 @@ gtk_cell_renderer_toggle_get_type (void)
 	(GInstanceInitFunc) gtk_cell_renderer_toggle_init,
       };
 
-      cell_toggle_type = g_type_register_static (GTK_TYPE_CELL_RENDERER, "GtkCellRendererToggle", &cell_toggle_info);
+      cell_toggle_type = g_type_register_static (GTK_TYPE_CELL_RENDERER, "GtkCellRendererToggle", &cell_toggle_info, 0);
     }
 
   return cell_toggle_type;
@@ -147,7 +147,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCellRendererToggleClass, toggled),
-		    gtk_marshal_NONE__POINTER,
+		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_POINTER);
 

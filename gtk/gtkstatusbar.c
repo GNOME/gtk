@@ -101,7 +101,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkStatusbarClass, text_pushed),
-		    gtk_marshal_NONE__UINT_STRING,
+		    gtk_marshal_VOID__UINT_STRING,
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_UINT,
 		    GTK_TYPE_STRING);
@@ -110,7 +110,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkStatusbarClass, text_popped),
-		    gtk_marshal_NONE__UINT_STRING,
+		    gtk_marshal_VOID__UINT_STRING,
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_UINT,
 		    GTK_TYPE_STRING);

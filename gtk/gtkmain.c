@@ -383,7 +383,7 @@ gtk_init_check (int	 *argc,
 	}
       if (!modinit_func)
 	{
-	  g_warning ("Failed to load module \"%s\": %s",
+	  g_message ("Failed to load module \"%s\": %s",
 		     module ? g_module_name (module) : module_name,
 		     g_module_error ());
 	  if (module)

@@ -360,7 +360,7 @@ gtk_layout_get_type (void)
 	(GInstanceInitFunc) gtk_layout_init,
       };
 
-      layout_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkLayout", &layout_info);
+      layout_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkLayout", &layout_info, 0);
     }
 
   return layout_type;
@@ -400,7 +400,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkLayoutClass, set_scroll_adjustments),
-		    gtk_marshal_NONE__POINTER_POINTER,
+		    gtk_marshal_VOID__POINTER_POINTER,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 }
 

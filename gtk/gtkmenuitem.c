@@ -101,7 +101,7 @@ gtk_menu_item_get_type (void)
 	(GInstanceInitFunc) gtk_menu_item_init,
       };
 
-      menu_item_type = g_type_register_static (GTK_TYPE_ITEM, "GtkMenuItem", &menu_item_info);
+      menu_item_type = g_type_register_static (GTK_TYPE_ITEM, "GtkMenuItem", &menu_item_info, 0);
     }
 
   return menu_item_type;
@@ -127,7 +127,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                     GTK_RUN_FIRST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkMenuItemClass, activate),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 
   menu_item_signals[ACTIVATE_ITEM] =

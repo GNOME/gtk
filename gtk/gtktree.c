@@ -117,14 +117,14 @@ gtk_tree_class_init (GtkTreeClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeClass, selection_changed),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   tree_signals[SELECT_CHILD] =
     gtk_signal_new ("select_child",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeClass, select_child),
-		    gtk_marshal_NONE__POINTER,
+		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
   tree_signals[UNSELECT_CHILD] =
@@ -132,7 +132,7 @@ gtk_tree_class_init (GtkTreeClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeClass, unselect_child),
-		    gtk_marshal_NONE__POINTER,
+		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
   

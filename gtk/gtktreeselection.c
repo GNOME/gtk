@@ -59,7 +59,7 @@ gtk_tree_selection_get_type (void)
         (GInstanceInitFunc) gtk_tree_selection_init
       };
 
-      selection_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkTreeSelection", &selection_info);
+      selection_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkTreeSelection", &selection_info, 0);
     }
 
   return selection_type;
@@ -78,7 +78,7 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeSelectionClass, selection_changed),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (object_class, tree_selection_signals, LAST_SIGNAL);

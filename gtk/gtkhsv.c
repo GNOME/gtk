@@ -150,7 +150,7 @@ gtk_hsv_class_init (GtkHSVClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkHSVClass, changed),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   gtk_object_class_add_signals (object_class, hsv_signals, LAST_SIGNAL);
   

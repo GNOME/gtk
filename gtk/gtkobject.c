@@ -95,7 +95,7 @@ gtk_object_get_type (void)
 	(GInstanceInitFunc) gtk_object_init,
       };
       
-      object_type = g_type_register_static (G_TYPE_OBJECT, "GtkObject", &object_info);
+      object_type = g_type_register_static (G_TYPE_OBJECT, "GtkObject", &object_info, 0);
     }
 
   return object_type;
@@ -161,10 +161,10 @@ gtk_object_class_init (GtkObjectClass *class)
 
   object_signals[DESTROY] =
     gtk_signal_new ("destroy",
-                    GTK_RUN_LAST | GTK_RUN_NO_HOOKS,
+                    G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | GTK_RUN_NO_HOOKS,
                     GTK_CLASS_TYPE (class),
                     GTK_SIGNAL_OFFSET (GtkObjectClass, destroy),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (class, object_signals, LAST_SIGNAL);
@@ -201,13 +201,10 @@ gtk_object_destroy (GtkObject *object)
   if (!GTK_OBJECT_DESTROYED (object))
     {
       /* need to hold a reference count around all class method
-       * invocations. we guard against reinvocations during
-       * destruction with the GTK_DESTROYED flag.
+       * invocations.
        */
       gtk_object_ref (object);
-      GTK_OBJECT_SET_FLAGS (object, GTK_DESTROYED);
       G_OBJECT_GET_CLASS (object)->shutdown (G_OBJECT (object));
-      GTK_OBJECT_UNSET_FLAGS (object, GTK_DESTROYED);
       gtk_object_unref (object);
     }
 }
@@ -217,7 +214,17 @@ gtk_object_shutdown (GObject *gobject)
 {
   GtkObject *object = GTK_OBJECT (gobject);
 
-  gtk_signal_emit (object, object_signals[DESTROY]);
+  /* guard against reinvocations during
+   * destruction with the GTK_DESTROYED flag.
+   */
+  if (!GTK_OBJECT_DESTROYED (object))
+    {
+      GTK_OBJECT_SET_FLAGS (object, GTK_DESTROYED);
+      
+      gtk_signal_emit (object, object_signals[DESTROY]);
+      
+      GTK_OBJECT_UNSET_FLAGS (object, GTK_DESTROYED);
+    }
 
   G_OBJECT_CLASS (parent_class)->shutdown (gobject);
 }
@@ -225,8 +232,7 @@ gtk_object_shutdown (GObject *gobject)
 static void
 gtk_object_real_destroy (GtkObject *object)
 {
-  if (GTK_OBJECT_CONNECTED (object))
-    gtk_signal_handlers_destroy (object);
+  g_signal_handlers_destroy (G_OBJECT (object));
 }
 
 static void

@@ -7,6 +7,8 @@ BEGIN {
   gen_macros = 0;
   gen_entries = 0;
   gen_vars = 0;
+  boxed_copy = "";
+  boxed_free = "";
   
   for (i = 2; i < ARGC; i++)
     {
@@ -65,7 +67,7 @@ function set_type (set_type_1)
   sub ("^GTK_TYPE_GTK_", "GTK_TYPE_", type_macro);
 }
 
-function generate (generate_1)
+function generate (generate_what)
 {
   if (gen_macros)
     {
@@ -74,10 +76,10 @@ function generate (generate_1)
   if (gen_entries)
     {
       printf ("  { \"%s\", &%s,\n", type_name, type_macro);
-      if (generate_1 == "BOXED")
-	printf ("    GTK_TYPE_%s, NULL },\n", generate_1);
+      if (generate_what == "BOXED")
+	printf ("    GTK_TYPE_%s, %s, %s, },\n", generate_what, boxed_copy, boxed_free);
       else
-	printf ("    GTK_TYPE_%s, %s_values },\n", generate_1, type_ident);
+	printf ("    GTK_TYPE_%s, %s_values },\n", generate_what, type_ident);
     }
   if (gen_vars)
     {
@@ -116,10 +118,31 @@ function generate (generate_1)
   if ($2 == "")
     printf ("huh? define-boxed keyword without arg?\n") > "/dev/stderr";
   else
-    {
-      set_type($2);
-      generate("BOXED");
-    }
+      {
+	  boxed_copy = "NULL";
+	  boxed_free = "NULL";
+	  set_type($2);
+	  do {
+	      getline;
+	      sub (";.*", "", $0);
+	  } while ($0 ~ /^[ \t]*$/);
+	  tmp_var1 = $1;
+	  if ($0 ~ /\)/) { generate("BOXED"); next; }
+	  do {
+	      getline;
+	      sub (";.*", "", $0);
+	  } while ($0 ~ /^[ \t]*$/);
+	  tmp_var2 = $1;
+	  sub ("\).*", "", tmp_var2);
+	  if (tmp_var1 ~ /^[_A-Za-z][_A-Za-z0-9]*$/ &&
+	      tmp_var2 ~ /^[_A-Za-z][_A-Za-z0-9]*$/)
+	      {
+		  boxed_copy = tmp_var1;
+		  boxed_free = tmp_var2;
+		  # printf ("read boxed funcs: %s %s\n", boxed_copy, boxed_free) > "/dev/stderr";
+	      }
+	  generate("BOXED");
+      }
 }
 
 END {

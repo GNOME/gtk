@@ -62,7 +62,7 @@ gtk_icon_factory_get_type (void)
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
                                             "GtkIconFactory",
-                                            &object_info);
+                                            &object_info, 0);
     }
   
   return object_type;

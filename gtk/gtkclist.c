@@ -544,7 +544,7 @@ gtk_clist_class_init (GtkCListClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCListClass, set_scroll_adjustments),
-		    gtk_marshal_NONE__POINTER_POINTER,
+		    gtk_marshal_VOID__POINTER_POINTER,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 
   clist_signals[SELECT_ROW] =
@@ -552,7 +552,7 @@ gtk_clist_class_init (GtkCListClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCListClass, select_row),
-		    gtk_marshal_NONE__INT_INT_POINTER,
+		    gtk_marshal_VOID__INT_INT_POINTER,
 		    GTK_TYPE_NONE, 3,
 		    GTK_TYPE_INT,
 		    GTK_TYPE_INT,
@@ -562,7 +562,7 @@ gtk_clist_class_init (GtkCListClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCListClass, unselect_row),
-		    gtk_marshal_NONE__INT_INT_POINTER,
+		    gtk_marshal_VOID__INT_INT_POINTER,
 		    GTK_TYPE_NONE, 3, GTK_TYPE_INT,
 		    GTK_TYPE_INT, GTK_TYPE_GDK_EVENT);
   clist_signals[ROW_MOVE] =
@@ -570,21 +570,21 @@ gtk_clist_class_init (GtkCListClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCListClass, row_move),
-		    gtk_marshal_NONE__INT_INT,
+		    gtk_marshal_VOID__INT_INT,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_INT, GTK_TYPE_INT);
   clist_signals[CLICK_COLUMN] =
     gtk_signal_new ("click_column",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCListClass, click_column),
-		    gtk_marshal_NONE__INT,
+		    gtk_marshal_VOID__INT,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_INT);
   clist_signals[RESIZE_COLUMN] =
     gtk_signal_new ("resize_column",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCListClass, resize_column),
-		    gtk_marshal_NONE__INT_INT,
+		    gtk_marshal_VOID__INT_INT,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_INT, GTK_TYPE_INT);
 
   clist_signals[TOGGLE_FOCUS_ROW] =
@@ -592,56 +592,56 @@ gtk_clist_class_init (GtkCListClass *klass)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkCListClass, toggle_focus_row),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
   clist_signals[SELECT_ALL] =
     gtk_signal_new ("select_all",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkCListClass, select_all),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
   clist_signals[UNSELECT_ALL] =
     gtk_signal_new ("unselect_all",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkCListClass, unselect_all),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
   clist_signals[UNDO_SELECTION] =
     gtk_signal_new ("undo_selection",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCListClass, undo_selection),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   clist_signals[START_SELECTION] =
     gtk_signal_new ("start_selection",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCListClass, start_selection),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   clist_signals[END_SELECTION] =
     gtk_signal_new ("end_selection",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCListClass, end_selection),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   clist_signals[TOGGLE_ADD_MODE] =
     gtk_signal_new ("toggle_add_mode",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCListClass, toggle_add_mode),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   clist_signals[EXTEND_SELECTION] =
     gtk_signal_new ("extend_selection",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkCListClass, extend_selection),
-                    gtk_marshal_NONE__ENUM_FLOAT_BOOL,
+                    gtk_marshal_VOID__ENUM_FLOAT_BOOL,
                     GTK_TYPE_NONE, 3,
 		    GTK_TYPE_SCROLL_TYPE, GTK_TYPE_FLOAT, GTK_TYPE_BOOL);
   clist_signals[SCROLL_VERTICAL] =
@@ -649,21 +649,21 @@ gtk_clist_class_init (GtkCListClass *klass)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkCListClass, scroll_vertical),
-                    gtk_marshal_NONE__ENUM_FLOAT,
+                    gtk_marshal_VOID__ENUM_FLOAT,
                     GTK_TYPE_NONE, 2, GTK_TYPE_SCROLL_TYPE, GTK_TYPE_FLOAT);
   clist_signals[SCROLL_HORIZONTAL] =
     gtk_signal_new ("scroll_horizontal",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkCListClass, scroll_horizontal),
-                    gtk_marshal_NONE__ENUM_FLOAT,
+                    gtk_marshal_VOID__ENUM_FLOAT,
                     GTK_TYPE_NONE, 2, GTK_TYPE_SCROLL_TYPE, GTK_TYPE_FLOAT);
   clist_signals[ABORT_COLUMN_RESIZE] =
     gtk_signal_new ("abort_column_resize",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkCListClass, abort_column_resize),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
   gtk_object_class_add_signals (object_class, clist_signals, LAST_SIGNAL);
 

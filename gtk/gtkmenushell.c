@@ -192,21 +192,21 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkMenuShellClass, deactivate),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   menu_shell_signals[SELECTION_DONE] =
     gtk_signal_new ("selection-done",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkMenuShellClass, selection_done),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   menu_shell_signals[MOVE_CURRENT] =
     gtk_signal_new ("move_current",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkMenuShellClass, move_current),
-		    gtk_marshal_NONE__ENUM,
+		    gtk_marshal_VOID__ENUM,
 		    GTK_TYPE_NONE, 1, 
 		    GTK_TYPE_MENU_DIRECTION_TYPE);
   menu_shell_signals[ACTIVATE_CURRENT] =
@@ -214,7 +214,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkMenuShellClass, activate_current),
-		    gtk_marshal_NONE__BOOL,
+		    gtk_marshal_VOID__BOOLEAN,
 		    GTK_TYPE_NONE, 1, 
 		    GTK_TYPE_BOOL);
   menu_shell_signals[CANCEL] =
@@ -222,7 +222,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkMenuShellClass, cancel),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   
   gtk_object_class_add_signals (object_class, menu_shell_signals, LAST_SIGNAL);

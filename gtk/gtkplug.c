@@ -79,7 +79,7 @@ gtk_plug_get_type ()
 	(GInstanceInitFunc) gtk_plug_init,
       };
 
-      plug_type = g_type_register_static (GTK_TYPE_WINDOW, "GtkPlug", &plug_info);
+      plug_type = g_type_register_static (GTK_TYPE_WINDOW, "GtkPlug", &plug_info, 0);
     }
 
   return plug_type;

@@ -77,7 +77,7 @@ gdk_gc_x11_get_type (void)
       
       object_type = g_type_register_static (GDK_TYPE_GC,
                                             "GdkGCX11",
-                                            &object_info);
+                                            &object_info, 0);
     }
   
   return object_type;

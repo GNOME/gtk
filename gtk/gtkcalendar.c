@@ -337,7 +337,7 @@ gtk_calendar_get_type (void)
 	(GInstanceInitFunc) gtk_calendar_init,
       };
 
-      calendar_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkCalendar", &calendar_info);
+      calendar_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkCalendar", &calendar_info, 0);
     }
   
   return calendar_type;

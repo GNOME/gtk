@@ -145,7 +145,7 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkToolbarClass, orientation_changed),
-		    gtk_marshal_NONE__INT,
+		    gtk_marshal_VOID__INT,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_INT);
   toolbar_signals[STYLE_CHANGED] =
@@ -153,7 +153,7 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkToolbarClass, style_changed),
-		    gtk_marshal_NONE__INT,
+		    gtk_marshal_VOID__INT,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_INT);
 

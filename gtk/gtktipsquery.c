@@ -127,21 +127,21 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, start_query),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   tips_query_signals[SIGNAL_STOP_QUERY] =
     gtk_signal_new ("stop_query",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, stop_query),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   tips_query_signals[SIGNAL_WIDGET_ENTERED] =
     gtk_signal_new ("widget_entered",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, widget_entered),
-		    gtk_marshal_NONE__POINTER_STRING_STRING,
+		    gtk_marshal_VOID__POINTER_STRING_STRING,
 		    GTK_TYPE_NONE, 3,
 		    GTK_TYPE_WIDGET,
 		    GTK_TYPE_STRING,
@@ -151,7 +151,7 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, widget_selected),
-		    gtk_marshal_BOOL__POINTER_STRING_STRING_POINTER,
+		    gtk_marshal_BOOLEAN__POINTER_STRING_STRING_POINTER,
 		    GTK_TYPE_BOOL, 4,
 		    GTK_TYPE_WIDGET,
 		    GTK_TYPE_STRING,

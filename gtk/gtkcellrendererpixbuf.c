@@ -76,7 +76,7 @@ gtk_cell_renderer_pixbuf_get_type (void)
 			(GInstanceInitFunc) gtk_cell_renderer_pixbuf_init,
 		};
 
-		cell_pixbuf_type = g_type_register_static (GTK_TYPE_CELL_RENDERER, "GtkCellRendererPixbuf", &cell_pixbuf_info);
+		cell_pixbuf_type = g_type_register_static (GTK_TYPE_CELL_RENDERER, "GtkCellRendererPixbuf", &cell_pixbuf_info, 0);
 	}
 
 	return cell_pixbuf_type;

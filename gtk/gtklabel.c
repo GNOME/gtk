@@ -79,7 +79,7 @@ gtk_label_get_type (void)
 	(GInstanceInitFunc) gtk_label_init,
       };
 
-      label_type = g_type_register_static (GTK_TYPE_MISC, "GtkLabel", &label_info);
+      label_type = g_type_register_static (GTK_TYPE_MISC, "GtkLabel", &label_info, 0);
     }
   
   return label_type;

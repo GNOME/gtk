@@ -85,7 +85,7 @@ gtk_cell_renderer_text_get_type (void)
         (GInstanceInitFunc) gtk_cell_renderer_text_init,
       };
 
-      cell_text_type = g_type_register_static (GTK_TYPE_CELL_RENDERER, "GtkCellRendererText", &cell_text_info);
+      cell_text_type = g_type_register_static (GTK_TYPE_CELL_RENDERER, "GtkCellRendererText", &cell_text_info, 0);
     }
 
   return cell_text_type;

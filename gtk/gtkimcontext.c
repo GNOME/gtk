@@ -76,7 +76,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkIMContextClass, preedit_start),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   
   im_context_signals[PREEDIT_END] =
@@ -84,7 +84,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkIMContextClass, preedit_end),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   
   im_context_signals[PREEDIT_CHANGED] =
@@ -92,7 +92,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkIMContextClass, preedit_changed),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   
   im_context_signals[COMMIT] =
@@ -100,7 +100,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkIMContextClass, commit),
-		    gtk_marshal_NONE__STRING,
+		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_STRING);
 

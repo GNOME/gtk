@@ -273,7 +273,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkNotebookClass, switch_page),
-		    gtk_marshal_NONE__POINTER_UINT,
+		    gtk_marshal_VOID__POINTER_UINT,
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_POINTER,
 		    GTK_TYPE_UINT);

@@ -106,6 +106,26 @@ Incompatible Changes from GTK+-1.2 to GTK+-1.4:
     have to be moved into the ::destroy implementations. The reason for doing
     this is that all object reference cycles should be broken at destruction 
     time.
+    
+* Signal system changes:
+  The Gtk 2.0 signal merly proxies the GSignal system now.
+  For future usage, direct use of the GSignal API is recommended,
+  this avoids significant performance hits where GtkArg structures
+  have to be converted into GValues. For language bindings,
+  GSignal+GClosure provide a much more flexible and convenient
+  mechanism to hook into signal emissions or install class default
+  handlers, so the old GtkSignal API for language bindings is not
+  supported anymore.
+  Functions that got removed in the Gtk signal API:
+  gtk_signal_n_emissions(), gtk_signal_n_emissions_by_name(),
+  gtk_signal_set_funcs(), gtk_signal_handler_pending_by_id(),
+  gtk_signal_add_emission_hook(), gtk_signal_add_emission_hook_full(),
+  gtk_signal_remove_emission_hook(), gtk_signal_query().
+  gtk_signal_add_emission_hook(), gtk_signal_remove_emission_hook().
+  Also, the GtkCallbackMarshal argument to gtk_signal_connect_full() is
+  not supported anymore.
+  For many of the removed functions, similar variants are available
+  in the g_signal_* namespace.
 
 - Inserting and deleting text in GtkEntry though functions such
   as gtk_entry_insert_text() now leave the cursor at its original

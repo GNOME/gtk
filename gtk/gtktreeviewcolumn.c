@@ -61,7 +61,7 @@ gtk_tree_view_column_get_type (void)
 	(GInstanceInitFunc) gtk_tree_view_column_init,
       };
 
-      tree_column_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkTreeViewColumn", &tree_column_info);
+      tree_column_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkTreeViewColumn", &tree_column_info, 0);
     }
 
   return tree_column_type;
@@ -81,7 +81,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeViewColumnClass, clicked),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (object_class, tree_column_signals, LAST_SIGNAL);

@@ -92,7 +92,7 @@ gtk_socket_get_type (void)
 	(GInstanceInitFunc) gtk_socket_init,
       };
 
-      socket_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkSocket", &socket_info);
+      socket_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkSocket", &socket_info, 0);
     }
 
   return socket_type;

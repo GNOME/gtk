@@ -42,7 +42,7 @@ gtk_tree_model_get_type (void)
 	NULL,		/* base_finalize */
       };
 
-      tree_model_type = g_type_register_static (G_TYPE_INTERFACE, "GtkTreeModel", &tree_model_info);
+      tree_model_type = g_type_register_static (G_TYPE_INTERFACE, "GtkTreeModel", &tree_model_info, 0);
     }
 
   return tree_model_type;

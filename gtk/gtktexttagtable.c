@@ -63,7 +63,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextTagTableClass, tag_changed),
-                    gtk_marshal_NONE__POINTER_INT,
+                    gtk_marshal_VOID__POINTER_INT,
                     GTK_TYPE_NONE,
                     2,
                     GTK_TYPE_OBJECT,
@@ -74,7 +74,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextTagTableClass, tag_added),
-                    gtk_marshal_NONE__POINTER,
+                    gtk_marshal_VOID__POINTER,
                     GTK_TYPE_NONE,
                     1,
                     GTK_TYPE_OBJECT);
@@ -84,7 +84,7 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextTagTableClass, tag_removed),
-                    gtk_marshal_NONE__POINTER,
+                    gtk_marshal_VOID__POINTER,
                     GTK_TYPE_NONE,
                     1,
                     GTK_TYPE_OBJECT);

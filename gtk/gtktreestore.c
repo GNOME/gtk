@@ -90,7 +90,7 @@ gtk_tree_store_get_type (void)
 	NULL
       };
 
-      tree_store_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkTreeStore", &tree_store_info);
+      tree_store_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkTreeStore", &tree_store_info, 0);
       g_type_add_interface_static (tree_store_type,
 				   GTK_TYPE_TREE_MODEL,
 				   &tree_model_info);
@@ -111,7 +111,7 @@ gtk_tree_store_class_init (GtkTreeStoreClass *tree_store_class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTreeStoreClass, node_changed),
-                    gtk_marshal_NONE__POINTER_POINTER,
+                    gtk_marshal_VOID__POINTER_POINTER,
                     GTK_TYPE_NONE, 2,
 		    GTK_TYPE_POINTER,
 		    GTK_TYPE_POINTER);
@@ -120,7 +120,7 @@ gtk_tree_store_class_init (GtkTreeStoreClass *tree_store_class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTreeStoreClass, node_inserted),
-                    gtk_marshal_NONE__POINTER_POINTER,
+                    gtk_marshal_VOID__POINTER_POINTER,
                     GTK_TYPE_NONE, 2,
 		    GTK_TYPE_POINTER,
 		    GTK_TYPE_POINTER);
@@ -129,7 +129,7 @@ gtk_tree_store_class_init (GtkTreeStoreClass *tree_store_class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTreeStoreClass, node_child_toggled),
-                    gtk_marshal_NONE__POINTER_POINTER,
+                    gtk_marshal_VOID__POINTER_POINTER,
                     GTK_TYPE_NONE, 2,
 		    GTK_TYPE_POINTER,
 		    GTK_TYPE_POINTER);
@@ -138,7 +138,7 @@ gtk_tree_store_class_init (GtkTreeStoreClass *tree_store_class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTreeStoreClass, node_deleted),
-                    gtk_marshal_NONE__POINTER,
+                    gtk_marshal_VOID__POINTER,
                     GTK_TYPE_NONE, 1,
 		    GTK_TYPE_POINTER);
 

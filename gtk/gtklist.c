@@ -221,14 +221,14 @@ gtk_list_class_init (GtkListClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListClass, selection_changed),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   list_signals[SELECT_CHILD] =
     gtk_signal_new ("select_child",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListClass, select_child),
-		    gtk_marshal_NONE__POINTER,
+		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
   list_signals[UNSELECT_CHILD] =
@@ -236,7 +236,7 @@ gtk_list_class_init (GtkListClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListClass, unselect_child),
-		    gtk_marshal_NONE__POINTER,
+		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
 

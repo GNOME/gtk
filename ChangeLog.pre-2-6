@@ -1,3 +1,105 @@
+Wed Oct 25 20:47:41 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gdk-pixbuf-loader.c (gdk_pixbuf_loader_class_init): urg, removed
+	implementation of gtk_marshal_VOID__INT_INT_INT_INT. if people do that,
+	couldn't they at least give it a non-standard name?
+	
+	* gtk/gtktextlayout.c: arg! yet another implementation of
+	gtk_marshal_VOID__INT_INT_INT_INT(), is this a conspiracy?
+
+	* gtk/gtktextbuffer.c: gotcha! captured a vagabonding
+	gtk_marshal_VOID__INT_POINTER_INT() implementation, braught it back
+	home. now i know this _is_ a conspiracy.
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): marshaller fixups for
+	::state-changed.
+
+	* gtk/gtkaccelgroup.c (gtk_accel_group_create_remove): 
+	(gtk_accel_group_create_add): marshaller signature fixups.
+
+	* gtk/gtklistitem.c (gtk_list_item_class_init): signal creation fixups,
+	pass in GTK_TYPE_SCROLL_TYPE instead of GTK_TYPE_ENUM.
+
+	* gtk/gtkobject.[hc]: removed GTK_CONNECTED flag, it's not valid
+	anymore.
+
+Tue Oct 24 23:59:21 2000  Tim Janik  <timj@gtk.org>
+
+	* docs/reference/Makefile.am: disabled SUBDIRS for the moment, since
+	due to the signal system changes, it wouldn't build currently. to
+	be fixed soon.
+
+	* docs/Changes-2.0.txt: GtkSignal/GSignal updates.
+
+	* gtk/gtkwidget.c: ::direction_changed takes an enum as argument,
+	so it needs gtk_marshal_VOID__ENUM() instead of
+	gtk_marshal_NONE__UINT().
+
+	* gdk/gdk*.c: adapted type registration functions.
+
+	* gtk/gtkbindings.c:
+	* gtk/gtkaccelgroup.c: operate on GSignalQuery, GtkSignalQuery is
+	gone.
+
+	* gtk/gtkenums.h: define GtkSignalRunType in terms of GSignalType.
+
+	* gtk/gtkobject.c:
+	(gtk_object_destroy):
+	(gtk_object_shutdown): fixed recursion guards. basically we have to
+	catch the case where any of GObject.shutdown() or gtk_object_destroy()
+	is called during ::destroy, and avoid recursion there.
+
+	* gtk/gtktypeutils.c:
+	* gtk/maketypes.awk: awk-script hackup to provide gtk_type_init() with
+	boxed_copy/boxed_free. this needs a more general solution based on a
+	publically installed code-generator utility.
+
+	* gtk/gtktypeutils.[hc]: compat aliased GTK_TYPE_BOXED to G_TYPE_BOXED,
+	glib's gobject has support for that now.
+	define GtkSignalMarshaller in terms of GSignalCMarshaller.
+
+Mon Oct 23 09:36:42 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.[hc]:
+	* gtk/gtkmarshal.[hc]:
+	* gtk/Makefile.am: generate marshallers with glib-genmarshal and don't
+	compile gtkmarshal.c on its own anymore, just include it in gtksignal.c.
+	removed #include <gtkmarshal.h>s all over the place, gtksignal.h takes
+	care of that.
+
+	* *.c: marshaller name fixups.
+
+	* gtk/gtkmarshal.list: added a comment briefing the format.
+
+Sun Oct 22 23:14:39 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.[hc]: nuked old implementation. we mostly have
+	compatibility macros here now. more specifically, most of
+	the API is preserved (yes, _most_, nonwithstanding the
+	following exceptions listed, the API is stil lHUGE ;)
+	things that got removed completely:
+	GtkSignalQuery, gtk_signal_query(), gtk_signal_n_emissions(),
+	gtk_signal_n_emissions_by_name(), gtk_signal_handlers_destroy(),
+	gtk_signal_set_funcs(), gtk_signal_handler_pending_by_id(),
+	gtk_signal_add_emission_hook(), gtk_signal_add_emission_hook_full(),
+	gtk_signal_remove_emission_hook().
+	non-functional functions variants:
+	gtk_signal_add_emission_hook(), gtk_signal_remove_emission_hook().
+	the GtkCallbackMarshal argument to gtk_signal_connect_full() is
+	not supported anymore.
+	(gtk_signal_compat_matched): new internal function to aid
+	implementation of the compatibility macros, it 	provides
+	functionality to block/unblock/disconnect handlers based
+	on func/data.
+
+	* gtk/gtkenums.h: define GtkSignalRunType in terms of GSignalType,
+
+	* *.c: adaptions to new type registration API signatures.
+
+Fri Oct 20 15:26:33 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.[hc]: removed G_TYPE_GTK_POINTER cludge.
+
 2000-10-25  Robert Brady  <robert@suse.co.uk>
 
 	* gdk/x11/gdkproperty-x11.c (gdk_property_get, gdk_property_change,

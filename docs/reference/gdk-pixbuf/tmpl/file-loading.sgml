@@ -25,18 +25,3 @@ Loading a pixbuf from a file.
     #GdkPixbufLoader.
   </para>
 
-<!-- ##### FUNCTION gdk_pixbuf_new_from_file ##### -->
-<para>
-
-</para>
-
-@filename: 
-@error: 
-@Returns: <!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
-End:
--->
-
-

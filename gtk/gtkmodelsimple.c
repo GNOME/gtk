@@ -18,7 +18,6 @@
  */
 
 #include "gtkmodelsimple.h"
-#include "gtkmarshal.h"
 #include "gtksignal.h"
 enum {
   NODE_CHANGED,
@@ -98,7 +97,7 @@ gtk_model_simple_get_type (void)
 	NULL
       };
 
-      model_simple_type = g_type_register_static (GTK_TYPE_TREE_MODEL, "GtkModelSimple", &model_simple_info);
+      model_simple_type = g_type_register_static (GTK_TYPE_TREE_MODEL, "GtkModelSimple", &model_simple_info, 0);
       g_type_add_interface_static (model_simple_type,
 				   GTK_TYPE_TREE_MODEL,
 				   &tree_model_info);
@@ -125,7 +124,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkModelSimpleClass, node_changed),
-                    gtk_marshal_NONE__POINTER_POINTER,
+                    gtk_marshal_VOID__POINTER_POINTER,
                     GTK_TYPE_NONE, 2,
 		    GTK_TYPE_POINTER,
 		    GTK_TYPE_POINTER);
@@ -134,7 +133,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkModelSimpleClass, node_inserted),
-                    gtk_marshal_NONE__POINTER_POINTER,
+                    gtk_marshal_VOID__POINTER_POINTER,
                     GTK_TYPE_NONE, 2,
 		    GTK_TYPE_POINTER,
 		    GTK_TYPE_POINTER);
@@ -143,7 +142,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkModelSimpleClass, node_child_toggled),
-                    gtk_marshal_NONE__POINTER_POINTER,
+                    gtk_marshal_VOID__POINTER_POINTER,
                     GTK_TYPE_NONE, 2,
 		    GTK_TYPE_POINTER,
 		    GTK_TYPE_POINTER);
@@ -152,7 +151,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkModelSimpleClass, node_deleted),
-                    gtk_marshal_NONE__POINTER,
+                    gtk_marshal_VOID__POINTER,
                     GTK_TYPE_NONE, 1,
 		    GTK_TYPE_POINTER);
 
@@ -161,7 +160,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     0,
-                    gtk_marshal_INT__NONE,
+                    gtk_marshal_INT__VOID,
                     GTK_TYPE_INT, 0);
   model_simple_signals[GET_NODE] =
     gtk_signal_new ("get_node",
@@ -184,7 +183,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     0,
-                    gtk_marshal_NONE__POINTER_INT_POINTER,
+                    gtk_marshal_VOID__POINTER_INT_POINTER,
                     GTK_TYPE_NONE, 3,
 		    GTK_TYPE_POINTER,
 		    GTK_TYPE_INT,
@@ -194,7 +193,7 @@ gtk_model_simple_class_init (GtkModelSimpleClass *class)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     0,
-                    gtk_marshal_BOOL__POINTER,
+                    gtk_marshal_BOOLEAN__POINTER,
                     GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_POINTER);
   model_simple_signals[NODE_CHILDREN] =

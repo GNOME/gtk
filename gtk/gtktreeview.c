@@ -180,7 +180,7 @@ gtk_tree_view_get_type (void)
         (GInstanceInitFunc) gtk_tree_view_init
       };
 
-      tree_view_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkTreeView", &tree_view_info);
+      tree_view_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkTreeView", &tree_view_info, 0);
     }
 
   return tree_view_type;
@@ -226,7 +226,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeViewClass, set_scroll_adjustments),
-		    gtk_marshal_NONE__POINTER_POINTER,
+		    gtk_marshal_VOID__POINTER_POINTER,
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_POINTER, GTK_TYPE_POINTER);
 }

@@ -101,10 +101,6 @@ static void gtk_text_layout_class_init (GtkTextLayoutClass *klass);
 static void gtk_text_layout_destroy (GtkObject *object);
 static void gtk_text_layout_finalize (GObject *object);
 
-void gtk_marshal_NONE__INT_INT_INT_INT (GtkObject  *object,
-                                        GtkSignalFunc func,
-                                        gpointer func_data,
-                                        GtkArg  *args);
 
 static GtkObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -149,7 +145,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextLayoutClass, invalidated),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE,
                     0);
 
@@ -158,7 +154,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextLayoutClass, changed),
-                    gtk_marshal_NONE__INT_INT_INT,
+                    gtk_marshal_VOID__INT_INT_INT,
                     GTK_TYPE_NONE,
                     3,
                     GTK_TYPE_INT,
@@ -2282,28 +2278,6 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
 	gtk_text_iter_next_char (iter);
     }
 
-}
-
-typedef void (*GtkSignal_NONE__INT_INT_INT_INT) (GtkObject  *object,
-                                                 gint x, gint y,
-                                                 gint width, gint height,
-                                                 gpointer user_data);
-
-void
-gtk_marshal_NONE__INT_INT_INT_INT (GtkObject  *object,
-                                   GtkSignalFunc func,
-                                   gpointer func_data,
-                                   GtkArg  *args)
-{
-  GtkSignal_NONE__INT_INT_INT_INT rfunc;
-
-  rfunc = (GtkSignal_NONE__INT_INT_INT_INT) func;
-  (*rfunc) (object,
-            GTK_VALUE_INT (args[0]),
-            GTK_VALUE_INT (args[1]),
-            GTK_VALUE_INT (args[2]),
-            GTK_VALUE_INT (args[3]),
-            func_data);
 }
 
 void

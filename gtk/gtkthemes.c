@@ -305,7 +305,7 @@ gtk_theme_engine_register_type (GtkThemeEngine  *engine,
       plugin->engine = NULL;
       plugin->engine_name = NULL;
       plugin->parent_type = parent_type;
-      plugin->type = g_type_register_dynamic (parent_type, type_name, (GTypePlugin *)plugin);
+      plugin->type = g_type_register_dynamic (parent_type, type_name, (GTypePlugin *) plugin, 0);
     }
   
   if (plugin->engine)

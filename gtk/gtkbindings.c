@@ -252,7 +252,7 @@ binding_ht_lookup_entry (GtkBindingSet *set,
 
 static gboolean
 binding_compose_params (GtkBindingArg	*args,
-			GtkSignalQuery	*query,
+			GSignalQuery	*query,
 			GtkArg		**params_p)
 {
   GtkArg *params;
@@ -260,12 +260,12 @@ binding_compose_params (GtkBindingArg	*args,
   guint i;
   gboolean valid;
   
-  params = g_new0 (GtkArg, query->nparams);
+  params = g_new0 (GtkArg, query->n_params);
   *params_p = params;
   
-  types = query->params;
+  types = query->param_types;
   valid = TRUE;
-  for (i = 0; i < query->nparams && valid; i++)
+  for (i = 0; i < query->n_params && valid; i++)
     {
       GtkType param_ftype;
 
@@ -357,7 +357,7 @@ gtk_binding_entry_activate (GtkBindingEntry	*entry,
   
   for (sig = entry->signals; sig; sig = sig->next)
     {
-      GtkSignalQuery *query;
+      GSignalQuery query;
       guint signal_id;
       GtkArg *params = NULL;
       gchar *accelerator = NULL;
@@ -376,10 +376,10 @@ gtk_binding_entry_activate (GtkBindingEntry	*entry,
 	  continue;
 	}
       
-      query = gtk_signal_query (signal_id);
-      if (query->nparams != sig->n_args ||
-	  query->return_val != GTK_TYPE_NONE ||
-	  !binding_compose_params (sig->args, query, &params))
+      g_signal_query (signal_id, &query);
+      if (query.n_params != sig->n_args ||
+	  query.return_type != G_TYPE_NONE ||
+	  !binding_compose_params (sig->args, &query, &params))
 	{
 	  accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
 	  g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
@@ -389,7 +389,7 @@ gtk_binding_entry_activate (GtkBindingEntry	*entry,
 		     sig->signal_name,
 		     gtk_type_name (GTK_OBJECT_TYPE (object)));
 	}
-      else if (!(query->signal_flags & GTK_RUN_ACTION))
+      else if (!(query.signal_flags & GTK_RUN_ACTION))
 	{
 	  accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
 	  g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
@@ -400,7 +400,6 @@ gtk_binding_entry_activate (GtkBindingEntry	*entry,
 		     gtk_type_name (GTK_OBJECT_TYPE (object)));
 	}
       g_free (accelerator);
-      g_free (query);
       if (accelerator)
 	continue;
 

@@ -50,7 +50,7 @@ gtk_type_unique (GtkType            parent_type,
   tinfo.n_preallocs = 0;
   tinfo.instance_init = gtkinfo->object_init_func;
 
-  return g_type_register_static (parent_type, gtkinfo->type_name, &tinfo);
+  return g_type_register_static (parent_type, gtkinfo->type_name, &tinfo, 0);
 }
 
 gpointer
@@ -118,6 +118,9 @@ GType GTK_TYPE_IDENTIFIER = 0;
 #endif
 extern IMPORT gboolean glib_debug_objects;
 
+#include <gtk.h>	/* for gtktypebuiltins_ids.c */
+#include <gdk.h>	/* gtktypebuiltins_ids.c */
+
 void
 gtk_type_init (void)
 {
@@ -129,14 +132,14 @@ gtk_type_init (void)
 	GtkType type_id;
 	gchar *name;
       } fundamental_info[] = {
-	{ GTK_TYPE_POINTER,	"gpointer" },
 	{ GTK_TYPE_SIGNAL,	"GtkSignal" },
       };
       static struct {
 	gchar              *type_name;
 	GtkType            *type_id;
 	GtkType             parent;
-	const GtkEnumValue *values;
+	gconstpointer	    pointer1;
+	gpointer	    pointer2;
       } builtin_info[GTK_TYPE_N_BUILTINS + 1] = {
 #include "gtktypebuiltins_ids.c"	/* type entries */
 	{ NULL }
@@ -148,7 +151,7 @@ gtk_type_init (void)
 
       initialized = TRUE;
 
-      glib_debug_objects = gtk_debug_flags & GTK_DEBUG_OBJECTS != 0;
+      glib_debug_objects = (gtk_debug_flags & GTK_DEBUG_OBJECTS) != 0;
       
       /* initialize GLib type system
        */
@@ -164,20 +167,13 @@ gtk_type_init (void)
 	{
 	  type_id = g_type_register_fundamental (fundamental_info[i].type_id,
 						 fundamental_info[i].name,
-						 &tinfo,
-						 &finfo);
+						 &tinfo, &finfo, 0);
 	  g_assert (type_id == fundamental_info[i].type_id);
 	}
 
       /* GTK_TYPE_IDENTIFIER
        */
-      GTK_TYPE_IDENTIFIER = g_type_register_static (G_TYPE_STRING, "GtkIdentifier", &tinfo);
-
-      /* GTK_TYPE_BOXED
-       */
-      finfo.type_flags = G_TYPE_FLAG_DERIVABLE;
-      type_id = g_type_register_fundamental (GTK_TYPE_BOXED, "GtkBoxed", &tinfo, &finfo);
-      g_assert (type_id == GTK_TYPE_BOXED);
+      GTK_TYPE_IDENTIFIER = g_type_register_static (G_TYPE_STRING, "GtkIdentifier", &tinfo, 0);
 
       /* enums and flags
        */
@@ -186,11 +182,18 @@ gtk_type_init (void)
 	  GtkType type_id = 0;
 
 	  if (builtin_info[i].parent == G_TYPE_ENUM)
-	    type_id = g_enum_register_static (builtin_info[i].type_name, builtin_info[i].values);
+	    type_id = g_enum_register_static (builtin_info[i].type_name, builtin_info[i].pointer1);
 	  else if (builtin_info[i].parent == G_TYPE_FLAGS)
-	    type_id = g_flags_register_static (builtin_info[i].type_name, (const GFlagsValue *)builtin_info[i].values);
+	    type_id = g_flags_register_static (builtin_info[i].type_name, builtin_info[i].pointer1);
 	  else if (builtin_info[i].parent == GTK_TYPE_BOXED)
-	    type_id = g_type_register_static (GTK_TYPE_BOXED, builtin_info[i].type_name, &tinfo);
+	    {
+	      if (builtin_info[i].pointer1 && builtin_info[i].pointer2)
+		type_id = g_boxed_type_register_static (builtin_info[i].type_name,
+							builtin_info[i].pointer1,
+							builtin_info[i].pointer2);
+	      else
+		type_id = g_type_register_static (GTK_TYPE_BOXED, builtin_info[i].type_name, &tinfo, 0);
+	    }
 	  else
 	    g_assert_not_reached ();
 

@@ -96,11 +96,6 @@ static void gtk_text_buffer_real_remove_tag            (GtkTextBuffer     *buffe
 
 static GtkTextBTree* get_btree (GtkTextBuffer *buffer);
 
-void gtk_marshal_NONE__INT_POINTER_INT (GtkObject  *object,
-                                        GtkSignalFunc func,
-                                        gpointer func_data,
-                                        GtkArg  *args);
-
 static GtkObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -142,7 +137,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, insert_text),
-                    gtk_marshal_NONE__POINTER_POINTER_INT_INT,
+                    gtk_marshal_VOID__POINTER_POINTER_INT_INT,
                     GTK_TYPE_NONE,
                     4,
                     GTK_TYPE_POINTER,
@@ -155,7 +150,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, delete_text),
-                    gtk_marshal_NONE__POINTER_POINTER_INT,
+                    gtk_marshal_VOID__POINTER_POINTER_INT,
                     GTK_TYPE_NONE,
                     3,
                     GTK_TYPE_POINTER,
@@ -167,7 +162,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, changed),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE,
                     0);
 
@@ -176,7 +171,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, modified_changed),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE,
                     0);
   
@@ -185,7 +180,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, mark_set),
-                    gtk_marshal_NONE__POINTER_POINTER,
+                    gtk_marshal_VOID__POINTER_POINTER,
                     GTK_TYPE_NONE,
                     2,
                     GTK_TYPE_POINTER,
@@ -196,7 +191,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, mark_deleted),
-                    gtk_marshal_NONE__POINTER,
+                    gtk_marshal_VOID__POINTER,
                     GTK_TYPE_NONE,
                     1,
                     GTK_TYPE_POINTER);
@@ -206,7 +201,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, apply_tag),
-                    gtk_marshal_NONE__POINTER_POINTER_POINTER,
+                    gtk_marshal_VOID__POINTER_POINTER_POINTER,
                     GTK_TYPE_NONE,
                     3,
                     GTK_TYPE_POINTER,
@@ -218,7 +213,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, remove_tag),
-                    gtk_marshal_NONE__POINTER_POINTER_POINTER,
+                    gtk_marshal_VOID__POINTER_POINTER_POINTER,
                     GTK_TYPE_NONE,
                     3,
                     GTK_TYPE_POINTER,
@@ -235,30 +230,6 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   klass->delete_text = gtk_text_buffer_real_delete_text;
   klass->apply_tag = gtk_text_buffer_real_apply_tag;
   klass->remove_tag = gtk_text_buffer_real_remove_tag;
-}
-
-
-typedef gint (*GtkSignal_NONE__INT_POINTER_INT) (GtkObject  *object,
-                                                 gint pos,
-                                                 const gchar *text,
-                                                 gint len,
-                                                 gpointer user_data);
-
-void 
-gtk_marshal_NONE__INT_POINTER_INT (GtkObject  *object,
-                                   GtkSignalFunc func,
-                                   gpointer func_data,
-                                   GtkArg  *args)
-{
-  GtkSignal_NONE__INT_POINTER_INT rfunc;
-
-  rfunc = (GtkSignal_NONE__INT_POINTER_INT) func;
-
-  (*rfunc) (object,
-            GTK_VALUE_INT (args[0]),
-            GTK_VALUE_POINTER (args[1]),
-            GTK_VALUE_INT (args[2]),
-            func_data);
 }
 
 void

@@ -125,7 +125,7 @@ gtk_button_get_type (void)
 	(GInstanceInitFunc) gtk_button_init,
       };
 
-      button_type = g_type_register_static (GTK_TYPE_BIN, "GtkButton", &button_info);
+      button_type = g_type_register_static (GTK_TYPE_BIN, "GtkButton", &button_info, 0);
     }
 
   return button_type;
@@ -152,35 +152,35 @@ gtk_button_class_init (GtkButtonClass *klass)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, pressed),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   button_signals[RELEASED] =
     gtk_signal_new ("released",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, released),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   button_signals[CLICKED] =
     gtk_signal_new ("clicked",
                     GTK_RUN_FIRST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, clicked),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   button_signals[ENTER] =
     gtk_signal_new ("enter",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, enter),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   button_signals[LEAVE] =
     gtk_signal_new ("leave",
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, leave),
-                    gtk_marshal_NONE__NONE,
+                    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (object_class, button_signals, LAST_SIGNAL);

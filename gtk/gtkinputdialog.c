@@ -143,7 +143,7 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkInputDialogClass, enable_device),
-		    gtk_marshal_NONE__POINTER,
+		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
 
   input_dialog_signals[DISABLE_DEVICE] =
@@ -151,7 +151,7 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkInputDialogClass, disable_device),
-		    gtk_marshal_NONE__POINTER,
+		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
 
   gtk_object_class_add_signals (object_class, input_dialog_signals,

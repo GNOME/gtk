@@ -66,26 +66,6 @@ typedef struct
 } GdkPixbufLoaderPrivate;
 
 
-/* our marshaller */
-typedef void (*GtkSignal_NONE__INT_INT_INT_INT) (GtkObject *object,
-						 gint arg1, gint arg2, gint arg3, gint arg4,
-						 gpointer user_data);
-static void
-gtk_marshal_NONE__INT_INT_INT_INT (GtkObject *object, GtkSignalFunc func, gpointer func_data,
-				   GtkArg * args)
-{
-  GtkSignal_NONE__INT_INT_INT_INT rfunc;
-  
-  rfunc = (GtkSignal_NONE__INT_INT_INT_INT) func;
-  (*rfunc) (object,
-	    GTK_VALUE_INT (args[0]),
-	    GTK_VALUE_INT (args[1]),
-	    GTK_VALUE_INT (args[2]),
-	    GTK_VALUE_INT (args[3]),
-	    func_data);
-}
-
-
 /**
  * gdk_pixbuf_loader_get_type:
  * @void:
@@ -135,7 +115,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, area_prepared),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   
   pixbuf_loader_signals[AREA_UPDATED] =
@@ -143,7 +123,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, area_updated),
-		    gtk_marshal_NONE__INT_INT_INT_INT,
+		    gtk_marshal_VOID__INT_INT_INT_INT,
 		    GTK_TYPE_NONE, 4,
 		    GTK_TYPE_INT,
 		    GTK_TYPE_INT,
@@ -155,7 +135,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, frame_done),
-		    gtk_marshal_NONE__POINTER,
+		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_POINTER);
   
@@ -164,7 +144,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, animation_done),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   
   pixbuf_loader_signals[CLOSED] =
@@ -172,7 +152,7 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, closed),
-		    gtk_marshal_NONE__NONE,
+		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   
   gtk_object_class_add_signals (object_class, pixbuf_loader_signals, LAST_SIGNAL);

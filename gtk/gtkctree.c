@@ -391,35 +391,35 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_select_row),
-		    gtk_marshal_NONE__POINTER_INT,
+		    gtk_marshal_VOID__POINTER_INT,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_CTREE_NODE, GTK_TYPE_INT);
   ctree_signals[TREE_UNSELECT_ROW] =
     gtk_signal_new ("tree_unselect_row",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_unselect_row),
-		    gtk_marshal_NONE__POINTER_INT,
+		    gtk_marshal_VOID__POINTER_INT,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_CTREE_NODE, GTK_TYPE_INT);
   ctree_signals[TREE_EXPAND] =
     gtk_signal_new ("tree_expand",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_expand),
-		    gtk_marshal_NONE__POINTER,
+		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_CTREE_NODE);
   ctree_signals[TREE_COLLAPSE] =
     gtk_signal_new ("tree_collapse",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_collapse),
-		    gtk_marshal_NONE__POINTER,
+		    gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_CTREE_NODE);
   ctree_signals[TREE_MOVE] =
     gtk_signal_new ("tree_move",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_move),
-		    gtk_marshal_NONE__POINTER_POINTER_POINTER,
+		    gtk_marshal_VOID__POINTER_POINTER_POINTER,
 		    GTK_TYPE_NONE, 3, GTK_TYPE_CTREE_NODE,
 		    GTK_TYPE_CTREE_NODE, GTK_TYPE_CTREE_NODE);
   ctree_signals[CHANGE_FOCUS_ROW_EXPANSION] =
@@ -428,7 +428,7 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass,
 				       change_focus_row_expansion),
-		    gtk_marshal_NONE__ENUM,
+		    gtk_marshal_VOID__ENUM,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_CTREE_EXPANSION_TYPE);
   gtk_object_class_add_signals (object_class, ctree_signals, LAST_SIGNAL);
 

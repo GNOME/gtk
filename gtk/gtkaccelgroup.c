@@ -342,7 +342,7 @@ gtk_accel_group_add (GtkAccelGroup	*accel_group,
   guint add_accelerator_signal_id = 0;
   guint remove_accelerator_signal_id = 0;
   gchar *signal;
-  GtkSignalQuery *query;
+  GSignalQuery query;
   GSList *slist;
   GSList *groups;
   GSList *attach_objects;
@@ -377,20 +377,16 @@ gtk_accel_group_add (GtkAccelGroup	*accel_group,
 		 gtk_type_name (GTK_OBJECT_TYPE (object)));
       return;
     }
-  query = gtk_signal_query (accel_signal_id);
-  if (!query ||
-      query->nparams > 0)
+  g_signal_query (accel_signal_id, &query);
+  if (!query.signal_id || query.n_params > 0)
     {
       g_warning ("gtk_accel_group_add(): signal \"%s\" in the `%s' class ancestry"
 		 "cannot be used as accelerator signal",
 		 accel_signal,
 		 gtk_type_name (GTK_OBJECT_TYPE (object)));
-      if (query)
-	g_free (query);
 
       return;
     }
-  g_free (query);
 
   /* prematurely abort if the group/entry is already locked
    */
@@ -662,7 +658,7 @@ gtk_accel_group_create_add (GtkType          class_type,
 			 signal_flags,
 			 class_type,
 			 handler_offset,
-			 gtk_marshal_NONE__UINT_POINTER_UINT_UINT_ENUM,
+			 gtk_marshal_VOID__UINT_BOXED_UINT_FLAGS_FLAGS,
 			 GTK_TYPE_NONE, 5,
 			 GTK_TYPE_UINT,
 			 GTK_TYPE_ACCEL_GROUP,
@@ -682,7 +678,7 @@ gtk_accel_group_create_remove (GtkType          class_type,
 			 signal_flags,
 			 class_type,
 			 handler_offset,
-			 gtk_marshal_NONE__POINTER_UINT_UINT,
+			 gtk_marshal_VOID__BOXED_UINT_FLAGS,
 			 GTK_TYPE_NONE, 3,
 			 GTK_TYPE_ACCEL_GROUP,
 			 GTK_TYPE_UINT,

@@ -27,6 +27,8 @@
 #ifndef __GTK_ENUMS_H__
 #define __GTK_ENUMS_H__
 
+#include <gobject/gsignal.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -236,12 +238,12 @@ typedef enum
 /* signal run types */
 typedef enum			/*< flags >*/
 {
-  GTK_RUN_FIRST      = 1 << 0,
-  GTK_RUN_LAST       = 1 << 1,
+  GTK_RUN_FIRST      = G_SIGNAL_RUN_FIRST,
+  GTK_RUN_LAST       = G_SIGNAL_RUN_LAST,
   GTK_RUN_BOTH       = (GTK_RUN_FIRST | GTK_RUN_LAST),
-  GTK_RUN_NO_RECURSE = 1 << 2,
-  GTK_RUN_ACTION     = 1 << 3,
-  GTK_RUN_NO_HOOKS   = 1 << 4
+  GTK_RUN_NO_RECURSE = G_SIGNAL_NO_RECURSE,
+  GTK_RUN_ACTION     = G_SIGNAL_ACTION,
+  GTK_RUN_NO_HOOKS   = G_SIGNAL_NO_HOOKS
 } GtkSignalRunType;
 
 /* scrolling types */
