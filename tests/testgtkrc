@@ -14,6 +14,7 @@ style "default"
 {
   fontset = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*,*"
 #  base[NORMAL] = { 0.8, 0.8, 1.0 }
+#  bg_pixmap[NORMAL] = "marble.xpm"
 }
 
 style "window"

@@ -1,3 +1,8 @@
+Tue Mar 17 12:36:35 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkstyle.c (gtk_default_draw_arrow): fixed a bug about drawing
+	GTK_ARROW_LEFT, correction from Damon Chaplin <DAChaplin@email.msn.com>.
+
 Tue Mar 17 02:02:02 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
 
 	* gdk/gdk.c (gdk_dnd_drag_leave): Use StructureNotifyMaskMask as

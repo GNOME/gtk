@@ -1420,10 +1420,10 @@ gtk_default_draw_arrow (GtkStyle      *style,
 
       gdk_draw_line (window, gc4,
                      x + width - 1, y + 1,
-                     x + 1, y + half_width);
+                     x + 1, y + half_height);
       gdk_draw_line (window, gc2,
                      x + width - 1, y,
-                     x, y + half_width);
+                     x, y + half_height);
       break;
     case GTK_ARROW_RIGHT:
       if (fill)
