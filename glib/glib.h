@@ -89,16 +89,21 @@
 
 
 /* Provide definitions for some commonly used macros.
+ *  Some of them are only provided if they haven't already
+ *  been defined. It is assumed that if they are already
+ *  defined then the current definition is correct.
  */
+#ifndef	NULL
+#define	NULL	((void*) 0)
+#endif
 
-#undef	NULL
-#define NULL ((void*) 0)
+#ifndef	FALSE
+#define	FALSE	(0)
+#endif
 
-#undef	FALSE
-#define FALSE 0
-
-#undef	TRUE
-#define TRUE 1
+#ifndef	TRUE
+#define	TRUE	(!FALSE)
+#endif
 
 #undef	MAX
 #define MAX(a, b)  (((a) > (b)) ? (a) : (b))
@@ -118,7 +123,7 @@
  *  if (x) G_STMT_START { ... } G_STMT_END; else ...
  *
  *  For gcc we will wrap the statements within `({' and `})' braces.
- *  For SunOS they will be wrapped within `if (1)' and `else (void)0',
+ *  For SunOS they will be wrapped within `if (1)' and `else (void) 0',
  *  and otherwise within `do' and `while (0)'.
  */
 #if !(defined (G_STMT_START) && defined (G_STMT_END))
@@ -136,16 +141,25 @@
 #  endif
 #endif
 
-/* Provide macros to feature the GCC printf format function attribute.
+/* Provide macros to feature the GCC function attribute.
  */
 #if	__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
 #define G_GNUC_PRINTF( format_idx, arg_idx )	\
   __attribute__((format (printf, format_idx, arg_idx)))
 #define G_GNUC_SCANF( format_idx, arg_idx )	\
   __attribute__((format (scanf, format_idx, arg_idx)))
+#define G_GNUC_FORMAT( arg_idx )		\
+  __attribute__((format_arg (arg_idx)))
+#define G_GNUC_NORETURN				\
+  __attribute__((noreturn))
+#define G_GNUC_CONST				\
+  __attribute__((const))
 #else   /* !__GNUC__ */
 #define G_GNUC_PRINTF( format_idx, arg_idx )
 #define G_GNUC_SCANF( format_idx, arg_idx )
+#define G_GNUC_FORMAT( arg_idx )
+#define G_GNUC_NORETURN
+#define G_GNUC_CONST
 #endif  /* !__GNUC__ */
 
 /* Wrap the __PRETTY_FUNCTION__ and __FUNCTION__ variables with macros,
@@ -187,9 +201,18 @@
     ((type *) g_malloc0 ((unsigned) sizeof (type) * (count)))
 #endif /* __DMALLOC_H__ */
 
-#define g_chunk_new(type, chunk)  \
-    ((type *) g_mem_chunk_alloc (chunk))
-
+#define g_mem_chunk_create(type, pre_alloc, alloc_type)	( \
+  g_mem_chunk_new (#type " mem chunks (" #pre_alloc ")", \
+		   sizeof (type), \
+		   sizeof (type) * (pre_alloc), \
+		   (alloc_type)) \
+)
+#define g_chunk_new(type, chunk)	( \
+  (type *) g_mem_chunk_alloc (chunk) \
+)
+#define	g_chunk_free(mem, mem_chunk)    G_STMT_START { \
+  g_mem_chunk_free ((mem_chunk), (mem)); \
+} G_STMT_END
 
 #define g_string(x) #x
 
@@ -502,6 +525,8 @@ guint  g_list_length	  (GList     *list);
 void   g_list_foreach	  (GList     *list,
 			   GFunc      func,
 			   gpointer   user_data);
+gpointer g_list_nth_data  (GList     *list,
+			   guint      n);
 
 #define g_list_previous(list) ((list) ? (((GList *)list)->prev) : NULL)
 #define g_list_next(list) ((list) ? (((GList *)list)->next) : NULL)
@@ -542,6 +567,8 @@ guint	g_slist_length	    (GSList   *list);
 void	g_slist_foreach	    (GSList   *list,
 			     GFunc     func,
 			     gpointer  user_data);
+gpointer g_slist_nth_data   (GSList   *list,
+			     guint     n);
 
 #define g_slist_next(list) ((list) ? (((GSList *)list)->next) : NULL)
 

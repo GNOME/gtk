@@ -163,14 +163,14 @@ g_string_chunk_insert_const (GStringChunk *fchunk,
 			     const gchar  *string)
 {
   GRealStringChunk *chunk = (GRealStringChunk*) fchunk;
-  char* lookup;
+  gchar* lookup;
 
   g_return_val_if_fail (chunk != NULL, NULL);
 
   if (!chunk->const_table)
     chunk->const_table = g_hash_table_new (g_str_hash, g_str_equal);
 
-  lookup = (char*) g_hash_table_lookup (chunk->const_table, string);
+  lookup = (gchar*) g_hash_table_lookup (chunk->const_table, (gchar*) string);
 
   if (!lookup)
     {

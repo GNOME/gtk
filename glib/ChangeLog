@@ -1,3 +1,15 @@
+Wed May 20 05:02:26 1998  Tim Janik  <timj@gtk.org>
+
+	* glib.h: conditionally define NULL, FALSE and TRUE.
+	added G_GNUC_FORMAT(), G_GNUC_NORETURN and G_GNUC_CONST macros to
+ 	feature more function arguments.
+	(g_mem_chunk_create): new convenience macro as a short hand for
+ 	g_mem_chunk_new().
+	(g_chunk_free): new convenience macro to be consistent with g_chunk_new.
+
+	* glist.c: backmerged g_list_nth_data().
+	* gslist.c: backmerged g_slist_nth_data().
+
 Mon May 18 22:14:39 1998  Owen Taylor  <otaylor@gtk.org>
 (Yasuhiro SHIRASAKI <joke@awa.tohoku.ac.jp> : gtk-joke-980517-0.patch)
 	
