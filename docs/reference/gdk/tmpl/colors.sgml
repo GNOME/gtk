@@ -72,14 +72,11 @@ The colormap structure contains the following public fields.
 
 <!-- ##### FUNCTION gdk_colormap_new ##### -->
 <para>
-Creates a new colormap for the given visual.
 </para>
 
-@visual: a #GdkVisual.
-@allocate: if %TRUE, the newly created colormap will be
-  a private colormap, and all colors in it will be
-  allocated for the applications use.
-@Returns: the new #GdkColormap.
+@visual: 
+@allocate: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_colormap_ref ##### -->
@@ -108,74 +105,50 @@ Creates a new colormap for the given visual.
 
 <!-- ##### FUNCTION gdk_colormap_get_system_size ##### -->
 <para>
-Returns the size of the system's default colormap.
-(See the description of struct #GdkColormap for an
-explanation of the size of a colormap.)
 </para>
 
-@Returns: the size of the system's default colormap.
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_colormap_change ##### -->
 <para>
-Changes the value of the first @ncolors in a private colormap
-to match the values in the <structfield>colors</structfield>
-array in the color map. This function is obsolete and
-should not be used. See gdk_color_change().
 </para>
 
-@colormap: a #GdkColormap.
-@ncolors: the number of colors to change.
+@colormap: 
+@ncolors: 
 
 
 <!-- ##### FUNCTION gdk_colormap_alloc_colors ##### -->
 <para>
-Allocates colors from a colormap.
 </para>
 
-@colormap: a #GdkColormap.
-@colors: The color values to allocate. On return, the pixel
- values for allocated colors will be filled in.
-@ncolors: The number of colors in @colors.
-@writeable: If %TRUE, the colors are allocated writeable
- (their values can later be changed using gdk_color_change()).
- Writeable colors cannot be shared between applications.
-@best_match: If %TRUE, GDK will attempt to do matching against
- existing colors if the colors cannot be allocated as
- requested.
-@success: An array of length @ncolors. On return, this
- indicates whether the corresponding color in @colors was
- sucessfully allocated or not.
-@Returns: The number of colors that were not sucessfully 
- allocated.
+@colormap: 
+@colors: 
+@ncolors: 
+@writeable:
+@best_match:
+@success: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_colormap_alloc_color ##### -->
 <para>
-Allocates a single color from a colormap.
 </para>
 
-@colormap: a #GdkColormap.
-@color: the color to allocate. On return the
-<structfield>pixel</structfield> field will be
-filled in if allocation succeeds.
-@writeable: If %TRUE, the color is allocated writeable
- (their values can later be changed using gdk_color_change()).
- Writeable colors cannot be shared between applications.
-@best_match: If %TRUE, GDK will attempt to do matching against
- existing colors if the color cannot be allocated as
- requested.
-@Returns: %TRUE if the allocation succeeded.
+@colormap:
+@color:
+@writeable:
+@best_match:
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_colormap_free_colors ##### -->
 <para>
-Frees previously allocated colors.
 </para>
 
-@colormap: a #GdkColormap.
-@colors: the colors to free.
-@ncolors: the number of colors in @colors.
+@colormap:
+@colors:
+@ncolors:
 
 
 <!-- ##### FUNCTION gdk_colormap_query_color ##### -->
@@ -190,11 +163,10 @@ Frees previously allocated colors.
 
 <!-- ##### FUNCTION gdk_colormap_get_visual ##### -->
 <para>
-Returns the visual for which a given colormap was created.
 </para>
 
-@colormap: a #GdkColormap.
-@Returns: the visual of the colormap.
+@colormap: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_colormap_get_screen ##### -->
@@ -208,157 +180,115 @@ Returns the visual for which a given colormap was created.
 
 <!-- ##### FUNCTION gdk_colors_store ##### -->
 <para>
-Changes the value of the first @ncolors colors in
-a private colormap. This function is obsolete and
-should not be used. See gdk_color_change().
 </para>
 
-@colormap: a #GdkColormap.
-@colors: the new color values.
-@ncolors: the number of colors to change.
+@colormap: 
+@colors: 
+@ncolors:
 
 
 <!-- ##### FUNCTION gdk_color_copy ##### -->
 <para>
-Makes a copy of a color structure. The result
-must be freed using gdk_color_free().
 </para>
 
-@color: a #GdkColor.
-@Returns: a copy of @color.
+@color: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_color_free ##### -->
 <para>
-Frees a color structure created with 
-gdk_color_copy().
 </para>
 
-@color: a #GdkColor.
+@color: 
 
 
 <!-- ##### FUNCTION gdk_colors_alloc ##### -->
 <para>
-Allocates colors from a colormap. This function
-is obsolete. See gdk_colormap_alloc_colors().
-For full documentation of the fields, see 
-the Xlib documentation for <function>XAllocColorCells()</function>.
 </para>
 
-@colormap: a #GdkColormap.
-@contiguous: if %TRUE, the colors should be allocated
- in contiguous color cells.
-@planes: an array in which to store the plane masks.
-@nplanes: the number of planes to allocate. (Or zero,
- to indicate that the color allocation should not be
- planar.)
-@pixels: an array into which to store allocated pixel
- values.
-@npixels: the number of pixels in each plane to allocate.
+@colormap: 
+@contiguous: 
+@planes: 
+@nplanes: 
+@pixels: 
+@npixels:
 @Returns: 
 
 
 <!-- ##### FUNCTION gdk_colors_free ##### -->
 <para>
-Frees colors allocated with gdk_colors_alloc(). This
-function is obsolete. See gdk_colormap_free_colors().
 </para>
 
-@colormap: a #GdkColormap.
-@pixels: the pixel values of the colors to free.
-@npixels: the number of values in @pixels.
-@planes: the plane masks for all planes to free, OR'd
- together.
+@colormap: 
+@pixels: 
+@npixels:
+@planes: 
 
 
 <!-- ##### FUNCTION gdk_color_white ##### -->
 <para>
-Returns the white color for a given colormap. The resulting
-value has already allocated been allocated. 
 </para>
 
-@colormap: a #GdkColormap.
-@color: the location to store the color.
-@Returns: %TRUE if the allocation succeeded.
+@colormap:
+@color: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_color_black ##### -->
 <para>
-Returns the black color for a given colormap. The resulting
-value has already benn allocated. 
 </para>
 
-@colormap: a #GdkColormap.
-@color: the location to store the color.
-@Returns: %TRUE if the allocation succeeded.
+@colormap: 
+@color: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_color_parse ##### -->
 <para>
-Parses a textual specification of a color and fill in
-the <structfield>red</structfield>,
-<structfield>green</structfield>, and 
-<structfield>blue</structfield> fields of a 
-#GdkColor structure. The color is <emphasis>not</emphasis> 
-allocated, you must call gdk_colormap_alloc_color() yourself.
-The text string can be in any of the forms accepted
-by <function>XParseColor</function>; these include
-name for a color from <filename>rgb.txt</filename>, such as
-<literal>DarkSlateGray</literal>, or a hex specification
-such as <literal>305050</literal>.
 </para>
 
-@spec: the string specifying the color.
-@color: the #GdkColor to fill in
+@spec: 
+@color: 
 @Returns: 
 
 
 <!-- ##### FUNCTION gdk_color_alloc ##### -->
 <para>
-Allocates a single color from a colormap.
-This function is obsolete. See gdk_colormap_alloc_color().
 </para>
 
-@colormap: a #GdkColormap.
-@color: The color to allocate. On return, the 
-<structfield>pixel</structfield> field will be
-filled in.
-@Returns: %TRUE if the allocation succeeded.
+@colormap: 
+@color: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_color_change ##### -->
 <para>
-Changes the value of a color that has already
-been allocated. If @colormap is not a private
-colormap, then the color must have been allocated
-using gdk_colormap_alloc_colors() with the 
-@writeable set to %TRUE.
 </para>
 
-@colormap: a #GdkColormap.
-@color: a #GdkColor, with the color to change
-in the <structfield>pixel</structfield> field,
-and the new value in the remaining fields.
+@colormap: 
+@color: 
 @Returns: 
 
 
 <!-- ##### FUNCTION gdk_color_equal ##### -->
 <para>
-Compares two colors. 
 </para>
 
-@colora: a #GdkColor.
-@colorb: another #GdkColor.
-@Returns: %TRUE if the two colors compare equal
+@colora: 
+@colorb: 
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_color_hash ##### -->
 <para>
-A hash function suitable for using for a hash
-table that stores #GdkColor's.
 </para>
 
-@colora: a #GdkColor.
-@Returns: The hash function appled to @colora
+@colora:
+@Returns: 
+
+
+
+
+
 
 

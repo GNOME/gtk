@@ -147,9 +147,20 @@ gdk_colormap_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+/**
+ * gdk_colormap_new:
+ * @visual: a #GdkVisual.
+ * @allocate: if %TRUE, the newly created colormap will be
+ * a private colormap, and all colors in it will be
+ * allocated for the applications use.
+ * 
+ * Creates a new colormap for the given visual.
+ * 
+ * Return value: the new #GdkColormap.
+ **/
 GdkColormap*
 gdk_colormap_new (GdkVisual *visual,
-		  gboolean   private_cmap)
+		  gboolean   allocate)
 {
   GdkColormap *colormap;
   GdkColormapPrivateX11 *private;
@@ -187,11 +198,11 @@ gdk_colormap_new (GdkVisual *visual,
       private->hash = g_hash_table_new ((GHashFunc) gdk_color_hash,
 					(GEqualFunc) gdk_color_equal);
       
-      private->private_val = private_cmap;
+      private->private_val = allocate;
       private->xcolormap = XCreateColormap (xdisplay, xrootwin,
-					    xvisual, (private_cmap) ? (AllocAll) : (AllocNone));
+					    xvisual, (allocate) ? (AllocAll) : (AllocNone));
 
-      if (private_cmap)
+      if (allocate)
 	{
 	  XColor *default_colors;
 
@@ -418,6 +429,15 @@ gdk_screen_get_system_colormap (GdkScreen *screen)
   return colormap;
 }
 
+/**
+ * gdk_colormap_get_system_size:
+ * 
+ * Returns the size of the system's default colormap.
+ * (See the description of struct #GdkColormap for an
+ * explanation of the size of a colormap.)
+ * 
+ * Return value: the size of the system's default colormap.
+ **/
 gint
 gdk_colormap_get_system_size (void)
 {
@@ -425,6 +445,16 @@ gdk_colormap_get_system_size (void)
 		       GDK_SCREEN_X11 (gdk_screen_get_default())->screen_num);
 }
 
+/**
+ * gdk_colormap_change:
+ * @colormap: a #GdkColormap.
+ * @ncolors: the number of colors to change.
+ * 
+ * Changes the value of the first @ncolors in a private colormap
+ * to match the values in the <structfield>colors</structfield>
+ * array in the colormap. This function is obsolete and
+ * should not be used. See gdk_color_change().
+ **/
 void
 gdk_colormap_change (GdkColormap *colormap,
 		     gint         ncolors)
@@ -514,6 +544,24 @@ gdk_colormap_change (GdkColormap *colormap,
   g_free (palette);
 }
 
+/**
+ * gdk_colors_alloc:
+ * @colormap: a #GdkColormap.
+ * @contiguous: if %TRUE, the colors should be allocated
+ *    in contiguous color cells.
+ * @planes: an array in which to store the plane masks.
+ * @nplanes: the number of planes to allocate. (Or zero,
+ *    to indicate that the color allocation should not be planar.)
+ * @pixels: an array into which to store allocated pixel values.
+ * @npixels: the number of pixels in each plane to allocate.
+ * 
+ * Allocates colors from a colormap. This function
+ * is obsolete. See gdk_colormap_alloc_colors().
+ * For full documentation of the fields, see 
+ * the Xlib documentation for <function>XAllocColorCells()</function>.
+ * 
+ * Return value: 
+ **/
 gboolean
 gdk_colors_alloc (GdkColormap   *colormap,
 		  gboolean       contiguous,
@@ -551,6 +599,18 @@ gdk_colors_alloc (GdkColormap   *colormap,
 /* This is almost identical to gdk_colormap_free_colors.
  * Keep them in sync!
  */
+
+
+/**
+ * gdk_colors_free:
+ * @colormap: a #GdkColormap.
+ * @in_pixels: the pixel values of the colors to free.
+ * @in_npixels: the number of values in @pixels.
+ * @planes: the plane masks for all planes to free, OR'd together.
+ * 
+ * Frees colors allocated with gdk_colors_alloc(). This
+ * function is obsolete. See gdk_colormap_free_colors().
+ **/
 void
 gdk_colors_free (GdkColormap *colormap,
 		 gulong      *in_pixels,
@@ -600,6 +660,15 @@ gdk_colors_free (GdkColormap *colormap,
 /* This is almost identical to gdk_colors_free.
  * Keep them in sync!
  */
+
+/**
+ * gdk_colormap_free_colors:
+ * @colormap: a #GdkColormap.
+ * @colors: the colors to free.
+ * @ncolors: the number of colors in @colors.
+ * 
+ * Frees previously allocated colors.
+ **/
 void
 gdk_colormap_free_colors (GdkColormap *colormap,
 			  GdkColor    *colors,
@@ -979,10 +1048,50 @@ gdk_colormap_alloc_colors_pseudocolor (GdkColormap *colormap,
     return 0;
 }
 
+/**
+ * gdk_colormap_alloc_colors:
+ * @colormap: a #GdkColormap.
+ * @colors: The color values to allocate. On return, the pixel
+ *    values for allocated colors will be filled in.
+ * @ncolors: The number of colors in @colors.
+ * @writeable: If %TRUE, the colors are allocated writeable
+ *    (their values can later be changed using gdk_color_change()).
+ *    Writeable colors cannot be shared between applications.
+ * @best_match: If %TRUE, GDK will attempt to do matching against
+ *    existing colors if the colors cannot be allocated as requested.
+ * @success: An array of length @ncolors. On return, this
+ *   indicates whether the corresponding color in @colors was
+ *   sucessfully allocated or not.
+ * 
+ * Allocates colors from a colormap.
+ * 
+ * Return value: The number of colors that were not sucessfully 
+ * allocated.
+ **/
 gint
 gdk_colormap_alloc_colors (GdkColormap *colormap,
 			   GdkColor    *colors,
 			   gint         ncolors,
+/**
+ * gdk_colormap_alloc_colors:
+ * @colormap: a #GdkColormap.
+ * @colors: The color values to allocate. On return, the pixel
+ *    values for allocated colors will be filled in.
+ * @ncolors: The number of colors in @colors.
+ * @writeable: If %TRUE, the colors are allocated writeable
+ *    (their values can later be changed using gdk_color_change()).
+ *    Writeable colors cannot be shared between applications.
+ * @best_match: If %TRUE, GDK will attempt to do matching against
+ *    existing colors if the colors cannot be allocated as requested.
+ * @success: An array of length @ncolors. On return, this
+ *   indicates whether the corresponding color in @colors was
+ *   sucessfully allocated or not.
+ * 
+ * Allocates colors from a colormap.
+ * 
+ * Return value: The number of colors that were not sucessfully 
+ * allocated.
+ **/
 			   gboolean     writeable,
 			   gboolean     best_match,
 			   gboolean    *success)
@@ -1121,6 +1230,21 @@ gdk_colormap_query_color (GdkColormap *colormap,
   }
 }
 
+/**
+ * gdk_color_change:
+ * @colormap: a #GdkColormap.
+ * @color: a #GdkColor, with the color to change
+ * in the <structfield>pixel</structfield> field,
+ * and the new value in the remaining fields.
+ * 
+ * Changes the value of a color that has already
+ * been allocated. If @colormap is not a private
+ * colormap, then the color must have been allocated
+ * using gdk_colormap_alloc_colors() with the 
+ * @writeable set to %TRUE.
+ * 
+ * Return value: %TRUE if the color was successfully changed.
+ **/
 gboolean
 gdk_color_change (GdkColormap *colormap,
 		  GdkColor    *color)

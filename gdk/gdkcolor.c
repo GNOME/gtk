@@ -56,6 +56,15 @@ gdk_colormap_unref (GdkColormap *cmap)
   g_object_unref (cmap);
 }
 
+
+/**
+ * gdk_colormap_get_visual:
+ * @colormap: a #GdkColormap.
+ * 
+ * Returns the visual for which a given colormap was created.
+ * 
+ * Return value: the visual of the colormap.
+ **/
 GdkVisual *
 gdk_colormap_get_visual (GdkColormap *colormap)
 {
@@ -63,7 +72,19 @@ gdk_colormap_get_visual (GdkColormap *colormap)
 
   return colormap->visual;
 }
-     
+
+/**
+ * gdk_colors_store:
+ * @colormap: a #GdkColormap.
+ * @colors: the new color values.
+ * @ncolors: the number of colors to change.
+ * 
+ * Changes the value of the first @ncolors colors in
+ * a private colormap. This function is obsolete and
+ * should not be used. See gdk_color_change().
+ * 
+ * Return value: 
+ **/     
 void
 gdk_colors_store (GdkColormap   *colormap,
 		  GdkColor      *colors,
@@ -82,23 +103,17 @@ gdk_colors_store (GdkColormap   *colormap,
   gdk_colormap_change (colormap, ncolors);
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_color_copy
- *
- *   Copy a color structure into new storage.
- *
- * Arguments:
- *   "color" is the color struct to copy.
- *
- * Results:
- *   A new color structure.  Free it with gdk_color_free.
- *
- *--------------------------------------------------------------
- */
-
 static GMemChunk *color_chunk;
 
+/**
+ * gdk_color_copy:
+ * @color: a #GdkColor.
+ * 
+ * Makes a copy of a color structure. The result
+ * must be freed using gdk_color_free().
+ * 
+ * Return value: a copy of @color.
+ **/
 GdkColor*
 gdk_color_copy (const GdkColor *color)
 {
@@ -117,18 +132,13 @@ gdk_color_copy (const GdkColor *color)
   return new_color;
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_color_free
- *
- *   Free a color structure obtained from gdk_color_copy.  Do not use
- *   with other color structures.
- *
- * Arguments:
- *   "color" is the color struct to free.
- *
- *-------------------------------------------------------------- */
-
+/**
+ * gdk_color_free:
+ * @color: a #GdkColor.
+ * 
+ * Frees a color structure created with 
+ * gdk_color_copy().
+ **/
 void
 gdk_color_free (GdkColor *color)
 {
@@ -138,6 +148,16 @@ gdk_color_free (GdkColor *color)
   g_mem_chunk_free (color_chunk, color);
 }
 
+/**
+ * gdk_color_white:
+ * @colormap: a #GdkColormap.
+ * @color: the location to store the color.
+ * 
+ * Returns the white color for a given colormap. The resulting
+ * value has already allocated been allocated. 
+ * 
+ * Return value: %TRUE if the allocation succeeded.
+ **/
 gboolean
 gdk_color_white (GdkColormap *colormap,
 		 GdkColor    *color)
@@ -160,6 +180,16 @@ gdk_color_white (GdkColormap *colormap,
   return return_val;
 }
 
+/**
+ * gdk_color_black:
+ * @colormap: a #GdkColormap.
+ * @color: the location to store the color.
+ * 
+ * Returns the black color for a given colormap. The resulting
+ * value has already benn allocated. 
+ * 
+ * Return value: %TRUE if the allocation succeeded.
+ **/
 gboolean
 gdk_color_black (GdkColormap *colormap,
 		 GdkColor    *color)
@@ -186,6 +216,22 @@ gdk_color_black (GdkColormap *colormap,
  * Color allocation *
  ********************/
 
+/**
+ * gdk_colormap_alloc_color:
+ * @colormap: a #GdkColormap.
+ * @color: the color to allocate. On return the
+ *    <structfield>pixel</structfield> field will be
+ *    filled in if allocation succeeds.
+ * @writeable: If %TRUE, the color is allocated writeable
+ *    (their values can later be changed using gdk_color_change()).
+ *    Writeable colors cannot be shared between applications.
+ * @best_match: If %TRUE, GDK will attempt to do matching against
+ *    existing colors if the color cannot be allocated as requested.
+ *
+ * Allocates a single color from a colormap.
+ * 
+ * Return value: %TRUE if the allocation succeeded.
+ **/
 gboolean
 gdk_colormap_alloc_color (GdkColormap *colormap,
 			  GdkColor    *color,
@@ -200,6 +246,17 @@ gdk_colormap_alloc_color (GdkColormap *colormap,
   return success;
 }
 
+/**
+ * gdk_color_alloc:
+ * @colormap: a #GdkColormap.
+ * @color: The color to allocate. On return, the 
+ *    <structfield>pixel</structfield> field will be filled in.
+ * 
+ * Allocates a single color from a colormap.
+ * This function is obsolete. See gdk_colormap_alloc_color().
+ * 
+ * Return value: %TRUE if the allocation succeeded.
+ **/
 gboolean
 gdk_color_alloc (GdkColormap *colormap,
 		 GdkColor    *color)
@@ -211,6 +268,15 @@ gdk_color_alloc (GdkColormap *colormap,
   return success;
 }
 
+/**
+ * gdk_color_hash:
+ * @colora: a #GdkColor.
+ * 
+ * A hash function suitable for using for a hash
+ * table that stores #GdkColor's.
+ * 
+ * Return value: The hash function appled to @colora
+ **/
 guint
 gdk_color_hash (const GdkColor *colora)
 {
@@ -220,6 +286,15 @@ gdk_color_hash (const GdkColor *colora)
 	  (colora->blue >> 6));
 }
 
+/**
+ * gdk_color_equal:
+ * @colora: a #GdkColor.
+ * @colorb: another #GdkColor.
+ * 
+ * Compares two colors. 
+ * 
+ * Return value: %TRUE if the two colors compare equal
+ **/
 gboolean
 gdk_color_equal (const GdkColor *colora,
 		 const GdkColor *colorb)
@@ -244,6 +319,25 @@ gdk_color_get_type (void)
   return our_type;
 }
 
+/**
+ * gdk_color_parse:
+ * @spec: the string specifying the color.
+ * @color: the #GdkColor to fill in
+ * 
+ * Parses a textual specification of a color and fill in
+ * the <structfield>red</structfield>,
+ * <structfield>green</structfield>, and 
+ * <structfield>blue</structfield> fields of a 
+ * #GdkColor structure. The color is <emphasis>not</emphasis> 
+ * allocated, you must call gdk_colormap_alloc_color() yourself.
+ * The text string can be in any of the forms accepted
+ * by <function>XParseColor</function>; these include
+ * name for a color from <filename>rgb.txt</filename>, such as
+ * <literal>DarkSlateGray</literal>, or a hex specification
+ * such as <literal>305050</literal>.
+ * 
+ * Return value: %TRUE if the parsing succeeded.
+ **/
 gboolean
 gdk_color_parse (const gchar *spec,
 		 GdkColor    *color)
