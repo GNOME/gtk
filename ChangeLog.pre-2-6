@@ -1,3 +1,11 @@
+Tue Nov 26 00:40:53 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkprogressbar.c (gtk_progress_bar_paint_text): draw text
+	twice, once with the prelight state and clipped to the progress
+	bar, and once with the normal state and clipped to the visible
+	part of the trough. Also fix a spelling error pointed out by
+	Matthias Clasen.
+
 Mon Nov 25 17:44:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Fixes from #98358, Havoc Pennington.

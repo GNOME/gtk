@@ -619,25 +619,16 @@ gtk_progress_bar_paint_activity (GtkProgressBar            *pbar,
 }
 
 static void
-gtk_progress_bar_paint_continous (GtkProgressBar            *pbar,
-				  GtkProgressBarOrientation  orientation)
+gtk_progress_bar_paint_continuous (GtkProgressBar            *pbar,
+				   gint                       amount,
+				   GtkProgressBarOrientation  orientation)
 {
   GtkWidget *widget = GTK_WIDGET (pbar);
-  gint space;
-  gint amount;
   gint x, y, w, h;
-
-  if (orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
-      orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
-    space = widget->allocation.width - 2 * widget->style->xthickness;
-  else
-    space = widget->allocation.height - 2 * widget->style->ythickness;
-
-  amount = space * gtk_progress_get_current_percentage (GTK_PROGRESS (pbar));
 
   if (amount <= 0)
     return;
-  
+
   switch (orientation)
     {
     case GTK_PROGRESS_LEFT_TO_RIGHT:
@@ -727,7 +718,9 @@ gtk_progress_bar_paint_discrete (GtkProgressBar            *pbar,
 }
 
 static void
-gtk_progress_bar_paint_text (GtkProgressBar *pbar)
+gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
+			     gint			amount,
+			     GtkProgressBarOrientation  orientation)
 {
   GtkProgress *progress = GTK_PROGRESS (pbar);
   GtkWidget *widget = GTK_WIDGET (pbar);
@@ -738,6 +731,7 @@ gtk_progress_bar_paint_text (GtkProgressBar *pbar)
   GdkRectangle rect;
   PangoLayout *layout;
   PangoRectangle logical_rect;
+  GdkRectangle prelight_clip, normal_clip;
   
   buf = gtk_progress_get_current_text (progress);
   
@@ -748,29 +742,66 @@ gtk_progress_bar_paint_text (GtkProgressBar *pbar)
     (widget->allocation.width - 2 * widget->style->xthickness -
      3 - logical_rect.width)
     * progress->x_align; 
-  
+
   y = widget->style->ythickness + 1 +
     (widget->allocation.height - 2 * widget->style->ythickness -
      3 - logical_rect.height)
     * progress->y_align;
-  
-  rect.x = widget->style->xthickness + 1;
-  rect.y = widget->style->ythickness + 1;
-  rect.width = widget->allocation.width -
-    2 * widget->style->xthickness - 3;
-  rect.height = widget->allocation.height -
-    2 * widget->style->ythickness - 3;
+
+  rect.x = widget->style->xthickness;
+  rect.y = widget->style->ythickness;
+  rect.width = widget->allocation.width - 2 * widget->style->xthickness;
+  rect.height = widget->allocation.height - 2 * widget->style->ythickness;
+
+  prelight_clip = normal_clip = rect;
+
+  switch (orientation)
+    {
+    case GTK_PROGRESS_LEFT_TO_RIGHT:
+      prelight_clip.width = amount;
+      normal_clip.x += amount;
+      normal_clip.width -= amount;
+      break;
+      
+    case GTK_PROGRESS_RIGHT_TO_LEFT:
+      normal_clip.width -= amount;
+      prelight_clip.x += normal_clip.width;
+      prelight_clip.width -= normal_clip.width;
+      break;
+       
+    case GTK_PROGRESS_TOP_TO_BOTTOM:
+      prelight_clip.height = amount;
+      normal_clip.y += amount;
+      normal_clip.height -= amount;
+      break;
+      
+    case GTK_PROGRESS_BOTTOM_TO_TOP:
+      normal_clip.height -= amount;
+      prelight_clip.y += normal_clip.height;
+      prelight_clip.height -= normal_clip.height;
+      break;
+    }
   
   gtk_paint_layout (widget->style,
 		    progress->offscreen_pixmap,
-		    GTK_WIDGET_STATE (widget),
+		    GTK_STATE_PRELIGHT,
 		    FALSE,
-		    &rect,
+		    &prelight_clip,
 		    widget,
 		    "progressbar",
 		    x, y,
 		    layout);
   
+  gtk_paint_layout (widget->style,
+		    progress->offscreen_pixmap,
+		    GTK_STATE_NORMAL,
+		    FALSE,
+		    &normal_clip,
+		    widget,
+		    "progressbar",
+		    x, y,
+		    layout);
+
   g_object_unref (layout);
   g_free (buf);
 }
@@ -813,13 +844,27 @@ gtk_progress_bar_paint (GtkProgress *progress)
 	}
       else
 	{
+	  gint amount;
+	  gint space;
+	  
+	  if (orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
+	      orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
+	    space = widget->allocation.width - 2 * widget->style->xthickness;
+	  else
+	    space = widget->allocation.height - 2 * widget->style->ythickness;
+	  
+	  amount = space *
+	    gtk_progress_get_current_percentage (GTK_PROGRESS (pbar));
+	  
 	  if (pbar->bar_style == GTK_PROGRESS_CONTINUOUS)
-	    gtk_progress_bar_paint_continous (pbar, orientation);
+	    {
+	      gtk_progress_bar_paint_continuous (pbar, amount, orientation);
+
+	      if (GTK_PROGRESS (pbar)->show_text)
+		gtk_progress_bar_paint_text (pbar, amount, orientation);
+	    }
 	  else
 	    gtk_progress_bar_paint_discrete (pbar, orientation);
-
-	  if (progress->show_text && pbar->bar_style != GTK_PROGRESS_DISCRETE)
-	    gtk_progress_bar_paint_text (pbar);
 	}
     }
 }
