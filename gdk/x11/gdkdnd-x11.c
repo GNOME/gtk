@@ -2541,6 +2541,7 @@ gdk_drag_get_protocol (guint32          xid,
 	}
     }
 
+  *protocol = GDK_DRAG_PROTO_NONE;
   return GDK_NONE;
 }
 
@@ -2950,8 +2951,7 @@ gdk_window_register_dnd (GdkWindow      *window)
 		   GDK_WINDOW_XWINDOW (window),
 		   xdnd_aware_atom, XA_ATOM,
 		   32, PropModeReplace,
-		   (guchar *)&xdnd_version,
-		   sizeof (xdnd_version));
+		   (guchar *)&xdnd_version, 1);
 }
 
 /*************************************************************

@@ -85,8 +85,6 @@ static gint  gtk_quit_invoke_function	 (GtkQuitFunction    *quitf);
 static void  gtk_quit_destroy		 (GtkQuitFunction    *quitf);
 static gint  gtk_invoke_key_snoopers	 (GtkWidget	     *grab_widget,
 					  GdkEvent	     *event);
-static void  gtk_propagate_event	 (GtkWidget	     *widget,
-					  GdkEvent	     *event);
 
 static void     gtk_destroy_closure      (gpointer            data);
 static gboolean gtk_invoke_idle_timeout  (gpointer            data);
@@ -1196,7 +1194,7 @@ gtk_quit_invoke_function (GtkQuitFunction *quitf)
     }
 }
 
-static void
+void
 gtk_propagate_event (GtkWidget *widget,
 		     GdkEvent  *event)
 {

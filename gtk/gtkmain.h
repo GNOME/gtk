@@ -139,6 +139,11 @@ GdkEvent*  gtk_get_current_event   (void);
 GtkWidget* gtk_get_event_widget	   (GdkEvent	   *event);
 
 
+/* Private routines internal to GTK+ 
+ */
+void       gtk_propagate_event     (GtkWidget         *widget,
+				    GdkEvent          *event);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

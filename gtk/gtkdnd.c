@@ -2005,11 +2005,14 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 			gboolean           success,
 			guint              time)
 {
+  gtk_drag_source_release_selections (info, time); 
+
   if (info->proxy_dest)
     {
       /* The time from the event isn't reliable for Xdnd drags */
       gtk_drag_finish (info->proxy_dest->context, success, FALSE, 
 		       info->proxy_dest->proxy_drop_time);
+      gtk_drag_source_info_destroy (info);
     }
   else
     {
@@ -2039,8 +2042,6 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 	  gtk_timeout_add (ANIM_STEP_TIME, gtk_drag_anim_timeout, anim);
 	}
     }
-
-  gtk_drag_source_release_selections (info, GDK_CURRENT_TIME); /* fixme */
 }
 
 static void
@@ -2459,19 +2460,31 @@ gtk_drag_button_release_cb (GtkWidget      *widget,
 
   gtk_grab_remove (widget);
 
+  /* Send on a release pair to the the original 
+   * widget to convince it to release its grab. We need to
+   * call gtk_propagate_event() here, instead of 
+   * gtk_widget_event() because widget like GtkList may
+   * expect propagation.
+   */
+
   send_event.button.type = GDK_BUTTON_RELEASE;
   send_event.button.window = source_widget->window;
+  send_event.button.send_event = TRUE;
+  send_event.button.time = event->time;
   send_event.button.x = 0;
   send_event.button.y = 0;
+  send_event.button.pressure = 0.;
+  send_event.button.xtilt = 0.;
+  send_event.button.ytilt = 0.;
   send_event.button.state = event->state;
   send_event.button.button = event->button;
-  
-  send_event.button.time = event->time;
+  send_event.button.source = GDK_SOURCE_PEN;
+  send_event.button.deviceid = GDK_CORE_POINTER;
+  send_event.button.x_root = 0;
+  send_event.button.y_root = 0;
 
-  /* Send on the button release to the original widget to
-   * convince it to release its grab
-   */
-  gtk_widget_event (source_widget, &send_event);
+  gtk_propagate_event (source_widget, &send_event);
+
   gtk_widget_unref (source_widget);
   
   return TRUE;
