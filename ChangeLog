@@ -1,3 +1,12 @@
+2004-11-04  Bastien Nocera  <hadess@hadess.net>
+
+	* gtk/gtkiconfactory.c: (get_default_icons): Make sure the RTL
+	variants are used for media icons
+	* gtk/stock-icons/Makefile.am: update following the addition of
+	the 2 Play icon RTL variants
+	* gtk/stock-icons/stock_media_play_rtl_16.png: added
+	* gtk/stock-icons/stock_media_play_rtl_24.png: added
+
 2004-11-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (new_folder_button_clicked): 

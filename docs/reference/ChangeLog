@@ -1,3 +1,8 @@
+2004-11-04  Bastien Nocera  <hadess@hadess.net>
+
+	* gtk/tmpl/gtkstock.sgml: add RTL variants for all the media icons
+	needing it
+
 2004-11-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/migrating-GtkIconView.sgml: Add a first version of

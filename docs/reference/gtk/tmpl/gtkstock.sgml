@@ -506,6 +506,8 @@ The "Right" item.
 <para>
 The "Media Forward" item.
 <inlinegraphic fileref="stock_media_forward_24.png" format="PNG"></inlinegraphic>
+RTL variant
+<inlinegraphic fileref="stock_media_rewind_24.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -515,6 +517,8 @@ The "Media Forward" item.
 <para>
 The "Media Next" item.
 <inlinegraphic fileref="stock_media_next_24.png" format="PNG"></inlinegraphic>
+RTL variant
+<inlinegraphic fileref="stock_media_previous_24.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -534,6 +538,9 @@ The "Media Pause" item.
 The "Media Play" item.
 <inlinegraphic fileref="stock_media_play_24.png" format="PNG"></inlinegraphic>
 </para>
+RTL variant
+<inlinegraphic fileref="stock_media_play_rtl_24.png" format="PNG"></inlinegraphic>
+</para>
 
 @Since: 2.6
 
@@ -542,6 +549,8 @@ The "Media Play" item.
 <para>
 The "Media Previous" item.
 <inlinegraphic fileref="stock_media_previous_24.png" format="PNG"></inlinegraphic>
+RTL variant
+<inlinegraphic fileref="stock_media_next_24.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
@@ -560,6 +569,8 @@ The "Media Record" item.
 <para>
 The "Media Rewind" item.
 <inlinegraphic fileref="stock_media_rewind_24.png" format="PNG"></inlinegraphic>
+RTL variant
+<inlinegraphic fileref="stock_media_forward_24.png" format="PNG"></inlinegraphic>
 </para>
 
 @Since: 2.6
