@@ -28,8 +28,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-04-02 13:13+0200\n"
-"PO-Revision-Date: 2002-03-28 19:49+0100\n"
+"POT-Creation-Date: 2002-04-06 15:57+0200\n"
+"PO-Revision-Date: 2002-04-06 15:56+0200\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -446,19 +446,16 @@ msgid "Insufficient memory to load PNM file"
 msgstr "Ikke tilstrækkelig hukommelse til indlæsning af PNM-fil"
 
 #: gdk-pixbuf/io-ras.c:158
-#, fuzzy
 msgid "RAS image has bogus header data"
-msgstr "BMP-billede har ugyldige data i filhoved"
+msgstr "RAS-billede har ugyldige data i filhoved"
 
 #: gdk-pixbuf/io-ras.c:180
-#, fuzzy
 msgid "RAS image has unknown type"
-msgstr "Ukendt billedformat"
+msgstr "RAS-billede er af en ukendt type"
 
 #: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
-#, fuzzy
 msgid "Not enough memory to load RAS image"
-msgstr "Ikke tilstrækkelig hukommelse til indlæsning af billede"
+msgstr "Ikke tilstrækkelig hukommelse til indlæsning af RAS-billede"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
@@ -571,35 +568,39 @@ msgstr "Kan ikke allokere pixbuf"
 msgid "Unsupported TGA image type"
 msgstr "Ikke-understøttet TGA-billedtype"
 
-#: gdk-pixbuf/io-tiff.c:152
+#: gdk-pixbuf/io-tiff.c:187
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Kunne ikke finde billedbredde (ugyldig TIFF-fil)"
 
-#: gdk-pixbuf/io-tiff.c:159
+#: gdk-pixbuf/io-tiff.c:194
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Kunne ikke finde billedhøjde (ugyldig TIFF-fil)"
 
-#: gdk-pixbuf/io-tiff.c:169
+#: gdk-pixbuf/io-tiff.c:202
 msgid "Width or height of TIFF image is zero"
 msgstr "Bredde eller højde på TIFF-billede er nul"
 
-#: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:485
+#: gdk-pixbuf/io-tiff.c:211 gdk-pixbuf/io-tiff.c:220
+msgid "Dimensions of TIFF image too large"
+msgstr "Dimensionerne af TIFF-billede er for store"
+
+#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:521
 msgid "Insufficient memory to open TIFF file"
 msgstr "Ikke tilstrækkelig hukommelse til åbning af TIFF-fil"
 
-#: gdk-pixbuf/io-tiff.c:203
+#: gdk-pixbuf/io-tiff.c:254
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Fejl under indlæsning af RGB-data fra TIFF-fil"
 
-#: gdk-pixbuf/io-tiff.c:273
+#: gdk-pixbuf/io-tiff.c:309
 msgid "Failed to open TIFF image"
 msgstr "Kunne ikke åbne TIFF-billede"
 
-#: gdk-pixbuf/io-tiff.c:286
+#: gdk-pixbuf/io-tiff.c:322
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose-operationen mislykkedes"
 
-#: gdk-pixbuf/io-tiff.c:419 gdk-pixbuf/io-tiff.c:433
+#: gdk-pixbuf/io-tiff.c:455 gdk-pixbuf/io-tiff.c:469
 msgid "Failed to load TIFF image"
 msgstr "Fejl under indlæsning af TIFF-billede"
 
@@ -1979,18 +1980,17 @@ msgid "Selection: "
 msgstr "Valg: "
 
 #: gtk/gtkfilesel.c:2983
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
-"Filnavnet %s kunne ikke konverteres til UTF-8. Prøv at sætte miljøvariablen "
-"G_BROKEN_FILENAMES."
+"Filnavnet \"%s\" kunne ikke konverteres til UTF-8 (prøv at sætte "
+"miljøvariablen G_BROKEN_FILENAMES): %s"
 
 #: gtk/gtkfilesel.c:2986
-#, fuzzy
 msgid "Invalid Utf-8"
-msgstr "Ugyldig XBM-fil"
+msgstr "Ugyldig UTF-8"
 
 #: gtk/gtkfilesel.c:3852
 msgid "Name too long"
@@ -3000,11 +3000,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Vis en ekstra fremadpilsknap i den modsatte ende af rulleskakten"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:524
 msgid "Horizontal Adjustment"
 msgstr "Vandret justering"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:532
 msgid "Vertical Adjustment"
 msgstr "Lodret justering"
 
@@ -3947,118 +3947,118 @@ msgstr "TreeModelSort-model"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Modellen som TreeModelSort skal sortere"
 
-#: gtk/gtktreeview.c:514
+#: gtk/gtktreeview.c:516
 msgid "TreeView Model"
 msgstr "TreeView-model"
 
-#: gtk/gtktreeview.c:515
+#: gtk/gtktreeview.c:517
 msgid "The model for the tree view"
 msgstr "Modellen for trævisningen"
 
-#: gtk/gtktreeview.c:523
+#: gtk/gtktreeview.c:525
 msgid "Horizontal Adjustment for the widget"
 msgstr "Vandret justering for kontrollen"
 
-#: gtk/gtktreeview.c:531
+#: gtk/gtktreeview.c:533
 msgid "Vertical Adjustment for the widget"
 msgstr "Lodret justering for kontrollen"
 
-#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:540 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Synlig"
 
-#: gtk/gtktreeview.c:539
+#: gtk/gtktreeview.c:541
 msgid "Show the column header buttons"
 msgstr "Vis kolonneoverskriftsknapperne"
 
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:548
 msgid "Headers Clickable"
 msgstr "Klikbare overskrifter"
 
-#: gtk/gtktreeview.c:547
+#: gtk/gtktreeview.c:549
 msgid "Column headers respond to click events"
 msgstr "Kolonneoverskrifter påvirkes af klikhændelser"
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:556
 msgid "Expander Column"
 msgstr "Udviderkolonne"
 
 # RETMIG: dette giver ikke mening?
-#: gtk/gtktreeview.c:555
+#: gtk/gtktreeview.c:557
 msgid "Set the column for the expander column"
 msgstr "Lad kolonnen være udviderkolonnen"
 
-#: gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:564 gtk/gtktreeviewcolumn.c:273
 msgid "Reorderable"
 msgstr "Kan omsorteres"
 
-#: gtk/gtktreeview.c:563
+#: gtk/gtktreeview.c:565
 msgid "View is reorderable"
 msgstr "Visningen kan omsorteres"
 
 # se næste for forklaring - jeg kunne ikke finde på noget bedre
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:572
 msgid "Rules Hint"
 msgstr "Skiftende rækker"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:573
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Sæt et tip til temamotoren om at tegne rækkerne i skiftende farver"
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:580
 msgid "Enable Search"
 msgstr "Aktivér søgning"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:581
 msgid "View allows user to search through columns interactively"
 msgstr "Visningen tillader brugeren at søge gennem kolonnerne interaktivt"
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:588
 msgid "Search Column"
 msgstr "Søgekolonne"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:589
 msgid "Model column to search through when searching through code"
 msgstr "Modelkolonne der skal søges gennem ved søgning gennem kode"
 
-#: gtk/gtktreeview.c:600
+#: gtk/gtktreeview.c:602
 msgid "Expander Size"
 msgstr "Udvidelsesstørrelse"
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:603
 msgid "Size of the expander arrow."
 msgstr "Størrelsen af udvidelsespilen"
 
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:611
 msgid "Vertical Separator Width"
 msgstr "Lodret adskillelsesbredde"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:612
 msgid "Vertical space between cells.  Must be an even number."
 msgstr "Lodret mellemrum mellem celler - skal være et lige tal"
 
-#: gtk/gtktreeview.c:618
+#: gtk/gtktreeview.c:620
 msgid "Horizontal Separator Width"
 msgstr "Vandret adskillelsesbredde"
 
-#: gtk/gtktreeview.c:619
+#: gtk/gtktreeview.c:621
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr "Vandret mellemrum mellem celler - skal være et lige tal"
 
 # se foregående "Rules Hint"
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:629
 msgid "Allow Rules"
 msgstr "Tillad skiftende rækker"
 
-#: gtk/gtktreeview.c:628
+#: gtk/gtktreeview.c:630
 msgid "Allow drawing of alternating color rows."
 msgstr "Tillad tegning af rækker med skiftende farver"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:636
 msgid "Indent Expanders"
 msgstr "Indryk udvidere"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:637
 msgid "Make the expanders indented."
 msgstr "Ryk udviderne ind"
 
