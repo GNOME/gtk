@@ -76,7 +76,8 @@ testtext_LDADD = $(LDADDS)
 treestoretest_LDADD = $(LDADDS)
 
 testgtk_SOURCES =	\
-	testgtk.c 
+	prop-editor.c   \
+	testgtk.c 	
 
 testtreeview_SOURCES =	\
 	prop-editor.c	\

@@ -47,6 +47,8 @@
 #define sleep(n) _sleep(n)
 #endif
 
+#include "prop-editor.h"
+
 #include "circles.xbm"
 #include "test.xpm"
 
@@ -3529,6 +3531,15 @@ entry_toggle_sensitive (GtkWidget *checkbutton,
 }
 
 static void
+entry_props_clicked (GtkWidget *button,
+		     GObject   *entry)
+{
+  GtkWidget *window = create_prop_editor (entry, 0);
+
+  gtk_window_set_title (GTK_WINDOW (window), "Entry Properties");
+}
+
+static void
 create_entry (void)
 {
   static GtkWidget *window = NULL;
@@ -3580,6 +3591,12 @@ create_entry (void)
       gtk_entry_set_text (GTK_ENTRY (entry), "hello world السلام عليكم");
       gtk_editable_select_region (GTK_EDITABLE (entry), 0, 5);
       gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
+
+      button = gtk_button_new_with_mnemonic ("_Props");
+      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (entry_props_clicked),
+			  entry);
 
       cb = gtk_combo_new ();
       gtk_combo_set_popdown_strings (GTK_COMBO (cb), cbitems);
@@ -7469,6 +7486,15 @@ toggle_shrink (GtkWidget *widget, GtkWidget *child)
   gtk_widget_unref (child);
 }
 
+static void
+paned_props_clicked (GtkWidget *button,
+		     GObject   *paned)
+{
+  GtkWidget *window = create_prop_editor (paned, GTK_TYPE_PANED);
+
+  gtk_window_set_title (GTK_WINDOW (window), "Paned Properties");
+}
+
 GtkWidget *
 create_pane_options (GtkPaned    *paned,
 		     const gchar *frame_label,
@@ -7478,6 +7504,7 @@ create_pane_options (GtkPaned    *paned,
   GtkWidget *frame;
   GtkWidget *table;
   GtkWidget *label;
+  GtkWidget *button;
   GtkWidget *check_button;
   
   frame = gtk_frame_new (frame_label);
@@ -7527,6 +7554,13 @@ create_pane_options (GtkPaned    *paned,
   gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
 		      GTK_SIGNAL_FUNC (toggle_shrink),
 		      paned->child2);
+
+  button = gtk_button_new_with_mnemonic ("_Properties");
+  gtk_table_attach_defaults (GTK_TABLE (table), button,
+			     0, 2, 3, 4);
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      GTK_SIGNAL_FUNC (paned_props_clicked),
+		      paned);
 
   return frame;
 }
@@ -9182,6 +9216,272 @@ create_progress_bar (void)
 }
 
 /*
+ * Properties
+ */
+
+typedef struct {
+  int x;
+  int y;
+  gboolean found;
+  gboolean first;
+  GtkWidget *res_widget;
+} FindWidgetData;
+
+static void
+find_widget (GtkWidget *widget, FindWidgetData *data)
+{
+  GtkAllocation new_allocation;
+  gint x_offset = 0;
+  gint y_offset = 0;
+
+  new_allocation = widget->allocation;
+
+  if (data->found || !GTK_WIDGET_MAPPED (widget))
+    return;
+
+  /* Note that in the following code, we only count the
+   * position as being inside a WINDOW widget if it is inside
+   * widget->window; points that are outside of widget->window
+   * but within the allocation are not counted. This is consistent
+   * with the way we highlight drag targets.
+   */
+  if (!GTK_WIDGET_NO_WINDOW (widget))
+    {
+      new_allocation.x = 0;
+      new_allocation.y = 0;
+    }
+  
+  if (widget->parent && !data->first)
+    {
+      GdkWindow *window = widget->window;
+      while (window != widget->parent->window)
+	{
+	  gint tx, ty, twidth, theight;
+	  gdk_window_get_size (window, &twidth, &theight);
+
+	  if (new_allocation.x < 0)
+	    {
+	      new_allocation.width += new_allocation.x;
+	      new_allocation.x = 0;
+	    }
+	  if (new_allocation.y < 0)
+	    {
+	      new_allocation.height += new_allocation.y;
+	      new_allocation.y = 0;
+	    }
+	  if (new_allocation.x + new_allocation.width > twidth)
+	    new_allocation.width = twidth - new_allocation.x;
+	  if (new_allocation.y + new_allocation.height > theight)
+	    new_allocation.height = theight - new_allocation.y;
+
+	  gdk_window_get_position (window, &tx, &ty);
+	  new_allocation.x += tx;
+	  x_offset += tx;
+	  new_allocation.y += ty;
+	  y_offset += ty;
+	  
+	  window = gdk_window_get_parent (window);
+	}
+    }
+
+  if ((data->x >= new_allocation.x) && (data->y >= new_allocation.y) &&
+      (data->x < new_allocation.x + new_allocation.width) && 
+      (data->y < new_allocation.y + new_allocation.height))
+    {
+      /* First, check if the drag is in a valid drop site in
+       * one of our children 
+       */
+      if (GTK_IS_CONTAINER (widget))
+	{
+	  FindWidgetData new_data = *data;
+	  
+	  new_data.x -= x_offset;
+	  new_data.y -= y_offset;
+	  new_data.found = FALSE;
+	  new_data.first = FALSE;
+	  
+	  gtk_container_forall (GTK_CONTAINER (widget),
+				(GtkCallback)find_widget,
+				&new_data);
+	  
+	  data->found = new_data.found;
+	  if (data->found)
+	    data->res_widget = new_data.res_widget;
+	}
+
+      /* If not, and this widget is registered as a drop site, check to
+       * emit "drag_motion" to check if we are actually in
+       * a drop site.
+       */
+      if (!data->found)
+	{
+	  data->found = TRUE;
+	  data->res_widget = widget;
+	}
+    }
+}
+
+static GtkWidget *
+find_widget_at_pointer (void)
+{
+  GtkWidget *widget = NULL;
+  GdkWindow *pointer_window;
+  gint x, y;
+  FindWidgetData data;
+ 
+ pointer_window = gdk_window_at_pointer (NULL, NULL);
+ 
+ if (pointer_window)
+   gdk_window_get_user_data (pointer_window, (gpointer*) &widget);
+
+ if (widget)
+   {
+     gdk_window_get_pointer (widget->window,
+			     &x, &y, NULL);
+     
+     data.x = x;
+     data.y = y;
+     data.found = FALSE;
+     data.first = TRUE;
+
+     find_widget (widget, &data);
+     if (data.found)
+       return data.res_widget;
+     return widget;
+   }
+ return NULL;
+}
+
+struct PropertiesData {
+  GtkWidget **window;
+  GdkCursor *cursor;
+  gboolean in_query;
+  gint handler;
+};
+
+static void
+destroy_properties (GtkWidget             *widget,
+		    struct PropertiesData *data)
+{
+  if (data->window)
+    {
+      *data->window = NULL;
+      data->window = NULL;
+    }
+
+  if (data->cursor)
+    {
+      gdk_cursor_destroy (data->cursor);
+      data->cursor = NULL;
+    }
+
+  if (data->handler)
+    {
+      gtk_signal_disconnect (widget, data->handler);
+      data->handler = 0;
+    }
+
+  g_free (data);
+}
+
+static gint
+property_query_event (GtkWidget	       *widget,
+		      GdkEvent	       *event,
+		      struct PropertiesData *data)
+{
+  GtkWidget *res_widget = NULL;
+
+  if (!data->in_query)
+    return FALSE;
+  
+  if (event->type == GDK_BUTTON_RELEASE)
+    {
+      gtk_grab_remove (widget);
+      gdk_pointer_ungrab (GDK_CURRENT_TIME);
+      
+      res_widget = find_widget_at_pointer ();
+      if (res_widget)
+	create_prop_editor (G_OBJECT (res_widget), 0);
+
+      data->in_query = FALSE;
+    }
+  return FALSE;
+}
+
+
+static void
+query_properties (GtkButton *button,
+		  struct PropertiesData *data)
+{
+  gint failure;
+
+  gtk_signal_connect (GTK_OBJECT (button), "event",
+		      (GtkSignalFunc) property_query_event, data);
+
+
+  if (!data->cursor)
+    data->cursor = gdk_cursor_new (GDK_TARGET);
+  
+  failure = gdk_pointer_grab (GTK_WIDGET (button)->window,
+			      TRUE,
+			      GDK_BUTTON_RELEASE_MASK,
+			      NULL,
+			      data->cursor,
+			      GDK_CURRENT_TIME);
+
+  gtk_grab_add (GTK_WIDGET (button));
+
+  data->in_query = TRUE;
+}
+
+static void
+create_properties (void)
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *button;
+  GtkWidget *vbox;
+  GtkWidget *label;
+  struct PropertiesData *data;
+
+  data = g_new (struct PropertiesData, 1);
+  data->window = &window;
+  data->in_query = FALSE;
+  data->cursor = NULL;
+  data->handler = 0;
+
+  if (!window)
+    {
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+      data->handler = gtk_signal_connect (GTK_OBJECT (window), "destroy",
+					  GTK_SIGNAL_FUNC(destroy_properties),
+					  data);
+
+      gtk_window_set_title (GTK_WINDOW (window), "test properties");
+      gtk_container_set_border_width (GTK_CONTAINER (window), 10);
+
+      vbox = gtk_vbox_new (FALSE, 1);
+      gtk_container_add (GTK_CONTAINER (window), vbox);
+            
+      label = gtk_label_new ("This is just a dumb test to test properties.\nIf you need a generic module, get GLE.");
+      gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+      
+      button = gtk_button_new_with_label ("Query properties");
+      gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC(query_properties),
+			  data);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
+  
+}
+
+
+/*
  * Color Preview
  */
 
@@ -10375,6 +10675,7 @@ struct {
   { "preview color", create_color_preview, TRUE },
   { "preview gray", create_gray_preview, TRUE },
   { "progress bar", create_progress_bar },
+  { "properties", create_properties },
   { "radio buttons", create_radio_buttons },
   { "range controls", create_range_controls },
   { "rc file", create_rc_file },

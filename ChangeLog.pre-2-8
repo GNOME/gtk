@@ -1,3 +1,10 @@
+2001-08-26  Alexander Larsson  <alla@lysator.liu.se>
+
+	* tests/testgtk.c:
+	* tests/Makefile.am:
+	Ressurect the properties test.
+	I don't care if it is inferior, I just want to test my property code.
+
 2001-08-25  Chema Celorio  <chema@celorio.com>
 
 	* gtk/gtktable.c (gtk_table_set_child_property): pass ->nrows to
