@@ -22,6 +22,7 @@
 
 #include <config.h>
 #include <math.h>
+#include <string.h>
 #include "gdk-pixbuf-private.h"
 #include "pixops/pixops.h"
 
@@ -305,3 +306,150 @@ gdk_pixbuf_composite_color_simple (const GdkPixbuf *src,
 
   return dest;
 }
+
+#define OFFSET(pb, x, y) ((x) * (pb)->n_channels + (y) * (pb)->rowstride)
+
+/**
+ * gdk_pixbuf_rotate_simple:
+ * @src: a #GdkPixbuf
+ * @angle: the angle to rotate by
+ *
+ * Rotates a pixbuf by a multiple of 90 degrees, and returns the
+ * result in a new pixbuf.
+ *
+ * Returns: a new pixbuf
+ *
+ * Since: 2.6
+ */
+GdkPixbuf *
+gdk_pixbuf_rotate_simple (const GdkPixbuf   *src,
+			  GdkPixbufRotation  angle)
+{
+  GdkPixbuf *dest;
+  guchar *p, *q;
+  gint x, y;
+
+  switch (angle % 360)
+    {
+    case 0:
+      dest = gdk_pixbuf_copy (src);
+      break;
+    case 90:
+      dest = gdk_pixbuf_new (src->colorspace, 
+			     src->has_alpha, 
+			     src->bits_per_sample, 
+			     src->height, 
+			     src->width);
+      if (!dest)
+	return NULL;
+
+      for (y = 0; y < src->height; y++) 
+	{ 
+	  for (x = 0; x < src->width; x++) 
+	    { 
+	      p = src->pixels + OFFSET (src, x, y); 
+	      q = dest->pixels + OFFSET (dest, y, src->width - x - 1); 
+	      memcpy (q, p, dest->n_channels);
+	    }
+	} 
+      break;
+    case 180:
+      dest = gdk_pixbuf_new (src->colorspace, 
+			     src->has_alpha, 
+			     src->bits_per_sample, 
+			     src->width, 
+			     src->height);
+      if (!dest)
+	return NULL;
+
+      for (y = 0; y < src->height; y++) 
+	{ 
+	  for (x = 0; x < src->width; x++) 
+	    { 
+	      p = src->pixels + OFFSET (src, x, y); 
+	      q = dest->pixels + OFFSET (dest, src->width - x - 1, src->height - y - 1); 
+	      memcpy (q, p, dest->n_channels);
+	    }
+	} 
+      break;
+    case 270:
+      dest = gdk_pixbuf_new (src->colorspace, 
+			     src->has_alpha, 
+			     src->bits_per_sample, 
+			     src->height, 
+			     src->width);
+      if (!dest)
+	return NULL;
+
+      for (y = 0; y < src->height; y++) 
+	{ 
+	  for (x = 0; x < src->width; x++) 
+	    { 
+	      p = src->pixels + OFFSET (src, x, y); 
+	      q = dest->pixels + OFFSET (dest, src->height - y - 1, x); 
+	      memcpy (q, p, dest->n_channels);
+	    }
+	} 
+      break;
+    default:
+      g_warning ("gdk_pixbuf_rotate_simple() can only rotate "
+		 "by multiples of 90 degrees");
+      g_assert_not_reached ();
+  } 
+
+  return dest;
+}
+
+/**
+ * gdk_pixbuf_flip:
+ * @src: a #GdkPixbuf
+ * @horizontal: %TRUE to flip horizontally, %FALSE to flip vertically
+ *
+ * Flips a pixbuf horizontally or vertically and returns the
+ * result in a new pixbuf.
+ *
+ * Returns: a new pixbuf.
+ *
+ * Since: 2.6
+ */
+GdkPixbuf *
+gdk_pixbuf_flip (const GdkPixbuf *src,
+		 gboolean         horizontal)
+{
+  GdkPixbuf *dest;
+  guchar *p, *q;
+  gint x, y;
+
+  dest = gdk_pixbuf_new (src->colorspace, 
+			 src->has_alpha, 
+			 src->bits_per_sample, 
+			 src->width, 
+			 src->height);
+  if (!dest)
+    return NULL;
+
+  if (!horizontal) /* flip vertical */
+    {
+      for (y = 0; y < dest->height; y++)
+	{
+	  p = src->pixels + OFFSET (src, 0, y);
+	  q = dest->pixels + OFFSET (dest, 0, dest->height - y - 1);
+	  memcpy (q, p, dest->rowstride);
+	}
+    }
+  else /* flip horizontal */
+    {
+      for (y = 0; y < dest->height; y++)
+	{
+	  for (x = 0; x < dest->width; x++)
+	    {
+	      p = src->pixels + OFFSET (src, x, y);
+	      q = dest->pixels + OFFSET (dest, dest->width - x - 1, y);
+	      memcpy (q, p, dest->n_channels);
+	    }
+	}
+    }
+
+  return dest;
+}
+				     

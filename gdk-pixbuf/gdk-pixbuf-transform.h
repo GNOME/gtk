@@ -42,6 +42,13 @@ typedef enum {
 	GDK_INTERP_HYPER
 } GdkInterpType;
 
+typedef enum {
+	GDK_PIXBUF_ROTATE_NONE             =   0,
+	GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE =  90,
+	GDK_PIXBUF_ROTATE_UPSIDEDOWN       = 180,
+	GDK_PIXBUF_ROTATE_CLOCKWISE        = 270
+} GdkPixbufRotation;
+
 void gdk_pixbuf_scale           (const GdkPixbuf *src,
 				 GdkPixbuf       *dest,
 				 int              dest_x,
@@ -97,7 +104,11 @@ GdkPixbuf *gdk_pixbuf_composite_color_simple (const GdkPixbuf *src,
 					      guint32          color1,
 					      guint32          color2);
 
-
+GdkPixbuf *gdk_pixbuf_rotate_simple          (const GdkPixbuf   *src,
+				              GdkPixbufRotation  angle);
+GdkPixbuf *gdk_pixbuf_flip                   (const GdkPixbuf   *src,
+				              gboolean           horizontal);
+				     
 G_END_DECLS
 
 
