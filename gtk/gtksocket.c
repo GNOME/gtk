@@ -31,6 +31,8 @@
 #include "x11/gdkx.h"
 #elif defined (GDK_WINDOWING_WIN32)
 #include "win32/gdkwin32.h"
+#elif defined(GDK_WINDOWING_FB)
+#include "linux-fb/gdkfb.h"
 #endif
 
 #include "gdk/gdkkeysyms.h"
@@ -145,7 +147,7 @@ gtk_socket_new (void)
 }
 
 void           
-gtk_socket_steal (GtkSocket *socket, guint32 id)
+gtk_socket_steal (GtkSocket *socket, GdkNativeWindow id)
 {
   GtkWidget *widget;
 
@@ -543,7 +545,7 @@ gtk_socket_send_configure_event (GtkSocket *socket)
 }
 
 static void
-gtk_socket_add_window (GtkSocket *socket, guint32 xid)
+gtk_socket_add_window (GtkSocket *socket, GdkNativeWindow xid)
 {
   socket->plug_window = gdk_window_lookup (xid);
   socket->same_app = TRUE;
@@ -757,7 +759,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
   return return_val;
 }
 
-#elif defined (GDK_WINDOWING_WIN32)
+#else
 
 GtkType
 gtk_socket_get_type (void)
@@ -774,7 +776,7 @@ gtk_socket_new ()
 }
 
 void           
-gtk_socket_steal (GtkSocket *socket, guint32 id)
+gtk_socket_steal (GtkSocket *socket, GdkNativeWindow id)
 {
   g_error ("GtkSocket not implemented");
 }

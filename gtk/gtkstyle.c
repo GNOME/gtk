@@ -404,20 +404,18 @@ gtk_style_new (void)
   style = g_new0 (GtkStyle, 1);
   
   style->font_desc = pango_font_description_from_string ("Sans 10");
-    
+
   if (!default_font)
     {
       default_font = gdk_font_from_description (style->font_desc);
 
-      if (!default_font)
-	default_font = gdk_font_load ("fixed");
       if (!default_font)
 	g_error ("Unable to load default font.");
     }
   
   style->font = default_font;
   gdk_font_ref (style->font);
-  
+
   style->ref_count = 1;
   style->attach_count = 0;
   style->colormap = NULL;

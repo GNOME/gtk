@@ -33,6 +33,8 @@
 #include "x11/gdkx.h"
 #elif defined (GDK_WINDOWING_WIN32)
 #include "win32/gdkwin32.h"
+#elif defined (GDK_WINDOWING_FB)
+#include "linux-fb/gdkfb.h"
 #elif defined (GDK_WINDOWING_NANOX)
 #include "nanox/gdkprivate-nanox.h"
 #endif
@@ -1826,6 +1828,9 @@ gtk_window_compute_default_size (GtkWindow       *window,
       *width = info->width > 0 ? info->width : *width;
       *height = info->height > 0 ? info->height : *height;
     }
+
+  *width = MIN(*width, gdk_screen_width());
+  *height = MIN(*width, gdk_screen_height());
 }
 
 /* Constrain a window size to obey the hints passed in geometry

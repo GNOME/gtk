@@ -33,6 +33,8 @@
 #include "win32/gdkwin32.h"
 #elif defined (GDK_WINDOWING_NANOX)
 #include "nanox/gdkprivate-nanox.h"
+#elif defined (GDK_WINDOWING_FB)
+#include "linux-fb/gdkprivate-fb.h"
 #endif
 #include "gdk/gdkkeysyms.h"
 #include "gtkcolorsel.h"
@@ -581,7 +583,7 @@ palette_paint (GtkWidget    *drawing_area,
 	gc = drawing_area->style->black_gc;
       else
 	gc = drawing_area->style->white_gc;
-      
+
       gdk_draw_rectangle (drawing_area->window,
 			  gc, FALSE, 0, 0,
 			  drawing_area->allocation.width - 1,

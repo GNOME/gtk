@@ -595,7 +595,7 @@ gtk_button_paint (GtkWidget    *widget,
 	  y -= 1;
 	  width += 2;
 	  height += 2;
-	     
+
 	  gtk_paint_focus (widget->style, widget->window,
 			   area, widget, "button",
 			   x, y, width - 1, height - 1);

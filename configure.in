@@ -513,9 +513,15 @@ AC_PATH_PROG(PANGO_CONFIG, pango-config, no)
 if test x$PANGO_CONFIG = xno ; then
   AC_MSG_ERROR([*** pango-config not found])
 fi
-PANGO_CFLAGS="`$PANGO_CONFIG --cflags pangox`"
+
+if test "x$gdktarget" = "xx11"; then
+	PANGO_CFLAGS="`$PANGO_CONFIG --cflags pangox`"
+	PANGO_LIBS="`$PANGO_CONFIG --libs pangox`"
+else
+	PANGO_CFLAGS="`$PANGO_CONFIG --cflags pango`"
+	PANGO_LIBS="`$PANGO_CONFIG --libs pango`"
+fi
 CFLAGS="$CFLAGS $PANGO_CFLAGS"
-PANGO_LIBS="`$PANGO_CONFIG --libs pangox`"
 AC_SUBST(PANGO_LIBS)
 AC_SUBST(PANGO_CFLAGS)
 
@@ -707,7 +713,8 @@ elif test "x$gdktarget" = "xnanox" ; then
 #define GDK_WINDOWING_NANOX'
 elif test "x$gdktarget" = "xlinux-fb" ; then
   gdk_windowing='
-#define GDK_WINDOWING_FB'
+#define GDK_WINDOWING_FB
+#define GDK_NATIVE_WINDOW_POINTER'
 fi
 
 if test x$gdk_wchar_h = xyes; then
@@ -744,4 +751,6 @@ gdk/linux-fb/Makefile
 gtk/Makefile
 gtk/gtkfeatures.h
 gtk/gtkcompat.h
+modules/Makefile
+modules/linux-fb/Makefile
 ], [chmod +x gtk-config])

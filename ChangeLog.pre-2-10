@@ -1,3 +1,18 @@
+2000-06-18  Elliot Lee  <sopwith@redhat.com>
+
+	* gtk/gtkwindow.c: Don't allow creation of a window bigger than the screen.
+
+	* gtk/gtkrange.c: Fix the mega-jumpy-with-lagged-events scrollbar
+ 	problem by calculating event position relative to the trough
+ 	rather than the slider.
+	* gtk/gtkdnd.c, gtk/gtkcolorsel.c: Include FB headers if appropriate.
+
+	* gdk/gdkgc.h: Add GDK_NOR.
+
+	* configure.in, Makefile.am: Add modules top level dir
+	* configure.in: Only use pangox library if building x11 target.
+	* gdk/gdkdnd.h: Add GDK_DRAG_PROTO_LOCAL enum for future intra-app use.
+
 Fri Jun 16 22:24:22 2000  Christopher Blizzard  <blizzard@redhat.com>
 
 	* gtk/gtkcolorsel.c: Change private class member to be named

@@ -622,8 +622,8 @@ gtk_label_expose (GtkWidget      *widget,
 
       gdk_draw_layout (widget->window, widget->style->fg_gc [widget->state], x, y, label->layout);
       
-      gdk_gc_set_clip_mask (widget->style->white_gc, NULL);
-      gdk_gc_set_clip_mask (widget->style->fg_gc[widget->state], NULL);
+      gdk_gc_set_clip_rectangle (widget->style->white_gc, NULL);
+      gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state], NULL);
     }
 
   return TRUE;

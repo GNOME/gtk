@@ -844,9 +844,13 @@ gtk_selection_request (GtkWidget *widget,
   
   /* Create GdkWindow structure for the requestor */
   
+#if defined(GDK_WINDOWING_WIN32) || defined(GDK_WINDOWING_X11)
   info->requestor = gdk_window_lookup (event->requestor);
   if (!info->requestor)
     info->requestor = gdk_window_foreign_new (event->requestor);
+#else
+  info->requestor = NULL;
+#endif
   
   /* Determine conversions we need to perform */
   
@@ -1293,8 +1297,10 @@ gtk_selection_property_notify (GtkWidget	*widget,
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
+#if defined(GDK_WINDOWING_WIN32) || defined(GDK_WINDOWING_X11)
   if ((event->state != GDK_PROPERTY_NEW_VALUE) ||  /* property was deleted */
       (event->atom != gdk_selection_property)) /* not the right property */
+#endif
     return FALSE;
   
 #ifdef DEBUG_SELECTION

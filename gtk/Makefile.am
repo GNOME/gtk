@@ -7,9 +7,9 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGTK_DATA_PREFIX=\"$(prefix)\"			\
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
+	-DTESTGTK_RCFILE=\"`pwd`/$(srcdir)/testgtkrc\"	\
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
-	-I$(top_srcdir)/gdk/x11				\
 	@GTK_DEBUG_FLAGS@				\
 	@GTK_XIM_FLAGS@					\
 	@GTK_LOCALE_FLAGS@				\
@@ -35,6 +35,7 @@ LDFLAGS = @STRIP_BEGIN@ \
 	@more_libs@ 						\
 	-lm							\
 @STRIP_END@
+
 #	$(top_builddir)/gdk/libgdk.la
 
 
@@ -516,12 +517,12 @@ uninstall-local:
 # test programs, not to be installed
 #
 noinst_PROGRAMS = testgtk testcalendar testinput testselection testrgb testdnd testtext simple testtextbuffer # testthreads
-DEPS = libgtk-x11.la $(top_builddir)/gdk/libgdk-x11.la
+DEPS = @gtktargetlib@ $(top_builddir)/gdk/@gdktargetlib@
 LDADDS = @STRIP_BEGIN@ \
-	libgtk-x11.la			\
-	$(top_builddir)/gdk/libgdk-x11.la	\
-	@x_ldflags@			\
-	@x_libs@			\
+	@gtktargetlib@			\
+	$(top_builddir)/gdk/@gdktargetlib@ \
+	@more_ldflags@			\
+	@more_libs@			\
 	@GDK_WLIBS@			\
 	@PANGO_LIBS@			\
 	@GLIB_LIBS@			\

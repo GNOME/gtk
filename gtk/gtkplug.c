@@ -26,6 +26,7 @@
  */
 
 #include "gdkconfig.h"
+#include "gdkprivate.h"
 
 #if defined (GDK_WINDOWING_X11)
 #include "x11/gdkx.h"
@@ -33,6 +34,8 @@
 #include "win32/gdkwin32.h"
 #elif defined (GDK_WINDOWING_NANOX)
 #include "nanox/gdkprivate-nanox.h"
+#elif defined (GDK_WINDOWING_FB)
+#include "linux-fb/gdkfb.h"
 #endif
 
 #include "gdk/gdkkeysyms.h"
@@ -53,7 +56,6 @@ static void gtk_plug_set_focus       (GtkWindow         *window,
 
 /* From Tk */
 #define EMBEDDED_APP_WANTS_FOCUS NotifyNormal+20
-
   
 static GtkWindowClass *parent_class = NULL;
 
@@ -115,7 +117,7 @@ gtk_plug_init (GtkPlug *plug)
 }
 
 void
-gtk_plug_construct (GtkPlug *plug, guint32 socket_id)
+gtk_plug_construct (GtkPlug *plug, GdkNativeWindow socket_id)
 {
   plug->socket_window = gdk_window_lookup (socket_id);
   plug->same_app = TRUE;
@@ -128,7 +130,7 @@ gtk_plug_construct (GtkPlug *plug, guint32 socket_id)
 }
 
 GtkWidget*
-gtk_plug_new (guint32 socket_id)
+gtk_plug_new (GdkNativeWindow socket_id)
 {
   GtkPlug *plug;
 

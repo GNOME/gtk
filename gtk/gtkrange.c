@@ -29,7 +29,6 @@
 #include "gtkrange.h"
 #include "gtksignal.h"
 
-
 #define SCROLL_TIMER_LENGTH  20
 #define SCROLL_INITIAL_DELAY 100
 #define SCROLL_DELAY_LENGTH  300
@@ -988,8 +987,6 @@ gtk_range_motion_notify (GtkWidget      *widget,
 			 GdkEventMotion *event)
 {
   GtkRange *range;
-  GdkModifierType mods;
-  gint x, y, mask;
 
   g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -998,13 +995,14 @@ gtk_range_motion_notify (GtkWidget      *widget,
 
   if (range->click_child == RANGE_CLASS (range)->slider)
     {
-      x = event->x;
-      y = event->y;
+      GdkModifierType mods;
+      gint x, y, mask, x2, y2;
 
-      if (event->is_hint || (event->window != range->slider))
-	gdk_window_get_pointer (range->slider, &x, &y, &mods);
-      else
-	mods = event->state;
+      gdk_window_get_pointer (range->trough, &x, &y, &mods);
+      gdk_window_get_position (range->slider, &x2, &y2);
+
+      x -= x2;
+      y -= y2;
 
       switch (range->button)
 	{
