@@ -1,3 +1,10 @@
+2001-11-17  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk-zip.sh.in: Build separate runtime and developer
+	packages.
+
+	* gtk/gtk.def: Reflect recent accelerator-related changes.
+
 Fri Nov 16 19:44:35 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_set_default): Move 

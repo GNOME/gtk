@@ -1,27 +1,34 @@
 #!/bin/sh
 
-# Build zipfile for GTK on Win32: both runtime and developer stuff
+# Build zipfiles for GTK on Win32
 
-# These two directory paths are obviously system-dependent.
-# These are what tml@iki.fi uses, change as appropriate.
-ZIP=/g/tmp/gtk+-@GTK_VERSION@-`date +%Y%m%d`.zip
-cd /target
+ZIP=/tmp/gtk+-@GTK_VERSION@-`date +%Y%m%d`.zip
+DEVZIP=/tmp/gtk+-dev-@GTK_VERSION@-`date +%Y%m%d`.zip
+cd @prefix@
 
 rm $ZIP
 zip -r $ZIP -@ <<EOF
 COPYING.LIB-2
 etc/gtk-2.0
-include/gtk-2.0
 lib/libgdk_pixbuf-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
+lib/libgdk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
+lib/libgtk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
+EOF
+
+zip $ZIP lib/gtk-2.0/@GTK_VERSION@/loaders/*.dll lib/gtk-2.0/immodules/@GTK_VERSION@/*.dll
+
+zip -r $ZIP lib/locale/*/LC_MESSAGES/gtk20.mo
+
+rm $DEVZIP
+zip -r $DEVZIP -@ <<EOF
+include/gtk-2.0
 lib/libgdk_pixbuf-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.dll.a
 lib/gdk_pixbuf-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.lib
-lib/libgdk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 lib/libgdk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.dll.a
 lib/gdk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.lib
-lib/libgtk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 lib/libgtk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.dll.a
 lib/gtk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.lib
-lib/gtk-2.0
+lib/gtk-2.0/include
 lib/pkgconfig/gdk-pixbuf-2.0.pc
 lib/pkgconfig/gdk-2.0.pc
 lib/pkgconfig/gdk-win32-2.0.pc
@@ -30,4 +37,3 @@ lib/pkgconfig/gtk+-win32-2.0.pc
 share/aclocal/gtk-2.0.m4
 EOF
 
-zip -r $ZIP lib/locale/*/LC_MESSAGES/gtk20.mo
