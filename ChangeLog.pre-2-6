@@ -1,5 +1,23 @@
 2004-03-01  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault): New
+	flag shortcuts_current_folder_is_volume.
+	(shortcuts_add_current_folder): Set
+	impl->shortcuts_current_folder_is_volume as appropriate.
+	(remove_current_folder_cb): Handle the flag.
+	(shortcuts_activate_item): Likewise.
+	(shortcuts_update_current_folder): Handle the
+	impl->shortcuts_current_folder_active flag; only add the folder if
+	it doesn't already exist in the list.
+	(shortcuts_model_create): Don't insert the current folder
+	separator here.
+	(shortcuts_add_current_folder): Insert the separator here.
+	(shortcut_find_position): Renamed from shortcut_exists(); now
+	returns an index.
+	(shortcuts_add_current_folder): Set the active item in the combo.
+
+2004-03-01  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkfilechooserdefault.c (shortcuts_row_activated_cb): Eep,
 	use gtk_tree_model_filter_convert_iter_to_child_iter(), not the reverse.
 

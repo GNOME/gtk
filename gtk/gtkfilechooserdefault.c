@@ -155,6 +155,7 @@ struct _GtkFileChooserDefault
   guint list_sort_ascending : 1;
   guint changing_folder : 1;
   guint shortcuts_current_folder_active : 1;
+  guint shortcuts_current_folder_is_volume : 1;
 };
 
 /* Signal IDs */
@@ -300,6 +301,8 @@ static void shortcuts_activate_item (GtkFileChooserDefault *impl,
 				     int                    item_num);
 static int shortcuts_get_index (GtkFileChooserDefault *impl,
 				ShortcutsIndex         where);
+static int shortcut_find_position (GtkFileChooserDefault *impl,
+				   const GtkFilePath     *path);
 
 static void list_selection_changed     (GtkTreeSelection      *tree_selection,
 					GtkFileChooserDefault *impl);
@@ -1055,12 +1058,44 @@ static void
 shortcuts_add_current_folder (GtkFileChooserDefault *impl)
 {
   int pos;
-  GtkFilePath *path_copy;
 
-  pos = shortcuts_get_index (impl, SHORTCUTS_CURRENT_FOLDER);
+  g_assert (!impl->shortcuts_current_folder_active);
 
-  path_copy = gtk_file_path_copy (impl->current_folder);
-  shortcuts_insert_path (impl, pos, FALSE, NULL, path_copy, NULL, FALSE, NULL);
+  pos = shortcut_find_position (impl, impl->current_folder);
+  if (pos == -1)
+    {
+      GtkFileSystemVolume *volume;
+      GtkFilePath *base_path;
+
+      /* Separator */
+
+      shortcuts_insert_separator (impl, SHORTCUTS_CURRENT_FOLDER_SEPARATOR);
+
+      /* Item */
+
+      pos = shortcuts_get_index (impl, SHORTCUTS_CURRENT_FOLDER);
+
+      volume = gtk_file_system_get_volume_for_path (impl->file_system, impl->current_folder);
+      base_path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
+
+      if (strcmp (gtk_file_path_get_string (base_path), gtk_file_path_get_string (impl->current_folder)) == 0)
+	{
+	  shortcuts_insert_path (impl, pos, TRUE, volume, NULL, NULL, FALSE, NULL);
+	  impl->shortcuts_current_folder_is_volume = TRUE;
+	}
+      else
+	{
+	  gtk_file_system_volume_free (impl->file_system, volume);
+	  shortcuts_insert_path (impl, pos, FALSE, NULL, impl->current_folder, NULL, FALSE, NULL);
+	  impl->shortcuts_current_folder_is_volume = FALSE;
+	}
+
+      gtk_file_path_free (base_path);
+
+      impl->shortcuts_current_folder_active = TRUE;
+    }
+
+  gtk_combo_box_set_active (GTK_COMBO_BOX (impl->save_folder_combo), pos);
 }
 
 /* Used from shortcuts_remove_rows() in shortcuts_update_current_folder() */
@@ -1068,23 +1103,25 @@ static void
 remove_current_folder_cb (GtkFileChooserDefault *impl,
 			  gpointer               data)
 {
-  GtkFilePath *path;
-
-  path = data;
-  gtk_file_path_free (data);
+  if (impl->shortcuts_current_folder_is_volume)
+    gtk_file_system_volume_free (impl->file_system, data);
+  else
+    gtk_file_path_free (data);
 }
 
 /* Updates the current folder row in the shortcuts model */
 static void
-shortcuts_update_current_folder (GtkFileChooserDefault *impl,
-				 gboolean               has_previous)
+shortcuts_update_current_folder (GtkFileChooserDefault *impl)
 {
   int pos;
 
-  pos = shortcuts_get_index (impl, SHORTCUTS_CURRENT_FOLDER);
+  pos = shortcuts_get_index (impl, SHORTCUTS_CURRENT_FOLDER_SEPARATOR);
 
-  if (has_previous)
-    shortcuts_remove_rows (impl, pos, 1, remove_current_folder_cb);
+  if (impl->shortcuts_current_folder_active)
+    {
+      shortcuts_remove_rows (impl, pos, 2, remove_current_folder_cb);
+      impl->shortcuts_current_folder_active = FALSE;
+    }
 
   shortcuts_add_current_folder (impl);
 }
@@ -1129,8 +1166,6 @@ shortcuts_model_create (GtkFileChooserDefault *impl)
       shortcuts_append_desktop (impl);
       shortcuts_add_volumes (impl);
       shortcuts_add_bookmarks (impl);
-
-      shortcuts_insert_separator (impl, SHORTCUTS_CURRENT_FOLDER_SEPARATOR);
     }
 
   impl->shortcuts_filter_model = gtk_tree_model_filter_new (GTK_TREE_MODEL (impl->shortcuts_model), NULL);
@@ -1295,12 +1330,11 @@ create_folder_tree (GtkFileChooserDefault *impl)
   return impl->browse_directories_swin;
 }
 
-/* Returns whether a path is already present in the shortcuts list */
-static gboolean
-shortcut_exists (GtkFileChooserDefault *impl,
-		 const GtkFilePath     *path)
+/* Looks for a path among the shortcuts; returns its index or -1 if it doesn't exist */
+static int
+shortcut_find_position (GtkFileChooserDefault *impl,
+			const GtkFilePath     *path)
 {
-  gboolean exists;
   GtkTreeIter iter;
   int i;
   int bookmarks_separator_idx;
@@ -1308,9 +1342,7 @@ shortcut_exists (GtkFileChooserDefault *impl,
   int volumes_idx;
 
   if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (impl->shortcuts_model), &iter))
-    return FALSE;
-
-  exists = FALSE;
+    return -1;
 
   bookmarks_separator_idx = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS_SEPARATOR);
   current_folder_separator_idx = shortcuts_get_index (impl, SHORTCUTS_CURRENT_FOLDER_SEPARATOR);
@@ -1331,6 +1363,7 @@ shortcut_exists (GtkFileChooserDefault *impl,
 	{
 	  GtkFileSystemVolume *volume;
 	  GtkFilePath *base_path;
+	  gboolean exists;
 
 	  volume = data;
 	  base_path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
@@ -1340,7 +1373,7 @@ shortcut_exists (GtkFileChooserDefault *impl,
 	  g_free (base_path);
 
 	  if (exists)
-	    break;
+	    return i;
 	}
       else
 	{
@@ -1349,17 +1382,14 @@ shortcut_exists (GtkFileChooserDefault *impl,
 	  model_path = data;
 
 	  if (model_path && gtk_file_path_compare (model_path, path) == 0)
-	    {
-	      exists = TRUE;
-	      break;
-	    }
+	    return i;
 	}
 
     next_iter:
       gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model), &iter);
     }
 
-  return exists;
+  return -1;
 }
 
 /* Tries to add a bookmark from a path name */
@@ -1370,7 +1400,7 @@ shortcuts_add_bookmark_from_path (GtkFileChooserDefault *impl,
   GtkFileInfo *info;
   GError *error;
 
-  if (shortcut_exists (impl, path))
+  if (shortcut_find_position (impl, path) != -1)
     return;
 
   error = NULL;
@@ -1544,7 +1574,7 @@ bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl)
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
 
   if (gtk_tree_selection_count_selected_rows (selection) == 0)
-    active = !shortcut_exists (impl, impl->current_folder);
+    active = (shortcut_find_position (impl, impl->current_folder) == -1);
   else
     active = (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
 	      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER ||
@@ -2799,15 +2829,9 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 					     const GtkFilePath *path)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
-  gboolean had_current_folder;
 
   if (impl->current_folder)
-    {
-      gtk_file_path_free (impl->current_folder);
-      had_current_folder = TRUE;
-    }
-  else
-    had_current_folder = FALSE;
+    gtk_file_path_free (impl->current_folder);
 
   impl->current_folder = gtk_file_path_copy (path);
 
@@ -2831,7 +2855,7 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
   /* Refresh controls */
 
   shortcuts_unselect_all (impl);
-  shortcuts_update_current_folder (impl, had_current_folder);
+  shortcuts_update_current_folder (impl);
 
   g_signal_emit_by_name (impl, "current-folder-changed", 0);
 
@@ -3581,7 +3605,8 @@ shortcuts_activate_item (GtkFileChooserDefault *impl,
   gpointer data;
   int start_row;
 
-  if (item_num == shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS_SEPARATOR))
+  if (item_num == shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS_SEPARATOR)
+      || item_num == shortcuts_get_index (impl, SHORTCUTS_CURRENT_FOLDER_SEPARATOR))
     return;
 
   path = gtk_tree_path_new_from_indices (item_num, -1);
@@ -3594,7 +3619,8 @@ shortcuts_activate_item (GtkFileChooserDefault *impl,
   gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter, SHORTCUTS_COL_PATH, &data, -1);
 
   start_row = shortcuts_get_index (impl, SHORTCUTS_VOLUMES);
-  if (item_num >= start_row && item_num < start_row + impl->num_volumes)
+  if ((item_num >= start_row && item_num < start_row + impl->num_volumes)
+      || (item_num == shortcuts_get_index (impl, SHORTCUTS_CURRENT_FOLDER) && impl->shortcuts_current_folder_is_volume))
     {
       GtkFileSystemVolume *volume;
 
