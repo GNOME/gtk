@@ -4141,9 +4141,13 @@ gtk_ctree_is_ancestor (GtkCTree     *ctree,
 		       GtkCTreeNode *node,
 		       GtkCTreeNode *child)
 {
+  g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
   g_return_val_if_fail (node != NULL, FALSE);
 
-  return gtk_ctree_find (ctree, GTK_CTREE_ROW (node)->children, child);
+  if (GTK_CTREE_ROW (node)->children)
+    return gtk_ctree_find (ctree, GTK_CTREE_ROW (node)->children, child);
+
+  return FALSE;
 }
 
 GtkCTreeNode *
