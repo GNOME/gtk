@@ -365,7 +365,7 @@ gtktypebuiltins_ids.c: @REBUILD@ maketypes.awk stamp-gtk.defs
 gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl $(gtk_public_h_sources) $(gdk_headers)
 	cd $(srcdir) \
 	&& $(PERL) makeenums.pl arrays $(gtk_public_h_sources) $(gdk_headers) > xgen-gtbec
-	cp $(srcdir)/xgen-gtbec gtktypebuiltins_evals \
+	cp $(srcdir)/xgen-gtbec gtktypebuiltins_evals.c \
 	&& rm -f $(srcdir)/xgen-gtbec
 
 
