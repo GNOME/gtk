@@ -55,30 +55,59 @@ GtkWidget*
 gtk_radio_menu_item_new (GSList *group)
 {
   GtkRadioMenuItem *radio_menu_item;
-  GtkRadioMenuItem *tmp_menu_item;
-  GSList *tmp_list;
 
   radio_menu_item = gtk_type_new (gtk_radio_menu_item_get_type ());
 
-  tmp_list = group;
-  radio_menu_item->group = g_slist_prepend (group, radio_menu_item);
+  gtk_radio_menu_item_set_group (radio_menu_item, group);
 
-  if (tmp_list)
+  return GTK_WIDGET (radio_menu_item);
+}
+
+void
+gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
+			       GSList           *group)
+{
+  g_return_if_fail (radio_menu_item != NULL);
+  g_return_if_fail (GTK_IS_RADIO_MENU_ITEM (radio_menu_item));
+  g_return_if_fail (!g_slist_find (group, radio_menu_item));
+  
+  if (radio_menu_item->group)
     {
-      while (tmp_list)
+      GSList *slist;
+      
+      radio_menu_item->group = g_slist_remove (radio_menu_item->group, radio_menu_item);
+      
+      for (slist = radio_menu_item->group; slist; slist = slist->next)
 	{
-	  tmp_menu_item = tmp_list->data;
-	  tmp_list = tmp_list->next;
-
-	  tmp_menu_item->group = radio_menu_item->group;
+	  GtkRadioMenuItem *tmp_item;
+	  
+	  tmp_item = slist->data;
+	  
+	  tmp_item->group = radio_menu_item->group;
+	}
+    }
+  
+  radio_menu_item->group = g_slist_prepend (group, radio_menu_item);
+  
+  if (group)
+    {
+      GSList *slist;
+      
+      for (slist = group; slist; slist = slist->next)
+	{
+	  GtkRadioMenuItem *tmp_item;
+	  
+	  tmp_item = slist->data;
+	  
+	  tmp_item->group = radio_menu_item->group;
 	}
     }
   else
     {
       GTK_CHECK_MENU_ITEM (radio_menu_item)->active = TRUE;
+      /* gtk_widget_set_state (GTK_WIDGET (radio_menu_item), GTK_STATE_ACTIVE);
+       */
     }
-
-  return GTK_WIDGET (radio_menu_item);
 }
 
 GtkWidget*
@@ -125,7 +154,7 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
 static void
 gtk_radio_menu_item_init (GtkRadioMenuItem *radio_menu_item)
 {
-  radio_menu_item->group = NULL;
+  radio_menu_item->group = g_slist_prepend (NULL, radio_menu_item);
 }
 
 static void

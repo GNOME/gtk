@@ -55,6 +55,8 @@ GtkWidget* gtk_radio_menu_item_new            (GSList           *group);
 GtkWidget* gtk_radio_menu_item_new_with_label (GSList           *group,
 					       const gchar      *label);
 GSList*    gtk_radio_menu_item_group          (GtkRadioMenuItem *radio_menu_item);
+void       gtk_radio_menu_item_set_group      (GtkRadioMenuItem *radio_menu_item,
+					       GSList           *group);
 
 
 #ifdef __cplusplus

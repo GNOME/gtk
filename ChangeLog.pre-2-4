@@ -1,3 +1,16 @@
+Sat Apr 18 22:18:12 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkradiomenuitem.h: 
+	* gtk/gtkradiomenuitem.c (gtk_radio_menu_item_set_group): new function
+	ala gtk_radio_button_set_group.
+	(gtk_radio_menu_item_init): assure that we always have at least a group
+	that points to self.
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_set_group): few cleanups and
+ 	added g_return_if_fail() statements.
+	(gtk_radio_button_init): assure that we always have at least a group
+	that points to self.
+
 Fri Apr 17 03:05:05 1998  Tim Janik  <timj@gtk.org>
 
 	* ChangeLog split up into ChangeLog.pre-1-0 and ChangeLog.
