@@ -1,3 +1,11 @@
+Sun Oct 13 16:55:49 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkdnd.c gtk/gtkradiobutton.[ch]: Deprecation cleanup
+
+	* gtk/Makefile.am: Added disable deprecation flags
+
+	* demos/pixbuf-init.c demos/gtk-demo/changedisplay.c: minor clean up
+
 Sun Oct 13 16:20:41 2002  Manish Singh  <yosh@gimp.org>
 
 	* tests/pixbuf-randomly-modified.c tests/prop-editor.c

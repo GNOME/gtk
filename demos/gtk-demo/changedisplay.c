@@ -551,12 +551,12 @@ destroy_info (ChangeDisplayInfo *info)
   GSList *tmp_list;
 
   g_signal_handlers_disconnect_by_func (manager,
-					(gpointer) display_opened_cb,
+					display_opened_cb,
 					info);
 
   for (tmp_list = displays; tmp_list; tmp_list = tmp_list->next)
     g_signal_handlers_disconnect_by_func (tmp_list->data,
-					  (gpointer) display_closed_cb,
+					  display_closed_cb,
 					  info);
   
   g_slist_free (tmp_list);

@@ -32,7 +32,6 @@
 #include "gtkimage.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
-#include "gtksignal.h"
 #include "gtkstock.h"
 #include "gtkwindow.h"
 
@@ -364,7 +363,7 @@ static const gint n_drag_cursors = sizeof (drag_cursors) / sizeof (drag_cursors[
  * Utility functions *
  *********************/
 
-static gboolean
+static void
 set_can_change_screen (GtkWidget *widget,
 		       gboolean   can_change_screen)
 {
@@ -606,8 +605,8 @@ gtk_drag_get_cursor (GdkDisplay   *display,
 
       drag_cursors[i].cursor = gdk_cursor_new_from_pixmap (pixmap, mask, &fg, &bg, 0, 0);
 
-      gdk_pixmap_unref (pixmap);
-      gdk_pixmap_unref (mask);
+      g_object_unref (pixmap);
+      g_object_unref (mask);
     }
 
   return drag_cursors[i].cursor;
@@ -642,13 +641,13 @@ gtk_drag_get_data (GtkWidget      *widget,
 
   selection_widget = gtk_drag_get_ipc_widget (gtk_widget_get_screen (widget));
 
-  gdk_drag_context_ref (context);
-  gtk_widget_ref (widget);
+  g_object_ref (context);
+  g_object_ref (widget);
   
-  gtk_signal_connect (GTK_OBJECT (selection_widget), "selection_received",
-		      GTK_SIGNAL_FUNC (gtk_drag_selection_received), widget);
+  g_signal_connect (selection_widget, "selection_received",
+		    G_CALLBACK (gtk_drag_selection_received), widget);
 
-  gtk_object_set_data (GTK_OBJECT (selection_widget), "drag-context", context);
+  g_object_set_data (G_OBJECT (selection_widget), "drag-context", context);
 
   gtk_selection_convert (selection_widget,
 			 gdk_drag_get_selection (context),
@@ -684,7 +683,7 @@ gtk_drag_get_source_widget (GdkDragContext *context)
       if (ipc_widget->window == context->source_window)
 	{
 	  GtkDragSourceInfo *info;
-	  info = gtk_object_get_data (GTK_OBJECT (ipc_widget), "gtk-info");
+	  info = g_object_get_data (G_OBJECT (ipc_widget), "gtk-info");
 
 	  return info ? info->widget : NULL;
 	}
@@ -733,12 +732,12 @@ gtk_drag_finish (GdkDragContext *context,
     {
       GtkWidget *selection_widget = gtk_drag_get_ipc_widget (gdk_drawable_get_screen (context->source_window));
 
-      gdk_drag_context_ref (context);
+      g_object_ref (context);
       
-      gtk_object_set_data (GTK_OBJECT (selection_widget), "drag-context", context);
-      gtk_signal_connect (GTK_OBJECT (selection_widget), "selection_received",
-			  GTK_SIGNAL_FUNC (gtk_drag_selection_received),
-			  NULL);
+      g_object_set_data (G_OBJECT (selection_widget), "drag-context", context);
+      g_signal_connect (selection_widget, "selection_received",
+			G_CALLBACK (gtk_drag_selection_received),
+			NULL);
       
       gtk_selection_convert (selection_widget,
 			     gdk_drag_get_selection (context),
@@ -780,12 +779,13 @@ gtk_drag_highlight_expose (GtkWidget      *widget,
 	{
 	  x = 0;
 	  y = 0;
-	  gdk_window_get_size (widget->window, &width, &height);
+	  gdk_drawable_get_size (widget->window, &width, &height);
 	}
       
-      gtk_draw_shadow (widget->style, widget->window,
-		       GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-		       x, y, width, height);
+      gtk_paint_shadow (widget->style, widget->window,
+		        GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+		        NULL, widget, "dnd",
+			x, y, width, height);
       
       gdk_draw_rectangle (widget->window,
 			  widget->style->black_gc,
@@ -808,10 +808,10 @@ void
 gtk_drag_highlight (GtkWidget  *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  
-  gtk_signal_connect_after (GTK_OBJECT (widget), "expose_event",
-			    GTK_SIGNAL_FUNC (gtk_drag_highlight_expose),
-			    NULL);
+
+  g_signal_connect_after (widget, "expose_event",
+			  G_CALLBACK (gtk_drag_highlight_expose),
+			  NULL);
 
   gtk_widget_queue_draw (widget);
 }
@@ -828,12 +828,12 @@ void
 gtk_drag_unhighlight (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  g_signal_handlers_disconnect_by_func (widget,
+					gtk_drag_highlight_expose,
+					NULL);
   
-  gtk_signal_disconnect_by_func (GTK_OBJECT (widget),
-				 GTK_SIGNAL_FUNC (gtk_drag_highlight_expose),
-				 NULL);
-  
-  gtk_widget_queue_clear (widget);
+  gtk_widget_queue_draw (widget);
 }
 
 static void
@@ -845,20 +845,27 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
   g_return_if_fail (widget != NULL);
 
   /* HACK, do this in the destroy */
-  old_site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
+  old_site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
   if (old_site)
-    gtk_signal_disconnect_by_data (GTK_OBJECT (widget), old_site);
+    {
+      g_signal_handlers_disconnect_by_func (widget,
+					    gtk_drag_dest_realized,
+					    old_site);
+      g_signal_handlers_disconnect_by_func (widget,
+					    gtk_drag_dest_hierarchy_changed,
+					    old_site);
+    }
 
   if (GTK_WIDGET_REALIZED (widget))
     gtk_drag_dest_realized (widget);
 
-  gtk_signal_connect (GTK_OBJECT (widget), "realize",
-		      GTK_SIGNAL_FUNC (gtk_drag_dest_realized), site);
-  gtk_signal_connect (GTK_OBJECT (widget), "hierarchy_changed",
-		      GTK_SIGNAL_FUNC (gtk_drag_dest_hierarchy_changed), site);
+  g_signal_connect (widget, "realize",
+		    G_CALLBACK (gtk_drag_dest_realized), site);
+  g_signal_connect (widget, "hierarchy_changed",
+		    G_CALLBACK (gtk_drag_dest_hierarchy_changed), site);
 
-  gtk_object_set_data_full (GTK_OBJECT (widget), "gtk-drag-dest",
-			    site, gtk_drag_dest_site_destroy);
+  g_object_set_data_full (G_OBJECT (widget), "gtk-drag-dest",
+			  site, gtk_drag_dest_site_destroy);
 }
 			    
 
@@ -932,7 +939,7 @@ gtk_drag_dest_set_proxy (GtkWidget      *widget,
   site->actions = 0;
   site->proxy_window = proxy_window;
   if (proxy_window)
-    gdk_window_ref (proxy_window);
+    g_object_ref (proxy_window);
   site->do_proxy = TRUE;
   site->proxy_protocol = protocol;
   site->proxy_coords = use_coordinates;
@@ -953,7 +960,7 @@ gtk_drag_dest_unset (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_object_set_data (GTK_OBJECT (widget), "gtk-drag-dest", NULL);
+  g_object_set_data (G_OBJECT (widget), "gtk-drag-dest", NULL);
 }
 
 /**
@@ -972,7 +979,7 @@ gtk_drag_dest_get_target_list (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
-  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
+  site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
 
   return site ? site->target_list : NULL;  
 }
@@ -991,10 +998,10 @@ gtk_drag_dest_set_target_list (GtkWidget      *widget,
                                GtkTargetList  *target_list)
 {
   GtkDragDestSite *site;
-  
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
-  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
+  site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
   
   if (site == NULL)
     {
@@ -1185,7 +1192,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
 
   drop_widget = data;
 
-  context = gtk_object_get_data (GTK_OBJECT (widget), "drag-context");
+  context = g_object_get_data (G_OBJECT (widget), "drag-context");
   info = gtk_drag_get_dest_info (context, FALSE);
 
   if (info->proxy_data && 
@@ -1213,7 +1220,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
     {
       GtkDragDestSite *site;
 
-      site = gtk_object_get_data (GTK_OBJECT (drop_widget), "gtk-drag-dest");
+      site = g_object_get_data (G_OBJECT (drop_widget), "gtk-drag-dest");
 
       if (site && site->target_list)
 	{
@@ -1225,19 +1232,20 @@ gtk_drag_selection_received (GtkWidget        *widget,
 	    {
 	      if (!(site->flags & GTK_DEST_DEFAULT_DROP) ||
 		  selection_data->length >= 0)
-		gtk_signal_emit_by_name (GTK_OBJECT (drop_widget), 
-					 "drag_data_received",
-					 context, info->drop_x, info->drop_y,
-					 selection_data, 
-					 target_info, time);
+		g_signal_emit_by_name (drop_widget,
+				       "drag_data_received",
+				       context, info->drop_x, info->drop_y,
+				       selection_data,
+				       target_info, time);
 	    }
 	}
       else
 	{
-	  gtk_signal_emit_by_name (GTK_OBJECT (drop_widget), 
-				   "drag_data_received",
-				   context, info->drop_x, info->drop_y,
-				   selection_data, 0, time);
+	  g_signal_emit_by_name (drop_widget,
+				 "drag_data_received",
+				 context, info->drop_x, info->drop_y,
+				 selection_data,
+				 0, time);
 	}
       
       if (site && site->flags & GTK_DEST_DEFAULT_DROP)
@@ -1249,15 +1257,15 @@ gtk_drag_selection_received (GtkWidget        *widget,
 			   time);
 	}
       
-      gtk_widget_unref (drop_widget);
+      g_object_unref (drop_widget);
     }
 
-  gtk_signal_disconnect_by_func (GTK_OBJECT (widget), 
-				 GTK_SIGNAL_FUNC (gtk_drag_selection_received),
-				 data);
+  g_signal_handlers_disconnect_by_func (widget,
+					gtk_drag_selection_received,
+					data);
   
-  gtk_object_set_data (GTK_OBJECT (widget), "drag-context", NULL);
-  gdk_drag_context_unref (context);
+  g_object_set_data (G_OBJECT (widget), "drag-context", NULL);
+  g_object_unref (context);
 
   gtk_drag_release_ipc_widget (widget);
 }
@@ -1338,7 +1346,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	{
 	  GdkRectangle window_rect = { 0, 0, 0, 0 };
 	  
-	  gdk_window_get_size (window, &window_rect.width, &window_rect.height);
+	  gdk_drawable_get_size (window, &window_rect.width, &window_rect.height);
 
 	  gdk_rectangle_intersect (&new_allocation, &window_rect, &new_allocation);
 
@@ -1382,7 +1390,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	    {
 	      if (!new_data.found && GTK_WIDGET_DRAWABLE (tmp_list->data))
 		gtk_drag_find_widget (tmp_list->data, &new_data);
-	      gtk_widget_unref (tmp_list->data);
+	      g_object_unref (tmp_list->data);
 	    }
 	  g_slist_free (children);
 	  
@@ -1394,7 +1402,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
        * a drop site.
        */
       if (!data->found &&
-	  gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest"))
+	  g_object_get_data (G_OBJECT (widget), "gtk-drag-dest"))
 	{
 	  data->found = data->callback (widget,
 					data->context,
@@ -1451,10 +1459,10 @@ gtk_drag_proxy_begin (GtkWidget       *widget,
 
   source_info->proxy_dest = dest_info;
   
-  gtk_signal_connect (GTK_OBJECT (ipc_widget), 
-		      "selection_get",
-		      GTK_SIGNAL_FUNC (gtk_drag_selection_get), 
-		      source_info);
+  g_signal_connect (ipc_widget,
+		    "selection_get",
+		    G_CALLBACK (gtk_drag_selection_get),
+		    source_info);
   
   dest_info->proxy_source = source_info;
 }
@@ -1563,7 +1571,7 @@ gtk_drag_dest_leave (GtkWidget      *widget,
 {
   GtkDragDestSite *site;
 
-  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
+  site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
   g_return_if_fail (site != NULL);
 
   if (site->do_proxy)
@@ -1585,8 +1593,8 @@ gtk_drag_dest_leave (GtkWidget      *widget,
 	gtk_drag_unhighlight (widget);
 
       if (!(site->flags & GTK_DEST_DEFAULT_MOTION) || site->have_drag)
-	gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_leave",
-				 context, time);
+	g_signal_emit_by_name (widget, "drag_leave",
+			       context, time);
       
       site->have_drag = FALSE;
     }
@@ -1603,7 +1611,7 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
   GdkDragAction action = 0;
   gboolean retval;
 
-  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
+  site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
   g_return_val_if_fail (site != NULL, FALSE);
 
   if (site->do_proxy)
@@ -1643,7 +1651,7 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
 		       context->actions, time);
 
       if (!site->proxy_window && dest_window)
-	gdk_window_unref (dest_window);
+	g_object_unref (dest_window);
 
       selection = gdk_drag_get_selection (info->proxy_source->context);
       if (selection && 
@@ -1692,8 +1700,8 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
 	}
     }
 
-  gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_motion",
-			   context, x, y, time, &retval);
+  g_signal_emit_by_name (widget, "drag_motion",
+			 context, x, y, time, &retval);
 
   return (site->flags & GTK_DEST_DEFAULT_MOTION) ? TRUE : retval;
 }
@@ -1708,7 +1716,7 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
   GtkDragDestSite *site;
   GtkDragDestInfo *info;
 
-  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
+  site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
   g_return_val_if_fail (site != NULL, FALSE);
 
   info = gtk_drag_get_dest_info (context, FALSE);
@@ -1764,7 +1772,7 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
 			   context->actions, time);
 
 	  if (!site->proxy_window && dest_window)
-	    gdk_window_unref (dest_window);
+	    g_object_unref (dest_window);
 
 	  selection = gdk_drag_get_selection (info->proxy_source->context);
 	  if (selection && 
@@ -1793,8 +1801,8 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
 	    gtk_drag_get_data (widget, context, target, time);
 	}
 
-      gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_drop",
-			       context, x, y, time, &retval);
+      g_signal_emit_by_name (widget, "drag_drop",
+			     context, x, y, time, &retval);
 
       return (site->flags & GTK_DEST_DEFAULT_DROP) ? TRUE : retval;
     }
@@ -1856,10 +1864,9 @@ gtk_drag_begin (GtkWidget         *widget,
   info = gtk_drag_get_source_info (context, TRUE);
   
   info->ipc_widget = ipc_widget;
-  gtk_object_set_data (GTK_OBJECT (info->ipc_widget), "gtk-info", info);
+  g_object_set_data (G_OBJECT (info->ipc_widget), "gtk-info", info);
 
   info->widget = gtk_widget_ref (widget);
-
   
   info->button = button;
   info->target_list = target_list;
@@ -1894,8 +1901,8 @@ gtk_drag_begin (GtkWidget         *widget,
 			       &info->cur_screen, &info->cur_x, &info->cur_y, NULL);
     }
 
-  gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_begin",
-			   info->context);
+  g_signal_emit_by_name (widget, "drag_begin",
+			 info->context);
   
   if (event && event->type == GDK_MOTION_NOTIFY)
     gtk_drag_motion_cb (info->ipc_widget, (GdkEventMotion *)event, info);
@@ -1903,16 +1910,16 @@ gtk_drag_begin (GtkWidget         *widget,
   info->start_x = info->cur_x;
   info->start_y = info->cur_y;
 
-  gtk_signal_connect (GTK_OBJECT (info->ipc_widget), "button_release_event",
-		      GTK_SIGNAL_FUNC (gtk_drag_button_release_cb), info);
-  gtk_signal_connect (GTK_OBJECT (info->ipc_widget), "motion_notify_event",
-		      GTK_SIGNAL_FUNC (gtk_drag_motion_cb), info);
-  gtk_signal_connect (GTK_OBJECT (info->ipc_widget), "key_press_event",
-		      GTK_SIGNAL_FUNC (gtk_drag_key_cb), info);
-  gtk_signal_connect (GTK_OBJECT (info->ipc_widget), "key_release_event",
-		      GTK_SIGNAL_FUNC (gtk_drag_key_cb), info);
-  gtk_signal_connect (GTK_OBJECT (info->ipc_widget), "selection_get",
-		      GTK_SIGNAL_FUNC (gtk_drag_selection_get), info);
+  g_signal_connect (info->ipc_widget, "button_release_event",
+		    G_CALLBACK (gtk_drag_button_release_cb), info);
+  g_signal_connect (info->ipc_widget, "motion_notify_event",
+		    G_CALLBACK (gtk_drag_motion_cb), info);
+  g_signal_connect (info->ipc_widget, "key_press_event",
+		    G_CALLBACK (gtk_drag_key_cb), info);
+  g_signal_connect (info->ipc_widget, "key_release_event",
+		    G_CALLBACK (gtk_drag_key_cb), info);
+  g_signal_connect (info->ipc_widget, "selection_get",
+		    G_CALLBACK (gtk_drag_selection_get), info);
 
   /* We use a GTK grab here to override any grabs that the widget
    * we are dragging from might have held
@@ -1959,7 +1966,7 @@ gtk_drag_source_set (GtkWidget            *widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data");
+  site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
 
   gtk_widget_add_events (widget,
 			 gtk_widget_get_events (widget) |
@@ -1977,16 +1984,16 @@ gtk_drag_source_set (GtkWidget            *widget,
 
       site->icon_type = GTK_IMAGE_EMPTY;
       
-      gtk_signal_connect (GTK_OBJECT (widget), "button_press_event",
-			  GTK_SIGNAL_FUNC (gtk_drag_source_event_cb),
-			  site);
-      gtk_signal_connect (GTK_OBJECT (widget), "motion_notify_event",
-			  GTK_SIGNAL_FUNC (gtk_drag_source_event_cb),
-			  site);
+      g_signal_connect (widget, "button_press_event",
+			G_CALLBACK (gtk_drag_source_event_cb),
+			site);
+      g_signal_connect (widget, "motion_notify_event",
+			G_CALLBACK (gtk_drag_source_event_cb),
+			site);
       
-      gtk_object_set_data_full (GTK_OBJECT (widget),
-				"gtk-site-data", 
-				site, gtk_drag_source_site_destroy);
+      g_object_set_data_full (G_OBJECT (widget),
+			      "gtk-site-data", 
+			      site, gtk_drag_source_site_destroy);
     }
 
   site->start_button_mask = start_button_mask;
@@ -2015,12 +2022,17 @@ gtk_drag_source_unset (GtkWidget        *widget)
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data");
+  site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
 
   if (site)
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (widget), site);
-      gtk_object_set_data (GTK_OBJECT (widget), "gtk-site-data", NULL);
+      g_signal_handlers_disconnect_by_func (widget,
+					    gtk_drag_source_event_cb,
+					    site);
+      g_signal_handlers_disconnect_by_func (widget,
+					    gtk_drag_source_event_cb,
+					    site);
+      g_object_set_data (G_OBJECT (widget), "gtk-site-data", NULL);
     }
 }
 
@@ -2033,12 +2045,12 @@ gtk_drag_source_unset_icon (GtkDragSourceSite *site)
       break;
     case GTK_IMAGE_PIXMAP:
       if (site->icon_data.pixmap.pixmap)
-	gdk_pixmap_unref (site->icon_data.pixmap.pixmap);
+	g_object_unref (site->icon_data.pixmap.pixmap);
       if (site->icon_mask)
-	gdk_pixmap_unref (site->icon_mask);
+	g_object_unref (site->icon_mask);
       break;
     case GTK_IMAGE_PIXBUF:
-      g_object_unref (G_OBJECT (site->icon_data.pixbuf.pixbuf));
+      g_object_unref (site->icon_data.pixbuf.pixbuf);
       break;
     case GTK_IMAGE_STOCK:
       g_free (G_OBJECT (site->icon_data.stock.stock_id));
@@ -2050,7 +2062,7 @@ gtk_drag_source_unset_icon (GtkDragSourceSite *site)
   site->icon_type = GTK_IMAGE_EMPTY;
   
   if (site->colormap)
-    gdk_colormap_unref (site->colormap);
+    g_object_unref (site->colormap);
   site->colormap = NULL;
 }
 
@@ -2079,13 +2091,13 @@ gtk_drag_source_set_icon (GtkWidget     *widget,
   g_return_if_fail (GDK_IS_PIXMAP (pixmap));
   g_return_if_fail (!mask || GDK_IS_PIXMAP (mask));
 
-  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data");
+  site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
   g_return_if_fail (site != NULL);
   
-  gdk_colormap_ref (colormap);
-  gdk_pixmap_ref (pixmap);
+  g_object_ref (colormap);
+  g_object_ref (pixmap);
   if (mask)
-    gdk_pixmap_ref (mask);
+    g_object_ref (mask);
 
   gtk_drag_source_unset_icon (site);
 
@@ -2114,9 +2126,9 @@ gtk_drag_source_set_icon_pixbuf (GtkWidget   *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
-  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data");
+  site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
   g_return_if_fail (site != NULL); 
-  gdk_pixbuf_ref (pixbuf);
+  g_object_ref (pixbuf);
 
   gtk_drag_source_unset_icon (site);
 
@@ -2141,7 +2153,7 @@ gtk_drag_source_set_icon_stock (GtkWidget   *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (stock_id != NULL);
 
-  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data");
+  site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
   g_return_if_fail (site != NULL);
   
   gtk_drag_source_unset_icon (site);
@@ -2221,9 +2233,9 @@ gtk_drag_update_icon (GtkDragSourceInfo *info)
   
       gtk_drag_get_icon (info, &icon_window, &hot_x, &hot_y);
       
-      gtk_widget_set_uposition (icon_window, 
-				info->cur_x - hot_x, 
-				info->cur_y - hot_y);
+      gtk_window_move (GTK_WINDOW (icon_window), 
+		       info->cur_x - hot_x, 
+		       info->cur_y - hot_y);
       
       if (GTK_WIDGET_VISIBLE (icon_window))
 	gdk_window_raise (icon_window->window);
@@ -2349,9 +2361,9 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
   width = gdk_pixbuf_get_width (pixbuf);
   height = gdk_pixbuf_get_width (pixbuf);
 
-  gtk_widget_set_usize (window,
-			gdk_pixbuf_get_width (pixbuf),
-			gdk_pixbuf_get_height (pixbuf));
+  gtk_widget_set_size_request (window,
+			       gdk_pixbuf_get_width (pixbuf),
+			       gdk_pixbuf_get_height (pixbuf));
 
   g_signal_connect_closure (window, "realize",
 			    g_cclosure_new (G_CALLBACK (icon_window_realize),
@@ -2446,7 +2458,7 @@ gtk_drag_set_icon_pixmap (GdkDragContext    *context,
   g_return_if_fail (gdk_drawable_get_screen (pixmap) == screen);
   g_return_if_fail (!mask || gdk_drawable_get_screen (mask) == screen);
   
-  gdk_window_get_size (pixmap, &width, &height);
+  gdk_drawable_get_size (pixmap, &width, &height);
 
   gtk_widget_push_colormap (colormap);
 
@@ -2458,7 +2470,7 @@ gtk_drag_set_icon_pixmap (GdkDragContext    *context,
 
   gtk_widget_pop_colormap ();
 
-  gtk_widget_set_usize (window, width, height);
+  gtk_widget_set_size_request (window, width, height);
   gtk_widget_realize (window);
 
   gdk_window_set_back_pixmap (window->window, pixmap, FALSE);
@@ -2519,21 +2531,21 @@ gtk_drag_set_default_icon (GdkColormap   *colormap,
   g_return_if_fail (!mask || GDK_IS_PIXMAP (mask));
   
   if (default_icon_colormap)
-    gdk_colormap_unref (default_icon_colormap);
+    g_object_unref (default_icon_colormap);
   if (default_icon_pixmap)
-    gdk_pixmap_unref (default_icon_pixmap);
+    g_object_unref (default_icon_pixmap);
   if (default_icon_mask)
-    gdk_pixmap_unref (default_icon_mask);
+    g_object_unref (default_icon_mask);
 
   default_icon_colormap = colormap;
-  gdk_colormap_ref (colormap);
+  g_object_ref (colormap);
   
   default_icon_pixmap = pixmap;
-  gdk_pixmap_ref (pixmap);
+  g_object_ref (pixmap);
 
   default_icon_mask = mask;
   if (mask)
-    gdk_pixmap_ref (mask);
+    g_object_ref (mask);
   
   default_icon_hot_x = hot_x;
   default_icon_hot_y = hot_y;
@@ -2792,10 +2804,10 @@ gtk_drag_drop (GtkDragSourceInfo *info,
 	      selection_data.data = NULL;
 	      selection_data.length = -1;
 	      
-	      gtk_signal_emit_by_name (GTK_OBJECT (info->widget), "drag_data_get",
-				       info->context, &selection_data,
-				       pair->info, 
-				       time);
+	      g_signal_emit_by_name (info->widget, "drag_data_get",
+				     info->context, &selection_data,
+				     pair->info,
+				     time);
 	      
 	      /* FIXME: Should we check for length >= 0 here? */
 	      gtk_drag_drop_finished (info, TRUE, time);
@@ -2944,9 +2956,9 @@ gtk_drag_selection_get (GtkWidget        *widget,
   switch (sel_info)
     {
     case TARGET_DELETE:
-      gtk_signal_emit_by_name (GTK_OBJECT (info->widget), 
-			       "drag_data_delete", 
-			       info->context);
+      g_signal_emit_by_name (info->widget,
+			     "drag_data_delete", 
+			     info->context);
       gtk_selection_data_set (selection_data, null_atom, 8, NULL, 0);
       break;
     case TARGET_MOTIF_SUCCESS:
@@ -2977,11 +2989,11 @@ gtk_drag_selection_get (GtkWidget        *widget,
 				    selection_data->target, 
 				    &target_info))
 	    {
-	      gtk_signal_emit_by_name (GTK_OBJECT (info->widget), "drag_data_get",
-				       info->context, 
-				       selection_data, 
-				       target_info, 
-				       time);
+	      g_signal_emit_by_name (info->widget, "drag_data_get",
+				     info->context,
+				     selection_data,
+				     target_info,
+				     time);
 	    }
 	}
       break;
@@ -3017,9 +3029,9 @@ gtk_drag_anim_timeout (gpointer data)
 	  
 	  gtk_drag_get_icon (anim->info, &icon_window, &hot_x, &hot_y);
 	  
-	  gtk_widget_set_uposition (icon_window, 
-				    x - hot_x, 
-				    y - hot_y);
+	  gtk_window_move (GTK_WINDOW (icon_window), 
+			   x - hot_x, 
+			   y - hot_y);
 	}
   
       anim->step++;
@@ -3047,7 +3059,7 @@ gtk_drag_remove_icon (GtkDragSourceInfo *info)
 	  info->fallback_icon = NULL;
 	}
 
-      gtk_widget_unref (info->icon_window);
+      g_object_unref (info->icon_window);
       info->icon_window = NULL;
     }
 }
@@ -3058,22 +3070,35 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
   gtk_drag_remove_icon (info);
 
   if (!info->proxy_dest)
-    gtk_signal_emit_by_name (GTK_OBJECT (info->widget), "drag_end", 
-			     info->context);
+    g_signal_emit_by_name (info->widget, "drag_end", 
+			   info->context);
 
   if (info->widget)
-    gtk_widget_unref (info->widget);
+    g_object_unref (info->widget);
 
-  gtk_signal_disconnect_by_data (GTK_OBJECT (info->ipc_widget), info);
+
+  g_signal_handlers_disconnect_by_func (info->ipc_widget,
+					gtk_drag_button_release_cb,
+					info);
+  g_signal_handlers_disconnect_by_func (info->ipc_widget,
+					gtk_drag_motion_cb,
+					info);
+  g_signal_handlers_disconnect_by_func (info->ipc_widget,
+					gtk_drag_key_cb,
+					info);
+  g_signal_handlers_disconnect_by_func (info->ipc_widget,
+					gtk_drag_selection_get,
+					info);
+
   gtk_selection_remove_all (info->ipc_widget);
-  gtk_object_set_data (GTK_OBJECT (info->ipc_widget), "gtk-info", NULL);
+  g_object_set_data (G_OBJECT (info->ipc_widget), "gtk-info", NULL);
   source_widgets = g_slist_remove (source_widgets, info->ipc_widget);
   gtk_drag_release_ipc_widget (info->ipc_widget);
 
   gtk_target_list_unref (info->target_list);
 
   gtk_drag_clear_source_info (info->context);
-  gdk_drag_context_unref (info->context);
+  g_object_unref (info->context);
 
   if (info->drop_timeout)
     gtk_timeout_remove (info->drop_timeout);
@@ -3142,7 +3167,7 @@ gtk_drag_update (GtkDragSourceInfo *info,
     }
   
   if (dest_window)
-    gdk_window_unref (dest_window);
+    g_object_unref (dest_window);
 
   selection = gdk_drag_get_selection (info->context);
   if (selection)
@@ -3172,15 +3197,15 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
   gdk_display_keyboard_ungrab (display, time);
   gtk_grab_remove (info->ipc_widget);
 
-  gtk_signal_disconnect_by_func (GTK_OBJECT (info->ipc_widget), 
-				 GTK_SIGNAL_FUNC (gtk_drag_button_release_cb),
-				 info);
-  gtk_signal_disconnect_by_func (GTK_OBJECT (info->ipc_widget), 
-				 GTK_SIGNAL_FUNC (gtk_drag_motion_cb),
-				 info);
-  gtk_signal_disconnect_by_func (GTK_OBJECT (info->ipc_widget), 
-				 GTK_SIGNAL_FUNC (gtk_drag_key_cb),
-				 info);
+  g_signal_handlers_disconnect_by_func (info->ipc_widget,
+					gtk_drag_button_release_cb,
+					info);
+  g_signal_handlers_disconnect_by_func (info->ipc_widget,
+					gtk_drag_motion_cb,
+					info);
+  g_signal_handlers_disconnect_by_func (info->ipc_widget,
+					gtk_drag_key_cb,
+					info);
 
   /* Send on a release pair to the the original 
    * widget to convince it to release its grab. We need to

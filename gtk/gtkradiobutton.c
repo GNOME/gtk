@@ -26,12 +26,12 @@
 
 #include "gtklabel.h"
 #include "gtkradiobutton.h"
-#include "gtksignal.h"
+#include "gtkintl.h"
 
 
 enum {
-  ARG_0,
-  ARG_GROUP
+  PROP_0,
+  PROP_GROUP
 };
 
 
@@ -43,36 +43,41 @@ static gboolean gtk_radio_button_focus          (GtkWidget           *widget,
 static void     gtk_radio_button_clicked        (GtkButton           *button);
 static void     gtk_radio_button_draw_indicator (GtkCheckButton      *check_button,
 						 GdkRectangle        *area);
-static void     gtk_radio_button_set_arg        (GtkObject           *object,
-						 GtkArg              *arg,
-						 guint                arg_id);
-static void     gtk_radio_button_get_arg        (GtkObject           *object,
-						 GtkArg              *arg,
-						 guint                arg_id);
+static void     gtk_radio_button_set_property   (GObject             *object,
+						 guint                prop_id,
+						 const GValue        *value,
+						 GParamSpec          *pspec);
+static void     gtk_radio_button_get_property   (GObject             *object,
+						 guint                prop_id,
+						 GValue              *value,
+						 GParamSpec          *pspec);
 
 static GtkCheckButtonClass *parent_class = NULL;
 
 
-GtkType
+GType
 gtk_radio_button_get_type (void)
 {
-  static GtkType radio_button_type = 0;
+  static GType radio_button_type = 0;
 
   if (!radio_button_type)
     {
-      static const GtkTypeInfo radio_button_info =
+      static const GTypeInfo radio_button_info =
       {
-	"GtkRadioButton",
-	sizeof (GtkRadioButton),
 	sizeof (GtkRadioButtonClass),
-	(GtkClassInitFunc) gtk_radio_button_class_init,
-	(GtkObjectInitFunc) gtk_radio_button_init,
-        /* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-	(GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_radio_button_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkRadioButton),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_radio_button_init,
       };
 
-      radio_button_type = gtk_type_unique (gtk_check_button_get_type (), &radio_button_info);
+      radio_button_type =
+	g_type_register_static (GTK_TYPE_CHECK_BUTTON, "GtkRadioButton",
+				&radio_button_info, 0);
     }
 
   return radio_button_type;
@@ -81,22 +86,30 @@ gtk_radio_button_get_type (void)
 static void
 gtk_radio_button_class_init (GtkRadioButtonClass *class)
 {
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkButtonClass *button_class;
   GtkCheckButtonClass *check_button_class;
   GtkWidgetClass *widget_class;
 
+  gobject_class = G_OBJECT_CLASS (class);
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   button_class = (GtkButtonClass*) class;
   check_button_class = (GtkCheckButtonClass*) class;
 
-  parent_class = gtk_type_class (gtk_check_button_get_type ());
+  parent_class = g_type_class_peek_parent (class);
 
-  gtk_object_add_arg_type ("GtkRadioButton::group", GTK_TYPE_RADIO_BUTTON, GTK_ARG_WRITABLE, ARG_GROUP);
+  gobject_class->set_property = gtk_radio_button_set_property;
+  gobject_class->get_property = gtk_radio_button_get_property;
 
-  object_class->set_arg = gtk_radio_button_set_arg;
-  object_class->get_arg = gtk_radio_button_get_arg;
+  g_object_class_install_property (gobject_class,
+				   PROP_GROUP,
+				   g_param_spec_object ("group",
+							_("Group"),
+							_("The radio button whose group this widget belongs."),
+							GTK_TYPE_RADIO_BUTTON,
+							G_PARAM_WRITABLE));
   object_class->destroy = gtk_radio_button_destroy;
 
   widget_class->focus = gtk_radio_button_focus;
@@ -123,43 +136,46 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
 }
 
 static void
-gtk_radio_button_set_arg (GtkObject	 *object,
-			  GtkArg         *arg,
-			  guint           arg_id)
+gtk_radio_button_set_property (GObject      *object,
+			       guint         prop_id,
+			       const GValue *value,
+			       GParamSpec   *pspec)
 {
   GtkRadioButton *radio_button;
 
   radio_button = GTK_RADIO_BUTTON (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
       GSList *slist;
 
-    case ARG_GROUP:
-      if (GTK_VALUE_OBJECT (*arg))
-	slist = gtk_radio_button_get_group ((GtkRadioButton*) GTK_VALUE_OBJECT (*arg));
+    case PROP_GROUP:
+      if (G_VALUE_HOLDS_OBJECT (value))
+	slist = gtk_radio_button_get_group ((GtkRadioButton*) g_value_get_object (value));
       else
 	slist = NULL;
       gtk_radio_button_set_group (radio_button, slist);
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
 static void
-gtk_radio_button_get_arg (GtkObject      *object,
-			  GtkArg         *arg,
-			  guint           arg_id)
+gtk_radio_button_get_property (GObject    *object,
+			       guint       prop_id,
+			       GValue     *value,
+			       GParamSpec *pspec)
 {
   GtkRadioButton *radio_button;
 
   radio_button = GTK_RADIO_BUTTON (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -211,7 +227,7 @@ gtk_radio_button_new (GSList *group)
 {
   GtkRadioButton *radio_button;
 
-  radio_button = gtk_type_new (gtk_radio_button_get_type ());
+  radio_button = g_object_new (GTK_TYPE_RADIO_BUTTON, NULL);
 
   if (group)
     gtk_radio_button_set_group (radio_button, group);
@@ -508,7 +524,7 @@ gtk_radio_button_clicked (GtkButton *button)
   toggle_button = GTK_TOGGLE_BUTTON (button);
   toggled = FALSE;
 
-  gtk_widget_ref (GTK_WIDGET (button));
+  g_object_ref (GTK_WIDGET (button));
 
   if (toggle_button->active)
     {
@@ -575,7 +591,7 @@ gtk_radio_button_clicked (GtkButton *button)
 
   gtk_widget_queue_draw (GTK_WIDGET (button));
 
-  gtk_widget_unref (GTK_WIDGET (button));
+  g_object_unref (button);
 }
 
 static void

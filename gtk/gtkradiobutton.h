@@ -38,11 +38,11 @@ extern "C" {
 
 
 #define GTK_TYPE_RADIO_BUTTON		       (gtk_radio_button_get_type ())
-#define GTK_RADIO_BUTTON(obj)		       (GTK_CHECK_CAST ((obj), GTK_TYPE_RADIO_BUTTON, GtkRadioButton))
-#define GTK_RADIO_BUTTON_CLASS(klass)	       (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_RADIO_BUTTON, GtkRadioButtonClass))
-#define GTK_IS_RADIO_BUTTON(obj)	       (GTK_CHECK_TYPE ((obj), GTK_TYPE_RADIO_BUTTON))
-#define GTK_IS_RADIO_BUTTON_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RADIO_BUTTON))
-#define GTK_RADIO_BUTTON_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_RADIO_BUTTON, GtkRadioButtonClass))
+#define GTK_RADIO_BUTTON(obj)		       (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_RADIO_BUTTON, GtkRadioButton))
+#define GTK_RADIO_BUTTON_CLASS(klass)	       (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_RADIO_BUTTON, GtkRadioButtonClass))
+#define GTK_IS_RADIO_BUTTON(obj)	       (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_RADIO_BUTTON))
+#define GTK_IS_RADIO_BUTTON_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RADIO_BUTTON))
+#define GTK_RADIO_BUTTON_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RADIO_BUTTON, GtkRadioButtonClass))
 
 
 typedef struct _GtkRadioButton	     GtkRadioButton;
@@ -67,7 +67,7 @@ struct _GtkRadioButtonClass
 };
 
 
-GtkType	    gtk_radio_button_get_type	     (void) G_GNUC_CONST;
+GType	   gtk_radio_button_get_type	     (void) G_GNUC_CONST;
 
 GtkWidget* gtk_radio_button_new                           (GSList         *group);
 GtkWidget* gtk_radio_button_new_from_widget               (GtkRadioButton *group);
