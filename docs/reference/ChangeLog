@@ -1,3 +1,7 @@
+2001-10-13  Matthias Clasen   <matthiasc@poet.de>
+
+	* gdk/tmpl/x_interaction.sgml: Update.
+
 2001-10-10  Matthias Clasen   <matthiasc@poet.de>
 
 	* gtk/gtk-sections.txt, gtk/tmpl/gtkspinbutton.sgml,
