@@ -142,6 +142,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkseparator.h		\
 	gtksettings.h		\
 	gtksignal.h		\
+	gtksizegroup.h		\
 	gtksocket.h		\
 	gtkspinbutton.h		\
 	gtkstyle.h		\
@@ -301,6 +302,7 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkseparator.c		\
 	gtksettings.c		\
 	gtksignal.c		\
+	gtksizegroup.c		\
 	gtkspinbutton.c		\
 	gtkstock.c		\
 	gtkstyle.c		\

@@ -1,3 +1,27 @@
+Fri May 18 14:25:20 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcontainer.c: Remove reallocate-redraws property.
+	This is something that only a widget writer would ever want
+	to change.
+
+	* gtk/gtksignal.c: Handle G_SIGNAL_TYPE_STATIC_SCOPE for
+	gtk_signal_emit_by_name().
+
+	* gtk/gtkviewport.c: Fix some warnings.
+
+	* gtk/gtkwidget.c gtk/gtksizegroup.c: Add "size group" facility
+	allowing the requisitions of multiple widgets to be grouped
+	together.
+
+	* tests/testgtk.c: Add GtkSizeGroup test
+
+	* demos/gtk-demo/sizegroup.c: Add GtkSizeGroup demo.
+
+	* demos/gtk-demo/main.c demos/gtk-demo/pixbufs.c: Fix some
+	warnings.
+
+	* configure.in: Switch to using AM_GLIB_GNU_GETTEXT.
+
 2001-04-28  Martin Baulig  <baulig@suse.de>
 
 	* gtk/gtkimagemenuitem.[ch]: Renamed gtk_image_menu_item_add_icon()

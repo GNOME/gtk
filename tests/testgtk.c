@@ -3638,6 +3638,169 @@ create_entry (void)
 }
 
 /*
+ * GtkSizeGroup
+ */
+
+#define SIZE_GROUP_INITIAL_SIZE 50
+
+static void
+size_group_hsize_changed (GtkSpinButton *spin_button,
+			  GtkWidget     *button)
+{
+  gtk_widget_set_usize (GTK_BIN (button)->child,
+			gtk_spin_button_get_value_as_int (spin_button),
+			-2);
+}
+
+static void
+size_group_vsize_changed (GtkSpinButton *spin_button,
+			  GtkWidget     *button)
+{
+  gtk_widget_set_usize (GTK_BIN (button)->child,
+			-2,
+			gtk_spin_button_get_value_as_int (spin_button));
+}
+
+static GtkWidget *
+create_size_group_window (GtkSizeGroup *master_size_group)
+{
+  GtkWidget *window;
+  GtkWidget *table;
+  GtkWidget *main_button;
+  GtkWidget *button;
+  GtkWidget *spin_button;
+  GtkWidget *hbox;
+  GtkSizeGroup *hgroup1;
+  GtkSizeGroup *hgroup2;
+  GtkSizeGroup *vgroup1;
+  GtkSizeGroup *vgroup2;
+
+  window = gtk_dialog_new_with_buttons ("GtkSizeGroup",
+					NULL, 0,
+					GTK_STOCK_BUTTON_CLOSE,
+					GTK_RESPONSE_NONE,
+					NULL);
+
+  gtk_window_set_resizeable (GTK_WINDOW (window), FALSE);
+
+  gtk_signal_connect (GTK_OBJECT (window), "response",
+		      GTK_SIGNAL_FUNC (gtk_widget_destroy),
+		      NULL);
+
+  table = gtk_table_new (2, 2, FALSE);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), table, TRUE, TRUE, 0);
+
+  gtk_table_set_row_spacings (GTK_TABLE (table), 5);
+  gtk_table_set_col_spacings (GTK_TABLE (table), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (table), 5);
+  gtk_widget_set_usize (table, 250, 250);
+
+  hgroup1 = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  hgroup2 = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  vgroup1 = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
+  vgroup2 = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
+
+  main_button = gtk_button_new_with_label ("X");
+  
+  gtk_table_attach (GTK_TABLE (table), main_button,
+		    0, 1,       0, 1,
+		    GTK_EXPAND, GTK_EXPAND,
+		    0,          0);
+  gtk_size_group_add_widget (master_size_group, main_button);
+  gtk_size_group_add_widget (hgroup1, main_button);
+  gtk_size_group_add_widget (vgroup1, main_button);
+  gtk_widget_set_usize (GTK_BIN (main_button)->child, SIZE_GROUP_INITIAL_SIZE, SIZE_GROUP_INITIAL_SIZE);
+
+  button = gtk_button_new ();
+  gtk_table_attach (GTK_TABLE (table), button,
+		    1, 2,       0, 1,
+		    GTK_EXPAND, GTK_EXPAND,
+		    0,          0);
+  gtk_size_group_add_widget (vgroup1, button);
+  gtk_size_group_add_widget (vgroup2, button);
+
+  button = gtk_button_new ();
+  gtk_table_attach (GTK_TABLE (table), button,
+		    0, 1,       1, 2,
+		    GTK_EXPAND, GTK_EXPAND,
+		    0,          0);
+  gtk_size_group_add_widget (hgroup1, button);
+  gtk_size_group_add_widget (hgroup2, button);
+
+  button = gtk_button_new ();
+  gtk_table_attach (GTK_TABLE (table), button,
+		    1, 2,       1, 2,
+		    GTK_EXPAND, GTK_EXPAND,
+		    0,          0);
+  gtk_size_group_add_widget (hgroup2, button);
+  gtk_size_group_add_widget (vgroup2, button);
+
+  g_object_unref (G_OBJECT (hgroup1));
+  g_object_unref (G_OBJECT (hgroup2));
+  g_object_unref (G_OBJECT (vgroup1));
+  g_object_unref (G_OBJECT (vgroup2));
+  
+  hbox = gtk_hbox_new (FALSE, 5);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), hbox, FALSE, FALSE, 0);
+  
+  spin_button = gtk_spin_button_new_with_range (1, 100, 1);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (spin_button), SIZE_GROUP_INITIAL_SIZE);
+  gtk_box_pack_start (GTK_BOX (hbox), spin_button, TRUE, TRUE, 0);
+  gtk_signal_connect (GTK_OBJECT (spin_button), "value_changed",
+		      GTK_SIGNAL_FUNC (size_group_hsize_changed), main_button);
+
+  spin_button = gtk_spin_button_new_with_range (1, 100, 1);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (spin_button), SIZE_GROUP_INITIAL_SIZE);
+  gtk_box_pack_start (GTK_BOX (hbox), spin_button, TRUE, TRUE, 0);
+  gtk_signal_connect (GTK_OBJECT (spin_button), "value_changed",
+		      GTK_SIGNAL_FUNC (size_group_vsize_changed), main_button);
+
+  return window;
+}
+
+static void
+create_size_groups (void)
+{
+  static GtkWidget *window1 = NULL;
+  static GtkWidget *window2 = NULL;
+  static GtkSizeGroup *master_size_group;
+
+  if (!master_size_group)
+    master_size_group = gtk_size_group_new (GTK_SIZE_GROUP_BOTH);
+  
+  if (!window1)
+    {
+      window1 = create_size_group_window (master_size_group);
+
+      gtk_signal_connect (GTK_OBJECT (window1), "destroy",
+			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+			  &window1);
+    }
+
+  if (!window2)
+    {
+      window2 = create_size_group_window (master_size_group);
+
+      gtk_signal_connect (GTK_OBJECT (window2), "destroy",
+			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+			  &window2);
+    }
+
+  if (GTK_WIDGET_VISIBLE (window1) && GTK_WIDGET_VISIBLE (window2))
+    {
+      gtk_widget_destroy (window1);
+      gtk_widget_destroy (window2);
+    }
+  else
+    {
+      if (!GTK_WIDGET_VISIBLE (window1))
+	gtk_widget_show_all (window1);
+      if (!GTK_WIDGET_VISIBLE (window2))
+	gtk_widget_show_all (window2);
+    }
+}
+
+/*
  * GtkSpinButton
  */
 
@@ -10433,6 +10596,7 @@ create_main_window (void)
       { "saved position", create_saved_position },
       { "scrolled windows", create_scrolled_windows },
       { "shapes", create_shapes },
+      { "size groups", create_size_groups },
       { "spinbutton", create_spins },
       { "statusbar", create_statusbar },
       { "styles", create_styles },

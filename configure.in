@@ -226,10 +226,10 @@ AC_SUBST(STRIP_END)
 
 # i18n stuff
 ALL_LINGUAS="az ca cs da de el en_GB en@IPA es et eu fa fi fr ga gl he hr hu ia it ja ko lt nl nn no pl pt pt_BR ro ru sk sl sp sr sv tr uk vi wa zh_TW zh_CN"
-AM_GTK_GNU_GETTEXT
+AM_GLIB_GNU_GETTEXT
 LIBS="$LIBS $INTLLIBS"
 
-# AM_GTK_GNU_GETTEXT above substs $DATADIRNAME
+# AM_GLIB_GNU_GETTEXT above substs $DATADIRNAME
 # this is the directory where the *.{mo,gmo} files are installed
 gtklocaledir='${prefix}/${DATADIRNAME}/locale'
 AC_SUBST(gtklocaledir)

@@ -47,7 +47,7 @@ static const char *installed_image_names[] = {
 #define N_IMAGES G_N_ELEMENTS (relative_image_names)
 
 /* demo window */
-static GtkWindow *window = NULL;
+static GtkWidget *window = NULL;
 
 /* Current frame */
 static GdkPixbuf *frame;

@@ -14,6 +14,7 @@ demos = @STRIP_BEGIN@	\
 	menus.c		\
 	panes.c		\
 	pixbufs.c	\
+	sizegroup.c	\
 	textview.c	\
 @STRIP_END@
 

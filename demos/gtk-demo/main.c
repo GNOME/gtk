@@ -1,5 +1,6 @@
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -546,7 +547,7 @@ button_press_event_cb (GtkTreeView    *tree_view,
 
 	      gtk_signal_connect (GTK_OBJECT (window),
                                   "destroy",
-                                  window_closed_cb,
+                                  GTK_SIGNAL_FUNC (window_closed_cb),
                                   cbdata);
 	    }
 	  else
@@ -598,7 +599,7 @@ row_activated_cb (GtkTreeView       *tree_view,
       
       gtk_signal_connect (GTK_OBJECT (window),
 			  "destroy",
-			  window_closed_cb,
+			  GTK_SIGNAL_FUNC (window_closed_cb),
 			  cbdata);
     }
 }
@@ -714,7 +715,7 @@ create_tree (void)
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),
 			       GTK_TREE_VIEW_COLUMN (column));
 
-  gtk_signal_connect (GTK_OBJECT (selection), "selection_changed", selection_cb, model);
+  gtk_signal_connect (GTK_OBJECT (selection), "selection_changed", GTK_SIGNAL_FUNC (selection_cb), model);
   gtk_signal_connect (GTK_OBJECT (tree_view), "row_activated", GTK_SIGNAL_FUNC (row_activated_cb), model);
 
   return tree_view;

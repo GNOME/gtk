@@ -125,6 +125,7 @@
 #include <gtk/gtkseparatormenuitem.h>
 #include <gtk/gtksettings.h>
 #include <gtk/gtksignal.h>
+#include <gtk/gtksizegroup.h>
 #include <gtk/gtksocket.h>
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkstock.h>

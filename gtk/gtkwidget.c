@@ -34,6 +34,7 @@
 #include "gtkrc.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
+#include "gtksizegroup.h"
 #include "gtksignal.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
@@ -2081,15 +2082,9 @@ gtk_widget_queue_resize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (GTK_IS_RESIZE_CONTAINER (widget))
-    gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
-
   gtk_widget_queue_clear (widget);
 
-  if (widget->parent)
-    gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
-  else if (GTK_WIDGET_TOPLEVEL (widget) && GTK_IS_CONTAINER (widget))
-    gtk_container_queue_resize (GTK_CONTAINER (widget));
+  _gtk_size_group_queue_resize (widget);
 }
 
 /**
@@ -2149,15 +2144,14 @@ gtk_widget_size_request (GtkWidget	*widget,
     g_warning ("gtk_widget_size_request() called on child widget with request equal\n to widget->requisition. gtk_widget_set_usize() may not work properly.");
 #endif /* G_ENABLE_DEBUG */
 
-  gtk_widget_ref (widget);
-  gtk_widget_ensure_style (widget);
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_REQUEST],
-		   &widget->requisition);
+  _gtk_size_group_compute_requisition (widget, requisition);
 
+#if 0  
   if (requisition)
     gtk_widget_get_child_requisition (widget, requisition);
 
   gtk_widget_unref (widget);
+#endif  
 }
 
 /**
@@ -2174,21 +2168,7 @@ void
 gtk_widget_get_child_requisition (GtkWidget	 *widget,
 				  GtkRequisition *requisition)
 {
-  GtkWidgetAuxInfo *aux_info;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  *requisition = widget->requisition;
-  
-  aux_info =_gtk_widget_get_aux_info (widget, FALSE);
-  if (aux_info)
-    {
-      if (aux_info->width > 0)
-	requisition->width = aux_info->width;
-      if (aux_info->height > 0)
-	requisition->height = aux_info->height;
-    }
+  _gtk_size_group_get_child_requisition (widget, requisition);
 }
 
 /**
