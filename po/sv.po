@@ -1,21 +1,22 @@
 # Swedish messages for GTK+.
-# Copyright (C) 1999, 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 # Tomas Ögren <stric@ing.umu.se>, 1999.
-# Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003.
+# Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003, 2004.
 #
 # $Id$
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2003-12-20 09:43+0100\n"
-"PO-Revision-Date: 2003-12-20 09:43+0100\n"
+"POT-Creation-Date: 2004-01-06 02:14+0100\n"
+"PO-Revision-Date: 2004-01-06 02:16+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Report-Msgid-Bugs-To: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:731
 #: gdk-pixbuf/gdk-pixbuf-io.c:864 tests/testfilechooser.c:198
@@ -113,6 +114,72 @@ msgstr ""
 "Internt fel: Bildinläsningsmodulen \"%s\" misslyckades med att läsa in en "
 "bild, men gav inte en anledning till misslyckandet"
 
+#: gdk-pixbuf/gdk-pixbuf.c:100
+msgid "Number of Channels"
+msgstr "Antal kanaler"
+
+#: gdk-pixbuf/gdk-pixbuf.c:101
+msgid "The number of samples per pixel"
+msgstr "Antal prov per bildpunkt"
+
+#: gdk-pixbuf/gdk-pixbuf.c:111
+msgid "Colorspace"
+msgstr "Färgrymd"
+
+#: gdk-pixbuf/gdk-pixbuf.c:112
+msgid "The colorspace in which the samples are interpreted"
+msgstr "Den färgrymd i vilken proven tolkas"
+
+#: gdk-pixbuf/gdk-pixbuf.c:122
+msgid "Has Alpha"
+msgstr "Har alfa"
+
+#: gdk-pixbuf/gdk-pixbuf.c:123
+msgid "Whether the pixbuf has an alpha channel"
+msgstr "Huruvida pixbufen har en alfakanal"
+
+#: gdk-pixbuf/gdk-pixbuf.c:131
+msgid "Bits per Sample"
+msgstr "Bitar per prov"
+
+#: gdk-pixbuf/gdk-pixbuf.c:132
+msgid "The number of bits per sample"
+msgstr "Antalet bitar per prov"
+
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:238
+msgid "Width"
+msgstr "Bredd"
+
+#: gdk-pixbuf/gdk-pixbuf.c:143
+msgid "The number of columns of the pixbuf"
+msgstr "Antalet kolumner i pixbufen"
+
+#: gdk-pixbuf/gdk-pixbuf.c:153 gtk/gtklayout.c:656
+msgid "Height"
+msgstr "Höjd"
+
+#: gdk-pixbuf/gdk-pixbuf.c:154
+msgid "The number of rows of the pixbuf"
+msgstr "Antalet rader i pixbufen"
+
+# Osäker
+#: gdk-pixbuf/gdk-pixbuf.c:164
+msgid "Rowstride"
+msgstr "Radhöjd"
+
+#: gdk-pixbuf/gdk-pixbuf.c:165
+msgid ""
+"The number of bytes between the start of a row and the start of the next row"
+msgstr "Antalet byte mellan början av en rad och början på nästa rad"
+
+#: gdk-pixbuf/gdk-pixbuf.c:175
+msgid "Pixels"
+msgstr "Bildpunkter"
+
+#: gdk-pixbuf/gdk-pixbuf.c:176
+msgid "A pointer to the pixel data of the pixbuf"
+msgstr "En pekare till bildpunktsdata för pixbufen"
+
 #: gdk-pixbuf/gdk-pixdata.c:145
 msgid "Image header corrupt"
 msgstr "Bildhuvudet är trasigt"
@@ -121,14 +188,16 @@ msgstr "Bildhuvudet är trasigt"
 msgid "Image format unknown"
 msgstr "Bildformatet är okänt"
 
-#: gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:456
+#: gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:458
 msgid "Image pixel data corrupt"
 msgstr "Bildpunktsdata är trasigt"
 
 #: gdk-pixbuf/gdk-pixdata.c:402
 #, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "misslyckades med att allokera bildbuffert på %u byte"
+msgid "failed to allocate image buffer of %u byte"
+msgid_plural "failed to allocate image buffer of %u bytes"
+msgstr[0] "misslyckades med att allokera bildbuffert på %u byte"
+msgstr[1] "misslyckades med att allokera bildbuffert på %u byte"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -755,53 +824,77 @@ msgstr "Genvägswidget"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Widgeten som ska övervakas för genvägsändringar"
 
-#: gtk/gtkaction.c:185 gtk/gtkactiongroup.c:117
+#: gtk/gtkaction.c:189 gtk/gtkactiongroup.c:118
 msgid "Name"
 msgstr "Namn"
 
-#: gtk/gtkaction.c:186
+#: gtk/gtkaction.c:190
 msgid "A unique name for the action."
 msgstr "Ett unikt namn för åtgärden."
 
-#: gtk/gtkaction.c:193 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
+#: gtk/gtkaction.c:197 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Etikett"
 
-#: gtk/gtkaction.c:194
+#: gtk/gtkaction.c:198
 msgid "The label used for menu items and buttons that activate this action."
 msgstr ""
 "Etiketten som används för menyposter och knappar som aktiverar denna åtgärd."
 
-#: gtk/gtkaction.c:200
+#: gtk/gtkaction.c:204
 msgid "Short label"
 msgstr "Kort etikett"
 
-#: gtk/gtkaction.c:201
+#: gtk/gtkaction.c:205
 msgid "A shorter label that may be used on toolbar buttons."
 msgstr "En kortare etikett som kan användas på verktygsradsknappar."
 
-#: gtk/gtkaction.c:207
+#: gtk/gtkaction.c:211
 msgid "Tooltip"
 msgstr "Verktygstips"
 
-#: gtk/gtkaction.c:208
+#: gtk/gtkaction.c:212
 msgid "A tooltip for this action."
 msgstr "Ett verktygstips för denna åtgärd."
 
-#: gtk/gtkaction.c:214
+#: gtk/gtkaction.c:218
 msgid "Stock Icon"
 msgstr "Standardikon"
 
-#: gtk/gtkaction.c:215
+#: gtk/gtkaction.c:219
 msgid "The stock icon displayed in widgets representing this action."
 msgstr "Standardikonen som visas i widgetar som representerar denna åtgärd."
 
-#: gtk/gtkaction.c:221 gtk/gtktoolitem.c:168
+#: gtk/gtkaction.c:225 gtk/gtktoolitem.c:154
+msgid "Visible when horizontal"
+msgstr "Synlig då horisontell"
+
+#: gtk/gtkaction.c:226 gtk/gtktoolitem.c:155
+msgid ""
+"Whether the toolbar item is visible when the toolbar is in a horizontal "
+"orientation."
+msgstr ""
+"Huruvida verktygsradsobjektet är synligt då verktygsraden är orienterad "
+"horisontellt."
+
+#: gtk/gtkaction.c:232 gtk/gtktoolitem.c:161
+msgid "Visible when vertical"
+msgstr "Synlig då vertikal"
+
+#: gtk/gtkaction.c:233 gtk/gtktoolitem.c:162
+msgid ""
+"Whether the toolbar item is visible when the toolbar is in a vertical "
+"orientation."
+msgstr ""
+"Huruvida verktygsradsobjektet är synligt då verktygsraden är orienterad "
+"vertikalt."
+
+#: gtk/gtkaction.c:239 gtk/gtktoolitem.c:168
 msgid "Is important"
 msgstr "Är viktig"
 
-#: gtk/gtkaction.c:222
+#: gtk/gtkaction.c:240
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
@@ -809,32 +902,32 @@ msgstr ""
 "Huruvida åtgärden är viktig. Då detta är SANT visar ställföreträdare för "
 "verktygsobjekt för denna åtgärd text i GTK_TOOLBAR_BOTH_HORIZ-läge."
 
-#: gtk/gtkaction.c:228
+#: gtk/gtkaction.c:246
 msgid "Hide if empty"
 msgstr "Dölj om tom"
 
-#: gtk/gtkaction.c:229
+#: gtk/gtkaction.c:247
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "Då detta är SANT döljs tomma menyställföreträdare för denna åtgärd."
 
-#: gtk/gtkaction.c:235 gtk/gtkwidget.c:446
+#: gtk/gtkaction.c:253 gtk/gtkwidget.c:446
 msgid "Sensitive"
 msgstr "Känslig"
 
-#: gtk/gtkaction.c:236
+#: gtk/gtkaction.c:254
 msgid "Whether the action is enabled."
 msgstr "Huruvida åtgärden är aktiverad."
 
-#: gtk/gtkaction.c:242 gtk/gtktreeview.c:551 gtk/gtktreeviewcolumn.c:222
+#: gtk/gtkaction.c:260 gtk/gtktreeview.c:551 gtk/gtktreeviewcolumn.c:222
 #: gtk/gtkwidget.c:439
 msgid "Visible"
 msgstr "Synlig"
 
-#: gtk/gtkaction.c:243
+#: gtk/gtkaction.c:261
 msgid "Whether the action is visible."
 msgstr "Huruvida åtgärden är synlig."
 
-#: gtk/gtkactiongroup.c:118
+#: gtk/gtkactiongroup.c:119
 msgid "A name for the action group."
 msgstr "Ett namn för åtgärdsgruppen."
 
@@ -1260,12 +1353,11 @@ msgstr "calendar:MY"
 
 # I Sverige börjar veckan på måndag
 #
-#. Translate to calendar:week_start:1 if you want Monday to be the
-#. * first day of the week; otherwise translate to calendar:week_start:0.
-#. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
-#. * or calendar:week_start:0 it will not work.
+#. Translate to calendar:week_start:0 if you want Sunday to be the
+#. * first day of the week to calendar:week_start:1 if you want Monday
+#. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:720
+#: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1714,9 +1806,9 @@ msgstr "Huruvida denna tagg påverkar understrykningen"
 msgid "Language set"
 msgstr "Språk inställt"
 
-#: gtk/gtkcellrenderertext.c:450
-msgid "Whether this tag affects the language the text is renderer as"
-msgstr "Huruvida denna tagg påverkar språket texten är renderare som"
+#: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:565
+msgid "Whether this tag affects the language the text is rendered as"
+msgstr "Huruvida denna tagg påverkar språket texten renderas som"
 
 #: gtk/gtkcellrenderertoggle.c:140
 msgid "Toggle state"
@@ -2572,8 +2664,10 @@ msgstr "genvägen %s finns inte"
 
 #: gtk/gtkfilechooserdefault.c:2949
 #, c-format
-msgid "%d bytes"
-msgstr "%d byte"
+msgid "%d byte"
+msgid_plural "%d bytes"
+msgstr[0] "%d byte"
+msgstr[1] "%d byte"
 
 #: gtk/gtkfilechooserdefault.c:2951
 #, c-format
@@ -2808,12 +2902,12 @@ msgstr "Kunde inte konvertera filnamn"
 msgid "(Empty)"
 msgstr "(Tom)"
 
-#: gtk/gtkfilesystemunix.c:343 gtk/gtkfilesystemwin32.c:383
+#: gtk/gtkfilesystemunix.c:343 gtk/gtkfilesystemwin32.c:417
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "fel vid skapande av katalogen \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:386
+#: gtk/gtkfilesystemunix.c:386 gtk/gtkfilesystemwin32.c:458
 msgid "This file system does not support mounting"
 msgstr "Detta filsystem stöder inte montering"
 
@@ -2829,17 +2923,17 @@ msgstr "Detta filsystem stöder inte ikoner"
 msgid "This file system does not support bookmarks"
 msgstr "Detta filsystem stöder inte bokmärken"
 
-#: gtk/gtkfilesystemunix.c:855 gtk/gtkfilesystemwin32.c:1069
+#: gtk/gtkfilesystemunix.c:855 gtk/gtkfilesystemwin32.c:1197
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "fel vid hämtning av information för \"%s\": %s"
 
-#: gtk/gtkfilesystemwin32.c:692
+#: gtk/gtkfilesystemwin32.c:820
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Bokmärkessparande misslyckades (%s)"
 
-#: gtk/gtkfilesystemwin32.c:848
+#: gtk/gtkfilesystemwin32.c:976
 msgid "This file system does not support icons for everything"
 msgstr "Detta filsystem stöder inte ikoner till allt"
 
@@ -3043,7 +3137,7 @@ msgstr ""
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1547
+#: gtk/gtkiconfactory.c:1551
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Fel vid inläsning av ikonen: %s"
@@ -3310,17 +3404,9 @@ msgstr "Vertikal justering"
 msgid "The GtkAdjustment for the vertical position"
 msgstr "GtkAdjustment på den vertikala positionen"
 
-#: gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:238
-msgid "Width"
-msgstr "Bredd"
-
 #: gtk/gtklayout.c:648
 msgid "The width of the layout"
 msgstr "Bredden på layouten"
-
-#: gtk/gtklayout.c:656
-msgid "Height"
-msgstr "Höjd"
 
 #: gtk/gtklayout.c:657
 msgid "The height of the layout"
@@ -4451,162 +4537,166 @@ msgid "_Up"
 msgstr "_Upp"
 
 #: gtk/gtkstock.c:298
+msgid "_Harddisk"
+msgstr "_Hårddisk"
+
+#: gtk/gtkstock.c:299
 msgid "_Help"
 msgstr "_Hjälp"
 
-#: gtk/gtkstock.c:299
+#: gtk/gtkstock.c:300
 msgid "_Home"
 msgstr "_Hem"
 
-#: gtk/gtkstock.c:300
+#: gtk/gtkstock.c:301
 msgid "_Index"
 msgstr "_Index"
 
-#: gtk/gtkstock.c:301
+#: gtk/gtkstock.c:302
 msgid "_Italic"
 msgstr "_Kursiv"
 
-#: gtk/gtkstock.c:302
+#: gtk/gtkstock.c:303
 msgid "_Jump to"
 msgstr "_Hoppa till"
 
-#: gtk/gtkstock.c:303
+#: gtk/gtkstock.c:304
 msgid "_Center"
 msgstr "_Centrera"
 
-#: gtk/gtkstock.c:304
+#: gtk/gtkstock.c:305
 msgid "_Fill"
 msgstr "_Fyll"
 
-#: gtk/gtkstock.c:305
+#: gtk/gtkstock.c:306
 msgid "_Left"
 msgstr "_Vänster"
 
-#: gtk/gtkstock.c:306
+#: gtk/gtkstock.c:307
 msgid "_Right"
 msgstr "_Höger"
 
-#: gtk/gtkstock.c:307
+#: gtk/gtkstock.c:308
 msgid "_New"
 msgstr "_Ny"
 
-#: gtk/gtkstock.c:308
+#: gtk/gtkstock.c:309
 msgid "_No"
 msgstr "_Nej"
 
-#: gtk/gtkstock.c:309
+#: gtk/gtkstock.c:310
 msgid "_OK"
 msgstr "_OK"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:311
 msgid "_Open"
 msgstr "_Öppna"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:312
 msgid "_Paste"
 msgstr "Klistra _in"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:313
 msgid "_Preferences"
 msgstr "_Inställningar"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:314
 msgid "_Print"
 msgstr "Skriv _ut"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:315
 msgid "Print Pre_view"
 msgstr "_Förhandsgranska"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:316
 msgid "_Properties"
 msgstr "_Egenskaper"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:317
 msgid "_Quit"
 msgstr "_Avsluta"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:318
 msgid "_Redo"
 msgstr "_Gör om"
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:319
 msgid "_Refresh"
 msgstr "_Uppdatera"
 
-#: gtk/gtkstock.c:319
+#: gtk/gtkstock.c:320
 msgid "_Remove"
 msgstr "_Ta bort"
 
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:321
 msgid "_Revert"
 msgstr "_Återställ"
 
-#: gtk/gtkstock.c:321
+#: gtk/gtkstock.c:322
 msgid "_Save"
 msgstr "_Spara"
 
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:323
 msgid "Save _As"
 msgstr "Spara so_m"
 
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:324
 msgid "_Color"
 msgstr "_Färg"
 
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:325
 msgid "_Font"
 msgstr "_Typsnitt"
 
-#: gtk/gtkstock.c:325
+#: gtk/gtkstock.c:326
 msgid "_Ascending"
 msgstr "_Stigande"
 
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:327
 msgid "_Descending"
 msgstr "_Fallande"
 
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:328
 msgid "_Spell Check"
 msgstr "_Stavningskontrollera"
 
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:329
 msgid "_Stop"
 msgstr "_Stopp"
 
-#: gtk/gtkstock.c:329
+#: gtk/gtkstock.c:330
 msgid "_Strikethrough"
 msgstr "_Genomstryk"
 
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:331
 msgid "_Undelete"
 msgstr "_Återskapa"
 
-#: gtk/gtkstock.c:331
+#: gtk/gtkstock.c:332
 msgid "_Underline"
 msgstr "_Stryk under"
 
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:333
 msgid "_Undo"
 msgstr "_Ångra"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:334
 msgid "_Yes"
 msgstr "_Ja"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:335
 msgid "Zoom _100%"
 msgstr "Zooma _100%"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:336
 msgid "Zoom to _Fit"
 msgstr "Zooma så att det _passar"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:337
 msgid "Zoom _In"
 msgstr "Zooma _in"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:338
 msgid "Zoom _Out"
 msgstr "Zooma _ut"
 
@@ -4955,10 +5045,6 @@ msgstr "Justering inställd"
 msgid "Whether this tag affects paragraph justification"
 msgstr "Huruvida denna tagg påverkar styckets justering"
 
-#: gtk/gtktexttag.c:565
-msgid "Whether this tag affects the language the text is rendered as"
-msgstr "Huruvida denna tagg påverkar språket texten renderas som"
-
 #: gtk/gtktexttag.c:568
 msgid "Left margin set"
 msgstr "Vänstermarginal inställd"
@@ -5271,30 +5357,6 @@ msgstr "Ikonwidget"
 msgid "Icon widget to display in the item"
 msgstr "Ikonsamling att visa i objektet"
 
-#: gtk/gtktoolitem.c:154
-msgid "Visible when horizontal"
-msgstr "Synlig då horisontell"
-
-#: gtk/gtktoolitem.c:155
-msgid ""
-"Whether the toolbar item is visible when the toolbar is in a horizontal "
-"orientation."
-msgstr ""
-"Huruvida verktygsradsobjektet är synligt då verktygsraden är orienterad "
-"horisontellt."
-
-#: gtk/gtktoolitem.c:161
-msgid "Visible when vertical"
-msgstr "Synlig då vertikal"
-
-#: gtk/gtktoolitem.c:162
-msgid ""
-"Whether the toolbar item is visible when the toolbar is in a vertical "
-"orientation."
-msgstr ""
-"Huruvida verktygsradsobjektet är synligt då verktygsraden är orienterad "
-"vertikalt."
-
 #: gtk/gtktoolitem.c:169
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
@@ -5566,7 +5628,7 @@ msgstr "Oväntad starttagg \"%s\" på rad %d tecken %d"
 msgid "Unexpected character data on line %d char %d"
 msgstr "Oväntade teckendata på rad %d tecken %d"
 
-#: gtk/gtkuimanager.c:1923
+#: gtk/gtkuimanager.c:1928
 msgid "Empty"
 msgstr "Tom"
 
@@ -6041,6 +6103,21 @@ msgstr "X-inmatningsmetod"
 msgid "Could not get information for file '%s': %s"
 msgstr "Kunde inte hämta information för filen \"%s\": %s"
 
+#~ msgid "Pixel"
+#~ msgstr "Bildpunkt"
+
+#~ msgid "failed to allocate image buffer of %u bytes"
+#~ msgstr "misslyckades med att allokera bildbuffert på %u byte"
+
+#~ msgid "%d bytes"
+#~ msgstr "%d byte"
+
+#~ msgid "Harddisk"
+#~ msgstr "Hårddisk"
+
+#~ msgid "Whether this tag affects the language the text is renderer as"
+#~ msgstr "Huruvida denna tagg påverkar språket texten är renderare som"
+
 #~ msgid "File system"
 #~ msgstr "Filsystem"
 
@@ -6263,9 +6340,6 @@ msgstr "Kunde inte hämta information för filen \"%s\": %s"
 
 #~ msgid "Save"
 #~ msgstr "Spara"
-
-#~ msgid "Close"
-#~ msgstr "Stäng"
 
 #~ msgid "Filename to load and siplay."
 #~ msgstr "Filnamn att läsa in och visa."
