@@ -1,3 +1,8 @@
+Wed Nov 13 13:50:25 2002  Eric Warmenhoven <warmenhoven@yahoo.com>
+
+	* gdk/linux-fb/gdkinput.c: add gdk_display_get_devices to fix
+	compilation
+
 Wed Nov 13 15:52:53 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcombo.c (gtk_combo_activate): Fix warning.

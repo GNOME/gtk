@@ -110,6 +110,12 @@ gdk_devices_list (void)
   return _gdk_input_devices;
 }
 
+GList *
+gdk_display_list_devices (GdkDisplay *dpy)
+{
+  return _gdk_input_devices;
+}
+
 void
 gdk_device_set_source (GdkDevice *device,
 		       GdkInputSource source)
