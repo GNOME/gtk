@@ -301,10 +301,15 @@ static gboolean            cmpl_updated_dir        (CompletionState* cmpl_state)
  */
 static gchar*              cmpl_reference_position (CompletionState* cmpl_state);
 
+#if 0
+/* This doesn't work currently and would require changes
+ * to fnmatch.c to get working.
+ */
 /* backing up: if cmpl_completion_matches returns NULL, you may query
  * the index of the last completable character into cmpl_updated_text.
  */
 static gint                cmpl_last_valid_char    (CompletionState* cmpl_state);
+#endif
 
 /* When the user selects a non-directory, call cmpl_completion_fullname
  * to get the full name of the selected file.
@@ -2101,7 +2106,6 @@ gtk_file_selection_populate (GtkFileSelection *fs,
   gchar* sel_text;
   gint did_recurse = FALSE;
   gint possible_count = 0;
-  gint selection_index = -1;
   
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
@@ -2195,8 +2199,6 @@ gtk_file_selection_populate (GtkFileSelection *fs,
         }
       else
         {
-          selection_index = cmpl_last_valid_char (cmpl_state) -
-                            (strlen (rel_path) - strlen (rem_path));
 	  if (fs->selection_entry)
 	    gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), rem_path);
         }
@@ -2209,9 +2211,8 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 
   if (!did_recurse)
     {
-      if (fs->selection_entry)
-	gtk_editable_set_position (GTK_EDITABLE (fs->selection_entry),
-				   selection_index);
+      if (fs->selection_entry && try_complete)
+	gtk_editable_set_position (GTK_EDITABLE (fs->selection_entry), -1);
 
       if (fs->selection_entry)
 	{
@@ -2540,11 +2541,16 @@ cmpl_reference_position (CompletionState *cmpl_state)
   return cmpl_state->reference_dir->fullname;
 }
 
+#if 0
+/* This doesn't work currently and would require changes
+ * to fnmatch.c to get working.
+ */
 static gint
 cmpl_last_valid_char (CompletionState *cmpl_state)
 {
   return cmpl_state->last_valid_char;
 }
+#endif
 
 static gchar*
 cmpl_completion_fullname (const gchar     *text,
