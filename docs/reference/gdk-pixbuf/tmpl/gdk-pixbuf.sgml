@@ -1,36 +1,41 @@
 <!-- ##### SECTION Title ##### -->
-gdk-pixbuf
+The GdkPixbuf Structure
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Information that describes an image.
 
 <!-- ##### SECTION Long_Description ##### -->
-<para>
 
-</para>
-
+  <para>
+    The <structname>GdkPixbuf</structname> structure contains
+    information that describes an image in memory.  It is actually a
+    simple wrapper that adds reference counting capabilities to an
+    #ArtPixBuf structure.
+  </para>
 
 <!-- ##### SECTION See_Also ##### -->
-<para>
-
-</para>
-
+  <para>
+    #ArtPixBuf
+  </para>
 
 <!-- ##### STRUCT GdkPixbuf ##### -->
-<para>
+  <para>
+    This is the main structure in the GdkPixbuf library.  This
+    structure adds reference counting capabilities to an #ArtPixBuf
+    structure.
+  </para>
 
-</para>
-
-@ref_count: 
-@art_pixbuf: 
+@ref_count: Reference count.
+@art_pixbuf: An #ArtPixBuf that actually contains the description of
+the image data.
 
 <!-- ##### FUNCTION gdk_pixbuf_get_format ##### -->
 <para>
 
 </para>
 
-@pixbuf: 
-@Returns: 
+@pixbuf:
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_n_channels ##### -->
@@ -38,8 +43,8 @@ gdk-pixbuf
 
 </para>
 
-@pixbuf: 
-@Returns: 
+@pixbuf:
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_has_alpha ##### -->
@@ -47,8 +52,8 @@ gdk-pixbuf
 
 </para>
 
-@pixbuf: 
-@Returns: 
+@pixbuf:
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_bits_per_sample ##### -->
@@ -56,8 +61,8 @@ gdk-pixbuf
 
 </para>
 
-@pixbuf: 
-@Returns: 
+@pixbuf:
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_pixels ##### -->
@@ -65,8 +70,8 @@ gdk-pixbuf
 
 </para>
 
-@pixbuf: 
-@Returns: 
+@pixbuf:
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_width ##### -->
@@ -74,8 +79,8 @@ gdk-pixbuf
 
 </para>
 
-@pixbuf: 
-@Returns: 
+@pixbuf:
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_height ##### -->
@@ -83,8 +88,8 @@ gdk-pixbuf
 
 </para>
 
-@pixbuf: 
-@Returns: 
+@pixbuf:
+@Returns:
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_rowstride ##### -->
@@ -92,7 +97,12 @@ gdk-pixbuf
 
 </para>
 
-@pixbuf: 
-@Returns: 
+@pixbuf:
+@Returns:
 
-
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->

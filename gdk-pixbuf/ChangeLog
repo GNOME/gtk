@@ -1,5 +1,16 @@
 1999-11-04  Federico Mena Quintero  <federico@redhat.com>
 
+	* doc/tmpl/gdk-pixbuf.sgml: Populated.
+
+	* doc/tmpl/refcounting.sgml: Populated.
+
+	* doc/tmpl/file-loading.sgml: Populated.
+
+	* src/gdk-pixbuf.c: Added documentation comments.
+
+	* src/gdk-pixbuf-io.c (gdk_pixbuf_new_from_file): Added
+	documentation comments.
+
 	* doc/: Finished integrating the documentation framework.
 
 1999-11-03  Federico Mena Quintero  <federico@redhat.com>

@@ -1,25 +1,30 @@
 <!-- ##### SECTION Title ##### -->
-refcounting
+Reference Counting
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Functions to perform reference counting on a #GdkPixbuf.
 
 <!-- ##### SECTION Long_Description ##### -->
-<para>
-
-</para>
-
+  <para>
+    #GdkPixbuf structures are reference counted.  This means that
+    an application can share a single pixbuf among many parts of the
+    code.  When a piece of the program needs to keep a pointer to a
+    pixbuf, it should add a reference to it.  When it no longer needs
+    the pixbuf, it should subtract a reference.  The pixbuf will be
+    destroyed when its reference count drops to zero.  Newly-created
+    #GdkPixbuf structures start with a reference count of one.
+  </para>
 
 <!-- ##### SECTION See_Also ##### -->
-<para>
-
-</para>
-
+  <para>
+    #GdkPixbuf
+    #ArtPixBuf
+  </para>
 
 <!-- ##### FUNCTION gdk_pixbuf_ref ##### -->
-<para>
+  <para>
 
-</para>
+  </para>
 
 @pixbuf: 
 
@@ -32,3 +37,9 @@ refcounting
 @pixbuf: 
 
 
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->

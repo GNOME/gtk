@@ -1,20 +1,18 @@
 <!-- ##### SECTION Title ##### -->
-creating
+Creating a Pixbuf from Data in Memory
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Creating a pixbuf from image data that is already in memory.
 
 <!-- ##### SECTION Long_Description ##### -->
-<para>
+  <para>
 
-</para>
-
+  </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
-
 
 <!-- ##### FUNCTION gdk_pixbuf_new_from_art_pixbuf ##### -->
 <para>
@@ -62,4 +60,9 @@ creating
 @data: 
 @Returns: 
 
-
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->

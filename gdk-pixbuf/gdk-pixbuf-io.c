@@ -221,6 +221,18 @@ gdk_pixbuf_get_module (gchar *buffer, gint size)
 	return NULL;
 }
 
+/**
+ * gdk_pixbuf_new_from_file:
+ * @filename: Name of file to load.
+ * 
+ * Creates a new pixbuf by loading an image from a file.  The file format is
+ * detected automatically.
+ * 
+ * Return value: A newly-created pixbuf, or NULL if any of several error
+ * conditions occurred:  the file could not be opened, there was no loader for
+ * the file's format, there was not enough memory to allocate the image buffer,
+ * or the image file contained invalid data.
+ **/
 GdkPixbuf *
 gdk_pixbuf_new_from_file (const char *filename)
 {

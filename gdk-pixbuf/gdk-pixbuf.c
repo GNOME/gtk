@@ -107,6 +107,10 @@ free_buffer (gpointer user_data, gpointer data)
 	free (data);
 }
 
+
+
+/* Create an empty pixbuf */
+
 /**
  * gdk_pixbuf_new:
  * @format: Image format.
@@ -114,11 +118,11 @@ free_buffer (gpointer user_data, gpointer data)
  * @bits_per_sample: Number of bits per color sample.
  * @width: Width of image in pixels.
  * @height: Height of image in pixels.
- * 
+ *
  * Creates a new &GdkPixbuf structure and allocates a buffer for it.  The buffer
  * has an optimal rowstride.  Note that the buffer is not cleared; you will have
  * to fill it completely.
- * 
+ *
  * Return value: A newly-created &GdkPixbuf, or NULL if not enough memory
  * could be allocated for the image buffer.
  **/
@@ -148,8 +152,18 @@ gdk_pixbuf_new (ArtPixFormat format, gboolean has_alpha, int bits_per_sample,
 					 free_buffer, NULL);
 }
 
+
 
 /* Convenience functions */
+
+/**
+ * gdk_pixbuf_get_format:
+ * @pixbuf: A pixbuf.
+ *
+ * Queries the image format (color model) of a pixbuf.
+ *
+ * Return value: Image format.
+ **/
 ArtPixFormat
 gdk_pixbuf_get_format (GdkPixbuf *pixbuf)
 {
@@ -160,6 +174,14 @@ gdk_pixbuf_get_format (GdkPixbuf *pixbuf)
 	return (pixbuf->art_pixbuf->format);
 }
 
+/**
+ * gdk_pixbuf_get_n_channels:
+ * @pixbuf: A pixbuf.
+ *
+ * Queries the number of channels of a pixbuf.
+ *
+ * Return value: Number of channels.
+ **/
 int
 gdk_pixbuf_get_n_channels (GdkPixbuf *pixbuf)
 {
@@ -169,6 +191,14 @@ gdk_pixbuf_get_n_channels (GdkPixbuf *pixbuf)
 	return (pixbuf->art_pixbuf->n_channels);
 }
 
+/**
+ * gdk_pixbuf_get_has_alpha:
+ * @pixbuf: A pixbuf.
+ *
+ * Queries whether a pixbuf has an alpha channel (opacity information).
+ *
+ * Return value: TRUE if it has an alpha channel, FALSE otherwise.
+ **/
 int
 gdk_pixbuf_get_has_alpha (GdkPixbuf *pixbuf)
 {
@@ -178,6 +208,14 @@ gdk_pixbuf_get_has_alpha (GdkPixbuf *pixbuf)
 	return (pixbuf->art_pixbuf->has_alpha);
 }
 
+/**
+ * gdk_pixbuf_get_bits_per_sample:
+ * @pixbuf: A pixbuf.
+ *
+ * Queries the number of bits per color sample in a pixbuf.
+ *
+ * Return value: Number of bits per color sample.
+ **/
 int
 gdk_pixbuf_get_bits_per_sample (GdkPixbuf *pixbuf)
 {
@@ -187,6 +225,14 @@ gdk_pixbuf_get_bits_per_sample (GdkPixbuf *pixbuf)
 	return (pixbuf->art_pixbuf->bits_per_sample);
 }
 
+/**
+ * gdk_pixbuf_get_pixels:
+ * @pixbuf: A pixbuf.
+ *
+ * Queries a pointer to the pixel data of a pixbuf.
+ *
+ * Return value: A pointer to the pixbuf's pixel data.
+ **/
 guchar *
 gdk_pixbuf_get_pixels (GdkPixbuf *pixbuf)
 {
@@ -196,6 +242,14 @@ gdk_pixbuf_get_pixels (GdkPixbuf *pixbuf)
 	return (pixbuf->art_pixbuf->pixels);
 }
 
+/**
+ * gdk_pixbuf_get_width:
+ * @pixbuf: A pixbuf.
+ *
+ * Queries the width of a pixbuf.
+ *
+ * Return value: Width in pixels.
+ **/
 int
 gdk_pixbuf_get_width (GdkPixbuf *pixbuf)
 {
@@ -205,6 +259,14 @@ gdk_pixbuf_get_width (GdkPixbuf *pixbuf)
 	return (pixbuf->art_pixbuf->width);
 }
 
+/**
+ * gdk_pixbuf_get_height:
+ * @pixbuf: A pixbuf.
+ *
+ * Queries the height of a pixbuf.
+ *
+ * Return value: Height in pixels.
+ **/
 int
 gdk_pixbuf_get_height (GdkPixbuf *pixbuf)
 {
@@ -214,6 +276,14 @@ gdk_pixbuf_get_height (GdkPixbuf *pixbuf)
 	return (pixbuf->art_pixbuf->height);
 }
 
+/**
+ * gdk_pixbuf_get_rowstride:
+ * @pixbuf: A pixbuf.
+ *
+ * Queries the rowstride of a pixbuf, or the number of bytes between rows.
+ *
+ * Return value: Number of bytes between rows.
+ **/
 int
 gdk_pixbuf_get_rowstride (GdkPixbuf *pixbuf)
 {
