@@ -1,3 +1,9 @@
+2004-11-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* xdgmimeparent.c (_xdg_mime_parent_read_from_file): 
+	Initialize the parent field of the newly allocate list 
+	entry.  (#159330, Alex Larsson)
+
 Fri Nov 19 15:10:32 2004  Manish Singh  <yosh@gimp.org>
 
 	* xdgmime.c: Don't put /* within a comment.

@@ -163,6 +163,7 @@ _xdg_mime_parent_read_from_file (XdgParentList *list,
 				       alloc * sizeof (XdgMimeParents));
 	    }
 	  list->parents[list->n_mimes].mime = strdup (line);
+	  list->parents[list->n_mimes].parent = NULL;
 	  entry = &(list->parents[list->n_mimes]);
 	  list->n_mimes++;
 	}
