@@ -2844,6 +2844,14 @@ gdk_synthesize_click (GdkEvent *event,
 static void
 gdk_exit_func ()
 {
+  static gboolean in_gdk_exit_func = FALSE;
+
+  /* This is to avoid an infinite loop if a program segfaults in
+     an atexit() handler (and yes, it does happen, especially if a program
+     has trounced over memory too badly for even g_print to work) */
+  if(in_gdk_exit_func == TRUE) return;
+  in_gdk_exit_func = TRUE;
+
   if (initialized)
     {
 #ifdef USE_XIM
