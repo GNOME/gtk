@@ -193,6 +193,12 @@ GtkWidget* gtk_get_event_widget	   (GdkEvent	   *event);
 void       gtk_propagate_event     (GtkWidget         *widget,
 				    GdkEvent          *event);
 
+gboolean _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
+                                   GValue                *return_accu,
+                                   const GValue          *handler_return,
+                                   gpointer               dummy);
+
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -1,3 +1,26 @@
+Mon Apr  2 16:41:08 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* Applied patch from Ron Steinke to add signal accumulators
+	so that signals with the convention 'TRUE return means
+	handled' stop emission on a TRUE return.
+
+	* gtk/gtkmain.[ch]: Add private accumulator 
+	_gtk_boolean_handled_accumulator, used throughout GTK+.
+	
+	* gtk/gtkspinbutton.c: Add accumulator for ::output.
+
+	* gtk/gtktipsquery.c: Add accumulator for ::widget_selected
+	
+	* gtk/gtkwidget.c: Add accumulators for event signals,
+	::drag_motion, ::drag_drop. Use _gtk_boolean_handled_accumator
+	for ::mnemonic-activate.
+
+	* gtk/gtkwindow.c: Add accumulator for ::frame_event
+
+Mon Apr  2 16:24:21 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c: Add missing include.
+
 Mon Apr  2 16:56:15 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkmarshal.list (VOID:BOXED,BOXED,BOXED,BOXED): new

@@ -1683,3 +1683,17 @@ gtk_print (gchar *str)
     gtk_widget_show (window);
 }
 #endif
+
+gboolean
+_gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
+				  GValue                *return_accu,
+				  const GValue          *handler_return,
+				  gpointer               dummy)
+{
+  gboolean val;
+
+  val = g_value_get_boolean (handler_return);
+  g_value_set_boolean (return_accu, val);
+  
+  return !val;
+}

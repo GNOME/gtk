@@ -32,6 +32,7 @@ style "global-style-properties"
 {
 #  xthickness = 20
   GtkSpinButton::shadow_type = etched-out
+  GtkEntry::cursor_color = { 1.0, 0.0, 0.0 }
 }
 class "GtkWidget" style "global-style-properties"
 
