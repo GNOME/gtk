@@ -1907,7 +1907,7 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
   *x = point.x;
   *y = point.y;
 
-  hwnd = WindowFromPoint (point);
+  hwnd = WindowFromPoint (screen_point);
   if (hwnd != NULL)
     {
       gboolean done = FALSE;
@@ -2003,7 +2003,7 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
       *win_y = point.y - rect.top;
     }
 
-  GDK_NOTE (MISC, g_print ("gdk_window_at_pointer: +%ld+%ld %p%s\n",
+  GDK_NOTE (MISC, g_print ("_gdk_windowing_window_at_pointer: +%ld+%ld %p%s\n",
 			   point.x, point.y,
 			   hwnd,
 			   (window == NULL ? " NULL" : "")));
