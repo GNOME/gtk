@@ -827,7 +827,7 @@ gdk_window_is_viewable (GdkWindow *window)
 	 (private != (GdkWindowObject *)root_window) &&
 	 (GDK_WINDOW_TYPE (private) != GDK_WINDOW_FOREIGN))
     {
-      if (GDK_WINDOW_DESTROYED (window) || !GDK_WINDOW_IS_MAPPED (window))
+      if (GDK_WINDOW_DESTROYED (private) || !GDK_WINDOW_IS_MAPPED (private))
 	return FALSE;
       
       private = (GdkWindowObject *)private->parent;
