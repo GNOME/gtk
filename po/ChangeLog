@@ -1,3 +1,8 @@
+2003-01-15  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* vi.po: Updated Vietnamese file
+	* el.po,hi.po,ru.po: fixed syntax errors
+
 2003-01-15  Kang Jeong-Hee  <Keizi@mail.co.kr>
 
 	* ko.po: Updated Korean translation by

@@ -5,7 +5,7 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: gtk2 VERSION\n"
 "POT-Creation-Date: 2002-12-20 15:52-0500\n"
 "PO-Revision-Date: 2002-06-08 14:30+0530\n"
 "Last-Translator: Anurag Seetha <anuragseetha@yahoo.com>\n"
@@ -65,7 +65,7 @@ msgid "Unrecognized image file format"
 msgstr "अपरिचित इमेज फाइल प्रारूप"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:758
-#, c-format
+#, fuzzy, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "इमेज %s को लोड करने में असफल"
 
@@ -172,7 +172,7 @@ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF लोडर (%s) में आंतरिक त्रुटि"
 
 #: gdk-pixbuf/io-gif.c:500
-#, c-format
+#, fuzzy, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "GIF इमेज लोडर इस इमेज को समझ नहीं पा रहा है"
 
@@ -2006,7 +2006,7 @@ msgstr ""
 "इस फोल्डर के नाम %s में Symbols मौजूद है जिन्हें फाइलनाम में प्रयुक्त नहीं किया जा सकता"
 
 #: gtk/gtkfilesel.c:1388
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
@@ -2017,7 +2017,7 @@ msgid "You probably used symbols not allowed in filenames."
 msgstr "आपने शायद Symbols का प्रयोग किया है जो फाइलनाम में प्रयुक्त नहीं किए जा सकते"
 
 #: gtk/gtkfilesel.c:1397
-#, c-format
+#, fuzzy, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "फोल्डर %s के निर्माण में त्रुटि\n"
 
@@ -2040,7 +2040,7 @@ msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "फाइलनाम \"%s\" में Symbols है जिनको फाइलनाम में प्रयुक्त नहीं किया जा सकता"
 
 #: gtk/gtkfilesel.c:1521
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
@@ -2070,14 +2070,14 @@ msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "इस फाइल नाम %s में Symbols है जिन्हें फाइलनाम में प्रयुक्त नहीं किया जा सकता"
 
 #: gtk/gtkfilesel.c:1628
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr "फाइलनाम को %s में बदलने में त्रुटि %s"
 
 #: gtk/gtkfilesel.c:1642
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
@@ -2108,7 +2108,7 @@ msgid "_Selection: "
 msgstr "चयनित"
 
 #: gtk/gtkfilesel.c:3077
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
