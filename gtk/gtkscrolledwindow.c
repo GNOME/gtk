@@ -57,6 +57,8 @@
 
 #define SCROLLBAR_SPACING(w) (GTK_SCROLLED_WINDOW_CLASS (GTK_OBJECT (w)->klass)->scrollbar_spacing)
 
+#define DEFAULT_SCROLLBAR_SPACING  3
+
 enum {
   ARG_0,
   ARG_HADJUSTMENT,
@@ -175,7 +177,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   container_class->remove = gtk_scrolled_window_remove;
   container_class->forall = gtk_scrolled_window_forall;
 
-  class->scrollbar_spacing = 5;
+  class->scrollbar_spacing = DEFAULT_SCROLLBAR_SPACING;
 }
 
 static void

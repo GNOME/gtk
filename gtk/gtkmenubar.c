@@ -28,7 +28,7 @@ enum {
 };
 
 
-#define BORDER_SPACING  2
+#define BORDER_SPACING  0
 #define CHILD_SPACING   3
 
 
