@@ -1,3 +1,8 @@
+2003-04-03  Matthias Clasen  <maclas@gmx.de>
+
+	* demos/gtk-demo/main.c (demo_find_file): Only use files from the
+	current directory if it looks like the srcdir.  (#109357)
+
 Wed Apr  2 23:02:26 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkbutton.[ch] (gtk_button_class_init): add property

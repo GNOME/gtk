@@ -45,7 +45,8 @@ demo_find_file (const char *base,
 {
   g_return_val_if_fail (err == NULL || *err == NULL, NULL);
   
-  if (g_file_test (base, G_FILE_TEST_EXISTS))
+  if (g_file_test ("gtk-logo-rgb.gif", G_FILE_TEST_EXISTS) &&
+      g_file_test (base, G_FILE_TEST_EXISTS))
     return g_strdup (base);
   else
     {
