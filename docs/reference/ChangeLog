@@ -1,5 +1,11 @@
 2001-11-11  Matthias Clasen  <matthiasc@poet.de>
 
+	* gdk-pixbuf/gdk-pixbuf-rendering.sgml, 
+	gdk-pixbuf/gdk-pixbuf-from-drawables.sgml: new files explaining
+	where the code for rendering pixbufs lives. (#61151) 
+	
+	* gdk-pixbuf/gdk-pixbuf.sgml: Use the new files.
+
 	* gtk/tmpl/gtkaccellabel.sgml, gtk/tmpl/gtkcombo.sgml,
 	gtk/tmpl/gtkentry.sgml, gtk/tmpl/gtkhscrollbar.sgml,
 	gtk/tmpl/gtkvscrollbar.sgml, gtk/tmpl/gtktoolbar.sgml,

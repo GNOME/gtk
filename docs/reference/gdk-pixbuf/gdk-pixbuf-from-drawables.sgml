@@ -1,0 +1,25 @@
+<refentry id="gdk-pixbuf-gdk-pixbuf-from-drawables">
+<refmeta>
+<refentrytitle>Drawables to Pixbufs</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GDK-PIXBUF Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Drawables to Pixbufs</refname><refpurpose>Getting parts of a GDK drawable's image data into a pixbuf.</refpurpose>
+</refnamediv>
+
+<refsect1>
+<title>Description</title>
+  <para>
+    The functions to take the image data from a GDK drawable and dump it 
+    into a pixbuf are contained in GDK, see the 
+    <link linkend="gdk-Pixbufs">Pixbufs</link> section of the GDK 
+    documentation.
+  </para>
+</refsect1>
+
+
+
+
+</refentry>

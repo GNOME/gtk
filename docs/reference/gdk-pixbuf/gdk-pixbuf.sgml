@@ -7,6 +7,8 @@
 <!entity gdk-pixbuf-creating SYSTEM "sgml/creating.sgml">
 <!entity gdk-pixbuf-inline SYSTEM "sgml/inline.sgml">
 <!entity gdk-pixbuf-scaling SYSTEM "sgml/scaling.sgml">
+<!entity gdk-pixbuf-rendering SYSTEM "gdk-pixbuf-rendering.sgml">
+<!entity gdk-pixbuf-from-drawables SYSTEM "gdk-pixbuf-from-drawables.sgml">
 <!entity gdk-pixbuf-util SYSTEM "sgml/util.sgml">
 <!entity gdk-pixbuf-animation SYSTEM "sgml/animation.sgml">
 <!entity GdkPixbufLoader SYSTEM "sgml/gdk-pixbuf-loader.sgml">
@@ -96,6 +98,8 @@
     &gdk-pixbuf-creating;
     &gdk-pixbuf-inline;
     &gdk-pixbuf-scaling;
+    &gdk-pixbuf-rendering;
+    &gdk-pixbuf-from-drawables;
     &gdk-pixbuf-util;
     &gdk-pixbuf-animation;
 
