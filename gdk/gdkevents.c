@@ -297,7 +297,8 @@ gdk_event_copy (GdkEvent *event)
   new_event = gdk_event_new ();
   
   *new_event = *event;
-  gdk_window_ref (new_event->any.window);
+  if (new_event->any.window)
+    gdk_window_ref (new_event->any.window);
   
   switch (event->any.type)
     {

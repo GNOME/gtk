@@ -1,3 +1,8 @@
+Wed Oct 25 20:10:57 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkevents.c (gdk_event_copy): Only ref the window if
+	it isn't NULL.
+
 2000-11-01  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtklabel.c (gtk_label_set_attributes): Set a PangoAttrList
