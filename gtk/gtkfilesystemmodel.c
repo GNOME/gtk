@@ -45,6 +45,7 @@ struct _GtkFileSystemModel
   GtkFileInfoType types;
   FileModelNode  *roots;
   GtkFileFolder  *root_folder;
+  GtkFilePath    *root_path;
 
   GtkFileSystemModelFilter filter_func;
   gpointer filter_data;
@@ -143,8 +144,10 @@ static void               file_model_node_clear        (GtkFileSystemModel *mode
 static FileModelNode *    file_model_node_get_children (GtkFileSystemModel *model,
 							FileModelNode      *node);
 
+#if 0
 static void roots_changed_callback (GtkFileSystem      *file_system,
 				    GtkFileSystemModel *model);
+#endif
 				    
 static void deleted_callback       (GtkFileFolder *folder,
 				    FileModelNode *node);
@@ -539,9 +542,7 @@ gtk_file_system_model_unref_node (GtkTreeModel *tree_model,
 /**
  * _gtk_file_system_model_new:
  * @file_system: an object implementing #GtkFileSystem
- * @root_path: the path of root of the file system to display,
- *            or %NULL to display starting from the
- *            root or roots of the fielsystem.
+ * @root_path: the path of root of the file system to display
  * @max_depth: the maximum depth from the children of @root_path
  *             or the roots of the file system to display in
  *             the file selector). A depth of 0 displays
@@ -571,6 +572,7 @@ _gtk_file_system_model_new (GtkFileSystem     *file_system,
   GSList *tmp_list;
 
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (root_path != NULL, NULL);
 
   model = g_object_new (GTK_TYPE_FILE_SYSTEM_MODEL, NULL);
   model->file_system = g_object_ref (file_system);
@@ -583,7 +585,8 @@ _gtk_file_system_model_new (GtkFileSystem     *file_system,
   if (root_path)
     {
       GSList *child_paths;
-      
+
+      model->root_path = gtk_file_path_copy (root_path);
       model->root_folder = gtk_file_system_get_folder (file_system, root_path,
 						       model->types,
 						       NULL);   /* NULL-GError */
@@ -605,12 +608,14 @@ _gtk_file_system_model_new (GtkFileSystem     *file_system,
 				   G_CALLBACK (root_files_removed_callback), model, 0);
 	}
     }
+#if 0
   else
     {
       roots = gtk_file_system_list_roots (file_system);
       g_signal_connect_object (file_system, "roots-changed",
 			       G_CALLBACK (roots_changed_callback), model, 0);
     }
+#endif
 
   roots = gtk_file_paths_sort (roots);
   
@@ -859,16 +864,14 @@ find_and_ref_path (GtkFileSystemModel  *model,
   FileModelNode *child_node;
   GtkFileFolder *folder;
 
-  if (!gtk_file_system_get_parent (model->file_system, path, &parent_path, NULL))
+  if (gtk_file_path_compare (path, model->root_path) == 0
+      || !gtk_file_system_get_parent (model->file_system, path, &parent_path, NULL))
     return NULL;
 
   if (parent_path)
     {
       parent_node = find_and_ref_path (model, parent_path, cleanups);
       gtk_file_path_free (parent_path);
-
-      if (!parent_node)
-	return NULL;
     }
   else
     parent_node = NULL;
@@ -1023,6 +1026,7 @@ file_model_node_get_info (GtkFileSystemModel *model,
 						 node->path,
 						 NULL);	/* NULL-GError */
 	}
+#if 0
       else
 	{
 	  node->info = gtk_file_system_get_root_info (model->file_system,
@@ -1030,6 +1034,7 @@ file_model_node_get_info (GtkFileSystemModel *model,
 						      model->types,
 						      NULL);  /* NULL-GError */
 	}
+#endif
     }
 
   return node->info;
@@ -1557,6 +1562,7 @@ do_files_removed (GtkFileSystemModel *model,
   g_slist_free (sorted_paths);
 }
 
+#if 0
 static void
 roots_changed_callback (GtkFileSystem      *file_system,
 			GtkFileSystemModel *model)
@@ -1653,6 +1659,7 @@ roots_changed_callback (GtkFileSystem      *file_system,
   g_slist_free (new_roots);
   gtk_tree_path_free (path);
 }
+#endif
 
 static void
 deleted_callback (GtkFileFolder      *folder,

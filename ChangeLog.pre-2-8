@@ -1,3 +1,39 @@
+2004-01-16  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilesystem.h (struct _GtkFileSystemIface): New
+	get_volume_for_path() method.
+	(struct _GtkFileSystemIface): Finally removed the list_roots() and
+	get_root_info() methods, and the "roots-changed" signal.
+
+	* gtk/gtkfilesystem.c (gtk_file_system_get_volume_for_path): New
+	function.
+	(gtk_file_system_list_roots): Removed.
+	(gtk_file_system_get_root_info): Removed.
+
+	* gtk/gtkfilesystemunix.c
+	(gtk_file_system_unix_get_volume_for_path): Implement.
+	(get_root_volume): New helper function.
+	(gtk_file_system_unix_list_volumes): Use get_root_volume().
+	(gtk_file_system_unix_list_roots): Removed.
+	(gtk_file_system_unix_get_root_info): Removed.
+
+	* gtk/gtkfilesystemmodel.c (_gtk_file_system_model_new): Don't
+	accept a NULL root_path.
+	(struct _GtkFileSystemModel): Add a field to remember the
+	root_path.
+	(_gtk_file_system_model_new): Store the root_path in the model
+	structure.
+	(find_and_ref_path): Stop going up the hierarchy at the root_path
+	of the model.  Also, don't return prematurely when walking up the
+	hierarchy.
+
+	* gtk/gtkfilechooserdefault.c (create_file_list): Sigh, restore
+	the rules_hint.
+	(struct _GtkFileChooserDefault): Added a current_volume_path field.
+	(set_tree_model): New function; create the folder tree model here.
+	(create_folder_tree): Don't create the model here.
+	(set_list_model): Set the show_hidden flag on the list model.
+
 Fri Jan 16 00:04:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtknotebook.h:

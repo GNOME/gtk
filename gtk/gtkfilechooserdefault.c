@@ -93,6 +93,7 @@ struct _GtkFileChooserDefault
 
   guint bookmarks_changed_id;
 
+  GtkFilePath *current_volume_path;
   GtkFilePath *current_folder;
   GtkFilePath *preview_path;
 
@@ -787,7 +788,6 @@ static void
 shortcuts_append_bookmarks (GtkFileChooserDefault *impl)
 {
   GtkTreeIter iter;
-  GSList *bookmarks;
 
   gtk_tree_store_append (impl->shortcuts_model, &iter, NULL);
   gtk_tree_store_set (impl->shortcuts_model, &iter,
@@ -981,15 +981,6 @@ create_folder_tree (GtkFileChooserDefault *impl)
 
   gtk_container_add (GTK_CONTAINER (impl->tree_scrollwin), impl->tree);
   gtk_widget_show (impl->tree);
-
-  /* Model */
-
-  impl->tree_model = _gtk_file_system_model_new (impl->file_system, NULL, -1,
-						 GTK_FILE_INFO_DISPLAY_NAME);
-  _gtk_file_system_model_set_show_files (impl->tree_model, FALSE);
-
-  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->tree),
-			   GTK_TREE_MODEL (impl->tree_model));
 
   /* Column */
 
@@ -1336,6 +1327,7 @@ create_file_list (GtkFileChooserDefault *impl)
   /* Tree/list view */
 
   impl->list = gtk_tree_view_new ();
+  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (impl->list), TRUE);
   gtk_container_add (GTK_CONTAINER (impl->list_scrollwin), impl->list);
   g_signal_connect (impl->list, "row_activated",
 		    G_CALLBACK (list_row_activated), impl);
@@ -1878,6 +1870,7 @@ set_list_model (GtkFileChooserDefault *impl)
 						 GTK_FILE_INFO_IS_FOLDER |
 						 GTK_FILE_INFO_SIZE |
 						 GTK_FILE_INFO_MODIFICATION_TIME);
+  _gtk_file_system_model_set_show_hidden (impl->list_model, impl->show_hidden);
   install_list_model_filter (impl);
 
   impl->sort_model = (GtkTreeModelSort *)gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (impl->list_model));
@@ -1896,6 +1889,40 @@ set_list_model (GtkFileChooserDefault *impl)
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (impl->list));
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->list),
 				   GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME);
+}
+
+/* Gets rid of the old folder tree model and creates a new one for the volume
+ * corresponding to the specified path.
+ */
+static void
+set_tree_model (GtkFileChooserDefault *impl, const GtkFilePath *path)
+{
+  GtkFileSystemVolume *volume;
+  GtkFilePath *volume_path;
+
+  volume = gtk_file_system_get_volume_for_path (impl->file_system, path);
+  volume_path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
+
+  if (impl->current_volume_path && gtk_file_path_compare (volume_path, impl->current_volume_path) == 0)
+    goto out;
+
+  if (impl->tree_model)
+    g_object_unref (impl->tree_model);
+
+  impl->current_volume_path = gtk_file_path_copy (volume_path);
+
+  impl->tree_model = _gtk_file_system_model_new (impl->file_system, impl->current_volume_path, -1,
+						 GTK_FILE_INFO_DISPLAY_NAME);
+  _gtk_file_system_model_set_show_files (impl->tree_model, FALSE);
+  _gtk_file_system_model_set_show_hidden (impl->tree_model, impl->show_hidden);
+
+  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->tree),
+			   GTK_TREE_MODEL (impl->tree_model));
+
+ out:
+
+  gtk_file_path_free (volume_path);
+  gtk_file_system_volume_free (impl->file_system, volume);
 }
 
 static void
@@ -1943,11 +1970,12 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
   gtk_label_set_text (GTK_LABEL (impl->folder_label), str);
   g_free (str);
 
-  /* Notify the folder tree */
+  /* Update the folder tree */
 
   if (!impl->changing_folder)
     {
       impl->changing_folder = TRUE;
+      set_tree_model (impl, impl->current_folder);
       _gtk_file_system_model_path_do (impl->tree_model, path,
 				      expand_and_select_func, impl);
       impl->changing_folder = FALSE;

@@ -454,13 +454,6 @@ gtk_file_system_base_init (gpointer g_class)
 		    NULL, NULL,
 		    g_cclosure_marshal_VOID__VOID,
 		    G_TYPE_NONE, 0);
-      g_signal_new ("roots-changed",
-		    iface_type,
-		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkFileSystemIface, roots_changed),
-		    NULL, NULL,
-		    g_cclosure_marshal_VOID__VOID,
-		    G_TYPE_NONE, 0);
       g_signal_new ("bookmarks-changed",
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
@@ -479,27 +472,6 @@ gtk_file_system_list_volumes (GtkFileSystem  *file_system)
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
 
   return GTK_FILE_SYSTEM_GET_IFACE (file_system)->list_volumes (file_system);
-}
-
-GSList *
-gtk_file_system_list_roots (GtkFileSystem  *file_system)
-{
-  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
-
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->list_roots (file_system);
-}
-
-GtkFileInfo *
-gtk_file_system_get_root_info  (GtkFileSystem     *file_system,
-				const GtkFilePath *path,
-				GtkFileInfoType    types,
-				GError           **error)
-{
-  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
-  g_return_val_if_fail (path != NULL, NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_root_info (file_system, path, types, error);
 }
 
 GtkFileFolder *
@@ -525,6 +497,26 @@ gtk_file_system_create_folder(GtkFileSystem     *file_system,
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   return GTK_FILE_SYSTEM_GET_IFACE (file_system)->create_folder (file_system, path, error);
+}
+
+/**
+ * gtk_file_system_get_volume_for_path:
+ * @file_system: a #GtkFileSystem
+ * @path: a #GtkFilePath
+ * 
+ * Queries the file system volume that corresponds to a specific path.
+ * 
+ * Return value: the #GtkFileSystemVolume that corresponds to the specified
+ * @path.  You should free this value with gtk_file_system_volume_free().
+ **/
+GtkFileSystemVolume *
+gtk_file_system_get_volume_for_path (GtkFileSystem     *file_system,
+				     const GtkFilePath *path)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
+
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_volume_for_path (file_system, path);
 }
 
 /**
@@ -1016,7 +1008,7 @@ gtk_file_paths_sort (GSList *paths)
 
 /**
  * gtk_file_paths_copy:
- * @paths: A #GSList of 3GtkFilePath structures.
+ * @paths: A #GSList of #GtkFilePath structures.
  * 
  * Copies a list of #GtkFilePath structures.
  * 

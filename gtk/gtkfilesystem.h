@@ -144,13 +144,9 @@ struct _GtkFileSystemIface
 
   /* Methods
    */
-  GSList *           (*list_volumes)   (GtkFileSystem     *file_system);
-  GSList *           (*list_roots)     (GtkFileSystem     *file_system);
-
-  GtkFileInfo *      (*get_root_info)  (GtkFileSystem     *file_system,
-					const GtkFilePath *path,
-					GtkFileInfoType    types,
-				        GError           **error);
+  GSList *              (*list_volumes)        (GtkFileSystem     *file_system);
+  GtkFileSystemVolume * (*get_volume_for_path) (GtkFileSystem     *file_system,
+						const GtkFilePath *path);
 
   GtkFileFolder *    (*get_folder)     (GtkFileSystem     *file_system,
 					const GtkFilePath *path,
@@ -226,18 +222,15 @@ struct _GtkFileSystemIface
   /* Signals
    */
   void (*volumes_changed)   (GtkFileSystem *file_system);
-  void (*roots_changed)     (GtkFileSystem *file_system);
   void (*bookmarks_changed) (GtkFileSystem *file_system);
 };
 
 GType             gtk_file_system_get_type       (void);
 
 GSList *          gtk_file_system_list_volumes   (GtkFileSystem     *file_system);
-GSList *          gtk_file_system_list_roots     (GtkFileSystem     *file_system);
-GtkFileInfo *     gtk_file_system_get_root_info  (GtkFileSystem     *file_system,
-						  const GtkFilePath *path,
-						  GtkFileInfoType    types,
-						  GError           **error);
+
+GtkFileSystemVolume *gtk_file_system_get_volume_for_path (GtkFileSystem     *file_system,
+							  const GtkFilePath *path);
 
 void              gtk_file_system_volume_free             (GtkFileSystem        *file_system,
 							   GtkFileSystemVolume  *volume);

@@ -83,12 +83,10 @@ static void gtk_file_system_unix_iface_init   (GtkFileSystemIface     *iface);
 static void gtk_file_system_unix_init         (GtkFileSystemUnix      *impl);
 static void gtk_file_system_unix_finalize     (GObject                *object);
 
-static GSList *       gtk_file_system_unix_list_volumes  (GtkFileSystem      *file_system);
-static GSList *       gtk_file_system_unix_list_roots    (GtkFileSystem      *file_system);
-static GtkFileInfo *  gtk_file_system_unix_get_root_info (GtkFileSystem      *file_system,
-							  const GtkFilePath  *path,
-							  GtkFileInfoType     types,
-							  GError            **error);
+static GSList *             gtk_file_system_unix_list_volumes        (GtkFileSystem     *file_system);
+static GtkFileSystemVolume *gtk_file_system_unix_get_volume_for_path (GtkFileSystem     *file_system,
+								      const GtkFilePath *path);
+
 static GtkFileFolder *gtk_file_system_unix_get_folder    (GtkFileSystem      *file_system,
 							  const GtkFilePath  *path,
 							  GtkFileInfoType     types,
@@ -243,9 +241,8 @@ static void
 gtk_file_system_unix_iface_init   (GtkFileSystemIface *iface)
 {
   iface->list_volumes = gtk_file_system_unix_list_volumes;
-  iface->list_roots = gtk_file_system_unix_list_roots;
+  iface->get_volume_for_path = gtk_file_system_unix_get_volume_for_path;
   iface->get_folder = gtk_file_system_unix_get_folder;
-  iface->get_root_info = gtk_file_system_unix_get_root_info;
   iface->create_folder = gtk_file_system_unix_create_folder;
   iface->volume_free = gtk_file_system_unix_volume_free;
   iface->volume_get_base_path = gtk_file_system_unix_volume_get_base_path;
@@ -277,29 +274,24 @@ gtk_file_system_unix_finalize (GObject *object)
   system_parent_class->finalize (object);
 }
 
+/* Returns our single root volume */
+static GtkFileSystemVolume *
+get_root_volume (void)
+{
+  return (GtkFileSystemVolume *) gtk_file_path_new_dup ("/");
+}
+
 static GSList *
 gtk_file_system_unix_list_volumes (GtkFileSystem *file_system)
 {
-  return g_slist_append (NULL, gtk_file_path_new_dup ("/"));
+  return g_slist_append (NULL, get_root_volume ());
 }
 
-static GSList *
-gtk_file_system_unix_list_roots (GtkFileSystem *file_system)
+static GtkFileSystemVolume *
+gtk_file_system_unix_get_volume_for_path (GtkFileSystem     *file_system,
+					  const GtkFilePath *path)
 {
-  return g_slist_append (NULL, gtk_file_path_new_dup ("/"));
-}
-
-static GtkFileInfo *
-gtk_file_system_unix_get_root_info (GtkFileSystem    *file_system,
-				    const GtkFilePath      *path,
-				    GtkFileInfoType   types,
-				    GError          **error)
-{
-  const gchar *filename = gtk_file_path_get_string (path);
-
-  g_return_val_if_fail (strcmp (filename, "/") == 0, NULL);
-
-  return filename_get_info ("/", types, error);
+  return get_root_volume ();
 }
 
 static GtkFileFolder *
