@@ -1515,24 +1515,10 @@ list_icon_data_func (GtkTreeViewColumn *tree_column,
 static void
 set_cell_text_bold_if_folder (const GtkFileInfo *info, GtkCellRenderer *cell, const char *text)
 {
-  if (gtk_file_info_get_is_folder (info))
-    {
-      char *escaped;
-      char *markup;
-
-      escaped = g_markup_escape_text (text, -1);
-      markup = g_strdup_printf ("<span weight=\"bold\">%s</span>", escaped);
-
-      g_object_set (cell, "markup", markup, NULL);
-
-      g_free (escaped);
-      g_free (markup);
-    }
-  else
-      g_object_set (cell,
-		    "text", text,
-		    "attributes", NULL,
-		    NULL);
+  g_object_set (cell,
+		"text", text,
+		"weight", gtk_file_info_get_is_folder (info) ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL,
+		NULL);
 }
 
 static void
