@@ -1,3 +1,9 @@
+2004-03-25  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (location_entry_create): Fill the
+	location entry with the display name of the file under the cursor
+	for Open mode, or the typed filename in Save mode.
+
 2004-03-24  J. Ali Harlow  <ali@juiblex.co.uk>
 
 	* gtk/gtkfilesystemwin32.c
