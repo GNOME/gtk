@@ -43,9 +43,9 @@ image_load (FILE *f)
 	png_structp png_ptr;
 	png_infop info_ptr, end_info;
 	gint i, depth, ctype, inttype, passes, bpp;
-	png_uint_32 w, h, x, y;
+	png_uint_32 w, h;
 	png_bytepp rows;
-	guchar *pixels, *temp, *rowdata;
+	guchar *pixels;
 
 	png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 	if (!png_ptr)
@@ -114,57 +114,19 @@ image_load (FILE *f)
 		bpp = 3;
 
 	pixels = malloc (w * h * bpp);
-	rows = malloc (h * sizeof (png_bytep));
-
-	if (!pixels || !rows) {
-		if (pixels)
-			free (pixels);
-
-		if (rows)
-			free (rows);
-
+	if (!pixels) {
 		png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
 		return NULL;
 	}
 
-	/* Icky code, but it has to be done... */
-	for (i = 0; i < h; i++) {
-		if ((rows[i] = malloc (w * bpp)) == NULL) {
-			int n;
+	rows = g_new (png_bytep, h);
 
-			for (n = 0; n < i; n++)
-				free (rows[i]);
+	for (i = 0; i < h; i++)
+		rows[i] = pixels + i * w * bpp;
 
-			free (rows);
-			free (pixels);
-			png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
-			return NULL;
-		}
-	}
-
-	/* And we FINALLY get here... */
 	png_read_image (png_ptr, rows);
 	png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
-
-	/* Now stuff the bytes into pixels & free rows[y] */
-
-	temp = pixels;
-
-	for (y = 0; y < h; y++) {
-		rowdata = rows[y];
-		for (x = 0; x < w; x++) {
-			temp[0] = rowdata[(x * bpp)];
-			temp[1] = rowdata[(x * bpp) + 1];
-			temp[2] = rowdata[(x * bpp) + 2];
-
-			if (bpp == 4)
-				temp[3] = rowdata[(x * bpp) + 3];
-
-			temp += bpp;
-		}
-		free (rows[y]);
-	}
-	free (rows);
+	g_free (rows);
 
 	if (ctype & PNG_COLOR_MASK_ALPHA)
 		return gdk_pixbuf_new_from_data (pixels, ART_PIX_RGB, TRUE,

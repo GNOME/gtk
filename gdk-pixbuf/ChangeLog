@@ -1,3 +1,10 @@
+1999-10-22  Federico Mena Quintero  <federico@redhat.com>
+
+	* src/io-png.c (image_load): Patch from Kristian Hogsberg
+	Kristensen <hogsberg@daimi.au.dk> to avoid allocating extra row
+	buffers; the rows can be read in directly into the main pixel
+	buffer.
+
 1999-10-20  Federico Mena Quintero  <federico@redhat.com>
 
 	* src/gdk-pixbuf-io.c (image_handler_load): Free path.
