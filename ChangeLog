@@ -1,3 +1,9 @@
+Wed Jun 12 16:21:38 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcheckbutton.c (gtk_check_button_size_allocate): 
+	Clamp size of child to at least 1x1. (#82431, 
+	Boris Shingarov.)
+
 Wed Jun 12 15:43:38 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_snap): Handle

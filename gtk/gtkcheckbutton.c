@@ -301,9 +301,12 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 					allocation->width -
 					((border_width + focus_width + focus_pad) * 2
 					 + indicator_size + indicator_spacing * 3));
+	  child_allocation.width = MAX (child_allocation.width, 1);
 
 	  child_allocation.height = MIN (child_requisition.height,
 					 allocation->height - (border_width + focus_width + focus_pad) * 2);
+	  child_allocation.height = MAX (child_allocation.height, 1);
+	  
 	  child_allocation.x = (border_width + indicator_size + indicator_spacing * 3 +
 				widget->allocation.x + focus_width + focus_pad);
 	  child_allocation.y = widget->allocation.y +
