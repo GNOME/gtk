@@ -191,7 +191,8 @@ typedef enum
   GDK_WA_CURSOR   = 1 << 4,
   GDK_WA_COLORMAP = 1 << 5,
   GDK_WA_VISUAL   = 1 << 6,
-  GDK_WA_WMCLASS  = 1 << 7
+  GDK_WA_WMCLASS  = 1 << 7,
+  GDK_WA_NOREDIR  = 1 << 8,
 } GdkWindowAttributesType;
 
 /* Size restriction enumeration.
@@ -635,6 +636,7 @@ struct _GdkWindowAttr
   GdkCursor *cursor;
   gchar *wmclass_name;
   gchar *wmclass_class;
+  gboolean override_redirect;
 };
 
 struct _GdkWindow

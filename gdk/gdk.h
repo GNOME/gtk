@@ -162,6 +162,8 @@ void          gdk_window_lower       (GdkWindow    *window);
 
 void          gdk_window_set_user_data   (GdkWindow       *window,
 					  gpointer         user_data);
+void          gdk_window_set_override_redirect(GdkWindow  *window,
+					       gboolean override_redirect);
 
 
 /* 

@@ -155,6 +155,13 @@ gdk_window_new (GdkWindow     *parent,
   if (xattributes.event_mask)
     xattributes_mask |= CWEventMask;
 
+  if(attributes_mask & GDK_WA_NOREDIR) {
+	xattributes.override_redirect =
+		(attributes->override_redirect == FALSE)?False:True;
+	xattributes_mask |= CWOverrideRedirect;
+  } else
+    xattributes.override_redirect = False;
+
   if (attributes->wclass == GDK_INPUT_OUTPUT)
     {
       class = InputOutput;
@@ -1355,4 +1362,16 @@ gdk_window_dnd_data_set (GdkWindow       *window,
   
   XSendEvent (gdk_display, event->dragrequest.requestor, False,
 	      NoEventMask, &sev);
+}
+
+void
+gdk_window_set_override_redirect(GdkWindow *window,
+				 gboolean override_redirect)
+{
+  XSetWindowAttributes attr;
+  attr.override_redirect = (override_redirect == FALSE)?False:True;
+  XChangeWindowAttributes(gdk_display,
+			  ((GdkWindowPrivate *)window)->xwindow,
+			  CWOverrideRedirect,
+			  &attr);
 }
