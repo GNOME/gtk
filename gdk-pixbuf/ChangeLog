@@ -1,3 +1,9 @@
+2005-03-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-io.c: Document BMP saving support.
+
+	* io-bmp.c: Support saving as BMP. (168173, Ivan Wong)
+
 2005-03-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-tga.c (parse_rle_data): Fix the update areas for incremental
