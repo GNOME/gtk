@@ -1,3 +1,10 @@
+2002-08-07  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmain.c (gtk_init): Fix doc comment.
+
+	* gtk/gtktreemodel.c (gtk_tree_path_new_from_indices): Make the
+	doc comment gtk-doc-grokkable.
+
 2002-08-06  jacob berkman  <jacob@ximian.com>
 
 	* configure.in: link gdk-pixbuf-xlib against x libs (bug #83442)

@@ -890,7 +890,7 @@ gtk_init_check (int	 *argc,
 #undef gtk_init
 
 /**
- * gtk_init_check:
+ * gtk_init:
  * @argc: Address of the <parameter>argc</parameter> parameter of your 
  *   <function>main()</function> function. Changed if any arguments were 
  *   handled.
@@ -900,8 +900,8 @@ gtk_init_check (int	 *argc,
  * 
  * Call this function before using any other GTK+ functions in your GUI
  * applications.  It will initialize everything needed to operate the toolkit and
- * parses some standard command line options. <parameter>argc</parameter> and 
- * <parameter>argv</parameter> are adjusted accordingly so your own code will 
+ * parses some standard command line options. @argc and 
+ * @argv are adjusted accordingly so your own code will 
  * never see those standard arguments.
  *
  * <note><para>

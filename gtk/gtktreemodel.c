@@ -201,7 +201,8 @@ gtk_tree_path_new_from_string (const gchar *path)
 
 /**
  * gtk_tree_path_new_from_indices:
- * @first_index and @varargs: list of integers terminated by -1
+ * @first_index: first integer
+ * @varargs: list of integers terminated by -1
  *
  * Creates a new path with @first_index and @varargs as indices.
  *
