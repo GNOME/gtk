@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properrties 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 02:01-0500\n"
-"PO-Revision-Date: 2004-03-04 01:54+0900\n"
+"POT-Creation-Date: 2005-01-26 14:14+0900\n"
+"PO-Revision-Date: 2005-01-26 16:28+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -92,127 +92,119 @@ msgid "Screen"
 msgstr "화면"
 
 #: gdk/gdkpango.c:575
-#, fuzzy
 msgid "the GdkScreen for the renderer"
-msgstr "트리 보기를 위한 모델"
+msgstr "렌더러를 위한 GdkScreen"
 
 #: gtk/gtkaboutdialog.c:195
-#, fuzzy
 msgid "Program name"
-msgstr "태그 이름"
+msgstr "프로그램 이름"
 
 #: gtk/gtkaboutdialog.c:196
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
-msgstr ""
+msgstr "프로그램의 이름. 설정하지 않으면 기본값은 g_get_application_name()입니다"
 
 #: gtk/gtkaboutdialog.c:210
 msgid "Program version"
-msgstr ""
+msgstr "프로그램 버전"
 
 #: gtk/gtkaboutdialog.c:211
-#, fuzzy
 msgid "The version of the program"
-msgstr "도구 모음의 방향"
+msgstr "프로그램의 버전"
 
 #: gtk/gtkaboutdialog.c:225
 msgid "Copyright string"
-msgstr ""
+msgstr "저작권 문자열"
 
 #: gtk/gtkaboutdialog.c:226
 msgid "Copyright information for the program"
-msgstr ""
+msgstr "프로그램의 저작권 정보"
 
 #: gtk/gtkaboutdialog.c:243
-#, fuzzy
 msgid "Comments string"
-msgstr "열 간격"
+msgstr "설명 문자열"
 
 #: gtk/gtkaboutdialog.c:244
 msgid "Comments about the program"
-msgstr ""
+msgstr "프로그램 설명"
 
 #: gtk/gtkaboutdialog.c:276
 msgid "Website URL"
-msgstr ""
+msgstr "웹사이트 URL"
 
 #: gtk/gtkaboutdialog.c:277
 msgid "The URL for the link to the website of the program"
-msgstr ""
+msgstr "프로그램의 웹사이트로 가는 링크 URL"
 
 #: gtk/gtkaboutdialog.c:293
-#, fuzzy
 msgid "Website label"
-msgstr "레이블에서 크기 사용"
+msgstr "웹사이트 레이블"
 
 #: gtk/gtkaboutdialog.c:294
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
-msgstr ""
+msgstr "프로그램의 웹사이트로 가는 링크의 레이블. 설정하지 않으면 그 URL을 사용합니다."
 
 #: gtk/gtkaboutdialog.c:310
 msgid "Authors"
-msgstr ""
+msgstr "개발자"
 
 #: gtk/gtkaboutdialog.c:311
-#, fuzzy
 msgid "List of authors of the program"
-msgstr "도구 모음의 방향"
+msgstr "프로그램의 개발자 목록"
 
 #: gtk/gtkaboutdialog.c:327
 msgid "Documenters"
-msgstr ""
+msgstr "문서 작성자"
 
 #: gtk/gtkaboutdialog.c:328
 msgid "List of people documenting the program"
-msgstr ""
+msgstr "프로그램의 문서를 작성한 사람 목록"
 
 #: gtk/gtkaboutdialog.c:344
 msgid "Artists"
-msgstr ""
+msgstr "아티스트"
 
 #: gtk/gtkaboutdialog.c:345
 msgid "List of people who have contributed artwork to the program"
-msgstr ""
+msgstr "프로그램의 아트워크를 만든 사람의 목록"
 
 #: gtk/gtkaboutdialog.c:362
 msgid "Translator credits"
-msgstr ""
+msgstr "옮긴이"
 
 #: gtk/gtkaboutdialog.c:363
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
-msgstr ""
+msgstr "옮긴이 크레디트 목록. 이 문자열은 번역할 수 있게 표시해야 합니다"
 
 #: gtk/gtkaboutdialog.c:378
 msgid "Logo"
-msgstr ""
+msgstr "로고"
 
 #: gtk/gtkaboutdialog.c:379
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
-msgstr ""
+msgstr "정보 대화 상자의 로고. 설정하지 않으면 기본값은 gtk_window_get_default_icon_list()입니다"
 
 #: gtk/gtkaboutdialog.c:394
-#, fuzzy
 msgid "Logo Icon Name"
-msgstr "글꼴 이름"
+msgstr "로고 아이콘 이름"
 
 #: gtk/gtkaboutdialog.c:395
 msgid "A named icon to use as the logo for the about box."
-msgstr ""
+msgstr "정보 대화 상자에 로고로 사용할 아이콘 이름."
 
 #: gtk/gtkaboutdialog.c:402
-#, fuzzy
 msgid "Link Color"
-msgstr "현재 색"
+msgstr "링크 색"
 
 #: gtk/gtkaboutdialog.c:403
 msgid "Color of hyperlinks"
-msgstr ""
+msgstr "하이퍼링크 색"
 
 # FIXME: closure?
 #: gtk/gtkaccellabel.c:139
@@ -282,17 +274,17 @@ msgid ""
 "orientation."
 msgstr "도구 모음이 가로 방향일 때 도구 모음 항목을 표시할 지 여부."
 
+# 확인 필요
 #: gtk/gtkaction.c:250
-#, fuzzy
 msgid "Visible when overflown"
-msgstr "세로 방향에서 표시"
+msgstr "넘어갈 경우에 표시"
 
+# 확인 필요
 #: gtk/gtkaction.c:251
-#, fuzzy
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr "참이면, 이 동작에 대한 메뉴 프록시가 비어 있으면 숨깁니다."
+msgstr "참이면, 이 동작에 대한 도구항목 프록시를 도구 모음 넘어감 메뉴에서 표시합니다."
 
 #: gtk/gtkaction.c:258 gtk/gtktoolitem.c:166
 msgid "Visible when vertical"
@@ -605,7 +597,7 @@ msgstr "간격"
 
 #: gtk/gtkbox.c:131
 msgid "The amount of space between children"
-msgstr "하위 위젯 사이의 간격"
+msgstr "하위 위젯 사이의 공백"
 
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:473 gtk/gtktoolbar.c:541
 msgid "Homogeneous"
@@ -725,9 +717,8 @@ msgid "Image widget"
 msgstr "그림 위젯"
 
 #: gtk/gtkbutton.c:307
-#, fuzzy
 msgid "Child widget to appear next to the button text"
-msgstr "메뉴 텍스트 옆에 나타날 하위 위젯"
+msgstr "하위 위젯을 단추 텍스트 옆에 나타냄"
 
 #: gtk/gtkbutton.c:373
 msgid "Default Spacing"
@@ -735,7 +726,7 @@ msgstr "기본 간격"
 
 #: gtk/gtkbutton.c:374
 msgid "Extra space to add for CAN_DEFAULT buttons"
-msgstr "CAN_DEFAULT 단추에 추가할 간격"
+msgstr "CAN_DEFAULT 단추에 더할 간격"
 
 #: gtk/gtkbutton.c:380
 msgid "Default Outside Spacing"
@@ -745,7 +736,7 @@ msgstr "기본 외부 간격"
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
-msgstr "CAN_DEFAULT 단추의 외부에 추가할 테두리 바깥에 언제나 그려지는 간격"
+msgstr "CAN_DEFAULT 단추의 외부에 더할 테두리 바깥에 언제나 그려지는 간격"
 
 #: gtk/gtkbutton.c:386
 msgid "Child X Displacement"
@@ -766,15 +757,14 @@ msgid ""
 msgstr "단추를 눌렀을 때 하위 위젯이 세로 방향으로 움직이는 거리"
 
 #: gtk/gtkbutton.c:411
-#, fuzzy
 msgid "Displace focus"
-msgstr "포커스인가"
+msgstr "포커스 옮기기"
 
 #: gtk/gtkbutton.c:412
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
-msgstr ""
+msgstr "child_displacement_x/_y 속성값이 포커스 구역에도 영향을 미치는 지 여부"
 
 #: gtk/gtkbutton.c:417
 msgid "Show button images"
@@ -831,7 +821,6 @@ msgid "No Month Change"
 msgstr "달 안 바꿈"
 
 #: gtk/gtkcalendar.c:527
-#, fuzzy
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "참이면, 선택한 달을 바꿀 수 없습니다"
 
@@ -860,9 +849,8 @@ msgid "Display the cell"
 msgstr "셀 표시하기"
 
 #: gtk/gtkcellrenderer.c:223
-#, fuzzy
 msgid "Display the cell sensitive"
-msgstr "셀 표시하기"
+msgstr "셀이 반응하도록 표시하기"
 
 #: gtk/gtkcellrenderer.c:230
 msgid "xalign"
@@ -953,14 +941,12 @@ msgid "Whether this tag affects the cell background color"
 msgstr "이 태그가 셀 바탕색에 영향을 미칠지 여부"
 
 #: gtk/gtkcellrenderercombo.c:88
-#, fuzzy
 msgid "Model"
-msgstr "모드"
+msgstr "모델"
 
 #: gtk/gtkcellrenderercombo.c:89
-#, fuzzy
 msgid "The model containing the possible values for the combo box"
-msgstr "콤보 상자를 위한 모델"
+msgstr "콤보 상자에서 사용할 수 있는 값이 들어 있는 모델"
 
 #: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:114
 msgid "Text Column"
@@ -972,11 +958,11 @@ msgstr "데이터 소스 모델에서 문자열을 가져올 때 쓰이는 열"
 
 #: gtk/gtkcellrenderercombo.c:127
 msgid "Has Entry"
-msgstr ""
+msgstr "엔트리 있음"
 
 #: gtk/gtkcellrenderercombo.c:128
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
+msgstr "거짓일 경우, 미리 정해진 값 이외의 다른 문자열을 입력할 수 없습니다"
 
 #: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf Object"
@@ -1027,9 +1013,8 @@ msgid "Render detail to pass to the theme engine"
 msgstr "테마 엔진에 넘김 상세한 내용 표시"
 
 #: gtk/gtkcellrendererprogress.c:116
-#, fuzzy
 msgid "Value of the progress bar"
-msgstr "진행률 표시줄에 표시할 텍스트"
+msgstr "진행률 표시줄의 값"
 
 #: gtk/gtkcellrendererprogress.c:133 gtk/gtkcellrenderertext.c:213
 #: gtk/gtkentry.c:573 gtk/gtkprogressbar.c:220
@@ -1037,9 +1022,8 @@ msgid "Text"
 msgstr "텍스트"
 
 #: gtk/gtkcellrendererprogress.c:134
-#, fuzzy
 msgid "Text on the progress bar"
-msgstr "진행률 표시줄에 표시할 텍스트"
+msgstr "진행률 표시줄의 텍스트"
 
 #: gtk/gtkcellrenderertext.c:214
 msgid "Text to render"
@@ -1063,7 +1047,7 @@ msgstr "표시기 텍스트에 적용할 유형 특성의 리스트"
 
 #: gtk/gtkcellrenderertext.c:237
 msgid "Single Paragraph Mode"
-msgstr "단일 문단 모드"
+msgstr "한 문단 모드"
 
 #: gtk/gtkcellrenderertext.c:238
 msgid "Whether or not to keep all text in a single paragraph"
@@ -1212,23 +1196,22 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:416 gtk/gtklabel.c:433 gtk/gtkprogressbar.c:242
 msgid "Ellipsize"
-msgstr ""
+msgstr "말줄임표"
 
 #: gtk/gtkcellrenderertext.c:417
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
-msgstr ""
+msgstr "말줄임표를 사용할 경우 그 위치. 셀 렌더러에서 전체 문자열을 표시할 공간이 부족할 경우 사용."
 
 #: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
 #: gtk/gtklabel.c:453
-#, fuzzy
 msgid "Width In Characters"
-msgstr "너비 문자 개수"
+msgstr "너비 (문자 개수)"
 
 #: gtk/gtkcellrenderertext.c:435 gtk/gtklabel.c:454
 msgid "The desired width of the label, in characters"
-msgstr ""
+msgstr "레이블의 희망 너비, 문자 개수 단위"
 
 #: gtk/gtkcellrenderertext.c:447 gtk/gtkcellview.c:197 gtk/gtktexttag.c:510
 msgid "Background set"
@@ -1343,14 +1326,12 @@ msgid "Whether this tag affects the language the text is rendered as"
 msgstr "이 태그가 텍스트를 그리게 될 언어에 영향을 미칠지 여부"
 
 #: gtk/gtkcellrenderertext.c:503
-#, fuzzy
 msgid "Ellipsize set"
-msgstr "떠오름 설정"
+msgstr "말줄임표 설정"
 
 #: gtk/gtkcellrenderertext.c:504
-#, fuzzy
 msgid "Whether this tag affects the ellipsize mode"
-msgstr "이 태그가 떠오름에 영향을 미칠지 여부"
+msgstr "이 태그가 말줄임표 모드에 영향을 미칠지 여부"
 
 #: gtk/gtkcellrenderertoggle.c:142
 msgid "Toggle state"
@@ -1574,32 +1555,28 @@ msgid "Add tearoffs to menus"
 msgstr "메뉴에 떼어내기 더하기"
 
 #: gtk/gtkcombobox.c:655
-#, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
-msgstr "탭의 크기가 균등한 지 여부"
+msgstr "드롭다운에 떼어내기 메뉴 아이템이 있을 지 여부"
 
 #: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "프레임 사용"
 
 #: gtk/gtkcombobox.c:671
-#, fuzzy
 msgid "Whether the combo box draws a frame around the child"
-msgstr "헤더 기준으로 열의 순서를 바꿀 것인지 여부"
+msgstr "콤보 상자의 하위 항목 주변에 테두리를 그릴지 여부"
 
 #: gtk/gtkcombobox.c:679
-#, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
-msgstr "마우스로 클릭하면 단추에 포커스가 가는 지 여부"
+msgstr "마우스로 클릭하면 콤보 상자에 포커스가 가는 지 여부"
 
 #: gtk/gtkcombobox.c:685
 msgid "Appears as list"
 msgstr "목록으로 표시"
 
 #: gtk/gtkcombobox.c:686
-#, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
-msgstr "콤보 상자 드롭다운을 메뉴가 아니라 목록으로 표시할 지 여부"
+msgstr "드롭다운을 메뉴가 아니라 목록으로 표시할 지 여부"
 
 #: gtk/gtkcontainer.c:205
 msgid "Resize mode"
@@ -1787,11 +1764,10 @@ msgid "X align"
 msgstr "가로 맞춤"
 
 #: gtk/gtkentry.c:590 gtk/gtkmisc.c:101
-#, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
-msgstr "가로 맞춤, 0(왼쪽)에서 1(오른쪽)까지. RTL 레이아웃의 경우에는 그 반대"
+msgstr "가로 맞춤, 0(왼쪽)에서 1(오른쪽)까지. RTL 레이아웃의 경우에는 그 반대."
 
 #: gtk/gtkentry.c:828
 msgid "Select on focus"
@@ -1818,32 +1794,28 @@ msgid "Minimum length of the search key in order to look up matches"
 msgstr "일치하는 텍스트를 찾을 때 쓸 찾기 키의 최소 길이"
 
 #: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:370
-#, fuzzy
 msgid "Text column"
 msgstr "텍스트 열"
 
 #: gtk/gtkentrycompletion.c:296
-#, fuzzy
 msgid "The column of the model containing the strings."
-msgstr "데이터 소스 모델에서 문자열을 가져올 때 쓰이는 열"
+msgstr "문자열이 들어 있는 모델의 열."
 
 #: gtk/gtkentrycompletion.c:313
 msgid "Inline completion"
-msgstr ""
+msgstr "인라인 완성"
 
 #: gtk/gtkentrycompletion.c:314
-#, fuzzy
 msgid "Whether the common prefix should be inserted automatically"
-msgstr "테두리를 보여줄 지 여부"
+msgstr "일반적인 접두어를 자동으로 넣을 지 여부"
 
 #: gtk/gtkentrycompletion.c:328
 msgid "Popup completion"
-msgstr ""
+msgstr "팝업 완성"
 
 #: gtk/gtkentrycompletion.c:329
-#, fuzzy
 msgid "Whether the completions should be shown in a popup window"
-msgstr "테두리를 보여줄 지 여부"
+msgstr "팝업 창에서 완성 기능을 표시할 지 여부"
 
 #: gtk/gtkeventbox.c:121
 msgid "Visible Window"
@@ -1997,26 +1969,25 @@ msgstr "숨겨진 파일과 폴더를 표시할 지 여부"
 
 #: gtk/gtkfilechooserbutton.c:336
 msgid "Dialog"
-msgstr ""
+msgstr "대화 상자"
 
 #: gtk/gtkfilechooserbutton.c:337
 msgid "The file chooser dialog to use."
-msgstr ""
+msgstr "사용할 파일 선택 대화 상자."
 
 #: gtk/gtkfilechooserbutton.c:352
-#, fuzzy
 msgid "The title of the file chooser dialog."
-msgstr "글꼴 선택 대화 상자의 제목"
+msgstr "글꼴 선택 대화 상자의 제목."
 
 #: gtk/gtkfilechooserbutton.c:366
 msgid "The desired width of the button widget, in characters."
-msgstr ""
+msgstr "단추 위젯의 희망 너비, 문자 개수 단위."
 
-#: gtk/gtkfilechooserdefault.c:625
+#: gtk/gtkfilechooserdefault.c:622
 msgid "Default file chooser backend"
 msgstr "기본 파일 선택창 백엔드"
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:623
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "기본적으로 사용할 GtkFileChooser 백엔드의 이름"
 
@@ -2198,96 +2169,84 @@ msgstr ""
 "할 것인 지 여부"
 
 #: gtk/gtkiconview.c:333
-#, fuzzy
 msgid "Selection mode"
-msgstr "선택 경계"
+msgstr "선택 모드"
 
 #: gtk/gtkiconview.c:334
-#, fuzzy
 msgid "The selection mode"
-msgstr "선택한 연도"
+msgstr "선택 모드"
 
 #: gtk/gtkiconview.c:352
-#, fuzzy
 msgid "Pixbuf column"
-msgstr "텍스트 열"
+msgstr "픽스버퍼 열"
 
 #: gtk/gtkiconview.c:353
 msgid "Model column used to retrieve the icon pixbuf from"
-msgstr ""
+msgstr "아이콘 픽스버퍼를 가져올 때 사용할 모델의 열"
 
 #: gtk/gtkiconview.c:371
 msgid "Model column used to retrieve the text from"
-msgstr ""
+msgstr "텍스트를 가져올 때 사용할 모델의 열"
 
 #: gtk/gtkiconview.c:390
-#, fuzzy
 msgid "Markup column"
-msgstr "마크업"
+msgstr "마크업 열"
 
 #: gtk/gtkiconview.c:391
 msgid "Model column used to retrieve the text if using Pango markup"
-msgstr ""
+msgstr "판고 마크업을 사용할 경우 텍스트를 가져올 때 사용할 모델의 열"
 
 #: gtk/gtkiconview.c:398
-#, fuzzy
 msgid "Icon View Model"
-msgstr "트리보기 모델"
+msgstr "아이콘 보기 모델"
 
 #: gtk/gtkiconview.c:399
-#, fuzzy
 msgid "The model for the icon view"
-msgstr "트리 보기를 위한 모델"
+msgstr "아이콘 보기를 위한 모델"
 
 #: gtk/gtkiconview.c:415
-#, fuzzy
 msgid "Number of columns"
-msgstr "채널 개수"
+msgstr "열 개수"
 
 #: gtk/gtkiconview.c:416
-#, fuzzy
 msgid "Number of columns to display"
-msgstr "표시할 십진수 숫자의 개수"
+msgstr "표시할 열 개수"
 
 #: gtk/gtkiconview.c:433
-#, fuzzy
 msgid "Width for each item"
-msgstr "항목 레이블로 사용할 위젯"
+msgstr "각 항목의 너비"
 
 #: gtk/gtkiconview.c:434
 msgid "The width used for each item"
-msgstr ""
+msgstr "각 항목에 사용할 너비"
 
 #: gtk/gtkiconview.c:450
 msgid "Space which is inserted between cells of an item"
-msgstr ""
+msgstr "항목의 셀 사이에 들어갈 공백"
 
 #: gtk/gtkiconview.c:465
-#, fuzzy
 msgid "Row Spacing"
 msgstr "행 간격"
 
 #: gtk/gtkiconview.c:466
 msgid "Space which is inserted between grid rows"
-msgstr ""
+msgstr "격자의 행 사이에 들어갈 공백"
 
 #: gtk/gtkiconview.c:481
-#, fuzzy
 msgid "Column Spacing"
 msgstr "열 간격"
 
 #: gtk/gtkiconview.c:482
 msgid "Space which is inserted between grid column"
-msgstr ""
+msgstr "격자의 열 사이에 들어갈 공백"
 
 #: gtk/gtkiconview.c:497
-#, fuzzy
 msgid "Margin"
-msgstr "왼쪽 여백"
+msgstr "여백"
 
 #: gtk/gtkiconview.c:498
 msgid "Space which is inserted at the edges of the icon view"
-msgstr ""
+msgstr "아이콘 보기의 가장자리에 들어갈 공백"
 
 #: gtk/gtkiconview.c:514 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
@@ -2296,27 +2255,23 @@ msgstr "방향"
 #: gtk/gtkiconview.c:515
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
-msgstr ""
+msgstr "각 항목의 텍스트와 아이콘의 상대적인 위치"
 
 #: gtk/gtkiconview.c:523
-#, fuzzy
 msgid "Selection Box Color"
-msgstr "선택 경계"
+msgstr "선택 상자 색"
 
 #: gtk/gtkiconview.c:524
-#, fuzzy
 msgid "Color of the selection box"
-msgstr "글꼴 선택 대화 상자의 제목"
+msgstr "선택 상자의 색"
 
 #: gtk/gtkiconview.c:530
-#, fuzzy
 msgid "Selection Box Alpha"
-msgstr "선택 경계"
+msgstr "선택 상자 알파"
 
 #: gtk/gtkiconview.c:531
-#, fuzzy
 msgid "Opacity of the selection box"
-msgstr "글꼴 선택 대화 상자의 제목"
+msgstr "선택 상자 불투명 정도"
 
 #: gtk/gtkimage.c:158
 msgid "Pixbuf"
@@ -2371,19 +2326,16 @@ msgid "Icon size"
 msgstr "아이콘 크기"
 
 #: gtk/gtkimage.c:216
-#, fuzzy
 msgid "Symbolic size to use for stock icon, icon set or named icon"
-msgstr "스톡 아이콘이나 아이콘 집합에 쓸 크기"
+msgstr "스톡 아이콘, 아이콘 집합, 이름붙은 아이콘에 사용할 크기 이름"
 
 #: gtk/gtkimage.c:232
-#, fuzzy
 msgid "Pixel size"
-msgstr "픽셀"
+msgstr "픽셀 크기"
 
 #: gtk/gtkimage.c:233
-#, fuzzy
 msgid "Pixel size to use for named icon"
-msgstr "스톡 아이콘이나 아이콘 집합에 쓸 크기"
+msgstr "이름붙은 아이콘에 사용할 픽셀 크기"
 
 #: gtk/gtkimage.c:241
 msgid "Animation"
@@ -2394,14 +2346,12 @@ msgid "GdkPixbufAnimation to display"
 msgstr "표시할 GdkPixbufAnimation"
 
 #: gtk/gtkimage.c:257 gtk/gtkwindow.c:525
-#, fuzzy
 msgid "Icon Name"
-msgstr "글꼴 이름"
+msgstr "아이콘 이름"
 
 #: gtk/gtkimage.c:258
-#, fuzzy
 msgid "The name of the icon from the icon theme"
-msgstr "선택한 글꼴의 이름"
+msgstr "아이콘 테마에서 아이콘 이름"
 
 #: gtk/gtkimage.c:265
 msgid "Storage type"
@@ -2413,7 +2363,7 @@ msgstr "그림 데이타 표현 방법"
 
 #: gtk/gtkimagemenuitem.c:132
 msgid "Child widget to appear next to the menu text"
-msgstr "메뉴 텍스트 옆에 나타날 하위 위젯"
+msgstr "하위 위젯을 메뉴 텍스트 옆에 나타냄"
 
 #: gtk/gtkimagemenuitem.c:137
 msgid "Show menu images"
@@ -2495,34 +2445,31 @@ msgstr "이 레이블의 단축 키가 눌렸을 경우 활성화할 위젯"
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
-msgstr ""
+msgstr "말줄임표의 그 위치. 이 기능을 사용할 경우 레이블에 전체 문자열을 표시할 공간이 부족할 경우 사용합니다."
 
 #: gtk/gtklabel.c:474
-#, fuzzy
 msgid "Single Line Mode"
-msgstr "단일 문단 모드"
+msgstr "한 줄 모드"
 
 #: gtk/gtklabel.c:475
-#, fuzzy
 msgid "Whether the label is in single line mode"
-msgstr "선택한 글꼴로 레이블을 그릴 지 여부"
+msgstr "레이블이 한 줄 모드인지 여부"
 
 #: gtk/gtklabel.c:492
 msgid "Angle"
-msgstr ""
+msgstr "각도"
 
 #: gtk/gtklabel.c:493
 msgid "Angle at which the label is rotated"
-msgstr ""
+msgstr "레이블이 회전되는 각도"
 
 #: gtk/gtklabel.c:513
-#, fuzzy
 msgid "Maximum Width In Characters"
-msgstr "너비 문자 개수"
+msgstr "최대 너비 (문자 개수)"
 
 #: gtk/gtklabel.c:514
 msgid "The desired maximum width of the label, in characters"
-msgstr ""
+msgstr "레이블의 최대 너비, 문자 개수"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
@@ -2559,14 +2506,12 @@ msgid ""
 msgstr "이 메뉴를 떼어냈을 때 윈도우매니저에 의해 표시될 제목"
 
 #: gtk/gtkmenu.c:541
-#, fuzzy
 msgid "Tearoff State"
-msgstr "떼어내기 제목"
+msgstr "떼어내기 상태"
 
 #: gtk/gtkmenu.c:542
-#, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
-msgstr "이 메뉴를 떼어냈을 때 윈도우매니저에 의해 표시될 제목"
+msgstr "이 메뉴를 떼어냈는 지 여부를 나타내는 참/거짓 값"
 
 #: gtk/gtkmenu.c:548
 msgid "Vertical Padding"
@@ -2686,7 +2631,7 @@ msgstr "메뉴"
 
 #: gtk/gtkmenutoolbutton.c:248
 msgid "The dropdown menu"
-msgstr ""
+msgstr "드롭다운 메뉴"
 
 #: gtk/gtkmessagedialog.c:124
 msgid "Image/label border"
@@ -2832,36 +2777,32 @@ msgid "Tab label"
 msgstr "탭 레이블"
 
 #: gtk/gtknotebook.c:482
-#, fuzzy
 msgid "The string displayed on the child's tab label"
-msgstr "하위 탭 레이블에 표시될 문자열"
+msgstr "하위 탭 레이블에 표시할 문자열"
 
 #: gtk/gtknotebook.c:488
 msgid "Menu label"
 msgstr "메뉴 레이블"
 
 #: gtk/gtknotebook.c:489
-#, fuzzy
 msgid "The string displayed in the child's menu entry"
-msgstr "하위 메뉴 항목에 표시될 문자열"
+msgstr "하위 메뉴 항목에 표시할 문자열"
 
 #: gtk/gtknotebook.c:502
 msgid "Tab expand"
 msgstr "탭 확장"
 
 #: gtk/gtknotebook.c:503
-#, fuzzy
 msgid "Whether to expand the child's tab or not"
-msgstr "하위 탭을 확장할 지의 여부"
+msgstr "하위 탭을 확장할 지 여부"
 
 #: gtk/gtknotebook.c:509
 msgid "Tab fill"
 msgstr "탭 채움"
 
 #: gtk/gtknotebook.c:510
-#, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
-msgstr "하위 탭이 할당된 영역을 채울 것인지의 여부"
+msgstr "하위 탭이 할당된 영역을 채울 지 여부"
 
 #: gtk/gtknotebook.c:516
 msgid "Tab pack type"
@@ -3086,7 +3027,7 @@ msgstr "진행률 표시줄에 표시할 텍스트"
 msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
-msgstr ""
+msgstr "문자열에 말줄임표를 붙일 위치 선택. 이 기능을 사용할 경우 진행 표시줄이 전체 문자열을 표시할 공간이 부족한 경우에 사용합니다."
 
 #: gtk/gtkradioaction.c:139
 msgid "The value"
@@ -3105,14 +3046,12 @@ msgid "Group"
 msgstr "그룹"
 
 #: gtk/gtkradioaction.c:157
-#, fuzzy
 msgid "The radio action whose group this action belongs to."
-msgstr "이 동작이 포함될 그룹의 라디오 동작."
+msgstr "이 동작이 포함되는 그룹에 있는 라디오 동작."
 
 #: gtk/gtkradiobutton.c:114
-#, fuzzy
 msgid "The radio button whose group this widget belongs to."
-msgstr "이 위젯이 포함될 그룹의 라디오 단추."
+msgstr "이 위젯이 포함되는 그룹에 있는 라디오 단추."
 
 #: gtk/gtkrange.c:325
 msgid "Update policy"
@@ -3441,11 +3380,11 @@ msgstr "아이콘 크기 목록 (gtk-menu=16,16;gtk-button=20,20..."
 
 #: gtk/gtksettings.c:372
 msgid "GTK Modules"
-msgstr ""
+msgstr "GTK 모듈"
 
 #: gtk/gtksettings.c:373
 msgid "List of currently active GTK modules"
-msgstr ""
+msgstr "현재 활성화된 GTK 모듈 목록"
 
 #: gtk/gtksettings.c:382
 msgid "Xft Antialias"
@@ -3489,12 +3428,11 @@ msgstr "Xft 해상도, 1024 * 점/인치. 기본값을 사용하려면 -1"
 
 #: gtk/gtksettings.c:432
 msgid "Alternative button order"
-msgstr ""
+msgstr "또 다른 단추 순서"
 
 #: gtk/gtksettings.c:433
-#, fuzzy
 msgid "Whether buttons in dialogs should use the alternative button order"
-msgstr "단추 안에 스톡 아이콘을 표시할 지 여부"
+msgstr "대화 상자의 단추가 또 다른 단추 순서를 사용할 지 여부"
 
 #: gtk/gtksizegroup.c:243
 msgid "Mode"
@@ -3807,13 +3745,10 @@ msgid "Left, right, or center justification"
 msgstr "좌, 우, 혹은 가운데 정렬"
 
 #: gtk/gtktexttag.c:386
-#, fuzzy
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
-msgstr ""
-"ISO 코드로서의 이 텍스트 언어. 판고는 텍스트를 표시할 때 이 값에서 힌트를 얻"
-"습니다. 이해하지 못하신다면 아마도 당신에게는 필요없을 것입니다."
+msgstr "이 텍스트의 언어 (ISO 코드). 판고는 이 텍스트를 표시할 때 이 언어 값에서 힌트를 얻습니다. 설정하지 않으면 적당한 기본값을 사용합니다."
 
 #: gtk/gtktexttag.c:393
 msgid "Left margin"
@@ -4288,23 +4223,20 @@ msgstr "모든 열의 높이가 같다고 가정합니다 - GtkTreeView의 속�
 
 #: gtk/gtktreeview.c:672
 msgid "Hover Selection"
-msgstr ""
+msgstr "따라다니기 선택"
 
 #: gtk/gtktreeview.c:673
-#, fuzzy
 msgid "Whether the selection should follow the pointer"
-msgstr "색 선택기에서 투명도를 조정할 수 있는 지 여부"
+msgstr "포인터를 따라다니면서 선택되는 지 여부"
 
 #: gtk/gtktreeview.c:692
-#, fuzzy
 msgid "Hover Expand"
-msgstr "확장"
+msgstr "따라다니기 확장"
 
 #: gtk/gtktreeview.c:693
-#, fuzzy
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
-msgstr "윈도우 매니저에서 이 창을 꾸미는 지 여부"
+msgstr "포인터가 위에 올라갈 때 각 행이 확장/축소되는 지 여부"
 
 #: gtk/gtktreeview.c:713
 msgid "Vertical Separator Width"
@@ -4372,7 +4304,7 @@ msgstr "열의 현재 너비"
 
 #: gtk/gtktreeviewcolumn.c:251
 msgid "Space which is inserted between cells"
-msgstr ""
+msgstr "셀 사이에 들어가는 공백"
 
 #: gtk/gtktreeviewcolumn.c:259
 msgid "Sizing"
@@ -4635,51 +4567,51 @@ msgstr "show all 안 하기"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "gtk_widget_show_all()이 이 위젯에 영향을 미치지 않는 지 여부"
 
-#: gtk/gtkwidget.c:1407
+#: gtk/gtkwidget.c:1417
 msgid "Interior Focus"
 msgstr "내부 포커스"
 
-#: gtk/gtkwidget.c:1408
+#: gtk/gtkwidget.c:1418
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "위젯 내에 포커스 표시기를 그릴 지 여부"
 
-#: gtk/gtkwidget.c:1414
+#: gtk/gtkwidget.c:1424
 msgid "Focus linewidth"
 msgstr "포커스 라인 두께"
 
-#: gtk/gtkwidget.c:1415
+#: gtk/gtkwidget.c:1425
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "포커스 표시기 라인의 너비 (픽셀 단위)."
 
-#: gtk/gtkwidget.c:1421
+#: gtk/gtkwidget.c:1431
 msgid "Focus line dash pattern"
 msgstr "포커스 라인의 점선 패턴"
 
-#: gtk/gtkwidget.c:1422
+#: gtk/gtkwidget.c:1432
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "포커스 표시기를 그릴 때 쓸 점선 패턴"
 
-#: gtk/gtkwidget.c:1427
+#: gtk/gtkwidget.c:1437
 msgid "Focus padding"
 msgstr "포커스 여백"
 
-#: gtk/gtkwidget.c:1428
+#: gtk/gtkwidget.c:1438
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "포커스 표시기와 위젯 '상자' 사이의 거리 (픽셀 단위)"
 
-#: gtk/gtkwidget.c:1433
+#: gtk/gtkwidget.c:1443
 msgid "Cursor color"
 msgstr "커서 색"
 
-#: gtk/gtkwidget.c:1434
+#: gtk/gtkwidget.c:1444
 msgid "Color with which to draw insertion cursor"
 msgstr "삽입 커서를 그릴때 사용할 색"
 
-#: gtk/gtkwidget.c:1439
+#: gtk/gtkwidget.c:1449
 msgid "Secondary cursor color"
 msgstr "보조 커서 색"
 
-#: gtk/gtkwidget.c:1440
+#: gtk/gtkwidget.c:1450
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4687,11 +4619,11 @@ msgstr ""
 "오른쪽에서 왼쪽으로 쓰는 텍스트와 왼쪽에서 오른쪽으로 쓰는 텍스트가 섞인 텍스"
 "트를 편집하는 경우 보조 삽입 커서를 그릴 때 쓰는 색"
 
-#: gtk/gtkwidget.c:1445
+#: gtk/gtkwidget.c:1455
 msgid "Cursor line aspect ratio"
 msgstr "커서 선 가로 세로 비율"
 
-#: gtk/gtkwidget.c:1446
+#: gtk/gtkwidget.c:1456
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "삽입 커서를 그릴때 사용할 가로 세로 비율"
 
@@ -4797,9 +4729,8 @@ msgid "Icon for this window"
 msgstr "이 창의 아이콘"
 
 #: gtk/gtkwindow.c:526
-#, fuzzy
 msgid "Name of the themed icon for this window"
-msgstr "이 창의 아이콘"
+msgstr "이 창의 테마 아이콘 이름"
 
 #: gtk/gtkwindow.c:541
 msgid "Is Active"
@@ -4854,14 +4785,12 @@ msgid "TRUE if the window should receive the input focus."
 msgstr "창이 입력 포커스를 받아야 하는 경우에 참입니다."
 
 #: gtk/gtkwindow.c:604
-#, fuzzy
 msgid "Focus on map"
-msgstr "클릭하면 포커스"
+msgstr "나타날 때 포커스"
 
 #: gtk/gtkwindow.c:605
-#, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
-msgstr "창이 입력 포커스를 받아야 하는 경우에 참입니다."
+msgstr "나타날 때 입력 포커스를 받아야 하는 경우에 참입니다."
 
 #: gtk/gtkwindow.c:619
 msgid "Decorated"
@@ -4894,31 +4823,3 @@ msgstr "입력기 상태 유형"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "입력 방법 상태 표시줄을 그리는 방법"
-
-#, fuzzy
-#~ msgid "Width In Chararacters"
-#~ msgstr "너비 문자 개수"
-
-#, fuzzy
-#~ msgid "Whether the browse dialog is visible or not."
-#~ msgstr "위젯을 보여줄 것인지 여부"
-
-#, fuzzy
-#~ msgid "Row separator column"
-#~ msgstr "행 범위 열"
-
-#, fuzzy
-#~ msgid "Boolean TreeModel column specifying which rows are separators"
-#~ msgstr "행 범위 값이 들어 있는 트리모델 열"
-
-#~ msgid "ComboBox appareance"
-#~ msgstr "콤보 상자 모양"
-
-#~ msgid "ComboBox appearance, where TRUE means Windows-style."
-#~ msgstr "콤보 상자 모양, 참이면 Windows 스타일입니다."
-
-#~ msgid "Folder Mode"
-#~ msgstr "폴더 모드"
-
-#~ msgid "Whether to select folders rather than files"
-#~ msgstr "파일이 아니라 폴더를 선택하는 지 여부"
