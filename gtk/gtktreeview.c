@@ -11663,7 +11663,7 @@ gtk_tree_view_search_equal_func (GtkTreeModel *model,
 
       key_len = strlen (case_normalized_key);
 
-      if (!strncmp (case_normalized_key, case_normalized_string, key_len))
+      if (strstr (case_normalized_string, case_normalized_key))
         retval = FALSE;
     }
   else

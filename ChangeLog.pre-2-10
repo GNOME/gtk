@@ -1,3 +1,8 @@
+Fri Dec 19 22:18:19 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_equal_func): use strstr
+	instead of strcmp (#117127, suggestion from Soeren Sandmann).
+
 Fri Dec 19 21:52:46 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkmenu.c (gtk_menu_do_insert): move item insertion logic
