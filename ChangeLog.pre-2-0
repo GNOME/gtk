@@ -1,3 +1,9 @@
+Fri Dec  7 16:05:22 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/gtkimcontextxim.c: Display the XIM
+	status callbacks with a popup window. (Patch from
+	HideToshi Tajima, #50628, somewhat modified.)
+
 Fri Dec  7 12:07:15 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/Makefile.am: each source generation rule needs to use its own
