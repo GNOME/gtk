@@ -1,3 +1,13 @@
+Fri Jul  2 23:34:33 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_unset_model): Unset the displayed
+	row when unsetting the model.  (#138560, Christian Persch)
+
+Fri Jul  2 23:01:07 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (update_menu_sensitivity): Don't crash if there
+	are no items.
+
 Fri Jul  2 22:41:27 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkimage.c (gtk_image_expose): Properly align mask and

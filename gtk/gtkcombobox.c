@@ -1266,7 +1266,7 @@ update_menu_sensitivity (GtkComboBox *combo_box)
   children = gtk_container_get_children (GTK_CONTAINER (menu));
   child = children;
 
-  if (GTK_IS_TEAROFF_MENU_ITEM (child->data))
+  if (child && GTK_IS_TEAROFF_MENU_ITEM (child->data))
     child = child->next;
 
   for (i = 0; i < items; i++, child = child->next)
@@ -1692,6 +1692,9 @@ gtk_combo_box_unset_model (GtkComboBox *combo_box)
       g_object_unref (G_OBJECT (combo_box->priv->model));
       combo_box->priv->model = NULL;
     }
+
+  if (combo_box->priv->cell_view)
+    gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (combo_box->priv->cell_view), NULL);
 }
 
 static void
