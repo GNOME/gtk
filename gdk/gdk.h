@@ -204,9 +204,11 @@ void gdk_window_shape_combine_mask (GdkWindow	    *window,
  * - Raster
  */
 void gdk_window_set_child_shapes (GdkWindow *window);
+
 /*
- * This routine allows you to combine 9ie ADD) child shapes to your own window's
- * shape keeping its current shape and ADDING the shild shapes to it.
+ * This routine allows you to combine (ie ADD) child shapes to your
+ * own window's shape keeping its current shape and ADDING the shild
+ * shapes to it.
  * 
  * - Raster
  */
@@ -224,8 +226,7 @@ void gdk_window_combine_child_shapes (GdkWindow *window);
  *
  * These two turn on/off drag or drop, and if enabling it also
  * sets the list of types supported. The list of types passed in
- * should be in order of decreasing preference.
- */
+ * should be in order of decreasing preference.  */
 void gdk_window_dnd_drag_set (GdkWindow	 *window,
 			      guint8	  drag_enable,
 			      gchar	**typelist,
@@ -859,7 +860,6 @@ guint    gdk_keyval_to_upper		  (guint	keyval);
 guint    gdk_keyval_to_lower		  (guint	keyval);
 gboolean gdk_keyval_is_upper		  (guint	keyval);
 gboolean gdk_keyval_is_lower		  (guint	keyval);
-
 
 #include <gdk/gdkrgb.h>
 

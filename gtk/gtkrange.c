@@ -1123,23 +1123,23 @@ gtk_real_range_draw_trough (GtkRange *range)
 static void
 gtk_real_range_draw_slider (GtkRange *range)
 {
-   GtkStateType state_type;
+  GtkStateType state_type;
    
-   g_return_if_fail (range != NULL);
-   g_return_if_fail (GTK_IS_RANGE (range));
+  g_return_if_fail (range != NULL);
+  g_return_if_fail (GTK_IS_RANGE (range));
    
-   if (range->slider)
-     {
-	if ((range->in_child == RANGE_CLASS (range)->slider) ||
-	    (range->click_child == RANGE_CLASS (range)->slider))
-	  state_type = GTK_STATE_PRELIGHT;
-	else
-	  state_type = GTK_STATE_NORMAL;
-	gtk_paint_box (GTK_WIDGET (range)->style, range->slider,
-		       state_type, GTK_SHADOW_OUT,
-		       NULL, GTK_WIDGET (range), "slider",
-		       0, 0, -1, -1);
-     }
+  if (range->slider)
+    {
+      if ((range->in_child == RANGE_CLASS (range)->slider) ||
+	  (range->click_child == RANGE_CLASS (range)->slider))
+	state_type = GTK_STATE_PRELIGHT;
+      else
+	state_type = GTK_STATE_NORMAL;
+      gtk_paint_box (GTK_WIDGET (range)->style, range->slider,
+		     state_type, GTK_SHADOW_OUT,
+		     NULL, GTK_WIDGET (range), "slider",
+		     0, 0, -1, -1);
+    }
 }
 
 static gint

@@ -491,12 +491,12 @@ gtk_window_finalize (GtkObject *object)
 static void
 gtk_window_show (GtkWidget *widget)
 {
-   g_return_if_fail (widget != NULL);
-   g_return_if_fail (GTK_IS_WINDOW (widget));
-   
-   GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
-   gtk_container_check_resize (GTK_CONTAINER (widget));
-   gtk_widget_map (widget);
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (widget));
+
+  GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
+  gtk_container_check_resize (GTK_CONTAINER (widget));
+  gtk_widget_map (widget);
 }
 
 static void
@@ -548,55 +548,55 @@ gtk_window_unmap (GtkWidget *widget)
 static void
 gtk_window_realize (GtkWidget *widget)
 {
-   GtkWindow *window;
-   GdkWindowAttr attributes;
-   gint attributes_mask;
-   
-   g_return_if_fail (widget != NULL);
-   g_return_if_fail (GTK_IS_WINDOW (widget));
-   
-   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
-   window = GTK_WINDOW (widget);
-   
-   switch (window->type)
-     {
-     case GTK_WINDOW_TOPLEVEL:
-       attributes.window_type = GDK_WINDOW_TOPLEVEL;
-       break;
-     case GTK_WINDOW_DIALOG:
-       attributes.window_type = GDK_WINDOW_DIALOG;
-       break;
-     case GTK_WINDOW_POPUP:
-       attributes.window_type = GDK_WINDOW_TEMP;
-       break;
+  GtkWindow *window;
+  GdkWindowAttr attributes;
+  gint attributes_mask;
+  
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (widget));
+  
+  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  window = GTK_WINDOW (widget);
+  
+  switch (window->type)
+    {
+    case GTK_WINDOW_TOPLEVEL:
+      attributes.window_type = GDK_WINDOW_TOPLEVEL;
+      break;
+    case GTK_WINDOW_DIALOG:
+      attributes.window_type = GDK_WINDOW_DIALOG;
+      break;
+    case GTK_WINDOW_POPUP:
+      attributes.window_type = GDK_WINDOW_TEMP;
+      break;
     }
    
-   attributes.title = window->title;
-   attributes.wmclass_name = window->wmclass_name;
-   attributes.wmclass_class = window->wmclass_class;
-   attributes.width = widget->allocation.width;
-   attributes.height = widget->allocation.height;
-   attributes.wclass = GDK_INPUT_OUTPUT;
-   attributes.visual = gtk_widget_get_visual (widget);
-   attributes.colormap = gtk_widget_get_colormap (widget);
-   attributes.event_mask = gtk_widget_get_events (widget);
-   attributes.event_mask |= (GDK_EXPOSURE_MASK |
-			     GDK_KEY_PRESS_MASK |
-			     GDK_ENTER_NOTIFY_MASK |
-			     GDK_LEAVE_NOTIFY_MASK |
-			     GDK_FOCUS_CHANGE_MASK |
-			     GDK_STRUCTURE_MASK);
+  attributes.title = window->title;
+  attributes.wmclass_name = window->wmclass_name;
+  attributes.wmclass_class = window->wmclass_class;
+  attributes.width = widget->allocation.width;
+  attributes.height = widget->allocation.height;
+  attributes.wclass = GDK_INPUT_OUTPUT;
+  attributes.visual = gtk_widget_get_visual (widget);
+  attributes.colormap = gtk_widget_get_colormap (widget);
+  attributes.event_mask = gtk_widget_get_events (widget);
+  attributes.event_mask |= (GDK_EXPOSURE_MASK |
+			    GDK_KEY_PRESS_MASK |
+			    GDK_ENTER_NOTIFY_MASK |
+			    GDK_LEAVE_NOTIFY_MASK |
+			    GDK_FOCUS_CHANGE_MASK |
+			    GDK_STRUCTURE_MASK);
    
-   attributes_mask = GDK_WA_VISUAL | GDK_WA_COLORMAP;
-   attributes_mask |= (window->title ? GDK_WA_TITLE : 0);
-   attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
+  attributes_mask = GDK_WA_VISUAL | GDK_WA_COLORMAP;
+  attributes_mask |= (window->title ? GDK_WA_TITLE : 0);
+  attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
    
-   widget->window = gdk_window_new (NULL, &attributes, attributes_mask);
-   gdk_window_set_user_data (widget->window, window);
+  widget->window = gdk_window_new (NULL, &attributes, attributes_mask);
+  gdk_window_set_user_data (widget->window, window);
 
-   widget->style = gtk_style_attach (widget->style, widget->window);
-   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
-   gtk_window_draw(widget, NULL);
+  widget->style = gtk_style_attach (widget->style, widget->window);
+  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+  gtk_window_draw(widget, NULL);
 }
 
 static void
@@ -1078,7 +1078,6 @@ gtk_window_move_resize (GtkWindow *window)
         gdk_window_resize (widget->window,
 			   widget->requisition.width,
 			   widget->requisition.height);
-       gtk_window_draw(widget, NULL);
     }
   else if (needed_resize)
     {
@@ -1094,8 +1093,6 @@ gtk_window_move_resize (GtkWindow *window)
        allocation.height = widget->requisition.height;
        
        gtk_widget_size_allocate (widget, &allocation);
-
-       gtk_window_draw(widget, NULL);
     }
   else
     {
@@ -1189,30 +1186,38 @@ gtk_window_set_hints (GtkWidget      *widget,
     }
 }
 
+static void
+gtk_window_paint (GtkWidget     *widget,
+		  GdkRectangle *area)
+{
+  gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL, 
+		      GTK_SHADOW_NONE, area, widget, "base", 0, 0, -1, -1);
+}
+
 static gint
 gtk_window_expose (GtkWidget      *widget,
 		   GdkEventExpose *event)
 {
-   g_return_val_if_fail (widget != NULL, FALSE);
-   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
-   g_return_val_if_fail (event != NULL, FALSE);
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
 
-   if (GTK_BIN(widget)->child)
-     gtk_widget_draw (widget, &event->area);
+  gtk_window_paint (widget, &event->area);
+  
+  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
+    return (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
 
-   if (GTK_WIDGET_DRAWABLE (widget))
-     if (GTK_WIDGET_CLASS (parent_class)->expose_event)
-       return (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
-   return FALSE;
+  return FALSE;
 }
 
 static void
 gtk_window_draw (GtkWidget    *widget,
 		 GdkRectangle *area)
 {
-   gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL, 
-		      GTK_SHADOW_NONE, area, widget, "base", 0, 0, -1, -1);
-   gtk_widget_draw (GTK_BIN (widget)->child, area);
+  gtk_window_paint (widget, area);
+  
+  if (GTK_WIDGET_CLASS (parent_class)->draw)
+    (* GTK_WIDGET_CLASS (parent_class)->draw) (widget, area);
 }
 
 static void

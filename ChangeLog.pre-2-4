@@ -1,3 +1,11 @@
+Thu Jul 30 17:27:10 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c: Abstract out checking for shape
+	  extension into a function.
+
+	* gtk/gtkwindow.c: Fix up gtk_window_expose()/draw().
+	  Remove extra callls to gtk_window_draw().
+
 Thu Jul 30 11:18:43 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.c gtk/gtkrc.c: Memory management fixups.

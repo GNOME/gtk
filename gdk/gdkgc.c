@@ -554,9 +554,7 @@ gdk_gc_set_clip_mask (GdkGC	*gc,
       xmask = mask_private->xwindow;
     }
   else
-     {
-	xmask = None;
-     }
+    xmask = None;
   
   private = (GdkGCPrivate*) gc;
 
@@ -586,9 +584,7 @@ gdk_gc_set_clip_rectangle (GdkGC	*gc,
 			  &xrectangle, 1, Unsorted);
     }
   else
-     {
-	XSetClipMask (private->xdisplay, private->xgc, None);
-     }
+    XSetClipMask (private->xdisplay, private->xgc, None);
 } 
 
 void

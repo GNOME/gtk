@@ -58,6 +58,7 @@ int event_mask_table[20] =
   SubstructureNotifyMask
 };
 
+static gboolean gdk_window_have_shape_ext (void);
 
 /* internal function created for and used by gdk_window_xid_at_coords */
 Window
@@ -1562,6 +1563,24 @@ gdk_window_add_colormap_windows (GdkWindow *window)
     XFree (old_windows);
 }
 
+static gboolean
+gdk_window_have_shape_ext (void){
+
+  enum { UNKNOWN, NO, YES };
+  static gint have_shape = UNKNOWN;
+
+  if (have_shape == UNKNOWN)
+    {
+      int ignore;
+      if (XQueryExtension(gdk_display, "SHAPE", &ignore, &ignore, &ignore))
+	have_shape = YES;
+      else
+	have_shape = NO;
+    }
+
+  return (have_shape == YES);
+}
+
 /*
  * This needs the X11 shape extension.
  * If not available, shaped windows will look
@@ -1572,26 +1591,13 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 			       GdkBitmap *mask,
 			       gint x, gint y)
 {
-  enum { UNKNOWN, NO, YES };
-
-  static gint have_shape = UNKNOWN;
-
   GdkWindowPrivate *window_private;
   Pixmap pixmap;
 
   g_return_if_fail (window != NULL);
 
 #ifdef HAVE_SHAPE_EXT
-  if (have_shape == UNKNOWN)
-    {
-      int ignore;
-      if (XQueryExtension(gdk_display, "SHAPE", &ignore, &ignore, &ignore))
-	have_shape = YES;
-      else
-	have_shape = NO;
-    }
-  
-  if (have_shape == YES)
+  if (gdk_window_have_shape_ext())
     {
       window_private = (GdkWindowPrivate*) window;
       if (window_private->destroyed)
@@ -2089,7 +2095,7 @@ struct _gdk_span
    struct _gdk_span    *next;
 };
 
-void
+static void
 gdk_add_to_span(struct _gdk_span **s, int x, int xx)
 {
    struct _gdk_span   *ptr1, *ptr2, *noo, *ss;
@@ -2215,7 +2221,7 @@ gdk_add_to_span(struct _gdk_span **s, int x, int xx)
    return;
 }
 
-void
+static void
 gdk_propagate_shapes(Display *disp, Window win)
 {
    Window              rt, par, *list = NULL;
@@ -2368,7 +2374,7 @@ gdk_propagate_shapes(Display *disp, Window win)
    g_free(spans);
 }
 
-void
+static void
 gdk_propagate_combine_shapes(Display *disp, Window win)
 {
    Window              rt, par, *list = NULL;
@@ -2531,57 +2537,35 @@ gdk_propagate_combine_shapes(Display *disp, Window win)
 void
 gdk_window_set_child_shapes (GdkWindow *window)
 {
-   enum { UNKNOWN, NO, YES };
-   static gint have_shape = UNKNOWN;
-   GdkWindowPrivate *private;
+  GdkWindowPrivate *private;
    
-   g_return_if_fail (window != NULL);
+  g_return_if_fail (window != NULL);
    
 #ifdef HAVE_SHAPE_EXT
-   if (have_shape == UNKNOWN)
-     {
-	int ignore;
-	if (XQueryExtension(gdk_display, "SHAPE", &ignore, &ignore, &ignore))
-	  have_shape = YES;
-	else
-	  have_shape = NO;
-     }
-   
-   if (have_shape == YES)
-     {
-	private = (GdkWindowPrivate*) window;
-	if (private->destroyed)
-	  return;
-	gdk_propagate_shapes (private->xdisplay, private->xwindow);
-     }
+  if (gdk_window_have_shape_ext())
+    {
+      private = (GdkWindowPrivate*) window;
+      if (private->destroyed)
+	return;
+      gdk_propagate_shapes (private->xdisplay, private->xwindow);
+    }
 #endif   
 }
 
 void
 gdk_window_combine_child_shapes (GdkWindow *window)
 {
-   enum { UNKNOWN, NO, YES };
-   static gint have_shape = UNKNOWN;
-   GdkWindowPrivate *private;
-   
-   g_return_if_fail (window != NULL);
-   
+  GdkWindowPrivate *private;
+  
+  g_return_if_fail (window != NULL);
+  
 #ifdef HAVE_SHAPE_EXT
-   if (have_shape == UNKNOWN)
+  if (gdk_window_have_shape_ext())
      {
-	int ignore;
-	if (XQueryExtension(gdk_display, "SHAPE", &ignore, &ignore, &ignore))
-	  have_shape = YES;
-	else
-	  have_shape = NO;
-     }
-   
-   if (have_shape == YES)
-     {
-	private = (GdkWindowPrivate*) window;
-	if (private->destroyed)
-	  return;
-	gdk_propagate_combine_shapes (private->xdisplay, private->xwindow);
+       private = (GdkWindowPrivate*) window;
+       if (private->destroyed)
+	 return;
+       gdk_propagate_combine_shapes (private->xdisplay, private->xwindow);
      }
 #endif   
 }
