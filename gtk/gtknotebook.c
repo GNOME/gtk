@@ -503,7 +503,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 					      CHILD_PROP_TAB_FILL,
 					      g_param_spec_boolean ("tab_fill", 
 								    P_("Tab fill"), 
-								    P_("Wheather the childs tab should fill the allocated area or not"),
+								    P_("Whether the childs tab should fill the allocated area or not"),
 								    TRUE,
 								    G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
