@@ -330,7 +330,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
       gtk_window_set_transient_for (GTK_WINDOW (widget),
 				    GTK_WINDOW (parent));
       gtk_window_set_screen (GTK_WINDOW (widget), 
-			     gtk_widget_get_screen (parent));
+			     gtk_window_get_screen (parent));
     }
   
   if (flags & GTK_DIALOG_MODAL)

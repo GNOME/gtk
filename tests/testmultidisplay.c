@@ -5,7 +5,7 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkinternals.h>
 
-const gchar *screen2_name = NULL;
+gchar *screen2_name = NULL;
 
 typedef struct
 {
@@ -20,10 +20,10 @@ get_dialog_response (GtkDialog * dialog, gint arg1, gpointer data)
 {
   GtkEntry *entry;
   if (arg1 == GTK_RESPONSE_DELETE_EVENT)
-    exit (1);
+    return;
   g_return_if_fail (GTK_IS_ENTRY (data));
   entry = GTK_ENTRY (data);
-  screen2_name = gtk_entry_get_text (entry);
+  screen2_name = g_strdup (gtk_entry_get_text (entry));
 }
 
 void
@@ -39,8 +39,6 @@ void
 changed (GtkEntry * entry, gpointer * data)
 {
   GtkEntry *other_entry = GTK_ENTRY (data);
-  printf ("%s | %s\n", gtk_entry_get_text (entry),
-	  gtk_entry_get_text (other_entry));
 }
 
 void
@@ -130,7 +128,7 @@ main (int argc, char *argv[])
 
   while (!correct_second_display)
     {
-      if (!strcmp (screen2_name, ""))
+      if (!g_strcasecmp (screen2_name, ""))
 	g_print ("No display name, reverting to default display\n");
 
       dpy2 = gdk_display_new (0, NULL, screen2_name);
@@ -142,13 +140,14 @@ main (int argc, char *argv[])
       else
 	{
 	  char *error_msg =
-	    g_new (char, sizeof (char) * (strlen (screen2_name) + 50));
+	    g_new (char, 200);
 	  sprintf (error_msg,
 		   "Can't open display :\n\t%s\nplease try another one\n",
 		   screen2_name);
 	  gtk_label_set_text (GTK_LABEL (dialog_label), error_msg);
 	  gtk_widget_show_all (dialog);
 	  gtk_dialog_run (GTK_DIALOG (dialog));
+	  g_free (error_msg);
 	}
     }
   gtk_widget_destroy (dialog);

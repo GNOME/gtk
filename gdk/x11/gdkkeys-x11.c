@@ -308,8 +308,8 @@ get_direction (GdkKeymapX11 *keymap_x11)
     result = PANGO_DIRECTION_LTR;
   else
     {
-      name = gdk_x11_get_xatom_name_for_display 
-	(display, xkb->names->groups[state_rec.locked_group]);
+      name = g_strdup (gdk_x11_get_xatom_name_for_display 
+	(display, xkb->names->groups[state_rec.locked_group]));
 
       if (g_strcasecmp (name, "arabic") == 0 ||
 	  g_strcasecmp (name, "hebrew") == 0 ||
@@ -317,6 +317,7 @@ get_direction (GdkKeymapX11 *keymap_x11)
 	result = PANGO_DIRECTION_RTL;
       else
 	result = PANGO_DIRECTION_LTR;
+      g_free (name);
     }
     
   return result;

@@ -23,7 +23,7 @@ get_dialog_response (GtkDialog * dialog, gint arg1, gpointer data)
 {
   GtkEntry *entry;
   if (arg1 == GTK_RESPONSE_DELETE_EVENT)
-    exit (1);
+    return;
   g_return_if_fail (GTK_IS_ENTRY (data));
   entry = GTK_ENTRY (data);
   screen2_name = g_strdup (gtk_entry_get_text (entry));
@@ -138,7 +138,7 @@ do_multidisplay (GtkWidget * do_widget)
       while (!correct_second_display)
 	{
 
-	  if (!strcmp (screen2_name, ""))
+	  if (!g_strcasecmp (screen2_name, ""))
 	    g_print ("No display name, reverting to default display\n");
 
 	  dpy2 = gdk_display_new (0, NULL, screen2_name);

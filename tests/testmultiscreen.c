@@ -75,7 +75,7 @@ main (int argc, char *argv[])
 
   dpy = gdk_get_default_display ();
   num_screen = gdk_display_get_n_screens (dpy);
-  displayname = gdk_display_get_name (dpy);
+  displayname = g_strdup (gdk_display_get_name (dpy));
   if (num_screen <= 1)
     {
       printf ("This Xserver (%s) manages only one screen. exiting...\n",

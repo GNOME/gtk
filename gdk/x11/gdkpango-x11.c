@@ -24,6 +24,7 @@
 #include "gdkpango.h"
 #include <pango/pangox.h>
 #include "gdkscreen-x11.h"
+#include "gdkdisplay-x11.h"
 #ifdef HAVE_XFT
 #include <pango/pangoxft.h>
 #endif
@@ -46,19 +47,20 @@ PangoContext *
 gdk_pango_context_get_for_screen (GdkScreen *screen)
 {
   PangoContext *context;
+  GdkDisplayImplX11 *display_impl; 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  display_impl = GDK_DISPLAY_IMPL_X11 (GDK_SCREEN_DISPLAY (screen));
   
 #ifdef HAVE_XFT
-  static gint use_xft = -1;
-  if (use_xft == -1)
+  if (display_impl->use_xft == -1)
     {
       const char *val = g_getenv ("GDK_USE_XFT");
 
-      use_xft = val && (atoi (val) != 0) && 
+      display_impl->use_xft = val && (atoi (val) != 0) && 
 	_gdk_x11_have_render (GDK_SCREEN_DISPLAY (screen));
     }
   
-  if (use_xft)
+  if (display_impl->use_xft)
     context = pango_xft_get_context (GDK_SCREEN_XDISPLAY (screen),
 				     GDK_SCREEN_IMPL_X11 (screen)->screen_num);
   else

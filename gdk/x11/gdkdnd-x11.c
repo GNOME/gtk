@@ -417,7 +417,6 @@ gdk_window_cache_new (GdkScreen *screen)
   Window root, parent, *children;
   unsigned int nchildren;
   int i;
-  gint old_warnings = _gdk_error_warnings;
   Display *xdisplay = GDK_SCREEN_XDISPLAY (screen);
   GdkWindow *root_window = gdk_screen_get_root_window (screen);
   

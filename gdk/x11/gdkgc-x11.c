@@ -843,14 +843,15 @@ _gdk_x11_gc_get_fg_picture (GdkGC *gc)
       if (!pix_format)
 	return None;
 
-      pix = XCreatePixmap (x11_gc->xdisplay, _gdk_root_window,
+      pix = XCreatePixmap (GDK_GC_XDISPLAY (gc), 
+			   GDK_SCREEN_XROOTWIN (x11_gc->screen),
 			   1, 1, pix_format->depth);
       pa.repeat = True;
       x11_gc->fg_picture = XRenderCreatePicture (GDK_GC_XDISPLAY (gc), 
 						 pix,
 						 pix_format,
 						 CPRepeat, &pa);
-      XFreePixmap (x11_gc->xdisplay, pix);
+      XFreePixmap (GDK_GC_XDISPLAY (gc), pix);
       
       new = TRUE;
     }

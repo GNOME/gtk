@@ -401,7 +401,7 @@ gtk_drag_get_ipc_widget (GdkScreen *screen)
 static void
 gtk_drag_release_ipc_widget (GtkWidget *widget)
 {
-  GdkScreen *screen = gtk_widget_get_display (widget);
+  GdkScreen *screen = gtk_widget_get_screen (widget);
   GSList *drag_widgets = g_object_get_data (G_OBJECT (screen),
 					    "gtk-dnd-ipc-widgets");
   drag_widgets = g_slist_prepend (drag_widgets, widget);

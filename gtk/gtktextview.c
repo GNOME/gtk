@@ -5789,7 +5789,7 @@ gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
       need_adjust = TRUE;
     }
 
-  if (need_adjust && gtk_widget_has_screen (text_view))
+  if (need_adjust && gtk_widget_has_screen (GTK_WIDGET (text_view)))
     gtk_text_view_value_changed (NULL, text_view);
 }
 

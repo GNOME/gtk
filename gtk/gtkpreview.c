@@ -422,7 +422,7 @@ gtk_preview_get_visual (void)
 GdkColormap*
 gtk_preview_get_cmap (void)
 {
-  return gdk_rgb_get_colormap_for_screen (gdk_get_default_display ());
+  return gdk_rgb_get_colormap_for_screen (gdk_get_default_screen ());
 }
 
 GtkPreviewInfo*

@@ -101,11 +101,11 @@ gdk_x11_display_impl_class_init (GdkDisplayImplX11Class * klass)
 static void
 init_xinerama_support (GdkScreen * screen)
 {
-  int opcode, firstevent, firsterror;
   GdkScreenImplX11 *screen_impl = GDK_SCREEN_IMPL_X11 (screen);
 #ifdef HAS_XINERAMA
 #ifdef HAS_SOLARIS_XINERAMA
   XRectangle monitors[MAXFRAMEBUFFERS];
+  int opcode, firstevent, firsterror;
   char hints[16];
   gint result;
 #endif
@@ -190,6 +190,8 @@ GdkDisplay *_gdk_x11_display_impl_display_new (gchar * display_name)
   int screen_num;
   display = g_object_new (gdk_x11_display_impl_get_type (), NULL);
   display_impl = GDK_DISPLAY_IMPL_X11 (display);
+
+  display_impl->use_xft = -1;
   if ((display_impl->xdisplay =
        XOpenDisplay (display_name)) == NULL)
     {

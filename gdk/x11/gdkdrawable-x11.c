@@ -265,7 +265,7 @@ gdk_x11_drawable_get_picture (GdkDrawable *drawable)
 	}
 
       format = XRenderFindVisualFormat (GDK_SCREEN_XDISPLAY (impl->screen),
-					GDK_VISUAL_XVISUAL (visual));
+					gdk_x11_visual_get_xvisual(visual));
       if (format)
 	impl->picture = XRenderCreatePicture (GDK_SCREEN_XDISPLAY (impl->screen),
 					      impl->xid, format, 0, NULL);
@@ -713,7 +713,9 @@ gdk_x11_draw_glyphs (GdkDrawable      *drawable,
       gdk_x11_drawable_update_picture_clip (drawable, gc);
       dest_picture = gdk_x11_drawable_get_picture (drawable);
       
-      pango_xft_picture_render (impl->xdisplay, src_picture, dest_picture, font, glyphs, x, y);
+      pango_xft_picture_render (GDK_SCREEN_XDISPLAY (impl->screen), 
+				src_picture, dest_picture, 
+				font, glyphs, x, y);
     }
   else
 #endif  /* !HAVE_XFT */
@@ -1314,7 +1316,6 @@ gdk_x11_draw_pixbuf (GdkDrawable     *drawable,
 		     gint             x_dither,
 		     gint             y_dither)
 {
-  Display *xdisplay = GDK_DRAWABLE_IMPL_X11 (drawable)->xdisplay;
   FormatType format_type;
   XRenderPictFormat *format, *mask_format;
   gint rowstride;
@@ -1322,7 +1323,8 @@ gdk_x11_draw_pixbuf (GdkDrawable     *drawable,
   gboolean use_pixmaps = TRUE;
 #endif /* USE_SHM */
     
-  format_type = select_format (xdisplay, &format, &mask_format);
+  format_type = select_format (gdk_drawable_get_display (drawable),
+			       &format, &mask_format);
 
   if (format_type == FORMAT_NONE ||
       !gdk_pixbuf_get_has_alpha (pixbuf) ||

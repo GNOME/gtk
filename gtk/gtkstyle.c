@@ -5512,14 +5512,14 @@ gtk_style_get_font (GtkStyle *style)
 	{
 	  /* no colormap, no screen */
 	  style->private_font = gdk_font_from_description_for_display (
-				    gdk_get_default_screen (),
+				    gdk_get_default_display (),
 				    style->font_desc);
 	  style->private_font_desc = pango_font_description_copy (style->font_desc);
 	}
 
       if (!style->private_font)
 	style->private_font = gdk_font_load_for_display (
-				  gdk_get_default_screen (),
+				  gdk_get_default_display (),
 				  "fixed");
       if (!style->private_font) 
 	g_error ("Unable to load \"fixed\" font");

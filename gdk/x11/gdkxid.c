@@ -112,7 +112,7 @@ gdk_xid_table_remove (XID xid)
 gpointer
 gdk_xid_table_lookup (XID xid)
 {
-  gdk_xid_table_lookup_for_display (gdk_get_default_display (), xid);
+  return gdk_xid_table_lookup_for_display (gdk_get_default_display (), xid);
 }
 #endif
 

@@ -113,7 +113,7 @@ struct _GdkDisplayImplX11
   gchar *gdk_input_gxid_host;
   gint   gdk_input_gxid_port;
 
-  
+  gint   use_xft; 
 };
 
 struct _GdkDisplayImplX11Class

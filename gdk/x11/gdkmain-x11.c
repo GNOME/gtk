@@ -846,7 +846,7 @@ gchar *
 gdk_get_display (void)
 {
   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_display_get_name instead\n"));
-  return gdk_display_get_name (gdk_get_default_display ());
+  return g_strdup (gdk_display_get_name (gdk_get_default_display ()));
 }
 #endif
 
@@ -873,9 +873,9 @@ gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
 
   gdk_error_trap_push ();
     
-  result = XSendEvent (gdk_get_default_display (), window, propagate, 
+  result = XSendEvent (gdk_display, window, propagate, 
 		       event_mask, event_send);
-  XSync (gdk_get_default_display (), False);
+  XSync (gdk_display, False);
   return result && gdk_error_trap_pop() == Success;
 }
 #endif
@@ -926,7 +926,8 @@ _gdk_region_get_xrectangles (GdkRegion   *region,
 void
 gdk_x11_grab_server ()
 { 
-  GdkDisplayImplX11 *display_impl = gdk_get_default_display ();
+  GdkDisplayImplX11 *display_impl = 
+    GDK_DISPLAY_IMPL_X11 (gdk_get_default_display ());
   
   if (display_impl->grab_count == 0)
     XGrabServer (display_impl->xdisplay);
@@ -938,7 +939,8 @@ gdk_x11_grab_server ()
 void
 gdk_x11_ungrab_server ()
 {
-  GdkDisplayImplX11 *display_impl = gdk_get_default_display ();
+  GdkDisplayImplX11 *display_impl = 
+    GDK_DISPLAY_IMPL_X11 (gdk_get_default_display ());
   
   g_return_if_fail (display_impl->grab_count > 0);
   

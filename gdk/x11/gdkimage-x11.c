@@ -644,7 +644,7 @@ _gdk_x11_copy_to_image (GdkDrawable    *drawable,
   if (have_grab)
     {				
       gdk_x11_display_ungrab (GDK_DRAWABLE_DISPLAY (drawable));
-      XFlush (GDK_DRAWABLE_DISPLAY (drawable));
+      XFlush (gdk_x11_drawable_get_xdisplay (drawable));
       have_grab = FALSE;
     }
   
