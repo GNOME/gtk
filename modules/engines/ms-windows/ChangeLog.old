@@ -1,6 +1,7 @@
 2004-05-21  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/Theme/gtk-2.0/gtkrc: Better icon sizes
+	* src/msw_theme_main.c: Enable XP theme switching
 	
 2004-03-20  Raymond Penners  <raymond@dotsphinx.com>
 
