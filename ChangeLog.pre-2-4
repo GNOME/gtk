@@ -1,3 +1,14 @@
+Tue Jan 19 22:15:10 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtklist.c
+	(gtk_list_button_press):  only call grab_add if pointer_grab succeeds.
+	(gtk_list_unmap): remove pointer/widget grabs if needed.
+	(gtk_list_signal_focus_lost): removed.
+	(gtk_list_focus) (gtk_list_set_focus_child): set last_focus_child.
+	(gtk_list_remove_items_internal) (gtk_list_clear_items): unset
+ 	undo_focus_child if necessary. In case of SELECTION_BROWSE/EXTENDED
+ 	select a new item if selection is empty.
+
 Tue Jan 19 00:21:15 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkcompat.h: add compatibility define for
