@@ -1,3 +1,10 @@
+Sat Mar  2 03:49:31 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): move edit
+	ifs above _set_cursor code, don't collapse/expand row on double
+	click, only activate (#63269)
+	(validate_visible_area): add two missing lines (#73161, #73162)
+
 Sun Mar  3 12:13:56 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Fix typo where pangoxft was being
