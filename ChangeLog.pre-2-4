@@ -15,6 +15,11 @@ Tue Jan 20 16:38:52 1998  Owen Taylor  <owt1@cornell.edu>
 	  gtk/testgtk.c: changed to use new version
 	  gtk/Makefile.am gtk/gtk.h
 	
+Mon Jan 19 20:10:19 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* gdk/gdk.h Fixed typo where strdup was used instead of g_strdup
+          (found by Frank Neumann)
+
 Mon Jan 19 16:21:00 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_class_init): Set

@@ -456,7 +456,7 @@ gdk_init (int    *argc,
   class_hint->res_name = gdk_progname;
   if (gdk_progclass == NULL)
     {
-      gdk_progclass = strdup (gdk_progname);
+      gdk_progclass = g_strdup (gdk_progname);
       gdk_progclass[0] = toupper (gdk_progclass[0]);
     }
   class_hint->res_class = gdk_progclass;
