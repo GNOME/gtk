@@ -1,3 +1,21 @@
+What is new in GTK+ 1.1.8:
+
+* Added support for gettext and the localization of the standard
+  dialogs.
+* Added line-wrapping for the label, and JUSTIFY_FILL
+* Support reordering via drag and drop in  CList and CTree.
+* Replaced GtkDrawWindow widget with a GTK_USER_DRAW flag
+* Extended gtkpaned API to support minimum sizes and proportional
+  resizing.
+* Changed the handling of shared memory segments so as to 
+  remove the need for GTK+ to set up signal handlers.
+* Re-implemented event loop in terms of the event loop
+  that has been added to GLib 1.1.8
+* Added 'grab_focus' signal to allow keyboard accelerators
+  for entries.
+* Load locale specific RC files if present.
+* Bug fixes.
+
 What is new in GTK+ 1.1.7:
 
 * Fixed memory mis-allocation in default files code
