@@ -910,17 +910,9 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
 {
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
   
-  if (text && *text)
-    {
-      gtk_progress_set_show_text (GTK_PROGRESS (pbar), TRUE);
-      gtk_progress_set_format_string (GTK_PROGRESS (pbar), text);
-    }
-  else
-    {
-      gtk_progress_set_show_text (GTK_PROGRESS (pbar), FALSE);
-      gtk_progress_set_format_string (GTK_PROGRESS (pbar), NULL);
-    }
-
+  gtk_progress_set_show_text (GTK_PROGRESS (pbar), text && *text);
+  gtk_progress_set_format_string (GTK_PROGRESS (pbar), text);
+  
   /* We don't support formats in this interface */
   GTK_PROGRESS (pbar)->use_text_format = FALSE;
   

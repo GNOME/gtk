@@ -1,3 +1,12 @@
+Fri Sep 27 15:27:45 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimage.c (gtk_image_unrealize): Reset the
+	animation iter on unrealize as well as unmap.
+	(#94336)
+
+	* gtk/gtkprogressbar.c (gtk_progress_bar_set_text): Don't
+	turn a value of "" into NULL. (#94157, Vitaly Tishkov)
+
 Wed Sep 25 18:23:50 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* modules/input/gtkimcontextxim.c:

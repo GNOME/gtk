@@ -39,6 +39,7 @@ static void gtk_image_init         (GtkImage       *image);
 static gint gtk_image_expose       (GtkWidget      *widget,
                                     GdkEventExpose *event);
 static void gtk_image_unmap        (GtkWidget      *widget);
+static void gtk_image_unrealize    (GtkWidget      *widget);
 static void gtk_image_size_request (GtkWidget      *widget,
                                     GtkRequisition *requisition);
 static void gtk_image_destroy      (GtkObject      *object);
@@ -122,6 +123,7 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->expose_event = gtk_image_expose;
   widget_class->size_request = gtk_image_size_request;
   widget_class->unmap = gtk_image_unmap;
+  widget_class->unrealize = gtk_image_unrealize;
   
   g_object_class_install_property (gobject_class,
                                    PROP_PIXBUF,
@@ -1136,12 +1138,8 @@ gtk_image_get (GtkImage   *image,
 }
 
 static void
-gtk_image_unmap (GtkWidget *widget)
+gtk_image_reset_anim_iter (GtkImage *image)
 {
-  GtkImage *image;
-
-  image = GTK_IMAGE (widget);
-
   if (image->storage_type == GTK_IMAGE_ANIMATION)
     {
       /* Reset the animation */
@@ -1158,9 +1156,24 @@ gtk_image_unmap (GtkWidget *widget)
           image->data.anim.iter = NULL;
         }
     }
+}
+
+static void
+gtk_image_unmap (GtkWidget *widget)
+{
+  gtk_image_reset_anim_iter (GTK_IMAGE (widget));
 
   if (GTK_WIDGET_CLASS (parent_class)->unmap)
     GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+}
+
+static void
+gtk_image_unrealize (GtkWidget *widget)
+{
+  gtk_image_reset_anim_iter (GTK_IMAGE (widget));
+
+  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
+    GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
 }
 
 static gint
