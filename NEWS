@@ -24,7 +24,7 @@ Overview of Changes in GTK+ 2.2.3
  - Fix CapsLock and NumLock for non-XKB [Robert Basch]
  - Fix problems with, eg. Ctrl-Alt-Backspace hiding Cntrl-Backspace [Owen]
  - Workaround Xinerama servers reporting wrong depths [Owen]
-* GtkTreeView [Kristian Rieteld]
+* GtkTreeView [Kristian Rietveld]
  - Fix scrolling once more [Pedro Gimeno, Michael Natterer, Timo Sirainen]
  - Don't get confused by the Control key when handling selection
    from an accelerator like <Control>B [Michael Natterer]
@@ -43,14 +43,14 @@ Overview of Changes in GTK+ 2.2.3
  - Remember imcontext attributes when switching methods [Owen, 
    Botond Botyanszki]
 * GtkFileSelection [Owen]
- - Fix selection of "UntitledN" on initail map [Mark Finlay]
+ - Fix selection of "UntitledN" on initial map [Mark Finlay]
  - Fix an annoying bug with cursor positioning on failed completion
  - Misc Fixes [Owen, Tor]
 * Other widgets
  - Fix problem with GtkOptionMenus coming up in the wrong place [Kristian]
-   Fix problem with spinbuttons not getting enough space [Morten Welinder,
+ - Fix problem with spinbuttons not getting enough space [Morten Welinder,
    Kristian]
- - Fix an infinite loop when resizing GtkTextView [Owen]
+ - Fix an infinite loop when resizing GtkTextView [Owen, Frederic Crozat]
  - Don't include menu labels in gtk_notebook_forall [Owen]
  - Fix problem with XEMBED (GtkPlug) clients that don't take focus stealing
    focus [Owen]
@@ -64,10 +64,11 @@ Overview of Changes in GTK+ 2.2.3
   from a tarball [Owen]
 * Documentation improvements [Matthias, Noah Levitt, Tor, Doug Quale, 
   Morten Welinder]
-* Misc bug fixes [Keith Bissett, Botond Botyanszki, Arno Charlet, 
-  Felipe Heidrich, Charles Kerr, George Lebl, Noah, Tor, Callum McKenzie, 
-  Michael Meeks, Denis Mikhalkin, Thomas Mirlacher, Kristian, Masahiro Sakai, 
-  Soeren Sandmann, Benedikt Spranger, Owen, Luis Villa]
+* Misc bug fixes [Keith Bissett, Botond Botyanszki, Damien Carbery,
+  Arno Charlet, Felipe Heidrich, Charles Kerr, George Lebl, Noah, Tor, 
+  Callum McKenzie, Michael Meeks, Denis Mikhalkin, Thomas Mirlacher,
+  Kristian, Masahiro Sakai, Soeren Sandmann, Benedikt Spranger, Owen, 
+  Luis Villa]
 * New and updated translations (ar,az,cs,cy,be,de,es,fi,fr,he,hu,id,is,it,
   ko,lt,ml,mn,nl,ne,no,pl,pt,pt_BR,ru,sk,sr,sr@Latn,ta,wa,zh_TW,zh_CN)
 

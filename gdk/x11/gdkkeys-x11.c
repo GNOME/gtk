@@ -297,6 +297,7 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
           gint keycode = keymap_x11->mod_keymap->modifiermap[i];
           gint j;
           KeySym *syms;
+	  guint mask;
 
           /* Ignore invalid keycodes. */
           if (keycode < keymap_x11->min_keycode ||
@@ -308,7 +309,7 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
           /* The fourth modifier, GDK_MOD1_MASK is 1 << 3.
 	   * Each group of max_keypermod entries refers to the same modifier.
            */
-          guint mask = 1 << (i / keymap_x11->mod_keymap->max_keypermod);
+          mask = 1 << (i / keymap_x11->mod_keymap->max_keypermod);
 
           switch (mask)
             {

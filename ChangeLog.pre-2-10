@@ -1,6 +1,15 @@
-Mon Aug 25 21:48:34 2003  Owen Taylor  <otaylor@redhat.com>
+Tue Aug 26 10:01:18 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.2.3 ===
+
+Tue Aug 26 09:57:38 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkkeys-x11.c (update_keymaps): Fix variable
+	declaration not at start of block. (#120371, Damien Carbery)
+
+	* NEWS: Bunch of typo fixes from Kristian.
+
+Mon Aug 25 21:48:34 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Version 2.2.3, interface age 3
 
