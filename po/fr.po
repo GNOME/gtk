@@ -9,9 +9,9 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.3.1\n"
+"Project-Id-Version: gtk+ 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
+"POT-Creation-Date: 2004-01-24 13:31+0100\n"
 "PO-Revision-Date: 2004-01-18 11:13+0100\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -331,7 +331,7 @@ msgstr "Espace de couleur JPEG non supporté (%s)"
 #: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
 #: gdk-pixbuf/io-jpeg.c:950
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Impossible d'allouer de la mémoire pour charger le fichier JPEG"
+msgstr "Impossible d'allouer de la mémoire pour le chargement du fichier JPEG"
 
 #: gdk-pixbuf/io-jpeg.c:893
 #, c-format
@@ -925,7 +925,7 @@ msgstr "_Palette"
 
 #: gtk/gtkcolorseldialog.c:115
 msgid "Color Selection"
-msgstr "Sélection de couleur"
+msgstr "Sélecteur de couleurs"
 
 #: gtk/gtkentry.c:4079 gtk/gtktextview.c:6875
 msgid "Select _All"
@@ -963,7 +963,7 @@ msgstr ""
 "Impossible d'ajouter un signet pour %s :\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2917
+#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2937
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1059,55 +1059,55 @@ msgid "Preview"
 msgstr "Aperçu"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2118
+#: gtk/gtkfilechooserdefault.c:2130
 #, c-format
 msgid "Current folder: %s"
-msgstr "Dossier courant : %s"
+msgstr "Dossier actuel : %s"
 
-#: gtk/gtkfilechooserdefault.c:2521
+#: gtk/gtkfilechooserdefault.c:2533
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "le raccourci %s n'existe pas"
 
-#: gtk/gtkfilechooserdefault.c:3063
+#: gtk/gtkfilechooserdefault.c:3083
 msgid "Type name of new folder"
 msgstr "Saisissez le nom du nouveau dossier"
 
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3110
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d octet"
 msgstr[1] "%d octets"
 
-#: gtk/gtkfilechooserdefault.c:3092
+#: gtk/gtkfilechooserdefault.c:3112
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f k"
 
-#: gtk/gtkfilechooserdefault.c:3094
+#: gtk/gtkfilechooserdefault.c:3114
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3096
+#: gtk/gtkfilechooserdefault.c:3116
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3141
+#: gtk/gtkfilechooserdefault.c:3161
 msgid "Today"
 msgstr "Aujourd'hui"
 
-#: gtk/gtkfilechooserdefault.c:3143
+#: gtk/gtkfilechooserdefault.c:3163
 msgid "Yesterday"
 msgstr "Hier"
 
-#: gtk/gtkfilechooserdefault.c:3151
+#: gtk/gtkfilechooserdefault.c:3171
 msgid "%d/%b/%Y"
 msgstr "%d/%b/%Y"
 
-#: gtk/gtkfilechooserdefault.c:3154
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "Unknown"
 msgstr "Inconnu"
 
@@ -1145,7 +1145,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1115
 msgid "_New Folder"
-msgstr "_Créer un dossier"
+msgstr "_Nouveau dossier"
 
 #: gtk/gtkfilesel.c:1126
 msgid "De_lete File"
@@ -1376,7 +1376,7 @@ msgstr "_Aperçu :"
 
 #: gtk/gtkfontsel.c:1285
 msgid "Font Selection"
-msgstr "Sélection de police"
+msgstr "Sélecteur de polices"
 
 #: gtk/gtkgamma.c:399
 msgid "Gamma"
@@ -1402,6 +1402,10 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
+"Impossible de trouver l'icône « %s ». Le thème « %s »\n"
+"n'a pas été trouvé non plus. Peut-être que vous avez besoin de\n"
+"l'installer. Vous pouvez obtenir une copie à :\n"
+"\t%s"
 
 #: gtk/gtkicontheme.c:1247
 #, c-format
@@ -1655,11 +1659,11 @@ msgstr "_Dossier personnel"
 
 #: gtk/gtkstock.c:301
 msgid "Increase Indent"
-msgstr ""
+msgstr "Augmenter l'indentation"
 
 #: gtk/gtkstock.c:302
 msgid "Decrease Indent"
-msgstr ""
+msgstr "Diminuer l'indentation"
 
 #: gtk/gtkstock.c:303
 msgid "_Index"
@@ -1719,7 +1723,7 @@ msgstr "_Imprimer"
 
 #: gtk/gtkstock.c:317
 msgid "Print Pre_view"
-msgstr "_Aperçu de l'impression"
+msgstr "_Aperçu avant impression"
 
 #: gtk/gtkstock.c:318
 msgid "_Properties"
@@ -1775,7 +1779,7 @@ msgstr "Vérification _orthographique"
 
 #: gtk/gtkstock.c:331
 msgid "_Stop"
-msgstr "_Stop"
+msgstr "_Arrêter"
 
 #: gtk/gtkstock.c:332
 msgid "_Strikethrough"
