@@ -1,7 +1,7 @@
 Thu May 29 18:30:35 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* modules/input/imipa.c: 
-	use GETTEXT_PACKAGE to get a translation for "Default"(#113850).
+	use GETTEXT_PACKAGE to get a translation for "ipa"(#113850).
 
 Thu May 29 18:08:01 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
