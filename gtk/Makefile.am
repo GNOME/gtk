@@ -493,6 +493,11 @@ gtk_private_h_sources += gtkfilesystemunix.h
 gtk_c_sources +=         gtkfilesystemunix.c
 endif
 
+if OS_WIN32
+gtk_private_h_sources += gtkfilesystemwin32.h
+gtk_c_sources +=         gtkfilesystemwin32.c
+endif
+
 gtk_plug_c_sources =            \
 	gtkplug.c		\
 	gtksocket.c		\
