@@ -21,6 +21,9 @@
 
 #include <gtk/gtkobject.h>
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkthemes.h>
+
+extern GtkThemesData th_dat;
 
 
 #ifdef __cplusplus

@@ -264,6 +264,9 @@ gtk_init (int	 *argc,
   /* Set the 'initialized' flag.
    */
   initialized = TRUE;
+   
+   gtk_themes_init (argc,argv);
+     
 }
 
 void
@@ -274,6 +277,8 @@ gtk_exit (int errorcode)
   /* de-initialisation is done by the gtk_exit_funct(),
    * no need to do this here (Alex J.)
    */
+   gtk_themes_exit(errorcode);
+   
   gdk_exit(errorcode);
 }
 
@@ -1183,6 +1188,7 @@ gtk_exit_func ()
       initialized = FALSE;
       gtk_preview_uninit ();
     }
+   gtk_themes_exit(0);
 }
 
 

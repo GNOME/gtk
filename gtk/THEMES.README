@@ -1,0 +1,32 @@
+<raster@redhat.com>
+
+This is a proposal - or at least a start at one for themes.
+
+compile and install this as your gtk - cxurrently --theme theme_name is
+broken for some reason on some apps.
+
+to use a specific theme do:
+
+app --theme theme_name
+
+i have 2 themes provided here - theme and theme2
+
+theme is the default GTK look
+theme2 is an alternative look for testing purposes only.
+
+this gtk theme lib looks for the themes in ~/themes
+the themes are compile dinti .libs here called:
+libtheme.so
+libtheme2.so
+
+by defautl gtk loosk for ~/themes/libtheme2.so
+
+just for the hell of it (yes it SHOULD do libtheme.so - but this is just for
+now soo I KNOW the theme is working)
+
+you will need to compile these themes beofre runing anythng but running
+
+COMPILE_THEME
+and
+COMPILE_THEME2
+

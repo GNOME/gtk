@@ -45,6 +45,10 @@ struct _GtkContainer
   GtkWidget *focus_child;
 
   gint16 border_width;
+  gint16 internal_border_left;
+  gint16 internal_border_right;
+  gint16 internal_border_top;
+  gint16 internal_border_bottom;
   guint auto_resize : 1;
   guint need_resize : 1;
   guint block_resize : 1;

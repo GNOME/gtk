@@ -1,0 +1,11 @@
+gcc -c theme_button.c -o theme_button.lo \
+ -I. -I.. -I../glib -I/usr/X11R6/include \
+ -g -O2 -DGTK_NO_CHECK_CASTS -Wall -DUSE_XIM -c -fPIC -DPIC
+gcc -c theme_main.c -o theme_main.lo \
+ -I. -I.. -I../glib -I/usr/X11R6/include \
+ -g -O2 -DGTK_NO_CHECK_CASTS -Wall -DUSE_XIM -c -fPIC -DPIC
+
+/bin/sh ../libtool --mode=link gcc -g -O2 -DGTK_NO_CHECK_CASTS -Wall \
+-DUSE_XIM  -o libtheme.la -rpath /usr/local/lib -version-info 1:0:0 \
+theme_button.lo \
+theme_main.lo

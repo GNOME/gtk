@@ -76,6 +76,7 @@ libgtk_la_SOURCES = \
 	gtkstatusbar.c		\
 	gtktable.c		\
 	gtktext.c		\
+	gtkthemes.c		\
 	gtktipsquery.c		\
 	gtktogglebutton.c	\
 	gtktoolbar.c		\
@@ -172,6 +173,7 @@ gtkinclude_HEADERS = \
 	gtkstatusbar.h		\
 	gtktable.h		\
 	gtktext.h		\
+	gtkthemes.h		\
 	gtktipsquery.h		\
 	gtktogglebutton.h	\
 	gtktoolbar.h		\
@@ -197,7 +199,7 @@ gtkinclude_HEADERS = \
 gtktypebuiltins.c: gtk.defs gentypeinfo.el
 	$(SHELL) $(srcdir)/runelisp $(srcdir)/gentypeinfo.el id $< $@
 
-libgtk_la_LDFLAGS = -version-info 1:0:0
+libgtk_la_LDFLAGS = -ldl -version-info 1:0:0
 
 EXTRA_DIST = \
 	line-arrow.xbm 		\
