@@ -836,6 +836,69 @@ rgb888msb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 	}
 }
 
+/*
+  This should work correctly with any display/any endianness, but will probably
+  run quite slow
+*/
+static void
+convert_real_slow (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *cmap, int alpha)
+{
+	int xx, yy;
+	int width, height;
+	int bpl;
+	unsigned char *srow = image->mem, *orow = pixels;
+	unsigned char *s;
+	unsigned char *o;
+	guint32 pixel;
+	GdkVisual *v;
+
+	width = image->width;
+	height = image->height;
+	bpl = image->bpl;
+	v = gdk_colormap_get_visual(cmap);
+
+	d(printf("rgb  mask/shift/prec = %x:%x:%x %d:%d:%d  %d:%d:%d\n",
+		 v->red_mask, v->green_mask, v->blue_mask,
+		 v->red_shift, v->green_shift, v->blue_shift,
+		 v->red_prec, v->green_prec, v->blue_prec));
+
+	for (yy = 0; yy < height; yy++) {
+		s = srow;
+		o = orow;
+		for (xx = 0; xx < width; xx++) {
+			pixel = gdk_image_get_pixel(image, xx, yy);
+			switch (v->type) {
+				/* I assume this is right for static & greyscale's too? */
+			case GDK_VISUAL_STATIC_GRAY:
+			case GDK_VISUAL_GRAYSCALE:
+			case GDK_VISUAL_STATIC_COLOR:
+			case GDK_VISUAL_PSEUDO_COLOR:
+				*o++ = cmap->colors[pixel].red;
+				*o++ = cmap->colors[pixel].green;
+				*o++ = cmap->colors[pixel].blue;
+				break;
+			case GDK_VISUAL_TRUE_COLOR:
+				/* this is odd because it must sometimes shift left (otherwise
+				   i'd just shift >> *_shift - 8 + *_prec), so this logic
+				   should work for all bit sizes/shifts/etc */
+				*o++ = ((pixel & v->red_mask) << (32 - v->red_shift - v->red_prec)) >> 24;
+				*o++ = ((pixel & v->green_mask) << (32 - v->green_shift - v->green_prec)) >> 24;
+				*o++ = ((pixel & v->blue_mask) << (32 - v->blue_shift - v->blue_prec)) >> 24;
+				break;
+			case GDK_VISUAL_DIRECT_COLOR:
+				*o++ = cmap->colors[((pixel & v->red_mask) << (32 - v->red_shift - v->red_prec)) >> 24].red;
+				*o++ = cmap->colors[((pixel & v->green_mask) << (32 - v->green_shift - v->green_prec)) >> 24].green;
+				*o++ = cmap->colors[((pixel & v->blue_mask) << (32 - v->blue_shift - v->blue_prec)) >> 24].blue;
+				break;
+			}
+			if (alpha)
+				*o++ = 0xff;
+		}
+		srow += bpl;
+		orow += rowstride;
+	}
+}
+
 typedef void (* cfunc) (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *cmap);
 
 static cfunc convert_map[] = {
@@ -848,38 +911,69 @@ static cfunc convert_map[] = {
 
 /*
   perform actual conversion
+
+  If we can, try and use the optimised code versions, but as a default
+  fallback, and always for direct colour, use the generic/slow but complete
+  conversion function.
 */
 static void
 rgbconvert (GdkImage *image, art_u8 *pixels, int rowstride, int alpha, GdkColormap *cmap)
 {
 	int index = (image->byte_order == GDK_MSB_FIRST) | (alpha != 0) << 1;
-	int bank=0;
+	int bank=5;		/* default fallback converter */
+	GdkVisual *v = gdk_colormap_get_visual(cmap);
 
-	switch (image->depth) {
-	case 1:
-		bank = 0;
+	d(printf("masks = %x:%x:%x\n", v->red_mask, v->green_mask, v->blue_mask));
+	d(printf("image depth = %d, bpp = %d\n", image->depth, image->bpp));
+
+	switch (v->type) {
+				/* I assume this is right for static & greyscale's too? */
+	case GDK_VISUAL_STATIC_GRAY:
+	case GDK_VISUAL_GRAYSCALE:
+	case GDK_VISUAL_STATIC_COLOR:
+	case GDK_VISUAL_PSEUDO_COLOR:
+		switch (image->bpp) {
+		case 1:
+			bank = 0;
+			break;
+		case 8:
+			bank = 1;
+			break;
+		}
 		break;
-
-	case 8:
-		bank = 1;
+	case GDK_VISUAL_TRUE_COLOR:
+		switch (image->depth) {
+		case 15:
+			if (v->red_mask == 0x7c00 && v->green_mask == 0x3e0 && v->blue_mask == 0x1f
+			    && image->bpp == 16)
+				bank = 2;
+			break;
+		case 16:
+			if (v->red_mask == 0xf800 && v->green_mask == 0x7e0 && v->blue_mask == 0x1f
+			    && image->bpp == 16)
+				bank = 3;
+			break;			
+		case 24:
+		case 32:
+			if (v->red_mask == 0xff0000 && v->green_mask == 0xff00 && v->blue_mask == 0xff
+			    && image->bpp == 32)
+				bank = 4;
+			break;
+		}
 		break;
-
-	case 15:
-		bank = 2;
-		break;
-
-	case 16:
-		bank = 3;
-		break;
-
-	case 24:
-	case 32:
-		bank = 4;
+	case GDK_VISUAL_DIRECT_COLOR:
+		/* always use the slow version */
 		break;
 	}
 
-	index |= bank << 2;
-	(* convert_map[index]) (image, pixels, rowstride, cmap);
+	d(printf("converting using conversion function in bank %d\n", bank));
+
+	if (bank==5) {
+		convert_real_slow(image, pixels, rowstride, cmap, alpha);
+	} else {
+		index |= bank << 2;
+		(* convert_map[index]) (image, pixels, rowstride, cmap);
+	}
 }
 
 

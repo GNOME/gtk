@@ -4,6 +4,12 @@
 	Filled in body of function.
 	(rgbconvert): Added GdkColormap parameter, and to all conversion
 	functions also.
+	(convert_real_slow): New function - should convert ANY visual/data
+	format properly, but it aint fast.  Used as a fallback when an
+	optimised routine wont match.
+	(rgbconvert): Do very specific tests on the data format to verify
+	properly if the optimised version will do, otherwise use the
+	fallback function for all other data formats.
 
 	* gdk-pixbuf/Makefile.am: Re-enabled building of
 	textpixbuf-drawable.
