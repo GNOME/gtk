@@ -1,3 +1,15 @@
+Thu Dec 19 03:58:36 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* tests/testtreeflow.c: the rand variable should be static to
+	avoid conflicts with rand(). (#100844, reported by Soeren Sandmann,
+	fix pointed out by Matthias Clasen).
+
+Thu Dec 19 03:56:23 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_select_cursor_row): if we
+	started editing, we handled this key signal, so return TRUE.
+	(#100532, reported by Soeren Sandmann).
+
 2002-12-18  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwidget.c: Add docs.

@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 
 GtkTreeModel *model = NULL;
-GRand *rand = NULL;
+static GRand *rand = NULL;
 GtkTreeSelection *selection = NULL;
 enum
 {

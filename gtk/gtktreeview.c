@@ -7487,7 +7487,7 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view,
       if (gtk_tree_view_start_editing (tree_view, cursor_path))
 	{
 	  gtk_tree_path_free (cursor_path);
-	  return FALSE;
+	  return TRUE;
 	}
     }
   _gtk_tree_selection_internal_select_node (tree_view->priv->selection,
