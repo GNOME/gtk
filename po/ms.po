@@ -939,7 +939,7 @@ msgid ""
 "Could not go to the parent folder of %s:\n"
 "%s"
 msgstr ""
-"Tak dapat pergi ke folder ibubapa bagi %s:\n"
+"Tak dapat pergi ke folder induk bagi %s:\n"
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:914
