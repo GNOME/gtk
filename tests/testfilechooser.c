@@ -216,6 +216,7 @@ my_new_from_file_at_size (const char *filename,
 
 	fclose (f);
 
+	g_assert (*error == NULL);
 	if (!gdk_pixbuf_loader_close (loader, error)) {
 		g_object_unref (G_OBJECT (loader));
 		return NULL;
@@ -225,6 +226,11 @@ my_new_from_file_at_size (const char *filename,
 
 	if (!pixbuf) {
 		g_object_unref (G_OBJECT (loader));
+
+		/* did the loader set an error? */
+		if (*error != NULL)
+			return NULL;
+
 		g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_FAILED,

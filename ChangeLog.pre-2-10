@@ -1,3 +1,23 @@
+Mon Mar  8 04:50:12 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (create_path_bar): new function to
+	consolidate creating the path_bar.
+	(gtk_file_chooser_default_set_current_folder): no longer need to
+	pass in the filesystem.
+
+	* gtk/gtkpathbar.h: Removed unused set_pixbuf functions in favor
+	of just setting the filesystem.
+
+	* gtk/gtkpathbar.c (gtk_path_bar_finalize): Free root path and
+	home_dir.
+	(get_button_image): Add images to path_bar.
+	(update_button_appearance): use images
+	(make_directory_button): Clasify buttons based upon location.
+	(_gtk_path_bar_set_path): no longer need a file-system.  Also, add
+	rerooting, #135845, #135914
+
+	* tests/testfilechooser.c: Fix reused error handling.
+
 2004-03-08  Anders Carlsson  <andersca@gnome.org>
 
 	* gtk/gtkfilesystemunix.c: (get_icon_for_directory),

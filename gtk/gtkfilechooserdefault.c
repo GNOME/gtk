@@ -208,7 +208,7 @@ typedef enum {
 } ShortcutsIndex;
 
 /* Standard icon size */
-/* FIXME: maybe this should correspond to the font size in the tree views... */
+/* FIXME: this should correspond to gtk_icon_size_lookup_for_settings  */
 #define ICON_SIZE 20
 #define PREVIEW_HBOX_SPACING 12
 #define NUM_LINES 40
@@ -1993,6 +1993,17 @@ create_filename_entry_and_filter_combo (GtkFileChooserDefault *impl)
   return hbox;
 }
 
+static GtkWidget *
+create_path_bar (GtkFileChooserDefault *impl)
+{
+  GtkWidget *path_bar;
+
+  path_bar = g_object_new (GTK_TYPE_PATH_BAR, NULL);
+  _gtk_path_bar_set_file_system (GTK_PATH_BAR (path_bar), impl->file_system);
+  
+  return path_bar;
+}
+
 /* Creates the widgets for the files/folders pane */
 static GtkWidget *
 file_pane_create (GtkFileChooserDefault *impl,
@@ -2008,7 +2019,7 @@ file_pane_create (GtkFileChooserDefault *impl,
   /* The path bar and 'Create Folder' button */
   hbox = gtk_hbox_new (FALSE, 12);
   gtk_widget_show (hbox);
-  impl->browse_path_bar = g_object_new (GTK_TYPE_PATH_BAR, NULL);
+  impl->browse_path_bar = create_path_bar (impl);
   g_signal_connect (impl->browse_path_bar, "path-clicked", G_CALLBACK (path_bar_clicked), impl);
   gtk_widget_show_all (impl->browse_path_bar);
   gtk_box_pack_start (GTK_BOX (hbox), impl->browse_path_bar, TRUE, TRUE, 0);
@@ -2858,7 +2869,7 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
   GError *err;
 
   err = NULL;
-  if (!_gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), path, impl->file_system, &err))
+  if (!_gtk_path_bar_set_path (GTK_PATH_BAR (impl->browse_path_bar), path, &err))
     {
       g_propagate_error (error, err);
       return FALSE;

@@ -40,7 +40,9 @@ struct _GtkPathBar
 {
   GtkContainer parent;
 
-  GtkFilePath *home_directory;
+  GtkFileSystem *file_system;
+  GtkFilePath *root_path;
+  GtkFilePath *home_path;
   GdkPixbuf *home_icon;
   GdkPixbuf *root_icon;
 
@@ -63,15 +65,11 @@ struct _GtkPathBarClass
 };
 
 GType    gtk_path_bar_get_type (void) G_GNUC_CONST;
-gboolean _gtk_path_bar_set_path (GtkPathBar         *path_bar,
-				 const GtkFilePath  *file_path,
-				 GtkFileSystem      *file_system,
-				 GError            **error);
-void     _gtk_path_bar_set_root_icon (GtkPathBar         *path_bar,
-				      GdkPixbuf          *home_icon);
-void     _gtk_path_bar_set_home_icon (GtkPathBar         *path_bar,
-				      const GtkFilePath  *home_dir,
-				      GdkPixbuf          *home_icon);
+void     _gtk_path_bar_set_file_system (GtkPathBar         *path_bar,
+					GtkFileSystem      *file_system);
+gboolean _gtk_path_bar_set_path        (GtkPathBar         *path_bar,
+					const GtkFilePath  *file_path,
+					GError            **error);
 
 G_END_DECLS
 
