@@ -805,12 +805,14 @@ gtk_tree_model_sort_row_deleted (GtkTreeModel *s_model,
   while (elt->ref_count > 0)
     gtk_tree_model_sort_real_unref_node (GTK_TREE_MODEL (data), &iter, FALSE);
 
-  if (level->ref_count == 0 && level != tree_model_sort->root)
+  if (level->ref_count == 0)
     {
       /* This will prune the level, so I can just emit the signal and not worry
        * about cleaning this level up. */
       gtk_tree_model_sort_increment_stamp (tree_model_sort);
       gtk_tree_path_free (path);
+      if (level == tree_model_sort->root)
+	tree_model_sort->root = NULL;
       return;
     }
 

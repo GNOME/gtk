@@ -1,3 +1,9 @@
+Mon Mar  1 23:59:18 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_deleted): 
+	Make it work correctly when the child model is cleared 
+	completely. (#121633)
+
 2004-03-01  Michael Natterer  <mitch@gimp.org>
 
 	* gtk/gtkfilechooserwidget.h: removed accidentially committed char
