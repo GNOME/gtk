@@ -2249,7 +2249,7 @@ gdk_window_set_icon (GdkWindow *window,
       }
 #endif
 
-      hIcon = (HICON)SendMessage (GDK_WINDOW_HWND (window), WM_SETICON, ICON_BIG, (LPARAM)hIcon);
+      SendMessage (GDK_WINDOW_HWND (window), WM_SETICON, ICON_BIG, (LPARAM)hIcon);
       if (impl->hicon)
         GDI_CALL (DestroyIcon, (impl->hicon));
       impl->hicon = hIcon;
@@ -2259,7 +2259,7 @@ gdk_window_set_icon (GdkWindow *window,
       /* reseting to default icon */
       if (impl->hicon)
         {
-          hIcon = (HICON)SendMessage (GDK_WINDOW_HWND (window), WM_SETICON, ICON_BIG, 0);
+          SendMessage (GDK_WINDOW_HWND (window), WM_SETICON, ICON_BIG, 0);
           GDI_CALL (DestroyIcon, (impl->hicon));
           impl->hicon = NULL;
         }
