@@ -4592,7 +4592,21 @@ pending_select_paths_process (GtkFileChooserDefault *impl)
       browse_files_center_selected_row (impl);
     }
   else
-    browse_files_select_first_row (impl);
+    {
+      /* We only select the first row if the chooser is actually mapped ---
+       * selecting the first row is to help the user when he is interacting with
+       * the chooser, but sometimes a chooser works not on behalf of the user,
+       * but rather on behalf of something else like GtkFileChooserButton.  In
+       * that case, the chooser's selection should be what the caller expects,
+       * as the user can't see that something else got selected.  See bug #165264.
+       *
+       * Also, we don't select the first file if we are in SAVE or CREATE_FOLDER
+       * modes.  Doing so would change the contents of the filename entry.
+       */
+      if (GTK_WIDGET_MAPPED (impl)
+	  && !(impl->action == GTK_FILE_CHOOSER_ACTION_SAVE || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
+	browse_files_select_first_row (impl);
+    }
 
   g_assert (impl->pending_select_paths == NULL);
 }
