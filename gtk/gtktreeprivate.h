@@ -135,6 +135,11 @@ struct _GtkTreeViewPrivate
   GList *column_drag_info;
   GtkTreeViewColumnReorder *cur_reorder;
 
+  /* ATK Hack */
+  GtkTreeDestroyCountFunc destroy_count_func;
+  gpointer destroy_count_data;
+  GtkDestroyNotify destroy_count_destroy;
+
   /* Scroll timeout (e.g. during dnd) */
   guint scroll_timeout;
 

@@ -1446,10 +1446,11 @@ run_automated_tests (void)
   {
     /* Make sure tree store mutations don't crash anything */
     GtkTreeStore *store;
-    
+    GtkTreeIter root;
+
     store = gtk_tree_store_new_with_types (1, G_TYPE_INT);
-    
-    treestore_torture_recurse (store, NULL, 0);
+    gtk_tree_model_get_iter_root (GTK_TREE_MODEL (store), &root);
+    treestore_torture_recurse (store, &root, 0);
     
     g_object_unref (G_OBJECT (store));
   }

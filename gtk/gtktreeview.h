@@ -275,6 +275,21 @@ gboolean               gtk_tree_view_get_dest_row_at_pos           (GtkTreeView 
 GdkPixmap             *gtk_tree_view_create_row_drag_icon          (GtkTreeView               *tree_view,
 								    GtkTreePath               *path);
 
+
+/* This function should really never be used.  It is just for use by ATK.
+ */
+typedef void (* GtkTreeDestroyCountFunc) (GtkTreeView *tree_view,
+					  GtkTreePath *path,
+					  gint         children,
+					  gpointer     user_data);
+void gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,
+					   GtkTreeDestroyCountFunc  func,
+					   gpointer                 data,
+					   GtkDestroyNotify         destroy);
+
+
+
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

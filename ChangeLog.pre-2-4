@@ -1,3 +1,13 @@
+Tue Jun 26 12:59:28 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_set_model): fix
+	stupid missing statement
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_destroy_count_func): New
+	private function for ATK.  It notifies you of how many _visible_
+	children are deleted when a node is deleted.  Should be used by
+	atk only.
+
 Tue Jun 26 11:06:34 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c gtk/gtkentry.c gtk/gtkspinbutton.c:

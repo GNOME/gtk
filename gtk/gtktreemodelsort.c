@@ -278,7 +278,7 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
   if (tree_model_sort->root)
     {
       gtk_tree_model_sort_free_level (tree_model_sort->root);
-      tree_model_sort->root;
+      tree_model_sort->root = NULL;
     }
 
   if (tree_model_sort->sort_list)

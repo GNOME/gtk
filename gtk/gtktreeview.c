@@ -836,7 +836,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   gtk_tree_view_set_adjustments (tree_view, NULL, NULL);
   tree_view->priv->selection = _gtk_tree_selection_new_with_tree_view (tree_view);
   _gtk_tree_view_update_size (tree_view);
-
 }
 
 
@@ -993,6 +992,13 @@ gtk_tree_view_destroy (GtkObject *object)
     {
       (* tree_view->priv->column_drop_func_data_destroy) (tree_view->priv->column_drop_func_data);
       tree_view->priv->column_drop_func_data = NULL;
+    }
+
+  if (tree_view->priv->destroy_count_destroy &&
+      tree_view->priv->destroy_count_data)
+    {
+      (* tree_view->priv->destroy_count_destroy) (tree_view->priv->destroy_count_data);
+      tree_view->priv->destroy_count_data = NULL;
     }
 
   gtk_tree_row_reference_free (tree_view->priv->cursor);
@@ -4415,6 +4421,16 @@ gtk_tree_view_has_child_toggled (GtkTreeModel *model,
 }
 
 static void
+count_children_helper (GtkRBTree *tree,
+		       GtkRBNode *node,
+		       gpointer   data)
+{
+  if (node->children)
+    _gtk_rbtree_traverse (node->children, node->children->root, G_POST_ORDER, count_children_helper, data);
+  ((gint *)data)++;
+}
+
+static void
 gtk_tree_view_deleted (GtkTreeModel *model,
 		       GtkTreePath  *path,
 		       gpointer      data)
@@ -4445,6 +4461,14 @@ gtk_tree_view_deleted (GtkTreeModel *model,
 
   /* Ensure we don't have a dangling pointer to a dead node */
   ensure_unprelighted (tree_view);
+
+  if (tree_view->priv->destroy_count_func)
+    {
+      gint child_count = 0;
+      if (node->children)
+	_gtk_rbtree_traverse (node->children, node->children->root, G_POST_ORDER, count_children_helper, &child_count);
+      (* tree_view->priv->destroy_count_func) (tree_view, path, child_count, tree_view->priv->destroy_count_data);
+    }
 
   if (tree->root->count == 1)
     {
@@ -7148,6 +7172,14 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   /* Ensure we don't have a dangling pointer to a dead node */
   ensure_unprelighted (tree_view);
 
+  if (tree_view->priv->destroy_count_func)
+    {
+      gint child_count = 0;
+      if (node->children)
+	_gtk_rbtree_traverse (node->children, node->children->root, G_POST_ORDER, count_children_helper, &child_count);
+      (* tree_view->priv->destroy_count_func) (tree_view, path, child_count, tree_view->priv->destroy_count_data);
+    }
+
   if (gtk_tree_view_unref_and_check_selection_tree (tree_view, node->children))
     g_signal_emit_by_name (G_OBJECT (tree_view->priv->selection), "changed", 0);
   _gtk_rbtree_remove (node->children);
@@ -8158,3 +8190,30 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   return drawable;
 }
 
+
+/**
+ * gtk_tree_view_set_destroy_count_func:
+ * @tree_view: A #GtkTreeView
+ * @func: Function to be called when a view row is destroyed, or NULL
+ * @data: User data to be passed to @func, or NULL
+ * @destroy: Destroy notifier for @data, or NULL
+ * 
+ * This function should almost never be used.  It is meant for private use by
+ * ATK for determining the number of visible rows that are removed when the user
+ * collapses a row, or a row is deleted.
+ **/
+void
+gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,
+				      GtkTreeDestroyCountFunc  func,
+				      gpointer                 data,
+				      GtkDestroyNotify         destroy)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  if (tree_view->priv->destroy_count_destroy)
+    (* tree_view->priv->destroy_count_destroy) (tree_view->priv->destroy_count_data);
+
+  tree_view->priv->destroy_count_func = func;
+  tree_view->priv->destroy_count_data = data;
+  tree_view->priv->destroy_count_destroy = destroy;
+}
