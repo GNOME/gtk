@@ -1,3 +1,8 @@
+2001-11-14  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtkgamma.c (button_clicked_callback): create the label with
+	a mnemonic
+
 2001-11-15  Sven Neumann  <sven@gimp.org>
 
 	* tests/testgtk.c: make it compile without warnings.
