@@ -1052,8 +1052,8 @@ _gtk_text_btree_delete (GtkTextIter *start,
   /* Re-initialize our iterators */
   _gtk_text_btree_get_iter_at_line (tree, start, start_line, start_byte_offset);
   *end = *start;
-  
-  _gtk_text_btree_resolve_bidi (start, end);
+
+  gtk_text_btree_resolve_bidi (start, end);
 }
 
 void
@@ -1220,8 +1220,8 @@ _gtk_text_btree_insert (GtkTextIter *iter,
 
     /* Convenience for the user */
     *iter = end;
-    
-    _gtk_text_btree_resolve_bidi (&start, &end);
+
+    gtk_text_btree_resolve_bidi (&start, &end);
   }
 }
 
