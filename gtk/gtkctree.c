@@ -1880,7 +1880,7 @@ draw_row (GtkCList     *clist,
 				       row_rectangle.y + row_center_offset + clist_row->cell[i].vertical,
 				       layout);
 		      gdk_gc_set_clip_rectangle (fg_gc, NULL);
-		      pango_layout_unref (layout);
+		      g_object_unref (G_OBJECT (layout));
 		    }
 		  break;
 		default:
@@ -1901,7 +1901,7 @@ draw_row (GtkCList     *clist,
 					    &intersect_rectangle))
 	{
 	  if (layout)
-	    pango_layout_unref (layout);
+            g_object_unref (G_OBJECT (layout));
 	  continue;
 	}
 
@@ -1955,7 +1955,7 @@ draw_row (GtkCList     *clist,
 			   row_rectangle.y + row_center_offset + clist_row->cell[i].vertical,
 			   layout);
 
-	  pango_layout_unref (layout);
+          g_object_unref (G_OBJECT (layout));
 	}
       gdk_gc_set_clip_rectangle (fg_gc, NULL);
     }
@@ -2820,7 +2820,7 @@ cell_size_request (GtkCList       *clist,
       requisition->width = logical_rect.width / PANGO_SCALE;
       requisition->height = logical_rect.height / PANGO_SCALE;
       
-      pango_layout_unref (layout);
+      g_object_unref (G_OBJECT (layout));
     }
   else
     {

@@ -267,7 +267,7 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
 	}
     }
 
-  pango_layout_unref (layout);
+  g_object_unref (G_OBJECT (layout));
 }
 
 

@@ -586,7 +586,7 @@ gtk_hscale_draw_value (GtkScale *scale)
 		       GTK_WIDGET (scale)->style->fg_gc [state_type],
 		       x, y, layout);
 
-      pango_layout_unref (layout);
+      g_object_unref (G_OBJECT (layout));
     }
 }
 

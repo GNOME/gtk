@@ -1314,7 +1314,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   
   requisition->height = height + (widget->style->ythickness + INNER_BORDER) * 2;
 
-  pango_layout_unref (layout);
+  g_object_unref (G_OBJECT (layout));
 }
 
 static void
@@ -1602,7 +1602,7 @@ gtk_calendar_paint_header (GtkWidget *widget)
   gtk_calendar_paint_arrow (widget, ARROW_YEAR_LEFT);
   gtk_calendar_paint_arrow (widget, ARROW_YEAR_RIGHT);
 
-  pango_layout_unref (layout);
+  g_object_unref (G_OBJECT (layout));
 }
 
 static void
@@ -1690,7 +1690,7 @@ gtk_calendar_paint_day_names (GtkWidget *widget)
 		       layout);
     }
   
-  pango_layout_unref (layout);
+  g_object_unref (G_OBJECT (layout));
 }
 
 static void
@@ -1779,7 +1779,7 @@ gtk_calendar_paint_week_numbers (GtkWidget *widget)
       gdk_draw_layout (private_data->week_win, gc, x_loc, y_loc, layout);
     }
   
-  pango_layout_unref (layout);
+  g_object_unref (G_OBJECT (layout));
 }
 
 static void
@@ -1924,8 +1924,7 @@ gtk_calendar_paint_day (GtkWidget *widget,
 			  private_data->day_width-1, day_height-1);
     }
 
-  pango_layout_unref (layout);
-
+  g_object_unref (G_OBJECT (layout));
 }
 
 

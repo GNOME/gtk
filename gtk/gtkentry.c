@@ -510,7 +510,7 @@ gtk_entry_finalize (GObject *object)
   entry = GTK_ENTRY (object);
 
   if (entry->layout)
-    pango_layout_unref (entry->layout);
+    g_object_unref (G_OBJECT (entry->layout));
 
   gtk_object_unref (GTK_OBJECT (entry->im_context));
 
@@ -673,7 +673,7 @@ gtk_entry_size_request (GtkWidget      *widget,
    */
   if (entry->layout)
     {
-      pango_layout_unref (entry->layout);
+      g_object_unref (G_OBJECT (entry->layout));
       entry->layout = NULL;
     }
 

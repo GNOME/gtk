@@ -367,7 +367,7 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
       pango_layout_set_text (layout, buf, -1);
       pango_layout_get_extents (layout, NULL, &logical_rect);
 	  
-      pango_layout_unref (layout);
+      g_object_unref (G_OBJECT (layout));
       g_free (buf);
     }
   
@@ -740,7 +740,7 @@ gtk_progress_bar_paint (GtkProgress *progress)
 
 	  gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state],
 				     NULL);
-	  pango_layout_unref (layout);
+          g_object_unref (G_OBJECT (layout));
 	  g_free (buf);
  	}
     }

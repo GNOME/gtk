@@ -2530,7 +2530,7 @@ _gtk_clist_create_cell_layout (GtkCList       *clist,
 				      GTK_CELL_PIXTEXT (*cell)->text :
 				      GTK_CELL_TEXT (*cell)->text), -1);
       
-      pango_context_unref (context);
+      g_object_unref (G_OBJECT (context));
 
       return layout;
       
@@ -2562,7 +2562,7 @@ cell_size_request (GtkCList       *clist,
       requisition->width = logical_rect.width / PANGO_SCALE;
       requisition->height = logical_rect.height / PANGO_SCALE;
       
-      pango_layout_unref (layout);
+      g_object_unref (G_OBJECT (layout));
     }
   else
     {
@@ -3028,7 +3028,7 @@ gtk_clist_set_row_height (GtkCList *clist,
       
       g_free (lang);
       g_object_unref (G_OBJECT (font));
-      pango_context_unref (context);
+      g_object_unref (G_OBJECT (context));
       
       if (!GTK_CLIST_ROW_HEIGHT_SET(clist))
 	clist->row_height = (metrics.ascent + metrics.descent) / PANGO_SCALE;
@@ -5921,7 +5921,7 @@ draw_row (GtkCList     *clist,
 			       offset,
 			       row_rectangle.y + row_center_offset + clist_row->cell[i].vertical,
 			       layout);
-	      pango_layout_unref (layout);
+              g_object_unref (G_OBJECT (layout));
 	      gdk_gc_set_clip_rectangle (fg_gc, NULL);
 	    }
 	  break;

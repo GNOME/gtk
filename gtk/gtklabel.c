@@ -265,7 +265,7 @@ gtk_label_set_justify (GtkLabel        *label,
       if (label->layout)
 	{
 	  /* No real need to be this drastic, but easier than duplicating the code */
-	  pango_layout_unref (label->layout);
+          g_object_unref (G_OBJECT (label->layout));
 	  label->layout = NULL;
 	}
       
@@ -313,7 +313,7 @@ gtk_label_finalize (GObject *object)
   g_free (label->pattern);
 
   if (label->layout)
-    pango_layout_unref (label->layout);
+    g_object_unref (G_OBJECT (label->layout));
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -401,7 +401,7 @@ gtk_label_size_request (GtkWidget      *widget,
       label->layout)
     {
       label->rtl = !label->rtl;
-      pango_layout_unref (label->layout);
+      g_object_unref (G_OBJECT (label->layout));
       label->layout = NULL;
     }
   
@@ -546,7 +546,7 @@ gtk_label_style_set (GtkWidget *widget,
 
   if (previous_style && label->layout)
     {
-      pango_layout_unref (label->layout);
+      g_object_unref (G_OBJECT (label->layout));
       label->layout = NULL;
     }
 }

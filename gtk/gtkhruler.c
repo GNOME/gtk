@@ -269,7 +269,7 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
 	}
     }
 
-  pango_layout_unref (layout);
+  g_object_unref (G_OBJECT (layout));
 }
 
 static void
