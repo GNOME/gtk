@@ -1,3 +1,8 @@
+Thu Oct 30 17:40:26 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (logical_to_physical): Make it work for
+	logical == 0.
+
 Thu Oct 30 16:20:58 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (logical_to_physical): Make sure we actually

@@ -1797,7 +1797,7 @@ logical_to_physical (GtkToolbar *toolbar, gint logical)
   g_assert (logical >= 0);
   
   physical = 0;
-  for (list = priv->content; list; list = list->next)
+  for (list = priv->content; list && logical > 0; list = list->next)
     {
       ToolbarContent *content = list->data;
 
