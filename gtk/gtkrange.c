@@ -1054,12 +1054,12 @@ range_get_scroll_for_grab (GtkRange      *range)
         if (range->trough_click_forward)
           {
             return range->layout->grab_button == 3
-              ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_STEP_FORWARD;
+              ? GTK_SCROLL_STEP_FORWARD : GTK_SCROLL_PAGE_FORWARD;
           }
         else
           {
             return range->layout->grab_button == 3
-              ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_STEP_BACKWARD;
+              ? GTK_SCROLL_STEP_BACKWARD : GTK_SCROLL_PAGE_BACKWARD;
           }
       }
       break;

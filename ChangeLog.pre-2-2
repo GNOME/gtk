@@ -1,3 +1,9 @@
+Thu Dec  6 16:50:17 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c: Make button 1 clicks on the trough
+	do pages, button 3 steps. (Patch from Hans Breuer
+	#63735)
+
 2001-12-06  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtklabel.c: Fix docs. (#66383)
