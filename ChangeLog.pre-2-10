@@ -1,5 +1,10 @@
 2004-08-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkframe.c (gtk_frame_paint): Take widget->state into account when
+	painting the shadows.  (#150351, Tim Janik)
+
+2004-08-17  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/abicheck.sh: No need for INCLUDE_INTERNAL_SYMBOLS anymore.
 
 	* gdk/gdk.symbols: Don't use #if defined().

@@ -566,7 +566,7 @@ gtk_frame_paint (GtkWidget    *widget,
 
 	  
 	  gtk_paint_shadow_gap (widget->style, widget->window,
-				GTK_STATE_NORMAL, frame->shadow_type,
+				widget->state, frame->shadow_type,
 				area, widget, "frame",
 				x, y, width, height,
 				GTK_POS_TOP, 
@@ -574,7 +574,7 @@ gtk_frame_paint (GtkWidget    *widget,
 	}
        else
 	 gtk_paint_shadow (widget->style, widget->window,
-			   GTK_STATE_NORMAL, frame->shadow_type,
+			   widget->state, frame->shadow_type,
 			   area, widget, "frame",
 			   x, y, width, height);
     }
