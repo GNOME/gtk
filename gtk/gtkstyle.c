@@ -1186,28 +1186,32 @@ gtk_default_draw_polygon (GtkStyle      *style,
   if (fill)
     gdk_draw_polygon (window, style->bg_gc[state_type], TRUE, points, npoints);
 
-  npoints -= 1;
+  /* Check if polygon is closed */
+
+  if ((points[0].x == points[npoints-1].x) &&
+      (points[0].y == points[npoints-1].y))
+    npoints--;
+
   for (i = 0; i < npoints; i++)
     {
-      if ((points[i].x == points[i+1].x) &&
-	  (points[i].y == points[i+1].y))
+      GdkPoint *next;
+
+      next = (i == npoints-1) ? &points[0] : &points[i+1];
+
+      if ((points[i].x == next->x) &&
+	  (points[i].y == next->y))
 	{
 	  angle = 0;
 	}
       else
 	{
-	  angle = atan2 (points[i+1].y - points[i].y,
-			 points[i+1].x - points[i].x);
+	  angle = atan2 (next->y - points[i].y,
+			 next->x - points[i].x);
 	}
 
       if ((angle > -pi_3_over_4) && (angle < pi_over_4))
 	{
-	  while (angle < 0)
-	    angle += M_PI;
-	  while (angle > M_PI)
-	    angle -= M_PI;
-
-	  if ((angle > pi_3_over_4) || (angle < pi_over_4))
+	  if (angle > -pi_over_4)
 	    {
 	      xadjust = 0;
 	      yadjust = 1;
@@ -1220,34 +1224,14 @@ gtk_default_draw_polygon (GtkStyle      *style,
 
 	  gdk_draw_line (window, gc1,
 			 points[i].x-xadjust, points[i].y-yadjust,
-			 points[i+1].x-xadjust, points[i+1].y-yadjust);
+			 next->x-xadjust, next->y-yadjust);
 	  gdk_draw_line (window, gc3,
 			 points[i].x, points[i].y,
-			 points[i+1].x, points[i+1].y);
-	}
-    }
-
-  for (i = 0; i < npoints; i++)
-    {
-      if ((points[i].x == points[i+1].x) &&
-	  (points[i].y == points[i+1].y))
-	{
-	  angle = 0;
+			 next->x, next->y);
 	}
       else
 	{
-	  angle = atan2 (points[i+1].y - points[i].y,
-			 points[i+1].x - points[i].x);
-	}
-
-      if ((angle <= -pi_3_over_4) || (angle >= pi_over_4))
-	{
-	  while (angle < 0)
-	    angle += M_PI;
-	  while (angle > M_PI)
-	    angle -= M_PI;
-
-	  if ((angle > pi_3_over_4) || (angle < pi_over_4))
+	  if ((angle < -pi_3_over_4) || (angle > pi_3_over_4))
 	    {
 	      xadjust = 0;
 	      yadjust = 1;
@@ -1260,10 +1244,10 @@ gtk_default_draw_polygon (GtkStyle      *style,
 
 	  gdk_draw_line (window, gc4,
 			 points[i].x+xadjust, points[i].y+yadjust,
-			 points[i+1].x+xadjust, points[i+1].y+yadjust);
+			 next->x+xadjust, next->y+yadjust);
 	  gdk_draw_line (window, gc2,
 			 points[i].x, points[i].y,
-			 points[i+1].x, points[i+1].y);
+			 next->x, next->y);
 	}
     }
 }

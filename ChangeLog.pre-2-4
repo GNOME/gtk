@@ -1,3 +1,11 @@
+Thu Jan 29 22:57:39 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkstyle.c (gtk_default_draw_polygon): Close
+	  the polygon if it isn't already. (To match gtk_draw_polygon)
+	  Simplified logic. (Appearance could probably be
+	  improved for objects with gradual curves by adding in
+	  some intermediate edge coloration)
+
 Thu Jan 29 21:36:14 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtksignal.c (gtk_signal_query): new function to gather
