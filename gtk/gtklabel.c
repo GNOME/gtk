@@ -666,6 +666,10 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
    * widget's ancestry.
    */
   parent = widget->parent;
+
+  if (parent && GTK_IS_NOTEBOOK (parent))
+    return gtk_widget_mnemonic_activate (parent, group_cycling);
+  
   while (parent)
     {
       if (GTK_WIDGET_CAN_FOCUS (parent) ||

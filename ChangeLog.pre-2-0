@@ -1,3 +1,8 @@
+Tue Dec 11 18:55:16 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_mnemonic_activate): Small fix to let
+	mnemonics work with notebooks.
+
 Tue Dec 11 15:25:06 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): Change
