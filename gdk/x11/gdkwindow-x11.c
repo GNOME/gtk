@@ -852,6 +852,20 @@ gdk_window_move_resize (GdkWindow *window,
     {
       XMoveResizeWindow (private->xdisplay, private->xwindow, x, y, width, height);
       
+      if (private->guffaw_gravity)
+	{
+	  GList *tmp_list = private->children;
+	  while (tmp_list)
+	    {
+	      GdkWindowPrivate *child_private = tmp_list->data;
+
+	      child_private->x -= x - private->x;
+	      child_private->y -= y - private->y;
+	      
+	      tmp_list = tmp_list->next;
+	    }
+	}
+      
       if (private->window_type == GDK_WINDOW_CHILD)
 	{
 	  private->x = x;

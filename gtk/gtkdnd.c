@@ -155,6 +155,12 @@ static GdkCursor *   gtk_drag_get_cursor         (GdkDragAction action);
 static GtkWidget    *gtk_drag_get_ipc_widget     (void);
 static void          gtk_drag_release_ipc_widget (GtkWidget *widget);
 
+static void          gtk_drag_highlight_paint  (GtkWidget  *widget);
+static gboolean      gtk_drag_highlight_expose (GtkWidget      *widget,
+						GdkEventExpose *event,
+						gpointer        data);
+
+
 static GdkAtom   gtk_drag_dest_find_target    (GtkWidget          *widget,
 					       GtkDragDestSite    *site,
 			                       GdkDragContext     *context);
@@ -650,6 +656,67 @@ gtk_drag_finish (GdkDragContext *context,
 }
 
 /*************************************************************
+ * gtk_drag_highlight_paint:
+ *     Paint a highlight indicating drag status onto the widget.
+ *   arguments:
+ *     widget:
+ *   results:
+ *************************************************************/
+
+static void 
+gtk_drag_highlight_paint (GtkWidget  *widget)
+{
+  gint x, y, width, height;
+
+  g_return_if_fail (widget != NULL);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      if (GTK_WIDGET_NO_WINDOW (widget))
+	{
+	  x = widget->allocation.x;
+	  y = widget->allocation.y;
+	  width = widget->allocation.width;
+	  height = widget->allocation.height;
+	}
+      else
+	{
+	  x = 0;
+	  y = 0;
+	  gdk_window_get_size (widget->window, &width, &height);
+	}
+      
+      gtk_draw_shadow (widget->style, widget->window,
+		       GTK_STATE_NORMAL, GTK_SHADOW_OUT,
+		       x, y, width, height);
+      
+      gdk_draw_rectangle (widget->window,
+			  widget->style->black_gc,
+			  FALSE,
+			  x, y, width - 1, height - 1);
+    }
+}
+
+/*************************************************************
+ * gtk_drag_highlight_expose:
+ *     Callback for expose_event for highlighted widgets.
+ *   arguments:
+ *     widget:
+ *     event:
+ *     data:
+ *   results:
+ *************************************************************/
+
+static gboolean
+gtk_drag_highlight_expose (GtkWidget      *widget,
+			   GdkEventExpose *event,
+			   gpointer        data)
+{
+  gtk_drag_highlight_paint (widget);
+  return TRUE;
+}
+
+/*************************************************************
  * gtk_drag_highlight:
  *     Highlight the given widget in the default manner.
  *   arguments:
@@ -660,33 +727,14 @@ gtk_drag_finish (GdkDragContext *context,
 void 
 gtk_drag_highlight (GtkWidget  *widget)
 {
-  gint x, y;
+  gtk_signal_connect_after (GTK_OBJECT (widget), "draw",
+			    GTK_SIGNAL_FUNC (gtk_drag_highlight_expose),
+			    NULL);
+  gtk_signal_connect (GTK_OBJECT (widget), "expose_event",
+		      GTK_SIGNAL_FUNC (gtk_drag_highlight_paint),
+		      NULL);
 
-  g_return_if_fail (widget != NULL);
-
-  if (GTK_WIDGET_NO_WINDOW (widget))
-    {
-      x = widget->allocation.x;
-      y = widget->allocation.y;
-    }
-  else
-    {
-      x = 0;
-      y = 0;
-    }
-	
-  gtk_draw_shadow (widget->style, widget->window,
-		   GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-		   x, y, 
-		   widget->allocation.width,
-		   widget->allocation.height);
-
-  gdk_draw_rectangle (widget->window,
-		      widget->style->black_gc,
-		      FALSE,
-		      x, y,
-		      widget->allocation.width - 1,
-		      widget->allocation.height - 1);
+  gtk_widget_queue_draw (widget);
 }
 
 /*************************************************************
@@ -700,25 +748,16 @@ gtk_drag_highlight (GtkWidget  *widget)
 void 
 gtk_drag_unhighlight (GtkWidget  *widget)
 {
-  gint x, y;
-
   g_return_if_fail (widget != NULL);
 
-  if (GTK_WIDGET_NO_WINDOW (widget))
-    {
-      x = widget->allocation.x;
-      y = widget->allocation.y;
-    }
-  else
-    {
-      x = 0;
-      y = 0;
-    }
-	
-  gdk_window_clear_area_e (widget->window,
-			   x, y,
-			   widget->allocation.width,
-			   widget->allocation.height);
+  gtk_signal_disconnect_by_func (GTK_OBJECT (widget),
+				 GTK_SIGNAL_FUNC (gtk_drag_highlight_paint),
+		      NULL);
+  gtk_signal_disconnect_by_func (GTK_OBJECT (widget),
+				 GTK_SIGNAL_FUNC (gtk_drag_highlight_expose),
+				 NULL);
+  
+  gtk_widget_queue_clear (widget);
 }
 
 /*************************************************************
@@ -1097,6 +1136,12 @@ gtk_drag_find_widget (GtkWidget       *widget,
   if (data->found || !GTK_WIDGET_MAPPED (widget))
     return;
 
+  /* Note that in the following code, we only count the
+   * position as being inside a WINDOW widget if it is inside
+   * widget->window; points that are outside of widget->window
+   * but within the allocation are not counted. This is consistent
+   * with the way we highlight drag targets.
+   */
   if (!GTK_WIDGET_NO_WINDOW (widget))
     {
       new_allocation.x = 0;
@@ -1412,7 +1457,7 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
       else
 	{
 	  /* We need to synthesize a motion event, wait for a status,
-	   * and, if we get one a good one, do a drop.
+	   * and, if we get a good one, do a drop.
 	   */
 	  
 	  GdkEvent *current_event;

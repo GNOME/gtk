@@ -1,3 +1,24 @@
+Fri Feb  5 13:23:50 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_move_resize): Adjust
+	saved positions of children when resizing a 
+	guffaw_gravity = TRUE window.
+
+	* gtk/gtkdnd.c (gtk_drag_highlight): Rework the
+	 highlighting so that it is done in callbacks for
+	 draw and expose. This should solve problems with
+         multiple highlights for the same GdkWindow.
+
+	* gtk/gtkdnd.c (gtk_drag_highlight): Fix bug where
+	the highlight was being drawn with an incorrect
+	width/height for !NO_WINDOW widgets.
+
+Tue Feb  2 11:06:02 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c (gtk_range_style_set): Fixes
+	 to account for the changed structure of the windows
+	 of range widgets.
+
 1999-02-05  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtk[hv]paned.c (gtk_[hv]paned_size_allocate): 
@@ -34,12 +55,6 @@ Tue Feb  2 12:39:42 1999  Owen Taylor  <otaylor@redhat.com>
 	 before it is shown to prevent annoying flicking to 0,0.
 	 Make it consistent that info->cur_x/y do not include
 	 info->hot_x/y displacement.
-
-Tue Feb  2 11:06:02 1999  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/gtkrange.c (gtk_range_style_set): Fixes
-	 to account for the changed structure of the windows
-	 of range widgets.
 
 Tue Feb  2 08:59:16 GMT 1999 Tony Gale  <gale@gtk.org>
 
