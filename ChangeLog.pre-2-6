@@ -1,3 +1,21 @@
+1999-03-16  Tor Lillqvist  <tml@iki.fi>
+
+	* README.win32: New file.
+		
+	* configure.in: Check for lstat.
+
+	* config.h.win32: Add non-definition of HAVE_LSTAT, just for
+	completeness.
+
+	* gtk/gtkrc.c: If don't HAVE_LSTAT, use stat.
+
+	* gtk/gtk.def: Removed CRs.
+
+	* gtk/makefile.msc: Correct include path to Win32 GDK version (in
+	..\gdk\win32).
+
+	* gdk/win32/makefile.msc: Correct upwards relative paths.
+	
 Mon Mar 15 03:38:34 1999  George Lebl  <jirka@5z.com>
 
 	* gtk/gtkdnd.c: (gtk_drag_highlight) swap the

@@ -6,7 +6,7 @@
 BIN = C:\bin
 
 # Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
-WTKIT = ..\..\wtkit125
+WTKIT = ..\..\..\wtkit125
 
 # Full optimization:
 OPTIMIZE = -Ox
@@ -27,11 +27,11 @@ TOUCH = copy makefile.msc+nul
 GLIB_VER=1.2
 GTK_VER=1.3
 
-GLIB = ..\..\glib-$(GLIB_VER)
-CFLAGS = -I. -I.. -I$(WTKIT)\include -I$(GLIB) -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\" # -DMULTIPLE_WINDOW_CLASSES
+GLIB = ..\..\..\glib-$(GLIB_VER)
+CFLAGS = -I. -I..\.. -I$(WTKIT)\include -I$(GLIB) -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\" # -DMULTIPLE_WINDOW_CLASSES
 
 all: \
-	..\config.h	\
+	..\..\config.h	\
 	gdk-$(GTK_VER).dll
 	$(TOUCH) all
 
@@ -63,8 +63,8 @@ gdk_OBJECTS = \
 	gdkwindow.obj	\
 	gdkxid.obj
 
-..\config.h : ..\config.h.win32
-	copy ..\config.h.win32 ..\config.h
+..\..\config.h : ..\..\config.h.win32
+	copy ..\..\config.h.win32 ..\..\config.h
 
 gdk.res : rc\gdk.rc
 	rc -r -fo gdk.res rc\gdk.rc

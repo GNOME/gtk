@@ -46,6 +46,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifndef HAVE_LSTAT
+#define lstat stat
+#endif
+
 #ifdef _MSC_VER
 #include <io.h>
 #endif

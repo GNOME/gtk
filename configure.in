@@ -160,6 +160,8 @@ if test -n "$PERL" && perl -v | grep 'version 5.' > /dev/null ; then
 fi
 AC_SUBST(REBUILD)
 
+AC_CHECK_FUNCS(lstat)
+
 # i18n stuff
 ALL_LINGUAS="cs de es fr hu it ja ko nl no pl pt ru sv"
 AM_GTK_GNU_GETTEXT

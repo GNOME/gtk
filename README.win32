@@ -1,0 +1,14 @@
+The Win32 port of GTk+ is a work in progress, and not as stable or
+correct as the Unix/X11 version. For more information about the Win32
+port, see http://www.gimp.org/tml/gimp/win32/ or
+http://www.iki.fi/tml/gimp/win32/ .
+
+As for now, only Microsoft C (the command-line compiler) is
+supported. Before compiling, check the BIN definition in
+gdk\win32\makefile.msc and gtk\makefile.msc. Compile in gdk\win32 and
+gtk with `nmake -f makefile.msc`. Install with `nmake -f makefile.msc
+install`. Cygwin ("mingw32", i.e. gcc -mno-cygwin) support will be
+added later.
+
+The tablet support uses the Wintab API. The Wintab development kit can
+be downloaded from http://www.pointing.com.

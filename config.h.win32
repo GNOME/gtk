@@ -100,6 +100,9 @@
 /* Define if you have the getpagesize function.  */
 #define HAVE_GETPAGESIZE 1
 
+/* Define if you have the lstat function.  */
+/* #undef HAVE_LSTAT */
+
 /* Define if you have the munmap function.  */
 /* #undef HAVE_MUNMAP */
 
