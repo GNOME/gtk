@@ -5857,7 +5857,7 @@ gtk_paint_polygon (GtkStyle      *style,
                    gboolean       fill)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_shadow != NULL);
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_polygon != NULL);
   
   GTK_STYLE_GET_CLASS (style)->draw_polygon (style, window, state_type, shadow_type, area, widget, detail, points, npoints, fill);
 }
