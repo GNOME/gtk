@@ -1575,46 +1575,31 @@ static void
 handle_configure_event (MSG       *msg,
 			GdkWindow *window)
 {
-  RECT client_rect, outer_rect;
-  POINT point;
-  LONG style, exstyle;
+  RECT client_rect;
 
   GetClientRect (msg->hwnd, &client_rect);
   
   GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->width = client_rect.right - client_rect.left;
   GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl)->height = client_rect.bottom - client_rect.top;
   
-  point.x = client_rect.left;
-  point.y = client_rect.top;
-  ClientToScreen (msg->hwnd, &point);
-  outer_rect.left = point.x;
-  outer_rect.top = point.y;
-  
-  point.x = client_rect.right;
-  point.y = client_rect.bottom;
-  ClientToScreen (msg->hwnd, &point);
-  outer_rect.right = point.x;
-  outer_rect.bottom = point.y;
-  
-  style = GetWindowLong (msg->hwnd, GWL_STYLE);
-  exstyle = GetWindowLong (msg->hwnd, GWL_EXSTYLE);
-  
-  API_CALL (AdjustWindowRectEx, (&outer_rect, style,
-				 FALSE, exstyle));
-  
-  ((GdkWindowObject *) window)->x = outer_rect.left;
-  ((GdkWindowObject *) window)->y = outer_rect.top;
+  ((GdkWindowObject *) window)->x = client_rect.left;
+  ((GdkWindowObject *) window)->y = client_rect.top;
   
   if (((GdkWindowObject *) window)->event_mask & GDK_STRUCTURE_MASK)
     {
+      POINT point;
       GdkEvent *event = gdk_event_new (GDK_CONFIGURE);
+
+      point.x = point.y = 0;
+      ClientToScreen (msg->hwnd, &point);
+      
       event->configure.window = window;
 
       event->configure.width = client_rect.right - client_rect.left;
       event->configure.height = client_rect.bottom - client_rect.top;
       
-      event->configure.x = outer_rect.left;
-      event->configure.y = outer_rect.top;
+      event->configure.x = point.x;
+      event->configure.y = point.y;
       
       append_event (gdk_drawable_get_display (window), event);
     }
@@ -2832,20 +2817,20 @@ gdk_event_translate (GdkDisplay *display,
       mmi = (MINMAXINFO*) msg->lParam;
       if (impl->hint_flags & GDK_HINT_MIN_SIZE)
 	{
-	  mmi->ptMinTrackSize.x = impl->hint_min_width;
-	  mmi->ptMinTrackSize.y = impl->hint_min_height;
+	  mmi->ptMinTrackSize.x = impl->hints.min_width;
+	  mmi->ptMinTrackSize.y = impl->hints.min_height;
 	}
 
       if (impl->hint_flags & GDK_HINT_MAX_SIZE)
 	{
-	  mmi->ptMaxTrackSize.x = impl->hint_max_width;
-	  mmi->ptMaxTrackSize.y = impl->hint_max_height;
+	  mmi->ptMaxTrackSize.x = impl->hints.max_width;
+	  mmi->ptMaxTrackSize.y = impl->hints.max_height;
 
 	  /* kind of WM functionality, limit maximized size to screen */
 	  mmi->ptMaxPosition.x = 0;
 	  mmi->ptMaxPosition.y = 0;	    
-	  mmi->ptMaxSize.x = MIN (impl->hint_max_width, gdk_screen_width ());
-	  mmi->ptMaxSize.y = MIN (impl->hint_max_height, gdk_screen_height ());
+	  mmi->ptMaxSize.x = MIN (impl->hints.max_width, gdk_screen_width ());
+	  mmi->ptMaxSize.y = MIN (impl->hints.max_height, gdk_screen_height ());
 	}
       else if (impl->hint_flags & GDK_HINT_MIN_SIZE)
 	{

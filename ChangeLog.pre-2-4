@@ -1,3 +1,28 @@
+2003-08-02  Tor Lillqvist  <tml@iki.fi>
+
+	Fix gdk/win32 window geometry handling again. The window position
+	in a GDK_CONFIGURE event should be that of the client area, not of
+	the window decorations. (I was confused by the term "window
+	border" in X11. It does *not* mean the window manager
+	decorations. There are no X11-style window borders in Win32.)
+	Also, this time do take the geometry hints into account
+	appropriately when moving windows. Now testgtk's gravity test's
+	move buttons work OK. There are stil problems with taking gravity
+	into account when showing a hidden window.
+
+	* gdk/win32/gdkwindow-win32.h: Keep a whole GdkGeometry as hints
+	instead of separate fields.
+	
+	* gdk/win32/gdkevents-win32.c (handle_configure_event): Don't
+	adjust for decorations.
+
+	* gdk/win32/gdkwindow-win32.c (get_outer_rect,
+	adjust_for_gravity_hints): New functions.
+	(gdk_window_move, gdk_window_resize, gdk_window_move_resize): Use
+	above functions, take geometry hints into account.
+	(gdk_window_set_geometry_hints): Size hints specicy client area,
+	not including decorations.
+
 Fri Aug  1 17:10:22 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (cmpl_completion_fullname): Always
