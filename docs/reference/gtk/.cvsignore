@@ -3,5 +3,8 @@ Makefile.in
 sgml
 html
 .libs
+gtk.args
+gtk.signals
+gtk-decl.txt
 gtk-decl-list.txt
 gtk-unused.txt
