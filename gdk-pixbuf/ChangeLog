@@ -1,3 +1,8 @@
+1999-12-03  Jonathan Blandford  <jrb@redhat.com>
+
+	* gdk-pixbuf/io-gif.c (gif_fill_in_lines): added a comment to
+	explain this function better.
+
 1999-12-02  Federico Mena Quintero  <federico@redhat.com>
 
 	Source files moved from src/ to gdk-pixbuf/, to be consistent with

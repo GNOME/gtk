@@ -628,11 +628,15 @@ gif_fill_in_lines (GifContext *context, guchar *dest, guchar v)
 			gif_fill_in_pixels (context, dest, 3, v);
 			gif_fill_in_pixels (context, dest, 4, v);
 		}
+		/* we don't need a break here.  We draw the outer pixels first, then the
+		 * inner ones, then the innermost ones.  case 0 needs to draw all 3 bands.
+		 * case 1, just the last two, and case 2 just draws the last one*/
 	case 1:
 		if (context->draw_ypos > 2)
 			gif_fill_in_pixels (context, dest, -2, v);
 		if (context->draw_ypos < (context->frame_height - 2))
 			gif_fill_in_pixels (context, dest, 2, v);
+		/* no break as above. */
 	case 2:
 		if (context->draw_ypos > 1)
 			gif_fill_in_pixels (context, dest, -1, v);
