@@ -1,3 +1,8 @@
+2002-02-28  Matthias Clasen  <maclas@gmx.de>
+
+	* pixops/pixops.c (tile_make_weights): Move the call to
+	correct_total() to the right spot. (#72732)
+
 Wed Feb 27 18:33:04 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixdata.c (gdk_pixdata_to_csource): Use {} not

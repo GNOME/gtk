@@ -1162,9 +1162,9 @@ tile_make_weights (PixopsFilter *filter, double x_scale, double y_scale, double 
 		total += weight;
 		*(pixel_weights + n_x * i + j) = weight;
 	      }
-	    
-	    correct_total (pixel_weights, n_x, n_y, total, overall_alpha);
 	  }
+	
+	correct_total (pixel_weights, n_x, n_y, total, overall_alpha);
       }
 }
 
