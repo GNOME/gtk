@@ -27,6 +27,8 @@
 #include "config.h"
 
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "gdkproperty.h"
 #include "gdkselection.h"
@@ -130,6 +132,106 @@ gdk_property_get (GdkWindow   *window,
   return FALSE;
 }
 
+static gboolean
+find_common_locale (const guchar  *data,
+		    gint           nelements,
+		    gint           nchars,
+		    LCID          *lcidp,
+		    guchar       **bufp,
+		    gint          *sizep)
+{
+  static struct {
+    LCID lcid;
+    UINT cp;
+  } locales[] = {
+#define ENTRY(lang, sublang) \
+ { MAKELCID (MAKELANGID (LANG_##lang, SUBLANG_##sublang), SORT_DEFAULT), 0 }
+    ENTRY (ENGLISH, DEFAULT),
+    ENTRY (POLISH, DEFAULT),
+    ENTRY (CZECH, DEFAULT),
+    ENTRY (LITHUANIAN, DEFAULT),
+    ENTRY (RUSSIAN, DEFAULT),
+    ENTRY (GREEK, DEFAULT),
+    ENTRY (TURKISH, DEFAULT),
+    ENTRY (HEBREW, DEFAULT),
+    ENTRY (ARABIC, DEFAULT),
+    ENTRY (THAI, DEFAULT),
+    ENTRY (JAPANESE, DEFAULT),
+    ENTRY (CHINESE, CHINESE_SIMPLIFIED),
+    ENTRY (CHINESE, CHINESE_TRADITIONAL),
+    ENTRY (KOREAN, DEFAULT),
+#undef ENTRY
+  };
+
+  static gboolean been_here = FALSE;
+  gint i;
+  wchar_t *wcs;
+
+  /* For each installed locale: Get the locale's default code page,
+   * and store the list of locales and code pages.
+   */
+  if (!been_here)
+    {
+      been_here = TRUE;
+      for (i = 0; i < G_N_ELEMENTS (locales); i++)
+	if (IsValidLocale (locales[i].lcid, LCID_INSTALLED))
+	  {
+	    gchar buf[10];
+	    if (GetLocaleInfo (locales[i].lcid, LOCALE_IDEFAULTANSICODEPAGE,
+			       buf, sizeof (buf)))
+	      {
+		gchar name[100];
+		locales[i].cp = atoi (buf);
+		GDK_NOTE (DND, (GetLocaleInfo (locales[i].lcid, LOCALE_SENGLANGUAGE,
+					       name, sizeof (name)),
+				g_print ("locale %#lx: %s: CP%d\n",
+					 (gulong) locales[i].lcid, name,
+					 locales[i].cp)));
+	      }
+	  }
+    }
+  
+  /* Allocate bufp big enough to store data in any code page.
+   * Two bytes for each Unicode char should be enough.
+   */
+  *bufp = g_malloc ((nchars+1) * 2);
+  wcs = g_new (wchar_t, nchars+1);
+
+  /* Convert to Windows wide chars into temp buf */
+  gdk_nmbstowchar_ts (wcs, data, nelements, nchars);
+  wcs[nchars] = 0;
+
+  /* For each code page that is the default for an installed locale: */
+  for (i = 0; i < G_N_ELEMENTS (locales); i++)
+    {
+      BOOL used_default;
+      int nbytes;
+
+      if (locales[i].cp == 0)
+	continue;
+
+      /* Convert to that code page into bufp */
+      
+      nbytes = WideCharToMultiByte (locales[i].cp, 0, wcs, -1,
+				    *bufp, (nchars+1)*2,
+				    NULL, &used_default);
+
+      if (!used_default)
+	{
+	  /* This locale is good for the string */
+	  g_free (wcs);
+	  *lcidp = locales[i].lcid;
+	  *sizep = nbytes;
+	  return TRUE;
+	}
+    }
+
+  g_free (*bufp);
+  g_free (wcs);
+
+  return FALSE;
+}
+
 void
 gdk_property_change (GdkWindow    *window,
 		     GdkAtom       property,
@@ -139,10 +241,18 @@ gdk_property_change (GdkWindow    *window,
 		     const guchar *data,
 		     gint          nelements)
 {
-  HGLOBAL hdata;
-  gint i, length;
+  static WORD cf_rtf = 0, cf_utf8_string = 0;
+  HGLOBAL hdata, hlcid, hutf8;
+  UINT cf = 0;
+  LCID lcid;
+  LCID *lcidptr;
+  GString *rtf = NULL;
+  gint i, size, nchars;
   gchar *prop_name, *type_name;
-  guchar *ptr;
+  guchar *ucptr, *buf = NULL;
+  wchar_t *wcptr;
+  enum { PLAIN_ASCII, UNICODE_TEXT, SINGLE_LOCALE, RICH_TEXT } method;
+  gboolean ok = TRUE;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -169,34 +279,180 @@ gdk_property_change (GdkWindow    *window,
       && format == 8
       && mode == GDK_PROP_MODE_REPLACE)
     {
-      length = nelements;
-      for (i = 0; i < nelements; i++)
-	if (data[i] == '\n')
-	  length++;
-      GDK_NOTE (DND, g_print ("...OpenClipboard(%#x)\n",
-			       (guint) GDK_DRAWABLE_XID (window)));
       if (!OpenClipboard (GDK_DRAWABLE_XID (window)))
 	{
 	  WIN32_API_FAILED ("OpenClipboard");
 	  return;
 	}
-      hdata = GlobalAlloc (GMEM_MOVEABLE|GMEM_DDESHARE, length + 1);
-      ptr = GlobalLock (hdata);
-      GDK_NOTE (DND, g_print ("...hdata=%#x, ptr=%p\n", (guint) hdata, ptr));
 
+      /* Check if only ASCII */
       for (i = 0; i < nelements; i++)
+	if (data[i] >= 0200)
+	  break;
+
+      if (i == nelements)
+	nchars = nelements;
+      else
+	nchars = g_utf8_strlen (data, nelements);
+
+      GDK_NOTE (DND, g_print ("...nchars:%d\n", nchars));
+      
+      if (i == nelements)
 	{
-	  if (*data == '\n')
-	    *ptr++ = '\r';
-	  *ptr++ = *data++;
+	  /* If only ASCII, use CF_TEXT and the data as such. */
+	  method = PLAIN_ASCII;
+	  size = nelements;
+	  for (i = 0; i < nelements; i++)
+	    if (data[i] == '\n')
+	      size++;
+	  size++;
+	  GDK_NOTE (DND, g_print ("...as text: %.40s\n", data));
 	}
-      *ptr++ = '\0';
+      else if (IS_WIN_NT (windows_version))
+	{
+	  /* On NT, use CF_UNICODETEXT if any non-ASCII char present */
+	  method = UNICODE_TEXT;
+	  size = (nchars + 1) * 2;
+	  GDK_NOTE (DND, g_print ("...as Unicode\n"));
+	}
+      else if (find_common_locale (data, nelements, nchars, &lcid, &buf, &size))
+	{
+	  /* On Win9x, if all chars are in the default code page of
+	   * some installed locale, use CF_TEXT and CF_LOCALE.
+	   */
+	  method = SINGLE_LOCALE;
+	  GDK_NOTE (DND, g_print ("...as text in locale %#lx %d bytes\n",
+				  (gulong) lcid, size));
+	}
+      else
+	{
+	  /* On Win9x, otherwise use RTF */
+
+	  const guchar *p = data;
+
+	  method = RICH_TEXT;
+	  rtf = g_string_new ("{\\rtf1\\uc0 ");
+
+	  while (p < data + nelements)
+	    {
+	      if (*p == '{' ||
+		  *p == '\\' ||
+		  *p == '}')
+		{
+		  rtf = g_string_append_c (rtf, '\\');
+		  rtf = g_string_append_c (rtf, *p);
+		  p++;
+		}
+	      else if (*p < 0200)
+		{
+		  rtf = g_string_append_c (rtf, *p);
+		  p++;
+		}
+	      else
+		{
+		  guchar *q;
+		  gint n;
+		  
+		  rtf = g_string_append (rtf, "\\uNNNNN ");
+		  rtf->len -= 6; /* five digits and a space */
+		  q = rtf->str + rtf->len;
+		  n = sprintf (q, "%d ", g_utf8_get_char (p));
+		  g_assert (n <= 6);
+		  rtf->len += n;
+		  
+		  p = g_utf8_next_char (p);
+		}
+	    }
+	  rtf = g_string_append (rtf, "}");
+	  size = rtf->len + 1;
+	  GDK_NOTE (DND, g_print ("...as RTF: %.40s\n", rtf->str));
+	}
+	  
+      if (!(hdata = GlobalAlloc (GMEM_MOVEABLE, size)))
+	{
+	  WIN32_API_FAILED ("GlobalAlloc");
+	  if (!CloseClipboard ())
+	    WIN32_API_FAILED ("CloseClipboard");
+	  if (buf != NULL)
+	    g_free (buf);
+	  if (rtf != NULL)
+	    g_string_free (rtf, TRUE);
+	  return;
+	}
+
+      ucptr = GlobalLock (hdata);
+
+      switch (method)
+	{
+	case PLAIN_ASCII:
+	  cf = CF_TEXT;
+	  for (i = 0; i < nelements; i++)
+	    {
+	      if (*data == '\n')
+		*ucptr++ = '\r';
+	      *ucptr++ = data[i];
+	    }
+	  *ucptr++ = '\0';
+	  break;
+
+	case UNICODE_TEXT:
+	  cf = CF_UNICODETEXT;
+	  wcptr = (wchar_t *) ucptr;
+	  if (gdk_nmbstowchar_ts (wcptr, data, nelements, nchars) == -1)
+	    g_warning ("gdk_nmbstowchar_ts() failed");
+	  wcptr[nchars] = 0;
+	  break;
+
+	case SINGLE_LOCALE:
+	  cf = CF_TEXT;
+	  memmove (ucptr, buf, size);
+	  g_free (buf);
+
+	  /* Set the CF_LOCALE clipboard data, too */
+	  if (!(hlcid = GlobalAlloc (GMEM_MOVEABLE, sizeof (LCID))))
+	    WIN32_API_FAILED ("GlobalAlloc"), ok = FALSE;
+	  if (ok)
+	    {
+	      lcidptr = GlobalLock (hlcid);
+	      *lcidptr = lcid;
+	      GlobalUnlock (hlcid);
+	      if (!SetClipboardData (CF_LOCALE, hlcid))
+		WIN32_API_FAILED ("SetClipboardData (CF_LOCALE)"), ok = FALSE;
+	    }
+	  break;
+
+	case RICH_TEXT:
+	  if (!cf_rtf)
+	    cf_rtf = RegisterClipboardFormat ("Rich Text Format");
+	  cf = cf_rtf;
+	  memmove (ucptr, rtf->str, size);
+	  g_string_free (rtf, TRUE);
+
+	  /* Set the UTF8_STRING clipboard data, too, for other
+	   * GTK+ apps to use (won't bother reading RTF).
+	   */
+	  if (cf_utf8_string == 0)
+	    cf_utf8_string = RegisterClipboardFormat ("UTF8_STRING");
+	  if (!(hutf8 = GlobalAlloc (GMEM_MOVEABLE, nelements)))
+	    WIN32_API_FAILED ("GlobalAlloc");
+	  else
+	    {
+	      guchar *utf8ptr = GlobalLock (hutf8);
+	      memmove (utf8ptr, data, nelements);
+	      GlobalUnlock (hutf8);
+	      if (!SetClipboardData (cf_utf8_string, hutf8))
+		WIN32_API_FAILED ("SetClipboardData (UTF8_STRING)");
+	    }
+	  break;
+
+	default:
+	  g_assert_not_reached ();
+	}
+
       GlobalUnlock (hdata);
-      GDK_NOTE (DND, g_print ("...SetClipboardData(CF_TEXT, %#x)\n",
-			       (guint) hdata));
-      if (!SetClipboardData(CF_TEXT, hdata))
-	WIN32_API_FAILED ("SetClipboardData");
-      GDK_NOTE (DND, g_print ("...CloseClipboard()\n"));
+      if (ok && !SetClipboardData (cf, hdata))
+	WIN32_API_FAILED ("SetClipboardData"), ok = FALSE;
+      
       if (!CloseClipboard ())
 	WIN32_API_FAILED ("CloseClipboard");
     }
@@ -209,7 +465,6 @@ gdk_property_delete (GdkWindow *window,
 		     GdkAtom    property)
 {
   gchar *prop_name;
-  extern void gdk_selection_property_delete (GdkWindow *);
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));

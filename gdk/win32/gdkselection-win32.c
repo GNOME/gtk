@@ -141,13 +141,11 @@ gdk_selection_owner_set (GdkWindow *owner,
   else
     xwindow = NULL;
 
-  GDK_NOTE (DND, g_print ("...OpenClipboard(%#x)\n", (guint) xwindow));
   if (!OpenClipboard (xwindow))
     {
       WIN32_API_FAILED ("OpenClipboard");
       return FALSE;
     }
-  GDK_NOTE (DND, g_print ("...EmptyClipboard()\n"));
   if (!EmptyClipboard ())
     {
       WIN32_API_FAILED ("EmptyClipboard");
@@ -159,7 +157,6 @@ gdk_selection_owner_set (GdkWindow *owner,
   if (xwindow != NULL)
     SetClipboardData (CF_TEXT, NULL);
 #endif
-  GDK_NOTE (DND, g_print ("...CloseClipboard()\n"));
   if (!CloseClipboard ())
     {
       WIN32_API_FAILED ("CloseClipboard");
@@ -196,6 +193,7 @@ gdk_selection_owner_get (GdkAtom selection)
   if (selection == GDK_SELECTION_PRIMARY ||
       selection == gdk_clipboard_atom)
     return NULL;
+
   window = gdk_window_lookup (g_hash_table_lookup (sel_owner_table, selection));
 
   GDK_NOTE (DND,
@@ -239,15 +237,12 @@ gdk_selection_convert (GdkWindow *requestor,
        * contents of the clipboard. Get the clipboard data,
        * and store it for later.
        */
-      GDK_NOTE (DND, g_print ("...OpenClipboard(%#x)\n",
-			      (guint) GDK_DRAWABLE_XID (requestor)));
       if (!OpenClipboard (GDK_DRAWABLE_XID (requestor)))
 	{
 	  WIN32_API_FAILED ("OpenClipboard");
 	  return;
 	}
 
-      GDK_NOTE (DND, g_print ("...GetClipboardData(CF_TEXT)\n"));
       if ((hdata = GetClipboardData (CF_TEXT)) != NULL)
 	{
 	  if ((ptr = GlobalLock (hdata)) != NULL)
@@ -284,9 +279,7 @@ gdk_selection_convert (GdkWindow *requestor,
 	      GlobalUnlock (hdata);
 	    }
 	}
-      GDK_NOTE (DND, g_print ("...CloseClipboard()\n"));
       CloseClipboard ();
-
 
       /* Send ourselves an ersatz selection notify message so that we actually
        * fetch the data.
@@ -328,19 +321,17 @@ gdk_selection_property_get (GdkWindow  *requestor,
   if (GDK_DRAWABLE_DESTROYED (requestor))
     return 0;
   
-  GDK_NOTE (DND, g_print ("gdk_selection_property_get: %#x",
+  GDK_NOTE (DND, g_print ("gdk_selection_property_get: %#x\n",
 			   (guint) GDK_DRAWABLE_XID (requestor)));
 
   prop = g_hash_table_lookup (sel_prop_table, GDK_DRAWABLE_XID (requestor));
 
   if (prop == NULL)
     {
-      GDK_NOTE (DND, g_print (": NULL\n"));
       *data = NULL;
       return 0;
     }
 
-  GDK_NOTE (DND, g_print (": %d bytes\n", prop->length));
   *data = g_malloc (prop->length);
   if (prop->length > 0)
     memmove (*data, prop->data, prop->length);
@@ -368,8 +359,6 @@ gdk_selection_property_delete (GdkWindow *window)
       g_free (prop->data);
       g_hash_table_remove (sel_prop_table, GDK_DRAWABLE_XID (window));
     }
-  else
-    g_warning ("gdk_selection_property_delete: not found");
 }
 
 void

@@ -419,6 +419,8 @@ HRGN	BitmapToRegion           (HBITMAP hBmp);
 
 void    gdk_win32_dropfiles_store(gchar     *data);
 
+void    gdk_selection_property_delete (GdkWindow *);
+
 gint gdk_nmbstowcs               (GdkWChar    *dest,
 				  const gchar *src,
 				  gint         src_len,

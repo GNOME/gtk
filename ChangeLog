@@ -1,3 +1,39 @@
+2002-01-08  Tor Lillqvist  <tml@iki.fi>
+
+	Solve the Unicode issue with copying text to the Windows
+	clipboard. (Still need to add code for pasting from the
+	clipboard. That will be easy, but I'm tired now.)
+	
+	* gdk/win32/gdkproperty-win32.c (gdk_property_change): When
+	storing text on the clipboard, handle non-ASCII text
+	correctly. The logic is as follows:
+
+	If we have only ASCII characters, use CF_TEXT.
+
+	Else, if we are on NT, use CF_UNICODETEXT.
+
+	Else (we are on Win9x), if all the characters are present in the
+	code page of some installed locale, use CF_TEXT and also set
+	CF_LOCALE to that locale.
+
+	Else (still on Win9x) store as RTF. We use a very simple RTF
+	string, just the text, no fonts or other crap, with the non-ASCII
+	characters as Unicode \uN keywords. Additionally, also store the
+	UTF-8 string as such, under the format "UTF8_STRING", so that GDK
+	can also paste from the Clipboard what it has copied there. (Thus
+	no need to implement any RTF parser.)
+	
+	(find_common_locale): New function, implements the search for a
+	locale for case 3 above.
+
+	(gdk_property_delete): Don't declare gdk_selection_property_delete()
+	here.
+
+	* gdk/win32/gdkprivate-win32.h: Declare
+	gdk_selection_property_delete() here instead.
+
+	* gdk/win32/gdkselection-win32.c: Remove some unnecessary logging.
+
 2002-01-06  Tor Lillqvist  <tml@iki.fi>
 
 	Some bug fixes and cleanup of selection and DND functionality. Now
@@ -38,8 +74,6 @@
 	(gdk_drop_reply): For WIN32_DROPFILES drops, free the temporarily
 	stored file list.
 
-	* gdk/win32/gdkproperty-win32.c
-	
 	* gdk/win32/gdkselection-win32.c: Now we don't try to support the
 	X11 PRIMARY selection -style cut&paste at all, it won't fit anyway
 	in the Windows cut&paste model. Only support CLIPBOARD style
