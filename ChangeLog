@@ -1,3 +1,43 @@
+2004-03-01  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_model_create): Don't
+	unref an old model; there isn't one.  This was a leftover from
+	when we recreated the model on every change.
+	(save_widgets_create): Create the save folder combo.
+	(shortcuts_model_create): Don't set the model on the tree view
+	here.
+	(gtk_file_chooser_default_constructor): Create the shortcuts model
+	here, before the rest of the widgets.
+	(shortcuts_list_create): Don't call shortcuts_model_create() here;
+	just set the model on the tree.
+	(save_folder_combo_create): New function, provided by Jonathan
+	Blandford.
+	(update_appearance): Set the sensitivity of the folder combo.
+	(shortcuts_activate_iter): New helper function; code moved from
+	shortcuts_row_activated_cb().
+	(shortcuts_activate_item): New helper function.
+	(shortcuts_row_activated_cb): Use shortcuts_activate_iter().
+	(ShortcutsIndex): Renamed SHORTCUTS_SEPARATOR to
+	SHORTCUTS_BOOKMARKS_SEPARATOR.
+	(struct _GtkFileChooserDefault): New field shortcuts_current_folder_active.
+	(shortcuts_insert_separator): Add a position argument.
+	(shortcuts_get_index): Handle the SHORTCUTS_CURRENT_FOLDER_SEPARATOR 
+	and SHORTCUTS_CURRENT_FOLDER positions.
+	(shortcut_exists): Ignore the current folder row.
+	(struct _GtkFileChooserDefault): New field shortcuts_filter_model.
+	(shortcuts_model_create): Create a filter model for the shortcuts list.
+	(shortcuts_list_create): Set the model to the shortcuts_filter_model.
+	(remove_bookmark_button_clicked_cb): Use the shortcuts_filter_model.
+	(bookmarks_check_remove_sensitivity): Likewise.
+	(shortcuts_row_activated_cb): Likewise.
+	(gtk_file_chooser_default_set_current_folder): New function.
+	(gtk_file_chooser_default_set_current_folder): Update the current
+	folder row in the shortcuts list.
+
+	* gtk/gtkfilechooserwidget.c
+	(gtk_file_chooser_widget_constructor): Cast correctly for
+	_gtk_file_chooser_embed_set_delegate().
+
 Mon Mar  1 19:30:25 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.[ch]: Add gtk_drag_source_set/get_target_list().

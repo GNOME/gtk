@@ -1,9 +1,9 @@
 Overview of Changes from GTK+ 2.3.4 to GTK+ 2.3.5
 =================================================
 * GtkFileChooser  [Federico Mena Quintero]:
- - Enable DND in the shortcuts list.  [Federico]
+ - Enable DND to the shortcuts list.  [Federico]
  - More folder modes.  [Jonathan R Blandford]
- - Misc. fixes  [Jonathan]
+ - Miscellaneous fixes.  [Jonathan, Morten Welinder]
 * GtkComboBox
  - Memory leak/crash fixes.  [Damon Chaplin, Matthias Clasen]
  - Always grab when popping the list up.  [Damon, Matthias]

@@ -163,8 +163,8 @@ gtk_file_chooser_widget_constructor (GType                  type,
   _gtk_file_chooser_set_delegate (GTK_FILE_CHOOSER (object),
 				  GTK_FILE_CHOOSER (priv->impl));
 
-  _gtk_file_chooser_embed_set_delegate (GTK_FILE_CHOOSER (object),
-					GTK_FILE_CHOOSER (priv->impl));
+  _gtk_file_chooser_embed_set_delegate (GTK_FILE_CHOOSER_EMBED (object),
+					GTK_FILE_CHOOSER_EMBED (priv->impl));
   
   gtk_widget_pop_composite_child ();
 
