@@ -1,3 +1,14 @@
+Sat Jul 17 23:11:04 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconview.h:
+	* gtk/gtkiconview.c (gtk_icon_view_class_init): 
+	* gtk/gtkiconview.c (gtk_icon_view_set_orientation): 
+	* gtk/gtkiconview.c (gtk_icon_view_get_orientation): 
+	* gtk/gtkiconview.c (gtk_icon_view_calculate_item_size): 
+	* gtk/gtkiconview.c (gtk_icon_view_layout_single_row): 
+	Add a new :orientation property to determine whether text
+	is positioned below or beside icons.  (#147463)
+
 Sat Jul 17 23:03:30 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkiconview.c (gtk_icon_view_paint_item): 
