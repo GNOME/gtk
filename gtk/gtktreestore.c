@@ -771,14 +771,14 @@ static gboolean
 gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
 			       GtkTreeIter  *iter,
 			       gint          column,
-			       GValue       *value)
+			       GValue       *value,
+			       gboolean      sort)
 {
   GtkTreeDataList *list;
   GtkTreeDataList *prev;
   GtkTreePath *path = NULL;
   GValue real_value = {0, };
   gboolean converted = FALSE;
-  gint orig_column = column;
   gboolean retval = FALSE;
 
   if (! g_type_is_a (G_VALUE_TYPE (value), tree_store->column_headers[column]))
@@ -856,9 +856,6 @@ gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
   if (converted)
     g_value_unset (&real_value);
 
-  if (GTK_TREE_STORE_IS_SORTED (tree_store))
-    gtk_tree_store_sort_iter_changed (tree_store, iter, orig_column);
-
   return retval;
 }
 
@@ -885,7 +882,7 @@ gtk_tree_store_set_value (GtkTreeStore *tree_store,
   g_return_if_fail (column >= 0 && column < tree_store->n_columns);
   g_return_if_fail (G_IS_VALUE (value));
 
-  if (gtk_tree_store_real_set_value (tree_store, iter, column, value))
+  if (gtk_tree_store_real_set_value (tree_store, iter, column, value, TRUE))
     {
       GtkTreePath *path;
 
@@ -912,11 +909,31 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
 {
   gint column;
   gboolean emit_signal = FALSE;
+  gboolean maybe_need_sort = FALSE;
+  GtkTreeIterCompareFunc func;
 
   g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
   g_return_if_fail (VALID_ITER (iter, tree_store));
 
   column = va_arg (var_args, gint);
+
+  if (tree_store->sort_column_id != -1)
+    {
+      GtkTreeDataSortHeader *header;
+      header = _gtk_tree_data_list_get_header (tree_store->sort_list,
+					       tree_store->sort_column_id);
+      g_return_if_fail (header != NULL);
+      g_return_if_fail (header->func != NULL);
+      func = header->func;
+    }
+  else
+    {
+      g_return_if_fail (tree_store->default_sort_func != NULL);
+      func = tree_store->default_sort_func;
+    }
+
+  if (func != gtk_tree_data_list_compare_func)
+    maybe_need_sort = TRUE;
 
   while (column != -1)
     {
@@ -945,12 +962,21 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
       emit_signal = gtk_tree_store_real_set_value (tree_store,
 						   iter,
 						   column,
-						   &value) || emit_signal;
+						   &value,
+						   FALSE) || emit_signal;
+
+      if (func == gtk_tree_data_list_compare_func &&
+	  column == tree_store->sort_column_id)
+	maybe_need_sort = TRUE;
 
       g_value_unset (&value);
 
       column = va_arg (var_args, gint);
     }
+
+  if (maybe_need_sort && GTK_TREE_STORE_IS_SORTED (tree_store))
+    gtk_tree_store_sort_iter_changed (tree_store, iter, tree_store->sort_column_id);
+
   if (emit_signal)
     {
       GtkTreePath *path;

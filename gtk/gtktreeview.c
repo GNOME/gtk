@@ -8320,9 +8320,10 @@ gtk_tree_view_get_cursor (GtkTreeView        *tree_view,
  * useful when you want to focus the user's attention on a particular row.  If
  * @column is not %NULL, then focus is given to the column specified by it.
  * Additionally, if @column is specified, and @start_editing is %TRUE, then
- * editing should be started in the specified cell.  Keyboard focus is given to
- * the widget after this is called.  Please note that editing can only happen
- * when the widget is realized.
+ * editing should be started in the specified cell.  This function is often
+ * followed by @gtk_widget_grab_focus (@tree_view) in order to give keyboard
+ * focus to the widget.  Please note that editing can only happen when the
+ * widget is realized.
  **/
 void
 gtk_tree_view_set_cursor (GtkTreeView       *tree_view,
@@ -8337,7 +8338,6 @@ gtk_tree_view_set_cursor (GtkTreeView       *tree_view,
 
   gtk_tree_view_real_set_cursor (tree_view, path, TRUE);
 
-  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
   if (focus_column && focus_column->visible)
     {
       GList *list;

@@ -1,3 +1,13 @@
+Wed Jan 30 18:46:14 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkliststore.c (gtk_list_store_set_valist): only emit the
+	signal if an interesting column changes.
+
+	* gtk/gtktreestore.c: ditto.
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_cursor): change behavior so
+	that it no longer grabs 
+
 2002-01-30  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkhandlebox.c (gtk_handle_box_destroy): remove unused
