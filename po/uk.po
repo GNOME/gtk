@@ -320,19 +320,16 @@ msgid "The JPEG image format"
 msgstr "Формат JPEG для зображень"
 
 #: gdk-pixbuf/io-pcx.c:190
-#, fuzzy
 msgid "Couldn't allocate memory for header"
-msgstr "Не вдалося виділити пам'ять для завантаження файлу JPEG"
+msgstr "Не вдалось виділити пам'ять для заголовка"
 
 #: gdk-pixbuf/io-pcx.c:205 gdk-pixbuf/io-pcx.c:565
-#, fuzzy
 msgid "Couldn't allocate memory for context buffer"
-msgstr "Неможливо виділити пам'ять для структури вмісту формату TGA"
+msgstr "Не вдалось виділити пам'ять для буфера вмісту"
 
 #: gdk-pixbuf/io-pcx.c:606
-#, fuzzy
 msgid "Image has invalid width and/or height"
-msgstr "Зображення має нульову висоту"
+msgstr "Зображення має неправильну висоту чи ширину"
 
 #: gdk-pixbuf/io-pcx.c:614 gdk-pixbuf/io-pcx.c:675
 #, fuzzy
@@ -350,9 +347,8 @@ msgid "Image has unsupported number of %d-bit planes"
 msgstr "Зображення BMP має непідтримуваний розмір заголовка"
 
 #: gdk-pixbuf/io-pcx.c:643
-#, fuzzy
 msgid "Couldn't create new pixbuf"
-msgstr "Неможливо виділити новий об'єкт Pixbuf"
+msgstr "Не вдалось створити нивий об'єкт Pixbuf"
 
 #: gdk-pixbuf/io-pcx.c:651
 #, fuzzy
@@ -370,12 +366,11 @@ msgstr ""
 
 #: gdk-pixbuf/io-pcx.c:712
 msgid "No palette found at end of PCX data"
-msgstr ""
+msgstr "Не знайдено палітри в кінці файлі формату PCX"
 
 #: gdk-pixbuf/io-pcx.c:753
-#, fuzzy
 msgid "The PCX image format"
-msgstr "Формат BMP для зображень"
+msgstr "Формат PCX для зображень"
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
