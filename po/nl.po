@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-13 05:08+0100\n"
-"PO-Revision-Date: 2004-01-08 17:27+0100\n"
+"POT-Creation-Date: 2004-01-13 20:54+0100\n"
+"PO-Revision-Date: 2004-01-14 02:53+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -969,32 +969,29 @@ msgstr "Zichtbaar"
 
 #: gtk/gtkaction.c:265
 msgid "Whether the action is visible."
-msgstr "Of de actie zichtbaar moet is."
+msgstr "Of de actie zichtbaar is."
 
 #: gtk/gtkaction.c:271
-#, fuzzy
 msgid "Action Group"
-msgstr "Actie"
+msgstr "Actiegroep"
 
 #: gtk/gtkaction.c:272
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
-msgstr ""
+msgstr "De GtkActionGroup waarmee deze GtkAction is geassocieerd, of NULL (voor intern gebruik)."
 
 #: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
 msgstr "Een naam voor de actiegroep."
 
 #: gtk/gtkactiongroup.c:142
-#, fuzzy
 msgid "Whether the action group is enabled."
-msgstr "Of de actie wordt gebruikt"
+msgstr "Of de actiegroep wordt gebruikt."
 
 #: gtk/gtkactiongroup.c:149
-#, fuzzy
 msgid "Whether the action group is visible."
-msgstr "Of de actie zichtbaar moet is."
+msgstr "Of de actiegroep zichtbaar is."
 
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
