@@ -162,6 +162,19 @@ query_module (const char *dir, const char *file)
 		GdkPixbufFormat *info;
 		GdkPixbufModule *vtable;
 		
+#ifdef G_OS_WIN32
+		/* Replace backslashes in path with forward slashes, so that
+		 * it reads in without problems.
+		 */
+		{
+			char *p = path;
+			while (*p) {
+				if (*p == '\\')
+					*p = '/';
+				p++;
+			}
+		}
+#endif	
 		info = g_new0 (GdkPixbufFormat, 1);
 		vtable = g_new0 (GdkPixbufModule, 1);
 		

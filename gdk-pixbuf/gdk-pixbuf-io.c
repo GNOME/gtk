@@ -170,6 +170,59 @@ skip_space (const char **pos)
 	return !(*p == '\0');
 }
   
+#ifdef G_OS_WIN32
+
+/* DllMain function needed to tuck away the gdk-pixbuf DLL name */
+G_WIN32_DLLMAIN_FOR_DLL_NAME (static, dll_name)
+
+static char *
+get_toplevel (void)
+{
+  static char *toplevel = NULL;
+
+  if (toplevel == NULL)
+    toplevel = g_win32_get_package_installation_subdirectory
+      (GETTEXT_PACKAGE, dll_name, "");
+
+  return toplevel;
+}
+
+static char *
+get_sysconfdir (void)
+{
+  static char *sysconfdir = NULL;
+
+  if (sysconfdir == NULL)
+    sysconfdir = g_win32_get_package_installation_subdirectory
+      (GETTEXT_PACKAGE, dll_name, "etc");
+
+  return sysconfdir;
+}
+
+#undef GTK_SYSCONFDIR
+#define GTK_SYSCONFDIR get_sysconfdir()
+
+static void
+correct_prefix (gchar **path)
+{
+  if (strncmp (*path, GTK_PREFIX "/", strlen (GTK_PREFIX "/")) == 0 ||
+      strncmp (*path, GTK_PREFIX "\\", strlen (GTK_PREFIX "\\")) == 0)
+    {
+      /* This is an entry put there by gdk-pixbuf-query-loaders on the
+       * packager's system. On Windows a prebuilt GTK+ package can be
+       * installed in a random location. The gdk-pixbuf.loaders file
+       * distributed in such a package contains paths from the package
+       * builder's machine. Replace the build-time prefix with the
+       * installation prefix on this machine.
+       */
+      gchar *tem = *path;
+      *path = g_strconcat (get_toplevel (), tem + strlen (GTK_PREFIX), NULL);
+      g_free (tem);
+    }
+}
+
+#endif
+
 static gchar *
 gdk_pixbuf_get_module_file (void)
 {
@@ -214,6 +267,9 @@ gdk_pixbuf_io_init ()
 				/* Blank line marking the end of a module
 				 */
 			if (module && *p != '#') {
+#ifdef G_OS_WIN32
+				correct_prefix (&module->module_path);
+#endif
 				file_formats = g_slist_prepend (file_formats, module);
 				module = NULL;
 			}
@@ -335,29 +391,6 @@ gdk_pixbuf_io_init ()
 	g_io_channel_unref (channel);
 	g_free (filename);
 }
-
-#ifdef G_OS_WIN32
-
-/* DllMain function needed to tuck away the gdk-pixbuf DLL name */
-
-G_WIN32_DLLMAIN_FOR_DLL_NAME (static, dll_name)
-
-static char *
-get_libdir (void)
-{
-  static char *libdir = NULL;
-
-  if (libdir == NULL)
-    libdir = g_win32_get_package_installation_subdirectory
-      (GETTEXT_PACKAGE, dll_name, "lib\\gtk-2.0\\" GTK_BINARY_VERSION "\\loaders");
-
-  return libdir;
-}
-
-#undef PIXBUF_LIBDIR
-#define PIXBUF_LIBDIR get_libdir ()
-
-#endif
 
 /* actually load the image handler - gdk_pixbuf_get_module only get a */
 /* reference to the module to load, it doesn't actually load it       */
