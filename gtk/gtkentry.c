@@ -4084,7 +4084,7 @@ gtk_entry_text_index_to_layout_index (GtkEntry *entry,
  * is clicked.
  * 
  * Note that as the user scrolls around in the entry the offsets will
- * change; you'll need to connect to the "notify::scroll_offset"
+ * change; you'll need to connect to the "notify::scroll-offset"
  * signal to track this. Remember when using the #PangoLayout
  * functions you need to convert to and from pixels using
  * PANGO_PIXELS() or #PANGO_SCALE.
