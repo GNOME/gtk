@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-11 09:54+0100\n"
+"POT-Creation-Date: 2005-01-12 08:33+0100\n"
 "PO-Revision-Date: 2003-11-14 17:38+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnomepl.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -1245,13 +1245,15 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:416 gtk/gtklabel.c:433 gtk/gtkprogressbar.c:242
 msgid "Ellipsize"
-msgstr ""
+msgstr "Przycięcie"
 
 #: gtk/gtkcellrenderertext.c:417
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
+"Preferowane miejsce przycięcia ciągu tekstowego, w przypadku gdy obiekt "
+"renderujący komórki nie ma miejsca na wyświetlenie go całego"
 
 #: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
 #: gtk/gtklabel.c:453
@@ -1376,14 +1378,13 @@ msgstr ""
 "Określa, czy ten znacznik wpływa na język, w którym wyświetlany jest tekst"
 
 #: gtk/gtkcellrenderertext.c:503
-#, fuzzy
 msgid "Ellipsize set"
-msgstr "Ustawienie wysunięcia"
+msgstr "Ustawienie przycięcia"
 
+# FIXME = Bełkot jakiś
 #: gtk/gtkcellrenderertext.c:504
-#, fuzzy
 msgid "Whether this tag affects the ellipsize mode"
-msgstr "Określa, czy ten znacznik wpływa na wysunięcie"
+msgstr "Określa, czy ten znacznik wpływa na tryb przycięcia"
 
 #: gtk/gtkcellrenderertoggle.c:142
 msgid "Toggle state"
@@ -2263,84 +2264,75 @@ msgstr "Tryb zaznaczania"
 
 #: gtk/gtkiconview.c:352
 msgid "Pixbuf column"
-msgstr ""
+msgstr "Kolumna grafik"
 
 #: gtk/gtkiconview.c:353
 msgid "Model column used to retrieve the icon pixbuf from"
-msgstr ""
+msgstr "Użyty model kolumny do pobierania grafik ikon"
 
 #: gtk/gtkiconview.c:371
 msgid "Model column used to retrieve the text from"
-msgstr ""
+msgstr "Użyty model kolumny do pobierania tekstu"
 
 #: gtk/gtkiconview.c:390
-#, fuzzy
 msgid "Markup column"
-msgstr "Tekst ze znacznikami"
+msgstr "Kolumna znaczników"
 
 #: gtk/gtkiconview.c:391
 msgid "Model column used to retrieve the text if using Pango markup"
-msgstr ""
+msgstr "Model kolumny użyty do pobierania tekstu przy użyciu znaczników Pango"
 
 #: gtk/gtkiconview.c:398
-#, fuzzy
 msgid "Icon View Model"
-msgstr "Model TreeView"
+msgstr "Model widoku ikon"
 
 #: gtk/gtkiconview.c:399
-#, fuzzy
 msgid "The model for the icon view"
-msgstr "Model dla widoku drzewa"
+msgstr "Model dla widoku ikon"
 
 #: gtk/gtkiconview.c:415
-#, fuzzy
 msgid "Number of columns"
-msgstr "Liczba kanałów"
+msgstr "Liczba kolumn"
 
 #: gtk/gtkiconview.c:416
-#, fuzzy
 msgid "Number of columns to display"
-msgstr "Liczba wyświetlanych pozycji dziesiętnych"
+msgstr "Liczba kolumn do wyświetlenia"
 
 #: gtk/gtkiconview.c:433
-#, fuzzy
 msgid "Width for each item"
-msgstr "Widget używany jako etykieta elementu"
+msgstr "Szerokość każdego elementu"
 
 #: gtk/gtkiconview.c:434
 msgid "The width used for each item"
-msgstr ""
+msgstr "Szerokość używana dla każdego elementu"
 
 #: gtk/gtkiconview.c:450
 msgid "Space which is inserted between cells of an item"
-msgstr ""
+msgstr "Odstęp jaki jest umieszczany pomiędzy komórkami elementu"
 
 #: gtk/gtkiconview.c:465
-#, fuzzy
 msgid "Row Spacing"
 msgstr "Odstępy wierszowe"
 
 #: gtk/gtkiconview.c:466
 msgid "Space which is inserted between grid rows"
-msgstr ""
+msgstr "Odstęp jaki jest umieszczany pomiędzy wierszami siatki"
 
 #: gtk/gtkiconview.c:481
-#, fuzzy
 msgid "Column Spacing"
 msgstr "Odstępy kolumnowe"
 
 #: gtk/gtkiconview.c:482
 msgid "Space which is inserted between grid column"
-msgstr ""
+msgstr "Odstęp jaki jest umieszczany pomiędzy kolumnami siatki"
 
 #: gtk/gtkiconview.c:497
-#, fuzzy
 msgid "Margin"
-msgstr "Lewy margines"
+msgstr "Margines"
 
 #: gtk/gtkiconview.c:498
 msgid "Space which is inserted at the edges of the icon view"
-msgstr ""
+msgstr "Odstęp jaki jest umieszczany na krawędziach widku ikon"
 
 #: gtk/gtkiconview.c:514 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
@@ -2349,27 +2341,23 @@ msgstr "Ułożenie"
 #: gtk/gtkiconview.c:515
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
-msgstr ""
+msgstr "Pozycjonowanie tekstu i ikony każdego elementu względem innych"
 
 #: gtk/gtkiconview.c:523
-#, fuzzy
 msgid "Selection Box Color"
-msgstr "Granica zaznaczenia"
+msgstr "Kolor prostokąta zaznaczania"
 
 #: gtk/gtkiconview.c:524
-#, fuzzy
 msgid "Color of the selection box"
-msgstr "Tytuł okna dialogowego wyboru czcionki"
+msgstr "Kolor prostokąta zaznaczania"
 
 #: gtk/gtkiconview.c:530
-#, fuzzy
 msgid "Selection Box Alpha"
-msgstr "Granica zaznaczenia"
+msgstr "Wartość alfa prostokąta zaznaczania"
 
 #: gtk/gtkiconview.c:531
-#, fuzzy
 msgid "Opacity of the selection box"
-msgstr "Tytuł okna dialogowego wyboru czcionki"
+msgstr "Nieprzepuszczalność prostokąta zaznaczania"
 
 #: gtk/gtkimage.c:158
 msgid "Pixbuf"
@@ -2424,20 +2412,18 @@ msgid "Icon size"
 msgstr "Rozmiar ikony"
 
 #: gtk/gtkimage.c:216
-#, fuzzy
 msgid "Symbolic size to use for stock icon, icon set or named icon"
-msgstr "Rozmiar używany przy typowej ikonie lub zbiorze ikon"
+msgstr ""
+"Symboliczny rozmiar używany przy typowej ikonie, zbiorze ikon lub nazwanej "
+"ikonie"
 
-# FIXME - lub pikseli
 #: gtk/gtkimage.c:232
-#, fuzzy
 msgid "Pixel size"
-msgstr "Piksele"
+msgstr "Rozmiar w pikselach"
 
 #: gtk/gtkimage.c:233
-#, fuzzy
 msgid "Pixel size to use for named icon"
-msgstr "Rozmiar używany przy typowej ikonie lub zbiorze ikon"
+msgstr "Rozmiar w pikselach używany przy nazwanych ikonach"
 
 #: gtk/gtkimage.c:241
 msgid "Animation"
@@ -2448,14 +2434,12 @@ msgid "GdkPixbufAnimation to display"
 msgstr "Obiekt GdkPixbufAnimation do wyświetlenia"
 
 #: gtk/gtkimage.c:257 gtk/gtkwindow.c:525
-#, fuzzy
 msgid "Icon Name"
-msgstr "Nazwa czcionki"
+msgstr "Nazwa ikony"
 
 #: gtk/gtkimage.c:258
-#, fuzzy
 msgid "The name of the icon from the icon theme"
-msgstr "Nazwa wybranej czcionki"
+msgstr "Nazwa ikony z motywu ikon"
 
 #: gtk/gtkimage.c:265
 msgid "Storage type"
@@ -2554,33 +2538,32 @@ msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
 msgstr ""
+"Preferowane miejsce przycięcia ciągu tekstowego, w przypadku gdy etykieta "
+"nie posiada miejsca na wyświetlenie całego teksu"
 
 #: gtk/gtklabel.c:474
-#, fuzzy
 msgid "Single Line Mode"
-msgstr "Tryb pojedynczego paragrafu"
+msgstr "Tryb jednowierszowy"
 
 #: gtk/gtklabel.c:475
-#, fuzzy
 msgid "Whether the label is in single line mode"
-msgstr "Określa, czy etykieta jest rysowana z użyciem wybranej czcionki"
+msgstr "Określa, czy etykieta jest w trybie jednowierszowym"
 
 #: gtk/gtklabel.c:492
 msgid "Angle"
-msgstr ""
+msgstr "Kąt"
 
 #: gtk/gtklabel.c:493
 msgid "Angle at which the label is rotated"
-msgstr ""
+msgstr "Kąt pod jakim etykieta jest obrócona"
 
 #: gtk/gtklabel.c:513
-#, fuzzy
 msgid "Maximum Width In Characters"
-msgstr "Maksymalna szerokość"
+msgstr "Maksymalna szerokość w znakach"
 
 #: gtk/gtklabel.c:514
 msgid "The desired maximum width of the label, in characters"
-msgstr ""
+msgstr "Żądana maksymalna szerokość etykiety (w znakach)"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
@@ -2617,14 +2600,12 @@ msgid ""
 msgstr "Tytuł wyświetlany przez menedżera okien, kiedy menu jest oderwane"
 
 #: gtk/gtkmenu.c:541
-#, fuzzy
 msgid "Tearoff State"
-msgstr "Tytuł przy oderwaniu"
+msgstr "Stan oderwania"
 
 #: gtk/gtkmenu.c:542
-#, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
-msgstr "Tytuł wyświetlany przez menedżera okien, kiedy menu jest oderwane"
+msgstr "Wartość logiczna wskazująca, czy menu jest oderwane"
 
 #: gtk/gtkmenu.c:548
 msgid "Vertical Padding"
@@ -2749,7 +2730,7 @@ msgstr "Menu"
 
 #: gtk/gtkmenutoolbutton.c:248
 msgid "The dropdown menu"
-msgstr ""
+msgstr "Menu rozwijane"
 
 #: gtk/gtkmessagedialog.c:124
 msgid "Image/label border"
@@ -2897,7 +2878,6 @@ msgid "Tab label"
 msgstr "Etykieta zakładki"
 
 #: gtk/gtknotebook.c:482
-#, fuzzy
 msgid "The string displayed on the child's tab label"
 msgstr "Napis wyświetlany na etykiecie zakładki widgetu potomnego"
 
@@ -2906,16 +2886,14 @@ msgid "Menu label"
 msgstr "Etykieta menu"
 
 #: gtk/gtknotebook.c:489
-#, fuzzy
 msgid "The string displayed in the child's menu entry"
-msgstr "Napis wyświetlany na pozycji menu odpowiadającej widgetowi potomnemu"
+msgstr "Napis wyświetlany na pozycji menu widgeta potomnego"
 
 #: gtk/gtknotebook.c:502
 msgid "Tab expand"
 msgstr "Rozwinięcie zakładki"
 
 #: gtk/gtknotebook.c:503
-#, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "Określa, czy zakładka widgetu potomnego powinna być rozwinięta"
 
@@ -2924,7 +2902,6 @@ msgid "Tab fill"
 msgstr "Wypełnienie zakładki"
 
 #: gtk/gtknotebook.c:510
-#, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr ""
 "Określa, czy zakładka widgeta potomnego powinna wypełnić przydzielony obszar"
@@ -3173,6 +3150,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
 msgstr ""
+"Preferowane miejsce przycięcia ciągu tekstowego, w przypadku gdy pasek "
+"postępu nie ma miejsca na wyświetlenie całego tekstu"
 
 #: gtk/gtkradioaction.c:139
 msgid "The value"
@@ -3191,7 +3170,6 @@ msgid "Group"
 msgstr "Grupa"
 
 #: gtk/gtkradioaction.c:157
-#, fuzzy
 msgid "The radio action whose group this action belongs to."
 msgstr "Grupa, do której należy ta akcja radiowa."
 
@@ -3199,7 +3177,6 @@ msgstr "Grupa, do której należy ta akcja radiowa."
 # chodzi o to, do której grupy należy ów przycisk radiowy,
 # bo takowe przyciski mają sesn tylko jak są w grupie 
 #: gtk/gtkradiobutton.c:114
-#, fuzzy
 msgid "The radio button whose group this widget belongs to."
 msgstr "Grupa, do której należy ten widget przycisku radiowego."
 
@@ -3547,11 +3524,11 @@ msgstr "Lista rozmiarów ikon (gtk-menu=16,16;gtk-button=20,20..."
 
 #: gtk/gtksettings.c:372
 msgid "GTK Modules"
-msgstr ""
+msgstr "Moduły GTK"
 
 #: gtk/gtksettings.c:373
 msgid "List of currently active GTK modules"
-msgstr ""
+msgstr "Lista obecnie używanych modułów GTK"
 
 #: gtk/gtksettings.c:382
 msgid "Xft Antialias"
@@ -3595,12 +3572,13 @@ msgstr "Rozdzielczość Xft, w 1024 * punkty/cal. -1 - użycie domyślnej warto�
 
 #: gtk/gtksettings.c:432
 msgid "Alternative button order"
-msgstr ""
+msgstr "Alternatywne ułożenie przycisków"
 
 #: gtk/gtksettings.c:433
-#, fuzzy
 msgid "Whether buttons in dialogs should use the alternative button order"
-msgstr "Określa, czy powinny być wyświetlane ikony w przyciskach"
+msgstr ""
+"Określa, czy przyciski w oknach dialogowych powinny używać alternatywnego "
+"ułożenia przycisków"
 
 #: gtk/gtksizegroup.c:243
 msgid "Mode"
@@ -3933,14 +3911,13 @@ msgid "Left, right, or center justification"
 msgstr "Justowanie do lewej, prawej, lub do środka"
 
 #: gtk/gtktexttag.c:386
-#, fuzzy
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
 msgstr ""
 "Kod ISO języka, w którym został napisany ten tekst. Pango może wykorzystać "
-"tę informację jako podpowiedź przy renderowaniu tekstu. Jeśli nie wiesz co "
-"oznacza ten parametr, prawdopodobnie go niepotrzebujesz."
+"tę informację jako podpowiedź przy renderowaniu tekstu. Jeśli nie ustawione, "
+"zostanie użyta odpowiednia wartość domyślna."
 
 #: gtk/gtktexttag.c:393
 msgid "Left margin"
@@ -4440,26 +4417,23 @@ msgstr ""
 "wysokość"
 
 #: gtk/gtktreeview.c:672
-#, fuzzy
 msgid "Hover Selection"
-msgstr "Granica zaznaczenia"
+msgstr "Zaznaczanie wskazanego"
 
 #: gtk/gtktreeview.c:673
-#, fuzzy
 msgid "Whether the selection should follow the pointer"
-msgstr ""
-"Określa, czy przy wyborze koloru powinna być możliwość określenia jego "
-"nieprzepuszczalności."
+msgstr "Określa, czy zaznaczanie powinno podążać za wskaźnikiem"
 
 #: gtk/gtktreeview.c:692
-#, fuzzy
 msgid "Hover Expand"
-msgstr "Rozszerzanie"
+msgstr "Rozwinięcie wskazanego"
 
 #: gtk/gtktreeview.c:693
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr ""
+"Określa, czy wiersze powinny być rozwinięte/zwinięte podczas przesuwania "
+"wskaźnika nad nimi"
 
 #: gtk/gtktreeview.c:713
 msgid "Vertical Separator Width"
@@ -4529,7 +4503,7 @@ msgstr "Bieżąca szerokość kolumny"
 
 #: gtk/gtktreeviewcolumn.c:251
 msgid "Space which is inserted between cells"
-msgstr ""
+msgstr "Miejsce wstawiane pomiędzy komórkami"
 
 #: gtk/gtktreeviewcolumn.c:259
 msgid "Sizing"
@@ -4971,9 +4945,8 @@ msgid "Icon for this window"
 msgstr "Ikona powiązana z tym oknem"
 
 #: gtk/gtkwindow.c:526
-#, fuzzy
 msgid "Name of the themed icon for this window"
-msgstr "Ikona powiązana z tym oknem"
+msgstr "Nazwa ikony z motywu, powiązanej z tym oknem"
 
 #: gtk/gtkwindow.c:541
 msgid "Is Active"
@@ -5031,14 +5004,13 @@ msgid "TRUE if the window should receive the input focus."
 msgstr "Jeżeli ustawione, okno powinno otrzymywać skupienie wejścia."
 
 #: gtk/gtkwindow.c:604
-#, fuzzy
 msgid "Focus on map"
-msgstr "Skupienie po kliknięciu"
+msgstr "Skupienie przy mapowaniu"
 
 #: gtk/gtkwindow.c:605
-#, fuzzy
 msgid "TRUE if the window should receive the input focus when mapped."
-msgstr "Jeżeli ustawione, okno powinno otrzymywać skupienie wejścia."
+msgstr ""
+"Jeżeli ustawione, okno powinno otrzymywać skupienie wejścia przy mapowaniu."
 
 #: gtk/gtkwindow.c:619
 msgid "Decorated"
