@@ -396,13 +396,15 @@ static void
 gtk_label_state_changed (GtkWidget      *widget,
 			 guint	         previous_state)
 {
-  GTK_LABEL (widget)->needs_clear = 1;
+  if (GTK_WIDGET_DRAWABLE (widget))
+    GTK_LABEL (widget)->needs_clear = 1;
 }
 
 static void 
 gtk_label_style_set	(GtkWidget      *widget,
 			 GtkStyle       *previous_style)
 {
-  GTK_LABEL (widget)->needs_clear = 1;
+  if (GTK_WIDGET_DRAWABLE (widget))
+    GTK_LABEL (widget)->needs_clear = 1;
 }
 

@@ -2329,7 +2329,7 @@ gdk_event_translate (GdkEvent *event,
 	  gdk_dnd_drag_addwindow((GdkWindow *) gdk_dnd.real_sw);
 	  gdk_dnd_drag_begin((GdkWindow *) gdk_dnd.real_sw);
 	  xgpret = 
-	  XGrabPointer(gdk_display, gdk_dnd.real_sw->xwindow, True,
+	  XGrabPointer(gdk_display, gdk_dnd.real_sw->xwindow, False,
 		       ButtonMotionMask | PointerMotionMask |
 		       /* PointerMotionHintMask | */ /* HINTME */
 		       ButtonPressMask | ButtonReleaseMask,

@@ -1226,7 +1226,7 @@ gdk_window_get_colormap (GdkWindow *window)
   g_return_val_if_fail (window_private->window_type != GDK_WINDOW_PIXMAP, NULL);
   if (!window_private->destroyed)
     {
-       if (window_private->colormap == NULL)
+      if (window_private->colormap == NULL)
 	{
 	  XGetWindowAttributes (window_private->xdisplay,
 				window_private->xwindow,

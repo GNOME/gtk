@@ -1,3 +1,26 @@
+Sun May  3 14:55:34 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* docs/gtkfaq.sgml (CPPFLAGS): Added a FAQ entry about
+	"glibconfig.h" and another about writing another IRC
+	client.
+
+Sat May  2 00:14:05 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkpreview.c (gtk_trim_cmap): Make sure the
+	parameters to log are doubles. Digital Unix apparently
+	is missing the argument in its prototype.
+
+Sun May  3 19:04:46 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtklabel.c (gtk_label_state_changed): Don't
+	force a clear until the widget is actually on
+	screen.
+
+Sun May  3 21:32:35 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdk.c (gdk_event_translate): Grab with OwnerEvents = False
+	to make this consistent with the gtk-1-0 tree.
+
 Sun May  3 13:38:22 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* configure.in acheader.h gdk/gdkwindow.c 
@@ -49,7 +72,7 @@ Fri May  1 16:40:57 1998  Owen Taylor  <otaylor@gtk.org>
 Sun May  3 19:45:09 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkadjustment.c (gtk_adjustment_assimilate_value): new function
-	to set the adjustments value when there is no current emissioin.
+	to set the adjustments value when there is no current emission.
 	[ Removed by mutual agreement owt 5/3/1998 ]
 
 	* gtk/gtksignal.c: added new functions to retrive the number of

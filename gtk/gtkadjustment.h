@@ -73,12 +73,6 @@ void	   gtk_adjustment_clamp_page		(GtkAdjustment	 *adjustment,
 						 gfloat		  upper);
 void	   gtk_adjustment_set_value		(GtkAdjustment	 *adjustment,
 						 gfloat		  value);
-void	   gtk_adjustment_assimilate_value	(GtkAdjustment	 *adjustment,
-						 gfloat		  value);
-
-
-
-
 
 #ifdef __cplusplus
 }

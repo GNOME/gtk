@@ -249,19 +249,6 @@ gtk_type_describe_tree (GtkType type,
   indent = old_indent;
 }
 
-static gint type_isas[512];
-
-static void
-show_isas (void)
-{
-  int i;
-  
-  for (i=0;i<512;i++)
-    if (type_isas[i])
-      g_print ("%s: %d\n",gtk_type_name(GTK_TYPE_MAKE(GTK_TYPE_OBJECT,i)),
-	       type_isas[i]);
-}
-
 gint
 gtk_type_is_a (GtkType type,
 	       GtkType is_a_type)
@@ -270,8 +257,6 @@ gtk_type_is_a (GtkType type,
 
   if (initialize)
     gtk_type_init ();
-
-  type_isas[GTK_TYPE_SEQNO(is_a_type)]++;
 
   node = g_hash_table_lookup (type_hash_table, &type);
 
@@ -524,6 +509,4 @@ gtk_type_init_builtin_types (void)
 	gtk_type_register_builtin (builtin_info[i].name,
 				   builtin_info[i].parent);
     }
-
-  ATEXIT(show_isas);
 }
