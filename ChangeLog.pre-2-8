@@ -1,3 +1,9 @@
+Mon Mar 16 18:19:31 GMT 1998 Tony Gale  <gale@gimp.org>
+	* docs/gtkfaq.sgml:
+	    - new question on modal windows
+	    - new question on updating progressbars
+	    - update all the links to gtk.org
+
 Mon Mar 16 09:15:03 GMT 1998 Tony Gale  <gale@gimp.org>
 
 	* docs/gtk_tut.sgml: 

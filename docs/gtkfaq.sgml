@@ -84,8 +84,8 @@ GTK Tutorial.
 
 In addition, you can find links to HTML versions of these documents 
 by going to 
-<htmlurl url="http://www.gimp.org/gtk/" 
-name="http://www.gimp.org/gtk/">.
+<htmlurl url="http://www.gtk.org/" 
+name="http://www.gtk.org/">.
 
 The Tutorial and FAQ can also be found at
 <htmlurl url="http://www.geocities.com/ResearchTriangle/Lab/4299/"
@@ -179,9 +179,9 @@ and associated libraries on your system.
 <p>
 The canonical site is:
 <verb>
-ftp://ftp.gimp.org/pub/gtk
+ftp://ftp.gtk.org/pub/gtk
 </verb>
-Of course, any mirrors of ftp.gimp.org should have the latest version, too.
+Of course, any mirrors of ftp.gtk.org should have the latest version, too.
 
 <sect1>How do I configure/compile GTK+?
 <p>
@@ -285,7 +285,7 @@ and then generate a patch in the form of a 'context diff'. This can be done
 using a command such as <tt/diff -ru &lt;oldfile&gt; &lt;newfile&gt;/. 
 Then upload the patchfile to:
 <verb>
-ftp://ftp.gimp.org/incoming
+ftp://ftp.gtk.org/incoming
 </verb>
 along with a README file.  Make sure you follow the naming conventions or your
 patch will just be deleted! The filenames should be of this form:
@@ -302,12 +302,12 @@ Example:
 gtk-gale-982701-0.patch.gz
 gtk-gale-982701-0.patch.README
 </verb>
-Once you upload <em>anything</em>, send the README to ftp-admin@gimp.org
+Once you upload <em>anything</em>, send the README to ftp-admin@gtk.org
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>How do I know if my patch got applied, and if not, why not?
 <p>
-Uploaded patches will be moved to <tt>ftp://ftp.gimp.org/pub/gtk/patches</tt>
+Uploaded patches will be moved to <tt>ftp://ftp.gtk.org/pub/gtk/patches</tt>
 where one of the GTK+ development team will pick them up. If applied, they
 will be moved to <tt>/pub/gtk/patches/old</tt>.
 
@@ -337,7 +337,7 @@ http://www.cs.tut.fi/~p150650/gtk/gtk--.html
 </verb>
 The FTP site is:
 <verb>
-ftp://ftp.gimp.org/pub/gtk/gtk--/
+ftp://ftp.gtk.org/pub/gtk/gtk--/
 </verb>
 <p>
 
@@ -362,7 +362,7 @@ ftp://ftp.gimp.org/pub/gtk/gtk--/
 <p>               
 <item>Perl bindings
 <verb>
-ftp://ftp.gimp.org/pub/gtk/perl
+ftp://ftp.gtk.org/pub/gtk/perl
 </verb>
    
 <item>Guile bindings. The home page is at:
@@ -388,7 +388,7 @@ http://www.acs.ucalgary.cs/~nashceme/python-gtk/
 </verb>
 If you try python-gtk and don't like it, there's also pygtk located at:
 <verb>
-ftp://ftp.gimp.org/pub/gtk/python/
+ftp://ftp.gtk.org/pub/gtk/python/
 </verb>
 
 <item>
@@ -407,8 +407,8 @@ http://www.sakuranet.or.jp/~aozasa/shige/doc/comp/gtk/gtkGL/files-en.html
 <p>
 So, after you have installed GTK+ there are a couple of things that can
 ease you into developing applications with it. There is the
-GTK+ Tutorial <htmlurl url="http://www.gimp.org/gtk/tutorial/" 
-name="&lt;http://www.gimp.org/gtk/tutorial/&gt;">, which is undergoing 
+GTK+ Tutorial <htmlurl url="http://www.gtk.org/tutorial/" 
+name="&lt;http://www.gtk.org/tutorial/&gt;">, which is undergoing 
 development. This will introduce you to writing applications using C.
 
 The Tutorial doesn't (yet) contain information on all of the widgets
@@ -710,7 +710,7 @@ determined it didn't look good and removed it.
 <!-- ----------------------------------------------------------------- -->
 <sect1>How can I define a separation line in a menu? 
 <p>
-See the <htmlurl url="http://www.gimp.org/gtk/tutorial/"
+See the <htmlurl url="http://www.gtk.org/tutorial/"
 name="Tutorial"> for information on how to create menus.
 However, to create a separation line in a menu, just insert an
 empty menu item:
@@ -730,6 +730,31 @@ Use something like the following:
 menu_path = gtk_menu_factory_find (factory,  "<MyApp>/Help");
 gtk_menu_item_right_justify(menu_path->widget);
 </verb></tscreen>
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I make my window modal? / How do I make a single window active?
+<p>
+After you create your window, do gtk_grab_add(my_window). And after 
+closing the window do gtk_grab_remove(my_window).
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Why doesn't my progressbar update?
+<p>
+
+You are probably doing all the progressbar changes within a function 
+without returning control to gtk_main. Most drawing updates are only 
+placed on a queue, which is processed within gtk_main. You can
+force the drawing queue to be processed using something like:
+
+<tscreen><verb>
+while (gtk_events_pending())
+        gtk_main_iteration();
+</verb></tscreen>
+
+inside you're function that changes the progress bar.
+
+What the above snippet does is run all pending events and high priority 
+idle functions, then return immediately (the drawing is done in a 
+high priority idle function).
 
 <!-- ***************************************************************** -->
 <sect>About gdk
