@@ -1,3 +1,11 @@
+Tue Dec  4 11:06:54 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenuitem.c: Revert my last mistaken change - 
+	toggle-size-request doesn't take a requisition.
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_class_init): Fix
+	reference to marshaler that no longer exists.
+
 Mon Dec  3 16:39:17 2001  Owen Taylor  <otaylor@redhat.com>
 
 	Patch from Bill Haneman (with many modifications) to make

@@ -186,9 +186,9 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkMenuItemClass, toggle_size_request),
-                    _gtk_marshal_VOID__BOXED,
+                    _gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_REQUISITION);
+		    GTK_TYPE_POINTER);
 
   menu_item_signals[TOGGLE_SIZE_ALLOCATE] =
     gtk_signal_new ("toggle_size_allocate",
