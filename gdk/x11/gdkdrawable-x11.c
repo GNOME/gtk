@@ -1,4 +1,4 @@
-/* GDK - The GIMP Drawing Kit
+/* GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -238,6 +238,9 @@ gdk_x11_drawable_get_picture (GdkDrawable *drawable)
 {
   GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
+  if (!_gdk_x11_have_render ())
+    return None;
+  
   if (impl->picture == None)
     {
       GdkVisual *visual = gdk_drawable_get_visual (drawable);
@@ -802,12 +805,14 @@ select_format (Display            *xdisplay,
 	       XRenderPictFormat **mask)
 {
   XRenderPictFormat pf;
-  
 
-/* Look for a 32-bit xRGB and Axxx formats that exactly match the
- * in memory data format. We can use them as pixmap and mask
- * to deal with non-premultiplied data.
- */
+  if (!_gdk_x11_have_render ())
+    return FORMAT_NONE;
+  
+  /* Look for a 32-bit xRGB and Axxx formats that exactly match the
+   * in memory data format. We can use them as pixmap and mask
+   * to deal with non-premultiplied data.
+   */
 
   pf.type = PictTypeDirect;
   pf.depth = 32;
