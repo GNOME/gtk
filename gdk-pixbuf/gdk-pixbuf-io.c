@@ -645,7 +645,7 @@ collect_save_options (va_list   opts,
 static gboolean
 gdk_pixbuf_real_save (GdkPixbuf     *pixbuf, 
                       FILE          *filehandle, 
-                      const char    *format, 
+                      const char    *type, 
                       gchar        **keys,
                       gchar        **values,
                       GError       **error)
@@ -654,14 +654,17 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
        GdkPixbufModule *image_module = NULL;       
        
        for (i = 0; file_formats[i].module_name; i++) {
-               if (!strcmp (file_formats[i].module_name, format)) {
+               if (!strcmp (file_formats[i].module_name, type)) {
                        image_module = &(file_formats[i]);
                        break;
                }
        }
        
        if (!image_module) {
-               g_warning ("gdk-pixbuf does not support the format: %s", format);
+               g_set_error (error,
+                            GDK_PIXBUF_ERROR,
+                            GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+                            _("This build of gdk-pixbuf does not support saving the image format: %s"), type);
                return FALSE;
        }
        
@@ -682,11 +685,11 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
  * gdk_pixbuf_save:
  * @pixbuf: pointer to GdkPixbuf.
  * @filename: Name of file to save.
- * @format: name of file format.
+ * @type: name of file format.
  * @error: return location for error, or NULL
  * @Varargs: list of key-value save options
  *
- * Saves pixbuf to a file in @format, which is currently "jpeg" or
+ * Saves pixbuf to a file in @type, which is currently "jpeg" or
  * "png".  If @error is set, FALSE will be returned. Possible errors include those
  * from #GdkPixbufErrorType and those from #GFileErrorType.
  *
@@ -708,7 +711,7 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
 gboolean
 gdk_pixbuf_save (GdkPixbuf  *pixbuf, 
                  const char *filename, 
-                 const char *format, 
+                 const char *type, 
                  GError    **error,
                  ...)
 {
@@ -723,7 +726,7 @@ gdk_pixbuf_save (GdkPixbuf  *pixbuf,
         
         va_end (args);
 
-        result = gdk_pixbuf_savev (pixbuf, filename, format,
+        result = gdk_pixbuf_savev (pixbuf, filename, type,
                                    keys, values,
                                    error);
 
@@ -737,12 +740,12 @@ gdk_pixbuf_save (GdkPixbuf  *pixbuf,
  * gdk_pixbuf_savev:
  * @pixbuf: pointer to GdkPixbuf.
  * @filename: Name of file to save.
- * @format: name of file format.
+ * @type: name of file format.
  * @option_keys: name of options to set, NULL-terminated
  * @option_values: values for named options
  * @error: return location for error, or NULL
  *
- * Saves pixbuf to a file in @format, which is currently "jpeg" or "png".
+ * Saves pixbuf to a file in @type, which is currently "jpeg" or "png".
  * If @error is set, FALSE will be returned. See gdk_pixbuf_save () for more
  * details. Possible errors include those from #GdkPixbufErrorType and
  * those from #GFileErrorType.
@@ -753,7 +756,7 @@ gdk_pixbuf_save (GdkPixbuf  *pixbuf,
 gboolean
 gdk_pixbuf_savev (GdkPixbuf  *pixbuf, 
                   const char *filename, 
-                  const char *format,
+                  const char *type,
                   char      **option_keys,
                   char      **option_values,
                   GError    **error)
@@ -763,7 +766,7 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
         
        
         g_return_val_if_fail (filename != NULL, FALSE);
-        g_return_val_if_fail (format != NULL, FALSE);
+        g_return_val_if_fail (type != NULL, FALSE);
        
         f = fopen (filename, "w");
         
@@ -777,7 +780,7 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
         }
 
        
-       result = gdk_pixbuf_real_save (pixbuf, f, format,
+       result = gdk_pixbuf_real_save (pixbuf, f, type,
                                       option_keys, option_values,
                                       error);
        

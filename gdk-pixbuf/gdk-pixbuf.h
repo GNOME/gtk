@@ -68,6 +68,8 @@ typedef enum {
         GDK_PIXBUF_ERROR_IO,
         /* bad option value passed to save routine */
         GDK_PIXBUF_ERROR_BAD_OPTION_VALUE,
+        /* unsupported image type (sort of an ENOSYS) */
+        GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
         GDK_PIXBUF_ERROR_FAILED
 } GdkPixbufErrorType;
 
