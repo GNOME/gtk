@@ -277,7 +277,7 @@ print_blurb (FILE    *bout,
       fprintf (bout, "  --static                   generate static symbols\n");
       fprintf (bout, "  --decoder                  provide rle decoder\n");
       fprintf (bout, "  --name=identifier          C macro/variable name\n");
-      fprintf (bout, "  --build-list		   parse (name, image) pairs\n");
+      fprintf (bout, "  --build-list               parse (name, image) pairs\n");
       fprintf (bout, "  -h, --help                 show this help message\n");
       fprintf (bout, "  -v, --version              print version informations\n");
       fprintf (bout, "  --g-fatal-warnings         make warnings fatal (abort)\n");
