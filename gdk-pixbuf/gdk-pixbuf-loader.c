@@ -181,7 +181,7 @@ gdk_pixbuf_loader_destroy (GtkObject *loader)
 		gdk_pixbuf_unref (priv->pixbuf);
 
 	if (GTK_OBJECT_CLASS (parent_class)->destroy)
-		(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+		(* GTK_OBJECT_CLASS (parent_class)->destroy) (loader);
 }
 
 static void
@@ -193,7 +193,7 @@ gdk_pixbuf_loader_finalize (GtkObject *loader)
 	g_free (priv);
 
 	if (GTK_OBJECT_CLASS (parent_class)->finalize)
-		(* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
+		(* GTK_OBJECT_CLASS (parent_class)->finalize) (loader);
 }
 
 static void
