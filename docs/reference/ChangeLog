@@ -1,3 +1,8 @@
+2003-02-24  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtktreemodel.sgml: Fix self-referential documenation of
+	gtk_tree_model_get_iter_root().  (#106720, Keith Sharp)
+
 2003-02-11  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkrc.sgml: Document that font and fontset declarations
