@@ -171,6 +171,8 @@ gtk_accel_group_new (void)
   GtkAccelGroup *accel_group;
 
   accel_group = (GtkAccelGroup *)g_object_new(GTK_TYPE_ACCEL_GROUP, NULL);
+
+  return accel_group;
 }
 
 GtkAccelGroup*
