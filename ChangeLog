@@ -1,3 +1,12 @@
+Sun Jan 23 20:28:24 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk+.spec.in: Added lib/gtk+/include/* to %files
+	(bug #5178 - Peter Wainright)
+	
+	* gtk/Makefile.am (gtk_public_h_sources): Add gtkcompat.h
+	so that it will be installed.
+	(bug #4889 - "david d `zoo' zuhn" <zoo@mnnr.org>)
+
 Fri Jan 21 16:29:28 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.[ch] docs/Changes-1.4.txt: Make the @detail argument

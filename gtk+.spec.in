@@ -165,6 +165,7 @@ fi
 %{prefix}/lib/lib*.so
 %{prefix}/lib/*a
 %{prefix}/include/*
+%{prefix}/include/lib/gtk+/include/*
 %{prefix}/info/*
 %{prefix}/man/man1/*
 %{prefix}/share/aclocal/*
