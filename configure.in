@@ -988,7 +988,7 @@ if test "x$gdktarget" = "xx11"; then
     if test $have_xft = true ; then
       have_xft=false
 
-      if $PKG_CONFIG --exists xft ; then
+      if pkg-config --exists pangoxft '>=' 1.1.0 ; then
         x_libs="`pkg-config --libs xft` -lX11 $FREETYPE_LIBS $X_EXTRA_LIBS"
         have_xft=true
       else
