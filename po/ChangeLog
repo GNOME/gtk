@@ -1,3 +1,8 @@
+2000-11-21  Robert Brady  <robert@suse.co.uk>
+
+	* update.pl: Allow a parameter to specify the name of the .pot
+	file to generate. (for stats).
+
 2000-11-12  Robert Brady  <robert@suse.co.uk>
 
 	* *.po: Convert them all to UTF-8. Rename Chinese .po's so

@@ -44,13 +44,19 @@ if ($LANG=~/^-(.)*/){
 
     elsif($LANG eq "--pot" || "$LANG" eq "-P"){
                 
-        print "Building the $PACKAGE.pot ...";
+	shift;
+	$REALPACKAGE = shift;
+	if (!$REALPACKAGE) {
+	    $REALPACKAGE = $PACKAGE;
+	}
+
+        print "Building the $REALPACKAGE.pot ...";
 
         $b="xgettext --default-domain\=$PACKAGE --directory\=\.\."
           ." --add-comments --keyword\=\_ --keyword\=N\_"
           ." --files-from\=\.\/POTFILES\.in ";
         $b1="test \! -f $PACKAGE\.po \|\| \( rm -f \.\/$PACKAGE\.pot "
-           ."&& mv $PACKAGE\.po \.\/$PACKAGE\.pot \)";
+           ."&& mv $PACKAGE\.po \.\/$REALPACKAGE\.pot \)";
          
         `$b`;
         `$b1`;
