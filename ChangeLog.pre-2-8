@@ -1,3 +1,8 @@
+Sat Jul 19 22:39:24 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolitem.c (gtk_tool_item_size_request): remove
+	leftover request of {xy}thickness
+
 Sat Jul 19 16:26:02 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbutton.c (gtk_tool_button_construct_contents): don't

@@ -362,8 +362,6 @@ gtk_tool_item_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
 {
   GtkWidget *child = GTK_BIN (widget)->child;
-  gint xthickness = widget->style->xthickness;
-  gint ythickness = widget->style->ythickness;
 
   if (child && GTK_WIDGET_VISIBLE (child))
     {
@@ -375,8 +373,8 @@ gtk_tool_item_size_request (GtkWidget      *widget,
       requisition->width = 0;
     }
   
-  requisition->width += (xthickness + GTK_CONTAINER (widget)->border_width) * 2;
-  requisition->height += (ythickness + GTK_CONTAINER (widget)->border_width) * 2;  
+  requisition->width += (GTK_CONTAINER (widget)->border_width) * 2;
+  requisition->height += (GTK_CONTAINER (widget)->border_width) * 2;
 }
 
 static void
