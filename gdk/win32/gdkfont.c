@@ -152,8 +152,10 @@ gdk_font_load (const gchar *font_name)
 	fnWeight = FW_THIN;
       else if (g_strcasecmp (weight, "extralight") == 0)
 	fnWeight = FW_EXTRALIGHT;
+#ifdef FW_ULTRALIGHT
       else if (g_strcasecmp (weight, "ultralight") == 0)
 	fnWeight = FW_ULTRALIGHT;
+#endif
       else if (g_strcasecmp (weight, "light") == 0)
 	fnWeight = FW_LIGHT;
       else if (g_strcasecmp (weight, "normal") == 0)
@@ -164,18 +166,24 @@ gdk_font_load (const gchar *font_name)
 	fnWeight = FW_MEDIUM;
       else if (g_strcasecmp (weight, "semibold") == 0)
 	fnWeight = FW_SEMIBOLD;
+#ifdef FW_DEMIBOLD
       else if (g_strcasecmp (weight, "demibold") == 0)
 	fnWeight = FW_DEMIBOLD;
+#endif
       else if (g_strcasecmp (weight, "bold") == 0)
 	fnWeight = FW_BOLD;
       else if (g_strcasecmp (weight, "extrabold") == 0)
 	fnWeight = FW_EXTRABOLD;
+#ifdef FW_ULTRABOLD
       else if (g_strcasecmp (weight, "ultrabold") == 0)
 	fnWeight = FW_ULTRABOLD;
+#endif
       else if (g_strcasecmp (weight, "heavy") == 0)
 	fnWeight = FW_HEAVY;
+#ifdef FW_BLACK
       else if (g_strcasecmp (weight, "black") == 0)
 	fnWeight = FW_BLACK;
+#endif
       else
 	fnWeight = FW_DONTCARE;
 
@@ -204,8 +212,10 @@ gdk_font_load (const gchar *font_name)
 	  fdwCharSet = HANGEUL_CHARSET;
 	else if (g_strcasecmp (encoding, "chinesebig5") == 0)
 	  fdwCharSet = CHINESEBIG5_CHARSET;
+#ifdef JOHAB_CHARSET
 	else if (g_strcasecmp (encoding, "johab") == 0)
 	  fdwCharSet = JOHAB_CHARSET;
+#endif
 	else if (g_strcasecmp (encoding, "hebrew") == 0)
 	  fdwCharSet = HEBREW_CHARSET;
 	else if (g_strcasecmp (encoding, "arabic") == 0)

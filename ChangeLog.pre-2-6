@@ -1,4 +1,21 @@
-Thu Jul 15 13:33:15 BST 1999 Tony Gale <gale@gtk.org>
+1999-07-21  Tor Lillqvist  <tml@iki.fi>
+	
+	* README.win32: Update gcc build instructions. Mention gettext is
+ 	GPL.
+
+	* gdk/win32/gdkcursor.c (gdk_cursor_new_from_pixmap): Get correct
+ 	supported cursor size with GetSystemMetrics.
+	
+	* gdk/win32/gdkfont.c
+	* gtk/gtkfontsel.c: Guard against some font weight and charset
+ 	symbols being undefined (in mingw32 headers).
+
+	* gdk/win32/makefile.cygwin
+	* gtk/makefile.cygwin
+	* gtk/gtkthemes.c: No longer need to have differently named
+	gcc-built DLLs when using gcc-2.95 and -fnative-struct.
+
+hu Jul 15 13:33:15 BST 1999 Tony Gale <gale@gtk.org>
 
 	* docs/gtkfaq.sgml: Long awaited FAQ update.
 

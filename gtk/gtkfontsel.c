@@ -2682,8 +2682,10 @@ logfont_to_xlfd (const LOGFONT *lfp,
     weight = N_("extrabold");
   else if (lfp->lfWeight >= FW_BOLD)
     weight = N_("bold");
+#ifdef FW_DEMIBOLD
   else if (lfp->lfWeight >= FW_DEMIBOLD)
     weight = N_("demibold");
+#endif
   else if (lfp->lfWeight >= FW_MEDIUM)
     weight = N_("medium");
   else if (lfp->lfWeight >= FW_NORMAL)
@@ -2719,8 +2721,10 @@ logfont_to_xlfd (const LOGFONT *lfp,
 	encoding = "chinesebig5";
       else if (lfp->lfCharSet == OEM_CHARSET)
 	encoding = "oem";
+#ifdef JOHAB_CHARSET
       else if (lfp->lfCharSet == JOHAB_CHARSET)
 	encoding = "johab";
+#endif
       else if (lfp->lfCharSet == HEBREW_CHARSET)
 	encoding = "hebrew";
       else if (lfp->lfCharSet == ARABIC_CHARSET)

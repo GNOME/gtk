@@ -151,7 +151,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   GdkImage *source_image, *mask_image;
   HCURSOR xcursor;
   guchar *p, *q, *XORmask, *ANDmask;
-  gint width, height, width32, height32;
+  gint width, height, cursor_width, cursor_height;
   guchar residue;
   gint ix, iy;
   
@@ -166,8 +166,11 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 			NULL);
   width = source_private->width;
   height = source_private->height;
-  width32 = ((width-1)/32+1)*32;
-  height32 = ((height-1)/32+1)*32;
+  cursor_width = GetSystemMetrics (SM_CXCURSOR);
+  cursor_height = GetSystemMetrics (SM_CYCURSOR);
+
+  g_return_val_if_fail (width <= cursor_width
+			&& height <= cursor_height, NULL);
 
   residue = (1 << ((8-(width%8))%8)) - 1;
 
@@ -193,20 +196,20 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
    */
   for (iy = 0; iy < height; iy++)
     {
-      p = source_image->mem + iy*source_image->bpl;
-      q = mask_image->mem + iy*mask_image->bpl;
+      p = (guchar *) source_image->mem + iy*source_image->bpl;
+      q = (guchar *) mask_image->mem + iy*mask_image->bpl;
       
       for (ix = 0; ix < ((width-1)/8+1); ix++)
 	*p++ |= ~(*q++);
     }
 
   /* XOR mask is initialized to zero */
-  XORmask = g_malloc0 (width32/8 * height32);
+  XORmask = g_malloc0 (cursor_width/8 * cursor_height);
 
   for (iy = 0; iy < height; iy++)
     {
-      p = source_image->mem + iy*source_image->bpl;
-      q = XORmask + iy*width32/8;
+      p = (guchar *) source_image->mem + iy*source_image->bpl;
+      q = XORmask + iy*cursor_width/8;
 
       for (ix = 0; ix < ((width-1)/8+1); ix++)
 	*q++ = ~(*p++);
@@ -214,20 +217,20 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
     }
       
   /* AND mask is initialized to ones */
-  ANDmask = g_malloc (width32/8 * height32);
-  memset (ANDmask, 0xFF, width32/8 * height32);
+  ANDmask = g_malloc (cursor_width/8 * cursor_height);
+  memset (ANDmask, 0xFF, cursor_width/8 * cursor_height);
 
   for (iy = 0; iy < height; iy++)
     {
-      p = mask_image->mem + iy*mask_image->bpl;
-      q = ANDmask + iy*width32/8;
+      p = (guchar *) mask_image->mem + iy*mask_image->bpl;
+      q = ANDmask + iy*cursor_width/8;
 
       for (ix = 0; ix < ((width-1)/8+1); ix++)
 	*q++ = ~(*p++);
       q[-1] |= residue;	/* Set left-over bits */
     }
       
-  xcursor = CreateCursor (gdk_ProgInstance, x, y, width32, height32,
+  xcursor = CreateCursor (gdk_ProgInstance, x, y, cursor_width, cursor_height,
 			  ANDmask, XORmask);
 
   GDK_NOTE (MISC, g_print ("gdk_cursor_new_from_pixmap: "
@@ -236,7 +239,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 			   source_private->width, source_private->height,
 			   mask_private->xwindow,
 			   mask_private->width, mask_private->height,
-			   xcursor, width32, height32));
+			   xcursor, cursor_width, cursor_height));
 
   g_free (XORmask);
   g_free (ANDmask);
