@@ -1,3 +1,7 @@
+Tue Jun  5 14:57:18 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_get_size): Fix bug #55573
+
 Mon Jun  4 12:41:25 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.h: Deprecate gtk_widget_set().

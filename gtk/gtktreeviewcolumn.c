@@ -1334,7 +1334,7 @@ gtk_tree_view_column_set_sizing (GtkTreeViewColumn       *tree_column,
  * 
  * Return value: The type of @tree_column.
  **/
-gint
+GtkTreeViewColumnSizing
 gtk_tree_view_column_get_sizing (GtkTreeViewColumn *tree_column)
 {
   g_return_val_if_fail (tree_column != NULL, 0);
