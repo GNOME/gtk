@@ -571,7 +571,8 @@ gtk_clist_column_titles_show (GtkCList * clist)
   if (!GTK_CLIST_SHOW_TITLES (clist))
     {
       GTK_CLIST_SET_FLAGS (clist, CLIST_SHOW_TITLES);
-      gdk_window_show (clist->title_window);
+      if (clist->title_window)
+	      gdk_window_show (clist->title_window);
       gtk_widget_queue_resize (GTK_WIDGET (clist));
     }
 }
@@ -584,7 +585,8 @@ gtk_clist_column_titles_hide (GtkCList * clist)
   if (GTK_CLIST_SHOW_TITLES (clist))
     {
       GTK_CLIST_UNSET_FLAGS (clist, CLIST_SHOW_TITLES);
-      gdk_window_hide (clist->title_window);
+      if (clist->title_window)
+	      gdk_window_hide (clist->title_window);
       gtk_widget_queue_resize (GTK_WIDGET (clist));
     }
 }
