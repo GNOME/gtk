@@ -2422,8 +2422,15 @@ menu_deactivated (GtkWidget  *menu,
 		  GtkToolbar *toolbar)
 {
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->arrow_button), FALSE);
+}
+
+static void
+menu_detached (GtkWidget  *toolbar,
+	       GtkMenu    *menu)
+{
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+  priv->menu = NULL;
 }
 
 static void
@@ -2445,10 +2452,13 @@ show_menu (GtkToolbar     *toolbar,
       gtk_container_foreach (GTK_CONTAINER (priv->menu), remove_item, NULL);
       gtk_widget_destroy (GTK_WIDGET (priv->menu));
     }
-  
+
   priv->menu = GTK_MENU (gtk_menu_new ());
+  gtk_menu_attach_to_widget (priv->menu,
+			     GTK_WIDGET (toolbar),
+			     menu_detached);
   g_signal_connect (priv->menu, "deactivate", G_CALLBACK (menu_deactivated), toolbar);
-  
+
   for (list = priv->content; list != NULL; list = list->next)
     {
       ToolbarContent *content = list->data;
@@ -2466,8 +2476,6 @@ show_menu (GtkToolbar     *toolbar,
 	}
     }
 
-  gtk_window_set_screen (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (priv->menu))),
-			 gtk_widget_get_screen (GTK_WIDGET (toolbar)));
   gtk_widget_show_all (GTK_WIDGET (priv->menu));
 
   gtk_menu_popup (priv->menu, NULL, NULL,

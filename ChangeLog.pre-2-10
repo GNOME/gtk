@@ -1,3 +1,8 @@
+2004-02-06  Morten Welinder  <terra@gnome.org>
+
+	* gtk/gtktoolbar.c (show_menu): Cleanup using
+	gtk_menu_attach_to_widget.  Also fixes leak, see #133411.
+
 2004-02-06  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_add_volumes): Free the
