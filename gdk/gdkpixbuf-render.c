@@ -22,6 +22,7 @@
 
 #include <config.h>
 #include <gdk/gdk.h>
+#include "gdkinternals.h" /* _gdk_draw_pixbuf() */
 #include "gdk-pixbuf-private.h"
 #include "gdkpixbuf.h"
 

@@ -365,6 +365,15 @@ GdkImage* _gdk_win32_get_image (GdkDrawable    *drawable,
 				gint            width,
 				gint            height);
 
+GdkImage *_gdk_win32_copy_to_image       (GdkDrawable *drawable,
+					  GdkImage    *image,
+					  gint         src_x,
+					  gint         src_y,
+					  gint         dest_x,
+					  gint         dest_y,
+					  gint         width,
+					  gint         height);
+
 COLORREF _gdk_win32_colormap_color      (GdkColormap        *colormap,
 				          gulong              pixel);
 

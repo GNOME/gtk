@@ -72,7 +72,7 @@ bitmap1 (GdkImage    *image,
   int bpl;
   register guint8 data;
   guint8 *o;
-  guint8 *srow = image->mem + y1 * image->bpl, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl, *orow = pixels;
 
   d (printf ("bitmap, no alpha\n"));
 
@@ -128,7 +128,7 @@ bitmap1a (GdkImage    *image,
   int bpl;
   register guint8 data;
   guint8 *o;
-  guint8 *srow = image->mem + y1 * image->bpl, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl, *orow = pixels;
 
   d (printf ("bitmap, with alpha\n"));
 
@@ -183,7 +183,7 @@ rgb1 (GdkImage    *image,
   int bpl;
   register guint8 data;
   guint8 *o;
-  guint8 *srow = image->mem + y1 * image->bpl, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl, *orow = pixels;
 
   d (printf ("1 bits/pixel\n"));
 
@@ -231,7 +231,7 @@ rgb1a (GdkImage    *image,
   int bpl;
   register guint8 data;
   guint8 *o;
-  guint8 *srow = image->mem + y1 * image->bpl, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl, *orow = pixels;
   
   d (printf ("1 bits/pixel\n"));
 
@@ -279,7 +279,7 @@ rgb8 (GdkImage    *image,
   int bpl;
   guint32 mask;
   register guint32 data;
-  guint8 *srow = image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
   register guint8 *s;
   register guint8 *o;
 
@@ -326,7 +326,7 @@ rgb8a (GdkImage    *image,
   guint32 remap[256];
   register guint8 *s;	/* read 2 pixels at once */
   register guint32 *o;
-  guint8 *srow = image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
 
   bpl = image->bpl;
 
@@ -387,7 +387,7 @@ rgb565lsb (GdkImage    *image,
   register guint8 *s;	/* read 2 pixels at once */
 #endif
   register guint16 *o;
-  guint8 *srow = image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
   
   bpl = image->bpl;
   
@@ -490,7 +490,7 @@ rgb565msb (GdkImage    *image,
   register guint32 *s;	/* read 2 pixels at once */
 #endif
   register guint16 *o;
-  guint8 *srow = image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
 
   bpl = image->bpl;
 
@@ -596,7 +596,7 @@ rgb565alsb (GdkImage    *image,
 #endif
   register guint32 *o;
 
-  guint8 *srow = image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
 
   bpl = image->bpl;
 
@@ -659,7 +659,7 @@ rgb565amsb (GdkImage    *image,
 #endif
   register guint32 *o;
 
-  guint8 *srow = image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
 
   bpl = image->bpl;
 
@@ -717,7 +717,7 @@ rgb555lsb (GdkImage     *image,
   register guint8 *s;	/* read 2 pixels at once */
 #endif
   register guint16 *o;
-  guint8 *srow = image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
 
   bpl = image->bpl;
 
@@ -821,7 +821,7 @@ rgb555msb (GdkImage    *image,
   register guint32 *s;	/* read 2 pixels at once */
 #endif
   register guint16 *o;
-  guint8 *srow = image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
 
   bpl = image->bpl;
 
@@ -922,7 +922,7 @@ rgb555alsb (GdkImage    *image,
 #endif
   register guint32 *o;
 
-  guint8 *srow = image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
 
   bpl = image->bpl;
 
@@ -985,7 +985,7 @@ rgb555amsb (GdkImage    *image,
 #endif
   register guint32 *o;
 
-  guint8 *srow = image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
 
   bpl = image->bpl;
 
@@ -1039,7 +1039,7 @@ rgb888alsb (GdkImage    *image,
 
   guint8 *s;	/* for byte order swapping */
   guint8 *o;
-  guint8 *srow = image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
 
   bpl = image->bpl;
 
@@ -1076,7 +1076,7 @@ rgb888lsb (GdkImage    *image,
   int xx, yy;
   int bpl;
 
-  guint8 *srow = image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
   guint8 *o, *s;
 
   bpl = image->bpl;
@@ -1112,7 +1112,7 @@ rgb888amsb (GdkImage    *image,
   int xx, yy;
   int bpl;
 
-  guint8 *srow = image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
 #ifdef LITTLE
   guint32 *o;
   guint32 *s;
@@ -1166,7 +1166,7 @@ rgb888msb (GdkImage    *image,
   int xx, yy;
   int bpl;
 
-  guint8 *srow = image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
+  guint8 *srow = (guint8*)image->mem + y1 * image->bpl + x1 * image->bpp, *orow = pixels;
   guint8 *s;
   guint8 *o;
 

@@ -25,7 +25,7 @@ GTK_BINARY_VERSION = @GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.@LT_CURRENT@
 PERL = perl
 AWK = gawk
 
-INCLUDES = -I . -I .. -I ../gdk -I ../gdk-pixbuf -DPANGO_ENABLE_BACKEND
+INCLUDES = -FImsvc_recommended_pragmas.h -I . -I .. -I ../gdk -I ../gdk-pixbuf -DPANGO_ENABLE_BACKEND
 DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) \
 		$(INTL_CFLAGS) $(ATK_CFLAGS)
 LDFLAGS = $(ATK_LIBS) /link /machine:ix86 $(LINKDEBUG)
@@ -133,7 +133,7 @@ gtk_OBJECTS = 					\
 	gtkoptionmenu.obj			\
 	gtkpaned.obj				\
 	gtkpixmap.obj				\
-	gtkplug.obj				\
+#	gtkplug.obj				\
 	gtkpreview.obj				\
 	gtkprogress.obj				\
 	gtkprogressbar.obj			\
@@ -152,7 +152,7 @@ gtk_OBJECTS = 					\
 	gtksettings.obj \
 	gtksignal.obj				\
 	gtksizegroup.obj \
-	gtksocket.obj				\
+#	gtksocket.obj				\
 	gtkspinbutton.obj			\
 	gtkstyle.obj				\
 	gtkstatusbar.obj			\
@@ -171,6 +171,7 @@ gtk_OBJECTS = 					\
 	gtktexttag.obj				\
 	gtktexttagtable.obj			\
 	gtktexttypes.obj			\
+	gtktextutil.obj	\
 	gtktextview.obj				\
 	gtkthemes.obj				\
 	gtktipsquery.obj			\

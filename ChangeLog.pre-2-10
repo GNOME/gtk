@@ -1,3 +1,31 @@
+2002-01-04  Hans Breuer  <hans@breuer.org>
+
+	* gdk/gdkdraw.c gdk/gdkpixbuf-drawable.c : 
+	need to cast image->mem away from void* to avoid 
+	'error C2036: 'void *' : unknown size'. Doing pointer 
+	arithmetics on void pointers is a GCCism afaik.
+
+	* gdk/gdkpixbuf-render.c : #include "gdkinternals.h" for
+	_gdk_draw_pixbuf ()
+
+	* gdk/makefile.msc gdk/win32/makefile.msc 
+        gdk/gtk/makefile.msc.in : use -FI msvc_recommended_pragmas.h
+
+	* gdk/win32/gdkdrawable-win32.c : use _gkd_win32_copy_to_image
+	and take care of image->visual possibly NULL.
+
+	* gdk/win32/gdkimage-win32.c : implement _gdk_image_new_for_depth(),
+	_gdk_win32_copy_to_image() and _gdk_windowing_bits_for_depth().
+	Again take care of image->visual possibly NULL.
+
+	* gdk/win32/gdkprivate-win32.h : declare _gdk_win32_copy_to_image()
+
+	* gdk/win32/gdkevents-win32.c : use gdk_drawable_get_colormap
+	instead of private field access
+
+	* gdk/win32/gdkpixmap-win32.c (gdk_pixmap_new) : adapt
+	colormap setting to the gdk-X behaviour
+
 2001-01-04  Matthias Clasen  <matthiasc@poet.de>
 
  	* gtk/gtkwidget.c: Documentation additions.

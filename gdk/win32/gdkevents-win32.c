@@ -2559,7 +2559,7 @@ gdk_event_translate (GdkEvent *event,
 	  break;
 	}
 
-      colormap = GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap;
+      colormap = gdk_drawable_get_colormap (window);
       if (colormap)
 	colormap_private = GDK_COLORMAP_PRIVATE_DATA (colormap);
       hdc = (HDC) msg->wParam;

@@ -1253,7 +1253,7 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
 					       width1, height1);
 		  (*composite_func) (pixbuf->pixels + (src_y + y0) * pixbuf->rowstride + (src_x + x0) * 4,
 				     pixbuf->rowstride,
-				     image->mem + ys0 * image->bpl + xs0 * image->bpp,
+				     (guchar*)image->mem + ys0 * image->bpl + xs0 * image->bpp,
 				     image->bpl,
 				     visual->byte_order,
 				     width1, height1);

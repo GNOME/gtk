@@ -134,6 +134,8 @@ gdk_pixmap_new (GdkWindow *window,
   GdkDrawableImplWin32 *draw_impl;
   GdkPixmapImplWin32 *pix_impl;
   GdkVisual *visual;
+  GdkColormap *cmap = NULL;
+  gint window_depth;
 
   struct {
     BITMAPINFOHEADER bmiHeader;
@@ -174,8 +176,9 @@ gdk_pixmap_new (GdkWindow *window,
 
   visual = gdk_drawable_get_visual (window);
 
+  window_depth = gdk_drawable_get_depth (GDK_DRAWABLE (window));
   if (depth == -1)
-    depth = gdk_drawable_get_depth (GDK_DRAWABLE (window));
+    depth = window_depth;
 
   GDK_NOTE (MISC, g_print ("gdk_pixmap_new: %dx%dx%d\n",
 			   width, height, depth));
@@ -228,15 +231,9 @@ gdk_pixmap_new (GdkWindow *window,
 	bmi.u.bmiColors[1].rgbRed = 0xFF;
       bmi.u.bmiColors[1].rgbReserved = 0x00;
       draw_impl->colormap = NULL;
-      GDK_NOTE (MISC, g_print ("... colormap NULL\n"));
     }
   else
     {
-      draw_impl->colormap = GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap;
-      if (draw_impl->colormap == NULL)
-	draw_impl->colormap = gdk_colormap_get_system ();
-      GDK_NOTE (MISC, g_print ("... colormap %p\n", draw_impl->colormap));
-
       if (depth == 8)
 	{
 	  iUsage = DIB_PAL_COLORS;
@@ -266,6 +263,15 @@ gdk_pixmap_new (GdkWindow *window,
       return NULL;
     }
   ReleaseDC (GDK_WINDOW_HWND (window), hdc);
+
+  if (depth == window_depth)
+    {
+      cmap = gdk_drawable_get_colormap (window);
+      if (cmap)
+        gdk_drawable_set_colormap (pixmap, cmap);
+    }
+
+  GDK_NOTE (MISC, g_print ("... colormap %p\n", cmap));
 
   GDK_NOTE (MISC, g_print ("... = %#x\n",
 			   (guint) GDK_PIXMAP_HBITMAP (pixmap)));
