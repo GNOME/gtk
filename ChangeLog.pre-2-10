@@ -1,3 +1,11 @@
+Tue Dec 23 03:03:17 1997  Tim Janik  <timj@psynet.net>
+
+	* gtk/gtkrc.h (gtk_rc_parse_string): new function.
+	* gtk/gtkrc.c: many functions adapted to use GScanner for scanning.
+ 	(gtk_rc_parse): use gtk_rc_parse_any for parsing.
+	(gtk_rc_parse_string): new function to support parsing from
+	strings, just calls gtk_rc_parse_any.
+	(gtk_rc_parse_any): new function using GScanner as lexer.
 
 Thu Dec 18 23:46:11 CST 1997 Shawn T. Amundson <amundson@gimp.org>
 

@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -28,13 +28,14 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-void      gtk_rc_init                   (void);
-void      gtk_rc_parse                  (const char  *filename);
-GtkStyle* gtk_rc_get_style              (GtkWidget   *widget);
-void      gtk_rc_add_widget_name_style  (GtkStyle    *style,
-					 const char  *pattern);
-void      gtk_rc_add_widget_class_style (GtkStyle    *style,
-					 const char  *pattern);
+void	  gtk_rc_init			(void);
+void	  gtk_rc_parse			(const gchar *filename);
+void	  gtk_rc_parse_string		(const gchar *rc_string);
+GtkStyle* gtk_rc_get_style		(GtkWidget   *widget);
+void	  gtk_rc_add_widget_name_style	(GtkStyle    *style,
+					 const gchar *pattern);
+void	  gtk_rc_add_widget_class_style (GtkStyle    *style,
+					 const gchar *pattern);
 
 
 #ifdef __cplusplus
