@@ -312,6 +312,7 @@ gtk_container_add (GtkContainer *container,
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (widget->parent == NULL);
 
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
 }

@@ -79,48 +79,42 @@ struct _GtkSpinButtonClass
   GtkEntryClass parent_class;
 };
 
-guint
-gtk_spin_button_get_type           (void);
+guint		gtk_spin_button_get_type           (void);
 
-void
-gtk_spin_button_construct          (GtkSpinButton  *spin_button,
-				    GtkAdjustment  *adjustment,
-				    gfloat          climb_rate,
-				    gint            digits);
+void		gtk_spin_button_construct          (GtkSpinButton  *spin_button,
+						    GtkAdjustment  *adjustment,
+						    gfloat          climb_rate,
+						    gint            digits);
 
-GtkWidget *
-gtk_spin_button_new                (GtkAdjustment  *adjustment,
-				    gfloat          climb_rate,
-				    gint            digits);
+GtkWidget*	gtk_spin_button_new                (GtkAdjustment  *adjustment,
+						    gfloat          climb_rate,
+						    gint            digits);
 
-void 
-gtk_spin_button_set_adjustment     (GtkSpinButton  *spin_button,
-				    GtkAdjustment  *adjustment);
+void		gtk_spin_button_set_adjustment     (GtkSpinButton  *spin_button,
+						    GtkAdjustment  *adjustment);
 
-GtkAdjustment *
-gtk_spin_button_get_adjustment     (GtkSpinButton  *spin_button);
+GtkAdjustment*	gtk_spin_button_get_adjustment     (GtkSpinButton  *spin_button);
 
-void
-gtk_spin_button_set_digits         (GtkSpinButton  *spin_button,
-				    gint            digits);
+void		gtk_spin_button_set_digits         (GtkSpinButton  *spin_button,
+						    gint            digits);
 
-gfloat 
-gtk_spin_button_get_value_as_float (GtkSpinButton  *spin_button);
+gfloat		gtk_spin_button_get_value_as_float (GtkSpinButton  *spin_button);
 
-gint 
-gtk_spin_button_get_value_as_int   (GtkSpinButton  *spin_button);
+gint		gtk_spin_button_get_value_as_int   (GtkSpinButton  *spin_button);
 
-void 
-gtk_spin_button_set_value          (GtkSpinButton  *spin_button, 
-				    gfloat          value);
+void		gtk_spin_button_set_value          (GtkSpinButton  *spin_button, 
+						    gfloat          value);
 
-void
-gtk_spin_button_set_update_policy  (GtkSpinButton             *spin_button,
-				    GtkSpinButtonUpdatePolicy  policy);
+void		gtk_spin_button_set_update_policy  (GtkSpinButton  *spin_button,
+						    GtkSpinButtonUpdatePolicy  policy);
 
-void
-gtk_spin_button_set_numeric        (GtkSpinButton  *spin_button,
-				    gint            numeric);
+void		gtk_spin_button_set_numeric        (GtkSpinButton  *spin_button,
+						    gint            numeric);
+
+void		gtk_spin_button_spin		   (GtkSpinButton *spin_button,
+						    guint          direction,
+						    gfloat         step);
+     
 
 #ifdef __cplusplus
 }

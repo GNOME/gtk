@@ -2421,6 +2421,196 @@ create_spins ()
     gtk_widget_destroy (window);
 }
 
+
+/*
+ * Cursors
+ */
+
+static gint
+cursor_expose_event (GtkWidget *widget,
+		     GdkEvent  *event,
+		     gpointer   user_data)
+{
+  GtkDrawingArea *darea;
+  GdkDrawable *drawable;
+  GdkGC *black_gc;
+  GdkGC *gray_gc;
+  GdkGC *white_gc;
+  guint max_width;
+  guint max_height;
+
+  g_return_val_if_fail (widget != NULL, TRUE);
+  g_return_val_if_fail (GTK_IS_DRAWING_AREA (widget), TRUE);
+
+  darea = GTK_DRAWING_AREA (widget);
+  drawable = widget->window;
+  white_gc = widget->style->white_gc;
+  gray_gc = widget->style->bg_gc[GTK_STATE_NORMAL];
+  black_gc = widget->style->black_gc;
+  max_width = widget->allocation.width;
+  max_height = widget->allocation.height;
+
+  gdk_draw_rectangle (drawable, white_gc,
+		      TRUE,
+		      0,
+		      0,
+		      max_width,
+		      max_height / 2);
+
+  gdk_draw_rectangle (drawable, black_gc,
+		      TRUE,
+		      0,
+		      max_height / 2,
+		      max_width,
+		      max_height / 2);
+
+  gdk_draw_rectangle (drawable, gray_gc,
+		      TRUE,
+		      max_width / 3,
+		      max_height / 3,
+		      max_width / 3,
+		      max_height / 3);
+
+  return TRUE;
+}
+
+static void
+set_cursor (GtkWidget *spinner,
+	    GtkWidget *widget)
+{
+  guint c;
+  GdkCursor *cursor;
+
+  c = CLAMP (gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (spinner)), 0, 152);
+  c &= 0xfe;
+
+  cursor = gdk_cursor_new (c);
+  gdk_window_set_cursor (widget->window, cursor);
+  gdk_cursor_destroy (cursor);
+}
+
+static gint
+cursor_event (GtkWidget          *widget,
+	      GdkEvent           *event,
+	      GtkSpinButton	 *spinner)
+{
+  if ((event->type == GDK_BUTTON_PRESS) &&
+      ((event->button.button == 1) ||
+       (event->button.button == 3)))
+    {
+      gtk_spin_button_spin (spinner,
+			    event->button.button == 1 ? GTK_ARROW_UP : GTK_ARROW_DOWN,
+			    spinner->adjustment->step_increment);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+create_cursors ()
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *frame;
+  GtkWidget *hbox;
+  GtkWidget *main_vbox;
+  GtkWidget *vbox;
+  GtkWidget *darea;
+  GtkWidget *spinner;
+  GtkWidget *button;
+  GtkWidget *label;
+  GtkWidget *any;
+  GtkAdjustment *adj;
+
+  if (!window)
+    {
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+			  &window);
+      
+      gtk_window_set_title (GTK_WINDOW (window), "Cursors");
+      
+      main_vbox = gtk_vbox_new (FALSE, 5);
+      gtk_container_border_width (GTK_CONTAINER (main_vbox), 0);
+      gtk_container_add (GTK_CONTAINER (window), main_vbox);
+
+      vbox =
+	gtk_widget_new (gtk_vbox_get_type (),
+			"GtkBox::homogeneous", FALSE,
+			"GtkBox::spacing", 5,
+			"GtkContainer::border_width", 10,
+			"GtkWidget::parent", main_vbox,
+			"GtkWidget::visible", TRUE,
+			NULL);
+
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_container_border_width (GTK_CONTAINER (hbox), 5);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
+      
+      label = gtk_label_new ("Cursor Value:");
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+      
+      adj = (GtkAdjustment *) gtk_adjustment_new (0,
+						  0, 152,
+						  2,
+						  10, 0);
+      spinner = gtk_spin_button_new (adj, 0, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), spinner, TRUE, TRUE, 0);
+
+      frame =
+	gtk_widget_new (gtk_frame_get_type (),
+			"GtkFrame::shadow", GTK_SHADOW_ETCHED_IN,
+			"GtkFrame::label_xalign", 0.5,
+			"GtkFrame::label", "Cursor Area",
+			"GtkContainer::border_width", 10,
+			"GtkWidget::parent", vbox,
+			"GtkWidget::visible", TRUE,
+			NULL);
+
+      darea = gtk_drawing_area_new ();
+      gtk_widget_set_usize (darea, 80, 80);
+      gtk_container_add (GTK_CONTAINER (frame), darea);
+      gtk_signal_connect (GTK_OBJECT (darea),
+			  "expose_event",
+			  GTK_SIGNAL_FUNC (cursor_expose_event),
+			  NULL);
+      gtk_widget_set_events (darea, GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK);
+      gtk_signal_connect (GTK_OBJECT (darea),
+			  "button_press_event",
+			  GTK_SIGNAL_FUNC (cursor_event),
+			  spinner);
+      gtk_widget_show (darea);
+
+      gtk_signal_connect (GTK_OBJECT (spinner), "changed",
+			  GTK_SIGNAL_FUNC (set_cursor),
+			  darea);
+
+      any =
+	gtk_widget_new (gtk_hseparator_get_type (),
+			"GtkWidget::visible", TRUE,
+			NULL);
+      gtk_box_pack_start (GTK_BOX (main_vbox), any, FALSE, TRUE, 0);
+  
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_container_border_width (GTK_CONTAINER (hbox), 10);
+      gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, TRUE, 0);
+
+      button = gtk_button_new_with_label ("Close");
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC (gtk_widget_destroy),
+				 GTK_OBJECT (window));
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
+}
+
 /*
  * GtkList
  */
@@ -5309,7 +5499,7 @@ create_main_window ()
       { "tooltips", create_tooltips },
       { "menus", create_menus },
       { "scrolled windows", create_scrolled_windows },
-      { "drawing areas", NULL },
+      { "cursors", create_cursors },
       { "entry", create_entry },
       { "spinbutton", create_spins },
       { "list", create_list },

@@ -1,3 +1,12 @@
+Tue Mar 17 03:56:13 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkspinbutton.h: exported gtk_spin_button_spin since it is
+	used in testgtk, and besides that.
+
+	* gtk/testgtk.c: created a new "test" cursors, which showes different
+	types of GdkCursors and is a very simple example at using the drawing
+	area.
+
 Mon Mar 16 18:19:31 GMT 1998 Tony Gale  <gale@gimp.org>
 	* docs/gtkfaq.sgml:
 	    - new question on modal windows

@@ -70,9 +70,6 @@ static gint gtk_spin_button_focus_out      (GtkWidget          *widget,
 static void gtk_spin_button_draw_arrow     (GtkSpinButton      *spin_button, 
 					    guint               arrow);
 static gint gtk_spin_button_timer          (GtkSpinButton      *spin_button);
-static void gtk_spin_button_spin           (GtkSpinButton      *spin_button,
-		                            guint               direction,
-		                            gfloat              step);
 static void gtk_spin_button_value_changed  (GtkWidget          *widget,
 					    GtkSpinButton      *spin_button); 
 static gint gtk_spin_button_key_press      (GtkWidget          *widget,
@@ -756,7 +753,7 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
   return FALSE;
 }
 
-static void
+void
 gtk_spin_button_spin (GtkSpinButton *spin_button,
 		      guint          direction,
 		      gfloat         step)
