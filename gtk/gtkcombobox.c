@@ -3056,7 +3056,29 @@ gtk_combo_box_menu_row_changed (GtkTreeModel *model,
 
   if (combo_box->priv->wrap_width
       && item->parent == combo_box->priv->popup_widget)
-    gtk_combo_box_relayout_item (combo_box, item, iter, NULL);
+    {
+      GtkWidget *pitem = NULL;
+      GtkTreePath *prev;
+
+      prev = gtk_tree_path_copy (path);
+
+      if (gtk_tree_path_prev (prev))
+        pitem = find_menu_by_path (combo_box->priv->popup_widget, prev, FALSE);
+
+      gtk_tree_path_free (prev);
+
+      /* unattach item so gtk_combo_box_relayout_item() won't spuriously
+         move it */
+      gtk_container_child_set (GTK_CONTAINER (combo_box->priv->popup_widget),
+                               item, 
+			       "left_attach", -1, 
+			       "right_attach", -1,
+                               "top_attach", -1, 
+			       "bottom_attach", -1, 
+			       NULL);
+
+      gtk_combo_box_relayout_item (combo_box, item, iter, pitem);
+    }
 
   width = gtk_combo_box_calc_requested_width (combo_box, path);
 

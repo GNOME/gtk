@@ -1,5 +1,8 @@
 2004-12-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_row_changed): Pass a 
+	last item to gtk_combo_box_relayout_item.  (#161050, John Finlay)
+
 	* tests/testfilechooserbutton.c (tests_button_clicked_cb): Rename
 	a local variable to avoid a conflict.  (#161109, Robert Ögren)
 
