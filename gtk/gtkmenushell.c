@@ -323,7 +323,6 @@ gtk_menu_shell_init (GtkMenuShell *menu_shell)
   menu_shell->active = FALSE;
   menu_shell->have_grab = FALSE;
   menu_shell->have_xgrab = FALSE;
-  menu_shell->ignore_leave = FALSE;
   menu_shell->button = 0;
   menu_shell->menu_flag = 0;
   menu_shell->activate_time = 0;
@@ -537,8 +536,13 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 	      gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent*) event);
 	      return TRUE;
 	    }
+
+	  /* If we ended up on an item with a submenu, leave the menu up.
+	   */
+	  if (menu_item && (menu_shell->active_menu_item == menu_item))
+	    deactivate = FALSE;
 	}
-      else
+      else /* a very fast press-release */
 	{
 	  /* We only ever want to prevent deactivation on the first
            * press/release. Setting the time to zero is a bit of a
@@ -551,18 +555,6 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 	  deactivate = FALSE;
 	}
       
-      /* If the button click was very fast, or we ended up on a submenu,
-       * leave the menu up
-       */
-      if (!deactivate || 
-	  (menu_item && (menu_shell->active_menu_item == menu_item)))
-	{
-	  deactivate = FALSE;
-	  menu_shell->ignore_leave = TRUE;
-	}
-      else
-	deactivate = TRUE;
-
       if (deactivate)
 	{
 	  gtk_menu_shell_deactivate (menu_shell);
@@ -662,12 +654,6 @@ gtk_menu_shell_leave_notify (GtkWidget        *widget,
 	return TRUE;
 
       menu_item = GTK_MENU_ITEM (event_widget);
-
-      if (menu_shell->ignore_leave)
-	{
-	  menu_shell->ignore_leave = FALSE;
-	  return TRUE;
-	}
 
       if (!_gtk_menu_item_is_selectable (event_widget))
 	return TRUE;

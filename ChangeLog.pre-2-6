@@ -1,3 +1,11 @@
+Wed Aug 13 17:01:49 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenushell.[ch] (gtk_menu_shell_enter_notify):
+	Remove usage of menu_shell->ignore leave which was
+	to deal with stray events we no longer get because
+	we do grabbing differently. Comment it as unused in
+	the header. (#115837, Keith Bissett)
+
 Wed Aug 13 16:32:43 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_position, gtk_menu_window_size_request): 
