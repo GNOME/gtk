@@ -1,3 +1,11 @@
+Mon Apr  5 13:08:51 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkevents.c (gdk_io_invoke, gdk_input_add_full):
+	Change mapping between GIOCondition and GdkInputCondition
+	to match the way the Linux kernel does it. This should
+	fix problems where closed pipes were no longer signalling
+	GDK_INPUT_READ on systems with a native poll().
+
 Thu Apr  1 16:58:10 PST 1999 Manish Singh <yosh@gimp.org>
 
 	* gdk/gdkevents.c: made "->" into a "." of previous change so

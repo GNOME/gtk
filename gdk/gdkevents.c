@@ -88,9 +88,11 @@ static GdkEvent* gdk_event_unqueue      (void);
 
 static gboolean  gdk_event_prepare      (gpointer   source_data, 
 				 	 GTimeVal  *current_time,
-					 gint      *timeout);
+					 gint      *timeout,
+					 gpointer   user_data);
 static gboolean  gdk_event_check        (gpointer   source_data,
-				 	 GTimeVal  *current_time);
+				 	 GTimeVal  *current_time,
+					 gpointer   user_data);
 static gboolean  gdk_event_dispatch     (gpointer   source_data,
 					 GTimeVal  *current_time,
 					 gpointer   user_data);
@@ -851,6 +853,12 @@ gdk_io_destroy (gpointer data)
   g_free (closure);
 }
 
+/* What do we do with G_IO_NVAL?
+ */
+#define READ_CONDITION (G_IO_IN | G_IO_HUP | G_IO_ERR)
+#define WRITE_CONDITION (G_IO_OUT | G_IO_ERR)
+#define EXCEPTION_CONDITION (G_IO_PRI)
+
 static gboolean  
 gdk_io_invoke (GIOChannel   *source,
 	       GIOCondition  condition,
@@ -859,11 +867,11 @@ gdk_io_invoke (GIOChannel   *source,
   GdkIOClosure *closure = data;
   GdkInputCondition gdk_cond = 0;
 
-  if (condition & (G_IO_IN | G_IO_PRI))
+  if (condition & READ_CONDITION)
     gdk_cond |= GDK_INPUT_READ;
-  if (condition & G_IO_OUT)
+  if (condition & WRITE_CONDITION)
     gdk_cond |= GDK_INPUT_WRITE;
-  if (condition & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
+  if (condition & EXCEPTION_CONDITION)
     gdk_cond |= GDK_INPUT_EXCEPTION;
 
   if (closure->condition & gdk_cond)
@@ -890,11 +898,11 @@ gdk_input_add_full (gint	      source,
   closure->data = data;
 
   if (condition & GDK_INPUT_READ)
-    cond |= (G_IO_IN | G_IO_PRI);
+    cond |= READ_CONDITION;
   if (condition & GDK_INPUT_WRITE)
-    cond |= G_IO_OUT;
+    cond |= WRITE_CONDITION;
   if (condition & GDK_INPUT_EXCEPTION)
-    cond |= G_IO_ERR|G_IO_HUP|G_IO_NVAL;
+    cond |= EXCEPTION_CONDITION;
 
   channel = g_io_channel_unix_new (source);
   result = g_io_add_watch_full (channel, G_PRIORITY_DEFAULT, cond, 
@@ -2019,7 +2027,8 @@ gdk_events_queue (void)
 static gboolean  
 gdk_event_prepare (gpointer  source_data, 
 		   GTimeVal *current_time,
-		   gint     *timeout)
+		   gint     *timeout,
+		   gpointer  user_data)
 {
   gboolean retval;
   
@@ -2036,7 +2045,8 @@ gdk_event_prepare (gpointer  source_data,
 
 static gboolean  
 gdk_event_check (gpointer  source_data,
-		 GTimeVal *current_time)
+		 GTimeVal *current_time,
+		 gpointer  user_data)
 {
   gboolean retval;
   
