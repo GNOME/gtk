@@ -1,5 +1,9 @@
 2001-10-27  Anders Carlsson  <andersca@gnu.org>
 
+	* gtk/tmpl/gtktreeviewcolumn.sgml: Remove documentation for
+	gtk_tree_view_column_cell_event since that function has been
+	removed. This fixes #62084.
+
 	* gdk/tmpl/properties.sgml: Change FALSE to TRUE in 
 	documentation for gdk_atom_intern, to document the
 	correct behavior. This fixes #58798.
