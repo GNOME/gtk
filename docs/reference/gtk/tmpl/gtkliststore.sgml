@@ -22,7 +22,7 @@ accept #GObject<!-- -->s are handled a little differently.  The
 #GtkListStore will keep a reference to the object instead of copying the
 value.  As a result, if the object is modified, it is up to the
 application writer to call @gtk_tree_model_row_changed to emit the
-"row_changed" signal.  This most commonly effects lists with
+"row_changed" signal.  This most commonly affects lists with
 #GdkPixbuf<!-- -->s stored.
 </para>
 

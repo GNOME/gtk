@@ -1,5 +1,16 @@
 2005-01-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* docs/tutorial/gtk-tut.sgml:
+	* docs/tutorial/gtk_tut.sgml:
+	* docs/reference/gtk/tmpl/gtkliststore.sgml:
+	* gtk/gtkactiongroup.c:
+	* gtk/gtksizegroup.c:
+	* gtk/gtksizegroup.h:
+	* gtk/gtktogglebutton.c: Replace "effect" by "affect" where
+	appropriate.  (#165108, Dan Winship)
+
+2005-01-24  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkwidget.c (gtk_widget_class_init): Document 
 	GtkWidget::style-set.  (#164222, Alex Graveley)
 	

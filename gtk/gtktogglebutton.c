@@ -262,7 +262,7 @@ gtk_toggle_button_get_property (GObject      *object,
  * You can call this function on a checkbutton or a radiobutton with
  * @draw_indicator = %FALSE to make the button look like a normal button
  *
- * This function only effects instances of classes like #GtkCheckButton
+ * This function only affects instances of classes like #GtkCheckButton
  * and #GtkRadioButton that derive from #GtkToggleButton,
  * not instances of #GtkToggleButton itself.
  */

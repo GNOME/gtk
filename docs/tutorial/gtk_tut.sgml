@@ -3594,7 +3594,7 @@ void gtk_progress_bar_set_discrete_blocks( GtkProgressBar *pbar,
 As well as indicating the amount of progress that has occured, the
 progress bar may be set to just indicate that there is some
 activity. This can be useful in situations where progress cannot be
-measured against a value range. Activity mode is not effected by the
+measured against a value range. Activity mode is not affected by the
 bar style that is described above, and overrides it. This mode is
 either TRUE or FALSE, and is selected by the following function.
 
@@ -5103,7 +5103,7 @@ Adjustments range.
 by the specified amount.
 
 We move away from functions for setting and retreving the range attributes
-of the Spin Button now, and move onto functions that effect the
+of the Spin Button now, and move onto functions that affect the
 appearance and behaviour of the Spin Button widget itself.
 
 The first of these functions is used to constrain the text box of the
@@ -6638,7 +6638,7 @@ exisiting Alignment widget to be altered.
 All four alignment parameters are floating point numbers which can
 range from 0.0 to 1.0. The <tt/xalign/ and <tt/yalign/ arguments
 affect the position of the widget placed within the Alignment
-widget. The <tt/xscale/ and <tt/yscale/ arguments effect the amount of
+widget. The <tt/xscale/ and <tt/yscale/ arguments affect the amount of
 space allocated to the widget.
 
 A child widget can be added to this Alignment widget using:
@@ -7455,7 +7455,7 @@ GtkWidget *gtk_hbutton_box_new( void );
 GtkWidget *gtk_vbutton_box_new( void );
 </verb></tscreen>
 
-The only attributes pertaining to button boxes effect how the buttons
+The only attributes pertaining to button boxes affect how the buttons
 are laid out. You can change the spacing between the buttons with:
 
 <tscreen><verb>
@@ -7472,7 +7472,7 @@ gint gtk_hbutton_box_get_spacing_default( void );
 gint gtk_vbutton_box_get_spacing_default( void );
 </verb></tscreen>
 
-The second attribute that we can access effects the layout of the
+The second attribute that we can access affects the layout of the
 buttons within the box. It is set using one of:
 
 <tscreen><verb>

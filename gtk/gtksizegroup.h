@@ -66,12 +66,12 @@ struct _GtkSizeGroupClass
 /**
  * GtkSizeGroupMode:
  * @GTK_SIZE_GROUP_NONE: group has no effect  
- * @GTK_SIZE_GROUP_HORIZONTAL: group effects horizontal requisition
- * @GTK_SIZE_GROUP_VERTICAL: group effects vertical requisition
- * @GTK_SIZE_GROUP_BOTH: group effects both horizontal and vertical requisition
+ * @GTK_SIZE_GROUP_HORIZONTAL: group affects horizontal requisition
+ * @GTK_SIZE_GROUP_VERTICAL: group affects vertical requisition
+ * @GTK_SIZE_GROUP_BOTH: group affects both horizontal and vertical requisition
  * 
  * The mode of the size group determines the directions in which the size
- * group effects the requested sizes of its component widgets.
+ * group affects the requested sizes of its component widgets.
  **/
 typedef enum {
   GTK_SIZE_GROUP_NONE,

@@ -419,7 +419,7 @@ gtk_action_group_get_sensitive (GtkActionGroup *action_group)
 static void
 cb_set_action_sensitivity (const gchar *name, GtkAction *action)
 {
-  /* Minor optimization, the action_groups state only effects actions that are
+  /* Minor optimization, the action_groups state only affects actions that are
    * themselves sensitive */
   if (gtk_action_get_sensitive (action))
     g_object_notify (G_OBJECT (action), "sensitive");
@@ -471,7 +471,7 @@ gtk_action_group_get_visible (GtkActionGroup *action_group)
 static void
 cb_set_action_visiblity (const gchar *name, GtkAction *action)
 {
-  /* Minor optimization, the action_groups state only effects actions that are
+  /* Minor optimization, the action_groups state only affects actions that are
    * themselves sensitive */
   if (gtk_action_get_visible (action))
     g_object_notify (G_OBJECT (action), "visible");

@@ -4892,7 +4892,7 @@ Adjustments range.</para>
 by the specified amount.</para>
 
 <para>We move away from functions for setting and retreving the range attributes
-of the Spin Button now, and move onto functions that effect the
+of the Spin Button now, and move onto functions that affect the
 appearance and behaviour of the Spin Button widget itself.</para>
 
 <para>The first of these functions is used to constrain the text box of the
@@ -6450,7 +6450,7 @@ exisiting Alignment widget to be altered.</para>
 <para>All four alignment parameters are floating point numbers which can
 range from 0.0 to 1.0. The <literal>xalign</literal> and <literal>yalign</literal> arguments
 affect the position of the widget placed within the Alignment
-widget. The <literal>xscale</literal> and <literal>yscale</literal> arguments effect the amount of
+widget. The <literal>xscale</literal> and <literal>yscale</literal> arguments affect the amount of
 space allocated to the widget.</para>
 
 <para>A child widget can be added to this Alignment widget using:</para>
