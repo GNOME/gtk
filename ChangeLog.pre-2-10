@@ -1,3 +1,7 @@
+Tue Apr 22 19:43:01 BST 2003  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgml: add note about version converage.
+
 Mon Apr 21 19:02:16 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksocket.c (activate_key): Fix prototype for

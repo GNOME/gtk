@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>January 23rd 2003</date>
+  <date>April 22nd 2003</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -22,6 +22,8 @@
     <para> This document is intended to answer questions that are
     likely to be frequently asked by programmers using GTK+ or
     people who are just looking at using GTK+. </para>
+    <para><emphasis>Note: </emphasis> This FAQ mainly covers GTK+ 1.2. 
+	Where the text covers GTK+ 2.x this will be indicated</para>
   </abstract>
 </bookinfo>
 
@@ -30,6 +32,16 @@
 <!-- ***************************************************************** -->
 <chapter>
 <title>General Information</title>
+
+<!-- ----------------------------------------------------------------- -->
+
+<sect1>
+<title>Note: This FAQ mainly covers GTK+ 1.2</title>
+<para>This FAQ mainly covers GTK+ 1.2.
+Where the text covers GTK+ 2.x this will be indicated by prefixing the
+text with: <emphasis>[GTK+ 2.x]</emphasis>
+</para>
+</sect1>
 
 <!-- ----------------------------------------------------------------- -->
 
