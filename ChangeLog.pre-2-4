@@ -1,3 +1,8 @@
+Mon Mar  1 10:31:11 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c: Implement auto-bidi-direction,
+	based on a patch from Dov Grobgeld. (#118540)
+
 Sun Feb 29 22:01:49 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.[ch]: Add gtk_entry_set_alignment() 
