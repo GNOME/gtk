@@ -13,9 +13,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2003-05-26 04:43+0200\n"
-"PO-Revision-Date: 2002-12-18 19:14+0100\n"
-"Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
+"POT-Creation-Date: 2003-06-05 11:35+0200\n"
+"PO-Revision-Date: 2003-06-05 20:24+0100\n"
+"Last-Translator: Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2423,6 +2423,10 @@ msgstr "Afbeeldingswidget"
 msgid "Child widget to appear next to the menu text"
 msgstr "Dochterwidget dat naast de menutekst verschijnt"
 
+#: gtk/gtkimmodule.c:419
+msgid "Default"
+msgstr "Standaard"
+
 #: gtk/gtkinputdialog.c:230
 msgid "Input"
 msgstr "Invoer"
@@ -2865,7 +2869,7 @@ msgstr "Of de tab van de dochter de beschikbare ruimte moet opvullen of niet"
 msgid "Tab pack type"
 msgstr "Tab-verpakkingsstijl"
 
-#: gtk/gtknotebook.c:2474 gtk/gtknotebook.c:4821
+#: gtk/gtknotebook.c:2475 gtk/gtknotebook.c:4822
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
