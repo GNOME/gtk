@@ -1,3 +1,9 @@
+Mon Apr  4 12:14:35 2005  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_handle_scrolling): Translate x, y into
+	widget coordinates instead of root coordinates. Patch from Jorn
+	Baayen. (#172236)
+
 2005-04-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c (gtk_icon_view_calculate_item_size): Take

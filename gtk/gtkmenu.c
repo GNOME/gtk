@@ -2945,10 +2945,14 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
   border = GTK_CONTAINER (menu)->border_width +
     GTK_WIDGET (menu)->style->ythickness + vertical_padding;
 
+  /* menu->toplevel->window is override-redirect so we know its
+   * position is in root coordinates.
+   */
   gdk_window_get_position (menu->toplevel->window, &top_x, &top_y);
+  x -= top_x;
+  y -= top_y;
+
   gdk_window_get_position (GTK_WIDGET (menu)->window, &win_x, &win_y);
-  win_x += top_x;
-  win_y += top_y;
   
   if (menu->upper_arrow_visible && !menu->tearoff_active)
     {
