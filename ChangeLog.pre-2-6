@@ -1,3 +1,27 @@
+Mon Jul 26 00:38:27 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Make the GtkComboBox in list mode scroll if the list is too
+	large to fit in the popup.  (#135543)
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_popup_widget): Add a 
+	scrolled window to the popup in list mode.
+	(gtk_combo_box_list_position): Calculate the height of the
+	popup so that it fits on the screen, set the scrollbar policy
+	of the scrolled window appropriately.
+	(gtk_combo_box_popup): Use the height calculated by 
+	gtk_combo_box_list_position().
+	(gtk_combo_box_remeasure): Don't add unnecessary padding.
+	(gtk_combo_box_size_request): But add the focus with here.
+	(gtk_combo_box_list_setup): Connect to enter notify on the 
+	popup window to activate auto scrolling.
+	(gtk_combo_box_list_enter_notify): Activate auto scrolling.
+	(gtk_combo_box_list_button_pressed): Setup a timeout for
+	auto scrolling. 
+	(gtk_combo_box_list_scroll_timeout): Timeout function for
+	auto scrolling.
+	(gtk_combo_box_list_auto_scroll): Scroll the list when the 
+	pointer leaves the window.
+	
 Sun Jul 25 19:51:17 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtknotebook.c (gtk_notebook_scroll): Ignore scroll
