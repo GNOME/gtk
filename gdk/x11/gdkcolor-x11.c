@@ -174,23 +174,27 @@ gdk_colormap_get_system (void)
       private->next_color = 0;
       private->ref_count = 1;
 
-      for (i = 0; i < 256; i++)
+      if ((private->visual->type == GDK_VISUAL_GRAYSCALE) ||
+	  (private->visual->type == GDK_VISUAL_PSEUDO_COLOR))
 	{
-	  xpalette[i].pixel = i;
-	  xpalette[i].red = 0;
-	  xpalette[i].green = 0;
-	  xpalette[i].blue = 0;
-	}
-
-      XQueryColors (gdk_display, private->xcolormap, xpalette, 
-                    private->visual->colormap_size);
-
-      for (i = 0; i < 256; i++)
-	{
-	  colormap->colors[i].pixel = xpalette[i].pixel;
-	  colormap->colors[i].red = xpalette[i].red;
-	  colormap->colors[i].green = xpalette[i].green;
-	  colormap->colors[i].blue = xpalette[i].blue;
+	  for (i = 0; i < 256; i++)
+	    {
+	      xpalette[i].pixel = i;
+	      xpalette[i].red = 0;
+	      xpalette[i].green = 0;
+	      xpalette[i].blue = 0;
+	    }
+	  
+	  XQueryColors (gdk_display, private->xcolormap, xpalette, 
+			MIN (private->visual->colormap_size, 256));
+	  
+	  for (i = 0; i < 256; i++)
+	    {
+	      colormap->colors[i].pixel = xpalette[i].pixel;
+	      colormap->colors[i].red = xpalette[i].red;
+	      colormap->colors[i].green = xpalette[i].green;
+	      colormap->colors[i].blue = xpalette[i].blue;
+	    }
 	}
 
       gdk_colormap_add (colormap);

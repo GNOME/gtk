@@ -1,3 +1,25 @@
+Tue Feb  3 15:34:27 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkcolor.c (gdk_colormap_get_system): Only query
+	  the colormap for GRAYSCALE and PSEUDOCOLOR visuals,
+	  and don't ask for more than 256 colors in any case.
+
+	* gdk/gdkwindow.c (gdk_window_internal_destroy): Remove
+	  the input window information when we destroy the window,
+	  not when we are notified of it.
+
+	* gdk/gdkinputcommon.h (gdk_input_device_new): Work around
+	  bug in XFree86 3.3.1's handling of Wacom macro buttons.
+	  by assumming no device will report exactly 25 buttons.
+
+	* gdk/gdkinputcommon.h (gdk_input_common_other_event): Fill
+	  in string translation for generated key press events,
+	  do sanity checking on received key codes.
+
+	* gdk/gdkcc.c (gdk_color_context_new): Allocate enough
+	  room for a GdkColorContextPrivate, not just for a 
+	  GdkColorContext.
+
 Tue Feb  3 15:09:55 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/testgtk.c: don't add the same menu to different menuitems/

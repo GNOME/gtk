@@ -177,8 +177,19 @@ gdk_input_device_new(XDeviceInfo *device, gint include_core)
       case KeyClass:
 	{
 	  XKeyInfo *xki = (XKeyInfo *)class;
-	  gdkdev->info.num_keys = xki->max_keycode - xki->min_keycode + 1;
-	  gdkdev->min_keycode = xki->min_keycode;
+	  /* Hack to catch XFree86 3.3.1 bug. Other devices better
+	   * not have exactly 25 keys... 
+	   */
+	  if ((xki->min_keycode == 8) && (xki->max_keycode == 32))
+	    {
+	      gdkdev->info.num_keys = 32;
+	      gdkdev->min_keycode = 0;
+	    }
+	  else
+	    {
+	      gdkdev->info.num_keys = xki->max_keycode - xki->min_keycode + 1;
+	      gdkdev->min_keycode = xki->min_keycode;
+	    }
 	  gdkdev->info.keys = g_new (GdkDeviceKey, gdkdev->info.num_keys);
 
 	  for (j=0; j<gdkdev->info.num_keys; j++)
@@ -585,7 +596,6 @@ gdk_input_common_other_event (GdkEvent *event,
       (xevent->type == gdkdev->keyrelease_type))
     {
       XDeviceKeyEvent *xdke = (XDeviceKeyEvent *)(xevent);
-      event->key.keyval = gdkdev->info.keys[xdke->keycode - gdkdev->min_keycode].keyval;
 
       if (gdk_show_events)
 	g_print ("device key %s:\twindow: %ld  device: %ld  keycode: %d\n",
@@ -593,6 +603,15 @@ gdk_input_common_other_event (GdkEvent *event,
 		 xdke->window,
 		 xdke->deviceid,
 		 xdke->keycode);
+
+      if (xdke->keycode < gdkdev->min_keycode ||
+	  xdke->keycode >= gdkdev->min_keycode + gdkdev->info.num_keys)
+	{
+	  g_warning ("Invalid device key code received");
+	  return FALSE;
+	}
+      
+      event->key.keyval = gdkdev->info.keys[xdke->keycode - gdkdev->min_keycode].keyval;
 
       if (event->key.keyval == 0) 
 	{
@@ -610,6 +629,20 @@ gdk_input_common_other_event (GdkEvent *event,
 
       event->key.state = gdk_input_translate_state(xdke->state, xdke->device_state)
 	| gdkdev->info.keys[xdke->keycode - gdkdev->min_keycode].modifiers;
+
+      /* Add a string translation for the key event */
+      if ((event->key.keyval >= 0x20) && (event->key.keyval <= 0xFF))
+	{
+	  event->key.length = 1;
+	  event->key.string = g_new (gchar, 2);
+	  event->key.string[0] = (gchar)event->key.keyval;
+	  event->key.string[1] = 0;
+	}
+      else
+	{
+	  event->key.length = 0;
+	  event->key.string = g_new0 (gchar, 1);
+	}
 
       if (gdk_show_events)
 	g_print ("\t\ttranslation - keyval: %d modifiers: %#x\n",

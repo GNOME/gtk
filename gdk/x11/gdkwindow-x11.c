@@ -382,6 +382,9 @@ gdk_window_internal_destroy (GdkWindow *window, int xdestroy)
 
 	  g_list_free (children);
 
+	  if (private->extension_events != 0)
+	    gdk_input_window_destroy (window);
+
 	  if(private->dnd_drag_data_numtypesavail > 0) 
 	    {
 	      g_free (private->dnd_drag_data_typesavail);
@@ -429,9 +432,6 @@ gdk_window_destroy_notify (GdkWindow *window)
   g_return_if_fail (window != NULL);
 
   private = (GdkWindowPrivate*) window;
-
-  if (private->extension_events != 0)
-    gdk_input_window_destroy (window);
 
   gdk_xid_table_remove (private->xwindow);
   gdk_window_unref (window);

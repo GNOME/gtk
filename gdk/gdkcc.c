@@ -507,9 +507,9 @@ gdk_color_context_new (GdkVisual   *visual,
 
   g_assert (visual != NULL);
   g_assert (colormap != NULL);
-	
-  cc = g_new (GdkColorContext, 1);
-  ccp = (GdkColorContextPrivate *) cc;
+
+  ccp = g_new (GdkColorContextPrivate, 1);
+  cc = (GdkColorContext *) ccp;
   ccp->xdisplay = gdk_display;
   cc->visual = visual;
   cc->colormap = colormap;
