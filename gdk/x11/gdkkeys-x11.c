@@ -166,6 +166,24 @@ update_keymaps (void)
 	      if (syms[KEYSYM_INDEX (i, 0)] == GDK_Tab)
 		syms[KEYSYM_INDEX (i, 1)] = GDK_ISO_Left_Tab;
 	    }
+
+          /*
+           * If there is one keysym and the key symbol has upper and lower
+           * case variants fudge the keymap
+           */
+          if (syms[KEYSYM_INDEX (0, 1)] == 0)
+            {
+              guint lower;
+              guint upper;
+
+              gdk_keyval_convert_case (syms[KEYSYM_INDEX (0, 0)], &lower, &upper);
+              if (lower != upper)
+                {
+                  syms[KEYSYM_INDEX (0, 0)] = lower;
+                  syms[KEYSYM_INDEX (0, 1)] = upper;
+                }
+            }
+      
           
           ++keycode;
         }

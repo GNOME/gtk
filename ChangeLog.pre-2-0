@@ -1,3 +1,9 @@
+2002-03-15 Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gdk/x11/gdkkeys-x11.c (update_keymaps): Fudge keymap to have lower
+	upper case variants if there is only a single keysym per keycode and
+	the key symbol has upper and lower case variants (#74512)
+
 Thu Mar 14 17:09:52 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_process_all_updates): Fix rather
