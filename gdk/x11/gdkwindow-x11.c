@@ -3529,6 +3529,24 @@ wmspec_moveresize (GdkWindow *window,
 	      &xev);
 }
 
+typedef struct {
+  GdkWindow *_gdk_moveresize_window;
+  GdkWindow *moveresize_emulation_window;
+  gboolean is_resize;
+  GdkWindowEdge resize_edge;
+  gint moveresize_button;
+  gint moveresize_x;
+  gint moveresize_y;
+  gint moveresize_orig_x;
+  gint moveresize_orig_y;
+  gint moveresize_orig_width;
+  gint moveresize_orig_height;
+  GdkWindowHints moveresize_geom_mask;
+  GdkGeometry moveresize_geometry;
+  Time moveresize_process_time;
+  XEvent *moveresize_pending_event;
+} _MoveResizeData;
+
 /* From the WM spec */
 #define _NET_WM_MOVERESIZE_SIZE_TOPLEFT      0
 #define _NET_WM_MOVERESIZE_SIZE_TOP          1
@@ -3603,19 +3621,21 @@ update_pos_for_display (GdkDisplay *display,
 			gint new_root_y)
 {
   gint dx, dy;
-  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11 (display);
+  _MoveResizeData * mv_resize = NULL;
+  mv_resize = g_object_get_data (G_OBJECT (display), "moveresize");
+  g_assert (mv_resize != NULL);  
   
-  dx = new_root_x - dpy->moveresize_x;
-  dy = new_root_y - dpy->moveresize_y;
+  dx = new_root_x - mv_resize->moveresize_x;
+  dy = new_root_y - mv_resize->moveresize_y;
 
-  if (dpy->is_resize)
+  if (mv_resize->is_resize)
     {
       gint w, h;
 
-      w = dpy->moveresize_orig_width;
-      h = dpy->moveresize_orig_height;
+      w = mv_resize->moveresize_orig_width;
+      h = mv_resize->moveresize_orig_height;
       
-      switch (dpy->resize_edge)
+      switch (mv_resize->resize_edge)
         {
         case GDK_WINDOW_EDGE_SOUTH_EAST:
           w += dx;
@@ -3628,39 +3648,42 @@ update_pos_for_display (GdkDisplay *display,
       w = MAX (w, 1);
       h = MAX (h, 1);
       
-      if (dpy->moveresize_geom_mask)
+      if (mv_resize->moveresize_geom_mask)
         {
-          gdk_window_constrain_size (&dpy->moveresize_geometry,
-                                     dpy->moveresize_geom_mask,
+          gdk_window_constrain_size (&mv_resize->moveresize_geometry,
+                                     mv_resize->moveresize_geom_mask,
                                      w, h,
                                      &w, &h);
         }
       
-      gdk_window_resize (dpy->_gdk_moveresize_window, w, h);
+      gdk_window_resize (mv_resize->_gdk_moveresize_window, w, h);
     }
   else
     {
       gint x, y;
 
-      x = dpy->moveresize_orig_x + dx;
-      y = dpy->moveresize_orig_y + dy;
+      x = mv_resize->moveresize_orig_x + dx;
+      y = mv_resize->moveresize_orig_y + dy;
       
-      gdk_window_move (dpy->_gdk_moveresize_window, x, y);
+      gdk_window_move (mv_resize->_gdk_moveresize_window, x, y);
     }
 }
 
 static void
 finish_drag_for_display (GdkDisplay *display)
 {
-  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11 (display);
-  gdk_window_destroy (dpy->moveresize_emulation_window);
-  dpy->moveresize_emulation_window = NULL;
-  dpy->_gdk_moveresize_window = NULL;
+  _MoveResizeData * mv_resize = NULL;
+  mv_resize = g_object_steal_data (G_OBJECT (display), "moveresize");
+  g_object_steal_data (G_OBJECT (display), "moveresize_window");
+  g_assert (mv_resize != NULL); 
+  gdk_window_destroy (mv_resize->moveresize_emulation_window);
+  mv_resize->moveresize_emulation_window = NULL;
+  mv_resize->_gdk_moveresize_window = NULL;
 
-  if (dpy->moveresize_pending_event)
+  if (mv_resize->moveresize_pending_event)
     {
-      g_free (dpy->moveresize_pending_event);
-      dpy->moveresize_pending_event = NULL;
+      g_free (mv_resize->moveresize_pending_event);
+      mv_resize->moveresize_pending_event = NULL;
     }
 }
 
@@ -3669,9 +3692,12 @@ lookahead_motion_predicate (Display *display,
 			    XEvent  *event,
 			    XPointer arg)
 {
-  GdkDisplayImplX11 *dpy = gdk_lookup_xdisplay (display);
-  
   gboolean *seen_release = (gboolean *)arg;
+  _MoveResizeData * mv_resize = NULL;
+  GdkDisplayImplX11 *dpy = gdk_lookup_xdisplay (display);
+  mv_resize = g_object_get_data (G_OBJECT (dpy), "moveresize");
+  g_assert (mv_resize != NULL);  
+  
   
   if (*seen_release)
     return False;
@@ -3682,7 +3708,7 @@ lookahead_motion_predicate (Display *display,
       *seen_release = TRUE;
       break;
     case MotionNotify:
-      dpy->moveresize_process_time = event->xmotion.time;
+      mv_resize->moveresize_process_time = event->xmotion.time;
       break;
     default:
       break;
@@ -3696,13 +3722,16 @@ moveresize_lookahead (XEvent *event)
 {
   XEvent tmp_event;
   gboolean seen_release = FALSE;
+  _MoveResizeData * mv_resize = NULL;
   GdkDisplayImplX11 *dpy = gdk_lookup_xdisplay (event->xany.display);
+  mv_resize = g_object_get_data (G_OBJECT (dpy), "moveresize");
+  g_assert (mv_resize != NULL);  
 
-  if (dpy->moveresize_process_time)
+  if (mv_resize->moveresize_process_time)
     {
-      if (event->xmotion.time == dpy->moveresize_process_time)
+      if (event->xmotion.time == mv_resize->moveresize_process_time)
 	{
-	  dpy->moveresize_process_time = 0;
+	  mv_resize->moveresize_process_time = 0;
 	  return TRUE;
 	}
       else
@@ -3712,27 +3741,32 @@ moveresize_lookahead (XEvent *event)
   XCheckIfEvent (dpy->xdisplay, &tmp_event,
 		 lookahead_motion_predicate, (XPointer)&seen_release);
 
-  return dpy->moveresize_process_time == 0;
+  return mv_resize->moveresize_process_time == 0;
 }
 	
 void
 _gdk_moveresize_handle_event (XEvent *event)
 {
   guint button_mask = 0;
+  _MoveResizeData * mv_resize = NULL;
+  GdkWindowObject *window_private;
   GdkDisplayImplX11 *dpy = gdk_lookup_xdisplay (event->xany.display);
-  GdkWindowObject *window_private = (GdkWindowObject *) dpy->_gdk_moveresize_window;
+  mv_resize = g_object_get_data (G_OBJECT (dpy), "moveresize");
+  g_assert (mv_resize != NULL);  
   
-  button_mask = GDK_BUTTON1_MASK << (dpy->moveresize_button - 1);
+  window_private = (GdkWindowObject *) mv_resize->_gdk_moveresize_window;
+  
+  button_mask = GDK_BUTTON1_MASK << (mv_resize->moveresize_button - 1);
   
   switch (event->xany.type)
     {
     case MotionNotify:
       if (window_private->resize_count > 0)
 	{
-	  if (dpy->moveresize_pending_event)
-	    *dpy->moveresize_pending_event = *event;
+	  if (mv_resize->moveresize_pending_event)
+	    *mv_resize->moveresize_pending_event = *event;
 	  else
-	    dpy->moveresize_pending_event = g_memdup (event, sizeof (XEvent));
+	    mv_resize->moveresize_pending_event = g_memdup (event, sizeof (XEvent));
 
 	  break;
 	}
@@ -3756,7 +3790,7 @@ _gdk_moveresize_handle_event (XEvent *event)
       update_pos_for_display ((GdkDisplay*)dpy, event->xbutton.x_root,
 			       event->xbutton.y_root);
       
-      if (event->xbutton.button == dpy->moveresize_button)
+      if (event->xbutton.button == mv_resize->moveresize_button)
         finish_drag_for_display ((GdkDisplay*)dpy);
       break;
     }
@@ -3766,12 +3800,14 @@ void
 _gdk_moveresize_configure_done_for_display (GdkDisplay *dpy)
 {
   XEvent *tmp_event;
-  GdkDisplayImplX11 * dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
+  _MoveResizeData * mv_resize = NULL;
+  mv_resize = g_object_get_data (G_OBJECT (dpy), "moveresize");
+  g_assert (mv_resize != NULL);  
   
-  if (dpy_impl->moveresize_pending_event)
+  if (mv_resize->moveresize_pending_event)
     {
-      tmp_event = dpy_impl->moveresize_pending_event;
-      dpy_impl->moveresize_pending_event = NULL;
+      tmp_event = mv_resize->moveresize_pending_event;
+      mv_resize->moveresize_pending_event = NULL;
       _gdk_moveresize_handle_event (tmp_event);
       g_free (tmp_event);
     }
@@ -3783,10 +3819,11 @@ create_moveresize_window_for_screen (GdkScreen *scr, guint32 timestamp)
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkGrabStatus status;
-  GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (scr);
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (scr_impl->display);
-
-  g_assert (dpy_impl->moveresize_emulation_window == NULL);
+  _MoveResizeData * mv_resize = NULL;
+  mv_resize = g_object_get_data (G_OBJECT (gdk_screen_get_display (scr)),
+				 "moveresize");
+  g_assert (mv_resize != NULL);
+  g_assert (mv_resize->moveresize_emulation_window == NULL);
   
   attributes.x = -100;
   attributes.y = -100;
@@ -3799,12 +3836,12 @@ create_moveresize_window_for_screen (GdkScreen *scr, guint32 timestamp)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
 
-  dpy_impl->moveresize_emulation_window =
+  mv_resize->moveresize_emulation_window =
     gdk_window_new_for_screen (scr, NULL, &attributes, attributes_mask);
 
-  gdk_window_show (dpy_impl->moveresize_emulation_window);
+  gdk_window_show (mv_resize->moveresize_emulation_window);
 
-  status = gdk_pointer_grab (dpy_impl->moveresize_emulation_window,
+  status = gdk_pointer_grab (mv_resize->moveresize_emulation_window,
                              FALSE,
                              GDK_BUTTON_RELEASE_MASK |
                              GDK_POINTER_MOTION_MASK,
@@ -3817,11 +3854,11 @@ create_moveresize_window_for_screen (GdkScreen *scr, guint32 timestamp)
       /* If this fails, some other client has grabbed the window
        * already.
        */
-      gdk_window_destroy (dpy_impl->moveresize_emulation_window);
-      dpy_impl->moveresize_emulation_window = NULL;
+      gdk_window_destroy (mv_resize->moveresize_emulation_window);
+      mv_resize->moveresize_emulation_window = NULL;
     }
 
-  dpy_impl->moveresize_process_time = 0;
+  mv_resize->moveresize_process_time = 0;
 }
 
 static void
@@ -3832,22 +3869,25 @@ emulate_resize_drag (GdkWindow     *window,
                      gint           root_y,
                      guint32        timestamp)
 {
-  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
-  dpy->is_resize = TRUE;
-  dpy->moveresize_button = button;
-  dpy->resize_edge = edge;
-  dpy->moveresize_x = root_x;
-  dpy->moveresize_y = root_y;
-  dpy->_gdk_moveresize_window = GDK_WINDOW (g_object_ref (G_OBJECT (window)));
+  _MoveResizeData * mv_resize = NULL;
+  mv_resize = g_object_get_data (G_OBJECT (GDK_WINDOW_DISPLAY (window)),
+				  "moveresize");
+  g_assert (mv_resize != NULL);
+  mv_resize->is_resize = TRUE;
+  mv_resize->moveresize_button = button;
+  mv_resize->resize_edge = edge;
+  mv_resize->moveresize_x = root_x;
+  mv_resize->moveresize_y = root_y;
+  mv_resize->_gdk_moveresize_window = GDK_WINDOW (g_object_ref (G_OBJECT (window)));
 
   gdk_window_get_size (window,
-		       &dpy->moveresize_orig_width, 
-		       &dpy->moveresize_orig_height);
+		       &mv_resize->moveresize_orig_width, 
+		       &mv_resize->moveresize_orig_height);
   
-  dpy->moveresize_geom_mask = 0;
+  mv_resize->moveresize_geom_mask = 0;
   gdk_window_get_geometry_hints (window,
-                                 &dpy->moveresize_geometry,
-                                 &dpy->moveresize_geom_mask);
+                                 &mv_resize->moveresize_geometry,
+                                 &mv_resize->moveresize_geom_mask);
   
   create_moveresize_window_for_screen (GDK_WINDOW_SCREEN(window), timestamp);
 }
@@ -3859,17 +3899,20 @@ emulate_move_drag (GdkWindow     *window,
                    gint           root_y,
                    guint32        timestamp)
 {
-  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
-  dpy->is_resize = FALSE;
-  dpy->moveresize_button = button;
-  dpy->moveresize_x = root_x;
-  dpy->moveresize_y = root_y;
+  _MoveResizeData * mv_resize = NULL;
+  mv_resize = g_object_get_data (G_OBJECT (GDK_WINDOW_DISPLAY (window)),
+				  "moveresize");
+  g_assert (mv_resize != NULL);
+  mv_resize->is_resize = FALSE;
+  mv_resize->moveresize_button = button;
+  mv_resize->moveresize_x = root_x;
+  mv_resize->moveresize_y = root_y;
 
-  dpy->_gdk_moveresize_window = GDK_WINDOW (g_object_ref (G_OBJECT (window)));
+  mv_resize->_gdk_moveresize_window = GDK_WINDOW (g_object_ref (G_OBJECT (window)));
 
-  gdk_window_get_deskrelative_origin (dpy->_gdk_moveresize_window,
-                                      &dpy->moveresize_orig_x,
-                                      &dpy->moveresize_orig_y);
+  gdk_window_get_deskrelative_origin (mv_resize->_gdk_moveresize_window,
+                                      &mv_resize->moveresize_orig_x,
+                                      &mv_resize->moveresize_orig_y);
   
   create_moveresize_window_for_screen (GDK_WINDOW_SCREEN(window), timestamp);
 }
@@ -3882,12 +3925,19 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
                               gint           root_y,
                               guint32        timestamp)
 {
-  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
+  _MoveResizeData * moveresize;
   g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (dpy->moveresize_emulation_window == NULL);
   
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  moveresize = g_new0 (_MoveResizeData, 1);
+  g_object_set_data (G_OBJECT (GDK_WINDOW_DISPLAY (window)), 
+		     "moveresize", 
+		     moveresize);
+  g_object_set_data (G_OBJECT (GDK_WINDOW_DISPLAY (window)),
+		     "moveresize_window",
+		     moveresize->_gdk_moveresize_window);
 
   if (gdk_net_wm_supports_for_screen (GDK_WINDOW_SCREEN(window),
 	gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_MOVERESIZE", FALSE)))
@@ -3903,12 +3953,19 @@ gdk_window_begin_move_drag (GdkWindow *window,
                             gint       root_y,
                             guint32    timestamp)
 {
-  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
+  _MoveResizeData * moveresize;
   g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (dpy->moveresize_emulation_window == NULL);
   
   if (GDK_WINDOW_DESTROYED (window))
     return;
+  
+  moveresize = g_new0 (_MoveResizeData, 1);
+  g_object_set_data (G_OBJECT (GDK_WINDOW_DISPLAY (window)), 
+		     "moveresize", 
+		     moveresize);
+  g_object_set_data (G_OBJECT (GDK_WINDOW_DISPLAY (window)),
+		     "moveresize_window",
+		     moveresize->_gdk_moveresize_window);
 
   if (gdk_net_wm_supports_for_screen (GDK_WINDOW_SCREEN(window),
 	gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_MOVERESIZE", FALSE)))

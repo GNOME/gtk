@@ -35,7 +35,9 @@ extern "C" {
  * A colormap is not sufficient.
  */
 PangoContext *gdk_pango_context_get_for_screen (GdkScreen * screen);
+#ifndef GDK_MULTIHEAD_SAFE
 PangoContext *gdk_pango_context_get            (void);
+#endif
 void          gdk_pango_context_set_colormap   (PangoContext *context,
                                                 GdkColormap  *colormap);
 

@@ -128,17 +128,20 @@ void        gdk_rgb_cmap_free               (GdkRgbCmap   *cmap);
 
 /* Below are some functions which are primarily useful for debugging
    and experimentation. */
-gboolean gdk_rgb_ditherable  (void);
-gboolean gdk_rgb_ditherable_for_screen  (GdkScreen *screen);
 void     gdk_rgb_set_verbose (gboolean verbose);
 
 /* experimental colormap stuff */
 void gdk_rgb_set_install    (gboolean install);
 void gdk_rgb_set_min_colors (gint     min_colors);
 
+#ifndef GDK_MULTIHEAD_SAFE
 GdkColormap *gdk_rgb_get_colormap (void);
-GdkColormap *gdk_rgb_get_colormap_for_screen (GdkScreen *screen);
+gboolean gdk_rgb_ditherable  (void);
 GdkVisual *  gdk_rgb_get_visual   (void);
+#endif
+
+gboolean gdk_rgb_ditherable_for_screen  (GdkScreen *screen);
+GdkColormap *gdk_rgb_get_colormap_for_screen (GdkScreen *screen);
 GdkVisual *  gdk_rgb_get_visual_for_screen   (GdkScreen *screen);
 
 #ifdef __cplusplus

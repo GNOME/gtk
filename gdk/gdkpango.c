@@ -77,8 +77,7 @@ gdk_pango_context_get_info (PangoContext *context, gboolean create)
 }
 
 static GdkGC *
-gdk_pango_get_gc (GdkScreen      *screen,
-		  PangoContext   *context,
+gdk_pango_get_gc (PangoContext   *context,
 		  PangoColor     *fg_color,
                   GdkBitmap      *stipple,
 		  GdkGC          *base_gc)
@@ -86,8 +85,11 @@ gdk_pango_get_gc (GdkScreen      *screen,
   GdkGC *result;
   GdkPangoContextInfo *info;
   GdkWindow *root_window;
+  GdkScreen *screen;
   
   g_return_val_if_fail (context != NULL, NULL);
+
+  screen = g_object_get_data (G_OBJECT (context), "gdk-screen");
 
   info = gdk_pango_context_get_info (context, FALSE);
 
@@ -97,7 +99,7 @@ gdk_pango_get_gc (GdkScreen      *screen,
       return NULL;
     }
   
-  root_window = GDK_SCREEN_GET_CLASS (screen)->get_root_window (screen);
+  root_window = gdk_screen_get_root_window (screen);
   result = gdk_gc_new (root_window);
   gdk_gc_copy (result, base_gc);
   
@@ -243,7 +245,7 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
               tmp.green = background->green;
             }
           
-          bg_gc = gdk_pango_get_gc (screen, context, &tmp, stipple, gc);
+          bg_gc = gdk_pango_get_gc (context, &tmp, stipple, gc);
           
 	  gdk_draw_rectangle (drawable, bg_gc, TRUE,
 			      x + (x_off + logical_rect.x) / PANGO_SCALE,
@@ -268,8 +270,7 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
               tmp.green = foreground->green;
             }
           
-          fg_gc = gdk_pango_get_gc (screen,
-				    context,
+          fg_gc = gdk_pango_get_gc (context,
 				    fg_set ? &tmp : NULL,
                                     stipple, gc);
         }
@@ -286,8 +287,7 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
           if (embossed)
             {
               PangoColor color = { 65535, 65535, 65535 };
-              GdkGC *white_gc = gdk_pango_get_gc (screen,
-						  context, 
+              GdkGC *white_gc = gdk_pango_get_gc (context, 
 						  &color, 
 						  stipple, 
 						  fg_gc);

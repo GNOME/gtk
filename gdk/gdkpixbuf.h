@@ -45,10 +45,12 @@ void gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf           *pixbuf,
 					  GdkRgbDither         dither,
 					  int                  x_dither,
 					  int                  y_dither);
+#ifndef GDK_MULTIHEAD_SAFE
 void gdk_pixbuf_render_pixmap_and_mask   (GdkPixbuf           *pixbuf,
 					  GdkPixmap          **pixmap_return,
 					  GdkBitmap          **mask_return,
 					  int                  alpha_threshold);
+#endif
 void gdk_pixbuf_render_pixmap_and_mask_for_screen (GdkPixbuf  *pixbuf,
 						   GdkScreen  *screen,
 						   GdkPixmap **pixmap_return,

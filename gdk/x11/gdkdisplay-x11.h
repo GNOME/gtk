@@ -112,25 +112,8 @@ extern "C"
     GList **motif_target_lists;
     gint motif_n_target_lists;
 
-    /* data needed for _NET_WM_MOVERESIZE spec impl */
-
-    GdkWindow *_gdk_moveresize_window;
-    GdkWindow *moveresize_emulation_window;
-    gboolean is_resize;
-    GdkWindowEdge resize_edge;
-    gint moveresize_button;
-    gint moveresize_x;
-    gint moveresize_y;
-    gint moveresize_orig_x;
-    gint moveresize_orig_y;
-    gint moveresize_orig_width;
-    gint moveresize_orig_height;
-    GdkWindowHints moveresize_geom_mask;
-    GdkGeometry moveresize_geometry;
-    Time moveresize_process_time;
-    XEvent *moveresize_pending_event;
-
     /* Misc Settings */
+
     XSettingsClient *xsettings_client;
   };
 

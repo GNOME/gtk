@@ -501,7 +501,7 @@ gdk_event_translate (GdkEvent *event,
   if (window != NULL)
     gdk_window_ref (window);
 
-  if (dpy_impl->_gdk_moveresize_window &&
+  if (g_object_get_data (G_OBJECT(dpy), "moveresize_window") &&
       (xevent->xany.type == MotionNotify ||
        xevent->xany.type == ButtonRelease))
     {
@@ -1321,7 +1321,7 @@ gdk_event_translate (GdkEvent *event,
 	      window_private->resize_count -= 1;
 
 	      if (window_private->resize_count == 0 &&
-		  window == dpy_impl->_gdk_moveresize_window)
+		  window == g_object_get_data (G_OBJECT(dpy), "moveresize_window"))
 		_gdk_moveresize_configure_done_for_display (dpy);
 	    }
 	}
