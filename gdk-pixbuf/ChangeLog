@@ -3,6 +3,8 @@
 	* src/io-gif.c: Some more work.  Now it generates a gdk_pixbuf of
 	the right size, at a minimum, even if the image is squished and
 	the wrong color.
+	(ReadImage): lets get the offset right.  This will let transparent
+	gifs work.
 
 1999-10-28  Jonathan Blandford  <jrb@redhat.com>
 

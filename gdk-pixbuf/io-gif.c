@@ -74,7 +74,6 @@ struct _GifContext
 	unsigned int aspect_ratio;
 	int gray_scale;
 	GdkPixbuf *pixbuf;
-	guchar used_cmap[3][256];
 	Gif89 gif89;
 };
 
@@ -367,7 +366,6 @@ ReadImage (FILE *file,
 	guchar c;
 	gint xpos = 0, ypos = 0, pass = 0;
 	gint v;
-	gint i, j;
 
 	/*
 	**  Initialize the Compression routines
@@ -377,6 +375,7 @@ ReadImage (FILE *file,
 		return;
 	}
 
+	g_print ("c = %d\n", c);
 	if (LWZReadByte (file, TRUE, c) < 0) {
 		/*g_message (_("GIF: error while reading\n"));*/
 		return;
@@ -388,22 +387,20 @@ ReadImage (FILE *file,
 					  context->width,
 					  context->height);
 
-	for (i = 0, j = 0; i < ncols; i++) {
-		context->used_cmap[0][i] = cmap[0][i];
-		context->used_cmap[1][i] = cmap[1][i];
-		context->used_cmap[2][i] = cmap[2][i];
-	}
-
 	dest = gdk_pixbuf_get_pixels (context->pixbuf);
 	while ((v = LWZReadByte (file, FALSE, c)) >= 0) {
+//		g_print ("in inner loop: xpos = %d, ypos = %d\n", xpos, ypos);
 		if (context->gif89.transparent) {
-			temp = dest + ( (ypos * len) + xpos ) * 2;
-			*temp = (guchar) v;
-			*(temp+1) = (guchar) ((v == context->gif89.transparent) ? 0 : 255);
+			temp = dest + (ypos * len + xpos) * 4;
+			*temp = cmap [0][(guchar) v];
+			*(temp+1) = cmap [1][(guchar) v];
+			*(temp+2) = cmap [2][(guchar) v];
+			*(temp+3) = (guchar) ((v == context->gif89.transparent) ? 0 : 65535);
 		} else {
-
-			temp = dest + (ypos * len) + xpos;
-			*temp = (guchar) v;
+			temp = dest + (ypos * len + xpos) * 3;
+			*temp = cmap [0][(guchar) v];
+			*(temp+1) = cmap [1][(guchar) v];
+			*(temp+2) = cmap [2][(guchar) v];
 		}
 
 		xpos++;
@@ -448,8 +445,14 @@ ReadImage (FILE *file,
 	}
 
  fini:
+	ypos = 0;
+/*	while (ReadOK (file, &c, 1) >= 0)
+	ypos++;
+	g_print ("ypos%d\n", ypos);*/
+/*
 	if (LWZReadByte (file, FALSE, c) >= 0)
 		g_print ("GIF: too much input data, ignoring extra...\n");
+*/
 }
 
 /* Shared library entry point */
@@ -516,6 +519,7 @@ image_load (FILE *file)
 	}
 
 	for (;;) {
+		g_print ("in loop\n");
 		if (!ReadOK (file, &c, 1)) {
 			/*g_message (_("GIF: EOF / read error on image data\n"));*/
 			return context->pixbuf;
