@@ -1,3 +1,11 @@
+Wed Nov  5 21:02:26 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcolorsel.c (update_color): 
+	(make_label_spinbutton): 
+	(adjustment_changed): Change the ranges for Saturation and
+	Value to be 0-100 instead of 0-255, since these axes of HSV
+	are usually expressed in percent.  (#121519, Gregory Merchan)
+
 Wed Nov  5 08:51:48 GMT 2003  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: More 2.x updates

@@ -1445,7 +1445,7 @@ adjustment_changed (GtkAdjustment *adjustment,
     {
     case COLORSEL_SATURATION:
     case COLORSEL_VALUE:
-      priv->color[GPOINTER_TO_INT (data)] = adjustment->value / 255;
+      priv->color[GPOINTER_TO_INT (data)] = adjustment->value / 100;
       gtk_hsv_to_rgb (priv->color[COLORSEL_HUE],
 		      priv->color[COLORSEL_SATURATION],
 		      priv->color[COLORSEL_VALUE],
@@ -1523,6 +1523,11 @@ make_label_spinbutton (GtkColorSelection *colorsel,
     {
       adjust = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 360.0, 1.0, 1.0, 1.0));
     }
+  else if (channel_type == COLORSEL_SATURATION ||
+	   channel_type == COLORSEL_VALUE)
+    {
+      adjust = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 100.0, 1.0, 1.0, 1.0));
+    }
   else
     {
       adjust = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 1.0, 1.0));
@@ -1599,10 +1604,10 @@ update_color (GtkColorSelection *colorsel)
 			    scale_round (priv->color[COLORSEL_HUE], 360));
   gtk_adjustment_set_value (gtk_spin_button_get_adjustment
 			    (GTK_SPIN_BUTTON (priv->sat_spinbutton)),
-			    scale_round (priv->color[COLORSEL_SATURATION], 255));
+			    scale_round (priv->color[COLORSEL_SATURATION], 100));
   gtk_adjustment_set_value (gtk_spin_button_get_adjustment
 			    (GTK_SPIN_BUTTON (priv->val_spinbutton)),
-			    scale_round (priv->color[COLORSEL_VALUE], 255));
+			    scale_round (priv->color[COLORSEL_VALUE], 100));
   gtk_adjustment_set_value (gtk_spin_button_get_adjustment
 			    (GTK_SPIN_BUTTON (priv->red_spinbutton)),
 			    scale_round (priv->color[COLORSEL_RED], 255));
