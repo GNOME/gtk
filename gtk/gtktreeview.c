@@ -122,7 +122,8 @@ enum {
   PROP_RULES_HINT,
   PROP_ENABLE_SEARCH,
   PROP_SEARCH_COLUMN,
-  PROP_FIXED_HEIGHT_MODE
+  PROP_FIXED_HEIGHT_MODE,
+  PROP_HOVER_SELECTION
 };
 
 static void     gtk_tree_view_class_init           (GtkTreeViewClass *klass);
@@ -356,9 +357,6 @@ static gboolean gtk_tree_view_has_special_cell               (GtkTreeView       
 static void     column_sizing_notify                         (GObject           *object,
                                                               GParamSpec        *pspec,
                                                               gpointer           data);
-static void     gtk_tree_view_set_fixed_height_mode          (GtkTreeView       *tree_view,
-                                                              gboolean           enable);
-
 static gboolean expand_collapse_timeout                      (gpointer           data);
 static gboolean do_expand_collapse                           (GtkTreeView       *tree_view);
 
@@ -608,11 +606,41 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 						       0,
 						       G_PARAM_READWRITE));
 
+    /**
+     * GtkTreeView:fixed-height-mode:
+     *
+     * Setting the ::fixed-height-mode property to %TRUE speeds up 
+     * #GtkTreeView by assuming that all rows have the same height. 
+     * Only enable this option if all rows are the same height.  
+     * Please see gtk_tree_view_set_fixed_height_mode() for more 
+     * information on this option.
+     *
+     * Since: 2.4
+     **/
     g_object_class_install_property (o_class,
                                      PROP_FIXED_HEIGHT_MODE,
                                      g_param_spec_boolean ("fixed_height_mode",
                                                            P_("Fixed Height Mode"),
                                                            P_("Speeds up GtkTreeView by assuming that all rows have the same height"),
+                                                           FALSE,
+                                                           G_PARAM_READWRITE));
+    
+    /**
+     * GtkTreeView:hover-selection:
+     * 
+     * Enables of disables the hover selection mode of @tree_view.
+     * Hover selection makes the selected row follow the pointer.
+     * Currently, this works only for the selection mode %GTK_SELECTION_SINGLE.
+     * This mode is primarily indended for treeviews in popups, e.g.
+     * in #GtkComboBox or #GtkEntryCompletion.
+     *
+     * Since: 2.6
+     */
+    g_object_class_install_property (o_class,
+                                     PROP_HOVER_SELECTION,
+                                     g_param_spec_boolean ("hover_selection",
+                                                           P_("Hover Selection"),
+                                                           P_("Whether the selection should follow the pointer"),
                                                            FALSE,
                                                            G_PARAM_READWRITE));
 
@@ -1082,7 +1110,9 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->search_dialog_position_func = gtk_tree_view_search_position_func;
   tree_view->priv->search_equal_func = gtk_tree_view_search_equal_func;
   tree_view->priv->init_hadjust_value = TRUE;    
-  tree_view->priv->width = 0;                    
+  tree_view->priv->width = 0;          
+          
+  tree_view->priv->hover_selection = 0;
 }
 
 
@@ -1135,6 +1165,9 @@ gtk_tree_view_set_property (GObject         *object,
     case PROP_FIXED_HEIGHT_MODE:
       gtk_tree_view_set_fixed_height_mode (tree_view, g_value_get_boolean (value));
       break;
+    case PROP_HOVER_SELECTION:
+      tree_view->priv->hover_selection = g_value_get_boolean (value);
+      break;
     default:
       break;
     }
@@ -1181,6 +1214,9 @@ gtk_tree_view_get_property (GObject    *object,
       break;
     case PROP_FIXED_HEIGHT_MODE:
       g_value_set_boolean (value, tree_view->priv->fixed_height_mode);
+      break;
+    case PROP_HOVER_SELECTION:
+      g_value_set_boolean (value, tree_view->priv->hover_selection);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2680,6 +2716,42 @@ do_prelight (GtkTreeView *tree_view,
 }
 
 static void
+prelight_or_select (GtkTreeView *tree_view,
+		    GtkRBTree   *tree,
+		    GtkRBNode   *node,
+		    /* these are in tree_window coords */
+		    gint         x,
+		    gint         y)
+{
+  if (tree_view->priv->hover_selection &&
+      gtk_tree_selection_get_mode (tree_view->priv->selection) == GTK_SELECTION_SINGLE &&
+      !(tree_view->priv->edited_column &&
+	tree_view->priv->edited_column->editable_widget))
+    {
+      if (node)
+	{
+	  if (!GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+	    {
+	      GtkTreePath *path;
+	      
+	      path = _gtk_tree_view_find_path (tree_view, tree, node);
+	      gtk_tree_selection_select_path (tree_view->priv->selection, path);
+	      if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+		{
+		  GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
+		  gtk_tree_view_real_set_cursor (tree_view, path, FALSE, FALSE);
+		}
+	      gtk_tree_path_free (path);
+	    }
+	}
+      else
+	gtk_tree_selection_unselect_all (tree_view->priv->selection);
+    }
+  else
+    do_prelight (tree_view, tree, node, x, y);
+}
+
+static void
 ensure_unprelighted (GtkTreeView *tree_view)
 {
   do_prelight (tree_view,
@@ -3123,7 +3195,7 @@ gtk_tree_view_motion_bin_window (GtkWidget      *widget,
       (tree_view->priv->button_pressed_node != node))
     node = NULL;
 
-  do_prelight (tree_view, tree, node, event->x, event->y);
+  prelight_or_select (tree_view, tree, node, event->x, event->y);
 
   return TRUE;
 }
@@ -4105,7 +4177,7 @@ gtk_tree_view_enter_notify (GtkWidget        *widget,
     new_y = 0;
   _gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
 
-  do_prelight (tree_view, tree, node, event->x, event->y);
+  prelight_or_select (tree_view, tree, node, event->x, event->y);
 
   return TRUE;
 }
@@ -4128,7 +4200,9 @@ gtk_tree_view_leave_notify (GtkWidget        *widget,
                                    tree_view->priv->prelight_node,
                                    NULL);
 
-  ensure_unprelighted (tree_view);
+  prelight_or_select (tree_view,
+		      NULL, NULL,
+		      -1000, -1000); /* coords not possibly over an arrow */
 
   return TRUE;
 }
@@ -6088,13 +6162,27 @@ column_sizing_notify (GObject    *object,
     g_object_set (data, "fixed_height_mode", FALSE, NULL);
 }
 
-static void
+/**
+ * gtk_tree_view_set_fixed_height_mode:
+ * @tree_view: a #GtkTreeView 
+ * @enable: %TRUE to enable fixed height mode
+ * 
+ * Enables or disables the fixed height mode of @tree_view. 
+ * Fixed height mode speeds up #GtkTreeView by assuming that all 
+ * rows have the same height. 
+ * Only enable this option if all rows are the same height.  
+ *
+ * Since: 2.6
+ **/
+void
 gtk_tree_view_set_fixed_height_mode (GtkTreeView *tree_view,
                                      gboolean     enable)
 {
   GList *l;
+  
+  enable = enable != FALSE;
 
-  if (tree_view->priv->fixed_height_mode && enable)
+  if (enable == tree_view->priv->fixed_height_mode)
     return;
 
   if (!enable)
@@ -6104,29 +6192,46 @@ gtk_tree_view_set_fixed_height_mode (GtkTreeView *tree_view,
 
       /* force a revalidation */
       install_presize_handler (tree_view);
-      return;
     }
-
-  /* make sure all columns are of type FIXED */
-  for (l = tree_view->priv->columns; l; l = l->next)
+  else 
     {
-      GtkTreeViewColumn *c = l->data;
-
-      g_return_if_fail (gtk_tree_view_column_get_sizing (c) == GTK_TREE_VIEW_COLUMN_FIXED);
+      /* make sure all columns are of type FIXED */
+      for (l = tree_view->priv->columns; l; l = l->next)
+	{
+	  GtkTreeViewColumn *c = l->data;
+	  
+	  g_return_if_fail (gtk_tree_view_column_get_sizing (c) == GTK_TREE_VIEW_COLUMN_FIXED);
+	}
+      
+      /* yes, we really have to do this is in a separate loop */
+      for (l = tree_view->priv->columns; l; l = l->next)
+	g_signal_connect (l->data, "notify::sizing",
+			  G_CALLBACK (column_sizing_notify), tree_view);
+      
+      tree_view->priv->fixed_height_mode = 1;
+      tree_view->priv->fixed_height = -1;
+      
+      if (tree_view->priv->tree)
+	initialize_fixed_height_mode (tree_view);
     }
 
-  /* yes, we really have to do this is in a separate loop */
-  for (l = tree_view->priv->columns; l; l = l->next)
-    g_signal_connect (l->data, "notify::sizing",
-                      G_CALLBACK (column_sizing_notify), tree_view);
+  g_object_notify (G_OBJECT (tree_view), "fixed-height-mode");
+}
 
-  tree_view->priv->fixed_height_mode = 1;
-  tree_view->priv->fixed_height = -1;
-
-  if (!tree_view->priv->tree)
-    return;
-
-  initialize_fixed_height_mode (tree_view);
+/**
+ * gtk_tree_view_get_fixed_height_mode:
+ * @tree_view: a #GtkTreeView
+ * 
+ * Returns whether fixed height mode is turned on for @tree_view.
+ * 
+ * Return value: %TRUE if @tree_view is in fixed height mode
+ * 
+ * Since: 2.6
+ **/
+gboolean
+gtk_tree_view_get_fixed_height_mode (GtkTreeView *tree_view)
+{
+  return tree_view->priv->fixed_height_mode;
 }
 
 /* Returns TRUE if the focus is within the headers, after the focus operation is
@@ -12146,4 +12251,47 @@ gtk_tree_view_stop_editing (GtkTreeView *tree_view,
   tree_view->priv->edited_column = column;
 
   gtk_cell_editable_remove_widget (column->editable_widget);
+}
+
+
+/**
+ * Gtk_tree_view_set_hover_selection:
+ * @tree_view: a #GtkTreeView
+ * @hover: %TRUE to enable hover selection mode
+ *
+ * Enables of disables the hover selection mode of @tree_view.
+ * Hover selection makes the selected row follow the pointer.
+ * Currently, this works only for the selection mode 
+ * %GTK_SELECTION_SINGLE.
+ * 
+ * Since: 2.6
+ **/
+void     
+gtk_tree_view_set_hover_selection (GtkTreeView *tree_view,
+				   gboolean     hover)
+{
+  hover = hover != FALSE;
+
+  if (hover != tree_view->priv->hover_selection)
+    {
+      tree_view->priv->hover_selection = hover;
+
+      g_object_notify (G_OBJECT (tree_view), "hover-selection");
+    }
+}
+
+/**
+ * gtk_tree_view_get_hover_selection:
+ * @tree_view: a #GtkTreeView
+ * 
+ * Returns whether hover selection mode is turned on for @tree_view.
+ * 
+ * Return value: %TRUE if @tree_view is in hover selection mode
+ *
+ * Since: 2.6 
+ **/
+gboolean 
+gtk_tree_view_get_hover_selection (GtkTreeView *tree_view)
+{
+  return tree_view->priv->hover_selection;
 }

@@ -271,6 +271,7 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
                     G_CALLBACK (gtk_entry_completion_list_button_press),
                     completion);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (priv->tree_view), FALSE);
+  gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (priv->tree_view), TRUE);
 
   sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->tree_view));
   gtk_tree_selection_set_mode (sel, GTK_SELECTION_SINGLE);
@@ -302,6 +303,7 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
                     G_CALLBACK (gtk_entry_completion_action_button_press),
                     completion);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (priv->action_view), FALSE);
+  gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (priv->action_view), TRUE);
 
   sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->action_view));
   gtk_tree_selection_set_mode (sel, GTK_SELECTION_SINGLE);

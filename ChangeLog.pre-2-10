@@ -1,5 +1,16 @@
 2004-05-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_init): 
+	* gtk/gtkcombobox.c (gtk_combo_box_list_setup): Use hover selection
+	mode.  (#127648, Dave Bordoley)
+
+	* gtk/gtktreeview.h:
+	* gtk/gtktreeview.c: Add a new property "hover_selection", which 
+	when TRUE makes the selection follow the mouse. Also add setter
+	and getter for the fixed_height property.
+
+2004-05-10  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcombobox.c (gtk_combo_box_popup) 
 	(gtk_combo_box_menu_button_press): Make sure the menu pops up
 	as wide as the combobox.  (#59660, Havoc Pennington)

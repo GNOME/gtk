@@ -313,6 +313,12 @@ void gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,
 					   gpointer                 data,
 					   GtkDestroyNotify         destroy);
 
+void     gtk_tree_view_set_fixed_height_mode (GtkTreeView          *tree_view,
+					      gboolean              hover);
+gboolean gtk_tree_view_get_fixed_height_mode (GtkTreeView          *tree_view);
+void     gtk_tree_view_set_hover_selection   (GtkTreeView          *tree_view,
+					      gboolean              hover);
+gboolean gtk_tree_view_get_hover_selection   (GtkTreeView          *tree_view);
 
 #ifdef __cplusplus
 }
