@@ -1,13 +1,13 @@
-# Japanese translation table of GTK+ 1.1
-# Copyright (C) YEAR Free Software Foundation, Inc.
+# Japanese translation table of GTK+ 1.2
+# Copyright (C) 1998 Free Software Foundation, Inc.
 # Yasuhiro SHIRASAKI <yasuhiro@awa.tohoku.ac.jp>, 1998.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.7\n"
+"Project-Id-Version: gtk+ 1.2.0\n"
 "POT-Creation-Date: 1999-02-25 05:04-0600\n"
-"PO-Revision-Date: 1998-12-16 15:18+0900\n"
+"PO-Revision-Date: 1999-03-10 17:00+0900\n"
 "Last-Translator: 白崎 泰弘 <yasuhiro@awa.tohoku.ac.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -80,11 +80,11 @@ msgstr "ディレクトリ作成"
 
 #: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:920
 msgid "Delete File"
-msgstr "ディレクトリ削除"
+msgstr "ファイル削除"
 
 #: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1024
 msgid "Rename File"
-msgstr "ファイル削除"
+msgstr "ファイル名変更"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -124,9 +124,8 @@ msgid "Rename"
 msgstr "名前変更"
 
 #: gtk/gtkfilesel.c:1440
-#, fuzzy
 msgid "Selection: "
-msgstr "フォント選択"
+msgstr "選択: "
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"
@@ -246,7 +245,7 @@ msgstr "実際のフォント名:"
 #: gtk/gtkfontsel.c:771
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr "%i 個のフォントが有効です。(%i スタイル)"
+msgstr "全 %i スタイルに対し %i 個のフォントが有効です。"
 
 #: gtk/gtkfontsel.c:786
 msgid "Filter"
@@ -384,7 +383,7 @@ msgstr "ウィンドウ"
 
 #: gtk/gtkinputdialog.c:277
 msgid "Mode: "
-msgstr "モード:"
+msgstr "モード: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
