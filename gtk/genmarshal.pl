@@ -54,7 +54,7 @@ while(chomp($aline = <IL>)) {
     .$retval."__".join("_",@params).")(GtkObject *object, ";
 
   $argn = 1;
-  foreach $it(@params) { print OS $trans{$it}." arg".$argn++.",\n"; }
+  foreach $it(@params) { if($it ne "NONE") {print OS $trans{$it}." arg".$argn++.",\n"; } }
   print OS "gpointer user_data);\n";
 
   print OS "void gtk_marshal_".$retval."__".join("_",@params)."(GtkObject *object, GtkSignalFunc func, gpointer func_data, GtkArg *args)\n";
@@ -71,6 +71,7 @@ while(chomp($aline = <IL>)) {
 
   print OS "(* rfunc)(object, ";
   for($i = 0; $i < (scalar @params); $i++) {
+    ($params[$i] eq "NONE") && next;
     print OS "GTK_VALUE_".$params[$i]."(args[$i]), ";
   }
 
