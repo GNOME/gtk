@@ -1,3 +1,7 @@
+Tue Nov 14 11:51:26 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am: Add -avoid-version for all modules.
+
 2000-11-13  Havoc Pennington  <hp@redhat.com>
 
 	* io-png.c (png_simple_error_callback): fix error message to not
