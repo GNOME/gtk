@@ -8,15 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
-"PO-Revision-Date: 2004-08-16 17:55+0530\n"
+"POT-Creation-Date: 2004-09-16 04:09+0200\n"
+"PO-Revision-Date: 2004-09-16 13:29+0530\n"
 "Last-Translator: Jayaradha N <jaya@pune.redhat.com>\n"
 "Language-Team: Tamil <zhakanini@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.3.1\n"
-"Plural-Forms: Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=(n != 1);\n\n"
 "\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:779
@@ -33,8 +33,7 @@ msgstr "'%s' உருவக் கோப்பில் தரவு ஏது�
 #: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
 #: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "'%s' உருவக் கோப்பை ஏற்ற முடியவில்லை: காரணம் தெரியாது, ஊழலாக்கபட்ட உருவக் கோப்பாக "
 "இருக்கலாம்"
@@ -260,12 +259,12 @@ msgstr "GIF உருவம் துணிக்கப்பட்டது அ
 msgid "The GIF image format"
 msgstr "GIF உருவ வகை"
 
-#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
-#: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:403 gdk-pixbuf/io-ico.c:433
 msgid "Not enough memory to load icon"
 msgstr "குறைவான நினைவகத்தினால் குறும்படத்தை ஏற்ற முடியாது"
 
-#: gdk-pixbuf/io-ico.c:256
+#: gdk-pixbuf/io-ico.c:256 gdk-pixbuf/io-ico.c:330
 msgid "Invalid header in icon"
 msgstr "குறும்படத்தில் செல்லுபடியாகாத தலைப்பு"
 
@@ -277,32 +276,32 @@ msgstr "குறும்படத்தின் அகலம் 0"
 msgid "Icon has zero height"
 msgstr "குறும்படத்தின் உயரம் 0"
 
-#: gdk-pixbuf/io-ico.c:347
+#: gdk-pixbuf/io-ico.c:355
 msgid "Compressed icons are not supported"
 msgstr "சுருக்கப்பட்ட குறும்பட வகைக்கு ஆதரவளிப்பு கிடையாது"
 
-#: gdk-pixbuf/io-ico.c:380
+#: gdk-pixbuf/io-ico.c:388
 msgid "Unsupported icon type"
 msgstr "குறும்படத்திற்கு ஆதரவு கிடையாது"
 
-#: gdk-pixbuf/io-ico.c:474
+#: gdk-pixbuf/io-ico.c:482
 msgid "Not enough memory to load ICO file"
 msgstr "ICO கோப்பை ஏற்றுவதற்கு நினைவகம் போதாது"
 
-#: gdk-pixbuf/io-ico.c:939
+#: gdk-pixbuf/io-ico.c:947
 msgid "Image too large to be saved as ICO"
 msgstr "ICO வகையாக சேமிக் உருவ அளவு பெரியது"
 
-#: gdk-pixbuf/io-ico.c:950
+#: gdk-pixbuf/io-ico.c:958
 msgid "Cursor hotspot outside image"
 msgstr "கர்சர் படத்திற்கு வெளியில் உள்ளது"
 
-#: gdk-pixbuf/io-ico.c:973
+#: gdk-pixbuf/io-ico.c:981
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "ICO கோப்பில் ஆதரவில்லாத ஆழம்: %d"
 
-#: gdk-pixbuf/io-ico.c:1202
+#: gdk-pixbuf/io-ico.c:1210
 msgid "The ICO image format"
 msgstr "ICO உருவடிவ வகை"
 
@@ -322,26 +321,24 @@ msgstr "உருவத்தை ஏற்றுவதற்கு நினை�
 msgid "Unsupported JPEG color space (%s)"
 msgstr "ஆதரவில்லாத JPEG வண்ண இடம் (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
-#: gdk-pixbuf/io-jpeg.c:950
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:943
+#: gdk-pixbuf/io-jpeg.c:952
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG கோப்பை ஏற்றுவதற்கு நினைவகத்தை ஒதுக்கீடு செய்ய முடியவில்லை"
 
-#: gdk-pixbuf/io-jpeg.c:893
+#: gdk-pixbuf/io-jpeg.c:894
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr "JPEG தரம் 0 க்கும் 100 இடையில் இருக்க வேண்டும்; '%s' அலகிட முடியவில்லை."
 
-#: gdk-pixbuf/io-jpeg.c:908
+#: gdk-pixbuf/io-jpeg.c:909
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"JPEG தரம் 0 க்கும் 100 இடையில் இருக்க வேண்டும்; '%d' மதிப்பிக்கு அனுமதி கிடையாது."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr "JPEG தரம் 0 க்கும் 100 இடையில் இருக்க வேண்டும்; '%d' மதிப்பிக்கு அனுமதி கிடையாது."
 
-#: gdk-pixbuf/io-jpeg.c:1069
+#: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
 msgstr "JPEG உருவடிவ வகை"
 
@@ -438,8 +435,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG உருவக் கோப்பை ஏற்றும்போது கொல் பிழை: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG உரைக்கான விசை 1 லிருந்து 79 எழுத்துக்களுக்குள் இருக்க வேண்டும்"
 
 #: gdk-pixbuf/io-png.c:821
@@ -448,8 +444,7 @@ msgstr "PNG உரைக்கான ஆஸ்கி எழுத்துக்
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid ""
-"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr "PNG உரை %s மதிப்பை ISO-8859-1 குறியீடாக மாற்ற முடியாது "
 
 #: gdk-pixbuf/io-png.c:994
@@ -695,26 +690,30 @@ msgid "XPM file has image height <= 0"
 msgstr "XPM கோப்பில் உல்ல உருவ உயரம் <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1253
-msgid "XPM file has invalid number of colors"
-msgstr "XPM கோப்பில் உள்ள நிறங்களின் எண்ணிக்கை செல்லாது"
-
-#: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM உருவத்தில் ஒரு பிக்செலில் தவறுதலான உரு எண்ணிக்கை"
 
-#: gdk-pixbuf/io-xpm.c:1279
+#: gdk-pixbuf/io-xpm.c:1260
+msgid "XPM file has invalid number of colors"
+msgstr "XPM கோப்பில் உள்ள நிறங்களின் எண்ணிக்கை செல்லாது"
+
+#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281
+msgid "Cannot allocate memory for loading XPM image"
+msgstr "XPM பிம்பத்தை ஏற்றுவதற்கு நினைவகத்தை ஒதுக்க முடியாது"
+
+#: gdk-pixbuf/io-xpm.c:1295
 msgid "Can't read XPM colormap"
 msgstr "XPM வண்ண-விவரப் படம் வாசிக்கமுடியவில்லை"
 
-#: gdk-pixbuf/io-xpm.c:1317
+#: gdk-pixbuf/io-xpm.c:1333
 msgid "Can't allocate memory for loading XPM image"
 msgstr "XBM உருவத்தை ஏற்றுவதற்கு நினைவகத்தை ஒதுக்கீட முடியாது"
 
-#: gdk-pixbuf/io-xpm.c:1508
+#: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "XPM உருவத்தை ஏற்றும்போது, தற்காலிகமான கோப்பிற்கு எழுத முடியவில்லை"
 
-#: gdk-pixbuf/io-xpm.c:1543
+#: gdk-pixbuf/io-xpm.c:1559
 msgid "The XPM image format"
 msgstr "XPM உருவடிவ வகை"
 
@@ -1167,8 +1166,7 @@ msgstr "கோப்பின் _பெயரை மாற்றுக"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" அடைவு பெயரில் கோப்பு பெயர்களில் அநுமதிக்கமுடியாத குறியீடுகள் உள்ளன"
 
 #: gtk/gtkfilesel.c:1441
@@ -1954,3 +1952,4 @@ msgstr "X உள்ளீட்டு முறை"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' கோப்பின் தகவல் பெற முடியவில்லை: %s"
+
