@@ -272,6 +272,9 @@ struct _GtkWidgetClass
 				GtkAccelGroup  *accel_group,
 				guint           accel_key,
 				GdkModifierType accel_mods);
+
+  /* explicit focus */
+  void (* grab_focus)          (GtkWidget      *widget);
   
   /* events */
   gint (* event)		   (GtkWidget	       *widget,

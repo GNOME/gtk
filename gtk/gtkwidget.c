@@ -52,6 +52,7 @@ enum {
   STYLE_SET,
   ADD_ACCELERATOR,
   REMOVE_ACCELERATOR,
+  GRAB_FOCUS,
   EVENT,
   BUTTON_PRESS_EVENT,
   BUTTON_RELEASE_EVENT,
@@ -387,6 +388,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[REMOVE_ACCELERATOR] =
     gtk_accel_group_create_remove (object_class->type, GTK_RUN_LAST,
 				   GTK_SIGNAL_OFFSET (GtkWidgetClass, remove_accelerator));
+  widget_signals[GRAB_FOCUS] =
+    gtk_signal_new ("grab_focus",
+		    GTK_RUN_FIRST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, grab_focus),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
   widget_signals[EVENT] =
     gtk_signal_new ("event",
 		    GTK_RUN_LAST,
@@ -721,6 +729,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->style_set = gtk_widget_style_set;
   klass->add_accelerator = (void*) gtk_accel_group_handle_add;
   klass->remove_accelerator = (void*) gtk_accel_group_handle_remove;
+  klass->grab_focus = gtk_widget_grab_focus;
   klass->event = NULL;
   klass->button_press_event = NULL;
   klass->button_release_event = NULL;
