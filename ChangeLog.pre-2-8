@@ -1,3 +1,9 @@
+Fri Sep  3 14:52:54 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c (clear_area): Fix stupid signedness
+	 problem that was causing background to sometimes
+	 be misaligned.
+
 Fri Sep  3 12:26:33 1999  Owen Taylor  <otaylor@redhat.com>
 
 	[ Fixes pointed out by Ettore Perazzoli <ettore@comm2000.it> ]

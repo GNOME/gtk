@@ -1498,8 +1498,9 @@ clear_focus_area (GtkText *text, gint area_x, gint area_y, gint area_width, gint
   gdk_window_get_size (widget->style->bg_pixmap[GTK_STATE_NORMAL], &width, &height);
   
   gdk_gc_set_ts_origin (text->bg_gc,
-			(- text->first_onscreen_hor_pixel + xthick) % width,
-			(- text->first_onscreen_ver_pixel + ythick) % height);
+			(- (gint)text->first_onscreen_hor_pixel + xthick) % width,
+			(- (gint)text->first_onscreen_ver_pixel + ythick) % height);
+
 
   gdk_draw_rectangle (GTK_WIDGET (text)->window, text->bg_gc, TRUE,
 		      area_x, area_y, area_width, area_height);
@@ -5265,8 +5266,8 @@ clear_area (GtkText *text, GdkRectangle *area)
       gdk_window_get_size (widget->style->bg_pixmap[GTK_STATE_NORMAL], &width, &height);
       
       gdk_gc_set_ts_origin (text->bg_gc,
-			    (- text->first_onscreen_hor_pixel) % width,
-			    (- text->first_onscreen_ver_pixel) % height);
+			    (- (gint)text->first_onscreen_hor_pixel) % width,
+			    (- (gint)text->first_onscreen_ver_pixel) % height);
 
       gdk_draw_rectangle (text->text_area, text->bg_gc, TRUE,
 			  area->x, area->y, area->width, area->height);
