@@ -3873,6 +3873,7 @@ validate_visible_area (GtkTreeView *tree_view)
 	      if (validate_row (tree_view, tree, node, &iter, path))
 		size_changed = TRUE;
 	    }
+
 	  if (tree_view->priv->scroll_to_use_align)
 	    {
 	      gint height = MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size);
@@ -3884,11 +3885,54 @@ validate_visible_area (GtkTreeView *tree_view)
 	    }
 	  else
 	    {
-	      /* FIXME: temporary solution, just validate a complete height
-	       * and all will be fine...
+	      /* two cases:
+	       * 1) row not visible
+	       * 2) row visible
 	       */
-	      area_above = total_height;
-	      area_below = total_height;
+	      gint dy;
+	      gint height = MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size);
+
+	      dy = _gtk_rbtree_node_find_offset (tree, node);
+
+	      if (dy >= tree_view->priv->vadjustment->value &&
+		  dy <= (tree_view->priv->vadjustment->value
+		         + tree_view->priv->vadjustment->page_size))
+	        {
+		  /* row visible: keep the row at the same position */
+		  area_above = dy - tree_view->priv->vadjustment->value;
+		  area_below = (tree_view->priv->vadjustment->value +
+		                tree_view->priv->vadjustment->page_size)
+		               - dy - height;
+		}
+	      else
+	        {
+		  /* row not visible */
+		  if (dy >= 0 && dy <= tree_view->priv->vadjustment->page_size)
+		    {
+		      /* row at the beginning -- fixed */
+		      area_above = dy;
+		      area_below = tree_view->priv->vadjustment->page_size
+				   - dy - height;
+		    }
+		  else if (dy >= (tree_view->priv->vadjustment->upper -
+			          tree_view->priv->vadjustment->page_size)
+		           && dy <= tree_view->priv->vadjustment->upper)
+		    {
+		      /* row at the end -- fixed */
+		      area_above = dy - (tree_view->priv->vadjustment->upper -
+			           tree_view->priv->vadjustment->page_size);
+		      area_below = tree_view->priv->vadjustment->upper -
+			           dy - height;
+		    }
+		  else
+		    {
+		      /* row somewhere in the middle, bring it to the top
+		       * of the view
+		       */
+		      area_above = 0;
+		      area_above = total_height - height;
+		    }
+		}
 	    }
 	}
       else
@@ -4049,6 +4093,7 @@ validate_visible_area (GtkTreeView *tree_view)
   if (size_changed)
     {
       GtkRequisition requisition;
+
       /* We temporarily guess a size, under the assumption that it will be the
        * same when we get our next size_allocate.  If we don't do this, we'll be
        * in an inconsistent state if we call top_row_to_dy. */
@@ -4060,7 +4105,8 @@ validate_visible_area (GtkTreeView *tree_view)
     }
 
   /* if we scroll at all, always update dy and kill the top_row */
-  if (tree_view->priv->scroll_to_path)
+  if (tree_view->priv->scroll_to_path &&
+      ! GTK_RBNODE_FLAG_SET (tree_view->priv->tree->root, GTK_RBNODE_DESCENDANTS_INVALID))
     {
       update_dy = TRUE;
       if (tree_view->priv->top_row)

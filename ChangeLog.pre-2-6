@@ -1,3 +1,20 @@
+Tue Dec 10 01:58:43 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (validate_visible_area): implement a working
+	use_align = FALSE implementation (also mentioned in #91335, reported
+	by Juri Pakaste).
+
+	* gtk/gtktreeview.c (validate_visible_area): only free the
+	scroll_to_path if we are done with validating (fixes #93584, reported
+	and testcase provided by Erik Simonsen).
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
+	set the GTK_CELL_RENDERER_FOCUSED flag where appropriate. (fixes
+	#75745, reported by Richard Hult).
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_get_position):
+	initialize cellinfo to NULL to silence the compiler.
+
 Mon Dec  9 19:31:59 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.c (draw_spinbutton_shadow): Remove

@@ -2482,6 +2482,9 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       if (! info->cell->visible)
 	continue;
 
+      if (info->has_focus)
+	flags |= GTK_CELL_RENDERER_FOCUSED;
+
       real_background_area.width = info->requested_width +
 	(info->expand?extra_space:0);
       info->real_width = real_background_area.width;
@@ -2573,7 +2576,10 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 						  background_area,
 						  cell_area,
 						  flags))
-		    return TRUE;
+		    {
+                      flags &= ~GTK_CELL_RENDERER_FOCUSED;
+		      return TRUE;
+		    }
 		}
 	      else if (visible && mode == GTK_CELL_RENDERER_MODE_EDITABLE)
 		{
@@ -2592,11 +2598,15 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 		      info->in_editing_mode = TRUE;
 		      gtk_tree_view_column_focus_cell (tree_column, info->cell);
 		      
+                      flags &= ~GTK_CELL_RENDERER_FOCUSED;
+
 		      return TRUE;
 		    }
 		}
 	    }
 	}
+
+      flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
       real_cell_area.x += (info->real_width + tree_column->spacing);
       real_background_area.x += (info->real_width + tree_column->spacing);
@@ -2612,6 +2622,9 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 
       if (! info->cell->visible)
 	continue;
+
+      if (info->has_focus)
+	flags |= GTK_CELL_RENDERER_FOCUSED;
 
       real_background_area.width = info->requested_width +
 	(info->expand?extra_space:0);
@@ -2704,7 +2717,10 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 						  background_area,
 						  cell_area,
 						  flags))
-		    return TRUE;
+		    {
+		      flags &= ~GTK_CELL_RENDERER_FOCUSED;
+		      return TRUE;
+		    }
 		}
 	      else if (visible && mode == GTK_CELL_RENDERER_MODE_EDITABLE)
 	        {
@@ -2723,11 +2739,14 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 		      info->in_editing_mode = TRUE;
 		      gtk_tree_view_column_focus_cell (tree_column, info->cell);
 
+		      flags &= ~GTK_CELL_RENDERER_FOCUSED;
 		      return TRUE;
 		    }
 		}
 	    }
 	}
+
+      flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
       real_cell_area.x += (info->real_width + tree_column->spacing);
       real_background_area.x += (info->real_width + tree_column->spacing);
@@ -3279,7 +3298,7 @@ gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
   GList *list;
   gint current_x = 0;
   gboolean found_cell = FALSE;
-  GtkTreeViewColumnCellInfo *cellinfo;
+  GtkTreeViewColumnCellInfo *cellinfo = NULL;
 
   list = gtk_tree_view_column_cell_first (tree_column);
   for (; list; list = gtk_tree_view_column_cell_next (tree_column, list))
