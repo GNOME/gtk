@@ -27,13 +27,16 @@
 
   <toc></toc>
 
-<!-- ***************************************************************** -->
+  <!-- ***************************************************************** -->
   <chapter>
     <title>General Information</title>
     <para>Here's a paragraph of text because it is stylistically poor
     to start a section right after the chapter title.</para>
     <sect1>
       <title></title>
+
+      <!-- ----------------------------------------------------------------- -->
+
       <sect2>
 	<title>Before anything else: the greetings</title>
 	<para>The FAQ authors want to thank:</para>
@@ -265,8 +268,43 @@
 
       <sect2>
 	<title>What applications have been written with GTK+?</title>
-	<para></para>
-      </sect2>
+	<para>A list of some GTK+ based application can be found on
+	the GTK+ web server at <ulink
+	url="http://www.gtk.org/apps/">http://www.gtk.org/apps/</ulink>
+	and contains more than 350 applications.</para>
+	<para>Failing that, look for a project to work on for the
+	GNOME project, <ulink
+	url="http://www.gnome.org/">http://www.gnome.org/</ulink>
+	Write a game. Write something that is useful.</para>
+	<para>Some of these are:</para>
+
+	<itemizedlist>
+	  <listitem><simpara> GIMP (<ulink
+	  url="http://www.gimp.org/">http://www.gimp.org/</ulink>), an
+	  image manipulation program</simpara>
+	  </listitem>
+	  <listitem><simpara> AbiWord (<ulink
+	  url="http://www.abisource.com/">http://www.abisource.com/</ulink>),
+	  a professional word processor</simpara>
+	  </listitem>
+	  <listitem><simpara> Gzilla (<ulink
+	  url="http://www.levien.com/gzilla/">http://www.levien.com/gzilla/</ulink>),
+	  a web browser</simpara>
+	  </listitem>
+	  <listitem><simpara> XQF (<ulink
+	  url="http://www.botik.ru/~roma/quake/">http://www.botik.ru/~roma/quake/</ulink>),
+	  a QuakeWorld/Quake2 server browser and launcher</simpara>
+	  </listitem>
+	  <listitem><simpara> GDK Imlib (<ulink
+	  url="http://www.rasterman.com/imlib.html">http://www.rasterman.com/imlib.html</ulink>),
+	  a fast image loading and manipulation library for GDK</simpara>
+	  </listitem>
+	  <listitem><simpara> Glade (<ulink
+	  url="http://glade.pn.org/">http://glade.pn.org/</ulink>), a
+	  GTK+ based RAD tool which produces GTK+ applications</simpara>
+	  </listitem>
+	</itemizedlist>
+       </sect2>
 
       <!-- ----------------------------------------------------------------- -->
 
@@ -287,20 +325,207 @@
 	  </listitem>
 	</itemizedlist>
       </sect2>
+    </sect1>
+  </chapter>
 
+  <!-- ***************************************************************** -->
+  <chapter>
+    <title>How to find, configure, install, and troubleshoot GTK+</title>
+    <sect1>
+      <title></title>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>What do I need to run GTK+?</title>
+	<para>To compile GTK+, all you need is a C compiler (gcc) and
+	the X Window System and associated libraries on your system.</para>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>Where can I get GTK+?</title>
+	<para>The canonical site is <ulink
+	url="ftp://ftp.gtk.org/pub/gtk">ftp://ftp.gtk.org/pub/gtk</ulink>.</para>
+	<para>This site tends to get busy around the time of a new
+	GTK+ release so try and use one of the mirror sites that are
+	listed in <ulink
+	url="ftp://ftp.gtk.org/etc/mirrors">ftp://ftp.gtk.org/etc/mirrors</ulink></para>
+	<para>Here's a few mirror sites to get you started:</para>
+
+	<itemizedlist spacing=compact>
+	  <listitem><simpara> Africa - ftp://ftp.is.co.za/applications/gimp/</simpara>
+	  </listitem>
+	  <listitem><simpara> Australia - ftp://ftp.au.gimp.org/pub/gimp/</simpara>
+	  </listitem>
+	  <listitem><simpara> Finland - ftp://ftp.funet.fi/pub/sci/graphics/packages/gimp</simpara>
+	  </listitem>
+	  <listitem><simpara> Germany - ftp://infosoc.uni-koeln.de/pub/ftp.gimp.org/</simpara>
+	  </listitem>
+	  <listitem><simpara> Japan - ftp://SunSITE.sut.ac.jp/pub/archives/packages/gimp/</simpara>
+	  </listitem>
+	  <listitem><simpara> UK - ftp://ftp.flirble.org/pub/X/gimp/</simpara>
+	  </listitem>
+	  <listitem><simpara> US - ftp://ftp.insync.net/pub/mirrors/ftp.gimp.org/</simpara>
+	  </listitem>
+	</itemizedlist>
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I configure/compile GTK+?</title>
+	<para>Generally, all you will need to do is issue the commands:</para>
+
+	<para><literallayout><literal>./configure</literal>
+	<literal>make</literal></literallayout></para>
+
+	<para>in the gtk+-version/ directory.</para>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>When compiling GTK+ I get an error like: <literal>make:
+	file `Makefile' line 456: Syntax error</literal></title>
+	<para>Make sure that you are using GNU make (use <literal>make
+	-v</literal>
+	to check). There are many weird and wonderful versions of make
+	out there, and not all of them handle the automatically
+	generated Makefiles.</para>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>I've compiled and installed GTK+, but I can't get any
+	programs to link with it!</title>
+	<para>This problem is most often encountered when the GTK+
+	libraries can't be  found or are the wrong version. Generally,
+	the compiler will complain about an 'unresolved symbol'.
+	There are two things you need to check:</para>
+
+	<itemizedlist>
+	  <listitem><simpara>Make sure that the libraries can be
+ found. You want to edit <filename>/etc/ld.so.conf</filename> to
+ include the directories which contain the GTK libraries,
+ so it looks something like:</simpara>
+ 	<para><literallayout><literal>/usr/X11R6/lib</literal>
+	<literal>/usr/local/lib</literal></literallayout></para>
+
+	    <para>Then you need to run /sbin/ldconfig as root. You can
+	    find what directory GTK is in using</para>
+
+ 	<para><literallayout><literal>gtk-config --libs</literal>
+	</literallayout></para>
+
+	    <para>If your system doesn't use ld.so to find libraries
+(such as Solaris), then you will have to use the LD_LIBRARY_PATH
+environment variable (or compile the path into your program, which I'm
+not going to cover here). So, with a Bourne type shell you can do (if
+your GTK libraries are in /usr/local/lib):</para>
+
+	    <para><literallayout><literal>export LD_LIBRARY_PATH=/usr/local/lib</literal></literallayout></para>
+
+	    <para>and in a csh, you can do:</para>
+
+	    <para><literallayout><literal>setenv LD_LIBRARY_PATH /usr/local/lib</literal></literallayout></para>
+
+	  </listitem>
+	  <listitem><simpara>Make sure the linker is finding the
+correct set of libraries. If you have a Linux distribution that
+installs GTK+ (e.g. RedHat 5.0) then this  older version may be
+used. Now (assuming you have a RedHat system), issue the
+command</simpara>
+
+	    <para><literallayout><literal>rpm -e gtk gtk-devel</literal></literallayout></para>
+	 
+	    <para>You may also want to remove the packages that depend
+on gtk (rpm will tell you which ones they are).  If you don't have a RedHat Linux system, check to make sure
+that neither <filename>/usr/lib</filename> or <filename>/usr/local/lib</filename> contain any of
+the libraries libgtk, libgdk, libglib, or libgck.  If they do exist, remove them
+(and any gtk include files, such as <filename>/usr/include/gtk</filename> and <filename>/usr/include/gdk</filename>) 
+and reinstall gtk+.</para>
+	  </listitem>
+	    
+	</itemizedlist>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>When compiling programs with GTK+, I get compiler error
+	messages about not being able to find
+	<literal>glibconfig.h</literal>.</title>
+	<para>The header file "glibconfig.h" was moved to the
+	directory $exec_prefix/lib/glib/include/. $exec_prefix is the
+	directory that was specified by giving the --exec-prefix flags
+	to ./configure when compiling GTK+. It defaults to  $prefix,
+	(specified with --prefix), which in turn defaults to /usr/local/.</para>
+
+	<para>This was done because "glibconfig.h" includes
+	architecture dependent information, and the rest of the
+	include files are put in $prefix/include, which can be shared
+	between different architectures.</para>
+
+	<para>GTK+ includes a shell script, <literal>/gtk-config/</literal>, that makes it
+	easy to find out the correct include paths. The GTK+ Tutorial
+	includes an example of using <literal>/gtk-config/</literal> for simple
+	compilation from the command line. For information about more
+	complicated configuration, see the file docs/gtk-config.txt in
+	the GTK+ distribution.</para>
+
+	<para>If you are trying to compile an old program, you may be
+	able to work around the problem by configuring it with a
+	command line like:</para>
+
+	<para><literallayout><literal>setenv CPPFLAGS "-I/usr/local/include/glib/include"</literal>
+<literal>./configure</literal></literallayout></para>
+
+	<para>(Substitute the appropriate value of $exec_prefix for
+	/usr/local.)</para>
+      </sect2>
+
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>When installing a GTK+ application, configure reports
+	that it can't find GTK.</title>
+	<para>There are several common reasons for this:</para>
+	<itemizedlist>
+	  <listitem><simpara>You have an old version of GTK installed
+          somewhere. RedHat 5.0, for example, installs an older copy of GTK that
+          may not work with the latest applications. You should remove this old
+          copy, but note that in the case of RedHat 5.0 this will
+          break the <literal>control-panel</literal> applications.</simpara>
+	  </listitem>
+	  <listitem><simpara><literal>gtk-config</literal> (or another
+	component of GTK) isn't in your path, or there is an old
+	version on your system. Type:</simpara>
+	<para><literallayout><literal>gtk-config --version</literal></literallayout></para>
+
+	    <para>to check for both of these. If it returns a value
+	    different from what you expect, then you have an old
+	    version of GTK on your system.</para>
+	  </listitem>
+	  <listitem><simpara>The ./configure script can't find the GTK
+          libraries. As ./configure compiles various test programs, it needs to
+          be able to find the GTK libraries. See the question above
+          for help on this. </simpara></listitem>
+	</itemizedlist>
+
+	<para>If none of the above help, then have a look in
+        config.log, which is generated by ./configure as it runs. At the
+        bottom will be the last action it took before failing. If it is a
+        section of source code, copy the source code to a file and compile it
+        with the line just above it in config.log. If the compilation is
+        successful, try executing it.</para>
+      </sect2>
 
     </sect1>
   </chapter>
+
   <!-- ----------------------------------------------------------------- -->
 
-  <appendix>
-    <title>Remaining details</title>
-    <para>Although this booklet is quite complete, here I will
-mention some details I never got to.</para>
-    <sect1>
-      <title>Use of the word dude</title>
-      <para>Here's an example of how to say
-<emphasis>dude</emphasis>: DUDE.</para>
-    </sect1>
-  </appendix>
 </book>

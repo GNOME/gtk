@@ -1,3 +1,7 @@
+Thu Jun 22 13:41:09 BST 2000  Tony Gale <gale@gtk.org>
+
+	* docs/gtk-faq.sgm: Add Section 2
+
 Thu Jun 22 08:43:45 BST 2000  Tony Gale <gale@gtk.org>
 
 	* docs/gtk-faq.sgm: New file. Start of DocBook
