@@ -1032,12 +1032,12 @@ gtk_tree_view_column_new (void)
  * gtk_tree_view_column_new_with_attributes:
  * @title: The title to set the header to.
  * @cell: The #GtkCellRenderer.
- * @Varargs: A NULL terminated list of attributes.
+ * @Varargs: A %NULL-terminated list of attributes.
  * 
  * Creates a new #GtkTreeViewColumn with a number of default values.  This is
- * equivalent to calling @gtk_tree_view_column_set_title,
- * @gtk_tree_view_column_pack_start, and
- * @gtk_tree_view_column_set_attributes on the newly created #GtkTreeViewColumn.
+ * equivalent to calling gtk_tree_view_column_set_title(),
+ * gtk_tree_view_column_pack_start(), and
+ * gtk_tree_view_column_set_attributes() on the newly created #GtkTreeViewColumn.
  * 
  * Return value: A newly created #GtkTreeViewColumn.
  **/
@@ -1076,8 +1076,8 @@ gtk_tree_view_column_get_cell_info (GtkTreeViewColumn *tree_column,
 /**
  * gtk_tree_view_column_pack_start:
  * @tree_column: A #GtkTreeViewColumn.
- * @cell: The #GtkCellRenderer, 
- * @expand: TRUE if @cell is to be given extra space allocated to box.
+ * @cell: The #GtkCellRenderer. 
+ * @expand: %TRUE if @cell is to be given extra space allocated to box.
  * 
  **/
 void
@@ -1158,8 +1158,8 @@ gtk_tree_view_column_clear (GtkTreeViewColumn *tree_column)
  * gtk_tree_view_column_get_cell_renderers:
  * @tree_column: A #GtkTreeViewColumn
  * 
- * Returns a newly allocated #GList of all the cell renderers in the column, in no
- * particular order.  The list must be freed with g_list_free()
+ * Returns a newly-allocated #GList of all the cell renderers in the column, 
+ * in no particular order.  The list must be freed with g_list_free().
  * 
  * Return value: A list of #GtkCellRenderers
  **/
@@ -1238,11 +1238,11 @@ gtk_tree_view_column_set_attributesv (GtkTreeViewColumn *tree_column,
  * gtk_tree_view_column_set_attributes:
  * @tree_column: A #GtkTreeViewColumn.
  * @cell_renderer: the #GtkCellRenderer we're setting the attributes of
- * @Varargs: A NULL terminated listing of attributes.
+ * @Varargs: A %NULL-terminated list of attributes.
  * 
  * Sets the attributes in the list as the attributes of @tree_column.
  * The attributes should be in attribute/column order, as in
- * @gtk_tree_view_column_add_attribute. All existing attributes
+ * gtk_tree_view_column_add_attribute(). All existing attributes
  * are removed, and replaced with the new attributes.
  **/
 void
@@ -1273,7 +1273,7 @@ gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
  * Sets the #GtkTreeViewColumnFunc to use for the column.  This
  * function is used instead of the standard attributes mapping for
  * setting the column value, and should set the value of @tree_column's
- * cell renderer as appropriate.  @func may be NULL to remove an
+ * cell renderer as appropriate.  @func may be %NULL to remove an
  * older one.
  **/
 void
@@ -1311,7 +1311,7 @@ gtk_tree_view_column_set_cell_data_func (GtkTreeViewColumn   *tree_column,
 /**
  * gtk_tree_view_column_clear_attributes:
  * @tree_column: a #GtkTreeViewColumn
- *@cell_renderer: a #GtkCellRenderer to clear the attribute mapping on.
+ * @cell_renderer: a #GtkCellRenderer to clear the attribute mapping on.
  * 
  * Clears all existing attributes previously set with
  * gtk_tree_view_column_set_attributes().
@@ -1370,6 +1370,8 @@ gtk_tree_view_column_set_spacing (GtkTreeViewColumn *tree_column,
  * @tree_column: A #GtkTreeViewColumn.
  * 
  * Returns the spacing of @tree_column.
+ * 
+ * Return value: the spacing of @tree_column.
  **/
 gint
 gtk_tree_view_column_get_spacing (GtkTreeViewColumn *tree_column)
@@ -1384,7 +1386,7 @@ gtk_tree_view_column_get_spacing (GtkTreeViewColumn *tree_column)
 /**
  * gtk_tree_view_column_set_visible:
  * @tree_column: A #GtkTreeViewColumn.
- * @visible: TRUE if the @tree_column is visible.
+ * @visible: %TRUE if the @tree_column is visible.
  * 
  * Sets the visibility of @tree_column.
  **/
@@ -1409,7 +1411,7 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
  * gtk_tree_view_column_get_visible:
  * @tree_column: A #GtkTreeViewColumn.
  * 
- * Returns TRUE if @tree_column is visible.
+ * Returns %TRUE if @tree_column is visible.
  * 
  * Return value: whether the column is visible or not.  If it is visible, then
  * the tree will show the column.
@@ -1508,9 +1510,9 @@ gtk_tree_view_column_get_sizing (GtkTreeViewColumn *tree_column)
  * gtk_tree_view_column_get_width:
  * @tree_column: A #GtkTreeViewColumn.
  * 
- * Returns the current size of the @tree_column in pixels.
+ * Returns the current size of @tree_column in pixels.
  * 
- * Return value: The current width of the @tree_column.
+ * Return value: The current width of @tree_column.
  **/
 gint
 gtk_tree_view_column_get_width (GtkTreeViewColumn *tree_column)
@@ -1523,7 +1525,7 @@ gtk_tree_view_column_get_width (GtkTreeViewColumn *tree_column)
 /**
  * gtk_tree_view_column_set_fixed_width:
  * @tree_column: A #GtkTreeViewColumn.
- * @fixed_width: The size to set the @tree_column to. Must be greater than 0.
+ * @fixed_width: The size to set @tree_column to. Must be greater than 0.
  * 
  * Sets the size of the column in pixels.  This is meaningful only if the sizing
  * type is #GTK_TREE_VIEW_COLUMN_FIXED.  In this case, the value is discarded
@@ -1734,9 +1736,9 @@ gtk_tree_view_column_get_title (GtkTreeViewColumn *tree_column)
 /**
  * gtk_tree_view_column_set_clickable:
  * @tree_column: A #GtkTreeViewColumn.
- * @clickable: TRUE if the header is active.
+ * @clickable: %TRUE if the header is active.
  * 
- * Sets the header to be active if @active is TRUE.  When the header is active,
+ * Sets the header to be active if @active is %TRUE.  When the header is active,
  * then it can take keyboard focus, and can be clicked.
  **/
 void
@@ -1760,7 +1762,7 @@ gtk_tree_view_column_set_clickable (GtkTreeViewColumn *tree_column,
  * 
  * Returns %TRUE if the user can click on the header for the column.
  * 
- * Return value: TRUE if user can click the column header
+ * Return value: %TRUE if user can click the column header.
  **/
 gboolean
 gtk_tree_view_column_get_clickable (GtkTreeViewColumn *tree_column)
@@ -1773,9 +1775,9 @@ gtk_tree_view_column_get_clickable (GtkTreeViewColumn *tree_column)
 /**
  * gtk_tree_view_column_set_widget:
  * @tree_column: A #GtkTreeViewColumn.
- * @widget: A child #GtkWidget, or NULL.
+ * @widget: A child #GtkWidget, or %NULL.
  * 
- * Sets the widget in the header to be @widget.  If widget is NULL, then the
+ * Sets the widget in the header to be @widget.  If widget is %NULL, then the
  * header button is set with a #GtkLabel set to the title of @tree_column.
  **/
 void
@@ -1888,10 +1890,10 @@ gtk_tree_view_column_get_reorderable (GtkTreeViewColumn *tree_column)
 /**
  * gtk_tree_view_column_set_sort_column_id:
  * @tree_column: a #GtkTreeViewColumn
- * @sort_column_id: The sort_column_id of the model to sort on.
+ * @sort_column_id: The @sort_column_id of the model to sort on.
  * 
- * Sets the logical sort_column_id that this column sorts on when this column is
- * selected for sorting.  Doing so makes the column header clickable.
+ * Sets the logical @sort_column_id that this column sorts on when this column 
+ * is selected for sorting.  Doing so makes the column header clickable.
  **/
 void
 gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
@@ -1940,10 +1942,10 @@ gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
  * gtk_tree_view_column_get_sort_column_id:
  * @tree_column: a #GtkTreeViewColumn
  *
- * Gets the logical sort_column_id that the model sorts on when this
- * coumn is selected for sorting. See gtk_tree_view_column_set_sort_column_id().
+ * Gets the logical @sort_column_id that the model sorts on when this
+ * column is selected for sorting. See gtk_tree_view_column_set_sort_column_id().
  *
- * Return value: the current sort_column_id for this column, or -1 if
+ * Return value: the current @sort_column_id for this column, or -1 if
  *               this column can't be used for sorting.
  **/
 gint
@@ -2049,13 +2051,13 @@ gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn     *tree_column)
  * @tree_column: A #GtkTreeViewColumn.
  * @tree_model: The #GtkTreeModel to to get the cell renderers attributes from.
  * @iter: The #GtkTreeIter to to get the cell renderer's attributes from.
- * @is_expander: TRUE, if the row has children
- * @is_expanded: TRUE, if the row has visible children
+ * @is_expander: %TRUE, if the row has children
+ * @is_expanded: %TRUE, if the row has visible children
  * 
  * Sets the cell renderer based on the @tree_model and @tree_node.  That is, for
  * every attribute mapping in @tree_column, it will get a value from the set
  * column on the @tree_node, and use that value to set the attribute on the cell
- * renderer.  This is used primarily by the GtkTreeView.
+ * renderer.  This is used primarily by the #GtkTreeView.
  **/
 void
 gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
@@ -2111,7 +2113,7 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
  * @height: location to return height needed to render a cell, or %NULL
  * 
  * Obtains the width and height needed to render the column.  This is used
- * primarily by the GtkTreeView.
+ * primarily by the #GtkTreeView.
  **/
 void
 gtk_tree_view_column_cell_get_size (GtkTreeViewColumn *tree_column,
@@ -2301,7 +2303,7 @@ gtk_tree_view_column_cell_render_or_focus (GtkTreeViewColumn *tree_column,
  * @flags: flags that affect rendering
  * 
  * Renders the cell contained by #tree_column. This is used primarily by the
- * GtkTreeView.
+ * #GtkTreeView.
  **/
 void
 gtk_tree_view_column_cell_render (GtkTreeViewColumn *tree_column,

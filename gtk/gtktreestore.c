@@ -345,12 +345,12 @@ gtk_tree_store_newv (gint   n_columns,
  * gtk_tree_store_set_column_types:
  * @tree_store: A #GtkTreeStore
  * @n_columns: Number of columns for the tree store
- * @types: An array length n of @GTypes
+ * @types: An array of #GType types, one for each column
  * 
- * This function is meant primarily for GObjects that inherit from GtkTreeStore,
- * and should only be used when constructing a new @GtkTreeStore.  It will not
- * function after a row has been added, or a method on the @GtkTreeModel
- * interface is called.
+ * This function is meant primarily for #GObjects that inherit from 
+ * #GtkTreeStore, and should only be used when constructing a new 
+ * #GtkTreeStore.  It will not function after a row has been added, 
+ * or a method on the #GtkTreeModel interface is called.
  **/
 void
 gtk_tree_store_set_column_types (GtkTreeStore *tree_store,
@@ -893,9 +893,9 @@ gtk_tree_store_set_value (GtkTreeStore *tree_store,
  * gtk_tree_store_set_valist:
  * @tree_store: A #GtkTreeStore
  * @iter: A valid #GtkTreeIter for the row being modified
- * @var_args: va_list of column/value pairs
+ * @var_args: <type>va_list</type> of column/value pairs
  *
- * See gtk_tree_store_set(); this version takes a va_list for
+ * See gtk_tree_store_set(); this version takes a <type>va_list</type> for
  * use by language bindings.
  *
  **/
@@ -965,8 +965,8 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
  * The variable argument list should contain integer column numbers,
  * each column number followed by the value to be set. 
  * The list is terminated by a -1. For example, to set column 0 with type
- * %G_TYPE_STRING to "Foo", you would write <literal>gtk_tree_store_set (store, iter,
- * 0, "Foo", -1)</literal>.
+ * %G_TYPE_STRING to "Foo", you would write 
+ * <literal>gtk_tree_store_set (store, iter, 0, "Foo", -1)</literal>.
  **/
 void
 gtk_tree_store_set (GtkTreeStore *tree_store,
@@ -1391,7 +1391,7 @@ gtk_tree_store_iter_depth (GtkTreeStore *tree_store,
 
 /**
  * gtk_tree_store_clear:
- * @tree_store: @ #GtkTreeStore
+ * @tree_store: a #GtkTreeStore
  * 
  * Removes all rows from @tree_store
  **/

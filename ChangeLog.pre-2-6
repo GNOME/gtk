@@ -1,3 +1,16 @@
+2001-12-08  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkwidget.c: Doc markup fix. 
+
+	* gtk/gtktreeviewcolumn.c: Markup fixes. (#66447)
+
+	* gtk/gtktreestore.c: Typo fixes. (#66445)
+
+	* gtk/gtkaccelgroup.c: Misc doc markup. (#66425) 
+
+	* gtk/gtkclipboard.c (gtk_clipboard_get_owner): Fix reference
+	to gtk_clipboard_set_with_owner(). (#66424)
+ 
 Sat Dec  8 16:12:10 2001  Christopher Blizzard  <blizzard@redhat.com>
 
 	* gdk/gdk.c (gdk_init_check): Fallback to setting the prgname to

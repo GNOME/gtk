@@ -134,7 +134,7 @@ will be informed that the attempt to get the data failed.
                      target from the #GtkTargetEntry array passed to
                      gtk_clipboard_set_with_data() or gtk_clipboard_set_with_owner().
 @user_data_or_owner: the @user_data argument passed to gtk_clipboard_set_with_data(), or
-                     the @owner argument passed to gtk_clipboard_set_owner()
+                     the @owner argument passed to gtk_clipboard_set_with_owner()
 
 
 <!-- ##### USER_FUNCTION GtkClipboardClearFunc ##### -->
@@ -146,7 +146,7 @@ will not be used again.
 
 @clipboard: the #GtkClipboard
 @user_data_or_owner: the @user_data argument passed to gtk_clipboard_set_with_data(), or
-                     the @owner argument passed to gtk_clipboard_set_owner()
+                     the @owner argument passed to gtk_clipboard_set_with_owner()
 
 
 <!-- ##### FUNCTION gtk_clipboard_get ##### -->

@@ -2653,7 +2653,7 @@ gtk_widget_add_accelerator (GtkWidget     *widget,
 }
 
 /**
- * gtk_widget_remove_accelerator
+ * gtk_widget_remove_accelerator:
  * @widget:       widget to install an accelerator on
  * @accel_group:  accel group for this widget
  * @accel_key:    GDK keyval of the accelerator
