@@ -41,13 +41,14 @@ main (int argc, char *argv[])
 					   "border_width", 10,
 					   NULL),
 			   "signal::destroy", gtk_main_quit, NULL, NULL);
-  butt2 = g_object_connect (gtk_widget_new (gtk_button_get_type (),
-					    "GtkButton::label", "hello world",
-					    "GtkWidget::parent", win2,
-					    "GtkWidget::visible", TRUE,
-					    NULL),
-			    "signal::clicked", hello, win2, NULL);
-  window = g_object_connect (gtk_widget_new (gtk_window_get_type (),
+  butt2 = gtk_widget_new (gtk_entry_get_type (),
+			  "activates_default", TRUE,
+			  "visible", TRUE,
+			  "GtkWidget::parent", win2,
+			  "GtkWidget::visible", TRUE,
+			  NULL);
+			 
+ window = g_object_connect (gtk_widget_new (gtk_window_get_type (),
 					     "user_data", NULL,
 					     "type", GTK_WINDOW_TOPLEVEL,
 					     "title", "hello world",
@@ -56,13 +57,12 @@ main (int argc, char *argv[])
 					     "border_width", 10,
 					     NULL),
 			     "signal::destroy", gtk_main_quit, NULL, NULL);
-  button = g_object_connect (gtk_widget_new (gtk_button_get_type (),
-					     "GtkButton::label",
-					     "hello world",
-					     "GtkWidget::parent", window,
-					     "GtkWidget::visible", TRUE,
-					     NULL), "signal::clicked", hello,
-			     window, NULL);
+  button = gtk_widget_new (gtk_entry_get_type (),
+			  "activates_default", TRUE,
+			  "visible", TRUE,
+			  "GtkWidget::parent", window,
+			  "GtkWidget::visible", TRUE,
+			  NULL);
 
   gtk_widget_show (window);
   gtk_widget_show (win2);

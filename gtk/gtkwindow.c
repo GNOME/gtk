@@ -4195,9 +4195,10 @@ gtk_window_move_resize (GtkWindow *window)
   /* Set hints if necessary
    */
   if (hints_changed)
-    gdk_window_set_geometry_hints (widget->window,
-				   &new_geometry,
-				   new_flags);
+    if (widget->window)
+      gdk_window_set_geometry_hints (widget->window,
+				     &new_geometry,
+				     new_flags);
 
   /* handle resizing/moving and widget tree allocation
    */
@@ -4296,9 +4297,10 @@ gtk_window_move_resize (GtkWindow *window)
                                  new_request.width, new_request.height);
 	    }
 	  else
-	    gdk_window_move_resize (widget->window,
-                                    new_request.x, new_request.y,
-                                    new_request.width, new_request.height);
+	    if (widget->window)
+	      gdk_window_move_resize (widget->window,
+				      new_request.x, new_request.y,
+				      new_request.width, new_request.height);
 	}
       else  /* only size changed */
 	{
@@ -4306,8 +4308,9 @@ gtk_window_move_resize (GtkWindow *window)
 	    gdk_window_resize (window->frame,
 			       new_request.width + window->frame_left + window->frame_right,
 			       new_request.height + window->frame_top + window->frame_bottom);
-	  gdk_window_resize (widget->window,
-                             new_request.width, new_request.height);
+	  if (widget->window)
+	    gdk_window_resize (widget->window,
+			       new_request.width, new_request.height);
 	}
       
       /* Increment the number of have-not-yet-received-notify requests */
