@@ -33,7 +33,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <math.h>
 
 /*
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
@@ -571,7 +571,7 @@ handle_mouse_input(MouseDevice *mouse, gboolean got_motion)
 }
 
 static gboolean
-pull_fidmour_packet(MouseDevice *mouse, gboolean *btn_down, int *x, int *y)
+pull_fidmour_packet(MouseDevice *mouse, gboolean *btn_down, gdouble *x, gdouble *y)
 {
   gboolean keep_reading = TRUE;
 
@@ -613,7 +613,7 @@ pull_fidmour_packet(MouseDevice *mouse, gboolean *btn_down, int *x, int *y)
 	}
       else if(mouse->fidmour_nbytes == 5)
 	{
-	  switch(mouse->fidmour_bytes[0] & 0x80)
+	  switch(mouse->fidmour_bytes[0] & 0xF)
 	    {
 	    case 2:
 	      *btn_down = 0;
@@ -622,9 +622,20 @@ pull_fidmour_packet(MouseDevice *mouse, gboolean *btn_down, int *x, int *y)
 	    case 0:
 	      *btn_down = 1;
 	      break;
+	    default:
+	      g_assert_not_reached();
+	      break;
 	    }
-	  *x = (mouse->fidmour_bytes[1] << 1) + (mouse->fidmour_bytes[2] << 7);
-	  *y = (mouse->fidmour_bytes[3] << 1) + (mouse->fidmour_bytes[4] << 7);
+
+	  *x = mouse->fidmour_bytes[1] + (mouse->fidmour_bytes[2] << 7);
+	  if(*x > 8192)
+	    *x -= 16384;
+	  *y = mouse->fidmour_bytes[3] + (mouse->fidmour_bytes[4] << 7);
+	  if(*y > 8192)
+	    *y -= 16384;
+	  /* Now map touchscreen coords to screen coords */
+	  *x *= ((double)gdk_display->modeinfo.xres)/4096.0;
+	  *y *= ((double)gdk_display->modeinfo.yres)/4096.0;
 	  n = 5;
 	  keep_reading = FALSE;
 	}
@@ -643,7 +654,7 @@ static gboolean
 handle_input_fidmour(GIOChannel *gioc, GIOCondition cond, gpointer data)
 {
   MouseDevice *mouse = data;
-  int x, y;
+  gdouble x, y, oldx, oldy;
   gboolean got_motion = FALSE;
   gboolean btn_down;
   time_t the_time;
@@ -651,21 +662,17 @@ handle_input_fidmour(GIOChannel *gioc, GIOCondition cond, gpointer data)
 
   g_get_current_time(&tv);
   the_time = tv.tv_sec;
-
+  oldx = mouse->x;
+  oldy = mouse->y;
   while(pull_fidmour_packet(mouse, &btn_down, &x, &y))
     {
-#if 0
-      if(x != mouse->x
-	 || y != mouse->y)
-	got_motion = TRUE;
-      mouse->x = x;
-      mouse->y = y;
-#else
-      g_print("%d at %dx%d\n",
-	      btn_down, x, y);
-      continue;
-#endif
-      
+      if(fabs(x - mouse->x) >= 1.0
+	 || fabs(x - mouse->y) >= 1.0)
+	{
+	  got_motion = TRUE;
+	  mouse->x = x;
+	  mouse->y = y;
+	}
 
       if(btn_down != mouse->button1_pressed)
 	{
@@ -844,8 +851,11 @@ mouse_open(void)
       break;
 
     case FIDMOUR_MOUSE:
+      fcntl(retval->fd, F_SETFL, O_RDONLY|O_NONBLOCK);
       gioc = g_io_channel_unix_new(retval->fd);
-      retval->fd_tag = g_io_add_watch(gioc, G_IO_IN|G_IO_ERR|G_IO_HUP|G_IO_NVAL, handle_input_fidmour, retval);
+      /* We set the priority lower here because otherwise it will flood out all the other stuff */
+      retval->fd_tag = g_io_add_watch_full(gioc, G_PRIORITY_DEFAULT, G_IO_IN|G_IO_ERR|G_IO_HUP|G_IO_NVAL,
+					   handle_input_fidmour, retval, NULL);
       break;
     default:
       g_assert_not_reached();
