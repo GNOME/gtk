@@ -1,3 +1,8 @@
+2001-05-03  Sven Neumann  <sven@convergence.de>
+
+	* demos/testpixbuf-save.c: include target-specific headers as
+	done in testpixbuf-drawable.c
+
 Wed May  2 20:36:38 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_real_insert_text): Reduce

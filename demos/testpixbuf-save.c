@@ -1,9 +1,14 @@
 
-#include <config.h>
-/* if building outside GTK, remove /x11 part */
-#include <gdk/x11/gdkx.h>
-#include <gtk/gtk.h>
+#include "config.h"
 #include <stdio.h>
+
+#include <gtk/gtk.h>
+
+#ifdef GDK_WINDOWING_X11
+#include <gdk/x11/gdkx.h>
+#elif defined (GDK_WINDOWING_WIN32)
+#include <gdk/win32/gdkwin32.h>
+#endif
 
 
 void
