@@ -1,5 +1,8 @@
 2004-10-06  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserentry.c (gtk_file_chooser_entry_focus): Pop up
+	the completions again after tab.  (#147700, Jens Bech Madsen)
+
 	* gtk/gtktreeview.c (gtk_tree_view_search_iter): Set the cursor
 	before changing the selection to make the file chooser preview
 	update work better.  (#143826, Tommi Komulainen)
