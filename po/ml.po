@@ -2534,7 +2534,7 @@ msgstr "രൂപരേഖയുടെ ഉയരം"
 #.
 #: gtk/gtkmain.c:806
 msgid "default:LTR"
-msgstr "സ്വതേയുള്ള:LTR"
+msgstr "default:LTR"
 
 #: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
