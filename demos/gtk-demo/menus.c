@@ -19,9 +19,9 @@
  * up when the menu item is selected. Typically, all menu items in a menu bar
  * have submenus.
  *
- * GtkItemFactory provides a higher-level interface for creating menu bars
+ * GtkUIManager provides a higher-level interface for creating menu bars
  * and menus; while you can construct menus manually, most people don't
- * do that. There's a separate demo for GtkItemFactory.
+ * do that. There's a separate demo for GtkUIManager.
  * 
  */
 
