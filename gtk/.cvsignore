@@ -2,6 +2,7 @@
 Makefile
 Makefile.in
 makefile.mingw
+makefile.msc
 .deps
 _libs
 .libs
@@ -27,6 +28,7 @@ gtktypebuiltins_ids.c
 gtktypebuiltins_vars.c
 gtktypebuiltins_evals.c
 gtk.defs
+gtk-win32.rc
 testdnd
 stamp-gtktypebuiltins.h
 stamp-gtkmarshal.h

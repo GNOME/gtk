@@ -2,6 +2,6 @@ Makefile
 Makefile.in
 .libs
 .deps
-testgtk
+gtk-demo
 demos.h
 
