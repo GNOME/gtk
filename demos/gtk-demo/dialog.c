@@ -46,6 +46,8 @@ interactive_dialog_clicked (GtkButton *button,
 					GTK_DIALOG_MODAL| GTK_DIALOG_DESTROY_WITH_PARENT,
 					GTK_STOCK_OK,
 					GTK_RESPONSE_OK,
+                                        "_Non-stock Button",
+                                        GTK_RESPONSE_CANCEL,
 					NULL);
 
   hbox = gtk_hbox_new (FALSE, 8);

@@ -3776,6 +3776,8 @@ cursor_blinks (GtkTextView *text_view)
 #ifdef DEBUG_VALIDATION_AND_SCROLLING
   return FALSE;
 #endif
+  if (gtk_debug_flags & GTK_DEBUG_UPDATES)
+    return FALSE;
   
   g_object_get (G_OBJECT (settings), "gtk-cursor-blink", &blink, NULL);
   return blink;

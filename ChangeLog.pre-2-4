@@ -1,3 +1,17 @@
+2001-09-26  Havoc Pennington  <hp@redhat.com>
+
+	* demos/gtk-demo/dialog.c (interactive_dialog_clicked): add demo
+	of passing non-stock label in to gtk_dialog_new_with_buttons
+
+	* gtk/gtktextview.c (cursor_blinks): disable cursor blink when
+	debugging updates
+
+	* gtk/gtktextiter.h: comment about how GtkTextIter struct contents
+	are private
+
+	* gtk/gtkbutton.c (gtk_button_new_from_stock): if stock ID doesn't
+	exist, fall back to mnemonic label, not plain label, bug #61184
+	
 Wed Sep 26 19:48:01 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_set_valist): Stop being

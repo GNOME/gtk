@@ -465,16 +465,24 @@ gtk_button_new_with_label (const gchar *label)
 /**
  * gtk_button_new_from_stock:
  * @stock_id: the name of the stock item 
- * @returns: a new #GtkButton
  *
  * Creates a new #GtkButton containing the image and text from a stock item.
  * Some stock ids have preprocessor macros like #GTK_STOCK_OK and
  * #GTK_STOCK_APPLY.
+ *
+ * If @stock_id is unknown, then it will be treated as a mnemonic
+ * label (as for gtk_button_new_with_mnemonic()).
+ *
+ * Returns: a new #GtkButton
  **/
 GtkWidget*
-gtk_button_new_from_stock (const gchar   *stock_id)
+gtk_button_new_from_stock (const gchar *stock_id)
 {
-  return g_object_new (GTK_TYPE_BUTTON, "label", stock_id, "use_stock", TRUE,  NULL);
+  return g_object_new (GTK_TYPE_BUTTON,
+                       "label", stock_id,
+                       "use_stock", TRUE,
+                       "use_underline", TRUE,
+                       NULL);
 }
 
 /**
