@@ -36,8 +36,8 @@
 #include "gdkprivate-win32.h"
 
 #define ROP3_D 0x00AA0029
-#define ROP3_DPSao 0x00EA02E9
 #define ROP3_DSna 0x00220326
+#define ROP3_DSPDxax 0x00E20746
 
 #define LINE_ATTRIBUTES (GDK_GC_LINE_WIDTH|GDK_GC_LINE_STYLE| \
 			 GDK_GC_CAP_STYLE|GDK_GC_JOIN_STYLE)
@@ -536,6 +536,7 @@ generic_draw (GdkDrawable    *drawable,
 	      gdk_draw_rectangle (tile_pixmap, tile_gc, TRUE,
 				  0, 0, width, height);
 	    }
+	  gdk_gc_unref (stipple_gc);
 	}
 
       gdk_gc_unref (mask_gc);
@@ -552,19 +553,49 @@ generic_draw (GdkDrawable    *drawable,
       if (gcwin32->fill_style == GDK_STIPPLED ||
 	  gcwin32->fill_style == GDK_OPAQUE_STIPPLED)
 	{
-	  HDC stipple_hdc = CreateCompatibleDC (hdc);
-	  HGDIOBJ old_stipple_hbm = SelectObject (stipple_hdc, GDK_PIXMAP_HBITMAP (stipple_bitmap));
-	  HBRUSH fg_brush = CreateSolidBrush
-	    (_gdk_win32_colormap_color (impl->colormap, gcwin32->foreground));
-	  HGDIOBJ old_tile_brush = SelectObject (tile_hdc, fg_brush);
+	  HDC stipple_hdc;
+	  HGDIOBJ old_stipple_hbm;
+	  HBRUSH fg_brush;
+	  HGDIOBJ old_tile_brush;
 
-	  /* Paint tile with foreround where stipple is one */
+	  if ((stipple_hdc = CreateCompatibleDC (hdc)) == NULL)
+	    WIN32_GDI_FAILED ("CreateCompatibleDC");
+
+	  if ((old_stipple_hbm =
+	       SelectObject (stipple_hdc,
+			     GDK_PIXMAP_HBITMAP (stipple_bitmap))) == NULL)
+	    WIN32_GDI_FAILED ("SelectObject");
+
+	  if ((fg_brush = CreateSolidBrush
+	       (_gdk_win32_colormap_color (impl->colormap,
+					   gcwin32->foreground))) == NULL)
+	    WIN32_GDI_FAILED ("CreateSolidBrush");
+
+	  if ((old_tile_brush = SelectObject (tile_hdc, fg_brush)) == NULL)
+	    WIN32_GDI_FAILED ("SelectObject");
+
+	  /* Paint tile with foreround where stipple is one
+	   *
+	   *  Desired ternary ROP: (P=foreground, S=stipple, D=destination)
+           *   P   S   D   ?
+           *   0   0   0   0
+           *   0   0   1   1
+           *   0   1   0   0
+           *   0   1   1   0
+           *   1   0   0   0
+           *   1   0   1   1
+           *   1   1   0   1
+           *   1   1   1   1
+	   *
+	   * Reading bottom-up: 11100010 = 0xE2. PSDK docs say this is
+	   * known as DSPDxax, with hex value 0x00E20746.
+	   */
 	  GDI_CALL (BitBlt, (tile_hdc, 0, 0, width, height,
-			     stipple_hdc, 0, 0, ROP3_DPSao));
+			     stipple_hdc, 0, 0, ROP3_DSPDxax));
 
 	  if (gcwin32->fill_style == GDK_STIPPLED)
 	    {
-	      /* Punch holes in mask where stipple bitmap is zero */
+	      /* Punch holes in mask where stipple is zero */
 	      GDI_CALL (BitBlt, (mask_hdc, 0, 0, width, height,
 				 stipple_hdc, 0, 0, SRCAND));
 	    }
@@ -754,7 +785,8 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
   bounds.height = height;
   region = widen_bounds (&bounds, GDK_GC_WIN32 (gc)->pen_width);
 
-  generic_draw (drawable, gc, GDK_GC_FOREGROUND|LINE_ATTRIBUTES,
+  generic_draw (drawable, gc,
+		GDK_GC_FOREGROUND | (filled ? 0 : LINE_ATTRIBUTES),
 		draw_rectangle, region, filled, x, y, width, height);
 
   gdk_region_destroy (region);
@@ -857,7 +889,8 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
   bounds.height = height;
   region = widen_bounds (&bounds, GDK_GC_WIN32 (gc)->pen_width);
 
-  generic_draw (drawable, gc, GDK_GC_FOREGROUND|LINE_ATTRIBUTES,
+  generic_draw (drawable, gc,
+		GDK_GC_FOREGROUND | (filled ? 0 : LINE_ATTRIBUTES),
 		draw_arc, region, filled, x, y, width, height, angle1, angle2);
 
   gdk_region_destroy (region);
@@ -938,7 +971,8 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
       
   region = widen_bounds (&bounds, GDK_GC_WIN32 (gc)->pen_width);
 
-  generic_draw (drawable, gc, GDK_GC_FOREGROUND|LINE_ATTRIBUTES,
+  generic_draw (drawable, gc,
+		GDK_GC_FOREGROUND | (filled ? 0 : LINE_ATTRIBUTES),
 		draw_polygon, region, filled, pts, npoints);
 
   gdk_region_destroy (region);

@@ -1,3 +1,59 @@
+2002-12-09  Tor Lillqvist  <tml@iki.fi>
+
+	Merge from stable:
+	
+	* gdk/win32/gdkdrawable-win32.c (generic_draw): Don't leak
+	stipple_gc. More checks for errors. Use correct ternary ROP when
+	blitting the foreground into the tile pixmap onto those pixels
+	where the stipple is set. (I didn't notice that I had used the
+	wrong one, as it didn't matter on Win2k, where DIB sections
+	apparently are zeroed upon creation. But on Win98 they have random
+	initial contents. Thanks to Hans Breuer for reporting this.)
+	(gdk_win32_draw_rectangle, gdk_win32_draw_arc,
+	gdk_win32_draw_polygon): Don't pass the LINE_ATTRIBUTES bits to
+	generic_draw() if drawing a filled figure.
+
+	* gdk/win32/gdkmain-win32.c (_gdk_win32_print_dc): Minor cosmetics.
+	(_gdk_win32_gcvalues_mask_to_string): Initialize buffer as empty.
+	(_gdk_win32_window_state_to_string): New debugging output helper
+	function.
+	
+	* gdk/win32/gdkevents-win32.c: Minor debugging output changes.
+	(gdk_event_translate): Ignore the WM_SHOWWINDOW/SW_OTHERUNZOOM or
+	SW_OTHERZOOM messages. Do not generate a GDK_UNMAP event for
+	WM_SIZE/SIZE_MINIMIZED messages, they do not really corrspond to
+	unmapping on X11. Set window state correctly for all three of
+	SIZE_{MINIMIZED,MAXIMIZED,RESTORED}. A maximized and then iconified
+	("minimized" in Windows terminology) window still has the
+	"maximized" property, i.e. when deiconified, it will reappear as
+	maximized. (#10557)
+
+	* gdk/win32/gdkprivate-win32.h: Declare new function.
+	(WIN32_API_FAILED, WIN32_GDI_FAILED, OTHER_API_FAILED): Don't use
+	__PRETTY_FUNCTION__ if __GNUC__ >= 3, to avoid warning message.
+
+	* gdk/win32/gdkwindow-win32.c (show_window_internal): Handle more
+	situations. Add parameter to tell whether deiconifying. Code
+	reorg: Return early when appropriate instead of using nested if
+	statements. If just deiconifying without raising, restore active
+	window. (#10557)
+
+	(gdk_window_hide, gdk_window_withdraw, gdk_window_iconify,
+	gdk_window_deiconify, gdk_window_maximize, gdk_window_unmaximize,
+	gdk_window_focus): Use _gdk_win32_window_state_to_string() in
+	debugging output.
+
+	(gdk_window_iconify): Restore active window after calling
+	ShowWindow(). Otherwise the "next" window gets activated.
+
+	(gdk_window_stick, gdk_window_unstick): Don't output any warnings.
+
+	(gdk_window_set_transient_for): Rewrite. Just call SetWindowLong()
+	with GWL_HWNDPARENT, which despite its name sets the *owner*
+	window, which should be exactly what we want. The PSDK
+	documentation is said to be misleading. testgtk's modal window
+	test now works much better. (#50586)
+
 Sun Dec  8 18:28:51 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_modify_fg/bg/base/text/font): 

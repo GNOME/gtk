@@ -810,59 +810,81 @@ gdk_window_destroy_notify (GdkWindow *window)
 
 static void
 show_window_internal (GdkWindow *window,
-                      gboolean   raise)
+                      gboolean   raise,
+		      gboolean   deiconify)
 {
   GdkWindowObject *private;
+  HWND old_active_window;
   
   private = GDK_WINDOW_OBJECT (window);
 
-  if (!private->destroyed)
-    {
-      GDK_NOTE (MISC, g_print ("gdk_window_show: %p\n",
-			       GDK_WINDOW_HWND (window)));
+  if (private->destroyed)
+    return;
 
-      private->state &= (~GDK_WINDOW_STATE_WITHDRAWN);
-      if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
-	{
-	  ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNOACTIVATE);
-	  SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOPMOST, 0, 0, 0, 0,
-			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
-#if 0
-	  /* Don't put on toolbar */
-	  ShowWindow (GDK_WINDOW_HWND (window), SW_HIDE);
-#endif
-	}
-      else
-	{
-          if (GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE) & WS_EX_TRANSPARENT)
-	    {
-	      SetWindowPos(GDK_WINDOW_HWND (window), HWND_TOP, 0, 0, 0, 0,
-			   SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE);
-	    }
-          else
-            {
-	      GdkWindow *parent = GDK_WINDOW (private->parent);
-
-	      /* Todo: GDK_WINDOW_STATE_STICKY */
-	      if (private->state & GDK_WINDOW_STATE_ICONIFIED)
-	        ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMINIMIZED);
-	      else if (private->state & GDK_WINDOW_STATE_MAXIMIZED)
-	        ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWMAXIMIZED);
-	      else
-	        {
-	          ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
-	          ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
-	        }
-              if (parent == _gdk_parent_root)
-                SetForegroundWindow (GDK_WINDOW_HWND (window));
-	      if (raise)
-	        BringWindowToTop (GDK_WINDOW_HWND (window));
-#if 0
-	      ShowOwnedPopups (GDK_WINDOW_HWND (window), TRUE);
-#endif
-	    }
-	}
+  GDK_NOTE (MISC, g_print ("show_window_internal: %p %s%s%s\n",
+			   GDK_WINDOW_HWND (window),
+			   _gdk_win32_window_state_to_string (private->state),
+			   (raise ? " raise" : ""),
+			   (deiconify ? " deiconify" : "")));
+  
+  /* If asked to show (not deiconify) an withdrawn and iconified
+   * window, do that.
+   */
+  if (!deiconify &&
+      !GDK_WINDOW_IS_MAPPED (window) &&
+      (private->state & GDK_WINDOW_STATE_ICONIFIED))
+    {	
+      ShowWindow (GDK_WINDOW_HWND (window), SW_MINIMIZE);
+      return;
     }
+  
+  /* If asked to just show an iconified window, do nothing. */
+  if (!deiconify && (private->state & GDK_WINDOW_STATE_ICONIFIED))
+    return;
+  
+  /* If asked to deiconify an already noniconified window, do
+   * nothing. (Especially, don't cause the window to rise and
+   * activate. There are different calls for that.)
+   */
+  if (deiconify && !(private->state & GDK_WINDOW_STATE_ICONIFIED))
+    return;
+  
+  /* If asked to show (but not raise) a window that is already
+   * visible, do nothing.
+   */
+  if (!deiconify && !raise && IsWindowVisible (GDK_WINDOW_HWND (window)))
+    return;
+
+  /* Other cases */
+  
+  if (!GDK_WINDOW_IS_MAPPED (window))
+    gdk_synthesize_window_state (window,
+				 GDK_WINDOW_STATE_WITHDRAWN,
+				 0);
+  if (GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE) & WS_EX_TRANSPARENT)
+    {
+      /* Don't really know if this makes sense, can't remember whether
+       * this case is handled like this because it is necessary, or
+       * if this is just old crap.
+       */
+      SetWindowPos(GDK_WINDOW_HWND (window), HWND_TOP, 0, 0, 0, 0,
+		   SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE);
+      return;
+    }
+
+  old_active_window = GetActiveWindow ();
+
+  if (private->state & GDK_WINDOW_STATE_MAXIMIZED)
+    ShowWindow (GDK_WINDOW_HWND (window), SW_MAXIMIZE);
+  else if (private->state & GDK_WINDOW_STATE_ICONIFIED)
+    ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
+  else
+    ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
+
+  if (raise)
+    BringWindowToTop (GDK_WINDOW_HWND (window));
+  else if (old_active_window != GDK_WINDOW_HWND (window))
+    SetActiveWindow (old_active_window);
 }
 
 void
@@ -870,7 +892,7 @@ gdk_window_show_unraised (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
   
-  show_window_internal (window, FALSE);
+  show_window_internal (window, FALSE, FALSE);
 }
 
 void
@@ -878,7 +900,7 @@ gdk_window_show (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  show_window_internal (window, TRUE);
+  show_window_internal (window, TRUE, FALSE);
 }
 
 void
@@ -891,10 +913,14 @@ gdk_window_hide (GdkWindow *window)
   private = (GdkWindowObject*) window;
   if (!private->destroyed)
     {
-      GDK_NOTE (MISC, g_print ("gdk_window_hide: %p\n",
-			       GDK_WINDOW_HWND (window)));
+      GDK_NOTE (MISC, g_print ("gdk_window_hide: %p %s\n",
+			       GDK_WINDOW_HWND (window),
+			       _gdk_win32_window_state_to_string (private->state)));
 
-      private->state |= GDK_WINDOW_STATE_WITHDRAWN;
+      if (GDK_WINDOW_IS_MAPPED (window))
+        gdk_synthesize_window_state (window,
+                                     0,
+                                     GDK_WINDOW_STATE_WITHDRAWN);
 
       _gdk_window_clear_update_area (window);
 
@@ -923,8 +949,9 @@ gdk_window_withdraw (GdkWindow *window)
   private = (GdkWindowObject*) window;
   if (!private->destroyed)
     {
-      GDK_NOTE (MISC, g_print ("gdk_window_withdraw: %p\n",
-			       GDK_WINDOW_HWND (window)));
+      GDK_NOTE (MISC, g_print ("gdk_window_withdraw: %p %s\n",
+			       GDK_WINDOW_HWND (window),
+			       _gdk_win32_window_state_to_string (private->state)));
 
       gdk_window_hide (window);	/* ??? */
     }
@@ -1509,7 +1536,6 @@ gdk_window_set_transient_for (GdkWindow *window,
 			      GdkWindow *parent)
 {
   HWND window_id, parent_id;
-  LONG style;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1521,31 +1547,24 @@ gdk_window_set_transient_for (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window) || GDK_WINDOW_DESTROYED (parent))
     return;
 
+  if (((GdkWindowObject *) window)->window_type == GDK_WINDOW_CHILD)
+    {
+      GDK_NOTE (MISC, g_print ("...a child window!\n"));
+      return;
+    }
+  
   window_id = GDK_WINDOW_HWND (window);
   parent_id = GDK_WINDOW_HWND (parent);
 
-  if ((style = GetWindowLong (window_id, GWL_STYLE)) == 0)
-    WIN32_API_FAILED ("GetWindowLong");
-
-  style |= WS_POPUP;
-#if 0 /* not sure if we want to do this */
-  style &= ~(WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX);
-#endif
-
-  if (!SetWindowLong (window_id, GWL_STYLE, style))
+  /* This changes the *owner* of the window, despite the misleading
+   * name. (Owner and parent are unrelated concepts.) At least that's
+   * what people who seem to know what they talk about say on
+   * USENET. Search on Google.
+   */
+  SetLastError (0);
+  if (SetWindowLong (window_id, GWL_HWNDPARENT, (long) parent_id) == 0 &&
+      GetLastError () != 0)
     WIN32_API_FAILED ("SetWindowLong");
-#if 0 /* not sure if we want to do this, clipping to parent size! */
-  if (!SetParent (window_id, parent_id))
-	WIN32_API_FAILED ("SetParent");
-#else /* make the modal window topmost instead */
-  if (!SetWindowPos (window_id, HWND_NOTOPMOST, 0, 0, 0, 0,
-                     SWP_NOMOVE | SWP_NOSIZE))
-    WIN32_API_FAILED ("SetWindowPos");
-#endif
-
-  if (!RedrawWindow (window_id, NULL, NULL, 
-                     RDW_FRAME | RDW_INVALIDATE | RDW_UPDATENOW))
-    WIN32_API_FAILED ("RedrawWindow");
 }
 
 void
@@ -2339,19 +2358,27 @@ gdk_window_set_static_gravities (GdkWindow *window,
 void
 gdk_window_iconify (GdkWindow *window)
 {
+  HWND old_active_window;
+
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  GDK_NOTE (MISC, g_print ("gdk_window_iconify: %p %s\n",
+			   GDK_WINDOW_HWND (window),
+			   _gdk_win32_window_state_to_string (((GdkWindowObject *) window)->state)));
+
   if (GDK_WINDOW_IS_MAPPED (window))
     {
+      old_active_window = GetActiveWindow ();
       ShowWindow (GDK_WINDOW_HWND (window), SW_MINIMIZE);
+      if (old_active_window != GDK_WINDOW_HWND (window))
+	SetActiveWindow (old_active_window);
     }
   else
     {
-      /* Flip our client side flag, the real work happens on map. */
       gdk_synthesize_window_state (window,
                                    0,
                                    GDK_WINDOW_STATE_ICONIFIED);
@@ -2367,13 +2394,16 @@ gdk_window_deiconify (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  GDK_NOTE (MISC, g_print ("gdk_window_deiconify: %p %s\n",
+			   GDK_WINDOW_HWND (window),
+			   _gdk_win32_window_state_to_string (((GdkWindowObject *) window)->state)));
+
   if (GDK_WINDOW_IS_MAPPED (window))
     {  
-      gdk_window_show (window);
+      show_window_internal (window, FALSE, TRUE);
     }
   else
     {
-      /* Flip our client side flag, the real work happens on map. */
       gdk_synthesize_window_state (window,
                                    GDK_WINDOW_STATE_ICONIFIED,
                                    0);
@@ -2388,20 +2418,7 @@ gdk_window_stick (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (GDK_WINDOW_IS_MAPPED (window))
-    {
-      /* "stick" means stick to all desktops _and_ do not scroll with the
-       * viewport. i.e. glue to the monitor glass in all cases.
-       */
-      g_warning ("gdk_window_stick (%p) ???", GDK_WINDOW_HWND (window));
-    }
-  else
-    {
-      /* Flip our client side flag, the real work happens on map. */
-      gdk_synthesize_window_state (window,
-                                   0,
-                                   GDK_WINDOW_STATE_STICKY);
-    }
+  /* FIXME: Do something? */
 }
 
 void
@@ -2412,17 +2429,7 @@ gdk_window_unstick (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (GDK_WINDOW_IS_MAPPED (window))
-    {
-      g_warning ("gdk_window_unstick (%p) ???", GDK_WINDOW_HWND (window));
-    }
-  else
-    {
-      /* Flip our client side flag, the real work happens on map. */
-      gdk_synthesize_window_state (window,
-                                   GDK_WINDOW_STATE_STICKY,
-                                   0);
-    }
+  /* FIXME: Do something? */
 }
 
 void
@@ -2432,6 +2439,10 @@ gdk_window_maximize (GdkWindow *window)
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  GDK_NOTE (MISC, g_print ("gdk_window_maximize: %p %s\n",
+			   GDK_WINDOW_HWND (window),
+			   _gdk_win32_window_state_to_string (((GdkWindowObject *) window)->state)));
 
   if (GDK_WINDOW_IS_MAPPED (window))
     ShowWindow (GDK_WINDOW_HWND (window), SW_MAXIMIZE);
@@ -2448,6 +2459,10 @@ gdk_window_unmaximize (GdkWindow *window)
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  GDK_NOTE (MISC, g_print ("gdk_window_unmaximize: %p %s\n",
+			   GDK_WINDOW_HWND (window),
+			   _gdk_win32_window_state_to_string (((GdkWindowObject *) window)->state)));
 
   if (GDK_WINDOW_IS_MAPPED (window))
     ShowWindow (GDK_WINDOW_HWND (window), SW_RESTORE);
@@ -2480,7 +2495,9 @@ gdk_window_focus (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
   
-  GDK_NOTE (MISC, g_print ("gdk_window_focus: %p\n", GDK_WINDOW_HWND (window)));
+  GDK_NOTE (MISC, g_print ("gdk_window_focus: %p %s\n",
+			   GDK_WINDOW_HWND (window),
+			   _gdk_win32_window_state_to_string (((GdkWindowObject *) window)->state)));
 
   ShowWindow (GDK_WINDOW_HWND (window), SW_SHOWNORMAL);
   SetFocus (GDK_WINDOW_HWND (window));

@@ -360,7 +360,7 @@ _gdk_win32_print_dc (HDC hdc)
   RECT rect;
   int flag;
 
-  g_print ("%p\n", hdc);
+  g_print ("%p:\n", hdc);
   obj = GetCurrentObject (hdc, OBJ_BRUSH);
   GetObject (obj, sizeof (LOGBRUSH), &logbrush);
   g_print ("brush: %s color=%06lx hatch=%p\n",
@@ -493,6 +493,8 @@ _gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask)
   gchar *bufp = buf;
   gchar *s = "";
 
+  buf[0] = '\0';
+
 #define BIT(x) 						\
   if (mask & GDK_GC_##x) 				\
     (bufp += sprintf (bufp, "%s" #x, s), s = "|")
@@ -515,6 +517,32 @@ _gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask)
   BIT (LINE_STYLE);
   BIT (CAP_STYLE);
   BIT (JOIN_STYLE);
+#undef BIT
+
+  return static_printf ("%s", buf);  
+}
+
+gchar *
+_gdk_win32_window_state_to_string (GdkWindowState state)
+{
+  gchar buf[100];
+  gchar *bufp = buf;
+  gchar *s = "";
+
+  buf[0] = '\0';
+
+#define BIT(x)						\
+  if (state & GDK_WINDOW_STATE_ ## x)			\
+    (bufp += sprintf (bufp, "%s" #x, s), s = "|")
+
+  /* For clarity, also show the complement of WITHDRAWN, i.e. "MAPPED" */
+  if (!(state & GDK_WINDOW_STATE_WITHDRAWN))
+    (bufp += sprintf (bufp, "MAPPED"), s = "|");
+
+  BIT (WITHDRAWN);
+  BIT (ICONIFIED);
+  BIT (MAXIMIZED);
+  BIT (STICKY);
 #undef BIT
 
   return static_printf ("%s", buf);  

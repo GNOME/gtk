@@ -1010,17 +1010,6 @@ print_event_state (gint state)
 }
 
 static void
-print_window_state (GdkWindowState state)
-{
-#define CASE(bit) if (state & GDK_WINDOW_STATE_ ## bit ) g_print (#bit " ");
-  CASE (WITHDRAWN);
-  CASE (ICONIFIED);
-  CASE (MAXIMIZED);
-  CASE (STICKY);
-#undef CASE
-}
-
-static void
 print_event (GdkEvent *event)
 {
   gchar *escaped, *kvname;
@@ -1127,8 +1116,9 @@ print_event (GdkEvent *event)
       print_event_state (event->scroll.state);
       break;
     case GDK_WINDOW_STATE:
-      print_window_state (event->window_state.changed_mask);
-      print_window_state (event->window_state.new_window_state);
+      g_print ("%s: %s",
+	       _gdk_win32_window_state_to_string (event->window_state.changed_mask),
+	       _gdk_win32_window_state_to_string (event->window_state.new_window_state));
     default:
       /* Nothing */
       break;
@@ -2946,6 +2936,10 @@ gdk_event_translate (GdkDisplay *display,
       if (!(private->event_mask & GDK_STRUCTURE_MASK))
 	break;
 
+      if (msg->lParam == SW_OTHERUNZOOM ||
+	  msg->lParam == SW_OTHERZOOM)
+	break;
+
       event->any.type = (msg->wParam ? GDK_MAP : GDK_UNMAP);
       event->any.window = window;
 
@@ -2971,13 +2965,9 @@ gdk_event_translate (GdkDisplay *display,
 			     (msg->wParam == SIZE_RESTORED ? "RESTORED" : "?"))))),
 			 LOWORD (msg->lParam), HIWORD (msg->lParam)));
 
-      if (!(private->event_mask & GDK_STRUCTURE_MASK))
-	break;
-
       if (msg->wParam == SIZE_MINIMIZED)
 	{
-	  event->any.type = GDK_UNMAP;
-	  event->any.window = window;
+	  /* Don't generate any GDK event. This is *not* an UNMAP. */
 
 	  if (p_grab_window == window)
 	    gdk_pointer_ungrab (msg->time);
@@ -2985,12 +2975,9 @@ gdk_event_translate (GdkDisplay *display,
 	  if (k_grab_window == window)
 	    gdk_keyboard_ungrab (msg->time);
 
-	  if (window && GDK_WINDOW_IS_MAPPED (window))
-	    gdk_synthesize_window_state (window,
-					 GDK_WINDOW_STATE_MAXIMIZED,
-					 GDK_WINDOW_STATE_ICONIFIED);
-
-	  return_val = !GDK_WINDOW_DESTROYED (window);
+	  gdk_synthesize_window_state (window,
+				       GDK_WINDOW_STATE_WITHDRAWN,
+				       GDK_WINDOW_STATE_ICONIFIED);
 	}
       else if ((msg->wParam == SIZE_RESTORED
 		|| msg->wParam == SIZE_MAXIMIZED)
@@ -2999,6 +2986,9 @@ gdk_event_translate (GdkDisplay *display,
 #endif
 								 )
 	{
+	  if (!(private->event_mask & GDK_STRUCTURE_MASK))
+	    break;
+
 	  event->configure.type = GDK_CONFIGURE;
 	  event->configure.window = window;
 	  pt.x = 0;
@@ -3016,11 +3006,13 @@ gdk_event_translate (GdkDisplay *display,
 	  if (msg->wParam == SIZE_RESTORED)
 	    gdk_synthesize_window_state (window,
 					 GDK_WINDOW_STATE_ICONIFIED |
-					 GDK_WINDOW_STATE_MAXIMIZED,
+					 GDK_WINDOW_STATE_MAXIMIZED |
+					 GDK_WINDOW_STATE_WITHDRAWN,
 					 0);
 	  else if (msg->wParam == SIZE_MAXIMIZED)
 	    gdk_synthesize_window_state (window,
-					 GDK_WINDOW_STATE_ICONIFIED,
+					 GDK_WINDOW_STATE_ICONIFIED |
+					 GDK_WINDOW_STATE_WITHDRAWN,
 					 GDK_WINDOW_STATE_MAXIMIZED);
 
 	  if (private->resize_count > 1)
