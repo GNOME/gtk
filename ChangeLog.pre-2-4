@@ -1,3 +1,10 @@
+2002-02-22  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (changed_handler): call
+	gtk_size_group_queue_resize to avoid invalidating the widget every
+	time its requisition changes. Instead we use the btree invalid
+	lines to know what to redraw. Fixes #71429
+
 Fri Feb 22 14:08:38 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkradiobutton.c, gtk/gtkcheckbutton.c, gtkbutton.h,
