@@ -82,7 +82,7 @@ response_cb (GtkDialog *dialog,
     }
   else
     g_print ("Dialog was closed\n");
-  
+
   gtk_main_quit ();
 }
 
@@ -138,20 +138,19 @@ static void
 size_prepared_cb (GdkPixbufLoader *loader, 
 		  int              width,
 		  int              height,
-		  gpointer         data)
+		  int             *data)
 {
-	struct {
-		int width;
-		int height;
-	} *info = data;
+	int des_width = data[0];
+	int des_height = data[1];
 
-	if ((double)height * (double)info->width >
-	    (double)width * (double)info->height) {
-		width = 0.5 + (double)width * (double)info->height / (double)height;
-		height = info->height;
+	if (des_height >= height && des_width >= width) {
+		/* Nothing */
+	} else if ((double)height * des_width > (double)width * des_height) {
+		width = 0.5 + (double)width * des_height / (double)height;
+		height = des_height;
 	} else {
-		height = 0.5 + (double)height * (double)info->width / (double)width;
-		width = info->width;
+		height = 0.5 + (double)height * des_width / (double)width;
+		width = des_width;
 	}
 
 	gdk_pixbuf_loader_set_size (loader, width, height);
@@ -165,10 +164,7 @@ my_new_from_file_at_size (const char *filename,
 {
 	GdkPixbufLoader *loader;
 	GdkPixbuf       *pixbuf;
-	struct {
-		int width;
-		int height;
-	} info;
+	int              info[2];
 	struct stat st;
 
 	guchar buffer [4096];
@@ -204,9 +200,9 @@ my_new_from_file_at_size (const char *filename,
 #ifdef DONT_PRESERVE_ASPECT
 	gdk_pixbuf_loader_set_size (loader, width, height);
 #else
-	info.width = width;
-	info.height = height;
-	g_signal_connect (loader, "size-prepared", G_CALLBACK (&size_prepared_cb), &info);
+	info[0] = width;
+	info[1] = height;
+	g_signal_connect (loader, "size-prepared", G_CALLBACK (size_prepared_cb), info);
 #endif	
 
 	while (!feof (f)) {

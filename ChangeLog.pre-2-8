@@ -1,5 +1,9 @@
 2004-03-02  Morten Welinder  <terra@gnome.org>
 
+	* tests/testfilechooser.c (size_prepared_cb): Don't scale images
+	that are small enough to fit.  Avoid using incompatibly typed data
+	pointer.
+
 	* gtk/gtkfilechooserdefault.c
 	(gtk_file_chooser_default_get_resizable_hints): Test the
 	resize_horizontally pointer, not the deferenced pointer.
