@@ -1,3 +1,31 @@
+Sat Aug 16 16:22:23 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Fix major bug in row ref handling, so the new combo box
+	will actually work right (:. Bug #107748. Patch written
+	with help from Tim Janik.
+
+	The basic idea is to update the row refs in a closure,
+	before the actual signal is emitted (rather than having
+	the model connect signal handlers).
+
+	* gtk/gtktreemodel.c (gtk_tree_model_base_init): change
+	g_signal_new calls for row_inserted, row_deleted and
+	rows_reordered to use the new marshallers,
+	(row_inserted_marshall), (row_deleted_marshall),
+	(rows_reordered_marshall): the new marshallers,
+	(gtk_tree_row_ref_inserted_callback): renamed to
+	gtk_tree_row_ref_inserted since it isn't a callback
+	anymore and gets called by the marshaller now,
+	(gtk_tree_row_ref_deleted_callback): likewise,
+	(gtk_tree_row_ref_reordered_callback): likewise,
+	(connect_ref_callbacks), (disconnect_ref_callbacks):
+	removed,
+	(gtk_tree_row_reference_new_proxy),
+	(gtk_tree_row_reference_free),
+	(gtk_tree_row_reference_inserted),
+	(gtk_tree_row_reference_deleted),
+	(gtk_tree_row_reference_reordered): updated.
+
 Fri Aug 15 16:54:39 2003  Owen Taylor  <otaylor@redhat.com>
 
 	Improve Cedilla handling - based on a patch from Gustavo 
