@@ -457,6 +457,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   
   for (i=0;i<31;i++)
     calendar->marked_date[i] = FALSE;
+  calendar->num_marked_dates = 0;
   calendar->selected_day = 1;
   
   calendar->display_flags = ( GTK_CALENDAR_SHOW_HEADING | 
@@ -665,11 +666,9 @@ gtk_calendar_set_month_prev (GtkCalendar *calendar)
     {
       if (calendar->selected_day < 0)
 	calendar->selected_day = calendar->selected_day + 1 + month_length[leap (calendar->year)][calendar->month + 1];
-      else
-	gtk_calendar_select_day (calendar, calendar->selected_day);
+      gtk_calendar_select_day (calendar, calendar->selected_day);
     }
   
-  gtk_calendar_select_day (calendar, calendar->selected_day);
   gtk_calendar_paint (GTK_WIDGET (calendar), NULL);
   gtk_calendar_thaw (calendar);
 }
@@ -2220,7 +2219,9 @@ gtk_calendar_clear_marks (GtkCalendar *calendar)
     {
       calendar->marked_date[day] = FALSE;
     }
-  
+ 
+  calendar->num_marked_dates = 0;
+ 
   if (GTK_WIDGET_DRAWABLE (calendar))
     {
       gtk_calendar_paint_main (GTK_WIDGET (calendar));
@@ -2234,9 +2235,11 @@ gtk_calendar_mark_day (GtkCalendar *calendar,
   g_return_val_if_fail (calendar != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CALENDAR (calendar), FALSE);
   
-  if (day >= 1 && day <= 31)
-    calendar->marked_date[day - 1] = TRUE;
-  
+  if (day >= 1 && day <= 31 && calendar->marked_date[day-1] == FALSE)
+    {
+      calendar->marked_date[day - 1] = TRUE;
+      calendar->num_marked_dates++;
+    }
   if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (calendar)))
     {
       gtk_calendar_paint_main (GTK_WIDGET (calendar));
@@ -2252,8 +2255,11 @@ gtk_calendar_unmark_day (GtkCalendar *calendar,
   g_return_val_if_fail (calendar != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CALENDAR (calendar), FALSE);
   
-  if (day >= 1 && day <= 31)
-    calendar->marked_date[day - 1] = FALSE;
+  if (day >= 1 && day <= 31 && calendar->marked_date[day-1] == TRUE)
+    {
+      calendar->marked_date[day - 1] = FALSE;
+      calendar->num_marked_dates--;
+    }
   
   if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (calendar)))
     {

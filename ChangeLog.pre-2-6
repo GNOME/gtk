@@ -1,3 +1,9 @@
+Sat Feb 26 11:46:25 GMT 2000  Tony Gale <gale@gtk.org>
+
+        * gtk/gtkcalendar.c: Implement num_marked_dates,
+          and don't emit mutiple day_selected signals on
+          month_prev.
+
 2000-02-25  Jonathan Blandford  <jrb@redhat.com>
 
 	* docs/make-todo (lineno): let title and logo be configurable so
