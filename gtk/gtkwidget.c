@@ -39,6 +39,7 @@
 #include "gtkprivate.h"
 #include "gdk/gdk.h"
 #include "gdk/gdkprivate.h" /* Used in gtk_reset_shapes_recurse to avoid copy */
+#include "gobject/gvaluecollector.h"
 
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
@@ -191,37 +192,29 @@ static void gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
 static GtkWidgetAuxInfo* gtk_widget_aux_info_new     (void);
 static void		 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info);
 
-static gpointer parent_class = NULL;
-static guint widget_signals[LAST_SIGNAL] = { 0 };
+static gpointer         parent_class = NULL;
+static guint            widget_signals[LAST_SIGNAL] = { 0 };
 
-static GMemChunk *aux_info_mem_chunk = NULL;
-
-static GdkColormap *default_colormap = NULL;
-static GtkStyle *gtk_default_style = NULL;
-
-static GSList *colormap_stack = NULL;
-static GSList *style_stack = NULL;
-static guint   composite_child_stack = 0;
-
-static const gchar *aux_info_key = "gtk-aux-info";
-static guint        aux_info_key_id = 0;
-static const gchar *event_key = "gtk-event-mask";
-static guint        event_key_id = 0;
-static const gchar *extension_event_key = "gtk-extension-event-mode";
-static guint        extension_event_key_id = 0;
-static const gchar *parent_window_key = "gtk-parent-window";
-static guint        parent_window_key_id = 0;
-static const gchar *saved_default_style_key = "gtk-saved-default-style";
-static guint        saved_default_style_key_id = 0;
-static const gchar *shape_info_key = "gtk-shape-info";
-static const gchar *colormap_key = "gtk-colormap";
-static const gchar *pango_context_key = "gtk-pango-context";
-static guint        pango_context_key_id = 0;
-
-static const gchar *rc_style_key = "gtk-rc-style";
-static guint        rc_style_key_id = 0;
-
+static GMemChunk       *aux_info_mem_chunk = NULL;
+static GdkColormap     *default_colormap = NULL;
+static GtkStyle        *gtk_default_style = NULL;
+static GSList          *colormap_stack = NULL;
+static GSList          *style_stack = NULL;
+static guint            composite_child_stack = 0;
 static GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
+static GParamSpecPool  *style_property_spec_pool = NULL;
+
+static GQuark quark_property_parser = 0;
+static GQuark quark_aux_info = 0;
+static GQuark quark_event_mask = 0;
+static GQuark quark_extension_event_mode = 0;
+static GQuark quark_parent_window = 0;
+static GQuark quark_saved_default_style = 0;
+static GQuark quark_shape_info = 0;
+static GQuark quark_colormap = 0;
+static GQuark quark_pango_context = 0;
+static GQuark quark_rc_style = 0;
+
 
 /*****************************************
  * gtk_widget_get_type:
@@ -331,6 +324,19 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->drag_data_received = NULL;
 
   klass->no_expose_event = NULL;
+
+  quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
+  quark_aux_info = g_quark_from_static_string ("gtk-aux-info");
+  quark_event_mask = g_quark_from_static_string ("gtk-event-mask");
+  quark_extension_event_mode = g_quark_from_static_string ("gtk-extension-event-mode");
+  quark_parent_window = g_quark_from_static_string ("gtk-parent-window");
+  quark_saved_default_style = g_quark_from_static_string ("gtk-saved-default-style");
+  quark_shape_info = g_quark_from_static_string ("gtk-shape-info");
+  quark_colormap = g_quark_from_static_string ("gtk-colormap");
+  quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
+  quark_rc_style = g_quark_from_static_string ("gtk-rc-style");
+
+  style_property_spec_pool = g_param_spec_pool_new (FALSE);
 
   gtk_object_add_arg_type ("GtkWidget::name", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_NAME);
   gtk_object_add_arg_type ("GtkWidget::parent", GTK_TYPE_CONTAINER, GTK_ARG_READWRITE, ARG_PARENT);
@@ -906,28 +912,28 @@ gtk_widget_get_arg (GtkObject   *object,
       GTK_VALUE_OBJECT (*arg) = (GtkObject*) widget->parent;
       break;
     case ARG_X:
-      aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
+      aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
       if (!aux_info)
 	GTK_VALUE_INT (*arg) = -1;
       else
 	GTK_VALUE_INT (*arg) = aux_info->x;
       break;
     case ARG_Y:
-      aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
+      aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
       if (!aux_info)
 	GTK_VALUE_INT (*arg) = -1;
       else
 	GTK_VALUE_INT (*arg) = aux_info->y;
       break;
     case ARG_WIDTH:
-      aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
+      aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
       if (!aux_info)
 	GTK_VALUE_INT (*arg) = -1;
       else
 	GTK_VALUE_INT (*arg) = aux_info->width;
       break;
     case ARG_HEIGHT:
-      aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
+      aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
       if (!aux_info)
 	GTK_VALUE_INT (*arg) = -1;
       else
@@ -964,14 +970,14 @@ gtk_widget_get_arg (GtkObject   *object,
       GTK_VALUE_BOXED (*arg) = (gpointer) gtk_widget_get_style (widget);
       break;
     case ARG_EVENTS:
-      eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), event_key_id);
+      eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);
       if (!eventp)
 	GTK_VALUE_FLAGS (*arg) = 0;
       else
 	GTK_VALUE_FLAGS (*arg) = *eventp;
       break;
     case ARG_EXTENSION_EVENTS:
-      modep = gtk_object_get_data_by_id (GTK_OBJECT (widget), extension_event_key_id);
+      modep = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_extension_event_mode);
       if (!modep)
 	GTK_VALUE_FLAGS (*arg) = 0;
       else
@@ -1584,8 +1590,7 @@ gtk_widget_realize (GtkWidget *widget)
       
       if (GTK_WIDGET_HAS_SHAPE_MASK (widget))
 	{
-	  shape_info = gtk_object_get_data (GTK_OBJECT (widget),
-					    shape_info_key);
+	  shape_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_shape_info);
 	  gdk_window_shape_combine_mask (widget->window,
 					 shape_info->shape_mask,
 					 shape_info->offset_x,
@@ -1917,7 +1922,7 @@ gtk_widget_get_child_requisition (GtkWidget	 *widget,
 
   *requisition = widget->requisition;
   
-  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
+  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
   if (aux_info)
     {
       if (aux_info->width > 0)
@@ -1948,7 +1953,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
   real_allocation = *allocation;
-  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
+  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
   
   if (aux_info)
     {
@@ -3094,13 +3099,11 @@ gtk_widget_set_style (GtkWidget *widget,
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_RC_STYLE);
   GTK_PRIVATE_SET_FLAG (widget, GTK_USER_STYLE);
 
-  default_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), saved_default_style_key_id);
+  default_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_saved_default_style);
   if (!default_style)
     {
       gtk_style_ref (widget->style);
-      if (!saved_default_style_key_id)
-	saved_default_style_key_id = g_quark_from_static_string (saved_default_style_key);
-      gtk_object_set_data_by_id (GTK_OBJECT (widget), saved_default_style_key_id, widget->style);
+      gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_saved_default_style, widget->style);
     }
 
   gtk_widget_set_style_internal (widget, style, initial_emission);
@@ -3148,16 +3151,14 @@ gtk_widget_set_rc_style (GtkWidget *widget)
   GTK_PRIVATE_UNSET_FLAG (widget, GTK_USER_STYLE);
   GTK_WIDGET_SET_FLAGS (widget, GTK_RC_STYLE);
 
-  saved_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), saved_default_style_key_id);
+  saved_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_saved_default_style);
   new_style = gtk_rc_get_style (widget);
   if (new_style)
     {
       if (!saved_style)
 	{
 	  gtk_style_ref (widget->style);
-	  if (!saved_default_style_key_id)
-	    saved_default_style_key_id = g_quark_from_static_string (saved_default_style_key);
-	  gtk_object_set_data_by_id (GTK_OBJECT (widget), saved_default_style_key_id, widget->style);
+	  gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_saved_default_style, widget->style);
 	}
       gtk_widget_set_style_internal (widget, new_style, initial_emission);
     }
@@ -3167,7 +3168,7 @@ gtk_widget_set_rc_style (GtkWidget *widget)
 	{
 	  g_assert (initial_emission == FALSE); /* FIXME: remove this line */
 
-	  gtk_object_remove_data_by_id (GTK_OBJECT (widget), saved_default_style_key_id);
+	  gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_saved_default_style);
 	  gtk_widget_set_style_internal (widget, saved_style, initial_emission);
 	  gtk_style_unref (saved_style);
 	}
@@ -3189,10 +3190,10 @@ gtk_widget_restore_default_style (GtkWidget *widget)
 
   GTK_PRIVATE_UNSET_FLAG (widget, GTK_USER_STYLE);
 
-  default_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), saved_default_style_key_id);
+  default_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_saved_default_style);
   if (default_style)
     {
-      gtk_object_remove_data_by_id (GTK_OBJECT (widget), saved_default_style_key_id);
+      gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_saved_default_style);
       gtk_widget_set_style_internal (widget, default_style, FALSE);
       gtk_style_unref (default_style);
     }
@@ -3246,15 +3247,12 @@ gtk_widget_modify_style (GtkWidget      *widget,
 
   g_return_if_fail (GTK_IS_RC_STYLE (style));
   
-  if (!rc_style_key_id)
-    rc_style_key_id = g_quark_from_static_string (rc_style_key);
-
   old_style = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-					 rc_style_key_id);
+					 quark_rc_style);
 
   if (style != old_style)
     gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
-				    rc_style_key_id,
+				    quark_rc_style,
 				    gtk_rc_style_copy (style),
 				    (GtkDestroyNotify)gtk_rc_style_unref);
 
@@ -3282,17 +3280,14 @@ gtk_widget_get_modifier_style (GtkWidget      *widget)
 {
   GtkRcStyle *rc_style;
   
-  if (!rc_style_key_id)
-    rc_style_key_id = g_quark_from_static_string (rc_style_key);
-  
   rc_style = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-					rc_style_key_id);
+					quark_rc_style);
 
   if (!rc_style)
     {
       rc_style = gtk_rc_style_new();
       gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
-				      rc_style_key_id,
+				      quark_rc_style,
 				      rc_style,
 				      (GtkDestroyNotify)gtk_rc_style_unref);
     }
@@ -3638,10 +3633,7 @@ gtk_widget_pop_style (void)
 static PangoContext *
 gtk_widget_peek_pango_context (GtkWidget *widget)
 {
-  if (!pango_context_key_id)
-    pango_context_key_id = g_quark_from_static_string (pango_context_key);
-
-  return gtk_object_get_data_by_id (GTK_OBJECT (widget), pango_context_key_id);
+  return gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_pango_context);
 }
 
 /**
@@ -3668,15 +3660,12 @@ gtk_widget_get_pango_context (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
-  if (!pango_context_key_id)
-    pango_context_key_id = g_quark_from_static_string (pango_context_key);
-
-  context = gtk_object_get_data_by_id (GTK_OBJECT (widget), pango_context_key_id);
+  context = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_pango_context);
   if (!context)
     {
       context = gtk_widget_create_pango_context (GTK_WIDGET (widget));
-      gtk_object_set_data_by_id_full (GTK_OBJECT (widget), pango_context_key_id, context,
-				      (GDestroyNotify)g_object_unref);
+      gtk_object_set_data_by_id_full (GTK_OBJECT (widget), quark_pango_context, context,
+				      (GDestroyNotify) g_object_unref);
     }
 
   return context;
@@ -3777,7 +3766,7 @@ gtk_widget_render_icon (GtkWidget      *widget,
   
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (stock_id != NULL, NULL);
-  g_return_val_if_fail (size != NULL, NULL);
+  g_return_val_if_fail (size > GTK_ICON_SIZE_INVALID, NULL);
   
   gtk_widget_ensure_style (widget);
   
@@ -3818,13 +3807,11 @@ gtk_widget_set_parent_window   (GtkWidget           *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
   old_parent_window = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-						 parent_window_key_id);
+						 quark_parent_window);
 
   if (parent_window != old_parent_window)
     {
-      if (!parent_window_key_id)
-	parent_window_key_id = g_quark_from_static_string (parent_window_key);
-      gtk_object_set_data_by_id (GTK_OBJECT (widget), parent_window_key_id, 
+      gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_parent_window, 
 				 parent_window);
       if (old_parent_window)
 	gdk_window_unref (old_parent_window);
@@ -3854,7 +3841,7 @@ gtk_widget_get_parent_window   (GtkWidget           *widget)
   g_return_val_if_fail (widget->parent != NULL, NULL);
   
   parent_window = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-					     parent_window_key_id);
+					     quark_parent_window);
 
   return (parent_window != NULL) ? parent_window : widget->parent->window;
 }
@@ -3887,13 +3874,11 @@ gtk_widget_set_uposition (GtkWidget *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
-  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
+  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
   if (!aux_info)
     {
-      if (!aux_info_key_id)
-	aux_info_key_id = g_quark_from_static_string (aux_info_key);
       aux_info = gtk_widget_aux_info_new ();
-      gtk_object_set_data_by_id (GTK_OBJECT (widget), aux_info_key_id, aux_info);
+      gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_aux_info, aux_info);
     }
 
   /* keep this in sync with gtk_window_compute_reposition() */
@@ -3945,13 +3930,11 @@ gtk_widget_set_usize (GtkWidget *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
-  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
+  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
   if (!aux_info)
     {
-      if (!aux_info_key_id)
-	aux_info_key_id = g_quark_from_static_string (aux_info_key);
       aux_info = gtk_widget_aux_info_new ();
-      gtk_object_set_data_by_id (GTK_OBJECT (widget), aux_info_key_id, aux_info);
+      gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_aux_info, aux_info);
     }
   
   if (width > -2)
@@ -3991,7 +3974,7 @@ gtk_widget_set_events (GtkWidget *widget,
   g_return_if_fail (!GTK_WIDGET_NO_WINDOW (widget));
   g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
   
-  eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), event_key_id);
+  eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);
   
   if (events)
     {
@@ -3999,14 +3982,12 @@ gtk_widget_set_events (GtkWidget *widget,
 	eventp = g_new (gint, 1);
       
       *eventp = events;
-      if (!event_key_id)
-	event_key_id = g_quark_from_static_string (event_key);
-      gtk_object_set_data_by_id (GTK_OBJECT (widget), event_key_id, eventp);
+      gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_event_mask, eventp);
     }
   else if (eventp)
     {
       g_free (eventp);
-      gtk_object_remove_data_by_id (GTK_OBJECT (widget), event_key_id);
+      gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_event_mask);
     }
 }
 
@@ -4029,7 +4010,7 @@ gtk_widget_add_events (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!GTK_WIDGET_NO_WINDOW (widget));
   
-  eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), event_key_id);
+  eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);
   
   if (events)
     {
@@ -4040,14 +4021,12 @@ gtk_widget_add_events (GtkWidget *widget,
 	}
       
       *eventp |= events;
-      if (!event_key_id)
-	event_key_id = g_quark_from_static_string (event_key);
-      gtk_object_set_data_by_id (GTK_OBJECT (widget), event_key_id, eventp);
+      gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_event_mask, eventp);
     }
   else if (eventp)
     {
       g_free (eventp);
-      gtk_object_remove_data_by_id (GTK_OBJECT (widget), event_key_id);
+      gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_event_mask);
     }
 
   if (GTK_WIDGET_REALIZED (widget))
@@ -4075,15 +4054,13 @@ gtk_widget_set_extension_events (GtkWidget *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
-  modep = gtk_object_get_data_by_id (GTK_OBJECT (widget), extension_event_key_id);
+  modep = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_extension_event_mode);
   
   if (!modep)
     modep = g_new (GdkExtensionMode, 1);
   
   *modep = mode;
-  if (!extension_event_key_id)
-    extension_event_key_id = g_quark_from_static_string (extension_event_key);
-  gtk_object_set_data_by_id (GTK_OBJECT (widget), extension_event_key_id, modep);
+  gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_extension_event_mode, modep);
 }
 
 /**
@@ -4166,7 +4143,7 @@ gtk_widget_get_colormap (GtkWidget *widget)
 	return colormap;
     }
   
-  colormap = gtk_object_get_data (GTK_OBJECT (widget), colormap_key);
+  colormap = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_colormap);
   if (colormap)
     return colormap;
 
@@ -4211,10 +4188,10 @@ gtk_widget_set_colormap (GtkWidget   *widget,
 
   g_object_ref (G_OBJECT (colormap));
   
-  gtk_object_set_data_full (GTK_OBJECT (widget), 
-                            colormap_key,
-                            colormap,
-                            (GtkDestroyNotify) g_object_unref);
+  g_object_set_qdata_full (G_OBJECT (widget), 
+			   quark_colormap,
+			   colormap,
+			   (GtkDestroyNotify) g_object_unref);
 }
 
 /**
@@ -4235,7 +4212,7 @@ gtk_widget_get_events (GtkWidget *widget)
   g_return_val_if_fail (widget != NULL, 0);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
   
-  events = gtk_object_get_data_by_id (GTK_OBJECT (widget), event_key_id);
+  events = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);
   if (events)
     return *events;
   
@@ -4259,7 +4236,7 @@ gtk_widget_get_extension_events (GtkWidget *widget)
   g_return_val_if_fail (widget != NULL, 0);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
   
-  mode = gtk_object_get_data_by_id (GTK_OBJECT (widget), extension_event_key_id);
+  mode = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_extension_event_mode);
   if (mode)
     return *mode;
   
@@ -4641,11 +4618,11 @@ gtk_widget_real_destroy (GtkObject *object)
   gtk_grab_remove (widget);
   gtk_selection_remove_all (widget);
   
-  saved_style = gtk_object_get_data_by_id (object, saved_default_style_key_id);
+  saved_style = gtk_object_get_data_by_id (object, quark_saved_default_style);
   if (saved_style)
     {
       gtk_style_unref (saved_style);
-      gtk_object_remove_data_by_id (object, saved_default_style_key_id);
+      gtk_object_remove_data_by_id (object, quark_saved_default_style);
     }
 
   gtk_style_unref (widget->style);
@@ -4667,11 +4644,11 @@ gtk_widget_finalize (GObject *object)
   gtk_grab_remove (widget);
   gtk_selection_remove_all (widget);
 
-  saved_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), saved_default_style_key_id);
+  saved_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_saved_default_style);
   if (saved_style)
     {
       gtk_style_unref (saved_style);
-      gtk_object_remove_data_by_id (GTK_OBJECT (widget), saved_default_style_key_id);
+      gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_saved_default_style);
     }
 
   gtk_style_unref (widget->style);
@@ -4680,15 +4657,15 @@ gtk_widget_finalize (GObject *object)
   if (widget->name)
     g_free (widget->name);
   
-  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
+  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
   if (aux_info)
     gtk_widget_aux_info_destroy (aux_info);
   
-  events = gtk_object_get_data_by_id (GTK_OBJECT (widget), event_key_id);
+  events = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);
   if (events)
     g_free (events);
   
-  mode = gtk_object_get_data_by_id (GTK_OBJECT (widget), extension_event_key_id);
+  mode = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_extension_event_mode);
   if (mode)
     g_free (mode);
 
@@ -4997,15 +4974,15 @@ gtk_widget_shape_combine_mask (GtkWidget *widget,
       if (widget->window)
 	gdk_window_shape_combine_mask (widget->window, NULL, 0, 0);
       
-      gtk_object_remove_data (GTK_OBJECT (widget), shape_info_key);
+      g_object_set_qdata (G_OBJECT (widget), quark_shape_info, NULL);
     }
   else
     {
       GTK_PRIVATE_SET_FLAG (widget, GTK_HAS_SHAPE_MASK);
       
       shape_info = g_new (GtkWidgetShapeInfo, 1);
-      gtk_object_set_data_full (GTK_OBJECT (widget), shape_info_key, shape_info,
-				(GDestroyNotify)gtk_widget_shape_info_destroy);
+      g_object_set_qdata_full (G_OBJECT (widget), quark_shape_info, shape_info,
+			       (GDestroyNotify) gtk_widget_shape_info_destroy);
       
       shape_info->shape_mask = gdk_drawable_ref (shape_mask);
       shape_info->offset_x = offset_x;
@@ -5079,6 +5056,150 @@ gtk_widget_unref (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   g_object_unref ((GObject*) widget);
+}
+
+
+/* style properties
+ */
+
+void
+gtk_widget_class_install_style_property_parser (GtkWidgetClass     *class,
+						GParamSpec         *pspec,
+						GtkRcPropertyParser parser)
+{
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (class));
+  g_return_if_fail (G_IS_PARAM_SPEC (pspec));
+  g_return_if_fail (pspec->flags & G_PARAM_READABLE);
+  g_return_if_fail (!(pspec->flags & (G_PARAM_CONSTRUCT_ONLY | G_PARAM_CONSTRUCT)));
+  
+  if (g_param_spec_pool_lookup (style_property_spec_pool, pspec->name, G_OBJECT_CLASS_TYPE (class), FALSE))
+    {
+      g_warning (G_STRLOC ": class `%s' already contains a style property named `%s'",
+		 G_OBJECT_CLASS_NAME (class),
+		 pspec->name);
+      return;
+    }
+
+  g_param_spec_ref (pspec);
+  g_param_spec_sink (pspec);
+  g_param_spec_set_qdata (pspec, quark_property_parser, parser);
+  g_param_spec_pool_insert (style_property_spec_pool, pspec, G_OBJECT_CLASS_TYPE (class));
+}
+
+void
+gtk_widget_class_install_style_property (GtkWidgetClass *class,
+					 GParamSpec     *pspec)
+{
+  gtk_widget_class_install_style_property_parser (class, pspec, NULL);
+}
+
+void
+gtk_widget_style_get_property (GtkWidget   *widget,
+			       const gchar *property_name,
+			       GValue      *value)
+{
+  GParamSpec *pspec;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (property_name != NULL);
+  g_return_if_fail (G_IS_VALUE (value));
+
+  g_object_ref (widget);
+  pspec = g_param_spec_pool_lookup (style_property_spec_pool,
+				    property_name,
+				    G_OBJECT_TYPE (widget),
+				    TRUE);
+  if (!pspec)
+    g_warning ("%s: widget class `%s' has no property named `%s'",
+	       G_STRLOC,
+	       G_OBJECT_TYPE_NAME (widget),
+	       property_name);
+  else
+    {
+      const GValue *peek_value;
+
+      peek_value = _gtk_style_peek_property_value (widget->style,
+						   G_OBJECT_TYPE (widget),
+						   pspec,
+						   g_param_spec_get_qdata (pspec, quark_property_parser));
+      
+      /* auto-conversion of the caller's value type
+       */
+      if (G_VALUE_TYPE (value) == G_PARAM_SPEC_VALUE_TYPE (pspec))
+	g_value_copy (peek_value, value);
+      else if (g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
+	g_value_transform (peek_value, value);
+      else
+	g_warning ("can't retrive style property `%s' of type `%s' as value of type `%s'",
+		   pspec->name,
+		   g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+		   G_VALUE_TYPE_NAME (value));
+    }
+  g_object_unref (widget);
+}
+
+void
+gtk_widget_style_get_valist (GtkWidget   *widget,
+			     const gchar *first_property_name,
+			     va_list      var_args)
+{
+  const gchar *name;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  g_object_ref (widget);
+
+  name = first_property_name;
+  while (name)
+    {
+      const GValue *peek_value;
+      GParamSpec *pspec;
+      gchar *error;
+
+      pspec = g_param_spec_pool_lookup (style_property_spec_pool,
+					name,
+					G_OBJECT_TYPE (widget),
+					TRUE);
+      if (!pspec)
+	{
+	  g_warning ("%s: widget class `%s' has no property named `%s'",
+		     G_STRLOC,
+		     G_OBJECT_TYPE_NAME (widget),
+		     name);
+	  break;
+	}
+      /* style pspecs are always readable so we can spare that check here */
+
+      peek_value = _gtk_style_peek_property_value (widget->style,
+						   G_OBJECT_TYPE (widget),
+						   pspec,
+						   g_param_spec_get_qdata (pspec, quark_property_parser));
+      G_VALUE_LCOPY (peek_value, var_args, G_VALUE_NOCOPY_CONTENTS, &error);
+      if (error)
+	{
+	  g_warning ("%s: %s", G_STRLOC, error);
+	  g_free (error);
+	  break;
+	}
+
+      name = va_arg (var_args, gchar*);
+    }
+
+  g_object_unref (widget);
+}
+
+void
+gtk_widget_style_get (GtkWidget   *widget,
+		      const gchar *first_property_name,
+		      ...)
+{
+  va_list var_args;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  va_start (var_args, first_property_name);
+  gtk_widget_style_get_valist (widget, first_property_name, var_args);
+  va_end (var_args);
 }
 
 /**

@@ -35,8 +35,6 @@ static void gtk_fixed_size_request  (GtkWidget        *widget,
 				     GtkRequisition   *requisition);
 static void gtk_fixed_size_allocate (GtkWidget        *widget,
 				     GtkAllocation    *allocation);
-static void gtk_fixed_paint         (GtkWidget        *widget,
-				     GdkRectangle     *area);
 static void gtk_fixed_add           (GtkContainer     *container,
 				     GtkWidget        *widget);
 static void gtk_fixed_remove        (GtkContainer     *container,
@@ -330,20 +328,6 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
 	  gtk_widget_size_allocate (child->widget, &child_allocation);
 	}
     }
-}
-
-static void
-gtk_fixed_paint (GtkWidget    *widget,
-		 GdkRectangle *area)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_FIXED (widget));
-  g_return_if_fail (area != NULL);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    gdk_window_clear_area (widget->window,
-			   area->x, area->y,
-			   area->width, area->height);
 }
 
 static void

@@ -4,5 +4,5 @@ GObject
     GdkDrawableImplX11
       GdkWindowImplX11
   GdkColormap
-  GtkRcStyle
+  GtkSettings
   GdkPixbufLoader

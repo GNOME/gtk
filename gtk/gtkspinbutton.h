@@ -79,7 +79,6 @@ struct _GtkSpinButton
   GtkAdjustment *adjustment;
   
   GdkWindow *panel;
-  GtkShadowType shadow_type;
   
   guint32 timer;
   guint32 ev_time;
@@ -148,9 +147,6 @@ void		gtk_spin_button_spin		   (GtkSpinButton  *spin_button,
 
 void		gtk_spin_button_set_wrap	   (GtkSpinButton  *spin_button,
 						    gboolean	    wrap);
-
-void		gtk_spin_button_set_shadow_type	   (GtkSpinButton  *spin_button,
-						    GtkShadowType   shadow_type);
 
 void		gtk_spin_button_set_snap_to_ticks  (GtkSpinButton  *spin_button,
 						    gboolean	    snap_to_ticks);

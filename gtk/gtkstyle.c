@@ -36,29 +36,31 @@
 #define LIGHTNESS_MULT  1.3
 #define DARKNESS_MULT   0.7
 
-/* actually glib should do that for us */
-#ifndef M_PI
-#define M_PI    3.14159265358979323846
-#endif /* M_PI */
-#ifndef M_PI_4
-#define M_PI_4  0.78539816339744830962
-#endif /* M_PI_4 */
 
-static void         gtk_style_realize (GtkStyle    *style,
-                                       GdkColormap *colormap);
-
-static void      gtk_style_real_realize        (GtkStyle     *style);
-static void      gtk_style_real_unrealize      (GtkStyle     *style);
-static void      gtk_style_real_copy           (GtkStyle     *style,
-						GtkStyle     *src);
-static void      gtk_style_real_set_background (GtkStyle     *style,
-						GdkWindow    *window,
-						GtkStateType  state_type);
-static GtkStyle *gtk_style_real_clone          (GtkStyle     *style);
-static void      gtk_style_real_init_from_rc   (GtkStyle     *style,
-                                                GtkRcStyle   *rc_style);
+/* --- typedefs & structures --- */
+typedef struct {
+  GType       widget_type;
+  GParamSpec *pspec;
+  GValue      value;
+} PropertyValue;
 
 
+/* --- prototypes --- */
+static void	 gtk_style_init			(GtkStyle	*style);
+static void	 gtk_style_class_init		(GtkStyleClass	*klass);
+static void	 gtk_style_finalize		(GObject	*object);
+static void	 gtk_style_realize		(GtkStyle	*style,
+						 GdkColormap	*colormap);
+static void      gtk_style_real_realize        (GtkStyle	*style);
+static void      gtk_style_real_unrealize      (GtkStyle	*style);
+static void      gtk_style_real_copy           (GtkStyle	*style,
+						GtkStyle	*src);
+static void      gtk_style_real_set_background (GtkStyle	*style,
+						GdkWindow	*window,
+						GtkStateType	 state_type);
+static GtkStyle *gtk_style_real_clone          (GtkStyle	*style);
+static void      gtk_style_real_init_from_rc   (GtkStyle	*style,
+                                                GtkRcStyle	*rc_style);
 static GdkPixbuf *gtk_default_render_icon      (GtkStyle            *style,
                                                 const GtkIconSource *source,
                                                 GtkTextDirection     direction,
@@ -66,7 +68,6 @@ static GdkPixbuf *gtk_default_render_icon      (GtkStyle            *style,
                                                 GtkIconSize          size,
                                                 GtkWidget           *widget,
                                                 const gchar         *detail);
-
 static void gtk_default_draw_hline      (GtkStyle        *style,
 					 GdkWindow       *window,
 					 GtkStateType     state_type,
@@ -285,13 +286,18 @@ static void gtk_default_draw_layout     (GtkStyle        *style,
                                          gint             x,
                                          gint             y,
                                          PangoLayout     *layout);
+static void gtk_style_shade		(GdkColor	 *a,
+					 GdkColor	 *b,
+					 gdouble	  k);
+static void rgb_to_hls			(gdouble	 *r,
+					 gdouble	 *g,
+					 gdouble	 *b);
+static void hls_to_rgb			(gdouble	 *h,
+					 gdouble	 *l,
+					 gdouble	 *s);
 
-static void gtk_style_shade (GdkColor *a, GdkColor *b, gdouble k);
-static void rgb_to_hls (gdouble *r, gdouble *g, gdouble *b);
-static void hls_to_rgb (gdouble *h, gdouble *l, gdouble *s);
 
-GdkFont *default_font = NULL;
-
+/* --- variables --- */
 static GdkColor gtk_default_normal_fg =      { 0,      0,      0,      0 };
 static GdkColor gtk_default_active_fg =      { 0,      0,      0,      0 };
 static GdkColor gtk_default_prelight_fg =    { 0,      0,      0,      0 };
@@ -305,19 +311,18 @@ static GdkColor gtk_default_selected_bg =    { 0,      0,      0, 0x9c40 };
 static GdkColor gtk_default_insensitive_bg = { 0, 0xd6d6, 0xd6d6, 0xd6d6 };
 
 static gpointer parent_class = NULL;
+static GdkFont *static_default_font = NULL;
 
-static void gtk_style_init       (GtkStyle      *style);
-static void gtk_style_class_init (GtkStyleClass *klass);
-static void gtk_style_finalize   (GObject       *object);
 
+/* --- functions --- */
 GType
 gtk_style_get_type (void)
 {
-  static GType object_type = 0;
-
-  if (!object_type)
+  static GType style_type = 0;
+  
+  if (!style_type)
     {
-      static const GTypeInfo object_info =
+      static const GTypeInfo style_info =
       {
         sizeof (GtkStyleClass),
         (GBaseInitFunc) NULL,
@@ -330,12 +335,12 @@ gtk_style_get_type (void)
         (GInstanceInitFunc) gtk_style_init,
       };
       
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GtkStyle",
-                                            &object_info, 0);
+      style_type = g_type_register_static (G_TYPE_OBJECT,
+					   "GtkStyle",
+					   &style_info, 0);
     }
   
-  return object_type;
+  return style_type;
 }
 
 static void
@@ -345,18 +350,18 @@ gtk_style_init (GtkStyle *style)
   
   style->font_desc = pango_font_description_from_string ("Sans 10");
 
-  if (!default_font)
+  if (!static_default_font)
     {
-      default_font = gdk_font_from_description (style->font_desc);
+      static_default_font = gdk_font_from_description (style->font_desc);
 
-      if (!default_font) 
-	default_font = gdk_font_load ("fixed");
+      if (!static_default_font) 
+	static_default_font = gdk_font_load ("fixed");
 
-      if (!default_font) 
-	g_error ("Unable to load \"fixed\" font!");
+      if (!static_default_font) 
+	g_error ("Unable to load \"fixed\" font");
     }
   
-  style->font = default_font;
+  style->font = static_default_font;
   gdk_font_ref (style->font);
 
   style->attach_count = 0;
@@ -413,6 +418,8 @@ gtk_style_init (GtkStyle *style)
 
   style->xthickness = 2;
   style->ythickness = 2;
+
+  style->property_cache = NULL;
 }
 
 static void
@@ -460,6 +467,21 @@ gtk_style_finalize (GObject *object)
   GtkStyle *style = GTK_STYLE (object);
 
   g_return_if_fail (style->attach_count == 0);
+
+  if (style->property_cache)
+    {
+      guint i;
+
+      for (i = 0; i < style->property_cache->n_nodes; i++)
+	{
+	  PropertyValue *node = g_bsearch_array_get_nth (style->property_cache, i);
+
+	  g_param_spec_unref (node->pspec);
+	  g_value_unset (&node->value);
+	}
+      g_bsearch_array_destroy (style->property_cache);
+      style->property_cache = NULL;
+    }
   
   if (style->styles)
     {
@@ -471,7 +493,7 @@ gtk_style_finalize (GObject *object)
 	  
           while (tmp_list)
             {
-              ((GtkStyle*) tmp_list->data)->styles = style->styles->next;
+              GTK_STYLE (tmp_list->data)->styles = style->styles->next;
               tmp_list = tmp_list->next;
             }
           g_slist_free_1 (style->styles);
@@ -668,10 +690,8 @@ gtk_style_lookup_icon_set (GtkStyle   *style,
   iter = style->icon_factories;
   while (iter != NULL)
     {
-      GtkIconSet *icon_set =
-        gtk_icon_factory_lookup (GTK_ICON_FACTORY (iter->data),
-                                 stock_id);
-
+      GtkIconSet *icon_set = gtk_icon_factory_lookup (GTK_ICON_FACTORY (iter->data),
+						      stock_id);
       if (icon_set)
         return icon_set;
       
@@ -1062,6 +1082,22 @@ gtk_style_real_copy (GtkStyle *style,
   style->rc_style = src->rc_style;
   if (src->rc_style)
     gtk_rc_style_ref (src->rc_style);
+
+  /* don't copy, just clear cache */
+  if (style->property_cache)
+    {
+      guint i;
+
+      for (i = 0; i < style->property_cache->n_nodes; i++)
+	{
+	  PropertyValue *node = g_bsearch_array_get_nth (style->property_cache, i);
+
+	  g_param_spec_unref (node->pspec);
+	  g_value_unset (&node->value);
+	}
+      g_bsearch_array_destroy (style->property_cache);
+      style->property_cache = NULL;
+    }
 }
 
 static void
@@ -1070,6 +1106,22 @@ gtk_style_real_init_from_rc (GtkStyle   *style,
 {
   GdkFont *old_font;
   gint i;
+
+  /* cache _should_ be still empty */
+  if (style->property_cache)
+    {
+      guint i;
+
+      for (i = 0; i < style->property_cache->n_nodes; i++)
+	{
+	  PropertyValue *node = g_bsearch_array_get_nth (style->property_cache, i);
+
+	  g_param_spec_unref (node->pspec);
+	  g_value_unset (&node->value);
+	}
+      g_bsearch_array_destroy (style->property_cache);
+      style->property_cache = NULL;
+    }
 
   if (rc_style->font_desc)
     {
@@ -1101,7 +1153,6 @@ gtk_style_real_init_from_rc (GtkStyle   *style,
   if (rc_style->ythickness >= 0)
     style->ythickness = rc_style->ythickness;
 
-  
   if (rc_style->icon_factories)
     {
       GSList *iter;
@@ -1116,6 +1167,118 @@ gtk_style_real_init_from_rc (GtkStyle   *style,
           iter = g_slist_next (iter);
         }
     }
+}
+
+static gint
+style_property_values_cmp (gconstpointer bsearch_node1,
+			   gconstpointer bsearch_node2)
+{
+  const PropertyValue *val1 = bsearch_node1;
+  const PropertyValue *val2 = bsearch_node2;
+  gint cmp;
+
+  cmp = G_BSEARCH_ARRAY_CMP (val1->widget_type, val2->widget_type);
+  if (cmp == 0)
+    cmp = G_BSEARCH_ARRAY_CMP (val1->pspec, val2->pspec);
+
+  return cmp;
+}
+
+const GValue*
+_gtk_style_peek_property_value (GtkStyle           *style,
+				GType               widget_type,
+				GParamSpec         *pspec,
+				GtkRcPropertyParser parser)
+{
+  PropertyValue *pcache, key = { 0, NULL, { 0, } };
+  const GtkRcProperty *rcprop = NULL;
+
+  g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
+  g_return_val_if_fail (G_IS_PARAM_SPEC (pspec), NULL);
+  g_return_val_if_fail (g_type_is_a (pspec->owner_type, GTK_TYPE_WIDGET), NULL);
+  g_return_val_if_fail (g_type_is_a (widget_type, pspec->owner_type), NULL);
+
+  /* need value cache array */
+  if (!style->property_cache)
+    style->property_cache = g_bsearch_array_new (sizeof (PropertyValue),
+						 style_property_values_cmp,
+						 0);
+  /* lookup, or insert value if not yet present */
+  key.widget_type = widget_type;
+  key.pspec = pspec;
+  pcache = g_bsearch_array_insert (style->property_cache, &key, FALSE);
+  if (G_VALUE_TYPE (&pcache->value))
+    return &pcache->value;
+
+  /* cache miss, initialize value type, then set contents */
+  g_value_init (&pcache->value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+
+  /* value provided by rc style? */
+  if (style->rc_style)
+    {
+      GQuark prop_quark = g_quark_from_string (pspec->name);
+
+      do
+	{
+	  rcprop = _gtk_rc_style_lookup_rc_property (style->rc_style,
+						     g_type_qname (widget_type),
+						     prop_quark);
+	  if (rcprop)
+	    break;
+	  widget_type = g_type_parent (widget_type);
+	}
+      while (g_type_is_a (widget_type, pspec->owner_type));
+    }
+
+  /* when supplied by rc style, we need to convert */
+  if (rcprop)
+    {
+      if (G_VALUE_TYPE (&rcprop->value) == G_TYPE_GSTRING)
+	{
+	  GString *gstring;
+	  
+	  /* value still unparsed, need to revert to user supplied parser function */
+	  
+	  gstring = g_value_get_boxed (&rcprop->value);
+	  
+	  if (!parser || !parser (pspec, gstring, &pcache->value) ||
+	      g_param_value_validate (pspec, &pcache->value))
+	    {
+	      gchar *contents = g_strescape (gstring->str, NULL);
+
+	      g_message ("%s: failed to parse property `%s::%s' of type `%s' from rc file value \"%s\"",
+			 rcprop->origin,
+			 g_type_name (pspec->owner_type), pspec->name,
+			 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+			 gstring->str);
+	      g_free (contents);
+	      rcprop = NULL;
+	    }
+	}
+      else
+	{
+	  /* we use the normal conversion functionality of param specs */
+	  if (!g_param_value_convert (pspec, &rcprop->value, &pcache->value, TRUE))
+	    {
+	      gchar *contents = g_strdup_value_contents (&rcprop->value);
+	      
+	      g_message ("%s: failed to retrive property `%s::%s' of type `%s' from rc file value \"%s\" of type `%s'",
+			 rcprop->origin,
+			 g_type_name (pspec->owner_type), pspec->name,
+			 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+			 contents,
+			 G_VALUE_TYPE_NAME (&rcprop->value));
+	      g_free (contents);
+	      rcprop = NULL;
+	    }
+	}
+    }
+  
+  /* not supplied by rc style (or conversion failed), revert to default */
+  if (!rcprop)
+    g_param_value_set_default (pspec, &pcache->value);
+
+  return &pcache->value;
 }
 
 static void
@@ -1146,7 +1309,7 @@ gtk_style_real_realize (GtkStyle *style)
     }
   else if (style->font->type == GDK_FONT_FONTSET)
     {
-      gc_values.font = default_font;
+      gc_values.font = static_default_font;
     }
   
   gc_values.foreground = style->black;
@@ -1394,7 +1557,7 @@ gtk_default_render_icon (GtkStyle            *style,
   
   if (!gtk_icon_size_lookup (size, &width, &height))
     {
-      g_warning ("Bad icon size '%s' passed to render_icon", size);
+      g_warning (G_STRLOC ": invalid icon size `%d'", size);
       return NULL;
     }
 
@@ -1728,8 +1891,8 @@ gtk_default_draw_polygon (GtkStyle      *style,
                           gint           npoints,
                           gboolean       fill)
 {
-  static const gdouble pi_over_4 = M_PI_4;
-  static const gdouble pi_3_over_4 = M_PI_4 * 3;
+  static const gdouble pi_over_4 = G_PI_4;
+  static const gdouble pi_3_over_4 = G_PI_4 * 3;
   GdkGC *gc1;
   GdkGC *gc2;
   GdkGC *gc3;

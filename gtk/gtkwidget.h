@@ -119,18 +119,18 @@ typedef enum
  */
 #define GTK_WIDGET_SET_FLAGS(wid,flag)	  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) |= (flag)); }G_STMT_END
 #define GTK_WIDGET_UNSET_FLAGS(wid,flag)  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) &= ~(flag)); }G_STMT_END
-  
-  
-  
-typedef struct _GtkRequisition	  GtkRequisition;
-typedef struct _GdkRectangle	  GtkAllocation;
-typedef struct _GtkSelectionData GtkSelectionData;
-typedef struct _GtkWidgetClass	  GtkWidgetClass;
-typedef struct _GtkWidgetAuxInfo  GtkWidgetAuxInfo;
-typedef struct _GtkWidgetShapeInfo GtkWidgetShapeInfo;
 
-typedef void (*GtkCallback) (GtkWidget *widget,
-			     gpointer	data);
+
+/* forward declaration to avoid excessive includes (and concurrent includes)
+ */
+typedef struct _GtkRequisition	   GtkRequisition;
+typedef struct _GdkRectangle	   GtkAllocation;
+typedef struct _GtkSelectionData   GtkSelectionData;
+typedef struct _GtkWidgetClass	   GtkWidgetClass;
+typedef struct _GtkWidgetAuxInfo   GtkWidgetAuxInfo;
+typedef struct _GtkWidgetShapeInfo GtkWidgetShapeInfo;
+typedef void     (*GtkCallback)        (GtkWidget        *widget,
+					gpointer	  data);
 
 /* A requisition is a desired amount of space which a
  *  widget may request.
@@ -603,6 +603,24 @@ void	     gtk_widget_push_composite_child (void);
 void	     gtk_widget_pop_composite_child  (void);
 void	     gtk_widget_pop_style	     (void);
 void	     gtk_widget_pop_colormap	     (void);
+
+/* widget style properties
+ */
+void gtk_widget_class_install_style_property        (GtkWidgetClass     *class,
+						     GParamSpec         *pspec);
+void gtk_widget_class_install_style_property_parser (GtkWidgetClass     *class,
+						     GParamSpec         *pspec,
+						     GtkRcPropertyParser parser);
+void gtk_widget_style_get_property (GtkWidget	     *widget,
+				    const gchar    *property_name,
+				    GValue	     *value);
+void gtk_widget_style_get_valist   (GtkWidget	     *widget,
+				    const gchar    *first_property_name,
+				    va_list         var_args);
+void gtk_widget_style_get          (GtkWidget	     *widget,
+				    const gchar    *first_property_name,
+				    ...);
+
 
 /* Set certain default values to be used at widget creation time.
  */

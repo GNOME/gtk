@@ -22,14 +22,27 @@ include "testgtkrc2"
 # On Windows, if you have installed gtk-engines, try this for instance:
 #include "\\windows\\gtk\\themes\\Pixmap\\gtk\\gtkrc"
 
-#foo_number = 5
-#mouse_timeout = -7
+double-click_timeout = 42
+bell-duration = 39
+bell_duration = 40
 
 pixmap_path "."
+
+style "global-style-properties"
+{
+#  xthickness = 20
+  GtkSpinButton::shadow_type = etched-out
+}
+class "GtkWidget" style "global-style-properties"
 
 style "defaultfont"
 {
   font_name = "Sans 12"
+
+  Gtest::foo = 47
+  Gtest::bar = 47
+#  GtkScrollbar::spacing = 33
+#  GtkButton::color = { 3, 2,45, 6, 6, 4, 23 }
 }
 
 style "myicons"

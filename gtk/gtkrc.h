@@ -75,6 +75,7 @@ struct _GtkRcStyle
   gint ythickness;
   
   /*< private >*/
+  GBSearchArray *rc_properties;
   
   /* list of RC style lists including this RC style */
   GSList *rc_style_lists;
@@ -91,7 +92,7 @@ struct _GtkRcStyleClass
    * g_object_new (G_OBJECT_TYPE (style), NULL);
    * should work in most cases.
    */
-  GtkRcStyle * (*clone) (GtkRcStyle *rc_style);
+  GtkRcStyle * (*create_rc_style) (GtkRcStyle *rc_style);
 
   /* Fill in engine specific parts of GtkRcStyle by parsing contents
    * of brackets. Returns G_TOKEN_NONE if succesful, otherwise returns
@@ -112,7 +113,7 @@ struct _GtkRcStyleClass
 };
 
 void	  gtk_rc_init			(void);
-void      gtk_rc_add_default_file    (const gchar *filename);
+void      gtk_rc_add_default_file	(const gchar *filename);
 void      gtk_rc_set_default_files      (gchar **filenames);
 gchar**   gtk_rc_get_default_files      (void);
 void	  gtk_rc_parse			(const gchar *filename);
@@ -128,7 +129,7 @@ void	  gtk_rc_add_class_style	(GtkRcStyle  *rc_style,
 
 GType       gtk_rc_style_get_type   (void) G_GNUC_CONST;
 GtkRcStyle* gtk_rc_style_new        (void);
-GtkRcStyle *gtk_rc_style_copy       (GtkRcStyle *orig);
+GtkRcStyle* gtk_rc_style_copy       (GtkRcStyle *orig);
 void        gtk_rc_style_ref        (GtkRcStyle *rc_style);
 void        gtk_rc_style_unref      (GtkRcStyle *rc_style);
 
@@ -194,17 +195,35 @@ typedef enum {
   GTK_RC_TOKEN_LAST
 } GtkRcTokenType;
 
-guint	gtk_rc_parse_color	(GScanner	     *scanner,
+GScanner* gtk_rc_scanner_new	(void);
+guint	  gtk_rc_parse_color	(GScanner	     *scanner,
 				 GdkColor	     *color);
-guint	gtk_rc_parse_state	(GScanner	     *scanner,
+guint	  gtk_rc_parse_state	(GScanner	     *scanner,
 				 GtkStateType	     *state);
-guint	gtk_rc_parse_priority	(GScanner	     *scanner,
+guint	  gtk_rc_parse_priority	(GScanner	     *scanner,
 				 GtkPathPriorityType *priority);
-     
+
+
+/* rc properties
+ * (structure forward declared in gtkstyle.h)
+ */
+struct _GtkRcProperty
+{
+  /* quark-ified property identifier like "GtkScrollbar::spacing" */
+  GQuark type_name;
+  GQuark property_name;
+
+  /* fields similar to GtkSettingsValue */
+  gchar *origin;
+  GValue value;
+};
+const GtkRcProperty* _gtk_rc_style_lookup_rc_property (GtkRcStyle *rc_style,
+						       GQuark      type_name,
+						       GQuark      property_name);
+
+
 #ifdef G_OS_WIN32
-
-gchar  *gtk_win32_get_installation_directory (void);
-
+gchar*  gtk_win32_get_installation_directory (void);
 #endif
 
 

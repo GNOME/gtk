@@ -5,6 +5,7 @@ GObject
       GdkWindowImplX11
     GdkPixmap
   GdkColormap
+  GtkSettings
   GtkObject
     GtkWidget
       GtkMisc

@@ -36,9 +36,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-typedef struct _GtkStyle       GtkStyle;
-typedef struct _GtkStyleClass  GtkStyleClass;
-
 #define GTK_TYPE_STYLE              (gtk_style_get_type ())
 #define GTK_STYLE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_STYLE, GtkStyle))
 #define GTK_STYLE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_STYLE, GtkStyleClass))
@@ -49,10 +46,16 @@ typedef struct _GtkStyleClass  GtkStyleClass;
 /* Some forward declarations needed to rationalize the header
  * files.
  */
+typedef struct _GtkStyle       GtkStyle;
+typedef struct _GtkStyleClass  GtkStyleClass;
 typedef struct _GtkThemeEngine GtkThemeEngine;
 typedef struct _GtkRcStyle     GtkRcStyle;
 typedef struct _GtkIconSet     GtkIconSet;
 typedef struct _GtkIconSource  GtkIconSource;
+typedef struct _GtkRcProperty  GtkRcProperty;
+typedef gboolean (*GtkRcPropertyParser) (const GParamSpec *pspec,
+					 const GString    *rc_string,
+					 GValue           *property_value);
 
 /* We make this forward declaration here, since we pass
  * GtkWidgt's to the draw functions.
@@ -64,7 +67,7 @@ typedef struct _GtkWidget      GtkWidget;
  */
 #define GTK_STYLE_NUM_STYLECOLORS()	(7 * 5)
 
-#define GTK_STYLE_ATTACHED(style)	(((GtkStyle*) (style))->attach_count > 0)
+#define GTK_STYLE_ATTACHED(style)	(GTK_STYLE (style)->attach_count > 0)
 
 struct _GtkStyle
 {
@@ -107,12 +110,12 @@ struct _GtkStyle
   gint depth;
   GdkColormap *colormap;
   
-  GtkRcStyle	 *rc_style;	/* the Rc style from which this style
-				 * was created
-				 */
-  GSList	 *styles;
+  /* the RcStyle from which this style was created */
+  GtkRcStyle	 *rc_style;
 
-  GSList         *icon_factories;
+  GSList	 *styles;	  /* of type GtkStyle* */
+  GBSearchArray	 *property_cache;
+  GSList         *icon_factories; /* of type GtkIconFactory* */
 };
 
 struct _GtkStyleClass
@@ -409,7 +412,7 @@ void	  gtk_style_apply_default_background (GtkStyle	   *style,
 
 GtkIconSet* gtk_style_lookup_icon_set (GtkStyle            *style,
                                        const gchar         *stock_id);
-GdkPixbuf * gtk_style_render_icon     (GtkStyle            *style,
+GdkPixbuf*  gtk_style_render_icon     (GtkStyle            *style,
                                        const GtkIconSource *source,
                                        GtkTextDirection     direction,
                                        GtkStateType         state,
@@ -461,14 +464,6 @@ void gtk_draw_diamond    (GtkStyle        *style,
 			  gint             y,
 			  gint             width,
 			  gint             height);
-#ifndef GTK_DISABLE_DEPRECATED
-void gtk_draw_string     (GtkStyle        *style,
-			  GdkWindow       *window,
-			  GtkStateType     state_type,
-			  gint             x,
-			  gint             y,
-			  const gchar     *string);
-#endif /* GTK_DISABLE_DEPRECATED */
 void gtk_draw_box        (GtkStyle        *style,
 			  GdkWindow       *window,
 			  GtkStateType     state_type,
@@ -640,17 +635,6 @@ void gtk_paint_diamond    (GtkStyle        *style,
 			   gint             y,
 			   gint             width,
 			   gint             height);
-#ifndef GTK_DISABLE_DEPRECATED
-void gtk_paint_string     (GtkStyle        *style,
-			   GdkWindow       *window,
-			   GtkStateType     state_type,
-			   GdkRectangle    *area,
-			   GtkWidget       *widget,
-			   const gchar     *detail,
-			   gint             x,
-			   gint             y,
-			   const gchar     *string);
-#endif /* GTK_DISABLE_DEPRECATED */
 void gtk_paint_box        (GtkStyle        *style,
 			   GdkWindow       *window,
 			   GtkStateType     state_type,
@@ -798,6 +782,32 @@ void gtk_paint_layout     (GtkStyle        *style,
                            gint             y,
                            PangoLayout     *layout);
 
+
+/* --- private API --- */
+const GValue* _gtk_style_peek_property_value (GtkStyle           *style,
+					      GType               widget_type,
+					      GParamSpec         *pspec,
+					      GtkRcPropertyParser parser);
+
+
+/* depprecated */
+#ifndef GTK_DISABLE_DEPRECATED
+void gtk_draw_string     (GtkStyle        *style,
+			  GdkWindow       *window,
+			  GtkStateType     state_type,
+			  gint             x,
+			  gint             y,
+			  const gchar     *string);
+void gtk_paint_string     (GtkStyle        *style,
+			   GdkWindow       *window,
+			   GtkStateType     state_type,
+			   GdkRectangle    *area,
+			   GtkWidget       *widget,
+			   const gchar     *detail,
+			   gint             x,
+			   gint             y,
+			   const gchar     *string);
+#endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus
 }

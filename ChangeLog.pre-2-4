@@ -1,3 +1,40 @@
+Sun Mar 18 01:15:30 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkspinbutton.[hc]: added rc-style argument
+	GtkSpinButton::shadow_type.
+	removed spin_button->shadow_type, gtk_spin_button_set_shadow_type()
+	and ARG_SHADOW_TYPE as it doesn' make much sense to try to override
+	rc-style settings.
+
+	* gtk/gtkfixed.c: removed gtk_fixed_paint() (was unused).
+
+	* gtk/gtkwidget.c: quark cleanups.
+
+	* gtk/gtkrc.[hc]: added gtk_rc_scanner_new() to create an rc-file
+	scanner with appropriate configuration, renamed GtkRcStyleClass.clone
+	to create_rc_style() (we don't do cloning in standard OO sense).
+	added per rc style properties.
+	
+	* gtk/gtkstyle.[hc]: added code to retrive pspec conformant rc-style
+	property values and for caching those. some cleanups.
+	
+	* gtk/Makefile.am: -DG_DISABLE_CONST_RETURNS.
+	
+	* gtk/gtksettings.[hc]: new file for global rc-file properties
+	(at least currently, should get extended to support X properties
+	and other communication mechanisms).
+	
+	* gtk/gtkwidget.[hc]: added style property support:
+	(gtk_widget_class_install_style_property_parser): install style
+	property pspec with parser function for rc-file values other
+	than LONG, DOUBLE or STRING.
+	(gtk_widget_class_install_style_property): same as above without
+	parser (parsers are going to be needed quite infrequently).
+	(gtk_widget_style_get_property): retrive style property value.
+	(gtk_widget_style_get_valist): same as above with varargs support,
+	has NOCOPY semantics.
+	(gtk_widget_style_get): wrapper around gtk_widget_style_get_valist().
+
 Fri Mar 16 18:24:53 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* demos/gtk-demo/main.c (row_activated_cb): modified to use

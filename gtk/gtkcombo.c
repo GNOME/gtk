@@ -259,8 +259,6 @@ gtk_combo_window_key_press (GtkWidget   *window,
 			    GdkEventKey *event,
 			    GtkCombo    *combo)
 {
-  GList *li;
-
   if (event->keyval == GDK_Return || event->keyval == GDK_KP_Enter)
     {
       if (GTK_WIDGET_VISIBLE (combo->popwin))

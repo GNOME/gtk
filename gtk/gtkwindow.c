@@ -1373,7 +1373,7 @@ gtk_window_finalize (GObject *object)
   g_free (window->wmclass_name);
   g_free (window->wmclass_class);
 
-  G_OBJECT_CLASS(parent_class)->finalize (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void

@@ -157,6 +157,25 @@ you might have to write a marshaller.
 @field: 
 
 
+<!-- ##### USER_FUNCTION GtkEmissionHook ##### -->
+<para>
+A simple function pointer to get invoked when the
+signal is emitted.  This allows you tie a hook to the signal type,
+so that it will trap all emissions of that signal, from any object.
+</para>
+<para>
+You may not attach these to signals created with the
+#GTK_RUN_NO_HOOKS flag.
+</para>
+
+@object: 
+@signal_id: 
+@n_params: 
+@params: 
+@data: 
+@Returns: 
+
+
 <!-- ##### ENUM GtkSignalRunType ##### -->
 <para>
 These configure the signal's emission.  They control
@@ -232,6 +251,13 @@ to the signal.
 @GTK_RUN_ACTION: 
 @GTK_RUN_NO_HOOKS: 
 
+<!-- ##### FUNCTION gtk_signal_init ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_signal_new ##### -->
 <para>
 Create a new signal type.  (This is usually done in the
@@ -289,7 +315,7 @@ you don't want a return value.
 the callbacks.
 
 
-<!-- ##### MACRO gtk_signal_lookup ##### -->
+<!-- ##### FUNCTION gtk_signal_lookup ##### -->
 <para>
 Given the name of the signal and the type of object it connects
 to, get the signal's identifying integer.  Emitting the signal
@@ -299,13 +325,12 @@ by number is somewhat faster than using the name each time.
 It also tries the ancestors of the given type.
 </para>
 
-@Returns: the signal's identifying number, or 0 if no signal was found.
-<!-- # Unused Parameters # -->
 @name: the signal's name, e.g. clicked.
 @object_type: the type that the signal operates on, e.g. #GTK_TYPE_BUTTON.
+@Returns: the signal's identifying number, or 0 if no signal was found.
 
 
-<!-- ##### MACRO gtk_signal_name ##### -->
+<!-- ##### FUNCTION gtk_signal_name ##### -->
 <para>
 Given the signal's identifier, find its name.
 </para>
@@ -313,9 +338,8 @@ Given the signal's identifier, find its name.
 Two different signals may have the same name, if they have differing types.
 </para>
 
-@Returns: the signal name, or NULL if the signal number was invalid.
-<!-- # Unused Parameters # -->
 @signal_id: the signal's identifying number.
+@Returns: the signal name, or NULL if the signal number was invalid.
 
 
 <!-- ##### FUNCTION gtk_signal_emit ##### -->
@@ -383,7 +407,7 @@ an array of GtkArgs instead of using C's varargs mechanism.
 followed by one which is a pointer to the return type.
 
 
-<!-- ##### MACRO gtk_signal_emit_stop ##### -->
+<!-- ##### FUNCTION gtk_signal_emit_stop ##### -->
 <para>
 This function aborts a signal's current emission.
 </para>
@@ -397,11 +421,11 @@ It will print a warning if used on a signal which
 isn't being emitted.
 </para>
 
-@i: 
-@s: 
-<!-- # Unused Parameters # -->
 @object: the object whose signal handlers you wish to stop.
 @signal_id: the signal identifier, as returned by gtk_signal_lookup().
+<!-- # Unused Parameters # -->
+@i: 
+@s: 
 
 
 <!-- ##### FUNCTION gtk_signal_emit_stop_by_name ##### -->
@@ -417,7 +441,7 @@ except it will lookup the signal id for you.
 @name: the name of the signal you wish to stop.
 
 
-<!-- ##### MACRO gtk_signal_connect ##### -->
+<!-- ##### FUNCTION gtk_signal_connect ##### -->
 <para>
 Attach a function pointer and user data to a signal for
 a particular object.
@@ -456,38 +480,38 @@ static void attach_print_signal(GtkButton* button, gint to_print)
 </programlisting>
 </informalexample>
 
-@o: 
-@s: 
-@f: 
-@d: 
-@Returns: the connection id.
-<!-- # Unused Parameters # -->
 @object: the object associated with the signal, e.g. if a button
 is getting pressed, this is that button.
 @name: name of the signal.
 @func: function pointer to attach to the signal.
 @func_data: value to pass as to your function (through the marshaller).
+@Returns: the connection id.
+<!-- # Unused Parameters # -->
+@o: 
+@s: 
+@f: 
+@d: 
 
 
-<!-- ##### MACRO gtk_signal_connect_after ##### -->
+<!-- ##### FUNCTION gtk_signal_connect_after ##### -->
 <para>
 Attach a function pointer and user data to a signal
 so that this handler will be called after the other handlers.
 </para>
 
-@o: 
-@s: 
-@f: 
-@d: 
-@Returns: the unique identifier for this attachment:  the connection id.
-<!-- # Unused Parameters # -->
 @object: the object associated with the signal.
 @name: name of the signal.
 @func: function pointer to attach to the signal.
 @func_data: value to pass as to your function (through the marshaller).
+@Returns: the unique identifier for this attachment:  the connection id.
+<!-- # Unused Parameters # -->
+@o: 
+@s: 
+@f: 
+@d: 
 
 
-<!-- ##### MACRO gtk_signal_connect_object ##### -->
+<!-- ##### FUNCTION gtk_signal_connect_object ##### -->
 <para>
 This function is for registering a callback that will
 call another object's callback.  That is,
@@ -508,21 +532,21 @@ gtk_signal_connect_object(button, "clicked", gtk_widget_show, window);
 </programlisting>
 </informalexample>
 
-@o: 
-@s: 
-@f: 
-@d: 
-@Returns: the connection id.
-<!-- # Unused Parameters # -->
 @object: the object which emits the signal.
 @name: the name of the signal.
 @func: the function to callback.
 @slot_object: the object to pass as the first parameter to func.
 (Though it pretends to take an object, you can
 really pass any gpointer as the #slot_object .)
+@Returns: the connection id.
+<!-- # Unused Parameters # -->
+@o: 
+@s: 
+@f: 
+@d: 
 
 
-<!-- ##### MACRO gtk_signal_connect_object_after ##### -->
+<!-- ##### FUNCTION gtk_signal_connect_object_after ##### -->
 <para>
 Attach a signal hook to a signal, passing in an alternate
 object as the first parameter, and guaranteeing 
@@ -530,16 +554,16 @@ that the default handler and all normal
 handlers are called first.
 </para>
 
-@o: 
-@s: 
-@f: 
-@d: 
-@Returns: the connection id.
-<!-- # Unused Parameters # -->
 @object: the object associated with the signal.
 @name: name of the signal.
 @func: function pointer to attach to the signal.
 @slot_object: the object to pass as the first parameter to #func.
+@Returns: the connection id.
+<!-- # Unused Parameters # -->
+@o: 
+@s: 
+@f: 
+@d: 
 
 
 <!-- ##### FUNCTION gtk_signal_connect_full ##### -->
@@ -628,98 +652,95 @@ should signal the removal of this signal.
 @name: name of the signal.
 
 
-<!-- ##### MACRO gtk_signal_disconnect ##### -->
+<!-- ##### FUNCTION gtk_signal_disconnect ##### -->
 <para>
 Destroy a user-defined handler connection.
 </para>
 
-<!-- # Unused Parameters # -->
 @object: the object which the handler pertains to.
 @handler_id: the connection id.
 
 
-<!-- ##### MACRO gtk_signal_disconnect_by_func ##### -->
+<!-- ##### FUNCTION gtk_signal_disconnect_by_func ##### -->
 <para>
 Destroy all connections for a particular object, with
 the given function-pointer and user-data.
 </para>
 
-@o: 
-@f: 
-@d: 
-<!-- # Unused Parameters # -->
 @object: the object which emits the signal.
 @func: the function pointer to search for.
 @data: the user data to search for.
+<!-- # Unused Parameters # -->
+@o: 
+@f: 
+@d: 
 
 
-<!-- ##### MACRO gtk_signal_disconnect_by_data ##### -->
+<!-- ##### FUNCTION gtk_signal_disconnect_by_data ##### -->
 <para>
 Destroy all connections for a particular object, with
 the given user-data.
 </para>
 
-@o: 
-@d: 
-<!-- # Unused Parameters # -->
 @object: the object which emits the signal.
 @data: the user data to search for.
+<!-- # Unused Parameters # -->
+@o: 
+@d: 
 
 
-<!-- ##### MACRO gtk_signal_handler_block ##### -->
+<!-- ##### FUNCTION gtk_signal_handler_block ##### -->
 <para>
 Prevent an user-defined handler from being invoked.  All other
 signal processing will go on as normal, but this particular
 handler will ignore it.
 </para>
 
-<!-- # Unused Parameters # -->
 @object: the object which emits the signal to block.
 @handler_id: the connection id.
 
 
-<!-- ##### MACRO gtk_signal_handler_block_by_func ##### -->
+<!-- ##### FUNCTION gtk_signal_handler_block_by_func ##### -->
 <para>
 Prevent a user-defined handler from being invoked, by reference to
 the user-defined handler's function pointer and user data.  (It may result in
 multiple hooks being blocked, if you've called connect multiple times.)
 </para>
 
-@o: 
-@f: 
-@d: 
-<!-- # Unused Parameters # -->
 @object: the object which emits the signal to block.
 @func: the function pointer of the handler to block.
 @data: the user data of the handler to block.
+<!-- # Unused Parameters # -->
+@o: 
+@f: 
+@d: 
 
 
-<!-- ##### MACRO gtk_signal_handler_block_by_data ##### -->
+<!-- ##### FUNCTION gtk_signal_handler_block_by_data ##### -->
 <para>
 Prevent all user-defined handlers with a certain user data from being invoked.
 </para>
 
-@o: 
-@d: 
-<!-- # Unused Parameters # -->
 @object: the object which emits the signal we want to block.
 @data: the user data of the handlers to block.
+<!-- # Unused Parameters # -->
+@o: 
+@d: 
 
 
-<!-- ##### MACRO gtk_signal_handler_unblock ##### -->
+<!-- ##### FUNCTION gtk_signal_handler_unblock ##### -->
 <para>
 Undo a block, by connection id.  Note that undoing a block doesn't
 necessarily make the hook callable, because if you block a
 hook twice, you must unblock it twice.
 </para>
 
-<!-- # Unused Parameters # -->
 @object: the object which emits the signal we want to unblock.
 @handler_id: the emission handler identifier, as returned by
 gtk_signal_connect(), etc.
 
 
-<!-- ##### MACRO gtk_signal_handler_unblock_by_func ##### -->
+<!-- ##### FUNCTION gtk_signal_handler_unblock_by_func ##### -->
 <para>
 Undo a block, by function pointer and data.
 Note that undoing a block doesn't
@@ -727,29 +748,29 @@ necessarily make the hook callable, because if you block a
 hook twice, you must unblock it twice.
 </para>
 
-@o: 
-@f: 
-@d: 
-<!-- # Unused Parameters # -->
 @object: the object which emits the signal we want to unblock.
 @func: the function pointer to search for.
 @data: the user data to search for.
+<!-- # Unused Parameters # -->
+@o: 
+@f: 
+@d: 
 
 
-<!-- ##### MACRO gtk_signal_handler_unblock_by_data ##### -->
+<!-- ##### FUNCTION gtk_signal_handler_unblock_by_data ##### -->
 <para>
 Undo block(s), to all signals for a particular object
 with a particular user-data pointer
 </para>
 
-@o: 
-@d: 
-<!-- # Unused Parameters # -->
 @object: the object which emits the signal we want to unblock.
 @data: the user data to search for.
+<!-- # Unused Parameters # -->
+@o: 
+@d: 
 
 
-<!-- ##### MACRO gtk_signal_handler_pending ##### -->
+<!-- ##### FUNCTION gtk_signal_handler_pending ##### -->
 <para>
 Returns a connection id corresponding to a given signal id and object.
 </para>
@@ -760,36 +781,64 @@ may opt to not emit the signal if no one is attached anyway,
 thus saving the cost of building the arguments.
 </para>
 
-@i: 
-@s: 
-@b: 
-@Returns: the connection id, if a connection was found.  0 otherwise.
-<!-- # Unused Parameters # -->
 @object: the object to search for the desired user-defined handler.
 @signal_id: the number of the signal to search for.
 @may_be_blocked: whether it is acceptable to return a blocked
 handler.
+@Returns: the connection id, if a connection was found.  0 otherwise.
+<!-- # Unused Parameters # -->
+@i: 
+@s: 
+@b: 
 
 
-<!-- ##### MACRO gtk_signal_handler_pending_by_func ##### -->
+<!-- ##### FUNCTION gtk_signal_handler_pending_by_func ##### -->
 <para>
 Returns a connection id corresponding to a given signal id, object, function
 pointer and user data.
 </para>
 
-@o: 
-@s: 
-@b: 
-@f: 
-@d: 
-@Returns: the connection id, if a handler was found.  0 otherwise.
-<!-- # Unused Parameters # -->
 @object: the object to search for the desired handler.
 @signal_id: the number of the signal to search for.
 @may_be_blocked: whether it is acceptable to return a blocked
 handler.
 @func: the function pointer to search for.
 @data: the user data to search for.
+@Returns: the connection id, if a handler was found.  0 otherwise.
+<!-- # Unused Parameters # -->
+@o: 
+@s: 
+@b: 
+@f: 
+@d: 
+
+
+<!-- ##### FUNCTION gtk_signal_add_emission_hook ##### -->
+<para>
+Add an emission hook for a type of signal, for any object.
+</para>
+
+@signal_id: the type of signal to hook for.
+@hook_func: the function to invoke to handle the emission hook.
+@data: the user data passed in to hook_func.
+@Returns: the id (that you may pass as a parameter
+to gtk_signal_remove_emission_hook()).
+<!-- # Unused Parameters # -->
+@i: 
+@h: 
+@d: 
+
+
+<!-- ##### FUNCTION gtk_signal_remove_emission_hook ##### -->
+<para>
+Delete an emission hook. (see gtk_signal_add_emission_hook())
+</para>
+
+@signal_id: the id of the signal type.
+@hook_id: the id of the emission handler, returned by add_emission_hook().
+<!-- # Unused Parameters # -->
+@i: 
+@h: 
 
 
 <!-- ##### MACRO gtk_signal_default_marshaller ##### -->

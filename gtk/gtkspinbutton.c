@@ -36,6 +36,7 @@
 #include "gtkspinbutton.h"
 #include "gtkmain.h"
 #include "gtksignal.h"
+#include "gtksettings.h"
 
 
 #define MIN_SPIN_BUTTON_WIDTH              30
@@ -55,7 +56,6 @@ enum {
   ARG_NUMERIC,
   ARG_WRAP,
   ARG_UPDATE_POLICY,
-  ARG_SHADOW_TYPE,
   ARG_VALUE
 };
 
@@ -121,6 +121,7 @@ static void gtk_spin_button_real_spin      (GtkSpinButton      *spin_button,
 static gint gtk_spin_button_default_input  (GtkSpinButton      *spin_button,
 					    gfloat             *new_val);
 static gint gtk_spin_button_default_output (GtkSpinButton      *spin_button);
+static gint spin_button_get_shadow_type    (GtkSpinButton      *spin_button);
 
 
 static GtkEntryClass *parent_class = NULL;
@@ -221,15 +222,17 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 			   GTK_TYPE_SPIN_BUTTON_UPDATE_POLICY,
 			   GTK_ARG_READWRITE,
 			   ARG_UPDATE_POLICY);
-  gtk_object_add_arg_type ("GtkSpinButton::shadow_type",
-			   GTK_TYPE_SHADOW_TYPE,
-			   GTK_ARG_READWRITE,
-			   ARG_SHADOW_TYPE);
   gtk_object_add_arg_type ("GtkSpinButton::value",
 			   GTK_TYPE_FLOAT,
 			   GTK_ARG_READWRITE,
 			   ARG_VALUE);
-
+  
+  gtk_widget_class_install_style_property_parser (widget_class,
+						  g_param_spec_enum ("shadow_type", "Shadow Type", NULL,
+								     GTK_TYPE_SHADOW_TYPE,
+								     GTK_SHADOW_NONE,
+								     G_PARAM_READABLE),
+						  gtk_rc_property_parse_enum);
   spinbutton_signals[INPUT] =
     gtk_signal_new ("input",
 		    GTK_RUN_LAST,
@@ -290,9 +293,6 @@ gtk_spin_button_set_arg (GtkObject        *object,
     case ARG_UPDATE_POLICY:
       gtk_spin_button_set_update_policy (spin_button, GTK_VALUE_ENUM (*arg));
       break;
-    case ARG_SHADOW_TYPE:
-      gtk_spin_button_set_shadow_type (spin_button, GTK_VALUE_ENUM (*arg));
-      break;
     case ARG_VALUE:
       gtk_spin_button_set_value (spin_button, GTK_VALUE_FLOAT (*arg));
       break;
@@ -333,9 +333,6 @@ gtk_spin_button_get_arg (GtkObject        *object,
     case ARG_UPDATE_POLICY:
       GTK_VALUE_ENUM (*arg) = spin_button->update_policy;
       break;
-    case ARG_SHADOW_TYPE:
-      GTK_VALUE_ENUM (*arg) = spin_button->shadow_type;
-      break;
     case ARG_VALUE:
       GTK_VALUE_FLOAT (*arg) = spin_button->adjustment->value;
       break;
@@ -350,7 +347,6 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 {
   spin_button->adjustment = NULL;
   spin_button->panel = NULL;
-  spin_button->shadow_type = GTK_SHADOW_NONE;
   spin_button->timer = 0;
   spin_button->ev_time = 0;
   spin_button->climb_rate = 0.0;
@@ -584,14 +580,17 @@ gtk_spin_button_expose (GtkWidget      *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
+      GtkShadowType shadow_type;
+
       /* FIXME this seems like really broken code -
        * why aren't we looking at event->window
        * and acting accordingly?
        */
-      
-      if (spin->shadow_type != GTK_SHADOW_NONE)
+
+      shadow_type = spin_button_get_shadow_type (spin);
+      if (shadow_type != GTK_SHADOW_NONE)
 	gtk_paint_box (widget->style, spin->panel,
-		       GTK_STATE_NORMAL, spin->shadow_type,
+		       GTK_STATE_NORMAL, shadow_type,
 		       &event->area, widget, "spinbutton",
 		       0, 0, 
 		       ARROW_SIZE + 2 * widget->style->xthickness,
@@ -616,6 +615,7 @@ static void
 gtk_spin_button_draw_arrow (GtkSpinButton *spin_button, 
 			    guint          arrow)
 {
+  GtkShadowType spin_shadow_type;
   GtkStateType state_type;
   GtkShadowType shadow_type;
   GtkWidget *widget;
@@ -626,6 +626,7 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
   
   widget = GTK_WIDGET (spin_button);
+  spin_shadow_type = spin_button_get_shadow_type (spin_button);
 
   if (GTK_WIDGET_DRAWABLE (spin_button))
     {
@@ -659,7 +660,7 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
 	}
       if (arrow == GTK_ARROW_UP)
 	{
-	  if (spin_button->shadow_type != GTK_SHADOW_NONE)
+	  if (spin_shadow_type != GTK_SHADOW_NONE)
 	    {
 	      x = widget->style->xthickness;
 	      y = widget->style->ythickness;
@@ -678,7 +679,7 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
 	}
       else
 	{
-	  if (spin_button->shadow_type != GTK_SHADOW_NONE)
+	  if (spin_shadow_type != GTK_SHADOW_NONE)
 	    {
 	      x = widget->style->xthickness;
 	      y = widget->requisition.height / 2;
@@ -1563,19 +1564,14 @@ gtk_spin_button_set_wrap (GtkSpinButton  *spin_button,
   spin_button->wrap = (wrap != 0);
 }
 
-void
-gtk_spin_button_set_shadow_type (GtkSpinButton *spin_button,
-				 GtkShadowType  shadow_type)
+static gint
+spin_button_get_shadow_type (GtkSpinButton *spin_button)
 {
-  g_return_if_fail (spin_button != NULL);
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
+  GtkShadowType rc_shadow_type;
 
-  if (shadow_type != spin_button->shadow_type)
-    {
-      spin_button->shadow_type = shadow_type;
-      if (GTK_WIDGET_DRAWABLE (spin_button))
-	gtk_widget_queue_draw (GTK_WIDGET (spin_button));
-    }
+  gtk_widget_style_get (GTK_WIDGET (spin_button), "shadow_type", &rc_shadow_type, NULL);
+
+  return rc_shadow_type;
 }
 
 void

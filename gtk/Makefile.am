@@ -11,6 +11,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
 	-DGTK_VERSION=\"@GTK_VERSION@\"			\
 	-DTESTGTK_RCFILE=\"`pwd`/$(srcdir)/testgtkrc\"	\
+	-DG_DISABLE_CONST_RETURNS			\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
@@ -147,6 +148,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkscrolledwindow.h	\
 	gtkselection.h		\
 	gtkseparator.h		\
+	gtksettings.h		\
 	gtksignal.h		\
 	gtksocket.h		\
 	gtkspinbutton.h		\
@@ -306,6 +308,7 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkscrolledwindow.c	\
 	gtkselection.c		\
 	gtkseparator.c		\
+	gtksettings.c		\
 	gtksignal.c		\
 	gtksocket.c             \
 	gtkspinbutton.c		\

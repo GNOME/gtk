@@ -140,9 +140,7 @@ gtk_type_init (GTypeDebugFlags debug_flags)
 #include "gtktypebuiltins_ids.c"	/* type entries */
 	{ NULL }
       };
-      GTypeFundamentalInfo finfo = { 0, };
       GTypeInfo tinfo = { 0, };
-      GtkType type_id;
       guint i;
 
       initialized = TRUE;

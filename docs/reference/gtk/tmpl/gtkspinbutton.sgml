@@ -294,15 +294,6 @@ Sets a spin button's value to the lower limit when it's upper limit is reached, 
 @wrap: defaults to FALSE, set to TRUE to make the spin button wrap.
 
 
-<!-- ##### FUNCTION gtk_spin_button_set_shadow_type ##### -->
-<para>
-Creates a border around the arrows of a #GtkSpinButton. The type of border is determined by @shadow_type.
-</para>
-
-@spin_button: a #GtkSpinButton
-@shadow_type: the new border type.
-
-
 <!-- ##### FUNCTION gtk_spin_button_set_snap_to_ticks ##### -->
 <para>
 Sets whether a number typed into a spin button should be snapped to the nearest step increment.
@@ -377,11 +368,6 @@ whether a spin button should wrap upon reaching its limits.
 <!-- ##### ARG GtkSpinButton:update-policy ##### -->
 <para>
 how a spin button should be updated.
-</para>
-
-<!-- ##### ARG GtkSpinButton:shadow-type ##### -->
-<para>
-the type of border that surrounds the arrows of a spin button.
 </para>
 
 <!-- ##### ARG GtkSpinButton:value ##### -->

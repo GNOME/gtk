@@ -123,6 +123,7 @@
 #include <gtk/gtkselection.h>
 #include <gtk/gtkseparator.h>
 #include <gtk/gtkseparatormenuitem.h>
+#include <gtk/gtksettings.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtksocket.h>
 #include <gtk/gtkspinbutton.h>

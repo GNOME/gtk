@@ -57,6 +57,7 @@
 #include "gtkthemes.h"
 #include "gtkintl.h"
 #include "gtkiconfactory.h"
+#include "gtksettings.h"
 
 #ifdef G_OS_WIN32
 #include <io.h>
@@ -101,6 +102,8 @@ static void        gtk_rc_parse_any                  (const gchar     *input_nam
                                                       const gchar     *input_string);
 static guint       gtk_rc_parse_statement            (GScanner        *scanner);
 static guint       gtk_rc_parse_style                (GScanner        *scanner);
+static guint       gtk_rc_parse_assignment           (GScanner        *scanner,
+						      GtkRcProperty   *prop);
 static guint       gtk_rc_parse_bg                   (GScanner        *scanner,
                                                       GtkRcStyle      *style);
 static guint       gtk_rc_parse_fg                   (GScanner        *scanner,
@@ -145,12 +148,14 @@ static void        gtk_rc_style_class_init           (GtkRcStyleClass *klass);
 static void        gtk_rc_style_finalize             (GObject         *object);
 static void        gtk_rc_style_real_merge           (GtkRcStyle      *dest,
                                                       GtkRcStyle      *src);
-static GtkRcStyle *gtk_rc_style_real_clone           (GtkRcStyle      *rc_style);
-static GtkStyle *  gtk_rc_style_real_create_style    (GtkRcStyle      *rc_style);
+static GtkRcStyle* gtk_rc_style_real_create_rc_style (GtkRcStyle      *rc_style);
+static GtkStyle*   gtk_rc_style_real_create_style    (GtkRcStyle      *rc_style);
+static gint	   gtk_rc_properties_cmp	     (gconstpointer    bsearch_node1,
+						      gconstpointer    bsearch_node2);
 
 static gpointer parent_class = NULL;
 
-static const GScannerConfig  gtk_rc_scanner_config =
+static const GScannerConfig gtk_rc_scanner_config =
 {
   (
    " \t\r\n"
@@ -267,7 +272,6 @@ static GtkImageLoader image_loader = NULL;
 
 
 #ifdef G_OS_WIN32
-
 static gchar *
 get_gtk_dll_name (void)
 {
@@ -286,8 +290,7 @@ get_themes_directory (void)
 							get_gtk_dll_name (),
 							"themes");
 }
-
-#endif
+#endif /* G_OS_WIN32 */
  
 static gchar *
 gtk_rc_make_default_dir (const gchar *type)
@@ -563,12 +566,11 @@ gtk_rc_get_default_files (void)
 void
 gtk_rc_init (void)
 {
+  static gboolean initialized = FALSE;
   static gchar *locale_suffixes[3];
   static gint n_locale_suffixes = 0;
-
   gint i, j;
 
-  static gboolean initialized = FALSE;
 
   if (!initialized)
     {
@@ -631,13 +633,13 @@ gtk_rc_init (void)
 	}
     }
   
-  i = 0;
-  while (gtk_rc_default_files[i] != NULL)
+  g_object_freeze_notify (G_OBJECT (gtk_settings_get_global ()));
+  for (i = 0; gtk_rc_default_files[i] != NULL; i++)
     {
-      /* Try to find a locale specific RC file corresponding to
-       * to parse before the default file.
+      /* Try to find a locale specific RC file corresponding to the
+       * current locale to parse before the default file.
        */
-      for (j=n_locale_suffixes-1; j>=0; j--)
+      for (j = n_locale_suffixes - 1; j >= 0; j--)
 	{
 	  gchar *name = g_strconcat (gtk_rc_default_files[i],
 				     ".",
@@ -646,10 +648,9 @@ gtk_rc_init (void)
 	  gtk_rc_parse (name);
 	  g_free (name);
 	}
-
       gtk_rc_parse (gtk_rc_default_files[i]);
-      i++;
     }
+  g_object_thaw_notify (G_OBJECT (gtk_settings_get_global ()));
 }
 
 void
@@ -801,6 +802,7 @@ gtk_rc_style_init (GtkRcStyle *style)
     }
   style->xthickness = -1;
   style->ythickness = -1;
+  style->rc_properties = NULL;
 
   style->rc_style_lists = NULL;
   style->icon_factories = NULL;
@@ -816,55 +818,17 @@ gtk_rc_style_class_init (GtkRcStyleClass *klass)
   object_class->finalize = gtk_rc_style_finalize;
 
   klass->parse = NULL;
-  klass->clone = gtk_rc_style_real_clone;
+  klass->create_rc_style = gtk_rc_style_real_create_rc_style;
   klass->merge = gtk_rc_style_real_merge;
   klass->create_style = gtk_rc_style_real_create_style;
-}
-
-/* Like g_slist_remove, but remove all copies of data */
-static GSList *
-gtk_rc_slist_remove_all (GSList   *list,
-			 gpointer  data)
-{
-  GSList *tmp;
-  GSList *prev;
-
-  prev = NULL;
-  tmp = list;
-
-  while (tmp)
-    {
-      if (tmp->data == data)
-	{
-	  if (list == tmp)
-	    list = list->next;
-
-	  if (prev) 
-	    prev->next = tmp->next;
-
-	  g_slist_free_1 (tmp);
-
-	  if (prev)
-	    tmp = prev->next;
-	  else
-	    tmp = list;
-	}
-      else
-	{
-	  prev = tmp;
-	  tmp = tmp->next;
-	}
-    }
-
-  return list;
 }
 
 static void
 gtk_rc_style_finalize (GObject *object)
 {
-  gint i;
   GSList *tmp_list1, *tmp_list2;
   GtkRcStyle *rc_style;
+  gint i;
 
   rc_style = GTK_RC_STYLE (object);
   
@@ -873,7 +837,7 @@ gtk_rc_style_finalize (GObject *object)
   if (rc_style->font_desc)
     pango_font_description_free (rc_style->font_desc);
       
-  for (i=0 ; i < 5 ; i++)
+  for (i = 0; i < 5; i++)
     if (rc_style->bg_pixmap_name[i])
       g_free (rc_style->bg_pixmap_name[i]);
   
@@ -896,9 +860,8 @@ gtk_rc_style_finalize (GObject *object)
           GtkRcStyle *other_style = tmp_list2->data;
 
           if (other_style != rc_style)
-            other_style->rc_style_lists =
-              gtk_rc_slist_remove_all (other_style->rc_style_lists, rc_styles);
-		  
+            other_style->rc_style_lists = g_slist_remove_all (other_style->rc_style_lists,
+							      rc_styles);
           tmp_list2 = tmp_list2->next;
         }
 
@@ -909,8 +872,22 @@ gtk_rc_style_finalize (GObject *object)
 
       tmp_list1 = tmp_list1->next;
     }
-
   g_slist_free (rc_style->rc_style_lists);
+
+  if (rc_style->rc_properties)
+    {
+      guint i;
+
+      for (i = 0; i < rc_style->rc_properties->n_nodes; i++)
+	{
+	  GtkRcProperty *node = g_bsearch_array_get_nth (rc_style->rc_properties, i);
+
+	  g_free (node->origin);
+	  g_value_unset (&node->value);
+	}
+      g_bsearch_array_destroy (rc_style->rc_properties);
+      rc_style->rc_properties = NULL;
+    }
 
   tmp_list1 = rc_style->icon_factories;
   while (tmp_list1)
@@ -919,7 +896,6 @@ gtk_rc_style_finalize (GObject *object)
 
       tmp_list1 = tmp_list1->next;
     }
-
   g_slist_free (rc_style->icon_factories);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -952,7 +928,7 @@ gtk_rc_style_copy (GtkRcStyle *orig)
 
   g_return_val_if_fail (GTK_IS_RC_STYLE (orig), NULL);
   
-  style = GTK_RC_STYLE_GET_CLASS (orig)->clone (orig);
+  style = GTK_RC_STYLE_GET_CLASS (orig)->create_rc_style (orig);
   GTK_RC_STYLE_GET_CLASS (style)->merge (style, orig);
 
   return style;
@@ -975,9 +951,24 @@ gtk_rc_style_unref (GtkRcStyle  *rc_style)
 }
 
 static GtkRcStyle *
-gtk_rc_style_real_clone (GtkRcStyle *style)
+gtk_rc_style_real_create_rc_style (GtkRcStyle *style)
 {
   return GTK_RC_STYLE (g_object_new (G_OBJECT_TYPE (style), NULL));
+}
+
+static gint
+gtk_rc_properties_cmp (gconstpointer bsearch_node1,
+		       gconstpointer bsearch_node2)
+{
+  const GtkRcProperty *prop1 = bsearch_node1;
+  const GtkRcProperty *prop2 = bsearch_node2;
+  gint cmp;
+
+  cmp = G_BSEARCH_ARRAY_CMP (prop1->type_name, prop2->type_name);
+  if (cmp == 0)
+    cmp = G_BSEARCH_ARRAY_CMP (prop1->property_name, prop2->property_name);
+
+  return cmp;
 }
 
 static void
@@ -1024,6 +1015,31 @@ gtk_rc_style_real_merge (GtkRcStyle *dest,
 
   if (!dest->font_desc && src->font_desc)
     dest->font_desc = pango_font_description_copy (src->font_desc);
+
+  if (src->rc_properties)
+    {
+      guint i;
+
+      if (!dest->rc_properties)
+	dest->rc_properties = g_bsearch_array_new (sizeof (GtkRcProperty),
+						   gtk_rc_properties_cmp,
+						   0);
+      for (i = 0; i < src->rc_properties->n_nodes; i++)
+	{
+	  GtkRcProperty *node = g_bsearch_array_get_nth (src->rc_properties, i);
+	  GtkRcProperty *prop, key = { 0, 0, NULL, { 0, }, };
+
+	  key.type_name = node->type_name;
+	  key.property_name = node->property_name;
+	  prop = g_bsearch_array_insert (dest->rc_properties, &key, FALSE);
+	  if (!prop->origin)
+	    {
+	      prop->origin = g_strdup (node->origin);
+	      g_value_init (&prop->value, G_VALUE_TYPE (&node->value));
+	      g_value_copy (&node->value, &prop->value);
+	    }
+	}
+    }
 }
 
 static GtkStyle *
@@ -1274,6 +1290,12 @@ gtk_rc_add_class_style (GtkRcStyle  *rc_style,
   gtk_rc_sets_class = gtk_rc_add_rc_sets (gtk_rc_sets_class, rc_style, pattern);
 }
 
+GScanner*
+gtk_rc_scanner_new (void)
+{
+  return g_scanner_new (&gtk_rc_scanner_config);
+}
+
 static void
 gtk_rc_parse_any (const gchar  *input_name,
 		  gint		input_fd,
@@ -1282,8 +1304,8 @@ gtk_rc_parse_any (const gchar  *input_name,
   GScanner *scanner;
   guint	   i;
   gboolean done;
-  
-  scanner = g_scanner_new ((GScannerConfig *) &gtk_rc_scanner_config);
+
+  scanner = gtk_rc_scanner_new ();
   
   if (input_fd >= 0)
     {
@@ -1478,7 +1500,7 @@ gtk_rc_init_style (GSList *rc_styles)
 	}
       
       proto_style_class = GTK_RC_STYLE_GET_CLASS (base_style);
-      proto_style = proto_style_class->clone (base_style);
+      proto_style = proto_style_class->create_rc_style (base_style);
       
       tmp_styles = rc_styles;
       while (tmp_styles)
@@ -1536,23 +1558,204 @@ gtk_rc_init_style (GSList *rc_styles)
  *********************/
 
 static guint
+rc_parse_token_or_compound (GScanner  *scanner,
+			    GString   *gstring,
+			    GTokenType delimiter)
+{
+  guint token = g_scanner_get_next_token (scanner);
+
+  /* we either scan a single token (skipping comments)
+   * or a compund statement.
+   * compunds are enclosed in (), [] or {} braces, we read
+   * them in via deep recursion.
+   */
+
+  switch (token)
+    {
+      gchar *string;
+    case G_TOKEN_INT:
+      g_string_printfa (gstring, " 0x%lx", scanner->value.v_int);
+      break;
+    case G_TOKEN_FLOAT:
+      g_string_printfa (gstring, " %f", scanner->value.v_float);
+      break;
+    case G_TOKEN_STRING:
+      string = g_strescape (scanner->value.v_string, NULL);
+      g_string_append (gstring, " \"");
+      g_string_append (gstring, string);
+      g_string_append_c (gstring, '"');
+      g_free (string);
+      break;
+    case G_TOKEN_IDENTIFIER:
+      g_string_append_c (gstring, ' ');
+      g_string_append (gstring, scanner->value.v_identifier);
+      break;
+    case G_TOKEN_COMMENT_SINGLE:
+    case G_TOKEN_COMMENT_MULTI:
+      return rc_parse_token_or_compound (scanner, gstring, delimiter);
+    case G_TOKEN_LEFT_PAREN:
+      g_string_append_c (gstring, ' ');
+      g_string_append_c (gstring, token);
+      token = rc_parse_token_or_compound (scanner, gstring, G_TOKEN_RIGHT_PAREN);
+      if (token != G_TOKEN_NONE)
+	return token;
+      break;
+    case G_TOKEN_LEFT_CURLY:
+      g_string_append_c (gstring, ' ');
+      g_string_append_c (gstring, token);
+      token = rc_parse_token_or_compound (scanner, gstring, G_TOKEN_RIGHT_CURLY);
+      if (token != G_TOKEN_NONE)
+	return token;
+      break;
+    case G_TOKEN_LEFT_BRACE:
+      g_string_append_c (gstring, ' ');
+      g_string_append_c (gstring, token);
+      token = rc_parse_token_or_compound (scanner, gstring, G_TOKEN_RIGHT_BRACE);
+      if (token != G_TOKEN_NONE)
+	return token;
+      break;
+    default:
+      if (token >= 256 || token < 1)
+	return delimiter ? delimiter : G_TOKEN_STRING;
+      g_string_append_c (gstring, ' ');
+      g_string_append_c (gstring, token);
+      if (token == delimiter)
+	return G_TOKEN_NONE;
+      break;
+    }
+  if (!delimiter)
+    return G_TOKEN_NONE;
+  else
+    return rc_parse_token_or_compound (scanner, gstring, delimiter);
+}
+
+static guint
+gtk_rc_parse_assignment (GScanner      *scanner,
+			 GtkRcProperty *prop)
+{
+  gboolean scan_identifier = scanner->config->scan_identifier;
+  gboolean scan_symbols = scanner->config->scan_symbols;
+  gboolean identifier_2_string = scanner->config->identifier_2_string;
+  gboolean char_2_token = scanner->config->char_2_token;
+  gboolean scan_identifier_NULL = scanner->config->scan_identifier_NULL;
+  gboolean numbers_2_int = scanner->config->numbers_2_int;
+  gboolean negate = FALSE;
+  guint token;
+
+  /* check that this is an assignment */
+  if (g_scanner_get_next_token (scanner) != '=')
+    return '=';
+
+  /* adjust scanner mode */
+  scanner->config->scan_identifier = TRUE;
+  scanner->config->scan_symbols = FALSE;
+  scanner->config->identifier_2_string = FALSE;
+  scanner->config->char_2_token = TRUE;
+  scanner->config->scan_identifier_NULL = FALSE;
+  scanner->config->numbers_2_int = TRUE;
+
+  /* record location */
+  prop->origin = g_strdup_printf ("%s:%u", scanner->input_name, scanner->line);
+
+  /* parse optional sign */
+  if (g_scanner_peek_next_token (scanner) == '-')
+    {
+      g_scanner_get_next_token (scanner); /* eat sign */
+      negate = TRUE;
+    }
+
+  /* parse one of LONG, DOUBLE and STRING or, if that fails, create an unparsed compund */
+  token = g_scanner_peek_next_token (scanner);
+  switch (token)
+    {
+    case G_TOKEN_INT:
+      g_scanner_get_next_token (scanner);
+      g_value_init (&prop->value, G_TYPE_LONG);
+      g_value_set_long (&prop->value, negate ? -scanner->value.v_int : scanner->value.v_int);
+      token = G_TOKEN_NONE;
+      break;
+    case G_TOKEN_FLOAT:
+      g_scanner_get_next_token (scanner);
+      g_value_init (&prop->value, G_TYPE_DOUBLE);
+      g_value_set_double (&prop->value, negate ? -scanner->value.v_float : scanner->value.v_float);
+      token = G_TOKEN_NONE;
+      break;
+    case G_TOKEN_STRING:
+      g_scanner_get_next_token (scanner);
+      if (negate)
+	token = G_TOKEN_INT;
+      else
+	{
+	  g_value_init (&prop->value, G_TYPE_STRING);
+	  g_value_set_string (&prop->value, scanner->value.v_string);
+	  token = G_TOKEN_NONE;
+	}
+      break;
+    case G_TOKEN_IDENTIFIER:
+    case G_TOKEN_LEFT_PAREN:
+    case G_TOKEN_LEFT_CURLY:
+    case G_TOKEN_LEFT_BRACE:
+      if (!negate)
+	{
+	  GString *gstring = g_string_new ("");
+
+	  token = rc_parse_token_or_compound (scanner, gstring, 0);
+	  if (token == G_TOKEN_NONE)
+	    {
+	      g_string_append_c (gstring, ' ');
+	      g_value_init (&prop->value, G_TYPE_GSTRING);
+	      g_value_set_static_boxed (&prop->value, gstring);
+	    }
+	  else
+	    g_string_free (gstring, TRUE);
+	  break;
+	}
+      /* fall through */
+    default:
+      g_scanner_get_next_token (scanner);
+      token = G_TOKEN_INT;
+      break;
+    }
+
+  /* restore scanner mode */
+  scanner->config->scan_identifier = scan_identifier;
+  scanner->config->scan_symbols = scan_symbols;
+  scanner->config->identifier_2_string = identifier_2_string;
+  scanner->config->char_2_token = char_2_token;
+  scanner->config->scan_identifier_NULL = scan_identifier_NULL;
+  scanner->config->numbers_2_int = numbers_2_int;
+
+  return token;
+}
+
+static gboolean
+is_c_identifier (const gchar *string)
+{
+  const gchar *p;
+  gboolean is_varname;
+
+  is_varname = strchr (G_CSET_a_2_z G_CSET_A_2_Z "_", string[0]) != NULL;
+  for (p = string + 1; *p && is_varname; p++)
+    is_varname &= strchr (G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "_-", *p) != NULL;
+
+  return is_varname;
+}
+
+static guint
 gtk_rc_parse_statement (GScanner *scanner)
 {
   guint token;
   
   token = g_scanner_peek_next_token (scanner);
-  
   switch (token)
     {
     case GTK_RC_TOKEN_INCLUDE:
       token = g_scanner_get_next_token (scanner);
       if (token != GTK_RC_TOKEN_INCLUDE)
 	return GTK_RC_TOKEN_INCLUDE;
-      
       token = g_scanner_get_next_token (scanner);
       if (token != G_TOKEN_STRING)
 	return G_TOKEN_STRING;
-      
       gtk_rc_parse_file (scanner->value.v_string, FALSE);
       return G_TOKEN_NONE;
       
@@ -1583,6 +1786,39 @@ gtk_rc_parse_statement (GScanner *scanner)
     case GTK_RC_TOKEN_IM_MODULE_FILE:
       return gtk_rc_parse_im_module_file (scanner);
 
+    case G_TOKEN_IDENTIFIER:
+      if (is_c_identifier (scanner->next_value.v_identifier))
+	{
+	  GtkRcProperty prop = { 0, 0, NULL, { 0, }, };
+	  gchar *name;
+	  
+	  g_scanner_get_next_token (scanner); /* eat identifier */
+	  name = g_strdup (scanner->value.v_identifier);
+	  
+	  token = gtk_rc_parse_assignment (scanner, &prop);
+	  if (token == G_TOKEN_NONE)
+	    {
+	      GtkSettingsValue svalue;
+
+	      svalue.origin = prop.origin;
+	      memcpy (&svalue.value, &prop.value, sizeof (prop.value));
+	      g_strcanon (name, G_CSET_A_2_Z G_CSET_a_2_z G_CSET_DIGITS "-", '-');
+	      gtk_settings_set_property_value (gtk_settings_get_global (),
+					       name,
+					       &svalue);
+	    }
+	  g_free (prop.origin);
+	  if (G_VALUE_TYPE (&prop.value))
+	    g_value_unset (&prop.value);
+	  g_free (name);
+	  
+	  return token;
+	}
+      else
+	{
+	  g_scanner_get_next_token (scanner);
+	  return G_TOKEN_IDENTIFIER;
+	}
     default:
       g_scanner_get_next_token (scanner);
       return /* G_TOKEN_SYMBOL */ GTK_RC_TOKEN_STYLE;
@@ -1665,6 +1901,33 @@ gtk_rc_parse_style (GScanner *scanner)
 	      if (rc_style->font_desc)
 		pango_font_description_free (rc_style->font_desc);
 	      rc_style->font_desc = pango_font_description_copy (parent_style->font_desc);
+	    }
+
+	  if (parent_style->rc_properties)
+	    {
+	      guint i;
+
+	      if (!rc_style->rc_properties)
+		rc_style->rc_properties = g_bsearch_array_new (sizeof (GtkRcProperty),
+							       gtk_rc_properties_cmp,
+							       0);
+	      for (i = 0; i < parent_style->rc_properties->n_nodes; i++)
+		{
+		  GtkRcProperty *node = g_bsearch_array_get_nth (parent_style->rc_properties, i);
+		  GtkRcProperty *prop, key = { 0, 0, NULL, { 0, }, };
+
+		  key.type_name = node->type_name;
+		  key.property_name = node->property_name;
+		  prop = g_bsearch_array_insert (rc_style->rc_properties, &key, FALSE);
+		  if (prop->origin)
+		    {
+		      g_free (prop->origin);
+		      g_value_unset (&prop->value);
+		    }
+		  prop->origin = g_strdup (node->origin);
+		  g_value_init (&prop->value, G_VALUE_TYPE (&node->value));
+		  g_value_copy (&node->value, &prop->value);
+		}
 	    }
 	  
 	  for (i = 0; i < 5; i++)
@@ -1761,6 +2024,65 @@ gtk_rc_parse_style (GScanner *scanner)
             }
           token = gtk_rc_parse_stock (scanner, rc_style, our_factory);
           break;
+	case G_TOKEN_IDENTIFIER:
+	  if (is_c_identifier (scanner->next_value.v_identifier) &&
+	      scanner->next_value.v_identifier[0] >= 'A' &&
+	      scanner->next_value.v_identifier[0] <= 'Z') /* match namespaced type names */
+	    {
+	      GtkRcProperty prop = { 0, 0, NULL, { 0, }, };
+	      
+	      g_scanner_get_next_token (scanner); /* eat type name */
+	      prop.type_name = g_quark_from_string (scanner->value.v_identifier);
+	      if (g_scanner_get_next_token (scanner) != ':' ||
+		  g_scanner_get_next_token (scanner) != ':')
+		{
+		  token = ':';
+		  break;
+		}
+	      if (g_scanner_get_next_token (scanner) != G_TOKEN_IDENTIFIER ||
+		  !is_c_identifier (scanner->value.v_identifier))
+		{
+		  token = G_TOKEN_IDENTIFIER;
+		  break;
+		}
+
+	      /* it's important that we do the same canonification as GParamSpecPool here */
+	      g_strcanon (scanner->value.v_identifier, G_CSET_A_2_Z G_CSET_a_2_z G_CSET_DIGITS "-", '-');
+	      prop.property_name = g_quark_from_string (scanner->value.v_identifier);
+
+	      token = gtk_rc_parse_assignment (scanner, &prop);
+	      if (token == G_TOKEN_NONE)
+		{
+		  GtkRcProperty *tmp;
+
+		  g_return_val_if_fail (prop.origin != NULL && G_VALUE_TYPE (&prop.value) != 0, G_TOKEN_ERROR);
+
+		  if (!rc_style->rc_properties)
+		    rc_style->rc_properties = g_bsearch_array_new (sizeof (GtkRcProperty),
+								   gtk_rc_properties_cmp,
+								   0);
+		  tmp = g_bsearch_array_insert (rc_style->rc_properties, &prop, FALSE);
+		  if (prop.origin != tmp->origin)
+		    {
+		      g_free (tmp->origin);
+		      g_value_unset (&tmp->value);
+		      tmp->origin = prop.origin;
+		      memcpy (&tmp->value, &prop.value, sizeof (prop.value));
+		    }
+		}
+	      else
+		{
+		  g_free (prop.origin);
+		  if (G_VALUE_TYPE (&prop.value))
+		    g_value_unset (&prop.value);
+		}
+	    }
+	  else
+	    {
+	      g_scanner_get_next_token (scanner);
+	      token = G_TOKEN_IDENTIFIER;
+	    }
+	  break;
 	default:
 	  g_scanner_get_next_token (scanner);
 	  token = G_TOKEN_RIGHT_CURLY;
@@ -1770,19 +2092,12 @@ gtk_rc_parse_style (GScanner *scanner)
       if (token != G_TOKEN_NONE)
 	{
 	  if (insert)
-	    {
-	      if (rc_style->font_desc)
-		pango_font_description_free (rc_style->font_desc);
-	      
-	      for (i = 0; i < 5; i++)
-		if (rc_style->bg_pixmap_name[i])
-		  g_free (rc_style->bg_pixmap_name[i]);
-	      g_free (rc_style);
-	    }
+	    gtk_rc_style_unref (rc_style);
+
 	  return token;
 	}
       token = g_scanner_peek_next_token (scanner);
-    }
+    } /* while (token != G_TOKEN_RIGHT_CURLY) */
   
   token = g_scanner_get_next_token (scanner);
   if (token != G_TOKEN_RIGHT_CURLY)
@@ -1811,6 +2126,28 @@ gtk_rc_parse_style (GScanner *scanner)
     }
   
   return G_TOKEN_NONE;
+}
+
+const GtkRcProperty*
+_gtk_rc_style_lookup_rc_property (GtkRcStyle *rc_style,
+				  GQuark      type_name,
+				  GQuark      property_name)
+{
+  GtkRcProperty *node = NULL;
+
+  g_return_val_if_fail (GTK_IS_RC_STYLE (rc_style), NULL);
+
+  if (rc_style->rc_properties)
+    {
+      GtkRcProperty key;
+
+      key.type_name = type_name;
+      key.property_name = property_name;
+
+      node = g_bsearch_array_lookup (rc_style->rc_properties, &key);
+    }
+
+  return node;
 }
 
 static guint
@@ -2317,7 +2654,7 @@ gtk_rc_parse_color (GScanner *scanner,
 
   g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
 
-  /* we don't need to set our own scop here, because
+  /* we don't need to set our own scope here, because
    * we don't need own symbols
    */
   
