@@ -1038,6 +1038,7 @@ gdk_window_reparent (GdkWindow *window,
     gdk_window_set_static_win_gravity (window, parent_private->guffaw_gravity);
   
   parent_private->children = g_list_prepend (parent_private->children, window);
+  _gdk_window_init_position (GDK_WINDOW (window_private));
 }
 
 void

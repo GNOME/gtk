@@ -1,3 +1,12 @@
+Thu Apr 26 19:11:46 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_motion): clean up column
+	dragging code.  Revealed some (potential) GdkWindow bugs.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_reparent): add
+	_gdk_window_init_position to the end of reparent to fix the case
+	of reparenting when new_x != old_x and new_y != old_y.
+
 Thu Apr 26 10:54:50 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (strstr_len): Fix optimization that

@@ -30,22 +30,6 @@ extern "C" {
 #include <gtk/gtkrbtree.h>
 
 
-/* the width of the column resize windows */
-#define TREE_VIEW_EXPANDER_WIDTH 14
-#define TREE_VIEW_EXPANDER_HEIGHT 14
-
-/* The TREE_VIEW_VERTICAL_SEPARATOR is the space between rows. The
- * GTK_RBNODE_GET_HEIGHT() value includes the separators; the offset
- * of each row points to the center of the inter-row space. For an odd
- * separator, the extra pixel by convention goes _below_ the row.  So
- * a node in the rbtree owns TREE_VIEW_VERTICAL_SEPARATOR/2 pixels
- * above the row, and TREE_VIEW_VERTICAL_SEPARATOR/2 +
- * TREE_VIEW_VERTICAL_SEPARATOR%2 pixels below the row.
- */
-
-#define TREE_VIEW_VERTICAL_SEPARATOR 2
-#define TREE_VIEW_HORIZONTAL_SEPARATOR 0
-
   
 #define TREE_VIEW_DRAG_WIDTH 6
 
@@ -104,7 +88,10 @@ struct _GtkTreeViewPrivate
   GdkWindow *bin_window;
   GdkWindow *header_window;
   GdkWindow *drag_window;
+  GdkWindow *drag_highlight_window;
+  GdkWindow *drag_header_window;
   GtkTreeViewColumn *drag_column;
+  gint drag_column_x;
 
   gint expander_column;
 

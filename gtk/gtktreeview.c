@@ -45,6 +45,8 @@
 #endif
 
 
+
+
 /* The "background" areas of all rows/cells add up to cover the entire tree.
  * The background includes all inter-row and inter-cell spacing.
  * The "cell" areas are the cell_area passed in to gtk_cell_renderer_render(),
@@ -52,10 +54,10 @@
  */
 
 #define BACKGROUND_FIRST_PIXEL(tree_view,tree,node) (_gtk_rbtree_node_find_offset ((tree), (node)) + TREE_VIEW_HEADER_HEIGHT ((tree_view)))
-#define CELL_FIRST_PIXEL(tree_view,tree,node) (BACKGROUND_FIRST_PIXEL (tree_view,tree,node) + TREE_VIEW_VERTICAL_SEPARATOR/2)
+#define CELL_FIRST_PIXEL(tree_view,tree,node,separator) (BACKGROUND_FIRST_PIXEL (tree_view,tree,node) + separator/2)
 
 #define BACKGROUND_HEIGHT(node) (GTK_RBNODE_GET_HEIGHT (node))
-#define CELL_HEIGHT(node) (BACKGROUND_HEIGHT (node) - TREE_VIEW_VERTICAL_SEPARATOR);
+#define CELL_HEIGHT(node, separator) (BACKGROUND_HEIGHT (node) - separator);
 
 #define TREE_WINDOW_Y_TO_RBTREE_Y(tree_view,y) ((y) - TREE_VIEW_HEADER_HEIGHT (tree_view))
 #define RBTREE_Y_TO_TREE_WINDOW_Y(tree_view,y) ((y) + TREE_VIEW_HEADER_HEIGHT (tree_view))
@@ -259,7 +261,6 @@ static gboolean gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_v
                                                         GdkEventMotion   *event);
 static void     _gtk_tree_view_update_col_width    (GtkTreeView      *tree_view);
 
-static void     gtk_tree_view_column_reorder_remove_draw (GtkTreeViewColumnReorder *reorder);
 
 static GtkContainerClass *parent_class = NULL;
 static guint tree_view_signals[LAST_SIGNAL] = { 0 };
@@ -439,6 +440,48 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		   G_TYPE_BOOLEAN, 2,
 		   GTK_TYPE_TREE_ITER,
 		   GTK_TYPE_TREE_PATH);
+
+/* the width of the column resize windows */
+#define _TREE_VIEW_EXPANDER_WIDTH 14
+#define _TREE_VIEW_EXPANDER_HEIGHT 14
+#define _TREE_VIEW_VERTICAL_SEPARATOR 2
+#define _TREE_VIEW_HORIZONTAL_SEPARATOR 0
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("expander_width",
+							     _("Expander Width"),
+							     _("Width of the expander arrow"),
+							     0,
+							     G_MAXINT,
+							     _TREE_VIEW_EXPANDER_WIDTH,
+							     G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("expander_height",
+							     _("Expander Height"),
+							     _("Height of the expander arrow"),
+							     4,
+							     G_MAXINT,
+							     _TREE_VIEW_EXPANDER_HEIGHT,
+							     G_PARAM_READABLE));
+
+    gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("vertical_separator",
+							     _("Vertical Separator Width"),
+							     _("Vertical space between cells"),
+							     0,
+							     G_MAXINT,
+							     _TREE_VIEW_VERTICAL_SEPARATOR,
+							     G_PARAM_READABLE));
+
+    gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("horizontal_separator",
+							     _("Horizontal Separator Width"),
+							     _("Horizontal space between cells"),
+							     0,
+							     G_MAXINT,
+							     _TREE_VIEW_HORIZONTAL_SEPARATOR,
+							     G_PARAM_READABLE));
 }
 
 static void
@@ -450,7 +493,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
 
   tree_view->priv->model = NULL;
   tree_view->priv->flags = GTK_TREE_VIEW_IS_LIST | GTK_TREE_VIEW_SHOW_EXPANDERS | GTK_TREE_VIEW_DRAW_KEYFOCUS | GTK_TREE_VIEW_HEADERS_VISIBLE;
-  tree_view->priv->tab_offset = TREE_VIEW_EXPANDER_WIDTH;
+  gtk_widget_style_get (GTK_WIDGET (tree_view), "expander_width", &tree_view->priv->tab_offset, NULL);
   tree_view->priv->n_columns = 0;
   tree_view->priv->columns = NULL;
   tree_view->priv->button_pressed_node = NULL;
@@ -782,6 +825,27 @@ gtk_tree_view_unrealize (GtkWidget *widget)
   gdk_window_destroy (tree_view->priv->header_window);
   tree_view->priv->header_window = NULL;
 
+  if (tree_view->priv->drag_window)
+    {
+      gdk_window_set_user_data (tree_view->priv->drag_window, NULL);
+      gdk_window_destroy (tree_view->priv->drag_window);
+      tree_view->priv->drag_window = NULL;
+    }
+
+  if (tree_view->priv->drag_highlight_window)
+    {
+      gdk_window_set_user_data (tree_view->priv->drag_highlight_window, NULL);
+      gdk_window_destroy (tree_view->priv->drag_highlight_window);
+      tree_view->priv->drag_highlight_window = NULL;
+    }
+
+  if (tree_view->priv->drag_header_window)
+    {
+      gdk_window_set_user_data (tree_view->priv->drag_header_window, NULL);
+      gdk_window_destroy (tree_view->priv->drag_header_window);
+      tree_view->priv->drag_header_window = NULL;
+    }
+
   gdk_cursor_destroy (tree_view->priv->cursor_drag);
   gdk_gc_destroy (tree_view->priv->xor_gc);
 
@@ -1090,6 +1154,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
       GtkTreeViewColumn *column = list->data;
       GdkRectangle cell_area;
       gboolean visible;
+      gint vertical_separator;
 
       if (!column->visible)
         continue;
@@ -1104,8 +1169,9 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
 
       cell_area = background_area;
 
-      cell_area.y += TREE_VIEW_VERTICAL_SEPARATOR / 2;
-      cell_area.height -= TREE_VIEW_VERTICAL_SEPARATOR;
+      gtk_widget_style_get (widget, "vertical_separator", &vertical_separator, NULL);
+      cell_area.y += vertical_separator / 2;
+      cell_area.height -= vertical_separator;
 
       if (i == tree_view->priv->expander_column &&
           TREE_VIEW_DRAW_EXPANDERS(tree_view))
@@ -1160,10 +1226,12 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   GtkTreePath *cursor_path;
   GtkTreePath *drag_dest_path;
   GList *last_column;
+  gint vertical_separator;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
 
   tree_view = GTK_TREE_VIEW (widget);
+  gtk_widget_style_get (widget, "vertical_separator", &vertical_separator, NULL);
 
   if (tree_view->priv->tree == NULL)
     return TRUE;
@@ -1282,8 +1350,8 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	  background_area.width = column->displayed_width;
 
           cell_area = background_area;
-          cell_area.y += TREE_VIEW_VERTICAL_SEPARATOR / 2;
-          cell_area.height -= TREE_VIEW_VERTICAL_SEPARATOR;
+          cell_area.y += vertical_separator / 2;
+          cell_area.height -= vertical_separator;
 
           /* Select the detail for drawing the cell.  relevant
            * factors are parity, sortedness, and whether to
@@ -1410,11 +1478,11 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
           switch (tree_view->priv->drag_dest_pos)
             {
             case GTK_TREE_VIEW_DROP_BEFORE:
-              highlight_y = background_area.y - TREE_VIEW_VERTICAL_SEPARATOR/2;
+              highlight_y = background_area.y - vertical_separator/2;
               break;
 
             case GTK_TREE_VIEW_DROP_AFTER:
-              highlight_y = background_area.y + background_area.height + TREE_VIEW_VERTICAL_SEPARATOR/2;
+              highlight_y = background_area.y + background_area.height + vertical_separator/2;
               break;
 
             case GTK_TREE_VIEW_DROP_INTO_OR_BEFORE:
@@ -1621,49 +1689,6 @@ ensure_unprelighted (GtkTreeView *tree_view)
   do_unprelight (tree_view, -1000, -1000); /* coords not possibly over an arrow */
 }
 
-
-static gint
-gtk_tree_view_column_button_expose (GtkWidget      *button,
-				    GdkEventExpose *event,
-				    gpointer        right)
-{
-  if (button->window != event->window)
-    return FALSE;
-
-  if (GPOINTER_TO_INT (right))
-    {
-      if (event->area.x + event->area.width < button->allocation.width - 2)
-	return FALSE;
-
-      gdk_draw_line (button->window,
-		     button->style->black_gc,
-		     button->allocation.width - 2, 0,
-		     button->allocation.width - 2,
-		     button->allocation.height);
-      gdk_draw_line (button->window,
-		     button->style->bg_gc[GTK_STATE_SELECTED],
-		     button->allocation.width - 1, 0,
-		     button->allocation.width - 1,
-		     button->allocation.height);
-    }
-  else
-    {
-      if (event->area.x > 2)
-	return FALSE;
-
-      gdk_draw_line (button->window,
-		     button->style->black_gc,
-		     1, 0,
-		     1, button->allocation.height);
-      gdk_draw_line (button->window,
-		     button->style->bg_gc[GTK_STATE_SELECTED],
-		     0, 0,
-		     0, button->allocation.height);
-    }
-
-  return FALSE;
-}
-
 /* Motion Event */
 static gboolean
 gtk_tree_view_motion_resize_column (GtkWidget      *widget,
@@ -1686,6 +1711,130 @@ gtk_tree_view_motion_resize_column (GtkWidget      *widget,
   _gtk_tree_view_update_size (GTK_TREE_VIEW (widget));
   return FALSE;
 }
+
+
+/* Our motion arrow is either a box (in the case of the original spot)
+ * or an arrow.
+ */
+/*
+ * 11111111111111
+ * 01111111111110
+ * 00111111111100
+ * 00011111111000
+ * 00001111110000
+ * 00000111100000
+ * 00000111100000
+ * 00000111100000
+ * ~ ~ ~ ~ ~ ~ ~ 
+ * 00000111100000
+ * 00000111100000
+ * 00000111100000
+ * 00001111110000
+ * 00011111111000
+ * 00111111111100
+ * 01111111111110
+ * 11111111111111
+ */
+
+static void
+gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
+{
+  GtkTreeViewColumnReorder *reorder = tree_view->priv->cur_reorder;
+  GtkWidget *widget = GTK_WIDGET (tree_view);
+  GdkBitmap *mask = NULL;
+  gint x;
+  gint y;
+  gint width;
+  gint height;
+
+  /* We want to draw the rectangle over the initial location. */
+  if (!reorder ||
+      reorder->left_column == tree_view->priv->drag_column ||
+      reorder->right_column == tree_view->priv->drag_column)
+    {
+      GdkGC *gc;
+      GdkColor col;
+
+      gdk_window_get_origin (tree_view->priv->header_window, &x, &y);
+      x += tree_view->priv->drag_column_x;
+      width = tree_view->priv->drag_column->button->allocation.width;
+      height = tree_view->priv->drag_column->button->allocation.height;
+
+
+      mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
+      gc = gdk_gc_new (mask);
+      col.pixel = 1;
+      gdk_gc_set_foreground (gc, &col);
+      gdk_draw_rectangle (mask, gc, TRUE, 0, 0, width, height);
+      col.pixel = 0;
+      gdk_gc_set_foreground(gc, &col);
+      gdk_draw_rectangle (mask, gc, TRUE, 2, 2, width - 4, height - 4);
+      gdk_gc_destroy (gc);
+    }
+  else if (reorder->left_column || reorder->right_column)
+    {
+      gint expander_height;
+      gint i, j = 1;
+      GdkGC *gc;
+      GdkColor col;
+
+      gtk_widget_style_get (widget,
+			    "expander_width", &width,
+			    "expander_height", &expander_height,
+			    NULL);
+
+      if (reorder->left_column)
+	{
+	  gdk_window_get_origin (reorder->left_column->button->window, &x, &y);
+	  x += reorder->left_column->button->allocation.width - width/2;
+	  height = reorder->left_column->button->allocation.height;
+	}
+      else
+	{
+	  gdk_window_get_origin (reorder->right_column->button->window, &x, &y);
+	  x -= width/2;
+	  height = reorder->right_column->button->allocation.height;
+	}
+      height += expander_height;
+      y -= expander_height/2;
+      mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
+      gc = gdk_gc_new (mask);
+      col.pixel = 1;
+      gdk_gc_set_foreground (gc, &col);
+      gdk_draw_rectangle (mask, gc, TRUE, 0, 0, width, height);
+
+      col.pixel = 0;
+      gdk_gc_set_foreground(gc, &col);
+      for (i = 0; i < width; i ++)
+	{
+	  if (i == (width/2 - 1))
+	    continue;
+	  gdk_draw_line (mask, gc, i, j, i, height - j);
+	  if (i < (width/2 - 1))
+	    j++;
+	  else
+	    j--;
+	}
+      gdk_gc_destroy (gc);
+    }
+  else
+    {
+      g_warning (G_STRLOC"Invalid GtkTreeViewColumnReorder struct");
+      gdk_window_hide (tree_view->priv->drag_highlight_window);
+      return;
+    }
+
+  gdk_window_move_resize (tree_view->priv->drag_highlight_window,
+			  x, y, width, height);
+  gdk_window_shape_combine_mask (tree_view->priv->drag_highlight_window,
+				 mask, 0, 0);
+  if (mask)
+    gdk_pixmap_unref (mask);
+
+  gdk_window_show (tree_view->priv->drag_highlight_window);
+  gdk_window_raise (tree_view->priv->drag_highlight_window);
+}
+  
 
 static gboolean
 gtk_tree_view_motion_drag_column (GtkWidget      *widget,
@@ -1722,9 +1871,9 @@ gtk_tree_view_motion_drag_column (GtkWidget      *widget,
   if (reorder && reorder == tree_view->priv->cur_reorder)
     return TRUE;
 
-  gtk_tree_view_column_reorder_remove_draw (reorder);
-      
   tree_view->priv->cur_reorder = reorder;
+
+  gtk_tree_view_motion_draw_column_motion_arrow (tree_view);
 
   return TRUE;
 }
@@ -1801,7 +1950,7 @@ gtk_tree_view_motion (GtkWidget      *widget,
 
   /* Drag column */
   if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IN_COLUMN_DRAG))
-    gtk_tree_view_motion_drag_column (widget, event);
+    return gtk_tree_view_motion_drag_column (widget, event);
 
   /* Sanity check it */
   if (event->window == tree_view->priv->bin_window)
@@ -1889,11 +2038,13 @@ gtk_tree_view_button_press (GtkWidget      *widget,
   gint i;
   GdkRectangle background_area;
   GdkRectangle cell_area;
+  gint vertical_separator;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
   tree_view = GTK_TREE_VIEW (widget);
+  gtk_widget_style_get (widget, "vertical_separator", &vertical_separator, NULL);
 
   if (event->window == tree_view->priv->bin_window)
     {
@@ -1942,8 +2093,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       /* Get the path and the node */
       path = _gtk_tree_view_find_path (tree_view, tree, node);
       depth = gtk_tree_path_get_depth (path);
-      background_area.y = y_offset + event->y + TREE_VIEW_VERTICAL_SEPARATOR;
-      background_area.height = GTK_RBNODE_GET_HEIGHT (node) - TREE_VIEW_VERTICAL_SEPARATOR;
+      background_area.y = y_offset + event->y + vertical_separator;
+      background_area.height = GTK_RBNODE_GET_HEIGHT (node) - vertical_separator;
       background_area.x = 0;
       /* Let the cell have a chance at selecting it. */
 
@@ -2079,6 +2230,44 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 }
 
 static gboolean
+gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
+					  GdkEventButton *event)
+{
+  GtkTreeView *tree_view;
+  GtkAllocation allocation;
+
+  tree_view = GTK_TREE_VIEW (widget);
+
+  allocation = tree_view->priv->drag_column->button->allocation;
+  allocation.x = tree_view->priv->drag_column_x;
+  gdk_pointer_ungrab (GDK_CURRENT_TIME);
+  gdk_window_reparent (tree_view->priv->drag_column->button->window,
+		       tree_view->priv->header_window,
+		       tree_view->priv->drag_column_x,
+		       tree_view->priv->drag_column->button->allocation.y);
+  gtk_widget_set_parent_window (tree_view->priv->drag_column->button, tree_view->priv->header_window);
+  gtk_widget_size_allocate (tree_view->priv->drag_column->button, &allocation);
+
+  tree_view->priv->drag_column = NULL;
+  gdk_window_hide (tree_view->priv->drag_window);
+
+  g_list_foreach (tree_view->priv->column_drag_info, (GFunc) g_free, NULL);
+  g_list_free (tree_view->priv->column_drag_info);
+  tree_view->priv->column_drag_info = NULL;
+      
+  gdk_window_hide (tree_view->priv->drag_highlight_window);
+
+  /* deal with headers */
+  gdk_window_reparent (tree_view->priv->header_window,
+		       widget->window,
+		       0, 0);
+  gdk_window_hide (tree_view->priv->drag_header_window);
+      
+  return TRUE;
+}
+
+
+static gboolean
 gtk_tree_view_button_release (GtkWidget      *widget,
 			      GdkEventButton *event)
 {
@@ -2089,26 +2278,9 @@ gtk_tree_view_button_release (GtkWidget      *widget,
 
   tree_view = GTK_TREE_VIEW (widget);
 
-  if (tree_view->priv->drag_column)
-    {
-      gdk_pointer_ungrab (GDK_CURRENT_TIME);
-      gdk_window_reparent (tree_view->priv->drag_column->button->window,
-			   tree_view->priv->header_window,
-			   tree_view->priv->drag_column->button->allocation.x,
-			   tree_view->priv->drag_column->button->allocation.y);
-      gtk_widget_set_parent_window (tree_view->priv->drag_column->button, tree_view->priv->header_window);
+  if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IN_COLUMN_DRAG))
+    return gtk_tree_view_button_release_drag_column (widget, event);
 
-      tree_view->priv->drag_column = NULL;
-      gtk_widget_queue_resize (GTK_WIDGET (tree_view));
-      gdk_window_hide (tree_view->priv->drag_window);
-
-      g_list_foreach (tree_view->priv->column_drag_info, (GFunc) g_free, NULL);
-      g_list_free (tree_view->priv->column_drag_info);
-      tree_view->priv->column_drag_info = NULL;
-
-      return TRUE;
-    }
-  
   if (tree_view->priv->pressed_button == event->button)
     tree_view->priv->pressed_button = -1;
 
@@ -2243,10 +2415,13 @@ gtk_tree_view_draw_focus (GtkWidget *widget)
   GtkRBNode *node = NULL;
   gint x, y;
   gint width, height;
+  gint vertical_separator;
 
   g_return_if_fail (GTK_IS_TREE_VIEW (widget));
 
   tree_view = GTK_TREE_VIEW (widget);
+    
+  gtk_widget_style_get (widget, "vertical_separator", &vertical_separator, NULL);
 
   if (! GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS))
     return;
@@ -2295,7 +2470,7 @@ gtk_tree_view_draw_focus (GtkWidget *widget)
 	  cell_area.x = tree_view->priv->focus_column->button->allocation.x;
 	  cell_area.y = y;
 	  cell_area.width = tree_view->priv->focus_column->displayed_width;
-	  cell_area.height = CELL_HEIGHT (node);
+	  cell_area.height = CELL_HEIGHT (node, vertical_separator);
 
 	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, cursor_path);
 	  gtk_tree_view_column_set_cell_data (tree_view->priv->focus_column, tree_view->priv->model, &iter);
@@ -2304,7 +2479,7 @@ gtk_tree_view_draw_focus (GtkWidget *widget)
 	  width += 2;
 	  height += 2;
 	  x = cell_area.x + x_offset - 1;
-	  y = cell_area.y + y_offset - 1 + TREE_VIEW_VERTICAL_SEPARATOR/2;
+	  y = cell_area.y + y_offset - 1 + vertical_separator/2;
 	}
     }
 
@@ -2925,8 +3100,11 @@ gtk_tree_view_range_changed (GtkTreeModel *model,
   gint height;
   gboolean dirty_marked;
   gboolean free_path = FALSE;
+  gint vertical_separator;
 
   g_return_if_fail (path != NULL || iter != NULL);
+
+  gtk_widget_style_get (GTK_WIDGET (data), "vertical_separator", &vertical_separator, NULL);
 
   if (path == NULL)
     {
@@ -2951,9 +3129,9 @@ gtk_tree_view_range_changed (GtkTreeModel *model,
 						    gtk_tree_path_get_depth (path),
 						    &height);
 
-  if (GTK_RBNODE_GET_HEIGHT (node) != height + TREE_VIEW_VERTICAL_SEPARATOR)
+  if (GTK_RBNODE_GET_HEIGHT (node) != height + vertical_separator)
     {
-      _gtk_rbtree_node_set_height (tree, node, height + TREE_VIEW_VERTICAL_SEPARATOR);
+      _gtk_rbtree_node_set_height (tree, node, height + vertical_separator);
       gtk_widget_queue_resize (GTK_WIDGET (data));
       goto done;
     }
@@ -3268,9 +3446,11 @@ gtk_tree_view_insert_iter_height (GtkTreeView *tree_view,
   GList *list;
   gint max_height = 0;
   gint i;
+  gint vertical_separator;
 
   i = 0;
 
+  gtk_widget_style_get (GTK_WIDGET (tree_view), "vertical_separator", &vertical_separator, NULL);
   /* do stuff with node */
   for (list = tree_view->priv->columns; list; list = list->next)
     {
@@ -3290,7 +3470,7 @@ gtk_tree_view_insert_iter_height (GtkTreeView *tree_view,
       gtk_tree_view_column_set_cell_data (column, tree_view->priv->model, iter);
 
       gtk_cell_renderer_get_size (cell, GTK_WIDGET (tree_view), NULL, NULL, NULL, &width, &height);
-      max_height = MAX (max_height, TREE_VIEW_VERTICAL_SEPARATOR + height);
+      max_height = MAX (max_height, vertical_separator + height);
 
       if (i == tree_view->priv->expander_column &&
           TREE_VIEW_DRAW_EXPANDERS (tree_view))
@@ -3361,9 +3541,12 @@ gtk_tree_view_calc_size (GtkTreeView *tree_view,
   GList *list;
   GtkTreeViewColumn *column;
   gint max_height;
+  gint vertical_separator;
   gint i;
 
   TREE_VIEW_INTERNAL_ASSERT_VOID (tree != NULL);
+
+  gtk_widget_style_get (GTK_WIDGET (tree_view), "vertical_separator", &vertical_separator, NULL);
 
   temp = tree->root;
   while (temp->left != tree->nil)
@@ -3384,7 +3567,7 @@ gtk_tree_view_calc_size (GtkTreeView *tree_view,
 	  gtk_tree_view_column_set_cell_data (column, tree_view->priv->model, iter);
 	  cell = column->cell;
 	  gtk_cell_renderer_get_size (cell, GTK_WIDGET (tree_view), NULL, NULL, NULL, &width, &height);
-	  max_height = MAX (max_height, TREE_VIEW_VERTICAL_SEPARATOR + height);
+	  max_height = MAX (max_height, vertical_separator + height);
 
 	  /* FIXME: I'm getting the width of all nodes here. )-: */
 	  if (column->dirty == FALSE)
@@ -3750,37 +3933,10 @@ gtk_tree_view_set_column_drag_info (GtkTreeView       *tree_view,
   /* First, identify all possible drop spots */
   tmp_list = tree_view->priv->columns;
 
-  while (GTK_TREE_VIEW_COLUMN (tmp_list->data) != column)
+  while (tmp_list)
     {
       g_assert (tmp_list);
 
-      cur_column = GTK_TREE_VIEW_COLUMN (tmp_list->data);
-      tmp_list = tmp_list->next;
-
-      if (cur_column->visible == FALSE)
-	continue;
-
-      reorder = g_new (GtkTreeViewColumnReorder, 1);
-      reorder->left_column = left_column;
-      left_column = reorder->right_column = cur_column;
-
-      tree_view->priv->column_drag_info = g_list_append (tree_view->priv->column_drag_info, reorder);
-    }
-
-  tmp_list = tmp_list->next;
-
-  /* Find the next visible column */
-  while (tmp_list != NULL && ! GTK_TREE_VIEW_COLUMN (tmp_list->data)->visible)
-    tmp_list = tmp_list->next;
-
-  if (tmp_list == NULL)
-    goto done;
-
-  left_column = GTK_TREE_VIEW_COLUMN (tmp_list->data);
-  tmp_list = tmp_list->next;
-
-  while (tmp_list)
-    {
       cur_column = GTK_TREE_VIEW_COLUMN (tmp_list->data);
       tmp_list = tmp_list->next;
 
@@ -3800,7 +3956,6 @@ gtk_tree_view_set_column_drag_info (GtkTreeView       *tree_view,
   reorder->right_column = NULL;
   tree_view->priv->column_drag_info = g_list_append (tree_view->priv->column_drag_info, reorder);
 
- done:
   /* Now we want to fill in the ranges for the columns, now that we've isolated them */
   left = - TREE_VIEW_COLUMN_DRAG_DEAD_MULTIPLIER (tree_view);
 
@@ -3831,6 +3986,8 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 				  GtkTreeViewColumn *column)
 {
   GdkEvent send_event;
+  GtkAllocation allocation;
+  gint x, y, width, height;
 
   g_return_if_fail (tree_view->priv->column_drag_info == NULL);
 
@@ -3855,8 +4012,15 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 						     &attributes,
 						     attributes_mask);
       gdk_window_set_user_data (tree_view->priv->drag_window, GTK_WIDGET (tree_view));
-    }
 
+      attributes.window_type = GDK_WINDOW_TEMP;
+      tree_view->priv->drag_highlight_window = gdk_window_new (NULL, &attributes, attributes_mask);
+      gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
+
+      tree_view->priv->drag_header_window = gdk_window_new (NULL, &attributes, attributes_mask);
+      gdk_window_set_user_data (tree_view->priv->drag_header_window, GTK_WIDGET (tree_view));
+    }
+  
   gdk_pointer_ungrab (GDK_CURRENT_TIME);
   gdk_keyboard_ungrab (GDK_CURRENT_TIME);
 
@@ -3892,11 +4056,21 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 			  column->button->allocation.width,
 			  column->button->allocation.height);
   gdk_window_reparent (column->button->window, tree_view->priv->drag_window, 0, 0);
+  tree_view->priv->drag_column_x = column->button->allocation.x;
+  allocation = column->button->allocation;
+  allocation.x = 0;
+  gtk_widget_size_allocate (column->button, &allocation);
   gtk_widget_set_parent_window (column->button, tree_view->priv->drag_window);
 
 
   tree_view->priv->drag_column = column;
   gdk_window_show (tree_view->priv->drag_window);
+
+  gdk_window_get_origin (tree_view->priv->header_window, &x, &y);
+  gdk_window_get_size (tree_view->priv->header_window, &width, &height);
+  gdk_window_move_resize (tree_view->priv->drag_header_window, x, y, width, height);
+  gdk_window_reparent (tree_view->priv->header_window, tree_view->priv->drag_header_window, 0, 0);
+  gdk_window_show (tree_view->priv->drag_header_window);
 
   while (gtk_events_pending ())
     gtk_main_iteration ();
@@ -3967,6 +4141,13 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   GtkStateType state;
   GtkWidget *widget;
   gint x_offset = 0;
+  gint vertical_separator;
+  gint expander_height;
+
+  gtk_widget_style_get (GTK_WIDGET (tree_view),
+			"vertical_separator", &vertical_separator,
+			"expander_height", &expander_height,
+			NULL);
 
   if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT))
     return;
@@ -3976,9 +4157,9 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   gtk_tree_view_get_arrow_xrange (tree_view, &x_offset, NULL);
 
   area.x = x_offset;
-  area.y = CELL_FIRST_PIXEL (tree_view, tree, node);
+  area.y = CELL_FIRST_PIXEL (tree_view, tree, node, vertical_separator);
   area.width = tree_view->priv->tab_offset - 2;
-  area.height = CELL_HEIGHT (node);
+  area.height = CELL_HEIGHT (node, vertical_separator);
 
   if (node == tree_view->priv->button_pressed_node)
     {
@@ -3997,8 +4178,6 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
 	state = GTK_STATE_NORMAL;
     }
 
-  /* FIXME expander size should come from a style property */
-#define EXPANDER_SIZE 8
   gtk_paint_expander (widget->style,
                       tree_view->priv->bin_window,
                       state,
@@ -4006,9 +4185,8 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
                       widget,
                       "treeview",
                       area.x,
-                      (area.y + (area.height - EXPANDER_SIZE) / 2 - (area.height + 1) % 2),
+                      (area.y + (area.height - expander_height) / 2 - (area.height + 1) % 2),
                       node->children != NULL);
-#undef EXPANDER_SIZE
 }
 
 
@@ -4048,7 +4226,10 @@ _gtk_tree_view_update_size (GtkTreeView *tree_view)
   gint width, height;
   GList *list;
   GtkTreeViewColumn *column;
+  gint vertical_separator;
   gint i;
+
+  gtk_widget_style_get (GTK_WIDGET (tree_view), "vertical_separator", &vertical_separator, NULL);
 
   if (tree_view->priv->model == NULL)
     {
@@ -4070,7 +4251,7 @@ _gtk_tree_view_update_size (GtkTreeView *tree_view)
   if (tree_view->priv->tree == NULL)
     height = 0;
   else
-    height = tree_view->priv->tree->root->offset + TREE_VIEW_VERTICAL_SEPARATOR;
+    height = tree_view->priv->tree->root->offset + vertical_separator;
 
   if (tree_view->priv->width != width)
     {
@@ -5270,10 +5451,13 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
 {
   GtkRBTree *tree = NULL;
   GtkRBNode *node = NULL;
-
+  gint vertical_separator;
+  
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (column == NULL || GTK_IS_TREE_VIEW_COLUMN (column));
   g_return_if_fail (rect != NULL);
+
+  gtk_widget_style_get (GTK_WIDGET (tree_view), "vertical_separator", &vertical_separator, NULL);
 
   rect->x = 0;
   rect->y = 0;
@@ -5295,9 +5479,9 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
       /* Remember that the rbtree stores node height including the vertical
        * separator, see comment at top of file.
        */
-      rect->y = CELL_FIRST_PIXEL (tree_view, tree, node);
+      rect->y = CELL_FIRST_PIXEL (tree_view, tree, node, vertical_separator);
 
-      rect->height = CELL_HEIGHT (node);
+      rect->height = CELL_HEIGHT (node, vertical_separator);
     }
 
   if (column)
@@ -6848,67 +7032,3 @@ gtk_tree_view_drag_data_received (GtkWidget        *widget,
   /* drop dest_row */
   set_dest_row (context, NULL, NULL);
 }
-
-
-/* GtkTreeViewColumnReorder functions
- */
-
-static GtkTreeViewColumnReorder *
-gtk_tree_view_column_reorder_new (void)
-{
-  return g_new (GtkTreeViewColumnReorder, 1);
-}
-
-static void
-gtk_tree_view_column_reorder_free (GtkTreeViewColumnReorder *reorder)
-{
-  g_free (reorder);
-}
-
-static void
-gtk_tree_view_column_reorder_begin_draw (GtkTreeViewColumnReorder *reorder)
-{
-  if (reorder == NULL)
-    return;
-
-  if (reorder->right_column)
-    {
-      gtk_widget_queue_draw (reorder->right_column->button);
-      g_signal_handlers_disconnect_matched (G_OBJECT (reorder->right_column->button),
-					    G_SIGNAL_MATCH_FUNC,
-					    0, 0, NULL,
-					    gtk_tree_view_column_button_expose,
-					    NULL);
-    }
-  if (reorder->left_column)
-    {
-      gtk_widget_queue_draw (reorder->left_column->button);
-      g_signal_handlers_disconnect_matched (G_OBJECT (reorder->left_column->button),
-					    G_SIGNAL_MATCH_FUNC,
-					    0, 0, NULL,
-					    gtk_tree_view_column_button_expose,
-					    NULL);
-    }
-}
-
-static void
-gtk_tree_view_column_reorder_remove_draw (GtkTreeViewColumnReorder *reorder)
-{
-  if (reorder->left_column)
-    {
-      gtk_signal_connect_after (GTK_OBJECT (reorder->left_column->button),
-				"expose_event",
-				(GtkSignalFunc) gtk_tree_view_column_button_expose,
-				GINT_TO_POINTER (TRUE));
-      gtk_widget_queue_draw (reorder->left_column->button);
-    }
-  if (reorder->right_column)
-    {
-      gtk_signal_connect_after (GTK_OBJECT (reorder->right_column->button),
-				"expose_event",
-				(GtkSignalFunc) gtk_tree_view_column_button_expose,
-				GINT_TO_POINTER (FALSE));
-      gtk_widget_queue_draw (reorder->right_column->button);
-    }
-}
-
