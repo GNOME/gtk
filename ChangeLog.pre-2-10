@@ -1,3 +1,13 @@
+Tue Jun  1 23:00:20 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktoolbar.h: 
+	* gtk/gtktoolbar.c: 
+	* gtk/gtkentrycompletion.h: 
+	* gtk/gtkentrycompletion.c: 
+	* gtk/gtkcombobox.h: 
+	* gtk/gtkcombobox.c: Rename function parameters from
+	index to index_ to prevent clash with BSD index().  (#143001)
+
 Tue Jun  1 22:45:42 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkmenu.c (get_accel_path): Handle accel_closure being

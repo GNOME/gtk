@@ -972,10 +972,10 @@ gtk_entry_completion_insert_action (GtkEntryCompletion *completion,
 /**
  * gtk_entry_completion_insert_action_text:
  * @completion: A #GtkEntryCompletion.
- * @index: The index of the item to insert.
+ * @index_: The index of the item to insert.
  * @text: Text of the item to insert.
  *
- * Inserts an action in @completion's action item list at position @index
+ * Inserts an action in @completion's action item list at position @index_
  * with text @text. If you want the action item to have markup, use
  * gtk_entry_completion_insert_action_markup().
  *
@@ -983,57 +983,57 @@ gtk_entry_completion_insert_action (GtkEntryCompletion *completion,
  */
 void
 gtk_entry_completion_insert_action_text (GtkEntryCompletion *completion,
-                                         gint                index,
+                                         gint                index_,
                                          const gchar        *text)
 {
   g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
   g_return_if_fail (text != NULL);
 
-  gtk_entry_completion_insert_action (completion, index, text, FALSE);
+  gtk_entry_completion_insert_action (completion, index_, text, FALSE);
 }
 
 /**
  * gtk_entry_completion_insert_action_markup:
  * @completion: A #GtkEntryCompletion.
- * @index: The index of the item to insert.
+ * @index_: The index of the item to insert.
  * @markup: Markup of the item to insert.
  *
- * Inserts an action in @completion's action item list at position @index
+ * Inserts an action in @completion's action item list at position @index_
  * with markup @markup.
  *
  * Since: 2.4
  */
 void
 gtk_entry_completion_insert_action_markup (GtkEntryCompletion *completion,
-                                           gint                index,
+                                           gint                index_,
                                            const gchar        *markup)
 {
   g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
   g_return_if_fail (markup != NULL);
 
-  gtk_entry_completion_insert_action (completion, index, markup, TRUE);
+  gtk_entry_completion_insert_action (completion, index_, markup, TRUE);
 }
 
 /**
  * gtk_entry_completion_delete_action:
  * @completion: A #GtkEntryCompletion.
- * @index: The index of the item to Delete.
+ * @index_: The index of the item to Delete.
  *
- * Deletes the action at @index from @completion's action list.
+ * Deletes the action at @index_ from @completion's action list.
  *
  * Since: 2.4
  */
 void
 gtk_entry_completion_delete_action (GtkEntryCompletion *completion,
-                                    gint                index)
+                                    gint                index_)
 {
   GtkTreeIter iter;
 
   g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
-  g_return_if_fail (index >= 0);
+  g_return_if_fail (index_ >= 0);
 
   gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (completion->priv->actions),
-                                 &iter, NULL, index);
+                                 &iter, NULL, index_);
   gtk_list_store_remove (completion->priv->actions, &iter);
 }
 

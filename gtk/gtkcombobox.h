@@ -83,7 +83,7 @@ void          gtk_combo_box_set_add_tearoffs       (GtkComboBox *combo_box,
 /* get/set active item */
 gint          gtk_combo_box_get_active       (GtkComboBox     *combo_box);
 void          gtk_combo_box_set_active       (GtkComboBox     *combo_box,
-                                              gint             index);
+                                              gint             index_);
 gboolean      gtk_combo_box_get_active_iter  (GtkComboBox     *combo_box,
                                               GtkTreeIter     *iter);
 void          gtk_combo_box_set_active_iter  (GtkComboBox     *combo_box,

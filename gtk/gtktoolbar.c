@@ -2013,11 +2013,12 @@ logical_to_physical (GtkToolbar *toolbar,
  * gtk_toolbar_set_drop_highlight_item:
  * @toolbar: a #GtkToolbar
  * @tool_item: a #GtkToolItem, or %NULL to turn of highlighting
- * @index: a position on @toolbar
+ * @index_: a position on @toolbar
  * 
  * Highlights @toolbar to give an idea of what it would look like
- * if @item was added to @toolbar at position indicated by @index. If @item
- * is %NULL, highlighting is turned off. In that case @index is ignored.
+ * if @item was added to @toolbar at the position indicated by @index_. 
+ * If @item is %NULL, highlighting is turned off. In that case @index_ 
+ * is ignored.
  *
  * The @tool_item passed to this function must not be part of any widget
  * hierarchy. When an item is set as drop highlight item it can not
@@ -2029,7 +2030,7 @@ logical_to_physical (GtkToolbar *toolbar,
 void
 gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
 				     GtkToolItem *tool_item,
-				     gint         index)
+				     gint         index_)
 {
   ToolbarContent *content;
   GtkToolbarPrivate *priv;
@@ -2060,8 +2061,8 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
     }
   
   n_items = gtk_toolbar_get_n_items (toolbar);
-  if (index < 0 || index > n_items)
-    index = n_items;
+  if (index_ < 0 || index_ > n_items)
+    index_ = n_items;
   
   if (tool_item != priv->highlight_tool_item)
     {
@@ -2077,15 +2078,15 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
 			     GTK_WIDGET (toolbar));
     }
   
-  index = logical_to_physical (toolbar, index);
+  index_ = logical_to_physical (toolbar, index_);
   
-  content = g_list_nth_data (priv->content, index);
+  content = g_list_nth_data (priv->content, index_);
   
-  if (index > 0)
+  if (index_ > 0)
     {
       ToolbarContent *prev_content;
       
-      prev_content = g_list_nth_data (priv->content, index - 1);
+      prev_content = g_list_nth_data (priv->content, index_ - 1);
       
       if (prev_content && toolbar_content_is_placeholder (prev_content))
 	content = prev_content;
@@ -2099,7 +2100,7 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
 
       content = toolbar_content_new_tool_item (toolbar,
 					       GTK_TOOL_ITEM (placeholder),
-					       TRUE, index);
+					       TRUE, index_);
       gtk_widget_show (placeholder);
     }
   

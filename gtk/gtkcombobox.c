@@ -1948,13 +1948,13 @@ gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
 
 static void
 gtk_combo_box_item_get_size (GtkComboBox *combo_box,
-                             gint         index,
+                             gint         index_,
                              gint        *cols,
                              gint        *rows)
 {
   GtkTreeIter iter;
 
-  gtk_tree_model_iter_nth_child (combo_box->priv->model, &iter, NULL, index);
+  gtk_tree_model_iter_nth_child (combo_box->priv->model, &iter, NULL, index_);
 
   if (cols)
     {
@@ -3372,7 +3372,7 @@ gtk_combo_box_get_active (GtkComboBox *combo_box)
 /**
  * gtk_combo_box_set_active:
  * @combo_box: A #GtkComboBox.
- * @index: An index in the model passed during construction, or -1 to have
+ * @index_: An index in the model passed during construction, or -1 to have
  * no active item.
  *
  * Sets the active item of @combo_box to be the item at @index.
@@ -3381,16 +3381,16 @@ gtk_combo_box_get_active (GtkComboBox *combo_box)
  */
 void
 gtk_combo_box_set_active (GtkComboBox *combo_box,
-                          gint         index)
+                          gint         index_)
 {
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
   /* -1 means "no item selected" */
-  g_return_if_fail (index >= -1);
+  g_return_if_fail (index_ >= -1);
 
-  if (combo_box->priv->active_item == index)
+  if (combo_box->priv->active_item == index_)
     return;
   
-  gtk_combo_box_set_active_internal (combo_box, index);
+  gtk_combo_box_set_active_internal (combo_box, index_);
 }
 
 static void

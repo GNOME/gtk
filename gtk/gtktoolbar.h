@@ -162,7 +162,7 @@ gint            gtk_toolbar_get_drop_index          (GtkToolbar      *toolbar,
 						     gint             y);
 void            gtk_toolbar_set_drop_highlight_item (GtkToolbar      *toolbar,
 						     GtkToolItem     *tool_item,
-						     gint             index);
+						     gint             index_);
 
 /* internal functions */
 gchar *         _gtk_toolbar_elide_underscores      (const gchar     *original);
