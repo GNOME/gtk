@@ -1,3 +1,7 @@
+2004-12-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.5.6 ===
+
 2004-11-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* xdgmimeparent.c (_xdg_mime_parent_list_lookup): 

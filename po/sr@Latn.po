@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-12 11:31-0500\n"
+"POT-Creation-Date: 2004-12-02 23:57-0500\n"
 "PO-Revision-Date: 2004-10-15 22:43+0200\n"
 "Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -20,27 +20,27 @@ msgstr ""
 "Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:821
-#: gdk-pixbuf/gdk-pixbuf-io.c:970 tests/testfilechooser.c:199
+#: gdk-pixbuf/gdk-pixbuf-animation.c:151 gdk-pixbuf/gdk-pixbuf-io.c:836
+#: gdk-pixbuf/gdk-pixbuf-io.c:985 tests/testfilechooser.c:199
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Ne mogu da otvorim datoteku „%s“: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:163 gdk-pixbuf/gdk-pixbuf-io.c:833
+#: gdk-pixbuf/gdk-pixbuf-animation.c:164 gdk-pixbuf/gdk-pixbuf-io.c:848
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Slika „%s“ ne sadrži podatke"
 
 # ovo ima najviše smisla
-#: gdk-pixbuf/gdk-pixbuf-animation.c:207 gdk-pixbuf/gdk-pixbuf-io.c:870
-#: gdk-pixbuf/gdk-pixbuf-io.c:1011 tests/testfilechooser.c:244
+#: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:885
+#: gdk-pixbuf/gdk-pixbuf-io.c:1026 tests/testfilechooser.c:244
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Ne mogu da učitam sliku „%s“: razlog nepoznat, verovatno neispravan zapis"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:238
+#: gdk-pixbuf/gdk-pixbuf-animation.c:239
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
@@ -48,12 +48,12 @@ msgid ""
 msgstr ""
 "Ne mogu da učitam animaciju „%s“: razlog nepoznat, verovatno neispravan zapis"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:437
+#: gdk-pixbuf/gdk-pixbuf-io.c:442
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Ne mogu da učitam deo za učitavanje slike: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:452
+#: gdk-pixbuf/gdk-pixbuf-io.c:457
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -62,53 +62,53 @@ msgstr ""
 "Deo za učitavanje slike %s ne podržava odgovarajuću spregu; možda je iz "
 "različitog GTK izdanja?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:612 gdk-pixbuf/gdk-pixbuf-io.c:664
+#: gdk-pixbuf/gdk-pixbuf-io.c:626 gdk-pixbuf/gdk-pixbuf-io.c:678
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Vrsta slike „%s“ nije podržana"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:704
+#: gdk-pixbuf/gdk-pixbuf-io.c:718
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Ne mogu prepoznati način zapisa slike u datoteci „%s“"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:712
+#: gdk-pixbuf/gdk-pixbuf-io.c:726
 msgid "Unrecognized image file format"
 msgstr "Nepoznat način zapisa slike"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:879
+#: gdk-pixbuf/gdk-pixbuf-io.c:894
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Ne mogu da učitam sliku „%s“: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1236
+#: gdk-pixbuf/gdk-pixbuf-io.c:1255
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Greška pri upisu u datoteku slike: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1281 gdk-pixbuf/gdk-pixbuf-io.c:1406
+#: gdk-pixbuf/gdk-pixbuf-io.c:1301 gdk-pixbuf/gdk-pixbuf-io.c:1430
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Ovo izdanje programa gdk-pixbuf ne podržava ovu sliku vrste %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1313
+#: gdk-pixbuf/gdk-pixbuf-io.c:1335
 msgid "Insufficient memory to save image to callback"
 msgstr "Nema dovoljno memorije za čuvanje slike u pozivnu funkciju"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1325
+#: gdk-pixbuf/gdk-pixbuf-io.c:1347
 msgid "Failed to open temporary file"
 msgstr "Ne mogu da otvorim privremenu datoteku"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1349
+#: gdk-pixbuf/gdk-pixbuf-io.c:1372
 msgid "Failed to read from temporary file"
 msgstr "Ne mogu da čitam iz privremene datoteke"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1534
+#: gdk-pixbuf/gdk-pixbuf-io.c:1559
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Ne mogu da pristupim „%s“ radi upisa: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1558
+#: gdk-pixbuf/gdk-pixbuf-io.c:1583
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -117,7 +117,7 @@ msgstr ""
 "Ne mogu da zatvorim „%s“ pri upisu slike, moguće je da nisu svi podaci "
 "sačuvani: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1746 gdk-pixbuf/gdk-pixbuf-io.c:1796
+#: gdk-pixbuf/gdk-pixbuf-io.c:1771 gdk-pixbuf/gdk-pixbuf-io.c:1821
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Nema dovoljno memorije da sačuva sliku u međuspremnik"
 
@@ -126,7 +126,7 @@ msgstr "Nema dovoljno memorije da sačuva sliku u međuspremnik"
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Nije podržano postepeno učitavanje slike vrste „%s“"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:412 gdk-pixbuf/gdk-pixbuf-loader.c:514
+#: gdk-pixbuf/gdk-pixbuf-loader.c:411 gdk-pixbuf/gdk-pixbuf-loader.c:513
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
@@ -946,7 +946,7 @@ msgstr "Izaberite boju"
 msgid "Received invalid color data\n"
 msgstr "Primio je neispravne podatke o bojama\n"
 
-#: gtk/gtkcolorsel.c:568
+#: gtk/gtkcolorsel.c:573
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -956,7 +956,7 @@ msgstr ""
 "možete odvući na stavku palete, ili izabrati ovu boju kao tekuću odvlačeći "
 "je na pregled trenutno izabrane boje."
 
-#: gtk/gtkcolorsel.c:573
+#: gtk/gtkcolorsel.c:578
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -964,11 +964,11 @@ msgstr ""
 "Boja koju ste izabrali. Možete odvući ovu boju na stavku palete kako bi je "
 "sačuvali za naknadnu upotrebu."
 
-#: gtk/gtkcolorsel.c:934
+#: gtk/gtkcolorsel.c:939
 msgid "_Save color here"
 msgstr "Ovde _sačuvaj boju"
 
-#: gtk/gtkcolorsel.c:1139
+#: gtk/gtkcolorsel.c:1144
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -977,7 +977,7 @@ msgstr ""
 "ovu stavku, dovucite ovde boju ili kliknite desnim tasterom miša i izaberite "
 "„Ovde sačuvaj boju“."
 
-#: gtk/gtkcolorsel.c:1847
+#: gtk/gtkcolorsel.c:1904
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -985,7 +985,7 @@ msgstr ""
 "Izaberite boju koju želite iz spoljnog prstena. Izaberite osvetljenost ili "
 "zatamnjenost te boje pomoću unutrašnjeg prstena."
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1929
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -993,69 +993,69 @@ msgstr ""
 "Pritisnite na kapalo, a zatim boju bilo gde na vašem ekranu da je izaberete."
 
 # Ako imamo strucni izraz za ovo, javite!
-#: gtk/gtkcolorsel.c:1881
+#: gtk/gtkcolorsel.c:1938
 msgid "_Hue:"
 msgstr "_Nijansa:"
 
-#: gtk/gtkcolorsel.c:1882
+#: gtk/gtkcolorsel.c:1939
 msgid "Position on the color wheel."
 msgstr "Položaj na točku boja."
 
-#: gtk/gtkcolorsel.c:1884
+#: gtk/gtkcolorsel.c:1941
 msgid "_Saturation:"
 msgstr "_Zasićenost:"
 
-#: gtk/gtkcolorsel.c:1885
+#: gtk/gtkcolorsel.c:1942
 msgid "\"Deepness\" of the color."
 msgstr "„Dubina“ boje."
 
-#: gtk/gtkcolorsel.c:1886
+#: gtk/gtkcolorsel.c:1943
 msgid "_Value:"
 msgstr "_Vrednost:"
 
 # Mozda "vedrina boje"?
-#: gtk/gtkcolorsel.c:1887
+#: gtk/gtkcolorsel.c:1944
 msgid "Brightness of the color."
 msgstr "Osvetljenost boje."
 
-#: gtk/gtkcolorsel.c:1888
+#: gtk/gtkcolorsel.c:1945
 msgid "_Red:"
 msgstr "_Crvena:"
 
-#: gtk/gtkcolorsel.c:1889
+#: gtk/gtkcolorsel.c:1946
 msgid "Amount of red light in the color."
 msgstr "Količina crvene svetlosti u boji."
 
-#: gtk/gtkcolorsel.c:1890
+#: gtk/gtkcolorsel.c:1947
 msgid "_Green:"
 msgstr "_Zelena:"
 
-#: gtk/gtkcolorsel.c:1891
+#: gtk/gtkcolorsel.c:1948
 msgid "Amount of green light in the color."
 msgstr "Količina zelene svetlosti u boji."
 
-#: gtk/gtkcolorsel.c:1892
+#: gtk/gtkcolorsel.c:1949
 msgid "_Blue:"
 msgstr "_Plava:"
 
-#: gtk/gtkcolorsel.c:1893
+#: gtk/gtkcolorsel.c:1950
 msgid "Amount of blue light in the color."
 msgstr "Količina plave svetlosti u boji."
 
 # Ovo znači „neprovidnost“, ali istovremeno se određuje i providnost, pa nema zabune.
-#: gtk/gtkcolorsel.c:1896
+#: gtk/gtkcolorsel.c:1953
 msgid "_Opacity:"
 msgstr "_Providnost:"
 
-#: gtk/gtkcolorsel.c:1904 gtk/gtkcolorsel.c:1915
+#: gtk/gtkcolorsel.c:1961 gtk/gtkcolorsel.c:1972
 msgid "Transparency of the color."
 msgstr "Providnost boje."
 
-#: gtk/gtkcolorsel.c:1922
+#: gtk/gtkcolorsel.c:1979
 msgid "Color _Name:"
 msgstr "_Ime boje:"
 
-#: gtk/gtkcolorsel.c:1937
+#: gtk/gtkcolorsel.c:1994
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1063,11 +1063,11 @@ msgstr ""
 "Ovde možete uneti boju na HTML način kao heksadekadnu vrednost, ili "
 "jednostavno englesko ime boje kao što je „orange“."
 
-#: gtk/gtkcolorsel.c:1956
+#: gtk/gtkcolorsel.c:2013
 msgid "_Palette"
 msgstr "_Paleta"
 
-#: gtk/gtkcolorsel.c:1988
+#: gtk/gtkcolorsel.c:2045
 msgid "Color Wheel"
 msgstr "Točak boja"
 
@@ -1075,15 +1075,15 @@ msgstr "Točak boja"
 msgid "Color Selection"
 msgstr "Izbor boje"
 
-#: gtk/gtkentry.c:4507 gtk/gtktextview.c:6978
+#: gtk/gtkentry.c:4507 gtk/gtktextview.c:6995
 msgid "Select _All"
 msgstr "Izaberi _sve"
 
-#: gtk/gtkentry.c:4517 gtk/gtktextview.c:6988
+#: gtk/gtkentry.c:4517 gtk/gtktextview.c:7005
 msgid "Input _Methods"
 msgstr "_Načini unosa"
 
-#: gtk/gtkentry.c:4528 gtk/gtktextview.c:6999
+#: gtk/gtkentry.c:4528 gtk/gtktextview.c:7016
 msgid "_Insert Unicode Control Character"
 msgstr "_Ubaci kontrolni Unikod znak"
 
@@ -1093,26 +1093,15 @@ msgstr "_Ubaci kontrolni Unikod znak"
 msgid "Invalid filename: %s"
 msgstr "Neispravno ime datoteke: %s"
 
-#: gtk/gtkfilechooserbutton.c:59
+#: gtk/gtkfilechooserbutton.c:56
 msgid "(None)"
 msgstr "(ništa)"
 
-#: gtk/gtkfilechooserbutton.c:268
+#: gtk/gtkfilechooserbutton.c:240
 msgid "Select a File"
 msgstr "Izaberi datoteku"
 
-# ako je za "home directory", onda bi bilo dobro "licni direktorijum", ako je za "home page", onda za "licna stranica"
-#: gtk/gtkfilechooserbutton.c:1284 gtk/gtkfilechooserdefault.c:1171
-#: gtk/gtkpathbar.c:981
-msgid "Home"
-msgstr "Lično"
-
-#: gtk/gtkfilechooserbutton.c:1291 gtk/gtkfilechooserdefault.c:1194
-#: gtk/gtkpathbar.c:983
-msgid "Desktop"
-msgstr "Radna površ"
-
-#: gtk/gtkfilechooserdefault.c:822
+#: gtk/gtkfilechooserdefault.c:861
 #, c-format
 msgid ""
 "Could not retrieve information about %s:\n"
@@ -1121,7 +1110,7 @@ msgstr ""
 "Ne mogu da saznam podatke o %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:833
+#: gtk/gtkfilechooserdefault.c:872
 #, c-format
 msgid ""
 "Could not add a bookmark for %s:\n"
@@ -1130,7 +1119,7 @@ msgstr ""
 "Ne mogu da dodam obeleživač za %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:848 gtk/gtkfilechooserdefault.c:5765
+#: gtk/gtkfilechooserdefault.c:887 gtk/gtkfilechooserdefault.c:5897
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1139,7 +1128,7 @@ msgstr ""
 "Ne mogu da sastavim ime datoteke iz „%s“ i „%s“:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:864
+#: gtk/gtkfilechooserdefault.c:903
 #, c-format
 msgid ""
 "Could not change the current folder to %s:\n"
@@ -1148,7 +1137,16 @@ msgstr ""
 "Ne mogu da promenim tekući direktorijum u %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1597
+# ako je za "home directory", onda bi bilo dobro "licni direktorijum", ako je za "home page", onda za "licna stranica"
+#: gtk/gtkfilechooserdefault.c:1210 gtk/gtkpathbar.c:982
+msgid "Home"
+msgstr "Lično"
+
+#: gtk/gtkfilechooserdefault.c:1233 gtk/gtkpathbar.c:984
+msgid "Desktop"
+msgstr "Radna površ"
+
+#: gtk/gtkfilechooserdefault.c:1641
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -1157,12 +1155,12 @@ msgstr ""
 "Ne mogu da napravim direktorijum %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1783
+#: gtk/gtkfilechooserdefault.c:1827
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Ne mogu da dodam obeleživač za %s zato što nije direktorijum."
 
-#: gtk/gtkfilechooserdefault.c:1895
+#: gtk/gtkfilechooserdefault.c:1939
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -1171,123 +1169,119 @@ msgstr ""
 "Ne mogu da uklonim obeleživač za %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2032
+#: gtk/gtkfilechooserdefault.c:2076
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Dodaj direktorijum „%s“ u obeleživače"
 
-#: gtk/gtkfilechooserdefault.c:2073
+#: gtk/gtkfilechooserdefault.c:2117
 msgid "Add the current folder to the bookmarks"
 msgstr "Dodaj tekući direktorijum u obeleživače"
 
-#: gtk/gtkfilechooserdefault.c:2075
+#: gtk/gtkfilechooserdefault.c:2119
 msgid "Add the selected folders to the bookmarks"
 msgstr "Dodaj izabrane direktorijume u obeleživače"
 
-#: gtk/gtkfilechooserdefault.c:2115
+#: gtk/gtkfilechooserdefault.c:2159
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Ukloni obeleživač „%s“"
 
-#: gtk/gtkfilechooserdefault.c:2520
+#: gtk/gtkfilechooserdefault.c:2564
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
 "Ne mogu da dodam obeleživač za %s zato što predstavlja neispravno ime "
 "putanje."
 
-#: gtk/gtkfilechooserdefault.c:2698
+#: gtk/gtkfilechooserdefault.c:2742
 msgid "Shortcuts"
 msgstr "Prečice"
 
-#: gtk/gtkfilechooserdefault.c:2752
+#: gtk/gtkfilechooserdefault.c:2796
 msgid "Folder"
 msgstr "Direktorijum"
 
-#: gtk/gtkfilechooserdefault.c:2804 gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:2848 gtk/gtkstock.c:295
 msgid "_Add"
 msgstr "_Dodaj"
 
-#: gtk/gtkfilechooserdefault.c:2811
+#: gtk/gtkfilechooserdefault.c:2855
 msgid "Add the selected folder to the bookmarks"
 msgstr "Dodaj izabrani direktorijum u obeleživače"
 
-#: gtk/gtkfilechooserdefault.c:2816 gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:2860 gtk/gtkstock.c:352
 msgid "_Remove"
 msgstr "_Ukloni"
 
-#: gtk/gtkfilechooserdefault.c:2823
+#: gtk/gtkfilechooserdefault.c:2867
 msgid "Remove the selected bookmark"
 msgstr "Ukloni izabrani obeleživač"
 
-#: gtk/gtkfilechooserdefault.c:2916
+#: gtk/gtkfilechooserdefault.c:2962
 msgid "_Add to Shortcuts"
 msgstr "_Dodaj među prečice"
 
-#: gtk/gtkfilechooserdefault.c:2930
+#: gtk/gtkfilechooserdefault.c:2976
 msgid "Show _Hidden Files"
 msgstr "Prikaži sa_krivene datoteke"
 
-#: gtk/gtkfilechooserdefault.c:3054 gtk/gtkfilesel.c:767
+#: gtk/gtkfilechooserdefault.c:3100 gtk/gtkfilesel.c:767
 msgid "Files"
 msgstr "Datoteke"
 
-#: gtk/gtkfilechooserdefault.c:3085
+#: gtk/gtkfilechooserdefault.c:3131
 msgid "Name"
 msgstr "Ime:"
 
-#: gtk/gtkfilechooserdefault.c:3110
+#: gtk/gtkfilechooserdefault.c:3156
 msgid "Size"
 msgstr "Veličina"
 
-#: gtk/gtkfilechooserdefault.c:3123
+#: gtk/gtkfilechooserdefault.c:3169
 msgid "Modified"
 msgstr "Izmenjen"
 
-#: gtk/gtkfilechooserdefault.c:3155
+#: gtk/gtkfilechooserdefault.c:3201
 msgid "Select which types of files are shown"
 msgstr "Izaberi datoteke kojih vrsta se prikazuju"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3191
+#: gtk/gtkfilechooserdefault.c:3237
 msgid "Create Fo_lder"
 msgstr "Napravi _direktorijum"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3309
+#: gtk/gtkfilechooserdefault.c:3355
 msgid "_Name:"
 msgstr "_Ime:"
 
-#: gtk/gtkfilechooserdefault.c:3353
+#: gtk/gtkfilechooserdefault.c:3395
 msgid "_Browse for other folders"
 msgstr "_Razgledaj ostale direktorijume"
 
-#: gtk/gtkfilechooserdefault.c:3595
+#: gtk/gtkfilechooserdefault.c:3645
 msgid "Save in _folder:"
 msgstr "Sačuvaj u _direktorijumu:"
 
-#: gtk/gtkfilechooserdefault.c:3597
+#: gtk/gtkfilechooserdefault.c:3647
 msgid "Create in _folder:"
 msgstr "Napravi u _direktorijumu:"
 
-#: gtk/gtkfilechooserdefault.c:4268
+#: gtk/gtkfilechooserdefault.c:4402
 msgid "Cannot change to folder because it is not local"
 msgstr "Ne mogu da uđem u direktorijum zato što nije lokalni"
 
-#: gtk/gtkfilechooserdefault.c:4412
-msgid "Could not find the path"
-msgstr "Ne mogu da nađem putanju"
-
-#: gtk/gtkfilechooserdefault.c:4796
+#: gtk/gtkfilechooserdefault.c:4923
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "prečica %s ne postoji"
 
-#: gtk/gtkfilechooserdefault.c:5543
+#: gtk/gtkfilechooserdefault.c:5675
 msgid "Type name of new folder"
 msgstr "Unesite ime novog direktorijuma"
 
-#: gtk/gtkfilechooserdefault.c:5585
+#: gtk/gtkfilechooserdefault.c:5717
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1295,40 +1289,40 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajta"
 msgstr[2] "%d bajtova"
 
-#: gtk/gtkfilechooserdefault.c:5587
+#: gtk/gtkfilechooserdefault.c:5719
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5589
+#: gtk/gtkfilechooserdefault.c:5721
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5591
+#: gtk/gtkfilechooserdefault.c:5723
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5643
+#: gtk/gtkfilechooserdefault.c:5775
 msgid "Today"
 msgstr "Danas"
 
-#: gtk/gtkfilechooserdefault.c:5645
+#: gtk/gtkfilechooserdefault.c:5777
 msgid "Yesterday"
 msgstr "Juče"
 
-#: gtk/gtkfilechooserdefault.c:5656
+#: gtk/gtkfilechooserdefault.c:5788
 msgid "Unknown"
 msgstr "Nepoznato"
 
-#: gtk/gtkfilechooserdefault.c:5726
+#: gtk/gtkfilechooserdefault.c:5858
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Ne mogu da uđem u direktorijum koji ste naveli zato što on predstavlja "
 "neispravnu putanju."
 
-#: gtk/gtkfilechooserdefault.c:5803
+#: gtk/gtkfilechooserdefault.c:5935
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1337,15 +1331,15 @@ msgstr ""
 "Ne mogu da izaberem %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5843
+#: gtk/gtkfilechooserdefault.c:5975
 msgid "Open Location"
 msgstr "Otvori putanju"
 
-#: gtk/gtkfilechooserdefault.c:5850
+#: gtk/gtkfilechooserdefault.c:5982
 msgid "Save in Location"
 msgstr "Sačuvaj na putanji"
 
-#: gtk/gtkfilechooserdefault.c:5874
+#: gtk/gtkfilechooserdefault.c:6006
 msgid "_Location:"
 msgstr "_Putanja: "
 
@@ -1504,7 +1498,7 @@ msgstr "_Preimenuj"
 msgid "_Selection: "
 msgstr "_Izbor: "
 
-#: gtk/gtkfilesel.c:3145
+#: gtk/gtkfilesel.c:3153
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1513,15 +1507,15 @@ msgstr ""
 "Ime datoteke „%s“ se ne može pretvoriti u UTF-8 (pokušajte postaviti "
 "promenljivu okruženja G_FILENAME_ENCODING): %s"
 
-#: gtk/gtkfilesel.c:3148
+#: gtk/gtkfilesel.c:3156
 msgid "Invalid UTF-8"
 msgstr "Neispravan UTF-8"
 
-#: gtk/gtkfilesel.c:4025
+#: gtk/gtkfilesel.c:4033
 msgid "Name too long"
 msgstr "Predugačko ime"
 
-#: gtk/gtkfilesel.c:4027
+#: gtk/gtkfilesel.c:4035
 msgid "Couldn't convert filename"
 msgstr "Ne mogu pretvoriti ime datoteke"
 
@@ -1529,23 +1523,23 @@ msgstr "Ne mogu pretvoriti ime datoteke"
 msgid "(Empty)"
 msgstr "(Prazno)"
 
-#: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemwin32.c:387
+#: gtk/gtkfilesystemunix.c:422 gtk/gtkfilesystemwin32.c:406
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
 #: gtk/gtkfilesystemunix.c:429 gtk/gtkfilesystemunix.c:624
-#: gtk/gtkfilesystemwin32.c:394 gtk/gtkfilesystemwin32.c:1369
+#: gtk/gtkfilesystemwin32.c:413 gtk/gtkfilesystemwin32.c:1388
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "greška pri dobavljanju podataka o „%s“: %s"
 
-#: gtk/gtkfilesystemunix.c:493 gtk/gtkfilesystemwin32.c:435
+#: gtk/gtkfilesystemunix.c:493 gtk/gtkfilesystemwin32.c:454
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "greška pri obrazovanju direktorijuma „%s“: %s"
 
-#: gtk/gtkfilesystemunix.c:573 gtk/gtkfilesystemwin32.c:495
+#: gtk/gtkfilesystemunix.c:573 gtk/gtkfilesystemwin32.c:514
 msgid "This file system does not support mounting"
 msgstr "Ovaj sistem datoteka ne podržava priključivanje"
 
@@ -1566,7 +1560,7 @@ msgid ""
 msgstr ""
 "Ime „%s“ nije ispravno zato što sadrži znak „%s“. Koristite neko drugo ime."
 
-#: gtk/gtkfilesystemunix.c:1441 gtk/gtkfilesystemwin32.c:928
+#: gtk/gtkfilesystemunix.c:1441 gtk/gtkfilesystemwin32.c:947
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Neuspešno snimanje obeleživača (%s)"
@@ -1576,7 +1570,7 @@ msgstr "Neuspešno snimanje obeleživača (%s)"
 msgid "error getting information for '%s'"
 msgstr "greška pri dobavljanju podataka o „%s“"
 
-#: gtk/gtkfilesystemwin32.c:1131
+#: gtk/gtkfilesystemwin32.c:1150
 msgid "This file system does not support icons for everything"
 msgstr "Ovaj sistem datoteka ne podržava ikone za sve"
 
@@ -1737,13 +1731,9 @@ msgstr "(nepoznato)"
 msgid "clear"
 msgstr "očistiti"
 
-#: gtk/gtklabel.c:3581
+#: gtk/gtklabel.c:3804
 msgid "Select All"
 msgstr "Izaberi sve"
-
-#: gtk/gtklabel.c:3591
-msgid "Input Methods"
-msgstr "Načini unosa"
 
 # dopunski dodaci? „dobar fazon“... crni Danilo
 #. Description of --gtk-module=MODULES in --help output
@@ -2182,22 +2172,22 @@ msgstr "Ne mogu da pronađem motor teme u putanji za module: „%s“,"
 msgid "--- No Tip ---"
 msgstr "—— Nema saveta ——"
 
-#: gtk/gtkuimanager.c:1111
+#: gtk/gtkuimanager.c:1132
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Nepoznat atribut „%s“ u %d. redu, %d. znak"
 
-#: gtk/gtkuimanager.c:1311
+#: gtk/gtkuimanager.c:1332
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Neočekivana početna oznaka „%s“ u %d. redu, %d. znak"
 
-#: gtk/gtkuimanager.c:1396
+#: gtk/gtkuimanager.c:1417
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Neočekivani znakovni podaci u %d. redu, %d. znak"
 
-#: gtk/gtkuimanager.c:2188
+#: gtk/gtkuimanager.c:2209
 msgid "Empty"
 msgstr "Prazno"
 
@@ -2255,6 +2245,12 @@ msgstr "Iksov način unosa (XIM)"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Ne mogu da saznam podatke o datoteci „%s“: %s"
+
+#~ msgid "Could not find the path"
+#~ msgstr "Ne mogu da nađem putanju"
+
+#~ msgid "Input Methods"
+#~ msgstr "Načini unosa"
 
 #~ msgid "Unsupported TIFF variant"
 #~ msgstr "Nepodržana TIFF vrsta"

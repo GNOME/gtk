@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.8-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-30 16:58+0200\n"
+"POT-Creation-Date: 2004-12-02 23:58-0500\n"
 "PO-Revision-Date: 2004-11-30 15:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Northern Sotho <translate-discuss-nso@lists.sourceforge.net>\n"
@@ -1435,8 +1435,7 @@ msgstr "Go Dira Sekgoba ga Selaetši"
 msgid "Spacing around check or radio indicator"
 msgstr "Go dira sekgoba go dikologa selaetši sa go lekola goba sa radio"
 
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtkfilechooserbutton.c:282
-#: gtk/gtktogglebutton.c:134
+#: gtk/gtkcheckmenuitem.c:118 gtk/gtktogglebutton.c:134
 msgid "Active"
 msgstr "E šomago"
 
@@ -1470,7 +1469,7 @@ msgstr "Diriša alfa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Ge eba o swanetše go nea mmala boleng bja alfa goba aowa"
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:266
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:238
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Sehlogo"
@@ -1617,7 +1616,7 @@ msgstr "Selo seo se šomago"
 msgid "The item which is currently active"
 msgstr "Selo seo gona bjale se šomago"
 
-#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:228
 msgid "Add tearoffs to menus"
 msgstr "Oketša tše kgeitšwego lelokelelong la dikagare"
 
@@ -2076,38 +2075,33 @@ msgstr "Bontšha e Utilwego"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Ge eba difaele le diphuthedi tše utilwego di swanetše go bontšhwa"
 
-#: gtk/gtkfilechooserbutton.c:251
+#: gtk/gtkfilechooserbutton.c:223
 msgid "Dialog"
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:252
+#: gtk/gtkfilechooserbutton.c:224
 msgid "The file chooser dialog to use."
 msgstr ""
 
-#: gtk/gtkfilechooserbutton.c:267
+#: gtk/gtkfilechooserbutton.c:239
 #, fuzzy
 msgid "The title of the file chooser dialog."
 msgstr "Sehlogo sa poledišano ka kgetho ya fonto"
 
-#: gtk/gtkfilechooserbutton.c:283
-#, fuzzy
-msgid "Whether the browse dialog is visible or not."
-msgstr "Ge eba sedirišwa se a bonagala"
-
-#: gtk/gtkfilechooserbutton.c:295
+#: gtk/gtkfilechooserbutton.c:252
 #, fuzzy
 msgid "Width In Characters"
 msgstr "Bophara mašaleng"
 
-#: gtk/gtkfilechooserbutton.c:296
+#: gtk/gtkfilechooserbutton.c:253
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:609
+#: gtk/gtkfilechooserdefault.c:623
 msgid "Default file chooser backend"
 msgstr "Dira gore mafelelo a sekgethi sa faele a hlaelele"
 
-#: gtk/gtkfilechooserdefault.c:610
+#: gtk/gtkfilechooserdefault.c:624
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr ""
 "Leina la mafelelo a Sekgethi sa Faele sa Gtk seo se tla dirišwago ke "
@@ -4706,17 +4700,17 @@ msgstr "Tatelano ya go hlaola"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Hlaola lefelo leo selaetši sa go hlaola se swanetšego go le hlaola"
 
-#: gtk/gtkuimanager.c:223
+#: gtk/gtkuimanager.c:229
 msgid "Whether tearoff menu items should be added to menus"
 msgstr ""
 "Ge eba dilo tša lelokelelo la dikagare la tše kgeitšwego le swanetše go "
 "oketšwa malokelelong a dikagare"
 
-#: gtk/gtkuimanager.c:230
+#: gtk/gtkuimanager.c:236
 msgid "Merged UI definition"
 msgstr "Tlhaloso ya UI e kopantšwego"
 
-#: gtk/gtkuimanager.c:231
+#: gtk/gtkuimanager.c:237
 msgid "An XML string describing the merged UI"
 msgstr "Mothaladi wa XML o hlalosago UI e kopantšwego"
 
@@ -5186,3 +5180,7 @@ msgstr "Setaele sa Boemo bja IM"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Kamoo o ka thalago bara e bontšhago boemo ya mokgwa wa tsebišo"
+
+#, fuzzy
+#~ msgid "Whether the browse dialog is visible or not."
+#~ msgstr "Ge eba sedirišwa se a bonagala"

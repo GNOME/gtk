@@ -82,7 +82,7 @@
  * use the semi-public headers, as with gtktextview.c.
  */
 
-#define GTK_TYPE_TEXT_RENDERER            (gtk_text_renderer_get_type())
+#define GTK_TYPE_TEXT_RENDERER            (_gtk_text_renderer_get_type())
 #define GTK_TEXT_RENDERER(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_TEXT_RENDERER, GtkTextRenderer))
 #define GTK_IS_TEXT_RENDERER(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), GTK_TYPE_TEXT_RENDERER))
 #define GTK_TEXT_RENDERER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_RENDERER, GtkTextRendererClass))
@@ -113,7 +113,7 @@ struct _GtkTextRendererClass
   GdkPangoRendererClass parent_class;
 };
 
-G_DEFINE_TYPE (GtkTextRenderer, gtk_text_renderer, GDK_TYPE_PANGO_RENDERER)
+G_DEFINE_TYPE (GtkTextRenderer, _gtk_text_renderer, GDK_TYPE_PANGO_RENDERER)
 
 static GdkColor *
 text_renderer_get_error_color (GtkTextRenderer *text_renderer)
@@ -181,7 +181,7 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
   GdkPixmap *fg_stipple, *bg_stipple;
   GtkTextAppearance *appearance;
 
-  PANGO_RENDERER_CLASS (gtk_text_renderer_parent_class)->prepare_run (renderer, run);
+  PANGO_RENDERER_CLASS (_gtk_text_renderer_parent_class)->prepare_run (renderer, run);
 
   appearance = get_item_appearance (run->item);
   g_assert (appearance != NULL);
@@ -335,16 +335,16 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
 static void
 gtk_text_renderer_finalize (GObject *object)
 {
-  G_OBJECT_CLASS (gtk_text_renderer_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_text_renderer_parent_class)->finalize (object);
 }
 
 static void
-gtk_text_renderer_init (GtkTextRenderer *renderer)
+_gtk_text_renderer_init (GtkTextRenderer *renderer)
 {
 }
 
 static void
-gtk_text_renderer_class_init (GtkTextRendererClass *klass)
+_gtk_text_renderer_class_init (GtkTextRendererClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   

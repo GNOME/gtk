@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-29 16:33+0100\n"
+"POT-Creation-Date: 2004-12-02 23:58-0500\n"
 "PO-Revision-Date: 2004-11-29 16:32+0100\n"
 "Last-Translator: Martin Willemoes Hansen <mwh@sysrq.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -1102,19 +1102,19 @@ msgstr "Enkelt paragraf-tilstand"
 msgid "Whether or not to keep all text in a single paragraph"
 msgstr "Om hele teksten skal bevares i en enkelt paragraf"
 
-#: gtk/gtkcellrenderertext.c:237 gtk/gtkcellview.c:180 gtk/gtktexttag.c:207
+#: gtk/gtkcellrenderertext.c:237 gtk/gtkcellview.c:181 gtk/gtktexttag.c:207
 msgid "Background color name"
 msgstr "Navn på baggrundsfarve"
 
-#: gtk/gtkcellrenderertext.c:238 gtk/gtkcellview.c:181 gtk/gtktexttag.c:208
+#: gtk/gtkcellrenderertext.c:238 gtk/gtkcellview.c:182 gtk/gtktexttag.c:208
 msgid "Background color as a string"
 msgstr "Baggrundsfarve som en streng"
 
-#: gtk/gtkcellrenderertext.c:245 gtk/gtkcellview.c:187 gtk/gtktexttag.c:215
+#: gtk/gtkcellrenderertext.c:245 gtk/gtkcellview.c:188 gtk/gtktexttag.c:215
 msgid "Background color"
 msgstr "Baggrundsfarve"
 
-#: gtk/gtkcellrenderertext.c:246 gtk/gtkcellview.c:188
+#: gtk/gtkcellrenderertext.c:246 gtk/gtkcellview.c:189
 msgid "Background color as a GdkColor"
 msgstr "Baggrundsfarve som en GdkColor"
 
@@ -1257,11 +1257,11 @@ msgstr ""
 "nok plads til at vise hele strengen, hvis noget overhovedet kan vises"
 
 # RETMIG: dette er vist suboptimalt
-#: gtk/gtkcellrenderertext.c:418 gtk/gtkcellview.c:195 gtk/gtktexttag.c:510
+#: gtk/gtkcellrenderertext.c:418 gtk/gtkcellview.c:196 gtk/gtktexttag.c:510
 msgid "Background set"
 msgstr "Baggrund angivet"
 
-#: gtk/gtkcellrenderertext.c:419 gtk/gtkcellview.c:196 gtk/gtktexttag.c:511
+#: gtk/gtkcellrenderertext.c:419 gtk/gtkcellview.c:197 gtk/gtktexttag.c:511
 msgid "Whether this tag affects the background color"
 msgstr "Om dette mærke påvirker baggrundsfarven"
 
@@ -1425,8 +1425,7 @@ msgstr "Indikatormellemrum"
 msgid "Spacing around check or radio indicator"
 msgstr "Mellemrum omkring afkrydsnings- eller radioindikator"
 
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtkfilechooserbutton.c:282
-#: gtk/gtktogglebutton.c:134
+#: gtk/gtkcheckmenuitem.c:118 gtk/gtktogglebutton.c:134
 msgid "Active"
 msgstr "Aktiv"
 
@@ -1458,7 +1457,7 @@ msgstr "Benyt alfa"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Om farven skal have en alfaværdi eller ej"
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:266
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:238
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Titel"
@@ -1600,7 +1599,7 @@ msgstr "Aktivt element"
 msgid "The item which is currently active"
 msgstr "Det element som aktuelt er aktivt"
 
-#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:228
 msgid "Add tearoffs to menus"
 msgstr "Tilføj afrivningslinjer til menuer"
 
@@ -2025,35 +2024,31 @@ msgstr "Vis skjulte"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Om skjulte filer og mapper skal vises"
 
-#: gtk/gtkfilechooserbutton.c:251
+#: gtk/gtkfilechooserbutton.c:223
 msgid "Dialog"
 msgstr "Dialogvindue"
 
-#: gtk/gtkfilechooserbutton.c:252
+#: gtk/gtkfilechooserbutton.c:224
 msgid "The file chooser dialog to use."
 msgstr "Filvælgervinduet der skal bruges."
 
-#: gtk/gtkfilechooserbutton.c:267
+#: gtk/gtkfilechooserbutton.c:239
 msgid "The title of the file chooser dialog."
 msgstr "Titlen på filvælgervinduet."
 
-#: gtk/gtkfilechooserbutton.c:283
-msgid "Whether the browse dialog is visible or not."
-msgstr "Om browsevinduet er synligt eller ej."
-
-#: gtk/gtkfilechooserbutton.c:295
+#: gtk/gtkfilechooserbutton.c:252
 msgid "Width In Characters"
 msgstr "Bredde i tegn"
 
-#: gtk/gtkfilechooserbutton.c:296
+#: gtk/gtkfilechooserbutton.c:253
 msgid "The desired width of the button widget, in characters."
 msgstr "Den ønskede bredde på knapkontrollen i tegn."
 
-#: gtk/gtkfilechooserdefault.c:609
+#: gtk/gtkfilechooserdefault.c:623
 msgid "Default file chooser backend"
 msgstr "Standard-filvælgerbagende"
 
-#: gtk/gtkfilechooserdefault.c:610
+#: gtk/gtkfilechooserdefault.c:624
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Navn på den GtkFileChooser-bagende som skal anvendes som standard"
 
@@ -4480,15 +4475,15 @@ msgstr "Sorteringsrækkefølge"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Den sorteringsretning sorteringsindikatoren skal pege i"
 
-#: gtk/gtkuimanager.c:223
+#: gtk/gtkuimanager.c:229
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Om afrivningsmenupunkter skal tilføjes til menuer"
 
-#: gtk/gtkuimanager.c:230
+#: gtk/gtkuimanager.c:236
 msgid "Merged UI definition"
 msgstr "Flettet grænsefladedefinition"
 
-#: gtk/gtkuimanager.c:231
+#: gtk/gtkuimanager.c:237
 msgid "An XML string describing the merged UI"
 msgstr "En XML-streng der beskriver den flettede grænseflade"
 
@@ -4926,6 +4921,9 @@ msgstr "Statusstil"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Hvordan statuslinjen til indtastningsmetoden skal tegnes"
+
+#~ msgid "Whether the browse dialog is visible or not."
+#~ msgstr "Om browsevinduet er synligt eller ej."
 
 #, fuzzy
 #~ msgid "Row separator column"

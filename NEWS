@@ -17,6 +17,13 @@ Overview of Changes from GTK+ 2.5.5 to GTK+ 2.5.6
   - Support rotated text [Owen Taylor]
   - Make it possible to select the first/last line
     when moving by lines  [Paolo Borelli]
+* GtkTreeView
+  - Make sorting of GtkListStore stable again [Søren Sandmann]
+  - Change the behaviour of gtk_tree_sortable_get_sort_column_id() 
+    slightly to be more useful [Matthias]
+* GtkUIManager
+  - Make some functions virtual to make deriving 
+    GtkUIManager easier [Michael Natterer]
 * GtkSettings
   - Handle changes to gtk-menu-images and gtk-button-images
     much more efficiently [Matthias]
@@ -30,16 +37,23 @@ Overview of Changes from GTK+ 2.5.5 to GTK+ 2.5.6
   - Add dead_hook and dead_horn keysyms [Samuel Thibault]
   - Determine direction of XKB groups from their content 
     [Behdad Esfahbod, Ilya Konstantinov]
+* Win32
+  - Notice when drives are plugged in or removed [Hans]
+  - Ms-windows theme improvements: no tearoff menu items,
+    button order, toolbar and statusbar grips, combobox 
+    arrows [Dom Lachowicz]
+  - Fix im module loading [Tor Lillqvist]
 * Bug fixes [Vasco Alexandre da Silva Costa, Kazuki IWAMOTO,
   Erwann Chenede, Tim Janik, Gavin Romig-Koch, Jonathan,
   Manish Singh, Morten Welinder, Billy Biggs, Matthias, Owen,
   John Finlay, Christian Neumair, Sven Neumann, Felipe
   Heidrich, Martin Jeppensen, Kristian Høgsberg, Olivier 
-  Andrieu, Jody Goldberg, Søren Sandmann, Dan Winship,
-  Alex Larsson]
-* Documentation improvements [Matthias, Jonathan, Owen]
-* New and updated translations (bg,ca,cs,da,de,en_CA,en_GB,es,hu,ja,nb,rw,sq,zh_CN)
-* Bugs fixed: 148032,158225,158243,156805,143668,62466,158420,158422,155428,154615,154611,158459,158470,125627,158522,155744,158477,141077,158475,158798,131345,159061,159098,151742,128968,159389,159373,159436,135385,151541,155891,149826,159739,116626, 157670,159931,158177,159330,159737
+  Andrieu, Jody Goldberg, Søren, Dan Winship, Federico,
+  Alex Larsson, James Henstridge, James M. Cape, Frederic Crozat,
+  Dennis Cranston, Marcel Telka, Robert Ögren]
+* Documentation improvements [Matthias, Jonathan, Owen, Masao Mutoh,
+  Billy Biggs]
+* New and updated translations (bg,ca,cs,da,de,en_CA,en_GB,es,hu,ja,nb,nso,rw,sq,zh_CN)
 
 Overview of Changes from GTK+ 2.5.4 to GTK+ 2.5.5
 =================================================

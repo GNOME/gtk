@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-29 20:40+0100\n"
+"POT-Creation-Date: 2004-12-02 23:58-0500\n"
 "PO-Revision-Date: 2004-11-29 20:40+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <es@li.org>\n"
@@ -1427,8 +1427,7 @@ msgstr "Espacio del Indicador"
 msgid "Spacing around check or radio indicator"
 msgstr "Espacio que rodea el indicador de radio o chequeo"
 
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtkfilechooserbutton.c:282
-#: gtk/gtktogglebutton.c:134
+#: gtk/gtkcheckmenuitem.c:118 gtk/gtktogglebutton.c:134
 msgid "Active"
 msgstr "Activo"
 
@@ -1464,7 +1463,7 @@ msgstr "Indica si debe darse o no un valor alfa al color"
 # #-#-#-#-#  memoria.po (memoria 1.0)  #-#-#-#-#
 # #-#-#-#-#  nautilus-es.po (Nautilus)  #-#-#-#-#
 # components/music/nautilus-music-view.c:198
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:266
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:238
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Título"
@@ -1608,7 +1607,7 @@ msgstr "Elemento activo"
 msgid "The item which is currently active"
 msgstr "El elemento que esta activo actualmente"
 
-#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:228
 msgid "Add tearoffs to menus"
 msgstr "Añadir tiradores a los menús"
 
@@ -2043,35 +2042,31 @@ msgstr "Mostrar ocultos"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Indica si los archivos y carpetas ocultas deben ser mostrados"
 
-#: gtk/gtkfilechooserbutton.c:251
+#: gtk/gtkfilechooserbutton.c:223
 msgid "Dialog"
 msgstr "Diálogo"
 
-#: gtk/gtkfilechooserbutton.c:252
+#: gtk/gtkfilechooserbutton.c:224
 msgid "The file chooser dialog to use."
 msgstr "El diálogo del selector de archivos a usar."
 
-#: gtk/gtkfilechooserbutton.c:267
+#: gtk/gtkfilechooserbutton.c:239
 msgid "The title of the file chooser dialog."
 msgstr "El título del diálogo de selección de archivos"
 
-#: gtk/gtkfilechooserbutton.c:283
-msgid "Whether the browse dialog is visible or not."
-msgstr "Indica si el diálogo de examinar es visible o no."
-
-#: gtk/gtkfilechooserbutton.c:295
+#: gtk/gtkfilechooserbutton.c:252
 msgid "Width In Characters"
 msgstr "Anchura en caracteres"
 
-#: gtk/gtkfilechooserbutton.c:296
+#: gtk/gtkfilechooserbutton.c:253
 msgid "The desired width of the button widget, in characters."
 msgstr "La anchura deseada del widget del botón, en caracteres."
 
-#: gtk/gtkfilechooserdefault.c:609
+#: gtk/gtkfilechooserdefault.c:623
 msgid "Default file chooser backend"
 msgstr "Backend predeterminado del selector de archivos"
 
-#: gtk/gtkfilechooserdefault.c:610
+#: gtk/gtkfilechooserdefault.c:624
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nombre del backend del GtkFilechooser a usar por omisión"
 
@@ -4563,15 +4558,15 @@ msgstr "Orden de la ordenación"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Dirección de ordenación que el indicador deberá indicar"
 
-#: gtk/gtkuimanager.c:223
+#: gtk/gtkuimanager.c:229
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Indica si deben añadirse tiradores a los menús"
 
-#: gtk/gtkuimanager.c:230
+#: gtk/gtkuimanager.c:236
 msgid "Merged UI definition"
 msgstr "Definición del IU combinado"
 
-#: gtk/gtkuimanager.c:231
+#: gtk/gtkuimanager.c:237
 msgid "An XML string describing the merged UI"
 msgstr "Una cadena XML describiendo el IU combinado"
 
@@ -5011,3 +5006,6 @@ msgstr "Estilo del estado IM"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Como dibujar el método de entrada de la barra de estado"
+
+#~ msgid "Whether the browse dialog is visible or not."
+#~ msgstr "Indica si el diálogo de examinar es visible o no."

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-21 20:43+0100\n"
+"POT-Creation-Date: 2004-12-02 23:58-0500\n"
 "PO-Revision-Date: 2004-11-22 08:53+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -92,6 +92,15 @@ msgstr "默认显示"
 msgid "The default display for GDK"
 msgstr "GDK 的默认显示"
 
+#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:574
+msgid "Screen"
+msgstr "屏幕"
+
+#: gdk/gdkpango.c:575
+#, fuzzy
+msgid "the GdkScreen for the renderer"
+msgstr "树形视图的模型"
+
 #: gtk/gtkaboutdialog.c:195
 msgid "Program name"
 msgstr "程序名称"
@@ -100,9 +109,7 @@ msgstr "程序名称"
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
-msgstr ""
-"程序的名称。如果未设置，则默认为 "
-"g_get_application_name()"
+msgstr "程序的名称。如果未设置，则默认为 g_get_application_name()"
 
 #: gtk/gtkaboutdialog.c:210
 msgid "Program version"
@@ -144,8 +151,7 @@ msgstr "网站标签"
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
-msgstr ""
-"程序网站链接的标签。如果未设置，则默认为 URL"
+msgstr "程序网站链接的标签。如果未设置，则默认为 URL"
 
 #: gtk/gtkaboutdialog.c:310
 msgid "Authors"
@@ -189,8 +195,7 @@ msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
-"关于对话框标志。如果未设置，则默认为 "
-"gtk_window_get_default_icon_list()"
+"关于对话框标志。如果未设置，则默认为 gtk_window_get_default_icon_list()"
 
 #: gtk/gtkaboutdialog.c:394
 msgid "Logo Icon Name"
@@ -1036,19 +1041,19 @@ msgstr "单段模式"
 msgid "Whether or not to keep all text in a single paragraph"
 msgstr "是否要在单段中保留全部文字"
 
-#: gtk/gtkcellrenderertext.c:237 gtk/gtkcellview.c:180 gtk/gtktexttag.c:207
+#: gtk/gtkcellrenderertext.c:237 gtk/gtkcellview.c:181 gtk/gtktexttag.c:207
 msgid "Background color name"
 msgstr "背景色名称"
 
-#: gtk/gtkcellrenderertext.c:238 gtk/gtkcellview.c:181 gtk/gtktexttag.c:208
+#: gtk/gtkcellrenderertext.c:238 gtk/gtkcellview.c:182 gtk/gtktexttag.c:208
 msgid "Background color as a string"
 msgstr "以字符串方式表达的背景色"
 
-#: gtk/gtkcellrenderertext.c:245 gtk/gtkcellview.c:187 gtk/gtktexttag.c:215
+#: gtk/gtkcellrenderertext.c:245 gtk/gtkcellview.c:188 gtk/gtktexttag.c:215
 msgid "Background color"
 msgstr "背景色"
 
-#: gtk/gtkcellrenderertext.c:246 gtk/gtkcellview.c:188
+#: gtk/gtkcellrenderertext.c:246 gtk/gtkcellview.c:189
 msgid "Background color as a GdkColor"
 msgstr "以 GdkColor 方式表达的背景色"
 
@@ -1187,11 +1192,11 @@ msgid ""
 "have enough room to display the entire string, if at all"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:418 gtk/gtkcellview.c:195 gtk/gtktexttag.c:510
+#: gtk/gtkcellrenderertext.c:418 gtk/gtkcellview.c:196 gtk/gtktexttag.c:510
 msgid "Background set"
 msgstr "背景色设置"
 
-#: gtk/gtkcellrenderertext.c:419 gtk/gtkcellview.c:196 gtk/gtktexttag.c:511
+#: gtk/gtkcellrenderertext.c:419 gtk/gtkcellview.c:197 gtk/gtktexttag.c:511
 msgid "Whether this tag affects the background color"
 msgstr "此标记是否会影响背景色"
 
@@ -1357,8 +1362,7 @@ msgstr "指示器间距"
 msgid "Spacing around check or radio indicator"
 msgstr "复选或单选指示器周围间距"
 
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtkfilechooserbutton.c:282
-#: gtk/gtktogglebutton.c:134
+#: gtk/gtkcheckmenuitem.c:118 gtk/gtktogglebutton.c:134
 msgid "Active"
 msgstr "激活"
 
@@ -1390,7 +1394,7 @@ msgstr "使用 alpha"
 msgid "Whether or not to give the color an alpha value"
 msgstr "是否要对颜色给出 alpha 值"
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:266
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:238
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "标题"
@@ -1399,7 +1403,7 @@ msgstr "标题"
 msgid "The title of the color selection dialog"
 msgstr "颜色选择对话框的标题"
 
-#: gtk/gtkcolorbutton.c:233 gtk/gtkcolorsel.c:1782
+#: gtk/gtkcolorbutton.c:233 gtk/gtkcolorsel.c:1839
 msgid "Current Color"
 msgstr "当前颜色"
 
@@ -1407,7 +1411,7 @@ msgstr "当前颜色"
 msgid "The selected color"
 msgstr "选中的颜色"
 
-#: gtk/gtkcolorbutton.c:248 gtk/gtkcolorsel.c:1789
+#: gtk/gtkcolorbutton.c:248 gtk/gtkcolorsel.c:1846
 msgid "Current Alpha"
 msgstr "当前 Alpha 值"
 
@@ -1415,35 +1419,35 @@ msgstr "当前 Alpha 值"
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "选中的不透明度(0 为完全透明，65535 为完全不透明)"
 
-#: gtk/gtkcolorsel.c:1768
+#: gtk/gtkcolorsel.c:1825
 msgid "Has Opacity Control"
 msgstr "可以控制透明度"
 
-#: gtk/gtkcolorsel.c:1769
+#: gtk/gtkcolorsel.c:1826
 msgid "Whether the color selector should allow setting opacity"
 msgstr "颜色选择器是否允许设置透明度"
 
-#: gtk/gtkcolorsel.c:1775
+#: gtk/gtkcolorsel.c:1832
 msgid "Has palette"
 msgstr "有调色板"
 
-#: gtk/gtkcolorsel.c:1776
+#: gtk/gtkcolorsel.c:1833
 msgid "Whether a palette should be used"
 msgstr "是否使用调色板"
 
-#: gtk/gtkcolorsel.c:1783
+#: gtk/gtkcolorsel.c:1840
 msgid "The current color"
 msgstr "当前的颜色"
 
-#: gtk/gtkcolorsel.c:1790
+#: gtk/gtkcolorsel.c:1847
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "当前的透明度(0 为完全透明，65535 为完全不透明)"
 
-#: gtk/gtkcolorsel.c:1804
+#: gtk/gtkcolorsel.c:1861
 msgid "Custom palette"
 msgstr "自定义调色板"
 
-#: gtk/gtkcolorsel.c:1805
+#: gtk/gtkcolorsel.c:1862
 msgid "Palette to use in the color selector"
 msgstr "颜色选择器使用的调色板"
 
@@ -1527,7 +1531,7 @@ msgstr "激活项"
 msgid "The item which is currently active"
 msgstr "当前激活的项目"
 
-#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:651 gtk/gtkuimanager.c:228
 msgid "Add tearoffs to menus"
 msgstr "在菜单上添加撕下标志"
 
@@ -1940,35 +1944,31 @@ msgstr "显示隐藏文件"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "是否显示隐藏的文件或文件夹。"
 
-#: gtk/gtkfilechooserbutton.c:251
+#: gtk/gtkfilechooserbutton.c:223
 msgid "Dialog"
 msgstr "对话框"
 
-#: gtk/gtkfilechooserbutton.c:252
+#: gtk/gtkfilechooserbutton.c:224
 msgid "The file chooser dialog to use."
 msgstr "要使用的文件选择对话框。"
 
-#: gtk/gtkfilechooserbutton.c:267
+#: gtk/gtkfilechooserbutton.c:239
 msgid "The title of the file chooser dialog."
 msgstr "文件选择器对话框的标题。"
 
-#: gtk/gtkfilechooserbutton.c:283
-msgid "Whether the browse dialog is visible or not."
-msgstr "浏览对话框是否可见。"
-
-#: gtk/gtkfilechooserbutton.c:295
+#: gtk/gtkfilechooserbutton.c:252
 msgid "Width In Characters"
 msgstr "以字符数计宽度"
 
-#: gtk/gtkfilechooserbutton.c:296
+#: gtk/gtkfilechooserbutton.c:253
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:609
+#: gtk/gtkfilechooserdefault.c:623
 msgid "Default file chooser backend"
 msgstr "默认文件选择器后端"
 
-#: gtk/gtkfilechooserdefault.c:610
+#: gtk/gtkfilechooserdefault.c:624
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "默认要使用的 GtkFileChooser 后端名称"
 
@@ -2314,10 +2314,6 @@ msgstr "显示菜单图像"
 #: gtk/gtkimagemenuitem.c:138
 msgid "Whether images should be shown in menus"
 msgstr "是否要在菜单中显示图像"
-
-#: gtk/gtkinvisible.c:116 gtk/gtkwindow.c:574
-msgid "Screen"
-msgstr "屏幕"
 
 #: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:575
 msgid "The screen where this window will be displayed"
@@ -4325,15 +4321,15 @@ msgstr "排序方向"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "排序指示器应显示的排序方向"
 
-#: gtk/gtkuimanager.c:223
+#: gtk/gtkuimanager.c:229
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "是否要将撕下的菜单项添加到菜单中"
 
-#: gtk/gtkuimanager.c:230
+#: gtk/gtkuimanager.c:236
 msgid "Merged UI definition"
 msgstr "合并的界面定义"
 
-#: gtk/gtkuimanager.c:231
+#: gtk/gtkuimanager.c:237
 msgid "An XML string describing the merged UI"
 msgstr "描述合并的界面的 XML 字符串"
 
@@ -4747,3 +4743,5 @@ msgstr "输入法状态样式"
 msgid "How to draw the input method statusbar"
 msgstr "如何绘制输入法状态栏"
 
+#~ msgid "Whether the browse dialog is visible or not."
+#~ msgstr "浏览对话框是否可见。"

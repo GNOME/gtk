@@ -1,3 +1,9 @@
+2004-12-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.5.6 ===
+
+	* NEWS: Updates
+
 2004-12-03  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk-pixbuf/Makefile.am (gdk_pixbuf.def)

@@ -32,7 +32,7 @@
 typedef struct _GdkX11Renderer      GdkX11Renderer;
 typedef struct _GdkX11RendererClass GdkX11RendererClass;
 
-#define GDK_TYPE_X11_RENDERER            (gdk_x11_renderer_get_type())
+#define GDK_TYPE_X11_RENDERER            (_gdk_x11_renderer_get_type())
 #define GDK_X11_RENDERER(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_X11_RENDERER, GdkX11Renderer))
 #define GDK_IS_X11_RENDERER(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_X11_RENDERER))
 #define GDK_X11_RENDERER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_X11_RENDERER, GdkX11RendererClass))
@@ -56,12 +56,12 @@ struct _GdkX11RendererClass
   PangoXftRendererClass parent_class;
 };
 
-G_DEFINE_TYPE (GdkX11Renderer, gdk_x11_renderer, PANGO_TYPE_XFT_RENDERER)
+G_DEFINE_TYPE (GdkX11Renderer, _gdk_x11_renderer, PANGO_TYPE_XFT_RENDERER)
 
 static void
 gdk_x11_renderer_finalize (GObject *object)
 {
-  G_OBJECT_CLASS (gdk_x11_renderer_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gdk_x11_renderer_parent_class)->finalize (object);
 }
      
 static void
@@ -96,12 +96,12 @@ gdk_x11_renderer_composite_glyphs (PangoXftRenderer *xftrenderer,
 }
 
 static void
-gdk_x11_renderer_init (GdkX11Renderer *renderer)
+_gdk_x11_renderer_init (GdkX11Renderer *renderer)
 {
 }
 
 static void
-gdk_x11_renderer_class_init (GdkX11RendererClass *klass)
+_gdk_x11_renderer_class_init (GdkX11RendererClass *klass)
 {
   PangoXftRendererClass *xftrenderer_class = PANGO_XFT_RENDERER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
