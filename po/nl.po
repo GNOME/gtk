@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.3\n"
-"POT-Creation-Date: 2001-12-26 06:15-0500\n"
+"POT-Creation-Date: 2001-12-28 06:16-0500\n"
 "PO-Revision-Date: 2001-12-27 02:50+0100\n"
 "Last-Translator: Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -248,7 +248,6 @@ msgid "%i fonts available with a total of %i styles."
 msgstr "%i lettertypen beschikbaar met in totaal %i stijlen."
 
 #: gtk/gtkfontsel.c:786
-#, fuzzy
 msgid "Filter"
 msgstr "Filter"
 
@@ -466,4 +465,3 @@ msgstr "Kan module in module_path: \"%s\" niet vinden,"
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Geen Tip ---"
-
