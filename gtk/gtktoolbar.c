@@ -1051,21 +1051,51 @@ slide_idle_handler (gpointer data)
       ItemState state;
       GtkAllocation goal_allocation;
       GtkAllocation allocation;
-      
+      gboolean cont;
+
       state = toolbar_content_get_state (content);
       toolbar_content_get_goal_allocation (content, &goal_allocation);
       toolbar_content_get_allocation (content, &allocation);
       
-      if ((state == NOT_ALLOCATED) ||
-	  (state == NORMAL &&
-	   toolbar_content_child_visible (content) &&
-	   ((goal_allocation.x != allocation.x ||
-	     goal_allocation.y != allocation.y ||
-	     goal_allocation.width != allocation.width ||
-	     goal_allocation.height != allocation.height))) ||
-	  (toolbar_content_is_placeholder (content) &&
+      cont = FALSE;
+      
+      if (state == NOT_ALLOCATED)
+	{
+	  /* an unallocated item means that size allocate has to
+	   * called at least once more
+	   */
+	  cont = TRUE;
+	}
+
+      if ((state == NORMAL && toolbar_content_child_visible (content)) ||
+	  state == OVERFLOWN)
+	{
+	  if ((goal_allocation.x != allocation.x ||
+	       goal_allocation.y != allocation.y ||
+	       goal_allocation.width != allocation.width ||
+	       goal_allocation.height != allocation.height))
+	    {
+	      /* An item is simply not in its right position yet. Note
+	       * that OVERFLOWN items still get an allocation in
+	       * gtk_toolbar_size_allocate(). This way you can see
+	       * them slide in when you drag out of the toolbar
+	       */
+	      cont = TRUE;
+	    }
+	}
+
+      if ((toolbar_content_is_placeholder (content) &&
 	   toolbar_content_disappearing (content) &&
-	   toolbar_content_child_visible (content)))
+	   (state == OVERFLOWN || toolbar_content_child_visible (content))))
+	{
+	  /* A placeholder is disappearing, and it either hasn't disappeared
+	   * yet, or is outside the toolbar.
+	   */
+
+	  cont = TRUE;
+	}
+
+      if (cont)
 	{
 	  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (toolbar));
 	  
@@ -1140,8 +1170,9 @@ gtk_toolbar_begin_sliding (GtkToolbar *toolbar)
       state = toolbar_content_get_state (content);
       toolbar_content_get_allocation (content, &item_allocation);
       
-      if (state == NORMAL &&
-	  rect_within (&item_allocation, &(widget->allocation)))
+      if ((state == NORMAL &&
+	   rect_within (&item_allocation, &(widget->allocation))) ||
+	  state == OVERFLOWN)
 	{
 	  new_start_allocation = item_allocation;
 	}
@@ -1334,6 +1365,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	{
 	  overflowing = TRUE;
 	  new_states[i] = OVERFLOWN;
+	  allocations[i].width = item_size;
 	}
     }
   
@@ -1384,7 +1416,11 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   pos = border_width;
   for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
     {
-      if (new_states[i] == NORMAL)
+      /* both NORMAL and OVERFLOWN items get a position. This ensures
+       * that sliding will work for OVERFLOWN items too
+       */
+      if (new_states[i] == NORMAL ||
+	  new_states[i] == OVERFLOWN)
 	{
 	  allocations[i].x = pos;
 	  allocations[i].y = border_width;
@@ -1477,6 +1513,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       if (new_states[i] != NORMAL)
 	{
 	  toolbar_content_set_child_visible (content, toolbar, FALSE);
+	  if (new_states[i] == OVERFLOWN)
+	    toolbar_content_size_allocate (content, &allocations[i]);
 	}
       else
 	{
@@ -1500,7 +1538,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	    {
 	      alloc = allocations[i];
 	    }
-	  
+
 	  if (alloc.width == 0 || alloc.height == 0)
 	    {
 	      toolbar_content_set_child_visible (content, toolbar, FALSE);
@@ -1511,7 +1549,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	      toolbar_content_size_allocate (content, &alloc);
 	    }
 	}
-      
+	  
       toolbar_content_set_state (content, new_states[i]);
     }
   

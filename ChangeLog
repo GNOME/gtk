@@ -1,3 +1,16 @@
+Sat Jan 24 23:17:27 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbutton.c (gtk_tool_button_construct_contents): Only
+	try to pack icon if there actually is one.
+
+	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Make sure
+	OVERFLOWN items get an allocation even when they are
+	unmapped. This ensures they will slide in properly.
+
+	* gtk/gtktoolbar.c (slide_idle_handler): Make sure we return TRUE
+	when there are overflown items that need to slide in. Also add
+	comments and make formatting more readable.
+
 Sat Jan 24 17:38:48 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkradiotoolbutton.c (gtk_radio_tool_button_class_init):

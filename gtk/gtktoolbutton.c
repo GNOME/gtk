@@ -387,7 +387,8 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 
     case GTK_TOOLBAR_BOTH_HORIZ:
       box = gtk_hbox_new (FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (box), icon, label? FALSE : TRUE, TRUE, 0);
+      if (icon)
+	gtk_box_pack_start (GTK_BOX (box), icon, label? FALSE : TRUE, TRUE, 0);
       if (label)
 	gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
       gtk_container_add (GTK_CONTAINER (button->priv->button), box);
