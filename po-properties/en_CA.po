@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-20 10:45-0400\n"
-"PO-Revision-Date: 2004-10-20 22:53-0400\n"
+"POT-Creation-Date: 2004-10-25 13:22-0400\n"
+"PO-Revision-Date: 2004-10-25 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -937,27 +937,27 @@ msgstr "Cell background set"
 msgid "Whether this tag affects the cell background color"
 msgstr "Whether this tag affects the cell background colour"
 
-#: gtk/gtkcellrenderercombo.c:117
+#: gtk/gtkcellrenderercombo.c:89
 msgid "Model"
 msgstr "Model"
 
-#: gtk/gtkcellrenderercombo.c:118
+#: gtk/gtkcellrenderercombo.c:90
 msgid "The model containing the possible values for the combo box"
 msgstr "The model containing the possible values for the combo box"
 
-#: gtk/gtkcellrenderercombo.c:136 gtk/gtkcomboboxentry.c:114
+#: gtk/gtkcellrenderercombo.c:108 gtk/gtkcomboboxentry.c:114
 msgid "Text Column"
 msgstr "Text Column"
 
-#: gtk/gtkcellrenderercombo.c:137 gtk/gtkcomboboxentry.c:115
+#: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:115
 msgid "A column in the data source model to get the strings from"
 msgstr "A column in the data source model to get the strings from"
 
-#: gtk/gtkcellrenderercombo.c:155
+#: gtk/gtkcellrenderercombo.c:127
 msgid "Has Entry"
 msgstr "Has Entry"
 
-#: gtk/gtkcellrenderercombo.c:156
+#: gtk/gtkcellrenderercombo.c:128
 #, c-format
 msgid "If %FALSE, don't allow to enter strings other than the chosen ones"
 msgstr ""
@@ -987,7 +987,7 @@ msgstr "Pixbuf Expander Closed"
 msgid "Pixbuf for closed expander"
 msgstr "Pixbuf for closed expander"
 
-#: gtk/gtkcellrendererpixbuf.c:163 gtk/gtkimage.c:180
+#: gtk/gtkcellrendererpixbuf.c:163 gtk/gtkimage.c:194
 msgid "Stock ID"
 msgstr "Stock ID"
 
@@ -1375,7 +1375,7 @@ msgstr "Indicator Spacing"
 msgid "Spacing around check or radio indicator"
 msgstr "Spacing around check or radio indicator"
 
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtkfilechooserbutton.c:232
+#: gtk/gtkcheckmenuitem.c:118 gtk/gtkfilechooserbutton.c:226
 #: gtk/gtktogglebutton.c:134
 msgid "Active"
 msgstr "Active"
@@ -1408,7 +1408,7 @@ msgstr "Use alpha"
 msgid "Whether or not to give the color an alpha value"
 msgstr "Whether or not to give the colour an alpha value"
 
-#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:226
+#: gtk/gtkcolorbutton.c:218 gtk/gtkfilechooserbutton.c:220
 #: gtk/gtkfontbutton.c:176 gtk/gtktreeviewcolumn.c:298
 msgid "Title"
 msgstr "Title"
@@ -1966,31 +1966,31 @@ msgstr "Show Hidden"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Whether the hidden files and folders should be displayed"
 
-#: gtk/gtkfilechooserbutton.c:219
+#: gtk/gtkfilechooserbutton.c:213
 msgid "Dialog"
 msgstr "Dialogue"
 
-#: gtk/gtkfilechooserbutton.c:220
+#: gtk/gtkfilechooserbutton.c:214
 msgid "The file chooser dialog to use."
 msgstr "The file chooser dialogue to use."
 
-#: gtk/gtkfilechooserbutton.c:227
+#: gtk/gtkfilechooserbutton.c:221
 msgid "The title of the file chooser dialog."
 msgstr "The title of the file chooser dialogue."
 
-#: gtk/gtkfilechooserbutton.c:233
+#: gtk/gtkfilechooserbutton.c:227
 msgid "Whether the browse dialog is visible or not."
 msgstr "Whether the browse dialogue is visible or not."
 
-#: gtk/gtkfilechooserdefault.c:588
+#: gtk/gtkfilechooserdefault.c:589
 msgid "Default file chooser backend"
 msgstr "Default file chooser backend"
 
-#: gtk/gtkfilechooserdefault.c:589
+#: gtk/gtkfilechooserdefault.c:590
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Name of the GtkFileChooser backend to use by default"
 
-#: gtk/gtkfilesel.c:560 gtk/gtkimage.c:171
+#: gtk/gtkfilesel.c:560 gtk/gtkimage.c:185
 msgid "Filename"
 msgstr "Filename"
 
@@ -2229,75 +2229,91 @@ msgstr "Selection Box Alpha"
 msgid "Opacity of the selection box"
 msgstr "Opacity of the selection box"
 
-#: gtk/gtkimage.c:139
+#: gtk/gtkimage.c:153
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:154
 msgid "A GdkPixbuf to display"
 msgstr "A GdkPixbuf to display"
 
-#: gtk/gtkimage.c:147
+#: gtk/gtkimage.c:161
 msgid "Pixmap"
 msgstr "Pixmap"
 
-#: gtk/gtkimage.c:148
+#: gtk/gtkimage.c:162
 msgid "A GdkPixmap to display"
 msgstr "A GdkPixmap to display"
 
-#: gtk/gtkimage.c:155
+#: gtk/gtkimage.c:169
 msgid "Image"
 msgstr "Image"
 
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:170
 msgid "A GdkImage to display"
 msgstr "A GdkImage to display"
 
-#: gtk/gtkimage.c:163
+#: gtk/gtkimage.c:177
 msgid "Mask"
 msgstr "Mask"
 
-#: gtk/gtkimage.c:164
+#: gtk/gtkimage.c:178
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Mask bitmap to use with GdkImage or GdkPixmap"
 
-#: gtk/gtkimage.c:172
+#: gtk/gtkimage.c:186
 msgid "Filename to load and display"
 msgstr "Filename to load and display"
 
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:195
 msgid "Stock ID for a stock image to display"
 msgstr "Stock ID for a stock image to display"
 
-#: gtk/gtkimage.c:188
+#: gtk/gtkimage.c:202
 msgid "Icon set"
 msgstr "Icon set"
 
-#: gtk/gtkimage.c:189
+#: gtk/gtkimage.c:203
 msgid "Icon set to display"
 msgstr "Icon set to display"
 
-#: gtk/gtkimage.c:196
+#: gtk/gtkimage.c:210
 msgid "Icon size"
 msgstr "Icon size"
 
-#: gtk/gtkimage.c:197
-msgid "Size to use for stock icon or icon set"
-msgstr "Size to use for stock icon or icon set"
+#: gtk/gtkimage.c:211
+msgid "Symbolic size to use for stock icon, icon set or named icon"
+msgstr "Symbolic size to use for stock icon, icon set or named icon"
 
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:227
+msgid "Pixel size"
+msgstr "Pixel size"
+
+#: gtk/gtkimage.c:228
+msgid "Pixel size to use for named icon"
+msgstr "Pixel size to use for named icon"
+
+#: gtk/gtkimage.c:236
 msgid "Animation"
 msgstr "Animation"
 
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:237
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation to display"
 
-#: gtk/gtkimage.c:213
+#: gtk/gtkimage.c:252 gtk/gtkwindow.c:563
+msgid "Icon Name"
+msgstr "Icon Name"
+
+#: gtk/gtkimage.c:253
+msgid "The name of the icon from the icon theme"
+msgstr "The name of the icon from the icon theme"
+
+#: gtk/gtkimage.c:260
 msgid "Storage type"
 msgstr "Storage type"
 
-#: gtk/gtkimage.c:214
+#: gtk/gtkimage.c:261
 msgid "The representation being used for image data"
 msgstr "The representation being used for image data"
 
@@ -3220,11 +3236,11 @@ msgstr "Draw"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Whether the separator is drawn, or just blank"
 
-#: gtk/gtksettings.c:267
+#: gtk/gtksettings.c:268
 msgid "Double Click Time"
 msgstr "Double Click Time"
 
-#: gtk/gtksettings.c:268
+#: gtk/gtksettings.c:269
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -3232,11 +3248,11 @@ msgstr ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 
-#: gtk/gtksettings.c:275
+#: gtk/gtksettings.c:276
 msgid "Double Click Distance"
 msgstr "Double Click Distance"
 
-#: gtk/gtksettings.c:276
+#: gtk/gtksettings.c:277
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -3244,27 +3260,27 @@ msgstr ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 
-#: gtk/gtksettings.c:283
+#: gtk/gtksettings.c:284
 msgid "Cursor Blink"
 msgstr "Cursor Blink"
 
-#: gtk/gtksettings.c:284
+#: gtk/gtksettings.c:285
 msgid "Whether the cursor should blink"
 msgstr "Whether the cursor should blink"
 
-#: gtk/gtksettings.c:291
+#: gtk/gtksettings.c:292
 msgid "Cursor Blink Time"
 msgstr "Cursor Blink Time"
 
-#: gtk/gtksettings.c:292
+#: gtk/gtksettings.c:293
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Length of the cursor blink cycle, in milleseconds"
 
-#: gtk/gtksettings.c:299
+#: gtk/gtksettings.c:300
 msgid "Split Cursor"
 msgstr "Split Cursor"
 
-#: gtk/gtksettings.c:300
+#: gtk/gtksettings.c:301
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -3272,109 +3288,117 @@ msgstr ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 
-#: gtk/gtksettings.c:307
+#: gtk/gtksettings.c:308
 msgid "Theme Name"
 msgstr "Theme Name"
 
-#: gtk/gtksettings.c:308
+#: gtk/gtksettings.c:309
 msgid "Name of theme RC file to load"
 msgstr "Name of theme RC file to load"
 
-#: gtk/gtksettings.c:315
+#: gtk/gtksettings.c:316
 msgid "Icon Theme Name"
 msgstr "Icon Theme Name"
 
-#: gtk/gtksettings.c:316
+#: gtk/gtksettings.c:317
 msgid "Name of icon theme to use"
 msgstr "Name of icon theme to use"
 
-#: gtk/gtksettings.c:324
+#: gtk/gtksettings.c:325
 msgid "Key Theme Name"
 msgstr "Key Theme Name"
 
-#: gtk/gtksettings.c:325
+#: gtk/gtksettings.c:326
 msgid "Name of key theme RC file to load"
 msgstr "Name of key theme RC file to load"
 
-#: gtk/gtksettings.c:333
+#: gtk/gtksettings.c:334
 msgid "Menu bar accelerator"
 msgstr "Menu bar accelerator"
 
-#: gtk/gtksettings.c:334
+#: gtk/gtksettings.c:335
 msgid "Keybinding to activate the menu bar"
 msgstr "Keybinding to activate the menu bar"
 
-#: gtk/gtksettings.c:342
+#: gtk/gtksettings.c:343
 msgid "Drag threshold"
 msgstr "Drag threshold"
 
-#: gtk/gtksettings.c:343
+#: gtk/gtksettings.c:344
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Number of pixels the cursor can move before dragging"
 
-#: gtk/gtksettings.c:351
+#: gtk/gtksettings.c:352
 msgid "Font Name"
 msgstr "Font Name"
 
-#: gtk/gtksettings.c:352
+#: gtk/gtksettings.c:353
 msgid "Name of default font to use"
 msgstr "Name of default font to use"
 
-#: gtk/gtksettings.c:360
+#: gtk/gtksettings.c:361
 msgid "Icon Sizes"
 msgstr "Icon Sizes"
 
-#: gtk/gtksettings.c:361
+#: gtk/gtksettings.c:362
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 msgstr "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 
-#: gtk/gtksettings.c:369
+#: gtk/gtksettings.c:370
 msgid "GTK Modules"
 msgstr "GTK Modules"
 
-#: gtk/gtksettings.c:370
+#: gtk/gtksettings.c:371
 msgid "List of currently active GTK modules"
 msgstr "List of currently active GTK modules"
 
-#: gtk/gtksettings.c:379
+#: gtk/gtksettings.c:380
 msgid "Xft Antialias"
 msgstr "Xft Antialias"
 
-#: gtk/gtksettings.c:380
+#: gtk/gtksettings.c:381
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 
-#: gtk/gtksettings.c:389
+#: gtk/gtksettings.c:390
 msgid "Xft Hinting"
 msgstr "Xft Hinting"
 
-#: gtk/gtksettings.c:390
+#: gtk/gtksettings.c:391
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 
-#: gtk/gtksettings.c:399
+#: gtk/gtksettings.c:400
 msgid "Xft Hint Style"
 msgstr "Xft Hint Style"
 
-#: gtk/gtksettings.c:400
+#: gtk/gtksettings.c:401
 msgid "What degree of hinting to use; none, slight, medium, or full"
 msgstr "What degree of hinting to use; none, slight, medium, or full"
 
-#: gtk/gtksettings.c:409
+#: gtk/gtksettings.c:410
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: gtk/gtksettings.c:410
+#: gtk/gtksettings.c:411
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 
-#: gtk/gtksettings.c:419
+#: gtk/gtksettings.c:420
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: gtk/gtksettings.c:420
+#: gtk/gtksettings.c:421
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
+
+#: gtk/gtksettings.c:430
+msgid "Alternative button order"
+msgstr "Alternative button order"
+
+#: gtk/gtksettings.c:431
+msgid "Whether buttons in dialogs should use the alternative button order"
+msgstr "Whether buttons in dialogues should use the alternative button order"
 
 #: gtk/gtksizegroup.c:243
 msgid "Mode"
@@ -4685,10 +4709,6 @@ msgstr "Icon"
 #: gtk/gtkwindow.c:548
 msgid "Icon for this window"
 msgstr "Icon for this window"
-
-#: gtk/gtkwindow.c:563
-msgid "Icon Name"
-msgstr "Icon Name"
 
 #: gtk/gtkwindow.c:564
 msgid "Name of the themed icon for this window"
