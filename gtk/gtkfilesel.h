@@ -55,6 +55,14 @@ struct _GtkFileSelection
   GtkWidget *fileop_entry;
   gchar     *fileop_file;
   gpointer   cmpl_state;
+  
+  GtkWidget *fileop_c_dir;
+  GtkWidget *fileop_del_file;
+  GtkWidget *fileop_ren_file;
+  
+  GtkWidget *button_area;
+  GtkWidget *action_area;
+  
 };
 
 struct _GtkFileSelectionClass
@@ -64,10 +72,12 @@ struct _GtkFileSelectionClass
 
 
 guint      gtk_file_selection_get_type     (void);
-GtkWidget* gtk_file_selection_new          (const gchar           *title);
-void       gtk_file_selection_set_filename (GtkFileSelection      *filesel,
-					    const gchar           *filename);
-gchar*     gtk_file_selection_get_filename (GtkFileSelection      *filesel);
+GtkWidget* gtk_file_selection_new          (const gchar             *title);
+void       gtk_file_selection_set_filename (GtkFileSelection        *filesel,
+					    const gchar             *filename);
+gchar*     gtk_file_selection_get_filename (GtkFileSelection        *filesel);
+void       gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel);
+void       gtk_file_selection_hide_fileop_buttons (GtkFileSelection *filesel);
 
 
 #ifdef __cplusplus
@@ -76,3 +86,13 @@ gchar*     gtk_file_selection_get_filename (GtkFileSelection      *filesel);
 
 
 #endif /* __GTK_FILESEL_H__ */
+
+
+
+
+
+
+
+
+
+

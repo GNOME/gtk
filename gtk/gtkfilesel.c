@@ -356,15 +356,13 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   GtkWidget *entry_vbox;
   GtkWidget *label;
   GtkWidget *list_hbox;
-  GtkWidget *action_area;
+  GtkWidget *confirm_area;
   GtkWidget *pulldown_hbox;
-  GtkWidget *button_hbox;
-  GtkWidget *button;
   char *dir_title [] = { "Directories", };
   char *file_title [] = { "Files", };
   
   filesel->cmpl_state = cmpl_init_state ();
-  
+
   /* The dialog-sized vertical box  */
   filesel->main_vbox = gtk_vbox_new (FALSE, 10);
   gtk_container_border_width (GTK_CONTAINER (filesel), 10);
@@ -372,40 +370,13 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_show (filesel->main_vbox);
 
   /* The horizontal box containing create, rename etc. buttons */
-  button_hbox = gtk_hbox_new (TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (filesel->main_vbox), button_hbox, 
+  filesel->button_area = gtk_hbox_new (TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (filesel->main_vbox), filesel->button_area, 
 		      FALSE, FALSE, 0);
-  gtk_widget_show (button_hbox);
-
-  /* delete, create directory, and rename */
-  button = gtk_button_new_with_label ("Create Dir");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc) gtk_file_selection_create_dir, 
-		      (gpointer) filesel);
-  gtk_box_pack_start (GTK_BOX (button_hbox), button, TRUE, TRUE, 0);
-  gtk_widget_show (button);
-
-  button = gtk_button_new_with_label ("Delete File");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc) gtk_file_selection_delete_file, 
-		      (gpointer) filesel);
-  gtk_box_pack_start (GTK_BOX (button_hbox), button, TRUE, TRUE, 0);
-  gtk_widget_show (button);
-
-  button = gtk_button_new_with_label ("Rename File");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc) gtk_file_selection_rename_file, 
-		      (gpointer) filesel);
-  gtk_box_pack_start (GTK_BOX (button_hbox), button, TRUE, TRUE, 0);
-  gtk_widget_show (button);
-
-  /*  The Help button  */
-  filesel->help_button = gtk_button_new_with_label ("Help");
-  gtk_box_pack_start (GTK_BOX (button_hbox), filesel->help_button, 
-		      TRUE, TRUE, 5);
-  gtk_widget_show (filesel->help_button);
-
+  gtk_widget_show (filesel->button_area);
   
+  gtk_file_selection_show_fileop_buttons(filesel);
+
   /* hbox for pulldown menu */
   pulldown_hbox = gtk_hbox_new (TRUE, 5);
   gtk_box_pack_start (GTK_BOX (filesel->main_vbox), pulldown_hbox, FALSE, FALSE, 0);
@@ -446,22 +417,28 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_box_pack_start (GTK_BOX (list_hbox), filesel->file_list, TRUE, TRUE, 0);
   gtk_widget_show (filesel->file_list);
 
-  /*  The action area  */
-  action_area = gtk_hbox_new (TRUE, 10);
-  gtk_box_pack_end (GTK_BOX (filesel->main_vbox), action_area, FALSE, FALSE, 0);
-  gtk_widget_show (action_area);
+  /* action area for packing buttons into. */
+  filesel->action_area = gtk_hbox_new (TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (filesel->main_vbox), filesel->action_area, 
+		      FALSE, FALSE, 0);
+  gtk_widget_show (filesel->action_area);
+  
+  /*  The OK/Cancel button area */
+  confirm_area = gtk_hbox_new (TRUE, 10);
+  gtk_box_pack_end (GTK_BOX (filesel->main_vbox), confirm_area, FALSE, FALSE, 0);
+  gtk_widget_show (confirm_area);
 
   /*  The OK button  */
   filesel->ok_button = gtk_button_new_with_label ("OK");
   GTK_WIDGET_SET_FLAGS (filesel->ok_button, GTK_CAN_DEFAULT);
-  gtk_box_pack_start (GTK_BOX (action_area), filesel->ok_button, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (confirm_area), filesel->ok_button, TRUE, TRUE, 0);
   gtk_widget_grab_default (filesel->ok_button);
   gtk_widget_show (filesel->ok_button);
 
   /*  The Cancel button  */
   filesel->cancel_button = gtk_button_new_with_label ("Cancel");
   GTK_WIDGET_SET_FLAGS (filesel->cancel_button, GTK_CAN_DEFAULT);
-  gtk_box_pack_start (GTK_BOX (action_area), filesel->cancel_button, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (confirm_area), filesel->cancel_button, TRUE, TRUE, 0);
   gtk_widget_show (filesel->cancel_button);
 
   /*  The selection entry widget  */
@@ -512,6 +489,74 @@ gtk_file_selection_new (const gchar *title)
 
   return GTK_WIDGET (filesel);
 }
+
+void
+gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
+{
+  g_return_if_fail (filesel != NULL);
+  g_return_if_fail (GTK_IS_FILE_SELECTION (filesel));
+    
+  /* delete, create directory, and rename */
+  if (!filesel->fileop_c_dir) 
+    {
+      filesel->fileop_c_dir = gtk_button_new_with_label ("Create Dir");
+      gtk_signal_connect (GTK_OBJECT (filesel->fileop_c_dir), "clicked",
+			  (GtkSignalFunc) gtk_file_selection_create_dir, 
+			  (gpointer) filesel);
+      gtk_box_pack_start (GTK_BOX (filesel->button_area), 
+			  filesel->fileop_c_dir, TRUE, TRUE, 0);
+      gtk_widget_show (filesel->fileop_c_dir);
+    }
+	
+  if (!filesel->fileop_del_file) 
+    {
+      filesel->fileop_del_file = gtk_button_new_with_label ("Delete File");
+      gtk_signal_connect (GTK_OBJECT (filesel->fileop_del_file), "clicked",
+			  (GtkSignalFunc) gtk_file_selection_delete_file, 
+			  (gpointer) filesel);
+      gtk_box_pack_start (GTK_BOX (filesel->button_area), 
+			  filesel->fileop_del_file, TRUE, TRUE, 0);
+      gtk_widget_show (filesel->fileop_del_file);
+    }
+
+  if (!filesel->fileop_ren_file)
+    {
+      filesel->fileop_ren_file = gtk_button_new_with_label ("Rename File");
+      gtk_signal_connect (GTK_OBJECT (filesel->fileop_ren_file), "clicked",
+			  (GtkSignalFunc) gtk_file_selection_rename_file, 
+			  (gpointer) filesel);
+      gtk_box_pack_start (GTK_BOX (filesel->button_area), 
+			  filesel->fileop_ren_file, TRUE, TRUE, 0);
+      gtk_widget_show (filesel->fileop_ren_file);
+    }
+}
+
+void       
+gtk_file_selection_hide_fileop_buttons (GtkFileSelection *filesel)
+{
+  g_return_if_fail (filesel != NULL);
+  g_return_if_fail (GTK_IS_FILE_SELECTION (filesel));
+    
+  if (filesel->fileop_ren_file) 
+    {
+      gtk_widget_destroy (filesel->fileop_ren_file);
+      filesel->fileop_ren_file = NULL;
+    }
+
+  if (filesel->fileop_del_file)
+    {
+      gtk_widget_destroy (filesel->fileop_del_file);
+      filesel->fileop_del_file = NULL;
+    }
+
+  if (filesel->fileop_c_dir)
+    {
+      gtk_widget_destroy (filesel->fileop_c_dir);
+      filesel->fileop_c_dir = NULL;
+    }
+}
+
+
 
 void
 gtk_file_selection_set_filename (GtkFileSelection *filesel,
@@ -1021,6 +1066,7 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
   GList *list;
   gchar *current_dir;
   gchar *directory;
+  gchar *menu_text;
   gint dir_len;
   gint i;
   
@@ -1051,27 +1097,27 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
 
   for (i = dir_len; i >= 0; i--)
     {
-      /* the i == dir_len is to catch the full path for the first 
-       * entry. */
-      if ( (current_dir[i] == '/') || (i == dir_len))
+      /* the i != dir_len is to watch out for the trailing '/' */
+	 
+      if (current_dir[i] == '/')
 	{
-	  /* another small hack to catch the full path */
-	  if (i != dir_len) 
-		  current_dir[i + 1] = '\0';
-	  menu_item = gtk_menu_item_new_with_label (current_dir);
-	  directory = g_strdup (current_dir);
+	  
+	  menu_text = g_strconcat (&current_dir[i+1], "/", NULL);
+	  menu_item = gtk_menu_item_new_with_label (menu_text);
+	  g_free (menu_text);
+
+	  /* since the completion gets confused if you don't 
+	   * supply a trailing '/' on a dir entry */
+
+	  directory = g_strconcat (current_dir, "/", NULL);
+	  
+	  /* insert a \0 here so next time the strdup will get cut short */
+	  current_dir[i] = '\0';
 	  
 	  callback_arg = g_new (HistoryCallbackArg, 1);
 	  callback_arg->menu_item = menu_item;
+	  callback_arg->directory = directory;
 	  
-	  /* since the autocompletion gets confused if you don't 
-	   * supply a trailing '/' on a dir entry, set the full
-	   * (current) path to "" which just refreshes the filesel */
-	  if (dir_len == i) {
-	    callback_arg->directory = g_strdup ("");
-	  } else {
-	    callback_arg->directory = directory;
-	  }
 	  
 	  fs->history_list = g_list_append (fs->history_list, callback_arg);
 	  
@@ -1082,9 +1128,24 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
 	  gtk_widget_show (menu_item);
 	}
     }
-
+  
+  /* and one last entry for '/' */
+  menu_item = gtk_menu_item_new_with_label ("/");
+  directory = g_strdup ("/");
+  callback_arg = g_new (HistoryCallbackArg, 1);
+  callback_arg->menu_item = menu_item;
+  callback_arg->directory = directory;
+  fs->history_list = g_list_append (fs->history_list, callback_arg);
+  gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+		      (GtkSignalFunc) gtk_file_selection_history_callback,
+		      (gpointer) fs);
+  gtk_menu_append (GTK_MENU (fs->history_menu), menu_item);
+  gtk_widget_show (menu_item);
+  
+  
   gtk_option_menu_set_menu (GTK_OPTION_MENU (fs->history_pulldown), 
 			    fs->history_menu);
+
   g_free (current_dir);
 }
 

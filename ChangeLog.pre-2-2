@@ -1,3 +1,19 @@
+Thu Mar  5 20:41:27 1998  Ian Main  <imain@gnu.org>
+
+	* gtk/gtkfilesel.c: Added
+	  gtk_file_selection_show_fileop_buttons(GtkFileSelection *fs), and
+	  gtk_file_selection_hide_fileop_buttons(GtkFileSelection *fs).
+	  Changed pulldown to only contain current directory name instead of
+	  the full path.  Removed Help button (it can now be packed into the
+	  button_area if desired).
+		
+	* gtk/gtkfilesel.h: Added GtkWidget *button_area (the fileop
+	  buttons at the top are packed into this hbox), and GtkWidget
+	  action_area (hbox below clists) to GtkFileSelection structure.
+
+	* gtk/testgtk.c: Changed the filesel example to show off the hiding/
+	  showing of fileop buttons, and the packing area.
+
 1998-03-05  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gdk/gdkprivate.h: Changed the name of default_filters to

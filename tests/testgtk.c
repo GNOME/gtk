@@ -2985,6 +2985,12 @@ create_color_selection ()
     gtk_widget_destroy (window);
 }
 
+void
+file_selection_hide_fileops (GtkWidget *widget,
+			     GtkFileSelection *fs)
+{
+  gtk_file_selection_hide_fileop_buttons (fs);
+}
 
 void
 file_selection_ok (GtkWidget        *w,
@@ -2998,10 +3004,14 @@ void
 create_file_selection ()
 {
   static GtkWidget *window = NULL;
+  GtkWidget *button;
 
   if (!window)
     {
       window = gtk_file_selection_new ("file selection dialog");
+
+      gtk_file_selection_hide_fileop_buttons (GTK_FILE_SELECTION (window));
+
       gtk_window_position (GTK_WINDOW (window), GTK_WIN_POS_MOUSE);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
@@ -3017,8 +3027,27 @@ create_file_selection ()
       gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (window)->cancel_button),
 				 "clicked", GTK_SIGNAL_FUNC(gtk_widget_destroy),
 				 GTK_OBJECT (window));
-    }
+      
+      button = gtk_button_new_with_label ("Hide Fileops");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  (GtkSignalFunc) file_selection_hide_fileops, 
+			  (gpointer) window);
+      gtk_box_pack_start (GTK_BOX (GTK_FILE_SELECTION (window)->action_area), 
+			  button, FALSE, FALSE, 0);
+      gtk_widget_show (button);
 
+      button = gtk_button_new_with_label ("Show Fileops");
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 (GtkSignalFunc) gtk_file_selection_show_fileop_buttons, 
+				 (gpointer) window);
+      gtk_box_pack_start (GTK_BOX (GTK_FILE_SELECTION (window)->action_area), 
+			  button, FALSE, FALSE, 0);
+      gtk_widget_show (button);
+
+      
+      
+    }
+  
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show (window);
   else
