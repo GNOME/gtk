@@ -3,10 +3,10 @@
 # Changwoo Ryu <cwryu@debian.org>, 2002-2004
 msgid ""
 msgstr ""
-"Project-Id-Version: $PACKAGE $VERSION, no-define\n"
+"Project-Id-Version: gtk+ 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-21 00:01+0900\n"
+"PO-Revision-Date: 2004-01-30 04:12+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -208,7 +208,7 @@ msgstr "스택 넘침"
 
 #: gdk-pixbuf/io-gif.c:635
 msgid "GIF image loader can't understand this image."
-msgstr "GIF 그림 읽기가 이 그림을 이해할 수 없습니다"
+msgstr "GIF 그림 읽기가 이 그림을 이해할 수 없습니다."
 
 #: gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
@@ -244,7 +244,7 @@ msgstr "GIF 그림에 전체 컬러맵이 없고, 프레임 내부에 부분 컬
 
 #: gdk-pixbuf/io-gif.c:1498
 msgid "GIF image was truncated or incomplete."
-msgstr "GIF 그림이 잘려져 있거나 불완전합니다"
+msgstr "GIF 그림이 잘려져 있거나 불완전합니다."
 
 #: gdk-pixbuf/io-gif.c:1650
 msgid "The GIF image format"
@@ -385,7 +385,7 @@ msgstr "PCX 그림 형식"
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
-msgstr "PNG 그림의 채널 당 비트수가 잘못되었습니다"
+msgstr "PNG 그림의 채널 당 비트수가 잘못되었습니다."
 
 #: gdk-pixbuf/io-png.c:136
 msgid "Transformed PNG has zero width or height."
@@ -433,11 +433,11 @@ msgstr "PNG 그림 파일을 읽어들이는 데 치명적인 오류: %s"
 #: gdk-pixbuf/io-png.c:813
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr "PNG 텍스트 부분의 키에서는 최소 1 최대 79 문자까지 쓸 수 있습니다"
+msgstr "PNG 텍스트 부분의 키에서는 최소 1 최대 79 문자까지 쓸 수 있습니다."
 
 #: gdk-pixbuf/io-png.c:821
 msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr "PNG 텍스트 부분의 키는 아스키 문자로 되어 있어야 합니다"
+msgstr "PNG 텍스트 부분의 키는 아스키 문자로 되어 있어야 합니다."
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
@@ -825,7 +825,7 @@ msgstr "색상(_H):"
 
 #: gtk/gtkcolorsel.c:1874
 msgid "Position on the color wheel."
-msgstr "색 동그라미의 위치"
+msgstr "색 동그라미의 위치."
 
 #: gtk/gtkcolorsel.c:1876
 msgid "_Saturation:"
@@ -833,7 +833,7 @@ msgstr "채도(_S):"
 
 #: gtk/gtkcolorsel.c:1877
 msgid "\"Deepness\" of the color."
-msgstr "색의 \"깊이\""
+msgstr "색의 \"깊이\"."
 
 #: gtk/gtkcolorsel.c:1878
 msgid "_Value:"
@@ -841,7 +841,7 @@ msgstr "값(_V):"
 
 #: gtk/gtkcolorsel.c:1879
 msgid "Brightness of the color."
-msgstr "색의 밝기"
+msgstr "색의 밝기."
 
 #: gtk/gtkcolorsel.c:1880
 msgid "_Red:"
@@ -849,7 +849,7 @@ msgstr "빨강(_R):"
 
 #: gtk/gtkcolorsel.c:1881
 msgid "Amount of red light in the color."
-msgstr "색에서 빨강 빛의 양"
+msgstr "색에서 빨강 빛의 양."
 
 #: gtk/gtkcolorsel.c:1882
 msgid "_Green:"
@@ -857,7 +857,7 @@ msgstr "초록(_G):"
 
 #: gtk/gtkcolorsel.c:1883
 msgid "Amount of green light in the color."
-msgstr "색에서 초록 빛의 양"
+msgstr "색에서 초록 빛의 양."
 
 #: gtk/gtkcolorsel.c:1884
 msgid "_Blue:"
@@ -865,7 +865,7 @@ msgstr "파랑(_B):"
 
 #: gtk/gtkcolorsel.c:1885
 msgid "Amount of blue light in the color."
-msgstr "색에서 파랑 빛의 양"
+msgstr "색에서 파랑 빛의 양."
 
 #: gtk/gtkcolorsel.c:1888
 msgid "_Opacity:"
@@ -1318,7 +1318,7 @@ msgstr "abcdefghijk ABCDEFGHIJK 가나다라마바사"
 
 #: gtk/gtkfontsel.c:332
 msgid "_Family:"
-msgstr "패밀리(_F)"
+msgstr "패밀리(_F):"
 
 #: gtk/gtkfontsel.c:338
 msgid "_Style:"
@@ -1361,6 +1361,10 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
+"'%s' 아이콘을 찾을 수 없습니다. '%s' 테마도 찾을\n"
+"수 없습니다. 테마를 설치해야 합니다.\n"
+"다음에서 테마를 구할 수 있습니다:\n"
+"\t%s"
 
 #: gtk/gtkicontheme.c:1247
 #, c-format
@@ -1614,11 +1618,11 @@ msgstr "홈(_H)"
 
 #: gtk/gtkstock.c:301
 msgid "Increase Indent"
-msgstr ""
+msgstr "들여 쓰기 늘리기"
 
 #: gtk/gtkstock.c:302
 msgid "Decrease Indent"
-msgstr ""
+msgstr "들여 쓰기 줄이기"
 
 #: gtk/gtkstock.c:303
 msgid "_Index"

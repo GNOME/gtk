@@ -3,12 +3,12 @@
 # Changwoo Ryu <cwryu@debian.org>, 2002-2004
 msgid ""
 msgstr ""
-"Project-Id-Version: $PACKAGE $VERSION, no-define\n"
+"Project-Id-Version: gtk+-properrties 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-20 23:56+0900\n"
+"PO-Revision-Date: 2004-01-30 04:18+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
-"Language-Team: GTP Korean <gnome-kr-translation@gnome.or.kr>\n"
+"Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -191,7 +191,7 @@ msgstr "반응"
 
 #: gtk/gtkaction.c:258
 msgid "Whether the action is enabled."
-msgstr "이 동작을 사용할 지 여부"
+msgstr "이 동작을 사용할 지 여부."
 
 #: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:551
 #: gtk/gtktreeviewcolumn.c:222 gtk/gtkwidget.c:439
@@ -200,7 +200,7 @@ msgstr "보임"
 
 #: gtk/gtkaction.c:265
 msgid "Whether the action is visible."
-msgstr "동작을 표시할 지 여부"
+msgstr "동작을 표시할 지 여부."
 
 #: gtk/gtkaction.c:271
 msgid "Action Group"
@@ -444,9 +444,7 @@ msgstr "채움"
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
-msgstr ""
-"하위 위젯에 주어지는 추가 여백이 하위 위젯에 할당될 것인 지 여백으로 사용될 "
-"것인 지 여부"
+msgstr "하위 위젯에 주어지는 추가 여백이 하위 위젯에 할당될 것인 지 여백으로 사용될 것인 지 여부"
 
 #: gtk/gtkbox.c:160
 msgid "Padding"
@@ -727,7 +725,7 @@ msgstr "셀 바탕 설정"
 
 #: gtk/gtkcellrenderer.c:272
 msgid "Whether this tag affects the cell background color"
-msgstr "이 태그가 셀 배경 색에 영향을 미칠지 여부"
+msgstr "이 태그가 셀 바탕색에 영향을 미칠지 여부"
 
 #: gtk/gtkcellrendererpixbuf.c:133
 msgid "Pixbuf Object"
@@ -811,35 +809,35 @@ msgstr "문단 한 개에 모든 텍스트가 들어 있는 지 여부"
 
 #: gtk/gtkcellrenderertext.c:225 gtk/gtkcellview.c:179 gtk/gtktexttag.c:205
 msgid "Background color name"
-msgstr "배경 색 이름"
+msgstr "바탕색 이름"
 
 #: gtk/gtkcellrenderertext.c:226 gtk/gtkcellview.c:180 gtk/gtktexttag.c:206
 msgid "Background color as a string"
-msgstr "배경 색 문자열"
+msgstr "바탕색 문자열"
 
 #: gtk/gtkcellrenderertext.c:233 gtk/gtkcellview.c:186 gtk/gtktexttag.c:213
 msgid "Background color"
-msgstr "배경 색"
+msgstr "바탕색"
 
 #: gtk/gtkcellrenderertext.c:234 gtk/gtkcellview.c:187
 msgid "Background color as a GdkColor"
-msgstr "배경 색 GdkColor"
+msgstr "바탕색 GdkColor"
 
 #: gtk/gtkcellrenderertext.c:241 gtk/gtktexttag.c:239
 msgid "Foreground color name"
-msgstr "전경 색 이름"
+msgstr "글자색 이름"
 
 #: gtk/gtkcellrenderertext.c:242 gtk/gtktexttag.c:240
 msgid "Foreground color as a string"
-msgstr "전경 색 문자열"
+msgstr "글자색 문자열"
 
 #: gtk/gtkcellrenderertext.c:249 gtk/gtktexttag.c:247
 msgid "Foreground color"
-msgstr "전경 색"
+msgstr "글자색"
 
 #: gtk/gtkcellrenderertext.c:250
 msgid "Foreground color as a GdkColor"
-msgstr "전경 색 GdkColor"
+msgstr "글자색 GdkColor"
 
 #: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:466 gtk/gtktexttag.c:273
 #: gtk/gtktextview.c:585
@@ -952,19 +950,19 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:397 gtk/gtkcellview.c:194 gtk/gtktexttag.c:508
 msgid "Background set"
-msgstr "배경 설정"
+msgstr "바탕색 설정"
 
 #: gtk/gtkcellrenderertext.c:398 gtk/gtkcellview.c:195 gtk/gtktexttag.c:509
 msgid "Whether this tag affects the background color"
-msgstr "이 태그가 배경 색에 영향을 미칠지 여부"
+msgstr "이 태그가 바탕색에 영향을 미칠지 여부"
 
 #: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:520
 msgid "Foreground set"
-msgstr "전경 설정"
+msgstr "글자색 설정"
 
 #: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:521
 msgid "Whether this tag affects the foreground color"
-msgstr "이 태그가 전경 색에 영향을 미칠지 여부"
+msgstr "이 태그가 글자색에 영향을 미칠지 여부"
 
 #: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:528
 msgid "Editability set"
@@ -1502,7 +1500,7 @@ msgstr "최소 키 길이"
 
 #: gtk/gtkentrycompletion.c:204
 msgid "Minimum length of the search key in order to look up matches"
-msgstr "일치하는 텍스트를 찾을때 쓸 찾기 키의 최소 길이"
+msgstr "일치하는 텍스트를 찾을 때 쓸 찾기 키의 최소 길이"
 
 #: gtk/gtkeventbox.c:119
 msgid "Visible Window"
@@ -2083,12 +2081,12 @@ msgstr "하위 위젯의 아래쪽을 붙일 행 번호"
 
 #: gtk/gtkmenu.c:500
 msgid "Can change accelerators"
-msgstr "단축키 변경 가능"
+msgstr "단축키 바꾸기 가능"
 
 #: gtk/gtkmenu.c:501
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
-msgstr "메뉴 항목 위에서 키를 눌러 메뉴 단축키를 변경할 수 있는지 여부"
+msgstr "메뉴 항목 위에서 키를 눌러 메뉴 단축키를 바꿀 수 있는지 여부"
 
 #: gtk/gtkmenu.c:506
 msgid "Delay before submenus appear"
@@ -2176,7 +2174,7 @@ msgstr "가로 여백"
 #: gtk/gtkmisc.c:119
 msgid ""
 "The amount of space to add on the left and right of the widget, in pixels"
-msgstr "위젯의 좌우에 추가할 공간 (픽셀 단위)"
+msgstr "위젯의 좌우에 더할 공간 (픽셀 단위)"
 
 #: gtk/gtkmisc.c:128
 msgid "Y pad"
@@ -2185,7 +2183,7 @@ msgstr "세로 여백"
 #: gtk/gtkmisc.c:129
 msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr "위젯의 위쪽/아래쪽에 추가할 공간 (픽셀 단위)"
+msgstr "위젯의 위쪽/아래쪽에 더할 공간 (픽셀 단위)"
 
 #: gtk/gtknotebook.c:396
 msgid "Page"
@@ -2249,7 +2247,7 @@ msgstr "스크롤 가능"
 
 #: gtk/gtknotebook.c:455
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
-msgstr "참이면, 탭이 많아서 크기에 맞출 수 없을 때 스크롤 화살표가 추가됩니다"
+msgstr "참이면, 탭이 많아서 크기에 맞출 수 없을 때 스크롤 화살표를 더합니다"
 
 #: gtk/gtknotebook.c:461
 msgid "Enable Popup"
@@ -2544,11 +2542,11 @@ msgstr "그룹"
 
 #: gtk/gtkradioaction.c:156
 msgid "The radio action whose group this action belongs."
-msgstr "이 동작이 포함될 그룹의 라디오 동작"
+msgstr "이 동작이 포함될 그룹의 라디오 동작."
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
-msgstr "이 위젯이 포함될 그룹의 라디오 단추"
+msgstr "이 위젯이 포함될 그룹의 라디오 단추."
 
 #: gtk/gtkrange.c:281
 msgid "Update policy"
@@ -3105,39 +3103,37 @@ msgstr "텍스트 태그를 가리키는 데 쓰일 이름. 익명 태그에는 
 
 #: gtk/gtktexttag.c:214
 msgid "Background color as a (possibly unallocated) GdkColor"
-msgstr "(해제었을 수 있는) GdkColor의 배경 색"
+msgstr "바탕색 (해제되었을 수 있는) GdkColor"
 
 #: gtk/gtktexttag.c:221
 msgid "Background full height"
-msgstr "배경 전체 높이"
+msgstr "바탕색 전체 높이"
 
 #: gtk/gtktexttag.c:222
 msgid ""
 "Whether the background color fills the entire line height or only the height "
 "of the tagged characters"
-msgstr ""
-"배경색으로 전체 라인 높이를 채울 것인지, 아니면 표시된 문자의 높이만을 채울 "
-"것인지"
+msgstr "바탕색으로 전체 라인 높이를 채울 것인지, 아니면 표시된 문자의 높이만을 채울 것인지"
 
 #: gtk/gtktexttag.c:230
 msgid "Background stipple mask"
-msgstr "배경 스티플 마스크"
+msgstr "바탕 스티플 마스크"
 
 #: gtk/gtktexttag.c:231
 msgid "Bitmap to use as a mask when drawing the text background"
-msgstr "텍스트 배경을 그릴 때 마스크로 사용할 비트맵"
+msgstr "텍스트 바탕을 그릴 때 마스크로 사용할 비트맵"
 
 #: gtk/gtktexttag.c:248
 msgid "Foreground color as a (possibly unallocated) GdkColor"
-msgstr "(해제되었을 수 있는) GdkColor의 전경 색"
+msgstr "글자색 (해제되었을 수 있는) GdkColor"
 
 #: gtk/gtktexttag.c:256
 msgid "Foreground stipple mask"
-msgstr "전경 스티플 마스크"
+msgstr "글자 스티플 마스크"
 
 #: gtk/gtktexttag.c:257
 msgid "Bitmap to use as a mask when drawing the text foreground"
-msgstr "텍스트 전경을 그릴 때 마스크로 사용할 비트맵"
+msgstr "텍스트 글자를 그릴 때 마스크로 사용할 비트맵"
 
 #: gtk/gtktexttag.c:264
 msgid "Text direction"
@@ -3271,27 +3267,27 @@ msgstr "이 텍스트를 숨길 지 여부. GTK 2.0에서는 구현되지 않음
 
 #: gtk/gtktexttag.c:512
 msgid "Background full height set"
-msgstr "배경 전체 높이 설정"
+msgstr "바탕 전체 높이 설정"
 
 #: gtk/gtktexttag.c:513
 msgid "Whether this tag affects background height"
-msgstr "이 태그가 배경 높이에 영향을 미칠지 여부"
+msgstr "이 태그가 바탕 높이에 영향을 미칠지 여부"
 
 #: gtk/gtktexttag.c:516
 msgid "Background stipple set"
-msgstr "배경 스티플 설정"
+msgstr "바탕 스티플 설정"
 
 #: gtk/gtktexttag.c:517
 msgid "Whether this tag affects the background stipple"
-msgstr "이 태그가 배경 스티플에 영향을 미칠지 여부"
+msgstr "이 태그가 바탕 스티플에 영향을 미칠지 여부"
 
 #: gtk/gtktexttag.c:524
 msgid "Foreground stipple set"
-msgstr "전경 스티플 설정"
+msgstr "글자 스티플 설정"
 
 #: gtk/gtktexttag.c:525
 msgid "Whether this tag affects the foreground stipple"
-msgstr "이 태그가 전경 스티플에 영향을 미칠지 여부"
+msgstr "이 태그가 글자 스티플에 영향을 미칠지 여부"
 
 #: gtk/gtktexttag.c:560
 msgid "Justification set"
@@ -3516,9 +3512,7 @@ msgstr "도구 모음 유형"
 #: gtk/gtktoolbar.c:583
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
-msgstr ""
-"도구 모음에 기본값으로 텍스트만 쓸 것인지, 텍스트와 아이콘을 쓸 것인지, 아이"
-"콘만을 쓸 것인지, 등"
+msgstr "도구 모음에 기본값으로 텍스트만 쓸 것인지, 텍스트와 아이콘을 쓸 것인지, 아이콘만을 쓸 것인지, 등."
 
 #: gtk/gtktoolbar.c:589
 msgid "Toolbar icon size"
@@ -4166,9 +4160,7 @@ msgstr "유형 힌트"
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
-msgstr ""
-"이 창이 어떤 종류이고 어떻게 처리되는 지 등의 데스크탑 환경을 이해할 수 있도"
-"록 도움을 주는 힌트"
+msgstr "이 창이 어떤 종류이고 어떻게 처리되는 지 등의 데스크탑 환경을 이해할 수 있도록 도움을 주는 힌트."
 
 #: gtk/gtkwindow.c:575
 msgid "Skip taskbar"
