@@ -1,3 +1,13 @@
+Tue May 14 18:02:37 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_realize): Fix
+	frame_right/frame_top screwup. (Detlef Reichl,
+	#78111)
+
+	* gtk/Makefile.am (install-data-local): Use
+	$(INSTALL_DATA) not $(INSTALL) when installing
+	theme files. (#77094, Ben Liblit)
+
 Tue May 14 17:30:57 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkctree.c gtk/gtkclist.c: Fix format of 
