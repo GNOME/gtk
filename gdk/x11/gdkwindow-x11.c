@@ -834,7 +834,7 @@ _gdk_windowing_window_destroy (GdkWindow *window,
       XftDrawDestroy (draw_impl->xft_draw);
 #else /* !HAVE_XFT2 */
     if (draw_impl->picture)
-      XRenderFreePicture (GDK_DISPLAY_XDISPLAY (display), draw_impl->picture);
+      XRenderFreePicture (GDK_DRAWABLE_XDISPLAY (window), draw_impl->picture);
 #endif /* HAVE_XFT2 */
   }
 #endif /* HAVE_XFT */  

@@ -1,3 +1,9 @@
+Thu Oct  3 23:53:43 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gdk/x11/gdkwindow-x11.c (_gdk_windowing_window_destroy): get
+	XDisplay from window instead of display, as display has not been
+	defined here (fixes the build).
+
 Thu Oct  3 17:09:23 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/{gdkdrawable-x11.[ch],gdkpixmap-x11.c,
