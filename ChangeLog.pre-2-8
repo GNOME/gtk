@@ -1,3 +1,13 @@
+Sun Jan 24 12:17:39 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkcolor.c (gdk_colormap_real_destroy): Fix 
+	 reversed assertion. 
+	 (Pointed out by Austin Donnelly <austin@greenend.org.uk>)
+
+	* gtk/gtkruler.c (gtk_ruler_expose): Remove unecessary
+	 and harmful call to gtk_paint_box(). We are going
+	 to paint onto the backing store later anyways.
+
 Sat Jan 23 11:15:39 1999  Owen Taylor  <otaylor@gtk.org>
 
 	* gdk/gdkdnd.c (gdk_window_register_dnd): X expects

@@ -145,7 +145,7 @@ gdk_colormap_real_destroy (GdkColormap *colormap)
   GdkColormapPrivate *private = (GdkColormapPrivate*) colormap;
 
   g_return_if_fail (colormap != NULL);
-  g_return_if_fail (private->ref_count > 0);
+  g_return_if_fail (private->ref_count == 0);
 
   gdk_colormap_remove (colormap);
   XFreeColormap (private->xdisplay, private->xcolormap);
