@@ -1,3 +1,8 @@
+2002-06-02  Christian Rose  <menthos@menthos.com>
+
+	* ca.po: Updated Catalan translation by
+	Jordi Mallach <jordi@sindominio.net> (also UTF-8 now).
+
 2002-05-17  Christian Rose  <menthos@menthos.com>
 
 	* POTFILES.in: Added missing file.
