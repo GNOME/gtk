@@ -1,3 +1,9 @@
+Mon Apr 21 18:29:03 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkiconfactory.c (gtk_icon_set_unref): Free
+	the source list, not just it's contents (Patch
+	from Charles Kerr, #108243)
+
 Mon Apr 21 18:13:46 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdnd-x11.c (gdk_window_cache_filter): Patch

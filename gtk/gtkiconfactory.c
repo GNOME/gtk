@@ -1562,6 +1562,7 @@ gtk_icon_set_unref (GtkIconSet *icon_set)
 
           tmp_list = g_slist_next (tmp_list);
         }
+      g_slist_free (icon_set->sources);
 
       clear_cache (icon_set, TRUE);
 
