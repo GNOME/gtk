@@ -11816,8 +11816,7 @@ gtk_tree_view_get_search_equal_func (GtkTreeView *tree_view)
 /**
  * gtk_tree_view_set_search_equal_func:
  * @tree_view: A #GtkTreeView
- * @search_equal_func: the compare function to use during the search, or %NULL
- *   to restore the default function
+ * @search_equal_func: the compare function to use during the search
  * @search_user_data: user data to pass to @search_equal_func, or %NULL
  * @search_destroy: Destroy notifier for @search_user_data, or %NULL
  *
@@ -11832,6 +11831,7 @@ gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
 				     GtkDestroyNotify            search_destroy)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (search_equal_func !=NULL);
 
   if (tree_view->priv->search_destroy)
     (* tree_view->priv->search_destroy) (tree_view->priv->search_user_data);
@@ -12513,11 +12513,12 @@ check_expander_max (gint height,
 	}
       
       if (!is_separator)
-	g_warning ("height less than expander size;\n"
-		   "please report this in http://bugzilla.gnome.org/show_bug.cgi?id=145528\n");
+	g_warning ("height less than expander size (%d < %d);\n"
+		   "please report this in http://bugzilla.gnome.org/show_bug.cgi?id=145528\n",
+		   height, expander_size);
     }
   
-  return height;
+  return height ? height : expander_size;
 }
   
 
