@@ -9,6 +9,7 @@ style "wimp-default"
   GtkSpinButton::shadow-type = in
 
   GtkTreeView::allow-rules = 0
+  GtkTreeView::expander_size = 11
 
   engine "wimp" 
   {

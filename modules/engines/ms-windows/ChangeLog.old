@@ -2,7 +2,9 @@
 
 	* src/wimp_style.c: Fixed typ-o (gtk-double-cliNk-time), adjusted
 	cursor blink time to cope with Windows semantics (GTK+ uses cycle
-	time), fixed clipping area computation.
+	time), fixed clipping area computation. Fixed XP tree expanders to
+	cope with clipping area, and made non-XP tree expanders look
+	pixel-perfect.
 	
 2003-09-15  Dom Lachowicz <cinamod@hotmail.com>
 

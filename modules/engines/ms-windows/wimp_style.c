@@ -644,16 +644,12 @@ draw_expander(GtkStyle      *style,
       break;
     }
 
-  if (xp_theme_draw(window, xp_expander, style,
-                    x, y - expander_size / 2,
-                    expander_size, expander_size, state, area))
-    {
-      return;
-    }
+  if ((expander_size % 2) == 0)
+    expander_size--;
 
   if (expander_size > 2)
     expander_size -= 2;
-
+  
   if (area)
     gdk_gc_set_clip_rectangle (style->fg_gc[state], area);
 
@@ -662,6 +658,13 @@ draw_expander(GtkStyle      *style,
   y -= expander_semi_size;
 
   gdk_gc_get_values (style->fg_gc[state], &values);
+
+  if (xp_theme_draw(window, xp_expander, style,
+                    x, y,
+                    expander_size, expander_size, state, area))
+    {
+      return;
+    }
 
   /* RGB values to emulate Windows Classic style */
   color.red = color.green = color.blue = 128 << 8;
@@ -673,7 +676,8 @@ draw_expander(GtkStyle      *style,
     gdk_gc_set_foreground (style->fg_gc[state], &color);
 
   gdk_draw_rectangle
-    (window, style->fg_gc[state], FALSE, x, y, expander_size, expander_size);
+    (window, style->fg_gc[state], FALSE, x, y,
+     expander_size - 1, expander_size - 1);
 
   if (success)
     gdk_gc_set_foreground (style->fg_gc[state], &values.foreground);
