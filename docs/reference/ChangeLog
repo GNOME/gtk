@@ -1,3 +1,9 @@
+Wed Mar  6 14:12:34 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/tmpl/gtktreeselection.sgml: docs
+
+	* gtk/tree_widget.sgml: clean up docs
+
 2002-03-05  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Remove gtk_win32_get_installation_directory.

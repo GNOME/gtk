@@ -50,6 +50,12 @@
       information can be found on this in the <link
       linkend="GtkTreeStore">GtkTreeModel</link> section.
       <informalexample><programlisting><![CDATA[
+enum
+{
+  COLUMN_ONE,
+  N_COLUMNS
+};
+
 {
   GtkTreeStore *model;
   GtkWidget *view;
@@ -58,7 +64,9 @@
 
   /* Create a model.  We are using the store model for now, though we
    * could use any other GtkTreeModel */
-  model = gtk_tree_store_new_with_values (1, G_TYPE_STRING);
+  model = gtk_tree_store_new_with_values (N_COLUMNS, G_TYPE_STRING);
+
+  /* custom function to fill the model with data */
   populate_tree_model (model);
 
   /* Create a view */
@@ -68,8 +76,8 @@
    * reference */
   g_object_unref (G_OBJECT (model));
 
-  /* Create a cell render and arbitrarily make it red for demonstartion
-   *purposes */
+  /* Create a cell render and arbitrarily make it red for demonstration
+   * purposes */
   cell_renderer = gtk_cell_renderer_text_new ();
   g_object_set (G_OBJECT (cell_renderer), "foreground", "red", NULL);
 
@@ -77,11 +85,14 @@
    * cell_renderer to the first column of the model */
   column = gtk_tree_view_column_new_with_attributes ("title",
 						     cell_renderer,
-						     "text", 0,
+						     "text", COLUMN_ONE,
 						     NULL);
 
   /* Add the column to the view. */
   gtk_tree_view_append_column (GTK_TREE_VIEW (view), column);
+
+  /* Now we can manipulate the view just like any other GTK widget */
+  ...
 }
 ]]>
       </programlisting></informalexample>
