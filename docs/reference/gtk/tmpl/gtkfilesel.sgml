@@ -118,6 +118,26 @@ The #GtkFileSelection struct contains the following #GtkWidget fields:
 
 </para>
 
+@dir_list: 
+@file_list: 
+@selection_entry: 
+@selection_text: 
+@main_vbox: 
+@ok_button: 
+@cancel_button: 
+@help_button: 
+@history_pulldown: 
+@history_menu: 
+@history_list: 
+@fileop_dialog: 
+@fileop_entry: 
+@fileop_file: 
+@cmpl_state: 
+@fileop_c_dir: 
+@fileop_del_file: 
+@fileop_ren_file: 
+@button_area: 
+@action_area: 
 
 <!-- ##### FUNCTION gtk_file_selection_new ##### -->
 <para>

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
-"POT-Creation-Date: 2003-02-01 23:47+0000\n"
+"POT-Creation-Date: 2003-02-02 10:11-0500\n"
 "PO-Revision-Date: 2003-02-01 23:59+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -903,8 +903,8 @@ msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
 msgstr ""
-"Como dispor os botões na caixa. Os valores possíveis são por omissão, afastados, "
-"extremos, início e fim"
+"Como dispor os botões na caixa. Os valores possíveis são por omissão, "
+"afastados, extremos, início e fim"
 
 #: gtk/gtkbbox.c:164
 msgid "Secondary"
@@ -1851,8 +1851,7 @@ msgstr "Limite Selecção"
 #: gtk/gtkentry.c:447 gtk/gtklabel.c:379
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
-msgstr ""
-"A posição do lado oposto da selecção a partir do cursor em caracteres"
+msgstr "A posição do lado oposto da selecção a partir do cursor em caracteres"
 
 #: gtk/gtkentry.c:457
 msgid "Whether the entry contents can be edited"
@@ -2508,8 +2507,7 @@ msgid ""
 "GtkMisc::xalign for that"
 msgstr ""
 "O alinhamento, na etiqueta, das linhas de texto entre si. Isto NÃO afecta o "
-"alinhamento da etiqueta dentro da sua alocação. Veja GtkMisc::xalign para "
-"tal"
+"alinhamento da etiqueta dentro da sua alocação. Veja GtkMisc::xalign para tal"
 
 #: gtk/gtklabel.c:328
 msgid "Pattern"
@@ -2627,8 +2625,8 @@ msgstr "Atraso antes de aparecerem os submenus"
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
-"Tempo mínimo que o cursor tem de estar sobre um item de menu antes do submenu "
-"ser mostrado"
+"Tempo mínimo que o cursor tem de estar sobre um item de menu antes do "
+"submenu ser mostrado"
 
 #: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
@@ -2639,8 +2637,8 @@ msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
 msgstr ""
-"O tempo antes de esconder um submenu quando o ponteiro se está a mover "
-"em direcção ao submenu"
+"O tempo antes de esconder um submenu quando o ponteiro se está a mover em "
+"direcção ao submenu"
 
 #: gtk/gtkmenubar.c:157
 msgid "Style of bevel around the menubar"
@@ -4917,8 +4915,8 @@ msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
-"Dica para ajudar o ambiente de trabalho a compreender que tipo de janela é esta "
-"e como a tratar."
+"Dica para ajudar o ambiente de trabalho a compreender que tipo de janela é "
+"esta e como a tratar."
 
 #: gtk/gtkwindow.c:585
 msgid "Skip taskbar"

@@ -284,6 +284,7 @@ Modules supporting animations must derive a type from
 virtual functions.
 </para>
 
+@parent_class: 
 @is_static_image: returns whether the given animation is just a static image.
 @get_static_image: returns a static image representing the given animation.
 @get_size: fills @width and @height with the frame size of the animation.
@@ -296,6 +297,7 @@ Modules supporting animations must derive a type from
 virtual functions.
 </para>
 
+@parent_class: 
 @get_delay_time: returns the time in milliseconds that the current frame 
   should be shown.
 @get_pixbuf: returns the current frame.

@@ -1,3 +1,11 @@
+Sun Feb  2 10:03:24 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.2.1 ===
+
+	* configure.in: Version 2.2.1, Binary age 201, interface age 1.
+	
+	* NEWS: More updates.
+
 2003-02-01  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdk.def: Add gdk_screen_get_system_visual. Noticed by Ed
