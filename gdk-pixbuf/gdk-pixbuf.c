@@ -96,6 +96,12 @@ gdk_pixbuf_class_init (GdkPixbufClass *klass)
         object_class->set_property = gdk_pixbuf_set_property;
         object_class->get_property = gdk_pixbuf_get_property;
         
+        /**
+         * GdkPixbuf:n-channels:
+         *
+         * The number of samples per pixel. 
+         * Currently, only 3 or 4 samples per pixel are supported.
+         */
         g_object_class_install_property (object_class,
                                          PROP_N_CHANNELS,
                                          g_param_spec_int ("n_channels",
@@ -127,6 +133,12 @@ gdk_pixbuf_class_init (GdkPixbufClass *klass)
                                                                G_PARAM_READWRITE |
                                                                G_PARAM_CONSTRUCT_ONLY));
 
+        /**
+         * GdkPixbuf:bits-per-sample:
+         *
+         * The number of bits per sample. 
+         * Currently only 8 bit per sample are supported.
+         */
         g_object_class_install_property (object_class,
                                          PROP_BITS_PER_SAMPLE,
                                          g_param_spec_int ("bits_per_sample",
@@ -160,6 +172,13 @@ gdk_pixbuf_class_init (GdkPixbufClass *klass)
                                                            G_PARAM_READWRITE |
                                                            G_PARAM_CONSTRUCT_ONLY));
 
+        /**
+         * GdkPixbuf:rowstride:
+         *
+         * The number of bytes between the start of a row and 
+         * the start of the next row. This number must (obviously)
+         * be at least as large as the width of the pixbuf.
+         */
         g_object_class_install_property (object_class,
                                          PROP_ROWSTRIDE,
                                          g_param_spec_int ("rowstride",

@@ -1,3 +1,8 @@
+2004-11-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf.c (gdk_pixbuf_class_init): Document current
+	restrictions for property values.  (#157409, Matthew H. Plough)
+
 2004-11-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-features.h.in: Break the declaration of the three 
