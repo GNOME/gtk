@@ -700,6 +700,13 @@ gtk_text_layout_real_invalidate (GtkTextLayout *layout,
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (layout->wrap_loop_count == 0);
 
+  /* Because we may be invalidating a mark, it's entirely possible
+   * that gtk_text_iter_equal (start, end) in which case we
+   * should still invalidate the line they are both on. i.e.
+   * we always invalidate the line with "start" even
+   * if there's an empty range.
+   */
+  
 #if 0
   gtk_text_view_index_spew (start_index, "invalidate start");
   gtk_text_view_index_spew (end_index, "invalidate end");
@@ -712,8 +719,7 @@ gtk_text_layout_real_invalidate (GtkTextLayout *layout,
     {
       GtkTextLineData *line_data = _gtk_text_line_get_data (line, layout);
 
-      if (line_data &&
-          (line != last_line || !gtk_text_iter_starts_line (end)))
+      if (line_data)
         {
           gtk_text_layout_invalidate_cache (layout, line);
           _gtk_text_line_invalidate_wrap (line, line_data);

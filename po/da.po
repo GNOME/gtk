@@ -28,8 +28,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-03-08 14:45-0500\n"
-"PO-Revision-Date: 2002-03-07 22:01+0100\n"
+"POT-Creation-Date: 2002-03-19 21:20+0100\n"
+"PO-Revision-Date: 2002-03-19 21:21+0100\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -148,7 +148,7 @@ msgstr "Ikke tilstrækkelig hukommelse til indlæsning af bitmap-billede"
 msgid "BMP image has unsupported header size"
 msgstr "BMP-billede har ikke-understøttet filhovedstørrelse"
 
-#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323
+#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "BMP-billede har ugyldige data i filhoved"
 
@@ -195,7 +195,7 @@ msgstr "Ikke tilstrækkelig hukommelse til indlæsning af ICO-fil"
 msgid "Failure reading GIF: %s"
 msgstr "Fejl under læsning af GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1371 gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1541
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF-fil manglede nogle data (måske er den blev afkortet?)"
 
@@ -216,8 +216,8 @@ msgstr "Ugyldig kode fundet"
 msgid "Circular table entry in GIF file"
 msgstr "Cirkulær tabelindgang i GIF-fil"
 
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1359 gdk-pixbuf/io-gif.c:1404
-#: gdk-pixbuf/io-gif.c:1518
+#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
+#: gdk-pixbuf/io-gif.c:1529
 msgid "Not enough memory to load GIF file"
 msgstr "Ikke nok hukommelse til indlæsning af GIF-fil"
 
@@ -235,18 +235,23 @@ msgid "Version %s of the GIF file format is not supported"
 msgstr "Version %s af GIF-filformatet er ikke understøttet"
 
 # 'image' må betyde animation her
-#: gdk-pixbuf/io-gif.c:1146
+#: gdk-pixbuf/io-gif.c:1144
+msgid "GIF image contained a frame with height or width 0."
+msgstr "GIF-animation indeholdt et billede med højden eller bredden 0."
+
+# 'image' må betyde animation her
+#: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "GIF-animation indeholdt et billede som var udenfor billedgrænserne."
 
 # 'disposal mode' betegner vist nok hvordan der skiftes fra et billede til et andet 
-#: gdk-pixbuf/io-gif.c:1162
+#: gdk-pixbuf/io-gif.c:1173
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "Første billede af GIF-animation havde 'gå til forrige' som sin "
 "overgangstilstand."
 
-#: gdk-pixbuf/io-gif.c:1197
+#: gdk-pixbuf/io-gif.c:1208
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -254,7 +259,7 @@ msgstr ""
 "GIF-animation har ikke globalt farvekort, og et billede i den har ikke "
 "lokalt farvekort."
 
-#: gdk-pixbuf/io-gif.c:1426
+#: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-billedet er afkortet eller ikke komplet."
 
@@ -401,108 +406,114 @@ msgstr "Uventet slutning på PNM-billeddata"
 msgid "Insufficient memory to load PNM file"
 msgstr "Ikke tilstrækkelig hukommelse til indlæsning af PNM-fil"
 
-#: gdk-pixbuf/io-tga.c:157
+#: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
 msgstr "Kan ikke allokere hukommelse til IOBuffer-struktur"
 
-#: gdk-pixbuf/io-tga.c:176
+#: gdk-pixbuf/io-tga.c:178
 msgid "Can't allocate memory for IOBuffer data"
 msgstr "Kan ikke allokere hukommelse til IOBuffer-data"
 
-#: gdk-pixbuf/io-tga.c:187
+#: gdk-pixbuf/io-tga.c:189
 msgid "Can't realloc IOBuffer data"
 msgstr "Kan ikke omallokere IOBuffer-data"
 
-#: gdk-pixbuf/io-tga.c:216
+#: gdk-pixbuf/io-tga.c:218
 msgid "Can't allocate temporary IOBuffer data"
 msgstr "Kan ikke allokere midlertidige IOBuffer-data"
 
-#: gdk-pixbuf/io-tga.c:249
+#: gdk-pixbuf/io-tga.c:251
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr "fread() mislykkedes - filen sluttede sandsynligt for tidligt"
 
-#: gdk-pixbuf/io-tga.c:259
+#: gdk-pixbuf/io-tga.c:261
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr "fseek() mislykkedes - filen sluttede sandsynligt for tidligt"
 
-#: gdk-pixbuf/io-tga.c:288
+#: gdk-pixbuf/io-tga.c:295 gdk-pixbuf/io-tga.c:1029 gdk-pixbuf/io-tga.c:1141
+#: gdk-pixbuf/io-tga.c:1224
+msgid "Insufficient memory to load TGA image"
+msgstr "Ikke tilstrækkelig hukommelse til indlæsning af TGA-billede"
+
+#: gdk-pixbuf/io-tga.c:305
 msgid "Can't allocate new pixbuf"
 msgstr "Kan ikke allokere ny pixbuf"
 
-#: gdk-pixbuf/io-tga.c:557
+#: gdk-pixbuf/io-tga.c:617
 msgid "Can't allocate colormap structure"
 msgstr "Kan ikke allokere farvetabelsstruktur"
 
-#: gdk-pixbuf/io-tga.c:564
+#: gdk-pixbuf/io-tga.c:624
 msgid "Can't allocate colormap entries"
 msgstr "Kan ikke allokere farvetabelselementer"
 
-#: gdk-pixbuf/io-tga.c:587
+#: gdk-pixbuf/io-tga.c:647
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Uventet bitdybde for farvetabelselementer"
 
-#: gdk-pixbuf/io-tga.c:607
+#: gdk-pixbuf/io-tga.c:667
 msgid "Can't allocate TGA header memory"
 msgstr "Kan ikke allokere hukommelse til TGA-hoved"
 
-#: gdk-pixbuf/io-tga.c:618
+#: gdk-pixbuf/io-tga.c:700
 msgid "TGA image has invalid dimensions"
 msgstr "TGA-billede har ugyldige dimensioner"
 
-#: gdk-pixbuf/io-tga.c:624
+#: gdk-pixbuf/io-tga.c:706
 msgid "TGA image comment length is too long"
 msgstr "Længde af TGA-billedkommentar er for lang"
 
-#: gdk-pixbuf/io-tga.c:633 gdk-pixbuf/io-tga.c:647
+#: gdk-pixbuf/io-tga.c:715 gdk-pixbuf/io-tga.c:724 gdk-pixbuf/io-tga.c:734
+#: gdk-pixbuf/io-tga.c:744 gdk-pixbuf/io-tga.c:751
 msgid "TGA image type not supported"
 msgstr "TGA-billedtype ikke understøttet"
 
-#: gdk-pixbuf/io-tga.c:692
+#: gdk-pixbuf/io-tga.c:796
 msgid "Can't allocate memory for TGA context struct"
 msgstr "Kan ikke allokere hukommelse til TGA-kontekststruktur"
 
-#: gdk-pixbuf/io-tga.c:756
+#: gdk-pixbuf/io-tga.c:860
 msgid "Excess data in file"
 msgstr "For mange data i fil"
 
-#: gdk-pixbuf/io-tga.c:798
+#: gdk-pixbuf/io-tga.c:902
 msgid "Can't allocate memory for TGA header"
 msgstr "Kan ikke allokere hukommelse til TGA-hoved"
 
-#: gdk-pixbuf/io-tga.c:808
+#: gdk-pixbuf/io-tga.c:912
 msgid "Too big value in the infolen field of TGA header."
 msgstr "For stor værdi i infolen-feltet i TGA-hoved"
 
-#: gdk-pixbuf/io-tga.c:832
+#: gdk-pixbuf/io-tga.c:936
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr ""
 "Kan ikke allokere hukommelse til midlertidigt mellemlager til TGA-farvetabel"
 
-#: gdk-pixbuf/io-tga.c:844
+#: gdk-pixbuf/io-tga.c:948
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr "Kan ikke allokere hukommelse til TGA-farvetabelsstruktur"
 
-#: gdk-pixbuf/io-tga.c:853
+#: gdk-pixbuf/io-tga.c:957
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr "Kan ikke allokere TGA-farvetabelselementer"
 
-#: gdk-pixbuf/io-tga.c:863
+#: gdk-pixbuf/io-tga.c:967
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr "Uventet bitdybde for TGA-farvetabel"
 
-#: gdk-pixbuf/io-tga.c:903
+#: gdk-pixbuf/io-tga.c:1009
 msgid "Pseudo-Color image without colormap"
 msgstr "Pseudofarve-billede uden farvetabel"
 
-#: gdk-pixbuf/io-tga.c:910
+#: gdk-pixbuf/io-tga.c:1016
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr "Kan ikke søge til billedafsæt - sandsynligvis blev filslutningen mødt"
 
-#: gdk-pixbuf/io-tga.c:919 gdk-pixbuf/io-tga.c:1015 gdk-pixbuf/io-tga.c:1081
+#: gdk-pixbuf/io-tga.c:1039 gdk-pixbuf/io-tga.c:1152 gdk-pixbuf/io-tga.c:1235
 msgid "Can't allocate pixbuf"
 msgstr "Kan ikke allokere pixbuf"
 
-#: gdk-pixbuf/io-tga.c:1147 gdk-pixbuf/io-tga.c:1176
+#: gdk-pixbuf/io-tga.c:1307 gdk-pixbuf/io-tga.c:1336
 msgid "Unsupported TGA image type"
 msgstr "Ikke-understøttet TGA-billedtype"
 
@@ -2947,11 +2958,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Vis en ekstra fremadpilsknap i den modsatte ende af rulleskakten"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:519
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
 msgid "Horizontal Adjustment"
 msgstr "Vandret justering"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:527
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
 msgid "Vertical Adjustment"
 msgstr "Lodret justering"
 
@@ -3882,118 +3893,118 @@ msgstr "TreeModelSort-model"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Modellen som TreeModelSort skal sortere"
 
-#: gtk/gtktreeview.c:511
+#: gtk/gtktreeview.c:514
 msgid "TreeView Model"
 msgstr "TreeView-model"
 
-#: gtk/gtktreeview.c:512
+#: gtk/gtktreeview.c:515
 msgid "The model for the tree view"
 msgstr "Modellen for trævisningen"
 
-#: gtk/gtktreeview.c:520
+#: gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment for the widget"
 msgstr "Vandret justering for kontrollen"
 
-#: gtk/gtktreeview.c:528
+#: gtk/gtktreeview.c:531
 msgid "Vertical Adjustment for the widget"
 msgstr "Lodret justering for kontrollen"
 
-#: gtk/gtktreeview.c:535 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Synlig"
 
-#: gtk/gtktreeview.c:536
+#: gtk/gtktreeview.c:539
 msgid "Show the column header buttons"
 msgstr "Vis kolonneoverskriftsknapperne"
 
-#: gtk/gtktreeview.c:543
+#: gtk/gtktreeview.c:546
 msgid "Headers Clickable"
 msgstr "Klikbare overskrifter"
 
-#: gtk/gtktreeview.c:544
+#: gtk/gtktreeview.c:547
 msgid "Column headers respond to click events"
 msgstr "Kolonneoverskrifter påvirkes af klikhændelser"
 
-#: gtk/gtktreeview.c:551
+#: gtk/gtktreeview.c:554
 msgid "Expander Column"
 msgstr "Udviderkolonne"
 
 # RETMIG: dette giver ikke mening?
-#: gtk/gtktreeview.c:552
+#: gtk/gtktreeview.c:555
 msgid "Set the column for the expander column"
 msgstr "Lad kolonnen være udviderkolonnen"
 
-#: gtk/gtktreeview.c:559 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
 msgid "Reorderable"
 msgstr "Kan omsorteres"
 
-#: gtk/gtktreeview.c:560
+#: gtk/gtktreeview.c:563
 msgid "View is reorderable"
 msgstr "Visningen kan omsorteres"
 
 # se næste for forklaring - jeg kunne ikke finde på noget bedre
-#: gtk/gtktreeview.c:567
+#: gtk/gtktreeview.c:570
 msgid "Rules Hint"
 msgstr "Skiftende rækker"
 
-#: gtk/gtktreeview.c:568
+#: gtk/gtktreeview.c:571
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Sæt et tip til temamotoren om at tegne rækkerne i skiftende farver"
 
-#: gtk/gtktreeview.c:575
+#: gtk/gtktreeview.c:578
 msgid "Enable Search"
 msgstr "Aktivér søgning"
 
-#: gtk/gtktreeview.c:576
+#: gtk/gtktreeview.c:579
 msgid "View allows user to search through columns interactively"
 msgstr "Visningen tillader brugeren at søge gennem kolonnerne interaktivt"
 
-#: gtk/gtktreeview.c:583
+#: gtk/gtktreeview.c:586
 msgid "Search Column"
 msgstr "Søgekolonne"
 
-#: gtk/gtktreeview.c:584
+#: gtk/gtktreeview.c:587
 msgid "Model column to search through when searching through code"
 msgstr "Modelkolonne der skal søges gennem ved søgning gennem kode"
 
-#: gtk/gtktreeview.c:597
+#: gtk/gtktreeview.c:600
 msgid "Expander Size"
 msgstr "Udvidelsesstørrelse"
 
-#: gtk/gtktreeview.c:598
+#: gtk/gtktreeview.c:601
 msgid "Size of the expander arrow."
 msgstr "Størrelsen af udvidelsespilen"
 
-#: gtk/gtktreeview.c:606
+#: gtk/gtktreeview.c:609
 msgid "Vertical Separator Width"
 msgstr "Lodret adskillelsesbredde"
 
-#: gtk/gtktreeview.c:607
+#: gtk/gtktreeview.c:610
 msgid "Vertical space between cells.  Must be an even number."
 msgstr "Lodret mellemrum mellem celler - skal være et lige tal"
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:618
 msgid "Horizontal Separator Width"
 msgstr "Vandret adskillelsesbredde"
 
-#: gtk/gtktreeview.c:616
+#: gtk/gtktreeview.c:619
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr "Vandret mellemrum mellem celler - skal være et lige tal"
 
 # se foregående "Rules Hint"
-#: gtk/gtktreeview.c:624
+#: gtk/gtktreeview.c:627
 msgid "Allow Rules"
 msgstr "Tillad skiftende rækker"
 
-#: gtk/gtktreeview.c:625
+#: gtk/gtktreeview.c:628
 msgid "Allow drawing of alternating color rows."
 msgstr "Tillad tegning af rækker med skiftende farver"
 
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:634
 msgid "Indent Expanders"
 msgstr "Indryk udvidere"
 
-#: gtk/gtktreeview.c:632
+#: gtk/gtktreeview.c:635
 msgid "Make the expanders indented."
 msgstr "Ryk udviderne ind"
 

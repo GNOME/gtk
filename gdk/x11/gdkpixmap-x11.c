@@ -334,7 +334,8 @@ gdk_pixmap_foreign_new_for_screen (GdkScreen       *screen,
   Pixmap xpixmap;
   Window root_return;
   GdkScreenImplX11 *screen_impl;
-  unsigned int x_ret, y_ret, w_ret, h_ret, bw_ret, depth_ret;
+  int x_ret, y_ret;
+  unsigned int w_ret, h_ret, bw_ret, depth_ret;
 
   /* check to make sure we were passed something at
      least a little sane */

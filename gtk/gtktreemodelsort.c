@@ -1964,14 +1964,16 @@ gtk_tree_model_sort_convert_path_to_child_path (GtkTreeModelSort *tree_model_sor
   for (i = 0; i < gtk_tree_path_get_depth (sorted_path); i++)
     {
       if ((level == NULL) ||
-	  (level->array->len > sorted_indices[i]))
+	  (level->array->len <= sorted_indices[i]))
 	{
 	  gtk_tree_path_free (retval);
 	  return NULL;
 	}
       if (g_array_index (level->array, SortElt, sorted_indices[i]).children == NULL)
 	gtk_tree_model_sort_build_level (tree_model_sort, level, &g_array_index (level->array, SortElt, sorted_indices[i]));
+
       if (level == NULL)
+	break;
 
       gtk_tree_path_append_index (retval, g_array_index (level->array, SortElt, i).offset);
     }
@@ -1985,7 +1987,7 @@ gtk_tree_model_sort_convert_path_to_child_path (GtkTreeModelSort *tree_model_sor
  * @child_iter: An uninitialized #GtkTreeIter
  * @sorted_iter: A valid #GtkTreeIter pointing to a row on @tree_model_sort.
  * 
- * Sets @child_iter to point to the row pointed to by *sorted_iter.
+ * Sets @child_iter to point to the row pointed to by @sorted_iter.
  **/
 void
 gtk_tree_model_sort_convert_iter_to_child_iter (GtkTreeModelSort *tree_model_sort,

@@ -536,8 +536,10 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
 	  retval = FALSE;
 	}
     }  
-  if (retval && priv->image_module && priv->image_module->stop_load && priv->context)
-    retval = priv->image_module->stop_load (priv->context, error);
+  if (priv->image_module && priv->image_module->stop_load && priv->context) {
+    if (!priv->image_module->stop_load (priv->context, error))
+      retval = FALSE;
+  }
   
   priv->closed = TRUE;
   

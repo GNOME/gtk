@@ -547,12 +547,6 @@ This can later be composited together with other
 @xthickness: 
 @ythickness: 
 
-<!-- ##### STRUCT GtkRcStyleClass ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### ENUM GtkRcFlags ##### -->
 <para>
 The #GtkRcFlags enumeration is used as a bitmask

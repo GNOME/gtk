@@ -1,3 +1,51 @@
+2002-03-27  Matthias Clasen  <maclas@gmx.de>
+
+	* io-png.c (gdk_pixbuf__png_image_stop_load): Don't leak info_ptr.
+
+	* io-png.c (gdk_pixbuf__png_image_load): Get rid of unused
+	end_info. Also call png_read_end to check proper ending of the png
+	file and catch text chunks after the image data.
+
+2002-03-27  Matthias Clasen  <maclas@gmx.de>
+
+	* io-png.c (gdk_pixbuf__png_image_load,
+	gdk_pixbuf__png_image_begin_load): Make libpng use g_malloc
+	instead of system malloc. 
+
+2002-03-26  Matthias Clasen  <maclas@gmx.de>
+
+	* io-tiff.c (tiff_image_parse): Don't leak pixbuf on error.
+
+	* io-gif.c (gdk_pixbuf__gif_image_load_increment): Don't leak
+	context->buf on error.
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): Make sure to call
+	stop_load even for short images to prevent memleaks.
+
+2002-03-25  Matthias Clasen  <maclas@gmx.de>
+
+	* io-png.c (setup_png_transformations): Changed signature to
+	return success and set a GError parameter, adjusted all callers.
+	Also work around a possible FPE in libpng and always check that
+	the new info is sane.
+
+2002-03-23  Matthias Clasen  <maclas@gmx.de>
+
+	* io-wbmp.c (gdk_pixbuf__wbmp_image_load_increment):
+	context->updated_func is NULL during a nonincremental load.
+	(gdk_pixbuf__wbmp_image_load): Stop reading after the first error.
+
+2002-03-18  Matthias Clasen  <maclas@gmx.de>
+
+	* io-tga.c: Fix assumptions on rowstride by manually allocating a
+	contiguous pixel buffer. Catch buffer overruns in RLE-modi. 
+	Support grayscale + alpha (which can be written, but not read (!)
+	by the Gimp). 
+
+2002-03-15  Matthias Clasen  <maclas@gmx.de>
+
+	* io-gif.c (gif_get_frame_info): Catch invalid frame dimensions.
+
 2002-03-13  Matthias Clasen  <maclas@gmx.de>
 
 	* test-images.h: Add valid_ras_test and invalid_bmp_1.

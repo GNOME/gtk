@@ -55,3 +55,17 @@ GtkCellEditable
 @cell_editable: 
 
 
+<!-- ##### SIGNAL GtkCellEditable::editing-done ##### -->
+<para>
+
+</para>
+
+@celleditable: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCellEditable::remove-widget ##### -->
+<para>
+
+</para>
+
+@celleditable: the object which received the signal.
+

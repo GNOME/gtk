@@ -106,3 +106,10 @@ GtkTreeSortable
 @Returns: 
 
 
+<!-- ##### SIGNAL GtkTreeSortable::sort-column-changed ##### -->
+<para>
+
+</para>
+
+@treesortable: the object which received the signal.
+

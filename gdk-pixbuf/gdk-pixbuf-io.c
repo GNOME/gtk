@@ -363,7 +363,7 @@ _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 	image_module->module = module;        
         
         if (pixbuf_module_symbol (module, name, "fill_vtable", &sym)) {
-                ModuleFillVtableFunc func = sym;
+                ModuleFillVtableFunc func = (ModuleFillVtableFunc) sym;
                 (* func) (image_module);
                 retval = TRUE;
         } else {

@@ -3502,10 +3502,7 @@ gtk_widget_grab_default (GtkWidget *widget)
   window = gtk_widget_get_toplevel (widget);
   
   if (window && GTK_WIDGET_TOPLEVEL (window))
-    {
-       gtk_window_set_default (GTK_WINDOW (window), widget);
-       g_object_notify (G_OBJECT (widget), "has_default");
-    }
+    gtk_window_set_default (GTK_WINDOW (window), widget);
   else
     g_warning (G_STRLOC ": widget not within a GtkWindow");
 }
@@ -4538,7 +4535,7 @@ gtk_widget_set_child_visible (GtkWidget *widget,
     GTK_PRIVATE_SET_FLAG (widget, GTK_CHILD_VISIBLE);
   else
     GTK_PRIVATE_UNSET_FLAG (widget, GTK_CHILD_VISIBLE);
-  if (GTK_WIDGET_REALIZED (widget->parent))
+  if (widget->parent && GTK_WIDGET_REALIZED (widget->parent))
     {
       if (GTK_WIDGET_MAPPED (widget->parent) &&
 	  GTK_WIDGET_CHILD_VISIBLE (widget) &&
@@ -6217,7 +6214,7 @@ gtk_widget_class_install_style_property_parser (GtkWidgetClass     *class,
 
   g_param_spec_ref (pspec);
   g_param_spec_sink (pspec);
-  g_param_spec_set_qdata (pspec, quark_property_parser, parser);
+  g_param_spec_set_qdata (pspec, quark_property_parser, (gpointer) parser);
   g_param_spec_pool_insert (style_property_spec_pool, pspec, G_OBJECT_CLASS_TYPE (class));
 }
 
@@ -6271,7 +6268,7 @@ gtk_widget_style_get_property (GtkWidget   *widget,
       peek_value = _gtk_style_peek_property_value (widget->style,
 						   G_OBJECT_TYPE (widget),
 						   pspec,
-						   g_param_spec_get_qdata (pspec, quark_property_parser));
+						   (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser));
       
       /* auto-conversion of the caller's value type
        */
@@ -6334,7 +6331,7 @@ gtk_widget_style_get_valist (GtkWidget   *widget,
       peek_value = _gtk_style_peek_property_value (widget->style,
 						   G_OBJECT_TYPE (widget),
 						   pspec,
-						   g_param_spec_get_qdata (pspec, quark_property_parser));
+						   (GtkRcPropertyParser) g_param_spec_get_qdata (pspec, quark_property_parser));
       G_VALUE_LCOPY (peek_value, var_args, 0, &error);
       if (error)
 	{

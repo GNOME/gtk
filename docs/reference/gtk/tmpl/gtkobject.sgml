@@ -146,14 +146,6 @@ See the overview documentation for #GtkObject.
 @obj: the object to examine.
 
 
-<!-- ##### MACRO GTK_OBJECT_CONNECTED ##### -->
-<para>
-Tests whether a #GtkObject has had a signal connected to it.
-</para>
-
-@obj: the object to examine.
-
-
 <!-- ##### ENUM GtkArgFlags ##### -->
 <para>
 Possible flags indicating how an argument should be treated.

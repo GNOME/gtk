@@ -20,12 +20,6 @@ GtkImageMenuItem
 </para>
 
 
-<!-- ##### STRUCT GtkImageMenuItemClass ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### FUNCTION gtk_image_menu_item_set_image ##### -->
 <para>
 

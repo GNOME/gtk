@@ -1996,15 +1996,7 @@ gdk_window_real_get_depth (GdkDrawable *drawable)
   
   g_return_val_if_fail (GDK_IS_WINDOW (drawable), 0);
 
-  depth = ((GdkWindowObject *)GDK_WINDOW (drawable))->depth;
-
-  if (depth == 0)
-    {
-      g_print ("0 depth for type %s\n", g_type_name (G_OBJECT_TYPE (drawable)));
-      G_BREAKPOINT ();
-    }
-
-  return depth;
+  return ((GdkWindowObject *)GDK_WINDOW (drawable))->depth;
 }
 
 static GdkScreen*
@@ -2163,9 +2155,12 @@ gdk_window_process_all_updates (void)
   update_windows = NULL;
   update_idle = 0;
 
+  g_slist_foreach (old_update_windows, (GFunc)g_object_ref, NULL);
+  
   while (tmp_list)
     {
       gdk_window_process_updates_internal (tmp_list->data);
+      g_object_unref (tmp_list->data);
       tmp_list = tmp_list->next;
     }
 

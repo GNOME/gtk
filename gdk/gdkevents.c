@@ -515,8 +515,6 @@ gdk_event_get_state (GdkEvent        *event,
 	*state =  event->property.state;
         return TRUE;
       case GDK_VISIBILITY_NOTIFY:
-        *state =  event->visibility.state;
-        return TRUE;
       case GDK_CLIENT_EVENT:
       case GDK_NO_EXPOSE:
       case GDK_CONFIGURE:
@@ -662,7 +660,7 @@ gdk_event_get_root_coords (GdkEvent *event,
   if (x_root)
     *x_root = x;
   if (y_root)
-    *y_root = x;
+    *y_root = y;
 
   return fetched;
 }

@@ -120,7 +120,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                    g_param_spec_float ("ratio",
                                                        _("Ratio"),
                                                        _("Aspect ratio if obey_child is FALSE"),
-                                                       0.0, 1.0, 0.5,
+                                                       MIN_RATIO, MAX_RATIO, 0.5,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE ));
   g_object_class_install_property (gobject_class,
                                    PROP_OBEY_CHILD,

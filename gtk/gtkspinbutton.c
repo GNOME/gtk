@@ -1117,8 +1117,6 @@ gtk_spin_button_button_release (GtkWidget      *widget,
     }
   else
     return GTK_WIDGET_CLASS (parent_class)->button_release_event (widget, event);
-
-  return FALSE;
 }
 
 static gint

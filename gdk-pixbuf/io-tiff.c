@@ -192,13 +192,16 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
                              _("Insufficient memory to open TIFF file"));
+                g_object_unref (pixbuf);
+
                 return NULL;
 	}
         
-	if (!TIFFReadRGBAImage (tiff, w, h, rast, 0) || global_error) {
+	if (!TIFFReadRGBAImage (tiff, w, h, rast, 1) || global_error) {
                 tiff_set_error (error,
                                 GDK_PIXBUF_ERROR_FAILED,
                                 _("Failed to load RGB data from TIFF file"));
+                g_object_unref (pixbuf);
                 _TIFFfree (rast);
 
                 return NULL;

@@ -466,7 +466,7 @@ remove_from_window (GtkWindow  *window,
   if (!menubars)
     {
       g_signal_handlers_disconnect_by_func (G_OBJECT (window),
-					    G_CALLBACK (window_key_press_handler),
+					    (gpointer) window_key_press_handler,
 					    NULL);
     }
 

@@ -163,9 +163,9 @@ gtk_signal_compat_matched (GtkObject       *object,
 
   switch (action)
     {
-    case 0:  n_handlers = g_signal_handlers_disconnect_matched (object, match, 0, 0, NULL, func, data);	 break;
-    case 1:  n_handlers = g_signal_handlers_block_matched (object, match, 0, 0, NULL, func, data);	 break;
-    case 2:  n_handlers = g_signal_handlers_unblock_matched (object, match, 0, 0, NULL, func, data);	 break;
+    case 0:  n_handlers = g_signal_handlers_disconnect_matched (object, match, 0, 0, NULL, (gpointer) func, data);	 break;
+    case 1:  n_handlers = g_signal_handlers_block_matched (object, match, 0, 0, NULL, (gpointer) func, data);	 break;
+    case 2:  n_handlers = g_signal_handlers_unblock_matched (object, match, 0, 0, NULL, (gpointer) func, data);	 break;
     default: n_handlers = 0;										 break;
     }
   

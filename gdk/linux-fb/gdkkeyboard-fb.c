@@ -21,6 +21,7 @@
 #include <gdk/gdkinternals.h>
 #include "gdkkeysyms.h"
 #include "gdkprivate-fb.h"
+#include <errno.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -872,6 +873,30 @@ xlate_io (GIOChannel *gioc,
 }
 
 static gboolean
+write_string (gint   fd,
+	      gchar *str)
+{
+  gsize to_write = strlen (string);
+
+  while (to_write > 0)
+    {
+      gssize count = write (fd, str, to_write);
+      if (count < 0)
+	{
+	  if (errno != EINTR)
+	    return FALSE;
+	}
+      else
+	{
+	  to_write -= count;
+	  str += count;
+	}
+    }
+
+  return TRUE;
+}
+
+static gboolean
 xlate_open (GdkFBKeyboard *kb)
 {
   const char cursoroff_str[] = "\033[?1;0;0c";
@@ -886,7 +911,7 @@ xlate_open (GdkFBKeyboard *kb)
 
   tcsetpgrp (gdk_display->tty_fd, getpgrp());
 
-  write (gdk_display->tty_fd, cursoroff_str, strlen (cursoroff_str));
+  write_string (gdk_display->tty_fd, cursoroff_str);
   
   ioctl (gdk_display->tty_fd, KDSKBMODE, K_XLATE);
 
@@ -906,7 +931,7 @@ xlate_close (GdkFBKeyboard *kb)
   struct termios ts;
   const char cursoron_str[] = "\033c";
 
-  write (gdk_display->tty_fd, cursoron_str, strlen (cursoron_str));
+  write_string (gdk_display->tty_fd, cursoron_str);
 
   tcgetattr (gdk_display->tty_fd, &ts);
   ts.c_lflag |= (ICANON|ECHO|ISIG);
@@ -947,6 +972,8 @@ xlate_get_for_keyval (GdkFBKeyboard       *kb,
 		      gint                *n_keys)
 {
   g_warning ("xlate_get_for_keyval() NIY");
+  *keys=NULL;
+  *n_keys=0;
   return FALSE;
 }
 
@@ -958,6 +985,8 @@ xlate_get_for_keycode (GdkFBKeyboard       *kb,
 		       gint                *n_entries)
 {
   g_warning ("xlate_get_for_keycode() NIY");
+  *keys=NULL;
+  *n_entries=0;
   return FALSE;
 }
 
@@ -1392,7 +1421,7 @@ raw_open (GdkFBKeyboard *kb)
 
   tcsetpgrp (gdk_display->tty_fd, getpgrp());
 
-  write (gdk_display->tty_fd, cursoroff_str, strlen (cursoroff_str));
+  write_string (gdk_display->tty_fd, cursoroff_str);
   
   if (ioctl (gdk_display->tty_fd, KDSKBMODE, K_MEDIUMRAW) < 0)
     {
@@ -1416,7 +1445,7 @@ raw_close (GdkFBKeyboard *kb)
   struct termios ts;
   const char cursoron_str[] = "\033c";
 
-  write (gdk_display->tty_fd, cursoron_str, strlen (cursoron_str));
+  write_string (gdk_display->tty_fd, cursoron_str);
 
   tcgetattr (gdk_display->tty_fd, &ts);
   ts.c_lflag |= (ICANON|ECHO|ISIG);
@@ -1458,6 +1487,8 @@ raw_get_for_keyval (GdkFBKeyboard       *kb,
 		      gint                *n_keys)
 {
   g_warning ("raw_get_for_keyval() NIY");
+  *keys=NULL;
+  *n_keys=0;
   return FALSE;
 }
 
@@ -1469,5 +1500,7 @@ raw_get_for_keycode (GdkFBKeyboard       *kb,
 		       gint                *n_entries)
 {
   g_warning ("raw_get_for_keycode() NIY");
+  *keys=NULL;
+  *n_entries=0;
   return FALSE;
 }

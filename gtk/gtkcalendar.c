@@ -177,14 +177,12 @@ dates_difference(N_int year1, N_int mm1, N_int dd1,
 /* Color usage */
 #define HEADER_FG_COLOR(widget)		 (& (widget)->style->fg[GTK_WIDGET_STATE (widget)])
 #define HEADER_BG_COLOR(widget)		 (& (widget)->style->bg[GTK_WIDGET_STATE (widget)])
-#define DAY_NAME_COLOR(widget)		 (& (widget)->style->base[GTK_STATE_SELECTED])
+#define SELECTED_BG_COLOR(widget)	 (& (widget)->style->base[GTK_WIDGET_HAS_FOCUS (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE])
+#define SELECTED_FG_COLOR(widget)	 (& (widget)->style->text[GTK_WIDGET_HAS_FOCUS (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE])
 #define NORMAL_DAY_COLOR(widget)	 (& (widget)->style->fg[GTK_WIDGET_STATE (widget)])
-#define SELECTION_FOCUS_COLOR(widget)	 (& (widget)->style->fg[GTK_WIDGET_STATE (widget)])
-#define SELECTION_NO_FOCUS_COLOR(widget) (& (widget)->style->mid[GTK_WIDGET_STATE (widget)])
 #define PREV_MONTH_COLOR(widget)	 (& (widget)->style->mid[GTK_WIDGET_STATE (widget)])
 #define NEXT_MONTH_COLOR(widget)	 (& (widget)->style->mid[GTK_WIDGET_STATE (widget)])
 #define MARKED_COLOR(widget)		 (& (widget)->style->fg[GTK_WIDGET_STATE (widget)])
-#define FOREGROUND_COLOR(widget)	 (& (widget)->style->fg[GTK_WIDGET_STATE (widget)])
 #define BACKGROUND_COLOR(widget)	 (& (widget)->style->base[GTK_WIDGET_STATE (widget)])
 #define HIGHLIGHT_BACK_COLOR(widget)	 (& (widget)->style->mid[GTK_WIDGET_STATE (widget)])
 
@@ -290,6 +288,8 @@ static void gtk_calendar_paint_day_names    (GtkWidget *widget);
 static void gtk_calendar_paint_week_numbers (GtkWidget *widget);
 static void gtk_calendar_paint_main	    (GtkWidget *widget);
 
+static void gtk_calendar_select_and_focus_day (GtkCalendar *calendar,
+					       guint        day);
 
 static void gtk_calendar_paint_arrow	(GtkWidget    *widget,
 					 guint	       arrow);
@@ -777,7 +777,7 @@ gtk_calendar_main_button (GtkWidget	 *widget,
   gint x, y;
   gint row, col;
   gint day_month;
-  gint old_focus_row, old_focus_col;
+  gint day;
   
   calendar = GTK_CALENDAR (widget);
   
@@ -792,28 +792,28 @@ gtk_calendar_main_button (GtkWidget	 *widget,
     return;
   
   day_month = calendar->day_month[row][col];
-  
-  if (day_month == MONTH_CURRENT)
+
+  if (event->type == GDK_BUTTON_PRESS)
     {
-      if (event->type == GDK_2BUTTON_PRESS)
+      day = calendar->day[row][col];
+      
+      if (day_month == MONTH_PREV)
+	gtk_calendar_set_month_prev (calendar);
+      else if (day_month == MONTH_NEXT)
+	gtk_calendar_set_month_next (calendar);
+      
+      if (!GTK_WIDGET_HAS_FOCUS (widget))
+	gtk_widget_grab_focus (widget);
+	  
+      gtk_calendar_select_and_focus_day (calendar, day);
+
+    }
+  else if (event->type == GDK_2BUTTON_PRESS)
+    {
+      if (day_month == MONTH_CURRENT)
 	gtk_signal_emit (GTK_OBJECT (calendar),
 			 gtk_calendar_signals[DAY_SELECTED_DOUBLE_CLICK_SIGNAL]);
-      else
-	{
-	  if (!GTK_WIDGET_HAS_FOCUS (widget))
-	    gtk_widget_grab_focus (widget);
-	  old_focus_row = calendar->focus_row;
-	  old_focus_col = calendar->focus_col;
-	  calendar->focus_row = row;
-	  calendar->focus_col = col;
-	  gtk_calendar_paint_day (widget, old_focus_row, old_focus_col);
-	  gtk_calendar_select_day (calendar, calendar->day[row][col]);
-	}
     }
-  else if (day_month == MONTH_PREV)
-    gtk_calendar_set_month_prev (calendar);
-  else if (day_month == MONTH_NEXT)
-    gtk_calendar_set_month_next (calendar);
 }
 
 static void
@@ -1557,7 +1557,7 @@ gtk_calendar_paint_day_names (GtkWidget *widget)
    * Draw rectangles as inverted background for the labels.
    */
   
-  gdk_gc_set_foreground (gc, &widget->style->base[GTK_STATE_SELECTED]);
+  gdk_gc_set_foreground (gc, SELECTED_BG_COLOR (widget));
   gdk_draw_rectangle (private_data->day_name_win, gc, TRUE,
 		      CALENDAR_MARGIN, CALENDAR_MARGIN,
 		      cal_width-CALENDAR_MARGIN * 2,
@@ -1576,7 +1576,7 @@ gtk_calendar_paint_day_names (GtkWidget *widget)
 
   layout = gtk_widget_create_pango_layout (widget, NULL);
   
-  gdk_gc_set_foreground (gc, &widget->style->text[GTK_STATE_SELECTED]);
+  gdk_gc_set_foreground (gc, SELECTED_FG_COLOR (widget));
   for (i = 0; i < 7; i++)
     {
       if (gtk_widget_get_direction (GTK_WIDGET (calendar)) == GTK_TEXT_DIR_RTL)
@@ -1650,7 +1650,7 @@ gtk_calendar_paint_week_numbers (GtkWidget *widget)
    * Draw a rectangle as inverted background for the labels.
    */
   
-  gdk_gc_set_foreground (gc, &widget->style->base[GTK_STATE_SELECTED]);
+  gdk_gc_set_foreground (gc, SELECTED_BG_COLOR (widget));
   if (private_data->day_name_win)
     gdk_draw_rectangle (private_data->week_win, gc, TRUE,
 			CALENDAR_MARGIN,
@@ -1670,7 +1670,7 @@ gtk_calendar_paint_week_numbers (GtkWidget *widget)
   
   layout = gtk_widget_create_pango_layout (widget, NULL);
   
-  gdk_gc_set_foreground (gc, &widget->style->text[GTK_STATE_SELECTED]);
+  gdk_gc_set_foreground (gc, SELECTED_FG_COLOR (widget));
   day_height = row_height (calendar);
   for (row = 0; row < 6; row++)
     {
@@ -1801,7 +1801,7 @@ gtk_calendar_paint_day (GtkWidget *widget,
       */
       if (calendar->selected_day == day)
 	{
-	  gdk_gc_set_foreground (gc, & (GTK_WIDGET (calendar)->style->base[GTK_STATE_SELECTED]));
+	  gdk_gc_set_foreground (gc, SELECTED_BG_COLOR (GTK_WIDGET (calendar)));
 	  gdk_draw_rectangle (private_data->main_win, gc, TRUE, x_left, y_top,
 			      private_data->day_width, day_height);
 	}
@@ -1812,7 +1812,7 @@ gtk_calendar_paint_day (GtkWidget *widget,
 	gdk_gc_set_foreground (gc, NORMAL_DAY_COLOR (GTK_WIDGET (calendar)));
   
       if (calendar->selected_day == day)
-	gdk_gc_set_foreground (gc, & (GTK_WIDGET (calendar)->style->text[GTK_STATE_SELECTED]));
+	gdk_gc_set_foreground (gc, SELECTED_FG_COLOR (GTK_WIDGET (calendar)));
       else
 	gdk_gc_set_foreground (gc, & (GTK_WIDGET (calendar)->style->fg[GTK_WIDGET_STATE (calendar)]));
     }
@@ -1835,6 +1835,13 @@ gtk_calendar_paint_day (GtkWidget *widget,
   if (GTK_WIDGET_HAS_FOCUS (calendar) 
       && calendar->focus_row == row && calendar->focus_col == col)
     {
+      GtkStateType state;
+
+      if (calendar->selected_day == day)
+	state = GTK_WIDGET_HAS_FOCUS (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE;
+      else
+	state = GTK_STATE_NORMAL;
+      
       gtk_paint_focus (widget->style, 
 		       private_data->main_win,
 		       (calendar->selected_day == day) 
@@ -2139,6 +2146,32 @@ gtk_calendar_select_day (GtkCalendar *calendar,
   
   gtk_signal_emit (GTK_OBJECT (calendar),
 		   gtk_calendar_signals[DAY_SELECTED_SIGNAL]);
+}
+
+static void
+gtk_calendar_select_and_focus_day (GtkCalendar *calendar,
+				   guint        day)
+{
+  gint old_focus_row = calendar->focus_row;
+  gint old_focus_col = calendar->focus_col;
+  gint row;
+  gint col;
+  
+  for (row = 0; row < 6; row ++)
+    for (col = 0; col < 7; col++)
+      {
+	if (calendar->day_month[row][col] == MONTH_CURRENT 
+	    && calendar->day[row][col] == day)
+	  {
+	    calendar->focus_row = row;
+	    calendar->focus_col = col;
+	  }
+      }
+
+  if (old_focus_row != -1 && old_focus_col != -1)
+    gtk_calendar_paint_day (GTK_WIDGET (calendar), old_focus_row, old_focus_col);
+  
+  gtk_calendar_select_day (calendar, day);
 }
 
 void
@@ -2645,18 +2678,8 @@ gtk_calendar_key_press (GtkWidget   *widget,
 	      gtk_calendar_set_month_next (calendar);
 	    }
 
-	  gtk_calendar_select_day (calendar, day);
+	  gtk_calendar_select_and_focus_day (calendar, day);
 	  
-	  for (row = 0; row < 6; row ++)
-	    for (col = 0; col < 7; col++)
-	      {
-		if (calendar->day_month[row][col] == MONTH_CURRENT 
-		    && calendar->day[row][col] == day)
-		  {
-		    calendar->focus_row = row;
-		    calendar->focus_col = col;
-		  }
-	      }
 	  gtk_calendar_thaw (calendar);	  
 	}
     }	

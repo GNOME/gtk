@@ -26,6 +26,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xos.h>
+#include <locale.h>
 
 #include <pango/pangox.h>
 
@@ -351,9 +352,11 @@ gdk_fontset_load_for_display (GdkDisplay * display,
   if (missing_charset_count)
     {
       gint i;
-      g_warning ("Missing charsets in FontSet creation\n");
-      for (i = 0; i < missing_charset_count; i++)
-	g_warning ("    %s\n", missing_charset_list[i]);
+      g_printerr ("The font \"%s\" does not support all the required character sets for the current locale \"%s\"\n",
+                 fontset_name, setlocale (LC_ALL, NULL));
+      for (i=0;i<missing_charset_count;i++)
+	g_printerr ("  (Missing character set \"%s\")\n",
+                    missing_charset_list[i]);
       XFreeStringList (missing_charset_list);
     }
 

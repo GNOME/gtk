@@ -1075,6 +1075,22 @@ gtk_tree_view_column_new (void)
  * equivalent to calling gtk_tree_view_column_set_title(),
  * gtk_tree_view_column_pack_start(), and
  * gtk_tree_view_column_set_attributes() on the newly created #GtkTreeViewColumn.
+ *
+ * Here's a simple example:
+ * <informalexample><programlisting>
+ *  <!>enum { TEXT_COLUMN, COLOR_COLUMN, N_COLUMNS };
+ *  <!>...
+ *  <!>{
+ *  <!>  GtkTreeViewColumn *column;
+ *  <!>  GtkCellRenderer   *renderer = gtk_cell_renderer_text_new ();
+ *  <!>
+ *  <!>  column = gtk_tree_view_column_new_with_attributes ("Title",
+ *  <!>                                                     renderer,
+ *  <!>                                                     "text", TEXT_COLUMN,
+ *  <!>                                                     "foreground", COLOR_COLUMN,
+ *  <!>                                                     NULL);
+ *  <!>}
+ * </programlisting></informalexample>
  * 
  * Return value: A newly created #GtkTreeViewColumn.
  **/
@@ -2357,7 +2373,6 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 	}
       else if (action == CELL_ACTION_EVENT)
 	{
-	  gint x_offset, y_offset, width, height;
 	  gboolean try_event = FALSE;
 
 	  if (event)

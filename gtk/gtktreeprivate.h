@@ -116,6 +116,7 @@ struct _GtkTreeViewPrivate
   GtkTreeViewColumn *edited_column;
   guint presize_handler_timer;
   guint validate_rows_timer;
+  guint scroll_sync_timer;
 
   /* Focus code */
   GtkTreeViewColumn *focus_column;
@@ -174,6 +175,8 @@ struct _GtkTreeViewPrivate
   gfloat scroll_to_row_align;
   gfloat scroll_to_col_align;
   guint scroll_to_use_align : 1;
+
+  guint fixed_height_check : 1;
 
   guint reorderable : 1;
   guint header_has_focus : 1;

@@ -764,9 +764,6 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
   g_return_if_fail (binding_set != NULL);
   g_return_if_fail (signal_name != NULL);
   
-  keyval = gdk_keyval_to_lower (keyval);
-  modifiers = modifiers & BINDING_MOD_MASK ();
-
   va_start (args, n_args);
   slist = NULL;
   for (i = 0; i < n_args; i++)
@@ -954,8 +951,18 @@ gtk_binding_entries_sort_patterns (GSList      *entries,
 				   gboolean     is_release)
 {
   GSList *patterns;
+  GSList *tmp_list;
 
   patterns = NULL;
+  for (tmp_list = entries; tmp_list; tmp_list = tmp_list->next)
+    {
+      GtkBindingEntry *entry = tmp_list->data;
+      GtkBindingSet *binding_set;
+
+      binding_set = entry->binding_set;
+      binding_set->current = NULL;
+    }
+  
   for (; entries; entries = entries->next)
     {
       GtkBindingEntry *entry = entries->data;
@@ -966,6 +973,9 @@ gtk_binding_entries_sort_patterns (GSList      *entries,
 	continue;
 
       binding_set = entry->binding_set;
+
+      if (binding_set->current)
+	continue;
       binding_set->current = entry;
 
       switch (path_id)

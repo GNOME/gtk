@@ -2921,7 +2921,7 @@ gdk_window_set_override_redirect (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (!GDK_WINDOW_DESTROYED (window))
     {
       attr.override_redirect = (override_redirect == FALSE)?False:True;
       XChangeWindowAttributes (GDK_WINDOW_XDISPLAY (window),
@@ -4074,9 +4074,14 @@ static void
 gdk_window_set_static_bit_gravity (GdkWindow *window, gboolean on)
 {
   XSetWindowAttributes xattributes;
+  GdkWindowObject *private;
   guint xattributes_mask = 0;
   
   g_return_if_fail (window != NULL);
+
+  private = GDK_WINDOW_OBJECT (window);
+  if (private->input_only)
+    return;
   
   xattributes.bit_gravity = StaticGravity;
   xattributes_mask |= CWBitGravity;

@@ -415,6 +415,29 @@ gdk_fb_mouse_dev_open (char *devname, gint mode)
 }
 
 static gboolean
+write_all (gint   fd,
+	   gchar *buf,
+	   gsize  to_write)
+{
+  while (to_write > 0)
+    {
+      gssize count = write (fd, buf, to_write);
+      if (count < 0)
+	{
+	  if (errno != EINTR)
+	    return FALSE;
+	}
+      else
+	{
+	  to_write -= count;
+	  buf += count;
+	}
+    }
+
+  return TRUE;
+}
+
+static gboolean
 gdk_fb_mouse_ps2_open (GdkFBMouse *mouse)
 {
   gint fd;
@@ -433,7 +456,11 @@ gdk_fb_mouse_ps2_open (GdkFBMouse *mouse)
   buf[i++] = 232; /* device resolution */
   buf[i++] = 1;
   
-  write (fd, buf, i);
+  if (!write_all (fd, buf, i))
+    {
+      close (fd);
+      return FALSE;
+    }
   
   usleep (10000); /* sleep 10 ms, then read whatever junk we can get from the mouse, in a vain attempt
 		     to get synchronized with the event stream */
@@ -541,8 +568,12 @@ gdk_fb_mouse_ms_open (GdkFBMouse   *mouse)
   tty.c_cc[VTIME] = 0;
   tty.c_cc[VMIN] = 1;
   tcsetattr (fd, TCSAFLUSH, &tty);
-  
-  write (fd, "*n", 2);
+
+  if (!write_all (fd, "*n", 2))
+    {
+      close (fd);
+      return FALSE;
+    }
 
   mouse->fd = fd;
   return TRUE;

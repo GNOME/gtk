@@ -32,20 +32,29 @@
 
 
 
-static void
+static gboolean
 setup_png_transformations(png_structp png_read_ptr, png_infop png_info_ptr,
-                          gboolean *fatal_error_occurred,
+                          GError **error,
                           png_uint_32* width_p, png_uint_32* height_p,
                           int* color_type_p)
 {
         png_uint_32 width, height;
         int bit_depth, color_type, interlace_type, compression_type, filter_type;
-#ifndef G_DISABLE_CHECKS
         int channels;
-#endif
         
         /* Get the image info */
 
+        /* Must check bit depth, since png_get_IHDR generates an 
+           FPE on bit_depth 0.
+        */
+        bit_depth = png_get_bit_depth (png_read_ptr, png_info_ptr);
+        if (bit_depth < 1 || bit_depth > 16) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("Bits per channel of PNG image is invalid."));
+                return FALSE;
+        }
         png_get_IHDR (png_read_ptr, png_info_ptr,
                       &width, &height,
                       &bit_depth,
@@ -118,29 +127,42 @@ setup_png_transformations(png_structp png_read_ptr, png_infop png_info_ptr,
         *height_p = height;
         *color_type_p = color_type;
         
-#ifndef G_DISABLE_CHECKS
         /* Check that the new info is what we want */
         
+        if (width == 0 || height == 0) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("Transformed PNG has zero width or height."));
+                return FALSE;
+        }
+
         if (bit_depth != 8) {
-                g_warning("Bits per channel of transformed PNG is %d, not 8.", bit_depth);
-                *fatal_error_occurred = TRUE;
-                return;
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("Bits per channel of transformed PNG is not 8."));
+                return FALSE;
         }
 
         if ( ! (color_type == PNG_COLOR_TYPE_RGB ||
                 color_type == PNG_COLOR_TYPE_RGB_ALPHA) ) {
-                g_warning("Transformed PNG not RGB or RGBA.");
-                *fatal_error_occurred = TRUE;
-                return;
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("Transformed PNG not RGB or RGBA."));
+                return FALSE;
         }
 
         channels = png_get_channels(png_read_ptr, png_info_ptr);
         if ( ! (channels == 3 || channels == 4) ) {
-                g_warning("Transformed PNG has %d channels, must be 3 or 4.", channels);
-                *fatal_error_occurred = TRUE;
-                return;
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("Transformed PNG has unsupported number of channels, must be 3 or 4."));
+                return FALSE;
         }
-#endif
+        return TRUE;
 }
 
 static void
@@ -200,15 +222,26 @@ png_text_to_pixbuf_option (png_text   text_ptr,
         }
 }
 
+static png_voidp
+png_malloc_callback (png_structp o, png_size_t size)
+{
+        return g_try_malloc (size);
+}
+
+static void
+png_free_callback (png_structp o, png_voidp x)
+{
+        g_free (x);
+}
+
 /* Shared library entry point */
 static GdkPixbuf *
 gdk_pixbuf__png_image_load (FILE *f, GError **error)
 {
         GdkPixbuf *pixbuf;
 	png_structp png_ptr;
-	png_infop info_ptr, end_info;
+	png_infop info_ptr;
         png_textp text_ptr;
-        gboolean failed = FALSE;
 	gint i, ctype, bpp;
 	png_uint_32 w, h;
 	png_bytepp volatile rows = NULL;
@@ -216,22 +249,26 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
         gint    num_texts;
         gchar **options = NULL;
 
+#ifdef PNG_USER_MEM_SUPPORTED
+	png_ptr = png_create_read_struct_2 (PNG_LIBPNG_VER_STRING,
+                                            error,
+                                            png_simple_error_callback,
+                                            png_simple_warning_callback,
+                                            NULL, 
+                                            png_malloc_callback, 
+                                            png_free_callback);
+#else
 	png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING,
                                           error,
                                           png_simple_error_callback,
                                           png_simple_warning_callback);
+#endif
 	if (!png_ptr)
 		return NULL;
 
 	info_ptr = png_create_info_struct (png_ptr);
 	if (!info_ptr) {
 		png_destroy_read_struct (&png_ptr, NULL, NULL);
-		return NULL;
-	}
-
-	end_info = png_create_info_struct (png_ptr);
-	if (!end_info) {
-		png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
 		return NULL;
 	}
 
@@ -242,17 +279,15 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
 		if (pixels)
 			g_free (pixels);
 
-		png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
+		png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
 		return NULL;
 	}
 
 	png_init_io (png_ptr, f);
 	png_read_info (png_ptr, info_ptr);
 
-        setup_png_transformations(png_ptr, info_ptr, &failed, &w, &h, &ctype);
-
-        if (failed) {
-                png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
+        if (!setup_png_transformations(png_ptr, info_ptr, error, &w, &h, &ctype)) {
+                png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
                 return NULL;
         }
         
@@ -273,7 +308,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
                                      _("Insufficient memory to load PNG file"));
                 }
                 
-		png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
+		png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
 		return NULL;
 	}
 
@@ -283,6 +318,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
 		rows[i] = pixels + i * w * bpp;
 
 	png_read_image (png_ptr, rows);
+        png_read_end (png_ptr, info_ptr);
 
         if (png_get_text (png_ptr, info_ptr, &text_ptr, &num_texts)) {
                 options = g_new (gchar *, num_texts * 2);
@@ -292,7 +328,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
                                                    options + 2*i + 1);
                 }
         }
-	png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
+	png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
 	g_free (rows);
 
 	if (ctype & PNG_COLOR_MASK_ALPHA)
@@ -402,12 +438,20 @@ gdk_pixbuf__png_image_begin_load (ModulePreparedNotifyFunc prepare_func,
         
         /* Create the main PNG context struct */
 
-		
+#ifdef PNG_USER_MEM_SUPPORTED
+        lc->png_read_ptr = png_create_read_struct_2 (PNG_LIBPNG_VER_STRING,
+                                                     lc, /* error/warning callback data */
+                                                     png_error_callback,
+                                                     png_warning_callback,
+                                                     NULL,
+                                                     png_malloc_callback,
+                                                     png_free_callback);
+#else
         lc->png_read_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
                                                   lc, /* error/warning callback data */
                                                   png_error_callback,
                                                   png_warning_callback);
-
+#endif
         if (lc->png_read_ptr == NULL) {
                 g_free(lc);
                 /* error callback should have set the error */
@@ -462,7 +506,7 @@ gdk_pixbuf__png_image_stop_load (gpointer context, GError **error)
         if (lc->pixbuf)
                 g_object_unref (lc->pixbuf);
         
-        png_destroy_read_struct(&lc->png_read_ptr, NULL, NULL);
+        png_destroy_read_struct(&lc->png_read_ptr, &lc->png_info_ptr, NULL);
         g_free(lc);
 
         return TRUE;
@@ -558,19 +602,16 @@ png_info_callback   (png_structp png_read_ptr,
         int i, num_texts;
         int color_type;
         gboolean have_alpha = FALSE;
-        gboolean failed = FALSE;
         
         lc = png_get_progressive_ptr(png_read_ptr);
 
         if (lc->fatal_error_occurred)
                 return;
 
-        setup_png_transformations(lc->png_read_ptr,
-                                  lc->png_info_ptr,
-                                  &failed,
-                                  &width, &height, &color_type);
-
-        if (failed) {
+        if (!setup_png_transformations(lc->png_read_ptr,
+                                       lc->png_info_ptr,
+                                       lc->error,
+                                       &width, &height, &color_type)) {
                 lc->fatal_error_occurred = TRUE;
                 return;
         }

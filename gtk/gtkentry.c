@@ -1544,7 +1544,7 @@ gtk_entry_key_release (GtkWidget   *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
 
-  if (!entry->editable)
+  if (entry->editable)
     {
       if (gtk_im_context_filter_keypress (entry->im_context, event))
 	{
@@ -1590,7 +1590,7 @@ gtk_entry_focus_out (GtkWidget     *widget,
   gtk_entry_check_cursor_blink (entry);
   
   g_signal_handlers_disconnect_by_func (gdk_keymap_get_for_display (gtk_widget_get_display (widget)),
-                                        gtk_entry_keymap_direction_changed,
+                                        (gpointer) gtk_entry_keymap_direction_changed,
                                         entry);
   
   return FALSE;
@@ -2225,7 +2225,8 @@ gtk_entry_real_activate (GtkEntry *entry)
       
 	  if (window &&
 	      widget != window->default_widget &&
-	      !(!window->default_widget && widget == window->focus_widget))
+	      !(widget == window->focus_widget &&
+		(!window->default_widget || !GTK_WIDGET_SENSITIVE (window->default_widget))))
 	    gtk_window_activate_default (window);
 	}
     }
@@ -3282,14 +3283,20 @@ gtk_entry_new_with_max_length (gint max)
 }
 
 void
-gtk_entry_set_text (GtkEntry *entry,
+gtk_entry_set_text (GtkEntry    *entry,
 		    const gchar *text)
 {
   gint tmp_pos;
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
   g_return_if_fail (text != NULL);
-  
+
+  /* Actually setting the text will affect the cursor and selection;
+   * if the contents don't actually change, this will look odd to the user.
+   */
+  if (strcmp (entry->text, text) == 0)
+    return;
+
   gtk_editable_delete_text (GTK_EDITABLE (entry), 0, -1);
 
   tmp_pos = 0;

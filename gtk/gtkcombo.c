@@ -325,9 +325,9 @@ gtk_combo_find (GtkCombo * combo)
   else
     compare_text = g_utf8_casefold (text, -1);
   
-  clist = GTK_LIST (combo->list)->children;
-
-  while (!found && clist && clist->data)
+  for (clist = GTK_LIST (combo->list)->children;
+       !found && clist;
+       clist = clist->next)
     {
       ltext = gtk_combo_func (GTK_LIST_ITEM (clist->data));
       if (!ltext)
@@ -341,8 +341,6 @@ gtk_combo_find (GtkCombo * combo)
 
       if (!combo->case_sensitive)
 	g_free (ltext);
-
-      clist = clist->next;
     }
 
   if (!combo->case_sensitive)

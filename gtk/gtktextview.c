@@ -234,9 +234,11 @@ static void gtk_text_view_page_horizontally (GtkTextView          *text_view,
                                              gboolean              extend_selection);
 static void gtk_text_view_set_anchor       (GtkTextView           *text_view);
 static void gtk_text_view_scroll_pages     (GtkTextView           *text_view,
-                                            gint                   count);
+                                            gint                   count,
+                                            gboolean               extend_selection);
 static void gtk_text_view_scroll_hpages    (GtkTextView           *text_view,
-                                            gint                   count);
+                                            gint                   count,
+                                            gboolean               extend_selection);
 static void gtk_text_view_insert_at_cursor (GtkTextView           *text_view,
                                             const gchar           *str);
 static void gtk_text_view_delete_from_cursor (GtkTextView           *text_view,
@@ -1087,7 +1089,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       g_slist_free (copy);
 
       g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->buffer),
-                                            gtk_text_view_mark_set_handler, text_view);
+                                            (gpointer) gtk_text_view_mark_set_handler, text_view);
       g_object_unref (G_OBJECT (text_view->buffer));
       text_view->dnd_mark = NULL;
 
@@ -2440,7 +2442,7 @@ gtk_text_view_finalize (GObject *object)
     text_window_free (text_view->bottom_window);
 
   g_object_unref (G_OBJECT (text_view->im_context));
-
+  
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
@@ -3102,6 +3104,10 @@ gtk_text_view_invalidate (GtkTextView *text_view)
                text_view->onscreen_validated));
 
   text_view->onscreen_validated = FALSE;
+
+  /* We'll invalidate when the layout is created */
+  if (text_view->layout == NULL)
+    return;
   
   if (!text_view->first_validate_idle)
     {
@@ -3606,6 +3612,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GtkTextMark *insert;
   GtkTextIter iter;
+  gboolean can_insert;
   
   if (text_view->layout == NULL ||
       get_buffer (text_view) == NULL)
@@ -3613,19 +3620,26 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 
   insert = gtk_text_buffer_get_insert (get_buffer (text_view));
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, insert);
-  if (gtk_text_iter_can_insert (&iter, text_view->editable) &&
+  can_insert = gtk_text_iter_can_insert (&iter, text_view->editable);
+  if (can_insert &&
       gtk_im_context_filter_keypress (text_view->im_context, event))
     {
       text_view->need_im_reset = TRUE;
       obscure = TRUE;
       retval = TRUE;
     }
+  /* Binding set */
   else if (GTK_WIDGET_CLASS (parent_class)->key_press_event &&
  	   GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
     retval = TRUE;
-  else if (event->keyval == GDK_Return ||
-           event->keyval == GDK_KP_Enter)
+  /* use overall editability not can_insert, more predictable for users */
+  else if (text_view->editable &&
+           (event->keyval == GDK_Return ||
+            event->keyval == GDK_KP_Enter))
     {
+      /* this won't actually insert the newline if the cursor isn't
+       * editable
+       */
       gtk_text_view_commit_text (text_view, "\n");
 
       obscure = TRUE;
@@ -3636,7 +3650,9 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
             event->keyval == GDK_KP_Tab) &&
            !(event->state & GDK_CONTROL_MASK))
     {
-      /* If the text isn't editable, move the focus instead */
+      /* If the text widget isn't editable overall, move the focus
+       * instead
+       */
       if (text_view->editable)
 	{
 	  gtk_text_view_commit_text (text_view, "\t");
@@ -3940,7 +3956,7 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
       gtk_text_view_check_cursor_blink (text_view);
     }
 
-  g_signal_handlers_disconnect_by_func (gdk_keymap_get_for_display (gtk_widget_get_display (widget)), keymap_direction_changed, text_view);
+  g_signal_handlers_disconnect_by_func (gdk_keymap_get_for_display (gtk_widget_get_display (widget)), (gpointer) keymap_direction_changed, text_view);
 
   text_view->need_im_reset = TRUE;
   gtk_im_context_focus_out (GTK_TEXT_VIEW (widget)->im_context);
@@ -4038,7 +4054,7 @@ gtk_text_view_paint (GtkWidget      *widget,
   if (!text_view->onscreen_validated)
     {
       g_warning (G_STRLOC ": somehow some text lines were modified or scrolling occurred since the last validation of lines on the screen - may be a text widget bug.");
-      G_BREAKPOINT ();
+      g_assert_not_reached ();
     }
   
 #if 0
@@ -4401,6 +4417,20 @@ gtk_text_view_move_iter_by_lines (GtkTextView *text_view,
     }
 }
 
+static void
+move_cursor (GtkTextView       *text_view,
+             const GtkTextIter *new_location,
+             gboolean           extend_selection)
+{
+  if (extend_selection)
+    gtk_text_buffer_move_mark_by_name (get_buffer (text_view),
+                                       "insert",
+                                       new_location);
+  else
+    gtk_text_buffer_place_cursor (get_buffer (text_view),
+                                  new_location);
+}
+
 /* FIXME when we are unfrozen and can change GtkMovementStep,
  * fix this
  */
@@ -4421,13 +4451,13 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
 
   if (step == GTK_MOVEMENT_PAGES)
     {
-      gtk_text_view_scroll_pages (text_view, count);
+      gtk_text_view_scroll_pages (text_view, count, extend_selection);
       gtk_text_view_pend_cursor_blink (text_view);
       return;
     }
   else if (step == PAGE_HORIZONTALLY_HACK_VALUE)
     {
-      gtk_text_view_scroll_hpages (text_view, count);
+      gtk_text_view_scroll_hpages (text_view, count, extend_selection);
       gtk_text_view_pend_cursor_blink (text_view);
       return;
     }
@@ -4523,13 +4553,7 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
 
   if (!gtk_text_iter_equal (&insert, &newplace))
     {
-      if (extend_selection)
-        gtk_text_buffer_move_mark (get_buffer (text_view),
-                                   gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                             "insert"),
-                                   &newplace);
-      else
-        gtk_text_buffer_place_cursor (get_buffer (text_view), &newplace);
+      move_cursor (text_view, &newplace, extend_selection);
 
       DV(g_print (G_STRLOC": scrolling onscreen\n"));
       gtk_text_view_scroll_mark_onscreen (text_view,
@@ -4577,7 +4601,8 @@ gtk_text_view_set_anchor (GtkTextView *text_view)
 
 static void
 gtk_text_view_scroll_pages (GtkTextView *text_view,
-                            gint         count)
+                            gint         count,
+                            gboolean     extend_selection)
 {
   gdouble newval;
   gdouble oldval;
@@ -4613,13 +4638,13 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
     {
       /* already at top, just be sure we are at offset 0 */
       gtk_text_buffer_get_start_iter (get_buffer (text_view), &new_insert);
-      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+      move_cursor (text_view, &new_insert, extend_selection);
     }
   else if (count > 0 && adj->value >= (adj->upper - adj->page_size - 1e-12))
     {
       /* already at bottom, just be sure we are at the end */
       gtk_text_buffer_get_end_iter (get_buffer (text_view), &new_insert);
-      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+      move_cursor (text_view, &new_insert, extend_selection);
     }
   else
     {
@@ -4635,7 +4660,7 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
 
       gtk_text_layout_get_iter_at_pixel (text_view->layout, &new_insert, cursor_x_pos, cursor_y_pos);
       clamp_iter_onscreen (text_view, &new_insert);
-      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+      move_cursor (text_view, &new_insert, extend_selection);
 
       gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, cursor_y_pos);
     }
@@ -4651,7 +4676,8 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
 
 static void
 gtk_text_view_scroll_hpages (GtkTextView *text_view,
-                             gint         count)
+                             gint         count,
+                             gboolean     extend_selection)
 {
   gdouble newval;
   gdouble oldval;
@@ -4677,13 +4703,13 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
     {
       /* already at far left, just be sure we are at offset 0 */
       gtk_text_iter_set_line_offset (&new_insert, 0);
-      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+      move_cursor (text_view, &new_insert, extend_selection);
     }
   else if (count > 0 && adj->value >= (adj->upper - adj->page_size - 1e-12))
     {
       /* already at far right, just be sure we are at the end */
       gtk_text_iter_forward_to_line_end (&new_insert);
-      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+      move_cursor (text_view, &new_insert, extend_selection);
     }
   else
     {
@@ -4699,7 +4725,7 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
 
       gtk_text_layout_get_iter_at_pixel (text_view->layout, &new_insert, cursor_x_pos, cursor_y_pos);
       clamp_iter_onscreen (text_view, &new_insert);
-      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+      move_cursor (text_view, &new_insert, extend_selection);
 
       gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, cursor_y_pos);
     }
@@ -5279,6 +5305,8 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
 
           tmp_list = g_slist_next (tmp_list);
         }
+
+      gtk_text_view_invalidate (text_view);
     }
 }
 
@@ -5315,6 +5343,13 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
       GSList *tmp_list;
 
       gtk_text_view_remove_validate_idles (text_view);
+
+      g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->layout),
+                                            (gpointer) invalidated_handler,
+					    text_view);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->layout),
+                                            (gpointer) changed_handler, 
+					    text_view);
       
       /* Remove layout from all anchored children */
       tmp_list = text_view->children;
@@ -5334,10 +5369,6 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
       gtk_text_view_stop_cursor_blink (text_view);
       gtk_text_view_end_selection_drag (text_view, NULL);
 
-      g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->layout),
-                                            invalidated_handler, text_view);
-      g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->layout),
-                                            changed_handler, text_view);
       g_object_unref (G_OBJECT (text_view->layout));
       text_view->layout = NULL;
     }
@@ -6410,6 +6441,9 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
 {
   PopupInfo *info = g_new (PopupInfo, 1);
 
+  /* should not need this, see http://bugzilla.gnome.org/show_bug.cgi?id=74620 */
+  gtk_text_view_end_selection_drag (text_view, event);
+  
   /* In order to know what entries we should make sensitive, we
    * ask for the current targets of the clipboard, and when
    * we get them, then we actually pop up the menu.

@@ -388,7 +388,7 @@ gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
 	{
 	  gtk_accel_label_set_accel_closure (accel_label, NULL);
 	  g_signal_handlers_disconnect_by_func (accel_label->accel_widget,
-						G_CALLBACK (refetch_widget_accel_closure),
+						(gpointer) refetch_widget_accel_closure,
 						accel_label);
 	  g_object_unref (accel_label->accel_widget);
 	}
@@ -448,7 +448,7 @@ gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
       if (accel_label->accel_closure)
 	{
 	  g_signal_handlers_disconnect_by_func (accel_label->accel_group,
-						G_CALLBACK (check_accel_changed),
+						(gpointer) check_accel_changed,
 						accel_label);
 	  accel_label->accel_group = NULL;
 	  g_closure_unref (accel_label->accel_closure);

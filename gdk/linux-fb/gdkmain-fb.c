@@ -1072,6 +1072,41 @@ gdk_keyboard_ungrab (guint32 time)
   _gdk_fb_keyboard_grab_window = NULL;
 }
 
+gboolean
+gdk_pointer_grab_info_libgtk_only (GdkWindow **grab_window,
+				   gboolean   *owner_events)
+{
+  if (_gdk_fb_pointer_grab_window)
+    {
+      if (grab_window)
+        *grab_window = (GdkWindow *)_gdk_fb_pointer_grab_window;
+      if (owner_events)
+        *owner_events = _gdk_fb_pointer_grab_owner_events;
+      
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
+gboolean
+gdk_keyboard_grab_info_libgtk_only (GdkWindow **grab_window,
+                                   gboolean   *owner_events)
+{
+  if (_gdk_fb_keyboard_grab_window)
+    {
+      if (grab_window)
+        *grab_window = (GdkWindow *)_gdk_fb_keyboard_grab_window;
+      if (owner_events)
+        *owner_events = _gdk_fb_keyboard_grab_owner_events;
+
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+
+
 /*
  *--------------------------------------------------------------
  * gdk_screen_width
