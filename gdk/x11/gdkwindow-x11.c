@@ -1411,7 +1411,7 @@ show_window_internal (GdkWindow *window,
       
       g_assert (GDK_WINDOW_IS_MAPPED (window));
 
-      if (GDK_WINDOW_IS_TOPLEVEL (window))
+      if (WINDOW_IS_TOPLEVEL (window))
 	{
 	  display = gdk_drawable_get_display (window);
 	  display_x11 = GDK_DISPLAY_X11 (display);

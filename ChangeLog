@@ -1,5 +1,7 @@
 2004-08-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkwindow-x11.c (show_window_internal): Make it compile.
+
 	* gdk/x11/gdkwindow-x11.h (struct _GdkToplevelX11): Add a 
 	user_time field.
 
