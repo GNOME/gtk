@@ -79,7 +79,7 @@ msgid "Failed to load image '%s': %s"
 msgstr "Resim '%s' yüklenemedi: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:687
-#, c-format
+#, fuzzy, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Kaydedilen resim formatı gdk-pixbuf tarafından desteklenmiyor."
 
