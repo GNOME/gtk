@@ -1,3 +1,25 @@
+Tue Feb 17 23:02:58 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	Fix for #119722, reported by Olexiy Avramchenko, patch by Owen
+	Taylor.
+
+	* gdk/x11/gdkprivate-x11.h (struct _GdkGCX11): Add a depth field
+
+	* gdk/x11/gdkgc-x11.c (_gdk_x11_gc_new): Keep track of the GC's
+	depth.
+
+	* gdk/x11/gdkgc-x11.c (_gdk_gc_x11_get_fg_xft_color): First query
+	the colormap, if no colormap, special case depth 1, 
+
+	* gdk/x11/gdkgc-x11.c (_gdk_x11_gc_get_fg_picture): Use
+	_gdk_gc_x11_get_fg_xft_color() to get the foreground color.
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_drawable_get_xft_draw):
+	Special-case bitmaps without a colormap.
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_draw_pixbuf): Use inherited
+	draw_pixbuf() implementation in the bitmap case.
+
 2004-02-17  Mark McLoughlin  <mark@skynet.ie>
 
 	* modules/input/Makefile.am: only reference input method

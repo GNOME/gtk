@@ -64,6 +64,7 @@ struct _GdkGCX11
   GdkRegion *clip_region;
   guint16 dirty_mask;
   guint have_clip_mask : 1;
+  guint depth : 8;
 
   Picture fg_picture;
   XRenderColor fg_picture_color; 

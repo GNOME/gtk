@@ -312,22 +312,29 @@ gdk_x11_drawable_get_xft_draw (GdkDrawable *drawable)
    if (impl->xft_draw == NULL)
     {
       GdkColormap *colormap = gdk_drawable_get_colormap (drawable);
-      GdkVisual *visual;
-
-      if (!colormap)
+      
+      if (colormap)
 	{
+          GdkVisual *visual;
+
+          visual = gdk_colormap_get_visual (colormap);
+      
+          impl->xft_draw = XftDrawCreate (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid,
+ 				          GDK_VISUAL_XVISUAL (visual), GDK_COLORMAP_XCOLORMAP (colormap));
+	}
+      else if (gdk_drawable_get_depth (drawable) == 1)
+	{
+	  impl->xft_draw = XftDrawCreateBitmap (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid);
+	}
+      else
+        {
 	  g_warning ("Using Xft rendering requires the drawable argument to\n"
 		     "have a specified colormap. All windows have a colormap,\n"
 		     "however, pixmaps only have colormap by default if they\n"
 		     "were created with a non-NULL window argument. Otherwise\n"
 		     "a colormap must be set on them with gdk_drawable_set_colormap");
- 	  return NULL;
-	}
-
-      visual = gdk_colormap_get_visual (colormap);
-      
-      impl->xft_draw = XftDrawCreate (GDK_SCREEN_XDISPLAY (impl->screen), impl->xid,
- 				      GDK_VISUAL_XVISUAL (visual), GDK_COLORMAP_XCOLORMAP (colormap));
+	  return NULL;
+        }
     }
 
    return impl->xft_draw;
@@ -1421,6 +1428,7 @@ gdk_x11_draw_pixbuf (GdkDrawable     *drawable,
 
   if (format_type == FORMAT_NONE ||
       !gdk_pixbuf_get_has_alpha (pixbuf) ||
+      gdk_drawable_get_depth (drawable) == 1 ||
       (dither == GDK_RGB_DITHER_MAX && gdk_drawable_get_depth (drawable) != 24) ||
       gdk_x11_drawable_get_picture (drawable) == None)
     {
