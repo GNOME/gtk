@@ -1,3 +1,7 @@
+2004-08-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf/Makefile.am (IGNORE_HFILES): Add gdk-pixbuf-alias.h
+
 Tue Aug 10 18:58:15 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/Makefile.am (IGNORE_HFILES): Add gdkalias.h
