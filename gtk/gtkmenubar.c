@@ -22,6 +22,11 @@
 #include "gtkmenubar.h"
 #include "gtkmenuitem.h"
 
+enum {
+  ARG_0,
+  ARG_SHADOW
+};
+
 
 #define BORDER_SPACING  2
 #define CHILD_SPACING   3
@@ -29,6 +34,12 @@
 
 static void gtk_menu_bar_class_init    (GtkMenuBarClass *klass);
 static void gtk_menu_bar_init          (GtkMenuBar      *menu_bar);
+static void gtk_menu_bar_set_arg       (GtkObject      *object,
+					GtkArg         *arg,
+					guint           arg_id);
+static void gtk_menu_bar_get_arg       (GtkObject      *object,
+					GtkArg         *arg,
+					guint           arg_id);
 static void gtk_menu_bar_size_request  (GtkWidget       *widget,
 					GtkRequisition  *requisition);
 static void gtk_menu_bar_size_allocate (GtkWidget       *widget,
@@ -69,13 +80,20 @@ gtk_menu_bar_get_type (void)
 static void
 gtk_menu_bar_class_init (GtkMenuBarClass *class)
 {
+  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkMenuShellClass *menu_shell_class;
 
   GtkBindingSet *binding_set;
 
+  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   menu_shell_class = (GtkMenuShellClass*) class;
+
+  gtk_object_add_arg_type ("GtkMenuBar::shadow", GTK_TYPE_SHADOW_TYPE, GTK_ARG_READWRITE, ARG_SHADOW);
+
+  object_class->set_arg = gtk_menu_bar_set_arg;
+  object_class->get_arg = gtk_menu_bar_get_arg;
 
   widget_class->draw = gtk_menu_bar_draw;
   widget_class->size_request = gtk_menu_bar_size_request;
@@ -110,8 +128,48 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 static void
 gtk_menu_bar_init (GtkMenuBar *menu_bar)
 {
+  menu_bar->shadow_type = GTK_SHADOW_OUT;
 }
 
+static void
+gtk_menu_bar_set_arg (GtkObject      *object,
+		      GtkArg         *arg,
+		      guint           arg_id)
+{
+  GtkMenuBar *menu_bar;
+
+  menu_bar = GTK_MENU_BAR (object);
+
+  switch (arg_id)
+    {
+    case ARG_SHADOW:
+      gtk_menu_bar_set_shadow_type (menu_bar, GTK_VALUE_ENUM (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_menu_bar_get_arg (GtkObject      *object,
+		      GtkArg         *arg,
+		      guint           arg_id)
+{
+  GtkMenuBar *menu_bar;
+
+  menu_bar = GTK_MENU_BAR (object);
+
+  switch (arg_id)
+    {
+    case ARG_SHADOW:
+      GTK_VALUE_ENUM (*arg) = menu_bar->shadow_type;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
+}
+ 
 GtkWidget*
 gtk_menu_bar_new (void)
 {
@@ -262,6 +320,25 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
     }
 }
 
+void
+gtk_menu_bar_set_shadow_type (GtkMenuBar    *menu_bar,
+			      GtkShadowType  type)
+{
+  g_return_if_fail (menu_bar != NULL);
+  g_return_if_fail (GTK_IS_MENU_BAR (menu_bar));
+
+  if ((GtkShadowType) menu_bar->shadow_type != type)
+    {
+      menu_bar->shadow_type = type;
+
+      if (GTK_WIDGET_DRAWABLE (menu_bar))
+        {
+          gtk_widget_queue_clear (GTK_WIDGET (menu_bar));
+        }
+      gtk_widget_queue_resize (GTK_WIDGET (menu_bar));
+    }
+}
+
 static void
 gtk_menu_bar_paint (GtkWidget *widget, GdkRectangle *area)
 {
@@ -273,7 +350,7 @@ gtk_menu_bar_paint (GtkWidget *widget, GdkRectangle *area)
       gtk_paint_box (widget->style,
 		     widget->window,
 		     GTK_STATE_NORMAL,
-		     GTK_SHADOW_OUT,
+		     GTK_MENU_BAR (widget)->shadow_type,
 		     area, widget, "menubar",
 		     0, 0,
 		     -1,-1);

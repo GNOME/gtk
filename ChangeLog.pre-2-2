@@ -1,3 +1,12 @@
+Mon Nov 16 00:59:26 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkmenubar.[ch]: added shadow_type setting and
+	gtk_menu_bar_set_shadow_type function to allow shadow
+	configurability for menubars
+
+	* gtk/gtkviewport.h: use GtkShadowType enum instead of generic
+	guint
+
 Mon Nov 16 00:17:53 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktypeutils.c (gtk_type_new): relookup type node after

@@ -41,6 +41,8 @@ typedef struct _GtkMenuBarClass  GtkMenuBarClass;
 struct _GtkMenuBar
 {
   GtkMenuShell menu_shell;
+
+  GtkShadowType shadow_type;
 };
 
 struct _GtkMenuBarClass
@@ -49,15 +51,17 @@ struct _GtkMenuBarClass
 };
 
 
-GtkType    gtk_menu_bar_get_type (void);
-GtkWidget* gtk_menu_bar_new      (void);
-void       gtk_menu_bar_append   (GtkMenuBar *menu_bar,
-				  GtkWidget  *child);
-void       gtk_menu_bar_prepend  (GtkMenuBar *menu_bar,
-				  GtkWidget  *child);
-void       gtk_menu_bar_insert   (GtkMenuBar *menu_bar,
-				  GtkWidget  *child,
-				  gint        position);
+GtkType    gtk_menu_bar_get_type        (void);
+GtkWidget* gtk_menu_bar_new             (void);
+void       gtk_menu_bar_append          (GtkMenuBar    *menu_bar,
+					 GtkWidget     *child);
+void       gtk_menu_bar_prepend         (GtkMenuBar    *menu_bar,
+					 GtkWidget     *child);
+void       gtk_menu_bar_insert          (GtkMenuBar    *menu_bar,
+					 GtkWidget     *child,
+					 gint           position);
+void       gtk_menu_bar_set_shadow_type (GtkMenuBar    *menu_bar,
+					 GtkShadowType  type);
 
 
 #ifdef __cplusplus

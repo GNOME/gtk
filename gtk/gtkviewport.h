@@ -44,7 +44,7 @@ struct _GtkViewport
 {
   GtkBin bin;
 
-  guint shadow_type;
+  GtkShadowType shadow_type;
   GdkWindow *view_window;
   GdkWindow *bin_window;
   GtkAdjustment *hadjustment;
