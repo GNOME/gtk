@@ -1,3 +1,14 @@
+Mon Feb  5 22:05:57 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/linux-fb/gdkimage-fb.c (_gdk_fb_get_image): Fix syntax
+	error introduced with earlier commit) (pointed out by
+	Ollie Lho)
+
+Mon Feb  5 12:25:06 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbutton.c: Remove calls	to gtk_grab_add/gtk_grab_remove,
+	which are no longer necessary.
+
 Mon Feb  5 13:22:54 GMT 2001  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: s/MISK/MISC/

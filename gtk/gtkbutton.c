@@ -746,10 +746,7 @@ gtk_button_button_press (GtkWidget      *widget,
 	gtk_widget_grab_focus (widget);
 
       if (event->button == 1)
-	{
-	  gtk_grab_add (GTK_WIDGET (button));
-	  gtk_button_pressed (button);
-	}
+	gtk_button_pressed (button);
     }
 
   return TRUE;
@@ -768,7 +765,6 @@ gtk_button_button_release (GtkWidget      *widget,
   if (event->button == 1)
     {
       button = GTK_BUTTON (widget);
-      gtk_grab_remove (GTK_WIDGET (button));
       gtk_button_released (button);
     }
 

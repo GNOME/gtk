@@ -166,7 +166,6 @@ _gdk_fb_get_image (GdkDrawable *drawable,
 {
   GdkImage *image;
   GdkImagePrivateFB *private;
-  gint bits_per_pixel = 
   GdkPixmapFBData fbd;
 
   g_return_val_if_fail (drawable != NULL, NULL);
