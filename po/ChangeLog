@@ -2,6 +2,16 @@
 
 	* pt_BR.po: Updated Brazilian Portuguese translation.
 
+<<<<<<< ChangeLog
+2005-01-24  Raphael Higino  <raphaelh@cvs.gnome.org>
+
+	* pt_BR.po: Updated Brazilian Portuguese translation.
+
+=======
+2005-01-24  Raphael Higino  <raphaelh@cvs.gnome.org>
+
+	* pt_BR.po: Updated Brazilian Portuguese translation.
+
 2005-01-24  Frank Arnold  <farnold@cvs.gnome.org>
 
 	* de.po: Fix for #164724
@@ -77,6 +87,7 @@
 
 	* pt.po: Updated Portuguese translation.
 
+>>>>>>> 1.999.2.23
 2005-01-10  Raphael Higino  <raphaelh@cvs.gnome.org>
 
 	* pt_BR.po: Updated Brazilian Portuguese translation.
