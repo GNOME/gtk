@@ -1,3 +1,8 @@
+Thu Aug  8 16:58:22 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkspinbutton.c (gtk_spin_button_real_change_value): 
+ 	Remove the check for editable. (Reported by Brent Fox)
+ 
 Tue Sep 24 06:17:37 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkeventbox.c (gtk_event_box_paint): Honor
