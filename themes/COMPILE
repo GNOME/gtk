@@ -1,11 +1,12 @@
 mkdir .libs
 
+CFLAGS=" -I. -I.. -I../gtk -I../gdk `glib-config --cflags` -I/usr/X11R6/include -g -O2"
+
+echo $CFLAGS
 gcc -c th_main.c -o th_main.lo \
- -I. -I.. -I../gtk -I../gdk -I../glib -I/usr/X11R6/include \
- -g -O2 -DGTK_NO_CHECK_CASTS -Wall -DUSE_XIM -c -fPIC -DPIC
+ $CFLAGS -DGTK_NO_CHECK_CASTS -Wall -DUSE_XIM -c -fPIC -DPIC
 gcc -c th_draw.c -o th_draw.lo \
- -I. -I.. -I../gtk -I../gdk -I../glib -I/usr/X11R6/include \
- -g -O2 -DGTK_NO_CHECK_CASTS -Wall -DUSE_XIM -c -fPIC -DPIC
+ $CFLAGS -DGTK_NO_CHECK_CASTS -Wall -DUSE_XIM -c -fPIC -DPIC
 
 /bin/sh ../libtool --mode=link gcc -g -O2 -DGTK_NO_CHECK_CASTS -Wall \
 -lgdk_imlib -ljpeg -lpng -ltiff -lm -lz -lgif -lgdk -lX11 -lXext \

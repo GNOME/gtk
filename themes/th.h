@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include "gtkrc.h"
 #include "gtkthemes.h"
-#include "gtkprivate.h"
 #include "gtkbutton.h"
 #include "gtkcheckbutton.h"
 #include "gtkwindow.h"

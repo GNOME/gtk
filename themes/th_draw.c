@@ -284,166 +284,52 @@ draw_handle  (GtkStyle      *style,
 
 /* internal data structs */
 
-static GdkColor gtk_default_normal_fg =      { 0,      0,      0,      0 };
-static GdkColor gtk_default_active_fg =      { 0,      0,      0,      0 };
-static GdkColor gtk_default_prelight_fg =    { 0,      0,      0,      0 };
-static GdkColor gtk_default_selected_fg =    { 0, 0xffff, 0xffff, 0xffff };
-static GdkColor gtk_default_insensitive_fg = { 0, 0x7530, 0x7530, 0x7530 };
-
-static GdkColor gtk_default_normal_bg =      { 0, 0xd6d6, 0xd6d6, 0xd6d6 };
-static GdkColor gtk_default_active_bg =      { 0, 0xc350, 0xc350, 0xc350 };
-static GdkColor gtk_default_prelight_bg =    { 0, 0xea60, 0xea60, 0xea60 };
-static GdkColor gtk_default_selected_bg =    { 0,      0,      0, 0x9c40 };
-static GdkColor gtk_default_insensitive_bg = { 0, 0xd6d6, 0xd6d6, 0xd6d6 };
-
-static GtkStyleClass th_default_class =
+GtkStyleClass th_default_class =
 {
    2,
    2,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL,
-   NULL
+   draw_hline,
+   draw_vline,
+   draw_shadow,
+   draw_polygon,
+   draw_arrow,
+   draw_diamond,
+   draw_oval,
+   draw_string,
+   draw_box,
+   draw_flat_box,
+   draw_check,
+   draw_option,
+   draw_cross,
+   draw_ramp,
+   draw_tab,
+   draw_shadow_gap,
+   draw_box_gap,
+   draw_extension,
+   draw_focus,
+   draw_slider,
+   draw_entry,
+   draw_handle
 };
 
-/* external theme functions called */
-GtkStyle*
-gtk_style_new (void)
+static GdkImlibImage *
+load_image (char *name)
 {
-   GtkStyle *style;
-   gint i;
-   
-   th_default_class.draw_hline       = draw_hline;
-   th_default_class.draw_vline       = draw_vline;
-   th_default_class.draw_shadow      = draw_shadow;
-   th_default_class.draw_polygon     = draw_polygon;
-   th_default_class.draw_arrow       = draw_arrow;
-   th_default_class.draw_diamond     = draw_diamond;
-   th_default_class.draw_oval        = draw_oval;
-   th_default_class.draw_string      = draw_string;
-   th_default_class.draw_box         = draw_box;
-   th_default_class.draw_flat_box    = draw_flat_box;
-   th_default_class.draw_check       = draw_check;
-   th_default_class.draw_option      = draw_option;
-   th_default_class.draw_cross       = draw_cross;
-   th_default_class.draw_ramp        = draw_ramp;
-   th_default_class.draw_tab         = draw_tab;
-   th_default_class.draw_shadow_gap  = draw_shadow_gap;
-   th_default_class.draw_box_gap     = draw_box_gap;
-   th_default_class.draw_extension   = draw_extension;
-   th_default_class.draw_focus       = draw_focus;
-   th_default_class.draw_slider      = draw_slider;
-   th_default_class.draw_entry       = draw_entry;
-   th_default_class.draw_handle      = draw_handle;
-   
-   style = g_new0 (GtkStyle, 1);
-   
-   if (!default_font)
-     default_font =
-     gdk_font_load ("-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*");
-   
-   style->font = default_font;
-   gdk_font_ref (style->font);
-   
-   style->ref_count = 1;
-   style->attach_count = 0;
-   style->colormap = NULL;
-   style->depth = -1;
-   style->klass = &th_default_class;
-   
-   style->black.red = 0;
-   style->black.green = 0;
-   style->black.blue = 0;
-   
-   style->white.red = 65535;
-   style->white.green = 65535;
-   style->white.blue = 65535;
-   
-   style->black_gc = NULL;
-   style->white_gc = NULL;
-   
-   style->fg[GTK_STATE_NORMAL] = gtk_default_normal_fg;
-   style->fg[GTK_STATE_ACTIVE] = gtk_default_active_fg;
-   style->fg[GTK_STATE_PRELIGHT] = gtk_default_prelight_fg;
-   style->fg[GTK_STATE_SELECTED] = gtk_default_selected_fg;
-   style->fg[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_fg;
-   
-   style->bg[GTK_STATE_NORMAL] = gtk_default_normal_bg;
-   style->bg[GTK_STATE_ACTIVE] = gtk_default_active_bg;
-   style->bg[GTK_STATE_PRELIGHT] = gtk_default_prelight_bg;
-   style->bg[GTK_STATE_SELECTED] = gtk_default_selected_bg;
-   style->bg[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_bg;
-   
-   for (i = 0; i < 4; i++)
-     {
-	style->text[i] = style->fg[i];
-	style->base[i] = style->white;
-     }
-   
-   style->base[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_bg;
-   style->text[GTK_STATE_INSENSITIVE] = gtk_default_insensitive_bg;
-   
-   for (i = 0; i < 5; i++)
-     style->bg_pixmap[i] = NULL;
-   
-   for (i = 0; i < 5; i++)
-     {
-	style->fg_gc[i] = NULL;
-	style->bg_gc[i] = NULL;
-	style->light_gc[i] = NULL;
-	style->dark_gc[i] = NULL;
-	style->mid_gc[i] = NULL;
-	style->text_gc[i] = NULL;
-	style->base_gc[i] = NULL;
-     }
-   
-   unattached_styles = g_slist_prepend (unattached_styles, style);
-   
-   return style;
-}
+  static char *themedir = NULL;
+  char buf[1024];
 
+  if (!themedir)
+    {
+      char buf2[1024];
+      g_snprintf (buf2, 1024, "%s/themes/", getenv("HOME"));
+      themedir = g_strdup (buf2);
+    }
 
-void
-gtk_style_set_background (GtkStyle     *style,
-			  GdkWindow    *window,
-			  GtkStateType  state_type)
-{
-   GdkPixmap *pixmap;
-   gint parent_relative;
-   
-   g_return_if_fail (style != NULL);
-   g_return_if_fail (window != NULL);
-   
-   if (style->bg_pixmap[state_type])
-     {
-	if (style->bg_pixmap[state_type] == (GdkPixmap*) GDK_PARENT_RELATIVE)
-	  {
-	     pixmap = NULL;
-	     parent_relative = TRUE;
-	  }
-	else
-	  {
-	     pixmap = style->bg_pixmap[state_type];
-	     parent_relative = FALSE;
-	  }
-	
-	gdk_window_set_back_pixmap (window, pixmap, parent_relative);
-     }
-   else
-     gdk_window_set_background (window, &style->bg[state_type]);
+  strcpy (buf, themedir);
+  strncat (buf, name, 1023);
+  buf[1023] = '\0';
+
+  return gdk_imlib_load_image(buf);
 }
 
 void
@@ -936,14 +822,14 @@ draw_arrow (GtkStyle      *style,
 		    {
 		     case GTK_STATE_NORMAL:
 		     case GTK_STATE_INSENSITIVE:
-		       im=gdk_imlib_load_image("/home/raster/themes/_arrow_u1.png");
+		       im=load_image("_arrow_u1.png");
 		       break;
 		     case GTK_STATE_PRELIGHT:
-		       im=gdk_imlib_load_image("/home/raster/themes/_arrow_u2.png");
+		       im=load_image("_arrow_u2.png");
 		       break;
 		     case GTK_STATE_ACTIVE:
 		     case GTK_STATE_SELECTED:
-		       im=gdk_imlib_load_image("/home/raster/themes/_arrow_u3.png");
+		       im=load_image("_arrow_u3.png");
 		       break;
 		    }
 		  break;
@@ -963,14 +849,14 @@ draw_arrow (GtkStyle      *style,
 		    {
 		     case GTK_STATE_NORMAL:
 		     case GTK_STATE_INSENSITIVE:
-		       im=gdk_imlib_load_image("/home/raster/themes/_arrow_d1.png");
+		       im=load_image("_arrow_d1.png");
 		       break;
 		     case GTK_STATE_PRELIGHT:
-		       im=gdk_imlib_load_image("/home/raster/themes/_arrow_d2.png");
+		       im=load_image("_arrow_d2.png");
 		       break;
 		     case GTK_STATE_ACTIVE:
 		     case GTK_STATE_SELECTED:
-		       im=gdk_imlib_load_image("/home/raster/themes/_arrow_d3.png");
+		       im=load_image("_arrow_d3.png");
 		       break;
 		    }
 		  break;
@@ -990,14 +876,14 @@ draw_arrow (GtkStyle      *style,
 		    {
 		     case GTK_STATE_NORMAL:
 		     case GTK_STATE_INSENSITIVE:
-		       im=gdk_imlib_load_image("/home/raster/themes/_arrow_l1.png");
+		       im=load_image("_arrow_l1.png");
 		       break;
 		     case GTK_STATE_PRELIGHT:
-		       im=gdk_imlib_load_image("/home/raster/themes/_arrow_l2.png");
+		       im=load_image("_arrow_l2.png");
 		       break;
 		     case GTK_STATE_ACTIVE:
 		     case GTK_STATE_SELECTED:
-		       im=gdk_imlib_load_image("/home/raster/themes/_arrow_l3.png");
+		       im=load_image("_arrow_l3.png");
 		       break;
 		    }
 		  break;
@@ -1017,14 +903,14 @@ draw_arrow (GtkStyle      *style,
 		    {
 		     case GTK_STATE_NORMAL:
 		     case GTK_STATE_INSENSITIVE:
-		       im=gdk_imlib_load_image("/home/raster/themes/_arrow_r1.png");
+		       im=load_image("_arrow_r1.png");
 		       break;
 		     case GTK_STATE_PRELIGHT:
-		       im=gdk_imlib_load_image("/home/raster/themes/_arrow_r2.png");
+		       im=load_image("_arrow_r2.png");
 		       break;
 		     case GTK_STATE_ACTIVE:
 		     case GTK_STATE_SELECTED:
-		       im=gdk_imlib_load_image("/home/raster/themes/_arrow_r3.png");
+		       im=load_image("_arrow_r3.png");
 		       break;
 		    }
 		  break;
@@ -1523,13 +1409,13 @@ draw_box     (GtkStyle      *style,
 	GdkImlibBorder bd;
 	
 	if ((detail) && (!strcmp("hruler", detail)))
-	  im=gdk_imlib_load_image("/home/raster/themes/_ruleh.png");
+	  im=load_image("_ruleh.png");
 	else if ((detail) && (!strcmp("vruler", detail)))
-	  im=gdk_imlib_load_image("/home/raster/themes/_rulev.png");
+	  im=load_image("_rulev.png");
 	else if ((detail) && (!strcmp("buttondefault", detail)))
-	  im=gdk_imlib_load_image("/home/raster/themes/_ruleh.png");
+	  im=load_image("_ruleh.png");
 	else if ((detail) && (!strcmp("bar", detail)))
-	  im=gdk_imlib_load_image("/home/raster/themes/_prog_vgrad.png");
+	  im=load_image("_prog_vgrad.png");
 	else
 	  {
 	     switch (shadow_type)
@@ -1553,15 +1439,15 @@ draw_box     (GtkStyle      *style,
 		  switch (state_type)
 		    {
 		     case GTK_STATE_NORMAL:
-		       im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad6.png");
+		       im=load_image("_box_out_dgrad6.png");
 		       break;
 		     case GTK_STATE_INSENSITIVE:
-		       im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad5.png");
+		       im=load_image("_box_out_dgrad5.png");
 		       break;
 		     case GTK_STATE_PRELIGHT:
 		     case GTK_STATE_ACTIVE:
 		     case GTK_STATE_SELECTED:
-		       im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad3.png");
+		       im=load_image("_box_out_dgrad3.png");
 		       break;
 		    }
 		  break;
@@ -1570,15 +1456,15 @@ draw_box     (GtkStyle      *style,
 		  switch (state_type)
 		    {
 		     case GTK_STATE_NORMAL:
-		       im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad1.png");
+		       im=load_image("_box_out_dgrad1.png");
 		       break;
 		     case GTK_STATE_INSENSITIVE:
-		       im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad4.png");
+		       im=load_image("_box_out_dgrad4.png");
 		       break;
 		     case GTK_STATE_PRELIGHT:
 		     case GTK_STATE_ACTIVE:
 		     case GTK_STATE_SELECTED:
-		       im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad2.png");
+		       im=load_image("_box_out_dgrad2.png");
 		       break;
 		    }
 		  break;
@@ -1852,18 +1738,18 @@ draw_flat_box (GtkStyle      *style,
 		case GTK_STATE_NORMAL:
 		case GTK_STATE_INSENSITIVE:
 		  if ((detail) && (!strcmp("selected",detail)))
-		    im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad6.png");
+		    im=load_image("_box_out_dgrad6.png");
 		  else if ((detail) && (!strcmp("viewportbin",detail)))
-		    im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad5.png");
+		    im=load_image("_box_out_dgrad5.png");
 		  else if ((detail) && (!strcmp("curve_bg",detail)))
-		    im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad3.png");
+		    im=load_image("_box_out_dgrad3.png");
 		  else
-		    im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad1.png");
+		    im=load_image("_box_out_dgrad1.png");
 		  break;
 		case GTK_STATE_PRELIGHT:
 		case GTK_STATE_ACTIVE:
 		case GTK_STATE_SELECTED:
-		  im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad1.png");
+		  im=load_image("_box_out_dgrad1.png");
 		  break;
 	       }
 	     break;
@@ -1873,12 +1759,12 @@ draw_flat_box (GtkStyle      *style,
 	       {
 		case GTK_STATE_NORMAL:
 		case GTK_STATE_INSENSITIVE:
-		  im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad1.png");
+		  im=load_image("_box_out_dgrad1.png");
 		  break;
 		case GTK_STATE_PRELIGHT:
 		case GTK_STATE_ACTIVE:
 		case GTK_STATE_SELECTED:
-		  im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad1.png");
+		  im=load_image("_box_out_dgrad1.png");
 		  break;
 	       }
 	     break;
@@ -1889,14 +1775,14 @@ draw_flat_box (GtkStyle      *style,
 		case GTK_STATE_NORMAL:
 		case GTK_STATE_INSENSITIVE:
 		  if ((detail) && (!strcmp("tooltip",detail)))
-		    im=gdk_imlib_load_image("/home/raster/themes/_ruleh.png");
+		    im=load_image("_ruleh.png");
 		  else
-		    im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad1.png");
+		    im=load_image("_box_out_dgrad1.png");
 		  break;
 		case GTK_STATE_PRELIGHT:
 		case GTK_STATE_ACTIVE:
 		case GTK_STATE_SELECTED:
-		  im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad1.png");
+		  im=load_image("_box_out_dgrad1.png");
 		  break;
 	       }
 	     break;
@@ -2011,12 +1897,12 @@ draw_check   (GtkStyle      *style,
 	       {
 		case GTK_STATE_NORMAL:
 		case GTK_STATE_INSENSITIVE:
-		  im=gdk_imlib_load_image("/home/raster/themes/_check1.png");
+		  im=load_image("_check1.png");
 		  break;
 		case GTK_STATE_PRELIGHT:
 		case GTK_STATE_ACTIVE:
 		case GTK_STATE_SELECTED:
-		  im=gdk_imlib_load_image("/home/raster/themes/_check1.png");
+		  im=load_image("_check1.png");
 		  break;
 	       }
 	     break;
@@ -2026,12 +1912,12 @@ draw_check   (GtkStyle      *style,
 	       {
 		case GTK_STATE_NORMAL:
 		case GTK_STATE_INSENSITIVE:
-		  im=gdk_imlib_load_image("/home/raster/themes/_check2.png");
+		  im=load_image("_check2.png");
 		  break;
 		case GTK_STATE_PRELIGHT:
 		case GTK_STATE_ACTIVE:
 		case GTK_STATE_SELECTED:
-		  im=gdk_imlib_load_image("/home/raster/themes/_check2.png");
+		  im=load_image("_check2.png");
 		  break;
 	       }
 	     break;
@@ -2041,12 +1927,12 @@ draw_check   (GtkStyle      *style,
 	       {
 		case GTK_STATE_NORMAL:
 		case GTK_STATE_INSENSITIVE:
-		  im=gdk_imlib_load_image("/home/raster/themes/_check1.png");
+		  im=load_image("_check1.png");
 		  break;
 		case GTK_STATE_PRELIGHT:
 		case GTK_STATE_ACTIVE:
 		case GTK_STATE_SELECTED:
-		  im=gdk_imlib_load_image("/home/raster/themes/_check1.png");
+		  im=load_image("_check1.png");
 		  break;
 	       }
 	     break;
@@ -2150,12 +2036,12 @@ draw_option  (GtkStyle      *style,
 	       {
 		case GTK_STATE_NORMAL:
 		case GTK_STATE_INSENSITIVE:
-		  im=gdk_imlib_load_image("/home/raster/themes/_option2.png");
+		  im=load_image("_option2.png");
 		  break;
 		case GTK_STATE_PRELIGHT:
 		case GTK_STATE_ACTIVE:
 		case GTK_STATE_SELECTED:
-		  im=gdk_imlib_load_image("/home/raster/themes/_option2.png");
+		  im=load_image("_option2.png");
 		  break;
 	       }
 	     break;
@@ -2165,12 +2051,12 @@ draw_option  (GtkStyle      *style,
 	       {
 		case GTK_STATE_NORMAL:
 		case GTK_STATE_INSENSITIVE:
-		  im=gdk_imlib_load_image("/home/raster/themes/_option1.png");
+		  im=load_image("_option1.png");
 		  break;
 		case GTK_STATE_PRELIGHT:
 		case GTK_STATE_ACTIVE:
 		case GTK_STATE_SELECTED:
-		  im=gdk_imlib_load_image("/home/raster/themes/_option1.png");
+		  im=load_image("_option1.png");
 		  break;
 	       }
 	     break;
@@ -2432,13 +2318,13 @@ draw_box_gap (GtkStyle      *style,
 	GdkImlibBorder bd;
 	
 	if ((detail) && (!strcmp("hruler", detail)))
-	  im=gdk_imlib_load_image("/home/raster/themes/_ruleh.png");
+	  im=load_image("_ruleh.png");
 	else if ((detail) && (!strcmp("vruler", detail)))
-	  im=gdk_imlib_load_image("/home/raster/themes/_rulev.png");
+	  im=load_image("_rulev.png");
 	else if ((detail) && (!strcmp("buttondefault", detail)))
-	  im=gdk_imlib_load_image("/home/raster/themes/_ruleh.png");
+	  im=load_image("_ruleh.png");
 	else if ((detail) && (!strcmp("bar", detail)))
-	  im=gdk_imlib_load_image("/home/raster/themes/_prog_vgrad.png");
+	  im=load_image("_prog_vgrad.png");
 	else
 	  {
 	     switch (shadow_type)
@@ -2462,15 +2348,15 @@ draw_box_gap (GtkStyle      *style,
 		  switch (state_type)
 		    {
 		     case GTK_STATE_NORMAL:
-		       im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad6.png");
+		       im=load_image("_box_out_dgrad6.png");
 		       break;
 		     case GTK_STATE_INSENSITIVE:
-		       im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad5.png");
+		       im=load_image("_box_out_dgrad5.png");
 		       break;
 		     case GTK_STATE_PRELIGHT:
 		     case GTK_STATE_ACTIVE:
 		     case GTK_STATE_SELECTED:
-		       im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad3.png");
+		       im=load_image("_box_out_dgrad3.png");
 		       break;
 		    }
 		  break;
@@ -2479,15 +2365,15 @@ draw_box_gap (GtkStyle      *style,
 		  switch (state_type)
 		    {
 		     case GTK_STATE_NORMAL:
-		       im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad1.png");
+		       im=load_image("_box_out_dgrad1.png");
 		       break;
 		     case GTK_STATE_INSENSITIVE:
-		       im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad4.png");
+		       im=load_image("_box_out_dgrad4.png");
 		       break;
 		     case GTK_STATE_PRELIGHT:
 		     case GTK_STATE_ACTIVE:
 		     case GTK_STATE_SELECTED:
-		       im=gdk_imlib_load_image("/home/raster/themes/_box_out_dgrad2.png");
+		       im=load_image("_box_out_dgrad2.png");
 		       break;
 		    }
 		  break;
@@ -2787,7 +2673,7 @@ draw_focus (GtkStyle      *style,
 	GdkImlibImage *im;
 	GdkImlibBorder bd;
 
-	im=gdk_imlib_load_image("/home/raster/themes/_focus.png");
+	im=load_image("_focus.png");
 	if (im)
 	  {
 	     GdkPixmap *p, *m;
