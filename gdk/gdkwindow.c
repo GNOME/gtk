@@ -2256,7 +2256,7 @@ gdk_window_invalidate_maybe_recurse (GdkWindow *window,
 		  child_region = gdk_region_copy (visible_region);
 		  gdk_region_offset (child_region, -x, -y);
 		  
-		  gdk_window_invalidate_region ((GdkWindow *)child, child_region, TRUE);
+		  gdk_window_invalidate_maybe_recurse ((GdkWindow *)child, child_region, child_func, user_data);
 		  
 		  gdk_region_destroy (child_region);
 		}
