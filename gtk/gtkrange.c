@@ -1002,7 +1002,7 @@ gtk_range_scroll_event (GtkWidget      *widget,
     gtk_adjustment_set_value (adj, new_value);
   }
 
-  return FALSE;
+  return TRUE;
 }
 
 static gint
