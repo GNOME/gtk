@@ -52,10 +52,325 @@ static GdkGCClass gdk_win32_gc_class = {
   gdk_win32_gc_set_dashes
 };
 
+static void
+gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
+				    GdkGCValuesMask mask,
+				    GdkGCWin32Data *data)
+{				    
+  char *s = "";
+
+  GDK_NOTE (MISC, g_print ("{"));
+
+  if (mask & GDK_GC_FOREGROUND)
+    {
+      data->foreground = values->foreground.pixel;
+      data->values_mask |= GDK_GC_FOREGROUND;
+      GDK_NOTE (MISC, (g_print ("fg=%.06x", data->foreground),
+		       s = ","));
+    }
+  
+  if (mask & GDK_GC_BACKGROUND)
+    {
+      data->background = values->background.pixel;
+      data->values_mask |= GDK_GC_BACKGROUND;
+      GDK_NOTE (MISC, (g_print ("%sbg=%.06x", s, data->background),
+		       s = ","));
+    }
+
+  if ((mask & GDK_GC_FONT) && (values->font->type == GDK_FONT_FONT
+			       || values->font->type == GDK_FONT_FONTSET))
+    {
+      if (data->font != NULL)
+	gdk_font_unref (data->font);
+      data->font = values->font;
+      if (data->font != NULL)
+	{
+	  gchar *xlfd;
+
+	  gdk_font_ref (data->font);
+	  data->values_mask |= GDK_GC_FONT;
+	  GDK_NOTE (MISC, (xlfd = gdk_font_full_name_get (data->font),
+			   g_print ("%sfont=%s", s, xlfd),
+			   s = ",",
+			   gdk_font_full_name_free (xlfd)));
+	}
+      else
+	{
+	  data->values_mask &= ~GDK_GC_FONT;
+	  GDK_NOTE (MISC, (g_print ("%sfont=NULL"),
+			   s = ","));
+	}
+    }
+
+  if (mask & GDK_GC_FUNCTION)
+    {
+      GDK_NOTE (MISC, (g_print ("%srop2=", s),
+		       s = ","));
+      switch (values->function)
+	{
+	case GDK_COPY:
+	  data->rop2 = R2_COPYPEN;
+	  GDK_NOTE (MISC, g_print ("COPYPEN"));
+	  break;
+	case GDK_INVERT:
+	  data->rop2 = R2_NOT;
+	  GDK_NOTE (MISC, g_print ("NOT"));
+	  break;
+	case GDK_XOR:
+	  data->rop2 = R2_XORPEN;
+	  GDK_NOTE (MISC, g_print ("XORPEN"));
+	  break;
+	case GDK_CLEAR:
+	  data->rop2 = R2_BLACK;
+	  GDK_NOTE (MISC, g_print ("BLACK"));
+	  break;
+	case GDK_AND:
+	  data->rop2 = R2_MASKPEN;
+	  GDK_NOTE (MISC, g_print ("MASKPEN"));
+	  break;
+	case GDK_AND_REVERSE:
+	  data->rop2 = R2_MASKPENNOT;
+	  GDK_NOTE (MISC, g_print ("MASKPENNOT"));
+	  break;
+	case GDK_AND_INVERT:
+	  data->rop2 = R2_MASKNOTPEN;
+	  GDK_NOTE (MISC, g_print ("MASKNOTPEN"));
+	  break;
+	case GDK_NOOP:
+	  data->rop2 = R2_NOP;
+	  GDK_NOTE (MISC, g_print ("NOP"));
+	  break;
+	case GDK_OR:
+	  data->rop2 = R2_MERGEPEN;
+	  GDK_NOTE (MISC, g_print ("MERGEPEN"));
+	  break;
+	case GDK_EQUIV:
+	  data->rop2 = R2_NOTXORPEN;
+	  GDK_NOTE (MISC, g_print ("NOTXORPEN"));
+	  break;
+	case GDK_OR_REVERSE:
+	  data->rop2 = R2_MERGEPENNOT;
+	  GDK_NOTE (MISC, g_print ("MERGEPENNOT"));
+	  break;
+	case GDK_COPY_INVERT:
+	  data->rop2 = R2_NOTCOPYPEN;
+	  GDK_NOTE (MISC, g_print ("NOTCOPYPEN"));
+	  break;
+	case GDK_OR_INVERT:
+	  data->rop2 = R2_MERGENOTPEN;
+	  GDK_NOTE (MISC, g_print ("MERGENOTPEN"));
+	  break;
+	case GDK_NAND:
+	  data->rop2 = R2_NOTMASKPEN;
+	  GDK_NOTE (MISC, g_print ("NOTMASKPEN"));
+	  break;
+	case GDK_SET:
+	  data->rop2 = R2_WHITE;
+	  GDK_NOTE (MISC, g_print ("WHITE"));
+	  break;
+	}
+      data->values_mask |= GDK_GC_FUNCTION;
+    }
+
+  if (mask & GDK_GC_FILL)
+    {
+      data->fill_style = values->fill;
+      data->values_mask |= GDK_GC_FILL;
+      GDK_NOTE (MISC, (g_print ("%sfill=%d", s, data->fill_style),
+		       s = ","));
+    }
+
+  if (mask & GDK_GC_TILE)
+    {
+      if (data->tile != NULL)
+	gdk_drawable_unref (data->tile);
+      data->tile = values->tile;
+      if (data->tile != NULL)
+	{
+	  gdk_drawable_ref (data->tile);
+	  data->values_mask |= GDK_GC_TILE;
+	  GDK_NOTE (MISC, (g_print ("%stile=%#x", s,
+				    GDK_DRAWABLE_XID (data->tile)),
+			   s = ","));
+	}
+      else
+	{
+	  data->values_mask &= ~GDK_GC_TILE;
+	  GDK_NOTE (MISC, (g_print ("%stile=NULL", s),
+			   s = ","));
+	}
+    }
+
+  if (mask & GDK_GC_STIPPLE)
+    {
+      if (data->stipple != NULL)
+	gdk_drawable_unref (data->stipple);
+      data->stipple = values->stipple;
+      if (data->stipple != NULL)
+	{
+	  gdk_drawable_ref (data->stipple);
+	  data->values_mask |= GDK_GC_STIPPLE;
+	  GDK_NOTE (MISC, (g_print ("%sstipple=%#x", s,
+				    GDK_DRAWABLE_XID (data->stipple)),
+			   s = ","));
+	}
+      else
+	{
+	  data->values_mask &= ~GDK_GC_STIPPLE;
+	  GDK_NOTE (MISC, (g_print ("%sstipple=NULL", s),
+			   s = ","));
+	}
+    }
+
+  if (mask & GDK_GC_CLIP_MASK)
+    {
+      if (data->clip_region != NULL)
+	if (!DeleteObject (data->clip_region))
+	  WIN32_API_FAILED ("DeleteObject");
+      if (values->clip_mask != NULL)
+	{
+	  data->clip_region =
+	    BitmapToRegion ((HBITMAP) GDK_DRAWABLE_XID (values->clip_mask));
+	  data->values_mask |= GDK_GC_CLIP_MASK;
+	}
+      else
+	{
+	  data->clip_region = NULL;
+	  data->values_mask &= ~GDK_GC_CLIP_MASK;
+	}
+      GDK_NOTE (MISC, (g_print ("%sclip=%#x", s, data->clip_region),
+		       s = ","));
+    }
+
+  if (mask & GDK_GC_SUBWINDOW)
+    {
+      data->subwindow_mode = values->subwindow_mode;
+      data->values_mask |= GDK_GC_SUBWINDOW;
+      GDK_NOTE (MISC, (g_print ("%ssubw=%d", s, data->subwindow_mode),
+		       s = ","));
+    }
+
+  if (mask & GDK_GC_TS_X_ORIGIN)
+    {
+      data->ts_x_origin = values->ts_x_origin;
+      data->values_mask |= GDK_GC_TS_X_ORIGIN;
+      GDK_NOTE (MISC, (g_print ("%sts_x=%d", s, data->ts_x_origin),
+		       s = ","));
+    }
+
+  if (mask & GDK_GC_TS_Y_ORIGIN)
+    {
+      data->ts_y_origin = values->ts_y_origin;
+      data->values_mask |= GDK_GC_TS_Y_ORIGIN;
+      GDK_NOTE (MISC, (g_print ("%sts_y=%d", s, data->ts_y_origin),
+		       s = ","));
+    }
+
+  if (mask & GDK_GC_CLIP_X_ORIGIN)
+    {
+      data->clip_x_origin = values->clip_x_origin;
+      data->values_mask |= GDK_GC_CLIP_X_ORIGIN;
+      GDK_NOTE (MISC, (g_print ("%sclip_x=%d", s, data->clip_x_origin),
+		       s = ","));
+    }
+
+  if (mask & GDK_GC_CLIP_Y_ORIGIN)
+    {
+      data->clip_y_origin = values->clip_y_origin; 
+      data->values_mask |= GDK_GC_CLIP_Y_ORIGIN;
+      GDK_NOTE (MISC, (g_print ("%sclip_y=%d", s, data->clip_y_origin),
+		       s = ","));
+   }
+ 
+  if (mask & GDK_GC_EXPOSURES)
+    {
+      data->graphics_exposures = values->graphics_exposures;
+      data->values_mask |= GDK_GC_EXPOSURES;
+      GDK_NOTE (MISC, (g_print ("%sexp=%d", s, data->graphics_exposures),
+		       s = ","));
+    }
+
+  if (mask & GDK_GC_LINE_WIDTH)
+    {
+      data->pen_width = values->line_width;
+      data->values_mask |= GDK_GC_LINE_WIDTH;
+      GDK_NOTE (MISC, (g_print ("%spw=%d", s, data->pen_width),
+		       s = ","));
+    }
+
+  if (mask & GDK_GC_LINE_STYLE)
+    {
+      data->pen_style &= ~(PS_STYLE_MASK);
+      GDK_NOTE (MISC, (g_print ("%sps|=", s),
+		       s = ","));
+      switch (values->line_style)
+	{
+	case GDK_LINE_SOLID:
+	  GDK_NOTE (MISC, g_print ("LINE_SOLID"));
+	  data->pen_style |= PS_SOLID;
+	  break;
+	case GDK_LINE_ON_OFF_DASH:
+	case GDK_LINE_DOUBLE_DASH: /* ??? */
+	  GDK_NOTE (MISC, g_print ("DASH"));
+	  data->pen_style |= PS_DASH;
+	  break;
+	}
+      data->values_mask |= GDK_GC_LINE_STYLE;
+    }
+
+  if (mask & GDK_GC_CAP_STYLE)
+    {
+      data->pen_style &= ~(PS_ENDCAP_MASK);
+      GDK_NOTE (MISC, (g_print ("%sps|=", s),
+		       s = ","));
+      switch (values->cap_style)
+	{
+	case GDK_CAP_NOT_LAST:	/* ??? */
+	case GDK_CAP_BUTT:
+	  GDK_NOTE (MISC, g_print ("ENDCAP_FLAT"));
+	  data->pen_style |= PS_ENDCAP_FLAT;
+	  break;
+	case GDK_CAP_ROUND:
+	  GDK_NOTE (MISC, g_print ("ENDCAP_ROUND"));
+	  data->pen_style |= PS_ENDCAP_ROUND;
+	  break;
+	case GDK_CAP_PROJECTING:
+	  GDK_NOTE (MISC, g_print ("ENDCAP_SQUARE"));
+	  data->pen_style |= PS_ENDCAP_SQUARE;
+	  break;
+	}
+      data->values_mask |= GDK_GC_CAP_STYLE;
+    }
+
+  if (mask & GDK_GC_JOIN_STYLE)
+    {
+      data->pen_style &= ~(PS_JOIN_MASK);
+      GDK_NOTE (MISC, (g_print ("%sps|=", s),
+		       s = ","));
+      switch (values->join_style)
+	{
+	case GDK_JOIN_MITER:
+	  GDK_NOTE (MISC, g_print ("JOIN_MITER"));
+	  data->pen_style |= PS_JOIN_MITER;
+	  break;
+	case GDK_JOIN_ROUND:
+	  GDK_NOTE (MISC, g_print ("JOIN_ROUND"));
+	  data->pen_style |= PS_JOIN_ROUND;
+	  break;
+	case GDK_JOIN_BEVEL:
+	  GDK_NOTE (MISC, g_print ("JOIN_BEVEL"));
+	  data->pen_style |= PS_JOIN_BEVEL;
+	  break;
+	}
+      data->values_mask |= GDK_GC_JOIN_STYLE;
+    }
+  GDK_NOTE (MISC, g_print ("}\n"));
+}
+
 GdkGC*
 _gdk_win32_gc_new (GdkDrawable	  *drawable,
 		   GdkGCValues	  *values,
-		   GdkGCValuesMask values_mask)
+		   GdkGCValuesMask mask)
 {
   GdkGC *gc;
   GdkGCPrivate *private;
@@ -77,204 +392,28 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
   private->klass = &gdk_win32_gc_class;
   private->klass_data = data = g_new (GdkGCWin32Data, 1);
     
+  data->foreground = black.pixel;
+  data->background = white.pixel;
+  data->font = NULL;
   data->rop2 = R2_COPYPEN;
   data->fill_style = GDK_SOLID;
-  data->values_mask = values_mask;
-  data->values_mask |= GDK_GC_FUNCTION | GDK_GC_FILL;
-
-  GDK_NOTE (MISC, g_print ("_gdk_win32_gc_new: {"));
-
-  if (values_mask & GDK_GC_FOREGROUND)
-    {
-      data->foreground = values->foreground;
-    }
-  else
-    data->foreground = black;
-  
-  if (values_mask & GDK_GC_BACKGROUND)
-    {
-      data->background = values->background;
-    }
-  else
-    data->background = white;
-
-  if ((values_mask & GDK_GC_FONT) && (values->font->type == GDK_FONT_FONT
-				      || values->font->type == GDK_FONT_FONTSET))
-    {
-      data->font = values->font;
-      gdk_font_ref (data->font);
-      GDK_NOTE (MISC, g_print (" font"));
-    }
-  else
-    data->font = NULL;
-
-  if (values_mask & GDK_GC_FUNCTION)
-    {
-      switch (values->function)
-	{
-	case GDK_COPY:
-	  data->rop2 = R2_COPYPEN; break;
-	case GDK_INVERT:
-	  data->rop2 = R2_NOT; break;
-	case GDK_XOR:
-	  data->rop2 = R2_XORPEN; break;
-	case GDK_CLEAR:
-	  data->rop2 = R2_BLACK; break;
-	case GDK_AND:
-	  data->rop2 = R2_MASKPEN; break;
-	case GDK_AND_REVERSE:
-	  data->rop2 = R2_MASKPENNOT; break;
-	case GDK_AND_INVERT:
-	  data->rop2 = R2_MASKNOTPEN; break;
-	case GDK_NOOP:
-	  data->rop2 = R2_NOP; break;
-	case GDK_OR:
-	  data->rop2 = R2_MERGEPEN; break;
-	case GDK_EQUIV:
-	  data->rop2 = R2_NOTXORPEN; break;
-	case GDK_OR_REVERSE:
-	  data->rop2 = R2_MERGEPENNOT; break;
-	case GDK_COPY_INVERT:
-	  data->rop2 = R2_NOTCOPYPEN; break;
-	case GDK_OR_INVERT:
-	  data->rop2 = R2_MERGENOTPEN; break;
-	case GDK_NAND:
-	  data->rop2 = R2_NOTMASKPEN; break;
-	case GDK_SET:
-	  data->rop2 = R2_WHITE; break;
-	}
-      GDK_NOTE (MISC, g_print (" function=%d", data->rop2));
-    }
-
-  if (values_mask & GDK_GC_FILL)
-    {
-      data->fill_style = values->fill;
-      GDK_NOTE (MISC, g_print (" fill=%d", data->fill_style));
-    }
-
-  if (values_mask & GDK_GC_TILE)
-    {
-      data->tile = values->tile;
-      gdk_drawable_ref (data->tile);
-      GDK_NOTE (MISC, g_print (" tile=%#x", GDK_DRAWABLE_XID (data->tile)));
-    }
-  else
-    data->tile = NULL;
-
-  if (values_mask & GDK_GC_STIPPLE)
-    {
-      data->stipple = values->stipple;
-      gdk_drawable_ref (data->stipple);
-      GDK_NOTE (MISC, g_print (" stipple=%#x", GDK_DRAWABLE_XID (data->stipple)));
-    }
-  else
-    data->stipple = NULL;
-
-  if (values_mask & GDK_GC_CLIP_MASK)
-    {
-      data->clip_region =
-	BitmapToRegion ((HBITMAP) GDK_DRAWABLE_XID (values->clip_mask));
-      GDK_NOTE (MISC, g_print (" clip=%#x", data->clip_region));
-    }
-  else
-    data->clip_region = NULL;
-
-  if (values_mask & GDK_GC_SUBWINDOW)
-    {
-      data->subwindow_mode = values->subwindow_mode;
-      GDK_NOTE (MISC, g_print (" subw=%d", data->subwindow_mode));
-    }
-
-  if (values_mask & GDK_GC_TS_X_ORIGIN)
-    {
-      data->ts_x_origin = values->ts_x_origin;
-      GDK_NOTE (MISC, g_print (" ts_x=%d", data->ts_x_origin));
-    }
-
-  if (values_mask & GDK_GC_TS_Y_ORIGIN)
-    {
-      data->ts_y_origin = values->ts_y_origin;
-      GDK_NOTE (MISC, g_print (" ts_y=%d", data->ts_y_origin));
-    }
-
-  if (values_mask & GDK_GC_CLIP_X_ORIGIN)
-    {
-      data->clip_x_origin = values->clip_x_origin;
-      GDK_NOTE (MISC, g_print (" clip_x=%d", data->clip_x_origin));
-    }
-
-  if (values_mask & GDK_GC_CLIP_Y_ORIGIN)
-    {
-      data->clip_y_origin = values->clip_y_origin; 
-      GDK_NOTE (MISC, g_print (" clip_y=%d", data->clip_y_origin));
-   }
- 
-  if (values_mask & GDK_GC_EXPOSURES)
-    {
-      data->graphics_exposures = values->graphics_exposures;
-      GDK_NOTE (MISC, g_print (" exp=%d", data->graphics_exposures));
-    }
-
+  data->tile = NULL;
+  data->stipple = NULL;
+  data->clip_region = NULL;
+  data->ts_x_origin = data->ts_y_origin =
+    data->clip_x_origin = data->clip_y_origin = 0;
   data->pen_style = PS_GEOMETRIC;
   data->pen_width = 1;
 
-  if (values_mask & (GDK_GC_LINE_WIDTH | GDK_GC_LINE_STYLE))
-    {
-      if (values_mask & GDK_GC_LINE_WIDTH)
-	{
-	  data->pen_width = values->line_width;
-	  GDK_NOTE (MISC, g_print (" pw=%d", data->pen_width));
-	}
-      if (values_mask & GDK_GC_LINE_STYLE)
-	{
-	  switch (values->line_style)
-	    {
-	    case GDK_LINE_SOLID:
-	      data->pen_style |= PS_SOLID; break;
-	    case GDK_LINE_ON_OFF_DASH:
-	    case GDK_LINE_DOUBLE_DASH: /* ??? */
-	      data->pen_style |= PS_DASH; break;
-	    }
-	  GDK_NOTE (MISC, g_print (" ps=%#x", data->pen_style));
-	}
-    }
+  data->values_mask = GDK_GC_FUNCTION | GDK_GC_FILL;
 
-  if (values_mask & GDK_GC_CAP_STYLE)
-    {
-      switch (values->cap_style)
-	{
-	case GDK_CAP_NOT_LAST:	/* ??? */
-	case GDK_CAP_BUTT:
-	  data->pen_style |= PS_ENDCAP_FLAT;	break;
-	case GDK_CAP_ROUND:
-	  data->pen_style |= PS_ENDCAP_ROUND; break;
-	case GDK_CAP_PROJECTING:
-	  data->pen_style |= PS_ENDCAP_SQUARE; break;
-	}
-      GDK_NOTE (MISC, g_print (" ps=%#x", data->pen_style));
-    }
-
-  if (values_mask & GDK_GC_JOIN_STYLE)
-    {
-      switch (values->join_style)
-	{
-	case GDK_JOIN_MITER:
-	  data->pen_style |= PS_JOIN_MITER;
-	  break;
-	case GDK_JOIN_ROUND:
-	  data->pen_style |= PS_JOIN_ROUND;
-	  break;
-	case GDK_JOIN_BEVEL:
-	  data->pen_style |= PS_JOIN_BEVEL;
-	  break;
-	}
-      GDK_NOTE (MISC, g_print (" ps=%#x", data->pen_style));
-    }
+  GDK_NOTE (MISC, g_print ("_gdk_win32_gc_new: "));
+  gdk_win32_gc_values_to_win32values (values, mask, data);
 
   data->hwnd = NULL;
   data->xgc = NULL;
 
-  GDK_NOTE (MISC, g_print ("} = %p\n", gc));
+  GDK_NOTE (MISC, g_print (" = %p\n", gc));
 
   return gc;
 }
@@ -305,8 +444,8 @@ gdk_win32_gc_get_values (GdkGC       *gc,
 {
   GdkGCWin32Data *data = GDK_GC_WIN32DATA (gc);
 
-  values->foreground = data->foreground;
-  values->background = data->background;
+  values->foreground.pixel = data->foreground;
+  values->background.pixel = data->background;
   values->font = data->font;
 
   switch (data->rop2)
@@ -347,6 +486,7 @@ gdk_win32_gc_get_values (GdkGC       *gc,
 
   values->tile = data->tile;
   values->stipple = data->stipple;
+
   if (data->clip_region != NULL)
     {
       RECT rect;
@@ -361,18 +501,18 @@ gdk_win32_gc_get_values (GdkGC       *gc,
 			1);
       hbr = GetStockObject (WHITE_BRUSH);
       if ((hdc = CreateCompatibleDC (NULL)) == NULL)
-	g_warning ("gdk_gc_get_values: CreateCompatibleDC failed");
+	WIN32_API_FAILED ("CreateCompatibleDC");
       if ((oldbitmap =
 	   SelectObject (hdc, GDK_DRAWABLE_XID (pixmap))) == NULL)
-	g_warning ("gdk_gc_get_values: SelectObject #1 failed");
+	WIN32_API_FAILED ("SelectObject #1");
       hbr = GetStockObject (BLACK_BRUSH);
       if (!FillRect (hdc, &rect, hbr))
-	g_warning ("gdk_gc_get_values: FillRect failed");
+	WIN32_API_FAILED ("FillRect");
       hbr = GetStockObject (WHITE_BRUSH);
       if (!FillRgn (hdc, data->clip_region, hbr))
-	g_warning ("gdk_gc_get_values: FillRgn failed");
+	WIN32_API_FAILED ("FillRgn");
       if (SelectObject (hdc, oldbitmap) == NULL)
-	g_warning ("gdk_gc_get_values: SelectObject #2 failed");
+	WIN32_API_FAILED ("SelectObject #2");
       DeleteDC (hdc);
       values->clip_mask = pixmap;
     }
@@ -413,253 +553,13 @@ gdk_win32_gc_get_values (GdkGC       *gc,
 static void
 gdk_win32_gc_set_values (GdkGC           *gc,
 			 GdkGCValues     *values,
-			 GdkGCValuesMask  values_mask)
+			 GdkGCValuesMask  mask)
 {
   GdkGCWin32Data *data = GDK_GC_WIN32DATA (gc);
-  gchar *xlfd;
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_gc_set_values: {"));
+  GDK_NOTE (MISC, g_print ("gdk_win32_gc_set_values: "));
 
-  if (values_mask & GDK_GC_FOREGROUND)
-    {
-      GDK_NOTE (MISC, g_print ("fg = %s ",
-			       gdk_color_to_string (&values->foreground)));
-      data->foreground = values->foreground;
-      data->values_mask |= GDK_GC_FOREGROUND;
-    }
-  
-  if (values_mask & GDK_GC_BACKGROUND)
-    {
-      GDK_NOTE (MISC, g_print ("bg = %s ",
-			       gdk_color_to_string (&values->background)));
-      data->background = values->background;
-      data->values_mask |= GDK_GC_BACKGROUND;
-    }
-
-  if (values_mask & GDK_GC_FONT)
-    {
-      if (data->font != NULL)
-	gdk_font_unref (data->font);
-      data->font = values->font;
-      if (data->font != NULL)
-	{
-	  GDK_NOTE (MISC, (xlfd = gdk_font_full_name_get (data->font),
-			   g_print ("font = %s ", xlfd),
-			   gdk_font_full_name_free (xlfd)));
-	  gdk_font_ref (data->font);
-	  data->values_mask |= GDK_GC_FONT;
-	}
-      else
-	{
-	  GDK_NOTE (MISC, g_print ("font = NULL "));
-	  data->values_mask &= ~GDK_GC_FONT;
-	}
-    }
-
-  if (values_mask & GDK_GC_FUNCTION)
-    {
-      GDK_NOTE (MISC, g_print ("fun = %d ", values->function));
-
-      switch (values->function)
-	{
-	case GDK_COPY:
-	  data->rop2 = R2_COPYPEN; break;
-	case GDK_INVERT:
-	  data->rop2 = R2_NOT; break;
-	case GDK_XOR:
-	  data->rop2 = R2_XORPEN; break;
-	case GDK_CLEAR:
-	  data->rop2 = R2_BLACK; break;
-	case GDK_AND:
-	  data->rop2 = R2_MASKPEN; break;
-	case GDK_AND_REVERSE:
-	  data->rop2 = R2_MASKPENNOT; break;
-	case GDK_AND_INVERT:
-	  data->rop2 = R2_MASKNOTPEN; break;
-	case GDK_NOOP:
-	  data->rop2 = R2_NOP; break;
-	case GDK_OR:
-	  data->rop2 = R2_MERGEPEN; break;
-	case GDK_EQUIV:
-	  data->rop2 = R2_NOTXORPEN; break;
-	case GDK_OR_REVERSE:
-	  data->rop2 = R2_MERGEPENNOT; break;
-	case GDK_COPY_INVERT:
-	  data->rop2 = R2_NOTCOPYPEN; break;
-	case GDK_OR_INVERT:
-	  data->rop2 = R2_MERGENOTPEN; break;
-	case GDK_NAND:
-	  data->rop2 = R2_NOTMASKPEN; break;
-	case GDK_SET:
-	  data->rop2 = R2_WHITE; break;
-	}
-      data->values_mask |= GDK_GC_FUNCTION;
-    }
-
-  if (values_mask & GDK_GC_FILL)
-    {
-      GDK_NOTE (MISC, g_print ("fill = %d ", values->fill));
-      data->fill_style = values->fill;
-      data->values_mask |= GDK_GC_FILL;
-    }
-
-  if (values_mask & GDK_GC_TILE)
-    {
-      if (data->tile != NULL)
-	gdk_drawable_unref (data->tile);
-      data->tile = values->tile;
-      if (data->tile != NULL)
-	{
-	  GDK_NOTE (MISC, g_print ("tile = %#x ",
-				   GDK_DRAWABLE_XID (values->tile)));
-	  gdk_drawable_ref (data->tile);
-	  data->values_mask |= GDK_GC_TILE;
-	}
-      else
-	{
-	  GDK_NOTE (MISC, g_print ("tile = NULL "));
-	  data->values_mask &= ~GDK_GC_TILE;
-	}
-    }
-
-  if (values_mask & GDK_GC_STIPPLE)
-    {
-      if (data->stipple != NULL)
-	gdk_drawable_unref (data->stipple);
-      data->stipple = values->stipple;
-      if (data->stipple != NULL)
-	{
-	  GDK_NOTE (MISC, g_print ("stipple = %#x ",
-				   GDK_DRAWABLE_XID (values->stipple)));
-	  gdk_drawable_ref (data->stipple);
-	  data->values_mask |= GDK_GC_STIPPLE;
-	}
-      else
-	{
-	  GDK_NOTE (MISC, g_print ("stipple = NULL "));
-	  data->values_mask &= ~GDK_GC_STIPPLE;
-	}
-    }
-
-  if (values_mask & GDK_GC_CLIP_MASK)
-    {
-      if (data->clip_region != NULL)
-	if (!DeleteObject (data->clip_region))
-	  g_warning ("gdk_win32_gc_set_values: DeleteObject failed");
-      if (values->clip_mask != NULL)
-	{
-	  data->clip_region =
-	    BitmapToRegion (GDK_DRAWABLE_XID (values->clip_mask));
-	  data->values_mask |= GDK_GC_CLIP_MASK;
-	  GDK_NOTE (MISC, g_print (" clip=%#x", data->clip_region));
-	}
-      else
-	{
-	  data->clip_region = NULL;
-	  data->values_mask &= ~GDK_GC_CLIP_MASK;
-	  GDK_NOTE (MISC, g_print (" clip=NULL"));
-	}
-    }
-
-  if (values_mask & GDK_GC_SUBWINDOW)
-    {
-      data->values_mask |= GDK_GC_SUBWINDOW;
-    }
-
-  if (values_mask & GDK_GC_TS_X_ORIGIN)
-    {
-      data->ts_x_origin = values->ts_x_origin;
-      data->values_mask |= GDK_GC_TS_X_ORIGIN;
-      GDK_NOTE (MISC, g_print (" ts_x=%d", data->ts_x_origin));
-    }
-  
-  if (values_mask & GDK_GC_TS_Y_ORIGIN)
-    {
-      data->ts_y_origin = values->ts_y_origin;
-      data->values_mask |= GDK_GC_TS_Y_ORIGIN;
-      GDK_NOTE (MISC, g_print (" ts_y=%d", data->ts_y_origin));
-    }
-  
-  if (values_mask & GDK_GC_CLIP_X_ORIGIN)
-    {
-      data->clip_x_origin = values->clip_x_origin;
-      data->values_mask |= GDK_GC_CLIP_X_ORIGIN;
-      GDK_NOTE (MISC, g_print (" clip_x=%d", data->clip_x_origin));
-    }
-  
-  if (values_mask & GDK_GC_CLIP_Y_ORIGIN)
-    {
-      data->clip_y_origin = values->clip_y_origin;
-      data->values_mask |= GDK_GC_CLIP_Y_ORIGIN;
-      GDK_NOTE (MISC, g_print (" clip_y=%d", data->clip_y_origin));
-    }
-  
-  if (values_mask & GDK_GC_EXPOSURES)
-    {
-      data->values_mask |= GDK_GC_EXPOSURES;
-    }
-
-  if (values_mask & GDK_GC_LINE_WIDTH)
-    {
-      data->pen_width = values->line_width;
-      data->values_mask |= GDK_GC_LINE_WIDTH;
-      GDK_NOTE (MISC, g_print (" pen_width=%d", data->pen_width));
-    }
-
-  if (values_mask & GDK_GC_LINE_STYLE)
-    {
-      data->pen_style &= ~(PS_STYLE_MASK);
-      switch (values->line_style)
-	{
-	case GDK_LINE_SOLID:
-	  data->pen_style |= PS_SOLID; break;
-	case GDK_LINE_ON_OFF_DASH:
-	case GDK_LINE_DOUBLE_DASH: /* ??? */
-	  data->pen_style |= PS_DASH; break;
-	}
-      data->values_mask |= GDK_GC_LINE_STYLE;
-      GDK_NOTE (MISC, g_print (" line_style=%#x",
-			       (data->pen_style & PS_STYLE_MASK)));
-    }
-  
-  if (values_mask & GDK_GC_CAP_STYLE)
-    {
-      data->pen_style &= ~(PS_ENDCAP_MASK);
-      switch (values->cap_style)
-	{
-	case GDK_CAP_NOT_LAST:
-	  /* ??? */
-	  break;
-	case GDK_CAP_BUTT:
-	  data->pen_style |= PS_ENDCAP_FLAT; break;
-	case GDK_CAP_ROUND:
-	  data->pen_style |= PS_ENDCAP_ROUND; break;
-	case GDK_CAP_PROJECTING:
-	  data->pen_style |= PS_ENDCAP_SQUARE; break;
-	}
-      data->values_mask |= GDK_GC_CAP_STYLE;
-      GDK_NOTE (MISC, g_print (" cap_style=%#x",
-			       (data->pen_style & PS_ENDCAP_MASK)));
-    }
-
-  if (values_mask & GDK_GC_JOIN_STYLE)
-    {
-      data->pen_style &= ~(PS_JOIN_MASK);
-
-      switch (values->join_style)
-	{
-	case GDK_JOIN_MITER:
-	  data->pen_style |= PS_JOIN_MITER; break;
-	case GDK_JOIN_ROUND:
-	  data->pen_style |= PS_JOIN_ROUND; break;
-	case GDK_JOIN_BEVEL:
-	  data->pen_style |= PS_JOIN_BEVEL; break;
-	}
-      data->values_mask |= GDK_GC_JOIN_STYLE;
-      GDK_NOTE (MISC, g_print (" join_style=%#x",
-			       (data->pen_style & PS_JOIN_MASK)));
-    }
-  GDK_NOTE (MISC, g_print ("}\n"));
+  gdk_win32_gc_values_to_win32values (values, mask, data);
 }
 
 static void
@@ -688,7 +588,7 @@ gdk_gc_set_clip_rectangle (GdkGC	*gc,
 
   if (data->clip_region != NULL)
     if (!DeleteObject (data->clip_region))
-      g_warning ("gdk_gc_set_clip_rectangle: DeleteObject failed");
+      WIN32_API_FAILED ("DeleteObject");
   if (rectangle)
     {
       GDK_NOTE (MISC,
@@ -700,7 +600,7 @@ gdk_gc_set_clip_rectangle (GdkGC	*gc,
 	   CreateRectRgn (rectangle->x, rectangle->y,
 			  rectangle->x + rectangle->width,
 			  rectangle->y + rectangle->height)) == NULL)
-	g_warning ("gdk_gc_set_clip_rectangle: CreateRectRgn failed");
+	WIN32_API_FAILED ("CreateRectRgn");
 
       data->values_mask |= GDK_GC_CLIP_MASK;
     }
@@ -729,7 +629,7 @@ gdk_gc_set_clip_region (GdkGC		 *gc,
 
   if (data->clip_region != NULL)
     if (!DeleteObject (data->clip_region))
-      g_warning ("gdk_gc_set_clip_region: DeleteObject failed");
+      WIN32_API_FAILED ("DeleteObject");
   if (region)
     {
       GdkRegionPrivate *region_private;
@@ -751,65 +651,52 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
 {
   GdkGCWin32Data *dst_data = GDK_GC_WIN32DATA (dst_gc);
   GdkGCWin32Data *src_data = GDK_GC_WIN32DATA (src_gc);
+  DWORD nbytes;
+  LPRGNDATA rgn;
 
-  if (dst_data->font)
+  if (dst_data->font != NULL)
     gdk_font_unref (dst_data->font);
-  if (dst_data->tile)
+  if (dst_data->tile != NULL)
     gdk_drawable_unref (dst_data->tile);
-  if (dst_data->stipple)
+  if (dst_data->stipple != NULL)
     gdk_drawable_unref (dst_data->stipple);
+  if (dst_data->clip_region != NULL)
+    if (!DeleteObject (dst_data->clip_region))
+      WIN32_API_FAILED ("DeleteObject");
   
   *dst_data = *src_data;
+
+  if (dst_data->clip_region != NULL)
+    {
+      nbytes = GetRegionData (dst_data->clip_region, 0, NULL);
+      rgn = g_malloc (nbytes);
+      GetRegionData (dst_data->clip_region, nbytes, rgn);
+      if ((dst_data->clip_region = ExtCreateRegion (NULL, nbytes, rgn)) == NULL)
+	WIN32_API_FAILED ("ExtCreateRegion");
+      g_free (rgn);
+    }
   
-  if (dst_data->font)
+  if (dst_data->font != NULL)
     gdk_font_ref (dst_data->font);
-  if (dst_data->tile)
+  if (dst_data->tile != NULL)
     gdk_drawable_ref (dst_data->tile);
-  if (dst_data->stipple)
+  if (dst_data->stipple != NULL)
     gdk_drawable_ref (dst_data->stipple);
 }
 
-HDC
-gdk_gc_predraw (GdkDrawable  *drawable,
-		GdkGCPrivate *gc_private)
+static guint mask[9] = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
+
+static void
+predraw_set_foreground (GdkGCWin32Data          *data,
+			GdkColormapPrivateWin32 *colormap_private)
 {
-  GdkDrawablePrivate *drawable_private = (GdkDrawablePrivate *) drawable;
-  GdkColormapPrivateWin32 *colormap_private =
-    (GdkColormapPrivateWin32 *) drawable_private->colormap;
-  GdkGCWin32Data *data = GDK_GC_WIN32DATA (gc_private);
-  GdkVisual *visual;
-  COLORREF bg;
   COLORREF fg;
   LOGBRUSH logbrush;
   HPEN hpen;
   HBRUSH hbr;
+  GdkVisual *visual;
   guchar r, g, b;
-  static guint mask[9] = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
 
-  g_assert (data->xgc == NULL);
-
-  if (GDK_DRAWABLE_TYPE (drawable) == GDK_DRAWABLE_PIXMAP)
-    {
-      if ((data->xgc = CreateCompatibleDC (NULL)) == NULL)
-	g_warning ("gdk_gc_predraw: CreateCompatibleDC failed");
-
-      if ((data->saved_dc = SaveDC (data->xgc)) == 0)
-	g_warning ("gdk_gc_predraw: SaveDC #1 failed");
-      
-      if (SelectObject (data->xgc, GDK_DRAWABLE_XID (drawable)) == NULL)
-	g_warning ("gdk_gc_predraw: SelectObject #1 failed");
-    }
-  else
-    {
-      if ((data->xgc = GetDC (GDK_DRAWABLE_XID (drawable))) == NULL)
-	g_warning ("gdk_gc_predraw: GetDC failed");
-      
-      if ((data->saved_dc = SaveDC (data->xgc)) == 0)
-	g_warning ("gdk_gc_predraw: SaveDC #2 failed");
-    }
-  
-  data->hwnd = GDK_DRAWABLE_XID (drawable);
-  
   if (colormap_private == NULL)
     {
       /* A 1 bit deep bitmap */
@@ -835,123 +722,167 @@ gdk_gc_predraw (GdkDrawable  *drawable,
 	    logpal.palPalEntry[1].peBlue = 0xFF;
 	  logpal.palPalEntry[1].peFlags = 0x00;
 	  if ((hpal = CreatePalette ((LOGPALETTE *) &logpal)) == NULL)
-	    g_warning ("gdk_gc_predraw: CreatePalette failed");
+	    WIN32_API_FAILED ("CreatePalette");
 	}
       SelectPalette (data->xgc, hpal, FALSE);
       RealizePalette (data->xgc);
-      fg = PALETTEINDEX (data->foreground.pixel);
+      fg = PALETTEINDEX (data->foreground);
     }
   else if (colormap_private->xcolormap->rc_palette)
     {
       int k;
-      if (SelectPalette (data->xgc,
-			 colormap_private->xcolormap->palette, FALSE) == NULL)
-	g_warning ("gdk_gc_predraw: SelectPalette failed");
+      if (SelectPalette (data->xgc, colormap_private->xcolormap->palette,
+			 FALSE) == NULL)
+	WIN32_API_FAILED ("SelectPalette");
       if (TRUE || colormap_private->xcolormap->stale)
 	{
 	  if ((k = RealizePalette (data->xgc)) == GDI_ERROR)
-	    g_warning ("gdk_gc_predraw: RealizePalette failed");
+	    WIN32_API_FAILED ("RealizePalette");
 	  colormap_private->xcolormap->stale = FALSE;
 	}
 #if 0
       g_print ("Selected palette %#x for gc %#x, realized %d colors\n",
 	       colormap_private->xcolormap->palette, data->xgc, k);
 #endif
-      fg = PALETTEINDEX (data->foreground.pixel);
+      fg = PALETTEINDEX (data->foreground);
     }
   else
     {
       visual = colormap_private->base.visual;
-      r = (data->foreground.pixel & visual->red_mask) >> visual->red_shift;
+      r = (data->foreground & visual->red_mask) >> visual->red_shift;
       r = (r * 255) / mask[visual->red_prec];
-      g = (data->foreground.pixel & visual->green_mask) >> visual->green_shift;
+      g = (data->foreground & visual->green_mask) >> visual->green_shift;
       g = (g * 255) / mask[visual->green_prec];
-      b = (data->foreground.pixel & visual->blue_mask) >> visual->blue_shift;
+      b = (data->foreground & visual->blue_mask) >> visual->blue_shift;
       b = (b * 255) / mask[visual->blue_prec];
 
       fg = GetNearestColor (data->xgc, RGB (r, g, b));
     }
-  logbrush.lbStyle = BS_SOLID;
-  logbrush.lbColor = fg;
-  if ((hpen = ExtCreatePen (data->pen_style, data->pen_width,
-			    &logbrush, 0, NULL)) == NULL)
-    g_warning ("gdk_gc_predraw: CreatePen failed");
-  
-  if (SelectObject (data->xgc, hpen) == NULL)
-    g_warning ("gdk_gc_predraw: SelectObject #2 failed");
 
   if (SetTextColor (data->xgc, fg) == CLR_INVALID)
-    g_warning ("gdk_gc_predraw: SetTextColor failed");
+    WIN32_API_FAILED ("SetTextColor");
 
-#if 0
+  /* Create and select pen and brush. */
+
+  logbrush.lbStyle = BS_SOLID;
+  logbrush.lbColor = fg;
+
+  if ((hpen = ExtCreatePen (data->pen_style, data->pen_width,
+			    &logbrush, 0, NULL)) == NULL)
+    WIN32_API_FAILED ("ExtCreatePen");
+  
+  if (SelectObject (data->xgc, hpen) == NULL)
+    WIN32_API_FAILED ("SelectObject #2");
+
   switch (data->fill_style)
     {
-    case GDK_STIPPLED:
-      {
-	GdkPixmap *stipple = data->stipple;
-	GdkPixmapPrivate *stipple_private = (GdkPixmapPrivate *) stipple;
-	HBITMAP hbm = GDK_DRAWABLE_XID (stipple);
-	if (NULL == (hbr = CreatePatternBrush (hbm)))
-	  g_warning ("gdk_gc_predraw: CreatePatternBrush failed");
+#if 1
+    case GDK_OPAQUE_STIPPLED:
+      if ((hbr = CreatePatternBrush (GDK_DRAWABLE_XID (data->stipple))) == NULL)
+	WIN32_API_FAILED ("CreatePatternBrush");
 	
-#ifdef NATIVE_WIN16
-	SetBrushOrg  (data->xgc, data->ts_x_origin,
-		      data->ts_y_origin);
-#else
-	SetBrushOrgEx(data->xgc, data->ts_x_origin,
-		      data->ts_y_origin, NULL);
-#endif
-      }
+      SetBrushOrgEx(data->xgc, data->ts_x_origin,
+		    data->ts_y_origin, NULL);
       break;
+#endif
+
     case GDK_SOLID:
     default:
       if ((hbr = CreateSolidBrush (fg)) == NULL)
-	g_warning ("gdk_gc_predraw: CreateSolidBrush failed");
+	WIN32_API_FAILED ("CreateSolidBrush");
       break;
   }
-#else
-  if ((hbr = CreateSolidBrush (fg)) == NULL)
-    g_warning ("gdk_gc_predraw: CreateSolidBrush failed");
-#endif
-  if (SelectObject (data->xgc, hbr) == NULL)
-    g_warning ("gdk_gc_predraw: SelectObject #3 failed");
 
-  if (data->values_mask & GDK_GC_BACKGROUND)
+  if (SelectObject (data->xgc, hbr) == NULL)
+    WIN32_API_FAILED ("SelectObject #3");
+}  
+
+void
+predraw_set_background (GdkGCWin32Data          *data,
+			GdkColormapPrivateWin32 *colormap_private)
+{
+  COLORREF bg;
+  GdkVisual *visual;
+  guchar r, g, b;
+
+  if (colormap_private == NULL)
     {
-      if (colormap_private == NULL)
-	{
-	  /* a bitmap */
-	  bg = PALETTEINDEX (data->background.pixel);
-	}
-      else if (colormap_private->xcolormap->rc_palette)
-	{
-	  bg = PALETTEINDEX (data->background.pixel);
-	}
-      else
-	{
-	  visual = colormap_private->base.visual;
-	  r = (data->background.pixel & visual->red_mask) >> visual->red_shift;
-	  r = (r * 255) / mask[visual->red_prec];
-	  g = (data->background.pixel & visual->green_mask) >> visual->green_shift;
-	  g = (g * 255) / mask[visual->green_prec];
-	  b = (data->background.pixel & visual->blue_mask) >> visual->blue_shift;
-	  b = (b * 255) / mask[visual->green_prec];
-	  
-	  fg = GetNearestColor (data->xgc, RGB (r, g, b));
-	}
-      if (SetBkColor (data->xgc, bg) == CLR_INVALID)
-	g_warning ("gdk_gc_predraw: SetBkColor failed");
+      /* a bitmap */
+      bg = PALETTEINDEX (data->background);
+    }
+  else if (colormap_private->xcolormap->rc_palette)
+    {
+      bg = PALETTEINDEX (data->background);
+    }
+  else
+    {
+      visual = colormap_private->base.visual;
+      r = (data->background & visual->red_mask) >> visual->red_shift;
+      r = (r * 255) / mask[visual->red_prec];
+      g = (data->background & visual->green_mask) >> visual->green_shift;
+      g = (g * 255) / mask[visual->green_prec];
+      b = (data->background & visual->blue_mask) >> visual->blue_shift;
+      b = (b * 255) / mask[visual->green_prec];
+
+      bg = GetNearestColor (data->xgc, RGB (r, g, b));
+    }
+  if (SetBkColor (data->xgc, bg) == CLR_INVALID)
+    WIN32_API_FAILED ("SetBkColor");
+}
+
+
+HDC
+gdk_gc_predraw (GdkDrawable    *drawable,
+		GdkGCPrivate   *gc_private,
+		GdkGCValuesMask usage)
+{
+  GdkDrawablePrivate *drawable_private = (GdkDrawablePrivate *) drawable;
+  GdkColormapPrivateWin32 *colormap_private =
+    (GdkColormapPrivateWin32 *) drawable_private->colormap;
+  GdkGCWin32Data *data = GDK_GC_WIN32DATA (gc_private);
+
+  g_assert (data->xgc == NULL);
+
+  data->hwnd = GDK_DRAWABLE_XID (drawable);
+  
+  if (GDK_DRAWABLE_TYPE (drawable) == GDK_DRAWABLE_PIXMAP)
+    {
+      if ((data->xgc = CreateCompatibleDC (NULL)) == NULL)
+	WIN32_API_FAILED ("CreateCompatibleDC");
+
+      if ((data->saved_dc = SaveDC (data->xgc)) == 0)
+	WIN32_API_FAILED ("SaveDC #1");
+      
+      if (SelectObject (data->xgc, data->hwnd) == NULL)
+	WIN32_API_FAILED ("SelectObject #1");
+    }
+  else
+    {
+      if ((data->xgc = GetDC (data->hwnd)) == NULL)
+	WIN32_API_FAILED ("GetDC");
+      
+      if ((data->saved_dc = SaveDC (data->xgc)) == 0)
+	WIN32_API_FAILED ("SaveDC #2");
     }
   
-  if (SetBkMode (data->xgc, TRANSPARENT) == 0)
-    g_warning ("gdk_gc_predraw: SetBkMode failed");
+  if (usage & GDK_GC_FOREGROUND)
+    predraw_set_foreground (data, colormap_private);
+
+  if ((usage & GDK_GC_BACKGROUND) && (data->values_mask & GDK_GC_BACKGROUND))
+    predraw_set_background (data, colormap_private);
   
-  if (SetTextAlign (data->xgc, TA_BASELINE) == GDI_ERROR)
-    g_warning ("gdk_gc_predraw: SetTextAlign failed");
+  if (usage & GDK_GC_FONT)
+    {
+      if (SetBkMode (data->xgc, TRANSPARENT) == 0)
+	WIN32_API_FAILED ("SetBkMode");
+  
+      if (SetTextAlign (data->xgc, TA_BASELINE) == GDI_ERROR)
+	WIN32_API_FAILED ("SetTextAlign");
+    }
   
   if (data->values_mask & GDK_GC_FUNCTION)
     if (SetROP2 (data->xgc, data->rop2) == 0)
-      g_warning ("gdk_gc_predraw: SetROP2 failed");
+      WIN32_API_FAILED ("SetROP2");
 
   if (data->values_mask & GDK_GC_CLIP_MASK
       && data->clip_region != NULL)
@@ -966,24 +897,28 @@ gdk_gc_predraw (GdkDrawable  *drawable,
 }
 
 void
-gdk_gc_postdraw (GdkDrawable  *drawable,
-		 GdkGCPrivate *gc_private)
+gdk_gc_postdraw (GdkDrawable    *drawable,
+		 GdkGCPrivate   *gc_private,
+		 GdkGCValuesMask usage)
 {
   GdkDrawablePrivate *drawable_private = (GdkDrawablePrivate *) drawable;
   GdkColormapPrivateWin32 *colormap_private =
     (GdkColormapPrivateWin32 *) drawable_private->colormap;
   GdkGCWin32Data *data = GDK_GC_WIN32DATA (gc_private);
-  HGDIOBJ hpen;
-  HGDIOBJ hbr;
+  HGDIOBJ hpen = NULL;
+  HGDIOBJ hbr = NULL;
 
-  if ((hpen = GetCurrentObject (data->xgc, OBJ_PEN)) == NULL)
-    g_warning ("gdk_gc_postdraw: GetCurrentObject #1 failed");
+  if (usage & GDK_GC_FOREGROUND)
+    {
+      if ((hpen = GetCurrentObject (data->xgc, OBJ_PEN)) == NULL)
+	WIN32_API_FAILED ("GetCurrentObject #1");
 
-  if ((hbr = GetCurrentObject (data->xgc, OBJ_BRUSH)) == NULL)
-    g_warning ("gdk_gc_postdraw: GetCurrentObject #2 failed");
+      if ((hbr = GetCurrentObject (data->xgc, OBJ_BRUSH)) == NULL)
+	WIN32_API_FAILED ("GetCurrentObject #2");
+    }
 
   if (!RestoreDC (data->xgc, data->saved_dc))
-    g_warning ("gdk_gc_postdraw: RestoreDC failed");
+    WIN32_API_FAILED ("RestoreDC");
 #if 0
   if (colormap_private != NULL
       && colormap_private->xcolormap->rc_palette
@@ -991,13 +926,13 @@ gdk_gc_postdraw (GdkDrawable  *drawable,
     {
       SelectPalette (data->xgc, GetStockObject (DEFAULT_PALETTE), FALSE);
       if (!UnrealizeObject (colormap_private->xcolormap->palette))
-	g_warning ("gdk_gc_postraw: UnrealizeObject failed");
+	WIN32_API_FAILED ("UnrealizeObject");
     }
 #endif
   if (GDK_DRAWABLE_TYPE (drawable) == GDK_DRAWABLE_PIXMAP)
     {
       if (!DeleteDC (data->xgc))
-	g_warning ("gdk_gc_postdraw: DeleteDC failed");
+	WIN32_API_FAILED ("DeleteDC");
     }
   else
     {
@@ -1006,11 +941,11 @@ gdk_gc_postdraw (GdkDrawable  *drawable,
 
   if (hpen != NULL)
     if (!DeleteObject (hpen))
-      g_warning ("gdk_gc_postdraw: DeleteObject #1 failed");
+      WIN32_API_FAILED ("DeleteObject #1");
   
   if (hbr != NULL)
     if (!DeleteObject (hbr))
-      g_warning ("gdk_gc_postdraw: DeleteObject #2 failed");
+      WIN32_API_FAILED ("DeleteObject #2");
 
   if (data->values_mask & GDK_GC_CLIP_MASK
       && data->clip_region != NULL
@@ -1086,14 +1021,14 @@ BitmapToRegion (HBITMAP hBmp)
 	logpal.palPalEntry[1].peBlue = 0xFF;
       logpal.palPalEntry[1].peFlags = 0;
       if ((bwPalette = CreatePalette ((LOGPALETTE *) &logpal)) == NULL)
-	g_warning ("BitmapToRegion: CreatePalette failed");
+	WIN32_API_FAILED ("CreatePalette");
     }
 
   /* Create a memory DC inside which we will scan the bitmap content */
   hMemDC = CreateCompatibleDC (NULL);
   if (!hMemDC)
     {
-      g_warning ("BitmapToRegion: CreateCompatibleDC #1 failed");
+      WIN32_API_FAILED ("CreateCompatibleDC #1");
       return NULL;
     }
 
@@ -1136,7 +1071,7 @@ BitmapToRegion (HBITMAP hBmp)
 #endif
   if (!hbm8)
     {
-      g_warning ("BitmapToRegion: CreateDIBSection failed");
+      WIN32_API_FAILED ("CreateDIBSection");
       DeleteDC (hMemDC);
       return NULL;
     }
@@ -1147,7 +1082,7 @@ BitmapToRegion (HBITMAP hBmp)
   hDC = CreateCompatibleDC (hMemDC);
   if (!hDC)
     {
-      g_warning ("BitmapToRegion: CreateCompatibleDC #2 failed");
+      WIN32_API_FAILED ("CreateCompatibleDC #2");
       SelectObject (hMemDC, holdBmp);
       DeleteObject (hbm8);
       DeleteDC (hMemDC);
@@ -1171,7 +1106,7 @@ BitmapToRegion (HBITMAP hBmp)
 
   if (!BitBlt (hMemDC, 0, 0, bm.bmWidth, bm.bmHeight, hDC, 0, 0, SRCCOPY))
     {
-      g_warning ("BitmapToRegion: BitBlt failed");
+      WIN32_API_FAILED ("BitBlt");
       SelectObject (hDC, holdBmp2);
       SelectObject (hMemDC, holdBmp);
       DeleteObject (hbm8);

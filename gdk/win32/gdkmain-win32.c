@@ -54,9 +54,6 @@ GdkArgDesc _gdk_windowing_args[] = {
   { NULL }
 };
 
-/* Private variable declarations
- */
-
 int __stdcall
 DllMain(HINSTANCE hinstDLL,
 	DWORD dwReason,
@@ -101,6 +98,31 @@ _gdk_windowing_init_check (int    argc,
   gdk_win32_selection_init ();
 
   return TRUE;
+}
+
+gchar *
+gdk_win32_last_error_string (void)
+{
+  static gchar error[100];
+  int nbytes;
+
+  if ((nbytes = FormatMessage (FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError (),
+			       0, error, sizeof (error), NULL)) == 0)
+    strcat (error, "Unknown error");
+
+  if (nbytes > 2 && error[nbytes-1] == '\n' && error[nbytes-2] == '\r')
+    error[nbytes-2] = '\0';
+
+  return error;
+}
+
+void
+gdk_win32_api_failed (const gchar *where,
+		      gint         line,
+		      const gchar *api)
+{
+  g_warning ("%s:%d: %s failed: %s", where, line, api,
+	     gdk_win32_last_error_string ());
 }
 
 void

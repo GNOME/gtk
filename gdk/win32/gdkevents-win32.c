@@ -3692,9 +3692,9 @@ gdk_event_translate (GdkEvent *event,
 
 	  if (SelectPalette (hdc,  colormap_private->xcolormap->palette,
 			     FALSE) == NULL)
-	    g_warning ("WM_ERASEBKGND: SelectPalette failed");
+	    WIN32_API_FAILED ("SelectPalette");
 	  if ((k = RealizePalette (hdc)) == GDI_ERROR)
-	    g_warning ("WM_ERASEBKGND: RealizePalette failed");
+	    WIN32_API_FAILED ("RealizePalette");
 #if 0
 	  g_print ("WM_ERASEBKGND: selected %#x, realized %d colors\n",
 		   colormap_private->xcolormap->palette, k);
@@ -3740,7 +3740,7 @@ gdk_event_translate (GdkEvent *event,
 	  g_print ("...CreateSolidBrush (%.08x) = %.08x\n", bg, hbr);
 #endif
 	  if (!FillRect (hdc, &rect, hbr))
-	    g_warning ("WM_ERASEBKGND: FillRect failed");
+	    WIN32_API_FAILED ("FillRect");
 	  DeleteObject (hbr);
 	}
       else if (GDK_WINDOW_WIN32DATA(window)->bg_type == GDK_WIN32_BG_PIXMAP)
@@ -3755,7 +3755,7 @@ gdk_event_translate (GdkEvent *event,
 	      GDK_NOTE (EVENTS, g_print ("...small pixmap, using brush\n"));
 	      hbr = CreatePatternBrush (GDK_DRAWABLE_XID (pixmap));
 	      if (!FillRect (hdc, &rect, hbr))
-		g_warning ("WM_ERASEBKGND: FillRect failed");
+		WIN32_API_FAILED ("FillRect");
 	      DeleteObject (hbr);
 	    }
 	  else
@@ -3771,12 +3771,12 @@ gdk_event_translate (GdkEvent *event,
 
 	      if (!(bgdc = CreateCompatibleDC (hdc)))
 		{
-		  g_warning ("WM_ERASEBKGND: CreateCompatibleDC failed");
+		  WIN32_API_FAILED ("CreateCompatibleDC");
 		  break;
 		}
 	      if (!(oldbitmap = SelectObject (bgdc, GDK_DRAWABLE_XID (pixmap))))
 		{
-		  g_warning ("WM_ERASEBKGND: SelectObject failed");
+		  WIN32_API_FAILED ("SelectObject");
 		  DeleteDC (bgdc);
 		  break;
 		}
@@ -3793,7 +3793,7 @@ gdk_event_translate (GdkEvent *event,
 				       pixmap_private->width, pixmap_private->height,
 				       bgdc, 0, 0, SRCCOPY))
 			    {
-			      g_warning ("WM_ERASEBKGND: BitBlt failed");
+			      WIN32_API_FAILED (" BitBlt");
 			      goto loopexit;
 			    }
 			}
@@ -3812,7 +3812,7 @@ gdk_event_translate (GdkEvent *event,
 	  hbr = GetStockObject (BLACK_BRUSH);
 	  GetClipBox (hdc, &rect);
 	  if (!FillRect (hdc, &rect, hbr))
-	    g_warning ("WM_ERASEBKGND: FillRect failed");
+	    WIN32_API_FAILED ("FillRect");
 	}
       break;
 
@@ -4073,7 +4073,7 @@ gdk_event_translate (GdkEvent *event,
 	strcpy (ptr, "Huhhaa");
 	GlobalUnlock (hdata);
 	if (!SetClipboardData (CF_TEXT, hdata))
-	  g_print ("SetClipboardData failed: %d\n", GetLastError ());
+	  WIN32_API_FAILED ("SetClipboardData");
       }
       *ret_valp = 0;
       *ret_val_flagp = TRUE;

@@ -117,7 +117,7 @@ gdk_cursor_new (GdkCursorType cursor_type)
     {
       xcursor = LoadCursor (gdk_DLLInstance, cursors[i].name);
       if (xcursor == NULL)
-	g_warning ("gdk_cursor_new: LoadCursor failed");
+	WIN32_API_FAILED ("LoadCursor");
       GDK_NOTE (MISC, g_print ("gdk_cursor_new: %#x %d\n",
 			       xcursor, cursor_type));
     }
@@ -132,7 +132,7 @@ gdk_cursor_new (GdkCursorType cursor_type)
   private->xcursor = xcursor;
   cursor = (GdkCursor*) private;
   cursor->type = cursor_type;
-  cursor->refcount = 1;
+  cursor->ref_count = 1;
 
   return cursor;
 }
@@ -268,7 +268,7 @@ _gdk_cursor_destroy (GdkCursor *cursor)
 
   if (cursor->type == GDK_CURSOR_IS_PIXMAP)
     if (!DestroyIcon (private->xcursor))
-      g_warning ("_gdk_cursor_destroy: DestroyIcon failed");
+      WIN32_API_FAILED ("DestroyIcon");
 
   g_free (private);
 }

@@ -1,3 +1,42 @@
+2000-02-13  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkgc-win32.c (gdk_gc_predraw): Add an extra parameter
+	so that we don't have to do unnecessary settings to the HDC.
+
+	* gdk/win32/gdkdrawable-win32.c
+	* gdk/win32/gdkimage-win32.c: Corresponding changes to the calls of
+	gdk_gc_predraw.
+
+	* gdk/win32/gdkdrawable-win32.c: Special-casing for GdkGCs where
+	the fill style is GDK_OPAQUE_STIPPLED. In those cases we construct
+	GDI paths, call WidenPath to get the outline of the stroken path,
+	and then fill the outline (with the brush that was built from the
+	stipple).
+
+	* gdk/win32/gdkgc-win32.c: Factor out common code from
+	_gdk_win32_gc_new and gdk_win32_gc_set_values into
+	gdk_win32_gc_values_to_win32values.
+
+	* gdk/win32/gdkmain-win32.c (gdk_win32_last_error_string,
+	gdk_win32_api_failed): New functions for error logging.
+
+	* gdk/win32/gdkprivate-win32.h: Declare them, and a macro
+	WIN32_API_FAILED to call them, passing function or file name and
+	line number.
+
+	* gdk/win32/*.c: Use the WIN32_API_FAILED macro.
+
+	* gdk/win32/gdkprivate-win32.h: Store just the pixel values from
+	GdkColor for foreground and background in GdkGCWin32Data.
+
+	* gdk/makefile.cygwin: Link in the resource object separately.
+
+	* gdk/win32/rc/gdk.rc
+	* gtk/gtk.rc (New file)
+	* gdk/win32/makefile.cygwin
+	* gtk/makefile.cygwin: Update build number in DLLs automatically,
+	as in GLib.
+
 Sun Feb 13 08:54:45 2000  Tim Janik  <timj@gtk.org>
 
 	* gdk/gdkcursor.h (struct _GdkCursor): s/refcount/ref_count/.

@@ -101,13 +101,13 @@ gdk_selection_owner_set (GdkWindow *owner,
   GDK_NOTE (MISC, g_print ("...OpenClipboard(%#x)\n", xwindow));
   if (!OpenClipboard (xwindow))
     {
-      g_warning ("gdk_selection_owner_set: OpenClipboard failed");
+      WIN32_API_FAILED ("OpenClipboard");
       return FALSE;
     }
   GDK_NOTE (MISC, g_print ("...EmptyClipboard()\n"));
   if (!EmptyClipboard ())
     {
-      g_warning ("gdk_selection_owner_set: EmptyClipboard failed");
+      WIN32_API_FAILED ("EmptyClipboard");
       CloseClipboard ();
       return FALSE;
     }
@@ -119,7 +119,7 @@ gdk_selection_owner_set (GdkWindow *owner,
   GDK_NOTE (MISC, g_print ("...CloseClipboard()\n"));
   if (!CloseClipboard ())
     {
-      g_warning ("gdk_selection_owner_set: CloseClipboard failed");
+      WIN32_API_FAILED ("CloseClipboard");
       return FALSE;
     }
   if (owner != NULL)
@@ -198,7 +198,7 @@ gdk_selection_convert (GdkWindow *requestor,
 				    GDK_DRAWABLE_XID (requestor)));
       if (!OpenClipboard (GDK_DRAWABLE_XID (requestor)))
 	{
-	  g_warning ("gdk_selection_convert: OpenClipboard failed");
+	  WIN32_API_FAILED ("OpenClipboard");
 	  return;
 	}
 

@@ -153,8 +153,8 @@ struct _GdkGCWin32Data
    */
   HDC xgc;
   GdkGCValuesMask values_mask;
-  GdkColor foreground;
-  GdkColor background;
+  gulong foreground;
+  gulong background;
   GdkFont *font;
   gint rop2;
   GdkFill fill_style;
@@ -278,9 +278,11 @@ GdkGC *  _gdk_win32_gc_new       (GdkDrawable        *drawable,
 				  GdkGCValues        *values,
 				  GdkGCValuesMask     values_mask);
 HDC	gdk_gc_predraw           (GdkDrawable        *drawable,
-				  GdkGCPrivate       *gc_private);
+				  GdkGCPrivate       *gc_private,
+				  GdkGCValuesMask     usage);
 void	gdk_gc_postdraw          (GdkDrawable        *drawable,
-				  GdkGCPrivate       *gc_private);
+				  GdkGCPrivate       *gc_private,
+				  GdkGCValuesMask     usage);
 HRGN	BitmapToRegion           (HBITMAP hBmp);
 
 void    gdk_sel_prop_store       (GdkWindow *owner,
@@ -307,8 +309,17 @@ void gdk_wchar_text_handle       (GdkFont       *font,
 							  void *),
 				  void          *arg);
 
-char *gdk_color_to_string        (const GdkColor *);
-
+gchar *gdk_color_to_string         (const GdkColor *);
+gchar *gdk_win32_last_error_string (void);
+void   gdk_win32_api_failed        (const gchar *where,
+				    gint line,
+				    const gchar *api);
+#ifdef __GNUC__
+#define WIN32_API_FAILED(api) gdk_win32_api_failed (__PRETTY_FUNCTION__, __LINE__, api)
+#else
+#define WIN32_API_FAILED(api) gdk_win32_api_failed (__FILE__, __LINE__, api)
+#endif
+ 
 extern LRESULT CALLBACK gdk_WindowProc (HWND, UINT, WPARAM, LPARAM);
 
 extern GdkDrawableClass  _gdk_win32_drawable_class;

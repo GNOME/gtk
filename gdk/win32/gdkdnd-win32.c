@@ -934,7 +934,7 @@ gdk_window_register_dnd (GdkWindow      *window)
   context = target_context_new ();
   hres = CoLockObjectExternal ((IUnknown *) &context->idt, TRUE, FALSE);
   if (!SUCCEEDED (hres))
-    g_warning ("gdk_window_register_dnd: CoLockObjectExternal failed");
+    WIN32_API_FAILED ("CoLockObjectExternal");
   else
     {
       hres = RegisterDragDrop (GDK_DRAWABLE_XID (window), &context->idt);
@@ -944,7 +944,7 @@ gdk_window_register_dnd (GdkWindow      *window)
 	  CoLockObjectExternal ((IUnknown *) &context->idt, FALSE, FALSE);
 	}
       else if (!SUCCEEDED (hres))
-	g_warning ("gdk_window_register_dnd: RegisterDragDrop failed");
+	WIN32_API_FAILED ("RegisterDragDrop");
       else
 	{
 	  gdk_window_add_filter (window, gdk_destroy_filter, &context->idt);

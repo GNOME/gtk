@@ -58,7 +58,7 @@ gdk_win32_pixmap_destroy (GdkPixmap *pixmap)
 			   GDK_DRAWABLE_XID (pixmap)));
 
   if (!DeleteObject (GDK_DRAWABLE_XID (pixmap)))
-    g_warning ("gdk_win32_pixmap_destroy: DeleteObject failed");
+    WIN32_API_FAILED ("DeleteObject");
 
   gdk_xid_table_remove (GDK_DRAWABLE_XID (pixmap));
 
@@ -137,7 +137,7 @@ gdk_pixmap_new (GdkWindow *window,
 
   if ((hdc = GetDC (GDK_DRAWABLE_XID (window))) == NULL)
     {
-      g_warning ("gdk_pixmap_new: GetDC failed");
+      WIN32_API_FAILED ("GetDC");
       g_free (private);
       return NULL;
     }
@@ -207,7 +207,7 @@ gdk_pixmap_new (GdkWindow *window,
        CreateDIBSection (hdc, (BITMAPINFO *) &bmi,
 			 iUsage, (PVOID *) &bits, NULL, 0)) == NULL)
     {
-      g_warning ("gdk_pixmap_new: CreateDIBSection failed: %d", GetLastError ());
+      WIN32_API_FAILED ("CreateDIBSection");
       ReleaseDC (GDK_DRAWABLE_XID (window), hdc);
       g_free (pixmap);
       return NULL;
@@ -334,6 +334,7 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
   for (i = 0; i < height; i++)
     for (j = 0; j < bpl; j++)
       bits[i*aligned_bpl + j] = mirror[(guchar) data[i*bpl + j]];
+
   GDK_DRAWABLE_WIN32DATA (pixmap)->xid =
     CreateBitmap (width, height, 1, 1, bits);
 

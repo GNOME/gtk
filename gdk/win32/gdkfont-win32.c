@@ -282,7 +282,7 @@ gdk_font_full_name_get (GdkFont *font)
 
       if (GetObject (singlefont->xfont, sizeof (LOGFONT), &logfont) == 0)
 	{
-	  g_warning ("gdk_font_full_name_get: GetObject failed");
+	  WIN32_API_FAILED ("GetObject");
 	  return NULL;
 	}
 
@@ -1771,7 +1771,7 @@ gdk_text_size_handler (GdkWin32SingleFont *singlefont,
 
   if ((oldfont = SelectObject (gdk_DC, singlefont->xfont)) == NULL)
     {
-      g_warning ("gdk_text_size_handler: SelectObject failed");
+      WIN32_API_FAILED ("SelectObject");
       return;
     }
   GetTextExtentPoint32W (gdk_DC, wcstr, wclen, &this_size);

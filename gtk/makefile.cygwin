@@ -327,10 +327,23 @@ gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
 #
 # Linking:
 #
-gtk-$(GTK_VER).dll : generated $(gtk_OBJECTS) gtk.def
-	$(GLIB)/build-dll gtk $(GTK_VER) gtk.def $(gtk_OBJECTS) -L ../gdk -lgdk-$(GTK_VER) -L$(INTL) -lgnu-intl -L $(GLIB) -lglib-$(GLIB_VER) -lgmodule-$(GLIB_VER) -lgdi32 -luser32
+gtk-$(GTK_VER).dll : generated $(gtk_OBJECTS) gtk.def gtk-win32res.o
+	$(GLIB)/build-dll gtk $(GTK_VER) gtk.def $(gtk_OBJECTS) gtk-win32res.o -L ../gdk -lgdk-$(GTK_VER) -L$(INTL) -lgnu-intl -L $(GLIB) -lglib-$(GLIB_VER) -lgmodule-$(GLIB_VER) -lgdi32 -luser32
 
 .SUFFIXES: .c .o .i
+
+# Kludge to get the path to the win32 headers
+WIN32APIHEADERS = $(shell echo "\#include <winver.h>" | $(CC) -M -E - | tail -1 | sed -e 's!/winver.h!!')
+
+gtk-win32res.o : gtk.rc gtk-build.tmp
+	m4 -DBUILDNUMBER=`cat gtk-build.tmp` <gtk.rc >gtk-win32res.rc
+	windres --include-dir $(WIN32APIHEADERS) gtk-win32res.rc gtk-win32res.o
+	rm gtk-build.tmp gtk-win32res.rc
+
+# Magic to bump the build number
+gtk-build.tmp :
+	bash -c "read number && echo $$[number+1]" <gtk-build.stamp >gtk-build.tmp
+	cp gtk-build.tmp gtk-build.stamp
 
 # General rule for compiling the objects into the DLL
 .c.o :
