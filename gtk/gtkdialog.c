@@ -632,6 +632,8 @@ gtk_dialog_set_response_sensitive (GtkDialog *dialog,
   GList *children;
   GList *tmp_list;
 
+  g_return_if_fail (GTK_IS_DIALOG (dialog));
+
   children = gtk_container_get_children (GTK_CONTAINER (dialog->action_area));
 
   tmp_list = children;
@@ -666,6 +668,8 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
 {
   GList *children;
   GList *tmp_list;
+
+  g_return_if_fail (GTK_IS_DIALOG (dialog));
 
   children = gtk_container_get_children (GTK_CONTAINER (dialog->action_area));
 
