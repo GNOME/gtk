@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-10-27 12:31+0200\n"
-"PO-Revision-Date: 2004-10-27 12:39+0200\n"
+"PO-Revision-Date: 2004-11-15 17:21+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -2006,7 +2006,7 @@ msgstr "E_genskaper"
 
 #: gtk/gtkstock.c:349
 msgid "_Quit"
-msgstr "_Avslutt"
+msgstr "A_vslutt"
 
 #: gtk/gtkstock.c:350
 msgid "_Redo"
