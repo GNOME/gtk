@@ -24,7 +24,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:214
 msgid "Saturation:"
-msgstr ""
+msgstr "Saturaedje:"
 
 #: gtk/gtkcolorsel.c:215
 msgid "Value:"
@@ -44,7 +44,7 @@ msgstr "Bleu:"
 
 #: gtk/gtkcolorsel.c:219
 msgid "Opacity:"
-msgstr ""
+msgstr "Zeroveyaedje:"
 
 #. The OK button
 #: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3472
@@ -133,7 +133,7 @@ msgstr "Tchûze: "
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"
-msgstr ""
+msgstr "Fondeu:"
 
 #: gtk/gtkfontsel.c:211
 msgid "Family:"
@@ -157,11 +157,11 @@ msgstr "Stîle di Rawete:"
 
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
-msgstr ""
+msgstr "Grandeu è Pixels:"
 
 #: gtk/gtkfontsel.c:217
 msgid "Point Size:"
-msgstr ""
+msgstr "Grandeu è Ponts:"
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
@@ -173,7 +173,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
-msgstr ""
+msgstr "Espacemint:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
@@ -304,8 +304,6 @@ msgstr "[M]"
 msgid "[C]"
 msgstr "[C]"
 
-msgid "*"
-msgstr "*"
 msgid "(nil)"
 msgstr "(nole)"
 msgid "heavy"
@@ -471,17 +469,17 @@ msgstr "Pådje %u"
 #: gtk/gtkrc.c:1529
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr ""
+msgstr "Dji n' pout nén trover on fitchî imådje è pixmap_path: \"%s\" al roye %d"
 
 #: gtk/gtkrc.c:1532
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr ""
+msgstr "Dji n' pout nén trover on fitchî imådje è pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr ""
+msgstr "Dji n' pout nén trover on module tcherdjåve è module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
