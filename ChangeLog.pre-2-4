@@ -1,3 +1,8 @@
+Thu Jul 31 15:29:28 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolitem.c (struct _GtkToolItemPrivate): remove unused
+	overflow_item field.
+
 Wed Jul 30 21:11:13 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolitem.h: make _gtk_tool_item_toolbar_reconfigured()

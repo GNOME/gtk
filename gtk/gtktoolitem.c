@@ -55,7 +55,6 @@ struct _GtkToolItemPrivate
   guint expand : 1;
   guint pack_end : 1;
   guint use_drag_window : 1;
-  guint overflow_item : 1;
 
   GdkWindow *drag_window;
   
