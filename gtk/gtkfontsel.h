@@ -102,16 +102,18 @@ struct _GtkFontSelectionClass
 struct _GtkFontSelectionDialog
 {
   GtkDialog parent_instance;
-  
+
+  /*< private >*/
   GtkWidget *fontsel;
-  
+
   GtkWidget *main_vbox;
   GtkWidget *action_area;
+  /*< public >*/
   GtkWidget *ok_button;
-  /* The 'Apply' button is not shown by default but you can show/hide it. */
   GtkWidget *apply_button;
   GtkWidget *cancel_button;
-  
+
+  /*< private >*/
   /* If the user changes the width of the dialog, we turn auto-shrink off. */
   gint dialog_width;
   gboolean auto_resize;

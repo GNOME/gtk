@@ -2757,8 +2757,9 @@ gdk_window_get_pointer (GdkWindow	  *window,
  * 
  * Obtains the window underneath the mouse pointer, returning the
  * location of that window in @win_x, @win_y. Returns %NULL if the
- * window under the mouse pointer is not known to GDK (for example,
- * belongs to another application).
+ * window under the mouse pointer is not known to GDK (if the window
+ * belongs to another application and a #GdkWindow hasn't been created
+ * for it with gdk_window_foreign_new())
  *
  * NOTE: For multihead-aware widgets or applications use
  * gdk_screen_get_window_at_pointer() instead.

@@ -1126,7 +1126,8 @@ gdk_window_hide (GdkWindow *window)
  * @window: a toplevel #GdkWindow
  * 
  * Withdraws a window (unmaps it and asks the window manager to forget about it).
- * Normally done automatically by gtk_widget_hide() called on a #GtkWindow.
+ * This function is not really useful as gdk_window_hide() automatically
+ * withdraws toplevel windows before hiding them.
  * 
  **/
 void
@@ -1165,7 +1166,6 @@ gdk_window_withdraw (GdkWindow *window)
  *
  * If you're also planning to resize the window, use gdk_window_move_resize()
  * to both move and resize simultaneously, for a nicer visual effect.
- * 
  **/
 void
 gdk_window_move (GdkWindow *window,
@@ -1208,7 +1208,6 @@ gdk_window_move (GdkWindow *window,
  * 
  * If you're also planning to move the window, use gdk_window_move_resize()
  * to both move and resize simultaneously, for a nicer visual effect.
- * 
  **/
 void
 gdk_window_resize (GdkWindow *window,
@@ -1258,7 +1257,6 @@ gdk_window_resize (GdkWindow *window,
  * except that both operations are performed at once, avoiding strange
  * visual effects. (i.e. the user may be able to see the window first
  * move, then resize, if you don't use gdk_window_move_resize().)
- * 
  **/
 void
 gdk_window_move_resize (GdkWindow *window,
@@ -1425,6 +1423,8 @@ _gdk_windowing_window_clear_area_e (GdkWindow *window,
  * 
  * Raises @window to the top of the Z-order (stacking order), so that
  * other windows with the same parent window appear below @window.
+ * This is true whether or not the windows are visible.
+ *
  * If @window is a toplevel, the window manager may choose to deny the
  * request to move the window in the Z-order, gdk_window_raise() only
  * requests the restack, does not guarantee it.
@@ -1446,6 +1446,8 @@ gdk_window_raise (GdkWindow *window)
  * 
  * Lowers @window to the bottom of the Z-order (stacking order), so that
  * other windows with the same parent window appear above @window.
+ * This is true whether or not the other windows are visible.
+ *
  * If @window is a toplevel, the window manager may choose to deny the
  * request to move the window in the Z-order, gdk_window_lower() only
  * requests the restack, does not guarantee it.
@@ -1588,7 +1590,7 @@ gdk_window_set_hints (GdkWindow *window,
 
 /**
  * gdk_window_set_type_hint:
- * @window: A #GdkWindow
+ * @window: A toplevel #GdkWindow
  * @hint: A hint of the function this window will have
  *
  * The application can use this call to provide a hint to the window
@@ -1681,7 +1683,7 @@ gdk_wmspec_change_state (gboolean   add,
 
 /**
  * gdk_window_set_modal_hint:
- * @window: A #GdkWindow
+ * @window: A toplevel #GdkWindow
  * @modal: TRUE if the window is modal, FALSE otherwise.
  *
  * The application can use this hint to tell the window manager
@@ -1716,7 +1718,7 @@ gdk_window_set_modal_hint (GdkWindow *window,
 
 /**
  * gdk_window_set_skip_taskbar_hint:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @skips_taskbar: %TRUE to skip the taskbar
  * 
  * Toggles whether a window should appear in a task list or window
@@ -1752,7 +1754,7 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
 
 /**
  * gdk_window_set_skip_pager_hint:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @skips_taskbar: %TRUE to skip the pager
  * 
  * Toggles whether a window should appear in a pager (workspace
@@ -1789,14 +1791,32 @@ gdk_window_set_skip_pager_hint (GdkWindow *window,
 
 /**
  * gdk_window_set_geometry_hints:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @geometry: geometry hints
  * @geom_mask: bitmask indicating fields of @geometry to pay attention to
  *
  * Sets the geometry hints for @window. Hints flagged in @geom_mask
  * are set, hints not flagged in @geom_mask are unset.
  * To unset all hints, use a @geom_mask of 0 and a @geometry of %NULL.
+ *
+ * This function provides hints to the windowing system about
+ * acceptable sizes for a toplevel window. The purpose of 
+ * this is to constrain user resizing, but the windowing system
+ * will typically  (but is not required to) also constrain the
+ * current size of the window to the provided values and
+ * constrain programatic resizing via gdk_window_resize() or
+ * gdk_window_move_resize().
  * 
+ * Note that on X11, this effect has no effect on windows
+ * of type GDK_WINDOW_TEMP or windows where override_redirect
+ * has been turned on via gdk_window_set_override_redirect()
+ * since these windows are not resizable by the user.
+ * 
+ * Since you can't count on the windowing system doing the
+ * constraints for programmatic resizes, you should generally
+ * call gdk_window_constrain_size() yourself to determine
+ * appropriate sizes.
+ *
  **/
 void 
 gdk_window_set_geometry_hints (GdkWindow      *window,
@@ -2024,7 +2044,7 @@ set_text_property (GdkWindow   *window,
 
 /**
  * gdk_window_set_title:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @title: title of @window
  *
  * Sets the title of a toplevel window, to be displayed in the titlebar.
@@ -2072,7 +2092,7 @@ gdk_window_set_title (GdkWindow   *window,
 
 /**
  * gdk_window_set_role:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @role: a string indicating its role
  *
  * When using GTK+, typically you should use gtk_window_set_role() instead
@@ -2401,7 +2421,7 @@ gdk_window_get_origin (GdkWindow *window,
 
 /**
  * gdk_window_get_deskrelative_origin:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @x: return location for X coordinate
  * @y: return location for Y coordinate
  * 
@@ -2481,7 +2501,7 @@ gdk_window_get_deskrelative_origin (GdkWindow *window,
 
 /**
  * gdk_window_get_root_origin:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @x: return location for X position of window frame
  * @y: return location for Y position of window frame
  *
@@ -2509,7 +2529,7 @@ gdk_window_get_root_origin (GdkWindow *window,
 
 /**
  * gdk_window_get_frame_extents:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @rect: rectangle to fill with bounding box of the window frame
  *
  * Obtains the bounding box of the window, including window manager
@@ -2820,6 +2840,8 @@ gdk_window_have_shape_ext (GdkDisplay *display)
  * very old X servers, and occasionally the implementation will be
  * buggy. On servers without the shape extension, this function
  * will do nothing.
+ *
+ * This function works on both toplevel and child windows.
  * 
  **/
 void
@@ -2888,6 +2910,8 @@ gdk_window_shape_combine_mask (GdkWindow *window,
  * very old X servers, and occasionally the implementation will be
  * buggy. On servers without the shape extension, this function
  * will do nothing.
+ *
+ * This function works on both toplevel and child windows.
  * 
  **/
 void
@@ -2944,7 +2968,7 @@ gdk_window_shape_combine_region (GdkWindow *window,
 
 /**
  * gdk_window_set_override_redirect:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @override_redirect: %TRUE if window should be override redirect
  *
  * An override redirect window is not under the control of the window manager.
@@ -3089,7 +3113,7 @@ gdk_window_set_icon_list (GdkWindow *window,
 
 /**
  * gdk_window_set_icon:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @icon_window: a #GdkWindow to use for the icon, or %NULL to unset
  * @pixmap: a #GdkPixmap to use as the icon, or %NULL to unset
  * @mask: a 1-bit pixmap (#GdkBitmap) to use as mask for @pixmap, or %NULL to have none
@@ -3152,7 +3176,7 @@ gdk_window_icon_name_set (GdkWindow *window)
 
 /**
  * gdk_window_set_icon_name:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @name: name of window while iconified (minimized)
  *
  * Windows may have a name used while minimized, distinct from the
@@ -3191,12 +3215,14 @@ gdk_window_set_icon_name (GdkWindow   *window,
 
 /**
  * gdk_window_iconify:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * 
  * Asks to iconify (minimize) @window. The window manager may choose
  * to ignore the request, but normally will honor it. Using
  * gtk_window_iconify() is preferred, if you have a #GtkWindow widget.
- * 
+ *
+ * This function only makes sense when @window is a toplevel window.
+ *
  **/
 void
 gdk_window_iconify (GdkWindow *window)
@@ -3228,14 +3254,14 @@ gdk_window_iconify (GdkWindow *window)
 
 /**
  * gdk_window_deiconify:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  *
  * Attempt to deiconify (unminimize) @window. On X11 the window manager may
  * choose to ignore the request to deiconify. When using GTK+,
  * use gtk_window_deiconify() instead of the #GdkWindow variant. Or better yet,
  * you probably want to use gtk_window_present(), which raises the window, focuses it,
  * unminimizes it, and puts it on the current desktop.
- * 
+ *
  **/
 void
 gdk_window_deiconify (GdkWindow *window)
@@ -3394,7 +3420,7 @@ gdk_window_unstick (GdkWindow *window)
 
 /**
  * gdk_window_maximize:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  *
  * Maximizes the window. If the window was already maximized, then
  * this function does nothing.
@@ -3429,7 +3455,7 @@ gdk_window_maximize (GdkWindow *window)
 
 /**
  * gdk_window_unmaximize:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  *
  * Unmaximizes the window. If the window wasn't maximized, then this
  * function does nothing.
@@ -3464,7 +3490,7 @@ gdk_window_unmaximize (GdkWindow *window)
 
 /**
  * gdk_window_fullscreen:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  *
  * Moves the window into fullscreen mode. This means the
  * window covers the entire screen and is above any panels
@@ -3502,7 +3528,7 @@ gdk_window_fullscreen (GdkWindow *window)
 
 /**
  * gdk_window_unfullscreen:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  *
  * Moves the window out of fullscreen mode. If the window was not
  * fullscreen, does nothing.
@@ -3538,7 +3564,7 @@ gdk_window_unfullscreen (GdkWindow *window)
 
 /**
  * gdk_window_set_group:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @leader: group leader window
  *
  * Sets the group leader window for @window. By default,
@@ -3661,7 +3687,7 @@ gdk_window_set_mwm_hints (GdkWindow *window,
 
 /**
  * gdk_window_set_decorations:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @decorations: decoration hint mask
  *
  * "Decorations" are the features the window manager adds to a toplevel #GdkWindow.
@@ -3697,7 +3723,7 @@ gdk_window_set_decorations (GdkWindow      *window,
 
 /**
  * gdk_window_get_decorations:
- * @window: The #GdkWindow to get the decorations from
+ * @window: The toplevel #GdkWindow to get the decorations from
  * @decorations: The window decorations will be written here
  *
  * Returns the decorations set on the GdkWindow with #gdk_window_set_decorations
@@ -3731,7 +3757,7 @@ gdk_window_get_decorations(GdkWindow       *window,
 
 /**
  * gdk_window_set_functions:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @functions: bitmask of operations to allow on @window
  *
  * This function isn't really good for much. It sets the traditional
@@ -4712,7 +4738,7 @@ emulate_move_drag (GdkWindow     *window,
 
 /**
  * gdk_window_begin_resize_drag:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @edge: the edge or corner from which the drag is started
  * @button: the button being used to drag
  * @root_x: root window X coordinate of mouse click that began the drag
@@ -4749,7 +4775,7 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
 
 /**
  * gdk_window_begin_move_drag:
- * @window: a #GdkWindow
+ * @window: a toplevel #GdkWindow
  * @button: the button being used to drag
  * @root_x: root window X coordinate of mouse click that began the drag
  * @root_y: root window Y coordinate of mouse click that began the drag

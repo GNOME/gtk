@@ -59,18 +59,22 @@ To allow only true scalable fonts to be selected use:
 
 <varlistentry>
 <term>#GtkFontSelection</term>
-<listitem><para>the underlying widget for selecting fonts.</para></listitem>
+<listitem><para>the underlying widget for selecting
+fonts.</para></listitem>
+<term>#GtkDialog</term>
+<listitem><para>the parent class of GtkFontSelectionDialog</para></listitem>
 </varlistentry>
 
 </variablelist>
 </para>
 
 <!-- ##### STRUCT GtkFontSelectionDialog ##### -->
-<para>
-The #GtkFontSelectionDialog struct contains private data only, and should
-only be accessed using the functions below.
-</para>
 
+
+@ok_button: The OK button of the dialog
+@apply_button: The Apply button of the dialog. This button is hidden
+by default but you can show/hide it
+@cancel_button: The Cancel button of the dialog
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_new ##### -->
 <para>

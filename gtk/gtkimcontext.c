@@ -525,7 +525,7 @@ gtk_im_context_get_surrounding (GtkIMContext *context,
  * 
  * Asks the widget that the input context is attached to to delete
  * characters around the cursor position by emitting the
- * GtkIMContext::delete_context signal. Note that @offset and @n_chars
+ * GtkIMContext::delete_surrounding signal. Note that @offset and @n_chars
  * are in characters not in bytes, which differs from the usage other
  * places in #GtkIMContext.
  *

@@ -2093,7 +2093,7 @@ gtk_tree_view_column_get_reorderable (GtkTreeViewColumn *tree_column)
  * gtk_tree_view_column_set_sort_column_id:
  * @tree_column: a #GtkTreeViewColumn
  * @sort_column_id: The @sort_column_id of the model to sort on.
- * 
+ *
  * Sets the logical @sort_column_id that this column sorts on when this column 
  * is selected for sorting.  Doing so makes the column header clickable.
  **/
@@ -2145,7 +2145,8 @@ gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
  * @tree_column: a #GtkTreeViewColumn
  *
  * Gets the logical @sort_column_id that the model sorts on when this
- * column is selected for sorting. See gtk_tree_view_column_set_sort_column_id().
+ * column is selected for sorting.
+ * See gtk_tree_view_column_set_sort_column_id().
  *
  * Return value: the current @sort_column_id for this column, or -1 if
  *               this column can't be used for sorting.
