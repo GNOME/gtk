@@ -148,6 +148,70 @@ add_many (GtkWidget *button, GtkIconView *icon_list)
 }
 
 static void
+add_large (GtkWidget *button, GtkIconView *icon_list)
+{
+  GtkListStore *store;
+  GtkTreeIter iter;
+
+  GdkPixbuf *pixbuf, *pb;
+  gchar *str;
+
+  store = GTK_LIST_STORE (gtk_icon_view_get_model (icon_list));
+  pixbuf = gdk_pixbuf_new_from_file ("gnome-textfile.png", NULL);
+
+  pb = gdk_pixbuf_scale_simple (pixbuf, 
+				2 * gdk_pixbuf_get_width (pixbuf),
+				2 * gdk_pixbuf_get_height (pixbuf),
+				GDK_INTERP_BILINEAR);
+
+  str = g_strdup_printf ("Some really long text");
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter,
+		      0, pb,
+		      1, str,
+		      2, 0,
+		      3, str,
+		      -1);
+  g_object_unref (pb);
+  g_free (str);
+  
+  pb = gdk_pixbuf_scale_simple (pixbuf, 
+				3 * gdk_pixbuf_get_width (pixbuf),
+				3 * gdk_pixbuf_get_height (pixbuf),
+				GDK_INTERP_BILINEAR);
+
+  str = g_strdup ("see how long text behaves when placed underneath "
+		  "an oversized icon which would allow for long lines");
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter,
+		      0, pb,
+		      1, str,
+		      2, 1,
+		      3, str,
+		      -1);
+  g_object_unref (pb);
+  g_free (str);
+
+  pb = gdk_pixbuf_scale_simple (pixbuf, 
+				3 * gdk_pixbuf_get_width (pixbuf),
+				3 * gdk_pixbuf_get_height (pixbuf),
+				GDK_INTERP_BILINEAR);
+
+  str = g_strdup ("short text");
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter,
+		      0, pb,
+		      1, str,
+		      2, 2,
+		      3, str,
+		      -1);
+  g_object_unref (pb);
+  g_free (str);
+
+  g_object_unref (pixbuf);
+}
+
+static void
 select_all (GtkWidget *button, GtkIconView *icon_list)
 {
   gtk_icon_view_select_all (icon_list);
@@ -286,8 +350,11 @@ main (gint argc, gchar **argv)
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 700, 400);
 
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (window), vbox);
+
   paned = gtk_hpaned_new ();
-  gtk_container_add (GTK_CONTAINER (window), paned);
+  gtk_box_pack_start (GTK_BOX (vbox), paned, TRUE, TRUE, 0);
 
   icon_list = gtk_icon_view_new ();
   gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (icon_list), GTK_SELECTION_MULTIPLE);
@@ -315,8 +382,8 @@ main (gint argc, gchar **argv)
   gtk_container_add (GTK_CONTAINER (scrolled_window), icon_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
   				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  vbox = gtk_vbox_new (FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
+
+  gtk_paned_add1 (GTK_PANED (paned), scrolled_window);
   bbox = gtk_hbutton_box_new ();
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_START);
   gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
@@ -329,9 +396,17 @@ main (gint argc, gchar **argv)
   g_signal_connect (button, "clicked", G_CALLBACK (add_many), icon_list);
   gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
 
+  button = gtk_button_new_with_label ("Add large");
+  g_signal_connect (button, "clicked", G_CALLBACK (add_large), icon_list);
+  gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
+
   button = gtk_button_new_with_label ("Remove selected");
   g_signal_connect (button, "clicked", G_CALLBACK (foreach_selected_remove), icon_list);
   gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
+
+  bbox = gtk_hbutton_box_new ();
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_START);
+  gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Select all");
   g_signal_connect (button, "clicked", G_CALLBACK (select_all), icon_list);

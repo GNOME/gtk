@@ -1,5 +1,7 @@
 2004-12-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testiconview.c: Test oversized items.
+
 	* gtk/gtk.symbols: Add new symbols.
 
 	* gtk/gtkiconview.[hc]: Make the icon view lay out its
