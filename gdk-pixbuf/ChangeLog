@@ -1,3 +1,8 @@
+2003-09-19  Matthias Clasen  <maclas@gmx.de>
+
+	* io-tga.c (try_preload): Remove a pointless check.  
+	(#122710, Kjartan Maraas)
+
 Mon Aug 18 10:25:29 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixdata.c (gdk_pixdata_to_csource): Add the correct

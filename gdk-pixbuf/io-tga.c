@@ -760,12 +760,6 @@ static gboolean try_preload(TGAContext *ctx, GError **err)
 					    _("TGA image has invalid dimensions"));
 				return FALSE;
 			}
-			if (ctx->hdr->infolen > 255) {
-				g_set_error(err, GDK_PIXBUF_ERROR,
-					    GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-					    _("TGA image comment length is too long"));
-				return FALSE;
-			}
 			if ((ctx->hdr->flags & TGA_INTERLEAVE_MASK) != TGA_INTERLEAVE_NONE) {
 				g_set_error(err, GDK_PIXBUF_ERROR, 
 					    GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
