@@ -129,7 +129,7 @@ gtk_hscale_new_with_range (gdouble min,
   g_return_val_if_fail (min < max, NULL);
   g_return_val_if_fail (step != 0.0, NULL);
 
-  adj = gtk_adjustment_new (min, min, max, step, 10 * step, step);
+  adj = gtk_adjustment_new (min, min, max, step, 10 * step, 0);
   
   scale = g_object_new (GTK_TYPE_HSCALE,
                         "adjustment", adj,

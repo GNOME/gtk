@@ -298,6 +298,22 @@ gtk_window_get_type (void)
 }
 
 static void
+add_tab_bindings (GtkBindingSet    *binding_set,
+		  GdkModifierType   modifiers,
+		  GtkDirectionType  direction)
+{
+  gtk_binding_entry_add_signal (binding_set, GDK_Tab, modifiers,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, modifiers,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, modifiers,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+}
+
+static void
 gtk_window_class_init (GtkWindowClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -555,25 +571,10 @@ gtk_window_class_init (GtkWindowClass *klass)
                                 "move_focus", 1,
                                 GTK_TYPE_DIRECTION_TYPE, GTK_DIR_RIGHT);  
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Tab, 0,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, 0,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
-  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, 0,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_Tab, GDK_SHIFT_MASK,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, GDK_SHIFT_MASK,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
-  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, GDK_SHIFT_MASK,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
+  add_tab_bindings (binding_set, 0, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+  add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 }
 
 static void

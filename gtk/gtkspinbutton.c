@@ -1607,7 +1607,7 @@ gtk_spin_button_new_with_range (gdouble min,
 
   spin = gtk_type_new (GTK_TYPE_SPIN_BUTTON);
 
-  adj = gtk_adjustment_new (min, min, max, step, 10 * step, step);
+  adj = gtk_adjustment_new (min, min, max, step, 10 * step, 0);
 
   if (fabs (step) >= 1.0 || step == 0.0)
     digits = 0;
