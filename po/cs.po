@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
-"PO-Revision-Date: 2004-04-16 17:00+0200\n"
+"POT-Creation-Date: 2004-07-10 15:49+0200\n"
+"PO-Revision-Date: 2004-07-10 19:46+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1339,9 +1339,9 @@ msgid "Filesystem"
 msgstr "Systém souborů"
 
 #: gtk/gtkfilesystemunix.c:731
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Nemohu získat informace o souboru '%s': %s"
+msgstr "Nemohu získat standardní ikonu pro %s"
 
 #: gtk/gtkfilesystemunix.c:826
 #, c-format
