@@ -94,6 +94,7 @@ struct _GtkDragSourceInfo
   gint               start_x, start_y; /* Initial position */
   gint               cur_x, cur_y;     /* Current Position */
 
+  guint32            grab_time;   /* timestamp for initial grab */
   GList             *selections;  /* selections we've claimed */
   
   GtkDragDestInfo   *proxy_dest;  /* Set if this is a proxy drag */
@@ -1903,6 +1904,7 @@ gtk_drag_begin (GtkWidget         *widget,
     }
 
   info->have_grab = TRUE;
+  info->grab_time = time;
 
   return info->context;
 }
@@ -2474,7 +2476,7 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
 				  GDK_POINTER_MOTION_HINT_MASK |
 				  GDK_BUTTON_RELEASE_MASK,
 				  NULL,
-				  cursor, event->dnd.time);
+				  cursor, info->grab_time);
 		info->cursor = cursor;
 	      }
 	    

@@ -1,3 +1,9 @@
+Thu Jun 13 11:36:37 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkdnd.c (_gtk_drag_source_handle_event): Save
+ 	the initial grab time, use that when changing the
+ 	pointer. (#83052, help from Dave Camp tracking it down.)
+ 
 Thu Jun 13 16:42:40 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreestore.c (gtk_tree_store_finalize): traverse all nodes,
