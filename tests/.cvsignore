@@ -17,10 +17,13 @@ testcalendar
 testcombo
 testcombochange
 testdnd
+testellipsise
 testentrycompletion
 testfilechooser
+testfilechooserbutton
 testgtk
 testicontheme
+testiconview
 testinput
 testmenus
 testmerge
@@ -38,6 +41,7 @@ testtreecolumns
 testtreeedit
 testtreeflow
 testtreefocus
+testtreemodel
 testtreesort
 testtreeview
 testxinerama

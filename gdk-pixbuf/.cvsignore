@@ -21,3 +21,4 @@ s-enum-types-[ch]
 gdk_pixbuf.rc
 gdk-pixbuf-query-loaders
 gdk-pixbuf.loaders
+gdk-pixbuf-alias.h
