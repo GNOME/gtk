@@ -144,6 +144,7 @@ gdk_display_open (const gchar *display_name)
   display_x11->leader_window = XCreateSimpleWindow (display_x11->xdisplay,
 						    GDK_SCREEN_X11 (display_x11->default_screen)->xroot_window,
 						    10, 10, 10, 10, 0, 0, 0);
+  display_x11->leader_window_title_set = FALSE;
 
   display_x11->have_shape = GDK_UNKNOWN;
   display_x11->gravity_works = GDK_UNKNOWN;

@@ -1,3 +1,18 @@
+Fri Nov  8 17:08:54 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_new): Use
+	g_get_application_name() instead of g_get_prgname()
+	as the default window title when set.
+	
+	* gdk/x11/gdkwindow-x11.c gdk/x11/gdkdisplay-x11.[ch]:x
+	Set g_get_application_name() as the title for the
+	leader window the first time we create a window
+	pointing to it.
+
+	* tests/testgtk.c (main): Call g_set_application_name();
+
+	* configure.in (GDK_PIXBUF_VERSION): Require GLib-2.1.3
+
 2002-11-08  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkstyle.c (gtk_default_draw_arrow): Improve drawing of RTL

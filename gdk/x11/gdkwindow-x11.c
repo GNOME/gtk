@@ -83,6 +83,9 @@ static void     gdk_window_set_static_win_gravity (GdkWindow  *window,
 static gboolean gdk_window_have_shape_ext         (GdkDisplay *display);
 static gboolean gdk_window_icon_name_set          (GdkWindow  *window);
 static void     gdk_window_add_colormap_windows   (GdkWindow  *window);
+static void     set_wm_name                       (GdkDisplay  *display,
+						   Window       xwindow,
+						   const gchar *name);
 
 static GdkColormap* gdk_window_impl_x11_get_colormap (GdkDrawable *drawable);
 static void         gdk_window_impl_x11_set_colormap (GdkDrawable *drawable,
@@ -333,6 +336,33 @@ set_wm_protocols (GdkWindow *window)
   XSetWMProtocols (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window), protocols, 3);
 }
 
+static const gchar *
+get_default_title (void)
+{
+  const char *title;
+
+  title = g_get_application_name ();
+  if (!title)
+    title = g_get_prgname ();
+
+  return title;
+}
+
+static void
+check_leader_window_title (GdkDisplay *display)
+{
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+
+  if (!display_x11->leader_window_title_set)
+    {
+      set_wm_name (display,
+		   display_x11->leader_window,
+		   get_default_title ());
+      
+      display_x11->leader_window_title_set = TRUE;
+    }
+}
+
 /**
  * gdk_window_new:
  * @parent: a #GdkWindow, or %NULL to create the window as a child of
@@ -373,7 +403,7 @@ gdk_window_new (GdkWindow     *parent,
   int x, y, depth;
   
   unsigned int class;
-  char *title;
+  const char *title;
   int i;
   long pid;
   
@@ -624,6 +654,8 @@ gdk_window_new (GdkWindow     *parent,
   size_hints.flags = PSize;
   size_hints.width = impl->width;
   size_hints.height = impl->height;
+
+  check_leader_window_title (screen_x11->display);
   
   wm_hints.flags = StateHint | WindowGroupHint;
   wm_hints.window_group = GDK_DISPLAY_X11 (screen_x11->display)->leader_window;
@@ -656,7 +688,7 @@ gdk_window_new (GdkWindow     *parent,
   if (attributes_mask & GDK_WA_TITLE)
     title = attributes->title;
   else
-    title = g_get_prgname ();
+    title = get_default_title ();
 
   gdk_window_set_title (window, title);
   
@@ -2002,7 +2034,8 @@ utf8_is_latin1 (const gchar *str)
  * convertable to STRING, otherwise, set it as compound text
  */
 static void
-set_text_property (GdkWindow   *window,
+set_text_property (GdkDisplay  *display,
+		   Window       xwindow,
 		   Atom         property,
 		   const gchar *utf8_str)
 {
@@ -2022,17 +2055,16 @@ set_text_property (GdkWindow   *window,
     {
       GdkAtom gdk_type;
       
-      gdk_utf8_to_compound_text_for_display (gdk_drawable_get_display (window),
+      gdk_utf8_to_compound_text_for_display (display,
 					     utf8_str, &gdk_type, &prop_format,
 					     &prop_text, &prop_length);
-      prop_type = gdk_x11_atom_to_xatom_for_display 
-	(GDK_WINDOW_DISPLAY (window), gdk_type);
+      prop_type = gdk_x11_atom_to_xatom_for_display (display, gdk_type);
     }
 
   if (prop_text)
     {
-      XChangeProperty (GDK_WINDOW_XDISPLAY (window),
-		       GDK_WINDOW_XID (window),
+      XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
+		       xwindow,
 		       property,
 		       prop_type, prop_format,
 		       PropModeReplace, prop_text,
@@ -2040,6 +2072,23 @@ set_text_property (GdkWindow   *window,
 
       g_free (prop_text);
     }
+}
+
+/* Set WM_NAME and _NET_WM_NAME
+ */
+static void
+set_wm_name (GdkDisplay  *display,
+	     Window       xwindow,
+	     const gchar *name)
+{
+  XChangeProperty (GDK_DISPLAY_XDISPLAY (display), xwindow,
+		   gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_NAME"),
+		   gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
+		   PropModeReplace, name, strlen (name));
+  
+  set_text_property (display, xwindow,
+		     gdk_x11_get_xatom_by_name_for_display (display, "WM_NAME"),
+		     name);
 }
 
 /**
@@ -2058,6 +2107,8 @@ gdk_window_set_title (GdkWindow   *window,
 		      const gchar *title)
 {
   GdkDisplay *display;
+  Display *xdisplay;
+  Window xwindow;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -2067,24 +2118,19 @@ gdk_window_set_title (GdkWindow   *window,
     return;
   
   display = gdk_drawable_get_display (window);
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  xwindow = GDK_WINDOW_XID (window);
 
-  XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
-		   gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_NAME"),
-		   gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
-		   PropModeReplace, title, strlen (title));
-  
-  set_text_property (window,
-		     gdk_x11_get_xatom_by_name_for_display (display, "WM_NAME"),
-		     title);
+  set_wm_name (display, xwindow, title);
   
   if (!gdk_window_icon_name_set (window))
     {
-      XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
+      XChangeProperty (xdisplay, xwindow,
 		       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_ICON_NAME"),
 		       gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
 		       PropModeReplace, title, strlen (title));
       
-      set_text_property (window,
+      set_text_property (display, xwindow,
 			 gdk_x11_get_xatom_by_name_for_display (display, "WM_ICON_NAME"),
 			 title);
     }
@@ -3243,13 +3289,13 @@ gdk_window_set_icon_name (GdkWindow   *window,
   g_object_set_qdata (G_OBJECT (window), g_quark_from_static_string ("gdk-icon-name-set"),
 		      GUINT_TO_POINTER (TRUE));
 
-  XChangeProperty (GDK_WINDOW_XDISPLAY (window),
+  XChangeProperty (GDK_DISPLAY_XDISPLAY (window),
 		   GDK_WINDOW_XID (window),
 		   gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_ICON_NAME"),
 		   gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
 		   PropModeReplace, name, strlen (name));
   
-  set_text_property (window,
+  set_text_property (display, GDK_WINDOW_XID (window),
 		     gdk_x11_get_xatom_by_name_for_display (display, "WM_ICON_NAME"),
 		     name);
 }

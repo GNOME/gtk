@@ -109,6 +109,7 @@ struct _GdkDisplayX11
 
   /* Session Management leader window see ICCCM */
   Window leader_window;
+  gboolean leader_window_title_set;
   
   /* list of filters for client messages */
   GList *client_filters;	            

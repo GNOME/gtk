@@ -12490,6 +12490,8 @@ main (int argc, char *argv[])
   if (file_exists ("testgtkrc"))
     gtk_rc_add_default_file ("testgtkrc");
 
+  g_set_application_name ("GTK+ Test Program");
+
   gtk_init (&argc, &argv);
 
   /*  benchmarking
