@@ -276,8 +276,15 @@ gtk_settings_get_property (GObject     *object,
 			   GParamSpec  *pspec)
 {
   GtkSettings *settings = GTK_SETTINGS (object);
+  GType value_type = G_VALUE_TYPE (value);
+  GType fundamental_type = G_TYPE_FUNDAMENTAL (value_type);
 
-  if (g_value_type_transformable (G_TYPE_INT, G_VALUE_TYPE (value)) ||
+  /* For enums and strings, we need to get the value as a string,
+   * not as an int, since we support using names/nicks as the setting
+   * value.
+   */
+  if ((g_value_type_transformable (G_TYPE_INT, value_type) &&
+       !(fundamental_type == G_TYPE_ENUM || fundamental_type == G_TYPE_FLAGS)) ||
       g_value_type_transformable (G_TYPE_STRING, G_VALUE_TYPE (value)) ||
       g_value_type_transformable (GDK_TYPE_COLOR, G_VALUE_TYPE (value)))
     {

@@ -1,3 +1,9 @@
+Wed Dec 12 15:11:49 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksettings.c (gtk_settings_get_property): Support
+	using names/nicks for the gdk_settings values for enum valued
+	types. (#57678, reported by Anders Carlsson)
+
 Wed Dec 12 15:01:33 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_set_tab_label): keep in sync
