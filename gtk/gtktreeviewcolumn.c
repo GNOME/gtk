@@ -235,7 +235,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                    PROP_ALIGNMENT,
                                    g_param_spec_float ("alignment",
                                                        _("Alignment"),
-                                                       _("Alignment of the column header text or widget"),
+                                                       _("X Alignment of the column header text or widget"),
                                                        0.0,
                                                        1.0,
                                                        0.5,
@@ -1422,13 +1422,18 @@ gtk_tree_view_column_set_min_width (GtkTreeViewColumn *tree_column,
   if (min_width == tree_column->min_width)
     return;
 
+  if (tree_column->tree_view == NULL)
+    {
+      tree_column->min_width = min_width;
+      return;
+    }
+
   real_min_width = (tree_column->min_width == -1) ?
     tree_column->button->requisition.width : tree_column->min_width;
 
   /* We want to queue a resize if the either the old min_size or the
    * new min_size determined the size of the column */
-  if (tree_column->tree_view &&
-      GTK_WIDGET_REALIZED (tree_column->tree_view))
+  if (GTK_WIDGET_REALIZED (tree_column->tree_view))
     {
       if ((tree_column->min_width > tree_column->width) ||
 	  (tree_column->min_width == -1 &&
@@ -1477,7 +1482,7 @@ void
 gtk_tree_view_column_set_max_width (GtkTreeViewColumn *tree_column,
 				    gint               max_width)
 {
-  gint real_min_width;
+  gint real_max_width;
 
   g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
@@ -1486,8 +1491,14 @@ gtk_tree_view_column_set_max_width (GtkTreeViewColumn *tree_column,
   if (max_width == tree_column->max_width)
     return;
 
-  real_min_width = tree_column->min_width == -1 ?
-    tree_column->button->requisition.width : tree_column->min_width;
+  if (tree_column->tree_view == NULL)
+    {
+      tree_column->max_width = max_width;
+      return;
+    }
+
+  real_max_width = tree_column->max_width == -1 ?
+    tree_column->button->requisition.width : tree_column->max_width;
 
   if (tree_column->tree_view &&
       GTK_WIDGET_REALIZED (tree_column->tree_view) &&
@@ -1497,8 +1508,8 @@ gtk_tree_view_column_set_max_width (GtkTreeViewColumn *tree_column,
 
   tree_column->max_width = max_width;
 
-  if (real_min_width > max_width)
-    tree_column->min_width = max_width;
+  if (real_max_width > max_width)
+    tree_column->max_width = max_width;
 
   g_object_notify (G_OBJECT (tree_column), "max_width");
 }
@@ -1689,6 +1700,15 @@ gtk_tree_view_column_set_alignment (GtkTreeViewColumn *tree_column,
   g_object_notify (G_OBJECT (tree_column), "alignment");
 }
 
+/**
+ * gtk_tree_view_column_get_alignment:
+ * @tree_column: A #GtkTreeViewColumn.
+ * 
+ * Returns the current x alignment of @tree_column.  This value can range
+ * between 0.0 and 1.0.
+ * 
+ * Return value: The current alignent of @tree_column.
+ **/
 gfloat
 gtk_tree_view_column_get_alignment (GtkTreeViewColumn *tree_column)
 {

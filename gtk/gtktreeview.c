@@ -3803,6 +3803,7 @@ gtk_tree_view_focus (GtkContainer     *container,
   g_return_val_if_fail (GTK_IS_TREE_VIEW (container), FALSE);
   g_return_val_if_fail (GTK_WIDGET_VISIBLE (container), FALSE);
 
+  g_print ("gtk_tree_view_focus\n");
   tree_view = GTK_TREE_VIEW (container);
 
   if (!GTK_WIDGET_IS_SENSITIVE (container))
@@ -5559,52 +5560,49 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
 {
   GtkRBTree *cursor_tree = NULL;
   GtkRBNode *cursor_node = NULL;
+  GtkRBTree *new_cursor_tree = NULL;
+  GtkRBNode *new_cursor_node = NULL;
   GtkTreePath *cursor_path = NULL;
 
   cursor_path = NULL;
   if (tree_view->priv->cursor)
     cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
 
-  g_print ("up_down:  cursor path is %s\n", cursor_path?"non NULL":"NULL");
+  if (cursor_path == NULL)
+    return;
+
   _gtk_tree_view_find_node (tree_view, cursor_path,
-			    &cursor_tree,
-			    &cursor_node);
-  gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
-  if (tree_view->priv->cursor)
-    {
-      gtk_tree_row_reference_free (tree_view->priv->cursor);
-      tree_view->priv->cursor = NULL;
-    }
+			    &cursor_tree, &cursor_node);
 
   if (count == -1)
     _gtk_rbtree_prev_full (cursor_tree, cursor_node,
-			   &cursor_tree, &cursor_node);
+			   &new_cursor_tree, &new_cursor_node);
   else
     _gtk_rbtree_next_full (cursor_tree, cursor_node,
-			   &cursor_tree, &cursor_node);
-  gtk_tree_path_free (cursor_path);
+			   &new_cursor_tree, &new_cursor_node);
 
-  if (cursor_node)
+  if (new_cursor_node)
     {
-      cursor_path = _gtk_tree_view_find_path (tree_view,
-					      cursor_tree,
-					      cursor_node);
-      if (cursor_path)
-	{
-	  _gtk_tree_selection_internal_select_node (tree_view->priv->selection,
-						    cursor_node,
-						    cursor_tree,
-						    cursor_path,
-						    extend_selection?0:0);
+      gtk_tree_path_free (cursor_path);
 
-	  tree_view->priv->cursor = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, cursor_path);
-	  gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
-
-	  gtk_tree_path_free (cursor_path);
-	}
-      gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
-      gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+      cursor_path = _gtk_tree_view_find_path (tree_view, new_cursor_tree, new_cursor_node);
+      _gtk_tree_selection_internal_select_node (tree_view->priv->selection,
+						new_cursor_node,
+						new_cursor_tree,
+						cursor_path,
+						extend_selection?GDK_SHIFT_MASK:0);
+      gtk_tree_row_reference_free (tree_view->priv->cursor);
+      tree_view->priv->cursor = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, cursor_path);
+      gtk_tree_view_clamp_node_visible (tree_view, new_cursor_tree, new_cursor_node);
     }
+  else
+    {
+      gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
+    }
+
+  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+  gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
+  gtk_tree_path_free (cursor_path);
 }
 
 void
