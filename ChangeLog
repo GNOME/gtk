@@ -10,8 +10,10 @@
 	window. Set the new cursor first and then destroy the old one.
 	Thanks to jpe@archaeopteryx.com.
 
-	* gdk/win32/gdkcc-win32.c: Removed.
+	* gdk/win32/gdkcc-win32.c: Remove.
 
+	* gdk/win32/Makefile.am: Remove from here, too.
+	
 	* gdk/gdk.def
 	* gdk/makefile.mingw.in: Update. Godbye GdkColorContext.
 
