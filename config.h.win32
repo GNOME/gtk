@@ -182,3 +182,6 @@
 
 /* define if compiled symbols have a leading underscore */
 /* #undef WITH_SYMBOL_UNDERSCORE */
+
+/* Define if you have the Wintab programmer's kit */
+#define HAVE_WINTAB 1

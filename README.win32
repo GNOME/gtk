@@ -14,7 +14,8 @@ See the README.win32 file in the GLib distribution for instructions
 how to build with gcc.
 
 The tablet support uses the Wintab API. The Wintab development kit can
-be downloaded from http://www.pointing.com.
+be downloaded from http://www.pointing.com. If you don't care for
+that, undefine HAVE_WINTAB in config.h.win32 before building.
 
 GTk+ wants to be built with the GNU gettext library for
 internationalisation (i18n). Get the version ported to Win32 (not a

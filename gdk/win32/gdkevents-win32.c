@@ -28,9 +28,13 @@
 #include "config.h"
 
 #include <stdio.h>
+
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
 #include "gdkx.h"
+#ifdef HAVE_WINTAB
+#include <wintab.h>
+#endif
 #include "gdkinput.h"
 
 #define PING() printf("%s: %d\n",__FILE__,__LINE__),fflush(stdout)
@@ -2782,6 +2786,7 @@ gdk_event_translate (GdkEvent *event,
       return_val = window_private && !window_private->destroyed;
       break;
 
+#ifdef HAVE_WINTAB
       /* Handle WINTAB events here, as we know that gdkinput.c will
        * use the fixed WT_DEFBASE as lcMsgBase, and we thus can use the
        * constants as case labels.
@@ -2801,9 +2806,11 @@ gdk_event_translate (GdkEvent *event,
 		g_print ("WT_PROXIMITY: %#x %d %d\n",
 			 xevent->wParam,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
+      /* Fall through */
     wintab:
       return_val = gdk_input_vtable.other_event(event, xevent);
       break;
+#endif
     }
 
 bypass_switch:

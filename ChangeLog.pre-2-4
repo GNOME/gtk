@@ -1,11 +1,30 @@
-1999-07-21  Tor Lillqvist  <tml@iki.fi>
+1999-07-25  Tor Lillqvist  <tml@iki.fi>
+
+	* README.win32
+	* config.h.win32: Add HAVE_WINTAB. Undefine it if bulding without
+ 	the Wintab SDK.
+
+	* gdk/win32/gdkinput.c: Hack some more. Still doesn't quite work
+ 	OK, but getting closer. Guard against bogus tilt data from Wacom
+ 	ArtPad II with the 3.40 driver. Add ifdefs for HAVE_WINTAB to
+ 	enable easier building without Wintab.
+
+	* gdk/win32/gdkinput.h
+	* gdk/win32/gdkevents.c	
+	* gdk/win32/gdkwindow.c: Minor changes related related to above.
 	
+	* gdk/win32/gdkvisual.c: Simplify a lot, remove leftovers from X11
+ 	code. As we have just one visual on Win32, no sense to have it in a
+ 	table, and no need for the hash table.
+
+1999-07-21  Tor Lillqvist  <tml@iki.fi>
+
 	* README.win32: Update gcc build instructions. Mention gettext is
  	GPL.
 
 	* gdk/win32/gdkcursor.c (gdk_cursor_new_from_pixmap): Get correct
  	supported cursor size with GetSystemMetrics.
-	
+
 	* gdk/win32/gdkfont.c
 	* gtk/gtkfontsel.c: Guard against some font weight and charset
  	symbols being undefined (in mingw32 headers).

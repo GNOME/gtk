@@ -27,11 +27,6 @@
 #ifndef __GDK_INPUT_H__
 #define __GDK_INPUT_H__
 
-#include <wintab.h>
-#define PACKETDATA (PK_CONTEXT | PK_CURSOR | PK_BUTTONS | PK_X | PK_Y  | PK_NORMAL_PRESSURE | PK_ORIENTATION)
-#define PACKETMODE (PK_BUTTONS)
-#include <pktdef.h>
-
 typedef struct _GdkAxisInfo    GdkAxisInfo;
 typedef struct _GdkInputVTable GdkInputVTable;
 typedef struct _GdkDevicePrivate GdkDevicePrivate;
@@ -87,40 +82,6 @@ struct _GdkAxisInfo
   
   /* calibrated minimum/maximum values */
   gint min_value, max_value;
-};
-
-#define GDK_INPUT_NUM_EVENTC 6
-
-struct _GdkDevicePrivate {
-  GdkDeviceInfo  info;
-
-  /* information about the axes */
-  GdkAxisInfo *axes;
-
-  /* reverse lookup on axis use type */
-  gint axis_for_use[GDK_AXIS_LAST];
-  
-  /* true if we need to select a different set of events, but
-   * can't because this is the core pointer
-   */
-  gint needs_update;
-
-  /* State of buttons */
-  gint button_state;
-
-  gint *last_axis_data;
-  gint last_buttons;
-
-  /* WINTAB stuff: */
-  HCTX hctx;
-  /* Cursor number */
-  UINT cursor;
-  /* The cursor's CSR_PKTDATA */
-  WTPKT pktdata;
-  /* CSR_NPBTNMARKS */
-  UINT npbtnmarks[2];
-  /* Azimuth and altitude axis */
-  AXIS orientation_axes[2];
 };
 
 struct _GdkInputWindow

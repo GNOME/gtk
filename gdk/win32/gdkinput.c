@@ -33,7 +33,48 @@
 
 #include <gdk/gdk.h>
 #include "gdkx.h"
+
+#ifdef HAVE_WINTAB
+#include <wintab.h>
+#define PACKETDATA (PK_CONTEXT | PK_CURSOR | PK_BUTTONS | PK_X | PK_Y  | PK_NORMAL_PRESSURE | PK_ORIENTATION)
+#define PACKETMODE (PK_BUTTONS)
+#include <pktdef.h>
+#endif
+
 #include "gdkinput.h"
+
+struct _GdkDevicePrivate {
+  GdkDeviceInfo  info;
+
+  /* information about the axes */
+  GdkAxisInfo *axes;
+
+  /* reverse lookup on axis use type */
+  gint axis_for_use[GDK_AXIS_LAST];
+  
+  /* true if we need to select a different set of events, but
+   * can't because this is the core pointer
+   */
+  gint needs_update;
+
+  /* State of buttons */
+  gint button_state;
+
+  gint *last_axis_data;
+  gint last_buttons;
+#ifdef HAVE_WINTAB
+  /* WINTAB stuff: */
+  HCTX hctx;
+  /* Cursor number */
+  UINT cursor;
+  /* The cursor's CSR_PKTDATA */
+  WTPKT pktdata;
+  /* CSR_NPBTNMARKS */
+  UINT npbtnmarks[2];
+  /* Azimuth and altitude axis */
+  AXIS orientation_axes[2];
+#endif
+};
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -47,11 +88,32 @@
 				 * good at all.
 				 */
 
+#ifdef HAVE_WINTAB
+#define DEBUG_WINTAB 1
+#endif
+
 #define TWOPI (2.*M_PI)
 
 #define PING() g_print("%s: %d\n",__FILE__,__LINE__)
 
 /* Forward declarations */
+
+static gint gdk_input_enable_window (GdkWindow *window,
+				     GdkDevicePrivate *gdkdev);
+static gint gdk_input_disable_window (GdkWindow *window,
+				      GdkDevicePrivate *gdkdev);
+static void gdk_input_none_get_pointer (GdkWindow       *window,
+					guint32		 deviceid,
+					gdouble         *x,
+					gdouble         *y,
+					gdouble         *pressure,
+					gdouble         *xtilt,
+					gdouble         *ytilt,
+					GdkModifierType *mask);
+
+static GdkDevicePrivate *gdk_input_find_device (guint32 deviceid);
+
+#ifdef HAVE_WINTAB
 
 static gint gdk_input_win32_set_mode (guint32      deviceid,
 				      GdkInputMode mode);
@@ -63,14 +125,6 @@ static void gdk_input_win32_get_pointer (GdkWindow       *window,
 					 gdouble         *xtilt,
 					 gdouble         *ytilt,
 					 GdkModifierType *mask);
-static void gdk_input_none_get_pointer (GdkWindow       *window,
-					guint32		 deviceid,
-					gdouble         *x,
-					gdouble         *y,
-					gdouble         *pressure,
-					gdouble         *xtilt,
-					gdouble         *ytilt,
-					GdkModifierType *mask);
 static gint gdk_input_win32_grab_pointer (GdkWindow *     window,
 					  gint            owner_events,
 					  GdkEventMask    event_mask,
@@ -89,10 +143,12 @@ static gint gdk_input_win32_disable_window (GdkWindow        *window,
 					    GdkDevicePrivate *gdkdev);
 
 static GdkInputWindow *gdk_input_window_find (GdkWindow *window);
+#if !USE_SYSCONTEXT
 static GdkInputWindow *gdk_input_window_find_within (GdkWindow *window);
-static GdkDevicePrivate *gdk_input_find_device (guint32 deviceid);
+#endif
 static GdkDevicePrivate *gdk_input_find_dev_from_ctx (HCTX hctx,
 						      UINT id);
+#endif /* HAVE_WINTAB */
 
 /* Local variables */
 
@@ -126,7 +182,7 @@ GdkInputVTable    gdk_input_vtable;
 gint              gdk_input_ignore_core;
 gint		  gdk_input_ignore_wintab = FALSE;
 
-#if 0
+#if DEBUG_WINTAB
 
 static void
 print_lc(LOGCONTEXT *lc)
@@ -228,6 +284,8 @@ print_lc(LOGCONTEXT *lc)
 void 
 gdk_input_init (void)
 {
+  guint32 deviceid_counter = 0;
+#ifdef HAVE_WINTAB
   GdkDevicePrivate *gdkdev;
   GdkWindowPrivate *window_private;
   GdkWindowAttr wa;
@@ -235,10 +293,11 @@ gdk_input_init (void)
   LOGCONTEXT defcontext;
   HCTX *hctx;
   UINT ndevices, ncursors, ncsrtypes, firstcsr, hardware;
-  AXIS axis_x, axis_y, axis_npressure, axis_orientation[3];
+  BOOL active;
+  AXIS axis_x, axis_y, axis_npressure, axis_or[3];
   int i, j, k;
+  int devix, cursorix;
   char devname[100], csrname[100];
-  guint32 deviceid_counter = 0;
 
   gdk_input_devices = NULL;
   wintab_contexts = NULL;
@@ -247,18 +306,25 @@ gdk_input_init (void)
       WTInfo (0, 0, NULL))
     {
       WTInfo (WTI_INTERFACE, IFC_SPECVERSION, &specversion);
-
+      GDK_NOTE (MISC, g_print ("Wintab interface version %d.%d\n",
+			       HIBYTE (specversion), LOBYTE (specversion)));
 #if USE_SYSCONTEXT
       WTInfo (WTI_DEFSYSCTX, 0, &defcontext);
+#if DEBUG_WINTAB
+      GDK_NOTE (MISC, (g_print("DEFSYSCTX:\n"), print_lc(&defcontext)));
+#endif
 #else
       WTInfo (WTI_DEFCONTEXT, 0, &defcontext);
+#if DEBUG_WINTAB
+      GDK_NOTE (MISC, (g_print("DEFCONTEXT:\n"), print_lc(&defcontext)));
 #endif
-#if 0
-      g_print("DEFCONTEXT:\n"); print_lc(&defcontext);
 #endif
       WTInfo (WTI_INTERFACE, IFC_NDEVICES, &ndevices);
       WTInfo (WTI_INTERFACE, IFC_NCURSORS, &ncursors);
-
+#if DEBUG_WINTAB
+      GDK_NOTE (MISC, g_print ("NDEVICES: %d, NCURSORS: %d\n",
+			       ndevices, ncursors));
+#endif
       /* Create a dummy window to receive wintab events */
       wa.wclass = GDK_INPUT_OUTPUT;
       wa.event_mask = GDK_ALL_EVENTS_MASK;
@@ -275,61 +341,64 @@ gdk_input_init (void)
       gdk_window_ref (wintab_window);
       window_private = (GdkWindowPrivate *) wintab_window;
       
-      for (i = 0; i < ndevices; i++)
+      for (devix = 0; devix < ndevices; devix++)
 	{
 	  LOGCONTEXT lc;
 
-	  WTInfo (WTI_DEVICES + i, DVC_NAME, devname);
+	  WTInfo (WTI_DEVICES + devix, DVC_NAME, devname);
       
-	  WTInfo (WTI_DEVICES + i, DVC_NCSRTYPES, &ncsrtypes);
-	  WTInfo (WTI_DEVICES + i, DVC_FIRSTCSR, &firstcsr);
-	  WTInfo (WTI_DEVICES + i, DVC_HARDWARE, &hardware);
-	  WTInfo (WTI_DEVICES + i, DVC_X, &axis_x);
-	  WTInfo (WTI_DEVICES + i, DVC_Y, &axis_y);
-	  WTInfo (WTI_DEVICES + i, DVC_NPRESSURE, &axis_npressure);
-	  WTInfo (WTI_DEVICES + i, DVC_ORIENTATION, axis_orientation);
+	  WTInfo (WTI_DEVICES + devix, DVC_NCSRTYPES, &ncsrtypes);
+	  WTInfo (WTI_DEVICES + devix, DVC_FIRSTCSR, &firstcsr);
+	  WTInfo (WTI_DEVICES + devix, DVC_HARDWARE, &hardware);
+	  WTInfo (WTI_DEVICES + devix, DVC_X, &axis_x);
+	  WTInfo (WTI_DEVICES + devix, DVC_Y, &axis_y);
+	  WTInfo (WTI_DEVICES + devix, DVC_NPRESSURE, &axis_npressure);
+	  WTInfo (WTI_DEVICES + devix, DVC_ORIENTATION, axis_or);
 
 	  if (HIBYTE (specversion) > 1 || LOBYTE (specversion) >= 1)
 	    {
-	      WTInfo (WTI_DDCTXS + i, CTX_NAME, lc.lcName);
-	      WTInfo (WTI_DDCTXS + i, CTX_OPTIONS, &lc.lcOptions);
+	      WTInfo (WTI_DDCTXS + devix, CTX_NAME, lc.lcName);
+	      WTInfo (WTI_DDCTXS + devix, CTX_OPTIONS, &lc.lcOptions);
 	      lc.lcOptions |= CXO_MESSAGES;
+#if USE_SYSCONTEXT
+	      lc.lcOptions |= CXO_SYSTEM;
+#endif
 	      lc.lcStatus = 0;
-	      WTInfo (WTI_DDCTXS + i, CTX_LOCKS, &lc.lcLocks);
+	      WTInfo (WTI_DDCTXS + devix, CTX_LOCKS, &lc.lcLocks);
 	      lc.lcMsgBase = WT_DEFBASE;
-	      lc.lcDevice = i;
-	      lc.lcPktRate = 20;
+	      lc.lcDevice = devix;
+	      lc.lcPktRate = 50;
 	      lc.lcPktData = PACKETDATA;
 	      lc.lcPktMode = PK_BUTTONS; /* We want buttons in relative mode */
 	      lc.lcMoveMask = PACKETDATA;
 	      lc.lcBtnDnMask = lc.lcBtnUpMask = ~0;
-	      WTInfo (WTI_DDCTXS + i, CTX_INORGX, &lc.lcInOrgX);
-	      WTInfo (WTI_DDCTXS + i, CTX_INORGY, &lc.lcInOrgY);
-	      WTInfo (WTI_DDCTXS + i, CTX_INORGZ, &lc.lcInOrgZ);
-	      WTInfo (WTI_DDCTXS + i, CTX_INEXTX, &lc.lcInExtX);
-	      WTInfo (WTI_DDCTXS + i, CTX_INEXTY, &lc.lcInExtY);
-	      WTInfo (WTI_DDCTXS + i, CTX_INEXTZ, &lc.lcInExtZ);
+	      WTInfo (WTI_DDCTXS + devix, CTX_INORGX, &lc.lcInOrgX);
+	      WTInfo (WTI_DDCTXS + devix, CTX_INORGY, &lc.lcInOrgY);
+	      WTInfo (WTI_DDCTXS + devix, CTX_INORGZ, &lc.lcInOrgZ);
+	      WTInfo (WTI_DDCTXS + devix, CTX_INEXTX, &lc.lcInExtX);
+	      WTInfo (WTI_DDCTXS + devix, CTX_INEXTY, &lc.lcInExtY);
+	      WTInfo (WTI_DDCTXS + devix, CTX_INEXTZ, &lc.lcInExtZ);
 	      lc.lcOutOrgX = axis_x.axMin;
 	      lc.lcOutOrgY = axis_y.axMin;
 	      lc.lcOutExtX = axis_x.axMax - axis_x.axMin;
 	      lc.lcOutExtY = axis_y.axMax - axis_y.axMin;
 	      lc.lcOutExtY = -lc.lcOutExtY; /* We want Y growing downward */
-	      WTInfo (WTI_DDCTXS + i, CTX_SENSX, &lc.lcSensX);
-	      WTInfo (WTI_DDCTXS + i, CTX_SENSY, &lc.lcSensY);
-	      WTInfo (WTI_DDCTXS + i, CTX_SENSZ, &lc.lcSensZ);
-	      WTInfo (WTI_DDCTXS + i, CTX_SYSMODE, &lc.lcSysMode);
+	      WTInfo (WTI_DDCTXS + devix, CTX_SENSX, &lc.lcSensX);
+	      WTInfo (WTI_DDCTXS + devix, CTX_SENSY, &lc.lcSensY);
+	      WTInfo (WTI_DDCTXS + devix, CTX_SENSZ, &lc.lcSensZ);
+	      WTInfo (WTI_DDCTXS + devix, CTX_SYSMODE, &lc.lcSysMode);
 	      lc.lcSysOrgX = lc.lcSysOrgY = 0;
-	      WTInfo (WTI_DDCTXS + i, CTX_SYSEXTX, &lc.lcSysExtX);
-	      WTInfo (WTI_DDCTXS + i, CTX_SYSEXTY, &lc.lcSysExtY);
-	      WTInfo (WTI_DDCTXS + i, CTX_SYSSENSX, &lc.lcSysSensX);
-	      WTInfo (WTI_DDCTXS + i, CTX_SYSSENSY, &lc.lcSysSensY);
+	      WTInfo (WTI_DDCTXS + devix, CTX_SYSEXTX, &lc.lcSysExtX);
+	      WTInfo (WTI_DDCTXS + devix, CTX_SYSEXTY, &lc.lcSysExtY);
+	      WTInfo (WTI_DDCTXS + devix, CTX_SYSSENSX, &lc.lcSysSensX);
+	      WTInfo (WTI_DDCTXS + devix, CTX_SYSSENSY, &lc.lcSysSensY);
 	    }
 	  else
 	    {
 	      lc = defcontext;
 	      lc.lcOptions |= CXO_MESSAGES;
 	      lc.lcMsgBase = WT_DEFBASE;
-	      lc.lcPktRate = 20; /* Slow down the packets a bit */
+	      lc.lcPktRate = 50;
 	      lc.lcPktData = PACKETDATA;
 	      lc.lcPktMode = PACKETMODE;
 	      lc.lcMoveMask = PACKETDATA;
@@ -344,8 +413,9 @@ gdk_input_init (void)
 	      lc.lcOutExtY = -lc.lcOutExtY; /* We want Y growing downward */
 #endif
 	    }
-#if 0
-	  g_print("context for device %d:\n", i); print_lc(&lc);
+#if DEBUG_WINTAB
+	  GDK_NOTE (MISC, (g_print("context for device %d:\n", devix),
+			   print_lc(&lc)));
 #endif
 	  hctx = g_new (HCTX, 1);
           if ((*hctx = WTOpen (window_private->xwindow, &lc, TRUE)) == NULL)
@@ -353,8 +423,8 @@ gdk_input_init (void)
 	      g_warning ("gdk_input_init: WTOpen failed");
 	      return;
 	    }
-	  GDK_NOTE (MISC, g_print ("gdk_input_init: opened Wintab device %d %#x\n",
-				   i, *hctx));
+	  GDK_NOTE (MISC, g_print ("opened Wintab device %d %#x\n",
+				   devix, *hctx));
 
 	  wintab_contexts = g_list_append (wintab_contexts, hctx);
 #if 0
@@ -362,13 +432,18 @@ gdk_input_init (void)
 #endif
 	  WTOverlap (*hctx, TRUE);
 
-#if 0
-	  g_print("context for device %d after WTOpen:\n", i); print_lc(&lc);
+#if DEBUG_WINTAB
+	  GDK_NOTE (MISC, (g_print("context for device %d after WTOpen:\n", devix),
+			   print_lc(&lc)));
 #endif
-	  for (j = firstcsr; j < firstcsr + ncsrtypes; j++)
+	  for (cursorix = firstcsr; cursorix < firstcsr + ncsrtypes; cursorix++)
 	    {
+	      active = FALSE;
+	      WTInfo (WTI_CURSORS + cursorix, CSR_ACTIVE, &active);
+	      if (!active)
+		continue;
 	      gdkdev = g_new (GdkDevicePrivate, 1);
-	      WTInfo (WTI_CURSORS + j, CSR_NAME, csrname);
+	      WTInfo (WTI_CURSORS + cursorix, CSR_NAME, csrname);
 	      gdkdev->info.name = g_strconcat (devname, " ", csrname, NULL);
 	      gdkdev->info.deviceid = deviceid_counter++;
 	      gdkdev->info.source = GDK_SOURCE_PEN;
@@ -379,8 +454,8 @@ gdk_input_init (void)
 	      gdkdev->info.has_cursor = FALSE;
 #endif
 	      gdkdev->hctx = *hctx;
-	      gdkdev->cursor = j;
-	      WTInfo (WTI_CURSORS + j, CSR_PKTDATA, &gdkdev->pktdata);
+	      gdkdev->cursor = cursorix;
+	      WTInfo (WTI_CURSORS + cursorix, CSR_PKTDATA, &gdkdev->pktdata);
 	      gdkdev->info.num_axes = 0;
 	      if (gdkdev->pktdata & PK_X)
 		gdkdev->info.num_axes++;
@@ -388,9 +463,18 @@ gdk_input_init (void)
 		gdkdev->info.num_axes++;
 	      if (gdkdev->pktdata & PK_NORMAL_PRESSURE)
 		gdkdev->info.num_axes++;
+	      /* The wintab driver for the Wacom ArtPad II reports
+	       * PK_ORIENTATION in CSR_PKTDATA, but the tablet doesn't
+	       * actually sense tilt. Catch this by noticing that the
+	       * orientation axis's azimuth resolution is zero.
+	       */
+	      if ((gdkdev->pktdata & PK_ORIENTATION)
+		  && axis_or[0].axResolution == 0)
+		gdkdev->pktdata &= ~PK_ORIENTATION;
+
 	      if (gdkdev->pktdata & PK_ORIENTATION)
 		gdkdev->info.num_axes += 2; /* x and y tilt */
-	      WTInfo (WTI_CURSORS + j, CSR_NPBTNMARKS, &gdkdev->npbtnmarks);
+	      WTInfo (WTI_CURSORS + cursorix, CSR_NPBTNMARKS, &gdkdev->npbtnmarks);
 	      gdkdev->axes = g_new (GdkAxisInfo, gdkdev->info.num_axes);
 	      gdkdev->info.axes = g_new (GdkAxisUse, gdkdev->info.num_axes);
 	      gdkdev->last_axis_data = g_new (gint, gdkdev->info.num_axes);
@@ -439,10 +523,13 @@ gdk_input_init (void)
 		{
 		  GdkAxisUse axis;
 
-		  gdkdev->orientation_axes[0] = axis_orientation[0];
-		  gdkdev->orientation_axes[1] = axis_orientation[1];
+		  gdkdev->orientation_axes[0] = axis_or[0];
+		  gdkdev->orientation_axes[1] = axis_or[1];
 		  for (axis = GDK_AXIS_XTILT; axis <= GDK_AXIS_YTILT; axis++)
 		    {
+		      /* Wintab gives us aximuth and altitude, which
+		       * we convert to x and y tilt in the -1000..1000 range
+		       */
 		      gdkdev->axes[k].xresolution =
 			gdkdev->axes[k].resolution = 1000;
 		      gdkdev->axes[k].xmin_value =
@@ -457,13 +544,37 @@ gdk_input_init (void)
 	      gdkdev->info.num_keys = 0;
 	      gdkdev->info.keys = NULL;
 	      GDK_NOTE (EVENTS,
-			g_print ("gdk_input_init: device: %d axes: %d\n",
-				 gdkdev->info.deviceid,
-				 gdkdev->info.num_axes));
+			(g_print ("device: %d (%d) %s axes: %d\n",
+				  gdkdev->info.deviceid, cursorix,
+				  gdkdev->info.name,
+				  gdkdev->info.num_axes),
+			 g_print ("axes: X:%d, Y:%d, PRESSURE:%d, "
+				  "XTILT:%d, YTILT:%d\n",
+				  gdkdev->axis_for_use[GDK_AXIS_X],
+				  gdkdev->axis_for_use[GDK_AXIS_Y],
+				  gdkdev->axis_for_use[GDK_AXIS_PRESSURE],
+				  gdkdev->axis_for_use[GDK_AXIS_XTILT],
+				  gdkdev->axis_for_use[GDK_AXIS_YTILT])));
+	      for (i = 0; i < gdkdev->info.num_axes; i++)
+		GDK_NOTE (EVENTS,
+			  g_print ("...axis %d: %d--%d@%d (%d--%d@%d)\n",
+				   i,
+				   gdkdev->axes[i].xmin_value, 
+				   gdkdev->axes[i].xmax_value, 
+				   gdkdev->axes[i].xresolution, 
+				   gdkdev->axes[i].min_value, 
+				   gdkdev->axes[i].max_value, 
+				   gdkdev->axes[i].resolution));
 	      gdk_input_devices = g_list_append (gdk_input_devices,
 						 gdkdev);
 	    }
 	}
+    }
+#endif /* HAVE_WINTAB */
+
+  if (deviceid_counter > 0)
+    {
+#ifdef HAVE_WINTAB
       gdk_input_vtable.set_mode           = gdk_input_win32_set_mode;
       gdk_input_vtable.set_axes           = NULL;
       gdk_input_vtable.set_key            = NULL;
@@ -480,6 +591,9 @@ gdk_input_init (void)
       gdk_input_root_width = gdk_screen_width ();
       gdk_input_root_height = gdk_screen_height ();
       gdk_input_ignore_core = FALSE;
+#else
+      g_assert_not_reached ();
+#endif
     }
   else
     {
@@ -501,20 +615,69 @@ gdk_input_init (void)
   gdk_input_devices = g_list_append (gdk_input_devices, &gdk_input_core_info);
 }
 
-static void
-gdk_input_get_root_relative_geometry (HWND w,
-				      int  *x_ret,
-				      int  *y_ret)
+gint
+gdk_input_set_mode (guint32      deviceid,
+		    GdkInputMode mode)
 {
-  RECT rect;
+  if (deviceid == GDK_CORE_POINTER)
+    return FALSE;
 
-  GetWindowRect (w, &rect);
-
-  if (x_ret)
-    *x_ret = rect.left;
-  if (y_ret)
-    *y_ret = rect.top;
+  if (gdk_input_vtable.set_mode)
+    return gdk_input_vtable.set_mode (deviceid, mode);
+  else
+    return FALSE;
 }
+
+void
+gdk_input_set_axes (guint32     deviceid,
+		    GdkAxisUse *axes)
+{
+  int i;
+  GdkDevicePrivate *gdkdev = gdk_input_find_device (deviceid);
+  g_return_if_fail (gdkdev != NULL);
+
+  if (deviceid == GDK_CORE_POINTER)
+    return;
+
+  for (i = GDK_AXIS_IGNORE; i < GDK_AXIS_LAST; i++)
+    {
+      gdkdev->axis_for_use[i] = -1;
+    }
+
+  for (i = 0; i < gdkdev->info.num_axes; i++)
+    {
+      gdkdev->info.axes[i] = axes[i];
+      gdkdev->axis_for_use[axes[i]] = i;
+    }
+}
+
+static void
+gdk_input_none_get_pointer (GdkWindow       *window,
+			    guint32          deviceid,
+			    gdouble         *x,
+			    gdouble         *y,
+			    gdouble         *pressure,
+			    gdouble         *xtilt,
+			    gdouble         *ytilt,
+			    GdkModifierType *mask)
+{
+  gint x_int, y_int;
+
+  gdk_window_get_pointer (window, &x_int, &y_int, mask);
+
+  if (x)
+    *x = x_int;
+  if (y)
+    *y = y_int;
+  if (pressure)
+    *pressure = 0.5;
+  if (xtilt)
+    *xtilt = 0;
+  if (ytilt)
+    *ytilt = 0;
+}
+
+#ifdef HAVE_WINTAB
 
 static void
 gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
@@ -625,42 +788,6 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
     }
 }
 
-gint
-gdk_input_set_mode (guint32      deviceid,
-		    GdkInputMode mode)
-{
-  if (deviceid == GDK_CORE_POINTER)
-    return FALSE;
-
-  if (gdk_input_vtable.set_mode)
-    return gdk_input_vtable.set_mode (deviceid, mode);
-  else
-    return FALSE;
-}
-
-void
-gdk_input_set_axes (guint32     deviceid,
-		    GdkAxisUse *axes)
-{
-  int i;
-  GdkDevicePrivate *gdkdev = gdk_input_find_device (deviceid);
-  g_return_if_fail (gdkdev != NULL);
-
-  if (deviceid == GDK_CORE_POINTER)
-    return;
-
-  for (i = GDK_AXIS_IGNORE; i < GDK_AXIS_LAST; i++)
-    {
-      gdkdev->axis_for_use[i] = -1;
-    }
-
-  for (i = 0; i < gdkdev->info.num_axes; i++)
-    {
-      gdkdev->info.axes[i] = axes[i];
-      gdkdev->axis_for_use[axes[i]] = i;
-    }
-}
-
 static void 
 gdk_input_win32_get_pointer (GdkWindow       *window,
 			     guint32	      deviceid,
@@ -714,29 +841,18 @@ gdk_input_win32_get_pointer (GdkWindow       *window,
 }
 
 static void
-gdk_input_none_get_pointer (GdkWindow       *window,
-			    guint32          deviceid,
-			    gdouble         *x,
-			    gdouble         *y,
-			    gdouble         *pressure,
-			    gdouble         *xtilt,
-			    gdouble         *ytilt,
-			    GdkModifierType *mask)
+gdk_input_get_root_relative_geometry (HWND w,
+				      int  *x_ret,
+				      int  *y_ret)
 {
-  gint x_int, y_int;
+  RECT rect;
 
-  gdk_window_get_pointer (window, &x_int, &y_int, mask);
+  GetWindowRect (w, &rect);
 
-  if (x)
-    *x = x_int;
-  if (y)
-    *y = y_int;
-  if (pressure)
-    *pressure = 0.5;
-  if (xtilt)
-    *xtilt = 0;
-  if (ytilt)
-    *ytilt = 0;
+  if (x_ret)
+    *x_ret = rect.left;
+  if (y_ret)
+    *y_ret = rect.top;
 }
 
 static gint
@@ -850,6 +966,22 @@ decode_tilt (gint   *axis_data,
   axis_data[1] = sin (az) * cos (el) * 1000;
 }
 
+static GdkDevicePrivate *
+gdk_input_find_dev_from_ctx (HCTX hctx,
+			     UINT cursor)
+{
+  GList *tmp_list = gdk_input_devices;
+  GdkDevicePrivate *gdkdev;
+
+  while (tmp_list)
+    {
+      gdkdev = (GdkDevicePrivate *) (tmp_list->data);
+      if (gdkdev->hctx == hctx && gdkdev->cursor == cursor)
+	return gdkdev;
+      tmp_list = tmp_list->next;
+    }
+  return NULL;
+}
 static gint 
 gdk_input_win32_other_event (GdkEvent  *event,
 			     MSG       *xevent)
@@ -1021,13 +1153,14 @@ gdk_input_win32_other_event (GdkEvent  *event,
 				 & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
 				    | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
 				    | GDK_BUTTON5_MASK));
-	  GDK_NOTE (EVENTS, g_print ("WINTAB button %s: %d %d %g,%g %g\n",
+	  GDK_NOTE (EVENTS, g_print ("WINTAB button %s: %d %d %g,%g %g %g,%g\n",
 				     (event->button.type == GDK_BUTTON_PRESS ?
 				      "press" : "release"),
 				     event->button.deviceid,
 				     event->button.button,
 				     event->button.x, event->button.y,
-				     event->button.pressure));
+				     event->button.pressure,
+				     event->button.xtilt, event->button.ytilt));
 	}
       else
 	{
@@ -1049,10 +1182,11 @@ gdk_input_win32_other_event (GdkEvent  *event,
 				    | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
 				    | GDK_BUTTON5_MASK));
 
-	  GDK_NOTE (EVENTS, g_print ("WINTAB motion: %d %g,%g %g\n",
+	  GDK_NOTE (EVENTS, g_print ("WINTAB motion: %d %g,%g %g %g,%g\n",
 				     event->motion.deviceid,
 				     event->motion.x, event->motion.y,
-				     event->motion.pressure));
+				     event->motion.pressure,
+				     event->motion.xtilt, event->motion.ytilt));
 
 	  /* Check for missing release or press events for the normal
 	   * pressure button. At least on my ArtPadII I sometimes miss a
@@ -1114,7 +1248,6 @@ gdk_input_win32_other_event (GdkEvent  *event,
 				 event->proximity.deviceid));
       return TRUE;
     }
-
   return FALSE;
 }
 
@@ -1188,6 +1321,7 @@ gdk_input_win32_grab_pointer (GdkWindow    *window,
 	  if (gdkdev->info.deviceid != GDK_CORE_POINTER)
 	    {
 #if 0	      
+	      /* XXX */
 	      gdk_input_find_events (window, gdkdev,
 				     event_mask,
 				     event_classes, &num_classes);
@@ -1215,6 +1349,7 @@ gdk_input_win32_grab_pointer (GdkWindow    *window,
 	      ((gdkdev->button_state != 0) || need_ungrab))
 	    {
 #if 0
+	      /* XXX */
 	      XUngrabDevice (gdk_display, gdkdev->xdevice, time);
 #endif
 	      gdkdev->button_state = 0;
@@ -1255,6 +1390,7 @@ gdk_input_win32_ungrab_pointer (guint32 time)
 	{
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
 #if 0
+	  /* XXX */
 	  if (gdkdev->info.deviceid != GDK_CORE_POINTER && gdkdev->xdevice)
 	    XUngrabDevice (gdk_display, gdkdev->xdevice, time);
 #endif
@@ -1262,6 +1398,8 @@ gdk_input_win32_ungrab_pointer (guint32 time)
 	}
     }
 }
+
+#endif /* HAVE_WINTAB */
 
 GList *
 gdk_input_list_devices (void)
@@ -1308,6 +1446,25 @@ gdk_input_motion_events (GdkWindow *window,
   return NULL;		/* ??? */
 }
 
+static gint
+gdk_input_enable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
+{
+  if (gdk_input_vtable.enable_window)
+    return gdk_input_vtable.enable_window (window, gdkdev);
+  else
+    return TRUE;
+}
+
+static gint
+gdk_input_disable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
+{
+  if (gdk_input_vtable.disable_window)
+    return gdk_input_vtable.disable_window(window,gdkdev);
+  else
+    return TRUE;
+}
+
+
 static GdkInputWindow *
 gdk_input_window_find (GdkWindow *window)
 {
@@ -1319,6 +1476,8 @@ gdk_input_window_find (GdkWindow *window)
 
   return NULL;      /* Not found */
 }
+
+#if !USE_SYSCONTEXT
 
 static GdkInputWindow *
 gdk_input_window_find_within (GdkWindow *window)
@@ -1345,6 +1504,8 @@ gdk_input_window_find_within (GdkWindow *window)
 
   return candidate;
 }
+
+#endif
 
 /* FIXME: this routine currently needs to be called between creation
    and the corresponding configure event (because it doesn't get the
@@ -1406,9 +1567,9 @@ gdk_input_set_extension_events (GdkWindow       *window,
 	{
 	  if (mask != 0 && gdkdev->info.mode != GDK_MODE_DISABLED
 	      && (gdkdev->info.has_cursor || mode == GDK_EXTENSION_EVENTS_ALL))
-	    gdk_input_win32_enable_window (window, gdkdev);
+	    gdk_input_enable_window (window, gdkdev);
 	  else
-	    gdk_input_win32_disable_window (window, gdkdev);
+	    gdk_input_disable_window (window, gdkdev);
 	}
     }
 }
@@ -1428,6 +1589,7 @@ gdk_input_window_destroy (GdkWindow *window)
 void
 gdk_input_exit (void)
 {
+#ifdef HAVE_WINTAB
   GList *tmp_list;
   GdkDevicePrivate *gdkdev;
 
@@ -1453,6 +1615,10 @@ gdk_input_exit (void)
       g_free (tmp_list->data);
     }
   g_list_free (gdk_input_windows);
+  gdk_input_windows = NULL;
+
+  gdk_window_unref (wintab_window);
+  wintab_window = NULL;
 
 #if 1
   for (tmp_list = wintab_contexts; tmp_list; tmp_list = tmp_list->next)
@@ -1463,27 +1629,30 @@ gdk_input_exit (void)
 #ifdef _MSC_VER
       /* For some reason WTEnable and/or WTClose tend to crash here.
        * Protect with __try/__except to avoid a message box.
+       * When compiling with gcc, we cannot use __try/__except, so
+       * don't call WTClose. I think this means that we'll
+       * eventually run out of Wintab contexts, sigh.
        */
       __try {
-#endif /* _MSC_VER */
 #if 0
         WTEnable (*hctx, FALSE);
 #endif
 	result = WTClose (*hctx);
-#ifdef _MSC_VER
       }
       __except (/* GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ? */
                 EXCEPTION_EXECUTE_HANDLER /*: 
                 EXCEPTION_CONTINUE_SEARCH */) {
 	result = FALSE;
       }
-#endif /* _MSC_VER */
       if (!result)
 	g_warning ("gdk_input_exit: Closing Wintab context %#x failed", *hctx);
+#endif /* _MSC_VER */
       g_free (hctx);
     }
 #endif
   g_list_free (wintab_contexts);
+  wintab_contexts = NULL;
+#endif
 }
 
 static GdkDevicePrivate *
@@ -1496,23 +1665,6 @@ gdk_input_find_device (guint32 id)
     {
       gdkdev = (GdkDevicePrivate *) (tmp_list->data);
       if (gdkdev->info.deviceid == id)
-	return gdkdev;
-      tmp_list = tmp_list->next;
-    }
-  return NULL;
-}
-
-static GdkDevicePrivate *
-gdk_input_find_dev_from_ctx (HCTX hctx,
-			     UINT cursor)
-{
-  GList *tmp_list = gdk_input_devices;
-  GdkDevicePrivate *gdkdev;
-
-  while (tmp_list)
-    {
-      gdkdev = (GdkDevicePrivate *) (tmp_list->data);
-      if (gdkdev->hctx == hctx && gdkdev->cursor == cursor)
 	return gdkdev;
       tmp_list = tmp_list->next;
     }
