@@ -1,9 +1,18 @@
+2005-03-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_button_[sg]et_image
+
 2005-03-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkwidget.sgml: Typo fixes. 	(#169728, 
 	Morten Welinder, Owen Taylor)
 
 2005-02-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtktreeselection.sgml:
+	* gtk/tmpl/gtktreeview.sgml:
+	* gtk/tmpl/gtktreeviewcolumn.sgml: Fix typos
+	in see also lists.  (# 168698, Torsten Schoenfeld)
 
 	* gtk/tmpl/gtktreemodel.sgml: Fix stack vs heap 
 	confusion.  (#168690, Torsten Schoenfeld)

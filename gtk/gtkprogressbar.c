@@ -1253,7 +1253,7 @@ gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
 }
 
 /**
- * gtk_pgrogress_bar_get_ellipsize:
+ * gtk_progress_bar_get_ellipsize:
  * @pbar: a #GtkProgressBar
  *
  * Returns the ellipsizing position of the progressbar. 

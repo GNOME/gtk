@@ -1,3 +1,22 @@
+2005-03-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprogressbar.c (gtk_progress_bar_get_ellipsize): 
+	Typo fix in the docs.
+	
+	* gtk/gtkmenutoolbutton.c (gtk_menu_tool_button_set_arrow_tooltip): 
+	Typo fix in the docs.
+
+	* gtk/gtkiconview.c (gtk_icon_view_set_columns) 
+	(gtk_icon_view_get_columns, gtk_icon_view_set_item_width) 
+	(gtk_icon_view_get_item_width, gtk_icon_view_set_spacing) 
+	(gtk_icon_view_get_spacing, gtk_icon_view_set_row_spacing) 
+	(gtk_icon_view_set_column_spacing) 
+	(gtk_icon_view_get_row_spacing, gtk_icon_view_get_margin) 
+	(gtk_icon_view_set_margin): Add docs.
+	
+	* gtk/gtkcellview.c (gtk_cell_view_get_displayed_row): 
+	Add docs.
+
 2005-03-15  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdrawable.h gdk/gdkdraw.c gdk/gdkpixmap.c gdk/gdkwindow.c 

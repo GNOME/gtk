@@ -408,6 +408,8 @@ gtk_button_set_focus_on_click
 gtk_button_get_focus_on_click
 gtk_button_set_alignment
 gtk_button_get_alignment
+gtk_button_set_image
+gtk_button_get_image
 
 <SUBSECTION Standard>
 GTK_BUTTON
