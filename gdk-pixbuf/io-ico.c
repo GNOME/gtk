@@ -493,6 +493,7 @@ gdk_pixbuf__ico_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 	context->HeaderSize = 54;
 	context->HeaderBuf = g_try_malloc(14 + 40 + 4*256 + 512);
 	if (!context->HeaderBuf) {
+		g_free (context);
 		g_set_error (error,
 			     GDK_PIXBUF_ERROR,
 			     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
