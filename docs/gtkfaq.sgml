@@ -9,7 +9,7 @@
 <!-- NOTE: Use only one author tag, otherwise sgml2txt barfs - TRG --> 
 <author>Tony Gale, Shawn T. Amundson, Emmanuel Deloget, Nathan Froyd
 
-<date>November 9th 1999
+<date>February 9th 2000
 
 <abstract> This document is intended to answer questions that are likely to be 
 frequently asked by programmers using GTK+ or people who are just looking at 
@@ -1478,6 +1478,19 @@ Moreover, Havoc posted this to the <tt/gtk-list/
 </quote>
 
 <!-- ----------------------------------------------------------------- -->
+<sect1>Data I pass to the <tt/delete_event/ (or other event) handler gets corrupted.
+<p>
+All event handlers take an additional argument which contains
+information about the event that triggered the handler. So, a
+<tt/delete_event/ handler must be declared as:
+
+<tscreen><verb>
+gint delete_event_handler (GtkWidget   *widget,
+                           GdkEventAny *event,
+                           gpointer     data);
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>I have my signal connected to the the (whatever) event, but it seems I don't catch it. What's wrong?
 <p>
 There is some special initialisation to do in order to catch some 
@@ -1544,7 +1557,7 @@ placed on a queue, which is processed within <tt/gtk_main()/. You can
 force the drawing queue to be processed using something like:
 
 <tscreen><verb>
-while (g_main_iteration(FALSE));
+while (gtk_main_iteration(FALSE));
 </verb></tscreen>
 
 inside you're function that changes the widget.
@@ -1607,20 +1620,61 @@ you:
 </itemize>
 
 <!-- ----------------------------------------------------------------- -->
+<sect1>How do I reparent a widget?
+<p>
+The normal way to reparent (ie change the owner) of a widget should be
+to use the function:
+
+<tscreen><verb>
+void gtk_widget_reparent (GtkWidget *widget, 
+                          GtkWidget *new_parent)
+</verb></tscreen>
+
+But this is only a "should be" since this function does not correctly
+do its job on some specific widgets. The main goal of
+gtk_widget_reparent() is to avoid unrealizing widget if both widget
+and new_parent are realized (in this case, widget->window is
+successfully reparented). The problem here is that some widgets in the
+GTK+ hierarchy have multiple attached X subwindows and this is notably
+the case for the GtkSpinButton widget. For those,
+gtk_widget_reparent() will fail by leaving an unrealized child window
+where it should not.
+
+To avoid this problem, simply use the following code snippet: 
+
+<tscreen><verb>
+     gtk_widget_ref(widget);
+     gtk_container_remove(GTK_CONTAINER(old_parent), widget);
+     gtk_container_add(GTK_CONTAINER(new_parent), widget);
+     gtk_widget_unref(widget);
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
 <sect1>How could I get any widgets position?
 <p>
 As Tim Janik pointed out, there are different cases, and each case requires
 a different solution.
 
 <itemize>
-<item>  If you want the position of a widget relative to its parent, you should
-        use <tt/widget->allocation.x/ and <tt/widget->allocation.y/.
-<item>  If you want the position of a window relative to the X root window,
-        you should use <tt/gdk_window_get_geometry()/ or 
+<item> If you want the position of a widget relative to its parent,
+        you should use <tt/widget->allocation.x/ and
+        <tt/widget->allocation.y/.
+<item> If you want the position of a window relative to the X root
+        window, you should use <tt/gdk_window_get_geometry()/
+        <tt/gdk_window_get_position()/ or
         <tt/gdk_window_get_origin()/.
-<item>  Last but not least, if you want to get a Window Manager frame position,
-        you should use <tt/gdk_window_get_deskrelative_origin()/.
+<item> If you want to get the position of the window (including the WM
+        decorations), you should use
+        <tt/gdk_window_get_root_origin()/.
+<item> Last but not least, if you want to get a Window Manager frame
+        position, you should use
+        <tt/gdk_window_get_deskrelative_origin()/.
 </itemize>
+
+Your choice of Window Manager will have an effect of the results of
+the above functions. You should keep this in mind when writing your
+application. This is dependant upon how the Window Managers manage the
+decorations that they add around windows.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>How do I set the size of a widget/window? How do I prevent the user resizing my window?
@@ -1632,17 +1686,17 @@ The <tt/gtk_widget_set_usize()/ function is used to set the
 size of a widget. In order to use all the features that are provided by
 this function when it acts on a window, you may want to use the
 <tt/gtk_window_set_policy/ function. The definition of these functions
-is:
+are:
 
 <tscreen><verb>
-void        gtk_widget_set_usize (GtkWidget *widget,
-                                  gint width,
-                                  gint height);
+void gtk_widget_set_usize (GtkWidget *widget,
+                           gint width,
+                           gint height);
 
-void        gtk_window_set_policy (GtkWindow *window,
-                                   gint allow_shrink,
-                                   gint allow_grow,
-                                   gint auto_shrink);
+void gtk_window_set_policy (GtkWindow *window,
+                            gint allow_shrink,
+                            gint allow_grow,
+                            gint auto_shrink);
 </verb></tscreen>
 
 <tt/Auto_shrink/ will automatically shrink the window when the
@@ -1658,6 +1712,20 @@ allow_grow   = TRUE
 auto_shrink  = FALSE
 </verb></tscreen>
 
+The <tt/gtk_widget_set_usize()/ functions is not the easiest way to
+set a window size since you cannot decrease this window size with
+another call to this function unless you call it twice, as in:
+
+     gtk_widget_set_usize(your_widget, -1, -1);
+     gtk_widget_set_usize(your_widget, new_x_size, new_y_size);
+
+Another way to set the size of and/or move a window is to use the
+<tt/gdk_window_move_resize()/ function which uses to work fine both to
+grow or to shrink the window:
+
+     gdk_window_move_resize(window->window, 
+                            x_pos, y_pos, 
+                            x_size, y_size);
 <!-- ----------------------------------------------------------------- -->
 <sect1>How do I add a popup menu to my GTK+ application?
 <p>
@@ -1694,8 +1762,8 @@ is a boolean value: when this value is TRUE, the widget is enabled.
 <p>
 For example:
 <verb>
-gint gtk_clist_prepend (GtkCList    *clist,
-                        gchar       *text[]);
+gint gtk_clist_prepend (GtkCList *clist,
+                        gchar    *text[]);
 </verb>
 
 Answer: No, while a type "gchar*" (pointer to char) can automatically
@@ -1729,6 +1797,34 @@ DirectMedia Layer library (SDL).
 
 You do NOT want to use <tt/gdk_draw_point()/, that will be extremely
 slow.
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I create a pixmap without having my window realized/shown?
+<p>
+Functions such as <tt/gdk_pixmap_create_from_xpm()/ require a valid
+window as a parameter. During the initialisation phase of an
+application, a valid window may not be available without showing a
+window, which may be inappropriate. In order to avoid this, a
+function such as <tt/gdk_pixmap_colormap_create_from_xpm/ can be used,
+as in:
+
+<tscreen><verb>
+  char *pixfile = "foo.xpm";
+  GtkWidget *top, *box, *pixw;
+  GdkPixmap *pixmap, *pixmap_mask;
+
+  top = gtk_window_new (GKT_WINDOW_TOPLEVEL);
+  box = gtk_hbox_new (FALSE, 4);
+  gtk_conainer_add (GTK_CONTAINER(top), box);
+ 
+  pixmap = gdk_pixmap_colormap_create_from_xpm (
+               NULL, gtk_widget_get_colormap(top),
+               &amp;pixmap_mask, NULL, pixfile);
+  pixw = gtk_pixmap_new (pixmap, pixmap_mask);
+  gdk_pixmap_unref (pixmap);
+  gdk_pixmap_unref (pixmap_mask);
+
+</verb></tscreen>
 
 <!-- ***************************************************************** -->
 <sect>Development with GTK+: widget specific questions 
@@ -1834,6 +1930,25 @@ To get known about the selection:
         }
         printf("\n");
 }
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I stop the column headings of a GtkCList disappearing
+when the list is scrolled?
+<p>
+This happens when a GtkCList is packed into a GtkScrolledWindow using
+the function <tt/gtk_scroll_window_add_with_viewport()/. The prefered
+method of adding a CList to a scrolled window is to use the function
+<tt/gtk_container_add/, as in:
+
+<tscreen><verb>
+    GtkWidget *scrolled, *clist;
+    char *titles[] = { "Title1" , "Title2" };
+
+    scrolled = gtk_scrolled_window_new(NULL, NULL);
+
+    clist = gtk_clist_new_with_titles(2, titles);
+    gtk_container_add(GTK_CONTAINER(scrolled), clist);
 </verb></tscreen>
 
 <!-- ----------------------------------------------------------------- --><p>
@@ -1956,9 +2071,9 @@ align it, center it or left align it. If you want to do this, you
 should use:
 
 <tscreen><verb>
-void gtk_misc_set_alignment     (GtkMisc *misc,
-                                gfloat xalign,
-                                gfloat yalign);
+void gtk_misc_set_alignment (GtkMisc *misc,
+                             gfloat xalign,
+                             gfloat yalign);
 </verb></tscreen>
 
 where the <tt/xalign/ and <tt/yalign/ values are floats in [0.00;1.00].
@@ -2038,14 +2153,6 @@ widget "gtk-tooltips*" style "postie"
 </verb>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>How do I use horizontal scrollbars with a GtkText widget?
-<p>
-The short answer is that you can't. The current version of the GtkText
-widget does not support horizontal scrolling. There is an intention to
-completely rewrite the GtkText widget, at which time this limitation
-will be removed.
-
-<!-- ----------------------------------------------------------------- -->
 <sect1>I can't add more than (something like) 2000 chars in a GtkEntry. What's wrong?
 <p>
 There is now a known problem in the GtkEntry widget. In the
@@ -2063,6 +2170,28 @@ the number of chars in the entry to 2047.
   else
     max_length = MIN (2047, entry->text_max_length);
 </verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I make a GtkEntry widget activate on pressing the Return key?
+<p>
+The Entry widget emits an 'activate' signal when you press return in
+it. Just attach to the activate signal on the entry and do whatever you
+want to do. Typical code would be:
+
+<tscreen><verb>
+  entry = gtk_entry_new();
+  gtk_signal_connect (GTK_OBJECT(entry), "activate",
+                      GTK_SIGNAL_FUNC(entry_callback),
+                      NULL);
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>How do I use horizontal scrollbars with a GtkText widget?
+<p>
+The short answer is that you can't. The current version of the GtkText
+widget does not support horizontal scrolling. There is an intention to
+completely rewrite the GtkText widget, at which time this limitation
+will be removed.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>How do I change the font of a GtkText widget?
@@ -2565,45 +2694,51 @@ have not accepted "hi 7 am 17" or "hi i hi 17".
 <!-- ***************************************************************** -->
 <sect>GTK+ FAQ Contributions, Maintainers and Copyright
 <p>
-If you would like to make a contribution to the FAQ, send either one of us
-an e-mail message with the exact text you think should be included (question and
-answer).  With your help, this document can grow and become more useful!
+If you would like to make a contribution to the FAQ, send either one
+of us an e-mail message with the exact text you think should be
+included (question and answer). With your help, this document can grow
+and become more useful!
 
-This document is maintained by Nathan Froyd 
-<htmlurl url="mailto:maestrox@geocities.com" 
-name="&lt;maestrox@geocities.com&gt;">,
+This document is maintained by 
 Tony Gale <htmlurl url="mailto:gale@gtk.org" 
-name="&lt;gale@gtk.org&gt;"> and 
+name="&lt;gale@gtk.org&gt;"> 
+Nathan Froyd <htmlurl url="mailto:maestrox@geocities.com" 
+name="&lt;maestrox@geocities.com&gt;">,
+and 
 Emmanuel Deloget <htmlurl url="mailto:logout@free.fr"
 name="&lt;logout@free.fr&gt;">.
 This FAQ was created by Shawn T. Amundson 
 <htmlurl url="mailto:amundson@gimp.org" 
 name="&lt;amundson@gimp.org&gt;"> who continues to provide support.
 
-The GTK+ FAQ is Copyright (C) 1997,1998, 1999 by Shawn T. Amundson, 
-Nathan Froyd and Tony Gale, Emmanuel Deloget.
+Contributions should be sent to Tony Gale <htmlurl url="mailto:gale@gtk.org" 
+name="&lt;gale@gtk.org&gt;">
 
-Permission is granted to make and distribute verbatim copies of 
-this manual provided the copyright notice and this permission notice 
-are preserved on all copies.
+The GTK+ FAQ is Copyright (C) 1997-2000 by Shawn T. Amundson, 
+Tony Gale, Emmanuel Deloget and Nathan Froyd.
 
-Permission is granted to copy and distribute modified versions of 
-this document under the conditions for verbatim copying, provided 
-that this copyright notice is included exactly as in the original, 
-and that the entire resulting derived work is distributed under 
-the terms of a permission notice identical to this one.
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
 
-Permission is granted to copy and distribute translations of 
-this document into another language,  under the above conditions 
-for modified versions.
+Permission is granted to copy and distribute modified versions of this
+document under the conditions for verbatim copying, provided that this
+copyright notice is included exactly as in the original, and that the
+entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
 
-If you are intending to incorporate this document into a published work, 
-please contact one of the maintainers, and we will make an effort to ensure 
-that you have the most up to date information available.
+Permission is granted to copy and distribute translations of this
+document into another language, under the above conditions for
+modified versions.
+
+If you are intending to incorporate this document into a published
+work, please contact one of the maintainers, and we will make an
+effort to ensure that you have the most up to date information
+available.
 
 There is no guarentee that this document lives up to its intended
-purpose.  This is simply provided as a free resource.  As such,
-the authors and maintainers of the information provided within can 
-not make any guarentee that the information is even accurate.
+purpose.  This is simply provided as a free resource.  As such, the
+authors and maintainers of the information provided within can not
+make any guarentee that the information is even accurate.
 
 </article>
