@@ -2614,7 +2614,7 @@ msgstr "­¼ «¨ÁÅ¢ý ¯ÂÃõ"
 #.
 #: gtk/gtkmain.c:805
 msgid "default:LTR"
-msgstr "¦¸¡¼¡ ¿¢¨Ä:LTR"
+msgstr "default:LTR"
 
 #: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
