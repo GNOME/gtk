@@ -102,8 +102,15 @@ gdk_pixbuf_rotate (GdkPixBuf *pixbuf, gdouble angle)
 
      trans[0] = trans[3] = 1;
      trans[1] = trans[2] = 0;
+     trans[4] = -(double)w / 2.0;
+     trans[5] = -(double)h / 2.0;
+
+     art_affine_multiply(rot, trans, rot);
+
+     trans[0] = trans[3] = 1;
+     trans[1] = trans[2] = 0;
      trans[4] = (double)w / 2.0;
-     trans[5] = 0;
+     trans[5] = (double)h / 2.0;
 
      art_affine_multiply(affine, rot, trans);
 

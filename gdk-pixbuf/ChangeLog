@@ -1,7 +1,7 @@
 1999-07-20  Mark Crichton  <crichton@gimp.org>
 
-	* src/gdk-pixbuf.c (gdk_pixbuf_rotate): Added translation to recenter
-	the pixbuf.  Unfortunately, it doesn't work right yet.
+	* src/gdk-pixbuf.c (gdk_pixbuf_rotate): Fixed rotation.  Now a bbox
+	calculation needs to be done.
 
 1999-07-18  Larry Ewing  <lewing@gimp.org>
 
