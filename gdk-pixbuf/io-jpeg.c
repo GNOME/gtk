@@ -693,7 +693,14 @@ gdk_pixbuf__jpeg_image_save (FILE          *f,
        g_return_val_if_fail (pixels != NULL, FALSE);
 
        /* allocate a small buffer to convert image data */
-       buf = g_malloc (w * 3 * sizeof (guchar));
+       buf = g_try_malloc (w * 3 * sizeof (guchar));
+       if (!buf) {
+	       g_set_error (error,
+			    GDK_PIXBUF_ERROR,
+			    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+			    _("Couldn't allocate memory for loading JPEG file"));
+	       return FALSE;
+       }
 
        /* set up error handling */
        jerr.pub.error_exit = fatal_error_handler;

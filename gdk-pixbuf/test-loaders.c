@@ -265,18 +265,19 @@ randomly_modify (const guchar *image, guint size, gboolean verbose)
     {
       int j;
       
-      guint index = rand () % size;
-      guchar byte = rand () % 256;
-      
+      guint index = g_random_int_range (0, size);
+      guchar byte = g_random_int_range (0, 256);
       
       img_copy[index] = byte;
       
       if (verbose)
-	g_print ("%d\n", i);
-      if (verbose)
-	for (j = 0; j < size; j++)
-	  g_print ("%u, ", img_copy[j]);
-
+	{
+	  g_print ("img no %d\n", i);
+	  for (j = 0; j < size; j++)
+	    g_print ("%u, ", img_copy[j]);
+	  g_print ("\n\n");
+	}
+      
       test_loader (img_copy, size, FALSE);
     }
   g_free (img_copy);
@@ -383,7 +384,16 @@ main (int argc, char **argv)
   
   TEST (valid_png_test, TRUE);
   TEST (png_test_1, FALSE);   
-
+  
+  TEST (valid_ico_test, TRUE);
+  
+  TEST (ico_test_1, FALSE);
+  
+#if 0
+  TEST (wbmp_test_1, FALSE); 
+  TEST (wbmp_test_2, FALSE);
+#endif
+  
 #if 0
   TEST (png_test_2, FALSE);   
 #endif
@@ -399,6 +409,13 @@ main (int argc, char **argv)
   TEST_RANDOMLY_MODIFIED (valid_tiff1_test, FALSE);
 #endif
 
+#if 0
+  TEST_RANDOMLY_MODIFIED (valid_ico_test, TRUE);    /* The ico loader does not seem to
+						     * break, but the image tend to 
+						     * mutate into a wbmp image, and
+						     * the wbmp loader is broken
+						     */
+#endif
   TEST_RANDOMLY_MODIFIED (valid_jpeg_test, FALSE);  // The jpeg loader does not break
 
 #if 0
