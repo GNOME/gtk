@@ -198,7 +198,6 @@ gtk_hscale_get_layout_offsets (GtkScale *scale,
 {
   GtkWidget *widget;
   GtkRange *range;
-  GtkScale *scale;
   PangoLayout *layout;
   PangoRectangle logical_rect;
   gint value_spacing;
@@ -248,7 +247,7 @@ gtk_hscale_get_layout_offsets (GtkScale *scale,
       break;
 
     default:
-      g_return_val_if_reached (FALSE);
+      g_return_if_reached ();
       *x = 0;
       *y = 0;
       break;

@@ -721,7 +721,7 @@ gtk_scale_get_layout_offsets (GtkScale *scale,
 {
   gint local_x, local_y;
 
-  g_return_val_if_fail (GTK_IS_SCALE (scale), NULL);
+  g_return_if_fail (GTK_IS_SCALE (scale));
 
   if (GTK_SCALE_GET_CLASS (scale)->get_layout_offsets)
     (GTK_SCALE_GET_CLASS (scale)->get_layout_offsets) (scale, &local_x, &local_y);

@@ -171,8 +171,8 @@ gtk_vscale_expose (GtkWidget      *widget,
       gint x, y;
       GtkStateType state_type;
 
-      layout = gtk_scale_get_layout (widget);
-      gtk_scale_get_layout_offsets (widget, &x, &y);
+      layout = gtk_scale_get_layout (scale);
+      gtk_scale_get_layout_offsets (scale, &x, &y);
 
       state_type = GTK_STATE_NORMAL;
       if (!GTK_WIDGET_IS_SENSITIVE (scale))
@@ -200,7 +200,6 @@ gtk_vscale_get_layout_offsets (GtkScale *scale,
 {
   GtkWidget *widget;
   GtkRange *range;
-  GtkScale *scale;
   PangoLayout *layout;
   PangoRectangle logical_rect;
   gint value_spacing;
@@ -248,7 +247,7 @@ gtk_vscale_get_layout_offsets (GtkScale *scale,
       break;
 
     default:
-      g_return_val_if_reached (FALSE);
+      g_return_if_reached ();
       *x = 0;
       *y = 0;
       break;

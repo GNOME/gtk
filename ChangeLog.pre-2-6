@@ -1,3 +1,21 @@
+Fri Feb 13 08:17:43 2004  Owen Taylor  <otaylor@redhat.com>
+
+	Fix various compilation problems (#134312, David
+	Hawthorne)
+
+	* gtk/gtkscale.c (gtk_scale_get_layout_offsets): Use 
+	g_return_if_fail(), not g_return_val_if_fail().
+
+	* gtk/gtkvscale.c (gtk_vscale_get_layout_offsets): 
+	* gtk/gtkhscale.c (gtk_hscale_get_layout_offsets): Use 
+	g_return_if_reached(), not g_return_val_if_reached().
+	
+	* gtk/gtkvscale.c (gtk_vscale_expose): Fix the types
+	of some parameters.
+
+	* gtk/gtkhscale.c (gtk_hscale_get_layout_offsets): Remove
+	extra 'scale' parameter.
+
 Thu Feb 12 21:58:20 2004  Owen Taylor  <otaylor@redhat.com>
 
         Various reentrancy fixes for widgets being destroyed
