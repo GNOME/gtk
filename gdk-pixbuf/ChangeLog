@@ -1,3 +1,8 @@
+Tue Nov  5 14:16:17 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): Fix 
+	leaked pixbuf reference (#96823, Morten Welinder)
+
 2002-10-23  Matthias Clasen  <maclas@gmx.de>
 
 	* io-gif.c (lzw_read_byte): Check for stack overflow throughout.
