@@ -583,9 +583,6 @@ gtk_handle_box_motion (GtkWidget      *widget,
 
   if (hb->is_being_dragged)
     {
-      newx = event->x_root - hb->dragoff_x;
-      newy = event->y_root - hb->dragoff_y;
-
       if ((abs (hb->steady_x - newx) < SNAP_TOLERANCE)
 	  && (abs (hb->steady_y - newy) < SNAP_TOLERANCE))
 	{
