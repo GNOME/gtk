@@ -331,19 +331,20 @@ gtk_type_new (GtkType type)
   GtkTypeNode *node;
   GtkTypeObject *tobject;
   gpointer klass;
-  guint i;
   
   LOOKUP_TYPE_NODE (node, type);
   g_return_val_if_fail (node != NULL, NULL);
   
-  klass = gtk_type_class (type);
+  klass = node->klass;
+  if (!klass)
+    {
+      klass = gtk_type_class (type);
+      LOOKUP_TYPE_NODE (node, type);
+    }
   node->chunk_alloc_locked = TRUE;
 
   if (node->mem_chunk)
-    {
-      tobject = g_mem_chunk_alloc (node->mem_chunk);
-      memset (tobject, 0, node->type_info.object_size);
-    }
+    tobject = g_mem_chunk_alloc0 (node->mem_chunk);
   else
     tobject = g_malloc0 (node->type_info.object_size);
   
@@ -352,16 +353,24 @@ gtk_type_new (GtkType type)
    * corresponding base class, otherwise overridden class functions
    * could get called with partly-initialized objects.
    */
-  for (i = node->n_supers; i > 0; i--)
+  if (node->n_supers)
     {
-      GtkTypeNode *pnode;
-      
-      LOOKUP_TYPE_NODE (pnode, node->supers[i]);
-      if (pnode->type_info.object_init_func)
+      guint i;
+      GtkType *supers;
+
+      supers = node->supers;
+      for (i = node->n_supers; i > 0; i--)
 	{
-	  tobject->klass = pnode->klass;
-	  pnode->type_info.object_init_func (tobject);
+	  GtkTypeNode *pnode;
+	  
+	  LOOKUP_TYPE_NODE (pnode, supers[i]);
+	  if (pnode->type_info.object_init_func)
+	    {
+	      tobject->klass = pnode->klass;
+	      pnode->type_info.object_init_func (tobject);
+	    }
 	}
+      LOOKUP_TYPE_NODE (node, type);
     }
   tobject->klass = klass;
   if (node->type_info.object_init_func)

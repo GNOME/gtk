@@ -1,3 +1,8 @@
+Mon Nov 16 00:17:53 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.c (gtk_type_new): relookup type node after
+	class creation and parent class' object initializer.
+
 1998-11-13  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkpaned.c (gtk_paned_realize): Destroy the cursor after we
