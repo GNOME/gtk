@@ -1,3 +1,8 @@
+Tue Apr 22 15:33:51 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (open_new_dir): Fix capitalization
+	of UTF-8. (#106419, Roozbeh Pournader)
+
 Tue Apr 22 15:17:25 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Only check for XFT2 if we found pango-xft

@@ -3117,7 +3117,7 @@ open_new_dir (gchar       *dir_name,
 	  g_message (_("The filename \"%s\" couldn't be converted to UTF-8 "
 		       "(try setting the environment variable G_BROKEN_FILENAMES): %s"),
 		     escaped_str,
-		     error->message ? error->message : _("Invalid Utf-8"));
+		     error->message ? error->message : _("Invalid UTF-8"));
 	  g_free (escaped_str);
 	  g_clear_error (&error);
 	  continue;
