@@ -136,13 +136,17 @@ use gtk_editable_select_region() instead.
 <para>
 Sets whether the contents of the entry are visible or
 not. When visibility is set to %FALSE, characters
-are displayed as asterisks (*'s), and will also appear
+are displayed as the invisible char, and will also appear
 that way when the text in the entry widget is copied
 elsewhere.
 </para>
+<para>
+The default invisible char is the asterisk '*', but it can
+be changed with gtk_entry_set_invisible_char().
+</para>
 
 @entry: a #GtkEntry.
-@visible: %TRUE if the contents of the entry are displayd
+@visible: %TRUE if the contents of the entry are displayed
           as plaintext.
 
 

@@ -358,29 +358,29 @@ gtk_dialog_new_empty (const gchar     *title,
 
 /**
  * gtk_dialog_new_with_buttons:
- * @title: Title of the dialog, or NULL
- * @parent: Transient parent of the dialog, or NULL
+ * @title: Title of the dialog, or %NULL
+ * @parent: Transient parent of the dialog, or %NULL
  * @flags: from #GtkDialogFlags
- * @first_button_text: stock ID or text to go in first button, or NULL
- * @Varargs: response ID for first button, then additional buttons, ending with NULL
+ * @first_button_text: stock ID or text to go in first button, or %NULL
+ * @Varargs: response ID for first button, then additional buttons, ending with %NULL
  * 
- * Creates a new #GtkDialog with title @title (or NULL for the default
+ * Creates a new #GtkDialog with title @title (or %NULL for the default
  * title; see gtk_window_set_title()) and transient parent @parent (or
- * NULL for none; see gtk_window_set_transient_for()). The @flags
- * argument can be used to make the dialog modal (GTK_DIALOG_MODAL)
+ * %NULL for none; see gtk_window_set_transient_for()). The @flags
+ * argument can be used to make the dialog modal (#GTK_DIALOG_MODAL)
  * and/or to have it destroyed along with its transient parent
- * (GTK_DIALOG_DESTROY_WITH_PARENT). After @flags, button
- * text/response ID pairs should be listed, with a NULL pointer ending
+ * (#GTK_DIALOG_DESTROY_WITH_PARENT). After @flags, button
+ * text/response ID pairs should be listed, with a %NULL pointer ending
  * the list. Button text can be either a stock ID such as
  * #GTK_STOCK_OK, or some arbitrary text.  A response ID can be
  * any positive number, or one of the values in the #GtkResponseType
  * enumeration. If the user clicks one of these dialog buttons,
  * #GtkDialog will emit the "response" signal with the corresponding
  * response ID. If a #GtkDialog receives the "delete_event" signal, it
- * will emit "response" with a response ID of GTK_RESPONSE_DELETE_EVENT.
+ * will emit "response" with a response ID of #GTK_RESPONSE_DELETE_EVENT.
  * However, destroying a dialog does not emit the "response" signal;
  * so be careful relying on "response" when using
- * the GTK_DIALOG_DESTROY_WITH_PARENT flag. Buttons are from left to right,
+ * the #GTK_DIALOG_DESTROY_WITH_PARENT flag. Buttons are from left to right,
  * so the first button in the list will be the leftmost button in the dialog.
  *
  * Here's a simple example:
@@ -476,7 +476,6 @@ action_widget_activated (GtkWidget *widget, GtkDialog *dialog)
  * the end of the dialog's action area.  If you want to add a
  * non-activatable widget, simply pack it into the
  * <literal>action_area</literal> field of the #GtkDialog struct.
- * 
  **/
 void
 gtk_dialog_add_action_widget  (GtkDialog *dialog,
@@ -592,10 +591,9 @@ gtk_dialog_add_buttons_valist(GtkDialog      *dialog,
  * @Varargs: response ID for first button, then more text-response_id pairs
  * 
  * Adds more buttons, same as calling gtk_dialog_add_button()
- * repeatedly.  The variable argument list should be NULL-terminated
+ * repeatedly.  The variable argument list should be %NULL-terminated
  * as with gtk_dialog_new_with_buttons(). Each button must have both
  * text and response ID.
- * 
  **/
 void
 gtk_dialog_add_buttons (GtkDialog   *dialog,
@@ -622,7 +620,6 @@ gtk_dialog_add_buttons (GtkDialog   *dialog,
  * Calls gtk_widget_set_sensitive (widget, @setting) for each
  * widget in the dialog's action area with the given @response_id.
  * A convenient way to sensitize/desensitize dialog buttons.
- * 
  **/
 void
 gtk_dialog_set_response_sensitive (GtkDialog *dialog,
@@ -660,7 +657,6 @@ gtk_dialog_set_response_sensitive (GtkDialog *dialog,
  * Sets the last widget in the dialog's action area with the given @response_id
  * as the default widget for the dialog. Pressing "Enter" normally activates
  * the default widget.
- * 
  **/
 void
 gtk_dialog_set_default_response (GtkDialog *dialog,
@@ -701,7 +697,6 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
  *
  * Sets whether the dialog has a separator above the buttons.
  * %TRUE by default.
- * 
  **/
 void
 gtk_dialog_set_has_separator (GtkDialog *dialog,
@@ -823,7 +818,7 @@ run_delete_handler (GtkDialog *dialog,
  * 
  * Blocks in a recursive main loop until the @dialog either emits the
  * response signal, or is destroyed. If the dialog is destroyed,
- * gtk_dialog_run() returns GTK_RESPONSE_NONE. Otherwise, it returns
+ * gtk_dialog_run() returns #GTK_RESPONSE_NONE. Otherwise, it returns
  * the response ID from the "response" signal emission. Before
  * entering the recursive main loop, gtk_dialog_run() calls
  * gtk_widget_show() on the dialog for you. Note that you still
@@ -832,7 +827,7 @@ run_delete_handler (GtkDialog *dialog,
  * During gtk_dialog_run(), the default behavior of "delete_event" is
  * disabled; if the dialog receives "delete_event", it will not be
  * destroyed as windows usually are, and gtk_dialog_run() will return
- * GTK_RESPONSE_DELETE_EVENT. Also, during gtk_dialog_run() the dialog will be
+ * #GTK_RESPONSE_DELETE_EVENT. Also, during gtk_dialog_run() the dialog will be
  * modal. You can force gtk_dialog_run() to return at any time by
  * calling gtk_dialog_response() to emit the "response"
  * signal. Destroying the dialog during gtk_dialog_run() is a very bad

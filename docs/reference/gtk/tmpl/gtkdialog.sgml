@@ -169,7 +169,7 @@ Creates a new dialog box. Widgets should not be packed into this #GtkWindow
 directly, but into the vbox and action_area, as described above. 
 </para>
 
-@Returns: a #GtkWidget - the newly created dialog box.
+@Returns: a new #GtkDialog. 
 
 
 <!-- ##### FUNCTION gtk_dialog_new_with_buttons ##### -->

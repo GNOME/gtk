@@ -1786,7 +1786,7 @@ gtk_text_buffer_delete_mark_by_name (GtkTextBuffer     *buffer,
  *
  * Returns the mark that represents the cursor (insertion point).
  * Equivalent to calling gtk_text_buffer_get_mark () to get the mark
- * name "insert," but very slightly more efficient, and involves less
+ * named "insert", but very slightly more efficient, and involves less
  * typing.
  *
  * Return value: insertion point mark
@@ -1805,14 +1805,14 @@ gtk_text_buffer_get_insert (GtkTextBuffer *buffer)
  * @buffer: a #GtkTextBuffer
  *
  * Returns the mark that represents the selection bound.  Equivalent
- * to calling gtk_text_buffer_get_mark () to get the mark name
- * "selection_bound," but very slightly more efficient, and involves
+ * to calling gtk_text_buffer_get_mark () to get the mark named
+ * "selection_bound", but very slightly more efficient, and involves
  * less typing.
  *
  * The currently-selected text in @buffer is the region between the
  * "selection_bound" and "insert" marks. If "selection_bound" and
  * "insert" are in the same place, then there is no current selection.
- * gtk_text_buffer_get_selection_bounds () is another convenient function
+ * gtk_text_buffer_get_selection_bounds() is another convenient function
  * for handling the selection, if you just want to know whether there's a
  * selection and what its bounds are.
  *
@@ -1849,7 +1849,7 @@ gtk_text_buffer_get_iter_at_child_anchor (GtkTextBuffer      *buffer,
  *
  * This function moves the "insert" and "selection_bound" marks
  * simultaneously.  If you move them to the same place in two steps
- * with gtk_text_buffer_move_mark (), you will temporarily select a
+ * with gtk_text_buffer_move_mark(), you will temporarily select a
  * region in between their old and new locations, which can be pretty
  * inefficient since the temporarily-selected region will force stuff
  * to be recalculated. This function moves them as a unit, which can
@@ -1887,7 +1887,7 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
  *
  *
  * Creates a tag and adds it to the tag table for @buffer.
- * Equivalent to calling gtk_text_tag_new () and then adding the
+ * Equivalent to calling gtk_text_tag_ne () and then adding the
  * tag to the buffer's tag table. The returned tag is owned by
  * the buffer's tag table, so the ref count will be equal to one.
  *

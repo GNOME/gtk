@@ -1,3 +1,12 @@
+2001-11-11  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtkaccellabel.sgml, gtk/tmpl/gtkcombo.sgml,
+	gtk/tmpl/gtkentry.sgml, gtk/tmpl/gtkhscrollbar.sgml,
+	gtk/tmpl/gtkvscrollbar.sgml, gtk/tmpl/gtktoolbar.sgml,
+	gtk/tmpl/gtkdialog.sgml, gtk/tmpl/gtkstatusbar.sgml: 
+	Mass fixing of trivial doc bugs. (#55579, #56760, #58769, #55918,
+	#64154, #60422, #54697)
+
 2001-11-10  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/tmpl/gtkpaned.sgml: Document gtk_paned_set_gutter_size

@@ -15,7 +15,7 @@ Buttons with text and/or images are added with gtk_toolbar_append_item(), gtk_to
 Any of #GtkToggleButton, #GtkRadioButton, or an arbitrary widget can be added to the toolbar with gtk_toolbar_append_element(), gtk_toolbar_prepend_element(), and gtk_toolbar_insert_element().
 </para>
 <para>
-Widgets can be visibily grouped by adding gaps between widgets using gtk_toolbar_append_space(), gtk_toolbar_prepend_space, and gtk_toolbar_insert_space().
+Widgets can be visibly grouped by adding gaps between widgets using gtk_toolbar_append_space(), gtk_toolbar_prepend_space(), and gtk_toolbar_insert_space().
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -43,17 +43,15 @@ Widgets can be visibily grouped by adding gaps between widgets using gtk_toolbar
 
 <!-- ##### ENUM GtkToolbarChildType ##### -->
 <para>
-is used to set the type of new elements that are added to a #GtkToolbar.
-</para>
-<para>
-SPACE is just a space in the style of the toolbar's GtkToolbarSpaceStyle. BUTTON denotes a #GtkButton. TOGGLEBUTTON denotes a #GtkToggleButton, RADIOBUTTON denotes a #GtkRadioButton, and WIDGET denotes a standard #GtkWidget.
+#GtkToolbarChildType is used to set the type of new elements that are added 
+to a #GtkToolbar.
 </para>
 
-@GTK_TOOLBAR_CHILD_SPACE: 
-@GTK_TOOLBAR_CHILD_BUTTON: 
-@GTK_TOOLBAR_CHILD_TOGGLEBUTTON: 
-@GTK_TOOLBAR_CHILD_RADIOBUTTON: 
-@GTK_TOOLBAR_CHILD_WIDGET: 
+@GTK_TOOLBAR_CHILD_SPACE: a space in the style of the toolbar's #GtkToolbarSpaceStyle. 
+@GTK_TOOLBAR_CHILD_BUTTON: a #GtkButton. 
+@GTK_TOOLBAR_CHILD_TOGGLEBUTTON: a #GtkToggleButton.
+@GTK_TOOLBAR_CHILD_RADIOBUTTON: a #GtkRadioButton.
+@GTK_TOOLBAR_CHILD_WIDGET: a standard #GtkWidget.
 
 <!-- ##### ENUM GtkToolbarSpaceStyle ##### -->
 <para>
@@ -75,18 +73,15 @@ SPACE is just a space in the style of the toolbar's GtkToolbarSpaceStyle. BUTTON
 
 <!-- ##### FUNCTION gtk_toolbar_new ##### -->
 <para>
-creates a new toolbar. 
+Creates a new toolbar. 
 </para>
 
-@Returns: the newly created toolbar.
-<!-- # Unused Parameters # -->
-@orientation: a #GtkOrientation. It determines whether the toolbar appears horizontally or vertically.
-@style: a #GtkToolbarStyle. It determines if the toolbar will contain buttons with just labels, just images, or both.
+@Returns: the newly-created toolbar.
 
 
 <!-- ##### FUNCTION gtk_toolbar_append_item ##### -->
 <para>
-adds a new button to the end (right or bottom edges) of the given toolbar.
+Adds a new button to the end (right or bottom edges) of the given toolbar.
 </para>
 
 @toolbar: a #GtkToolbar.
@@ -101,7 +96,7 @@ adds a new button to the end (right or bottom edges) of the given toolbar.
 
 <!-- ##### FUNCTION gtk_toolbar_prepend_item ##### -->
 <para>
-adds a new button to the beginning (top or left edges) of the given toolbar.
+Adds a new button to the beginning (top or left edges) of the given toolbar.
 </para>
 
 @toolbar: a #GtkToolbar.
@@ -116,7 +111,7 @@ adds a new button to the beginning (top or left edges) of the given toolbar.
 
 <!-- ##### FUNCTION gtk_toolbar_insert_item ##### -->
 <para>
-inserts a new item into the toolbar. You must specify the position in the toolbar where it will be inserted.
+Inserts a new item into the toolbar. You must specify the position in the toolbar where it will be inserted.
 </para>
 
 @toolbar: a #GtkToolbar.
@@ -132,7 +127,7 @@ inserts a new item into the toolbar. You must specify the position in the toolba
 
 <!-- ##### FUNCTION gtk_toolbar_append_space ##### -->
 <para>
-adds a new space to the end of the toolbar.
+Adds a new space to the end of the toolbar.
 </para>
 
 @toolbar: a #GtkToolbar.
@@ -140,7 +135,7 @@ adds a new space to the end of the toolbar.
 
 <!-- ##### FUNCTION gtk_toolbar_prepend_space ##### -->
 <para>
-adds a new space to the beginning of the toolbar.
+Adds a new space to the beginning of the toolbar.
 </para>
 
 @toolbar: a #GtkToolbar.
@@ -148,7 +143,7 @@ adds a new space to the beginning of the toolbar.
 
 <!-- ##### FUNCTION gtk_toolbar_insert_space ##### -->
 <para>
-inserts a new space in the toolbar at the specified position.
+Inserts a new space in the toolbar at the specified position.
 </para>
 
 @toolbar: a #GtkToolbar
@@ -157,7 +152,7 @@ inserts a new space in the toolbar at the specified position.
 
 <!-- ##### FUNCTION gtk_toolbar_append_element ##### -->
 <para>
-adds a new element to the end of a toolbar.
+Adds a new element to the end of a toolbar.
 </para>
 
 @toolbar: a #GtkToolbar.
@@ -174,7 +169,7 @@ adds a new element to the end of a toolbar.
 
 <!-- ##### FUNCTION gtk_toolbar_prepend_element ##### -->
 <para>
-adds a new element to the beginning of a toolbar.
+Adds a new element to the beginning of a toolbar.
 </para>
 
 @toolbar: a #GtkToolbar.
@@ -243,7 +238,7 @@ adds a new element to the beginning of a toolbar.
 
 <!-- ##### FUNCTION gtk_toolbar_set_orientation ##### -->
 <para>
-sets whether a toolbar should appear horizontally or vertically.
+Sets whether a toolbar should appear horizontally or vertically.
 </para>
 
 @toolbar: a #GtkToolbar.
@@ -252,7 +247,7 @@ sets whether a toolbar should appear horizontally or vertically.
 
 <!-- ##### FUNCTION gtk_toolbar_set_style ##### -->
 <para>
-alters the view of @toolbar to display either icons only, text only, or both.
+Alters the view of @toolbar to display either icons only, text only, or both.
 </para>
 
 @toolbar: a #GtkToolbar.
@@ -261,11 +256,11 @@ alters the view of @toolbar to display either icons only, text only, or both.
 
 <!-- ##### FUNCTION gtk_toolbar_set_tooltips ##### -->
 <para>
-sets if the tooltips of a toolbar should be active or not.
+Sets if the tooltips of a toolbar should be active or not.
 </para>
 
 @toolbar: a #GtkToolbar.
-@enable: set to 0 to disable the tooltips, or 1 to enable them.
+@enable: set to %FALSE to disable the tooltips, or %TRUE to enable them.
 
 
 <!-- ##### FUNCTION gtk_toolbar_insert_stock ##### -->
@@ -290,8 +285,6 @@ sets if the tooltips of a toolbar should be active or not.
 
 @toolbar: 
 @icon_size: 
-<!-- # Unused Parameters # -->
-@stock_size: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_get_icon_size ##### -->
@@ -357,7 +350,7 @@ sets if the tooltips of a toolbar should be active or not.
 
 <!-- ##### SIGNAL GtkToolbar::orientation-changed ##### -->
 <para>
-should be used if you wish to perform an action when the orientation of a toolbar is changed.
+Should be used if you wish to perform an action when the orientation of a toolbar is changed.
 </para>
 
 @toolbar: the object which received the signal.
@@ -365,7 +358,7 @@ should be used if you wish to perform an action when the orientation of a toolba
 
 <!-- ##### SIGNAL GtkToolbar::style-changed ##### -->
 <para>
-should be used if you wish to perform an action when ever the style of a toolbar is adjusted. For example, this would be a useful signal to connect to if you want to display more items on the toolbar when it is in icon-only mode; each item takes less space on the bar.
+Should be used if you wish to perform an action when ever the style of a toolbar is adjusted. For example, this would be a useful signal to connect to if you want to display more items on the toolbar when it is in icon-only mode; each item takes less space on the bar.
 </para>
 
 @toolbar: the object which received the signal.

@@ -1,3 +1,10 @@
+2001-11-11  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkiconfactory.c, gtk/gtktextbuffer.c, gtk/gtktreemodel.c,
+	gtk/gtkwindow.c, gtk/gtknotebook.c, gtk/gtkradiobutton.c, 
+	gtk/gtktextiter.c, gtk/gtkdialog.c: Mass fixing of trivial doc bugs.  
+	(#63544, #57007, #64141, #63472, #57108, #60818, #61562)
+
 2001-11-10  Hans Breuer  <hans@breuer.org>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate) : make sure 

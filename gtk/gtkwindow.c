@@ -5107,11 +5107,10 @@ gtk_window_group_get_type (void)
 /**
  * gtk_window_group_new:
  * 
- * Create a new #GtkWindowGroup object. Grabs added with
- * gtk_window_grab_add() only affect windows within the
- * same #GtkWindowGroup
+ * Creates a new #GtkWindowGroup object. Grabs added with
+ * gtk_grab_add() only affect windows within the same #GtkWindowGroup.
  * 
- * Return value: 
+ * Return value: a new #GtkWindowGroup. 
  **/
 GtkWindowGroup *
 gtk_window_group_new (void)
@@ -5147,7 +5146,7 @@ window_group_cleanup_grabs (GtkWindowGroup *group,
  * @window_group: a #GtkWindowGroup
  * @window: the #GtkWindow to add
  * 
- * Add a window to a #GtkWindowGroup. 
+ * Adds a window to a #GtkWindowGroup. 
  **/
 void
 gtk_window_group_add_window (GtkWindowGroup *window_group,

@@ -137,12 +137,12 @@ the values in the list. If this is set then the user will not be able to
 perform any other action until a valid value has been entered.
 </para>
 <para>
-If an empty field is acceptable, the @ok_if_empty parameter should be TRUE.
+If an empty field is acceptable, the @ok_if_empty parameter should be %TRUE.
 </para>
 
 @combo: a #GtkCombo.
-@val: TRUE if the value entered must match one of the values in the list.
-@ok_if_empty: TRUE if an empty value is considered valid.
+@val: %TRUE if the value entered must match one of the values in the list.
+@ok_if_empty: %TRUE if an empty value is considered valid.
 
 
 <!-- ##### FUNCTION gtk_combo_set_use_arrows ##### -->
@@ -152,7 +152,7 @@ the list. This is on by default.
 </para>
 
 @combo: a #GtkCombo.
-@val: TRUE if the arrow keys can be used to step through the items in the list.
+@val: %TRUE if the arrow keys can be used to step through the items in the list.
 
 
 <!-- ##### FUNCTION gtk_combo_set_use_arrows_always ##### -->
@@ -162,7 +162,8 @@ Specifies if the arrow keys will still work even if the current contents of the
 </para>
 
 @combo: a #GtkCombo.
-@val: 
+@val: %TRUE if the arrow keys will still work even if the current contents of
+the #GtkEntry field do not match any of the list items.
 
 
 <!-- ##### FUNCTION gtk_combo_set_case_sensitive ##### -->
@@ -177,7 +178,7 @@ worried about differences in case.
 </para>
 
 @combo: a #GtkCombo.
-@val: 
+@val: %TRUE if the text in the list items is case sensitive. 
 
 
 <!-- ##### FUNCTION gtk_combo_set_item_string ##### -->
@@ -187,7 +188,7 @@ selected. This is needed if the list item is not a simple label.
 </para>
 
 @combo: a #GtkCombo.
-@item: a #GtkItem which
+@item: a #GtkItem.
 @item_value: the string to place in the #GtkEntry when @item is selected.
 
 
@@ -195,7 +196,7 @@ selected. This is needed if the list item is not a simple label.
 <para>
 Stops the #GtkCombo widget from showing the popup list when the #GtkEntry
 emits the "activate" signal, i.e. when the Return key is pressed.
-This may be useful if, for example. you want the Return key to close a dialog
+This may be useful if, for example, you want the Return key to close a dialog
 instead.
 </para>
 

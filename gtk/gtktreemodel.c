@@ -397,7 +397,7 @@ gtk_tree_path_compare (const GtkTreePath *a,
  * @path: a #GtkTreePath
  * @descendant: another #GtkTreePath
  *
- * Returns %TRUE is @descendant is a descendant of @path.
+ * Returns %TRUE if @descendant is a descendant of @path.
  *
  * Return value: %TRUE if @descendant is contained inside @path
  **/

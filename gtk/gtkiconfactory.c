@@ -913,11 +913,11 @@ gtk_icon_set_new_from_pixbuf (GdkPixbuf *pixbuf)
 
 /**
  * gtk_icon_set_ref:
- * @icon_set: a #GtkIconSet
+ * @icon_set: a #GtkIconSet.
  * 
- * Increments the reference count on @icon_set
+ * Increments the reference count on @icon_set.
  * 
- * Return value: @icon_set is returned
+ * Return value: @icon_set.
  **/
 GtkIconSet*
 gtk_icon_set_ref (GtkIconSet *icon_set)

@@ -4184,8 +4184,8 @@ gtk_notebook_get_show_tabs (GtkNotebook *notebook)
 
 /**
  * gtk_notebook_set_tab_pos:
- * @notebook: 
- * @pos: 
+ * @notebook: a #GtkNotebook.
+ * @pos: the edge to draw the tabs at.
  * 
  * Sets the edge at which the tabs for switching pages in the
  * notebook are drawn.
@@ -4253,7 +4253,7 @@ gtk_notebook_set_homogeneous_tabs (GtkNotebook *notebook,
  * Sets the width the border around the tab labels
  * in a notebook. This is equivalent to calling
  * gtk_notebook_set_tab_hborder (@notebook, @border_width) followed
- * by gtk_noteobok_set_tab_vborder (@notebook, @border_width).
+ * by gtk_notebook_set_tab_vborder (@notebook, @border_width).
  **/
 void
 gtk_notebook_set_tab_border (GtkNotebook *notebook,
@@ -4323,7 +4323,6 @@ gtk_notebook_set_tab_vborder (GtkNotebook *notebook,
  * 
  * Sets whether the tab label area will have arrows for scrolling if
  * there are too many tabs to fit in the area.
-
  **/
 void
 gtk_notebook_set_scrollable (GtkNotebook *notebook,

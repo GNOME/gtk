@@ -7,11 +7,11 @@ A horizontal scrollbar
 <!-- ##### SECTION Long_Description ##### -->
 
 <para>
-The HScrollbar widget is a widget arranged horizontally creating a
-scroll bar. See #GtkScrollbar for details on
+The #GtkHScrollbar widget is a widget arranged horizontally creating a
+scrollbar. See #GtkScrollbar for details on
 scrollbars. #GtkAdjustment pointers may be added to handle the
-adjustment of the scrollbars or it may be left NULL in which case one
-will be created you. See #GtkAdjustment for details.
+adjustment of the scrollbar or it may be left %NULL in which case one
+will be created for you. See #GtkAdjustment for details.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -22,7 +22,7 @@ will be created you. See #GtkAdjustment for details.
 <!-- ##### STRUCT GtkHScrollbar ##### -->
 <para>
 The #GtkHScrollbar struct contains private data and should be accessed
-unsing the functions below.
+using the functions below.
 </para>
 
 
@@ -31,7 +31,7 @@ unsing the functions below.
 Creates a new horizontal scrollbar.
 </para>
 
-@adjustment: 
-@Returns: the new GTKHScrollbar
+@adjustment: the #GtkAdjustment to use, or %NULL to create a new adjustment.
+@Returns: the new #GtkHScrollbar.
 
 

@@ -238,9 +238,10 @@ gtk_radio_button_new_with_label (GSList      *group,
  *         mnemonic character
  * @returns: a new #GtkRadioButton
  *
- * Creates a new #GtkRadioButton containing a label. The label
- * will be created using gtk_label_new_with_mnemonic(), so underscores
- * in @label indicate the mnemonic for the button.
+ * Creates a new #GtkRadioButton containing a label, adding it to the same 
+ * group as @group. The label will be created using 
+ * gtk_label_new_with_mnemonic(), so underscores in @label indicate the 
+ * mnemonic for the button.
  **/
 GtkWidget*
 gtk_radio_button_new_with_mnemonic (GSList      *group,
