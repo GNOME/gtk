@@ -1228,24 +1228,32 @@ static gboolean
 file_model_node_is_visible (GtkFileSystemModel *model,
 			    FileModelNode      *node)
 {
-  if (model->show_hidden && model->show_folders && model->show_files)
-    return TRUE;
-  else
+  if (model->show_folders != model->show_files ||
+      !model->show_hidden ||
+      model->filter_func)
     {
       const GtkFileInfo *info = file_model_node_get_info (model, node);
-      gboolean is_folder = gtk_file_info_get_is_folder (info);
 
-      if (!model->show_folders && is_folder)
+      if (!info)
+	{
+	  /* File probably disappeared underneath us or resides in a
+	     directory where we have only partial access rights.  */
+	  return FALSE;
+	}
+
+      if (model->show_folders != model->show_files &&
+	  model->show_folders != gtk_file_info_get_is_folder (info))
 	return FALSE;
-      if (!model->show_files && !is_folder)
-	return FALSE;
+
       if (!model->show_hidden && gtk_file_info_get_is_hidden (info))
 	return FALSE;
-      if (model->filter_func && !model->filter_func (model, node->path, info, model->filter_data))
-	return FALSE;
 
-      return TRUE;
+      if (model->filter_func &&
+	  !model->filter_func (model, node->path, info, model->filter_data))
+	return FALSE;
     }
+
+  return TRUE;
 }
 
 static void

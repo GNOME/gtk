@@ -676,7 +676,15 @@ gtk_path_bar_set_path (GtkPathBar         *path_bar,
 	file_folder = gtk_file_system_get_folder (file_system, path,
 						  GTK_FILE_INFO_DISPLAY_NAME, NULL);
 
-      file_info = gtk_file_folder_get_info (file_folder, path, NULL);
+      file_info = gtk_file_folder_get_info (file_folder, path, &err);
+      if (!file_info)
+	{
+	  g_propagate_error (error, err);
+	  g_error_free (err);
+	  gtk_file_path_free (path);
+	  break;
+	}
+
       display_name = gtk_file_info_get_display_name (file_info);
       if (! strcmp ("/", display_name))
 	display_name = " / ";
