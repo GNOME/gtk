@@ -39,6 +39,8 @@ Bugs:
 
  * Expose events aren't being generated correctly for DND demo
 
+ * MappingNotify events produce warnings.
+
 Additions:
  * implement keyboard navigation in menus
 

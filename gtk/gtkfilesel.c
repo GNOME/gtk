@@ -245,13 +245,18 @@ static gchar*              cmpl_completion_fullname (gchar*, CompletionState* cm
 static CompletionDir* open_ref_dir         (gchar* text_to_complete,
 					    gchar** remaining_text,
 					    CompletionState* cmpl_state);
+static gboolean       check_dir            (gchar *dir_name, 
+					    struct stat *result, 
+					    gboolean *stat_subdirs);
 static CompletionDir* open_dir             (gchar* dir_name,
 					    CompletionState* cmpl_state);
 static CompletionDir* open_user_dir        (gchar* text_to_complete,
 					    CompletionState *cmpl_state);
 static CompletionDir* open_relative_dir    (gchar* dir_name, CompletionDir* dir,
 					    CompletionState *cmpl_state);
-static CompletionDirSent* open_new_dir         (gchar* dir_name, struct stat* sbuf);
+static CompletionDirSent* open_new_dir     (gchar* dir_name, 
+					    struct stat* sbuf,
+					    gboolean stat_subdirs);
 static gint           correct_dir_fullname (CompletionDir* cmpl_dir);
 static gint           correct_parent       (CompletionDir* cmpl_dir,
 					    struct stat *sbuf);
@@ -1890,7 +1895,7 @@ open_relative_dir(gchar* dir_name,
 
 /* after the cache lookup fails, really open a new directory */
 static CompletionDirSent*
-open_new_dir(gchar* dir_name, struct stat* sbuf)
+open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 {
   CompletionDirSent* sent;
   DIR* directory;
@@ -1968,12 +1973,17 @@ open_new_dir(gchar* dir_name, struct stat* sbuf)
       path_buf[path_buf_len] = '/';
       strcpy(path_buf + path_buf_len + 1, dirent_ptr->d_name);
 
-      if(stat(path_buf, &ent_sbuf) >= 0 && S_ISDIR(ent_sbuf.st_mode))
-	sent->entries[i].is_dir = 1;
+      if (stat_subdirs)
+	{
+	  if(stat(path_buf, &ent_sbuf) >= 0 && S_ISDIR(ent_sbuf.st_mode))
+	    sent->entries[i].is_dir = 1;
+	  else
+	    /* stat may fail, and we don't mind, since it could be a
+	     * dangling symlink. */
+	    sent->entries[i].is_dir = 0;
+	}
       else
-	/* stat may fail, and we don't mind, since it could be a
-	 * dangling symlink. */
-	sent->entries[i].is_dir = 0;
+	sent->entries[i].is_dir = 1;
     }
 
   qsort(sent->entries, sent->entry_count, sizeof(CompletionDirEntry), compare_cmpl_dir);
@@ -1983,19 +1993,69 @@ open_new_dir(gchar* dir_name, struct stat* sbuf)
   return sent;
 }
 
+static gboolean
+check_dir(gchar *dir_name, struct stat *result, gboolean *stat_subdirs)
+{
+  /* A list of directories that we know only contain other directories.
+   * Trying to stat every file in these directories would be very
+   * expensive.
+   */
+
+  static struct {
+    gchar *name;
+    gboolean present;
+    struct stat statbuf;
+  } no_stat_dirs[] = {
+    { "/afs", FALSE, { 0 } },
+  };
+
+  static gint n_no_stat_dirs = sizeof(no_stat_dirs) / sizeof(no_stat_dirs[0]);
+  static gboolean initialized = FALSE;
+
+  gint i;
+
+  if (!initialized)
+    {
+      initialized = TRUE;
+      for (i=0; i<n_no_stat_dirs; i++)
+	{
+	  if (stat(no_stat_dirs[i].name, &no_stat_dirs[i].statbuf) == 0)
+	    no_stat_dirs[i].present = TRUE;
+	}
+    }
+
+  if(stat(dir_name, result) < 0)
+    {
+      cmpl_errno = errno;
+      return FALSE;
+    }
+
+  *stat_subdirs = TRUE;
+  for (i=0; i<n_no_stat_dirs; i++)
+    {
+      if (no_stat_dirs[i].present &&
+	  (no_stat_dirs[i].statbuf.st_dev == result->st_dev) &&
+	  (no_stat_dirs[i].statbuf.st_ino == result->st_ino))
+	{
+	  *stat_subdirs = FALSE;
+	  break;
+	}
+    }
+
+  return TRUE;
+}
+
 /* open a directory by absolute pathname */
 static CompletionDir*
 open_dir(gchar* dir_name, CompletionState* cmpl_state)
 {
   struct stat sbuf;
+  gboolean stat_subdirs;
   CompletionDirSent *sent;
   GList* cdsl;
 
-  if(stat(dir_name, &sbuf) < 0)
-    {
-      cmpl_errno = errno;
-      return NULL;
-    }
+  if (!check_dir (dir_name, &sbuf, &stat_subdirs))
+    return NULL;
 
   cdsl = cmpl_state->directory_sent_storage;
 
@@ -2011,7 +2071,7 @@ open_dir(gchar* dir_name, CompletionState* cmpl_state)
       cdsl = cdsl->next;
     }
 
-  sent = open_new_dir(dir_name, &sbuf);
+  sent = open_new_dir(dir_name, &sbuf, stat_subdirs);
 
   if (sent) {
     cmpl_state->directory_sent_storage =
@@ -2317,13 +2377,14 @@ find_completion_dir(gchar* text_to_complete,
 {
   gchar* first_slash = strchr(text_to_complete, '/');
   CompletionDir* dir = cmpl_state->reference_dir;
+  CompletionDir* next;
   *remaining_text = text_to_complete;
 
   while(first_slash)
     {
       gint len = first_slash - *remaining_text;
       gint found = 0;
-      gint found_index = -1;
+      gchar *found_name = NULL;         /* Quiet gcc */
       gint i;
       gchar* pat_buf = g_new (gchar, len + 1);
 
@@ -2344,40 +2405,37 @@ find_completion_dir(gchar* text_to_complete,
 	      else
 		{
 		  found = 1;
-		  found_index = i;
+		  found_name = dir->sent->entries[i].entry_name;
 		}
 	    }
 	}
 
-      if(found)
+      if (!found)
 	{
-	  CompletionDir* next = open_relative_dir(dir->sent->entries[found_index].entry_name,
-						  dir, cmpl_state);
-
-	  if(!next)
-	    {
-	      g_free (pat_buf);
-	      return NULL;
-	    }
-
-	  next->cmpl_parent = dir;
-
-	  dir = next;
-
-	  if(!correct_dir_fullname(dir))
-	    {
-	      g_free(pat_buf);
-	      return NULL;
-	    }
-
-	  *remaining_text = first_slash + 1;
-	  first_slash = strchr(*remaining_text, '/');
+	  /* Perhaps we are trying to open an automount directory */
+	  found_name = pat_buf;
 	}
-      else
+
+      next = open_relative_dir(found_name, dir, cmpl_state);
+      
+      if(!next)
 	{
 	  g_free (pat_buf);
 	  return NULL;
 	}
+      
+      next->cmpl_parent = dir;
+      
+      dir = next;
+      
+      if(!correct_dir_fullname(dir))
+	{
+	  g_free(pat_buf);
+	  return NULL;
+	}
+      
+      *remaining_text = first_slash + 1;
+      first_slash = strchr(*remaining_text, '/');
 
       g_free (pat_buf);
     }

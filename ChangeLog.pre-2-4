@@ -1,3 +1,20 @@
+Sat Sep 12 10:44:06 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtkfilesel.c: Maintain a list of directories like
+	/afs we know contain only directories, and avoid
+	stat'ing files in those directories. (Because
+	stat'ing all files in /afs is extremely expensive)
+
+	To support automounters, try to open directories,
+	even if we couldn't find them when reading their
+	parent directory.
+
+Thu Sep  3 10:29:03 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk.m4: Conditionalize check for GTK_MAJOR_VERSION,
+	to allow the same gtk.m4 to work for 1.0.x and
+	1.1.x.
+
 Fri Sep 11 15:25:10 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (gtk_clist_set_selectable): new function
