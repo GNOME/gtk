@@ -915,8 +915,11 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
   gtk_progress_set_show_text (GTK_PROGRESS (pbar), text && *text);
   gtk_progress_set_format_string (GTK_PROGRESS (pbar), text);
   
-  /* We don't support formats in this interface */
-  GTK_PROGRESS (pbar)->use_text_format = FALSE;
+  /* We don't support formats in this interface, but turn
+   * them back on for NULL, which should put us back to
+   * the initial state.
+   */
+  GTK_PROGRESS (pbar)->use_text_format = (text == NULL);
   
   g_object_notify (G_OBJECT (pbar), "text");
 }

@@ -1,3 +1,9 @@
+Fri Oct 18 15:38:50 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkprogressbar.c (gtk_progress_bar_set_text): 
+	Reset use_text_format to %TRUE for a %NULL text string.
+	(#94157, once again).
+
 Thu Oct 17 17:17:05 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcheckbutton.c (gtk_check_button_size_request): 
@@ -7,7 +13,7 @@ Thu Oct 17 14:38:37 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaccellabel.c (gtk_accel_label_expose_event): 
 	Align the baseline of the accelerator label with the 
-	first baseline of the main label of the menu item. (#76593)
+	first baseline of the main label of the menu item. (#76953)
 
 Wed Oct 16 18:25:24 2002  Owen Taylor  <otaylor@redhat.com>
 
@@ -54,7 +60,6 @@ Thu Oct 17 22:37:57 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	Unbreaks various things using SubstructureNotifyMask.
 
->>>>>>> 1.3770
 Thu Oct 17 16:13:28 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcheckbutton.c gtk/gtkradiobutton.c: Make
