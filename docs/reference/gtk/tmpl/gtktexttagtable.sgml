@@ -76,15 +76,6 @@ types related to the text widget and how they work together.
 @data: 
 
 
-<!-- ##### FUNCTION gtk_text_tag_table_size ##### -->
-<para>
-
-</para>
-
-@table: 
-@Returns: 
-
-
 <!-- ##### SIGNAL GtkTextTagTable::tag-added ##### -->
 <para>
 

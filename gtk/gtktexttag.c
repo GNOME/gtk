@@ -1597,7 +1597,7 @@ gtk_text_tag_get_priority (GtkTextTag *tag)
  * @priority: the new priority
  * 
  * Sets the priority of a #GtkTextTag. Valid priorities are
- * start at 0 and go to one less than gtk_text_tag_table_size().
+ * start at 0 and go to one less than gtk_text_tag_table_get_size().
  * Each tag in a table has a unique priority; setting the priority
  * of one tag shifts the priorities of all the other tags in the
  * table to maintain a unique priority for each tag. Higher priority
@@ -1617,7 +1617,7 @@ gtk_text_tag_set_priority (GtkTextTag *tag,
   g_return_if_fail (GTK_IS_TEXT_TAG (tag));
   g_return_if_fail (tag->table != NULL);
   g_return_if_fail (priority >= 0);
-  g_return_if_fail (priority < gtk_text_tag_table_size (tag->table));
+  g_return_if_fail (priority < gtk_text_tag_table_get_size (tag->table));
 
   if (priority == tag->priority)
     return;

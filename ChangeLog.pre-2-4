@@ -1,3 +1,8 @@
+Thu Aug 23 18:23:31 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktexttag.c (gtk_text_tag_table_get_size): 
+	Rename from gtk_text_tag_table_size(). (#59366)
+
 Thu Aug 23 20:01:41 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtktreemodelsort.[ch], gtk/gtktreesortable.[ch],
