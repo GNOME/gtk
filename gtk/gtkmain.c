@@ -260,6 +260,7 @@ gtk_init (int	 *argc,
 					      gtk_debug_keys,
 					      gtk_ndebug_keys);
   }
+#endif	/* G_ENABLE_DEBUG */
 
   if (argc && argv)
     {
@@ -267,55 +268,13 @@ gtk_init (int	 *argc,
       
       for (i = 1; i < *argc;)
 	{
-	  if ((strcmp ("--gtk-debug", (*argv)[i]) == 0) ||
-	      (strncmp ("--gtk-debug=", (*argv)[i], 12) == 0))
-	    {
-	      gchar *equal_pos = strchr ((*argv)[i], '=');
-
-	      if (equal_pos != NULL)
-		{
-		  gtk_debug_flags |= g_parse_debug_string (equal_pos+1,
-							   gtk_debug_keys,
-							   gtk_ndebug_keys);
-		}
-	      else if ((i + 1) < *argc && (*argv)[i + 1])
-		{
-		  gtk_debug_flags |= g_parse_debug_string ((*argv)[i+1],
-							   gtk_debug_keys,
-							   gtk_ndebug_keys);
-		  (*argv)[i] = NULL;
-		  i += 1;
-		}
-	      (*argv)[i] = NULL;
-	    }
-	  else if ((strcmp ("--gtk-no-debug", (*argv)[i]) == 0) ||
-		   (strncmp ("--gtk-no-debug=", (*argv)[i], 15) == 0))
-	    {
-	      gchar *equal_pos = strchr ((*argv)[i], '=');
-
-	      if (equal_pos != NULL)
-		{
-		  gtk_debug_flags &= ~g_parse_debug_string (equal_pos+1,
-							    gtk_debug_keys,
-							    gtk_ndebug_keys);
-		}
-	      else if ((i + 1) < *argc && (*argv)[i + 1])
-		{
-		  gtk_debug_flags &= ~g_parse_debug_string ((*argv)[i+1],
-							    gtk_debug_keys,
-							    gtk_ndebug_keys);
-		  (*argv)[i] = NULL;
-		  i += 1;
-		}
-	      (*argv)[i] = NULL;
-	    }
-	  else if (strcmp ("--gtk-module", (*argv)[i]) == 0 ||
-		   strncmp ("--gtk-module=", (*argv)[i], 13) == 0)
+	  if (strcmp ("--gtk-module", (*argv)[i]) == 0 ||
+	      strncmp ("--gtk-module=", (*argv)[i], 13) == 0)
 	    {
 	      GModule *module = NULL;
 	      GtkModuleInitFunc modinit_func = NULL;
 	      gchar *module_name = (*argv)[i] + 12;
-
+	      
 	      if (*module_name == '=')
 		module_name++;
 	      else
@@ -362,15 +321,59 @@ gtk_init (int	 *argc,
 	  else if (strcmp ("--g-fatal-warnings", (*argv)[i]) == 0)
 	    {
 	      GLogLevelFlags fatal_mask;
-
+	      
 	      fatal_mask = g_log_set_always_fatal (G_LOG_FATAL_MASK);
 	      fatal_mask |= G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL;
               g_log_set_always_fatal (fatal_mask);
 	      (*argv)[i] = NULL;
 	    }
+#ifdef G_ENABLE_DEBUG
+	  else if ((strcmp ("--gtk-debug", (*argv)[i]) == 0) ||
+		   (strncmp ("--gtk-debug=", (*argv)[i], 12) == 0))
+	    {
+	      gchar *equal_pos = strchr ((*argv)[i], '=');
+	      
+	      if (equal_pos != NULL)
+		{
+		  gtk_debug_flags |= g_parse_debug_string (equal_pos+1,
+							   gtk_debug_keys,
+							   gtk_ndebug_keys);
+		}
+	      else if ((i + 1) < *argc && (*argv)[i + 1])
+		{
+		  gtk_debug_flags |= g_parse_debug_string ((*argv)[i+1],
+							   gtk_debug_keys,
+							   gtk_ndebug_keys);
+		  (*argv)[i] = NULL;
+		  i += 1;
+		}
+	      (*argv)[i] = NULL;
+	    }
+	  else if ((strcmp ("--gtk-no-debug", (*argv)[i]) == 0) ||
+		   (strncmp ("--gtk-no-debug=", (*argv)[i], 15) == 0))
+	    {
+	      gchar *equal_pos = strchr ((*argv)[i], '=');
+	      
+	      if (equal_pos != NULL)
+		{
+		  gtk_debug_flags &= ~g_parse_debug_string (equal_pos+1,
+							    gtk_debug_keys,
+							    gtk_ndebug_keys);
+		}
+	      else if ((i + 1) < *argc && (*argv)[i + 1])
+		{
+		  gtk_debug_flags &= ~g_parse_debug_string ((*argv)[i+1],
+							    gtk_debug_keys,
+							    gtk_ndebug_keys);
+		  (*argv)[i] = NULL;
+		  i += 1;
+		}
+	      (*argv)[i] = NULL;
+	    }
+#endif /* G_ENABLE_DEBUG */
 	  i += 1;
 	}
-
+      
       for (i = 1; i < *argc; i++)
 	{
 	  for (k = i; k < *argc; k++)
@@ -386,9 +389,7 @@ gtk_init (int	 *argc,
 	    }
 	}
     }
-
-#endif /* G_ENABLE_DEBUG */
-
+  
   /* Check if there is a good chance the mb functions will handle things
    * correctly - set if either mblen("\xc0", MB_CUR_MAX) == 1 in the
    * C locale, or we're using X's mb functions. (-DX_LOCALE && locale != C)

@@ -1,3 +1,9 @@
+Wed Aug 19 00:11:14 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_init): allow argument parsing in gtk without
+	G_ENABLE_DEBUG being defined (specifically --gtk-module= and
+	--g-fatal-warnings), noticed by miguel.
+
 Tue Aug 18 17:54:40 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkrc.c (gtk_rc_parse_file): use g_get_current_dir() instead of
