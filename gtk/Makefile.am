@@ -456,7 +456,7 @@ EXTRA_DIST += $(gtk_built_sources)
 # rules to generate built sources
 #
 # setup autogeneration dependancies
-gen_sources = xgen-gdef xgen-gtbh xgen-gtbvc xgen-gtbic xgen-gtbec xgen-gmh xgen-gmc
+gen_sources = xgen-gdef xgen-gtbh xgen-gtbvc xgen-gtbic xgen-gtbec xgen-gmh xgen-gmc xgen-gmlh xgen-gmlc
 CLEANFILES = $(gen_sources)
 Makefile: oldest-source-stamp	# oh boy, does automake SUCK!
 oldest-source-stamp: $(gtk_built_sources)
@@ -493,9 +493,9 @@ $(srcdir)/stamp-gtkmarshalers.h: @REBUILD@ gtkmarshalers.list gtkmarshalers.h
 	   *) glib_genmarshal=@GLIB_GENMARSHAL@ ;;						\
 	esac;											\
 	cd $(srcdir)										\
-	&& $$glib_genmarshal --prefix=_gtk_marshal gtkmarshalers.list --header >> xgen-gmh	\
-	&& (cmp -s xgen-gmh gtkmarshalers.h || cp xgen-gmh gtkmarshalers.h)			\
-	&& rm -f xgen-gmh xgen-gmh~								\
+	&& $$glib_genmarshal --prefix=_gtk_marshal gtkmarshalers.list --header >> xgen-gmlh	\
+	&& (cmp -s xgen-gmlh gtkmarshalers.h || cp xgen-gmlh gtkmarshalers.h)			\
+	&& rm -f xgen-gmlh 									\
 	&& echo timestamp > $(@F)
 $(srcdir)/gtkmarshalers.c: @REBUILD@ $(srcdir)/stamp-gtkmarshalers.h
 	case @GLIB_GENMARSHAL@ in								\
@@ -503,9 +503,9 @@ $(srcdir)/gtkmarshalers.c: @REBUILD@ $(srcdir)/stamp-gtkmarshalers.h
 	   *) glib_genmarshal=@GLIB_GENMARSHAL@ ;;						\
 	esac;											\
 	cd $(srcdir)										\
-	&& $$glib_genmarshal --prefix=_gtk_marshal gtkmarshalers.list --body >> xgen-gmc	\
-	&& cp xgen-gmc gtkmarshalers.c								\
-	&& rm -f xgen-gmc xgen-gmc~
+	&& $$glib_genmarshal --prefix=_gtk_marshal gtkmarshalers.list --body >> xgen-gmlc	\
+	&& cp xgen-gmlc gtkmarshalers.c								\
+	&& rm -f xgen-gmlc 
 $(srcdir)/gtkmarshal.h: @REBUILD@ gtkmarshal.list
 	case @GLIB_GENMARSHAL@ in								\
 	   .*) glib_genmarshal=`pwd`/@GLIB_GENMARSHAL@ ;;					\
@@ -516,7 +516,7 @@ $(srcdir)/gtkmarshal.h: @REBUILD@ gtkmarshal.list
         && $$glib_genmarshal --prefix=gtk_marshal gtkmarshal.list --header >> xgen-gmh		\
 	&& echo "#endif /* GTK_DISABLE_DEPRECATED */" >> xgen-gmh				\
 	&& cp xgen-gmh gtkmarshal.h								\
-	&& rm -f xgen-gmh xgen-gmh~
+	&& rm -f xgen-gmh 
 $(srcdir)/gtkmarshal.c: @REBUILD@ gtkmarshal.h
 	case @GLIB_GENMARSHAL@ in								\
 	   .*) glib_genmarshal=`pwd`/@GLIB_GENMARSHAL@ ;;					\
@@ -525,7 +525,7 @@ $(srcdir)/gtkmarshal.c: @REBUILD@ gtkmarshal.h
 	cd $(srcdir)										\
 	&& $$glib_genmarshal --prefix=gtk_marshal gtkmarshal.list --body >> xgen-gmc		\
 	&& cp xgen-gmc gtkmarshal.c								\
-	&& rm -f xgen-gmc xgen-gmc~
+	&& rm -f xgen-gmc 
 
 $(srcdir)/stamp-gtktypebuiltins.h: @REBUILD@ maketypes.awk $(srcdir)/stamp-gtk.defs gtktypebuiltins.h
 	cd $(srcdir) \

@@ -1,3 +1,9 @@
+Fri Dec  7 12:07:15 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/Makefile.am: each source generation rule needs to use its own
+	temporary file, to avoid clashes for parallel builds. fixed rules
+	for gtkmarshalers.h and gtkmarshalers.c to use their own temp files.
+
 2001-12-07  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/x11/gdkcursor-x11.c (gdk_cursor_new): fix up my list of
