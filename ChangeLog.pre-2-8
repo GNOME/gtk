@@ -1,5 +1,11 @@
 2001-10-27  Anders Carlsson  <andersca@gnu.org>
 
+	* gdk/x11/gdkmain-x11.c: Replace int and guint with
+	long and gulong in some places to make the code 64-bit
+	clean.
+	(_gdk_windowing_init_check): Replace gint with gulong.
+	This patch was made by George Lebl and fixes bug #62113.
+
 	* tests/testgtk.c (create_range_controls): Don't set a 
 	fixed height on the hscale widget. This fixes "bug" 
 	#55840.
