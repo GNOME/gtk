@@ -91,7 +91,7 @@ GdkPixBuf *image_load(FILE * f)
         else
                 bpp = 3;
 
-	pixels = g_malloc(w*h*bpp);
+	pixels = art_alloc(w*h*bpp);
 	rows = g_malloc(h*sizeof(png_bytep));
 
 	if ((!pixels) || (!rows)) {
@@ -126,7 +126,7 @@ GdkPixBuf *image_load(FILE * f)
 			temp[1] = rowdata[(x*bpp)+1];
 			temp[2] = rowdata[(x*bpp)+2];
 			if (bpp == 4)
-				temp[3] = rowdata[(x*4)+3];
+				temp[3] = rowdata[(x*bpp)+3];
 			temp += bpp;
 		}
 		g_free(rows[y]);
