@@ -41,6 +41,8 @@ and GTK is a widget set for creating user interfaces.
 
 - Added aclocal and bin stuff to file list.
 
+- Added -k to the SMP make line.
+
 * Fri Mar 14 1998 Shawn T. Amundson <amundson@gimp.org>
 
 - Changed version to 0.99.7
@@ -70,7 +72,7 @@ else
 fi
 
 if [ "$SMP" != "" ]; then
-  (make "MAKE=make -j $SMP"; exit 0)
+  (make "MAKE=make -k -j $SMP"; exit 0)
   make
 else
   make
