@@ -18,6 +18,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:769
 #: gdk-pixbuf/gdk-pixbuf-io.c:902 tests/testfilechooser.c:192
@@ -153,7 +154,6 @@ msgstr "画像のピクセルデータが壊れています"
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "%u バイトの画像バッファの確保に失敗しました"
-msgstr[1] "%u バイトの画像バッファの確保に失敗しました"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -1075,7 +1075,6 @@ msgstr "新しいフォルダの種類"
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d バイト"
-msgstr[1] "%d バイト"
 
 #: gtk/gtkfilechooserdefault.c:4979
 #, c-format
