@@ -1,3 +1,8 @@
+Thu Nov  6 20:41:40 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkstyle.c (gtk_style_attach): Fix doc comment.
+	(#126369, Olexiy Avramchenko)
+
 Thu Nov  6 00:21:41 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcolorbutton.c (gtk_color_button_init): 
