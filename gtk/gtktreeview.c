@@ -12497,7 +12497,8 @@ gtk_tree_view_search_move (GtkWidget   *window,
 
   /* search */
   gtk_tree_selection_unselect_all (selection);
-  gtk_tree_model_get_iter_first (model, &iter);
+  if (!gtk_tree_model_get_iter_first (model, &iter))
+    return;
 
   ret = gtk_tree_view_search_iter (model, selection, &iter, text,
 				   &count, up?((tree_view->priv->selected_iter) - 1):((tree_view->priv->selected_iter + 1)));
