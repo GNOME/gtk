@@ -1,3 +1,8 @@
+Sat Feb 24 20:11:39 2001  Jonathan Blandford  <jrb@webwynk.net>
+
+	* gtk/gtkclipboard.h: actually put /* */ around #endif comment.
+
+
 Fri Feb 23 17:50:13 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): Only draw the

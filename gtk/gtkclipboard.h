@@ -84,4 +84,4 @@ gchar *           gtk_clipboard_wait_for_text     (GtkClipboard *clipboard);
 }
 #endif /* __cplusplus */
 
-#endif __GTK_CLIPBOARD_H__
+#endif /* __GTK_CLIPBOARD_H__ */
