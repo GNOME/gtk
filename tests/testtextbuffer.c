@@ -602,7 +602,7 @@ fill_buffer (GtkTextBuffer *buffer)
 
   color.blue = color.green = 0;
   color.red = 0xffff;
-  g_object_set (GTK_OBJECT (tag),
+  g_object_set (G_OBJECT (tag),
                 "rise", -4,
                 "foreground_gdk", &color,
                 NULL);

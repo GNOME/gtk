@@ -67,8 +67,7 @@ struct _GtkTextView
   GtkTextBuffer *buffer;
 
   guint selection_drag_handler;
-  guint selection_drag_scan_timeout;
-  gint scrolling_accel_factor;
+  guint scroll_timeout;
 
   /* Default style settings */
   gint pixels_above_lines;
@@ -175,7 +174,12 @@ void           gtk_text_view_set_buffer            (GtkTextView   *text_view,
 GtkTextBuffer *gtk_text_view_get_buffer            (GtkTextView   *text_view);
 gboolean       gtk_text_view_scroll_to_mark        (GtkTextView   *text_view,
                                                     GtkTextMark   *mark,
-                                                    gint           mark_within_margin);
+                                                    gdouble        within_margin,
+                                                    gboolean       use_align,
+                                                    gdouble        xalign,
+                                                    gdouble        yalign);
+gboolean       gtk_text_view_scroll_mark_onscreen  (GtkTextView   *text_view,
+                                                    GtkTextMark   *mark);
 gboolean       gtk_text_view_move_mark_onscreen    (GtkTextView   *text_view,
                                                     GtkTextMark   *mark);
 gboolean       gtk_text_view_place_cursor_onscreen (GtkTextView   *text_view);

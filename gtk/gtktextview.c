@@ -1136,25 +1136,179 @@ gtk_text_view_scroll_to_mark_adjusted (GtkTextView *text_view,
  * gtk_text_view_scroll_to_mark:
  * @text_view: a #GtkTextView
  * @mark: a #GtkTextMark
- * @mark_within_margin: a margin
+ * @within_margin: margin as a [0.0,0.5) fraction of screen size
+ * @use_align: whether to use alignment arguments (if %FALSE, just get the mark onscreen)
+ * @xalign: horizontal alignment of mark within visible area.
+ * @yalign: vertical alignment of mark within visible area
  *
- * Scrolls @text_view so that @mark is on the screen. If
- * @mark_within_margin is nonzero, the mark will be moved onscreen by
- * that many pixels. For example, if @mark_within_margin is 5, the
- * mark will be at least 5 pixels away from the edge of the screen,
- * if possible.
+ * Scrolls @text_view so that @mark is on the screen in the position
+ * indicated by @xalign and @yalign. An alignment of 0.0 indicates
+ * left or top, 1.0 indicates right or bottom, 0.5 means center. If @use_align
+ * is %FALSE, the text scrolls the minimal distance to get the mark onscreen,
+ * possibly not scrolling at all. The effective screen for purposes
+ * of this function is reduced by a margin of size @within_margin.
  *
- * Return value: TRUE if scrolling occurred
+ * Return value: %TRUE if scrolling occurred
  **/
 gboolean
 gtk_text_view_scroll_to_mark (GtkTextView *text_view,
                               GtkTextMark *mark,
-                              gint mark_within_margin)
+                              gdouble      within_margin,
+                              gboolean     use_align,
+                              gdouble      xalign,
+                              gdouble      yalign)
 {
-  g_return_val_if_fail (mark_within_margin >= 0, FALSE);
+  GtkTextIter iter;
+  GdkRectangle rect;
+  GdkRectangle screen;
+  gint screen_bottom;
+  gint screen_right;
+  gint scroll_dest;
+  GtkWidget *widget;
+  gboolean retval = FALSE;
+  gint scroll_inc;
+  gint screen_xoffset, screen_yoffset;
+  gint current_x_scroll, current_y_scroll;
 
-  return gtk_text_view_scroll_to_mark_adjusted (text_view, mark,
-                                                mark_within_margin, 1.0);
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+  g_return_val_if_fail (GTK_IS_TEXT_MARK (mark), FALSE);
+  g_return_val_if_fail (within_margin >= 0.0 && within_margin < 0.5, FALSE);
+  g_return_val_if_fail (xalign >= 0.0 && xalign <= 1.0, FALSE);
+  g_return_val_if_fail (yalign >= 0.0 && yalign <= 1.0, FALSE);
+  
+  widget = GTK_WIDGET (text_view);
+
+  if (!GTK_WIDGET_MAPPED (widget))
+    {
+      g_warning ("FIXME need to implement scroll_to_mark for unmapped GtkTextView?");
+      return FALSE;
+    }
+
+  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, mark);
+
+  gtk_text_layout_get_iter_location (text_view->layout,
+                                     &iter,
+                                     &rect);
+
+  /* Be sure the scroll region is up-to-date */
+  gtk_text_view_scroll_calc_now (text_view);
+
+  current_x_scroll = text_view->xoffset;
+  current_y_scroll = text_view->yoffset;
+
+  screen.x = current_x_scroll;
+  screen.y = current_y_scroll;
+  screen.width = SCREEN_WIDTH (widget);
+  screen.height = SCREEN_HEIGHT (widget);
+  
+  screen_xoffset = screen.width * within_margin;
+  screen_yoffset = screen.height * within_margin;
+  
+  screen.x += screen_xoffset;
+  screen.y += screen_yoffset;
+  screen.width -= screen_xoffset * 2;
+  screen.height -= screen_yoffset * 2;
+
+  /* paranoia check */
+  if (screen.width < 1)
+    screen.width = 1;
+  if (screen.height < 1)
+    screen.height = 1;
+  
+  screen_right = screen.x + screen.width;
+  screen_bottom = screen.y + screen.height;
+  
+  /* The alignment affects the point in the target character that we
+   * choose to align. If we're doing right/bottom alignment, we align
+   * the right/bottom edge of the character the mark is at; if we're
+   * doing left/top we align the left/top edge of the character; if
+   * we're doing center alignment we align the center of the
+   * character.
+   */
+  
+  /* Vertical scroll */
+
+  scroll_inc = 0;
+  scroll_dest = current_y_scroll;
+  
+  if (use_align)
+    {      
+      scroll_dest = rect.y + (rect.height * yalign) - (screen.height * yalign);
+      
+      /* if scroll_dest < screen.y, we move a negative increment (up),
+       * else a positive increment (down)
+       */
+      scroll_inc = scroll_dest - screen.y + screen_yoffset;
+    }
+  else
+    {
+      /* move minimum to get onscreen */
+      if (rect.y < screen.y)
+        {
+          scroll_dest = rect.y;
+          scroll_inc = scroll_dest - screen.y - screen_yoffset;
+        }
+      else if ((rect.y + rect.height) > screen_bottom)
+        {
+          scroll_dest = rect.y + rect.height;
+          scroll_inc = scroll_dest - screen_bottom + screen_yoffset;
+        }
+    }  
+  
+  if (scroll_inc != 0)
+    {
+      set_adjustment_clamped (get_vadjustment (text_view),
+                              current_y_scroll + scroll_inc);
+      retval = TRUE;
+    }
+
+  /* Horizontal scroll */
+  
+  scroll_inc = 0;
+  scroll_dest = current_x_scroll;
+  
+  if (use_align)
+    {      
+      scroll_dest = rect.x + (rect.width * xalign) - (screen.width * xalign);
+
+      /* if scroll_dest < screen.y, we move a negative increment (left),
+       * else a positive increment (right)
+       */
+      scroll_inc = scroll_dest - screen.x + screen_xoffset;
+    }
+  else
+    {
+      /* move minimum to get onscreen */
+      if (rect.x < screen.x)
+        {
+          scroll_dest = rect.x;
+          scroll_inc = scroll_dest - screen.x - screen_xoffset;
+        }
+      else if ((rect.x + rect.width) > screen_right)
+        {
+          scroll_dest = rect.x + rect.width;
+          scroll_inc = scroll_dest - screen_right + screen_xoffset;
+        }
+    }
+  
+  if (scroll_inc != 0)
+    {
+      set_adjustment_clamped (get_hadjustment (text_view),
+                              current_x_scroll + scroll_inc);
+      retval = TRUE;
+    }
+
+  return retval;
+}
+
+gboolean
+gtk_text_view_scroll_mark_onscreen (GtkTextView *text_view,
+                                    GtkTextMark *mark)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+  g_return_val_if_fail (GTK_IS_TEXT_MARK (mark), FALSE);
+
+  return gtk_text_view_scroll_to_mark (text_view, mark, 0.0, FALSE, 0.0, 0.0);
 }
 
 static gboolean
@@ -1176,7 +1330,7 @@ clamp_iter_onscreen (GtkTextView *text_view, GtkTextIter *iter)
  * Moves a mark within the buffer so that it's
  * located within the currently-visible text area.
  *
- * Return value: %TRUE if scrolling occurred
+ * Return value: %TRUE if the mark moved (wasn't already onscreen)
  **/
 gboolean
 gtk_text_view_move_mark_onscreen (GtkTextView *text_view,
@@ -2533,7 +2687,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
       gtk_text_view_scroll_to_mark (text_view,
                                     gtk_text_buffer_get_mark (get_buffer (text_view),
                                                               "insert"),
-                                    0);
+                                    0.0, FALSE, 0.0, 0.0);
       retval = TRUE;
     }
   /* Pass through Tab as literal tab, unless Control is held down */
@@ -2541,10 +2695,9 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
     {
       gtk_text_buffer_insert_interactive_at_cursor (get_buffer (text_view), "\t", 1,
                                                     text_view->editable);
-      gtk_text_view_scroll_to_mark (text_view,
-                                    gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                              "insert"),
-                                    0);
+      gtk_text_view_scroll_mark_onscreen (text_view,
+                                          gtk_text_buffer_get_mark (get_buffer (text_view),
+                                                                    "insert"));
       retval = TRUE;
     }
   else
@@ -3190,9 +3343,9 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
       else
         gtk_text_buffer_place_cursor (get_buffer (text_view), &newplace);
 
-      gtk_text_view_scroll_to_mark (text_view,
-                                    gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                              "insert"), 0);
+      gtk_text_view_scroll_mark_onscreen (text_view,
+                                          gtk_text_buffer_get_mark (get_buffer (text_view),
+                                                                    "insert"));
 
       if (step == GTK_MOVEMENT_DISPLAY_LINES)
         {
@@ -3265,10 +3418,9 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
   /* Adjust to have the cursor _entirely_ onscreen, move_mark_onscreen
    * only guarantees 1 pixel onscreen.
    */
-  gtk_text_view_scroll_to_mark (text_view,
-                                gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                          "insert"),
-                                0);
+  gtk_text_view_scroll_mark_onscreen (text_view,
+                                      gtk_text_buffer_get_mark (get_buffer (text_view),
+                                                                "insert"));
 }
 
 static gboolean
@@ -3308,8 +3460,8 @@ gtk_text_view_insert_at_cursor (GtkTextView *text_view,
 
 static void
 gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
-                                GtkDeleteType  type,
-                                gint           count)
+                                  GtkDeleteType  type,
+                                  gint           count)
 {
   GtkTextIter insert;
   GtkTextIter start;
@@ -3423,9 +3575,8 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
 
       gtk_text_buffer_end_user_action (get_buffer (text_view));
       
-      gtk_text_view_scroll_to_mark (text_view,
-                                    gtk_text_buffer_get_mark (get_buffer (text_view), "insert"),
-                                    0);
+      gtk_text_view_scroll_mark_onscreen (text_view,
+                                          gtk_text_buffer_get_mark (get_buffer (text_view), "insert"));
     }
 }
 
@@ -3433,30 +3584,27 @@ static void
 gtk_text_view_cut_clipboard (GtkTextView *text_view)
 {
   gtk_text_buffer_cut_clipboard (get_buffer (text_view), text_view->editable);
-  gtk_text_view_scroll_to_mark (text_view,
-                                gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                          "insert"),
-                                0);
+  gtk_text_view_scroll_mark_onscreen (text_view,
+                                      gtk_text_buffer_get_mark (get_buffer (text_view),
+                                                                "insert"));
 }
 
 static void
 gtk_text_view_copy_clipboard (GtkTextView *text_view)
 {
   gtk_text_buffer_copy_clipboard (get_buffer (text_view));
-  gtk_text_view_scroll_to_mark (text_view,
-                                gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                          "insert"),
-                                0);
+  gtk_text_view_scroll_mark_onscreen (text_view,
+                                      gtk_text_buffer_get_mark (get_buffer (text_view),
+                                                                "insert"));
 }
 
 static void
 gtk_text_view_paste_clipboard (GtkTextView *text_view)
 {
   gtk_text_buffer_paste_clipboard (get_buffer (text_view), text_view->editable);
-  gtk_text_view_scroll_to_mark (text_view,
-                                gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                          "insert"),
-                                0);
+  gtk_text_view_scroll_mark_onscreen (text_view,
+                                      gtk_text_buffer_get_mark (get_buffer (text_view),
+                                                                "insert"));
 }
 
 static void
@@ -3486,86 +3634,31 @@ gtk_text_view_unselect (GtkTextView *text_view)
 }
 
 static gboolean
-move_insert_to_pointer_and_scroll (GtkTextView *text_view, gboolean partial_scroll)
+move_mark_to_pointer_and_scroll (GtkTextView *text_view,
+                                 const gchar *mark_name)
 {
   gint x, y;
   GdkModifierType state;
   GtkTextIter newplace;
-  gint adjust = 0;
-  gboolean in_threshold = FALSE;
 
   gdk_window_get_pointer (text_view->text_window->bin_window,
                           &x, &y, &state);
-
-  /* Adjust movement by how long we've been selecting, to
-     get an acceleration effect. The exact numbers are
-     pretty arbitrary. We have a threshold before we
-     start to accelerate. */
-  /* uncommenting this printf helps visualize how it works. */
-  /*   printf ("%d\n", text_view->scrolling_accel_factor); */
-
-  if (text_view->scrolling_accel_factor > 10)
-    adjust = (text_view->scrolling_accel_factor - 10) * 75;
-
-  if (y < 0) /* scrolling upward */
-    adjust = -adjust;
-
-  /* No adjust if the pointer has moved back inside the window for sure.
-     Also I'm adding a small threshold where no adjust is added,
-     in case you want to do a continuous slow scroll. */
-#define SLOW_SCROLL_TH 7
-  if (x >= (0 - SLOW_SCROLL_TH) &&
-      x < (SCREEN_WIDTH (text_view) + SLOW_SCROLL_TH) &&
-      y >= (0 - SLOW_SCROLL_TH) &&
-      y < (SCREEN_HEIGHT (text_view) + SLOW_SCROLL_TH))
-    {
-      adjust = 0;
-      in_threshold = TRUE;
-    }
-
+  
   gtk_text_layout_get_iter_at_pixel (text_view->layout,
                                      &newplace,
                                      x + text_view->xoffset,
-                                     y + text_view->yoffset + adjust);
+                                     y + text_view->yoffset);
 
   {
     gboolean scrolled = FALSE;
-    GtkTextMark *insert_mark =
-      gtk_text_buffer_get_mark (get_buffer (text_view), "insert");
+    GtkTextMark *mark =
+      gtk_text_buffer_get_mark (get_buffer (text_view), mark_name);
 
     gtk_text_buffer_move_mark (get_buffer (text_view),
-                               insert_mark,
+                               mark,
                                &newplace);
 
-    if (partial_scroll)
-      scrolled = gtk_text_view_scroll_to_mark_adjusted (text_view, insert_mark, 0, 0.7);
-    else
-      scrolled = gtk_text_view_scroll_to_mark_adjusted (text_view, insert_mark, 0, 1.0);
-
-    if (scrolled)
-      {
-        /* We want to avoid rapid jump to super-accelerated when you
-           leave the slow scroll threshold after scrolling for a
-           while. So we slowly decrease accel when scrolling inside
-           the threshold.
-        */
-        if (in_threshold)
-          {
-            if (text_view->scrolling_accel_factor > 1)
-              text_view->scrolling_accel_factor -= 2;
-          }
-        else
-          text_view->scrolling_accel_factor += 1;
-      }
-    else
-      {
-        /* If we don't scroll we're probably inside the window, but
-           potentially just a bit outside. We decrease acceleration
-           while the user is fooling around inside the window.
-           Acceleration decreases faster than it increases. */
-        if (text_view->scrolling_accel_factor > 4)
-          text_view->scrolling_accel_factor -= 5;
-      }
+    scrolled = gtk_text_view_scroll_mark_onscreen (text_view, mark);
 
     return scrolled;
   }
@@ -3578,32 +3671,57 @@ selection_scan_timeout (gpointer data)
 
   text_view = GTK_TEXT_VIEW (data);
 
-  if (move_insert_to_pointer_and_scroll (text_view, TRUE))
-    {
-      return TRUE; /* remain installed. */
-    }
-  else
-    {
-      text_view->selection_drag_scan_timeout = 0;
-      return FALSE; /* remove ourselves */
-    }
+  move_mark_to_pointer_and_scroll (text_view, "insert");
+
+  return TRUE; /* remain installed. */
+}
+
+#define DND_SCROLL_MARGIN 0.20
+
+static gint
+drag_scan_timeout (gpointer data)
+{
+  GtkTextView *text_view;
+  gint x, y;
+  GdkModifierType state;
+  GtkTextIter newplace;
+  
+  text_view = GTK_TEXT_VIEW (data);
+
+  gdk_window_get_pointer (text_view->text_window->bin_window,
+                          &x, &y, &state);
+  
+  gtk_text_layout_get_iter_at_pixel (text_view->layout,
+                                     &newplace,
+                                     x + text_view->xoffset,
+                                     y + text_view->yoffset);
+  
+  gtk_text_buffer_move_mark (get_buffer (text_view),
+                             text_view->dnd_mark,
+                             &newplace);
+  
+  gtk_text_view_scroll_to_mark (text_view,
+                                text_view->dnd_mark,
+                                DND_SCROLL_MARGIN, FALSE, 0.0, 0.0);
+
+  return TRUE;
 }
 
 static gint
 selection_motion_event_handler (GtkTextView *text_view, GdkEventMotion *event, gpointer data)
 {
-  if (move_insert_to_pointer_and_scroll (text_view, TRUE))
-    {
-      /* If we had to scroll offscreen, insert a timeout to do so
-         again. Note that in the timeout, even if the mouse doesn't
-         move, due to this scroll xoffset/yoffset will have changed
-         and we'll need to scroll again. */
-      if (text_view->selection_drag_scan_timeout != 0) /* reset on every motion event */
-        gtk_timeout_remove (text_view->selection_drag_scan_timeout);
+  move_mark_to_pointer_and_scroll (text_view, "insert");
 
-      text_view->selection_drag_scan_timeout =
-        gtk_timeout_add (50, selection_scan_timeout, text_view);
-    }
+  /* If we had to scroll offscreen, insert a timeout to do so
+   * again. Note that in the timeout, even if the mouse doesn't
+   * move, due to this scroll xoffset/yoffset will have changed
+   * and we'll need to scroll again.
+   */
+  if (text_view->scroll_timeout != 0) /* reset on every motion event */
+    gtk_timeout_remove (text_view->scroll_timeout);
+  
+  text_view->scroll_timeout =
+    gtk_timeout_add (50, selection_scan_timeout, text_view);
 
   return TRUE;
 }
@@ -3618,8 +3736,6 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
   g_return_if_fail (text_view->selection_drag_handler == 0);
 
   gtk_grab_add (GTK_WIDGET (text_view));
-
-  text_view->scrolling_accel_factor = 0;
 
   newplace = *iter;
 
@@ -3641,16 +3757,14 @@ gtk_text_view_end_selection_drag (GtkTextView *text_view, GdkEventButton *event)
   gtk_signal_disconnect (GTK_OBJECT (text_view), text_view->selection_drag_handler);
   text_view->selection_drag_handler = 0;
 
-  text_view->scrolling_accel_factor = 0;
-
-  if (text_view->selection_drag_scan_timeout != 0)
+  if (text_view->scroll_timeout != 0)
     {
-      gtk_timeout_remove (text_view->selection_drag_scan_timeout);
-      text_view->selection_drag_scan_timeout = 0;
+      gtk_timeout_remove (text_view->scroll_timeout);
+      text_view->scroll_timeout = 0;
     }
 
   /* one last update to current position */
-  move_insert_to_pointer_and_scroll (text_view, FALSE);
+  move_mark_to_pointer_and_scroll (text_view, "insert");
 
   gtk_grab_remove (GTK_WIDGET (text_view));
 
@@ -3869,7 +3983,7 @@ gtk_text_view_reset_im_context (GtkTextView *text_view)
 {
   if (text_view->need_im_reset)
     {
-      text_view->need_im_reset = 0;
+      text_view->need_im_reset = FALSE;
       gtk_im_context_reset (text_view->im_context);
     }
 }
@@ -3921,8 +4035,14 @@ gtk_text_view_drag_end (GtkWidget        *widget,
   GtkTextView *text_view;
 
   text_view = GTK_TEXT_VIEW (widget);
-
+  
   gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
+
+  if (text_view->scroll_timeout != 0)
+    {
+      gtk_timeout_remove (text_view->scroll_timeout);
+      text_view->scroll_timeout = 0;
+    }
 }
 
 static void
@@ -3986,8 +4106,16 @@ gtk_text_view_drag_leave (GtkWidget        *widget,
                           GdkDragContext   *context,
                           guint             time)
 {
+  GtkTextView *text_view;
 
+  text_view = GTK_TEXT_VIEW (widget);
 
+  gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
+  
+  if (text_view->scroll_timeout != 0)
+    gtk_timeout_remove (text_view->scroll_timeout);
+
+  text_view->scroll_timeout = 0;
 }
 
 static gboolean
@@ -4003,11 +4131,12 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
   GtkTextIter end;
   GdkRectangle target_rect;
   gint bx, by;
+  gboolean scrolled;
   
   text_view = GTK_TEXT_VIEW (widget);
 
   target_rect = text_view->text_window->allocation;
-
+  
   if (x < target_rect.x ||
       y < target_rect.y ||
       x > (target_rect.x + target_rect.width) ||
@@ -4065,25 +4194,19 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
     }
 
   gtk_text_buffer_move_mark (get_buffer (text_view),
-                             gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                       "gtk_drag_target"),
+                             text_view->dnd_mark,
                              &newplace);
 
-  {
-    /* The effect of this is that the text scrolls if you're near
-       the edge. We have to scroll whether or not we're inside
-       the selection. */
-    gint margin;
-
-    margin = MIN (SCREEN_WIDTH (widget), SCREEN_HEIGHT (widget));
-    margin /= 5;
-
-    gtk_text_view_scroll_to_mark_adjusted (text_view,
-                                           gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                                     "gtk_drag_target"),
-                                           margin, 1.0);
-  }
-
+  scrolled = gtk_text_view_scroll_to_mark (text_view,
+                                           text_view->dnd_mark,
+                                           DND_SCROLL_MARGIN, FALSE, 0.0, 0.0);
+  
+  if (text_view->scroll_timeout != 0) /* reset on every motion event */
+    gtk_timeout_remove (text_view->scroll_timeout);
+      
+  text_view->scroll_timeout =
+    gtk_timeout_add (50, drag_scan_timeout, text_view);
+  
   return TRUE;
 }
 
@@ -4360,10 +4483,9 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
 
   gtk_text_buffer_end_user_action (get_buffer (text_view));
   
-  gtk_text_view_scroll_to_mark (text_view,
-                                gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                          "insert"),
-                                0);
+  gtk_text_view_scroll_mark_onscreen (text_view,
+                                      gtk_text_buffer_get_mark (get_buffer (text_view),
+                                                                "insert"));
 }
 
 static void

@@ -225,13 +225,13 @@ GtkTextLineSegment *_gtk_text_line_byte_to_segment            (GtkTextLine      
 GtkTextLineSegment *_gtk_text_line_char_to_segment            (GtkTextLine         *line,
                                                                gint                 char_offset,
                                                                gint                *seg_offset);
-void                _gtk_text_line_byte_locate                (GtkTextLine         *line,
+gboolean            _gtk_text_line_byte_locate                (GtkTextLine         *line,
                                                                gint                 byte_offset,
                                                                GtkTextLineSegment **segment,
                                                                GtkTextLineSegment **any_segment,
                                                                gint                *seg_byte_offset,
                                                                gint                *line_byte_offset);
-void                _gtk_text_line_char_locate                (GtkTextLine         *line,
+gboolean            _gtk_text_line_char_locate                (GtkTextLine         *line,
                                                                gint                 char_offset,
                                                                GtkTextLineSegment **segment,
                                                                GtkTextLineSegment **any_segment,

@@ -1053,9 +1053,9 @@ _gtk_text_btree_insert (GtkTextIter *iter,
 
 
     _gtk_text_btree_get_iter_at_line (tree,
-                                     &start,
-                                     start_line,
-                                     start_byte_index);
+                                      &start,
+                                      start_line,
+                                      start_byte_index);
     end = start;
 
     /* We could almost certainly be more efficient here
@@ -3545,13 +3545,13 @@ _gtk_text_line_char_to_byte (GtkTextLine *line,
 
 /* FIXME sync with char_locate (or figure out a clean
    way to merge the two functions) */
-void
+gboolean
 _gtk_text_line_byte_locate (GtkTextLine *line,
-                           gint byte_offset,
-                           GtkTextLineSegment **segment,
-                           GtkTextLineSegment **any_segment,
-                           gint *seg_byte_offset,
-                           gint *line_byte_offset)
+                            gint byte_offset,
+                            GtkTextLineSegment **segment,
+                            GtkTextLineSegment **any_segment,
+                            gint *seg_byte_offset,
+                            gint *line_byte_offset)
 {
   GtkTextLineSegment *seg;
   GtkTextLineSegment *after_prev_indexable;
@@ -3560,16 +3560,8 @@ _gtk_text_line_byte_locate (GtkTextLine *line,
   gint offset;
   gint bytes_in_line;
 
-  g_return_if_fail (line != NULL);
-
-  if (byte_offset < 0)
-    {
-      /* -1 means end of line; we here assume no line is
-         longer than 1 bazillion bytes, of course we assumed
-         that anyway since we'd wrap around... */
-
-      byte_offset = G_MAXINT;
-    }
+  g_return_val_if_fail (line != NULL, FALSE);
+  g_return_val_if_fail (byte_offset >= 0, FALSE);
 
   *segment = NULL;
   *any_segment = NULL;
@@ -3602,11 +3594,10 @@ _gtk_text_line_byte_locate (GtkTextLine *line,
   if (seg == NULL)
     {
       /* We went off the end of the line */
-      *segment = last_indexable;
-      *any_segment = after_prev_indexable;
-      /* subtracting 1 is OK, we know it's a newline at the end. */
-      offset = (*segment)->byte_count - 1;
-      bytes_in_line -= (*segment)->byte_count;
+      if (offset != 0)
+        g_warning ("%s: byte index off the end of the line", G_STRLOC);
+
+      return FALSE;
     }
   else
     {
@@ -3628,17 +3619,19 @@ _gtk_text_line_byte_locate (GtkTextLine *line,
   g_assert (*seg_byte_offset < (*segment)->byte_count);
 
   *line_byte_offset = bytes_in_line + *seg_byte_offset;
+
+  return TRUE;
 }
 
 /* FIXME sync with byte_locate (or figure out a clean
    way to merge the two functions) */
-void
+gboolean
 _gtk_text_line_char_locate     (GtkTextLine     *line,
-                               gint              char_offset,
-                               GtkTextLineSegment **segment,
-                               GtkTextLineSegment **any_segment,
-                               gint             *seg_char_offset,
-                               gint             *line_char_offset)
+                                gint              char_offset,
+                                GtkTextLineSegment **segment,
+                                GtkTextLineSegment **any_segment,
+                                gint             *seg_char_offset,
+                                gint             *line_char_offset)
 {
   GtkTextLineSegment *seg;
   GtkTextLineSegment *after_prev_indexable;
@@ -3647,17 +3640,9 @@ _gtk_text_line_char_locate     (GtkTextLine     *line,
   gint offset;
   gint chars_in_line;
 
-  g_return_if_fail (line != NULL);
-
-  if (char_offset < 0)
-    {
-      /* -1 means end of line; we here assume no line is
-         longer than 1 bazillion chars, of course we assumed
-         that anyway since we'd wrap around... */
-
-      char_offset = G_MAXINT;
-    }
-
+  g_return_val_if_fail (line != NULL, FALSE);
+  g_return_val_if_fail (char_offset >= 0, FALSE);
+  
   *segment = NULL;
   *any_segment = NULL;
   chars_in_line = 0;
@@ -3688,12 +3673,11 @@ _gtk_text_line_char_locate     (GtkTextLine     *line,
 
   if (seg == NULL)
     {
-      /* We went off the end of the line */
-      *segment = last_indexable;
-      *any_segment = after_prev_indexable;
-      /* subtracting 1 is OK, we know it's a newline at the end. */
-      offset = (*segment)->char_count - 1;
-      chars_in_line -= (*segment)->char_count;
+      /* end of the line */
+      if (offset != 0)
+        g_warning ("%s: char offset off the end of the line", G_STRLOC);
+
+      return FALSE;
     }
   else
     {
@@ -3715,6 +3699,8 @@ _gtk_text_line_char_locate     (GtkTextLine     *line,
   g_assert (*seg_char_offset < (*segment)->char_count);
 
   *line_char_offset = chars_in_line + *seg_char_offset;
+
+  return TRUE;
 }
 
 void

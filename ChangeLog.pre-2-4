@@ -1,3 +1,40 @@
+2000-12-31  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextview.c: Rearrange all the
+	scroll-while-dragging-or-selecting code to be different, not
+	necessarily better. ;-)
+	(gtk_text_view_scroll_to_mark): Change this
+	function to take within_margin as a fraction instead of a pixel
+	value, and to take alignment arguments (indicating where to align 
+	the mark inside the visible area)
+	
+	* gtk/testtextbuffer.c (fill_buffer): fix bad cast of GtkTextTag
+	to GtkObject
+
+	* gtk/gtktextiter.c (gtk_text_iter_set_line_offset): change
+	behavior so that offsets past the end of the line are not 
+	allowed, and an offset equal to the line length moves the iterator
+	to the next line
+	(gtk_text_iter_set_line_index): make parallel change
+	(gtk_text_iter_get_bytes_in_line): add this function
+	
+	* gtk/gtktextbtree.c (_gtk_text_line_byte_locate): change handling
+	of byte indexes off the end of the line; byte index at the end of
+	the line now returns FALSE and doesn't fill in the requested
+	values, byte index past the end of the line is an error.  Also,
+	don't allow -1 offset anymore, since its meaning is unclear.
+
+	This change exposes some bug in visual cursor motion, where we
+	end up with a huge invalid byte index; needs fixing. Symptom of 
+	bug is a crash when you hit up arrow.
+	
+	(_gtk_text_line_char_locate): match the change to byte_locate
+
+	* gtk/gtktextiter.c (find_by_log_attrs): Handle iteration backward
+	from start of line properly. fixes bug reported by Mikael
+	Hermansson where backspace would delete all text before the
+	cursor.
+
 2000-12-30  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c
