@@ -1,5 +1,10 @@
 1998-08-19  Raph Levien  <raph@gimp.org>
 
+	* gtk/testgtk.c (create_color_preview): pushed the colormap and
+	visual so it would work better with GdkRgb.
+
+1998-08-19  Raph Levien  <raph@gimp.org>
+
 	* gdk/gdkrgb.c: fixed some bugs in the 565_d mode, and added a
 	4bpp static_color mode (for vga displays). Also fixed a '64' value
 	in the dither matrix, which was causing one pixel out of 16k to be
