@@ -1,3 +1,10 @@
+Mon May 10 00:51:18 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Merge from HEAD:
+	
+	* gtk/gtkmenu.c: Make destruction of a torn off menu work 
+	like un-tearing off.
+
 Sun May  9 21:05:38 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkactiongroup.c (gtk_action_group_add_action_with_accel): 
