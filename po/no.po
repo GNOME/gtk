@@ -273,7 +273,7 @@ msgstr "*"
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1228
 msgid "(nil)"
-msgstr ""
+msgstr "(nil)"
 
 #: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2700
 msgid "regular"
@@ -345,40 +345,39 @@ msgstr "Skrifttype: (med filter på)"
 
 #: gtk/gtkfontsel.c:2680
 msgid "heavy"
-msgstr ""
+msgstr "tung"
 
 #: gtk/gtkfontsel.c:2682
 msgid "extrabold"
-msgstr ""
+msgstr "ekstra fet"
 
 #: gtk/gtkfontsel.c:2684
 msgid "bold"
-msgstr ""
+msgstr "fet"
 
 #: gtk/gtkfontsel.c:2687
 msgid "demibold"
-msgstr ""
+msgstr "halvfet"
 
 #: gtk/gtkfontsel.c:2690
 msgid "medium"
-msgstr ""
+msgstr "middels"
 
 #: gtk/gtkfontsel.c:2692
 msgid "normal"
-msgstr ""
+msgstr "normal"
 
 #: gtk/gtkfontsel.c:2694
-#, fuzzy
 msgid "light"
-msgstr "Tyngde:"
+msgstr "lys"
 
 #: gtk/gtkfontsel.c:2696
 msgid "extralight"
-msgstr ""
+msgstr "ekstra lys"
 
 #: gtk/gtkfontsel.c:2698
 msgid "thin"
-msgstr ""
+msgstr "tynn"
 
 #: gtk/gtkfontsel.c:2875
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
