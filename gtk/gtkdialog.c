@@ -345,10 +345,16 @@ gtk_dialog_map (GtkWidget *widget)
   if (!window->focus_widget)
     {
       GList *children, *tmp_list;
+      GtkWidget *first_focus = NULL;
       
       do 
 	{
 	  g_signal_emit_by_name (window, "move_focus", GTK_DIR_TAB_FORWARD);
+
+	  if (first_focus == NULL)
+	    first_focus = window->focus_widget;
+	  else if (first_focus == window->focus_widget)
+	    break;
 	}
       while (GTK_IS_LABEL (window->focus_widget));
 

@@ -1,5 +1,10 @@
 2005-01-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkdialog.c (gtk_dialog_map): Don't loop forever
+	here, even if the only focusable widgets are labels.
+
+2005-01-20  Matthias Clasen  <mclasen@redhat.com>
+
 	Support tinting in GtkCellRendererPixbuf (#162903, Jorn Baayen):
 	
 	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_class_init) 
