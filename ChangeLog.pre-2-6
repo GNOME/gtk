@@ -1,3 +1,14 @@
+Thu Aug  7 16:49:29 2003  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkwidget.c (gtk_widget_set_style_internal): 
+ 	Fix a bug where on theme change, resize/redraw wasn't
+ 	properly getting queued on toplevel windows. (#116346,
+ 	Rajkumar Siva)
+ 
+ 	* gtk/gtkwidget.c (gtk_widget_invalidate_widget_windows): 
+ 	Fix bug where wrong coordinates were used for toplevel
+ 	window.
+ 
 Thu Aug  7 16:40:21 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_remove): Remove leftover

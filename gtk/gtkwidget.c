@@ -2557,7 +2557,7 @@ static void
 gtk_widget_invalidate_widget_windows (GtkWidget *widget,
 				      GdkRegion *region)
 {
-  if (!GTK_WIDGET_NO_WINDOW (widget))
+  if (!GTK_WIDGET_NO_WINDOW (widget) && widget->parent)
     {
       int x, y;
       
@@ -4605,7 +4605,7 @@ gtk_widget_set_style_internal (GtkWidget *widget,
 		     initial_emission ? NULL : previous_style);
       g_object_unref (previous_style);
 
-      if (widget->parent && !initial_emission)
+      if (GTK_WIDGET_ANCHORED (widget) && !initial_emission)
 	gtk_widget_queue_resize (widget);
     }
   else if (initial_emission)
