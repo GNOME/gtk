@@ -1,3 +1,8 @@
+2004-02-17  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/migrating-checklist.sgml: Add a missing semicolon to an
+	entity.
+
 2004-02-16  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/migrating-checklist.sgml: Umm, I'm on crack.  Use

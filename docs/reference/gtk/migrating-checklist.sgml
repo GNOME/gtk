@@ -247,7 +247,7 @@ my_widget_expose_event_handler (GtkWidget *widget, GdkEventExpose *event)
       Say you want to see if
       <keycombo><keycap>Control</keycap><keycap>F10</keycap></keycombo>
       was pressed.  Doing a simple test like
-      <literal>event-&gt;keysym&nbsp;==&nbspGDK_F10 &amp;&amp;
+      <literal>event-&gt;keysym&nbsp;==&nbsp;GDK_F10 &amp;&amp;
       event->state&nbsp;==&nbsp;GDK_CONTROL_MASK</literal> is not
       enough.  If <keycap>CapsLock</keycap> is pressed, then
       <structfield>event-&gt;state</structfield> will be equal to
