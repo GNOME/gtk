@@ -54,6 +54,7 @@ enum {
   PROP_PULSE_STEP,
   PROP_ORIENTATION,
   PROP_TEXT,
+  PROP_ELLIPSIZE,
   
   /* Deprecated args */
   PROP_ADJUSTMENT,
@@ -221,6 +222,29 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 							"%P %%",
 							G_PARAM_READWRITE));
 
+  /**
+   * GtkProgressBar:ellipsize:
+   *
+   * The preferred place to ellipsize the string, if the progressbar does 
+   * not have enough room to display the entire string, specified as a 
+   * #PangoEllisizeMode. 
+   *
+   * Note that setting this property to a value other than 
+   * %PANGO_ELLIPSIZE_NONE has the side-effect that the progressbar requests 
+   * only enough space to display the ellipsis "...". Another means to set a 
+   * progressbar's width is gtk_widget_set_size_request().
+   *
+   * Since: 2.6
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_ELLIPSIZE,
+                                   g_param_spec_enum ("ellipsize",
+                                                      P_("Ellipsize"),
+                                                      P_("The preferred place to ellipsize the string, if the progressbar does not have enough room to display the entire string, if at all"),
+						      PANGO_TYPE_ELLIPSIZE_MODE,
+						      PANGO_ELLIPSIZE_NONE,
+                                                      G_PARAM_READWRITE));
+
 }
 
 static void
@@ -235,6 +259,7 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
   pbar->activity_dir = 1;
   pbar->activity_step = 3;
   pbar->activity_blocks = 5;
+  pbar->ellipsize = PANGO_ELLIPSIZE_NONE;
 }
 
 static void
@@ -276,6 +301,9 @@ gtk_progress_bar_set_property (GObject      *object,
       break;
     case PROP_TEXT:
       gtk_progress_bar_set_text (pbar, g_value_get_string (value));
+      break;
+    case PROP_ELLIPSIZE:
+      gtk_progress_bar_set_ellipsize (pbar, g_value_get_enum (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -321,6 +349,9 @@ gtk_progress_bar_get_property (GObject      *object,
       break;
     case PROP_TEXT:
       g_value_set_string (value, gtk_progress_bar_get_text (pbar));
+      break;
+    case PROP_ELLIPSIZE:
+      g_value_set_enum (value, pbar->ellipsize);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -462,12 +493,16 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
   gchar *buf;
   PangoRectangle logical_rect;
   PangoLayout *layout;
+  gint width, height;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (widget));
   g_return_if_fail (requisition != NULL);
 
   progress = GTK_PROGRESS (widget);
   pbar = GTK_PROGRESS_BAR (widget);
+
+  width = 2 * widget->style->xthickness + 3 + 2 * TEXT_SPACING;
+  height = 2 * widget->style->ythickness + 3 + 2 * TEXT_SPACING;
 
   if (progress->show_text && pbar->bar_style != GTK_PROGRESS_DISCRETE)
     {
@@ -477,8 +512,29 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
       buf = gtk_progress_get_text_from_value (progress, progress->adjustment->upper);
 
       layout = gtk_widget_create_pango_layout (widget, buf);
+
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 	  
+      if (pbar->ellipsize)
+	{
+	  PangoContext *context;
+	  PangoFontMetrics *metrics;
+	  gint char_width;
+	  
+	  /* The minimum size for ellipsized text is ~ 3 chars */
+	  context = pango_layout_get_context (layout);
+	  metrics = pango_context_get_metrics (context, widget->style->font_desc, NULL);
+	  
+	  char_width = pango_font_metrics_get_approximate_char_width (metrics);
+	  pango_font_metrics_unref (metrics);
+	  
+	  width += PANGO_PIXELS (char_width) * 3;
+	}
+      else
+	width += logical_rect.width;
+      
+      height += logical_rect.height;
+
       g_object_unref (layout);
       g_free (buf);
     }
@@ -488,13 +544,8 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
     {
       if (progress->show_text && pbar->bar_style != GTK_PROGRESS_DISCRETE)
 	{
-	  requisition->width = MAX (MIN_HORIZONTAL_BAR_WIDTH,
-				    2 * widget->style->xthickness + 3 +
-				    logical_rect.width + 2 * TEXT_SPACING);
-
-	  requisition->height = MAX (MIN_HORIZONTAL_BAR_HEIGHT,
-				     2 * widget->style->ythickness + 3 +
-				     logical_rect.height + 2 * TEXT_SPACING);
+	  requisition->width = MAX (MIN_HORIZONTAL_BAR_WIDTH, width);
+	  requisition->height = MAX (MIN_HORIZONTAL_BAR_HEIGHT, height);
 	}
       else
 	{
@@ -506,13 +557,8 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
     {
       if (progress->show_text && pbar->bar_style != GTK_PROGRESS_DISCRETE)
 	{	  
-	  requisition->width = MAX (MIN_VERTICAL_BAR_WIDTH,
-				    2 * widget->style->xthickness + 3 +
-				    logical_rect.width + 2 * TEXT_SPACING);
-
-	  requisition->height = MAX (MIN_VERTICAL_BAR_HEIGHT,
-				     2 * widget->style->ythickness + 3 +
-				     logical_rect.height + 2 * TEXT_SPACING);
+	  requisition->width = MAX (MIN_VERTICAL_BAR_WIDTH, width);
+	  requisition->height = MAX (MIN_VERTICAL_BAR_HEIGHT, height);
 	}
       else
 	{
@@ -737,6 +783,10 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
   buf = gtk_progress_get_current_text (progress);
   
   layout = gtk_widget_create_pango_layout (widget, buf);
+  pango_layout_set_ellipsize (layout, pbar->ellipsize);
+  if (pbar->ellipsize)
+    pango_layout_set_width (layout, widget->allocation.width * PANGO_SCALE);
+
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   
   x = widget->style->xthickness + 1 +
@@ -1174,3 +1224,50 @@ gtk_progress_bar_set_activity_blocks (GtkProgressBar *pbar,
 
   gtk_progress_bar_set_activity_blocks_internal (pbar, blocks);
 }
+
+/**
+ * gtk_progress_bar_set_ellipsize:
+ * @pbar: a #GtkProgressBar
+ * @mode: a #PangoEllipsizeMode
+ *
+ * Sets the mode used to ellipsize (add an ellipsis: "...") the text 
+ * if there is not enough space to render the entire string.
+ *
+ * Since: 2.6
+ **/
+void
+gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
+				PangoEllipsizeMode  mode)
+{
+  g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
+  g_return_if_fail (mode >= PANGO_ELLIPSIZE_NONE && 
+		    mode <= PANGO_ELLIPSIZE_END);
+  
+  if ((PangoEllipsizeMode)pbar->ellipsize != mode)
+    {
+      pbar->ellipsize = mode;
+
+      g_object_notify (G_OBJECT (pbar), "ellipsize");
+      gtk_widget_queue_resize (GTK_WIDGET (pbar));
+    }
+}
+
+/**
+ * gtk_pgrogress_bar_get_ellipsize:
+ * @pbar: a #GtkProgressBar
+ *
+ * Returns the ellipsizing position of the progressbar. 
+ * See gtk_progress_bar_set_ellipsize().
+ *
+ * Return value: #PangoEllipsizeMode
+ *
+ * Since: 2.6
+ **/
+PangoEllipsizeMode 
+gtk_progress_bar_get_ellipsize (GtkProgressBar *pbar)
+{
+  g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), PANGO_ELLIPSIZE_NONE);
+
+  return pbar->ellipsize;
+}
+

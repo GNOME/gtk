@@ -1,3 +1,8 @@
+2004-10-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkprogressbar.[hc]: Add an ellipsize property with 
+	getter and setter.  (#156845, Morten Welinder)
+
 2004-10-29  Robert Ögren  <gtk@roboros.com>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_begin_resize_drag),

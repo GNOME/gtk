@@ -79,6 +79,7 @@ struct _GtkProgressBar
   gdouble pulse_fraction;
   
   guint activity_dir : 1;
+  guint ellipsize : 3;
 };
 
 struct _GtkProgressBarClass
@@ -139,6 +140,9 @@ gdouble               gtk_progress_bar_get_fraction   (GtkProgressBar *pbar);
 gdouble               gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar);
 
 GtkProgressBarOrientation gtk_progress_bar_get_orientation (GtkProgressBar *pbar);
+void               gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
+						   PangoEllipsizeMode  mode);
+PangoEllipsizeMode gtk_progress_bar_get_ellipsize (GtkProgressBar     *pbar);
 
 
 #ifndef GTK_DISABLE_DEPRECATED
