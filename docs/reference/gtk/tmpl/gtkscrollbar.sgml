@@ -2,21 +2,34 @@
 GtkScrollbar
 
 <!-- ##### SECTION Short_Description ##### -->
-
+base class for #GtkHScrollbar and GtkVScrollbar.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+The #GtkScrollbar widget is an abstract base class for #GtkHScrollbar and
+#GtkVScrollbar. It is not very useful in itself.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
+<variablelist>
 
+<varlistentry>
+<term>#GtkHScrollbar</term>
+<listitem><para>a horizontal scrollbar.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GtkVScrollbar</term>
+<listitem><para>a vertical scrollbar.</para></listitem>
+</varlistentry>
+
+</variablelist>
 </para>
 
 <!-- ##### STRUCT GtkScrollbar ##### -->
 <para>
-
+The #GtkScrollbar struct does not contain any public data.
 </para>
 
 

@@ -1,3 +1,7 @@
+2000-01-19  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gtk/tmpl/gtkscrollbar.sgml: Started.
+
 2000-01-08  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* gtk/tmpl/gtkclist.sgml: update from Paul Schifferer
