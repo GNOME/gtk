@@ -933,6 +933,29 @@ G_PARAM_READABLE));
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, FALSE);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_asterisk, 0,
+                                "expand_collapse_cursor_row", 3,
+                                G_TYPE_BOOLEAN, TRUE,
+                                G_TYPE_BOOLEAN, TRUE,
+                                G_TYPE_BOOLEAN, TRUE);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Multiply, 0,
+                                "expand_collapse_cursor_row", 3,
+                                G_TYPE_BOOLEAN, TRUE,
+                                G_TYPE_BOOLEAN, TRUE,
+                                G_TYPE_BOOLEAN, TRUE);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_slash, 0,
+                                "expand_collapse_cursor_row", 3,
+                                G_TYPE_BOOLEAN, TRUE,
+                                G_TYPE_BOOLEAN, FALSE,
+                                G_TYPE_BOOLEAN, FALSE);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Divide, 0,
+                                "expand_collapse_cursor_row", 3,
+                                G_TYPE_BOOLEAN, TRUE,
+                                G_TYPE_BOOLEAN, FALSE,
+                                G_TYPE_BOOLEAN, FALSE);
+
   /* Not doable on US keyboards */
   gtk_binding_entry_add_signal (binding_set, GDK_plus, GDK_SHIFT_MASK, "expand_collapse_cursor_row", 3,
 				G_TYPE_BOOLEAN, TRUE,

@@ -1,3 +1,9 @@
+Thu Dec 18 18:01:01 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): add key bindings
+	for "*" and "/" (expand/collapse all). (#110195, reported by
+	Calum Benson).
+
 Thu Dec 18 17:52:56 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_set_property):
