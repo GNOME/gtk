@@ -1,3 +1,7 @@
+2004-09-29  Paolo Borelli  <pborelli@katamail.com>
+
+	* tests/testtoolbar.c: add a GtkMenuToolButton.
+
 2004-09-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c (gtk_icon_view_move_cursor_left_right) 

@@ -589,7 +589,16 @@ main (gint argc, gchar **argv)
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   gtk_tool_item_set_expand (item, TRUE);
 
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_OPEN);
+  menu = gtk_menu_new ();
+  menuitem = gtk_menu_item_new_with_label ("foo.txt");
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  menuitem = gtk_menu_item_new_with_label ("bar.txt");
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+  item = gtk_menu_tool_button_new_from_stock (GTK_STOCK_OPEN);
+  gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (item), menu);
   add_item_to_list (store, item, "Open");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
