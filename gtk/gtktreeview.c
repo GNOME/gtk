@@ -1362,6 +1362,17 @@ gtk_tree_view_destroy (GtkObject *object)
   
   gtk_tree_view_set_model (tree_view, NULL);
 
+  if (tree_view->priv->hadjustment)
+    {
+      g_object_unref (tree_view->priv->hadjustment);
+      tree_view->priv->hadjustment = NULL;
+    }
+  if (tree_view->priv->vadjustment)
+    {
+      g_object_unref (tree_view->priv->vadjustment);
+      tree_view->priv->vadjustment = NULL;
+    }
+
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
