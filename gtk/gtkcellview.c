@@ -437,9 +437,11 @@ gtk_cell_view_expose (GtkWidget      *widget,
       g_object_unref (G_OBJECT (gc));
     }
 
-  /* set cell data (if applicable) */
-  if (cellview->priv->displayed_row)
-    gtk_cell_view_set_cell_data (cellview);
+  if (!cellview->priv->displayed_row)
+    return FALSE;
+    
+  /* set cell data */
+  gtk_cell_view_set_cell_data (cellview);
 
   /* render cells */
   area = widget->allocation;

@@ -1,3 +1,9 @@
+Sat Mar 13 21:47:47 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcellview.c (gtk_cell_view_expose): Don't do anything
+	beyond clearing to the background if there is no active row.
+	(#137066, reported by Owen Taylor)
+
 Sat Mar 13 21:37:44 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_list_key_press): Pop down the
