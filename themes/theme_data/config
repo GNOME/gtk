@@ -9,283 +9,390 @@
 # button cannot|can|has_default normal|active|prelight|selected|insensitive
 # no_focus|focus background %s ....
 
-button 0 0 0 padding                4  4  4  4
-button 0 0 0 background image       pix/btn2.xpm
+window padding                      4  4  4  4
+window minimums                     8  8
+window background image             pix/b_full.png
+window background color             128 128 128
+window background border            4  4  4  4
+window background scale             1
+window background parent_tile       0
+
+button 0 0 0 padding                17  4  4  6
+button 0 0 0 minimums               30  28
+button 0 0 0 background image       pix/b_out.png
 button 0 0 0 background color       128 128 128
-button 0 0 0 background border      4  4  4  4
+button 0 0 0 background border      6  3  5  5
 button 0 0 0 background scale       1
 button 0 0 0 background parent_tile 0
+button 0 0 0 decoration image       pix/d1_n.png
+button 0 0 0 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 0 0 0 decoration image       pix/d2_n.png
+button 0 0 0 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 0 1 0 padding                4  4  4  4
-button 0 1 0 background image       pix/btn3.xpm
+button 0 1 0 padding                17  4  4  6
+button 0 1 0 minimums               30  28
+button 0 1 0 background image       pix/b_in.png
 button 0 1 0 background color       128 128 128
-button 0 1 0 background border      4  4  4  4
+button 0 1 0 background border      6  3  5  5
 button 0 1 0 background scale       1
 button 0 1 0 background parent_tile 0
+button 0 1 0 decoration image       pix/d1_h.png
+button 0 1 0 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 0 1 0 decoration image       pix/d2_h.png
+button 0 1 0 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 0 2 0 padding                4  4  4  4
-button 0 2 0 background image       pix/btn1.xpm
+button 0 2 0 padding                17  4  4  6
+button 0 2 0 minimums               30  28
+button 0 2 0 background image       pix/b_out.png
 button 0 2 0 background color       128 128 128
-button 0 2 0 background border      4  4  4  4
+button 0 2 0 background border      6  3  5  5
 button 0 2 0 background scale       1
 button 0 2 0 background parent_tile 0
+button 0 2 0 decoration image       pix/d1_h.png
+button 0 2 0 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 0 2 0 decoration image       pix/d2_h.png
+button 0 2 0 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 0 3 0 padding                4  4  4  4
-button 0 3 0 background image       pix/btn1.xpm
+button 0 3 0 padding                17  4  4  6
+button 0 3 0 minimums               30  28
+button 0 3 0 background image       pix/b_out.png
 button 0 3 0 background color       128 128 128
-button 0 3 0 background border      4  4  4  4
+button 0 3 0 background border      6  3  5  5
 button 0 3 0 background scale       1
 button 0 3 0 background parent_tile 0
+button 0 3 0 decoration image       pix/d1_h.png
+button 0 3 0 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 0 3 0 decoration image       pix/d2_h.png
+button 0 3 0 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 0 4 0 padding                4  4  4  4
-button 0 4 0 background image       pix/btn2.xpm
+button 0 4 0 padding                17  4  4  6
+button 0 4 0 minimums               30  28
+button 0 4 0 background image       pix/b_out.png
 button 0 4 0 background color       128 128 128
-button 0 4 0 background border      4  4  4  4
+button 0 4 0 background border      6  3  5  5
 button 0 4 0 background scale       1
 button 0 4 0 background parent_tile 0
+button 0 4 0 decoration image       pix/d1_d.png
+button 0 4 0 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 0 4 0 decoration image       pix/d2_d.png
+button 0 4 0 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 0 0 1 padding                4  4  4  4
-button 0 0 1 background image       pix/btn2.xpm
+button 0 0 1 padding                17  4  4  6
+button 0 0 1 minimums               30  28
+button 0 0 1 background image       pix/b_out.png
 button 0 0 1 background color       128 128 128
-button 0 0 1 background border      4  4  4  4
+button 0 0 1 background border      6  3  5  5
 button 0 0 1 background scale       1
 button 0 0 1 background parent_tile 0
-button 0 0 1 border     image       pix/brd1.xpm
-button 0 0 1 border     border      4  4  4  4
+button 0 0 1 decoration image       pix/d1_n.png
+button 0 0 1 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 0 0 1 decoration image       pix/d2_n.png
+button 0 0 1 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 0 1 1 padding                4  4  4  4
-button 0 1 1 background image       pix/btn3.xpm
+button 0 1 1 padding                17  4  4  6
+button 0 1 1 minimums               30  28
+button 0 1 1 background image       pix/b_in.png
 button 0 1 1 background color       128 128 128
-button 0 1 1 background border      4  4  4  4
+button 0 1 1 background border      6  3  5  5
 button 0 1 1 background scale       1
 button 0 1 1 background parent_tile 0
-button 0 1 1 border     image       pix/brd1.xpm
-button 0 1 1 border     border      4  4  4  4
+button 0 1 1 decoration image       pix/d1_h.png
+button 0 1 1 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 0 1 1 decoration image       pix/d2_h.png
+button 0 1 1 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 0 2 1 padding                4  4  4  4
-button 0 2 1 background image       pix/btn1.xpm
+button 0 2 1 padding                17  4  4  6
+button 0 2 1 minimums               30  28
+button 0 2 1 background image       pix/b_out.png
 button 0 2 1 background color       128 128 128
-button 0 2 1 background border      4  4  4  4
+button 0 2 1 background border      6  3  5  5
 button 0 2 1 background scale       1
 button 0 2 1 background parent_tile 0
-button 0 2 1 border     image       pix/brd1.xpm
-button 0 2 1 border     border      4  4  4  4
+button 0 2 1 decoration image       pix/d1_h.png
+button 0 2 1 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 0 2 1 decoration image       pix/d2_h.png
+button 0 2 1 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 0 3 1 padding                4  4  4  4
-button 0 3 1 background image       pix/btn1.xpm
+button 0 3 1 padding                17  4  4  6
+button 0 3 1 minimums               30  28
+button 0 3 1 background image       pix/b_out.png
 button 0 3 1 background color       128 128 128
-button 0 3 1 background border      4  4  4  4
+button 0 3 1 background border      6  3  5  5
 button 0 3 1 background scale       1
 button 0 3 1 background parent_tile 0
-button 0 3 1 border     image       pix/brd1.xpm
-button 0 3 1 border     border      4  4  4  4
+button 0 3 1 decoration image       pix/d1_h.png
+button 0 3 1 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 0 3 1 decoration image       pix/d2_h.png
+button 0 3 1 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-
-button 0 4 1 padding                4  4  4  4
-button 0 4 1 background image       pix/btn2.xpm
+button 0 4 1 padding                17  4  4  6
+button 0 4 1 minimums               30  28
+button 0 4 1 background image       pix/b_out.png
 button 0 4 1 background color       128 128 128
-button 0 4 1 background border      4  4  4  4
+button 0 4 1 background border      6  3  5  5
 button 0 4 1 background scale       1
 button 0 4 1 background parent_tile 0
-button 0 4 1 border     image       pix/brd1.xpm
-button 0 4 1 border     border      4  4  4  4
+button 0 4 1 decoration image       pix/d1_d.png
+button 0 4 1 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 0 4 1 decoration image       pix/d2_d.png
+button 0 4 1 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 1 0 0 padding                20  6  6  6
-button 1 0 0 background image       pix/btn2.xpm
+button 1 0 0 padding                17  16  4  6
+button 1 0 0 minimums               30  28
+button 1 0 0 background image       pix/b_out.png
 button 1 0 0 background color       128 128 128
-button 1 0 0 background border      4  4  4  4
+button 1 0 0 background border      6  3  5  5
 button 1 0 0 background scale       1
 button 1 0 0 background parent_tile 0
-button 1 0 0 decoration image       pix/led_off1.xpm
-button 1 0 0 decoration coords      0 512 6 -6   0 512 18 6
+button 1 0 0 decoration image       pix/d1_n.png
+button 1 0 0 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 1 0 0 decoration image       pix/d2_n.png
+button 1 0 0 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 1 1 0 padding                20  6  6  6
-button 1 1 0 background image       pix/btn3.xpm
+button 1 1 0 padding                17  16  4  6
+button 1 1 0 minimums               30  28
+button 1 1 0 background image       pix/b_in.png
 button 1 1 0 background color       128 128 128
-button 1 1 0 background border      4  4  4  4
+button 1 1 0 background border      6  3  5  5
 button 1 1 0 background scale       1
 button 1 1 0 background parent_tile 0
-button 1 1 0 decoration image       pix/led_off1.xpm
-button 1 1 0 decoration coords      0 512 6 -6   0 512 18 6
+button 1 1 0 decoration image       pix/d1_h.png
+button 1 1 0 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 1 1 0 decoration image       pix/d2_h.png
+button 1 1 0 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 1 2 0 padding                20  6  6  6
-button 1 2 0 background image       pix/btn1.xpm
+button 1 2 0 padding                17  16  4  6
+button 1 2 0 minimums               30  28
+button 1 2 0 background image       pix/b_out.png
 button 1 2 0 background color       128 128 128
-button 1 2 0 background border      4  4  4  4
+button 1 2 0 background border      6  3  5  5
 button 1 2 0 background scale       1
 button 1 2 0 background parent_tile 0
-button 1 2 0 decoration image       pix/led_off1.xpm
-button 1 2 0 decoration coords      0 512 6 -6   0 512 18 6
+button 1 2 0 decoration image       pix/d1_h.png
+button 1 2 0 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 1 2 0 decoration image       pix/d2_h.png
+button 1 2 0 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 1 3 0 padding                20  6  6  6
-button 1 3 0 background image       pix/btn1.xpm
+button 1 3 0 padding                17  16  4  6
+button 1 3 0 minimums               30  28
+button 1 3 0 background image       pix/b_out.png
 button 1 3 0 background color       128 128 128
-button 1 3 0 background border      4  4  4  4
+button 1 3 0 background border      6  3  5  5
 button 1 3 0 background scale       1
 button 1 3 0 background parent_tile 0
-button 1 3 0 decoration image       pix/led_off1.xpm
-button 1 3 0 decoration coords      0 512 6 -6   0 512 18 6
+button 1 3 0 decoration image       pix/d1_h.png
+button 1 3 0 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 1 3 0 decoration image       pix/d2_h.png
+button 1 3 0 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 1 4 0 padding                20  6  6  6
-button 1 4 0 background image       pix/btn2.xpm
+button 1 4 0 padding                17  16  4  6
+button 1 4 0 minimums               30  28
+button 1 4 0 background image       pix/b_out.png
 button 1 4 0 background color       128 128 128
-button 1 4 0 background border      4  4  4  4
+button 1 4 0 background border      6  3  5  5
 button 1 4 0 background scale       1
 button 1 4 0 background parent_tile 0
-button 1 4 0 decoration image       pix/led_off1.xpm
-button 1 4 0 decoration coords      0 512 6 -6   0 512 18 6
+button 1 4 0 decoration image       pix/d1_d.png
+button 1 4 0 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 1 4 0 decoration image       pix/d2_d.png
+button 1 4 0 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 1 0 1 padding                20  6  6  6
-button 1 0 1 background image       pix/btn2.xpm
+button 1 0 1 padding                17  16  4  6
+button 1 0 1 minimums               30  28
+button 1 0 1 background image       pix/b_out.png
 button 1 0 1 background color       128 128 128
-button 1 0 1 background border      4  4  4  4
+button 1 0 1 background border      6  3  5  5
 button 1 0 1 background scale       1
 button 1 0 1 background parent_tile 0
-button 1 0 1 border     image       pix/brd1.xpm
-button 1 0 1 border     border      4  4  4  4
-button 1 0 1 decoration image       pix/led_off1.xpm
-button 1 0 1 decoration coords      0 512 6 -6   0 512 18 6
+button 1 0 1 decoration image       pix/d1_n.png
+button 1 0 1 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 1 0 1 decoration image       pix/d2_n.png
+button 1 0 1 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 1 1 1 padding                20  6  6  6
-button 1 1 1 background image       pix/btn3.xpm
+button 1 1 1 padding                17  16  4  6
+button 1 1 1 minimums               30  28
+button 1 1 1 background image       pix/b_in.png
 button 1 1 1 background color       128 128 128
-button 1 1 1 background border      4  4  4  4
+button 1 1 1 background border      6  3  5  5
 button 1 1 1 background scale       1
 button 1 1 1 background parent_tile 0
-button 1 1 1 border     image       pix/brd1.xpm
-button 1 1 1 border     border      4  4  4  4
-button 1 1 1 decoration image       pix/led_off1.xpm
-button 1 1 1 decoration coords      0 512 6 -6   0 512 18 6
+button 1 1 1 decoration image       pix/d1_h.png
+button 1 1 1 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 1 1 1 decoration image       pix/d2_h.png
+button 1 1 1 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 1 2 1 padding                20  6  6  6
-button 1 2 1 background image       pix/btn1.xpm
+button 1 2 1 padding                17  16  4  6
+button 1 2 1 minimums               30  28
+button 1 2 1 background image       pix/b_out.png
 button 1 2 1 background color       128 128 128
-button 1 2 1 background border      4  4  4  4
+button 1 2 1 background border      6  3  5  5
 button 1 2 1 background scale       1
 button 1 2 1 background parent_tile 0
-button 1 2 1 border     image       pix/brd1.xpm
-button 1 2 1 border     border      4  4  4  4
-button 1 2 1 decoration image       pix/led_off1.xpm
-button 1 2 1 decoration coords      0 512 6 -6   0 512 18 6
+button 1 2 1 decoration image       pix/d1_h.png
+button 1 2 1 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 1 2 1 decoration image       pix/d2_h.png
+button 1 2 1 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 1 3 1 padding                20  6  6  6
-button 1 3 1 background image       pix/btn1.xpm
+button 1 3 1 padding                17  16  4  6
+button 1 3 1 minimums               30  28
+button 1 3 1 background image       pix/b_out.png
 button 1 3 1 background color       128 128 128
-button 1 3 1 background border      4  4  4  4
+button 1 3 1 background border      6  3  5  5
 button 1 3 1 background scale       1
 button 1 3 1 background parent_tile 0
-button 1 3 1 border     image       pix/brd1.xpm
-button 1 3 1 border     border      4  4  4  4
-button 1 3 1 decoration image       pix/led_off1.xpm
-button 1 3 1 decoration coords      0 512 6 -6   0 512 18 6
+button 1 3 1 decoration image       pix/d1_h.png
+button 1 3 1 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 1 3 1 decoration image       pix/d2_h.png
+button 1 3 1 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 1 4 1 padding                20  6  6  6
-button 1 4 1 background image       pix/btn2.xpm
+button 1 4 1 padding                17  16  4  6
+button 1 4 1 minimums               30  28
+button 1 4 1 background image       pix/b_out.png
 button 1 4 1 background color       128 128 128
-button 1 4 1 background border      4  4  4  4
+button 1 4 1 background border      6  3  5  5
 button 1 4 1 background scale       1
 button 1 4 1 background parent_tile 0
-button 1 4 1 border     image       pix/brd1.xpm
-button 1 4 1 border     border      4  4  4  4
-button 1 4 1 decoration image       pix/led_off1.xpm
-button 1 4 1 decoration coords      0 512 6 -6   0 512 18 6
+button 1 4 1 decoration image       pix/d1_d.png
+button 1 4 1 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 1 4 1 decoration image       pix/d2_d.png
+button 1 4 1 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
 
-button 2 0 0 padding                20  6  6  6
-button 2 0 0 background image       pix/btn2.xpm
+button 2 0 0 padding                17  16  4  6
+button 2 0 0 minimums               30  28
+button 2 0 0 background image       pix/b_out.png
 button 2 0 0 background color       128 128 128
-button 2 0 0 background border      4  4  4  4
+button 2 0 0 background border      6  3  5  5
 button 2 0 0 background scale       1
 button 2 0 0 background parent_tile 0
-button 2 0 0 decoration image       pix/led_off1.xpm
-button 2 0 0 decoration coords      0 512 6 -6   0 512 18 6
+button 2 0 0 decoration image       pix/d1_n.png
+button 2 0 0 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 2 0 0 decoration image       pix/d2_n.png
+button 2 0 0 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
+button 2 0 0 decoration image       pix/d3_n.png
+button 2 0 0 decoration coords      1024 512 -16 -6   1024 512 -7 3
 
-button 2 1 0 padding                20  6  6  6
-button 2 1 0 background image       pix/btn3.xpm
+button 2 1 0 padding                17  16  4  6
+button 2 1 0 minimums               30  28
+button 2 1 0 background image       pix/b_in.png
 button 2 1 0 background color       128 128 128
-button 2 1 0 background border      4  4  4  4
+button 2 1 0 background border      6  3  5  5
 button 2 1 0 background scale       1
 button 2 1 0 background parent_tile 0
-button 2 1 0 decoration image       pix/led_off1.xpm
-button 2 1 0 decoration coords      0 512 6 -6   0 512 18 6
+button 2 1 0 decoration image       pix/d1_h.png
+button 2 1 0 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 2 1 0 decoration image       pix/d2_h.png
+button 2 1 0 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
+button 2 1 0 decoration image       pix/d3_n.png
+button 2 1 0 decoration coords      1024 512 -16 -6   1024 512 -7 3
 
-button 2 2 0 padding                20  6  6  6
-button 2 2 0 background image       pix/btn1.xpm
+button 2 2 0 padding                17  16  4  6
+button 2 2 0 minimums               30  28
+button 2 2 0 background image       pix/b_out.png
 button 2 2 0 background color       128 128 128
-button 2 2 0 background border      4  4  4  4
+button 2 2 0 background border      6  3  5  5
 button 2 2 0 background scale       1
 button 2 2 0 background parent_tile 0
-button 2 2 0 decoration image       pix/led_off1.xpm
-button 2 2 0 decoration coords      0 512 6 -6   0 512 18 6
+button 2 2 0 decoration image       pix/d1_h.png
+button 2 2 0 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 2 2 0 decoration image       pix/d2_h.png
+button 2 2 0 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
+button 2 2 0 decoration image       pix/d3_n.png
+button 2 2 0 decoration coords      1024 512 -16 -6   1024 512 -7 3
 
-button 2 3 0 padding                20  6  6  6
-button 2 3 0 background image       pix/btn1.xpm
+button 2 3 0 padding                17  16  4  6
+button 2 3 0 minimums               30  28
+button 2 3 0 background image       pix/b_out.png
 button 2 3 0 background color       128 128 128
-button 2 3 0 background border      4  4  4  4
+button 2 3 0 background border      6  3  5  5
 button 2 3 0 background scale       1
 button 2 3 0 background parent_tile 0
-button 2 3 0 decoration image       pix/led_off1.xpm
-button 2 3 0 decoration coords      0 512 6 -6   0 512 18 6
+button 2 3 0 decoration image       pix/d1_h.png
+button 2 3 0 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 2 3 0 decoration image       pix/d2_h.png
+button 2 3 0 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
+button 2 3 0 decoration image       pix/d3_n.png
+button 2 3 0 decoration coords      1024 512 -16 -6   1024 512 -7 3
 
-button 2 4 0 padding                20  6  6  6
-button 2 4 0 background image       pix/btn2.xpm
+button 2 4 0 padding                17  16  4  6
+button 2 4 0 minimums               30  28
+button 2 4 0 background image       pix/b_out.png
 button 2 4 0 background color       128 128 128
-button 2 4 0 background border      4  4  4  4
+button 2 4 0 background border      6  3  5  5
 button 2 4 0 background scale       1
 button 2 4 0 background parent_tile 0
-button 2 4 0 decoration image       pix/led_off1.xpm
-button 2 4 0 decoration coords      0 512 6 -6   0 512 18 6
+button 2 4 0 decoration image       pix/d1_d.png
+button 2 4 0 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 2 4 0 decoration image       pix/d2_d.png
+button 2 4 0 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
+button 2 4 0 decoration image       pix/d3_n.png
+button 2 4 0 decoration coords      1024 512 -16 -6   1024 512 -7 3
 
-button 2 0 1 padding                20  6  6  6
-button 2 0 1 background image       pix/btn2.xpm
+button 2 0 1 padding                17  16  4  6
+button 2 0 1 minimums               30  28
+button 2 0 1 background image       pix/b_out.png
 button 2 0 1 background color       128 128 128
-button 2 0 1 background border      4  4  4  4
+button 2 0 1 background border      6  3  5  5
 button 2 0 1 background scale       1
 button 2 0 1 background parent_tile 0
-button 2 0 1 border     image       pix/brd1.xpm
-button 2 0 1 border     border      4  4  4  4
-button 2 0 1 decoration image       pix/led_off1.xpm
-button 2 0 1 decoration coords      0 512 6 -6   0 512 18 6
+button 2 0 1 decoration image       pix/d1_n.png
+button 2 0 1 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 2 0 1 decoration image       pix/d2_n.png
+button 2 0 1 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
+button 2 0 1 decoration image       pix/d3_n.png
+button 2 0 1 decoration coords      1024 512 -16 -6   1024 512 -7 3
 
-button 1 1 1 padding                20  6  6  6
-button 2 1 1 background image       pix/btn3.xpm
+button 2 1 1 padding                17  16  4  6
+button 2 1 1 minimums               30  28
+button 2 1 1 background image       pix/b_in.png
 button 2 1 1 background color       128 128 128
-button 2 1 1 background border      4  4  4  4
+button 2 1 1 background border      6  3  5  5
 button 2 1 1 background scale       1
 button 2 1 1 background parent_tile 0
-button 2 1 1 border     image       pix/brd1.xpm
-button 2 1 1 border     border      4  4  4  4
-button 2 1 1 decoration image       pix/led_off1.xpm
-button 2 1 1 decoration coords      0 512 6 -6   0 512 18 6
+button 2 1 1 decoration image       pix/d1_h.png
+button 2 1 1 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 2 1 1 decoration image       pix/d2_h.png
+button 2 1 1 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
+button 2 1 1 decoration image       pix/d3_n.png
+button 2 1 1 decoration coords      1024 512 -16 -6   1024 512 -7 3
 
-button 2 2 1 padding                20  6  6  6
-button 2 2 1 background image       pix/btn1.xpm
+button 2 2 1 padding                17  16  4  6
+button 2 2 1 minimums               30  28
+button 2 2 1 background image       pix/b_out.png
 button 2 2 1 background color       128 128 128
-button 2 2 1 background border      4  4  4  4
+button 2 2 1 background border      6  3  5  5
 button 2 2 1 background scale       1
 button 2 2 1 background parent_tile 0
-button 2 2 1 border     image       pix/brd1.xpm
-button 2 2 1 border     border      4  4  4  4
-button 2 2 1 decoration image       pix/led_off1.xpm
-button 2 2 1 decoration coords      0 512 6 -6   0 512 18 6
+button 2 2 1 decoration image       pix/d1_h.png
+button 2 2 1 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 2 2 1 decoration image       pix/d2_h.png
+button 2 2 1 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
+button 2 2 1 decoration image       pix/d3_n.png
+button 2 2 1 decoration coords      1024 512 -16 -6   1024 512 -7 3
 
-button 2 3 1 padding                20  6  6  6
-button 2 3 1 background image       pix/btn1.xpm
+button 2 3 1 padding                17  16  4  6
+button 2 3 1 minimums               30  28
+button 2 3 1 background image       pix/b_out.png
 button 2 3 1 background color       128 128 128
-button 2 3 1 background border      4  4  4  4
+button 2 3 1 background border      6  3  5  5
 button 2 3 1 background scale       1
 button 2 3 1 background parent_tile 0
-button 2 3 1 border     image       pix/brd1.xpm
-button 2 3 1 border     border      4  4  4  4
-button 2 3 1 decoration image       pix/led_off1.xpm
-button 2 3 1 decoration coords      0 512 6 -6   0 512 18 6
+button 2 3 1 decoration image       pix/d1_h.png
+button 2 3 1 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 2 3 1 decoration image       pix/d2_h.png
+button 2 3 1 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
+button 2 3 1 decoration image       pix/d3_n.png
+button 2 3 1 decoration coords      1024 512 -16 -6   1024 512 -7 3
 
-button 2 4 1 padding                20  6  6  6
-button 2 4 1 background image       pix/btn2.xpm
+button 2 4 1 padding                17  16  4  6
+button 2 4 1 minimums               30  28
+button 2 4 1 background image       pix/b_out.png
 button 2 4 1 background color       128 128 128
-button 2 4 1 background border      4  4  4  4
+button 2 4 1 background border      6  3  5  5
 button 2 4 1 background scale       1
 button 2 4 1 background parent_tile 0
-button 2 4 1 border     image       pix/brd1.xpm
-button 2 4 1 border     border      4  4  4  4
-button 2 4 1 decoration image       pix/led_off1.xpm
-button 2 4 1 decoration coords      0 512 6 -6   0 512 18 6
+button 2 4 1 decoration image       pix/d1_d.png
+button 2 4 1 decoration coords      0 1024 0 -28   0 1024 19 -1
+button 2 4 1 decoration image       pix/d2_d.png
+button 2 4 1 decoration coords      1024 1024 -8 -10   1024 1024 -1 -3
+button 2 4 1 decoration image       pix/d3_n.png
+button 2 4 1 decoration coords      1024 512 -16 -6   1024 512 -7 3
