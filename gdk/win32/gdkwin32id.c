@@ -68,7 +68,7 @@ gdk_win32_handle_table_remove (HANDLE handle)
 }
 
 gpointer
-gdk_win32_handle_table_lookup (HANDLE handle)
+gdk_win32_handle_table_lookup (GdkNativeWindow handle)
 {
   gpointer data = NULL;
 

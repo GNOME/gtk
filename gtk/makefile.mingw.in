@@ -32,7 +32,7 @@ PERL = perl
 AWK = awk
 
 INCLUDES = -I . -I .. -I ../gdk -I ../gdk-pixbuf
-DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(INTL_CFLAGS)
+DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) $(INTL_CFLAGS)
 DEFINES = -DGTK_DISABLE_COMPAT_H -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\"
 
 all :						\
@@ -366,7 +366,7 @@ gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
 # Linking:
 #
 gtk-win32-$(GTK_VER).dll : generated $(gtk_OBJECTS) gtk.def 
-	$(GLIB)/build-dll gtk-win32 $(GTK_VER) gtk.def $(gtk_OBJECTS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) -luser32
+	$(GLIB)/build-dll gtk-win32 $(GTK_VER) gtk.def $(gtk_OBJECTS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(GLIB_LIBS) $(LIBICONV_LIBS) $(INTL_LIBS) -luser32
 
 #
 # Test programs:

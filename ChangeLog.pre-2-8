@@ -1,3 +1,19 @@
+2000-07-30  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/Makefile.am: Add makefile.mingw.in to EXTRA_DIST.
+
+	* gdk/win32/gdkevents-win32.c (gdk_events_init, gdk_events_queue):
+	Remove the g_pipe_readable_msg stuff. Not needed with new GLib
+	GIOChannel implementation.
+
+	* gdk/win32/gdkinput.c
+	* gdk/win32/gdkpango-win32.c: Update license name here, too.
+
+	* gdk/win32/gdkwin32id.c (gdk_win32_handle_table_lookup): Fix
+	definition to match prototype.
+
+	* gtk/makefile.mingw.in: Add libiconv CFLAGS and LIBS.
+
 2000-07-27  Elliot Lee  <sopwith@redhat.com>
 
 	* gtk/gdk-pixbuf-loader.[ch]: Add gdk_pixbuf_loader_new_with_type

@@ -278,11 +278,6 @@ gdk_events_init (void)
   HMODULE user32, imm32;
   HINSTANCE commctrl32;
 
-  if (g_pipe_readable_msg == 0)
-    g_pipe_readable_msg = RegisterWindowMessage ("g-pipe-readable");
-  GDK_NOTE (EVENTS, g_print ("g-pipe-readable = %#.03x\n",
-			     g_pipe_readable_msg));
-
   gdk_ping_msg = RegisterWindowMessage ("gdk-ping");
   GDK_NOTE (EVENTS, g_print ("gdk-ping = %#.03x\n",
 			     gdk_ping_msg));
@@ -2719,16 +2714,6 @@ gdk_events_queue (void)
 	  || (active_imm_msgpump_owner->lpVtbl->OnTranslateMessage) (active_imm_msgpump_owner, &msg) != S_OK)
 	TranslateMessage (&msg);
 
-      if (msg.message == g_pipe_readable_msg)
-	{
-	  GDK_NOTE (EVENTS, g_print ("g_pipe_readable_msg: %d %d\n",
-				     msg.wParam, msg.lParam));
-
-	  g_io_channel_win32_pipe_readable (msg.wParam, msg.lParam);
-
-	  continue;
-	}
-      
       DispatchMessage (&msg);
     }
 }
