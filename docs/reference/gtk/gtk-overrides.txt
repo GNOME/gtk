@@ -1,23 +1,6 @@
 # These are manually-edited to override or add declarations to those scanned
 # from the GTK header files.
 
-# These haven't been given parameter names in the header files.
-<USER_FUNCTION>
-<NAME>GtkArgGetFunc</NAME>
-<RETURNS>void</RETURNS>
-GtkObject *object,
-GtkArg *arg,
-guint arg_id
-</USER_FUNCTION>
-
-<USER_FUNCTION>
-<NAME>GtkArgSetFunc</NAME>
-<RETURNS>void</RETURNS>
-GtkObject *object,
-GtkArg *arg,
-guint arg_id
-</USER_FUNCTION>
-
 # GtkAllocation is the same as GtkRectangle
 
 <STRUCT>

@@ -545,7 +545,6 @@ gtk_text_layout_get_lines (GtkTextLayout *layout,
                                    layout, top_y, first_line_y);
   if (first_btree_line == NULL)
     {
-      g_assert (top_y > 0);
       /* off the bottom */
       return NULL;
     }
@@ -1982,7 +1981,6 @@ line_display_index_to_iter (GtkTextLayout      *layout,
         gtk_text_iter_forward_to_line_end (iter);
     }
   
-  /* FIXME should this be cursor positions? */
   gtk_text_iter_forward_chars (iter, trailing);
 }
 

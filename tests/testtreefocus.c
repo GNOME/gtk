@@ -334,6 +334,8 @@ main (int argc, char *argv[])
 					       -1, "Holiday",
 					       renderer,
 					       "text", HOLIDAY_COLUMN, NULL);
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (tree_view), col_offset - 1);
+  gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
   g_object_unref (renderer);
 
   /* Alex Column */
@@ -351,6 +353,7 @@ main (int argc, char *argv[])
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (tree_view), col_offset - 1);
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column), GTK_TREE_VIEW_COLUMN_FIXED);
   gtk_tree_view_column_set_width (GTK_TREE_VIEW_COLUMN (column), 50);
+  gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
   g_object_unref (renderer);
 
   /* Havoc Column */
@@ -367,6 +370,7 @@ main (int argc, char *argv[])
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (tree_view), col_offset - 1);
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column), GTK_TREE_VIEW_COLUMN_FIXED);
   gtk_tree_view_column_set_width (GTK_TREE_VIEW_COLUMN (column), 50);
+  gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
   g_object_unref (renderer);
 
   /* Tim Column */
@@ -383,6 +387,7 @@ main (int argc, char *argv[])
 					       NULL);
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (tree_view), col_offset - 1);
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column), GTK_TREE_VIEW_COLUMN_FIXED);
+  gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
   gtk_tree_view_column_set_width (GTK_TREE_VIEW_COLUMN (column), 50);
   g_object_unref (renderer);
 
@@ -398,6 +403,7 @@ main (int argc, char *argv[])
 					       NULL);
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (tree_view), col_offset - 1);
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column), GTK_TREE_VIEW_COLUMN_FIXED);
+  gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
   gtk_tree_view_column_set_width (GTK_TREE_VIEW_COLUMN (column), 50);
   g_object_unref (renderer);
 
@@ -414,6 +420,7 @@ main (int argc, char *argv[])
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (tree_view), col_offset - 1);
   gtk_tree_view_column_set_sizing (GTK_TREE_VIEW_COLUMN (column), GTK_TREE_VIEW_COLUMN_FIXED);
   gtk_tree_view_column_set_width (GTK_TREE_VIEW_COLUMN (column), 50);
+  gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
   g_object_unref (renderer);
 
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);

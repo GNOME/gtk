@@ -1,7 +1,13 @@
 #include <gtk/gtk.h>
-#include "x11/gdkx.h"
 
-#include <unistd.h>
+#if defined (GDK_WINDOWING_X11)
+#include "x11/gdkx.h"
+#elif defined (GDK_WINDOWING_WIN32)
+#include "win32/gdkwin32.h"
+#define GDK_WINDOW_XWINDOW(w) (guint)GDK_WINDOW_HWND(w)
+#endif
+
+#include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 

@@ -32,6 +32,7 @@ extern "C" {
 #define GTK_CELL_RENDERER_PIXBUF_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CELL_RENDERER_PIXBUF, GtkCellRendererPixbufClass))
 #define GTK_IS_CELL_RENDERER_PIXBUF(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_CELL_RENDERER_PIXBUF))
 #define GTK_IS_CELL_RENDERER_PIXBUF_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_CELL_RENDERER_PIXBUF))
+#define GTK_CELL_RENDERER_PIXBUF_GET_CLASS(obj)         (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_CELL_RENDERER_PIXBUF, GtkCellRendererPixbufClass))
 
 typedef struct _GtkCellRendererPixbuf GtkCellRendererPixbuf;
 typedef struct _GtkCellRendererPixbufClass GtkCellRendererPixbufClass;

@@ -158,6 +158,7 @@ col_clicked_cb (GtkTreeViewColumn *col, gpointer data)
 static void
 setup_column (GtkTreeViewColumn *col)
 {
+  gtk_tree_view_column_set_clickable (col, TRUE);
   g_signal_connect_data (G_OBJECT (col),
                          "clicked",
                          (GCallback) col_clicked_cb,

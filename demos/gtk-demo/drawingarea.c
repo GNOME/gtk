@@ -21,17 +21,17 @@ static GdkPixmap *pixmap = NULL;
 
 /* Create a new pixmap of the appropriate size to store our scribbles */
 static gboolean
-scribble_configure_event (GtkWidget         *widget,
-                          GdkEventConfigure *event,
-                          gpointer           data)
+scribble_configure_event (GtkWidget	    *widget,
+			  GdkEventConfigure *event,
+			  gpointer	     data)
 {
   if (pixmap)
     g_object_unref (G_OBJECT (pixmap));
 
   pixmap = gdk_pixmap_new (widget->window,
-                           widget->allocation.width,
-                           widget->allocation.height,
-                           -1);
+			   widget->allocation.width,
+			   widget->allocation.height,
+			   -1);
 
   /* Initialize the pixmap to white */
   gdk_draw_rectangle (pixmap,
@@ -48,8 +48,8 @@ scribble_configure_event (GtkWidget         *widget,
 /* Redraw the screen from the pixmap */
 static gboolean
 scribble_expose_event (GtkWidget      *widget,
-                       GdkEventExpose *event,
-                       gpointer        data)
+		       GdkEventExpose *event,
+		       gpointer	       data)
 {
   /* We use the "foreground GC" for the widget since it already exists,
    * but honestly any GC would work. The only thing to worry about
@@ -57,12 +57,12 @@ scribble_expose_event (GtkWidget      *widget,
    */
   
   gdk_draw_drawable (widget->window,
-                     widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-                     pixmap,
-                     /* Only copy the area that was exposed. */
-                     event->area.x, event->area.y,
-                     event->area.x, event->area.y,
-                     event->area.width, event->area.height);
+		     widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+		     pixmap,
+		     /* Only copy the area that was exposed. */
+		     event->area.x, event->area.y,
+		     event->area.x, event->area.y,
+		     event->area.width, event->area.height);
   
   return FALSE;
 }
@@ -70,8 +70,8 @@ scribble_expose_event (GtkWidget      *widget,
 /* Draw a rectangle on the screen */
 static void
 draw_brush (GtkWidget *widget,
-            gdouble    x,
-            gdouble    y)
+	    gdouble    x,
+	    gdouble    y)
 {
   GdkRectangle update_rect;
 
@@ -89,14 +89,14 @@ draw_brush (GtkWidget *widget,
 
   /* Now invalidate the affected region of the drawing area. */
   gdk_window_invalidate_rect (widget->window,
-                              &update_rect,
-                              FALSE);
+			      &update_rect,
+			      FALSE);
 }
 
 static gboolean
-scribble_button_press_event (GtkWidget      *widget,
-                             GdkEventButton *event,
-                             gpointer        data)
+scribble_button_press_event (GtkWidget	    *widget,
+			     GdkEventButton *event,
+			     gpointer	     data)
 {
   if (pixmap == NULL)
     return FALSE; /* paranoia check, in case we haven't gotten a configure event */
@@ -109,9 +109,9 @@ scribble_button_press_event (GtkWidget      *widget,
 }
 
 static gboolean
-scribble_motion_notify_event (GtkWidget      *widget,
-                              GdkEventMotion *event,
-                              gpointer        data)
+scribble_motion_notify_event (GtkWidget	     *widget,
+			      GdkEventMotion *event,
+			      gpointer	      data)
 {
   int x, y;
   GdkModifierType state;
@@ -141,9 +141,9 @@ scribble_motion_notify_event (GtkWidget      *widget,
 
 
 static gboolean
-checkerboard_expose (GtkWidget      *da,
-                     GdkEventExpose *event,
-                     gpointer        data)
+checkerboard_expose (GtkWidget	    *da,
+		     GdkEventExpose *event,
+		     gpointer	     data)
 {
   gint i, j, xcount, ycount;
   GdkGC *gc1, *gc2;
@@ -182,28 +182,28 @@ checkerboard_expose (GtkWidget      *da,
       j = SPACING;
       ycount = xcount % 2; /* start with even/odd depending on row */
       while (j < da->allocation.height)
-        {
-          GdkGC *gc;
-          
-          if (ycount % 2)
-            gc = gc1;
-          else
-            gc = gc2;
+	{
+	  GdkGC *gc;
+	  
+	  if (ycount % 2)
+	    gc = gc1;
+	  else
+	    gc = gc2;
 
-          /* If we're outside event->area, this will do nothing.
-           * It might be mildly more efficient if we handled
-           * the clipping ourselves, but again we're feeling lazy.
-           */
-          gdk_draw_rectangle (da->window,
-                              gc,
-                              TRUE,
-                              i, j,
-                              CHECK_SIZE,
-                              CHECK_SIZE);
+	  /* If we're outside event->area, this will do nothing.
+	   * It might be mildly more efficient if we handled
+	   * the clipping ourselves, but again we're feeling lazy.
+	   */
+	  gdk_draw_rectangle (da->window,
+			      gc,
+			      TRUE,
+			      i, j,
+			      CHECK_SIZE,
+			      CHECK_SIZE);
 
-          j += CHECK_SIZE + SPACING;
-          ++ycount;
-        }
+	  j += CHECK_SIZE + SPACING;
+	  ++ycount;
+	}
 
       i += CHECK_SIZE + SPACING;
       ++xcount;
@@ -245,7 +245,7 @@ do_drawingarea (void)
       
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
-                            "<u>Checkerboard pattern</u>");
+			    "<u>Checkerboard pattern</u>");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
       
       frame = gtk_frame_new (NULL);
@@ -259,9 +259,9 @@ do_drawingarea (void)
       gtk_container_add (GTK_CONTAINER (frame), da);
 
       gtk_signal_connect (GTK_OBJECT (da),
-                          "expose_event",
-                          GTK_SIGNAL_FUNC (checkerboard_expose),
-                          NULL);
+			  "expose_event",
+			  GTK_SIGNAL_FUNC (checkerboard_expose),
+			  NULL);
 
       /*
        * Create the scribble area
@@ -269,7 +269,7 @@ do_drawingarea (void)
       
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
-                            "<u>Scribble area</u>");
+			    "<u>Scribble area</u>");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
       
       frame = gtk_frame_new (NULL);
@@ -285,26 +285,26 @@ do_drawingarea (void)
       /* Signals used to handle backing pixmap */
       
       gtk_signal_connect (GTK_OBJECT (da), "expose_event",
-                          GTK_SIGNAL_FUNC (scribble_expose_event), NULL);
+			  GTK_SIGNAL_FUNC (scribble_expose_event), NULL);
       gtk_signal_connect (GTK_OBJECT (da),"configure_event",
-                          GTK_SIGNAL_FUNC (scribble_configure_event), NULL);
+			  GTK_SIGNAL_FUNC (scribble_configure_event), NULL);
       
       /* Event signals */
       
       gtk_signal_connect (GTK_OBJECT (da), "motion_notify_event",
-                          GTK_SIGNAL_FUNC (scribble_motion_notify_event), NULL);
+			  GTK_SIGNAL_FUNC (scribble_motion_notify_event), NULL);
       gtk_signal_connect (GTK_OBJECT (da), "button_press_event",
-                          GTK_SIGNAL_FUNC (scribble_button_press_event), NULL);
+			  GTK_SIGNAL_FUNC (scribble_button_press_event), NULL);
 
 
       /* Ask to receive events the drawing area doesn't normally
        * subscribe to
        */
       gtk_widget_set_events (da, gtk_widget_get_events (da)
-                             | GDK_LEAVE_NOTIFY_MASK
-                             | GDK_BUTTON_PRESS_MASK
-                             | GDK_POINTER_MOTION_MASK
-                             | GDK_POINTER_MOTION_HINT_MASK);
+			     | GDK_LEAVE_NOTIFY_MASK
+			     | GDK_BUTTON_PRESS_MASK
+			     | GDK_POINTER_MOTION_MASK
+			     | GDK_POINTER_MOTION_HINT_MASK);
 
     }
 

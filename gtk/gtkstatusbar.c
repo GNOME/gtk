@@ -30,6 +30,7 @@
 #include "gtksignal.h"
 #include "gtkstatusbar.h"
 #include "gtkwindow.h"
+#include "gtkintl.h"
 
 typedef struct _GtkStatusbarMsg GtkStatusbarMsg;
 
@@ -63,6 +64,10 @@ static gboolean gtk_statusbar_button_press   (GtkWidget         *widget,
 					      GdkEventButton    *event);
 static gboolean gtk_statusbar_expose_event   (GtkWidget         *widget,
 					      GdkEventExpose    *event);
+static void     gtk_statusbar_size_request   (GtkWidget         *widget,
+                                              GtkRequisition    *requisition);
+static void     gtk_statusbar_size_allocate  (GtkWidget         *widget,
+                                              GtkAllocation     *allocation);
 static void     gtk_statusbar_create_window  (GtkStatusbar      *statusbar);
 static void     gtk_statusbar_destroy_window (GtkStatusbar      *statusbar);
 
@@ -109,8 +114,6 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   
   object_class->destroy = gtk_statusbar_destroy;
 
-  widget_class->size_allocate = gtk_statusbar_size_allocate;
-  
   widget_class->realize = gtk_statusbar_realize;
   widget_class->unrealize = gtk_statusbar_unrealize;
   widget_class->map = gtk_statusbar_map;
@@ -118,6 +121,9 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   
   widget_class->button_press_event = gtk_statusbar_button_press;
   widget_class->expose_event = gtk_statusbar_expose_event;
+
+  widget_class->size_request = gtk_statusbar_size_request;
+  widget_class->size_allocate = gtk_statusbar_size_allocate;
   
   class->messages_mem_chunk = g_mem_chunk_new ("GtkStatusBar messages mem chunk",
 					       sizeof (GtkStatusbarMsg),
@@ -145,27 +151,42 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_UINT,
 		    GTK_TYPE_STRING);
+
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_enum ("shadow_type",
+                                                              _("Shadow type"),
+                                                              _("Style of bevel around the statusbar text"),
+                                                              GTK_TYPE_SHADOW_TYPE,
+                                                              GTK_SHADOW_IN,
+                                                              G_PARAM_READABLE));
 }
 
 static void
 gtk_statusbar_init (GtkStatusbar *statusbar)
 {
   GtkBox *box;
-
+  GtkShadowType shadow_type;
+  
   box = GTK_BOX (statusbar);
 
   box->spacing = 2;
   box->homogeneous = FALSE;
 
   statusbar->has_resize_grip = TRUE;
+
+  gtk_widget_style_get (GTK_WIDGET (statusbar), "shadow_type", &shadow_type, NULL);
   
   statusbar->frame = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (statusbar->frame), GTK_SHADOW_IN);
+  gtk_frame_set_shadow_type (GTK_FRAME (statusbar->frame), shadow_type);
   gtk_box_pack_start (box, statusbar->frame, TRUE, TRUE, 0);
   gtk_widget_show (statusbar->frame);
 
   statusbar->label = gtk_label_new ("");
   gtk_misc_set_alignment (GTK_MISC (statusbar->label), 0.0, 0.0);
+  /* don't expand the size request for the label; if we
+   * do that then toplevels weirdly resize
+   */
+  gtk_widget_set_usize (statusbar->label, 1, -1);
   gtk_container_add (GTK_CONTAINER (statusbar->frame), statusbar->label);
   gtk_widget_show (statusbar->label);
 
@@ -426,25 +447,6 @@ get_grip_rect (GtkStatusbar *statusbar,
 }
 
 static void
-gtk_statusbar_size_allocate (GtkWidget     *widget,
-                             GtkAllocation *allocation)
-{
-  GtkStatusbar *statusbar;
-  GdkRectangle rect;
-  
-  statusbar = GTK_STATUSBAR (widget);
-  
-  GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
-
-  get_grip_rect (statusbar, &rect);
-  
-  if (statusbar->grip_window)
-    gdk_window_move_resize (statusbar->grip_window,
-                            rect.x, rect.y,
-                            rect.width, rect.height);
-}
-
-static void
 gtk_statusbar_create_window (GtkStatusbar *statusbar)
 {
   GtkWidget *widget;
@@ -583,7 +585,7 @@ gtk_statusbar_expose_event (GtkWidget      *widget,
   if (statusbar->has_resize_grip)
     {
       get_grip_rect (statusbar, &rect);
-      
+
       gtk_paint_resize_grip (widget->style,
                              widget->window,
                              GTK_WIDGET_STATE (widget),
@@ -600,4 +602,69 @@ gtk_statusbar_expose_event (GtkWidget      *widget,
     }
 
   return FALSE;
+}
+
+static void
+gtk_statusbar_size_request   (GtkWidget      *widget,
+                              GtkRequisition *requisition)
+{
+  GtkStatusbar *statusbar;
+  GtkShadowType shadow_type;
+  
+  statusbar = GTK_STATUSBAR (widget);
+
+  gtk_widget_style_get (GTK_WIDGET (statusbar), "shadow_type", &shadow_type, NULL);  
+  gtk_frame_set_shadow_type (GTK_FRAME (statusbar->frame), shadow_type);
+  
+  GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
+
+  if (statusbar->has_resize_grip)
+    {
+      GdkRectangle rect;
+
+      /* x, y in the grip rect depend on size allocation, but
+       * w, h do not so this is OK
+       */
+      get_grip_rect (statusbar, &rect);
+      
+      requisition->width += rect.width;
+      requisition->height = MAX (requisition->height, rect.height);
+    }
+}
+
+static void
+gtk_statusbar_size_allocate  (GtkWidget     *widget,
+                              GtkAllocation *allocation)
+{
+  GtkStatusbar *statusbar;
+  
+  statusbar = GTK_STATUSBAR (widget);
+
+  if (statusbar->has_resize_grip)
+    {
+      GdkRectangle rect;
+      GtkAllocation hbox_allocation;
+      GtkRequisition saved_req;
+      
+      widget->allocation = *allocation; /* get_grip_rect needs this info */
+      get_grip_rect (statusbar, &rect);
+  
+      if (statusbar->grip_window)
+        gdk_window_move_resize (statusbar->grip_window,
+                                rect.x, rect.y,
+                                rect.width, rect.height);
+      
+      /* enter the bad hack zone */      
+      saved_req = widget->requisition;
+      widget->requisition.width -= rect.width; /* HBox::size_allocate needs this */
+      if (widget->requisition.width < 0)
+        widget->requisition.width = 0;
+      GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
+      widget->requisition = saved_req;
+    }
+  else
+    {
+      /* chain up normally */
+      GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
+    }
 }

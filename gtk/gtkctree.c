@@ -3769,6 +3769,7 @@ gtk_ctree_insert_gnode (GtkCTree          *ctree,
   if (!func (ctree, depth, gnode, cnode, data))
     {
       tree_delete_row (ctree, cnode, NULL);
+      gtk_clist_thaw (clist);
       return NULL;
     }
 

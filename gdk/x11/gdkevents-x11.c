@@ -691,11 +691,23 @@ gdk_event_translate (GdkEvent *event,
       
       /* If we get a ButtonPress event where the button is 4 or 5,
 	 it's a Scroll event */
-      if (xevent->xbutton.button == 4 || xevent->xbutton.button == 5)
-	{
+      switch (xevent->xbutton.button)
+        {
+        case 4: /* up */
+        case 5: /* down */
+        case 6: /* left */
+        case 7: /* right */
 	  event->scroll.type = GDK_SCROLL;
-	  event->scroll.direction = (xevent->xbutton.button == 4) ? 
-	    GDK_SCROLL_UP : GDK_SCROLL_DOWN;
+
+          if (xevent->xbutton.button == 4)
+            event->scroll.direction = GDK_SCROLL_UP;
+          else if (xevent->xbutton.button == 5)
+            event->scroll.direction = GDK_SCROLL_DOWN;
+          else if (xevent->xbutton.button == 6)
+            event->scroll.direction = GDK_SCROLL_LEFT;
+          else
+            event->scroll.direction = GDK_SCROLL_RIGHT;
+
 	  event->scroll.window = window;
 	  event->scroll.time = xevent->xbutton.x;
 	  event->scroll.x = xevent->xbutton.x + xoffset;
@@ -704,9 +716,9 @@ gdk_event_translate (GdkEvent *event,
 	  event->scroll.y_root = (gfloat)xevent->xbutton.y_root;
 	  event->scroll.state = (GdkModifierType) xevent->xbutton.state;
 	  event->scroll.device = gdk_core_pointer;
-	}
-      else
-	{
+          break;
+          
+        default:
 	  event->button.type = GDK_BUTTON_PRESS;
 	  event->button.window = window;
 	  event->button.time = xevent->xbutton.time;
@@ -720,6 +732,7 @@ gdk_event_translate (GdkEvent *event,
 	  event->button.device = gdk_core_pointer;
 	  
 	  gdk_event_button_generate (event);
+          break;
 	}
 
       break;
@@ -740,7 +753,8 @@ gdk_event_translate (GdkEvent *event,
 	}
       
       /* We treat button presses as scroll wheel events, so ignore the release */
-      if (xevent->xbutton.button == 4 || xevent->xbutton.button == 5)
+      if (xevent->xbutton.button == 4 || xevent->xbutton.button == 5 ||
+          xevent->xbutton.button == 6 || xevent->xbutton.button ==7)
 	{
 	  return_val = FALSE;
 	  break;
@@ -1959,7 +1973,12 @@ static struct
   const char *gdk_name;
 } settings_map[] = {
   { "Net/DoubleClickTime", "gtk-double-click-timeout" },
-  { "Net/DragThreshold", "gtk-drag-threshold" }
+  { "Net/DragThreshold", "gtk-drag-threshold" },
+  { "Gtk/ColorPalette", "gtk-color-palette" },
+  { "Gtk/ToolbarStyle", "gtk-toolbar-style" },
+  { "Gtk/ToolbarIconSize", "gtk-toolbar-icon-size" },
+  { "Net/CursorBlink", "gtk-cursor-blink" },
+  { "Net/CursorBlinkTime", "gtk-cursor-blink-time" }
 };
 
 static void
@@ -2028,6 +2047,7 @@ gdk_setting_get (const gchar *name,
   XSettingsSetting *setting;
   gboolean success = FALSE;
   gint i;
+  GValue tmp_val = { 0, };
 
   for (i = 0; i < G_N_ELEMENTS (settings_map) ; i++)
     if (strcmp (settings_map[i].gdk_name, name) == 0)
@@ -2048,14 +2068,20 @@ gdk_setting_get (const gchar *name,
     case XSETTINGS_TYPE_INT:
       if (check_transform (xsettings_name, G_TYPE_INT, G_VALUE_TYPE (value)))
 	{
-	  g_value_set_int (value, setting->data.v_int);
+	  g_value_init (&tmp_val, G_TYPE_INT);
+	  g_value_set_int (&tmp_val, setting->data.v_int);
+	  g_value_transform (&tmp_val, value);
+
 	  success = TRUE;
 	}
       break;
     case XSETTINGS_TYPE_STRING:
       if (check_transform (xsettings_name, G_TYPE_STRING, G_VALUE_TYPE (value)))
 	{
-	  g_value_set_string (value, setting->data.v_string);
+	  g_value_init (&tmp_val, G_TYPE_STRING);
+	  g_value_set_string (&tmp_val, setting->data.v_string);
+	  g_value_transform (&tmp_val, value);
+
 	  success = TRUE;
 	}
       break;
@@ -2064,17 +2090,23 @@ gdk_setting_get (const gchar *name,
 	{
 	  GdkColor color;
 	  
+	  g_value_init (&tmp_val, GDK_TYPE_COLOR);
+
 	  color.pixel = 0;
 	  color.red = setting->data.v_color.red;
 	  color.green = setting->data.v_color.green;
 	  color.blue = setting->data.v_color.blue;
 	  
-	  g_value_set_boxed (value, &color);
+	  g_value_set_boxed (&tmp_val, &color);
+	  
+	  g_value_transform (&tmp_val, value);
 	  
 	  success = TRUE;
 	}
       break;
     }
+  
+  g_value_unset (&tmp_val);
 
   xsettings_setting_free (setting);
 

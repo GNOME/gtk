@@ -665,7 +665,7 @@ types related to the text widget and how they work together.
 
 </para>
 
-<!-- ##### ARG GtkTextView:justify ##### -->
+<!-- ##### ARG GtkTextView:justification ##### -->
 <para>
 
 </para>
@@ -686,6 +686,11 @@ types related to the text widget and how they work together.
 </para>
 
 <!-- ##### ARG GtkTextView:tabs ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:cursor-visible ##### -->
 <para>
 
 </para>

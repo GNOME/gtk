@@ -106,3 +106,18 @@ Sets the text displayed in the preview area.
 @text: the text to display in the preview area.
 
 
+<!-- ##### ARG GtkFontSelection:font-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFontSelection:font ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFontSelection:preview-text ##### -->
+<para>
+
+</para>
+

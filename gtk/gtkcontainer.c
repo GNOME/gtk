@@ -49,7 +49,6 @@ enum {
   PROP_BORDER_WIDTH,
   PROP_RESIZE_MODE,
   PROP_CHILD,
-  PROP_REALLOCATE_REDRAWS
 };
 
 typedef struct _GtkChildArgInfo	GtkChildArgInfo;
@@ -200,13 +199,7 @@ gtk_container_class_init (GtkContainerClass *class)
                                                       _("Can be used to add a new child to the container."),
                                                       GTK_TYPE_WIDGET,
 						      G_PARAM_WRITABLE));
-  g_object_class_install_property (gobject_class,
-                                   PROP_REALLOCATE_REDRAWS,
-                                   g_param_spec_boolean ("reallocate_redraws",
-							 _("Reallocate redraws"),
-							 _("Whether redraws should be reallocated"),
-							 FALSE,
-							 G_PARAM_READWRITE));
+
   object_class->destroy = gtk_container_destroy;
 
   widget_class->show_all = gtk_container_show_all;
@@ -689,10 +682,6 @@ gtk_container_set_property (GObject         *object,
     case PROP_RESIZE_MODE:
       gtk_container_set_resize_mode (container, g_value_get_enum (value));
       break;
-    case PROP_REALLOCATE_REDRAWS:
-      gtk_container_set_reallocate_redraws (container, 
-					    g_value_get_boolean (value));
-      break;
     case PROP_CHILD:
       gtk_container_add (container, GTK_WIDGET (g_value_get_object (value)));
       break;
@@ -719,9 +708,6 @@ gtk_container_get_property (GObject         *object,
       break;
     case PROP_RESIZE_MODE:
       g_value_set_enum (value, container->resize_mode);
-      break;
-    case PROP_REALLOCATE_REDRAWS:
-      g_value_set_boolean (value, container->reallocate_redraws);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -889,15 +875,7 @@ gtk_container_set_reallocate_redraws (GtkContainer *container,
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
 
-  needs_redraws = needs_redraws ? TRUE : FALSE;
-  if (needs_redraws != container->reallocate_redraws)
-    {
-      container->reallocate_redraws = needs_redraws;
-      g_object_notify (G_OBJECT (container), "reallocate_redraws");
-      
-      if (container->reallocate_redraws)
-	gtk_widget_queue_draw (GTK_WIDGET (container));
-    }
+  container->reallocate_redraws = needs_redraws ? TRUE : FALSE;
 }
 
 static GtkContainer*
@@ -1092,7 +1070,7 @@ gtk_container_resize_children (GtkContainer *container)
 
   /* we first check out if we actually need to perform a resize,
    * which is not the case if we got another container queued for
-   * a resize in our anchestry. also we can skip the whole
+   * a resize in our ancestry. also we can skip the whole
    * resize_widgets checks if we are a toplevel and NEED_RESIZE.
    * this code assumes that our allocation is sufficient for our
    * requisition, since otherwise we would NEED_RESIZE.
@@ -1119,7 +1097,7 @@ gtk_container_resize_children (GtkContainer *container)
 
   resize_container = GTK_WIDGET (container);
 
-  /* we now walk the anchestry for all resize widgets as long
+  /* we now walk the ancestry for all resize widgets as long
    * as they are our children and as long as their allocation
    * is insufficient, since we don't need to reallocate below that.
    */
@@ -1141,9 +1119,9 @@ gtk_container_resize_children (GtkContainer *container)
     }
 
   /* for the newly setup resize_widgets list, we now walk each widget's
-   * anchestry to sort those widgets out that have RESIZE_NEEDED parents.
+   * ancestry to sort those widgets out that have RESIZE_NEEDED parents.
    * we can safely stop the walk if we are the parent, since we checked
-   * our own anchestry already.
+   * our own ancestry already.
    */
   resize_containers = NULL;
   for (node = resize_widgets; node; node = node->next)

@@ -33,8 +33,3 @@ Creates a new vertical scrollbar.
 @Returns: the new GTKVScrollbar
 
 
-<!-- ##### ARG GtkVScrollbar:adjustment ##### -->
-<para>
-
-</para>
-

@@ -81,3 +81,27 @@ gdk_rectangle_intersect (GdkRectangle *src1,
 
   return return_val;
 }
+
+static GdkRectangle *
+gdk_rectangle_copy (const GdkRectangle *rectangle)
+{
+  GdkRectangle *result = g_new (GdkRectangle, 1);
+  *result = *rectangle;
+
+  return result;
+}
+
+GType
+gdk_rectangle_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GdkRectangle",
+					     NULL,
+					     (GBoxedCopyFunc)gdk_rectangle_copy,
+					     (GBoxedFreeFunc)g_free,
+					     FALSE);
+  return our_type;
+}
+

@@ -5,6 +5,7 @@ democodedir=$(datadir)/gtk-2.0/demo
 ## These should be in the order you want them to appear in the 
 ## demo app, which means alphabetized by demo title, not filename
 demos = @STRIP_BEGIN@	\
+	appwindow.c	\
 	button_box.c	\
 	colorsel.c	\
 	dialog.c	\
@@ -14,6 +15,8 @@ demos = @STRIP_BEGIN@	\
 	menus.c		\
 	panes.c		\
 	pixbufs.c	\
+	sizegroup.c	\
+	stock_browser.c	\
 	textview.c	\
 @STRIP_END@
 

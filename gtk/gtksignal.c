@@ -130,7 +130,7 @@ gtk_signal_connect_while_alive (GtkObject    *object,
 				  FALSE);
 }
 
-guint
+gulong
 gtk_signal_connect_full (GtkObject           *object,
 			 const gchar         *name,
 			 GtkSignalFunc        func,
@@ -321,11 +321,12 @@ gtk_signal_emitv (GtkObject *object,
       GValue *value = params + 1 + i;
       GtkArg *arg = args + i;
       
-      g_value_init (value, arg->type);
+      g_value_init (value, arg->type & ~G_SIGNAL_TYPE_STATIC_SCOPE);
       if (!gtk_arg_static_to_value (arg, value))
 	{
 	  g_warning ("%s: failed to convert arg type `%s' to value type `%s'",
-		     G_STRLOC, g_type_name (arg->type), g_type_name (G_VALUE_TYPE (value)));
+		     G_STRLOC, g_type_name (arg->type & ~G_SIGNAL_TYPE_STATIC_SCOPE),
+		     g_type_name (G_VALUE_TYPE (value)));
 	  return;
 	}
     }

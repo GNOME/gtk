@@ -1,3 +1,26 @@
+Tue Jun  5 10:54:48 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkenums.sgml: Improve docs for GtkStateType.
+	(Fixes #55751, among other things.)
+
+Mon Jun  4 15:08:21 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk-overrides.txt: Remove GtkArgSetFunc, GtkArgGetFunc.
+
+Wed May 30 16:56:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkrc.sgml (pattern): Correct typoe when
+	describing order of composition. (#53371, Skip Montanaro)
+	
+2001-05-22  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtk-sections.txt: add gtk_bin_get_child
+
+Fri May 18 12:28:08 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtksizegroup.sgml gtk/gtk-sections.txt gtk/gtk.types:
+	Add documentation about GtkSizeGroup.
+
 2001-05-11  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/tmpl/gtkvruler.sgml, 

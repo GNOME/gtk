@@ -37,7 +37,7 @@
 
 #define BORDER_SPACING  0
 #define CHILD_SPACING   3
-
+#define DEFAULT_IPADDING 1
 
 static void gtk_menu_bar_class_init    (GtkMenuBarClass *klass);
 static void gtk_menu_bar_size_request  (GtkWidget       *widget,
@@ -136,6 +136,16 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
                                                               GTK_TYPE_SHADOW_TYPE,
                                                               GTK_SHADOW_OUT,
                                                               G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("internal_padding",
+							     _("Internal padding"),
+							     _("Amount of border space between the menubar shadow and the menu items"),
+							     0,
+							     G_MAXINT,
+                                                             DEFAULT_IPADDING,
+                                                             G_PARAM_READABLE));
+
 }
  
 GtkWidget*
@@ -177,6 +187,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   GList *children;
   gint nchildren;
   GtkRequisition child_requisition;
+  gint ipadding;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
@@ -184,7 +195,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 
   requisition->width = 0;
   requisition->height = 0;
-
+  
   if (GTK_WIDGET_VISIBLE (widget))
     {
       menu_bar = GTK_MENU_BAR (widget);
@@ -222,11 +233,15 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 	    }
 	}
 
+      gtk_widget_style_get (widget, "internal_padding", &ipadding, NULL);
+      
       requisition->width += (GTK_CONTAINER (menu_bar)->border_width +
 			     widget->style->xthickness +
+                             ipadding + 
 			     BORDER_SPACING) * 2;
       requisition->height += (GTK_CONTAINER (menu_bar)->border_width +
 			      widget->style->ythickness +
+                              ipadding +
 			      BORDER_SPACING) * 2;
 
       if (nchildren > 0)
@@ -245,6 +260,7 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
   GtkAllocation child_allocation;
   GtkRequisition child_requisition;
   guint offset;
+  gint ipadding;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
@@ -259,15 +275,19 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 			    allocation->x, allocation->y,
 			    allocation->width, allocation->height);
 
+  gtk_widget_style_get (widget, "internal_padding", &ipadding, NULL);
+  
   if (menu_shell->children)
     {
       child_allocation.x = (GTK_CONTAINER (menu_bar)->border_width +
 			    widget->style->xthickness +
+                            ipadding + 
 			    BORDER_SPACING);
       offset = child_allocation.x; 	/* Window edge to menubar start */
 
       child_allocation.y = (GTK_CONTAINER (menu_bar)->border_width +
 			    widget->style->ythickness +
+                            ipadding +
 			    BORDER_SPACING);
       child_allocation.height = MAX (1, (gint)allocation->height - child_allocation.y * 2);
 
@@ -314,13 +334,18 @@ gtk_menu_bar_paint (GtkWidget *widget, GdkRectangle *area)
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
+      gint border;
+
+      border = GTK_CONTAINER (widget)->border_width;
+      
       gtk_paint_box (widget->style,
 		     widget->window,
-		     GTK_STATE_NORMAL,
+                     GTK_WIDGET_STATE (widget),
                      get_shadow_type (GTK_MENU_BAR (widget)),
 		     area, widget, "menubar",
-		     0, 0,
-		     -1,-1);
+		     border, border,
+		     widget->allocation.width - border * 2,
+                     widget->allocation.height - border * 2);
     }
 }
 

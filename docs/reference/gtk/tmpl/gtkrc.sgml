@@ -188,7 +188,7 @@ or <literal>class</literal> declaration. All styles
 applying to a particular widget are composited together
 with <literal>widget</literal> declarations overriding
 <literal>widget_class</literal> declarations which, in
-turn, override <literal>widget</literal> declarations.
+turn, override <literal>class</literal> declarations.
 Within each type of declaration, later declarations override
 earlier ones.
 </para>

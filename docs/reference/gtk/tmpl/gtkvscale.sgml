@@ -37,8 +37,3 @@ Creates a new #GtkVScale.
 @Returns: a new #GtkVScale.
 
 
-<!-- ##### ARG GtkVScale:adjustment ##### -->
-<para>
-the #GtkAdjustment which sets the range of the scale.
-</para>
-

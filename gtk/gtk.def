@@ -135,6 +135,7 @@ EXPORTS
 	gtk_aspect_frame_get_type
 	gtk_aspect_frame_new
 	gtk_aspect_frame_set
+	gtk_bin_get_child
 	gtk_bin_get_type
 	gtk_binary_age
 	gtk_binding_entry_add_signal
@@ -597,7 +598,7 @@ EXPORTS
 	gtk_image_get_stock
 	gtk_image_get_storage_type
 	gtk_image_get_type
-	gtk_image_menu_item_add_image
+;	gtk_image_menu_item_add_image
 	gtk_image_menu_item_get_image
 	gtk_image_menu_item_get_type
 	gtk_image_menu_item_new
@@ -1257,7 +1258,7 @@ EXPORTS
 	gtk_text_iter_has_tag
 	gtk_text_iter_in_range
 	gtk_text_iter_is_end
-	gtk_text_iter_is_first
+;	gtk_text_iter_is_first
 	gtk_text_iter_reorder
 	gtk_text_iter_set_line
 	gtk_text_iter_set_line_index
@@ -1428,6 +1429,7 @@ EXPORTS
 	gtk_tree_model_iter_parent
 	gtk_tree_model_range_changed
 	gtk_tree_model_ref_node
+	gtk_tree_model_reordered
 	gtk_tree_model_sort_convert_path
 	gtk_tree_model_sort_get_model
 	gtk_tree_model_sort_get_type
@@ -1443,6 +1445,7 @@ EXPORTS
 	gtk_tree_path_new
 	gtk_tree_path_new_from_string
 	gtk_tree_path_prepend_index
+	gtk_tree_view_get_columns
 	gtk_tree_view_set_rows_drag_dest
 	gtk_tree_view_set_rows_drag_source
 	gtk_tree_prepend
@@ -1740,4 +1743,10 @@ EXPORTS
 	gtk_window_unmaximize
 	gtk_window_unstick
 
+	gtk_image_menu_item_new_with_label
+	gtk_image_menu_item_set_image
+	gtk_size_group_add_widget
+	gtk_size_group_new
+	gtk_text_buffer_remove_all_tags
+	gtk_tree_view_column_set_reorderable
 

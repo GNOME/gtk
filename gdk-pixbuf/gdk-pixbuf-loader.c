@@ -345,7 +345,7 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader,
   g_return_val_if_fail (count >= 0, FALSE);
   
   priv = loader->priv;
-  
+
   /* we expect it's not to be closed */
   g_return_val_if_fail (priv->closed == FALSE, FALSE);
   
@@ -532,7 +532,7 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
   if (priv->image_module == NULL)
     gdk_pixbuf_loader_load_module (loader, NULL, NULL);
   
-  if (priv->image_module && priv->image_module->stop_load)
+  if (priv->image_module && priv->image_module->stop_load && priv->context)
     retval = priv->image_module->stop_load (priv->context, error);
   
   priv->closed = TRUE;

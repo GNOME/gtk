@@ -8,3 +8,4 @@ cat-id-tbl.c
 gtk20.pot
 messages
 stamp-cat-id
+po2tbl.sed

@@ -277,7 +277,12 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 	{
 	  gdk_drawable_get_size (win32_gc->stipple, &sw, &sh);
 
-	  if (sw != 8 || sh != 8)
+#if 0 /* HB: this size limitation is disabled to make radio and check
+       * buttons work. I got the impression from the API docs, that
+       * it shouldn't be necessary at all, but win9x would do the clipping
+       */
+	  if (   (sw != 8 || sh != 8)
+	      && !IS_WIN_NT ()) /* HB: the MSDN says it's a Win95 limitation */
 	    {
 	      /* It seems that it *must* be 8x8, at least on my machine. 
 	       * Thus, tile an 8x8 bitmap with the stipple in case it is
@@ -304,6 +309,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 	      gdk_gc_unref (gc);
 	    }
 	  else
+#endif
 	    gdk_drawable_ref (win32_gc->stipple);
 	  win32_gc->values_mask |= GDK_GC_STIPPLE;
 	  GDK_NOTE (MISC,
@@ -402,19 +408,26 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 
   if (mask & GDK_GC_LINE_STYLE)
     {
-      win32_gc->pen_style &= ~(PS_STYLE_MASK);
       GDK_NOTE (MISC, (g_print ("%sps|=", s),
 		       s = ","));
       switch (values->line_style)
 	{
 	case GDK_LINE_SOLID:
+        win32_gc->pen_style &= ~(PS_STYLE_MASK);
 	  GDK_NOTE (MISC, g_print ("LINE_SOLID"));
 	  win32_gc->pen_style |= PS_SOLID;
 	  break;
 	case GDK_LINE_ON_OFF_DASH:
 	case GDK_LINE_DOUBLE_DASH: /* ??? */
-	  GDK_NOTE (MISC, g_print ("DASH"));
-	  win32_gc->pen_style |= PS_DASH;
+	  /* only set the linestyle here, if it isn't already set
+	   * gdk_win32_gc_set_dashes () knows better
+	   */
+	  if (0 == (win32_gc->values_mask & GDK_GC_LINE_STYLE))
+	    {
+            win32_gc->pen_style &= ~(PS_STYLE_MASK);
+	      GDK_NOTE (MISC, g_print ("DASH"));
+	      win32_gc->pen_style |= PS_DASH;
+	    }
 	  break;
 	}
       win32_gc->values_mask |= GDK_GC_LINE_STYLE;
@@ -625,8 +638,10 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
 
   win32_gc = GDK_GC_WIN32 (gc);
 
+  /* mark as set, see gdk_win32_gc_values_to_win32values () for the reason */
+  win32_gc->values_mask |= GDK_GC_LINE_STYLE;
+
   win32_gc->pen_style &= ~(PS_STYLE_MASK);
-  win32_gc->pen_style |= PS_DASH;
 
   /* 
    * Set the extended line style. This could be done by 
@@ -910,6 +925,7 @@ predraw_set_foreground (GdkGC       *gc,
 
   logbrush.lbStyle = BS_SOLID;
   logbrush.lbColor = fg;
+  logbrush.lbHatch = 0;
 
   if (*ok && (hpen = ExtCreatePen (win32_gc->pen_style,
 				   (win32_gc->pen_width > 0 ? win32_gc->pen_width : 1),
@@ -924,12 +940,11 @@ predraw_set_foreground (GdkGC       *gc,
     case GDK_OPAQUE_STIPPLED:
       if (*ok && (hbr = CreatePatternBrush (GDK_PIXMAP_HBITMAP (win32_gc->stipple))) == NULL)
 	WIN32_GDI_FAILED ("CreatePatternBrush"), *ok = FALSE;
-	
       if (*ok && !SetBrushOrgEx(win32_gc->hdc, gc->ts_x_origin,
 				gc->ts_y_origin, NULL))
 	WIN32_GDI_FAILED ("SetBrushOrgEx"), *ok = FALSE;
+	
       break;
-
     case GDK_SOLID:
     default:
       if (*ok && (hbr = CreateSolidBrush (fg)) == NULL)
@@ -1076,6 +1091,25 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
       if ((hrgn = ExtCreateRegion (NULL, nbytes, rgndata)) == NULL)
 	WIN32_API_FAILED ("ExtCreateRegion"), ok = FALSE;
 
+      /*
+       * XXX: combine the fillmode-stipple with the clip region possibly 
+       *  this needs to be done with the hcliprgn below as well, but 
+       *  the test case here were check boxes and radio buttons ...
+       */
+      if (   (win32_gc->values_mask & GDK_GC_STIPPLE)
+          && (win32_gc->values_mask & GDK_GC_FILL) && (win32_gc->fill_style == GDK_STIPPLED))
+        {
+          HRGN hstipplergn = BitmapToRegion ((HBITMAP) GDK_PIXMAP_HBITMAP (win32_gc->stipple));
+
+          if (OffsetRgn (hstipplergn, 
+             win32_gc->values_mask & GDK_GC_TS_X_ORIGIN ? gc->ts_x_origin : 0,
+             win32_gc->values_mask & GDK_GC_TS_Y_ORIGIN ? gc->ts_y_origin : 0) == ERROR)
+            WIN32_API_FAILED ("OffsetRgn"), ok = FALSE;
+          if (CombineRgn (hrgn, hrgn, hstipplergn, RGN_AND) == ERROR)
+            WIN32_API_FAILED ("CombineRgn"), ok = FALSE;
+          if (!DeleteObject (hstipplergn))
+            WIN32_API_FAILED ("DeleteObject");
+        }
       if (ok && SelectClipRgn (win32_gc->hdc, hrgn) == ERROR)
 	WIN32_API_FAILED ("SelectClipRgn"), ok = FALSE;
 
@@ -1119,8 +1153,10 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
 		PS_GEOMETRIC ? "GEOMETRIC" : "COSMETIC"),
 	       ((extlogpen.elpPenStyle & PS_STYLE_MASK) ==
 		PS_NULL ? "NULL" :
-		((extlogpen.elpPenStyle & PS_STYLE_MASK) ==
-		 PS_SOLID ? "SOLID" : "???")),
+		((extlogpen.elpPenStyle & PS_STYLE_MASK) == PS_SOLID ? "SOLID" :
+		 ((extlogpen.elpPenStyle & PS_STYLE_MASK) == PS_DOT ? "DOT" :
+		  ((extlogpen.elpPenStyle & PS_STYLE_MASK) == PS_DASH ? "DASH" :
+ 		   "???")))),
 	       ((extlogpen.elpPenStyle & PS_ENDCAP_MASK) ==
 		PS_ENDCAP_FLAT ? "FLAT" :
 		((extlogpen.elpPenStyle & PS_ENDCAP_MASK) ==

@@ -129,7 +129,6 @@ struct _GtkTextView
 
   GtkTextMark *dnd_mark;
   guint blink_timeout;
-  guint preblink_timeout;
 
   guint first_validate_idle;            /* Idle to revalidate onscreen portion, runs before resize */
   guint incremental_validate_idle;      /* Idle to revalidate offscreen portions, runs after redraw */

@@ -33,6 +33,7 @@ extern "C" {
 #define GTK_TREE_STORE_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_STORE, GtkTreeStoreClass))
 #define GTK_IS_TREE_STORE(obj)			(GTK_CHECK_TYPE ((obj), GTK_TYPE_TREE_STORE))
 #define GTK_IS_TREE_STORE_CLASS(klass)		(GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_TREE_STORE))
+#define GTK_TREE_STORE_GET_CLASS(obj)           (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TREE_STORE, GtkTreeStoreClass))
 
 typedef struct _GtkTreeStore       GtkTreeStore;
 typedef struct _GtkTreeStoreClass  GtkTreeStoreClass;

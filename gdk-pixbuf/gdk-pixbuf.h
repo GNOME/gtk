@@ -88,7 +88,7 @@ typedef enum {
         GDK_PIXBUF_ERROR_FAILED
 } GdkPixbufError;
 
-GQuark gdk_pixbuf_error_quark () G_GNUC_CONST;
+GQuark gdk_pixbuf_error_quark (void) G_GNUC_CONST;
 
 
 

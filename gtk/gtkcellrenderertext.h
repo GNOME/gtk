@@ -33,6 +33,7 @@ extern "C" {
 #define GTK_CELL_RENDERER_TEXT_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CELL_RENDERER_TEXT, GtkCellRendererTextClass))
 #define GTK_IS_CELL_RENDERER_TEXT(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_CELL_RENDERER_TEXT))
 #define GTK_IS_CELL_RENDERER_TEXT_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_CELL_RENDERER_TEXT))
+#define GTK_CELL_RENDERER_TEXT_GET_CLASS(obj)   (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_CELL_RENDERER_TEXT, GtkCellRendererTextClass))
 
 typedef struct _GtkCellRendererText      GtkCellRendererText;
 typedef struct _GtkCellRendererTextClass GtkCellRendererTextClass;
@@ -53,7 +54,10 @@ struct _GtkCellRendererText
   PangoUnderline underline_style;
 
   gint rise;
-  
+  gint width;
+  gint height;
+
+  guint fixed_size : 1;
   guint strikethrough : 1;
 
   /* editable feature doesn't work */
@@ -86,8 +90,14 @@ struct _GtkCellRendererTextClass
   GtkCellRendererClass parent_class;
 };
 
-GtkType          gtk_cell_renderer_text_get_type (void);
-GtkCellRenderer *gtk_cell_renderer_text_new      (void);
+GtkType          gtk_cell_renderer_text_get_type       (void);
+GtkCellRenderer *gtk_cell_renderer_text_new            (void);
+
+void             gtk_cell_renderer_text_set_fixed_size (GtkCellRendererText *renderer,
+							gboolean             fixed_size,
+							gint                 width,
+							gint                 height);
+
 
 #ifdef __cplusplus
 }

@@ -20,7 +20,7 @@ GdkAtom gdk_atom_intern_for_display (const gchar * atom_name,
 				     gboolean only_if_exists,
 				     GdkDisplay * dpy);
 gchar *gdk_atom_name_for_display (GdkAtom atom, GdkDisplay * dpy);
-gchar *gdk_atom_name	     (GdkAtom       atom) G_GNUC_CONST;
+gchar*  gdk_atom_name   (GdkAtom      atom);
 
 gboolean gdk_property_get    (GdkWindow     *window,
 			      GdkAtom        property,

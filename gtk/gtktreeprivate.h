@@ -129,7 +129,7 @@ struct _GtkTreeViewPrivate
   GList *columns;
   gint header_height;
 
-  GtkTreeViewColumnDropFunc *column_drop_func;
+  GtkTreeViewColumnDropFunc column_drop_func;
   gpointer column_drop_func_data;
   GtkDestroyNotify column_drop_func_data_destroy;
   GList *column_drag_info;

@@ -3,11 +3,15 @@ EXPORTS
 	_gdk_pixbuf_get_named_module
 	_gdk_pixbuf_load_module
 	gdk_pixbuf_add_alpha
-	gdk_pixbuf_animation_get_frames
 	gdk_pixbuf_animation_get_height
-	gdk_pixbuf_animation_get_num_frames
+	gdk_pixbuf_animation_get_iter
+	gdk_pixbuf_animation_get_static_image
 	gdk_pixbuf_animation_get_type
 	gdk_pixbuf_animation_get_width
+	gdk_pixbuf_animation_is_static_image
+	gdk_pixbuf_animation_iter_advance
+	gdk_pixbuf_animation_iter_get_delay_time
+	gdk_pixbuf_animation_iter_get_pixbuf
 	gdk_pixbuf_animation_new_from_file
 	gdk_pixbuf_animation_ref
 	gdk_pixbuf_animation_unref
@@ -17,14 +21,6 @@ EXPORTS
 	gdk_pixbuf_copy
 	gdk_pixbuf_copy_area
 	gdk_pixbuf_error_quark
-	gdk_pixbuf_frame_copy
-	gdk_pixbuf_frame_free
-	gdk_pixbuf_frame_get_action
-	gdk_pixbuf_frame_get_delay_time
-	gdk_pixbuf_frame_get_pixbuf
-	gdk_pixbuf_frame_get_type
-	gdk_pixbuf_frame_get_x_offset
-	gdk_pixbuf_frame_get_y_offset
 	gdk_pixbuf_get_bits_per_sample
 	gdk_pixbuf_get_colorspace
 	gdk_pixbuf_get_has_alpha

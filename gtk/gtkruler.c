@@ -25,13 +25,14 @@
  */
 
 #include "gtkruler.h"
+#include "gtkintl.h"
 
 enum {
-  ARG_0,
-  ARG_LOWER,
-  ARG_UPPER,
-  ARG_POSITION,
-  ARG_MAX_SIZE
+  PROP_0,
+  PROP_LOWER,
+  PROP_UPPER,
+  PROP_POSITION,
+  PROP_MAX_SIZE
 };
 
 static void gtk_ruler_class_init    (GtkRulerClass  *klass);
@@ -43,12 +44,14 @@ static void gtk_ruler_size_allocate (GtkWidget      *widget,
 static gint gtk_ruler_expose        (GtkWidget      *widget,
 				     GdkEventExpose *event);
 static void gtk_ruler_make_pixmap   (GtkRuler       *ruler);
-static void gtk_ruler_set_arg       (GtkObject      *object,
-				     GtkArg         *arg,
-				     guint           arg_id);
-static void gtk_ruler_get_arg       (GtkObject      *object,
-				     GtkArg         *arg,
-				     guint           arg_id);
+static void gtk_ruler_set_property  (GObject        *object,
+				     guint            prop_id,
+				     const GValue   *value,
+				     GParamSpec     *pspec);
+static void gtk_ruler_get_property  (GObject        *object,
+				     guint           prop_id,
+				     GValue         *value,
+				     GParamSpec     *pspec);
 
 static GtkWidgetClass *parent_class;
 
@@ -88,16 +91,18 @@ gtk_ruler_get_type (void)
 static void
 gtk_ruler_class_init (GtkRulerClass *class)
 {
+  GObjectClass   *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
+  gobject_class = G_OBJECT_CLASS (class);
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
   parent_class = gtk_type_class (GTK_TYPE_WIDGET);
   
-  object_class->set_arg = gtk_ruler_set_arg;
-  object_class->get_arg = gtk_ruler_get_arg;
+  gobject_class->set_property = gtk_ruler_set_property;
+  gobject_class->get_property = gtk_ruler_get_property;
 
   widget_class->realize = gtk_ruler_realize;
   widget_class->unrealize = gtk_ruler_unrealize;
@@ -107,14 +112,45 @@ gtk_ruler_class_init (GtkRulerClass *class)
   class->draw_ticks = NULL;
   class->draw_pos = NULL;
 
-  gtk_object_add_arg_type ("GtkRuler::lower", GTK_TYPE_DOUBLE,
-			   GTK_ARG_READWRITE, ARG_LOWER);
-  gtk_object_add_arg_type ("GtkRuler::upper", GTK_TYPE_DOUBLE,
-			   GTK_ARG_READWRITE, ARG_UPPER);
-  gtk_object_add_arg_type ("GtkRuler::position", GTK_TYPE_DOUBLE,
-			   GTK_ARG_READWRITE, ARG_POSITION);
-  gtk_object_add_arg_type ("GtkRuler::max_size", GTK_TYPE_DOUBLE,
-			   GTK_ARG_READWRITE, ARG_MAX_SIZE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_LOWER,
+                                   g_param_spec_double ("lower",
+							_("Lower"),
+							_("Lower limit of ruler"),
+							-G_MAXDOUBLE,
+							G_MAXDOUBLE,
+							0.0,
+							G_PARAM_READWRITE));  
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_UPPER,
+                                   g_param_spec_double ("upper",
+							_("Upper"),
+							_("Upper limit of ruler"),
+							-G_MAXDOUBLE,
+							G_MAXDOUBLE,
+							0.0,
+							G_PARAM_READWRITE));  
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_POSITION,
+                                   g_param_spec_double ("position",
+							_("Position"),
+							_("Position of mark on the ruler"),
+							-G_MAXDOUBLE,
+							G_MAXDOUBLE,
+							0.0,
+							G_PARAM_READWRITE));  
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_MAX_SIZE,
+                                   g_param_spec_double ("max_size",
+							_("Max Size"),
+							_("Maximum size of the ruler"),
+							-G_MAXDOUBLE,
+							G_MAXDOUBLE,
+							0.0,
+							G_PARAM_READWRITE));  
 }
 
 static void
@@ -134,56 +170,58 @@ gtk_ruler_init (GtkRuler *ruler)
 }
 
 static void
-gtk_ruler_set_arg (GtkObject  *object,
-		   GtkArg     *arg,
-		   guint       arg_id)
+gtk_ruler_set_property (GObject      *object,
+ 			guint         prop_id,
+			const GValue *value,
+			GParamSpec   *pspec)
 {
   GtkRuler *ruler = GTK_RULER (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_LOWER:
-      gtk_ruler_set_range (ruler, GTK_VALUE_DOUBLE (*arg), ruler->upper,
+    case PROP_LOWER:
+      gtk_ruler_set_range (ruler, g_value_get_double (value), ruler->upper,
 			   ruler->position, ruler->max_size);
       break;
-    case ARG_UPPER:
-      gtk_ruler_set_range (ruler, ruler->lower, GTK_VALUE_DOUBLE (*arg),
+    case PROP_UPPER:
+      gtk_ruler_set_range (ruler, ruler->lower, g_value_get_double (value),
 			   ruler->position, ruler->max_size);
       break;
-    case ARG_POSITION:
+    case PROP_POSITION:
       gtk_ruler_set_range (ruler, ruler->lower, ruler->upper,
-			   GTK_VALUE_DOUBLE (*arg), ruler->max_size);
+			   g_value_get_double (value), ruler->max_size);
       break;
-    case ARG_MAX_SIZE:
+    case PROP_MAX_SIZE:
       gtk_ruler_set_range (ruler, ruler->lower, ruler->upper,
-			   ruler->position,  GTK_VALUE_DOUBLE (*arg));
+			   ruler->position,  g_value_get_double (value));
       break;
     }
 }
 
 static void
-gtk_ruler_get_arg (GtkObject  *object,
-		   GtkArg     *arg,
-		   guint       arg_id)
+gtk_ruler_get_property (GObject      *object,
+			guint         prop_id,
+			GValue       *value,
+			GParamSpec   *pspec)
 {
   GtkRuler *ruler = GTK_RULER (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_LOWER:
-      GTK_VALUE_DOUBLE (*arg) = ruler->lower;
+    case PROP_LOWER:
+      g_value_set_double (value, ruler->lower);
       break;
-    case ARG_UPPER:
-      GTK_VALUE_DOUBLE (*arg) = ruler->upper;
+    case PROP_UPPER:
+      g_value_set_double (value, ruler->upper);
       break;
-    case ARG_POSITION:
-      GTK_VALUE_DOUBLE (*arg) = ruler->position;
+    case PROP_POSITION:
+      g_value_set_double (value, ruler->position);
       break;
-    case ARG_MAX_SIZE:
-      GTK_VALUE_DOUBLE (*arg) = ruler->max_size;
+    case PROP_MAX_SIZE:
+      g_value_set_double (value, ruler->max_size);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -211,10 +249,26 @@ gtk_ruler_set_range (GtkRuler *ruler,
   g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_RULER (ruler));
 
-  ruler->lower = lower;
-  ruler->upper = upper;
-  ruler->position = position;
-  ruler->max_size = max_size;
+  if (ruler->lower != lower)
+    {
+      ruler->lower = lower;
+      g_object_notify (G_OBJECT (ruler), "lower");
+    }
+  if (ruler->upper != upper)
+    {
+      ruler->upper = upper;
+      g_object_notify (G_OBJECT (ruler), "upper");
+    }
+  if (ruler->position != position)
+    {
+      ruler->position = position;
+      g_object_notify (G_OBJECT (ruler), "position");
+    }
+  if (ruler->max_size != max_size)
+    {
+      ruler->max_size = max_size;
+      g_object_notify (G_OBJECT (ruler), "max_size");
+    }
 
   if (GTK_WIDGET_DRAWABLE (ruler))
     gtk_widget_queue_draw (GTK_WIDGET (ruler));

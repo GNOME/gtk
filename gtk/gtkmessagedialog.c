@@ -214,6 +214,9 @@ gtk_message_dialog_new (GtkWindow     *parent,
 
   if (flags & GTK_DIALOG_DESTROY_WITH_PARENT)
     gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+
+  if (flags & GTK_DIALOG_NO_SEPARATOR)
+    gtk_dialog_set_has_separator (dialog, FALSE);
   
   setup_type (GTK_MESSAGE_DIALOG (dialog), type);
   
@@ -225,37 +228,37 @@ gtk_message_dialog_new (GtkWindow     *parent,
 
     case GTK_BUTTONS_OK:
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_BUTTON_OK,
+                             GTK_STOCK_OK,
                              GTK_RESPONSE_OK);
       break;
 
     case GTK_BUTTONS_CLOSE:
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_BUTTON_CLOSE,
+                             GTK_STOCK_CLOSE,
                              GTK_RESPONSE_CLOSE);
       break;
 
     case GTK_BUTTONS_CANCEL:
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_BUTTON_CANCEL,
+                             GTK_STOCK_CANCEL,
                              GTK_RESPONSE_CANCEL);
       break;
 
     case GTK_BUTTONS_YES_NO:
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_BUTTON_YES,
+                             GTK_STOCK_YES,
                              GTK_RESPONSE_YES);
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_BUTTON_NO,
+                             GTK_STOCK_NO,
                              GTK_RESPONSE_NO);
       break;
 
     case GTK_BUTTONS_OK_CANCEL:
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_BUTTON_OK,
+                             GTK_STOCK_OK,
                              GTK_RESPONSE_OK);
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_BUTTON_CANCEL,
+                             GTK_STOCK_CANCEL,
                              GTK_RESPONSE_CANCEL);
       break;
       

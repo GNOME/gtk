@@ -359,7 +359,7 @@ gtk_dialog_new_empty (const gchar     *title,
  * (GTK_DIALOG_DESTROY_WITH_PARENT). After @flags, button
  * text/response ID pairs should be listed, with a NULL pointer ending
  * the list. Button text can be either a stock ID such as
- * GTK_STOCK_BUTTON_OK, or some arbitrary text.  A response ID can be
+ * #GTK_STOCK_OK, or some arbitrary text.  A response ID can be
  * any positive number, or one of the values in the #GtkResponseType
  * enumeration. If the user clicks one of these dialog buttons,
  * #GtkDialog will emit the "response" signal with the corresponding
@@ -375,9 +375,9 @@ gtk_dialog_new_empty (const gchar     *title,
  *  GtkWidget *dialog = gtk_dialog_new_with_buttons ("My dialog",
  *                                                   main_app_window,
  *                                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
- *                                                   GTK_STOCK_BUTTON_OK,
+ *                                                   GTK_STOCK_OK,
  *                                                   GTK_RESPONSE_ACCEPT,
- *                                                   GTK_STOCK_BUTTON_CANCEL,
+ *                                                   GTK_STOCK_CANCEL,
  *                                                   GTK_RESPONSE_REJECT,
  *                                                   NULL);
  * </programlisting>

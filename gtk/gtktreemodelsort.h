@@ -31,6 +31,7 @@ extern "C" {
 #define GTK_TREE_MODEL_SORT_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_MODEL_SORT, GtkTreeModelSortClass))
 #define GTK_IS_TREE_MODEL_SORT(obj)			(GTK_CHECK_TYPE ((obj), GTK_TYPE_TREE_MODEL_SORT))
 #define GTK_IS_TREE_MODEL_SORT_CLASS(klass)		(GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_TREE_MODEL_SORT))
+#define GTK_TREE_MODEL_SORT_GET_CLASS(obj)              (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TREE_MODEL_SORT, GtkTreeModelSortClass))
 
 typedef struct _GtkTreeModelSort       GtkTreeModelSort;
 typedef struct _GtkTreeModelSortClass  GtkTreeModelSortClass;
@@ -73,7 +74,7 @@ GtkTreeModel *gtk_tree_model_sort_get_model      (GtkTreeModelSort  *tree_model)
 GtkTreePath  *gtk_tree_model_sort_convert_path   (GtkTreeModelSort  *tree_model_sort,
 						  GtkTreePath       *child_path);
 
-/* not implemented */
+/* FIXME: not implemented yet */
 void          gtk_tree_model_sort_convert_iter    (GtkTreeModelSort  *tree_model_sort,
                                                    GtkTreeIter       *sort_iter,
                                                    GtkTreeIter       *child_iter);

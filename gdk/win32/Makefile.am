@@ -20,6 +20,7 @@ EXTRA_DIST = \
 	gdkinput.c \
 	gdkinput-win32.c \
 	gdkinput-win32.h \
+	gdkkeys-win32.c \
 	gdkmain-win32.c \
 	gdkpango-win32.c \
 	gdkpixmap-win32.c \

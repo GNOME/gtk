@@ -33,8 +33,3 @@ Creates a new horizontal scrollbar.
 @Returns: the new GTKHScrollbar
 
 
-<!-- ##### ARG GtkHScrollbar:adjustment ##### -->
-<para>
-
-</para>
-

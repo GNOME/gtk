@@ -14,7 +14,7 @@ static GtkWidget *frame;
 
 static void
 change_color_callback (GtkWidget *button,
-                       gpointer   data)
+		       gpointer	  data)
 {
   GtkWidget *dialog;
   GtkColorSelection *colorsel;
@@ -35,7 +35,7 @@ change_color_callback (GtkWidget *button,
   if (response == GTK_RESPONSE_OK)
     {
       gtk_color_selection_get_current_color (colorsel,
-                                             &color);
+					     &color);
       
       gtk_widget_modify_bg (da, GTK_STATE_NORMAL, &color);
     }
@@ -92,8 +92,8 @@ do_colorsel (void)
       gtk_box_pack_start (GTK_BOX (vbox), alignment, FALSE, FALSE, 0);
       
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
-                          GTK_SIGNAL_FUNC (change_color_callback),
-                          NULL);
+			  GTK_SIGNAL_FUNC (change_color_callback),
+			  NULL);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

@@ -361,8 +361,8 @@ gtk_button_new_with_label (const gchar *label)
  * @returns: a new #GtkButton
  *
  * Creates a new #GtkButton containing the image and text from a stock item.
- * Some stock ids have preprocessor macros like #GTK_STOCK_BUTTON_OK and
- * #GTK_STOCK_BUTTON_APPLY.
+ * Some stock ids have preprocessor macros like #GTK_STOCK_OK and
+ * #GTK_STOCK_APPLY.
  **/
 GtkWidget*
 gtk_button_new_from_stock (const gchar   *stock_id)

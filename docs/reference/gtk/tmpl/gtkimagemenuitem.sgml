@@ -27,15 +27,6 @@ GtkImageMenuItem
 </para>
 
 
-<!-- ##### FUNCTION gtk_image_menu_item_add_image ##### -->
-<para>
-
-</para>
-
-@image_menu_item: 
-@child: 
-
-
 <!-- ##### FUNCTION gtk_image_menu_item_get_image ##### -->
 <para>
 
@@ -58,9 +49,10 @@ GtkImageMenuItem
 
 </para>
 
+@Returns: 
+<!-- # Unused Parameters # -->
 @widget: 
 @label: 
-@Returns: 
 
 
 <!-- ##### FUNCTION gtk_image_menu_item_new_from_stock ##### -->

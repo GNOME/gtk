@@ -34,6 +34,7 @@
 #include "gtkrc.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
+#include "gtksizegroup.h"
 #include "gtksignal.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
@@ -599,9 +600,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, size_allocate),
-		    gtk_marshal_VOID__POINTER,
+		    gtk_marshal_VOID__BOXED,
 		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_POINTER);
+		    GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[STATE_CHANGED] =
     gtk_signal_new ("state_changed",
 		    GTK_RUN_FIRST,
@@ -1177,7 +1178,10 @@ gtk_widget_get_property (GObject         *object,
 	g_value_set_string (value, "");
       break;
     case PROP_PARENT:
-      g_value_set_object (value, G_OBJECT (widget->parent));
+      if (widget->parent)
+	g_value_set_object (value, G_OBJECT (widget->parent));
+      else
+	g_value_set_object (value, NULL);
       break;
     case PROP_X:
       aux_info =_gtk_widget_get_aux_info (widget, FALSE);
@@ -2102,15 +2106,9 @@ gtk_widget_queue_resize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (GTK_IS_RESIZE_CONTAINER (widget))
-    gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
-
   gtk_widget_queue_clear (widget);
 
-  if (widget->parent)
-    gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
-  else if (GTK_WIDGET_TOPLEVEL (widget) && GTK_IS_CONTAINER (widget))
-    gtk_container_queue_resize (GTK_CONTAINER (widget));
+  _gtk_size_group_queue_resize (widget);
 }
 
 /**
@@ -2170,15 +2168,14 @@ gtk_widget_size_request (GtkWidget	*widget,
     g_warning ("gtk_widget_size_request() called on child widget with request equal\n to widget->requisition. gtk_widget_set_usize() may not work properly.");
 #endif /* G_ENABLE_DEBUG */
 
-  gtk_widget_ref (widget);
-  gtk_widget_ensure_style (widget);
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_REQUEST],
-		   &widget->requisition);
+  _gtk_size_group_compute_requisition (widget, requisition);
 
+#if 0  
   if (requisition)
     gtk_widget_get_child_requisition (widget, requisition);
 
   gtk_widget_unref (widget);
+#endif  
 }
 
 /**
@@ -2195,21 +2192,7 @@ void
 gtk_widget_get_child_requisition (GtkWidget	 *widget,
 				  GtkRequisition *requisition)
 {
-  GtkWidgetAuxInfo *aux_info;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  *requisition = widget->requisition;
-  
-  aux_info =_gtk_widget_get_aux_info (widget, FALSE);
-  if (aux_info)
-    {
-      if (aux_info->width > 0)
-	requisition->width = aux_info->width;
-      if (aux_info->height > 0)
-	requisition->height = aux_info->height;
-    }
+  _gtk_size_group_get_child_requisition (widget, requisition);
 }
 
 /**
@@ -4101,7 +4084,7 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
  * A convenience function that uses the theme engine and RC file
  * settings for @widget to look up @stock_id and render it to
  * a pixbuf. @stock_id should be a stock icon ID such as
- * #GTK_STOCK_OPEN or #GTK_STOCK_BUTTON_OK. @size should be a size
+ * #GTK_STOCK_OPEN or #GTK_STOCK_OK. @size should be a size
  * such as #GTK_ICON_SIZE_MENU. @detail should be a string that
  * identifies the widget or code doing the rendering, so that
  * theme engines can special-case rendering for that widget or code.

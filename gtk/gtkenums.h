@@ -286,11 +286,11 @@ typedef enum			/*< flags >*/
 typedef enum
 {
   GTK_SCROLL_NONE,
+  GTK_SCROLL_JUMP,
   GTK_SCROLL_STEP_BACKWARD,
   GTK_SCROLL_STEP_FORWARD,
   GTK_SCROLL_PAGE_BACKWARD,
   GTK_SCROLL_PAGE_FORWARD,
-  GTK_SCROLL_JUMP,
   GTK_SCROLL_STEP_UP,
   GTK_SCROLL_STEP_DOWN,
   GTK_SCROLL_PAGE_UP,
@@ -298,7 +298,9 @@ typedef enum
   GTK_SCROLL_STEP_LEFT,
   GTK_SCROLL_STEP_RIGHT,
   GTK_SCROLL_PAGE_LEFT,
-  GTK_SCROLL_PAGE_RIGHT
+  GTK_SCROLL_PAGE_RIGHT,
+  GTK_SCROLL_START,
+  GTK_SCROLL_END
 } GtkScrollType;
 
 /* list selection modes */
@@ -352,15 +354,6 @@ typedef enum
   GTK_TOOLBAR_BOTH,
   GTK_TOOLBAR_BOTH_HORIZ
 } GtkToolbarStyle;
-
-/* Trough types for GtkRange */
-typedef enum
-{
-  GTK_TROUGH_NONE,
-  GTK_TROUGH_START,
-  GTK_TROUGH_END,
-  GTK_TROUGH_JUMP
-} GtkTroughType;
 
 /* Data update types (for ranges) */
 typedef enum

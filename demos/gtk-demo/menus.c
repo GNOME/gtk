@@ -28,13 +28,14 @@
  * 
  */
 
-#include <stdio.h>
-
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
-static GtkWidget*
-create_menu (gint depth, gboolean tearoff)
+#include <stdio.h>
+
+static GtkWidget *
+create_menu (gint     depth,
+	     gboolean tearoff)
 {
   GtkWidget *menu;
   GtkWidget *menuitem;
@@ -215,4 +216,3 @@ do_menus (void)
 
   return window;
 }
-

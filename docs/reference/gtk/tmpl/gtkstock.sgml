@@ -64,7 +64,7 @@ Stock Items
 @item: 
 
 
-<!-- ##### FUNCTION gtk_stock_list_items ##### -->
+<!-- ##### FUNCTION gtk_stock_list_ids ##### -->
 <para>
 
 </para>
@@ -82,42 +82,77 @@ Stock Items
 @Returns: 
 
 
-<!-- ##### MACRO GTK_STOCK_BUTTON_APPLY ##### -->
+<!-- ##### MACRO GTK_STOCK_ADD ##### -->
 <para>
 
 </para>
 
 
 
-<!-- ##### MACRO GTK_STOCK_BUTTON_CANCEL ##### -->
+<!-- ##### MACRO GTK_STOCK_APPLY ##### -->
 <para>
 
 </para>
 
 
 
-<!-- ##### MACRO GTK_STOCK_BUTTON_CLOSE ##### -->
+<!-- ##### MACRO GTK_STOCK_BOLD ##### -->
 <para>
 
 </para>
 
 
 
-<!-- ##### MACRO GTK_STOCK_BUTTON_NO ##### -->
+<!-- ##### MACRO GTK_STOCK_CANCEL ##### -->
 <para>
 
 </para>
 
 
 
-<!-- ##### MACRO GTK_STOCK_BUTTON_OK ##### -->
+<!-- ##### MACRO GTK_STOCK_CDROM ##### -->
 <para>
 
 </para>
 
 
 
-<!-- ##### MACRO GTK_STOCK_BUTTON_YES ##### -->
+<!-- ##### MACRO GTK_STOCK_CLEAR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_CLOSE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_CONVERT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_COPY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_CUT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_DELETE ##### -->
 <para>
 
 </para>
@@ -152,7 +187,154 @@ Stock Items
 
 
 
+<!-- ##### MACRO GTK_STOCK_EXECUTE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_FIND ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_FIND_AND_REPLACE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_FLOPPY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_GOTO_BOTTOM ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_GOTO_FIRST ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_GOTO_LAST ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_GOTO_TOP ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_GO_BACK ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_GO_DOWN ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_GO_FORWARD ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_GO_UP ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### MACRO GTK_STOCK_HELP ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_HOME ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_INDEX ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_ITALIC ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_JUMP_TO ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_JUSTIFY_CENTER ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_JUSTIFY_FILL ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_JUSTIFY_LEFT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_JUSTIFY_RIGHT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_MISSING_IMAGE ##### -->
 <para>
 
 </para>
@@ -166,7 +348,56 @@ Stock Items
 
 
 
+<!-- ##### MACRO GTK_STOCK_NO ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_OK ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### MACRO GTK_STOCK_OPEN ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_PASTE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_PREFERENCES ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_PRINT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_PRINT_PREVIEW ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_PROPERTIES ##### -->
 <para>
 
 </para>
@@ -180,6 +411,34 @@ Stock Items
 
 
 
+<!-- ##### MACRO GTK_STOCK_REDO ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_REFRESH ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_REMOVE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_REVERT_TO_SAVED ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### MACRO GTK_STOCK_SAVE ##### -->
 <para>
 
@@ -187,14 +446,112 @@ Stock Items
 
 
 
-<!-- ##### MACRO GTK_STOCK_CLOSE ##### -->
+<!-- ##### MACRO GTK_STOCK_SAVE_AS ##### -->
 <para>
 
 </para>
 
 
 
-<!-- ##### MACRO GTK_STOCK_MISSING_IMAGE ##### -->
+<!-- ##### MACRO GTK_STOCK_SELECT_COLOR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_SELECT_FONT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_SORT_ASCENDING ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_SORT_DESCENDING ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_SPELL_CHECK ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_STOP ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_STRIKETHROUGH ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_UNDELETE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_UNDERLINE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_UNDO ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_YES ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_ZOOM_100 ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_ZOOM_FIT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_ZOOM_IN ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_ZOOM_OUT ##### -->
 <para>
 
 </para>

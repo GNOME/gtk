@@ -52,6 +52,7 @@ struct _GtkScale
 {
   GtkRange range;
 
+  gint digits;
   guint draw_value : 1;
   guint value_pos : 2;
 };
@@ -60,8 +61,6 @@ struct _GtkScaleClass
 {
   GtkRangeClass parent_class;
 
-  gint value_spacing;
-
   gchar* (* format_value) (GtkRange *range,
                            gdouble   value);  
   
@@ -69,19 +68,21 @@ struct _GtkScaleClass
 };
 
 GtkType gtk_scale_get_type        (void) G_GNUC_CONST;
-void    gtk_scale_set_digits      (GtkScale        *scale,
-				   gint             digits);
-void    gtk_scale_set_draw_value  (GtkScale        *scale,
-				   gboolean         draw_value);
-void    gtk_scale_set_value_pos   (GtkScale        *scale,
-				   GtkPositionType  pos);
-gint    gtk_scale_get_value_width (GtkScale        *scale);
-void    gtk_scale_get_value_size  (GtkScale        *scale,
-				   gint            *width,
-				   gint            *height);
 
-void    gtk_scale_draw_value      (GtkScale        *scale);
+void            gtk_scale_set_digits     (GtkScale        *scale,
+                                          gint             digits);
+gint            gtk_scale_get_digits     (GtkScale        *scale);
+void            gtk_scale_set_draw_value (GtkScale        *scale,
+                                          gboolean         draw_value);
+gboolean        gtk_scale_get_draw_value (GtkScale        *scale);
+void            gtk_scale_set_value_pos  (GtkScale        *scale,
+                                          GtkPositionType  pos);
+GtkPositionType gtk_scale_get_value_pos  (GtkScale        *scale);
 
+
+void    _gtk_scale_get_value_size  (GtkScale        *scale,
+                                    gint            *width,
+                                    gint            *height);
 gchar  *_gtk_scale_format_value   (GtkScale        *scale,
                                    gdouble          value);
 

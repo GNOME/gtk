@@ -45,8 +45,8 @@ void make_selection_dialog(GdkScreen *screen,
 {
   GtkWidget *window, *vbox, *button_box, *clear, *quit;
   MyDoubleGtkEntry *double_entry = g_new(MyDoubleGtkEntry, 1);
-  double_entry->e1 = entry;
-  double_entry->e2 = other_entry;
+  double_entry->e1 = GTK_ENTRY(entry);
+  double_entry->e2 = GTK_ENTRY(other_entry);
   
   if(!screen)
      screen = gdk_display_get_default_screen(
@@ -76,7 +76,7 @@ void make_selection_dialog(GdkScreen *screen,
   
   gtk_box_pack_start(GTK_BOX(vbox), button_box, FALSE, FALSE, 0);
   
-  clear = gtk_button_new_from_stock (GTK_STOCK_BUTTON_APPLY);
+  clear = gtk_button_new_from_stock (GTK_STOCK_APPLY);
   quit = gtk_button_new_from_stock (GTK_STOCK_QUIT);
   
   gtk_box_pack_start(GTK_BOX(button_box), clear, FALSE, FALSE, 0);
@@ -111,7 +111,7 @@ main (int argc, char *argv[])
   dialog = gtk_dialog_new_with_buttons ("Second Display Selection",
                                         NULL,
                                         GTK_DIALOG_MODAL,
-                                        GTK_STOCK_BUTTON_OK,
+                                        GTK_STOCK_OK,
                                         GTK_RESPONSE_NONE,
                                         NULL);
   display_entry = gtk_entry_new();

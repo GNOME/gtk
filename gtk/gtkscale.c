@@ -1,5 +1,6 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 2001 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,6 +29,8 @@
 #include "gtkintl.h"
 #include "gtkscale.h"
 #include "gtkmarshal.h"
+#include "gdk/gdkkeysyms.h"
+#include "gtkbindings.h"
 
 enum {
   PROP_0,
@@ -42,25 +45,22 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL];
-
-static void gtk_scale_class_init   (GtkScaleClass *klass);
-static void gtk_scale_init         (GtkScale      *scale);
-static void gtk_scale_set_property (GObject       *object,
-				    guint          prop_id,
-				    const GValue  *value,
-				    GParamSpec    *pspec);
-static void gtk_scale_get_property (GObject       *object,
-				    guint          prop_id,
-				    GValue        *value,
-				    GParamSpec    *pspec);
-static void gtk_scale_map          (GtkWidget     *widget);
-static void gtk_scale_unmap        (GtkWidget     *widget);
-
-static void gtk_scale_draw_background (GtkRange      *range);
-
-
 static GtkRangeClass *parent_class = NULL;
 
+static void gtk_scale_class_init       (GtkScaleClass *klass);
+static void gtk_scale_init             (GtkScale      *scale);
+static void gtk_scale_set_property     (GObject       *object,
+                                        guint          prop_id,
+                                        const GValue  *value,
+                                        GParamSpec    *pspec);
+static void gtk_scale_get_property     (GObject       *object,
+                                        guint          prop_id,
+                                        GValue        *value,
+                                        GParamSpec    *pspec);
+static void gtk_scale_style_set        (GtkWidget     *widget,
+                                        GtkStyle      *previous);
+static void gtk_scale_get_range_border (GtkRange      *range,
+                                        GtkBorder     *border);
 
 GtkType
 gtk_scale_get_type (void)
@@ -103,6 +103,12 @@ single_string_accumulator (GSignalInvocationHint *ihint,
   return continue_emission;
 }
 
+
+#define add_slider_binding(binding_set, keyval, mask, scroll)          \
+  gtk_binding_entry_add_signal (binding_set, keyval, mask,             \
+                                "move_slider", 1,                      \
+                                GTK_TYPE_SCROLL_TYPE, scroll)
+
 static void
 gtk_scale_class_init (GtkScaleClass *class)
 {
@@ -110,7 +116,8 @@ gtk_scale_class_init (GtkScaleClass *class)
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkRangeClass *range_class;
-
+  GtkBindingSet *binding_set;
+  
   gobject_class = G_OBJECT_CLASS (class);
   object_class = (GtkObjectClass*) class;
   range_class = (GtkRangeClass*) class;
@@ -121,11 +128,10 @@ gtk_scale_class_init (GtkScaleClass *class)
   gobject_class->set_property = gtk_scale_set_property;
   gobject_class->get_property = gtk_scale_get_property;
 
-  widget_class->map = gtk_scale_map;
-  widget_class->unmap = gtk_scale_unmap;
-  
-  range_class->draw_background = gtk_scale_draw_background;
+  widget_class->style_set = gtk_scale_style_set;
 
+  range_class->get_range_border = gtk_scale_get_range_border;
+  
   signals[FORMAT_VALUE] =
     g_signal_newc ("format_value",
 		   G_TYPE_FROM_CLASS (object_class),
@@ -171,8 +177,99 @@ gtk_scale_class_init (GtkScaleClass *class)
 							     G_MAXINT,
 							     31,
 							     G_PARAM_READABLE));
-  class->value_spacing = 2;
-  class->draw_value = NULL;
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("value_spacing",
+							     _("Value spacing"),
+							     _("Space between value text and the slider/trough area"),
+							     0,
+							     G_MAXINT,
+							     2,
+							     G_PARAM_READABLE));
+  
+  /* All bindings (even arrow keys) are on both h/v scale, because
+   * blind users etc. don't care about scale orientation.
+   */
+  
+  binding_set = gtk_binding_set_by_class (class);
+
+  add_slider_binding (binding_set, GDK_Left, 0,
+                      GTK_SCROLL_STEP_LEFT);
+
+  add_slider_binding (binding_set, GDK_Left, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_LEFT);
+
+  add_slider_binding (binding_set, GDK_KP_Left, 0,
+                      GTK_SCROLL_STEP_LEFT);
+
+  add_slider_binding (binding_set, GDK_KP_Left, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_LEFT);
+
+
+  add_slider_binding (binding_set, GDK_Right, 0,
+                      GTK_SCROLL_STEP_RIGHT);
+
+  add_slider_binding (binding_set, GDK_Right, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_RIGHT);
+
+  add_slider_binding (binding_set, GDK_KP_Right, 0,
+                      GTK_SCROLL_STEP_RIGHT);
+
+  add_slider_binding (binding_set, GDK_KP_Right, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_RIGHT);
+
+  add_slider_binding (binding_set, GDK_Up, 0,
+                      GTK_SCROLL_STEP_UP);
+
+  add_slider_binding (binding_set, GDK_Up, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_UP);
+
+  add_slider_binding (binding_set, GDK_KP_Up, 0,
+                      GTK_SCROLL_STEP_UP);
+
+  add_slider_binding (binding_set, GDK_KP_Up, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_UP);
+
+
+  add_slider_binding (binding_set, GDK_Down, 0,
+                      GTK_SCROLL_STEP_DOWN);
+
+  add_slider_binding (binding_set, GDK_Down, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_DOWN);
+
+  add_slider_binding (binding_set, GDK_KP_Down, 0,
+                      GTK_SCROLL_STEP_DOWN);
+
+  add_slider_binding (binding_set, GDK_KP_Down, GDK_CONTROL_MASK,
+                      GTK_SCROLL_PAGE_DOWN);
+
+  /* I think most users will find it strange that these move
+   * logically instead of visually...
+   */
+   
+  add_slider_binding (binding_set, GDK_Page_Up, 0,
+                      GTK_SCROLL_PAGE_BACKWARD);
+
+  add_slider_binding (binding_set, GDK_KP_Page_Up, 0,
+                      GTK_SCROLL_PAGE_BACKWARD);  
+
+  add_slider_binding (binding_set, GDK_Page_Down, 0,
+                      GTK_SCROLL_PAGE_FORWARD);
+
+  add_slider_binding (binding_set, GDK_KP_Page_Down, 0,
+                      GTK_SCROLL_PAGE_FORWARD);
+
+  add_slider_binding (binding_set, GDK_Home, 0,
+                      GTK_SCROLL_START);
+
+  add_slider_binding (binding_set, GDK_KP_Home, 0,
+                      GTK_SCROLL_START);
+
+  add_slider_binding (binding_set, GDK_End, 0,
+                      GTK_SCROLL_END);
+
+  add_slider_binding (binding_set, GDK_KP_End, 0,
+                      GTK_SCROLL_END);
 }
 
 static void
@@ -215,7 +312,7 @@ gtk_scale_get_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_DIGITS:
-      g_value_set_int (value, GTK_RANGE (scale)->digits);
+      g_value_set_int (value, scale->digits);
       break;
     case PROP_DRAW_VALUE:
       g_value_set_boolean (value, scale->draw_value);
@@ -232,61 +329,53 @@ gtk_scale_get_property (GObject      *object,
 static void
 gtk_scale_init (GtkScale *scale)
 {
+  GtkRange *range;
+
+  range = GTK_RANGE (scale);
+  
   GTK_WIDGET_SET_FLAGS (scale, GTK_CAN_FOCUS);
-  GTK_WIDGET_SET_FLAGS (scale, GTK_NO_WINDOW);
-  GTK_RANGE (scale)->digits = 1;
+
+  range->slider_size_fixed = TRUE;
+  range->has_stepper_a = FALSE;
+  range->has_stepper_b = FALSE;
+  range->has_stepper_c = FALSE;
+  range->has_stepper_d = FALSE;
+  
   scale->draw_value = TRUE;
   scale->value_pos = GTK_POS_TOP;
-}
-
-static void
-gtk_scale_map (GtkWidget *widget)
-{
-  GtkRange *range;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_SCALE (widget));
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-  range = GTK_RANGE (widget);
-
-  gdk_window_show (range->trough);
-}
-
-static void
-gtk_scale_unmap (GtkWidget *widget)
-{
-  GtkRange *range;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_SCALE (widget));
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-  range = GTK_RANGE (widget);
-
-  if (GTK_WIDGET_NO_WINDOW (widget))
-     gtk_widget_queue_clear (widget);
-
-  gdk_window_hide (range->trough);
+  scale->digits = 1;
+  range->round_digits = scale->digits;
 }
 
 void
 gtk_scale_set_digits (GtkScale *scale,
 		      gint      digits)
 {
-  g_return_if_fail (scale != NULL);
+  GtkRange *range;
+  
   g_return_if_fail (GTK_IS_SCALE (scale));
 
+  range = GTK_RANGE (scale);
+  
   digits = CLAMP (digits, -1, 16);
 
-  if (GTK_RANGE (scale)->digits != digits)
+  if (scale->digits != digits)
     {
-      GTK_RANGE (scale)->digits = digits;
-
+      scale->digits = digits;
+      range->round_digits = digits;
+      
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 
       g_object_notify (G_OBJECT (scale), "digits");
     }
+}
+
+gint
+gtk_scale_get_digits (GtkScale *scale)
+{
+  g_return_val_if_fail (GTK_IS_SCALE (scale), -1);
+
+  return scale->digits;
 }
 
 void
@@ -308,11 +397,18 @@ gtk_scale_set_draw_value (GtkScale *scale,
     }
 }
 
+gboolean
+gtk_scale_get_draw_value (GtkScale *scale)
+{
+  g_return_val_if_fail (GTK_IS_SCALE (scale), FALSE);
+
+  return scale->draw_value;
+}
+
 void
 gtk_scale_set_value_pos (GtkScale        *scale,
 			 GtkPositionType  pos)
 {
-  g_return_if_fail (scale != NULL);
   g_return_if_fail (GTK_IS_SCALE (scale));
 
   if (scale->value_pos != pos)
@@ -326,10 +422,60 @@ gtk_scale_set_value_pos (GtkScale        *scale,
     }
 }
 
+GtkPositionType
+gtk_scale_get_value_pos (GtkScale *scale)
+{
+  g_return_val_if_fail (GTK_IS_SCALE (scale), 0);
+
+  return scale->value_pos;
+}
+
+static void
+gtk_scale_get_range_border (GtkRange  *range,
+                            GtkBorder *border)
+{
+  GtkWidget *widget;
+  GtkScale *scale;
+  gint w, h;
+  
+  widget = GTK_WIDGET (range);
+  scale = GTK_SCALE (range);
+
+  _gtk_scale_get_value_size (scale, &w, &h);
+
+  border->left = 0;
+  border->right = 0;
+  border->top = 0;
+  border->bottom = 0;
+
+  if (scale->draw_value)
+    {
+      gint value_spacing;
+      gtk_widget_style_get (widget, "value_spacing", &value_spacing, NULL);
+
+      switch (scale->value_pos)
+        {
+        case GTK_POS_LEFT:
+          border->left += w + value_spacing;
+          break;
+        case GTK_POS_RIGHT:
+          border->right += w + value_spacing;
+          break;
+        case GTK_POS_TOP:
+          border->top += h + value_spacing;
+          break;
+        case GTK_POS_BOTTOM:
+          border->bottom += h + value_spacing;
+          break;
+        }
+    }
+}
+
+/* FIXME this could actually be static at the moment. */
 void
-gtk_scale_get_value_size (GtkScale *scale,
-			  gint     *width,
-			  gint     *height)
+_gtk_scale_get_value_size (GtkScale *scale,
+                           gint     *width,
+                           gint     *height)
 {
   GtkRange *range;
 
@@ -380,38 +526,24 @@ gtk_scale_get_value_size (GtkScale *scale,
 
 }
 
-gint
-gtk_scale_get_value_width (GtkScale *scale)
-{
-  gint width;
-
-  g_return_val_if_fail (scale != NULL, 0);
-  g_return_val_if_fail (GTK_IS_SCALE (scale), 0);
-  
-  gtk_scale_get_value_size (scale, &width, NULL);
-
-  return width;
-}
-
-void
-gtk_scale_draw_value (GtkScale *scale)
-{
-  g_return_if_fail (scale != NULL);
-  g_return_if_fail (GTK_IS_SCALE (scale));
-
-  if (GTK_SCALE_GET_CLASS (scale)->draw_value)
-    GTK_SCALE_GET_CLASS (scale)->draw_value (scale);
-}
-
-
 static void
-gtk_scale_draw_background (GtkRange *range)
+gtk_scale_style_set (GtkWidget *widget,
+                     GtkStyle  *previous)
 {
-  g_return_if_fail (range != NULL);
-  g_return_if_fail (GTK_IS_SCALE (range));
+  gint slider_length;
+  GtkRange *range;
 
-  gtk_scale_draw_value (GTK_SCALE (range));
+  range = GTK_RANGE (widget);
+  
+  gtk_widget_style_get (widget,
+                        "slider_length", &slider_length,
+                        NULL);
+  
+  range->min_slider_size = slider_length;
+  
+  (* GTK_WIDGET_CLASS (parent_class)->style_set) (widget, previous);
 }
+
 
 /**
  * _gtk_scale_format_value:
@@ -438,6 +570,6 @@ _gtk_scale_format_value (GtkScale *scale,
   if (fmt)
     return fmt;
   else
-    return g_strdup_printf ("%0.*f", GTK_RANGE (scale)->digits,
+    return g_strdup_printf ("%0.*f", scale->digits,
                             value);
 }

@@ -209,6 +209,42 @@ Get the array of signals defined for this object.
 
 @obj: the object to fetch the signals from.
 
+<!-- ##### MACRO GTK_STOCK_BUTTON_APPLY ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_CANCEL ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_CLOSE ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_NO ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_OK ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_YES ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### MACRO GTK_TREE_SELECTION ##### -->
 <para>
 A macro that returns a GList that contains the selection of the root tree of @obj.
@@ -300,6 +336,36 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_FOREIGN
 </para>
 
 @a: 
+
+<!-- ##### ARG GtkAccelLabel:accel-width ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### USER_FUNCTION GtkArgGetFunc ##### -->
+<para>
+Define a function pointer.  Deprecated.
+</para>
+
+@object: 
+@arg: 
+@arg_id: 
+
+<!-- ##### USER_FUNCTION GtkArgSetFunc ##### -->
+<para>
+Define a function pointer.  Deprecated.
+</para>
+
+@object: 
+@arg: 
+@arg_id: 
+
+<!-- ##### ARG GtkContainer:reallocate-redraws ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### STRUCT GtkData ##### -->
 <para>
@@ -540,6 +606,18 @@ gtk_font_selection_set_filter().
 </para>
 
 
+<!-- ##### ARG GtkHScale:adjustment ##### -->
+<para>
+the #GtkAdjustment which sets the range of the scale.
+</para>
+
+
+<!-- ##### ARG GtkHScrollbar:adjustment ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### STRUCT GtkIMContextSimple ##### -->
 <para>
 
@@ -720,6 +798,24 @@ line in a wrapped paragraph.
 <para>
 Pixels to offset the text horizontally or vertically, useful to
 produce superscript and subscript.
+</para>
+
+
+<!-- ##### ARG GtkTextView:justify ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkVScale:adjustment ##### -->
+<para>
+the #GtkAdjustment which sets the range of the scale.
+</para>
+
+
+<!-- ##### ARG GtkVScrollbar:adjustment ##### -->
+<para>
+
 </para>
 
 
@@ -982,6 +1078,14 @@ Get the type of GtkIdentifier.
 </para>
 
 @Returns: GtkType -- the enumerated type of something.
+
+<!-- ##### FUNCTION gtk_image_menu_item_add_image ##### -->
+<para>
+
+</para>
+
+@image_menu_item: 
+@child: 
 
 <!-- ##### FUNCTION gtk_label_set_markup_with_accel ##### -->
 <para>
@@ -1417,6 +1521,13 @@ Creates a border around the arrows of a #GtkSpinButton. The type of border is de
 @spin_button: a #GtkSpinButton
 @shadow_type: the new border type.
 
+<!-- ##### FUNCTION gtk_stock_list_items ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
 <!-- ##### FUNCTION gtk_trace_referencing ##### -->
 <para>
 Private: print debugging information while doing a gtk_object_ref() or 
@@ -1470,6 +1581,15 @@ a gtk_object_unref().
 @iter: 
 @column: 
 @value: 
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_cell_data ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@tree_model: 
+@iter: 
 
 <!-- ##### FUNCTION gtk_type_check_class_cast ##### -->
 <para>

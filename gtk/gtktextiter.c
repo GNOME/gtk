@@ -4832,27 +4832,14 @@ _gtk_text_btree_get_iter_at_last_toggle  (GtkTextBTree   *tree,
                                          GtkTextIter    *iter,
                                          GtkTextTag     *tag)
 {
-  GtkTextLine *line;
-
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (tree != NULL, FALSE);
 
-  line = _gtk_text_btree_last_could_contain_tag (tree, tag);
-
-  if (line == NULL)
-    {
-      /* Set iter to first in tree */
-      _gtk_text_btree_get_iter_at_line_char (tree, iter, 0, 0);
-      check_invariants (iter);
-      return FALSE;
-    }
-  else
-    {
-      iter_init_from_byte_offset (iter, tree, line, -1);
-      gtk_text_iter_backward_to_tag_toggle (iter, tag);
-      check_invariants (iter);
-      return TRUE;
-    }
+  _gtk_text_btree_get_end_iter (tree, iter);
+  gtk_text_iter_backward_to_tag_toggle (iter, tag);
+  check_invariants (iter);
+  
+  return TRUE;
 }
 
 gboolean
