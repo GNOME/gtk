@@ -1,3 +1,8 @@
+2001-07-30  Hans Breuer  <hans@breuer.org>
+
+	* pixops/makefile.msc : new file
+	* makefile.msc : use it to complete the build
+
 2001-07-20  Hans Breuer  <hans@breuer.org>
 
 	* gdk-pixdata.c : don't 'g_tohl (*istream++)', but move
