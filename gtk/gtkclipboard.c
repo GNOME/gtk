@@ -260,8 +260,8 @@ clipboard_display_closed (GdkDisplay   *display,
  *
  * (Passing #GDK_NONE is the same as using <literal>gdk_atom_intern
  * ("CLIPBOARD", FALSE)</literal>. See <ulink
- * url="http://www.freedesktop.org/standards/clipboards-spec/clipboards.txt">
- * http://www.freedesktop.org/standards/clipboards-spec/clipboards.txt</ulink>
+ * url="http://www.freedesktop.org/Standards/clipboards-spec">
+ * http://www.freedesktop.org/Standards/clipboards-spec</ulink>
  * for a detailed discussion of the "CLIPBOARD" vs. "PRIMARY"
  * selections under the X window system. On Win32 the
  * #GDK_SELECTION_PRIMARY clipboard is essentially ignored.)
