@@ -3695,9 +3695,10 @@ msgstr "Standaard-ID"
 msgid "The stock icon displayed on the item"
 msgstr "Het standaard pictogram weergegeven op het item"
 
+#. GRUT modified this item
 #: gtk/gtktoolbutton.c:207
 msgid "Icon widget"
-msgstr "Pictogramwidget"
+msgstr "Pictogram-widget"
 
 #: gtk/gtktoolbutton.c:208
 msgid "Icon widget to display in the item"
@@ -4394,3 +4395,4 @@ msgstr "IM statusstijl"
 #: modules/input/gtkimcontextxim.c:335
 msgid "How to draw the input method statusbar"
 msgstr "Hoe de statusbalk voor invoermethode moet worden getekend"
+
