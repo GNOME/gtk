@@ -291,7 +291,8 @@ static gboolean        toolbar_content_has_proxy_menu_item  (ToolbarContent	 *co
 static gboolean        toolbar_content_is_separator         (ToolbarContent      *content);
 static void            toolbar_content_show_all             (ToolbarContent      *content);
 static void            toolbar_content_hide_all             (ToolbarContent      *content);
-
+static void	       toolbar_content_set_expand	    (ToolbarContent      *content,
+							     gboolean		  expand);
 
 #define GTK_TOOLBAR_GET_PRIVATE(o)  \
   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_TOOLBAR, GtkToolbarPrivate))
@@ -2248,6 +2249,7 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
   gtk_widget_size_request (GTK_WIDGET (priv->highlight_tool_item),
 			   &requisition);
 
+  toolbar_content_set_expand (content, gtk_tool_item_get_expand (tool_item));
   
   restart_sliding = FALSE;
   toolbar_content_size_request (content, toolbar, &old_requisition);
@@ -4187,7 +4189,8 @@ static gboolean
 toolbar_content_get_expand (ToolbarContent *content)
 {
   if (content->type == TOOL_ITEM &&
-      gtk_tool_item_get_expand (content->u.tool_item.item))
+      gtk_tool_item_get_expand (content->u.tool_item.item) &&
+      !content->u.tool_item.disappearing)
     {
       return TRUE;
     }
@@ -4492,6 +4495,14 @@ toolbar_content_is_separator (ToolbarContent *content)
     }
   
   return FALSE;
+}
+
+static void
+toolbar_content_set_expand (ToolbarContent *content,
+			    gboolean        expand)
+{
+  if (content->type == TOOL_ITEM)
+    gtk_tool_item_set_expand (content->u.tool_item.item, expand);
 }
 
 static gboolean

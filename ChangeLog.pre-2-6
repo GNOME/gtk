@@ -1,3 +1,15 @@
+Wed Sep  8 18:38:08 2004  Soeren Sandmann  <sandmann@redhat.com>
+
+	Make dropping of expandable items look nicer.
+	
+	* gtk/gtktoolbar.c (gtk_toolbar_set_drop_highlight_item): Make
+	placeholder expand if highlight item is expanding.
+
+	* gtk/gtktoolbar.c (toolbar_content_set_expand): New function.
+
+	* gtk/gtktoolbar.c (toolbar_content_get_expand): Return TRUE only
+	if the item is not disappering.
+
 2004-09-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkuimanager.c (gtk_ui_manager_add_ui): Use the proper node type
