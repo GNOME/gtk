@@ -324,3 +324,22 @@ Applications should never have any reason to use this facility
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_display_supports_selection_notification ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_request_selection_notification ##### -->
+<para>
+
+</para>
+
+@display: 
+@selection: 
+@Returns: 
+
+

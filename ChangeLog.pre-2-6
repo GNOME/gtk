@@ -1,5 +1,36 @@
 2004-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Check for XFIXES extension.
+
+	* gdk/x11/gdkdisplay-x11.h (struct _GdkDisplayX11): Add 
+	a gboolean have_xfixes member.
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Register
+	XFIXES events and set have_xfixes.
+
+	* gdk/gdkevents.h (GdkEventType): Add GDK_OWNER_CHANGE.
+	(GdkEventOwnerChange): New event struct for owner change events.
+	(GdkOwnerChange): New enum for the reason field of GdkEventOwnerChange.
+	
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Translate 
+	XFixesSelectionNotify events into GdkEventOwnerChange events.
+	
+	* gdk/gdkdisplay.h:
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_supports_selection_notification):
+	(gdk_display_request_selection_notification): New api 
+	to support selection ownership notification.
+
+	* gtk/gtkclipboard.h:
+	* gtk/gtkclipboard.c (_gtk_clipboard_handle_event): New private
+	api to handle owner change events.
+	(clipboard_peek): Refactored out the body of 
+	gtk_clipboard_get_for_display() for use in _gtk_clipboard_handle_event().
+
+	* gtk/gtkmain.c (gtk_main_do_event): Handle GDK_OWNER_CHANGE events
+	by calling _gtk_clipboard_handle_event().
+
+2004-05-18  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkintl.h: Include glib/gi18n-lib.h and only define
 	the P_() macros ourselves.
 

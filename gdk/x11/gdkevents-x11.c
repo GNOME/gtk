@@ -46,6 +46,10 @@
 #include <X11/XKBlib.h>
 #endif
 
+#ifdef HAVE_XFIXES
+#include <X11/extensions/Xfixes.h>
+#endif
+
 #include <X11/Xatom.h>
 
 typedef struct _GdkIOClosure GdkIOClosure;
@@ -1952,6 +1956,24 @@ gdk_event_translate (GdkDisplay *display,
 	      _gdk_keymap_state_changed (display);
 	      break;
 	    }
+	}
+      else
+#endif
+#ifdef HAVE_XFIXES
+      if (xevent->type - display_x11->xfixes_event_base == XFixesSelectionNotify)
+	{
+	  XFixesSelectionNotifyEvent *selection_notify = (XFixesSelectionNotifyEvent *)xevent;
+	  event->owner_change.type = GDK_OWNER_CHANGE;
+	  event->owner_change.window = window;
+	  event->owner_change.owner = selection_notify->owner;
+	  event->owner_change.reason = selection_notify->subtype;
+	  event->owner_change.selection = 
+	    gdk_x11_xatom_to_atom_for_display (display, 
+					       selection_notify->selection);
+	  event->owner_change.time = selection_notify->timestamp;
+	  event->owner_change.selection_time = selection_notify->selection_timestamp;
+
+	  return_val = TRUE;
 	}
       else
 #endif

@@ -145,6 +145,8 @@ gdk_display_supports_cursor_alpha
 gdk_display_get_default_cursor_size
 gdk_display_get_maximal_cursor_size
 gdk_display_get_default_group
+gdk_display_supports_selection_notification
+gdk_display_request_selection_notification
 
 <SUBSECTION Standard>
 GDK_DISPLAY_OBJECT

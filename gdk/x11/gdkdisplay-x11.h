@@ -78,7 +78,9 @@ struct _GdkDisplayX11
   gboolean use_xshm;
   gboolean have_shm_pixmaps;
   GdkTristate have_render;
-  
+  gboolean have_xfixes;
+  gint xfixes_event_base;
+
   /* Information about current pointer and keyboard grabs held by this
    * client. If gdk_pointer_xgrab_window or gdk_keyboard_xgrab_window
    * window is NULL, then the other associated fields are ignored

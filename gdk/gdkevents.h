@@ -29,6 +29,7 @@ typedef struct _GdkEventCrossing    GdkEventCrossing;
 typedef struct _GdkEventConfigure   GdkEventConfigure;
 typedef struct _GdkEventProperty    GdkEventProperty;
 typedef struct _GdkEventSelection   GdkEventSelection;
+typedef struct _GdkEventOwnerChange GdkEventOwnerChange;
 typedef struct _GdkEventProximity   GdkEventProximity;
 typedef struct _GdkEventClient	    GdkEventClient;
 typedef struct _GdkEventDND         GdkEventDND;
@@ -118,7 +119,8 @@ typedef enum
   GDK_NO_EXPOSE		= 30,
   GDK_SCROLL            = 31,
   GDK_WINDOW_STATE      = 32,
-  GDK_SETTING           = 33
+  GDK_SETTING           = 33,
+  GDK_OWNER_CHANGE      = 34
 } GdkEventType;
 
 /* Event masks. (Used to select what types of events a window
@@ -218,6 +220,13 @@ typedef enum
   GDK_SETTING_ACTION_CHANGED,
   GDK_SETTING_ACTION_DELETED
 } GdkSettingAction;
+
+typedef enum
+{
+  GDK_OWNER_CHANGE_NEW_OWNER,
+  GDK_OWNER_CHANGE_DESTROY,
+  GDK_OWNER_CHANGE_CLOSE
+} GdkOwnerChange;
 
 struct _GdkEventAny
 {
@@ -366,6 +375,18 @@ struct _GdkEventSelection
   GdkNativeWindow requestor;
 };
 
+struct _GdkEventOwnerChange
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkNativeWindow owner;
+  GdkOwnerChange reason;
+  GdkAtom selection;
+  guint32 time;
+  guint32 selection_time;
+};
+
 /* This event type will be used pretty rarely. It only is important
    for XInput aware programs that are drawing their own cursor */
 
@@ -438,6 +459,7 @@ union _GdkEvent
   GdkEventConfigure	    configure;
   GdkEventProperty	    property;
   GdkEventSelection	    selection;
+  GdkEventOwnerChange  	    owner_change;
   GdkEventProximity	    proximity;
   GdkEventClient	    client;
   GdkEventDND               dnd;

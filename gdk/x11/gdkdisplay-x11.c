@@ -43,6 +43,10 @@
 #include <X11/XKBlib.h>
 #endif
 
+#ifdef HAVE_XFIXES
+#include <X11/extensions/Xfixes.h>
+#endif
+
 static void                 gdk_display_x11_class_init         (GdkDisplayX11Class *class);
 static void                 gdk_display_x11_dispose            (GObject            *object);
 static void                 gdk_display_x11_finalize           (GObject            *object);
@@ -147,6 +151,7 @@ gdk_display_open (const gchar *display_name)
   XClassHint *class_hint;
   gulong pid;
   gint i;
+  gint ignore;
 
   xdisplay = XOpenDisplay (display_name);
   if (!xdisplay)
@@ -192,6 +197,21 @@ gdk_display_open (const gchar *display_name)
   display_x11->leader_window_title_set = FALSE;
 
   display_x11->have_render = GDK_UNKNOWN;
+
+#ifdef HAVE_XFIXES
+  if (XFixesQueryExtension (display_x11->xdisplay, 
+			    &display_x11->xfixes_event_base, 
+			    &ignore))
+    {
+      display_x11->have_xfixes = TRUE;
+
+      gdk_x11_register_standard_event_type (display,
+					    display_x11->xfixes_event_base, 
+					    XFixesNumberEvents);
+    }
+  else
+#endif
+  display_x11->have_xfixes = FALSE;
 
   if (_gdk_synchronize)
     XSynchronize (display_x11->xdisplay, True);
@@ -968,4 +988,64 @@ gdk_notify_startup_complete (void)
                       message);
 
   g_free (message);
+}
+
+
+/**
+ * gdk_display_supports_selection_notification:
+ * @display: a #GdkDisplay
+ * 
+ * Returns whether #GdkEventOwnerChange events will be 
+ * sent when the owner of a selection changes.
+ * 
+ * Return value: whether #GdkEventOwnerChange events will 
+ *               be sent.
+ *
+ * Since: 2.6
+ **/
+gboolean 
+gdk_display_supports_selection_notification (GdkDisplay *display)
+{
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+
+  return display_x11->have_xfixes;
+}
+
+/**
+ * gdk_display_request_selection_notification:
+ * @display: a #GdkDisplay
+ * @selection: the #GdkAtom naming the selection for which
+ *             ownership change notification is requested
+ * 
+ * Request #GdkEventOwnerChange events for ownership changes
+ * of the selection named by the given atom.
+ * 
+ * Return value: whether #GdkEventOwnerChange events will 
+ *               be sent.
+ *
+ * Since: 2.6
+ **/
+gboolean gdk_display_request_selection_notification  (GdkDisplay *display,
+						      GdkAtom     selection)
+
+{
+#ifdef HAVE_XFIXES
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  Atom atom;
+
+  if (display_x11->have_xfixes)
+    {
+      atom = gdk_x11_atom_to_xatom_for_display (display, 
+						selection);
+      XFixesSelectSelectionInput (display_x11->xdisplay, 
+				  display_x11->leader_window,
+				  atom,
+				  XFixesSetSelectionOwnerNotifyMask |
+				  XFixesSelectionWindowDestroyNotifyMask |
+				  XFixesSelectionClientCloseNotifyMask);
+      return TRUE;
+    }
+  else
+#endif
+    return FALSE;
 }

@@ -1438,6 +1438,12 @@ gtk_main_do_event (GdkEvent *event)
       return;
     }
 
+  if (event->type == GDK_OWNER_CHANGE)
+    {
+      _gtk_clipboard_handle_event (&event->owner_change);
+      return;
+    }
+
   /* Find the widget which got the event. We store the widget
    *  in the user_data field of GdkWindow's.
    *  Ignore the event if we don't have a widget for it, except

@@ -25,6 +25,7 @@
 #include "gtkclipboard.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -33,6 +34,11 @@
 #ifdef GDK_WINDOWING_WIN32
 #include "win32/gdkwin32.h"
 #endif
+
+enum {
+  OWNER_CHANGE,
+  LAST_SIGNAL
+};
 
 typedef struct _GtkClipboardClass GtkClipboardClass;
 
@@ -60,6 +66,9 @@ struct _GtkClipboard
 struct _GtkClipboardClass
 {
   GObjectClass parent_class;
+
+  void (*owner_change) (GtkClipboard        *clipboard,
+			GdkEventOwnerChange *event);
 };
 
 struct _RequestContentsInfo
@@ -83,11 +92,13 @@ struct _RequestTargetsInfo
 static void gtk_clipboard_class_init (GtkClipboardClass *class);
 static void gtk_clipboard_finalize   (GObject           *object);
 
-static void clipboard_unset    (GtkClipboard     *clipboard);
-static void selection_received (GtkWidget        *widget,
-				GtkSelectionData *selection_data,
-				guint             time);
-
+static void clipboard_unset          (GtkClipboard      *clipboard);
+static void selection_received       (GtkWidget         *widget,
+				      GtkSelectionData  *selection_data,
+				      guint              time);
+static GtkClipboard *clipboard_peek  (GdkDisplay        *display,
+				      GdkAtom            selection,
+				      gboolean           only_if_exists);
 enum {
   TARGET_STRING,
   TARGET_TEXT,
@@ -102,6 +113,7 @@ static const gchar clipboards_owned_key[] = "gtk-clipboards-owned";
 static GQuark clipboards_owned_key_id = 0;
 
 static GObjectClass *parent_class;
+static guint         clipboard_signals[LAST_SIGNAL] = { 0 };
 
 GType
 gtk_clipboard_get_type (void)
@@ -138,10 +150,22 @@ gtk_clipboard_class_init (GtkClipboardClass *class)
   parent_class = g_type_class_peek_parent (class);
   
   gobject_class->finalize = gtk_clipboard_finalize;
+
+  class->owner_change = NULL;
+
+  clipboard_signals[OWNER_CHANGE] =
+    g_signal_new ("owner_change",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkClipboardClass, owner_change),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__BOXED,
+		  G_TYPE_NONE, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void
-gtk_clipboard_finalize   (GObject *object)
+gtk_clipboard_finalize (GObject *object)
 {
   clipboard_unset (GTK_CLIPBOARD (object));
 
@@ -204,43 +228,15 @@ clipboard_display_closed (GdkDisplay   *display,
  * Since: 2.2
  **/
 GtkClipboard *
-gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection)
+gtk_clipboard_get_for_display (GdkDisplay *display, 
+			       GdkAtom     selection)
 {
-  GtkClipboard *clipboard = NULL;
-  GSList *clipboards;
-  GSList *tmp_list;
-
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (!display->closed, NULL);
 
-  if (selection == GDK_NONE)
-    selection = GDK_SELECTION_CLIPBOARD;
-
-  clipboards = g_object_get_data (G_OBJECT (display), "gtk-clipboard-list");
-
-  tmp_list = clipboards;
-  while (tmp_list)
-    {
-      clipboard = tmp_list->data;
-      if (clipboard->selection == selection)
-	break;
-
-      tmp_list = tmp_list->next;
-    }
-
-  if (!tmp_list)
-    {
-      clipboard = g_object_new (GTK_TYPE_CLIPBOARD, NULL);
-      clipboard->selection = selection;
-      clipboard->display = display;
-      clipboards = g_slist_prepend (clipboards, clipboard);
-      g_object_set_data (G_OBJECT (display), "gtk-clipboard-list", clipboards);
-      g_signal_connect (display, "closed",
-			G_CALLBACK (clipboard_display_closed), clipboard);
-    }
-  
-  return clipboard;
+  return clipboard_peek (display, selection, FALSE);
 }
+
 
 /**
  * gtk_clipboard_get():
@@ -1108,3 +1104,66 @@ gtk_clipboard_wait_for_targets (GtkClipboard  *clipboard,
 
   return result;
 }
+
+static GtkClipboard *
+clipboard_peek (GdkDisplay *display, 
+		GdkAtom     selection,
+		gboolean    only_if_exists)
+{
+  GtkClipboard *clipboard = NULL;
+  GSList *clipboards;
+  GSList *tmp_list;
+
+  if (selection == GDK_NONE)
+    selection = GDK_SELECTION_CLIPBOARD;
+
+  clipboards = g_object_get_data (G_OBJECT (display), "gtk-clipboard-list");
+
+  tmp_list = clipboards;
+  while (tmp_list)
+    {
+      clipboard = tmp_list->data;
+      if (clipboard->selection == selection)
+	break;
+
+      tmp_list = tmp_list->next;
+    }
+
+  if (!tmp_list && !only_if_exists)
+    {
+      clipboard = g_object_new (GTK_TYPE_CLIPBOARD, NULL);
+      clipboard->selection = selection;
+      clipboard->display = display;
+      clipboards = g_slist_prepend (clipboards, clipboard);
+      g_object_set_data (G_OBJECT (display), "gtk-clipboard-list", clipboards);
+      g_signal_connect (display, "closed",
+			G_CALLBACK (clipboard_display_closed), clipboard);
+      gdk_display_request_selection_notification (display, selection);
+    }
+  
+  return clipboard;
+}
+
+
+/**
+ * _gtk_clipboard_handle_event:
+ * @event: a owner change event
+ * 
+ * Emits the ::owner_change signal on the appropriate @clipboard.
+ *
+ * Since: 2.6
+ **/
+void 
+_gtk_clipboard_handle_event (GdkEventOwnerChange *event)
+{
+  GdkDisplay *display;
+  GtkClipboard *clipboard;
+  
+  display = gdk_drawable_get_display (event->window);
+  clipboard = clipboard_peek (display, event->selection, TRUE);
+      
+  if (clipboard)
+    g_signal_emit (clipboard, 
+		   clipboard_signals[OWNER_CHANGE], 0, event, NULL);
+}
+

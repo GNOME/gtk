@@ -164,6 +164,10 @@ void     gdk_display_get_maximal_cursor_size   (GdkDisplay    *display,
 
 GdkWindow *gdk_display_get_default_group       (GdkDisplay *display); 
 
+gboolean gdk_display_supports_selection_notification (GdkDisplay *display);
+gboolean gdk_display_request_selection_notification  (GdkDisplay *display,
+						      GdkAtom     selection);
+
 G_END_DECLS
 
-#endif				/* __GDK_DISPLAY_H__ */
+#endif	/* __GDK_DISPLAY_H__ */

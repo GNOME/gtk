@@ -129,6 +129,15 @@ They are not covered by the same stability guarantees as the regular
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_format_is_scalable ##### -->
+<para>
+
+</para>
+
+@format: 
+@Returns: 
+
+
 <!-- ##### STRUCT GdkPixbufFormat ##### -->
 <para>
 A #GdkPixbufFormat contains information about the image format accepted by a
@@ -153,6 +162,7 @@ operations.
 </para>
 
 @GDK_PIXBUF_FORMAT_WRITABLE: the module can write out images in the format.
+@GDK_PIXBUF_FORMAT_SCALABLE: 
 @Since: 2.2
 
 <!-- ##### STRUCT GdkPixbufModulePattern ##### -->

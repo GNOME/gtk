@@ -104,6 +104,9 @@ gboolean gtk_clipboard_wait_for_targets (GtkClipboard  *clipboard,
 					 GdkAtom      **targets,
 					 gint          *n_targets);
 
+/* private */
+void     _gtk_clipboard_handle_event    (GdkEventOwnerChange *event);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
