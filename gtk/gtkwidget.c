@@ -630,6 +630,16 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
+  /**
+   * GtkWidget::style-set:
+   * @widget: the object on which the signal is emitted
+   * @previous_style: the previous style, or %NULL if the widget 
+   *   just got its initial style 
+   *
+   * The style-set signal is emitted when a new style has been set 
+   * on a widget. Note that style-modifying functions like 
+   * gtk_widget_modify_base() also cause this signal to be emitted.
+   */
   widget_signals[STYLE_SET] =
     g_signal_new ("style_set",
 		  G_TYPE_FROM_CLASS (gobject_class),
