@@ -1,3 +1,12 @@
+2001-10-30  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk+-1.3-win32-production.pc.in
+	* gdk-1.3-win32-production.pc.in: Should not use @prefix@
+	elsewhere than in definition of the 'prefix'
+	variable. @exec_prefix@, @libdir@ and @includedir@ are defined by
+	configure to include '${prefix}' (literally like that), so
+	everything will work as if by magic.
+
 2001-10-28  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk-1.3-win32-production.pc.in (Cflags): Use correct
