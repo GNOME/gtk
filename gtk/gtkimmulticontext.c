@@ -27,6 +27,16 @@
 #include "gtkradiomenuitem.h"
 #include "gtkintl.h"
 
+struct _GtkIMMulticontextPrivate
+{
+  GdkWindow *client_window;
+  GdkRectangle cursor_location;
+
+  guint use_preedit : 1;
+  guint have_cursor_location : 1;
+  guint focus_in : 1;
+};
+
 static void     gtk_im_multicontext_class_init         (GtkIMMulticontextClass  *class);
 static void     gtk_im_multicontext_init               (GtkIMMulticontext       *im_multicontext);
 static void     gtk_im_multicontext_finalize           (GObject                 *object);
@@ -131,6 +141,11 @@ static void
 gtk_im_multicontext_init (GtkIMMulticontext *multicontext)
 {
   multicontext->slave = NULL;
+  
+  multicontext->priv = g_new0 (GtkIMMulticontextPrivate, 1);
+  multicontext->priv->use_preedit = TRUE;
+  multicontext->priv->have_cursor_location = FALSE;
+  multicontext->priv->focus_in = FALSE;
 }
 
 /**
@@ -149,7 +164,10 @@ gtk_im_multicontext_new (void)
 static void
 gtk_im_multicontext_finalize (GObject *object)
 {
-  gtk_im_multicontext_set_slave (GTK_IM_MULTICONTEXT (object), NULL, TRUE);
+  GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (object);
+  
+  gtk_im_multicontext_set_slave (multicontext, NULL, TRUE);
+  g_free (multicontext->priv);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -159,6 +177,7 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
 			       GtkIMContext      *slave,
 			       gboolean           finalizing)
 {
+  GtkIMMulticontextPrivate *priv = multicontext->priv;
   gboolean need_preedit_changed = FALSE;
   
   if (multicontext->slave)
@@ -211,8 +230,14 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
 			G_CALLBACK (gtk_im_multicontext_delete_surrounding_cb),
 			multicontext);
       
-      if (multicontext->client_window)
-	gtk_im_context_set_client_window (slave, multicontext->client_window);
+      if (!priv->use_preedit)	/* Default is TRUE */
+	gtk_im_context_set_use_preedit (slave, FALSE);
+      if (priv->client_window)
+	gtk_im_context_set_client_window (slave, priv->client_window);
+      if (priv->have_cursor_location)
+	gtk_im_context_set_cursor_location (slave, &priv->cursor_location);
+      if (priv->focus_in)
+	gtk_im_context_focus_in (slave);
     }
 
   if (need_preedit_changed)
@@ -250,9 +275,10 @@ gtk_im_multicontext_set_client_window (GtkIMContext *context,
 				       GdkWindow    *window)
 {
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
+  
   GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
 
-  multicontext->client_window = window;
+  multicontext->priv->client_window = window;
   
   if (slave)
     gtk_im_context_set_client_window (slave, window);
@@ -306,7 +332,9 @@ gtk_im_multicontext_focus_in (GtkIMContext   *context)
     gtk_im_multicontext_set_slave (multicontext, NULL, FALSE);
 
   slave = gtk_im_multicontext_get_slave (multicontext);
-
+  
+  multicontext->priv->focus_in = TRUE;
+  
   if (slave)
     gtk_im_context_focus_in (slave);
 }
@@ -317,6 +345,8 @@ gtk_im_multicontext_focus_out (GtkIMContext   *context)
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
   GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
 
+  multicontext->priv->focus_in = FALSE;
+  
   if (slave)
     gtk_im_context_focus_out (slave);
 }
@@ -338,6 +368,9 @@ gtk_im_multicontext_set_cursor_location (GtkIMContext   *context,
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
   GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
 
+  multicontext->priv->have_cursor_location = TRUE;
+  multicontext->priv->cursor_location = *area;
+
   if (slave)
     gtk_im_context_set_cursor_location (slave, area);
 }
@@ -348,6 +381,10 @@ gtk_im_multicontext_set_use_preedit (GtkIMContext   *context,
 {
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
   GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
+
+  use_preedit = use_preedit != FALSE;
+
+  multicontext->priv->use_preedit = use_preedit;
 
   if (slave)
     gtk_im_context_set_use_preedit (slave, use_preedit);
