@@ -22,7 +22,9 @@ EOF
 
 zip $ZIP lib/gtk-2.0/@GTK_BINARY_VERSION@/loaders/*.dll lib/gtk-2.0/@GTK_BINARY_VERSION@/immodules/*.dll
 
-zip $ZIP share/themes/{Default,Emacs}/gtk-2.0{,-key}/gtkrc
+zip $ZIP share/themes/Default/gtk-2.0/gtkrc
+zip $ZIP share/themes/Default/gtk-2.0-key/gtkrc
+zip $ZIP share/themes/Emacs/gtk-2.0-key/gtkrc
 
 zip -r $ZIP lib/locale/*/LC_MESSAGES/gtk20.mo
 

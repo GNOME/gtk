@@ -102,23 +102,21 @@ enum_monitor (HMONITOR hmonitor,
 }
 #endif /* HAVE_MONITOR_INFO */
 
-GdkDisplay *
-gdk_display_open (const gchar *display_name)
+void
+_gdk_monitor_init (void)
 {
-  HMODULE user32;
-
-  if (_gdk_display != NULL)
-    return NULL; /* single display only */
-
-  _gdk_display = g_object_new (GDK_TYPE_DISPLAY, NULL);
-  _gdk_screen = g_object_new (GDK_TYPE_SCREEN, NULL);
-
 #ifdef HAVE_MONITOR_INFO
-  user32 = GetModuleHandle ("user32.dll");
-  g_assert (user32 != NULL);
+  static HMODULE user32 = NULL;
 
-  p_EnumDisplayMonitors = (t_EnumDisplayMonitors) GetProcAddress (user32, "EnumDisplayMonitors");
-  p_GetMonitorInfoA = (t_GetMonitorInfoA) GetProcAddress (user32, "GetMonitorInfoA");
+  if (user32 == NULL)
+    {
+      user32 = GetModuleHandle ("user32.dll");
+
+      g_assert (user32 != NULL);
+
+      p_EnumDisplayMonitors = (t_EnumDisplayMonitors) GetProcAddress (user32, "EnumDisplayMonitors");
+      p_GetMonitorInfoA = (t_GetMonitorInfoA) GetProcAddress (user32, "GetMonitorInfoA");
+    }
 
   if (p_EnumDisplayMonitors != NULL && p_GetMonitorInfoA != NULL)
     {
@@ -128,10 +126,11 @@ gdk_display_open (const gchar *display_name)
 
       (*p_EnumDisplayMonitors) (NULL, NULL, count_monitor, (LPARAM) &_gdk_num_monitors);
 
-      _gdk_monitors = g_new (GdkRectangle, _gdk_num_monitors);
+      _gdk_monitors = g_renew (GdkRectangle, _gdk_monitors, _gdk_num_monitors);
+
       index = 0;
       (*p_EnumDisplayMonitors) (NULL, NULL, enum_monitor, (LPARAM) &index);
-#if 1
+
       _gdk_offset_x = G_MININT;
       _gdk_offset_y = G_MININT;
 
@@ -154,7 +153,6 @@ gdk_display_open (const gchar *display_name)
 				   _gdk_monitors[i].height,
 				   _gdk_monitors[i].x, _gdk_monitors[i].y));
 	}
-#endif
     }
   else
 #endif /* HAVE_MONITOR_INFO */
@@ -162,7 +160,7 @@ gdk_display_open (const gchar *display_name)
       unsigned int width, height;
 
       _gdk_num_monitors = 1;
-      _gdk_monitors = g_new (GdkRectangle, 1);
+      _gdk_monitors = g_renew (GdkRectangle, _gdk_monitors, 1);
 
       width = GetSystemMetrics (SM_CXSCREEN);
       height = GetSystemMetrics (SM_CYSCREEN);
@@ -175,6 +173,18 @@ gdk_display_open (const gchar *display_name)
       _gdk_offset_y = 0;
     }
 
+}
+
+GdkDisplay *
+gdk_display_open (const gchar *display_name)
+{
+  if (_gdk_display != NULL)
+    return NULL; /* single display only */
+
+  _gdk_display = g_object_new (GDK_TYPE_DISPLAY, NULL);
+  _gdk_screen = g_object_new (GDK_TYPE_SCREEN, NULL);
+
+  _gdk_monitor_init ();
   _gdk_visual_init ();
   gdk_screen_set_default_colormap (_gdk_screen,
                                    gdk_screen_get_system_colormap (_gdk_screen));
