@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>April 30th 2003</date>
+  <date>June 24th 2003</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -695,10 +695,10 @@ presents a list of GTK+ bindings.</para>
 <listitem><simpara>There are several C++ wrappers for GTK+.</simpara>
 
   <itemizedlist> 
-  <listitem><simpara>the gtk-- package, which is a very small wrapper for
+  <listitem><simpara>the gtkmm package, which is a wrapper for
   GTK+. You can find the home page at <ulink
-  url="http://www.cs.tut.fi/~p150650/gtk/gtk--.html">
-  http://www.cs.tut.fi/~p150650/gtk/gtk--.html</ulink>. The FTP site is 
+  url="http://www.gtkmm.org">
+  http://www.gtkmm.org/</ulink>. The FTP site is 
   <ulink url="ftp://ftp.gtk.org/pub/gtk/gtk--">
   ftp://ftp.gtk.org/pub/gtk/gtk--</ulink>.</simpara>
   </listitem>
@@ -706,14 +706,14 @@ presents a list of GTK+ bindings.</para>
   <listitem><simpara>the VDK package, which was built as
   the base package of a GTK+ application Borland-like
   builder. The home page can be found at <ulink
-  url="http://www.guest.net/homepages/mmotta/VDKHome">
-  http://www.guest.net/homepages/mmotta/VDKHome</ulink>.</simpara>
+  url="http://vdkbuilder.sourceforge.net/">
+  http://vdkbuilder.sourceforge.net/</ulink>.</simpara>
   </listitem>
 
   <listitem><simpara>The wxWindows/Gtk package, a free C++ library for
   cross-platform GUI development. The home page of this package is
-  <ulink url="http://www.freiburg.linux.de/~wxxt/">
-  http://www.freiburg.linux.de/~wxxt/</ulink>.</simpara>
+  <ulink url="http://www.wxwindows.org/">
+  http://www.wxwindows.org/</ulink>.</simpara>
   </listitem>
 
   </itemizedlist>
@@ -826,6 +826,32 @@ the basics of all the GTK+ widgets you should look at the file
 gtk/testgtk.c (and associated source files) within the GTK+
 distribution. Looking at these examples will give you a good
 grounding on what the widgets can do.</para>
+
+</sect1>
+
+<!-- ----------------------------------------------------------------- -->
+
+<sect1>
+<title>How do I use the Glade GUI builder with GTK+? <emphasis>[GTK 2.x]</emphasis></title>
+
+<para>There are two ways to use Glade. The first way is to use
+Glade's facilities for generating code; the second
+way is to use the libglade library which directly loads
+the XML user interface description files that Glade
+generates into a running program.</para>
+
+Experienced GTK+ programmers generally strongly recommend
+using libglade; you don't have to worry about the interaction
+between Glade generating the source and you editing it,
+and its been shown to be a method that works better
+for large projects, so there is a lot of example code
+out there you can look at.</para>
+
+<para>An introduction to using libglade can be found in the 
+libglade API docs
+(<ulink url="http://developer.gnome.org/doc/API/2.0/libglade/libglade-notes.html#libglade-basics">
+http://developer.gnome.org/doc/API/2.0/libglade/libglade-notes.html#libglade-basics</ulink>)
+</para>
 
 </sect1>
 
@@ -1140,7 +1166,7 @@ Netherlands, YMMV).</quote></para>
 
 <sect1>
 <title>Is GTK+ thread safe? How do I write multi-threaded GTK+
-applications?</title>
+applications? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>The GLib library can be used in a thread-safe mode by
 calling g_thread_init() before making any other GLib
@@ -1152,11 +1178,12 @@ simultaneously. If two different threads need to access the
 same hash table, the application is responsible for locking
 itself.</para>
 
-<para>When GLib is intialized to be thread-safe, GTK+ is
-<emphasis>thread aware</emphasis>. There is a single global
+<para>In order to make GDK thread aware, you also need to
+call gdk_threads_init() in conjunction with the above call.
+There is a single global
 lock that you must acquire with gdk_threads_enter() before
 making any GDK calls, and release with gdk_threads_leave()
-afterwards.</para>
+afterwards throughout your code.</para>
 
 <para>A minimal main program for a threaded GTK+ application
 looks like:</para>
@@ -1194,36 +1221,30 @@ illustrate how to use threads within GTK+ programs.</para>
 <programlisting role="C">
 /*-------------------------------------------------------------------------
  * Filename:      gtk-thread.c
- * Version:       0.99.1
+ * Version:       1.99.1
  * Copyright:     Copyright (C) 1999, Erik Mouw
  * Author:        Erik Mouw &lt;J.A.K.Mouw@its.tudelft.nl&gt;
- * Description:   GTK threads example. 
+ * Description:   GTK threads example.
  * Created at:    Sun Oct 17 21:27:09 1999
- * Modified by:   Erik Mouw &lt;J.A.K.Mouw@its.tudelft.nl&gt;
- * Modified at:   Sun Oct 24 17:21:41 1999
+ * Modified by:   Owen Taylor &lt;otaylor@gtk.org&gt;
+ * Modified at:   Wed May 28 10:43:00 2003
  *-----------------------------------------------------------------------*/
 /*
  * Compile with:
  *
- * cc -o gtk-thread gtk-thread.c `pkg-config gtk+-2.0 --cflags --libs gthread`
+ * cc -o gtk-thread gtk-thread.c `pkg-config --cflags --libs gtk+-2.0 gthread`
  *
- * Thanks to Sebastian Wilhelmi and Owen Taylor for pointing out some
- * bugs.
+ * Thanks to Sebastian Wilhelmi for pointing out some bugs in earlier versions.
  *
  */
 
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
-#include &lt;time.h&gt;
 #include &lt;gtk/gtk.h&gt;
-#include &lt;glib.h&gt;
-#include &lt;pthread.h&gt;
 
 #define YES_IT_IS    (1)
 #define NO_IT_IS_NOT (0)
 
-typedef struct 
+typedef struct
 {
   GtkWidget *label;
   int what;
@@ -1245,7 +1266,7 @@ void *argument_thread(void *args)
   for(;;)
     {
       /* sleep a while */
-      sleep(rand() / (RAND_MAX / 3) + 1);
+      sleep(g_random_int_range (1, 4));
 
       /* lock the yes_or_no_variable */
       G_LOCK(yes_or_no);
@@ -1273,42 +1294,46 @@ void *argument_thread(void *args)
 	  else
 	    gtk_label_set_text(GTK_LABEL(data->label), "O no, it isn't!");
 
+	  /* Make sure all X commands are sent to the X server; not strictly
+	   * necessary here, but always a good idea when you do anything
+	   * from a thread other than the one where the main loop is running.
+	   */
+	  gdk_flush ();
+
 	  /* release GTK thread lock */
 	  gdk_threads_leave();
 	}
     }
 
-  return(NULL);
+  return NULL;
 }
 
 int main(int argc, char *argv[])
 {
   GtkWidget *window;
   GtkWidget *label;
+  GError *error = NULL;
   yes_or_no_args yes_args, no_args;
-  pthread_t no_tid, yes_tid;
 
   /* init threads */
   g_thread_init(NULL);
+  gdk_threads_init();
 
   /* init gtk */
   gtk_init(&amp;argc, &amp;argv);
 
-  /* init random number generator */
-  srand((unsigned int)time(NULL));
-
   /* create a window */
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
-  gtk_signal_connect(GTK_OBJECT (window), "destroy",
-		     GTK_SIGNAL_FUNC(destroy), NULL);
+  g_signal_connect(window, "destroy",
+		   G_CALLBACK(destroy), NULL);
 
   gtk_container_set_border_width(GTK_CONTAINER (window), 10);
 
   /* create a label */
   label = gtk_label_new("And now for something completely different ...");
   gtk_container_add(GTK_CONTAINER(window), label);
-  
+
   /* show everything */
   gtk_widget_show(label);
   gtk_widget_show (window);
@@ -1316,20 +1341,96 @@ int main(int argc, char *argv[])
   /* create the threads */
   yes_args.label = label;
   yes_args.what = YES_IT_IS;
-  pthread_create(&amp;yes_tid, NULL, argument_thread, &amp;yes_args);
+  if (!g_thread_create(argument_thread, &amp;yes_args, FALSE, &amp;error))
+    {
+      g_printerr ("Failed to create YES thread: %s\n", error->message);
+      return 1;
+    }
 
   no_args.label = label;
   no_args.what = NO_IT_IS_NOT;
-  pthread_create(&amp;no_tid, NULL, argument_thread, &amp;no_args);
+  if (!g_thread_create(argument_thread, &amp;no_args, FALSE, &amp;error))
+    {
+      g_printerr ("Failed to create NO thread: %s\n", error->message);
+      return 1;
+    }
 
   /* enter the GTK main loop */
   gdk_threads_enter();
   gtk_main();
   gdk_threads_leave();
 
-  return(0);
+  return 0;
 }
 </programlisting>
+</sect1>
+
+<!-- ----------------------------------------------------------------- -->
+
+<sect1>
+<title>I'm doing some stuff with GTK+ in a separate thread, and
+properly locking with gdk_threads_enter/gdk_threads_leave()
+but the display doesn't update properly. <emphasis>[GTK 2.x]</emphasis>
+</title>
+
+<para>For efficiency, the X window system batches up commands
+and sends them to the X server in batches instead of sending
+out immediately.</para>
+
+<para>In a non-multithreaded program, you don't have to worry about
+this, since the first thing that happens when control returns
+to the main loop is that any outstanding X requests are 
+sent to the X server.</para>
+
+<para>However, if you are making GTK+ calls from a thread other
+than the main loop, then GTK+ doesn't know when to send batched
+commands out. For that reason, after making GTK+ calls 
+in a separate thread, it is usually a good idea to call
+gdk_flush() before gdk_thread_leave().</para>
+
+<para>Actually, gdk_flush() is more expensive than is necessary here,
+since it waits for the X server to finish outstanding commands
+as well; if performance is an issue, you may want to call
+XFlush() directly:</para>
+
+<programlisting role="C">
+
+#include <gdk/gdkx.h>
+
+void my_flush_commands (void)
+{
+  GdkDisplay *display = gdk_display_get_default ();
+  XFlush (GDK_DISPLAY_XDISPLAY (display);
+}
+</programlisting>
+
+</sect1>
+
+<!-- ----------------------------------------------------------------- -->
+
+<sect1>
+<title>What's an easy way to run a function in the thread with
+the main loop? <emphasis>[GTK 2.x]</emphasis></title>
+
+<para>Sometimes the simplest way to set up a threaded program
+is to make all the GTK+ calls in a single thread. In such
+a program, you should still call g_threads_init(), but
+don't need to call gdk_threads_init(), gkd_threads_enter(),
+and gdk_threads_leave().</para>
+
+<para>If you set your program up this way, how then do you get
+the thread making GTK+ calls and running the main loop
+to do something in response to another thread?</para>
+
+<para>An easy way to do it is to take advantage of the fact that
+the GLib main loop functions are all thread safe, and can
+be called from any thread by adding an idle function
+with g_idle_add(). The function provided will be called
+at the next opportunity by the main thread. If you want
+your function to take priority over event handling and
+drawing, you can instead use g_idle_add_full() and pass
+in a priority of G_PRIORITY_HIGH.</para>
+
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
@@ -1560,7 +1661,7 @@ ancestor?</title>
 
 <para>There are a couple of ways to find the top level parent
 of a widget. The easier way is to call the
-<literal>gtk_widget_top_level()</literal> function that
+<literal>gtk_widget_get_toplevel()</literal> function that
 returns pointer to a GtkWidget that is the top level
 window.</para>
 
@@ -1871,7 +1972,8 @@ and high priority idle functions, then return immediately
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>How do I attach data to some GTK+ object/widget?</title>
+<title>How do I attach data to some GTK+ object/widget?
+<emphasis>[GTK 2.x]</emphasis></title>
 
 <para>First of all, the attached data is stored in the
 object_data field of a GtkObject. The type of this field is
@@ -1880,15 +1982,15 @@ gdataset.c file in your glib source directory very
 carefully.</para>
 
 <para>There are two (easy) ways to attach some data to a gtk
-object.  Using <literal>gtk_object_set_data()</literal> and
-<literal>gtk_object_get_data()</literal> seems to be the most
+object.  Using <literal>g_object_set_data()</literal> and
+<literal>g_object_get_data()</literal> seems to be the most
 common way to do this, as it provides a powerful interface to
 connect objects and data.</para>
 
 <programlisting role="C">
-void gtk_object_set_data(GtkObject *object, const gchar *key, gpointer data);
+void g_object_set_data(GObject *object, const gchar *key, gpointer data);
 
-gpointer gtk_object_get_data(GtkObject *object, const gchar *key);
+gpointer g_object_get_data(GObject *object, const gchar *key);
 </programlisting>
 
 <para>Since a short example is better than any lengthy speech:</para>
@@ -1897,10 +1999,10 @@ gpointer gtk_object_get_data(GtkObject *object, const gchar *key);
 struct my_struct	p1,p2,*result;
 GtkWidget		*w;
 
-gtk_object_set_data(GTK_OBJECT(w),"p1 data",(gpointer)&amp;p1);
-gtk_object_set_data(GTK_OBJECT(w),"p2 data",(gpointer)&amp;p2);
+g_object_set_data(G_OBJECT(w),"p1 data",(gpointer)&amp;p1);
+g_object_set_data(G_OBJECT(w),"p2 data",(gpointer)&amp;p2);
 
-result = gtk_object_get_data(GTK_OBJECT(w),"p1 data");
+result = g_object_get_data(G_OBJECT(w),"p1 data");
 </programlisting>
 
 <para>The <literal>gtk_object_set_user_data()</literal> and
@@ -2023,62 +2125,24 @@ windows.</para>
 
 <sect1>
 <title>How do I set the size of a widget/window? How do I
-prevent the user resizing my window?</title>
+prevent the user resizing my window? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>The <literal>gtk_widget_set_uposition()</literal>
-function is used to set the position of any widget.</para>
+<para>The <literal>gtk_widget_set_size_request()</literal> function
+is used to set the size of a widget to a specific size.
 
-<para>The <literal>gtk_widget_set_usize()</literal> function
-is used to set the size of a widget. In order to use all the
-features that are provided by this function when it acts on a
-window, you may want to use the
-<literal>gtk_window_set_policy</literal> function. The
+The function
+<literal>gtk_window_set_resizable()</literal> function sets whether
+the user can resize a window, which they can by default. The
 definition of these functions are:</para>
 
 <programlisting role="C">
-void gtk_widget_set_usize (GtkWidget *widget,
-                           gint width,
-                           gint height);
+void gtk_widget_set_size_request (GtkWidget *widget,
+                                  gint       width,
+                                  gint       height);
 
-void gtk_window_set_policy (GtkWindow *window,
-                            gint allow_shrink,
-                            gint allow_grow,
-                            gint auto_shrink);
-</programlisting>
+void gtk_window_set_resizable (GtkWindow *window,
+                               gboolean   resizable);
 
-<para><literal>auto_shrink</literal> will automatically shrink
-the window when the requested size of the child widgets goes
-below the current size of the
-window. <literal>allow_shrink</literal> will give the user the
-authorisation to make the window smaller that it should
-normally be. <literal>allow_grow</literal> gives the user
-the ability to make the window bigger. The default
-values for these parameters are:</para>
-
-<programlisting role="C">
-allow_shrink = FALSE
-allow_grow   = TRUE
-auto_shrink  = FALSE
-</programlisting>
-
-<para>The <literal>gtk_widget_set_usize()</literal> functions
-is not the easiest way to set a window size since you cannot
-decrease this window size with another call to this function
-unless you call it twice, as in:</para>
-
-<programlisting role="C">
-     gtk_widget_set_usize(your_widget, -1, -1);
-     gtk_widget_set_usize(your_widget, new_x_size, new_y_size);
-</programlisting>
-
-<para>Another way to set the size of and/or move a window is to use
-the <literal>gdk_window_move_resize()</literal> function which
-uses to work fine both to grow or to shrink the window:</para>
-
-<programlisting role="C">
-     gdk_window_move_resize(window->window, 
-                            x_pos, y_pos, 
-                            x_size, y_size);
 </programlisting>
 
 </sect1>

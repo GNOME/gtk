@@ -1,3 +1,8 @@
+Tue Jun 24 20:00:45 BST 2003  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgml: Thread support updates
+	from Owen. Various suggestions from Steve Chaplin.
+
 2003-03-24  Mohammad DAMT  <mdamt@bisnisweb.com>
 
 	* po/id.po: Updated Indonesian translation
