@@ -80,33 +80,20 @@ enum_monitor (HMONITOR hmonitor,
 #define MONITORINFOF_PRIMARY 1
 #endif
 
-  if (monitor_info.dwFlags & MONITORINFOF_PRIMARY)
+  monitor->x = monitor_info.rcMonitor.left;
+  monitor->y = monitor_info.rcMonitor.top;
+  monitor->width = monitor_info.rcMonitor.right - monitor_info.rcMonitor.left;
+  monitor->height = monitor_info.rcMonitor.bottom - monitor_info.rcMonitor.top;
+
+  if (monitor_info.dwFlags & MONITORINFOF_PRIMARY &&
+      *index != 0)
     {
-      /* For the primary monitor, use SPI_GETWORKAREA */
-      RECT rect;
-
-      SystemParametersInfo (SPI_GETWORKAREA, 0, &rect, 0);
-      monitor->x = rect.left;
-      monitor->y = rect.top;
-      monitor->width = rect.right - rect.left;
-      monitor->height = rect.bottom - rect.top;
-
       /* Put primary monitor at index 0, just in case somebody needs
        * to know which one is the primary.
        */
-      if (*index != 0)
-	{
-	  GdkRectangle temp = *monitor;
-	  *monitor = _gdk_monitors[0];
-	  _gdk_monitors[0] = temp;
-	}
-    }
-  else
-    {
-      monitor->x = monitor_info.rcMonitor.left;
-      monitor->y = monitor_info.rcMonitor.top;
-      monitor->width = monitor_info.rcMonitor.right - monitor_info.rcMonitor.left;
-      monitor->height = monitor_info.rcMonitor.bottom - monitor_info.rcMonitor.top;
+      GdkRectangle temp = *monitor;
+      *monitor = _gdk_monitors[0];
+      _gdk_monitors[0] = temp;
     }
 
   (*index)++;
@@ -172,15 +159,18 @@ gdk_display_open (const gchar *display_name)
   else
 #endif /* HAVE_MONITOR_INFO */
     {
-      RECT rect;
+      unsigned int width, height;
 
       _gdk_num_monitors = 1;
       _gdk_monitors = g_new (GdkRectangle, 1);
-      SystemParametersInfo (SPI_GETWORKAREA, 0, &rect, 0);
-      _gdk_monitors[0].x = rect.left;
-      _gdk_monitors[0].y = rect.top;
-      _gdk_monitors[0].width = rect.right - rect.left;
-      _gdk_monitors[0].height = rect.bottom - rect.top;
+
+      width = GetSystemMetrics (SM_CXSCREEN);
+      height = GetSystemMetrics (SM_CYSCREEN);
+
+      _gdk_monitors[0].x = 0;
+      _gdk_monitors[0].y = 0;
+      _gdk_monitors[0].width = width;
+      _gdk_monitors[0].height = height;
       _gdk_offset_x = 0;
       _gdk_offset_y = 0;
     }
