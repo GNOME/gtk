@@ -1,3 +1,32 @@
+Mon Dec  8 10:54:44 2003  Owen Taylor  <otaylor@redhat.com>
+	 
+	* === Released 2.3.1 ===
+
+	* NEWS: Updates for 2.3.1
+
+	* configure.in: Version 2.3.1, interface age 0, binary age 301.
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_can_activate_accel):
+	Rename from gtk_menu_item_real_can_activate_accel() to
+	match GTK+ convention, improve comment.
+
+	* gtk/gtkwidget.c: Document gtk_widget_can_activate_accel(),
+	can ::can-activate-accel signal.
+
+	* gtk/gtkwidget.c (closure_accel_activate): Fix spelling
+	in comment.
+
+	* gtk/gtkmenu.c (gtk_menu_real_can_activate_accel): Clean 
+	up comment.
+	
+	* gtk/gtkcellview{,menuitem}.[ch]: Move GET_PRIVATE() macros
+	into the .c file.
+
+Mon Dec  8 12:09:21 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkicontheme.c (find_builtin_icon): Fix a
+	missing 'else'. (#128816, Jorn Baayen)
+
 2003-12-02  Michael Meeks  <michael@ximian.com>
 
 	Based on a patch by Martin Kretzschmar; #122448
@@ -398,7 +427,7 @@ Mon Nov 17 16:25:04 2003  Manish Singh <yosh@gimp.org>
 
 Tue Nov 18 00:12:55 2003  Matthias Clasen  <maclas@gmx.de>
 
-	Fix for #119555, Peter Zelesny:
+	Fix for #119555, Peter Zelezny:
 	
 	* gdk/gdkdrawable.h: Declare gdk_drawable_copy_to_image.
 	* gdk/gdkdraw.c (gdk_drawable_copy_to_image): Make public
@@ -840,7 +869,7 @@ Wed Oct 29 15:40:26 2003  Owen Taylor  <otaylor@redhat.com>
 	as worked previously. (#125759, Richard Hult)
 
 	* gtk/gtkmessagedialog.c (gtk_message_dialog_new_with_markup):
-	Use g_markup_vprintf_escaped() to escape argumetns.
+	Use g_markup_vprintf_escaped() to escape arguments.
 
 	* gtk/gtkmessagedialog.[ch]: Add gtk_message_dialog_set_markup()
 	so there is some way to set literal markup.
@@ -886,10 +915,6 @@ Tue Oct 28 10:34:24 2003  Owen Taylor  <otaylor@redhat.com>
 	the is_active and has_toplevel_focus properties.
 	(#122531)
 
-Tue Oct 28 10:18:55 2003  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/gtkwindow.c (gtk_window_is_active): 
-
 2003-10-28  Mark McLoughlin  <mark@skynet.ie>
 
 	* gtk/gtkexpander.c:
@@ -917,7 +942,7 @@ Tue Oct 28 09:21:29 2003  Owen Taylor  <otaylor@redhat.com>
 2003-10-28  Padraig O'Briain  <padraig.obriain@sun.com>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_remove_filter):
-	Changew index to filter_index to fix compilation error.
+	Change index to filter_index to fix compilation error.
 
 	* gtk/gtkfilesystem.h: Correct definition of gtk_file_path_get_string.
 
