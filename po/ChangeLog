@@ -1,3 +1,8 @@
+2004-07-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* POTFILES.in: Add missing files.  (#147688,
+	Christian Rose)
+
 2004-07-15  Pawan Chitrakar  <pawan@nplinux.org>
 
 	* ne.po: Updated Nepali Translation

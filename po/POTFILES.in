@@ -21,7 +21,7 @@ gdk-pixbuf/io-wbmp.c
 gdk-pixbuf/io-xbm.c
 gdk-pixbuf/io-xpm.c
 gdk/gdkdisplaymanager.c
-gtk/gtkaccellabel.c
+gtk/gtkaboutdialog.c
 gtk/gtkaction.c
 gtk/gtkactiongroup.c
 gtk/gtkadjustment.c
@@ -35,6 +35,7 @@ gtk/gtkcalendar.c
 gtk/gtkcelllayout.c
 gtk/gtkcellrenderer.c
 gtk/gtkcellrendererpixbuf.c
+gtk/gtkcellrendererprogress.c
 gtk/gtkcellrenderertext.c
 gtk/gtkcellrenderertoggle.c
 gtk/gtkcellview.c
@@ -67,6 +68,7 @@ gtk/gtkgamma.c
 gtk/gtkhandlebox.c
 gtk/gtkiconfactory.c
 gtk/gtkicontheme.c
+gtk/gtkiconview.c
 gtk/gtkimage.c
 gtk/gtkimagemenuitem.c
 gtk/gtkimmodule.c
