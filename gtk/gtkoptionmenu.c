@@ -79,6 +79,8 @@ static void gtk_option_menu_position        (GtkMenu            *menu,
 					     gpointer            user_data);
 static void gtk_option_menu_show_all        (GtkWidget          *widget);
 static void gtk_option_menu_hide_all        (GtkWidget          *widget);
+static gboolean gtk_option_menu_mnemonic_activate (GtkWidget    *widget,
+						   gboolean      group_cycling);
 static GtkType gtk_option_menu_child_type   (GtkContainer       *container);
 static gint gtk_option_menu_scroll_event    (GtkWidget          *widget,
 					     GdkEventScroll     *event);
@@ -152,6 +154,7 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
   widget_class->scroll_event = gtk_option_menu_scroll_event;
   widget_class->show_all = gtk_option_menu_show_all;
   widget_class->hide_all = gtk_option_menu_hide_all;
+  widget_class->mnemonic_activate = gtk_option_menu_mnemonic_activate;
 
   container_class->child_type = gtk_option_menu_child_type;
 
@@ -884,6 +887,14 @@ gtk_option_menu_hide_all (GtkWidget *widget)
 
   gtk_widget_hide (widget);
   gtk_container_foreach (container, (GtkCallback) gtk_widget_hide_all, NULL);
+}
+
+static gboolean
+gtk_option_menu_mnemonic_activate (GtkWidget *widget,
+				   gboolean   group_cycling)
+{
+  gtk_widget_grab_focus (widget);
+  return TRUE;
 }
 
 static gint
