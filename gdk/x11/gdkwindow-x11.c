@@ -28,6 +28,7 @@
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <netinet/in.h>
+#include <unistd.h>
 #include "gdk.h"
 #include "config.h"
 
@@ -326,6 +327,7 @@ gdk_window_new (GdkWindow     *parent,
   unsigned int class;
   char *title;
   int i;
+  int pid;
   
   g_return_val_if_fail (attributes != NULL, NULL);
   
@@ -578,6 +580,16 @@ gdk_window_new (GdkWindow     *parent,
   
   if (!wm_client_leader_atom)
     wm_client_leader_atom = gdk_atom_intern ("WM_CLIENT_LEADER", FALSE);
+
+  /* This will set WM_CLIENT_MACHINE and WM_LOCALE_NAME */
+  XSetWMProperties (xdisplay, xid, NULL, NULL, NULL, 0, NULL, NULL, NULL);
+
+  pid = getpid ();
+  XChangeProperty (xdisplay, xid,
+		   gdk_atom_intern ("_NET_WM_PID", FALSE),
+		   XA_CARDINAL, 32,
+		   PropModeReplace,
+		   (guchar *)&pid, 1);
   
   XChangeProperty (xdisplay, xid,
 	   	   wm_client_leader_atom,
