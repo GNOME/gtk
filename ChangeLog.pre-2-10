@@ -1,3 +1,9 @@
+1998-03-11  Elliot Lee  <sopwith@bogus.circ.us.eu.org>
+
+	* gtk/gtkentry.h: Keep it consistent - 
+	don't list gtk_entry_set_max_length unless it's implemented.
+	(Someone make up their mind please ;-)
+
 Wed Mar 11 07:10:11 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkspinbutton.h: 

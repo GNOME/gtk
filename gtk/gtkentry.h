@@ -79,11 +79,6 @@ void       gtk_entry_set_visibility (GtkEntry      *entry,
 void       gtk_entry_set_editable   (GtkEntry      *entry,
 				     gboolean       editable);
 
-/* If entry->text is already > max it's up to you to change it */
-void       gtk_entry_set_max_length (GtkEntry      *entry,
-                                     guint16        max);
-
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
