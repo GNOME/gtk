@@ -1,5 +1,6 @@
 2000-10-28  Tor Lillqvist  <tml@iki.fi>
 
+	* gtk/gtk.def
 	* gtk/makefile.{mingw,msc}.in: Adjust to Tim's changes. Use
 	glib-genmarshal etc.
 
