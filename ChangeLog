@@ -1,3 +1,19 @@
+Tue Jan 20 22:11:31 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Fixes for #130370, based on a patch by Michael Meeks:
+	
+	* gtk/gtkmenu.c (gtk_menu_do_remove): New auxiliary function to
+	adjust cell positions and recalculate row and column counts after
+	removing an item.
+
+	* gtk/gtkmenu.c (gtk_menu_remove): Call gtk_menu_do_remove.
+
+	* gtk/gtkmenu.c (gtk_menu_do_insert): Don't leave empty rows when
+	appending items.
+
+	* gtk/gtkmenu.c (gtk_menu_attach): Don't call gtk_menu_shell_append,
+	to avoid an unintended recursion.
+
 2004-01-19  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #131418.

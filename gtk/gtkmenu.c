@@ -597,21 +597,19 @@ gtk_menu_set_child_property (GtkContainer *container,
         break;
       case CHILD_PROP_RIGHT_ATTACH:
         ai->right_attach = g_value_get_uint (value);
+	priv->columns = MAX (priv->columns, ai->right_attach);
         break;
       case CHILD_PROP_TOP_ATTACH:
         ai->top_attach = g_value_get_uint (value);
         break;
       case CHILD_PROP_BOTTOM_ATTACH:
         ai->bottom_attach = g_value_get_uint (value);
+	priv->rows = MAX (priv->rows, ai->bottom_attach);
         break;
-
       default:
         GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
         return;
     }
-
-  priv->columns = MAX (priv->columns, ai->right_attach);
-  priv->rows = MAX (priv->rows, ai->bottom_attach);
 
   gtk_widget_queue_resize (GTK_WIDGET (menu));
 }
@@ -935,6 +933,41 @@ gtk_menu_detach (GtkMenu *menu)
   g_object_unref (menu);
 }
 
+static void
+gtk_menu_do_remove (GtkMenuShell *menu_shell,
+		    GtkWidget    *child)
+{
+  AttachInfo *ai;
+  GList *children;
+  GtkMenuPrivate *priv;
+  gint delta;
+
+  ai = get_attach_info (G_OBJECT (child));
+  priv = gtk_menu_get_private (GTK_MENU (menu_shell));
+  delta = ai->bottom_attach - ai->top_attach;
+
+  /* recalculate these, assuming the child has already been removed */
+  priv->rows = 0;
+  priv->columns = 0;
+
+  for (children = menu_shell->children; children; children = children->next)
+    {
+      AttachInfo *child_ai = get_attach_info (children->data);
+      
+      /* Do not move items in table menus */
+      if (priv->columns == 1 && child_ai->bottom_attach > ai->bottom_attach)
+        gtk_container_child_set (GTK_CONTAINER (menu_shell), children->data,
+                                 "top_attach", child_ai->top_attach - delta,
+                                 "bottom_attach", child_ai->bottom_attach - delta,
+                                 NULL);
+      else
+	{
+	  priv->columns = MAX (priv->columns, child_ai->right_attach);
+	  priv->rows = MAX (priv->rows, child_ai->bottom_attach);
+	}
+    }
+}
+
 static void 
 gtk_menu_remove (GtkContainer *container,
 		 GtkWidget    *widget)
@@ -957,6 +990,7 @@ gtk_menu_remove (GtkContainer *container,
   g_object_set_data (G_OBJECT (widget), ATTACH_INFO_KEY, NULL);
 
   GTK_CONTAINER_CLASS (parent_class)->remove (container, widget);
+  gtk_menu_do_remove (GTK_MENU_SHELL (container), widget);
 }
 
 
@@ -971,39 +1005,34 @@ gtk_menu_do_insert (GtkMenuShell *menu_shell,
                     GtkWidget    *child,
                     gint          position)
 {
-  gint i;
   GList *children;
   GtkMenuPrivate *priv;
 
   priv = gtk_menu_get_private (GTK_MENU (menu_shell));
 
-  if (position < 0)
+  if (position < 0 || position >= priv->rows)
     {
       /* attach after the last row */
-      i = g_list_length (menu_shell->children) - 1;
       gtk_menu_attach (GTK_MENU (menu_shell), child,
                        0, priv->columns ? priv->columns : 1,
-                       i, i + 1);
+                       priv->rows, priv->rows + 1);
 
       return;
     }
 
-  /* we need to make space for this new item; move all items with
-   * top >= position one down
+  /* We need to make space for this new item; move all items with
+   * top >= position one down. 
+   * Note that this does not prevent overlaps when the menu contains 
+   * vertically spanning items.
    */
   for (children = menu_shell->children; children; children = children->next)
     {
-      guint top, bottom;
+      AttachInfo *child_ai = get_attach_info (children->data);
 
-      gtk_container_child_get (GTK_CONTAINER (menu_shell), children->data,
-                               "top_attach", &top,
-                               "bottom_attach", &bottom,
-                               NULL);
-
-      if (top >= position)
+      if (child_ai->top_attach >= position)
         gtk_container_child_set (GTK_CONTAINER (menu_shell), children->data,
-                                 "top_attach", top + 1,
-                                 "bottom_attach", bottom + 1,
+                                 "top_attach", child_ai->top_attach + 1,
+                                 "bottom_attach", child_ai->bottom_attach + 1,
                                  NULL);
     }
 
@@ -3671,6 +3700,8 @@ gtk_menu_set_screen (GtkMenu   *menu,
  * rightmost, uppermost and lower column and row numbers of the table.
  * (Columns and rows are indexed from zero).
  *
+ * Note that this function is not related to gtk_menu_detach().
+ *
  * Since: 2.4
  **/
 void
@@ -3683,12 +3714,18 @@ gtk_menu_attach (GtkMenu   *menu,
 {
   g_return_if_fail (GTK_IS_MENU (menu));
   g_return_if_fail (GTK_IS_MENU_ITEM (child));
-
+  g_return_if_fail (child->parent == NULL || 
+		    child->parent == GTK_WIDGET (menu));
   g_return_if_fail (left_attach < right_attach);
   g_return_if_fail (top_attach < bottom_attach);
 
   if (!child->parent)
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), child);
+    {
+      GTK_MENU_SHELL (menu)->children = 
+	g_list_append (GTK_MENU_SHELL (menu)->children, child);
+
+      gtk_widget_set_parent (child, GTK_WIDGET (menu));
+    }
 
   gtk_container_child_set (GTK_CONTAINER (menu), child,
                            "left_attach", left_attach,
