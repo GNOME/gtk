@@ -59,8 +59,8 @@
 #define FS_VIETNAMESE 0x100
 #endif
 
-/* Some virtual keycodes are missing */
-#ifndef VM_OEM_PLUS
+/* Some virtual keycodes are missing from mingw headers */
+#ifndef VK_OEM_PLUS
 #define VK_OEM_PLUS 0xBB
 #endif
 
