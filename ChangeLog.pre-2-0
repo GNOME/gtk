@@ -1,3 +1,11 @@
+Sun Feb 28 16:46:02 1999  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/gtkspinbutton.[c,h] gtk/testgtk.c: Added two new signals to 
+	GtkSpinButton, "input" and "output", to make the output more flexible.
+ 	The user has to provide a mapping between adjustment->value and the
+ 	output string (and vice versa, if the spin button is editable). 
+	See testgtk for examples.
+
 Sat Feb 27 01:18:47 1999  Tim Janik  <timj@gtk.org>
 
 	* ChangeLog: moved old ChangeLog to ChangeLog.pre-1-2, and started

@@ -47,6 +47,7 @@ extern "C" {
 #define GTK_IS_SPIN_BUTTON(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_SPIN_BUTTON))
 #define GTK_IS_SPIN_BUTTON_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SPIN_BUTTON))
 
+#define INPUT_ERROR -1
 
 typedef enum
 {
@@ -101,6 +102,10 @@ struct _GtkSpinButton
 struct _GtkSpinButtonClass
 {
   GtkEntryClass parent_class;
+
+  gint (*input)  (GtkSpinButton *spin_button,
+		  gfloat        *new_value);
+  gint (*output) (GtkSpinButton *spin_button);
 };
 
 

@@ -2873,6 +2873,104 @@ get_value (GtkWidget *widget, gpointer data)
   gtk_label_set_text (label, buf);
 }
 
+static gint
+spin_button_time_output_func (GtkSpinButton *spin_button)
+{
+  static gchar buf[6];
+  gfloat hours;
+  gfloat minutes;
+
+  hours = spin_button->adjustment->value / 60.0;
+  minutes = (fabs(floor (hours) - hours) < 1e-5) ? 0.0 : 30;
+  sprintf (buf, "%02.0f:%02.0f", floor (hours), minutes);
+  if (strcmp (buf, gtk_entry_get_text (GTK_ENTRY (spin_button))))
+    gtk_entry_set_text (GTK_ENTRY (spin_button), buf);
+  return TRUE;
+}
+
+static gint
+spin_button_month_input_func (GtkSpinButton *spin_button,
+			      gfloat        *new_val)
+{
+  gint i;
+  static gchar *month[12] = { "January", "February", "March", "April",
+			      "May", "June", "July", "August",
+			      "September", "October", "November", "December" };
+  gchar *tmp1, *tmp2;
+  gboolean found = FALSE;
+
+  for (i = 1; i <= 12; i++)
+    {
+      tmp1 = g_strdup (month[i-1]);
+      g_strup (tmp1);
+      tmp2 = g_strdup (gtk_entry_get_text (GTK_ENTRY (spin_button)));
+      g_strup (tmp2);
+      if (strstr (tmp1, tmp2) == tmp1)
+	found = TRUE;
+      g_free (tmp1);
+      g_free (tmp2);
+      if (found)
+	break;
+    }
+  if (!found)
+    {
+      *new_val = 0.0;
+      return INPUT_ERROR;
+    }
+  *new_val = (gfloat) i;
+  return TRUE;
+}
+
+static gint
+spin_button_month_output_func (GtkSpinButton *spin_button)
+{
+  gint i;
+  static gchar *month[12] = { "January", "February", "March", "April",
+			      "May", "June", "July", "August", "September",
+			      "October", "November", "December" };
+
+  for (i = 1; i <= 12; i++)
+    if (fabs (spin_button->adjustment->value - (double)i) < 1e-5)
+      {
+	if (strcmp (month[i-1], gtk_entry_get_text (GTK_ENTRY (spin_button))))
+	  gtk_entry_set_text (GTK_ENTRY (spin_button), month[i-1]);
+      }
+  return TRUE;
+}
+
+static gint
+spin_button_hex_input_func (GtkSpinButton *spin_button,
+			    gfloat        *new_val)
+{
+  gchar *buf;
+  gchar *err;
+  gfloat res;
+
+  buf = gtk_entry_get_text (GTK_ENTRY (spin_button));
+  res = (gfloat)(strtol(buf, &err, 16));
+  *new_val = res;
+  if (*err)
+    return INPUT_ERROR;
+  else
+    return TRUE;
+}
+
+static gint
+spin_button_hex_output_func (GtkSpinButton *spin_button)
+{
+  static gchar buf[7];
+  gint val;
+
+  val = (gint) spin_button->adjustment->value;
+  if (fabs (val) < 1e-5)
+    sprintf (buf, "0x00");
+  else
+    sprintf (buf, "0x%.2X", val);
+  if (strcmp (buf, gtk_entry_get_text (GTK_ENTRY (spin_button))))
+    gtk_entry_set_text (GTK_ENTRY (spin_button), buf);
+  return TRUE;
+}
+
 static void
 create_spins (void)
 {
@@ -2910,7 +3008,7 @@ create_spins (void)
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
       gtk_container_add (GTK_CONTAINER (frame), vbox);
       
-      /* Day, month, year spinners */
+      /* Time, month, hex spinners */
       
       hbox = gtk_hbox_new (FALSE, 0);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 5);
@@ -2918,16 +3016,19 @@ create_spins (void)
       vbox2 = gtk_vbox_new (FALSE, 0);
       gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
       
-      label = gtk_label_new ("Day :");
+      label = gtk_label_new ("Time :");
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
       
-      adj = (GtkAdjustment *) gtk_adjustment_new (1.0, 1.0, 31.0, 1.0,
-						  5.0, 0.0);
+      adj = (GtkAdjustment *) gtk_adjustment_new (0, 0, 1410, 30, 60, 0);
       spinner = gtk_spin_button_new (adj, 0, 0);
+      gtk_editable_set_editable (GTK_EDITABLE (spinner), FALSE);
+      gtk_signal_connect (GTK_OBJECT (spinner),
+			  "output",
+			  GTK_SIGNAL_FUNC (spin_button_time_output_func),
+			  NULL);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-      gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-				       GTK_SHADOW_OUT);
+      gtk_widget_set_usize (spinner, 55, -1);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
 
       vbox2 = gtk_vbox_new (FALSE, 0);
@@ -2940,24 +3041,39 @@ create_spins (void)
       adj = (GtkAdjustment *) gtk_adjustment_new (1.0, 1.0, 12.0, 1.0,
 						  5.0, 0.0);
       spinner = gtk_spin_button_new (adj, 0, 0);
+      gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spinner),
+					 GTK_UPDATE_IF_VALID);
+      gtk_signal_connect (GTK_OBJECT (spinner),
+			  "input",
+			  GTK_SIGNAL_FUNC (spin_button_month_input_func),
+			  NULL);
+      gtk_signal_connect (GTK_OBJECT (spinner),
+			  "output",
+			  GTK_SIGNAL_FUNC (spin_button_month_output_func),
+			  NULL);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-      gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-				       GTK_SHADOW_ETCHED_IN);
+      gtk_widget_set_usize (spinner, 85, -1);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
       
       vbox2 = gtk_vbox_new (FALSE, 0);
       gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
 
-      label = gtk_label_new ("Year :");
+      label = gtk_label_new ("Hex :");
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
-      adj = (GtkAdjustment *) gtk_adjustment_new (1998.0, 0.0, 2100.0, 
-						  1.0, 100.0, 0.0);
+      adj = (GtkAdjustment *) gtk_adjustment_new (0, 0, 255, 1, 16, 0);
       spinner = gtk_spin_button_new (adj, 0, 0);
+      gtk_editable_set_editable (GTK_EDITABLE (spinner), TRUE);
+      gtk_signal_connect (GTK_OBJECT (spinner),
+			  "input",
+			  GTK_SIGNAL_FUNC (spin_button_hex_input_func),
+			  NULL);
+      gtk_signal_connect (GTK_OBJECT (spinner),
+			  "output",
+			  GTK_SIGNAL_FUNC (spin_button_hex_output_func),
+			  NULL);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
-      gtk_spin_button_set_shadow_type (GTK_SPIN_BUTTON (spinner),
-				       GTK_SHADOW_IN);
       gtk_widget_set_usize (spinner, 55, 0);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
 
@@ -2994,7 +3110,6 @@ create_spins (void)
 
       adj = (GtkAdjustment *) gtk_adjustment_new (2, 1, 5, 1, 1, 0);
       spinner2 = gtk_spin_button_new (adj, 0.0, 0);
-      gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner2), TRUE);
       gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
 			  GTK_SIGNAL_FUNC (change_digits),
 			  (gpointer) spinner2);
@@ -3054,6 +3169,7 @@ create_spins (void)
   else
     gtk_widget_destroy (window);
 }
+
 
 /*
  * Cursors
