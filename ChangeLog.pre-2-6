@@ -341,7 +341,8 @@ Fri Mar  5 22:37:15 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilechooserdefault.c
 	(gtk_file_chooser_default_select_path): Likewise.
-	(gtk_file_chooser_default_set_current_folder): Likewise.
+	(gtk_file_chooser_default_set_current_folder): Likewise; this also
+	fixes #136024.
 	(error_changing_folder_dialog): New helper function.
 	(change_folder_and_display_error): New helper function.
 	(switch_to_selected_folder): Use change_folder_and_display_error().
