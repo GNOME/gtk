@@ -1,3 +1,9 @@
+Fri Apr  3 21:03:38 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c (gtk_text_realize): Call recompute_geometry()
+	upon realization, since it can't be done in the previous
+	size_allocate.
+
 Fri Apr  3 20:36:52 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gdk/gdk.c gtk/gtkmain.c: Accept debug options 
