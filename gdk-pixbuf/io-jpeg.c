@@ -26,21 +26,6 @@
  */
 
 
-/*
-  Progressive file loading notes (11/03/1999) <drmike@redhat.com>...
-
-  These are issues I know of and will be dealing with shortly:
-
-    -  Currently does not handle progressive jpegs - this
-       requires a change in the way image_load_increment () calls
-       libjpeg. Progressive jpegs are rarer but I will add this
-       support asap.
-
-    - error handling is not as good as it should be
-
- */
-
-
 #include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
