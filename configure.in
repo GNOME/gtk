@@ -1132,6 +1132,7 @@ m4macros/Makefile
 po/Makefile.in
 build/Makefile
 build/win32/Makefile
+build/win32/dirent/Makefile
 demos/Makefile
 demos/gtk-demo/Makefile
 tests/Makefile

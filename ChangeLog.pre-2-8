@@ -1,3 +1,8 @@
+2001-09-29  Alexander Larsson  <alla@lysator.liu.se>
+
+	* configure.in:
+	Added build/win32/dirent/Makefile 
+
 Sat Sep 29 12:25:26 2001  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_class_init): typo
