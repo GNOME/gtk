@@ -1,3 +1,7 @@
+Sat Feb  2 19:00:39 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/Makefile.am: remove TESTGTK_RCFILE define
+
 Sat Feb  2 11:37:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_popup): Remove the 

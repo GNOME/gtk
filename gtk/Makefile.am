@@ -10,7 +10,6 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
 	-DGTK_VERSION=\"@GTK_VERSION@\"			\
 	-DGTK_BINARY_VERSION=\"@GTK_BINARY_VERSION@\"	\
-	-DTESTGTK_RCFILE=\"`pwd`/$(srcdir)/testgtkrc\"	\
 	-DGTK_COMPILATION				\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) -I../gdk			\
