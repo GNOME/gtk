@@ -7768,7 +7768,7 @@ create_timeout_test (void)
  * Idle Test
  */
 
-static int idle = 0;
+static int idle_id = 0;
 
 static gint
 idle_test (GtkWidget *label)
@@ -7786,9 +7786,9 @@ static void
 start_idle_test (GtkWidget *widget,
 		 GtkWidget *label)
 {
-  if (!idle)
+  if (!idle_id)
     {
-      idle = gtk_idle_add ((GtkFunction) idle_test, label);
+      idle_id = gtk_idle_add ((GtkFunction) idle_test, label);
     }
 }
 
@@ -7796,10 +7796,10 @@ static void
 stop_idle_test (GtkWidget *widget,
 		gpointer   data)
 {
-  if (idle)
+  if (idle_id)
     {
-      gtk_idle_remove (idle);
-      idle = 0;
+      gtk_idle_remove (idle_id);
+      idle_id = 0;
     }
 }
 
