@@ -1,3 +1,9 @@
+2005-02-02  Ivan, Wong Yat Cheung  <email@ivanwong.info>
+
+	* gdk/win32/gdkselection.c: Use a FIFO list for storing GdkSelProp
+	of a single window so that gtk_clipboard_request_contents() can be
+	called inside a GtkClipboardReceivedFunc(). (#163844)
+
 2005-02-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkicontheme.c (gtk_icon_theme_init): Look for icons

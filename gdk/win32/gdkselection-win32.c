@@ -136,13 +136,8 @@ _gdk_selection_property_store (GdkWindow *owner,
                                gint       length)
 {
   GdkSelProp *prop;
+  GSList *prop_list;
 
-  prop = g_hash_table_lookup (sel_prop_table, GDK_WINDOW_HWND (owner));
-  if (prop != NULL)
-    {
-      g_free (prop->data);
-      g_hash_table_remove (sel_prop_table, GDK_WINDOW_HWND (owner));
-    }
   prop = g_new (GdkSelProp, 1);
 
   if (type == GDK_TARGET_STRING)
@@ -167,7 +162,9 @@ _gdk_selection_property_store (GdkWindow *owner,
     }
   prop->format = format;
   prop->type = type;
-  g_hash_table_insert (sel_prop_table, GDK_WINDOW_HWND (owner), prop);
+  prop_list = g_hash_table_lookup (sel_prop_table, GDK_WINDOW_HWND (owner));
+  prop_list = g_slist_append (prop_list, prop);
+  g_hash_table_insert (sel_prop_table, GDK_WINDOW_HWND (owner), prop_list);
 }
 
 void
@@ -656,6 +653,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
 			    gint       *ret_format)
 {
   GdkSelProp *prop;
+  GSList *prop_list;
 
   g_return_val_if_fail (requestor != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (requestor), 0);
@@ -666,7 +664,8 @@ gdk_selection_property_get (GdkWindow  *requestor,
   GDK_NOTE (DND, g_print ("gdk_selection_property_get: %p\n",
 			   GDK_WINDOW_HWND (requestor)));
 
-  prop = g_hash_table_lookup (sel_prop_table, GDK_WINDOW_HWND (requestor));
+  prop_list = g_hash_table_lookup (sel_prop_table, GDK_WINDOW_HWND (requestor));
+  prop = prop_list ? (GdkSelProp *) prop_list->data : NULL;
 
   if (prop == NULL)
     {
@@ -691,15 +690,18 @@ void
 _gdk_selection_property_delete (GdkWindow *window)
 {
   GdkSelProp *prop;
+  GSList *prop_list;
   
   GDK_NOTE (DND, g_print ("_gdk_selection_property_delete: %p\n",
 			   GDK_WINDOW_HWND (window)));
 
-  prop = g_hash_table_lookup (sel_prop_table, GDK_WINDOW_HWND (window));
-  if (prop != NULL)
+  prop_list = g_hash_table_lookup (sel_prop_table, GDK_WINDOW_HWND (window));
+  if (prop_list && (prop = (GdkSelProp *) prop_list->data) != NULL)
     {
       g_free (prop->data);
-      g_hash_table_remove (sel_prop_table, GDK_WINDOW_HWND (window));
+      prop_list = g_slist_remove (prop_list, prop);
+      g_free (prop);
+      g_hash_table_insert (sel_prop_table, GDK_WINDOW_HWND (window), prop_list);
     }
 }
 
