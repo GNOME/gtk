@@ -1,3 +1,7 @@
+2003-01-07  Pablo Gonzalo del Campo <pablodc@bigfoot.com>
+
+	* es.po: Fixed translation bug #102758.
+
 2003-01-06  Christian Neumair  <chris@gnome-de.org>
 
 	* .cvsignore: Added "missing".
