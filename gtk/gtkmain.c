@@ -887,10 +887,9 @@ gtk_handle_current_idles ()
 static void
 gtk_handle_idle ()
 {
-  GtkIdleFunction *idlef;
-  
   /* Caller must already have called gtk_handle_current_idles if
-     necessary */
+   * necessary
+   */
   g_assert (current_idles == NULL);
   
   if (idle_functions)

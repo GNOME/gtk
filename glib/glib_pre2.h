@@ -130,31 +130,57 @@
     ((type *) g_mem_chunk_alloc (chunk))
 
 
+#define g_string(x) #x
+
+
+/* Provide simple macro statement wrappers (adapted from Pearl):
+ *  G_STMT_START { statements; } G_STMT_END;
+ *  can be used as a single statement, as in
+ *  if (x) G_STMT_START { ... } G_STMT_END; else ...
+ *
+ *  For gcc we will wrap the statements within `({' and `})' braces.
+ *  For SunOS they will be wrapped within `if (1)' and `else (void)0',
+ *  and otherwise within `do' and `while (0)'.
+ */
+#if !(defined (G_STMT_START) && defined (G_STMT_END))
+#  if defined (__GNUC__) && !defined (__STRICT_ANSI__) && !defined (__cplusplus)
+#    define G_STMT_START	(void)(
+#    define G_STMT_END		)
+#  else
+#    if (defined (sun) || defined (__sun__))
+#      define G_STMT_START	if (1)
+#      define G_STMT_END	else (void)0
+#    else
+#      define G_STMT_START	do
+#      define G_STMT_END	while (0)
+#    endif
+#  endif
+#endif
+
+
 /* Provide macros for error handling. The "assert" macros will
- *  exit on failur. The "return" macros will exit the current
+ *  exit on failure. The "return" macros will exit the current
  *  function. Two different definitions are given for the macros
  *  in order to support gcc's __PRETTY_FUNCTION__ capability.
  */
 
-#define g_string(x) #x
-
 #ifdef __GNUC__
 
-#define g_assert(expr) \
+#define g_assert(expr)			G_STMT_START{\
      if (!(expr))                                    \
        g_error ("file %s: line %d (%s): \"%s\"",     \
 		__FILE__,                            \
 		__LINE__,                            \
 		__PRETTY_FUNCTION__,                 \
-		#expr)
+		#expr);			}G_STMT_END
 
-#define g_assert_not_reached() \
+#define g_assert_not_reached()		G_STMT_START{		      \
      g_error ("file %s: line %d (%s): \"should not be reached\"",     \
 	      __FILE__,                                               \
 	      __LINE__,                                               \
-	      __PRETTY_FUNCTION__)
+	      __PRETTY_FUNCTION__);	}G_STMT_END
 
-#define g_return_if_fail(expr) \
+#define g_return_if_fail(expr)		G_STMT_START{	       \
      if (!(expr))                                              \
        {                                                       \
          g_warning ("file %s: line %d (%s): \"%s\"",           \
@@ -163,9 +189,9 @@
 		    __PRETTY_FUNCTION__,                       \
 		    #expr);                                    \
          return;                                               \
-       }
+       };				}G_STMT_END
 
-#define g_return_val_if_fail(expr,val) \
+#define g_return_val_if_fail(expr,val)	G_STMT_START{	       \
      if (!(expr))                                              \
        {                                                       \
          g_warning ("file %s: line %d (%s): \"%s\"",           \
@@ -174,23 +200,23 @@
 		    __PRETTY_FUNCTION__,                       \
 		    #expr);                                    \
          return val;                                           \
-       }
+       };				}G_STMT_END
 
 #else /* __GNUC__ */
 
-#define g_assert(expr) \
+#define g_assert(expr)			G_STMT_START{\
      if (!(expr))                                    \
        g_error ("file %s: line %d: \"%s\"",          \
 		__FILE__,                            \
 		__LINE__,                            \
-		#expr)
+		#expr);			}G_STMT_END
 
-#define g_assert_not_reached() \
+#define g_assert_not_reached()		G_STMT_START{		      \
      g_error ("file %s: line %d: \"should not be reached\"",          \
 	      __FILE__,                                               \
-	      __LINE__)
+	      __LINE__);		}G_STMT_END
 
-#define g_return_if_fail(expr) \
+#define g_return_if_fail(expr)		G_STMT_START{	 \
      if (!(expr))                                        \
        {                                                 \
          g_warning ("file %s: line %d: \"%s\"",          \
@@ -198,9 +224,9 @@
 		    __LINE__,                            \
 		    #expr);                              \
 	 return;				         \
-       }
+       };				}G_STMT_END
 
-#define g_return_val_if_fail(expr, val) \
+#define g_return_val_if_fail(expr, val)	G_STMT_START{	 \
      if (!(expr))                                        \
        {                                                 \
          g_warning ("file %s: line %d: \"%s\"",          \
@@ -208,7 +234,7 @@
 		    __LINE__,                            \
 		    #expr);                              \
 	 return val;	 			         \
-       }
+       };				}G_STMT_END
 
 #endif /* __GNUC__ */
 

@@ -476,7 +476,7 @@ gtk_text_set_point (GtkText *text,
 {
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
-  g_return_if_fail (index >= 0 && index <= TEXT_LENGTH (text))
+  g_return_if_fail (index >= 0 && index <= TEXT_LENGTH (text));
 
   text->point = find_mark (text, index);
 }

@@ -415,7 +415,7 @@ GdkWindow*
 gdk_window_ref (GdkWindow *window)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)window;
-  g_return_if_fail (window != NULL);
+  g_return_val_if_fail (window != NULL, NULL);
 
   private->ref_count += 1;
   return window;

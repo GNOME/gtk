@@ -1,3 +1,8 @@
+Wed Dec 10 23:40:03 1997  Tim Janik  <timj@psynet.net>
+
+	* fixed some compiler errors, because g_return_if_fail() wasn't used
+	with a trailing semicolon in some places. fixed few other warnings also.
+
 Tue Dec  9 Owen Taylor <owt1@cornell.edu>
 	* configure changes: (configure.in, glib/configure.in)
 	Change test ! `...` to test -z `...`

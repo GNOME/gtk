@@ -1,3 +1,15 @@
+Wed Dec 10 23:27:20 1997  Tim Janik  <timj@psynet.net>
+
+	* glib_pre1.h: 
+	* glib_pre2.h: 
+	* glib.h: this file now gets concatenated by makeglib_h from
+	glib_pre1.h and glib_pre2.h to merge in glibconfig.h wich got
+	created by configure (done by Jay Painter).
+
+	* glib_pre2.h: the g_assert*() and g_return_*_fail() macros
+	are wrapped by G_STMT_START and G_STMT_END now, to avoid conflicts
+	when used within if (...) g_macro(); else ... conditionals.
+	
 Tue Dec 17 13:14:07 1996  Peter Mattis  <pmattis@charnley.HIP.Berkeley.EDU>
 
 	* glib.h: Changed 'g_return_if_fail' and 'g_return_val_if_fail' to

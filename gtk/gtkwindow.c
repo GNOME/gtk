@@ -741,6 +741,7 @@ gtk_window_key_release_event (GtkWidget   *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   window = GTK_WINDOW (widget);
+  return_val = FALSE;
   if (window->focus_widget)
     return_val = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
 
@@ -834,7 +835,7 @@ gtk_window_style_set_event (GtkWidget *widget,
   GdkAtom realtype;
   gint retfmt, retlen;
   GdkColor *data, *stylecolors;
-  int i = 0, j;
+  int i = 0;
   GdkColormap *widget_cmap;
   
   atom_default_colors = gdk_atom_intern("_GTK_DEFAULT_COLORS", FALSE);

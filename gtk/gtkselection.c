@@ -749,8 +749,7 @@ gtk_selection_request (GtkWidget *widget,
 	  continue;
 	}
 
-      g_return_val_if_fail ((data.format >= 8) 
-			    && (data.format % 8 == 0), FALSE)
+      g_return_val_if_fail ((data.format >= 8) && (data.format % 8 == 0), FALSE);
 
       items = (data.length + data.format/8 - 1) / (data.format/8);
 
