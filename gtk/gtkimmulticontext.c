@@ -353,7 +353,7 @@ gtk_im_multicontext_get_surrounding (GtkIMContext  *context,
   GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
 
   if (slave)
-    return gtk_im_context_get_surrounding (context, text, cursor_index);
+    return gtk_im_context_get_surrounding (slave, text, cursor_index);
   else
     {
       if (text)

@@ -1,3 +1,9 @@
+Thu Feb 14 11:13:22 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimmulticontext.c (gtk_im_multicontext_get_surrounding): 
+	Fix bug where we called get_surrounding on the context,.
+	not the slave.
+
 Thu Feb 14 00:10:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktooltips.c (gtk_tooltips_event_handler): Only
