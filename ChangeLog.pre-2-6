@@ -1,3 +1,9 @@
+2004-09-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserentry.c (update_current_folder_files): Turn
+	off sorting while inserting batches of new files, since sorting
+	is slow with the current list store implementation.
+
 2004-09-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkliststore.c: Allow to disable sorting. This is meant

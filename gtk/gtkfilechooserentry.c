@@ -522,7 +522,10 @@ update_current_folder_files (GtkFileChooserEntry *chooser_entry,
 
   g_assert (chooser_entry->completion_store != NULL);
 
-  /* Bah.  Need to turn off sorting */
+  /* Turn off sorting, since it is slow with the default list store implementation */
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (chooser_entry->completion_store),
+					-2, GTK_SORT_ASCENDING);
+
   for (tmp_list = added_uris; tmp_list; tmp_list = tmp_list->next)
     {
       GtkFileInfo *info;
@@ -535,8 +538,10 @@ update_current_folder_files (GtkFileChooserEntry *chooser_entry,
 				       NULL); /* NULL-GError */
       if (info)
 	{
-	  const gchar *display_name = gtk_file_info_get_display_name (info);
+	  const gchar *display_name;
 	  GtkTreeIter iter;
+
+	  display_name = gtk_file_info_get_display_name (info);
 
 	  gtk_list_store_append (chooser_entry->completion_store, &iter);
 	  gtk_list_store_set (chooser_entry->completion_store, &iter,
@@ -548,7 +553,7 @@ update_current_folder_files (GtkFileChooserEntry *chooser_entry,
 	}
     }
 
-  /* FIXME: we want to turn off sorting temporarily.  I suck... */
+  /* Turn sorting back on */
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (chooser_entry->completion_store),
 					DISPLAY_NAME_COLUMN, GTK_SORT_ASCENDING);
 
