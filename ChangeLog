@@ -1,3 +1,11 @@
+2003-06-17  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk-zip.sh.in (DLLDIR): Look for DLLs also in the bin
+	subdirectory, where libtool 1.5 installs them.
+
+	* README.win32: Point to FSF's binary Win32 distribution of
+	gettext-runtime.
+
 2003-06-17  Matthias Clasen  <maclas@gmx.de>
 
 	* acinclude.m4 (JH_PATH_XML_CATALOG, JH_CHECK_XML_CATALOG): New
