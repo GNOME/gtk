@@ -1,3 +1,10 @@
+Tue May 20 17:27:24 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimmodule.c (gtk_im_module_init): Silently
+	accept a missing gtk.immodules file, some people
+	want to run without one. (#112406, patch from
+	Arnaud Charlet)
+
 Tue May 20 17:05:31 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_compute_hints): Fix 

@@ -279,9 +279,12 @@ gtk_im_module_init ()
   file = fopen (filename, "r");
   if (!file)
     {
-      g_warning ("Can not open Input Method module file '%s': %s",
-		 filename, g_strerror (errno));
-      /* We are leaking all kinds of memory here. */
+      /* In case someone wants only the default input method,
+       * we allow no file at all.
+       */
+      g_string_free (line_buf, TRUE);
+      g_string_free (tmp_buf, TRUE);
+      g_free (filename);
       return;
     }
 
