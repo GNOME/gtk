@@ -1,3 +1,9 @@
+Tue May 19 23:38:36 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkpreview.c (gtk_preview_get_visuals): Fill lookup
+	arrays _after_ possibly changing the selected visuals.
+	(Fixes problem with reversed red and blue on SGI's)
+
 Mon May 18 22:26:33 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkwindow.c (gtk_window_style_set_event): Added a

@@ -842,29 +842,7 @@ gtk_preview_get_visuals (GtkPreviewClass *klass)
   if (!klass->info.visual)
     for (i = 0; i < nvisual_types; i++)
       if ((klass->info.visual = gdk_visual_get_best_with_both (depths[i], types[i])))
-	{
-	  if ((klass->info.visual->type == GDK_VISUAL_TRUE_COLOR) ||
-	      (klass->info.visual->type == GDK_VISUAL_DIRECT_COLOR))
-	    {
-	      klass->info.lookup_red = g_new (gulong, 256);
-	      klass->info.lookup_green = g_new (gulong, 256);
-	      klass->info.lookup_blue = g_new (gulong, 256);
-
-	      gtk_fill_lookup_array (klass->info.lookup_red,
-				     klass->info.visual->depth,
-				     klass->info.visual->red_shift,
-				     8 - klass->info.visual->red_prec);
-	      gtk_fill_lookup_array (klass->info.lookup_green,
-				     klass->info.visual->depth,
-				     klass->info.visual->green_shift,
-				     8 - klass->info.visual->green_prec);
-	      gtk_fill_lookup_array (klass->info.lookup_blue,
-				     klass->info.visual->depth,
-				     klass->info.visual->blue_shift,
-				     8 - klass->info.visual->blue_prec);
-	    }
-	  break;
-	}
+	break;
 
   if (!klass->info.visual)
     {
@@ -884,6 +862,27 @@ gtk_preview_get_visuals (GtkPreviewClass *klass)
       klass->info.visual = gdk_visual_get_system();
     }
     
+  if ((klass->info.visual->type == GDK_VISUAL_TRUE_COLOR) ||
+      (klass->info.visual->type == GDK_VISUAL_DIRECT_COLOR))
+    {
+      klass->info.lookup_red = g_new (gulong, 256);
+      klass->info.lookup_green = g_new (gulong, 256);
+      klass->info.lookup_blue = g_new (gulong, 256);
+      
+      gtk_fill_lookup_array (klass->info.lookup_red,
+			     klass->info.visual->depth,
+			     klass->info.visual->red_shift,
+			     8 - klass->info.visual->red_prec);
+      gtk_fill_lookup_array (klass->info.lookup_green,
+			     klass->info.visual->depth,
+			     klass->info.visual->green_shift,
+			     8 - klass->info.visual->green_prec);
+      gtk_fill_lookup_array (klass->info.lookup_blue,
+			     klass->info.visual->depth,
+			     klass->info.visual->blue_shift,
+			     8 - klass->info.visual->blue_prec);
+    }
+
   switch (klass->info.visual->depth)
     {
     case 8:
