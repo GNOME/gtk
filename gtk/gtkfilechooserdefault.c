@@ -2972,8 +2972,9 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 {
   GtkFileChooserDefault *impl;
   const GtkFileInfo *info;
-  time_t mtime, now;
-  struct tm tm, now_tm;
+  GtkFileTime time_mtime, time_now;
+  GDate mtime, now;
+  int days_diff;
   char buf[256];
 
   impl = data;
@@ -2982,52 +2983,29 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
   if (!info)
     return;
 
-  mtime = (time_t) gtk_file_info_get_modification_time (info);
-  tm = *localtime (&mtime);
+  time_mtime = gtk_file_info_get_modification_time (info);
+  g_date_set_time (&mtime, (GTime) time_mtime);
 
-  now = time (NULL);
-  now_tm = *localtime (&now);
+  time_now = (GTime ) time (NULL);
+  g_date_set_time (&now, (GTime) time_now);
 
-  /* Today */
-  if (tm.tm_mday == now_tm.tm_mday
-      && tm.tm_mon == now_tm.tm_mon
-      && tm.tm_year == now_tm.tm_year)
+  days_diff = g_date_get_julian (&now) - g_date_get_julian (&mtime);
+
+  if (days_diff == 0)
     strcpy (buf, _("Today"));
+  else if (days_diff == 1)
+    strcpy (buf, _("Yesterday"));
   else
     {
-      int i;
+      char *format;
 
-      /* Days from last week */
+      if (days_diff > 1 && days_diff < 7)
+	format = "%A"; /* Days from last week */
+      else
+	format = _("%d/%b/%Y"); /* Any other date */
 
-      for (i = 1; i < 7; i++)
-	{
-	  time_t then;
-	  struct tm then_tm;
-
-	  then = now - i * 60 * 60 * 24;
-	  then_tm = *localtime (&then);
-
-	  if (tm.tm_mday == then_tm.tm_mday
-	      && tm.tm_mon == then_tm.tm_mon
-	      && tm.tm_year == then_tm.tm_year)
-	    {
-	      if (i == 1)
-		strcpy (buf, _("Yesterday"));
-	      else
-		if (strftime (buf, sizeof (buf), "%A", &tm) == 0)
-		  strcpy (buf, _("Unknown"));
-
-	      break;
-	    }
-	}
-
-      /* Any other date */
-
-      if (i == 7)
-	{
-	  if (strftime (buf, sizeof (buf), _("%d/%b/%Y"), &tm) == 0)
-	    strcpy (buf, _("Unknown"));
-	}
+      if (g_date_strftime (buf, sizeof (buf), format, &mtime) == 0)
+	strcpy (buf, _("Unknown"));
     }
 
   set_cell_text_bold_if_folder (info, cell, buf);

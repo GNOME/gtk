@@ -1,3 +1,9 @@
+2003-12-19  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (list_mtime_data_func): Use
+	g_date_strftime() for UTF-8 correctness; use Julian dates to
+	simplify the function.
+
 Fri Dec 19 01:47:34 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_size_request): 
