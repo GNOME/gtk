@@ -953,8 +953,9 @@ print_event (GdkEvent *event)
 	       event->expose.count);
       break;
     case GDK_MOTION_NOTIFY:
-      g_print ("(%.4g,%.4g) %s",
+      g_print ("(%.4g,%.4g) (%.4g,%.4g) %s",
 	       event->motion.x, event->motion.y,
+	       event->motion.x_root, event->motion.y_root,
 	       event->motion.is_hint ? "HINT " : "");
       print_event_state (event->motion.state);
       break;
@@ -962,9 +963,10 @@ print_event (GdkEvent *event)
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-      g_print ("%d (%.4g,%.4g) ",
+      g_print ("%d (%.4g,%.4g) (%.4g,%.4g)",
 	       event->button.button,
-	       event->button.x, event->button.y);
+	       event->button.x, event->button.y,
+	       event->button.x_root, event->button.y_root);
       print_event_state (event->button.state);
       break;
     case GDK_KEY_PRESS: 
@@ -984,7 +986,10 @@ print_event (GdkEvent *event)
       break;
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
-      g_print ("%s %s%s",
+      g_print ("%p (%.4g,%.4g) (%.4g,%.4g) %s %s%s",
+	       event->crossing.subwindow == NULL ? NULL : GDK_WINDOW_HWND (event->crossing.subwindow),
+	       event->crossing.x, event->crossing.y,
+	       event->crossing.x_root, event->crossing.y_root,
 	       (event->crossing.mode == GDK_CROSSING_NORMAL ? "NORMAL" :
 		(event->crossing.mode == GDK_CROSSING_GRAB ? "GRAB" :
 		 (event->crossing.mode == GDK_CROSSING_UNGRAB ? "UNGRAB" :
@@ -997,6 +1002,7 @@ print_event (GdkEvent *event)
 		    (event->crossing.detail == GDK_NOTIFY_UNKNOWN ? "UNKNOWN" :
 		     "???")))))),
 	       event->crossing.focus ? " FOCUS" : "");
+      print_event_state (event->crossing.state);
       break;
     case GDK_CONFIGURE:
       g_print ("x:%d y:%d w:%d h:%d",
@@ -1004,8 +1010,9 @@ print_event (GdkEvent *event)
 	       event->configure.width, event->configure.height);
       break;
     case GDK_SCROLL:
-      g_print ("(%.4g,%.4g) %s",
+      g_print ("(%.4g,%.4g) (%.4g,%.4g)%s",
 	       event->scroll.x, event->scroll.y,
+	       event->scroll.x_root, event->scroll.y_root,
 	       (event->scroll.direction == GDK_SCROLL_UP ? "UP" :
 		(event->scroll.direction == GDK_SCROLL_DOWN ? "DOWN" :
 		 (event->scroll.direction == GDK_SCROLL_LEFT ? "LEFT" :
@@ -2567,7 +2574,7 @@ gdk_event_translate (GdkDisplay *display,
         if (!gdk_win32_handle_table_lookup ((GdkNativeWindow) wndnow))
           {
             /* we are only interested if we don't know the new window */
-            GDK_NOTE (EVENTS, g_print ("WM_MOUSELEAVE: %p %d (%d,%d)\n",
+            GDK_NOTE (EVENTS, g_print ("WM_MOUSELEAVE: %p %d (%ld,%ld)\n",
                                        msg->hwnd, HIWORD (msg->wParam), pt.x, pt.y));
             synthesize_enter_or_leave_event (current_window, msg, 
                 GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_UNKNOWN, 
@@ -2575,7 +2582,7 @@ gdk_event_translate (GdkDisplay *display,
           }
         else
           {
-            GDK_NOTE (EVENTS, g_print ("WM_MOUSELEAVE: %p %d (%d,%d) ignored\n",
+            GDK_NOTE (EVENTS, g_print ("WM_MOUSELEAVE: %p %d (%ld,%ld) ignored\n",
                                        msg->hwnd, HIWORD (msg->wParam), pt.x, pt.y));
           }
       }
@@ -2783,8 +2790,8 @@ gdk_event_translate (GdkDisplay *display,
 
 		  list = list->next;
                 }
+	      append_event (display, event);
             }
-	  append_event (display, event);
 
 	  return_val = TRUE;
         }
@@ -3049,8 +3056,8 @@ gdk_event_translate (GdkDisplay *display,
 
       impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) window)->impl);
       mmi = (MINMAXINFO*) msg->lParam;
-      GDK_NOTE (EVENTS, g_print ("...mintrack:%dx%d maxtrack:%dx%d "
-				 "maxpos:+%d+%d maxsize:%dx%d\n",
+      GDK_NOTE (EVENTS, g_print ("...mintrack:%ldx%ld maxtrack:%ldx%ld "
+				 "maxpos:+%ld+%ld maxsize:%ldx%ld\n",
 				 mmi->ptMinTrackSize.x, mmi->ptMinTrackSize.y,
 				 mmi->ptMaxTrackSize.x, mmi->ptMaxTrackSize.y,
 				 mmi->ptMaxPosition.x, mmi->ptMaxPosition.y,
@@ -3083,8 +3090,8 @@ gdk_event_translate (GdkDisplay *display,
       if (impl->hint_flags & (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE))
 	{
 	  /* Don't call DefWindowProc() */
-	  GDK_NOTE (EVENTS, g_print ("...handled, mintrack:%dx%d maxtrack:%dx%d "
-				     "maxpos:+%d+%d maxsize:%dx%d\n",
+	  GDK_NOTE (EVENTS, g_print ("...handled, mintrack:%ldx%ld maxtrack:%ldx%ld "
+				     "maxpos:+%ld+%ld maxsize:%ldx%ld\n",
 				     mmi->ptMinTrackSize.x, mmi->ptMinTrackSize.y,
 				     mmi->ptMaxTrackSize.x, mmi->ptMaxTrackSize.y,
 				     mmi->ptMaxPosition.x, mmi->ptMaxPosition.y,

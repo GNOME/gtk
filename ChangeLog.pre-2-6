@@ -1,3 +1,16 @@
+2003-08-08  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (print_event): Print also the root
+	coordinates for events that have such. Print coordinates for enter
+	and leave events.
+
+	(gdk_event_translate): Don't use event uninitialixed in the
+	return_exposes branch of the WM_PAINT handler.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_new,
+	_gdk_windowing_window_get_pointer, _gdk_windowing_window_at_pointer): 
+	Must offset top-level window coordinates here, too.
+
 2003-08-08  Matthias Clasen  <maclas@gmx.de>
 
 	* demos/gtk-demo/appwindow.c (do_appwindow): Hide the resize grip when maximized or fullscreen.

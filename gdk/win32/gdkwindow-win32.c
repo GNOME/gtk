@@ -427,6 +427,7 @@ gdk_window_new (GdkWindow     *parent,
   const gchar *title;
   char *mbtitle;
   gint window_width, window_height;
+  gint offset_x = 0, offset_y = 0;
 
   g_return_val_if_fail (attributes != NULL, NULL);
 
@@ -522,6 +523,8 @@ gdk_window_new (GdkWindow     *parent,
     case GDK_WINDOW_TOPLEVEL:
       dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN;
       hparent = _gdk_root_window;
+      offset_x = _gdk_offset_x;
+      offset_y = _gdk_offset_y;
       break;
 
     case GDK_WINDOW_CHILD:
@@ -534,6 +537,8 @@ gdk_window_new (GdkWindow     *parent,
       dwExStyle |= WS_EX_TOPMOST; /* //HB: want this? */
 #endif
       hparent = _gdk_root_window;
+      offset_x = _gdk_offset_x;
+      offset_y = _gdk_offset_y;
       break;
 
     case GDK_WINDOW_TEMP:
@@ -541,6 +546,8 @@ gdk_window_new (GdkWindow     *parent,
       /* a temp window is not necessarily a top level window */
       dwStyle |= (_gdk_parent_root == parent ? WS_POPUP : WS_CHILDWINDOW);
       dwExStyle |= WS_EX_TOOLWINDOW;
+      offset_x = _gdk_offset_x;
+      offset_y = _gdk_offset_y;
       break;
 
     case GDK_WINDOW_ROOT:
@@ -601,8 +608,8 @@ gdk_window_new (GdkWindow     *parent,
 		    mbtitle,
 		    dwStyle,
 		    ((attributes_mask & GDK_WA_X) ?
-		     impl->position_info.x : CW_USEDEFAULT),
-		    impl->position_info.y, 
+		     impl->position_info.x - offset_x : CW_USEDEFAULT),
+		    impl->position_info.y - offset_y, 
 		    window_width, window_height,
 		    hparent,
 		    NULL,
@@ -616,8 +623,8 @@ gdk_window_new (GdkWindow     *parent,
 		    mbtitle,
 		    dwStyle,
 		    ((attributes_mask & GDK_WA_X) ?
-		     impl->position_info.x : CW_USEDEFAULT),
-		    impl->position_info.y, 
+		     impl->position_info.x - offset_x: CW_USEDEFAULT),
+		    impl->position_info.y - offset_y, 
 		    window_width, window_height,
 		    hparent,
 		    NULL,
@@ -653,8 +660,8 @@ gdk_window_new (GdkWindow     *parent,
 			   mbtitle,
 			   window_width, window_height,
 			   ((attributes_mask & GDK_WA_X) ?
-			    impl->position_info.x : CW_USEDEFAULT),
-			   impl->position_info.y, 
+			    impl->position_info.x - offset_x: CW_USEDEFAULT),
+			   impl->position_info.y - offset_y, 
 			   hparent,
 			   GDK_WINDOW_HWND (window)));
 
@@ -1943,6 +1950,12 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
   *x = point.x;
   *y = point.y;
 
+  if (window == _gdk_parent_root)
+    {
+      *x += _gdk_offset_x;
+      *y += _gdk_offset_y;
+    }
+
   hwnd = WindowFromPoint (screen_point);
   if (hwnd != NULL)
     {
@@ -2017,8 +2030,8 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
   if (hwnd == NULL)
     {
       window = _gdk_parent_root;
-      *win_x = pointc.x;
-      *win_y = pointc.y;
+      *win_x = pointc.x + _gdk_offset_x;
+      *win_y = pointc.y + _gdk_offset_y;
       return window;
     }
       
@@ -2039,8 +2052,8 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
       *win_y = point.y - rect.top;
     }
 
-  GDK_NOTE (MISC, g_print ("_gdk_windowing_window_at_pointer: +%ld+%ld %p%s\n",
-			   point.x, point.y,
+  GDK_NOTE (MISC, g_print ("_gdk_windowing_window_at_pointer: +%d+%d %p%s\n",
+			   *win_x, *win_y,
 			   hwnd,
 			   (window == NULL ? " NULL" : "")));
 
