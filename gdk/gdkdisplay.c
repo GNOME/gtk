@@ -494,15 +494,18 @@ gdk_display_get_window_at_pointer (GdkDisplay *display,
 				   gint       *win_y)
 {
   gint tmp_x, tmp_y;
+  GdkWindow *window;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  
-  return display->pointer_hooks->window_at_pointer (display, &tmp_x, &tmp_y);
+
+  window = display->pointer_hooks->window_at_pointer (display, &tmp_x, &tmp_y);
 
   if (win_x)
     *win_x = tmp_x;
   if (win_y)
     *win_y = tmp_y;
+
+  return window;
 }
 
 /**
