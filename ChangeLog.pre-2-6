@@ -1,3 +1,7 @@
+Mon Aug 23 23:16:14 1999  Tim Janik  <timj@gtk.org>
+
+	* configure.in: evaluate $ac_make when checking for GNU Make.
+
 Mon Aug 23 19:11:17 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/Makefile.am:

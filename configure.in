@@ -166,7 +166,7 @@ AC_SUBST(REBUILD)
 AC_MSG_CHECKING(whether make is GNU Make)
 STRIP_BEGIN=
 STRIP_END=
-if make --version 2>/dev/null | grep '^GNU Make version ' >/dev/null ; then
+if $ac_make --version 2>/dev/null | grep '^GNU Make version ' >/dev/null ; then
 	STRIP_BEGIN='$(strip'
 	STRIP_END=')'
 	AC_MSG_RESULT(yes)
