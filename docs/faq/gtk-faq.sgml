@@ -1061,6 +1061,17 @@ port is also great for debugging X programs. Old vt100/vt220
 terminals are dirt cheap but a bit hard to get (here in The
 Netherlands, YMMV).</quote></para>
 
+<para>
+Another option is to run your application on Xnest. Xnest is an X server
+which displays its root window in a regular window of another X server.  
+A pointer grab on the Xnest display will not affect the GUI of your debugger
+running on your regular X server.
+<programlisting>
+Xnest :1
+twm -display :1
+myapp --display=:1
+</programlisting>
+</para>
 </sect1>
 </chapter>
 
