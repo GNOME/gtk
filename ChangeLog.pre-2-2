@@ -1,3 +1,21 @@
+Sat Aug 25 19:02:39 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbutton.[ch] gtk/gtktogglebutton.c: Add optional movement
+	on push to buttons (based on patch from Soeren Sandmann, #54720)
+
+	  - Add child_displacement_x/y style properties to control how far the
+	    child moves when the button is depressed.
+
+	  - Add non-exported function _gtk_button_set_depressed to clean
+	    up the handling of the in/out shadow and separate it frmo
+	    widget->state.
+
+	  - Lots of code cleanup and simplification of state handling
+	    for GtkButton/GtkToggleButton.
+ 
+        * tests/testgtkrc: Set the x/y displacement to 1 to provide a test
+        of button movement. testgtk + testgtkrc == test ugly GTK+, as always. 	
+
 Fri Aug 24 23:09:05 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimage.[ch] docs/Changes-2.0.txt: Break compatibility 

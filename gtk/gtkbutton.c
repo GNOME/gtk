@@ -97,9 +97,8 @@ static void gtk_button_remove         (GtkContainer     *container,
 				       GtkWidget        *widget);
 static void gtk_real_button_pressed   (GtkButton        *button);
 static void gtk_real_button_released  (GtkButton        *button);
-static void gtk_real_button_enter     (GtkButton        *button);
-static void gtk_real_button_leave     (GtkButton        *button);
 static void gtk_real_button_activate (GtkButton         *button);
+static void gtk_button_update_state   (GtkButton        *button);
 static GtkType gtk_button_child_type  (GtkContainer     *container);
 
 static void gtk_button_finish_activate (GtkButton *button,
@@ -169,8 +168,8 @@ gtk_button_class_init (GtkButtonClass *klass)
   klass->pressed = gtk_real_button_pressed;
   klass->released = gtk_real_button_released;
   klass->clicked = NULL;
-  klass->enter = gtk_real_button_enter;
-  klass->leave = gtk_real_button_leave;
+  klass->enter = gtk_button_update_state;
+  klass->leave = gtk_button_update_state;
   klass->activate = gtk_real_button_activate;
 
   g_object_class_install_property (G_OBJECT_CLASS(object_class),
@@ -247,6 +246,22 @@ gtk_button_class_init (GtkButtonClass *klass)
 							       _("Extra space to add for CAN_DEFAULT buttons that is always drawn outside the border"),
 							       GTK_TYPE_BORDER,
 							       G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("child_displacement_x",
+							     _("Child X Displacement"),
+							     _("How far in the x direction to move the child when the button is depressed"),
+							     G_MININT,
+							     G_MAXINT,
+							     0,
+							     G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("child_displacement_y",
+							     _("Child Y Displacement"),
+							     _("How far in the y direction to move the child when the button is depressed"),
+							     G_MININT,
+							     G_MAXINT,
+							     0,
+							     G_PARAM_READABLE));
 }
 
 static void
@@ -259,6 +274,7 @@ gtk_button_init (GtkButton *button)
   button->in_button = FALSE;
   button->button_down = FALSE;
   button->relief = GTK_RELIEF_NORMAL;
+  button->depressed = FALSE;
 }
 
 static GtkType
@@ -656,6 +672,19 @@ gtk_button_size_allocate (GtkWidget     *widget,
 	  child_allocation.height = MAX (1, child_allocation.height - default_border.top - default_border.bottom);
 	}
 
+      if (button->depressed)
+	{
+	  gint child_displacement_x;
+	  gint child_displacement_y;
+	  
+	  gtk_widget_style_get (widget,
+				"child_displacement_x", &child_displacement_x, 
+				"child_displacement_y", &child_displacement_y,
+				NULL);
+	  child_allocation.x += child_displacement_x;
+	  child_allocation.y += child_displacement_y;
+	}
+
       gtk_widget_size_allocate (GTK_BIN (button)->child, &child_allocation);
     }
 }
@@ -740,11 +769,8 @@ gtk_button_paint (GtkWidget    *widget,
 	  width -= 2;
 	  height -= 2;
 	}
-	
-      if (GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE)
-	shadow_type = GTK_SHADOW_IN;
-      else
-	shadow_type = GTK_SHADOW_OUT;
+
+      shadow_type = button->depressed ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
 
       if ((button->relief != GTK_RELIEF_NONE) ||
 	  ((GTK_WIDGET_STATE(widget) != GTK_STATE_NORMAL) &&
@@ -937,85 +963,27 @@ gtk_button_remove (GtkContainer *container,
 static void
 gtk_real_button_pressed (GtkButton *button)
 {
-  GtkStateType new_state;
-
-  g_return_if_fail (GTK_IS_BUTTON (button));
-
   if (button->activate_timeout)
     return;
   
   button->button_down = TRUE;
-
-  new_state = (button->in_button ? GTK_STATE_ACTIVE : GTK_STATE_NORMAL);
-
-  if (GTK_WIDGET_STATE (button) != new_state)
-    {
-      gtk_widget_set_state (GTK_WIDGET (button), new_state);
-      gtk_widget_queue_draw (GTK_WIDGET (button));
-    }
+  gtk_button_update_state (button);
 }
 
 static void
 gtk_real_button_released (GtkButton *button)
 {
-  GtkStateType new_state;
-
-  g_return_if_fail (GTK_IS_BUTTON (button));
-
   if (button->button_down)
     {
       button->button_down = FALSE;
 
       if (button->activate_timeout)
 	return;
-  
+      
       if (button->in_button)
 	gtk_button_clicked (button);
 
-      new_state = (button->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL);
-
-      if (GTK_WIDGET_STATE (button) != new_state)
-	{
-	  gtk_widget_set_state (GTK_WIDGET (button), new_state);
-	  /* We _draw () instead of queue_draw so that if the operation
-	   * blocks, the label doesn't vanish.
-	   */
-	  gtk_widget_draw (GTK_WIDGET (button), NULL);
-	}
-    }
-}
-
-static void
-gtk_real_button_enter (GtkButton *button)
-{
-  GtkStateType new_state;
-
-  g_return_if_fail (GTK_IS_BUTTON (button));
-
-  new_state = (button->button_down ? GTK_STATE_ACTIVE : GTK_STATE_PRELIGHT);
-
-  if (button->activate_timeout)
-    return;
-  
-  if (GTK_WIDGET_STATE (button) != new_state)
-    {
-      gtk_widget_set_state (GTK_WIDGET (button), new_state);
-      gtk_widget_queue_draw (GTK_WIDGET (button));
-    }
-}
-
-static void
-gtk_real_button_leave (GtkButton *button)
-{
-  g_return_if_fail (GTK_IS_BUTTON (button));
-  
-  if (button->activate_timeout)
-    return;
-  
-  if (GTK_WIDGET_STATE (button) != GTK_STATE_NORMAL)
-    {
-      gtk_widget_set_state (GTK_WIDGET (button), GTK_STATE_NORMAL);
-      gtk_widget_queue_draw (GTK_WIDGET (button));
+      gtk_button_update_state (button);
     }
 }
 
@@ -1049,7 +1017,7 @@ gtk_real_button_activate (GtkButton *button)
 						    button_activate_timeout,
 						    button);
 	  button->button_down = TRUE;
-	  gtk_widget_set_state (widget, GTK_STATE_ACTIVE);
+	  gtk_button_update_state (button);
 	}
     }
 }
@@ -1067,10 +1035,49 @@ gtk_button_finish_activate (GtkButton *button,
   gtk_grab_remove (widget);
 
   button->button_down = FALSE;
-  gtk_widget_set_state (GTK_WIDGET (button),
-			button->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL);
+  gtk_button_update_state (button);
 
   if (do_it)
     gtk_button_clicked (button);
 }
 
+/**
+ * _gtk_button_set_depressed:
+ * @button: a #GtkButton
+ * @depressed: %TRUE if the button should be drawn with a recessed shadow.
+ * 
+ * Sets whether the button is currently drawn as down or not. This is 
+ * purely a visual setting, and is meant only for use by derived widgets
+ * such as #GtkToggleButton.
+ **/
+void
+_gtk_button_set_depressed (GtkButton *button,
+			   gboolean   depressed)
+{
+  GtkWidget *widget = GTK_WIDGET (button);
+
+  depressed = depressed != FALSE;
+
+  if (depressed != button->depressed)
+    {
+      button->depressed = depressed;
+      gtk_widget_queue_resize (widget);
+    }
+}
+
+static void
+gtk_button_update_state (GtkButton *button)
+{
+  gboolean depressed;
+  GtkStateType new_state;
+
+  depressed = button->in_button && button->button_down;
+      
+  if (!button->button_down && button->in_button)
+    new_state = GTK_STATE_PRELIGHT;
+  else
+    new_state = depressed ? GTK_STATE_ACTIVE: GTK_STATE_NORMAL;
+
+  _gtk_button_set_depressed (button, depressed); 
+  gtk_widget_set_state (GTK_WIDGET (button), new_state);
+}

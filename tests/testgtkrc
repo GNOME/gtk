@@ -29,6 +29,8 @@ bell_duration = 40
 style "global-style-properties"
 {
 #  xthickness = 20
+  GtkButton::child_displacement_x = 1
+  GtkButton::child_displacement_y = 1
   GtkSpinButton::shadow_type = etched-out
   GtkEntry::cursor_color = "#ff0000"
   GtkToolbar::space_size = 10
