@@ -1,3 +1,9 @@
+Mon May 31 00:16:36 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtktable.sgml: Document the default attach
+	options for gtk_table_attach_defaults().  (#143391,
+	Steve Chaplin)
+
 Fri May 28 14:34:36 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkcontainer.sgml: Fix docs for 

@@ -210,7 +210,7 @@ and row numbers of the table. (Columns and rows are indexed from zero).
 
 <!-- ##### FUNCTION gtk_table_attach_defaults ##### -->
 <para>
-As there are many options associated with gtk_table_attach(), this convenience function provides the programmer with a means to add children to a table with identical padding and expansion options.
+As there are many options associated with gtk_table_attach(), this convenience function provides the programmer with a means to add children to a table with identical padding and expansion options. The values used for the #GtkAttachOptions are <literal>GTK_EXPAND | GTK_FILL</literal>, and the padding is set to 0.
 </para>
 
 @table: The table to add a new child widget to.
