@@ -25,6 +25,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#define USE_GENERIC_DRAW	/* See also gdkdrawable-win32.c */
+
 #include <string.h>
 
 #include "gdkgc.h"
@@ -838,6 +840,7 @@ predraw_set_foreground (GdkGC       *gc,
 
   switch (win32_gc->fill_style)
     {
+#ifndef USE_GENERIC_DRAW
     case GDK_OPAQUE_STIPPLED:
       if (*ok && (hbr = CreatePatternBrush (GDK_PIXMAP_HBITMAP (win32_gc->stipple))) == NULL)
 	WIN32_GDI_FAILED ("CreatePatternBrush"), *ok = FALSE;
@@ -851,6 +854,7 @@ predraw_set_foreground (GdkGC       *gc,
       break;
 
     case GDK_SOLID:
+#endif
     default:
       if (*ok && (hbr = CreateSolidBrush (fg)) == NULL)
 	WIN32_GDI_FAILED ("CreateSolidBrush"), *ok = FALSE;

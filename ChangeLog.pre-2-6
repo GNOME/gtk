@@ -1,3 +1,20 @@
+2002-11-23  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdrawable-win32.c (draw_polygon,
+	gdk_win32_draw_polygon, draw_segments, gdk_win32_draw_segments):
+	Use generic_draw() also for polygons and segments, thus adding
+	support for tiled and stippled polygons and segments.
+
+	(gdk_win32_draw_points): Use Rectangle() instead of
+	SetPixel(). Rectangle() uses the function (raster op) set for the
+	HDC, SetPixel() doesn't.
+
+	(widen_bounds): New function, refactoring.
+	
+	* gdk/win32/gdkgc-win32.c (predraw_set_foreground): Ifdef out the
+	GDK_OPAQUE_STIPPLED handling here, has been superseded by the code
+	in generic_draw(). Always create a solid brush.
+	
 2002-11-22  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdrawable-win32.c (draw_arc, gdk_win32_draw_arc):

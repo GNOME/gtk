@@ -620,9 +620,20 @@ generic_draw (GdkDrawable    *drawable,
   gdk_win32_hdc_release (drawable, gc, mask);
 }
 
-#endif /* USE_GENERIC_DRAW */
+static GdkRegion *
+widen_bounds (GdkRectangle *bounds,
+	      gint          pen_width)
+{
+  if (pen_width == 0)
+    pen_width = 1;
 
-#ifdef USE_GENERIC_DRAW
+  bounds->x -= pen_width;
+  bounds->y -= pen_width;
+  bounds->width += 2 * pen_width;
+  bounds->height += 2 * pen_width;
+
+  return gdk_region_rectangle (bounds);
+}
 
 static void
 draw_rectangle (GdkGCWin32 *gcwin32,
@@ -697,7 +708,6 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 
   GdkRectangle bounds;
   GdkRegion *region;
-  gint pen_width;
 
   GDK_NOTE (MISC, g_print ("gdk_win32_draw_rectangle: %s (%p) %s%dx%d@+%d+%d\n",
 			   gdk_win32_drawable_description (drawable),
@@ -705,15 +715,11 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 			   (filled ? "fill " : ""),
 			   width, height, x, y));
     
-  pen_width = GDK_GC_WIN32 (gc)->pen_width;
-  if (pen_width == 0)
-    pen_width = 1;
-
-  bounds.x = x - pen_width;
-  bounds.y = y - pen_width;
-  bounds.width = width + 2 * pen_width;
-  bounds.height = height + 2 * pen_width;
-  region = gdk_region_rectangle (&bounds);
+  bounds.x = x;
+  bounds.y = y;
+  bounds.width = width;
+  bounds.height = height;
+  region = widen_bounds (&bounds, GDK_GC_WIN32 (gc)->pen_width);
 
   generic_draw (drawable, gc, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND,
 		draw_rectangle, region, filled, x, y, width, height);
@@ -919,20 +925,19 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
 
   GdkRectangle bounds;
   GdkRegion *region;
-  gint pen_width;
+
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_arc: %s  %d,%d,%d,%d  %d %d\n",
+			   gdk_win32_drawable_description (drawable),
+			   x, y, width, height, angle1, angle2));
 
   if (width <= 2 || height <= 2 || angle2 == 0)
     return;
 
-  pen_width = GDK_GC_WIN32 (gc)->pen_width;
-  if (pen_width == 0)
-    pen_width = 1;
-
-  bounds.x = x - pen_width;
-  bounds.y = y - pen_width;
-  bounds.width = width + 2 * pen_width;
-  bounds.height = height + 2 * pen_width;
-  region = gdk_region_rectangle (&bounds);
+  bounds.x = x;
+  bounds.y = y;
+  bounds.width = width;
+  bounds.height = height;
+  region = widen_bounds (&bounds, GDK_GC_WIN32 (gc)->pen_width);
 
   generic_draw (drawable, gc, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND,
 		draw_arc, region, filled, x, y, width, height, angle1, angle2);
@@ -1005,6 +1010,39 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
 #endif /* !USE_GENERIC_DRAW */
 }
 
+#ifdef USE_GENERIC_DRAW
+
+static void
+draw_polygon (GdkGCWin32 *gcwin32,
+	      HDC         hdc,
+	      gint        x_offset,
+	      gint        y_offset,
+	      va_list     args)
+{
+  gint filled;
+  POINT *pts;
+  gint npoints;
+  gint i;
+
+  filled = va_arg (args, gint);
+  pts = va_arg (args, POINT *);
+  npoints = va_arg (args, gint);
+
+  if (x_offset != 0 || y_offset != 0)
+    for (i = 0; i < npoints; i++)
+      {
+	pts[i].x -= x_offset;
+	pts[i].y -= y_offset;
+      }
+
+  if (filled)
+    GDI_CALL (Polygon, (hdc, pts, npoints));
+  else
+    GDI_CALL (Polyline, (hdc, pts, npoints));
+}
+
+#endif /* USE_GENERIC_DRAW */
+
 static void
 gdk_win32_draw_polygon (GdkDrawable *drawable,
 			GdkGC       *gc,
@@ -1012,6 +1050,55 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
 			GdkPoint    *points,
 			gint         npoints)
 {
+#ifdef USE_GENERIC_DRAW
+
+  GdkRectangle bounds;
+  GdkRegion *region;
+  POINT *pts;
+  int i;
+
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_polygon: %s %d points\n",
+			   gdk_win32_drawable_description (drawable),
+			   npoints));
+
+  if (npoints < 2)
+    return;
+
+  bounds.x = G_MAXINT;
+  bounds.y = G_MAXINT;
+  bounds.width = 0;
+  bounds.height = 0;
+
+  pts = g_new (POINT, npoints+1);
+
+  for (i = 0; i < npoints; i++)
+    {
+      bounds.x = MIN (bounds.x, points[i].x);
+      bounds.y = MIN (bounds.y, points[i].y);
+      bounds.width = MAX (bounds.width, points[i].x - bounds.x);
+      bounds.height = MAX (bounds.height, points[i].y - bounds.y);
+      pts[i].x = points[i].x;
+      pts[i].y = points[i].y;
+    }
+
+  if (points[0].x != points[npoints-1].x ||
+      points[0].y != points[npoints-1].y) 
+    {
+      pts[npoints].x = points[0].x;
+      pts[npoints].y = points[0].y;
+      npoints++;
+    }
+      
+  region = widen_bounds (&bounds, GDK_GC_WIN32 (gc)->pen_width);
+
+  generic_draw (drawable, gc, GDK_GC_FOREGROUND|GDK_GC_BACKGROUND,
+		draw_polygon, region, filled, pts, npoints);
+
+  gdk_region_destroy (region);
+  g_free (pts);
+  
+#else
+
   GdkGCWin32 *gcwin32 = GDK_GC_WIN32 (gc);
   const GdkGCValuesMask mask = GDK_GC_FOREGROUND|GDK_GC_BACKGROUND;
   HDC hdc;
@@ -1086,6 +1173,8 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
     }
   g_free (pts);
   gdk_win32_hdc_release (drawable, gc, mask);
+
+#endif /* USE_GENERIC_DRAW */
 }
 
 typedef struct
@@ -1144,7 +1233,7 @@ gdk_win32_draw_text (GdkDrawable *drawable,
   arg.y = y;
   arg.hdc = gdk_win32_hdc_get (drawable, gc, mask);
 
-  GDK_NOTE (MISC, g_print ("gdk_draw_text: %s (%d,%d) \"%.*s\" (len %d)\n",
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_text: %s (%d,%d) \"%.*s\" (len %d)\n",
 			   gdk_win32_drawable_description (drawable),
 			   x, y,
 			   (text_length > 10 ? 10 : text_length),
@@ -1193,7 +1282,7 @@ gdk_win32_draw_text_wc (GdkDrawable	 *drawable,
   arg.y = y;
   arg.hdc = gdk_win32_hdc_get (drawable, gc, mask);
 
-  GDK_NOTE (MISC, g_print ("gdk_draw_text_wc: %s (%d,%d) len: %d\n",
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_text_wc: %s (%d,%d) len: %d\n",
 			   gdk_win32_drawable_description (drawable),
 			   x, y, text_length));
       
@@ -1240,24 +1329,106 @@ gdk_win32_draw_points (GdkDrawable *drawable,
 		       gint         npoints)
 {
   HDC hdc;
-  COLORREF fg;
-  GdkGCWin32 *gcwin32 = GDK_GC_WIN32 (gc);
-  GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
+  HGDIOBJ old_pen;
   int i;
 
-  hdc = gdk_win32_hdc_get (drawable, gc, 0);
+  hdc = gdk_win32_hdc_get (drawable, gc, GDK_GC_FOREGROUND);
   
-  fg = _gdk_win32_colormap_color (impl->colormap, gcwin32->foreground);
-
-  GDK_NOTE (MISC, g_print ("gdk_draw_points: %s %dx%.06x\n",
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_points: %s %d points\n",
 			   gdk_win32_drawable_description (drawable),
-			   npoints, (guint) fg));
+			   npoints));
 
+  /* The X11 version uses XDrawPoint(), which doesn't use the fill
+   * mode, so don't use generic_draw. But we should use the current
+   * function, so we can't use SetPixel(). Draw single-pixel
+   * rectangles (sigh).
+   */
+
+  old_pen = SelectObject (hdc, GetStockObject (NULL_PEN));
   for (i = 0; i < npoints; i++)
-    SetPixel (hdc, points[i].x, points[i].y, fg);
+    Rectangle (hdc, points[i].x, points[i].y,
+	       points[i].x + 2, points[i].y + 2);
 
-  gdk_win32_hdc_release (drawable, gc, 0);
+  SelectObject (hdc, old_pen);
+  gdk_win32_hdc_release (drawable, gc, GDK_GC_FOREGROUND);
 }
+
+#ifdef USE_GENERIC_DRAW
+
+static void
+draw_segments (GdkGCWin32 *gcwin32,
+	       HDC         hdc,
+	       gint        x_offset,
+	       gint        y_offset,
+	       va_list     args)
+{
+  GdkSegment *segs;
+  gint nsegs;
+  gint i;
+
+  segs = va_arg (args, GdkSegment *);
+  nsegs = va_arg (args, gint);
+
+  if (gcwin32->pen_dashes && !IS_WIN_NT ())
+    {
+      for (i = 0; i < nsegs; i++)
+	{
+	  if (segs[i].x1 == segs[i].x2)
+	    {
+	      int y1, y2;
+	      
+	      if (segs[i].y1 <= segs[i].y2)
+		y1 = segs[i].y1, y2 = segs[i].y2;
+	      else
+		y1 = segs[i].y2, y2 = segs[i].y1;
+	      
+	      render_line_vertical (hdc,
+				    segs[i].x1 - x_offset,
+				    y1 - y_offset, y2 - y_offset,
+				    gcwin32->pen_width,
+				    gcwin32->pen_dashes,
+				    gcwin32->pen_num_dashes);
+	    }
+	  else if (segs[i].y1 == segs[i].y2)
+	    {
+	      int x1, x2;
+	      
+	      if (segs[i].x1 <= segs[i].x2)
+		x1 = segs[i].x1, x2 = segs[i].x2;
+	      else
+		x1 = segs[i].x2, x2 = segs[i].x1;
+	      
+	      render_line_horizontal (hdc,
+				      x1 - x_offset, x2 - x_offset,
+				      segs[i].y1 - y_offset,
+				      gcwin32->pen_width,
+				      gcwin32->pen_dashes,
+				      gcwin32->pen_num_dashes);
+	    }
+	  else
+	    GDI_CALL (MoveToEx, (hdc, segs[i].x1 - x_offset,
+				 segs[i].y1 - y_offset, NULL)) &&
+	      GDI_CALL (LineTo, (hdc, segs[i].x2 - x_offset,
+				 segs[i].y2 - y_offset)) &&
+	      (gcwin32->pen_width <= 1 &&
+	       GDI_CALL (LineTo, (hdc, segs[i].x2 - x_offset + 1,
+				  segs[i].y2 - y_offset + 1)));
+	}
+    }
+  else
+    {
+      for (i = 0; i < nsegs; i++)
+	GDI_CALL (MoveToEx, (hdc, segs[i].x1 - x_offset,
+			     segs[i].y1 - y_offset, NULL)) &&
+	  GDI_CALL (LineTo, (hdc, segs[i].x2 - x_offset,
+			     segs[i].y2 - y_offset)) &&
+	  (gcwin32->pen_width <= 1 &&
+	   GDI_CALL (LineTo, (hdc, segs[i].x2 - x_offset + 1,
+			      segs[i].y2 - y_offset + 1)));
+    }
+}
+
+#endif /* USE_GENERIC_DRAW */
 
 static void
 gdk_win32_draw_segments (GdkDrawable *drawable,
@@ -1265,6 +1436,42 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
 			 GdkSegment  *segs,
 			 gint         nsegs)
 {
+#ifdef USE_GENERIC_DRAW
+
+  GdkRectangle bounds;
+  GdkRegion *region;
+  gint i;
+
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_segments: %s %d segs\n",
+			   gdk_win32_drawable_description (drawable),
+			   nsegs));
+
+  bounds.x = G_MAXINT;
+  bounds.y = G_MAXINT;
+  bounds.width = 0;
+  bounds.height = 0;
+
+  for (i = 0; i < nsegs; i++)
+    {
+      bounds.x = MIN (bounds.x, segs[i].x1);
+      bounds.x = MIN (bounds.x, segs[i].x2);
+      bounds.y = MIN (bounds.y, segs[i].y1);
+      bounds.y = MIN (bounds.y, segs[i].y2);
+      bounds.width = MAX (bounds.width, segs[i].x1 - bounds.x);
+      bounds.width = MAX (bounds.width, segs[i].x2 - bounds.x);
+      bounds.height = MAX (bounds.height, segs[i].y1 - bounds.y);
+      bounds.height = MAX (bounds.height, segs[i].y2 - bounds.y);
+    }
+
+  region = widen_bounds (&bounds, GDK_GC_WIN32 (gc)->pen_width);
+
+  generic_draw (drawable, gc, GDK_GC_FOREGROUND,
+		draw_segments, region, segs, nsegs);
+
+  gdk_region_destroy (region);
+
+#else
+
   GdkGCWin32 *gcwin32 = GDK_GC_WIN32 (gc);
   const GdkGCValuesMask mask = GDK_GC_FOREGROUND|GDK_GC_BACKGROUND;
   HDC hdc;
@@ -1413,6 +1620,8 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
     	  }
     }
   gdk_win32_hdc_release (drawable, gc, mask);
+
+#endif /* USE_GENERIC_DRAW */
 }
 
 static void
