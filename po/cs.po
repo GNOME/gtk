@@ -11,14 +11,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-13 05:08+0100\n"
-"PO-Revision-Date: 2004-01-13 14:59+0100\n"
+"POT-Creation-Date: 2004-01-15 04:44+0100\n"
+"PO-Revision-Date: 2004-01-15 13:07+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:736
 #: gdk-pixbuf/gdk-pixbuf-io.c:869 tests/testfilechooser.c:198
@@ -954,7 +955,9 @@ msgstr "Skupina akcí"
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
-msgstr "GtkAction Group, ke které je tato GtkAction přiřazena, nebo NULL (pro interní použití)."
+msgstr ""
+"GtkAction Group, ke které je tato GtkAction přiřazena, nebo NULL (pro "
+"interní použití)."
 
 #: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
@@ -3965,11 +3968,11 @@ msgstr "Podíl z celkového průběhu, o který se posunout blok při pulzu"
 msgid "Text to be displayed in the progress bar"
 msgstr "Text zobrazovaný v pruhu průběhu"
 
-#: gtk/gtkradioaction.c:137
+#: gtk/gtkradioaction.c:138
 msgid "The value"
 msgstr "Hodnota"
 
-#: gtk/gtkradioaction.c:138
+#: gtk/gtkradioaction.c:139
 msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
@@ -3977,9 +3980,13 @@ msgstr ""
 "Hodnota vrácená gtk_radio_action_get_current_value(), když je tato akce "
 "aktuální akce své skupiny."
 
-#: gtk/gtkradiobutton.c:109
+#: gtk/gtkradioaction.c:155 gtk/gtkradiobutton.c:109
 msgid "Group"
 msgstr "Skupina"
+
+#: gtk/gtkradioaction.c:156
+msgid "The radio action whose group this action belongs."
+msgstr "Přepínací tlačíto, do jejíž skupiny patří tato akce."
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
