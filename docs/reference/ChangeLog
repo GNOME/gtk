@@ -1,3 +1,7 @@
+2002-03-20  Cody Russell  <cody@jhu.edu>
+
+	* gtk/tree_widget.sgml: Much expanded overview of the tree.
+
 Tue Mar 12 00:29:31 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/question_index.sgml: new FAQ.
