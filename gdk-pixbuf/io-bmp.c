@@ -130,6 +130,7 @@ struct headerpair {
 	guint depth;
 	guint Negative;		/* Negative = 1 -> top down BMP,
 				   Negative = 0 -> bottom up BMP */
+	guint  n_colors;
 };
 
 /* Data needed for the "state" during decompression */
@@ -155,8 +156,8 @@ struct bmp_progressive_state {
 	guint Lines;		/* # of finished lines */
 
 	guchar *buff;
-	gint BufferSize;
-	gint BufferDone;
+	guint BufferSize;
+	guint BufferDone;
 
 	guchar (*Colormap)[3];
 
@@ -233,6 +234,8 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
                              struct bmp_progressive_state *State,
                              GError **error)
 {
+	gint clrUsed;
+
         /* FIXME this is totally unrobust against bogus image data. */
 
 	if (State->BufferSize < lsb_32 (&BIH[0]) + 14) {
@@ -244,7 +247,7 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 
 #if DUMPBIH
 	DumpBIH(BIH);
-#endif
+#endif    
 
 	State->Header.size = lsb_32 (&BIH[0]);
 	if (State->Header.size == 40) {
@@ -262,6 +265,21 @@ static gboolean DecodeHeader(unsigned char *BFH, unsigned char *BIH,
 			     GDK_PIXBUF_ERROR,
 			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
 			     _("BMP image has unsupported header size"));
+		State->read_state = READ_STATE_ERROR;
+		return FALSE;
+	}
+
+	clrUsed = (int) (BIH[35] << 24) + (BIH[34] << 16) + (BIH[33] << 8) + (BIH[32]);
+	if (clrUsed != 0)
+		State->Header.n_colors = clrUsed;
+	else
+            State->Header.n_colors = 1 << State->Header.depth;
+	
+	if (State->Header.n_colors > 1 << State->Header.depth) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("BMP image has bogus header data"));
 		State->read_state = READ_STATE_ERROR;
 		return FALSE;
 	}
@@ -396,16 +414,25 @@ static gboolean DecodeColormap (guchar *buff,
 				GError **error)
 {
 	gint i;
+	gint samples;
 
 	g_assert (State->read_state == READ_STATE_PALETTE);
 
-	State->Colormap = g_malloc ((1 << State->Header.depth) * sizeof (*State->Colormap));
+	samples = (State->Header.size == 12 ? 3 : 4);
+	if (State->BufferSize < State->Header.n_colors * samples) {
+		State->BufferSize = State->Header.n_colors * samples;
+		if (!grow_buffer (State, error))
+			return FALSE;
+		return TRUE;
+	}
 
-	for (i = 0; i < (1 << State->Header.depth); i++)
+	State->Colormap = g_malloc ((1 << State->Header.depth) * sizeof (*State->Colormap));
+	for (i = 0; i < State->Header.n_colors; i++)
+
 	{
-		State->Colormap[i][0] = buff[i * (State->Header.size == 12 ? 3 : 4)];
-		State->Colormap[i][1] = buff[i * (State->Header.size == 12 ? 3 : 4) + 1];
-		State->Colormap[i][2] = buff[i * (State->Header.size == 12 ? 3 : 4) + 2];
+		State->Colormap[i][0] = buff[i * samples];
+		State->Colormap[i][1] = buff[i * samples + 1];
+		State->Colormap[i][2] = buff[i * samples + 2];
 #ifdef DUMPCMAP
 		g_print ("color %d %x %x %x\n", i,
 			 State->Colormap[i][0],
@@ -487,6 +514,8 @@ decode_bitmasks (guchar *buf,
  * return context (opaque to user)
  */
 
+static struct bmp_progressive_state *d;
+
 static gpointer
 gdk_pixbuf__bmp_image_begin_load(GdkPixbufModuleSizeFunc size_func,
                                  GdkPixbufModulePreparedFunc prepared_func,
@@ -495,7 +524,7 @@ gdk_pixbuf__bmp_image_begin_load(GdkPixbufModuleSizeFunc size_func,
                                  GError **error)
 {
 	struct bmp_progressive_state *context;
-
+	
 	context = g_new0(struct bmp_progressive_state, 1);
 	context->size_func = size_func;
 	context->prepared_func = prepared_func;
@@ -520,8 +549,8 @@ gdk_pixbuf__bmp_image_begin_load(GdkPixbufModuleSizeFunc size_func,
 
 
 	context->pixbuf = NULL;
-
-
+	
+	d = context;
 	return (gpointer) context;
 }
 
@@ -538,7 +567,7 @@ static gboolean gdk_pixbuf__bmp_image_stop_load(gpointer data, GError **error)
         /* FIXME this thing needs to report errors if
          * we have unused image data
          */
-
+	
 	g_return_val_if_fail(context != NULL, TRUE);
 
 	if (context->Colormap != NULL)
@@ -986,7 +1015,7 @@ DoCompressed(struct bmp_progressive_state *context, GError **error)
  * buf - new image data
  * size - length of new image data
  *
- * append image data onto inrecrementally built output image
+ * append image data onto incrementally built output image
  */
 static gboolean
 gdk_pixbuf__bmp_image_load_increment(gpointer data,

@@ -1,3 +1,10 @@
+Fri Feb 20 22:25:32 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* io-bmp.c (DecodeHeader): Store and sanity-check the clrUsed field 
+	from the header for use in DecodeColormap.
+	* io-bmp.c (DecodeColormap): Don't read more colormap entries than
+	the header says are there.  (#134235, Kazuho Okui)
+
 Sun Feb  8 01:07:20 2004  Manish Singh  <yosh@gimp.org>
 
 	* gdk-pixbuf-io.c: removed unnecessary G_OBJECT() cast checks.
