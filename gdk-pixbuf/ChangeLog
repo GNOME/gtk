@@ -1,5 +1,10 @@
 2001-06-07  Havoc Pennington  <hp@redhat.com>
 
+	* Makefile.am: use Owen's new way of doing stampfiles/generated
+	sources
+
+2001-06-07  Havoc Pennington  <hp@redhat.com>
+
 	* Makefile.am (gdk-pixbuf-marshal.c): fix up the glib-genmarshal path
 
 2001-06-05  Havoc Pennington  <hp@redhat.com>

@@ -205,7 +205,7 @@ libgdk_pixbuf_1_3_la_SOURCES = 	\
 	gdk-pixbuf-scale.c	\
 	gdk-pixbuf-util.c
 
-#	gdk-pixbuf-marshal.h	
+$(libgdk_pixbuf_1_3_la_OBJECTS): gdk-pixbuf-marshal.h gdk-pixbuf-marshal.c
 
 libgdk_pixbuf_1_3_la_LDFLAGS = 				        \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)    \
@@ -240,22 +240,26 @@ EXTRA_DIST =			\
 	pixbufloader_xbm.def
 
 
-gdk-pixbuf-marshal.h: @REBUILD@ $(srcdir)/gdk-pixbuf-marshal.list
-        case @GLIB_GENMARSHAL@ in							\
-           /*) glib_genmarshal=@GLIB_GENMARSHAL@ ;;					\
-            *) glib_genmarshal=`cd $(top_builddir) && pwd`/@GLIB_GENMARSHAL@ ;;		\
-        esac;										\
-	cd $(srcdir) \
-	&& $$glib_genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >> xgen-gmh \
-	&& (cmp -s xgen-gmh gdk-pixbuf-marshal.h || cp xgen-gmh gdk-pixbuf-marshal.h) \
+gdk-pixbuf-marshal.h: @REBUILD@ stamp-gdk-pixbuf-marshal.h
+	@true
+
+gdk-pixbuf-marshal.c: @REBUILD@ stamp-gdk-pixbuf-marshal.c
+	@true
+
+stamp-gdk-pixbuf-marshal.h: @REBUILD@ $(srcdir)/gdk-pixbuf-marshal.list
+	case @GLIB_GENMARSHAL@ in									\
+	   .*) glib_genmarshal=`cd $(top_builddir) && pwd`/@GLIB_GENMARSHAL@ ;;				\
+	   *) glib_genmarshal=@GLIB_GENMARSHAL@ ;;							\
+	esac;												\
+	$$glib_genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >> xgen-gmh	\
+	&& (cmp -s xgen-gmh gdk-pixbuf-marshal.h || cp xgen-gmh gdk-pixbuf-marshal.h)			\
 	&& rm -f xgen-gmh xgen-gmh~
 
-gdk-pixbuf-marshal.c: @REBUILD@ $(srcdir)/gdk-pixbuf-marshal.list
-        case @GLIB_GENMARSHAL@ in							\
-           /*) glib_genmarshal=@GLIB_GENMARSHAL@ ;;					\
-            *) glib_genmarshal=`cd $(top_builddir) && pwd`/@GLIB_GENMARSHAL@ ;;		\
-        esac;										\
-	&& cd $(srcdir) \
-	&& $$glib-genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >> xgen-gmc \
-	&& (cmp -s xgen-gmc gdk-pixbuf-marshal.c || cp xgen-gmc gdk-pixbuf-marshal.c) \
+stamp-gdk-pixbuf-marshal.c: @REBUILD@ $(srcdir)/gdk-pixbuf-marshal.list
+	case @GLIB_GENMARSHAL@ in									\
+	   .*) glib_genmarshal=`cd $(top_builddir) && pwd`/@GLIB_GENMARSHAL@ ;;				\
+	   *) glib_genmarshal=@GLIB_GENMARSHAL@ ;;							\
+	esac;												\
+	$$glib_genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >> xgen-gmc	\
+	&& (cmp -s xgen-gmc gdk-pixbuf-marshal.c || cp xgen-gmc gdk-pixbuf-marshal.c)			\
 	&& rm -f xgen-gmc xgen-gmc~
