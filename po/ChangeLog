@@ -1,3 +1,7 @@
+2001-05-22  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* no.po: Updated Norwegian translation.
+
 Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* Move to glib-gettext.m4, to avoid including, buildding
