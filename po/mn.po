@@ -2,22 +2,22 @@
 # translation of gtk+.gtk-2-2.mn.po to Mongolian
 # This file is distributed under the same license as the PACKAGE package.
 # SukhOchir <sukhochir@csms.edu.mn>
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2003 OpenMN team
 # Sanlig Badral <badral@chinggis.com>, 2003
-# Sanlig Badral <badral@users.sf.net>, 2003
+# Sanlig Badral <badral@openmn.org>, 2003
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-2.mn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-06-20 03:35+0200\n"
-"PO-Revision-Date: 2003-06-20 18:30+0200\n"
-"Last-Translator: Sanlig Badral <badral@users.sf.net>\n"
-"Language-Team: Mongolian <openmn-kdemn@lists.sourceforge.net>\n"
+"POT-Creation-Date: 2003-08-17 19:01+0200\n"
+"PO-Revision-Date: 2003-08-17 22:31+0200\n"
+"Last-Translator: Sanlig Badral <badral@openmn.org>\n"
+"Language-Team: Mongolian <openmn-linux@lists.sf.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.1\n"
+"X-Generator: KBabel 1.0.1\n"
 
 # gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:737
@@ -196,81 +196,71 @@ msgid "The BMP image format"
 msgstr "BMP зургийн төрөл "
 
 # gdk-pixbuf/io-gif.c:218
-#: gdk-pixbuf/io-gif.c:219
+#: gdk-pixbuf/io-gif.c:220
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "GIF төрлийн файл уншигдахгүй байна: %s"
 
 # gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
-#: gdk-pixbuf/io-gif.c:491 gdk-pixbuf/io-gif.c:1428 gdk-pixbuf/io-gif.c:1589
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1431 gdk-pixbuf/io-gif.c:1592
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF төрлийн файлын зарим өгөгдөл алдагдсан байна (магадгүй тасарсан байх?)"
 
 # gdk-pixbuf/io-gif.c:469
-#: gdk-pixbuf/io-gif.c:500
+#: gdk-pixbuf/io-gif.c:501
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "GIF зураг ачаалагчийн дотоод алдаа (%s)"
 
-#: gdk-pixbuf/io-gif.c:574
+#: gdk-pixbuf/io-gif.c:575
 msgid "Stack overflow"
 msgstr "Стек дүүрлээ"
 
 # gdk-pixbuf/io-gif.c:592
-#: gdk-pixbuf/io-gif.c:634
+#: gdk-pixbuf/io-gif.c:635
 msgid "GIF image loader can't understand this image."
 msgstr "GIF зураг ачаалагч уг зургийг ойлгож чадахгүй байна"
 
 # gdk-pixbuf/io-gif.c:621
-#: gdk-pixbuf/io-gif.c:663
+#: gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
 msgstr "Буруу код тааралдлаа"
 
 # gdk-pixbuf/io-gif.c:630
-#: gdk-pixbuf/io-gif.c:673
+#: gdk-pixbuf/io-gif.c:674
 msgid "Circular table entry in GIF file"
 msgstr "GIF зургийн файлын заавар хүснэгтийн бичлэг"
 
 # gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
 # gdk-pixbuf/io-gif.c:1530
-#: gdk-pixbuf/io-gif.c:806 gdk-pixbuf/io-gif.c:1416 gdk-pixbuf/io-gif.c:1462
-#: gdk-pixbuf/io-gif.c:1577
+#: gdk-pixbuf/io-gif.c:826 gdk-pixbuf/io-gif.c:1419 gdk-pixbuf/io-gif.c:1465
+#: gdk-pixbuf/io-gif.c:1580
 msgid "Not enough memory to load GIF file"
 msgstr "GIF зургийн файл ачаалахад санах ой хүрэлцэхгүй байна"
 
 # gdk-pixbuf/io-gif.c:1009
-#: gdk-pixbuf/io-gif.c:1053
+#: gdk-pixbuf/io-gif.c:1074
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF зураг бол гэмтсэн (буруу LZW алгоритмын шахалт)"
 
 # gdk-pixbuf/io-gif.c:1059
-#: gdk-pixbuf/io-gif.c:1103
+#: gdk-pixbuf/io-gif.c:1124
 msgid "File does not appear to be a GIF file"
 msgstr "GIF зургийн файл гэж санагдахгүй байна"
 
 # gdk-pixbuf/io-gif.c:1071
-#: gdk-pixbuf/io-gif.c:1115
+#: gdk-pixbuf/io-gif.c:1136
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF зургийн файлын төрөлийн %s хувилбар тодорхойгүй"
 
-# gdk-pixbuf/io-gif.c:1144
-#: gdk-pixbuf/io-gif.c:1188
-msgid "GIF image contained a frame with height or width 0."
-msgstr "GIF зураг кадрыг өндөр эсвэл өргөнтэй нь цуг агуулдаг"
-
 # gdk-pixbuf/io-gif.c:1157
-#: gdk-pixbuf/io-gif.c:1201
+#: gdk-pixbuf/io-gif.c:1211
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "GIF файлын кадрын үзэгдэх зургийг гаднаас нь зангиддаг"
 
-# gdk-pixbuf/io-gif.c:1173
-#: gdk-pixbuf/io-gif.c:1217
-msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
-msgstr "GIF зургийн эхний кадр 'хуучиндаа шилжих' горим"
-
 # gdk-pixbuf/io-gif.c:1208
-#: gdk-pixbuf/io-gif.c:1252
+#: gdk-pixbuf/io-gif.c:1255
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -279,54 +269,54 @@ msgstr ""
 "дүрслэлтэй."
 
 # gdk-pixbuf/io-gif.c:1437
-#: gdk-pixbuf/io-gif.c:1484
+#: gdk-pixbuf/io-gif.c:1487
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF зураг тасархай эсвэл дутуу болсон"
 
 # gdk-pixbuf/gdk-pixdata.c:151
-#: gdk-pixbuf/io-gif.c:1636
+#: gdk-pixbuf/io-gif.c:1639
 msgid "The GIF image format"
 msgstr "GIF зургийн төрөл"
 
 # gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
 # gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-#: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:338
-#: gdk-pixbuf/io-ico.c:401 gdk-pixbuf/io-ico.c:418
+#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:330
+#: gdk-pixbuf/io-ico.c:393 gdk-pixbuf/io-ico.c:410
 msgid "Not enough memory to load icon"
 msgstr "Дүрс ачаалахад санах ой хүрэлцэхгүй байна"
 
 # gdk-pixbuf/io-ico.c:303
-#: gdk-pixbuf/io-ico.c:262
+#: gdk-pixbuf/io-ico.c:254
 msgid "Invalid header in icon"
 msgstr "Дүрсний толгой нь буруу"
 
 # gdk-pixbuf/io-ico.c:340
-#: gdk-pixbuf/io-ico.c:299
+#: gdk-pixbuf/io-ico.c:291
 msgid "Icon has zero width"
 msgstr "Дүрсний өргөн нь \" 0 \" болжээ"
 
 # gdk-pixbuf/io-ico.c:350
-#: gdk-pixbuf/io-ico.c:309
+#: gdk-pixbuf/io-ico.c:301
 msgid "Icon has zero height"
 msgstr "Дүрсийн өндөр нь \" 0 \" болжээ"
 
 # gdk-pixbuf/io-ico.c:395
-#: gdk-pixbuf/io-ico.c:353
+#: gdk-pixbuf/io-ico.c:345
 msgid "Compressed icons are not supported"
 msgstr "Шахагдсан дүрлэл дэмжигдээгүй"
 
 # gdk-pixbuf/io-ico.c:428
-#: gdk-pixbuf/io-ico.c:386
+#: gdk-pixbuf/io-ico.c:378
 msgid "Unsupported icon type"
 msgstr "Дэмжигдээгүй дүрлэлийн төрөл"
 
 # gdk-pixbuf/io-ico.c:499
-#: gdk-pixbuf/io-ico.c:466
+#: gdk-pixbuf/io-ico.c:458
 msgid "Not enough memory to load ICO file"
 msgstr "ICO файл ачаалахад санах ой хүрэлцэхгүй байна"
 
 # gdk-pixbuf/gdk-pixdata.c:151
-#: gdk-pixbuf/io-ico.c:872
+#: gdk-pixbuf/io-ico.c:868
 msgid "The ICO image format"
 msgstr "ICO зургийн төрөл"
 
@@ -561,7 +551,7 @@ msgstr "RAS зураг ачаалахад санах ой хүрэлцэхгүй
 
 #: gdk-pixbuf/io-ras.c:532
 msgid "The Sun raster image format"
-msgstr "Sun компаны Растэрийн алгоритмийн зургийн төрөл"
+msgstr "Sun компаны �астэрийн алгоритмийн зургийн төрөл"
 
 # gdk-pixbuf/io-tga.c:159
 #: gdk-pixbuf/io-tga.c:157
@@ -1356,7 +1346,7 @@ msgstr "Pixbuf обьект"
 
 #: gtk/gtkcellrendererpixbuf.c:133
 msgid "The pixbuf to render"
-msgstr "Харагдах Рixbuf обьект"
+msgstr "Харагдах �ixbuf обьект"
 
 #: gtk/gtkcellrendererpixbuf.c:141
 msgid "Pixbuf Expander Open"
@@ -1736,7 +1726,7 @@ msgstr "Шилжилтийг идэвхжүүлэгч товчыг иэдэвх�
 # gtk/gtkcellrenderertoggle.c:148
 #: gtk/gtkcellrenderertoggle.c:159
 msgid "Radio state"
-msgstr "Радио-төлөв "
+msgstr "�адио-төлөв "
 
 # gtk/gtkcellrenderertoggle.c:149
 #: gtk/gtkcellrenderertoggle.c:160
@@ -1779,7 +1769,7 @@ msgstr "Таарамжгүй "
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "Дэлгэцэнд  \"Таарамжгүй\" төлөв."
 
-#: gtk/gtkcolorsel.c:559
+#: gtk/gtkcolorsel.c:561
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1789,7 +1779,7 @@ msgstr ""
 "нийлүүрийг чирч орох, эсвэл энэ бусад өнгөний жижигрүүлсэн юм уу  чирч "
 "байгаа шиг өнгө сонгох. "
 
-#: gtk/gtkcolorsel.c:564
+#: gtk/gtkcolorsel.c:566
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1797,11 +1787,11 @@ msgstr ""
 "Таны сонгосон өнгө. Та энэ өнгөний нийлүүлгэтэйгээ дараа нь ашиглахын  тулд "
 "хадгалж орж чадна."
 
-#: gtk/gtkcolorsel.c:925
+#: gtk/gtkcolorsel.c:927
 msgid "_Save color here"
 msgstr "Энд _Хадгалах өнгө "
 
-#: gtk/gtkcolorsel.c:1128
+#: gtk/gtkcolorsel.c:1132
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1811,56 +1801,56 @@ msgstr ""
 "өнгө\" гэдгийг сонго"
 
 # gtk/gtkcolorsel.c:1704
-#: gtk/gtkcolorsel.c:1752
+#: gtk/gtkcolorsel.c:1756
 msgid "Has Opacity Control"
 msgstr "Тохиргоо тодорхойгүй "
 
 # gtk/gtkcolorsel.c:1705
-#: gtk/gtkcolorsel.c:1753
+#: gtk/gtkcolorsel.c:1757
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Өнгө сонгогч нь тодорхойгүй тогтоохыг зөвшөөрөөд тодорхойлж байна "
 
 # gtk/gtkcolorsel.c:1711
-#: gtk/gtkcolorsel.c:1759
+#: gtk/gtkcolorsel.c:1763
 msgid "Has palette"
 msgstr "Өнгөний нийлүүлэг "
 
 # gtk/gtkcolorsel.c:1712
-#: gtk/gtkcolorsel.c:1760
+#: gtk/gtkcolorsel.c:1764
 msgid "Whether a palette should be used"
 msgstr "Ашигласан өнгөний нийлүүлэг үү, эсвэл "
 
 # gtk/gtkcolorsel.c:1718
-#: gtk/gtkcolorsel.c:1766
+#: gtk/gtkcolorsel.c:1770
 msgid "Current Color"
 msgstr "Харгалзах өнгө "
 
 # gtk/gtkcolorsel.c:1719
-#: gtk/gtkcolorsel.c:1767
+#: gtk/gtkcolorsel.c:1771
 msgid "The current color"
 msgstr "Харгалзах өнгө "
 
 # gtk/gtkcolorsel.c:1725
-#: gtk/gtkcolorsel.c:1773
+#: gtk/gtkcolorsel.c:1777
 msgid "Current Alpha"
 msgstr "Харгалзах альфа-суваг "
 
 # gtk/gtkcolorsel.c:1726
-#: gtk/gtkcolorsel.c:1774
+#: gtk/gtkcolorsel.c:1778
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Одоогын тодорхойгүй утга (\"0\" -ээс , \"65535\" -хүртэлх) "
 
 # gtk/gtkcolorsel.c:1739
-#: gtk/gtkcolorsel.c:1788
+#: gtk/gtkcolorsel.c:1792
 msgid "Custom palette"
 msgstr "Сонголт хийх өнгөний нийлүүлэг "
 
-#: gtk/gtkcolorsel.c:1789
+#: gtk/gtkcolorsel.c:1793
 msgid "Palette to use in the color selector"
 msgstr "Өнгө сонгогчид ашиглагдах будгын нийлүүлэг"
 
 # gtk/gtkcolorsel.c:1784
-#: gtk/gtkcolorsel.c:1830
+#: gtk/gtkcolorsel.c:1834
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1869,7 +1859,7 @@ msgstr ""
 "Харавтар эсвэл  Гэгээлэг өнгө сонго "
 
 # gtk/gtkcolorsel.c:1812
-#: gtk/gtkcolorsel.c:1855
+#: gtk/gtkcolorsel.c:1859
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1878,81 +1868,81 @@ msgstr ""
 "сонгох болно. "
 
 # gtk/gtkcolorsel.c:1821
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1868
 msgid "_Hue:"
 msgstr "_Өнгө:"
 
 # gtk/gtkcolorsel.c:1822
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1869
 msgid "Position on the color wheel."
 msgstr "Өнгөндээрх дугуй байрлал."
 
 # gtk/gtkcolorsel.c:1823
-#: gtk/gtkcolorsel.c:1866
+#: gtk/gtkcolorsel.c:1870
 msgid "_Saturation:"
 msgstr "Хан_галуун:"
 
 # gtk/gtkcolorsel.c:1824
-#: gtk/gtkcolorsel.c:1867
+#: gtk/gtkcolorsel.c:1871
 msgid "\"Deepness\" of the color."
 msgstr "Өнгөний \"Гүн гүнзгий\" байдал."
 
 # gtk/gtkcolorsel.c:1825
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1872
 msgid "_Value:"
 msgstr "Ут_га:"
 
 # gtk/gtkcolorsel.c:1826
-#: gtk/gtkcolorsel.c:1869
+#: gtk/gtkcolorsel.c:1873
 msgid "Brightness of the color."
 msgstr "Өнгөний гэрэлдэлт."
 
 # gtk/gtkcolorsel.c:1827
-#: gtk/gtkcolorsel.c:1870
+#: gtk/gtkcolorsel.c:1874
 msgid "_Red:"
 msgstr "Улаан:"
 
 # gtk/gtkcolorsel.c:1828
-#: gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorsel.c:1875
 msgid "Amount of red light in the color."
 msgstr "Өнгө дахь цайвар улааны утга."
 
 # gtk/gtkcolorsel.c:1829
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1876
 msgid "_Green:"
 msgstr "Ногоон:"
 
 # gtk/gtkcolorsel.c:1830
-#: gtk/gtkcolorsel.c:1873
+#: gtk/gtkcolorsel.c:1877
 msgid "Amount of green light in the color."
 msgstr "Өнгө дахь цайвар ногооны утга."
 
 # gtk/gtkcolorsel.c:1831
-#: gtk/gtkcolorsel.c:1874
+#: gtk/gtkcolorsel.c:1878
 msgid "_Blue:"
 msgstr "Хөх:"
 
 # gtk/gtkcolorsel.c:1832
-#: gtk/gtkcolorsel.c:1875
+#: gtk/gtkcolorsel.c:1879
 msgid "Amount of blue light in the color."
 msgstr "Өнгө дахь цайвар хөхийн утга."
 
 # gtk/gtkcolorsel.c:1835
-#: gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorsel.c:1882
 msgid "_Opacity:"
 msgstr "Харанхуй:"
 
 # gtk/gtkcolorsel.c:1843
-#: gtk/gtkcolorsel.c:1886
+#: gtk/gtkcolorsel.c:1890
 msgid "Transparency of the currently-selected color."
 msgstr "Сонгогдсон өнгөний нэвтрэлт."
 
 # gtk/gtkcolorsel.c:1858
-#: gtk/gtkcolorsel.c:1901
+#: gtk/gtkcolorsel.c:1905
 msgid "Color _Name:"
 msgstr "Өнгөний Нэр:"
 
-#: gtk/gtkcolorsel.c:1916
+#: gtk/gtkcolorsel.c:1920
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1961,7 +1951,7 @@ msgstr ""
 "өнгөний нэрээр оруулж болно."
 
 # gtk/gtkcolorsel.c:1889
-#: gtk/gtkcolorsel.c:1935
+#: gtk/gtkcolorsel.c:1939
 msgid "_Palette"
 msgstr "Будгийн нийлүүр"
 
@@ -2255,62 +2245,62 @@ msgid "_Insert Unicode control character"
 msgstr "Удирдлагын Unicode тэмдэгт оруулах"
 
 # gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
-#: gtk/gtkfilesel.c:551 gtk/gtkimage.c:167
+#: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
 msgid "Filename"
 msgstr "Файлын нэр"
 
 # gtk/gtkfilesel.c:537
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:557
 msgid "The currently selected filename"
 msgstr "Сонгогдсон файлын нэр."
 
 # gtk/gtkfilesel.c:543
-#: gtk/gtkfilesel.c:558
+#: gtk/gtkfilesel.c:563
 msgid "Show file operations"
 msgstr "Файлын үйлдлүүдийг харуулах"
 
 # gtk/gtkfilesel.c:544
-#: gtk/gtkfilesel.c:559
+#: gtk/gtkfilesel.c:564
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Файл үүсгэх/боловсруулах товчийг харуулах эсэх."
 
 # gtk/gtkfilesel.c:551
-#: gtk/gtkfilesel.c:566
+#: gtk/gtkfilesel.c:571
 msgid "Select multiple"
 msgstr "Олон сонголт."
 
 # gtk/gtkfilesel.c:552
-#: gtk/gtkfilesel.c:567
+#: gtk/gtkfilesel.c:572
 msgid "Whether to allow multiple files to be selected"
 msgstr "Олон файл сонгогдож болох эсэх."
 
 # gtk/gtkfilesel.c:707
-#: gtk/gtkfilesel.c:722
+#: gtk/gtkfilesel.c:727
 msgid "Folders"
 msgstr "Хавтсууд"
 
 # gtk/gtkfilesel.c:711
-#: gtk/gtkfilesel.c:726
+#: gtk/gtkfilesel.c:731
 msgid "Fol_ders"
 msgstr "Хавтсууд"
 
 # gtk/gtkfilesel.c:742
-#: gtk/gtkfilesel.c:758
+#: gtk/gtkfilesel.c:763
 msgid "Files"
 msgstr "Файлууд"
 
 # gtk/gtkfilesel.c:746
-#: gtk/gtkfilesel.c:762
+#: gtk/gtkfilesel.c:767
 msgid "_Files"
 msgstr "Файлууд"
 
 # gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
-#: gtk/gtkfilesel.c:845 gtk/gtkfilesel.c:2237
+#: gtk/gtkfilesel.c:850 gtk/gtkfilesel.c:2240
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Уншигдахгүй хавтас: %s"
 
-#: gtk/gtkfilesel.c:976
+#: gtk/gtkfilesel.c:981
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2322,27 +2312,27 @@ msgstr ""
 "Та үүнийг сонгох уу?"
 
 # gtk/gtkfilesel.c:1076
-#: gtk/gtkfilesel.c:1107
+#: gtk/gtkfilesel.c:1112
 msgid "_New Folder"
 msgstr "Хавтас үүсгэх"
 
 # gtk/gtkfilesel.c:1087
-#: gtk/gtkfilesel.c:1118
+#: gtk/gtkfilesel.c:1123
 msgid "De_lete File"
 msgstr "Файл устгах"
 
 # gtk/gtkfilesel.c:1098
-#: gtk/gtkfilesel.c:1129
+#: gtk/gtkfilesel.c:1134
 msgid "_Rename File"
 msgstr "Файл шинээр нэрлэх"
 
-#: gtk/gtkfilesel.c:1429
+#: gtk/gtkfilesel.c:1436
 #, c-format
 msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" хавтас үүсгэхэд оролцсон тэмдэгтүүд нь файл нэрлэхэд зөвшөөрөгдөөгүй"
 
 # gtk/gtkfilesel.c:1360
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1438
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -2351,38 +2341,38 @@ msgstr ""
 "\"%s\" хавтас үүсгэхэд алдлаа: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1432 gtk/gtkfilesel.c:1668
+#: gtk/gtkfilesel.c:1439 gtk/gtkfilesel.c:1675
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Таны хэрэглэсэн тэмдэгтүүд файлыг нэрлэхэд зөвшөөрөгдөөгүй."
 
 # gtk/gtkfilesel.c:1369
-#: gtk/gtkfilesel.c:1440
+#: gtk/gtkfilesel.c:1447
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "\"%s\" хавтас үүсгэхэд алдлаа: %s\n"
 
 # gtk/gtkfilesel.c:1403
-#: gtk/gtkfilesel.c:1474
+#: gtk/gtkfilesel.c:1481
 msgid "New Folder"
 msgstr "Шинэ хавтас"
 
 # gtk/gtkfilesel.c:1418
-#: gtk/gtkfilesel.c:1489
+#: gtk/gtkfilesel.c:1496
 msgid "_Folder name:"
 msgstr "_Хавтсын нэр:"
 
 # gtk/gtkfilesel.c:1444
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1520
 msgid "C_reate"
 msgstr "Үү_сгэх"
 
-#: gtk/gtkfilesel.c:1556
+#: gtk/gtkfilesel.c:1563
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Файлын \"%s\" нэрэнд файлыг нэрлэхэд зөвшөөрөгдөөгүй тэмдэгт орсон байна"
 
 # gtk/gtkfilesel.c:1488
-#: gtk/gtkfilesel.c:1559
+#: gtk/gtkfilesel.c:1566
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -2392,35 +2382,35 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1490 gtk/gtkfilesel.c:1611
-#: gtk/gtkfilesel.c:1561 gtk/gtkfilesel.c:1682
+#: gtk/gtkfilesel.c:1568 gtk/gtkfilesel.c:1689
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Энэ нь файлыг нэрлэхэд зөвшөөрөгдөөгүй тэмдэгт байна."
 
 # gtk/gtkfilesel.c:1499
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1577
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "\"%s\" файлыг устгахад алдлаа: %s"
 
 # gtk/gtkfilesel.c:1542
-#: gtk/gtkfilesel.c:1613
+#: gtk/gtkfilesel.c:1620
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr " \"%s\" файлыг үнэхээр устгах уу?"
 
 # gtk/gtkfilesel.c:1547
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1625
 msgid "Delete File"
 msgstr "Файл устгах"
 
 # gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
-#: gtk/gtkfilesel.c:1664 gtk/gtkfilesel.c:1678
+#: gtk/gtkfilesel.c:1671 gtk/gtkfilesel.c:1685
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Файлын \"%s\" нэрэнд файлыг нэрлэхэд зөвшөөрөгдөөгүй тэмдэгт орсон байна"
 
 # gtk/gtkfilesel.c:1595
-#: gtk/gtkfilesel.c:1666
+#: gtk/gtkfilesel.c:1673
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2430,7 +2420,7 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1609
-#: gtk/gtkfilesel.c:1680
+#: gtk/gtkfilesel.c:1687
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2440,33 +2430,33 @@ msgstr ""
 "%s"
 
 # gtk/gtkfilesel.c:1619
-#: gtk/gtkfilesel.c:1690
+#: gtk/gtkfilesel.c:1697
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "\"%s\" файлыг \"%s\" -ээр нэрлэхэд алдлаа: %s"
 
 # gtk/gtkfilesel.c:1666
-#: gtk/gtkfilesel.c:1737
+#: gtk/gtkfilesel.c:1744
 msgid "Rename File"
 msgstr "Файлын шинээр нэрлэх"
 
 # gtk/gtkfilesel.c:1681
-#: gtk/gtkfilesel.c:1752
+#: gtk/gtkfilesel.c:1759
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "\"%s\" файлын шинэ нэр:"
 
 # gtk/gtkfilesel.c:1712
-#: gtk/gtkfilesel.c:1781
+#: gtk/gtkfilesel.c:1788
 msgid "_Rename"
 msgstr "_Сольж нэрлэх"
 
 # gtk/gtkfilesel.c:2103
-#: gtk/gtkfilesel.c:2217
+#: gtk/gtkfilesel.c:2220
 msgid "_Selection: "
 msgstr "_Сонголт: "
 
-#: gtk/gtkfilesel.c:3111
+#: gtk/gtkfilesel.c:3136
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2476,17 +2466,17 @@ msgstr ""
 "утгуудыг тохируул): %s"
 
 # gtk/gtkfilesel.c:2986
-#: gtk/gtkfilesel.c:3114
+#: gtk/gtkfilesel.c:3139
 msgid "Invalid Utf-8"
 msgstr "Utf-8 буруу"
 
 # gtk/gtkfilesel.c:3852
-#: gtk/gtkfilesel.c:3991
+#: gtk/gtkfilesel.c:4016
 msgid "Name too long"
 msgstr "Нэр хэт урт"
 
 # gtk/gtkfilesel.c:3854
-#: gtk/gtkfilesel.c:3993
+#: gtk/gtkfilesel.c:4018
 msgid "Couldn't convert filename"
 msgstr "Файлын нэр өөрчлөгдсөнгүй"
 
@@ -4067,7 +4057,7 @@ msgstr "_Налуу"
 # gtk/gtkstock.c:302
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
-msgstr "Руу _үсэр"
+msgstr "�уу _үсэр"
 
 # gtk/gtkstock.c:303
 #: gtk/gtkstock.c:303
@@ -5553,6 +5543,11 @@ msgstr "Хэрвээ цонх ажлын-талбар солигчид харъ�
 msgid "Amharic (EZ+)"
 msgstr "Амхар (EZ+)"
 
+#. ID
+#: modules/input/imcedilla.c:90
+msgid "Cedilla"
+msgstr "Седилла"
+
 # modules/input/imcyrillic-translit.c:216
 #. ID
 #: modules/input/imcyrillic-translit.c:216
@@ -5613,4 +5608,13 @@ msgstr "IM төлөвийн хэлбэр"
 #: modules/input/gtkimcontextxim.c:286
 msgid "How to draw the input method statusbar"
 msgstr "Төлөвийн самбарыг оруулах аргыг хэрхэн үзүүлэх"
+
+# gdk-pixbuf/io-gif.c:1144
+#~ msgid "GIF image contained a frame with height or width 0."
+#~ msgstr "GIF зураг кадрыг өндөр эсвэл өргөнтэй нь цуг агуулдаг"
+
+# gdk-pixbuf/io-gif.c:1173
+#~ msgid ""
+#~ "First frame of GIF image had 'revert to previous' as its disposal mode."
+#~ msgstr "GIF зургийн эхний кадр 'хуучиндаа шилжих' горим"
 
