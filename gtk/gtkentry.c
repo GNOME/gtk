@@ -4652,8 +4652,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
       
       entry = gtk_entry_completion_get_entry (completion);
 
-      gtk_widget_child_focus (gtk_widget_get_toplevel (entry), 
-			      GTK_DIR_TAB_FORWARD);
+      gtk_widget_child_focus (gtk_widget_get_toplevel (entry), dir);
 
       return TRUE;
     }

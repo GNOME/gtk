@@ -1,3 +1,8 @@
+Sun Feb 29 23:25:35 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentry.c (gtk_entry_completion_key_press): 
+	Fix the Shift-Tab support to go backwards.
+
 Sun Feb 29 16:40:40 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_class_init): Fix 
