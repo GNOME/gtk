@@ -1284,7 +1284,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gtk_tree_view_column_cell_get_size (completion->priv->column, NULL,
                                       NULL, NULL, NULL, &height);
 
-  g_print ("item height %d\n", height);
   if (items <= 0)
     gtk_widget_hide (completion->priv->scrolled_window);
   else

@@ -1,5 +1,8 @@
 2004-11-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
+	Remove a debug printf().  (#157087, Christian Persch)
+
 	* gtk/gtkicontheme.c: Actually commit the "stat less" patch
 	which appeared in the ChangeLog a few days ago.
 
