@@ -113,6 +113,11 @@ below.
 
 </para>
 
+<!-- ##### ARG GtkImage:icon-name ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkImage:icon-set ##### -->
 <para>
 
@@ -139,6 +144,11 @@ below.
 </para>
 
 <!-- ##### ARG GtkImage:pixbuf-animation ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkImage:pixel-size ##### -->
 <para>
 
 </para>
@@ -176,6 +186,7 @@ functions), but they will all return %NULL values.
 @GTK_IMAGE_STOCK: the widget contains a stock icon name (see <xref linkend="gtk-Stock-Items"/>)
 @GTK_IMAGE_ICON_SET: the widget contains a #GtkIconSet
 @GTK_IMAGE_ANIMATION: the widget contains a #GdkPixbufAnimation
+@GTK_IMAGE_ICON_NAME: 
 
 <!-- ##### FUNCTION gtk_image_get_icon_set ##### -->
 <para>
@@ -233,6 +244,16 @@ functions), but they will all return %NULL values.
 
 @image: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_get_icon_name ##### -->
+<para>
+
+</para>
+
+@image: 
+@icon_name: 
+@size: 
 
 
 <!-- ##### FUNCTION gtk_image_get_storage_type ##### -->
@@ -311,6 +332,16 @@ functions), but they will all return %NULL values.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_image_new_from_icon_name ##### -->
+<para>
+
+</para>
+
+@icon_name: 
+@size: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_image_set_from_file ##### -->
 <para>
 
@@ -378,6 +409,16 @@ functions), but they will all return %NULL values.
 @animation: 
 
 
+<!-- ##### FUNCTION gtk_image_set_from_icon_name ##### -->
+<para>
+
+</para>
+
+@image: 
+@icon_name: 
+@size: 
+
+
 <!-- ##### FUNCTION gtk_image_new ##### -->
 <para>
 
@@ -407,5 +448,23 @@ Gets the #GtkImage.
 @image: a #GdkPixmap
 @val: 
 @mask: a #GdkBitmap that indicates which parts of the image should be transparent.
+
+
+<!-- ##### FUNCTION gtk_image_set_pixel_size ##### -->
+<para>
+
+</para>
+
+@image: 
+@pixel_size: 
+
+
+<!-- ##### FUNCTION gtk_image_get_pixel_size ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
 
 

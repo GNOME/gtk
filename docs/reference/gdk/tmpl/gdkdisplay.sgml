@@ -343,3 +343,24 @@ Applications should never have any reason to use this facility
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_display_supports_clipboard_persistence ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_store_clipboard ##### -->
+<para>
+
+</para>
+
+@display: 
+@clipboard_window: 
+@time_: 
+@targets: 
+@n_targets: 
+
+

@@ -149,7 +149,8 @@ gdk_display_get_maximal_cursor_size
 gdk_display_get_default_group
 gdk_display_supports_selection_notification
 gdk_display_request_selection_notification
-
+gdk_display_supports_clipboard_persistence
+gdk_display_store_clipboard
 <SUBSECTION Standard>
 GDK_DISPLAY_OBJECT
 GDK_IS_DISPLAY

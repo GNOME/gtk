@@ -323,3 +323,31 @@ End:
 -->
 
 
+<!-- ##### FUNCTION gtk_clipboard_wait_is_target_available ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@target: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_clipboard_set_can_store ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@targets: 
+@n_targets: 
+
+
+<!-- ##### FUNCTION gtk_clipboard_store ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+
+

@@ -5059,6 +5059,9 @@ gtk_clipboard_wait_for_contents
 gtk_clipboard_wait_for_text
 gtk_clipboard_wait_is_text_available
 gtk_clipboard_wait_for_targets
+gtk_clipboard_wait_is_target_available
+gtk_clipboard_set_can_store
+gtk_clipboard_store
 <SUBSECTION Standard>
 GTK_CLIPBOARD
 GTK_TYPE_CLIPBOARD

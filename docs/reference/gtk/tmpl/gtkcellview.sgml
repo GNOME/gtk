@@ -129,6 +129,8 @@ A widget displaying a single row of a GtkTreeModel
 
 </para>
 
+@cell_view: 
+<!-- # Unused Parameters # -->
 @cellview: 
 
 
@@ -137,7 +139,9 @@ A widget displaying a single row of a GtkTreeModel
 
 </para>
 
-@cellview: 
+@cell_view: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@cellview: 
 
 

@@ -1,3 +1,9 @@
+2004-10-25  Anders Carlsson  <andersca@gnome.org>
+
+	* gdk/gdk-sections.txt:
+	* gtk/gtk-sections.txt:
+	Add new clipboard persistence api.
+	
 2004-10-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add new named icon api in GtkImage.

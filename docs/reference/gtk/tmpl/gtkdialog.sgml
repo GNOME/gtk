@@ -319,3 +319,22 @@ directly, but into the @vbox and @action_area, as described above.
 @setting: 
 
 
+<!-- ##### FUNCTION gtk_alternative_dialog_button_order ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_dialog_set_alternative_button_order ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@first_response_id: 
+@Varargs: 
+
+
