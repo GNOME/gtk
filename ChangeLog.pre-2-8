@@ -1,3 +1,8 @@
+2003-01-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/fnmatch.c (FNMATCH_TEST_CASES): #undef, since having
+	a main() in the library is obviously bad. 
+
 2002-12-27  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c (gtk_text_view_drag_data_received): Place the

@@ -256,7 +256,7 @@ _gtk_fnmatch (const char *pattern,
   return gtk_fnmatch_intern (pattern, string, TRUE);
 }
 
-#define FNMATCH_TEST_CASES
+#undef FNMATCH_TEST_CASES
 #ifdef FNMATCH_TEST_CASES
 
 #define TEST(pat, str, result) \
