@@ -210,7 +210,7 @@ gtk_plug_set_is_child (GtkPlug  *plug,
  * @plug: a #GtkPlug
  * @socket: a #GtkSocket
  * 
- * Add a plug to a socket within the same application.
+ * Adds a plug to a socket within the same application.
  **/
 void
 _gtk_plug_add_to_socket (GtkPlug   *plug,
@@ -244,7 +244,7 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
  * @plug: a #GtkPlug
  * @socket: a #GtkSocket
  * 
- * Remove a plug from a socket within the same application.
+ * Removes a plug from a socket within the same application.
  **/
 void
 _gtk_plug_remove_from_socket (GtkPlug   *plug,

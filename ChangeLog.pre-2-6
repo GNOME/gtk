@@ -1,3 +1,10 @@
+2002-01-08  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkplug.c, gtk/gtksocket.c: Speak of window IDs rather 
+	than XIDs in the docs.
+
+	* gtk/gtkclipboard.c (gtk_clipboard_clear): Fix docs.
+
 Tue Jan  8 18:39:23 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreedatalist.c (gtk_tree_data_list_compare_func): wow!

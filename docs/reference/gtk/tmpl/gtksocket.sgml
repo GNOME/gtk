@@ -10,20 +10,20 @@ Together with #GtkPlug, #GtkSocket provides the ability
 to embed widgets from one process into another process
 in a fashion that is transparent to the user. One
 process creates a #GtkSocket widget and, passes the
-XID of that widget's window to the other process, 
-which then creates a #GtkPlug window with that XID.
+that widget's window ID to the other process, 
+which then creates a #GtkPlug with that window ID.
 Any widgets contained in the #GtkPlug then will appear
 inside the first applications window.
 </para>
 
 <para>
-The XID of the socket's window is obtained by using
+The socket's window ID is obtained by using
 gtk_socket_get_id(). Before using this function,
 the socket must have been realized, and for hence,
 have been added to its parent.
 
 <example>
-<title>Obtaining the XID of a socket.</title>
+<title>Obtaining the window ID of a socket.</title>
 <programlisting>
 GtkWidget *socket = gtk_socket_new (<!>);
 gtk_widget_show (socket);
@@ -33,14 +33,14 @@ gtk_container_add (GTK_CONTAINER (parent), socket);
  * the ancestors of the socket is not yet visible.
  */
 gtk_widget_realize (socket);
-g_print ("The XID of the sockets window is %#x\n",
+g_print ("The ID of the sockets window is %#x\n",
          gtk_socket_get_id (socket));
 </programlisting>
 </example>
 </para>
 
 <para>
-Note that if you pass the XID of the socket to another
+Note that if you pass the window ID of the socket to another
 process that will create a plug in the socket, you 
 must make sure that the socket widget is not destroyed
 until that plug is created. Violating this rule will
@@ -82,13 +82,12 @@ as between a #GtkPlug and a #GtkSocket.</para>
 
 <!-- ##### STRUCT GtkSocket ##### -->
 <para>
-The #GtkSocket structure contains the following field.
-(This field should be considered read-only. It should
+The #GtkSocket structure contains the <structfield>plug_window</structfield>
+field.  (This field should be considered read-only. It should
 never be set by an application.)
 </para>
 
-@plug_window:
-the window embedded inside this #GtkSocket.
+@plug_window: the window embedded inside this #GtkSocket.
 
 
 <!-- ##### FUNCTION gtk_socket_new ##### -->

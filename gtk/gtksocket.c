@@ -207,7 +207,7 @@ gtk_socket_new (void)
 /**
  * gtk_socket_steal:
  * @socket: a #GtkSocket
- * @wid: the XID of an existing toplevel window.
+ * @wid: the window ID of an existing toplevel window.
  * 
  * Reparents a pre-existing toplevel window into a #GtkSocket. This is
  * meant to embed clients that do not know about embedding into a
@@ -232,14 +232,14 @@ gtk_socket_steal (GtkSocket *socket, GdkNativeWindow wid)
 /**
  * gtk_socket_add_id:
  * @socket: a #GtkSocket
- * @window_id: the XID of a client participating in the XEMBED protocol.
+ * @window_id: the window ID of a client participating in the XEMBED protocol.
  *
  * Adds an XEMBED client, such as a #GtkPlug, to the #GtkSocket.  The
  * client may be in the same process or in a different process. 
  * 
  * To embed a #GtkPlug in a #GtkSocket, you can either create the
- * #GtkPlug with gtk_plug_new (0), call gtk_plug_get_id() to get the
- * window ID of the plug, and then pass that to the
+ * #GtkPlug with <literal>gtk_plug_new (0)</literal>, call 
+ * gtk_plug_get_id() to get the window ID of the plug, and then pass that to the
  * gtk_socket_add_id(), or you can call gtk_socket_get_id() to get the
  * window ID for the socket, and call gtk_plug_new() passing in that
  * ID.
@@ -265,7 +265,7 @@ gtk_socket_add_id (GtkSocket *socket, GdkNativeWindow window_id)
  * 
  * Gets the window ID of a #GtkSocket widget, which can then
  * be used to create a client embedded inside the socket, for
- * instance with gtk_plug_new (). 
+ * instance with gtk_plug_new(). 
  *
  * The #GtkSocket must have already be added into a toplevel window 
  * before you can make this call.

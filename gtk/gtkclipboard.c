@@ -498,7 +498,8 @@ clipboard_unset (GtkClipboard *clipboard)
  * @clipboard:  a #GtkClipboard
  * 
  * Clears the contents of the clipboard. Generally this should only
- * be called between the time you call gtk_clipboard_set_contents(),
+ * be called between the time you call gtk_clipboard_set_with_owner()
+ * or gtk_clipboard_set_with_data(),
  * and when the @clear_func you supplied is called. Otherwise, the
  * clipboard may be owned by someone else.
  **/

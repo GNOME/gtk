@@ -1,3 +1,8 @@
+2002-01-08  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtksocket.sgml, gtk/tmpl/gtkplug.sgml: speak of 
+	window IDs rather than XIDs.
+
 2002-01-07  Matthias Clasen  <matthiasc@poet.de>
  	
 	* gtk/tmpl/gtksocket.sgml: Mention gtk_socket_get_id()
