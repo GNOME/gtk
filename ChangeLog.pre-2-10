@@ -1,3 +1,8 @@
+Sat Aug  1 22:17:00 1998  Raph Levien  <raph@acm.org>
+
+	* gdk/gdkrgb.c: made some minor config changes to unify GdkRgb
+	with the standalone release.
+
 Fri Jul 31 20:45:07 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (gtk_clist_button_press) (gtk_clist_motion)

@@ -27,9 +27,22 @@
 
 #define ENABLE_GRAYSCALE
 
+#ifdef GDK_RGB_STANDALONE
+
+/* Compiling as a standalone module (i.e. with Gtk 1.0) */
+/* gtk/gtk.h is already included in gdkrgbstub.c */
+#include "config.h"
+#include <gdk/gdkprivate.h>
+
+#else
+
+/* Compiling as a part of Gtk 1.1 or later */
 #include "../config.h"
-#include "gdk/gdk.h"
-#include "gdk/gdkprivate.h"
+#include "gdk.h"
+#include "gdkprivate.h"
+
+#endif
+
 #include "gdkrgb.h"
 
 typedef struct _GdkRgbInfo   GdkRgbInfo;
@@ -2386,8 +2399,10 @@ gdk_draw_rgb_image_core (GdkDrawable *drawable,
 	  conv (image, xs0, ys0, width1, height1, buf_ptr, rowstride,
 		x + x0, y + y0, cmap);
 
+#ifndef DONT_ACTUALLY_DRAW
 	  gdk_draw_image (drawable, gc,
 			  image, xs0, ys0, x + x0, y + y0, width1, height1);
+#endif
 	}
     }
 }
