@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.1.x\n"
-"POT-Creation-Date: 2003-02-02 10:11-0500\n"
-"PO-Revision-Date: 2002-12-06 11:51+0100\n"
+"POT-Creation-Date: 2003-02-06 12:07+0100\n"
+"PO-Revision-Date: 2003-02-07 04:55+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2999,7 +2999,7 @@ msgstr "Skupina"
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
-msgstr "Přepínací tlačíto, do jejíž skupiny patří tento widget."
+msgstr "Přepínací tlačítko, do jejíž skupiny patří tento widget."
 
 #: gtk/gtkrange.c:275
 msgid "Update policy"
@@ -4173,11 +4173,11 @@ msgstr "ZWS _Nulová šířka mezery"
 
 #: gtk/gtktextutil.c:54
 msgid "ZWJ Zero width _joiner"
-msgstr "ZWJ Nulová šířka _spojovatele"
+msgstr "ZWJ _Spojovatel nulové šířky"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWNJ Zero width _non-joiner"
-msgstr "ZWNJ Nulová šířka _nespojovatele"
+msgstr "ZWNJ _Nespojovatel nulové šířky"
 
 #: gtk/gtktextview.c:540
 msgid "Pixels Above Lines"
