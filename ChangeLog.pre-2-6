@@ -1,3 +1,8 @@
+2003-01-04  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilesel.h (struct _GtkFileSelection): Add /*< public >*/
+	and /*< private >*/ as appropriate.  (#97211)
+
 2003-01-04  Tor Lillqvist  <tml@iki.fi>
 
 	* Makefile.am (EXTRA_DIST): Don't distribute gtk-zip.sh, but do
