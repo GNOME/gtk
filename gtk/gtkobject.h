@@ -268,19 +268,19 @@ GtkArg* gtk_object_query_args	(GtkType	  class_type,
  *  where 'data' is NULL
  *  `gtk_object_get_data' gets the data associated with "key".
  */
-void	 gtk_object_set_data	    (GtkObject	     *object,
-				     const gchar     *key,
-				     gpointer	      data);
-void	 gtk_object_set_data_full   (GtkObject	     *object,
-				     const gchar     *key,
-				     gpointer	      data,
-				     GtkDestroyNotify destroy);
-void	 gtk_object_remove_data	    (GtkObject	     *object,
-				     const gchar     *key);
-gpointer gtk_object_get_data	    (GtkObject	     *object,
-				     const gchar     *key);
-void	 gtk_object_remove_no_notify(GtkObject	     *object,
-				     const gchar     *key);
+void	 gtk_object_set_data	     (GtkObject	     *object,
+				      const gchar    *key,
+				      gpointer	      data);
+void	 gtk_object_set_data_full    (GtkObject	     *object,
+				      const gchar    *key,
+				      gpointer	      data,
+				      GtkDestroyNotify destroy);
+void	 gtk_object_remove_data	     (GtkObject	     *object,
+				      const gchar    *key);
+gpointer gtk_object_get_data	     (GtkObject	     *object,
+				      const gchar    *key);
+void	 gtk_object_remove_no_notify (GtkObject	     *object,
+				      const gchar    *key);
 
 /* Set/get the "user_data" object data field of "object". It should
  *  be noted that these functions are no different than calling
@@ -305,19 +305,19 @@ void	gtk_object_add_arg_type		(const gchar	*arg_name,
 					 guint		 arg_id);
 
 /* Object data method variants that operate on key ids. */
-void gtk_object_set_data_by_id		(GtkObject	*object,
-					 GQuark		 data_id,
-					 gpointer	 data);
-void gtk_object_set_data_by_id_full	(GtkObject	*object,
-					 GQuark		 data_id,
-					 gpointer	 data,
+void gtk_object_set_data_by_id		(GtkObject	 *object,
+					 GQuark		  data_id,
+					 gpointer	  data);
+void gtk_object_set_data_by_id_full	(GtkObject	 *object,
+					 GQuark		  data_id,
+					 gpointer	  data,
 					 GtkDestroyNotify destroy);
-gpointer gtk_object_get_data_by_id	(GtkObject	*object,
-					 GQuark		 data_id);
-void  gtk_object_remove_data_by_id	(GtkObject	*object,
-					 GQuark		 data_id);
-void  gtk_object_remove_no_notify_by_id	(GtkObject	*object,
-					 GQuark		 key_id);
+gpointer gtk_object_get_data_by_id	(GtkObject	 *object,
+					 GQuark		  data_id);
+void  gtk_object_remove_data_by_id	(GtkObject	 *object,
+					 GQuark		  data_id);
+void  gtk_object_remove_no_notify_by_id	(GtkObject	 *object,
+					 GQuark		  key_id);
 #define	gtk_object_data_try_key	    g_quark_try_string
 #define	gtk_object_data_force_id    g_quark_from_string
 
