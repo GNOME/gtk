@@ -1,5 +1,20 @@
 2001-10-31  Matthias Clasen  <matthiasc@poet.de>
 
+	* gdk-pixbuf/gdk-pixbuf.sgml: include initialization_versions.sgml,
+	file-saving.sgml and module_interface.sgml.
+
+	* gdk-pixbuf/tmpl/module_interface.sgml: add short description.
+
+	* gtk/tmpl/gtkarg.sgml, gtk/tmpl/gtkdata.sgml, 
+	gtk/tmpl/gtkcellrenderertextpixbuf.sgml: removed, since they described 
+	no longer existent stuff and aren't included anymore.
+
+	* gdk/tmpl/color_contexts.sgml, gdk/tmpl/input_contexts.sgml, 
+	gdk/tmpl/input_methods.sgml: removed, since they described no longer 
+	existent stuff and aren't included anymore.
+
+2001-10-31  Matthias Clasen  <matthiasc@poet.de>
+
 	* gdk-pixbuf/gdk-pixbuf-sections.txt,
 	gdk-pixbuf/tmpl/animation.sgml, 
 	gdk-pixbuf/tmpl/module_interface.sgml: Updates. (#63293)

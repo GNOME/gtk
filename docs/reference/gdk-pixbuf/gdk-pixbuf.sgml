@@ -3,12 +3,15 @@
 <!entity gdk-pixbuf-gdk-pixbuf SYSTEM "sgml/gdk-pixbuf.sgml">
 <!entity gdk-pixbuf-refcounting SYSTEM "sgml/refcounting.sgml">
 <!entity gdk-pixbuf-file-loading SYSTEM "sgml/file-loading.sgml">
+<!entity gdk-pixbuf-file-saving SYSTEM "sgml/file-saving.sgml">
 <!entity gdk-pixbuf-creating SYSTEM "sgml/creating.sgml">
 <!entity gdk-pixbuf-inline SYSTEM "sgml/inline.sgml">
 <!entity gdk-pixbuf-scaling SYSTEM "sgml/scaling.sgml">
 <!entity gdk-pixbuf-util SYSTEM "sgml/util.sgml">
 <!entity gdk-pixbuf-animation SYSTEM "sgml/animation.sgml">
 <!entity GdkPixbufLoader SYSTEM "sgml/gdk-pixbuf-loader.sgml">
+<!entity module_interface SYSTEM "sgml/module_interface.sgml">
+<!entity initialization_versions SYSTEM "sgml/initialization_versions.sgml">
 <!entity gdk-pixbuf-gdk-pixbuf-xlib-init SYSTEM "sgml/gdk-pixbuf-xlib-init.sgml">
 <!entity gdk-pixbuf-gdk-pixbuf-xlib-rendering SYSTEM "sgml/gdk-pixbuf-xlib-rendering.sgml">
 <!entity gdk-pixbuf-gdk-pixbuf-xlib-from-drawables SYSTEM "sgml/gdk-pixbuf-xlib-from-drawables.sgml">
@@ -84,9 +87,12 @@
       </para>
     </partintro>
 
+    &initialization_versions;
+
     &gdk-pixbuf-gdk-pixbuf;
     &gdk-pixbuf-refcounting;
     &gdk-pixbuf-file-loading;
+    &gdk-pixbuf-file-saving;
     &gdk-pixbuf-creating;
     &gdk-pixbuf-inline;
     &gdk-pixbuf-scaling;
@@ -94,6 +100,7 @@
     &gdk-pixbuf-animation;
 
     &GdkPixbufLoader;
+    &module_interface;
 
     &gdk-pixbuf-gdk-pixbuf-xlib-init;
     &gdk-pixbuf-gdk-pixbuf-xlib-rendering;

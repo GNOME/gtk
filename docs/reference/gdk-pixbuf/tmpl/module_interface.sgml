@@ -2,7 +2,7 @@
 Module Interface
 
 <!-- ##### SECTION Short_Description ##### -->
-
+extending &gdk-pixbuf;
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
