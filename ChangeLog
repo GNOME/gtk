@@ -1,5 +1,11 @@
 2005-03-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkclipboard.c (gtk_clipboard_set_can_store): 
+	Don't accept n_targets == -1.
+	(clipboard_unset): unref the old_data, not the
+	user_data which we have just cleared.  (#172038, Sven
+	Neumann)
+
 	* gtk/gtkcombobox.c (gtk_combo_box_popup): Don't 
 	segfault if somebody tries to popup an unrealized
 	combo box.  (#172031, Felipe Heidrich)

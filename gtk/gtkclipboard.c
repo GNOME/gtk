@@ -678,7 +678,7 @@ clipboard_unset (GtkClipboard *clipboard)
    */
   if (old_have_owner &&
       old_n_storable_targets != -1)
-    g_object_unref (clipboard->user_data);
+    g_object_unref (old_data);
 }
 
 /**
@@ -1609,6 +1609,7 @@ gtk_clipboard_set_can_store (GtkClipboard         *clipboard,
   };
   
   g_return_if_fail (GTK_IS_CLIPBOARD (clipboard));
+  g_return_if_fail (n_targets >= 0);
 
   if (clipboard->selection != GDK_SELECTION_CLIPBOARD)
     return;
