@@ -1,3 +1,8 @@
+2001-03-18  Mike Kestner  <mkestner@ameritech.net>
+
+	* make-inline-pixbuf.c (main): Added logic to remove output when
+	failures occur.
+
 2001-03-14  Havoc Pennington  <hp@redhat.com>
 
 	* Makefile.am (gdk-pixbuf-marshal.c): Use different temporary file
