@@ -20,6 +20,9 @@ Cambridge, MA 02139, USA.  */
 #endif
 
 #include <errno.h>
+/* Added for GTK. We need to make sure that all constants are defined
+ * to properly compile this file */
+#define _GNU_SOURCE
 #include "fnmatch.h"
 #include <ctype.h>
 
