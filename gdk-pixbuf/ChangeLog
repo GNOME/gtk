@@ -1,3 +1,13 @@
+Mon May 28 14:21:35 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* io-bmp.c: Patch from Helmethead <hoshem@mel.comcen.com.au> to
+	fix up bmp decoder to: 
+	 - adds 16 bpp bmp support (bug #53884)
+	 - adds OS/2 1.x format bmp support (bug #54964)
+	 - adds 4 bpp RLE compressed bmp support
+	 - adds 1 bpp colormap support
+	 - fixes negative height (top down) bmp support
+
 2001-05-25  Hans Breuer  <hans@breuer.org>
 
 	* gdk_pixbuf.def : reflect Havoc's recent api change
