@@ -1,4 +1,19 @@
-2002-05-05  Matthias Clasen  <maclas@gmx.de>
+Mon May  6 12:17:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Fix versioning to avoid changing the
+	soname!
+
+	[ merge from stable ]
+
+	* Makefile.am (EXTRA_DIST): Add ChangeLog.pre-2-0 (#78641)
+
+	* m4macros/gtk-2.0.m4: save CFLAGS/LIBS properly when
+	compiling "what went wrong" test case. (#79329)
+
+	* m4macros/gtk-2.0.m4: Remove reference to editing
+	pkg-config script. (From Jim Gettys)
+
+02-05-05  Matthias Clasen  <maclas@gmx.de>
 
 	* configure.in: Bump version to 2.1.0, binary, interface age 0.
 

@@ -13,6 +13,7 @@ EXTRA_DIST =			\
 	NEWS.pre-1-0		\
 	ChangeLog.pre-1-0	\
 	ChangeLog.pre-1-2	\
+	ChangeLog.pre-2-0	\
 	README.cvs-commits	\
 	README.win32		\
 	config.h.win32		\
