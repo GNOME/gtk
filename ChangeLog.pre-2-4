@@ -3,10 +3,17 @@
 	* Makefile.am: Distribute README.win32.
 	
 	* gdk/Makefile.am
-	* gdk/win32/Makefile.am: Distribute gdk/win32.
+	* gdk/win32/Makefile.am: Distribute Win32 files.
+
+	* gdk/makefile.msc: New file.
+
+	* gdk/gdk.c (gdk_arg_context_parse): Fix gccism (no statement
+	after label).
 
 	* gdk/gdkprivate.h: Must mark also gdk_error_warnings and
 	gdk_error_code as GDKVAR, as they are referred outside GDK.
+
+	* gdk/win32/makefile.msc: Update.
 
 	* gdk/win32/gdkinput-win32.c: Remove debugging leftover.
 

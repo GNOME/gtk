@@ -1,4 +1,6 @@
 EXTRA_DIST = \
+	makefile.cygwin \
+	makefile.msc \
 	gdkcc-win32.c \
 	gdkcolor-win32.c \
 	gdkcursor-win32.c \

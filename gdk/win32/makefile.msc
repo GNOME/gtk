@@ -1,10 +1,6 @@
 ## Makefile for building the GDK DLL with Microsoft C
 ## Use: nmake -f makefile.msc
 
-# Change this to wherever you want to install the DLLs. This directory
-# should be in your PATH.
-BIN = C:\bin
-
 # Location of the Wintab toolkit. Downloadable from http://www.pointing.com.
 WTKIT = ..\..\..\wtkit126
 
@@ -15,18 +11,15 @@ WTKIT = ..\..\..\wtkit126
 !IFNDEF DEBUG
 # Full optimization:
 OPTIMIZE = -Ox -MD
-LINKDEBUG = /nodefaultlib:libc.lib
 !ELSE
 # Debugging:
 OPTIMIZE = -Zi -MDd
-LINKDEBUG = /defaultlib:libcd.lib /debug
 !ENDIF
 
 # cl -? describes the options
 CC = cl -G5 -GF $(OPTIMIZE) -W3 -nologo
 
 LDFLAGS = /link /machine:ix86 $(LINKDEBUG)
-INSTALL = copy
 
 GLIB_VER=1.3
 GTK_VER=1.3
@@ -35,57 +28,31 @@ GLIB = ..\..\..\glib
 CFLAGS = -I. -I.. -I..\.. -I$(WTKIT)\include -I$(GLIB) -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
 
 all: \
-	gdk\gdkprivate.h \
-	gdk\gdkx.h	\
 	..\..\config.h	\
-	gdk-$(GTK_VER).dll
+	gdk-win32.lib \
+	gdk.res
 
-install : all
-	$(INSTALL) gdk-$(GTK_VER).dll $(BIN)
-
-gdk_OBJECTS = \
-	gdk.obj		\
-	gdkcc.obj	\
-	gdkcolor.obj	\
-	gdkcursor.obj	\
-	gdkdnd.obj	\
-	gdkdraw.obj	\
-	gdkevents.obj	\
-	gdkfont.obj	\
-	gdkgc.obj	\
-	gdkglobals.obj	\
-	gdkim.obj	\
-	gdkimage.obj	\
-	gdkinput.obj	\
-	gdkpixmap.obj	\
-	gdkproperty.obj	\
-	gdkrgb.obj	\
-	gdkrectangle.obj\
-	gdkregion.obj	\
-	gdkselection.obj\
-	gdkvisual.obj	\
-	gdkwindow.obj	\
-	gdkxid.obj
-
-# We must have copies of gdkx.h and gdkprivate.h in the gdk
-# subdirectory, so that application sources which want to be
-# compilable with both GTk+ 1.2 (where there are no separate backend
-# gdk directories) and this 1.3 version (where the Win32 backend is in
-# the directory of *this* file you are reading right now) can use
-# #include <gdk/gdkprivate.h>.
-
-# Applications that depend on GTk+ 1.3 or later should include
-# gdkprivate.h and gdkx.h without the gdk/ prefix. The CFLAGS should
-# include an -I switch pointing to the backend-specific directory
-# (*this* directory in the Win32 case).
-
-gdk\gdkprivate.h : gdkprivate.h
-	-md gdk
-	copy gdkprivate.h gdk
-
-gdk\gdkx.h : gdkx.h
-	-md gdk
-	copy gdkx.h gdk
+gdk_win32_OBJECTS = \
+	gdkcc-win32.obj \
+	gdkcolor-win32.obj \
+	gdkcursor-win32.obj \
+	gdkdnd-win32.obj \
+	gdkdrawable-win32.obj \
+	gdkevents-win32.obj \
+	gdkfont-win32.obj \
+	gdkgc-win32.obj \
+	gdkglobals-win32.obj \
+	gdkim-win32.obj \
+	gdkimage-win32.obj \
+	gdkinput-win32.obj \
+	gdkmain-win32.obj \
+	gdkpixmap-win32.obj \
+	gdkproperty-win32.obj \
+	gdkregion-win32.obj \
+	gdkselection-win32.obj \
+	gdkvisual-win32.obj \
+	gdkwin32id.obj \
+	gdkwindow-win32.obj
 
 ..\..\config.h : ..\..\config.h.win32
 	copy ..\..\config.h.win32 ..\..\config.h
@@ -93,27 +60,14 @@ gdk\gdkx.h : gdkx.h
 gdk.res : rc\gdk.rc
 	rc -r -fo gdk.res rc\gdk.rc
 
-gdk-$(GTK_VER).dll : $(gdk_OBJECTS) gdk.def gdk.res
-	$(CC) $(CFLAGS) -LD -Fegdk-$(GTK_VER).dll $(gdk_OBJECTS) $(GLIB)\glib-$(GLIB_VER).lib gdi32.lib user32.lib shell32.lib ole32.lib uuid.lib $(WTKIT)\lib\i386\wntab32x.lib $(LDFLAGS) gdk.res /def:gdk.def
+gdk-win32.lib : $(gdk_win32_OBJECTS)
+	lib -out:gdk-win32.lib $(gdk_win32_OBJECTS)
 
 .c.obj :
 	$(CC) $(CFLAGS) -GD -c -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $<
 
-gdkrgb.c : ..\gdkrgb.c
-	copy ..\gdkrgb.c .
-
-gdkrectangle.c : ..\gdkrectangle.c
-	copy ..\gdkrectangle.c .
-
 clean:
-	del *.exe
 	del *.obj
-	del *.dll
 	del *.lib
-	del *.exp
 	del *.err
-	del *.map
-	del *.sym
 	del *.res
-	del *.pdb
-	del *.ilk
