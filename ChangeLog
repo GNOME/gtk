@@ -1,4 +1,15 @@
-Mon Apr  5 13:08:51 1999  Owen Taylor  <otaylor@redhat.com>
+Mon Apr  5 17:11:57 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpixmap.c (_gdk_pixmap_create_from_xpm): Check 
+	explicitly for the string "None" - it is in the XPM
+	spec and some servers treat unknown colors in odd ways
+	(like asking the user!)
+
+Mon Apr  5 13:21:30 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkevents.c (gdk_event_check, gdk_event_prepare):
+	Fix warning created by people mucking around
+	with the gsource API.
 
 	* gdk/gdkevents.c (gdk_io_invoke, gdk_input_add_full):
 	Change mapping between GIOCondition and GdkInputCondition

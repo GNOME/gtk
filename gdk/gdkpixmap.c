@@ -518,7 +518,7 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
       
       color_name = gdk_pixmap_extract_color (buffer);
       
-      if (color_name == NULL ||
+      if (color_name == NULL || strcmp (color_name, "None") == 0 ||
 	  gdk_color_parse (color_name, &color->color) == FALSE)
 	{
 	  color->color = *transparent_color;
