@@ -1625,7 +1625,11 @@ gtk_text_delete_text    (GtkEditable       *editable,
 			 gint               start_pos,
 			 gint               end_pos)
 {
-  GtkText *text = GTK_TEXT (editable);
+  GtkText *text;
+  
+  g_return_if_fail (start_pos >= 0);
+
+  text = GTK_TEXT (editable);
   
   gtk_text_set_point (text, start_pos);
   if (end_pos < 0)
@@ -3262,20 +3266,17 @@ remove_cache_line (GtkText* text, GList* member)
 {
   GList *list;
 
+  if (member == NULL)
+    return NULL;
+
   if (member == text->line_start_cache)
-    {
-      if (text->line_start_cache)
-	text->line_start_cache = text->line_start_cache->next;
-    }
+    text->line_start_cache = text->line_start_cache->next;
 
   if (member->prev)
-    {
-      list = member->prev;
-  
-      list->next = member->next;
-      if (list->next)
-	list->next->prev = list;
-    }
+    member->prev->next = member->next;
+
+  if (member->next)
+    member->next->prev = member->prev;
 
   list = member->next;
   
@@ -3497,7 +3498,8 @@ gtk_text_delete_forward_character (GtkText *text)
     gtk_editable_delete_selection (editable);
   else
     {
-      gtk_editable_delete_text (editable, text->point.index, text->point.index + 1);
+      if (text->point.index + 1 <= TEXT_LENGTH (text))
+	gtk_editable_delete_text (editable, text->point.index, text->point.index + 1);
     }
 }
 
@@ -3511,7 +3513,8 @@ gtk_text_delete_backward_character (GtkText *text)
     gtk_editable_delete_selection (editable);
   else
     {
-      gtk_editable_delete_text (editable, text->point.index - 1, text->point.index);
+      if (text->point.index > 0)
+	gtk_editable_delete_text (editable, text->point.index - 1, text->point.index);
     }
 }
 
