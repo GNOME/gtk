@@ -43,6 +43,10 @@ im_am_et_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_am_et_la_SOURCES = imam-et.c
 im_am_et_la_LIBADD = $(LDADDS)
 
+im_cedilla_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
+im_cedilla_la_SOURCES = imcedilla.c
+im_cedilla_la_LIBADD = $(LDADDS)
+
 im_cyrillic_translit_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_cyrillic_translit_la_SOURCES = imcyrillic-translit.c
 im_cyrillic_translit_la_LIBADD = $(LDADDS)
@@ -104,6 +108,7 @@ uninstall-local:
 module_LTLIBRARIES =				\
 	$(IM_XIM_MODULE)			\
 	im-am-et.la				\
+	im-cedilla.la				\
 	im-cyrillic-translit.la			\
 	im-hangul.la				\
 	im-inuktitut.la				\

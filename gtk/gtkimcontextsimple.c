@@ -708,6 +708,7 @@ static const guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_a,	GDK_diaeresis,	0,	0,	0x00E4,	/* LATIN_SMALL_LETTER_A_WITH_DIAERESIS */
   GDK_Multi_key,	GDK_a,	GDK_acute,	0,	0,	0x00E1,	/* LATIN_SMALL_LETTER_A_WITH_ACUTE */
   GDK_Multi_key,	GDK_b,	GDK_period,	0,	0,	0x1E03,	/* LATIN_SMALL_LETTER_B_WITH_DOT_ABOVE */
+  GDK_Multi_key,	GDK_c,  GDK_apostrophe,	0,      0,      0x0107, /* LATIN_SMALL_LETTER_C_WITH_ACUTE */
   GDK_Multi_key,	GDK_c,	GDK_comma,	0,	0,	0x00E7,	/* LATIN_SMALL_LETTER_C_WITH_CEDILLA */
   GDK_Multi_key,	GDK_c,	GDK_period,	0,	0,	0x010B,	/* LATIN_SMALL_LETTER_C_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_c,	GDK_slash,	0,	0,	0x00A2,	/* CENT_SIGN */

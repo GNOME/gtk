@@ -231,11 +231,8 @@ gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
 	{
 	  const char *locale;
 	  
-#ifdef HAVE_LC_MESSAGES
-	  locale = setlocale (LC_MESSAGES, NULL);
-#else
 	  locale = setlocale (LC_CTYPE, NULL);
-#endif
+
 	  global_context_id = _gtk_im_module_get_default_context_id (locale);
 	}
 	

@@ -1,3 +1,22 @@
+Fri Aug 15 16:54:39 2003  Owen Taylor  <otaylor@redhat.com>
+
+	Improve Cedilla handling - based on a patch from Gustavo 
+	De Nardin, #111334
+
+	* modules/input/imcedilla.c po/POTFILES.in: Input method that 
+	produces C_WITH_CEDILLA rather than C_WITH_ACUTE for 
+	dead_acute+c combinations. Make this the default for
+	fr and pt.
+
+	* gtk/gtkimmulticontext.c (gtk_im_multicontext_get_slave): 
+	Use LC_CTYPE instead of LC_MESSAGES to pick the default
+	input method.
+
+Fri Aug 15 17:00:19 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontextsimple.c: Fix missing compose sequence
+	for Multi_key+c+apostrophe.
+
 Fri Aug 15 21:57:34 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.
