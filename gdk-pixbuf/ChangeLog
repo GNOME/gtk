@@ -1,3 +1,10 @@
+1999-11-24  James Henstridge  <james@daa.com.au>
+
+	* configure.in (AC_OUTPUT): altered hack to place the symlink in the
+	top builddir rather than src.  This still builds fine, and does not
+	get gtk-doc into an infinite loop when trying to find all the source
+	files.
+
 1999-11-23  Jonathan Blandford  <jrb@redhat.com>
 
 	* Removed #PRAGMA } from headers.  Also, make compile if you don't
