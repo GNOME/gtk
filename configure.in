@@ -132,6 +132,10 @@ AC_SUBST(REBUILD)
 # i18n stuff
 ALL_LINGUAS="de pt"
 AM_GNU_GETTEXT
+AC_CHECK_FUNC(gettext,
+	,
+	AC_CHECK_LIB(intl, gettext)
+)
 
 dnl The DU4 header files don't provide library prototypes unless 
 dnl -std1 is given to the native cc.
