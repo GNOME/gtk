@@ -6,9 +6,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.0.3\n"
-"POT-Creation-Date: 2002-06-16 00:04-0400\n"
-"PO-Revision-Date: 2002-06-13 19:32+0200\n"
+"Project-Id-Version: gtk+ 2.0.5\n"
+"POT-Creation-Date: 2002-07-10 18:49+0200\n"
+"PO-Revision-Date: 2002-07-10 18:50+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <gnome@softcatala.net>\n"
 "MIME-Version: 1.0\n"
@@ -137,15 +137,15 @@ msgstr "Les dades en punts de la imatge estan corrompudes"
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "És impossible d'obtenir %u bytes a la memòria intermitja"
 
-#: gdk-pixbuf/io-bmp.c:266 gdk-pixbuf/io-bmp.c:366
+#: gdk-pixbuf/io-bmp.c:261 gdk-pixbuf/io-bmp.c:374
 msgid "Not enough memory to load bitmap image"
 msgstr "No existeix prou memòria per carregar la imatge en mapa de bits"
 
-#: gdk-pixbuf/io-bmp.c:292
+#: gdk-pixbuf/io-bmp.c:300
 msgid "BMP image has unsupported header size"
 msgstr "La imatge BMP té una mida de capçalera no implementat"
 
-#: gdk-pixbuf/io-bmp.c:317 gdk-pixbuf/io-bmp.c:340 gdk-pixbuf/io-bmp.c:399
+#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:409
 msgid "BMP image has bogus header data"
 msgstr "La imatge BMP conté dades de capçalera errònies"
 
@@ -550,39 +550,43 @@ msgstr "No es pot obtenir pixbuf"
 msgid "Unsupported TGA image type"
 msgstr "Tipus d'imatge TGA sense implementació"
 
-#: gdk-pixbuf/io-tiff.c:187
+#: gdk-pixbuf/io-tiff.c:191
 msgid "Could not get image width (bad TIFF file)"
 msgstr "No es pot obtenir l'amplada de la imatge (fitxer TIFF incorrecte)"
 
-#: gdk-pixbuf/io-tiff.c:194
+#: gdk-pixbuf/io-tiff.c:198
 msgid "Could not get image height (bad TIFF file)"
 msgstr "No es pot obtenir l'alçada de la imatge (fitxer TIFF incorrecte)"
 
-#: gdk-pixbuf/io-tiff.c:202
+#: gdk-pixbuf/io-tiff.c:206
 msgid "Width or height of TIFF image is zero"
 msgstr "L'amplada o l'alçada de la imatge TIFF és zero"
 
-#: gdk-pixbuf/io-tiff.c:211 gdk-pixbuf/io-tiff.c:220
+#: gdk-pixbuf/io-tiff.c:215 gdk-pixbuf/io-tiff.c:224
 msgid "Dimensions of TIFF image too large"
 msgstr "Les dimensions de la imatge TIFF són massa grans"
 
-#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
+#: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:552
 msgid "Insufficient memory to open TIFF file"
 msgstr "Memòria insuficient per obrir el fitxer TIFF"
 
-#: gdk-pixbuf/io-tiff.c:254
+#: gdk-pixbuf/io-tiff.c:258
 msgid "Failed to load RGB data from TIFF file"
 msgstr "No s'ha pogut carregar les dades RGB des del fitxer TIFF"
 
-#: gdk-pixbuf/io-tiff.c:324
+#: gdk-pixbuf/io-tiff.c:266
+msgid "Unsupported TIFF variant"
+msgstr "Variant de TIFF no suportada"
+
+#: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
 msgstr "No s'ha pogut obrir la imatge TIFF"
 
-#: gdk-pixbuf/io-tiff.c:337
+#: gdk-pixbuf/io-tiff.c:349
 msgid "TIFFClose operation failed"
 msgstr "L'operació TIFFClose ha fallat"
 
-#: gdk-pixbuf/io-tiff.c:470 gdk-pixbuf/io-tiff.c:484
+#: gdk-pixbuf/io-tiff.c:482 gdk-pixbuf/io-tiff.c:495
 msgid "Failed to load TIFF image"
 msgstr "No s'ha pogut carregar la imatge TIFF"
 
