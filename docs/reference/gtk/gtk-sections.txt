@@ -2184,6 +2184,8 @@ gtk_paned_add2
 gtk_paned_gutter_size
 gtk_paned_pack1
 gtk_paned_pack2
+gtk_paned_get_child1
+gtk_paned_get_child2
 gtk_paned_set_gutter_size
 gtk_paned_set_position
 gtk_paned_get_position

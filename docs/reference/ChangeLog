@@ -1,3 +1,7 @@
+2004-01-20  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtk-sections.txt: Added gtk_paned_get_child[12].
+
 Thu Jan 15 23:54:46 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-docs.sgml: Move the old chapters about 1.2 and 2.0 
