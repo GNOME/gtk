@@ -1,3 +1,9 @@
+Thu Dec 11 01:57:05 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_class_init): Move
+	the documentation for signals inline, to get proper parameter
+	documentation.  (#128977)
+
 Sat Nov 15 00:26:19 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* queryloaders.c (loader_sanity_check): Check that the mask

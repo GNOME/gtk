@@ -1,3 +1,8 @@
+Thu Dec 11 01:57:55 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/tmpl/gdk-pixbuf-loader.sgml: Signal documentation
+	moved inline.
+
 Thu Dec 11 00:04:10 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_window_[sg]et_accept_focus().
