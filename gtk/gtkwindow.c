@@ -1002,11 +1002,9 @@ gtk_window_need_resize (GtkContainer *container)
     return return_val;
 
   if (GTK_WIDGET_VISIBLE (container))
-    {
-      window->need_resize = TRUE;
-      return_val = gtk_window_move_resize (GTK_WIDGET (window));
-      window->need_resize = FALSE;
-    }
+    return_val = gtk_window_move_resize (GTK_WIDGET (window));
+  else
+    window->need_resize = TRUE;
   
   return return_val;
 }
@@ -1019,12 +1017,16 @@ gtk_real_window_move_resize (GtkWindow *window,
 			     gint       height)
 {
   GtkWidget *widget;
+  gboolean needed_resize;
   
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
   g_return_val_if_fail ((x != NULL) || (y != NULL), FALSE);
-  
+
   widget = GTK_WIDGET (window);
+
+  needed_resize = window->need_resize;
+  window->need_resize = FALSE;
 
   if ((widget->requisition.width == 0) ||
       (widget->requisition.height == 0))
@@ -1064,6 +1066,21 @@ gtk_real_window_move_resize (GtkWindow *window,
         gdk_window_resize (widget->window,
 			   widget->requisition.width,
 			   widget->requisition.height);
+    }
+  else if (needed_resize)
+    {
+      /* The windows contents changed size while it was not
+       * visible, so reallocate everything, since we didn't
+       * keep track of what changed
+       */
+      GtkAllocation allocation;
+
+      allocation.x = 0;
+      allocation.y = 0;
+      allocation.width = widget->requisition.width;
+      allocation.height = widget->requisition.height;
+      
+      gtk_widget_size_allocate (widget, &allocation);
     }
   else
     {
@@ -1150,7 +1167,7 @@ gtk_real_window_move_resize (GtkWindow *window,
 	}
       g_slist_free (resize_containers);
     }
-  
+
   return FALSE;
 }
 
