@@ -1756,7 +1756,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	}
 
       if (event->type == GDK_BUTTON_PRESS &&
-	  !event->state)
+	  !(event->state & gtk_accelerator_get_default_mod_mask ()))
 	{
 	  GtkCellEditable *cell_editable = NULL;
 	  /* FIXME: get the right flags */
