@@ -1151,7 +1151,7 @@ print_event (GdkEvent *event)
 	       event->configure.width, event->configure.height);
       break;
     case GDK_SCROLL:
-      g_print ("(%.4g,%.4g) (%.4g,%.4g)%s",
+      g_print ("(%.4g,%.4g) (%.4g,%.4g) %s ",
 	       event->scroll.x, event->scroll.y,
 	       event->scroll.x_root, event->scroll.y_root,
 	       (event->scroll.direction == GDK_SCROLL_UP ? "UP" :
@@ -2192,14 +2192,11 @@ gdk_event_translate (GdkDisplay *display,
 	apply_filters (display, NULL, msg, _gdk_default_filters);
       
       /* If result is GDK_FILTER_CONTINUE, we continue as if nothing
-       * happened. If it is GDK_FILTER_REMOVE, we return FALSE from
-       * gdk_event_translate(), meaning that the DefWindowProc() will
-       * be called. If it is GDK_FILTER_TRANSLATE, we return TRUE, and
-       * DefWindowProc() will not be called.
+       * happened. If it is GDK_FILTER_REMOVE or GDK_FILTER_TRANSLATE,
+       * we return TRUE, and DefWindowProc() will not be called.
        */
-      if (result == GDK_FILTER_REMOVE)
-	return FALSE;
-      else if (result == GDK_FILTER_TRANSLATE)
+      if (result == GDK_FILTER_REMOVE ||
+	  result == GDK_FILTER_TRANSLATE)
 	return TRUE;
     }
 
@@ -2256,12 +2253,8 @@ gdk_event_translate (GdkDisplay *display,
       GdkFilterReturn result =
 	apply_filters (display, window, msg, ((GdkWindowObject *) window)->filters);
 
-      if (result == GDK_FILTER_REMOVE)
-	{
-	  return_val = FALSE;
-	  goto done;
-	}
-      else if (result == GDK_FILTER_TRANSLATE)
+      if (result == GDK_FILTER_REMOVE ||
+	  result == GDK_FILTER_TRANSLATE)
 	{
 	  return_val = TRUE;
 	  goto done;
@@ -2318,52 +2311,54 @@ gdk_event_translate (GdkDisplay *display,
   else if (msg->message == client_message)
     {
       GList *tmp_list;
+      GdkFilterReturn result = GDK_FILTER_CONTINUE;
+
+      GDK_NOTE (EVENTS, g_print (" client_message"));
 
       tmp_list = client_filters;
       while (tmp_list)
 	{
 	  GdkClientFilter *filter = tmp_list->data;
 
+	  tmp_list = tmp_list->next;
+
 	  if (filter->type == GDK_POINTER_TO_ATOM (msg->wParam))
 	    {
-	      GList *this_filter = g_list_append (NULL, filter);
+	      GList *filter_list = g_list_append (NULL, filter);
 	      
-	      GdkFilterReturn result =
-		apply_filters (display, window, msg, this_filter);
+	      GDK_NOTE (EVENTS, g_print (" (match)"));
 
-	      GDK_NOTE (EVENTS, g_print (" (client filter match)"));
+	      result = apply_filters (display, window, msg, filter_list);
 
-	      g_list_free (this_filter);
+	      g_list_free (filter_list);
 
-	      if (result == GDK_FILTER_REMOVE)
-		{
-		  return_val = FALSE;
-		  goto done;
-		}
-	      else if (result == GDK_FILTER_TRANSLATE)
-		{
-		  return_val = TRUE;
-		  goto done;
-		}
-	      else /* GDK_FILTER_CONTINUE */
-		{
-		  /* Send unknown client messages on to Gtk for it to use */
-
-		  event = gdk_event_new (GDK_CLIENT_EVENT);
-		  event->client.window = window;
-		  event->client.message_type = GDK_POINTER_TO_ATOM (msg->wParam);
-		  event->client.data_format = 32;
-		  event->client.data.l[0] = msg->lParam;
-		  for (i = 1; i < 5; i++)
-		    event->client.data.l[i] = 0;
-
-		  append_event (display, event);
-
-		  return_val = TRUE;
-		  goto done;
-		}
+	      if (result != GDK_FILTER_CONTINUE)
+		break;
 	    }
-	  tmp_list = tmp_list->next;
+	}
+
+      if (result == GDK_FILTER_REMOVE ||
+	  result == GDK_FILTER_TRANSLATE)
+	{
+	  return_val = TRUE;
+	  goto done;
+	}
+      else
+	{
+	  /* Send unknown client messages on to Gtk for it to use */
+
+	  event = gdk_event_new (GDK_CLIENT_EVENT);
+	  event->client.window = window;
+	  event->client.message_type = GDK_POINTER_TO_ATOM (msg->wParam);
+	  event->client.data_format = 32;
+	  event->client.data.l[0] = msg->lParam;
+	  for (i = 1; i < 5; i++)
+	    event->client.data.l[i] = 0;
+	  
+	  append_event (display, event);
+	  
+	  return_val = TRUE;
+	  goto done;
 	}
     }
 

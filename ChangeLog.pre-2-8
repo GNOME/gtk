@@ -3,6 +3,15 @@
 	* gdk/win32/gdkevents-win32.c (build_pointer_event_state): The
 	state field should represent the state before the event, like on
 	X11. (#169753)
+	(gdk_event_translate): Fix event filter handling. If an event
+	filter (global, client message filter, of window-specific) returns
+	GDK_FILTER_CONTINUE, continue as if nothing happened. If it
+	returns GDK_FILTER_REMOVE or GDK_FILTER_TRANSLATE, return TRUE
+	from gdk_event_translate() which means that DefWindowProc() will
+	not be called.
+	(gdk_event_translate): Fix client message handling. Append a
+	GDK_CLIENT_EVENT unless there is a filter that matches and returns
+	something other than GDK_FILTER_CONTINUE. (#135552)
 
 2005-03-29  Matthias Clasen  <mclasen@redhat.com>
 
