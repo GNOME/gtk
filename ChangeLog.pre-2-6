@@ -1,3 +1,8 @@
+2002-05-23  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk-zip.sh.in: Use correct path to the loaders and immodules
+	directories (GTK_BINARY_VERSION, not GTK_VERSION).
+
 Wed May 22 16:12:38 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Require autoconf-2.52 explicitely,
