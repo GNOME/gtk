@@ -1,3 +1,8 @@
+Mon Dec  7 16:03:55 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkthemes.h: Remove random unnecessary includes
+	of standard headers.
+
 1998-12-07  Damon Chaplin  <DAChaplin@msn.com>
 
 	* gtk/gtkfontsel.c (gtk_font_selection_select_best_style): made sure

@@ -20,10 +20,6 @@
 #ifndef __GTK_THEMES_H__
 #define __GTK_THEMES_H__
 
-
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <gdk/gdk.h>
 #include <gtk/gtkstyle.h>
 #include <gtk/gtkwidget.h>
