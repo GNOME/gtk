@@ -1,3 +1,14 @@
+2003-01-05  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.c (gtk_text_view_move_cursor_internal): Make
+	C-Down step through the sequence of paragraph ends (old behaviour
+	included paragraph starts).  (#80340, patch by Narayana Pattipati)
+
+	* gtk/gtktextiter.c (_gtk_text_btree_get_iter_at_first_toggle):
+ 	Check for a tag toggle at the start iterator before calling
+ 	gtk_text_iter_forward_to_tag_toggle().  (#102090, patch by Daniel 
+	Elstner)
+
 2003-01-04  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilesel.h (struct _GtkFileSelection): Add /*< public >*/
