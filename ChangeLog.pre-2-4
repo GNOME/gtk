@@ -1,3 +1,22 @@
+Fri Jul 11 14:32:43 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Landing GtkTreeModelFilter and the completion code. (Test program
+	and documentation will follow next week).
+
+	* gtk/gtkcellayout.[ch], gtk/gtkentrycompletion.[ch],
+	gtk/gtktreemodelfilter.[ch], gtk/gtkentryprivate.h: new files.
+
+	* gtkentry.[ch]: added gtk_entry_{get,set}_completion, wrote
+	necessary code to hook up completion.
+
+	* gtktreeviewcolumn.c: made GtkTreeViewColumn implement the new
+	GtkCellLayout interface.
+
+	* gtkmarshalers.list: added BOOLEAN:OBJECT,BOXED.
+
+	* gtk/gtk.h, gtk/Makefile.am, po/POTFILES.in: all updated for the new
+	source files.
+
 Wed Jul  9 19:48:26 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from stable.
