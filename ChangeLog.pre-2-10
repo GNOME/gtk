@@ -1,3 +1,8 @@
+Wed Apr  8 01:33:58 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkviewport.c (gtk_viewport_realize): Handle border
+	width correctly on realize after allocate.
+
 Tue Apr  7 23:06:00 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* Changes for GTK+ 0.99.10

@@ -279,21 +279,23 @@ gtk_viewport_realize (GtkWidget *widget)
   GtkBin *bin;
   GtkViewport *viewport;
   GdkWindowAttr attributes;
-  GtkRequisition *child_requisition;
   gint attributes_mask;
   gint event_mask;
+  gint border_width;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_VIEWPORT (widget));
+
+  border_width = GTK_CONTAINER (widget)->border_width;
 
   bin = GTK_BIN (widget);
   viewport = GTK_VIEWPORT (widget);
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
-  attributes.x = widget->allocation.x + GTK_CONTAINER (widget)->border_width;
-  attributes.y = widget->allocation.y + GTK_CONTAINER (widget)->border_width;
-  attributes.width = widget->allocation.width - GTK_CONTAINER (widget)->border_width * 2;
-  attributes.height = widget->allocation.height - GTK_CONTAINER (widget)->border_width * 2;
+  attributes.x = widget->allocation.x + border_width;
+  attributes.y = widget->allocation.y + border_width;
+  attributes.width = widget->allocation.width - border_width * 2;
+  attributes.height = widget->allocation.height - border_width * 2;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
@@ -308,10 +310,19 @@ gtk_viewport_realize (GtkWidget *widget)
 				   &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, viewport);
 
-  attributes.x += widget->style->klass->xthickness;
-  attributes.y += widget->style->klass->ythickness;
-  attributes.width -= widget->style->klass->xthickness * 2;
-  attributes.height -= widget->style->klass->ythickness * 2;
+  if (viewport->shadow_type != GTK_SHADOW_NONE)
+    {
+      attributes.x = widget->style->klass->xthickness;
+      attributes.y = widget->style->klass->ythickness;
+    }
+  else
+    {
+      attributes.x = 0;
+      attributes.y = 0;
+    }
+
+  attributes.width = MAX (1, widget->allocation.width - attributes.x * 2 - border_width * 2);
+  attributes.height = MAX (1, widget->allocation.height - attributes.y * 2 - border_width * 2);
   attributes.event_mask = 0;
 
   viewport->view_window = gdk_window_new (widget->window, &attributes, attributes_mask);
@@ -319,19 +330,20 @@ gtk_viewport_realize (GtkWidget *widget)
 
   attributes.x = 0;
   attributes.y = 0;
+
+  if (bin->child)
+    {
+      attributes.width = viewport->hadjustment->upper;
+      attributes.height = viewport->vadjustment->upper;
+    }
+  
   attributes.event_mask = event_mask;
 
   viewport->bin_window = gdk_window_new (viewport->view_window, &attributes, attributes_mask);
   gdk_window_set_user_data (viewport->bin_window, viewport);
 
   if (bin->child)
-    {
-      child_requisition = &GTK_WIDGET (GTK_BIN (viewport)->child)->requisition;
-      attributes.width = child_requisition->width;
-      attributes.height = child_requisition->height;
-
-      gtk_widget_set_parent_window (bin->child, viewport->bin_window);
-    }
+    gtk_widget_set_parent_window (bin->child, viewport->bin_window);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
