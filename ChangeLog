@@ -1,3 +1,7 @@
+Mon Aug 23 15:05:17 CDT 1999  Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.2.4
+
 Mon Aug 23 23:16:14 1999  Tim Janik  <timj@gtk.org>
 
 	* configure.in: evaluate $ac_make when checking for GNU Make.
