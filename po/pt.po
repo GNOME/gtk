@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3\n"
-"POT-Creation-Date: 2002-03-06 01:00+0000\n"
+"POT-Creation-Date: 2002-03-05 22:16-0500\n"
 "PO-Revision-Date: 2002-03-06 01:10+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -1745,8 +1745,7 @@ msgstr "Seleccionar múltiplos"
 
 #: gtk/gtkfilesel.c:552
 msgid "Whether to allow multiple files to be selected."
-msgstr ""
-"Permitir ou não a selecção de múltiplos ficheiros."
+msgstr "Permitir ou não a selecção de múltiplos ficheiros."
 
 #: gtk/gtkfilesel.c:695
 msgid "Folders"

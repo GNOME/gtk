@@ -1,7 +1,11 @@
+EXTRA_DIST = 			\
+	gtk-faq.sgml
+
 if HAVE_DOCBOOK
 html: 
 	(cd $(srcdir); \
 	 db2html gtk-faq.sgml; \
+	 test -d html && rm -r html; \
 	 mv gtk-faq html)
 
 pdf:

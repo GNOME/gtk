@@ -1,3 +1,12 @@
+Tue Mar  5 22:16:58 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* GTK+-2.0.0 rc1
+
+	* docs/tutorial,faq/Makefile.am: Deal with the html directory
+	already being there.
+
+	* docs/faq/Makefile.am (EXTRA_DIST): Add gtk-faq.sgml to EXTRA_DIST.
+
 2002-03-05  Manish Singh  <yosh@gimp.org>
 
 	* gdk/Makefile.am

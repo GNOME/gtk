@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 1.4.0\n"
-"POT-Creation-Date: 2002-03-03 20:02+0100\n"
+"POT-Creation-Date: 2002-03-05 22:16-0500\n"
 "PO-Revision-Date: 2002-02-26 00:23+0100\n"
 "Last-Translator: Andra¾ Tori <andraz.tori1@guest.arnes.si>\n"
 "Language-Team: slovenian <sl@li.org>\n"
@@ -114,17 +114,17 @@ msgstr ""
 "Notranja napaka: Modul nalagalnika slik '%s' ni uspel zaèeti nalagati slike, "
 "a ni podal razloga za neuspeh"
 
-#: gdk-pixbuf/io-bmp.c:267
+#: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
+msgid "Not enough memory to load bitmap image"
+msgstr "Ni dovolj pomnilnika za nalo¾itev slike"
+
+#: gdk-pixbuf/io-bmp.c:275
 msgid "BMP image has unsupported header size"
 msgstr "Slika BMP ima nepodprto velikost glave"
 
-#: gdk-pixbuf/io-bmp.c:292 gdk-pixbuf/io-bmp.c:315
+#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323
 msgid "BMP image has bogus header data"
 msgstr "Slika BMP ima v glavi neveljavne podatke"
-
-#: gdk-pixbuf/io-bmp.c:341
-msgid "Not enough memory to load bitmap image"
-msgstr "Ni dovolj pomnilnika za nalo¾itev slike"
 
 #: gdk-pixbuf/io-ico.c:207
 #, c-format
@@ -801,7 +801,7 @@ msgstr "Homogenost"
 msgid "Whether the children should all be the same size."
 msgstr "Ali naj bodo vsi otroci enake velikosti"
 
-#: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:281
+#: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:280
 msgid "Label"
 msgstr "Oznaka"
 
@@ -811,11 +811,11 @@ msgid ""
 "widget."
 msgstr "Besedilo gradnika oznake v gumbu, èe gumb vsebuje gradnik oznake"
 
-#: gtk/gtkbutton.c:197 gtk/gtklabel.c:302
+#: gtk/gtkbutton.c:197 gtk/gtklabel.c:301
 msgid "Use underline"
 msgstr "Uporabi podèrtaj"
 
-#: gtk/gtkbutton.c:198 gtk/gtklabel.c:303
+#: gtk/gtkbutton.c:198 gtk/gtklabel.c:302
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1000,7 +1000,7 @@ msgstr "Oznaèevanje"
 msgid "Marked up text to render"
 msgstr "Oznaèeno besedilo za izris"
 
-#: gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:288
+#: gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:287
 msgid "Attributes"
 msgstr "Atributi"
 
@@ -1050,7 +1050,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Ali lahko uporabnik spremeni besedilo"
 
 #: gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
-#: gtk/gtkfontsel.c:201 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
+#: gtk/gtkfontsel.c:209 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
 msgstr "Pisava"
 
@@ -1594,19 +1594,19 @@ msgstr "Rob okoli podroèja dejavnosti"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "©irina robu okoli podroèja gumbov na dnu dialoga"
 
-#: gtk/gtkentry.c:435 gtk/gtklabel.c:359
+#: gtk/gtkentry.c:435 gtk/gtklabel.c:358
 msgid "Cursor Position"
 msgstr "Polo¾aj kazalca"
 
-#: gtk/gtkentry.c:436 gtk/gtklabel.c:360
+#: gtk/gtkentry.c:436 gtk/gtklabel.c:359
 msgid "The current position of the insertion cursor in chars."
 msgstr "Trenutni polo¾aj kazalca vstavljanja v znakih."
 
-#: gtk/gtkentry.c:445 gtk/gtklabel.c:369
+#: gtk/gtkentry.c:445 gtk/gtklabel.c:368
 msgid "Selection Bound"
 msgstr "Meja izbire"
 
-#: gtk/gtkentry.c:446 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:446 gtk/gtklabel.c:369
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars."
 msgstr "Lega drugega konca izbire od kazalca (v znakih)."
@@ -1692,15 +1692,15 @@ msgstr "Izbira fokusa"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Ali naj se izbere vsebina vnosa, ko je fokusiran"
 
-#: gtk/gtkentry.c:3866 gtk/gtklabel.c:3211
+#: gtk/gtkentry.c:3838 gtk/gtklabel.c:3164
 msgid "Select All"
 msgstr "Izberi vse"
 
-#: gtk/gtkentry.c:3876 gtk/gtklabel.c:3221
+#: gtk/gtkentry.c:3848 gtk/gtklabel.c:3174
 msgid "Input Methods"
 msgstr "Naèini vnosa"
 
-#: gtk/gtkentry.c:3886 gtk/gtktextview.c:6372
+#: gtk/gtkentry.c:3858 gtk/gtktextview.c:6344
 msgid "_Insert Unicode control character"
 msgstr "_Vstavi kontrolni znak Unicode"
 
@@ -1728,28 +1728,28 @@ msgstr "Izbira veè datotek"
 msgid "Whether to allow multiple files to be selected."
 msgstr "Ali naj bo mo¾no izbrati veè datotek hrkrati."
 
-#: gtk/gtkfilesel.c:694
+#: gtk/gtkfilesel.c:695
 msgid "Folders"
 msgstr "Mape"
 
-#: gtk/gtkfilesel.c:698
+#: gtk/gtkfilesel.c:699
 msgid "Fol_ders"
 msgstr "_Mape"
 
-#: gtk/gtkfilesel.c:729
+#: gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Datoteke"
 
-#: gtk/gtkfilesel.c:733
+#: gtk/gtkfilesel.c:734
 msgid "_Files"
 msgstr "_Datoteke"
 
-#: gtk/gtkfilesel.c:809 gtk/gtkfilesel.c:2111
+#: gtk/gtkfilesel.c:810 gtk/gtkfilesel.c:2112
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Neberljiv imenik: %s"
 
-#: gtk/gtkfilesel.c:933
+#: gtk/gtkfilesel.c:934
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1760,25 +1760,25 @@ msgstr ""
 "voljo temu programu.\n"
 "Ste preprièani, da jo ¾elite izbrati."
 
-#: gtk/gtkfilesel.c:1063
+#: gtk/gtkfilesel.c:1064
 msgid "_New Folder"
 msgstr "_Nova mapa"
 
-#: gtk/gtkfilesel.c:1074
+#: gtk/gtkfilesel.c:1075
 msgid "De_lete File"
 msgstr "_Zbri¹i datoteko"
 
-#: gtk/gtkfilesel.c:1085
+#: gtk/gtkfilesel.c:1086
 msgid "_Rename File"
 msgstr "P_reimenuj datoteko"
 
-#: gtk/gtkfilesel.c:1345
+#: gtk/gtkfilesel.c:1346
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Ime mape \"%s\" vsebuje simbole, ki v imenih map niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1347
+#: gtk/gtkfilesel.c:1348
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1787,34 +1787,34 @@ msgstr ""
 "Napaka ob ustvarjanju mape \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1348 gtk/gtkfilesel.c:1584
+#: gtk/gtkfilesel.c:1349 gtk/gtkfilesel.c:1585
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Verjetno ste uporabili simbole, ki niso dovoljeni v imenih datotek"
 
-#: gtk/gtkfilesel.c:1356
+#: gtk/gtkfilesel.c:1357
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Napaka ob ustvarjanju mape: \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1390
+#: gtk/gtkfilesel.c:1391
 msgid "New Folder"
 msgstr "Nova mapa"
 
-#: gtk/gtkfilesel.c:1405
+#: gtk/gtkfilesel.c:1406
 msgid "_Folder name:"
 msgstr "Ime _mape:"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1432
 msgid "Create"
 msgstr "Ustvari"
 
-#: gtk/gtkfilesel.c:1472
+#: gtk/gtkfilesel.c:1473
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Ime datoteke \"%s\" vsebuje simbole, ki v imenih datotek niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1475
+#: gtk/gtkfilesel.c:1476
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1823,31 +1823,31 @@ msgstr ""
 "Napaka ob brisanju datoteke \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1477 gtk/gtkfilesel.c:1598
+#: gtk/gtkfilesel.c:1478 gtk/gtkfilesel.c:1599
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Verjetno vsebuje simbole, ki v imenih datotek niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1486
+#: gtk/gtkfilesel.c:1487
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Napaka ob brisanju datoteke \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1529
+#: gtk/gtkfilesel.c:1530
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Resnièno zbri¹i datoteko \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1534
+#: gtk/gtkfilesel.c:1535
 msgid "Delete File"
 msgstr "Zbri¹i datoteko"
 
-#: gtk/gtkfilesel.c:1580 gtk/gtkfilesel.c:1594
+#: gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1595
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Ime datoteke \"%s\" vsebuje simbole, ki v imenih datotek niso dovoljeni"
 
-#: gtk/gtkfilesel.c:1582
+#: gtk/gtkfilesel.c:1583
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1856,7 +1856,7 @@ msgstr ""
 "Napaka ob preimenovanju datoteke v \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1596
+#: gtk/gtkfilesel.c:1597
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1865,29 +1865,29 @@ msgstr ""
 "Napaka ob preimenovanju datoteke \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1606
+#: gtk/gtkfilesel.c:1607
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Napaka ob preimenovanju datoteke \"%s\" v \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1653
+#: gtk/gtkfilesel.c:1654
 msgid "Rename File"
 msgstr "Preimenuj datoteko"
 
-#: gtk/gtkfilesel.c:1668
+#: gtk/gtkfilesel.c:1669
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Preimenuj datoteko \"%s\" v:"
 
-#: gtk/gtkfilesel.c:1699
+#: gtk/gtkfilesel.c:1700
 msgid "Rename"
 msgstr "Preimenuj"
 
-#: gtk/gtkfilesel.c:2090
+#: gtk/gtkfilesel.c:2091
 msgid "Selection: "
 msgstr "Izbira: "
 
-#: gtk/gtkfilesel.c:2966
+#: gtk/gtkfilesel.c:2969
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
@@ -1896,11 +1896,11 @@ msgstr ""
 "Imena datoteke %s ni bilo moè pretvoriti v UTF-8. Poskusite nastaviti "
 "okoljsko spremenljivko G_BROKEN__FILENAMES."
 
-#: gtk/gtkfilesel.c:3830
+#: gtk/gtkfilesel.c:3833
 msgid "Name too long"
 msgstr "Ime je predolgo"
 
-#: gtk/gtkfilesel.c:3832
+#: gtk/gtkfilesel.c:3835
 msgid "Couldn't convert filename"
 msgstr "Nisem mogel pretvoriti imena datoteke"
 
@@ -1922,48 +1922,48 @@ msgstr "Polo¾aj Y gradnika otroka"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:61
+#: gtk/gtkfontsel.c:69
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcèdefghij ABCÈDEFGHIJ"
 
-#: gtk/gtkfontsel.c:194
+#: gtk/gtkfontsel.c:202
 msgid "Font name"
 msgstr "Ime pisave"
 
-#: gtk/gtkfontsel.c:195
+#: gtk/gtkfontsel.c:203
 msgid "The X string that represents this font."
 msgstr "Niz X, ki predstavlja to pisavo"
 
-#: gtk/gtkfontsel.c:202
+#: gtk/gtkfontsel.c:210
 msgid "The GdkFont that is currently selected."
 msgstr "GdkFont (GdkPisava), ki je trenutno izbrana."
 
-#: gtk/gtkfontsel.c:208
+#: gtk/gtkfontsel.c:216
 msgid "Preview text"
 msgstr "Predogled besedila"
 
-#: gtk/gtkfontsel.c:209
+#: gtk/gtkfontsel.c:217
 msgid "The text to display in order to demonstrate the selected font."
 msgstr "Besedilo, ki naj se prika¾e za predstavitev izbrane pisave."
 
-#: gtk/gtkfontsel.c:311
+#: gtk/gtkfontsel.c:321
 msgid "_Family:"
 msgstr "_Dru¾ina:"
 
-#: gtk/gtkfontsel.c:317
+#: gtk/gtkfontsel.c:327
 msgid "_Style:"
 msgstr "_Slog:"
 
-#: gtk/gtkfontsel.c:323
+#: gtk/gtkfontsel.c:333
 msgid "Si_ze:"
 msgstr "_Velikost:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:452
+#: gtk/gtkfontsel.c:462
 msgid "_Preview:"
 msgstr "_Predolged"
 
-#: gtk/gtkfontsel.c:1237
+#: gtk/gtkfontsel.c:1253
 msgid "Font Selection"
 msgstr "Izbor pisave"
 
@@ -2015,7 +2015,7 @@ msgstr "Gama"
 msgid "_Gamma value"
 msgstr "Vrednost _gama"
 
-#: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:215 gtk/gtkstatusbar.c:158
+#: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:151 gtk/gtkstatusbar.c:158
 #: gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
 msgid "Shadow type"
 msgstr "Vrsta sence"
@@ -2214,27 +2214,27 @@ msgstr "(neznano)"
 msgid "clear"
 msgstr "izprazni"
 
-#: gtk/gtklabel.c:282
+#: gtk/gtklabel.c:281
 msgid "The text of the label."
 msgstr "Besedilo oznake."
 
-#: gtk/gtklabel.c:289
+#: gtk/gtklabel.c:288
 msgid "A list of style attributes to apply to the text of the label."
 msgstr "Seznam atributov sloga, ki naj se uveljavijo na besedilu te oznake."
 
-#: gtk/gtklabel.c:295
+#: gtk/gtklabel.c:294
 msgid "Use markup"
 msgstr "Uporabi oznaèevanje"
 
-#: gtk/gtklabel.c:296
+#: gtk/gtklabel.c:295
 msgid "The text of the label includes XML markup. See pango_parse_markup()."
 msgstr "Besedilo oznake vkljuèuje oznake XML. Poglejte pango_parse_markup()."
 
-#: gtk/gtklabel.c:310 gtk/gtktexttag.c:378 gtk/gtktextview.c:583
+#: gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:583
 msgid "Justification"
 msgstr "Poravnava"
 
-#: gtk/gtklabel.c:311
+#: gtk/gtklabel.c:310
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2243,47 +2243,47 @@ msgstr ""
 "Poravnava vrstic v oznaki relativno druga na drugo. To ne pomeni poravnavo "
 "oznake glede na njen polo¾aj. Za to poglejte GtkMisc::xalign."
 
-#: gtk/gtklabel.c:319
+#: gtk/gtklabel.c:318
 msgid "Pattern"
 msgstr "Vzorec"
 
-#: gtk/gtklabel.c:320
+#: gtk/gtklabel.c:319
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline."
 msgstr ""
 "Niz z podèrtaji (_) na mestih kjer naj bodo znaki v besedilu podèrtani."
 
-#: gtk/gtklabel.c:327
+#: gtk/gtklabel.c:326
 msgid "Line wrap"
 msgstr "Lom vrstice"
 
-#: gtk/gtklabel.c:328
+#: gtk/gtklabel.c:327
 msgid "If set, wrap lines if the text becomes too wide."
 msgstr ""
 "Èe je nastavljen, se vrstcie zaènejo lomiti, ko besedilo postane pre¹iroko."
 
-#: gtk/gtklabel.c:334
+#: gtk/gtklabel.c:333
 msgid "Selectable"
 msgstr "Izberljiva"
 
-#: gtk/gtklabel.c:335
+#: gtk/gtklabel.c:334
 msgid "Whether the label text can be selected with the mouse."
 msgstr "Ali se lahko besedilo oznake izbere z mi¹ko"
 
-#: gtk/gtklabel.c:341
+#: gtk/gtklabel.c:340
 msgid "Mnemonic key"
 msgstr "Pospe¹evalna tipka"
 
-#: gtk/gtklabel.c:342
+#: gtk/gtklabel.c:341
 msgid "The mnemonic accelerator key for this label."
 msgstr "Pospe¹evalna tipka za to oznako."
 
-#: gtk/gtklabel.c:350
+#: gtk/gtklabel.c:349
 msgid "Mnemonic widget"
 msgstr "Pospe¹evalni gradnik"
 
-#: gtk/gtklabel.c:351
+#: gtk/gtklabel.c:350
 msgid "The widget to be activated when the label's mnemonic key is pressed."
 msgstr "Gradnik, ki naj se aktivira, ko je pritisnjena tipka za oznako."
 
@@ -2350,15 +2350,15 @@ msgstr ""
 "Ali se lahko pospe¹evalniki  menujev spremenijo z pritiskom tipke nad "
 "predmetom menuja."
 
-#: gtk/gtkmenubar.c:216
+#: gtk/gtkmenubar.c:152
 msgid "Style of bevel around the menubar"
 msgstr "Slog obrobe okoli menuja"
 
-#: gtk/gtkmenubar.c:223 gtk/gtktoolbar.c:251
+#: gtk/gtkmenubar.c:159 gtk/gtktoolbar.c:251
 msgid "Internal padding"
 msgstr "Notranje polnjenje"
 
-#: gtk/gtkmenubar.c:224
+#: gtk/gtkmenubar.c:160
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "Kolièina robnega prostora med senco menuja in premeti menuja"
 
@@ -2503,7 +2503,7 @@ msgstr "Èe je RESNIÈNO, se ob pritisku na desni mi¹kin gumb prika¾e men"
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Ali naj imajo vsi uhlji enako velikost"
 
-#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4694
+#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
 #, c-format
 msgid "Page %u"
 msgstr "Stran %u"
@@ -3722,7 +3722,7 @@ msgstr "Viden kazalec"
 msgid "If the insertion cursor is shown"
 msgstr "Ali je vstavitveni kazalec viden"
 
-#: gtk/gtktextview.c:6363
+#: gtk/gtktextview.c:6335
 msgid "Input _Methods"
 msgstr "_Naèini vnosa"
 
@@ -3937,7 +3937,7 @@ msgstr "Naredi raz¹irilnike zamaknjene"
 msgid "Whether to display the column"
 msgstr "Ali naj se stolpec prika¾e"
 
-#: gtk/gtktreeviewcolumn.c:182 gtk/gtkwindow.c:434
+#: gtk/gtktreeviewcolumn.c:182 gtk/gtkwindow.c:441
 msgid "Resizable"
 msgstr "Spremenljive velikosti"
 
@@ -4229,34 +4229,45 @@ msgid "Color with which to draw insertion cursor"
 msgstr "Barva s katero naj se ri¹e vnosni kazalec"
 
 #: gtk/gtkwidget.c:1083
+#, fuzzy
+msgid "Secondary cursor color"
+msgstr "Barva kazalca"
+
+#: gtk/gtkwidget.c:1084
+msgid ""
+"Color with which to draw the secondary insertion cursor when editing mixed "
+"right-to-left and left-to-right text."
+msgstr ""
+
+#: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"
 msgstr "Razmerje èrte kazalca"
 
-#: gtk/gtkwidget.c:1084
+#: gtk/gtkwidget.c:1090
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Razmerje v katerem naj se ri¹e vnosni kazalec"
 
-#: gtk/gtkwindow.c:399
+#: gtk/gtkwindow.c:406
 msgid "Window Type"
 msgstr "Vrsta okna"
 
-#: gtk/gtkwindow.c:400
+#: gtk/gtkwindow.c:407
 msgid "The type of the window"
 msgstr "Vrsta okna"
 
-#: gtk/gtkwindow.c:409
+#: gtk/gtkwindow.c:416
 msgid "Window Title"
 msgstr "Naziv okna"
 
-#: gtk/gtkwindow.c:410
+#: gtk/gtkwindow.c:417
 msgid "The title of the window"
 msgstr "Naziv okna"
 
-#: gtk/gtkwindow.c:417
+#: gtk/gtkwindow.c:424
 msgid "Allow Shrink"
 msgstr "Dovoli skrèitev"
 
-#: gtk/gtkwindow.c:419
+#: gtk/gtkwindow.c:426
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4265,24 +4276,24 @@ msgstr ""
 "Èe je RESNIÈNO, okno nima najmanj¹e velikosti. Nastavljanje tega na RESNIÈNO "
 "je v 99% èasa slaba ideja."
 
-#: gtk/gtkwindow.c:426
+#: gtk/gtkwindow.c:433
 msgid "Allow Grow"
 msgstr "Dovoli rast"
 
-#: gtk/gtkwindow.c:427
+#: gtk/gtkwindow.c:434
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr ""
 "Èe je RESNIÈNO, lahko uporabik poveèa okno preko njegove najmanj¹e velikosti."
 
-#: gtk/gtkwindow.c:435
+#: gtk/gtkwindow.c:442
 msgid "If TRUE, users can resize the window."
 msgstr "Èe je RESNIÈNO, lahko uporabniki spreminjajo velikost okna"
 
-#: gtk/gtkwindow.c:442
+#: gtk/gtkwindow.c:449
 msgid "Modal"
 msgstr "Modalni"
 
-#: gtk/gtkwindow.c:443
+#: gtk/gtkwindow.c:450
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
@@ -4290,45 +4301,45 @@ msgstr ""
 "Èe je RESNIÈNO, je okno modalno (medtem, ko je to okno prikazano, druga niso "
 "uporabna)."
 
-#: gtk/gtkwindow.c:450
+#: gtk/gtkwindow.c:457
 msgid "Window Position"
 msgstr "Lega okna"
 
-#: gtk/gtkwindow.c:451
+#: gtk/gtkwindow.c:458
 msgid "The initial position of the window."
 msgstr "Zaèetna lega okna"
 
-#: gtk/gtkwindow.c:459
+#: gtk/gtkwindow.c:466
 msgid "Default Width"
 msgstr "Privzeta ¹irina"
 
-#: gtk/gtkwindow.c:460
+#: gtk/gtkwindow.c:467
 msgid ""
 "The default width of the window, used when initially showing the window."
 msgstr "Privzeta ¹irina okna, uporabljena kadar se okno poka¾e prviè."
 
-#: gtk/gtkwindow.c:469
+#: gtk/gtkwindow.c:476
 msgid "Default Height"
 msgstr "Privzeta vi¹ina"
 
-#: gtk/gtkwindow.c:470
+#: gtk/gtkwindow.c:477
 msgid ""
 "The default height of the window, used when initially showing the window."
 msgstr "Privzeta vi¹ina okna, uporabljena kadar se okno prika¾e prviè."
 
-#: gtk/gtkwindow.c:479
+#: gtk/gtkwindow.c:486
 msgid "Destroy with Parent"
 msgstr "Unièi skupaj s star¹em"
 
-#: gtk/gtkwindow.c:480
+#: gtk/gtkwindow.c:487
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Ali naj bo to okno unièeno skupaj s star¹evskim"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:494
 msgid "Icon"
 msgstr "Ikona"
 
-#: gtk/gtkwindow.c:488
+#: gtk/gtkwindow.c:495
 msgid "Icon for this window"
 msgstr "Ikona za to okno"
 
