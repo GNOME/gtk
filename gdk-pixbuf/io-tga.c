@@ -23,11 +23,6 @@
 /*
  * Some NOTES about the TGA loader (2001/06/07, nikke@swlibero.org)
  *
- * - The module doesn't currently provide support for TGA images where the
- *   order of the pixels isn't left-to-right and top-to-bottom.  I plan to
- *   add support for those files as soon as I get one of them.  I haven't
- *   run into one yet.  (And I don't seem to be able to create it with GIMP.)
- *
  * - The TGAFooter isn't present in all TGA files.  In fact, there's an older
  *   format specification, still in use, which doesn't cover the TGAFooter.
  *   Actually, most TGA files I have are of the older type.  Anyway I put the 
@@ -635,6 +630,7 @@ static guint parse_rle_data_grayscale(TGAContext *ctx)
 
 static gboolean parse_rle_data(TGAContext *ctx, GError **err)
 {
+	guint rows = 0;
 	guint count = 0;
 	guint pbuf_count = 0;
 	guint bytes_done_before = ctx->pbuf_bytes_done;
@@ -667,13 +663,14 @@ static gboolean parse_rle_data(TGAContext *ctx, GError **err)
 		 */
 		if (!(ctx->hdr->flags & TGA_ORIGIN_UPPER))
 			pixbuf_flip_vertically (ctx->pbuf);
+
 	}
-
+		
+	rows = ctx->pbuf_bytes_done / ctx->pbuf->rowstride - bytes_done_before / ctx->pbuf->rowstride;
 	if (ctx->ufunc)
-		(*ctx->ufunc) (ctx->pbuf, 0, ctx->pbuf_bytes_done / ctx->pbuf->rowstride,
-			       ctx->pbuf->width, pbuf_count / ctx->pbuf->rowstride,
+		(*ctx->ufunc) (ctx->pbuf, 0, bytes_done_before / ctx->pbuf->rowstride,
+			       ctx->pbuf->width, rows,
 			       ctx->udata);
-
 
 	return TRUE;
 }
