@@ -4966,7 +4966,8 @@ toggle_focus_row (GtkCList *clist)
   g_return_if_fail (clist != 0);
   g_return_if_fail (GTK_IS_CLIST (clist));
 
-  if (gdk_pointer_is_grabbed ())
+  if (gdk_pointer_is_grabbed () ||
+      clist->focus_row < 0 || clist->focus_row >= clist->rows)
     return;
 
   switch (clist->selection_mode)
@@ -4983,23 +4984,16 @@ toggle_focus_row (GtkCList *clist)
       clist->undo_selection = NULL;
       clist->undo_unselection = NULL;
 
+      clist->anchor = clist->focus_row;
+      clist->drag_pos = clist->focus_row;
+      clist->undo_anchor = clist->focus_row;
+      
       if (GTK_CLIST_ADD_MODE (clist))
-	{
-	  clist->anchor = clist->focus_row;
-	  clist->drag_pos = clist->focus_row;
-	  clist->undo_anchor = clist->focus_row;
-	  fake_toggle_row (clist, clist->focus_row);
-	  GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
-	}
+	fake_toggle_row (clist, clist->focus_row);
       else
-	{
-	  clist->anchor = clist->focus_row;
-	  clist->drag_pos = clist->focus_row;
-	  clist->undo_anchor = clist->focus_row;
-	  GTK_CLIST_CLASS_FW (clist)->fake_unselect_all (clist,
-							 clist->focus_row);
-	  GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
-	}
+	GTK_CLIST_CLASS_FW (clist)->fake_unselect_all (clist,clist->focus_row);
+
+      GTK_CLIST_CLASS_FW (clist)->resync_selection (clist, NULL);
       break;
       
     default:
