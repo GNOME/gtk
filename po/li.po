@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2003-05-30 20:31+0200\n"
+"POT-Creation-Date: 2003-06-03 04:48+0200\n"
 "PO-Revision-Date: 2003-05-28 17:57+0000\n"
 "Last-Translator: Mathieu van Woerkom <mathieu.brabants.org>\n"
 "Language-Team: Limburgish <li.org>\n"
@@ -911,12 +911,11 @@ msgid "Secondary"
 msgstr "Sekundaer"
 
 #: gtk/gtkbbox.c:165
-#, fuzzy
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
 msgstr ""
-"Bie WAOR (TRUE), versjient de dochter in ein sekundaere gróp van dochters, "
+"Bie WAOR (TRUE), versjient de dochter in ein sekundaere gróp van kènjer, "
 "gesjik veur b.v. hulpknóppe"
 
 #: gtk/gtkbox.c:128
@@ -1303,9 +1302,8 @@ msgid "Font family"
 msgstr "Booksjtaaftiepfemielie"
 
 #: gtk/gtkcellrenderertext.c:258 gtk/gtktexttag.c:299
-#, fuzzy
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr "Naam van de femielie, b.v. Sans, Helvetica, Times, Monospace"
+msgstr "Naam van de booksjtaaftiepfemielie, b.v. Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:265 gtk/gtkcellrenderertext.c:266
 #: gtk/gtktexttag.c:306
@@ -1354,7 +1352,6 @@ msgid "Rise"
 msgstr "Verhoeging"
 
 #: gtk/gtkcellrenderertext.c:333
-#, fuzzy
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
@@ -1816,7 +1813,6 @@ msgid "Has separator"
 msgstr "Haet sjeijingslien"
 
 #: gtk/gtkdialog.c:137
-#, fuzzy
 msgid "The dialog has a separator bar above its buttons"
 msgstr "'t dialoogvinster haet ein sjeijingslien baove zien knóppe"
 
@@ -2410,6 +2406,10 @@ msgstr "Aafbiljingswidget"
 msgid "Child widget to appear next to the menu text"
 msgstr "Dochterwidget det naeve de menuteks versjient"
 
+#: gtk/gtkimmodule.c:419
+msgid "Default"
+msgstr "Sjtanderd"
+
 #: gtk/gtkinputdialog.c:230
 msgid "Input"
 msgstr "Inveur"
@@ -2609,11 +2609,11 @@ msgstr "De huugde van de opmaak"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:293
+#: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
 msgstr "Aafsjeur-Tittel"
 
-#: gtk/gtkmenu.c:294
+#: gtk/gtkmenu.c:264
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2621,33 +2621,33 @@ msgstr ""
 "Eine tittel die getuind kèn waere door de windowmanager wen dit menu "
 "losgesjeurd weurt"
 
-#: gtk/gtkmenu.c:410
+#: gtk/gtkmenu.c:379
 msgid "Can change accelerators"
 msgstr "Kèn sjnaktósj verangere"
 
-#: gtk/gtkmenu.c:411
+#: gtk/gtkmenu.c:380
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Of sjnaktósje verangerd kènne waere door 't drökke van ein tósj euver 't "
 "menu-item"
 
-#: gtk/gtkmenu.c:416
+#: gtk/gtkmenu.c:385
 msgid "Delay before submenus appear"
 msgstr "Vertraging ierdet submenus versjiene"
 
-#: gtk/gtkmenu.c:417
+#: gtk/gtkmenu.c:386
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Minimumtied die de moesaanwiezer baove ein menu-item moot sjtaon ierdet 't "
 "submenu versjient"
 
-#: gtk/gtkmenu.c:424
+#: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
 msgstr "Vertraging ierdet ein submenu verdwient"
 
-#: gtk/gtkmenu.c:425
+#: gtk/gtkmenu.c:394
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3925,27 +3925,20 @@ msgid "Text direction"
 msgstr "Teksrichting"
 
 #: gtk/gtktexttag.c:265
-#, fuzzy
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr "Teksrichting: rechs-nao-links of Links-nao-rechs"
+msgstr "Teksrichting: b.v. rechs-nao-links of links-nao-rechs"
 
 #: gtk/gtktexttag.c:282
-#, fuzzy
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr ""
-"Booksjtaaftiepbesjrieving es ein string, bieveurbild \"Sans Italic 12\""
+msgstr "Booksjtaaftiepbesjrieving es ein string, b.v. \"Sans Italic 12\""
 
 #: gtk/gtktexttag.c:307
-#, fuzzy
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr "Booksjtaaftiepsjtiel es ein PangoStyle, bieveurbild PANGO_STYLE_ITALIC"
+msgstr "Booksjtaaftiepsjtiel es ein PangoStyle, b.v. PANGO_STYLE_ITALIC"
 
 #: gtk/gtktexttag.c:316
-#, fuzzy
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
-msgstr ""
-"Booksjtaaftiepvarrejant es ein PangoVariant, bijveurbeeld "
-"PANGO_VARIANT_SMALL_CAPS"
+msgstr "Booksjtaaftiepvarrejant es ein PangoVariant, b.v. PANGO_VARIANT_SMALL_CAPS"
 
 #: gtk/gtktexttag.c:325
 msgid ""
@@ -3956,17 +3949,14 @@ msgstr ""
 "PangoWeight; bieveurbild PANGO_WEIGHT_BOLD"
 
 #: gtk/gtktexttag.c:336
-#, fuzzy
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
-msgstr ""
-"Booksjtaaftieprek es ein PangoStretch, bieveurbild PANGO_STRETHC_CONDENSED"
+msgstr "Booksjtaaftiepbereik es ein PangoStretch, b.v. PANGO_STRETHC_CONDENSED"
 
 #: gtk/gtktexttag.c:345
 msgid "Font size in Pango units"
 msgstr "Booksjtaafgruutde in Pango-einheite"
 
 #: gtk/gtktexttag.c:355
-#, fuzzy
 msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
@@ -3974,7 +3964,7 @@ msgid ""
 msgstr ""
 "Booksjtaaftiepgruutde es sjaalfaktor, relatief tót de sjtanderd "
 "booksjtaaftiepgruutde. Dit pas zich aan mit verangeringe in tema enz. en is "
-"alzoe aanbevaole. Pango definieert veuraf get sjale wie PANGO_SCALE_X_LARGE"
+"alzoe aangerikkemendeerd. Pango definieert veuraf get sjale wie PANGO_SCALE_X_LARGE"
 
 #: gtk/gtktexttag.c:375 gtk/gtktextview.c:588
 msgid "Left, right, or center justification"
@@ -4019,21 +4009,18 @@ msgid "Amount to indent the paragraph, in pixels"
 msgstr "Wieväölheid veur de parregraaf te late insjpringe, in pixels"
 
 #: gtk/gtktexttag.c:424
-#, fuzzy
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in pixels"
 msgstr ""
-"Plaats van teks baove de basislien (ónger de basislien es verhoeging "
+"Plaats van teks baove de basislien (ónger de basislien wen verhoeging "
 "negatief is), in pixels"
 
 #: gtk/gtktexttag.c:433
-#, fuzzy
 msgid "Pixels above lines"
 msgstr "Pixels baove liene"
 
 #: gtk/gtktexttag.c:434 gtk/gtktextview.c:541
-#, fuzzy
 msgid "Pixels of blank space above paragraphs"
 msgstr "Pixels mit laeg ruumde baove parregrafe"
 
@@ -4135,12 +4122,10 @@ msgid "Whether this tag affects indentation"
 msgstr "Of dit label 't insjpringe beïnvloot"
 
 #: gtk/gtktexttag.c:580
-#, fuzzy
 msgid "Pixels above lines set"
-msgstr "Pixels baove liene gebroeke"
+msgstr "Pixels baove liene gezat"
 
 #: gtk/gtktexttag.c:581 gtk/gtktexttag.c:585
-#, fuzzy
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr "Of dit label 't deil pixels baove liene beïnvloot"
 
@@ -4201,7 +4186,6 @@ msgid "LRE Left-to-right _embedding"
 msgstr "LRE Links-nao-rechs _inbèdding"
 
 #: gtk/gtktextutil.c:49
-#, fuzzy
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RLE rechs-nao-links i_nbèdding"
 
@@ -4230,7 +4214,6 @@ msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ neet-koppelaar zónger breide"
 
 #: gtk/gtktextview.c:540
-#, fuzzy
 msgid "Pixels Above Lines"
 msgstr "Pixels baove liene"
 
@@ -4354,11 +4337,11 @@ msgstr "Piktogramgruutde op wirkbalk"
 msgid "Size of icons in default toolbars"
 msgstr "Gruutde van piktogramme in de sjtanderd wirkbalk"
 
-#: gtk/gtktreemodelsort.c:328
+#: gtk/gtktreemodelsort.c:306
 msgid "TreeModelSort Model"
 msgstr "TreeModelSort Model"
 
-#: gtk/gtktreemodelsort.c:329
+#: gtk/gtktreemodelsort.c:307
 msgid "The model for the TreeModelSort to sort"
 msgstr "'t model veur te sortere veur de TreeModelSort"
 
@@ -4756,7 +4739,6 @@ msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "'t masker det bepaalt welke ekstensiegebäörtenisse dit widget óntvink"
 
 #: gtk/gtkwidget.c:1098
-#, fuzzy
 msgid "Interior Focus"
 msgstr "Interne focus"
 
@@ -4765,7 +4747,6 @@ msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Of de focus-indikator in widgets moot waere geteikend"
 
 #: gtk/gtkwidget.c:1105
-#, fuzzy
 msgid "Focus linewidth"
 msgstr "focus-lienbreide"
 
@@ -4774,7 +4755,6 @@ msgid "Width, in pixels, of the focus indicator line"
 msgstr "Breide, in pixels, van de focus-indikatorlien"
 
 #: gtk/gtkwidget.c:1112
-#, fuzzy
 msgid "Focus line dash pattern"
 msgstr "focuslien-sjtreippetroen"
 
@@ -4783,7 +4763,6 @@ msgid "Dash pattern used to draw the focus indicator"
 msgstr "Sjtreippetroen van de focus-indikator"
 
 #: gtk/gtkwidget.c:1118
-#, fuzzy
 msgid "Focus padding"
 msgstr "focus-opvölling"
 
@@ -4925,7 +4904,6 @@ msgid "Whether the toplevel is the current active window"
 msgstr "Of 't topnivo 't hujige aktieve vinster is"
 
 #: gtk/gtkwindow.c:568
-#, fuzzy
 msgid "Focus in Toplevel"
 msgstr "fokus in topnivo"
 
