@@ -410,8 +410,10 @@ gchar *gdk_win32_fill_style_to_string (GdkFill      fill);
 gchar *gdk_win32_function_to_string   (GdkFunction  function);
 gchar *gdk_win32_join_style_to_string (GdkJoinStyle join_style);
 gchar *gdk_win32_line_style_to_string (GdkLineStyle line_style);
+gchar *gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask);
 gchar *gdk_win32_drawable_description (GdkDrawable *d);
 
+gchar *gdk_win32_rop2_to_string       (int          rop2);
 gchar *gdk_win32_lbstyle_to_string    (UINT         brush_style);
 gchar *gdk_win32_pstype_to_string     (DWORD        pen_style);
 gchar *gdk_win32_psstyle_to_string    (DWORD        pen_style);

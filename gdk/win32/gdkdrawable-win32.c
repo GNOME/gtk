@@ -1043,6 +1043,45 @@ gdk_win32_draw_glyphs (GdkDrawable      *drawable,
   gdk_win32_hdc_release (drawable, gc, mask);
 }
 
+static int
+bitblt_wrapper (int  rop2,
+		HDC  destdc,
+		gint xdest,
+		gint ydest,
+		gint width,
+		gint height,
+		HDC  srcdc,
+		gint xsrc,
+		gint ysrc)
+{
+  int rop3;
+
+  switch (rop2)
+    {
+    /* I love Microsoft's names for binary and ternary rop codes... */
+    case R2_BLACK: rop3 = BLACKNESS; break;
+    case R2_NOTMERGEPEN: rop3 = NOTSRCERASE; break;
+    case R2_MASKNOTPEN: rop3 = 0x00220326; break;
+    case R2_NOTCOPYPEN: rop3 = NOTSRCCOPY; break;
+    case R2_MASKPENNOT: rop3 = SRCERASE; break;
+    case R2_NOT: rop3 = DSTINVERT; break;
+    case R2_XORPEN: rop3 = SRCINVERT; break;
+    case R2_NOTMASKPEN: rop3 = 0x007700E6; break;
+    case R2_MASKPEN: rop3 = SRCAND; break;
+    case R2_NOTXORPEN: rop3 = 0x00990066; break;
+    case R2_NOP: rop3 = 0x00AA0029; break;
+    case R2_MERGENOTPEN: rop3 = MERGEPAINT; break;
+    case R2_COPYPEN: rop3 = SRCCOPY; break;
+    case R2_MERGEPENNOT: rop3 = 0x00DD0228; break;
+    case R2_MERGEPEN: rop3 = SRCPAINT; break;
+    case R2_WHITE: rop3 = WHITENESS; break;
+    default: rop3 = SRCCOPY; break;
+    }
+
+  return BitBlt (destdc, xdest, ydest, width, height,
+		 srcdc, xsrc, ysrc, rop3);
+}
+
 static void
 blit_from_pixmap (gboolean              use_fg_bg,
 		  GdkDrawableImplWin32 *dest,
@@ -1160,8 +1199,9 @@ blit_from_pixmap (gboolean              use_fg_bg,
 	    }
 	}
       
-      if (ok && !BitBlt (hdc, xdest, ydest, width, height,
-			 srcdc, xsrc, ysrc, SRCCOPY))
+      if (ok && !bitblt_wrapper (gcwin32->rop2, hdc,
+				 xdest, ydest, width, height,
+				 srcdc, xsrc, ysrc))
 	WIN32_GDI_FAILED ("BitBlt");
       
       /* Restore source's color table if necessary */
@@ -1183,26 +1223,27 @@ blit_from_pixmap (gboolean              use_fg_bg,
 }
 
 static void
-blit_inside_window (GdkDrawableImplWin32 *window,
-		    HDC      		  hdc,
-		    gint     		  xsrc,
-		    gint     		  ysrc,
-		    gint     		  xdest,
-		    gint     		  ydest,
-		    gint     		  width,
-		    gint     		  height)
+blit_inside_window (HDC         hdc,
+		    GdkGCWin32 *gc_win32,
+		    gint     	xsrc,
+		    gint     	ysrc,
+		    gint     	xdest,
+		    gint     	ydest,
+		    gint     	width,
+		    gint     	height)
 
 {
   GDK_NOTE (MISC, g_print ("blit_inside_window\n"));
 
-  if (!BitBlt (hdc, xdest, ydest, width, height,
-	       hdc, xsrc, ysrc, SRCCOPY))
+  if (!bitblt_wrapper (gc_win32->rop2, hdc, xdest, ydest, width, height,
+		       hdc, xsrc, ysrc))
     WIN32_GDI_FAILED ("BitBlt");
 }
 
 static void
 blit_from_window (HDC                   hdc,
 		  GdkDrawableImplWin32 *src,
+		  GdkGCWin32           *gc_win32,
 		  gint         	      	xsrc,
 		  gint         	      	ysrc,
 		  gint         	      	xdest,
@@ -1236,8 +1277,8 @@ blit_from_window (HDC                   hdc,
 		  g_print ("blit_from_window: realized %d\n", k));
     }
   
-  if (!BitBlt (hdc, xdest, ydest, width, height,
-	       srcdc, xsrc, ysrc, SRCCOPY))
+  if (!bitblt_wrapper (gc_win32->rop2, hdc, xdest, ydest, width, height,
+		       srcdc, xsrc, ysrc))
     WIN32_GDI_FAILED ("BitBlt");
   
   if (holdpal != NULL)
@@ -1356,9 +1397,9 @@ _gdk_win32_blit (gboolean              use_fg_bg,
 		      (GdkPixmapImplWin32 *) src_impl, GDK_GC_WIN32 (gc),
 		      xsrc, ysrc, xdest, ydest, width, height);
   else if (draw_impl->handle == src_impl->handle)
-    blit_inside_window (src_impl, hdc, xsrc, ysrc, xdest, ydest, width, height);
+    blit_inside_window (hdc, GDK_GC_WIN32 (gc), xsrc, ysrc, xdest, ydest, width, height);
   else
-    blit_from_window (hdc, src_impl, xsrc, ysrc, xdest, ydest, width, height);
+    blit_from_window (hdc, GDK_GC_WIN32 (gc), src_impl, xsrc, ysrc, xdest, ydest, width, height);
   gdk_win32_hdc_release ((GdkDrawable *) drawable, gc, GDK_GC_FOREGROUND);
 }
 

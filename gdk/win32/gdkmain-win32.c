@@ -419,18 +419,21 @@ gdk_win32_print_dc (HDC hdc)
   g_print ("%p\n", hdc);
   obj = GetCurrentObject (hdc, OBJ_BRUSH);
   GetObject (obj, sizeof (LOGBRUSH), &logbrush);
-  g_print ("brush: style: %s color: %06lx hatch: %#lx\n",
+  g_print ("brush: %s color=%06lx hatch=%p\n",
 	   gdk_win32_lbstyle_to_string (logbrush.lbStyle),
 	   logbrush.lbColor, logbrush.lbHatch);
   obj = GetCurrentObject (hdc, OBJ_PEN);
   GetObject (obj, sizeof (EXTLOGPEN), &extlogpen);
-  g_print ("pen: type: %s style: %s endcap: %s join: %s width: %d brush: %s\n",
+  g_print ("pen: %s %s %s %s w=%d %s\n",
 	   gdk_win32_pstype_to_string (extlogpen.elpPenStyle),
 	   gdk_win32_psstyle_to_string (extlogpen.elpPenStyle),
 	   gdk_win32_psendcap_to_string (extlogpen.elpPenStyle),
 	   gdk_win32_psjoin_to_string (extlogpen.elpPenStyle),
 	   extlogpen.elpWidth,
 	   gdk_win32_lbstyle_to_string (extlogpen.elpBrushStyle));
+  g_print ("rop2: %s textcolor=%06lx\n",
+	   gdk_win32_rop2_to_string (GetROP2 (hdc)),
+	   GetTextColor (hdc));
   hrgn = CreateRectRgn (0, 0, 0, 0);
   if ((flag = GetClipRgn (hdc, hrgn)) == -1)
     WIN32_API_FAILED ("GetClipRgn");
@@ -439,11 +442,8 @@ gdk_win32_print_dc (HDC hdc)
   else if (flag == 1)
     {
       GetRgnBox (hrgn, &rect);
-      g_print ("clip region: %p bbox: %ldx%ld@+%ld+%ld\n",
-	       hrgn,
-	       rect.right - rect.left,
-	       rect.bottom - rect.top,
-	       rect.left, rect.top);
+      g_print ("clip region: %p bbox: %s\n",
+	       hrgn, gdk_win32_rect_to_string (&rect));
     }
   DeleteObject (hrgn);
 }
@@ -540,6 +540,69 @@ gdk_win32_line_style_to_string (GdkLineStyle line_style)
     }
   /* NOTREACHED */
   return NULL; 
+}
+
+gchar *
+gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask)
+{
+  gchar buf[400];
+  gchar *bufp = buf;
+  gchar *s = "";
+
+#define BIT(x) 						\
+  if (mask & GDK_GC_##x) 				\
+    (bufp += sprintf (bufp, "%s" #x, s), s = "|")
+
+  BIT (FOREGROUND);
+  BIT (BACKGROUND);
+  BIT (FONT);
+  BIT (FUNCTION);
+  BIT (FILL);
+  BIT (TILE);
+  BIT (STIPPLE);
+  BIT (CLIP_MASK);
+  BIT (SUBWINDOW);
+  BIT (TS_X_ORIGIN);
+  BIT (TS_Y_ORIGIN);
+  BIT (CLIP_X_ORIGIN);
+  BIT (CLIP_Y_ORIGIN);
+  BIT (EXPOSURES);
+  BIT (LINE_WIDTH);
+  BIT (LINE_STYLE);
+  BIT (CAP_STYLE);
+  BIT (JOIN_STYLE);
+#undef BIT
+
+  return static_printf ("%s", buf);  
+}
+
+gchar *
+gdk_win32_rop2_to_string (int rop2)
+{
+  switch (rop2)
+    {
+#define CASE(x) case R2_##x: return #x
+      CASE (BLACK);
+      CASE (COPYPEN);
+      CASE (MASKNOTPEN);
+      CASE (MASKPEN);
+      CASE (MASKPENNOT);
+      CASE (MERGENOTPEN);
+      CASE (MERGEPEN);
+      CASE (MERGEPENNOT);
+      CASE (NOP);
+      CASE (NOT);
+      CASE (NOTCOPYPEN);
+      CASE (NOTMASKPEN);
+      CASE (NOTMERGEPEN);
+      CASE (NOTXORPEN);
+      CASE (WHITE);
+      CASE (XORPEN);
+#undef CASE
+    default: return static_printf ("illegal_%x", rop2);
+    }
+  /* NOTREACHED */
+  return NULL;
 }
 
 gchar *

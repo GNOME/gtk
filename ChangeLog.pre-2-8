@@ -1,3 +1,29 @@
+2002-11-13  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdrawable-win32.c (bitblt_wrapper): New
+	function. Translates the GC's current binary raster op (rop2) to
+	the appropriate ternary raster op and calls BitBlt(). Previously
+	used SRCCOPY always.
+	(blit_from_pixmap, blit_inside_window, blit_from_window): Use
+	bitblt_wrapper().
+
+	* gdk/win32/gdkgc-win32.c
+	* gdk/win32/gdkmain-win32.c:: Various debugging output improvements.
+
+	* gdk/win32/gdkgc-win32.c (predraw_set_foreground): Check whether
+	tile/stipple origins are valid when calling SetBrushOrgEx().
+	(gdk_win32_hdc_get): Ifdef out code that tries to handle the
+	stipple by converting it into a region, and combining the clip
+	region with that. A stipple shouldn't work like that, it should
+	replicate in x and y directions. Stipples will have to be handled
+	elsewhere.
+
+	* gdk/win32/gdkmain-win32.c: (gdk_win32_gcvalues_mask_to_string,
+	gdk_win32_rop2_to_string): New debugging functions.
+	(gdk_win32_print_dc): Print also DC's rop2 and text color.
+
+	* gdk/win32/gdkprivate-win32.h: Declare new functions.
+
 2002-11-12  Tor Lillqvist  <tml@iki.fi>
 
 	More work on the Win32 backend. The scrolling problem diagnosis
