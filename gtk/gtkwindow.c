@@ -1162,7 +1162,9 @@ gtk_window_key_press_event (GtkWidget   *widget,
 
   handled = FALSE;
   
-  if (window->focus_widget && GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
+  if (window->focus_widget &&
+      window->focus_widget != widget &&
+      GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
     {
       handled = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
     }
@@ -1264,7 +1266,9 @@ gtk_window_key_release_event (GtkWidget   *widget,
   
   window = GTK_WINDOW (widget);
   handled = FALSE;
-  if (window->focus_widget && GTK_WIDGET_SENSITIVE (window->focus_widget))
+  if (window->focus_widget &&
+      window->focus_widget != widget &&
+      GTK_WIDGET_SENSITIVE (window->focus_widget))
     {
       handled = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
     }
@@ -1316,7 +1320,9 @@ gtk_window_focus_in_event (GtkWidget     *widget,
   if (GTK_WIDGET_VISIBLE (widget))
     {
       window = GTK_WINDOW (widget);
-      if (window->focus_widget && !GTK_WIDGET_HAS_FOCUS (window->focus_widget))
+      if (window->focus_widget &&
+	  window->focus_widget != widget &&
+	  !GTK_WIDGET_HAS_FOCUS (window->focus_widget))
 	{
 	  fevent.type = GDK_FOCUS_CHANGE;
 	  fevent.window = window->focus_widget->window;
@@ -1341,7 +1347,9 @@ gtk_window_focus_out_event (GtkWidget     *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   window = GTK_WINDOW (widget);
-  if (window->focus_widget && GTK_WIDGET_HAS_FOCUS (window->focus_widget))
+  if (window->focus_widget &&
+      window->focus_widget != widget &&
+      GTK_WIDGET_HAS_FOCUS (window->focus_widget))
     {
       fevent.type = GDK_FOCUS_CHANGE;
       fevent.window = window->focus_widget->window;
