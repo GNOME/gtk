@@ -22,6 +22,10 @@ if XINPUT_GXI
 xinput_sources =	   \
 	gdkinput-x11.c	   \
 	gdkinput-gxi.c
+gxid_sources =                  \
+	gxid_lib.c	   	\
+	gxid_lib.h	   	\
+	gxid_proto.h
 else
 if XINPUT_XFREE
 xinput_sources =	   \
@@ -59,12 +63,10 @@ libgdk_x11_la_SOURCES =    	\
 	gdkwindow-x11.c    	\
 	gdkwindow-x11.h		\
 	gdkxid.c	   	\
-	gxid_lib.c	   	\
-	gxid_lib.h	   	\
-	gxid_proto.h	   	\
 	gdkx.h		   	\
 	gdkprivate-x11.h   	\
 	gdkinputprivate.h  	\
+	$(gxid_sources)		\
 	xsettings-client.h	\
 	xsettings-client.c	\
 	xsettings-common.h	\

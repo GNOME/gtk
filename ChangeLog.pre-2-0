@@ -1,3 +1,14 @@
+Thu Jan 31 11:33:52 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkproperty-x11.c (insert_atom_pair): Fix 
+	another missing static.
+
+	* gtk/gtkimmodule.c (n_loaded_contexts): And another.
+
+	* gdk/x11/Makefile.am gdk/x11/gxid_lib.c: Don't
+	build gxid sources at all except in the vanishingly
+	rare case of --with-xinput=xfree.
+
 2002-01-31  Mark McLoughlin  <mark@skynet.ie>
 
 	* gdk/gdkimage.c: (scratch_image_info_for_depth): make static.

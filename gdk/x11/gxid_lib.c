@@ -7,8 +7,6 @@
 #include "config.h"
 #include "gxid_lib.h"
 
-#ifdef XINPUT_GXI
-
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/time.h>
@@ -110,16 +108,3 @@ _gxid_release_device(char *host, int port, GxidU32 device, GxidU32 window)
 
   return gxid_send_message(host,port,(GxidMessage *)&msg);
 }
-
-#else /* !XINPUT_GXI */
-
-/* Some compilers don't like empty source files */
-int 
-_gxid_claim_device(char *host, int port, GxidU32 device, GxidU32 window,
-		   int exclusive)
-{
-  return 0;
-}
-
-#endif /* XINPUT_GXI */
-

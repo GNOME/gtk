@@ -119,7 +119,7 @@ static gchar *XAtomsStrings[] = {
 #define ATOM_TO_INDEX(atom) (GPOINTER_TO_UINT(atom))
 #define INDEX_TO_ATOM(atom) ((GdkAtom)GUINT_TO_POINTER(atom))
 
-void
+static void
 insert_atom_pair (GdkAtom     virtual_atom,
 		  Atom        xatom)
 {

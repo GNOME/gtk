@@ -76,7 +76,7 @@ struct _GtkIMModuleClass
 
 GType gtk_im_module_get_type (void);
 
-gint n_loaded_contexts = 0;
+static gint n_loaded_contexts = 0;
 static GHashTable *contexts_hash = NULL;
 static GSList *modules_list = NULL;
 
