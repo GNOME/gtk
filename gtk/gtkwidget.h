@@ -398,6 +398,8 @@ struct _GtkWidgetClass
    */
   AtkObject*   (* get_accessible)  (GtkWidget          *widget);
 
+  void (* screen_changed) (GtkWidget *widget,
+			   GdkScreen *previous_screen);
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -761,6 +763,8 @@ GtkWidgetAuxInfo *_gtk_widget_get_aux_info                (GtkWidget    *widget,
 							   gboolean      create);
 void              _gtk_widget_propagate_hierarchy_changed (GtkWidget    *widget,
 							   GtkWidget    *previous_toplevel);
+void              _gtk_widget_propagate_screen_changed    (GtkWidget    *widget,
+							   GdkScreen    *previous_screen);
 
 GdkColormap* _gtk_widget_peek_colormap (void);
 

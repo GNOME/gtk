@@ -189,6 +189,8 @@ void
 gtk_invisible_set_screen (GtkInvisible *invisible,
 			  GdkScreen    *screen)
 {
+  GtkWidget *widget;
+  GdkScreen *previous_screen;
   gboolean was_realized;
   
   g_return_if_fail (GTK_IS_INVISIBLE (invisible));
@@ -197,16 +199,21 @@ gtk_invisible_set_screen (GtkInvisible *invisible,
   if (screen == invisible->screen)
     return;
 
+  widget = GTK_WIDGET (invisible);
+
+  previous_screen = invisible->screen;
   was_realized = GTK_WIDGET_REALIZED (invisible);
 
   if (was_realized)
-    gtk_widget_unrealize (GTK_WIDGET (invisible));
+    gtk_widget_unrealize (widget);
   
   invisible->screen = screen;
+  if (screen != previous_screen)
+    _gtk_widget_propagate_screen_changed (widget, previous_screen);
   g_object_notify (G_OBJECT (invisible), "screen");
   
   if (was_realized)
-    gtk_widget_realize (GTK_WIDGET (invisible));
+    gtk_widget_realize (widget);
 }
 
 /**

@@ -94,8 +94,8 @@ static void gtk_toolbar_style_set                (GtkWidget       *widget,
                                                   GtkStyle        *prev_style);
 static gboolean gtk_toolbar_focus                (GtkWidget       *widget,
                                                   GtkDirectionType dir);
-static void gtk_toolbar_hierarchy_changed        (GtkWidget       *widget,
-						  GtkWidget       *previous_toplevel);
+static void gtk_toolbar_screen_changed           (GtkWidget       *widget,
+						  GdkScreen       *previous_screen);
 static void gtk_toolbar_show_all                 (GtkWidget       *widget);
 static void gtk_toolbar_add                      (GtkContainer    *container,
 				                  GtkWidget       *widget);
@@ -195,7 +195,7 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   widget_class->style_set = gtk_toolbar_style_set;
   widget_class->show_all = gtk_toolbar_show_all;
   widget_class->focus = gtk_toolbar_focus;
-  widget_class->hierarchy_changed = gtk_toolbar_hierarchy_changed;
+  widget_class->screen_changed = gtk_toolbar_screen_changed;
   
   container_class->add = gtk_toolbar_add;
   container_class->remove = gtk_toolbar_remove;
@@ -329,8 +329,10 @@ toolbar_get_settings (GtkToolbar *toolbar)
 }
 
 static void
-toolbar_screen_changed (GtkToolbar *toolbar)
+gtk_toolbar_screen_changed (GtkWidget *widget,
+			    GdkScreen *previous_screen)
 {
+  GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkSettings *old_settings = toolbar_get_settings (toolbar);
   GtkSettings *settings;
 
@@ -373,27 +375,6 @@ toolbar_screen_changed (GtkToolbar *toolbar)
 
   style_change_notify (toolbar);
   icon_size_change_notify (toolbar);
-}
-
-static void
-gtk_toolbar_hierarchy_changed (GtkWidget *widget,
-			       GtkWidget *previous_toplevel)
-{
-  GtkWidget *toplevel;
-  
-  if (previous_toplevel)
-    g_signal_handlers_disconnect_by_func (previous_toplevel,
-					  toolbar_screen_changed,
-					  widget);
-
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (GTK_WIDGET_TOPLEVEL (toplevel))
-    g_signal_connect_swapped (toplevel,
-			      "notify::screen",
-			      G_CALLBACK (toolbar_screen_changed),
-			      widget);
-  
-  toolbar_screen_changed (GTK_TOOLBAR (widget));
 }
 
 static void

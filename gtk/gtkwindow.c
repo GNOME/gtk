@@ -5982,6 +5982,8 @@ gtk_window_set_screen (GtkWindow *window,
 		       GdkScreen *screen)
 {
   GtkWidget *widget;
+  GdkScreen *previous_screen;
+  GdkScreen *new_screen;
   gboolean was_mapped;
   
   g_return_if_fail (GTK_IS_WINDOW (window));
@@ -5991,17 +5993,20 @@ gtk_window_set_screen (GtkWindow *window,
     return;
 
   widget = GTK_WIDGET (window);
-  
+
+  previous_screen = window->screen;
   was_mapped = GTK_WIDGET_MAPPED (widget);
 
   if (was_mapped)
     gtk_widget_unmap (widget);
   if (GTK_WIDGET_REALIZED (widget))
     gtk_widget_unrealize (widget);
-  
+      
   gtk_window_free_key_hash (window);
   window->screen = screen;
   gtk_widget_reset_rc_styles (widget);
+  if (screen != previous_screen)
+    _gtk_widget_propagate_screen_changed (widget, previous_screen);
   g_object_notify (G_OBJECT (window), "screen");
 
   if (was_mapped)

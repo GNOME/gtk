@@ -118,8 +118,8 @@ static void    gtk_font_selection_get_property       (GObject         *object,
 						      GParamSpec      *pspec);
 static void    gtk_font_selection_init		     (GtkFontSelection      *fontsel);
 static void    gtk_font_selection_finalize	     (GObject               *object);
-static void    gtk_font_selection_hierarchy_changed  (GtkWidget		    *widget,
-						      GtkWidget             *previous_toplevel);
+static void    gtk_font_selection_screen_changed     (GtkWidget		    *widget,
+						      GdkScreen             *previous_screen);
 
 /* These are the callbacks & related functions. */
 static void     gtk_font_selection_select_font           (GtkTreeSelection *selection,
@@ -200,7 +200,7 @@ gtk_font_selection_class_init (GtkFontSelectionClass *klass)
   gobject_class->set_property = gtk_font_selection_set_property;
   gobject_class->get_property = gtk_font_selection_get_property;
 
-  widget_class->hierarchy_changed = gtk_font_selection_hierarchy_changed;
+  widget_class->screen_changed = gtk_font_selection_screen_changed;
    
   g_object_class_install_property (gobject_class,
                                    PROP_FONT_NAME,
@@ -522,60 +522,17 @@ gtk_font_selection_finalize (GObject *object)
 }
 
 static void
-fontsel_screen_changed (GtkFontSelection *fontsel)
+gtk_font_selection_screen_changed (GtkWidget *widget,
+				   GdkScreen *previous_screen)
 {
-  GdkScreen *old_screen = g_object_get_data (G_OBJECT (fontsel), "gtk-font-selection-screen");
-  GdkScreen *screen;
+  GtkFontSelection *fontsel = GTK_FONT_SELECTION (widget);
 
   if (gtk_widget_has_screen (GTK_WIDGET (fontsel)))
-    screen = gtk_widget_get_screen (GTK_WIDGET (fontsel));
-  else
-    screen = NULL;
-
-  if (screen == old_screen)
-    return;
-
-  if (fontsel->font)
     {
-      gdk_font_unref (fontsel->font);
-      fontsel->font = NULL;
-    }
-
-  if (old_screen)
-    g_object_unref (old_screen);
-  
-  if (screen)
-    {
-      g_object_ref (screen);
-      g_object_set_data (G_OBJECT (fontsel), "gtk-font-selection-screen", screen);
-
       gtk_font_selection_show_available_fonts (fontsel);
       gtk_font_selection_show_available_sizes (fontsel, TRUE);
       gtk_font_selection_show_available_styles (fontsel);
     }
-  else
-    g_object_set_data (G_OBJECT (fontsel), "gtk-font-selection-screen", NULL);
-}
-
-static void
-gtk_font_selection_hierarchy_changed (GtkWidget *widget,
-				      GtkWidget *previous_toplevel)
-{
-  GtkWidget *toplevel;
-  
-  if (previous_toplevel)
-    g_signal_handlers_disconnect_by_func (previous_toplevel,
-					  fontsel_screen_changed,
-					  widget);
-  
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (GTK_WIDGET_TOPLEVEL (toplevel))
-    g_signal_connect_swapped (toplevel,
-			      "notify::screen",
-			      G_CALLBACK (fontsel_screen_changed),
-			      widget);
-  
-  fontsel_screen_changed (GTK_FONT_SELECTION (widget));
 }
 
 static void
