@@ -1,3 +1,8 @@
+2004-02-20  Christian Rose  <menthos@menthos.com>
+
+	* en_CA.po: Added Canadian English translation by
+	Adam Weinberger <adamw@FreeBSD.org>.
+
 2004-02-20  Laurent Dhima  <laurenti@alblinux.net>
 
 	* sq.po: Fixed Albanian translation.

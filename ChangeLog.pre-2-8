@@ -1,3 +1,7 @@
+2004-02-20  Christian Rose  <menthos@menthos.com>
+
+	* configure.in: Added "en_CA" to ALL_LINGUAS.
+
 2004-02-20  Michael Meeks  <michael@ximian.com>
 
 	* gtk/gtktoolitem.c (gtk_tool_item_property_notify): impl.
