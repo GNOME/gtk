@@ -1,19 +1,22 @@
+# translation of gtk+-properties.po to Maori
 # Māori translation of gtk+ 2.0.
 # Copyright (C) 2004 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 # John C Barstow <jbowtie@amathaine.com>, 2004.
 #
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.3.2\n"
+"Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-01-25 04:35+0100\n"
-"PO-Revision-Date: 2004-01-25 09:20+1300\n"
+"PO-Revision-Date: 2004-02-06 21:52+1300\n"
 "Last-Translator: John C Barstow <jbowtie@amathaine.com>\n"
-"Language-Team: GNOME Māori Team\n"
+"Language-Team: Maori <maori@nzlinux.org.nz>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.0.2\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:736
 #: gdk-pixbuf/gdk-pixbuf-io.c:869 tests/testfilechooser.c:198
@@ -29,8 +32,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:780
 #: gdk-pixbuf/gdk-pixbuf-io.c:906 tests/testfilechooser.c:237
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:226
@@ -73,8 +75,9 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1095
 #, c-format
+#, fuzzy
 msgid "Error writing to image file: %s"
-msgstr ""
+msgstr "PÅhÄhÄ"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1139 gdk-pixbuf/gdk-pixbuf-io.c:1255
 #, c-format
@@ -136,9 +139,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixdata.c:402
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr ""
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -291,8 +292,9 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:114
 #, c-format
+#, fuzzy
 msgid "Error interpreting JPEG image file (%s)"
-msgstr ""
+msgstr "PÅhÄhÄ"
 
 #: gdk-pixbuf/io-jpeg.c:349
 msgid ""
@@ -319,8 +321,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:1069
@@ -418,8 +419,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:813
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:821
@@ -428,8 +428,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid ""
-"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:994
@@ -449,16 +448,19 @@ msgid "PNM file is not in a recognized PNM subformat"
 msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:336
+#, fuzzy
 msgid "PNM file has an image width of 0"
-msgstr ""
+msgstr "0"
 
 #: gdk-pixbuf/io-pnm.c:357
+#, fuzzy
 msgid "PNM file has an image height of 0"
-msgstr ""
+msgstr "0"
 
 #: gdk-pixbuf/io-pnm.c:380
+#, fuzzy
 msgid "Maximum color value in PNM file is 0"
-msgstr ""
+msgstr "0"
 
 #: gdk-pixbuf/io-pnm.c:388
 msgid "Maximum color value in PNM file is too large"
@@ -670,12 +672,14 @@ msgid "No XPM header found"
 msgstr ""
 
 #: gdk-pixbuf/io-xpm.c:1237
+#, fuzzy
 msgid "XPM file has image width <= 0"
-msgstr ""
+msgstr "0"
 
 #: gdk-pixbuf/io-xpm.c:1245
+#, fuzzy
 msgid "XPM file has image height <= 0"
-msgstr ""
+msgstr "0"
 
 #: gdk-pixbuf/io-xpm.c:1253
 msgid "XPM file has invalid number of colors"
@@ -739,7 +743,7 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:709
 msgid "calendar:MY"
-msgstr ""
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -747,7 +751,7 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
-msgstr ""
+msgstr "calendar:week_start:1"
 
 #: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
 msgid "Pick a Color"
@@ -771,14 +775,16 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkcolorsel.c:927
+#, fuzzy
 msgid "_Save color here"
-msgstr ""
+msgstr "Pupuri"
 
 #: gtk/gtkcolorsel.c:1132
+#, fuzzy
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr ""
+msgstr "Pupuri"
 
 #: gtk/gtkcolorsel.c:1839
 msgid ""
@@ -817,8 +823,9 @@ msgid "Brightness of the color."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1880
+#, fuzzy
 msgid "_Red:"
-msgstr ""
+msgstr "_Mahi AnÅ"
 
 #: gtk/gtkcolorsel.c:1881
 msgid "Amount of red light in the color."
@@ -907,7 +914,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:621
 msgid "Home"
-msgstr ""
+msgstr "Kāinga"
 
 #. FIXME: What is the Right Way of finding the desktop directory?
 #: gtk/gtkfilechooserdefault.c:637
@@ -930,15 +937,15 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:1001
 msgid "Add"
-msgstr ""
+msgstr "Tāpiri"
 
 #: gtk/gtkfilechooserdefault.c:1011
 msgid "Remove"
-msgstr ""
+msgstr "Tangohia"
 
 #: gtk/gtkfilechooserdefault.c:1021
 msgid "Up"
-msgstr ""
+msgstr "Runga"
 
 #: gtk/gtkfilechooserdefault.c:1101 gtk/gtkfilechooserdefault.c:1456
 msgid "File name"
@@ -963,7 +970,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:1403
 msgid "Folder"
-msgstr ""
+msgstr "Kōpaki"
 
 #: gtk/gtkfilechooserdefault.c:1478
 msgid "Size"
@@ -980,8 +987,9 @@ msgstr ""
 
 #. Preview
 #: gtk/gtkfilechooserdefault.c:1598
+#, fuzzy
 msgid "Preview"
-msgstr ""
+msgstr "Tiro TÄnga"
 
 #. Change the current folder label
 #: gtk/gtkfilechooserdefault.c:2130
@@ -1001,9 +1009,7 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:3110
 #, c-format
 msgid "%d byte"
-msgid_plural "%d bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:3112
 #, c-format
@@ -1022,11 +1028,11 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:3161
 msgid "Today"
-msgstr ""
+msgstr "Ākuni"
 
 #: gtk/gtkfilechooserdefault.c:3163
 msgid "Yesterday"
-msgstr ""
+msgstr "Nanahi"
 
 #: gtk/gtkfilechooserdefault.c:3171
 msgid "%d/%b/%Y"
@@ -1038,24 +1044,25 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:730
 msgid "Folders"
-msgstr ""
+msgstr "Ngā Kōpaki"
 
 #: gtk/gtkfilesel.c:734
 msgid "Fol_ders"
-msgstr ""
+msgstr "Ngā Kō_paki"
 
 #: gtk/gtkfilesel.c:766
 msgid "Files"
-msgstr ""
+msgstr "Ngā Kōnae"
 
 #: gtk/gtkfilesel.c:770
 msgid "_Files"
-msgstr ""
+msgstr "Ngā _Kōnae"
 
 #: gtk/gtkfilesel.c:853 gtk/gtkfilesel.c:2243
 #, c-format
+#, fuzzy
 msgid "Folder unreadable: %s"
-msgstr ""
+msgstr "KÅpaki"
 
 #: gtk/gtkfilesel.c:984
 #, c-format
@@ -1067,7 +1074,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1115
 msgid "_New Folder"
-msgstr ""
+msgstr "Kōpaki _Hou"
 
 #: gtk/gtkfilesel.c:1126
 msgid "De_lete File"
@@ -1079,16 +1086,16 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1441
 #, c-format
+#, fuzzy
 msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
-msgstr ""
+msgstr "PÅhÄhÄ"
 
 #: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
 msgid "You probably used symbols not allowed in filenames."
@@ -1096,16 +1103,18 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1450
 #, c-format
+#, fuzzy
 msgid "Error creating folder \"%s\": %s\n"
-msgstr ""
+msgstr "PÅhÄhÄ"
 
 #: gtk/gtkfilesel.c:1484
 msgid "New Folder"
-msgstr ""
+msgstr "Kōpaki Hou"
 
 #: gtk/gtkfilesel.c:1499
+#, fuzzy
 msgid "_Folder name:"
-msgstr ""
+msgstr "KÅpaki:"
 
 #: gtk/gtkfilesel.c:1523
 msgid "C_reate"
@@ -1118,10 +1127,11 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1569
 #, c-format
+#, fuzzy
 msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
-msgstr ""
+msgstr "PÅhÄhÄ"
 
 #: gtk/gtkfilesel.c:1571 gtk/gtkfilesel.c:1692
 msgid "It probably contains symbols not allowed in filenames."
@@ -1129,8 +1139,9 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1580
 #, c-format
+#, fuzzy
 msgid "Error deleting file \"%s\": %s"
-msgstr ""
+msgstr "PÅhÄhÄ"
 
 #: gtk/gtkfilesel.c:1623
 #, c-format
@@ -1139,7 +1150,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1628
 msgid "Delete File"
-msgstr ""
+msgstr "_Porowhiu te Konae"
 
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
@@ -1148,22 +1159,25 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1676
 #, c-format
+#, fuzzy
 msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
-msgstr ""
+msgstr "PÅhÄhÄ"
 
 #: gtk/gtkfilesel.c:1690
 #, c-format
+#, fuzzy
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
-msgstr ""
+msgstr "PÅhÄhÄ"
 
 #: gtk/gtkfilesel.c:1700
 #, c-format
+#, fuzzy
 msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr ""
+msgstr "PÅhÄhÄ"
 
 #: gtk/gtkfilesel.c:1747
 msgid "Rename File"
@@ -1179,8 +1193,9 @@ msgid "_Rename"
 msgstr ""
 
 #: gtk/gtkfilesel.c:2223
+#, fuzzy
 msgid "_Selection: "
-msgstr ""
+msgstr "TÄrua te whiringa"
 
 #: gtk/gtkfilesel.c:3139
 #, c-format
@@ -1191,7 +1206,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:3142
 msgid "Invalid UTF-8"
-msgstr ""
+msgstr "UTF-8 koremana"
 
 #: gtk/gtkfilesel.c:4019
 msgid "Name too long"
@@ -1202,8 +1217,9 @@ msgid "Couldn't convert filename"
 msgstr ""
 
 #: gtk/gtkfilesystemmodel.c:1118
+#, fuzzy
 msgid "(Empty)"
-msgstr ""
+msgstr "Tuhera kau"
 
 #: gtk/gtkfilesystemunix.c:335 gtk/gtkfilesystemwin32.c:417
 #, c-format
@@ -1241,23 +1257,27 @@ msgid "This file system does not support icons for everything"
 msgstr ""
 
 #: gtk/gtkfontbutton.c:177 gtk/gtkfontbutton.c:294
+#, fuzzy
 msgid "Pick a Font"
-msgstr ""
+msgstr "Momotuhi"
 
 #. Initialize fields
 #: gtk/gtkfontbutton.c:288
+#, fuzzy
 msgid "Sans 12"
-msgstr ""
+msgstr "Sans 12"
 
 #: gtk/gtkfontbutton.c:806
+#, fuzzy
 msgid "Font"
-msgstr ""
+msgstr "Momotuhi"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:68
+#, fuzzy
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr ""
+msgstr "aehikmnop AEHIKMNOP"
 
 #: gtk/gtkfontsel.c:332
 msgid "_Family:"
@@ -1273,12 +1293,14 @@ msgstr ""
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:469
+#, fuzzy
 msgid "_Preview:"
-msgstr ""
+msgstr "Tiro TÄnga"
 
 #: gtk/gtkfontsel.c:1285
+#, fuzzy
 msgid "Font Selection"
-msgstr ""
+msgstr "Momotuhi"
 
 #: gtk/gtkgamma.c:399
 msgid "Gamma"
@@ -1293,8 +1315,9 @@ msgstr ""
 #.
 #: gtk/gtkiconfactory.c:1559
 #, c-format
+#, fuzzy
 msgid "Error loading icon: %s"
-msgstr ""
+msgstr "PÅhÄhÄ"
 
 #: gtk/gtkicontheme.c:1182
 #, c-format
@@ -1332,11 +1355,11 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:278
 msgid "Screen"
-msgstr ""
+msgstr "Mata"
 
 #: gtk/gtkinputdialog.c:285
 msgid "Window"
-msgstr ""
+msgstr "Matapihi"
 
 #: gtk/gtkinputdialog.c:292
 msgid "_Mode: "
@@ -1350,7 +1373,7 @@ msgstr ""
 #. Keys listbox
 #: gtk/gtkinputdialog.c:340
 msgid "_Keys"
-msgstr ""
+msgstr "Ngā _Pātuhi"
 
 #: gtk/gtkinputdialog.c:560
 msgid "X"
@@ -1374,11 +1397,11 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:565
 msgid "Wheel"
-msgstr ""
+msgstr "Porohita"
 
 #: gtk/gtkinputdialog.c:605
 msgid "none"
-msgstr ""
+msgstr "kaore tētahi"
 
 #: gtk/gtkinputdialog.c:641 gtk/gtkinputdialog.c:677
 msgid "(disabled)"
@@ -1390,8 +1413,9 @@ msgstr ""
 
 #. and clear button
 #: gtk/gtkinputdialog.c:757
+#, fuzzy
 msgid "clear"
-msgstr ""
+msgstr "_WhakawÄtea"
 
 #: gtk/gtklabel.c:3225
 msgid "Select All"
@@ -1413,7 +1437,7 @@ msgstr ""
 #: gtk/gtknotebook.c:2679 gtk/gtknotebook.c:5072
 #, c-format
 msgid "Page %u"
-msgstr ""
+msgstr "Whārangi %u"
 
 #: gtk/gtkrc.c:2380
 #, c-format
@@ -1433,82 +1457,82 @@ msgstr ""
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
 msgid "Information"
-msgstr ""
+msgstr "Rongo"
 
 #: gtk/gtkstock.c:268
 msgid "Warning"
-msgstr ""
+msgstr "Kupu tūpato"
 
 #: gtk/gtkstock.c:269
 msgid "Error"
-msgstr ""
+msgstr "Pōhēhē"
 
 #: gtk/gtkstock.c:270
 msgid "Question"
-msgstr ""
+msgstr "Pātai"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr ""
+msgstr "_Tāpiri"
 
 #: gtk/gtkstock.c:276
 msgid "_Apply"
-msgstr ""
+msgstr "_Whakatinana"
 
 #: gtk/gtkstock.c:277
 msgid "_Bold"
-msgstr ""
+msgstr "_Miramira"
 
 #: gtk/gtkstock.c:278
 msgid "_Cancel"
-msgstr ""
+msgstr "_Whakakore"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
-msgstr ""
+msgstr "Kōpaepae _Pūoru"
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
-msgstr ""
+msgstr "_Whakawātea"
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
-msgstr ""
+msgstr "_Kati"
 
 #: gtk/gtkstock.c:282
 msgid "_Convert"
-msgstr ""
+msgstr "_Huri"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
-msgstr ""
+msgstr "_Tārua"
 
 #: gtk/gtkstock.c:284
 msgid "Cu_t"
-msgstr ""
+msgstr "K_otia"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
-msgstr ""
+msgstr "_Porowhiu"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr ""
+msgstr "Whaka_haerea"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
-msgstr ""
+msgstr "_Kitea"
 
 #: gtk/gtkstock.c:288
 msgid "Find and _Replace"
-msgstr ""
+msgstr "Kitea me _Whakakapia"
 
 #: gtk/gtkstock.c:289
 msgid "_Floppy"
-msgstr ""
+msgstr "Kōpae _pingore"
 
 #: gtk/gtkstock.c:290
 msgid "_Bottom"
@@ -1524,27 +1548,27 @@ msgstr ""
 
 #: gtk/gtkstock.c:293
 msgid "_Top"
-msgstr ""
+msgstr "_Tihi"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
-msgstr ""
+msgstr "Whakamuri"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr ""
+msgstr "Whakararo"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
-msgstr ""
+msgstr "_Whakamua"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr ""
+msgstr "_Runga"
 
 #: gtk/gtkstock.c:298
 msgid "_Harddisk"
-msgstr ""
+msgstr "Kōpae _matua"
 
 #: gtk/gtkstock.c:299
 msgid "_Help"
@@ -1564,15 +1588,15 @@ msgstr ""
 
 #: gtk/gtkstock.c:303
 msgid "_Index"
-msgstr ""
+msgstr "_Kuputohu"
 
 #: gtk/gtkstock.c:304
 msgid "_Italic"
-msgstr ""
+msgstr "_Tītaha"
 
 #: gtk/gtkstock.c:305
 msgid "_Jump to"
-msgstr ""
+msgstr "_Whaia"
 
 #: gtk/gtkstock.c:306
 msgid "_Center"
@@ -1580,7 +1604,7 @@ msgstr "_Pūtahi"
 
 #: gtk/gtkstock.c:307
 msgid "_Fill"
-msgstr ""
+msgstr "_Whakakīa"
 
 #: gtk/gtkstock.c:308
 msgid "_Left"
@@ -1608,11 +1632,11 @@ msgstr "_Huakina"
 
 #: gtk/gtkstock.c:314
 msgid "_Paste"
-msgstr ""
+msgstr "_Whakapiri"
 
 #: gtk/gtkstock.c:315
 msgid "_Preferences"
-msgstr ""
+msgstr "Ngā _Tina Hiahia"
 
 #: gtk/gtkstock.c:316
 msgid "_Print"
@@ -1620,15 +1644,15 @@ msgstr "_Tāria"
 
 #: gtk/gtkstock.c:317
 msgid "Print Pre_view"
-msgstr ""
+msgstr "T_iro Tānga"
 
 #: gtk/gtkstock.c:318
 msgid "_Properties"
-msgstr "_Āhuatanga"
+msgstr "Ngā _Āhuatanga"
 
 #: gtk/gtkstock.c:319
 msgid "_Quit"
-msgstr ""
+msgstr "_Whakamutu"
 
 #: gtk/gtkstock.c:320
 msgid "_Redo"
@@ -1636,11 +1660,11 @@ msgstr "_Mahi Anō"
 
 #: gtk/gtkstock.c:321
 msgid "_Refresh"
-msgstr ""
+msgstr "_Whakārahina"
 
 #: gtk/gtkstock.c:322
 msgid "_Remove"
-msgstr ""
+msgstr "_Tangohia"
 
 #: gtk/gtkstock.c:323
 msgid "_Revert"
@@ -1652,7 +1676,7 @@ msgstr "_Tiakina"
 
 #: gtk/gtkstock.c:325
 msgid "Save _As"
-msgstr ""
+msgstr "P_urihia pēneitia"
 
 #: gtk/gtkstock.c:326
 msgid "_Color"
@@ -1660,7 +1684,7 @@ msgstr "_Kano"
 
 #: gtk/gtkstock.c:327
 msgid "_Font"
-msgstr ""
+msgstr "_Momotuhi"
 
 #: gtk/gtkstock.c:328
 msgid "_Ascending"
@@ -1672,15 +1696,15 @@ msgstr ""
 
 #: gtk/gtkstock.c:330
 msgid "_Spell Check"
-msgstr ""
+msgstr "Pūmanawa tātaki kupu"
 
 #: gtk/gtkstock.c:331
 msgid "_Stop"
-msgstr ""
+msgstr "Whaka_mutua"
 
 #: gtk/gtkstock.c:332
 msgid "_Strikethrough"
-msgstr ""
+msgstr "_Tāroto"
 
 #: gtk/gtkstock.c:333
 msgid "_Undelete"
@@ -1688,11 +1712,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:334
 msgid "_Underline"
-msgstr ""
+msgstr "_Rūritia"
 
 #: gtk/gtkstock.c:335
 msgid "_Undo"
-msgstr ""
+msgstr "_Whakakore"
 
 #: gtk/gtkstock.c:336
 msgid "_Yes"
@@ -1779,8 +1803,9 @@ msgid "Unexpected character data on line %d char %d"
 msgstr ""
 
 #: gtk/gtkuimanager.c:2136
+#, fuzzy
 msgid "Empty"
-msgstr ""
+msgstr "Tuhera kau"
 
 #. ID
 #: modules/input/imam-et.c:453
@@ -1836,3 +1861,4 @@ msgstr ""
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr ""
+

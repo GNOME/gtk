@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-30 04:18+0100\n"
+"POT-Creation-Date: 2004-02-02 20:46+0100\n"
 "PO-Revision-Date: 2004-01-27 07:36+1300\n"
 "Last-Translator: John C Barstow <jbowtie@amathaine.com>\n"
 "Language-Team: GNOME Māori Team\n"
@@ -1205,30 +1205,26 @@ msgstr ""
 msgid "(Empty)"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:346 gtk/gtkfilesystemwin32.c:373
+#: gtk/gtkfilesystemunix.c:351 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:389 gtk/gtkfilesystemwin32.c:414
+#: gtk/gtkfilesystemunix.c:392 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:397
+#: gtk/gtkfilesystemunix.c:400
 msgid "Filesystem"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:416 gtk/gtkfilesystemunix.c:1051
+#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemunix.c:1295
 #: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr ""
 
-#: gtk/gtkfilesystemunix.c:868 gtk/gtkfilesystemunix.c:881
-msgid "This file system does not support bookmarks"
-msgstr ""
-
-#: gtk/gtkfilesystemwin32.c:777
+#: gtk/gtkfilesystemunix.c:1005 gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr ""
@@ -1347,7 +1343,7 @@ msgstr ""
 #. Keys listbox
 #: gtk/gtkinputdialog.c:340
 msgid "_Keys"
-msgstr "Pātuhi"
+msgstr "Ngā _Pātuhi"
 
 #: gtk/gtkinputdialog.c:560
 msgid "X"
@@ -1411,6 +1407,14 @@ msgstr ""
 #, c-format
 msgid "Page %u"
 msgstr "Whārangi %u"
+
+#: gtk/gtkradiotoolbutton.c:89
+msgid "Group"
+msgstr ""
+
+#: gtk/gtkradiotoolbutton.c:90
+msgid "The radio tool button whose group this button belongs to."
+msgstr ""
 
 #: gtk/gtkrc.c:2380
 #, c-format
@@ -1653,7 +1657,7 @@ msgstr "_Pupuri"
 
 #: gtk/gtkstock.c:326
 msgid "Save _As"
-msgstr "Purihia pēneitia"
+msgstr "P_urihia pēneitia"
 
 #: gtk/gtkstock.c:327
 msgid "_Color"
