@@ -315,8 +315,8 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
 {
   ensure_clipboard_widget ();
 
-  if (gtk_selection_owner_set_for_display (clipboard_widget,
-					   clipboard->display,
+  if (gtk_selection_owner_set_for_display (clipboard->display,
+					   clipboard_widget,
 					   clipboard->selection,
 					   clipboard_get_timestamp (clipboard)))
     {
@@ -501,8 +501,8 @@ gtk_clipboard_clear (GtkClipboard *clipboard)
   g_return_if_fail (clipboard != NULL);
 
   if (clipboard->have_selection)
-    gtk_selection_owner_set_for_display (NULL, 
-					 clipboard->display,
+    gtk_selection_owner_set_for_display (clipboard->display, 
+					 NULL,
 					 clipboard->selection,
 					 clipboard_get_timestamp (clipboard));
 }

@@ -23,6 +23,9 @@
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
+#if HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include <ctype.h>
 #include <stdio.h>
@@ -40,7 +43,6 @@
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 
-#include "config.h"
 #ifdef HAVE_XKB
 #include <X11/XKBlib.h>
 #endif /* HAVE_XKB */

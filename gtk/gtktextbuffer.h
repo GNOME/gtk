@@ -67,6 +67,8 @@ struct _GtkTextBuffer
   GtkTextLogAttrCache *log_attr_cache;
 
   guint user_action_count;
+
+  GdkDisplay *clipboard_display;
   
   /* Whether the buffer has been modified since last save */
   guint modified : 1;
@@ -341,6 +343,14 @@ gboolean        gtk_text_buffer_delete_selection        (GtkTextBuffer *buffer,
 /* Called to specify atomic user actions, used to implement undo */
 void            gtk_text_buffer_begin_user_action       (GtkTextBuffer *buffer);
 void            gtk_text_buffer_end_user_action         (GtkTextBuffer *buffer);
+
+/* Called for multiple display applications */
+GtkTextBuffer*  gtk_text_buffer_new_for_display         (GdkDisplay *clipboard_display,
+							 GtkTextTagTable *table);
+void		gtk_text_buffer_set_clipboard_display	(GtkTextBuffer *buffer,
+							 GdkDisplay *clipboard_display);
+GdkDisplay*     gtk_text_buffer_get_clipboard_display	(GtkTextBuffer *buffer);
+
 
 /* INTERNAL private stuff */
 void            _gtk_text_buffer_spew                  (GtkTextBuffer      *buffer);

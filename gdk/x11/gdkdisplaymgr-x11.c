@@ -1,4 +1,3 @@
-/*#include "gdkx.h"*/
 #include <glib.h>
 #include "gdkdisplaymgr.h"
 #include "gdkdisplaymgr-x11.h"

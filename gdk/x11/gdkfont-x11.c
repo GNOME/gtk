@@ -23,6 +23,9 @@
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
+#if HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include <X11/Xlib.h>
 #include <X11/Xos.h>

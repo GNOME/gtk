@@ -595,7 +595,10 @@ gtk_selection_add_targets (GtkWidget            *widget,
   g_return_if_fail (targets != NULL);
   
   list = gtk_selection_target_list_get (widget, selection);
-  gtk_target_list_add_table (list, targets, ntargets);
+  gtk_target_list_add_table_for_display (list,
+  					 GTK_WIDGET_GET_DISPLAY(widget),
+					 targets,
+					 ntargets);
 }
 
 

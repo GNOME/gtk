@@ -2317,8 +2317,8 @@ gtk_drag_source_check_selection (GtkDragSourceInfo *info,
       tmp_list = tmp_list->next;
     }
 
-  gtk_selection_owner_set_for_display (info->ipc_widget, 
-				       display,
+  gtk_selection_owner_set_for_display (display, 
+				       info->ipc_widget,
 				       selection,
 				       time);
   info->selections = g_list_prepend (info->selections,
@@ -2423,8 +2423,7 @@ gtk_drag_source_release_selections (GtkDragSourceInfo *info,
     {
       GdkAtom selection = GPOINTER_TO_UINT (tmp_list->data);
       if (gdk_selection_owner_get_for_display (gdk_window_get_display(info->ipc_widget->window), selection) == info->ipc_widget->window)
-	gtk_selection_owner_set_for_display (NULL, 
-			gdk_window_get_display(info->ipc_widget->window),		     			selection, time);
+	gtk_selection_owner_set_for_display (gdk_window_get_display(info->ipc_widget->window), NULL, selection, time);
 
       tmp_list = tmp_list->next;
     }

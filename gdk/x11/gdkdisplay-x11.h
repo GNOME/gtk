@@ -1,6 +1,7 @@
 #ifndef __GDK_DISPLAY_X11__
 #define __GDK_DISPLAY_X11__
 
+#include "config.h"
 #include "gdkdisplay.h"
 #include <X11/X.h>
 #include <X11/Xlib.h>

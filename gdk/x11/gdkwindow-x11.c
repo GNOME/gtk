@@ -24,12 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#if HAVE_CONFIG_H
+#include <config.h>
+#endif
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <netinet/in.h>
 #include "gdk.h"
-#include "config.h"
 
 #include "gdkwindow.h"
 #include "gdkinputprivate.h"
@@ -3662,6 +3664,8 @@ update_pos_for_display (GdkDisplay *display,
           w += dx;
           h += dy;
           break;
+	default:
+	  break;
         }
 
       w = MAX (w, 1);

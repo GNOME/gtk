@@ -3,19 +3,19 @@
 #include <gdk/gdkinternals.h>
 
 void
-hello (void)
+hello (GtkWidget *widget)
 {
-  g_print ("hello world\n");
+  GdkScreen *scr = gtk_widget_get_screen(widget);
+  GdkDisplay *dpy = gdk_screen_get_display(scr);
+  g_print("Click from %s\n",gdk_display_get_name(dpy));
 }
 
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window, *win2;
-  GtkWidget *button, *butt2;
+  GtkWidget *window, *win2, *button, *butt2, *dialog;
   GdkDisplay *dpy2;
   GdkScreen *scr2;
-  GtkButton *toto;
 
   gtk_init (&argc, &argv);
   /* Crude test insert 2nd machine name here */
@@ -39,7 +39,7 @@ main (int argc, char *argv[])
 					     "GtkWidget::parent", win2,
 					     "GtkWidget::visible", TRUE,
 					     NULL),
-			     "signal::clicked", hello, NULL,
+			     "signal::clicked", hello, win2,
 			     NULL);
   window = g_object_connect (gtk_widget_new (gtk_window_get_type (),
 					     "user_data", NULL,
@@ -56,7 +56,7 @@ main (int argc, char *argv[])
 					     "GtkWidget::parent", window,
 					     "GtkWidget::visible", TRUE,
 					     NULL),
-			     "signal::clicked", hello, NULL,
+			     "signal::clicked", hello, window,
 			     NULL);
 
   gtk_widget_show (window);

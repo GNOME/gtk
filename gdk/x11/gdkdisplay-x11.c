@@ -1,9 +1,13 @@
-#include "gdkx.h"
+#if HAVE_CONFIG_H
+#include <config.h>
+#endif
 #include <glib.h>
+#include "gdkx.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-x11.h"
 #include "gdkscreen.h"
 #include "gdkscreen-x11.h"
+#include "gdkinternals.h"
 
 void	gdk_x11_display_impl_class_init(GdkDisplayImplX11Class *class);
 
@@ -110,7 +114,7 @@ GdkScreen *gdk_x11_display_impl_get_screen(GdkDisplay *dpy,gint screen_num){
   while(tmp){
       if((((GdkScreenImplX11*)tmp->data)->xscreen) == desired_scr)
       {
-	GdkScreenImplX11 *desired_screen = (GdkScreen*) tmp->data; 
+	GdkScreenImplX11 *desired_screen = (GdkScreenImplX11*) tmp->data; 
 	if(!desired_screen->visual_initialised)
 	  _gdk_visual_init((GdkScreen*) tmp->data);
 	if(!desired_screen->colormap_initialised)

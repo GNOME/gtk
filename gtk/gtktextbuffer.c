@@ -35,6 +35,7 @@
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
 #include <string.h>
+#include <gdk/gdkprivate.h>
 
 typedef struct _ClipboardRequest ClipboardRequest;
 
@@ -300,6 +301,7 @@ void
 gtk_text_buffer_init (GtkTextBuffer *buffer)
 {
   buffer->clipboard_contents = NULL;
+  buffer->clipboard_display = DEFAULT_GDK_DISPLAY;
 }
 
 /**
@@ -2855,7 +2857,7 @@ gtk_text_buffer_update_primary_selection (GtkTextBuffer *buffer)
   GtkTextIter end;
 
   GtkClipboard *clipboard = gtk_clipboard_get_for_display (GDK_SELECTION_PRIMARY,
-						 GTK_WIDGET_GET_DISPLAY(buffer));
+						      buffer->clipboard_display);
 
   /* Determine whether we have a selection and adjust X selection
    * accordingly.
@@ -2888,7 +2890,7 @@ paste (GtkTextBuffer *buffer,
   ClipboardRequest *data = g_new (ClipboardRequest, 1);
   GtkTextIter paste_point;
   GtkTextIter start, end;
-  GdkDisplay *display = gdk_screen_get_display(GTK_WIDGET(buffer)->screen);
+  GdkDisplay *display = buffer->clipboard_display;
   
   data->buffer = buffer;
   g_object_ref (G_OBJECT (buffer));
@@ -3045,7 +3047,7 @@ cut_or_copy (GtkTextBuffer *buffer,
   if (!gtk_text_iter_equal (&start, &end))
     {
       GtkClipboard *clipboard = gtk_clipboard_get_for_display (GDK_NONE, 
-					GTK_WIDGET_GET_DISPLAY(buffer));
+					     buffer->clipboard_display);
       GtkTextIter ins;
       
       buffer->clipboard_contents =
@@ -3341,6 +3343,47 @@ _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
   
   return cache->entries[0].attrs;
 }
+
+
+GtkTextBuffer*
+gtk_text_buffer_new_for_display (GdkDisplay *clipboard_display,
+				 GtkTextTagTable *table)
+{
+  GtkTextBuffer *text_buffer;
+
+  text_buffer = GTK_TEXT_BUFFER (g_object_new (gtk_text_buffer_get_type (), NULL));
+
+  if (table)
+    {
+      text_buffer->tag_table = table;
+
+      g_object_ref (G_OBJECT (text_buffer->tag_table));
+    }
+
+  text_buffer->clipboard_display = clipboard_display;
+
+  g_object_ref (G_OBJECT (text_buffer));
+  
+  return text_buffer;
+
+
+}
+void
+gtk_text_buffer_set_clipboard_display (GtkTextBuffer *buffer,
+				       GdkDisplay *clipboard_display)
+{
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_if_fail (clipboard_display != NULL);
+  buffer->clipboard_display = clipboard_display;
+}
+
+GdkDisplay* gtk_text_buffer_get_clipboard_display (GtkTextBuffer *buffer)
+{
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));  
+  return buffer->clipboard_display;
+}
+
+
 
 /*
  * Debug spew

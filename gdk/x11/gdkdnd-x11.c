@@ -24,6 +24,10 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#if HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <string.h>

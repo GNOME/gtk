@@ -23,6 +23,9 @@
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
+#if HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -447,8 +450,8 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay *display,
     /*
        Probably COMPOUND text, we fall back to Xlib routines
      */
-    local_count = gdk_text_property_to_text_list_for_display (encoding,
-							      display,
+    local_count = gdk_text_property_to_text_list_for_display (display,
+							      encoding,
 							      format,
 							      text,
 							      length,

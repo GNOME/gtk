@@ -763,16 +763,16 @@ gtk_old_editable_claim_selection (GtkOldEditable *old_editable,
   
   if (claim)
     {
-      if (gtk_selection_owner_set_for_display (GTK_WIDGET (old_editable),
-					       GTK_WIDGET_GET_DISPLAY(old_editable),
+      if (gtk_selection_owner_set_for_display (GTK_WIDGET_GET_DISPLAY(old_editable),
+					       GTK_WIDGET (old_editable),
 					       GDK_SELECTION_PRIMARY, time))
 	old_editable->has_selection = TRUE;
     }
   else
     {
       if (gdk_selection_owner_get_for_display (GTK_WIDGET_GET_DISPLAY(old_editable),GDK_SELECTION_PRIMARY) == GTK_WIDGET (old_editable)->window)
-	gtk_selection_owner_set_for_display (NULL, 
-					     GTK_WIDGET_GET_DISPLAY(old_editable),
+	gtk_selection_owner_set_for_display (GTK_WIDGET_GET_DISPLAY(old_editable), 
+					     NULL,
 					     GDK_SELECTION_PRIMARY, time);
     }
 }
