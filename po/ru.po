@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-16 08:52+0300\n"
-"PO-Revision-Date: 2004-03-17 16:10+0300\n"
+"PO-Revision-Date: 2004-03-19 13:31+0300\n"
 "Last-Translator: Dmitry G. Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1035,11 +1035,11 @@ msgstr "Папка"
 #.
 #: gtk/gtkfilechooserdefault.c:2532 gtk/gtkstock.c:276
 msgid "_Add"
-msgstr "Доб_авить"
+msgstr "_Добавить"
 
 #: gtk/gtkfilechooserdefault.c:2542 gtk/gtkstock.c:324
 msgid "_Remove"
-msgstr "У_брать"
+msgstr "_Убрать"
 
 #: gtk/gtkfilechooserdefault.c:2628
 msgid "Name"
@@ -1621,7 +1621,7 @@ msgstr "_Вырезать"
 
 #: gtk/gtkstock.c:286
 msgid "_Delete"
-msgstr "У_далить"
+msgstr "_Удалить"
 
 #: gtk/gtkstock.c:287
 msgid "_Execute"
