@@ -87,11 +87,13 @@ Canvas item to display #GdkPixbuf images.
       Normally, the pixbuf item's translation and scaling arguments
       are interpreted in units, so they will be modified by the item's
       affine transformation.  The <link
-      linkend="GnomeCanvasPixbuf--width-pixels">width_pixels</link>,
+      linkend="GnomeCanvasPixbuf--width-in-pixels">width_in_pixels</link>,
       <link
-      linkend="GnomeCanvasPixbuf--height-pixels">height_pixels</link>,
-      <link linkend="GnomeCanvasPixbuf--x-pixels">x_pixels</link>, and
-      <link linkend="GnomeCanvasPixbuf--y-pixels">y_pixels</link>
+      linkend="GnomeCanvasPixbuf--height-in-pixels">height_in_pixels</link>,
+      <link
+      linkend="GnomeCanvasPixbuf--x-in-pixels">x_in_pixels</link>, and
+      <link
+      linkend="GnomeCanvasPixbuf--y-in-pixels">y_in_pixels</link>
       object arguments can be used to modify this behavior.  If one of
       these arguments is %TRUE, then the corresponding scaling or
       translation value will not be affected lengthwise by the pixbuf
@@ -102,11 +104,11 @@ Canvas item to display #GdkPixbuf images.
       For example, consider a pixbuf item whose size is (300, 200).
       If the item is modified with a scaling transformation of (0.5,
       2.0) but the <link
-      linkend="GnomeCanvasPixbuf--width-pixels">width_pixels</link> is
-      set to %TRUE, then the item will appear to be (300, 400) pixels
-      in size.  This means that in this case the item's affine
-      transformation only applies to the height value, while the
-      width value is kept in absolute pixels.
+      linkend="GnomeCanvasPixbuf--width-in-pixels">width_in_pixels</link>
+      is set to %TRUE, then the item will appear to be (300, 400)
+      pixels in size.  This means that in this case the item's affine
+      transformation only applies to the height value, while the width
+      value is kept in absolute pixels.
     </para>
 
     <para>
@@ -122,11 +124,11 @@ Canvas item to display #GdkPixbuf images.
 	</para>
       </footnote>.  If the item is then modified by the same scaling
       transformation of (0.5, 2.0) but the <link
-      linkend="GnomeCanvasPixbuf--y-pixels">y_pixels</link> argument
-      is set to %TRUE, then the image's upper-left corner will appear
-      to be at position (15, 40).  In this case, the affine
-      transformation is applied only to the x offset, while the y
-      offset is kept in absolute pixels.
+      linkend="GnomeCanvasPixbuf--y-in-pixels">y_in_pixels</link>
+      argument is set to %TRUE, then the image's upper-left corner
+      will appear to be at position (15, 40).  In this case, the
+      affine transformation is applied only to the x offset, while the
+      y offset is kept in absolute pixels.
     </para>
 
     <para>
@@ -215,12 +217,12 @@ Canvas item to display #GdkPixbuf images.
     will only be used if the <link
     linkend="GnomeCanvasPixbuf--width-set">width_set</link> argument
     is %TRUE.  If the <link
-    linkend="GnomeCanvasPixbuf--width-pixels">width_pixels</link>
+    linkend="GnomeCanvasPixbuf--width-in-pixels">width_in_pixels</link>
     argument is %FALSE, the width will be taken to be in canvas units,
     and thus will be scaled along with the canvas item's affine
-    transformation.  If width_pixels is %TRUE, the width will be taken
-    to be in pixels, and will visually remain a constant size even if
-    the item's affine transformation changes.
+    transformation.  If width_in_pixels is %TRUE, the width will be
+    taken to be in pixels, and will visually remain a constant size
+    even if the item's affine transformation changes.
   </para>
 
 <!-- ##### ARG GnomeCanvasPixbuf:width_set ##### -->
@@ -232,7 +234,7 @@ Canvas item to display #GdkPixbuf images.
     used instead.  This argument is %FALSE by default.
   </para>
 
-<!-- ##### ARG GnomeCanvasPixbuf:width_pixels ##### -->
+<!-- ##### ARG GnomeCanvasPixbuf:width_in_pixels ##### -->
   <para>
     If this argument is %TRUE, then the width of the pixbuf will be
     considered to be in pixels, that is, it will not be visually
@@ -261,10 +263,10 @@ Canvas item to display #GdkPixbuf images.
     The default is %FALSE.
   </para>
 
-<!-- ##### ARG GnomeCanvasPixbuf:height_pixels ##### -->
+<!-- ##### ARG GnomeCanvasPixbuf:height_in_pixels ##### -->
   <para>
     Works in the same way as the <link
-    linkend="GnomeCanvasPixbuf--width-pixels">width_pixels</link>
+    linkend="GnomeCanvasPixbuf--width-in-pixels">width_in_pixels</link>
     argument.  The default is %FALSE.
   </para>
 
@@ -285,7 +287,7 @@ Canvas item to display #GdkPixbuf images.
     coordinates.
   </para>
 
-<!-- ##### ARG GnomeCanvasPixbuf:x_pixels ##### -->
+<!-- ##### ARG GnomeCanvasPixbuf:x_in_pixels ##### -->
   <para>
     If this argument is %TRUE, the pixbuf's translation with respect
     to its logical origin in item-relative coordinates will be in
@@ -312,11 +314,11 @@ Canvas item to display #GdkPixbuf images.
     default is %FALSE.
   </para>
 
-<!-- ##### ARG GnomeCanvasPixbuf:y_pixels ##### -->
+<!-- ##### ARG GnomeCanvasPixbuf:y_in_pixels ##### -->
   <para>
     Works in the same way as the <link
-    linkend="GnomeCanvasPixbuf--x-pixels">x_pixels</link> argument.
-    The default is %FALSE.
+    linkend="GnomeCanvasPixbuf--x-in-pixels">x_in_pixels</link>
+    argument.  The default is %FALSE.
   </para>
 
 <!--
