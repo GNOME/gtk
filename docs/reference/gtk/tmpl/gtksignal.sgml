@@ -494,6 +494,7 @@ This function aborts a signal's current emission.
 It will prevent the default method from running,
 if the signal was #GTK_RUN_LAST and you connected
 normally (i.e. without the "after" flag).
+</para>
 <para>
 It will print a warning if used on a signal which
 isn't being emitted.
@@ -536,6 +537,7 @@ which order things are called in).
 Here is how one passes an integer as user data,
 for when you just want to specify a constant int
 as parameter to your function:
+</para>
 <informalexample>
 <programlisting>
 static void button_clicked_int(GtkButton* button, gpointer func_data)

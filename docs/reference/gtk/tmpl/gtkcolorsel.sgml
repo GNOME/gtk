@@ -43,17 +43,20 @@ The available policies are:
 %GTK_UPDATE_CONTINUOUS - signals are sent continuously as the color
 selection changes.
 </para>
+</listitem>
 <listitem>
 <para>
 %GTK_UPDATE_DISCONTINUOUS - signals are sent only when the mouse 
 button is released.
 </para>
+</listitem>
 <listitem>
 <para>
 %GTK_UPDATE_DELAYED - signals are sent when the mouse button is
 released or when the mouse has been motionless for a period of
 time.
 </para>
+</listitem>
 </itemizedlist>
 </para>
 

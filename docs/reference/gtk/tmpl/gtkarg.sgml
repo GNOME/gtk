@@ -34,7 +34,7 @@ signal, you must use gtk_signal_emitv() or gtk_signal_newv().
 </para>
 </listitem>
 </itemizedlist>
-
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>

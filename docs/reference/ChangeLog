@@ -1,3 +1,13 @@
+Wed Jan  5 10:23:41 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkprogress.sgml: Missing </listitem>, remove extra <para>
+	* gtk/tmpl/gtkobject.sgml: dos2unix
+	* gtk/tmpl/gtkcurve.sgml: missing </para>
+	* gtk/tmpl/gtkarg.sgml: dos2unix, missing </para>
+	* gtk/tmpl/gtkcolorsel.sgml: Missing </listitem>'s
+	* gtk/tmpl/gtksignal.sgml (signal): dos2unix, missing </para>'s
+	* gtk/tmpl/gtkmarshal.sgml: Missing </refsect2>
+
 1999-11-16  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* gtk/tmpl/gtkmenubar.sgml: fixed minor error - using <em>.

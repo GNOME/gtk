@@ -829,7 +829,6 @@ Private function to get an argument and argument info from an object.
 <para>
 Private: Gets an array of #GtkArgs from a va_list C structure.
 </para>
-<para>
 
 @object_type: the type of object to collect arguments for.
 @arg_list_p: pointer to be filled in with a list of parsed arguments.

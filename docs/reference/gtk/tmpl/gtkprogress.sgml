@@ -52,18 +52,22 @@ current progress.  The string can contain the following substitution characters:
 <para>
 %%v - the current progress value.
 </para>
+</listitem>
 <listitem>
 <para>
 %%l - the lower bound for the progress value.
 </para>
+</listitem>
 <listitem>
 <para>
 %%u - the upper bound for the progress value.
 </para>
+</listitem>
 <listitem>
 <para>
 %%p - the current progress percentage.
 </para>
+</listitem>
 </itemizedlist>
 </para>
 

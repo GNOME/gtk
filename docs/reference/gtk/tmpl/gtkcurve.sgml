@@ -23,7 +23,7 @@ draw the points of the curve freely, and they are not connected at all.
 <variablelist>
 <varlistentry>
 <term>#GtkGammaCurve</term>
-<listitem><para>a subclass for editing gamma curves.
+<listitem><para>a subclass for editing gamma curves.</para>
 </listitem>
 </varlistentry>
 </variablelist>

@@ -67,6 +67,7 @@ void marshal_INT__POINTER_POINTER_INT_INT(GtkObject*    object,
 }
 </programlisting>
 </para>
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
