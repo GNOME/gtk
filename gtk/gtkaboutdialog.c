@@ -1572,7 +1572,14 @@ add_credits_page (GtkAboutDialog *about,
 	  q1 = linkify_email ? strchr (q0, '<') : NULL;
 	  q2 = q1 ? strchr (q1, '>') : NULL;
 	  r1 = linkify_urls ? strstr (q0, "http://") : NULL;
-	  r2 = r1 ? (strpbrk (r1, " \n\t") ? : strchr (r1, '\0')) : NULL;
+          if (r1)
+            {
+              r2 = strpbrk (r1, " \n\t");
+	      if (!r2)
+		r2 = strchr (r1, '\0');
+	    }
+          else  
+            r2 = NULL;
 
 	  if (r1 && r2 && (!q1 || !q2 || (r1 < q1))) 
 	    {
