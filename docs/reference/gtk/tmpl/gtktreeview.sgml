@@ -307,7 +307,7 @@ has some similarity to strcmp() returning 0 for equal strings.
 </para>
 
 @model: the #GtkTreeModel being searched
-@column: the search column set by gtk_tree_view_set_seach_column
+@column: the search column set by gtk_tree_view_set_search_column()
 @key: the key string to compare with
 @iter: a #GtkTreeIter pointing the row of @model that should be compared
   with @key.
