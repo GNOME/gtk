@@ -1,3 +1,17 @@
+Fri Mar  5 00:05:59 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_list_setup): 
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_setup): Connect to 
+	key_press_event and handle Alt-Down/Alt-Up to show or hide the
+	list popup. Also handle Down/Up/PageDown/PageUp/Home/End and 
+	make them change the active item without popping up the list.
+	These keybindings are inherited from GtkCombo. 
+
+Thu Mar  4 23:15:58 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_position): Initially 
+	select the active item when using optionmenu-like positioning. 
+
 Thu Mar  4 16:54:30 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_check_pixmap_dir): Don't
