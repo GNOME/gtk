@@ -156,6 +156,11 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
+<!-- ##### ARG GtkEntry:xalign ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_entry_new ##### -->
 <para>
 Creates a new #GtkEntry widget.
@@ -345,6 +350,24 @@ use gtk_editable_set_editable() instead.
 
 
 <!-- ##### FUNCTION gtk_entry_get_invisible_char ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_alignment ##### -->
+<para>
+
+</para>
+
+@entry: 
+@xalign: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_alignment ##### -->
 <para>
 
 </para>

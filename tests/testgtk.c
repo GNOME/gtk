@@ -2591,10 +2591,8 @@ void create_labels (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       frame = gtk_frame_new ("Bidirection Label");
-      label = gtk_label_new ("Arabic	\330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205\n"
-			     "Hebrew	\327\251\327\234\327\225\327\235");
-      gtk_widget_set_direction (label, GTK_TEXT_DIR_RTL);
-      gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_RIGHT);
+      label = gtk_label_new ("\342\200\217Arabic	\330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205\n"
+			     "\342\200\217Hebrew	\327\251\327\234\327\225\327\235");
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 

@@ -209,6 +209,11 @@ types related to the text widget and how they work together.
 
 </para>
 
+<!-- ##### ARG GtkTextView:error-underline-color ##### -->
+<para>
+
+</para>
+
 <!-- ##### ENUM GtkTextWindowType ##### -->
 <para>
 

@@ -96,6 +96,10 @@ void gtk_drag_source_set  (GtkWidget            *widget,
 
 void gtk_drag_source_unset (GtkWidget        *widget);
 
+GtkTargetList* gtk_drag_source_get_target_list (GtkWidget     *widget);
+void           gtk_drag_source_set_target_list (GtkWidget     *widget,
+                                                GtkTargetList *target_list);
+
 void gtk_drag_source_set_icon        (GtkWidget   *widget,
 				      GdkColormap *colormap,
 				      GdkPixmap   *pixmap,

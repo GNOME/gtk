@@ -490,6 +490,16 @@ Deprecated alias for gtk_window_set_position().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_window_activate_key ##### -->
+<para>
+
+</para>
+
+@window: 
+@event: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_window_get_focus ##### -->
 <para>
 

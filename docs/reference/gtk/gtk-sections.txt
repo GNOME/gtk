@@ -4829,6 +4829,8 @@ gtk_drag_source_set_icon
 gtk_drag_source_set_icon_pixbuf
 gtk_drag_source_set_icon_stock
 gtk_drag_source_unset
+gtk_drag_source_set_target_list
+gtk_drag_source_get_target_list
 </SECTION>
 
 

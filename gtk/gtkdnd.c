@@ -1006,9 +1006,10 @@ gtk_drag_dest_set_target_list (GtkWidget      *widget,
   
   site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
   
-  if (site == NULL)
+  if (!site)
     {
-      g_warning ("can't set a target list on a widget until you've called gtk_drag_dest_set() to make the widget into a drag destination");
+      g_warning ("Can't set a target list on a widget until you've called gtk_drag_dest_set() "
+                 "to make the widget into a drag destination");
       return;
     }
 
@@ -2097,6 +2098,61 @@ gtk_drag_source_unset (GtkWidget        *widget)
 					    site);
       g_object_set_data (G_OBJECT (widget), "gtk-site-data", NULL);
     }
+}
+
+/**
+ * gtk_drag_source_get_target_list:
+ * @widget: a #GtkWidget
+ *
+ * Gets the list of targets this widget can provide for
+ * drag-and-drop.
+ *
+ * Return value: the #GtkTargetList, or %NULL if none
+ **/
+GtkTargetList *
+gtk_drag_source_get_target_list (GtkWidget *widget)
+{
+  GtkDragSourceSite *site;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
+
+  return site ? site->target_list : NULL;
+}
+
+/**
+ * gtk_drag_source_set_target_list:
+ * @widget: a #GtkWidget that's a drag source
+ * @target_list: list of draggable targets, or %NULL for none
+ *
+ * Changes the target types that this widget offers for drag-and-drop.
+ * The widget must first be made into a drag source with
+ * gtk_drag_source_set().
+ **/
+void
+gtk_drag_source_set_target_list (GtkWidget     *widget,
+                                 GtkTargetList *target_list)
+{
+  GtkDragSourceSite *site;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
+  if (site == NULL)
+    {
+      g_warning ("gtk_drag_source_set_target_list() requires the widget "
+		 "to already be a drag source.");
+      return;
+    }
+
+  if (target_list)
+    gtk_target_list_ref (target_list);
+
+  if (site->target_list)
+    gtk_target_list_unref (site->target_list);
+
+  site->target_list = target_list;
 }
 
 static void

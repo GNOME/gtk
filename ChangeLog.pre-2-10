@@ -1,3 +1,11 @@
+Mon Mar  1 19:30:25 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.[ch]: Add gtk_drag_source_set/get_target_list().
+	(#127499, based on patch from Michael Natterer)
+
+	* tests/testgtk.c: Fix bidi strings to display correctly
+	with new auto-bidi.
+
 Tue Mar  2 01:34:40 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtksettings.c: Remove the include of Xft.h, which is already
