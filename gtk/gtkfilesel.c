@@ -1168,7 +1168,7 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
   g_return_if_fail (filename != NULL);
 
   filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
-  g_return_if_fail (filename_utf8 == NULL);
+  g_return_if_fail (filename_utf8 != NULL);
 
   last_slash = strrchr (filename, G_DIR_SEPARATOR);
 
