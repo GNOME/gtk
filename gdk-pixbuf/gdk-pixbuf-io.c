@@ -425,7 +425,8 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
                         GError         **error)
 {
 	image_module->module = (void *) 1;
-	
+
+#ifdef INCLUDE_png	
 	if (strcmp (image_module->module_name, "png") == 0){
 		image_module->load           = mname (png,load);
 		image_module->begin_load     = mname (png,begin_load);
@@ -434,7 +435,9 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
                 image_module->save           = mname (png,save);
 		return TRUE;
 	}
+#endif
 
+#ifdef INCLUDE_bmp	
 	if (strcmp (image_module->module_name, "bmp") == 0){
 		image_module->load           = mname (bmp,load);
 		image_module->begin_load     = mname (bmp,begin_load);
@@ -442,7 +445,9 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 		image_module->stop_load      = mname (bmp,stop_load);
 		return TRUE;
 	}
+#endif
 
+#ifdef INCLUDE_wbmp
 	if (strcmp (image_module->module_name, "wbmp") == 0){
 		image_module->load           = mname (wbmp,load);
 		image_module->begin_load     = mname (wbmp,begin_load);
@@ -450,7 +455,9 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 		image_module->stop_load      = mname (wbmp,stop_load);
 		return TRUE;
 	}
+#endif
 
+#ifdef INCLUDE_gif
 	if (strcmp (image_module->module_name, "gif") == 0){
 		image_module->load           = mname (gif,load);
 		image_module->begin_load     = mname (gif,begin_load);
@@ -459,7 +466,9 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 		image_module->load_animation = mname (gif,load_animation);
 		return TRUE;
 	}
+#endif
 
+#ifdef INCLUDE_ico
 	if (strcmp (image_module->module_name, "ico") == 0){
 		image_module->load           = mname (ico,load);
 		image_module->begin_load     = mname (ico,begin_load);
@@ -467,7 +476,9 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 		image_module->stop_load      = mname (ico,stop_load);
 		return TRUE;
 	}
+#endif
 
+#ifdef INCLUDE_jpeg
 	if (strcmp (image_module->module_name, "jpeg") == 0){
 		image_module->load           = mname (jpeg,load);
 		image_module->begin_load     = mname (jpeg,begin_load);
@@ -476,6 +487,9 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
                 image_module->save           = mname (jpeg,save);
 		return TRUE;
 	}
+#endif
+
+#ifdef INCLUDE_pnm
 	if (strcmp (image_module->module_name, "pnm") == 0){
 		image_module->load           = mname (pnm,load);
 		image_module->begin_load     = mname (pnm,begin_load);
@@ -483,6 +497,9 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 		image_module->stop_load      = mname (pnm,stop_load);
 		return TRUE;
 	}
+#endif
+
+#ifdef INCLUDE_ras
 	if (strcmp (image_module->module_name, "ras") == 0){
 		image_module->load           = mname (ras,load);
 		image_module->begin_load     = mname (ras,begin_load);
@@ -490,6 +507,9 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 		image_module->stop_load      = mname (ras,stop_load);
 		return TRUE;
 	}
+#endif
+
+#ifdef INCLUDE_tiff
 	if (strcmp (image_module->module_name, "tiff") == 0){
 		image_module->load           = mname (tiff,load);
 		image_module->begin_load     = mname (tiff,begin_load);
@@ -497,11 +517,15 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 		image_module->stop_load      = mname (tiff,stop_load);
 		return TRUE;
 	}
+#endif
+
+#ifdef INCLUDE_xpm
 	if (strcmp (image_module->module_name, "xpm") == 0){
 		image_module->load           = mname (xpm,load);
 		image_module->load_xpm_data  = mname (xpm,load_xpm_data);
 		return TRUE;
 	}
+#endif
 
         g_set_error (error,
                      GDK_PIXBUF_ERROR,

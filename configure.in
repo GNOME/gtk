@@ -896,6 +896,40 @@ AC_SUBST(LIBPNG)
 
 AM_CONDITIONAL(BUILD_DYNAMIC_MODULES, $dynworks)
 
+#
+# Allow building some or all gdk-pixbuf loaders included
+#
+AC_MSG_CHECKING(pixbuf loaders to build)
+
+AC_ARG_WITH(included_loaders, [  --with-included-loaders=LOADER1,LOADER2,... Build the specified loaders into gdk-pixbuf (only used if module loading disabled)])
+
+all_loaders="png,bmp,wbmp,gif,ico,jpeg,pnm,ras,tiff,xpm"
+included_loaders=""
+# If no loaders specified, include all
+if test "x$with_included_loaders" = x ; then
+  included_loaders="$all_loaders"
+else
+  included_loaders="$with_included_loaders"
+fi
+
+AC_MSG_RESULT($included_loaders)
+
+INCLUDED_LOADER_OBJ=
+INCLUDED_LOADER_DEFINE=
+
+IFS="${IFS= 	}"; gtk_save_ifs="$IFS"; IFS=","
+for loader in $included_loaders; do
+ if ! echo "$all_loaders" | grep "\(^\|\,\)$loader\(\$\|\,\)" > /dev/null; then
+   AC_MSG_ERROR([the specified loader $loader does not exist])
+ fi
+
+ INCLUDED_LOADER_OBJ="$INCLUDED_LOADER_OBJ libpixbufloader-static-$loader.la"
+ INCLUDED_LOADER_DEFINE="$INCLUDED_LOADER_DEFINE -DINCLUDE_$loader"
+done
+IFS="$gtk_save_ifs"
+AC_SUBST(INCLUDED_LOADER_OBJ)
+AC_SUBST(INCLUDED_LOADER_DEFINE)
+
 AC_HEADER_STDC
 AC_HEADER_DIRENT
 AC_HEADER_SYS_WAIT

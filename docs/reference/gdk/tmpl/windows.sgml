@@ -876,9 +876,9 @@ Windows
 
 </para>
 
-@window: The window to get the decorations from
-@decorations: The window decorations will be written here
-@Returns: TRUE if the window has decorations set, FALSE otherwise.
+@window: 
+@decorations: 
+@Returns: 
 
 
 <!-- ##### ENUM GdkWMDecoration ##### -->

@@ -1,3 +1,20 @@
+2001-01-09  Alexander Larsson  <alla@lysator.liu.se>
+
+	* configure.in:
+	Added --with-included-loaders option
+
+	* gdk-pixbuf/Makefile.am:
+	* gdk-pixbuf/gdk-pixbuf-io.c:
+	Add support for including selected gdk-pixbuf loaders only.
+
+	* gtk/gtkwindow.c (gtk_window_set_frame_dimensions,
+	gtk_window_set_has_frame):
+	Added inline documentation.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_get_decorations):
+	* docs/reference/gdk/tmpl/windows.sgml:
+	Added inline documentation.
+
 Mon Jan  8 14:42:06 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_realize_buttons): Skip
