@@ -1,9 +1,48 @@
+Tue Oct 16 15:50:03 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_translate_coordinates): Add
+	a utility function to translate coordinates relative to
+	one widget's allocation to coordinates relative to another
+	widget's allocation.
+
+	* gtk/gtkradiobutton.c: Add a special ->focus() implementation
+	that:
+	 - only accepts external focus if there is no active
+   	   member of the group or the button is active.
+	 - makes arrow keys move the active button as well
+	   as the focus
+	 - make tab tab out directly.
+	This makes a radio button group act as a single focus location.
+	(#53577).
+	
+	* gtk/gtkcontainer.c (gtk_container_focus): Remove prefiltering -
+	it was only a small optimization that didn't matter and made
+	things more complicated.
+
+	* gtk/gtkcontainer.c (gtk_container_focus_tab): Get rid of custom
+	sorter for FOCUS_TAB as we did for the other focus directions,
+	sort by center of widgets, not upper-left corner. (Shouldn't
+	matter in general.)
+
+	* gtk/gtkcontainer.c: Restructure code to remove duplicate code
+	from the different types of focusing: encapsulate sorting the
+	widgets for the focus direction into one routine
+	(gtk_container_focus_sort()) and then share the work of moving the
+	focus between the different focus directions.
+
+	* gtk/gtkcontainer.c: Fix bug where arrow navigation might not
+	work correctly with focus chains containing non-immediate
+	children. Sorting was being done using allocation coordinates for
+	each widget in the focus chain, and if there were intermediate
+	window-widgets, these allocations would not be in the same
+	coordinate system.
+
 Tue Oct 16 15:12:26 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_mnemonic_activate): add a
 	mnemonic_activate function to option menu.
 
-2001-10-15  Murray Cumming <murrayc@usa.net
+2001-10-15  Murray Cumming <murrayc@usa.net>
 
 	* gtk/gtkinputdialog.c, gtk/gtktoolbar.c,  gtk/gtkwidget.c:
 	  Corrected the type names used in some calls to g_signal_new().

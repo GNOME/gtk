@@ -2317,6 +2317,167 @@ gtk_widget_size_allocate (GtkWidget	*widget,
     }
 }
 
+/**
+ * gtk_widget_common_ancestor:
+ * @widget_a: a #GtkWidget
+ * @widget_b: a #GtkWidget
+ * 
+ * Find the common ancestor of @widget_a and @widget_b that
+ * is closest to the two widgets.
+ * 
+ * Return value: the closest common ancestor of @widget_a and
+ *   @widget_b or %NULL if @widget_a and @widget_b do not
+ *   share a common ancestor.
+ **/
+static GtkWidget *
+gtk_widget_common_ancestor (GtkWidget *widget_a,
+			    GtkWidget *widget_b)
+{
+  GtkWidget *parent_a;
+  GtkWidget *parent_b;
+  gint depth_a = 0;
+  gint depth_b = 0;
+
+  parent_a = widget_a;
+  while (parent_a->parent)
+    {
+      parent_a = parent_a->parent;
+      depth_a++;
+    }
+
+  parent_b = widget_b;
+  while (parent_b->parent)
+    {
+      parent_b = parent_b->parent;
+      depth_b++;
+    }
+
+  if (parent_a != parent_b)
+    return NULL;
+
+  while (depth_a > depth_b)
+    {
+      widget_a = widget_a->parent;
+      depth_a--;
+    }
+
+  while (depth_b > depth_a)
+    {
+      widget_b = widget_b->parent;
+      depth_b--;
+    }
+
+  while (widget_a != widget_b)
+    {
+      widget_a = widget_a->parent;
+      widget_b = widget_b->parent;
+    }
+
+  return widget_a;
+}
+
+/**
+ * gtk_widget_translate_coordinates:
+ * @src_widget:  a #GtkWidget
+ * @dest_widget: a #GtkWidget
+ * @src_x: X position relative to @src_widget
+ * @src_y: Y position relative to @src_widget
+ * @dest_x: location to store X position relative to @dest_widget
+ * @dest_y: location to store Y position relative to @dest_widget
+ * 
+ * Translate coordinates relative to @src_widget's allocation to coordinates
+ * relative to @dest_widget's allocations. In order to perform this
+ * operation, both widgets must be realized, and must share a common
+ * toplevel.
+ * 
+ * Return value: %FALSE if either widget was not realized, or there
+ *   was no common ancestor. In this case, nothing is stored in
+ *   *@dest_x and *@dest_y. Otherwise %TRUE.
+ **/
+gboolean
+gtk_widget_translate_coordinates (GtkWidget  *src_widget,
+				  GtkWidget  *dest_widget,
+				  gint        src_x,
+				  gint        src_y,
+				  gint       *dest_x,
+				  gint       *dest_y)
+{
+  GtkWidget *ancestor;
+  GdkWindow *window;
+
+  g_return_if_fail (GTK_IS_WIDGET (src_widget));
+  g_return_if_fail (GTK_IS_WIDGET (dest_widget));
+
+  ancestor = gtk_widget_common_ancestor (src_widget, dest_widget);
+  if (!ancestor || !GTK_WIDGET_REALIZED (src_widget) || !GTK_WIDGET_REALIZED (dest_widget))
+    return FALSE;
+
+  /* Translate from allocation relative to window relative */
+  if (!GTK_WIDGET_NO_WINDOW (src_widget) && src_widget->parent)
+    {
+      gint wx, wy;
+      gdk_window_get_position (src_widget->window, &wx, &wy);
+
+      src_x -= wx - src_widget->allocation.x;
+      src_y -= wy - src_widget->allocation.y;
+    }
+  else
+    {
+      src_x += src_widget->allocation.x;
+      src_y += src_widget->allocation.y;
+    }
+
+  /* Translate to the common ancestor */
+  window = src_widget->window;
+  while (window != ancestor->window)
+    {
+      gint dx, dy;
+      
+      gdk_window_get_position (window, &dx, &dy);
+      
+      src_x += dx;
+      src_y += dy;
+      
+      window = gdk_window_get_parent (window);
+    }
+
+  /* And back */
+  window = dest_widget->window;
+  while (window != ancestor->window)
+    {
+      gint dx, dy;
+      
+      gdk_window_get_position (window, &dx, &dy);
+      
+      src_x -= dx;
+      src_y -= dy;
+      
+      window = gdk_window_get_parent (window);
+    }
+
+  /* Translate from window relative to allocation relative */
+  if (!GTK_WIDGET_NO_WINDOW (dest_widget) && dest_widget->parent)
+    {
+      gint wx, wy;
+      gdk_window_get_position (dest_widget->window, &wx, &wy);
+
+      src_x += wx - dest_widget->allocation.x;
+      src_y += wy - dest_widget->allocation.y;
+    }
+  else
+    {
+      src_x -= dest_widget->allocation.x;
+      src_y -= dest_widget->allocation.y;
+    }
+
+  if (dest_x)
+    *dest_x = src_x;
+  if (dest_y)
+    *dest_y = src_y;
+
+  return TRUE;
+}
+
 static void
 gtk_widget_real_size_allocate (GtkWidget     *widget,
 			       GtkAllocation *allocation)

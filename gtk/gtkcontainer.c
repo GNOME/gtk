@@ -80,15 +80,10 @@ static gboolean gtk_container_focus                (GtkWidget         *widget,
 						    GtkDirectionType   direction);
 static void     gtk_container_real_set_focus_child (GtkContainer      *container,
 						    GtkWidget         *widget);
-static gboolean gtk_container_focus_tab            (GtkContainer      *container,
+static GList *  gtk_container_focus_sort           (GtkContainer      *container,
 						    GList             *children,
 						    GtkDirectionType   direction);
-static gboolean gtk_container_focus_up_down        (GtkContainer      *container,
-						    GList            **children,
-						    GtkDirectionType   direction);
-static gboolean gtk_container_focus_left_right     (GtkContainer      *container,
-						    GList            **children,
-						    GtkDirectionType   direction);
+
 static gboolean gtk_container_focus_move           (GtkContainer      *container,
 						    GList             *children,
 						    GtkDirectionType   direction);
@@ -1536,38 +1531,12 @@ get_focus_chain (GtkContainer *container)
   return g_object_get_data (G_OBJECT (container), "gtk-container-focus-chain");
 }
 
-static GList*
-filter_unfocusable (GtkContainer *container,
-                    GList        *list)
-{
-  GList *tmp_list;
-  GList *tmp_list2;
-  
-  tmp_list = list;
-  while (tmp_list)
-    {
-      if (GTK_WIDGET_IS_SENSITIVE (tmp_list->data) &&
-          GTK_WIDGET_DRAWABLE (tmp_list->data) &&
-          (GTK_IS_CONTAINER (tmp_list->data) || GTK_WIDGET_CAN_FOCUS (tmp_list->data)))
-        tmp_list = tmp_list->next;
-      else
-        {
-          tmp_list2 = tmp_list;
-          tmp_list = tmp_list->next;
-          
-          list = g_list_remove_link (list, tmp_list2);
-          g_list_free_1 (tmp_list2);
-        }
-    }
-
-  return list;
-}
-
 static gboolean
 gtk_container_focus (GtkWidget        *widget,
                      GtkDirectionType  direction)
 {
   GList *children;
+  GList *sorted_children;
   gint return_val;
   GtkContainer *container;
 
@@ -1591,115 +1560,58 @@ gtk_container_focus (GtkWidget        *widget,
        * chain to override.
        */
       if (container->has_focus_chain)
-        {
-          children = g_list_copy (get_focus_chain (container));
-        }
+	children = g_list_copy (get_focus_chain (container));
       else
-        {
-          children = NULL;
-          gtk_container_forall (container,
-                                gtk_container_children_callback,
-                                &children);
-          children = g_list_reverse (children);
-        }
+	children = gtk_container_get_children (container);
 
-      if (children)
+      if (container->has_focus_chain &&
+	  (direction == GTK_DIR_TAB_FORWARD ||
+	   direction == GTK_DIR_TAB_BACKWARD))
 	{
-	  /* Remove any children which are inappropriate for focus movement
-	   */
-          children = filter_unfocusable (container, children);
-          
-	  switch (direction)
-	    {
-	    case GTK_DIR_TAB_FORWARD:
-	    case GTK_DIR_TAB_BACKWARD:
-              if (container->has_focus_chain)
-                {
-                  if (direction == GTK_DIR_TAB_BACKWARD)
-                    children = g_list_reverse (children);
-                  return_val = gtk_container_focus_move (container, children, direction);
-                }
-              else
-                return_val = gtk_container_focus_tab (container, children, direction);
-	      break;
-	    case GTK_DIR_UP:
-	    case GTK_DIR_DOWN:
-	      return_val = gtk_container_focus_up_down (container, &children, direction);
-	      break;
-	    case GTK_DIR_LEFT:
-	    case GTK_DIR_RIGHT:
-	      return_val = gtk_container_focus_left_right (container, &children, direction);
-	      break;
-	    }
-
-	  g_list_free (children);
+	  sorted_children = g_list_copy (children);
+	  
+	  if (direction == GTK_DIR_TAB_BACKWARD)
+	    sorted_children = g_list_reverse (sorted_children);
 	}
+      else
+	sorted_children = gtk_container_focus_sort (container, children, direction);
+      
+      return_val = gtk_container_focus_move (container, sorted_children, direction);
+
+      g_list_free (sorted_children);
+      g_list_free (children);
     }
 
   return return_val;
 }
 
-static gboolean
-gtk_container_focus_tab (GtkContainer     *container,
-			 GList            *children,
-			 GtkDirectionType  direction)
+static gint
+tab_compare (gconstpointer a,
+	     gconstpointer b)
 {
-  GtkWidget *child;
-  GtkWidget *child2;
-  GList *tmp_list;
-  guint length;
-  guint i, j;
+  const GtkWidget *child1 = a;
+  const GtkWidget *child2 = b;
 
-  length = g_list_length (children);
+  gint y1 = child1->allocation.y + child1->allocation.height / 2;
+  gint y2 = child2->allocation.y + child2->allocation.height / 2;
 
-  /* sort the children in the y direction */
-  for (i = 1; i < length; i++)
+  if (y1 == y2)
     {
-      j = i;
-      tmp_list = g_list_nth (children, j);
-      child = tmp_list->data;
-
-      while (j > 0)
-	{
-	  child2 = tmp_list->prev->data;
-	  if (child->allocation.y < child2->allocation.y)
-	    {
-	      tmp_list->data = tmp_list->prev->data;
-	      tmp_list = tmp_list->prev;
-	      j--;
-	    }
-	  else
-	    break;
-	}
-
-      tmp_list->data = child;
+      gint x1 = child1->allocation.x + child1->allocation.width / 2;
+      gint x2 = child2->allocation.x + child2->allocation.width / 2;
+      
+      return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
     }
+  else
+    return (y1 < y2) ? -1 : 1;
+}
 
-  /* sort the children in the x direction while
-   *  maintaining the y direction sort.
-   */
-  for (i = 1; i < length; i++)
-    {
-      j = i;
-      tmp_list = g_list_nth (children, j);
-      child = tmp_list->data;
-
-      while (j > 0)
-	{
-	  child2 = tmp_list->prev->data;
-	  if ((child->allocation.x < child2->allocation.x) &&
-	      (child->allocation.y == child2->allocation.y))
-	    {
-	      tmp_list->data = tmp_list->prev->data;
-	      tmp_list = tmp_list->prev;
-	      j--;
-	    }
-	  else
-	    break;
-	}
-
-      tmp_list->data = child;
-    }
+static GList *
+gtk_container_focus_sort_tab (GtkContainer     *container,
+			      GList            *children,
+			      GtkDirectionType  direction)
+{
+  children = g_list_sort (children, tab_compare);
 
   /* if we are going backwards then reverse the order
    *  of the children.
@@ -1707,67 +1619,82 @@ gtk_container_focus_tab (GtkContainer     *container,
   if (direction == GTK_DIR_TAB_BACKWARD)
     children = g_list_reverse (children);
 
-  return gtk_container_focus_move (container, children, direction);
+  return children;
+}
+
+/* Get coordinates of @widget's allocation with respect to
+ * allocation of @container.
+ */
+static gboolean
+get_allocation_coords (GtkContainer  *container,
+		       GtkWidget     *widget,
+		       GdkRectangle  *allocation)
+{
+  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+
+  *allocation = widget->allocation;
+
+  return gtk_widget_translate_coordinates (widget, GTK_WIDGET (container),
+					   0, 0, &allocation->x, &allocation->y);
+}
+
+/* Look for a child in @children that is intermediate between
+ * the focus widget and container. This widget, if it exists,
+ * acts as the starting widget for focus navigation.
+ */
+static GtkWidget *
+find_old_focus (GtkContainer *container,
+		GList        *children)
+{
+  GList *tmp_list = children;
+  while (tmp_list)
+    {
+      GtkWidget *child = tmp_list->data;
+      GtkWidget *widget = child;
+
+      while (widget && widget != (GtkWidget *)container)
+	{
+	  GtkWidget *parent = widget->parent;
+	  if (parent && ((GtkContainer *)parent)->focus_child != widget)
+	    goto next;
+
+	  widget = parent;
+	}
+
+      return child;
+
+    next:
+      tmp_list = tmp_list->next;
+    }
+
+  return NULL;
 }
 
 static gboolean
-old_focus_coords (GtkContainer *container, GdkRectangle *old_focus_rect)
+old_focus_coords (GtkContainer *container,
+		  GdkRectangle *old_focus_rect)
 {
   GtkWidget *widget = GTK_WIDGET (container);
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
   
-  if (toplevel &&
-      GTK_IS_WINDOW (toplevel) && GTK_WINDOW (toplevel)->focus_widget &&
-      GTK_WIDGET_REALIZED (container) &&
-      GTK_WIDGET_REALIZED (GTK_WINDOW (toplevel)->focus_widget))
+  if (toplevel && GTK_IS_WINDOW (toplevel) && GTK_WINDOW (toplevel)->focus_widget)
     {
       GtkWidget *old_focus = GTK_WINDOW (toplevel)->focus_widget;
-      GdkWindow *old_parent_window = old_focus->parent ? old_focus->parent->window : old_focus->window;
-      GdkWindow *new_parent_window = widget->window;
-      GdkWindow *toplevel_window = toplevel->window;
       
-      *old_focus_rect = old_focus->allocation;
-      
-      /* Translate coordinates to the toplevel */
-      
-      while (old_parent_window != toplevel_window)
-	{
-	  gint dx, dy;
-	  
-	  gdk_window_get_position (old_parent_window, &dx, &dy);
-	  
-	  old_focus_rect->x += dx;
-	  old_focus_rect->y += dy;
-	  
-	  old_parent_window = gdk_window_get_parent (old_parent_window);
-	}
-      
-      /* Translate coordinates back to the new container */
-      
-      while (new_parent_window != toplevel_window)
-	{
-	  gint dx, dy;
-	  
-	  gdk_window_get_position (new_parent_window, &dx, &dy);
-	  
-	  old_focus_rect->x -= dx;
-	  old_focus_rect->y -= dy;
-	  
-	  new_parent_window = gdk_window_get_parent (new_parent_window);
-	}
-
-      return TRUE;
+      return get_allocation_coords (container, old_focus, old_focus_rect);
     }
-
-  return FALSE;
+  else
+    return FALSE;
 }
 
 typedef struct _CompareInfo CompareInfo;
 
 struct _CompareInfo
 {
+  GtkContainer *container;
   gint x;
   gint y;
+  gboolean reverse;
 };
 
 static gint
@@ -1775,68 +1702,83 @@ up_down_compare (gconstpointer a,
 		 gconstpointer b,
 		 gpointer      data)
 {
-  const GtkWidget *child1 = a;
-  const GtkWidget *child2 = b;
+  GdkRectangle allocation1;
+  GdkRectangle allocation2;
   CompareInfo *compare = data;
+  gint y1, y2;
 
-  gint y1 = child1->allocation.y + child1->allocation.height / 2;
-  gint y2 = child2->allocation.y + child2->allocation.height / 2;
+  get_allocation_coords (compare->container, (GtkWidget *)a, &allocation1);
+  get_allocation_coords (compare->container, (GtkWidget *)b, &allocation2);
+
+  y1 = allocation1.y + allocation1.height / 2;
+  y2 = allocation2.y + allocation2.height / 2;
 
   if (y1 == y2)
     {
-      gint x1 = abs (child1->allocation.x + child1->allocation.width / 2 - compare->x);
-      gint x2 = abs (child2->allocation.x + child2->allocation.width / 2 - compare->x);
+      gint x1 = abs (allocation1.x + allocation1.width / 2 - compare->x);
+      gint x2 = abs (allocation2.x + allocation2.width / 2 - compare->x);
 
-      if (compare->y < y1)
-	return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
-      else
+      if (compare->reverse)
 	return (x1 < x2) ? 1 : ((x1 == x2) ? 0 : -1);
+      else
+	return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
     }
   else
     return (y1 < y2) ? -1 : 1;
 }
 
-static gboolean
-gtk_container_focus_up_down (GtkContainer     *container,
-			     GList           **children,
-			     GtkDirectionType  direction)
+static GList *
+gtk_container_focus_sort_up_down (GtkContainer     *container,
+				  GList            *children,
+				  GtkDirectionType  direction)
 {
   CompareInfo compare;
   GList *tmp_list;
+  GtkWidget *old_focus;
 
-  if (container->focus_child)
+  compare.container = container;
+  compare.reverse = (direction == GTK_DIR_UP);
+
+  old_focus = find_old_focus (container, children);
+  if (old_focus)
     {
+      GdkRectangle old_allocation;
       gint compare_x1;
       gint compare_x2;
       gint compare_y;
-      
+
       /* Delete widgets from list that don't match minimum criteria */
 
-      compare_x1 = container->focus_child->allocation.x;
-      compare_x2 = container->focus_child->allocation.x + container->focus_child->allocation.width;
+      get_allocation_coords (container, old_focus, &old_allocation);
+
+      compare_x1 = old_allocation.x;
+      compare_x2 = old_allocation.x + old_allocation.width;
 
       if (direction == GTK_DIR_UP)
-	compare_y = container->focus_child->allocation.y;
+	compare_y = old_allocation.y;
       else
-	compare_y = container->focus_child->allocation.y + container->focus_child->allocation.height;
+	compare_y = old_allocation.y + old_allocation.height;
       
-      tmp_list = *children;
+      tmp_list = children;
       while (tmp_list)
 	{
 	  GtkWidget *child = tmp_list->data;
 	  GList *next = tmp_list->next;
 	  gint child_x1, child_x2;
+	  GdkRectangle child_allocation;
 	  
-	  if (child != container->focus_child)
+	  if (child != old_focus)
 	    {
-	      child_x1 = child->allocation.x;
-	      child_x2 = child->allocation.x + child->allocation.width;
+	      get_allocation_coords (container, child, &child_allocation);
+	      
+	      child_x1 = child_allocation.x;
+	      child_x2 = child_allocation.x + child_allocation.width;
 	      
 	      if ((child_x2 <= compare_x1 || child_x1 >= compare_x2) /* No horizontal overlap */ ||
-		  (direction == GTK_DIR_DOWN && child->allocation.y + child->allocation.height < compare_y) || /* Not below */
-		  (direction == GTK_DIR_UP && child->allocation.y > compare_y)) /* Not above */
+		  (direction == GTK_DIR_DOWN && child_allocation.y + child_allocation.height < compare_y) || /* Not below */
+		  (direction == GTK_DIR_UP && child_allocation.y > compare_y)) /* Not above */
 		{
-		  *children = g_list_delete_link (*children, tmp_list);
+		  children = g_list_delete_link (children, tmp_list);
 		}
 	    }
 	  
@@ -1844,7 +1786,7 @@ gtk_container_focus_up_down (GtkContainer     *container,
 	}
 
       compare.x = (compare_x1 + compare_x2) / 2;
-      compare.y = container->focus_child->allocation.y + container->focus_child->allocation.height / 2;
+      compare.y = old_allocation.y + old_allocation.height / 2;
     }
   else
     {
@@ -1871,12 +1813,12 @@ gtk_container_focus_up_down (GtkContainer     *container,
 	compare.y = (direction == GTK_DIR_DOWN) ? 0 : + widget->allocation.height;
     }
 
-  *children = g_list_sort_with_data (*children, up_down_compare, &compare);
+  children = g_list_sort_with_data (children, up_down_compare, &compare);
 
-  if (direction == GTK_DIR_UP)
-    *children = g_list_reverse (*children);
+  if (compare.reverse)
+    children = g_list_reverse (children);
 
-  return gtk_container_focus_move (container, *children, direction);
+  return children;
 }
 
 static gint
@@ -1884,68 +1826,84 @@ left_right_compare (gconstpointer a,
 		    gconstpointer b,
 		    gpointer      data)
 {
-  const GtkWidget *child1 = a;
-  const GtkWidget *child2 = b;
+  GdkRectangle allocation1;
+  GdkRectangle allocation2;
   CompareInfo *compare = data;
+  gint x1, x2;
 
-  gint x1 = child1->allocation.x + child1->allocation.width / 2;
-  gint x2 = child2->allocation.x + child2->allocation.width / 2;
+  get_allocation_coords (compare->container, (GtkWidget *)a, &allocation1);
+  get_allocation_coords (compare->container, (GtkWidget *)b, &allocation2);
+
+  x1 = allocation1.x + allocation1.width / 2;
+  x2 = allocation2.x + allocation2.width / 2;
 
   if (x1 == x2)
     {
-      gint y1 = abs (child1->allocation.y + child1->allocation.height / 2 - compare->y);
-      gint y2 = abs (child2->allocation.y + child2->allocation.height / 2 - compare->y);
+      gint y1 = abs (allocation1.y + allocation1.height / 2 - compare->y);
+      gint y2 = abs (allocation2.y + allocation2.height / 2 - compare->y);
 
-      if (compare->x < x1)
-	return (y1 < y2) ? -1 : ((y1 == y2) ? 0 : 1);
-      else
+      if (compare->reverse)
 	return (y1 < y2) ? 1 : ((y1 == y2) ? 0 : -1);
+      else
+	return (y1 < y2) ? -1 : ((y1 == y2) ? 0 : 1);
     }
   else
     return (x1 < x2) ? -1 : 1;
 }
 
-static gboolean
-gtk_container_focus_left_right (GtkContainer     *container,
-				GList           **children,
-				GtkDirectionType  direction)
+static GList *
+gtk_container_focus_sort_left_right (GtkContainer     *container,
+				     GList            *children,
+				     GtkDirectionType  direction)
 {
   CompareInfo compare;
   GList *tmp_list;
+  GtkWidget *old_focus;
 
-  if (container->focus_child)
+  compare.container = container;
+  compare.reverse = (direction == GTK_DIR_LEFT);
+  
+  old_focus = find_old_focus (container, children);
+  if (old_focus)
     {
+      GdkRectangle old_allocation;
+
       gint compare_y1;
       gint compare_y2;
       gint compare_x;
       
       /* Delete widgets from list that don't match minimum criteria */
 
-      compare_y1 = container->focus_child->allocation.y;
-      compare_y2 = container->focus_child->allocation.y + container->focus_child->allocation.height;
+      get_allocation_coords (container, old_focus, &old_allocation);
+
+      compare_y1 = old_allocation.y;
+      compare_y2 = old_allocation.y + old_allocation.height;
 
       if (direction == GTK_DIR_LEFT)
-	compare_x = container->focus_child->allocation.x;
+	compare_x = old_allocation.x;
       else
-	compare_x = container->focus_child->allocation.x + container->focus_child->allocation.width;
+	compare_x = old_allocation.x + old_allocation.width;
       
-      tmp_list = *children;
+      tmp_list = children;
       while (tmp_list)
 	{
 	  GtkWidget *child = tmp_list->data;
 	  GList *next = tmp_list->next;
 	  gint child_y1, child_y2;
+	  GdkRectangle child_allocation;
 	  
-	  if (child != container->focus_child)
+	  if (child != old_focus)
 	    {
-	      child_y1 = child->allocation.y;
-	      child_y2 = child->allocation.y + child->allocation.height;
+	      get_allocation_coords (container, child, &child_allocation);
+	      
+	      child_y1 = child_allocation.y;
+	      child_y2 = child_allocation.y + child_allocation.height;
 	      
 	      if ((child_y2 <= compare_y1 || child_y1 >= compare_y2) /* No vertical overlap */ ||
-		  (direction == GTK_DIR_RIGHT && child->allocation.x + child->allocation.width < compare_x) || /* Not to left */
-		  (direction == GTK_DIR_LEFT && child->allocation.x > compare_x)) /* Not to right */
+		  (direction == GTK_DIR_RIGHT && child_allocation.x + child_allocation.width < compare_x) || /* Not to left */
+		  (direction == GTK_DIR_LEFT && child_allocation.x > compare_x)) /* Not to right */
 		{
-		  *children = g_list_delete_link (*children, tmp_list);
+		  children = g_list_delete_link (children, tmp_list);
 		}
 	    }
 	  
@@ -1953,7 +1911,7 @@ gtk_container_focus_left_right (GtkContainer     *container,
 	}
 
       compare.y = (compare_y1 + compare_y2) / 2;
-      compare.x = container->focus_child->allocation.x + container->focus_child->allocation.width / 2;
+      compare.x = old_allocation.x + old_allocation.width / 2;
     }
   else
     {
@@ -1980,12 +1938,51 @@ gtk_container_focus_left_right (GtkContainer     *container,
 	compare.x = (direction == GTK_DIR_RIGHT) ? 0 : widget->allocation.width;
     }
 
-  *children = g_list_sort_with_data (*children, left_right_compare, &compare);
+  children = g_list_sort_with_data (children, left_right_compare, &compare);
 
-  if (direction == GTK_DIR_LEFT)
-    *children = g_list_reverse (*children);
+  if (compare.reverse)
+    children = g_list_reverse (children);
 
-  return gtk_container_focus_move (container, *children, direction);
+  return children;
+}
+
+/**
+ * gtk_container_focus_sort:
+ * @container: a #GtkContainer
+ * @children:  a list of descendents of @container (they don't
+ *             have to be direct children.
+ * @direction: focus direction
+ * 
+ * Sorts @children in the correct order for focusing with
+ * direction type @direction.
+ * 
+ * Return value: a copy of @children, sorted in correct focusing order,
+ *   with children that aren't suitable for focusing in this direction
+ *   removed.
+ **/
+static GList *
+gtk_container_focus_sort (GtkContainer     *container,
+			  GList            *children,
+			  GtkDirectionType  direction)
+{
+  children = g_list_copy (children);
+  
+  switch (direction)
+    {
+    case GTK_DIR_TAB_FORWARD:
+    case GTK_DIR_TAB_BACKWARD:
+      return gtk_container_focus_sort_tab (container, children, direction);
+    case GTK_DIR_UP:
+    case GTK_DIR_DOWN:
+      return gtk_container_focus_sort_up_down (container, children, direction);
+    case GTK_DIR_LEFT:
+    case GTK_DIR_RIGHT:
+      return gtk_container_focus_sort_left_right (container, children, direction);
+    }
+
+  g_assert_not_reached ();
+
+  return NULL;
 }
 
 static gboolean

@@ -621,6 +621,13 @@ void	     gtk_widget_get_pointer	(GtkWidget	*widget,
 gboolean     gtk_widget_is_ancestor	(GtkWidget	*widget,
 					 GtkWidget	*ancestor);
 
+gboolean     gtk_widget_translate_coordinates (GtkWidget  *src_widget,
+					       GtkWidget  *dest_widget,
+					       gint        src_x,
+					       gint        src_y,
+					       gint       *dest_x,
+					       gint       *dest_y);
+
 /* Hide widget and return TRUE.
  */
 gboolean     gtk_widget_hide_on_delete	(GtkWidget	*widget);
