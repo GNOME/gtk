@@ -162,6 +162,17 @@ Finds out the DND protocol supported by a window.
   support Drag and Drop.
 
 
+<!-- ##### FUNCTION gdk_drag_get_protocol_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@xid: 
+@protocol: 
+@Returns: 
+
+
 <!-- ##### ENUM GdkDragProtocol ##### -->
 <para>
 Used in #GdkDragContext to indicate the protocol according to

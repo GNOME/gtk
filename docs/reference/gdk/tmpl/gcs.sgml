@@ -144,6 +144,15 @@ Create a new GC with the given initial values.
 @Returns: the new graphics context.
 
 
+<!-- ##### FUNCTION gdk_gc_get_screen ##### -->
+<para>
+
+</para>
+
+@gc: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_gc_ref ##### -->
 <para>
 

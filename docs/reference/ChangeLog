@@ -1,3 +1,13 @@
+Tue Apr 30 12:26:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-sections.txt: Update for multihead.
+
+	* multihead.sgml gtk-docs.sgml: Add overview of
+	multihead from multihead branch.
+
+	* tmpl/gdkdisplay.sgml tmpl/gdkscreen.sgml: New
+	sections from multihead branch.
+
 2002-04-30  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/other_software.sgml: half-finished docs on merging GTK with

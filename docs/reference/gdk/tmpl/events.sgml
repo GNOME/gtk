@@ -151,43 +151,44 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 <para>
 </para>
 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_event_peek ##### -->
 <para>
 </para>
 
-@Returns:
+@Returns: 
+
 
 <!-- ##### FUNCTION gdk_event_get ##### -->
 <para>
 </para>
 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_event_get_graphics_expose ##### -->
 <para>
 </para>
 
-@window:
-@Returns:
+@window: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_event_put ##### -->
 <para>
 </para>
 
-@event:
+@event: 
 
 
 <!-- ##### FUNCTION gdk_event_copy ##### -->
 <para>
 </para>
 
-@event:
-@Returns:
+@event: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_event_free ##### -->
@@ -201,8 +202,8 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 <para>
 </para>
 
-@event:
-@Returns:
+@event: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_event_get_state ##### -->
@@ -252,9 +253,9 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 <para>
 </para>
 
-@func:
-@data:
-@notify:
+@func: 
+@data: 
+@notify: 
 
 
 <!-- ##### USER_FUNCTION GdkEventFunc ##### -->
@@ -272,16 +273,27 @@ gdk_event_handler_set().
 <para>
 </para>
 
-@event:
-@xid:
-@Returns:
+@event: 
+@xid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_event_send_client_message_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@event: 
+@xid: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_event_send_clientmessage_toall ##### -->
 <para>
 </para>
 
-@event:
+@event: 
 
 
 <!-- ##### FUNCTION gdk_add_client_message_filter ##### -->
@@ -289,30 +301,30 @@ gdk_event_handler_set().
 </para>
 
 @message_type: 
-@func:
-@data:
+@func: 
+@data: 
 
 
 <!-- ##### FUNCTION gdk_get_show_events ##### -->
 <para>
 </para>
 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_set_show_events ##### -->
 <para>
 </para>
 
-@show_events:
+@show_events: 
 
 
 <!-- ##### FUNCTION gdk_setting_get ##### -->
 <para>
 </para>
 
-@name:
-@value:
-@Returns:
+@name: 
+@value: 
+@Returns: 
 
 

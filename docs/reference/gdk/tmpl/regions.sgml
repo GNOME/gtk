@@ -236,16 +236,16 @@ Positive values shrink the region. Negative values expand it.
 
 </para>
 
-@region:
-@rect:
+@region: 
+@rect: 
 
 
 <!-- ##### FUNCTION gdk_region_intersect ##### -->
 <para>
 </para>
 
-@source1:
-@source2:
+@source1: 
+@source2: 
 
 
 <!-- ##### FUNCTION gdk_region_union ##### -->
@@ -253,24 +253,24 @@ Positive values shrink the region. Negative values expand it.
 
 </para>
 
-@source1:
-@source2:
+@source1: 
+@source2: 
 
 
 <!-- ##### FUNCTION gdk_region_subtract ##### -->
 <para>
 </para>
 
-@source1:
-@source2:
+@source1: 
+@source2: 
 
 
 <!-- ##### FUNCTION gdk_region_xor ##### -->
 <para>
 </para>
 
-@source1:
-@source2:
+@source1: 
+@source2: 
 
 
 <!-- ##### STRUCT GdkSpan ##### -->

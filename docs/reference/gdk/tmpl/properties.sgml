@@ -96,6 +96,20 @@ the nul-separated elements of the original text string.)
           if the conversion failed.
 
 
+<!-- ##### FUNCTION gdk_text_property_to_text_list_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@encoding: 
+@format: 
+@text: 
+@length: 
+@list: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_free_text_list ##### -->
 <para>
 Frees the array of strings created by
@@ -119,6 +133,20 @@ gdk_text_property_to_text_list().
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_text_property_to_utf8_list_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@encoding: 
+@format: 
+@text: 
+@length: 
+@list: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_string_to_compound_text ##### -->
 <para>
 Converts a string from the encoding of the current locale 
@@ -131,6 +159,20 @@ into a form suitable for storing in a window property.
 @ctext: location to store newly allocated data for the property.
 @length: location to store the length of @ctext in items.
 @Returns: 0 upon sucess, non-zero upon failure.
+
+
+<!-- ##### FUNCTION gdk_string_to_compound_text_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@str: 
+@encoding: 
+@format: 
+@ctext: 
+@length: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_free_compound_text ##### -->
@@ -155,6 +197,20 @@ Frees the data returned from gdk_string_to_compound_text().
 
 </para>
 
+@str: 
+@encoding: 
+@format: 
+@ctext: 
+@length: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_utf8_to_compound_text_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
 @str: 
 @encoding: 
 @format: 

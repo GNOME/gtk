@@ -176,7 +176,7 @@ types that GTK+ understands.
 <para>
 </para>
 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_device_set_source ##### -->

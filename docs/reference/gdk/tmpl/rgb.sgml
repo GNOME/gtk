@@ -409,7 +409,7 @@ private colormap.
 <para>
 </para>
 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_rgb_get_colormap ##### -->

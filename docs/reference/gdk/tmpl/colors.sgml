@@ -103,7 +103,7 @@ Creates a new colormap for the given visual.
 <para>
 </para>
 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_colormap_get_system_size ##### -->

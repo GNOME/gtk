@@ -123,11 +123,12 @@ image is freed.</para></warning>
 </para>
 
 @drawable: 
-@x:
-@y:
-@width:
-@height:
-@Returns:
+@x: 
+@y: 
+@width: 
+@height: 
+@Returns: 
+
 
 <!-- ##### FUNCTION gdk_image_ref ##### -->
 <para>

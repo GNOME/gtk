@@ -72,6 +72,24 @@ or a #GdkWindow.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_drawable_get_display ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drawable_get_screen ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_drawable_get_visual ##### -->
 <para>
 

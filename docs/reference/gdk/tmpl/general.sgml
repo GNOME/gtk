@@ -53,6 +53,23 @@ by GTK+ applications.
 @Returns: %TRUE if initialization succeeded.
 
 
+<!-- ##### FUNCTION gdk_parse_args ##### -->
+<para>
+
+</para>
+
+@argc: 
+@argv: 
+
+
+<!-- ##### FUNCTION gdk_get_display_arg_name ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_set_locale ##### -->
 <para>
 Initializes the support for internationalization by calling the <function>setlocale()</function>
@@ -81,7 +98,7 @@ locale.
 <para>
 </para>
 
-@sm_client_id:
+@sm_client_id: 
 
 
 <!-- ##### FUNCTION gdk_exit ##### -->
@@ -139,37 +156,37 @@ trapping X errors with gdk_error_trap_push() and gdk_error_trap_pop().
 
 <!-- ##### FUNCTION gdk_screen_width ##### -->
 <para>
-Returns the width of the screen in pixels.
+Returns the width of the default screen in pixels.
 </para>
 
-@Returns: the width of the screen in pixels.
+@Returns: the width of the default screen in pixels.
 
 
 <!-- ##### FUNCTION gdk_screen_height ##### -->
 <para>
-Returns the height of the screen in pixels.
+Returns the height of the default screen in pixels.
 </para>
 
-@Returns: the height of the screen in pixels.
+@Returns: the height of the default screen in pixels.
 
 
 <!-- ##### FUNCTION gdk_screen_width_mm ##### -->
 <para>
-Returns the width of the screen in millimeters.
+Returns the width of the default screen in millimeters.
 Note that on many X servers this value will not be correct.
 </para>
 
-@Returns: the width of the screen in millimeters, though it is not always
+@Returns: the width of the default screen in millimeters, though it is not always
 correct.
 
 
 <!-- ##### FUNCTION gdk_screen_height_mm ##### -->
 <para>
-Returns the height of the screen in millimeters.
+Returns the height of the default screen in millimeters.
 Note that on many X servers this value will not be correct.
 </para>
 
-@Returns: the height of the screen in millimeters, though it is not always
+@Returns: the height of the default screen in millimeters, though it is not always
 correct.
 
 

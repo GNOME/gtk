@@ -299,6 +299,16 @@ You should make no assumptions about the initial reference count.
 @Returns: a #GdkFont, or %NULL if the font could not be loaded.
 
 
+<!-- ##### FUNCTION gdk_font_load_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@font_name: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_fontset_load ##### -->
 <para>
 Loads a fontset.
@@ -313,12 +323,41 @@ You should make no assumptions about the initial reference count.
 @Returns: a #GdkFont, or %NULL if the fontset could not be loaded.
 
 
+<!-- ##### FUNCTION gdk_fontset_load_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@fontset_name: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_font_from_description ##### -->
 <para>
 
 </para>
 
 @font_desc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_font_from_description_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@font_desc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_font_get_display ##### -->
+<para>
+
+</para>
+
+@font: 
 @Returns: 
 
 

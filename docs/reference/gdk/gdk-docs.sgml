@@ -26,6 +26,10 @@
 <!entity gdk-Input SYSTEM "sgml/input.sgml">
 <!entity gdk-Drag-and-Drop SYSTEM "sgml/dnd.sgml">
 <!entity gdk-X-Window-System-Interaction SYSTEM "sgml/x_interaction.sgml">
+<!entity gdk-Screen SYSTEM "sgml/gdkscreen.sgml">
+<!entity gdk-Display SYSTEM "sgml/gdkdisplay.sgml">
+
+<!entity gdk-Multihead SYSTEM "multihead.sgml">
 ]>
 
 <book id="index">
@@ -36,6 +40,10 @@
   <reference id="reference">
     <title>API Reference</title>
     &gdk-General;
+
+    &gdk-Multihead;
+    &gdk-Screen;
+    &gdk-Display;
 
     &gdk-Points-Rectangles-and-Regions;
     &gdk-Graphics-Contexts;

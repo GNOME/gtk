@@ -118,6 +118,15 @@ be mapped to a keyval.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_keymap_get_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_keymap_lookup_key ##### -->
 <para>
 

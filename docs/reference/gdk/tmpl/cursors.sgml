@@ -171,6 +171,25 @@ The color does not have to be allocated first.
 @Returns: a new #GdkCursor.
 
 
+<!-- ##### FUNCTION gdk_cursor_new_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@cursor_type: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_cursor_get_screen ##### -->
+<para>
+
+</para>
+
+@cursor: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_cursor_ref ##### -->
 <para>
 

@@ -76,6 +76,14 @@ Returns the X pixmap belonging to a #GdkPixmap.
 @win: a #GdkPixmap.
 
 
+<!-- ##### MACRO GDK_DISPLAY_XDISPLAY ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
 <!-- ##### MACRO GDK_DRAWABLE_XDISPLAY ##### -->
 <para>
 Returns the display of a #GdkDrawable.
@@ -137,6 +145,30 @@ Returns the X colormap belonging to a #GdkColormap.
 
 @cmap: a #GdkColormap.
 @Returns: an Xlib <type>Colormap</type>.
+
+
+<!-- ##### MACRO GDK_SCREEN_XDISPLAY ##### -->
+<para>
+
+</para>
+
+@screen: 
+
+
+<!-- ##### MACRO GDK_SCREEN_XNUMBER ##### -->
+<para>
+
+</para>
+
+@screen: 
+
+
+<!-- ##### MACRO GDK_SCREEN_XSCREEN ##### -->
+<para>
+
+</para>
+
+@screen: 
 
 
 <!-- ##### MACRO GDK_VISUAL_XVISUAL ##### -->
@@ -223,6 +255,16 @@ Returns a #GdkVisual corresponding to a X visual.
 @Returns: the #GdkVisual.
 
 
+<!-- ##### FUNCTION gdkx_visual_get_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@xvisualid: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdkx_colormap_get ##### -->
 <para>
 Returns a #GdkColormap corresponding to a X colormap.
@@ -241,11 +283,31 @@ Returns a #GdkColormap corresponding to a X colormap.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pixmap_foreign_new_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@anid: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_foreign_new ##### -->
 <para>
 
 </para>
 
+@anid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_foreign_new_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
 @anid: 
 @Returns: 
 
@@ -260,6 +322,16 @@ Returns the Gdk object associated with the given X id.
 a #GdkWindow or a #GdkFont.
 
 
+<!-- ##### FUNCTION gdk_xid_table_lookup_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@xid: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_lookup ##### -->
 <para>
 </para>
@@ -267,10 +339,31 @@ a #GdkWindow or a #GdkFont.
 @anid: 
 @Returns: 
 
+
+<!-- ##### FUNCTION gdk_window_lookup_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@anid: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_pixmap_lookup ##### -->
 <para>
 </para>
 
+@anid: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixmap_lookup_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
 @anid: 
 @Returns: 
 
@@ -282,6 +375,24 @@ been created for @xid.
 </para>
 
 @xid: 
+
+
+<!-- ##### MACRO gdk_font_lookup_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@xid: 
+
+
+<!-- ##### FUNCTION gdk_x11_lookup_xdisplay ##### -->
+<para>
+
+</para>
+
+@xdisplay: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_get_server_time ##### -->
@@ -298,6 +409,16 @@ been created for @xid.
 
 </para>
 
+@property: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_screen_supports_net_wm_hint ##### -->
+<para>
+
+</para>
+
+@screen: 
 @property: 
 @Returns: 
 
@@ -338,6 +459,15 @@ Returns the display of a #GdkCursor.
 
 @cursor: a #GdkCursor.
 @Returns: an Xlib <type>Display*</type>.
+
+
+<!-- ##### FUNCTION gdk_x11_display_get_xdisplay ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_x11_drawable_get_xdisplay ##### -->
@@ -461,6 +591,24 @@ Returns the X image belonging to a #GdkImage.
 @Returns: an <type>XImage*</type>.
 
 
+<!-- ##### FUNCTION gdk_x11_screen_get_screen_number ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_screen_get_xscreen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_x11_ungrab_server ##### -->
 <para>
 Ungrab the default display after it has been grabbed with 
@@ -487,11 +635,33 @@ Returns the X visual belonging to a #GdkVisual.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_x11_atom_to_xatom_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@atom: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@virtual_atom: 
+
+
 <!-- ##### FUNCTION gdk_x11_xatom_to_atom ##### -->
 <para>
 
 </para>
 
+@xatom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_xatom_to_atom_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
 @xatom: 
 @Returns: 
 
@@ -505,11 +675,31 @@ Returns the X visual belonging to a #GdkVisual.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_x11_get_xatom_by_name_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@atom_name: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_x11_get_xatom_name ##### -->
 <para>
 
 </para>
 
+@xatom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_get_xatom_name_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
 @xatom: 
 @Returns: 
 

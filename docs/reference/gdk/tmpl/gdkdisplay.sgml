@@ -1,0 +1,215 @@
+<!-- ##### SECTION Title ##### -->
+GdkDisplay
+
+<!-- ##### SECTION Short_Description ##### -->
+controls the keyboard/mouse pointer grabs and a set of #GdkScreen
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+#GdkDisplay objects purpose are two fold :
+<itemizedlist>
+<listitem><para>To grab/ungrab keyboard focus and mouse pointer</para></listitem>
+<listitem><para>To manage and provide information about the #GdkScreen(s) 
+		available for this #GdkDisplay
+	  </para></listitem>
+</itemizedlist>
+</para>
+<para>
+  #GdkDisplay objects are the Gdk representation of the X Display which can be 
+  described as <emphasis>"a workstation consisting of a keyboard a pointing
+  device (such as a mouse) and one or more screens"</emphasis>. 
+  It is used to open and keep track of various #GdkScreen objects currently 
+  intanciated by the application. It is also used to grab and release the keyboard 
+  and the mouse pointer.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GdkDisplay ##### -->
+<para>
+
+</para>
+
+@parent_instance: 
+
+<!-- ##### FUNCTION gdk_open_display ##### -->
+<para>
+
+</para>
+
+@display_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_name ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_n_screens ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_screen ##### -->
+<para>
+
+</para>
+
+@display: 
+@screen_num: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_default_screen ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_pointer_ungrab ##### -->
+<para>
+
+</para>
+
+@display: 
+@time: 
+
+
+<!-- ##### FUNCTION gdk_display_keyboard_ungrab ##### -->
+<para>
+
+</para>
+
+@display: 
+@time: 
+
+
+<!-- ##### FUNCTION gdk_display_pointer_is_grabbed ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_beep ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
+<!-- ##### FUNCTION gdk_display_sync ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
+<!-- ##### FUNCTION gdk_display_close ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
+<!-- ##### FUNCTION gdk_display_list_devices ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_event ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_peek_event ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_put_event ##### -->
+<para>
+
+</para>
+
+@display: 
+@event: 
+
+
+<!-- ##### FUNCTION gdk_display_add_client_message_filter ##### -->
+<para>
+
+</para>
+
+@display: 
+@message_type: 
+@func: 
+@data: 
+
+
+<!-- ##### FUNCTION gdk_display_set_double_click_time ##### -->
+<para>
+
+</para>
+
+@display: 
+@msec: 
+
+
+<!-- ##### FUNCTION gdk_display_set_sm_client_id ##### -->
+<para>
+
+</para>
+
+@display: 
+@sm_client_id: 
+
+
+<!-- ##### FUNCTION gdk_set_default_display ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
+<!-- ##### FUNCTION gdk_get_default_display ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+

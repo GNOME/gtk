@@ -22,6 +22,15 @@ Pango Interaction
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pango_context_get_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_pango_context_set_colormap ##### -->
 <para>
 

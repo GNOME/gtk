@@ -208,6 +208,19 @@ Sets the owner of the given selection.
           changed to @owner, otherwise %FALSE.
 
 
+<!-- ##### FUNCTION gdk_selection_owner_set_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@owner: 
+@selection: 
+@time: 
+@send_event: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_selection_owner_get ##### -->
 <para>
 Determines the owner of the given selection.
@@ -222,6 +235,16 @@ Determines the owner of the given selection.
           was previously created for that window, but
           a new foreign window will never be created by
           this call.
+
+
+<!-- ##### FUNCTION gdk_selection_owner_get_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@selection: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_selection_convert ##### -->
@@ -271,5 +294,18 @@ Sends a response to SelectionRequest event.
            data, or %GDK_NONE to indicate that the request
            was rejected.
 @time: timestamp.
+
+
+<!-- ##### FUNCTION gdk_selection_send_notify_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@requestor: 
+@selection: 
+@target: 
+@property: 
+@time: 
 
 
