@@ -79,6 +79,12 @@ struct _GtkSpinButtonClass
 guint
 gtk_spin_button_get_type           (void);
 
+void
+gtk_spin_button_construct          (GtkSpinButton  *spin_button,
+				    GtkAdjustment  *adjustment,
+				    gfloat          climb_rate,
+				    gint            digits);
+
 GtkWidget *
 gtk_spin_button_new                (GtkAdjustment  *adjustment,
 				    gfloat          climb_rate,

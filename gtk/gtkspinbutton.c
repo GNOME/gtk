@@ -162,26 +162,40 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   spin_button->digits = 0;
 }
 
-GtkWidget*
+void
+gtk_spin_button_construct (GtkSpinButton  *spin_button,
+                           GtkAdjustment  *adjustment,
+                           gfloat          climb_rate,
+                           gint            digits)
+{
+  char buf[MAX_TEXT_LENGTH];
+
+  g_return_if_fail (spin_button != NULL);
+  g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
+  g_return_if_fail (digits >= 0 && digits < 128);
+
+  if (!adjustment)
+    adjustment = (GtkAdjustment*) gtk_adjustment_new (0, 0, 0, 0, 0, 0);
+
+  gtk_spin_button_set_adjustment (spin_button, adjustment);
+  spin_button->digits = digits;
+  sprintf (buf, "%0.*f", digits, adjustment->value);
+  gtk_entry_set_text (GTK_ENTRY (spin_button), buf);
+  spin_button->climb_rate = climb_rate;
+}
+
+GtkWidget *
 gtk_spin_button_new (GtkAdjustment *adjustment,
 		     gfloat         climb_rate,
 		     gint           digits)
 {
   GtkSpinButton *spin;
-  char buf[MAX_TEXT_LENGTH];
 
   g_return_val_if_fail (digits >= 0 && digits < 128, NULL);
 
   spin = gtk_type_new (gtk_spin_button_get_type ());
 
-  if (!adjustment)
-    adjustment = (GtkAdjustment*) gtk_adjustment_new (0, 0, 0, 0, 0, 0);
-
-  gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (spin), adjustment);
-  spin->digits = digits;
-  sprintf (buf, "%0.*f", digits, adjustment->value);
-  gtk_entry_set_text (GTK_ENTRY (spin), buf);
-  spin->climb_rate = climb_rate;
+  gtk_spin_button_construct (spin, adjustment, climb_rate, digits);
 
   return GTK_WIDGET (spin);
 }
