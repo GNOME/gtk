@@ -2886,6 +2886,7 @@ changed_handler (GtkTextLayout     *layout,
       GSList *tmp_list;
       int new_first_para_top;
       int old_first_para_top;
+      GtkTextIter first;
       
       /* If the bottom of the old area was above the top of the
        * screen, we need to scroll to keep the current top of the
