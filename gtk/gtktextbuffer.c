@@ -3382,6 +3382,91 @@ gtk_text_buffer_delete_selection (GtkTextBuffer *buffer,
     }
 }
 
+/**
+ * gtk_text_buffer_backspace:
+ * @buffer: a #GtkTextBuffer
+ * @iter: a position in @buffer
+ * @interactive: whether the deletion is caused by user interaction
+ * @default_editable: whether the buffer is editable by default
+ * 
+ * Performs the appropriate action as if the user hit the delete
+ * key with the cursor at the position specified by @iter. In the
+ * normal case a single character will be deleted, but when
+ * combining accents are involved, more than one character can
+ * be deleted, and when precomposed character and accent combinations,
+ * less than one character will be deleted.
+ *
+ * @iter must be at a cursor position.
+ *
+ * Return value: %TRUE if tbe buffer was modified
+
+ * Since: 2.6
+ **/
+gboolean
+gtk_text_buffer_backspace (GtkTextBuffer *buffer,
+			   GtkTextIter   *iter,
+			   gboolean       interactive,
+			   gboolean       default_editable)
+{
+  gchar *cluster_text;
+  GtkTextIter start;
+  GtkTextIter end;
+  gboolean retval = FALSE;
+  const PangoLogAttr *attrs;
+  int offset;
+  gboolean backspace_deletes_character;
+
+  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  start = *iter;
+  end = *iter;
+
+  attrs = _gtk_text_buffer_get_line_log_attrs (buffer, &start, NULL);
+  offset = gtk_text_iter_get_line_offset (&start);
+  backspace_deletes_character = attrs[offset].backspace_deletes_character;
+
+  gtk_text_iter_backward_cursor_position (&start);
+
+  if (gtk_text_iter_equal (&start, &end))
+    return FALSE;
+    
+  cluster_text = gtk_text_iter_get_text (&start, &end);
+
+  if (interactive)
+    gtk_text_buffer_begin_user_action (buffer);
+  
+  if (gtk_text_buffer_delete_interactive (buffer, &start, &end,
+					  default_editable))
+    {
+      if (backspace_deletes_character)
+	{
+	  gchar *normalized_text = g_utf8_normalize (cluster_text,
+						     strlen (cluster_text),
+						     G_NORMALIZE_NFD);
+	  glong len = g_utf8_strlen (normalized_text, -1);
+	  
+	  if (len > 1)
+	    gtk_text_buffer_insert_interactive (buffer,
+						&start,
+						normalized_text,
+						g_utf8_offset_to_pointer (normalized_text, len - 1) - normalized_text,
+						default_editable);
+	  
+	  g_free (normalized_text);
+	}
+
+      retval = TRUE;
+    }
+  
+  if (interactive)
+    gtk_text_buffer_end_user_action (buffer);
+  
+  g_free (cluster_text);
+
+  return retval;
+}
+
 static void
 cut_or_copy (GtkTextBuffer *buffer,
 	     GtkClipboard  *clipboard,

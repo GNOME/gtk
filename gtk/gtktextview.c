@@ -5147,8 +5147,6 @@ static void
 gtk_text_view_backspace (GtkTextView *text_view)
 {
   GtkTextIter insert;
-  GtkTextIter start;
-  GtkTextIter end;
 
   gtk_text_view_reset_im_context (text_view);
 
@@ -5162,41 +5160,12 @@ gtk_text_view_backspace (GtkTextView *text_view)
                                     gtk_text_buffer_get_mark (get_buffer (text_view),
                                                               "insert"));
 
-  start = insert;
-  end = insert;
-
-  gtk_text_iter_backward_cursor_position (&end);
-
-  if (!gtk_text_iter_equal (&start, &end))
+  if (gtk_text_buffer_backspace (get_buffer (text_view), &insert,
+				 TRUE, text_view->editable))
     {
-      gchar *cluster_text = gtk_text_iter_get_text (&start, &end);
-
-      gtk_text_buffer_begin_user_action (get_buffer (text_view));
-
-      if (gtk_text_buffer_delete_interactive (get_buffer (text_view), &start, &end,
-                                              text_view->editable))
-        {
-          gchar *normalized_text = g_utf8_normalize (cluster_text,
-                                                     strlen (cluster_text),
-                                                     G_NORMALIZE_NFD);
-          glong len = g_utf8_strlen (normalized_text, -1);
-
-          if (len > 1)
-            gtk_text_buffer_insert_interactive_at_cursor (get_buffer (text_view),
-                                                          normalized_text,
-                                                          g_utf8_offset_to_pointer (normalized_text, len - 1) - normalized_text,
-                                                          text_view->editable);
-
-          g_free (normalized_text);
-        }
-
-      gtk_text_buffer_end_user_action (get_buffer (text_view));
-
-      g_free (cluster_text);
-
       DV(g_print (G_STRLOC": scrolling onscreen\n"));
       gtk_text_view_scroll_mark_onscreen (text_view,
-                                          gtk_text_buffer_get_mark (get_buffer (text_view), "insert"));
+					  gtk_text_buffer_get_mark (get_buffer (text_view), "insert"));
     }
 }
 

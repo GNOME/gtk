@@ -2536,7 +2536,7 @@ gtk_entry_backspace (GtkEntry *entry)
 
       pango_layout_get_log_attrs (layout, &log_attrs, &n_attrs);
 
-      if (log_attrs[prev_pos].backspace_deletes_character)
+      if (log_attrs[entry->current_pos].backspace_deletes_character)
 	{
 	  gchar *cluster_text;
 	  gchar *normalized_text;

@@ -197,14 +197,16 @@ void    gtk_text_buffer_insert_with_tags_by_name  (GtkTextBuffer     *buffer,
 
 /* Delete from the buffer */
 void     gtk_text_buffer_delete             (GtkTextBuffer *buffer,
-                                             GtkTextIter   *start,
-                                             GtkTextIter   *end);
+					     GtkTextIter   *start,
+					     GtkTextIter   *end);
 gboolean gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
-                                             GtkTextIter   *start_iter,
-                                             GtkTextIter   *end_iter,
-                                             gboolean       default_editable);
-
-
+					     GtkTextIter   *start_iter,
+					     GtkTextIter   *end_iter,
+					     gboolean       default_editable);
+gboolean gtk_text_buffer_backspace          (GtkTextBuffer *buffer,
+					     GtkTextIter   *iter,
+					     gboolean       interactive,
+					     gboolean       default_editable);
 
 /* Obtain strings from the buffer */
 gchar          *gtk_text_buffer_get_text            (GtkTextBuffer     *buffer,

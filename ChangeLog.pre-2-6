@@ -1,3 +1,16 @@
+Thu Oct 21 15:01:09 2004  Owen Taylor  <otaylor@redhat.com>
+
+	#155952
+
+	* gtk/gtkentry.c: Fix checking the wrong position for
+	the backspace_deletes_character PangoLogAttr.
+
+	* gtk/gtktextbuffer.[ch] gtk/gtk.symbols (gtk_text_buffer_backspace): 
+	Move backspace logic from GtkTextView to here, check 
+	backspace_deletes_char.	
+
+	* gtk/gtktextview.c: Use gtk_text_buffer_backspace().
+
 2004-10-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconcache.c: Include io.h on windows.  (#156075,
