@@ -1,5 +1,11 @@
 2002-02-22  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextview.c (buffer_to_widget): implement more cleanly by
+	using text_window->allocation.x/y instead of recomputing it. 
+	Fixes a bug caused by leaving out the border width here.
+
+2002-02-22  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.c (changed_handler): call
 	gtk_size_group_queue_resize to avoid invalidating the widget every
 	time its requisition changes. Instead we use the btree invalid

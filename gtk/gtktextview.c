@@ -43,6 +43,7 @@
 #include "gtktextview.h"
 #include "gtkimmulticontext.h"
 #include "gdk/gdkkeysyms.h"
+#include "gtksizegroup.h"          /* FIXME http://bugzilla.gnome.org/show_bug.cgi?id=72258 */
 #include "gtktextutil.h"
 #include "gtkwindow.h"
 #include <string.h>
@@ -6710,33 +6711,17 @@ buffer_to_widget (GtkTextView      *text_view,
                   gint              buffer_y,
                   gint             *window_x,
                   gint             *window_y)
-{
-  gint focus_edge_width;
-  gboolean interior_focus;
-  gint focus_width;
-  
-  gtk_widget_style_get (GTK_WIDGET (text_view),
-			"interior_focus", &interior_focus,
-		        "focus_line_width", &focus_width,
-			NULL);
-
-  if (interior_focus)
-    focus_edge_width = 0;
-  else
-    focus_edge_width = focus_width;
-  
+{  
   if (window_x)
     {
-      *window_x = buffer_x - text_view->xoffset + focus_edge_width;
-      if (text_view->left_window)
-        *window_x += text_view->left_window->allocation.width;
+      *window_x = buffer_x - text_view->xoffset;
+      *window_x += text_view->text_window->allocation.x;
     }
 
   if (window_y)
     {
-      *window_y = buffer_y - text_view->yoffset + focus_edge_width;
-      if (text_view->top_window)
-        *window_y += text_view->top_window->allocation.height;
+      *window_y = buffer_y - text_view->yoffset;
+      *window_y += text_view->text_window->allocation.y;
     }
 }
 
