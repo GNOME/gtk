@@ -2796,10 +2796,17 @@ create_reparent (GtkWidget *widget)
 static gboolean
 grippy_button_press (GtkWidget *area, GdkEventButton *event, GdkWindowEdge edge)
 {
-  if (event->button == 1)
-    gtk_window_begin_resize_drag (GTK_WINDOW (gtk_widget_get_toplevel (area)), edge,
-				  event->button, event->x_root, event->y_root,
-				  event->time);
+  if (event->type == GDK_BUTTON_PRESS) 
+    {
+      if (event->button == 1)
+	gtk_window_begin_resize_drag (GTK_WINDOW (gtk_widget_get_toplevel (area)), edge,
+				      event->button, event->x_root, event->y_root,
+				      event->time);
+      else if (event->button == 2)
+	gtk_window_begin_move_drag (GTK_WINDOW (gtk_widget_get_toplevel (area)), 
+				    event->button, event->x_root, event->y_root,
+				    event->time);
+    }
   return TRUE;
 }
 

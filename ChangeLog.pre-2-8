@@ -1,3 +1,12 @@
+2002-11-10  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkstatusbar.c (gtk_statusbar_button_press): Don't start
+	a drag on double click.  (#98189)
+
+2002-11-10  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/testgtk.c (grippy_button_press): Also test moving.
+
 Sun Nov 10 22:55:39 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenu.c (gtk_menu_enter_notify): Don't return after

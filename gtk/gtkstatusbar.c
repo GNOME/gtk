@@ -546,7 +546,8 @@ gtk_statusbar_button_press (GtkWidget      *widget,
   
   statusbar = GTK_STATUSBAR (widget);
   
-  if (!statusbar->has_resize_grip)
+  if (!statusbar->has_resize_grip ||
+    event->type != GDK_BUTTON_PRESS)
     return FALSE;
   
   ancestor = gtk_widget_get_toplevel (widget);
