@@ -27,6 +27,31 @@ types related to the text widget and how they work together.
 </para>
 
 
+<!-- ##### SIGNAL GtkTextTagTable::tag-added ##### -->
+<para>
+
+</para>
+
+@texttagtable: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkTextTagTable::tag-changed ##### -->
+<para>
+
+</para>
+
+@texttagtable: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkTextTagTable::tag-removed ##### -->
+<para>
+
+</para>
+
+@texttagtable: the object which received the signal.
+@arg1: 
+
 <!-- ##### USER_FUNCTION GtkTextTagTableForeach ##### -->
 <para>
 
@@ -90,29 +115,4 @@ types related to the text widget and how they work together.
 @table: 
 @Returns: 
 
-
-<!-- ##### SIGNAL GtkTextTagTable::tag-added ##### -->
-<para>
-
-</para>
-
-@texttagtable: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkTextTagTable::tag-changed ##### -->
-<para>
-
-</para>
-
-@texttagtable: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTextTagTable::tag-removed ##### -->
-<para>
-
-</para>
-
-@texttagtable: the object which received the signal.
-@arg1: 
 

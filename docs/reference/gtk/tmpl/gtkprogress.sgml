@@ -23,6 +23,26 @@ and should be accessed using the functions below.
 </para>
 
 
+<!-- ##### ARG GtkProgress:activity-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgress:show-text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgress:text-xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkProgress:text-yalign ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_progress_set_show_text ##### -->
 <para>
 Controls whether progress text is shown.
@@ -186,24 +206,4 @@ the #GtkProgress.
 @min: the minimum progress value.
 @max: the maximum progress value.
 
-
-<!-- ##### ARG GtkProgress:activity-mode ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgress:show-text ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgress:text-xalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkProgress:text-yalign ##### -->
-<para>
-
-</para>
 

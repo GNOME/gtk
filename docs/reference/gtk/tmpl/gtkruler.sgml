@@ -37,6 +37,26 @@ points are really 1/72.27 in.)
 </para>
 
 
+<!-- ##### ARG GtkRuler:lower ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRuler:max-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRuler:position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRuler:upper ##### -->
+<para>
+
+</para>
+
 <!-- ##### STRUCT GtkRulerMetric ##### -->
 <para>
 This should be points_per_unit. This is the size of the unit in 1/72nd's of an inch and has nothing to do with screen pixels. 
@@ -91,24 +111,4 @@ This sets the range of the ruler using gfloat lower, gfloat upper, gfloat positi
 @position: 
 @max_size: 
 
-
-<!-- ##### ARG GtkRuler:lower ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkRuler:max-size ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkRuler:position ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkRuler:upper ##### -->
-<para>
-
-</para>
 

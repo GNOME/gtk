@@ -41,6 +41,11 @@ should only be accessed through the functions described below.
 </para>
 
 
+<!-- ##### ARG GtkSeparatorToolItem:draw ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_separator_tool_item_new ##### -->
 <para>
 
@@ -68,9 +73,4 @@ should only be accessed through the functions described below.
 @item: 
 @Returns: 
 
-
-<!-- ##### ARG GtkSeparatorToolItem:draw ##### -->
-<para>
-
-</para>
 

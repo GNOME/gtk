@@ -20,14 +20,6 @@ Renders a pixbuf in a cell
 </para>
 
 
-<!-- ##### FUNCTION gtk_cell_renderer_pixbuf_new ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
 <!-- ##### ARG GtkCellRendererPixbuf:pixbuf ##### -->
 <para>
 
@@ -57,4 +49,12 @@ Renders a pixbuf in a cell
 <para>
 
 </para>
+
+<!-- ##### FUNCTION gtk_cell_renderer_pixbuf_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
 

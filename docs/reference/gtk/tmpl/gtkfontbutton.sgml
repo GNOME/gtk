@@ -21,6 +21,43 @@ dialog to change the font. It is suitable widget for selecting a font in a prefe
 </para>
 
 
+<!-- ##### SIGNAL GtkFontButton::font-set ##### -->
+<para>
+
+</para>
+
+@fontbutton: the object which received the signal.
+
+<!-- ##### ARG GtkFontButton:font-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFontButton:show-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFontButton:show-style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFontButton:title ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFontButton:use-font ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFontButton:use-size ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_font_button_new ##### -->
 <para>
 
@@ -146,41 +183,4 @@ dialog to change the font. It is suitable widget for selecting a font in a prefe
 @font_button: 
 @Returns: 
 
-
-<!-- ##### SIGNAL GtkFontButton::font-set ##### -->
-<para>
-
-</para>
-
-@fontbutton: the object which received the signal.
-
-<!-- ##### ARG GtkFontButton:font-name ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFontButton:show-size ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFontButton:show-style ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFontButton:title ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFontButton:use-font ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFontButton:use-size ##### -->
-<para>
-
-</para>
 

@@ -39,6 +39,57 @@ only a few are really useful.
 </para>
 
 
+<!-- ##### SIGNAL GtkMenuItem::activate ##### -->
+<para>
+Emitted when the item is activated.
+</para>
+
+@menuitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkMenuItem::activate-item ##### -->
+<para>
+Emitted when the item is activated, but also if the menu item has a
+submenu. For normal applications, the relevant signal is "activate".
+</para>
+
+@menuitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkMenuItem::toggle-size-allocate ##### -->
+<para>
+
+</para>
+
+@menuitem: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkMenuItem::toggle-size-request ##### -->
+<para>
+
+</para>
+
+@menuitem: the object which received the signal.
+@arg1: 
+
+<!-- ##### ARG GtkMenuItem:arrow-spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenuItem:horizontal-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenuItem:selected-shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenuItem:toggle-spacing ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_menu_item_new ##### -->
 <para>
 Creates a new #GtkMenuItem.
@@ -169,55 +220,4 @@ Sets the menu item to be right-justified. Only useful for menu bars.
 @menu_item: 
 @Returns: 
 
-
-<!-- ##### SIGNAL GtkMenuItem::activate ##### -->
-<para>
-Emitted when the item is activated.
-</para>
-
-@menuitem: the object which received the signal.
-
-<!-- ##### SIGNAL GtkMenuItem::activate-item ##### -->
-<para>
-Emitted when the item is activated, but also if the menu item has a
-submenu. For normal applications, the relevant signal is "activate".
-</para>
-
-@menuitem: the object which received the signal.
-
-<!-- ##### SIGNAL GtkMenuItem::toggle-size-allocate ##### -->
-<para>
-
-</para>
-
-@menuitem: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkMenuItem::toggle-size-request ##### -->
-<para>
-
-</para>
-
-@menuitem: the object which received the signal.
-@arg1: 
-
-<!-- ##### ARG GtkMenuItem:arrow-spacing ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenuItem:horizontal-padding ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenuItem:selected-shadow-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenuItem:toggle-spacing ##### -->
-<para>
-
-</para>
 

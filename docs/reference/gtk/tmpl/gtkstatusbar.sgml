@@ -52,6 +52,34 @@ Contains private data that should be modified with the functions described below
 </para>
 
 
+<!-- ##### SIGNAL GtkStatusbar::text-popped ##### -->
+<para>
+Is emitted whenever a new message is popped off a statusbar's stack.
+</para>
+
+@statusbar: the object which received the signal.
+@context_id: the context id of the relevant message/statusbar.
+@text: the message that was just popped.
+
+<!-- ##### SIGNAL GtkStatusbar::text-pushed ##### -->
+<para>
+Is emitted whenever a new message gets pushed onto a statusbar's stack.
+</para>
+
+@statusbar: the object which received the signal.
+@context_id: the context id of the relevant message/statusbar.
+@text: the message that was pushed.
+
+<!-- ##### ARG GtkStatusbar:has-resize-grip ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkStatusbar:shadow-type ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_statusbar_new ##### -->
 <para>
 Creates a new #GtkStatusbar ready for messages.
@@ -119,32 +147,4 @@ Returns whether the statusbar has a resize grip.
 @statusbar: a #GtkStatusBar.
 @Returns: %TRUE if the statusbar has a resize grip.
 
-
-<!-- ##### SIGNAL GtkStatusbar::text-popped ##### -->
-<para>
-Is emitted whenever a new message is popped off a statusbar's stack.
-</para>
-
-@statusbar: the object which received the signal.
-@context_id: the context id of the relevant message/statusbar.
-@text: the message that was just popped.
-
-<!-- ##### SIGNAL GtkStatusbar::text-pushed ##### -->
-<para>
-Is emitted whenever a new message gets pushed onto a statusbar's stack.
-</para>
-
-@statusbar: the object which received the signal.
-@context_id: the context id of the relevant message/statusbar.
-@text: the message that was pushed.
-
-<!-- ##### ARG GtkStatusbar:has-resize-grip ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkStatusbar:shadow-type ##### -->
-<para>
-
-</para>
 

@@ -7,15 +7,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-18 23:39+0100\n"
+"POT-Creation-Date: 2004-07-20 02:54+0200\n"
 "PO-Revision-Date: 2004-07-18 23:40+0100\n"
 "Last-Translator: Gareth Owen <gowen72@yahoo.com>\n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;"
+"Report-Msgid-Bugs-To: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:787
 #: gdk-pixbuf/gdk-pixbuf-io.c:934 tests/testfilechooser.c:192
@@ -451,7 +451,8 @@ msgstr "Keys for PNG text chunks must be ASCII characters."
 #: gdk-pixbuf/io-png.c:854
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-msgstr "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+msgstr ""
+"Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 
 #: gdk-pixbuf/io-png.c:994
 msgid "The PNG image format"
@@ -918,15 +919,15 @@ msgstr "Colour Wheel"
 msgid "Color Selection"
 msgstr "Colour Selection"
 
-#: gtk/gtkentry.c:4318 gtk/gtktextview.c:6936
+#: gtk/gtkentry.c:4343 gtk/gtktextview.c:6936
 msgid "Select _All"
 msgstr "Select _All"
 
-#: gtk/gtkentry.c:4328 gtk/gtktextview.c:6946
+#: gtk/gtkentry.c:4353 gtk/gtktextview.c:6946
 msgid "Input _Methods"
 msgstr "Input _Methods"
 
-#: gtk/gtkentry.c:4338 gtk/gtktextview.c:6957
+#: gtk/gtkentry.c:4363 gtk/gtktextview.c:6957
 msgid "_Insert Unicode Control Character"
 msgstr "_Insert Unicode Control Character"
 

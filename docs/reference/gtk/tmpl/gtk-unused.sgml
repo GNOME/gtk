@@ -525,27 +525,6 @@ This is a private struct used by GTK+ internally, don't worry about it.
 @object: 
 @signal_id: 
 
-<!-- ##### SIGNAL GtkAccelGroup::accel-activate ##### -->
-<para>
-
-</para>
-
-@accelgroup: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkAccelGroup::accel-changed ##### -->
-<para>
-
-</para>
-
-@accelgroup: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
 <!-- ##### ARG GtkAccelLabel:accel-object ##### -->
 <para>
 
@@ -557,16 +536,6 @@ This is a private struct used by GTK+ internally, don't worry about it.
 
 </para>
 
-
-<!-- ##### SIGNAL GtkAccelMap::changed ##### -->
-<para>
-
-</para>
-
-@accelmap: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
 
 <!-- ##### USER_FUNCTION GtkAccelMapNotify ##### -->
 <para>
@@ -638,6 +607,13 @@ Define a function pointer.  Deprecated.
 </para>
 
 @parent: 
+
+<!-- ##### STRUCT GtkCellView ##### -->
+<para>
+
+</para>
+
+@parent_instance: 
 
 <!-- ##### ARG GtkColorSelection:previous-alpha ##### -->
 <para>
@@ -870,67 +846,7 @@ You may not attach these to signals created with the
 </para>
 
 
-<!-- ##### ARG GtkFileChooser:action ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkFileChooser:extra-widget ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### ARG GtkFileChooser:file-system ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkFileChooser:file-system-backend ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkFileChooser:filter ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkFileChooser:local-only ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkFileChooser:preview-widget ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkFileChooser:preview-widget-active ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkFileChooser:select-multiple ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkFileChooser:show-hidden ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkFileChooser:use-preview-label ##### -->
 <para>
 
 </para>
@@ -1184,109 +1100,7 @@ after other user handlers and the default handler.
 </para>
 
 
-<!-- ##### ARG GtkSettings:gtk-button-images ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-can-change-accels ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-color-palette ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-cursor-blink ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-cursor-blink-time ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-dnd-drag-threshold ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-double-click-distance ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-double-click-time ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-entry-select-on-focus ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-font-name ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-icon-sizes ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-icon-theme-name ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-key-theme-name ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-menu-bar-accel ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### ARG GtkSettings:gtk-menu-bar-popout-delay ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-menu-bar-popup-delay ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-menu-images ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-menu-popdown-delay ##### -->
 <para>
 
 </para>
@@ -1298,67 +1112,7 @@ after other user handlers and the default handler.
 </para>
 
 
-<!-- ##### ARG GtkSettings:gtk-menu-popup-delay ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### ARG GtkSettings:gtk-menu-submenu-hysteresis ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-split-cursor ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-theme-name ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-toolbar-icon-size ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-toolbar-style ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-xft-antialias ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-xft-dpi ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-xft-hinting ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-xft-hintstyle ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkSettings:gtk-xft-rgba ##### -->
 <para>
 
 </para>
@@ -1429,20 +1183,6 @@ Holds the data for a statusbar message. <structfield>text</structfield> holds th
 @text: 
 @context_id: 
 @message_id: 
-
-<!-- ##### SIGNAL GtkStyle::realize ##### -->
-<para>
-
-</para>
-
-@style: the object which received the signal.
-
-<!-- ##### SIGNAL GtkStyle::unrealize ##### -->
-<para>
-
-</para>
-
-@style: the object which received the signal.
 
 <!-- ##### STRUCT GtkStyleClass ##### -->
 <para>
@@ -2133,6 +1873,113 @@ Sets the default size of child buttons.
 </para>
 
 @Returns: 
+
+<!-- ##### FUNCTION gtk_cell_view_get_cell_renderers ##### -->
+<para>
+
+</para>
+
+@cellview: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_cell_view_get_displayed_row ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_cell_view_get_size_of_row ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@path: 
+@requisition: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_cell_view_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+<!-- ##### FUNCTION gtk_cell_view_new_with_markup ##### -->
+<para>
+
+</para>
+
+@markup: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_cell_view_new_with_pixbuf ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_cell_view_new_with_text ##### -->
+<para>
+
+</para>
+
+@text: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_cell_view_set_background_color ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@color: 
+
+<!-- ##### FUNCTION gtk_cell_view_set_cell_data ##### -->
+<para>
+
+</para>
+
+@cellview: 
+
+<!-- ##### FUNCTION gtk_cell_view_set_displayed_row ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@path: 
+
+<!-- ##### FUNCTION gtk_cell_view_set_model ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@model: 
+
+<!-- ##### FUNCTION gtk_cell_view_set_value ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@renderer: 
+@property: 
+@value: 
+
+<!-- ##### FUNCTION gtk_cell_view_set_values ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@renderer: 
+@Varargs: 
 
 <!-- ##### FUNCTION gtk_clist_construct ##### -->
 <para>

@@ -55,6 +55,73 @@ and should not be accessed directly.
 </para>
 
 
+<!-- ##### SIGNAL GtkAction::activate ##### -->
+<para>
+
+</para>
+
+@action: the object which received the signal.
+
+<!-- ##### ARG GtkAction:action-group ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:hide-if-empty ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:is-important ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:sensitive ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:short-label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:stock-id ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:tooltip ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:visible-horizontal ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:visible-vertical ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_action_new ##### -->
 <para>
 
@@ -226,71 +293,4 @@ and should not be accessed directly.
 @action: 
 @accel_group: 
 
-
-<!-- ##### SIGNAL GtkAction::activate ##### -->
-<para>
-
-</para>
-
-@action: the object which received the signal.
-
-<!-- ##### ARG GtkAction:action-group ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAction:hide-if-empty ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAction:is-important ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAction:label ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAction:name ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAction:sensitive ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAction:short-label ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAction:stock-id ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAction:tooltip ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAction:visible ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAction:visible-horizontal ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkAction:visible-vertical ##### -->
-<para>
-
-</para>
 

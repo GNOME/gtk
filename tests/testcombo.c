@@ -1,7 +1,6 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <gtk/gtkcellview.h>
-#include <gtk/gtkcellviewmenuitem.h>
 
 #include <string.h>
 #include <stdio.h>

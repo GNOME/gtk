@@ -3,10 +3,11 @@ Overview of Changes from GTK+ 2.4.1 to GTK+ 2.5.0
 * New widgets: 
  - GtkIconView [Anders Carlsson]
  - GtkAboutDialog [Matthias Clasen]
+ - GtkCellView [Matthias]
 * GtkFileChooser
  - change to newly-created folders [Federico Mena Quintero]
  - always show icons [Federico]
- - bug fixes [Federico, Christian Neumair, Alex Roitman, Morten Welinder]
+ - bug fixes [Federico, Christian Neumair, Alex Roitman]
 * GtkComboBox, GtkComboBoxEntry
  - add missing getters and some more convience API [Matthias, 
   Christian Neumeir, Oliver Andrieu]
@@ -20,6 +21,7 @@ Overview of Changes from GTK+ 2.4.1 to GTK+ 2.5.0
  - ignore enter events when the window pops up under the 
    pointer [Anders]
  - bug fixes [Matthias]
+ - support inline autocompletion [Matthias]
 * GtkUIManager
  - fix signal registration [Michael Natterer]
  - make generated XML parseable [Sven Neumann]
@@ -52,8 +54,8 @@ Overview of Changes from GTK+ 2.4.1 to GTK+ 2.5.0
  - license information for loaders [Matthias]
  - simple multiple-of-90° rotation support [Matthias]
  - allow to disable loaders [Matthias]
- - bug fixes [Kouichirou Hiratsuka, Sven Neumann, Brian Cameron,
-  Manish Singh, Morten]
+ - bug fixes [Kouichirou Hiratsuka, Sven, Brian Cameron,
+  Manish Singh, Morten Welinder]
 * X11 selections 
  - make incremental transfer of MULTIPLE work [Matthias]
  - don't do incremental transfer in 4k chunks [Matthias]
@@ -68,7 +70,7 @@ Overview of Changes from GTK+ 2.4.1 to GTK+ 2.5.0
  - support the update counter spec for smoother resizing [Søren]
 * Misc bug fixes [Matthias, Owen, Søren, Anders, Padraig O'Briain, 
   Crispin Flowerday, Michal Pasternak, Scott Tsai, Morten,
-  Michael Natterer, Dmd Ljungmark, Sven Neumann, Billy Biggs, 
+  Michael Natterer, Dmd Ljungmark, Sven, Billy Biggs, 
   Mark McLoughlin, Sam Stephenson, John Finlay, David Hawthorne, 
   Kent Sandvik, Davyd Madeley, Alexander Winston, Jean-François Wauthy, 
   Jeff Franks, Philip Kendall, Baris Cicek Yevgen Muntyan, 
@@ -80,7 +82,7 @@ Overview of Changes from GTK+ 2.4.1 to GTK+ 2.5.0
 * Doc improvements [Matthias, Federico, Owen, Steve Chaplin, Tommi 
   Komulainen, Bastien Nocera, Billy Biggs, Sampo Nurmentaus, Steffen 
   Röcker, Doug Quale, Oliver Andrieu]
-* Updated translations (bg,lt,ne,tk,wa)
+* Updated translations (bg,lt,ne,tk,wa,en_GB)
 
 
 Overview of Changes from GTK+ 2.4.0 to GTK+ 2.4.1

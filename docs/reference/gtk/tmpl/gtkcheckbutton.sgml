@@ -40,6 +40,16 @@ The important signal ('toggled') is also inherited from #GtkToggleButton.
 </para>
 
 
+<!-- ##### ARG GtkCheckButton:indicator-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCheckButton:indicator-spacing ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_check_button_new ##### -->
 <para>
 Creates a new #GtkCheckButton.
@@ -65,14 +75,4 @@ Creates a new #GtkCheckButton with a #GtkLabel to the right of it.
 @label: 
 @Returns: 
 
-
-<!-- ##### ARG GtkCheckButton:indicator-size ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCheckButton:indicator-spacing ##### -->
-<para>
-
-</para>
 

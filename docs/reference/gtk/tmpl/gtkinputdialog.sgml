@@ -43,14 +43,6 @@ immediately.
 </para>
 
 
-<!-- ##### FUNCTION gtk_input_dialog_new ##### -->
-<para>
-Creates a new #GtkInputDialog.
-</para>
-
-@Returns: the new #GtkInputDialog.
-
-
 <!-- ##### SIGNAL GtkInputDialog::disable-device ##### -->
 <para>
 This signal is emitted when the user changes the 
@@ -70,4 +62,12 @@ mode of a device from #GDK_MODE_DISABLED to a
 
 @inputdialog: the object which received the signal.
 @deviceid: The ID of the newly enabled device.
+
+<!-- ##### FUNCTION gtk_input_dialog_new ##### -->
+<para>
+Creates a new #GtkInputDialog.
+</para>
+
+@Returns: the new #GtkInputDialog.
+
 

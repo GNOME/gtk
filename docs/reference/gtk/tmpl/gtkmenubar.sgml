@@ -20,6 +20,16 @@ The #GtkMenuBar struct contains the following fields. (These fields should be co
 </para>
 
 
+<!-- ##### ARG GtkMenuBar:internal-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenuBar:shadow-type ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_menu_bar_new ##### -->
 <para>
 Creates the new #GtkMenuBar
@@ -63,14 +73,4 @@ Adds a new #GtkMenuItem to the GtkMenuBar at the position defined by @position
 @menu_bar: a #GtkMenuBar
 @position: the position in the item list where the @child is added.
 
-
-<!-- ##### ARG GtkMenuBar:internal-padding ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenuBar:shadow-type ##### -->
-<para>
-
-</para>
 

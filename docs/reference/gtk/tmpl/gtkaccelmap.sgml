@@ -20,6 +20,16 @@ Loadable keyboard accelerator specifications
 </para>
 
 
+<!-- ##### SIGNAL GtkAccelMap::changed ##### -->
+<para>
+
+</para>
+
+@accelmap: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
 <!-- ##### USER_FUNCTION GtkAccelMapForeach ##### -->
 <para>
 

@@ -27,6 +27,197 @@ only private data, and should be accessed only via the CList API.
 </para>
 
 
+<!-- ##### SIGNAL GtkCList::abort-column-resize ##### -->
+<para>
+This signal is emitted when a column resize is aborted.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::click-column ##### -->
+<para>
+This signal is emitted when a column title is clicked.
+</para>
+
+@clist: The object which received the signal.
+@column: The number of the column.
+
+<!-- ##### SIGNAL GtkCList::end-selection ##### -->
+<para>
+This signal is emitted when a selection ends in a 
+multiple selection CList.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::extend-selection ##### -->
+<para>
+This signal is emitted when the selection is extended.
+</para>
+
+@clist: the object which received the signal.
+@scroll_type: A #GtkScrollType value of any scrolling operation the
+occured during the selection.
+@position: A value between 0.0 and 1.0.
+@auto_start_selection: %TRUE or %FALSE.
+
+<!-- ##### SIGNAL GtkCList::resize-column ##### -->
+<para>
+This signal is emitted when a column is resized.
+</para>
+
+@clist: The object which received the signal.
+@column: The number of the column
+@width: The new width of the column.
+
+<!-- ##### SIGNAL GtkCList::row-move ##### -->
+<para>
+This signal is emitted when a row is moved.
+</para>
+
+@clist: The object which received the signal.
+@arg1: The source position of the row.
+@arg2: The destination position of the row.
+
+<!-- ##### SIGNAL GtkCList::scroll-horizontal ##### -->
+<para>
+This signal is emitted when the CList is scrolled horizontally.
+</para>
+
+@clist: the object which received the signal.
+@scroll_type: A #GtkScrollType value of how the scroll operation occured.
+@position: a value between 0.0 and 1.0.
+
+<!-- ##### SIGNAL GtkCList::scroll-vertical ##### -->
+<para>
+This signal is emitted when the CList is scrolled vertically.
+</para>
+
+@clist: the object which received the signal.
+@scroll_type: A #GtkScrollType value of how the scroll operation occured.
+@position: A value between 0.0 and 1.0.
+
+<!-- ##### SIGNAL GtkCList::select-all ##### -->
+<para>
+This signal is emitted when all the rows are selected in a CList.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::select-row ##### -->
+<para>
+This signal is emitted when the user selects a row in the list.  
+It is emitted for every row that is selected in a multi-selection or
+by calling gtk_clist_select_all().
+</para>
+
+@clist: The object which received the signal.
+@row: The row selected.
+@column: The column where the selection occured.
+@event: A #GdkEvent structure for the selection.
+
+<!-- ##### SIGNAL GtkCList::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkCList::start-selection ##### -->
+<para>
+This signal is emitted when a drag-selection is started in 
+a multiple-selection CList.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::toggle-add-mode ##### -->
+<para>
+This signal is emitted when "add mode" is toggled.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::toggle-focus-row ##### -->
+<para>
+
+</para>
+
+@clist: The object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::undo-selection ##### -->
+<para>
+This signal is emitted when an undo selection occurs in the CList,
+probably via calling gtk_clist_undo_selection().
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::unselect-all ##### -->
+<para>
+This signal is emitted when all rows are unselected in a CList.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::unselect-row ##### -->
+<para>
+This signal is emitted when the user unselects a row in the list.  
+It is emitted for every row that is unselected in a multi-selection or
+by calling gtk_clist_unselect_all().  It is also emitted for the
+previously selected row in a "single" or "browse" mode CList.
+</para>
+
+@clist: The object which received the signal.
+@row: The selected row
+@column: The column where the selection occured.
+@event: 
+
+<!-- ##### ARG GtkCList:n-columns ##### -->
+<para>
+An integer value for a column.
+</para>
+
+<!-- ##### ARG GtkCList:reorderable ##### -->
+<para>
+A boolean value for determining if the user can re-order the CList's
+columns.
+</para>
+
+<!-- ##### ARG GtkCList:row-height ##### -->
+<para>
+An integer value representing the height of a row in pixels.
+</para>
+
+<!-- ##### ARG GtkCList:selection-mode ##### -->
+<para>
+Sets the type of selection mode for the CList.
+</para>
+
+<!-- ##### ARG GtkCList:shadow-type ##### -->
+<para>
+Sets the shadowing for the CList.
+</para>
+
+<!-- ##### ARG GtkCList:sort-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCList:titles-active ##### -->
+<para>
+A boolean value for setting whether the column titles can be
+clicked.
+</para>
+
+<!-- ##### ARG GtkCList:use-drag-icons ##### -->
+<para>
+A boolean value for setting whether to use icons during drag
+operations.
+</para>
+
 <!-- ##### ENUM GtkCellType ##### -->
 <para>
 Identifies the type of element in the current cell of the CList.  Cells can
@@ -1115,195 +1306,4 @@ aspect of the #GtkCList widget.
 @clist: The #GtkCList to affect.
 @adjustment: A pointer to a #GtkAdjustment widget, or NULL.
 
-
-<!-- ##### SIGNAL GtkCList::abort-column-resize ##### -->
-<para>
-This signal is emitted when a column resize is aborted.
-</para>
-
-@clist: the object which received the signal.
-
-<!-- ##### SIGNAL GtkCList::click-column ##### -->
-<para>
-This signal is emitted when a column title is clicked.
-</para>
-
-@clist: The object which received the signal.
-@column: The number of the column.
-
-<!-- ##### SIGNAL GtkCList::end-selection ##### -->
-<para>
-This signal is emitted when a selection ends in a 
-multiple selection CList.
-</para>
-
-@clist: the object which received the signal.
-
-<!-- ##### SIGNAL GtkCList::extend-selection ##### -->
-<para>
-This signal is emitted when the selection is extended.
-</para>
-
-@clist: the object which received the signal.
-@scroll_type: A #GtkScrollType value of any scrolling operation the
-occured during the selection.
-@position: A value between 0.0 and 1.0.
-@auto_start_selection: %TRUE or %FALSE.
-
-<!-- ##### SIGNAL GtkCList::resize-column ##### -->
-<para>
-This signal is emitted when a column is resized.
-</para>
-
-@clist: The object which received the signal.
-@column: The number of the column
-@width: The new width of the column.
-
-<!-- ##### SIGNAL GtkCList::row-move ##### -->
-<para>
-This signal is emitted when a row is moved.
-</para>
-
-@clist: The object which received the signal.
-@arg1: The source position of the row.
-@arg2: The destination position of the row.
-
-<!-- ##### SIGNAL GtkCList::scroll-horizontal ##### -->
-<para>
-This signal is emitted when the CList is scrolled horizontally.
-</para>
-
-@clist: the object which received the signal.
-@scroll_type: A #GtkScrollType value of how the scroll operation occured.
-@position: a value between 0.0 and 1.0.
-
-<!-- ##### SIGNAL GtkCList::scroll-vertical ##### -->
-<para>
-This signal is emitted when the CList is scrolled vertically.
-</para>
-
-@clist: the object which received the signal.
-@scroll_type: A #GtkScrollType value of how the scroll operation occured.
-@position: A value between 0.0 and 1.0.
-
-<!-- ##### SIGNAL GtkCList::select-all ##### -->
-<para>
-This signal is emitted when all the rows are selected in a CList.
-</para>
-
-@clist: the object which received the signal.
-
-<!-- ##### SIGNAL GtkCList::select-row ##### -->
-<para>
-This signal is emitted when the user selects a row in the list.  
-It is emitted for every row that is selected in a multi-selection or
-by calling gtk_clist_select_all().
-</para>
-
-@clist: The object which received the signal.
-@row: The row selected.
-@column: The column where the selection occured.
-@event: A #GdkEvent structure for the selection.
-
-<!-- ##### SIGNAL GtkCList::set-scroll-adjustments ##### -->
-<para>
-
-</para>
-
-@clist: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkCList::start-selection ##### -->
-<para>
-This signal is emitted when a drag-selection is started in 
-a multiple-selection CList.
-</para>
-
-@clist: the object which received the signal.
-
-<!-- ##### SIGNAL GtkCList::toggle-add-mode ##### -->
-<para>
-This signal is emitted when "add mode" is toggled.
-</para>
-
-@clist: the object which received the signal.
-
-<!-- ##### SIGNAL GtkCList::toggle-focus-row ##### -->
-<para>
-
-</para>
-
-@clist: The object which received the signal.
-
-<!-- ##### SIGNAL GtkCList::undo-selection ##### -->
-<para>
-This signal is emitted when an undo selection occurs in the CList,
-probably via calling gtk_clist_undo_selection().
-</para>
-
-@clist: the object which received the signal.
-
-<!-- ##### SIGNAL GtkCList::unselect-all ##### -->
-<para>
-This signal is emitted when all rows are unselected in a CList.
-</para>
-
-@clist: the object which received the signal.
-
-<!-- ##### SIGNAL GtkCList::unselect-row ##### -->
-<para>
-This signal is emitted when the user unselects a row in the list.  
-It is emitted for every row that is unselected in a multi-selection or
-by calling gtk_clist_unselect_all().  It is also emitted for the
-previously selected row in a "single" or "browse" mode CList.
-</para>
-
-@clist: The object which received the signal.
-@row: The selected row
-@column: The column where the selection occured.
-@event: 
-
-<!-- ##### ARG GtkCList:n-columns ##### -->
-<para>
-An integer value for a column.
-</para>
-
-<!-- ##### ARG GtkCList:reorderable ##### -->
-<para>
-A boolean value for determining if the user can re-order the CList's
-columns.
-</para>
-
-<!-- ##### ARG GtkCList:row-height ##### -->
-<para>
-An integer value representing the height of a row in pixels.
-</para>
-
-<!-- ##### ARG GtkCList:selection-mode ##### -->
-<para>
-Sets the type of selection mode for the CList.
-</para>
-
-<!-- ##### ARG GtkCList:shadow-type ##### -->
-<para>
-Sets the shadowing for the CList.
-</para>
-
-<!-- ##### ARG GtkCList:sort-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCList:titles-active ##### -->
-<para>
-A boolean value for setting whether the column titles can be
-clicked.
-</para>
-
-<!-- ##### ARG GtkCList:use-drag-icons ##### -->
-<para>
-A boolean value for setting whether to use icons during drag
-operations.
-</para>
 

@@ -20,6 +20,167 @@ Toplevel which can contain other widgets
 </para>
 
 
+<!-- ##### SIGNAL GtkWindow::activate-default ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWindow::activate-focus ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWindow::frame-event ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+@event: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkWindow::keys-changed ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+
+<!-- ##### SIGNAL GtkWindow::move-focus ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkWindow::set-focus ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+@widget: 
+
+<!-- ##### ARG GtkWindow:accept-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:allow-grow ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:allow-shrink ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:decorated ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:default-height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:default-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:destroy-with-parent ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:focus-on-map ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:gravity ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:has-toplevel-focus ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:icon ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:icon-name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:is-active ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:modal ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:resizable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:role ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:screen ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:skip-pager-hint ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:skip-taskbar-hint ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:title ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:type-hint ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:window-position ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_window_new ##### -->
 <para>
 
@@ -947,165 +1108,4 @@ Deprecated alias for gtk_window_set_position().
 @width: 
 @height: 
 
-
-<!-- ##### SIGNAL GtkWindow::activate-default ##### -->
-<para>
-
-</para>
-
-@window: the object which received the signal.
-
-<!-- ##### SIGNAL GtkWindow::activate-focus ##### -->
-<para>
-
-</para>
-
-@window: the object which received the signal.
-
-<!-- ##### SIGNAL GtkWindow::frame-event ##### -->
-<para>
-
-</para>
-
-@window: the object which received the signal.
-@event: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkWindow::keys-changed ##### -->
-<para>
-
-</para>
-
-@window: the object which received the signal.
-
-<!-- ##### SIGNAL GtkWindow::move-focus ##### -->
-<para>
-
-</para>
-
-@window: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkWindow::set-focus ##### -->
-<para>
-
-</para>
-
-@window: the object which received the signal.
-@widget: 
-
-<!-- ##### ARG GtkWindow:accept-focus ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:allow-grow ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:allow-shrink ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:decorated ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:default-height ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:default-width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:destroy-with-parent ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:focus-on-map ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:gravity ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:has-toplevel-focus ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:icon ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:icon-name ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:is-active ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:modal ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:resizable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:role ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:screen ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:skip-pager-hint ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:skip-taskbar-hint ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:title ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:type-hint ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWindow:window-position ##### -->
-<para>
-
-</para>
 

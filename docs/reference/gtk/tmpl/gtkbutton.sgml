@@ -27,6 +27,106 @@ This should not be accessed directly.  Use the accessor functions below.
 </para>
 
 
+<!-- ##### SIGNAL GtkButton::activate ##### -->
+<para>
+
+</para>
+
+@button: the object which received the signal.
+
+<!-- ##### SIGNAL GtkButton::clicked ##### -->
+<para>
+Emitted when a button clicked on by the mouse and the cursor stays on the
+button.  If the cursor is not on the button when the mouse button is released,
+the signal is not emitted.
+</para>
+
+@button: the object which received the signal.
+
+<!-- ##### SIGNAL GtkButton::enter ##### -->
+<para>
+Emitted when the mouse cursor enters the region of the button.
+</para>
+
+@button: the object which received the signal.
+
+<!-- ##### SIGNAL GtkButton::leave ##### -->
+<para>
+Emitted when the mouse cursor leaves the region of the button.
+</para>
+
+@button: the object which received the signal.
+
+<!-- ##### SIGNAL GtkButton::pressed ##### -->
+<para>
+Emitted when the button is initially pressed.
+</para>
+
+@button: the object which received the signal.
+
+<!-- ##### SIGNAL GtkButton::released ##### -->
+<para>
+Emitted when a button which is pressed is released, no matter where the
+mouse cursor is.
+</para>
+
+@button: the object which received the signal.
+
+<!-- ##### ARG GtkButton:focus-on-click ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:relief ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:use-stock ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:use-underline ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:yalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:child-displacement-x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:child-displacement-y ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:default-border ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:default-outside-border ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_button_new ##### -->
 <para>
 Creates a new #GtkButton widget. To add a child widget to the button,
@@ -221,104 +321,4 @@ Returns the current relief style of the given #GtkButton.
 @xalign: 
 @yalign: 
 
-
-<!-- ##### SIGNAL GtkButton::activate ##### -->
-<para>
-
-</para>
-
-@button: the object which received the signal.
-
-<!-- ##### SIGNAL GtkButton::clicked ##### -->
-<para>
-Emitted when a button clicked on by the mouse and the cursor stays on the
-button.  If the cursor is not on the button when the mouse button is released,
-the signal is not emitted.
-</para>
-
-@button: the object which received the signal.
-
-<!-- ##### SIGNAL GtkButton::enter ##### -->
-<para>
-Emitted when the mouse cursor enters the region of the button.
-</para>
-
-@button: the object which received the signal.
-
-<!-- ##### SIGNAL GtkButton::leave ##### -->
-<para>
-Emitted when the mouse cursor leaves the region of the button.
-</para>
-
-@button: the object which received the signal.
-
-<!-- ##### SIGNAL GtkButton::pressed ##### -->
-<para>
-Emitted when the button is initially pressed.
-</para>
-
-@button: the object which received the signal.
-
-<!-- ##### SIGNAL GtkButton::released ##### -->
-<para>
-Emitted when a button which is pressed is released, no matter where the
-mouse cursor is.
-</para>
-
-@button: the object which received the signal.
-
-<!-- ##### ARG GtkButton:focus-on-click ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButton:label ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButton:relief ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButton:use-stock ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButton:use-underline ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButton:xalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButton:yalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButton:child-displacement-x ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButton:child-displacement-y ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButton:default-border ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkButton:default-outside-border ##### -->
-<para>
-
-</para>
 

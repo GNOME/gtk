@@ -21,7 +21,6 @@ SHELL = /bin/sh
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-top_builddir = ..
 VPATH = @srcdir@
 
 prefix = @prefix@
@@ -42,10 +41,7 @@ GENCAT = @GENCAT@
 GMSGFMT = @GMSGFMT@
 MSGFMT = @MSGFMT@
 XGETTEXT = @XGETTEXT@
-INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
-INTLTOOL_EXTRACT = @INTLTOOL_EXTRACT@
-MSGMERGE = INTLTOOL_EXTRACT=$(INTLTOOL_EXTRACT) $(INTLTOOL_UPDATE) --gettext-package $(GETTEXT_PACKAGE) --dist
-GENPOT   = INTLTOOL_EXTRACT=$(INTLTOOL_EXTRACT) $(INTLTOOL_UPDATE) --gettext-package $(GETTEXT_PACKAGE) --pot
+MSGMERGE = msgmerge
 
 DEFS = @DEFS@
 CFLAGS = @CFLAGS@
@@ -95,7 +91,12 @@ all-yes: $(CATALOGS)
 all-no:
 
 $(srcdir)/$(GETTEXT_PACKAGE).pot: $(POTFILES)
-	$(GENPOT)
+	$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) --directory=$(top_srcdir) \
+	  --add-comments --keyword=_ --keyword=N_ \
+	  --files-from=$(srcdir)/POTFILES.in \
+	&& test ! -f $(GETTEXT_PACKAGE).po \
+	   || ( rm -f $(srcdir)/$(GETTEXT_PACKAGE).pot \
+		&& mv $(GETTEXT_PACKAGE).po $(srcdir)/$(GETTEXT_PACKAGE).pot )
 
 install: install-exec install-data
 install-exec:
@@ -224,19 +225,6 @@ update-po: Makefile
 	    rm -f $$tmpdir/$$lang.new.po; \
 	  fi; \
 	done
-
-.po: Makefile
-	$(MAKE)  $(PACKAGE).pot;
-	PATH=`pwd`/../src:$$PATH; \
-	echo; printf "$*: "; \
-	if $(MSGMERGE) $*; then \
-	  rm -f $*.old.po; \
-	  else \
-	    echo "msgmerge for * failed!"; \
-	    mv $*.old.po $*.po; \
-	fi; \
-	msgfmt --statistics $*.po; echo;
-
 
 # POTFILES is created from POTFILES.in by stripping comments, empty lines
 # and Intltool tags (enclosed in square brackets), and appending a full

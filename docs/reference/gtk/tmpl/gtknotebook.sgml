@@ -36,6 +36,151 @@ will be a popup menu allowing the users to switch pages.
 </para>
 
 
+<!-- ##### SIGNAL GtkNotebook::change-current-page ##### -->
+<para>
+
+</para>
+
+@notebook: the object which received the signal.
+@arg1: 
+<!-- # Unused Parameters # -->
+@Returns: 
+
+<!-- ##### SIGNAL GtkNotebook::focus-tab ##### -->
+<para>
+
+</para>
+
+@notebook: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkNotebook::move-focus-out ##### -->
+<para>
+
+</para>
+
+@notebook: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkNotebook::select-page ##### -->
+<para>
+
+</para>
+
+@notebook: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkNotebook::switch-page ##### -->
+<para>
+Emitted when the user or a function changes the current page.
+</para>
+
+@notebook: the object which received the signal.
+@page: the new current page
+@page_num: the index of the page
+
+<!-- ##### ARG GtkNotebook:enable-popup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:homogeneous ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:page ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:scrollable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:show-border ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:show-tabs ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab-border ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab-hborder ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab-pos ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab-vborder ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:menu-label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab-expand ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab-fill ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab-label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab-pack ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:has-backward-stepper ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:has-forward-stepper ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:has-secondary-backward-stepper ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:has-secondary-forward-stepper ##### -->
+<para>
+
+</para>
+
 <!-- ##### STRUCT GtkNotebookPage ##### -->
 <para>
 The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
@@ -414,149 +559,4 @@ gtk_notebook_set_current_page() instead.
 @notebook: 
 @page_num: 
 
-
-<!-- ##### SIGNAL GtkNotebook::change-current-page ##### -->
-<para>
-
-</para>
-
-@notebook: the object which received the signal.
-@arg1: 
-<!-- # Unused Parameters # -->
-@Returns: 
-
-<!-- ##### SIGNAL GtkNotebook::focus-tab ##### -->
-<para>
-
-</para>
-
-@notebook: the object which received the signal.
-@arg1: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkNotebook::move-focus-out ##### -->
-<para>
-
-</para>
-
-@notebook: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkNotebook::select-page ##### -->
-<para>
-
-</para>
-
-@notebook: the object which received the signal.
-@arg1: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkNotebook::switch-page ##### -->
-<para>
-Emitted when the user or a function changes the current page.
-</para>
-
-@notebook: the object which received the signal.
-@page: the new current page
-@page_num: the index of the page
-
-<!-- ##### ARG GtkNotebook:enable-popup ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:homogeneous ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:page ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:scrollable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:show-border ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:show-tabs ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:tab-border ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:tab-hborder ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:tab-pos ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:tab-vborder ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:menu-label ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:position ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:tab-expand ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:tab-fill ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:tab-label ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:tab-pack ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:has-backward-stepper ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:has-forward-stepper ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:has-secondary-backward-stepper ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkNotebook:has-secondary-forward-stepper ##### -->
-<para>
-
-</para>
 

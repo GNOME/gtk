@@ -20,14 +20,6 @@ Renders numbers as progress bars
 </para>
 
 
-<!-- ##### FUNCTION gtk_cell_renderer_progress_new ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
 <!-- ##### ARG GtkCellRendererProgress:text ##### -->
 <para>
 
@@ -37,4 +29,12 @@ Renders numbers as progress bars
 <para>
 
 </para>
+
+<!-- ##### FUNCTION gtk_cell_renderer_progress_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
 

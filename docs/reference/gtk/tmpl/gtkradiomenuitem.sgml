@@ -55,6 +55,13 @@ the interface functions.
 </para>
 
 
+<!-- ##### SIGNAL GtkRadioMenuItem::group-changed ##### -->
+<para>
+
+</para>
+
+@radiomenuitem: the object which received the signal.
+
 <!-- ##### FUNCTION gtk_radio_menu_item_new ##### -->
 <para>
 Creates a new #GtkRadioMenuItem.
@@ -138,11 +145,4 @@ Returns the group to which the radio menu item belongs, as a #GList of
 @radio_menu_item: a #GtkRadioMenuItem.
 @Returns: the group of @radio_menu_item.
 
-
-<!-- ##### SIGNAL GtkRadioMenuItem::group-changed ##### -->
-<para>
-
-</para>
-
-@radiomenuitem: the object which received the signal.
 

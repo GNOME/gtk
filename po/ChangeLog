@@ -1,3 +1,9 @@
+Tue Jul 20 02:53:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* === released 2.5.0 ==
+
+	* Makefile.in.in: Revert INTLTOOL changes
+
 2004-07-18  David Lodge <dave@cirt.net>
                                                                                 
         * en_GB.po: Updated British translation.

@@ -151,6 +151,46 @@ In the future it will do full alpha compositing.
   </para>
 
 
+<!-- ##### ARG GdkPixbuf:bits-per-sample ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkPixbuf:colorspace ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkPixbuf:has-alpha ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkPixbuf:height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkPixbuf:n-channels ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkPixbuf:pixels ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkPixbuf:rowstride ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GdkPixbuf:width ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gdk_pixbuf_get_colorspace ##### -->
 <para>
 

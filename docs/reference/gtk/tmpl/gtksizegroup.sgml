@@ -56,6 +56,11 @@ reached from the widget by a chain of size groups of type
 </para>
 
 
+<!-- ##### ARG GtkSizeGroup:mode ##### -->
+<para>
+
+</para>
+
 <!-- ##### ENUM GtkSizeGroupMode ##### -->
 <para>
 
@@ -112,9 +117,4 @@ reached from the widget by a chain of size groups of type
 @size_group: 
 @widget: 
 
-
-<!-- ##### ARG GtkSizeGroup:mode ##### -->
-<para>
-
-</para>
 

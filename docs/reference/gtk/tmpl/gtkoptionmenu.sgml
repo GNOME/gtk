@@ -37,6 +37,28 @@ should be accessed using the functions below.
 
 @Deprecated: Use #GtkComboBox instead.
 
+<!-- ##### SIGNAL GtkOptionMenu::changed ##### -->
+<para>
+
+</para>
+
+@optionmenu: the object which received the signal.
+
+<!-- ##### ARG GtkOptionMenu:menu ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkOptionMenu:indicator-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkOptionMenu:indicator-spacing ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_option_menu_new ##### -->
 <para>
 Creates a new #GtkOptionMenu.
@@ -96,26 +118,4 @@ selected value for the option menu.
 @option_menu: 
 @Returns: 
 
-
-<!-- ##### SIGNAL GtkOptionMenu::changed ##### -->
-<para>
-
-</para>
-
-@optionmenu: the object which received the signal.
-
-<!-- ##### ARG GtkOptionMenu:menu ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkOptionMenu:indicator-size ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkOptionMenu:indicator-spacing ##### -->
-<para>
-
-</para>
 

@@ -1,3 +1,7 @@
+Sun Jul 18 20:17:41 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* === released 2.5.0 ==
+
 Thu Jul 15 19:19:21 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* io-png.c (real_save_png): 

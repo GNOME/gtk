@@ -7,29 +7,30 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-29 12:45+0300\n"
+"POT-Creation-Date: 2004-07-20 02:54+0200\n"
 "PO-Revision-Date: 2004-06-29 12:53+0300\n"
 "Last-Translator: Žygimantas Beručka <uid0@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Report-Msgid-Bugs-To: \n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
+"100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:779
-#: gdk-pixbuf/gdk-pixbuf-io.c:926 tests/testfilechooser.c:192
+#: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:787
+#: gdk-pixbuf/gdk-pixbuf-io.c:934 tests/testfilechooser.c:192
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Nepavyko atidaryti bylos „%s“: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:165 gdk-pixbuf/gdk-pixbuf-io.c:793
+#: gdk-pixbuf/gdk-pixbuf-animation.c:165 gdk-pixbuf/gdk-pixbuf-io.c:801
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Paveikslėlio byloje „%s“ nėra duomenų"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:831
-#: gdk-pixbuf/gdk-pixbuf-io.c:969 tests/testfilechooser.c:237
+#: gdk-pixbuf/gdk-pixbuf-animation.c:208 gdk-pixbuf/gdk-pixbuf-io.c:839
+#: gdk-pixbuf/gdk-pixbuf-io.c:977 tests/testfilechooser.c:237
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -60,55 +61,55 @@ msgstr ""
 "Paveikslėlių kelties modulis %s neeksportuoja teisingos sąsajos; galbūt jis "
 "yra iš kitos GTK versijos?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:577 gdk-pixbuf/gdk-pixbuf-io.c:625
+#: gdk-pixbuf/gdk-pixbuf-io.c:577 gdk-pixbuf/gdk-pixbuf-io.c:629
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Paveikslėlio tipas „%s“ nepalaikomas"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:663
+#: gdk-pixbuf/gdk-pixbuf-io.c:671
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Negalėjau atpažinti paveikslėlio bylos „%s“ formato"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:671
+#: gdk-pixbuf/gdk-pixbuf-io.c:679
 msgid "Unrecognized image file format"
 msgstr "Neatpažintas paveikslėlio bylos formatas"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:844
+#: gdk-pixbuf/gdk-pixbuf-io.c:852
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Nepavyko įkelti paveikslėlio „%s“: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1158
+#: gdk-pixbuf/gdk-pixbuf-io.c:1166
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Klaida rašant į paveikslėlio bylą: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1202 gdk-pixbuf/gdk-pixbuf-io.c:1318
+#: gdk-pixbuf/gdk-pixbuf-io.c:1210 gdk-pixbuf/gdk-pixbuf-io.c:1326
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Jūsų naudojamas gdk-pixbuf variantas nepalaiko saugojimo į šį paveikslėlių "
 "formatą: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1231
+#: gdk-pixbuf/gdk-pixbuf-io.c:1239
 msgid "Insufficient memory to save image to callback"
 msgstr "Nepakanka atminties paveikslėlio išsaugojimui į callback"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1243
+#: gdk-pixbuf/gdk-pixbuf-io.c:1251
 msgid "Failed to open temporary file"
 msgstr "Nepavyko atidaryti laikonos bylos"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1262
+#: gdk-pixbuf/gdk-pixbuf-io.c:1270
 msgid "Failed to read from temporary file"
 msgstr "Nepavyko perskaityti laikinos bylos"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1444
+#: gdk-pixbuf/gdk-pixbuf-io.c:1452
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Nepavyko atidaryti „%s“ įrašymui: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1469
+#: gdk-pixbuf/gdk-pixbuf-io.c:1477
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -117,7 +118,7 @@ msgstr ""
 "Saugant paveikslėlį nepavyko uždaryti „%s“, duomenys gali būti neišsaugoti: %"
 "s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1657 gdk-pixbuf/gdk-pixbuf-io.c:1707
+#: gdk-pixbuf/gdk-pixbuf-io.c:1665 gdk-pixbuf/gdk-pixbuf-io.c:1715
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Nepakanka atminties įšsaugoti paveikslėlį į buferį"
 
@@ -453,9 +454,8 @@ msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG tekstiniai raktai turi naudoti tik ASCII simbolius."
 
 #: gdk-pixbuf/io-png.c:854
-#, c-format
-msgid ""
-"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+#, fuzzy, c-format
+msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 "PNG tekstinio rakto reikšmė %s negali būti perkoduota į ISO-8859-1 koduotę."
 
@@ -615,44 +615,44 @@ msgstr "Byloje duomenų perteklius"
 msgid "The Targa image format"
 msgstr "Targa paveikslėlių formatas"
 
-#: gdk-pixbuf/io-tiff.c:175
+#: gdk-pixbuf/io-tiff.c:177
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Negalėjau gauti paveikslėlio pločio (bloga TIFF byla)"
 
-#: gdk-pixbuf/io-tiff.c:182
+#: gdk-pixbuf/io-tiff.c:184
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Negalėjau gauti paveikslėlio aukščio (bloga TIFF byla)"
 
-#: gdk-pixbuf/io-tiff.c:190
+#: gdk-pixbuf/io-tiff.c:192
 msgid "Width or height of TIFF image is zero"
 msgstr "TIFF paveikslėlio plotis ar aukštis yra nulis"
 
-#: gdk-pixbuf/io-tiff.c:199 gdk-pixbuf/io-tiff.c:208
+#: gdk-pixbuf/io-tiff.c:201 gdk-pixbuf/io-tiff.c:210
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF paveikslėlio išmatavimai per dideli"
 
-#: gdk-pixbuf/io-tiff.c:227 gdk-pixbuf/io-tiff.c:239 gdk-pixbuf/io-tiff.c:290
-#: gdk-pixbuf/io-tiff.c:587
+#: gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:241 gdk-pixbuf/io-tiff.c:292
+#: gdk-pixbuf/io-tiff.c:589
 msgid "Insufficient memory to open TIFF file"
 msgstr "Nepakanka atminties atidaryti TIFF bylai"
 
-#: gdk-pixbuf/io-tiff.c:255 gdk-pixbuf/io-tiff.c:298
+#: gdk-pixbuf/io-tiff.c:257 gdk-pixbuf/io-tiff.c:300
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Nepavyko įkelti RGB duomenų iš TIFF bylos"
 
-#: gdk-pixbuf/io-tiff.c:369
+#: gdk-pixbuf/io-tiff.c:371
 msgid "Failed to open TIFF image"
 msgstr "Nepavyko atidaryti TIFF bylos"
 
-#: gdk-pixbuf/io-tiff.c:382
+#: gdk-pixbuf/io-tiff.c:384
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose operacijos klaida"
 
-#: gdk-pixbuf/io-tiff.c:517 gdk-pixbuf/io-tiff.c:530
+#: gdk-pixbuf/io-tiff.c:519 gdk-pixbuf/io-tiff.c:532
 msgid "Failed to load TIFF image"
 msgstr "Nepavyko įkelti TIFF paveikslėlio"
 
-#: gdk-pixbuf/io-tiff.c:625
+#: gdk-pixbuf/io-tiff.c:627
 msgid "The TIFF image format"
 msgstr "TIFF paveikslėlių formatas"
 
@@ -728,32 +728,48 @@ msgstr "Įkeliant XPM bylą nepavyko įrašyti laikinos bylos"
 msgid "The XPM image format"
 msgstr "XPM paveikslėlio formatas"
 
-#. This is the text that should appear next to menu accelerators
-#. * that use the shift key. If the text on this key isn't typically
-#. * translated on keyboards used for your language, don't translate
-#. * this.
-#.
-#: gtk/gtkaccellabel.c:118
-msgid "Shift"
-msgstr "Shift"
+#: gtk/gtkaboutdialog.c:209 gtk/gtkaboutdialog.c:1707
+msgid "License"
+msgstr ""
 
-#. This is the text that should appear next to menu accelerators
-#. * that use the control key. If the text on this key isn't typically
-#. * translated on keyboards used for your language, don't translate
-#. * this.
-#.
-#: gtk/gtkaccellabel.c:124
-msgid "Ctrl"
-msgstr "Ctrl"
+#: gtk/gtkaboutdialog.c:210
+msgid "The license of the program"
+msgstr ""
 
-#. This is the text that should appear next to menu accelerators
-#. * that use the alt key. If the text on this key isn't typically
-#. * translated on keyboards used for your language, don't translate
-#. * this.
-#.
-#: gtk/gtkaccellabel.c:130
-msgid "Alt"
-msgstr "Alt"
+#. Add the credits button
+#: gtk/gtkaboutdialog.c:349
+msgid "_Credits"
+msgstr ""
+
+#. Add the license button
+#: gtk/gtkaboutdialog.c:358
+msgid "_License"
+msgstr ""
+
+#: gtk/gtkaboutdialog.c:532
+#, c-format
+msgid "About %s"
+msgstr ""
+
+#: gtk/gtkaboutdialog.c:1647
+msgid "Credits"
+msgstr ""
+
+#: gtk/gtkaboutdialog.c:1670
+msgid "Written by"
+msgstr ""
+
+#: gtk/gtkaboutdialog.c:1673
+msgid "Documented by"
+msgstr ""
+
+#: gtk/gtkaboutdialog.c:1684
+msgid "Translated by"
+msgstr ""
+
+#: gtk/gtkaboutdialog.c:1688
+msgid "Artwork by"
+msgstr ""
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -911,15 +927,15 @@ msgstr "Spalvų ratas"
 msgid "Color Selection"
 msgstr "Spalvos pasirinkimas"
 
-#: gtk/gtkentry.c:4226 gtk/gtktextview.c:6940
+#: gtk/gtkentry.c:4343 gtk/gtktextview.c:6936
 msgid "Select _All"
 msgstr "P_ažymėti viską"
 
-#: gtk/gtkentry.c:4236 gtk/gtktextview.c:6950
+#: gtk/gtkentry.c:4353 gtk/gtktextview.c:6946
 msgid "Input _Methods"
 msgstr "Įvesties _metodai"
 
-#: gtk/gtkentry.c:4246 gtk/gtktextview.c:6961
+#: gtk/gtkentry.c:4363 gtk/gtktextview.c:6957
 msgid "_Insert Unicode Control Character"
 msgstr "Įterpt_i Unicode valdymo simbolį"
 
@@ -947,7 +963,7 @@ msgstr ""
 "Nepavyko pridėti %s žymelės:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5264
+#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5353
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -965,15 +981,15 @@ msgstr ""
 "Nepavyko pakeisti esamo aplanko į: %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1058 gtk/gtkpathbar.c:842
+#: gtk/gtkfilechooserdefault.c:1072 gtk/gtkpathbar.c:842
 msgid "Home"
 msgstr "Namai"
 
-#: gtk/gtkfilechooserdefault.c:1076 gtk/gtkpathbar.c:844
+#: gtk/gtkfilechooserdefault.c:1090 gtk/gtkpathbar.c:844
 msgid "Desktop"
 msgstr "Darbalaukis"
 
-#: gtk/gtkfilechooserdefault.c:1517
+#: gtk/gtkfilechooserdefault.c:1534
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -982,12 +998,12 @@ msgstr ""
 "Nepavyko sukurti aplanko %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1700
+#: gtk/gtkfilechooserdefault.c:1717
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Nepavyko pridėti %s žymelės, kadangi tai nėra aplankas."
 
-#: gtk/gtkfilechooserdefault.c:1778
+#: gtk/gtkfilechooserdefault.c:1795
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -996,82 +1012,87 @@ msgstr ""
 "Nepavyko pašalinti %s žymelės:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2372
+#: gtk/gtkfilechooserdefault.c:2387
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "Negalima pridėti %s žymelės, nes nurodytas kelias yra neteisingas."
 
-#: gtk/gtkfilechooserdefault.c:2563
+#: gtk/gtkfilechooserdefault.c:2525
+msgid "Shortcuts"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:2579
 msgid "Folder"
 msgstr "Aplankas"
 
-#. FIXME these need accelerators when appropriate, and
-#. * need the mnemonics to be rationalized
-#.
-#: gtk/gtkfilechooserdefault.c:2610 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2626 gtk/gtkstock.c:294
 msgid "_Add"
 msgstr "_Pridėti"
 
-#: gtk/gtkfilechooserdefault.c:2620 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2636 gtk/gtkstock.c:351
 msgid "_Remove"
 msgstr "_Pašalinti"
 
-#: gtk/gtkfilechooserdefault.c:2699
+#: gtk/gtkfilechooserdefault.c:2715
 msgid "Show _Hidden Files"
 msgstr "Rod_yti paslėptas bylas"
 
-#: gtk/gtkfilechooserdefault.c:2811
+#: gtk/gtkfilechooserdefault.c:2830 gtk/gtkfilesel.c:766
+msgid "Files"
+msgstr "Bylos"
+
+#: gtk/gtkfilechooserdefault.c:2857
 msgid "Name"
 msgstr "Pavadinimas"
 
-#: gtk/gtkfilechooserdefault.c:2833
+#: gtk/gtkfilechooserdefault.c:2879
 msgid "Size"
 msgstr "Dydis"
 
-#: gtk/gtkfilechooserdefault.c:2845
+#: gtk/gtkfilechooserdefault.c:2891
 msgid "Modified"
 msgstr "Pakeista"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2890
+#: gtk/gtkfilechooserdefault.c:2936
 msgid "Create Fo_lder"
 msgstr "Sukurti ap_lanką"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3002
+#: gtk/gtkfilechooserdefault.c:3048
 msgid "_Name:"
 msgstr "_Pavadinimas:"
 
-#: gtk/gtkfilechooserdefault.c:3044
+#: gtk/gtkfilechooserdefault.c:3090
 msgid "_Browse for other folders"
 msgstr "_Naršyti kitų aplankų"
 
-#: gtk/gtkfilechooserdefault.c:3281
+#: gtk/gtkfilechooserdefault.c:3327
 msgid "Save in _folder:"
 msgstr "Išsaugoti _aplanke:"
 
-#: gtk/gtkfilechooserdefault.c:3283
+#: gtk/gtkfilechooserdefault.c:3329
 msgid "Create in _folder:"
 msgstr "Sukurti _aplanke:"
 
-#: gtk/gtkfilechooserdefault.c:3908
+#: gtk/gtkfilechooserdefault.c:3973
 msgid "Cannot change to folder because it is not local"
 msgstr "Negalima pakeisti į nurodytą aplanką, nes jis nėra vietinis"
 
-#: gtk/gtkfilechooserdefault.c:4043
+#: gtk/gtkfilechooserdefault.c:4111
 msgid "Could not find the path"
 msgstr "Nepavyko rasti kelio"
 
-#: gtk/gtkfilechooserdefault.c:4391
+#: gtk/gtkfilechooserdefault.c:4462
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "nuoroda %s neegzistuoja"
 
-#: gtk/gtkfilechooserdefault.c:5037
+#: gtk/gtkfilechooserdefault.c:5126
 msgid "Type name of new folder"
 msgstr "Naujo aplanko tipo pavadinimas"
 
-#: gtk/gtkfilechooserdefault.c:5066
+#: gtk/gtkfilechooserdefault.c:5155
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1079,39 +1100,39 @@ msgstr[0] "%d baitas"
 msgstr[1] "%d baitai"
 msgstr[2] "%d baitų"
 
-#: gtk/gtkfilechooserdefault.c:5068
+#: gtk/gtkfilechooserdefault.c:5157
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5070
+#: gtk/gtkfilechooserdefault.c:5159
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5072
+#: gtk/gtkfilechooserdefault.c:5161
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5117
+#: gtk/gtkfilechooserdefault.c:5206
 msgid "Today"
 msgstr "Šiandien"
 
-#: gtk/gtkfilechooserdefault.c:5119
+#: gtk/gtkfilechooserdefault.c:5208
 msgid "Yesterday"
 msgstr "Vakar"
 
-#: gtk/gtkfilechooserdefault.c:5130
+#: gtk/gtkfilechooserdefault.c:5219
 msgid "Unknown"
 msgstr "Nežinomas"
 
-#: gtk/gtkfilechooserdefault.c:5225
+#: gtk/gtkfilechooserdefault.c:5314
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Negalima pakeisti į nurodytą aplanką, nes nurodytas kelias yra neteisingas."
 
-#: gtk/gtkfilechooserdefault.c:5302
+#: gtk/gtkfilechooserdefault.c:5391
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1120,15 +1141,15 @@ msgstr ""
 "Nepavyko pasirinkti %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5341
+#: gtk/gtkfilechooserdefault.c:5430
 msgid "Open Location"
 msgstr "Atidaryti vietą"
 
-#: gtk/gtkfilechooserdefault.c:5348
+#: gtk/gtkfilechooserdefault.c:5437
 msgid "Save in Location"
 msgstr "Išsaugoti vietoje"
 
-#: gtk/gtkfilechooserdefault.c:5367
+#: gtk/gtkfilechooserdefault.c:5456
 msgid "_Location:"
 msgstr "_Vieta: "
 
@@ -1139,10 +1160,6 @@ msgstr "Aplankai"
 #: gtk/gtkfilesel.c:734
 msgid "Fol_ders"
 msgstr "_Aplankai"
-
-#: gtk/gtkfilesel.c:766
-msgid "Files"
-msgstr "Bylos"
 
 #: gtk/gtkfilesel.c:770
 msgid "_Files"
@@ -1311,36 +1328,40 @@ msgstr "Vardas per ilgas"
 msgid "Couldn't convert filename"
 msgstr "Nepavyko pakeisti bylos vardo"
 
-#: gtk/gtkfilesystemmodel.c:1272
+#: gtk/gtkfilesystemmodel.c:1266
 msgid "(Empty)"
 msgstr "(Tuščia)"
 
-#: gtk/gtkfilesystemunix.c:418 gtk/gtkfilesystemwin32.c:386
+#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemwin32.c:386
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: gtk/gtkfilesystemunix.c:425 gtk/gtkfilesystemunix.c:616
-#: gtk/gtkfilesystemunix.c:1741 gtk/gtkfilesystemwin32.c:393
-#: gtk/gtkfilesystemwin32.c:1357
+#: gtk/gtkfilesystemunix.c:426 gtk/gtkfilesystemunix.c:617
+#: gtk/gtkfilesystemwin32.c:393 gtk/gtkfilesystemwin32.c:1357
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "klaida bandant gauti „%s“ informaciją: %s"
 
-#: gtk/gtkfilesystemunix.c:489 gtk/gtkfilesystemwin32.c:434
+#: gtk/gtkfilesystemunix.c:490 gtk/gtkfilesystemwin32.c:434
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "klaida kuriant aplanką „%s“: %s"
 
-#: gtk/gtkfilesystemunix.c:569 gtk/gtkfilesystemwin32.c:494
+#: gtk/gtkfilesystemunix.c:570 gtk/gtkfilesystemwin32.c:494
 msgid "This file system does not support mounting"
 msgstr "Ši bylų sistema nepalaiko prijungimo"
 
-#: gtk/gtkfilesystemunix.c:577
+#: gtk/gtkfilesystemunix.c:578
 msgid "Filesystem"
 msgstr "Bylų sistema"
 
-#: gtk/gtkfilesystemunix.c:778
+#: gtk/gtkfilesystemunix.c:731
+#, fuzzy, c-format
+msgid "Could not get a stock icon for %s"
+msgstr "Nepavyko gauti bylos „%s“ informacijos: %s"
+
+#: gtk/gtkfilesystemunix.c:826
 #, c-format
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
@@ -1349,12 +1370,12 @@ msgstr ""
 "Vardas „%s“ yra netinkamas, nes jame yra simbolis „%s“. Prašom naudoti kitą "
 "vardą."
 
-#: gtk/gtkfilesystemunix.c:1335 gtk/gtkfilesystemwin32.c:923
+#: gtk/gtkfilesystemunix.c:1434 gtk/gtkfilesystemwin32.c:923
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Nepavyko išsaugoti žymelės (%s)"
 
-#: gtk/gtkfilesystemunix.c:1631
+#: gtk/gtkfilesystemunix.c:1730
 #, c-format
 msgid "error getting information for '%s'"
 msgstr "klaida bandant gauti „%s“ informaciją"
@@ -1414,7 +1435,7 @@ msgstr "_Gamos reikšmė"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1564
+#: gtk/gtkiconfactory.c:1620
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Įvyko klaida įkeliant piktogramą: %s"
@@ -1537,7 +1558,7 @@ msgstr "Įvesties metodai"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtknotebook.c:2680 gtk/gtknotebook.c:5073
+#: gtk/gtknotebook.c:2698 gtk/gtknotebook.c:5046
 #, c-format
 msgid "Page %u"
 msgstr "%u puslapis"
@@ -1550,17 +1571,17 @@ msgstr "Grupė"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Žymimosios akutės grupė, kuriai priklauso šis mygtukas."
 
-#: gtk/gtkrc.c:2390
+#: gtk/gtkrc.c:2391
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Nepavyko rasti įterpiamos bylos: \"%s\""
 
-#: gtk/gtkrc.c:3029 gtk/gtkrc.c:3032
+#: gtk/gtkrc.c:3030 gtk/gtkrc.c:3033
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Negaliu rasti paveikslėlio bylos pixmap_path: „%s“"
 
-#: gtk/gtkrc.c:3467
+#: gtk/gtkrc.c:3468
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
@@ -1583,263 +1604,302 @@ msgstr "Klaida"
 msgid "Question"
 msgstr "Klausimas"
 
-#: gtk/gtkstock.c:294
+#. FIXME these need accelerators when appropriate, and
+#. * need the mnemonics to be rationalized
+#.
+#: gtk/gtkstock.c:293
+msgid "_About"
+msgstr ""
+
+#: gtk/gtkstock.c:295
 msgid "_Apply"
 msgstr "Prit_aikyti"
 
-#: gtk/gtkstock.c:295
+#: gtk/gtkstock.c:296
 msgid "_Bold"
 msgstr "Pus_juodis"
 
-#: gtk/gtkstock.c:296
+#: gtk/gtkstock.c:297
 msgid "_Cancel"
 msgstr "_Atšaukti"
 
-#: gtk/gtkstock.c:297
+#: gtk/gtkstock.c:298
 msgid "_CD-Rom"
 msgstr "_CD-ROM"
 
-#: gtk/gtkstock.c:298
+#: gtk/gtkstock.c:299
 msgid "_Clear"
 msgstr "Iš_valyti"
 
-#: gtk/gtkstock.c:299
+#: gtk/gtkstock.c:300
 msgid "_Close"
 msgstr "_Uždaryti"
 
-#: gtk/gtkstock.c:300
+#: gtk/gtkstock.c:301
 msgid "_Convert"
 msgstr "_Keisti"
 
-#: gtk/gtkstock.c:301
+#: gtk/gtkstock.c:302
 msgid "_Copy"
 msgstr "_Kopijuoti"
 
-#: gtk/gtkstock.c:302
+#: gtk/gtkstock.c:303
 msgid "Cu_t"
 msgstr "_Iškirpti"
 
-#: gtk/gtkstock.c:303
+#: gtk/gtkstock.c:304
 msgid "_Delete"
 msgstr "_Ištrinti"
 
-#: gtk/gtkstock.c:304
+#: gtk/gtkstock.c:305
 msgid "_Execute"
 msgstr "Į_vykdyti"
 
-#: gtk/gtkstock.c:305
+#: gtk/gtkstock.c:306
+msgid "_Edit"
+msgstr ""
+
+#: gtk/gtkstock.c:307
 msgid "_Find"
 msgstr "_Rasti"
 
-#: gtk/gtkstock.c:306
+#: gtk/gtkstock.c:308
 msgid "Find and _Replace"
 msgstr "Rasti ir _Pakeisti"
 
-#: gtk/gtkstock.c:307
+#: gtk/gtkstock.c:309
 msgid "_Floppy"
 msgstr "_Diskelis"
 
-#: gtk/gtkstock.c:308
+#: gtk/gtkstock.c:310
 msgid "_Bottom"
 msgstr "_Apačia"
 
-#: gtk/gtkstock.c:309
+#: gtk/gtkstock.c:311
 msgid "_First"
 msgstr "_Pirmas"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:312
 msgid "_Last"
 msgstr "_Paskutinis"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:313
 msgid "_Top"
 msgstr "_Viršus"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:314
 msgid "_Back"
 msgstr "_Atgal"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:315
 msgid "_Down"
 msgstr "_Žemyn"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:316 gtk/gtkstock.c:330
 msgid "_Forward"
 msgstr "_Pirmyn"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:317
 msgid "_Up"
 msgstr "A_ukštyn"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:318
 msgid "_Harddisk"
 msgstr "_Kietasis diskas"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:319
 msgid "_Help"
 msgstr "_Pagalba"
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:320
 msgid "_Home"
 msgstr "_Namai"
 
-#: gtk/gtkstock.c:319
+#: gtk/gtkstock.c:321
 msgid "Increase Indent"
 msgstr "Padidinti įtrauką"
 
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:322
 msgid "Decrease Indent"
 msgstr "Sumažinti įtrauką"
 
-#: gtk/gtkstock.c:321
+#: gtk/gtkstock.c:323
 msgid "_Index"
 msgstr "Tur_inys"
 
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:324
 msgid "_Italic"
 msgstr "Kursyv_inis"
 
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:325
 msgid "_Jump to"
 msgstr "Šo_kti į"
 
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:326
 msgid "_Center"
 msgstr "_Centruoti"
 
-#: gtk/gtkstock.c:325
+#: gtk/gtkstock.c:327
 msgid "_Fill"
 msgstr "_Užpildyti"
 
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:328
 msgid "_Left"
 msgstr "_Kairėn"
 
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:329
 msgid "_Right"
 msgstr "_Dešinėn"
 
-#: gtk/gtkstock.c:328
-msgid "_Network"
-msgstr "_Tinklas"
-
-#: gtk/gtkstock.c:329
-msgid "_New"
+#: gtk/gtkstock.c:331
+#, fuzzy
+msgid "_Next"
 msgstr "_Naujas"
 
-#: gtk/gtkstock.c:330
-msgid "_No"
-msgstr "_Ne"
-
-#: gtk/gtkstock.c:331
-msgid "_OK"
-msgstr "_Gerai"
-
 #: gtk/gtkstock.c:332
-msgid "_Open"
-msgstr "Ati_daryti"
-
-#: gtk/gtkstock.c:333
-msgid "_Paste"
+#, fuzzy
+msgid "P_ause"
 msgstr "Į_dėti"
 
+#: gtk/gtkstock.c:333
+msgid "_Play"
+msgstr ""
+
 #: gtk/gtkstock.c:334
-msgid "_Preferences"
-msgstr "_Nustatymai"
+msgid "Pre_vious"
+msgstr ""
 
 #: gtk/gtkstock.c:335
-msgid "_Print"
-msgstr "S_pausdinti"
+#, fuzzy
+msgid "_Record"
+msgstr "_Raudona:"
 
 #: gtk/gtkstock.c:336
-msgid "Print Pre_view"
-msgstr "Spa_udinio peržiūra"
+#, fuzzy
+msgid "R_ewind"
+msgstr "_Rasti"
 
-#: gtk/gtkstock.c:337
-msgid "_Properties"
-msgstr "_Savybės"
-
-#: gtk/gtkstock.c:338
-msgid "_Quit"
-msgstr "Išei_ti"
-
-#: gtk/gtkstock.c:339
-msgid "_Redo"
-msgstr "Paka_rtoti"
-
-#: gtk/gtkstock.c:340
-msgid "_Refresh"
-msgstr "_Atnaujinti"
-
-#: gtk/gtkstock.c:342
-msgid "_Revert"
-msgstr "Atsta_tyti"
-
-#: gtk/gtkstock.c:343
-msgid "_Save"
-msgstr "Iš_saugoti"
-
-#: gtk/gtkstock.c:344
-msgid "Save _As"
-msgstr "Išsaugoti k_aip"
-
-#: gtk/gtkstock.c:345
-msgid "_Color"
-msgstr "_Spalva"
-
-#: gtk/gtkstock.c:346
-msgid "_Font"
-msgstr "Šri_ftas"
-
-#: gtk/gtkstock.c:347
-msgid "_Ascending"
-msgstr "_Didėjančiai"
-
-#: gtk/gtkstock.c:348
-msgid "_Descending"
-msgstr "_Mažėjančiai"
-
-#: gtk/gtkstock.c:349
-msgid "_Spell Check"
-msgstr "_Rašybos tikrinimas"
-
-#: gtk/gtkstock.c:350
+#: gtk/gtkstock.c:337 gtk/gtkstock.c:360
 msgid "_Stop"
 msgstr "_Sustabdyti"
 
-#: gtk/gtkstock.c:351
+#: gtk/gtkstock.c:338
+msgid "_Network"
+msgstr "_Tinklas"
+
+#: gtk/gtkstock.c:339
+msgid "_New"
+msgstr "_Naujas"
+
+#: gtk/gtkstock.c:340
+msgid "_No"
+msgstr "_Ne"
+
+#: gtk/gtkstock.c:341
+msgid "_OK"
+msgstr "_Gerai"
+
+#: gtk/gtkstock.c:342
+msgid "_Open"
+msgstr "Ati_daryti"
+
+#: gtk/gtkstock.c:343
+msgid "_Paste"
+msgstr "Į_dėti"
+
+#: gtk/gtkstock.c:344
+msgid "_Preferences"
+msgstr "_Nustatymai"
+
+#: gtk/gtkstock.c:345
+msgid "_Print"
+msgstr "S_pausdinti"
+
+#: gtk/gtkstock.c:346
+msgid "Print Pre_view"
+msgstr "Spa_udinio peržiūra"
+
+#: gtk/gtkstock.c:347
+msgid "_Properties"
+msgstr "_Savybės"
+
+#: gtk/gtkstock.c:348
+msgid "_Quit"
+msgstr "Išei_ti"
+
+#: gtk/gtkstock.c:349
+msgid "_Redo"
+msgstr "Paka_rtoti"
+
+#: gtk/gtkstock.c:350
+msgid "_Refresh"
+msgstr "_Atnaujinti"
+
+#: gtk/gtkstock.c:352
+msgid "_Revert"
+msgstr "Atsta_tyti"
+
+#: gtk/gtkstock.c:353
+msgid "_Save"
+msgstr "Iš_saugoti"
+
+#: gtk/gtkstock.c:354
+msgid "Save _As"
+msgstr "Išsaugoti k_aip"
+
+#: gtk/gtkstock.c:355
+msgid "_Color"
+msgstr "_Spalva"
+
+#: gtk/gtkstock.c:356
+msgid "_Font"
+msgstr "Šri_ftas"
+
+#: gtk/gtkstock.c:357
+msgid "_Ascending"
+msgstr "_Didėjančiai"
+
+#: gtk/gtkstock.c:358
+msgid "_Descending"
+msgstr "_Mažėjančiai"
+
+#: gtk/gtkstock.c:359
+msgid "_Spell Check"
+msgstr "_Rašybos tikrinimas"
+
+#: gtk/gtkstock.c:361
 msgid "_Strikethrough"
 msgstr "Perbraukta_s"
 
-#: gtk/gtkstock.c:352
+#: gtk/gtkstock.c:362
 msgid "_Undelete"
 msgstr "_Sugrąžinti"
 
-#: gtk/gtkstock.c:353
+#: gtk/gtkstock.c:363
 msgid "_Underline"
 msgstr "Pabra_uktas"
 
-#: gtk/gtkstock.c:354
+#: gtk/gtkstock.c:364
 msgid "_Undo"
 msgstr "Atša_ukti"
 
-#: gtk/gtkstock.c:355
+#: gtk/gtkstock.c:365
 msgid "_Yes"
 msgstr "_Taip"
 
-#: gtk/gtkstock.c:356
+#: gtk/gtkstock.c:366
 msgid "_Normal Size"
 msgstr "_Normalus dydis"
 
-#: gtk/gtkstock.c:357
+#: gtk/gtkstock.c:367
 msgid "Best _Fit"
 msgstr "Geriausiai _tinka"
 
-#: gtk/gtkstock.c:358
+#: gtk/gtkstock.c:368
 msgid "Zoom _In"
 msgstr "Pa_didinti"
 
-#: gtk/gtkstock.c:359
+#: gtk/gtkstock.c:369
 msgid "Zoom _Out"
 msgstr "Su_mažinti"
 
@@ -1965,6 +2025,15 @@ msgstr "X įvesties metodas"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nepavyko gauti bylos „%s“ informacijos: %s"
+
+#~ msgid "Shift"
+#~ msgstr "Shift"
+
+#~ msgid "Ctrl"
+#~ msgstr "Ctrl"
+
+#~ msgid "Alt"
+#~ msgstr "Alt"
 
 #~ msgid "Unsupported TIFF variant"
 #~ msgstr "Nepalaikomas TIFF paveikslėlio tipas"

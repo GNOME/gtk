@@ -26,6 +26,20 @@ prior to including the GTK+ header files. Use #GtkTreeView instead.
 </para>
 
 
+<!-- ##### SIGNAL GtkTreeItem::collapse ##### -->
+<para>
+
+</para>
+
+@treeitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTreeItem::expand ##### -->
+<para>
+
+</para>
+
+@treeitem: the object which received the signal.
+
 <!-- ##### MACRO GTK_TREE_ITEM_SUBTREE ##### -->
 <para>
 
@@ -99,18 +113,4 @@ prior to including the GTK+ header files. Use #GtkTreeView instead.
 
 @tree_item: 
 
-
-<!-- ##### SIGNAL GtkTreeItem::collapse ##### -->
-<para>
-
-</para>
-
-@treeitem: the object which received the signal.
-
-<!-- ##### SIGNAL GtkTreeItem::expand ##### -->
-<para>
-
-</para>
-
-@treeitem: the object which received the signal.
 
