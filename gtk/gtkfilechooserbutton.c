@@ -36,6 +36,7 @@
 #include "gtkentry.h"
 #include "gtkhbox.h"
 #include "gtkicontheme.h"
+#include "gtkiconfactory.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkstock.h"

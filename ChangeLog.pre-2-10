@@ -1,5 +1,8 @@
 2004-10-26  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmessagedialog.c: 
+	* gtk/gtkfilechooserbutton.c: Add missing includes.  (#156503, Kazuki IWAMOTO)
+
 	* gtk/gtkimage.h: 
 	* gtk/gtkimage.c (gtk_image_get_icon_name): Make the icon_name parameter
 	G_CONST_RETURN.

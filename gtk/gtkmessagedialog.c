@@ -30,6 +30,7 @@
 #include "gtkmessagedialog.h"
 #include "gtklabel.h"
 #include "gtkhbox.h"
+#include "gtkvbox.h"
 #include "gtkimage.h"
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
