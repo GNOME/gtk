@@ -1,12 +1,15 @@
 	.file	"scale_line_22_33_mmx.S"
 	.version	"01.01"
-	.section .note.GNU-stack, "", @progbits
-	.previous
 gcc2_compiled.:
 .text
 	.align 16
 
 #if !defined(__MINGW32__) && !defined(__CYGWIN__)	
+	
+/* Magic indicating no need for an executable stack */
+#if !defined __powerpc64__ && !defined __ia64__
+.section .note.GNU-stack;  .previous
+#endif
 	
 .globl _pixops_scale_line_22_33_mmx
 	.type	 _pixops_scale_line_22_33_mmx,@function
