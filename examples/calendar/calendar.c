@@ -1,5 +1,7 @@
-/* G Calendar
+/* example-start calendar calendar.c */
+/*
  * Copyright (C) 1998 Cesar Miquel, Shawn T. Amundson, Mattias Grönlund
+ * Copyright (C) 2000 Tony Gale
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,83 +28,17 @@
 
 #define TM_YEAR_BASE 1900
 
-
 typedef struct _CalendarData {
   GtkWidget *flag_checkboxes[5];
   gboolean  settings[5];
   gchar     *font;
   GtkWidget *font_dialog;
   GtkWidget *window;
-  GtkWidget *selected;
-  GtkWidget *selected_double_click;
+  GtkWidget *prev2_sig;
+  GtkWidget *prev_sig;
+  GtkWidget *last_sig;
   GtkWidget *month;
 } CalendarData;
-
-void create_calendar();
-gint delete_event(GtkWidget *widget, GdkEvent *event, gpointer data);
-void destroy (GtkWidget *widget, gpointer data);
-void day_selected_double_click (GtkWidget *widget, gpointer data);
-int main(int argc, char *argv[]);
-void calendar_month_changed (GtkWidget *widget, CalendarData *data);
-void calendar_day_selected (GtkWidget *widget, CalendarData *data);
-void calendar_day_selected_double_click (GtkWidget *widget, CalendarData *data);
-
-
-void calendar_set_flags(CalendarData *calendar);
-void calendar_toggle_flag(GtkWidget * toggle, CalendarData *calendar);
-void calendar_font_selection_ok(GtkWidget * button, CalendarData *calendar);
-void calendar_font_selection_destroy(GtkWidget * button, GtkWidget widget);
-void calendar_select_font(GtkWidget * button, CalendarData *calendar);
-void calendar_create_window_destroy(GtkWidget * ignore, CalendarData *calendar);
-void calendar_create_window(GtkWidget * ignored, CalendarData * calendar);
-void calendar_window_destroy(GtkWidget * ignore, CalendarData *calendar);
-void create_calendar();
-
-/*
- * GtkCalendar
- */
-
-void
-calendar_month_changed (GtkWidget *widget, CalendarData *data)
-{
-  char buffer[256];
-  struct tm tm;
-  time_t time;
-  memset (&tm, 0, sizeof (tm));
-  gtk_calendar_get_date (GTK_CALENDAR(data->window), &tm.tm_year, &tm.tm_mon, &tm.tm_mday);
-  tm.tm_year -= TM_YEAR_BASE;
-  time = mktime(&tm);
-  strftime (buffer, 255, "%x", gmtime(&time));
-  gtk_label_set (GTK_LABEL (data->month), buffer);
-}
-
-void
-calendar_day_selected (GtkWidget *widget, CalendarData *data)
-{
-  char buffer[256];
-  struct tm tm;
-  time_t time;
-  memset (&tm, 0, sizeof (tm));
-  gtk_calendar_get_date (GTK_CALENDAR(data->window), &tm.tm_year, &tm.tm_mon, &tm.tm_mday);
-  tm.tm_year -= TM_YEAR_BASE;
-  time = mktime(&tm);
-  strftime (buffer, 255, "%x", gmtime(&time));
-  gtk_label_set (GTK_LABEL (data->selected), buffer);
-}
-
-void
-calendar_day_selected_double_click (GtkWidget *widget, CalendarData *data)
-{
-  char buffer[256];
-  struct tm tm;
-  time_t time;
-  memset (&tm, 0, sizeof (tm));
-  gtk_calendar_get_date (GTK_CALENDAR(data->window), &tm.tm_year, &tm.tm_mon, &tm.tm_mday);
-  tm.tm_year -= TM_YEAR_BASE;
-  time = mktime(&tm);
-  strftime (buffer, 255, "%x", gmtime(&time));
-  gtk_label_set (GTK_LABEL (data->selected_double_click), buffer);
-}
 
 enum {
   calendar_show_header,
@@ -112,8 +48,115 @@ enum {
   calendar_monday_first
 };
 
-void
-calendar_set_flags(CalendarData *calendar)
+/*
+ * GtkCalendar
+ */
+
+void calendar_date_to_string( CalendarData *data,
+			      char         *buffer,
+			      gint          buff_len )
+{
+  struct tm tm;
+  time_t time;
+
+  memset (&tm, 0, sizeof (tm));
+  gtk_calendar_get_date (GTK_CALENDAR(data->window),
+			 &tm.tm_year, &tm.tm_mon, &tm.tm_mday);
+  tm.tm_year -= TM_YEAR_BASE;
+  time = mktime(&tm);
+  strftime (buffer, buff_len-1, "%x", gmtime(&time));
+}
+
+void calendar_set_signal_strings( char         *sig_str,
+				  CalendarData *data)
+{
+  gchar *prev_sig;
+
+  gtk_label_get (GTK_LABEL (data->prev_sig), &prev_sig);
+  gtk_label_set (GTK_LABEL (data->prev2_sig), prev_sig);
+
+  gtk_label_get (GTK_LABEL (data->last_sig), &prev_sig);
+  gtk_label_set (GTK_LABEL (data->prev_sig), prev_sig);
+  gtk_label_set (GTK_LABEL (data->last_sig), sig_str);
+}
+
+void calendar_month_changed( GtkWidget    *widget,
+                             CalendarData *data )
+{
+  char buffer[256] = "month_changed: ";
+
+  calendar_date_to_string (data, buffer+15, 256-15);
+  calendar_set_signal_strings (buffer, data);
+}
+
+void calendar_day_selected( GtkWidget    *widget,
+                            CalendarData *data )
+{
+  char buffer[256] = "day_selected: ";
+
+  calendar_date_to_string (data, buffer+14, 256-14);
+  calendar_set_signal_strings (buffer, data);
+}
+
+void calendar_day_selected_double_click( GtkWidget    *widget,
+                                         CalendarData *data )
+{
+  struct tm tm;
+  char buffer[256] = "day_selected_double_click: ";
+
+  calendar_date_to_string (data, buffer+27, 256-27);
+  calendar_set_signal_strings (buffer, data);
+
+  memset (&tm, 0, sizeof (tm));
+  gtk_calendar_get_date (GTK_CALENDAR(data->window),
+			 &tm.tm_year, &tm.tm_mon, &tm.tm_mday);
+  tm.tm_year -= TM_YEAR_BASE;
+
+  if(GTK_CALENDAR(data->window)->marked_date[tm.tm_mday-1] == 0) {
+    gtk_calendar_mark_day(GTK_CALENDAR(data->window),tm.tm_mday);
+  } else { 
+    gtk_calendar_unmark_day(GTK_CALENDAR(data->window),tm.tm_mday);
+  }
+}
+
+void calendar_prev_month( GtkWidget    *widget,
+                            CalendarData *data )
+{
+  char buffer[256] = "prev_month: ";
+
+  calendar_date_to_string (data, buffer+12, 256-12);
+  calendar_set_signal_strings (buffer, data);
+}
+
+void calendar_next_month( GtkWidget    *widget,
+                            CalendarData *data )
+{
+  char buffer[256] = "next_month: ";
+
+  calendar_date_to_string (data, buffer+12, 256-12);
+  calendar_set_signal_strings (buffer, data);
+}
+
+void calendar_prev_year( GtkWidget    *widget,
+                            CalendarData *data )
+{
+  char buffer[256] = "prev_year: ";
+
+  calendar_date_to_string (data, buffer+11, 256-11);
+  calendar_set_signal_strings (buffer, data);
+}
+
+void calendar_next_year( GtkWidget    *widget,
+                            CalendarData *data )
+{
+  char buffer[256] = "next_year: ";
+
+  calendar_date_to_string (data, buffer+11, 256-11);
+  calendar_set_signal_strings (buffer, data);
+}
+
+
+void calendar_set_flags( CalendarData *calendar )
 {
   gint i;
   gint options=0;
@@ -126,8 +169,8 @@ calendar_set_flags(CalendarData *calendar)
     gtk_calendar_display_options (GTK_CALENDAR (calendar->window), options);
 }
 
-void 
-calendar_toggle_flag(GtkWidget * toggle, CalendarData *calendar)
+void calendar_toggle_flag( GtkWidget    *toggle,
+                           CalendarData *calendar )
 {
   gint i;
   gint j;
@@ -140,13 +183,15 @@ calendar_toggle_flag(GtkWidget * toggle, CalendarData *calendar)
   calendar_set_flags(calendar);
   
 }
-void
-calendar_font_selection_ok(GtkWidget * button, CalendarData *calendar)
+
+void calendar_font_selection_ok( GtkWidget    *button,
+                                 CalendarData *calendar )
 {
   GtkStyle *style;
   GdkFont  *font;
 
-  calendar->font = gtk_font_selection_dialog_get_font_name (GTK_FONT_SELECTION_DIALOG (calendar->font_dialog));
+  calendar->font = gtk_font_selection_dialog_get_font_name(
+			GTK_FONT_SELECTION_DIALOG (calendar->font_dialog));
   if (calendar->window)
     {
       font = gtk_font_selection_dialog_get_font(GTK_FONT_SELECTION_DIALOG(calendar->font_dialog));
@@ -161,8 +206,8 @@ calendar_font_selection_ok(GtkWidget * button, CalendarData *calendar)
     }
 }
 
-void
-calendar_select_font(GtkWidget * button, CalendarData *calendar)
+void calendar_select_font( GtkWidget    *button,
+                           CalendarData *calendar )
 {
   GtkWidget *window;
 
@@ -193,8 +238,7 @@ calendar_select_font(GtkWidget * button, CalendarData *calendar)
 
 }
 
-void 
-create_calendar()
+void create_calendar()
 {
   GtkWidget *window;
   GtkWidget *vbox, *vbox2, *vbox3;
@@ -231,6 +275,7 @@ create_calendar()
   }
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title(GTK_WINDOW(window), "GtkCalendar Example");
   gtk_container_border_width (GTK_CONTAINER (window), 5);
   gtk_signal_connect(GTK_OBJECT(window), "destroy",
 		     GTK_SIGNAL_FUNC(gtk_main_quit),
@@ -257,7 +302,7 @@ create_calendar()
 
   /* Calendar widget */
   frame = gtk_frame_new("Calendar");
-  gtk_box_pack_start(GTK_BOX(hbbox), frame, TRUE, TRUE, DEF_PAD);
+  gtk_box_pack_start(GTK_BOX(hbbox), frame, FALSE, TRUE, DEF_PAD);
   calendar=gtk_calendar_new();
   calendar_data.window = calendar;
   calendar_set_flags(&calendar_data);
@@ -271,6 +316,18 @@ create_calendar()
 		      &calendar_data);
   gtk_signal_connect (GTK_OBJECT (calendar), "day_selected_double_click", 
                       GTK_SIGNAL_FUNC (calendar_day_selected_double_click),
+		      &calendar_data);
+  gtk_signal_connect (GTK_OBJECT (calendar), "prev_month", 
+                      GTK_SIGNAL_FUNC (calendar_prev_month),
+		      &calendar_data);
+  gtk_signal_connect (GTK_OBJECT (calendar), "next_month", 
+                      GTK_SIGNAL_FUNC (calendar_next_month),
+		      &calendar_data);
+  gtk_signal_connect (GTK_OBJECT (calendar), "prev_year", 
+                      GTK_SIGNAL_FUNC (calendar_prev_year),
+		      &calendar_data);
+  gtk_signal_connect (GTK_OBJECT (calendar), "next_year", 
+                      GTK_SIGNAL_FUNC (calendar_next_year),
 		      &calendar_data);
 
 
@@ -311,30 +368,31 @@ create_calendar()
 
   frame = gtk_frame_new("Signal events");
   gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, DEF_PAD);
+
   vbox2 = gtk_vbox_new(TRUE, DEF_PAD_SMALL);
   gtk_container_add(GTK_CONTAINER(frame), vbox2);
   
-  hbox = gtk_hbox_new (FALSE, 5);
+  hbox = gtk_hbox_new (FALSE, 3);
   gtk_box_pack_start (GTK_BOX (vbox2), hbox, FALSE, TRUE, 0);
-  label = gtk_label_new ("Day selected:");
+  label = gtk_label_new ("Signal:");
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
-  calendar_data.selected = gtk_label_new ("");
-  gtk_box_pack_start (GTK_BOX (hbox), calendar_data.selected, FALSE, TRUE, 0);
+  calendar_data.last_sig = gtk_label_new ("");
+  gtk_box_pack_start (GTK_BOX (hbox), calendar_data.last_sig, FALSE, TRUE, 0);
 
-  hbox = gtk_hbox_new (FALSE, 5);
+  hbox = gtk_hbox_new (FALSE, 3);
   gtk_box_pack_start (GTK_BOX (vbox2), hbox, FALSE, TRUE, 0);
-  label = gtk_label_new ("Day selected double click:");
+  label = gtk_label_new ("Previous signal:");
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
-  calendar_data.selected_double_click = gtk_label_new ("");
-  gtk_box_pack_start (GTK_BOX (hbox), calendar_data.selected_double_click, FALSE, TRUE, 0);
+  calendar_data.prev_sig = gtk_label_new ("");
+  gtk_box_pack_start (GTK_BOX (hbox), calendar_data.prev_sig, FALSE, TRUE, 0);
 
-  hbox = gtk_hbox_new (FALSE, 5);
+  hbox = gtk_hbox_new (FALSE, 3);
   gtk_box_pack_start (GTK_BOX (vbox2), hbox, FALSE, TRUE, 0);
-  label = gtk_label_new ("Month change:"); 
+  label = gtk_label_new ("Second previous signal:");
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
-  calendar_data.month = gtk_label_new ("");
-  gtk_box_pack_start (GTK_BOX (hbox), calendar_data.month, FALSE, TRUE, 0);
-  
+  calendar_data.prev2_sig = gtk_label_new ("");
+  gtk_box_pack_start (GTK_BOX (hbox), calendar_data.prev2_sig, FALSE, TRUE, 0);
+
   bbox = gtk_hbutton_box_new ();
   gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
   gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_END);
@@ -351,12 +409,16 @@ create_calendar()
 }
 
 
-int
-main(int argc, char *argv[])
+int main(int   argc,
+         char *argv[] )
 {
   gtk_set_locale ();
   gtk_init (&argc, &argv);
+
   create_calendar();
-  gtk_main ();
-  return 0;
+
+  gtk_main();
+
+  return(0);
 }
+/* example-end */
