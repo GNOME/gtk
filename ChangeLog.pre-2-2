@@ -1,11 +1,13 @@
+Tue Mar 10 05:42:34 1998  Tim Janik  <timj@gimp.org>
+
+        * configure.in: Bumped version number to 0.99.5.
+
 Tue Mar 10 05:30:05 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkrange.h:
 	* gtk/gtkrange.c:
  	changed gtk_range_trough_click() to take an additional jump_perc arg,
 	class method and callers changed.
-
-Tue Mar 10 05:25:10 1998  Tim Janik  <timj@gimp.org>
 
 	* gdk/gdk.c (gdk_ic_destroy): applied gtk-gronlund-980309-1.patch.gz
 	which fixes a memory leak.
@@ -391,7 +393,7 @@ Mon Mar  2 12:26:59 1998  Owen Taylor  <owt1@cornell.edu>
 
 Sun Mar  1 18:29:58 PST 1998 Shawn T. amundson <amundson@gimp.org>
 
-        * Released GTK 0.99.4.
+        * Released GTK+ 0.99.4.
 
 Sun Mar  1 16:47:29 PST 1998 Shawn T. Amundson <amundson@gimp.org>
 
