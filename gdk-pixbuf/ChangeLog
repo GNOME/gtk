@@ -1,3 +1,8 @@
+1999-11-16  Havoc Pennington  <hp@pobox.com>
+
+	* src/gdk-pixbuf-drawable.h: Use includes from the current
+	directory, not the system directory.
+
 Mon Nov 15 17:18:28 1999  George Lebl <jirka@5z.com>
 
 	* src/testpixbuf-drawable.c: use includes from the current directory
