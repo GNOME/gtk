@@ -1,3 +1,8 @@
+Fri Jul 26 17:59:06 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Replace uses of grep \(A\|B\) ... with
+	egrep (A|B). (#84872, Arnaud Charlet)
+
 Fri Jul 26 21:39:21 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreestore.c (node_free): return FALSE,
