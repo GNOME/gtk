@@ -683,18 +683,19 @@ gtk_type_enum_find_value (GtkType        enum_type,
       GtkEnumValue *vals;
 
       vals = gtk_type_enum_get_values (enum_type);
-      while (vals)
-	{
-	  if (strcmp (vals->value_name, value_name) == 0 ||
-	      strcmp (vals->value_nick, value_name) == 0)
-	    return vals;
-	  vals++;
-	}
+      if (vals)
+	while (vals->value_name)
+	  {
+	    if (strcmp (vals->value_name, value_name) == 0 ||
+		strcmp (vals->value_nick, value_name) == 0)
+	      return vals;
+	    vals++;
+	  }
     }
   else
     g_warning ("gtk_type_enum_find_value(): type `%s' is not derived from `GtkEnum' or `GtkFlags'",
 	       gtk_type_name (enum_type));
-
+  
   return NULL;
 }
 
