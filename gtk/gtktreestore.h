@@ -42,6 +42,7 @@ struct _GtkTreeStore
 
   gint stamp;
   gpointer root;
+  gpointer last;
   gint n_columns;
   GType *column_headers;
 };

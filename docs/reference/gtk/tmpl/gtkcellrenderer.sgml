@@ -1,0 +1,76 @@
+<!-- ##### SECTION Title ##### -->
+GtkCellRenderer
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM GtkCellRendererType ##### -->
+<para>
+
+</para>
+
+@GTK_CELL_RENDERER_SELECTED: 
+@GTK_CELL_RENDERER_PRELIT: 
+@GTK_CELL_RENDERER_INSENSITIVE: 
+
+<!-- ##### STRUCT GtkCellRenderer ##### -->
+<para>
+
+</para>
+
+@parent: 
+@xalign: 
+@yalign: 
+@xpad: 
+@ypad: 
+
+<!-- ##### FUNCTION gtk_cell_renderer_get_size ##### -->
+<para>
+
+</para>
+
+@cell: 
+@widget: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_render ##### -->
+<para>
+
+</para>
+
+@cell: 
+@window: 
+@widget: 
+@background_area: 
+@cell_area: 
+@expose_area: 
+@flags: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_event ##### -->
+<para>
+
+</para>
+
+@cell: 
+@event: 
+@widget: 
+@path: 
+@background_area: 
+@cell_area: 
+@flags: 
+@Returns: 
+
+

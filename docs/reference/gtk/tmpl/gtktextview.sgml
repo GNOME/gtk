@@ -178,7 +178,7 @@ types related to the text widget and how they work together.
 
 @textview: the object which received the signal.
 
-<!-- ##### SIGNAL GtkTextView::delete ##### -->
+<!-- ##### SIGNAL GtkTextView::delete-at-cursor ##### -->
 <para>
 
 </para>
@@ -187,7 +187,7 @@ types related to the text widget and how they work together.
 @arg1: 
 @arg2: 
 
-<!-- ##### SIGNAL GtkTextView::insert ##### -->
+<!-- ##### SIGNAL GtkTextView::insert-at-cursor ##### -->
 <para>
 
 </para>

@@ -1,0 +1,64 @@
+<!-- ##### SECTION Title ##### -->
+GtkModelSimple
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_model_simple_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_model_simple_node_changed ##### -->
+<para>
+
+</para>
+
+@simple: 
+@path: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_model_simple_node_inserted ##### -->
+<para>
+
+</para>
+
+@simple: 
+@path: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_model_simple_node_child_toggled ##### -->
+<para>
+
+</para>
+
+@simple: 
+@path: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_model_simple_node_deleted ##### -->
+<para>
+
+</para>
+
+@simple: 
+@path: 
+@iter: 
+
+

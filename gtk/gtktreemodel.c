@@ -50,7 +50,6 @@ gtk_tree_model_get_type (void)
 
 /**
  * gtk_tree_path_new:
- * @void: 
  * 
  * Creates a new #GtkTreePath.
  * 
@@ -138,7 +137,6 @@ gtk_tree_path_to_string (GtkTreePath *path)
 
 /**
  * gtk_tree_path_new_root:
- * @void: 
  * 
  * Creates a new root #GtkTreePath.  The string representation of this path is
  * "0"
@@ -332,6 +330,8 @@ gtk_tree_path_next (GtkTreePath *path)
  * @path: A #GtkTreePath.
  * 
  * Moves the @path to point to the previous node at the current depth, if it exists.
+ * 
+ * Return value: TRUE if @path has a previous node, and the move was made.
  **/
 gint
 gtk_tree_path_prev (GtkTreePath *path)
@@ -518,8 +518,8 @@ gtk_tree_model_iter_next (GtkTreeModel  *tree_model,
 /**
  * gtk_tree_model_iter_children:
  * @tree_model: A #GtkTreeModel.
- * @iter: The #GtkTreeIter.
- * @child: The new #GtkTreeIter.
+ * @iter: The new #GtkTreeIter to be set to the child.
+ * @parent: The #GtkTreeIter.
  * 
  * Sets @iter to point to the first child of @parent.  If @parent has no children,
  * FALSE is returned and @iter is set to be invalid.  @parent will remain a valid
@@ -614,8 +614,8 @@ gtk_tree_model_iter_nth_child (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_iter_parent:
  * @tree_model: A #GtkTreeModel
- * @iter: The #GtkTreeIter.
- * @parent: The #GtkTreeIter to set to the parent
+ * @iter: The new #GtkTreeIter to set to the parent.
+ * @child: The #GtkTreeIter.
  * 
  * Sets @iter to be the parent of @child.  If @child is at the toplevel, and
  * doesn't have a parent, then @iter is set to an invalid iterator and FALSE

@@ -1,0 +1,32 @@
+<!-- ##### SECTION Title ##### -->
+GtkCellRendererPixbuf
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkCellRendererPixbuf ##### -->
+<para>
+
+</para>
+
+@parent: 
+@pixbuf: 
+
+<!-- ##### FUNCTION gtk_cell_renderer_pixbuf_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+

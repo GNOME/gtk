@@ -22,6 +22,9 @@ IGNORE_HFILES=			\
 	gtkintl.h		\
 	gtkmarshal.h		\
 	gtkprivate.h		\
+	gtktreeprivate.h	\
+	gtkrbtree.h		\
+	gtktreedatalist.h	\
 	gtktextbtree.h		\
 	gtktextchild.h		\
 	gtktextdisplay.h	\

@@ -1,0 +1,40 @@
+<!-- ##### SECTION Title ##### -->
+GtkCellRendererToggle
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkCellRendererToggle ##### -->
+<para>
+
+</para>
+
+@parent: 
+
+<!-- ##### FUNCTION gtk_cell_renderer_toggle_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_toggle_set_radio ##### -->
+<para>
+
+</para>
+
+@toggle: 
+@radio: 
+
+

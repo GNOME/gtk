@@ -1,0 +1,74 @@
+<refentry id="TreeWidget" revision="30 Oct 2000">
+  <refmeta>
+    <refentrytitle>Tree and List Widget Overview</refentrytitle>
+    <manvolnum>3</manvolnum>
+    <refmiscinfo>GTK Library</refmiscinfo>
+  </refmeta>
+
+  <refnamediv>
+    <refname>Tree and List Widget Overview</refname>
+    <refpurpose>Overview of <link linkend="GtkTreeModel">GtkTreeModel</link>, <link linkend="GtkTreeView">GtkTreeView</link>, and friends</refpurpose>
+  </refnamediv>
+
+  <refsect1>
+    <title>Overview</title>
+    <para>
+      To create a tree or list in GTK+, you need to use the <link
+      linkend="GtkTreeModel">GtkTreeModel</link> interface, in
+      conjunction with the <link
+      linkend="GtkTreeView">GtkTreeView</link>.
+    </para>
+    <para>
+      <emphasis>Write real docs here</emphasis>
+    </para>
+  </refsect1>
+  
+
+  <refsect1>
+    <title>Simple Example</title>
+    <para>
+      Here is a simple example of using a <link
+      linkend="GtkTreeView">GtkTreeView</link> widget in context of the
+      other widgets.  It simply creates a simple model and view, and
+      puts them together.  Note that the model is never populated with
+      data &mdash; that is left as an exercise for the reader.
+      <programlisting><![CDATA[
+{
+  GtkTreeStore *model;
+  GtkWidget *view;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *cell_renderer;
+
+  /* Create a model.  We are using the store model for now, though we
+   * could use any other GtkTreeModel */
+  model = gtk_tree_store_new_with_values (1, G_TYPE_STRING);
+
+  /* Create a view */
+  view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
+
+  /* The view now holds a reference.  We can get rid of our own
+   * reference */
+  g_object_unref (G_OBJECT (model));
+
+  /* Create a cell render and set an attribute */
+  cell_renderer = gtk_cell_renderer_text_new ();
+  g_object_set (G_OBJECT (cell_renderer),
+	        "foreground", "red",
+		NULL);
+
+  /* Create a column, associating the "text" attribute of the
+   * cell_renderer to the first column of the model */
+  column = gtk_tree_view_column_new_with_attributes ("title",
+						     cell_renderer,
+						     "text", 0,
+						     NULL);
+
+  /* Add the column to the view. */
+  gtk_tree_view_append_column (GTK_TREE_VIEW (view), column);
+}
+]]>
+      </programlisting>
+    </para>
+  </refsect1>
+
+</refentry>

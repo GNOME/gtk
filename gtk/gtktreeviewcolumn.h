@@ -105,7 +105,7 @@ void             gtk_tree_view_column_set_col_type        (GtkTreeViewColumn    
 gint             gtk_tree_view_column_get_col_type        (GtkTreeViewColumn     *tree_column);
 gint             gtk_tree_view_column_get_size            (GtkTreeViewColumn     *tree_column);
 void             gtk_tree_view_column_set_size            (GtkTreeViewColumn     *tree_column,
-							   gint                   width);
+							   gint                   size);
 void             gtk_tree_view_column_set_min_width       (GtkTreeViewColumn     *tree_column,
 							   gint                   min_width);
 gint             gtk_tree_view_column_get_min_width       (GtkTreeViewColumn     *tree_column);

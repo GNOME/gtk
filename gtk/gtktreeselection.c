@@ -94,7 +94,6 @@ gtk_tree_selection_init (GtkTreeSelection *selection)
 
 /**
  * gtk_tree_selection_new:
- * @void: 
  * 
  * Creates a new #GtkTreeSelection object.  This function should not be invoked,
  * as each #GtkTreeView will create it's own #GtkTreeSelection.
@@ -242,12 +241,13 @@ gtk_tree_selection_get_user_data (GtkTreeSelection *selection)
 /**
  * gtk_tree_selection_get_selected:
  * @selection: A #GtkTreeSelection.
+ * @iter: The #GtkTreeIter, or NULL.
  * 
  * Sets @iter to the currently selected node if @selection is set to
  * #GTK_TREE_SELECTION_SINGLE.  Otherwise, it uses the anchor.  @iter may be
  * NULL if you just want to test if @selection has any selected nodes.
  * 
- * Return value: The if a node is selected.
+ * Return value: TRUE, if there is a selected node.
  **/
 gboolean
 gtk_tree_selection_get_selected (GtkTreeSelection *selection,

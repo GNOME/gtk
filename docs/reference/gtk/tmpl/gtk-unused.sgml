@@ -109,6 +109,14 @@ void marshal_INT__POINTER_POINTER_INT_INT(GtkObject*    object,
 </para>
 
 
+<!-- ##### SIGNAL GtkTextView::insert ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
 <!-- ##### MACRO gtk_widget_set_default_visual ##### -->
 <para>
 
@@ -1177,6 +1185,38 @@ really an implementation detail).</para></listitem>
 </para>
 
 
+<!-- ##### STRUCT GtkTreeViewPrivate ##### -->
+<para>
+
+</para>
+
+@model: 
+@flags: 
+@tree: 
+@tab_offset: 
+@button_pressed_node: 
+@button_pressed_tree: 
+@children: 
+@width: 
+@height: 
+@hadjustment: 
+@vadjustment: 
+@bin_window: 
+@header_window: 
+@anchor: 
+@cursor: 
+@cursor_drag: 
+@xor_gc: 
+@drag_pos: 
+@x_drag: 
+@prelight_node: 
+@prelight_tree: 
+@prelight_offset: 
+@selection: 
+@columns: 
+@column: 
+@header_height: 
+
 <!-- ##### MACRO GTK_WIDGET_RESIZE_NEEDED ##### -->
 <para>
 
@@ -1646,6 +1686,15 @@ object.
 
 </para>
 
+
+<!-- ##### SIGNAL GtkTextView::delete ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
 
 <!-- ##### FUNCTION gtk_container_register_toplevel ##### -->
 <para>

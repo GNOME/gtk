@@ -1,0 +1,280 @@
+<!-- ##### SECTION Title ##### -->
+GtkTreeViewColumn
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### MACRO GTK_TYPE_TREE_COLUMN ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### STRUCT GtkTreeViewColumn ##### -->
+<para>
+
+</para>
+
+@parent: 
+@tree_view: 
+@button: 
+@window: 
+@justification: 
+@id: 
+@size: 
+@min_width: 
+@max_width: 
+@func: 
+@func_data: 
+@title: 
+@cell: 
+@attributes: 
+@column_type: 
+@visible: 
+@button_active: 
+@dirty: 
+
+<!-- ##### ENUM GtkTreeViewColumnType ##### -->
+<para>
+
+</para>
+
+@GTK_TREE_VIEW_COLUMN_RESIZEABLE: 
+@GTK_TREE_VIEW_COLUMN_AUTOSIZE: 
+@GTK_TREE_VIEW_COLUMN_FIXED: 
+
+<!-- ##### USER_FUNCTION GtkTreeViewColumnFunc ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@tree_model: 
+@iter: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_new_with_attributes ##### -->
+<para>
+
+</para>
+
+@title: 
+@cell: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_cell_renderer ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@cell: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_add_attribute ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@attribute: 
+@column: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_attributes ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_cell_data ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@tree_model: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_visible ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@visible: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_get_visible ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_col_type ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@type: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_get_col_type ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_get_size ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_size ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@size: 
+<!-- # Unused Parameters # -->
+@width: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_min_width ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@min_width: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_get_min_width ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_max_width ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@max_width: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_get_max_width ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_title ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@title: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_get_title ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_header_active ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@active: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_widget ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_get_widget ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_justification ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@justification: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_get_justification ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Returns: 
+
+

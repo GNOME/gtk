@@ -1,0 +1,182 @@
+<!-- ##### SECTION Title ##### -->
+GtkTreeSelection
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM GtkTreeSelectionType ##### -->
+<para>
+
+</para>
+
+@GTK_TREE_SELECTION_SINGLE: 
+@GTK_TREE_SELECTION_MULTI: 
+
+<!-- ##### USER_FUNCTION GtkTreeSelectionFunc ##### -->
+<para>
+
+</para>
+
+@selection: 
+@model: 
+@path: 
+@data: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION GtkTreeSelectionForeachFunc ##### -->
+<para>
+
+</para>
+
+@model: 
+@iter: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_set_type ##### -->
+<para>
+
+</para>
+
+@selection: 
+@type: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_set_select_function ##### -->
+<para>
+
+</para>
+
+@selection: 
+@func: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_get_user_data ##### -->
+<para>
+
+</para>
+
+@selection: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_get_selected ##### -->
+<para>
+
+</para>
+
+@selection: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_selected_foreach ##### -->
+<para>
+
+</para>
+
+@selection: 
+@func: 
+@data: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_select_path ##### -->
+<para>
+
+</para>
+
+@selection: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_unselect_path ##### -->
+<para>
+
+</para>
+
+@selection: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_select_iter ##### -->
+<para>
+
+</para>
+
+@selection: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_unselect_iter ##### -->
+<para>
+
+</para>
+
+@selection: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_select_all ##### -->
+<para>
+
+</para>
+
+@selection: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_unselect_all ##### -->
+<para>
+
+</para>
+
+@selection: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_select_range ##### -->
+<para>
+
+</para>
+
+@selection: 
+@start_path: 
+@end_path: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_new_with_tree_view ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_set_tree_view ##### -->
+<para>
+
+</para>
+
+@selection: 
+@tree_view: 
+
+

@@ -2876,7 +2876,6 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
 
 /**
  * gtk_tree_view_new:
- * @void: 
  * 
  * Creates a new #GtkTreeView widget.
  * 
@@ -3703,3 +3702,82 @@ gtk_tree_view_collapse_all (GtkTreeView *tree_view)
   if (GTK_WIDGET_REALIZED (tree_view))
     gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 }
+
+gboolean
+gtk_tree_view_expand_row (GtkTreeView *tree_view,
+			  GtkTreePath *path,
+			  gboolean     open_all)
+{
+  GtkTreeIter iter;
+  GtkTreeIter child;
+  GtkRBTree *tree;
+  GtkRBNode *node;
+
+  g_return_val_if_fail (tree_view != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
+  g_return_val_if_fail (tree_view->priv->model != NULL, FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  if (_gtk_tree_view_find_node (tree_view,
+				path,
+				&tree,
+				&node))
+    return FALSE;
+
+  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
+  if (! gtk_tree_model_iter_has_child (tree_view->priv->model, &iter))
+    return FALSE;
+
+  node->children = _gtk_rbtree_new ();
+  node->children->parent_tree = tree;
+  node->children->parent_node = node;
+
+  gtk_tree_model_iter_children (tree_view->priv->model, &child, &iter);
+  gtk_tree_view_build_tree (tree_view,
+			    node->children,
+			    &child,
+			    gtk_tree_path_get_depth (path) + 1,
+			    open_all,
+			    GTK_WIDGET_REALIZED (tree_view));
+
+  if (GTK_WIDGET_REALIZED (tree_view))
+    gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+
+  return TRUE;
+}
+
+gboolean
+gtk_tree_view_collapse_row (GtkTreeView *tree_view,
+			    GtkTreePath *path)
+{
+  GtkRBTree *tree;
+  GtkRBNode *node;
+  GtkTreeIter iter;
+
+  g_return_val_if_fail (tree_view != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
+  g_return_val_if_fail (tree_view->priv->tree != NULL, FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  if (_gtk_tree_view_find_node (tree_view,
+				path,
+				&tree,
+				&node))
+    return FALSE;
+
+  if (node->children == NULL)
+    return FALSE;
+
+  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
+  gtk_tree_view_discover_dirty (tree_view,
+				node->children,
+				&iter,
+				gtk_tree_path_get_depth (path));
+  _gtk_rbtree_remove (node->children);
+
+  if (GTK_WIDGET_REALIZED (tree_view))
+    gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+
+  return TRUE;
+}
+

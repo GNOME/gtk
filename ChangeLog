@@ -1,3 +1,19 @@
+Mon Oct 30 19:23:50 2000  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_expand_row): New function.
+
+	* gtk/gtktreeview.c (gtk_tree_view_collapse_row): New function.
+
+	* gtk/gtktreeview.c, gtk/gtktreemodel.c, gtk/gtktreeselection.c
+	gtk/gtktreestore.h, gtk/gtktreeview.h, gtk/gtktreeviewcolumn.c,
+	gtk/gtktreeviewcolumn.h: Fixed inline docs.
+
+	* docs/reference/gtk/tree_widget.sgml: Proto intro to the tree
+	widget.  Needs writing someday.
+
+	* docs/reference/gtk/tmpl/gtktree*sgml: Added the tree widget to
+	the docs.
+
 2000-10-30  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.h, gtk/gtktextview.c:

@@ -250,8 +250,7 @@ will not be used again.
 </para>
 
 @clipboard: 
-@Returns: 
-<!--
+@Returns: <!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gtk-docs.sgml" "book" "refsect2" "")

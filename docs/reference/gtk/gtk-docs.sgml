@@ -54,6 +54,7 @@
 <!entity GtkMenuBar SYSTEM "sgml/gtkmenubar.sgml">
 <!entity GtkMenuItem SYSTEM "sgml/gtkmenuitem.sgml">
 <!entity GtkMenuShell SYSTEM "sgml/gtkmenushell.sgml">
+<!entity gtk-GtkMessageDialog SYSTEM "sgml/gtkmessagedialog.sgml">
 <!entity GtkMisc SYSTEM "sgml/gtkmisc.sgml">
 <!entity GtkNotebook SYSTEM "sgml/gtknotebook.sgml">
 <!entity GtkObject SYSTEM "sgml/gtkobject.sgml">
@@ -91,6 +92,18 @@
 <!entity GtkTooltips SYSTEM "sgml/gtktooltips.sgml">
 <!entity GtkTree SYSTEM "sgml/gtktree.sgml">
 <!entity GtkTreeItem SYSTEM "sgml/gtktreeitem.sgml">
+<!entity gtk-gtktreemodel SYSTEM "sgml/gtktreemodel.sgml">
+<!entity gtk-GtkTreeSelection SYSTEM "sgml/gtktreeselection.sgml">
+<!entity gtk-GtkTreeStore SYSTEM "sgml/gtktreestore.sgml">
+<!entity gtk-GtkTreeViewColumn SYSTEM "sgml/gtktreeviewcolumn.sgml">
+<!entity gtk-GtkTreeView SYSTEM "sgml/gtktreeview.sgml">
+<!entity gtk-GtkModelSimple SYSTEM "sgml/gtkmodelsimple.sgml">
+<!entity gtk-GtkCellRenderer SYSTEM "sgml/gtkcellrenderer.sgml">
+<!entity gtk-GtkCellRendererPixbuf SYSTEM "sgml/gtkcellrendererpixbuf.sgml">
+<!entity gtk-GtkCellRendererText SYSTEM "sgml/gtkcellrenderertext.sgml">
+<!entity gtk-GtkCellRendererTextPixbuf SYSTEM "sgml/gtkcellrenderertextpixbuf.sgml">
+<!entity gtk-GtkCellRendererToggle SYSTEM "sgml/gtkcellrenderertoggle.sgml">
+<!entity gtk-GtkListStore SYSTEM "sgml/gtkliststore.sgml">
 <!entity GtkVButtonBox SYSTEM "sgml/gtkvbbox.sgml">
 <!entity GtkVBox SYSTEM "sgml/gtkvbox.sgml">
 <!entity GtkViewport SYSTEM "sgml/gtkviewport.sgml">
@@ -109,6 +122,7 @@
 <!entity gtk-Resource-Files SYSTEM "sgml/gtkrc.sgml">
 <!entity gtk-Keyboard-Accelerators SYSTEM "sgml/gtkaccelgroup.sgml">
 <!entity gtk-Selections SYSTEM "sgml/gtkselection.sgml">
+<!entity gtk-Clipboards SYSTEM "sgml/gtkclipboard.sgml">
 <!entity gtk-Drag-and-Drop SYSTEM "sgml/gtkdnd.sgml">
 <!entity gtk-Signals SYSTEM "sgml/gtksignal.sgml">
 <!entity gtk-Object-Properties SYSTEM "sgml/gtkarg.sgml">
@@ -120,6 +134,7 @@
 
 <!entity index-Objects-Grouped SYSTEM "objects_grouped.sgml">
 <!entity gtk-TextWidget SYSTEM "text_widget.sgml">
+<!entity gtk-TreeWidget SYSTEM "tree_widget.sgml">
 ]>
 <book id="index">
   <bookinfo>
@@ -244,7 +259,22 @@ An advanced widget set.
         &GtkTextView;
     </sect1>
 
-
+    <sect1 id="TreeWidgetObjects">
+      <title>Tree and List Widget</title>
+        &gtk-TreeWidget;
+        &gtk-gtktreemodel;
+        &gtk-GtkTreeSelection;
+        &gtk-GtkTreeStore;
+        &gtk-GtkTreeViewColumn;
+        &gtk-GtkTreeView;
+        &gtk-GtkModelSimple;
+        &gtk-GtkCellRenderer;
+        &gtk-GtkCellRendererPixbuf;
+        &gtk-GtkCellRendererText;
+        &gtk-GtkCellRendererTextPixbuf;
+        &gtk-GtkCellRendererToggle;
+        &gtk-GtkListStore;
+    </sect1>
     <sect1 id="MenusAndCombos">
       <title>Menus, Combo Box, Toolbar</title>
         &GtkCheckMenuItem;      

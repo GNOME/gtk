@@ -140,7 +140,6 @@ gtk_real_tree_column_clicked (GtkTreeViewColumn *tree_column)
 
 /**
  * gtk_tree_view_column_new:
- * @void: 
  * 
  * Creates a new #GtkTreeViewColumn.
  * 
@@ -160,7 +159,7 @@ gtk_tree_view_column_new (void)
  * gtk_tree_view_column_new_with_attributes:
  * @title: The title to set the header to.
  * @cell: The #GtkCellRenderer.
- * @: A NULL terminated list of attributes.
+ * @Varargs: A NULL terminated list of attributes.
  * 
  * Creates a new #GtkTreeViewColumn with a number of default values.  This is
  * equivalent to calling @gtk_tree_view_column_set_title,
@@ -279,7 +278,7 @@ gtk_tree_view_column_set_attributesv (GtkTreeViewColumn *tree_column,
 /**
  * gtk_tree_view_column_set_attributes:
  * @tree_column: A #GtkTreeViewColumn.
- * @: A NULL terminated listing of attributes to add.
+ * @Varargs: A NULL terminated listing of attributes to add.
  * 
  * Adds the attributes in the list the the @tree_column.  The attributes should
  * be in attribute/column order, as in @gtk_tree_view_column_add_attribute.  If
@@ -305,7 +304,7 @@ gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
  * gtk_tree_view_column_set_cell_data:
  * @tree_column: A #GtkTreeViewColumn.
  * @tree_model: The #GtkTreeModel to to get the cell renderers attributes from.
- * @tree_node: The #GtkTreeNode to to get the cell renderers attributes from.
+ * @iter: The #GtkTreeIter to to get the cell renderer's attributes from.
  * 
  * Sets the cell renderer based on the @tree_model and @tree_node.  That is, for
  * every attribute mapping in @tree_column, it will get a value from the set

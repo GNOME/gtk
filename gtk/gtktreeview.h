@@ -65,13 +65,13 @@ GtkWidget             *gtk_tree_view_new_with_model      (GtkTreeModel       *mo
 
 GtkTreeModel          *gtk_tree_view_get_model           (GtkTreeView        *tree_view);
 void                   gtk_tree_view_set_model           (GtkTreeView        *tree_view,
-							  GtkTreeModel       *tree_model);
+							  GtkTreeModel       *model);
 GtkTreeSelection      *gtk_tree_view_get_selection       (GtkTreeView        *tree_view);
-GtkAdjustment         *gtk_tree_view_get_hadjustment     (GtkTreeView        *layout);
-void                   gtk_tree_view_set_hadjustment     (GtkTreeView        *layout,
+GtkAdjustment         *gtk_tree_view_get_hadjustment     (GtkTreeView        *tree_view);
+void                   gtk_tree_view_set_hadjustment     (GtkTreeView        *tree_view,
 							  GtkAdjustment      *adjustment);
-GtkAdjustment         *gtk_tree_view_get_vadjustment     (GtkTreeView        *layout);
-void                   gtk_tree_view_set_vadjustment     (GtkTreeView        *layout,
+GtkAdjustment         *gtk_tree_view_get_vadjustment     (GtkTreeView        *tree_view);
+void                   gtk_tree_view_set_vadjustment     (GtkTreeView        *tree_view,
 							  GtkAdjustment      *adjustment);
 gboolean               gtk_tree_view_get_headers_visible (GtkTreeView        *tree_view);
 void                   gtk_tree_view_set_headers_visible (GtkTreeView        *tree_view,
@@ -103,6 +103,11 @@ gboolean               gtk_tree_view_get_path_at_pos     (GtkTreeView        *tr
 							  GtkTreeViewColumn **column);
 void                   gtk_tree_view_expand_all          (GtkTreeView        *tree_view);
 void                   gtk_tree_view_collapse_all        (GtkTreeView        *tree_view);
+gboolean               gtk_tree_view_expand_row          (GtkTreeView        *tree_view,
+							  GtkTreePath        *path,
+							  gboolean            open_all);
+gboolean               gtk_tree_view_collapse_row        (GtkTreeView        *tree_view,
+							  GtkTreePath        *path);
 
 
 #ifdef __cplusplus
