@@ -47,7 +47,6 @@ Thu Feb 26 22:19:29 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_new_text): Improve the docs.
 
->>>>>>> 1.5032
 Thu Feb 26 15:43:43 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.[ch]: Export insertion cursor drawing functionality
