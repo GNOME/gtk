@@ -1,3 +1,7 @@
+Thu Dec 18 01:24:35 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_message_dialog_set_markup
+
 Tue Dec 16 01:57:13 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdk-sections.txt: Add gdk_display_set_double_click_distance.

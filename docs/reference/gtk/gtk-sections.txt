@@ -2003,6 +2003,7 @@ GtkMessageType
 GtkButtonsType
 gtk_message_dialog_new
 gtk_message_dialog_new_with_markup
+gtk_message_dialog_set_markup
 <SUBSECTION Standard>
 GTK_MESSAGE_DIALOG
 GTK_IS_MESSAGE_DIALOG
