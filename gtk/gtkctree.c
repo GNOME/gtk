@@ -5712,8 +5712,8 @@ resync_selection (GtkCList *clist, GdkEvent *event)
 	  }
     }
 
-  for (list = g_list_reverse (clist->undo_unselection); list;
-       list = list->next)
+  clist->undo_unselection = g_list_reverse (clist->undo_unselection);
+  for (list = clist->undo_unselection; list; list = list->next)
     gtk_ctree_select (ctree, list->data);
 
   clist->anchor = -1;

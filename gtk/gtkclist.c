@@ -3866,8 +3866,11 @@ real_undo_selection (GtkCList *clist)
 		     GPOINTER_TO_INT (work->data), -1, NULL);
 
   for (work = clist->undo_unselection; work; work = work->next)
-    gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], 
-		     GPOINTER_TO_INT (work->data), -1, NULL);
+    {
+      g_print ("unselect %d\n",GPOINTER_TO_INT (work->data));
+      gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], 
+		       GPOINTER_TO_INT (work->data), -1, NULL);
+    }
 
   if (GTK_WIDGET_HAS_FOCUS(clist) && clist->focus_row != clist->undo_anchor)
     {
@@ -4023,9 +4026,9 @@ resync_selection (GtkCList *clist,
 	      }
 	  }
     }
-
-  for (list = g_list_reverse (clist->undo_unselection); list;
-       list = list->next)
+  
+  clist->undo_unselection = g_list_reverse (clist->undo_unselection);
+  for (list = clist->undo_unselection; list; list = list->next)
     gtk_signal_emit (GTK_OBJECT (clist), clist_signals[SELECT_ROW],
 		     GPOINTER_TO_INT (list->data), -1, event);
 
@@ -5156,6 +5159,7 @@ gtk_clist_button_release (GtkWidget      *widget,
 	    {
 	    case GTK_SELECTION_EXTENDED:
 	      if (!(event->state & GDK_SHIFT_MASK) ||
+		  !GTK_WIDGET_CAN_FOCUS (widget) ||
 		  event->x < 0 || event->x >= clist->clist_window_width ||
 		  event->y < 0 || event->y >= clist->clist_window_height)
 		GTK_CLIST_CLASS_FW (clist)->resync_selection
