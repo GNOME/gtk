@@ -389,6 +389,7 @@ static gint gtk_file_selection_insert_text   (GtkWidget             *widget,
 					      gint                   new_text_length,
 					      gint                  *position,
 					      gpointer               user_data);
+static void gtk_file_selection_update_fileops (GtkFileSelection     *filesel);
 
 static void gtk_file_selection_file_activate (GtkTreeView       *tree_view,
 					      GtkTreePath       *path,
@@ -787,12 +788,15 @@ gtk_file_selection_init (GtkFileSelection *filesel)
 		    G_CALLBACK (gtk_file_selection_key_press), filesel);
   g_signal_connect (filesel->selection_entry, "insert_text",
 		    G_CALLBACK (gtk_file_selection_insert_text), NULL);
+  g_signal_connect_swapped (filesel->selection_entry, "changed",
+			    G_CALLBACK (gtk_file_selection_update_fileops), filesel);
   g_signal_connect_swapped (filesel->selection_entry, "focus_in_event",
 			    G_CALLBACK (grab_default),
 			    filesel->ok_button);
   g_signal_connect_swapped (filesel->selection_entry, "activate",
 			    G_CALLBACK (gtk_button_clicked),
 			    filesel->ok_button);
+  
   gtk_box_pack_start (GTK_BOX (entry_vbox), filesel->selection_entry, TRUE, TRUE, 0);
   gtk_widget_show (filesel->selection_entry);
 
@@ -1092,8 +1096,10 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
 			  filesel->fileop_ren_file, TRUE, TRUE, 0);
       gtk_widget_show (filesel->fileop_ren_file);
     }
+  
+  gtk_file_selection_update_fileops (filesel);
+  
   g_object_notify (G_OBJECT (filesel), "show_fileops");
-  gtk_widget_queue_resize (GTK_WIDGET (filesel));
 }
 
 void       
@@ -1339,6 +1345,20 @@ gtk_file_selection_fileop_destroy (GtkWidget *widget,
   fs->fileop_dialog = NULL;
 }
 
+static gboolean
+entry_is_empty (GtkEntry *entry)
+{
+  const gchar *text = gtk_entry_get_text (entry);
+  
+  return *text == '\0';
+}
+
+static void
+gtk_file_selection_fileop_entry_changed (GtkEntry   *entry,
+					 GtkWidget  *button)
+{
+  gtk_widget_set_sensitive (button, !entry_is_empty (entry));
+}
 
 static void
 gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
@@ -1450,10 +1470,15 @@ gtk_file_selection_create_dir (GtkWidget *widget,
 
   gtk_widget_grab_focus (fs->fileop_entry);
 
-  button = gtk_button_new_with_label (_("Create"));
+  button = gtk_button_new_with_mnemonic (_("C_reate"));
+  gtk_widget_set_sensitive (button, FALSE);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (gtk_file_selection_create_dir_confirmed),
 		    fs);
+  g_signal_connect (fs->fileop_entry, "changed",
+                    G_CALLBACK (gtk_file_selection_fileop_entry_changed),
+		    button);
+
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
 		     button, TRUE, TRUE, 0);
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -1718,10 +1743,14 @@ gtk_file_selection_rename_file (GtkWidget *widget,
 
   gtk_widget_grab_focus (fs->fileop_entry);
 
-  button = gtk_button_new_with_label (_("Rename"));
+  button = gtk_button_new_with_mnemonic (_("_Rename"));
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (gtk_file_selection_rename_file_confirmed),
 		    fs);
+  g_signal_connect (fs->fileop_entry, "changed",
+		    G_CALLBACK (gtk_file_selection_fileop_entry_changed),
+		    button);
+
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
 		      button, TRUE, TRUE, 0);
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -1751,6 +1780,23 @@ gtk_file_selection_insert_text (GtkWidget   *widget,
   g_free (filename);
   
   return TRUE;
+}
+
+static void
+gtk_file_selection_update_fileops (GtkFileSelection *fs)
+{
+  gboolean sensitive;
+
+  if (!fs->selection_entry)
+    return;
+
+  sensitive = !entry_is_empty (GTK_ENTRY (fs->selection_entry));
+
+  if (fs->fileop_del_file)
+    gtk_widget_set_sensitive (fs->fileop_del_file, sensitive);
+  
+  if (fs->fileop_ren_file)
+    gtk_widget_set_sensitive (fs->fileop_ren_file, sensitive);
 }
 
 static gint
