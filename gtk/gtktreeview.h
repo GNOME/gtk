@@ -79,11 +79,13 @@ struct _GtkTreeViewClass
   void     (* columns_changed)            (GtkTreeView       *tree_view);
 
   /* Key Binding signals */
+  void     (* begin_extended_selection)   (GtkTreeView       *tree_view);
+  void     (* end_extended_selection)     (GtkTreeView       *tree_view);
+  void     (* begin_free_motion)          (GtkTreeView       *tree_view);
+  void     (* end_free_motion)            (GtkTreeView       *tree_view);
   void     (* move_cursor)                (GtkTreeView       *tree_view,
 				           GtkMovementStep    step,
-				           gint               count,
-				           gboolean           extend_selection);
-  void     (* set_anchor)                 (GtkTreeView       *tree_view);
+				           gint               count);
   void     (* toggle_cursor_row)          (GtkTreeView       *tree_view);
   void     (* expand_collapse_cursor_row) (GtkTreeView       *tree_view,
 					   gboolean           logical,
@@ -196,6 +198,8 @@ void                   gtk_tree_view_map_expanded_rows             (GtkTreeView 
 								    gpointer                   data);
 void                   gtk_tree_view_set_reorderable               (GtkTreeView               *tree_view,
 								    gboolean                   reorderable);
+void                   gtk_tree_view_set_cursor                    (GtkTreeView               *tree_view,
+								    GtkTreePath               *path);
 
 
 /* Layout information */

@@ -1,3 +1,8 @@
+Fri Jun  8 18:41:30 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_cursor): new function to
+	clean up cursor handling.
+
 2001-06-08  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextbuffer.c (gtk_text_buffer_get_start_iter): added this

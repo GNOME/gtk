@@ -158,6 +158,9 @@ struct _GtkTreeViewPrivate
   guint drag_column_window_state : 3;
   /* hint to display rows in alternating colors */
   guint has_rules : 1;
+
+  guint in_extended_selection : 1;
+  guint in_free_motion : 1;
 };
 
 #ifdef __GNUC__
