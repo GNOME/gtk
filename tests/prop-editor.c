@@ -35,8 +35,8 @@ get_param_specs (GType         type,
    */
 
   /* Use private interface for now, fix later */
-  *specs = class->property_specs;
-  *n_specs = class->n_property_specs;
+  *specs = NULL; /* class->property_specs; */
+  *n_specs = 0; /* class->n_property_specs; */
 }
 
 typedef struct

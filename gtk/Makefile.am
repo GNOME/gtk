@@ -48,7 +48,6 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkaccessible.h		\
 	gtkadjustment.h		\
 	gtkalignment.h		\
-	gtkarg.h		\
 	gtkarrow.h		\
 	gtkaspectframe.h	\
 	gtkbin.h		\
@@ -122,7 +121,6 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkoldeditable.h	\
 	gtkobject.h		\
 	gtkoptionmenu.h		\
-	gtkpacker.h		\
 	gtkpaned.h		\
 	gtkpixmap.h		\
 	gtkplug.h		\
@@ -208,7 +206,6 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkaccessible.c		\
 	gtkadjustment.c		\
 	gtkalignment.c		\
-	gtkarg.c		\
 	gtkarrow.c		\
 	gtkaspectframe.c	\
 	gtkbin.c		\
@@ -283,7 +280,6 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkobject.c		\
 	gtkoldeditable.c	\
 	gtkoptionmenu.c		\
-	gtkpacker.c		\
 	gtkpaned.c		\
 	gtkpixmap.c		\
 	gtkpreview.c		\
@@ -394,7 +390,6 @@ gtk_extra_sources = @STRIP_BEGIN@ \
 	gtkcompat.h.in		\
 	maketypes.awk		\
 	makeenums.h		\
-	gtkargcollector.c	\
 	gtk-boxed.defs		\
 	gtkmarshal.list		\
 @STRIP_END@

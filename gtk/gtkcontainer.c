@@ -34,6 +34,9 @@
 #include "gtkmain.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
+#include <gobject/gobjectnotifyqueue.c>
+#include <gobject/gvaluecollector.h>
+
 
 enum {
   ADD,
@@ -50,18 +53,13 @@ enum {
   PROP_CHILD,
 };
 
-typedef struct _GtkChildArgInfo	GtkChildArgInfo;
-struct _GtkChildArgInfo
-{
-  gchar *name;
-  GtkType type;
-  GtkType class_type;
-  guint arg_flags;
-  guint arg_id;
-  guint seq_id;
-};
+#define PARAM_SPEC_PARAM_ID(pspec)              ((pspec)->param_id)
+#define PARAM_SPEC_SET_PARAM_ID(pspec, id)      ((pspec)->param_id = (id))
 
+
+/* --- prototypes --- */
 static void     gtk_container_base_class_init      (GtkContainerClass *klass);
+static void     gtk_container_base_class_finalize  (GtkContainerClass *klass);
 static void     gtk_container_class_init           (GtkContainerClass *klass);
 static void     gtk_container_init                 (GtkContainer      *container);
 static void     gtk_container_destroy              (GtkObject         *object);
@@ -100,24 +98,23 @@ static void     gtk_container_show_all             (GtkWidget         *widget);
 static void     gtk_container_hide_all             (GtkWidget         *widget);
 static gint     gtk_container_expose               (GtkWidget         *widget,
 						    GdkEventExpose    *event);
-
-
 static gchar* gtk_container_child_default_composite_name (GtkContainer *container,
 							  GtkWidget    *child);
 
 
+/* --- variables --- */
+static const gchar          *vadjustment_key = "gtk-vadjustment";
+static guint                 vadjustment_key_id = 0;
+static const gchar          *hadjustment_key = "gtk-hadjustment";
+static guint                 hadjustment_key_id = 0;
+static GSList	            *container_resize_queue = NULL;
+static guint                 container_signals[LAST_SIGNAL] = { 0 };
+static GtkWidgetClass       *parent_class = NULL;
+extern GParamSpecPool       *_gtk_widget_child_property_pool;
+extern GObjectNotifyContext *_gtk_widget_child_property_notify_context;
 
-static guint container_signals[LAST_SIGNAL] = { 0 };
-static GHashTable *container_child_arg_info_ht = NULL;
 
-static GtkWidgetClass *parent_class = NULL;
-
-static const gchar *vadjustment_key = "gtk-vadjustment";
-static guint        vadjustment_key_id = 0;
-static const gchar *hadjustment_key = "gtk-hadjustment";
-static guint        hadjustment_key_id = 0;
-static GSList	   *container_resize_queue = NULL;
-
+/* --- functions --- */
 GtkType
 gtk_container_get_type (void)
 {
@@ -125,19 +122,20 @@ gtk_container_get_type (void)
 
   if (!container_type)
     {
-      static const GtkTypeInfo container_info =
-      {
-	"GtkContainer",
-	sizeof (GtkContainer),
+      static GTypeInfo container_info = {
 	sizeof (GtkContainerClass),
-	(GtkClassInitFunc) gtk_container_class_init,
-	(GtkObjectInitFunc) gtk_container_init,
-	/* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-	(GtkClassInitFunc) gtk_container_base_class_init,
+	(GBaseInitFunc) gtk_container_base_class_init,
+	(GBaseFinalizeFunc) gtk_container_base_class_finalize,
+	(GClassInitFunc) gtk_container_class_init,
+	NULL        /* class_destroy */,
+	NULL        /* class_data */,
+	sizeof (GtkContainer),
+	0           /* n_preallocs */,
+	(GInstanceInitFunc) gtk_container_init,
+	NULL,       /* value_table */
       };
 
-      container_type = gtk_type_unique (gtk_widget_get_type (), &container_info);
+      container_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkContainer", &container_info, 0);
     }
 
   return container_type;
@@ -147,32 +145,56 @@ static void
 gtk_container_base_class_init (GtkContainerClass *class)
 {
   /* reset instance specifc class fields that don't get inherited */
-  class->n_child_args = 0;
-  class->set_child_arg = NULL;
-  class->get_child_arg = NULL;
+  class->set_child_property = NULL;
+  class->get_child_property = NULL;
+}
+
+static void
+gtk_container_base_class_finalize (GtkContainerClass *class)
+{
+  GList *list, *node;
+
+  list = g_param_spec_pool_belongings (_gtk_widget_child_property_pool, G_OBJECT_CLASS_TYPE (class));
+  for (node = list; node; node = node->next)
+    {
+      GParamSpec *pspec = node->data;
+
+      g_param_spec_pool_remove (_gtk_widget_child_property_pool, pspec);
+      PARAM_SPEC_SET_PARAM_ID (pspec, 0);
+      g_param_spec_unref (pspec);
+    }
+  g_list_free (list);
 }
 
 static void
 gtk_container_class_init (GtkContainerClass *class)
 {
-  GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
-  GtkWidgetClass *widget_class;
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
-  gobject_class = G_OBJECT_CLASS (class);
-  object_class = (GtkObjectClass*) class;
-  widget_class = (GtkWidgetClass*) class;
-
-  parent_class = gtk_type_class (gtk_widget_get_type ());
-
-  container_child_arg_info_ht = g_hash_table_new (gtk_arg_info_hash,
-						  gtk_arg_info_equal);
+  parent_class = g_type_class_peek_parent (class);
 
   vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
   hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
   
   gobject_class->set_property = gtk_container_set_property;
   gobject_class->get_property = gtk_container_get_property;
+
+  object_class->destroy = gtk_container_destroy;
+
+  widget_class->show_all = gtk_container_show_all;
+  widget_class->hide_all = gtk_container_hide_all;
+  widget_class->expose_event = gtk_container_expose;
+  widget_class->focus = gtk_container_focus;
+  
+  class->add = gtk_container_add_unimplemented;
+  class->remove = gtk_container_remove_unimplemented;
+  class->check_resize = gtk_container_real_check_resize;
+  class->forall = NULL;
+  class->set_focus_child = gtk_container_real_set_focus_child;
+  class->child_type = NULL;
+  class->composite_name = gtk_container_child_default_composite_name;
 
   g_object_class_install_property (gobject_class,
                                    PROP_RESIZE_MODE,
@@ -198,22 +220,6 @@ gtk_container_class_init (GtkContainerClass *class)
                                                       _("Can be used to add a new child to the container."),
                                                       GTK_TYPE_WIDGET,
 						      G_PARAM_WRITABLE));
-
-  object_class->destroy = gtk_container_destroy;
-
-  widget_class->show_all = gtk_container_show_all;
-  widget_class->hide_all = gtk_container_hide_all;
-  widget_class->expose_event = gtk_container_expose;
-  widget_class->focus = gtk_container_focus;
-  
-  class->add = gtk_container_add_unimplemented;
-  class->remove = gtk_container_remove_unimplemented;
-  class->check_resize = gtk_container_real_check_resize;
-  class->forall = NULL;
-  class->set_focus_child = gtk_container_real_set_focus_child;
-  class->child_type = NULL;
-  class->composite_name = gtk_container_child_default_composite_name;
-
   container_signals[ADD] =
     gtk_signal_new ("add",
                     GTK_RUN_FIRST,
@@ -248,7 +254,7 @@ gtk_container_class_init (GtkContainerClass *class)
 }
 
 GtkType
-gtk_container_child_type (GtkContainer      *container)
+gtk_container_child_type (GtkContainer *container)
 {
   GtkType slot;
   GtkContainerClass *class;
@@ -265,16 +271,185 @@ gtk_container_child_type (GtkContainer      *container)
   return slot;
 }
 
-/****************************************************
- * GtkContainer child argument mechanism
- *
- ****************************************************/
+/* --- GtkContainer child property mechanism --- */
+static inline void
+container_get_child_property (GtkContainer *container,
+			      GtkWidget    *child,
+			      GParamSpec   *pspec,
+			      GValue       *value)
+{
+  GtkContainerClass *class = g_type_class_peek (pspec->owner_type);
+  
+  class->get_child_property (container, child, PARAM_SPEC_PARAM_ID (pspec), value, pspec);
+}
+
+static inline void
+container_set_child_property (GtkContainer       *container,
+			      GtkWidget		 *child,
+			      GParamSpec         *pspec,
+			      const GValue       *value,
+			      GObjectNotifyQueue *nqueue)
+{
+  GValue tmp_value = { 0, };
+  GtkContainerClass *class = g_type_class_peek (pspec->owner_type);
+
+  /* provide a copy to work from, convert (if necessary) and validate */
+  g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+  if (!g_value_transform (value, &tmp_value))
+    g_warning ("unable to set child property `%s' of type `%s' from value of type `%s'",
+	       pspec->name,
+	       g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+	       G_VALUE_TYPE_NAME (value));
+  else if (g_param_value_validate (pspec, &tmp_value) && !(pspec->flags & G_PARAM_LAX_VALIDATION))
+    {
+      gchar *contents = g_strdup_value_contents (value);
+
+      g_warning ("value \"%s\" of type `%s' is invalid for property `%s' of type `%s'",
+		 contents,
+		 G_VALUE_TYPE_NAME (value),
+		 pspec->name,
+		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
+      g_free (contents);
+    }
+  else
+    {
+      class->set_child_property (container, child, PARAM_SPEC_PARAM_ID (pspec), &tmp_value, pspec);
+      g_object_notify_queue_add (G_OBJECT (child), nqueue, pspec);
+    }
+  g_value_unset (&tmp_value);
+}
 
 void
-gtk_container_add_with_args (GtkContainer      *container,
-			     GtkWidget         *widget,
-			     const gchar       *first_arg_name,
-			     ...)
+gtk_container_child_get_valist (GtkContainer *container,
+				GtkWidget    *child,
+				const gchar  *first_property_name,
+				va_list       var_args)
+{
+  const gchar *name;
+
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (child->parent == GTK_WIDGET (container));
+
+  g_object_ref (container);
+  g_object_ref (child);
+
+  name = first_property_name;
+  while (name)
+    {
+      GValue value = { 0, };
+      GParamSpec *pspec;
+      gchar *error;
+
+      pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool,
+					name,
+					G_OBJECT_TYPE (container),
+					TRUE);
+      if (!pspec)
+	{
+	  g_warning ("%s: container class `%s' has no child property named `%s'",
+		     G_STRLOC,
+		     G_OBJECT_TYPE_NAME (container),
+		     name);
+	  break;
+	}
+      if (!(pspec->flags & G_PARAM_READABLE))
+	{
+	  g_warning ("%s: child property `%s' of container class `%s' is not readable",
+		     G_STRLOC,
+		     pspec->name,
+		     G_OBJECT_TYPE_NAME (container));
+	  break;
+	}
+      g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+      container_get_child_property (container, child, pspec, &value);
+      G_VALUE_LCOPY (&value, var_args, 0, &error);
+      if (error)
+	{
+	  g_warning ("%s: %s", G_STRLOC, error);
+	  g_free (error);
+	  g_value_unset (&value);
+	  break;
+	}
+      g_value_unset (&value);
+      name = va_arg (var_args, gchar*);
+    }
+
+  g_object_unref (child);
+  g_object_unref (container);
+}
+
+void
+gtk_container_child_set_valist (GtkContainer *container,
+				GtkWidget    *child,
+				const gchar  *first_property_name,
+				va_list       var_args)
+{
+  GObject *object;
+  GObjectNotifyQueue *nqueue;
+  const gchar *name;
+
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (child->parent == GTK_WIDGET (container));
+
+  g_object_ref (container);
+  g_object_ref (child);
+
+  object = G_OBJECT (container);
+  nqueue = g_object_notify_queue_freeze (G_OBJECT (child), _gtk_widget_child_property_notify_context);
+  name = first_property_name;
+  while (name)
+    {
+      GValue value = { 0, };
+      gchar *error = NULL;
+      GParamSpec *pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool,
+						    name,
+						    G_OBJECT_TYPE (container),
+						    TRUE);
+      if (!pspec)
+	{
+	  g_warning ("%s: container class `%s' has no child property named `%s'",
+		     G_STRLOC,
+		     G_OBJECT_TYPE_NAME (container),
+		     name);
+	  break;
+	}
+      if (!(pspec->flags & G_PARAM_WRITABLE))
+	{
+	  g_warning ("%s: child property `%s' of container class `%s' is not writable",
+		     G_STRLOC,
+		     pspec->name,
+		     G_OBJECT_TYPE_NAME (container));
+	  break;
+	}
+      g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+      G_VALUE_COLLECT (&value, var_args, 0, &error);
+      if (error)
+	{
+	  g_warning ("%s: %s", G_STRLOC, error);
+	  g_free (error);
+
+	  /* we purposely leak the value here, it might not be
+	   * in a sane state if an error condition occoured
+	   */
+	  break;
+	}
+      container_set_child_property (container, child, pspec, &value, nqueue);
+      g_value_unset (&value);
+      name = va_arg (var_args, gchar*);
+    }
+  g_object_notify_queue_thaw (G_OBJECT (child), nqueue);
+
+  g_object_unref (container);
+  g_object_unref (child);
+}
+
+void
+gtk_container_add_with_properties (GtkContainer *container,
+				   GtkWidget    *widget,
+				   const gchar  *first_prop_name,
+				   ...)
 {
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
@@ -284,324 +459,120 @@ gtk_container_add_with_args (GtkContainer      *container,
 
   gtk_widget_ref (GTK_WIDGET (container));
   gtk_widget_ref (widget);
+  gtk_widget_freeze_child_notify (widget);
 
   gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
-  
   if (widget->parent)
     {
       va_list var_args;
-      GSList *arg_list = NULL;
-      GSList *info_list = NULL;
-      gchar *error;
-      
-      va_start (var_args, first_arg_name);
-      error = gtk_container_child_args_collect (GTK_OBJECT_TYPE (container),
-						&arg_list,
-						&info_list,
-						first_arg_name,
-						var_args);
+
+      va_start (var_args, first_prop_name);
+      gtk_container_child_set_valist (container, widget, first_prop_name, var_args);
       va_end (var_args);
-
-      if (error)
-	{
-	  g_warning ("gtk_container_add_with_args(): %s", error);
-	  g_free (error);
-	}
-      else
-	{
-	  GSList *slist_arg;
-	  GSList *slist_info;
-
-	  slist_arg = arg_list;
-	  slist_info = info_list;
-	  while (slist_arg)
-	    {
-	      gtk_container_arg_set (container, widget, slist_arg->data, slist_info->data);
-	      slist_arg = slist_arg->next;
-	      slist_info = slist_info->next;
-	    }
-	  gtk_args_collect_cleanup (arg_list, info_list);
-	}
     }
 
+  gtk_widget_thaw_child_notify (widget);
   gtk_widget_unref (widget);
   gtk_widget_unref (GTK_WIDGET (container));
-}
-
-void
-gtk_container_addv (GtkContainer      *container,
-		    GtkWidget         *widget,
-		    guint              n_args,
-		    GtkArg            *args)
-{
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (widget->parent == NULL);
-
-  gtk_widget_ref (GTK_WIDGET (container));
-  gtk_widget_ref (widget);
-
-  gtk_signal_emit (GTK_OBJECT (container), container_signals[ADD], widget);
-  
-  if (widget->parent)
-    {
-      GtkArg *max_args;
-
-      for (max_args = args + n_args; args < max_args; args++)
-	gtk_container_arg_set (container, widget, args, NULL);
-    }
-
-  gtk_widget_unref (widget);
-  gtk_widget_unref (GTK_WIDGET (container));
-}
-
-void
-gtk_container_child_setv (GtkContainer      *container,
-			  GtkWidget         *child,
-			  guint              n_args,
-			  GtkArg            *args)
-{
-  GtkArg *max_args;
-
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (child != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (child->parent != NULL);
-  if (n_args)
-    g_return_if_fail (args != NULL);
-
-  for (max_args = args + n_args; args < max_args; args++)
-    gtk_container_arg_set (container, child, args, NULL);
-}
-
-void
-gtk_container_child_getv (GtkContainer      *container,
-			  GtkWidget         *child,
-			  guint              n_args,
-			  GtkArg            *args)
-{
-  GtkArg *max_args;
-
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (child != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (child->parent != NULL);
-  if (n_args)
-    g_return_if_fail (args != NULL);
-
-  for (max_args = args + n_args; args < max_args; args++)
-    gtk_container_arg_get (container, child, args, NULL);
 }
 
 void
 gtk_container_child_set (GtkContainer      *container,
 			 GtkWidget         *child,
-			 const gchar       *first_arg_name,
+			 const gchar       *first_prop_name,
 			 ...)
 {
   va_list var_args;
-  GSList *arg_list = NULL;
-  GSList *info_list = NULL;
-  gchar *error;
   
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (child->parent != NULL);
+  g_return_if_fail (child->parent == GTK_WIDGET (container));
 
-  va_start (var_args, first_arg_name);
-  error = gtk_container_child_args_collect (GTK_OBJECT_TYPE (container),
-					    &arg_list,
-					    &info_list,
-					    first_arg_name,
-					    var_args);
+  va_start (var_args, first_prop_name);
+  gtk_container_child_set_valist (container, child, first_prop_name, var_args);
   va_end (var_args);
-
-  if (error)
-    {
-      g_warning ("gtk_container_child_set(): %s", error);
-      g_free (error);
-    }
-  else
-    {
-      GSList *slist_arg;
-      GSList *slist_info;
-
-      slist_arg = arg_list;
-      slist_info = info_list;
-      while (slist_arg)
-	{
-	  gtk_container_arg_set (container, child, slist_arg->data, slist_info->data);
-	  slist_arg = slist_arg->next;
-	  slist_info = slist_info->next;
-	}
-      gtk_args_collect_cleanup (arg_list, info_list);
-    }
 }
 
 void
-gtk_container_arg_set (GtkContainer *container,
-		       GtkWidget    *child,
-		       GtkArg       *arg,
-		       GtkArgInfo   *info)
+gtk_container_child_get (GtkContainer      *container,
+			 GtkWidget         *child,
+			 const gchar       *first_prop_name,
+			 ...)
 {
-  GtkContainerClass *class;
+  va_list var_args;
   
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (arg != NULL);
-  
-  if (!info)
-    {
-      gchar *error;
-      
-      error = gtk_arg_get_info (GTK_OBJECT_TYPE (container),
-				container_child_arg_info_ht,
-				arg->name,
-				&info);
-      if (error)
-	{
-	  g_warning ("gtk_container_arg_set(): %s", error);
-	  g_free (error);
-	  return;
-	}
-    }
-  g_return_if_fail (info->arg_flags & GTK_ARG_CHILD_ARG);
-  
-  if (! (info->arg_flags & GTK_ARG_WRITABLE))
-    {
-      g_warning ("gtk_container_arg_set(): argument \"%s\" is not writable",
-		 info->full_name);
-      return;
-    }
-  if (info->type != arg->type)
-    {
-      g_warning ("gtk_container_arg_set(): argument \"%s\" has invalid type `%s'",
-		 info->full_name,
-		 gtk_type_name (arg->type));
-      return;
-    }
-  
-  class = gtk_type_class (info->class_type);
-  g_assert (class->set_child_arg != NULL);
-  class->set_child_arg (container, child, arg, info->arg_id);
+  g_return_if_fail (child->parent == GTK_WIDGET (container));
+
+  va_start (var_args, first_prop_name);
+  gtk_container_child_get_valist (container, child, first_prop_name, var_args);
+  va_end (var_args);
 }
 
 void
-gtk_container_arg_get (GtkContainer *container,
-		       GtkWidget    *child,
-		       GtkArg       *arg,
-		       GtkArgInfo   *info)
+gtk_container_class_install_child_property (GtkContainerClass *class,
+					    guint              property_id,
+					    GParamSpec        *pspec)
 {
-  GtkContainerClass *class;
-  
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (child != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (arg != NULL);
-  
-  if (!info)
+  g_return_if_fail (GTK_IS_CONTAINER_CLASS (class));
+  g_return_if_fail (G_IS_PARAM_SPEC (pspec));
+  if (pspec->flags & G_PARAM_WRITABLE)
+    g_return_if_fail (class->set_child_property != NULL);
+  if (pspec->flags & G_PARAM_READABLE)
+    g_return_if_fail (class->get_child_property != NULL);
+  g_return_if_fail (property_id > 0);
+  g_return_if_fail (PARAM_SPEC_PARAM_ID (pspec) == 0);  /* paranoid */
+  if (pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY))
+    g_return_if_fail ((pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY)) == 0);
+
+  if (g_param_spec_pool_lookup (_gtk_widget_child_property_pool, pspec->name, G_OBJECT_CLASS_TYPE (class), FALSE))
     {
-      gchar *error;
-      
-      error = gtk_arg_get_info (GTK_OBJECT_TYPE (container),
-				container_child_arg_info_ht,
-				arg->name,
-				&info);
-      if (error)
-	{
-	  g_warning ("gtk_container_arg_get(): %s", error);
-	  g_free (error);
-	  arg->type = GTK_TYPE_INVALID;
-	  return;
-	}
-    }
-  g_return_if_fail (info->arg_flags & GTK_ARG_CHILD_ARG);
-  
-  if (! (info->arg_flags & GTK_ARG_READABLE))
-    {
-      g_warning ("gtk_container_arg_get(): argument \"%s\" is not readable",
-		 info->full_name);
-      arg->type = GTK_TYPE_INVALID;
+      g_warning (G_STRLOC ": class `%s' already contains a property named `%s'",
+		 G_OBJECT_CLASS_NAME (class),
+		 pspec->name);
       return;
     }
-  
-  class = gtk_type_class (info->class_type);
-  g_assert (class->get_child_arg != NULL);
-  arg->type = info->type;
-  class->get_child_arg (container, child, arg, info->arg_id);
+  g_param_spec_ref (pspec);
+  g_param_spec_sink (pspec);
+  PARAM_SPEC_SET_PARAM_ID (pspec, property_id);
+  g_param_spec_pool_insert (_gtk_widget_child_property_pool, pspec, G_OBJECT_CLASS_TYPE (class));
 }
 
-void
-gtk_container_add_child_arg_type (const gchar       *arg_name,
-				  GtkType            arg_type,
-				  guint              arg_flags,
-				  guint              arg_id)
+GParamSpec*
+gtk_container_class_find_child_property (GObjectClass *class,
+					 const gchar  *property_name)
 {
-  g_return_if_fail (arg_name != NULL);
-  g_return_if_fail (arg_type > GTK_TYPE_NONE);
-  g_return_if_fail (arg_id > 0);
-  g_return_if_fail ((arg_flags & GTK_ARG_READWRITE) == GTK_ARG_READWRITE);
-  /* g_return_if_fail ((arg_flags & GTK_ARG_CHILD_ARG) != 0); */
+  g_return_val_if_fail (GTK_IS_CONTAINER_CLASS (class), NULL);
+  g_return_val_if_fail (property_name != NULL, NULL);
 
-  arg_flags |= GTK_ARG_CHILD_ARG;
-  arg_flags &= GTK_ARG_MASK;
-
-  gtk_arg_type_new_static (GTK_TYPE_CONTAINER,
-			   arg_name,
-			   GTK_STRUCT_OFFSET (GtkContainerClass, n_child_args),
-			   container_child_arg_info_ht,
-			   arg_type,
-			   arg_flags,
-			   arg_id);
+  return g_param_spec_pool_lookup (_gtk_widget_child_property_pool,
+				   property_name,
+				   G_OBJECT_CLASS_TYPE (class),
+				   TRUE);
 }
 
-gchar*
-gtk_container_child_args_collect (GtkType       object_type,
-				  GSList      **arg_list_p,
-				  GSList      **info_list_p,
-				  const gchar  *first_arg_name,
-				  va_list	var_args)
+GParamSpec** /* free result */
+gtk_container_class_list_child_properties (GObjectClass *class,
+					   guint        *n_properties)
 {
-  return gtk_args_collect (object_type,
-			   container_child_arg_info_ht,
-			   arg_list_p,
-			   info_list_p,
-			   first_arg_name,
-			   var_args);
+  GParamSpec **pspecs;
+  guint n;
+
+  g_return_val_if_fail (GTK_IS_CONTAINER_CLASS (class), NULL);
+
+  pspecs = g_param_spec_pool_list (_gtk_widget_child_property_pool,
+				   G_OBJECT_CLASS_TYPE (class),
+				   &n);
+  if (n_properties)
+    *n_properties = n;
+
+  return pspecs;
 }
-
-gchar*
-gtk_container_child_arg_get_info (GtkType       object_type,
-				  const gchar  *arg_name,
-				  GtkArgInfo  **info_p)
-{
-  return gtk_arg_get_info (object_type,
-			   container_child_arg_info_ht,
-			   arg_name,
-			   info_p);
-}
-
-GtkArg*
-gtk_container_query_child_args (GtkType	           class_type,
-				guint32          **arg_flags,
-				guint             *n_args)
-{
-  g_return_val_if_fail (n_args != NULL, NULL);
-  *n_args = 0;
-  g_return_val_if_fail (gtk_type_is_a (class_type, GTK_TYPE_CONTAINER), NULL);
-
-  return gtk_args_query (class_type, container_child_arg_info_ht, arg_flags, n_args);
-}
-
 
 static void
 gtk_container_add_unimplemented (GtkContainer     *container,

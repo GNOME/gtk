@@ -236,6 +236,11 @@ struct _GtkWidgetClass
    */
   guint set_scroll_adjustments_signal;
 
+  /* seldomly overidden */
+  void (*dispatch_child_properties_changed) (GtkWidget   *widget,
+					     guint        n_pspecs,
+					     GParamSpec **pspecs);
+
   /* basics */
   void (* show)		       (GtkWidget        *widget);
   void (* show_all)            (GtkWidget        *widget);
@@ -260,6 +265,8 @@ struct _GtkWidgetClass
 				GtkTextDirection  previous_direction);
   void (* grab_notify)         (GtkWidget        *widget,
 				gboolean          was_grabbed);
+  void (* child_notify)        (GtkWidget	 *widget,
+				GParamSpec       *pspec);
   
   /* accelerators */
   void (* add_accelerator)     (GtkWidget      *widget,
@@ -278,7 +285,7 @@ struct _GtkWidgetClass
 				  gboolean      group_cycling);
   
   /* explicit focus */
-  void (* grab_focus)          (GtkWidget        *widget);
+  void     (* grab_focus)      (GtkWidget        *widget);
   gboolean (* focus)           (GtkWidget        *widget,
                                 GtkDirectionType  direction);
   
@@ -506,6 +513,11 @@ gboolean   gtk_widget_intersect		  (GtkWidget	       *widget,
 					   GdkRectangle	       *intersection);
 GdkRegion *gtk_widget_region_intersect	  (GtkWidget	       *widget,
 					   GdkRegion	       *region);
+
+void	gtk_widget_freeze_child_notify	  (GtkWidget	       *widget);
+void	gtk_widget_child_notify		  (GtkWidget	       *widget,
+					   const gchar	       *child_property);
+void	gtk_widget_thaw_child_notify	  (GtkWidget	       *widget);
 
 gboolean   gtk_widget_is_focus            (GtkWidget           *widget);
 void	   gtk_widget_grab_focus	  (GtkWidget	       *widget);

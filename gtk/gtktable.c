@@ -39,15 +39,15 @@ enum
 
 enum
 {
-  CHILD_ARG_0,
-  CHILD_ARG_LEFT_ATTACH,
-  CHILD_ARG_RIGHT_ATTACH,
-  CHILD_ARG_TOP_ATTACH,
-  CHILD_ARG_BOTTOM_ATTACH,
-  CHILD_ARG_X_OPTIONS,
-  CHILD_ARG_Y_OPTIONS,
-  CHILD_ARG_X_PADDING,
-  CHILD_ARG_Y_PADDING
+  CHILD_PROP_0,
+  CHILD_PROP_LEFT_ATTACH,
+  CHILD_PROP_RIGHT_ATTACH,
+  CHILD_PROP_TOP_ATTACH,
+  CHILD_PROP_BOTTOM_ATTACH,
+  CHILD_PROP_X_OPTIONS,
+  CHILD_PROP_Y_OPTIONS,
+  CHILD_PROP_X_PADDING,
+  CHILD_PROP_Y_PADDING
 };
   
 
@@ -76,14 +76,16 @@ static void gtk_table_set_property  (GObject         *object,
 				     guint            prop_id,
 				     const GValue    *value,
 				     GParamSpec      *pspec);
-static void gtk_table_set_child_arg (GtkContainer   *container,
-				     GtkWidget      *child,
-				     GtkArg         *arg,
-				     guint           arg_id);
-static void gtk_table_get_child_arg (GtkContainer   *container,
-				     GtkWidget      *child,
-				     GtkArg         *arg,
-				     guint           arg_id);
+static void gtk_table_set_child_property (GtkContainer    *container,
+					  GtkWidget       *child,
+					  guint            property_id,
+					  const GValue    *value,
+					  GParamSpec      *pspec);
+static void gtk_table_get_child_property (GtkContainer    *container,
+					  GtkWidget       *child,
+					  guint            property_id,
+					  GValue          *value,
+					  GParamSpec      *pspec);
 static GtkType gtk_table_child_type (GtkContainer   *container);
 
 
@@ -129,15 +131,10 @@ static void
 gtk_table_class_init (GtkTableClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  GtkObjectClass *object_class;
-  GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
   
-  object_class = (GtkObjectClass*) class;
-  widget_class = (GtkWidgetClass*) class;
-  container_class = (GtkContainerClass*) class;
-  
-  parent_class = gtk_type_class (gtk_container_get_type ());
+  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_table_finalize;
 
@@ -153,8 +150,8 @@ gtk_table_class_init (GtkTableClass *class)
   container_class->remove = gtk_table_remove;
   container_class->forall = gtk_table_forall;
   container_class->child_type = gtk_table_child_type;
-  container_class->set_child_arg = gtk_table_set_child_arg;
-  container_class->get_child_arg = gtk_table_get_child_arg;
+  container_class->set_child_property = gtk_table_set_child_property;
+  container_class->get_child_property = gtk_table_get_child_property;
   
 
   g_object_class_install_property (gobject_class,
@@ -166,7 +163,6 @@ gtk_table_class_init (GtkTableClass *class)
 						     G_MAXUINT,
 						     0,
 						     G_PARAM_READWRITE));
-
   g_object_class_install_property (gobject_class,
                                    PROP_N_COLUMNS,
                                    g_param_spec_uint ("n_columns",
@@ -176,7 +172,6 @@ gtk_table_class_init (GtkTableClass *class)
 						     G_MAXUINT,
 						     0,
 						     G_PARAM_READWRITE));
-
   g_object_class_install_property (gobject_class,
                                    PROP_ROW_SPACING,
                                    g_param_spec_uint ("row_spacing",
@@ -186,7 +181,6 @@ gtk_table_class_init (GtkTableClass *class)
 						     G_MAXUINT,
 						     0,
 						     G_PARAM_READWRITE));
-
   g_object_class_install_property (gobject_class,
                                    PROP_COLUMN_SPACING,
                                    g_param_spec_uint ("column_spacing",
@@ -196,7 +190,6 @@ gtk_table_class_init (GtkTableClass *class)
 						     G_MAXUINT,
 						     0,
 						     G_PARAM_READWRITE));
-
   g_object_class_install_property (gobject_class,
                                    PROP_HOMOGENEOUS,
                                    g_param_spec_boolean ("homogeneous",
@@ -205,14 +198,46 @@ gtk_table_class_init (GtkTableClass *class)
 							 FALSE,
 							 G_PARAM_READWRITE));
 
-  gtk_container_add_child_arg_type ("GtkTable::left_attach", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_LEFT_ATTACH);
-  gtk_container_add_child_arg_type ("GtkTable::right_attach", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_RIGHT_ATTACH);
-  gtk_container_add_child_arg_type ("GtkTable::top_attach", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_TOP_ATTACH);
-  gtk_container_add_child_arg_type ("GtkTable::bottom_attach", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_BOTTOM_ATTACH);
-  gtk_container_add_child_arg_type ("GtkTable::x_options", GTK_TYPE_ATTACH_OPTIONS, GTK_ARG_READWRITE, CHILD_ARG_X_OPTIONS);
-  gtk_container_add_child_arg_type ("GtkTable::y_options", GTK_TYPE_ATTACH_OPTIONS, GTK_ARG_READWRITE, CHILD_ARG_Y_OPTIONS);
-  gtk_container_add_child_arg_type ("GtkTable::x_padding", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_X_PADDING);
-  gtk_container_add_child_arg_type ("GtkTable::y_padding", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_Y_PADDING);
+  gtk_container_class_install_child_property (container_class,
+					      CHILD_PROP_LEFT_ATTACH,
+					      g_param_spec_uint ("left_attach", NULL, NULL,
+								 0, 65535, 0,
+								 G_PARAM_READWRITE));
+  gtk_container_class_install_child_property (container_class,
+					      CHILD_PROP_RIGHT_ATTACH,
+					      g_param_spec_uint ("right_attach", NULL, NULL,
+								 1, 65535, 1,
+								 G_PARAM_READWRITE));
+  gtk_container_class_install_child_property (container_class,
+					      CHILD_PROP_TOP_ATTACH,
+					      g_param_spec_uint ("top_attach", NULL, NULL,
+								 0, 65535, 0,
+								 G_PARAM_READWRITE));
+  gtk_container_class_install_child_property (container_class,
+					      CHILD_PROP_BOTTOM_ATTACH,
+					      g_param_spec_uint ("bottom_attach", NULL, NULL,
+								 1, 65535, 1,
+								 G_PARAM_READWRITE));
+  gtk_container_class_install_child_property (container_class,
+					      CHILD_PROP_X_OPTIONS,
+					      g_param_spec_flags ("x_options", NULL, NULL,
+								  GTK_TYPE_ATTACH_OPTIONS, GTK_EXPAND | GTK_FILL,
+								  G_PARAM_READWRITE));
+  gtk_container_class_install_child_property (container_class,
+					      CHILD_PROP_Y_OPTIONS,
+					      g_param_spec_flags ("y_options", NULL, NULL,
+								  GTK_TYPE_ATTACH_OPTIONS, GTK_EXPAND | GTK_FILL,
+								  G_PARAM_READWRITE));
+  gtk_container_class_install_child_property (container_class,
+					      CHILD_PROP_X_PADDING,
+					      g_param_spec_uint ("x_padding", NULL, NULL,
+								 0, 65535, 0,
+								 G_PARAM_READWRITE));
+  gtk_container_class_install_child_property (container_class,
+					      CHILD_PROP_Y_PADDING,
+					      g_param_spec_uint ("y_padding", NULL, NULL,
+								 0, 65535, 0,
+								 G_PARAM_READWRITE));
 }
 
 static GtkType
@@ -288,16 +313,16 @@ gtk_table_set_property (GObject      *object,
 }
 
 static void
-gtk_table_set_child_arg (GtkContainer   *container,
-			 GtkWidget      *child,
-			 GtkArg         *arg,
-			 guint           arg_id)
+gtk_table_set_child_property (GtkContainer    *container,
+			      GtkWidget       *child,
+			      guint            property_id,
+			      const GValue    *value,
+			      GParamSpec      *pspec)
 {
-  GtkTable *table;
+  GtkTable *table = GTK_TABLE (container);
   GtkTableChild *table_child;
   GList *list;
 
-  table = GTK_TABLE (container);
   table_child = NULL;
   for (list = table->children; list; list = list->next)
     {
@@ -307,61 +332,59 @@ gtk_table_set_child_arg (GtkContainer   *container,
 	break;
     }
   if (!list)
-    return;
-
-  switch (arg_id)
     {
-    case CHILD_ARG_LEFT_ATTACH:
-      table_child->left_attach = GTK_VALUE_UINT (*arg);
+      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+      return;
+    }
+
+  switch (property_id)
+    {
+    case CHILD_PROP_LEFT_ATTACH:
+      table_child->left_attach = g_value_get_uint (value);
       if (table_child->right_attach <= table_child->left_attach)
 	table_child->right_attach = table_child->left_attach + 1;
       if (table_child->right_attach >= table->ncols)
 	gtk_table_resize (table, table->ncols, table_child->right_attach);
       break;
-    case CHILD_ARG_RIGHT_ATTACH:
-      if (GTK_VALUE_UINT (*arg) > 0)
-	{
-	  table_child->right_attach = GTK_VALUE_UINT (*arg);
-	  if (table_child->right_attach <= table_child->left_attach)
-	    table_child->left_attach = table_child->right_attach - 1;
-	  if (table_child->right_attach >= table->ncols)
-	    gtk_table_resize (table, table->ncols, table_child->right_attach);
-	}
+    case CHILD_PROP_RIGHT_ATTACH:
+      table_child->right_attach = g_value_get_uint (value);
+      if (table_child->right_attach <= table_child->left_attach)
+	table_child->left_attach = table_child->right_attach - 1;
+      if (table_child->right_attach >= table->ncols)
+	gtk_table_resize (table, table->ncols, table_child->right_attach);
       break;
-    case CHILD_ARG_TOP_ATTACH:
-      table_child->top_attach = GTK_VALUE_UINT (*arg);
+    case CHILD_PROP_TOP_ATTACH:
+      table_child->top_attach = g_value_get_uint (value);
       if (table_child->bottom_attach <= table_child->top_attach)
 	table_child->bottom_attach = table_child->top_attach + 1;
       if (table_child->bottom_attach >= table->nrows)
 	gtk_table_resize (table, table_child->bottom_attach, table->ncols);
       break;
-    case CHILD_ARG_BOTTOM_ATTACH:
-      if (GTK_VALUE_UINT (*arg) > 0)
-	{
-	  table_child->bottom_attach = GTK_VALUE_UINT (*arg);
-	  if (table_child->bottom_attach <= table_child->top_attach)
-	    table_child->top_attach = table_child->bottom_attach - 1;
-	  if (table_child->bottom_attach >= table->nrows)
-	    gtk_table_resize (table, table_child->bottom_attach, table->ncols);
-	}
+    case CHILD_PROP_BOTTOM_ATTACH:
+      table_child->bottom_attach = g_value_get_uint (value);
+      if (table_child->bottom_attach <= table_child->top_attach)
+	table_child->top_attach = table_child->bottom_attach - 1;
+      if (table_child->bottom_attach >= table->nrows)
+	gtk_table_resize (table, table_child->bottom_attach, table->ncols);
       break;
-    case CHILD_ARG_X_OPTIONS:
-      table_child->xexpand = (GTK_VALUE_FLAGS (*arg) & GTK_EXPAND) != 0;
-      table_child->xshrink = (GTK_VALUE_FLAGS (*arg) & GTK_SHRINK) != 0;
-      table_child->xfill = (GTK_VALUE_FLAGS (*arg) & GTK_FILL) != 0;
+    case CHILD_PROP_X_OPTIONS:
+      table_child->xexpand = (g_value_get_flags (value) & GTK_EXPAND) != 0;
+      table_child->xshrink = (g_value_get_flags (value) & GTK_SHRINK) != 0;
+      table_child->xfill = (g_value_get_flags (value) & GTK_FILL) != 0;
       break;
-    case CHILD_ARG_Y_OPTIONS:
-      table_child->yexpand = (GTK_VALUE_FLAGS (*arg) & GTK_EXPAND) != 0;
-      table_child->yshrink = (GTK_VALUE_FLAGS (*arg) & GTK_SHRINK) != 0;
-      table_child->yfill = (GTK_VALUE_FLAGS (*arg) & GTK_FILL) != 0;
+    case CHILD_PROP_Y_OPTIONS:
+      table_child->yexpand = (g_value_get_flags (value) & GTK_EXPAND) != 0;
+      table_child->yshrink = (g_value_get_flags (value) & GTK_SHRINK) != 0;
+      table_child->yfill = (g_value_get_flags (value) & GTK_FILL) != 0;
       break;
-    case CHILD_ARG_X_PADDING:
-      table_child->xpadding = GTK_VALUE_UINT (*arg);
+    case CHILD_PROP_X_PADDING:
+      table_child->xpadding = g_value_get_uint (value);
       break;
-    case CHILD_ARG_Y_PADDING:
-      table_child->ypadding = GTK_VALUE_UINT (*arg);
+    case CHILD_PROP_Y_PADDING:
+      table_child->ypadding = g_value_get_uint (value);
       break;
     default:
+      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
       break;
     }
   if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (table))
@@ -369,16 +392,16 @@ gtk_table_set_child_arg (GtkContainer   *container,
 }
 
 static void
-gtk_table_get_child_arg (GtkContainer   *container,
-			 GtkWidget      *child,
-			 GtkArg         *arg,
-			 guint           arg_id)
+gtk_table_get_child_property (GtkContainer    *container,
+			      GtkWidget       *child,
+			      guint            property_id,
+			      GValue          *value,
+			      GParamSpec      *pspec)
 {
-  GtkTable *table;
+  GtkTable *table = GTK_TABLE (container);
   GtkTableChild *table_child;
   GList *list;
 
-  table = GTK_TABLE (container);
   table_child = NULL;
   for (list = table->children; list; list = list->next)
     {
@@ -388,40 +411,43 @@ gtk_table_get_child_arg (GtkContainer   *container,
 	break;
     }
   if (!list)
-    return;
-
-  switch (arg_id)
     {
-    case CHILD_ARG_LEFT_ATTACH:
-      GTK_VALUE_UINT (*arg) = table_child->left_attach;
+      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+      return;
+    }
+
+  switch (property_id)
+    {
+    case CHILD_PROP_LEFT_ATTACH:
+      g_value_set_uint (value, table_child->left_attach);
       break;
-    case CHILD_ARG_RIGHT_ATTACH:
-      GTK_VALUE_UINT (*arg) = table_child->right_attach;
+    case CHILD_PROP_RIGHT_ATTACH:
+      g_value_set_uint (value, table_child->right_attach);
       break;
-    case CHILD_ARG_TOP_ATTACH:
-      GTK_VALUE_UINT (*arg) = table_child->top_attach;
+    case CHILD_PROP_TOP_ATTACH:
+      g_value_set_uint (value, table_child->top_attach);
       break;
-    case CHILD_ARG_BOTTOM_ATTACH:
-      GTK_VALUE_UINT (*arg) = table_child->bottom_attach;
+    case CHILD_PROP_BOTTOM_ATTACH:
+      g_value_set_uint (value, table_child->bottom_attach);
       break;
-    case CHILD_ARG_X_OPTIONS:
-      GTK_VALUE_FLAGS (*arg) = (table_child->xexpand * GTK_EXPAND |
-				table_child->xshrink * GTK_SHRINK |
-				table_child->xfill * GTK_FILL);
+    case CHILD_PROP_X_OPTIONS:
+      g_value_set_flags (value, (table_child->xexpand * GTK_EXPAND |
+				 table_child->xshrink * GTK_SHRINK |
+				 table_child->xfill * GTK_FILL));
       break;
-    case CHILD_ARG_Y_OPTIONS:
-      GTK_VALUE_FLAGS (*arg) = (table_child->yexpand * GTK_EXPAND |
-				table_child->yshrink * GTK_SHRINK |
-				table_child->yfill * GTK_FILL);
+    case CHILD_PROP_Y_OPTIONS:
+      g_value_set_flags (value, (table_child->yexpand * GTK_EXPAND |
+				 table_child->yshrink * GTK_SHRINK |
+				 table_child->yfill * GTK_FILL));
       break;
-    case CHILD_ARG_X_PADDING:
-      GTK_VALUE_UINT (*arg) = table_child->xpadding;
+    case CHILD_PROP_X_PADDING:
+      g_value_set_uint (value, table_child->xpadding);
       break;
-    case CHILD_ARG_Y_PADDING:
-      GTK_VALUE_UINT (*arg) = table_child->ypadding;
+    case CHILD_PROP_Y_PADDING:
+      g_value_set_uint (value, table_child->ypadding);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
       break;
     }
 }

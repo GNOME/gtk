@@ -54,7 +54,6 @@ static guint	settings_install_property_parser (GtkSettingsClass      *class,
 static gpointer		 parent_class = NULL;
 static GtkSettings	*the_singleton = NULL;
 static GQuark		 quark_property_parser = 0;
-static GQuark		 quark_property_id = 0;
 static GSList           *object_list = NULL;
 static guint		 class_n_properties = 0;
 
@@ -89,8 +88,8 @@ gtk_settings_get_type (void)
 static void
 gtk_settings_init (GtkSettings *settings)
 {
-  GObjectClass *gobject_class = G_OBJECT_GET_CLASS (settings);
-  guint i;
+  GParamSpec **pspecs, **p;
+  guint i = 0;
   
   g_datalist_init (&settings->queued_settings);
   object_list = g_slist_prepend (object_list, settings);
@@ -99,15 +98,24 @@ gtk_settings_init (GtkSettings *settings)
    * notification for them (at least notification for internal properties
    * will instantly be caught)
    */
-  settings->property_values = g_new0 (GValue, class_n_properties);
-  for (i = 0; i < class_n_properties; i++)
+  pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (settings), NULL);
+  for (p = pspecs; *p; p++)
+    if ((*p)->owner_type == G_OBJECT_TYPE (settings))
+      i++;
+  settings->property_values = g_new0 (GValue, i);
+  i = 0;
+  for (p = pspecs; *p; p++)
     {
-      GParamSpec *pspec = gobject_class->property_specs[i]; // FIXME: g_object_list_properties(this_class_type)
+      GParamSpec *pspec = *p;
 
+      if (pspec->owner_type != G_OBJECT_TYPE (settings))
+	continue;
       g_value_init (settings->property_values + i, G_PARAM_SPEC_VALUE_TYPE (pspec));
       g_param_value_set_default (pspec, settings->property_values + i);
       g_object_notify (G_OBJECT (settings), pspec->name);
+      i++;
     }
+  g_free (pspecs);
 }
 
 static void
@@ -125,8 +133,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
   gobject_class->notify = gtk_settings_notify;
 
   quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
-  quark_property_id = g_quark_try_string ("GObject-property-id");
-  g_assert (quark_property_id != 0);	/* special quarks from GObjectClass */
 
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-double-click-time",
@@ -286,7 +292,7 @@ static void
 gtk_settings_notify (GObject    *object,
 		     GParamSpec *pspec)
 {
-  guint property_id = GPOINTER_TO_UINT (g_param_spec_get_qdata ((pspec), quark_property_id));
+  guint property_id = pspec->param_id;
   gint double_click_time;
   
 #if 1

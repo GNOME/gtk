@@ -28,7 +28,6 @@
 #define __GTK_OBJECT_H__
 
 
-#include <gtk/gtkarg.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtktypeutils.h>
 #include <gtk/gtkdebug.h>

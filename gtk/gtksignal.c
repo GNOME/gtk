@@ -18,7 +18,6 @@
  */
 
 #include	"gtksignal.h"
-#include	"gtkargcollector.c"
 #include	"gtkmarshal.c"
 
 
@@ -345,93 +344,6 @@ gtk_signal_emitv (GtkObject *object,
   g_value_unset (params + 0);
 }
 
-static gboolean
-gtk_signal_collect_args (GtkArg        *args,
-			 guint          n_args,
-			 const GtkType *arg_types,
-			 GtkType        return_type,
-			 va_list        var_args)
-{
-  register GtkArg *last_arg;
-  register gboolean failed = FALSE;
-  
-  for (last_arg = args + n_args; args < last_arg; args++)
-    {
-      register gchar *error;
-      
-      args->name = NULL;
-      args->type = *(arg_types++);
-      GTK_ARG_COLLECT_VALUE (args,
-			     var_args,
-			     error);
-      if (error)
-	{
-	  failed = TRUE;
-	  g_warning ("gtk_signal_collect_args(): %s", error);
-	  g_free (error);
-	}
-    }
-  
-  args->type = return_type;
-  args->name = NULL;
-  
-  return_type = GTK_FUNDAMENTAL_TYPE (return_type);
-  if (return_type != G_TYPE_NONE)
-    {
-      if (return_type != 0) /* FIXME: check for IS_ARG */
-	{
-	  GTK_VALUE_POINTER (*args) = va_arg (var_args, gpointer);
-	  
-	  if (GTK_VALUE_POINTER (*args) == NULL)
-	    {
-	      failed = TRUE;
-	      g_warning ("gtk_signal_collect_args(): invalid NULL pointer for return argument type `%s'",
-			 gtk_type_name (args->type));
-	    }
-	}
-      else
-	{
-	  failed = TRUE;
-	  g_warning ("gtk_signal_collect_args(): unsupported return argument type `%s'",
-		     gtk_type_name (args->type));
-	}
-    }
-  else
-    GTK_VALUE_POINTER (*args) = NULL;
-  
-  return failed;
-}
-
-#if 0
-void
-gtk_signal_emit (GtkObject *object,
-		 guint      signal_id,
-		 ...)
-{
-  GtkArg args[SIGNAL_MAX_PARAMS + 1];
-  GSignalQuery query;
-  gboolean abort;
-  va_list var_args;
-  
-  g_return_if_fail (GTK_IS_OBJECT (object));
-  
-  g_signal_query (signal_id, &query);
-  g_return_if_fail (query.signal_id != 0);
-  g_return_if_fail (query.n_params < SIGNAL_MAX_PARAMS);
-  
-  va_start (var_args, signal_id);
-  abort = gtk_signal_collect_args (args,
-				   query.n_params,
-				   query.param_types,
-				   query.return_type,
-				   var_args);
-  va_end (var_args);
-  
-  if (!abort)
-    gtk_signal_emitv (object, signal_id, args);
-}
-#endif
-
 void
 gtk_signal_emit (GtkObject *object,
 		 guint      signal_id,
@@ -451,9 +363,7 @@ gtk_signal_emit_by_name (GtkObject   *object,
 			 const gchar *name,
 			 ...)
 {
-  GtkArg args[SIGNAL_MAX_PARAMS + 1];
   GSignalQuery query;
-  gboolean abort;
   va_list var_args;
   
   g_return_if_fail (GTK_IS_OBJECT (object));
@@ -461,18 +371,10 @@ gtk_signal_emit_by_name (GtkObject   *object,
   
   g_signal_query (g_signal_lookup (name, GTK_OBJECT_TYPE (object)), &query);
   g_return_if_fail (query.signal_id != 0);
-  g_return_if_fail (query.n_params < SIGNAL_MAX_PARAMS);
   
   va_start (var_args, name);
-  abort = gtk_signal_collect_args (args,
-				   query.n_params,
-				   query.param_types,
-				   query.return_type,
-				   var_args);
+  g_signal_emit_valist (G_OBJECT (object), query.signal_id, 0, var_args);
   va_end (var_args);
-  
-  if (!abort)
-    gtk_signal_emitv (object, query.signal_id, args);
 }
 
 void

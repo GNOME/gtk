@@ -1,3 +1,37 @@
+Mon Jun 18 02:00:49 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_get_property): fix PROP_EVENTS.
+
+	* gtk/Makefile.am:
+	* gtk/gtk.h: disabled GtkPacker compilation.
+
+	* gtk/gtkarg.[hc], gtk/gtkargcollector.c: got rid of these.
+
+	* gtk/gtknotebook.c:
+	* gtk/gtktable.c:
+	* gtk/gtkbox.c: ported this over to child properties.
+
+	* gtk/gtksettings.c: fetch class properties via
+	g_object_class_list_properties().
+
+	* gtk/gtkcontainer.[hc]: implemented child properties, got rid of the
+	child arg interface. use gobjectnotifyqueue.c for child property
+	notification.
+
+	* gtk/gtkwidget.[hc]: provide necessary means for container child
+	properties, i.e. ::child_notify signal,
+	gtk_widget_freeze_child_notify(),
+	gtk_widget_child_notify(),
+	gtk_widget_thaw_child_notify().
+
+	* tests/testgtk.c: removed inferior property handling code, for
+	property editing, a generic module should be used, and GLE
+	coincidentally fullfills that purpose.
+
+	* docs/reference/Makefile.am: disabled gtk docs building, gtk-doc
+	needs to be adapted to g_object_class_list_properties() before this
+	builds again.
+
 Mon Jun 18 20:06:10 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_row_expanded): New function to
