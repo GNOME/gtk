@@ -1,3 +1,7 @@
+2001-11-20  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkcontainer.c (gtk_container_propagate_expose): Typo fix.
+
 Tue Nov 20 23:01:01 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtktreemodel.c (gtk_tree_row_reference_unref_path):

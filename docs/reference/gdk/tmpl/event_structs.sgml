@@ -171,7 +171,7 @@ when the wheel is turned.
 @window: the window which received the event.
 @send_event: %TRUE if the event was sent explicitly (e.g. using 
 <function>XSendEvent</function>).
-@time: 
+@time: the time of the event in milliseconds.
 @x: the x coordinate of the pointer relative to the window.
 @y: the y coordinate of the pointer relative to the window.
 @state: a bit-mask representing the state of the modifier keys (e.g. Control,
@@ -249,7 +249,7 @@ Generated when the pointer enters or leaves a window.
 @y_root: the y coordinate of the pointer relative to the root of the screen.
 @mode: the crossing mode (%GDK_CROSSING_NORMAL, %GDK_CROSSING_GRAB or
   %GDK_CROSSING_UNGRAB).
-@detail: the kind of crossing that happended (%GDK_NOTIFY_INFERIOR,
+@detail: the kind of crossing that happened (%GDK_NOTIFY_INFERIOR,
   %GDK_NOTIFY_ANCESTOR, %GDK_NOTIFY_VIRTUAL, %GDK_NOTIFY_NONLINEAR or
   %GDK_NOTIFY_NONLINEAR_VIRTUAL).
 @focus: %TRUE if @window is the focus window or an inferior.

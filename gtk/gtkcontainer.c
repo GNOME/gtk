@@ -2216,7 +2216,7 @@ gtk_container_unmap (GtkWidget *widget)
  * when it receives an expose event, gtk_container_propagate_expose() 
  * once for each child, passing in the event the container received.
  *
- * gtk_container_propagate expose() takes care of deciding whether
+ * gtk_container_propagate_expose() takes care of deciding whether
  * an expose event needs to be sent to the child, intersecting
  * the event's area with the child area, and sending the event.
  * 
