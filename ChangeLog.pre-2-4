@@ -1,5 +1,8 @@
 2003-09-24  Matthias Clasen  <maclas@gmx.de>
 
+	* demos/gtk-demo/appwindow.c (do_appwindow): Demonstrate tooltips
+	on toolitems.
+
 	* gtk/gtkaction.c (connect_proxy): Sync tooltips on toolitems.
 
 	* gtk/gtkuimanager.c (update_node): Don't complain about missing
