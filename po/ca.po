@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.2.4\n"
-"POT-Creation-Date: 1999-10-08 10:56-0500\n"
+"Project-Id-Version: gtk+ 1.2.6\n"
+"POT-Creation-Date: 1999-11-13 21:31+0100\n"
 "PO-Revision-Date: 1999-04-07 22:31+02:00\n"
 "Last-Translator: Ivan Vilata i Balaguer <al011097@alumail.uji.es>\n"
 "Language-Team: linux-ca@chanae.alphanet.ch\n"
@@ -442,12 +442,12 @@ msgstr "esborrar"
 msgid "Page %u"
 msgstr "Pàgina %u"
 
-#: gtk/gtkrc.c:1706
+#: gtk/gtkrc.c:1702
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "No s'ha trobat un fitxer d'imatge al pixmap_path: «%s», línia %d"
 
-#: gtk/gtkrc.c:1709
+#: gtk/gtkrc.c:1705
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "No s'ha trobat un fitxer d'imatge al pixmap_path: «%s»"

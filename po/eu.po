@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 1999-10-08 10:56-0500\n"
+"Project-Id-Version: gtk+ 1.2.6\n"
+"POT-Creation-Date: 1999-11-13 21:34+0100\n"
 "PO-Revision-Date: 1999-07-05 19:17+0200\n"
 "Last-Translator: Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>\n"
 "Language-Team: euskare <linux-eu@chanae.alphanet.ch>\n"
@@ -446,12 +446,12 @@ msgstr "garbitu"
 msgid "Page %u"
 msgstr "Orria %u"
 
-#: gtk/gtkrc.c:1706
+#: gtk/gtkrc.c:1702
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Imaginaren fitxategia ezin aurkitu pixmap_path-en: \"%s\",%d lerroa"
 
-#: gtk/gtkrc.c:1709
+#: gtk/gtkrc.c:1705
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Imaginaren fitxategia ezin aurkitu pixmap_path-en: \"%s\""

@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.2.4\n"
-"POT-Creation-Date: 1999-10-08 10:56-0500\n"
-"PO-Revision-Date: 1999-09-19 12:08+02:00\n"
+"Project-Id-Version: gtk+ 1.2.6\n"
+"POT-Creation-Date: 1999-11-13 21:34+0100\n"
+"PO-Revision-Date: 1999-11-11 00:11+01:00\n"
 "Last-Translator: Birger Langkjer <birger.langkjer@image.dk>\n"
 "Language-Team: Danish <dltp@lists.wiktor.dk>\n"
 "MIME-Version: 1.0\n"
@@ -53,7 +53,7 @@ msgstr "OK"
 #: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3480
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
-msgstr "Annuller"
+msgstr "Annullér"
 
 #: gtk/gtkcolorsel.c:1738
 msgid "Help"
@@ -191,7 +191,7 @@ msgstr "Ønsket værdi"
 
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
-msgstr "Oprigtig værdi"
+msgstr "Egentlig værdi"
 
 #: gtk/gtkfontsel.c:494
 msgid "Font"
@@ -223,7 +223,7 @@ msgstr "Punkter"
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
-msgstr "Pixeler"
+msgstr "Pixler"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
@@ -240,7 +240,7 @@ msgstr "Ønsket skrifttypenavn:"
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
-msgstr "Oprigtigt skrifttypenavn:"
+msgstr "Egentligt skrifttypenavn:"
 
 #: gtk/gtkfontsel.c:771
 #, c-format
@@ -261,7 +261,7 @@ msgstr "Bitmap"
 
 #: gtk/gtkfontsel.c:813
 msgid "Scalable"
-msgstr "Skalerbar"
+msgstr "Skalérbar"
 
 #: gtk/gtkfontsel.c:819
 msgid "Scaled Bitmap"
@@ -447,12 +447,12 @@ msgstr "ryd"
 msgid "Page %u"
 msgstr "Side %u"
 
-#: gtk/gtkrc.c:1706
+#: gtk/gtkrc.c:1702
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\" linje %d"
 
-#: gtk/gtkrc.c:1709
+#: gtk/gtkrc.c:1705
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\""
