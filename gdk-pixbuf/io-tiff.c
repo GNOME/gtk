@@ -268,6 +268,21 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
         TIFFRGBAImageGet (&img, (uint32 *)pixels, width, height);
         TIFFRGBAImageEnd (&img);
 
+#ifdef WORDS_BIGENDIAN
+/* Turns out that the packing used by TIFFRGBAImage depends on the host byte order... */ 
+        while (pixels < pixbuf->pixels + bytes) {
+                uint32 pixel = *(uint32 *)pixels;
+                int r = TIFFGetR(pixel);
+                int g = TIFFGetG(pixel);
+                int b = TIFFGetB(pixel);
+                int a = TIFFGetA(pixel);
+                *pixels++ = r;
+                *pixels++ = g;
+                *pixels++ = b;
+                *pixels++ = a;
+        }
+#endif
+
         G_UNLOCK (tiff_loader);
 	if (context)
 		(* context->update_func) (pixbuf, 0, 0, width, height, context->user_data);

@@ -1,3 +1,7 @@
+2002-05-18  Matthias Clasen  <maclas@gmx.de>
+
+	* configure.in: Check for endianness. Sorry about REBUILD_PNGS...
+
 Fri May 17 16:05:34 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in (REBUILD_PNGS): Re-add REBUILD_PNGS
