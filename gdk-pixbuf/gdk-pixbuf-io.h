@@ -37,6 +37,10 @@ G_BEGIN_DECLS
 
 
 
+typedef void (* ModuleSizeFunc)           (gint *width, 
+				           gint *height, 
+				           gpointer user_data);
+
 typedef void (* ModulePreparedNotifyFunc) (GdkPixbuf          *pixbuf,
                                            GdkPixbufAnimation *anim,
                                            gpointer            user_data);
@@ -58,7 +62,8 @@ struct _GdkPixbufModule {
 
         /* Incremental loading */
 
-        gpointer (* begin_load)     (ModulePreparedNotifyFunc prepare_func,
+        gpointer (* begin_load)     (ModuleSizeFunc size_func,
+                                     ModulePreparedNotifyFunc prepare_func,
                                      ModuleUpdatedNotifyFunc update_func,
                                      gpointer user_data,
                                      GError **error);

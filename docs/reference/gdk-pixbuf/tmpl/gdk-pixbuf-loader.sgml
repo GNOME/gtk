@@ -21,21 +21,28 @@ Application-driven progressive image loading.
     To use #GdkPixbufLoader to load an image, just create a new one,
     and call gdk_pixbuf_loader_write() to send the data to it.  When
     done, gdk_pixbuf_loader_close() should be called to end the stream
-    and finalize everything.  The loader will emit two important
+    and finalize everything.  The loader will emit three important
     signals throughout the process.  The first, "<link
-    linkend="GdkPixbufLoader-area-prepared">area_prepared</link>",
+    linkend="GdkPixbufLoader-size-prepared">size_prepared</link>",
     will be called as soon as the image has enough information to
-    determine the size of the image to be used.  It will pass a
-    @GdkPixbuf in.  If you want to use it, you can simply ref it.  In
-    addition, no actual information will be passed in yet, so the
+    determine the size of the image to be used. If you want to scale
+    the image while loading it, you can call gdk_pixbuf_loader_set_size()
+    in response to this signal.
+    </para>
+
+    <para>The second signal, "<link
+    linkend="GdkPixbufLoader-area-prepared">area_prepared</link>",
+    will be called as soon as the pixbuf of the desired has been 
+    allocated.  You can obtain it by calling gdk_pixbuf_loader_get_pixbuf(). 
+    If you want to use it, simply ref it.  
+    In addition, no actual information will be passed in yet, so the
     pixbuf can be safely filled with any temporary graphics (or an
-    initial color) as needed.  You can also call the
-    gdk_pixbuf_loader_get_pixbuf() once this signal has been emitted
-    and get the same pixbuf.
+    initial color) as needed.  You can also call
+    gdk_pixbuf_loader_get_pixbuf() later and get the same pixbuf.
   </para>
 
   <para>
-    The other signal, "<link
+    The last signal, "<link
     linkend="GdkPixbufLoader-area-updated">area_updated</link>" gets
     called every time a region is updated.  This way you can update a
     partially completed image.  Note that you do not know anything
@@ -119,19 +126,23 @@ Application-driven progressive image loading.
 @error: 
 @Returns: 
 
+<!-- ##### SIGNAL GdkPixbufLoader::size-prepared ##### -->
+  <para>
+    This signal is emitted when the pixbuf loader has been fed the
+    initial amount of data that is required to figure out the size
+    of the image that it will create.  Applications can call  
+    gdk_pixbuf_loader_set_size() in response to this signal to set
+    the desired size to which the image should be scaled.
+  </para>
+@width: the original width of the image
+@height: the original height of the image
 
 <!-- ##### SIGNAL GdkPixbufLoader::area-prepared ##### -->
   <para>
-    This signal is emitted when the pixbuf loader has been fed the
-    initial amount of data that is required to figure out the size and
-    format of the image that it will create.  After this signal is
-    emitted, applications can call gdk_pixbuf_loader_get_pixbuf() to
-    fetch the partially-loaded pixbuf.
+    This signal is emitted when the pixbuf loader has allocated the pixbuf
+    in the desired size.  After this signal is emitted, applications can 
+    call gdk_pixbuf_loader_get_pixbuf() to fetch the partially-loaded pixbuf.
   </para>
-
-@gdkpixbufloader: the object which received the signal.
-<!-- # Unused Parameters # -->
-@loader: Loader which emitted the signal.
 
 <!-- ##### SIGNAL GdkPixbufLoader::area-updated ##### -->
   <para>
@@ -142,13 +153,7 @@ Application-driven progressive image loading.
     areas of an image that is being loaded.
   </para>
 
-@gdkpixbufloader: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-@arg4: 
-<!-- # Unused Parameters # -->
-@loader: Loader which emitted the signal.
+@gdkpixbufloader: Loader which emitted the signal.
 @x: X offset of upper-left corner of the updated area.
 @y: Y offset of upper-left corner of the updated area.
 @width: Width of updated area.
@@ -163,8 +168,6 @@ Application-driven progressive image loading.
   </para>
 
 @gdkpixbufloader: the object which received the signal.
-<!-- # Unused Parameters # -->
-@loader: Loader which emitted the signal.
 
 <!--
 Local variables:
@@ -172,4 +175,5 @@ mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
+
 

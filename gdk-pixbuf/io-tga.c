@@ -801,7 +801,8 @@ static gboolean try_preload(TGAContext *ctx, GError **err)
 	return TRUE;
 }
 
-static gpointer gdk_pixbuf__tga_begin_load(ModulePreparedNotifyFunc f1,
+static gpointer gdk_pixbuf__tga_begin_load(ModuleSizeFunc f0,
+                                           ModulePreparedNotifyFunc f1,
 					   ModuleUpdatedNotifyFunc f2,
 					   gpointer udata, GError **err)
 {

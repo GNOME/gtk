@@ -1,3 +1,34 @@
+2002-07-07  Matthias Clasen  <maclas@gmx.de>
+
+	Load-at-size functionality  (#53726): 
+	
+	* gdk-pixbuf-io.h (ModuleSizeFunc): New. 
+	(_GdkPixbufModule): Prepend a ModuleSizeFunc to the 
+	begin_load arguments. Adjust all modules.
+	* gdk-pixbuf-loader.c (struct GdkPixbufLoaderPrivate): Add
+	fields width, height, size_fixed, need_scale.
+	(gdk_pixbuf_loader_class_init): Add size_prepared signal.
+	(gdk_pixbuf_loader_set_size): New function.
+	(gdk_pixbuf_loader_size_func): ModuleSizeFunc which gets
+	passed to the module, emits size_prepared.
+	(gdk_pixbuf_loader_prepare): Call gdk_pixbuf_loader_size_func
+	if necessary, only emit area_prepared if no separate scaling
+	is required.
+	(gdk_pixbuf_loader_update): Only emit area_updated if no 
+	separate scaling is required.
+	(gdk_pixbuf_loader_load_module): Add size_func as first argument.
+	(gdk_pixbuf_loader_close): If necessary scale the image
+	to the desired size and emit area_prepared and area_updated.
+	* gdk-pixbuf-loader.h (struct _GdkPixbufLoaderClass): Add
+	size_prepared signal.
+	(gdk_pixbuf_loader_set_size) New API.
+	* gdk-pixbuf-marshal.list: Add VOID:INT,INT.
+	* io-jpeg.c: User cinfo->output_width/height instead of 
+	cinfo->image_width/height throughout when adressing the pixbuf.
+	(gdk_pixbuf__jpeg_image_load_increment): Call size_func, and
+	find the nearest possible output size which libjpeg can produce
+	that is still larger than the desired size.
+	
 2002-07-06  Matthias Clasen  <maclas@gmx.de>
 
 	* io-tiff.c (tiff_set_error): Handle global_error == NULL

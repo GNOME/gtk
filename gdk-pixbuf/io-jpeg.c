@@ -1,3 +1,4 @@
+/* -*- mode: C; c-file-style: "linux" -*- */
 /* GdkPixbuf library - JPEG image loader
  *
  * Copyright (C) 1999 Michael Zucchi
@@ -50,7 +51,7 @@ typedef struct {
 
 	JOCTET buffer[JPEG_PROG_BUF_SIZE];              /* start of buffer */
 	long  skip_next;              /* number of bytes to skip next read */
-
+	
 } my_source_mgr;
 
 typedef my_source_mgr * my_src_ptr;
@@ -64,6 +65,7 @@ struct error_handler_data {
 
 /* progressive loader context */
 typedef struct {
+        ModuleSizeFunc           size_func;
 	ModuleUpdatedNotifyFunc  updated_func;
 	ModulePreparedNotifyFunc prepared_func;
 	gpointer                 user_data;
@@ -80,7 +82,8 @@ typedef struct {
 } JpegProgContext;
 
 static GdkPixbuf *gdk_pixbuf__jpeg_image_load (FILE *f, GError **error);
-static gpointer gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc func, 
+static gpointer gdk_pixbuf__jpeg_image_begin_load (ModuleSizeFunc           func0,
+                                                   ModulePreparedNotifyFunc func1, 
                                                    ModuleUpdatedNotifyFunc func2,
                                                    gpointer user_data,
                                                    GError **error);
@@ -140,7 +143,7 @@ explode_gray_into_buf (struct jpeg_decompress_struct *cinfo,
 	/* Expand grey->colour.  Expand from the end of the
 	 * memory down, so we can use the same buffer.
 	 */
-	w = cinfo->image_width;
+	w = cinfo->output_width;
 	for (i = cinfo->rec_outbuf_height - 1; i >= 0; i--) {
 		guchar *from, *to;
 		
@@ -171,7 +174,7 @@ convert_cmyk_to_rgb (struct jpeg_decompress_struct *cinfo,
 		guchar *p;
 		
 		p = lines[i];
-		for (j = 0; j < cinfo->image_width; j++) {
+		for (j = 0; j < cinfo->output_width; j++) {
 			int c, m, y, k;
 			c = p[0];
 			m = p[1];
@@ -446,8 +449,9 @@ skip_input_data (j_decompress_ptr cinfo, long num_bytes)
  */
 
 gpointer
-gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc prepared_func, 
-				   ModuleUpdatedNotifyFunc  updated_func,
+gdk_pixbuf__jpeg_image_begin_load (ModuleSizeFunc size_func,
+				   ModulePreparedNotifyFunc prepared_func, 
+				   ModuleUpdatedNotifyFunc updated_func,
 				   gpointer user_data,
                                    GError **error)
 {
@@ -455,6 +459,7 @@ gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc prepared_func,
 	my_source_mgr   *src;
 
 	context = g_new0 (JpegProgContext, 1);
+	context->size_func = size_func;
 	context->prepared_func = prepared_func;
 	context->updated_func  = updated_func;
 	context->user_data = user_data;
@@ -469,11 +474,11 @@ gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc prepared_func,
 
 	context->cinfo.src = (struct jpeg_source_mgr *) g_try_malloc (sizeof (my_source_mgr));
 	if (!context->cinfo.src) {
-	  g_set_error (error,
-		       GDK_PIXBUF_ERROR,
-		       GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-		       _("Couldn't allocate memory for loading JPEG file"));
-	  return NULL;
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+			     _("Couldn't allocate memory for loading JPEG file"));
+		return NULL;
 	}
 	memset (context->cinfo.src, 0, sizeof (my_source_mgr));
        
@@ -509,14 +514,14 @@ gdk_pixbuf__jpeg_image_stop_load (gpointer data, GError **error)
 	JpegProgContext *context = (JpegProgContext *) data;
 
 	g_return_val_if_fail (context != NULL, TRUE);
-
+	
         /* FIXME this thing needs to report errors if
          * we have unused image data
          */
         
 	if (context->pixbuf)
 		g_object_unref (context->pixbuf);
-
+	
 	/* if we have an error? */
 	if (sigsetjmp (context->jerr.setjmp_buffer, 1)) {
 		jpeg_destroy_decompress (&context->cinfo);
@@ -559,6 +564,7 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 	guint       spinguard;
 	gboolean    first;
 	const guchar *bufhd;
+	gint        width, height;
 
 	g_return_val_if_fail (context != NULL, FALSE);
 	g_return_val_if_fail (buf != NULL, FALSE);
@@ -569,10 +575,6 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 
         context->jerr.error = error;
         
-	/* XXXXXXX (drmike) - loop(s) below need to be recoded now I
-         *                    have a grasp of what the flow needs to be!
-         */
-
 	/* check for fatal error */
 	if (sigsetjmp (context->jerr.setjmp_buffer, 1)) {
 		return FALSE;
@@ -636,29 +638,32 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 		/* try to load jpeg header */
 		if (!context->got_header) {
 			int rc;
-
+			
 			rc = jpeg_read_header (cinfo, TRUE);
 			context->src_initialized = TRUE;
-
+			
 			if (rc == JPEG_SUSPENDED)
 				continue;
-
-			context->got_header = TRUE;
-
-		} else if (!context->did_prescan) {
-			int rc;
 			
-			/* start decompression */
-			cinfo->buffered_image = TRUE;
-			rc = jpeg_start_decompress (cinfo);
-			cinfo->do_fancy_upsampling = FALSE;
-			cinfo->do_block_smoothing = FALSE;
-
-			context->pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, 
-							 cinfo->output_components == 4 ? TRUE : FALSE,
-							 8, 
-							 cinfo->image_width,
-							 cinfo->image_height);
+			context->got_header = TRUE;
+			
+			width = cinfo->image_width;
+			height = cinfo->image_height;
+			(* context->size_func) (&width, &height, context->user_data);
+			for (cinfo->scale_denom = 2; cinfo->scale_denom <= 8; cinfo->scale_denom *= 2) {
+				jpeg_calc_output_dimensions (cinfo);
+				if (cinfo->output_width < width || cinfo->output_height < height) {
+					cinfo->scale_denom /= 2;
+					break;
+				}
+			}
+			jpeg_calc_output_dimensions (cinfo);
+			
+			context->pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, 
+							  cinfo->output_components == 4 ? TRUE : FALSE,
+							  8, 
+							  cinfo->output_width,
+							  cinfo->output_height);
 
 			if (context->pixbuf == NULL) {
                                 g_set_error (error,
@@ -667,16 +672,24 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
                                              _("Couldn't allocate memory for loading JPEG file"));
                                 return FALSE;
 			}
-
+			
 			/* Use pixbuf buffer to store decompressed data */
 			context->dptr = context->pixbuf->pixels;
-
+			
 			/* Notify the client that we are ready to go */
 			(* context->prepared_func) (context->pixbuf,
                                                     NULL,
 						    context->user_data);
-
 			
+		} else if (!context->did_prescan) {
+			int rc;			
+			
+			/* start decompression */
+			cinfo->buffered_image = TRUE;
+			rc = jpeg_start_decompress (cinfo);
+			cinfo->do_fancy_upsampling = FALSE;
+			cinfo->do_block_smoothing = FALSE;
+
 			if (rc == JPEG_SUSPENDED)
 				continue;
 

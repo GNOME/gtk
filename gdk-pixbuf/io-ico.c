@@ -158,7 +158,8 @@ struct ico_progressive_state {
 };
 
 static gpointer
-gdk_pixbuf__ico_image_begin_load(ModulePreparedNotifyFunc prepared_func,
+gdk_pixbuf__ico_image_begin_load(ModuleSizeFunc size_func,
+                                 ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 gpointer user_data,
                                  GError **error);
@@ -193,7 +194,7 @@ gdk_pixbuf__ico_image_load(FILE * f, GError **error)
 
 	GdkPixbuf *pb;
 
-	State = gdk_pixbuf__ico_image_begin_load(NULL, NULL, NULL, error);
+	State = gdk_pixbuf__ico_image_begin_load(NULL, NULL, NULL, NULL, error);
 
         if (State == NULL)
 		return NULL;
@@ -478,7 +479,8 @@ static void DecodeHeader(guchar *Data, gint Bytes,
  */
 
 static gpointer
-gdk_pixbuf__ico_image_begin_load(ModulePreparedNotifyFunc prepared_func,
+gdk_pixbuf__ico_image_begin_load(ModuleSizeFunc size_func,
+                                 ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 gpointer user_data,
                                  GError **error)

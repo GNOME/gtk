@@ -50,6 +50,10 @@ struct _GdkPixbufLoaderClass
 {
   GObjectClass parent_class;
 
+  void (*size_prepared)      (GdkPixbufLoader *loader, 
+			      int              width,
+			      int              height);
+
   void (*area_prepared)      (GdkPixbufLoader *loader);
 
   /* Last known frame needs a redraw for x, y, width, height */
@@ -62,11 +66,13 @@ struct _GdkPixbufLoaderClass
   void (*closed)             (GdkPixbufLoader *loader);
 };
 
-
 GType                gdk_pixbuf_loader_get_type      (void) G_GNUC_CONST;
 GdkPixbufLoader *    gdk_pixbuf_loader_new           (void);
 GdkPixbufLoader *    gdk_pixbuf_loader_new_with_type (const char *image_type,
                                                       GError    **error);
+void                 gdk_pixbuf_loader_set_size (GdkPixbufLoader  *loader,
+                                                 int               width,
+						 int               height);
 gboolean             gdk_pixbuf_loader_write         (GdkPixbufLoader *loader,
 						      const guchar    *buf,
 						      gsize            count,
@@ -80,3 +86,5 @@ gboolean             gdk_pixbuf_loader_close         (GdkPixbufLoader *loader,
 G_END_DECLS
 
 #endif
+
+

@@ -63,7 +63,8 @@ struct wbmp_progressive_state {
 };
 
 static gpointer
-gdk_pixbuf__wbmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
+gdk_pixbuf__wbmp_image_begin_load(ModuleSizeFunc size_func, 
+                                  ModulePreparedNotifyFunc prepared_func,
 				  ModuleUpdatedNotifyFunc updated_func,
                                   gpointer user_data,
                                   GError **error);
@@ -85,7 +86,7 @@ static GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f, GError **error)
 
 	GdkPixbuf *pb;
 
-	State = gdk_pixbuf__wbmp_image_begin_load(NULL, NULL, NULL,
+	State = gdk_pixbuf__wbmp_image_begin_load(NULL, NULL, NULL, NULL,
                                                   error);
 
         if (State == NULL)
@@ -116,7 +117,8 @@ static GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f, GError **error)
  */
 
 static gpointer
-gdk_pixbuf__wbmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
+gdk_pixbuf__wbmp_image_begin_load(ModuleSizeFunc size_func, 
+                                  ModulePreparedNotifyFunc prepared_func,
                                   ModuleUpdatedNotifyFunc updated_func,
                                   gpointer user_data,
                                   GError **error)

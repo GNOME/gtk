@@ -361,7 +361,8 @@ gdk_pixbuf__tiff_image_load (FILE *f, GError **error)
 /* Progressive loader */
 
 static gpointer
-gdk_pixbuf__tiff_image_begin_load (ModulePreparedNotifyFunc prepare_func,
+gdk_pixbuf__tiff_image_begin_load (ModuleSizeFunc size_func,
+                                   ModulePreparedNotifyFunc prepare_func,
 				   ModuleUpdatedNotifyFunc update_func,
 				   gpointer user_data,
                                    GError **error)

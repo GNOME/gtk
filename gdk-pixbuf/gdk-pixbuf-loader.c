@@ -31,8 +31,9 @@
 #include "gdk-pixbuf-marshal.h"
 
 enum {
-  AREA_UPDATED,
+  SIZE_PREPARED,
   AREA_PREPARED,
+  AREA_UPDATED,
   CLOSED,
   LAST_SIGNAL
 };
@@ -58,6 +59,10 @@ typedef struct
   gint header_buf_offset;
   GdkPixbufModule *image_module;
   gpointer context;
+  gint width;
+  gint height;
+  gboolean size_fixed;
+  gboolean needs_scale;
 } GdkPixbufLoaderPrivate;
 
 
@@ -109,6 +114,17 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
   
   object_class->finalize = gdk_pixbuf_loader_finalize;
 
+  pixbuf_loader_signals[SIZE_PREPARED] =
+    g_signal_new ("size_prepared",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GdkPixbufLoaderClass, size_prepared),
+                  NULL, NULL,
+                  gdk_pixbuf_marshal_VOID__INT_INT,
+                  G_TYPE_NONE, 2, 
+		  G_TYPE_INT,
+		  G_TYPE_INT);
+  
   pixbuf_loader_signals[AREA_PREPARED] =
     g_signal_new ("area_prepared",
                   G_TYPE_FROM_CLASS (object_class),
@@ -170,14 +186,73 @@ gdk_pixbuf_loader_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+/**
+ * gdk_pixbuf_loader_set_size:
+ * @loader: A pixbuf loader.
+ * @width: The desired width of the image being loaded.
+ * @height: The desired height of the image being loaded.
+ *
+ * Causes the image to be scaled while it is loaded. The desired
+ * image size can be determined relative to the original size of
+ * the image by calling gdk_pixbuf_loader_set_size() from a
+ * signal handler for the ::size_prepared signal.
+ *
+ * Attempts to set the desired image size  are ignored after the 
+ * emission of the ::size_prepared signal.
+ */
+void 
+gdk_pixbuf_loader_set_size (GdkPixbufLoader *loader,
+			    gint             width,
+			    gint             height)
+{
+  GdkPixbufLoaderPrivate *priv = GDK_PIXBUF_LOADER (loader)->priv;
+  g_return_if_fail (width > 0 && height > 0);
+
+  if (!priv->size_fixed) {
+    priv->width = width;
+    priv->height = height;
+  }
+}
+
+static void
+gdk_pixbuf_loader_size_func (gint *width, gint *height, gpointer loader)
+{
+  GdkPixbufLoaderPrivate *priv = GDK_PIXBUF_LOADER (loader)->priv;
+
+  /* allow calling gdk_pixbuf_loader_set_size() before the signal */
+  if (priv->width == 0 && priv->height == 0) {
+    priv->width = *width;
+    priv->height = *height;
+  }
+
+  g_signal_emit (loader, pixbuf_loader_signals[SIZE_PREPARED], 0, *width, *height);
+  priv->size_fixed = TRUE;
+
+  *width = priv->width;
+  *height = priv->height;
+}
+
 static void
 gdk_pixbuf_loader_prepare (GdkPixbuf          *pixbuf,
                            GdkPixbufAnimation *anim,
 			   gpointer            loader)
 {
-  GdkPixbufLoaderPrivate *priv = NULL;
-  
-  priv = GDK_PIXBUF_LOADER (loader)->priv;
+  GdkPixbufLoaderPrivate *priv = GDK_PIXBUF_LOADER (loader)->priv;
+  g_return_if_fail (pixbuf != NULL);
+
+  if (!priv->size_fixed) {
+    /* Defend against lazy loaders which don't call size_func */
+    gint width = gdk_pixbuf_get_width (pixbuf);
+    gint height = gdk_pixbuf_get_height (pixbuf);
+
+    gdk_pixbuf_loader_size_func (&width, &height, loader);
+  }
+
+  priv->needs_scale = FALSE;
+  if (priv->width > 0 && priv->height > 0 &&
+      (priv->width != gdk_pixbuf_get_width (pixbuf) ||
+       priv->height != gdk_pixbuf_get_height (pixbuf)))
+    priv->needs_scale = TRUE;
 
   if (anim)
     g_object_ref (anim);
@@ -186,7 +261,8 @@ gdk_pixbuf_loader_prepare (GdkPixbuf          *pixbuf,
   
   priv->animation = anim;
   
-  g_signal_emit (loader, pixbuf_loader_signals[AREA_PREPARED], 0);
+  if (!priv->needs_scale)
+    g_signal_emit (loader, pixbuf_loader_signals[AREA_PREPARED], 0);
 }
 
 static void
@@ -197,17 +273,16 @@ gdk_pixbuf_loader_update (GdkPixbuf *pixbuf,
 			  gint       height,
 			  gpointer   loader)
 {
-  GdkPixbufLoaderPrivate *priv = NULL;
+  GdkPixbufLoaderPrivate *priv = GDK_PIXBUF_LOADER (loader)->priv;
   
-  priv = GDK_PIXBUF_LOADER (loader)->priv;
-  
-  g_signal_emit (loader,
-                 pixbuf_loader_signals[AREA_UPDATED],
-                 0,
-                 x, y,
-                 /* sanity check in here.  Defend against an errant loader */
-                 MIN (width, gdk_pixbuf_animation_get_width (priv->animation)),
-                 MIN (height, gdk_pixbuf_animation_get_height (priv->animation)));
+  if (!priv->needs_scale)
+    g_signal_emit (loader,
+		   pixbuf_loader_signals[AREA_UPDATED],
+		   0,
+		   x, y,
+		   /* sanity check in here.  Defend against an errant loader */
+		   MIN (width, gdk_pixbuf_animation_get_width (priv->animation)),
+		   MIN (height, gdk_pixbuf_animation_get_height (priv->animation)));
 }
 
 static gint
@@ -253,10 +328,11 @@ gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader,
       return 0;
     }
 
-  priv->context = priv->image_module->begin_load (gdk_pixbuf_loader_prepare,
-						  gdk_pixbuf_loader_update,
-						  loader,
-                                                  error);
+    priv->context = priv->image_module->begin_load (gdk_pixbuf_loader_size_func,
+						    gdk_pixbuf_loader_prepare,
+						    gdk_pixbuf_loader_update,
+						    loader,
+						    error);
   
   if (priv->context == NULL)
     {
@@ -536,16 +612,41 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader,
 	  retval = FALSE;
 	}
     }  
+
   if (priv->image_module && priv->image_module->stop_load && priv->context) {
     if (!priv->image_module->stop_load (priv->context, error))
       retval = FALSE;
   }
   
   priv->closed = TRUE;
+
+  if (priv->needs_scale) {
+    GdkPixbuf *tmp, *pixbuf;
+
+    tmp = gdk_pixbuf_animation_get_static_image (priv->animation);
+    g_object_ref (tmp);
+    pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, tmp->has_alpha, 8, priv->width, priv->height);
+    g_object_unref (priv->animation);
+    priv->animation = gdk_pixbuf_non_anim_new (pixbuf);
+    g_signal_emit (loader, pixbuf_loader_signals[AREA_PREPARED], 0);
+    gdk_pixbuf_scale (tmp, pixbuf, 0, 0, priv->width, priv->height, 0, 0,
+		      (double) priv->width / tmp->width,
+		      (double) priv->height / tmp->height,
+		      GDK_INTERP_BILINEAR); 
+    g_object_unref (tmp);
+
+    g_signal_emit (loader, pixbuf_loader_signals[AREA_UPDATED], 0, 
+		   0, 0, priv->width, priv->height);
+  }
+
   
   g_signal_emit (loader, pixbuf_loader_signals[CLOSED], 0);
 
   return retval;
 }
+
+
+
+
 
 

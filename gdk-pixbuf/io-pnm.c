@@ -81,7 +81,8 @@ typedef struct {
 } PnmLoaderContext;
 
 static GdkPixbuf   *gdk_pixbuf__pnm_image_load          (FILE *f, GError **error);
-static gpointer    gdk_pixbuf__pnm_image_begin_load     (ModulePreparedNotifyFunc func, 
+static gpointer    gdk_pixbuf__pnm_image_begin_load     (ModuleSizeFunc size_func, 
+                                                         ModulePreparedNotifyFunc func, 
 							 ModuleUpdatedNotifyFunc func2,
 							 gpointer user_data,
 							 GError **error);
@@ -803,7 +804,8 @@ gdk_pixbuf__pnm_image_load (FILE *f, GError **error)
  */
 
 static gpointer
-gdk_pixbuf__pnm_image_begin_load (ModulePreparedNotifyFunc prepared_func, 
+gdk_pixbuf__pnm_image_begin_load (ModuleSizeFunc size_func, 
+                                  ModulePreparedNotifyFunc prepared_func, 
 				  ModuleUpdatedNotifyFunc  updated_func,
 				  gpointer user_data,
 				  GError **error)
