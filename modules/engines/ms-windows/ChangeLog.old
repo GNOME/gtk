@@ -1,3 +1,10 @@
+2003-11-24  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Get the coloration correct for menu bars (XP theme
+	was showing white foreground instead of gray)
+
+	* configure.in: Post-release version number bump
+	
 2003-11-19  Raymond Penners  <raymond@dotsphinx.com>
 
 	* === Released 0.5.2 ===
