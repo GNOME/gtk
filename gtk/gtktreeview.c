@@ -8114,11 +8114,23 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       tree_view->priv->cursor = NULL;
       gtk_tree_row_reference_free (tree_view->priv->anchor);
       tree_view->priv->anchor = NULL;
+      gtk_tree_row_reference_free (tree_view->priv->top_row);
+      tree_view->priv->top_row = NULL;
+      gtk_tree_row_reference_free (tree_view->priv->last_button_press);
+      tree_view->priv->last_button_press = NULL;
+      gtk_tree_row_reference_free (tree_view->priv->last_button_press_2);
+      tree_view->priv->last_button_press_2 = NULL;
+      gtk_tree_row_reference_free (tree_view->priv->scroll_to_path);
+      tree_view->priv->scroll_to_path = NULL;
+
+      tree_view->priv->scroll_to_column = NULL;
 
       g_object_unref (tree_view->priv->model);
+
       tree_view->priv->search_column = -1;
       GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_IS_LIST);
       tree_view->priv->fixed_height_check = 0;
+      tree_view->priv->dy = tree_view->priv->top_row_dy = 0;
     }
 
   tree_view->priv->model = model;

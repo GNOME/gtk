@@ -1,3 +1,11 @@
+Thu May 29 18:06:26 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* gtk/gtktreeview.c (gtk_tree_model_set_model): reset a bunch
+	of row reference when we unset the model. Also reset
+	dy and top_row_dy. (Fixes #109289, patch from Owen Taylor).
+
 Thu May 29 17:12:19 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.
