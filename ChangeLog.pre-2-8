@@ -1,3 +1,8 @@
+Mon Aug  2 00:21:26 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.c (blink_cb): Add the same warning
+	that the blink_cb() in GtkEntry already has.  (#148733)
+
 Mon Aug  2 00:12:16 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentry.c (gtk_entry_class_init):
