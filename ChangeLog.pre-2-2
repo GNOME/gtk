@@ -1,3 +1,14 @@
+2002-04-21  Alexander Larsson  <alla@lysator.liu.se>
+
+	Merged from HEAD:
+	
+	* gdk/x11/gdkwindow-x11.c (gdk_window_reparent):
+	Save x and y in window_private.
+
+	* gtk/gtkplug.c (_gtk_plug_add_to_socket):
+	Move plug window outside the visible area to avoid flashing until
+	the first size_allocate.
+
 Sat Apr 20 16:49:26 2002  Kristian Rietveld  <kris@gtk.org>
 
         * gdk/x11/gdkpixmap-x11.c (gdk_pixmap_new): replace GDK_IS_WINDOW

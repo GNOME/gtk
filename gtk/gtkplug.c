@@ -217,6 +217,7 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
 			 GtkSocket *socket)
 {
   GtkWidget *widget;
+  gint w, h;
   
   g_return_if_fail (GTK_IS_PLUG (plug));
   g_return_if_fail (GTK_IS_SOCKET (socket));
@@ -232,7 +233,10 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
   plug->socket_window = GTK_WIDGET (socket)->window;
 
   if (GTK_WIDGET_REALIZED (widget))
-    gdk_window_reparent (widget->window, plug->socket_window, 0, 0);
+    {
+      gdk_drawable_get_size (GDK_DRAWABLE (widget->window), &w, &h);
+      gdk_window_reparent (widget->window, plug->socket_window, -w, -h);
+    }
 
   gtk_widget_set_parent (widget, GTK_WIDGET (socket));
 
