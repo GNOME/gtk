@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-28 03:59+0200\n"
+"POT-Creation-Date: 2004-07-29 12:01+0200\n"
 "PO-Revision-Date: 2004-03-03 10:48+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -137,9 +137,10 @@ msgstr ""
 "Një etiketë e shkurtër që mund të përdoret tek butonat e menusë së "
 "instrumentëve."
 
+#. GRUT modified this item
 #: gtk/gtkaction.c:215
 msgid "Tooltip"
-msgstr "Tooltip"
+msgstr "Tregues"
 
 #: gtk/gtkaction.c:216
 msgid "A tooltip for this action."
@@ -873,7 +874,7 @@ msgstr "Teksti i markuar që duhet vizatuar"
 #. GRUT modified this item
 #: gtk/gtkcellrenderertext.c:209 gtk/gtklabel.c:299
 msgid "Attributes"
-msgstr "Veçoritë"
+msgstr "Vlerat"
 
 #: gtk/gtkcellrenderertext.c:210
 msgid "A list of style attributes to apply to the text of the renderer"
@@ -1009,7 +1010,6 @@ msgstr "Vizuar"
 msgid "Whether to strike through the text"
 msgstr "Tregon nëse teksti është i vizuar"
 
-#. GRUT modified this item
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:472
 msgid "Underline"
 msgstr "Nënvizuar"
@@ -1853,7 +1853,6 @@ msgstr "Shfaq stilin"
 msgid "Whether the selected font style is shown in the label"
 msgstr "Nëse stili i zgjedhur i gërmave tregohet në etiketë"
 
-#. GRUT modified this item
 #: gtk/gtkfontbutton.c:256
 msgid "Show size"
 msgstr "Shfaq madhësinë"
