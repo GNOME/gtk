@@ -681,6 +681,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
     list_container = g_object_new (GTK_TYPE_HPANED,
 				   "visible", TRUE,
 				   "parent", list_hbox,
+				   "border_width", 5,
 				   NULL);
   else
     list_container = list_hbox;
@@ -713,7 +714,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_container_add (GTK_CONTAINER (scrolled_win), filesel->dir_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-  gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 0);
   if (GTK_IS_PANED (list_container))
     gtk_paned_pack1 (GTK_PANED (list_container), scrolled_win, TRUE, TRUE);
   else
@@ -750,7 +751,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_container_add (GTK_CONTAINER (scrolled_win), filesel->file_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-  gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 5);
+  gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 0);
   gtk_container_add (GTK_CONTAINER (list_container), scrolled_win);
   gtk_widget_show (filesel->file_list);
   gtk_widget_show (scrolled_win);
@@ -2372,6 +2373,8 @@ gtk_file_selection_get_selections (GtkFileSelection *filesel)
 	  else
 	    g_free (current);
 	}
+
+      g_free (dirname);
     }
 
   selections[count] = NULL;

@@ -1,3 +1,8 @@
+Mon Mar  4 11:02:18 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_get_selections): Fix
+	memory leak. (#73370, Paolo Maggi).
+
 Mon Mar  4 10:35:28 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_set_current_page): Fix docs
