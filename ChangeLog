@@ -1,3 +1,8 @@
+Mon Jan  8 14:42:06 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_realize_buttons): Skip
+	realizing buttons that have already been realized.
+
 Mon Jan  8 14:06:29 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* tests/testtreeview.c (main): Show menu items before adding to

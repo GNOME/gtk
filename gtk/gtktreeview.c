@@ -265,7 +265,7 @@ gtk_tree_view_realize_buttons (GtkTreeView *tree_view)
 
   g_return_if_fail (GTK_WIDGET_REALIZED (tree_view));
   g_return_if_fail (tree_view->priv->header_window != NULL);
-  
+
   attr.window_type = GDK_WINDOW_CHILD;
   attr.wclass = GDK_INPUT_ONLY;
   attr.visual = gtk_widget_get_visual (GTK_WIDGET (tree_view));
@@ -291,12 +291,13 @@ gtk_tree_view_realize_buttons (GtkTreeView *tree_view)
 	{
 	  if (column->visible == FALSE)
 	    continue;
+	  if (column->window != NULL)
+	    continue;
+
 	  gtk_widget_set_parent_window (column->button,
 					tree_view->priv->header_window);
 
 	  attr.x = (column->button->allocation.x + column->button->allocation.width) - 3;
-
-          g_return_if_fail (column->window == NULL);
           
 	  column->window = gdk_window_new (tree_view->priv->header_window,
 					   &attr, attributes_mask);
@@ -2502,6 +2503,9 @@ gtk_tree_view_create_buttons (GtkTreeView *tree_view)
     {
       column = list->data;
 
+      if (column->button != NULL)
+	continue;
+
       gtk_tree_view_create_button (tree_view, i);
       switch (column->justification)
 	{
@@ -2911,14 +2915,13 @@ gtk_tree_view_setup_model (GtkTreeView *tree_view)
     return;
 
   path = gtk_tree_path_new_root ();
-  if (path == NULL)
-    return;
-
   gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
   gtk_tree_path_free (path);
+
   gtk_tree_view_build_tree (tree_view, tree_view->priv->tree, &iter, 1, FALSE, GTK_WIDGET_REALIZED (tree_view));
 
   gtk_tree_view_create_buttons (tree_view);
+
   GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_MODEL_SETUP);
 }
 
