@@ -15,3 +15,4 @@ gdkconfig.h
 stamp-gc-h
 stamp-gdkenumtypes.h
 gdkalias.h
+gdkaliasdef.c

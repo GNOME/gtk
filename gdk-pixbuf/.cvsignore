@@ -22,3 +22,4 @@ gdk_pixbuf.rc
 gdk-pixbuf-query-loaders
 gdk-pixbuf.loaders
 gdk-pixbuf-alias.h
+gdk-pixbuf-aliasdef.c
