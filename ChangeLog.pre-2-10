@@ -1,3 +1,13 @@
+Sat Aug 21 14:07:36 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_real_switch_page): queue_resize
+	notebook after switch to avoid drawing problems.
+	(Bug#856 Reported by: Theodore Roth <troth@netmagic.net>)
+	
+	(gtk_notebook_pages_allocate): don't map not visible tab_labels, 
+	show them instead. 
+	(Bug#1805 Reported by: Dave Cole <dave@dccs.com.au>)
+
 Wed Aug 18 09:20:10 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c:

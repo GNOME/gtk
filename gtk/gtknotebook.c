@@ -2948,7 +2948,12 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 
       if (GTK_WIDGET_REALIZED (notebook) &&
 	  page->tab_label && !GTK_WIDGET_MAPPED (page->tab_label))
-	gtk_widget_map (page->tab_label);
+	{
+	  if (GTK_WIDGET_VISIBLE (page->tab_label))
+	    gtk_widget_map (page->tab_label);
+	  else
+	    gtk_widget_show (page->tab_label);
+	}
     }
 
   if (children)
@@ -3016,7 +3021,12 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 
 	  if (GTK_WIDGET_REALIZED (notebook) && page->tab_label &&
 	      !GTK_WIDGET_MAPPED (page->tab_label))
-	    gtk_widget_map (page->tab_label);
+	    {
+	      if (GTK_WIDGET_VISIBLE (page->tab_label))
+		gtk_widget_map (page->tab_label);
+	      else
+		gtk_widget_show (page->tab_label);
+	    }
 	}
     }
   gtk_notebook_set_shape (notebook);
@@ -3282,24 +3292,10 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
     notebook->focus_tab = 
       g_list_find (notebook->children, notebook->cur_page);
 
-  gtk_notebook_pages_allocate (notebook, &GTK_WIDGET (notebook)->allocation);
-  gtk_notebook_expose_tabs (notebook);
-  
   if (GTK_WIDGET_MAPPED (notebook))
-    {
-      if (GTK_WIDGET_REALIZED (notebook->cur_page->child))
-	gtk_widget_map (notebook->cur_page->child);
-      else
-	{
-	  gtk_widget_map (notebook->cur_page->child);
-	  gtk_widget_size_allocate (GTK_WIDGET (notebook), 
-				    &GTK_WIDGET (notebook)->allocation);
-	}
-    }
-  
-  if (GTK_WIDGET_DRAWABLE (notebook))
-    gtk_widget_queue_draw (GTK_WIDGET (notebook));
-  gtk_notebook_set_shape (notebook);
+    gtk_widget_map (notebook->cur_page->child);
+
+  gtk_widget_queue_resize (GTK_WIDGET (notebook));
 }
 
 /* Private GtkNotebook Page Switch Functions:
