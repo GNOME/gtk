@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-08 15:37+0100\n"
+"POT-Creation-Date: 2004-01-13 05:08+0100\n"
 "PO-Revision-Date: 2004-01-08 17:27+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -26,19 +26,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:731
-#: gdk-pixbuf/gdk-pixbuf-io.c:864 tests/testfilechooser.c:198
+#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:736
+#: gdk-pixbuf/gdk-pixbuf-io.c:869 tests/testfilechooser.c:198
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Openen van bestand '%s' mislukt: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:741
+#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:746
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Afbeelding '%s' bevat geen data"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:775
-#: gdk-pixbuf/gdk-pixbuf-io.c:901 tests/testfilechooser.c:237
+#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:780
+#: gdk-pixbuf/gdk-pixbuf-io.c:906 tests/testfilechooser.c:237
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -55,12 +55,12 @@ msgstr ""
 "Laden van animatie '%s' mislukt: reden onbekend, waarschijnlijk een "
 "beschadigde animatie"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:377
+#: gdk-pixbuf/gdk-pixbuf-io.c:382
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Laden van module in module_path: %s mislukt: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:392
+#: gdk-pixbuf/gdk-pixbuf-io.c:397
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -69,53 +69,55 @@ msgstr ""
 "Afbeeldingslader %s geeft de verkeerde interface door ; misschien is het de "
 "lader van een andere GTK+ versie?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:539 gdk-pixbuf/gdk-pixbuf-io.c:587
+#: gdk-pixbuf/gdk-pixbuf-io.c:544 gdk-pixbuf/gdk-pixbuf-io.c:592
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Afbeeldingstype '%s' wordt niet ondersteund"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:619
+#: gdk-pixbuf/gdk-pixbuf-io.c:624
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Afbeeldingstype van bestand '%s' niet herkend"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:625
+#: gdk-pixbuf/gdk-pixbuf-io.c:630
 msgid "Unrecognized image file format"
 msgstr "Onbekend afbeeldingstype"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:786
+#: gdk-pixbuf/gdk-pixbuf-io.c:791
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Laden van afbeelding '%s' mislukt: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1090
+#: gdk-pixbuf/gdk-pixbuf-io.c:1095
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Fout bij het schrijven naar afbeelding: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1134 gdk-pixbuf/gdk-pixbuf-io.c:1250
+#: gdk-pixbuf/gdk-pixbuf-io.c:1139 gdk-pixbuf/gdk-pixbuf-io.c:1255
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Deze versie van gdk-pixbuf heeft geen ondersteuning voor het opslaan van het bestandsformaat: %s"
+msgstr ""
+"Deze versie van gdk-pixbuf heeft geen ondersteuning voor het opslaan van het "
+"bestandsformaat: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1163
+#: gdk-pixbuf/gdk-pixbuf-io.c:1168
 msgid "Insufficient memory to save image to callback"
 msgstr "Onvoldoende geheugen om het image op te slaan naar de callback"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1175
+#: gdk-pixbuf/gdk-pixbuf-io.c:1180
 msgid "Failed to open temporary file"
 msgstr "Kon tijdelijk bestand niet openen"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1194
+#: gdk-pixbuf/gdk-pixbuf-io.c:1199
 msgid "Failed to read from temporary file"
 msgstr "Niet mogelijk om van tijdelijk bestand te lezen"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1374
+#: gdk-pixbuf/gdk-pixbuf-io.c:1379
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Openen van '%s' om te schrijven is mislukt: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1395
+#: gdk-pixbuf/gdk-pixbuf-io.c:1400
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -124,7 +126,7 @@ msgstr ""
 "Sluiten van '%s' tijdens het schrijven is mislukt; er kan data verloren zijn "
 "gegaan: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1581 gdk-pixbuf/gdk-pixbuf-io.c:1631
+#: gdk-pixbuf/gdk-pixbuf-io.c:1586 gdk-pixbuf/gdk-pixbuf-io.c:1636
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Onvoldoende geheugen om afbeelding in een buffer op te slaan"
 
@@ -861,57 +863,57 @@ msgstr "Sneltoets-widget"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Het in de gaten te houden widget voor sneltoets-veranderingen"
 
-#: gtk/gtkaction.c:189 gtk/gtkactiongroup.c:118
+#: gtk/gtkaction.c:193 gtk/gtkactiongroup.c:133
 msgid "Name"
 msgstr "Naam"
 
-#: gtk/gtkaction.c:190
+#: gtk/gtkaction.c:194
 msgid "A unique name for the action."
 msgstr "Een unieke naar voor de actie."
 
-#: gtk/gtkaction.c:197 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Label"
 
-#: gtk/gtkaction.c:198
+#: gtk/gtkaction.c:202
 msgid "The label used for menu items and buttons that activate this action."
 msgstr ""
 "Het label dat gebruikt wordt voor menu-items en knoppen die deze actie "
 "activeren."
 
-#: gtk/gtkaction.c:204
+#: gtk/gtkaction.c:208
 msgid "Short label"
 msgstr "Kort label"
 
-#: gtk/gtkaction.c:205
+#: gtk/gtkaction.c:209
 msgid "A shorter label that may be used on toolbar buttons."
 msgstr "Een korter label dat op werkbalkknoppen gebruikt kan worden."
 
 # vertalen of niet?
 # werktip
 # tip
-#: gtk/gtkaction.c:211
+#: gtk/gtkaction.c:215
 msgid "Tooltip"
 msgstr "Tooltip"
 
-#: gtk/gtkaction.c:212
+#: gtk/gtkaction.c:216
 msgid "A tooltip for this action."
 msgstr "Een tooltip voor deze actie."
 
-#: gtk/gtkaction.c:218
+#: gtk/gtkaction.c:222
 msgid "Stock Icon"
 msgstr "Standaard pictogram"
 
-#: gtk/gtkaction.c:219
+#: gtk/gtkaction.c:223
 msgid "The stock icon displayed in widgets representing this action."
 msgstr "Het standaardpictogram in widgets voor deze actie."
 
-#: gtk/gtkaction.c:225 gtk/gtktoolitem.c:154
+#: gtk/gtkaction.c:229 gtk/gtktoolitem.c:154
 msgid "Visible when horizontal"
 msgstr "Zichtbaar indien horizontaal"
 
-#: gtk/gtkaction.c:226 gtk/gtktoolitem.c:155
+#: gtk/gtkaction.c:230 gtk/gtktoolitem.c:155
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -919,22 +921,22 @@ msgstr ""
 "Of het werkbalkitem zichtbaar is als de werkbalk in een horizontale positie "
 "is."
 
-#: gtk/gtkaction.c:232 gtk/gtktoolitem.c:161
+#: gtk/gtkaction.c:236 gtk/gtktoolitem.c:161
 msgid "Visible when vertical"
 msgstr "Zichtbaar indien verticaal"
 
-#: gtk/gtkaction.c:233 gtk/gtktoolitem.c:162
+#: gtk/gtkaction.c:237 gtk/gtktoolitem.c:162
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr ""
 "Of het werkbalkitem zichtbaar is als de werkbalk in een verticale positie is."
 
-#: gtk/gtkaction.c:239 gtk/gtktoolitem.c:168
+#: gtk/gtkaction.c:243 gtk/gtktoolitem.c:168
 msgid "Is important"
 msgstr "Is belangrijk"
 
-#: gtk/gtkaction.c:240
+#: gtk/gtkaction.c:244
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
@@ -942,36 +944,57 @@ msgstr ""
 "Of de actie belangrijk wordt geacht. Indien WAAR, tonen 'toolitem-proxies' "
 "voor deze actie de tekst in GTK_TOOLBAR_BOTH_HORIZ modus."
 
-#: gtk/gtkaction.c:246
+#: gtk/gtkaction.c:250
 msgid "Hide if empty"
 msgstr "Indien leeg verbergen"
 
-#: gtk/gtkaction.c:247
+#: gtk/gtkaction.c:251
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 "If de actie belangrijk wordt geacht. Indien WAAR, tonen 'toolitem-proxies' "
 "voor deze actie de tekst in GTK_TOOLBAR_BOTH_HORIZ modus."
 
-#: gtk/gtkaction.c:253 gtk/gtkwidget.c:446
+#: gtk/gtkaction.c:257 gtk/gtkactiongroup.c:141 gtk/gtkwidget.c:446
 msgid "Sensitive"
 msgstr "Gevoelig"
 
-#: gtk/gtkaction.c:254
+#: gtk/gtkaction.c:258
 msgid "Whether the action is enabled."
 msgstr "Of de actie wordt gebruikt"
 
-#: gtk/gtkaction.c:260 gtk/gtktreeview.c:551 gtk/gtktreeviewcolumn.c:222
-#: gtk/gtkwidget.c:439
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:551
+#: gtk/gtktreeviewcolumn.c:222 gtk/gtkwidget.c:439
 msgid "Visible"
 msgstr "Zichtbaar"
 
-#: gtk/gtkaction.c:261
+#: gtk/gtkaction.c:265
 msgid "Whether the action is visible."
 msgstr "Of de actie zichtbaar moet is."
 
-#: gtk/gtkactiongroup.c:119
+#: gtk/gtkaction.c:271
+#, fuzzy
+msgid "Action Group"
+msgstr "Actie"
+
+#: gtk/gtkaction.c:272
+msgid ""
+"The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
+"use)."
+msgstr ""
+
+#: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
 msgstr "Een naam voor de actiegroep."
+
+#: gtk/gtkactiongroup.c:142
+#, fuzzy
+msgid "Whether the action group is enabled."
+msgstr "Of de actie wordt gebruikt"
+
+#: gtk/gtkactiongroup.c:149
+#, fuzzy
+msgid "Whether the action group is visible."
+msgstr "Of de actie zichtbaar moet is."
 
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
@@ -4570,7 +4593,7 @@ msgstr "_Wissen"
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
-msgstr "_Sluiten"
+msgstr "Sl_uiten"
 
 #: gtk/gtkstock.c:282
 msgid "_Convert"
@@ -4582,7 +4605,7 @@ msgstr "_Kopiëren"
 
 #: gtk/gtkstock.c:284
 msgid "Cu_t"
-msgstr "Kni_ppen"
+msgstr "K_nippen"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
@@ -4622,7 +4645,7 @@ msgstr "_Bovenste"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
-msgstr "Vo_rige"
+msgstr "_Terug"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
@@ -4634,7 +4657,7 @@ msgstr "_Volgende"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr "Om_hoog"
+msgstr "_Omhoog"
 
 #: gtk/gtkstock.c:298
 msgid "_Harddisk"
@@ -4702,7 +4725,7 @@ msgstr "_Voorkeuren"
 
 #: gtk/gtkstock.c:314
 msgid "_Print"
-msgstr "_Afdrukken"
+msgstr "Af_drukken"
 
 #: gtk/gtkstock.c:315
 msgid "Print Pre_view"
@@ -4714,11 +4737,11 @@ msgstr "_Eigenschappen"
 
 #: gtk/gtkstock.c:317
 msgid "_Quit"
-msgstr "_Afsluiten"
+msgstr "A_fsluiten"
 
 #: gtk/gtkstock.c:318
 msgid "_Redo"
-msgstr "_Herhalen"
+msgstr "O_pnieuw"
 
 #: gtk/gtkstock.c:319
 msgid "_Refresh"
@@ -4730,7 +4753,7 @@ msgstr "_Verwijderen"
 
 #: gtk/gtkstock.c:321
 msgid "_Revert"
-msgstr "_Terugzetten"
+msgstr "_Terugdraaien"
 
 #: gtk/gtkstock.c:322
 msgid "_Save"
@@ -4738,7 +4761,7 @@ msgstr "Op_slaan"
 
 #: gtk/gtkstock.c:323
 msgid "Save _As"
-msgstr "Opslaan _Als"
+msgstr "Opslaan _als"
 
 #: gtk/gtkstock.c:324
 msgid "_Color"
@@ -4762,7 +4785,7 @@ msgstr "_Spellingscontrole"
 
 #: gtk/gtkstock.c:329
 msgid "_Stop"
-msgstr "_Stop"
+msgstr "_Stoppen"
 
 #: gtk/gtkstock.c:330
 msgid "_Strikethrough"
@@ -4778,7 +4801,7 @@ msgstr "_Onderstrepen"
 
 #: gtk/gtkstock.c:333
 msgid "_Undo"
-msgstr "_Herstel"
+msgstr "_Ongedaan maken"
 
 #: gtk/gtkstock.c:334
 msgid "_Yes"
@@ -4794,11 +4817,11 @@ msgstr "Zoom _Passend"
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _In"
-msgstr "Zoom _In"
+msgstr "_Inzoomen"
 
 #: gtk/gtkstock.c:338
 msgid "Zoom _Out"
-msgstr "Zoom _Uit"
+msgstr "_Uitzoomen"
 
 #: gtk/gtktable.c:158
 msgid "Rows"
@@ -5712,40 +5735,40 @@ msgid "Sort direction the sort indicator should indicate"
 msgstr "De richting waarheen de sorteerindicator moet wijzen"
 
 # enkelvoud mooier? Menu heeft afscheurperforatie
-#: gtk/gtkuimanager.c:213
+#: gtk/gtkuimanager.c:217
 msgid "Add tearoffs to menus"
 msgstr "Menus hebben afscheur-perforatie"
 
 # niet helemaal strict vertaald, maar wel duidelijk
-#: gtk/gtkuimanager.c:214
+#: gtk/gtkuimanager.c:218
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Of afscheur-perforatie aan een menu wordt toegevoegd"
 
-#: gtk/gtkuimanager.c:221
+#: gtk/gtkuimanager.c:225
 msgid "Merged UI definition"
 msgstr "Samengevoegde UI-definitie"
 
-#: gtk/gtkuimanager.c:222
+#: gtk/gtkuimanager.c:226
 msgid "An XML string describing the merged UI"
 msgstr "Een XML-tekenreeks die de samengevoegde UI beschrijft"
 
-#: gtk/gtkuimanager.c:865
+#: gtk/gtkuimanager.c:1064
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Onbekend attribuut '%s' bij regel %d teken %d"
 
-#: gtk/gtkuimanager.c:1074
+#: gtk/gtkuimanager.c:1273
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Onverwacht begin-tag '%s' bij regel %d teken %d"
 
-#: gtk/gtkuimanager.c:1158
+#: gtk/gtkuimanager.c:1358
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Onverwacht teken  bij regel %d teken %d"
 
 # Legen
-#: gtk/gtkuimanager.c:1928
+#: gtk/gtkuimanager.c:2135
 msgid "Empty"
 msgstr "Leeg"
 
