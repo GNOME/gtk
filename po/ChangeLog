@@ -1,3 +1,7 @@
+1999-12-23  Fatih Demir <kabalak@gmx.net>
+
+	* tr.po: Added the Turkish translation , edited ../configure.in & makefile.cygwin .
+
 1999-10-31  Tor Lillqvist  <tml@iki.fi>
 
 	* makefile.cygwin: New file for building the message catalogs on

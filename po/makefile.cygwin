@@ -118,6 +118,9 @@ sv.jpo: sv.po
 #uk.jpo: uk.po
 #	native2ascii -encoding KOI8_U uk.po uk.jpo
 
+tr.jpo: tr.po
+	native2ascii -encoding 8859_9 tr.po tr.jpo
+
 wa.jpo: wa.po
 	native2ascii -encoding 8859_1 wa.po wa.jpo
 
