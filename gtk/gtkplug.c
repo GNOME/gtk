@@ -366,6 +366,7 @@ gtk_plug_focus_in_event (GtkWidget     *widget,
   if (GTK_WIDGET_VISIBLE (widget))
     {
       GTK_OBJECT_SET_FLAGS (widget, GTK_HAS_FOCUS);
+
       window = GTK_WINDOW (widget);
       if (window->focus_widget && !GTK_WIDGET_HAS_FOCUS (window->focus_widget))
 	{

@@ -1,3 +1,13 @@
+Mon Feb 26 21:36:11 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.[ch] (gtk_window_focus_in/out_event): We can't
+	maintain a flag in gtk_window_focus_in/out, because
+	GtkPlug and cut-and-pastes of GtkPlug override these
+	methods and don't chain up. So back out recent change
+	adding such a flag, and instead recycle the hack
+	GtkPlug uses of making GTK_WIDGET_HAS_FOCUS on the 
+	top level represent this information
+
 Fri Feb 23 15:06:48 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktree.c (gtk_tree_class_init): Do the setting
