@@ -1,5 +1,8 @@
 2004-10-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_remove_widget): Disconnect
+	from the remove-widget signal after removing the signal.
+
 	* gtk/gtkaboutdialog.c (gtk_show_about_dialog): Destroy
 	the dialog with the parent.  (#156557, Paolo Borelli)
 

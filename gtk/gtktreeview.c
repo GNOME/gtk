@@ -12740,8 +12740,13 @@ gtk_tree_view_remove_widget (GtkCellEditable *cell_editable,
   if (GTK_WIDGET_HAS_FOCUS (cell_editable))
     gtk_widget_grab_focus (GTK_WIDGET (tree_view));
 
+  g_signal_handlers_disconnect_by_func (cell_editable,
+					gtk_tree_view_remove_widget,
+					tree_view);
+
   gtk_container_remove (GTK_CONTAINER (tree_view),
 			GTK_WIDGET (cell_editable));  
+
   /* FIXME should only redraw a single node */
   gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 }
