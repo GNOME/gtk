@@ -2,8 +2,6 @@
 
 SUBDIRS = tutorial faq reference
 
-man_MANS = gtk-config.1
-
 EXTRA_DIST += \
 	Changes-1.2.txt			\
 	Changes-2.0.txt			\
@@ -18,7 +16,5 @@ EXTRA_DIST += \
 	widget_system.txt 		\
 	generation.txt			\
         README.linux-fb  	        \
-        gtk-config.txt  	        \
-	gtk-config.1.in			\
 	gtkdocs_fix
 

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.x\n"
-"POT-Creation-Date: 2001-08-30 18:07-0400\n"
+"POT-Creation-Date: 2001-09-04 00:11-0400\n"
 "PO-Revision-Date: 2001-08-30 20:00+0900\n"
 "Last-Translator: Yukihiro Nakai <nakai@gnome.gr.jp>\n"
 "Language-Team: Japanese <translation@gnome.gr.jp>\n"
@@ -34,8 +34,8 @@ msgstr "ファイル'%s'のアニメーションの読み込み方がわかり�
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
-"イメージ'%s'の読み込みに失敗しました: 理由は不明ですがおそらくイメージ"
-"ファイルが壊れています"
+"イメージ'%s'の読み込みに失敗しました: 理由は不明ですがおそらくイメージファイ"
+"ルが壊れています"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
@@ -43,10 +43,11 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"アニメーション'%s'の読み込みに失敗しました: 理由は不明ですがおそらく"
-"アニメーションファイルが壊れています"
+"アニメーション'%s'の読み込みに失敗しました: 理由は不明ですがおそらくアニメー"
+"ションファイルが壊れています"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:316
+#, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "イメージローディングモジュールが読み込めません: %s: %s"
 
@@ -56,8 +57,8 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"イメージローディングモジュール%sは正しいインターフェースをエクスポートして"
-"いません。別のバージョンのGTK+のものではないでしょうか?"
+"イメージローディングモジュール%sは正しいインターフェースをエクスポートしてい"
+"ません。別のバージョンのGTK+のものではないでしょうか?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:452 gdk-pixbuf/gdk-pixbuf-io.c:478
 #, c-format
@@ -493,11 +494,11 @@ msgid "Foreground color as a GdkColor"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:211 gtk/gtkentry.c:396 gtk/gtktexttag.c:276
-#: gtk/gtktextview.c:552
+#: gtk/gtktextview.c:554
 msgid "Editable"
 msgstr "編集可能"
 
-#: gtk/gtkcellrenderertext.c:212 gtk/gtktexttag.c:277 gtk/gtktextview.c:553
+#: gtk/gtkcellrenderertext.c:212 gtk/gtktexttag.c:277 gtk/gtktextview.c:555
 msgid "Whether the text can be modified by the user"
 msgstr ""
 
@@ -965,19 +966,19 @@ msgstr ""
 msgid "Color with which to draw insertion cursor"
 msgstr ""
 
-#: gtk/gtkentry.c:3642 gtk/gtktextview.c:5318
+#: gtk/gtkentry.c:3642 gtk/gtktextview.c:5377
 msgid "Cut"
 msgstr ""
 
-#: gtk/gtkentry.c:3644 gtk/gtktextview.c:5320
+#: gtk/gtkentry.c:3644 gtk/gtktextview.c:5379
 msgid "Copy"
 msgstr ""
 
-#: gtk/gtkentry.c:3646 gtk/gtktextview.c:5323
+#: gtk/gtkentry.c:3646 gtk/gtktextview.c:5382
 msgid "Paste"
 msgstr ""
 
-#: gtk/gtkentry.c:3653 gtk/gtktextview.c:5330
+#: gtk/gtkentry.c:3653 gtk/gtktextview.c:5389
 msgid "Input Methods"
 msgstr ""
 
@@ -1632,11 +1633,11 @@ msgstr "ディレクトリ作成"
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr ""
 
-#: gtk/gtklabel.c:227 gtk/gtktexttag.c:377 gtk/gtktextview.c:569
+#: gtk/gtklabel.c:227 gtk/gtktexttag.c:377 gtk/gtktextview.c:571
 msgid "Justification"
 msgstr ""
 
-#: gtk/gtktexttag.c:378 gtk/gtktextview.c:570
+#: gtk/gtktexttag.c:378 gtk/gtktextview.c:572
 msgid "Left, right, or center justification"
 msgstr ""
 
@@ -1652,7 +1653,7 @@ msgstr ""
 msgid "Left margin"
 msgstr ""
 
-#: gtk/gtktexttag.c:395 gtk/gtktextview.c:579
+#: gtk/gtktexttag.c:395 gtk/gtktextview.c:581
 msgid "Width of the left margin in pixels"
 msgstr ""
 
@@ -1660,15 +1661,15 @@ msgstr ""
 msgid "Right margin"
 msgstr ""
 
-#: gtk/gtktexttag.c:405 gtk/gtktextview.c:589
+#: gtk/gtktexttag.c:405 gtk/gtktextview.c:591
 msgid "Width of the right margin in pixels"
 msgstr ""
 
-#: gtk/gtktexttag.c:415 gtk/gtktextview.c:598
+#: gtk/gtktexttag.c:415 gtk/gtktextview.c:600
 msgid "Indent"
 msgstr ""
 
-#: gtk/gtktexttag.c:416 gtk/gtktextview.c:599
+#: gtk/gtktexttag.c:416 gtk/gtktextview.c:601
 msgid "Amount to indent the paragraph, in pixels"
 msgstr ""
 
@@ -1676,7 +1677,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr ""
 
-#: gtk/gtktexttag.c:437 gtk/gtktextview.c:523
+#: gtk/gtktexttag.c:437 gtk/gtktextview.c:525
 msgid "Pixels of blank space above paragraphs"
 msgstr ""
 
@@ -1684,7 +1685,7 @@ msgstr ""
 msgid "Pixels below lines"
 msgstr ""
 
-#: gtk/gtktexttag.c:447 gtk/gtktextview.c:533
+#: gtk/gtktexttag.c:447 gtk/gtktextview.c:535
 msgid "Pixels of blank space below paragraphs"
 msgstr ""
 
@@ -1692,7 +1693,7 @@ msgstr ""
 msgid "Pixels inside wrap"
 msgstr ""
 
-#: gtk/gtktexttag.c:457 gtk/gtktextview.c:543
+#: gtk/gtktexttag.c:457 gtk/gtktextview.c:545
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr ""
 
@@ -1700,16 +1701,16 @@ msgstr ""
 msgid "Wrap mode"
 msgstr ""
 
-#: gtk/gtktexttag.c:484 gtk/gtktextview.c:561
+#: gtk/gtktexttag.c:484 gtk/gtktextview.c:563
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
-#: gtk/gtktexttag.c:493 gtk/gtktextview.c:608
+#: gtk/gtktexttag.c:493 gtk/gtktextview.c:610
 msgid "Tabs"
 msgstr ""
 
-#: gtk/gtktexttag.c:494 gtk/gtktextview.c:609
+#: gtk/gtktexttag.c:494 gtk/gtktextview.c:611
 msgid "Custom tabs for this text"
 msgstr ""
 
@@ -1829,55 +1830,56 @@ msgstr ""
 msgid "Whether this tag affects text visibility"
 msgstr ""
 
-#: gtk/gtktextview.c:502
+#: gtk/gtktextview.c:504
 msgid "Line Height"
 msgstr ""
 
-#: gtk/gtktextview.c:503
+#: gtk/gtktextview.c:505
 msgid "The height of a line"
 msgstr ""
 
-#: gtk/gtktextview.c:512
+#: gtk/gtktextview.c:514
 msgid "Column Width"
 msgstr ""
 
-#: gtk/gtktextview.c:513
+#: gtk/gtktextview.c:515
 msgid "The width of a column"
 msgstr ""
 
-#: gtk/gtktextview.c:522
+#: gtk/gtktextview.c:524
 msgid "Pixels Above Lines"
 msgstr ""
 
-#: gtk/gtktextview.c:532
+#: gtk/gtktextview.c:534
 msgid "Pixels Below Lines"
 msgstr ""
 
-#: gtk/gtktextview.c:542
+#: gtk/gtktextview.c:544
 msgid "Pixels Inside Wrap"
 msgstr ""
 
-#: gtk/gtktextview.c:560
+#: gtk/gtktextview.c:562
 msgid "Wrap Mode"
 msgstr ""
 
-#: gtk/gtktextview.c:578
+#: gtk/gtktextview.c:580
 msgid "Left Margin"
 msgstr ""
 
-#: gtk/gtktextview.c:588
+#: gtk/gtktextview.c:590
 msgid "Right Margin"
 msgstr ""
 
-#: gtk/gtktextview.c:616
+#: gtk/gtktextview.c:618
 msgid "Cursor Visible"
 msgstr "カーソルを表示"
 
-#: gtk/gtktextview.c:617
+#: gtk/gtktextview.c:619
 msgid "If the insertion cursor is shown"
 msgstr ""
 
 #: gtk/gtkthemes.c:71
+#, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "モジュールパスにテーマエンジンが見つかりません: \"%s\""
 
@@ -1885,7 +1887,7 @@ msgstr "モジュールパスにテーマエンジンが見つかりません: \
 msgid "--- No Tip ---"
 msgstr "--- Tip 無し ---"
 
-#: gtk/gtktreeview.c:505 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:422
+#: gtk/gtktreeview.c:506 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:422
 msgid "Visible"
 msgstr "可視"
 
@@ -1957,7 +1959,7 @@ msgstr ""
 msgid "X Alignment of the column header text or widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:529 gtk/gtktreeviewcolumn.c:253
+#: gtk/gtktreeview.c:530 gtk/gtktreeviewcolumn.c:253
 msgid "Reorderable"
 msgstr ""
 
@@ -3128,7 +3130,7 @@ msgstr ""
 msgid "If TRUE this means the table cells are all the same width/height"
 msgstr ""
 
-#: gtk/gtktext.c:594 gtk/gtktreeview.c:489
+#: gtk/gtktext.c:594 gtk/gtktreeview.c:490
 msgid "Horizontal Adjustment"
 msgstr ""
 
@@ -3136,7 +3138,7 @@ msgstr ""
 msgid "Horizontal adjustment for the text widget"
 msgstr ""
 
-#: gtk/gtktext.c:602 gtk/gtktreeview.c:497
+#: gtk/gtktext.c:602 gtk/gtktreeview.c:498
 msgid "Vertical Adjustment"
 msgstr ""
 
@@ -3237,91 +3239,91 @@ msgstr ""
 msgid "Size of icons in default toolbars"
 msgstr ""
 
-#: gtk/gtktreeview.c:481
+#: gtk/gtktreeview.c:482
 msgid "TreeView Model"
 msgstr ""
 
-#: gtk/gtktreeview.c:482
+#: gtk/gtktreeview.c:483
 msgid "The model for the tree view"
 msgstr ""
 
-#: gtk/gtktreeview.c:490
+#: gtk/gtktreeview.c:491
 msgid "Horizontal Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:498
+#: gtk/gtktreeview.c:499
 msgid "Vertical Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:506
+#: gtk/gtktreeview.c:507
 msgid "Show the column header buttons"
 msgstr ""
 
-#: gtk/gtktreeview.c:513
+#: gtk/gtktreeview.c:514
 msgid "Headers Clickable"
 msgstr ""
 
-#: gtk/gtktreeview.c:514
+#: gtk/gtktreeview.c:515
 msgid "Column headers respond to click events"
 msgstr ""
 
-#: gtk/gtktreeview.c:521
+#: gtk/gtktreeview.c:522
 msgid "Expander Column"
 msgstr ""
 
-#: gtk/gtktreeview.c:522
+#: gtk/gtktreeview.c:523
 msgid "Set the column for the expander column"
 msgstr ""
 
-#: gtk/gtktreeview.c:530
+#: gtk/gtktreeview.c:531
 msgid "View is reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:537
+#: gtk/gtktreeview.c:538
 msgid "Rules Hint"
 msgstr ""
 
-#: gtk/gtktreeview.c:538
+#: gtk/gtktreeview.c:539
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 
-#: gtk/gtktreeview.c:545
+#: gtk/gtktreeview.c:546
 msgid "Enable Search"
 msgstr ""
 
-#: gtk/gtktreeview.c:546
+#: gtk/gtktreeview.c:547
 msgid "View allows user to search through columns interactively"
 msgstr ""
 
-#: gtk/gtktreeview.c:553
+#: gtk/gtktreeview.c:554
 msgid "Search Column"
 msgstr ""
 
-#: gtk/gtktreeview.c:554
+#: gtk/gtktreeview.c:555
 msgid "Model column to search through when searching through code"
 msgstr ""
 
-#: gtk/gtktreeview.c:568
+#: gtk/gtktreeview.c:569
 msgid "Expander Size"
 msgstr ""
 
-#: gtk/gtktreeview.c:569
+#: gtk/gtktreeview.c:570
 msgid "Size of the expander arrow"
 msgstr ""
 
-#: gtk/gtktreeview.c:577
+#: gtk/gtktreeview.c:578
 msgid "Vertical Separator Width"
 msgstr ""
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:579
 msgid "Vertical space between cells"
 msgstr ""
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:587
 msgid "Horizontal Separator Width"
 msgstr ""
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:588
 msgid "Horizontal space between cells"
 msgstr ""
 

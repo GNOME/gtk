@@ -54,10 +54,13 @@ im_ipa_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module
 im_ipa_la_SOURCES = imipa.c
 im_ipa_la_LIBADD = $(LDADDS)
 
-# We create a dummy theme for the default GTK+ theme
+# Running this if DESTDIR is set is going to not work at all, so
+# skip it.
 install-data-local:
-	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0
-	$(top_builddir)/gtk/gtk-query-immodules-2.0 > $(DESTDIR)$(sysconfdir)/gtk-2.0/gtk.immodules
+	if [ -z "$(DESTDIR)" ] ; then \
+	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0 ; \
+	  $(top_builddir)/gtk/gtk-query-immodules-2.0 > $(DESTDIR)$(sysconfdir)/gtk-2.0/gtk.immodules ; \
+        fi
 
 module_LTLIBRARIES = im-cyrillic-translit.la $(IM_XIM_MODULE) im-viqr.la im-thai-broken.la \
                      im-inuktitut.la im-ipa.la

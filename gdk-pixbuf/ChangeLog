@@ -1,3 +1,7 @@
+Tue Sep  4 00:22:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am: Fix EXTRA_DIST for gdk-pixbuf-csource.1
+
 Tue Sep  4 03:09:52 2001  Tim Janik  <timj@gtk.org>
 
 	* gdk-pixbuf-csource.1: new file, manual page for

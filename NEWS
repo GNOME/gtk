@@ -1,28 +1,37 @@
 Overview of Changes in GTK+ 1.3.7
+=================================
 
-* Many Pixbuf (loader) improvements
+* Many Pixbuf (loader) improvements [Matthias Clasen, Soeren Sandmann]
 * Added publically installed utility gdk-pixbuf-csource to generate
-  inlined pixbufs in C source code
-* New/improved stock icons
-* Code and API rework for window resizing
-* Converted accel groups to GObject
+  inlined pixbufs in C source code [Tim Janik]
+* Optional movement of button children on press [Soeren, Owen Taylor]
+* Interactive searching in GtkTreeView [Kristian Rietveld]
+* Sorting/ordering improvements for GtkTreeView [Kris, Jonathan Blandford]
+* Animation of expander motion for GtkTreeView [Anders Carlsson]
+* Lots of misc GtkTreeView fixes and improvements [Jonathan]
+* New/improved stock icons [Jakub Steiner] 
+* Code and API rework for window resizing [Havoc Pennington]
+* Converted accel groups to GObject [James Henstridge]
 * More property support improvements
-* Disentangled child visability from MAPPED state
-* Plug/Socket improvements and port to the XEMBED protocol
-* Added priorities for styles in RC files
-* Made GdkVisual and GdkDevice GObjects 
-* Key binding improvements
+* Add facility for "secondary" buttons in 
+  GtkButtonBox/GtkDialog [Gregory Merchan]
+* Disentangled child visability from MAPPED state [Owen]
+* Plug/Socket improvements and port to the XEMBED protocol [Owen]
+* Added priorities for styles in RC files, 
+  support multiple parse contents [Owen]
+* Made GdkVisual and GdkDevice GObjects [Alexander Larsson]
+* Key binding improvements [Havoc]
 * Added GtkWidget::event-after signal since normal event handling
-  is now aborted as soon as a handler returned TRUE
-* Dnd fixes and improved icon support
+  is now aborted as soon as a handler returned TRUE [Tim]
+* Dnd fixes and improved icon support [Owen]
 * Removed GtkPacker widget
-* Nuked remaining GtkArg cruft, implemented container/child
-  properties
-* Added sorting/eordering for tree view
-* Added window grab groups
-* Many frame buffer improvements
-* Many UTF8/locale fixes
-* Miscellaneous bug and API fixes
+* Fixing missing paired getters/setters [Kris]
+* Nuked remaining GtkArg cruft, implemented container/child properties [Tim]
+* Added window grab groups [Owen]
+* Many frame buffer improvements [Alex]
+* Win32 fixes and improvements [Hans Breuer]
+* Warning fixes [Darin Adler]
+* Miscellaneous bug and API fixes [Matthias et. al]
 
 Overview of Changes in GTK+ 1.3.6
 =================================

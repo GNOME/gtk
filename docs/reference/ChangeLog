@@ -1,3 +1,8 @@
+Tue Sep  4 01:33:51 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk-docs.sgml: Remove references to a couple
+	sections that are no longer there.
+
 Thu Aug 30 19:34:38 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/tmpl/gtkdialog.sgml: Fix obvious mistake.

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2001-09-03 16:06+0200\n"
+"POT-Creation-Date: 2001-09-04 00:11-0400\n"
 "PO-Revision-Date: 2001-09-03 17:38CET\n"
 "Last-Translator: Stanislav Visnovsky <visnovsky@nenya.ms.mff.cuni.cz>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -32,15 +32,18 @@ msgstr "Neviem, ako načítať animáciu zo súboru '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:598
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Nepodarilo sa načítač obrázok '%s': príčina neznáma, asi poškodený súbor"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Nepodarilo sa načítač obrázok '%s': príčina neznáma, asi poškodený súbor"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr "Nepodarilo sa načítať animáciu '%s': príčina neznáma, asi poškodený súbor"
+msgstr ""
+"Nepodarilo sa načítať animáciu '%s': príčina neznáma, asi poškodený súbor"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:316
 #, c-format
@@ -95,7 +98,9 @@ msgstr "Nepodarilo sa otvoriť pre zápis '%s': %s"
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr "Nepodarilo sa zavrieť '%s' počas zápisu obrázku. Niektoré dáta nemusia byť uložené: %s"
+msgstr ""
+"Nepodarilo sa zavrieť '%s' počas zápisu obrázku. Niektoré dáta nemusia byť "
+"uložené: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:252
 #, c-format
@@ -169,15 +174,16 @@ msgstr "Obrázok GIF obsahuje rámec zobrazený mimo okraje obrázku."
 
 #: gdk-pixbuf/io-gif.c:1143
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
-msgstr "Prvý rámec obrázku GIF má obsahuje príkaz 'vrátiť sa k predchádzajúcemu'."
+msgstr ""
+"Prvý rámec obrázku GIF má obsahuje príkaz 'vrátiť sa k predchádzajúcemu'."
 
 #: gdk-pixbuf/io-gif.c:1178
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
-"Obrázok GIF neobsahuje globálnu farebnú mapu a rámec v ňom neobsahuje "
-"mapu lokálnu."
+"Obrázok GIF neobsahuje globálnu farebnú mapu a rámec v ňom neobsahuje mapu "
+"lokálnu."
 
 #: gdk-pixbuf/io-gif.c:1407
 msgid "GIF image was truncated or incomplete."
@@ -193,8 +199,8 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"Nedostatočná pamäť pre načítanie obrázku, skúste ukončiť niektoré aplikácie a tým "
-"uvolniť pamäť"
+"Nedostatočná pamäť pre načítanie obrázku, skúste ukončiť niektoré aplikácie "
+"a tým uvolniť pamäť"
 
 #: gdk-pixbuf/io-jpeg.c:529 gdk-pixbuf/io-jpeg.c:701
 msgid "Couldn't allocate memory for loading JPEG file"
@@ -205,11 +211,13 @@ msgstr "Nepodarilo sa alokovať pamäť pre načítanie súboru JPEG"
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
-msgstr "Kvalita JPEG musí byť medzi 0 a 100, hodnotu '%s' nie je možné spracovať."
+msgstr ""
+"Kvalita JPEG musí byť medzi 0 a 100, hodnotu '%s' nie je možné spracovať."
 
 #: gdk-pixbuf/io-jpeg.c:670
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "Kvalita JPEG musí byť medzi 0 a 100, hodnota '%d' nie je povolená."
 
 #: gdk-pixbuf/io-png.c:161
@@ -586,7 +594,8 @@ msgid "Rise"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:313 gtk/gtktexttag.c:427
-msgid "Offset of text above the baseline (below the baseline if rise is negative)"
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:323 gtk/gtktexttag.c:466
@@ -1058,7 +1067,8 @@ msgstr "Premenovať súbor"
 
 #: gtk/gtkfilesel.c:1000
 #, c-format
-msgid "The directory name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The directory name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1002
@@ -1788,7 +1798,8 @@ msgid "Wrap mode"
 msgstr "Zarovnávací mód"
 
 #: gtk/gtktexttag.c:484 gtk/gtktextview.c:563
-msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
 #: gtk/gtktexttag.c:493 gtk/gtktextview.c:610
@@ -2305,7 +2316,8 @@ msgid "Use stock"
 msgstr ""
 
 #: gtk/gtkbutton.c:199
-msgid "If set, the label is used to pick a stock item instead of being displayed"
+msgid ""
+"If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 
 #: gtk/gtkbutton.c:206
@@ -2340,7 +2352,8 @@ msgid "Child X Displacement"
 msgstr ""
 
 #: gtk/gtkbutton.c:272
-msgid "How far in the x direction to move the child when the button is depressed"
+msgid ""
+"How far in the x direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkbutton.c:279
@@ -2348,7 +2361,8 @@ msgid "Child Y Displacement"
 msgstr ""
 
 #: gtk/gtkbutton.c:280
-msgid "How far in the y direction to move the child when the button is depressed"
+msgid ""
+"How far in the y direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkcheckbutton.c:95 gtk/gtkoptionmenu.c:157
@@ -2397,7 +2411,8 @@ msgid "Always enable arrows"
 msgstr ""
 
 #: gtk/gtkcombo.c:141
-msgid "Whether the arrow keys work, even if the entry contents are not in the list"
+msgid ""
+"Whether the arrow keys work, even if the entry contents are not in the list"
 msgstr ""
 
 #: gtk/gtkcombo.c:147
@@ -2738,7 +2753,8 @@ msgid "X pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:118
-msgid "The amount of space to add on the left and right of the widget, in pixels"
+msgid ""
+"The amount of space to add on the left and right of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtkmisc.c:127
@@ -2746,7 +2762,8 @@ msgid "Y pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:128
-msgid "The amount of space to add on the top and bottom of the widget, in pixels"
+msgid ""
+"The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtkoptionmenu.c:158
@@ -2763,7 +2780,8 @@ msgid "Position"
 msgstr "Pozícia"
 
 #: gtk/gtkpaned.c:117
-msgid "Position of paned separator in pixels(0 means all the way to the left/top)"
+msgid ""
+"Position of paned separator in pixels(0 means all the way to the left/top)"
 msgstr ""
 
 #: gtk/gtkpaned.c:125
@@ -2787,7 +2805,8 @@ msgid "Expand"
 msgstr ""
 
 #: gtk/gtkpreview.c:135
-msgid "Whether the preview widget should take up the entire space it is allocated"
+msgid ""
+"Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
 
 #: gtk/gtkprogress.c:122
@@ -3069,7 +3088,8 @@ msgid "Secondary backward stepper"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:110
-msgid "Display a second backward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:117
@@ -3077,7 +3097,8 @@ msgid "Secondary forward stepper"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:118
-msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtksettings.c:145
@@ -3184,7 +3205,8 @@ msgid "Update Policy"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:256
-msgid "Whether the spin button should update always, or only when the value is legal"
+msgid ""
+"Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:264
@@ -3342,7 +3364,8 @@ msgid "Toolbar style"
 msgstr "Štýl písma:"
 
 #: gtk/gtktoolbar.c:284
-msgid "Whether default toolbars have text only, text and icons, icons only, etc."
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 
 #: gtk/gtktoolbar.c:290
@@ -3670,7 +3693,8 @@ msgid "Default Width"
 msgstr "Štandardná šírka"
 
 #: gtk/gtkwindow.c:423
-msgid "The default width of the window, used when initially showing the window."
+msgid ""
+"The default width of the window, used when initially showing the window."
 msgstr ""
 
 #: gtk/gtkwindow.c:432
@@ -3678,7 +3702,8 @@ msgid "Default Height"
 msgstr "Štandardná výška"
 
 #: gtk/gtkwindow.c:433
-msgid "The default height of the window, used when initially showing the window."
+msgid ""
+"The default height of the window, used when initially showing the window."
 msgstr "Štandardná výška okna použitá pri počiatočnom zobrazení okna."
 
 #: gtk/gtkwindow.c:442
@@ -3705,10 +3730,11 @@ msgstr "Režim"
 msgid ""
 "The the directions in which the size group effects the requested sizes of "
 "its component widgets."
-msgstr "Režim, ako veľkosť skupiny ovplyvňuje požadované veľkosti jednotlivých prvkov."
+msgstr ""
+"Režim, ako veľkosť skupiny ovplyvňuje požadované veľkosti jednotlivých "
+"prvkov."
 
 #. ID
 #: modules/input/imipa.c:144
 msgid "IPA"
 msgstr "IPA"
-

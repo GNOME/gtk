@@ -205,7 +205,6 @@ gdk_pixbuf_csource_LDADD = $(LDADDS)
 # manual pages to install
 #
 man_MANS = gdk-pixbuf-csource.1
-EXTRA_DIST += gdk-pixbuf-csource.1
 
 
 #
@@ -250,6 +249,7 @@ noinst_HEADERS = 		\
 	gdk-pixbuf-private.h
 
 EXTRA_DIST =			\
+        gdk-pixbuf-csource.1    \
 	makefile.mingw		\
 	makefile.mingw.in	\
 	gdk_pixbuf.def		\
