@@ -4,6 +4,8 @@
 #include <gdk/x11/gdkx.h>
 #elif defined (GDK_WINDOWING_WIN32)
 #include <gdk/win32/gdkwin32.h>
+#elif defined (GDK_WINDOWING_FB)
+#include <gdk/linux-fb/gdkfb.h>
 #endif
 
 int close_app(GtkWidget *widget, gpointer data)

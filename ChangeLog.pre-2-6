@@ -1,5 +1,11 @@
 2001-05-07  Alexander Larsson  <alexl@redhat.com>
 
+	* demos/testpixbuf-save.c: 
+	* demos/testpixbuf-drawable.c:
+	Include gdkfb.h on linux-fb.
+
+2001-05-07  Alexander Larsson  <alexl@redhat.com>
+
 	* gdk/linux-fb/gdkdnd-fb.c (get_toplevel_window_at):
 	New function for getting toplevel window at position.
 	(gdk_drag_find_window): Use get_toplevel_window () instead
