@@ -5,6 +5,7 @@ SUBDIRS=stock-icons theme-bits
 INCLUDES =						\
 	-DG_LOG_DOMAIN=\"Gtk\"				\
 	-DGTK_LIBDIR=\"$(libdir)\"			\
+	-DGTK_DATADIR=\"$(datadir)\"			\
 	-DGTK_DATA_PREFIX=\"$(prefix)\"			\
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
 	-DGTK_VERSION=\"$(GTK_VERSION)\"		\
@@ -142,6 +143,7 @@ gtk_public_h_sources =          \
 	gtkhscrollbar.h		\
 	gtkhseparator.h		\
 	gtkiconfactory.h	\
+	gtkicontheme.h		\
 	gtkimage.h		\
 	gtkimagemenuitem.h	\
 	gtkimcontext.h		\
@@ -317,6 +319,9 @@ gtk_c_sources =                 \
 	gtkhsv.c		\
 	gtkhsv.h		\
 	gtkiconfactory.c	\
+	gtkicontheme.c		\
+	gtkiconthemeparser.c	\
+	gtkiconthemeparser.h	\
 	gtkimage.c		\
 	gtkimagemenuitem.c	\
 	gtkimcontext.c		\

@@ -4623,7 +4623,7 @@ gtk_widget_peek_pango_context (GtkWidget *widget)
  *
  * If you create and keep a #PangoLayout using this context, you must
  * deal with changes to the context by calling pango_layout_context_changed()
- * on the layout in response to the ::style_set and ::direction_set signals
+ * on the layout in response to the ::style-set and ::direction-changed signals
  * for the widget.
  *
  * Return value: the #PangoContext for the widget.
@@ -4699,7 +4699,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
  * If you keep a #PangoLayout created in this way around, in order
  * notify the layout of changes to the base direction or font of this
  * widget, you must call pango_layout_context_changed() in response to
- * the ::style_set and ::direction_set signals for the widget.
+ * the ::style-set and ::direction-changed signals for the widget.
  * 
  * Return value: the new #PangoLayout
  **/

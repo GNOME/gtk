@@ -2484,7 +2484,8 @@ static struct
   { "Gtk/IMStatusStyle", "gtk-im-status-style" },
   { "Net/CursorBlink", "gtk-cursor-blink" },
   { "Net/CursorBlinkTime", "gtk-cursor-blink-time" },
-  { "Net/ThemeName", "gtk-theme-name" }
+  { "Net/ThemeName", "gtk-theme-name" },
+  { "Net/IconThemeName", "gtk-icon-theme-name" },
 };
 
 static void

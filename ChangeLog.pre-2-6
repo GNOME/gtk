@@ -1,3 +1,43 @@
+Wed Jul  2 18:00:56 2003  Owen Taylor  <otaylor@redhat.com>
+	 
+        * gtk/gtkicontheme.[ch]: Implement a loader for
+	named themed icon based on from gnome-desktop library
+	by Alex Larsson.
+
+	* gtk/gtkiconthemeparser.[ch]: .ini file parsing code
+	from gnome-desktop.
+
+	* gtk/gtkiconfactory.[ch]: Add
+	gtk_icon_source_set/get_icon_name() to allow stock icons
+	to be based off of named theme icons.
+
+	* gtk/gtkiconfactory.c: Rework sources so that the source
+	is *either* a pixbuf, or a filename, or an icon name,
+	instead of the pixbuf/filename mix it was before. Put a
+	workaround for get_pixbuf() so that it can return the
+	filename pixbuf, e.g, for render_icon().
+
+	* gtk/gtkiconfactory.c: Make the default setup use
+	themed icons, and add builtin icons to the default
+	icon theme for all the standard pixbufs, so we
+	don't rely on actually having an icon theme on disk.
+
+	* gtk/gtkrc.c: Add support for @"icon-name" to specify
+	a themed icon for a stock icon source.
+
+	* tests/Makefile.am test/testicontheme.c: Add a test
+	program from gnome-desktop.
+
+	* gdk/x11/gdkevents-x11.c gtk/gtksettings.c: Add
+	Net/IconThemeName / gtk-icon-theme-name setting.
+
+	* gtk/gtkiconfactory.c (ensure_cache_up_to_date): Actually
+	update the icon cache serial so we don't continually
+	think we are out-of-date.
+
+	* gtk/gtkwidget.c: Fix a couple of references in doc comments 
+	to ::direction_set that should have been to ::direction-changed
+
 Wed Jul  2 14:45:41 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_realize): Attach the

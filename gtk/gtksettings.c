@@ -49,6 +49,7 @@ enum {
   PROP_CURSOR_BLINK_TIME,
   PROP_SPLIT_CURSOR,
   PROP_THEME_NAME,
+  PROP_ICON_THEME_NAME,
   PROP_KEY_THEME_NAME,
   PROP_MENU_BAR_ACCEL,
   PROP_DND_DRAG_THRESHOLD,
@@ -203,6 +204,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								  G_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_THEME_NAME);
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-icon-theme-name",
+								  _("Icon Theme Name"),
+								  _("Name of icon theme to use"),
+								  "hicolor",
+								  G_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_ICON_THEME_NAME);    
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-key-theme-name",
 								  _("Key Theme Name"),

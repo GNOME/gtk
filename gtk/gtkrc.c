@@ -3647,17 +3647,32 @@ gtk_rc_parse_icon_source (GtkRcContext   *context,
 
   token = g_scanner_get_next_token (scanner);
   
-  if (token != G_TOKEN_STRING)
+  if (token != G_TOKEN_STRING && token != '@')
     return G_TOKEN_STRING;
-
   
   source = gtk_icon_source_new ();
-  
-  full_filename = gtk_rc_find_pixmap_in_path (context->settings, scanner, scanner->value.v_string);
-  if (full_filename)
+
+  if (token == G_TOKEN_STRING)
     {
-      gtk_icon_source_set_filename (source, full_filename);
-      g_free (full_filename);
+      /* Filename */
+      
+      full_filename = gtk_rc_find_pixmap_in_path (context->settings, scanner, scanner->value.v_string);
+      if (full_filename)
+	{
+	  gtk_icon_source_set_filename (source, full_filename);
+	  g_free (full_filename);
+	}
+    }
+  else
+    {
+      /* Icon name */
+      
+      token = g_scanner_get_next_token (scanner);
+  
+      if (token != G_TOKEN_STRING)
+	return G_TOKEN_STRING;
+
+      gtk_icon_source_set_icon_name (source, scanner->value.v_string);
     }
 
   /* We continue parsing even if we didn't find the pixmap so that rest of the
@@ -3793,7 +3808,8 @@ gtk_rc_parse_icon_source (GtkRcContext   *context,
     }
 
  done:
-  if (gtk_icon_source_get_filename (source))
+  if (gtk_icon_source_get_filename (source) ||
+      gtk_icon_source_get_icon_name (source))
     {
       gtk_icon_set_add_source (icon_set, source);
       *icon_set_valid = TRUE;

@@ -82,6 +82,7 @@
 #include <gtk/gtkhscrollbar.h>
 #include <gtk/gtkhseparator.h>
 #include <gtk/gtkiconfactory.h>
+#include <gtk/gtkicontheme.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkimagemenuitem.h>
 #include <gtk/gtkimcontext.h>
