@@ -1,3 +1,13 @@
+2001-02-10  Ian Peters  <itp@ximian.com>
+
+	* gtk/gtkprogressbar.c (gtk_progress_bar_size_request): use the
+	font->ascent and ->descent to calculate the requisition height,
+	rather than the gdk_text_height
+	(gtk_progress_bar_paint): use the font->ascent instead of the
+	gdk_text_height when calculating the vertical offset of the text
+	label on the progress bar.  This fixes the baseline of the font on
+	the widget.
+
 Fri Feb  2 19:21:23 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_propagate_shapes): Surround additional

@@ -373,8 +373,8 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
 
 	  requisition->height = MAX (MIN_HORIZONTAL_BAR_HEIGHT,
 				     2 * widget->style->klass->ythickness + 3 +
-				     gdk_text_height (widget->style->font, 
-						      buf, strlen (buf)) +
+				     widget->style->font->ascent +
+				     widget->style->font->descent +
 				     2 * TEXT_SPACING);
 	  g_free (buf);
 	}
@@ -399,8 +399,8 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
 
 	  requisition->height = MAX (MIN_VERTICAL_BAR_HEIGHT,
 				     2 * widget->style->klass->ythickness + 3 +
-				     gdk_text_height (widget->style->font, 
-						      buf, strlen (buf)) +
+				     widget->style->font->ascent +
+				     widget->style->font->descent +
 				     2 * TEXT_SPACING);
 	  g_free (buf);
 	}
@@ -717,8 +717,7 @@ gtk_progress_bar_paint (GtkProgress *progress)
 
 	  y = widget->style->font->ascent + 1 +
 	    (widget->allocation.height - 2 * widget->style->klass->ythickness -
-	     3 - gdk_text_height (widget->style->font, buf, strlen (buf)))
-	    * progress->y_align;
+	     3 - widget->style->font->ascent) * progress->y_align;
 
 	  rect.x = widget->style->klass->xthickness + 1;
 	  rect.y = widget->style->klass->ythickness + 1;
