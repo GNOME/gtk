@@ -1,4 +1,9 @@
-2003-08-07  Tor Lillqvist  <tml@iki.fi
+2003-08-07  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_default_input): Use g_strtod() to cope with C libraries with
+	crippled locale support.  (#115293)
+
+2003-08-07  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdk.def
 	* gdk/win32/gdkfont-win32.c (gdk_fontset_load_for_display): Add
