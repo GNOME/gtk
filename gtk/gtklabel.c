@@ -2129,6 +2129,7 @@ gtk_label_style_set (GtkWidget *widget,
 
   /* We have to clear the layout, fonts etc. may have changed */
   gtk_label_clear_layout (label);
+  gtk_widget_queue_resize (GTK_WIDGET (label));
 }
 
 static void 
