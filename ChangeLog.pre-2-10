@@ -1,3 +1,7 @@
+Sun Dec 14 00:08:00 PST 1997 Raph Levien <raph@acm.org>
+	* a minor patch to make the file selection dialog not always
+	select the first file in a directory
+
 Sat Dec 13 Jay Painter <jpaint@serv.net>
 	* gtk/gtkvscrollbar.c: added focus flag so vertical scrollbars
 	can get keyboard focus
