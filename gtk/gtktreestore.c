@@ -1658,7 +1658,7 @@ gtk_tree_store_sort_helper (GtkTreeStore *tree_store,
   GtkTreePath *path;
 
   node = parent->children;
-  if (node->next == NULL)
+  if (node == NULL || node->next == NULL)
     return;
 
   g_assert (GTK_TREE_STORE_IS_SORTED (tree_store));

@@ -6911,7 +6911,7 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
   column = gtk_tree_view_column_new ();
 
   gtk_tree_view_column_set_title (column, title);
-  gtk_tree_view_column_set_cell_renderer (column, cell);
+  gtk_tree_view_column_pack_start (column, cell, TRUE);
 
   va_start (args, cell);
 
@@ -6944,7 +6944,7 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
  * Convenience function that inserts a new column into the #GtkTreeView
  * with the given cell renderer and a #GtkCellDataFunc to set cell renderer
  * attributes (normally using data from the model). See also
- * gtk_tree_view_column_set_cell_data_func(), gtk_tree_view_column_set_cell_renderer().
+ * gtk_tree_view_column_set_cell_data_func(), gtk_tree_view_column_pack_start().
  *
  * Return value: number of columns in the tree view post-insert
  **/
@@ -6964,7 +6964,7 @@ gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_vie
   column = gtk_tree_view_column_new ();
 
   gtk_tree_view_column_set_title (column, title);
-  gtk_tree_view_column_set_cell_renderer (column, cell);
+  gtk_tree_view_column_pack_start (column, cell, TRUE);
   gtk_tree_view_column_set_cell_data_func (column, cell, func, data, dnotify);
 
   gtk_tree_view_insert_column (tree_view, column, position);
@@ -7923,6 +7923,37 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
 					      state);
   gtk_tree_view_clamp_node_visible (tree_view, tree, node);
   gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
+}
+
+/**
+ * gtk_tree_view_get_cursor:
+ * @tree_view: A #GtkTreeView
+ * @path: A pointer to be filled with the current cursor path, or %NULL
+ * @focus_column: A pointer to be filled with the current focus column, or %NULL
+ * 
+ * Fills in @path and @focus_column with the current path and focus column.  If
+ * the cursor isn't currently set, then *path will be %NULL.  If no column
+ * currently has focus, then *focus_column will be %NULL.
+ **/
+void
+gtk_tree_view_get_cursor (GtkTreeView        *tree_view,
+			  GtkTreePath       **path,
+			  GtkTreeViewColumn **focus_column)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  if (path)
+    {
+      if (gtk_tree_row_reference_valid (tree_view->priv->cursor))
+	*path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
+      else
+	*path = NULL;
+    }
+
+  if (focus_column)
+    {
+      *focus_column = tree_view->priv->focus_column;
+    }
 }
 
 /**

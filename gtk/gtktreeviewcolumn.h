@@ -110,8 +110,6 @@ GtkTreeViewColumn      *gtk_tree_view_column_new                 (void);
 GtkTreeViewColumn      *gtk_tree_view_column_new_with_attributes (const gchar             *title,
 								  GtkCellRenderer         *cell,
 								  ...);
-void                    gtk_tree_view_column_set_cell_renderer   (GtkTreeViewColumn       *tree_column,
-								  GtkCellRenderer         *cell);
 void                    gtk_tree_view_column_pack_start          (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell,
 								  gboolean                 expand);

@@ -1028,7 +1028,7 @@ gtk_tree_view_column_new (void)
  * 
  * Creates a new #GtkTreeViewColumn with a number of default values.  This is
  * equivalent to calling @gtk_tree_view_column_set_title,
- * @gtk_tree_view_column_set_cell_renderer, and
+ * @gtk_tree_view_column_pack_start, and
  * @gtk_tree_view_column_set_attributes on the newly created #GtkTreeViewColumn.
  * 
  * Return value: A newly created #GtkTreeViewColumn.
@@ -1044,29 +1044,13 @@ gtk_tree_view_column_new_with_attributes (const gchar     *title,
   retval = gtk_tree_view_column_new ();
 
   gtk_tree_view_column_set_title (retval, title);
-  gtk_tree_view_column_set_cell_renderer (retval, cell);
+  gtk_tree_view_column_pack_start (retval, cell, TRUE);
 
   va_start (args, cell);
   gtk_tree_view_column_set_attributesv (retval, cell, args);
   va_end (args);
 
   return retval;
-}
-
-/**
- * gtk_tree_view_column_set_cell_renderer:
- * @tree_column: A #GtkTreeViewColumn.
- * @cell: The #GtkCellRenderer, or NULL.
- * 
- * Sets the cell renderer of the @tree_column.  If there is a cell
- * renderer already set, then it is removed.  If @cell is NULL, then
- * the cell renderer is unset.
- **/
-void
-gtk_tree_view_column_set_cell_renderer (GtkTreeViewColumn *tree_column,
-					GtkCellRenderer   *cell)
-{
-  gtk_tree_view_column_pack_start (tree_column, cell, TRUE);
 }
 
 static GtkTreeViewColumnCellInfo *
@@ -1801,6 +1785,8 @@ gtk_tree_view_column_set_alignment (GtkTreeViewColumn *tree_column,
                                     gfloat             xalign)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+
+  xalign = CLAMP (xalign, 0.0, 1.0);
 
   if (tree_column->xalign == xalign)
     return;

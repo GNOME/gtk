@@ -1,3 +1,12 @@
+Tue Sep 25 15:32:44 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c
+	(gtk_tree_view_column_set_cell_renderer): Removed
+	(gtk_tree_view_column_set_alignment): xalign = CLAMP (xalign, 0.0, 1.0);  Fixes 61012.
+
+	* gtk/gtktreestore.c (gtk_tree_store_sort_helper): Fixed #61012
+	Patch from Detlef Reichl
+
 2001-09-25  Havoc Pennington  <hp@redhat.com>
 
 	* tests/testtextbuffer.c (line_separator_tests): Add tests for
