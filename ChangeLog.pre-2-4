@@ -1,5 +1,11 @@
 2001-10-25  Matt Wilson  <msw@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_destroy): call
+	gtk_text_view_destroy_layout after gtk_text_view_set_buffer (which
+	now invalidates) so that we remove our idle functions.
+	(gtk_text_view_destroy_layout): remove the first_validate_idle as
+	well.
+
 	* gtk/gtktexttag.c (gtk_text_tag_class_init): the valid range for
 	the 'indent' property is G_MININT to G_MAXINT.  Don't use
 	-G_MAXINT for the minimum of the 'rise' property, use G_MININT

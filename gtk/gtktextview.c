@@ -2166,8 +2166,8 @@ gtk_text_view_destroy (GtkObject *object)
 
   layout = text_view->layout;
   
-  gtk_text_view_destroy_layout (text_view);
   gtk_text_view_set_buffer (text_view, NULL);
+  gtk_text_view_destroy_layout (text_view);
 
   (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
@@ -4666,14 +4666,19 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
     {
       GSList *tmp_list;
 
-      if (text_view->incremental_validate_idle)
-        {
-          g_source_remove (text_view->incremental_validate_idle);
-          text_view->incremental_validate_idle = 0;
-        }
+      if (text_view->first_validate_idle)
+	{
+	  g_source_remove (text_view->first_validate_idle);
+	  text_view->first_validate_idle = 0;
+	}
 
-      /* Remove layout from all anchored children */
+      if (text_view->incremental_validate_idle)
+	{
+	  g_source_remove (text_view->incremental_validate_idle);
+	  text_view->incremental_validate_idle = 0;
+	}
       
+      /* Remove layout from all anchored children */
       tmp_list = text_view->children;
       while (tmp_list != NULL)
         {
