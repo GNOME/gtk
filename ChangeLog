@@ -22,6 +22,10 @@
 	work like I think it should on non-Latin keyboards, too, use
 	latin_locale when looking for the corresponding keycode.
 
+	* gdk/win32/gdkgeometry-win32.c: Add GDK_NOTE debugging output
+	to some functions, related to moving and resizing and expose
+	and antiexpose queue processing. Use %p to output HWNDs.
+
 	Fix for #81831 by Tim Evans:
 	
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Don't call
@@ -31,6 +35,15 @@
 	(real_window_procedure): If we got a single-click event, call
 	_gdk_event_button_generate() to perhaps append the double- or
 	triple-click event after that.
+
+	Tentative fix for #79720 based on code by Florent Duguet:
+		
+	* gdk/win32/gdkgeometry-win32 (gdk_window_queue_append): New
+	static function. Checks length of translate_queue, calls
+	_gdk_window_process_expose() if length is >= 128. Then appends
+	to translate_queue.
+	(gdk_window_queue_translation,_gdk_windowing_window_queue_antiexpose):
+	Call gdk_window_queue_append().
 
 	Merge from gtk-1-3-win32-production branch:
 
