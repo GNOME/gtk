@@ -1,3 +1,7 @@
+2004-03-10  Morten Welinder  <terra@gnome.org>
+
+	* tests/testfilechooser.c (main): Add support for --multiple.
+
 Wed Mar 10 02:41:05 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkpathbar.c: (gtk_path_bar_init), (gtk_path_bar_class_init),

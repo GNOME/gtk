@@ -380,6 +380,7 @@ main (int argc, char **argv)
   GtkFileFilter *filter;
   GtkWidget *preview_vbox;
   int i;
+  gboolean multiple = FALSE;
   
   gtk_init (&argc, &argv);
 
@@ -396,11 +397,14 @@ main (int argc, char **argv)
 	action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
       else if (! strcmp ("--action=create_folder", argv[i]))
 	action = GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER;
+      else if (! strcmp ("--multiple", argv[i]))
+	multiple = TRUE;
     }
 
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
 			 "action", action,
 			 "file-system-backend", "gnome-vfs",
+			 "select-multiple", multiple,
 			 NULL);
   switch (action)
     {
@@ -493,6 +497,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (control_window), vbbox);
 
   button = gtk_button_new_with_mnemonic ("_Select all");
+  gtk_widget_set_sensitive (button, multiple);
   gtk_container_add (GTK_CONTAINER (vbbox), button);
   g_signal_connect_swapped (button, "clicked",
 			    G_CALLBACK (gtk_file_chooser_select_all), dialog);
