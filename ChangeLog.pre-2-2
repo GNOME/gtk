@@ -1,4 +1,8 @@
-2000-10-15    <jrb@redhat.com>
+2000-10-15  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_insert_column): New function
+	proposed by Guy Harris <gharris@flashcom.net>.  Also, added API
+	docs to all public functions.
 
 	* gtk/gtktreeview.c, gtk/gtktreeview.h, gtk/gtktreestore.h,
 	gtk/gtktreestore.c, gtk/gtkliststore.h, gtk/gtkliststore.c,

@@ -2851,6 +2851,15 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
 
 /* Public methods
  */
+
+/**
+ * gtk_tree_view_new:
+ * @void: 
+ * 
+ * Creates a new #GtkTreeView widget.
+ * 
+ * Return value: A newly created #GtkTreeView widget.
+ **/
 GtkWidget *
 gtk_tree_view_new (void)
 {
@@ -2861,6 +2870,14 @@ gtk_tree_view_new (void)
   return GTK_WIDGET (tree_view);
 }
 
+/**
+ * gtk_tree_view_new_with_model:
+ * @model: the model.
+ * 
+ * Creates a new #GtkTreeView widget with the model initialized to @model.
+ * 
+ * Return value: A newly created #GtkTreeView widget.
+ **/
 GtkWidget *
 gtk_tree_view_new_with_model (GtkTreeModel *model)
 {
@@ -2872,6 +2889,15 @@ gtk_tree_view_new_with_model (GtkTreeModel *model)
   return GTK_WIDGET (tree_view);
 }
 
+/**
+ * gtk_tree_view_get_model:
+ * @tree_view: a #GtkTreeView
+ * 
+ * Returns the model the the #GtkTreeView is based on.  Returns NULL if the
+ * model is unset.
+ * 
+ * Return value: A #GtkTreeModel, or NULL if none is currently being used.
+ **/
 GtkTreeModel *
 gtk_tree_view_get_model (GtkTreeView *tree_view)
 {
@@ -2921,8 +2947,18 @@ gtk_tree_view_set_model_realized (GtkTreeView *tree_view)
   GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_MODEL_SETUP);
 }
 
+/**
+ * gtk_tree_view_set_model:
+ * @tree_view: A #GtkTreeNode.
+ * @model: The model.
+ * 
+ * Sets the model for a #GtkTreeView.  If the @tree_view already has a model
+ * set, it will remove it before setting the new model.  If @model is NULL, then
+ * it will unset the old model.
+ **/
 void
-gtk_tree_view_set_model (GtkTreeView *tree_view, GtkTreeModel *model)
+gtk_tree_view_set_model (GtkTreeView  *tree_view,
+			 GtkTreeModel *model)
 {
   GList *list;
   GtkTreeViewColumn *column;
@@ -2982,6 +3018,14 @@ gtk_tree_view_set_model (GtkTreeView *tree_view, GtkTreeModel *model)
     }
 }
 
+/**
+ * gtk_tree_view_get_selection:
+ * @tree_view: A #GtkTreeView.
+ * 
+ * Gets the #GtkTreeSelection associated with @tree_view.
+ * 
+ * Return value: A #GtkTreeSelection object.
+ **/
 GtkTreeSelection *
 gtk_tree_view_get_selection (GtkTreeView *tree_view)
 {
@@ -2994,23 +3038,15 @@ gtk_tree_view_get_selection (GtkTreeView *tree_view)
   return tree_view->priv->selection;
 }
 
-void
-gtk_tree_view_set_selection (GtkTreeView      *tree_view,
-			     GtkTreeSelection *selection)
-{
-  g_return_if_fail (tree_view != NULL);
-  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  g_return_if_fail (selection != NULL);
-  g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
-
-  g_object_ref (G_OBJECT (selection));
-
-  if (tree_view->priv->selection != NULL)
-    g_object_unref (G_OBJECT (tree_view->priv->selection));
-
-  tree_view->priv->selection = selection;
-}
-
+/**
+ * gtk_tree_view_get_hadjustment:
+ * @tree_view: A #GtkTreeView
+ * 
+ * Gets the #GtkAdjustment currently being used for the horizontal aspect.
+ * 
+ * Return value: A #GtkAdjustment object, or NULL if none is currently being
+ * used.
+ **/
 GtkAdjustment *
 gtk_tree_view_get_hadjustment (GtkTreeView *tree_view)
 {
@@ -3020,8 +3056,15 @@ gtk_tree_view_get_hadjustment (GtkTreeView *tree_view)
   return tree_view->priv->hadjustment;
 }
 
+/**
+ * gtk_tree_view_set_hadjustment:
+ * @tree_view: A #GtkTreeView
+ * @adjustment: The #GtkAdjustment to set, or NULL
+ * 
+ * Sets the #GtkAdjustment for the current horizontal aspect.
+ **/
 void
-gtk_tree_view_set_hadjustment (GtkTreeView     *tree_view,
+gtk_tree_view_set_hadjustment (GtkTreeView   *tree_view,
 			       GtkAdjustment *adjustment)
 {
   g_return_if_fail (tree_view != NULL);
@@ -3032,6 +3075,15 @@ gtk_tree_view_set_hadjustment (GtkTreeView     *tree_view,
 				 tree_view->priv->vadjustment);
 }
 
+/**
+ * gtk_tree_view_get_vadjustment:
+ * @tree_view: A #GtkTreeView
+ * 
+ * Gets the #GtkAdjustment currently being used for the vertical aspect.
+ * 
+ * Return value: A #GtkAdjustment object, or NULL if none is currently being
+ * used.
+ **/
 GtkAdjustment *
 gtk_tree_view_get_vadjustment (GtkTreeView *tree_view)
 {
@@ -3041,8 +3093,15 @@ gtk_tree_view_get_vadjustment (GtkTreeView *tree_view)
   return tree_view->priv->vadjustment;
 }
 
+/**
+ * gtk_tree_view_set_vadjustment:
+ * @tree_view: A #GtkTreeView
+ * @adjustment: The #GtkAdjustment to set, or NULL
+ * 
+ * Sets the #GtkAdjustment for the current vertical aspect.
+ **/
 void
-gtk_tree_view_set_vadjustment (GtkTreeView     *tree_view,
+gtk_tree_view_set_vadjustment (GtkTreeView   *tree_view,
 			       GtkAdjustment *adjustment)
 {
   g_return_if_fail (tree_view != NULL);
@@ -3053,8 +3112,16 @@ gtk_tree_view_set_vadjustment (GtkTreeView     *tree_view,
 				 adjustment);
 }
 
+/**
+ * gtk_tree_view_set_adjustments:
+ * @tree_view: A #GtkTreeView
+ * @hadj: The horizontal #GtkAdjustment to set, or NULL
+ * @vadj: The vertical #GtkAdjustment to set, or NULL
+ * 
+ * Sets the horizonal and or vertical #GtkAdjustment.
+ **/
 static void
-gtk_tree_view_set_adjustments (GtkTreeView     *tree_view,
+gtk_tree_view_set_adjustments (GtkTreeView   *tree_view,
 			       GtkAdjustment *hadj,
 			       GtkAdjustment *vadj)
 {
@@ -3115,6 +3182,14 @@ gtk_tree_view_set_adjustments (GtkTreeView     *tree_view,
 
 /* Column and header operations */
 
+/**
+ * gtk_tree_view_get_headers_visible:
+ * @tree_view: A #GtkTreeView.
+ * 
+ * Returns TRUE if the headers on the @tree_view are visible.
+ * 
+ * Return value: whether the headers are visible or not.
+ **/
 gboolean
 gtk_tree_view_get_headers_visible (GtkTreeView *tree_view)
 {
@@ -3124,9 +3199,16 @@ gtk_tree_view_get_headers_visible (GtkTreeView *tree_view)
   return GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_HEADERS_VISIBLE);
 }
 
+/**
+ * gtk_tree_view_set_headers_visible:
+ * @tree_view: A #GtkTreeView.
+ * @headers_visible: TRUE if the headers are visible
+ * 
+ * Sets the the visibility state of the headers.
+ **/
 void
 gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
-				   gboolean   headers_visible)
+				   gboolean     headers_visible)
 {
   gint x, y;
   GList *list;
@@ -3192,6 +3274,12 @@ gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
 }
 
 
+/**
+ * gtk_tree_view_columns_autosize:
+ * @tree_view: A #GtkTreeView.
+ * 
+ * Resizes all columns to their optimal width.
+ **/
 void
 gtk_tree_view_columns_autosize (GtkTreeView *tree_view)
 {
@@ -3215,6 +3303,13 @@ gtk_tree_view_columns_autosize (GtkTreeView *tree_view)
     gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 }
 
+/**
+ * gtk_tree_view_set_headers_active:
+ * @tree_view: A #GtkTreeView.
+ * @active: TRUE if the columns are active.
+ * 
+ * Sets the headers active (eg. keyboard navigable) or inactive.
+ **/
 void
 gtk_tree_view_set_headers_active (GtkTreeView *tree_view,
 				  gboolean   active)
@@ -3229,9 +3324,18 @@ gtk_tree_view_set_headers_active (GtkTreeView *tree_view,
     gtk_tree_view_column_set_header_active (GTK_TREE_VIEW_COLUMN (list->data), active);
 }
 
+/**
+ * gtk_tree_view_append_column:
+ * @tree_view: A #GtkTreeView.
+ * @column: The #GtkTreeViewColumn to add.
+ * 
+ * Appends @column to the list of columns.
+ * 
+ * Return value: The number of columns in @tree_view.
+ **/
 gint
-gtk_tree_view_add_column (GtkTreeView   *tree_view,
-			  GtkTreeViewColumn *column)
+gtk_tree_view_append_column (GtkTreeView       *tree_view,
+			     GtkTreeViewColumn *column)
 {
   g_return_val_if_fail (tree_view != NULL, -1);
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), -1);
@@ -3245,9 +3349,75 @@ gtk_tree_view_add_column (GtkTreeView   *tree_view,
   return tree_view->priv->columns++;
 }
 
+
+/**
+ * gtk_tree_view_remove_column:
+ * @tree_view: A #GtkTreeView.
+ * @column: The #GtkTreeViewColumn to remove.
+ * 
+ * Removes @column from @tree_view.
+ * 
+ * Return value: The number of columns in @tree_view.
+ **/
+gint
+gtk_tree_view_remove_column (GtkTreeView       *tree_view,
+                             GtkTreeViewColumn *column)
+{
+  g_return_val_if_fail (tree_view != NULL, -1);
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), -1);
+  g_return_val_if_fail (column != NULL, -1);
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), -1);
+  g_return_val_if_fail (column->tree_view == tree_view, -1);
+
+  tree_view->priv->column = g_list_remove (tree_view->priv->column,
+                                           column);
+  column->tree_view = NULL;
+  g_object_unref (column);
+
+  return tree_view->priv->columns--;
+}
+
+
+/**
+ * gtk_tree_view_insert_column:
+ * @tree_view: A #GtkTreeView.
+ * @column: The #GtkTreeViewColumn to be inserted.
+ * @position: The position to insert @column in.
+ * 
+ * This inserts the @column into the @tree_view at @position.
+ * 
+ * Return value: The number of columns in @tree_view.
+ **/
+gint
+gtk_tree_view_insert_column (GtkTreeView       *tree_view,
+                             GtkTreeViewColumn *column,
+                             gint               position)
+{
+  g_return_val_if_fail (tree_view != NULL, -1);
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), -1);
+  g_return_val_if_fail (column != NULL, -1);
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), -1);
+  g_return_val_if_fail (column->tree_view == NULL, -1);
+
+  tree_view->priv->column = g_list_insert (tree_view->priv->column,
+                                           column, position);
+  column->tree_view = GTK_WIDGET (tree_view);
+  return tree_view->priv->columns++;
+}
+
+/**
+ * gtk_tree_view_get_column:
+ * @tree_view: A #GtkTreeView.
+ * @n: The position of the column, counting from 0.
+ * 
+ * Gets the #GtkTreeViewColumn at the given position in the #tree_view.
+ * 
+ * Return value: The #GtkTreeViewColumn, or NULL if the position is outside the
+ * range of columns.
+ **/
 GtkTreeViewColumn *
 gtk_tree_view_get_column (GtkTreeView *tree_view,
-			  gint       n)
+			  gint         n)
 {
   g_return_val_if_fail (tree_view != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
@@ -3260,21 +3430,33 @@ gtk_tree_view_get_column (GtkTreeView *tree_view,
   return GTK_TREE_VIEW_COLUMN (g_list_nth (tree_view->priv->column, n)->data);
 }
 
+/**
+ * gtk_tree_view_move_to:
+ * @tree_view: A #GtkTreeView.
+ * @path: The path of the row to move to.
+ * @column: The #GtkTreeViewColumn to move horizontally to.
+ * @row_align: The vertical alignment of the row specified by @path.
+ * @col_align: The horizontal alignment of the column specified by @column.
+ * 
+ * Moves the alignments of @tree_view to the position specified by @column and
+ * @path.  If @column is NULL, then the first visible column is assumed, and the
+ * @tree_view is left justified.  Likewise, if @path is NULL the first row is
+ * assumed, and the @tree_view is top justified.  @row_align determines where
+ * the @row is placed, and @col_align determines where @column is placed.  Both
+ * are expected to be between 0.0 and 1.0.
+ **/
 void
-gtk_tree_view_move_to (GtkTreeView *tree_view,
-		       GtkTreePath *path,
-		       gint       column,
-		       gfloat     row_align,
-		       gfloat     col_align)
+gtk_tree_view_move_to (GtkTreeView       *tree_view,
+		       GtkTreePath       *path,
+		       GtkTreeViewColumn *column,
+		       gfloat             row_align,
+		       gfloat             col_align)
 {
   GtkRBNode *node = NULL;
   GtkRBTree *tree = NULL;
 
   g_return_if_fail (tree_view != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-
-  if (column < -1 || column > tree_view->priv->columns)
-    return;
 
   row_align = CLAMP (row_align, 0, 1);
   col_align = CLAMP (col_align, 0, 1);
@@ -3283,6 +3465,7 @@ gtk_tree_view_move_to (GtkTreeView *tree_view,
     {
       _gtk_tree_view_find_node (tree_view, path,
 				&tree, &node);
+      /* Should we justify it to the bottom? */
       if (node == NULL)
 	return;
     }
@@ -3330,6 +3513,12 @@ gtk_tree_view_expand_all_helper (GtkRBTree  *tree,
     }
 }
 
+/**
+ * gtk_tree_view_expand_all:
+ * @tree_view: A #GtkTreeView.
+ * 
+ * Recursively expands all nodes in the @tree_view.
+ **/
 void
 gtk_tree_view_expand_all (GtkTreeView *tree_view)
 {
@@ -3369,6 +3558,12 @@ gtk_tree_view_collapse_all_helper (GtkRBTree  *tree,
     }
 }
 
+/**
+ * gtk_tree_view_collapse_all:
+ * @tree_view: A #GtkTreeView.
+ * 
+ * Recursively collapses all visible, expanded nodes in @tree_view.
+ **/
 void
 gtk_tree_view_collapse_all (GtkTreeView *tree_view)
 {

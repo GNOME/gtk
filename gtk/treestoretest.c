@@ -171,7 +171,7 @@ make_window ()
   /* The selected column */
   cell = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes ("nodes", cell, "text", 0, NULL);
-  gtk_tree_view_add_column (GTK_TREE_VIEW (tree_view), GTK_TREE_VIEW_COLUMN (column));
+  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), GTK_TREE_VIEW_COLUMN (column));
 
   /* Show it all */
   gtk_widget_show_all (window);
