@@ -1,3 +1,13 @@
+Thu May 17 16:20:04 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* demos/gtk-demo/main.c (fontify): It's the worlds ugliest
+	highlighting code!!!!  The result is okay so long as you don't try
+	to stress it.  It also highlights a bug in the TextView so it's in
+	an unproportional font right now until it's fixed.
+
+	*demos/gtk-demo/*.c: Clean up code a bit to make it
+	ugly-parser(TM) friendly. (-:
+
 2001-05-17  Joe Shaw  <joe@ximian.com>
 
 	* gtk/gtktextdisplay.c (gtk_text_layout_draw): Remove the assertions

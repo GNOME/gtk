@@ -14,7 +14,8 @@
 #include <gtk/gtk.h>
 
 void
-toggle_resize (GtkWidget *widget, GtkWidget *child)
+toggle_resize (GtkWidget *widget,
+	       GtkWidget *child)
 {
   GtkPaned *paned = GTK_PANED (child->parent);
   gboolean is_child1 = (child == paned->child1);
@@ -33,7 +34,8 @@ toggle_resize (GtkWidget *widget, GtkWidget *child)
 }
 
 void
-toggle_shrink (GtkWidget *widget, GtkWidget *child)
+toggle_shrink (GtkWidget *widget,
+	       GtkWidget *child)
 {
   GtkPaned *paned = GTK_PANED (child->parent);
   gboolean is_child1 = (child == paned->child1);
@@ -52,7 +54,7 @@ toggle_shrink (GtkWidget *widget, GtkWidget *child)
 }
 
 GtkWidget *
-create_pane_options (GtkPaned *paned,
+create_pane_options (GtkPaned	 *paned,
 		     const gchar *frame_label,
 		     const gchar *label1,
 		     const gchar *label2)

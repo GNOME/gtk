@@ -9,15 +9,13 @@
  * off how to use GtkDrawingArea to do a simple animation.
  *
  * Look at the Image demo for additional pixbuf usage examples.
- * 
+ *
  */
 
 #include <config.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <math.h>
-
-
 
 #define FRAME_DELAY 50
 
@@ -56,7 +54,7 @@ static GdkPixbuf *frame;
 
 /* Background image */
 static GdkPixbuf *background;
-static int back_width, back_height;
+static gint back_width, back_height;
 
 /* Images */
 static GdkPixbuf *images[N_IMAGES];
@@ -64,18 +62,16 @@ static GdkPixbuf *images[N_IMAGES];
 /* Widgets */
 static GtkWidget *da;
 
-
-
 /* Loads the images for the demo and returns whether the operation succeeded */
 static gboolean
 load_pixbufs (GError **error)
 {
-  int i;
-  const char **image_names;
+  gint i;
+  const gchar **image_names;
 
   if (background)
     return TRUE; /* already loaded earlier */
-  
+
   background = gdk_pixbuf_new_from_file (RELATIVE_BACKGROUND_NAME, NULL);
 
   if (!background)
@@ -83,7 +79,7 @@ load_pixbufs (GError **error)
 
   if (!background)
     return FALSE; /* note that "error" was filled in and returned */
-  
+
   back_width = gdk_pixbuf_get_width (background);
   back_height = gdk_pixbuf_get_height (background);
 
@@ -91,12 +87,12 @@ load_pixbufs (GError **error)
     image_names = relative_image_names;
   else
     image_names = installed_image_names;
-  
+
   for (i = 0; i < N_IMAGES; i++)
     {
       images[i] = gdk_pixbuf_new_from_file (image_names[i], error);
       if (!images[i])
-        return FALSE; /* Note that "error" was filled with a GError */
+	return FALSE; /* Note that "error" was filled with a GError */
     }
 
   return TRUE;
@@ -104,7 +100,9 @@ load_pixbufs (GError **error)
 
 /* Expose callback for the drawing area */
 static gint
-expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
+expose_cb (GtkWidget	  *widget,
+	   GdkEventExpose *event,
+	   gpointer	   data)
 {
   guchar *pixels;
   int rowstride;
@@ -112,14 +110,14 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
   rowstride = gdk_pixbuf_get_rowstride (frame);
 
   pixels = gdk_pixbuf_get_pixels (frame) + rowstride * event->area.y + event->area.x * 3;
-		  
+
   gdk_draw_rgb_image_dithalign (widget->window,
-                                widget->style->black_gc,
-                                event->area.x, event->area.y,
-                                event->area.width, event->area.height,
-                                GDK_RGB_DITHER_NORMAL,
-                                pixels, rowstride,
-                                event->area.x, event->area.y);
+				widget->style->black_gc,
+				event->area.x, event->area.y,
+				event->area.width, event->area.height,
+				GDK_RGB_DITHER_NORMAL,
+				pixels, rowstride,
+				event->area.x, event->area.y);
 
   return TRUE;
 }
@@ -138,7 +136,7 @@ timeout (gpointer data)
   double radius;
 
   gdk_pixbuf_copy_area (background, 0, 0, back_width, back_height,
-                        frame, 0, 0);
+			frame, 0, 0);
 
   f = (double) (frame_num % CYCLE_LEN) / CYCLE_LEN;
 
@@ -181,16 +179,16 @@ timeout (gpointer data)
       r2.height = back_height;
 
       if (gdk_rectangle_intersect (&r1, &r2, &dest))
-        gdk_pixbuf_composite (images[i],
-                              frame,
-                              dest.x, dest.y,
-                              dest.width, dest.height,
-                              xpos, ypos,
-                              k, k,
-                              GDK_INTERP_NEAREST,
-                              ((i & 1)
-                               ? MAX (127, fabs (255 * sin (f * 2.0 * M_PI)))
-                               : MAX (127, fabs (255 * cos (f * 2.0 * M_PI)))));
+	gdk_pixbuf_composite (images[i],
+			      frame,
+			      dest.x, dest.y,
+			      dest.width, dest.height,
+			      xpos, ypos,
+			      k, k,
+			      GDK_INTERP_NEAREST,
+			      ((i & 1)
+			       ? MAX (127, fabs (255 * sin (f * 2.0 * M_PI)))
+			       : MAX (127, fabs (255 * cos (f * 2.0 * M_PI)))));
     }
 
   gtk_widget_queue_draw (da);
@@ -203,7 +201,7 @@ static guint timeout_id;
 
 static void
 cleanup_callback (GtkObject *object,
-                  gpointer data)
+		  gpointer   data)
 {
   g_source_remove (timeout_id);
   timeout_id = 0;
@@ -216,53 +214,53 @@ do_pixbufs (void)
     {
       GError *error;
 
-      
+
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Pixbufs");
       gtk_window_set_resizeable (GTK_WINDOW (window), FALSE);
-      
+
       gtk_signal_connect (GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC (gtk_widget_destroyed), &window);
       gtk_signal_connect (GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC (cleanup_callback), NULL);
 
-      
+
       error = NULL;
       if (!load_pixbufs (&error))
-        {
-          GtkWidget *dialog;
-          
-          dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           "Failed to load an image: %s",
-                                           error->message);
-          
-          g_error_free (error);
-          
-          gtk_signal_connect (GTK_OBJECT (dialog),
-                              "response",
-                              GTK_SIGNAL_FUNC (gtk_widget_destroy),
-                              NULL);
-          
-          gtk_widget_show (dialog);
-        }
+	{
+	  GtkWidget *dialog;
+
+	  dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+					   GTK_DIALOG_DESTROY_WITH_PARENT,
+					   GTK_MESSAGE_ERROR,
+					   GTK_BUTTONS_CLOSE,
+					   "Failed to load an image: %s",
+					   error->message);
+
+	  g_error_free (error);
+
+	  gtk_signal_connect (GTK_OBJECT (dialog),
+			      "response",
+			      GTK_SIGNAL_FUNC (gtk_widget_destroy),
+			      NULL);
+
+	  gtk_widget_show (dialog);
+	}
       else
-        {
-          gtk_widget_set_usize (window, back_width, back_height);
-          
-          frame = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, back_width, back_height);
-          
-          da = gtk_drawing_area_new ();
-          
-          gtk_signal_connect (GTK_OBJECT (da), "expose_event",
-                              GTK_SIGNAL_FUNC (expose_cb), NULL);
-          
-          gtk_container_add (GTK_CONTAINER (window), da);
-          
-          timeout_id = gtk_timeout_add (FRAME_DELAY, timeout, NULL);
-        }
+	{
+	  gtk_widget_set_usize (window, back_width, back_height);
+
+	  frame = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, back_width, back_height);
+
+	  da = gtk_drawing_area_new ();
+
+	  gtk_signal_connect (GTK_OBJECT (da), "expose_event",
+			      GTK_SIGNAL_FUNC (expose_cb), NULL);
+
+	  gtk_container_add (GTK_CONTAINER (window), da);
+
+	  timeout_id = gtk_timeout_add (FRAME_DELAY, timeout, NULL);
+	}
     }
-  
+
   if (!GTK_WIDGET_VISIBLE (window))
     {
       gtk_widget_show_all (window);

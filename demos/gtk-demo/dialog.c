@@ -10,7 +10,8 @@ static GtkWidget *entry1 = NULL;
 static GtkWidget *entry2 = NULL;
 
 static void
-message_dialog_clicked (GtkButton *button, gpointer user_data)
+message_dialog_clicked (GtkButton *button,
+			gpointer   user_data)
 {
   GtkWidget *dialog;
   static gint i = 1;
@@ -28,7 +29,8 @@ message_dialog_clicked (GtkButton *button, gpointer user_data)
 }
 
 static void
-interactive_dialog_clicked (GtkButton *button, gpointer user_data)
+interactive_dialog_clicked (GtkButton *button,
+			    gpointer   user_data)
 {
   GtkWidget *dialog;
   GtkWidget *hbox;
@@ -59,7 +61,7 @@ interactive_dialog_clicked (GtkButton *button, gpointer user_data)
   gtk_box_pack_start (GTK_BOX (hbox), table, TRUE, TRUE, 0);
   label = gtk_label_new_with_mnemonic ("_Entry 1");
   gtk_table_attach_defaults (GTK_TABLE (table),
-                             label,
+			     label,
 			     0, 1, 0, 1);
   local_entry1 = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (local_entry1), gtk_entry_get_text (GTK_ENTRY (entry1)));
@@ -68,7 +70,7 @@ interactive_dialog_clicked (GtkButton *button, gpointer user_data)
 
   label = gtk_label_new_with_mnemonic ("E_ntry 2");
   gtk_table_attach_defaults (GTK_TABLE (table),
-                             label,
+			     label,
 			     0, 1, 1, 2);
 
   local_entry2 = gtk_entry_new ();
@@ -142,8 +144,8 @@ do_dialog (void)
 
       label = gtk_label_new_with_mnemonic ("_Entry 1");
       gtk_table_attach_defaults (GTK_TABLE (table),
-                                 label,
-                                 0, 1, 0, 1);
+				 label,
+				 0, 1, 0, 1);
 
       entry1 = gtk_entry_new ();
       gtk_table_attach_defaults (GTK_TABLE (table), entry1, 1, 2, 0, 1);
@@ -152,8 +154,8 @@ do_dialog (void)
       label = gtk_label_new_with_mnemonic ("E_ntry 2");
       
       gtk_table_attach_defaults (GTK_TABLE (table),
-                                 label,
-                                 0, 1, 1, 2);
+				 label,
+				 0, 1, 1, 2);
 
       entry2 = gtk_entry_new ();
       gtk_table_attach_defaults (GTK_TABLE (table), entry2, 1, 2, 1, 2);
@@ -165,7 +167,7 @@ do_dialog (void)
       gtk_widget_show_all (window);
     }
   else
-    {    
+    {	 
       gtk_widget_destroy (window);
       window = NULL;
     }
