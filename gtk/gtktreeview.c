@@ -1796,10 +1796,13 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 						(GdkEvent *)event,
 						path_string,
 						&background_area,
-						&cell_area, flags))
+						&cell_area, flags) &&
+	      tree_view->priv->cursor)
 	    {
-	      if (cell_editable != NULL &&
-		  gtk_tree_selection_iter_is_selected (gtk_tree_view_get_selection (tree_view), &iter))
+	      GtkTreePath *cursor = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
+
+	      if (cell_editable != NULL && cursor &&
+		  !gtk_tree_path_compare (cursor, path))
 		{
 		  gtk_tree_view_real_start_editing (tree_view,
 						    column,
@@ -1809,8 +1812,11 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 						    (GdkEvent *)event,
 						    flags);
 		  gtk_tree_path_free (path);
+		  gtk_tree_path_free (cursor);
 		  return TRUE;
 		}
+	      if (cursor)
+		gtk_tree_path_free (cursor);
 	      column_handled_click = TRUE;
 	    }
 	  g_free (path_string);

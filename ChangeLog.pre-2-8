@@ -1,3 +1,9 @@
+Mon Mar 11 01:25:14 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): compare path with
+	cursor path and not with the selected iter in the 'decide to edit'
+	check
+
 Fri Mar  8 14:45:00 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* ======== Released GTK+-2.0 ========
