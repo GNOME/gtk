@@ -1,3 +1,13 @@
+2002-02-22  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_reorderable):
+	s/columns/rows/ in docs.  (#70199)
+
+	* gtk/gtktreestore.c (gtk_tree_store_insert): s/before/after/ in 
+	docs. (#71852, #68405)
+
+	* gtk/gtkcalendar.c (gtk_calendar_select_day): Correct a comment.
+
 Thu Feb 21 23:02:29 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.[ch]: add keynav handling for unselect all,

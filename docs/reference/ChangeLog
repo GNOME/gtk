@@ -1,3 +1,14 @@
+2002-02-22  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtksignal.sgml, gtk/tmpl/gtkimage.sgml: s/%d/%%d/ in
+	examples.  (#71479)
+
+	* gtk/tmpl/gtkmenu.sgml: Document gtk_menu_set_active as 
+	quasi-private.  (#69788)
+
+	* gtk/tmpl/gtkcalendar.sgml: Document month as zero-based and 
+	selected_day as one-based.  (#57169)
+
 Thu Feb 21 12:11:42 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am (IGNORE_HFILES): Add gtkkeyhash.h

@@ -166,8 +166,6 @@ static gboolean gtk_tree_view_button_release       (GtkWidget        *widget,
 						    GdkEventButton   *event);
 static void     gtk_tree_view_set_focus_child      (GtkContainer     *container,
 						    GtkWidget        *child);
-static gint     gtk_tree_view_focus_in             (GtkWidget        *widget,
-						    GdkEventFocus    *event);
 static gint     gtk_tree_view_focus_out            (GtkWidget        *widget,
 						    GdkEventFocus    *event);
 static gint     gtk_tree_view_focus                (GtkWidget        *widget,
@@ -474,7 +472,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->key_press_event = gtk_tree_view_key_press;
   widget_class->enter_notify_event = gtk_tree_view_enter_notify;
   widget_class->leave_notify_event = gtk_tree_view_leave_notify;
-  widget_class->focus_in_event = gtk_tree_view_focus_in;
   widget_class->focus_out_event = gtk_tree_view_focus_out;
   widget_class->drag_begin = gtk_tree_view_drag_begin;
   widget_class->drag_end = gtk_tree_view_drag_end;
@@ -3525,34 +3522,10 @@ return TRUE;
 
 
 static gint
-gtk_tree_view_focus_in (GtkWidget     *widget,
-			GdkEventFocus *event)
-{
-  GtkTreeView *tree_view;
-
-  g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  tree_view = GTK_TREE_VIEW (widget);
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-
-  gtk_widget_queue_draw (widget);
-
-  return FALSE;
-}
-
-
-static gint
 gtk_tree_view_focus_out (GtkWidget     *widget,
 			 GdkEventFocus *event)
 {
   GtkWidget   *search_dialog;
-
-  g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
 
   gtk_widget_queue_draw (widget);
 
@@ -8742,7 +8715,7 @@ gtk_tree_view_get_reorderable (GtkTreeView *tree_view)
  * This function is a convenience function to allow you to reorder models that
  * support the #GtkDragSourceIface and the #GtkDragDestIface.  Both
  * #GtkTreeStore and #GtkListStore support these.  If @reorderable is %TRUE, then
- * the user can reorder the model by dragging and dropping columns.  The
+ * the user can reorder the model by dragging and dropping rows.  The
  * developer can listen to these changes by connecting to the model's
  * signals.
  *

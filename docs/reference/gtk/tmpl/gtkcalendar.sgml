@@ -56,6 +56,13 @@ year, and selected day respectively.
 All of these fields should be considered read only, and everything in this
 struct should only be modified using the functions provided below.
 </para>
+<note>
+<para>
+Note that <structfield>month</structfield> is zero-based (i.e it allowed values
+are 0-11) while <structfield>selected_day</structfield> is one-based
+(i.e. allowed values are 1-31). 
+</para>
+</note>
 
 
 <!-- ##### ENUM GtkCalendarDisplayOptions ##### -->
@@ -109,7 +116,7 @@ Shifts the calendar to a different month.
 </para>
 
 @calendar: a #GtkCalendar.
-@month: a month number.
+@month: a month number between 0 and 11.
 @year: the year the month is in.
 @Returns: %TRUE.
 
@@ -120,7 +127,8 @@ Selects a day from the current month.
 </para>
 
 @calendar: a #GtkCalendar.
-@day: the day number to select.
+@day: the day number between 1 and 31, or 0 to unselect 
+   the currently selected day.
 
 
 <!-- ##### FUNCTION gtk_calendar_mark_day ##### -->
@@ -129,7 +137,7 @@ Places a visual marker on a particular day.
 </para>
 
 @calendar: a #GtkCalendar.
-@day: the day number to mark.
+@day: the day number to mark between 1 and 31.
 @Returns: %TRUE.
 
 
@@ -139,7 +147,7 @@ Removes the visual marker from a particular day.
 </para>
 
 @calendar: a #GtkCalendar.
-@day: the day number to unmark.
+@day: the day number to unmark between 1 and 31.
 @Returns: %TRUE.
 
 

@@ -246,7 +246,7 @@ selection has not yet been made, the first menu item is selected.
 <!-- ##### FUNCTION gtk_menu_set_active ##### -->
 <para>
 Selects the specified menu item within the menu.  This is used by the
-#GtkOptionMenu.
+#GtkOptionMenu and should not be used by anyone else.
 </para>
 
 @menu: a #GtkMenu.
