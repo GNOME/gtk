@@ -571,6 +571,7 @@ gtk_combo_box_menu_show (GtkWidget *menu,
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (combo_box->priv->button),
                                 TRUE);
+  combo_box->priv->popup_in_progress = FALSE;
 }
 
 static void
@@ -1431,6 +1432,7 @@ gtk_combo_box_menu_button_press (GtkWidget      *widget,
 
   if (event->type == GDK_BUTTON_PRESS && event->button == 1)
     {
+      combo_box->priv->popup_in_progress = TRUE;
       gtk_menu_popup (GTK_MENU (combo_box->priv->popup_widget),
                       NULL, NULL,
                       gtk_combo_box_menu_position, combo_box,

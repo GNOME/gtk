@@ -1,3 +1,11 @@
+Tue Sep 30 21:43:34 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_button_press): set
+	popup_in_progress to TRUE,
+	(gtk_combo_box_menu_show): and back to FALSE here; the menu now
+	won't disappear on the first button release. (Reported by Matthias
+	Clasen).
+
 Tue Sep 30 21:08:43 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_init): actually show the child.
