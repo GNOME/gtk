@@ -327,6 +327,8 @@ gtk_text_buffer_new (GtkTextTagTable *table)
       text_buffer->tag_table = table;
 
       g_object_ref (G_OBJECT (text_buffer->tag_table));
+
+      _gtk_text_tag_table_add_buffer (table, text_buffer);
     }
   
   return text_buffer;
@@ -344,6 +346,7 @@ gtk_text_buffer_finalize (GObject *object)
 
   if (buffer->tag_table)
     {
+      _gtk_text_tag_table_remove_buffer (buffer->tag_table, buffer);
       g_object_unref (G_OBJECT (buffer->tag_table));
       buffer->tag_table = NULL;
     }
@@ -366,7 +369,10 @@ static GtkTextTagTable*
 get_table (GtkTextBuffer *buffer)
 {
   if (buffer->tag_table == NULL)
-    buffer->tag_table = gtk_text_tag_table_new ();
+    {
+      buffer->tag_table = gtk_text_tag_table_new ();
+      _gtk_text_tag_table_add_buffer (buffer->tag_table, buffer);
+    }
 
   return buffer->tag_table;
 }
@@ -376,7 +382,7 @@ get_btree (GtkTextBuffer *buffer)
 {
   if (buffer->btree == NULL)
     buffer->btree = _gtk_text_btree_new (gtk_text_buffer_get_tag_table (buffer),
-                                        buffer);
+                                         buffer);
 
   return buffer->btree;
 }
@@ -3502,6 +3508,19 @@ _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
   return cache->entries[0].attrs;
 }
 
+void
+_gtk_text_buffer_notify_will_remove_tag (GtkTextBuffer *buffer,
+                                         GtkTextTag    *tag)
+{
+  /* This removes tag from the buffer, but DOESN'T emit the
+   * remove_tag signal, because we can't afford to have user
+   * code messing things up at this point; the tag MUST be removed
+   * entirely.
+   */
+  if (buffer->btree)
+    _gtk_text_btree_notify_will_remove_tag (buffer->btree, tag);
+}
+
 /*
  * Debug spew
  */
@@ -3511,8 +3530,3 @@ _gtk_text_buffer_spew (GtkTextBuffer *buffer)
 {
   _gtk_text_btree_spew (get_btree (buffer));
 }
-
-
-
-
-

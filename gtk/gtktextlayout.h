@@ -205,6 +205,9 @@ struct _GtkTextLayoutClass
                                  GtkWidget         *child,
                                  gint               x,
                                  gint               y);
+
+  GtkFunction pad1;
+  GtkFunction pad2;
 };
 
 struct _GtkTextAttrAppearance

@@ -292,6 +292,10 @@ void _gtk_change_node_toggle_count  (GtkTextBTreeNode   *node,
 void _gtk_text_btree_release_mark_segment (GtkTextBTree       *tree,
                                            GtkTextLineSegment *segment);
 
+/* for coordination with the tag table */
+void _gtk_text_btree_notify_will_remove_tag (GtkTextBTree *tree,
+                                             GtkTextTag   *tag);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

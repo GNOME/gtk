@@ -2,6 +2,7 @@
 #include "gtktexttagtable.h"
 #include "gtkmarshalers.h"
 #include "gtksignal.h"
+#include "gtktextbuffer.h" /* just for the lame notify_will_remove_tag hack */
 
 #include <stdlib.h>
 
@@ -154,6 +155,8 @@ gtk_text_tag_table_finalize (GObject *object)
   g_hash_table_destroy (table->hash);
   g_slist_free (table->anonymous);
 
+  g_slist_free (table->buffers);
+  
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 static void
@@ -277,10 +280,24 @@ void
 gtk_text_tag_table_remove (GtkTextTagTable *table,
                            GtkTextTag      *tag)
 {
+  GSList *tmp;
+  
   g_return_if_fail (GTK_IS_TEXT_TAG_TABLE (table));
   g_return_if_fail (GTK_IS_TEXT_TAG (tag));
   g_return_if_fail (tag->table == table);
 
+  /* Our little bad hack to be sure buffers don't still have the tag
+   * applied to text in the buffer
+   */
+  tmp = table->buffers;
+  while (tmp != NULL)
+    {
+      _gtk_text_buffer_notify_will_remove_tag (GTK_TEXT_BUFFER (tmp->data),
+                                               tag);
+      
+      tmp = tmp->next;
+    }
+  
   /* Set ourselves to the highest priority; this means
      when we're removed, there won't be any gaps in the
      priorities of the tags in the table. */
@@ -367,4 +384,22 @@ gtk_text_tag_table_get_size (GtkTextTagTable *table)
   g_return_val_if_fail (GTK_IS_TEXT_TAG_TABLE (table), 0);
 
   return g_hash_table_size (table->hash) + table->anon_count;
+}
+
+void
+_gtk_text_tag_table_add_buffer (GtkTextTagTable *table,
+                                gpointer         buffer)
+{
+  g_return_if_fail (GTK_IS_TEXT_TAG_TABLE (table));
+
+  table->buffers = g_slist_prepend (table->buffers, buffer);
+}
+
+void
+_gtk_text_tag_table_remove_buffer (GtkTextTagTable *table,
+                                   gpointer         buffer)
+{
+  g_return_if_fail (GTK_IS_TEXT_TAG_TABLE (table));
+
+  table->buffers = g_slist_remove (table->buffers, buffer);
 }

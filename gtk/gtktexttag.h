@@ -9,7 +9,6 @@ extern "C" {
 #endif /* __cplusplus */
 
 typedef struct _GtkTextIter GtkTextIter;
-typedef struct _GtkTextBTreeNode GtkTextBTreeNode;
 typedef struct _GtkTextTagTable GtkTextTagTable;
 
 typedef struct _GtkTextAttributes GtkTextAttributes;
@@ -47,7 +46,7 @@ struct _GtkTextTag
    */
 
   GtkTextAttributes *values;
-
+  
   /* Flags for whether a given value is set; if a value is unset, then
    * this tag does not affect it.
    */
@@ -85,6 +84,9 @@ struct _GtkTextTagClass
                       GObject           *event_object, /* widget, canvas item, whatever */
                       GdkEvent          *event,        /* the event itself */
                       const GtkTextIter *iter);        /* location of event in buffer */
+
+  GtkFunction pad1;
+  GtkFunction pad2;
 };
 
 GType        gtk_text_tag_get_type     (void) G_GNUC_CONST;
@@ -112,6 +114,11 @@ struct _GtkTextAppearance
 
   /* super/subscript rise, can be negative */
   gint rise;
+
+  /* I'm not sure this can really be used without breaking some things
+   * an app might do :-/
+   */
+  gpointer padding1;
   
   guint underline : 4;          /* PangoUnderline */
   guint strikethrough : 1;
@@ -129,6 +136,11 @@ struct _GtkTextAppearance
    */
   guint inside_selection : 1;
   guint is_text : 1;
+
+  guint pad1 : 1;
+  guint pad2 : 1;
+  guint pad3 : 1;
+  guint pad4 : 1;
 };
 
 struct _GtkTextAttributes
@@ -166,6 +178,11 @@ struct _GtkTextAttributes
 
   PangoLanguage *language;
 
+  /* I'm not sure this can really be used without breaking some things
+   * an app might do :-/
+   */
+  gpointer padding1;
+  
   /* hide the text  */
   guint invisible : 1;
 

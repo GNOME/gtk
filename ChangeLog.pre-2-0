@@ -1,3 +1,44 @@
+2001-12-04  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbtree.c (gtk_text_btree_remove_tag_info): remove
+	g_assert_not_reached() that was bogus, since we demand-create the
+	tag info. reported by Chris Phelps
+
+        Jump through assorted hoops to fix bug from Chris Phelps where 
+	removing tags from the table resulted in btree trying to 
+	access tag->table
+	
+	* gtk/gtktextbuffer.c: set up mechanics of adding/removing 
+	ourselves to the tag table
+
+	* gtk/gtktexttagtable.c (_gtk_text_tag_table_add_buffer) 
+	(_gtk_text_tag_table_remove_buffer): private cruft to 
+	let us notify buffer of disappearing tags
+
+	* gtk/gtktexttag.h: remove BTreeNode typedef from this public
+	header, put it in tagprivate	
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_new): don't connect to
+	tag_removed; it's emitted too late.
+	(_gtk_text_btree_notify_will_remove_tag): rename tag_remove_cb to
+	this
+
+	Padding for ABI-compat expansion
+	
+	* gtk/gtktexttag.h (struct _GtkTextAttributes): pad this
+	(struct _GtkTextAppearance): one pad in here too
+
+	* gtk/gtktextlayout.h (struct _GtkTextLayoutClass): padding here
+
+	* gtk/gtktextview.h (struct _GtkTextViewClass): more padding,
+	since action signals etc. seem pretty likely
+
+	* gtk/gtktextbuffer.h (struct _GtkTextBufferClass): padding
+
+	* gtk/gtktexttag.h (struct _GtkTextTagClass): padding
+
+	* gtk/gtktexttagtable.h (struct _GtkTextTagTableClass): padding
+
 2001-12-04  Matthias Clasen  <matthiasc@poet.de>
 
         * gdk/gdkcolor.h (gdk_colormap_change): Deprecate. (#65851)
@@ -26,7 +67,7 @@ Tue Dec  4 18:38:35 2001  Jonathan Blandford  <jrb@redhat.com>
 	* gtk/gtktreeviewcolumn.h: ditto
 
 2001-12-04  Havoc Pennington  <hp@redhat.com>
-
+	
 	* gtk/gtktexttag.c (gtk_text_tag_set_property): add a warning for
 	"invisible" property, #65999
 

@@ -189,6 +189,11 @@ struct _GtkTextViewClass
   GtkFunction pad2;
   GtkFunction pad3;
   GtkFunction pad4;
+  
+  GtkFunction pad5;
+  GtkFunction pad6;
+  GtkFunction pad7;
+  GtkFunction pad8;
 };
 
 GtkType        gtk_text_view_get_type              (void) G_GNUC_CONST;

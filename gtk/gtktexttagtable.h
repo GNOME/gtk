@@ -26,6 +26,8 @@ struct _GtkTextTagTable {
   GHashTable *hash;
   GSList *anonymous;
   gint anon_count;
+
+  GSList *buffers;
 };
 
 struct _GtkTextTagTableClass {
@@ -34,6 +36,9 @@ struct _GtkTextTagTableClass {
   void (* tag_changed) (GtkTextTagTable *table, GtkTextTag *tag, gboolean size_changed);
   void (* tag_added) (GtkTextTagTable *table, GtkTextTag *tag);
   void (* tag_removed) (GtkTextTagTable *table, GtkTextTag *tag);
+
+  GtkFunction pad1;
+  GtkFunction pad2;
 };
 
 GType          gtk_text_tag_table_get_type (void) G_GNUC_CONST;
@@ -50,6 +55,14 @@ void             gtk_text_tag_table_foreach  (GtkTextTagTable        *table,
                                               gpointer                data);
 gint             gtk_text_tag_table_get_size (GtkTextTagTable        *table);
 
+
+/* INTERNAL private stuff - not even exported from the library on
+ * many platforms
+ */
+void _gtk_text_tag_table_add_buffer    (GtkTextTagTable *table,
+                                        gpointer         buffer);
+void _gtk_text_tag_table_remove_buffer (GtkTextTagTable *table,
+                                        gpointer         buffer);
 
 #ifdef __cplusplus
 }
