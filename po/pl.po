@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-05-29 17:43+0200\n"
-"PO-Revision-Date: 2002-05-29 22:06+0200\n"
+"POT-Creation-Date: 2002-06-14 10:22+0200\n"
+"PO-Revision-Date: 2002-06-14 10:25+0200\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3815,7 +3815,7 @@ msgid "ZWS _Zero width space"
 msgstr "ZWS - spacja o z_erowej szerokości"
 
 #: gtk/gtktextutil.c:1
-msgid "ZWN Zero width _joiner"
+msgid "ZWJ Zero width _joiner"
 msgstr "ZWN - łączn_ik znaków o zerowej szerokości"
 
 #: gtk/gtktextutil.c:1
