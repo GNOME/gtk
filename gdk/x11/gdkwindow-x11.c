@@ -1102,6 +1102,20 @@ set_initial_hints (GdkWindow *window)
       ++i;
     }
 
+  if (private->state & GDK_WINDOW_STATE_ABOVE)
+    {
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
+							"_NET_WM_STATE_ABOVE");
+      ++i;
+    }
+  
+  if (private->state & GDK_WINDOW_STATE_BELOW)
+    {
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
+							"_NET_WM_STATE_BELOW");
+      ++i;
+    }
+  
   if (private->state & GDK_WINDOW_STATE_STICKY)
     {
       atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
