@@ -10,8 +10,6 @@
 #include <gmodule.h>
 #include "gdk-pixbuf.h"
 
-#define PIXBUF_LIBDIR "."
-
 static gboolean
 pixbuf_check_png (unsigned char *buffer, int size)
 {
