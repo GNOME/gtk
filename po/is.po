@@ -2839,31 +2839,29 @@ msgstr "Sýna texta"
 
 #: gtk/gtkprogress.c:138
 msgid "Whether the progress is shown as text"
-msgstr ""
+msgstr "Hvort framgangur er sýndur sem texti"
 
 #: gtk/gtkprogress.c:145
 msgid "Text x alignment"
 msgstr "X viðfang texta"
 
 #: gtk/gtkprogress.c:146
-#, fuzzy
 msgid "A number between 0.0 and 1.0 specifying the horizontal alignment of the text in the progress widget"
-msgstr "Tala frá 0.0 til 1.0 er skilgreinir lárétt viðfang texta í progress widget"
+msgstr "Tala frá 0.0 til 1.0 er skilgreinir lárétt viðfang texta í framgangsgræju"
 
 #: gtk/gtkprogress.c:154
 msgid "Text y alignment"
 msgstr "Y viðfang texta"
 
 #: gtk/gtkprogress.c:155
-#, fuzzy
 msgid "A number between 0.0 and 1.0 specifying the vertical alignment of the text in the progress widget"
-msgstr "Tala frá 0.0 til 1.0 er skilgreinir lóðrétt viðfang texta í progress widget"
+msgstr "Tala frá 0.0 til 1.0 er skilgreinir lóðrétt viðfang texta í framgangsgræju"
 
 #: gtk/gtkprogressbar.c:142
 #: gtk/gtkrange.c:290
 #: gtk/gtkspinbutton.c:240
 msgid "Adjustment"
-msgstr ""
+msgstr "Stillingar"
 
 #: gtk/gtkprogressbar.c:143
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
