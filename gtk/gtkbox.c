@@ -298,7 +298,7 @@ gtk_box_reorder_child (GtkBox                   *box,
       list = list->next;
     }
 
-  if (list)
+  if (list && box->children->next)
     {
       GList *tmp_list;
 
@@ -306,6 +306,8 @@ gtk_box_reorder_child (GtkBox                   *box,
 	list->next->prev = list->prev;
       if (list->prev)
 	list->prev->next = list->next;
+      else
+	box->children = list->next;
 
       tmp_list = box->children;
       while (pos && tmp_list->next)
