@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk20.hi\n"
-"POT-Creation-Date: 2003-08-25 19:00+0530\n"
+"POT-Creation-Date: 2003-08-25 22:08-0400\n"
 "PO-Revision-Date: 2003-08-26 20:48+0530\n"
 "Last-Translator: G Karunakar <karunakar@freedomink.org>\n"
 "Language-Team: Hindi <indlinux-hindi-gnome@lists.sourceforge.net>\n"
@@ -27,7 +27,8 @@ msgstr "इमेज फाइल %s में कोई डाटा नही�
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:781
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "इमेज %s को लोड करने में असफल, कारण अग्यात, शायद एक खराब इमेज फाइल है"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:226
@@ -47,7 +48,8 @@ msgstr "इमेज लोडिंग माड्यूल %s को लो�
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
-msgstr "इमेज लोडिंग माड्यूल %s सही इंटरफेस नहीं बना पा रहा, शायद यह भिन्न GTK संस्करण से है"
+msgstr ""
+"इमेज लोडिंग माड्यूल %s सही इंटरफेस नहीं बना पा रहा, शायद यह भिन्न GTK संस्करण से है"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:564 gdk-pixbuf/gdk-pixbuf-io.c:612
 #, c-format
@@ -287,7 +289,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:827
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG गुणवत्ता का मान 0 से 100 के बीच होना चाहिए। %d मान वैध नहीं है"
 
 #: gdk-pixbuf/io-jpeg.c:940
@@ -342,7 +345,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG इमेज फाइल को पढ़ने में मूलभूत त्रुटि %s"
 
 #: gdk-pixbuf/io-png.c:771
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG पाठ्य में कुंजीयें  कम से कम १ तथा अधिकतम 79 कैरेक्टर्स हो सकते हैं"
 
 #: gdk-pixbuf/io-png.c:779
@@ -351,7 +355,8 @@ msgstr "PNG पाठ्य कुंजियों में सिर्फ A
 
 #: gdk-pixbuf/io-png.c:812
 #, c-format
-msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr "PNG पाठ्य %s में मानों को ISO-8859-1 इनकोडिंग में परिवर्तित नहीं किया जा सकता"
 
 #: gdk-pixbuf/io-png.c:919
@@ -954,7 +959,8 @@ msgid "Use stock"
 msgstr "भण्डार का प्रयोग करें"
 
 #: gtk/gtkbutton.c:206
-msgid "If set, the label is used to pick a stock item instead of being displayed"
+msgid ""
+"If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "यदि समायोजित किया गया है तो लेबल का प्रयोग भंडार वस्तु को चुनने के लिए किया जाएगा, "
 "प्रदर्शित करने के स्थान पर"
@@ -991,7 +997,8 @@ msgid "Child X Displacement"
 msgstr ""
 
 #: gtk/gtkbutton.c:285
-msgid "How far in the x direction to move the child when the button is depressed"
+msgid ""
+"How far in the x direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkbutton.c:292
@@ -999,7 +1006,8 @@ msgid "Child Y Displacement"
 msgstr ""
 
 #: gtk/gtkbutton.c:293
-msgid "How far in the y direction to move the child when the button is depressed"
+msgid ""
+"How far in the y direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:116
@@ -1215,11 +1223,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Gdk रंग की तरह पार्श्व रंग"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtkentry.c:459 gtk/gtktexttag.c:273
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:578
 msgid "Editable"
 msgstr "संशोधनीय"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:233 gtk/gtktexttag.c:274 gtk/gtktextview.c:579
 msgid "Whether the text can be modified by the user"
 msgstr "क्या उपयोगकर्ता द्वारा पाठ्य संशोधित किया गया है"
 
@@ -1290,7 +1298,8 @@ msgid "Rise"
 msgstr "व=द्धि (ऊंचाई)"
 
 #: gtk/gtkcellrenderertext.c:333
-msgid "Offset of text above the baseline (below the baseline if rise is negative)"
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 "पाठ्य को बेसलाइन (आधार पंक्ति) से ऊपर रखें (यदि व=द्धि ऋणात्मक हो तो आधार पंक्ति से नीचे "
 "रखें)"
@@ -1775,7 +1784,8 @@ msgid "Selection Bound"
 msgstr "चयन सीमा"
 
 #: gtk/gtkentry.c:450 gtk/gtklabel.c:379
-msgid "The position of the opposite end of the selection from the cursor in chars"
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars"
 msgstr "कैरेक्टर्स कर्सर से चयन किए गए दूसरे विपरीत सिरे की स्थिति"
 
 #: gtk/gtkentry.c:460
@@ -1798,7 +1808,8 @@ msgstr "दश्यता"
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
-msgstr "FALSE का प्रयोग करने पर वास्तविक पाठ्य के स्थान पर (पासवर्ड मोड) में प्रदर्शन अदश्य कैरेक्टर"
+msgstr ""
+"FALSE का प्रयोग करने पर वास्तविक पाठ्य के स्थान पर (पासवर्ड मोड) में प्रदर्शन अदश्य कैरेक्टर"
 
 #: gtk/gtkentry.c:484
 msgid "Has Frame"
@@ -1858,7 +1869,7 @@ msgstr "फोकस करने पर चयन करें"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "जब कोई प्रविष्टि फोकस हो तब क्या उसके Contents को चयनित किया जाना है?"
 
-#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6621
+#: gtk/gtkentry.c:3993 gtk/gtklabel.c:3222 gtk/gtktextview.c:6623
 msgid "Select All"
 msgstr "सभी का चयन करें"
 
@@ -1866,7 +1877,7 @@ msgstr "सभी का चयन करें"
 msgid "Input Methods"
 msgstr "इनपुट पद्धति"
 
-#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6640
+#: gtk/gtkentry.c:4013 gtk/gtktextview.c:6642
 msgid "_Insert Unicode control character"
 msgstr "यूनिकोड कन्ट्रोल कैरेक्टर प्रविष्ट करें"
 
@@ -1939,8 +1950,10 @@ msgstr "फाइल का नाम बदलें"
 
 #: gtk/gtkfilesel.c:1436
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "इस फोल्डर के नाम %s में Symbols मौजूद है जिन्हें फाइलनाम में प्रयुक्त नहीं किया जा सकता"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"इस फोल्डर के नाम %s में Symbols मौजूद है जिन्हें फाइलनाम में प्रयुक्त नहीं किया जा सकता"
 
 #: gtk/gtkfilesel.c:1438
 #, c-format
@@ -2409,7 +2422,7 @@ msgstr "मार्कअप का प्रयोग करें"
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "लेबल के पाठ्य में XML मार्कअप संयुक्त है, Pango-Parse.markup() देखें"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:595
 msgid "Justification"
 msgstr "पक्ष समर्थन"
 
@@ -2511,14 +2524,16 @@ msgstr ""
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
-msgstr "जब इस मेनू का प्रदर्शन बंद किया जाएगा तब विन्डो मैनेजर द्वारा शीर्षक प्रदर्शित किया जाएगा"
+msgstr ""
+"जब इस मेनू का प्रदर्शन बंद किया जाएगा तब विन्डो मैनेजर द्वारा शीर्षक प्रदर्शित किया जाएगा"
 
 #: gtk/gtkmenu.c:379
 msgid "Can change accelerators"
 msgstr "त्वरक को परिवर्तित बदला जा सकता है"
 
 #: gtk/gtkmenu.c:380
-msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
+msgid ""
+"Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "क्या मेनू पर एक कुंजी दबाने पर मेनू त्वरकों को बदला जा सकता है?"
 
 #: gtk/gtkmenu.c:385
@@ -2526,7 +2541,8 @@ msgid "Delay before submenus appear"
 msgstr ""
 
 #: gtk/gtkmenu.c:386
-msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
+msgid ""
+"Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 
 #: gtk/gtkmenu.c:393
@@ -2604,7 +2620,8 @@ msgid "X pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:119
-msgid "The amount of space to add on the left and right of the widget, in pixels"
+msgid ""
+"The amount of space to add on the left and right of the widget, in pixels"
 msgstr "विडगेट के बांयी तथा दांयी ओर जोड़ी जाने वाली रिक्त स्थान की मात्रा पिक्सल में"
 
 #: gtk/gtkmisc.c:128
@@ -2612,7 +2629,8 @@ msgid "Y pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:129
-msgid "The amount of space to add on the top and bottom of the widget, in pixels"
+msgid ""
+"The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "विडगेट के ऊपर नीचे जोड़ी जाने वाले रिक्त स्थान की मात्रा पिक्सल में"
 
 #: gtk/gtknotebook.c:378
@@ -2731,7 +2749,7 @@ msgstr "क्या बार्डर को दर्शाया जान�
 msgid "Tab pack type"
 msgstr ""
 
-#: gtk/gtknotebook.c:2473 gtk/gtknotebook.c:4820
+#: gtk/gtknotebook.c:2471 gtk/gtknotebook.c:4818
 #, c-format
 msgid "Page %u"
 msgstr "पेज %u"
@@ -2753,7 +2771,8 @@ msgid "Spacing around indicator"
 msgstr "सूचक के चारों ओर का रिक्त स्थान"
 
 #: gtk/gtkpaned.c:219
-msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid ""
+"Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 
 #: gtk/gtkpaned.c:227
@@ -2773,7 +2792,8 @@ msgid "Width of handle"
 msgstr "हैण्डल की चौड़ाई"
 
 #: gtk/gtkpreview.c:133
-msgid "Whether the preview widget should take up the entire space it is allocated"
+msgid ""
+"Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
 
 #: gtk/gtkprogress.c:129
@@ -2956,7 +2976,8 @@ msgid "Arrow X Displacement"
 msgstr ""
 
 #: gtk/gtkrange.c:338
-msgid "How far in the x direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrange.c:345
@@ -2964,7 +2985,8 @@ msgid "Arrow Y Displacement"
 msgstr ""
 
 #: gtk/gtkrange.c:346
-msgid "How far in the y direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrc.c:2382
@@ -3087,16 +3109,20 @@ msgid "Secondary backward stepper"
 msgstr "द्वितीयक पिछले चरण"
 
 #: gtk/gtkscrollbar.c:114
-msgid "Display a second backward arrow button on the opposite end of the scrollbar"
-msgstr "स्क्रोलबार पर विपरीत सिरे पर एक द्वितीय पीछे की ओर तीर निशान वाली बटन प्रदर्शित करें"
+msgid ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
+msgstr ""
+"स्क्रोलबार पर विपरीत सिरे पर एक द्वितीय पीछे की ओर तीर निशान वाली बटन प्रदर्शित करें"
 
 #: gtk/gtkscrollbar.c:121
 msgid "Secondary forward stepper"
 msgstr "द्वितीयक अगले चरण"
 
 #: gtk/gtkscrollbar.c:122
-msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
-msgstr "स्क्रोलबार पर विपरीत सिरे पर एक द्वितीय आगे की ओर तीर निशान वाली बटन प्रदर्शित करें"
+msgid ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgstr ""
+"स्क्रोलबार पर विपरीत सिरे पर एक द्वितीय आगे की ओर तीर निशान वाली बटन प्रदर्शित करें"
 
 #: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:528
 msgid "Horizontal Adjustment"
@@ -3182,7 +3208,8 @@ msgstr "कर्सर विभाजन"
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
-msgstr "क्या दायें-से-बायें एवं बांये से दांये पाठ्य के लिए मिश्रित दो कर्सर को प्रदर्शित किया जाना है"
+msgstr ""
+"क्या दायें-से-बायें एवं बांये से दांये पाठ्य के लिए मिश्रित दो कर्सर को प्रदर्शित किया जाना है"
 
 #: gtk/gtksettings.c:200
 msgid "Theme Name"
@@ -3289,7 +3316,8 @@ msgid "Update Policy"
 msgstr "अपडेट नीति"
 
 #: gtk/gtkspinbutton.c:293
-msgid "Whether the spin button should update always, or only when the value is legal"
+msgid ""
+"Whether the spin button should update always, or only when the value is legal"
 msgstr "क्या स्पिन बटन हमेशा अपडेट रहे, या सिर्फ तब जब मान वैध रहे"
 
 #: gtk/gtkspinbutton.c:301
@@ -3748,7 +3776,8 @@ msgstr "पार्श्व साधारण मास्क"
 
 #: gtk/gtktexttag.c:231
 msgid "Bitmap to use as a mask when drawing the text background"
-msgstr "जब पाठ्य पार्श्व चित्रित किया जा रहा है। तब बिटमैप का उपयोग एक मास्क की तरह करें"
+msgstr ""
+"जब पाठ्य पार्श्व चित्रित किया जा रहा है। तब बिटमैप का उपयोग एक मास्क की तरह करें"
 
 #: gtk/gtktexttag.c:248
 #, fuzzy
@@ -3806,7 +3835,7 @@ msgid ""
 "such as PANGO_SCALE_X_LARGE"
 msgstr ""
 
-#: gtk/gtktexttag.c:375 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:375 gtk/gtktextview.c:596
 msgid "Left, right, or center justification"
 msgstr "बांया, दांया या मध्य न्यायसंगतता"
 
@@ -3825,7 +3854,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "दांया मार्जिन"
 
-#: gtk/gtktexttag.c:392 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:392 gtk/gtktextview.c:605
 msgid "Width of the left margin in pixels"
 msgstr "बांये मार्जिन की चौड़ाई, पिक्सल में"
 
@@ -3833,15 +3862,15 @@ msgstr "बांये मार्जिन की चौड़ाई, पि�
 msgid "Right margin"
 msgstr "दांया मार्जिन"
 
-#: gtk/gtktexttag.c:402 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:402 gtk/gtktextview.c:615
 msgid "Width of the right margin in pixels"
 msgstr "दांया मार्जिन की चौड़ाई पिक्सल में"
 
-#: gtk/gtktexttag.c:412 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:412 gtk/gtktextview.c:624
 msgid "Indent"
 msgstr "हाशिये से अंदर"
 
-#: gtk/gtktexttag.c:413 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:413 gtk/gtktextview.c:625
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "पैराग्राफ, हाशिये से कितना अंदर है पिक्सल में"
 
@@ -3857,7 +3886,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "पंक्तियों के ऊपर पिक्सल"
 
-#: gtk/gtktexttag.c:434 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:434 gtk/gtktextview.c:549
 msgid "Pixels of blank space above paragraphs"
 msgstr "पैराग्राफ के ऊपर रिक्त स्थान के पिक्सल"
 
@@ -3865,7 +3894,7 @@ msgstr "पैराग्राफ के ऊपर रिक्त स्थ�
 msgid "Pixels below lines"
 msgstr "व्रैप के अंदर पिक्सल"
 
-#: gtk/gtktexttag.c:444 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:444 gtk/gtktextview.c:559
 msgid "Pixels of blank space below paragraphs"
 msgstr "पैराग्राफ में व्रैप पंक्तियों के बीच रिक्त स्थानों के पिक्सल"
 
@@ -3873,7 +3902,7 @@ msgstr "पैराग्राफ में व्रैप पंक्ति
 msgid "Pixels inside wrap"
 msgstr "व्रैप मोड"
 
-#: gtk/gtktexttag.c:454 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:454 gtk/gtktextview.c:569
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "पैराग्राफ में व्रैप पंक्तियों के बीच रिक्त स्थानों के पिक्सल"
 
@@ -3881,17 +3910,18 @@ msgstr "पैराग्राफ में व्रैप पंक्ति
 msgid "Wrap mode"
 msgstr "व्रैप मोड"
 
-#: gtk/gtktexttag.c:481 gtk/gtktextview.c:585
-msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
+#: gtk/gtktexttag.c:481 gtk/gtktextview.c:587
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "क्या पंक्तियों को कभी नहीं व्रैप नहीं करना है, शब्द सीमाओं पर करना है, या कैरेक्टर की सीमाओं "
 "पर करना है"
 
-#: gtk/gtktexttag.c:490 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:490 gtk/gtktextview.c:634
 msgid "Tabs"
 msgstr "टैब"
 
-#: gtk/gtktexttag.c:491 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:491 gtk/gtktextview.c:635
 msgid "Custom tabs for this text"
 msgstr "इस पाठ्य के लिए कस्टम टैब"
 
@@ -4051,39 +4081,39 @@ msgstr ""
 msgid "ZWNJ Zero width _non-joiner"
 msgstr ""
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:548
 msgid "Pixels Above Lines"
 msgstr "पंक्तियों के ऊपर पिक्सल"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:558
 msgid "Pixels Below Lines"
 msgstr "पंक्तियों के नीचे पिक्सल"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:568
 msgid "Pixels Inside Wrap"
 msgstr "व्रैप के अंदर पिक्सल"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:586
 msgid "Wrap Mode"
 msgstr "व्रैप मोड"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:604
 msgid "Left Margin"
 msgstr "बांया मार्जिन"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:614
 msgid "Right Margin"
 msgstr "दांया मार्जिन"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:642
 msgid "Cursor Visible"
 msgstr "दश्य कर्सर"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:643
 msgid "If the insertion cursor is shown"
 msgstr "यदि प्रविष्टि कर्सर दिखाया गया है"
 
-#: gtk/gtktextview.c:6631
+#: gtk/gtktextview.c:6633
 msgid "Input _Methods"
 msgstr "इनपुट विधियां"
 
@@ -4161,7 +4191,8 @@ msgid "Toolbar style"
 msgstr "टूलबार का स्टाइल"
 
 #: gtk/gtktoolbar.c:292
-msgid "Whether default toolbars have text only, text and icons, icons only, etc."
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr "क्या डिफाल्ट टूलबार में सिर्फ पाठ्य हो, पाठ्य या आइकान या सिर्फ आइकान"
 
 #: gtk/gtktoolbar.c:298
@@ -4234,7 +4265,8 @@ msgstr "नियमों के संकेत"
 
 #: gtk/gtktreeview.c:577
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
-msgstr "पंक्तियों को एक के बाद एक रंग से रंग से बनाने के लिए थीम इंजन के संकेत को समायोजित करें"
+msgstr ""
+"पंक्तियों को एक के बाद एक रंग से रंग से बनाने के लिए थीम इंजन के संकेत को समायोजित करें"
 
 #: gtk/gtktreeview.c:584
 msgid "Enable Search"
@@ -4707,7 +4739,8 @@ msgid "Default Height"
 msgstr "डिफाल्ट ऊंचाई"
 
 #: gtk/gtkwindow.c:527
-msgid "The default height of the window, used when initially showing the window"
+msgid ""
+"The default height of the window, used when initially showing the window"
 msgstr ""
 "विन्डो की डिफाल्ट ऊंचाई, इसका प्रयोग तब किया जाएगा जब विन्डो को प्रारंभिक तौर पर "
 "दर्शाया जाएगा"
@@ -4872,4 +4905,3 @@ msgstr ""
 
 #~ msgid "Language engine code to use for rendering the text"
 #~ msgstr "पाठ्य की रैण्डरिंग के लिए प्रयुक्त भाषा इंजिन का कोड"
-
