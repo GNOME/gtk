@@ -346,7 +346,7 @@ gtk_size_group_new (GtkSizeGroupMode  mode)
  * group determines whether the widgets in the size group should
  * all have the same horizontal requisition (%GTK_SIZE_GROUP_MODE_HORIZONTAL)
  * all have the same vertical requisition (%GTK_SIZE_GROUP_MODE_VERTICAL),
- * or should all have the same requisition in both directions.
+ * or should all have the same requisition in both directions
  * (%GTK_SIZE_GROUP_MODE_BOTH).
  **/
 void

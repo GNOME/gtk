@@ -1,5 +1,8 @@
 2001-10-27  Anders Carlsson  <andersca@gnu.org>
 
+	* gtk/gtksizegroup.c (gtk_size_group_set_mode): Remove
+	a dot in the documentation. Fixes bug #62632.
+
 	* gdk/x11/gdkmain-x11.c: Replace int and guint with
 	long and gulong in some places to make the code 64-bit
 	clean.
