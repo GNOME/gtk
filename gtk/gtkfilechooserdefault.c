@@ -4867,6 +4867,7 @@ gtk_file_chooser_default_select_path (GtkFileChooser    *chooser,
       return result;
     }
 
+  gtk_file_path_free (parent_path);
   return TRUE;
 }
 

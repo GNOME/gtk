@@ -1,3 +1,8 @@
+2005-02-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_select_path): 
+	Don't leak parent_path.  (#168435, Morten Welinder)
+
 Thu Feb 24 14:20:16 2005  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtkstyle.c: Add
@@ -14,7 +19,7 @@ Thu Feb 24 14:20:16 2005  Søren Sandmann  <sandmann@redhat.com>
 
 2005-02-24  Matthias Clasen  <mclasen@redhat.com>
 
-        Fix #167259, reported by  Christian Persch:
+	Fix #167259, reported by  Christian Persch:
 	
 	* gtk/gtkwidget.c (gtk_widget_unparent): Unmap the reparented 
 	widget, even if we avoid the unrealizing. 
