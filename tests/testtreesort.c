@@ -163,9 +163,9 @@ main (int argc, char *argv[])
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (smodel),
+  /*  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (smodel),
 					WORD_COLUMN_1,
-					GTK_SORT_ASCENDING);
+					GTK_SORT_ASCENDING);*/
 
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
@@ -230,12 +230,13 @@ main (int argc, char *argv[])
       gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_4);
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view2), column);
       
-      gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (smodel),
+      /*      gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (smodel),
 					       (GtkTreeIterCompareFunc)gtk_tree_data_list_compare_func,
 					       NULL, NULL);
       gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (smodel),
 					    WORD_COLUMN_1,
-					    GTK_SORT_DESCENDING);
+					    GTK_SORT_DESCENDING);*/
+      
       
       gtk_container_add (GTK_CONTAINER (scrolled_window2), tree_view2);
       gtk_window_set_default_size (GTK_WINDOW (window2), 400, 400);
@@ -301,12 +302,12 @@ main (int argc, char *argv[])
       gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_4);
       gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view3), column);
       
-      gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (ssmodel),
+      /*      gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (ssmodel),
 					       (GtkTreeIterCompareFunc)gtk_tree_data_list_compare_func,
 					       NULL, NULL);
       gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (ssmodel),
 					    WORD_COLUMN_1,
-					    GTK_SORT_ASCENDING);
+					    GTK_SORT_ASCENDING);*/
       
       gtk_container_add (GTK_CONTAINER (scrolled_window3), tree_view3);
       gtk_window_set_default_size (GTK_WINDOW (window3), 400, 400);
