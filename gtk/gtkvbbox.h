@@ -37,11 +37,11 @@ extern "C" {
 
 
 #define GTK_TYPE_VBUTTON_BOX            (gtk_vbutton_box_get_type ())
-#define GTK_VBUTTON_BOX(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_VBUTTON_BOX, GtkVButtonBox))
-#define GTK_VBUTTON_BOX_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_VBUTTON_BOX, GtkVButtonBoxClass))
-#define GTK_IS_VBUTTON_BOX(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_VBUTTON_BOX))
-#define GTK_IS_VBUTTON_BOX_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VBUTTON_BOX))
-#define GTK_VBUTTON_BOX_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_VBUTTON_BOX, GtkVButtonBoxClass))
+#define GTK_VBUTTON_BOX(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_VBUTTON_BOX, GtkVButtonBox))
+#define GTK_VBUTTON_BOX_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_VBUTTON_BOX, GtkVButtonBoxClass))
+#define GTK_IS_VBUTTON_BOX(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_VBUTTON_BOX))
+#define GTK_IS_VBUTTON_BOX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_VBUTTON_BOX))
+#define GTK_VBUTTON_BOX_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_VBUTTON_BOX, GtkVButtonBoxClass))
 
 
 typedef struct _GtkVButtonBox       GtkVButtonBox;
@@ -58,7 +58,7 @@ struct _GtkVButtonBoxClass
 };
 
 
-GtkType    gtk_vbutton_box_get_type (void) G_GNUC_CONST;
+GType      gtk_vbutton_box_get_type (void) G_GNUC_CONST;
 GtkWidget *gtk_vbutton_box_new      (void);
 
 /* buttons can be added by gtk_container_add() */

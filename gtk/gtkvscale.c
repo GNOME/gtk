@@ -28,7 +28,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "gtkvscale.h"
-#include "gtksignal.h"
 #include "gtkintl.h"
 
 #define VALUE_SPACING 2
@@ -40,26 +39,28 @@ static void     gtk_vscale_init             (GtkVScale      *vscale);
 static gboolean gtk_vscale_expose           (GtkWidget      *widget,
                                              GdkEventExpose *event);
 
-GtkType
+GType
 gtk_vscale_get_type (void)
 {
-  static GtkType vscale_type = 0;
+  static GType vscale_type = 0;
   
   if (!vscale_type)
     {
-      static const GtkTypeInfo vscale_info =
+      static const GTypeInfo vscale_info =
       {
-        "GtkVScale",
-        sizeof (GtkVScale),
-        sizeof (GtkVScaleClass),
-        (GtkClassInitFunc) gtk_vscale_class_init,
-        (GtkObjectInitFunc) gtk_vscale_init,
-        /* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+      	sizeof (GtkVScaleClass),
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_vscale_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkVScale),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_vscale_init,
       };
       
-      vscale_type = gtk_type_unique (GTK_TYPE_SCALE, &vscale_info);
+      vscale_type = g_type_register_static (GTK_TYPE_SCALE, "GtkVScale",
+					    &vscale_info, 0);
     }
   
   return vscale_type;
@@ -68,11 +69,9 @@ gtk_vscale_get_type (void)
 static void
 gtk_vscale_class_init (GtkVScaleClass *class)
 {
-  GObjectClass   *gobject_class;
   GtkWidgetClass *widget_class;
   GtkRangeClass *range_class;
   
-  gobject_class = G_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
   range_class = GTK_RANGE_CLASS (class); 
 
@@ -96,13 +95,7 @@ gtk_vscale_init (GtkVScale *vscale)
 GtkWidget*
 gtk_vscale_new (GtkAdjustment *adjustment)
 {
-  GtkWidget *vscale;
-  
-  vscale = gtk_widget_new (GTK_TYPE_VSCALE,
-			   "adjustment", adjustment,
-			   NULL);
-  
-  return vscale;
+  return g_object_new (GTK_TYPE_VSCALE, "adjustment", adjustment, NULL);
 }
 
 
@@ -235,7 +228,7 @@ gtk_vscale_expose (GtkWidget      *widget,
                         x, y,
                         layout);
 
-      g_object_unref (G_OBJECT (layout));
+      g_object_unref (layout);
     }
   
   return FALSE;

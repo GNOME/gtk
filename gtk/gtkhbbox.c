@@ -37,26 +37,29 @@ static void gtk_hbutton_box_size_allocate (GtkWidget      *widget,
 static gint default_spacing = 30;
 static gint default_layout_style = GTK_BUTTONBOX_EDGE;
 
-GtkType
+GType
 gtk_hbutton_box_get_type (void)
 {
-  static GtkType hbutton_box_type = 0;
+  static GType hbutton_box_type = 0;
 
   if (!hbutton_box_type)
     {
-      static const GtkTypeInfo hbutton_box_info =
+      static const GTypeInfo hbutton_box_info =
       {
-	"GtkHButtonBox",
-	sizeof (GtkHButtonBox),
 	sizeof (GtkHButtonBoxClass),
-	(GtkClassInitFunc) gtk_hbutton_box_class_init,
-	(GtkObjectInitFunc) gtk_hbutton_box_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_hbutton_box_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkHButtonBox),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_hbutton_box_init,
       };
 
-      hbutton_box_type = gtk_type_unique (GTK_TYPE_BUTTON_BOX, &hbutton_box_info);
+      hbutton_box_type =
+	g_type_register_static (GTK_TYPE_BUTTON_BOX, "GtkHButtonBox",
+				&hbutton_box_info, 0);
     }
 
   return hbutton_box_type;
@@ -84,7 +87,7 @@ gtk_hbutton_box_new (void)
 {
   GtkHButtonBox *hbutton_box;
 
-  hbutton_box = gtk_type_new (GTK_TYPE_HBUTTON_BOX);
+  hbutton_box = g_object_new (GTK_TYPE_HBUTTON_BOX, NULL);
 
   return GTK_WIDGET (hbutton_box);
 }

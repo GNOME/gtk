@@ -37,11 +37,11 @@ extern "C" {
 
 
 #define GTK_TYPE_HBUTTON_BOX                  (gtk_hbutton_box_get_type ())
-#define GTK_HBUTTON_BOX(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_HBUTTON_BOX, GtkHButtonBox))
-#define GTK_HBUTTON_BOX_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HBUTTON_BOX, GtkHButtonBoxClass))
-#define GTK_IS_HBUTTON_BOX(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_HBUTTON_BOX))
-#define GTK_IS_HBUTTON_BOX_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HBUTTON_BOX))
-#define GTK_HBUTTON_BOX_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_HBUTTON_BOX, GtkHButtonBoxClass))
+#define GTK_HBUTTON_BOX(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HBUTTON_BOX, GtkHButtonBox))
+#define GTK_HBUTTON_BOX_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_HBUTTON_BOX, GtkHButtonBoxClass))
+#define GTK_IS_HBUTTON_BOX(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_HBUTTON_BOX))
+#define GTK_IS_HBUTTON_BOX_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HBUTTON_BOX))
+#define GTK_HBUTTON_BOX_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HBUTTON_BOX, GtkHButtonBoxClass))
 
 
 typedef struct _GtkHButtonBox       GtkHButtonBox;
@@ -58,7 +58,7 @@ struct _GtkHButtonBoxClass
 };
 
 
-GtkType    gtk_hbutton_box_get_type (void) G_GNUC_CONST;
+GType      gtk_hbutton_box_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_hbutton_box_new      (void);
 
 /* buttons can be added by gtk_container_add() */

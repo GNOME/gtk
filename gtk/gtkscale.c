@@ -69,25 +69,25 @@ static void gtk_scale_style_set        (GtkWidget     *widget,
 static void gtk_scale_get_range_border (GtkRange      *range,
                                         GtkBorder     *border);
 
-GtkType
+GType
 gtk_scale_get_type (void)
 {
-  static GtkType scale_type = 0;
+  static GType scale_type = 0;
 
   if (!scale_type)
     {
       static const GTypeInfo scale_info =
       {
 	sizeof (GtkScaleClass),
-	NULL,            /* base_init */
-	NULL,            /* base_finalize */
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
 	(GClassInitFunc) gtk_scale_class_init,
-	NULL,            /* class_finalize */
-	NULL,            /* class_data */
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
 	sizeof (GtkScale),
-	0,               /* n_preallocs */
+	0,		/* n_preallocs */
 	(GInstanceInitFunc) gtk_scale_init,
-	NULL,            /* value_table */
+	NULL,		/* value_table */
       };
 
       scale_type = g_type_register_static (GTK_TYPE_RANGE, "GtkScale",
@@ -123,17 +123,15 @@ static void
 gtk_scale_class_init (GtkScaleClass *class)
 {
   GObjectClass   *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
-  GtkRangeClass *range_class;
-  GtkBindingSet *binding_set;
+  GtkRangeClass  *range_class;
+  GtkBindingSet  *binding_set;
   
   gobject_class = G_OBJECT_CLASS (class);
-  object_class = (GtkObjectClass*) class;
   range_class = (GtkRangeClass*) class;
   widget_class = (GtkWidgetClass*) class;
   
-  parent_class = gtk_type_class (GTK_TYPE_RANGE);
+  parent_class = g_type_class_peek_parent (class);
   
   gobject_class->set_property = gtk_scale_set_property;
   gobject_class->get_property = gtk_scale_get_property;
@@ -144,7 +142,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   
   signals[FORMAT_VALUE] =
     g_signal_new ("format_value",
-                  G_TYPE_FROM_CLASS (object_class),
+                  G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkScaleClass, format_value),
                   single_string_accumulator, NULL,
@@ -561,7 +559,7 @@ _gtk_scale_get_value_size (GtkScale *scale,
       if (height)
 	*height = MAX (*height, logical_rect.height);
 
-      g_object_unref (G_OBJECT (layout));
+      g_object_unref (layout);
     }
   else
     {
@@ -608,7 +606,7 @@ _gtk_scale_format_value (GtkScale *scale,
 {
   gchar *fmt = NULL;
 
-  g_signal_emit (G_OBJECT (scale),
+  g_signal_emit (scale,
                  signals[FORMAT_VALUE],
                  0,
                  value,

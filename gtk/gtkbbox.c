@@ -64,29 +64,30 @@ static void gtk_button_box_get_child_property (GtkContainer      *container,
 #define DEFAULT_CHILD_IPAD_X 4
 #define DEFAULT_CHILD_IPAD_Y 0
 
-GtkType
+GType
 gtk_button_box_get_type (void)
 {
-  static GtkType button_box_type = 0;
+  static GType button_box_type = 0;
 
   if (!button_box_type)
     {
       static const GTypeInfo button_box_info =
       {
 	sizeof (GtkButtonBoxClass),
-	NULL,            /* base_init */
-	NULL,            /* base_finalize */
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
 	(GClassInitFunc) gtk_button_box_class_init,
-	NULL,            /* class_finalize */
-	NULL,            /* class_data */
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
 	sizeof (GtkButtonBox),
 	0,               /* n_preallocs */
 	(GInstanceInitFunc) gtk_button_box_init,
-	NULL,            /* value_table */
+	NULL,		/* value_table */
       };
 
-      button_box_type = g_type_register_static (GTK_TYPE_BOX, "GtkButtonBox",
-						&button_box_info, G_TYPE_FLAG_ABSTRACT);
+      button_box_type =
+	g_type_register_static (GTK_TYPE_BOX, "GtkButtonBox",
+				&button_box_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return button_box_type;

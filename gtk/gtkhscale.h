@@ -38,11 +38,11 @@ extern "C" {
 
 
 #define GTK_TYPE_HSCALE            (gtk_hscale_get_type ())
-#define GTK_HSCALE(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_HSCALE, GtkHScale))
-#define GTK_HSCALE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HSCALE, GtkHScaleClass))
-#define GTK_IS_HSCALE(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_HSCALE))
-#define GTK_IS_HSCALE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HSCALE))
-#define GTK_HSCALE_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_HSCALE, GtkHScaleClass))
+#define GTK_HSCALE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_HSCALE, GtkHScale))
+#define GTK_HSCALE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_HSCALE, GtkHScaleClass))
+#define GTK_IS_HSCALE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_HSCALE))
+#define GTK_IS_HSCALE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HSCALE))
+#define GTK_HSCALE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_HSCALE, GtkHScaleClass))
 
 
 typedef struct _GtkHScale       GtkHScale;
@@ -59,7 +59,7 @@ struct _GtkHScaleClass
 };
 
 
-GtkType    gtk_hscale_get_type       (void) G_GNUC_CONST;
+GType      gtk_hscale_get_type       (void) G_GNUC_CONST;
 GtkWidget* gtk_hscale_new            (GtkAdjustment *adjustment);
 GtkWidget* gtk_hscale_new_with_range (gdouble        min,
                                       gdouble        max,

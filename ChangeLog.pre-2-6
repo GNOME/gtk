@@ -1,3 +1,8 @@
+Fri Oct  4 15:47:06 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtkbbox.[ch] gtkhbbox.[ch] gtkhscale.[ch] gtkscale.[ch]
+	gtkvscale.[ch] gtkvbbox.[ch]: Deprecation cleanup
+
 Fri Oct  4 15:05:19 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* modules/input/gtkimcontextxim.c (get_ic_real): Fix memory
