@@ -1,3 +1,24 @@
+Sat Oct 17 00:40:51 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_style_init): Duplicate bg_pixmap_name when
+	merging RC styles. Report new share/themes path for
+	themes directory. Deref theme engines when appropriate.
+
+	* gtk/gtkclist.c: Set all backgrounds in _style_set().
+	Make sure that pixel for xor_gc is never 0.
+
+	* gtk/gtkctree.c: Choose colors for plus/minus more
+	carefully, in a hopefully style-independent fashion.
+	(Still needs a bit more work)
+
+	* gtk/gtkwidget.c: Don't send expose events to widgets
+	which are about to be resized and redrawn. (Needs a
+	bit more thought.)
+
+	* gtk/gtknotebook.c (gtk_notebook_draw_tab): Avoid
+	drawing on tabs for newly allocated, un-sized
+	pages - we'll get the size wrong.
+
 Thu Oct  1 17:38:07 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_redraw_queue_remove): Fixed

@@ -2537,9 +2537,13 @@ gtk_widget_event (GtkWidget *widget,
       signal_num = CLIENT_EVENT;
       break;
     case GDK_EXPOSE:
-      /* there is no sense in providing a widget with bogus expose events
+      /* there is no sense in providing a widget with bogus expose events.
+       * Widgets that are going to be resized don't need to be
+       * exposed, since they will be redrawn anyways.
        */
-      if (!event->any.window)
+      if (!event->any.window ||
+	  GTK_WIDGET_RESIZE_NEEDED (widget) ||
+	  (widget->parent && GTK_WIDGET_RESIZE_NEEDED (widget->parent)))
 	{
 	  gtk_widget_unref (widget);
 	  return TRUE;

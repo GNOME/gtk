@@ -201,13 +201,13 @@ gtk_rc_get_theme_dir(void)
   var = getenv("GTK_DATA_PREFIX");
   if (var)
     {
-      path = g_malloc(strlen(var) + strlen("/share/gtk/themes") +1);
-      sprintf(path, "%s%s", var, "/share/gtk/themes");
+      path = g_malloc(strlen(var) + strlen("/share/themes") +1);
+      sprintf(path, "%s%s", var, "/share/themes");
     }
   else
     {
-      path = g_malloc(strlen(GTK_DATA_PREFIX) + strlen("/share/gtk/themes") +1);
-      sprintf(path, "%s%s", GTK_DATA_PREFIX, "/share/gtk/themes");
+      path = g_malloc(strlen(GTK_DATA_PREFIX) + strlen("/share/themes") +1);
+      sprintf(path, "%s%s", GTK_DATA_PREFIX, "/share/themes");
     }
   return path;
 }
@@ -442,7 +442,10 @@ gtk_rc_style_unref (GtkRcStyle  *rc_style)
   if (rc_style->ref_count == 0)
     {
       if (rc_style->engine)
-	rc_style->engine->destroy_rc_style (rc_style);
+	{
+	  rc_style->engine->destroy_rc_style (rc_style);
+	  gtk_theme_engine_unref (rc_style->engine);
+	}
 
       if (rc_style->name)
 	g_free (rc_style->name);
@@ -495,13 +498,19 @@ gtk_rc_clear_styles (void)
 {
   /* Clear out all old rc_styles */
 
-  g_hash_table_foreach (rc_style_ht, gtk_rc_clear_hash_node, NULL);
-  g_hash_table_destroy (rc_style_ht);
-  rc_style_ht = NULL;
+  if (rc_style_ht)
+    {
+      g_hash_table_foreach (rc_style_ht, gtk_rc_clear_hash_node, NULL);
+      g_hash_table_destroy (rc_style_ht);
+      rc_style_ht = NULL;
+    }
 
-  g_hash_table_foreach (realized_style_ht, gtk_rc_clear_realized_node, NULL);
-  g_hash_table_destroy (realized_style_ht);
-  realized_style_ht = NULL;
+  if (realized_style_ht)
+    {
+      g_hash_table_foreach (realized_style_ht, gtk_rc_clear_realized_node, NULL);
+      g_hash_table_destroy (realized_style_ht);
+      realized_style_ht = NULL;
+    }
 
   gtk_rc_free_rc_sets (gtk_rc_sets_widget);
   g_slist_free (gtk_rc_sets_widget);
@@ -890,6 +899,7 @@ gtk_rc_style_to_style (GtkRcStyle *rc_style)
   if (rc_style->engine)
     {
       style->engine = rc_style->engine;
+      gtk_theme_engine_ref (style->engine);
       rc_style->engine->rc_style_to_style (style, rc_style);
     }
 
@@ -924,7 +934,7 @@ gtk_rc_style_init (GSList *rc_styles)
 	  for (i=0; i<5; i++)
 	    {
 	      if (!proto_style->bg_pixmap_name[i] && rc_style->bg_pixmap_name[i])
-		proto_style->bg_pixmap_name[i] = rc_style->bg_pixmap_name[i];
+		proto_style->bg_pixmap_name[i] = g_strdup (rc_style->bg_pixmap_name[i]);
 
 	      if (!(proto_style->color_flags[i] & GTK_RC_FG) && 
 		    rc_style->color_flags[i] & GTK_RC_FG)
@@ -958,7 +968,10 @@ gtk_rc_style_init (GSList *rc_styles)
 	    proto_style->fontset_name = g_strdup (rc_style->fontset_name);
 
 	  if (!proto_style->engine && rc_style->engine)
-	    proto_style->engine = rc_style->engine;
+	    {
+	      proto_style->engine = rc_style->engine;
+	      gtk_theme_engine_ref (proto_style->engine);
+	    }
 	  
 	  if (proto_style->engine &&
 	      (proto_style->engine == rc_style->engine))

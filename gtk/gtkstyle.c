@@ -728,7 +728,10 @@ gtk_style_destroy (GtkStyle *style)
     }
 
   if (style->engine)
-    style->engine->destroy_style (style);
+    {
+      style->engine->destroy_style (style);
+      gtk_theme_engine_unref (style->engine);
+    }
 
   gdk_font_unref (style->font);
   if (style->rc_style)
@@ -745,7 +748,7 @@ gtk_style_set_background (GtkStyle     *style,
   GdkPixmap *pixmap;
   gint parent_relative;
 
-   if (style->engine)
+   if (style->engine && style->engine->set_background)
      {
         (*style->engine->set_background) (style, window, state_type);
 	return;

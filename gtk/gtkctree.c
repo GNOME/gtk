@@ -1811,7 +1811,7 @@ draw_row (GtkCList     *clist,
 		    default:
 		      gdk_draw_rectangle 
 			(clist->clist_window,
-			 GTK_WIDGET (clist)->style->fg_gc[GTK_STATE_SELECTED],
+			 GTK_WIDGET (clist)->style->base_gc[GTK_STATE_NORMAL],
 			 TRUE,
 			 xdest + xoffset, 
 			 clip_rectangle.y + yoffset,
@@ -2078,13 +2078,13 @@ draw_row (GtkCList     *clist,
 		      if (clist_row->fg_set)
 			tgc = clist->fg_gc;
 		      else
-			tgc = widget->style->fg_gc[GTK_STATE_NORMAL];
+			tgc = widget->style->text_gc[GTK_STATE_NORMAL];
 		      cgc = tgc;
 		    }
 		  else 
 		    {
 		      cgc = 
-			GTK_WIDGET(clist)->style->fg_gc[GTK_STATE_SELECTED];
+			GTK_WIDGET(clist)->style->base_gc[GTK_STATE_NORMAL];
 		      tgc = fg_gc;
 		    }
 	      

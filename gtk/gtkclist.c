@@ -360,7 +360,6 @@ static void real_sort_list (GtkCList *clist);
 /* Fill in data after widget is realized and has style */
 
 static void add_style_data (GtkCList * clist);
-
 static void gtk_clist_style_set (GtkWidget *widget, GtkStyle  *previous_style);
 
 static GtkContainerClass *parent_class = NULL;
@@ -2459,7 +2458,10 @@ gtk_clist_realize (GtkWidget * widget)
   /* We'll use this gc to do scrolling as well */
   gdk_gc_set_exposures (clist->fg_gc, TRUE);
 
-  values.foreground = widget->style->white;
+  if (widget->style->white.pixel == 0)
+    values.foreground = widget->style->black;
+  else
+    values.foreground = widget->style->white;
   values.function = GDK_XOR;
   values.subwindow_mode = GDK_INCLUDE_INFERIORS;
   clist->xor_gc = gdk_gc_new_with_values (widget->window,
@@ -6117,24 +6119,19 @@ static void
 gtk_clist_style_set (GtkWidget *widget,
 		     GtkStyle  *previous_style)
 {
-   GdkRectangle area;
-   
-   if (GTK_WIDGET_REALIZED (widget) &&
-       !GTK_WIDGET_NO_WINDOW (widget))
-     {
-	gtk_style_set_background (widget->style, widget->window, widget->state);
-	if (GTK_WIDGET_DRAWABLE (widget))
-	  gdk_window_clear (widget->window);
+  GtkCList *clist;
+  
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_CLIST (widget));
+  
+  clist = GTK_CLIST (widget);
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      gtk_style_set_background (widget->style, widget->window, widget->state);
+      gtk_style_set_background (widget->style, clist->title_window, GTK_STATE_SELECTED);
+      gdk_window_set_background (clist->clist_window, &widget->style->bg[GTK_STATE_PRELIGHT]);
      }
-   if (GTK_CLIST(widget)->vscrollbar)
-     gtk_widget_queue_draw(GTK_CLIST(widget)->vscrollbar);
-   if (GTK_CLIST(widget)->hscrollbar)
-     gtk_widget_queue_draw(GTK_CLIST(widget)->hscrollbar);
-   area.x = 0;
-   area.y = 0;
-   area.width = widget->allocation.width;
-   area.height = widget->allocation.height;
-   gtk_clist_draw(widget, &area);
 }
 
 static gint

@@ -10,7 +10,7 @@
 # widget <widget_set> style <style_name>
 # widget_class <widget_class_set> style <style_name>
 
-#include "/opt/themes/share/gtk/themes/metal/gtkrc"
+#include "/opt/themes/share/themes/Motif/gtk/gtkrc"
 
 binding "test1"
 {
@@ -31,7 +31,7 @@ binding "test2"
 # lowest
 # gtk         (used by gtk for internal class bindings)
 # application (for hard coded bindings on application basis)
-# rc          (used implicitel by rc files)
+# rc          (used implicitly by rc files)
 # highest
 class "GtkButton" binding "test1"           # implicit : rc
 class "GtkButton" binding : highest "test2" # override "rc" priority

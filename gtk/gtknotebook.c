@@ -2271,7 +2271,8 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   g_return_if_fail (page != NULL);
   g_return_if_fail (area != NULL);
 
-  if (!GTK_WIDGET_MAPPED (page->tab_label))
+  if (!GTK_WIDGET_MAPPED (page->tab_label) ||
+      (page->allocation.width == 0) || (page->allocation.height == 0))
     return;
 
   page_area.x = page->allocation.x;
