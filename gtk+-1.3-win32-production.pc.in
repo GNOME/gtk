@@ -1,7 +1,7 @@
 prefix=@prefix@
-exec_prefix=@exec_prefix@
-libdir=@libdir@
-includedir=@includedir@
+exec_prefix=@prefix@
+libdir=@prefix@/lib
+includedir=@prefix@/include
 
 Name: GTK+
 Description: GIMP Tool Kit (Win32 "production" branch)
