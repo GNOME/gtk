@@ -2947,9 +2947,7 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
 			 GtkTreeModel *model)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
-
-  if (model != NULL)
-    g_return_if_fail (GTK_IS_TREE_MODEL (model));
+  g_return_if_fail (model == NULL || GTK_IS_TREE_MODEL (model));
   
   if (icon_view->priv->model == model)
     return;
@@ -2998,6 +2996,9 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
       g_list_foreach (icon_view->priv->items, (GFunc)gtk_icon_view_item_free, NULL);
       g_list_free (icon_view->priv->items);
       icon_view->priv->items = NULL;
+      icon_view->priv->anchor_item = NULL;
+      icon_view->priv->cursor_item = NULL;
+      icon_view->priv->last_single_clicked = NULL;
     }
 
   icon_view->priv->model = model;

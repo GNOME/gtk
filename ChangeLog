@@ -1,5 +1,8 @@
 2004-10-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_set_model): Reset pointers
+	pointing to the old model.  (#154350)
+
 	* gtk/gtkwindow.c (icon_list_from_theme): Don't leak the
 	sizes array.  (#154310, Christian Persch)
 
