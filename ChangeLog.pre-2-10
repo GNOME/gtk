@@ -1,3 +1,8 @@
+Mon Oct  6 21:05:46 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktable.c (gtk_table_class_init): Start the blurb for 
+	"right_attach" with a capital.  (#123945, Christian Rose)
+
 Sun Oct  5 23:59:03 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/testsocket.c (child_read_watch): Remove an

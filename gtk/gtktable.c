@@ -207,7 +207,7 @@ gtk_table_class_init (GtkTableClass *class)
 					      CHILD_PROP_RIGHT_ATTACH,
 					      g_param_spec_uint ("right_attach", 
 								 _("Right attachment"), 
-								 _("the column number to attach the right side of a child widget to"),
+								 _("The column number to attach the right side of a child widget to"),
 								 1, 65535, 1,
 								 G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
