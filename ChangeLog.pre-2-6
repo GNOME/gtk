@@ -1,3 +1,7 @@
+2004-09-30  Paolo Borelli  <pborelli@katamail.com>
+
+	* tests/testellipsize.c: exit on close.
+
 2004-09-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmain.c: Make --g-fatal-warnings a G_OPTION_ARG_NONE,
