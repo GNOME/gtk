@@ -1,7 +1,7 @@
 Wed Mar  3 15:50:28 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am (libgdk_pixbuf_xlib_2_0_la_LIBADD): Add 
-	a shared library dependency on libgdk-pixbuf.
+	a shared library dependency on libgdk-pixbuf (#124687)
 
 Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
 
