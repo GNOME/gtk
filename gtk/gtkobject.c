@@ -105,7 +105,8 @@ gtk_object_debug_foreach (gpointer key, gpointer value, gpointer user_data)
 static void
 gtk_object_debug (void)
 {
-  g_hash_table_foreach (living_objs_ht, gtk_object_debug_foreach, NULL);
+  if (living_objs_ht)
+    g_hash_table_foreach (living_objs_ht, gtk_object_debug_foreach, NULL);
   
   g_message ("living objects count = %d", obj_count);
 }

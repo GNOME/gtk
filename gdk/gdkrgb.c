@@ -2123,7 +2123,6 @@ gdk_rgb_convert_4 (GdkImage *image,
   gint r, g, b;
   guchar *dmp;
   gint dith;
-  guchar pix0, pix1;
 
   bptr = buf;
   bpl = image->bpl;

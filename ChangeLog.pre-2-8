@@ -1,3 +1,12 @@
+Mon Aug 24 11:09:32 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdkrgb.c: removed some unused variables
+
+	* gtk/gtkclist.c
+	* gtk/gtkmain.c: #if 0'd out some unused code
+
+	* gtk/gtkobject.c: check for NULL object hash table in gtk_object_debug
+
 Mon Aug 24 02:36:53 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkarg.h:

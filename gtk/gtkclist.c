@@ -2083,6 +2083,7 @@ gtk_clist_row_is_visible (GtkCList * clist,
   return GTK_VISIBILITY_FULL;
 }
 
+#if 0
 static GtkAdjustment*
 gtk_clist_get_vadjustment (GtkCList * clist)
 {
@@ -2100,6 +2101,7 @@ gtk_clist_get_hadjustment (GtkCList * clist)
 
   return gtk_range_get_adjustment (GTK_RANGE (clist->hscrollbar));
 }
+#endif
 
 void
 gtk_clist_set_policy (GtkCList * clist,
