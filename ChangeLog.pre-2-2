@@ -1,3 +1,7 @@
+Sat Mar 21 10:39:02 CET 1998 Paolo Molaro <lupus@debian.org>
+
+	* gtk/gtkcombo.[ch] "activate" signal can be disabled now
+
 Fri Mar 20 20:49:33 1998  Radek Doulik  <rodo@aquarius>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_insert_element): changed packing

@@ -463,7 +463,7 @@ gtk_combo_init (GtkCombo * combo)
 		      (GtkSignalFunc) gtk_combo_entry_key_press, combo);
   gtk_signal_connect_after (GTK_OBJECT (combo->entry), "focus_out_event",
 			    (GtkSignalFunc) gtk_combo_entry_focus_out, combo);
-  gtk_signal_connect (GTK_OBJECT (combo->entry), "activate",
+  combo->activate_id = gtk_signal_connect (GTK_OBJECT (combo->entry), "activate",
 		      (GtkSignalFunc) gtk_combo_popup_list, combo);
   gtk_signal_connect (GTK_OBJECT (combo->button), "clicked",
 		      (GtkSignalFunc) gtk_combo_popup_list, combo);
@@ -652,4 +652,16 @@ gtk_combo_size_allocate (GtkWidget     *widget,
 	/ 2;
       gtk_widget_size_allocate (combo->button, &button_allocation);
     }
+}
+
+void
+gtk_combo_disable_activate (GtkCombo* combo)
+{
+  g_return_if_fail (combo != NULL);
+  g_return_if_fail (GTK_IS_COMBO (combo));
+
+  if ( combo->activate_id ) {
+    gtk_signal_disconnect(GTK_OBJECT(combo), combo->activate_id);
+    combo->activate_id = 0;
+  }
 }
