@@ -1,3 +1,9 @@
+Mon May 31 00:11:24 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* acinclude.m4 (LIBM): Standardize on func_dgettext
+	not func_gettext, so that the checks for dgettext
+	actually are paid attention to.
+
 Sat May 29 11:17:29 PDT 1999 Manish Singh <yosh@gimp.org>
 
 	* docs/Makefile.am: add Changes-1.2.txt to EXTRA_DIST

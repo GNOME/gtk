@@ -473,14 +473,14 @@ AC_DEFUN(AM_GTK_WITH_NLS,
 	CATOBJEXT=NONE
 
 	AC_CHECK_HEADER(libintl.h,
-	  [AC_CACHE_CHECK([for dgettext in libc], gt_cv_func_gettext_libc,
+	  [AC_CACHE_CHECK([for dgettext in libc], gt_cv_func_dgettext_libc,
 	    [AC_TRY_LINK([#include <libintl.h>], [return (int) dgettext ("","")],
 	       gt_cv_func_dgettext_libc=yes, gt_cv_func_dgettext_libc=no)])
 
-	   if test "$gt_cv_func_gettext_libc" != "yes"; then
+	   if test "$gt_cv_func_dgettext_libc" != "yes"; then
 	     AC_CHECK_LIB(intl, bindtextdomain,
 	       [AC_CACHE_CHECK([for dgettext in libintl],
-		 gt_cv_func_gettext_libintl,
+		 gt_cv_func_dgettext_libintl,
 		 [AC_CHECK_LIB(intl, dgettext,
 		  gt_cv_func_dgettext_libintl=yes,
 		  gt_cv_func_dgettext_libintl=no)],
