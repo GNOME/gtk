@@ -1,3 +1,8 @@
+Thu Feb  8 19:00:00 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (TREE_VIEW_VERTICAL_SEPARATOR): moved back to
+	a sane value!
+
 2001-02-08  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkstyle.c (get_darkened_gc): let's darken colors, not

@@ -49,7 +49,7 @@
  */
 
 /* Set to large number for debugging. Should normally be 2. */
-#define TREE_VIEW_VERTICAL_SEPARATOR 11
+#define TREE_VIEW_VERTICAL_SEPARATOR 2
 
 #define TREE_VIEW_HORIZONTAL_SEPARATOR 0
 
