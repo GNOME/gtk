@@ -1,16 +1,17 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <pauls@euronet.nl>, 1998.
-#
+# dutch translation of gtk+.
+# Copyright (C) 2001 Free Software Foundation, Inc.
+# Paul Siegmann <pauls@euronet.nl>, 1998.
+# Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>, 2001.
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.3\n"
-"POT-Creation-Date: 2001-03-28 16:12-0500\n"
-"PO-Revision-Date: 1999-01-31 23:04+0100\n"
-"Last-Translator: Paul Siegmann <pauls@euronet.nl>\n"
-"Language-Team: dutch <nl@li.org>\n"
+"POT-Creation-Date: 2001-12-26 06:15-0500\n"
+"PO-Revision-Date: 2001-12-27 02:50+0100\n"
+"Last-Translator: Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>\n"
+"Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=iso-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:221
@@ -56,12 +57,12 @@ msgstr "Annuleren"
 
 #: gtk/gtkcolorsel.c:1738
 msgid "Help"
-msgstr "Help"
+msgstr "Hulp"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:430
 msgid "Directories"
-msgstr "Directories"
+msgstr "Mappen"
 
 #. The files clist
 #: gtk/gtkfilesel.c:449
@@ -71,19 +72,19 @@ msgstr "Bestanden"
 #: gtk/gtkfilesel.c:519 gtk/gtkfilesel.c:1478
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Directory onleesbaar: %s"
+msgstr "Map onleesbaar: %s"
 
 #: gtk/gtkfilesel.c:551
 msgid "Create Dir"
-msgstr "Maak Dir"
+msgstr "Maak map"
 
 #: gtk/gtkfilesel.c:562 gtk/gtkfilesel.c:937
 msgid "Delete File"
-msgstr "Verwijder Bestand"
+msgstr "Verwijder bestand"
 
 #: gtk/gtkfilesel.c:573 gtk/gtkfilesel.c:1041
 msgid "Rename File"
-msgstr "Wijzig Bestandsnaam"
+msgstr "Wijzig bestandsnaam"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -101,11 +102,11 @@ msgstr "Sluiten"
 
 #: gtk/gtkfilesel.c:832
 msgid "Create Directory"
-msgstr "Maak Directory"
+msgstr "Maak map"
 
 #: gtk/gtkfilesel.c:846
 msgid "Directory name:"
-msgstr "Directory naam:"
+msgstr "Mapnaam:"
 
 #. buttons
 #: gtk/gtkfilesel.c:859
@@ -152,11 +153,11 @@ msgstr "Voeg Stijl toe:"
 
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
-msgstr "Pixel Grootte:"
+msgstr "Pixelgrootte:"
 
 #: gtk/gtkfontsel.c:217
 msgid "Point Size:"
-msgstr "Punt Grootte:"
+msgstr "Puntgrootte:"
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
@@ -168,11 +169,11 @@ msgstr "Resolutie Y:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
-msgstr "Spatiering:"
+msgstr "Spatiëring:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr "Gemiddelde Breedte:"
+msgstr "Gemiddelde breedte:"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
@@ -182,15 +183,15 @@ msgstr "Karakterset:"
 #. of NULL initializers above
 #: gtk/gtkfontsel.c:459
 msgid "Font Property"
-msgstr "Eigenschap Lettertype"
+msgstr "Eigenschap lettertype"
 
 #: gtk/gtkfontsel.c:460
 msgid "Requested Value"
-msgstr "Gevraagde Waarde"
+msgstr "Gevraagde waarde"
 
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
-msgstr "Werkelijke Waarde"
+msgstr "Werkelijke waarde"
 
 #: gtk/gtkfontsel.c:494
 msgid "Font"
@@ -202,16 +203,15 @@ msgstr "Lettertype:"
 
 #: gtk/gtkfontsel.c:509
 msgid "Font Style:"
-msgstr "Lettertype Stijl:"
+msgstr "Lettertype stijl:"
 
 #: gtk/gtkfontsel.c:514
 msgid "Size:"
 msgstr "Grootte:"
 
 #: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
-#, fuzzy
 msgid "Reset Filter"
-msgstr "Verwijder Filter"
+msgstr "Filter resetten"
 
 #: gtk/gtkfontsel.c:660
 msgid "Metric:"
@@ -232,15 +232,15 @@ msgstr "Voorbeeld:"
 
 #: gtk/gtkfontsel.c:716
 msgid "Font Information"
-msgstr "Lettertype Informatie"
+msgstr "Lettertype informatie"
 
 #: gtk/gtkfontsel.c:749
 msgid "Requested Font Name:"
-msgstr "Naam Gewenste Lettertype:"
+msgstr "Gewenst lettertype:"
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
-msgstr "Naam Werkelijke Lettertype:"
+msgstr "Werkelijk lettertype:"
 
 #: gtk/gtkfontsel.c:771
 #, c-format
@@ -266,7 +266,7 @@ msgstr "Schaalbaar"
 
 #: gtk/gtkfontsel.c:819
 msgid "Scaled Bitmap"
-msgstr "Geschaalde Bitmap"
+msgstr "Geschaalde bitmap"
 
 #: gtk/gtkfontsel.c:890
 msgid "*"
@@ -275,7 +275,7 @@ msgstr "*"
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "(nil)"
-msgstr ""
+msgstr "(niets)"
 
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
@@ -303,11 +303,11 @@ msgstr "anders"
 
 #: gtk/gtkfontsel.c:1231
 msgid "[M]"
-msgstr ""
+msgstr "[M]"
 
 #: gtk/gtkfontsel.c:1232
 msgid "[C]"
-msgstr ""
+msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1792
 msgid "The selected font is not available."
@@ -315,7 +315,7 @@ msgstr "Het gekozen lettertype is niet beschikbaar."
 
 #: gtk/gtkfontsel.c:1798
 msgid "The selected font is not a valid font."
-msgstr "Het gekozen lettertype is niet een geldig lettertype."
+msgstr "Het gekozen lettertype is geen geldig lettertype."
 
 #: gtk/gtkfontsel.c:1856
 msgid "This is a 2-byte font and may not be displayed correctly."
@@ -335,11 +335,11 @@ msgstr "proportioneel"
 
 #: gtk/gtkfontsel.c:1984
 msgid "monospaced"
-msgstr "enkelvoudige spatiering"
+msgstr "enkelvoudige spatiëring"
 
 #: gtk/gtkfontsel.c:1985
 msgid "char cell"
-msgstr "karakter cel"
+msgstr "karaktercel"
 
 #: gtk/gtkfontsel.c:2185
 msgid "Font: (Filter Applied)"
@@ -355,7 +355,7 @@ msgstr "Toepassen"
 
 #: gtk/gtkfontsel.c:3530
 msgid "Font Selection"
-msgstr "Lettertype Selectie"
+msgstr "Lettertype selectie"
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
@@ -372,7 +372,7 @@ msgstr "Invoer"
 
 #: gtk/gtkinputdialog.c:208
 msgid "No input devices"
-msgstr "Geen invoer apparaten"
+msgstr "Geen invoerapparaten"
 
 #: gtk/gtkinputdialog.c:237
 msgid "Device:"
@@ -392,7 +392,7 @@ msgstr "Venster"
 
 #: gtk/gtkinputdialog.c:277
 msgid "Mode: "
-msgstr ""
+msgstr "Modus:"
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
@@ -448,15 +448,15 @@ msgstr "wissen"
 msgid "Page %u"
 msgstr "Pagina %u"
 
-#: gtk/gtkrc.c:1703
+#: gtk/gtkrc.c:1758
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" regel %d niet vinden"
+msgstr "Kan afbeeldingsbestand in pixmap_path: \"%s\" regel %d niet vinden"
 
-#: gtk/gtkrc.c:1706
+#: gtk/gtkrc.c:1761
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" niet vinden"
+msgstr "Kan afbeeldingsbestand in pixmap_path: \"%s\" niet vinden"
 
 #: gtk/gtkthemes.c:79
 #, c-format
@@ -466,3 +466,4 @@ msgstr "Kan module in module_path: \"%s\" niet vinden,"
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Geen Tip ---"
+
