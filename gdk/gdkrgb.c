@@ -339,7 +339,7 @@ gdk_rgb_do_colormaps (GdkRgbInfo *image_info, gboolean force)
     { 3, 3, 3 }, 
     { 2, 2, 2 }
   };
-  static const gint n_sizes = sizeof(sizes) / (3 * sizeof(gint));
+  static const gint n_sizes = G_N_ELEMENTS (sizes);
   gint i;
 
   /* Try the possible sizes. If the force parameter is set to TRUE
@@ -611,10 +611,26 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 
   image_info->cmap = colormap;
 
-  if ((image_info->visual->type == GDK_VISUAL_PSEUDO_COLOR ||
-       image_info->visual->type == GDK_VISUAL_STATIC_COLOR) &&
-      image_info->visual->depth < 8 &&
-      image_info->visual->depth >= 3)
+  /* We used to use the 2x2x2 color cube for pseudo-color with depths
+   * 5, 6, 7 as well but now only use it for depths (3 and) 4 in
+   * pseudo-color. The reason for this is that on Win32 we let the
+   * user restrict the color allocation for PSEUDO_COLOR visuals
+   * (i.e., 256-color mode) and we probably want to do the full
+   * gdk_rgb_do_colormaps() if we are doing that. (Though the color
+   * sharing code won't really be right.)
+   *
+   * (The actual usefulness of this user-requested restriction remains
+   * to be seen, but the code is there in gdkvisual-win32.c. The
+   * thought is that it might occasionally be useful to restrict the
+   * palette size in a GTK application in order to reduce color
+   * flashing.)
+   */
+  if ((image_info->visual->type == GDK_VISUAL_PSEUDO_COLOR &&
+       image_info->visual->depth <= 4 &&
+       image_info->visual->depth >= 3) ||
+      (image_info->visual->type == GDK_VISUAL_STATIC_COLOR &&
+       image_info->visual->depth < 8 &&
+       image_info->visual->depth >= 3))
     {
       if (!image_info->cmap)
 	image_info->cmap = gdk_colormap_ref (gdk_colormap_get_system ());
@@ -690,6 +706,9 @@ void
 gdk_rgb_init (void)
 {
   static const gint byte_order[1] = { 1 };
+
+  if (_gdk_debug_flags & GDK_DEBUG_GDKRGB)
+    gdk_rgb_verbose = TRUE;
 
   /* check endian sanity */
 #if G_BYTE_ORDER == G_BIG_ENDIAN
@@ -2321,6 +2340,79 @@ gdk_rgb_convert_4 (GdkRgbInfo *image_info, GdkImage *image,
     }
 }
 
+static void
+gdk_rgb_convert_4_pack (GdkRgbInfo *image_info, GdkImage *image,
+			gint x0, gint y0, gint width, gint height,
+			guchar *buf, int rowstride,
+			gint x_align, gint y_align,
+			GdkRgbCmap *cmap)
+{
+  int x, y, ix;
+  gint bpl;
+  guchar *obuf, *obptr;
+  guchar *bptr, *bp2;
+  gint r, g, b;
+  const guchar *dmp;
+  gint dith;
+  guchar *colorcube_d = image_info->colorcube_d;
+  guchar pix0, pix1;
+
+  bptr = buf;
+  bpl = image->bpl;
+  obuf = ((guchar *)image->mem) + y0 * bpl + (x0 >> 1);
+  for (y = 0; y < height; y++)
+    {
+      dmp = DM[(y_align + y) & (DM_HEIGHT - 1)];
+      bp2 = bptr;
+      obptr = obuf;
+
+      x = 0;
+      if (x0 & 1)
+	{
+	  r = *bp2++;
+	  g = *bp2++;
+	  b = *bp2++;
+	  dith = (dmp[(x_align + x + 1) & (DM_WIDTH - 1)] << 2) | 3;
+	  ix = (((r + dith) & 0x100) >> 2) |
+	    (((g + 258 - dith) & 0x100) >> 5) |
+	    (((b + dith) & 0x100) >> 8);
+	  pix1 = (colorcube_d[ix]);
+	  *obptr = (*obptr & 0xF0) | pix1;
+	  obptr++;
+	  x++;
+	}
+      while (x < width)
+       {
+         r = *bp2++;
+         g = *bp2++;
+         b = *bp2++;
+         dith = (dmp[(x_align + x) & (DM_WIDTH - 1)] << 2) | 3;
+	 ix = (((r + dith) & 0x100) >> 2) |
+	   (((g + 258 - dith) & 0x100) >> 5) |
+	   (((b + dith) & 0x100) >> 8);
+         pix0 = (colorcube_d[ix]);
+	 x++;
+	 if (x == width)
+	   pix1 = (*obptr & 0x0F);
+	 else
+	   {
+	     r = *bp2++;
+	     g = *bp2++;
+	     b = *bp2++;
+	     dith = (dmp[(x_align + x + 1) & (DM_WIDTH - 1)] << 2) | 3;
+	     ix = (((r + dith) & 0x100) >> 2) |
+	       (((g + 258 - dith) & 0x100) >> 5) |
+	       (((b + dith) & 0x100) >> 8);
+	     pix1 = (colorcube_d[ix]);
+	     x++;
+	   }
+         *obptr++ = (pix0 << 4) | pix1;
+       }
+      bptr += rowstride;
+      obuf += bpl;
+    }
+}
+
 /* This actually works for depths from 3 to 7 */
 static void
 gdk_rgb_convert_gray4 (GdkRgbInfo *image_info, GdkImage *image,
@@ -2379,26 +2471,36 @@ gdk_rgb_convert_gray4_pack (GdkRgbInfo *image_info, GdkImage *image,
     {
       bp2 = bptr;
       obptr = obuf;
-      for (x = 0; x < width; x += 2)
+
+      x = 0;
+      if (x0 & 1)
 	{
-	  r = *bp2++;
-	  g = *bp2++;
-	  b = *bp2++;
-	  pix0 = (g + ((b + r) >> 1)) >> shift;
 	  r = *bp2++;
 	  g = *bp2++;
 	  b = *bp2++;
 	  pix1 = (g + ((b + r) >> 1)) >> shift;
-	  obptr[0] = (pix0 << 4) | pix1;
+	  *obptr = (*obptr & 0xF0) | pix1;
 	  obptr++;
+	  x++;
 	}
-      if (width & 1)
+      while (x < width)
 	{
 	  r = *bp2++;
 	  g = *bp2++;
 	  b = *bp2++;
 	  pix0 = (g + ((b + r) >> 1)) >> shift;
-	  obptr[0] = (pix0 << 4);
+	  x++;
+	  if (x == width)
+	    pix1 = (*obptr & 0x0F);
+	  else
+	    {
+	      r = *bp2++;
+	      g = *bp2++;
+	      b = *bp2++;
+	      pix1 = (g + ((b + r) >> 1)) >> shift;
+	      x++;
+	    }
+	  *obptr++ = (pix0 << 4) | pix1;
 	}
       bptr += rowstride;
       obuf += bpl;
@@ -2473,7 +2575,21 @@ gdk_rgb_convert_gray4_d_pack (GdkRgbInfo *image_info, GdkImage *image,
       bp2 = bptr;
       obptr = obuf;
       dmp = DM[(y_align + y) & (DM_HEIGHT - 1)];
-      for (x = 0; x < width; x += 2)
+
+      x = 0;
+      if (x0 & 1)
+	{
+	  r = *bp2++;
+	  g = *bp2++;
+	  b = *bp2++;
+	  gray = (g + ((b + r) >> 1)) >> 1;
+	  gray += (dmp[(x_align + x + 1) & (DM_WIDTH - 1)] << 2) >> prec;
+	  pix1 = (gray - (gray >> prec)) >> right;
+	  *obptr = (*obptr & 0xF0) | pix1;
+	  obptr++;
+	  x++;
+	}
+      while (x < width)
 	{
 	  r = *bp2++;
 	  g = *bp2++;
@@ -2481,24 +2597,20 @@ gdk_rgb_convert_gray4_d_pack (GdkRgbInfo *image_info, GdkImage *image,
 	  gray = (g + ((b + r) >> 1)) >> 1;
 	  gray += (dmp[(x_align + x) & (DM_WIDTH - 1)] << 2) >> prec;
 	  pix0 = (gray - (gray >> prec)) >> right;
-	  r = *bp2++;
-	  g = *bp2++;
-	  b = *bp2++;
-	  gray = (g + ((b + r) >> 1)) >> 1;
-	  gray += (dmp[(x_align + x + 1) & (DM_WIDTH - 1)] << 2) >> prec;
-	  pix1 = (gray - (gray >> prec)) >> right;
-	  obptr[0] = (pix0 << 4) | pix1;
-	  obptr++;
-	}
-      if (width & 1)
-	{
-	  r = *bp2++;
-	  g = *bp2++;
-	  b = *bp2++;
-	  gray = (g + ((b + r) >> 1)) >> 1;
-	  gray += (dmp[(x_align + x + 1) & (DM_WIDTH - 1)] << 2) >> prec;
-	  pix0 = (gray - (gray >> prec)) >> right;
-	  obptr[0] = (pix0 << 4);
+	  x++;
+	  if (x == width)
+	    pix1 = (*obptr & 0x0F);
+	  else
+	    {
+	      r = *bp2++;
+	      g = *bp2++;
+	      b = *bp2++;
+	      gray = (g + ((b + r) >> 1)) >> 1;
+	      gray += (dmp[(x_align + x + 1) & (DM_WIDTH - 1)] << 2) >> prec;
+	      pix1 = (gray - (gray >> prec)) >> right;
+	      x++;
+	    }
+	  *obptr++ = (pix0 << 4) | pix1;
 	}
       bptr += rowstride;
       obuf += bpl;
@@ -2877,12 +2989,19 @@ gdk_rgb_select_conv (GdkRgbInfo *image_info)
       conv = gdk_rgb_convert_truecolor_msb;
       conv_d = gdk_rgb_convert_truecolor_msb_d;
     }
-  else if (bpp == 8 && depth == 8 && (vtype == GDK_VISUAL_PSEUDO_COLOR
+  else if (bpp == 8 &&
+	   depth <= 8 &&
+	   (vtype == GDK_VISUAL_PSEUDO_COLOR
 #ifdef ENABLE_GRAYSCALE
-				      || vtype == GDK_VISUAL_GRAYSCALE
+	    || vtype == GDK_VISUAL_GRAYSCALE
 #endif
-				      ))
+	    ))
     {
+      /* Mainly for Win32: use these conversion functions also for the
+       * explicitly (on user request) restricted palette versions of
+       * 256-color, i.e. depths 5, 6 and 7. On X11, such depths
+       * probably never occur.
+       */
       image_info->dith_default = TRUE;
       conv = gdk_rgb_convert_8;
       if (vtype != GDK_VISUAL_GRAYSCALE)
@@ -2924,6 +3043,9 @@ gdk_rgb_select_conv (GdkRgbInfo *image_info)
       conv = gdk_rgb_convert_gray4_pack;
       conv_d = gdk_rgb_convert_gray4_d_pack;
     }
+  else if (bpp == 4 && depth == 4 &&
+	   vtype == GDK_VISUAL_STATIC_COLOR)
+    conv = gdk_rgb_convert_4_pack;
 
   if (!conv)
     {

@@ -1,3 +1,28 @@
+2002-04-04  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkrgb.c: Fix some bugs, and introduce a minor feature.
+
+	(gdk_rgb_convert_4_pack): New function, for 16-color (4 bits per
+	pixel) static visuals (fixes #858).
+
+	(gdk_rgb_convert_gray4_pack, gdk_rgb_convert_gray4_d_pack): Fix
+	same bugs in both functions: Odd start coordinate (partial byte)
+	was not handled correctly. Also a partial final byte was not
+	handled correctly.
+
+	(gdk_rgb_do_colormaps): Use G_N_ELEMENTS.
+	(gdk_rgb_create_info): For pseudocolor visuals, use the 2x2x2
+	colorcube only for depths 3 and 4. For static color, use it for
+	depths 3..7 like before. (Depth 5..7 pseudocolor probably never
+	occurs on X11. It doesn't normally occur on Win32 either, but
+	there is experimental code in gdkvisual-win32.c to let the user
+	restrict the size of palette used.)
+	(gdk_rgb_init): Set gdk_rgb_verbose if the GDK_DEBUG_GDKRGB flag
+	is set.
+	(gdk_rgb_select_conv): Use gdk_rgb_convert_8 also for depths 5, 6
+	and 7 (see above). Use gdk_rgb_convert_4_pack for 4 bits per pixel
+	static color.
+
 Tue Apr  2 11:10:13 2002  Jonathan Blandford  <jrb@redhat.com>
 	* gtk/gtkliststore.c (gtk_list_store_set_sort_func): set the
 	sort_func correctly, 77030
