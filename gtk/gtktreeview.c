@@ -7335,10 +7335,14 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
 
   if (tree_view->priv->destroy_count_func)
     {
+      GtkTreePath *child_path;
       gint child_count = 0;
+      child_path = gtk_tree_path_copy (path);
+      gtk_tree_path_append_index (child_path, 0);
       if (node->children)
 	_gtk_rbtree_traverse (node->children, node->children->root, G_POST_ORDER, count_children_helper, &child_count);
-      (* tree_view->priv->destroy_count_func) (tree_view, path, child_count, tree_view->priv->destroy_count_data);
+      (* tree_view->priv->destroy_count_func) (tree_view, child_path, child_count, tree_view->priv->destroy_count_data);
+      gtk_tree_path_free (child_path);
     }
 
   if (gtk_tree_view_unref_and_check_selection_tree (tree_view, node->children))

@@ -1097,6 +1097,7 @@ gtk_tree_store_append (GtkTreeStore *model,
 
   g_return_if_fail (GTK_IS_TREE_STORE (model));
   g_return_if_fail (iter != NULL);
+
   if (parent != NULL)
     g_return_if_fail (VALID_ITER (parent, model));
 
