@@ -478,7 +478,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 				   PROP_COMPOSITE_CHILD,
 				   g_param_spec_boolean ("composite_child",
  							 _("Composite child"),
- 							 _("Whether the widget is composed of other widgets"),
+ 							 _("Whether the widget is part of a composite widget"),
  							 FALSE,
  							 G_PARAM_READABLE));
   g_object_class_install_property (gobject_class,
@@ -1086,11 +1086,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							       GDK_TYPE_COLOR,
 							       G_PARAM_READABLE));
   gtk_widget_class_install_style_property (klass,
-                                           g_param_spec_float ("cursor-aspect-ratio",
-                                                               _("Cursor line aspect ratio"),
-                                                               _("Aspect ratio with which to draw insertion cursor"),
-                                                               0.0, 1.0, 0.04,
-                                                               G_PARAM_READABLE));
+					   g_param_spec_float ("cursor-aspect-ratio",
+							       _("Cursor line aspect ratio"),
+							       _("Aspect ratio with which to draw insertion cursor"),
+							       0.0, 1.0, 0.04,
+							       G_PARAM_READABLE));
 }
 
 static void
