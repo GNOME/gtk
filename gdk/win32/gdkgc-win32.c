@@ -25,6 +25,9 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#define LINE_ATTRIBUTES (GDK_GC_LINE_WIDTH|GDK_GC_LINE_STYLE| \
+			 GDK_GC_CAP_STYLE|GDK_GC_JOIN_STYLE)
+
 #include <string.h>
 
 #include "gdkgc.h"
@@ -767,15 +770,12 @@ _gdk_win32_colormap_color (GdkColormap *colormap,
     }
 }
 
-static void
+static COLORREF
 predraw_set_foreground (GdkGC       *gc,
 			GdkColormap *colormap,
 			gboolean    *ok)
 {
   COLORREF fg;
-  LOGBRUSH logbrush;
-  HPEN hpen;
-  HBRUSH hbr;
   GdkGCWin32 *win32_gc = (GdkGCWin32 *) gc;
   GdkColormapPrivateWin32 *colormap_private;
   gint k;
@@ -800,92 +800,59 @@ predraw_set_foreground (GdkGC       *gc,
   fg = _gdk_win32_colormap_color (colormap, win32_gc->foreground);
 
   GDK_NOTE (GC, g_print ("predraw_set_foreground: fg=%06lx\n", fg));
-
-  if (SetTextColor (win32_gc->hdc, fg) == CLR_INVALID)
-    WIN32_GDI_FAILED ("SetTextColor"), *ok = FALSE;
-
-  /* Create and select pen and brush. */
-
-  logbrush.lbStyle = BS_SOLID;
-  logbrush.lbColor = fg;
-  logbrush.lbHatch = 0;
-
-  if (win32_gc->pen_num_dashes > 0 && !IS_WIN_NT ())
-    {
-      /* The Win9x GDI is rather limited so we either draw dotted
-       * lines ourselve (only horizontal and vertical) or let them
-       * be drawn solid to avoid implementing a whole line renderer
-       */
-      if (*ok && (hpen = ExtCreatePen (
-                           (win32_gc->pen_style & ~(PS_STYLE_MASK)) | PS_SOLID,
-                           (win32_gc->pen_width > 0 ? win32_gc->pen_width : 1),
-                           &logbrush, 
-                           0, NULL)) == NULL)
-        WIN32_GDI_FAILED ("ExtCreatePen"), *ok = FALSE;
-    }
-  else
-    {
-      if (*ok && (hpen = ExtCreatePen (win32_gc->pen_style,
-                           (win32_gc->pen_width > 0 ? win32_gc->pen_width : 1),
-                           &logbrush, 
-                           win32_gc->pen_num_dashes,
-                           win32_gc->pen_dashes)) == NULL)
-        WIN32_GDI_FAILED ("ExtCreatePen"), *ok = FALSE;
-    }
-  
-  if (*ok && SelectObject (win32_gc->hdc, hpen) == NULL)
-    WIN32_GDI_FAILED ("SelectObject"), *ok = FALSE;
-
-  switch (win32_gc->fill_style)
-    {
-    case GDK_OPAQUE_STIPPLED:
-      if (*ok && (hbr = CreatePatternBrush (GDK_PIXMAP_HBITMAP (win32_gc->stipple))) == NULL)
-	WIN32_GDI_FAILED ("CreatePatternBrush"), *ok = FALSE;
-      if (*ok && win32_gc->values_mask & (GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN) &&
-	  !SetBrushOrgEx(win32_gc->hdc,
-			 win32_gc->values_mask & GDK_GC_TS_X_ORIGIN ? gc->ts_x_origin : 0,
-			 win32_gc->values_mask & GDK_GC_TS_Y_ORIGIN ? gc->ts_y_origin : 0,
-			 NULL))
-	WIN32_GDI_FAILED ("SetBrushOrgEx"), *ok = FALSE;
-	
-      break;
-
-    case GDK_SOLID:
-    default:
-      if (*ok && (hbr = CreateSolidBrush (fg)) == NULL)
-	WIN32_GDI_FAILED ("CreateSolidBrush"), *ok = FALSE;
-      break;
-  }
-
-  if (*ok)
-    {
-      HBRUSH old_hbr = SelectObject (win32_gc->hdc, hbr);
-      if (old_hbr == NULL)
-	WIN32_GDI_FAILED ("SelectObject"), *ok = FALSE;
-    }
-}  
-
-static void
-predraw_set_background (GdkGC       *gc,
-			GdkColormap *colormap,
-			gboolean    *ok)
-{
-  GdkGCWin32 *win32_gc = (GdkGCWin32 *) gc;
-
-  if (win32_gc->values_mask & GDK_GC_BACKGROUND)
-    {
-      COLORREF bg = _gdk_win32_colormap_color (colormap, win32_gc->background);
-
-      if (SetBkColor (win32_gc->hdc, bg) == CLR_INVALID)
-        WIN32_GDI_FAILED ("SetBkColor"), *ok = FALSE;
-    }
-  else
-    {
-      if (!SetBkMode (win32_gc->hdc, TRANSPARENT))
-        WIN32_GDI_FAILED ("SetBkMode"), *ok = FALSE;
-    }
+  return fg;
 }
 
+/**
+ * gdk_win32_hdc_get:
+ * @drawable: destination #GdkDrawable
+ * @gc: #GdkGC to use for drawing on @drawable
+ * @usage: mask indicating what properties needs to be set up
+ *
+ * Allocates a Windows device context handle (HDC) for drawing into
+ * @drawable, and sets it up appropriately according to @usage.
+ *
+ * Each #GdkGC can at one time have only one HDC associated with it.
+ *
+ * The following flags in @mask are handled:
+ *
+ * If %GDK_GC_FOREGROUND is set in @mask, a solid brush of the
+ * foreground color in @gc is selected into the HDC. The text color of
+ * the HDC is also set. If the @drawable has a palette (256-color
+ * mode), the palette is selected and realized.
+ *
+ * If any of the line attribute flags (%GDK_GC_LINE_WIDTH,
+ * %GDK_GC_LINE_STYLE, %GDK_GC_CAP_STYLE and %GDK_GC_JOIN_STYLE) is
+ * set in @mask, a solid pen of the foreground color and appropriate
+ * width and stule is created and selected into the HDC. Note that the
+ * dash properties are not completely implemented.
+ *
+ * If the %GDK_GC_FONT flag is set, the background mix mode is set to
+ * %TRANSPARENT. and the text alignment is set to
+ * %TA_BASELINE|%TA_LEFT. Note that no font gets selected into the HDC
+ * by this function.
+ *
+ * Some things are done regardless of @mask: If the function in @gc is
+ * any other than %GDK_COPY, the raster operation of the HDC is
+ * set. If @gc has a clip mask, the clip region of the HDC is set.
+ *
+ * Note that the fill style, tile, stipple, and tile and stipple
+ * origins in the @gc are ignored by this function. (In general, tiles
+ * and stipples can't be implemented directly on Win32; you need to do
+ * multiple pass drawing and blitting to implement tiles or
+ * stipples. GDK does just that when you call the GDK drawing
+ * functions with a GC that asks for tiles or stipples.)
+ *
+ * When the HDC is no longer used, it should be released by calling
+ * <function>gdk_win32_hdc_release()</function> with the same
+ * parameters.
+ *
+ * If you modify the HDC by calling <function>SelectObject</function>
+ * you should undo those modifications before calling
+ * <function>gdk_win32_hdc_release()</function>.
+ *
+ * Return value: The HDC.
+ **/
 HDC
 gdk_win32_hdc_get (GdkDrawable    *drawable,
 		   GdkGC          *gc,
@@ -894,6 +861,10 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
   GdkGCWin32 *win32_gc = (GdkGCWin32 *) gc;
   GdkDrawableImplWin32 *impl = NULL;
   gboolean ok = TRUE;
+  COLORREF fg = RGB (0, 0, 0);
+  LOGBRUSH logbrush;
+  HPEN hpen;
+  HBRUSH hbr;
 
   g_assert (win32_gc->hdc == NULL);
 
@@ -929,21 +900,62 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
     }
   
   if (ok && (usage & GDK_GC_FOREGROUND))
-    predraw_set_foreground (gc, impl->colormap, &ok);
+    {
+      fg = predraw_set_foreground (gc, impl->colormap, &ok);
+      if (ok && (hbr = CreateSolidBrush (fg)) == NULL)
+	WIN32_GDI_FAILED ("CreateSolidBrush"), ok = FALSE;
 
-  if (ok && (usage & GDK_GC_BACKGROUND))
-    predraw_set_background (gc, impl->colormap, &ok);
-  
+      if (ok && SelectObject (win32_gc->hdc, hbr) == NULL)
+	WIN32_GDI_FAILED ("SelectObject"), ok = FALSE;
+
+      if (ok && SetTextColor (win32_gc->hdc, fg) == CLR_INVALID)
+	WIN32_GDI_FAILED ("SetTextColor"), ok = FALSE;
+    }
+
+  if (ok && (usage & LINE_ATTRIBUTES))
+    {
+      /* Create and select pen */
+      logbrush.lbStyle = BS_SOLID;
+      logbrush.lbColor = fg;
+      logbrush.lbHatch = 0;
+      
+      if (win32_gc->pen_num_dashes > 0 && !IS_WIN_NT ())
+	{
+	  /* The Win9x GDI is rather limited so we either draw dashed
+	   * lines ourselves (only horizontal and vertical) or let them be
+	   * drawn solid to avoid implementing a whole line renderer.
+	   */
+	  if ((hpen = ExtCreatePen (
+				    (win32_gc->pen_style & ~(PS_STYLE_MASK)) | PS_SOLID,
+				    MAX (win32_gc->pen_width, 1),
+				    &logbrush, 
+				    0, NULL)) == NULL)
+	    WIN32_GDI_FAILED ("ExtCreatePen"), ok = FALSE;
+	}
+      else
+	{
+	  if ((hpen = ExtCreatePen (win32_gc->pen_style,
+				    MAX (win32_gc->pen_width, 1),
+				    &logbrush, 
+				    win32_gc->pen_num_dashes,
+				    win32_gc->pen_dashes)) == NULL)
+	    WIN32_GDI_FAILED ("ExtCreatePen"), ok = FALSE;
+	}
+      
+      if (ok && SelectObject (win32_gc->hdc, hpen) == NULL)
+	WIN32_GDI_FAILED ("SelectObject"), ok = FALSE;
+    }
+
   if (ok && (usage & GDK_GC_FONT))
     {
       if (SetBkMode (win32_gc->hdc, TRANSPARENT) == 0)
 	WIN32_GDI_FAILED ("SetBkMode"), ok = FALSE;
   
-      if (ok && SetTextAlign (win32_gc->hdc, TA_BASELINE) == GDI_ERROR)
+      if (ok && SetTextAlign (win32_gc->hdc, TA_BASELINE|TA_LEFT|TA_NOUPDATECP) == GDI_ERROR)
 	WIN32_GDI_FAILED ("SetTextAlign"), ok = FALSE;
     }
   
-  if (ok && (win32_gc->values_mask & GDK_GC_FUNCTION))
+  if (ok && win32_gc->rop2 != R2_COPYPEN)
     if (SetROP2 (win32_gc->hdc, win32_gc->rop2) == 0)
       WIN32_GDI_FAILED ("SetROP2"), ok = FALSE;
 
@@ -953,33 +965,6 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
     {
       if (SelectClipRgn (win32_gc->hdc, win32_gc->hcliprgn) == ERROR)
 	WIN32_API_FAILED ("SelectClipRgn"), ok = FALSE;
-
-#if 0 /* No, this is totally bogus. The stipple should replicate in x
-       * and y directions, not be just one copy of the bitmap. We must
-       * handle stipples elsewhere.
-       */
-      /* Combine the fillmode-stipple with the clip region */
-      if (ok &&
-	  (win32_gc->values_mask & GDK_GC_STIPPLE) &&
-          (win32_gc->values_mask & GDK_GC_FILL) &&
-	  (win32_gc->fill_style == GDK_STIPPLED))
-        {
-	  HRGN hstipplergn;
-
-	  if ((hstipplergn = _gdk_win32_bitmap_to_hrgn (win32_gc->stipple)) == NULL)
-	    ;
-          else if (win32_gc->values_mask & (GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN) &&
-		   OffsetRgn (hstipplergn,
-		     win32_gc->values_mask & GDK_GC_TS_X_ORIGIN ? gc->ts_x_origin : 0,
-		     win32_gc->values_mask & GDK_GC_TS_Y_ORIGIN ? gc->ts_y_origin : 0) == ERROR)
-	    WIN32_API_FAILED ("OffsetRgn");
-          else if (ExtSelectClipRgn (win32_gc->hdc, hstipplergn, RGN_AND) == ERROR)
-            WIN32_API_FAILED ("ExtSelectClipRgn");
-
-          if (hstipplergn != NULL && !DeleteObject (hstipplergn))
-            WIN32_API_FAILED ("DeleteObject");
-        }
-#endif
 
       if (ok && win32_gc->values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN) &&
 	  OffsetClipRgn (win32_gc->hdc,
@@ -995,6 +980,16 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
   return win32_gc->hdc;
 }
 
+/**
+ * gdk_win32_hdc_release:
+ * @drawable: destination #GdkDrawable
+ * @gc: #GdkGC to use for drawing on @drawable
+ * @usage: mask indicating what properties were set up
+ *
+ * This function deallocates the Windows device context allocated by
+ * <funcion>gdk_win32_hdc_get()</function>. It should be called with
+ * the same parameters.
+ **/
 void
 gdk_win32_hdc_release (GdkDrawable    *drawable,
 		       GdkGC          *gc,
@@ -1032,36 +1027,26 @@ gdk_win32_hdc_release (GdkDrawable    *drawable,
       win32_gc->holdpal = NULL;
     }
 
+  if (usage & LINE_ATTRIBUTES)
+    if ((hpen = GetCurrentObject (win32_gc->hdc, OBJ_PEN)) == NULL)
+      WIN32_GDI_FAILED ("GetCurrentObject");
+  
   if (usage & GDK_GC_FOREGROUND)
-    {
-      if ((hpen = GetCurrentObject (win32_gc->hdc, OBJ_PEN)) == NULL)
-	WIN32_GDI_FAILED ("GetCurrentObject");
+    if ((hbr = GetCurrentObject (win32_gc->hdc, OBJ_BRUSH)) == NULL)
+      WIN32_GDI_FAILED ("GetCurrentObject");
 
-      if ((hbr = GetCurrentObject (win32_gc->hdc, OBJ_BRUSH)) == NULL)
-	WIN32_GDI_FAILED ("GetCurrentObject");
-    }
-
-  if (!RestoreDC (win32_gc->hdc, win32_gc->saved_dc))
-    WIN32_GDI_FAILED ("RestoreDC");
+  GDI_CALL (RestoreDC, (win32_gc->hdc, win32_gc->saved_dc));
 
   if (GDK_IS_PIXMAP_IMPL_WIN32 (impl))
-    {
-      if (!DeleteDC (win32_gc->hdc))
-	WIN32_GDI_FAILED ("DeleteDC");
-    }
+    GDI_CALL (DeleteDC, (win32_gc->hdc));
   else
-    {
-      if (!ReleaseDC (win32_gc->hwnd, win32_gc->hdc))
-	WIN32_GDI_FAILED ("ReleaseDC");
-    }
+    GDI_CALL (ReleaseDC, (win32_gc->hwnd, win32_gc->hdc));
 
   if (hpen != NULL)
-    if (!DeleteObject (hpen))
-      WIN32_GDI_FAILED ("DeleteObject");
+    GDI_CALL (DeleteObject, (hpen));
   
   if (hbr != NULL)
-    if (!DeleteObject (hbr))
-      WIN32_GDI_FAILED ("DeleteObject");
+    GDI_CALL (DeleteObject, (hbr));
 
   win32_gc->hdc = NULL;
 }

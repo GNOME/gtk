@@ -1850,7 +1850,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
     WIN32_API_FAILED ("GetWindowRect");
 
   rect->x = r.left;
-  rect->y = r.right;
+  rect->y = r.top;
   rect->width = r.right - r.left;
   rect->height = r.bottom - r.top;
 }

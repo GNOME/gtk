@@ -1,3 +1,58 @@
+2002-11-24  Tor Lillqvist  <tml@iki.fi>
+
+	Merge from stable:
+	
+	Implement tiles and stipples for all drawing methids (except the
+	deprecated draw_text() and draw_text_wc()).
+
+	* gdk/win32/gdkdrawable-win32.c: Remove the already ifdeffed-out
+	code that didn't use generic_draw().
+
+	(generic_draw): When drawing into the mask (for tiled/stippled
+	fill styles), copy the line attributes from the actual GC. Also
+	ask for text drawing setup if needed. Use differently set up HDCs
+	in the normal and tiled/stippled cases.
+
+	(draw_lines, gdk_win32_draw_lines, draw_polygon,
+	gdk_win32_draw_polygon, draw_segments, gdk_win32_draw_segments,
+	draw_arc, gdk_win32_draw_arc): Use generic_draw(), thus
+	implementing tiled and stippled fill styles for lines, polygons,
+	segments, and args.
+
+	(gdk_win32_draw_points): Use Rectangle() instead of
+	SetPixel(). Rectangle() uses the function (raster op) set for the
+	HDC, SetPixel() doesn't.
+
+	(widen_bounds): New function, refactoring.
+	
+	* gdk/win32/gdkgc-win32.c: Remove ifdeffed-out code.
+
+	(predraw_set_foreground, gdk_win32_hdc_get): Some code moved
+	around. Call SetROP2() only if necessary. Call SetTextColor() only
+	if GDK_GC_FOREGROUND flag present. Don't handle
+	GDK_OPAQUE_STIPPLED here, has been superseded by the code in
+	generic_draw(). Always create a solid brush.
+
+	Remove background color handling from here. The background color
+	of a GdkGC is supposed to affect only GDK_OPAQUE_STIPPLED fill
+	style, which it is already handled in generic_draw(), and
+	GDK_LINE_DOUBLE_DASH lines, which aren't implemented properly
+	anyway. Calling SetBkColor() is unnecessary as we always use
+	TRANSPARENT text output.
+
+	(gdk_win32_hdc_get, gdk_win32_hdc_release): Add doc comments, as
+	these are public functions.
+
+	* gdk/win32/gdkevents-win32.c (synthesize_expose_events): Don't
+	synthesize expose events for GDK_INPUT_ONLY windows.
+	(gdk_event_translate): On WM_SIZE, call
+	gdk_synthesize_window_state() if window was iconified, restored or
+	maximized. (#98983, Arnaud Charlet)
+
+	* gtk+/gdk/win32/gdkwindow-win32.c
+	(gdk_window_get_frame_extents): Fix typo in setting y.  (#98983,
+	Arnaud Charlet)
+
 2002-11-23  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkcursor-x11.c (gdk_cursor_new_from_pixmap): 
