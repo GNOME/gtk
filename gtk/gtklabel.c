@@ -2008,6 +2008,7 @@ gtk_label_size_request (GtkWidget      *widget,
       
       requisition->width = width + rect.width;
       requisition->height = height + rect.height;
+
       return;
     }
   else
@@ -2081,8 +2082,10 @@ gtk_label_size_allocate (GtkWidget     *widget,
                          GtkAllocation *allocation)
 {
   GtkLabel *label;
+  GtkLabelPrivate *priv;
 
   label = GTK_LABEL (widget);
+  priv = GTK_LABEL_GET_PRIVATE (widget);
 
   (* GTK_WIDGET_CLASS (parent_class)->size_allocate) (widget, allocation);
 
@@ -2129,7 +2132,6 @@ gtk_label_style_set (GtkWidget *widget,
 
   /* We have to clear the layout, fonts etc. may have changed */
   gtk_label_clear_layout (label);
-  gtk_widget_queue_resize (GTK_WIDGET (label));
 }
 
 static void 
