@@ -1,5 +1,10 @@
 2004-11-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkbutton.[hc]: Add a GtkButton::image property with setter 
+	and getter, which allows to construct stock-like buttons with 
+	custom images and/or text.  (#62466, Jonathan Blandford, patch by
+	Matthias Clasen)
+
 	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_set_image): Add 
 	some more docs.
 
