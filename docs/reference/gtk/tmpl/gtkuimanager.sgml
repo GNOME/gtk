@@ -25,11 +25,16 @@ roughly described by the following DTD.
 &lt;!ELEMENT toolitem     EMPTY &gt;
 &lt;!ELEMENT separator    EMPTY &gt;
 &lt;!ELEMENT accelerator  EMPTY &gt;
-&lt;!ATTLIST menubar      name               &num;IMPLIED &gt;
-&lt;!ATTLIST toolbar      name               &num;IMPLIED &gt;
-&lt;!ATTLIST popup        name               &num;IMPLIED &gt;
-&lt;!ATTLIST placeholder  name               &num;IMPLIED &gt;
-&lt;!ATTLIST separator    name               &num;IMPLIED &gt;
+&lt;!ATTLIST menubar      name               &num;IMPLIED 
+                       action             &num;IMPLIED &gt;
+&lt;!ATTLIST toolbar      name               &num;IMPLIED 
+                       action             &num;IMPLIED &gt;
+&lt;!ATTLIST popup        name               &num;IMPLIED 
+                       action             &num;IMPLIED &gt;
+&lt;!ATTLIST placeholder  name               &num;IMPLIED
+                       action             &num;IMPLIED &gt;
+&lt;!ATTLIST separator    name               &num;IMPLIED
+                       action             &num;IMPLIED &gt;
 &lt;!ATTLIST menu         name               &num;IMPLIED
                        action             &num;REQUIRED
                        position (top|bot) &num;IMPLIED &gt;
