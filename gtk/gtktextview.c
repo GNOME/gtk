@@ -4410,6 +4410,31 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
     }
 }
 
+/**
+ * gtk_text_view_get_default_attributes:
+ * @text_view: a #GtkTextView
+ * 
+ * Obtains a copy of the default text attributes. These are the
+ * attributes used for text unless a tag overrides them.
+ * You'd typically pass the default attributes in to
+ * gtk_text_tag_get_attributes() in order to get the
+ * attributes in effect at a given text position.
+ *
+ * The return value is a copy owned by the caller of this function,
+ * and should be freed.
+ * 
+ * Return value: a new #GtkTextAttributes
+ **/
+GtkTextAttributes*
+gtk_text_view_get_default_attributes (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
+  
+  gtk_text_view_ensure_layout (text_view);
+
+  return gtk_text_attributes_copy (text_view->layout->default_style);
+}
+
 static void
 gtk_text_view_destroy_layout (GtkTextView *text_view)
 {

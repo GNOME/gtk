@@ -2325,6 +2325,26 @@ gtk_text_buffer_get_iter_at_offset         (GtkTextBuffer      *buffer,
 }
 
 /**
+ * gtk_text_buffer_get_start_iter:
+ * @buffer: a #GtkTextBuffer
+ * @iter: iterator to initialize
+ *
+ * Initialized @iter with the first position in the text buffer. This
+ * is the same as using gtk_text_buffer_get_iter_at_offset() to get
+ * the iter at character offset 0.
+ * 
+ **/
+void
+gtk_text_buffer_get_start_iter (GtkTextBuffer *buffer,
+                                GtkTextIter   *iter)
+{
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+
+  _gtk_text_btree_get_iter_at_char (get_btree (buffer), iter, 0);
+}
+
+/**
  * gtk_text_buffer_get_end_iter:
  * @buffer: a #GtkTextBuffer 
  * @iter: iterator to initialize
@@ -2333,7 +2353,7 @@ gtk_text_buffer_get_iter_at_offset         (GtkTextBuffer      *buffer,
  * character in the text buffer. If dereferenced with
  * gtk_text_iter_get_char(), the end iterator has a character value of
  * 0. The entire buffer lies in the range from the first position in
- * the buffer (call gtk_text_buffer_get_iter_at_offset() to get
+ * the buffer (call gtk_text_buffer_get_start_iter() to get
  * character position 0) to the end iterator.
  * 
  **/

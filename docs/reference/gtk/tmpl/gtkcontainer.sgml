@@ -101,16 +101,6 @@ GtkContainer
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_container_focus ##### -->
-<para>
-
-</para>
-
-@container: 
-@direction: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_container_set_reallocate_redraws ##### -->
 <para>
 

@@ -1629,12 +1629,14 @@ gtk_text_iter_get_bytes_in_line (const GtkTextIter   *iter)
  *
  * Computes the effect of any tags applied to this spot in the
  * text. The @values parameter should be initialized to the default
- * settings you wish to use if no tags are in effect.
+ * settings you wish to use if no tags are in effect. You'd typically
+ * obtain the defaults from gtk_text_view_get_default_attributes().
+ *
  * gtk_text_iter_get_attributes () will modify @values, applying the
  * effects of any tags present at @iter. If any tags affected @values,
- * the function returns TRUE.
+ * the function returns %TRUE.
  *
- * Return value: TRUE if @values was modified
+ * Return value: %TRUE if @values was modified
  **/
 gboolean
 gtk_text_iter_get_attributes (const GtkTextIter  *iter,

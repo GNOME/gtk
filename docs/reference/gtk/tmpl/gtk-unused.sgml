@@ -1005,6 +1005,15 @@ is enabled.
 @colorsel: 
 @use_palette: 
 
+<!-- ##### FUNCTION gtk_container_focus ##### -->
+<para>
+
+</para>
+
+@container: 
+@direction: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_ctree_construct ##### -->
 <para>
 This function is not usually used by users.

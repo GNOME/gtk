@@ -316,8 +316,9 @@ gint             gtk_text_view_get_indent             (GtkTextView      *text_vi
 void             gtk_text_view_set_tabs               (GtkTextView      *text_view,
                                                        PangoTabArray    *tabs);
 PangoTabArray*   gtk_text_view_get_tabs               (GtkTextView      *text_view);
-                                       
 
+/* note that the return value of this changes with the theme */
+GtkTextAttributes* gtk_text_view_get_default_attributes (GtkTextView    *text_view);
 
 #ifdef __cplusplus
 }
