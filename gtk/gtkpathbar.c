@@ -73,8 +73,6 @@ static void gtk_path_bar_size_request             (GtkWidget        *widget,
 						   GtkRequisition   *requisition);
 static void gtk_path_bar_size_allocate            (GtkWidget        *widget,
 						   GtkAllocation    *allocation);
-static void gtk_path_bar_direction_changed        (GtkWidget        *widget,
-						   GtkTextDirection  direction);
 static void gtk_path_bar_add                      (GtkContainer     *container,
 						   GtkWidget        *widget);
 static void gtk_path_bar_remove                   (GtkContainer     *container,
@@ -97,14 +95,15 @@ static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
 						   gboolean          current_dir);
 
 static GtkWidget *
-get_slider_button (GtkPathBar *path_bar)
+get_slider_button (GtkPathBar  *path_bar,
+		   GtkArrowType arrow_type)
 {
   GtkWidget *button;
 
   gtk_widget_push_composite_child ();
 
   button = gtk_button_new ();
-  gtk_container_add (GTK_CONTAINER (button), gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_OUT));
+  gtk_container_add (GTK_CONTAINER (button), gtk_arrow_new (arrow_type, GTK_SHADOW_OUT));
   gtk_container_add (GTK_CONTAINER (path_bar), button);
   gtk_widget_show_all (button);
 
@@ -120,8 +119,8 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (path_bar), FALSE);
 
   path_bar->spacing = 3;
-  path_bar->up_slider_button = get_slider_button (path_bar);
-  path_bar->down_slider_button = get_slider_button (path_bar);
+  path_bar->up_slider_button = get_slider_button (path_bar, GTK_ARROW_LEFT);
+  path_bar->down_slider_button = get_slider_button (path_bar, GTK_ARROW_RIGHT);
   path_bar->icon_size = FALLBACK_ICON_SIZE;
 
   g_signal_connect (path_bar->up_slider_button, "clicked", G_CALLBACK (gtk_path_bar_scroll_up), path_bar);
@@ -146,7 +145,6 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
 
   widget_class->size_request = gtk_path_bar_size_request;
   widget_class->size_allocate = gtk_path_bar_size_allocate;
-  widget_class->direction_changed = gtk_path_bar_direction_changed;
   widget_class->style_set = gtk_path_bar_style_set;
   widget_class->screen_changed = gtk_path_bar_screen_changed;
 
@@ -267,30 +265,6 @@ gtk_path_bar_size_request (GtkWidget      *widget,
 static void
 gtk_path_bar_update_slider_buttons (GtkPathBar *path_bar)
 {
-  GtkTextDirection direction;
-
-  direction = gtk_widget_get_direction (GTK_WIDGET (path_bar));
-  if (direction == GTK_TEXT_DIR_RTL)
-    {
-      GtkWidget *arrow;
-
-      arrow = gtk_bin_get_child (GTK_BIN (path_bar->up_slider_button));
-      g_object_set (arrow, "arrow_type", GTK_ARROW_RIGHT, NULL);
-
-      arrow = gtk_bin_get_child (GTK_BIN (path_bar->down_slider_button));
-      g_object_set (arrow, "arrow_type", GTK_ARROW_LEFT, NULL);
-    }
-  else
-    {
-      GtkWidget *arrow;
-
-      arrow = gtk_bin_get_child (GTK_BIN (path_bar->up_slider_button));
-      g_object_set (arrow, "arrow_type", GTK_ARROW_LEFT, NULL);
-
-      arrow = gtk_bin_get_child (GTK_BIN (path_bar->down_slider_button));
-      g_object_set (arrow, "arrow_type", GTK_ARROW_RIGHT, NULL);
-    }
-
   if (path_bar->button_list)
     {
       GtkWidget *button;
@@ -489,15 +463,6 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
       gtk_widget_set_child_visible (path_bar->up_slider_button, FALSE);
       gtk_widget_set_child_visible (path_bar->down_slider_button, FALSE);
     }
-}
-
-static void
- gtk_path_bar_direction_changed (GtkWidget *widget,
-				 GtkTextDirection direction)
-{
-  gtk_path_bar_update_slider_buttons (GTK_PATH_BAR (widget));
-
-  (* GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->direction_changed) (widget, direction);
 }
 
 static void

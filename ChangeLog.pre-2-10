@@ -1,3 +1,13 @@
+Fri Mar 12 17:20:15 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkarrow.c (gtk_arrow_expose): Swap GTK_ARROW_LEFT
+	and GTK_ARROW_RIGHT for GTK_TEXT_DIR_LTR. (#129159,
+	Semion Chichelnitsky)
+
+	* gtk/gtkpathbar.c gtk/gtktoolbar.c: Remove no-longer-needed 
+	gtk_toolbar_direction-changed handlers and explicit
+	flipping of GtkArrow widgets.
+
 Fri Mar 12 23:37:15 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkfilechooserdialog.c

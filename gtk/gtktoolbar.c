@@ -158,8 +158,6 @@ static void       gtk_toolbar_size_allocate        (GtkWidget           *widget,
 						    GtkAllocation       *allocation);
 static void       gtk_toolbar_style_set            (GtkWidget           *widget,
 						    GtkStyle            *prev_style);
-static void       gtk_toolbar_direction_changed    (GtkWidget           *widget,
-						    GtkTextDirection     previous_direction);
 static gboolean   gtk_toolbar_focus                (GtkWidget           *widget,
 						    GtkDirectionType     dir);
 static void       gtk_toolbar_screen_changed       (GtkWidget           *widget,
@@ -373,7 +371,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   widget_class->size_request = gtk_toolbar_size_request;
   widget_class->size_allocate = gtk_toolbar_size_allocate;
   widget_class->style_set = gtk_toolbar_style_set;
-  widget_class->direction_changed = gtk_toolbar_direction_changed;
   widget_class->focus = gtk_toolbar_focus;
   widget_class->screen_changed = gtk_toolbar_screen_changed;
   widget_class->realize = gtk_toolbar_realize;
@@ -1625,24 +1622,6 @@ gtk_toolbar_style_set (GtkWidget *widget,
     gtk_toolbar_update_button_relief (GTK_TOOLBAR (widget));
 }
 
-static void 
-gtk_toolbar_direction_changed (GtkWidget        *widget,
-		   	       GtkTextDirection  previous_dir)
-{
-  GtkToolbar *toolbar = GTK_TOOLBAR (widget);
-  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  
-  if (toolbar->orientation == GTK_ORIENTATION_VERTICAL)
-    {
-      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-	gtk_arrow_set (GTK_ARROW (priv->arrow), GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
-      else 
-	gtk_arrow_set (GTK_ARROW (priv->arrow), GTK_ARROW_LEFT, GTK_SHADOW_NONE);
-    }
-  
-  GTK_WIDGET_CLASS (parent_class)->direction_changed (widget, previous_dir);
-}
-
 static GList *
 gtk_toolbar_list_children_in_focus_order (GtkToolbar       *toolbar,
 					  GtkDirectionType  dir)
@@ -2355,10 +2334,8 @@ gtk_toolbar_orientation_changed (GtkToolbar    *toolbar,
       
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	gtk_arrow_set (GTK_ARROW (priv->arrow), GTK_ARROW_DOWN, GTK_SHADOW_NONE);
-      else if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_LTR)
+      else
 	gtk_arrow_set (GTK_ARROW (priv->arrow), GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
-      else 
-	gtk_arrow_set (GTK_ARROW (priv->arrow), GTK_ARROW_LEFT, GTK_SHADOW_NONE);
       
       gtk_toolbar_reconfigured (toolbar);
       

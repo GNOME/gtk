@@ -234,6 +234,7 @@ gtk_arrow_expose (GtkWidget      *widget,
   gint x, y;
   gint extent;
   gfloat xalign;
+  GtkArrowType effective_arrow_type;
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
@@ -243,11 +244,18 @@ gtk_arrow_expose (GtkWidget      *widget,
       width = widget->allocation.width - misc->xpad * 2;
       height = widget->allocation.height - misc->ypad * 2;
       extent = MIN (width, height) * 0.7;
+      effective_arrow_type = arrow->arrow_type;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
 	xalign = misc->xalign;
       else
-	xalign = 1.0 - misc->xalign;
+	{
+	  xalign = 1.0 - misc->xalign;
+	  if (arrow->arrow_type == GTK_ARROW_LEFT)
+	    effective_arrow_type = GTK_ARROW_RIGHT;
+	  else if (arrow->arrow_type == GTK_ARROW_RIGHT)
+	    effective_arrow_type = GTK_ARROW_LEFT;
+	}
 
       x = floor (widget->allocation.x + misc->xpad
 		 + ((widget->allocation.width - extent) * xalign)
@@ -273,7 +281,7 @@ gtk_arrow_expose (GtkWidget      *widget,
       gtk_paint_arrow (widget->style, widget->window,
 		       widget->state, shadow_type,
 		       &event->area, widget, "arrow",
-		       arrow->arrow_type, TRUE,
+		       effective_arrow_type, TRUE,
 		       x, y, extent, extent);
     }
 
