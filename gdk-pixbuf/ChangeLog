@@ -1,3 +1,8 @@
+2003-03-11  Matthias Clasen  <maclas@gmx.de>
+
+	* io-ico.c (DecodeHeader): Calculate LineWidth for 16bpp from
+	width, like for the other depths.  (noticed by Marijn Ros)
+
 2003-03-08  Matthias Clasen  <maclas@gmx.de>
 
 	Bug #107664 continued: 
