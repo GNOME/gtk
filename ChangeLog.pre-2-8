@@ -1,3 +1,10 @@
+Wed Jan 15 14:56:09 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_size_allocate): 
+	Show/hide the notebook event window as necessary,
+	we weren't previously keeping the visibility updated
+	properly.  (#103599)
+
 2002-12-29  Murray Cumming  <murrayc@usa.net>
 
 	Fixes #102168. Merge from HEAD.
