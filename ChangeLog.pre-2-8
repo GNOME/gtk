@@ -1,5 +1,8 @@
 2005-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* docs/tutorial/gtk-tut.sgml: Clarify section on 
+	g_signal_connect_swapped.   (#120543, David Bourguignon)
+
 	Make gtk_icon_theme_load_icon() work independent of
 	icon factory initialization.  (#162791, Tristan Van Berkom)
 	

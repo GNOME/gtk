@@ -527,11 +527,12 @@ function", and should generally be of the form</para>
 
 <programlisting role="C">
 void callback_func( GtkWidget *widget,
+                    ... /* other signal arguments */
                     gpointer   callback_data );
 </programlisting>
 
 <para>where the first argument will be a pointer to the widget that emitted
-the signal, and the second a pointer to the data given as the last
+the signal, and the last a pointer to the data given as the last
 argument to the g_signal_connect() function as shown above.</para>
 
 <para>Note that the above form for a signal callback function declaration is
@@ -544,29 +545,29 @@ different calling parameters.</para>
 gulong g_signal_connect_swapped( gpointer     *object,
                                  const gchar  *name,
                                  GCallback    func,
-                                 gpointer     *slot_object );
+                                 gpointer     *callback_data );
 </programlisting>
 
 <para>g_signal_connect_swapped() is the same as g_signal_connect() except
-that the callback function only uses one argument, a pointer to a GTK
-object. So when using this function to connect signals, the callback
+that the instance on which the signal is emitted and data will be swapped when
+calling the handler. So when using this function to connect signals, the callback
 should be of the form</para>
 
 <programlisting role="C">
-void callback_func( GtkObject *object );
+void callback_func( gpointer   callback_data,
+                    ... /* other signal arguments */
+                    GtkWidget *widget);
 </programlisting>
 
 <para>where the object is usually a widget. We usually don't setup callbacks
 for g_signal_connect_swapped() however. They are usually used to call a
-GTK function that accepts a single widget or object as an argument, as
-is the case in our <emphasis>helloworld</emphasis> example.</para>
+GTK function that accepts a single widget or object as an argument, when a signal
+is emitted on some <emphasis>other</emphasis> object. In the 
+<emphasis>helloworld</emphasis> example, we connect to the "clicked" signal
+on the button, but call gtk_widget_destroy() on the window.</para>
 
-<para>The purpose of having two functions to connect signals is simply to
-allow the callbacks to have a different number of arguments. Many
-functions in the GTK library accept only a single GtkWidget pointer as
-an argument, so you want to use the g_signal_connect_swapped() for
-these, whereas for your functions, you may need to have additional
-data supplied to the callbacks.</para>
+<para>If your callbacks need additional data, use g_signal_connect() instead
+of g_signal_connect_swapped().</para>
 
 </sect1>
 
