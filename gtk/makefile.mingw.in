@@ -47,7 +47,7 @@ all :						\
 	testrgb.exe				\
 	testselection.exe			\
 	testtext.exe				\
-	testtextbuffer.exe
+	testtextbuffer.exe			\
 	simple.exe
 
 gtk_OBJECTS =					\
@@ -376,49 +376,61 @@ testcalendar.exe : testcalendar.o
 
 # Must have separate rules for these objects that don't go in the DLL
 testcalendar.o : testcalendar.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testcalendar\" testcalendar.c
+	$(CC) $(CFLAGS) -UGTK_COMPILATION -c -DG_LOG_DOMAIN=\"testcalendar\" testcalendar.c
 
 testdnd.exe : testdnd.o
 	$(CC) $(CFLAGS) -o $@ testdnd.o $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
 
 testdnd.o : testdnd.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testdnd\" testdnd.c
+	$(CC) $(CFLAGS) -UGTK_COMPILATION -c -DG_LOG_DOMAIN=\"testdnd\" testdnd.c
 
 testgtk.exe : testgtk.o
 	$(CC) $(CFLAGS) -o $@  testgtk.o $(GTK_LIBS) $(GDK_LIBS) $(PANGO_LIBS) $(GLIB_LIBS) $(LDFLAGS)
 
 testgtk.o : testgtk.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testgtk\" testgtk.c
+	$(CC) $(CFLAGS) -UGTK_COMPILATION -c -DG_LOG_DOMAIN=\"testgtk\" testgtk.c
 
 testinput.exe : testinput.o
 	$(CC) $(CFLAGS) -o $@  testinput.o $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
 
 testinput.o : testinput.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testinput\" testinput.c
+	$(CC) $(CFLAGS) -UGTK_COMPILATION -c -DG_LOG_DOMAIN=\"testinput\" testinput.c
 
 testrgb.exe : testrgb.o
 	$(CC) $(CFLAGS) -o $@  testrgb.o $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
 
 testrgb.o : testrgb.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testrgb\" testrgb.c
+	$(CC) $(CFLAGS) -UGTK_COMPILATION -c -DG_LOG_DOMAIN=\"testrgb\" testrgb.c
 
 testselection.exe : testselection.o
 	$(CC) $(CFLAGS) -o $@  testselection.o $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
 
 testselection.o : testselection.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testselection\" testselection.c
+	$(CC) $(CFLAGS) -UGTK_COMPILATION -c -DG_LOG_DOMAIN=\"testselection\" testselection.c
+
+testtext.exe : testtext.o
+	$(CC) $(CFLAGS) -o $@  testtext.o $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
+
+testtext.o : testtext.c
+	$(CC) $(CFLAGS) -UGTK_COMPILATION -c -DG_LOG_DOMAIN=\"testtext\" testtext.c
+
+testtextbuffer.exe : testtextbuffer.o
+	$(CC) $(CFLAGS) -o $@  testtextbuffer.o $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
+
+testtextbuffer.o : testtextbuffer.c
+	$(CC) $(CFLAGS) -UGTK_COMPILATION -c -DG_LOG_DOMAIN=\"testtextbuffer\" testtextbuffer.c
 
 testthreads.exe : testthreads.o
 	$(CC) $(CFLAGS) -o $@  testthreads.o $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(PTHREAD_LIB) $(LDFLAGS)
 
 testthreads.o : testthreads.c
-	$(CC) $(CFLAGS) -I$(PTHREAD_INC) -c -DG_LOG_DOMAIN=\"testthreads\" -DUSE_PTHREADS=1 testthreads.c
+	$(CC) $(CFLAGS) -I$(PTHREAD_INC) -UGTK_COMPILATION -c -DG_LOG_DOMAIN=\"testthreads\" -DUSE_PTHREADS=1 testthreads.c
 
 simple.exe : simple.o
 	$(CC) $(CFLAGS) -o $@  simple.o $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)
 
 simple.o : simple.c
-	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"simple\" simple.c
+	$(CC) $(CFLAGS) -UGTK_COMPILATION -c -DG_LOG_DOMAIN=\"simple\" simple.c
 
 # The rmgen target removes just the generated source files
 rmgen:

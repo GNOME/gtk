@@ -52,7 +52,17 @@ typedef enum {
       
 #endif /* G_ENABLE_DEBUG */
 
-extern guint gtk_debug_flags;
+#ifdef G_OS_WIN32
+#  ifdef GTK_COMPILATION
+#    define GTKVAR __declspec(dllexport)
+#  else
+#    define GTKVAR extern __declspec(dllimport)
+#  endif
+#else
+#  define GTKVAR extern
+#endif
+
+GTKVAR guint gtk_debug_flags;
 
 #ifdef __cplusplus
 }

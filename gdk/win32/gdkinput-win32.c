@@ -1154,6 +1154,73 @@ _gdk_device_get_history (GdkDevice         *device,
 }
 
 void 
+gdk_device_get_state (GdkDevice       *device,
+		      GdkWindow       *window,
+		      gdouble         *axes,
+		      GdkModifierType *mask)
+{
+  gint i;
+
+  g_return_if_fail (device != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_IS_CORE (device))
+    {
+      gint x_int, y_int;
+      
+      gdk_window_get_pointer (window, &x_int, &y_int, mask);
+
+      if (axes)
+	{
+	  axes[0] = x_int;
+	  axes[1] = y_int;
+	}
+    }
+  else
+    {
+      GdkDevicePrivate *gdkdev;
+      GdkInputWindow *input_window;
+      
+      if (mask)
+	gdk_window_get_pointer (window, NULL, NULL, mask);
+      
+      gdkdev = (GdkDevicePrivate *)device;
+      input_window = gdk_input_window_find (window);
+      g_return_if_fail (input_window != NULL);
+
+#if 0 /* FIXME */
+      state = XQueryDeviceState (gdk_display, gdkdev->xdevice);
+      input_class = state->data;
+      for (i = 0; i < state->num_classes; i++)
+	{
+	  switch (input_class->class)
+	    {
+	    case ValuatorClass:
+	      if (axes)
+		gdk_input_translate_coordinates (gdkdev, input_window,
+						 ((XValuatorState *)input_class)->valuators,
+						 axes, NULL, NULL);
+	      break;
+	      
+	    case ButtonClass:
+	      if (mask)
+		{
+		  *mask &= 0xFF;
+		  if (((XButtonState *)input_class)->num_buttons > 0)
+		    *mask |= ((XButtonState *)input_class)->buttons[0] << 7;
+		  /* GDK_BUTTON1_MASK = 1 << 8, and button n is stored
+		   * in bit 1<<(n%8) in byte n/8. n = 1,2,... */
+		}
+	      break;
+	    }
+	  input_class = (XInputClass *)(((char *)input_class)+input_class->length);
+	}
+      XFreeDeviceState (state);
+#endif
+    }
+}
+
+void 
 gdk_input_init (void)
 {
   gdk_input_ignore_core = FALSE;

@@ -1281,7 +1281,7 @@ gdk_font_load_internal (const gchar *font_name)
       logfont.lfUnderline = FALSE;
       logfont.lfStrikeOut = FALSE;
       logfont.lfCharSet = ANSI_CHARSET;
-      logfont.lfOutPrecision = OUT_TT_PRECIS;
+      logfont.lfOutPrecision = OUT_TT_ONLY_PRECIS;
       logfont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
       logfont.lfQuality = PROOF_QUALITY;
       logfont.lfPitchAndFamily = DEFAULT_PITCH;

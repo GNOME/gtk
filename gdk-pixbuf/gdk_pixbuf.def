@@ -24,6 +24,7 @@ EXPORTS
 	gdk_pixbuf_get_height
 	gdk_pixbuf_get_module
 	gdk_pixbuf_get_n_channels
+	gdk_pixbuf_get_named_module
 	gdk_pixbuf_get_pixels
 	gdk_pixbuf_get_rowstride
 	gdk_pixbuf_get_type

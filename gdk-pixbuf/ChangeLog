@@ -1,3 +1,7 @@
+2000-08-12  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk_pixbuf.def: Add missing entry point.
+
 2000-08-10  Havoc Pennington  <hp@redhat.com>
 
 	* Makefile.am (EXTRA_DIST): The *.def files had the wrong names

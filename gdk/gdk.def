@@ -47,6 +47,10 @@ EXPORTS
 	gdk_cursor_new_from_pixmap
 	gdk_cursor_ref
 	gdk_cursor_unref
+	gdk_device_free_history
+	gdk_device_get_axis
+	gdk_device_get_history
+	gdk_device_get_state
 	gdk_device_set_axis_use
 	gdk_device_set_key
 	gdk_device_set_mode
@@ -108,6 +112,7 @@ EXPORTS
 	gdk_event_free
 	gdk_event_func
 	gdk_event_get
+	gdk_event_get_axis
 	gdk_event_get_graphics_expose
 	gdk_event_get_time
 	gdk_event_handler_set
