@@ -1,3 +1,10 @@
+Fri Nov  8 17:49:54 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_check_screen): Access
+	window->screen through a function so we can provide
+	an informative warning window window->screen is NULL.
+	(#85703)
+	
 2002-11-08  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcheckmenuitem.c

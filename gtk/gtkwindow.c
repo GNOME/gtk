@@ -213,6 +213,8 @@ static void gtk_window_transient_parent_realized   (GtkWidget  *parent,
 static void gtk_window_transient_parent_unrealized (GtkWidget  *parent,
 						    GtkWidget  *window);
 
+static GdkScreen *gtk_window_check_screen (GtkWindow *window);
+
 static GtkWindowGeometryInfo* gtk_window_get_geometry_info         (GtkWindow    *window,
                                                                     gboolean      create);
 
@@ -4449,7 +4451,7 @@ get_center_monitor_of_window (GtkWindow *window)
    * stuff, or we could just be losers and assume you have a row
    * or column of monitors.
    */
-  return gdk_screen_get_n_monitors (window->screen) / 2;
+  return gdk_screen_get_n_monitors (gtk_window_check_screen (window)) / 2;
 }
 
 static int
@@ -4457,14 +4459,16 @@ get_monitor_containing_pointer (GtkWindow *window)
 {
   gint px, py;
   gint monitor_num;
+  GdkScreen *window_screen;
   GdkScreen *pointer_screen;
 
-  gdk_display_get_pointer (gdk_screen_get_display (window->screen),
+  window_screen = gtk_window_check_screen (window);
+  gdk_display_get_pointer (gdk_screen_get_display (window_screen),
                            &pointer_screen,
                            &px, &py, NULL);
 
-  if (pointer_screen == window->screen)
-    monitor_num = gdk_screen_get_monitor_at_point (window->screen, px, py);
+  if (pointer_screen == window_screen)
+    monitor_num = gdk_screen_get_monitor_at_point (pointer_screen, px, py);
   else
     monitor_num = -1;
 
@@ -4485,8 +4489,9 @@ center_window_on_monitor (GtkWindow *window,
   
   if (monitor_num == -1)
     monitor_num = get_center_monitor_of_window (window);
-  
-  gdk_screen_get_monitor_geometry (window->screen, monitor_num, &monitor);
+
+  gdk_screen_get_monitor_geometry (gtk_window_check_screen (window),
+				   monitor_num, &monitor);
   
   *x = (monitor.width - w) / 2 + monitor.x;
   *y = (monitor.height - h) / 2 + monitor.y;
@@ -4538,9 +4543,12 @@ gtk_window_compute_configure_request (GtkWindow    *window,
   GtkWindowPosition pos;
   GtkWidget *parent_widget;
   GtkWindowGeometryInfo *info;
+  GdkScreen *screen;
   int x, y;
   
   widget = GTK_WIDGET (window);
+
+  screen = gtk_window_check_screen (window);
   
   gtk_widget_size_request (widget, NULL);
   gtk_window_compute_configure_request_size (window, &w, &h);
@@ -4589,7 +4597,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
             g_assert (GTK_WIDGET_MAPPED (parent_widget)); /* established earlier */
 
             if (parent_widget->window != NULL)
-              monitor_num = gdk_screen_get_monitor_at_window (window->screen,
+              monitor_num = gdk_screen_get_monitor_at_window (screen,
                                                               parent_widget->window);
             else
               monitor_num = -1;
@@ -4606,7 +4614,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
              */
             if (monitor_num >= 0)
               {
-                gdk_screen_get_monitor_geometry (window->screen, monitor_num, &monitor);
+                gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
                 clamp_window_to_rectangle (&x, &y, w, h, &monitor);
               }
           }
@@ -4614,19 +4622,19 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
         case GTK_WIN_POS_MOUSE:
           {
-            gint screen_width = gdk_screen_get_width (window->screen);
-            gint screen_height = gdk_screen_get_height (window->screen);
+            gint screen_width = gdk_screen_get_width (screen);
+            gint screen_height = gdk_screen_get_height (screen);
 	    gint monitor_num;
 	    GdkRectangle monitor;
             GdkScreen *pointer_screen;
             gint px, py;
             
-            gdk_display_get_pointer (gdk_screen_get_display (window->screen),
+            gdk_display_get_pointer (gdk_screen_get_display (screen),
                                      &pointer_screen,
                                      &px, &py, NULL);
 
-            if (pointer_screen == window->screen)
-              monitor_num = gdk_screen_get_monitor_at_point (window->screen, px, py);
+            if (pointer_screen == screen)
+              monitor_num = gdk_screen_get_monitor_at_point (screen, px, py);
             else
               monitor_num = -1;
             
@@ -4641,7 +4649,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
              */
             if (monitor_num >= 0)
               {
-                gdk_screen_get_monitor_geometry (window->screen, monitor_num, &monitor);
+                gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
                 clamp_window_to_rectangle (&x, &y, w, h, &monitor);
               }
           }
@@ -5983,7 +5991,6 @@ gtk_window_set_screen (GtkWindow *window,
 {
   GtkWidget *widget;
   GdkScreen *previous_screen;
-  GdkScreen *new_screen;
   gboolean was_mapped;
   
   g_return_if_fail (GTK_IS_WINDOW (window));
@@ -6011,6 +6018,19 @@ gtk_window_set_screen (GtkWindow *window,
 
   if (was_mapped)
     gtk_widget_map (widget);
+}
+
+static GdkScreen *
+gtk_window_check_screen (GtkWindow *window)
+{
+  if (window->screen)
+    return window->screen;
+  else
+    {
+      g_warning ("Screen for GtkWindow not set; you must always set\n"
+		 "a screen for a GtkWindow before using the window");
+      return NULL;
+    }
 }
 
 /** 
@@ -6384,9 +6404,12 @@ gtk_window_parse_geometry (GtkWindow   *window,
   guint w, h;
   GdkGravity grav;
   gboolean size_set, pos_set;
+  GdkScreen *screen;
   
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
   g_return_val_if_fail (geometry != NULL, FALSE);
+
+  screen = gtk_window_check_screen (window);
   
   result = gtk_XParseGeometry (geometry, &x, &y, &w, &h);
 
@@ -6423,11 +6446,11 @@ gtk_window_parse_geometry (GtkWindow   *window,
 
   if (grav == GDK_GRAVITY_SOUTH_WEST ||
       grav == GDK_GRAVITY_SOUTH_EAST)
-    y = gdk_screen_get_height (window->screen) - h + y;
+    y = gdk_screen_get_height (screen) - h + y;
 
   if (grav == GDK_GRAVITY_SOUTH_EAST ||
       grav == GDK_GRAVITY_NORTH_EAST)
-    x = gdk_screen_get_width (window->screen) - w + x;
+    x = gdk_screen_get_width (screen) - w + x;
 
   /* we don't let you put a window offscreen; maybe some people would
    * prefer to be able to, but it's kind of a bogus thing to do.
@@ -6566,11 +6589,13 @@ add_to_key_hash (GtkWindow      *window,
 static GtkKeyHash *
 gtk_window_get_key_hash (GtkWindow *window)
 {
+  GdkScreen *screen = gtk_window_check_screen (window);
   GtkKeyHash *key_hash = g_object_get_data (G_OBJECT (window), "gtk-window-key-hash");
+  
   if (key_hash)
     return key_hash;
   
-  key_hash = _gtk_key_hash_new (gdk_keymap_get_for_display (gdk_screen_get_display (window->screen)),
+  key_hash = _gtk_key_hash_new (gdk_keymap_get_for_display (gdk_screen_get_display (screen)),
 				(GDestroyNotify)g_free);
   _gtk_window_keys_foreach (window, add_to_key_hash, key_hash);
   g_object_set_data (G_OBJECT (window), "gtk-window-key-hash", key_hash);
