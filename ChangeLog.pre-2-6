@@ -1,5 +1,7 @@
 2004-10-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version.
+
 	* === Released 2.4.13 ===
 
 	* configure.in: Bump version.
