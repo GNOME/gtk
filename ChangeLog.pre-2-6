@@ -1,3 +1,13 @@
+Mon May 22 15:47:30 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_get_first_para_iter): Encapsulate
+	in a function.
+
+	* gtk/gtktextlayout.c (find_display_line_above): Fixed
+	bug with computing line tops.
+
+	* gtk/gtktextview.c (changed_handler): Fix < , <= confusion.
+
 Thu May 18 18:53:31 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextdisplay.c (gtk_text_layout_draw): Fix up the x_offset

@@ -1676,21 +1676,28 @@ find_display_line_above (GtkTextLayout *layout,
   while (line && !found_line)
     {
       GtkTextLineDisplay *display = gtk_text_layout_get_line_display (layout, line, TRUE);
-      gint byte_index = 0;
-      GSList *tmp_list =  pango_layout_get_lines (display->layout);
-
-      line_top += display->top_margin;
+      PangoRectangle logical_rect;
       
+      gint byte_index = 0;
+      GSList *tmp_list;
+      gint tmp_top;
+
+      line_top -= display->top_margin + display->bottom_margin;
+      pango_layout_get_extents (display->layout, NULL, &logical_rect);
+      line_top -= logical_rect.height / PANGO_SCALE;
+	  
+      tmp_top = line_top + display->top_margin;
+
+      tmp_list =  pango_layout_get_lines (display->layout);
       while (tmp_list)
 	{
-	  PangoRectangle logical_rect;
 	  PangoLayoutLine *layout_line = tmp_list->data;
 
 	  found_byte = byte_index;
 	  
-	  line_top += logical_rect.height / PANGO_SCALE;
+	  tmp_top += logical_rect.height / PANGO_SCALE;
 
-	  if (line_top < y)
+	  if (tmp_top < y)
 	    {
 	      found_line = line;
 	      found_byte = byte_index;
@@ -1701,7 +1708,6 @@ find_display_line_above (GtkTextLayout *layout,
 	  tmp_list = tmp_list->next;
 	}
 
-      line_top += display->bottom_margin;
       gtk_text_layout_free_line_display (layout, display);
       
       line = gtk_text_line_previous (line);

@@ -175,6 +175,8 @@ static void gtk_text_view_toggle_overwrite (GtkTextView             *text_view);
 
 
 static void     gtk_text_view_validate_onscreen     (GtkTextView        *text_view);
+static void     gtk_text_view_get_first_para_iter   (GtkTextView        *text_view,
+						     GtkTextIter        *iter);
 static void     gtk_text_view_scroll_calc_now       (GtkTextView        *text_view);
 static void     gtk_text_view_set_values_from_style (GtkTextView        *text_view,
 						     GtkTextStyleValues *values,
@@ -1080,7 +1082,6 @@ gtk_text_view_size_allocate (GtkWidget *widget,
                              GtkAllocation *allocation)
 {
   GtkTextView *text_view;
-  gchar *mark_name;
   GtkTextIter first_para;
   gint y;
   GtkAdjustment *vadj;
@@ -1108,12 +1109,9 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   gtk_text_view_scroll_calc_now (text_view);
 
   /* Now adjust the value of the adjustment to keep the cursor at the same place in
-   * the buffer
-   */
-  mark_name = gtk_text_mark_get_name (text_view->first_para_mark);
-  gtk_text_buffer_get_iter_at_mark (text_view->buffer, &first_para, mark_name);
-  g_free (mark_name);
-
+   * the buffer 
+  */
+  gtk_text_view_get_first_para_iter (text_view, &first_para);
   y = gtk_text_layout_get_line_y (text_view->layout, &first_para) + text_view->first_para_pixels;
 
   vadj = text_view->vadjustment;
@@ -1143,6 +1141,15 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 }
 
 static void
+gtk_text_view_get_first_para_iter (GtkTextView *text_view,
+				   GtkTextIter *iter)
+{
+  gchar *mark_name = gtk_text_mark_get_name (text_view->first_para_mark);
+  gtk_text_buffer_get_iter_at_mark (text_view->buffer, iter, mark_name);
+  g_free (mark_name);
+}
+
+static void
 gtk_text_view_validate_onscreen (GtkTextView *text_view)
 {
   GtkWidget *widget = GTK_WIDGET (text_view);
@@ -1150,10 +1157,7 @@ gtk_text_view_validate_onscreen (GtkTextView *text_view)
   if (widget->allocation.height > 0)
     {
       GtkTextIter first_para;
-      gchar *mark_name = gtk_text_mark_get_name (text_view->first_para_mark);
-      gtk_text_buffer_get_iter_at_mark (text_view->buffer, &first_para, mark_name);
-      g_free (mark_name);
-      
+      gtk_text_view_get_first_para_iter (text_view, &first_para);
       gtk_text_layout_validate_yrange (text_view->layout,
 				       &first_para,
 				       0, text_view->first_para_pixels + widget->allocation.height);
@@ -1235,8 +1239,8 @@ changed_handler (GtkTextLayout *layout,
   if (old_height != new_height)
     {
       gboolean yoffset_changed = FALSE;
-      
-      if (start_y + old_height < text_view->yoffset - text_view->first_para_pixels)
+
+      if (start_y + old_height <= text_view->yoffset - text_view->first_para_pixels)
 	{
 	  text_view->yoffset += new_height - old_height;
 	  text_view->vadjustment->value = text_view->yoffset;
@@ -1833,15 +1837,48 @@ gtk_text_view_scroll_text (GtkTextView *text_view,
   GtkAdjustment *adj;
   gint cursor_x_pos, cursor_y_pos;
   GtkTextIter new_insert;
+  GtkTextIter anchor;
+  gint y0, y1;
   
   g_return_if_fail (text_view->vadjustment != NULL);
 
   adj = text_view->vadjustment;
-  
-  newval = adj->value;
+
+  /* Validate the region that will be brought into view by the cursor motion
+   */
+  switch (type)
+    {
+    default:
+    case GTK_TEXT_SCROLL_TO_TOP:
+      gtk_text_buffer_get_iter_at_char (text_view->buffer, &anchor, 0);
+      y0 = 0;
+      y1 = adj->page_size;
+      break;
+
+    case GTK_TEXT_SCROLL_TO_BOTTOM:
+      gtk_text_buffer_get_last_iter (text_view->buffer, &anchor);
+      y0 = -adj->page_size;
+      y1 = adj->page_size;
+      break;
+
+    case GTK_TEXT_SCROLL_PAGE_DOWN:
+      gtk_text_view_get_first_para_iter (text_view, &anchor);
+      y0 = adj->page_size;
+      y1 = adj->page_size + adj->page_increment;
+      break;
+
+    case GTK_TEXT_SCROLL_PAGE_UP:
+      gtk_text_view_get_first_para_iter (text_view, &anchor);
+      y0 = - adj->page_increment + adj->page_size;
+      y1 = 0;
+      break;
+    }
+  gtk_text_layout_validate_yrange (text_view->layout, &anchor, y0, y1);
+
 
   gtk_text_view_get_virtual_cursor_pos (text_view, &cursor_x_pos, &cursor_y_pos);
-  
+
+  newval = adj->value;
   switch (type)
     {
     case GTK_TEXT_SCROLL_TO_TOP:
@@ -2767,7 +2804,10 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
     }
 
   if (dx != 0 || dy != 0)
-    gdk_window_scroll (text_view->bin_window, dx, dy);
+    {
+      gdk_window_scroll (text_view->bin_window, dx, dy);
+      gdk_window_process_updates (text_view->bin_window, TRUE);
+    }
 }
 
 static void
