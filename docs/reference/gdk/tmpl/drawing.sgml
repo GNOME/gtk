@@ -285,6 +285,29 @@ function.
 @npoints: 
 
 
+<!-- ##### FUNCTION gdk_draw_trapezoids ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@trapezoids: 
+@n_trapezoids: 
+
+
+<!-- ##### STRUCT GdkTrapezoid ##### -->
+<para>
+
+</para>
+
+@y1: 
+@x11: 
+@x21: 
+@y2: 
+@x12: 
+@x22: 
+
 <!-- ##### FUNCTION gdk_draw_glyphs ##### -->
 <para>
 
@@ -292,6 +315,20 @@ function.
 
 @drawable: 
 @gc: 
+@font: 
+@x: 
+@y: 
+@glyphs: 
+
+
+<!-- ##### FUNCTION gdk_draw_glyphs_transformed ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@gc: 
+@matrix: 
 @font: 
 @x: 
 @y: 

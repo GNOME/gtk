@@ -464,7 +464,10 @@ GdkSegment
 gdk_draw_rectangle
 gdk_draw_arc
 gdk_draw_polygon
+gdk_draw_trapezoids
+GdkTrapezoid
 gdk_draw_glyphs
+gdk_draw_glyphs_transformed
 gdk_draw_layout_line
 gdk_draw_layout_line_with_colors
 gdk_draw_layout
@@ -827,6 +830,14 @@ GDK_TYPE_PROP_MODE
 <SECTION>
 <TITLE>Pango Interaction</TITLE>
 <FILE>pango_interaction</FILE>
+GdkPangoRenderer
+GdkPangoRendererClass
+gdk_pango_renderer_new
+gdk_pango_renderer_get_default
+gdk_pango_renderer_set_drawable
+gdk_pango_renderer_set_gc
+gdk_pango_renderer_set_stipple
+gdk_pango_renderer_set_override_color
 gdk_pango_context_get
 gdk_pango_context_get_for_screen
 gdk_pango_context_set_colormap
@@ -836,6 +847,17 @@ gdk_pango_attr_embossed_new
 gdk_pango_attr_stipple_new
 gdk_pango_layout_get_clip_region
 gdk_pango_layout_line_get_clip_region
+<SUBSECTION Standard>
+GDK_TYPE_PANGO_RENDERER
+GDK_PANGO_RENDERER
+GDK_IS_PANGO_RENDERER
+GDK_PANGO_RENDERER_CLASS
+GDK_IS_PANGO_RENDERER_CLASS
+GDK_PANGO_RENDERER_GET_CLASS
+
+<SUBSECTION Private>
+gdk_pango_renderer_get_type
+GdkPangoRendererPrivate
 </SECTION>
 
 <SECTION>

@@ -59,6 +59,8 @@ content_files = 		\
 
 # Images to copy into HTML directory
 HTML_IMAGES =				\
+	images/rotated-text.png		\
+					\
 	images/X_cursor.png 		\
 	images/arrow.png 		\
 	images/based_arrow_down.png 	\

@@ -1,3 +1,14 @@
+Sat Nov 20 16:01:51 2004  Owen Taylor  <otaylor@redhat.com>
+
+        * gdk/gdk-sections.txt gdk/gdk.types : Update for GdkPangoRenderer
+	* gdk/Makefile.am gdk/images/rotated-text.png:
+
+	* gdk/tmpl/pango_interaction.sgml: Add a long
+	description and an extensive example (more or less the same as 
+	demos/gtk-demo/rotated_text.c)
+
+	* gtk/gtk-sections.txt: Add gtk_label_set/get_angle.
+
 2004-11-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add gtk_dialog_set_alternative_button_order_from_array

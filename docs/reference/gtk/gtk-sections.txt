@@ -1935,10 +1935,12 @@ gtk_label_get_selection_bounds
 gtk_label_get_use_markup
 gtk_label_get_use_underline
 gtk_label_get_single_line_mode
+gtk_label_get_angle
 gtk_label_set_label
 gtk_label_set_use_markup
 gtk_label_set_use_underline
 gtk_label_set_single_line_mode
+gtk_label_set_angle
 <SUBSECTION Standard>
 GTK_LABEL
 GTK_IS_LABEL

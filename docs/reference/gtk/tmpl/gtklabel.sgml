@@ -170,6 +170,11 @@ described below.
 @label: the object which received the signal.
 @arg1: 
 
+<!-- ##### ARG GtkLabel:angle ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkLabel:attributes ##### -->
 <para>
 
@@ -564,6 +569,15 @@ Gtk+ 1.0.x.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_label_get_angle ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_label_set_label ##### -->
 <para>
 
@@ -598,5 +612,14 @@ Gtk+ 1.0.x.
 
 @label: 
 @single_line_mode: 
+
+
+<!-- ##### FUNCTION gtk_label_set_angle ##### -->
+<para>
+
+</para>
+
+@label: 
+@angle: 
 
 
