@@ -1,3 +1,9 @@
+Mon Jun 11 12:43:08 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): changed
+	expand_row/collapse_row to be 2 signals each -- test_expand_row
+	and row_expanded as well as test_collapse_row and row_collapsed.
+
 2001-06-10  Anders Carlsson  <andersca@codefactory.se>
 
 	* demos/gtk-demo/stock_browser.c (do_stock_browser): Update

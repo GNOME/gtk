@@ -70,10 +70,16 @@ struct _GtkTreeViewClass
   void     (* row_activated)              (GtkTreeView       *tree_view,
 				           GtkTreePath       *path,
 					   GtkTreeViewColumn *column);
-  gboolean (* expand_row)                 (GtkTreeView       *tree_view,
+  gboolean (* test_expand_row)            (GtkTreeView       *tree_view,
 				           GtkTreeIter       *iter,
 				           GtkTreePath       *path);
-  gboolean (* collapse_row)               (GtkTreeView       *tree_view,
+  gboolean (* test_collapse_row)          (GtkTreeView       *tree_view,
+				           GtkTreeIter       *iter,
+				           GtkTreePath       *path);
+  void     (* row_expanded)               (GtkTreeView       *tree_view,
+				           GtkTreeIter       *iter,
+				           GtkTreePath       *path);
+  void     (* row_collapsed)              (GtkTreeView       *tree_view,
 				           GtkTreeIter       *iter,
 				           GtkTreePath       *path);
   void     (* columns_changed)            (GtkTreeView       *tree_view);

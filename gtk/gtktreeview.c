@@ -93,8 +93,10 @@ struct _TreeViewDragInfo
 enum
 {
   ROW_ACTIVATED,
-  EXPAND_ROW,
-  COLLAPSE_ROW,
+  TEST_EXPAND_ROW,
+  TEST_COLLAPSE_ROW,
+  ROW_EXPANDED,
+  ROW_COLLAPSED,
   COLUMNS_CHANGED,
   BEGIN_EXTENDED_SELECTION,
   END_EXTENDED_SELECTION,
@@ -425,7 +427,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->drag_drop = gtk_tree_view_drag_drop;
   widget_class->drag_data_received = gtk_tree_view_drag_data_received;
   widget_class->focus = gtk_tree_view_focus;
-  
+
   /* GtkContainer signals */
   container_class->remove = gtk_tree_view_remove;
   container_class->forall = gtk_tree_view_forall;
@@ -573,25 +575,47 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		    GTK_TYPE_TREE_PATH,
 		    GTK_TYPE_TREE_VIEW_COLUMN);
 
-  tree_view_signals[EXPAND_ROW] =
-    g_signal_newc ("expand_row",
+  tree_view_signals[TEST_EXPAND_ROW] =
+    g_signal_newc ("test_expand_row",
 		   G_TYPE_FROM_CLASS (object_class),
 		   G_SIGNAL_RUN_LAST,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, expand_row),
+		   G_STRUCT_OFFSET (GtkTreeViewClass, test_expand_row),
 		   _gtk_boolean_handled_accumulator, NULL,
 		    gtk_marshal_BOOLEAN__BOXED_BOXED,
 		   G_TYPE_BOOLEAN, 2,
 		   GTK_TYPE_TREE_ITER,
 		   GTK_TYPE_TREE_PATH);
 
-  tree_view_signals[COLLAPSE_ROW] =
-    g_signal_newc ("collapse_row",
+  tree_view_signals[TEST_COLLAPSE_ROW] =
+    g_signal_newc ("test_collapse_row",
 		   G_TYPE_FROM_CLASS (object_class),
 		   G_SIGNAL_RUN_LAST,
-		   G_STRUCT_OFFSET (GtkTreeViewClass, collapse_row),
+		   G_STRUCT_OFFSET (GtkTreeViewClass, test_collapse_row),
 		   _gtk_boolean_handled_accumulator, NULL,
 		    gtk_marshal_BOOLEAN__BOXED_BOXED,
 		   G_TYPE_BOOLEAN, 2,
+		   GTK_TYPE_TREE_ITER,
+		   GTK_TYPE_TREE_PATH);
+
+  tree_view_signals[ROW_EXPANDED] =
+    g_signal_newc ("row_expanded",
+		   G_TYPE_FROM_CLASS (object_class),
+		   G_SIGNAL_RUN_LAST,
+		   G_STRUCT_OFFSET (GtkTreeViewClass, row_expanded),
+		   NULL, NULL,
+		    gtk_marshal_VOID__BOXED_BOXED,
+		   GTK_TYPE_NONE, 2,
+		   GTK_TYPE_TREE_ITER,
+		   GTK_TYPE_TREE_PATH);
+
+  tree_view_signals[ROW_COLLAPSED] =
+    g_signal_newc ("row_collapsed",
+		   G_TYPE_FROM_CLASS (object_class),
+		   G_SIGNAL_RUN_LAST,
+		   G_STRUCT_OFFSET (GtkTreeViewClass, row_collapsed),
+		   NULL, NULL,
+		    gtk_marshal_VOID__BOXED_BOXED,
+		   GTK_TYPE_NONE, 2,
 		   GTK_TYPE_TREE_ITER,
 		   GTK_TYPE_TREE_PATH);
 
@@ -722,7 +746,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_Right, 0, "move_cursor", 2,
 				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				GTK_TYPE_INT, 1);
-				
+
   gtk_binding_entry_add_signal (binding_set, GDK_Left, 0, "move_cursor", 2,
 				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				GTK_TYPE_INT, -1);
@@ -4130,7 +4154,7 @@ gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
 
   GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
   gtk_widget_grab_focus (GTK_WIDGET (tree_view));
-  
+
   switch (step)
     {
       /* currently we make no distinction.  When we go bi-di, we need to */
@@ -7036,7 +7060,7 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
   if (! gtk_tree_model_iter_has_child (tree_view->priv->model, &iter))
     return FALSE;
 
-  g_signal_emit (G_OBJECT (tree_view), tree_view_signals[EXPAND_ROW], 0, &iter, path, &expand);
+  g_signal_emit (G_OBJECT (tree_view), tree_view_signals[TEST_EXPAND_ROW], 0, &iter, path, &expand);
 
   if (expand)
     return FALSE;
@@ -7058,8 +7082,12 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
       gtk_widget_queue_draw (GTK_WIDGET (tree_view));
       _gtk_tree_view_update_size (tree_view);
     }
+
+  g_signal_emit (G_OBJECT (tree_view), tree_view_signals[ROW_EXPANDED], 0, &iter, path);
+
   return TRUE;
 }
+
 
 /**
  * gtk_tree_view_expand_row:
@@ -7103,7 +7131,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
 
   gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
 
-  g_signal_emit (G_OBJECT (tree_view), tree_view_signals[COLLAPSE_ROW], 0, &iter, path, &collapse);
+  g_signal_emit (G_OBJECT (tree_view), tree_view_signals[TEST_COLLAPSE_ROW], 0, &iter, path, &collapse);
 
   if (collapse)
     return FALSE;
@@ -7130,6 +7158,9 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
       gtk_widget_queue_draw (GTK_WIDGET (tree_view));
       _gtk_tree_view_update_size (tree_view);
     }
+
+  g_signal_emit (G_OBJECT (tree_view), tree_view_signals[ROW_COLLAPSED], 0, &iter, path);
+
   return TRUE;
 }
 
@@ -7302,11 +7333,22 @@ gtk_tree_view_real_set_cursor (GtkTreeView *tree_view,
   gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
 }
 
+static void
+gtk_tree_view_set_anchor (GtkTreeView *tree_view,
+			  GtkTreePath *path)
+{
+  if (tree_view->priv->anchor)
+    gtk_tree_row_reference_free (tree_view->priv->anchor);
+  tree_view->priv->anchor = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view),
+							      tree_view->priv->model,
+							      path);
+}
+
 /**
  * gtk_tree_view_set_cursor:
  * @tree_view: A #GtkTreeView
  * @path: A #GtkTreePath
- * 
+ *
  * Sets the current keyboard focus to be at @path.
  **/
 void
