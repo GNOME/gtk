@@ -97,6 +97,7 @@ static gboolean gtk_toolbar_focus                (GtkWidget       *widget,
 static void gtk_toolbar_screen_changed           (GtkWidget       *widget,
 						  GdkScreen       *previous_screen);
 static void gtk_toolbar_show_all                 (GtkWidget       *widget);
+static void gtk_toolbar_hide_all                 (GtkWidget       *widget);
 static void gtk_toolbar_add                      (GtkContainer    *container,
 				                  GtkWidget       *widget);
 static void gtk_toolbar_remove                   (GtkContainer    *container,
@@ -194,6 +195,7 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   widget_class->size_allocate = gtk_toolbar_size_allocate;
   widget_class->style_set = gtk_toolbar_style_set;
   widget_class->show_all = gtk_toolbar_show_all;
+  widget_class->hide_all = gtk_toolbar_hide_all;
   widget_class->focus = gtk_toolbar_focus;
   widget_class->screen_changed = gtk_toolbar_screen_changed;
   
@@ -846,6 +848,26 @@ gtk_toolbar_show_all (GtkWidget *widget)
 			 (GtkCallback) child_show_all,
 			 NULL);
   gtk_widget_show (widget);
+}
+
+static void
+child_hide_all (GtkWidget *widget)
+{
+  /* Don't hide our own children, since that would also hide
+   * widgets that won't be shown again by gtk_toolbar_show_all().
+   */
+  if (!g_object_get_data (G_OBJECT (widget),
+                          "gtk-toolbar-is-child"))
+    gtk_widget_hide_all (widget);
+}
+
+static void
+gtk_toolbar_hide_all (GtkWidget *widget)
+{
+  gtk_container_foreach (GTK_CONTAINER (widget),
+			 (GtkCallback) child_hide_all,
+			 NULL);
+  gtk_widget_hide (widget);
 }
 
 static void

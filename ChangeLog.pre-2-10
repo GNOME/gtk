@@ -1,3 +1,8 @@
+2003-01-23  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_hide_all): Override hide_all
+	in addition to show_all in order to keep them symmetric. (#102201)
+
 Wed Jan 22 14:18:46 2003  Manish Singh  <yosh@gimp.org>
 
 	* gdk/x11/gdkevents-x11.c (translate_key_event): add a "return" at
