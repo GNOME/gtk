@@ -88,6 +88,8 @@ enum {
   ARG_HEIGHT,
   ARG_VISIBLE,
   ARG_SENSITIVE,
+  ARG_CAN_FOCUS,
+  ARG_CAN_DEFAULT,
   ARG_EVENTS,
   ARG_EXTENSION_EVENTS,
   ARG_NAME,
@@ -132,6 +134,9 @@ static void gtk_widget_marshal_signal_4 (GtkObject	*object,
 static void gtk_widget_class_init		 (GtkWidgetClass    *klass);
 static void gtk_widget_init			 (GtkWidget	    *widget);
 static void gtk_widget_set_arg			 (GtkWidget	    *widget,
+						  GtkArg	    *arg,
+						  guint		     arg_id);
+static void gtk_widget_get_arg			 (GtkWidget	    *widget,
 						  GtkArg	    *arg,
 						  guint		     arg_id);
 static void gtk_real_widget_destroy		 (GtkObject	    *object);
@@ -222,7 +227,7 @@ gtk_widget_get_type ()
 	(GtkClassInitFunc) gtk_widget_class_init,
 	(GtkObjectInitFunc) gtk_widget_init,
 	(GtkArgSetFunc) gtk_widget_set_arg,
-	(GtkArgGetFunc) NULL,
+	(GtkArgGetFunc) gtk_widget_get_arg,
       };
       
       widget_type = gtk_type_unique (gtk_object_get_type (), &widget_info);
@@ -254,6 +259,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   gtk_object_add_arg_type ("GtkWidget::height", GTK_TYPE_INT, ARG_HEIGHT);
   gtk_object_add_arg_type ("GtkWidget::visible", GTK_TYPE_BOOL, ARG_VISIBLE);
   gtk_object_add_arg_type ("GtkWidget::sensitive", GTK_TYPE_BOOL, ARG_SENSITIVE);
+  gtk_object_add_arg_type ("GtkWidget::can_focus", GTK_TYPE_BOOL, ARG_CAN_FOCUS);
+  gtk_object_add_arg_type ("GtkWidget::can_default", GTK_TYPE_BOOL, ARG_CAN_DEFAULT);
   gtk_object_add_arg_type ("GtkWidget::events", GTK_TYPE_GDK_EVENT_MASK, ARG_EVENTS);
   gtk_object_add_arg_type ("GtkWidget::extension_events", GTK_TYPE_GDK_EVENT_MASK, ARG_EXTENSION_EVENTS);
   gtk_object_add_arg_type ("GtkWidget::name", GTK_TYPE_STRING, ARG_NAME);
@@ -683,16 +690,16 @@ gtk_widget_set_arg (GtkWidget	*widget,
   switch (arg_id)
     {
     case ARG_X:
-      gtk_widget_set_uposition (widget, GTK_VALUE_INT(*arg), -2);
+      gtk_widget_set_uposition (widget, GTK_VALUE_INT (*arg), -2);
       break;
     case ARG_Y:
-      gtk_widget_set_uposition (widget, -2, GTK_VALUE_INT(*arg));
+      gtk_widget_set_uposition (widget, -2, GTK_VALUE_INT (*arg));
       break;
     case ARG_WIDTH:
-      gtk_widget_set_usize (widget, GTK_VALUE_INT(*arg), -1);
+      gtk_widget_set_usize (widget, GTK_VALUE_INT (*arg), -1);
       break;
     case ARG_HEIGHT:
-      gtk_widget_set_usize (widget, -1, GTK_VALUE_INT(*arg));
+      gtk_widget_set_usize (widget, -1, GTK_VALUE_INT (*arg));
       break;
     case ARG_VISIBLE:
       if (GTK_VALUE_BOOL(*arg))
@@ -701,23 +708,125 @@ gtk_widget_set_arg (GtkWidget	*widget,
 	gtk_widget_hide (widget);
       break;
     case ARG_SENSITIVE:
-      gtk_widget_set_sensitive (widget, GTK_VALUE_BOOL(*arg));
+      gtk_widget_set_sensitive (widget, GTK_VALUE_BOOL (*arg));
+      break;
+    case ARG_CAN_FOCUS:
+      if (GTK_VALUE_BOOL (*arg))
+	GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
+      else
+	GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_FOCUS);
+      break;
+    case ARG_CAN_DEFAULT:
+      if (GTK_VALUE_BOOL (*arg))
+	GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_DEFAULT);
+      else
+	GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_DEFAULT);
       break;
     case ARG_EVENTS:
-      gtk_widget_set_events (widget, GTK_VALUE_FLAGS(*arg));
+      gtk_widget_set_events (widget, GTK_VALUE_FLAGS (*arg));
       break;
     case ARG_EXTENSION_EVENTS:
-      gtk_widget_set_extension_events (widget, GTK_VALUE_FLAGS(*arg));
+      gtk_widget_set_extension_events (widget, GTK_VALUE_FLAGS (*arg));
       break;
     case ARG_NAME:
-      gtk_widget_set_name (widget, GTK_VALUE_STRING(*arg));
+      gtk_widget_set_name (widget, GTK_VALUE_STRING (*arg));
       break;
     case ARG_STYLE:
-      gtk_widget_set_style (widget, (GtkStyle*)GTK_VALUE_BOXED(*arg));
+      gtk_widget_set_style (widget, (GtkStyle*) GTK_VALUE_BOXED (*arg));
       break;
     case ARG_PARENT:
-      gtk_container_add (GTK_CONTAINER (GTK_VALUE_OBJECT(*arg)), widget);
+      gtk_container_add (GTK_CONTAINER (GTK_VALUE_OBJECT (*arg)), widget);
       break;
+    }
+}
+
+/*****************************************
+ * gtk_widget_set_arg:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+static void
+gtk_widget_get_arg (GtkWidget	*widget,
+		    GtkArg	*arg,
+		    guint	 arg_id)
+{
+  GtkWidgetAuxInfo *aux_info;
+  gint *eventp;
+  GdkExtensionMode *modep;
+  
+  switch (arg_id)
+    {
+    case ARG_X:
+      aux_info = gtk_object_get_data (GTK_OBJECT (widget), aux_info_key);
+      if (!aux_info)
+	GTK_VALUE_INT (*arg) = -2;
+      else
+	GTK_VALUE_INT (*arg) = aux_info->x;
+      break;
+    case ARG_Y:
+      aux_info = gtk_object_get_data (GTK_OBJECT (widget), aux_info_key);
+      if (!aux_info)
+	GTK_VALUE_INT (*arg) = -2;
+      else
+	GTK_VALUE_INT (*arg) = aux_info->y;
+      break;
+    case ARG_WIDTH:
+      aux_info = gtk_object_get_data (GTK_OBJECT (widget), aux_info_key);
+      if (!aux_info)
+	GTK_VALUE_INT (*arg) = -2;
+      else
+	GTK_VALUE_INT (*arg) = aux_info->width;
+      break;
+    case ARG_HEIGHT:
+      aux_info = gtk_object_get_data (GTK_OBJECT (widget), aux_info_key);
+      if (!aux_info)
+	GTK_VALUE_INT (*arg) = -2;
+      else
+	GTK_VALUE_INT (*arg) = aux_info->height;
+      break;
+    case ARG_VISIBLE:
+      GTK_VALUE_BOOL (*arg) = GTK_WIDGET_VISIBLE (widget);
+      break;
+    case ARG_SENSITIVE:
+      GTK_VALUE_BOOL (*arg) = GTK_WIDGET_SENSITIVE (widget);
+      break;
+    case ARG_CAN_FOCUS:
+      GTK_VALUE_BOOL (*arg) = GTK_WIDGET_CAN_FOCUS (widget);
+      break;
+    case ARG_CAN_DEFAULT:
+      GTK_VALUE_BOOL (*arg) = GTK_WIDGET_CAN_DEFAULT (widget);
+      break;
+    case ARG_EVENTS:
+      eventp = gtk_object_get_data (GTK_OBJECT (widget), event_key);
+      if (!eventp)
+	GTK_VALUE_FLAGS (*arg) = 0;
+      else
+	GTK_VALUE_FLAGS (*arg) = *eventp;
+      break;
+    case ARG_EXTENSION_EVENTS:
+      modep = gtk_object_get_data (GTK_OBJECT (widget), extension_event_key);
+      if (!modep)
+	GTK_VALUE_FLAGS (*arg) = 0;
+      else
+	GTK_VALUE_FLAGS (*arg) = *modep;
+      break;
+    case ARG_NAME:
+      if (widget->name)
+	GTK_VALUE_STRING (*arg) = g_strdup (widget->name);
+      else
+	GTK_VALUE_STRING (*arg) = g_strdup ("");
+      break;
+    case ARG_STYLE:
+      GTK_VALUE_BOXED (*arg) = (gpointer) gtk_widget_get_style (widget);
+      break;
+    case ARG_PARENT:
+      GTK_VALUE_OBJECT (*arg) = (GtkObject*) widget->parent;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
     }
 }
 

@@ -275,6 +275,145 @@ gtk_box_set_spacing (GtkBox *box,
     }
 }
 
+void
+gtk_box_reorder_child (GtkBox                   *box,
+		       GtkWidget                *child,
+		       guint                    pos)
+{
+  GList *list;
+
+  g_return_if_fail (box != NULL);
+  g_return_if_fail (GTK_IS_BOX (box));
+  g_return_if_fail (child != NULL);
+
+  list = box->children;
+  while (list)
+    {
+      GtkBoxChild *child_info;
+
+      child_info = list->data;
+      if (child_info->widget == child)
+	break;
+
+      list = list->next;
+    }
+
+  if (list)
+    {
+      GList *tmp_list;
+
+      if (list->next)
+	list->next->prev = list->prev;
+      if (list->prev)
+	list->prev->next = list->next;
+
+      tmp_list = box->children;
+      while (pos && tmp_list->next)
+	{
+	  pos--;
+	  tmp_list = tmp_list->next;
+	}
+
+      if (pos)
+	{
+	  tmp_list->next = list;
+	  list->prev = tmp_list;
+	  list->next = NULL;
+	}
+      else
+	{
+	  if (tmp_list->prev)
+	    tmp_list->prev->next = list;
+	  else
+	    box->children = list;
+	  list->prev = tmp_list->prev;
+	  tmp_list->prev = list;
+	  list->next = tmp_list;
+	}
+
+      if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (box))
+	gtk_widget_queue_resize (child);
+    }
+}
+
+void
+gtk_box_query_child_packing (GtkBox             *box,
+			     GtkWidget          *child,
+			     gint               *expand,
+			     gint               *fill,
+			     gint               *padding,
+			     GtkPackType        *pack_type)
+{
+  GList *list;
+  GtkBoxChild *child_info;
+
+  g_return_if_fail (box != NULL);
+  g_return_if_fail (GTK_IS_BOX (box));
+  g_return_if_fail (child != NULL);
+
+  list = box->children;
+  while (list)
+    {
+      child_info = list->data;
+      if (child_info->widget == child)
+	break;
+
+      list = list->next;
+    }
+
+  if (list)
+    {
+      if (expand)
+	*expand = child_info->expand;
+      if (fill)
+	*fill = child_info->fill;
+      if (padding)
+	*padding = child_info->padding;
+      if (pack_type)
+	*pack_type = child_info->pack;
+    }
+}
+
+void
+gtk_box_set_child_packing (GtkBox               *box,
+			   GtkWidget            *child,
+			   gint                 expand,
+			   gint                 fill,
+			   gint                 padding,
+			   GtkPackType          pack_type)
+{
+  GList *list;
+  GtkBoxChild *child_info;
+
+  g_return_if_fail (box != NULL);
+  g_return_if_fail (GTK_IS_BOX (box));
+  g_return_if_fail (child != NULL);
+
+  list = box->children;
+  while (list)
+    {
+      child_info = list->data;
+      if (child_info->widget == child)
+	break;
+
+      list = list->next;
+    }
+
+  if (list)
+    {
+      child_info->expand = expand != FALSE;
+      child_info->fill = fill != FALSE;
+      child_info->padding = padding;
+      if (pack_type == GTK_PACK_END)
+	child_info->pack = GTK_PACK_END;
+      else
+	child_info->pack = GTK_PACK_START;
+
+      if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (box))
+	gtk_widget_queue_resize (child);
+    }
+}
+
 
 static void
 gtk_box_destroy (GtkObject *object)

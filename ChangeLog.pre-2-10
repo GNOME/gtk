@@ -1,3 +1,18 @@
+Sun Jan 18 03:57:52 1998  Tim Janik  <timj@psynet.net>
+
+	* gtk/gtkbox.h:
+	* gtk/gtkbox.c: new functions gtk_box_reorder_child,
+	gtk_box_query_child_packing and gtk_box_set_child_packing to
+	allow modification of the child linkage after the widget tree
+	is setup.
+
+	* gtk/gtkbox.c:
+        * gtk/gtklabel.c:
+        * gtk/gtkwindow.c:
+	* gtk/gtkwidget.c:
+        * gtk/gtkobject.c: gtk_*_get_arg() and gtk_*_set_arg() fixes
+          and implementations.
+	
 Sat Jan 17 18:06:35 1998  Owen Taylor  <owt1@cornell.edu>
 	* gdk/gdk.c (gdk_events_pending): Take putback events into
 	  account

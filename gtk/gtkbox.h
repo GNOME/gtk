@@ -80,6 +80,22 @@ void       gtk_box_set_homogeneous     (GtkBox       *box,
 					gint          homogeneous);
 void       gtk_box_set_spacing         (GtkBox       *box,
 					gint          spacing);
+void	   gtk_box_reorder_child       (GtkBox       *box,
+					GtkWidget    *child,
+					guint         pos);
+void       gtk_box_query_child_packing (GtkBox       *box,
+					GtkWidget    *child,
+					gint         *expand,
+					gint         *fill,
+					gint         *padding,
+					GtkPackType  *pack_type);
+void       gtk_box_set_child_packing   (GtkBox       *box,
+					GtkWidget    *child,
+					gint          expand,
+					gint          fill,
+					gint          padding,
+					GtkPackType   pack_type);
+
 
 
 #ifdef __cplusplus
