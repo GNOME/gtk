@@ -1,3 +1,9 @@
+Tue Oct  5 17:06:26 2004  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_size_allocate): if REQUEST_NEEDED is still
+	set on ::size-allocate, another size-request has been queued since
+	::size-request and needs to be requeued.
+
 2004-10-05  Paolo Borelli  <pborelli@katamail.com>
 
 	* gtk/gtkmenutoolbutton.c: rename the activate-menu signal to

@@ -2705,7 +2705,13 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 		      old_allocation.y != real_allocation.y);
 
   if (!alloc_needed && !size_changed && !position_changed)
-    return;
+    {
+      if (GTK_WIDGET_REQUEST_NEEDED (widget))
+        { /* another resize has been queued */
+          gtk_widget_queue_resize (widget);
+        }
+      return;
+    }
   
   g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0, &real_allocation);
 
@@ -2743,6 +2749,11 @@ gtk_widget_size_allocate (GtkWidget	*widget,
       GdkRegion *invalidate = gdk_region_rectangle (&widget->parent->allocation);
       gtk_widget_invalidate_widget_windows (widget->parent, invalidate);
       gdk_region_destroy (invalidate);
+    }
+  
+  if (GTK_WIDGET_REQUEST_NEEDED (widget))
+    { /* another resize has been queued */
+      gtk_widget_queue_resize (widget);
     }
 }
 
