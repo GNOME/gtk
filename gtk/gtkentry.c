@@ -402,14 +402,11 @@ gtk_entry_class_init (GtkEntryClass *class)
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_INVISIBLE_CHAR,
-                                   g_param_spec_int ("invisible_char",
-                                                     _("Invisible character"),
-                                                     _("The character to use when masking entry contents (in \"password mode\")"),
-                                                     0,
-                                                     G_MAXINT,
-                                                     
-                                                     '*',
-                                                     G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                   g_param_spec_unichar ("invisible_char",
+							 _("Invisible character"),
+							 _("The character to use when masking entry contents (in \"password mode\")"),
+							 '*',
+							 G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVATES_DEFAULT,

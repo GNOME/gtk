@@ -46,6 +46,7 @@ extern "C" {
 /* Some forward declarations needed to rationalize the header
  * files.
  */
+typedef struct _GtkBorder      GtkBorder;
 typedef struct _GtkStyle       GtkStyle;
 typedef struct _GtkStyleClass  GtkStyleClass;
 typedef struct _GtkThemeEngine GtkThemeEngine;
@@ -398,6 +399,14 @@ struct _GtkStyleClass
 				 gint			 width,
 				 gint			 height);
   
+};
+
+struct _GtkBorder
+{
+  gint left;
+  gint right;
+  gint top;
+  gint bottom;
 };
 
 GType     gtk_style_get_type                 (void) G_GNUC_CONST;
@@ -814,6 +823,9 @@ void gtk_paint_resize_grip (GtkStyle		*style,
                             gint                 width,
                             gint           	 height);
 
+
+GtkBorder *gtk_border_copy (const GtkBorder *border);
+void       gtk_border_free (GtkBorder       *border);
 
 /* --- private API --- */
 const GValue* _gtk_style_peek_property_value (GtkStyle           *style,

@@ -77,15 +77,21 @@ void		gtk_settings_install_property_parser (GtkSettings        *settings,
 						      GtkRcPropertyParser parser);
 
 /* --- precoded parsing functions --- */
-gboolean	gtk_rc_property_parse_color (const GParamSpec *pspec,
-					     const GString    *gstring,
-					     GValue           *property_value);
-gboolean	gtk_rc_property_parse_enum  (const GParamSpec *pspec,
-					     const GString    *gstring,
-					     GValue           *property_value);
-gboolean	gtk_rc_property_parse_flags (const GParamSpec *pspec,
-					     const GString    *gstring,
-					     GValue           *property_value);
+gboolean gtk_rc_property_parse_color       (const GParamSpec *pspec,
+					    const GString    *gstring,
+					    GValue           *property_value);
+gboolean gtk_rc_property_parse_enum        (const GParamSpec *pspec,
+					    const GString    *gstring,
+					    GValue           *property_value);
+gboolean gtk_rc_property_parse_flags       (const GParamSpec *pspec,
+					    const GString    *gstring,
+					    GValue           *property_value);
+gboolean gtk_rc_property_parse_requisition (const GParamSpec *pspec,
+					    const GString    *gstring,
+					    GValue           *property_value);
+gboolean gtk_rc_property_parse_border      (const GParamSpec *pspec,
+					    const GString    *gstring,
+					    GValue           *property_value);
 
 /*< private >*/
 void		gtk_settings_set_property_value	 (GtkSettings	*settings,
@@ -103,6 +109,8 @@ void		gtk_settings_set_double_property (GtkSettings	*settings,
 						  const gchar	*name,
 						  gdouble	 v_double,
 						  const gchar   *origin);
+
+GtkRcPropertyParser _gtk_rc_property_parser_for_type (GType type);
 
 #ifdef __cplusplus
 }

@@ -569,10 +569,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, size_request),
-		    gtk_marshal_VOID__POINTER,
+		    gtk_marshal_VOID__BOXED,
 		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_POINTER);
-  widget_signals[SIZE_ALLOCATE] =
+		    GTK_TYPE_REQUISITION | G_VALUE_NOCOPY_CONTENTS);
+  widget_signals[SIZE_ALLOCATE] = 
     gtk_signal_new ("size_allocate",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
@@ -5383,7 +5383,14 @@ void
 gtk_widget_class_install_style_property (GtkWidgetClass *class,
 					 GParamSpec     *pspec)
 {
-  gtk_widget_class_install_style_property_parser (class, pspec, NULL);
+  GtkRcPropertyParser parser;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (class));
+  g_return_if_fail (G_IS_PARAM_SPEC (pspec));
+
+  parser = _gtk_rc_property_parser_for_type (G_PARAM_SPEC_VALUE_TYPE (pspec));
+
+  gtk_widget_class_install_style_property_parser (class, pspec, parser);
 }
 
 void
@@ -5634,3 +5641,16 @@ gtk_widget_class_path (GtkWidget *widget,
       g_strreverse (*path_p);
     }
 }
+
+GtkRequisition *
+gtk_requisition_copy (const GtkRequisition *requisition)
+{
+  return (GtkRequisition *)g_memdup (requisition, sizeof (GtkRequisition));
+}
+
+void
+gtk_requisition_free (GtkRequisition *requisition)
+{
+  g_free (requisition);
+}
+

@@ -4620,3 +4620,15 @@ gtk_paint_resize_grip (GtkStyle      *style,
                                                  edge, x, y, width, height);
 }
 
+GtkBorder *
+gtk_border_copy (const GtkBorder *border)
+{
+  return (GtkBorder *)g_memdup (border, sizeof (GtkBorder));
+}
+
+void
+gtk_border_free (GtkBorder *border)
+{
+  g_free (border);
+}
+

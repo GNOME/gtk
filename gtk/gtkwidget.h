@@ -673,6 +673,9 @@ void	     gtk_widget_class_path	   (GtkWidget *widget,
 					    gchar    **path,
 					    gchar    **path_reversed);
 
+GtkRequisition *gtk_requisition_copy (const GtkRequisition *requisition);
+void            gtk_requisition_free (GtkRequisition       *requisition);
+
 #if	defined (GTK_TRACE_OBJECTS) && defined (__GNUC__)
 #  define gtk_widget_ref gtk_object_ref
 #  define gtk_widget_unref gtk_object_unref

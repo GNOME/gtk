@@ -375,6 +375,23 @@ settings_install_property_parser (GtkSettingsClass   *class,
   return class_n_properties;
 }
 
+GtkRcPropertyParser
+_gtk_rc_property_parser_for_type (GType type)
+{
+  if (type == GTK_TYPE_GDK_COLOR)
+    return gtk_rc_property_parse_color;
+  else if (type == GTK_TYPE_REQUISITION)
+    return gtk_rc_property_parse_requisition;
+  else if (type == GTK_TYPE_BORDER)
+    return gtk_rc_property_parse_border;
+  else if (G_TYPE_FUNDAMENTAL (type) == G_TYPE_ENUM && G_TYPE_IS_DERIVED (type))
+    return gtk_rc_property_parse_enum;
+  else if (G_TYPE_FUNDAMENTAL (type) == G_TYPE_FLAGS && G_TYPE_IS_DERIVED (type))
+    return gtk_rc_property_parse_flags;
+  else
+    return NULL;
+}
+
 void
 gtk_settings_install_property (GtkSettings *settings,
 			       GParamSpec  *pspec)
@@ -384,17 +401,8 @@ gtk_settings_install_property (GtkSettings *settings,
   g_return_if_fail (GTK_IS_SETTINGS (settings));
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
-  /* convenient automatic parser selection
-   */
-  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GTK_TYPE_GDK_COLOR)
-    parser = gtk_rc_property_parse_color;
-  else if (G_TYPE_FUNDAMENTAL (G_PARAM_SPEC_VALUE_TYPE (pspec)) == G_TYPE_ENUM &&
-	   G_TYPE_IS_DERIVED (G_PARAM_SPEC_VALUE_TYPE (pspec)))
-    parser = gtk_rc_property_parse_enum;
-  else if (G_TYPE_FUNDAMENTAL (G_PARAM_SPEC_VALUE_TYPE (pspec)) == G_TYPE_FLAGS &&
-	   G_TYPE_IS_DERIVED (G_PARAM_SPEC_VALUE_TYPE (pspec)))
-    parser = gtk_rc_property_parse_flags;
-  
+  parser = _gtk_rc_property_parser_for_type (G_PARAM_SPEC_VALUE_TYPE (pspec));
+
   settings_install_property_parser (GTK_SETTINGS_GET_CLASS (settings), pspec, parser);
 }
 
@@ -685,6 +693,97 @@ gtk_rc_property_parse_flags (const GParamSpec *pspec,
 	  success = TRUE;
 	}
     }
+  g_scanner_destroy (scanner);
+
+  return success;
+}
+
+static gboolean
+get_braced_int (GScanner *scanner,
+		gboolean  first,
+		gboolean  last,
+		gint     *value)
+{
+  if (first)
+    {
+      g_scanner_get_next_token (scanner);
+      if (scanner->token != '{')
+	return FALSE;
+    }
+
+  g_scanner_get_next_token (scanner);
+  if (scanner->token != G_TOKEN_INT)
+    return FALSE;
+
+  *value = scanner->value.v_int;
+
+  if (last)
+    {
+      g_scanner_get_next_token (scanner);
+      if (scanner->token != '}')
+	return FALSE;
+    }
+  else
+    {
+      g_scanner_get_next_token (scanner);
+      if (scanner->token != ',')
+	return FALSE;
+    }
+
+  return TRUE;
+}
+
+gboolean
+gtk_rc_property_parse_requisition  (const GParamSpec *pspec,
+				    const GString    *gstring,
+				    GValue           *property_value)
+{
+  GtkRequisition requisition;
+  GScanner *scanner;
+  gboolean success = FALSE;
+
+  g_return_val_if_fail (G_IS_PARAM_SPEC (pspec), FALSE);
+  g_return_val_if_fail (G_VALUE_HOLDS_BOXED (property_value), FALSE);
+
+  scanner = gtk_rc_scanner_new ();
+  g_scanner_input_text (scanner, gstring->str, gstring->len);
+
+  if (get_braced_int (scanner, TRUE, FALSE, &requisition.width) &&
+      get_braced_int (scanner, FALSE, TRUE, &requisition.height))
+    {
+      g_value_set_boxed (property_value, &requisition);
+      success = TRUE;
+    }
+
+  g_scanner_destroy (scanner);
+
+  return success;
+}
+
+gboolean
+gtk_rc_property_parse_border (const GParamSpec *pspec,
+			      const GString    *gstring,
+			      GValue           *property_value)
+{
+  GtkBorder border;
+  GScanner *scanner;
+  gboolean success = FALSE;
+
+  g_return_val_if_fail (G_IS_PARAM_SPEC (pspec), FALSE);
+  g_return_val_if_fail (G_VALUE_HOLDS_BOXED (property_value), FALSE);
+
+  scanner = gtk_rc_scanner_new ();
+  g_scanner_input_text (scanner, gstring->str, gstring->len);
+
+  if (get_braced_int (scanner, TRUE, FALSE, &border.left) &&
+      get_braced_int (scanner, FALSE, FALSE, &border.right) &&
+      get_braced_int (scanner, FALSE, FALSE, &border.top) &&
+      get_braced_int (scanner, FALSE, TRUE, &border.bottom))
+    {
+      g_value_set_boxed (property_value, &border);
+      success = TRUE;
+    }
+
   g_scanner_destroy (scanner);
 
   return success;

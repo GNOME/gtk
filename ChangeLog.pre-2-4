@@ -1,3 +1,25 @@
+Sun Apr  1 21:37:22 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.[ch] gtk/gtktypeutils.c gtk/gtk-boxed.defs:
+	Add boxed type for GtkRequistion. Use it for ::size-request.
+
+	* gtk/gtkstyle.[ch] gtk/gtktypeutils.c gtk/gtk-boxed.defs:
+        Add a new GtkBorder structure useful for geometry properties
+	for widgets. Add corresponding GTK_TYPE_BORDER.
+	
+	* gtk/gtkwidget.c (gtk_widget_class_install_style_property):
+	Support automatic parser selection like
+	gtk_settings_install_property_parser().
+
+	* gtk/gtksettings.c (_gtk_rc_property_select_parser): Export
+	functionality for use by gtk_widget_class_install_style_property.
+	Support GTK_TYPE_BORDER, GTK_TYPE_REQUISITION.
+
+Sun Apr  1 20:48:59 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_class_init): Make invisible-char
+	g_param_spec_unichar(). 
+
 Sun Apr  1 23:41:37 2001  Tim Janik  <timj@gtk.org>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_focus): raise window for non

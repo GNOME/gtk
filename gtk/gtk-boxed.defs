@@ -13,10 +13,19 @@
   gtk_accel_group_ref
   gtk_accel_group_unref)
 
+(define-boxed GtkBorder
+  gtk_border_copy
+  gtk_border_free
+  "sizeof(GtkBorder)")
+
 (define-boxed GtkSelectionData
   gtk_selection_data_copy
   gtk_selection_data_free)
 
+(define-boxed GtkRequisition
+  gtk_requisition_copy
+  gtk_requisition_free
+  "sizeof(GtkRequisition)")
 
 ;;; Gdk boxed types
 
