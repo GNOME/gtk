@@ -538,7 +538,7 @@ gdk_rgb_init (void)
   gint byte_order[1] = { 1 };
 
   /* check endian sanity */
-#if G_BYTE_ORDER == G_BIGENDIAN
+#if G_BYTE_ORDER == G_BIG_ENDIAN
   if (((char *)byte_order)[0] == 1)
     g_error ("gdk_rgb_init: compiled for big endian, but this is a little endian machine.\n\n");
 #else

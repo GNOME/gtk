@@ -1,3 +1,7 @@
+Wed Oct 28 23:32:19 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdkrgb.c: Oops. s/BIGENDIAN/BIG_ENDIAN/
+
 Wed Oct 28 19:04:49 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* configure.in: AIX has libpthreads, to make sure you can have
