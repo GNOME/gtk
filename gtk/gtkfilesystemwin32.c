@@ -57,6 +57,8 @@ struct _GtkFileSystemWin32Class
 struct _GtkFileSystemWin32
 {
   GObject parent_instance;
+
+  GHashTable *folder_hash;
 };
 
 #define GTK_TYPE_FILE_FOLDER_WIN32             (gtk_file_folder_win32_get_type ())
@@ -78,6 +80,7 @@ struct _GtkFileFolderWin32
 {
   GObject parent_instance;
 
+  GtkFileSystemWin32 *system_win32;
   GtkFileInfoType types;
   gchar *filename;
 };
@@ -277,11 +280,19 @@ gtk_file_system_win32_iface_init (GtkFileSystemIface *iface)
 static void
 gtk_file_system_win32_init (GtkFileSystemWin32 *system_win32)
 {
+  system_win32->folder_hash = g_hash_table_new (g_str_hash, g_str_equal);
 }
 
 static void
 gtk_file_system_win32_finalize (GObject *object)
 {
+  GtkFileSystemWin32 *system_win32;
+
+  system_win32 = GTK_FILE_SYSTEM_WIN32 (object);
+
+  /* FIXME: assert that the hash is empty? */
+  g_hash_table_destroy (system_win32->folder_hash);
+
   system_parent_class->finalize (object);
 }
 
@@ -339,11 +350,19 @@ gtk_file_system_win32_get_folder (GtkFileSystem    *file_system,
 				 GtkFileInfoType    types,
 				 GError           **error)
 {
+  GtkFileSystemWin32 *system_win32;
   GtkFileFolderWin32 *folder_win32;
   gchar *filename;
 
+  system_win32 = GTK_FILE_SYSTEM_WIN32 (file_system);
+
   filename = filename_from_path (path);
   g_return_val_if_fail (filename != NULL, NULL);
+
+  folder_win32 = g_hash_table_lookup (system_win32->folder_hash, filename);
+
+  if (folder_win32)
+    return g_object_ref (folder_win32);
 
   if (!g_file_test (filename, G_FILE_TEST_IS_DIR))
     {
@@ -374,8 +393,11 @@ gtk_file_system_win32_get_folder (GtkFileSystem    *file_system,
     }
 
   folder_win32 = g_object_new (GTK_TYPE_FILE_FOLDER_WIN32, NULL);
+  folder_win32->system_win32 = system_win32;
   folder_win32->filename = filename;
   folder_win32->types = types;
+
+  g_hash_table_insert (system_win32->folder_hash, folder_win32->filename, folder_win32);
 
   return GTK_FILE_FOLDER (folder_win32);
 }
@@ -385,8 +407,12 @@ gtk_file_system_win32_create_folder (GtkFileSystem     *file_system,
 				     const GtkFilePath *path,
 				     GError           **error)
 {
+  GtkFileSystemWin32 *system_win32;
   gchar *filename;
   gboolean result;
+  char *parent;
+
+  system_win32 = GTK_FILE_SYSTEM_WIN32 (file_system);
 
   filename = filename_from_path (path);
   g_return_val_if_fail (filename != NULL, FALSE);
@@ -404,9 +430,28 @@ gtk_file_system_win32_create_folder (GtkFileSystem     *file_system,
 		   g_strerror (errno));
       g_free (filename_utf8);
     }
-  
+  else if (!filename_is_root (filename))
+    {
+      parent = g_path_get_dirname (filename);
+      if (parent)
+	{
+	  GtkFileFolderWin32 *folder_win32;
+
+	  folder_win32 = g_hash_table_lookup (system_win32->folder_hash, parent);
+	  if (folder_win32)
+	    {
+	      GSList *paths;
+
+	      paths = g_slist_append (NULL, (GtkFilePath *) path);
+	      g_signal_emit_by_name (folder_win32, "files-added", paths);
+	      g_slist_free (paths);
+	    }
+	  g_free(parent);
+	}
+    }
+
   g_free (filename);
-  
+
   return result;
 }
 
@@ -1115,6 +1160,8 @@ static void
 gtk_file_folder_win32_finalize (GObject *object)
 {
   GtkFileFolderWin32 *folder_win32 = GTK_FILE_FOLDER_WIN32 (object);
+
+  g_hash_table_remove (folder_win32->system_win32->folder_hash, folder_win32->filename);
 
   g_free (folder_win32->filename);
   
