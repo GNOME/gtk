@@ -786,6 +786,11 @@ draw_arrow (GtkStyle      *style,
       height -= ythik * 2;
     }
 
+  if (!(width & 1)) 
+    width--;
+  if (!(height & 1)) 
+    height--;
+  
   half_width = width / 2;
   half_height = height / 2;
   
@@ -800,6 +805,7 @@ draw_arrow (GtkStyle      *style,
       points[2].y = y + half_height - (half_width / 2);
 
       gdk_draw_polygon (window, gc, TRUE, points, 3);
+      gdk_draw_polygon (window, gc, FALSE, points, 3);
       break;
      case GTK_ARROW_DOWN:
       points[0].x = x;
@@ -810,6 +816,7 @@ draw_arrow (GtkStyle      *style,
       points[2].y = y + half_height + (half_width / 2);
 
       gdk_draw_polygon (window, gc, TRUE, points, 3);
+      gdk_draw_polygon (window, gc, FALSE, points, 3);
       break;
      case GTK_ARROW_LEFT:
       points[0].x = x + half_width + (half_height / 2);
@@ -820,6 +827,7 @@ draw_arrow (GtkStyle      *style,
       points[2].y = y + half_height;
       
       gdk_draw_polygon (window, gc, TRUE, points, 3);
+      gdk_draw_polygon (window, gc, FALSE, points, 3);
       break;
      case GTK_ARROW_RIGHT:
       points[0].x = x + half_width - (half_height / 2);
@@ -830,6 +838,7 @@ draw_arrow (GtkStyle      *style,
       points[2].y = y + half_height;
       
       gdk_draw_polygon (window, gc, TRUE, points, 3);
+      gdk_draw_polygon (window, gc, FALSE, points, 3);
       break;
     }
   if (area)
@@ -1210,8 +1219,31 @@ draw_check   (GtkStyle      *style,
 	      gint           width,
 	      gint           height)
 {
-   gtk_paint_box (style, window, state_type, shadow_type, area, widget, detail,
-	                         x, y, width, height);
+  GdkGC *gc1;
+  GdkGC *gc2;
+  gint xx, yy, ww, hh;
+  
+  gc2 = style->light_gc[GTK_STATE_NORMAL];
+  gc1 = style->black_gc;
+  
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle (gc1, area);
+      gdk_gc_set_clip_rectangle (gc2, area);
+    }
+  gdk_draw_rectangle (window, gc1, TRUE,
+		      x, y, width, height);
+  if (shadow_type == GTK_SHADOW_IN)
+    {
+    }
+  
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle (gc1, NULL);
+      gdk_gc_set_clip_rectangle (gc2, NULL);
+    }
+  gtk_paint_shadow (style, window, state_type, GTK_SHADOW_IN, area, widget, detail,
+		    x, y, width, height);
 }
 
 void

@@ -28,11 +28,6 @@ AC_PROG_MAKE_SET
 AM_PATH_GTK(1.1.0, , 
 	AC_MSG_ERROR([*** GTK 1.1 not installed - please install first ***]))
 
-GLIB_CFLAGS=$glib_cflags
-GLIB_LIBS=$glib_libs
-GTK_CFLAGS=$glib_cflags
-GTK_LIBS=$glib_libs
-
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
 AC_SUBST(GTK_CFLAGS)
