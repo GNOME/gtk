@@ -1,3 +1,10 @@
+Sat Dec 12 17:18:32 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkfont.c (gdk_text_extents): Corrections
+	to computation of extents of text from a font set.
+	(from Chi-Deok Hwang <cdhwang@sr.hei.co.kr>)
+         and Akira Higuchi <a-higuti@math.sci.hokudai.ac.jp>)
+	
 Fri Dec 11 08:59:12 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklistitem.c (gtk_list_item_style_set):

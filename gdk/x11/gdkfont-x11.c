@@ -489,15 +489,15 @@ gdk_text_extents (GdkFont     *font,
       fontset = (XFontSet) private->xfont;
       XmbTextExtents (fontset, text, text_length, &ink, &logical);
       if (lbearing)
-	*lbearing = -ink.x;
+	*lbearing = ink.x;
       if (rbearing)
-	*rbearing = ink.y;
+	*rbearing = ink.x + ink.width;
       if (width)
 	*width = logical.width;
       if (ascent)
-	*ascent = ink.height;
+	*ascent = -ink.y;
       if (descent)
-	*descent = -ink.y;
+	*descent = ink.y + ink.height;
       break;
     }
 
