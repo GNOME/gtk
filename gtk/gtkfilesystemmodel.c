@@ -23,6 +23,7 @@
 #include "gtkfilesystemmodel.h"
 #include "gtkfilesystem.h"
 #include "gtkintl.h"
+#include "gtktreednd.h"
 #include "gtktreemodel.h"
 
 typedef struct _GtkFileSystemModelClass GtkFileSystemModelClass;
@@ -91,6 +92,8 @@ static void gtk_file_system_model_iface_init   (GtkTreeModelIface       *iface);
 static void gtk_file_system_model_init         (GtkFileSystemModel      *model);
 static void gtk_file_system_model_finalize     (GObject                 *object);
 
+static void drag_source_iface_init (GtkTreeDragSourceIface *iface);
+
 static GtkTreeModelFlags gtk_file_system_model_get_flags       (GtkTreeModel *tree_model);
 static gint              gtk_file_system_model_get_n_columns   (GtkTreeModel *tree_model);
 static GType             gtk_file_system_model_get_column_type (GtkTreeModel *tree_model,
@@ -124,6 +127,12 @@ static void              gtk_file_system_model_ref_node        (GtkTreeModel *tr
 								GtkTreeIter  *iter);
 static void              gtk_file_system_model_unref_node      (GtkTreeModel *tree_model,
 								GtkTreeIter  *iter);
+
+static gboolean drag_source_row_draggable (GtkTreeDragSource   *drag_source,
+					   GtkTreePath         *path);
+static gboolean drag_source_drag_data_get (GtkTreeDragSource   *drag_source,
+					   GtkTreePath         *path,
+					   GtkSelectionData    *selection_data);
 
 static FileModelNode *file_model_node_new        (GtkFileSystemModel *model,
 						  const GtkFilePath  *path);
@@ -199,8 +208,15 @@ _gtk_file_system_model_get_type (void)
       static const GInterfaceInfo file_system_info =
       {
 	(GInterfaceInitFunc) gtk_file_system_model_iface_init, /* interface_init */
-	NULL,			                              /* interface_finalize */
-	NULL			                              /* interface_data */
+	NULL,			                               /* interface_finalize */
+	NULL			                               /* interface_data */
+      };
+
+      static const GInterfaceInfo drag_source_info =
+      {
+	(GInterfaceInitFunc) drag_source_iface_init,           /* interface_init */
+	NULL,			                               /* interface_finalize */
+	NULL			                               /* interface_data */
       };
 
       file_system_model_type = g_type_register_static (G_TYPE_OBJECT,
@@ -209,6 +225,9 @@ _gtk_file_system_model_get_type (void)
       g_type_add_interface_static (file_system_model_type,
 				   GTK_TYPE_TREE_MODEL,
 				   &file_system_info);
+      g_type_add_interface_static (file_system_model_type,
+				   GTK_TYPE_TREE_DRAG_SOURCE,
+				   &drag_source_info);
     }
 
   return file_system_model_type;
@@ -275,6 +294,14 @@ gtk_file_system_model_finalize (GObject *object)
     }
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+drag_source_iface_init (GtkTreeDragSourceIface *iface)
+{
+  iface->row_draggable = drag_source_row_draggable;
+  iface->drag_data_get = drag_source_drag_data_get;
+  iface->drag_data_delete = NULL;
 }
 
 /*
@@ -563,6 +590,60 @@ gtk_file_system_model_unref_node (GtkTreeModel *tree_model,
 {
   file_model_node_unref (GTK_FILE_SYSTEM_MODEL (tree_model),
 			 iter->user_data);
+}
+
+static gboolean
+drag_source_row_draggable (GtkTreeDragSource *drag_source,
+			   GtkTreePath       *path)
+{
+  GtkFileSystemModel *model;
+  GtkTreeIter iter;
+  FileModelNode *node;
+
+  model = GTK_FILE_SYSTEM_MODEL (drag_source);
+
+  if (!gtk_file_system_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
+    return FALSE;
+
+  if (!model->has_editable)
+    return TRUE;
+
+  node = iter.user_data;
+  return (node != model->roots);
+}
+
+static gboolean
+drag_source_drag_data_get (GtkTreeDragSource *drag_source,
+			   GtkTreePath       *path,
+			   GtkSelectionData  *selection_data)
+{
+  GtkFileSystemModel *model;
+  GtkTreeIter iter;
+  const GtkFilePath *file_path;
+  char *uri;
+  char *uris;
+
+  model = GTK_FILE_SYSTEM_MODEL (drag_source);
+
+  if (!gtk_file_system_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
+    return FALSE;
+
+  file_path = _gtk_file_system_model_get_path (model, &iter);
+  g_assert (file_path != NULL);
+
+  uri = gtk_file_system_path_to_uri (model->file_system, file_path);
+  uris = g_strconcat (uri, "\r\n", NULL);
+
+  gtk_selection_data_set (selection_data,
+			  gdk_atom_intern ("text/uri-list", FALSE),
+			  8,
+			  uris,
+			  strlen (uris) + 1);
+
+  g_free (uri);
+  g_free (uris);
+
+  return TRUE;
 }
 
 /**

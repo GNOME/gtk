@@ -1,3 +1,19 @@
+2004-02-24  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_model_create): Renamed
+	from create_shortcuts_model().
+	(struct _GtkFileChooserDefault): Renamed the shortcuts_tree field
+	to shortcuts_list.
+	(shortcuts_list_create): Renamed from shortcuts_tree_create().
+	(create_file_list): Enable the tree view as a model drag source.
+	(create_folder_tree): Likewise.
+
+	* gtk/gtkfilesystemmodel.c (_gtk_file_system_model_get_type):
+	Register the drag source interface.
+	(drag_source_iface_init): New function.
+	(drag_source_row_draggable): New function.
+	(drag_source_drag_data_get): New function.
+
 Tue Feb 24 19:12:07 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.3.4 ===

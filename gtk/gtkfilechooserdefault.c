@@ -118,7 +118,7 @@ struct _GtkFileChooserDefault
   GtkWidget *tree_scrollwin;
   GtkWidget *tree;
   GtkWidget *shortcuts_scrollwin;
-  GtkWidget *shortcuts_tree;
+  GtkWidget *shortcuts_list;
   GtkWidget *add_bookmark_button;
   GtkWidget *remove_bookmark_button;
   GtkWidget *list_scrollwin;
@@ -159,7 +159,7 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-/* Column numbers for the shortcuts tree.  Keep these in sync with create_shortcuts_model() */
+/* Column numbers for the shortcuts tree.  Keep these in sync with shortcuts_model_create() */
 enum {
   SHORTCUTS_COL_PIXBUF,
   SHORTCUTS_COL_NAME,
@@ -620,7 +620,7 @@ shortcuts_unselect_all (GtkFileChooserDefault *impl)
 {
   GtkTreeSelection *selection;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_tree));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_list));
   gtk_tree_selection_unselect_all (selection);
 }
 
@@ -958,7 +958,7 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
 }
 
 static void
-create_shortcuts_model (GtkFileChooserDefault *impl)
+shortcuts_model_create (GtkFileChooserDefault *impl)
 {
   if (impl->shortcuts_model)
     g_object_unref (impl->shortcuts_model);
@@ -979,7 +979,7 @@ create_shortcuts_model (GtkFileChooserDefault *impl)
       shortcuts_add_bookmarks (impl);
     }
 
-  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->shortcuts_tree), GTK_TREE_MODEL (impl->shortcuts_model));
+  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->shortcuts_list), GTK_TREE_MODEL (impl->shortcuts_model));
 }
 
 /* Callback used when the "New Folder" toolbar button is clicked */
@@ -1114,6 +1114,12 @@ create_folder_tree (GtkFileChooserDefault *impl)
 
   impl->tree = gtk_tree_view_new ();
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (impl->tree), FALSE);
+
+  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (impl->tree),
+					  GDK_BUTTON1_MASK,
+					  shortcuts_targets,
+					  num_shortcuts_targets,
+					  GDK_ACTION_COPY);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->tree));
   g_signal_connect (selection, "changed",
@@ -1292,7 +1298,7 @@ remove_bookmark_button_clicked_cb (GtkButton *button,
   gboolean removable;
   GError *error;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_tree));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_list));
 
   if (gtk_tree_selection_get_selected (selection, NULL, &iter))
     {
@@ -1396,7 +1402,7 @@ bookmarks_check_remove_sensitivity (GtkFileChooserDefault *impl)
   GtkTreeIter iter;
   gboolean removable = FALSE;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_tree));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_list));
 
   if (gtk_tree_selection_get_selected (selection, NULL, &iter))
     gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
@@ -1492,7 +1498,7 @@ shortcuts_selection_changed_cb (GtkTreeSelection      *selection,
 
 /* Creates the widgets for the shortcuts and bookmarks tree */
 static GtkWidget *
-shortcuts_tree_create (GtkFileChooserDefault *impl)
+shortcuts_list_create (GtkFileChooserDefault *impl)
 {
   GtkTreeSelection *selection;
   GtkTreeViewColumn *column;
@@ -1509,16 +1515,16 @@ shortcuts_tree_create (GtkFileChooserDefault *impl)
 
   /* Tree */
 
-  impl->shortcuts_tree = gtk_tree_view_new ();
-  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (impl->shortcuts_tree), FALSE);
+  impl->shortcuts_list = gtk_tree_view_new ();
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (impl->shortcuts_list), FALSE);
   
-  gtk_drag_dest_set (impl->shortcuts_tree,
+  gtk_drag_dest_set (impl->shortcuts_list,
 		     GTK_DEST_DEFAULT_ALL,
 		     shortcuts_targets,
 		     num_shortcuts_targets,
 		     GDK_ACTION_COPY);
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_tree));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_list));
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
   gtk_tree_selection_set_select_function (selection,
 					  shortcuts_select_func,
@@ -1527,18 +1533,18 @@ shortcuts_tree_create (GtkFileChooserDefault *impl)
   g_signal_connect (selection, "changed",
 		    G_CALLBACK (shortcuts_selection_changed_cb), impl);
 
-  g_signal_connect (impl->shortcuts_tree, "row-activated",
+  g_signal_connect (impl->shortcuts_list, "row-activated",
 		    G_CALLBACK (shortcuts_row_activated_cb), impl);
 
-  g_signal_connect (impl->shortcuts_tree, "drag-data-received",
+  g_signal_connect (impl->shortcuts_list, "drag-data-received",
 		    G_CALLBACK (shortcuts_drag_data_received_cb), impl);
 
-  gtk_container_add (GTK_CONTAINER (impl->shortcuts_scrollwin), impl->shortcuts_tree);
-  gtk_widget_show (impl->shortcuts_tree);
+  gtk_container_add (GTK_CONTAINER (impl->shortcuts_scrollwin), impl->shortcuts_list);
+  gtk_widget_show (impl->shortcuts_list);
 
   /* Model */
 
-  create_shortcuts_model (impl);
+  shortcuts_model_create (impl);
 
   /* Column */
 
@@ -1558,7 +1564,7 @@ shortcuts_tree_create (GtkFileChooserDefault *impl)
 				       "text", SHORTCUTS_COL_NAME,
 				       NULL);
 
-  gtk_tree_view_append_column (GTK_TREE_VIEW (impl->shortcuts_tree), column);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (impl->shortcuts_list), column);
 
   return impl->shortcuts_scrollwin;
 }
@@ -1577,7 +1583,7 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 
   /* Shortcuts tree */
 
-  widget = shortcuts_tree_create (impl);
+  widget = shortcuts_list_create (impl);
   gtk_box_pack_start (GTK_BOX (vbox), widget, TRUE, TRUE, 0);
 
   /* Box for buttons */
@@ -1636,6 +1642,12 @@ create_file_list (GtkFileChooserDefault *impl)
   g_signal_connect (impl->list, "row_activated",
 		    G_CALLBACK (list_row_activated), impl);
   gtk_widget_show (impl->list);
+
+  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (impl->list),
+					  GDK_BUTTON1_MASK,
+					  shortcuts_targets,
+					  num_shortcuts_targets,
+					  GDK_ACTION_COPY);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
   g_signal_connect (selection, "changed",
