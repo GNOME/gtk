@@ -1,5 +1,16 @@
 2004-10-31  Matthias Clasen  <mclasen@redhat.com>
 
+	Add api for image transfer via copy-and-paste (#156408)
+	
+	* gtk/gtkclipboard.c (gtk_clipboard_set_image) 
+	(gtk_clipboard_request_image, gtk_clipboard_wait_for_image) 
+	(gtk_clipboard_wait_is_image_available): New functions for image
+	transfer.
+
+	* gtk/gtkselection.h:
+	* gtk/gtkselection.c (gtk_selection_data_targets_include_image): 
+	New function, similar to gtk_selection_data_targets_include_text().
+
 	* gtk/gtkprogressbar.[hc]: Add an ellipsize property with 
 	getter and setter.  (#156845, Morten Welinder)
 

@@ -144,9 +144,9 @@ gboolean gtk_selection_data_set_text (GtkSelectionData     *selection_data,
 				      const gchar          *str,
 				      gint                  len);
 guchar * gtk_selection_data_get_text (GtkSelectionData     *selection_data);
-gboolean gtk_selection_data_set_pixbuf (GtkSelectionData   *selection_data,
-					GdkPixbuf          *pixbuf);
-GdkPixbuf *gtk_selection_data_get_pixbuf (GtkSelectionData *selection_data);
+gboolean gtk_selection_data_set_pixbuf   (GtkSelectionData  *selection_data,
+				          GdkPixbuf         *pixbuf);
+GdkPixbuf *gtk_selection_data_get_pixbuf (GtkSelectionData  *selection_data);
 gboolean gtk_selection_data_set_uris (GtkSelectionData     *selection_data,
 				      gchar               **uris);
 gchar  **gtk_selection_data_get_uris (GtkSelectionData     *selection_data);
@@ -155,6 +155,8 @@ gboolean gtk_selection_data_get_targets          (GtkSelectionData  *selection_d
 						  GdkAtom          **targets,
 						  gint              *n_atoms);
 gboolean gtk_selection_data_targets_include_text (GtkSelectionData  *selection_data);
+gboolean gtk_selection_data_targets_include_image (GtkSelectionData  *selection_data,
+						   gboolean           writable);
 
 /* Called when a widget is destroyed */
 

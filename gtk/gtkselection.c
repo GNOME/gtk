@@ -1496,9 +1496,60 @@ gtk_selection_data_targets_include_text (GtkSelectionData *selection_data)
 	      targets[i] == text_plain_atom ||
 	      targets[i] == text_plain_utf8_atom ||
 	      targets[i] == text_plain_locale_atom)
-	    result = TRUE;
+	    {
+	      result = TRUE;
+	      break;
+	    }
 	}
 
+      g_free (targets);
+    }
+
+  return result;
+}
+
+/**
+ * gtk_selection_data_targets_include_image:
+ * @selection_data: a #GtkSelectionData object
+ * @writable: whether to accept only targets for which GTK+ knows
+ *   how to convert a pixbuf into the format
+ * 
+ * Given a #GtkSelectionData object holding a list of targets,
+ * determines if any of the targets in @targets can be used to
+ * provide a #GdkPixbuf.
+ * 
+ * Return value: %TRUE if @selection_data holds a list of targets,
+ *   and a suitable target for images is included, otherwise %FALSE.
+ *
+ * Since: 2.6
+ **/
+gboolean 
+gtk_selection_data_targets_include_image (GtkSelectionData *selection_data,
+					  gboolean          writable)
+{
+  GdkAtom *targets;
+  gint n_targets;
+  gint i;
+  gboolean result = FALSE;
+  GtkTargetList *list;
+  GList *l;
+
+  init_atoms ();
+
+  if (gtk_selection_data_get_targets (selection_data, &targets, &n_targets))
+    {
+      list = gtk_target_list_new (NULL, 0);
+      gtk_target_list_add_image_targets (list, 0, writable);
+      for (i=0; i < n_targets && !result; i++)
+	{
+	  for (l = list->list; l && !result; l = l->next)
+	    {
+	      GtkTargetPair *pair = (GtkTargetPair *)l->data;
+	      if (pair->target == targets[i])
+		result = TRUE;
+	    }
+	}
+      gtk_target_list_unref (list);
       g_free (targets);
     }
 

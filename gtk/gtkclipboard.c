@@ -46,6 +46,7 @@ typedef struct _GtkClipboardClass GtkClipboardClass;
 
 typedef struct _RequestContentsInfo RequestContentsInfo;
 typedef struct _RequestTextInfo RequestTextInfo;
+typedef struct _RequestImageInfo RequestImageInfo;
 typedef struct _RequestTargetsInfo RequestTargetsInfo;
 
 struct _GtkClipboard 
@@ -92,6 +93,12 @@ struct _RequestContentsInfo
 struct _RequestTextInfo
 {
   GtkClipboardTextReceivedFunc callback;
+  gpointer user_data;
+};
+
+struct _RequestImageInfo
+{
+  GtkClipboardImageReceivedFunc callback;
   gpointer user_data;
 };
 
@@ -702,6 +709,7 @@ text_clear_func (GtkClipboard *clipboard,
   g_free (data);
 }
 
+
 /**
  * gtk_clipboard_set_text:
  * @clipboard: a #GtkClipboard object
@@ -731,15 +739,13 @@ gtk_clipboard_set_text (GtkClipboard *clipboard,
   gtk_target_list_add_text_targets (list, 0);
 
   n_targets = g_list_length (list->list);
-  targets = g_new (GtkTargetEntry, n_targets);
+  targets = g_new0 (GtkTargetEntry, n_targets);
   for (l = list->list, i = 0; l; l = l->next, i++)
     {
       GtkTargetPair *pair = (GtkTargetPair *)l->data;
       targets[i].target = gdk_atom_name (pair->target);
-      targets[i].flags = 0;
-      targets[i].info = 0;
     }
-
+  
   if (len < 0)
     len = strlen (text);
   
@@ -747,6 +753,67 @@ gtk_clipboard_set_text (GtkClipboard *clipboard,
 			       targets, n_targets,
 			       text_get_func, text_clear_func,
 			       g_strndup (text, len));
+  gtk_clipboard_set_can_store (clipboard, NULL, 0);
+
+  g_free (targets);
+  gtk_target_list_unref (list);
+}
+
+static void 
+pixbuf_get_func (GtkClipboard     *clipboard,
+		 GtkSelectionData *selection_data,
+		 guint             info,
+		 gpointer          data)
+{
+  gtk_selection_data_set_pixbuf (selection_data, data);
+}
+
+static void 
+pixbuf_clear_func (GtkClipboard *clipboard,
+		   gpointer      data)
+{
+  g_object_unref (data);
+}
+
+/**
+ * gtk_clipboard_set_image:
+ * @clipboard: a #GtkClipboard object
+ * @pixbuf:    a #GdkPixbuf 
+ * 
+ * Sets the contents of the clipboard to the given #GdkPixbuf. 
+ * GTK+ will take responsibility for responding for requests 
+ * for the image, and for converting the image into the 
+ * requested format.
+ * 
+ * Since: 2.6
+ **/
+void
+gtk_clipboard_set_image (GtkClipboard *clipboard,
+			  GdkPixbuf    *pixbuf)
+{
+  GtkTargetList *list;
+  GList *l;
+  GtkTargetEntry *targets;
+  gint n_targets, i;
+
+  g_return_if_fail (clipboard != NULL);
+  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+
+  list = gtk_target_list_new (NULL, 0);
+  gtk_target_list_add_image_targets (list, 0, TRUE);
+
+  n_targets = g_list_length (list->list);
+  targets = g_new0 (GtkTargetEntry, n_targets);
+  for (l = list->list, i = 0; l; l = l->next, i++)
+    {
+      GtkTargetPair *pair = (GtkTargetPair *)l->data;
+      targets[i].target = gdk_atom_name (pair->target);
+    }
+
+  gtk_clipboard_set_with_data (clipboard, 
+			       targets, n_targets,
+			       pixbuf_get_func, pixbuf_clear_func,
+			       g_object_ref (pixbuf));
   gtk_clipboard_set_can_store (clipboard, NULL, 0);
 
   g_free (targets);
@@ -910,6 +977,83 @@ gtk_clipboard_request_text (GtkClipboard                *clipboard,
 }
 
 static void 
+request_image_received_func (GtkClipboard     *clipboard,
+			     GtkSelectionData *selection_data,
+			     gpointer          data)
+{
+  RequestImageInfo *info = data;
+  GdkPixbuf *result = NULL;
+
+  result = gtk_selection_data_get_pixbuf (selection_data);
+
+  if (!result)
+    {
+      /* If we asked for image/png and didn't get it, try image/jpeg;
+       * if we asked for image/jpeg and didn't get it, try image/gif;
+       * If we asked for anything else and didn't get it, give up.
+       */
+      if (selection_data->target == gdk_atom_intern ("image/png", FALSE))
+	{
+	  gtk_clipboard_request_contents (clipboard,
+					  gdk_atom_intern ("image/jpeg", FALSE), 
+					  request_image_received_func, info);
+	  return;
+	}
+      else if (selection_data->target == gdk_atom_intern ("image/jpeg", FALSE))
+	{
+	  gtk_clipboard_request_contents (clipboard,
+					  gdk_atom_intern ("image/gif", FALSE), 
+					  request_text_received_func, info);
+	  return;
+	}
+    }
+
+  info->callback (clipboard, result, info->user_data);
+  g_free (info);
+  g_object_unref (result);
+}
+
+/**
+ * gtk_clipboard_request_image:
+ * @clipboard: a #GtkClipboard
+ * @callback:  a function to call when the image is received,
+ *             or the retrieval fails. (It will always be called
+ *             one way or the other.)
+ * @user_data: user data to pass to @callback.
+ * 
+ * Requests the contents of the clipboard as image. When the image is
+ * later received, it will be converted to a #GdkPixbuf, and
+ * @callback will be called. 
+ *
+ * The @pixbuf parameter to @callback will contain the resulting 
+ * #GdkPixbuf if the request succeeded, or %NULL if it failed. This 
+ * could happen for various reasons, in particular if the clipboard 
+ * was empty or if the contents of the clipboard could not be 
+ * converted into an image.
+ *
+ * Since: 2.6
+ **/
+void 
+gtk_clipboard_request_image (GtkClipboard                  *clipboard,
+			     GtkClipboardImageReceivedFunc  callback,
+			     gpointer                       user_data)
+{
+  RequestImageInfo *info;
+  
+  g_return_if_fail (clipboard != NULL);
+  g_return_if_fail (callback != NULL);
+  
+  info = g_new (RequestImageInfo, 1);
+  info->callback = callback;
+  info->user_data = user_data;
+
+  gtk_clipboard_request_contents (clipboard, 
+				  gdk_atom_intern ("image/png", FALSE),
+				  request_image_received_func,
+				  info);
+}
+
+static void 
 request_targets_received_func (GtkClipboard     *clipboard,
 			       GtkSelectionData *selection_data,
 			       gpointer          data)
@@ -1042,7 +1186,6 @@ clipboard_text_received_func (GtkClipboard *clipboard,
   g_main_loop_quit (results->loop);
 }
 
-
 /**
  * gtk_clipboard_wait_for_text:
  * @clipboard: a #GtkClipboard
@@ -1065,7 +1208,6 @@ gtk_clipboard_wait_for_text (GtkClipboard *clipboard)
   WaitResults results;
 
   g_return_val_if_fail (clipboard != NULL, NULL);
-  g_return_val_if_fail (clipboard != NULL, NULL);
   
   results.data = NULL;
   results.loop = g_main_loop_new (NULL, TRUE);
@@ -1085,6 +1227,62 @@ gtk_clipboard_wait_for_text (GtkClipboard *clipboard)
 
   return results.data;
 }
+
+static void 
+clipboard_image_received_func (GtkClipboard *clipboard,
+			       GdkPixbuf    *pixbuf,
+			       gpointer      data)
+{
+  WaitResults *results = data;
+
+  results->data = g_object_ref (pixbuf);
+  g_main_loop_quit (results->loop);
+}
+
+/**
+ * gtk_clipboard_wait_for_image:
+ * @clipboard: a #GtkClipboard
+ * 
+ * Requests the contents of the clipboard as image and converts
+ * the result to a #GdkPixbuf. This function waits for
+ * the data to be received using the main loop, so events,
+ * timeouts, etc, may be dispatched during the wait.
+ * 
+ * Return value: a newly-allocated #GdkPixbuf object which must
+ *               be disposed with g_object_unref(), or %NULL if 
+ *               retrieving the selection data failed. (This 
+ *               could happen for various reasons, in particular 
+ *               if the clipboard was empty or if the contents of 
+ *               the clipboard could not be converted into an image.)
+ *
+ * Since: 2.6
+ **/
+GdkPixbuf *
+gtk_clipboard_wait_for_image (GtkClipboard *clipboard)
+{
+  WaitResults results;
+
+  g_return_val_if_fail (clipboard != NULL, NULL);
+  
+  results.data = NULL;
+  results.loop = g_main_loop_new (NULL, TRUE);
+
+  gtk_clipboard_request_image (clipboard,
+			       clipboard_image_received_func,
+			       &results);
+
+  if (g_main_loop_is_running (results.loop))
+    {
+      GDK_THREADS_LEAVE ();
+      g_main_loop_run (results.loop);
+      GDK_THREADS_ENTER ();
+    }
+
+  g_main_loop_unref (results.loop);
+
+  return results.data;
+}
+
 /**
  * gtk_clipboard_get_display:
  * @clipboard: a #GtkClipboard
@@ -1109,10 +1307,9 @@ gtk_clipboard_get_display (GtkClipboard *clipboard)
  * 
  * Test to see if there is text available to be pasted
  * This is done by requesting the TARGETS atom and checking
- * if it contains any of the names: STRING, TEXT, COMPOUND_TEXT,
- * UTF8_STRING. This function waits for the data to be received
- * using the main loop, so events, timeouts, etc, may be dispatched
- * during the wait.
+ * if it contains any of the supported text targets. This function 
+ * waits for the data to be received using the main loop, so events, 
+ * timeouts, etc, may be dispatched during the wait.
  *
  * This function is a little faster than calling
  * gtk_clipboard_wait_for_text() since it doesn't need to retrieve
@@ -1130,6 +1327,41 @@ gtk_clipboard_wait_is_text_available (GtkClipboard *clipboard)
   if (data)
     {
       result = gtk_selection_data_targets_include_text (data);
+      gtk_selection_data_free (data);
+    }
+
+  return result;
+}
+
+/**
+ * gtk_clipboard_wait_is_image_available:
+ * @clipboard: a #GtkClipboard
+ * 
+ * Test to see if there is an image available to be pasted
+ * This is done by requesting the TARGETS atom and checking
+ * if it contains any of the supported image targets. This function 
+ * waits for the data to be received using the main loop, so events, 
+ * timeouts, etc, may be dispatched during the wait.
+ *
+ * This function is a little faster than calling
+ * gtk_clipboard_wait_for_image() since it doesn't need to retrieve
+ * the actual image data.
+ * 
+ * Return value: %TRUE is there is an image available, %FALSE otherwise.
+ *
+ * Since: 2.6
+ **/
+gboolean
+gtk_clipboard_wait_is_image_available (GtkClipboard *clipboard)
+{
+  GtkSelectionData *data;
+  gboolean result = FALSE;
+
+  data = gtk_clipboard_wait_for_contents (clipboard, 
+					  gdk_atom_intern ("TARGETS", FALSE));
+  if (data)
+    {
+      result = gtk_selection_data_targets_include_image (data, FALSE);
       gtk_selection_data_free (data);
     }
 
