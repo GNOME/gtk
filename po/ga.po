@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-01-17 01:16+0100\n"
-"PO-Revision-Date: 2004-01-18 20:18+0000\n"
+"PO-Revision-Date: 2004-01-21 20:18+0000\n"
 "Last-Translator: Alastair McKinstry <mckinstry@computer.org\n"
 "Language-Team: Gaeilge <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -708,7 +708,7 @@ msgstr "An formôid d'íomhá XPM"
 #.
 #: gtk/gtkaccellabel.c:117
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -717,7 +717,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:123
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -726,7 +726,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:129
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -747,11 +747,11 @@ msgstr "féilire:MB"
 #.
 #: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
-msgstr ""
+msgstr "calendar:week_start:0"
 
 #: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
 msgid "Pick a Color"
-msgstr "Tóg dath"
+msgstr "Roghnaigh dath"
 
 #: gtk/gtkcolorbutton.c:465
 msgid "Received invalid color data\n"
@@ -864,11 +864,11 @@ msgstr "_Pailéid"
 
 #: gtk/gtkcolorseldialog.c:115
 msgid "Color Selection"
-msgstr ""
+msgstr "Roghachais Dath"
 
 #: gtk/gtkentry.c:4079 gtk/gtktextview.c:6875
 msgid "Select _All"
-msgstr "Tóg _Gach Rud"
+msgstr "Roghnaigh _Gach Rud"
 
 #: gtk/gtkentry.c:4089 gtk/gtktextview.c:6885
 msgid "Input _Methods"
@@ -1195,7 +1195,7 @@ msgstr "(Folamh)"
 #: gtk/gtkfilesystemunix.c:335 gtk/gtkfilesystemwin32.c:417
 #, c-format
 msgid "error creating directory '%s': %s"
-msgstr ""
+msgstr "earriadh ag cruthaigh eolaire '%s': %s"
 
 #: gtk/gtkfilesystemunix.c:378 gtk/gtkfilesystemwin32.c:458
 msgid "This file system does not support mounting"
