@@ -322,7 +322,7 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 }
 #else
 
-#define mname(type,fn) gdk_pixbuf__ ## type ## _image_ ##fn
+#define mname(type,fn) gdk_pixbuf__ ## type ## _ ##fn
 #define m_fill_vtable(type) extern void mname(type,fill_vtable) (GdkPixbufModule *module)
 
 m_fill_vtable (png);
@@ -602,10 +602,16 @@ gdk_pixbuf_new_from_xpm_data (const char **data)
 {
 	GdkPixbuf *(* load_xpm_data) (const char **data);
 	GdkPixbuf *pixbuf;
+        GError *error = NULL;
 
-	if (file_formats[XPM_FILE_FORMAT_INDEX].module == NULL)
-		gdk_pixbuf_load_module (&file_formats[XPM_FILE_FORMAT_INDEX], NULL);
-
+	if (file_formats[XPM_FILE_FORMAT_INDEX].module == NULL) {
+                if (!gdk_pixbuf_load_module (&file_formats[XPM_FILE_FORMAT_INDEX], &error)) {
+                        g_warning ("Error loading XPM image loader: %s", error->message);
+                        g_error_free (error);
+                        return FALSE;
+                }
+        }
+          
 	if (file_formats[XPM_FILE_FORMAT_INDEX].module == NULL) {
 		g_warning ("Can't find gdk-pixbuf module for parsing inline XPM data");
 		return NULL;
