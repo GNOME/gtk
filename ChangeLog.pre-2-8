@@ -1,6 +1,7 @@
 2004-07-15  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtkcellrenderer.c (gtk_cell_renderer_get_property): 
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): 
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_class_init): 
 	Correct the declared default values of several properties
 	to be in sync with the actual initial values.
 

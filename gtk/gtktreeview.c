@@ -616,7 +616,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 						       P_("Model column to search through when searching through code"),
 						       -1,
 						       G_MAXINT,
-						       0,
+						       -1,
 						       G_PARAM_READWRITE));
 
     /**
@@ -1116,7 +1116,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->presize_handler_timer = 0;
   tree_view->priv->scroll_sync_timer = 0;
   tree_view->priv->fixed_height = -1;
-  tree_view->priv->fixed_height_mode = 0;
+  tree_view->priv->fixed_height_mode = FALSE;
   tree_view->priv->fixed_height_check = 0;
   gtk_tree_view_set_adjustments (tree_view, NULL, NULL);
   tree_view->priv->selection = _gtk_tree_selection_new_with_tree_view (tree_view);
@@ -1127,7 +1127,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->init_hadjust_value = TRUE;    
   tree_view->priv->width = 0;          
           
-  tree_view->priv->hover_selection = 0;
+  tree_view->priv->hover_selection = FALSE;
 }
 
 
