@@ -816,12 +816,15 @@ gtk_button_remove (GtkContainer *container,
 
   if (button->child == widget)
     {
+      gboolean widget_was_visible = GTK_WIDGET_VISIBLE(widget);
+
       gtk_widget_unparent (widget);
 
       button->child = NULL;
 
-      if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
+      if (widget_was_visible && GTK_WIDGET_VISIBLE (container))
 	gtk_widget_queue_resize (GTK_WIDGET (container));
+
     }
 }
 
