@@ -135,7 +135,6 @@ Tue Apr 16 07:53:49 2002  Tim Janik  <timj@gtk.org>
 	* gtk/gtkwidget.c (_gtk_widget_get_accel_path): export whether the
 	accel path is from a locked accel group.
 
->>>>>>> 1.3353
 Mon Apr 15 15:41:56 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcontainer.c (gtk_container_focus): include internal
