@@ -992,7 +992,6 @@ gtk_object_set_data_by_id_full (GtkObject        *object,
 				GtkDestroyNotify  destroy)
 {
   GtkObjectData *odata;
-  GtkObjectData *prev;
   
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
@@ -1001,6 +1000,8 @@ gtk_object_set_data_by_id_full (GtkObject        *object,
   odata = object->object_data;
   if (!data)
     {
+      GtkObjectData *prev;
+      
       prev = NULL;
       
       while (odata)
@@ -1022,6 +1023,10 @@ gtk_object_set_data_by_id_full (GtkObject        *object,
     }
   else
     {
+      GtkObjectData *prev;
+
+      prev = NULL;
+      
       while (odata)
 	{
 	  if (odata->id == data_id)
@@ -1045,8 +1050,9 @@ gtk_object_set_data_by_id_full (GtkObject        *object,
 	      odata->destroy = destroy;
 	      return;
 	    }
-	  
-	  odata = odata->next;
+
+	  prev = odata;
+	  odata = prev->next;
 	}
       
       if (gtk_object_data_free_list)
@@ -1520,14 +1526,16 @@ gtk_trace_referencing (GtkObject   *object,
 		       guint	   line,
 		       gboolean	   do_ref)
 {
-  gboolean exists;
-
   if (gtk_debug_flags & GTK_DEBUG_OBJECTS)
     {
+      gboolean exists = TRUE;
+
       g_return_if_fail (object != NULL);
       g_return_if_fail (GTK_IS_OBJECT (object));
 
+#ifdef	G_ENABLE_DEBUG
       exists = g_hash_table_lookup (living_objs_ht, object) != NULL;
+#endif	/* !G_ENABLE_DEBUG */
       
       if (exists &&
 	  (object == gtk_trace_object ||
