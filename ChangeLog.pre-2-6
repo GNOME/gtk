@@ -1,3 +1,33 @@
+Thu Apr 30 10:22:59 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* glib/ltmain.sh glib/ltconfig glib/config.sub glib/config.guess:
+	Updated to libtool 1.2a.
+
+	* gtk/gtkclist.c: Draw the in-between lines with style->base
+	instead of style->white.
+	
+Wed Apr 29 15:46:13 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkprivate.h gdk/gdkwindow.c gdk/gdkpixmap.c: 
+	Cache the colormap and children of a window locally
+	instead of fetching them from the server when needed.
+	Huge performance difference for creating/destroying
+	windows.
+
+	* gtk/gtkstyle.c: Find the depth from the cached
+	visual, instead of asking the server.
+
+	* gtk.m4: Distribute the new version which tries to
+	figure out what went wrong and give helpful error
+	messages.
+
+	* ltmain.sh ltconfig config.sub config.sh: 
+	Updated to libtool 1.2a
+
+	* gtk/gtktext.c: Fixed a bug where the drawn level
+	was being messed up when the text was scrolled
+	during a deletion.
+	
 Thu Apr 30 02:42:11 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/gtkfilesel.c: don't die when naughty people remove parts of
