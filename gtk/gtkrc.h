@@ -58,9 +58,6 @@ struct _GtkRcStyle
 
   GtkThemeEngine *engine;
   gpointer        engine_data;
-
-  /* Private */
-  guint ref_count;
 };
 
 void	  gtk_rc_init			(void);
