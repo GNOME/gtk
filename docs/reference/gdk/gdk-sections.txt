@@ -149,6 +149,7 @@ GDK_DISPLAY_GET_CLASS
 <SECTION>
 <FILE>gdkscreen</FILE>
 <TITLE>GdkScreen</TITLE>
+GdkScreen
 gdk_screen_get_default_colormap
 gdk_screen_set_default_colormap
 gdk_screen_get_system_colormap
@@ -564,7 +565,6 @@ GdkWindowEdge
 GdkWindowTypeHint
 GdkWindowAttr
 GdkWindowAttributesType
-GdkScreen
 gdk_window_new
 gdk_window_destroy
 gdk_window_ref

@@ -1,3 +1,15 @@
+2002-05-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdk-sections.txt: Move GdkScreen struct to the GdkScreen section.
+
+	* gdk/tmpl/gdkscreen.sgml: 
+	* gdk/tmpl/gdkdisplay.sgml: Typo and markup fixes.
+
+	* gdk/gdk-docs.sgml: Reorder display and screen sections.
+
+	* gdk/multihead.sgml: Remove references to GdkDisplayManager, typo
+	and markup fixes.
+
 Tue Apr 30 14:16:12 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk-sections.txt: Update for multihead.

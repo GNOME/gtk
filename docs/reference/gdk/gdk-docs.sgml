@@ -28,7 +28,6 @@
 <!entity gdk-X-Window-System-Interaction SYSTEM "sgml/x_interaction.sgml">
 <!entity gdk-Screen SYSTEM "sgml/gdkscreen.sgml">
 <!entity gdk-Display SYSTEM "sgml/gdkdisplay.sgml">
-
 <!entity gdk-Multihead SYSTEM "multihead.sgml">
 ]>
 
@@ -42,8 +41,8 @@
     &gdk-General;
 
     &gdk-Multihead;
-    &gdk-Screen;
     &gdk-Display;
+    &gdk-Screen;
 
     &gdk-Points-Rectangles-and-Regions;
     &gdk-Graphics-Contexts;

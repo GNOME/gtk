@@ -2,11 +2,11 @@
 GdkDisplay
 
 <!-- ##### SECTION Short_Description ##### -->
-controls the keyboard/mouse pointer grabs and a set of #GdkScreen
+controls the keyboard/mouse pointer grabs and a set of <type>GdkScreen</type>s
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-#GdkDisplay objects purpose are two fold :
+#GdkDisplay objects purpose are two fold:
 <itemizedlist>
 <listitem><para>To grab/ungrab keyboard focus and mouse pointer</para></listitem>
 <listitem><para>To manage and provide information about the #GdkScreen(s) 
@@ -15,11 +15,11 @@ controls the keyboard/mouse pointer grabs and a set of #GdkScreen
 </itemizedlist>
 </para>
 <para>
-  #GdkDisplay objects are the Gdk representation of the X Display which can be 
-  described as <emphasis>"a workstation consisting of a keyboard a pointing
-  device (such as a mouse) and one or more screens"</emphasis>. 
+  #GdkDisplay objects are the GDK representation of the X Display which can be 
+  described as <emphasis>a workstation consisting of a keyboard a pointing
+  device (such as a mouse) and one or more screens</emphasis>. 
   It is used to open and keep track of various #GdkScreen objects currently 
-  intanciated by the application. It is also used to grab and release the keyboard 
+  instanciated by the application. It is also used to grab and release the keyboard 
   and the mouse pointer.
 </para>
 

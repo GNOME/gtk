@@ -6,18 +6,30 @@ object representing a physical screen
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-  #GdkScreen objects are the Gdk representation of a physical screen. It is used 
-  throughout Gdk and Gtk+ to specify which screen the top level windows (GtkWindow)
+  #GdkScreen objects are the GDK representation of a physical screen. It is used 
+  throughout GDK and GTK+ to specify which screen the top level windows
   are to be displayed on. 
   It is also used to query the screen specification and default settings such as 
   the default colormap (gdk_screen_get_default_colormap()),
   the screen width (gdk_screen_get_width()), etc.
+</para>
+<para>Note that a screen may consist of multiple monitors which are merged to
+form a large screen area. 
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
+
+<!-- ##### STRUCT GdkScreen ##### -->
+<para>
+This is a currently just a placeholder typedef for the first argument of 
+the @window_at_pointer function in #GdkPointerHooks. It will be used
+when GDK gets multihead support. 
+</para>
+
+@parent_instance: 
 
 <!-- ##### FUNCTION gdk_screen_get_default_colormap ##### -->
 <para>
@@ -198,6 +210,8 @@ object representing a physical screen
 
 @screen: 
 @monitor_num: 
+@dest: 
+<!-- # Unused Parameters # -->
 @Returns: 
 
 
@@ -218,8 +232,10 @@ object representing a physical screen
 </para>
 
 @screen: 
-@anid: 
+@window: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@anid: 
 
 
 <!-- ##### FUNCTION gdk_screen_broadcast_client_message ##### -->
