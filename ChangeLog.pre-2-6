@@ -1,3 +1,11 @@
+Tue Aug  3 18:16:55 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Fix #149191, reported by Morten Welinder:
+	
+	* gtk/gtkmain.c: Include gtkclipboard.h,
+	* gtk/gtkwidget.h: Declare _gtk_widget_grab_notify, not
+	_gtk_widget_emit_grab_notify.  
+
 Tue Aug  3 14:50:14 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkicontheme.c (add_size): Add missing parens.
