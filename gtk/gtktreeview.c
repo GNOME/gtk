@@ -9093,10 +9093,10 @@ gtk_tree_view_map_expanded_rows_helper (GtkTreeView            *tree_view,
     {
       if (node->children)
 	{
+	  (* func) (tree_view, path, user_data);
 	  gtk_tree_path_down (path);
 	  gtk_tree_view_map_expanded_rows_helper (tree_view, node->children, path, func, user_data);
 	  gtk_tree_path_up (path);
-	  (* func) (tree_view, path, user_data);
 	}
       gtk_tree_path_next (path);
       node = _gtk_rbtree_next (tree, node);
