@@ -527,7 +527,6 @@ gtk_entry_finalize (GtkObject *object)
     g_free (entry->text_mb);
   entry->text_mb = NULL;
  
-   if (entry->backing_pixmap)
   if (entry->backing_pixmap)
     gdk_pixmap_unref (entry->backing_pixmap);
 
