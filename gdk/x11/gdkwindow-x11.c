@@ -1268,12 +1268,10 @@ gdk_wmspec_change_state (gboolean add,
 			 GdkAtom state2)
 {
   XEvent xev;
-  Atom op;
 
-  if (add)
-    op = gdk_atom_intern ("_NET_WM_STATE_ADD", FALSE);
-  else
-    op = gdk_atom_intern ("_NET_WM_STATE_REMOVE", FALSE);
+#define _NET_WM_STATE_REMOVE        0    /* remove/unset property */
+#define _NET_WM_STATE_ADD           1    /* add/set property */
+#define _NET_WM_STATE_TOGGLE        2    /* toggle property  */  
   
   xev.xclient.type = ClientMessage;
   xev.xclient.serial = 0;
@@ -1282,7 +1280,7 @@ gdk_wmspec_change_state (gboolean add,
   xev.xclient.window = GDK_WINDOW_XID (window);
   xev.xclient.message_type = gdk_atom_intern ("_NET_WM_STATE", FALSE);
   xev.xclient.format = 32;
-  xev.xclient.data.l[0] = op;
+  xev.xclient.data.l[0] = add ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE;
   xev.xclient.data.l[1] = state1;
   xev.xclient.data.l[2] = state2;
   

@@ -1,3 +1,8 @@
+2001-07-02  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_wmspec_change_state): fix to 
+	use constants not atoms.
+
 2001-07-02  James Henstridge  <james@daa.com.au>
 
 	* gtk/gtktextview.c (gtk_text_view_class_init): same here for
