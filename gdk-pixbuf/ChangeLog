@@ -1,3 +1,7 @@
+2002-02-08  Federico Mena Quintero  <federico@ximian.com>
+
+	* pixops/pixops.h: Fix comment; PixopsInterpType -> GdkInterpType.
+
 2002-02-08  Darin Adler  <darin@bentspoon.com>
 
 	* io-xbm.c: (next_int): Wean this from <ctype.h>.

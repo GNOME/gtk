@@ -5,7 +5,7 @@
 
 
 
-/* Interpolation modes; must match PixopsInterpType */ 
+/* Interpolation modes; must match GdkInterpType */ 
 typedef enum {
 	PIXOPS_INTERP_NEAREST,
 	PIXOPS_INTERP_TILES,
