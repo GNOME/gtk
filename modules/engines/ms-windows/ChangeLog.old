@@ -1,3 +1,7 @@
+2003-10-08  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.5.0 ===
+	
 2003-10-07  Raymond Penners  <raymond@dotsphinx.com>
 
 	* src/wimp_style.c: Tabs not located on top of the notebook are
