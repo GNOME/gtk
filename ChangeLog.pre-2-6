@@ -1,3 +1,8 @@
+Tue Jan  8 18:39:23 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreedatalist.c (gtk_tree_data_list_compare_func): wow!
+	Am I a moron or what 0 < 1 is not equivalent to strcmp ("a", "b")
+
 Tue Jan  8 18:04:01 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_set_icon_size):

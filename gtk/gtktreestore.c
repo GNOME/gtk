@@ -1794,6 +1794,7 @@ gtk_tree_store_sort_helper (GtkTreeStore *tree_store,
       i++;
     }
 
+  /* Sort the array */
   g_array_sort_with_data (sort_array, gtk_tree_store_compare_func, tree_store);
 
   for (i = 0; i < list_length - 1; i++)

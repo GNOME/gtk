@@ -280,32 +280,78 @@ gtk_tree_data_list_compare_func (GtkTreeModel *model,
   switch (G_TYPE_FUNDAMENTAL (type))
     {
     case G_TYPE_BOOLEAN:
-      retval = (g_value_get_int (&a_value) < g_value_get_int (&b_value));
+      if (g_value_get_int (&a_value) < g_value_get_int (&b_value))
+	retval = -1;
+      else if (g_value_get_int (&a_value) == g_value_get_int (&b_value))
+	retval = 0;
+      else
+	retval = 1;
       break;
     case G_TYPE_CHAR:
-      retval = (g_value_get_char (&a_value) < g_value_get_char (&b_value));
+      if (g_value_get_char (&a_value) < g_value_get_char (&b_value))
+	retval = -1;
+      else if (g_value_get_char (&a_value) == g_value_get_char (&b_value))
+	retval = 0;
+      else
+	retval = 1;
       break;
     case G_TYPE_UCHAR:
-      retval = (g_value_get_uchar (&a_value) < g_value_get_uchar (&b_value));
+      if (g_value_get_uchar (&a_value) < g_value_get_uchar (&b_value))
+	retval = -1;
+      else if (g_value_get_uchar (&a_value) == g_value_get_uchar (&b_value))
+	retval = 0;
+      else
+	retval = 1;
       break;
     case G_TYPE_INT:
-      retval = (g_value_get_int (&a_value) < g_value_get_int (&b_value));
+      if (g_value_get_int (&a_value) < g_value_get_int (&b_value))
+	retval = -1;
+      else if (g_value_get_int (&a_value) == g_value_get_int (&b_value))
+	retval = 0;
+      else
+	retval = 1;
       break;
     case G_TYPE_UINT:
-      retval = (g_value_get_uint (&a_value) < g_value_get_uint (&b_value));
+      if (g_value_get_uint (&a_value) < g_value_get_uint (&b_value))
+	retval = -1;
+      else if (g_value_get_uint (&a_value) == g_value_get_uint (&b_value))
+	retval = 0;
+      else
+	retval = 1;
       break;
     case G_TYPE_ENUM:
       /* this is somewhat bogus. */
-      retval = (g_value_get_int (&a_value) < g_value_get_int (&b_value));
+      if (g_value_get_int (&a_value) < g_value_get_int (&b_value))
+	retval = -1;
+      else if (g_value_get_int (&a_value) == g_value_get_int (&b_value))
+	retval = 0;
+      else
+	retval = 1;
       break;
     case G_TYPE_FLAGS:
-      retval = (g_value_get_uint (&a_value) < g_value_get_uint (&b_value));
+      /* this is even more bogus. */
+      if (g_value_get_uint (&a_value) < g_value_get_uint (&b_value))
+	retval = -1;
+      else if (g_value_get_uint (&a_value) == g_value_get_uint (&b_value))
+	retval = 0;
+      else
+	retval = 1;
       break;
     case G_TYPE_FLOAT:
-      retval = (g_value_get_float (&a_value) < g_value_get_float (&b_value));
+      if (g_value_get_float (&a_value) < g_value_get_float (&b_value))
+	retval = -1;
+      else if (g_value_get_float (&a_value) == g_value_get_float (&b_value))
+	retval = 0;
+      else
+	retval = 1;
       break;
     case G_TYPE_DOUBLE:
-      retval = (g_value_get_double (&a_value) < g_value_get_double (&b_value));
+      if (g_value_get_double (&a_value) < g_value_get_double (&b_value))
+	retval = -1;
+      else if (g_value_get_double (&a_value) == g_value_get_double (&b_value))
+	retval = 0;
+      else
+	retval = 1;
       break;
     case G_TYPE_STRING:
       stra = g_value_get_string (&a_value);
