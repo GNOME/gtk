@@ -4088,7 +4088,7 @@ gtk_entry_drag_data_get (GtkWidget        *widget,
   
   if (gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end))
     {
-      gchar *str = gtk_editable_get_chars (editable, sel_start, sel_end);
+      gchar *str = gtk_entry_get_public_chars (GTK_ENTRY (widget), sel_start, sel_end);
 
       gtk_selection_data_set_text (selection_data, str, -1);
       
