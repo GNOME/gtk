@@ -367,9 +367,6 @@ g_slist_insert_sorted (GSList    *list,
       cmp = (*func) (data, tmp_list->data);
     }
 
-  if (cmp == 0)
-    return list;
- 
   new_list = g_slist_alloc();
   new_list->data = data;
 
