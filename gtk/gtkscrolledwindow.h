@@ -53,6 +53,8 @@ struct _GtkScrolledWindow
 struct _GtkScrolledWindowClass
 {
   GtkContainerClass parent_class;
+
+  gint scrollbar_spacing;
 };
 
 

@@ -1,5 +1,11 @@
 Tue Dec 23 03:03:17 1997  Tim Janik  <timj@psynet.net>
 
+	* gtk/gtkscrolledwindow.c (SCROLLBAR_SPACING): this macro computes
+	the spacing from klass->scrollbar_spacing now. adapted all functions
+	that used this macro (based on a patch from Patrice Fortier).
+	* gtk/gtkscrolledwindow.h (struct _GtkScrolledWindowClass): added
+	scrollbar_spacing to substitute a define (patch from Patrice Fortier).
+
 	* gtk/gtkrc.h (gtk_rc_parse_string): new function.
 	* gtk/gtkrc.c: many functions adapted to use GScanner for scanning.
  	(gtk_rc_parse): use gtk_rc_parse_any for parsing.

@@ -19,7 +19,7 @@
 #include "gtksignal.h"
 
 
-#define SCROLLBAR_SPACING  5
+#define SCROLLBAR_SPACING(w) (GTK_SCROLLED_WINDOW_CLASS (GTK_OBJECT (w)->klass)->scrollbar_spacing)
 
 
 static void gtk_scrolled_window_class_init         (GtkScrolledWindowClass *klass);
@@ -310,7 +310,7 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
 			       &scrolled_window->hscrollbar->requisition);
 
       requisition->width = MAX (requisition->width, scrolled_window->hscrollbar->requisition.width);
-      extra_height = SCROLLBAR_SPACING + scrolled_window->hscrollbar->requisition.height;
+      extra_height = SCROLLBAR_SPACING (scrolled_window) + scrolled_window->hscrollbar->requisition.height;
     }
 
   if ((scrolled_window->vscrollbar_policy == GTK_POLICY_AUTOMATIC) ||
@@ -320,7 +320,7 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
 			       &scrolled_window->vscrollbar->requisition);
 
       requisition->height = MAX (requisition->height, scrolled_window->vscrollbar->requisition.height);
-      extra_width = SCROLLBAR_SPACING + scrolled_window->vscrollbar->requisition.width;
+      extra_width = SCROLLBAR_SPACING (scrolled_window) + scrolled_window->vscrollbar->requisition.width;
     }
 
   requisition->width += GTK_CONTAINER (widget)->border_width * 2 + extra_width;
@@ -369,7 +369,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   if (GTK_WIDGET_VISIBLE (scrolled_window->hscrollbar))
     {
       child_allocation.x = viewport_allocation.x;
-      child_allocation.y = viewport_allocation.y + viewport_allocation.height + SCROLLBAR_SPACING;
+      child_allocation.y = viewport_allocation.y + viewport_allocation.height + SCROLLBAR_SPACING (scrolled_window);
       child_allocation.width = viewport_allocation.width;
       child_allocation.height = scrolled_window->hscrollbar->requisition.height;
       child_allocation.x += allocation->x;
@@ -380,7 +380,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 
   if (GTK_WIDGET_VISIBLE (scrolled_window->vscrollbar))
     {
-      child_allocation.x = viewport_allocation.x + viewport_allocation.width + SCROLLBAR_SPACING;
+      child_allocation.x = viewport_allocation.x + viewport_allocation.width + SCROLLBAR_SPACING (scrolled_window);
       child_allocation.y = viewport_allocation.y;
       child_allocation.width = scrolled_window->vscrollbar->requisition.width;
       child_allocation.height = viewport_allocation.height;
@@ -454,9 +454,9 @@ gtk_scrolled_window_viewport_allocate (GtkWidget     *widget,
   allocation->height = widget->allocation.height - allocation->y * 2;
 
   if (GTK_WIDGET_VISIBLE (scrolled_window->vscrollbar))
-    allocation->width -= scrolled_window->vscrollbar->requisition.width + SCROLLBAR_SPACING;
+    allocation->width -= scrolled_window->vscrollbar->requisition.width + SCROLLBAR_SPACING (scrolled_window);
   if (GTK_WIDGET_VISIBLE (scrolled_window->hscrollbar))
-    allocation->height -= scrolled_window->hscrollbar->requisition.height + SCROLLBAR_SPACING;
+    allocation->height -= scrolled_window->hscrollbar->requisition.height + SCROLLBAR_SPACING (scrolled_window);
 }
 
 static void
