@@ -1,5 +1,10 @@
 2001-06-04  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtkclist.c (vadjustment_value_changed): Apply fix from
+	Sam Solon, bug #54577, update value even if not drawable.
+
+2001-06-04  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkrange.c (gtk_range_scroll_event): change SCROLL_RIGHT to
 	SCROLL_LEFT, reported by Thomas Broyer.
 

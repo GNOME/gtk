@@ -6124,14 +6124,18 @@ vadjustment_value_changed (GtkAdjustment *adjustment,
 
   clist = GTK_CLIST (data);
 
-  if (!GTK_WIDGET_DRAWABLE (clist) || adjustment != clist->vadjustment)
+  if (adjustment != clist->vadjustment)
     return;
 
   value = -adjustment->value;
   dy = value - clist->voffset;
   clist->voffset = value;
-  gdk_window_scroll (clist->clist_window, 0, dy);
-  gdk_window_process_updates (clist->clist_window, FALSE);
+
+  if (GTK_WIDGET_DRAWABLE (clist))
+    {
+      gdk_window_scroll (clist->clist_window, 0, dy);
+      gdk_window_process_updates (clist->clist_window, FALSE);
+    }
   
   return;
 }
@@ -6155,90 +6159,96 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
   clist = GTK_CLIST (data);
   container = GTK_CONTAINER (data);
 
-  if (!GTK_WIDGET_DRAWABLE (clist) || adjustment != clist->hadjustment)
+  if (adjustment != clist->hadjustment)
     return;
 
   value = adjustment->value;
 
   dx = -value - clist->hoffset;
-  
-  /* move the column buttons and resize windows */
-  for (i = (dx<0)? 0 : clist->columns-1; i >= 0 && i < clist->columns; i += (dx<0)? 1 : -1)
-    {
-      if (clist->column[i].button)
-	{
-	  clist->column[i].button->allocation.x -= value + clist->hoffset;
-	  
-	  if (clist->column[i].button->window)
-	    {
-	      gdk_window_move (clist->column[i].button->window,
-			       clist->column[i].button->allocation.x,
-			       clist->column[i].button->allocation.y);
-	      
-	      if (clist->column[i].window)
-		gdk_window_move (clist->column[i].window,
-				 clist->column[i].button->allocation.x +
-				 clist->column[i].button->allocation.width - 
-				 (DRAG_WIDTH / 2), 0); 
-	    }
-	}
-    }
 
+  if (GTK_WIDGET_REALIZED (clist))
+    {
+      /* move the column buttons and resize windows */
+      for (i = (dx<0)? 0 : clist->columns-1; i >= 0 && i < clist->columns; i += (dx<0)? 1 : -1)
+        {
+          if (clist->column[i].button)
+            {
+              clist->column[i].button->allocation.x -= value + clist->hoffset;
+              
+              if (clist->column[i].button->window)
+                {
+                  gdk_window_move (clist->column[i].button->window,
+                                   clist->column[i].button->allocation.x,
+                                   clist->column[i].button->allocation.y);
+                  
+                  if (clist->column[i].window)
+                    gdk_window_move (clist->column[i].window,
+                                     clist->column[i].button->allocation.x +
+                                     clist->column[i].button->allocation.width - 
+                                     (DRAG_WIDTH / 2), 0); 
+                }
+            }
+        }
+    }
 
   clist->hoffset = -value;
 
-  if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
-      !container->focus_child && GTK_CLIST_ADD_MODE(clist))
+
+  if (GTK_WIDGET_DRAWABLE (clist))
     {
-      y = ROW_TOP_YPIXEL (clist, clist->focus_row);
+      if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
+          !container->focus_child && GTK_CLIST_ADD_MODE(clist))
+        {
+          y = ROW_TOP_YPIXEL (clist, clist->focus_row);
       
-      gdk_draw_rectangle (clist->clist_window, clist->xor_gc, FALSE, 0, y,
-			  clist->clist_window_width - 1,
-			  clist->row_height - 1);
-    }
+          gdk_draw_rectangle (clist->clist_window, clist->xor_gc, FALSE, 0, y,
+                              clist->clist_window_width - 1,
+                              clist->row_height - 1);
+        }
  
-  gdk_window_scroll (clist->clist_window, dx, 0);
-  gdk_window_process_updates (clist->clist_window, FALSE);
+      gdk_window_scroll (clist->clist_window, dx, 0);
+      gdk_window_process_updates (clist->clist_window, FALSE);
 
-  if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
-      !container->focus_child)
-    {
-      if (GTK_CLIST_ADD_MODE(clist))
-	{
-	  gint focus_row;
+      if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
+          !container->focus_child)
+        {
+          if (GTK_CLIST_ADD_MODE(clist))
+            {
+              gint focus_row;
 	  
-	  focus_row = clist->focus_row;
-	  clist->focus_row = -1;
-	  draw_rows (clist, &area);
-	  clist->focus_row = focus_row;
+              focus_row = clist->focus_row;
+              clist->focus_row = -1;
+              draw_rows (clist, &area);
+              clist->focus_row = focus_row;
 	  
-	  gdk_draw_rectangle (clist->clist_window, clist->xor_gc,
-			      FALSE, 0, y, clist->clist_window_width - 1,
-			      clist->row_height - 1);
-	  return;
-	}
-      else if (ABS(dx) < clist->clist_window_width - 1)
-	{
-	  gint x0;
-	  gint x1;
+              gdk_draw_rectangle (clist->clist_window, clist->xor_gc,
+                                  FALSE, 0, y, clist->clist_window_width - 1,
+                                  clist->row_height - 1);
+              return;
+            }
+          else if (ABS(dx) < clist->clist_window_width - 1)
+            {
+              gint x0;
+              gint x1;
 	  
-	  if (dx > 0)
-	    {
-	      x0 = clist->clist_window_width - 1;
-	      x1 = dx;
-	    }
-	  else
-	    {
-	      x0 = 0;
-	      x1 = clist->clist_window_width - 1 + dx;
-	    }
+              if (dx > 0)
+                {
+                  x0 = clist->clist_window_width - 1;
+                  x1 = dx;
+                }
+              else
+                {
+                  x0 = 0;
+                  x1 = clist->clist_window_width - 1 + dx;
+                }
 
-	  y = ROW_TOP_YPIXEL (clist, clist->focus_row);
-	  gdk_draw_line (clist->clist_window, clist->xor_gc,
-			 x0, y + 1, x0, y + clist->row_height - 2);
-	  gdk_draw_line (clist->clist_window, clist->xor_gc,
-			 x1, y + 1, x1, y + clist->row_height - 2);
-	}
+              y = ROW_TOP_YPIXEL (clist, clist->focus_row);
+              gdk_draw_line (clist->clist_window, clist->xor_gc,
+                             x0, y + 1, x0, y + clist->row_height - 2);
+              gdk_draw_line (clist->clist_window, clist->xor_gc,
+                             x1, y + 1, x1, y + clist->row_height - 2);
+            }
+        }
     }
 }
 
