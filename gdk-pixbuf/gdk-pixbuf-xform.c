@@ -71,10 +71,10 @@ gdk_pixbuf_rotate (GdkPixbuf *pixbuf, gdouble angle)
 	trans[5] = (double)h / 2.0;
 
 	art_affine_multiply(affine, rot, trans);
-
+/*
 	g_print("Affine: %e %e %e %e %e %e\n", affine[0], affine[1], affine[2],
 		affine[3], affine[4], affine[5]);
-
+*/
 	/* rowstride = w * pixbuf->art_pixbuf->n_channels; */
 	rowstride = w * 3;
 

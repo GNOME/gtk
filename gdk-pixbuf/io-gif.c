@@ -821,10 +821,11 @@ gif_get_lzw (GifContext *context)
 	}
 
 	if (context->animation && context->state == GIF_GET_NEXT_STEP) {
-		(* context->frame_done_func) (context->frame,
-					      context->user_data);
-
-		gdk_pixbuf_unref (context->pixbuf);
+		if (context->frame_done_func)
+			(* context->frame_done_func) (context->frame,
+						      context->user_data);
+		if (context->frame_done_func)
+			gdk_pixbuf_unref (context->pixbuf);
 		context->pixbuf = NULL;
 		context->frame = NULL;
 	}
