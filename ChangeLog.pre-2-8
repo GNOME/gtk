@@ -1,6 +1,7 @@
 2004-10-04  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtkwindow.c (gtk_window_set_icon_list): Ref the new icons
+	* gtk/gtkwindow.c (gtk_window_set_icon_list): 
+	(gtk_window_set_default_icon_list): Ref the new icons
 	before unreffing the old ones.  (#154468, Morten Welinder)
 
 2004-10-03  Matthias Clasen  <mclasen@redhat.com>

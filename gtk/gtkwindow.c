@@ -3125,14 +3125,15 @@ gtk_window_set_default_icon_list (GList *list)
    */
   default_icon_serial++;
   
+  g_list_foreach (list,
+                  (GFunc) g_object_ref, NULL);
+
   g_list_foreach (default_icon_list,
                   (GFunc) g_object_unref, NULL);
 
   g_list_free (default_icon_list);
 
   default_icon_list = g_list_copy (list);
-  g_list_foreach (default_icon_list,
-                  (GFunc) g_object_ref, NULL);
   
   /* Update all toplevels */
   toplevels = gtk_window_list_toplevels ();
