@@ -351,6 +351,12 @@ static void     gtk_tree_view_search_dialog_destroy     (GtkWidget        *searc
 							 GtkTreeView      *tree_view);
 static void     gtk_tree_view_search_position_func      (GtkTreeView      *tree_view,
 							 GtkWidget        *search_dialog);
+static void     gtk_tree_view_search_disable_popdown    (GtkEntry         *entry,
+							 GtkMenu          *menu,
+							 gpointer          data);
+static gboolean gtk_tree_view_real_search_enable_popdown(gpointer          data);
+static void     gtk_tree_view_search_enable_popdown     (GtkWidget        *widget,
+							 gpointer          data);
 static gboolean gtk_tree_view_search_delete_event       (GtkWidget        *widget,
 							 GdkEventAny      *event,
 							 GtkTreeView      *tree_view);
@@ -531,7 +537,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                    g_param_spec_boolean ("headers_visible",
 							 _("Visible"),
 							 _("Show the column header buttons"),
-							 FALSE,
+							 TRUE,
 							 G_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
@@ -983,6 +989,7 @@ gtk_tree_view_set_property (GObject         *object,
       break;
     case PROP_RULES_HINT:
       gtk_tree_view_set_rules_hint (tree_view, g_value_get_boolean (value));
+      break;
     case PROP_ENABLE_SEARCH:
       gtk_tree_view_set_enable_search (tree_view, g_value_get_boolean (value));
       break;
@@ -1101,6 +1108,18 @@ gtk_tree_view_destroy (GtkObject *object)
     {
       gtk_tree_row_reference_free (tree_view->priv->drag_dest_row);
       tree_view->priv->drag_dest_row = NULL;
+    }
+
+  if (tree_view->priv->last_single_clicked != NULL)
+    {
+      gtk_tree_row_reference_free (tree_view->priv->last_single_clicked);
+      tree_view->priv->last_single_clicked = NULL;
+    }
+
+  if (tree_view->priv->last_single_clicked_2 != NULL)
+    {
+      gtk_tree_row_reference_free (tree_view->priv->last_single_clicked_2);
+      tree_view->priv->last_single_clicked_2 = NULL;
     }
 
   if (tree_view->priv->top_row != NULL)
@@ -1865,20 +1884,46 @@ gtk_tree_view_button_press (GtkWidget      *widget,
           tree_view->priv->press_start_y = event->y;
         }
 
-      if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
+      if (event->button == 1 && event->type == GDK_2BUTTON_PRESS &&
+	  tree_view->priv->last_single_clicked)
 	{
-	  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT))
+	  GtkTreePath *lsc = gtk_tree_row_reference_get_path (tree_view->priv->last_single_clicked);
+
+	  if (lsc)
 	    {
-	      if (node->children == NULL)
-		gtk_tree_view_real_expand_row (tree_view, path,
-					       tree, node, FALSE, TRUE);
-	      else
-		gtk_tree_view_real_collapse_row (GTK_TREE_VIEW (widget), path,
-						 tree, node, TRUE);
+	      if (!gtk_tree_path_compare (lsc, path))
+	        {
+		  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT))
+		    {
+		      if (node->children == NULL)
+			gtk_tree_view_real_expand_row (tree_view, path,
+						       tree, node, FALSE,
+						       TRUE);
+		      else
+			gtk_tree_view_real_collapse_row (tree_view, path,
+							 tree, node, TRUE);
+		    }
+
+		  gtk_tree_view_row_activated (tree_view, path, column);
+		}
+	      gtk_tree_path_free (lsc);
 	    }
 
-	  gtk_tree_view_row_activated (tree_view, path, column);
+	  if (tree_view->priv->last_single_clicked)
+	    gtk_tree_row_reference_free (tree_view->priv->last_single_clicked);
+	  if (tree_view->priv->last_single_clicked_2)
+	    gtk_tree_row_reference_free (tree_view->priv->last_single_clicked_2);
+	  tree_view->priv->last_single_clicked = NULL;
+	  tree_view->priv->last_single_clicked_2 = NULL;
 	}
+      else if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
+        {
+	  if (tree_view->priv->last_single_clicked)
+	    gtk_tree_row_reference_free (tree_view->priv->last_single_clicked);
+	  tree_view->priv->last_single_clicked = tree_view->priv->last_single_clicked_2;
+	  tree_view->priv->last_single_clicked_2 = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, path);
+	}
+
       GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
       gtk_tree_path_free (path);
       return TRUE;
@@ -7025,6 +7070,9 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view)
   gtk_widget_show (entry);
   g_signal_connect (G_OBJECT (entry), "changed",
 		    G_CALLBACK (gtk_tree_view_search_init), tree_view);
+  g_signal_connect (G_OBJECT (entry), "populate_popup",
+		    G_CALLBACK (gtk_tree_view_search_disable_popdown),
+		    tree_view);
   gtk_container_add (GTK_CONTAINER (window), entry);
 
   /* done, show it */
@@ -8734,8 +8782,6 @@ gtk_tree_view_set_reorderable (GtkTreeView *tree_view,
   if (tree_view->priv->reorderable == reorderable)
     return;
 
-  tree_view->priv->reorderable = reorderable;
-
   if (reorderable)
     {
       gtk_tree_view_enable_model_drag_source (tree_view,
@@ -8753,6 +8799,8 @@ gtk_tree_view_set_reorderable (GtkTreeView *tree_view,
       gtk_tree_view_unset_rows_drag_source (tree_view);
       gtk_tree_view_unset_rows_drag_dest (tree_view);
     }
+
+  tree_view->priv->reorderable = reorderable;
 
   g_object_notify (G_OBJECT (tree_view), "reorderable");
 }
@@ -9764,6 +9812,9 @@ gtk_tree_view_search_dialog_destroy (GtkWidget   *search_dialog,
   GtkEntry *entry = (GtkEntry *)(gtk_container_get_children (GTK_CONTAINER (search_dialog)))->data;
   gint *selected_iter;
 
+  if (tree_view->priv->disable_popdown)
+    return;
+
   if (entry)
     {
       GdkEventFocus focus_event;
@@ -9820,6 +9871,39 @@ gtk_tree_view_search_position_func (GtkTreeView *tree_view,
     y = tree_y + tree_height;
 
   gtk_window_move (GTK_WINDOW (search_dialog), x, y);
+}
+
+static void
+gtk_tree_view_search_disable_popdown (GtkEntry *entry,
+				      GtkMenu  *menu,
+				      gpointer  data)
+{
+  GtkTreeView *tree_view = (GtkTreeView *)data;
+
+  tree_view->priv->disable_popdown = 1;
+  g_signal_connect (G_OBJECT (menu), "hide",
+		    G_CALLBACK (gtk_tree_view_search_enable_popdown), data);
+}
+
+static gboolean
+gtk_tree_view_real_search_enable_popdown (gpointer data)
+{
+  GtkTreeView *tree_view = (GtkTreeView *)data;
+
+  GDK_THREADS_ENTER ();
+
+  tree_view->priv->disable_popdown = 0;
+
+  GDK_THREADS_LEAVE ();
+
+  return FALSE;
+}
+
+static void
+gtk_tree_view_search_enable_popdown (GtkWidget *widget,
+				     gpointer   data)
+{
+  g_timeout_add (200, gtk_tree_view_real_search_enable_popdown, data);
 }
 
 static gboolean

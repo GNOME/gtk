@@ -1,3 +1,31 @@
+Fri Feb 22 22:39:59 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeprivate.h: add last_single_clicked and
+	last_single_clicked_2 rowrefs and add disable_popdown to the
+	bitfield
+
+	* gtk/gtktreeview.c (gtk_tree_view_destroy): add destroy stuff
+	for two new rowrefs
+	(gtk_tree_view_button_press): add some 'advanced' button handling,	
+	so double click is being handled right (double click madness was
+	discovered by Anders Carlsson)
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_property): add missing
+	break
+	(gtk_tree_view_class_init): default value of headers_visible
+	should be TRUE (both pointed out by Damon Chaplin, #71986)
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_start_interactive_search):
+	connect to populate_popup,
+	(gtk_tree_view_search_disable_popdown): new function,
+	(gtk_tree_view_real_search_enable_popdown): ditto,
+	(gtk_tree_view_search_enable_popdown): ditto,
+	(gtk_tree_view_search_dialog_destroy): check for
+	gtk-tree-view-popdown-disabled (#71868)
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_reorderable): move
+	->priv->reorderable assignment to bottom. (#72122)
+
 2002-02-22  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkstyle.c (_gtk_draw_insertion_cursor): subtract 1 from

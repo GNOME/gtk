@@ -101,6 +101,9 @@ struct _GtkTreeViewPrivate
   GdkWindow *drag_highlight_window;
   GtkTreeViewColumn *drag_column;
 
+  GtkTreeRowReference *last_single_clicked;
+  GtkTreeRowReference *last_single_clicked_2;
+
   /* bin_window offset */
   GtkTreeRowReference *top_row;
   gint top_row_dy;
@@ -181,6 +184,7 @@ struct _GtkTreeViewPrivate
   
   /* interactive search */
   guint enable_search : 1;
+  guint disable_popdown : 1;
   gint search_column;
   GtkTreeViewSearchDialogPositionFunc search_dialog_position_func;
   GtkTreeViewSearchEqualFunc search_equal_func;
