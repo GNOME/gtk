@@ -1,3 +1,4 @@
+# translation of mn.po to Mongolian
 # translation of gtk+.HEAD.po to Mongolian
 # translation of gtk+.mn.po to Mongolian
 # This file is distributed under the same license as the PACKAGE package.
@@ -8,16 +9,17 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.HEAD\n"
+"Project-Id-Version: mn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-09 01:20+0100\n"
+"PO-Revision-Date: 2004-01-31 23:17+0100\n"
 "Last-Translator: Sanlig Badral <Badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: KBabel 1.0.2\n"
 
 # gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:736
@@ -35,8 +37,7 @@ msgstr "\"%s\" зургийн файл өгөгдөл агуулаагүй"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:780
 #: gdk-pixbuf/gdk-pixbuf-io.c:906 tests/testfilechooser.c:237
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "\"%s\" зураг ачаалагдсангүй: Шалтгаан нь тодорхойгүй, магадгүй зураг "
 "эвдэрхий бололтой"
@@ -105,9 +106,8 @@ msgstr ""
 
 # gdk-pixbuf/io-xbm.c:293
 #: gdk-pixbuf/gdk-pixbuf-io.c:1168
-#, fuzzy
 msgid "Insufficient memory to save image to callback"
-msgstr "XBM зургийн файлыг ачаалахад санах ой хүрэлцэхгүй байна"
+msgstr "callback руу зураг хадгалах хангалттай санах ой алга"
 
 # gdk-pixbuf/io-tiff.c:273
 #: gdk-pixbuf/gdk-pixbuf-io.c:1180
@@ -137,9 +137,8 @@ msgstr ""
 
 # gdk-pixbuf/io-xbm.c:293
 #: gdk-pixbuf/gdk-pixbuf-io.c:1586 gdk-pixbuf/gdk-pixbuf-io.c:1636
-#, fuzzy
 msgid "Insufficient memory to save image into a buffer"
-msgstr "XBM зургийн файлыг ачаалахад санах ой хүрэлцэхгүй байна"
+msgstr "Буфер рүү зураг хадгалах хангалттай санах ой алга"
 
 # gdk-pixbuf/gdk-pixbuf-loader.c:250
 #: gdk-pixbuf/gdk-pixbuf-loader.c:377
@@ -173,7 +172,7 @@ msgstr "Зургийн цэгэн өгөгдөл эвдэрсэн"
 
 # gdk-pixbuf/gdk-pixdata.c:403
 #: gdk-pixbuf/gdk-pixdata.c:402
-#, fuzzy, c-format
+#, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "Зургийн %u байтын буфер байрлуулж чадсангүй"
@@ -237,8 +236,7 @@ msgstr "GIF төрлийн файл уншигдахгүй байна: %s"
 # gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
 #: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1442 gdk-pixbuf/io-gif.c:1603
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"GIF төрлийн файлын зарим өгөгдөл алдагдсан байна (магадгүй тасарсан байх?)"
+msgstr "GIF төрлийн файлын зарим өгөгдөл алдагдсан байна (магадгүй тасарсан байх?)"
 
 # gdk-pixbuf/io-gif.c:469
 #: gdk-pixbuf/io-gif.c:501
@@ -402,8 +400,7 @@ msgstr ""
 # gdk-pixbuf/io-jpeg.c:679
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG төрөл нь 0 ба 100 -ийн хоорондох утгыг авбал сайн; \"%d\" утга бол "
 "зөвшөөрөгдөөгүй."
@@ -522,24 +519,19 @@ msgstr "PNG зургийн файлыг уншихад ноцтой алдаа %
 
 # gdk-pixbuf/io-png.c:800
 #: gdk-pixbuf/io-png.c:813
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"PNG хэсэг текстийн түлхүүр нь 1 ба 79 хүртэл тэмдэгтүүдээр байвал зүгээр."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr "PNG хэсэг текстийн түлхүүр нь 1 ба 79 хүртэл тэмдэгтүүдээр байвал зүгээр."
 
 # gdk-pixbuf/io-png.c:808
 #: gdk-pixbuf/io-png.c:821
 msgid "Keys for PNG text chunks must be ASCII characters."
-msgstr ""
-"PNG хэсэг текстэд түлхүүр нь ASCII тэмдэгтүүд байвал зүгээр набора ASCII."
+msgstr "PNG хэсэг текстэд түлхүүр нь ASCII тэмдэгтүүд байвал зүгээр набора ASCII."
 
 # gdk-pixbuf/io-png.c:829
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid ""
-"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
-msgstr ""
-"PNG хэсэг текстэд утга нь %s -г ISO-8859-1 хувиргагч руу хөрвүүлж чадсангүй."
+msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgstr "PNG хэсэг текстэд утга нь %s -г ISO-8859-1 хувиргагч руу хөрвүүлж чадсангүй."
 
 # gdk-pixbuf/io-pnm.c:560 gdk-pixbuf/io-pnm.c:602
 #: gdk-pixbuf/io-png.c:994
@@ -608,8 +600,7 @@ msgstr "Файлын төгсгөл хэт эрт олдлоо"
 
 #: gdk-pixbuf/io-pnm.c:743 gdk-pixbuf/io-pnm.c:974
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"Боловсроогүй PNM төрөл яг нэг цагаан зай жишээ өгөгдлийн өмнөө шаарддаг"
+msgstr "Боловсроогүй PNM төрөл яг нэг цагаан зай жишээ өгөгдлийн өмнөө шаарддаг"
 
 # gdk-pixbuf/io-pnm.c:775
 #: gdk-pixbuf/io-pnm.c:770
@@ -1139,12 +1130,12 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:925
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not create folder %s:\n"
 "%s"
 msgstr ""
-"%s-н эцэг лавлах руу очих боломжгүй:\n"
+"%s хавтас үүсгэж чадсангүй:\n"
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:1001
@@ -1183,7 +1174,7 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1330
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
-msgstr ""
+msgstr "%s-н хувьд хавчуурга нэмэгдэх боломжгүй.Учир нь зам хүчингүй байна"
 
 # gtk/gtkfilesel.c:707
 #: gtk/gtkfilechooserdefault.c:1403
@@ -1225,7 +1216,7 @@ msgstr "%s богино тушаал алга"
 
 #: gtk/gtkfilechooserdefault.c:3063
 msgid "Type name of new folder"
-msgstr ""
+msgstr "Шинэ хавтасын нэрийг бич"
 
 #: gtk/gtkfilechooserdefault.c:3090
 #, c-format
@@ -1321,10 +1312,8 @@ msgstr "Файл шинээр нэрлэх"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"\"%s\" хавтас үүсгэхэд оролцсон тэмдэгтүүд нь файл нэрлэхэд зөвшөөрөгдөөгүй"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr "\"%s\" хавтас үүсгэхэд оролцсон тэмдэгтүүд нь файл нэрлэхэд зөвшөөрөгдөөгүй"
 
 # gtk/gtkfilesel.c:1360
 #: gtk/gtkfilesel.c:1441
@@ -1364,8 +1353,7 @@ msgstr "Үү_сгэх"
 #: gtk/gtkfilesel.c:1566
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Файлын \"%s\" нэрэнд файлыг нэрлэхэд зөвшөөрөгдөөгүй тэмдэгт орсон байна"
+msgstr "Файлын \"%s\" нэрэнд файлыг нэрлэхэд зөвшөөрөгдөөгүй тэмдэгт орсон байна"
 
 # gtk/gtkfilesel.c:1488
 #: gtk/gtkfilesel.c:1569
@@ -1403,8 +1391,7 @@ msgstr "Файл устгах"
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Файлын \"%s\" нэрэнд файлыг нэрлэхэд зөвшөөрөгдөөгүй тэмдэгт орсон байна"
+msgstr "Файлын \"%s\" нэрэнд файлыг нэрлэхэд зөвшөөрөгдөөгүй тэмдэгт орсон байна"
 
 # gtk/gtkfilesel.c:1595
 #: gtk/gtkfilesel.c:1676
@@ -1593,6 +1580,10 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
+"'%s' эмбелемийг олсонгүй. '%s' хэлбэр\n"
+"олдоогүй. Магад та үүгнийг суулгах хэрэгтэй.\n"
+"Та дараахаас хуулж авч болно:\n"
+"\t%s"
 
 #: gtk/gtkicontheme.c:1247
 #, c-format
@@ -1899,16 +1890,16 @@ msgstr "_Гэрт"
 
 #: gtk/gtkstock.c:301
 msgid "Increase Indent"
-msgstr ""
+msgstr "Шүд нэмэх"
 
 #: gtk/gtkstock.c:302
 msgid "Decrease Indent"
-msgstr ""
+msgstr "Шүд хасах"
 
 # gtk/gtkstock.c:300
 #: gtk/gtkstock.c:303
 msgid "_Index"
-msgstr "_Индекс"
+msgstr "_Товчоон"
 
 # gtk/gtkstock.c:301
 #: gtk/gtkstock.c:304
@@ -2220,3 +2211,4 @@ msgstr "Х оролтын тогтолцоо"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "\"%s\" файлын мэдээлэл авагдахгүй байна: %s"
+
