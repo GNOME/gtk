@@ -1,5 +1,9 @@
 2005-01-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaboutdialog.c (gtk_about_dialog_init): Use R as mnemonic
+	for the Credits button to avoid duplicate.  (#163465, Tim-Philipp 
+	Müller)
+	
 	* configure.in: Add an OS_LINUX conditional.
 
 	* gdk/Makefile.am (TESTS):

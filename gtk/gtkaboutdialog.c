@@ -479,7 +479,7 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_dialog_set_default_response (GTK_DIALOG (about), GTK_RESPONSE_CLOSE);
 
   /* Add the credits button */
-  button = gtk_button_new_from_stock (_("_Credits"));
+  button = gtk_button_new_from_stock (_("C_redits"));
   gtk_box_pack_end (GTK_BOX (GTK_DIALOG (about)->action_area), 
 		    button, FALSE, TRUE, 0); 
   gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (GTK_DIALOG (about)->action_area), button, TRUE);
