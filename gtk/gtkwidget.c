@@ -5009,13 +5009,12 @@ gtk_widget_create_pango_context (GtkWidget *widget)
     {
       GTK_NOTE (MULTIHEAD,
 		g_warning ("gtk_widget_create_pango_context ()) called without screen"));
-      
+
       screen = gdk_screen_get_default ();
     }
 
   context = gdk_pango_context_get_for_screen (screen);
 
-  gdk_pango_context_set_colormap (context, gtk_widget_get_colormap (widget));
   pango_context_set_base_dir (context,
 			      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
 			        PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);

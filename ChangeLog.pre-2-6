@@ -1,3 +1,8 @@
+2004-11-21  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkwidget.c (gtk_widget_create_pango_context): removed call
+	to gdk_pango_context_set_colormap() which isn't needed any longer.
+
 2004-11-21  Hans Breuer  <hans@breuer.org>
 
 	* gdk/makefile.msc.in gtk/stock-icons/makefile.msc 
