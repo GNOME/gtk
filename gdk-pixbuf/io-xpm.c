@@ -159,8 +159,8 @@ xpm_read_string (FILE *infile, gchar **buffer, guint *buffer_size)
 	return ret;
 }
 
-static gchar *
-xpm_skip_whitespaces (gchar *buffer)
+static const gchar *
+xpm_skip_whitespaces (const gchar *buffer)
 {
 	gint32 index = 0;
 
@@ -170,8 +170,8 @@ xpm_skip_whitespaces (gchar *buffer)
 	return &buffer[index];
 }
 
-static gchar *
-xpm_skip_string (gchar *buffer)
+static const gchar *
+xpm_skip_string (const gchar *buffer)
 {
 	gint32 index = 0;
 
@@ -185,10 +185,11 @@ xpm_skip_string (gchar *buffer)
 #define MAX_COLOR_LEN 120
 
 static gchar *
-xpm_extract_color (gchar *buffer)
+xpm_extract_color (const gchar *buffer)
 {
 	gint counter, numnames;
-	gchar *ptr = NULL, ch, temp[128];
+	const gchar *ptr = NULL;
+        gchar ch, temp[128];
 	gchar color[MAX_COLOR_LEN], *retcol;
 	gint space;
 
@@ -252,7 +253,7 @@ xpm_extract_color (gchar *buffer)
 
 /* (almost) direct copy from gdkpixmap.c... loads an XPM from a file */
 
-static gchar *
+static const gchar *
 file_buffer (enum buf_op op, gpointer handle)
 {
 	struct file_handle *h = handle;
@@ -283,7 +284,7 @@ file_buffer (enum buf_op op, gpointer handle)
 }
 
 /* This reads from memory */
-static gchar *
+static const gchar *
 mem_buffer (enum buf_op op, gpointer handle)
 {
 	struct mem_handle *h = handle;
@@ -291,11 +292,18 @@ mem_buffer (enum buf_op op, gpointer handle)
 	case op_header:
 	case op_cmap:
 	case op_body:
-		if (h->data[h->offset])
-			return h->data[h->offset++];
+                if (h->data[h->offset]) {
+                        const gchar* retval;
+
+                        retval = h->data[h->offset];
+                        h->offset += 1;
+                        return retval;
+                }
+                break;
 
 	default:
 		g_assert_not_reached ();
+                break;
 	}
 
 	return NULL;
@@ -310,12 +318,13 @@ free_buffer (gpointer user_data, gpointer data)
 
 /* This function does all the work. */
 static GdkPixbuf *
-pixbuf_create_from_xpm (gchar * (*get_buf) (enum buf_op op, gpointer handle), gpointer handle)
+pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handle), gpointer handle)
 {
 	gint w, h, n_col, cpp;
 	gint cnt, xcnt, ycnt, wbytes, n, ns;
 	gint is_trans = FALSE;
-	gchar *buffer, *name_buf;
+	const gchar *buffer;
+        gchar *name_buf;
 	gchar pixel_str[32];
 	GHashTable *color_hash;
 	_XPMColor *colors, *color, *fallbackcolor;

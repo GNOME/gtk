@@ -175,6 +175,126 @@ static const unsigned char default_image[] = {
 	0xff, 0x00, 0xff, 0xff, 0x00, 0xff, 0xff, 0x00, 0xff, 0xff, 0x00, 0xff
 };
 
+
+static const char * book_open_xpm[] = {
+"16 16 4 1",
+"       c None s None",
+".      c black",
+"X      c #808080",
+"o      c white",
+"                ",
+"  ..            ",
+" .Xo.    ...    ",
+" .Xoo. ..oo.    ",
+" .Xooo.Xooo...  ",
+" .Xooo.oooo.X.  ",
+" .Xooo.Xooo.X.  ",
+" .Xooo.oooo.X.  ",
+" .Xooo.Xooo.X.  ",
+" .Xooo.oooo.X.  ",
+"  .Xoo.Xoo..X.  ",
+"   .Xo.o..ooX.  ",
+"    .X..XXXXX.  ",
+"    ..X.......  ",
+"     ..         ",
+"                "};
+
+static const char * book_closed_xpm[] = {
+"16 16 6 1",
+"       c None s None",
+".      c black",
+"X      c red",
+"o      c yellow",
+"O      c #808080",
+"#      c white",
+"                ",
+"       ..       ",
+"     ..XX.      ",
+"   ..XXXXX.     ",
+" ..XXXXXXXX.    ",
+".ooXXXXXXXXX.   ",
+"..ooXXXXXXXXX.  ",
+".X.ooXXXXXXXXX. ",
+".XX.ooXXXXXX..  ",
+" .XX.ooXXX..#O  ",
+"  .XX.oo..##OO. ",
+"   .XX..##OO..  ",
+"    .X.#OO..    ",
+"     ..O..      ",
+"      ..        ",
+"                "};
+
+static const char * mini_page_xpm[] = {
+"16 16 4 1",
+"       c None s None",
+".      c black",
+"X      c white",
+"o      c #808080",
+"                ",
+"   .......      ",
+"   .XXXXX..     ",
+"   .XoooX.X.    ",
+"   .XXXXX....   ",
+"   .XooooXoo.o  ",
+"   .XXXXXXXX.o  ",
+"   .XooooooX.o  ",
+"   .XXXXXXXX.o  ",
+"   .XooooooX.o  ",
+"   .XXXXXXXX.o  ",
+"   .XooooooX.o  ",
+"   .XXXXXXXX.o  ",
+"   ..........o  ",
+"    oooooooooo  ",
+"                "};
+
+static const char * gtk_mini_xpm[] = {
+"15 20 17 1",
+"       c None",
+".      c #14121F",
+"+      c #278828",
+"@      c #9B3334",
+"#      c #284C72",
+"$      c #24692A",
+"%      c #69282E",
+"&      c #37C539",
+"*      c #1D2F4D",
+"=      c #6D7076",
+"-      c #7D8482",
+";      c #E24A49",
+">      c #515357",
+",      c #9B9C9B",
+"'      c #2FA232",
+")      c #3CE23D",
+"!      c #3B6CCB",
+"               ",
+"      ***>     ",
+"    >.*!!!*    ",
+"   ***....#*=  ",
+"  *!*.!!!**!!# ",
+" .!!#*!#*!!!!# ",
+" @%#!.##.*!!$& ",
+" @;%*!*.#!#')) ",
+" @;;@%!!*$&)'' ",
+" @%.%@%$'&)$+' ",
+" @;...@$'*'*)+ ",
+" @;%..@$+*.')$ ",
+" @;%%;;$+..$)# ",
+" @;%%;@$$$'.$# ",
+" %;@@;;$$+))&* ",
+"  %;;;@+$&)&*  ",
+"   %;;@'))+>   ",
+"    %;@'&#     ",
+"     >%$$      ",
+"      >=       "};
+
+const gchar ** xpms[] = { 
+  book_open_xpm,
+  book_closed_xpm,
+  mini_page_xpm,
+  gtk_mini_xpm,
+  NULL
+};
+
 static void
 quit_func (GtkWidget *widget, gpointer dummy)
 {
@@ -299,10 +419,20 @@ main (int argc, char **argv)
 
 	i = 1;
 	if (argc == 1) {
+                const gchar*** xpmp;
+                
 		pixbuf = gdk_pixbuf_new_from_data ((guchar *) default_image, ART_PIX_RGB, FALSE,
 						   DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_WIDTH * 3,
 						   NULL, NULL);
 		new_testrgb_window (pixbuf);
+
+                xpmp = xpms;
+                while (*xpmp) {
+                        pixbuf = gdk_pixbuf_new_from_xpm_data (*xpmp);
+                        new_testrgb_window (pixbuf);
+                        ++xpmp;
+                }
+                
 		found_valid = TRUE;
 	} else {
 		for (i = 1; i < argc; i++) {

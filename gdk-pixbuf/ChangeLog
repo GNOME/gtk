@@ -1,5 +1,15 @@
 1999-10-22  Havoc Pennington  <hp@pobox.com>
 
+	* src/io-xpm.c (mem_buffer): Clean up stupid
+	increment-inside-array-dereference thing
+
+	* src/testpixbuf.c: Add XPM data tests.
+
+	* src/io-xpm.c: Make the XPM data buffer const, fix const
+	correctness throughout the code.	
+
+1999-10-22  Havoc Pennington  <hp@pobox.com>
+
 	* src/gdk-pixbuf.h: Export gdk_pixbuf_new_from_xpm_data()
 
 1999-10-22  Havoc Pennington  <hp@pobox.com>
