@@ -47,6 +47,7 @@ SOFTWARE.
 #define SMALL_COORDINATE -LARGE_COORDINATE
 
 #include <config.h>
+#include "gdkalias.h"
 #include <gdkregion.h>
 #include "gdkregion-generic.h"
 #include "gdkpoly-generic.h"

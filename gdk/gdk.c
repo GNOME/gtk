@@ -29,6 +29,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "gdkalias.h"
 #include "gdk.h"
 #include "gdkinternals.h"
 

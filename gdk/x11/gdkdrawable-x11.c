@@ -26,6 +26,7 @@
 
 #include <config.h>
 
+#include "gdkalias.h"
 #include "gdkx.h"
 #include "gdkregion-generic.h"
 

@@ -27,6 +27,7 @@
 #include <config.h>
 #include <string.h>		/* For memset() */
 
+#include "gdkalias.h"
 #include "gdk.h"
 #include "gdkinternals.h"
 

@@ -26,6 +26,7 @@
 
 #include <config.h>
 
+#include "gdkalias.h"
 #include "gdkdisplay.h"
 #include "gdkdisplaymanager.h"
 

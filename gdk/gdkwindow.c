@@ -25,6 +25,7 @@
  */
 
 #include <config.h>
+#include "gdkalias.h"
 #include "gdkwindow.h"
 #include "gdkinternals.h"
 #include "gdk.h"		/* For gdk_rectangle_union() */

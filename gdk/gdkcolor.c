@@ -27,6 +27,7 @@
 #include <config.h>
 #include <time.h>
 
+#include "gdkalias.h"
 #include "gdkscreen.h"
 #include "gdkcolor.h"
 #include "gdkinternals.h"

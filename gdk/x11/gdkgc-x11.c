@@ -26,6 +26,7 @@
 
 #include <config.h>
 
+#include "gdkalias.h"
 #include "gdkgc.h"
 #include "gdkprivate-x11.h"
 #include "gdkregion-generic.h"

@@ -25,6 +25,7 @@
  */
 
 #include <config.h>
+#include "gdkalias.h"
 #include "gdkcursor.h"
 #include "gdkdisplay.h"
 #include "gdkinternals.h"

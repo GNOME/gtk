@@ -36,6 +36,7 @@
 
 #define ENABLE_GRAYSCALE
 
+#include "gdkalias.h"
 #include "gdkprivate.h"
 #include "gdkinternals.h"	/* _gdk_windowing_get_bits_for_depth() */
 

@@ -22,6 +22,7 @@
 #include <config.h>
 #include <string.h>
 
+#include "gdkalias.h"
 #include "gdkspawn.h"
 
 #include <glib.h>

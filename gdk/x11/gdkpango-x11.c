@@ -20,6 +20,7 @@
 #include <config.h>
 #include <stdlib.h>
 
+#include "gdkalias.h"
 #include "gdkx.h"
 #include "gdkdisplay-x11.h"
 #include "gdkpango.h"

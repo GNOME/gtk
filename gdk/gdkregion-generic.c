@@ -71,6 +71,7 @@ SOFTWARE.
 #include <config.h>
 #include <stdlib.h>
 #include <string.h>
+#include "gdkalias.h"
 #include <gdkregion.h>
 #include "gdkregion-generic.h"
 

@@ -27,6 +27,7 @@
 #include <string.h>
 
 #include <glib.h>
+#include "gdkalias.h"
 #include "gdkscreen.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay.h"

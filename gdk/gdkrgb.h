@@ -137,7 +137,7 @@ void gdk_rgb_set_min_colors (gint     min_colors);
 GdkColormap *gdk_rgb_get_colormap (void);
 GdkVisual *  gdk_rgb_get_visual   (void);
 gboolean     gdk_rgb_ditherable   (void);
-gboolean     gdk_rgb_colormap_ditherable   (GdkColormap *cmap);
+gboolean     gdk_rgb_colormap_ditherable (GdkColormap *cmap);
 #endif
 
 #ifdef __cplusplus

@@ -28,6 +28,7 @@
 #include <unistd.h>
 
 #include <glib.h>
+#include "gdkalias.h"
 #include "gdkx.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-x11.h"

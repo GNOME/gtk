@@ -25,6 +25,7 @@
  */
 
 #include <config.h>
+#include "gdkalias.h"
 #include <gdk/gdk.h>
 
 void

@@ -31,6 +31,7 @@
 #include <X11/Xcursor/Xcursor.h>
 #endif
 
+#include "gdkalias.h"
 #include "gdkprivate-x11.h"
 #include "gdkcursor.h"
 #include "gdkpixmap-x11.h"

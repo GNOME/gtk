@@ -32,6 +32,7 @@
 #include <unistd.h>
 #include <X11/Xlib.h>
 
+#include "gdkalias.h"
 #include "gdkx.h"
 
 #include "gdkpixmap-x11.h"

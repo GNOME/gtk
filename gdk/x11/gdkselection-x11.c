@@ -29,6 +29,7 @@
 #include <X11/Xatom.h>
 #include <string.h>
 
+#include "gdkalias.h"
 #include "gdkx.h"
 #include "gdkproperty.h"
 #include "gdkselection.h"

@@ -21,6 +21,7 @@
  */
 
 #include <config.h>
+#include "gdkalias.h"
 #include <gdk/gdk.h>
 #include "gdk-pixbuf-private.h"
 #include "gdkpixbuf.h"

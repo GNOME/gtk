@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 
+#include "gdkalias.h"
 #include "gdk.h"		/* For gdk_flush() */
 #include "gdkimage.h"
 #include "gdkprivate.h"

@@ -27,6 +27,7 @@
 #include <config.h>
 #include <string.h>
 
+#include "gdkalias.h"
 #include "gdkgc.h"
 #include "gdkrgb.h"
 #include "gdkprivate.h"

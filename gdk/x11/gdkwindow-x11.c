@@ -31,6 +31,8 @@
 #include <X11/Xatom.h>
 #include <netinet/in.h>
 #include <unistd.h>
+
+#include "gdkalias.h"
 #include "gdk.h"
 
 #include "gdkwindow.h"

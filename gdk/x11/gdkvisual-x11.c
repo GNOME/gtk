@@ -28,6 +28,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
+#include "gdkalias.h"
 #include "gdkvisual.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"

@@ -47,6 +47,7 @@
 
 #include <errno.h>
 
+#include "gdkalias.h"
 #include "gdk.h"		/* For gdk_error_trap_* / gdk_flush_* */
 #include "gdkx.h"
 #include "gdkimage.h"

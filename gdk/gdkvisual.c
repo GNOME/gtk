@@ -22,6 +22,7 @@
  */
 
 #include <config.h>
+#include "gdkalias.h"
 #include "gdkvisual.h"
 #include "gdkscreen.h"
 

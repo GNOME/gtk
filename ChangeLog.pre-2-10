@@ -1,3 +1,27 @@
+Mon Aug  9 15:41:17 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Add hidden aliases for exported symbols which are
+	used internally in order to get rid of many PLT 
+	entries.  (#145519, Arjan van de Ven)
+	
+	* gdk/Makefile.am: Add rules to generate gdk.def and 
+	gdkalias.h from gdk.symbols, and make make check check 
+	the abi with abicheck.sh.
+
+	* gdk/gdk.symbols: New file. Definition of the GDK ABI.
+	The file can be processed by cpp to filter out certain 
+	subsets of symbols.
+
+	* gdk/abicheck.sh: New file. Script to check the actually 
+	symbols exported from libgdk-x11.2.0.so against the symbols
+	found in gdk.symbols.
+
+	* gdk/makegdkalias.pl: New file. Perl script to generate the 
+	header containing the alias definitions for internally used 
+	exported symbols from a list of symbols.
+
+	* gdk/*.c, gdk/x11/*.c: Include gdkalias.h
+	
 2004-08-09  Morten Welinder  <terra@gnome.org>
 
 	* gdk/x11/gdkdnd-x11.c (gdk_drag_drop_succeeded): Fix C99ism.
@@ -27,8 +51,8 @@ Mon Aug  9 12:48:04 2004  Matthias Clasen  <maclas@gmx.de>
 	entries.  (#145519, Arjan van de Ven)
 	
 	* gtk/Makefile.am: Add rules to generate gtk.def and 
-	from gtk.symbols, and make make check check the abi 
-	with abicheck.sh.
+	gtkalias.h from gtk.symbols, and make make check check 
+	the abi with abicheck.sh.
 	(gtk_private_h_sources): Add gtkinternals.h
 	(gtk_built_private_headers): Add gtkalias.h
 	(gtk_extra_sources): Add gtk.symbols

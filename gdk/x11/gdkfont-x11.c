@@ -31,6 +31,7 @@
 #include <X11/Xos.h>
 #include <locale.h>
 
+#include "gdkalias.h"
 #include "gdkx.h"
 #include "gdkfont.h"
 #include "gdkprivate-x11.h"

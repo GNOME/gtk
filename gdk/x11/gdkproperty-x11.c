@@ -29,6 +29,7 @@
 #include <X11/Xatom.h>
 #include <string.h>
 
+#include "gdkalias.h"
 #include "gdk.h"          /* For gdk_error_trap_push/pop() */
 #include "gdkx.h"
 #include "gdkproperty.h"

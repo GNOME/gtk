@@ -1,4 +1,5 @@
 #include <config.h>
+#include "gdkalias.h"
 #include "gdkproperty.h"
 #include "gdkdisplay.h"
 #include "gdkselection.h"

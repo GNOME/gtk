@@ -29,6 +29,7 @@
 #include <X11/Xatom.h>
 #include <string.h>
 
+#include "gdkalias.h"
 #include "gdk.h"          /* For gdk_flush() */
 #include "gdkx.h"
 #include "gdkasync.h"

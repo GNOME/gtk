@@ -25,6 +25,7 @@
  */
 
 #include <config.h>
+#include "gdkalias.h"
 #include "gdkpixmap.h"
 #include "gdkinternals.h"
 #include "gdkpixbuf.h"

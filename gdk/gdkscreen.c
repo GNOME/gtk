@@ -22,6 +22,7 @@
  */
 
 #include <config.h>
+#include "gdkalias.h"
 #include "gdk.h"		/* For gdk_rectangle_intersect() */
 #include "gdkcolor.h"
 #include "gdkwindow.h"

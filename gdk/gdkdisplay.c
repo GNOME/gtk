@@ -23,6 +23,7 @@
 
 #include <config.h>
 #include <glib.h>
+#include "gdkalias.h"
 #include "gdk.h"		/* gdk_event_send_client_message() */
 #include "gdkdisplay.h"
 #include "gdkinternals.h"

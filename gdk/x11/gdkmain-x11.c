@@ -41,6 +41,7 @@
 #include <X11/XKBlib.h>
 #endif
 
+#include "gdkalias.h"
 #include "gdk.h"
 
 #include "gdkx.h"

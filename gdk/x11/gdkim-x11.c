@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "gdkalias.h"
 #include "gdkx.h"
 #include "gdk.h"		/* For gdk_flush() */
 #include "gdkx.h"

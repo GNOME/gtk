@@ -18,6 +18,7 @@
  */
 
 #include <config.h>
+#include "gdkalias.h"
 #include "gdkinputprivate.h"
 #include "gdkdisplay-x11.h"
 

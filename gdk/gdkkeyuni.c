@@ -1,4 +1,5 @@
 #include <config.h>
+#include "gdkalias.h"
 #include "gdk.h"
 
 /* Thanks to Markus G. Kuhn <mkuhn@acm.org> for the ksysym<->Unicode

@@ -30,6 +30,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
+#include "gdkalias.h"
 #include "gdkx.h"
 #include "gdkinput.h"
 #include "gdkprivate.h"

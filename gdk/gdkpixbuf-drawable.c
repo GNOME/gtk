@@ -25,6 +25,7 @@
 #include <config.h>
 #include <stdio.h>
 #include <string.h>
+#include "gdkalias.h"
 #include "gdkcolor.h"
 #include "gdkimage.h"
 #include "gdkvisual.h"

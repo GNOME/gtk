@@ -33,6 +33,7 @@
 #include <limits.h>
 #include <errno.h>
 
+#include "gdkalias.h"
 #include "gdk.h"
 #include "gdkx.h"
 

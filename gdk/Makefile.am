@@ -8,7 +8,10 @@ EXTRA_DIST =			\
 	gdk.def 		\
 	gdkmarshalers.list	\
 	makeenums.pl		\
-	makefile.msc
+	makefile.msc		\
+	gdk.symbols		\
+	makegdkalias.pl		\
+	abicheck.sh
 
 INCLUDES =                              \
 	-DG_LOG_DOMAIN=\"Gdk\"		\
@@ -77,7 +80,8 @@ gdk_public_h_sources =				\
 gdk_headers =                     \
 	$(gdk_public_h_sources)   \
 	gdkenumtypes.h		  \
-	gdkprivate.h
+	gdkprivate.h		  \
+	gdkalias.h
 
 gdk_c_sources =                 \
 	gdk.c			\
@@ -170,6 +174,16 @@ uninstall-ms-lib:
 else
 install-ms-lib:
 uninstall-ms-lib:
+endif
+
+gdk.def: gdk.symbols
+	(echo -e EXPORTS; cpp -P -DGDK_WINDOWING_WIN32 -DINCLUDE_VARIABLES gdk.symbols | sed -e '/^$$/d' -e 's/^/\t/') > gdk.def
+
+gdkalias.h: gdk.symbols
+	 cpp -P gdk.symbols -DGDK_WINDOWING_X11 | ./makegdkalias.pl > gdkalias.h
+
+if OS_UNIX
+TEST = abicheck.sh
 endif
 
 
