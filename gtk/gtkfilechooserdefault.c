@@ -1014,6 +1014,7 @@ update_preview_widget_visibility (GtkFileChooserDefault *impl)
 	  impl->preview_label = gtk_label_new (impl->preview_display_name);
 	  gtk_box_pack_start (GTK_BOX (impl->preview_box), impl->preview_label, FALSE, FALSE, 0);
 	  gtk_box_reorder_child (GTK_BOX (impl->preview_box), impl->preview_label, 0);
+	  gtk_label_set_ellipsize (GTK_LABEL (impl->preview_label), PANGO_ELLIPSIZE_MIDDLE);
 	  gtk_widget_show (impl->preview_label);
 	}
     }

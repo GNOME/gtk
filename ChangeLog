@@ -1,3 +1,9 @@
+2005-03-28  Jeroen Zwartepoorte  <jeroen.zwartepoorte@gmail.com>
+
+	* gtk/gtkfilechooserdefault.c: (update_preview_widget_visibility): Make
+	the preview label ellipsize so the dialog layout stays constant.
+	(#171398)
+
 2005-03-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_key_press): Don't pop up
