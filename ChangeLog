@@ -1,3 +1,9 @@
+Mon Oct 22 10:12:08 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c docs/Changes-2.0.txt (gdk_threads_init): Don't call
+	g_thread_init(), we don't want to link to -lgthread if we don't
+	have to.
+
 Mon Oct 22 08:51:02 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.[ch] (gdk_threads_init) docs/Changes-2.0.txt: 

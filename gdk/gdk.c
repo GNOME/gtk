@@ -516,8 +516,7 @@ gdk_threads_leave ()
  * 
  * Initializes GDK so that it can be used from multiple threads
  * in conjunction with gdk_threads_enter() and gdk_threads_leave().
- * If g_thread_init() has not yet been called, calls
- * g_thread_init(NULL).
+ * g_thread_init() must be called previous to this function.
  *
  * This call must be made before any use of the main loop from
  * GTK+; to be safe, call it before gtk_init().
@@ -526,7 +525,7 @@ void
 gdk_threads_init ()
 {
   if (!g_thread_supported ())
-    g_thread_init (NULL);
+    g_error ("g_thread_init() must be called before gdk_threads_init()");
 
   gdk_threads_mutex = g_mutex_new ();
 }
