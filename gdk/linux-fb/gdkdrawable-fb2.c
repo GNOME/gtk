@@ -792,9 +792,103 @@ gdk_fb_draw_drawable (GdkDrawable *drawable,
   gdk_fb_draw_drawable_2 (drawable, gc, src_impl , xsrc, ysrc, xdest, ydest, width, height, TRUE, TRUE);
 }
 
+#ifdef EMULATE_GDKFONT
+static void
+gdk_fb_draw_text(GdkDrawable    *drawable,
+		 GdkFont        *font,
+		 GdkGC          *gc,
+		 gint            x,
+		 gint            y,
+		 const gchar    *text,
+		 gint            text_length)
+{
+  GdkFontPrivateFB *private;
+  guchar *utf8, *utf8_end;
+  PangoGlyphString *glyphs = pango_glyph_string_new ();
+  PangoEngineShape *shaper, *last_shaper;
+  PangoAnalysis analysis;
+  guchar *p, *start;
+  gint x_offset;
+  int i;
+  
+  g_return_if_fail (font != NULL);
+  g_return_if_fail (text != NULL);
 
+  private = (GdkFontPrivateFB*) font;
 
+  utf8 = alloca (text_length*2);
 
+  /* Convert latin-1 to utf8 */
+  p = utf8;
+  for (i=0;i<text_length;i++)
+    {
+      if (text[i]==0)
+	*p++ = 1; /* Hack to handle embedded nulls */
+      else
+	{
+	  if(((guchar)text[i])<128)
+	    *p++ = text[i];
+	  else
+	    {
+	      *p++ = ((((guchar)text[i])>>6) & 0x3f) | 0xC0;
+	      *p++ = (((guchar)text[i]) & 0x3f) | 0x80;
+	    }
+	}
+    }
+  utf8_end = p;
+
+  last_shaper = NULL;
+  shaper = NULL;
+
+  x_offset = 0;
+  p = start = utf8;
+  while (p < utf8_end)
+    {
+      gunichar wc = g_utf8_get_char (p);
+      p = g_utf8_next_char (p);
+      shaper = pango_font_find_shaper (private->pango_font, "fr", wc);
+      if (shaper != last_shaper)
+	{
+	  analysis.shape_engine = shaper;
+	  analysis.lang_engine = NULL;
+	  analysis.font = private->pango_font;
+	  analysis.level = 0;
+	  
+	  pango_shape (start, p - start, &analysis, glyphs);
+
+	  gdk_fb_draw_glyphs (drawable, gc, private->pango_font,
+			      x + PANGO_PIXELS (x_offset), y,
+			      glyphs);
+	  
+	  for (i = 0; i < glyphs->num_glyphs; i++)
+	    x_offset += glyphs->glyphs[i].geometry.width;
+	  
+	  start = p;
+	}
+
+      last_shaper = shaper;
+    }
+
+  if (p > start)
+    {
+      analysis.shape_engine = shaper;
+      analysis.lang_engine = NULL;
+      analysis.font = private->pango_font;
+      analysis.level = 0;
+      
+      pango_shape (start, p - start, &analysis, glyphs);
+      
+      gdk_fb_draw_glyphs (drawable, gc, private->pango_font,
+			  x + PANGO_PIXELS (x_offset), y,
+			  glyphs);
+    }
+  
+  pango_glyph_string_free (glyphs);
+      
+  return;
+}
+
+#else
 static void
 gdk_fb_draw_text(GdkDrawable    *drawable,
 		 GdkFont        *font,
@@ -806,6 +900,7 @@ gdk_fb_draw_text(GdkDrawable    *drawable,
 {
   g_warning ("gdk_fb_draw_text NYI");
 }
+#endif
 
 static void
 gdk_fb_draw_text_wc (GdkDrawable    *drawable,

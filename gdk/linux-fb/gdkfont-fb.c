@@ -35,73 +35,36 @@
 
 #include <freetype/freetype.h>
 #if !defined(FREETYPE_MAJOR) || FREETYPE_MAJOR != 2
-#error "We need Freetype 2.0 (beta?)"
+#error "We need Freetype 2.0"
 #endif
 
-
-static GdkFont *
-gdk_fb_bogus_font (gint height)
-{
-  GdkFont *font;
-  GdkFontPrivateFB *private;
-
-  private = g_new0 (GdkFontPrivateFB, 1);
-  font = (GdkFont *)private;
-  
-  font->type = GDK_FONT_FONT;
-  font->ascent = height*3/4;
-  font->descent = height/4;
-  private->size = height;
-  private->base.ref_count = 1;
-  return font;
-}
-
-GdkFont*
-gdk_font_from_description (PangoFontDescription *font_desc)
-{
-  g_return_val_if_fail (font_desc, NULL);
-
-  return gdk_fb_bogus_font (PANGO_PIXELS(font_desc->size));
-}
-
-/* ********************* */
-#if 0
+#ifdef EMULATE_GDKFONT
 static GHashTable *font_name_hash = NULL;
 static GHashTable *fontset_name_hash = NULL;
 
 static void
-gdk_font_hash_insert (GdkFontType type, GdkFont *font, const gchar *font_name)
+gdk_font_hash_insert (GdkFontType type, GdkFont *font)
 {
   GdkFontPrivateFB *private = (GdkFontPrivateFB *)font;
+  
   GHashTable **hashp = (type == GDK_FONT_FONT) ?
     &font_name_hash : &fontset_name_hash;
 
   if (!*hashp)
     *hashp = g_hash_table_new (g_str_hash, g_str_equal);
 
-  private->names = g_slist_prepend (private->names, g_strdup (font_name));
-  g_hash_table_insert (*hashp, private->names->data, font);
+  g_hash_table_insert (*hashp, private->name, font);
 }
 
 static void
 gdk_font_hash_remove (GdkFontType type, GdkFont *font)
 {
   GdkFontPrivateFB *private = (GdkFontPrivateFB *)font;
-  GSList *tmp_list;
+  
   GHashTable *hash = (type == GDK_FONT_FONT) ?
     font_name_hash : fontset_name_hash;
 
-  tmp_list = private->names;
-  while (tmp_list)
-    {
-      g_hash_table_remove (hash, tmp_list->data);
-      g_free (tmp_list->data);
-      
-      tmp_list = tmp_list->next;
-    }
-
-  g_slist_free (private->names);
-  private->names = NULL;
+  g_hash_table_remove (hash, private->name);
 }
 
 static GdkFont *
@@ -124,49 +87,147 @@ gdk_font_hash_lookup (GdkFontType type, const gchar *font_name)
 }
 
 GdkFont*
+gdk_font_from_description (PangoFontDescription *desc)
+{
+  GdkFont *font;
+  GdkFontPrivateFB *private;
+  PangoFont *pango_font;
+  PangoContext *context;
+  PangoFontMetrics metrics;
+  gchar *lang;
+  
+  g_return_val_if_fail (desc, NULL);
+
+  private = g_new0 (GdkFontPrivateFB, 1);
+  private->base.ref_count = 1;
+  private->name = NULL;
+  
+  font = (GdkFont*) private;
+  font->type = GDK_FONT_FONT;
+
+  context = gdk_pango_context_get ();
+  pango_font = pango_context_load_font (context, desc);
+  if (!pango_font)
+    {
+      g_free (desc->family_name);
+      desc->family_name = g_strdup ("sans");
+      pango_font = pango_context_load_font (context, desc);
+      if (!pango_font)
+	{
+	  desc->style = PANGO_STYLE_NORMAL;
+	  desc->weight = PANGO_WEIGHT_NORMAL;
+	  desc->variant = PANGO_VARIANT_NORMAL;
+	  desc->stretch = PANGO_STRETCH_NORMAL;
+	  pango_font = pango_context_load_font (context, desc);
+	}
+    }
+  
+  g_assert (pango_font != NULL);
+
+  if (pango_font == NULL)
+    return NULL;
+  
+  metrics.ascent = 0;
+  metrics.descent = 0;
+  lang = pango_context_get_lang (context);
+  pango_font_get_metrics (pango_font, "fr", &metrics);
+
+  private->pango_font = pango_font;
+  
+  g_free (lang);
+  g_object_unref (G_OBJECT (context));
+
+  font->ascent = PANGO_PIXELS (metrics.ascent);
+  font->descent = PANGO_PIXELS (metrics.descent);
+
+  g_assert ((font->ascent > 0) || (font->descent > 0));
+  
+  return font;
+}
+
+
+GdkFont*
 gdk_font_load (const gchar *font_name)
 {
   GdkFont *font;
   GdkFontPrivateFB *private;
+  PangoFontDescription desc;
+  gchar **pieces;
 
   g_return_val_if_fail (font_name != NULL, NULL);
 
-  font = gdk_font_hash_lookup (GDK_FONT_FONTSET, font_name);
+  font = gdk_font_hash_lookup (GDK_FONT_FONT, font_name);
   if (font)
     return font;
 
-  {
-    char **pieces;
-    BBox bb;
+  /* Default values */
+  desc.family_name = NULL;
+  desc.style = PANGO_STYLE_NORMAL;
+  desc.weight = PANGO_WEIGHT_NORMAL;
+  desc.variant = PANGO_VARIANT_NORMAL;
+  desc.stretch = PANGO_STRETCH_NORMAL;
+  
+  desc.size = 0;
+  
+  pieces = g_strsplit(font_name, "-", 8);
+
+  do {
+    if (!pieces[0])
+      break;
     
-    private = g_new0 (GdkFontPrivateFB, 1);
-    private->base.ref_count = 1;
-    private->names = NULL;
+    if (!pieces[1])
+      break;
+    
+    if (!pieces[2])
+      break;
 
-    pieces = g_strsplit(font_name, "-", 2);
-    if(pieces[1])
-      {
-	private->size = atof(pieces[1]);
-	private->t1_font_id = T1_AddFont(pieces[0]);
-      }
-    else
-      private->t1_font_id = T1_AddFont((char *)font_name);
-    g_strfreev(pieces);
+    if (strcmp (pieces[2], "*")!=0)
+      desc.family_name = g_strdup (pieces[2]);
+    
+    if (!pieces[3])
+      break;
+    
+    if (strcmp (pieces[3], "light")==0)
+      desc.weight = PANGO_WEIGHT_LIGHT;
+    if (strcmp (pieces[3], "medium")==0)
+      desc.weight = PANGO_WEIGHT_NORMAL;
+    if (strcmp (pieces[3], "bold")==0)
+      desc.weight = PANGO_WEIGHT_BOLD;
+    
+    if (!pieces[4])
+      break;
+    
+    if (strcmp (pieces[4], "r")==0)
+      desc.style = PANGO_STYLE_NORMAL;
+    if (strcmp (pieces[4], "i")==0)
+      desc.style = PANGO_STYLE_ITALIC;
+    if (strcmp (pieces[4], "o")==0)
+      desc.style = PANGO_STYLE_OBLIQUE;
+    
+    if (!pieces[5])
+      break;
+    if (!pieces[6])
+      break;
+    if (!pieces[7])
+      break;
 
-    T1_LoadFont(private->t1_font_id);
-    CreateNewFontSize(private->t1_font_id, private->size, FALSE);
+    if (strcmp (pieces[7], "*")!=0)
+      desc.size = atoi (pieces[7]) * PANGO_SCALE;
+    if (desc.size == 0)
+      desc.size = 12 * PANGO_SCALE;
+    
+  } while (0);
+  
+  font = gdk_font_from_description (&desc);
+  private = (GdkFontPrivateFB*) font;
+  private->name = g_strdup (font_name);
 
-    font = (GdkFont*) private;
-    font->type = GDK_FONT_FONTSET;
+  gdk_font_hash_insert (GDK_FONT_FONT, font);
 
-    bb = T1_GetFontBBox(private->t1_font_id);
+  g_strfreev(pieces);
 
-    font->ascent = ((double)bb.ury) / 1000.0 * private->size;
-    font->descent = ((double)bb.lly) / -1000.0 * private->size;
-  }
-
-  gdk_font_hash_insert (GDK_FONT_FONTSET, font, font_name);
-
+  g_free (desc.family_name);
+  
   return font;
 }
 
@@ -175,7 +236,217 @@ gdk_fontset_load (const gchar *fontset_name)
 {
   return gdk_font_load(fontset_name);
 }
-#endif
+
+void
+_gdk_font_destroy (GdkFont *font)
+{
+  GdkFontPrivateFB *private = (GdkFontPrivateFB *)font;
+  gdk_font_hash_remove (font->type, font);
+
+  g_object_unref (G_OBJECT (private->pango_font));
+  g_free (private->name);
+  g_free (font);
+}
+
+gint
+_gdk_font_strlen (GdkFont     *font,
+		  const gchar *str)
+{
+  GdkFontPrivateFB *font_private;
+
+  g_return_val_if_fail (font != NULL, -1);
+  g_return_val_if_fail (str != NULL, -1);
+
+  font_private = (GdkFontPrivateFB*) font;
+  
+  return strlen (str);
+}
+
+gint
+gdk_text_width (GdkFont      *font,
+		const gchar  *text,
+		gint          text_length)
+{
+  gint width = -1;
+  gdk_text_extents (font, text, text_length, NULL, NULL, &width, NULL, NULL);
+  return width;
+}
+
+/* Assumes text is in Latin-1 for performance reasons.
+   If you need another encoding, use pangofont */
+void
+gdk_text_extents (GdkFont     *font,
+                  const gchar *text,
+                  gint         text_length,
+		  gint        *lbearing,
+		  gint        *rbearing,
+		  gint        *width,
+		  gint        *ascent,
+		  gint        *descent)
+{
+  GdkFontPrivateFB *private;
+  guchar *utf8, *utf8_end;
+  PangoGlyphString *glyphs = pango_glyph_string_new ();
+  PangoEngineShape *shaper, *last_shaper;
+  PangoAnalysis analysis;
+  guchar *p, *start;
+  int i;
+  
+  g_return_if_fail (font != NULL);
+  g_return_if_fail (text != NULL);
+
+  private = (GdkFontPrivateFB*) font;
+
+  if(ascent)
+    *ascent = 0;
+  if(descent)
+    *descent = 0;
+  if(width)
+    *width = 0;
+  if(lbearing)
+    *lbearing = 0;
+  if(rbearing)
+    *rbearing = 0;
+
+  utf8 = alloca (text_length*2);
+
+  /* Convert latin-1 to utf8 */
+  p = utf8;
+  for (i=0;i<text_length;i++)
+    {
+      if (text[i]==0)
+	*p++ = 1; /* Hack to handle embedded nulls */
+      else
+	{
+	  if(((guchar)text[i])<128)
+	    *p++ = text[i];
+	  else
+	    {
+	      *p++ = ((((guchar)text[i])>>6) & 0x3f) | 0xC0;
+	      *p++ = (((guchar)text[i]) & 0x3f) | 0x80;
+	    }
+	}
+    }
+  utf8_end = p;
+
+  last_shaper = NULL;
+  shaper = NULL;
+
+  p = start = utf8;
+  while (p < utf8_end)
+    {
+      gunichar wc = g_utf8_get_char (p);
+      p = g_utf8_next_char (p);
+      shaper = pango_font_find_shaper (private->pango_font, "fr", wc);
+      if (shaper != last_shaper)
+	{
+	  analysis.shape_engine = shaper;
+	  analysis.lang_engine = NULL;
+	  analysis.font = private->pango_font;
+	  analysis.level = 0;
+
+	  pango_shape (start, p - start, &analysis, glyphs);
+
+	  for (i = 0; i < glyphs->num_glyphs; i++)
+	    {
+	      PangoRectangle ink_rect;
+	      PangoGlyphGeometry *geometry = &glyphs->glyphs[i].geometry;
+	      
+	      pango_font_get_glyph_extents (private->pango_font, glyphs->glyphs[i].glyph,
+					    &ink_rect, NULL);
+	      
+	      if(ascent)
+		*ascent = MAX (*ascent, ink_rect.y);
+	      if(descent)
+		*descent = MAX (*descent, ink_rect.height - ink_rect.y);
+	      if(width)
+		*width += geometry->width;
+	      if(lbearing)
+		*lbearing = 0;
+	      if(rbearing)
+		*rbearing = 0;
+	      
+	    }
+	  
+	  start = p;
+	}
+
+      last_shaper = shaper;
+    }
+
+  if (p > start)
+    {
+      analysis.shape_engine = shaper;
+      analysis.lang_engine = NULL;
+      analysis.font = private->pango_font;
+      analysis.level = 0;
+      
+      pango_shape (start, p - start, &analysis, glyphs);
+      
+      for (i = 0; i < glyphs->num_glyphs; i++)
+	{
+	  PangoRectangle ink_rect;
+	  PangoGlyphGeometry *geometry = &glyphs->glyphs[i].geometry;
+	  
+	  pango_font_get_glyph_extents (private->pango_font, glyphs->glyphs[i].glyph,
+					&ink_rect, NULL);
+	  
+	  if(ascent)
+	    *ascent = MAX (*ascent, ink_rect.y);
+	  if(descent)
+	    *descent = MAX (*descent, ink_rect.height - ink_rect.y);
+	  if(width)
+	    *width += geometry->width;
+	  if(lbearing)
+	    *lbearing = 0;
+	  if(rbearing)
+	    *rbearing = 0;
+	}
+    }
+
+
+  
+  pango_glyph_string_free (glyphs);
+
+  if(ascent)
+    *ascent = PANGO_PIXELS (*ascent);
+  if(descent)
+    *descent = PANGO_PIXELS(*descent);
+  if(width)
+    *width = PANGO_PIXELS (*width);
+  if(lbearing)
+    *lbearing = PANGO_PIXELS (*lbearing);
+  if(rbearing)
+    *rbearing = PANGO_PIXELS (*rbearing);
+}
+
+#else
+
+/* Don't emulate GdkFont */
+static GdkFont *
+gdk_fb_bogus_font (gint height)
+{
+  GdkFont *font;
+  GdkFontPrivateFB *private;
+
+  private = g_new0 (GdkFontPrivateFB, 1);
+  font = (GdkFont *)private;
+  
+  font->type = GDK_FONT_FONT;
+  font->ascent = height*3/4;
+  font->descent = height/4;
+  private->size = height;
+  private->base.ref_count = 1;
+  return font;
+}
+
+GdkFont*
+gdk_font_from_description (PangoFontDescription *font_desc)
+{
+  g_return_val_if_fail (font_desc, NULL);
+
+  return gdk_fb_bogus_font (PANGO_PIXELS (font_desc->size));
+}
 
 GdkFont*
 gdk_fontset_load (const gchar *fontset_name)
@@ -192,20 +463,6 @@ gdk_font_load (const gchar *font_name)
 void
 _gdk_font_destroy (GdkFont *font)
 {
-#if 0
-  gdk_font_hash_remove (font->type, font);
-#endif
-      
-  switch (font->type)
-    {
-    case GDK_FONT_FONT:
-      break;
-    case GDK_FONT_FONTSET:
-      break;
-    default:
-      g_error ("unknown font type.");
-      break;
-    }
   g_free (font);
 }
 
@@ -220,23 +477,46 @@ _gdk_font_strlen (GdkFont     *font,
   g_return_val_if_fail (str != NULL, -1);
 
   font_private = (GdkFontPrivateFB*) font;
-
-  if (font->type == GDK_FONT_FONT)
-    {
-      guint16 *string_2b = (guint16 *)str;
-	    
-      while (*(string_2b++))
-	length++;
-    }
-  else if (font->type == GDK_FONT_FONTSET)
-    {
-      length = strlen (str);
-    }
-  else
-    g_error("undefined font type\n");
-
-  return length;
+  
+  return strlen (str);
 }
+
+gint
+gdk_text_width (GdkFont      *font,
+		const gchar  *text,
+		gint          text_length)
+{
+  GdkFontPrivateFB *private;
+
+  private = (GdkFontPrivateFB*) font;
+
+  return (text_length * private->size) / 2;
+}
+
+void
+gdk_text_extents (GdkFont     *font,
+                  const gchar *text,
+                  gint         text_length,
+		  gint        *lbearing,
+		  gint        *rbearing,
+		  gint        *width,
+		  gint        *ascent,
+		  gint        *descent)
+{
+  if(ascent)
+    *ascent = font->ascent;
+  if(descent)
+    *descent = font->descent;
+  if(width)
+    *width = gdk_text_width(font, text, text_length);
+  if(lbearing)
+    *lbearing = 0;
+  if(rbearing)
+    *rbearing = 0;
+}
+
+
+#endif
 
 gint
 gdk_font_id (const GdkFont *font)
@@ -272,117 +552,19 @@ gdk_font_equal (const GdkFont *fonta,
 
   if(fonta == fontb)
     return TRUE;
-#if 0
-  if(privatea->t1_font_id == privateb->t1_font_id
-     && privatea->size == privateb->size)
-    return TRUE;
-#endif
 
   return FALSE;
 }
 
-gint
-gdk_text_width (GdkFont      *font,
-		const gchar  *text,
-		gint          text_length)
-{
-#if 0
-  GdkFontPrivateFB *private;
-  gint width;
-  double n;
-
-  g_return_val_if_fail (font != NULL, -1);
-  g_return_val_if_fail (text != NULL, -1);
-
-  private = (GdkFontPrivateFB*) font;
-
-  switch (font->type)
-    {
-    case GDK_FONT_FONT:
-    case GDK_FONT_FONTSET:
-      n = private->size / 1000.0;
-      n *= T1_GetStringWidth(private->t1_font_id, (char *)text, text_length, 0, T1_KERNING);
-      width = ceil(n);
-      break;
-    default:
-      width = 0;
-      break;
-    }
-
-  return width;
-#else
-  GdkFontPrivateFB *private;
-
-  private = (GdkFontPrivateFB*) font;
-
-  return (text_length * private->size) / 2;
-#endif
-}
 
 gint
 gdk_text_width_wc (GdkFont	  *font,
 		   const GdkWChar *text,
 		   gint		   text_length)
 {
-#if 0
-  char *realstr;
-  int i;
-
-  realstr = alloca(text_length + 1);
-  for(i = 0; i < text_length; i++)
-    realstr[i] = text[i];
-  realstr[i] = '\0';
-
-  return gdk_text_width(font, realstr, text_length);
-#else
   return 0;
-#endif
 }
 
-void
-gdk_text_extents (GdkFont     *font,
-                  const gchar *text,
-                  gint         text_length,
-		  gint        *lbearing,
-		  gint        *rbearing,
-		  gint        *width,
-		  gint        *ascent,
-		  gint        *descent)
-{
-#if 0
-  GdkFontPrivateFB *private;
-  METRICSINFO mi;
-
-  g_return_if_fail (font != NULL);
-  g_return_if_fail (text != NULL);
-
-  private = (GdkFontPrivateFB*) font;
-
-  mi = T1_GetMetricsInfo(private->t1_font_id, (char *)text, text_length, 0, T1_KERNING);
-
-  if(ascent)
-    *ascent = ((double)mi.bbox.ury) / 1000.0 * private->size;
-  if(descent)
-    *descent = ((double)mi.bbox.lly) / -1000.0 * private->size;
-  if(width)
-    *width = ((double)mi.width) / 1000.0 * private->size;
-  if(lbearing)
-    *lbearing = ((double)mi.bbox.llx) / 1000.0 * private->size;
-  if(rbearing)
-    *rbearing = ((double)mi.bbox.urx) / 1000.0 * private->size;
-#else
-  if(ascent)
-    *ascent = font->ascent;
-  if(descent)
-    *descent = font->descent;
-  if(width)
-    *width = gdk_text_width(font, text, text_length);
-  if(lbearing)
-    *lbearing = 0;
-  if(rbearing)
-    *rbearing = 0;
-#endif
-}
 
 void
 gdk_text_extents_wc (GdkFont        *font,
@@ -394,20 +576,6 @@ gdk_text_extents_wc (GdkFont        *font,
 		     gint           *ascent,
 		     gint           *descent)
 {
-  char *realstr;
-  int i;
-
-  realstr = alloca (text_length + 1);
-  for(i = 0; i < text_length; i++)
-    realstr[i] = text[i];
-  realstr[i] = '\0';
-
-  return gdk_text_extents (font,
-			   realstr,
-			   text_length,
-			   lbearing,
-			   rbearing,
-			   width,
-			   ascent,
-			   descent);
+  g_warning ("gdk_text_extents_wc() is not implemented\n");
+  return;
 }

@@ -160,9 +160,20 @@ typedef struct {
   int hot_x, hot_y;
 } GdkCursorPrivateFB;
 
+/* Define this to emulate slow emulation of
+   GdkFonts using PangoFont */
+#define EMULATE_GDKFONT
+
 typedef struct {
   GdkFontPrivate base;
+#ifdef EMULATE_GDKFONT
+  /* For PangoFont emulation: */
+  char *name;
+  PangoFont *pango_font;
+#else
+  /* For bogus GdkFonts: */
   int size;
+#endif
 } GdkFontPrivateFB;
 
 typedef struct {
