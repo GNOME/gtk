@@ -2,7 +2,7 @@
 GtkIMMulticontext
 
 <!-- ##### SECTION Short_Description ##### -->
-
+An input method context supporting multiple, loadable input methods
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -1,8 +1,8 @@
 <!-- ##### SECTION Title ##### -->
-GtkTreeSortable
+GtkTreeSortable 
 
 <!-- ##### SECTION Short_Description ##### -->
-
+The interface for sortable models used by GtkTreeView
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,7 +2,7 @@
 GtkCellRendererToggle
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Renders a toggle button in a cell
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

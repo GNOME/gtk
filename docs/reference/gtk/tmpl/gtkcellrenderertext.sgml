@@ -2,7 +2,7 @@
 GtkCellRendererText
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Renders text in a cell
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

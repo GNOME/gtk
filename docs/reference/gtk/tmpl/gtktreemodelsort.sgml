@@ -2,7 +2,7 @@
 GtkTreeModelSort
 
 <!-- ##### SECTION Short_Description ##### -->
-
+A wrapper which makes an underlying tree model sortable
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -2,7 +2,7 @@
 GtkIMContextSimple
 
 <!-- ##### SECTION Short_Description ##### -->
-
+An input method context supporting table-based input methods
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

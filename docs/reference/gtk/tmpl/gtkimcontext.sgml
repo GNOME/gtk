@@ -2,7 +2,7 @@
 GtkIMContext
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Base class for input method contexts 
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

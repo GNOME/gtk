@@ -2,7 +2,7 @@
 GtkViewport
 
 <!-- ##### SECTION Short_Description ##### -->
-
+An adapter which makes widgets scrollable
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

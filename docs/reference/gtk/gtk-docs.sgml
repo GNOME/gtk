@@ -425,7 +425,6 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkDrawingArea;
         &GtkEventBox;
         &GtkHandleBox;
-        &GtkIMContext;
         &GtkIMContextSimple;
         &GtkIMMulticontext;
         &GtkSizeGroup;
@@ -449,6 +448,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkScrollbar;
         &GtkSeparator;
         &GtkWidget;
+        &GtkIMContext;
     </chapter>    
 
     <chapter id="PlugSocket">

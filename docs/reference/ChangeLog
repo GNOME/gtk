@@ -1,3 +1,19 @@
+2003-06-24  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-docs.sgml: Move GtkIMContext to "Abstract Base Classes", since its abstract.
+
+	* gtk/tmpl/gtkaccessible.sgml: 
+	* gtk/tmpl/gtkimmulticontext.sgml: 
+	* gtk/tmpl/gtkimcontextsimple.sgml: 
+	* gtk/tmpl/gtkimcontext.sgml: 
+	* gtk/tmpl/gtkviewport.sgml: 
+	* gtk/tmpl/gtkcellrenderertext.sgml: 
+	* gtk/tmpl/gtkcellrendererpixbuf.sgml: 
+	* gtk/tmpl/gtkcelleditable.sgml: 
+	* gtk/tmpl/gtktreemodelsort.sgml: 
+	* gtk/tmpl/gtktreednd.sgml: 
+	* gtk/tmpl/gtktreesortable.sgml: Add short descriptions.
+
 2003-06-23  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/Makefile.am (HTML_IMAGES): Add RTL variants of stock icons.
