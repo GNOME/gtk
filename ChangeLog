@@ -1,3 +1,18 @@
+Sun Nov 25 23:18:39 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtktexttag.c (gtk_text_tag_set_property): free font_desc
+	when finished (#65266)
+
+Sun Nov 25 23:16:29 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_icon_list): free
+	data after we set the property. (#65264)
+
+Sun Nov 25 23:14:06 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtkbutton.c: add destroy method so label_text gets freed
+	if it has been allocated (#65268)
+
 Sat Nov 24 13:39:51 2001  Manish Singh  <yosh@gimp.org>
 
 	* gdk/linux-fb/gdkdrawable-fb2.c

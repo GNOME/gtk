@@ -67,6 +67,7 @@ enum {
 
 static void gtk_button_class_init     (GtkButtonClass   *klass);
 static void gtk_button_init           (GtkButton        *button);
+static void gtk_button_destroy        (GtkObject        *object);
 static void gtk_button_set_property   (GObject         *object,
                                        guint            prop_id,
                                        const GValue    *value,
@@ -159,6 +160,8 @@ gtk_button_class_init (GtkButtonClass *klass)
   g_object_class->constructor = gtk_button_constructor;
   g_object_class->set_property = gtk_button_set_property;
   g_object_class->get_property = gtk_button_get_property;
+
+  object_class->destroy = gtk_button_destroy;
 
   widget_class->realize = gtk_button_realize;
   widget_class->unrealize = gtk_button_unrealize;
@@ -305,6 +308,20 @@ gtk_button_init (GtkButton *button)
   button->use_stock = FALSE;
   button->use_underline = FALSE;
   button->depressed = FALSE;
+}
+
+static void
+gtk_button_destroy (GtkObject *object)
+{
+  GtkButton *button = GTK_BUTTON (object);
+  
+  if (button->label_text)
+    {
+      g_free (button->label_text);
+      button->label_text = NULL;
+    }
+  
+  (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 static GObject*

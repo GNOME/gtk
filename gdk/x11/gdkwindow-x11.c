@@ -2858,6 +2858,8 @@ gdk_window_set_icon_list (GdkWindow *window,
                        GDK_WINDOW_XID (window),
                        gdk_x11_get_xatom_by_name ("_NET_WM_ICON"));
     }
+  
+  g_free (data);
 }
 
 /**

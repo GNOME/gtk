@@ -999,6 +999,8 @@ gtk_text_tag_set_property (GObject      *object,
           font_desc = pango_font_description_from_string (name);
 
         set_font_description (text_tag, font_desc);
+	if (font_desc)
+	  pango_font_description_free (font_desc);
         
         size_changed = TRUE;
       }
