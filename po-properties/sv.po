@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
-"POT-Creation-Date: 2004-02-16 11:44+0100\n"
-"PO-Revision-Date: 2004-02-16 11:44+0100\n"
+"POT-Creation-Date: 2004-02-19 18:53+0100\n"
+"PO-Revision-Date: 2004-02-19 18:53+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1661,12 +1661,12 @@ msgid "The type of operation that the file selector is performing"
 msgstr "Typen av åtgärd som filväljaren utför"
 
 #: gtk/gtkfilechooser.c:99
-msgid "File System"
-msgstr "Filsystem"
+msgid "File System Backend"
+msgstr "Filsystemsbakände"
 
 #: gtk/gtkfilechooser.c:100
-msgid "File system object to use"
-msgstr "Filsystemsobjekt att använda"
+msgid "Name of file system backend to use"
+msgstr "Namn på filsystemsbakände att använda"
 
 #: gtk/gtkfilechooser.c:105
 msgid "Filter"
@@ -4363,6 +4363,12 @@ msgstr "IM-statusstil"
 #: modules/input/gtkimcontextxim.c:335
 msgid "How to draw the input method statusbar"
 msgstr "Hur inmatningsmetodens statusrad ska ritas"
+
+#~ msgid "File System"
+#~ msgstr "Filsystem"
+
+#~ msgid "File system object to use"
+#~ msgstr "Filsystemsobjekt att använda"
 
 #~ msgid "The size of the rendered icon"
 #~ msgstr "Storleken på den renderade ikonen"
