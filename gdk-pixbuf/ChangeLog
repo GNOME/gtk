@@ -1,3 +1,9 @@
+2002-04-09  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_load_module): Use 
+	priv->image_module->module_name instead of image_type which may 
+	be NULL.
+
 2002-04-06  Matthias Clasen  <maclas@gmx.de>
 
 	* io-png.c (gdk_pixbuf__png_image_load): Restructured to use

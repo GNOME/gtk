@@ -248,7 +248,7 @@ gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader,
                    GDK_PIXBUF_ERROR,
                    GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
                    _("Incremental loading of image type '%s' is not supported"),
-                   image_type);
+                   priv->image_module->module_name);
 
       return 0;
     }
