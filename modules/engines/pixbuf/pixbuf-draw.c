@@ -485,7 +485,8 @@ draw_arrow (GtkStyle     *style,
   g_return_if_fail(style != NULL);
   g_return_if_fail(window != NULL);
 
-  if (strcmp (detail, "hscrollbar") == 0 || strcmp (detail, "vscrollbar") == 0)
+  if (detail &&
+      (strcmp (detail, "hscrollbar") == 0 || strcmp (detail, "vscrollbar") == 0))
     {
       /* This is a hack to work around the fact that scrollbar steppers are drawn
        * as a box + arrow, so we never have
@@ -637,7 +638,8 @@ draw_box (GtkStyle     *style,
   g_return_if_fail(style != NULL);
   g_return_if_fail(window != NULL);
 
-  if (strcmp (detail, "hscrollbar") == 0 || strcmp (detail, "vscrollbar") == 0)
+  if (detail &&
+      (strcmp (detail, "hscrollbar") == 0 || strcmp (detail, "vscrollbar") == 0))
     {
       /* We handle this in draw_arrow */
       return;
