@@ -1,3 +1,14 @@
+2004-02-24  Anders Carlsson  <andersca@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c: (shortcuts_insert_path),
+	(shortcuts_remove_rows), (shortcuts_append_bookmarks),
+	(create_shortcuts_model), (shortcuts_tree_create),
+	(gtk_file_chooser_default_remove_shortcut_folder):
+	Improve bookmark list rendering by controlling the visibility
+	of the pixbuf cell so that it will be invisible for the separator
+	row, also use a list store instead of a tree store for the model
+	so we won't get unnecessary space for an expander.
+	
 Tue Feb 24 01:08:27 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c: Add a destroy implementation in order to

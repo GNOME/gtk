@@ -89,7 +89,7 @@ struct _GtkFileChooserDefault
   GtkWidget *hpaned;
 
   GtkFileSystemModel *tree_model;
-  GtkTreeStore *shortcuts_model;
+  GtkListStore *shortcuts_model;
   GtkFileSystemModel *list_model;
   GtkTreeModelSort *sort_model;
 
@@ -164,6 +164,7 @@ enum {
   SHORTCUTS_COL_NAME,
   SHORTCUTS_COL_PATH,
   SHORTCUTS_COL_REMOVABLE,
+  SHORTCUTS_COL_PIXBUF_VISIBLE,
   SHORTCUTS_COL_NUM_COLUMNS
 };
 
@@ -699,10 +700,14 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
       gtk_file_info_free (info);
     }
 
-  gtk_tree_store_insert (impl->shortcuts_model, &iter, NULL, pos);
+  if (pos == -1)
+    gtk_list_store_append (impl->shortcuts_model, &iter);
+  else
+    gtk_list_store_insert (impl->shortcuts_model, &iter, pos);
 
-  gtk_tree_store_set (impl->shortcuts_model, &iter,
+  gtk_list_store_set (impl->shortcuts_model, &iter,
 		      SHORTCUTS_COL_PIXBUF, pixbuf,
+		      SHORTCUTS_COL_PIXBUF_VISIBLE, TRUE,
 		      SHORTCUTS_COL_NAME, label_copy,
 		      SHORTCUTS_COL_PATH, data,
 		      SHORTCUTS_COL_REMOVABLE, removable,
@@ -851,7 +856,7 @@ shortcuts_remove_rows (GtkFileChooserDefault *impl,
 	  (* remove_fn) (impl, data);
 	}
 
-      gtk_tree_store_remove (impl->shortcuts_model, &iter);
+      gtk_list_store_remove (impl->shortcuts_model, &iter);
     }
 
   gtk_tree_path_free (path);
@@ -930,9 +935,10 @@ shortcuts_append_bookmarks (GtkFileChooserDefault *impl)
 {
   GtkTreeIter iter;
 
-  gtk_tree_store_append (impl->shortcuts_model, &iter, NULL);
-  gtk_tree_store_set (impl->shortcuts_model, &iter,
+  gtk_list_store_append (impl->shortcuts_model, &iter);
+  gtk_list_store_set (impl->shortcuts_model, &iter,
 		      SHORTCUTS_COL_PIXBUF, NULL,
+		      SHORTCUTS_COL_PIXBUF_VISIBLE, FALSE,
 		      SHORTCUTS_COL_NAME, NULL,
 		      SHORTCUTS_COL_PATH, NULL,
 		      -1);
@@ -947,11 +953,12 @@ create_shortcuts_model (GtkFileChooserDefault *impl)
     g_object_unref (impl->shortcuts_model);
 
   /* Keep this order in sync with the SHORCUTS_COL_* enum values */
-  impl->shortcuts_model = gtk_tree_store_new (SHORTCUTS_COL_NUM_COLUMNS,
+  impl->shortcuts_model = gtk_list_store_new (SHORTCUTS_COL_NUM_COLUMNS,
 					      GDK_TYPE_PIXBUF,	/* pixbuf */
 					      G_TYPE_STRING,	/* name */
 					      G_TYPE_POINTER,	/* path or volume */
-					      G_TYPE_BOOLEAN);  /* removable */
+					      G_TYPE_BOOLEAN,   /* removable */
+					      G_TYPE_BOOLEAN);  /* pixbuf cell visibility */
 
   if (impl->file_system)
     {
@@ -1376,7 +1383,7 @@ shortcuts_tree_create (GtkFileChooserDefault *impl)
 
   impl->shortcuts_tree = gtk_tree_view_new ();
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (impl->shortcuts_tree), FALSE);
-
+  
   gtk_drag_dest_set (impl->shortcuts_tree,
 		     GTK_DEST_DEFAULT_ALL,
 		     shortcuts_targets,
@@ -1414,6 +1421,7 @@ shortcuts_tree_create (GtkFileChooserDefault *impl)
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   gtk_tree_view_column_set_attributes (column, renderer,
 				       "pixbuf", SHORTCUTS_COL_PIXBUF,
+				       "visible", SHORTCUTS_COL_PIXBUF_VISIBLE,
 				       NULL);
 
   renderer = _gtk_cell_renderer_sep_text_new ();
@@ -2737,7 +2745,7 @@ gtk_file_chooser_default_remove_shortcut_folder (GtkFileChooser    *chooser,
 	{
 	  /* The other columns are freed by the GtkTreeStore */
 	  gtk_file_path_free (shortcut);
-	  gtk_tree_store_remove (impl->shortcuts_model, &iter);
+	  gtk_list_store_remove (impl->shortcuts_model, &iter);
 	  impl->num_shortcuts--;
 	  return TRUE;
 	}
