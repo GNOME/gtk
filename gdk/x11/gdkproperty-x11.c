@@ -347,8 +347,8 @@ virtual_atom_check_init (void)
       
       for (i = 0; i < G_N_ELEMENTS (XAtomsStrings); i++)
 	{
-	  g_ptr_array_add (virtual_atom_array, XAtomsStrings[i]);
-	  g_hash_table_insert (virtual_atom_hash, XAtomsStrings[i],
+	  g_ptr_array_add (virtual_atom_array, (gchar *) XAtomsStrings[i]);
+	  g_hash_table_insert (virtual_atom_hash, (gchar *) XAtomsStrings[i],
 			       GUINT_TO_POINTER (i));
 	}
     }
