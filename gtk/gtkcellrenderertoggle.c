@@ -139,7 +139,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 		                   PROP_INCONSISTENT,
 				   g_param_spec_boolean ("inconsistent",
 					                 _("Inconsistent state"),
-							 _("The inconsistent stae of the button"),
+							 _("The inconsistent state of the button"),
 							 FALSE,
 							 G_PARAM_READABLE |
 							 G_PARAM_WRITABLE));
