@@ -1223,7 +1223,7 @@ gtk_list_store_insert_after (GtkListStore *list_store,
   validate_list_store (list_store);
 
   path = gtk_tree_path_new ();
-  gtk_tree_path_append_index (path, i);
+  gtk_tree_path_append_index (path, i + 1);
   gtk_tree_model_row_inserted (GTK_TREE_MODEL (list_store), path, iter);
   gtk_tree_path_free (path);
 }

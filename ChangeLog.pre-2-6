@@ -1,3 +1,9 @@
+Tue Feb  5 22:54:16 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkliststore.c (gtk_list_store_insert_after): let's set the
+	path, which we're going to pass with the emission of row_inserted, to
+	the iter we inserted and not its sibling.
+
 2002-02-04 Padraig O'Briain <padraig.obriain@sun.com>
 
 	* gtk/gtkmenu.c (gtk_menu_popup):
