@@ -1,3 +1,29 @@
+2003-12-10  Mark McLoughlin  <mark@skynet.ie>
+
+	Utility functions for multi-screen applications which need
+	to ensure launched applications appear on a certain screen.
+	See bug #95897.
+	
+	* gdk/gdkspawn.h: header for multi-screen launching
+	support.
+	
+	* gdk/Makefile.am: install gdkspawn.h.
+	
+	* gdk/x11/Makefile.am:
+	* gdk/x11/gdkspawn-x11.c:
+	(gdk_spawn_make_environment_for_screen): private function
+	to create an environment vector with DISPLAY set appropriately
+	for the screen.
+	(gdk_spawn_on_screen): multi-screen version of g_spawn_async().
+	(gdk_spawn_on_screen_with_pipes): version of g_spawn_async_with_pipes().
+	(gdk_spawn_command_line_on_screen): version of g_spawn_command_line_async().
+	
+	* gdk/linux-fb/Makefile.am,
+	  gdk/linux-fb/gdkspawn-fb.c: linux-fb impl.
+	
+	* gdk/win32/Makefile.am,
+	  gdk/win32/gdkspawn-win32.c: win32 impl.
+
 2003-12-09  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_append_home): Use "Home"

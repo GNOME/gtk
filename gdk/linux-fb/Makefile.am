@@ -51,6 +51,7 @@ libgdk_linux_fb_la_SOURCES =    \
 	gdkrender-fb.c		\
 	gdkscreen-fb.c		\
 	gdkselection-fb.c 	\
+	gdkspawn-fb.c		\
 	gdkvisual-fb.c	   	\
 	gdkwindow-fb.c    	\
 	mi.h			\

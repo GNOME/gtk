@@ -46,6 +46,7 @@ libgdk_x11_la_SOURCES =    	\
 	gdkscreen-x11.c		\
 	gdkscreen-x11.h		\
 	gdkselection-x11.c 	\
+	gdkspawn-x11.c		\
 	gdkvisual-x11.c	   	\
 	gdkwindow-x11.c    	\
 	gdkwindow-x11.h		\

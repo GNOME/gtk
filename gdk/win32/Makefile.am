@@ -68,6 +68,7 @@ libgdk_win32_la_SOURCES = \
 	gdkproperty-win32.c \
 	gdkscreen-win32.c \
 	gdkselection-win32.c \
+	gdkspawn-win32.c \
 	gdkvisual-win32.c \
 	gdkwin32.h \
 	gdkwin32id.c \

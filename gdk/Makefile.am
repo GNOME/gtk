@@ -69,6 +69,7 @@ gdk_public_h_sources =				\
 	gdkrgb.h				\
 	gdkscreen.h				\
 	gdkselection.h				\
+	gdkspawn.h				\
 	gdktypes.h				\
 	gdkvisual.h				\
 	gdkwindow.h
