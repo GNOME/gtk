@@ -1,3 +1,10 @@
+2000-10-03  Tor Lillqvist  <tml@iki.fi>
+
+	* makefile.mingw.in: Add rule for make-inline-pixbuf. Use
+	gdk-pixbuf's version number in the rule for makefile.mingw itself.
+
+	* gdk_pixbuf.def: Add new entry points.
+
 2000-09-26  Havoc Pennington  <hp@redhat.com>
 
 	* gdk-pixbuf-util.c (gdk_pixbuf_saturate_and_pixelate): Add this

@@ -34,10 +34,12 @@ EXPORTS
 	gdk_pixbuf_new
 	gdk_pixbuf_new_from_data
 	gdk_pixbuf_new_from_file
+	gdk_pixbuf_new_from_inline
 	gdk_pixbuf_new_from_xpm_data
 	gdk_pixbuf_postinit
 	gdk_pixbuf_preinit
 	gdk_pixbuf_ref
+	gdk_pixbuf_saturate_and_pixelate
 	gdk_pixbuf_scale
 	gdk_pixbuf_scale_simple
 	gdk_pixbuf_unref

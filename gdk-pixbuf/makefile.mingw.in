@@ -26,6 +26,7 @@ all :						\
 	pixbufloader-tiff.dll			\
 	pixbufloader-wbmp.dll			\
 	pixbufloader-xpm.dll			\
+	make-inline-pixbuf.exe			\
 	test-gdk-pixbuf.exe
 	
 gdk_pixbuf_OBJECTS =				\
@@ -105,11 +106,14 @@ pixbufloader_xpm_OBJECTS = io-xpm.o
 pixbufloader-xpm.dll : $(pixbufloader_xpm_OBJECTS) pixbufloader_xpm.def
 	$(GLIB)/build-dll pixbufloader-xpm - pixbufloader_xpm.def $(pixbufloader_xpm_OBJECTS) -L  . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS)
 
+make-inline-pixbuf.exe : make-inline-pixbuf.o gdk_pixbuf-$(GDK_PIXBUF_VER).dll
+	$(CC) $(CFLAGS) -o $@ make-inline-pixbuf.o -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS)
+
 test-gdk-pixbuf.exe : test-gdk-pixbuf.o gdk_pixbuf-$(GDK_PIXBUF_VER).dll
 	$(CC) $(CFLAGS) -o $@ test-gdk-pixbuf.o -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GTK_LIBS) $(GLIB_LIBS)
 
 # Hack to get an updated makefile.mingw automatically after updating
 # makefile.mingw.in. Only for developer use.
 makefile.mingw: makefile.mingw.in
-	sed -e 's,@GTK_MAJOR[_]VERSION@,@GTK_MAJOR_VERSION@,' \
-	    -e 's,@GTK_MINOR[_]VERSION@,@GTK_MINOR_VERSION@,' <$< >$@
+	sed -e 's,@GDK_PIXBUF[_]MAJOR@,@GDK_PIXBUF_MAJOR@,' \
+	    -e 's,@GDK_PIXBUF[_]MINOR@,@GDK_PIXBUF_MINOR@,' <$< >$@
