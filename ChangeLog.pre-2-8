@@ -1,5 +1,8 @@
 2005-02-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.c (gtk_label_style_set): Queue a resize, since
+	fonts may have changed.  (#164128, Phil Blundell)
+
 	* gtk/gtkaboutdialog.c (gtk_about_dialog_init) 
 	(gtk_about_dialog_new): Move initialization code from _new to 
 	_init.  (#168249, Murray Cumming) 
