@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
 SRC_SUBDIRS = gdk gtk
-SUBDIRS = $(SRC_SUBDIRS) docs
+SUBDIRS = intl po $(SRC_SUBDIRS) docs
 
 bin_SCRIPTS = gtk-config
 

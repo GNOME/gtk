@@ -41,6 +41,7 @@
 #include "gdk/gdki18n.h"
 #include "config.h"
 #include "gtkdebug.h"
+#include "gtkintl.h"
 
 
 /* Private type definitions
@@ -443,6 +444,10 @@ gtk_init (int	 *argc,
 	}
       g_free (module_name);
     }
+
+#ifdef ENABLE_NLS
+  bindtextdomain("gtk+",GTK_LOCALEDIR);
+#endif  
 
   /* Initialize the default visual and colormap to be
    *  used in creating widgets. (We want to use the system

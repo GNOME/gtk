@@ -129,6 +129,10 @@ if test -n "$PERL" && perl -v | grep 'version 5.' > /dev/null ; then
 fi
 AC_SUBST(REBUILD)
 
+# i18n stuff
+ALL_LINGUAS="de"
+AM_GNU_GETTEXT
+
 dnl The DU4 header files don't provide library prototypes unless 
 dnl -std1 is given to the native cc.
 AC_MSG_CHECKING([for extra flags to get ANSI library prototypes])
@@ -508,6 +512,8 @@ AC_SUBST(GTK_THREAD_FLAGS)
 AC_OUTPUT([
 Makefile
 gtk-config
+intl/Makefile
+po/Makefile.in
 docs/Makefile
 gdk/Makefile
 gtk/Makefile

@@ -46,6 +46,7 @@
 #include "gtkoptionmenu.h"
 #include "gtkclist.h"
 #include "gtkdialog.h"
+#include "gtkintl.h"
 
 #define DIR_LIST_WIDTH   180
 #define DIR_LIST_HEIGHT  180
@@ -369,8 +370,8 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   GtkWidget *pulldown_hbox;
   GtkWidget *scrolled_win;
 
-  static const char *dir_title [] = { "Directories", NULL };
-  static const char *file_title [] = { "Files", NULL };
+  char *dir_title [2];
+  char *file_title [2];
   
   filesel->cmpl_state = cmpl_init_state ();
 
@@ -415,6 +416,8 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_clist_column_titles_passive (GTK_CLIST (filesel->dir_list));
 
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  dir_title[0] = _("Directories");
+  dir_title[1] = NULL;
   gtk_container_add (GTK_CONTAINER (scrolled_win), filesel->dir_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
@@ -424,6 +427,8 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_show (scrolled_win);
 
   /* The files clist */
+  file_title[0] = _("Files");
+  file_title[1] = NULL;
   filesel->file_list = gtk_clist_new_with_titles (1, (gchar**) file_title);
   gtk_widget_set_usize (filesel->file_list, FILE_LIST_WIDTH, FILE_LIST_HEIGHT);
   gtk_signal_connect (GTK_OBJECT (filesel->file_list), "select_row",
@@ -454,14 +459,14 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_show (confirm_area);
 
   /*  The OK button  */
-  filesel->ok_button = gtk_button_new_with_label ("OK");
+  filesel->ok_button = gtk_button_new_with_label (_("OK"));
   GTK_WIDGET_SET_FLAGS (filesel->ok_button, GTK_CAN_DEFAULT);
   gtk_box_pack_start (GTK_BOX (confirm_area), filesel->ok_button, TRUE, TRUE, 0);
   gtk_widget_grab_default (filesel->ok_button);
   gtk_widget_show (filesel->ok_button);
 
   /*  The Cancel button  */
-  filesel->cancel_button = gtk_button_new_with_label ("Cancel");
+  filesel->cancel_button = gtk_button_new_with_label (_("Cancel"));
   GTK_WIDGET_SET_FLAGS (filesel->cancel_button, GTK_CAN_DEFAULT);
   gtk_box_pack_start (GTK_BOX (confirm_area), filesel->cancel_button, TRUE, TRUE, 0);
   gtk_widget_show (filesel->cancel_button);
@@ -492,7 +497,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
     {
       gchar err_buf[256];
 
-      sprintf (err_buf, "Directory unreadable: %s", cmpl_strerror (cmpl_errno));
+      sprintf (err_buf, _("Directory unreadable: %s"), cmpl_strerror (cmpl_errno));
 
       gtk_label_set (GTK_LABEL (filesel->selection_text), err_buf);
     }
@@ -524,7 +529,7 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
   /* delete, create directory, and rename */
   if (!filesel->fileop_c_dir) 
     {
-      filesel->fileop_c_dir = gtk_button_new_with_label ("Create Dir");
+      filesel->fileop_c_dir = gtk_button_new_with_label (_("Create Dir"));
       gtk_signal_connect (GTK_OBJECT (filesel->fileop_c_dir), "clicked",
 			  (GtkSignalFunc) gtk_file_selection_create_dir, 
 			  (gpointer) filesel);
@@ -535,7 +540,7 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
 	
   if (!filesel->fileop_del_file) 
     {
-      filesel->fileop_del_file = gtk_button_new_with_label ("Delete File");
+      filesel->fileop_del_file = gtk_button_new_with_label (_("Delete File"));
       gtk_signal_connect (GTK_OBJECT (filesel->fileop_del_file), "clicked",
 			  (GtkSignalFunc) gtk_file_selection_delete_file, 
 			  (gpointer) filesel);
@@ -546,7 +551,7 @@ gtk_file_selection_show_fileop_buttons (GtkFileSelection *filesel)
 
   if (!filesel->fileop_ren_file)
     {
-      filesel->fileop_ren_file = gtk_button_new_with_label ("Rename File");
+      filesel->fileop_ren_file = gtk_button_new_with_label (_("Rename File"));
       gtk_signal_connect (GTK_OBJECT (filesel->fileop_ren_file), "clicked",
 			  (GtkSignalFunc) gtk_file_selection_rename_file, 
 			  (gpointer) filesel);
@@ -707,7 +712,7 @@ gtk_file_selection_fileop_error (gchar *error_message)
 		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
 		      (gpointer) fs);
   */
-  gtk_window_set_title (GTK_WINDOW (dialog), "Error");
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Error"));
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
   
   vbox = gtk_vbox_new(FALSE, 0);
@@ -725,7 +730,7 @@ gtk_file_selection_fileop_error (gchar *error_message)
   g_free (error_message);
   
   /* close button */
-  button = gtk_button_new_with_label ("Close");
+  button = gtk_button_new_with_label (_("Close"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);
@@ -800,7 +805,7 @@ gtk_file_selection_create_dir (GtkWidget *widget, gpointer data)
   gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
 		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
 		      (gpointer) fs);
-  gtk_window_set_title (GTK_WINDOW (dialog), "Create Directory");
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Create Directory"));
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
 
   /* If file dialog is grabbed, grab option dialog */
@@ -814,7 +819,7 @@ gtk_file_selection_create_dir (GtkWidget *widget, gpointer data)
 		     FALSE, FALSE, 0);
   gtk_widget_show(vbox);
   
-  label = gtk_label_new("Directory name:");
+  label = gtk_label_new(_("Directory name:"));
   gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
   gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 5);
   gtk_widget_show(label);
@@ -827,7 +832,7 @@ gtk_file_selection_create_dir (GtkWidget *widget, gpointer data)
   gtk_widget_show (fs->fileop_entry);
   
   /* buttons */
-  button = gtk_button_new_with_label ("Create");
+  button = gtk_button_new_with_label (_("Create"));
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc) gtk_file_selection_create_dir_confirmed, 
 		      (gpointer) fs);
@@ -836,7 +841,7 @@ gtk_file_selection_create_dir (GtkWidget *widget, gpointer data)
   GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
   gtk_widget_show(button);
   
-  button = gtk_button_new_with_label ("Cancel");
+  button = gtk_button_new_with_label (_("Cancel"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);
@@ -905,7 +910,7 @@ gtk_file_selection_delete_file (GtkWidget *widget, gpointer data)
   gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
 		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
 		      (gpointer) fs);
-  gtk_window_set_title (GTK_WINDOW (dialog), "Delete File");
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Delete File"));
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
 
   /* If file dialog is grabbed, grab option dialog */
@@ -927,7 +932,7 @@ gtk_file_selection_delete_file (GtkWidget *widget, gpointer data)
   g_free(buf);
   
   /* buttons */
-  button = gtk_button_new_with_label ("Delete");
+  button = gtk_button_new_with_label (_("Delete"));
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc) gtk_file_selection_delete_file_confirmed, 
 		      (gpointer) fs);
@@ -936,7 +941,7 @@ gtk_file_selection_delete_file (GtkWidget *widget, gpointer data)
   GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
   gtk_widget_show(button);
   
-  button = gtk_button_new_with_label ("Cancel");
+  button = gtk_button_new_with_label (_("Cancel"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);
@@ -1009,7 +1014,7 @@ gtk_file_selection_rename_file (GtkWidget *widget, gpointer data)
   gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
 		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
 		      (gpointer) fs);
-  gtk_window_set_title (GTK_WINDOW (dialog), "Rename File");
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Rename File"));
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
 
   /* If file dialog is grabbed, grab option dialog */
@@ -1042,7 +1047,7 @@ gtk_file_selection_rename_file (GtkWidget *widget, gpointer data)
 			      0, strlen (fs->fileop_file));
 
   /* buttons */
-  button = gtk_button_new_with_label ("Rename");
+  button = gtk_button_new_with_label (_("Rename"));
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc) gtk_file_selection_rename_file_confirmed, 
 		      (gpointer) fs);
@@ -1051,7 +1056,7 @@ gtk_file_selection_rename_file (GtkWidget *widget, gpointer data)
   GTK_WIDGET_SET_FLAGS(button, GTK_CAN_DEFAULT);
   gtk_widget_show(button);
   
-  button = gtk_button_new_with_label ("Cancel");
+  button = gtk_button_new_with_label (_("Cancel"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);
@@ -1447,7 +1452,7 @@ gtk_file_selection_abort (GtkFileSelection *fs)
 {
   gchar err_buf[256];
 
-  sprintf (err_buf, "Directory unreadable: %s", cmpl_strerror (cmpl_errno));
+  sprintf (err_buf, _("Directory unreadable: %s"), cmpl_strerror (cmpl_errno));
 
   /*  BEEP gdk_beep();  */
 

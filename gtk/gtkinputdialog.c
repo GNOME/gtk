@@ -45,6 +45,8 @@
 #include "gtktable.h"
 #include "gtkvbox.h"
 
+#include "gtkintl.h"
+
 typedef struct {
   gint       index;
   GtkWidget *entry;
@@ -187,7 +189,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
   /* shell and main vbox */
 
-  gtk_window_set_title (GTK_WINDOW (inputd), "Input");
+  gtk_window_set_title (GTK_WINDOW (inputd), _("Input"));
 
   vbox = gtk_vbox_new (FALSE, 4);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
@@ -195,7 +197,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
   if (g_list_length(device_info) <= 1) /* only core device */
     {
-      label = gtk_label_new ("No input devices");
+      label = gtk_label_new (_("No input devices"));
       gtk_container_add (GTK_CONTAINER (vbox), label);
 
       gtk_widget_show (label);
@@ -224,7 +226,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
       util_box = gtk_hbox_new (FALSE, 2);
       gtk_box_pack_start (GTK_BOX (vbox), util_box, FALSE, FALSE, 0);
 
-      label = gtk_label_new("Device:");
+      label = gtk_label_new(_("Device:"));
       gtk_box_pack_start (GTK_BOX (util_box), label, FALSE, FALSE, 2);
 
       optionmenu = gtk_option_menu_new ();
@@ -240,7 +242,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
       mapping_menu = gtk_menu_new ();
 
-      menuitem = gtk_menu_item_new_with_label("Disabled");
+      menuitem = gtk_menu_item_new_with_label(_("Disabled"));
       gtk_menu_append(GTK_MENU(mapping_menu),menuitem);
       gtk_object_set_user_data (GTK_OBJECT (menuitem), inputd);
       gtk_widget_show(menuitem);
@@ -248,7 +250,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 			  (GtkSignalFunc) gtk_input_dialog_set_mapping_mode,
 			  GINT_TO_POINTER (GDK_MODE_DISABLED));
 
-      menuitem = gtk_menu_item_new_with_label("Screen");
+      menuitem = gtk_menu_item_new_with_label(_("Screen"));
       gtk_menu_append(GTK_MENU(mapping_menu),menuitem);
       gtk_object_set_user_data (GTK_OBJECT (menuitem), inputd);
       gtk_widget_show(menuitem);
@@ -256,7 +258,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 			  (GtkSignalFunc) gtk_input_dialog_set_mapping_mode,
 			  GINT_TO_POINTER (GDK_MODE_SCREEN));
 
-      menuitem = gtk_menu_item_new_with_label("Window");
+      menuitem = gtk_menu_item_new_with_label(_("Window"));
       gtk_menu_append(GTK_MENU(mapping_menu),menuitem);
       gtk_object_set_user_data (GTK_OBJECT (menuitem), inputd);
       gtk_widget_show(menuitem);
@@ -264,7 +266,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 			  (GtkSignalFunc) gtk_input_dialog_set_mapping_mode,
 			  GINT_TO_POINTER (GDK_MODE_WINDOW));
 
-      label = gtk_label_new("Mode: ");
+      label = gtk_label_new(_("Mode: "));
       gtk_box_pack_start (GTK_BOX (util_box), label, FALSE, FALSE, 2);
 
       inputd->mode_optionmenu = gtk_option_menu_new ();
@@ -294,7 +296,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
       
       /*  The axis listbox  */
 
-      label = gtk_label_new ("Axes");
+      label = gtk_label_new (_("Axes"));
 
       inputd->axis_listbox = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(inputd->axis_listbox),
@@ -310,7 +312,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
       /* Keys listbox */
 
-      label = gtk_label_new ("Keys");
+      label = gtk_label_new (_("Keys"));
 
       inputd->keys_listbox = gtk_scrolled_window_new (NULL, NULL);
       gtk_widget_set_usize (inputd->keys_listbox, KEYS_LIST_WIDTH, KEYS_LIST_HEIGHT);
@@ -332,7 +334,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 
   /* We create the save button in any case, so that clients can 
      connect to it, without paying attention to whether it exits */
-  inputd->save_button = gtk_button_new_with_label ("Save");
+  inputd->save_button = gtk_button_new_with_label (_("Save"));
   GTK_WIDGET_SET_FLAGS (inputd->save_button, GTK_CAN_DEFAULT);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG(inputd)->action_area),
 		      inputd->save_button, TRUE, TRUE, 0);
@@ -341,7 +343,7 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
   if (g_list_length(device_info) <= 1) /* only core device */
     gtk_widget_set_sensitive(inputd->save_button, FALSE);
 
-  inputd->close_button = gtk_button_new_with_label ("Close");
+  inputd->close_button = gtk_button_new_with_label (_("Close"));
   GTK_WIDGET_SET_FLAGS (inputd->close_button, GTK_CAN_DEFAULT);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG(inputd)->action_area),
 		      inputd->close_button, TRUE, TRUE, 0);
@@ -487,11 +489,11 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDeviceInfo *info)
   static const char *axis_use_strings[GDK_AXIS_LAST] =
   {
     "",
-    "X",
-    "Y",
-    "Pressure",
-    "X Tilt",
-    "Y Tilt"
+    N_("X"),
+    N_("Y"),
+    N_("Pressure"),
+    N_("X Tilt"),
+    N_("Y Tilt")
   };
 
   int i,j;
@@ -518,7 +520,7 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDeviceInfo *info)
     {
       /* create the label */
 
-      label = gtk_label_new(axis_use_strings[i]);
+      label = gtk_label_new (_(axis_use_strings[i]));
       gtk_table_attach (GTK_TABLE (inputd->axis_list), label, 0, 1, i, i+1, 
 			0, 0, 2, 2);
 
@@ -531,7 +533,7 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDeviceInfo *info)
 	  GtkWidget *menu_item;
 
 	  if (j == -1)
-	    menu_item = gtk_menu_item_new_with_label ("none");
+	    menu_item = gtk_menu_item_new_with_label (_("none"));
 	  else
 	    {
 	      sprintf (buffer,"%d",j+1);
@@ -565,7 +567,7 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDeviceInfo *info)
 static void 
 gtk_input_dialog_clear_key (GtkWidget *widget, GtkInputKeyInfo *key)
 {
-  gtk_entry_set_text (GTK_ENTRY(key->entry), "(disabled)");
+  gtk_entry_set_text (GTK_ENTRY(key->entry), _("(disabled)"));
   gdk_input_set_key (key->inputd->current_device, key->index, 0, 0);
 }
 
@@ -594,14 +596,14 @@ gtk_input_dialog_set_key (GtkInputKeyInfo *key,
 	  g_string_append (str, chars);
 	}
       else
-	g_string_append (str, "(unknown)");
+	g_string_append (str, _("(unknown)"));
       gtk_entry_set_text (GTK_ENTRY(key->entry), str->str);
 
       g_string_free (str, TRUE);
     }
   else
     {
-      gtk_entry_set_text (GTK_ENTRY(key->entry), "(disabled)");
+      gtk_entry_set_text (GTK_ENTRY(key->entry), _("(disabled)"));
     }
 }
 
@@ -679,7 +681,7 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDeviceInfo *info)
       
       /* and clear button */
 
-      button = gtk_button_new_with_label ("clear");
+      button = gtk_button_new_with_label (_("clear"));
       gtk_table_attach (GTK_TABLE (inputd->keys_list), button, 2, 3, i, i+1, 
 			0, 0, 2, 2);
       gtk_widget_show (button);

@@ -15,10 +15,15 @@
 
 
 /* Other stuff */
+#undef ENABLE_NLS
 #undef GTK_COMPILED_WITH_DEBUGGING
 
+#undef HAVE_CATGETS
+#undef HAVE_GETTEXT
 #undef HAVE_IPC_H
+#undef HAVE_LC_MESSAGES
 #undef HAVE_SHM_H
+#undef HAVE_STPCPY
 #undef HAVE_XSHM_H
 #undef HAVE_SHAPE_EXT
 #undef HAVE_SYS_SELECT_H

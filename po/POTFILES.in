@@ -1,0 +1,5 @@
+# Files from the Gtk ditribution which have already been
+# marked to allow runtime translation of messages
+
+gtk/gtkfilesel.c
+gtk/gtkcolorsel.c

@@ -6,6 +6,8 @@ to have the following packages installed:
 	        (Beta releases are at ftp://ftp.cygnus.com/pub/tromey)
 	- GNU libtool 1.2b
 	- indent (GNU indent 1.9.1 is known good)
+	- GNU gettext 10.35
+		Available in ftp://alpha.gnu.org/gnu
 
 These should be available by ftp from ftp.gnu.org or any of the
 fine GNU mirrors.  Beta software can be found at alpha.gnu.org.

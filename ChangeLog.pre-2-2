@@ -1,3 +1,24 @@
+Mon Dec 14 12:24:13 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* HACKING: Added gettext-10.35
+
+	* autogen.sh: Run gettextize.
+
+Wed Dec  9 16:29:06 1998  Owen Taylor  <otaylor@redhat.com>
+
+        Applied gtk-egger-981010-[12] 
+	[ Daniel.Egger@t-online.de (Daniel Egger) ]
+
+	* gtk/gtkintl.h: New file - defines for localization.
+
+	* gtk/gtkfilesel.c gtk/gtkinputdialog.c: Mark strings
+	for internationalization.
+
+	* gtk/gtkmain.c: call bindtextdomain
+
+	* po/ - directory for translations. Initially includes
+	German translation.
+
 Mon Dec 14 02:42:11 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c: made GtkWidget::grab_focus a RUN_LAST and

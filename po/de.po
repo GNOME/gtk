@@ -1,0 +1,104 @@
+msgid ""
+msgstr ""
+"Date: 1998-10-10 18:46:34+0200\n"
+"From: Daniel Egger <Daniel.Egger@t-online.de>\n"
+"Content-Type: text/plain; charset=\n"
+"Xgettext-Options: --default-domain=gtk+ --directory=.. --add-comments --keyword=_ --keyword=N_ --files-from=./POTFILES.in\n"
+"Files: gtk/gtkfilesel.c\n"
+
+#: gtk/gtkfilesel.c:371
+msgid "Directories"
+msgstr "Verzeichnisse"
+
+#: gtk/gtkfilesel.c:372
+msgid "Files"
+msgstr "Dateien"
+
+#: gtk/gtkfilesel.c:446
+msgid "OK"
+msgstr "OK"
+
+#. The Cancel button
+#: gtk/gtkfilesel.c:453 gtk/gtkfilesel.c:815 gtk/gtkfilesel.c:915 gtk/gtkfilesel.c:1030
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: gtk/gtkfilesel.c:484 gtk/gtkfilesel.c:1431
+msgid "Directory unreadable: %s"
+msgstr "Verzeichnis nicht lesbar: %s"
+
+#: gtk/gtkfilesel.c:516
+msgid "Create Dir"
+msgstr "Erstelle Verzeichnis"
+
+#: gtk/gtkfilesel.c:527 gtk/gtkfilesel.c:884
+msgid "Delete File"
+msgstr "Datei löschen"
+
+#: gtk/gtkfilesel.c:538 gtk/gtkfilesel.c:988
+msgid "Rename File"
+msgstr "Datei umbenennen"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:686
+msgid "Error"
+msgstr "Fehler"
+
+#. close button
+#: gtk/gtkfilesel.c:704
+msgid "Close"
+msgstr "Schließen"
+
+#: gtk/gtkfilesel.c:749
+msgid "Error creating directory \""
+msgstr ""
+
+#: gtk/gtkfilesel.c:779
+msgid "Create Directory"
+msgstr "Erstelle Verzeichnis"
+
+#: gtk/gtkfilesel.c:793
+msgid "Directory name:"
+msgstr "Verzeichnisname:"
+
+#. buttons
+#: gtk/gtkfilesel.c:806
+msgid "Create"
+msgstr "Erstellen"
+
+#: gtk/gtkfilesel.c:846
+msgid "Error deleting file \""
+msgstr ""
+
+#: gtk/gtkfilesel.c:898
+msgid "Really delete file \""
+msgstr ""
+
+#: gtk/gtkfilesel.c:906
+msgid "Delete"
+msgstr "Löschen"
+
+#: gtk/gtkfilesel.c:952
+msgid "Error renaming file \""
+msgstr ""
+
+#: gtk/gtkfilesel.c:1002
+msgid "Rename file \""
+msgstr ""
+
+#. buttons
+#: gtk/gtkfilesel.c:1021
+msgid "Rename"
+msgstr "Umbenennen"
+
+#: gtk/gtkfilesel.c:1410 gtk/gtkfilesel.c:1411
+msgid "Selection: "
+msgstr "Auswahl: "
+
+#: gtk/gtkfilesel.c:2712
+msgid "Name too long"
+msgstr ""
