@@ -3035,27 +3035,239 @@ gtk_widget_get_style (GtkWidget *widget)
   return widget->style;
 }
 
+/**
+ * gtk_widget_modify_style:
+ * @widget: a #GtkWidget
+ * @style: the #GtkRcStyle holding the style modifications
+ * 
+ * Modify style values on the widget. Modifications made using this
+ * technique take precendence over style values set via an RC file,
+ * however, they will be overriden if a style is explicitely set on
+ * the widget using gtk_widget_set_style(). The #GtkRcStyle structure
+ * is designed so each field can either be set or unset, so it is
+ * possible, using this function, to modify some style values and
+ * leave the others unchanged.
+ *
+ * Note that modifications made with this function are not cumulative
+ * with previous calls to gtk_widget_modify_style() or with such
+ * functions as gtk_widget_modify_fg(). If you wish to retain
+ * previous values, you must first call gtk_widget_get_modifier_style(),
+ * make your modifications to the returned style, then call
+ * gtk_widget_modify_style() with that style. On the other hand,
+ * if you first call gtk_widget_modify_style(), subsequent calls
+ * to such functions gtk_widget_modify_fg() will be have a cumulative
+ * effect with the inital modifications.
+ **/
 void       
 gtk_widget_modify_style (GtkWidget      *widget,
 			 GtkRcStyle     *style)
 {
   GtkRcStyle *old_style;
+
+  g_return_if_fail (GTK_IS_RC_STYLE (style));
   
   if (!rc_style_key_id)
     rc_style_key_id = g_quark_from_static_string (rc_style_key);
 
-  old_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), rc_style_key_id);
+  old_style = gtk_object_get_data_by_id (GTK_OBJECT (widget),
+					 rc_style_key_id);
 
   if (style != old_style)
+    gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
+				    rc_style_key_id,
+				    gtk_rc_style_copy (style),
+				    (GtkDestroyNotify)gtk_rc_style_unref);
+
+  if (GTK_WIDGET_RC_STYLE (widget))
+    gtk_widget_set_rc_style (widget);
+}
+
+/**
+ * gtk_widget_get_modifier_style:
+ * @widget: a #GtkWidget
+ * 
+ * Return the current modifier style for the widget. (As set by
+ * gtk_widget_modify_style().) If no style has previously set, a new
+ * #GtkRcStyle will be created with all values unset, and set as the
+ * modifier style for the widget. If you make changes to this rc
+ * style, you must call gtk_widget_modify_style(), passing in the
+ * returned rc style, to make sure that your changes take effect.
+ * 
+ * Return value: the modifier style for the widget. This rc style is
+ *   owned by the widget. If you want to keep a pointer to value this
+ *   around, you must add a refcount using gtk_rc_style_ref().
+ **/
+GtkRcStyle *
+gtk_widget_get_modifier_style (GtkWidget      *widget)
+{
+  GtkRcStyle *rc_style;
+  
+  if (!rc_style_key_id)
+    rc_style_key_id = g_quark_from_static_string (rc_style_key);
+  
+  rc_style = gtk_object_get_data_by_id (GTK_OBJECT (widget),
+					rc_style_key_id);
+
+  if (!rc_style)
     {
-      gtk_rc_style_ref (style);
-      
+      rc_style = gtk_rc_style_new();
       gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
 				      rc_style_key_id,
-				      style,
+				      rc_style,
 				      (GtkDestroyNotify)gtk_rc_style_unref);
     }
 
+  return rc_style;
+}
+
+static void
+gtk_widget_modify_color_component (GtkWidget     *widget,
+				   GtkRcFlags     component,
+				   GtkStateType   state,
+				   GdkColor      *color)
+{
+  GtkRcStyle *rc_style = gtk_widget_get_modifier_style (widget);  
+
+  switch (component)
+    {
+    case GTK_RC_FG:
+      rc_style->fg[state] = *color;
+      break;
+    case GTK_RC_BG:
+      rc_style->bg[state] = *color;
+      break;
+    case GTK_RC_TEXT:
+      rc_style->text[state] = *color;
+       break;
+    case GTK_RC_BASE:
+      rc_style->base[state] = *color;
+      break;
+    default:
+      g_assert_not_reached();
+    }
+
+  rc_style->color_flags[state] |= component;
+
+  if (GTK_WIDGET_RC_STYLE (widget))
+    gtk_widget_set_rc_style (widget);
+}
+
+/**
+ * gtk_widget_modify_fg:
+ * @widget: a #GtkWidget
+ * @state: the state for which to set the foreground color.
+ * @color: the color to assign (does not need to be allocated)
+ * 
+ * Set the foreground color for a widget in a particular state.  All
+ * other style values are left untouched. See also
+ * gtk_widget_modify_style().
+ **/
+void
+gtk_widget_modify_fg (GtkWidget   *widget,
+		      GtkStateType state,
+		      GdkColor    *color)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);
+  g_return_if_fail (color != NULL);
+
+  gtk_widget_modify_color_component (widget, GTK_RC_FG, state, color);
+}
+
+/**
+ * gtk_widget_modify_bg:
+ * @widget: a #GtkWidget
+ * @state: the state for which to set the foreground color.
+ * @color: the color to assign (does not need to be allocated)
+ * 
+ * Set the background color for a widget in a particular state.  All
+ * other style values are left untouched. See also
+ * gtk_widget_modify_style().
+ **/
+void
+gtk_widget_modify_bg (GtkWidget   *widget,
+		      GtkStateType state,
+		      GdkColor    *color)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);
+  g_return_if_fail (color != NULL);
+
+  gtk_widget_modify_color_component (widget, GTK_RC_BG, state, color);
+}
+
+/**
+ * gtk_widget_modify_base:
+ * @widget: a #GtkWidget
+ * @state: the state for which to set the foreground color.
+ * @color: the color to assign (does not need to be allocated)
+ * 
+ * Set the text color for a widget in a particular state.  All other
+ * style values are left untouched. The text color is the foreground
+ * color used along with the base color (see gtk_widget_modify_base)
+ * for widgets such as #GtkEntry and #GtkTextView. See also
+ * gtk_widget_modify_style().
+ **/
+void
+gtk_widget_modify_text (GtkWidget   *widget,
+			GtkStateType state,
+			GdkColor    *color)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);
+  g_return_if_fail (color != NULL);
+
+  gtk_widget_modify_color_component (widget, GTK_RC_TEXT, state, color);
+}
+
+/**
+ * gtk_widget_modify_base:
+ * @widget: a #GtkWidget
+ * @state: the state for which to set the foreground color.
+ * @color: the color to assign (does not need to be allocated)
+ * 
+ * Set the text color for a widget in a particular state.
+ * All other style values are left untouched. The base color
+ * is the background color used along with the text color
+ * (see gtk_widget_modify_text) for widgets such as #GtkEntry
+ * and #GtkTextView. See also gtk_widget_modify_style().
+ **/
+void
+gtk_widget_modify_base (GtkWidget  *widget,
+			GtkStateType state,
+			GdkColor    *color)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);
+  g_return_if_fail (color != NULL);
+
+  gtk_widget_modify_color_component (widget, GTK_RC_BASE, state, color);
+}
+
+/**
+ * gtk_widget_modify_font:
+ * @widget: a #GtkWidget
+ * @font: the font description to use
+ * 
+ * Set the font to use for a widget.  All other style values are left
+ * untouched. See also gtk_widget_modify_style().
+ **/
+void
+gtk_widget_modify_font (GtkWidget            *widget,
+			PangoFontDescription *font_desc)
+{
+  GtkRcStyle *rc_style;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (font_desc != NULL);
+
+  rc_style = gtk_widget_get_modifier_style (widget);  
+
+  if (rc_style->font_desc)
+    pango_font_description_free (rc_style->font_desc);
+  
+  rc_style->font_desc = pango_font_description_copy (font_desc);
+  
   if (GTK_WIDGET_RC_STYLE (widget))
     gtk_widget_set_rc_style (widget);
 }

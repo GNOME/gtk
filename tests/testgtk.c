@@ -8472,6 +8472,125 @@ void create_layout (void)
     gtk_widget_destroy (window);
 }
 
+void
+create_styles (void)
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *label;
+  GtkWidget *button;
+  GtkWidget *entry;
+  GtkWidget *vbox;
+  static GdkColor red =    { 0, 0xffff, 0,      0      };
+  static GdkColor green =  { 0, 0,      0xffff, 0      };
+  static GdkColor blue =   { 0, 0,      0,      0xffff };
+  static GdkColor yellow = { 0, 0xffff, 0xffff, 0      };
+  static GdkColor cyan =   { 0, 0     , 0xffff, 0xffff };
+  PangoFontDescription *font_desc;
+
+  GtkRcStyle *rc_style;
+
+  if (!window)
+    {
+      window = gtk_dialog_new ();
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &window);
+
+      
+      button = gtk_button_new_with_label ("Close");
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
+				 GTK_OBJECT (window));
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
+			  button, TRUE, TRUE, 0);
+      gtk_widget_show (button);
+
+      vbox = gtk_vbox_new (FALSE, 5);
+      gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox, FALSE, FALSE, 0);
+      
+      label = gtk_label_new ("Font:");
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+      font_desc = pango_font_description_from_string ("Helvetica,Sans Oblique 18");
+
+      button = gtk_button_new_with_label ("Some Text");
+      gtk_widget_modify_font (GTK_BIN (button)->child, font_desc);
+      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+      label = gtk_label_new ("Foreground:");
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+      button = gtk_button_new_with_label ("Some Text");
+      gtk_widget_modify_fg (GTK_BIN (button)->child, GTK_STATE_NORMAL, &red);
+      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+      label = gtk_label_new ("Background:");
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+      button = gtk_button_new_with_label ("Some Text");
+      gtk_widget_modify_bg (button, GTK_STATE_NORMAL, &green);
+      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+      label = gtk_label_new ("Text:");
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+      entry = gtk_entry_new ();
+      gtk_entry_set_text (GTK_ENTRY (entry), "Some Text");
+      gtk_widget_modify_text (entry, GTK_STATE_NORMAL, &blue);
+      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
+
+      label = gtk_label_new ("Base:");
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+      entry = gtk_entry_new ();
+      gtk_entry_set_text (GTK_ENTRY (entry), "Some Text");
+      gtk_widget_modify_base (entry, GTK_STATE_NORMAL, &yellow);
+      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
+
+      label = gtk_label_new ("Multiple:");
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+      button = gtk_button_new_with_label ("Some Text");
+
+      rc_style = gtk_rc_style_new ();
+
+      rc_style->font_desc = font_desc;
+      rc_style->color_flags[GTK_STATE_NORMAL] = GTK_RC_FG | GTK_RC_BG;
+      rc_style->color_flags[GTK_STATE_PRELIGHT] = GTK_RC_FG | GTK_RC_BG;
+      rc_style->color_flags[GTK_STATE_ACTIVE] = GTK_RC_FG | GTK_RC_BG;
+      rc_style->fg[GTK_STATE_NORMAL] = yellow;
+      rc_style->bg[GTK_STATE_NORMAL] = blue;
+      rc_style->fg[GTK_STATE_PRELIGHT] = blue;
+      rc_style->bg[GTK_STATE_PRELIGHT] = yellow;
+      rc_style->fg[GTK_STATE_ACTIVE] = red;
+      rc_style->bg[GTK_STATE_ACTIVE] = cyan;
+      rc_style->xthickness = 5;
+      rc_style->ythickness = 5;
+
+      gtk_widget_modify_style (button, rc_style);
+      gtk_widget_modify_style (GTK_BIN (button)->child, rc_style);
+
+      g_object_unref (G_OBJECT (rc_style));
+      
+      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+      pango_font_description_free (font_desc);
+    }
+  
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
+}
+
 /*
  * Main Window and Exit
  */
@@ -8529,6 +8648,7 @@ create_main_window (void)
       { "shapes", create_shapes },
       { "spinbutton", create_spins },
       { "statusbar", create_statusbar },
+      { "styles", create_styles },
       { "test idle", create_idle_test },
       { "test mainloop", create_mainloop },
       { "test scrolling", create_scroll_test },

@@ -121,6 +121,7 @@ void	  gtk_rc_add_class_style	(GtkRcStyle  *rc_style,
 
 GType       gtk_rc_style_get_type   (void);
 GtkRcStyle* gtk_rc_style_new        (void);
+GtkRcStyle *gtk_rc_style_copy       (GtkRcStyle *orig);
 void        gtk_rc_style_ref        (GtkRcStyle *rc_style);
 void        gtk_rc_style_unref      (GtkRcStyle *rc_style);
 

@@ -871,6 +871,29 @@ gtk_rc_style_new (void)
   return style;
 }
 
+/**
+ * gtk_rc_style_copy:
+ * @orig: the style to copy
+ * 
+ * Make a copy of the specified #GtkRcStyle. This function
+ * will correctly copy an rc style that is a member of a class
+ * derived from #GtkRcStyle.
+ * 
+ * Return value: the resulting #GtkRcStyle
+ **/
+GtkRcStyle *
+gtk_rc_style_copy (GtkRcStyle *orig)
+{
+  GtkRcStyle *style;
+
+  g_return_if_fail (GTK_IS_RC_STYLE (orig));
+  
+  style = GTK_RC_STYLE_GET_CLASS (orig)->clone (orig);
+  GTK_RC_STYLE_GET_CLASS (style)->merge (style, orig);
+
+  return style;
+}
+
 void      
 gtk_rc_style_ref (GtkRcStyle  *rc_style)
 {

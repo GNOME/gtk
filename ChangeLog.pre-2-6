@@ -1,3 +1,18 @@
+Mon Aug 21 22:39:18 2000  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtkwidget.[ch]: Add gtk_widget_modify_{fg,bg,text,base,font}.
+	
+	* gtk/testgtk.c (create_styles): Add a test for modifying
+	the style through gtk_widget_modify_*.
+
+	* gtk/gtkwidget.c (gtk_widget_get_modifier_style): Add
+	a function to get the current modifier style.
+
+	* gtk/gtkwidget.c (gtk_widget_modify_style): Make a copy
+	of the passed in GtkRcStyle instead of ref'ing it.
+
+	* gtk/gtkrc.[ch]: Add gtk_rc_style_copy().
+
 2000-08-20  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdkimage.h
