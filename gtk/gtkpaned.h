@@ -72,11 +72,28 @@ struct _GtkPaned
   guint child2_shrink : 1;
   guint child2_resize : 1;
   guint orientation : 1;
-};
+  guint in_recursion : 1;
 
+  GtkWidget *last_child1_focus;
+  GtkWidget *last_child2_focus;
+  GtkWidget *saved_focus;
+  
+  gint original_position;
+};
+ 
 struct _GtkPanedClass
 {
   GtkContainerClass parent_class;
+  
+  gboolean (* cycle_child_focus)   (GtkPaned      *paned,
+				    gboolean       reverse); 
+  gboolean (* toggle_handle_focus) (GtkPaned      *paned);
+  gboolean (* move_handle)         (GtkPaned      *paned,
+				    GtkScrollType  scroll);
+  gboolean (* cycle_handle_focus)  (GtkPaned      *paned,
+				    gboolean       reverse);
+  gboolean (* accept_position)     (GtkPaned	  *paned);
+  gboolean (* cancel_position)     (GtkPaned	  *paned);
 };
 
 

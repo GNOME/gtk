@@ -1,3 +1,12 @@
+Sat Feb  9 13:58:41 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkpaned.[ch]: Keyboard navigation for GtkPaned
+	F6: cycle between panes.
+	F8: focus handle (#53584)
+	
+	* tests/testgtk.c: Add test cases for GtkPaned keyboard 
+	navigation.
+	
 Sat Feb  9 00:16:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkimage-x11.c (_gdk_x11_copy_to_image): 

@@ -7903,6 +7903,371 @@ create_panes (void)
 }
 
 /*
+ * Paned keyboard navigation
+ */
+
+static GtkWidget*
+paned_keyboard_window1 (void)
+{
+  GtkWidget *window1;
+  GtkWidget *hpaned1;
+  GtkWidget *frame1;
+  GtkWidget *vbox1;
+  GtkWidget *button7;
+  GtkWidget *button8;
+  GtkWidget *button9;
+  GtkWidget *vpaned1;
+  GtkWidget *frame2;
+  GtkWidget *frame5;
+  GtkWidget *hbox1;
+  GtkWidget *button5;
+  GtkWidget *button6;
+  GtkWidget *frame3;
+  GtkWidget *frame4;
+  GtkWidget *table1;
+  GtkWidget *button1;
+  GtkWidget *button2;
+  GtkWidget *button3;
+  GtkWidget *button4;
+
+  window1 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window1), "Basic paned navigation");
+
+  hpaned1 = gtk_hpaned_new ();
+  gtk_container_add (GTK_CONTAINER (window1), hpaned1);
+
+  frame1 = gtk_frame_new (NULL);
+  gtk_paned_pack1 (GTK_PANED (hpaned1), frame1, FALSE, TRUE);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame1), GTK_SHADOW_IN);
+
+  vbox1 = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (frame1), vbox1);
+
+  button7 = gtk_button_new_with_label ("button7");
+  gtk_box_pack_start (GTK_BOX (vbox1), button7, FALSE, FALSE, 0);
+
+  button8 = gtk_button_new_with_label ("button8");
+  gtk_box_pack_start (GTK_BOX (vbox1), button8, FALSE, FALSE, 0);
+
+  button9 = gtk_button_new_with_label ("button9");
+  gtk_box_pack_start (GTK_BOX (vbox1), button9, FALSE, FALSE, 0);
+
+  vpaned1 = gtk_vpaned_new ();
+  gtk_paned_pack2 (GTK_PANED (hpaned1), vpaned1, TRUE, TRUE);
+
+  frame2 = gtk_frame_new (NULL);
+  gtk_paned_pack1 (GTK_PANED (vpaned1), frame2, FALSE, TRUE);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame2), GTK_SHADOW_IN);
+
+  frame5 = gtk_frame_new (NULL);
+  gtk_container_add (GTK_CONTAINER (frame2), frame5);
+
+  hbox1 = gtk_hbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (frame5), hbox1);
+
+  button5 = gtk_button_new_with_label ("button5");
+  gtk_box_pack_start (GTK_BOX (hbox1), button5, FALSE, FALSE, 0);
+
+  button6 = gtk_button_new_with_label ("button6");
+  gtk_box_pack_start (GTK_BOX (hbox1), button6, FALSE, FALSE, 0);
+
+  frame3 = gtk_frame_new (NULL);
+  gtk_paned_pack2 (GTK_PANED (vpaned1), frame3, TRUE, TRUE);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame3), GTK_SHADOW_IN);
+
+  frame4 = gtk_frame_new ("Buttons");
+  gtk_container_add (GTK_CONTAINER (frame3), frame4);
+  gtk_container_set_border_width (GTK_CONTAINER (frame4), 15);
+
+  table1 = gtk_table_new (2, 2, FALSE);
+  gtk_container_add (GTK_CONTAINER (frame4), table1);
+  gtk_container_set_border_width (GTK_CONTAINER (table1), 11);
+
+  button1 = gtk_button_new_with_label ("button1");
+  gtk_table_attach (GTK_TABLE (table1), button1, 0, 1, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  button2 = gtk_button_new_with_label ("button2");
+  gtk_table_attach (GTK_TABLE (table1), button2, 1, 2, 0, 1,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  button3 = gtk_button_new_with_label ("button3");
+  gtk_table_attach (GTK_TABLE (table1), button3, 0, 1, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  button4 = gtk_button_new_with_label ("button4");
+  gtk_table_attach (GTK_TABLE (table1), button4, 1, 2, 1, 2,
+                    (GtkAttachOptions) (GTK_FILL),
+                    (GtkAttachOptions) (0), 0, 0);
+
+  return window1;
+}
+
+static GtkWidget*
+paned_keyboard_window2 (void)
+{
+  GtkWidget *window2;
+  GtkWidget *hpaned2;
+  GtkWidget *frame6;
+  GtkWidget *button13;
+  GtkWidget *hbox2;
+  GtkWidget *vpaned2;
+  GtkWidget *frame7;
+  GtkWidget *button12;
+  GtkWidget *frame8;
+  GtkWidget *button11;
+  GtkWidget *button10;
+
+  window2 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window2), "\"button 10\" is not inside the horisontal pane");
+
+  hpaned2 = gtk_hpaned_new ();
+  gtk_container_add (GTK_CONTAINER (window2), hpaned2);
+
+  frame6 = gtk_frame_new (NULL);
+  gtk_paned_pack1 (GTK_PANED (hpaned2), frame6, FALSE, TRUE);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame6), GTK_SHADOW_IN);
+
+  button13 = gtk_button_new_with_label ("button13");
+  gtk_container_add (GTK_CONTAINER (frame6), button13);
+
+  hbox2 = gtk_hbox_new (FALSE, 0);
+  gtk_paned_pack2 (GTK_PANED (hpaned2), hbox2, TRUE, TRUE);
+
+  vpaned2 = gtk_vpaned_new ();
+  gtk_box_pack_start (GTK_BOX (hbox2), vpaned2, TRUE, TRUE, 0);
+
+  frame7 = gtk_frame_new (NULL);
+  gtk_paned_pack1 (GTK_PANED (vpaned2), frame7, FALSE, TRUE);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame7), GTK_SHADOW_IN);
+
+  button12 = gtk_button_new_with_label ("button12");
+  gtk_container_add (GTK_CONTAINER (frame7), button12);
+
+  frame8 = gtk_frame_new (NULL);
+  gtk_paned_pack2 (GTK_PANED (vpaned2), frame8, TRUE, TRUE);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame8), GTK_SHADOW_IN);
+
+  button11 = gtk_button_new_with_label ("button11");
+  gtk_container_add (GTK_CONTAINER (frame8), button11);
+
+  button10 = gtk_button_new_with_label ("button10");
+  gtk_box_pack_start (GTK_BOX (hbox2), button10, FALSE, FALSE, 0);
+
+  return window2;
+}
+
+static GtkWidget*
+paned_keyboard_window3 (void)
+{
+  GtkWidget *window3;
+  GtkWidget *vbox2;
+  GtkWidget *label1;
+  GtkWidget *hpaned3;
+  GtkWidget *frame9;
+  GtkWidget *button14;
+  GtkWidget *hpaned4;
+  GtkWidget *frame10;
+  GtkWidget *button15;
+  GtkWidget *hpaned5;
+  GtkWidget *frame11;
+  GtkWidget *button16;
+  GtkWidget *frame12;
+  GtkWidget *button17;
+
+  window3 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_object_set_data (GTK_OBJECT (window3), "window3", window3);
+  gtk_window_set_title (GTK_WINDOW (window3), "Nested panes");
+
+  vbox2 = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (window3), vbox2);
+
+  label1 = gtk_label_new ("Three panes nested inside each other");
+  gtk_box_pack_start (GTK_BOX (vbox2), label1, FALSE, FALSE, 0);
+
+  hpaned3 = gtk_hpaned_new ();
+  gtk_box_pack_start (GTK_BOX (vbox2), hpaned3, TRUE, TRUE, 0);
+
+  frame9 = gtk_frame_new (NULL);
+  gtk_paned_pack1 (GTK_PANED (hpaned3), frame9, FALSE, TRUE);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame9), GTK_SHADOW_IN);
+
+  button14 = gtk_button_new_with_label ("button14");
+  gtk_container_add (GTK_CONTAINER (frame9), button14);
+
+  hpaned4 = gtk_hpaned_new ();
+  gtk_paned_pack2 (GTK_PANED (hpaned3), hpaned4, TRUE, TRUE);
+
+  frame10 = gtk_frame_new (NULL);
+  gtk_paned_pack1 (GTK_PANED (hpaned4), frame10, FALSE, TRUE);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame10), GTK_SHADOW_IN);
+
+  button15 = gtk_button_new_with_label ("button15");
+  gtk_container_add (GTK_CONTAINER (frame10), button15);
+
+  hpaned5 = gtk_hpaned_new ();
+  gtk_paned_pack2 (GTK_PANED (hpaned4), hpaned5, TRUE, TRUE);
+
+  frame11 = gtk_frame_new (NULL);
+  gtk_paned_pack1 (GTK_PANED (hpaned5), frame11, FALSE, TRUE);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame11), GTK_SHADOW_IN);
+
+  button16 = gtk_button_new_with_label ("button16");
+  gtk_container_add (GTK_CONTAINER (frame11), button16);
+
+  frame12 = gtk_frame_new (NULL);
+  gtk_paned_pack2 (GTK_PANED (hpaned5), frame12, TRUE, TRUE);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame12), GTK_SHADOW_IN);
+
+  button17 = gtk_button_new_with_label ("button17");
+  gtk_container_add (GTK_CONTAINER (frame12), button17);
+
+  return window3;
+}
+
+static GtkWidget*
+paned_keyboard_window4 (void)
+{
+  GtkWidget *window4;
+  GtkWidget *vbox3;
+  GtkWidget *label2;
+  GtkWidget *hpaned6;
+  GtkWidget *vpaned3;
+  GtkWidget *button19;
+  GtkWidget *button18;
+  GtkWidget *hbox3;
+  GtkWidget *vpaned4;
+  GtkWidget *button21;
+  GtkWidget *button20;
+  GtkWidget *vpaned5;
+  GtkWidget *button23;
+  GtkWidget *button22;
+  GtkWidget *vpaned6;
+  GtkWidget *button25;
+  GtkWidget *button24;
+
+  window4 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_object_set_data (GTK_OBJECT (window4), "window4", window4);
+  gtk_window_set_title (GTK_WINDOW (window4), "window4");
+
+  vbox3 = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (window4), vbox3);
+
+  label2 = gtk_label_new ("Widget tree:\n\nhpaned \n - vpaned\n - hbox\n    - vpaned\n    - vpaned\n    - vpaned\n");
+  gtk_box_pack_start (GTK_BOX (vbox3), label2, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label2), GTK_JUSTIFY_LEFT);
+
+  hpaned6 = gtk_hpaned_new ();
+  gtk_box_pack_start (GTK_BOX (vbox3), hpaned6, TRUE, TRUE, 0);
+
+  vpaned3 = gtk_vpaned_new ();
+  gtk_paned_pack1 (GTK_PANED (hpaned6), vpaned3, FALSE, TRUE);
+
+  button19 = gtk_button_new_with_label ("button19");
+  gtk_paned_pack1 (GTK_PANED (vpaned3), button19, FALSE, TRUE);
+
+  button18 = gtk_button_new_with_label ("button18");
+  gtk_paned_pack2 (GTK_PANED (vpaned3), button18, TRUE, TRUE);
+
+  hbox3 = gtk_hbox_new (FALSE, 0);
+  gtk_paned_pack2 (GTK_PANED (hpaned6), hbox3, TRUE, TRUE);
+
+  vpaned4 = gtk_vpaned_new ();
+  gtk_box_pack_start (GTK_BOX (hbox3), vpaned4, TRUE, TRUE, 0);
+
+  button21 = gtk_button_new_with_label ("button21");
+  gtk_paned_pack1 (GTK_PANED (vpaned4), button21, FALSE, TRUE);
+
+  button20 = gtk_button_new_with_label ("button20");
+  gtk_paned_pack2 (GTK_PANED (vpaned4), button20, TRUE, TRUE);
+
+  vpaned5 = gtk_vpaned_new ();
+  gtk_box_pack_start (GTK_BOX (hbox3), vpaned5, TRUE, TRUE, 0);
+
+  button23 = gtk_button_new_with_label ("button23");
+  gtk_paned_pack1 (GTK_PANED (vpaned5), button23, FALSE, TRUE);
+
+  button22 = gtk_button_new_with_label ("button22");
+  gtk_paned_pack2 (GTK_PANED (vpaned5), button22, TRUE, TRUE);
+
+  vpaned6 = gtk_vpaned_new ();
+  gtk_box_pack_start (GTK_BOX (hbox3), vpaned6, TRUE, TRUE, 0);
+
+  button25 = gtk_button_new_with_label ("button25");
+  gtk_paned_pack1 (GTK_PANED (vpaned6), button25, FALSE, TRUE);
+
+  button24 = gtk_button_new_with_label ("button24");
+  gtk_paned_pack2 (GTK_PANED (vpaned6), button24, TRUE, TRUE);
+
+  return window4;
+}
+
+static void
+create_paned_keyboard_navigation (void)
+{
+  static GtkWidget *window1 = NULL;
+  static GtkWidget *window2 = NULL;
+  static GtkWidget *window3 = NULL;
+  static GtkWidget *window4 = NULL;
+
+  if (!window1)
+    {
+      window1 = paned_keyboard_window1 ();
+      gtk_signal_connect (GTK_OBJECT (window1), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &window1);
+    }
+
+  if (!window2)
+    {
+      window2 = paned_keyboard_window2 ();
+      gtk_signal_connect (GTK_OBJECT (window2), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &window2);
+    }
+
+  if (!window3)
+    {
+      window3 = paned_keyboard_window3 ();
+      gtk_signal_connect (GTK_OBJECT (window3), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &window3);
+    }
+
+  if (!window4)
+    {
+      window4 = paned_keyboard_window4 ();
+      gtk_signal_connect (GTK_OBJECT (window4), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &window4);
+    }
+
+  if (GTK_WIDGET_VISIBLE (window1))
+    gtk_widget_destroy (GTK_WIDGET (window1));
+  else
+    gtk_widget_show_all (GTK_WIDGET (window1));
+
+  if (GTK_WIDGET_VISIBLE (window2))
+    gtk_widget_destroy (GTK_WIDGET (window2));
+  else
+    gtk_widget_show_all (GTK_WIDGET (window2));
+
+  if (GTK_WIDGET_VISIBLE (window3))
+    gtk_widget_destroy (GTK_WIDGET (window3));
+  else
+    gtk_widget_show_all (GTK_WIDGET (window3));
+
+  if (GTK_WIDGET_VISIBLE (window4))
+    gtk_widget_destroy (GTK_WIDGET (window4));
+  else
+    gtk_widget_show_all (GTK_WIDGET (window4));
+}
+
+
+/*
  * Shaped Windows
  */
 
@@ -10966,6 +11331,7 @@ struct {
   { "modal window", create_modal_window, TRUE },
   { "notebook", create_notebook },
   { "panes", create_panes },
+  { "paned keyboard", create_paned_keyboard_navigation },
   { "pixmap", create_pixmap },
   { "preview color", create_color_preview, TRUE },
   { "preview gray", create_gray_preview, TRUE },
