@@ -514,6 +514,12 @@ gtk_list_store_get_path (GtkTreeModel *tree_model,
 
   g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), NULL);
   g_return_val_if_fail (iter->stamp == GTK_LIST_STORE (tree_model)->stamp, NULL);
+  if (G_SLIST (iter->user_data) == G_SLIST (GTK_LIST_STORE (tree_model)->tail))
+    {
+      retval = gtk_tree_path_new ();
+      gtk_tree_path_append_index (retval, GTK_LIST_STORE (tree_model)->length - 1);
+      return retval;
+    }
 
   for (list = G_SLIST (GTK_LIST_STORE (tree_model)->root); list; list = list->next)
     {
@@ -651,7 +657,6 @@ gtk_list_store_real_set_value (GtkListStore *list_store,
 {
   GtkTreeDataList *list;
   GtkTreeDataList *prev;
-  GtkTreePath *path;
   GValue real_value = {0, };
   gboolean converted = FALSE;
   gint orig_column = column;
@@ -691,13 +696,11 @@ gtk_list_store_real_set_value (GtkListStore *list_store,
     {
       if (column == 0)
 	{
-	  path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
 	  if (converted)
 	    _gtk_tree_data_list_value_to_node (list, &real_value);
 	  else
 	    _gtk_tree_data_list_value_to_node (list, value);
 	  retval = TRUE;
-	  gtk_tree_path_free (path);
 	  if (converted)
 	    g_value_unset (&real_value);
 	  return retval;
@@ -727,13 +730,11 @@ gtk_list_store_real_set_value (GtkListStore *list_store,
       column --;
     }
 
-  path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
   if (converted)
     _gtk_tree_data_list_value_to_node (list, &real_value);
   else
     _gtk_tree_data_list_value_to_node (list, value);
   retval = TRUE;
-  gtk_tree_path_free (path);
   if (converted)
     g_value_unset (&real_value);
 

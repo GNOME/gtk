@@ -1445,6 +1445,9 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
 
   tree_column->visible = visible;
 
+  if (tree_column->visible)
+    _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
+
   gtk_tree_view_column_update_button (tree_column);
   g_object_notify (G_OBJECT (tree_column), "visible");
 }

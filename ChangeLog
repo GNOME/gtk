@@ -1,3 +1,13 @@
+Mon Feb 25 22:11:34 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_visible): call
+	_gtk_tree_view_column_cell_set_dirty when visible, so this column
+	gets some space allocated. (#70996)
+
+	* gtk/gtkliststore.c (gtk_list_store_get_path): add simple
+	optimization for the tail case
+	(gtk_list_store_real_set_value): remove unneeded _get_path calls
+
 Mon Feb 25 12:47:25 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkkeys-x11.c (gdk_keymap_translate_keyboard_state): 
