@@ -6067,9 +6067,9 @@ adjust_adjustments (GtkCList *clist,
     {
       clist->hadjustment->page_size = clist->clist_window_width;
       clist->hadjustment->step_increment = 10;
-      clist->vadjustment->page_increment =
-	MAX (clist->vadjustment->page_size - clist->vadjustment->step_increment,
-	     clist->vadjustment->page_size / 2);
+      clist->hadjustment->page_increment =
+	MAX (clist->hadjustment->page_size - clist->hadjustment->step_increment,
+	     clist->hadjustment->page_size / 2);
       clist->hadjustment->lower = 0;
       clist->hadjustment->upper = LIST_WIDTH (clist);
 

@@ -1,3 +1,9 @@
+Tue Dec 10 12:57:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c (adjust_adjustments): Fix typo with
+	hadjustment/vadjustment introduce prior to 2.0.0.
+	(#84621, Charles Kerr)
+
 Tue Dec 10 12:40:30 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenuitem.c, gtk/gtkstyle.c, gtk/gtkrc.c: new default
