@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2003-02-28 15:23+0200\n"
-"PO-Revision-Date: 2003-02-28 12:01--500\n"
+"PO-Revision-Date: 2003-02-28 13:31--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1157,11 +1157,11 @@ msgstr "Розмір візуалізованої піктограми"
 
 #: gtk/gtkcellrendererpixbuf.c:176
 msgid "Detail"
-msgstr ""
+msgstr "Деталь"
 
 #: gtk/gtkcellrendererpixbuf.c:177
 msgid "Render detail to pass to the theme engine"
-msgstr ""
+msgstr "Деталь візуалізації для передачі у механізм теми"
 
 #: gtk/gtkcellrenderertext.c:175
 #: gtk/gtkentry.c:524
@@ -1486,12 +1486,11 @@ msgstr "Перемикнути стан кнопки"
 
 #: gtk/gtkcellrenderertoggle.c:141
 msgid "Inconsistent state"
-msgstr ""
+msgstr "Нерівномірний стан"
 
 #: gtk/gtkcellrenderertoggle.c:142
-#, fuzzy
 msgid "The inconsistent state of the button"
-msgstr "Поточна позиція точки вставляння"
+msgstr "Нерівномірний стан кнопки"
 
 #: gtk/gtkcellrenderertoggle.c:150
 msgid "Activatable"
@@ -1539,12 +1538,11 @@ msgstr "Чи елемент меню ввімкнений"
 #: gtk/gtkcheckmenuitem.c:125
 #: gtk/gtktogglebutton.c:140
 msgid "Inconsistent"
-msgstr ""
+msgstr "Неузгоджений"
 
 #: gtk/gtkcheckmenuitem.c:126
-#, fuzzy
 msgid "Whether to display an \"inconsistent\" state"
-msgstr "Чи показувати стовпчик"
+msgstr "Чи відображати \"неузгоджений\" стан"
 
 #: gtk/gtkcolorsel.c:559
 msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
@@ -1731,9 +1729,8 @@ msgid "Border width"
 msgstr "Ширина поля"
 
 #: gtk/gtkcontainer.c:211
-#, fuzzy
 msgid "The width of the empty border outside the containers children"
-msgstr "Ширина поля з зовнішньої сторони нащадків контейнера."
+msgstr "Ширина порожньої границі із зовнішньої сторони нащадків контейнера"
 
 #: gtk/gtkcontainer.c:219
 msgid "Child"
@@ -1822,9 +1819,8 @@ msgstr "Позиція курсора"
 
 #: gtk/gtkentry.c:437
 #: gtk/gtklabel.c:369
-#, fuzzy
 msgid "The current position of the insertion cursor in chars"
-msgstr "Поточна позиція точки вставляння"
+msgstr "Поточна позиція точки вставляння в символах"
 
 #: gtk/gtkentry.c:446
 #: gtk/gtklabel.c:378
@@ -1833,9 +1829,8 @@ msgstr "Границя виділення"
 
 #: gtk/gtkentry.c:447
 #: gtk/gtklabel.c:379
-#, fuzzy
 msgid "The position of the opposite end of the selection from the cursor in chars"
-msgstr "Поточна позиція точки вставляння"
+msgstr "Позиція протилежного кінця вибору від курсора в символах"
 
 #: gtk/gtkentry.c:457
 msgid "Whether the entry contents can be edited"
@@ -1846,9 +1841,8 @@ msgid "Maximum length"
 msgstr "Максимальна довжина"
 
 #: gtk/gtkentry.c:465
-#, fuzzy
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "Максимальна кількість символів у полі"
+msgstr "Максимальна кількість символів у полі. \"0\" — без обмежень."
 
 #: gtk/gtkentry.c:473
 msgid "Visibility"
@@ -1887,9 +1881,8 @@ msgid "Width in chars"
 msgstr "Ширина в символах"
 
 #: gtk/gtkentry.c:505
-#, fuzzy
 msgid "Number of characters to leave space for in the entry"
-msgstr "Кількість десяткових місць для відображення значення"
+msgstr "Кількість символів, для яких залишено місто в полі"
 
 #: gtk/gtkentry.c:514
 msgid "Scroll offset"
@@ -2255,19 +2248,19 @@ msgstr "Позиція регулятора відносно вкладеног�
 
 #: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
-msgstr ""
+msgstr "Вирівнювання країв"
 
 #: gtk/gtkhandlebox.c:221
 msgid "Side of the handlebox that's lined up with the docking point to dock the handlebox"
-msgstr ""
+msgstr "Бік утримувача, вирівняний по точці стикування для стикування утримувача"
 
 #: gtk/gtkhandlebox.c:229
 msgid "Snap edge set"
-msgstr ""
+msgstr "Встановлення вирівнювання країв"
 
 #: gtk/gtkhandlebox.c:230
 msgid "Whether to use the value from the snap_edge property or a value derived from handle_position"
-msgstr ""
+msgstr "Використовувати значення властивості snap_edge чи значення отримане з handle_position"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2767,15 +2760,15 @@ msgstr "Чи розширювати вкладки"
 
 #: gtk/gtknotebook.c:480
 msgid "Tab fill"
-msgstr ""
+msgstr "Вкладки заповнюють"
 
 #: gtk/gtknotebook.c:481
 msgid "Wheather the childs tab should fill the allocated area or not"
-msgstr "Чи мають вкладкизаповнювати виділиний простір"
+msgstr "Чи мають вкладки заповнювати виділений простір"
 
 #: gtk/gtknotebook.c:487
 msgid "Tab pack type"
-msgstr ""
+msgstr "Тип вкладання вкладки"
 
 #: gtk/gtknotebook.c:2440
 #: gtk/gtknotebook.c:4787
@@ -2801,7 +2794,7 @@ msgstr "Проміжок навколо індикатора"
 
 #: gtk/gtkpaned.c:219
 msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
-msgstr ""
+msgstr "Позиція розділювача в точках (\"0\" означає весь простір до лівого верхнього кута)"
 
 #: gtk/gtkpaned.c:227
 msgid "Position Set"
@@ -2809,7 +2802,7 @@ msgstr "Встановлення позиції"
 
 #: gtk/gtkpaned.c:228
 msgid "TRUE if the Position property should be used"
-msgstr ""
+msgstr "Істинно, якщо має використовуватися властивість \"Позиція\""
 
 #: gtk/gtkpaned.c:234
 msgid "Handle Size"
@@ -2821,7 +2814,7 @@ msgstr "Ширина держака"
 
 #: gtk/gtkpreview.c:133
 msgid "Whether the preview widget should take up the entire space it is allocated"
-msgstr ""
+msgstr "Чи буде елемент перегляду зразка займати весь відведений йому простір"
 
 #: gtk/gtkprogress.c:127
 msgid "Activity mode"
@@ -2829,7 +2822,7 @@ msgstr "Режим активності"
 
 #: gtk/gtkprogress.c:128
 msgid "If TRUE the GtkProgress is in activity mode, meaning that it signals something is happening, but not how much of the activity is finished. This is used when you're doing something that you don't know how long it will take"
-msgstr ""
+msgstr "Якщо істинно, GtkProgress знаходиться в режимі активності. Це означає, що він повідомляє, що щось відбувається, але але не знає, скільки зроблено. Це використовується коли ви робите щось, що не відомо коли завершиться."
 
 #: gtk/gtkprogress.c:135
 msgid "Show text"
@@ -2932,7 +2925,7 @@ msgstr "Група"
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
-msgstr ""
+msgstr "Кнопка-перемикач, чия група належить цьому віджету."
 
 #: gtk/gtkrange.c:275
 msgid "Update policy"
@@ -3020,7 +3013,7 @@ msgstr "Компонент шляху до зображення \"%s\" має б
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
-msgstr ""
+msgstr "Низ"
 
 #: gtk/gtkruler.c:119
 msgid "Lower limit of ruler"
@@ -3028,7 +3021,7 @@ msgstr "Нижня межа лінійки"
 
 #: gtk/gtkruler.c:128
 msgid "Upper"
-msgstr ""
+msgstr "Верх"
 
 #: gtk/gtkruler.c:129
 msgid "Upper limit of ruler"
@@ -3169,7 +3162,7 @@ msgstr "Розміщення вікна"
 
 #: gtk/gtkscrolledwindow.c:267
 msgid "Where the contents are located with respect to the scrollbars"
-msgstr ""
+msgstr "Як буде розміщено вміст відносно смуг прокрутки"
 
 #: gtk/gtkscrolledwindow.c:274
 msgid "Shadow Type"
@@ -3180,9 +3173,8 @@ msgid "Style of bevel around the contents"
 msgstr "Стиль фаски навколо вмісту"
 
 #: gtk/gtkscrolledwindow.c:282
-#, fuzzy
 msgid "Scrollbar spacing"
-msgstr "Міжстовпчиковий проміжок"
+msgstr "Відстань до панелей прокрутки"
 
 #: gtk/gtkscrolledwindow.c:283
 msgid "Number of pixels between the scrollbars and the scrolled window"
@@ -3238,19 +3230,19 @@ msgstr "Назва RC-файла з ключовою темою, який нео
 
 #: gtk/gtksettings.c:217
 msgid "Menu bar accelerator"
-msgstr ""
+msgstr "Клавіша виклику панелі меню"
 
 #: gtk/gtksettings.c:218
 msgid "Keybinding to activate the menu bar"
-msgstr ""
+msgstr "Клавіша для активації панелі меню"
 
 #: gtk/gtksettings.c:226
 msgid "Drag threshold"
-msgstr ""
+msgstr "Поріг перетягування"
 
 #: gtk/gtksettings.c:227
 msgid "Number of pixels the cursor can move before dragging"
-msgstr ""
+msgstr "Кількість точок, на які може зміститися курсор до початку перетягування"
 
 #: gtk/gtksettings.c:235
 msgid "Font Name"
