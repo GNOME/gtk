@@ -1,3 +1,8 @@
+2003-01-03  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_xpm_data): Don't crash if
+	gdk-pixbuf.loaders file is missing.  (#102222)
+
 2002-12-08  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-animation.h: 

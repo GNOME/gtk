@@ -779,20 +779,22 @@ gdk_pixbuf_new_from_xpm_data (const char **data)
 	GdkPixbuf *(* load_xpm_data) (const char **data);
 	GdkPixbuf *pixbuf;
         GError *error = NULL;
-	GdkPixbufModule *xpm_module = _gdk_pixbuf_get_named_module ("xpm", NULL);
+	GdkPixbufModule *xpm_module = _gdk_pixbuf_get_named_module ("xpm", &error);
+	if (xpm_module == NULL) {
+		g_warning ("Error loading XPM image loader: %s", error->message);
+		g_error_free (error);
+		return NULL;
+	}
 
 	if (xpm_module->module == NULL) {
                 if (!_gdk_pixbuf_load_module (xpm_module, &error)) {
                         g_warning ("Error loading XPM image loader: %s", error->message);
                         g_error_free (error);
-                        return FALSE;
+                        return NULL;
                 }
         }
           
-	if (xpm_module->module == NULL) {
-		g_warning ("Can't find gdk-pixbuf module for parsing inline XPM data");
-		return NULL;
-	} else if (xpm_module->load_xpm_data == NULL) {
+	if (xpm_module->load_xpm_data == NULL) {
 		g_warning ("gdk-pixbuf XPM module lacks XPM data capability");
 		return NULL;
 	} else
