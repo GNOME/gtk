@@ -445,9 +445,9 @@ _gtk_find_module (const gchar *name,
       g_free(tmp_name);
     }
 
-  g_strfreev (paths);
 
  found:
+  g_strfreev (paths);
   return module_name;
 }
 
