@@ -1,3 +1,10 @@
+Thu Jan 21 02:47:36 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtknotebook.c (gtk_notebook_focus): few cleanups.
+	(gtk_notebook_key_press): call select page function for
+	GDK_DOWN key in case of tab_pos == TOP. Changed other
+	positions accordingly.
+
 Wed Jan 20 19:57:14 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_begin): Start off with the
