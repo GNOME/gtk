@@ -1,3 +1,17 @@
+2004-11-07  Matthias Clasen  <mclasen@redhat.com>
+
+	Show files in folder modes. (#157013, Nickolay V. Shmyrev)
+	
+	* gtk/gtkfilechooserdefault.c (create_file_list): Use a selection
+	function to determine which rows can be selected.
+	(update_appearance): Always show files. Also queue a redraw.
+	(set_list_model): Always show files.
+	(list_select_func): The selection function used for the file list.
+	Don't allow to select files when in select/create folder mode.
+	(list_row_activated): Don't activate files in folder modes.
+	(list_icon_data_func, list_mtime_data_func, list_size_data_func): 
+	Render files insensitive in folder modes.
+
 2004-11-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_set_property): 
