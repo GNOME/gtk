@@ -1,3 +1,9 @@
+Wed Jan 20 21:07:45 1999  Timur Bakeyev <mc@bat.ru>
+
+	* gtk/gtkrc.c (gtk_rc_init): There are some systems, that lacks of
+	LC_MESSAGES in locale.h. As a last resort for such systems, set locale
+	according to LC_ALL.
+
 Wed Jan 20 13:06:51 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.[ch] (clear_[focus_]area): Instead of drawing

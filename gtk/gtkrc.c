@@ -380,7 +380,11 @@ gtk_rc_init (void)
   gchar *locale_suffixes[3];
   gint n_locale_suffixes = 0;
   gint i, j;
+#ifdef HAVE_LC_MESSAGES
   char *locale = setlocale (LC_MESSAGES, NULL);
+#else
+  char *locale = setlocale (LC_ALL, NULL);
+#endif
   guint length;
   char *p;
 
