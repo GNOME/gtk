@@ -1,3 +1,10 @@
+Wed Aug 14 08:07:53 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
+
+	* gtk/gtkselection.c (gtk_selection_init): initialize
+	gtk_selection_atoms only once at the 1st call.
+	* gdk/x11/gdkselection-x11.c (gdk_selection_property_get): 
+	set length of selection data from number of read bytes (#90595)
+
 2002-08-14 Padraig O'Briain <padraig.obriain@sun.com>
 
 	* gtk/gtktextview.c (gtk_text_view_focus): Move focus to

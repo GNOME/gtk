@@ -1004,6 +1004,8 @@ gtk_selection_init (void)
   gtk_selection_atoms[MULTIPLE] = gdk_atom_intern ("MULTIPLE", FALSE);
   gtk_selection_atoms[TIMESTAMP] = gdk_atom_intern ("TIMESTAMP", FALSE);
   gtk_selection_atoms[TARGETS] = gdk_atom_intern ("TARGETS", FALSE);
+
+  initialize = FALSE;
 }
 
 /*************************************************************

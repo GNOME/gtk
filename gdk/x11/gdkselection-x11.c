@@ -297,8 +297,8 @@ gdk_selection_property_get (GdkWindow  *requestor,
 	*ret_format = prop_format;
       
       /* Add on an extra byte to handle null termination.  X guarantees
-	 that t will be 1 longer than nbytes and null terminated */
-      length = nbytes + 1;
+	 that t will be 1 longer than nitems and null terminated */
+      length = nitems + 1;
 
       if (data)
 	{
