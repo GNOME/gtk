@@ -65,6 +65,7 @@ struct _GtkButton
   guint use_underline : 1;
   guint use_stock : 1;
   guint depressed : 1;
+  guint depress_on_activate : 1;
 };
 
 struct _GtkButtonClass

@@ -162,6 +162,7 @@ gtk_toggle_button_init (GtkToggleButton *toggle_button)
 {
   toggle_button->active = FALSE;
   toggle_button->draw_indicator = FALSE;
+  GTK_BUTTON (toggle_button)->depress_on_activate = TRUE;
 }
 
 
@@ -246,6 +247,17 @@ gtk_toggle_button_get_property (GObject      *object,
     }
 }
 
+static void
+gtk_toggle_button_update_depress_on_activate (GtkToggleButton *toggle_button)
+{
+  GtkButton *button = GTK_BUTTON (toggle_button);
+  
+  if (toggle_button->draw_indicator || toggle_button->inconsistent)
+    button->depress_on_activate = FALSE;
+  else
+    button->depress_on_activate = !toggle_button->active;
+}
+
 void
 gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
 			    gboolean         draw_indicator)
@@ -262,6 +274,8 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
     {
       toggle_button->draw_indicator = draw_indicator;
 
+      gtk_toggle_button_update_depress_on_activate (toggle_button);
+      
       if (GTK_WIDGET_VISIBLE (toggle_button))
 	gtk_widget_queue_resize (GTK_WIDGET (toggle_button));
 
@@ -344,6 +358,7 @@ gtk_toggle_button_set_inconsistent (GtkToggleButton *toggle_button,
     {
       toggle_button->inconsistent = setting;
       
+      gtk_toggle_button_update_depress_on_activate (toggle_button);
       gtk_toggle_button_update_state (GTK_BUTTON (toggle_button));
       gtk_widget_queue_draw (GTK_WIDGET (toggle_button));
 
@@ -405,6 +420,7 @@ gtk_toggle_button_pressed (GtkButton *button)
   button->button_down = TRUE;
 
   gtk_toggle_button_update_state (button);
+  gtk_widget_queue_draw (GTK_WIDGET (button));
 }
 
 static void
@@ -418,6 +434,7 @@ gtk_toggle_button_released (GtkButton *button)
 	gtk_button_clicked (button);
 
       gtk_toggle_button_update_state (button);
+      gtk_widget_queue_draw (GTK_WIDGET (button));
     }
 }
 
@@ -426,6 +443,8 @@ gtk_toggle_button_clicked (GtkButton *button)
 {
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
   toggle_button->active = !toggle_button->active;
+
+  gtk_toggle_button_update_depress_on_activate (toggle_button);
 
   gtk_toggle_button_toggled (toggle_button);
 
@@ -448,10 +467,10 @@ gtk_toggle_button_update_state (GtkButton *button)
   else
     depressed = toggle_button->active;
       
-  if (!button->button_down && button->in_button)
+  if (button->in_button && (!button->button_down || toggle_button->draw_indicator))
     new_state = GTK_STATE_PRELIGHT;
   else
-    new_state = depressed ? GTK_STATE_ACTIVE: GTK_STATE_NORMAL;
+    new_state = depressed ? GTK_STATE_ACTIVE : GTK_STATE_NORMAL;
 
   _gtk_button_set_depressed (button, depressed); 
   gtk_widget_set_state (GTK_WIDGET (toggle_button), new_state);

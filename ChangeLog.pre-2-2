@@ -1,3 +1,9 @@
+Fri Feb 22 14:08:38 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkradiobutton.c, gtk/gtkcheckbutton.c, gtkbutton.h,
+	gtktogglebutton.c: feedback when check and radio buttons are
+	depressed.	
+
 2002-02-22  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_reorderable):
@@ -33,6 +39,7 @@ Thu Feb 21 16:51:17 2002  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkmenushell.c (gtk_menu_shell_key_press): Use
 	_gtk_window_activate_key(), gtk_bindings_activate_event().
 
+>>>>>>> 1.3066
 Thu Feb 21 12:24:22 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkctree.c (gtk_ctree_class_init): Remove some workarounds

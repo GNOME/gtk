@@ -306,6 +306,7 @@ gtk_button_init (GtkButton *button)
   button->use_stock = FALSE;
   button->use_underline = FALSE;
   button->depressed = FALSE;
+  button->depress_on_activate = TRUE;
 }
 
 static void
@@ -1069,6 +1070,7 @@ gtk_real_button_activate (GtkButton *button)
 						    button);
 	  button->button_down = TRUE;
 	  gtk_button_update_state (button);
+	  gtk_widget_queue_draw (GTK_WIDGET (button));
 	}
     }
 }
@@ -1088,6 +1090,7 @@ gtk_button_finish_activate (GtkButton *button,
   button->button_down = FALSE;
 
   gtk_button_update_state (button);
+  gtk_widget_queue_draw (GTK_WIDGET (button));
 
   if (do_it)
     gtk_button_clicked (button);
@@ -1257,12 +1260,15 @@ gtk_button_update_state (GtkButton *button)
   gboolean depressed;
   GtkStateType new_state;
 
-  depressed = button->button_down && (button->in_button || button->activate_timeout);
+  if (button->activate_timeout)
+    depressed = button->depress_on_activate;
+  else
+    depressed = button->in_button && button->button_down;
 
-  if (!button->button_down && button->in_button)
+  if (button->in_button && (!button->button_down || !depressed))
     new_state = GTK_STATE_PRELIGHT;
   else
-    new_state = depressed ? GTK_STATE_ACTIVE: GTK_STATE_NORMAL;
+    new_state = depressed ? GTK_STATE_ACTIVE : GTK_STATE_NORMAL;
 
   _gtk_button_set_depressed (button, depressed); 
   gtk_widget_set_state (GTK_WIDGET (button), new_state);
