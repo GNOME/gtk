@@ -27,7 +27,7 @@
 #ifndef __GTK_ENUMS_H__
 #define __GTK_ENUMS_H__
 
-#include <gobject/gsignal.h>
+#include <glib-object.h>
 
 #ifdef __cplusplus
 extern "C" {

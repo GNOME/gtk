@@ -1,3 +1,7 @@
+2001-11-17  Matt Wilson  <msw@redhat.com>
+
+	* gtk/gtkenums.h: must include glib-object.h only
+
 Sat Nov 17 19:26:20 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_key_press_event): Reprioritize
