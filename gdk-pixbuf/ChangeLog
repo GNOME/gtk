@@ -1,3 +1,9 @@
+2002-05-07  Michael Natterer  <mitch@gimp.org>
+
+	* gdk-pixbuf/Makefile.am: build the static pixbuf loaders
+	conditionally like the dynamic ones so --without-lib<foo> is
+	honored when building with --disable-modules. (#66867)
+
 Sun May  5 02:27:01 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* Makefile.am (noinst_PROGRAMS): remove test-loaders (moved to
