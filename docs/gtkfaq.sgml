@@ -741,7 +741,7 @@ are:
 You'll find these packages on the GNU main ftp server (<htmlurl 
 url="ftp://ftp.gnu.org/" name="ftp://ftp.gnu.org/">) or on any GNU mirror.
 
-In order to use the powerfull autoconf/automake scheme, you must create
+In order to use the powerful autoconf/automake scheme, you must create
 a configure.in which may look like:
 
 <tscreen><verb>
@@ -1521,7 +1521,7 @@ performance penalty.
 Its possible that, in the long term, the best solution to such
 problems might be just to change gtk to give labels X windows.
 A short term workaround is to put the label widget inside another
-widget that does get it's own window - one possible candidate would
+widget that does get its own window - one possible candidate would
 be the viewport widget.
 
 <tscreen><verb>
@@ -1576,7 +1576,7 @@ carefully.
 
 There are two (easy) ways to attach some data to a gtk object. 
 Using <tt/gtk_object_set_data()/ and <tt/gtk_object_get_data()/ seems to be the 
-most common way to do this, as it provides a powerfull interface 
+most common way to do this, as it provides a powerful interface 
 to connect objects and data.
 
 <tscreen><verb>
@@ -2594,7 +2594,7 @@ main (int argc, char *argv[])
   /* give the error handler an idea on how the input is named */
   scanner->input_name = "test text";
 
-  /* scanning loop, we parse the input untill it's end is reached,
+  /* scanning loop, we parse the input until its end is reached,
    * the scanner encountered a lexing error, or our sub routine came
    * across invalid syntax
    */
@@ -2624,7 +2624,7 @@ main (int argc, char *argv[])
 }
 </verb>
 
-You need to understand that the scanner will parse it's input and
+You need to understand that the scanner will parse its input and
 tokenize it, it is up to you to interpret these tokens, not define
 their types before they get parsed, e.g. watch gscanner parse a string:
  

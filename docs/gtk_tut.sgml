@@ -6654,7 +6654,7 @@ the <ref id="sec_ProgressBar" name="Progress Bar"> widget.
 <sect1> Fixed Container
 <p>
 The Fixed container allows you to place widgets at a fixed position
-within it's window, relative to it's upper left hand corner. The
+within its window, relative to its upper left hand corner. The
 position of the widgets can be changed dynamically.
 
 There are only three functions associated with the fixed widget:

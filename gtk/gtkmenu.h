@@ -104,7 +104,7 @@ void	   gtk_menu_popup		  (GtkMenu	       *menu,
 					   guint		button,
 					   guint32		activate_time);
 
-/* Position the menu according to it's position function. Called
+/* Position the menu according to its position function. Called
  * from gtkmenuitem.c when a menu-item changes its allocation
  */
 void	   gtk_menu_reposition		  (GtkMenu	       *menu);

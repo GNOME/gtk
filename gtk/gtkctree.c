@@ -1623,7 +1623,7 @@ draw_row (GtkCList     *clist,
   cell_rectangle.width = row_rectangle.width;
   cell_rectangle.height = CELL_SPACING;
 
-  /* rectangle used to clip drawing operations, it's y and height
+  /* rectangle used to clip drawing operations, its y and height
    * positions only need to be set once, so we set them once here. 
    * the x and width are set withing the drawing loop below once per
    * column */
@@ -1699,7 +1699,7 @@ draw_row (GtkCList     *clist,
 	}
     }
 
-  /* the last row has to clear it's bottom cell spacing too */
+  /* the last row has to clear its bottom cell spacing too */
   if (clist_row == clist->row_list_end->data)
     {
       cell_rectangle.y += clist->row_height + CELL_SPACING;

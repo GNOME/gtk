@@ -15,7 +15,7 @@ functions that follow these conventions:
 GtkObjects also provide the following functions:
 
   *_destroy:  Render an object `unusable', but as long as there are
-              references to it, it's allocated memory will not be freed.
+              references to it, its allocated memory will not be freed.
   *_sink:     Clear a GtkObjects `floating' state and decrement the
 	      reference count by 1.
 
@@ -248,7 +248,7 @@ widget, it needs to hold a reference to it.
 Example code sequences that require reference wraps:
 
    /* gtk_container_remove() will unparent the child and therefore
-    * cause it's reference count to be decremented by one.
+    * cause its reference count to be decremented by one.
     */
    gtk_widget_ref (widget);
    gtk_container_remove (container, widget);

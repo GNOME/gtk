@@ -175,7 +175,7 @@ struct _GtkCList
   /* dynamicly allocated array of column structures */
   GtkCListColumn *column;
   
-  /*the scrolling window and it's height and width to
+  /* the scrolling window and its height and width to
    * make things a little speedier */
   GdkWindow *clist_window;
   gint clist_window_width;
@@ -584,7 +584,7 @@ GtkCellType gtk_clist_get_cell_type (GtkCList *clist,
 				     gint      row,
 				     gint      column);
 
-/* sets a given cell's text, replacing it's current contents */
+/* sets a given cell's text, replacing its current contents */
 void gtk_clist_set_text (GtkCList    *clist,
 			 gint         row,
 			 gint         column,
@@ -598,7 +598,7 @@ gint gtk_clist_get_text (GtkCList  *clist,
 			 gint       column,
 			 gchar    **text);
 
-/* sets a given cell's pixmap, replacing it's current contents */
+/* sets a given cell's pixmap, replacing its current contents */
 void gtk_clist_set_pixmap (GtkCList  *clist,
 			   gint       row,
 			   gint       column,
@@ -611,7 +611,7 @@ gint gtk_clist_get_pixmap (GtkCList   *clist,
 			   GdkPixmap **pixmap,
 			   GdkBitmap **mask);
 
-/* sets a given cell's pixmap and text, replacing it's current contents */
+/* sets a given cell's pixmap and text, replacing its current contents */
 void gtk_clist_set_pixtext (GtkCList    *clist,
 			    gint         row,
 			    gint         column,

@@ -5706,7 +5706,7 @@ draw_row (GtkCList     *clist,
 			    intersect_rectangle.width,
 			    intersect_rectangle.height);
 
-      /* the last row has to clear it's bottom cell spacing too */
+      /* the last row has to clear its bottom cell spacing too */
       if (clist_row == clist->row_list_end->data)
 	{
 	  cell_rectangle.y += clist->row_height + CELL_SPACING;
@@ -5737,7 +5737,7 @@ draw_row (GtkCList     *clist,
 			  cell_rectangle.width,
 			  cell_rectangle.height);
 
-      /* the last row has to clear it's bottom cell spacing too */
+      /* the last row has to clear its bottom cell spacing too */
       if (clist_row == clist->row_list_end->data)
 	{
 	  cell_rectangle.y += clist->row_height + CELL_SPACING;

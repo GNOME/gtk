@@ -201,7 +201,7 @@ void gdk_window_set_child_shapes (GdkWindow *window);
 void gdk_window_merge_child_shapes (GdkWindow *window);
 
 /*
- * Check if a window has been shown, and whether all it's
+ * Check if a window has been shown, and whether all its
  * parents up to a toplevel have been shown, respectively.
  * Note that a window that is_viewable below is not necessarily
  * viewable in the X sense.

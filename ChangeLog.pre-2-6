@@ -1,3 +1,12 @@
+Tue Feb 29 13:10:00 GMT 2000  Tony Gale <gale@gtk.org>
+
+	* gdk/gdkwindow.h gdk/x11/gxid.c gtk/gtkclist.c gtk/gtkclist.h
+	  gtk/gtkctree.c gtk/gtkmenu.h gtk/gtkwidget.c gtk/testgtk.c
+	  docs/styles.txt docs/refcounting.txt docs/gtkfaq.sgml
+	  docs/gtk_tut.sgml docs/gtk.texi TODO:
+
+	  Spelling/grammar fixes from Martin Buchholz <martin@xemacs.org>
+
 Sat Feb 26 11:46:25 GMT 2000  Tony Gale <gale@gtk.org>
 
         * gtk/gtkcalendar.c: Implement num_marked_dates,

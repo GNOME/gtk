@@ -2048,7 +2048,7 @@ tips_query_widget_entered (GtkTipsQuery   *tips_query,
   if (GTK_TOGGLE_BUTTON (toggle)->active)
     {
       gtk_label_set_text (GTK_LABEL (tips_query), tip_text ? "There is a Tip!" : "There is no Tip!");
-      /* don't let GtkTipsQuery reset it's label */
+      /* don't let GtkTipsQuery reset its label */
       gtk_signal_emit_stop_by_name (GTK_OBJECT (tips_query), "widget_entered");
     }
 }

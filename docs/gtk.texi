@@ -79,7 +79,7 @@ approved by Peter Mattis.
 This is edition @value{edition} of the GTK documentation,
 @w{@value{update-date}}.
 @end ifinfo
-@c FIXME: Do a introduction to the GTK?
+@c FIXME: Do an introduction to the GTK?
 
 @menu
 * Copying::                     Your rights.
@@ -288,7 +288,7 @@ form that is easier to parse.  Tools for generating bindings of Gtk to
 other languages can read these declarations and---because all the
 important details are defined---automatically generate the bulk of the
 needed glue code.  It is also possible to feed these declarations into a
-running application (a interface builder, say) and thus make it aware of
+running application (an interface builder, say) and thus make it aware of
 new widgets and functions without recompiling anything.
 
 The run-time side of the type system is also somewhat introspective.
@@ -320,7 +320,7 @@ inherit these rules from their fundamental type.  For example,
 derive from @samp{GtkObject} and so the rules for @samp{GtkObject} apply
 to all widgets as well.
 
-This derivation defines a type hierachy, but this hierachy is not
+This derivation defines a type hierarchy, but this hierachy is not
 completely general.  You can't derive from @samp{int} for example, and
 you can only have one level of derivation from @samp{enum}.  The
 fundamental type @samp{GtkObject}, however, is the basis for the large
@@ -382,7 +382,7 @@ to a fundamental type and thus there is no name for it.
 
 @deftp {Data type} GtkType
 The type @code{GtkType} holds the run-time representation of a type.  It
-is a integer of a certain size.  The follwing macros are defined to
+is an integer of a certain size.  The follwing macros are defined to
 access the basic properties of a @code{GtkType}:
 
 @deftypefn {Macro} {unsigned int} GTK_TYPE_SEQNO (GtkType type)
@@ -461,7 +461,7 @@ always return @code{NULL}.
 @item
 The @code{class_init_func} and @code{base_class_init_func} fields are
 callbacks which are used by the type mechanism to initialize class
-specific fields. The single argument these function taks is a pointer to
+specific fields. The single argument these functions take is a pointer to
 a class structure.  When you do not need one or both of them, set the
 corresponding field to @code{NULL}.  The @code{class_init_func} will be
 called at most once, right after the class structure of size
