@@ -3810,8 +3810,8 @@ check_icon_theme (GtkFileChooserDefault *impl)
 }
 
 static void
-gtk_file_chooser_default_style_set      (GtkWidget *widget,
-					 GtkStyle  *previous_style)
+gtk_file_chooser_default_style_set (GtkWidget *widget,
+				    GtkStyle  *previous_style)
 {
   GtkFileChooserDefault *impl;
 
@@ -3820,7 +3820,8 @@ gtk_file_chooser_default_style_set      (GtkWidget *widget,
   if (GTK_WIDGET_CLASS (parent_class)->style_set)
     GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
 
-  check_icon_theme (impl);
+  if (gtk_widget_has_screen (GTK_WIDGET (impl)))
+    change_icon_theme (impl);
 
   g_signal_emit_by_name (widget, "default-size-changed");
 }

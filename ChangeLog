@@ -1,5 +1,11 @@
 2004-08-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_style_set): 
+	Don't install the settings_notify_cb from here, since it
+	may be called before the first screen_changed signal, 
+	confusing the logic in gtk_file_chooser_screen_changed().
+	(#148803, Abel Daniel)
+
 	* gtk/gtkcombobox.c: Make re-sensitivation work
 	in menu mode.
 
