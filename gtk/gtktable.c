@@ -341,6 +341,19 @@ gtk_table_set_col_spacings (GtkTable *table,
     gtk_widget_queue_resize (GTK_WIDGET (table));
 }
 
+void
+gtk_table_set_homogeneous (GtkTable *table,
+			   gint      homogeneous)
+{
+  g_return_if_fail (table != NULL);
+  g_return_if_fail (GTK_IS_TABLE (table));
+
+  table->homogeneous = (homogeneous != 0);
+
+  if (GTK_WIDGET_VISIBLE (table))
+    gtk_widget_queue_resize (GTK_WIDGET (table));
+}
+
 
 static void
 gtk_table_finalize (GtkObject *object)

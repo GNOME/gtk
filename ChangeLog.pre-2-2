@@ -1,3 +1,14 @@
+1998-04-06  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtktable.h: 
+	* gtk/gtktable.c (gtk_table_set_homogeneous): Added function to
+	set the homogeneous flag of the table (needed by derived widgets
+	and such).
+
+1998-04-03  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkradiobutton.h: Add prototype for gtk_radio_button_new_with_label_from_widget.
+
 Mon Apr  6 18:48:49 BST 1998 Tony Gale  <gale@gtk.org>
 
 	* docs/gtkfaq.sgml: more on GIMP (et al) configure
