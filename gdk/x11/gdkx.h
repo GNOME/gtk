@@ -150,7 +150,7 @@ GType gdk_gc_x11_get_type (void);
 
 #define GDK_GC_XGC(gc)       (GDK_GC_X11(gc)->xgc)
 #define GDK_GC_GET_XGC(gc)   (GDK_GC_X11(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : GDK_GC_XGC (gc))
-#define GDK_WINDOW_XWINDOW    GDK_WINDOW_XID
+#define GDK_WINDOW_XWINDOW    GDK_DRAWABLE_XID
 
 extern Display		*gdk_display;
 extern Window		 gdk_root_window;

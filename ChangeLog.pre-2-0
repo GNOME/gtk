@@ -1,3 +1,9 @@
+2000-06-19  Havoc Pennington  <hp@redhat.com>
+
+	* gdk/x11/gdkx.h (GDK_WINDOW_XWINDOW): change this to be
+	GDK_DRAWABLE_XID. In the future, we probably want to make it
+	faster with G_DISABLE_CHECKS turned on.
+
 2000-06-14  Havoc Pennington  <hp@redhat.com>
 
         * gdk/Makefile.am: add gdkpixmap.c
