@@ -1,5 +1,13 @@
 2002-12-03  Matthias Clasen  <maclas@gmx.de>
 
+	Moveresize emulation for all edges.  (#52833)
+	
+	* gdk/x11/gdkwindow-x11.c (update_pos): Support all edges. 
+	(calculate_unmoving_origin): New function which calculates the
+	ICCCM reference point for the window depending on the gravity.
+	(emulate_resize_drag): use calculate_unmoving_origin().
+	(emulate_move_drag): use calculate_unmoving_origin().
+
 	RTL flipping for statusbars.  (#96832)
 	
 	* gtk/gtkstatusbar.c (get_grip_edge): New function returning the

@@ -4556,19 +4556,54 @@ update_pos (MoveResizeData *mv_resize,
 
   if (mv_resize->is_resize)
     {
-      gint w, h;
+      gint x, y, w, h;
+
+      x = mv_resize->moveresize_orig_x;
+      y = mv_resize->moveresize_orig_y;
 
       w = mv_resize->moveresize_orig_width;
       h = mv_resize->moveresize_orig_height;
 
       switch (mv_resize->resize_edge)
 	{
+	case GDK_WINDOW_EDGE_NORTH_WEST:
+	  x += dx;
+	  y += dy;
+	  w -= dx;
+	  h -= dy;
+	  break;
+	case GDK_WINDOW_EDGE_NORTH:
+	  y += dy;
+	  h -= dy;
+	  break;
+	case GDK_WINDOW_EDGE_NORTH_EAST:
+	  y += dy;
+	  h -= dy;
+	  w += dx;
+	  break;
+	case GDK_WINDOW_EDGE_SOUTH_WEST:
+	  h += dy;
+	  x += dx;
+	  w -= dx;
+	  break;
 	case GDK_WINDOW_EDGE_SOUTH_EAST:
 	  w += dx;
 	  h += dy;
 	  break;
+	case GDK_WINDOW_EDGE_SOUTH:
+	  h += dy;
+	  break;
+	case GDK_WINDOW_EDGE_EAST:
+	  w += dx;
+	  break;
+	case GDK_WINDOW_EDGE_WEST:
+	  x += dx;
+	  w -= dx;
+	  break;
 	}
 
+      x = MAX (x, 0);
+      y = MAX (y, 0);
       w = MAX (w, 1);
       h = MAX (h, 1);
 
@@ -4579,7 +4614,7 @@ update_pos (MoveResizeData *mv_resize,
 				     w, h, &w, &h);
 	}
 
-      gdk_window_resize (mv_resize->moveresize_window, w, h);
+      gdk_window_move_resize (mv_resize->moveresize_window, x, y, w, h);
     }
   else
     {
@@ -4662,7 +4697,7 @@ _gdk_moveresize_handle_event (XEvent *event)
 {
   guint button_mask = 0;
   GdkWindowObject *window_private;
-  GdkDisplay *display= gdk_x11_lookup_xdisplay (event->xany.display);
+  GdkDisplay *display = gdk_x11_lookup_xdisplay (event->xany.display);
   MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
 
   if (!mv_resize || !mv_resize->moveresize_window)
@@ -4783,6 +4818,78 @@ create_moveresize_window (MoveResizeData *mv_resize,
   mv_resize->moveresize_process_time = 0;
 }
 
+/* 
+   Calculate mv_resize->moveresize_orig_x and mv_resize->moveresize_orig_y
+   so that calling XMoveWindow with these coordinates will not move the 
+   window.
+   Note that this depends on the WM to implement ICCCM-compliant reference
+   point handling.
+*/
+static void 
+calculate_unmoving_origin (MoveResizeData *mv_resize)
+{
+  GdkRectangle rect;
+  gint width, height;
+
+  if (mv_resize->moveresize_geom_mask & GDK_HINT_WIN_GRAVITY &&
+      mv_resize->moveresize_geometry.win_gravity == GDK_GRAVITY_STATIC)
+    {
+      gdk_window_get_origin (mv_resize->moveresize_window,
+			     &mv_resize->moveresize_orig_x,
+			     &mv_resize->moveresize_orig_y);
+    }
+  else
+    {
+      gdk_window_get_frame_extents (mv_resize->moveresize_window, &rect);
+      gdk_window_get_geometry (mv_resize->moveresize_window, 
+			       NULL, NULL, &width, &height, NULL);
+      
+      switch (mv_resize->moveresize_geometry.win_gravity) 
+	{
+	case GDK_GRAVITY_NORTH_WEST:
+	  mv_resize->moveresize_orig_x = rect.x;
+	  mv_resize->moveresize_orig_y = rect.y;
+	  break;
+	case GDK_GRAVITY_NORTH:
+	  mv_resize->moveresize_orig_x = rect.x + rect.width / 2 - width / 2;
+	  mv_resize->moveresize_orig_y = rect.y;
+	  break;	  
+	case GDK_GRAVITY_NORTH_EAST:
+	  mv_resize->moveresize_orig_x = rect.x + rect.width - width;
+	  mv_resize->moveresize_orig_y = rect.y;
+	  break;
+	case GDK_GRAVITY_WEST:
+	  mv_resize->moveresize_orig_x = rect.x;
+	  mv_resize->moveresize_orig_y = rect.y + rect.height / 2 - height / 2;
+	  break;
+	case GDK_GRAVITY_CENTER:
+	  mv_resize->moveresize_orig_x = rect.x + rect.width / 2 - width / 2;
+	  mv_resize->moveresize_orig_y = rect.y + rect.height / 2 - height / 2;
+	  break;
+	case GDK_GRAVITY_EAST:
+	  mv_resize->moveresize_orig_x = rect.x + rect.width - width;
+	  mv_resize->moveresize_orig_y = rect.y + rect.height / 2 - height / 2;
+	  break;
+	case GDK_GRAVITY_SOUTH_WEST:
+	  mv_resize->moveresize_orig_x = rect.x;
+	  mv_resize->moveresize_orig_y = rect.y + rect.height - height;
+	  break;
+	case GDK_GRAVITY_SOUTH:
+	  mv_resize->moveresize_orig_x = rect.x + rect.width / 2 - width / 2;
+	  mv_resize->moveresize_orig_y = rect.y + rect.height - height;
+	  break;
+	case GDK_GRAVITY_SOUTH_EAST:
+	  mv_resize->moveresize_orig_x = rect.x + rect.width - width;
+	  mv_resize->moveresize_orig_y = rect.y + rect.height - height;
+	  break;
+	default:
+	  mv_resize->moveresize_orig_x = rect.x;
+	  mv_resize->moveresize_orig_y = rect.y;
+	  break; 
+	}
+    }  
+}
+
 static void
 emulate_resize_drag (GdkWindow     *window,
                      GdkWindowEdge  edge,
@@ -4809,6 +4916,8 @@ emulate_resize_drag (GdkWindow     *window,
 				 &mv_resize->moveresize_geometry,
 				 &mv_resize->moveresize_geom_mask);
 
+  calculate_unmoving_origin (mv_resize);
+
   create_moveresize_window (mv_resize, timestamp);
 }
 
@@ -4828,9 +4937,7 @@ emulate_move_drag (GdkWindow     *window,
 
   mv_resize->moveresize_window = g_object_ref (window);
 
-  gdk_window_get_deskrelative_origin (mv_resize->moveresize_window,
-				      &mv_resize->moveresize_orig_x,
-				      &mv_resize->moveresize_orig_y);
+  calculate_unmoving_origin (mv_resize);
 
   create_moveresize_window (mv_resize, timestamp);
 }
