@@ -2,7 +2,7 @@
 <book id="gtk-tut">
 
 <bookinfo>
-    <date>November 21st 2000</date>
+    <date>November 22nd 2000</date>
     <title>GTK+ 1.2 Tutorial</title>
     <authorgroup>
       <author>
@@ -2233,14 +2233,15 @@ argument to specify whether it should be down (depressed) or up
 (released). Default is up, or FALSE.</para>
 
 <para>Note that when you use the gtk_toggle_button_set_active() function, and
-the state is actually changed, it causes the "clicked" signal to be
-emitted from the button.</para>
+the state is actually changed, it causes the "clicked" and "toggled"
+signals to be emitted from the button.</para>
 
 <programlisting role="C">
-void gtk_toggle_button_toggled (GtkToggleButton *toggle_button);
+gboolean gtk_toggle_button_get_active	(GtkToggleButton *toggle_button);
 </programlisting>
 
-<para>This simply toggles the button, and emits the "toggled" signal.</para>
+<para>This returns the current state of the toggle button as a boolean
+TRUE/FALSE value.</para>
 
 </sect1>
 
@@ -11517,14 +11518,6 @@ widget, please consider writing a tutorial on it so others may benefit
 from your time.</para>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1 id="sec-CTree">
-<title>CTree</title>
-
-<para></para>
-
-</sect1>
-
-<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Curves">
 <title>Curves</title>
 
@@ -12779,6 +12772,176 @@ int main( int   argc,
 }
 /* example-end */
 </programlisting>
+
+</sect1>
+</chapter>
+
+<!-- ***************************************************************** -->
+<chapter id="ch-DragAngDrop">
+<title>Drag and Drop (DND)</title>
+
+<para>GTK+ has a high level set of functions for doing inter-window
+communication using the drag and drop system on top of the low level
+Xdnd and Motif protocols.</para>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1 id="sec-DragAndDropOverview">
+<title>Overview</title>
+
+<para>An application capable of GTK+ drag and drop first defines and sets up
+the GTK+ widget(s) for drag and drop. Each widget can be a source
+and/or destination for drag and drop. Note that these GTK+ widgets must have
+an associated X Window, check using GTK_WIDGET_NO_WINDOW(wid)).</para>
+
+<para>Source widgets can send out drag data, thus allowing the user to drag
+things off of them, while destination widgets can receive drag data.
+Drag and drop destinations can limit who they accept drag data from,
+e.g. the same application or any application (including itself).</para>
+
+<para>Sending and receiving drop data makes use of GTK+ signals.
+Dropping an item to a destination widget requires both a data
+request (for the source widget) and data received signal handler (for
+the target widget). Additional signal handers can be connected if you
+want to know when a drag begins (at the very instant it starts), to
+when a drop is made, and when the entire drag and drop procedure has
+ended (successfully or not).</para>
+
+<para>Your application will need to provide data for source widgets when
+requested, that involves having a drag data request signal handler. For
+destination widgets they will need a drop data received signal
+handler. </para>
+
+<para>So a typical drag and drop cycle would look as follows:</para>
+<orderedlist>
+<listitem><simpara> Drag begins.</simpara>
+</listitem>
+<listitem><simpara> Drag data request (when a drop occurs).</simpara>
+</listitem>
+<listitem><simpara> Drop data received (may be on same or different
+application).</simpara>
+</listitem>
+<listitem><simpara> Drag data delete (if the drag was a move).</simpara>
+</listitem>
+<listitem><simpara> Drag and drop procedure done.</simpara>
+</listitem>
+</orderedlist>
+
+<para>There are a few minor steps that go in between here and there, but we
+will get into detail about that later.</para>
+
+</sect1>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1 id="sec-DragAndDropProperties">
+<title>Properties</title>
+
+<para>Drag data has the following properties:</para>
+
+<itemizedlist>
+<listitem><simpara> Drag action type (ie GDK_ACTION_COPY, GDK_ACTION_MOVE).</simpara>
+</listitem>
+
+<listitem><simpara> Client specified arbitrary drag and drop type (a
+gchar *name and a gint info id number pair).</simpara>
+</listitem>
+
+<listitem><simpara> Sent and received data format type.</simpara>
+</listitem>
+</itemizedlist>
+
+<para>Drag actions are quite obvious, they specify if the widget can
+drag with the specified action(s), e.g. GDK_ACTION_COPY and/or
+GDK_ACTION_MOVE. A GDK_ACTION_COPY would be a typical drag and drop
+without the source data being deleted while GDK_ACTION_MOVE would be
+just like GDK_ACTION_COPY but the source data will be 'suggested' to be
+deleted after the received signal handler is called. There are
+additional drag actions including GDK_ACTION_LINK which you may want to
+look into when you get to more advanced levels of drag and drop.</para>
+
+<para>The client specified arbitrary drag and drop type is much more
+flexible, because your application will be defining and checking for
+that specifically. You will need to set up your destination widgets to
+receive certain drag and drop types by specifying a name and/or number.
+It would be more reliable to use a name since another application may
+just happen to use the same number for an entirely different
+meaning.</para>
+
+<para>Sent and received data format types (<emphasis>selection
+target</emphasis>) come into play only in your request and received
+data handler functions. The term <emphasis>selection target</emphasis>
+is somewhat misleading. It is a term adapted from GTK+ selection
+(cut/copy and paste). What <emphasis>selection target</emphasis>
+actually means is the data's format type (ie GdkAtom, integer, or
+string) that being sent or received. Your request data handler function
+needs to specify the type (<emphasis>selection target</emphasis>) of
+data that it sends out and your received data handler needs to handle
+the type (<emphasis>selection target</emphasis>) of data
+received.</para>
+
+</sect1>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1 id="sec-DragAndDropFunctions">
+<title>Functions</title>
+
+<para>Setting up source widget:</para>
+
+<itemizedlist>
+<listitem><simpara> <literal>gtk_drag_source_set()</literal> specifies a
+set of target types for a drag operation on a widget.</simpara>
+</listitem>
+<listitem><simpara> <literal>gtk_drag_source_unset()</literal> specifies
+that the widget is to no longer perform drag operations.</simpara>
+</listitem> 
+</itemizedlist>
+
+<para>Signals on the source widget:</para>
+
+<itemizedlist>
+<listitem><simpara> drag_begin - prototype: void (*drag_begin)(GtkWidget
+*widget, GdkDragContext *dc, gpointer data)</simpara>
+</listitem>
+
+<listitem><simpara> drag_motion - prototype gboolean
+(*drag_motion)(GtkWidget *widget, GdkDragContext *dc, gint x, gint y, guint t, gpointer data)</simpara>
+</listitem>
+
+<listitem><simpara> drag_data_get - prototype void
+(*drag_data_get)(GtkWidget *widget, GdkDragContext *dc, GtkSelectionData *selection_data, guint info, guint t, gpointer data)</simpara>
+</listitem>
+
+<listitem><simpara> drag_data_delete - prototype void
+(*drag_data_delete)(GtkWidget *widget, GdkDragContext *dc, gpointer data)</simpara>
+</listitem>
+
+<listitem><simpara> drag_drop - prototype gboolean
+(*drag_drop)(GtkWidget *widget, GdkDragContext *dc, gint x, gint y, guint t, gpointer data)</simpara>
+</listitem>
+
+<listitem><simpara> drag_end - prototype void (*drag_end)(GtkWidget *widget, GdkDragContext *dc, gpointer data)</simpara>
+</listitem>
+</itemizedlist>
+
+<para>Setting up destination widget:</para>
+
+<itemizedlist>
+<listitem><simpara> <literal> gtk_drag_dest_set()</literal> specifies
+that this widget can recieve drops and specifies what types of drops it
+can recieve.</simpara>
+</listitem>
+
+<listitem><simpara> <literal> gtk_drag_dest_unset()</literal> specifies
+that the widget can no longer recieve drops.</simpara>
+</listitem>
+</itemizedlist>
+
+<para>Signals on the destination widget:</para>
+
+<itemizedlist>
+<listitem><simpara> drag_data_received - prototype: void (*drag_data_received)(GtkWidget *widget, GdkDragContext
+     *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint t, gpointer data)</simpara>
+</listitem>
+</itemizedlist>
 
 </sect1>
 </chapter>
