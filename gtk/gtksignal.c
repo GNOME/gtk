@@ -1335,7 +1335,12 @@ gtk_signal_handler_insert (GtkObject  *object,
       }
 }
 
+
+#ifdef  G_ENABLE_DEBUG
+/* value typically set via gdb */
 static GtkObject *gtk_trace_signal_object = NULL;
+#endif  /* G_ENABLE_DEBUG */
+
 
 static void
 gtk_signal_real_emit (GtkObject *object,

@@ -8,6 +8,9 @@
 
 Mon Nov 30 12:17:10 1998  Jeff Garzik  <jgarzik@pobox.com>
 
+	* gtk/gtksignal.c:
+	Surround debug variable with #ifdef to silence gcc.
+
 	* gtk/gtknotebook.c (gtk_notebook_reorder_child):
 	Added initializer to quiet gcc warning.
 	Added assertion to check for null pointer deref.
