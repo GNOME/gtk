@@ -1,3 +1,8 @@
+Tue Dec 15 21:26:26 CST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* autogen.sh: warn if glib.m4 or gettext.m4 are not found 
+          in aclocal's directory.
+
 Tue Dec 15 21:36:14 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/testgtk.c (create_layout): Create buttons,
