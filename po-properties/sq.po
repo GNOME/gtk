@@ -7,10 +7,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+properties\n"
+"Project-Id-Version: gtk-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-01 13:39+0100\n"
-"PO-Revision-Date: 2004-03-01 14:11+0100\n"
+"POT-Creation-Date: 2004-03-02 10:09+0100\n"
+"PO-Revision-Date: 2004-03-02 10:13+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -468,8 +468,8 @@ msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
 msgstr ""
-"Nëse TRUE, instrumenti shfaqet në një grup dytësor instrumentësh bij, i përdorshëm, "
-"p.sh. për pulsantët e ndihmës"
+"Nëse TRUE, instrumenti shfaqet në një grup dytësor instrumentësh bij, i "
+"përdorshëm, p.sh. për pulsantët e ndihmës"
 
 #: gtk/gtkbox.c:128 gtk/gtkexpander.c:226
 msgid "Spacing"
@@ -505,8 +505,8 @@ msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
-"Tregon nëse hapësira shtesë dhënë instrumentit bir i duhet dhënë birit apo të "
-"përdoret si mbushje"
+"Tregon nëse hapësira shtesë dhënë instrumentit bir i duhet dhënë birit apo "
+"të përdoret si mbushje"
 
 #: gtk/gtkbox.c:160
 msgid "Padding"
@@ -527,8 +527,8 @@ msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
-"Një GtkPackType që tregon nëse instrumenti është futur në fillim apo në fund të "
-"instrumentit prind"
+"Një GtkPackType që tregon nëse instrumenti është futur në fillim apo në fund "
+"të instrumentit prind"
 
 #: gtk/gtkbox.c:174 gtk/gtknotebook.c:490 gtk/gtkpaned.c:238
 #: gtk/gtkruler.c:138
@@ -544,8 +544,8 @@ msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr ""
-"Teksti i etiketës së instrumentit brenda butonit, nëse ky përmban një etiketë "
-"\"instrumenti\""
+"Teksti i etiketës së instrumentit brenda butonit, nëse ky përmban një "
+"etiketë \"instrumenti\""
 
 #: gtk/gtkbutton.c:217 gtk/gtkexpander.c:210 gtk/gtklabel.c:309
 #: gtk/gtktoolbutton.c:186
@@ -1299,8 +1299,8 @@ msgstr "Gërma të mëdha/të vogla"
 #: gtk/gtkcombo.c:158
 msgid "Whether list item matching is case sensitive"
 msgstr ""
-"Nëse përputhja me elementët t listës kontrollohet duke respektuar "
-"ndryshimet midis gërmave të Mëdha/Vogla"
+"Nëse përputhja me elementët t listës kontrollohet duke respektuar ndryshimet "
+"midis gërmave të Mëdha/Vogla"
 
 #: gtk/gtkcombo.c:165
 msgid "Allow empty"
@@ -1539,8 +1539,8 @@ msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
-"Nëse duhet aktivuar instrumenti i prezgjedhur (si p.sh butoni prezgjedhur "
-"në një dialog) kur shtypet Enter"
+"Nëse duhet aktivuar instrumenti i prezgjedhur (si p.sh butoni prezgjedhur në "
+"një dialog) kur shtypet Enter"
 
 #: gtk/gtkentry.c:524
 msgid "Width in chars"
@@ -1749,6 +1749,14 @@ msgstr "Shfaq të padukshmit"
 #: gtk/gtkfilechooser.c:149
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Nëse files dhe kartelat e padukshme duhen shfaqur"
+
+#: gtk/gtkfilechooserdefault.c:473
+msgid "Default file chooser backend"
+msgstr "Zgjedhësi backend i prezgjedhur i file"
+
+#: gtk/gtkfilechooserdefault.c:474
+msgid "Name of the GtkFileChooser backend to use by default"
+msgstr "Emri i GtkFileChooser backend që duhet përdorur si i prezgjedhur"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
@@ -2895,11 +2903,11 @@ msgstr "Vizato"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Nëse ndarësi duhet vizatuar, apo thjesht bosh"
 
-#: gtk/gtksettings.c:262
+#: gtk/gtksettings.c:261
 msgid "Double Click Time"
 msgstr "Koha e dopjo klik-imit"
 
-#: gtk/gtksettings.c:263
+#: gtk/gtksettings.c:262
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -2907,11 +2915,11 @@ msgstr ""
 "Koha më e madhe e lejuar ndërmjet dy klikësh që këta të merren si klik i "
 "dyfishtë (në milisekonda)"
 
-#: gtk/gtksettings.c:270
+#: gtk/gtksettings.c:269
 msgid "Double Click Distance"
 msgstr "Largësia e dopjo klik-imit"
 
-#: gtk/gtksettings.c:271
+#: gtk/gtksettings.c:270
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -2919,27 +2927,27 @@ msgstr ""
 "Largësia më e madhe e lejuar ndërmjet dy klik-imeve që këta të merren si "
 "klik i dyfishtë (në pixels)"
 
-#: gtk/gtksettings.c:278
+#: gtk/gtksettings.c:277
 msgid "Cursor Blink"
 msgstr "Pulsimi i kursorit"
 
-#: gtk/gtksettings.c:279
+#: gtk/gtksettings.c:278
 msgid "Whether the cursor should blink"
 msgstr "Përcakton nëse kursori duhet të pulsojë"
 
-#: gtk/gtksettings.c:286
+#: gtk/gtksettings.c:285
 msgid "Cursor Blink Time"
 msgstr "Intervali i pulsimit të kursorit"
 
-#: gtk/gtksettings.c:287
+#: gtk/gtksettings.c:286
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Gjatësia e ciklit të pulsimit të kursorit, në milisekonda"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:293
 msgid "Split Cursor"
 msgstr "Nda Kursorin"
 
-#: gtk/gtksettings.c:295
+#: gtk/gtksettings.c:294
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -2947,19 +2955,19 @@ msgstr ""
 "Nëse dy kursorë duhen shfaqur për tekst të përzierë nga - e majta - në të "
 "djathtë dhe nga - e djathta - në të majtë "
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:301
 msgid "Theme Name"
 msgstr "Emri i Temës"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:302
 msgid "Name of theme RC file to load"
 msgstr "Emri i file teme RC për t'u ngarkuar"
 
-#: gtk/gtksettings.c:310
+#: gtk/gtksettings.c:309
 msgid "Icon Theme Name"
 msgstr "Emri i ikonës së temës"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:310
 msgid "Name of icon theme to use"
 msgstr "Emri i ikonës së temës që duhet përdorur"
 
