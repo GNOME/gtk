@@ -54,7 +54,7 @@ gtk_label_get_type ()
   return label_type;
 }
 
-void
+static void
 gtk_label_class_init (GtkLabelClass *class)
 {
   GtkObjectClass *object_class;
@@ -71,7 +71,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->expose_event = gtk_label_expose;
 }
 
-void
+static void
 gtk_label_init (GtkLabel *label)
 {
   GTK_WIDGET_SET_FLAGS (label, GTK_NO_WINDOW);
