@@ -1337,7 +1337,7 @@ _gtk_style_peek_property_value (GtkStyle           *style,
     {
       gchar *contents = g_strdup_value_contents (&rcprop->value);
       
-      g_message ("%s: failed to retrive property `%s::%s' of type `%s' from rc file value \"%s\" of type `%s'",
+      g_message ("%s: failed to retrieve property `%s::%s' of type `%s' from rc file value \"%s\" of type `%s'",
 		 rcprop->origin,
 		 g_type_name (pspec->owner_type), pspec->name,
 		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),

@@ -1,3 +1,12 @@
+2001-10-03  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtkwidget.c (gtk_widget_style_get_property): 
+	* gtk/gtkstyle.c (_gtk_style_peek_property_value): 
+	* gtk/gtksettings.c (apply_queued_setting): 
+	* gtk/gtkmain.c (gtk_init_check): 
+	* gtk/gtkcontainer.c (gtk_container_child_get_property):
+	s/retrive/retrieve/
+
 Wed Oct  3 20:29:29 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtktreemodelsort.[ch]: preparation for surgery

@@ -424,7 +424,7 @@ gtk_container_child_get_property (GtkContainer *container,
 	}
       else if (!g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
 	{
-	  g_warning ("can't retrive child property `%s' of type `%s' as value of type `%s'",
+	  g_warning ("can't retrieve child property `%s' of type `%s' as value of type `%s'",
 		     pspec->name,
 		     g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
 		     G_VALUE_TYPE_NAME (value));

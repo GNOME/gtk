@@ -5683,7 +5683,7 @@ gtk_widget_style_get_property (GtkWidget   *widget,
       else if (g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
 	g_value_transform (peek_value, value);
       else
-	g_warning ("can't retrive style property `%s' of type `%s' as value of type `%s'",
+	g_warning ("can't retrieve style property `%s' of type `%s' as value of type `%s'",
 		   pspec->name,
 		   g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
 		   G_VALUE_TYPE_NAME (value));

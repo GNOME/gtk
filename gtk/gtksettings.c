@@ -411,7 +411,7 @@ apply_queued_setting (GtkSettings      *data,
     {
       gchar *debug = g_strdup_value_contents (&tmp_value);
       
-      g_message ("%s: failed to retrive property `%s' of type `%s' from rc file value \"%s\" of type `%s'",
+      g_message ("%s: failed to retrieve property `%s' of type `%s' from rc file value \"%s\" of type `%s'",
 		 qvalue->origin,
 		 pspec->name,
 		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
