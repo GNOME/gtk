@@ -1322,6 +1322,20 @@ static void gtk_tree_row_reference_unref_path (GtkTreePath  *path,
 					       gint          depth);
 
 
+GType
+gtk_tree_row_reference_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GtkTreeRowReference",
+					     (GBoxedCopyFunc) gtk_tree_row_reference_copy,
+					     (GBoxedFreeFunc) gtk_tree_row_reference_free);
+
+  return our_type;
+}
+
+
 #define ROW_REF_DATA_STRING "gtk-tree-row-refs"
 
 struct _GtkTreeRowReference
@@ -1743,6 +1757,15 @@ gtk_tree_row_reference_valid (GtkTreeRowReference *reference)
     return FALSE;
 
   return TRUE;
+}
+
+
+GtkTreeRowReference *
+gtk_tree_row_reference_copy (GtkTreeRowReference *reference)
+{
+  return gtk_tree_row_reference_new_proxy (reference->proxy,
+					   reference->model,
+					   reference->path);
 }
 
 /**

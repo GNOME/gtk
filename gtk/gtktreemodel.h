@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_TREE_ITER             (gtk_tree_iter_get_type ())
 #define GTK_TYPE_TREE_PATH             (gtk_tree_path_get_type ())
+#define GTK_TYPE_TREE_ROW_REFERENCE    (gtk_tree_row_reference_get_type ())
 
 typedef struct _GtkTreeIter         GtkTreeIter;
 typedef struct _GtkTreePath         GtkTreePath;
@@ -154,6 +155,7 @@ GtkTreeRowReference *gtk_tree_row_reference_new_proxy (GObject             *prox
 						       GtkTreePath         *path);
 GtkTreePath         *gtk_tree_row_reference_get_path  (GtkTreeRowReference *reference);
 gboolean             gtk_tree_row_reference_valid     (GtkTreeRowReference *reference);
+GtkTreeRowReference *gtk_tree_row_reference_copy      (GtkTreeRowReference *reference);
 void                 gtk_tree_row_reference_free      (GtkTreeRowReference *reference);
 /* These two functions are only needed if you created the row reference with a
  * proxy object */

@@ -1,3 +1,14 @@
+Wed Sep 11 15:48:38 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.c (gtk_tree_row_reference_get_type): Make
+	GtkTreeRowReference a boxed type.
+
+	* gtk/gtkliststore.c (gtk_list_store_finalize): free the root
+	list.
+
+	* gtk/gtktreestore.c (gtk_tree_store_finalize): free the root
+	nodes.
+
 Wed Sep 11 12:33:34 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkstyle.c: Draw radio buttons more symmetric. Draw shadow

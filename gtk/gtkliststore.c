@@ -424,7 +424,9 @@ gtk_list_store_finalize (GObject *object)
 {
   GtkListStore *list_store = GTK_LIST_STORE (object);
 
-  g_list_foreach (list_store->root, (GFunc) _gtk_tree_data_list_free, list_store->column_headers);
+  g_slist_foreach (list_store->root, (GFunc) _gtk_tree_data_list_free, list_store->column_headers);
+  g_slist_free (list_store->root);
+
   _gtk_tree_data_list_header_free (list_store->sort_list);
   g_free (list_store->column_headers);
   
@@ -437,6 +439,7 @@ gtk_list_store_finalize (GObject *object)
       list_store->default_sort_data = NULL;
     }
 
+  /* must chain up */
   (* parent_class->finalize) (object);
 }
 
