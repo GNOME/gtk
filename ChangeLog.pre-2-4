@@ -1,3 +1,14 @@
+Wed Jun  6 10:34:42 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.h: Include gtkwidget.h 
+	(#55798, Karl Nelson)
+
+	* gdk/x11/gdkwindow-x11.c (utf8_is_latin1): 0xff is
+	a valid latin-1 character. (Marc Lehmann, #35467)
+
+	* gdk/x11/gdkwindow-x11.c: Fix minor typo in comment. 
+	(Marc Lehmann, #35467)
+	
 2001-06-05  Alex Larsson  <alexl@redhat.com>
 
 	* demos/gtk-demo/appwindow.c (do_appwindow):

@@ -1175,7 +1175,7 @@ gdk_window_set_hints (GdkWindow *window,
       size_hints.max_height = max_height;
     }
   
-  /* FIXME: Would it be better to delete this property of
+  /* FIXME: Would it be better to delete this property if
    *        flags == 0? It would save space on the server
    */
   XSetWMNormalHints (GDK_WINDOW_XDISPLAY (window),
@@ -1383,7 +1383,7 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
       size_hints.win_gravity = geometry->win_gravity;
     }
   
-  /* FIXME: Would it be better to delete this property of
+  /* FIXME: Would it be better to delete this property if
    *        geom_mask == 0? It would save space on the server
    */
   XSetWMNormalHints (GDK_WINDOW_XDISPLAY (window),
@@ -1459,7 +1459,7 @@ utf8_is_latin1 (const gchar *str)
     {
       gunichar ch = g_utf8_get_char (p);
 
-      if (ch >= 0xff)
+      if (ch > 0xff)
 	return FALSE;
       
       p = g_utf8_next_char (p);
