@@ -1,3 +1,17 @@
+Wed May 19 01:09:34 1999  Tor Lillqvist  <tml@iki.fi>
+
+1999-05-18  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/makefile.{cygwin,msc}: Copy our gdkprivate.h and
+ 	gdkx.h to a gdk subdirectory, so that applications can include
+ 	these with <gdk/*.h> without trouble.
+
+	* gdk/win32/gdkimage.c (gdk_image_new_with_depth): Code simplified.
+	(gdk_image_destroy): Plugged resource leak, some GdkImages didn't
+	have their bitmap destroyed.
+
+	* gdk/win32/gdk.def: Add gdk_root_parent.
+
 Wed May 12 03:00:56 CDT 1999 Shawn T. Amundson <amundson@gtk.org>
 
 	* configure.in

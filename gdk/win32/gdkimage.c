@@ -75,7 +75,7 @@ gdk_image_new_bitmap (GdkVisual *visual, gpointer data, gint w, gint h)
   private = g_new(GdkImagePrivate, 1);
   image = (GdkImage *) private;
   private->image_put = gdk_image_put_normal;
-  image->type = GDK_IMAGE_NORMAL;
+  image->type = GDK_IMAGE_SHARED;
   image->visual = visual;
   image->width = w;
   image->height = h;
@@ -151,142 +151,121 @@ gdk_image_new_with_depth (GdkImageType  type,
   UINT iUsage;
   int i;
 
-  GDK_NOTE (MISC, g_print ("gdk_image_new_with_depth: %dx%dx%d\n",
-			   width, height, depth));
+  if (type == GDK_IMAGE_FASTEST || type == GDK_IMAGE_NORMAL)
+    type = GDK_IMAGE_SHARED;
 
-  switch (type)
-    {
-    case GDK_IMAGE_FASTEST:
-      image = gdk_image_new_with_depth (GDK_IMAGE_SHARED, visual,
-					width, height, depth);
+  GDK_NOTE (MISC, g_print ("gdk_image_new_with_depth: %dx%dx%d %s\n",
+			   width, height, depth,
+			   (type == GDK_IMAGE_SHARED ? "shared" :
+			    (type == GDK_IMAGE_SHARED_PIXMAP ? "shared_pixmap" :
+			     "???"))));
 
-      if (!image)
-	image = gdk_image_new_with_depth (GDK_IMAGE_NORMAL, visual,
-					  width, height, depth);
-      break;
+  private = g_new (GdkImagePrivate, 1);
+  image = (GdkImage*) private;
 
-    default:
-      private = g_new (GdkImagePrivate, 1);
-      image = (GdkImage*) private;
+  private->image_put = NULL;
 
-      private->image_put = NULL;
-
-      image->type = type;
-      image->visual = visual;
-      image->width = width;
-      image->height = height;
-      image->depth = depth;
-
-      xvisual = ((GdkVisualPrivate*) visual)->xvisual;
-
-      switch (type)
-	{
-	case GDK_IMAGE_SHARED:
-	case GDK_IMAGE_SHARED_PIXMAP:
-	  /* Fall through, Windows images are always shared */
-	case GDK_IMAGE_NORMAL:
-	  private->image_put = gdk_image_put_normal;
-
-	  bmi.bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
-	  bmi.bmiHeader.biWidth = width;
-	  bmi.bmiHeader.biHeight = -height;
-	  bmi.bmiHeader.biPlanes = 1;
-	  if (depth == 15)
-	    bmi.bmiHeader.biBitCount = 16;
-	  else
-	    bmi.bmiHeader.biBitCount = depth;
-#if 1
-	  if (depth == 16)
-	    bmi.bmiHeader.biCompression = BI_BITFIELDS;
-	  else
-#endif
-	    bmi.bmiHeader.biCompression = BI_RGB;
-	  bmi.bmiHeader.biSizeImage = 0;
-	  bmi.bmiHeader.biXPelsPerMeter =
-	    bmi.bmiHeader.biYPelsPerMeter = 0;
-	  bmi.bmiHeader.biClrUsed = 0;
-	  bmi.bmiHeader.biClrImportant = 0;
-	  
-	  if (image->visual->type == GDK_VISUAL_PSEUDO_COLOR)
-	    {
-	      iUsage = DIB_PAL_COLORS;
-	      for (i = 0; i < 256; i++)
-		bmi.u.bmiIndices[i] = i;
-	    }
-	  else
-	    {
-	      if (depth == 1)
-		{
-		  bmi.u.bmiColors[0].rgbBlue = 
-		    bmi.u.bmiColors[0].rgbGreen =
-		    bmi.u.bmiColors[0].rgbRed = 0x00;
-		  bmi.u.bmiColors[0].rgbReserved = 0x00;
-		  
-		  bmi.u.bmiColors[1].rgbBlue = 
-		    bmi.u.bmiColors[1].rgbGreen =
-		    bmi.u.bmiColors[1].rgbRed = 0xFF;
-		  bmi.u.bmiColors[1].rgbReserved = 0x00;
-		  
-		}
-#if 1
-	      else if (depth == 16)
-		{
-		  bmi.u.bmiMasks[0] = visual->red_mask;
-		  bmi.u.bmiMasks[1] = visual->green_mask;
-		  bmi.u.bmiMasks[2] = visual->blue_mask;
-		}
-#endif
-	      iUsage = DIB_RGB_COLORS;
-	    }
-	  
-	  private->ximage =
-	    CreateDIBSection (gdk_DC, (BITMAPINFO *) &bmi, iUsage,
-			      &image->mem, NULL, 0);
-	  
-	  if (private->ximage == NULL)
-	    {
-	      g_warning ("gdk_image_new_with_depth: CreateDIBSection failed");
-	      g_free (image);
-	      return NULL;
-	    }
-	  
-	  switch (depth)
-	    {
-	    case 1:
-	    case 8:
-	      image->bpp = 1;
-	      break;
-	    case 15:
-	    case 16:
-	      image->bpp = 2;
-	      break;
-	    case 24:
-	      image->bpp = 3;
-	      break;
-	    case 32:
-	      image->bpp = 4;
-	      break;
-	    default:
-	      g_warning ("gdk_image_new_with_depth: depth = %d", depth);
-	      g_assert_not_reached ();
-	    }
-	  image->byte_order = GDK_LSB_FIRST;
-	  if (depth == 1)
-	    image->bpl = ((width-1)/32 + 1)*4;
-	  else
-	    image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
-
-	  GDK_NOTE (MISC, g_print ("... = %#x mem = %#x, bpl = %d\n",
-				   private->ximage, image->mem, image->bpl));
-
-	  break;
-
-	case GDK_IMAGE_FASTEST:
-	  g_assert_not_reached ();
-	}
+  image->type = type;
+  image->visual = visual;
+  image->width = width;
+  image->height = height;
+  image->depth = depth;
+  
+  xvisual = ((GdkVisualPrivate*) visual)->xvisual;
+  
+  private->image_put = gdk_image_put_normal;
       
-      break;
+  bmi.bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
+  bmi.bmiHeader.biWidth = width;
+  bmi.bmiHeader.biHeight = -height;
+  bmi.bmiHeader.biPlanes = 1;
+  if (depth == 15)
+    bmi.bmiHeader.biBitCount = 16;
+  else
+    bmi.bmiHeader.biBitCount = depth;
+#if 1
+  if (depth == 16)
+    bmi.bmiHeader.biCompression = BI_BITFIELDS;
+  else
+#endif
+    bmi.bmiHeader.biCompression = BI_RGB;
+  bmi.bmiHeader.biSizeImage = 0;
+  bmi.bmiHeader.biXPelsPerMeter =
+    bmi.bmiHeader.biYPelsPerMeter = 0;
+  bmi.bmiHeader.biClrUsed = 0;
+  bmi.bmiHeader.biClrImportant = 0;
+
+  if (image->visual->type == GDK_VISUAL_PSEUDO_COLOR)
+    {
+      iUsage = DIB_PAL_COLORS;
+      for (i = 0; i < 256; i++)
+	bmi.u.bmiIndices[i] = i;
     }
+  else
+    {
+      if (depth == 1)
+	{
+	  bmi.u.bmiColors[0].rgbBlue = 
+	    bmi.u.bmiColors[0].rgbGreen =
+	    bmi.u.bmiColors[0].rgbRed = 0x00;
+	  bmi.u.bmiColors[0].rgbReserved = 0x00;
+
+	  bmi.u.bmiColors[1].rgbBlue = 
+	    bmi.u.bmiColors[1].rgbGreen =
+	    bmi.u.bmiColors[1].rgbRed = 0xFF;
+	  bmi.u.bmiColors[1].rgbReserved = 0x00;
+
+	}
+#if 1
+      else if (depth == 16)
+	{
+	  bmi.u.bmiMasks[0] = visual->red_mask;
+	  bmi.u.bmiMasks[1] = visual->green_mask;
+	  bmi.u.bmiMasks[2] = visual->blue_mask;
+	}
+#endif
+      iUsage = DIB_RGB_COLORS;
+    }
+
+  private->ximage =
+    CreateDIBSection (gdk_DC, (BITMAPINFO *) &bmi, iUsage,
+		      &image->mem, NULL, 0);
+
+  if (private->ximage == NULL)
+    {
+      g_warning ("gdk_image_new_with_depth: CreateDIBSection failed");
+      g_free (image);
+      return NULL;
+    }
+
+  switch (depth)
+    {
+    case 1:
+    case 8:
+      image->bpp = 1;
+      break;
+    case 15:
+    case 16:
+      image->bpp = 2;
+      break;
+    case 24:
+      image->bpp = 3;
+      break;
+    case 32:
+      image->bpp = 4;
+      break;
+    default:
+      g_warning ("gdk_image_new_with_depth: depth = %d", depth);
+      g_assert_not_reached ();
+    }
+  image->byte_order = GDK_LSB_FIRST;
+  if (depth == 1)
+    image->bpl = ((width-1)/32 + 1)*4;
+  else
+    image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
+
+  GDK_NOTE (MISC, g_print ("... = %#x mem = %#x, bpl = %d\n",
+			   private->ximage, image->mem, image->bpl));
 
   return image;
 }
@@ -347,7 +326,7 @@ gdk_image_get (GdkWindow *window,
 
   private->image_put = gdk_image_put_normal;
 
-  image->type = GDK_IMAGE_NORMAL;
+  image->type = GDK_IMAGE_SHARED;
   image->visual = gdk_window_get_visual (window);
   image->width = width;
   image->height = height;
@@ -652,18 +631,18 @@ gdk_image_destroy (GdkImage *image)
   
   switch (image->type)
     {
-    case GDK_IMAGE_NORMAL:
     case GDK_IMAGE_SHARED_PIXMAP:
       break;			/* The Windows bitmap has already been
 				 * (or will be) deleted when freeing
 				 * the corresponding pixmap.
 				 */
 
-    case GDK_IMAGE_SHARED:	/* All images are shared in Windows */
-      DeleteObject (private->ximage);
+    case GDK_IMAGE_SHARED:
+      if (!DeleteObject (private->ximage))
+	g_warning ("gdk_image_destroy: DeleteObject failed");
       break;
 
-    case GDK_IMAGE_FASTEST:
+    default:
       g_assert_not_reached ();
     }
 

@@ -28,6 +28,8 @@ GLIB = ../../../glib
 CFLAGS = -g -I. -I../.. -I$(WTKIT)/include -I$(GLIB) -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\" -DNEAR= -DFAR=
 
 all: \
+	gdk/gdkprivate.h \
+	gdk/gdkx.h	\
 	../../config.h	\
 	gdk-$(GTK_VER).dll
 
@@ -57,6 +59,26 @@ gdk_OBJECTS = \
 	gdkvisual.o	\
 	gdkwindow.o	\
 	gdkxid.o
+
+# We must have copies of gdkx.h and gdkprivate.h in the gdk
+# subdirectory, so that application sources which want to be
+# compilable with both GTk+ 1.2 (where there are no separate backend
+# gdk directories) and this 1.3 version (where the Win32 backend is in
+# the directory of *this* file you are reading right now) can use
+# #include <gdk/gdkprivate.h>.
+
+# Applications that depend on GTk+ 1.3 or later should include
+# gdkprivate.h and gdkx.h without the gdk/ prefix. The CFLAGS should
+# include an -I switch pointing to the backend-specific directory
+# (*this* directory in the Win32 case).
+
+gdk/gdkprivate.h : gdkprivate.h
+	-mkdir gdk
+	cp gdkprivate.h gdk
+
+gdk/gdkx.h : gdkx.h
+	-mkdir gdk
+	cp gdkx.h gdk
 
 ../../config.h : ../../config.h.win32
 	$(CP) ../../config.h.win32 ../../config.h
