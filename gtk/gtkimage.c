@@ -75,26 +75,28 @@ enum
   PROP_STORAGE_TYPE
 };
 
-GtkType
+GType
 gtk_image_get_type (void)
 {
-  static GtkType image_type = 0;
+  static GType image_type = 0;
 
   if (!image_type)
     {
-      static const GtkTypeInfo image_info =
+      static const GTypeInfo image_info =
       {
-	"GtkImage",
-	sizeof (GtkImage),
 	sizeof (GtkImageClass),
-	(GtkClassInitFunc) gtk_image_class_init,
-	(GtkObjectInitFunc) gtk_image_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_image_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkImage),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_image_init,
       };
 
-      image_type = gtk_type_unique (GTK_TYPE_MISC, &image_info);
+      image_type = g_type_register_static (GTK_TYPE_MISC, "GtkImage",
+					   &image_info, 0);
     }
 
   return image_type;
@@ -271,7 +273,7 @@ gtk_image_set_property (GObject      *object,
           mask = g_value_get_object (value);
 
           if (mask)
-            g_object_ref (G_OBJECT (mask));
+            g_object_ref (mask);
           
           gtk_image_reset (image);
 
@@ -410,7 +412,7 @@ gtk_image_new_from_pixmap (GdkPixmap *pixmap,
 {
   GtkImage *image;
 
-  image = gtk_type_new (GTK_TYPE_IMAGE);
+  image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
   gtk_image_set_from_pixmap (image, pixmap, mask);
 
@@ -437,7 +439,7 @@ gtk_image_new_from_image  (GdkImage  *gdk_image,
 {
   GtkImage *image;
 
-  image = gtk_type_new (GTK_TYPE_IMAGE);
+  image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
   gtk_image_set_from_image (image, gdk_image, mask);
 
@@ -472,7 +474,7 @@ gtk_image_new_from_file   (const gchar *filename)
 {
   GtkImage *image;
 
-  image = gtk_type_new (GTK_TYPE_IMAGE);
+  image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
   gtk_image_set_from_file (image, filename);
 
@@ -499,7 +501,7 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
 {
   GtkImage *image;
 
-  image = gtk_type_new (GTK_TYPE_IMAGE);
+  image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
   gtk_image_set_from_pixbuf (image, pixbuf);
 
@@ -526,7 +528,7 @@ gtk_image_new_from_stock (const gchar    *stock_id,
 {
   GtkImage *image;
 
-  image = gtk_type_new (GTK_TYPE_IMAGE);
+  image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
   gtk_image_set_from_stock (image, stock_id, size);
 
@@ -559,7 +561,7 @@ gtk_image_new_from_icon_set (GtkIconSet     *icon_set,
 {
   GtkImage *image;
 
-  image = gtk_type_new (GTK_TYPE_IMAGE);
+  image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
   gtk_image_set_from_icon_set (image, icon_set, size);
 
@@ -584,7 +586,7 @@ gtk_image_new_from_animation (GdkPixbufAnimation *animation)
 
   g_return_val_if_fail (GDK_IS_PIXBUF_ANIMATION (animation), NULL);
   
-  image = gtk_type_new (GTK_TYPE_IMAGE);
+  image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
   gtk_image_set_from_animation (image, animation);
 
@@ -614,10 +616,10 @@ gtk_image_set_from_pixmap (GtkImage  *image,
   g_object_freeze_notify (G_OBJECT (image));
   
   if (pixmap)
-    g_object_ref (G_OBJECT (pixmap));
+    g_object_ref (pixmap);
 
   if (mask)
-    g_object_ref (G_OBJECT (mask));
+    g_object_ref (mask);
 
   gtk_image_reset (image);
 
@@ -666,10 +668,10 @@ gtk_image_set_from_image  (GtkImage  *image,
   g_object_freeze_notify (G_OBJECT (image));
   
   if (gdk_image)
-    g_object_ref (G_OBJECT (gdk_image));
+    g_object_ref (gdk_image);
 
   if (mask)
-    g_object_ref (G_OBJECT (mask));
+    g_object_ref (mask);
 
   gtk_image_reset (image);
 
@@ -686,7 +688,7 @@ gtk_image_set_from_image  (GtkImage  *image,
     {
       /* Clean up the mask if gdk_image was NULL */
       if (mask)
-        g_object_unref (G_OBJECT (mask));
+        g_object_unref (mask);
     }
 
   g_object_notify (G_OBJECT (image), "image");
@@ -747,7 +749,7 @@ gtk_image_set_from_file   (GtkImage    *image,
       gtk_image_set_from_animation (image, anim);
     }
 
-  g_object_unref (G_OBJECT (anim));
+  g_object_unref (anim);
 
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -771,7 +773,7 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
   g_object_freeze_notify (G_OBJECT (image));
   
   if (pixbuf)
-    g_object_ref (G_OBJECT (pixbuf));
+    g_object_ref (pixbuf);
 
   gtk_image_reset (image);
 
@@ -895,7 +897,7 @@ gtk_image_set_from_animation (GtkImage           *image,
   g_object_freeze_notify (G_OBJECT (image));
   
   if (animation)
-    g_object_ref (G_OBJECT (animation));
+    g_object_ref (animation);
 
   gtk_image_reset (image);
 
@@ -1152,7 +1154,7 @@ gtk_image_reset_anim_iter (GtkImage *image)
 
       if (image->data.anim.iter)
         {
-          g_object_unref (G_OBJECT (image->data.anim.iter));
+          g_object_unref (image->data.anim.iter);
           image->data.anim.iter = NULL;
         }
     }
@@ -1313,7 +1315,7 @@ gtk_image_expose (GtkWidget      *widget,
 	  else
 	    {
 	      pixbuf = image->data.pixbuf.pixbuf;
-	      g_object_ref (G_OBJECT (pixbuf));
+	      g_object_ref (pixbuf);
 	    }
           break;
 
@@ -1373,7 +1375,7 @@ gtk_image_expose (GtkWidget      *widget,
              */
             
             pixbuf = gdk_pixbuf_animation_iter_get_pixbuf (image->data.anim.iter);
-            g_object_ref (G_OBJECT (pixbuf));
+            g_object_ref (pixbuf);
           }
           break;
 
@@ -1418,7 +1420,7 @@ gtk_image_expose (GtkWidget      *widget,
 
                   gtk_icon_source_free (source);
 
-                  g_object_unref (G_OBJECT (pixbuf));
+                  g_object_unref (pixbuf);
                   pixbuf = rendered;
                 }
 
@@ -1436,7 +1438,7 @@ gtk_image_expose (GtkWidget      *widget,
 				   GDK_RGB_DITHER_NORMAL,
 				   0, 0);
 
-                  g_object_unref (G_OBJECT (pixbuf));
+                  g_object_unref (pixbuf);
                   pixbuf = NULL;
                 }
             }
@@ -1494,7 +1496,7 @@ gtk_image_clear (GtkImage *image)
 
   if (image->mask)
     {
-      g_object_unref (G_OBJECT (image->mask));
+      g_object_unref (image->mask);
       image->mask = NULL;
       g_object_notify (G_OBJECT (image), "mask");
     }
@@ -1510,7 +1512,7 @@ gtk_image_clear (GtkImage *image)
     case GTK_IMAGE_PIXMAP:
 
       if (image->data.pixmap.pixmap)
-        g_object_unref (G_OBJECT (image->data.pixmap.pixmap));
+        g_object_unref (image->data.pixmap.pixmap);
       image->data.pixmap.pixmap = NULL;
       
       g_object_notify (G_OBJECT (image), "pixmap");
@@ -1520,7 +1522,7 @@ gtk_image_clear (GtkImage *image)
     case GTK_IMAGE_IMAGE:
 
       if (image->data.image.image)
-        g_object_unref (G_OBJECT (image->data.image.image));
+        g_object_unref (image->data.image.image);
       image->data.image.image = NULL;
       
       g_object_notify (G_OBJECT (image), "image");
@@ -1530,7 +1532,7 @@ gtk_image_clear (GtkImage *image)
     case GTK_IMAGE_PIXBUF:
 
       if (image->data.pixbuf.pixbuf)
-        g_object_unref (G_OBJECT (image->data.pixbuf.pixbuf));
+        g_object_unref (image->data.pixbuf.pixbuf);
 
       g_object_notify (G_OBJECT (image), "pixbuf");
       
@@ -1558,7 +1560,7 @@ gtk_image_clear (GtkImage *image)
         g_source_remove (image->data.anim.frame_timeout);
       
       if (image->data.anim.anim)
-        g_object_unref (G_OBJECT (image->data.anim.anim));
+        g_object_unref (image->data.anim.anim);
 
       image->data.anim.frame_timeout = 0;
       image->data.anim.anim = NULL;
@@ -1631,7 +1633,7 @@ gtk_image_size_request (GtkWidget      *widget,
       GTK_WIDGET (image)->requisition.width = gdk_pixbuf_get_width (pixbuf) + GTK_MISC (image)->xpad * 2;
       GTK_WIDGET (image)->requisition.height = gdk_pixbuf_get_height (pixbuf) + GTK_MISC (image)->ypad * 2;
 
-      g_object_unref (G_OBJECT (pixbuf));
+      g_object_unref (pixbuf);
     }
 
   /* Chain up to default that simply reads current requisition */

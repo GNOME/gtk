@@ -37,38 +37,38 @@ enum {
   PROP_YPAD
 };
 
-static void gtk_misc_class_init (GtkMiscClass *klass);
-static void gtk_misc_init       (GtkMisc      *misc);
-static void gtk_misc_realize    (GtkWidget    *widget);
-static void gtk_misc_set_property(GObject         *object,
-				  guint            prop_id,
-				  const GValue    *value,
-				  GParamSpec      *pspec);
-static void gtk_misc_get_property(GObject         *object,
-				  guint            prop_id,
-				  GValue          *value,
-				  GParamSpec      *pspec);
+static void gtk_misc_class_init   (GtkMiscClass *klass);
+static void gtk_misc_init         (GtkMisc      *misc);
+static void gtk_misc_realize      (GtkWidget    *widget);
+static void gtk_misc_set_property (GObject         *object,
+				   guint            prop_id,
+				   const GValue    *value,
+				   GParamSpec      *pspec);
+static void gtk_misc_get_property (GObject         *object,
+				   guint            prop_id,
+				   GValue          *value,
+				   GParamSpec      *pspec);
 
 
-GtkType
+GType
 gtk_misc_get_type (void)
 {
-  static GtkType misc_type = 0;
+  static GType misc_type = 0;
 
   if (!misc_type)
     {
       static const GTypeInfo misc_info =
       {
 	sizeof (GtkMiscClass),
-	NULL,            /* base_init */
-	NULL,            /* base_finalize */
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
 	(GClassInitFunc) gtk_misc_class_init,
-	NULL,            /* class_finalize */
-	NULL,            /* class_data */
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
 	sizeof (GtkMisc),
-	0,               /* n_preallocs */
+	0,		/* n_preallocs */
 	(GInstanceInitFunc) gtk_misc_init,
-	NULL,            /* value_table */
+	NULL,		/* value_table */
       };
 
       misc_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkMisc",
@@ -82,11 +82,9 @@ static void
 gtk_misc_class_init (GtkMiscClass *class)
 {
   GObjectClass   *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
   gobject_class = G_OBJECT_CLASS (class);
-  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
   gobject_class->set_property = gtk_misc_set_property;
@@ -233,7 +231,7 @@ gtk_misc_set_alignment (GtkMisc *misc,
           GtkWidget *widget;
 	  
           widget = GTK_WIDGET (misc);
-          gtk_widget_queue_clear (widget);
+          gtk_widget_queue_draw (widget);
         }
 
       g_object_freeze_notify (G_OBJECT (misc));
@@ -343,7 +341,7 @@ gtk_misc_realize (GtkWidget *widget)
   if (GTK_WIDGET_NO_WINDOW (widget))
     {
       widget->window = gtk_widget_get_parent_window (widget);
-      gdk_window_ref (widget->window);
+      g_object_ref (widget->window);
       widget->style = gtk_style_attach (widget->style, widget->window);
     }
   else

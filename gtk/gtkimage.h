@@ -37,11 +37,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define GTK_TYPE_IMAGE                  (gtk_image_get_type ())
-#define GTK_IMAGE(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_IMAGE, GtkImage))
-#define GTK_IMAGE_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_IMAGE, GtkImageClass))
-#define GTK_IS_IMAGE(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_IMAGE))
-#define GTK_IS_IMAGE_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IMAGE))
-#define GTK_IMAGE_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_IMAGE, GtkImageClass))
+#define GTK_IMAGE(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IMAGE, GtkImage))
+#define GTK_IMAGE_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_IMAGE, GtkImageClass))
+#define GTK_IS_IMAGE(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_IMAGE))
+#define GTK_IS_IMAGE_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IMAGE))
+#define GTK_IMAGE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IMAGE, GtkImageClass))
 
 
 typedef struct _GtkImage       GtkImage;
@@ -131,7 +131,7 @@ struct _GtkImageClass
   void (*_gtk_reserved4) (void);
 };
 
-GtkType    gtk_image_get_type (void) G_GNUC_CONST;
+GType      gtk_image_get_type (void) G_GNUC_CONST;
 
 GtkWidget* gtk_image_new                (void);
 GtkWidget* gtk_image_new_from_pixmap    (GdkPixmap       *pixmap,

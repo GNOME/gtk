@@ -1,3 +1,8 @@
+Sat Oct  5 16:11:22 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkmisc.[ch] gtk/gtklabel.[ch] gtk/gtkimage.[ch]
+	gtk/gtkdrawingarea.[ch] gtk/gtknotebook.[ch]: deprecation cleanup
+
 Sat Oct  5 18:30:50 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/stock-icons/Makefile.am (pixbuf_csource): Use
@@ -25,9 +30,9 @@ Sat Oct  5 16:47:03 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 Fri Oct  4 18:40:50 2002  Manish Singh  <yosh@gimp.org>
 
-	* gtkcheckmenuitem.[ch] gtkimagemenuitem.[ch] gtkmenu.[ch]
-	gtkmenubar.[ch] gtkmenuitem.[ch] gtkmenushell.[ch]
-	gtkradiomenuitem.[ch]: Deprecation cleanup
+	* gtk/gtkcheckmenuitem.[ch] gtk/gtkimagemenuitem.[ch] gtk/gtkmenu.[ch]
+	gtk/gtkmenubar.[ch] gtk/gtkmenuitem.[ch] gtk/gtkmenushell.[ch]
+	gtk/gtkradiomenuitem.[ch]: Deprecation cleanup
 
 Fri Oct  4 16:48:27 2002  Manish Singh  <yosh@gimp.org>
 
@@ -109,9 +114,9 @@ Fri Oct  4 11:43:47 2002  Owen Taylor  <otaylor@redhat.com>
 	
 Fri Oct  4 00:57:53 2002  Manish Singh  <yosh@gimp.org>
 
-	* gtkhscrollbar.[ch] gtkhseparator.[ch] gtkrange.[ch]
-	gtkscrollbar.[ch] gtkseparator.[ch] gtkseparatormenuitem.h
-	gtkvscrollbar.[ch] gtkvseparator.[ch]: Deprecation cleanup
+	* gtk/gtkhscrollbar.[ch] gtk/gtkhseparator.[ch] gtk/gtkrange.[ch]
+	gtk/gtkscrollbar.[ch] gtk/gtkseparator.[ch] gtk/gtkseparatormenuitem.h
+	gtk/gtkvscrollbar.[ch] gtk/gtkvseparator.[ch]: Deprecation cleanup
 
 Thu Oct  3 22:38:12 2002  Manish Singh  <yosh@gimp.org>
 
@@ -235,7 +240,7 @@ Wed Oct  2 08:47:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 Tue Oct  1 12:53:44 2002  Manish Singh  <yosh@gimp.org>
 
-	* gtk/gtkwindow-decorate.c gtkwindow.[ch]: Deprecation cleanup
+	* gtk/gtkwindow-decorate.c gtk/gtkwindow.[ch]: Deprecation cleanup
 
 2002-10-01  jacob berkman  <jacob@ximian.com>
 

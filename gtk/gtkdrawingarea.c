@@ -35,26 +35,29 @@ static void gtk_drawing_area_size_allocate (GtkWidget           *widget,
 static void gtk_drawing_area_send_configure (GtkDrawingArea     *darea);
 
 
-GtkType
+GType
 gtk_drawing_area_get_type (void)
 {
-  static GtkType drawing_area_type = 0;
+  static GType drawing_area_type = 0;
 
   if (!drawing_area_type)
     {
-      static const GtkTypeInfo drawing_area_info =
+      static const GTypeInfo drawing_area_info =
       {
-	"GtkDrawingArea",
-	sizeof (GtkDrawingArea),
 	sizeof (GtkDrawingAreaClass),
-	(GtkClassInitFunc) gtk_drawing_area_class_init,
-	(GtkObjectInitFunc) gtk_drawing_area_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_drawing_area_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkDrawingArea),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_drawing_area_init,
       };
 
-      drawing_area_type = gtk_type_unique (GTK_TYPE_WIDGET, &drawing_area_info);
+      drawing_area_type =
+	g_type_register_static (GTK_TYPE_WIDGET, "GtkDrawingArea",
+				&drawing_area_info, 0);
     }
 
   return drawing_area_type;
@@ -79,7 +82,7 @@ gtk_drawing_area_init (GtkDrawingArea *darea)
 GtkWidget*
 gtk_drawing_area_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (GTK_TYPE_DRAWING_AREA));
+  return g_object_new (GTK_TYPE_DRAWING_AREA, NULL);
 }
 
 void

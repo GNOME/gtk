@@ -38,11 +38,11 @@ extern "C" {
 
 
 #define GTK_TYPE_LABEL		  (gtk_label_get_type ())
-#define GTK_LABEL(obj)		  (GTK_CHECK_CAST ((obj), GTK_TYPE_LABEL, GtkLabel))
-#define GTK_LABEL_CLASS(klass)	  (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_LABEL, GtkLabelClass))
-#define GTK_IS_LABEL(obj)	  (GTK_CHECK_TYPE ((obj), GTK_TYPE_LABEL))
-#define GTK_IS_LABEL_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LABEL))
-#define GTK_LABEL_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_LABEL, GtkLabelClass))
+#define GTK_LABEL(obj)		  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LABEL, GtkLabel))
+#define GTK_LABEL_CLASS(klass)	  (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_LABEL, GtkLabelClass))
+#define GTK_IS_LABEL(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_LABEL))
+#define GTK_IS_LABEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LABEL))
+#define GTK_LABEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LABEL, GtkLabelClass))
        
 
 typedef struct _GtkLabel       GtkLabel;
@@ -96,7 +96,7 @@ struct _GtkLabelClass
   void (*_gtk_reserved4) (void);
 };
 
-GtkType               gtk_label_get_type          (void) G_GNUC_CONST;
+GType                 gtk_label_get_type          (void) G_GNUC_CONST;
 GtkWidget*            gtk_label_new               (const char    *str);
 GtkWidget*            gtk_label_new_with_mnemonic (const char    *str);
 void                  gtk_label_set_text          (GtkLabel      *label,

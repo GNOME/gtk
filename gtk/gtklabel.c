@@ -28,7 +28,6 @@
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtksignal.h"
 #include "gtkwindow.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkclipboard.h"
@@ -165,10 +164,10 @@ static gint gtk_label_move_backward_word (GtkLabel        *label,
 static GtkMiscClass *parent_class = NULL;
 
 
-GtkType
+GType
 gtk_label_get_type (void)
 {
-  static GtkType label_type = 0;
+  static GType label_type = 0;
   
   if (!label_type)
     {
@@ -185,7 +184,8 @@ gtk_label_get_type (void)
 	(GInstanceInitFunc) gtk_label_init,
       };
 
-      label_type = g_type_register_static (GTK_TYPE_MISC, "GtkLabel", &label_info, 0);
+      label_type = g_type_register_static (GTK_TYPE_MISC, "GtkLabel",
+					   &label_info, 0);
     }
   
   return label_type;
@@ -202,16 +202,16 @@ add_move_binding (GtkBindingSet  *binding_set,
   
   gtk_binding_entry_add_signal (binding_set, keyval, modmask,
 				"move_cursor", 3,
-				GTK_TYPE_ENUM, step,
+				G_TYPE_ENUM, step,
 				G_TYPE_INT, count,
-                                G_TYPE_BOOLEAN, FALSE);
+				G_TYPE_BOOLEAN, FALSE);
 
   /* Selection-extending version */
   gtk_binding_entry_add_signal (binding_set, keyval, modmask | GDK_SHIFT_MASK,
 				"move_cursor", 3,
-				GTK_TYPE_ENUM, step,
+				G_TYPE_ENUM, step,
 				G_TYPE_INT, count,
-                                G_TYPE_BOOLEAN, TRUE);
+				G_TYPE_BOOLEAN, TRUE);
 }
 
 static void
@@ -222,7 +222,7 @@ gtk_label_class_init (GtkLabelClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkBindingSet *binding_set;
 
-  parent_class = gtk_type_class (GTK_TYPE_MISC);
+  parent_class = g_type_class_peek_parent (class);
   
   gobject_class->set_property = gtk_label_set_property;
   gobject_class->get_property = gtk_label_get_property;
@@ -251,30 +251,37 @@ gtk_label_class_init (GtkLabelClass *class)
   class->copy_clipboard = gtk_label_copy_clipboard;
   
   signals[MOVE_CURSOR] = 
-      gtk_signal_new ("move_cursor",
-                      GTK_RUN_LAST | GTK_RUN_ACTION,
-                      GTK_CLASS_TYPE (object_class),
-                      GTK_SIGNAL_OFFSET (GtkLabelClass, move_cursor),
-                      _gtk_marshal_VOID__ENUM_INT_BOOLEAN,
-                      GTK_TYPE_NONE, 3, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT, GTK_TYPE_BOOL);
+    g_signal_new ("move_cursor",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkLabelClass, move_cursor),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__ENUM_INT_BOOLEAN,
+		  G_TYPE_NONE, 3,
+		  GTK_TYPE_MOVEMENT_STEP,
+		  G_TYPE_INT,
+		  G_TYPE_BOOLEAN);
   
   signals[COPY_CLIPBOARD] =
-    gtk_signal_new ("copy_clipboard",
-                    GTK_RUN_LAST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkLabelClass, copy_clipboard),
-                    _gtk_marshal_VOID__VOID,
-                    GTK_TYPE_NONE, 0);
+    g_signal_new ("copy_clipboard",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkLabelClass, copy_clipboard),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   
   signals[POPULATE_POPUP] =
-    gtk_signal_new ("populate_popup",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkLabelClass, populate_popup),
-		    _gtk_marshal_VOID__OBJECT,
-		    GTK_TYPE_NONE, 1, GTK_TYPE_MENU);
+    g_signal_new ("populate_popup",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkLabelClass, populate_popup),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_MENU);
 
-  g_object_class_install_property (G_OBJECT_CLASS(object_class),
+  g_object_class_install_property (gobject_class,
                                    PROP_LABEL,
                                    g_param_spec_string ("label",
                                                         _("Label"),
@@ -601,7 +608,7 @@ gtk_label_new (const gchar *str)
 {
   GtkLabel *label;
   
-  label = gtk_type_new (GTK_TYPE_LABEL);
+  label = g_object_new (GTK_TYPE_LABEL, NULL);
 
   if (str && *str)
     gtk_label_set_text (label, str);
@@ -637,7 +644,7 @@ gtk_label_new_with_mnemonic (const gchar *str)
 {
   GtkLabel *label;
   
-  label = gtk_type_new (GTK_TYPE_LABEL);
+  label = g_object_new (GTK_TYPE_LABEL, NULL);
 
   if (str && *str)
     gtk_label_set_text_with_mnemonic (label, str);
@@ -1321,7 +1328,7 @@ gtk_label_finalize (GObject *object)
   g_free (label->text);
 
   if (label->layout)
-    g_object_unref (G_OBJECT (label->layout));
+    g_object_unref (label->layout);
 
   if (label->attrs)
     pango_attr_list_unref (label->attrs);
@@ -1339,7 +1346,7 @@ gtk_label_clear_layout (GtkLabel *label)
 {
   if (label->layout)
     {
-      g_object_unref (G_OBJECT (label->layout));
+      g_object_unref (label->layout);
       label->layout = NULL;
     }
 }
@@ -3110,8 +3117,8 @@ static void
 activate_cb (GtkWidget *menuitem,
 	     GtkLabel  *label)
 {
-  const gchar *signal = gtk_object_get_data (GTK_OBJECT (menuitem), "gtk-signal");
-  gtk_signal_emit_by_name (GTK_OBJECT (label), signal);
+  const gchar *signal = g_object_get_data (G_OBJECT (menuitem), "gtk-signal");
+  g_signal_emit_by_name (label, signal);
 }
 
 static void
@@ -3123,9 +3130,9 @@ append_action_signal (GtkLabel     *label,
 {
   GtkWidget *menuitem = gtk_image_menu_item_new_from_stock (stock_id, NULL);
 
-  gtk_object_set_data (GTK_OBJECT (menuitem), "gtk-signal", (char *)signal);
-  gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-		      GTK_SIGNAL_FUNC (activate_cb), label);
+  g_object_set_data (G_OBJECT (menuitem), "gtk-signal", (char *)signal);
+  g_signal_connect (menuitem, "activate",
+		    G_CALLBACK (activate_cb), label);
 
   gtk_widget_set_sensitive (menuitem, sensitive);
   
@@ -3208,8 +3215,8 @@ gtk_label_do_popup (GtkLabel       *label,
                         FALSE);
   
   menuitem = gtk_menu_item_new_with_label (_("Select All"));
-  gtk_signal_connect_object (GTK_OBJECT (menuitem), "activate",
-			     GTK_SIGNAL_FUNC (gtk_label_select_all), label);
+  g_signal_connect_swapped (menuitem, "activate",
+			    G_CALLBACK (gtk_label_select_all), label);
   gtk_widget_show (menuitem);
   gtk_menu_shell_append (GTK_MENU_SHELL (label->select_info->popup_menu), menuitem);
 
@@ -3223,9 +3230,10 @@ gtk_label_do_popup (GtkLabel       *label,
   gtk_widget_set_sensitive (menuitem, FALSE);
   gtk_menu_shell_append (GTK_MENU_SHELL (label->select_info->popup_menu), menuitem);
 
-  gtk_signal_emit (GTK_OBJECT (label),
-                   signals[POPULATE_POPUP],
-                   label->select_info->popup_menu);
+  g_signal_emit (label,
+		 signals[POPULATE_POPUP],
+		 0,
+		 label->select_info->popup_menu);
   
   if (event)
     gtk_menu_popup (GTK_MENU (label->select_info->popup_menu), NULL, NULL,
