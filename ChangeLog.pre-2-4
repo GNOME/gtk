@@ -1,3 +1,21 @@
+Mon Oct  7 16:28:11 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c (palette_drag_begin): Use
+	a pixbuf to set the drag icon, combine code
+	to create drag icons (Fixes #80092, #80093)
+
+	* gtk/gtkcolorsel.c (get_screen_color): Don't warn
+	on failure to grab keyboard/mouse. (#80085)
+
+	* gtk/gtkcolorsel.c (palette_press): Return FALSE,
+	so DND initiation is possible.
+
+	* gtk/gtkcolorsel.c (palette_release): Set the color
+	from the palette on release, not press.
+
+	* tests/testgtk.c (create_color_selection): Use 
+	gtk_widget_show_all()
+
 Mon Oct  7 15:48:44 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdnd.[ch] gdk/x11/gdkdnd-x11.c: Add 

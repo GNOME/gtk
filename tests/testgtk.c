@@ -6827,8 +6827,6 @@ create_color_selection (GtkWidget *widget)
       gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
 			  GTK_SIGNAL_FUNC (palette_toggled_cb), window);
 
-      gtk_widget_show_all (options_hbox);
-
       gtk_signal_connect (
 	GTK_OBJECT (GTK_COLOR_SELECTION_DIALOG (window)->colorsel),
 	"color_changed",
@@ -6849,7 +6847,7 @@ create_color_selection (GtkWidget *widget)
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
-    gtk_widget_show (window);
+    gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);
 }

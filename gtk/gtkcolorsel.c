@@ -157,6 +157,7 @@ static void gtk_color_selection_get_property    (GObject                 *object
 
 static void gtk_color_selection_realize         (GtkWidget               *widget);
 static void gtk_color_selection_unrealize       (GtkWidget               *widget);
+static void gtk_color_selection_show_all        (GtkWidget               *widget);
 
 static gint     gtk_color_selection_get_palette_size    (GtkColorSelection *colorsel);
 static gboolean gtk_color_selection_get_palette_color   (GtkColorSelection *colorsel,
@@ -217,53 +218,42 @@ static void color_sample_draw_sample (GtkColorSelection *colorsel, int which);
 static void color_sample_draw_samples (GtkColorSelection *colorsel);
 
 static void
+set_color_icon (GdkDragContext *context,
+		gdouble        *colors)
+{
+  GdkPixbuf *pixbuf;
+  guint32 pixel;
+
+  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE,
+			   8, 48, 32);
+
+  pixel = (((UNSCALE (colors[COLORSEL_RED])   & 0xff00) << 16) |
+	   ((UNSCALE (colors[COLORSEL_GREEN]) & 0xff00) << 8) |
+	   ((UNSCALE (colors[COLORSEL_BLUE])  & 0xff00)));
+
+  gdk_pixbuf_fill (pixbuf, pixel);
+  
+  gtk_drag_set_icon_pixbuf (context, pixbuf, -2, -2);
+  gdk_pixbuf_unref (pixbuf);
+}
+
+static void
 color_sample_drag_begin (GtkWidget      *widget,
 			 GdkDragContext *context,
 			 gpointer        data)
 {
   GtkColorSelection *colorsel = data;
   ColorSelectionPrivate *priv;
-  GtkWidget *window;
-  gdouble colors[4];
   gdouble *colsrc;
-  GdkColor bg;
-  gint n, i;
   
   priv = colorsel->private_data;
-  window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_screen (GTK_WINDOW (window),
-			 gtk_widget_get_screen (widget));
-  gtk_widget_set_app_paintable (GTK_WIDGET (window), TRUE);
-  gtk_widget_set_usize (window, 48, 32);
-  gtk_widget_realize (window);
-  gtk_object_set_data_full (GTK_OBJECT (widget),
-			    "gtk-color-selection-drag-window",
-			    window,
-			    (GtkDestroyNotify) gtk_widget_destroy);
   
   if (widget == priv->old_sample)
     colsrc = priv->old_color;
   else
     colsrc = priv->color;
-  
-  for (i=0, n = COLORSEL_RED; n <= COLORSEL_BLUE; n++)
-    {
-      colors[i++] = colsrc[n];
-    }
-  
-  if (priv->has_opacity)
-    {
-      colors[i] = colsrc[COLORSEL_OPACITY];
-    }
-  
-  bg.red = 0xffff * colors[0];
-  bg.green = 0xffff * colors[1];
-  bg.blue = 0xffff * colors[2];
-  
-  gdk_color_alloc (gtk_widget_get_colormap (window), &bg);
-  gdk_window_set_background (window->window, &bg);
-  
-  gtk_drag_set_icon_widget (context, window, -2, -2);
+
+  set_color_icon (context, colsrc);
 }
 
 static void
@@ -650,33 +640,10 @@ palette_drag_begin (GtkWidget      *widget,
 		    GdkDragContext *context,
 		    gpointer        data)
 {
-  GtkColorSelection *colorsel = data;
-  ColorSelectionPrivate *priv;
-  GtkWidget *window;
   gdouble colors[4];
-  GdkColor bg;
-  
-  priv = colorsel->private_data;
-  window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_screen (GTK_WINDOW (window),
-			 gtk_widget_get_screen (widget));
-  gtk_widget_set_app_paintable (GTK_WIDGET (window), TRUE);
-  gtk_widget_set_usize (window, 48, 32);
-  gtk_widget_realize (window);
-  gtk_object_set_data_full (GTK_OBJECT (widget),
-			    "gtk-color-selection-drag-window",
-			    window,
-			    (GtkDestroyNotify) gtk_widget_destroy);
   
   palette_get_color (widget, colors);
-  bg.red = 0xffff * colors[0];
-  bg.green = 0xffff * colors[1];
-  bg.blue = 0xffff * colors[2];
-  
-  gdk_color_alloc (gtk_widget_get_colormap (window), &bg);
-  gdk_window_set_background (window->window, &bg);
-  
-  gtk_drag_set_icon_widget (context, window, -2, -2);
+  set_color_icon (context, colors);
 }
 
 static void
@@ -948,7 +915,31 @@ do_popup (GtkColorSelection *colorsel,
 }
 
 
-static gint
+static gboolean
+palette_enter (GtkWidget        *drawing_area,
+	       GdkEventCrossing *event,
+	       gpointer        data)
+{
+  g_object_set_data (G_OBJECT (drawing_area),
+		     "gtk-colorsel-have-pointer",
+		     GUINT_TO_POINTER (TRUE));
+
+  return FALSE;
+}
+
+static gboolean
+palette_leave (GtkWidget        *drawing_area,
+	       GdkEventCrossing *event,
+	       gpointer        data)
+{
+  g_object_set_data (G_OBJECT (drawing_area),
+		     "gtk-colorsel-have-pointer",
+		     NULL);
+
+  return FALSE;
+}
+
+static gboolean
 palette_press (GtkWidget      *drawing_area,
 	       GdkEventButton *event,
 	       gpointer        data)
@@ -957,24 +948,38 @@ palette_press (GtkWidget      *drawing_area,
 
   gtk_widget_grab_focus (drawing_area);
   
-  if (event->button == 1 &&
-      event->type == GDK_BUTTON_PRESS)
-    {      
-      if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (drawing_area), "color_set")) != 0)
-        {
-          gdouble color[4];
-          palette_get_color (drawing_area, color);
-          gtk_color_selection_set_color (GTK_COLOR_SELECTION (data), color);
-        }
-    }
-  
   if (event->button == 3 &&
       event->type == GDK_BUTTON_PRESS)
     {
       do_popup (colorsel, drawing_area, event->time);
+      return TRUE;
     }
-  
-  return TRUE;
+
+  return FALSE;
+}
+
+static gboolean
+palette_release (GtkWidget      *drawing_area,
+		 GdkEventButton *event,
+		 gpointer        data)
+{
+  GtkColorSelection *colorsel = GTK_COLOR_SELECTION (data);
+
+  gtk_widget_grab_focus (drawing_area);
+
+  if (event->button == 1 &&
+      g_object_get_data (G_OBJECT (drawing_area),
+			 "gtk-colorsel-have-pointer") != NULL)
+    {
+      if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (drawing_area), "color_set")) != 0)
+        {
+          gdouble color[4];
+          palette_get_color (drawing_area, color);
+          gtk_color_selection_set_color (colorsel, color);
+        }
+    }
+
+  return FALSE;
 }
 
 static void
@@ -1082,6 +1087,12 @@ palette_new (GtkColorSelection *colorsel)
                       GTK_SIGNAL_FUNC (palette_expose), colorsel);
   gtk_signal_connect (GTK_OBJECT (retval), "button_press_event",
                       GTK_SIGNAL_FUNC (palette_press), colorsel);
+  gtk_signal_connect (GTK_OBJECT (retval), "button_release_event",
+                      GTK_SIGNAL_FUNC (palette_release), colorsel);
+  gtk_signal_connect (GTK_OBJECT (retval), "enter_notify_event",
+                      GTK_SIGNAL_FUNC (palette_enter), colorsel);
+  gtk_signal_connect (GTK_OBJECT (retval), "leave_notify_event",
+                      GTK_SIGNAL_FUNC (palette_leave), colorsel);
   gtk_signal_connect (GTK_OBJECT (retval), "key_press_event",
                       GTK_SIGNAL_FUNC (palette_activate), colorsel);
   gtk_signal_connect (GTK_OBJECT (retval), "popup_menu",
@@ -1306,10 +1317,7 @@ get_screen_color (GtkWidget *button)
   if (gdk_keyboard_grab (priv->dropper_grab_widget->window,
                          FALSE,
                          gtk_get_current_event_time ()) != GDK_GRAB_SUCCESS)
-    {
-      g_warning ("Failed to grab keyboard to do eyedropper");
-      return;
-    }
+    return;
   
   picker_cursor = make_picker_cursor (screen);
   grab_status = gdk_pointer_grab (priv->dropper_grab_widget->window,
@@ -1323,7 +1331,6 @@ get_screen_color (GtkWidget *button)
   if (grab_status != GDK_GRAB_SUCCESS)
     {
       gdk_display_keyboard_ungrab (gtk_widget_get_display (button), GDK_CURRENT_TIME);
-      g_warning ("Failed to grab pointer to do eyedropper");
       return;
     }
 
@@ -1710,6 +1717,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 
   widget_class->realize = gtk_color_selection_realize;
   widget_class->unrealize = gtk_color_selection_unrealize;
+  widget_class->show_all = gtk_color_selection_show_all;
   
   g_object_class_install_property (gobject_class,
                                    PROP_HAS_OPACITY_CONTROL,
@@ -1972,6 +1980,16 @@ gtk_color_selection_unrealize (GtkWidget *widget)
   g_signal_handler_disconnect (settings, priv->settings_connection);
 
   GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
+}
+
+/* We override show-all since we have internal widgets that
+ * shouldn't be shown when you call show_all(), like the
+ * palette and opacity sliders.
+ */
+static void
+gtk_color_selection_show_all (GtkWidget *widget)
+{
+  gtk_widget_show (widget);
 }
 
 /**
