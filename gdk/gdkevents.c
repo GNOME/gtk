@@ -383,6 +383,7 @@ typedef struct _GdkExposeInfo GdkExposeInfo;
 struct _GdkExposeInfo
 {
   Window window;
+  Window toplevel_window;
   gboolean seen_nonmatching;
 };
 
@@ -401,7 +402,9 @@ expose_predicate (Display *display,
    * expose events.
    */
   if (xevent->xany.type != Expose && 
-      xevent->xany.type != GravityNotify)
+      xevent->xany.type != GravityNotify &&
+      (xevent->xany.type != ConfigureNotify ||
+       xevent->xany.window == info->toplevel_window))
     {
       info->seen_nonmatching = TRUE;
     }
@@ -429,6 +432,7 @@ gdk_compress_exposures (XEvent    *xevent,
   GdkEvent event;
 
   info.window = xevent->xany.window;
+  info.toplevel_window = GDK_WINDOW_XWINDOW (gdk_window_get_toplevel (window));
   info.seen_nonmatching = FALSE;
   
   rect1.x = xevent->xexpose.x;

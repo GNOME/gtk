@@ -1,3 +1,12 @@
+2001-06-01  Alex Larsson  <alexl@redhat.com>
+
+	* gdk/gdkevents.c (expose_predicate):
+	Allow expose event compression past configure notify events for
+	other toplevel window. This fixes performance when dragging a
+	window of an application over another window of the same
+	application. In this case there will be interleaved exposure
+	and configure events.
+
 Thu May 31 12:43:57 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkoptionmenu.c: Account for the fact that the border
