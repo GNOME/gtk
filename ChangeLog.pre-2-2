@@ -1,3 +1,9 @@
+Sat Apr 11 02:01:31 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c (scroll_down): Removed incorrect part of
+	assertion that was causing failures for scrolling a single
+	line very short text widget.
+
 Sat Apr 11 01:41:55 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtktext.c (expose_text): Fixed a sign problem 

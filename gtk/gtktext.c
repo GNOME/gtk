@@ -3732,8 +3732,7 @@ scroll_down (GtkText* text, gint diff0)
 
   while (diff0-- > 0)
     {
-      g_assert (text->line_start_cache &&
-		text->line_start_cache->next);
+      g_assert (text->line_start_cache);
 
       if (text->first_cut_pixels < LINE_HEIGHT(CACHE_DATA(text->line_start_cache)) - 1)
 	{
