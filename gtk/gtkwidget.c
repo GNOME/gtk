@@ -2651,24 +2651,6 @@ gtk_widget_get_parent_window   (GtkWidget           *widget)
 }
 
 /*****************************************
- * gtk_widget_set_style:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-void
-gtk_widget_set_style (GtkWidget *widget,
-		      GtkStyle	*style)
-{
-  g_return_if_fail (widget != NULL);
-  
-  GTK_PRIVATE_SET_FLAG (widget, GTK_USER_STYLE);
-  gtk_widget_set_style_internal (widget, style);
-}
-
-/*****************************************
  * gtk_widget_set_uposition:
  *
  *   arguments:
