@@ -3362,16 +3362,19 @@ gtk_file_chooser_default_get_resizable_hints (GtkFileChooserEmbed *chooser_embed
 
   g_return_if_fail (resize_horizontally != NULL);
   g_return_if_fail (resize_vertically != NULL);
-
+  
   impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
 
+  *resize_horizontally = TRUE;
+  *resize_vertically = TRUE;
+  
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
       impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
       if (! gtk_expander_get_expanded (GTK_EXPANDER (impl->save_expander)))
 	{
-	  *resize_vertically = FALSE;
 	  *resize_horizontally = FALSE;
+	  *resize_vertically = FALSE;
 	}
     }
 }

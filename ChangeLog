@@ -1,3 +1,9 @@
+Tue Mar  2 15:19:52 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_get_resizable_hints): set the default
+	value, spotted by Morten Welinder.
+
 Tue Mar  2 15:03:15 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c
