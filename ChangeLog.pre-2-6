@@ -1,3 +1,8 @@
+2002-02-11  jacob berkman  <jacob@ximian.com>
+
+	* gdk/gdkwindow.h (gdk_get_default_root_window): fix signature to
+	match implementation
+
 Mon Feb 11 16:48:34 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkliststore.c (gtk_list_store_set_valist): set value of

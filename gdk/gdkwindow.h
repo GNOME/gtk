@@ -535,7 +535,7 @@ void gdk_window_get_internal_paint_info (GdkWindow    *window,
 
 GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);   
 
-GdkWindow *gdk_get_default_root_window ();
+GdkWindow *gdk_get_default_root_window (void);
 
 #ifndef GDK_DISABLE_DEPRECATED
 #define GDK_ROOT_PARENT()             (gdk_get_default_root_window ())
