@@ -1,3 +1,7 @@
+Mon May 18 22:14:39 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gutils.c: Restored a missing prototype for g_vsprintf.
+
 Tue May 12 19:22:58 1998  Owen Taylor  <otaylor@gtk.org>
 
  	* glib/glib.h: Added macros G[U]INT_TO_POINTER() and
