@@ -282,7 +282,7 @@ pnm_read_header (PnmLoaderContext *context)
 		if (*inbuf->byte != 'P') {
 			g_set_error (context->error,
 				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_HEADER_CORRUPT,
+				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
 				     _("PNM file has an incorrect initial byte"));
 			return PNM_FATAL_ERR;
 		}
@@ -312,7 +312,7 @@ pnm_read_header (PnmLoaderContext *context)
 		default:
 			g_set_error (context->error,
 				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_HEADER_CORRUPT,
+				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
 				     _("PNM file is not in a recognized PNM subformat"));
 			return PNM_FATAL_ERR;
 		}
@@ -337,7 +337,7 @@ pnm_read_header (PnmLoaderContext *context)
 		if (!width) {
 			g_set_error (context->error,
 				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_HEADER_CORRUPT,
+				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
 				     _("PNM file has an image width of 0"));
 			return PNM_FATAL_ERR;
 		}
@@ -358,7 +358,7 @@ pnm_read_header (PnmLoaderContext *context)
 		if (!height) {
 			g_set_error (context->error,
 				     GDK_PIXBUF_ERROR,
-				     GDK_PIXBUF_ERROR_HEADER_CORRUPT,
+				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
 				     _("PNM file has an image height of 0"));
 			return PNM_FATAL_ERR;
 		}
@@ -381,7 +381,7 @@ pnm_read_header (PnmLoaderContext *context)
 			if (context->maxval == 0) {
 				g_set_error (context->error,
 					     GDK_PIXBUF_ERROR,
-					     GDK_PIXBUF_ERROR_HEADER_CORRUPT,
+					     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
  					     _("Maximum color value in PNM file is 0"));
 				return PNM_FATAL_ERR;
 			}
@@ -389,7 +389,7 @@ pnm_read_header (PnmLoaderContext *context)
 			if (context->maxval > 65535) {
 				g_set_error (context->error,
 					     GDK_PIXBUF_ERROR,
-					     GDK_PIXBUF_ERROR_HEADER_CORRUPT,
+					     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
  					     _("Maximum color value in PNM file is too large"));
 				return PNM_FATAL_ERR;
 			}
@@ -397,7 +397,7 @@ pnm_read_header (PnmLoaderContext *context)
 			if (context->maxval > 255) {
 				g_set_error (context->error,
 					     GDK_PIXBUF_ERROR,
-					     GDK_PIXBUF_ERROR_HEADER_CORRUPT,
+					     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
  					     _("Can't handle PNM files with maximum color values greater than 255"));
 				return PNM_FATAL_ERR;
 			}
