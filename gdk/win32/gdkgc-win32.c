@@ -1192,7 +1192,7 @@ gdk_win32_colormap_color_pack (GdkColormapPrivateWin32 *colormap_private,
   guchar r, g, b;
 
   if (colormap_private == NULL)
-    return DIBINDEX (pixel);
+    return DIBINDEX (pixel & 1);
 
   visual = colormap_private->base.visual;
   switch (visual->type)

@@ -1,3 +1,8 @@
+2002-02-28  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkgc-win32.c (gdk_win32_colormap_color_pack): In the
+	bitmap case, use just the LSB of the pixel value.
+
 2002-02-24  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_foreign_new): Do accept
