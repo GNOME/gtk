@@ -1,5 +1,8 @@
 2004-12-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c: Use secondary text for error 
+	dialogs.
+
 	* gtk/gtkfilesystemunix.c: Clean up some cases of errno handling
 	(#162496, noted by Tor Lillqvist), and use g_filename_display_name()
 	for error messages. Also mark some error messages for translation,

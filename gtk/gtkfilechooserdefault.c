@@ -794,7 +794,8 @@ gtk_file_chooser_default_finalize (GObject *object)
 /* Shows an error dialog set as transient for the specified window */
 static void
 error_message_with_parent (GtkWindow  *parent,
-			   const char *msg)
+			   const char *msg,
+			   const char *detail)
 {
   GtkWidget *dialog;
 
@@ -804,6 +805,8 @@ error_message_with_parent (GtkWindow  *parent,
 				   GTK_BUTTONS_OK,
 				   "%s",
 				   msg);
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+					    "%s", detail);
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
 }
@@ -824,9 +827,10 @@ get_toplevel (GtkWidget *widget)
 /* Shows an error dialog for the file chooser */
 static void
 error_message (GtkFileChooserDefault *impl,
-	       const char            *msg)
+	       const char            *msg,
+	       const char            *detail)
 {
-  error_message_with_parent (get_toplevel (GTK_WIDGET (impl)), msg);
+  error_message_with_parent (get_toplevel (GTK_WIDGET (impl)), msg, detail);
 }
 
 /* Shows a simple error dialog relative to a path.  Frees the GError as well. */
@@ -836,15 +840,15 @@ error_dialog (GtkFileChooserDefault *impl,
 	      const GtkFilePath     *path,
 	      GError                *error)
 {
-  g_return_if_fail (path != NULL);
-
   if (error)
     {
-      char *uri = gtk_file_system_path_to_uri (impl->file_system, path);
-      char *text = g_strdup_printf (msg,
-				    uri,
-				    error->message);
-      error_message (impl, text);
+      char *uri = NULL;
+      char *text;
+
+      if (path)
+	uri = gtk_file_system_path_to_uri (impl->file_system, path);
+      text = g_strdup_printf (msg, uri);
+      error_message (impl, text, error->message);
       g_free (text);
       g_free (uri);
       g_error_free (error);
@@ -860,39 +864,52 @@ error_getting_info_dialog (GtkFileChooserDefault *impl,
 			   GError                *error)
 {
   error_dialog (impl,
-		_("Could not retrieve information about %s:\n%s"),
+		_("Could not retrieve information about the file"),
 		path, error);
 }
 
 /* Shows an error dialog about not being able to add a bookmark */
 static void
-error_could_not_add_bookmark_dialog (GtkFileChooserDefault *impl,
-				     const GtkFilePath     *path,
-				     GError                *error)
+error_adding_bookmark_dialog (GtkFileChooserDefault *impl,
+			      const GtkFilePath     *path,
+			      GError                *error)
 {
   error_dialog (impl,
-		_("Could not add a bookmark for %s:\n%s"),
+		_("Could not add a bookmark"),
 		path, error);
 }
 
-/* Shows an error dialog about not being able to compose a filename */
+/* Shows an error dialog about not being able to remove a bookmark */
+static void
+error_removing_bookmark_dialog (GtkFileChooserDefault *impl,
+				const GtkFilePath     *path,
+				GError                *error)
+{
+  error_dialog (impl,
+		_("Could not remove bookmark"),
+		path, error);
+}
+
+/* Shows an error dialog about not being able to create a folder */
+static void
+error_creating_folder_dialog (GtkFileChooserDefault *impl,
+			      const GtkFilePath     *path,
+			      GError                *error)
+{
+  error_dialog (impl, 
+		_("The folder could not be created"), 
+		path, error);
+}
+
+/* Shows an error dialog about not being able to create a filename */
 static void
 error_building_filename_dialog (GtkFileChooserDefault *impl,
-				const GtkFilePath     *base_path,
+				const GtkFilePath     *folder_part,
 				const char            *file_part,
 				GError                *error)
 {
-  char *uri;
-  char *msg;
-
-  uri = gtk_file_system_path_to_uri (impl->file_system, base_path);
-  msg = g_strdup_printf (_("Could not build file name from '%s' and '%s':\n%s"),
-			 uri, file_part,
-			 error->message);
-  error_message (impl, msg);
-  g_free (uri);
-  g_free (msg);
-  g_error_free (error);
+  error_dialog (impl, _("Invalid file name"), 
+		NULL, error);
 }
 
 /* Shows an error dialog when we cannot switch to a folder */
@@ -901,10 +918,8 @@ error_changing_folder_dialog (GtkFileChooserDefault *impl,
 			      const GtkFilePath     *path,
 			      GError                *error)
 {
-  error_dialog (impl,
-		_("Could not change the current folder to %s:\n%s"),
-		path,
-		error);
+  error_dialog (impl, _("The folder contents could not be displayed"),
+		path, error);
 }
 
 /* Changes folders, displaying an error dialog if this fails */
@@ -1641,14 +1656,12 @@ edited_idle_cb (GtkFileChooserDefault *impl)
 	  if (gtk_file_system_create_folder (impl->file_system, file_path, &error))
 	    change_folder_and_display_error (impl, file_path);
 	  else
-	    error_dialog (impl,
-			  _("Could not create folder %s:\n%s"),
-			  file_path, error);
+	    error_creating_folder_dialog (impl, file_path, error);
 
 	  gtk_file_path_free (file_path);
 	}
       else
-	error_building_filename_dialog (impl, impl->current_folder, impl->edited_new_text, error);
+	error_creating_folder_dialog (impl, file_path, error);
 
       g_free (impl->edited_new_text);
       impl->edited_new_text = NULL;
@@ -1829,17 +1842,14 @@ shortcuts_add_bookmark_from_path (GtkFileChooserDefault *impl,
   error = NULL;
   if (!check_is_folder (impl->file_system, path, &error))
     {
-      error_dialog (impl,
-		    _("Could not add bookmark for %s because it is not a folder."),
-		    path,
-		    error);
+      error_adding_bookmark_dialog (impl, path, error);
       return FALSE;
     }
 
   error = NULL;
   if (!gtk_file_system_insert_bookmark (impl->file_system, path, pos, &error))
     {
-      error_could_not_add_bookmark_dialog (impl, path, error);
+      error_adding_bookmark_dialog (impl, path, error);
       return FALSE;
     }
 
@@ -1940,12 +1950,7 @@ remove_selected_bookmarks (GtkFileChooserDefault *impl)
 
   error = NULL;
   if (!gtk_file_system_remove_bookmark (impl->file_system, path, &error))
-    {
-      error_dialog (impl,
-		    _("Could not remove bookmark for %s:\n%s"),
-		    path,
-		    error);
-    }
+    error_removing_bookmark_dialog (impl, path, error);
 }
 
 /* Callback used when the "Remove bookmark" button is clicked */
@@ -2570,12 +2575,15 @@ shortcuts_drop_uris (GtkFileChooserDefault *impl,
 	}
       else
 	{
-	  char *msg;
+	  GError *error;
 
-	  msg = g_strdup_printf (_("Could not add a bookmark for %s because it is an invalid path name."),
-				 uri);
-	  error_message (impl, msg);
-	  g_free (msg);
+	  g_set_error (&error,
+		       GTK_FILE_SYSTEM_ERROR,
+		       GTK_FILE_SYSTEM_ERROR_INVALID_URI,
+		       _("Could not add a bookmark for '%s' "
+			 "because it is an invalid path name."),
+		       uri);
+	  error_adding_bookmark_dialog (impl, path, error);
 	}
     }
 
@@ -2632,7 +2640,7 @@ shortcuts_reorder (GtkFileChooserDefault *impl,
   if (gtk_file_system_remove_bookmark (impl->file_system, file_path_copy, &error))
     shortcuts_add_bookmark_from_path (impl, file_path_copy, new_position);
   else
-    error_could_not_add_bookmark_dialog (impl, file_path_copy, error);
+    error_adding_bookmark_dialog (impl, file_path_copy, error);
 
  out:
 
@@ -5004,7 +5012,7 @@ gtk_file_chooser_default_remove_shortcut_folder (GtkFileChooser    *chooser,
   g_set_error (error,
 	       GTK_FILE_CHOOSER_ERROR,
 	       GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
-	       _("shortcut %s does not exist"),
+	       _("Shortcut %s does not exist"),
 	       uri);
   g_free (uri);
 
@@ -5464,10 +5472,9 @@ shortcuts_activate_volume (GtkFileChooserDefault *impl,
 	{
 	  char *msg;
 
-	  msg = g_strdup_printf ("Could not mount %s:\n%s",
-				 gtk_file_system_volume_get_display_name (impl->file_system, volume),
-				 error->message);
-	  error_message (impl, msg);
+	  msg = g_strdup_printf (_("Could not mount %s"),
+				 gtk_file_system_volume_get_display_name (impl->file_system, volume));
+	  error_message (impl, msg, error->message);
 	  g_free (msg);
 	  g_error_free (error);
 	}
@@ -5941,7 +5948,8 @@ update_from_entry (GtkFileChooserDefault *impl,
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN && !folder_path)
     {
       error_message_with_parent (parent,
-				 _("Cannot change to the folder you specified as it is an invalid path."));
+				 _("Cannot change folder"),
+				 _("The folder you specified is an invalid path."));
       return FALSE;
     }
 
@@ -5980,10 +5988,9 @@ update_from_entry (GtkFileChooserDefault *impl,
 	  char *uri;
 
 	  uri = gtk_file_system_path_to_uri (impl->file_system, folder_path);
-	  msg = g_strdup_printf (_("Could not build file name from '%s' and '%s':\n%s"),
-				 uri, file_part,
-				 error->message);
-	  error_message (impl, msg);
+	  msg = g_strdup_printf (_("Could not build file name from '%s' and '%s'"),
+				 uri, file_part);
+	  error_message (impl, msg, error->message);
 	  g_free (uri);
 	  g_free (msg);
 	  goto out;
@@ -6017,8 +6024,7 @@ update_from_entry (GtkFileChooserDefault *impl,
 	  error = NULL;
 	  result = _gtk_file_chooser_select_path (GTK_FILE_CHOOSER (impl), subfolder_path, &error);
 	  if (!result)
-	    error_dialog (impl,
-			  _("Could not select %s:\n%s"),
+	    error_dialog (impl, _("Could not select item"),
 			  subfolder_path, error);
 	}
 
