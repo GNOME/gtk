@@ -2641,7 +2641,7 @@ arrow_action (GtkCalendar *calendar,
       gtk_calendar_set_month_next (calendar);
       break;
     default:;
-      // do nothing
+      /* do nothing */
     }
 }
 

@@ -1,3 +1,8 @@
+2004-01-30  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkcalendar.c (arrow_action): Remove C++ comment; reported
+	by Damien Carbery <damien.carbery@sun.com>.  Fixes #132956.
+
 Fri Jan 30 11:37:37 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdrawable-x11.c: Revert changes from
