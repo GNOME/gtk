@@ -1,3 +1,17 @@
+Mon Sep 23 18:01:52 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.[ch]: Add gtk_notebook_get_n_pages
+	(#73229, Havoc Pennington)
+
+	* gtk/gtknotebook.c (gtk_notebook_get_nth_page): Handle
+	-1 to mean the last page, as we do elsewhere. (#73229)
+
+Mon Sep 23 17:50:23 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenushell.[ch] gtk/gtkentry.c gtk/gtkmenubar.c
+	gtk/gtkmenuitem.c gtk/gtktextview.c: Make
+	gtk_menu_shell_select_first() public. (#70373)
+
 Mon Sep 23 16:48:46 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkkeys.[ch] gdk/x11/gdkkeys-x11.c gdk/x11/gdkevents-x11.c:
