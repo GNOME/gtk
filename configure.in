@@ -93,6 +93,12 @@ fi
 AC_PATH_X
 AC_PATH_XTRA
 
+if test "x$no_x" = "xyes"; then 
+  AC_MSG_ERROR([
+*** X libraries or include files not found. Check 'config.log' for 
+*** more details.])
+fi
+
 if test "x$x_includes" = "x"; then
   x_includes="/usr/include"
 fi
@@ -105,7 +111,9 @@ LDFLAGS="$X_LDFLAGS $X_LIBS"
 
 # Checks for libraries.
 # Check for the X11 library
-AC_CHECK_LIB(X11, XOpenDisplay, x_libs="-lX11 $X_EXTRA_LIBS", no_x11_lib=yes, $X_EXTRA_LIBS)
+AC_CHECK_LIB(X11, XOpenDisplay, x_libs="-lX11 $X_EXTRA_LIBS",
+  AC_MSG_ERROR([*** libX11 not found. Check 'config.log' for more details.]),
+  $X_EXTRA_LIBS)
 
 if test "x$enable_shm" = "xyes"; then
   # Check for the Xext library (needed for XShm extention)
