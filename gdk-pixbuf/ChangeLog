@@ -1,3 +1,7 @@
+2005-02-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-ico.c: Fix a typo.  (#168173, Ivan Wong)
+
 2005-02-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-pnm.c (pnm_skip_whitespace): Don't read over the end of

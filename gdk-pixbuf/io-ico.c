@@ -950,7 +950,7 @@ fill_entry (IconEntry *icon,
 	
 	if (hot_x > -1 && hot_y > -1) {
 		icon->hot_x = hot_x;
-		icon->hot_x = hot_y;
+		icon->hot_y = hot_y;
 		if (icon->hot_x >= icon->width || icon->hot_y >= icon->height) {
 			g_set_error (error,
 				     GDK_PIXBUF_ERROR,
