@@ -52,7 +52,7 @@ add_row (GtkTable     *table,
   GtkWidget *option_menu;
   GtkWidget *label;
 
-  label = gtk_label_new (label_text);
+  label = gtk_label_new_with_mnemonic (label_text);
   gtk_misc_set_alignment (GTK_MISC (label), 0, 1);
   gtk_table_attach (GTK_TABLE (table), label,
 		    0, 1,                  row, row + 1,
@@ -60,6 +60,7 @@ add_row (GtkTable     *table,
 		    0,                     0);
   
   option_menu = create_option_menu (options);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), option_menu);
   gtk_size_group_add_widget (size_group, option_menu);
   gtk_table_attach (GTK_TABLE (table), option_menu,
 		    1, 2,                  row, row + 1,
@@ -137,8 +138,8 @@ do_sizegroup (void)
       gtk_table_set_col_spacings (GTK_TABLE (table), 10);
       gtk_container_add (GTK_CONTAINER (frame), table);
 
-      add_row (GTK_TABLE (table), 0, size_group, "Foreground", color_options);
-      add_row (GTK_TABLE (table), 1, size_group, "Background", color_options);
+      add_row (GTK_TABLE (table), 0, size_group, "_Foreground", color_options);
+      add_row (GTK_TABLE (table), 1, size_group, "_Background", color_options);
 
       /* And another frame holding line style options
        */
@@ -151,11 +152,11 @@ do_sizegroup (void)
       gtk_table_set_col_spacings (GTK_TABLE (table), 10);
       gtk_container_add (GTK_CONTAINER (frame), table);
 
-      add_row (GTK_TABLE (table), 0, size_group, "Dashing", dash_options);
-      add_row (GTK_TABLE (table), 1, size_group, "Line ends", end_options);
+      add_row (GTK_TABLE (table), 0, size_group, "_Dashing", dash_options);
+      add_row (GTK_TABLE (table), 1, size_group, "_Line ends", end_options);
 
       /* And a check button to turn grouping on and off */
-      check_button = gtk_check_button_new_with_label ("Enable grouping");
+      check_button = gtk_check_button_new_with_mnemonic ("_Enable grouping");
       gtk_box_pack_start (GTK_BOX (vbox), check_button, FALSE, FALSE, 0);
       
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);

@@ -2129,39 +2129,34 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn *tree_column,
     }
 }
 
-/**
- * gtk_tree_view_column_cell_render:
- * @tree_column: A #GtkTreeViewColumn.
- * @window: a #GdkDrawable to draw to
- * @background_area: entire cell area (including tree expanders and maybe padding on the sides)
- * @cell_area: area normally rendered by a cell renderer
- * @expose_area: area that actually needs updating
- * @flags: flags that affect rendering
- * 
- * Renders the cell contained by #tree_column. This is used primarily by the
- * GtkTreeView.
- **/
-void
-gtk_tree_view_column_cell_render (GtkTreeViewColumn *tree_column,
-				  GdkWindow         *window,
-				  GdkRectangle      *background_area,
-				  GdkRectangle      *cell_area,
-				  GdkRectangle      *expose_area,
-				  guint              flags)
+/* both rendering and rendering focus are somewhat complicated, and a bit of
+ * code.  Rather than duplicate them, we put them together to keep the code in
+ * one place
+ */
+static void
+gtk_tree_view_column_cell_render_or_focus (GtkTreeViewColumn *tree_column,
+					   GdkWindow         *window,
+					   GdkRectangle      *background_area,
+					   GdkRectangle      *cell_area,
+					   GdkRectangle      *expose_area,
+					   guint              flags,
+					   gboolean           render,
+					   GdkRectangle      *focus_rectangle)
 {
   GList *list;
   GdkRectangle real_cell_area;
   gint expand_cell_count = 0;
   gint full_requested_width = 0;
   gint extra_space;
+  gint min_x, min_y, max_x, max_y;
 
-  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
-  g_return_if_fail (background_area != NULL);
-  g_return_if_fail (cell_area != NULL);
-  g_return_if_fail (expose_area != NULL);
+  min_x = G_MAXINT;
+  min_y = G_MAXINT;
+  max_x = 0;
+  max_y = 0;
 
   real_cell_area = *cell_area;
-    
+
   /* Find out how my extra space we have to allocate */
   for (list = tree_column->cell_list; list; list = list->next)
     {
@@ -2195,13 +2190,35 @@ gtk_tree_view_column_cell_render (GtkTreeViewColumn *tree_column,
 
       real_cell_area.width = info->requested_width +
 	(info->expand?extra_space:0);
-      gtk_cell_renderer_render (info->cell,
-				window,
-				tree_column->tree_view,
-				background_area,
-				&real_cell_area,
-				expose_area,
-				flags);
+      if (render)
+	{
+	  gtk_cell_renderer_render (info->cell,
+				    window,
+				    tree_column->tree_view,
+				    background_area,
+				    &real_cell_area,
+				    expose_area,
+				    flags);
+	}
+      else
+	{
+	  gint x_offset, y_offset, width, height;
+
+	  gtk_cell_renderer_get_size (info->cell,
+				      tree_column->tree_view,
+				      &real_cell_area,
+				      &x_offset, &y_offset,
+				      &width, &height);
+
+	  if (min_x > (real_cell_area.x + x_offset))
+	    min_x = real_cell_area.x + x_offset;
+	  if (max_x < real_cell_area.x + x_offset + width)
+	    max_x = real_cell_area.x + x_offset + width;
+	  if (min_y > (real_cell_area.y + y_offset))
+	    min_y = real_cell_area.y + y_offset;
+	  if (max_y < real_cell_area.y + y_offset + height)
+	    max_y = real_cell_area.y + y_offset + height;
+	}
       real_cell_area.x += (info->requested_width + tree_column->spacing);
     }
   for (list = g_list_last (tree_column->cell_list); list; list = list->prev)
@@ -2227,6 +2244,59 @@ gtk_tree_view_column_cell_render (GtkTreeViewColumn *tree_column,
 				flags);
       real_cell_area.x += (info->requested_width + tree_column->spacing);
     }
+  if (! render)
+    {
+      if (min_x >= max_x || min_y >= max_y)
+	{
+	  *focus_rectangle = *cell_area;
+	  focus_rectangle->x -= 1;
+	  focus_rectangle->y -= 1;
+	  focus_rectangle->width += 2;
+	  focus_rectangle->height += 2;
+	}
+      else
+	{
+	  focus_rectangle->x = min_x - 1;
+	  focus_rectangle->y = min_y - 1;
+	  focus_rectangle->width = (max_x - min_x) + 2;
+	  focus_rectangle->height = (max_y - min_y) + 2;
+	}
+    }
+}
+
+/**
+ * gtk_tree_view_column_cell_render:
+ * @tree_column: A #GtkTreeViewColumn.
+ * @window: a #GdkDrawable to draw to
+ * @background_area: entire cell area (including tree expanders and maybe padding on the sides)
+ * @cell_area: area normally rendered by a cell renderer
+ * @expose_area: area that actually needs updating
+ * @flags: flags that affect rendering
+ * 
+ * Renders the cell contained by #tree_column. This is used primarily by the
+ * GtkTreeView.
+ **/
+void
+gtk_tree_view_column_cell_render (GtkTreeViewColumn *tree_column,
+				  GdkWindow         *window,
+				  GdkRectangle      *background_area,
+				  GdkRectangle      *cell_area,
+				  GdkRectangle      *expose_area,
+				  guint              flags)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  g_return_if_fail (background_area != NULL);
+  g_return_if_fail (cell_area != NULL);
+  g_return_if_fail (expose_area != NULL);
+
+  gtk_tree_view_column_cell_render_or_focus (tree_column,
+					     window,
+					     background_area,
+					     cell_area,
+					     expose_area,
+					     flags,
+					     TRUE,
+					     NULL);
 }
 
 gboolean
@@ -2266,7 +2336,13 @@ _gtk_tree_view_column_cell_event (GtkTreeViewColumn  *tree_column,
 							  background_area,
 							  cell_area,
 							  flags);
-      return (*editable_widget != NULL);
+
+      if (*editable_widget != NULL)
+	{
+	  g_return_val_if_fail (GTK_IS_CELL_EDITABLE (*editable_widget), FALSE);
+
+	  return TRUE;
+	}
     }
   return FALSE;
 }
@@ -2274,13 +2350,10 @@ _gtk_tree_view_column_cell_event (GtkTreeViewColumn  *tree_column,
 
 gboolean
 gtk_tree_view_column_cell_focus (GtkTreeViewColumn *tree_column,
-				 gint               direction,
-				 gboolean           unfocus)
+				 gint               direction)
 {
-  if (unfocus)
-    GTK_TREE_VIEW (tree_column->tree_view)->priv->focus_column = NULL;
-  else
-    GTK_TREE_VIEW (tree_column->tree_view)->priv->focus_column = tree_column;
+  if (GTK_TREE_VIEW (tree_column->tree_view)->priv->focus_column == tree_column)
+    return FALSE;
   return TRUE;
 }
 
@@ -2292,15 +2365,45 @@ gtk_tree_view_column_cell_draw_focus (GtkTreeViewColumn       *tree_column,
 				      GdkRectangle            *expose_area,
 				      guint                    flags)
 {
-  gtk_paint_focus (tree_column->tree_view->style,
-		   window,
-		   NULL,
-		   tree_column->tree_view,
-		   "treeview",
-		   cell_area->x,
-		   cell_area->y,
-		   cell_area->width-1,
-		   cell_area->height);
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  if (tree_column->editable_widget)
+    {
+      /* This function is only called on the editable row when editing.
+       */
+
+      gtk_paint_focus (tree_column->tree_view->style,
+		       window,
+		       NULL,
+		       tree_column->tree_view,
+		       "treeview",
+		       cell_area->x - 1,
+		       cell_area->y - 1,
+		       cell_area->width + 2 - 1,
+		       cell_area->height + 2 - 1);
+      
+    }
+  else
+    {
+      GdkRectangle focus_rectangle;
+      gtk_tree_view_column_cell_render_or_focus (tree_column,
+						 window,
+						 background_area,
+						 cell_area,
+						 expose_area,
+						 flags,
+						 FALSE,
+						 &focus_rectangle);
+      
+      gtk_paint_focus (tree_column->tree_view->style,
+		       window,
+		       NULL,
+		       tree_column->tree_view,
+		       "treeview",
+		       focus_rectangle.x,
+		       focus_rectangle.y,
+		       focus_rectangle.width - 1,
+		       focus_rectangle.height - 1);
+    }
 }
 
 gboolean

@@ -19,6 +19,9 @@
 
 #include <stdlib.h>
 #include "gtkcellrenderertext.h"
+#include "gtkeditable.h"
+#include "gtkentry.h"
+#include "gtksignal.h"
 #include "gtkintl.h"
 
 static void gtk_cell_renderer_text_init       (GtkCellRendererText      *celltext);
@@ -48,7 +51,18 @@ static void gtk_cell_renderer_text_render     (GtkCellRenderer          *cell,
 					       GdkRectangle             *expose_area,
 					       guint                     flags);
 
+static GtkCellEditable *gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
+							      GdkEvent             *event,
+							      GtkWidget            *widget,
+							      gchar                *path,
+							      GdkRectangle         *background_area,
+							      GdkRectangle         *cell_area,
+							      GtkCellRendererState  flags);
 
+enum {
+  EDITED,
+  LAST_SIGNAL
+};
 
 enum {
   PROP_0,
@@ -94,6 +108,9 @@ enum {
 };
 
 static gpointer parent_class;
+static guint text_cell_renderer_signals [LAST_SIGNAL];
+
+#define GTK_CELL_RENDERER_TEXT_PATH "gtk-cell-renderer-text-path"
 
 GtkType
 gtk_cell_renderer_text_get_type (void)
@@ -128,7 +145,7 @@ gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
   GTK_CELL_RENDERER (celltext)->yalign = 0.5;
   GTK_CELL_RENDERER (celltext)->xpad = 2;
   GTK_CELL_RENDERER (celltext)->ypad = 2;
-
+  GTK_CELL_RENDERER (celltext)->mode = GTK_CELL_RENDERER_MODE_EDITABLE;
   celltext->fixed_height_rows = -1;
   celltext->font = pango_font_description_new ();
 }
@@ -148,7 +165,8 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 
   cell_class->get_size = gtk_cell_renderer_text_get_size;
   cell_class->render = gtk_cell_renderer_text_render;
-
+  cell_class->start_editing = gtk_cell_renderer_text_start_editing;
+  
   g_object_class_install_property (object_class,
                                    PROP_TEXT,
                                    g_param_spec_string ("text",
@@ -390,6 +408,17 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   ADD_SET_PROP ("underline_set", PROP_UNDERLINE_SET,
                 _("Underline set"),
                 _("Whether this tag affects underlining"));
+
+  text_cell_renderer_signals [EDITED] =
+    gtk_signal_new ("edited",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkCellRendererTextClass, edited),
+		    gtk_marshal_VOID__STRING_STRING,
+		    GTK_TYPE_NONE, 2,
+		    G_TYPE_STRING,
+		    G_TYPE_STRING);
+
 }
 
 static void
@@ -1135,12 +1164,12 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
       if (x_offset)
 	{
 	  *x_offset = cell->xalign * (cell_area->width - rect.width - (2 * cell->xpad));
-	  *x_offset = MAX (*x_offset, 0) + cell->xpad;
+	  *x_offset = MAX (*x_offset, 0);
 	}
       if (y_offset)
 	{
 	  *y_offset = cell->yalign * (cell_area->height - rect.height - (2 * cell->ypad));
-	  *y_offset = MAX (*y_offset, 0) + cell->ypad;
+	  *y_offset = MAX (*y_offset, 0);
 	}
     }
 
@@ -1202,7 +1231,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
 
       g_object_unref (G_OBJECT (gc));
     }
-  
+
   gtk_paint_layout (widget->style,
                     window,
                     state,
@@ -1210,11 +1239,59 @@ gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
                     cell_area,
                     widget,
                     "cellrenderertext",
-                    cell_area->x + x_offset,
-                    cell_area->y + y_offset,
+                    cell_area->x + x_offset + cell->xpad,
+                    cell_area->y + y_offset + cell->ypad,
                     layout);
 
   g_object_unref (G_OBJECT (layout));
+}
+static void
+gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
+				     gpointer         data)
+{
+  gchar *path;
+  gchar *new_text;
+
+  path = g_object_get_data (G_OBJECT (entry), GTK_CELL_RENDERER_TEXT_PATH);
+  new_text = gtk_entry_get_text (GTK_ENTRY (entry));
+
+  gtk_signal_emit (GTK_OBJECT (data), text_cell_renderer_signals[EDITED], path, new_text);
+}
+
+static GtkCellEditable *
+gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
+				      GdkEvent             *event,
+				      GtkWidget            *widget,
+				      gchar                *path,
+				      GdkRectangle         *background_area,
+				      GdkRectangle         *cell_area,
+				      GtkCellRendererState  flags)
+{
+  GtkCellRendererText *celltext;
+  GtkWidget *entry;
+  
+  celltext = GTK_CELL_RENDERER_TEXT (cell);
+
+  /* If the cell isn't editable we return NULL. */
+  if (celltext->editable == FALSE)
+    return NULL;
+
+  entry = g_object_new (GTK_TYPE_ENTRY,
+			"has_frame", FALSE,
+			NULL);
+
+  gtk_entry_set_text (GTK_ENTRY (entry), celltext->text);
+  g_object_set_data_full (G_OBJECT (entry), GTK_CELL_RENDERER_TEXT_PATH, g_strdup (path), g_free);
+  
+  gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
+  
+  gtk_widget_show (entry);
+  gtk_signal_connect (GTK_OBJECT (entry),
+		      "editing_done",
+		      G_CALLBACK (gtk_cell_renderer_text_editing_done),
+		      celltext);
+  return GTK_CELL_EDITABLE (entry);
+
 }
 
 /**
@@ -1226,8 +1303,9 @@ gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
  * "y_pad" property set on it.  Further changes in these properties do not
  * affect the height, so they must be accompanied by a subsequent call to this
  * function.  Using this function is unflexible, and should really only be used
- * if calculating the size of a cell is too slow.  If @no_rows is -1, then the
- * fixed height is unset, and the height is determined by the properties again.
+ * if calculating the size of a cell is too slow (ie, a massive number of cells
+ * displayed).  If @number_of_rows is -1, then the fixed height is unset, and
+ * the height is determined by the properties again.
  **/
 void
 gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer,

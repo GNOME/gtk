@@ -3018,19 +3018,12 @@ gtk_default_draw_check (GtkStyle      *style,
                           x, y,
 			  width, height);
 
+      x -= (1 + INDICATOR_PART_SIZE - width) / 2;
+      y -= (((1 + INDICATOR_PART_SIZE - height) / 2) - 1);
       if (shadow_type == GTK_SHADOW_IN)
 	{
-	  gdk_draw_line (window,
-			 widget->style->fg_gc[state_type],
-                         x, y,
-                         x + width,
-                         y + height);
-	  gdk_draw_line (window,
-			 widget->style->fg_gc[state_type],
-                         x + width,
-                         y,
-                         x,
-                         y + height);
+	  draw_part (window, style->text_gc[state_type], area, x, y, CHECK_TEXT);
+	  draw_part (window, style->text_aa_gc[state_type], area, x, y, CHECK_AA);
 	}
     }
   else

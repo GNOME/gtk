@@ -12,7 +12,7 @@ struct _ListSort
 
 static ListSort data[] =
 {
-  { "Apples", "Transmorgrify long word to demonstrate weirdness", "Exculpatory", "Gesundheit"},
+  { "Apples", "Transmogrify long word to demonstrate weirdness", "Exculpatory", "Gesundheit"},
   { "Oranges", "Wicker", "Adamantine", "Convivial" },
   { "Bovine Spongiform Encephilopathy", "Sleazebucket", "Mountaineer", "Pander" },
   { "Foot and Mouth", "Lampshade", "Skim Milk\nFull Milk", "Viewless" },

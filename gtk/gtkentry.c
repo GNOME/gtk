@@ -30,6 +30,7 @@
 
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
+#include "gtkcelleditable.h"
 #include "gtkclipboard.h"
 #include "gtkdnd.h"
 #include "gtkentry.h"
@@ -100,8 +101,9 @@ static GtkTargetEntry target_table[] = {
 
 /* GObject, GtkObject methods
  */
-static void   gtk_entry_class_init           (GtkEntryClass    *klass);
-static void   gtk_entry_editable_init        (GtkEditableClass *iface);
+static void   gtk_entry_class_init           (GtkEntryClass        *klass);
+static void   gtk_entry_editable_init        (GtkEditableClass     *iface);
+static void   gtk_entry_cell_editable_init   (GtkCellEditableIface *iface);
 static void   gtk_entry_init                 (GtkEntry         *entry);
 static void   gtk_entry_set_property (GObject         *object,
 				      guint            prop_id,
@@ -188,6 +190,11 @@ static void     gtk_entry_set_selection_bounds (GtkEditable *editable,
 static gboolean gtk_entry_get_selection_bounds (GtkEditable *editable,
 						gint        *start,
 						gint        *end);
+
+/* GtkCellEditable method implementations
+ */
+static void gtk_entry_start_editing (GtkCellEditable *cell_editable,
+				     GdkEvent        *event);
 
 /* Default signal handlers
  */
@@ -298,10 +305,20 @@ gtk_entry_get_type (void)
 	NULL			                         /* interface_data */
       };
 
+      static const GInterfaceInfo cell_editable_info =
+      {
+	(GInterfaceInitFunc) gtk_entry_cell_editable_init,    /* interface_init */
+	NULL,                                                 /* interface_finalize */
+	NULL                                                  /* interface_data */
+      };
+      
       entry_type = gtk_type_unique (GTK_TYPE_WIDGET, &entry_info);
       g_type_add_interface_static (entry_type,
 				   GTK_TYPE_EDITABLE,
 				   &editable_info);
+      g_type_add_interface_static (entry_type,
+				   GTK_TYPE_CELL_EDITABLE,
+				   &cell_editable_info);
     }
 
   return entry_type;
@@ -764,6 +781,12 @@ gtk_entry_editable_init (GtkEditableClass *iface)
 }
 
 static void
+gtk_entry_cell_editable_init (GtkCellEditableIface *iface)
+{
+  iface->start_editing = gtk_entry_start_editing;
+}
+
+static void
 gtk_entry_set_property (GObject         *object,
                         guint            prop_id,
                         const GValue    *value,
@@ -881,7 +904,7 @@ gtk_entry_init (GtkEntry *entry)
   entry->invisible_char = '*';
   entry->dnd_position = -1;
   entry->width_chars = -1;
-  
+  entry->is_cell_renderer = FALSE;
   entry->has_frame = TRUE;
   
   gtk_drag_dest_set (GTK_WIDGET (entry),
@@ -1179,13 +1202,23 @@ get_widget_window_size (GtkEntry *entry,
     *x = widget->allocation.x;
 
   if (y)
-    *y = widget->allocation.y + (widget->allocation.height - requisition.height) / 2;
+    {
+      if (entry->is_cell_renderer)
+	*y = widget->allocation.y;
+      else
+	*y = widget->allocation.y + (widget->allocation.height - requisition.height) / 2;
+    }
 
   if (width)
     *width = widget->allocation.width;
 
   if (height)
-    *height = requisition.height;
+    {
+      if (entry->is_cell_renderer)
+	*height = widget->allocation.height;
+      else
+	*height = requisition.height;
+    }
 }
 
 static void
@@ -1775,6 +1808,43 @@ gtk_entry_style_set	(GtkWidget      *widget,
 
       gtk_entry_realize_cursor_gc (entry);
     }
+}
+
+/* GtkCellEditable method implementations
+ */
+static void
+gtk_cell_editable_entry_activated (GtkEntry *entry, gpointer data)
+{
+  gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
+  gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
+}
+
+static gboolean
+gtk_cell_editable_key_press_event (GtkEntry    *entry,
+				   GdkEventKey *key_event,
+				   gpointer     data)
+{
+    if (key_event->keyval == GDK_Escape)
+      {
+	gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
+	gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
+
+	return TRUE;
+      }
+
+    return FALSE;
+}
+
+static void
+gtk_entry_start_editing (GtkCellEditable *cell_editable,
+			 GdkEvent        *event)
+{
+  GTK_ENTRY (cell_editable)->is_cell_renderer = TRUE;
+
+  g_signal_connect (G_OBJECT (cell_editable), "activate",
+		    G_CALLBACK (gtk_cell_editable_entry_activated), NULL);
+  g_signal_connect (G_OBJECT (cell_editable), "key_press_event",
+		    G_CALLBACK (gtk_cell_editable_key_press_event), NULL);
 }
 
 /* Default signal handlers

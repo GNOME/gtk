@@ -30,7 +30,7 @@ HOW THE GTKTREEVIEWCOLUMN STORES SIZE:
 ======================================
 
 There are a number of size related fields in the GtkTreeViewColumn
-structure:
+structure.  These are all valid after realization:
 
   sizing	    The sizing method to use when calculating the size
 		    of the column.  Can be grow_only, resizable, auto, and fixed.

@@ -1,3 +1,37 @@
+Tue Sep 25 12:34:42 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkentry.c: Make a GtkCellEditable
+	(get_widget_window_size): Change to let it honor size_allocate
+	when a CellEditable.
+
+	* gtk/gtktreeview.c: M-x clean-line-ends.  Lots of focus and
+	editable changes.
+	(gtk_tree_view_set_cursor): Now you can set the cursor
+	horizontally, as well as start editing.
+
+	* gtk/gtkstyle.c (gtk_default_draw_check): changing toggle drawing
+	code to look more like the other check buttons.
+
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_get_size):
+	Change the way we calculate cell size.
+
+	* gtk/gtkmarshal.list (VOID:STRING,STRING): new marshaller.
+
+	* demos/gtk-demo/sizegroup.c: Add mnemonics.
+
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_get_size): Fix docs.
+	Fix logic.
+
+	* gtk/gtkcellrenderertext.c: Change to be editable.
+
+	* gtk/gtkcellrenderertoggle.c: Change to be activatable.
+
+	* test/testtreesort.c: Fix misspelling
+
+	* test/testreecolumns.c: Add mnemonics.
+
+	* test/testreeedit.c: New test program.
+
 2001-09-25  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkwindow.c: Put notes in gtk_window_set_has_frame(),

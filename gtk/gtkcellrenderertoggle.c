@@ -62,6 +62,7 @@ enum {
 
 enum {
   PROP_ZERO,
+  PROP_ACTIVATABLE,
   PROP_ACTIVE,
   PROP_RADIO
 };
@@ -101,6 +102,7 @@ gtk_cell_renderer_toggle_get_type (void)
 static void
 gtk_cell_renderer_toggle_init (GtkCellRendererToggle *celltoggle)
 {
+  celltoggle->activatable = TRUE;
   celltoggle->active = FALSE;
   celltoggle->radio = FALSE;
   GTK_CELL_RENDERER (celltoggle)->mode = GTK_CELL_RENDERER_MODE_ACTIVATABLE;
@@ -130,6 +132,15 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 							 G_PARAM_READABLE |
 							 G_PARAM_WRITABLE));
   
+  g_object_class_install_property (object_class,
+				   PROP_ACTIVATABLE,
+				   g_param_spec_boolean ("activatable",
+							 _("Activatable"),
+							 _("The toggle button can be activated"),
+							 TRUE,
+							 G_PARAM_READABLE |
+							 G_PARAM_WRITABLE));
+
   g_object_class_install_property (object_class,
 				   PROP_RADIO,
 				   g_param_spec_boolean ("radio",
@@ -163,6 +174,9 @@ gtk_cell_renderer_toggle_get_property (GObject     *object,
     case PROP_ACTIVE:
       g_value_set_boolean (value, celltoggle->active);
       break;
+    case PROP_ACTIVATABLE:
+      g_value_set_boolean (value, celltoggle->activatable);
+      break;
     case PROP_RADIO:
       g_value_set_boolean (value, celltoggle->radio);
       break;
@@ -186,6 +200,10 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
     case PROP_ACTIVE:
       celltoggle->active = g_value_get_boolean (value);
       g_object_notify (G_OBJECT(object), "active");
+      break;
+    case PROP_ACTIVATABLE:
+      celltoggle->activatable = g_value_get_boolean (value);
+      g_object_notify (G_OBJECT(object), "activatable");
       break;
     case PROP_RADIO:
       celltoggle->radio = g_value_get_boolean (value);
@@ -241,13 +259,13 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer *cell,
     {
       if (x_offset)
 	{
-	  *x_offset = cell->xalign * (cell_area->width - calc_width - (2 * cell->xpad));
-	  *x_offset = MAX (*x_offset, 0) + cell->xpad;
+	  *x_offset = cell->xalign * (cell_area->width - calc_width);
+	  *x_offset = MAX (*x_offset, 0);
 	}
       if (y_offset)
 	{
-	  *y_offset = cell->yalign * (cell_area->height - calc_height - (2 * cell->ypad));
-	  *y_offset = MAX (*y_offset, 0) + cell->ypad;
+	  *y_offset = cell->yalign * (cell_area->height - calc_height);
+	  *y_offset = MAX (*y_offset, 0);
 	}
     }
 }
@@ -281,21 +299,17 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
   if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
     {
       if (GTK_WIDGET_HAS_FOCUS (widget))
-	{
-	  state = GTK_STATE_SELECTED;
-	}
+	state = GTK_STATE_SELECTED;
       else
-	{
-	  state = GTK_STATE_ACTIVE;
-	}
+	state = GTK_STATE_ACTIVE;
     }
-  else if (cell->mode == GTK_CELL_RENDERER_MODE_INERT)
+  else if (celltoggle->activatable)
     {
-      state = GTK_STATE_INSENSITIVE;
+      state = GTK_STATE_NORMAL;
     }
   else
     {
-      state = GTK_STATE_NORMAL;
+      state = GTK_STATE_INSENSITIVE;
     }
 
   if (celltoggle->radio)
@@ -306,7 +320,7 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
                         cell_area, widget, "cellradio",
                         cell_area->x + x_offset + cell->xpad,
                         cell_area->y + y_offset + cell->ypad,
-                        width, height);
+                        width - 1, height - 1);
     }
   else
     {
@@ -316,7 +330,7 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer *cell,
                        cell_area, widget, "cellcheck",
                        cell_area->x + x_offset + cell->xpad,
                        cell_area->y + y_offset + cell->ypad,
-                       width, height);
+                       width - 1, height - 1);
     }
 }
 
@@ -330,24 +344,15 @@ gtk_cell_renderer_toggle_activate (GtkCellRenderer *cell,
 				   guint            flags)
 {
   GtkCellRendererToggle *celltoggle;
-  gboolean retval = FALSE;
   
   celltoggle = GTK_CELL_RENDERER_TOGGLE (cell);
-  
-  switch (event->type)
+  if (celltoggle->activatable)
     {
-    case GDK_BUTTON_PRESS:
-      {
-        gtk_signal_emit (GTK_OBJECT (cell), toggle_cell_signals[TOGGLED], path);
-        retval = TRUE;
-      }
-      break;
-
-    default:
-      break;
+      gtk_signal_emit (GTK_OBJECT (cell), toggle_cell_signals[TOGGLED], path);
+      return TRUE;
     }
-      
-  return retval;
+
+  return FALSE;
 }
 
 /**

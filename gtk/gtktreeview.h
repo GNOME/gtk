@@ -96,6 +96,7 @@ struct _GtkTreeViewClass
 					   gboolean           expand,
 					   gboolean           open_all);
   void     (* select_cursor_parent)       (GtkTreeView       *tree_view);
+  void     (* start_interactive_search)   (GtkTreeView       *tree_view); 
 };
 
 
@@ -212,7 +213,9 @@ void                   gtk_tree_view_set_reorderable               (GtkTreeView 
 								    gboolean                   reorderable);
 gboolean               gtk_tree_view_get_reorderable               (GtkTreeView               *tree_view);
 void                   gtk_tree_view_set_cursor                    (GtkTreeView               *tree_view,
-								    GtkTreePath               *path);
+								    GtkTreePath               *path,
+								    GtkTreeViewColumn         *focus_column,
+								    gboolean                   start_editing);
 
 
 /* Layout information */

@@ -109,7 +109,6 @@ struct _GtkTreeViewPrivate
 
   /* Focus code */
   GtkTreeViewColumn *focus_column;
-  GtkTreeViewColumn *scroll_column;
 
   /* Selection stuff */
   GtkTreeRowReference *anchor;

@@ -217,8 +217,7 @@ gboolean                gtk_tree_view_column_cell_event          (GtkTreeViewCol
 								  GdkRectangle            *cell_area,
 								  guint                    flags);
 gboolean                gtk_tree_view_column_cell_focus          (GtkTreeViewColumn       *tree_column,
-								  gint                     direction,
-								  gboolean                 unfocus);
+								  gint                     direction);
 void                    gtk_tree_view_column_cell_draw_focus     (GtkTreeViewColumn       *tree_column,
 								  GdkWindow               *window,
 								  GdkRectangle            *background_area,
