@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-03-03 04:52+0100\n"
-"PO-Revision-Date: 2005-03-03 13:08+0200\n"
+"PO-Revision-Date: 2005-03-03 16:40+0200\n"
 "Last-Translator: Leonid Kanter <leon@asplinux.ru>\n"
 "Language-Team:  <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1095,7 +1095,7 @@ msgstr "Выберите файл"
 #: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1283
 #: gtk/gtkpathbar.c:986
 msgid "Home"
-msgstr "Домашний каталог"
+msgstr "Домашняя папка"
 
 #: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1310
 #: gtk/gtkpathbar.c:988
