@@ -10,8 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.15\n"
-"POT-Creation-Date: 2003-02-19 04:54+0100\n"
-"PO-Revision-Date: 2003-02-19 15:09-0300\n"
+"POT-Creation-Date: 2003-03-24 12:38+0100\n"
+"PO-Revision-Date: 2003-03-24 10:17-0300\n"
 "Last-Translator: Pablo Gonzalo del Campo <pablodc@bigfoot.com>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -282,7 +282,7 @@ msgstr "Tipo de icono no implementado"
 msgid "Not enough memory to load ICO file"
 msgstr "No hay memoria suficiente para cargar el archivo ICO"
 
-#: gdk-pixbuf/io-ico.c:871
+#: gdk-pixbuf/io-ico.c:872
 msgid "The ICO image format"
 msgstr "El formato de imagen ICO"
 
@@ -1950,7 +1950,7 @@ msgstr ""
 "Indica si se deben seleccionar los contenidos de una entrada cuando obtiene "
 "el foco"
 
-#: gtk/gtkentry.c:3980 gtk/gtklabel.c:3222 gtk/gtktextview.c:6568
+#: gtk/gtkentry.c:3980 gtk/gtklabel.c:3222 gtk/gtktextview.c:6574
 msgid "Select All"
 msgstr "Seleccionar todo"
 
@@ -1958,7 +1958,7 @@ msgstr "Seleccionar todo"
 msgid "Input Methods"
 msgstr "Métodos de entrada"
 
-#: gtk/gtkentry.c:4000 gtk/gtktextview.c:6587
+#: gtk/gtkentry.c:4000 gtk/gtktextview.c:6593
 msgid "_Insert Unicode control character"
 msgstr "_Insertar caracter de control unicode"
 
@@ -3625,7 +3625,7 @@ msgstr "_No"
 
 #: gtk/gtkstock.c:309
 msgid "_OK"
-msgstr "_OK"
+msgstr "_Aceptar"
 
 # #-#-#-#-#  memoria.po (memoria 1.0)  #-#-#-#-#
 # #-#-#-#-#  nautilus-es.po (Nautilus)  #-#-#-#-#
@@ -4267,9 +4267,9 @@ msgstr "Cursor visible"
 msgid "If the insertion cursor is shown"
 msgstr "Si se muestra el cursor de inserción"
 
-#: gtk/gtktextview.c:6578
+#: gtk/gtktextview.c:6584
 msgid "Input _Methods"
-msgstr "Métodos de entrada"
+msgstr "_Métodos de entrada"
 
 #: gtk/gtkthemes.c:69
 #, c-format
