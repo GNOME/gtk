@@ -1,3 +1,13 @@
+Sun Jan 30 20:10:52 2000  Lars Hamann  <lars@gtk.org>
+
+	A few more fixes for bug #5487, #2051, #2677.
+	* gtk/gtkclist.c : 
+	(gtk_clist_button_press):  Reset clist->anchor to -1 if event->type is
+ 	not GDK_BUTTON_PRESS.
+	(resync_selection): resync only if selection_mode is
+	GTK_SELECTION_EXTENDED
+	* gtk/gtkctree.c (resync_selection): same here
+
 Sun Jan 30 12:29:20 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.h gtk/gtkmenu.h: Removed duplicate prototypes for
