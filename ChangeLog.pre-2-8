@@ -1,3 +1,11 @@
+2004-08-07  Tor Lillqvist  <tml@iki.fi>
+
+	Merge from HEAD:
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_new): Backward
+	compatibility for GDK_WINDOW_TEMP, GDK_INPUT_ONLY. (#148702, Hans
+	Breuer)
+
 Sat Aug  7 01:26:08 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Make the column drag code a bit more robust (still scary, 
