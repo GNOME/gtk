@@ -1,3 +1,12 @@
+2004-06-07  Federico Mena Quintero  <federico@ximian.com>
+
+	Merge from HEAD:
+	
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): Revert the patch
+	from 2003/Sep/12.  This kept DnD in tree views within modal
+	dialogs from working, which is especially bad for the file
+	chooser.  Fixes #135168.
+
 Sat Jun  5 23:07:30 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentrycompletion.c: (gtk_entry_completion_init),
