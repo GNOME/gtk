@@ -1,3 +1,7 @@
+2003-06-10  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_text_view_[gs]et_overwrite().
+
 2003-06-05  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/question_index.sgml: Add a couple of questions.
