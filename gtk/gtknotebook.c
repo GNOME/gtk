@@ -2400,8 +2400,6 @@ gtk_notebook_forall (GtkContainer *container,
 	{
 	  if (page->tab_label)
 	    (* callback) (page->tab_label, callback_data);
-	  if (page->menu_label)
-	    (* callback) (page->menu_label, callback_data);
 	}
     }
 }

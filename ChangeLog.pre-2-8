@@ -1,3 +1,9 @@
+Mon Aug 25 17:28:04 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_forall): Don't
+	include page->menu_label - causes various problems,
+	including #12047.
+
 Mon Aug 25 23:21:43 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merge from stable.
