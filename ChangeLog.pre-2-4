@@ -1,3 +1,8 @@
+Wed Jan 14 21:16:20 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkimcontext.c: Documentation fix.  (#131335, Theppitak 
+	Karoonboonyanan)
+
 Wed Jan 14 21:00:49 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkactiongroup.c (gtk_action_group_add_action_with_accel): 

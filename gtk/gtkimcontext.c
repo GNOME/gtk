@@ -435,7 +435,7 @@ gtk_im_context_set_use_preedit (GtkIMContext *context,
  * 
  * Sets surrounding context around the insertion point and preedit
  * string. This function is expected to be called in response to the
- * GtkIMContext::retrieve_context signal, and will likely have no
+ * GtkIMContext::retrieve_surrounding signal, and will likely have no
  * effect if called at other times.
  **/
 void
@@ -477,11 +477,11 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
  * only some sequences of characters are allowed.
  *
  * This function is implemented by emitting the
- * GtkIMContext::retrieve_context signal on the input method; in
+ * GtkIMContext::retrieve_surrounding signal on the input method; in
  * response to this signal, a widget should provide as much context as
  * is available, up to an entire paragraph, by calling
  * gtk_im_context_set_surrounding(). Note that there is no obligation
- * for a widget to respond to the ::retrieve_context signal, so input
+ * for a widget to respond to the ::retrieve_surrounding signal, so input
  * methods must be prepared to function without context.
  *
  * Return value: %TRUE if surrounding text was provided; in this case
