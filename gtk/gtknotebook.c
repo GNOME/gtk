@@ -3681,6 +3681,9 @@ gtk_notebook_switch_focus_tab (GtkNotebook *notebook,
     gtk_notebook_focus_changed (notebook, old_page);
   else
     gtk_notebook_pages_allocate (notebook);
+  
+  gtk_notebook_switch_page (notebook, page,
+			    g_list_index (notebook->children, page));
 }
 
 static void

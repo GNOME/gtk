@@ -1,3 +1,9 @@
+Fri Oct 25 17:56:24 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_switch_focus_tab): 
+	Always switch to the page with the focused tab
+	label. (#82108, Matt Wilson.)
+
 Fri Oct 25 17:46:18 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_button_press): 
