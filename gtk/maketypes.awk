@@ -75,7 +75,7 @@ function generate (generate_what)
 {
   if (gen_macros)
     {
-      printf ("GTKTYPEBUILTINS_VAR GtkType %s;\n", type_macro);
+      printf ("GTKTYPEBUILTINS_VAR GType %s;\n", type_macro);
     }
   if (gen_entries)
     {
@@ -87,7 +87,7 @@ function generate (generate_what)
     }
   if (gen_vars)
     {
-      printf ("GTKTYPEBUILTINS_VAR GtkType %s = 0;\n", type_macro);
+      printf ("GTKTYPEBUILTINS_VAR GType %s = 0;\n", type_macro);
     }
 }
 

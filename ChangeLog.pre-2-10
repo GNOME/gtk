@@ -1,3 +1,19 @@
+Sat Nov 17 19:08:13 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/testtreeview.c (gtk_tree_model_types_get_type): 
+	We no longer need to create the signals here ... they
+	come from the interface.
+
+	* gtk/maketypes.awk: Use GType, not GtkType in output.
+
+	* gtk/gtktypeutils.h: Mark virtually all of this
+	file deprecated.
+
+	* gtk/gtkcontainer.h: Deprecate gtk_container_foreach_full;
+	the only use of this function is the GtkArg using
+	GtkCallbackMarshal, since destroy notification is
+	silly here.
+
 Sat Nov 17 18:26:45 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am gtk/gtkmarshal.list gtk/gtkmarshalers.list

@@ -767,17 +767,7 @@ main (int    argc,
  * GtkTreeModelTypes
  */
 
-enum {
-  CHANGED,
-  INSERTED,
-  CHILD_TOGGLED,
-  DELETED,
-
-  LAST_SIGNAL
-};
-
 static void         gtk_tree_model_types_init                 (GtkTreeModelTypes      *model_types);
-static void         gtk_tree_model_types_class_init           (GtkTreeModelTypesClass *class);
 static void         gtk_tree_model_types_tree_model_init      (GtkTreeModelIface   *iface);
 static gint         gtk_real_model_types_get_n_columns   (GtkTreeModel        *tree_model);
 static GType        gtk_real_model_types_get_column_type (GtkTreeModel        *tree_model,
@@ -806,9 +796,6 @@ static gboolean     gtk_real_model_types_iter_parent     (GtkTreeModel        *t
 							   GtkTreeIter         *child);
 
 
-static guint model_types_signals[LAST_SIGNAL] = { 0 };
-
-
 GtkType
 gtk_tree_model_types_get_type (void)
 {
@@ -821,7 +808,7 @@ gtk_tree_model_types_get_type (void)
         sizeof (GtkTreeModelTypesClass),
 	NULL,		/* base_init */
 	NULL,		/* base_finalize */
-        (GClassInitFunc) gtk_tree_model_types_class_init,
+        NULL,           /* class_init */
 	NULL,		/* class_finalize */
 	NULL,		/* class_data */
         sizeof (GtkTreeModelTypes),
@@ -853,54 +840,6 @@ gtk_tree_model_types_new (void)
   retval = GTK_TREE_MODEL_TYPES (g_object_new (GTK_TYPE_MODEL_TYPES, NULL));
 
   return retval;
-}
-
-static void
-gtk_tree_model_types_class_init (GtkTreeModelTypesClass *class)
-{
-  GObjectClass *object_class;
-
-  object_class = (GObjectClass*) class;
-
-  model_types_signals[CHANGED] =
-    g_signal_new ("changed",
-                  GTK_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_FIRST,
-                  GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, changed),
-                  NULL, NULL,
-                  gtk_marshal_VOID__BOXED_BOXED,
-                  G_TYPE_NONE, 2,
-                  G_TYPE_POINTER,
-                  G_TYPE_POINTER);
-  model_types_signals[INSERTED] =
-    g_signal_new ("inserted",
-                  GTK_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_FIRST,
-                  GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, inserted),
-                  NULL, NULL,
-                  gtk_marshal_VOID__BOXED_BOXED,
-                  G_TYPE_NONE, 2,
-                  G_TYPE_POINTER,
-                  G_TYPE_POINTER);
-  model_types_signals[CHILD_TOGGLED] =
-    g_signal_new ("child_toggled",
-                  GTK_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_FIRST,
-                  GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, child_toggled),
-                  NULL, NULL,
-                  gtk_marshal_VOID__BOXED_BOXED,
-                  G_TYPE_NONE, 2,
-                  G_TYPE_POINTER,
-                  G_TYPE_POINTER);
-  model_types_signals[DELETED] =
-    g_signal_new ("deleted",
-                  GTK_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_FIRST,
-                  GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, deleted),
-                  NULL, NULL,
-                  gtk_marshal_VOID__BOXED,
-                  G_TYPE_NONE, 1,
-                  G_TYPE_POINTER);
 }
 
 static void

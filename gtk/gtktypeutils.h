@@ -31,10 +31,9 @@
 #include <glib-object.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
+#ifndef GTK_DISABLE_DEPRECATED
 
 /* Fundamental Types
  * many of these are just aliases for GLib types to maintain
@@ -62,49 +61,49 @@ typedef enum	/*< skip >*/
   GTK_TYPE_POINTER	= G_TYPE_POINTER
 } GtkFundamentalType;
 
-
 /* --- type macros --- */
 #define GTK_CLASS_NAME(class)		(g_type_name (G_TYPE_FROM_CLASS (class)))
 #define GTK_CLASS_TYPE(class)		(G_TYPE_FROM_CLASS (class))
 #define GTK_TYPE_IS_OBJECT(type)	(g_type_is_a ((type), GTK_TYPE_OBJECT))
 
-
 /* outdated macros that really shouldn't e used anymore,
  * use the GLib type system instead
  */
-#ifndef GTK_DISABLE_DEPRECATED
 #define	GTK_TYPE_FUNDAMENTAL_LAST        (G_TYPE_LAST_RESERVED_FUNDAMENTAL - 1)
 #define	GTK_TYPE_FUNDAMENTAL_MAX         (G_TYPE_FUNDAMENTAL_MAX)
+
+#define	GTK_FUNDAMENTAL_TYPE	G_TYPE_FUNDAMENTAL
+#define GTK_STRUCT_OFFSET	G_STRUCT_OFFSET
+
 #endif /* GTK_DISABLE_DEPRECATED */
 
 /* glib macro wrappers (compatibility) */
-#define GTK_STRUCT_OFFSET	G_STRUCT_OFFSET
 #define	GTK_CHECK_CAST		G_TYPE_CHECK_INSTANCE_CAST
 #define	GTK_CHECK_CLASS_CAST	G_TYPE_CHECK_CLASS_CAST
 #define GTK_CHECK_GET_CLASS	G_TYPE_INSTANCE_GET_CLASS
 #define	GTK_CHECK_TYPE		G_TYPE_CHECK_INSTANCE_TYPE
 #define	GTK_CHECK_CLASS_TYPE	G_TYPE_CHECK_CLASS_TYPE
-#define	GTK_FUNDAMENTAL_TYPE	G_TYPE_FUNDAMENTAL
 
 /* glib type wrappers (compatibility) */
+
 typedef GType			GtkType;
+
+#ifndef GTK_DISABLE_DEPRECATED
+
 typedef GTypeInstance		GtkTypeObject;
 typedef GTypeClass		GtkTypeClass;
 typedef GBaseInitFunc		GtkClassInitFunc;
 typedef GInstanceInitFunc	GtkObjectInitFunc;
 
+#endif /* GTK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 /* Builtin Types
  */
 #include <gtk/gtktypebuiltins.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
 /* --- typedefs --- */
@@ -113,7 +112,6 @@ extern "C" {
  */
 typedef struct _GtkArg	       	     GtkArg;
 typedef struct _GtkObject   	     GtkObject; /* object forward declaration */
-typedef struct _GtkTypeInfo 	     GtkTypeInfo;
 typedef gboolean (*GtkFunction)	    (gpointer      data);
 typedef void (*GtkDestroyNotify)    (gpointer      data);
 typedef void (*GtkCallbackMarshal)  (GtkObject    *object,
@@ -121,9 +119,11 @@ typedef void (*GtkCallbackMarshal)  (GtkObject    *object,
 				     guint         n_args,
 				     GtkArg       *args);
 typedef void (*GtkSignalFunc)       (void);
-typedef GSignalCMarshaller          GtkSignalMarshaller;
 #define GTK_SIGNAL_FUNC(f)	    ((GtkSignalFunc) (f))
 
+#ifndef GTK_DISABLE_DEPRECATED
+typedef struct _GtkTypeInfo 	     GtkTypeInfo;
+typedef GSignalCMarshaller          GtkSignalMarshaller;
 
 /* GtkArg, used to hold differently typed values */
 struct _GtkArg
@@ -217,15 +217,16 @@ struct _GtkTypeInfo
   gpointer		 reserved_2;
   GtkClassInitFunc	 base_class_init_func;
 };
+
+#endif /* GTK_DISABLE_DEPRECATED */
+
+gpointer	gtk_type_class	(GtkType	 type);
+
+#ifndef GTK_DISABLE_DEPRECATED
+
 GtkType		gtk_type_unique	(GtkType	   parent_type,
 				 const GtkTypeInfo *gtkinfo);
-gpointer	gtk_type_class	(GtkType	 type);
 gpointer	gtk_type_new	(GtkType	 type);
-
-
-/* deprecated, use g_type_init() instead */
-void		gtk_type_init	(GTypeDebugFlags debug_flags);
-
 
 /* --- compatibility defines --- */
 #define	gtk_type_name(type)		 g_type_name (type)
@@ -233,6 +234,8 @@ void		gtk_type_init	(GTypeDebugFlags debug_flags);
 #define	gtk_type_parent(type)		 g_type_parent (type)
 #define	gtk_type_is_a(type, is_a_type)	 g_type_is_a ((type), (is_a_type))
 
+/* deprecated, use g_type_init() instead */
+void		gtk_type_init	(GTypeDebugFlags debug_flags);
 
 /* enum/flags compatibility functions, we strongly
  * recommend to use the glib enum/flags classes directly
@@ -259,10 +262,8 @@ GtkFlagValue*	gtk_type_flags_find_value	(GtkType	 flags_type,
 /* urg */
 GTKTYPEUTILS_VAR GType GTK_TYPE_IDENTIFIER;
 
+#endif /* GTK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_TYPE_UTILS_H__ */
