@@ -3824,6 +3824,13 @@ gtk_widget_dnd_data_set (GtkWidget   *widget,
   gdk_window_dnd_data_set (widget->window, event, data, data_numbytes);
 }
 
+void
+gtk_widget_sink (GtkWidget *widget)
+{
+  gtk_object_sink (GTK_OBJECT (widget));
+}
+
+
 #undef	gtk_widget_ref
 #undef	gtk_widget_unref
 

@@ -1,3 +1,6 @@
+Notes about the inner workings of the widget system of GTK+
+===========================================================
+
 This file contains some notes as to how the widget system does
 and should work. It consists of three parts:
 
@@ -5,7 +8,7 @@ and should work. It consists of three parts:
 
  II) A list of invariants about the states of the widgets. 
     (Throughout this document, we refer to the states of the
-     widgets by referring to the flags for gtkwidget)
+     widgets by referring to the flags for GtkWidget)
 
  III) Some notes about the ways that a widget changes states
 
@@ -26,73 +29,176 @@ Section II is mostly of interest to those maintaining GTK, the
 other sections may also be interesting to people writing
 new widgets.
 
-                            Owen Taylor <owt1@cornell.edu>
-          		    98/02/03
+Main outline:
+	- Owen Taylor <owt1@cornell.edu>
+	  98/02/03
+
+Flag descriptions:
+	- Tim Janik <timj@gimp.org>
+	  98/02/04
 
 I. Flags
 --------
 
+GtkObject:
+
+GTK_DESTROYED:
+	This flagged is set for a GtkObject right before its
+	destruction code is executed. Its main use is the
+	prevention of multiple destruction invokations.
+	
+GTK_FLOATING:
+	This flag reflects the fact that the holder of the
+	initial reference count is unknown. Refer to refcounting.txt
+	for further details.
+
+GTK_RESERVED_1:
+GTK_RESERVED_2:
+	Reserved flags.
+
+
+GtkWidget, public flags:
+
+GTK_TOPLEVEL:
+	Widgets witghout a real parent, as there are GtkWindows and
+	GtkMenus have this flag set throughout their lifetime.
+	Toplevel widgets always contain their own GdkWindow.
+	
+GTK_NO_WINDOW:
+	This flag is indicative for a widget that does not provide
+	its own GdkWindow. Visible action (e.g. drawing) is performed
+	on the parents GdkWindow.
+
 GTK_REALIZED:
-	set by gtk_widget_realize, unset by gtk_widget_unrealize
-	relies on ((widget->parent && widget->parent->window)
-	           || GTK_WIDGET_TOPLEVEL (widget);
-	means: widget has an associated GdkWindow (XWindow)
+	Set by gtk_widget_realize, unset by gtk_widget_unrealize.
+	Relies on ((widget->parent && widget->parent->window)
+	           || GTK_WIDGET_TOPLEVEL (widget));
+	Means: widget has an associated GdkWindow (XWindow).
 
 GTK_MAPPED:
-	set by gtk_widget_map, unset by gtk_widget_unmap
-	may only be set if GTK_WIDGET_REALIZED(widget)
-	means: gdk_window_show() has been called on the widgets window(s).
+	Set by gtk_widget_map, unset by gtk_widget_unmap.
+	May only be set if GTK_WIDGET_REALIZED (widget).
+	Means: gdk_window_show() has been called on the widgets window(s).
 
 GTK_VISIBLE:
-	set by gtk_widget_show
-	implies that a widget will be GTK_MAPPED as soon as it's
-	parent is GTK_MAPPED.
+	Set by gtk_widget_show.
+	Implies that a widget will be flagged GTK_MAPPED as soon as its
+	parent is mapped.
 !GTK_VISIBLE:
-	set by gtk_widget_hide
-	implies that a widget is not onscreen, therefore !GTK_MAPPED
+	Set by gtk_widget_hide.
+	Implies that a widget is not onscreen, therefore !GTK_MAPPED.
 
+GTK_SENSITIVE:
+	Set and unset by gtk_widget_set_sensitive.
+	The sensitivity of a widget determines wether it will receive
+	certain events (e.g. button or key presses). One premise for
+	the widgets sensitivity is to have GTK_SENSITIVE set.
+
+GTK_PARENT_SENSITIVE:
+	Set and unset by gtk_widget_set_sensitive operations on the
+	parents of the widget.
+	This is the second premise for the widgets sensitivity. Once
+	it has GTK_SENSITIVE and GTK_PARENT_SENSITIVE set, its state is
+	effectively sensitive. This is expressed (and can be examined) by
+	the GTK_WIDGET_IS_SENSITIVE macro.
+
+GTK_CAN_FOCUS:
+	There are no directly corresponding functions for setting/unsetting
+	this flag, but it can be affected by the GtkWidget::has_focus argument
+	via gtk_widget_set_arg.
+	This flag determines wether a widget is able to handle focus grabs.
+
+GTK_HAS_FOCUS:
+	This flag will be set by gtk_widget_grab_focus for widgets that also
+	have GTK_CAN_FOCUS set. The flag will bve unset once another widget
+	grabs the focus.
+	
+GTK_CAN_DEFAULT:
+GTK_HAS_DEFAULT:
+	These two flags are mostly equal in functionality to their *_FOCUS
+	counterparts, but for the defalt widget.
+
+GTK_HAS_GRAB:
+	Set by gtk_grab_add, unset by gtk_grab_remove.
+	Means: widget is in the grab_widgets stack, and will be the preferred
+	one for receiving events other than ones of cosmetic value.
+
+GTK_BASIC:
+	The GTK_BASIC flag is an attempted at making a distinction between
+	widgets that will proper handle user input e.g. key/button presses.
+	Supsequent parent<->child relation ships of non `basic' widgets
+	should be avoided. The checking for this is currently not proper
+	enforced in the code. For example GtkButton is a non `basic' widget,
+	that will therefore disallow to act as a container for another
+	GtkButton. Now the gnit is, one can add a GtkHBox (which is a
+	`basic' widget) to the first button, and put the second into
+	the box.
+	
+
+GtkWidget, private flags:
+
+GTK_USER_STYLE:
+	A widget is flagged to have a user style, once gtk_widget_set_style
+	has been invoked for it. The use of this flag is to tell widgets
+	wich share a global user style from the ones which got a certain
+	style assign from outside the toolkit.
+	
 GTK_REDRAW_PENDING:
-	relies on GTK_WIDGET_MAPPED(widget)
-	[this is not really enforced throughout the code, but should
+	Relies on GTK_WIDGET_MAPPED (widget).
+	[FIXME: this is not really enforced throughout the code, but should
 	 be. it only requires a few checks for GTK_WIDGET_MAPPED and
 	 minor changes to gtk_widget_unmap, we can then remove the check
 	 in gtk_widget_real_destroy]
-	means: there is an idle handler waiting for the widget, that
-	will cause a full redraw (gtk_widget_draw(widget, NULL))
+	Means: there is an idle handler waiting for the widget, that
+	will cause a full redraw (gtk_widget_draw (widget, NULL)).
 
 GTK_RESIZE_PENDING:
-	first, this is only valid for GtkContainers.
+	First, this is only valid for GtkContainers.
 	[some of the code should move to gtkcontainer.c therefore]
-	relies on GTK_WIDGET_REALIZED(widget)
+	Relies on GTK_WIDGET_REALIZED(widget)
 	[this is not really enforced throughout the code, but should
 	 be. it only requires a few checks for GTK_WIDGET_RELIZED and
 	 minor changes to gtk_widget_unrealize, we can then remove the check
 	 in gtk_widget_real_destroy]
-	means: there is an idle handler waiting for the container to
+	Means: there is an idle handler waiting for the container to
 	resize it.
 
 GTK_RESIZE_NEEDED:
-	relies on GTK_WIDGET_REALIZED(widget)
-	[puhhh, this isn't rely enforced either..., bla bla ...remove check
-	 in gtk_widget_real_destroy]
-	means: a widget has been added to the resize_widgets list of
+	Relies on GTK_WIDGET_REALIZED(widget)
+	[this is not really enforced throughout the code, but should
+	 be. once this is done special checking in gtk_widget_real_destroy
+	 can be avoided]
+	Means: a widget has been added to the resize_widgets list of
 	its _toplevel_ container (keep this in mind for GtkViewport).
-	remark: this flag is also used internaly by gtkwindow.c.
+	Remark: this flag is also used internaly by gtkwindow.c during
+	the evaluation of resizing worthy widgets.
 
 GTK_LEAVE_PENDING:
-	a widget is flagged as such if there is a leave_notify event
-	pending for it. it receives this event regardless of a grab or
-	its current sensitivity.
+	A widget is flagged as such if there is a leave_notify event
+	pending for it. It will receive this event regardless of a grab
+	through another widget or its current sensitivity.
 	[this should be made relying on GTK_REALIZED]
 
-GTK_HAS_GRAB:
-	set by gtk_grab_add, unset by gtk_grab_remove
-	means: widget is in the grab_widgets stack.
+GTK_HAS_SHAPE_MASK:
+	Set by gtk_widget_shape_combine_mask if a widget got a shape mask
+	assigned (making use of the X11 shaped window extension).
+
+GTK_IN_REPARENT:
+	During the act of reparentation widgets which are already
+	realized and will be added to an already realized parent need
+	to have this flag set to prevent natural unrealization on the
+	process of getting unparented.
+
+Related Macros:
 
 GTK_WIDGET_DRAWABLE:
-	a widget is flagged as GTK_WIDGET_VISIBLE and GTK_WIDGET_MAPPED
-	means: it _makes sense_ to draw in a widgets window.
+	This macro examines wether a widget is flagged as GTK_WIDGET_VISIBLE
+	and GTK_WIDGET_MAPPED.
+	Means: it _makes sense_ to draw in a widgets window.
 
+GTK_WIDGET_IS_SENSITIVE:
+	This macro tells the real sensitivity state of a widget. It returns
+	wether both the widget and all its parents are in sensitive state.
 
 
 II. Invariants:
@@ -105,7 +211,7 @@ In the following
 
   A => B     means  if A is true, than B is true
   A <=> B    means  A is true, if and only if B is true
-                    (equivalent to A => B and B <= A)
+                    (equivalent to A => B and A <= B)
 
 
 1)  GTK_WIDGET_DESTROYED (widget) => !GTK_WIDGET_REALIZED (widget)
@@ -375,5 +481,3 @@ it was not overridden in the Bar class structure) and
 gtk_widget_destroy will call gtk_object_destroy because
 the parent_class variable referenced by gtk_foo_destroy is the 
 static variable in gtkwidget.c: GtkObjectClass.
-
-
