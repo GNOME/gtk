@@ -1,3 +1,14 @@
+Sun Apr 21 14:10:04 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* pixbuf-rc-style.c pixbuf.h pixbuf-draw.c: Add a fake STEPPER
+	function that is used for drawing scrollbar steppers,
+	so that themes that want to draw the button and arrow
+	separately can override the default handling.
+
+	* pixbuf-draw.c: Remove draw_polygon() since it was
+	just a cut-and-paste of the default one. Remove
+	some unused code.
+
 2002-03-07  James Henstridge  <james@daa.com.au>
 
 	* Makefile.am (libpixmap_la_LIBADD): link pixbuf engine against

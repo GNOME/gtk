@@ -87,6 +87,7 @@ theme_symbols[] =
   { "SLIDER",		TOKEN_D_SLIDER },
   { "ENTRY",		TOKEN_D_ENTRY },
   { "HANDLE",		TOKEN_D_HANDLE },
+  { "STEPPER",		TOKEN_D_STEPPER },
 
   { "TRUE",		TOKEN_TRUE },
   { "FALSE",		TOKEN_FALSE },
@@ -331,7 +332,7 @@ theme_parse_function(GScanner * scanner,
     return G_TOKEN_EQUAL_SIGN;
 
   token = g_scanner_get_next_token(scanner);
-  if ((token >= TOKEN_D_HLINE) && (token <= TOKEN_D_HANDLE))
+  if ((token >= TOKEN_D_HLINE) && (token <= TOKEN_D_STEPPER))
     data->match_data.function = token;
 
   return G_TOKEN_NONE;

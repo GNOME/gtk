@@ -421,84 +421,48 @@ draw_shadow(GtkStyle     *style,
 			       x, y, width, height);
 }
 
+/* This function makes up for some brokeness in gtkrange.c
+ * where we never get the full arrow of the stepper button
+ * and the type of button in a single drawing function.
+ *
+ * It doesn't work correctly when the scrollbar is squished
+ * to the point we don't have room for full-sized steppers.
+ */
 static void
-draw_polygon(GtkStyle * style,
-	     GdkWindow * window,
-	     GtkStateType state,
-	     GtkShadowType shadow,
-	     GdkRectangle * area,
-	     GtkWidget * widget,
-	     const gchar *detail,
-	     GdkPoint * points,
-	     gint npoints,
-	     gint fill)
+reverse_engineer_stepper_box (GtkWidget    *range,
+			      GtkArrowType  arrow_type,
+			      gint         *x,
+			      gint         *y,
+			      gint         *width,
+			      gint         *height)
 {
-#ifndef M_PI
-#define M_PI    3.14159265358979323846
-#endif /* M_PI */
-#ifndef M_PI_4
-#define M_PI_4  0.78539816339744830962
-#endif /* M_PI_4 */
-
-  static const gdouble pi_over_4 = M_PI_4;
-  static const gdouble pi_3_over_4 = M_PI_4 * 3;
-
-  GdkGC              *gc3;
-  GdkGC              *gc4;
-  gdouble             angle;
-  gint                i;
-
-  g_return_if_fail(style != NULL);
-  g_return_if_fail(window != NULL);
-  g_return_if_fail(points != NULL);
-
-  switch (shadow)
+  gint slider_width = 14, stepper_size = 14;
+  gint box_width;
+  gint box_height;
+  
+  if (range)
     {
-    case GTK_SHADOW_IN:
-      gc3 = style->light_gc[state];
-      gc4 = style->black_gc;
-      break;
-    case GTK_SHADOW_OUT:
-      gc3 = style->black_gc;
-      gc4 = style->light_gc[state];
-      break;
-    default:
-      return;
+      gtk_widget_style_get (range,
+			    "slider_width", &slider_width,
+			    "stepper_size", &stepper_size,
+			    NULL);
+    }
+	
+  if (arrow_type == GTK_ARROW_UP || arrow_type == GTK_ARROW_DOWN)
+    {
+      box_width = slider_width;
+      box_height = stepper_size;
+    }
+  else
+    {
+      box_width = stepper_size;
+      box_height = slider_width;
     }
 
-  if (area)
-    {
-      gdk_gc_set_clip_rectangle(gc3, area);
-      gdk_gc_set_clip_rectangle(gc4, area);
-    }
-  if (fill)
-    gdk_draw_polygon(window, style->bg_gc[state], TRUE, points, npoints);
-
-  npoints--;
-
-  for (i = 0; i < npoints; i++)
-    {
-      if ((points[i].x == points[i + 1].x) &&
-	  (points[i].y == points[i + 1].y))
-	angle = 0;
-      else
-	angle = atan2(points[i + 1].y - points[i].y,
-		      points[i + 1].x - points[i].x);
-
-      if ((angle > -pi_3_over_4) && (angle < pi_over_4))
-	gdk_draw_line(window, gc3,
-		      points[i].x, points[i].y,
-		      points[i + 1].x, points[i + 1].y);
-      else
-	gdk_draw_line(window, gc4,
-		      points[i].x, points[i].y,
-		      points[i + 1].x, points[i + 1].y);
-    }
-  if (area)
-    {
-      gdk_gc_set_clip_rectangle(gc3, NULL);
-      gdk_gc_set_clip_rectangle(gc4, NULL);
-    }
+  *x = *x - (box_width - *width) / 2;
+  *y = *y - (box_height - *height) / 2;
+  *width = box_width;
+  *height = box_height;
 }
 
 static void
@@ -520,6 +484,57 @@ draw_arrow (GtkStyle     *style,
   
   g_return_if_fail(style != NULL);
   g_return_if_fail(window != NULL);
+
+  if (strcmp (detail, "hscrollbar") == 0 || strcmp (detail, "vscrollbar") == 0)
+    {
+      /* This is a hack to work around the fact that scrollbar steppers are drawn
+       * as a box + arrow, so we never have
+       *
+       *   The full bounding box of the scrollbar 
+       *   The arrow direction
+       *
+       * At the same time. We simulate an extra paint function, "STEPPER", by doing
+       * nothing for the box, and then here, reverse engineering the box that
+       * was passed to draw box and using that
+       */
+      gint box_x = x;
+      gint box_y = y;
+      gint box_width = width;
+      gint box_height = height;
+
+      reverse_engineer_stepper_box (widget, arrow_direction,
+				    &box_x, &box_y, &box_width, &box_height);
+
+      match_data.function = TOKEN_D_STEPPER;
+      match_data.detail = (gchar *)detail;
+      match_data.flags = (THEME_MATCH_SHADOW | 
+			  THEME_MATCH_STATE | 
+			  THEME_MATCH_ARROW_DIRECTION);
+      match_data.shadow = shadow;
+      match_data.state = state;
+      match_data.arrow_direction = arrow_direction;
+      
+      if (draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+			     box_x, box_y, box_width, box_height))
+	{
+	  /* The theme included stepper images, we're done */
+	  return;
+	}
+
+      /* Otherwise, draw the full box, and fall through to draw the arrow
+       */
+      match_data.function = TOKEN_D_BOX;
+      match_data.detail = (gchar *)detail;
+      match_data.flags = THEME_MATCH_SHADOW | THEME_MATCH_STATE;
+      match_data.shadow = shadow;
+      match_data.state = state;
+      
+      if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
+			      box_x, box_y, box_width, box_height))
+	parent_class->draw_box (style, window, state, shadow, area, widget, detail,
+				box_x, box_y, box_width, box_height);
+    }
+
 
   match_data.function = TOKEN_D_ARROW;
   match_data.detail = (gchar *)detail;
@@ -565,37 +580,7 @@ draw_diamond (GtkStyle     *style,
     parent_class->draw_diamond (style, window, state, shadow, area, widget, detail,
 				x, y, width, height);
 }
-/*
-static void
-draw_oval (GtkStyle     *style,
-	   GdkWindow    *window,
-	   GtkStateType  state,
-	   GtkShadowType shadow,
-	   GdkRectangle *area,
-	   GtkWidget    *widget,
-	   const gchar  *detail,
-	   gint          x,
-	   gint          y,
-	   gint          width,
-	   gint          height)
-{
-  ThemeMatchData match_data;
-  
-  g_return_if_fail(style != NULL);
-  g_return_if_fail(window != NULL);
 
-  match_data.function = TOKEN_D_OVAL;
-  match_data.detail = (gchar *)detail;
-  match_data.flags = THEME_MATCH_SHADOW | THEME_MATCH_STATE;
-  match_data.shadow = shadow;
-  match_data.state = state;
-
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
-			  x, y, width, height))
-    parent_class->draw_oval (style, window, state, shadow, area, widget, detail,
-			     x, y, width, height);
-}
-*/
 static void
 draw_string (GtkStyle * style,
 	     GdkWindow * window,
@@ -651,6 +636,12 @@ draw_box (GtkStyle     *style,
 
   g_return_if_fail(style != NULL);
   g_return_if_fail(window != NULL);
+
+  if (strcmp (detail, "hscrollbar") == 0 || strcmp (detail, "vscrollbar") == 0)
+    {
+      /* We handle this in draw_arrow */
+      return;
+    }
 
   match_data.function = TOKEN_D_BOX;
   match_data.detail = (gchar *)detail;
@@ -754,69 +745,6 @@ draw_option (GtkStyle      *style,
     parent_class->draw_option (style, window, state, shadow, area, widget, detail,
 			       x, y, width, height);
 }
-
-/*
-static void
-draw_cross (GtkStyle     *style,
-	    GdkWindow    *window,
-	    GtkStateType  state,
-	    GtkShadowType shadow,
-	    GdkRectangle *area,
-	    GtkWidget    *widget,
-	    const gchar  *detail,
-	    gint          x,
-	    gint          y,
-	    gint          width,
-	    gint          height)
-{
-  ThemeMatchData match_data;
-  
-  g_return_if_fail(style != NULL);
-  g_return_if_fail(window != NULL);
-
-  match_data.function = TOKEN_D_CROSS;
-  match_data.detail = (gchar *)detail;
-  match_data.flags = THEME_MATCH_SHADOW | THEME_MATCH_STATE;
-  match_data.shadow = shadow;
-  match_data.state = state;
-  
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
-			  x, y, width, height))
-    parent_class->draw_cross (style, window, state, shadow, area, widget, detail,
-			      x, y, width, height);
-}
-
-static void
-draw_ramp (GtkStyle     *style,
-	   GdkWindow    *window,
-	   GtkStateType  state,
-	   GtkShadowType shadow,
-	   GdkRectangle *area,
-	   GtkWidget    *widget,
-	   const gchar  *detail,
-	   GtkArrowType  arrow_direction,
-	   gint          x,
-	   gint          y,
-	   gint          width,
-	   gint          height)
-{
-  ThemeMatchData match_data;
-  
-  g_return_if_fail(style != NULL);
-  g_return_if_fail(window != NULL);
-
-  match_data.function = TOKEN_D_RAMP;
-  match_data.detail = (gchar *)detail;
-  match_data.flags = THEME_MATCH_SHADOW | THEME_MATCH_STATE;
-  match_data.shadow = shadow;
-  match_data.state = state;
-  
-  if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
-			  x, y, width, height))
-    parent_class->draw_ramp (style, window, state, shadow, area, widget, detail,
-			     arrow_direction, x, y, width, height);
-}
-*/
 
 static void
 draw_tab (GtkStyle     *style,
@@ -1087,17 +1015,13 @@ pixbuf_style_class_init (PixbufStyleClass *klass)
   style_class->draw_hline = draw_hline;
   style_class->draw_vline = draw_vline;
   style_class->draw_shadow = draw_shadow;
-  style_class->draw_polygon = draw_polygon;
   style_class->draw_arrow = draw_arrow;
   style_class->draw_diamond = draw_diamond;
-  /*style_class->draw_oval = draw_oval;*/
   style_class->draw_string = draw_string;
   style_class->draw_box = draw_box;
   style_class->draw_flat_box = draw_flat_box;
   style_class->draw_check = draw_check;
   style_class->draw_option = draw_option;
-  /*style_class->draw_cross = draw_cross;*/
-  /*style_class->draw_ramp = draw_ramp;*/
   style_class->draw_tab = draw_tab;
   style_class->draw_shadow_gap = draw_shadow_gap;
   style_class->draw_box_gap = draw_box_gap;
