@@ -1,3 +1,14 @@
+2003-03-13  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_set_property):
+	removed redundant calls to g_object_notify().
+	(gtk_cell_renderer_pixbuf_get_size): removed redundant casts, see
+	bug #108236.
+
+	* gtk/gtktextiter.c (_gtk_text_iter_get_segment_char)
+	(_gtk_text_iter_get_segment_byte): return 0, not NULL (these
+	functions return an integer value).
+
 2003-03-13  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): On

@@ -519,7 +519,7 @@ _gtk_text_iter_get_segment_byte (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
 
-  g_return_val_if_fail (iter != NULL, NULL);
+  g_return_val_if_fail (iter != NULL, 0);
 
   real = gtk_text_iter_make_real (iter);
 
@@ -538,7 +538,7 @@ _gtk_text_iter_get_segment_char (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
 
-  g_return_val_if_fail (iter != NULL, NULL);
+  g_return_val_if_fail (iter != NULL, 0);
 
   real = gtk_text_iter_make_real (iter);
 
