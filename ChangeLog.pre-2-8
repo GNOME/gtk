@@ -1,3 +1,8 @@
+Tue Mar  5 16:53:05 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* docs/faq/Makefile.am: Build the docbook version, not
+	the old linuxdoc version.
+
 Tue Mar  5 15:47:54 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in test/makefile.msc **.pc.in **/*.am:
