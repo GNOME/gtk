@@ -1,3 +1,10 @@
+Fri Aug  1 17:10:22 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (cmpl_completion_fullname): Always
+	return an absolute path (#115590), fix a problem where
+	you could crash the file selector with a looong name
+	by returning a newly allocated buffer.
+
 Fri Aug  1 16:44:51 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (update_cmpl): Fix obvious reallocation
