@@ -1,3 +1,8 @@
+Sun Feb  1 00:37:44 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkobject.sgml: Remove misleading documentation for 
+	gtk_object_set_user_data().  (#101614)
+
 Sun Feb  1 00:30:53 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/tmpl/general.sgml: Improve the documentation of event_mask for
