@@ -195,26 +195,6 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint width, gint height)
   return(image);
 } /* gdk_image_new_bitmap() */
 
-/* 
- * Desc: query the server for support for the MIT_SHM extension
- * Return:  0 = not available
- *          1 = shared XImage support available
- *          2 = shared Pixmap support available also
- */
-static int
-gdk_image_check_xshm(Display *display)
-{
-#ifdef USE_SHM
-  int major, minor;
-  Bool pixmaps;
-  
-  if (XShmQueryExtension (display) &&
-      XShmQueryVersion (display, &major, &minor, &pixmaps))
-    return pixmaps ? 2 : 1;
-#endif /* USE_SHM */
-  return 0;
-}
-
 void
 _gdk_windowing_image_init (GdkDisplay *display)
 {
@@ -222,12 +202,23 @@ _gdk_windowing_image_init (GdkDisplay *display)
   
   if (display_x11->use_xshm)
     {
-      gint res = gdk_image_check_xshm (GDK_DISPLAY_XDISPLAY (display));
-      
-      if (!res)
-	display_x11->use_xshm = False;
+#ifdef USE_SHM
+      Display *xdisplay = display_x11->xdisplay;
+      int major, minor, event_base;
+      Bool pixmaps;
+  
+      if (XShmQueryExtension (xdisplay) &&
+	  XShmQueryVersion (xdisplay, &major, &minor, &pixmaps))
+	{
+	  display_x11->have_shm_pixmaps = pixmaps;
+	  event_base = XShmGetEventBase (xdisplay);
+
+	  _gdk_x11_register_event_type (display,
+					event_base, ShmNumberEvents);
+	}
       else
-	display_x11->have_shm_pixmaps = (res == 2);
+	display_x11->use_xshm = TRUE;
+#endif /* USE_SHM */
     }
 }
 

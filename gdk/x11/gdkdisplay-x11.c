@@ -653,6 +653,9 @@ gdk_display_x11_finalize (GObject *object)
   XDestroyWindow (display_x11->xdisplay, display_x11->leader_window);
   /* list of filters for client messages */
   g_list_free (display_x11->client_filters);
+  /* List of event window extraction functions */
+  g_slist_foreach (display_x11->event_types, (GFunc)g_free, NULL);
+  g_slist_free (display_x11->event_types);
   /* X ID hashtable */
   g_hash_table_destroy (display_x11->xid_ht);
   /* input GdkDevice list */

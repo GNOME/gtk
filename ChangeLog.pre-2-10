@@ -1,3 +1,18 @@
+Tue Jul  8 20:11:04 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (get_real_window)
+	gdk/x11/gdkinput-x11.c (_gdk_input_common_init)
+	gdk/x11/gdkimage-x11.c (_gdk_windowing_image_init)
+	gdk/x11/gdkprivate-x11.h (_gdk_windowing_image_init)
+	Don't assume that all events start with XEventAny - Xkb events
+	don't! (#105745). So, only do that for core events, and for
+	non-core events, add a system for registering event types
+	that start with XEventAny.
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate):
+	Check to see if the result of gdk_window_lookup_for_display()
+	is actually a window.
+
 Fri Jul 11 20:48:14 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodel.c (gtk_tree_path_free): make the path != NULL

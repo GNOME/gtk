@@ -112,7 +112,10 @@ struct _GdkDisplayX11
   gboolean leader_window_title_set;
   
   /* list of filters for client messages */
-  GList *client_filters;	            
+  GList *client_filters;
+
+  /* List of functions to go from extension event => X window */
+  GSList *event_types;
   
   /* X ID hashtable */
   GHashTable *xid_ht;
@@ -132,7 +135,7 @@ struct _GdkDisplayX11
   gchar *input_gxid_host;
   gint   input_gxid_port;
 
-  gint   use_xft; 
+  gint   use_xft;
 
   /* Startup notification */
   gchar *startup_notification_id;

@@ -53,6 +53,7 @@
 
 typedef struct _GdkIOClosure GdkIOClosure;
 typedef struct _GdkDisplaySource GdkDisplaySource;
+typedef struct _GdkEventTypeX11 GdkEventTypeX11;
 
 #define DOUBLE_CLICK_TIME      250
 #define TRIPLE_CLICK_TIME      500
@@ -73,6 +74,12 @@ struct _GdkDisplaySource
   
   GdkDisplay *display;
   GPollFD event_poll_fd;
+};
+
+struct _GdkEventTypeX11
+{
+  gint base;
+  gint n_events;
 };
 
 /* 
@@ -639,50 +646,101 @@ translate_key_event (GdkDisplay *display,
   return;
 }
 
+void
+_gdk_x11_register_event_type (GdkDisplay          *display,
+			      gint                 event_base,
+			      gint                 n_events)
+{
+  GdkEventTypeX11 *event_type;
+  GdkDisplayX11 *display_x11;
+
+  display_x11 = GDK_DISPLAY_X11 (display);
+  event_type = g_new (GdkEventTypeX11, 1);
+
+  event_type->base = event_base;
+  event_type->n_events = n_events;
+
+  display_x11->event_types = g_slist_prepend (display_x11->event_types, event_type);
+}
+
 /* Return the window this has to do with, if any, rather
  * than the frame or root window that was selecting
  * for substructure
  */
-static Window
-get_real_window (XEvent *event)
+static void
+get_real_window (GdkDisplay *display,
+		 XEvent     *event,
+		 Window     *event_window,
+		 Window     *filter_window)
 {
-  switch (event->type)
-    {      
-    case CreateNotify:
-      return event->xcreatewindow.window;
-      
-    case DestroyNotify:
-      return event->xdestroywindow.window;
+  /* Core events all have an event->xany.window field, but that's
+   * not true for extension events
+   */
+  if (event->type >= KeyPress &&
+      event->type <= MappingNotify)
+    {
+      *filter_window = event->xany.window;
+      switch (event->type)
+	{      
+	case CreateNotify:
+	  *event_window = event->xcreatewindow.window;
+	  
+	case DestroyNotify:
+	  *event_window = event->xdestroywindow.window;
+	  
+	case UnmapNotify:
+	  *event_window = event->xunmap.window;
+	  
+	case MapNotify:
+	  *event_window = event->xmap.window;
+	  
+	case MapRequest:
+	  *event_window = event->xmaprequest.window;
+	  
+	case ReparentNotify:
+	  *event_window = event->xreparent.window;
+	  
+	case ConfigureNotify:
+	  *event_window = event->xconfigure.window;
+	  
+	case ConfigureRequest:
+	  *event_window = event->xconfigurerequest.window;
+	  
+	case GravityNotify:
+	  *event_window = event->xgravity.window;
+	  
+	case CirculateNotify:
+	  *event_window = event->xcirculate.window;
+	  
+	case CirculateRequest:
+	  *event_window = event->xcirculaterequest.window;
+	  
+	default:
+	  *event_window = event->xany.window;
+	}
+    }
+  else
+    {
+      GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+      GSList *tmp_list;
 
-    case UnmapNotify:
-      return event->xunmap.window;
+      for (tmp_list = display_x11->event_types;
+	   tmp_list;
+	   tmp_list = tmp_list->next)
+	{
+	  GdkEventTypeX11 *event_type = tmp_list->data;
 
-    case MapNotify:
-      return event->xmap.window;
-
-    case MapRequest:
-      return event->xmaprequest.window;
-
-    case ReparentNotify:
-     return event->xreparent.window;
-      
-    case ConfigureNotify:
-      return event->xconfigure.window;
-      
-    case ConfigureRequest:
-      return event->xconfigurerequest.window;
-
-    case GravityNotify:
-      return event->xgravity.window;
-
-    case CirculateNotify:
-      return event->xcirculate.window;
-
-    case CirculateRequest:
-      return event->xcirculaterequest.window;
-
-    default:
-      return event->xany.window;
+	  if (event->type >= event_type->base &&
+	      event->type < event_type->base + event_type->n_events)
+	    {
+	      *event_window = event->xany.window;
+	      *filter_window = event->xany.window;
+	      return;
+	    }
+	}
+	   
+      *event_window = None;
+      *filter_window = None;
     }
 }
 
@@ -723,7 +781,7 @@ gdk_event_translate (GdkDisplay *display,
   GdkScreenX11 *screen_x11 = NULL;
   GdkToplevelX11 *toplevel = NULL;
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
-  Window xwindow;
+  Window xwindow, filter_xwindow;
   
   return_val = FALSE;
 
@@ -750,18 +808,27 @@ gdk_event_translate (GdkDisplay *display,
    * Basically this means substructure events
    * are reported same as structure events
    */
-  xwindow = get_real_window (xevent);
+  get_real_window (display, xevent, &xwindow, &filter_xwindow);
   
   window = gdk_window_lookup_for_display (display, xwindow);
+  /* We may receive events such as NoExpose/GraphicsExpose
+   * and ShmCompletion for pixmaps
+   */
+  if (window && !GDK_IS_WINDOW (window))
+    window = NULL;
   window_private = (GdkWindowObject *) window;
 
   /* We always run the filters for the window where the event
    * is delivered, not the window that it relates to
    */
-  if (xevent->xany.window == xwindow)
+  if (filter_xwindow == xwindow)
     filter_window = window;
   else
-    filter_window = gdk_window_lookup_for_display (display, xevent->xany.window);
+    {
+      filter_window = gdk_window_lookup_for_display (display, filter_xwindow);
+      if (filter_window && !GDK_IS_WINDOW (filter_window))
+	filter_window = NULL;
+    }
 
   if (window)
     {
@@ -772,32 +839,24 @@ gdk_event_translate (GdkDisplay *display,
     
   if (window != NULL)
     {
-      /* Window may be a pixmap, so check its type.
-       * (This check is probably too expensive unless
-       *  GLib short-circuits an exact type match,
-       *  which has been proposed)
-       */
-      if (GDK_IS_WINDOW (window))
-        {
-          window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
-
-          /* Move key events on focus window to the real toplevel, and
-           * filter out all other events on focus window
-           */          
-          if (toplevel && xwindow == toplevel->focus_window)
-            {
-              switch (xevent->type)
-                {
-                case KeyPress:
-                case KeyRelease:
-                  xwindow = GDK_WINDOW_XID (window);
-                  xevent->xany.window = xwindow;
-                  break;
-                default:
-                  return FALSE;
-                }
-            }
-        }
+      window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
+      
+      /* Move key events on focus window to the real toplevel, and
+       * filter out all other events on focus window
+       */          
+      if (toplevel && xwindow == toplevel->focus_window)
+	{
+	  switch (xevent->type)
+	    {
+	    case KeyPress:
+	    case KeyRelease:
+	      xwindow = GDK_WINDOW_XID (window);
+	      xevent->xany.window = xwindow;
+	      break;
+	    default:
+	      return FALSE;
+	    }
+	}
 
       g_object_ref (window);
     }

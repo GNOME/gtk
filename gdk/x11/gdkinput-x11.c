@@ -385,18 +385,17 @@ _gdk_input_common_init (GdkDisplay *display,
   XDeviceInfo   *devices;
   int num_devices;
   int num_extensions, loop;
+  int ignore, event_base;
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
 
   /* Init XInput extension */
-  
-  extensions = XListExtensions(display_x11->xdisplay, &num_extensions);
-  for (loop = 0; loop < num_extensions &&
-	 (strcmp(extensions[loop], "XInputExtension") != 0); loop++);
-  XFreeExtensionList(extensions);
+
   display_x11->input_devices = NULL;
-  if (loop < num_extensions)
+  if (XQueryExtension (display_x11->xdisplay, "XInputExtension",
+		       &ignore, &event_base, &ignore))
     {
-      /* XInput extension found */
+      _gdk_x11_register_event_type (display,
+				    event_base, 9 /* Number of events */);
 
       devices = XListInputDevices(display_x11->xdisplay, &num_devices);
   
