@@ -1,3 +1,7 @@
+Fri Dec 10 13:58:38 2004  Manish Singh  <yosh@gimp.org>
+
+	* xdgmime.h: wrap new API in XDG_ENTRY().
+
 2004-12-09  Marco Pesenti Gritti  <marco@gnome.org>
 
 	* xdgmime.c: (xdg_mime_unalias_mime_type),
