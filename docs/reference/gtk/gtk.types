@@ -3,6 +3,8 @@
 gtk_accel_group_get_type
 gtk_accel_label_get_type
 gtk_accessible_get_type
+gtk_action_get_type
+gtk_action_group_get_type
 gtk_adjustment_get_type
 gtk_alignment_get_type
 gtk_arrow_get_type
@@ -78,6 +80,7 @@ gtk_plug_get_type
 gtk_preview_get_type
 gtk_progress_bar_get_type
 gtk_progress_get_type
+gtk_radio_action_get_type
 gtk_radio_button_get_type
 gtk_radio_menu_item_get_type
 gtk_radio_tool_button_get_type
@@ -106,6 +109,7 @@ gtk_text_tag_get_type
 gtk_text_tag_table_get_type
 gtk_text_view_get_type
 gtk_tips_query_get_type
+gtk_toggle_action_get_type
 gtk_toggle_button_get_type
 gtk_toggle_tool_button_get_type
 gtk_toolbar_get_type
@@ -119,6 +123,7 @@ gtk_tree_selection_get_type
 gtk_tree_store_get_type
 gtk_tree_view_column_get_type
 gtk_tree_view_get_type
+gtk_ui_manager_get_type
 gtk_vbox_get_type
 gtk_vbutton_box_get_type
 gtk_viewport_get_type

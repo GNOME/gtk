@@ -10,25 +10,94 @@ A #GtkUIManager constructs a user interface (menus and toolbars) from
 one or more UI definitions, which reference actions from one or ore 
 action groups.
 </para>
-
+<refsect2 id="XML-UI"><title>UI Definitions</title>
+<para>
+The UI definitions are specified in an XML format which is described
+by the following DTD.
+<programlisting>
+&lt;!ELEMENT ui          (menubar|toolbar|popup)* &gt;
+&lt;!ELEMENT menubar     (menuitem|separator|placeholder|menu)* &gt;
+&lt;!ELEMENT menu        (menuitem|separator|placeholder|menu)* &gt;
+&lt;!ELEMENT popup       (menuitem|separator|placeholder|menu)* &gt;
+&lt;!ELEMENT toolbar     (toolitem|separator|placeholder)* &gt;
+&lt;!ELEMENT placeholder (menuitem|toolitem|separator|placeholder|menu)* &gt;
+&lt;!ELEMENT menuitem     EMPTY &gt;
+&lt;!ELEMENT toolitem     EMPTY &gt;
+&lt;!ELEMENT separator    EMPTY &gt;
+&lt;!ATTLIST menubar      name             &num;IMPLIED &gt;
+&lt;!ATTLIST toolbar      name             &num;IMPLIED &gt;
+&lt;!ATTLIST popup        name             &num;IMPLIED &gt;
+&lt;!ATTLIST placeholder  name             &num;IMPLIED &gt;
+&lt;!ATTLIST menu         name             &num;IMPLIED
+                       action           &num;REQUIRED
+                       pos    (top|bot) &num;IMPLIED &gt;
+&lt;!ATTLIST menuitem     name             &num;IMPLIED
+                       action           &num;REQUIRED
+                       pos    (top|bot) &num;IMPLIED &gt;
+&lt;!ATTLIST toolitem     name             &num;IMPLIED
+                       action           &num;REQUIRED
+                       pos    (top|bot) &num;IMPLIED &gt;
+</programlisting>
+There are some additional restrictions beyond those specified in the DTD, e.g.
+every toolitem must have a toolbar in its anchestry and every menuitem must have
+a menubar or popup in its anchestry. If a name is not specified, it defaults to 
+the action. If an action is not specified either, the element name is used.
+</para>
+<para>
+The constructed widget hierarchy is very similar to the element
+tree of the XML, with the exception that placeholders are merged into their 
+parents. The correspondence of XML elements to widgets should be almost obvious:
+<itemizedlist>
+<listitem><para>menubar: a #GtkMenuBar</para></listitem>
+<listitem><para>toolbar: a #GtkToolBar</para></listitem>
+<listitem><para>popup: a toplevel #GtkMenu</para></listitem>
+<listitem><para>menu: a #GtkMenu attached to a menuitem</para></listitem>
+<listitem><para>menuitem: a #GtkMenuItem subclass, the exact type depends on the action</para></listitem>
+<listitem><para>toolitem: a #GtkToolItem subclass, the exact type depends on the action</para></listitem>
+<listitem><para>separator: a #GtkSeparatorMenuItem or #GtkSeparatorToolItem</para></listitem>
+</itemizedlist>
+</para>
+<para>
+The pos attribute determines where a constructed widget is positioned wrt. to its
+siblings in the partially constructed tree. If it is "top", the widget is prepended,
+otherwise it is appended.
+</para>
+</refsect2>
+ 
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
-
 
 <!-- ##### STRUCT GtkUIManager ##### -->
 <para>
 
 </para>
 
-@parent: 
 
 <!-- ##### FUNCTION gtk_ui_manager_new ##### -->
 <para>
 
 </para>
 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ui_manager_set_add_tearoffs ##### -->
+<para>
+
+</para>
+
+@self: 
+@add_tearoffs: 
+
+
+<!-- ##### FUNCTION gtk_ui_manager_get_add_tearoffs ##### -->
+<para>
+
+</para>
+
+@self: 
 @Returns: 
 
 
@@ -119,4 +188,33 @@ action groups.
 @self: 
 @Returns: 
 
+
+<!-- ##### FUNCTION gtk_ui_manager_activate ##### -->
+<para>
+
+</para>
+
+@self: 
+@path: 
+
+
+<!-- ##### SIGNAL GtkUIManager::add-widget ##### -->
+<para>
+
+</para>
+
+@uimanager: the object which received the signal.
+@widget: 
+
+<!-- ##### SIGNAL GtkUIManager::changed ##### -->
+<para>
+
+</para>
+
+@uimanager: the object which received the signal.
+
+<!-- ##### ARG GtkUIManager:add-tearoffs ##### -->
+<para>
+
+</para>
 

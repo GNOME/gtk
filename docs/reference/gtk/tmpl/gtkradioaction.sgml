@@ -2,26 +2,26 @@
 GtkRadioAction
 
 <!-- ##### SECTION Short_Description ##### -->
-
+an action of which only one in a group can be active
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
-</para>
-
+A #GtkRadioAction is similar to #GtkRadioMenuItem. A number of radio
+actions can be linked together so that only one may be active at any 
+one time.
+</para>   
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
 
-
 <!-- ##### STRUCT GtkRadioAction ##### -->
 <para>
-
+The <structname>GtkRadioAction</structname> struct contains 
+only private members and should not be accessed directly.
 </para>
 
-@parent: 
 
 <!-- ##### FUNCTION gtk_radio_action_get_group ##### -->
 <para>
@@ -40,4 +40,26 @@ GtkRadioAction
 @action: 
 @group: 
 
+
+<!-- ##### FUNCTION gtk_radio_action_get_current_value ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### SIGNAL GtkRadioAction::changed ##### -->
+<para>
+
+</para>
+
+@radioaction: the object which received the signal.
+@arg1: 
+
+<!-- ##### ARG GtkRadioAction:value ##### -->
+<para>
+
+</para>
 

@@ -212,6 +212,14 @@ gtk_action_class_init (GtkActionClass *klass)
 							 TRUE,
 							 G_PARAM_READWRITE));
 
+  /**
+   * GtkAction::activate:
+   * @action: the #GtkAction
+   *
+   * The "activate" signal is emitted when the action is activated.
+   *
+   * Since: 2.4
+   */
   action_signals[ACTIVATE] =
     g_signal_new ("activate",
 		  G_OBJECT_CLASS_TYPE (klass),

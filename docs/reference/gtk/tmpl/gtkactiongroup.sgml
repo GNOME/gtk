@@ -2,41 +2,68 @@
 GtkActionGroup
 
 <!-- ##### SECTION Short_Description ##### -->
-
+a group of actions
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+Actions are organised into groups.  An action group is essentially a
+map from names to #GtkAction objects.
 </para>
-
+<para>
+All actions that would make sense to use in a particular context
+should be in a single group.  Multiple action groups may be used for a
+particular user interface.  In fact, it is expected that most nontrivial 
+applications will make use of multiple groups.  For example, in an application
+that can edit multiple documents, one group holding global actions 
+(eg. quit, about, new), and one group per document holding actions that 
+act on that document (eg. save, cut/copy/paste, etc).  Each window's menus 
+would be constructed from a combination of two action groups.
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
 
-
 <!-- ##### STRUCT GtkActionGroup ##### -->
 <para>
-
+The <structname>GtkActionGroup</structname> struct contains only private members
+and should not be accessed directly.
 </para>
 
-@parent: 
 
-<!-- ##### STRUCT GtkActionGroupEntry ##### -->
+<!-- ##### STRUCT GtkActionEntry ##### -->
 <para>
-
+<structname>GtkActionEntry</structname> structs are used with 
+gtk_action_group_add_actions() to construct actions.
 </para>
 
-@name: 
-@label: 
-@stock_id: 
-@accelerator: 
-@tooltip: 
-@callback: 
-@user_data: 
-@entry_type: 
-@extra_data: 
+@name: The name of the action.
+@stock_id: The stock id for the action.
+@label: The label for the action. This field should typically be marked for 
+    translation, see gtk_action_group_set_translation_domain().
+@accelerator: The accelerator for the action, in the format understood by 
+    gtk_accelerator_parse().
+@tooltip: The tooltip for the action. This field should typically be marked for 
+    translation, see gtk_action_group_set_translation_domain().
+@callback: The function to call when the action is activated.
+@is_toggle: If this is %TRUE, a #GtkToggleAction is constructed, else a #GtkAction.
+
+<!-- ##### STRUCT GtkRadioActionEntry ##### -->
+<para>
+<structname>GtkRadioActionEntry</structname> structs are used with 
+gtk_action_group_add_radio_actions() to construct radio actions.
+</para>
+
+@name: The name of the action.
+@stock_id: The stock id for the action.
+@label: The label for the action. This field should typically be marked for 
+    translation, see gtk_action_group_set_translation_domain().
+@accelerator: The accelerator for the action, in the format understood by 
+    gtk_accelerator_parse().
+@tooltip: The tooltip for the action. This field should typically be marked for 
+    translation, see gtk_action_group_set_translation_domain().
+@value: The value to set on the radio action. See gtk_radio_action_get_current_value().
 
 <!-- ##### FUNCTION gtk_action_group_new ##### -->
 <para>
@@ -101,5 +128,63 @@ GtkActionGroup
 @action_group: 
 @entries: 
 @n_entries: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gtk_action_group_add_actions_full ##### -->
+<para>
+
+</para>
+
+@action_group: 
+@entries: 
+@n_entries: 
+@user_data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_action_group_add_radio_actions ##### -->
+<para>
+
+</para>
+
+@action_group: 
+@entries: 
+@n_entries: 
+@on_change: 
+@user_data: 
+
+
+<!-- ##### FUNCTION gtk_action_group_add_radio_actions_full ##### -->
+<para>
+
+</para>
+
+@action_group: 
+@entries: 
+@n_entries: 
+@on_change: 
+@user_data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_action_group_set_translate_func ##### -->
+<para>
+
+</para>
+
+@action_group: 
+@func: 
+@data: 
+@notify: 
+
+
+<!-- ##### FUNCTION gtk_action_group_set_translation_domain ##### -->
+<para>
+
+</para>
+
+@action_group: 
+@domain: 
 
 

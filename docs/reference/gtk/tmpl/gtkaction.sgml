@@ -2,26 +2,58 @@
 GtkAction
 
 <!-- ##### SECTION Short_Description ##### -->
-
+an action which can be triggered by a menu or toolbar item
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+Actions represent operations that the user can be perform, along with
+some information how it should be presented in the interface. Each action 
+provides methods to create icons, menu items and toolbar items representing 
+itself.
 </para>
-
+<para>
+As well as the callback that is called when the action gets activated, the 
+following also gets associated with the action:
+<itemizedlist>
+  <listitem><para>a name (not translated, for path lookup)</para></listitem>
+  <listitem><para>a label (translated, for display)</para></listitem>
+  <listitem><para>an accelerator</para></listitem>
+  <listitem><para>whether label indicates a stock id</para></listitem>
+  <listitem><para>a tooltip (optional, translated)</para></listitem>
+  <listitem><para>a toolbar label (optional, shorter than label)</para></listitem>
+</itemizedlist>
+The action will also have some state information:
+<itemizedlist>
+  <listitem><para>visible (shown/hidden)</para></listitem>
+  <listitem><para>sensitive (enabled/disabled)</para></listitem>
+</itemizedlist>
+</para>
+<para>
+Apart from regular actions, there are <link linkend="GtkToggleAction">toggle 
+actions</link>, which can be toggled between two states and <link 
+linkend="GtkRadioAction">radio actions</link>, of which only one in a group 
+can be in the "active" state. Other actions can be implemented as #GtkAction 
+subclasses.
+</para>
+<para>
+Each action can have one or more proxy menu item, toolbar button or
+other proxy widgets.  Proxies mirror the state of the action (text
+label, tooltip, icon, visible, sensitive, etc), and should change when
+the action's state changes. When the proxy is activated, it should
+activate its action.
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkActionGroup, #GtkMenuMerge
 </para>
-
 
 <!-- ##### STRUCT GtkAction ##### -->
 <para>
-
+The <structname>GtkAction</structname> struct contains only private members
+and should not be accessed directly.
 </para>
 
-@object: 
 
 <!-- ##### FUNCTION gtk_action_get_name ##### -->
 <para>
@@ -121,4 +153,46 @@ GtkAction
 @action: 
 @accel_path: 
 
+
+<!-- ##### SIGNAL GtkAction::activate ##### -->
+<para>
+
+</para>
+
+@action: the object which received the signal.
+
+<!-- ##### ARG GtkAction:label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:sensitive ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:short-label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:stock-id ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:tooltip ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:visible ##### -->
+<para>
+
+</para>
 

@@ -1,9 +1,10 @@
 2003-08-31  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkactiongroup.c: Add some docs.
+	* gtk/gtkaction.c: 
+	* gtk/gtkactiongroup.c: Some doc tweaks.
 
 	* gtk/gtkuimanager.[hc]: Get rid of the remove_widget signal. It
-	wasn't emitted anyway.
+	wasn't emitted anyway. Some doc tweaks.
 
 2003-08-30  Matthias Clasen  <maclas@gmx.de>
 

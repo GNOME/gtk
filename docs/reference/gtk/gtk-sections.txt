@@ -130,8 +130,8 @@ GtkActionPrivate
 <FILE>gtkactiongroup</FILE>
 <TITLE>GtkActionGroup</TITLE>
 GtkActionGroup
-GtkActionGroupEntryTrype
-GtkActionGroupEntry
+GtkActionEntry
+GtkRadioActionEntry
 gtk_action_group_new
 gtk_action_group_get_name
 gtk_action_group_get_action
@@ -139,6 +139,11 @@ gtk_action_group_list_actions
 gtk_action_group_add_action
 gtk_action_group_remove_action
 gtk_action_group_add_actions
+gtk_action_group_add_actions_full 
+gtk_action_group_add_radio_actions
+gtk_action_group_add_radio_actions_full
+gtk_action_group_set_translate_func
+gtk_action_group_set_translation_domain
 <SUBSECTION Standard>
 GTK_TYPE_ACTION_GROUP
 GTK_ACTION_GROUP
@@ -1718,6 +1723,8 @@ gtk_menu_item_get_type
 <TITLE>GtkUIManager</TITLE>
 GtkUIManager
 gtk_ui_manager_new
+gtk_ui_manager_set_add_tearoffs
+gtk_ui_manager_get_add_tearoffs
 gtk_ui_manager_insert_action_group
 gtk_ui_manager_remove_action_group
 gtk_ui_manager_get_action_groups
@@ -1727,6 +1734,7 @@ gtk_ui_manager_add_ui_from_string
 gtk_ui_manager_add_ui_from_file
 gtk_ui_manager_remove_ui
 gtk_ui_manager_get_ui
+gtk_ui_manager_activate
 <SUBSECTION Standard>
 GTK_TYPE_UI_MANAGER
 GTK_UI_MANAGER
@@ -2094,6 +2102,7 @@ gtk_progress_bar_get_type
 GtkRadioAction
 gtk_radio_action_get_group
 gtk_radio_action_set_group
+gtk_radio_action_get_current_value
 <SUBSECTION Standard>
 GTK_TYPE_RADIO_ACTION
 GTK_RADIO_ACTION
@@ -2103,7 +2112,7 @@ GTK_IS_RADIO_ACTION_CLASS
 GTK_RADIO_ACTION_GET_CLASS
 <SUBSECTION Private>
 gtk_radio_action_get_type
-GtkRadionActionPrivate
+GtkRadioActionPrivate
 </SECTION>
 
 <SECTION>

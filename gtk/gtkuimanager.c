@@ -319,9 +319,9 @@ gtk_ui_manager_get_property (GObject         *object,
 /**
  * gtk_ui_manager_new:
  * 
- * Creates a new menu merge object.
+ * Creates a new ui manager object.
  * 
- * Return value: a new menu merge object.
+ * Return value: a new ui manager object.
  *
  * Since: 2.4
  **/
@@ -1077,8 +1077,9 @@ add_ui_from_string (GtkUIManager *self,
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
  * @error: return location for an error
  * 
- * Parses a string containing a UI description and merge it with the current
- * contents of @self. FIXME: describe the XML format.
+ * Parses a string containing a <link linkend="XML-UI">UI description</link> and 
+ * merges it with the current contents of @self. An enclosing &lt;ui&gt; &lt;/ui&gt;
+ * element is added if it is missing.
  * 
  * Return value: The merge id for the merged UI. The merge id can be used
  *   to unmerge the UI with gtk_ui_manager_remove_ui(). If an error occurred,
@@ -1119,8 +1120,8 @@ gtk_ui_manager_add_ui_from_string (GtkUIManager *self,
  * @filename: the name of the file to parse 
  * @error: return location for an error
  * 
- * Parses a file containing a UI description and merge it with the current
- * contents of @self. See gtk_ui_manager_add_ui_from_file().
+ * Parses a file containing a <link linkend="XML-UI">UI description</link> and 
+ * merges it with the current contents of @self. 
  * 
  * Return value: The merge id for the merged UI. The merge id can be used
  *   to unmerge the UI with gtk_ui_manager_remove_ui(). If an error occurred,

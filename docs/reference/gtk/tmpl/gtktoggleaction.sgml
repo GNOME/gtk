@@ -2,26 +2,25 @@
 GtkToggleAction
 
 <!-- ##### SECTION Short_Description ##### -->
-
+an action which can be toggled between two states
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+A #GtkToggleAction corresponds roughly to a #GtkCheckMenuItem. It has an
+"active" state specifying whether the action has been checked or not.
 </para>
-
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
 
-
 <!-- ##### STRUCT GtkToggleAction ##### -->
 <para>
-
+The <structname>GtkToggleAction</structname> struct contains only 
+private members and should not be accessed directly.
 </para>
 
-@parent: 
 
 <!-- ##### FUNCTION gtk_toggle_action_toggled ##### -->
 <para>
@@ -48,4 +47,11 @@ GtkToggleAction
 @action: 
 @Returns: 
 
+
+<!-- ##### SIGNAL GtkToggleAction::toggled ##### -->
+<para>
+
+</para>
+
+@toggleaction: the object which received the signal.
 
