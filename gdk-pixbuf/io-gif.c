@@ -62,8 +62,8 @@
 #include <stdio.h>
 #include <glib.h>
 #include <string.h>
-#include "gdk-pixbuf.h"
-#include "gdk-pixbuf-io.h"
+#include "gdk-pixbuf/gdk-pixbuf.h"
+#include "gdk-pixbuf/gdk-pixbuf-io.h"
 
 
 

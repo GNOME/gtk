@@ -28,8 +28,8 @@
 #define GDK_PIXBUF_IO_H
 
 #include <gmodule.h>
-#include "gdk-pixbuf.h"
 #include <stdio.h>
+#include "gdk-pixbuf/gdk-pixbuf.h"
 
 #ifdef __cplusplus
 extern "C" {

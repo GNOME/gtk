@@ -1,3 +1,9 @@
+1999-11-22  Jonathan Blandford  <jrb@redhat.com>
+
+	* configure.in (GDK_PIXBUF_DIR): make the symlink.  Does not work
+	for srcdir != buildir != .  Beats me why; I can't figure it out.
+	AC_OUTPUT_COMMANDS doesn't seem to let me substitute it correctly.
+
 1999-11-21  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/gdk-pixbuf-io.c: added io-bmp from Arjan

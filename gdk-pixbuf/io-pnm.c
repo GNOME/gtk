@@ -27,8 +27,8 @@
 #include <string.h>
 #include <setjmp.h>
 #include <jpeglib.h>
-#include "gdk-pixbuf.h"
-#include "gdk-pixbuf-io.h"
+#include "gdk-pixbuf/gdk-pixbuf.h"
+#include "gdk-pixbuf/gdk-pixbuf-io.h"
 
 
 

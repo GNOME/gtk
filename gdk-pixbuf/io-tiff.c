@@ -28,8 +28,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <tiffio.h>
-#include "gdk-pixbuf.h"
-#include "gdk-pixbuf-io.h"
+#include "gdk-pixbuf/gdk-pixbuf.h"
+#include "gdk-pixbuf/gdk-pixbuf-io.h"
 #include <unistd.h>
 
 

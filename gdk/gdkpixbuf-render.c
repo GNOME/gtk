@@ -23,7 +23,7 @@
 #include <config.h>
 #include <gdk/gdk.h>
 #include <libart_lgpl/art_rect.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf/gdk-pixbuf.h"
 
 
 

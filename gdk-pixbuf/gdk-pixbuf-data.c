@@ -21,7 +21,7 @@
  */
 
 #include <config.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf/gdk-pixbuf.h"
 
 
 

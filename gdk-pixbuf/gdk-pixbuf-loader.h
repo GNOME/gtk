@@ -28,7 +28,7 @@
 
 #include <unistd.h>
 #include <gtk/gtkobject.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf/gdk-pixbuf.h"
 
 #ifdef __cplusplus
 extern "C" {

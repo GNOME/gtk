@@ -29,7 +29,7 @@
 #include <libart_lgpl/art_pixbuf.h>
 #include <libart_lgpl/art_rgb_pixbuf_affine.h>
 #include <libart_lgpl/art_alphagamma.h>
-#include "gdk-pixbuf.h"
+#include "gdk-pixbuf/gdk-pixbuf.h"
 
 
 

@@ -14,8 +14,8 @@
 #include <string.h>
 #include <glib.h>
 #include <gmodule.h>
-#include "gdk-pixbuf.h"
-#include "gdk-pixbuf-drawable.h"
+#include "gdk-pixbuf/gdk-pixbuf.h"
+#include "gdk-pixbuf/gdk-pixbuf-drawable.h"
 
 
 #if (G_BYTE_ORDER == G_LITTLE_ENDIAN)
