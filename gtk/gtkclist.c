@@ -380,6 +380,9 @@ gtk_clist_init (GtkCList * clist)
   GTK_WIDGET_UNSET_FLAGS (clist, GTK_NO_WINDOW);
   GTK_CLIST_SET_FLAGS (clist, CLIST_FROZEN);
 
+  clist->row_mem_chunk = NULL;
+  clist->cell_mem_chunk = NULL;
+
   clist->rows = 0;
   clist->row_center_offset = 0;
   clist->row_height = 0;
@@ -422,6 +425,11 @@ gtk_clist_construct (GtkCList * clist,
 		     gchar *titles[])
 {
   int i;
+
+  g_return_if_fail (clist != NULL);
+  g_return_if_fail (GTK_IS_CLIST (clist));
+  g_return_if_fail (clist->row_mem_chunk == NULL);
+
 
   /* initalize memory chunks */
   clist->row_mem_chunk = g_mem_chunk_new ("clist row mem chunk",
