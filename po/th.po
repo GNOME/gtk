@@ -1,14 +1,14 @@
 # Thai translation for gtk+.
 # Copyright (C) 2003 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
-# Paisa Seeluangsawat <paisa@users.sf.net>, 2003.
+# Paisa Seeluangsawat <paisa@users.sf.net>, 2003, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-03-02 01:16-0600\n"
+"PO-Revision-Date: 2004-03-05 15:18-0600\n"
 "Last-Translator: Paisa Seeluangsawat <paisa@users.sf.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -925,11 +925,11 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:821
 msgid "Home"
-msgstr "_บ้าน"
+msgstr "บ้าน"
 
 #: gtk/gtkfilechooserdefault.c:839
 msgid "Desktop"
-msgstr "_พื้นโต๊ะ"
+msgstr "พื้นโต๊ะ"
 
 #: gtk/gtkfilechooserdefault.c:1229
 #, c-format
@@ -941,9 +941,8 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:1331 gtk/gtkfilechooserdefault.c:1854
-#, fuzzy
 msgid "Name"
-msgstr "_ชื่อ:"
+msgstr "ชื่อ"
 
 #: gtk/gtkfilechooserdefault.c:1422
 #, c-format
