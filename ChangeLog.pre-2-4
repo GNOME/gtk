@@ -1,3 +1,9 @@
+2003-05-30  Matthias Clasen  <maclas@gmx.de>
+	
+	* gtk/gtknotebook.c: Changed guint to GtkNotebookArrow in the
+	signature of gtk_notebook_draw_arrow() for Solaris builds to go
+	through.  (#114043, Anand Subramanian)
+
 Thu May 29 18:30:35 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* modules/input/imipa.c: 

@@ -230,7 +230,7 @@ static void gtk_notebook_draw_tab            (GtkNotebook      *notebook,
 					      GtkNotebookPage  *page,
 					      GdkRectangle     *area);
 static void gtk_notebook_draw_arrow          (GtkNotebook      *notebook,
-					      guint             arrow);
+					      GtkNotebookArrow  arrow);
 
 /*** GtkNotebook Size Allocate Functions ***/
 static void gtk_notebook_pages_allocate      (GtkNotebook      *notebook);
