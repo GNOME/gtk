@@ -178,7 +178,6 @@ child_read_watch (GIOChannel *channel, GIOCondition cond, gpointer data)
       return TRUE;
     case G_IO_STATUS_EOF:
       n_children--;
-      g_io_channel_unref (channel);
       return FALSE;
     case G_IO_STATUS_ERROR:
       fprintf (stderr, "Error reading fd from child: %s\n", error->message);

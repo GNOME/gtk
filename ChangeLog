@@ -1,3 +1,8 @@
+Sun Oct  5 23:59:03 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/testsocket.c (child_read_watch): Remove an
+        extraneous unref.  (#122336, Frederic Crozat)
+
 2003-09-25  Tor Lillqvist  <tml@iki.fi>
 
 	* demos/gtk-demo/main.c: Don't use hardcoded DEMOCODEDIR on Windows.
@@ -241,7 +246,7 @@ Sat Aug 23 21:40:18 2003  Owen Taylor  <otaylor@redhat.com>
 	problem where rc_file->directory wasn't always getting
 	set. (#120549, Luis Villa)
 
-2003-08-22  Samúel Jón Gunnarsson  <sammi@techattack.nu>
+2003-08-22  SamÃºel JÃ³n Gunnarsson  <sammi@techattack.nu>
 
 	* configure.in: Added "is" to ALL_LINGUAS.
 
@@ -816,7 +821,7 @@ Fri Aug  1 15:06:25 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_selected_foreach):
 	Fix function name in warning message.  (#118156, Tim-Philipp
-	Müller)
+	MÃ¼ller)
 
 	* gtk/gtkcellrenderer.c (gtk_cell_renderer_get_property):
 	is-expander and is-expanded are boolean properties, not ints.
@@ -1290,7 +1295,7 @@ Fri Jun  6 11:07:33 2003  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkwidget.c (event_window_still_viewable): 
 	Before delivering an event to a widget, check that
 	(if relevant), the event's window is still viewable.
-	(#105642, Dennis BjÃ¶rklund)
+	(#105642, Dennis BjÃÂ¶rklund)
 
 	* gdk/gdkwindow.c (_gdk_window_destroy_hierarchy): 
 	NULL out private->parent, since after destruction
@@ -1423,7 +1428,7 @@ Thu Jun  5 16:52:54 2003  Owen Taylor  <otaylor@redhat.com>
 
 Thu Jun  5 17:20:40 2003  Owen Taylor  <otaylor@redhat.com>
 	 
-	 #107883, Gustavo GirÃ¡ldez
+	 #107883, Gustavo GirÃÂ¡ldez
 
 	* gtk/gtktextlayout.c (gtk_text_layout_emit_changed):
 	Split out the case where we know we changed, and 
@@ -1441,7 +1446,7 @@ Thu Jun  5 17:20:40 2003  Owen Taylor  <otaylor@redhat.com>
 
 2003-06-05  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtktextview.c: Fix for #84668, reported by Torbjörn Andersson:
+	* gtk/gtktextview.c: Fix for #84668, reported by TorbjÃ¶rn Andersson:
 	(gtk_text_view_grab_notify): 
 	(gtk_text_view_state_changed): Implement these
 	to unobscure cursor when grab shadowed or insensitised.
@@ -2423,7 +2428,7 @@ Mon Jan 27 22:43:11 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreestore.c (gtk_tree_store_sort_helper): don't just bail
 	out if the level only has one item, recurse over the child if there
-	is one. (Fixes #100458, reported by GaÃ«l Le Mignot).
+	is one. (Fixes #100458, reported by GaÃÂ«l Le Mignot).
 
 Mon Jan 27 22:41:26 2003  Kristian Rietveld  <kris@gtk.org>
 
