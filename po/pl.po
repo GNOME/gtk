@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2003-06-28 09:10+0200\n"
-"PO-Revision-Date: 2003-06-28 09:19--100\n"
+"POT-Creation-Date: 2003-07-02 02:07+0200\n"
+"PO-Revision-Date: 2003-07-01 07:33+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -219,7 +219,7 @@ msgstr "Format GIF w wersji %s nie jest obsługiwany"
 
 #: gdk-pixbuf/io-gif.c:1211
 msgid "GIF image contained a frame appearing outside the image bounds."
-msgstr "Obraz GIF zawiera ramkę występującą poza granice obrazu."
+msgstr "Obraz GIF zawiera ramkę wystającą poza granice obrazu."
 
 #: gdk-pixbuf/io-gif.c:1255
 msgid ""
@@ -237,36 +237,36 @@ msgstr "Plik GIF został obcięty lub jest niekompletny."
 msgid "The GIF image format"
 msgstr "Format obrazu GIF"
 
-#: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:338
-#: gdk-pixbuf/io-ico.c:401 gdk-pixbuf/io-ico.c:418
+#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:330
+#: gdk-pixbuf/io-ico.c:393 gdk-pixbuf/io-ico.c:410
 msgid "Not enough memory to load icon"
 msgstr "Brak pamięci na odczytanie ikony"
 
-#: gdk-pixbuf/io-ico.c:262
+#: gdk-pixbuf/io-ico.c:254
 msgid "Invalid header in icon"
 msgstr "Niepoprawny nagłówek ikony"
 
-#: gdk-pixbuf/io-ico.c:299
+#: gdk-pixbuf/io-ico.c:291
 msgid "Icon has zero width"
 msgstr "Szerokość ikony jest zerowa"
 
-#: gdk-pixbuf/io-ico.c:309
+#: gdk-pixbuf/io-ico.c:301
 msgid "Icon has zero height"
 msgstr "Wysokość ikony jest zerowa"
 
-#: gdk-pixbuf/io-ico.c:353
+#: gdk-pixbuf/io-ico.c:345
 msgid "Compressed icons are not supported"
 msgstr "Skompresowane ikony nie są obsługiwane"
 
-#: gdk-pixbuf/io-ico.c:386
+#: gdk-pixbuf/io-ico.c:378
 msgid "Unsupported icon type"
 msgstr "Nieobsługiwany typ ikony"
 
-#: gdk-pixbuf/io-ico.c:466
+#: gdk-pixbuf/io-ico.c:458
 msgid "Not enough memory to load ICO file"
 msgstr "Brak pamięci na odczytanie pliku ICO"
 
-#: gdk-pixbuf/io-ico.c:872
+#: gdk-pixbuf/io-ico.c:868
 msgid "The ICO image format"
 msgstr "Format obrazu ICO"
 
@@ -402,6 +402,7 @@ msgstr "Plik PNM zawiera obraz o szerokości 0"
 msgid "PNM file has an image height of 0"
 msgstr "Plik PNM zawiera obraz o wysokości 0"
 
+# Ar't Maksymalna wartość koloru w pliku jest/wynosi 0 (to bląd jak sadzę ze = 0)
 #: gdk-pixbuf/io-pnm.c:379
 msgid "Maximum color value in PNM file is 0"
 msgstr "Maksymalną wartością koloru w pliku PNM jest 0"
@@ -702,15 +703,13 @@ msgstr "Przy odczycie pliku XPM nie powiódł się zapis do pliku tymczasowego"
 msgid "The XPM image format"
 msgstr "Format obrazu XPM"
 
-# Czuję, że dwa poniższe tłumaczenia mogą być 
-# lekko kontrowersyjne 
 #: gdk/gdkdisplaymanager.c:117
 msgid "Default Display"
-msgstr "Domyślny ekran"
+msgstr "Ekran domyślny"
 
 #: gdk/gdkdisplaymanager.c:118
 msgid "The default display for GDK"
-msgstr "Domyślny ekran dla GDK"
+msgstr "Ekran domyślny dla GDK"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -2317,9 +2316,8 @@ msgstr ""
 "Strona skrzynki z uchwytem, która powinna być połączona z punktem dokowania"
 
 #: gtk/gtkhandlebox.c:229
-#, fuzzy
 msgid "Snap edge set"
-msgstr "Przyciągana krawędź"
+msgstr "Przyciąganie do krawędzi"
 
 #: gtk/gtkhandlebox.c:230
 msgid ""
@@ -4719,9 +4717,8 @@ msgid "Whether the widget has the input focus"
 msgstr "Określa, czy na widgecie jest skupienie wejściowe"
 
 #: gtk/gtkwidget.c:540
-#, fuzzy
 msgid "Is focus"
-msgstr "Skupienie"
+msgstr "Skupianie"
 
 # chmm, dziwne to jakieś
 #: gtk/gtkwidget.c:541
