@@ -1,3 +1,8 @@
+2001-11-06  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkmain.c (find_module): Do search GTK_BINARY_VERSION
+	-specific directory on Windows, too (#63759).
+
 Mon Nov  5 12:46:44 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdrawable-x11.[ch] gdk/x11/gdkgc-x11.c

@@ -320,7 +320,6 @@ find_module (gchar      **module_path,
     {
       gchar *version_directory;
 
-#ifndef G_OS_WIN32 /* ignoring GTK_BINARY_VERSION elsewhere too */
       version_directory = g_build_filename (module_path[i], GTK_BINARY_VERSION, NULL);
       module_name = g_module_build_path (version_directory, name);
       g_free (version_directory);
@@ -333,7 +332,6 @@ find_module (gchar      **module_path,
 	}
       
       g_free (module_name);
-#endif
 
       module_name = g_module_build_path (module_path[i], name);
       
