@@ -1,3 +1,10 @@
+Wed Oct 24 11:36:33 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in (GTK_MICRO_VERSION): Version 1.3.10,
+	require GLib 1.3.10.
+
+	* NEWS: updates.
+
 Thu Oct 25 16:27:29 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkrbtree.c (_gtk_rbnode_rotate_left): Add support for

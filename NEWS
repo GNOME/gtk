@@ -1,3 +1,38 @@
+Overview of Changes in GTK+ 1.3.10
+==================================
+
+* GtkTextView fixes [Havoc Pennington]
+* GtkTreeView fixes and improvements [Jonathan Blandford, Kristian,
+  Manish Singh, Joshua Pritikin, Oleg Maiboroda, James Henstridge]
+* gtkdemo improvements [Kristian Rietveld]
+* Drag and drop fixes to generic code and widgets 
+  [Owen Taylor, Damian Ivereigh]
+* Documentation improvement [Havoc Pennington, Matthias Clasen]
+* Spelling fixes [Jacob Berkman]
+* Move signals to the GtkEditable interface [Kristian]
+* Further stock image improvements [Jakub Steiner]
+* Support text chunks for the PGN loader, add gdk_pixbuf_get_option()
+  [Sven Neumann]
+* Rename gdk_pixbuf_new_from_stream back to new_from_inline [Owen]
+* Automatically call setlocale(), unless explictely disabled [Owen]
+* Property addition to various widgets [Michael Meeks, Owen]
+* Support building with automake-1.4 [James]
+* Make GtkRadioButton groups act as a single focus point [Owen]
+* Move gdk_window_lookup etc. to be cross-platform [Matthias]
+* Draw spinbuttons variably sized [Kristian]
+* Separate GdkAtom out from X atoms for compatibility with future
+  multihead changes [Owen]
+* Require gdk_threads_init() to be explicitly called instead
+  of piggybacking off of g_thread_init(). [Owen]
+* Improvements to text-view/label/entry popup menus [Damian, Jacob, Owen]
+* Bug fixes and cleanup [Matthias, others]
+
+Other Contributors:
+  Mark McLoughin, Mikael Hermansson, Soeren Sandmann, Anders Carlsson,
+  Tim Janik, Murray Cumming, Hidetoshi Tajima, Padraig O'Briain, 
+  Hans Breuer, Vitaly Tishkov, Dov Grobgeld
+ 
+
 Overview of Changes in GTK+ 1.3.9
 =================================
 
