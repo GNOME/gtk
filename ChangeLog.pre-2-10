@@ -1,3 +1,13 @@
+Sun Sep 29 14:22:47 2002 Manish Singh  <yosh@gimp.org>
+
+	* contrib/gdk-pixbuf-xlib/Makefile.am demos/Makefile.am
+	demos/gtk-demo/Makefile.am: add deprecation compile flags
+
+	* demos/testanimation.c demos/testpixbuf-save.c demos/testpixbuf.c
+	demos/gtk-demo/*.c gdk-pixbuf/gdk-pixbuf-animation.c
+	gdk-pixbuf/gdk-pixbuf.c: minor cleanups, getting rid of
+	unnecessary casts
+
 Sun Sep 29 13:11:13 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtktypeutils.h: use #defines instead of enum for

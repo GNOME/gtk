@@ -243,7 +243,7 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
 GdkPixbufAnimation *
 gdk_pixbuf_animation_ref (GdkPixbufAnimation *animation)
 {
-        return (GdkPixbufAnimation*) g_object_ref (G_OBJECT (animation));
+        return (GdkPixbufAnimation*) g_object_ref (animation);
 }
 
 /**
@@ -255,7 +255,7 @@ gdk_pixbuf_animation_ref (GdkPixbufAnimation *animation)
 void
 gdk_pixbuf_animation_unref (GdkPixbufAnimation *animation)
 {
-        g_object_unref (G_OBJECT (animation));
+        g_object_unref (animation);
 }
 
 /**

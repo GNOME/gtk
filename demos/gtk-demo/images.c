@@ -165,7 +165,7 @@ progressive_timeout (gpointer data)
 	      
 	      gtk_widget_show (dialog);
 
-	      g_object_unref (G_OBJECT (pixbuf_loader));
+	      g_object_unref (pixbuf_loader);
 	      pixbuf_loader = NULL;
 	      
 	      load_timeout = 0;
@@ -173,7 +173,7 @@ progressive_timeout (gpointer data)
 	      return FALSE; /* uninstall the timeout */
 	    }
 	  
-	  g_object_unref (G_OBJECT (pixbuf_loader));
+	  g_object_unref (pixbuf_loader);
 	  pixbuf_loader = NULL;
 	}
     }
@@ -227,16 +227,16 @@ progressive_timeout (gpointer data)
       if (pixbuf_loader)
 	{
 	  gdk_pixbuf_loader_close (pixbuf_loader, NULL);
-	  g_object_unref (G_OBJECT (pixbuf_loader));
+	  g_object_unref (pixbuf_loader);
 	  pixbuf_loader = NULL;
 	}
       
       pixbuf_loader = gdk_pixbuf_loader_new ();
       
-      g_signal_connect (G_OBJECT (pixbuf_loader), "area_prepared",
+      g_signal_connect (pixbuf_loader, "area_prepared",
 			G_CALLBACK (progressive_prepared_callback), image);
       
-      g_signal_connect (G_OBJECT (pixbuf_loader), "area_updated",
+      g_signal_connect (pixbuf_loader, "area_updated",
 			G_CALLBACK (progressive_updated_callback), image);
     }
 
@@ -272,7 +272,7 @@ cleanup_callback (GtkObject *object,
   if (pixbuf_loader)
     {
       gdk_pixbuf_loader_close (pixbuf_loader, NULL);
-      g_object_unref (G_OBJECT (pixbuf_loader));
+      g_object_unref (pixbuf_loader);
       pixbuf_loader = NULL;
     }
 
@@ -442,7 +442,7 @@ do_images (void)
       button = gtk_toggle_button_new_with_mnemonic ("_Insensitive");
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-      g_signal_connect (G_OBJECT (button), "toggled",
+      g_signal_connect (button, "toggled",
                         G_CALLBACK (toggle_sensitivity_callback),
                         vbox);
     }

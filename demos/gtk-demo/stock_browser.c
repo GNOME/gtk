@@ -34,7 +34,7 @@ stock_item_info_free (StockItemInfo *info)
   g_free (info->macro);
   g_free (info->accel_str);
   if (info->small_icon)
-    g_object_unref (G_OBJECT (info->small_icon));
+    g_object_unref (info->small_icon);
   
   g_free (info);
 }
@@ -53,7 +53,7 @@ stock_item_info_copy (StockItemInfo *src)
 
   info->small_icon = src->small_icon;
   if (info->small_icon)
-    g_object_ref (G_OBJECT (info->small_icon));
+    g_object_ref (info->small_icon);
 
   return info;
 }
@@ -190,7 +190,7 @@ create_model (void)
                                                 w, h,
                                                 GDK_INTERP_BILINEAR);
 
-              g_object_unref (G_OBJECT (info.small_icon));
+              g_object_unref (info.small_icon);
               info.small_icon = scaled;
             }
         }
@@ -215,7 +215,7 @@ create_model (void)
       g_free (info.macro);
       g_free (info.accel_str);
       if (info.small_icon)
-        g_object_unref (G_OBJECT (info.small_icon));
+        g_object_unref (info.small_icon);
       
       tmp_list = g_slist_next (tmp_list);
     }
@@ -436,7 +436,7 @@ do_stock_browser (void)
       
       treeview = gtk_tree_view_new_with_model (model);
 
-      g_object_unref (G_OBJECT (model));
+      g_object_unref (model);
 
       gtk_container_add (GTK_CONTAINER (sw), treeview);
       
@@ -524,7 +524,7 @@ do_stock_browser (void)
       selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
       gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
       
-      g_signal_connect (G_OBJECT (selection),
+      g_signal_connect (selection,
 			"changed",
 			G_CALLBACK (selection_changed),
 			NULL);

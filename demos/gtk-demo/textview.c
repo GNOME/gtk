@@ -84,7 +84,7 @@ create_tags (GtkTextBuffer *buffer)
   gtk_text_buffer_create_tag (buffer, "foreground_stipple",
 			      "foreground_stipple", stipple, NULL);
 
-  g_object_unref (G_OBJECT (stipple));
+  g_object_unref (stipple);
 
   gtk_text_buffer_create_tag (buffer, "big_gap_before_line",
 			      "pixels_above_lines", 30, NULL);
@@ -174,7 +174,7 @@ insert_text (GtkTextBuffer *buffer)
     }
 
   scaled = gdk_pixbuf_scale_simple (pixbuf, 32, 32, GDK_INTERP_BILINEAR);
-  g_object_unref (G_OBJECT (pixbuf));
+  g_object_unref (pixbuf);
   pixbuf = scaled;
   
   /* get start of buffer; each insertion will revalidate the
@@ -356,7 +356,7 @@ insert_text (GtkTextBuffer *buffer)
   gtk_text_buffer_get_bounds (buffer, &start, &end);
   gtk_text_buffer_apply_tag_by_name (buffer, "word_wrap", &start, &end);
 
-  g_object_unref (G_OBJECT (pixbuf));
+  g_object_unref (pixbuf);
 }
 
 static gboolean
@@ -393,7 +393,7 @@ attach_widgets (GtkTextView *text_view)
         {
           widget = gtk_button_new_with_label ("Click Me");
 
-          g_signal_connect (G_OBJECT (widget), "clicked",
+          g_signal_connect (widget, "clicked",
                             G_CALLBACK (easter_egg_callback),
                             NULL);
         }
@@ -583,7 +583,7 @@ easter_egg_callback (GtkWidget *button,
   
   recursive_attach_view (0, GTK_TEXT_VIEW (view), anchor);
   
-  g_object_unref (G_OBJECT (buffer));
+  g_object_unref (buffer);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   sw = gtk_scrolled_window_new (NULL, NULL);

@@ -96,7 +96,7 @@ gdk_pixbuf_finalize (GObject *object)
 GdkPixbuf *
 gdk_pixbuf_ref (GdkPixbuf *pixbuf)
 {
-        return (GdkPixbuf *) g_object_ref (G_OBJECT(pixbuf));
+        return (GdkPixbuf *) g_object_ref (pixbuf);
 }
 
 /**
@@ -110,7 +110,7 @@ gdk_pixbuf_ref (GdkPixbuf *pixbuf)
 void
 gdk_pixbuf_unref (GdkPixbuf *pixbuf)
 {
-        g_object_unref (G_OBJECT (pixbuf));
+        g_object_unref (pixbuf);
 }
 
 

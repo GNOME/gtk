@@ -100,7 +100,7 @@ keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
                                 g_error_free (err);
                         } else {
                                 compare_pixbufs (pixbuf, compare, "jpeg");
-                                g_object_unref (G_OBJECT (compare));
+                                g_object_unref (compare);
                         }
                                         
                 }
@@ -126,7 +126,7 @@ keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
                                 g_error_free (err);
                         } else {
                                 compare_pixbufs (pixbuf, compare, "png");
-                                g_object_unref (G_OBJECT (compare));
+                                g_object_unref (compare);
                         }
                                         
                 }

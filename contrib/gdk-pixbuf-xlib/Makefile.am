@@ -4,6 +4,8 @@ INCLUDES = @STRIP_BEGIN@			\
 	-I$(top_srcdir) -I$(top_builddir) 	\
 	-I$(top_srcdir)/gdk-pixbuf 		\
 	-I$(top_srcdir)/contrib 		\
+	-DG_DISABLE_DEPRECATED			\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED		\
 	@GDK_PIXBUF_XLIB_DEP_CFLAGS@		\
 @STRIP_END@
 

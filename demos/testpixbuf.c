@@ -464,7 +464,7 @@ update_timeout (gpointer data)
                 /* ignoring errors, we should not do that. */
 		gdk_pixbuf_loader_close (GDK_PIXBUF_LOADER (status->loader), NULL);
 		gtk_widget_queue_draw (*status->rgbwin);
-		g_object_unref (G_OBJECT (status->loader));
+		g_object_unref (status->loader);
 		fclose (status->imagefile);
 		g_free (status->buf);
 	}

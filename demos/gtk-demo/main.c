@@ -790,8 +790,8 @@ setup_default_icon (void)
       list = g_list_append (list, transparent);
       gtk_window_set_default_icon_list (list);
       g_list_free (list);
-      g_object_unref (G_OBJECT (pixbuf));
-      g_object_unref (G_OBJECT (transparent));
+      g_object_unref (pixbuf);
+      g_object_unref (transparent);
     }
 }
 

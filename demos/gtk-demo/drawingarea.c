@@ -26,7 +26,7 @@ scribble_configure_event (GtkWidget	    *widget,
 			  gpointer	     data)
 {
   if (pixmap)
-    g_object_unref (G_OBJECT (pixmap));
+    g_object_unref (pixmap);
 
   pixmap = gdk_pixmap_new (widget->window,
 			   widget->allocation.width,
@@ -209,8 +209,8 @@ checkerboard_expose (GtkWidget	    *da,
       ++xcount;
     }
   
-  g_object_unref (G_OBJECT (gc1));
-  g_object_unref (G_OBJECT (gc2));
+  g_object_unref (gc1);
+  g_object_unref (gc2);
   
   /* return TRUE because we've handled this event, so no
    * further processing is required.

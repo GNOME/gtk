@@ -53,7 +53,7 @@ destroy_context (gpointer data)
   if (lc->pixbuf_loader)
     {
       gdk_pixbuf_loader_close (lc->pixbuf_loader, NULL);
-      g_object_unref (G_OBJECT (lc->pixbuf_loader));
+      g_object_unref (lc->pixbuf_loader);
     }
   
   g_free (lc);
@@ -230,7 +230,7 @@ progressive_timeout (gpointer data)
               
               gtk_widget_show (dialog);
 
-              g_object_unref (G_OBJECT (lc->pixbuf_loader));
+              g_object_unref (lc->pixbuf_loader);
               lc->pixbuf_loader = NULL;
               
               lc->load_timeout = 0;
@@ -238,7 +238,7 @@ progressive_timeout (gpointer data)
               return FALSE; /* uninstall the timeout */
             }
           
-          g_object_unref (G_OBJECT (lc->pixbuf_loader));
+          g_object_unref (lc->pixbuf_loader);
           lc->pixbuf_loader = NULL;
         }
     }
@@ -271,7 +271,7 @@ progressive_timeout (gpointer data)
       if (lc->pixbuf_loader)
         {
           gdk_pixbuf_loader_close (lc->pixbuf_loader, NULL);
-          g_object_unref (G_OBJECT (lc->pixbuf_loader));
+          g_object_unref (lc->pixbuf_loader);
           lc->pixbuf_loader = NULL;
         }
       
@@ -357,10 +357,10 @@ do_image (const char *filename)
   
   start_progressive_loading (image);
 
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
 		    G_CALLBACK (gtk_main_quit), NULL);
   
-  g_signal_connect (G_OBJECT (window), "delete_event",
+  g_signal_connect (window, "delete_event",
 		    G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_widget_show_all (window);
@@ -411,10 +411,10 @@ do_nonprogressive (const gchar *filename)
   image = gtk_image_new_from_file (filename);
   gtk_container_add (GTK_CONTAINER (frame), image);
 
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
 		    G_CALLBACK (gtk_main_quit), NULL);
   
-  g_signal_connect (G_OBJECT (window), "delete_event",
+  g_signal_connect (window, "delete_event",
 		    G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_widget_show_all (window);

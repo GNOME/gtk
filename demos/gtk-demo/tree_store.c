@@ -276,8 +276,8 @@ add_columns (GtkTreeView *treeview)
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)ALEX_COLUMN);
 
-  g_signal_connect (G_OBJECT (renderer), "toggled", G_CALLBACK (item_toggled),
-		    model);
+  g_signal_connect (renderer, "toggled", G_CALLBACK (item_toggled), model);
+
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
 							    -1, "Alex",
 							    renderer,
@@ -299,8 +299,8 @@ add_columns (GtkTreeView *treeview)
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)HAVOC_COLUMN);
 
-  g_signal_connect (G_OBJECT (renderer), "toggled", G_CALLBACK (item_toggled),
-		    model);
+  g_signal_connect (renderer, "toggled", G_CALLBACK (item_toggled), model);
+
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
 							    -1, "Havoc",
 							    renderer,
@@ -321,8 +321,8 @@ add_columns (GtkTreeView *treeview)
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)TIM_COLUMN);
 
-  g_signal_connect (G_OBJECT (renderer), "toggled", G_CALLBACK (item_toggled),
-		    model);
+  g_signal_connect (renderer, "toggled", G_CALLBACK (item_toggled), model);
+
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
 							    -1, "Tim",
 							    renderer,
@@ -344,8 +344,8 @@ add_columns (GtkTreeView *treeview)
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)OWEN_COLUMN);
 
-  g_signal_connect (G_OBJECT (renderer), "toggled", G_CALLBACK (item_toggled),
-		    model);
+  g_signal_connect (renderer, "toggled", G_CALLBACK (item_toggled), model);
+
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
 							    -1, "Owen",
 							    renderer,
@@ -366,8 +366,8 @@ add_columns (GtkTreeView *treeview)
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)DAVE_COLUMN);
 
-  g_signal_connect (G_OBJECT (renderer), "toggled", G_CALLBACK (item_toggled),
-		    model);
+  g_signal_connect (renderer, "toggled", G_CALLBACK (item_toggled), model);
+
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
 							    -1, "Dave",
 							    renderer,
@@ -397,7 +397,7 @@ do_tree_store (void)
       /* create window, etc */
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Card planning sheet");
-      g_signal_connect (G_OBJECT (window), "destroy",
+      g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
 
       vbox = gtk_vbox_new (FALSE, 8);
@@ -421,7 +421,7 @@ do_tree_store (void)
 
       /* create tree view */
       treeview = gtk_tree_view_new_with_model (model);
-      g_object_unref (G_OBJECT (model));
+      g_object_unref (model);
       gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (treeview), TRUE);
       gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview)),
 				   GTK_SELECTION_MULTIPLE);
@@ -431,7 +431,7 @@ do_tree_store (void)
       gtk_container_add (GTK_CONTAINER (sw), treeview);
 
       /* expand all rows after the treeview widget has been realized */
-      g_signal_connect (G_OBJECT (treeview), "realize",
+      g_signal_connect (treeview, "realize",
 			G_CALLBACK (gtk_tree_view_expand_all), NULL);
       gtk_window_set_default_size (GTK_WINDOW (window), 650, 400);
     }

@@ -201,7 +201,7 @@ add_columns (GtkTreeView *treeview)
 
   /* number column */
   renderer = gtk_cell_renderer_text_new ();
-  g_signal_connect (G_OBJECT (renderer), "edited",
+  g_signal_connect (renderer, "edited",
 		    G_CALLBACK (cell_edited), model);
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)COLUMN_NUMBER);
 
@@ -213,7 +213,7 @@ add_columns (GtkTreeView *treeview)
 
   /* product column */
   renderer = gtk_cell_renderer_text_new ();
-  g_signal_connect (G_OBJECT (renderer), "edited",
+  g_signal_connect (renderer, "edited",
 		    G_CALLBACK (cell_edited), model);
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)COLUMN_PRODUCT);
 
@@ -240,7 +240,7 @@ do_editable_cells (void)
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Shopping list");
       gtk_container_set_border_width (GTK_CONTAINER (window), 5);
-      g_signal_connect (G_OBJECT (window), "destroy",
+      g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
 
       vbox = gtk_vbox_new (FALSE, 5);
@@ -263,7 +263,7 @@ do_editable_cells (void)
 
       /* create tree view */
       treeview = gtk_tree_view_new_with_model (model);
-      g_object_unref (G_OBJECT (model));
+      g_object_unref (model);
       gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (treeview), TRUE);
       gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview)),
 				   GTK_SELECTION_SINGLE);
@@ -277,12 +277,12 @@ do_editable_cells (void)
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
       button = gtk_button_new_with_label ("Add item");
-      g_signal_connect (G_OBJECT (button), "clicked",
+      g_signal_connect (button, "clicked",
 			G_CALLBACK (add_item), model);
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
       button = gtk_button_new_with_label ("Remove item");
-      g_signal_connect (G_OBJECT (button), "clicked",
+      g_signal_connect (button, "clicked",
 			G_CALLBACK (remove_item), treeview);
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 

@@ -109,7 +109,7 @@ add_columns (GtkTreeView *treeview)
 
   /* column for fixed toggles */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_signal_connect (G_OBJECT (renderer), "toggled",
+  g_signal_connect (renderer, "toggled",
 		    G_CALLBACK (fixed_toggled), model);
 
   column = gtk_tree_view_column_new_with_attributes ("Fixed?",
@@ -169,7 +169,7 @@ do_list_store (void)
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "GtkListStore demo");
 
-      g_signal_connect (G_OBJECT (window), "destroy",
+      g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
@@ -196,7 +196,7 @@ do_list_store (void)
       gtk_tree_view_set_search_column (GTK_TREE_VIEW (treeview),
 				       COLUMN_DESCRIPTION);
 
-      g_object_unref (G_OBJECT (model));
+      g_object_unref (model);
 
       gtk_container_add (GTK_CONTAINER (sw), treeview);
 

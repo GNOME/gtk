@@ -24,7 +24,7 @@ menuitem_cb (gpointer             callback_data,
                                     gtk_item_factory_path_from_widget (widget));
 
   /* Close dialog on user response */
-  g_signal_connect (G_OBJECT (dialog),
+  g_signal_connect (dialog,
                     "response",
                     G_CALLBACK (gtk_widget_destroy),
                     NULL);
@@ -73,7 +73,7 @@ toolbar_cb (GtkWidget *button,
                                    "You selected a toolbar button");
 
   /* Close dialog on user response */
-  g_signal_connect (G_OBJECT (dialog),
+  g_signal_connect (dialog,
                     "response",
                     G_CALLBACK (gtk_widget_destroy),
                     NULL);
@@ -137,14 +137,14 @@ register_stock_icons (void)
           icon_set = gtk_icon_set_new_from_pixbuf (transparent);
           gtk_icon_factory_add (factory, "demo-gtk-logo", icon_set);
           gtk_icon_set_unref (icon_set);
-          g_object_unref (G_OBJECT (pixbuf));
-          g_object_unref (G_OBJECT (transparent));
+          g_object_unref (pixbuf);
+          g_object_unref (transparent);
         }
       else
         g_warning ("failed to load GTK logo for toolbar");
       
       /* Drop our reference to the factory, GTK will hold a reference. */
-      g_object_unref (G_OBJECT (factory));
+      g_object_unref (factory);
     }
 }
 
@@ -208,7 +208,7 @@ do_appwindow (void)
       gtk_window_set_title (GTK_WINDOW (window), "Application Window");
 
       /* NULL window variable when window is closed */
-      g_signal_connect (G_OBJECT (window), "destroy",
+      g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed),
                         &window);
 
