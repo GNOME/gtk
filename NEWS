@@ -1,3 +1,38 @@
+Overview of Changes from GTK+ 2.5.0 to GTK+ 2.5.1
+=================================================
+* GtkTreeView
+ - Support ellipsisation in GtkCellRendererText [Vincent Untz, 
+  Jonathan Blandford, Anders Carlsson]
+ - Add a GtkCellRenderer::editing-started signal [Matthias Clasen]
+ - Typeahead support [Jonathan]
+ - Align the entry in GtkCellRendererText [Matthias]
+ - Make DND work again [Ernst Persson, Matthias]
+ - Improve appearance of search popup [Matthias]
+* GtkFileChooser
+ - Activate the last focused widget [Federico Mena Quintero]
+ - Add an "Add to shortcuts" item to the context menu [Federico]
+* GtkCombobox
+ - Support scrolling in list mode [Matthias]
+ - Add necessary API to make GtkComboBox accessible [Padraig O'Briain]
+ - Change the API for separators to use a callback function 
+   instead of a boolean model column [Matthias]
+* GtkNotebook
+ - Ignore scroll events from page content [Gabriel de Perthuis]
+* GtkAboutDialog
+ - Visual improvements [Anders]
+* GtkIconView
+ - Use XRender to draw selection rectangle [Anders]
+* GtkLabel
+ - Support ellipsisation [Tim Van Wassenhove, James M. Cape]
+* Expose the menubar accel key as an XSetting [Scott James Remnant]
+* Add example code for clipboard handling to gtk-demo [Anders]
+* Bug fixes [Peter Zelesny, Guilherme Salgado, John Finlay, 
+ Tommi Komulainen, Matthias, Crispin Flowerday, Padraig,
+ Morten Welinder, Olivier Sessink, Dafydd Harries, Soeren Sandmann,
+ Michael Natterer, Nicolas Deves, Matthew Garrett, Lorenzo Gil Sanchez]
+* Documentation improvements [Federico, Matthias]
+* Updated translations (gu,hi,pt_BR,ru,sv,uz)
+
 Overview of Changes from GTK+ 2.4.1 to GTK+ 2.5.0
 =================================================
 * New widgets: 

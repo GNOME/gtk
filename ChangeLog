@@ -1,3 +1,7 @@
+Sat Jul 31 23:17:44 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* NEWS: Updates
+
 Sat Jul 31 01:13:01 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwindow.c: 
@@ -11,7 +15,7 @@ Sat Jul 31 00:42:08 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_set_keep_below): 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_set_keep_above): Don't
-	set both states at once.  (#148789, Matthew Garret)
+	set both states at once.  (#148789, Matthew Garrett)
 
 2004-07-30  Matthias Clasen  <mclasen@redhat.com>
 
@@ -158,7 +162,7 @@ Mon Jul 26 00:38:27 2004  Matthias Clasen  <maclas@gmx.de>
 	large to fit in the popup.  (#135543)
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_popup_widget): Add a 
-	scrolled window to the popup in list mode.
+o	scrolled window to the popup in list mode.
 	(gtk_combo_box_list_position): Calculate the height of the
 	popup so that it fits on the screen, set the scrollbar policy
 	of the scrolled window appropriately.
