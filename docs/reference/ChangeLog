@@ -1,3 +1,7 @@
+Mon Aug 16 01:44:30 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Updates.
+
 Thu Aug 12 00:00:12 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkuimanager.sgml: Add some information about
