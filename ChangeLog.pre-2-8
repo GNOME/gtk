@@ -1,5 +1,11 @@
 2004-11-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkbutton.c: 
+	* gtk/gtkimagemenuitem.c: Don't use one signal handler per
+	instance to track changes to the gtk-menu-images and
+	gtk-button-images settings. Instead use a single handler which 
+	iterates over the widget hierarchy. (#143668)
+
 	* gtk/gtktreemodel.c (gtk_tree_path_prev): Return FALSE if
 	depth is 0 (noticed by Tim Janik)
 

@@ -32,16 +32,8 @@
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
 #include "gtkimage.h"
-
-typedef struct _GtkImageMenuItemPrivate GtkImageMenuItemPrivate;
-
-struct _GtkImageMenuItemPrivate 
-{
-  GtkSettings *settings;
-  guint        show_image_connection;
-};
-
-#define GTK_IMAGE_MENU_ITEM_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_IMAGE_MENU_ITEM, GtkImageMenuItemPrivate))
+#include "gtkcontainer.h"
+#include "gtkwindow.h"
 
 static void gtk_image_menu_item_class_init           (GtkImageMenuItemClass *klass);
 static void gtk_image_menu_item_init                 (GtkImageMenuItem      *image_menu_item);
@@ -146,8 +138,7 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
 						       P_("Whether images should be shown in menus"),
 						       TRUE,
 						       G_PARAM_READWRITE));
-
-  g_type_class_add_private (gobject_class, sizeof (GtkImageMenuItemPrivate));  
+  
 }
 
 static void
@@ -551,44 +542,64 @@ gtk_image_menu_item_remove (GtkContainer *container,
 static void 
 show_image_change_notify (GtkImageMenuItem *image_menu_item)
 {
-  if (image_menu_item->image) 
-    g_object_set (image_menu_item->image, "visible", show_image (image_menu_item), NULL);
+  if (image_menu_item->image)
+    {
+      if (show_image (image_menu_item))
+	gtk_widget_show (image_menu_item->image);
+      else
+	gtk_widget_hide (image_menu_item->image);
+    }
+}
+
+static void
+traverse_container (GtkWidget *widget,
+		    gpointer   data)
+{
+  if (GTK_IS_IMAGE_MENU_ITEM (widget))
+    show_image_change_notify (GTK_IMAGE_MENU_ITEM (widget));
+  else if (GTK_IS_CONTAINER (widget))
+    gtk_container_forall (GTK_CONTAINER (widget), traverse_container, NULL);
+}
+
+static void
+gtk_image_menu_item_setting_changed (GtkSettings *settings)
+{
+  GList *list;
+
+  list = gtk_window_list_toplevels ();
+
+  for (; list; list = list->next)
+    gtk_container_forall (GTK_CONTAINER (list->data), traverse_container, NULL);
+
+  g_list_free (list);  
 }
 
 static void
 gtk_image_menu_item_screen_changed (GtkWidget *widget,
 				    GdkScreen *previous_screen)
 {
-  GtkImageMenuItemPrivate *priv = GTK_IMAGE_MENU_ITEM_GET_PRIVATE (widget);
   GtkSettings *settings;
+  guint show_image_connection;
 
-  if (gtk_widget_has_screen (widget))
-    settings = gtk_widget_get_settings (widget);
-  else
-    settings = NULL;
-
-  if (settings == priv->settings)
+  if (!gtk_widget_has_screen (widget))
     return;
 
-  if (priv->settings)
-    {
-      g_signal_handler_disconnect (priv->settings, priv->show_image_connection);
-      g_object_unref (priv->settings);
-    }
+  settings = gtk_widget_get_settings (widget);
+  
+  show_image_connection = 
+    GPOINTER_TO_INT (g_object_get_data (G_OBJECT (settings), 
+					"gtk-image-menu-item-connection"));
+  
+  if (show_image_connection)
+    return;
 
-  if (settings)
-    {
-      priv->show_image_connection =
-	g_signal_connect_swapped (settings,
-				  "notify::gtk-menu-images",
-				  G_CALLBACK (show_image_change_notify),
-				  widget);
-
-      g_object_ref (settings);
-      priv->settings = settings;
-    }
-  else
-    priv->settings = NULL;
+  show_image_connection =
+    g_signal_connect (settings, "notify::gtk-menu-images",
+		      G_CALLBACK (gtk_image_menu_item_setting_changed), 0);
+  g_object_set_data (G_OBJECT (settings), 
+		     "gtk-image-menu-item-connection",
+		     GINT_TO_POINTER (show_image_connection));
 
   show_image_change_notify (GTK_IMAGE_MENU_ITEM (widget));
 }
+

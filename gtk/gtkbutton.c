@@ -76,8 +76,6 @@ struct _GtkButtonPrivate
 {
   gfloat       xalign;
   gfloat       yalign;
-  GtkSettings *settings;
-  guint        show_image_connection;
   GtkWidget   *image;
   guint        align_set : 1;
 };
@@ -1613,43 +1611,63 @@ show_image_change_notify (GtkButton *button)
   GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
 
   if (priv->image) 
-    g_object_set (priv->image, "visible", show_image (button), NULL);
+    {
+      if (show_image (button))
+	gtk_widget_show (priv->image);
+      else
+	gtk_widget_hide (priv->image);
+    }
 }
+
+static void
+traverse_container (GtkWidget *widget,
+		    gpointer   data)
+{
+  if (GTK_IS_BUTTON (widget))
+    show_image_change_notify (GTK_BUTTON (widget));
+  else if (GTK_IS_CONTAINER (widget))
+    gtk_container_forall (GTK_CONTAINER (widget), traverse_container, NULL);
+}
+
+static void
+gtk_button_setting_changed (GtkSettings *settings)
+{
+  GList *list;
+
+  list = gtk_window_list_toplevels ();
+
+  for (; list; list = list->next)
+    gtk_container_forall (GTK_CONTAINER (list->data), traverse_container, NULL);
+
+  g_list_free (list);
+}
+
 
 static void
 gtk_button_screen_changed (GtkWidget *widget,
 			   GdkScreen *previous_screen)
 {
-  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (widget);
   GtkSettings *settings;
+  guint show_image_connection;
 
-  if (gtk_widget_has_screen (widget))
-    settings = gtk_widget_get_settings (widget);
-  else
-    settings = NULL;
-
-  if (settings == priv->settings)
+  if (!gtk_widget_has_screen (widget))
     return;
 
-  if (priv->settings)
-    {
-      g_signal_handler_disconnect (priv->settings, priv->show_image_connection);
-      g_object_unref (priv->settings);
-    }
+  settings = gtk_widget_get_settings (widget);
 
-  if (settings)
-    {
-      priv->show_image_connection =
-	g_signal_connect_swapped (settings,
-				  "notify::gtk-button-images",
-				  G_CALLBACK (show_image_change_notify),
-				  widget);
+  show_image_connection = 
+    GPOINTER_TO_INT (g_object_get_data (G_OBJECT (settings), 
+					"gtk-button-connection"));
+  
+  if (show_image_connection)
+    return;
 
-      g_object_ref (settings);
-      priv->settings = settings;
-    }
-  else
-    priv->settings = NULL;
+  show_image_connection =
+    g_signal_connect (settings, "notify::gtk-button-images",
+		      G_CALLBACK (gtk_button_setting_changed), 0);
+  g_object_set_data (G_OBJECT (settings), 
+		     "gtk-button-connection",
+		     GINT_TO_POINTER (show_image_connection));
 
   show_image_change_notify (GTK_BUTTON (widget));
 }
