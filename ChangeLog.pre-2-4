@@ -1,3 +1,12 @@
+Wed Feb 25 22:56:42 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkspinbutton.h: 
+	* gtk/gtkspinbutton.c:
+ 	new widget from Lars Hamann <hamann@braunschweig.netsurf.de> and
+	Stefan Jeske <jeske@braunschweig.netsurf.de>.
+
+	* gtk/gtknotebook.c: fixups from lars and stefan.
+
 Wed Feb 25 13:18:53 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkbbox.[ch] gtk/gtkhbox.[ch] gtk/gtkvbox.[ch] :

@@ -1778,33 +1778,37 @@ gtk_real_notebook_switch_page (GtkNotebook     *notebook,
 			       GtkNotebookPage *page)
 {
   g_return_if_fail (notebook != NULL);
+  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
   g_return_if_fail (page != NULL);
 
-  if (notebook->cur_page != page)
+  if (notebook->cur_page == page)
+    return;
+
+  if (notebook->cur_page && GTK_WIDGET_MAPPED (notebook->cur_page->child))
+    gtk_widget_unmap (notebook->cur_page->child);
+  
+  notebook->cur_page = page;
+
+  if (notebook->focus_tab->data != (gpointer) notebook->cur_page)
+    notebook->focus_tab = 
+      g_list_find (notebook->children, notebook->cur_page);
+
+  gtk_notebook_pages_allocate (notebook, &GTK_WIDGET (notebook)->allocation);
+
+  if (GTK_WIDGET_MAPPED (notebook))
     {
-      if (notebook->cur_page && GTK_WIDGET_MAPPED (notebook->cur_page->child))
-	gtk_widget_unmap (notebook->cur_page->child);
-
-      notebook->cur_page = page;
-      gtk_notebook_pages_allocate (notebook, &GTK_WIDGET (notebook)->allocation);
-
-      if (GTK_WIDGET_MAPPED (notebook))
+      if (GTK_WIDGET_REALIZED (notebook->cur_page->child))
+	gtk_widget_map (notebook->cur_page->child);
+      else
 	{
-	  if (GTK_WIDGET_REALIZED (notebook->cur_page->child))
-	    {
-	      gtk_widget_map (notebook->cur_page->child);
-	    }
-	  else
-	    {
-	      gtk_widget_map (notebook->cur_page->child);
-	      gtk_widget_size_allocate (GTK_WIDGET (notebook), 
-					&GTK_WIDGET (notebook)->allocation);
-	    }
+	  gtk_widget_map (notebook->cur_page->child);
+	  gtk_widget_size_allocate (GTK_WIDGET (notebook), 
+				    &GTK_WIDGET (notebook)->allocation);
 	}
-
-      if (GTK_WIDGET_DRAWABLE (notebook))
-	gtk_widget_queue_draw (GTK_WIDGET (notebook));
     }
+  
+  if (GTK_WIDGET_DRAWABLE (notebook))
+    gtk_widget_queue_draw (GTK_WIDGET (notebook));
 }
 
 static void
@@ -2539,6 +2543,10 @@ gtk_notebook_menu_switch_page (GtkWidget *widget,
 
   notebook = GTK_NOTEBOOK (gtk_menu_get_attach_widget 
 			   (GTK_MENU (widget->parent)));
+
+  if (notebook->cur_page == page)
+    return;
+
   page_num = 0;
   children = notebook->children;
   while (children && children->data != page)
@@ -2557,7 +2565,14 @@ static void
 gtk_notebook_switch_page (GtkNotebook     *notebook,
 			  GtkNotebookPage *page,
 			  gint             page_num)
-{
+{ 
+  g_return_if_fail (notebook != NULL);
+  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
+  g_return_if_fail (page != NULL);
+ 
+  if (notebook->cur_page == page)
+    return;
+
   gtk_signal_emit (GTK_OBJECT (notebook), 
 		   notebook_signals[SWITCH_PAGE], 
 		   page,

@@ -1636,8 +1636,174 @@ create_entry ()
 
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show (window);
-  /*  else
-    gtk_widget_destroy (window); */
+  else
+    gtk_widget_destroy (window);
+}
+
+GtkWidget *spinner1;
+
+static void
+toggle_snap (GtkWidget *widget, GtkSpinButton *spin)
+{
+  if (GTK_TOGGLE_BUTTON (widget)->active)
+    gtk_spin_button_set_update_policy (spin, GTK_UPDATE_ALWAYS 
+				       | GTK_UPDATE_SNAP_TO_TICKS);
+  else
+    gtk_spin_button_set_update_policy (spin, GTK_UPDATE_ALWAYS);
+}
+
+static void
+change_digits (GtkWidget *widget, GtkSpinButton *spin)
+{
+  gtk_spin_button_set_digits (GTK_SPIN_BUTTON (spinner1), 
+			      gtk_spin_button_get_value_as_int (spin));
+}
+
+static void
+create_spins ()
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *frame;
+  GtkWidget *hbox;
+  GtkWidget *main_vbox;
+  GtkWidget *vbox;
+  GtkWidget *vbox2;
+  GtkWidget *spinner2;
+  GtkWidget *spinner;
+  GtkWidget *button;
+  GtkWidget *label;
+  GtkAdjustment *adj;
+
+  if (!window)
+    {
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC (destroy_window),
+			  &window);
+      gtk_signal_connect (GTK_OBJECT (window), "delete_event",
+			  GTK_SIGNAL_FUNC (destroy_window),
+			  &window);
+      
+      gtk_window_set_title (GTK_WINDOW (window), "GtkSpinButton");
+      
+      main_vbox = gtk_vbox_new (FALSE, 5);
+      gtk_container_border_width (GTK_CONTAINER (main_vbox), 10);
+      gtk_container_add (GTK_CONTAINER (window), main_vbox);
+      
+      frame = gtk_frame_new ("Not accelerated");
+      gtk_box_pack_start (GTK_BOX (main_vbox), frame, TRUE, TRUE, 0);
+      
+      vbox = gtk_vbox_new (FALSE, 0);
+      gtk_container_border_width (GTK_CONTAINER (vbox), 5);
+      gtk_container_add (GTK_CONTAINER (frame), vbox);
+      
+      /* Day, month, year spinners */
+      
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 5);
+      
+      vbox2 = gtk_vbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, TRUE, 5);
+      
+      label = gtk_label_new ("Day :");
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
+      
+      adj = (GtkAdjustment *) gtk_adjustment_new (1.0, 1.0, 31.0, 1.0,
+						  5.0, 0.0);
+      spinner = gtk_spin_button_new (adj, 0, 0);
+      gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
+
+      vbox2 = gtk_vbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, TRUE, 5);
+      
+      label = gtk_label_new ("Month :");
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
+      
+      adj = (GtkAdjustment *) gtk_adjustment_new (1.0, 1.0, 12.0, 1.0,
+						  5.0, 0.0);
+      spinner = gtk_spin_button_new (adj, 0, 0);
+      gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
+      
+      vbox2 = gtk_vbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, TRUE, 5);
+
+      label = gtk_label_new ("Year :");
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
+
+      adj = (GtkAdjustment *) gtk_adjustment_new (1998.0, 0.0, 2100.0, 
+						  1.0, 100.0, 0.0);
+      spinner = gtk_spin_button_new (adj, 0, 0);
+      gtk_widget_set_usize (spinner, 55, 0);
+      gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
+
+      frame = gtk_frame_new ("Accelerated");
+      gtk_box_pack_start (GTK_BOX (main_vbox), frame, TRUE, TRUE, 0);
+  
+      vbox = gtk_vbox_new (FALSE, 0);
+      gtk_container_border_width (GTK_CONTAINER (vbox), 5);
+      gtk_container_add (GTK_CONTAINER (frame), vbox);
+      
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
+      
+      vbox2 = gtk_vbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, TRUE, 5);
+      
+      label = gtk_label_new ("Value :");
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
+
+      adj = (GtkAdjustment *) gtk_adjustment_new (0.0, 0.0, 10000.0,
+						  1.0, 100.0, 0.0);
+      spinner1 = gtk_spin_button_new (adj, 1.0, 3);
+      gtk_widget_set_usize (spinner1, 120, 0);
+      gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spinner1),
+					 GTK_UPDATE_ALWAYS);
+      gtk_box_pack_start (GTK_BOX (vbox2), spinner1, FALSE, TRUE, 0);
+
+      vbox2 = gtk_vbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, TRUE, 0);
+
+      label = gtk_label_new ("Digits :");
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
+
+      adj = (GtkAdjustment *) gtk_adjustment_new (3.0, 0.0, 8.0,
+						  1.0, 3.0, 0.0);
+      spinner2 = gtk_spin_button_new (adj, 0.0, 0);
+      gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
+			  GTK_SIGNAL_FUNC (change_digits),
+			  (gpointer) spinner2);
+      gtk_box_pack_start (GTK_BOX (vbox2), spinner2, FALSE, TRUE, 0);
+
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
+
+      button = gtk_check_button_new_with_label ("Snap to ticks");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (toggle_snap),
+			  spinner1);
+      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, TRUE, 0);
+      gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (button), TRUE);
+
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, TRUE, 0);
+  
+      button = gtk_button_new_with_label ("Close");
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC (gtk_widget_destroy),
+				 GTK_OBJECT (window));
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
 }
 
 /*
@@ -4377,6 +4543,7 @@ create_main_window ()
       { "scrolled windows", create_scrolled_windows },
       { "drawing areas", NULL },
       { "entry", create_entry },
+      { "spinbutton", create_spins },
       { "list", create_list },
       { "clist", create_clist},
       { "color selection", create_color_selection },
