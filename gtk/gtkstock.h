@@ -109,6 +109,7 @@ void          gtk_stock_item_free (GtkStockItem       *item);
 #define GTK_STOCK_JUSTIFY_LEFT     "gtk-justify-left"
 #define GTK_STOCK_JUSTIFY_RIGHT    "gtk-justify-right"
 #define GTK_STOCK_MISSING_IMAGE    "gtk-missing-image"
+#define GTK_STOCK_NETWORK          "gtk-network"
 #define GTK_STOCK_NEW              "gtk-new"
 #define GTK_STOCK_NO               "gtk-no"
 #define GTK_STOCK_OK               "gtk-ok"

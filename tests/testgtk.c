@@ -12592,7 +12592,12 @@ struct {
   gboolean do_not_benchmark;
 } buttons[] =
 {
+#ifdef G_OS_WIN32
+  /* dog slow on NT, no working at all on 9x */
+  { "big windows", create_big_windows, TRUE },
+#else
   { "big windows", create_big_windows },
+#endif
   { "button box", create_button_box },
   { "buttons", create_buttons },
   { "check buttons", create_check_buttons },
@@ -12600,8 +12605,8 @@ struct {
   { "color selection", create_color_selection },
   { "ctree", create_ctree },
   { "cursors", create_cursors },
-  { "dialog", create_dialog },
-  { "display & screen", create_display_screen },
+  { "dialog", create_dialog, TRUE },
+  { "display & screen", create_display_screen, TRUE },
   { "entry", create_entry },
   { "event box", create_event_box },
   { "event watcher", create_event_watcher },
@@ -12610,7 +12615,7 @@ struct {
   { "focus", create_focus },
   { "font selection", create_font_selection },
   { "gamma curve", create_gamma_curve, TRUE },
-  { "gridded geometry", create_gridded_geometry, TRUE },
+  { "gridded geometry", create_gridded_geometry },
   { "handle box", create_handle_box },
   { "image from drawable", create_get_image },
   { "image", create_image },

@@ -64,6 +64,8 @@ VARIABLES = \
 	stock_last_24		stock_last_24.png	\
 	stock_left_arrow_16		stock_left_arrow_16.png	\
 	stock_left_arrow_24		stock_left_arrow_24.png	\
+	stock_network_16		stock_network_16.png	\
+	stock_network_24		stock_network_24.png	\
 	stock_new_16		stock_new_16.png	\
 	stock_new_24		stock_new_24.png	\
 	stock_no_20		stock_no_20.png	\
@@ -112,12 +114,16 @@ VARIABLES = \
 	stock_stop_24		stock_stop_24.png	\
 	stock_text_bold_16		stock_text_bold_16.png	\
 	stock_text_bold_24		stock_text_bold_24.png	\
+	stock_text_indent_16		stock_text_indent_16.png	\
+	stock_text_indent_24		stock_text_indent_24.png	\
 	stock_text_italic_16		stock_text_italic_16.png	\
 	stock_text_italic_24		stock_text_italic_24.png	\
 	stock_text_strikethrough_16		stock_text_strikethrough_16.png	\
 	stock_text_strikethrough_24		stock_text_strikethrough_24.png	\
 	stock_text_underline_16		stock_text_underline_16.png	\
 	stock_text_underline_24		stock_text_underline_24.png	\
+	stock_text_unindent_16		stock_text_unindent_16.png	\
+	stock_text_unindent_24		stock_text_unindent_24.png	\
 	stock_top_16		stock_top_16.png	\
 	stock_top_24		stock_top_24.png	\
 	stock_trash_16		stock_trash_16.png	\

@@ -1,3 +1,19 @@
+2004-01-28  Hans Breuer  <hans@breuer.org>
+
+	* gtk/stock-icons/stock_network_(16|24).png : new GTK_STOCK_NETWORK ...
+	  gtk/gtkstock.[hc] : ... define ...
+	  gtk/gtkiconfactory.c : ... register ...
+	  gtk/stock-icons/Makefile.am gtk/stock-icons/makefile.msc : ... compile ...
+	* gtk/gtkfilesystemwin32.c : ... and use. Also adapt to recent 
+	IFace changes.
+
+	* gtk/gtk.def : added a bunch of new exported symbols
+
+	* tests/testfilechooser.c (no_backup_files_filter) : don't crash
+	on filter_info->display_name being NULL
+
+	* tests/testgtk.c : make testgtk --bench=all work again
+
 Wed Jan 28 21:40:47 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_action_data_func):

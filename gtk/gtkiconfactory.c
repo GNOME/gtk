@@ -562,6 +562,10 @@ get_default_icons (GtkIconFactory *factory)
 	     16, stock_missing_image_16,
 	     24, stock_missing_image_24);
 
+  add_icon2 (factory, GTK_STOCK_NETWORK,
+	     16, stock_network_16,
+	     24, stock_network_24);
+
   add_icon2 (factory, GTK_STOCK_NEW,
 	     16, stock_new_16,
 	     24, stock_new_24);

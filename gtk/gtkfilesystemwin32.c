@@ -89,11 +89,9 @@ static void           gtk_file_system_win32_init             (GtkFileSystemWin32
 static void           gtk_file_system_win32_finalize         (GObject                  *object);
 
 static GSList *       gtk_file_system_win32_list_volumes     (GtkFileSystem      *file_system);
-static GSList *       gtk_file_system_win32_list_roots       (GtkFileSystem            *file_system);
-static GtkFileInfo *  gtk_file_system_win32_get_root_info    (GtkFileSystem            *file_system,
-							      const GtkFilePath        *path,
-							      GtkFileInfoType           types,
-							      GError                  **error);
+static GtkFileSystemVolume *gtk_file_system_win32_get_volume_for_path (GtkFileSystem     *file_system,
+                                                                       const GtkFilePath *path);
+
 static GtkFileFolder *gtk_file_system_win32_get_folder       (GtkFileSystem            *file_system,
 							      const GtkFilePath        *path,
 							      GtkFileInfoType           types,
@@ -251,9 +249,8 @@ static void
 gtk_file_system_win32_iface_init (GtkFileSystemIface *iface)
 {
   iface->list_volumes = gtk_file_system_win32_list_volumes;
-  iface->list_roots = gtk_file_system_win32_list_roots;
+  iface->get_volume_for_path = gtk_file_system_win32_get_volume_for_path;
   iface->get_folder = gtk_file_system_win32_get_folder;
-  iface->get_root_info = gtk_file_system_win32_get_root_info;
   iface->create_folder = gtk_file_system_win32_create_folder;
   iface->volume_free = gtk_file_system_win32_volume_free;
   iface->volume_get_base_path = gtk_file_system_win32_volume_get_base_path;
@@ -318,62 +315,21 @@ gtk_file_system_win32_list_volumes (GtkFileSystem *file_system)
   return list;
 }
 
-/* to be removed */
-static GSList *
-gtk_file_system_win32_list_roots (GtkFileSystem *file_system)
+static GtkFileSystemVolume *
+gtk_file_system_win32_get_volume_for_path (GtkFileSystem     *file_system,
+                                           const GtkFilePath *path)
 {
-  GSList *volumes, *v;
-  GSList *list = NULL;
+  GtkFileSystemVolume *vol = g_new0 (GtkFileSystemVolume, 1);
+  gchar* p = g_strndup (path, 3);
 
-  volumes = gtk_file_system_win32_list_volumes (file_system);
+  g_return_val_if_fail (p != NULL, NULL);
 
-  for (v = volumes; v; v = v->next)
-    {
-      GtkFileSystemVolume *vol = v->data;
+  /*FIXME: gtk_file_path_compare() is case sensitive, we are not*/
+  p[0] = toupper (p[0]);
+  vol->drive = p;
+  vol->is_mounted = (p[0] != 'a' && p[0] != 'b');
 
-      if (vol->is_mounted)
-        list = g_slist_append (list, g_strndup (vol->drive, 2));
-    }
-
-  return list;
-}
-
-static GtkFileInfo *
-gtk_file_system_win32_get_root_info (GtkFileSystem    *file_system,
-				    const GtkFilePath *path,
-				    GtkFileInfoType    types,
-				    GError           **error)
-{
-  /* needed _with_ the trailing backslash */
-  gchar *filename = g_strconcat(gtk_file_path_get_string (path), "\\", NULL);
-  GtkFileInfo *info;
-  DWORD dt = GetDriveType (filename);
-
-  info = filename_get_info (filename, types, error);
-
-  /* additional info */
-  if (GTK_FILE_INFO_DISPLAY_NAME & types)
-    {
-      gchar display_name[80];
-
-      if (GetVolumeInformation (filename, 
-                                display_name, sizeof(display_name),
-                                NULL, /* serial number */
-                                NULL, /* max. component length */
-                                NULL, /* fs flags */
-                                NULL, 0)) /* fs type like FAT, NTFS */
-        {
-          gchar* real_display_name = g_strconcat (display_name, " (", filename, ")", NULL);
-
-          gtk_file_info_set_display_name (info, real_display_name);
-          g_free (real_display_name);
-        }
-      else
-        gtk_file_info_set_display_name (info, filename);
-    }
-
-  g_free (filename);
-  return info;
+  return vol;
 }
 
 static GtkFileFolder *
@@ -499,7 +455,8 @@ gtk_file_system_win32_volume_render_icon (GtkFileSystem        *file_system,
       icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_CDROM);
       break;
     case DRIVE_REMOTE :
-      /*FIXME: need a network stock icon*/
+      icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_NETWORK);
+      break;
     case DRIVE_FIXED :
       icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_HARDDISK);
       break;

@@ -90,7 +90,7 @@ static gboolean
 no_backup_files_filter (const GtkFileFilterInfo *filter_info,
 			gpointer                 data)
 {
-  gsize len = strlen (filter_info->display_name);
+  gsize len = filter_info->display_name ? strlen (filter_info->display_name) : 0;
   if (len > 0 && filter_info->display_name[len - 1] == '~')
     return 0;
   else

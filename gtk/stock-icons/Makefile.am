@@ -60,6 +60,8 @@ IMAGES = \
 	stock_last_24.png 		\
 	stock_left_arrow_16.png		\
 	stock_left_arrow_24.png 	\
+	stock_network_16.png		\
+	stock_network_24.png		\
 	stock_new_16.png		\
 	stock_new_24.png		\
 	stock_no_20.png			\
@@ -202,6 +204,8 @@ VARIABLES3 = \
 	stock_left_arrow_24	$(srcdir)/stock_left_arrow_24.png	\
 	stock_missing_image_16	$(srcdir)/stock_broken_image_16.png	\
 	stock_missing_image_24	$(srcdir)/stock_broken_image_24.png	\
+	stock_network_16		$(srcdir)/stock_network_16.png		\
+	stock_network_24		$(srcdir)/stock_network_24.png		\
 	stock_new_16		$(srcdir)/stock_new_16.png		\
 	stock_new_24		$(srcdir)/stock_new_24.png		\
 	stock_no_20         	$(srcdir)/stock_no_20.png  		\

@@ -1,5 +1,6 @@
 EXPORTS
 	gtk_accel_flags_get_type
+	gtk_accel_group_activate
 	gtk_accel_group_connect
 	gtk_accel_group_connect_by_path
 	gtk_accel_group_disconnect
@@ -28,9 +29,11 @@ EXPORTS
 	gtk_accel_map_load
 	gtk_accel_map_load_fd
 	gtk_accel_map_load_scanner
+	gtk_accel_map_lock_path
 	gtk_accel_map_lookup_entry
 	gtk_accel_map_save
 	gtk_accel_map_save_fd
+	gtk_accel_map_unlock_path
 	gtk_accelerator_get_default_mod_mask
 	gtk_accelerator_name
 	gtk_accelerator_parse
@@ -49,8 +52,11 @@ EXPORTS
 	gtk_action_disconnect_proxy
 	gtk_action_get_name
 	gtk_action_get_proxies
+	gtk_action_get_sensitive
 	gtk_action_get_type
+	gtk_action_get_visible
 	gtk_action_group_add_action
+	gtk_action_group_add_action_with_accel
 	gtk_action_group_add_actions
 	gtk_action_group_add_actions_full
 	gtk_action_group_add_radio_actions
@@ -59,12 +65,19 @@ EXPORTS
 	gtk_action_group_add_toggle_actions_full
 	gtk_action_group_get_action
 	gtk_action_group_get_name
+	gtk_action_group_get_sensitive
 	gtk_action_group_get_type
+	gtk_action_group_get_visible
 	gtk_action_group_list_actions
 	gtk_action_group_new
 	gtk_action_group_remove_action
+	gtk_action_group_set_sensitive
 	gtk_action_group_set_translate_func
 	gtk_action_group_set_translation_domain
+	gtk_action_group_set_visible
+	gtk_action_is_sensitive
+	gtk_action_is_visible
+	gtk_action_new
 	gtk_action_set_accel_group
 	gtk_action_set_accel_path
 	gtk_action_unblock_activate_from
@@ -132,6 +145,7 @@ EXPORTS
 	gtk_button_box_style_get_type
 	gtk_button_clicked
 	gtk_button_enter
+	gtk_button_get_alignment
 	gtk_button_get_focus_on_click
 	gtk_button_get_label
 	gtk_button_get_relief
@@ -145,6 +159,7 @@ EXPORTS
 	gtk_button_new_with_mnemonic
 	gtk_button_pressed
 	gtk_button_released
+	gtk_button_set_alignment
 	gtk_button_set_focus_on_click
 	gtk_button_set_label
 	gtk_button_set_relief
@@ -175,9 +190,11 @@ EXPORTS
 	gtk_cell_layout_get_type
 	gtk_cell_layout_pack_end
 	gtk_cell_layout_pack_start
+	gtk_cell_layout_reorder
 	gtk_cell_layout_set_attributes
 	gtk_cell_layout_set_cell_data_func
 	gtk_cell_renderer_activate
+	gtk_cell_renderer_editing_canceled
 	gtk_cell_renderer_get_fixed_size
 	gtk_cell_renderer_get_size
 	gtk_cell_renderer_get_type
@@ -199,6 +216,7 @@ EXPORTS
 	gtk_cell_renderer_toggle_set_radio
 	gtk_cell_type_get_type
 	gtk_cell_view_get_displayed_row
+	gtk_cell_view_get_size_of_row
 	gtk_cell_view_get_type
 	gtk_cell_view_menu_item_get_type
 	gtk_cell_view_menu_item_new
@@ -239,11 +257,13 @@ EXPORTS
 	gtk_clipboard_get_owner
 	gtk_clipboard_get_type
 	gtk_clipboard_request_contents
+	gtk_clipboard_request_targets
 	gtk_clipboard_request_text
 	gtk_clipboard_set_text
 	gtk_clipboard_set_with_data
 	gtk_clipboard_set_with_owner
 	gtk_clipboard_wait_for_contents
+	gtk_clipboard_wait_for_targets
 	gtk_clipboard_wait_for_text
 	gtk_clipboard_wait_is_text_available
 	gtk_clist_append
@@ -360,6 +380,8 @@ EXPORTS
 	gtk_combo_box_entry_get_text_column
 	gtk_combo_box_entry_get_type
 	gtk_combo_box_entry_new
+	gtk_combo_box_entry_new_with_model
+	gtk_combo_box_entry_set_text_column
 	gtk_combo_box_get_active
 	gtk_combo_box_get_active_iter
 	gtk_combo_box_get_model
@@ -367,17 +389,18 @@ EXPORTS
 	gtk_combo_box_insert_text
 	gtk_combo_box_new
 	gtk_combo_box_new_text
+	gtk_combo_box_new_with_model
 	gtk_combo_box_prepend_text
+	gtk_combo_box_remove_text
 	gtk_combo_box_set_active
 	gtk_combo_box_set_active_iter
 	gtk_combo_box_set_column_span_column
+	gtk_combo_box_set_model
 	gtk_combo_box_set_row_span_column
 	gtk_combo_box_set_wrap_width
 	gtk_combo_disable_activate
 	gtk_combo_get_type
 	gtk_combo_new
-	gtk_combo_box_entry_new_with_model
-	gtk_combo_box_new_with_model
 	gtk_combo_set_case_sensitive
 	gtk_combo_set_item_string
 	gtk_combo_set_popdown_strings
@@ -640,6 +663,7 @@ EXPORTS
 	gtk_expander_get_label_widget
 	gtk_expander_get_spacing
 	gtk_expander_get_type
+	gtk_expander_get_use_markup
 	gtk_expander_get_use_underline
 	gtk_expander_new
 	gtk_expander_new_with_mnemonic
@@ -647,6 +671,7 @@ EXPORTS
 	gtk_expander_set_label
 	gtk_expander_set_label_widget
 	gtk_expander_set_spacing
+	gtk_expander_set_use_markup
 	gtk_expander_set_use_underline
 	gtk_expander_style_get_type
 	gtk_false
@@ -753,16 +778,23 @@ EXPORTS
 	gtk_file_system_filename_to_path
 	gtk_file_system_get_folder
 	gtk_file_system_get_parent
-	gtk_file_system_get_root_info
 	gtk_file_system_get_type
+	gtk_file_system_get_volume_for_path
 	gtk_file_system_list_bookmarks
-	gtk_file_system_list_roots
+	gtk_file_system_list_volumes
 	gtk_file_system_make_path
 	gtk_file_system_parse
 	gtk_file_system_path_to_filename
 	gtk_file_system_path_to_uri
 	gtk_file_system_remove_bookmark
+	gtk_file_system_render_icon
 	gtk_file_system_uri_to_path
+	gtk_file_system_volume_free
+	gtk_file_system_volume_get_base_path
+	gtk_file_system_volume_get_display_name
+	gtk_file_system_volume_get_is_mounted
+	gtk_file_system_volume_mount
+	gtk_file_system_volume_render_icon
 	gtk_file_system_win32_get_type
 	gtk_file_system_win32_new
 	gtk_fixed_get_has_window
@@ -1210,6 +1242,7 @@ EXPORTS
 	gtk_menu_set_title
 	gtk_menu_shell_activate_item
 	gtk_menu_shell_append
+	gtk_menu_shell_cancel
 	gtk_menu_shell_deactivate
 	gtk_menu_shell_deselect
 	gtk_menu_shell_get_type
@@ -1220,6 +1253,7 @@ EXPORTS
 	gtk_message_dialog_get_type
 	gtk_message_dialog_new
 	gtk_message_dialog_new_with_markup
+	gtk_message_dialog_set_markup
 	gtk_message_type_get_type
 	gtk_metric_type_get_type
 	gtk_micro_version
@@ -1332,6 +1366,8 @@ EXPORTS
 	gtk_paned_add1
 	gtk_paned_add2
 	gtk_paned_compute_position
+	gtk_paned_get_child1
+	gtk_paned_get_child2
 	gtk_paned_get_position
 	gtk_paned_get_type
 	gtk_paned_pack1
@@ -1407,6 +1443,7 @@ EXPORTS
 	gtk_radio_action_get_current_value
 	gtk_radio_action_get_group
 	gtk_radio_action_get_type
+	gtk_radio_action_new
 	gtk_radio_action_set_group
 	gtk_radio_button_get_group
 	gtk_radio_button_get_type
@@ -2365,6 +2402,7 @@ EXPORTS
 	gtk_ui_manager_get_action
 	gtk_ui_manager_get_action_groups
 	gtk_ui_manager_get_add_tearoffs
+	gtk_ui_manager_get_toplevels
 	gtk_ui_manager_get_type
 	gtk_ui_manager_get_ui
 	gtk_ui_manager_get_widget
@@ -2406,6 +2444,7 @@ EXPORTS
 	gtk_widget_activate
 	gtk_widget_add_accelerator
 	gtk_widget_add_events
+	gtk_widget_can_activate_accel
 	gtk_widget_child_focus
 	gtk_widget_child_notify
 	gtk_widget_class_find_style_property
@@ -2540,6 +2579,7 @@ EXPORTS
 	gtk_window_begin_resize_drag
 	gtk_window_deiconify
 	gtk_window_fullscreen
+	gtk_window_get_accept_focus
 	gtk_window_get_decorated
 	gtk_window_get_default_icon_list
 	gtk_window_get_default_size
@@ -2568,8 +2608,8 @@ EXPORTS
 	gtk_window_group_new
 	gtk_window_group_remove_window
 	gtk_window_has_toplevel_focus
-	gtk_window_is_active
 	gtk_window_iconify
+	gtk_window_is_active
 	gtk_window_list_toplevels
 	gtk_window_maximize
 	gtk_window_mnemonic_activate
@@ -2583,6 +2623,7 @@ EXPORTS
 	gtk_window_remove_mnemonic
 	gtk_window_reshow_with_initial_size
 	gtk_window_resize
+	gtk_window_set_accept_focus
 	gtk_window_set_auto_startup_notification
 	gtk_window_set_decorated
 	gtk_window_set_default
