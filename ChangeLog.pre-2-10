@@ -1,3 +1,9 @@
+2003-05-23  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_init): Update color on
+	focus out of hex_entry.  (#112665)
+	(hex_focus_out): New signal handler for focus out of hex entry.
+
 Wed May 21 19:01:06 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_realize): 
