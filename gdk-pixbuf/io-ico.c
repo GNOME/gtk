@@ -1,4 +1,4 @@
-/* GdkPixbuf library - Windows Bitmap image loader
+/* GdkPixbuf library - Windows Icon/Cursor image loader
  *
  * Copyright (C) 1999 The Free Software Foundation
  *
@@ -23,6 +23,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#undef DUMPBIH
 /*
 
 Icons are just like BMP's, except for the header.
@@ -40,19 +41,13 @@ Known bugs:
 
 
 
-struct headerpair {
-	guint width;
-	guint height;
-	guint depth;
-	guint Negative;		/* Negative = 1 -> top down BMP,  
-				   Negative = 0 -> bottom up BMP */
-};
 
 /* 
 
 These structures are actually dummies. These are according to
-the "Windows API reference guide volume II" as written by Borland,
-but GCC fiddles with the alignment of the internal members.
+the "Windows API reference guide volume II" as written by 
+Borland International, but GCC fiddles with the alignment of
+the internal members.
 
 */
 
@@ -77,59 +72,53 @@ struct BitmapInfoHeader {
 	guint biClrImportant;
 };
 
+#ifdef DUMPBIH
+/* 
+
+DumpBIH printf's the values in a BitmapInfoHeader to the screen, for 
+debugging purposes.
+
+*/
 static void DumpBIH(unsigned char *BIH)
-{				/* For debugging */
+{				
 	printf("biSize      = %i \n",
-	       (BIH[3] << 24) + (BIH[2] << 16) + (BIH[1] << 8) + (BIH[0]));
+	       (int)(BIH[3] << 24) + (BIH[2] << 16) + (BIH[1] << 8) + (BIH[0]));
 	printf("biWidth     = %i \n",
-	       (BIH[7] << 24) + (BIH[6] << 16) + (BIH[5] << 8) + (BIH[4]));
+	       (int)(BIH[7] << 24) + (BIH[6] << 16) + (BIH[5] << 8) + (BIH[4]));
 	printf("biHeight    = %i \n",
-	       (BIH[11] << 24) + (BIH[10] << 16) + (BIH[9] << 8) +
+	       (int)(BIH[11] << 24) + (BIH[10] << 16) + (BIH[9] << 8) +
 	       (BIH[8]));
-	printf("biPlanes    = %i \n", (BIH[13] << 8) + (BIH[12]));
-	printf("biBitCount  = %i \n", (BIH[15] << 8) + (BIH[14]));
+	printf("biPlanes    = %i \n", (int)(BIH[13] << 8) + (BIH[12]));
+	printf("biBitCount  = %i \n", (int)(BIH[15] << 8) + (BIH[14]));
 	printf("biCompress  = %i \n",
-	       (BIH[19] << 24) + (BIH[18] << 16) + (BIH[17] << 8) +
+	       (int)(BIH[19] << 24) + (BIH[18] << 16) + (BIH[17] << 8) +
 	       (BIH[16]));
 	printf("biSizeImage = %i \n",
-	       (BIH[23] << 24) + (BIH[22] << 16) + (BIH[21] << 8) +
+	       (int)(BIH[23] << 24) + (BIH[22] << 16) + (BIH[21] << 8) +
 	       (BIH[20]));
 	printf("biXPels     = %i \n",
-	       (BIH[27] << 24) + (BIH[26] << 16) + (BIH[25] << 8) +
+	       (int)(BIH[27] << 24) + (BIH[26] << 16) + (BIH[25] << 8) +
 	       (BIH[24]));
 	printf("biYPels     = %i \n",
-	       (BIH[31] << 24) + (BIH[30] << 16) + (BIH[29] << 8) +
+	       (int)(BIH[31] << 24) + (BIH[30] << 16) + (BIH[29] << 8) +
 	       (BIH[28]));
 	printf("biClrUsed   = %i \n",
-	       (BIH[35] << 24) + (BIH[34] << 16) + (BIH[33] << 8) +
+	       (int)(BIH[35] << 24) + (BIH[34] << 16) + (BIH[33] << 8) +
 	       (BIH[32]));
 	printf("biClrImprtnt= %i \n",
-	       (BIH[39] << 24) + (BIH[38] << 16) + (BIH[37] << 8) +
+	       (int)(BIH[39] << 24) + (BIH[38] << 16) + (BIH[37] << 8) +
 	       (BIH[36]));
 }
-
-/* 
-	This does a byte-order swap. Does glib have something like
-	be32_to_cpu() ??
-*/
-
-static unsigned int le32_to_cpu(guint i)
-{
-	unsigned int i2;
-	return i2;
-}
-
-/* 
-	Destroy notification function for the libart pixbuf 
-*/
-
-static void free_buffer(gpointer user_data, gpointer data)
-{
-	free(data);
-}
-
+#endif
 
 /* Progressive loading */
+struct headerpair {
+	guint width;
+	guint height;
+	guint depth;
+	guint Negative;		/* Negative = 1 -> top down BMP,  
+				   Negative = 0 -> bottom up BMP */
+};
 
 struct ico_progressive_state {
 	ModulePreparedNotifyFunc prepared_func;
@@ -170,13 +159,13 @@ gboolean image_load_increment(gpointer data, guchar * buf, guint size);
 
 
 
-/* Shared library entry point */
+/* Shared library entry point --> Can go when generic_image_load
+   enters gdk-pixbuf-io */
 GdkPixbuf *image_load(FILE * f)
 {
 	guchar *membuf;
 	size_t length;
 	struct ico_progressive_state *State;
-	int fd;
 
 	GdkPixbuf *pb;
 
@@ -189,7 +178,7 @@ GdkPixbuf *image_load(FILE * f)
 	while (feof(f) == 0) {
 		length = fread(membuf, 1, 4096, f);
 		if (length > 0)
-			image_load_increment(State, membuf, length);
+			(void)image_load_increment(State, membuf, length);
 
 	}
 	g_free(membuf);
@@ -199,7 +188,7 @@ GdkPixbuf *image_load(FILE * f)
 	pb = State->pixbuf;
 
 	image_stop_load(State);
-	return State->pixbuf;
+	return pb;
 }
 
 static void DecodeHeader(guchar *Data, gint Bytes,
@@ -220,7 +209,6 @@ static void DecodeHeader(guchar *Data, gint Bytes,
  
  	IconCount = (Data[5] << 8) + (Data[4]);
  
-/* 	printf("There are %i icons in this file \n",IconCount);*/
  	State->HeaderSize = 6 + IconCount*16;
  	
  	if (State->HeaderSize>State->BytesInHeaderBuf) {
@@ -244,21 +232,17 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 		ThisHeight = Ptr[1];
 		ThisColors = (Ptr[2]);
 		if (ThisColors==0) 
-			ThisColors=256; /* Yes, this is in the spec */
+			ThisColors=256; /* Yes, this is in the spec, ugh */
 		
-/*		printf("Option: %ix%ix%i ",ThisWidth,ThisHeight,ThisColors);*/
-	
 		ThisScore = ThisColors*1024+ThisWidth*ThisHeight; 
 
 		if (ThisScore>State->ImageScore) {
 			State->ImageScore = ThisScore;
 			State->DIBoffset = (Ptr[15]<<24)+(Ptr[14]<<16)+
 					   (Ptr[13]<<8) + (Ptr[12]);
-/*			printf("*");*/
 								 
 		}
 		
-/*		printf("\n");*/
 		
 		Ptr += 16;	
 	} 
@@ -277,22 +261,29 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 	
 	BIH = Data+State->DIBoffset;
 
-/*	DumpBIH(BIH);*/
+#ifdef DUMPBIH
+	DumpBIH(BIH);
+#endif	
 	
 	/* Add the palette to the headersize */
 		
 	State->Header.width =
-	    (BIH[7] << 24) + (BIH[6] << 16) + (BIH[5] << 8) + (BIH[4]);
+	    (int)(BIH[7] << 24) + (BIH[6] << 16) + (BIH[5] << 8) + (BIH[4]);
 	State->Header.height =
-	    (BIH[11] << 24) + (BIH[10] << 16) + (BIH[9] << 8) + (BIH[8])/2;
+	    (int)(BIH[11] << 24) + (BIH[10] << 16) + (BIH[9] << 8) + (BIH[8])/2;
 	    /* /2 because the BIH height includes the transparency mask */
 	State->Header.depth = (BIH[15] << 8) + (BIH[14]);;
 
-	State->Type = State->Header.depth;	/* This may be less trivial someday */
+	State->Type = State->Header.depth;	
 	if (State->Lines>=State->Header.height)
-		State->Type = 1;
+		State->Type = 1; /* The transparency mask is 1 bpp */
 	
-	I =(BIH[35] << 24) + (BIH[34] << 16) + (BIH[33] << 8) + (BIH[32]);
+	
+	
+	/* Determine the  palette size. If the header indicates 0, it
+	   is actually the maximum for the bpp. You have to love the
+	   guys who made the spec. */
+	I =(int)(BIH[35] << 24) + (BIH[34] << 16) + (BIH[33] << 8) + (BIH[32]);
 	if ((I==0)&&(State->Type==1))
 		I = 2*4;
 	if ((I==0)&&(State->Type==4))
@@ -314,13 +305,13 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 		g_assert(0); /* Compressed icons aren't allowed */
 	}
 
+	/* Negative heights mean top-down pixel-order */
 	if (State->Header.height < 0) {
 		State->Header.height = -State->Header.height;
 		State->Header.Negative = 1;
 	}
 	if (State->Header.width < 0) {
 		State->Header.width = -State->Header.width;
-		State->Header.Negative = 0;
 	}
 
 	if (State->Type == 24)
@@ -328,9 +319,7 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 	if (State->Type == 8)
 		State->LineWidth = State->Header.width * 1;
 	if (State->Type == 4) {
-		State->LineWidth = State->Header.width/2;
-		if ((State->Header.width & 1) != 0)
-			State->LineWidth++;
+		State->LineWidth = (State->Header.width+1)/2;
 	}
 	if (State->Type == 1) {
 		State->LineWidth = State->Header.width / 8;
@@ -340,7 +329,7 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 
 	/* Pad to a 32 bit boundary */
 	if (((State->LineWidth % 4) > 0))
-		State->LineWidth = (State->LineWidth / 3) * 3 + 3;
+		State->LineWidth = (State->LineWidth / 4) * 4 + 4;
 
 
 	if (State->LineBuf == NULL)
@@ -538,9 +527,9 @@ static void OneLine1(struct ico_progressive_state *context)
 		Bit = (context->LineBuf[X / 8]) >> (7 - (X & 7));
 		Bit = Bit & 1;
 		/* The joys of having a BGR byteorder */
-		Pixels[X * 4 + 0] = context->HeaderBuf[Bit + 32];
-		Pixels[X * 4 + 1] = context->HeaderBuf[Bit + 2 + 32];
-		Pixels[X * 4 + 2] = context->HeaderBuf[Bit + 4 + 32];
+		Pixels[X * 4 + 0] = Bit*255;
+		Pixels[X * 4 + 1] = Bit*255;
+		Pixels[X * 4 + 2] = Bit*255;
 		X++;
 	}
 }
@@ -642,7 +631,6 @@ gboolean image_load_increment(gpointer data, guchar * buf, guint size)
 	gint BytesToCopy;
 
 	while (size > 0) {
-/*		printf("Y=%i  C=%i H=%i\n",context->Lines,context->Type,context->Header.height);*/
 		g_assert(context->LineDone >= 0);
 		if (context->HeaderDone < context->HeaderSize) {	/* We still 
 									   have headerbytes to do */
@@ -651,7 +639,7 @@ gboolean image_load_increment(gpointer data, guchar * buf, guint size)
 			if (BytesToCopy > size)
 				BytesToCopy = size;
 
-			memcpy(context->HeaderBuf + context->HeaderDone,
+			memmove(context->HeaderBuf + context->HeaderDone,
 			       buf, BytesToCopy);
 
 			size -= BytesToCopy;
@@ -666,7 +654,7 @@ gboolean image_load_increment(gpointer data, guchar * buf, guint size)
 				BytesToCopy = size;
 
 			if (BytesToCopy > 0) {
-				memcpy(context->LineBuf +
+				memmove(context->LineBuf +
 				       context->LineDone, buf,
 				       BytesToCopy);
 

@@ -1,3 +1,17 @@
+1999-12-04  Arjan van de Ven <arjan@fenrus.demon.nl>
+
+	* gdk-pixbuf/io-bmp.c: Major cleanup, added support for
+	32 bpp and 4 bpp (uncompressed) images, fixed 1bpp.
+	
+	* gdk-pixbuf/io-ras.c: Minor cleanup, ran through lclint
+
+	* gdk-pixbuf/io-ico.c: Minor cleanup, fixed 1bpp icons,
+ 	ran through lclint.
+
+	* gdk-pixbuf/gdk-pixbuf-io.c: Added detection of .CUR files
+	(Windows Cursor files). These are identical to .ICO files, 
+	except for the signature and 2 extra fields for the hotspot.
+
 1999-12-03  Jonathan Blandford  <jrb@redhat.com>
 
 	* gdk-pixbuf/io-gif.c (gif_fill_in_lines): added a comment to

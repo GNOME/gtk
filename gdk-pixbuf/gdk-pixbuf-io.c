@@ -145,7 +145,7 @@ pixbuf_check_ico (guchar *buffer, int size)
 		return FALSE;
 	if (buffer [0] != 0x0 ||
 	    buffer [1] != 0x0 ||
-	    buffer [2] != 0x1 ||
+	    ((buffer [2] != 0x1)&&(buffer[2]!=0x2)) ||
 	    buffer [3] != 0x0 ||
 	    buffer [5] != 0x0 )
 		return FALSE;

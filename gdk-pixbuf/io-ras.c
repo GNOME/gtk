@@ -71,17 +71,6 @@ static unsigned int be32_to_cpu(guint i)
 	return i2;
 }
 
-/* 
-	Destroy notification function for the libart pixbuf 
-*/
-
-static void free_buffer(gpointer user_data, gpointer data)
-{
-	free(data);
-}
-
-
-
 
 /* Progressive loading */
 
@@ -126,7 +115,6 @@ GdkPixbuf *image_load(FILE * f)
 	guchar *membuf;
 	size_t length;
 	struct ras_progressive_state *State;
-	int fd;
 	
 	GdkPixbuf *pb;
 	
@@ -138,7 +126,7 @@ GdkPixbuf *image_load(FILE * f)
 	
 	while (feof(f) == 0) {
 		length = fread(membuf, 1, 4096, f);
-		image_load_increment(State, membuf, length);
+		(void)image_load_increment(State, membuf, length);
 	} 
 	g_free(membuf);
 	if (State->pixbuf != NULL)
@@ -147,7 +135,7 @@ GdkPixbuf *image_load(FILE * f)
 	pb = State->pixbuf;
 
 	image_stop_load(State);
-	return State->pixbuf;
+	return pb;
 }
 
 static void RAS2State(struct rasterfile *RAS,
@@ -416,7 +404,7 @@ gboolean image_load_increment(gpointer data, guchar * buf, guint size)
 			if (BytesToCopy > size)
 				BytesToCopy = size;
 
-			memcpy(context->HeaderBuf + context->HeaderDone,
+			memmove(context->HeaderBuf + context->HeaderDone,
 			       buf, BytesToCopy);
 
 			size -= BytesToCopy;
@@ -431,7 +419,7 @@ gboolean image_load_increment(gpointer data, guchar * buf, guint size)
 				BytesToCopy = size;
 
 			if (BytesToCopy > 0) {
-				memcpy(context->LineBuf +
+				memmove(context->LineBuf +
 				       context->LineDone, buf,
 				       BytesToCopy);
 
