@@ -1,3 +1,8 @@
+Tue Mar 11 12:01:07 2003  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): Ctrl/Shift
+	[left/right] expands/collapses the tree, #108092
+
 2003-03-09  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdrawable-win32.c (draw_segments): Don't try to

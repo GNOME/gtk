@@ -257,7 +257,8 @@ Gets properties of an object.
 @object: a #GtkObject.
 @first_property_name: name of first property to get the value for.
 @Varargs: %NULL-terminated list of name-return location pairs.
-@Deprecated: Use g_object_get() instead.  
+@Deprecated: Use g_object_get() instead.
+
 
 <!-- ##### FUNCTION gtk_object_set ##### -->
 <para>
@@ -280,7 +281,7 @@ void set_box_properties (GtkBox* box)
 @first_property_name: name of the first property to set
 @Varargs: the value of the first argument, followed optionally
 by more name/value pairs, followed by %NULL.
-@Deprecated: Use g_object_set() instead.  
+@Deprecated: Use g_object_set() instead.
 
 
 <!-- ##### FUNCTION gtk_object_set_data ##### -->
