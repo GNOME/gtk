@@ -122,7 +122,7 @@ gtk_xembed_get_time (void)
 /**
  * _gtk_xembed_send_message:
  * @recipient: window to which to send the window, or %NULL
- *             in which case nothing wil be sent
+ *             in which case nothing will be sent
  * @message:   type of message
  * @detail:    detail field of message
  * @data1:     data1 field of message
@@ -170,7 +170,7 @@ _gtk_xembed_send_message (GdkWindow        *recipient,
 /**
  * _gtk_xembed_send_focus_message:
  * @recipient: window to which to send the window, or %NULL
- *             in which case nothing wil be sent
+ *             in which case nothing will be sent
  * @message:   type of message
  * @detail:    detail field of message
  * 
@@ -184,6 +184,9 @@ _gtk_xembed_send_focus_message (GdkWindow        *recipient,
 				glong             detail)
 {
   gulong flags = 0;
+
+  if (!recipient)
+    return;
   
   g_return_if_fail (GDK_IS_WINDOW (recipient));
   g_return_if_fail (message == XEMBED_FOCUS_IN ||
