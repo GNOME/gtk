@@ -106,8 +106,8 @@ fi
 saved_cflags="$CFLAGS"
 saved_ldflags="$LDFLAGS"
 
-CFLAGS="$X_CFLAGS"
-LDFLAGS="$X_LDFLAGS $X_LIBS"
+CFLAGS="$CFLAGS $X_CFLAGS"
+LDFLAGS="$LDFLAGS $X_LDFLAGS $X_LIBS"
 
 # Checks for libraries.
 # Check for the X11 library
