@@ -1335,16 +1335,30 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
   
   if (table->homogeneous)
     {
-      width = real_width;
-      
-      for (col = 0; col + 1 < table->ncols; col++)
-	width -= table->cols[col].spacing;
-      
-      for (col = 0; col < table->ncols; col++)
+      if (!table->children)
+	nexpand = 1;
+      else
 	{
-	  extra = width / (table->ncols - col);
-	  table->cols[col].allocation = MAX (1, extra);
-	  width -= extra;
+	  nexpand = 0;
+	  for (col = 0; col < table->ncols; col++)
+	    if (table->cols[col].expand)
+	      {
+		nexpand += 1;
+		break;
+	      }
+	}
+      if (nexpand)
+	{
+	  width = real_width;
+	  for (col = 0; col + 1 < table->ncols; col++)
+	    width -= table->cols[col].spacing;
+	  
+	  for (col = 0; col < table->ncols; col++)
+	    {
+	      extra = width / (table->ncols - col);
+	      table->cols[col].allocation = MAX (1, extra);
+	      width -= extra;
+	    }
 	}
     }
   else
@@ -1412,17 +1426,32 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
   
   if (table->homogeneous)
     {
-      height = real_height;
-      
-      for (row = 0; row + 1 < table->nrows; row++)
-	height -= table->rows[row].spacing;
-      
-      
-      for (row = 0; row < table->nrows; row++)
+      if (!table->children)
+	nexpand = 1;
+      else
 	{
-	  extra = height / (table->nrows - row);
-	  table->rows[row].allocation = MAX (1, extra);
-	  height -= extra;
+	  nexpand = 0;
+	  for (row = 0; row < table->nrows; row++)
+	    if (table->rows[row].expand)
+	      {
+		nexpand += 1;
+		break;
+	      }
+	}
+      if (nexpand)
+	{
+	  height = real_height;
+	  
+	  for (row = 0; row + 1 < table->nrows; row++)
+	    height -= table->rows[row].spacing;
+	  
+	  
+	  for (row = 0; row < table->nrows; row++)
+	    {
+	      extra = height / (table->nrows - row);
+	      table->rows[row].allocation = MAX (1, extra);
+	      height -= extra;
+	    }
 	}
     }
   else

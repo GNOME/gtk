@@ -1,3 +1,10 @@
+Wed Feb 13 06:42:37 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktable.c (gtk_table_size_allocate_pass1): partly revert
+	my recent expanding change to not expand the table if all children
+	have not epxand behaviour. this fixes palette views which often
+	use homogeneous non-expanding tables.
+
 Tue Feb 12 14:27:41 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_deleted): emit
