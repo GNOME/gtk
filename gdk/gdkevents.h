@@ -48,7 +48,9 @@ typedef void GdkXEvent;	  /* Can be cast to window system specific
 
 typedef enum {
   GDK_FILTER_CONTINUE,	  /* Event not handled, continue processesing */
-  GDK_FILTER_TRANSLATE,	  /* Translated event stored */
+  GDK_FILTER_TRANSLATE,	  /* Native event translated into a GDK event and
+                             stored in the "event" structure that was
+                             passed in */
   GDK_FILTER_REMOVE	  /* Terminate processing, removing event */
 } GdkFilterReturn;
 

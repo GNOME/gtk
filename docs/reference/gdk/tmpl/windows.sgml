@@ -746,8 +746,15 @@ Registers a window as a potential drop destination.
 <!-- ##### USER_FUNCTION GdkFilterFunc ##### -->
 <para>
 Specifies the type of function used to filter native events before they are
-converted to GDK events. A filter may translate the native event to a GDK
-event or handle it without translation.
+converted to GDK events. 
+</para>
+
+<para>
+When a filter is called, @event is unpopulated, except for
+<literal>event-&gt;window</literal>. The filter may translate the native
+event to a GDK event and store the result in @event, or handle it without
+translation. If the filter translates the event and processing should
+continue, it should return <literal>GDK_FILTER_TRANSLATE</literal>.
 </para>
 
 @xevent: the native event to filter.
@@ -762,7 +769,8 @@ Specifies the result of applying a #GdkFilterFunc to a native event.
 </para>
 
 @GDK_FILTER_CONTINUE: event not handled, continue processing.
-@GDK_FILTER_TRANSLATE: translated event stored.
+@GDK_FILTER_TRANSLATE: native event translated into a GDK event and stored
+                       in the <literal>event</literal> structure that was passed in.
 @GDK_FILTER_REMOVE: event handled, terminate processing.
 
 <!-- ##### TYPEDEF GdkXEvent ##### -->
