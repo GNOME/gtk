@@ -1,3 +1,21 @@
+Mon Mar 15 08:48:48 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserentry.c (match_selected_callback): implement
+	correctly.
+	(completion_match_func): Allow surpressing popdowns.
+	(maybe_append_seperator_to_path): New function to add a separator
+	item to a display_name.  Bad hack.
+	(check_completion_callback): Implement select-ahead as an idle.
+	(add_completion_idle): new function to handle select-ahead
+	(gtk_file_chooser_entry_do_insert_text): starf the select-ahead
+	idle.
+	(gtk_file_chooser_entry_focus): Override tab for completion.
+	(gtk_file_chooser_entry_activate): commit select_ahead when
+	activated.
+
+	* gtk/gtkfilechooserdefault.c (location_popup_handler): grab the
+	appropriate widget for the mode.
+
 2004-03-15  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkgc-win32.c (gdk_gc_copy): Don't just copy the whole

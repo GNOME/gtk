@@ -5025,7 +5025,17 @@ location_popup_handler (GtkFileChooserDefault *impl)
     {
       if (update_from_entry (impl, GTK_WINDOW (dialog), GTK_FILE_CHOOSER_ENTRY (entry)))
 	{
-	  gtk_widget_grab_focus (impl->browse_files_tree_view);
+	  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
+	      || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+	    {
+	      gtk_widget_grab_focus (impl->browse_files_tree_view);
+	    }
+	  else 
+	    {
+	      g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
+			|| impl->action == GTK_FILE_CHOOSER_ACTION_SAVE);
+	      gtk_widget_grab_focus (impl->save_file_name_entry);
+	    }
 	  refocus = FALSE;
 	}
     }
