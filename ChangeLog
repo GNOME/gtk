@@ -1,3 +1,19 @@
+Mon Apr  1 22:20:24 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down): add
+	check for y > tree_view->priv->height (fixes #76974)
+
+Mon Apr  1 22:19:39 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_sort_level): get
+	the stamp changes right this time
+
+Mon Apr  1 22:13:24 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodel.c (gtk_tree_row_reference_free): only
+	disconnect the ref callbacks when model == proxy (Thanks go to
+	Manuel Clos Crespo for the remote debugging)
+
 Sat Mar 30 15:19:24 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelsort.c: revert the latest stamp increment changes,

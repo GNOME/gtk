@@ -1677,7 +1677,9 @@ gtk_tree_row_reference_free (GtkTreeRowReference *reference)
 
   if (refs->list == NULL)
     {
-      disconnect_ref_callbacks (reference->model);
+      if (G_OBJECT (reference->model) == reference->proxy)
+	disconnect_ref_callbacks (reference->model);
+
       g_object_set_data (G_OBJECT (reference->proxy),
 			 ROW_REF_DATA_STRING,
 			 NULL);

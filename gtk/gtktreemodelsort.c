@@ -1512,6 +1512,7 @@ gtk_tree_model_sort_sort_level (GtkTreeModelSort *tree_model_sort,
 
   if (emit_reordered)
     {
+      gtk_tree_model_sort_increment_stamp (tree_model_sort);
       if (level->parent_elt)
 	{
 	  iter.stamp = tree_model_sort->stamp;
