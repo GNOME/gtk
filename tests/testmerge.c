@@ -123,6 +123,8 @@ static GtkActionEntry entries[] = {
   { "EditMenuAction", NULL, "_Edit" },
   { "HelpMenuAction", NULL, "_Help" },
   { "JustifyMenuAction", NULL, "_Justify" },
+  { "EmptyMenu1Action", NULL, "Empty 1" },
+  { "EmptyMenu2Action", NULL, "Empty 2" },
   { "Test", NULL, "Test" },
 
   { "QuitAction",  GTK_STOCK_QUIT,  NULL,     "<control>q", "Quit", G_CALLBACK (gtk_main_quit) },
@@ -541,6 +543,10 @@ main (int argc, char **argv)
   gtk_action_group_add_actions (action_group, 
 				entries, n_entries, 
 				NULL);
+  action = gtk_action_group_get_action (action_group, "EmptyMenu1Action");
+  g_object_set (G_OBJECT (action), "is_important", TRUE, NULL);
+  action = gtk_action_group_get_action (action_group, "EmptyMenu2Action");
+  g_object_set (G_OBJECT (action), "is_important", FALSE, NULL);
   gtk_action_group_add_toggle_actions (action_group, 
 				       toggle_entries, n_toggle_entries, 
 				       NULL);

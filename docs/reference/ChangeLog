@@ -1,5 +1,7 @@
 2003-09-30  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/tmpl/gtkuimanager.sgml: Add a section about empty menus.
+
 	* gdk/tmpl/keys.sgml: Small addition.
 
 	* gdk/gdk-sections.txt: Add GdkDisplayClass and GdkScreenClass.

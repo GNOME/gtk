@@ -60,8 +60,7 @@ typedef enum
   NODE_TYPE_ACCELERATOR
 } NodeType;
 
-
-typedef struct _Node  Node;
+typedef struct _Node Node;
 
 struct _Node {
   NodeType type;
@@ -71,7 +70,7 @@ struct _Node {
   GQuark action_name;
   GtkAction *action;
   GtkWidget *proxy;
-  GtkWidget *extra; /*GtkMenu for submenus, second separator for placeholders*/
+  GtkWidget *extra; /* second separator for placeholders */
 
   GList *uifiles;
 
@@ -831,13 +830,14 @@ start_element_handler (GMarkupParseContext *context,
   const gchar *action;
   GQuark action_quark;
   gboolean top;
-
+  
   gboolean raise_error = TRUE;
 
   node_name = NULL;
   action = NULL;
   action_quark = 0;
   top = FALSE;
+
   for (i = 0; attribute_names[i] != NULL; i++)
     {
       if (!strcmp (attribute_names[i], "name"))
@@ -1642,11 +1642,54 @@ find_toolbar_position (GNode      *node,
   return TRUE;
 }
 
+/**
+ * _gtk_menu_is_empty:
+ * @menu: a #GtkMenu or %NULL
+ * 
+ * Determines whether @menu is empty. A menu is considered empty if it
+ * the only visible children are tearoff menu items or "filler" menu 
+ * items which were inserted to mark the menu as empty.
+ * 
+ * This function is used by #GtkAction.
+ *
+ * Return value: whether @menu is empty.
+ **/
+gboolean
+_gtk_menu_is_empty (GtkWidget *menu)
+{
+  GList *children, *cur;
+
+  g_return_val_if_fail (menu == NULL || GTK_IS_MENU (menu), TRUE);
+
+  if (!menu)
+    return TRUE;
+
+  children = gtk_container_get_children (GTK_CONTAINER (menu));
+
+  cur = children;
+  while (cur) 
+    {
+      if (GTK_WIDGET_VISIBLE (cur->data))
+	{
+	  if (!GTK_IS_TEAROFF_MENU_ITEM (cur->data) &&
+	      !g_object_get_data (cur->data, "gtk-empty-menu-item"))
+	    return FALSE;
+	}
+      cur = cur->next;
+    }
+
+  return TRUE;
+}
+
 enum {
   SEPARATOR_MODE_SMART,
   SEPARATOR_MODE_VISIBLE,
   SEPARATOR_MODE_HIDDEN
 };
+
+void _gtk_action_sync_menu_visible (GtkAction *action,
+				    GtkWidget *proxy,
+				    gboolean   empty);
 
 static void
 update_smart_separators (GtkWidget *proxy)
@@ -1661,15 +1704,23 @@ update_smart_separators (GtkWidget *proxy)
   if (parent) 
     {
       gboolean visible;
+      gboolean empty;
       GList *children, *cur, *last;
+      GtkWidget *filler;
 
       children = gtk_container_get_children (GTK_CONTAINER (parent));
       
       visible = FALSE;
       last = NULL;
+      empty = TRUE;
+      filler = NULL;
+
       cur = children;
       while (cur) 
 	{
+	  if (g_object_get_data (cur->data, "gtk-empty-menu-item"))
+	    filler = cur->data;
+
 	  if (GTK_IS_SEPARATOR_MENU_ITEM (cur->data) ||
 	      GTK_IS_SEPARATOR_TOOL_ITEM (cur->data))
 	    {
@@ -1701,10 +1752,13 @@ update_smart_separators (GtkWidget *proxy)
 	  else if (GTK_WIDGET_VISIBLE (cur->data))
 	    {
 	      last = NULL;
-	      if (GTK_IS_TEAROFF_MENU_ITEM (cur->data))
+	      if (GTK_IS_TEAROFF_MENU_ITEM (cur->data) || cur->data == filler)
 		visible = FALSE;
 	      else 
-		visible = TRUE;
+		{
+		  visible = TRUE;
+		  empty = FALSE;
+		}
 	    }
 	  
 	  cur = cur->next;
@@ -1712,6 +1766,15 @@ update_smart_separators (GtkWidget *proxy)
 
       if (last)
 	gtk_widget_hide (GTK_WIDGET (last->data));
+
+      if (GTK_IS_MENU (parent)) 
+	{
+	  GtkWidget *item;
+
+	  item = gtk_menu_get_attach_widget (GTK_MENU (parent));
+	  _gtk_action_sync_menu_visible (NULL, item, empty);
+	  g_object_set (G_OBJECT (filler), "visible", empty, NULL);
+	}
     }
 }
 
@@ -1843,12 +1906,20 @@ update_node (GtkUIManager *self,
 		if (find_menu_position (node, &menushell, &pos))
 		  {
 		    GtkWidget *tearoff;
+		    GtkWidget *filler;
 
 		    info->proxy = gtk_action_create_menu_item (action);
 		    menu = gtk_menu_new ();
 		    tearoff = gtk_tearoff_menu_item_new ();
 		    gtk_widget_set_no_show_all (tearoff, TRUE);
 		    gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
+		    filler = gtk_menu_item_new_with_label (_("Empty"));
+		    g_object_set_data (G_OBJECT (filler),
+				       "gtk-empty-menu-item",
+				       GINT_TO_POINTER (TRUE));
+		    gtk_widget_set_sensitive (filler, FALSE);
+		    gtk_widget_set_no_show_all (filler, TRUE);
+		    gtk_menu_shell_append (GTK_MENU_SHELL (menu), filler);
 		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
 		    gtk_menu_shell_insert (GTK_MENU_SHELL (menushell), info->proxy, pos);
 		  }

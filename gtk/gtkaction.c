@@ -40,6 +40,7 @@
 #include "gtkmarshalers.h"
 #include "gtkmenuitem.h"
 #include "gtkstock.h"
+#include "gtktearoffmenuitem.h"
 #include "gtktoolbutton.h"
 #include "gtktoolbar.h"
 
@@ -88,7 +89,7 @@ enum
   PROP_STOCK_ID,
   PROP_IS_IMPORTANT,
   PROP_SENSITIVE,
-  PROP_VISIBLE,
+  PROP_VISIBLE
 };
 
 static void gtk_action_init       (GtkAction *action);
@@ -216,7 +217,7 @@ gtk_action_class_init (GtkActionClass *klass)
 				   PROP_IS_IMPORTANT,
 				   g_param_spec_boolean ("is_important",
 							 _("Is important"),
-							 _("Whether the action is considered important. When TRUE, toolitem proxies for this action show text in GTK_TOOLBAR_BOTH_HORIZ mode"),
+							 _("Whether the action is considered important. When TRUE, toolitem proxies for this action show text in GTK_TOOLBAR_BOTH_HORIZ mode, and empty menu proxies for this action are not hidden."),
 							 FALSE,
 							 G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
@@ -233,7 +234,6 @@ gtk_action_class_init (GtkActionClass *klass)
 							 _("Whether the action is visible."),
 							 TRUE,
 							 G_PARAM_READWRITE));
-
 
   /**
    * GtkAction::activate:
@@ -530,6 +530,63 @@ gtk_action_sync_property (GtkAction  *action,
   g_value_unset (&value);
 }
 
+/**
+ * _gtk_action_sync_menu_visible:
+ * @action: a #GtkAction, or %NULL to determine the action from @proxy
+ * @proxy: a proxy menu item
+ * @empty: whether the submenu attached to @proxy is empty
+ * 
+ * Updates the visibility of @proxy from the visibility of @action
+ * according to the following rules:
+ * <itemizedlist>
+ * <listitem><para>if @action is invisible, @proxy is too
+ * </para></listitem>
+ * <listitem><para>if @empty is %TRUE, hide @proxy unless @action is important
+ * </para></listitem>
+ * </itemizedlist>
+ * 
+ * This function is used in the implementation of #GtkUIManager.
+ **/
+void
+_gtk_action_sync_menu_visible (GtkAction *action,
+			       GtkWidget *proxy,
+			       gboolean   empty)
+{
+  gboolean visible, important;
+
+  g_return_if_fail (GTK_IS_MENU_ITEM (proxy));
+  g_return_if_fail (action == NULL || GTK_IS_ACTION (action));
+  
+  if (action == NULL)
+    action = g_object_get_data (G_OBJECT (proxy), "gtk-action");
+  
+  g_object_get (G_OBJECT (action), 
+		"visible", &visible, 
+		"is_important", &important,
+		NULL);
+
+  g_object_set (G_OBJECT (proxy),
+		"visible", visible && (important || !empty),
+		NULL);
+}
+
+gboolean _gtk_menu_is_empty (GtkWidget *menu);
+
+static void
+gtk_action_sync_visible (GtkAction  *action, 
+			 GParamSpec *pspec,
+			 GtkWidget  *proxy)
+{
+  if (GTK_IS_MENU_ITEM (proxy))
+    {
+      GtkWidget *menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (proxy));
+
+      _gtk_action_sync_menu_visible (action, proxy, _gtk_menu_is_empty (menu));
+    }
+  else
+    gtk_action_sync_property (action, pspec, proxy);
+}
+
 static void
 gtk_action_sync_label (GtkAction  *action, 
 		       GParamSpec *pspec, 
@@ -627,7 +684,7 @@ connect_proxy (GtkAction     *action,
   gtk_widget_set_sensitive (proxy, action->private_data->sensitive);
 
   g_signal_connect_object (action, "notify::visible",
-			   G_CALLBACK (gtk_action_sync_property), proxy, 0);
+			   G_CALLBACK (gtk_action_sync_visible), proxy, 0);
   if (action->private_data->visible)
     gtk_widget_show (proxy);
   else

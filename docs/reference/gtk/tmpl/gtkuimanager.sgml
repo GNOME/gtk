@@ -146,15 +146,31 @@ actions even if they have no visible proxies.
 <refsect2 id="Smart-Separators">
 <title>Smart Separators</title>
 <para>
-The separators created by #GtkUIManager are "smart", i.e. they do not show up in the 
-UI unless they end up between two visible menu or tool items. Separators which are located 
-at the very beginning or end of the menu or toolbar containing them, or multiple separators 
-next to each other, are hidden. This is a useful feature, since the merging of UI elements
-from multiple sources can make it hard or impossible to determine in advance whether a 
-separator will end up in such an unfortunate position.
+The separators created by #GtkUIManager are "smart", i.e. they do not show up 
+in the UI unless they end up between two visible menu or tool items. Separators
+which are located at the very beginning or end of the menu or toolbar 
+containing them, or multiple separators next to each other, are hidden. This 
+is a useful feature, since the merging of UI elements from multiple sources 
+can make it hard or impossible to determine in advance whether a separator 
+will end up in such an unfortunate position.
 </para>
 </refsect2>
-
+<refsect2>
+<title>Empty Menus</title>
+<para>
+Submenus pose similar problems to separators inconnection with merging. It is 
+impossible to know in advance whether they will end up empty after merging. 
+#GtkUIManager offers two ways to treat empty submenus:
+<itemizedlist>
+<listitem><para>make them disappear by hiding the menu item they're attached to
+</para></listitem>
+<listitem><para>add an insensitive "Empty" item
+</para></listitem>
+</itemizedlist>
+The behaviour is chosen based on the "is_important" property of the action 
+to which the submenu is associated.
+</para>
+</refsect2>
 <!-- ##### SECTION See_Also ##### -->
 <para>
 

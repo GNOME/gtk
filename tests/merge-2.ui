@@ -8,6 +8,14 @@
       <menuitem name="Quit" action="QuitAction" />
       <separator name="Sep3" />
     </menu>
+    <menu name="EditMenu" action="EditMenuAction">
+      <menu name="EmptyMenu1" action="EmptyMenu1Action">
+        <menuitem name="Cut" action="CutAction" />
+      </menu>
+      <menu name="EmptyMenu2" action="EmptyMenu2Action">
+        <menuitem name="Cut" action="CutAction" />
+      </menu>
+    </menu>
     <menu name="HelpMenu" action="HelpMenuAction">
       <menuitem name="About" action="AboutAction" />
     </menu>

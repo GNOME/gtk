@@ -1,3 +1,21 @@
+2003-09-30  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/merge-*.ui: 
+	* tests/testmerge.c: Test handling of empty menus.
+
+	* gtk/gtkuimanager.c (_gtk_menu_is_empty): New function to determine
+	whether a menu is empty. Used in gtkaction.c.
+	(update_smart_separators): Also update the visibility of empty menus.
+	(update_node): When creating a new menu proxy, insert an "Empty" menu 
+	item which only gets shown if the menu is empty. 
+
+	* gtk/gtkaction.c (gtk_action_class_init): Document the meaning of
+	"is_important" for menu proxies.
+	(_gtk_action_sync_menu_visible): New function to sync the visibility
+	of menu proxies. Used in gtkuimanager.c.
+	(gtk_action_sync_visible): New function to sync the visibility of 
+	proxies.
+
 Tue Sep 30 21:43:34 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_menu_button_press): set
