@@ -1,3 +1,7 @@
+Sat Jan  9 20:52:00 PST 1998 Ian Main <imain@gimp.org>
+	* gtk/gtkfilesel.c:  Changed a few tests in the path correcting
+		function.  Hopefully this helps the filesel stability.
+
 Fri Jan  8 00:55:00 PST 1998 Jay Painter <jpaint@serv.net>
 	* gtk/gtkclist.c:
 	* gtk/gtkclist.h: modifications to GtkCList so it's look and 
