@@ -1632,7 +1632,7 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
 	  node_type = NODE_TYPE_SEPARATOR;
 	  break;
 	case GTK_UI_MANAGER_PLACEHOLDER:
-	  node_type = NODE_TYPE_MENU_PLACEHOLDER;
+	  node_type = NODE_TYPE_TOOLBAR_PLACEHOLDER;
 	  break;
 	default: ;
 	  /* do nothing */

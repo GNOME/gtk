@@ -1,5 +1,8 @@
 2004-09-07  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c (gtk_ui_manager_add_ui): Use the proper node type
+	for placeholders in toolbars.  (#151963, Olivier Andrieu)
+
 	* gtk/gtkstyle.c (gtk_default_draw_expander): Draw expanders a bit 
 	better.
 
