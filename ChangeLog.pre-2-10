@@ -1,3 +1,13 @@
+2002-10-28  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_decorations,
+	gdk_window_set_functions): Don't call GetWindowLong for
+	GWL_EXSTYLE, the extended window style wasn't used or
+	changed. After setting the window style with SetWindowLong, call
+	SetWindowPos with the SWP_FRAMECHANGED flag for the window to
+	actually be updated, as Platform SDK docs say one should. (#95812,
+	huzheng)
+
 2002-10-28  Dmitry G. Mastrukov  <dmitry@taurussoft.org>
 
 	* configure.in: Added Belorusian (be) to ALL_LINGUAS.

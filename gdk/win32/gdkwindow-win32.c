@@ -45,7 +45,7 @@ static void         gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,
 static void         gdk_window_impl_win32_get_size     (GdkDrawable *drawable,
 							gint *width,
 							gint *height);
-static GdkRegion*  gdk_window_impl_win32_get_visible_region (GdkDrawable *drawable);
+static GdkRegion*   gdk_window_impl_win32_get_visible_region (GdkDrawable *drawable);
 static void gdk_window_impl_win32_init       (GdkWindowImplWin32      *window);
 static void gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass);
 static void gdk_window_impl_win32_finalize   (GObject                 *object);
@@ -2102,18 +2102,25 @@ void
 gdk_window_set_decorations (GdkWindow      *window,
 			    GdkWMDecoration decorations)
 {
-  LONG style, exstyle;
+  LONG style;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
+  GDK_NOTE (MISC, g_print ("gdk_window_set_decorations: %p %s%s%s%s%s%s%s\n",
+			   GDK_WINDOW_HWND (window),
+			   (decorations & GDK_DECOR_ALL ? "ALL " : ""),
+			   (decorations & GDK_DECOR_BORDER ? "BORDER " : ""),
+			   (decorations & GDK_DECOR_RESIZEH ? "RESIZEH " : ""),
+			   (decorations & GDK_DECOR_TITLE ? "TITLE " : ""),
+			   (decorations & GDK_DECOR_MENU ? "MENU " : ""),
+			   (decorations & GDK_DECOR_MINIMIZE ? "MINIMIZE " : ""),
+			   (decorations & GDK_DECOR_MAXIMIZE ? "MAXIMIZE " : "")));
+
   style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
-  exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
 
   style &= (WS_OVERLAPPED|WS_POPUP|WS_CHILD|WS_MINIMIZE|WS_VISIBLE|WS_DISABLED
 	    |WS_CLIPSIBLINGS|WS_CLIPCHILDREN|WS_MAXIMIZE);
-
-  exstyle &= (WS_EX_TOPMOST|WS_EX_TRANSPARENT);
 
   if (decorations & GDK_DECOR_ALL)
     style |= (WS_CAPTION|WS_SYSMENU|WS_THICKFRAME|WS_MINIMIZEBOX|WS_MAXIMIZEBOX);
@@ -2131,25 +2138,34 @@ gdk_window_set_decorations (GdkWindow      *window,
     style |= (WS_MAXIMIZEBOX);
   
   SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, style);
+  SetWindowPos (GDK_WINDOW_HWND (window), NULL, 0, 0, 0, 0,
+		SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOMOVE |
+		SWP_NOREPOSITION | SWP_NOSIZE | SWP_NOZORDER);
 }
 
 void
 gdk_window_set_functions (GdkWindow    *window,
 			  GdkWMFunction functions)
 {
-  LONG style, exstyle;
+  LONG style;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
+  GDK_NOTE (MISC, g_print ("gdk_window_set_functions: %p %s%s%s%s%s%s\n",
+			   GDK_WINDOW_HWND (window),
+			   (functions & GDK_FUNC_ALL ? "ALL " : ""),
+			   (functions & GDK_FUNC_RESIZE ? "RESIZE " : ""),
+			   (functions & GDK_FUNC_MOVE ? "MOVE " : ""),
+			   (functions & GDK_FUNC_MINIMIZE ? "MINIMIZE " : ""),
+			   (functions & GDK_FUNC_MAXIMIZE ? "MAXIMIZE " : ""),
+			   (functions & GDK_FUNC_CLOSE ? "CLOSE " : "")));
+
   style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
-  exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
 
   style &= (WS_OVERLAPPED|WS_POPUP|WS_CHILD|WS_MINIMIZE|WS_VISIBLE|WS_DISABLED
 	    |WS_CLIPSIBLINGS|WS_CLIPCHILDREN|WS_MAXIMIZE|WS_CAPTION|WS_BORDER
 	    |WS_SYSMENU);
-
-  exstyle &= (WS_EX_TOPMOST|WS_EX_TRANSPARENT);
 
   if (functions & GDK_FUNC_ALL)
     style |= (WS_THICKFRAME|WS_MINIMIZEBOX|WS_MAXIMIZEBOX);
@@ -2163,19 +2179,15 @@ gdk_window_set_functions (GdkWindow    *window,
     style |= (WS_MAXIMIZEBOX);
   
   SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, style);
+  SetWindowPos (GDK_WINDOW_HWND (window), NULL, 0, 0, 0, 0,
+		SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOMOVE |
+		SWP_NOREPOSITION | SWP_NOSIZE | SWP_NOZORDER);
 }
 
-/* 
- * propagate the shapes from all child windows of a GDK window to the parent 
- * window. Shamelessly ripped from Enlightenment's code
- * 
- * - Raster
- */
-
 static void
-QueryTree (HWND hwnd,
+QueryTree (HWND   hwnd,
 	   HWND **children,
-	   gint *nchildren)
+	   gint  *nchildren)
 {
   guint i, n;
   HWND child;
@@ -2536,7 +2548,7 @@ gdk_window_set_modal_hint (GdkWindow *window,
 
   if (GDK_WINDOW_IS_MAPPED (window))
     if (!SetWindowPos (GDK_WINDOW_HWND (window), HWND_TOPMOST,
-                           0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE))
+		       0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE))
       WIN32_API_FAILED ("SetWindowPos");
 }
 
