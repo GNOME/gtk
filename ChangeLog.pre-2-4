@@ -1,3 +1,8 @@
+1998-05-21    <sopwith@redhat.com>
+
+	* gtk/gtkrc.[ch]: gtk_rc_set_image_loader() - allow apps to set a custom
+	routine for loading images specified in gtkrc's.
+
 Tue May 19 23:41:04 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* configure.in: Use pthread_attr_init() as a test function,
