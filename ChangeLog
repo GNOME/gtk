@@ -1,3 +1,11 @@
+Tue Feb  3 00:14:36 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gdk/x11/gdkgeometry-x11.c (queue_item_free, gdk_window_queue):
+	Use a weak reference instead of ref()/unref(). (#60857, reported
+	by Joshua N Pritikin)
+
+	* gdk/gdkimage.c (scratch_image_info_for_depth): Formatting fix.
+
 Tue Feb  3 00:15:17 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeprivate.h (struct _GtkTreeViewPrivate): Add 

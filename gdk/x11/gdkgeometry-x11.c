@@ -914,7 +914,11 @@ queue_delete_link (GQueue *queue,
 static void
 queue_item_free (GdkWindowQueueItem *item)
 {
-  g_object_unref (item->window);
+  if (item->window)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (item->window),
+				    (gpointer *)&(item->window));
+    }
   
   if (item->type == GDK_WINDOW_QUEUE_ANTIEXPOSE)
     gdk_region_destroy (item->u.antiexpose.area);
@@ -979,12 +983,13 @@ gdk_window_queue (GdkWindow          *window,
 	  tmp_list = next;
 	}
     }
-      
-  g_object_ref (window);
 
   item->window = window;
   item->serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
   
+  g_object_add_weak_pointer (G_OBJECT (window),
+			     (gpointer *)&(item->window));
+
   g_queue_push_tail (display_x11->translate_queue, item);
 }
 
