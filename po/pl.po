@@ -5,11 +5,11 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 1999-02-25 05:04-0600\n"
+"Project-Id-Version: gtk+ 1.2.1\n"
+"POT-Creation-Date: 1999-03-24 23:06-0600\n"
 "PO-Revision-Date: 1998-12-18 02:21+0100\n"
-"Last-Translator: Krzysztof Krzy¿aniak <eloy@venco.com.pl>\n"
-"Language-Team: Polish <plug@poznan.linux.org.pl>\n"
+"Last-Translator: Tomasz K³oczko <kloczek@pld.org.pl>\n"
+"Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -161,15 +161,15 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
-msgstr ""
+msgstr "Rozdzielczo¶æ X:"
 
 #: gtk/gtkfontsel.c:219
 msgid "Resolution Y:"
-msgstr ""
+msgstr "Rozdzielczo¶æ Y:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
-msgstr ""
+msgstr "Odstêp:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
@@ -177,7 +177,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
-msgstr ""
+msgstr "Strona kodowa:"
 
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
@@ -191,7 +191,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
-msgstr ""
+msgstr "Warto¶æ bierz±ca"
 
 #: gtk/gtkfontsel.c:494
 msgid "Font"
@@ -207,7 +207,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:514
 msgid "Size:"
-msgstr ""
+msgstr "Rozmiar:"
 
 #: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
 #, fuzzy
@@ -220,7 +220,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:664
 msgid "Points"
-msgstr ""
+msgstr "Punktów"
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
@@ -255,7 +255,7 @@ msgstr "Pliki"
 
 #: gtk/gtkfontsel.c:799
 msgid "Font Types:"
-msgstr ""
+msgstr "Typ fontu:"
 
 #: gtk/gtkfontsel.c:807
 msgid "Bitmap"
@@ -263,7 +263,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:813
 msgid "Scalable"
-msgstr ""
+msgstr "Skalowalny"
 
 #: gtk/gtkfontsel.c:819
 msgid "Scaled Bitmap"
@@ -292,7 +292,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1952
 msgid "other"
-msgstr ""
+msgstr "inny"
 
 #: gtk/gtkfontsel.c:1231
 msgid "[M]"
@@ -316,7 +316,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:1936 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
-msgstr ""
+msgstr "(nieznany)"
 
 #: gtk/gtkfontsel.c:1947
 msgid "roman"
@@ -324,7 +324,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:1959
 msgid "proportional"
-msgstr ""
+msgstr "proporcjonalny"
 
 #: gtk/gtkfontsel.c:1960
 msgid "monospaced"
@@ -344,7 +344,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:3482
 msgid "Apply"
-msgstr ""
+msgstr "Zatwierd¼"
 
 #: gtk/gtkfontsel.c:3504
 msgid "Font Selection"
@@ -361,7 +361,7 @@ msgstr ""
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:200
 msgid "Input"
-msgstr ""
+msgstr "Wej¶cie"
 
 #: gtk/gtkinputdialog.c:208
 msgid "No input devices"
@@ -369,7 +369,7 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:237
 msgid "Device:"
-msgstr ""
+msgstr "Urz±dz±nie"
 
 #: gtk/gtkinputdialog.c:253
 msgid "Disabled"
@@ -381,7 +381,7 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:269
 msgid "Window"
-msgstr ""
+msgstr "Okno"
 
 #: gtk/gtkinputdialog.c:277
 msgid "Mode: "
@@ -390,7 +390,7 @@ msgstr ""
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
 msgid "Axes"
-msgstr ""
+msgstr "Stra³ki"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:323
@@ -401,7 +401,7 @@ msgstr ""
 #. connect to it, without paying attention to whether it exits
 #: gtk/gtkinputdialog.c:345
 msgid "Save"
-msgstr ""
+msgstr "Zachowaj"
 
 #: gtk/gtkinputdialog.c:500
 msgid "X"
@@ -439,7 +439,7 @@ msgstr ""
 #: gtk/gtknotebook.c:2017 gtk/gtknotebook.c:4092
 #, c-format
 msgid "Page %u"
-msgstr ""
+msgstr "Strona %u"
 
 #: gtk/gtkrc.c:1529
 #, c-format
