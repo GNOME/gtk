@@ -1,3 +1,8 @@
+2000-05-21  Nils Barth  <nils_barth@post.harvard.edu>
+	* gtkmenu.c:
+	* gtkmenu.h:
+	* gtktypeutils.h: Spelling/grammar fixes in comments.
+
 Tue May 23 12:25:07 CEST 2000 lupus <lupus@debian.org>
 
 	* gdk/nanox/*.h: add missing header files.
