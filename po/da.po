@@ -41,43 +41,43 @@ msgstr "Version %s af GIF-filformatet er ikke understøttet"
 msgid "GIF animation contained a frame with an incorrect size"
 msgstr "GIF-animation indeholdt et billed med en forkert størrelse"
 
-#: gtk/gtkcolorsel.c:1413
+#: gtk/gtkcolorsel.c:1410
 msgid "Hue:"
 msgstr "Glød:"
 
-#: gtk/gtkcolorsel.c:1414
+#: gtk/gtkcolorsel.c:1411
 msgid "Saturation:"
 msgstr "Mætning:"
 
-#: gtk/gtkcolorsel.c:1415
+#: gtk/gtkcolorsel.c:1412
 msgid "Value:"
 msgstr "Værdi:"
 
-#: gtk/gtkcolorsel.c:1416
+#: gtk/gtkcolorsel.c:1413
 msgid "Red:"
 msgstr "Rød:"
 
-#: gtk/gtkcolorsel.c:1417
+#: gtk/gtkcolorsel.c:1414
 msgid "Green:"
 msgstr "Grøn:"
 
-#: gtk/gtkcolorsel.c:1418
+#: gtk/gtkcolorsel.c:1415
 msgid "Blue:"
 msgstr "Blå:"
 
-#: gtk/gtkcolorsel.c:1421
+#: gtk/gtkcolorsel.c:1418
 msgid "Opacity:"
 msgstr "Gennemsigtighed:"
 
-#: gtk/gtkcolorsel.c:1436
+#: gtk/gtkcolorsel.c:1433
 msgid "Hex Value:"
 msgstr "Hexværdi:"
 
-#: gtk/gtkcolorsel.c:1457
+#: gtk/gtkcolorsel.c:1454
 msgid "Custom Palette"
 msgstr "Personlig palette"
 
-#: gtk/gtkcolorsel.c:1462
+#: gtk/gtkcolorsel.c:1459
 msgid "Set Color"
 msgstr "Sæt farve"
 
@@ -118,7 +118,7 @@ msgid "Error"
 msgstr "Fejl"
 
 #. close button
-#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:338 gtk/gtkstock.c:181
+#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:334 gtk/gtkstock.c:181
 msgid "Close"
 msgstr "Luk"
 
@@ -188,88 +188,88 @@ msgid "OK"
 msgstr "Ok"
 
 #. shell and main vbox
-#: gtk/gtkinputdialog.c:185
+#: gtk/gtkinputdialog.c:181
 msgid "Input"
 msgstr "Indstrøm"
 
-#: gtk/gtkinputdialog.c:193
+#: gtk/gtkinputdialog.c:189
 msgid "No input devices"
 msgstr "Ingen indenheder"
 
-#: gtk/gtkinputdialog.c:222
+#: gtk/gtkinputdialog.c:218
 msgid "Device:"
 msgstr "Enhed:"
 
-#: gtk/gtkinputdialog.c:238
+#: gtk/gtkinputdialog.c:234
 msgid "Disabled"
 msgstr "Slået fra"
 
-#: gtk/gtkinputdialog.c:246
+#: gtk/gtkinputdialog.c:242
 msgid "Screen"
 msgstr "Skærm"
 
-#: gtk/gtkinputdialog.c:254
+#: gtk/gtkinputdialog.c:250
 msgid "Window"
 msgstr "Vindue"
 
-#: gtk/gtkinputdialog.c:262
+#: gtk/gtkinputdialog.c:258
 msgid "Mode: "
 msgstr "Modus: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:292
+#: gtk/gtkinputdialog.c:288
 msgid "Axes"
 msgstr "Akser"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:308
+#: gtk/gtkinputdialog.c:304
 msgid "Keys"
 msgstr "Taster"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:329 gtk/gtkstock.c:186
+#: gtk/gtkinputdialog.c:325 gtk/gtkstock.c:186
 msgid "Save"
 msgstr "Gem"
 
-#: gtk/gtkinputdialog.c:471
+#: gtk/gtkinputdialog.c:467
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:472
+#: gtk/gtkinputdialog.c:468
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:473
+#: gtk/gtkinputdialog.c:469
 msgid "Pressure"
 msgstr "Pres"
 
-#: gtk/gtkinputdialog.c:474
+#: gtk/gtkinputdialog.c:470
 msgid "X Tilt"
 msgstr "X-hældning"
 
-#: gtk/gtkinputdialog.c:475
+#: gtk/gtkinputdialog.c:471
 msgid "Y Tilt"
 msgstr "Y-hældning"
 
-#: gtk/gtkinputdialog.c:476
+#: gtk/gtkinputdialog.c:472
 msgid "Wheel"
 msgstr "Hjul"
 
-#: gtk/gtkinputdialog.c:516
+#: gtk/gtkinputdialog.c:512
 msgid "none"
 msgstr "ingen"
 
-#: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
+#: gtk/gtkinputdialog.c:546 gtk/gtkinputdialog.c:582
 msgid "(disabled)"
 msgstr "(deaktiveret)"
 
-#: gtk/gtkinputdialog.c:579
+#: gtk/gtkinputdialog.c:575
 msgid "(unknown)"
 msgstr "(ukendt)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:664
+#: gtk/gtkinputdialog.c:660
 msgid "clear"
 msgstr "ryd"
 
@@ -327,7 +327,7 @@ msgstr "Ny"
 msgid "Open"
 msgstr "Åbn"
 
-#: gtk/gtknotebook.c:2012 gtk/gtknotebook.c:4098
+#: gtk/gtknotebook.c:2034 gtk/gtknotebook.c:4353
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -598,12 +598,12 @@ msgstr "PNM billedformat er ugyldigt"
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "PNM billedindlæser understøtter ikke dette PNM-underformat"
 
-#: gtk/gdk-pixbuf-loader.c:358
+#: gtk/gdk-pixbuf-loader.c:356
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Stykvis indlæsning af billedtype '%s' er ikke understøttet"
 
-#: gtk/gdk-pixbuf-loader.c:383 gtk/gdk-pixbuf-loader.c:484
+#: gtk/gdk-pixbuf-loader.c:381 gtk/gdk-pixbuf-loader.c:482
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
@@ -776,15 +776,15 @@ msgstr "Radio status"
 msgid "Draw the toggle button as a radio button."
 msgstr "Tegn skifteknappen som en radioknap."
 
-#: gtk/gtkentry.c:2473 gtk/gtktextview.c:4495
+#: gtk/gtkentry.c:2469 gtk/gtktextview.c:4493
 msgid "Cut"
 msgstr "Klip"
 
-#: gtk/gtkentry.c:2474 gtk/gtktextview.c:4496
+#: gtk/gtkentry.c:2470 gtk/gtktextview.c:4494
 msgid "Copy"
 msgstr "Kopiér"
 
-#: gtk/gtkentry.c:2475 gtk/gtktextview.c:4497
+#: gtk/gtkentry.c:2471 gtk/gtktextview.c:4495
 msgid "Paste"
 msgstr "Indsæt"
 
