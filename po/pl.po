@@ -1,0 +1,89 @@
+# Polish translation
+# Copyright (C) 1998 Free Software Foundation, Inc.
+# Krzysztof Krzy¿aniak <eloy@venco.com.pl>, 1998.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 1.1.9\n"
+"POT-Creation-Date: 1998-12-18 21:46-0600\n"
+"PO-Revision-Date: 1998-12-18 02:21+0100\n"
+"Last-Translator: Krzysztof Krzy¿aniak <eloy@venco.com.pl>\n"
+"Language-Team: Polish <plug@poznan.linux.org.pl>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gtk/gtkfilesel.c:419
+msgid "Directories"
+msgstr "Katalogi"
+
+#. The files clist
+#: gtk/gtkfilesel.c:430
+msgid "Files"
+msgstr "Pliki"
+
+#. The OK button
+#: gtk/gtkfilesel.c:462
+msgid "OK"
+msgstr "OK"
+
+#. The Cancel button
+#: gtk/gtkfilesel.c:469 gtk/gtkfilesel.c:844 gtk/gtkfilesel.c:944
+#: gtk/gtkfilesel.c:1059
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: gtk/gtkfilesel.c:500 gtk/gtkfilesel.c:1455
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "Nie mo¿na odczytaæ katalogu: %s"
+
+#: gtk/gtkfilesel.c:532
+msgid "Create Dir"
+msgstr "Utwórz katalog"
+
+#: gtk/gtkfilesel.c:543 gtk/gtkfilesel.c:913
+msgid "Delete File"
+msgstr "Skasuj plik"
+
+#: gtk/gtkfilesel.c:554 gtk/gtkfilesel.c:1017
+msgid "Rename File"
+msgstr "Zmieñ nazwê"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:715
+msgid "Error"
+msgstr "B³±d"
+
+#. close button
+#: gtk/gtkfilesel.c:733
+msgid "Close"
+msgstr "Zamknij"
+
+#: gtk/gtkfilesel.c:808
+msgid "Create Directory"
+msgstr "Utwórz katalog"
+
+#: gtk/gtkfilesel.c:822
+msgid "Directory name:"
+msgstr "Nazwa katalogu:"
+
+#. buttons
+#: gtk/gtkfilesel.c:835
+msgid "Create"
+msgstr "Utwórz"
+
+#. buttons
+#: gtk/gtkfilesel.c:935
+msgid "Delete"
+msgstr "Skasuj"
+
+#. buttons
+#: gtk/gtkfilesel.c:1050
+msgid "Rename"
+msgstr "Zmieñ nazwê"
