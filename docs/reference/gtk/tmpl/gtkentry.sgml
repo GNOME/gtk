@@ -180,6 +180,60 @@ to fit.
 @max: the new maximum length.
 
 
+<!-- ##### FUNCTION gtk_entry_get_activates_default ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_has_frame ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_width_chars ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_activates_default ##### -->
+<para>
+
+</para>
+
+@entry: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_has_frame ##### -->
+<para>
+
+</para>
+
+@entry: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_width_chars ##### -->
+<para>
+
+</para>
+
+@entry: 
+@n_chars: 
+
+
 <!-- ##### SIGNAL GtkEntry::activate ##### -->
 <para>
 

@@ -61,7 +61,7 @@ GtkTreeStore *gtk_tree_store_new_with_types  (gint          n_columns,
 					      ...);
 void          gtk_tree_store_set_n_columns   (GtkTreeStore *tree_store,
 					      gint          n_columns);
-void          gtk_tree_store_set_column_type (GtkTreeStore *store,
+void          gtk_tree_store_set_column_type (GtkTreeStore *tree_store,
 					      gint          column,
 					      GType         type);
 void          gtk_tree_store_set_value       (GtkTreeStore *tree_store,

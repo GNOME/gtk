@@ -1,3 +1,31 @@
+<!-- ##### SECTION ./tmpl/gtkdata.sgml:Long_Description ##### -->
+<para>
+The #GtkData object is a very simple object intended to be used as a base
+class for objects which contain data (i.e. the 'Model' in the object-oriented
+Model/View/Controller framework).
+</para>
+<para>
+Currently it is not very useful since all it provides is a "disconnect" signal.
+This signal could be emitted by a #GtkData subclass to notify any 'Views'
+that they should disconnect from the #GtkData (the 'Model'), possibly just
+before the #GtkData is destroyed.
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkdata.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkdata.sgml:Short_Description ##### -->
+abstract base class for objects containing data.
+
+
+<!-- ##### SECTION ./tmpl/gtkdata.sgml:Title ##### -->
+GtkData
+
+
 <!-- ##### SECTION ./tmpl/gtkdebug.sgml:Title ##### -->
 Debugging
 
@@ -100,6 +128,26 @@ Signal Marshallers
 
 <!-- ##### SECTION ./tmpl/gtkprivate.sgml:Title ##### -->
 Private Information
+
+
+<!-- ##### SECTION ./tmpl/gtktreemodelsimple.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtktreemodelsimple.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtktreemodelsimple.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtktreemodelsimple.sgml:Title ##### -->
+GtkModelSimple
 
 
 <!-- ##### MACRO GTK_CLIST_CHILD_HAS_FOCUS ##### -->
@@ -875,6 +923,16 @@ Get the type of GtkIdentifier.
 @str: 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_list_store_set_cell ##### -->
+<para>
+
+</para>
+
+@store: 
+@iter: 
+@column: 
+@value: 
+
 <!-- ##### FUNCTION gtk_menu_ensure_uline_accel_group ##### -->
 <para>
 
@@ -1265,6 +1323,16 @@ a gtk_object_unref().
 
 @tree_model: 
 @iter: 
+
+<!-- ##### FUNCTION gtk_tree_store_set_cell ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@column: 
+@value: 
 
 <!-- ##### FUNCTION gtk_type_check_class_cast ##### -->
 <para>

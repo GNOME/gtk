@@ -1079,9 +1079,9 @@ gtk_tree_model_reordered (GtkTreeModel *tree_model,
 }
 
 
-/**
- ** GtkTreeRowReference
- **/
+/*
+ * GtkTreeRowReference
+ */
 
 #define ROW_REF_DATA_STRING "gtk-tree-row-refs"
 

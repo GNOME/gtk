@@ -340,6 +340,33 @@ GtkContainer
 @container: 
 
 
+<!-- ##### FUNCTION gtk_container_propagate_expose ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@event: 
+
+
+<!-- ##### FUNCTION gtk_container_set_focus_chain ##### -->
+<para>
+
+</para>
+
+@container: 
+@focusable_widgets: 
+
+
+<!-- ##### FUNCTION gtk_container_unset_focus_chain ##### -->
+<para>
+
+</para>
+
+@container: 
+
+
 <!-- ##### SIGNAL GtkContainer::add ##### -->
 <para>
 

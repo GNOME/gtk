@@ -152,6 +152,33 @@ Creates a new #GtkProgressBar.
 @fraction: 
 
 
+<!-- ##### FUNCTION gtk_progress_bar_get_fraction ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_get_pulse_step ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_progress_bar_get_text ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_progress_bar_new_with_adjustment ##### -->
 <para>
 Creates a new #GtkProgressBar with an associated #GtkAdjustment.
@@ -213,6 +240,15 @@ grows.
 @pbar: a #GtkProgressBar.
 @orientation: a #GtkProgressBarOrientation value which specifies the
 orientation and growth direction of the bar.
+
+
+<!-- ##### FUNCTION gtk_progress_bar_get_orientation ##### -->
+<para>
+
+</para>
+
+@pbar: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_progress_bar_update ##### -->

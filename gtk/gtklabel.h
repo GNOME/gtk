@@ -95,7 +95,7 @@ guint    gtk_label_get_mnemonic_keyval            (GtkLabel         *label);
 void     gtk_label_set_mnemonic_widget            (GtkLabel         *label,
 						   GtkWidget        *widget);
 void     gtk_label_set_text_with_mnemonic         (GtkLabel         *label,
-						   const gchar      *string);
+						   const gchar      *str);
 void     gtk_label_set_justify                    (GtkLabel         *label,
 						   GtkJustification  jtype);
 void     gtk_label_set_pattern                    (GtkLabel         *label,

@@ -303,6 +303,32 @@ sets if the tooltips of a toolbar should be active or not.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_toolbar_insert_stock ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@stock_id: 
+@tooltip_text: 
+@tooltip_private_text: 
+@callback: 
+@user_data: 
+@position: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toolbar_set_icon_size ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@icon_size: 
+<!-- # Unused Parameters # -->
+@stock_size: 
+
+
 <!-- ##### SIGNAL GtkToolbar::orientation-changed ##### -->
 <para>
 should be used if you wish to perform an action when the orientation of a toolbar is changed.

@@ -1247,6 +1247,85 @@ GtkWidget
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_widget_activate_mnemonic ##### -->
+<para>
+
+</para>
+
+@widget: 
+@group_cycling: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_class_install_style_property ##### -->
+<para>
+
+</para>
+
+@class: 
+@pspec: 
+
+
+<!-- ##### FUNCTION gtk_widget_class_install_style_property_parser ##### -->
+<para>
+
+</para>
+
+@class: 
+@pspec: 
+@parser: 
+
+
+<!-- ##### FUNCTION gtk_widget_region_intersect ##### -->
+<para>
+
+</para>
+
+@widget: 
+@region: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_send_expose ##### -->
+<para>
+
+</para>
+
+@widget: 
+@event: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_style_get ##### -->
+<para>
+
+</para>
+
+@widget: 
+@first_property_name: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_widget_style_get_property ##### -->
+<para>
+
+</para>
+
+@widget: 
+@property_name: 
+@value: 
+
+
+<!-- ##### FUNCTION gtk_widget_style_get_valist ##### -->
+<para>
+
+</para>
+
+@widget: 
+@first_property_name: 
+@var_args: 
+
+
 <!-- ##### SIGNAL GtkWidget::activate-mnemonic ##### -->
 <para>
 

@@ -47,6 +47,24 @@ GtkRange
 @adjustment: 
 
 
+<!-- ##### FUNCTION gtk_range_get_inverted ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_set_inverted ##### -->
+<para>
+
+</para>
+
+@range: 
+@setting: 
+
+
 <!-- ##### ARG GtkRange:update-policy ##### -->
 <para>
 

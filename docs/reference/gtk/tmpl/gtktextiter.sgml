@@ -296,6 +296,33 @@ types related to the text widget and how they work together.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_text_iter_starts_sentence ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_ends_sentence ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_inside_sentence ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_text_iter_is_cursor_position ##### -->
 <para>
 
@@ -334,6 +361,15 @@ types related to the text widget and how they work together.
 
 
 <!-- ##### FUNCTION gtk_text_iter_get_language ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_is_end ##### -->
 <para>
 
 </para>
@@ -494,6 +530,44 @@ types related to the text widget and how they work together.
 
 
 <!-- ##### FUNCTION gtk_text_iter_backward_cursor_positions ##### -->
+<para>
+
+</para>
+
+@iter: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_backward_sentence_start ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_backward_sentence_starts ##### -->
+<para>
+
+</para>
+
+@iter: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_forward_sentence_end ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_forward_sentence_ends ##### -->
 <para>
 
 </para>

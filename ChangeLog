@@ -1,3 +1,8 @@
+2001-03-23  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktoolbar.c, gtk/gtkimcontext.c, gtk/gtklabel.c: fix up
+	some docs
+
 Fri Mar 23 16:13:43 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.h (GtkCellDataFunc): Forgot to namespace

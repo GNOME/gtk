@@ -93,10 +93,6 @@ GTK_ASPECT_FRAME_GET_CLASS
 <TITLE>GtkButtonBox</TITLE>
 GtkButtonBox
 GTK_BUTTONBOX_DEFAULT
-gtk_button_box_get_child_size_default
-gtk_button_box_get_child_ipadding_default
-gtk_button_box_set_child_size_default
-gtk_button_box_set_child_ipadding_default
 gtk_button_box_get_spacing
 gtk_button_box_get_layout
 gtk_button_box_get_child_size
@@ -105,7 +101,6 @@ gtk_button_box_set_spacing
 gtk_button_box_set_layout
 gtk_button_box_set_child_size
 gtk_button_box_set_child_ipadding
-gtk_button_box_child_requisition
 <SUBSECTION Standard>
 GTK_BUTTON_BOX
 GTK_IS_BUTTON_BOX
@@ -144,6 +139,7 @@ gtk_box_set_spacing
 gtk_box_reorder_child
 gtk_box_query_child_packing
 gtk_box_set_child_packing
+gtk_box_get_spacing
 <SUBSECTION Standard>
 GTK_BOX
 GTK_IS_BOX
@@ -160,8 +156,8 @@ GTK_BOX_GET_CLASS
 GtkButton
 gtk_button_new
 gtk_button_new_with_label
-gtk_button_new_accel
-gtk_button_new_stock
+gtk_button_new_with_mnemonic
+gtk_button_new_from_stock
 gtk_button_pressed
 gtk_button_released
 gtk_button_clicked
@@ -210,6 +206,7 @@ GtkCheckButton
 <TITLE>GtkCheckButton</TITLE>
 gtk_check_button_new
 gtk_check_button_new_with_label
+gtk_check_button_new_with_mnemonic
 <SUBSECTION Standard>
 GTK_CHECK_BUTTON
 GTK_IS_CHECK_BUTTON
@@ -230,6 +227,8 @@ gtk_check_menu_item_set_state
 gtk_check_menu_item_set_active
 gtk_check_menu_item_set_show_toggle
 gtk_check_menu_item_toggled
+gtk_check_menu_item_get_inconsistent
+gtk_check_menu_item_set_inconsistent
 <SUBSECTION Standard>
 GTK_CHECK_MENU_ITEM
 GTK_IS_CHECK_MENU_ITEM
@@ -460,6 +459,9 @@ gtk_container_forall
 gtk_container_child_composite_name
 gtk_container_set_border_width
 gtk_container_dequeue_resize_handler
+gtk_container_propagate_expose
+gtk_container_set_focus_chain
+gtk_container_unset_focus_chain
 <SUBSECTION Standard>
 GTK_CONTAINER
 GTK_IS_CONTAINER
@@ -587,20 +589,6 @@ GTK_CURVE_GET_CLASS
 </SECTION>
 
 <SECTION>
-<FILE>gtkdata</FILE>
-GtkData
-<TITLE>GtkData</TITLE>
-<SUBSECTION Standard>
-GTK_DATA
-GTK_IS_DATA
-GTK_TYPE_DATA
-gtk_data_get_type
-GTK_DATA_CLASS
-GTK_IS_DATA_CLASS
-GTK_DATA_GET_CLASS
-</SECTION>
-
-<SECTION>
 <FILE>gtkdialog</FILE>
 GtkDialog
 <TITLE>GtkDialog</TITLE>
@@ -613,6 +601,10 @@ gtk_dialog_response
 gtk_dialog_add_button
 gtk_dialog_add_buttons
 gtk_dialog_add_action_widget
+gtk_dialog_get_has_separator
+gtk_dialog_set_default_response
+gtk_dialog_set_has_separator
+gtk_dialog_set_response_sensitive
 <SUBSECTION Standard>
 GTK_DIALOG
 GTK_IS_DIALOG
@@ -698,6 +690,12 @@ gtk_entry_set_visibility
 gtk_entry_set_invisible_char
 gtk_entry_set_editable
 gtk_entry_set_max_length
+gtk_entry_get_activates_default
+gtk_entry_get_has_frame
+gtk_entry_get_width_chars
+gtk_entry_set_activates_default
+gtk_entry_set_has_frame
+gtk_entry_set_width_chars
 <SUBSECTION Standard>
 GTK_ENTRY
 GTK_IS_ENTRY
@@ -812,6 +810,7 @@ gtk_frame_set_label
 gtk_frame_set_label_widget
 gtk_frame_set_label_align
 gtk_frame_set_shadow_type
+gtk_frame_get_label
 <SUBSECTION Standard>
 GTK_FRAME
 GTK_IS_FRAME
@@ -1007,6 +1006,27 @@ GtkImageType
 </SECTION>
 
 <SECTION>
+<FILE>gtkimagemenuitem</FILE>
+<TITLE>GtkImageMenuItem</TITLE>
+GtkImageMenuItem
+GtkImageMenuItemClass
+gtk_image_menu_item_add_image
+gtk_image_menu_item_get_image
+gtk_image_menu_item_get_type
+gtk_image_menu_item_new
+gtk_image_menu_item_new_from_stock
+<SUBSECTION Standard>
+GTK_IMAGE_MENU_ITEM
+GTK_IMAGE_MENU_ITEM_CLASS
+GTK_IMAGE_MENU_ITEM_GET_CLASS
+GTK_IS_IMAGE_MENU_ITEM
+GTK_IS_IMAGE_MENU_ITEM_CLASS
+GTK_TYPE_IMAGE_MENU_ITEM
+<SUBSECTION Private>
+
+</SECTION>
+
+<SECTION>
 <FILE>gtkimcontext</FILE>
 <TITLE>GtkIMContext</TITLE>
 GtkIMContext
@@ -1016,6 +1036,7 @@ gtk_im_context_filter_keypress
 gtk_im_context_focus_in
 gtk_im_context_focus_out
 gtk_im_context_reset
+gtk_im_context_set_cursor_location
 <SUBSECTION Standard>
 GTK_IM_CONTEXT
 GTK_IS_IM_CONTEXT
@@ -1147,13 +1168,22 @@ gtk_label_new
 gtk_label_set_text
 gtk_label_set_attributes
 gtk_label_set_markup
-gtk_label_set_markup_with_accel
+gtk_label_set_markup_with_mnemonic
 gtk_label_set_pattern
 gtk_label_set_justify
 gtk_label_get
 gtk_label_parse_uline
 gtk_label_set_line_wrap
 gtk_label_set
+gtk_label_get_layout_offsets
+gtk_label_get_mnemonic_keyval
+gtk_label_get_selectable
+gtk_label_get_text
+gtk_label_new_with_mnemonic
+gtk_label_select_region
+gtk_label_set_mnemonic_widget
+gtk_label_set_selectable
+gtk_label_set_text_with_mnemonic
 <SUBSECTION Standard>
 GTK_LABEL
 GTK_IS_LABEL
@@ -1162,6 +1192,8 @@ gtk_label_get_type
 GTK_LABEL_CLASS
 GTK_IS_LABEL_CLASS
 GTK_LABEL_GET_CLASS
+<SUBSECTION Private>
+GtkLabelSelectionInfo
 </SECTION>
 
 <SECTION>
@@ -1257,8 +1289,6 @@ gtk_menu_reorder_child
 gtk_menu_popup
 gtk_menu_set_accel_group
 gtk_menu_get_accel_group
-gtk_menu_get_uline_accel_group
-gtk_menu_ensure_uline_accel_group
 gtk_menu_set_title
 <SUBSECTION>
 gtk_menu_popdown
@@ -1660,12 +1690,16 @@ gtk_progress_bar_pulse
 gtk_progress_bar_set_text
 gtk_progress_bar_set_fraction
 gtk_progress_bar_set_pulse_step
+gtk_progress_bar_get_fraction
+gtk_progress_bar_get_pulse_step
+gtk_progress_bar_get_text
 gtk_progress_bar_new_with_adjustment
 gtk_progress_bar_set_bar_style
 gtk_progress_bar_set_discrete_blocks
 gtk_progress_bar_set_activity_step
 gtk_progress_bar_set_activity_blocks
 gtk_progress_bar_set_orientation
+gtk_progress_bar_get_orientation
 gtk_progress_bar_update
 <SUBSECTION Standard>
 GTK_PROGRESS_BAR
@@ -1722,20 +1756,8 @@ GtkRange
 gtk_range_get_adjustment
 gtk_range_set_update_policy
 gtk_range_set_adjustment
-gtk_range_draw_background
-gtk_range_draw_trough
-gtk_range_draw_slider
-gtk_range_draw_step_forw
-gtk_range_draw_step_back
-gtk_range_slider_update
-gtk_range_trough_click
-gtk_range_default_hslider_update
-gtk_range_default_vslider_update
-gtk_range_default_htrough_click
-gtk_range_default_vtrough_click
-gtk_range_default_hmotion
-gtk_range_default_vmotion
-gtk_range_clear_background
+gtk_range_get_inverted
+gtk_range_set_inverted
 <SUBSECTION Standard>
 GTK_RANGE
 GTK_IS_RANGE
@@ -1841,6 +1863,43 @@ GTK_SEPARATOR_GET_CLASS
 </SECTION>
 
 <SECTION>
+<FILE>gtkseparatormenuitem</FILE>
+<TITLE>GtkSeparatorMenuItem</TITLE>
+GtkSeparatorMenuItem
+GtkSeparatorMenuItemClass
+gtk_separator_menu_item_new
+<SUBSECTION Standard>
+GTK_SEPARATOR_MENU_ITEM
+GTK_SEPARATOR_MENU_ITEM_CLASS
+GTK_SEPARATOR_MENU_ITEM_GET_CLASS
+GTK_IS_SEPARATOR_MENU_ITEM
+GTK_IS_SEPARATOR_MENU_ITEM_CLASS
+GTK_TYPE_SEPARATOR_MENU_ITEM
+gtk_separator_menu_item_get_type
+<SUBSECTION Private>
+
+</SECTION>
+
+<SECTION>
+<FILE>gtksettings</FILE>
+<TITLE>GtkSettings</TITLE>
+GtkSettings
+GtkSettingsClass
+GtkSettingsValue
+<SUBSECTION Standard>
+GTK_IS_SETTINGS
+GTK_IS_SETTINGS_CLASS
+GTK_SETTINGS
+GTK_SETTINGS_CLASS
+GTK_SETTINGS_GET_CLASS
+GTK_TYPE_SETTINGS
+<SUBSECTION Private>
+
+</SECTION>
+
+
+
+<SECTION>
 <FILE>gtksocket</FILE>
 <TITLE>GtkSocket</TITLE>
 GtkSocket
@@ -1874,7 +1933,6 @@ gtk_spin_button_set_update_policy
 gtk_spin_button_set_numeric
 gtk_spin_button_spin
 gtk_spin_button_set_wrap
-gtk_spin_button_set_shadow_type
 gtk_spin_button_set_snap_to_ticks
 gtk_spin_button_update
 GTK_INPUT_ERROR
@@ -2005,6 +2063,7 @@ gtk_text_buffer_set_text
 gtk_text_buffer_get_text
 gtk_text_buffer_get_slice
 gtk_text_buffer_insert_pixbuf
+gtk_text_buffer_insert_child_anchor
 gtk_text_buffer_create_child_anchor
 gtk_text_buffer_create_mark
 gtk_text_buffer_move_mark
@@ -2026,9 +2085,9 @@ gtk_text_buffer_get_iter_at_line
 gtk_text_buffer_get_iter_at_line_index
 gtk_text_buffer_get_iter_at_mark
 gtk_text_buffer_get_iter_at_child_anchor
-gtk_text_buffer_get_last_iter
+gtk_text_buffer_get_end_iter
 gtk_text_buffer_get_bounds
-gtk_text_buffer_modified
+gtk_text_buffer_get_modified
 gtk_text_buffer_set_modified
 gtk_text_buffer_delete_selection
 gtk_text_buffer_paste_clipboard
@@ -2082,12 +2141,15 @@ gtk_text_iter_ends_word
 gtk_text_iter_inside_word
 gtk_text_iter_starts_line
 gtk_text_iter_ends_line
+gtk_text_iter_starts_sentence
+gtk_text_iter_ends_sentence
+gtk_text_iter_inside_sentence
 gtk_text_iter_is_cursor_position
 gtk_text_iter_get_chars_in_line
 gtk_text_iter_get_bytes_in_line
 gtk_text_iter_get_attributes
 gtk_text_iter_get_language
-gtk_text_iter_is_last
+gtk_text_iter_is_end
 gtk_text_iter_is_first
 gtk_text_iter_forward_char
 gtk_text_iter_backward_char
@@ -2105,6 +2167,10 @@ gtk_text_iter_forward_cursor_position
 gtk_text_iter_backward_cursor_position
 gtk_text_iter_forward_cursor_positions
 gtk_text_iter_backward_cursor_positions
+gtk_text_iter_backward_sentence_start
+gtk_text_iter_backward_sentence_starts
+gtk_text_iter_forward_sentence_end
+gtk_text_iter_forward_sentence_ends
 gtk_text_iter_set_offset
 gtk_text_iter_set_line
 gtk_text_iter_set_line_offset
@@ -2134,6 +2200,7 @@ gtk_text_mark_get_visible
 gtk_text_mark_get_deleted
 gtk_text_mark_get_name
 gtk_text_mark_get_buffer
+gtk_text_mark_get_left_gravity
 <SUBSECTION Standard>
 GTK_TEXT_MARK
 GTK_IS_TEXT_MARK
@@ -2202,6 +2269,7 @@ gtk_text_view_new_with_buffer
 gtk_text_view_set_buffer
 gtk_text_view_get_buffer
 gtk_text_view_scroll_to_mark
+gtk_text_view_scroll_to_iter
 gtk_text_view_scroll_mark_onscreen
 gtk_text_view_move_mark_onscreen
 gtk_text_view_place_cursor_onscreen
@@ -2260,6 +2328,7 @@ GtkTextBTree
 GtkTextChildBody
 GtkTextPixbuf
 GtkTextWindow
+GtkTextPendingScroll
 </SECTION>
 
 <SECTION>
@@ -2291,6 +2360,8 @@ gtk_toggle_button_set_state
 gtk_toggle_button_toggled
 gtk_toggle_button_get_active
 gtk_toggle_button_set_active
+gtk_toggle_button_get_inconsistent
+gtk_toggle_button_set_inconsistent
 <SUBSECTION Standard>
 GTK_TOGGLE_BUTTON
 GTK_IS_TOGGLE_BUTTON
@@ -2328,6 +2399,8 @@ gtk_toolbar_set_space_style
 gtk_toolbar_set_tooltips
 gtk_toolbar_set_button_relief
 gtk_toolbar_get_button_relief
+gtk_toolbar_insert_stock
+gtk_toolbar_set_icon_size
 <SUBSECTION Standard>
 GTK_TOOLBAR
 GTK_IS_TOOLBAR
@@ -2455,8 +2528,8 @@ gtk_tree_model_iter_has_child
 gtk_tree_model_iter_n_children
 gtk_tree_model_iter_nth_child
 gtk_tree_model_iter_parent
-gtk_tree_model_ref_iter
-gtk_tree_model_unref_iter
+gtk_tree_model_ref_node
+gtk_tree_model_unref_node
 <SUBSECTION Standard>
 GTK_TREE_MODEL
 GTK_IS_TREE_MODEL
@@ -2521,9 +2594,8 @@ gtk_tree_store_new
 gtk_tree_store_new_with_types
 gtk_tree_store_set_n_columns
 gtk_tree_store_set_column_type
-gtk_tree_store_set_cell
+gtk_tree_store_set_value
 gtk_tree_store_set
-gtk_tree_store_get
 gtk_tree_store_remove
 gtk_tree_store_insert
 gtk_tree_store_insert_before
@@ -2543,7 +2615,7 @@ GTK_IS_TREE_STORE_CLASS
 
 <SECTION>
 <FILE>gtktreeviewcolumn</FILE>
-GTK_TYPE_TREE_COLUMN
+GTK_TYPE_TREE_VIEW_COLUMN
 GtkTreeViewColumn
 GtkTreeViewColumnSizing
 GtkTreeViewColumnFunc
@@ -2569,8 +2641,8 @@ gtk_tree_view_column_get_title
 gtk_tree_view_column_set_clickable
 gtk_tree_view_column_set_widget
 gtk_tree_view_column_get_widget
-gtk_tree_view_column_set_justification
-gtk_tree_view_column_get_justification
+gtk_tree_view_column_set_alignment
+gtk_tree_view_column_get_alignment
 gtk_tree_view_column_clicked
 <SUBSECTION Standard>
 GTK_TREE_VIEW_COLUMN
@@ -2618,24 +2690,6 @@ GTK_TREE_VIEW_CLASS
 GTK_IS_TREE_VIEW_CLASS
 <SUBSECTION Private>
 GtkTreeViewPrivate
-</SECTION>
-
-<SECTION>
-<FILE>gtktreemodelsimple</FILE>
-<TITLE>GtkTreeModelSimple</TITLE>
-GtkTreeModelSimple
-gtk_tree_model_simple_new
-gtk_tree_model_simple_changed
-gtk_tree_model_simple_inserted
-gtk_tree_model_simple_child_toggled
-gtk_tree_model_simple_deleted
-<SUBSECTION Standard>
-GTK_TREE_MODEL_SIMPLE
-GTK_IS_TREE_MODEL_SIMPLE
-GTK_TYPE_TREE_MODEL_SIMPLE
-gtk_tree_model_simple_get_type
-GTK_TREE_MODEL_SIMPLE_CLASS
-GTK_IS_TREE_MODEL_SIMPLE_CLASS
 </SECTION>
 
 <SECTION>
@@ -2923,8 +2977,6 @@ gtk_widget_unrealize
 gtk_widget_queue_draw
 gtk_widget_queue_resize
 gtk_widget_draw
-gtk_widget_draw_focus
-gtk_widget_draw_default
 gtk_widget_size_request
 gtk_widget_get_child_requisition
 gtk_widget_size_allocate
@@ -3010,6 +3062,14 @@ gtk_widget_set_composite_name
 gtk_widget_set_scroll_adjustments
 gtk_widget_unlock_accelerators
 gtk_widget_accelerators_locked
+gtk_widget_activate_mnemonic
+gtk_widget_class_install_style_property
+gtk_widget_class_install_style_property_parser
+gtk_widget_region_intersect
+gtk_widget_send_expose
+gtk_widget_style_get
+gtk_widget_style_get_property
+gtk_widget_style_get_valist
 <SUBSECTION Standard>
 GTK_WIDGET
 GTK_IS_WIDGET
@@ -3040,7 +3100,24 @@ gtk_window_set_position
 gtk_window_set_transient_for
 gtk_window_set_destroy_with_parent
 gtk_window_list_toplevels
-gtk_window_get_default_accel_group
+gtk_window_activate_mnemonic
+gtk_window_add_mnemonic
+gtk_window_deiconify
+gtk_window_iconify
+gtk_window_maximize
+gtk_window_present
+gtk_window_remove_mnemonic
+gtk_window_set_decorated
+gtk_window_set_decorations_hint
+gtk_window_set_frame_dimensions
+gtk_window_set_functions_hint
+gtk_window_set_has_frame
+gtk_window_set_mnemonic_modifier
+gtk_window_set_role
+gtk_window_set_type_hint
+gtk_window_stick
+gtk_window_unmaximize
+gtk_window_unstick
 <SUBSECTION Standard>
 GTK_WINDOW
 GTK_IS_WINDOW
@@ -3429,9 +3506,7 @@ gtk_drag_dest_handle_event
 <FILE>gtksignal</FILE>
 <TITLE>Signals</TITLE>
 GTK_SIGNAL_OFFSET
-GtkEmissionHook
 GtkSignalRunType
-gtk_signal_init
 gtk_signal_new
 gtk_signal_newv
 gtk_signal_lookup
@@ -3460,8 +3535,6 @@ gtk_signal_handler_unblock_by_func
 gtk_signal_handler_unblock_by_data
 gtk_signal_handler_pending
 gtk_signal_handler_pending_by_func
-gtk_signal_add_emission_hook
-gtk_signal_remove_emission_hook
 gtk_signal_default_marshaller
 
 <SUBSECTION Private>
@@ -3676,6 +3749,7 @@ GTK_STOCK_OPEN
 GTK_STOCK_QUIT
 GTK_STOCK_SAVE
 GTK_STOCK_CLOSE
+GTK_STOCK_MISSING_IMAGE
 </SECTION>
 
 
@@ -3685,6 +3759,7 @@ GTK_STOCK_CLOSE
 GtkIconSource
 GtkIconFactory
 GtkIconSet
+GtkIconSize
 gtk_icon_source_copy
 gtk_icon_source_free
 gtk_icon_factory_add
@@ -3696,17 +3771,32 @@ gtk_icon_factory_remove_default
 gtk_icon_set_add_source
 gtk_icon_set_copy
 gtk_icon_set_new
+gtk_icon_set_new_from_pixbuf
 gtk_icon_set_ref
 gtk_icon_set_render_icon
 gtk_icon_set_unref
-GTK_ICON_SIZE_MENU
-GTK_ICON_SIZE_BUTTON
-GTK_ICON_SIZE_SMALL_TOOLBAR
-GTK_ICON_SIZE_LARGE_TOOLBAR
-GTK_ICON_SIZE_DIALOG
 gtk_icon_size_lookup
 gtk_icon_size_register
 gtk_icon_size_register_alias
+gtk_icon_size_from_name
+gtk_icon_size_get_name
+gtk_icon_source_get_direction
+gtk_icon_source_get_direction_wildcarded
+gtk_icon_source_get_filename
+gtk_icon_source_get_pixbuf
+gtk_icon_source_get_size
+gtk_icon_source_get_size_wildcarded
+gtk_icon_source_get_state
+gtk_icon_source_get_state_wildcarded
+gtk_icon_source_new
+gtk_icon_source_set_direction
+gtk_icon_source_set_direction_wildcarded
+gtk_icon_source_set_filename
+gtk_icon_source_set_pixbuf
+gtk_icon_source_set_size
+gtk_icon_source_set_size_wildcarded
+gtk_icon_source_set_state
+gtk_icon_source_set_state_wildcarded
 <SUBSECTION Standard>
 GtkIconFactoryClass
 GTK_TYPE_ICON_FACTORY

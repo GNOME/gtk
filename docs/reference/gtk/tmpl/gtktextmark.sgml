@@ -104,3 +104,12 @@ Marks are typically created using the gtk_text_buffer_create_mark() function.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_text_mark_get_left_gravity ##### -->
+<para>
+
+</para>
+
+@mark: 
+@Returns: 
+
+

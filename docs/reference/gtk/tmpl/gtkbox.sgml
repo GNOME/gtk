@@ -352,6 +352,15 @@ field in #GtkBoxChild-struct.
 in #GtkBoxChild-struct.
 
 
+<!-- ##### FUNCTION gtk_box_get_spacing ##### -->
+<para>
+
+</para>
+
+@box: 
+@Returns: 
+
+
 <!-- ##### ARG GtkBox:spacing ##### -->
 <para>
 the minimum amount of space to put between children.  Refers to the

@@ -94,6 +94,24 @@ Emits the GtkCheckMenuItem::toggled signal.
 @check_menu_item: a #GtkCheckMenuItem.
 
 
+<!-- ##### FUNCTION gtk_check_menu_item_get_inconsistent ##### -->
+<para>
+
+</para>
+
+@check_menu_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_check_menu_item_set_inconsistent ##### -->
+<para>
+
+</para>
+
+@check_menu_item: 
+@setting: 
+
+
 <!-- ##### SIGNAL GtkCheckMenuItem::toggled ##### -->
 <para>
 This signal is emitted when the state of the check box is changed.

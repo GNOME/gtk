@@ -52,6 +52,18 @@ looking up the icon to use for a given stock ID.
 </para>
 
 
+<!-- ##### ENUM GtkIconSize ##### -->
+<para>
+
+</para>
+
+@GTK_ICON_SIZE_INVALID: 
+@GTK_ICON_SIZE_MENU: 
+@GTK_ICON_SIZE_SMALL_TOOLBAR: 
+@GTK_ICON_SIZE_LARGE_TOOLBAR: 
+@GTK_ICON_SIZE_BUTTON: 
+@GTK_ICON_SIZE_DIALOG: 
+
 <!-- ##### FUNCTION gtk_icon_source_copy ##### -->
 <para>
 
@@ -148,6 +160,15 @@ looking up the icon to use for a given stock ID.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_icon_set_new_from_pixbuf ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_icon_set_ref ##### -->
 <para>
 
@@ -213,5 +234,175 @@ looking up the icon to use for a given stock ID.
 
 @alias: 
 @target: 
+
+
+<!-- ##### FUNCTION gtk_icon_size_from_name ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_size_get_name ##### -->
+<para>
+
+</para>
+
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_direction ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_direction_wildcarded ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_filename ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_pixbuf ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_size ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_size_wildcarded ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_state ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_get_state_wildcarded ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_direction ##### -->
+<para>
+
+</para>
+
+@source: 
+@direction: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_direction_wildcarded ##### -->
+<para>
+
+</para>
+
+@source: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_filename ##### -->
+<para>
+
+</para>
+
+@source: 
+@filename: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_pixbuf ##### -->
+<para>
+
+</para>
+
+@source: 
+@pixbuf: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_size ##### -->
+<para>
+
+</para>
+
+@source: 
+@size: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_size_wildcarded ##### -->
+<para>
+
+</para>
+
+@source: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_state ##### -->
+<para>
+
+</para>
+
+@source: 
+@state: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_state_wildcarded ##### -->
+<para>
+
+</para>
+
+@source: 
+@setting: 
 
 

@@ -137,7 +137,7 @@ GtkWidget* gtk_toolbar_insert_item     (GtkToolbar      *toolbar,
 
 /* Stock Items */
 void       gtk_toolbar_set_icon_size   (GtkToolbar      *toolbar,
-					GtkIconSize      stock_size);
+					GtkIconSize      icon_size);
 GtkWidget* gtk_toolbar_insert_stock    (GtkToolbar      *toolbar,
 					const gchar     *stock_id,
 					const char      *tooltip_text,

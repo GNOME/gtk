@@ -12,9 +12,7 @@
 <!entity gdk-Windows SYSTEM "sgml/windows.sgml">
 <!entity gdk-Selections SYSTEM "sgml/selections.sgml">
 <!entity gdk-Properties-and-Atoms SYSTEM "sgml/properties.sgml">
-<!entity gdk-Input-Methods SYSTEM "sgml/input_methods.sgml">
 <!entity gdk-Pango-Interaction SYSTEM "sgml/pango_interaction.sgml">
-<!entity gdk-Input-Contexts SYSTEM "sgml/input_contexts.sgml">
 <!entity gdk-Points-Rectangles-and-Regions SYSTEM "sgml/regions.sgml">
 <!entity gdk-Threads SYSTEM "sgml/threads.sgml">
 <!entity gdk-Keys SYSTEM "sgml/keys.sgml">
@@ -70,8 +68,6 @@
     &gdk-Input-Devices;
 
     &gdk-Pango-Interaction;
-    &gdk-Input-Methods;
-    &gdk-Input-Contexts;
 
     &gdk-X-Window-System-Interaction;
   </reference>

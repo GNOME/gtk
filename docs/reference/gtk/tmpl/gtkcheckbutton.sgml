@@ -57,3 +57,12 @@ Creates a new #GtkCheckButton with a #GtkLabel to the right of it.
 @Returns: a #GtkWidget.
 
 
+<!-- ##### FUNCTION gtk_check_button_new_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+

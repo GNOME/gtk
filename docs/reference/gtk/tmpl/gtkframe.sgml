@@ -78,6 +78,15 @@ Set the shadow type for the Frame widget.
 @type: New shadow type.
 
 
+<!-- ##### FUNCTION gtk_frame_get_label ##### -->
+<para>
+
+</para>
+
+@frame: 
+@Returns: 
+
+
 <!-- ##### ARG GtkFrame:label ##### -->
 <para>
 

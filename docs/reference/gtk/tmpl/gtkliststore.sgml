@@ -58,17 +58,6 @@ GtkListStore
 @type: 
 
 
-<!-- ##### FUNCTION gtk_list_store_set_cell ##### -->
-<para>
-
-</para>
-
-@store: 
-@iter: 
-@column: 
-@value: 
-
-
 <!-- ##### FUNCTION gtk_list_store_remove ##### -->
 <para>
 

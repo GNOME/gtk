@@ -74,6 +74,15 @@ GtkIMContext
 @context: 
 
 
+<!-- ##### FUNCTION gtk_im_context_set_cursor_location ##### -->
+<para>
+
+</para>
+
+@context: 
+@area: 
+
+
 <!-- ##### SIGNAL GtkIMContext::commit ##### -->
 <para>
 

@@ -236,6 +236,167 @@ it's larger
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_window_activate_mnemonic ##### -->
+<para>
+
+</para>
+
+@window: 
+@keyval: 
+@modifier: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_add_mnemonic ##### -->
+<para>
+
+</para>
+
+@window: 
+@keyval: 
+@target: 
+
+
+<!-- ##### FUNCTION gtk_window_deiconify ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_iconify ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_maximize ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_present ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_remove_mnemonic ##### -->
+<para>
+
+</para>
+
+@window: 
+@keyval: 
+@target: 
+
+
+<!-- ##### FUNCTION gtk_window_set_decorated ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_set_decorations_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@decorations: 
+
+
+<!-- ##### FUNCTION gtk_window_set_frame_dimensions ##### -->
+<para>
+
+</para>
+
+@window: 
+@left: 
+@top: 
+@right: 
+@bottom: 
+
+
+<!-- ##### FUNCTION gtk_window_set_functions_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@functions: 
+
+
+<!-- ##### FUNCTION gtk_window_set_has_frame ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_set_mnemonic_modifier ##### -->
+<para>
+
+</para>
+
+@window: 
+@modifier: 
+
+
+<!-- ##### FUNCTION gtk_window_set_role ##### -->
+<para>
+
+</para>
+
+@window: 
+@role: 
+
+
+<!-- ##### FUNCTION gtk_window_set_type_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@hint: 
+
+
+<!-- ##### FUNCTION gtk_window_stick ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_unmaximize ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_unstick ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
 <!-- ##### SIGNAL GtkWindow::frame-event ##### -->
 <para>
 

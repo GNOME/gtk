@@ -90,6 +90,20 @@ types related to the text widget and how they work together.
 @mark_within_margin: 
 
 
+<!-- ##### FUNCTION gtk_text_view_scroll_to_iter ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@within_margin: 
+@use_align: 
+@xalign: 
+@yalign: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_text_view_scroll_mark_onscreen ##### -->
 <para>
 

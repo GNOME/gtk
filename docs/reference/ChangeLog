@@ -1,3 +1,14 @@
+2001-03-23  Havoc Pennington  <hp@redhat.com>
+
+	* gdk/gdk-sections.txt: updates
+
+	* gtk/gtk-sections.txt: updates
+
+	* gtk/gtk-docs.sgml: mop up TreeModelSimple entity
+
+	* gdk/gdk-docs.sgml: remove input method
+	and input context docs
+
 2001-03-22  Havoc Pennington  <hp@redhat.com>
 
 	* gdk/tmpl/keys.sgml: docs on GdkKeymap

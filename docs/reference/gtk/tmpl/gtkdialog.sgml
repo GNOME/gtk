@@ -236,6 +236,43 @@ directly, but into the vbox and action_area, as described above.
 @widget: 
 
 
+<!-- ##### FUNCTION gtk_dialog_get_has_separator ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_dialog_set_default_response ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@response_id: 
+
+
+<!-- ##### FUNCTION gtk_dialog_set_has_separator ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_dialog_set_response_sensitive ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@response_id: 
+@setting: 
+
+
 <!-- ##### SIGNAL GtkDialog::response ##### -->
 <para>
 Emitted when an action widget is clicked, the dialog receives a delete event, or

@@ -532,11 +532,12 @@ gtk_label_set_mnemonic_widget (GtkLabel  *label,
 /**
  * gtk_label_get_mnemonic_keyval:
  * @label: a #GtkLabel
- * @Returns: GDK keyval usable for accelerators, or GDK_VoidSymbol
  *
  * If the label has been set so that it has an mnemonic key this function
  * returns the keyval used for the mnemonic accelerator. If there is no
  * mnemonic set up it returns #GDK_VoidSymbol.
+ *
+ * Returns: GDK keyval usable for accelerators, or GDK_VoidSymbol
  **/
 guint
 gtk_label_get_mnemonic_keyval (GtkLabel *label)
@@ -636,8 +637,8 @@ gtk_label_recalculate (GtkLabel *label)
 
 /**
  * gtk_label_set_text:
- * label: a #GtkLabel
- * str: a string
+ * @label: a #GtkLabel
+ * @str: a string
  *
  * Sets the text of the label to @str.
  *
@@ -1904,7 +1905,7 @@ gtk_label_select_region  (GtkLabel *label,
  * @x: location to store X offset of layout, or %NULL
  * @y: location to store Y offset of layout, or %NULL
  *
- * Returns the coordinates where the label will draw the #PangoLayout
+ * Obtains the coordinates where the label will draw the #PangoLayout
  * representing the text in the label; useful to convert mouse events
  * into coordinates inside the #PangoLayout, e.g. to take some action
  * if some part of the label is clicked. Of course you will need to

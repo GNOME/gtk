@@ -349,3 +349,21 @@ gtktreemodel
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_tree_model_ref_node ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_unref_node ##### -->
+<para>
+
+</para>
+
+@tree_model: 
+@iter: 
+
+

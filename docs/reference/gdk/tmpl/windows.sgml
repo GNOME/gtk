@@ -121,6 +121,16 @@ Windows
 @GDK_GRAVITY_SOUTH_EAST: 
 @GDK_GRAVITY_STATIC: 
 
+<!-- ##### ENUM GdkWindowTypeHint ##### -->
+<para>
+
+</para>
+
+@GDK_WINDOW_TYPE_HINT_NORMAL: 
+@GDK_WINDOW_TYPE_HINT_DIALOG: 
+@GDK_WINDOW_TYPE_HINT_MENU: 
+@GDK_WINDOW_TYPE_HINT_TOOLBAR: 
+
 <!-- ##### FUNCTION gdk_window_new ##### -->
 <para>
 
@@ -720,6 +730,34 @@ Windows
 @window: 
 @geometry: 
 @flags: 
+
+
+<!-- ##### FUNCTION gdk_window_set_icon_list ##### -->
+<para>
+
+</para>
+
+@window: 
+@pixbufs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_set_modal_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@modal: 
+
+
+<!-- ##### FUNCTION gdk_window_set_type_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@hint: 
 
 
 <!-- ##### FUNCTION gdk_window_get_position ##### -->

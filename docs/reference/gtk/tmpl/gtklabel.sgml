@@ -64,6 +64,15 @@ gtk_label_set_pattern().
 @str: 
 
 
+<!-- ##### FUNCTION gtk_label_set_markup_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@label: 
+@str: 
+
+
 <!-- ##### FUNCTION gtk_label_set_pattern ##### -->
 <para>
 The pattern of underlines you want under the existing text within the
@@ -130,6 +139,91 @@ Aliases gtk_label_set_text.  Probably used for backward compatibility with
 Gtk+ 1.0.x.
 </para>
 
+
+
+<!-- ##### FUNCTION gtk_label_get_layout_offsets ##### -->
+<para>
+
+</para>
+
+@label: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_label_get_mnemonic_keyval ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_selectable ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_text ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_new_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@str: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_select_region ##### -->
+<para>
+
+</para>
+
+@label: 
+@start_offset: 
+@end_offset: 
+
+
+<!-- ##### FUNCTION gtk_label_set_mnemonic_widget ##### -->
+<para>
+
+</para>
+
+@label: 
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_label_set_selectable ##### -->
+<para>
+
+</para>
+
+@label: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_label_set_text_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@label: 
+@str: 
+<!-- # Unused Parameters # -->
+@string: 
 
 
 <!-- ##### ARG GtkLabel:label ##### -->

@@ -14,6 +14,13 @@ GtkTreeViewColumn
 
 </para>
 
+<!-- ##### MACRO GTK_TYPE_TREE_VIEW_COLUMN ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### STRUCT GtkTreeViewColumn ##### -->
 <para>
 
@@ -238,6 +245,24 @@ GtkTreeViewColumn
 
 
 <!-- ##### FUNCTION gtk_tree_view_column_get_widget ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_alignment ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@xalign: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_get_alignment ##### -->
 <para>
 
 </para>

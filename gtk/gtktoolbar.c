@@ -858,6 +858,8 @@ gtk_toolbar_set_icon_size (GtkToolbar  *toolbar,
  * @stock_id is not a known stock item ID, it's inserted verbatim,
  * except that underscores are used to mark mnemonics (see
  * gtk_label_new_with_mnemonic()).
+ *
+ * Returns: the inserted widget
  */
 GtkWidget*
 gtk_toolbar_insert_stock (GtkToolbar      *toolbar,

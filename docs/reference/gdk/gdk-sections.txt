@@ -381,7 +381,7 @@ GdkWindowAttributesType
 GdkWindowHints
 GdkGeometry
 GdkGravity
-
+GdkWindowTypeHint
 gdk_window_new
 gdk_window_destroy
 gdk_window_ref
@@ -452,6 +452,9 @@ gdk_window_set_colormap
 gdk_window_get_user_data
 gdk_window_get_geometry
 gdk_window_set_geometry_hints
+gdk_window_set_icon_list
+gdk_window_set_modal_hint
+gdk_window_set_type_hint
 gdk_window_get_position
 gdk_window_get_root_origin
 gdk_window_get_size
@@ -530,25 +533,6 @@ gdk_property_delete
 </SECTION>
 
 <SECTION>
-<TITLE>Input Methods</TITLE>
-<FILE>input_methods</FILE>
-GdkIMStyle
-gdk_im_ready
-gdk_im_decide_style
-gdk_im_set_best_style
-
-<SUBSECTION>
-gdk_im_begin
-gdk_im_end
-
-<SUBSECTION Private>
-gdk_iswalnum
-gdk_iswspace
-GDK_HAVE_WCHAR_H
-GDK_HAVE_WCTYPE_H
-</SECTION>
-
-<SECTION>
 <TITLE>Pango Interaction</TITLE>
 <FILE>pango_interaction</FILE>
 gdk_pango_context_get
@@ -559,24 +543,6 @@ gdk_pango_attr_embossed_new
 gdk_pango_attr_stipple_new
 gdk_pango_layout_get_clip_region
 gdk_pango_layout_line_get_clip_region
-</SECTION>
-
-<SECTION>
-<TITLE>Input Contexts</TITLE>
-<FILE>input_contexts</FILE>
-GdkIC
-gdk_ic_new
-gdk_ic_destroy
-gdk_ic_get_events
-gdk_ic_get_style
-gdk_ic_get_attr
-gdk_ic_set_attr
-
-<SUBSECTION>
-GdkICAttr
-GdkICAttributesType
-gdk_ic_attr_new
-gdk_ic_attr_destroy
 </SECTION>
 
 <SECTION>
@@ -882,7 +848,10 @@ GdkCursorPrivate
 GdkFontPrivateX
 GdkImagePrivateX11
 GdkVisualPrivate
-GdkICPrivate
 gdk_display
 gdk_root_window
+GDK_HAVE_WCHAR_H
+GDK_HAVE_WCTYPE_H
+gdk_iswalnum
+gdk_iswspace
 </SECTION>

@@ -143,6 +143,24 @@ This action causes the toggled signal to be emitted.
 @is_active: TRUE or FALSE.
 
 
+<!-- ##### FUNCTION gtk_toggle_button_get_inconsistent ##### -->
+<para>
+
+</para>
+
+@toggle_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_toggle_button_set_inconsistent ##### -->
+<para>
+
+</para>
+
+@toggle_button: 
+@setting: 
+
+
 <!-- ##### SIGNAL GtkToggleButton::toggled ##### -->
 <para>
 Should be connected if you wish to perform an action whenever the

@@ -279,7 +279,6 @@ An advanced widget set.
         &gtk-GtkTreeStore;
         &gtk-GtkTreeViewColumn;
         &gtk-GtkTreeView;
-        &gtk-GtkTreeModelSimple;
         &gtk-GtkTreeModelSort;
         &gtk-GtkCellRenderer;
         &gtk-GtkCellRendererPixbuf;
