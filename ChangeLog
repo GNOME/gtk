@@ -1,3 +1,7 @@
+Wed Jul 29 16:03:20 EDT 1998 The Rasterman <raster@redhat.com>
+	* Fixed drawing functions to handle switching themes on the fly 
+	  gracefully and look decent.
+	  
 Tue Jul 28 22:52:10 EDT 1998 The Rasterman <raster@redhat.com>
 	* Added all the theme drawing code to all widgets, fixed up minor
           nigglies in some widgets when it comes to themes, seem to be

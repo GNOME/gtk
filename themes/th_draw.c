@@ -1673,7 +1673,8 @@ draw_flat_box (GtkStyle      *style,
 	     gdk_window_clear_area(window,x,y,width,height);
 	     return;
 	  }
- */ 
+ */
+/*	
 	if (area)
 	  gdk_draw_rectangle(window, style->bg_gc[state_type], TRUE, 
 			     new_area.x, new_area.y, 
@@ -1681,6 +1682,7 @@ draw_flat_box (GtkStyle      *style,
 	else
 	  gdk_draw_rectangle(window, style->bg_gc[state_type], TRUE, 
 			     x, y, width, height);
+ */
 	switch (shadow_type)
 	  {
 	   case GTK_SHADOW_NONE:

@@ -92,6 +92,8 @@ static void gtk_window_draw           (GtkWidget        *widget,
 				       GdkRectangle     *area);
 static gint gtk_window_expose         (GtkWidget        *widget,
 				       GdkEventExpose   *event);
+static void gtk_window_style_set      (GtkWidget *widget,
+				       GtkStyle  *previous_style);
 
 
 
@@ -178,6 +180,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus_in_event = gtk_window_focus_in_event;
   widget_class->focus_out_event = gtk_window_focus_out_event;
   widget_class->client_event = gtk_window_client_event;
+  widget_class->style_set = gtk_window_style_set;
 
    widget_class->draw = gtk_window_draw;
    widget_class->expose_event = gtk_window_expose;
@@ -1210,4 +1213,26 @@ gtk_window_draw (GtkWidget    *widget,
    gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL, 
 		      GTK_SHADOW_NONE, area, widget, "base", 0, 0, -1, -1);
    gtk_widget_draw (GTK_BIN (widget)->child, area);
+}
+
+static void
+gtk_window_style_set (GtkWidget *widget,
+		      GtkStyle  *previous_style)
+{
+   GdkRectangle area;
+   
+   if (GTK_WIDGET_REALIZED (widget) &&
+       !GTK_WIDGET_NO_WINDOW (widget))
+     {
+	gtk_style_set_background (widget->style, widget->window, widget->state);
+
+	area.x = 0;
+	area.y = 0;
+	area.width = widget->allocation.width;
+	area.height = widget->allocation.height;
+	gtk_window_draw(widget, &area);
+
+	if (GTK_WIDGET_DRAWABLE (widget))
+	  gdk_window_clear (widget->window);
+     }
 }

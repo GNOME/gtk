@@ -1463,7 +1463,7 @@ gtk_range_style_set (GtkWidget *widget,
   if (GTK_WIDGET_REALIZED (widget) &&
       !GTK_WIDGET_NO_WINDOW (widget))
     {
-      if (range->trough)
+       if (range->trough)
 	{
 	  gtk_style_set_background (widget->style, range->trough, GTK_STATE_ACTIVE);
 	  if (GTK_WIDGET_DRAWABLE (widget))
@@ -1483,5 +1483,7 @@ gtk_range_style_set (GtkWidget *widget,
 	  if (GTK_WIDGET_DRAWABLE (widget))
 	    gdk_window_clear (range->step_back);
 	}
+       gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+       gdk_window_clear (widget->window);
     }
 }

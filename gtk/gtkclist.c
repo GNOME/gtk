@@ -354,6 +354,8 @@ static void extend_selection (GtkCList      *clist,
 
 static void add_style_data (GtkCList * clist);
 
+static void gtk_clist_style_set (GtkWidget *widget, GtkStyle  *previous_style);
+
 static GtkContainerClass *parent_class = NULL;
 static guint clist_signals[LAST_SIGNAL] = {0};
 
@@ -521,6 +523,7 @@ gtk_clist_class_init (GtkCListClass * klass)
   widget_class->focus_in_event = gtk_clist_focus_in;
   widget_class->focus_out_event = gtk_clist_focus_out;
   widget_class->draw_focus = gtk_clist_draw_focus;
+  widget_class->style_set = gtk_clist_style_set;
 
   /* container_class->add = NULL; use the default GtkContainerClass warning */
   /* container_class->remove = NULL; use the default GtkContainerClass warning */
@@ -6064,4 +6067,28 @@ selection_find (GtkCList *clist,
 		GList    *row_list_element)
 {
   return g_list_find (clist->selection, GINT_TO_POINTER (row_number));
+}
+
+static void
+gtk_clist_style_set (GtkWidget *widget,
+		     GtkStyle  *previous_style)
+{
+   GdkRectangle area;
+   
+   if (GTK_WIDGET_REALIZED (widget) &&
+       !GTK_WIDGET_NO_WINDOW (widget))
+     {
+	gtk_style_set_background (widget->style, widget->window, widget->state);
+	if (GTK_WIDGET_DRAWABLE (widget))
+	  gdk_window_clear (widget->window);
+     }
+   if (GTK_CLIST(widget)->vscrollbar)
+     gtk_widget_queue_draw(GTK_CLIST(widget)->vscrollbar);
+   if (GTK_CLIST(widget)->hscrollbar)
+     gtk_widget_queue_draw(GTK_CLIST(widget)->hscrollbar);
+   area.x = 0;
+   area.y = 0;
+   area.width = widget->allocation.width;
+   area.height = widget->allocation.height;
+   gtk_clist_draw(GTK_CLIST(widget), &area);
 }

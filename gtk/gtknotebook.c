@@ -168,6 +168,8 @@ static GtkType gtk_notebook_child_type       (GtkContainer     *container);
 static gint    gtk_notebook_find_page        (gconstpointer     a,
 					      gconstpointer     b);
 static void gtk_notebook_set_shape           (GtkNotebook *notebook);
+static void gtk_notebook_style_set           (GtkWidget *widget,
+					      GtkStyle  *previous_style);
 
 static GtkContainerClass *parent_class = NULL;
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
@@ -253,7 +255,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->focus_in_event = gtk_notebook_focus_in;
   widget_class->focus_out_event = gtk_notebook_focus_out;
   widget_class->draw_focus = gtk_notebook_draw_focus;
-
+  widget_class->style_set = gtk_notebook_style_set;
+   
   container_class->add = gtk_notebook_add;
   container_class->remove = gtk_notebook_remove;
   container_class->foreach = gtk_notebook_foreach;
@@ -2139,9 +2142,11 @@ gtk_notebook_draw_arrow (GtkNotebook *notebook, guint arrow)
 	  if (notebook->tab_pos == GTK_POS_LEFT ||
 	      notebook->tab_pos == GTK_POS_RIGHT)
 	    arrow = GTK_ARROW_UP;
-	  gtk_draw_arrow (widget->style, notebook->panel, state_type, 
-			  shadow_type, arrow, TRUE, 
-                          0, 0, ARROW_SIZE, ARROW_SIZE);
+	   gdk_window_clear_area(notebook->panel, 0, 0, ARROW_SIZE, ARROW_SIZE);
+	  gtk_paint_arrow (widget->style, notebook->panel, state_type, 
+			   shadow_type, NULL, GTK_WIDGET(notebook), "notebook",
+			   arrow, TRUE, 
+			   0, 0, ARROW_SIZE, ARROW_SIZE);
 	}
       else
 	{
@@ -2154,9 +2159,12 @@ gtk_notebook_draw_arrow (GtkNotebook *notebook, guint arrow)
 	  if (notebook->tab_pos == GTK_POS_LEFT ||
 	      notebook->tab_pos == GTK_POS_RIGHT)
 	    arrow = GTK_ARROW_DOWN;
-	  gtk_draw_arrow (widget->style, notebook->panel, state_type, 
-			  shadow_type, arrow, TRUE, ARROW_SIZE + ARROW_SPACING,
-                          0, ARROW_SIZE, ARROW_SIZE);
+	   gdk_window_clear_area(notebook->panel, ARROW_SIZE + ARROW_SPACING, 
+				 0, ARROW_SIZE, ARROW_SIZE);
+	   gtk_paint_arrow (widget->style, notebook->panel, state_type, 
+			    shadow_type, NULL, GTK_WIDGET(notebook), "notebook",
+			    arrow, TRUE, ARROW_SIZE + ARROW_SPACING,
+			    0, ARROW_SIZE, ARROW_SIZE);
 	}
     }
 }
@@ -3344,4 +3352,19 @@ gtk_notebook_set_shape (GtkNotebook *notebook)
    gdk_window_shape_combine_mask(widget->window, pm, 0, 0);
    gdk_pixmap_unref(pm);
    gdk_gc_destroy(pmgc);
+}
+
+static void
+gtk_notebook_style_set (GtkWidget *widget,
+		      GtkStyle  *previous_style)
+{
+   if (GTK_WIDGET_REALIZED (widget) &&
+       !GTK_WIDGET_NO_WINDOW (widget))
+     {
+	gtk_style_set_background (widget->style, widget->window, widget->state);
+	if (GTK_WIDGET_DRAWABLE (widget))
+	  gdk_window_clear (widget->window);
+     }
+   gtk_widget_queue_draw(widget);
+   gtk_notebook_set_shape(GTK_NOTEBOOK(widget));
 }

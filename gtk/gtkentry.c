@@ -2332,6 +2332,8 @@ gtk_entry_style_set	(GtkWidget      *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     gdk_window_clear (widget->window);
+
+   gtk_widget_queue_draw(widget);
 }
 
 static void

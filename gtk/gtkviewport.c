@@ -57,6 +57,8 @@ static void gtk_viewport_adjustment_changed       (GtkAdjustment    *adjustment,
 						   gpointer          data);
 static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
 						   gpointer          data);
+static void gtk_viewport_style_set                (GtkWidget *widget,
+			                           GtkStyle  *previous_style);
 
 static GtkBinClass *parent_class;
 
@@ -122,7 +124,8 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->expose_event = gtk_viewport_expose;
   widget_class->size_request = gtk_viewport_size_request;
   widget_class->size_allocate = gtk_viewport_size_allocate;
-
+  widget_class->style_set = gtk_viewport_style_set;
+   
   container_class->add = gtk_viewport_add;
 }
 
@@ -766,4 +769,29 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
 			 child_allocation.x,
 			 child_allocation.y);
     }
+}
+
+static void
+gtk_viewport_style_set (GtkWidget *widget,
+			GtkStyle  *previous_style)
+{
+   GtkViewport *viewport;
+   
+   if (GTK_WIDGET_REALIZED (widget) &&
+       !GTK_WIDGET_NO_WINDOW (widget))
+     {
+	viewport = GTK_VIEWPORT (widget);
+	
+	gtk_style_set_background (widget->style, viewport->bin_window, GTK_STATE_NORMAL);
+	gtk_style_set_background (widget->style, widget->window, widget->state);
+	gtk_paint_flat_box(widget->style, viewport->bin_window, GTK_STATE_NORMAL,
+			   GTK_SHADOW_NONE,
+			   NULL, widget, "viewportbin",
+			   0, 0, -1, -1);
+	if (GTK_WIDGET_DRAWABLE (widget))
+	  {
+	     gdk_window_clear (widget->window);
+	     gdk_window_clear (viewport->bin_window);
+	  }
+     }
 }

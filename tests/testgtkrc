@@ -19,9 +19,9 @@ style "default"
 {
 #  fontset = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*,*"
   font = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
-   engine "th" { 
-     name = "Sssaample"
-   }
+  engine "th" { 
+      name = "Sssaample"
+      }
 }
 
 style "window"
