@@ -1,3 +1,7 @@
+Fri Dec 18 15:30:43 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* configure.in: add ja to ALL_LINGUAS
+
 Fri Dec 18 15:19:54 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksocket.c (gtk_socket_filter_func): Marked
