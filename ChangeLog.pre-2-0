@@ -1,3 +1,9 @@
+Thu Sep 17 19:10:49 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* install-sh
+	* missing
+	* mkinstalldirs: updated to latest automake version
+
 Mon Sep 14 14:28:24 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.c (adjust_adj): Change the way we
