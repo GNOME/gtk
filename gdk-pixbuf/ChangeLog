@@ -1,3 +1,8 @@
+2000-04-17  Karl Eichwalder  <ke@suse.de>
+
+	* gdk-pixbuf/Makefile.am (INCLUDES): Add $(GNOME_CFLAGS).
+	Reported by Jens Finke.
+
 2000-04-14 Tomasz K³opczko <kloczek@pld.org.pl>
 
 	* gdk-pixbuf/pixops/makefile.am: $(LIBART_CFLAGS) replaced by 

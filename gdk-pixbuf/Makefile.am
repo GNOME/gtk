@@ -144,7 +144,7 @@ DEPS = libgdk_pixbuf.la
 INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
 	-I$(top_srcdir)/gdk-pixbuf \
 	-I$(top_builddir)/gdk-pixbuf \
-	$(GLIB_CFLAGS) $(GTK_CFLAGS)
+	$(GLIB_CFLAGS) $(GTK_CFLAGS) $(GNOME_CFLAGS)
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
 
 LDADDS = libgdk_pixbuf.la $(GLIB_LIBS) $(GTK_LIBS) $(STATIC_LIB_DEPS)
