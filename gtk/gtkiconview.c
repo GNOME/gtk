@@ -82,7 +82,11 @@ struct _EggIconListPrivate
   gboolean rubberbanding;
   gint rubberband_x1, rubberband_y1;
   gint rubberband_x2, rubberband_y2;
-  
+
+  guint scroll_timeout_id;
+  gint scroll_value_diff;
+  gint event_last_x, event_last_y;
+
   EggIconListItem *cursor_item;
   
   char *typeahead_string;
@@ -512,8 +516,13 @@ egg_icon_list_finalize (GObject *object)
 
   icon_list = EGG_ICON_LIST (object);
 
+  /* FIXME: Put in destroy */
+  
   if (icon_list->priv->layout_idle_id != 0)
     g_source_remove (icon_list->priv->layout_idle_id);
+
+  if (icon_list->priv->scroll_timeout_id != 0)
+    g_source_remove (icon_list->priv->scroll_timeout_id);
 
   g_free (icon_list->priv);
   
@@ -753,17 +762,66 @@ egg_icon_list_expose (GtkWidget *widget,
 }
 
 static gboolean
+scroll_timeout (gpointer data)
+{
+  EggIconList *icon_list;
+  gdouble value;
+  
+  icon_list = data;
+
+  value = MIN (icon_list->priv->vadjustment->value +
+	       icon_list->priv->scroll_value_diff,
+	       icon_list->priv->vadjustment->upper -
+	       icon_list->priv->vadjustment->page_size);
+
+  gtk_adjustment_set_value (icon_list->priv->vadjustment,
+			    value);
+
+  rubberbanding (icon_list);
+  
+  return TRUE;
+}
+
+static gboolean
 egg_icon_list_motion (GtkWidget      *widget,
 		      GdkEventMotion *event)
 {
   EggIconList *icon_list;
-
+  gint abs_y;
+  
   icon_list = EGG_ICON_LIST (widget);
 
   egg_icon_list_maybe_begin_dragging_items (icon_list, event);
 
   if (icon_list->priv->rubberbanding)
-    rubberbanding (widget);
+    {
+      rubberbanding (widget);
+
+      abs_y = event->y - icon_list->priv->height *
+	(icon_list->priv->vadjustment->value /
+	 (icon_list->priv->vadjustment->upper -
+	  icon_list->priv->vadjustment->lower));
+
+      if (abs_y < 0 || abs_y > widget->allocation.height)
+	{
+	  if (icon_list->priv->scroll_timeout_id == 0)
+	    icon_list->priv->scroll_timeout_id = g_timeout_add (30, scroll_timeout, icon_list);
+
+	  if (abs_y < 0)
+	    icon_list->priv->scroll_value_diff = abs_y;
+	  else
+	    icon_list->priv->scroll_value_diff = abs_y - widget->allocation.height;
+
+	  icon_list->priv->event_last_x = event->x;
+	  icon_list->priv->event_last_y = event->y;
+	}
+      else if (icon_list->priv->scroll_timeout_id != 0)
+	{
+	  g_source_remove (icon_list->priv->scroll_timeout_id);
+
+	  icon_list->priv->scroll_timeout_id = 0;
+	}
+    }
   
   return TRUE;
 }
@@ -871,6 +929,12 @@ egg_icon_list_button_release (GtkWidget      *widget,
     icon_list->priv->pressed_button = -1;
 
   egg_icon_list_stop_rubberbanding (icon_list);
+
+  if (icon_list->priv->scroll_timeout_id != 0)
+    {
+      g_source_remove (icon_list->priv->scroll_timeout_id);
+      icon_list->priv->scroll_timeout_id = 0;
+    }
 
   return TRUE;
 }
