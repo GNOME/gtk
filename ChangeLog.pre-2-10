@@ -1,6 +1,10 @@
+Fri Sep 10 21:31:00 CEST 1999 Pablo Saratxaga <pablo@mandrakesoft.com>
+
+	* configure.in,po/et.po: added Estonian language file
+
 Wed Sep  1 14:36:12 CEST 1999 Pablo Saratxaga <pablo@mandrakesoft.com>
 
-	* configure.in,po/da.po: added danish file
+	* configure.in,po/da.po: added Danish file
 
 Sun Aug 29 13:38:59 BST 1999 Tony Gale <gale@gtk.org>
 
