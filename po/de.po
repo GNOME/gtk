@@ -10,8 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.x\n"
-"POT-Creation-Date: 2003-01-24 16:38+0100\n"
-"PO-Revision-Date: 2003-01-24 16:38+0100\n"
+"POT-Creation-Date: 2003-01-29 17:46+0100\n"
+"PO-Revision-Date: 2003-01-29 17:45+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1993,7 +1993,7 @@ msgstr "Der momentan gewählte Dateiname"
 
 #: gtk/gtkfilesel.c:558
 msgid "Show file operations"
-msgstr "Dateiaktionen zeigen"
+msgstr "Dateiaktionen anzeigen"
 
 #: gtk/gtkfilesel.c:559
 msgid "Whether buttons for creating/manipulating files should be displayed"
@@ -2806,7 +2806,7 @@ msgstr "Die Breite des vertikalen Randes um Reiterbeschriftungen"
 
 #: gtk/gtknotebook.c:416
 msgid "Show Tabs"
-msgstr "Reiter zeigen"
+msgstr "Reiter anzeigen"
 
 #: gtk/gtknotebook.c:417
 msgid "Whether tabs should be shown or not"
@@ -2814,7 +2814,7 @@ msgstr "Sollen die Reiter gezeigt werden?"
 
 #: gtk/gtknotebook.c:423
 msgid "Show Border"
-msgstr "Rand zeigen"
+msgstr "Rand anzeigen"
 
 #: gtk/gtknotebook.c:424
 msgid "Whether the border should be shown or not"
@@ -2947,7 +2947,7 @@ msgstr ""
 
 #: gtk/gtkprogress.c:135
 msgid "Show text"
-msgstr "Text zeigen"
+msgstr "Text anzeigen"
 
 #: gtk/gtkprogress.c:136
 msgid "Whether the progress is shown as text"
@@ -4421,7 +4421,7 @@ msgstr "Sichtbar"
 
 #: gtk/gtktreeview.c:544
 msgid "Show the column header buttons"
-msgstr "Die Spaltenkopf-Knöpfe zeigen"
+msgstr "Die Spaltenkopf-Knöpfe anzeigen"
 
 #: gtk/gtktreeview.c:551
 msgid "Headers Clickable"
