@@ -205,6 +205,11 @@ sys_font_to_pango_font (SystemFontType type, char * buf)
   return NULL;
 }
 
+/* missing from ms's header files */
+#ifndef SPI_GETMENUSHOWDELAY
+#define SPI_GETMENUSHOWDELAY 106
+#endif
+
 static void
 setup_system_settings (GtkStyle * style)
 {
@@ -231,14 +236,6 @@ setup_system_settings (GtkStyle * style)
   g_object_set (G_OBJECT (settings), "gtk-dnd-drag-threshold",
 		GetSystemMetrics (SM_CXDRAG), NULL);
 
-#if 0
-  /* TODO: there's an ICONMETRICS struct that we should probably use instead */
-  g_object_set (G_OBJECT (settings), "gtk-toolbar-icon-size",
-		GTK_ICON_SIZE_SMALL_TOOLBAR, NULL);
-
-  g_object_set (G_OBJECT (settings), "gtk-icon-sizes",
-		"gtk-menu=10,10", NULL);
-
   {
     OSVERSIONINFOEX osvi;
 
@@ -250,20 +247,29 @@ setup_system_settings (GtkStyle * style)
 
     if (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
       if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 0)
-	win95 = TRUE;
+		win95 = TRUE;
   }
 
   if (!win95) {
     if (SystemParametersInfo (SPI_GETMENUSHOWDELAY, 0, &menu_delay, 0)) {
       g_object_set (G_OBJECT (settings), "gtk-menu-bar-popup-delay",
-		    menu_delay, NULL);
+		    0, NULL);
       g_object_set (G_OBJECT (settings), "gtk-menu-popdown-delay",
 		    menu_delay, NULL);
       g_object_set (G_OBJECT (settings), "gtk-menu-popup-delay",
 		    menu_delay, NULL);
     }
   }
+
+#if 0
+  /* TODO: there's an ICONMETRICS struct that we should probably use instead */
+  g_object_set (G_OBJECT (settings), "gtk-toolbar-icon-size",
+		GTK_ICON_SIZE_SMALL_TOOLBAR, NULL);
+
 #endif
+
+  g_object_set (G_OBJECT (settings), "gtk-icon-sizes",
+		"gtk-menu=10,10 : gtk-button=16,16 : gtk-small-toolbar=16,16 : gtk-large-toolbar=16,16 : gtk-dialog=32,32 : gtk-dnd=32,32", NULL);
 
   /*
      http://developer.gnome.org/doc/API/2.0/gtk/GtkSettings.html
@@ -649,7 +655,7 @@ draw_expander(GtkStyle      *style,
 
   if (expander_size > 2)
     expander_size -= 2;
-  
+
   if (area)
     gdk_gc_set_clip_rectangle (style->fg_gc[state], area);
 
