@@ -1681,6 +1681,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       gint depth;
       gint new_y;
       gint y_offset;
+      gint dval;
+      gint pre_val, aft_val;
       GtkTreeViewColumn *column = NULL;
       gint column_handled_click = FALSE;
 
@@ -1758,6 +1760,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       if (column == NULL)
 	return FALSE;
 
+      pre_val = tree_view->priv->vadjustment->value;
+
       tree_view->priv->focus_column = column;
       if (event->state & GDK_CONTROL_MASK)
 	{
@@ -1773,6 +1777,16 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	{
 	  gtk_tree_view_real_set_cursor (tree_view, path, TRUE);
 	}
+
+      /* the treeview may have been scrolled because of _set_cursor,
+       * correct here
+       */
+
+      aft_val = tree_view->priv->vadjustment->value;
+      dval = pre_val - aft_val;
+
+      cell_area.y += dval;
+      background_area.y += dval;
 
       if (event->type == GDK_BUTTON_PRESS &&
 	  !(event->state & gtk_accelerator_get_default_mod_mask ()))

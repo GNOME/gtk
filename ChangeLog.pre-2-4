@@ -1,3 +1,9 @@
+Fri Feb  1 23:40:31 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): adjust
+	cell_area and background_area for possible treeview scroll
+	(fixes #70283, #70065)
+
 Fri Feb  1 22:20:13 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): use
