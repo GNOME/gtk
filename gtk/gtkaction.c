@@ -875,8 +875,9 @@ disconnect_proxy (GtkAction *action,
  * gtk_action_activate:
  * @action: the action object
  *
- * Emits the "activate" signal on the specified action. 
- * This gets called by the proxy widgets when they get activated.
+ * Emits the "activate" signal on the specified action, if it isn't 
+ * insensitive. This gets called by the proxy widgets when they get 
+ * activated.
  *
  * It can also be used to manually activate an action.
  *
@@ -885,7 +886,10 @@ disconnect_proxy (GtkAction *action,
 void
 gtk_action_activate (GtkAction *action)
 {
-  g_signal_emit (action, action_signals[ACTIVATE], 0);
+  g_return_if_fail (GTK_IS_ACTION (action));
+  
+  if (action->private_data->sensitive)
+    g_signal_emit (action, action_signals[ACTIVATE], 0);
 }
 
 /**
