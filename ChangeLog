@@ -1,3 +1,16 @@
+Thu Jan 21 16:03:02 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbutton.c (gtk_button_expose): Code cleanup.
+
+	* gtk/gtktreeitem.c: Add a paint routine, fix up bugs
+	in drawing where if the expose area was contained
+	completely in the right side of the tree the background
+	wasn't redraw, etc.
+
+	* gtk/gtkwidget.c (gtk_widget_clip_rect): Fix a bug
+	in clipping draw regions while propagating them
+	upwards.
+
 Thu Jan 21 12:20:51 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcolorsel.c (gtk_color_selection_dialog_new): 

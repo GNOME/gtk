@@ -59,6 +59,8 @@ static void gtk_tree_item_size_allocate (GtkWidget        *widget,
 static void gtk_tree_item_draw          (GtkWidget        *widget,
 					 GdkRectangle     *area);
 static void gtk_tree_item_draw_focus    (GtkWidget        *widget);
+static void gtk_tree_item_paint         (GtkWidget        *widget,
+					 GdkRectangle     *area);
 static gint gtk_tree_item_button_press  (GtkWidget        *widget,
 					 GdkEventButton   *event);
 static gint gtk_tree_item_expose        (GtkWidget        *widget,
@@ -625,8 +627,8 @@ gtk_tree_item_draw_lines (GtkWidget *widget)
 }
 
 static void
-gtk_tree_item_draw (GtkWidget    *widget,
-		    GdkRectangle *area)
+gtk_tree_item_paint (GtkWidget    *widget,
+		     GdkRectangle *area)
 {
   GtkBin *bin;
   GdkRectangle child_area, item_area;
@@ -641,6 +643,25 @@ gtk_tree_item_draw (GtkWidget    *widget,
       bin = GTK_BIN (widget);
       tree_item = GTK_TREE_ITEM(widget);
 
+      if (widget->state == GTK_STATE_NORMAL)
+	{
+	  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+	  gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+	}
+      else 
+	{
+	  if (!GTK_WIDGET_IS_SENSITIVE (widget)) 
+	    gtk_paint_flat_box(widget->style, widget->window,
+			       widget->state, GTK_STATE_INSENSITIVE,
+			       area, widget, "treeitem",
+			       0, 0, -1, -1);
+	  else
+	    gtk_paint_flat_box(widget->style, widget->window,
+			       widget->state, GTK_SHADOW_ETCHED_OUT,
+			       area, widget, "treeitem",
+			       0, 0, -1, -1);
+	}
+
       /* draw left size of tree item */
       item_area.x = 0;
       item_area.y = 0;
@@ -648,42 +669,16 @@ gtk_tree_item_draw (GtkWidget    *widget,
 			 GTK_TREE (widget->parent)->current_indent + 2);
       item_area.height = widget->allocation.height;
 
+
       if (gdk_rectangle_intersect(&item_area, area, &child_area)) 
 	{
-	  if (widget->state == GTK_STATE_NORMAL)
-	    {
-	      gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
-	      gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
-	    }
-	  else 
-	    {
-	      if (!GTK_WIDGET_IS_SENSITIVE (widget)) 
-		gtk_paint_flat_box(widget->style, widget->window,
-				   widget->state, GTK_STATE_INSENSITIVE,
-				   area, widget, "treeitem",
-				   0, 0, -1, -1);
-	      else
-		gtk_paint_flat_box(widget->style, widget->window,
-				   widget->state, GTK_SHADOW_ETCHED_OUT,
-				   area, widget, "treeitem",
-				   0, 0, -1, -1);
-	    }
-
-	  gtk_tree_item_draw_lines(widget);
 	  
+	  gtk_tree_item_draw_lines(widget);
+
 	  if (tree_item->pixmaps_box && 
 	      GTK_WIDGET_VISIBLE(tree_item->pixmaps_box) &&
 	      gtk_widget_intersect (tree_item->pixmaps_box, area, &child_area))
 	    gtk_widget_draw (tree_item->pixmaps_box, &child_area);
-	}
-      
-      /* draw right side */
-      if (gtk_widget_intersect (bin->child, area, &child_area)) 
-	{
-	  if (bin->child && 
-	      GTK_WIDGET_VISIBLE(bin->child) &&
-	      gtk_widget_intersect (bin->child, area, &child_area))
-	    gtk_widget_draw (bin->child, &child_area);
 	}
 
       if (GTK_WIDGET_HAS_FOCUS (widget))
@@ -693,6 +688,30 @@ gtk_tree_item_draw (GtkWidget    *widget,
 			 widget->allocation.width - 1,
 			 widget->allocation.height - 1);
       
+    }
+}
+
+static void
+gtk_tree_item_draw (GtkWidget    *widget,
+		    GdkRectangle *area)
+{
+  GtkBin *bin;
+  GdkRectangle child_area;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_TREE_ITEM (widget));
+  g_return_if_fail (area != NULL);
+
+  if (GTK_WIDGET_DRAWABLE (widget))
+    {
+      bin = GTK_BIN (widget);
+
+      gtk_tree_item_paint (widget, area);
+     
+      if (bin->child && 
+	  gtk_widget_intersect (bin->child, area, &child_area))
+	gtk_widget_draw (bin->child, &child_area);
+
     }
 }
 
@@ -726,12 +745,24 @@ static gint
 gtk_tree_item_expose (GtkWidget      *widget,
 		      GdkEventExpose *event)
 {
+  GdkEventExpose child_event;
+  GtkBin *bin;
+
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_ITEM (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
   if (GTK_WIDGET_DRAWABLE (widget))
-    gtk_tree_item_draw(widget, &event->area);
+    {
+      bin = GTK_BIN (widget);
+      
+      gtk_tree_item_paint (widget, &event->area);
+
+      child_event = *event;
+      if (bin->child && GTK_WIDGET_NO_WINDOW (bin->child) &&
+	  gtk_widget_intersect (bin->child, &event->area, &child_event.area))
+	gtk_widget_event (bin->child, (GdkEvent*) &child_event);
+   }
 
   return FALSE;
 }
