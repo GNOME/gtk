@@ -160,6 +160,7 @@ gtk_box_pack_start (GtkBox    *box,
   g_return_if_fail (box != NULL);
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (child != NULL);
+  g_return_if_fail (child->parent == NULL);
 
   child_info = g_new (GtkBoxChild, 1);
   child_info->widget = child;
@@ -199,6 +200,7 @@ gtk_box_pack_end (GtkBox    *box,
   g_return_if_fail (box != NULL);
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (child != NULL);
+  g_return_if_fail (child->parent == NULL);
 
   child_info = g_new (GtkBoxChild, 1);
   child_info->widget = child;

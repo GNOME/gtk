@@ -200,27 +200,25 @@ gtk_bin_add (GtkContainer *container,
   g_return_if_fail (widget != NULL);
 
   bin = GTK_BIN (container);
+  g_return_if_fail (bin->child == NULL);
 
-  if (!bin->child)
+  gtk_widget_set_parent (widget, GTK_WIDGET (container));
+  
+  if (GTK_WIDGET_VISIBLE (widget->parent))
     {
-      gtk_widget_set_parent (widget, GTK_WIDGET (container));
-
-      if (GTK_WIDGET_VISIBLE (widget->parent))
-	{
-	  if (GTK_WIDGET_REALIZED (widget->parent) &&
-	      !GTK_WIDGET_REALIZED (widget))
-	    gtk_widget_realize (widget);
-	  
-	  if (GTK_WIDGET_MAPPED (widget->parent) &&
-	      !GTK_WIDGET_MAPPED (widget))
-	    gtk_widget_map (widget);
-	}
-
-      bin->child = widget;
-
-      if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
-        gtk_widget_queue_resize (widget);
+      if (GTK_WIDGET_REALIZED (widget->parent) &&
+	  !GTK_WIDGET_REALIZED (widget))
+	gtk_widget_realize (widget);
+      
+      if (GTK_WIDGET_MAPPED (widget->parent) &&
+	  !GTK_WIDGET_MAPPED (widget))
+	gtk_widget_map (widget);
     }
+  
+  bin->child = widget;
+  
+  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
+    gtk_widget_queue_resize (widget);
 }
 
 static void

@@ -1,3 +1,11 @@
+Thu Apr 30 01:51:00 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkbin.c (gtk_bin_add): made this function issue a warning if
+	the GtkBin widget already has a child.
+
+	* gtk/gtkbox.c (gtk_box_pack_{start|end}):
+ 	check that child->parent == NULL;
+
 Tue Apr 28 22:13:54 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkselection.c (gtk_selection_clear): Only return
