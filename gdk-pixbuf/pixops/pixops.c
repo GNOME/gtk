@@ -202,10 +202,14 @@ pixops_composite_nearest (guchar        *dest_buf,
               else
                 {
                   unsigned int a1 = 0xff - a0;
-                  
-                  dest[0] = (a0 * p[0] + a1 * dest[0]) / 0xff;
-                  dest[1] = (a0 * p[1] + a1 * dest[1]) / 0xff;
-                  dest[2] = (a0 * p[2] + a1 * dest[2]) / 0xff;
+		  unsigned int tmp;
+
+		  tmp = a0 * p[0] + a1 * dest[0] + 0x80;
+                  dest[0] = (tmp + (tmp >> 8)) >> 8;
+		  tmp = a0 * p[1] + a1 * dest[1] + 0x80;
+                  dest[1] = (tmp + (tmp >> 8)) >> 8;
+		  tmp = a0 * p[2] + a1 * dest[2] + 0x80;
+                  dest[2] = (tmp + (tmp >> 8)) >> 8;
                 }
               break;
             }
@@ -388,7 +392,7 @@ composite_line (int *weights, int n_x, int n_y,
       int *pixel_weights;
       
       pixel_weights = weights + ((x >> (SCALE_SHIFT - SUBSAMPLE_BITS)) & SUBSAMPLE_MASK) * n_x * n_y;
-
+      
       for (i=0; i<n_y; i++)
 	{
 	  guchar *q = src[i] + x_scaled * src_channels;
@@ -837,10 +841,9 @@ scale_line_22_33_mmx_stub (int *weights, int n_x, int n_y,
 }
 #endif /* USE_MMX */
 
-#ifdef SCALE_LINE_22_33_USED /* This dead code would need changes if we wanted to use it */
 static guchar *
 scale_line_22_33 (int *weights, int n_x, int n_y,
-		  guchar *dest, guchar *dest_end, int dest_channels, int dest_has_alpha,
+		  guchar *dest, int dest_x, guchar *dest_end, int dest_channels, int dest_has_alpha,
 		  guchar **src, int src_channels, gboolean src_has_alpha,
 		  int x_init, int x_step, int src_width,
 		  int check_size, guint32 color1, guint32 color2)
@@ -860,8 +863,8 @@ scale_line_22_33 (int *weights, int n_x, int n_y,
       q0 = src0 + x_scaled * 3;
       q1 = src1 + x_scaled * 3;
       
-      pixel_weights = (int *)((char *)weights + ((x >> (SCALE_SHIFT - SUBSAMPLE_BITS - 4)) & (SUBSAMPLE_MASK << 4)));
-      
+      pixel_weights = weights + ((x >> (SCALE_SHIFT - SUBSAMPLE_BITS)) & SUBSAMPLE_MASK) * 4;
+
       w1 = pixel_weights[0];
       w2 = pixel_weights[1];
       w3 = pixel_weights[2];
@@ -883,9 +886,9 @@ scale_line_22_33 (int *weights, int n_x, int n_y,
       g += w4 * q1[5];
       b += w4 * q1[6];
 
-      dest[0] = r >> 16;
-      dest[1] = g >> 16;
-      dest[2] = b >> 16;
+      dest[0] = (r + 0x8000) >> 16;
+      dest[1] = (g + 0x8000) >> 16;
+      dest[2] = (b + 0x8000) >> 16;
       
       dest += 3;
       
@@ -894,7 +897,6 @@ scale_line_22_33 (int *weights, int n_x, int n_y,
   
   return dest;
 }
-#endif /* SCALE_LINE_22_33_USED */
 
 static void
 process_pixel (int *weights, int n_x, int n_y,
@@ -1227,7 +1229,7 @@ bilinear_make_fast_weights (PixopsFilter *filter, double x_scale, double y_scale
 
 	for (i = 0; i < n_y; i++)
 	  for (j = 0; j < n_x; j++)
-	    *(pixel_weights + n_x * i + j) = 65536 * x_weights[j] * x_scale * y_weights[i] * y_scale * overall_alpha;
+	    *(pixel_weights + n_x * i + j) = 65536 * x_weights[j] * x_scale * y_weights[i] * y_scale * overall_alpha + 0.5;
       }
 
   g_free (x_weights);
@@ -1412,6 +1414,30 @@ pixops_composite_color (guchar         *dest_buf,
   g_free (filter.weights);
 }
 
+/**
+ * pixops_composite:
+ * @dest_buf: pointer to location to store result
+ * @render_x0: x0 of region of scaled source to store into @dest_buf
+ * @render_y0: y0 of region of scaled source to store into @dest_buf
+ * @render_x1: x1 of region of scaled source to store into @dest_buf
+ * @render_y1: x1 of region of scaled source to store into @dest_buf
+ * @dest_rowstride: rowstride of @dest_buf
+ * @dest_channels: number of channels in @dest_buf
+ * @dest_has_alpha: whether @dest_buf has alpha
+ * @src_buf: pointer to source pixels
+ * @src_width: width of source (used for clipping)
+ * @src_height: height of source (used for clipping)
+ * @src_rowstride: rowstride of source
+ * @src_channels: number of channels in @src_buf
+ * @src_has_alpha: whether @src_buf has alpha
+ * @scale_x: amount to scale source by in X direction
+ * @scale_y: amount to scale source by in Y direction
+ * @interp_type: type of enumeration
+ * @overall_alpha: overall alpha factor to multiply source by
+ * 
+ * Scale source buffer by scale_x / scale_y, then composite a given rectangle
+ * of the result into the destination buffer.
+ **/
 void
 pixops_composite (guchar        *dest_buf,
 		  int            render_x0,
@@ -1550,12 +1576,16 @@ pixops_scale (guchar        *dest_buf,
       break;
     }
 
+  if (filter.n_x == 2 && filter.n_y == 2 && dest_channels == 3 && src_channels == 3)
+    {
 #ifdef USE_MMX
-  if (filter.n_x == 2 && filter.n_y == 2 &&
-      found_mmx && dest_channels == 3 && src_channels == 3)
-    line_func = scale_line_22_33_mmx_stub;
+      if (found_mmx)
+	line_func = scale_line_22_33_mmx_stub;
+      else
+#endif
+	line_func = scale_line_22_33;
+    }
   else
-#endif    
     line_func = scale_line;
   
   pixops_process (dest_buf, render_x0, render_y0, render_x1, render_y1,

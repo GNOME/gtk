@@ -55,6 +55,12 @@ _pixops_scale_line_22_33_mmx:
 	cmpl %esi,28(%ebp)
 	je   .out
 
+/* For the body of this loop, %mm01, %mm1, %mm2, %mm3 hold the 4 adjoining
+ * points we are interpolating between, as:
+ *
+ *  000000BB00GG00RR
+ */	
+	
 /* Load initial values into %mm1, %mm3 */
 	leal (%edx,%edx,2),%edx  # Multiply by 3
 
@@ -82,11 +88,16 @@ _pixops_scale_line_22_33_mmx:
 	jmp .newx
 	.p2align 4,,7
 .loop:
-/* int x_index = (x & 0xf000) >> 12 */
+/* short *pixel_weights = weights + ((x >> (SCALE_SHIFT - SUBSAMPLE_BITS)) & SUBSAMPLE_MASK) * n_x * n_y
+ *                                             16             4                  0xf            2     2
+ */
 	movl %ebx,%eax
 	andl $0xf000,%eax
 	shrl $7,%eax
 
+/* At this point, %edi holds weights. Load the 4 weights into %mm4,%mm5,%mm6,%mm7, multiply and
+ * accumulate.
+ */
 	movq (%edi,%eax),%mm4
 	pmullw %mm0,%mm4
 	movq 8(%edi,%eax),%mm5
@@ -99,7 +110,17 @@ _pixops_scale_line_22_33_mmx:
 	paddw %mm6, %mm7
 	paddw %mm5, %mm7
 
+/* %mm7	holds the accumulated sum. Compute (C + 0x80) / 256
+ */
+	pxor %mm4, %mm4
+	movl $8421504, %eax  # 0x00808080
+	movd %eax, %mm6  
+	punpcklbw %mm4, %mm6
+	paddw %mm6, %mm7
 	psrlw $8, %mm7
+
+/* Pack into %eax and store result
+ */	
 	packuswb %mm7, %mm7
 	movd %mm7, %eax
 	
@@ -113,7 +134,7 @@ _pixops_scale_line_22_33_mmx:
 
 /* x += x_step; */
 	addl 24(%ebp),%ebx
-/* x_scale = x >> 16; */
+/* x_scaled = x >> 16; */
 	movl %ebx,%edx
 	sarl $16,%edx
 
@@ -131,7 +152,6 @@ _pixops_scale_line_22_33_mmx:
 	leal (%edx,%edx,2),%edx  # Multiply by 3
 
 	movl 16(%ebp),%edi
-	pxor %mm4, %mm4
 	movzbl 2(%edi,%edx),%ecx
 	shll $16,%ecx
 	movzwl (%edi,%edx),%eax

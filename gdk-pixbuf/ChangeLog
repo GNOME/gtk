@@ -1,3 +1,17 @@
+Thu Jan  3 19:31:58 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* pixops/pixops.c (scale_line_22_33): Fix and uncomment
+	non-MMX version.
+
+	* pixops/pixops.c (pixops_composite_nearest): Remove a
+	division.
+
+	* pixops/pixops.c (pixops_composite): Add some docs
+	about the parameters.
+
+	* pixops/README: Add notes about the correct algorithms
+	for alpha compositing and how to implement them quickly.
+
 2001-12-29  Tor Lillqvist  <tml@iki.fi>
 
 	* Makefile.am (EXTRA_DIST): Add makefile.msc.

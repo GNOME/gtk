@@ -33,6 +33,61 @@ for a number of the most common special cases:
  compositing from RGBA to RGBx
  compositing against a color from RGBA and storing in a RGBx buffer
 
+Alpha compositing 8 bit RGBAa onto RGB is defined in terms of
+rounding the exact result (real values in [0,1]):
+
+ cc = ca * aa + (1 - aa) * Cb
+
+ Cc = ROUND [255. * (Ca/255. * Aa/255. + (1 - Aa/255.) * Cb/255.)]
+
+We can comp
+
+ROUND(i / 255.) can be computed exactly for i in [0,255*255] as:
+
+ t = i + 0x80; result = (t + (t >> 8)) >> 8;  [ call this as To8(i) ]
+
+So, 
+  
+ t = Ca * Aa + (255 - Aa) * Cb + 0x80;
+ Cc = (t + (t >> 8)) >> 8;
+
+Alpha compositing 8 bit RaGaBaAa onto RbGbBbAa is a little harder, for
+non-premultiplied alpha. The premultiplied result is simple:
+
+ ac = aa + (1 - aa) * ab
+ cc = ca + (1 - aa) * cb
+
+Which can be computed in integers terms as:
+
+ Cc = Ca + To8 ((255 - Aa) * Cb)
+ Ac = Aa + To8 ((255 - Aa) * Ab)
+
+For non-premultiplied alpha, we need divide the color components by 
+the alpha:
+
+       +- (ca * aa + (1 - aa) * ab * cb)) / ac; aa != 0
+  cc = |
+       +- cb; aa == 0
+
+To calculate this as in integer, we note the alternate form:
+
+ cc = cb + aa * (ca - cb) / ac
+
+[ 'cc = ca + (ac - aa) * (cb - ca) / ac' can also be useful numerically,
+  but isn't important here ]
+
+We can express this as integers as:
+
+ Ac_tmp = Aa * 255 + (255 - Aa) * Ab;
+ 
+      +- Cb + (255 * Aa * (Ca - Cb) + Ac_tmp / 2) / Ac_tmp ; Ca > Cb
+ Cc = | 
+      +- Cb - (255 * Aa * (Cb - Ca) + Ac_tmp / 2) / Ac_tmp ; ca <= Cb
+
+Or, playing bit tricks to avoid the conditional
+
+ Cc = Cb + (255 * Aa * (Ca - Cb) + (((Ca - Cb) >> 8) ^ (Ac_tmp / 2)) ) / Ac_tmp
+
 TODO
 ====
 
@@ -57,13 +112,13 @@ TODO
   the _nearest() variants do it right, most of the other code 
   is wrong to some degree or another.
 
-  For instance, in composite line, we have:
+  For instance, in composite_line_22_4a4(), we have:
 
     dest[0] = ((0xff0000 - a) * dest[0] + r) >> 24;
 
-   if a is 0, then we have:
+   if a is 0 (implies r == 0), then we have:
 
-    (0xff0000 * dest[0] + r) >> 24
+    (0xff0000 * dest[0]) >> 24
 
    which gives results which are 1 to low:
 
