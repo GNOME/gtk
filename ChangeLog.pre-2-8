@@ -1,3 +1,9 @@
+Thu Aug  8 23:26:05 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkmain-x11.c gdk/x11/gdkscreen-x11.c: Remove
+	explicit calls to pango_x/xft_shutdown_display() since
+	Pango now does it by itself on XCloseDisplay().
+
 Thu Aug  8 21:53:16 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Consistently order pangoxft / pangox

@@ -494,7 +494,6 @@ _gdk_windowing_exit (void)
     
   while (tmp_list)
     {
-      pango_x_shutdown_display (GDK_DISPLAY_XDISPLAY (tmp_list->data));
       XCloseDisplay (GDK_DISPLAY_XDISPLAY (tmp_list->data));
       
       tmp_list = tmp_list->next;
