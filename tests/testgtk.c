@@ -4434,6 +4434,135 @@ create_entry (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
+/* GtkEventBox */
+
+
+static void
+event_box_label_pressed (GtkWidget        *widget,
+			 GdkEventButton   *event,
+			 gpointer user_data)
+{
+  g_print ("clicked on event box\n");
+}
+
+static void
+event_box_button_clicked (GtkWidget *widget,
+			  GtkWidget *button,
+			  gpointer user_data)
+{
+  g_print ("pushed button\n");
+}
+
+static void
+event_box_toggle_visible_window (GtkWidget *checkbutton,
+				 GtkEventBox *event_box)
+{
+  gtk_event_box_set_visible_window (event_box,
+				    GTK_TOGGLE_BUTTON(checkbutton)->active);
+}
+
+static void
+event_box_toggle_above_child (GtkWidget *checkbutton,
+			      GtkEventBox *event_box)
+{
+  gtk_event_box_set_above_child (event_box,
+				 GTK_TOGGLE_BUTTON(checkbutton)->active);
+}
+
+static void
+create_event_box (GtkWidget *widget)
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *box1;
+  GtkWidget *box2;
+  GtkWidget *hbox;
+  GtkWidget *vbox;
+  GtkWidget *button;
+  GtkWidget *separator;
+  GtkWidget *event_box;
+  GtkWidget *label;
+  GtkWidget *visible_window_check;
+  GtkWidget *above_child_check;
+  GdkColor color;
+
+  if (!window)
+    {
+      color.red = 0;
+      color.blue = 65535;
+      color.green = 0;
+      
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window),
+			     gtk_widget_get_screen (widget));
+
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_widget_destroyed),
+			&window);
+
+      gtk_window_set_title (GTK_WINDOW (window), "event box");
+      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
+
+      box1 = gtk_vbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (window), box1);
+      gtk_widget_modify_bg (window, GTK_STATE_NORMAL, &color);
+
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (box1), hbox, TRUE, FALSE, 0);
+      
+      event_box = gtk_event_box_new ();
+      gtk_box_pack_start (GTK_BOX (hbox), event_box, TRUE, FALSE, 0);
+
+      vbox = gtk_vbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (event_box), vbox);
+      g_signal_connect (event_box, "button_press_event",
+			G_CALLBACK (event_box_label_pressed),
+			NULL);
+      
+      label = gtk_label_new ("Click on this label");
+      gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, FALSE, 0);
+
+      button = gtk_button_new_with_label ("button in eventbox");
+      gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, FALSE, 0);
+      g_signal_connect (button, "clicked",
+			G_CALLBACK (event_box_button_clicked),
+			NULL);
+      
+
+      visible_window_check = gtk_check_button_new_with_label("Visible Window");
+      gtk_box_pack_start (GTK_BOX (box1), visible_window_check, FALSE, TRUE, 0);
+      g_signal_connect (visible_window_check, "toggled",
+			G_CALLBACK (event_box_toggle_visible_window), event_box);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (visible_window_check), FALSE);
+      
+      above_child_check = gtk_check_button_new_with_label("Above Child");
+      gtk_box_pack_start (GTK_BOX (box1), above_child_check, FALSE, TRUE, 0);
+      g_signal_connect (above_child_check, "toggled",
+			G_CALLBACK (event_box_toggle_above_child), event_box);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (above_child_check), FALSE);
+      
+      separator = gtk_hseparator_new ();
+      gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
+
+      box2 = gtk_vbox_new (FALSE, 10);
+      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
+      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
+
+      button = gtk_button_new_with_label ("close");
+      g_signal_connect_swapped (button, "clicked",
+			        G_CALLBACK (gtk_widget_destroy),
+				window);
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_grab_default (button);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
+}
+
+
 /*
  * GtkSizeGroup
  */
@@ -12310,6 +12439,7 @@ struct {
   { "dialog", create_dialog },
   { "display & screen", create_display_screen },
   { "entry", create_entry },
+  { "event box", create_event_box },
   { "event watcher", create_event_watcher },
   { "file selection", create_file_selection },
   { "flipping", create_flipping },

@@ -1,3 +1,11 @@
+2003-09-08  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkeventbox.[hc]:
+	Implement gtk_event_box_get/set_input_only()
+	
+	* tests/testgtk.c:
+	Tests for the new input only event boxes
+
 Mon Sep  8 21:44:20 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Fixes from David Hampton <hampton@employees.org> via gtk-devel-list.

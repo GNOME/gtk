@@ -44,7 +44,6 @@ extern "C" {
 #define GTK_IS_EVENT_BOX_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_EVENT_BOX))
 #define GTK_EVENT_BOX_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_EVENT_BOX, GtkEventBoxClass))
 
-
 typedef struct _GtkEventBox	  GtkEventBox;
 typedef struct _GtkEventBoxClass  GtkEventBoxClass;
 
@@ -58,8 +57,14 @@ struct _GtkEventBoxClass
   GtkBinClass parent_class;
 };
 
-GType	       gtk_event_box_get_type	     (void) G_GNUC_CONST;
-GtkWidget*     gtk_event_box_new	     (void);
+GType	   gtk_event_box_get_type           (void) G_GNUC_CONST;
+GtkWidget* gtk_event_box_new                (void);
+gboolean   gtk_event_box_get_visible_window (GtkEventBox *event_box);
+void       gtk_event_box_set_visible_window (GtkEventBox *event_box,
+					     gboolean     visible_window);
+gboolean   gtk_event_box_get_above_child    (GtkEventBox *event_box);
+void       gtk_event_box_set_above_child    (GtkEventBox *event_box,
+					     gboolean     above_child);
 
 #ifdef __cplusplus
 }
