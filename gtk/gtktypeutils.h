@@ -197,6 +197,7 @@ GtkType		gtk_type_from_name	    	(const gchar	*name);
 GtkType		gtk_type_parent	    		(GtkType	 type);
 gpointer	gtk_type_class		    	(GtkType	 type);
 gpointer	gtk_type_parent_class	    	(GtkType	 type);
+GList*		gtk_type_children_types		(GtkType	 type);
 gpointer	gtk_type_new		    	(GtkType	 type);
 void		gtk_type_free		    	(GtkType	 type,
 						 gpointer	 mem);

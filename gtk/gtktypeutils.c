@@ -368,11 +368,23 @@ gtk_type_free (GtkType      type,
     g_free (mem);
 }
 
+GList*
+gtk_type_children_types (GtkType type)
+{
+  GtkTypeNode *node;
+
+  LOOKUP_TYPE_NODE (node, type);
+  if (node)
+    return node->children_types;
+
+  return NULL;
+}
+
 void
 gtk_type_describe_heritage (GtkType type)
 {
   GtkTypeNode *node;
-  gint first;
+  gboolean first;
 
   LOOKUP_TYPE_NODE (node, type);
   first = TRUE;
@@ -395,8 +407,8 @@ gtk_type_describe_heritage (GtkType type)
 }
 
 void
-gtk_type_describe_tree (GtkType type,
-			gint  show_size)
+gtk_type_describe_tree (GtkType  type,
+			gboolean show_size)
 {
   GtkTypeNode *node;
   

@@ -140,7 +140,7 @@ const guint gtk_micro_version = GTK_MICRO_VERSION;
 
 static gboolean iteration_done = FALSE;
 static guint main_level = 0;
-static gint initialized = FALSE;
+static gint gtk_initialized = FALSE;
 static GdkEvent *next_event = NULL;
 static GList *current_events = NULL;
 
@@ -231,12 +231,10 @@ void
 gtk_init (int	 *argc,
 	  char ***argv)
 {
-  static gboolean gtk_initialized = FALSE;
   gchar *current_locale;
 
   if (gtk_initialized)
     return;
-  gtk_initialized = TRUE;
 
   if (0)
     {
@@ -331,7 +329,7 @@ gtk_init (int	 *argc,
 
   /* Check if there is a good chance the mb functions will handle things
    * correctly - set if either mblen("\xc0", MB_CUR_MAX) == 1 in the
-   * C locale, or were using X's mb functions. (-DX_LOCALE && locale != C)
+   * C locale, or we're using X's mb functions. (-DX_LOCALE && locale != C)
    */
 
   current_locale = g_strdup (setlocale (LC_CTYPE, NULL));
@@ -371,7 +369,7 @@ gtk_init (int	 *argc,
   
   /* Set the 'initialized' flag.
    */
-  initialized = TRUE;
+  gtk_initialized = TRUE;
 }
 
 void
@@ -1354,9 +1352,9 @@ gtk_get_event_widget (GdkEvent *event)
 static void
 gtk_exit_func (void)
 {
-  if (initialized)
+  if (gtk_initialized)
     {
-      initialized = FALSE;
+      gtk_initialized = FALSE;
       gtk_preview_uninit ();
     }
 }

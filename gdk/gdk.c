@@ -160,7 +160,7 @@ static void   gdk_ic_cleanup 		(void);
 
 /* Private variable declarations
  */
-static int initialized = 0;                         /* 1 if the library is initialized,
+static int gdk_initialized = 0;                     /* 1 if the library is initialized,
 						     * 0 otherwise.
 						     */
 static int connection_number = 0;                   /* The file descriptor number of our
@@ -268,13 +268,21 @@ gdk_init (int    *argc,
   gint synchronize;
   gint i, j, k;
   XClassHint *class_hint;
-  gint argc_orig = *argc;
-  gchar **argv_orig;
+  gchar **argv_orig = NULL;
+  gint argc_orig = 0;
 
-  argv_orig = g_malloc ((argc_orig + 1) * sizeof (char*));
-  for (i = 0; i < argc_orig; i++)
-    argv_orig[i] = g_strdup ((*argv)[i]);
-  argv_orig[argc_orig] = NULL;
+  if (gdk_initialized)
+    return;
+
+  if (argc && argv)
+    {
+      argc_orig = *argc;
+      
+      argv_orig = g_malloc ((argc_orig + 1) * sizeof (char*));
+      for (i = 0; i < argc_orig; i++)
+	argv_orig[i] = g_strdup ((*argv)[i]);
+      argv_orig[argc_orig] = NULL;
+    }
 
   X_GETTIMEOFDAY (&start);
 
@@ -316,8 +324,6 @@ gdk_init (int    *argc,
 	    gdk_progname = g_strdup (d + 1);
 	  else
 	    gdk_progname = g_strdup ((*argv)[0]);
-	  GDK_NOTE (MISC,
-		    g_print ("Gdk: progname: \"%s\"\n", gdk_progname));
 	}
 
       for (i = 1; i < *argc;)
@@ -484,6 +490,8 @@ gdk_init (int    *argc,
       gdk_progname = "<unknown>";
     }
 
+  GDK_NOTE (MISC, g_print ("Gdk: progname: \"%s\"\n", gdk_progname));
+
   gdk_display = XOpenDisplay (gdk_display_name);
   if (!gdk_display)
     {
@@ -579,7 +587,7 @@ gdk_init (int    *argc,
   gdk_im_open (NULL, NULL, NULL);
 #endif
 
-  initialized = 1;
+  gdk_initialized = 1;
 }
 
 /*
@@ -3159,10 +3167,11 @@ gdk_exit_func (void)
   /* This is to avoid an infinite loop if a program segfaults in
      an atexit() handler (and yes, it does happen, especially if a program
      has trounced over memory too badly for even g_print to work) */
-  if(in_gdk_exit_func == TRUE) return;
+  if (in_gdk_exit_func == TRUE)
+    return;
   in_gdk_exit_func = TRUE;
 
-  if (initialized)
+  if (gdk_initialized)
     {
 #ifdef USE_XIM
       /* cleanup IC */
@@ -3175,7 +3184,7 @@ gdk_exit_func (void)
       gdk_key_repeat_restore ();
 
       XCloseDisplay (gdk_display);
-      initialized = 0;
+      gdk_initialized = 0;
     }
 }
 
