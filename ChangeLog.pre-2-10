@@ -1,3 +1,10 @@
+Sun Jul  4 01:29:35 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcalendar.c (gtk_calendar_drag_data_get): 
+	(gtk_calendar_drag_data_received): Fix off-by-one error.  
+	GDate month is one-based and GtkCalendar month is zero-based.  
+	(#145134, William Jon McCann)
+
 Sun Jul  4 01:11:07 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreestore.c (gtk_tree_store_move): Don't crash if
