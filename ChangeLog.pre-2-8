@@ -1,3 +1,8 @@
+Thu Dec  6 23:09:21 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk[hv]paned.c (gtk_[hv]paned_size_allocate): Fix errors
+	in computing the size of the second child.
+
 Thu Dec  6 16:50:17 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrange.c: Make button 1 clicks on the trough

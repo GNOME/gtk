@@ -196,7 +196,7 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
       child1_allocation.y = widget->allocation.y + border_width;
       
       child2_allocation.y = child1_allocation.y + child1_allocation.height + paned->handle_pos.height;
-      child2_allocation.height = MAX (1, (gint) allocation->height - child2_allocation.y - border_width);
+      child2_allocation.height = MAX (1, widget->allocation.y + widget->allocation.height - child2_allocation.y - border_width);
       
       /* Now allocate the childen, making sure, when resizing not to
        * overlap the windows
