@@ -85,7 +85,7 @@ buffer_to_pixbuf (const gchar *buf, gsize count, GError **err)
         if (gdk_pixbuf_loader_write (loader, buf, count, err) && 
             gdk_pixbuf_loader_close (loader, err)) {
                 pixbuf = g_object_ref (gdk_pixbuf_loader_get_pixbuf (loader));
-                g_object_unref (G_OBJECT (loader));
+                g_object_unref (loader);
                 return pixbuf;
         } else {
                 return NULL;
@@ -138,7 +138,7 @@ keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
                         do_compare (pixbuf,
                                     g_object_ref (gdk_pixbuf_loader_get_pixbuf (loader)),
                                     err);
-                        g_object_unref (G_OBJECT (loader));
+                        g_object_unref (loader);
                 }
         }
         else if (evt->keyval == 'S') {
@@ -194,7 +194,7 @@ keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
                         do_compare (pixbuf,
                                     g_object_ref (gdk_pixbuf_loader_get_pixbuf (loader)),
                                     err);
-                        g_object_unref (G_OBJECT (loader));
+                        g_object_unref (loader);
                 }
         }
         else if (evt->keyval == 'P') {
@@ -248,7 +248,7 @@ keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
                         do_compare (pixbuf,
                                     g_object_ref (gdk_pixbuf_loader_get_pixbuf (loader)),
                                     err);
-                        g_object_unref (G_OBJECT (loader));
+                        g_object_unref (loader);
                 }
         }
         else if (evt->keyval == 'I') {

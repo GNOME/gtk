@@ -64,14 +64,16 @@ activate_radio_action (GtkAction *action, GtkRadioAction *current)
 
 static void 
 activate_email (GtkAboutDialog *about,
-		const gchar    *link)
+		const gchar    *link,
+		gpointer        data)
 {
   g_print ("send mail to %s\n", link);
 }
 
 static void 
 activate_url (GtkAboutDialog *about,
-	      const gchar    *link)
+	      const gchar    *link,
+	      gpointer        data)
 {
   g_print ("show url %s\n", link);
 }

@@ -1,3 +1,11 @@
+Wed Aug 18 17:25:26 2004  Manish Singh  <yosh@gimp.org>
+
+	* demos/testpixbuf-save.c
+	* demos/gtk-demo/hypertext.c: Get rid of some unnecessary casts.
+
+	* demos/gtk-demo/appwindow.c: Make activate_email and activate_url
+	match the arguments for GtkAboutDialogActivateLinkFunc.
+
 Wed Aug 18 16:18:00 2004  Manish Singh  <yosh@gimp.org>
 
         * gtk/gtktreeview.c (gtk_tree_view_row_inserted): Initialize height

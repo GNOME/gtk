@@ -281,13 +281,13 @@ do_hypertext (GtkWidget *do_widget)
 
       view = gtk_text_view_new ();
       gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view), GTK_WRAP_WORD);
-      g_signal_connect (G_OBJECT (view), "key-press-event", 
+      g_signal_connect (view, "key-press-event", 
 			G_CALLBACK (key_press_event), NULL);
-      g_signal_connect (G_OBJECT (view), "event-after", 
+      g_signal_connect (view, "event-after", 
 			G_CALLBACK (event_after), NULL);
-      g_signal_connect (G_OBJECT (view), "motion-notify-event", 
+      g_signal_connect (view, "motion-notify-event", 
 			G_CALLBACK (motion_notify_event), NULL);
-      g_signal_connect (G_OBJECT (view), "visibility-notify-event", 
+      g_signal_connect (view, "visibility-notify-event", 
 			G_CALLBACK (visibility_notify_event), NULL);
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
