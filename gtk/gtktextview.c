@@ -2986,6 +2986,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   text_view->hadjustment->upper = MAX (SCREEN_WIDTH (text_view),
                                        text_view->width);
   gtk_adjustment_changed (text_view->hadjustment);
+  set_adjustment_clamped (text_view->hadjustment, 
+			  text_view->hadjustment->upper - text_view->hadjustment->page_size);
 
   text_view->vadjustment->page_size = SCREEN_HEIGHT (text_view);
   text_view->vadjustment->page_increment = SCREEN_HEIGHT (text_view) * 0.9;
@@ -5835,6 +5837,8 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
     }
   else
     insert_text_data (text_view, &drop_point, selection_data);
+
+  gtk_text_buffer_place_cursor (get_buffer (text_view), &drop_point);
 
   success = TRUE;
 

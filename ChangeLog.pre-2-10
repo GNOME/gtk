@@ -1,3 +1,10 @@
+2002-12-27  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.c (gtk_text_view_drag_data_received): Place the
+	cursor at drop point.  (#72384)
+	(gtk_text_view_size_allocate): Update the horizontal adjustment
+	value.  (#75694)
+
 2002-12-25  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextdisplay.c (gtk_text_layout_draw): Fix highlighting of
