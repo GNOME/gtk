@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2004-01-08 07:17+0000\n"
+"PO-Revision-Date: 2004-01-08 07:25+0000\n"
 "Last-Translator: Dafydd Harries <daf@parnassus.ath.cx>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
 "MIME-Version: 1.0\n"
@@ -3539,7 +3539,7 @@ msgstr "Gellir newid cyflymwyr"
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
-"A ellir newid cyflymwyr dewislenni gan wasgu bysell dross yr eitem dewislen"
+"A ellir newid cyflymwyr dewislenni gan wasgu bysell dros yr eitem dewislen"
 
 #: gtk/gtkmenu.c:506
 msgid "Delay before submenus appear"
@@ -5524,7 +5524,7 @@ msgstr "Modd Uchder Gosodedig"
 
 #: gtk/gtktreeview.c:610
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
-msgstr "Yn cyflymu GTKTreeView gan dybio fod gan pob rhes yr un uchder"
+msgstr "Yn cyflymu GtkTreeView gan dybio fod gan pob rhes yr un uchder"
 
 #: gtk/gtktreeview.c:630
 msgid "Vertical Separator Width"
