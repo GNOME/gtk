@@ -1,3 +1,12 @@
+Sun Jun  8 22:03:09 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/testdnd.c: Use application/x-rootwindow-drop for
+	root window drops. (#108670, Alex Larsson)
+
+	* gdk/x11/gdkdnd-x11.c (gdk_drag_motion) gtk/gtkdnd.c (gtk_drag_drop): 
+	Accept either application/x-rootwin-drop (what GTK+ has always used)
+	or application/x-rootwindow-drop (what the XDND standard specifies).
+
 Fri Jun  6 11:07:33 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (event_window_still_viewable): 

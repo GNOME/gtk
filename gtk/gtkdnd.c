@@ -2791,17 +2791,21 @@ gtk_drag_drop (GtkDragSourceInfo *info,
     {
       GtkSelectionData selection_data;
       GList *tmp_list;
-      GdkAtom target = gdk_atom_intern ("application/x-rootwin-drop", FALSE);
+      /* GTK+ traditionally has used application/x-rootwin-drop, but the
+       * XDND spec specifies x-rootwindow-drop.
+       */
+      GdkAtom target1 = gdk_atom_intern ("application/x-rootwindow-drop", FALSE);
+      GdkAtom target2 = gdk_atom_intern ("application/x-rootwin-drop", FALSE);
       
       tmp_list = info->target_list->list;
       while (tmp_list)
 	{
 	  GtkTargetPair *pair = tmp_list->data;
 	  
-	  if (pair->target == target)
+	  if (pair->target == target1 || pair->target == target2)
 	    {
 	      selection_data.selection = GDK_NONE;
-	      selection_data.target = target;
+	      selection_data.target = pair->target;
 	      selection_data.data = NULL;
 	      selection_data.length = -1;
 	      
