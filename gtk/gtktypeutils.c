@@ -746,3 +746,14 @@ gtk_type_init_builtin_types (void)
       (*builtin_info[i].type_id) = type_id;
     }
 }
+
+GtkType
+gtk_identifier_get_type (void)
+{
+  static GtkType identifier_type = 0;
+
+  if (!identifier_type)
+    identifier_type = gtk_type_register_intern ("GtkIdentifier", GTK_TYPE_STRING, NULL);
+
+  return identifier_type;
+}

@@ -59,7 +59,9 @@ typedef enum
   GTK_TYPE_SIGNAL,
   GTK_TYPE_C_CALLBACK,
   
-  GTK_TYPE_OBJECT
+  GTK_TYPE_OBJECT,
+
+  GTK_FUNDAMENTAL_TYPE_LAST
 } GtkFundamentalType;
 
 typedef guint GtkType;
@@ -68,10 +70,13 @@ typedef guint GtkType;
  */
 #include <gtk/gtktypebuiltins.h>
 
+#define		GTK_TYPE_IDENTIFIER		(gtk_identifier_get_type ())
+GtkType		gtk_identifier_get_type		(void);
+
 /* Macros
  */
 #define GTK_TYPE_MAKE(parent_t, seqno) 	(((seqno) << 8) | GTK_FUNDAMENTAL_TYPE (parent_t))
-#define GTK_FUNDAMENTAL_TYPE(type)	 	((GtkFundamentalType) ((type) & 0xFF))
+#define GTK_FUNDAMENTAL_TYPE(type)	((GtkFundamentalType) ((type) & 0xFF))
 #define GTK_TYPE_SEQNO(type)	 	((type) > 0xFF ? (type) >> 8 : (type))
 
 typedef struct _GtkArg	       GtkArg;

@@ -30,13 +30,6 @@
 /* --- defines --- */
 #define	BINDING_MOD_MASK()	(gtk_accelerator_get_default_mod_mask () | GDK_RELEASE_MASK)
 
-#define	BINDING_TYPE_INT	(GTK_TYPE_INT)
-#define	BINDING_TYPE_LONG	(GTK_TYPE_LONG)
-#define	BINDING_TYPE_FLOAT	(GTK_TYPE_FLOAT)
-#define	BINDING_TYPE_DOUBLE	(GTK_TYPE_DOUBLE)
-#define	BINDING_TYPE_STRING	(GTK_TYPE_STRING)
-#define	BINDING_TYPE_IDENTIFIER	(42)
-
 
 /* --- variables --- */
 static GHashTable	*binding_entry_hash_table = NULL;
@@ -68,8 +61,7 @@ binding_signal_free (GtkBindingSignal *sig)
   
   for (i = 0; i < sig->n_args; i++)
     {
-      if (sig->args[i].arg_type == BINDING_TYPE_STRING ||
-	  sig->args[i].arg_type == BINDING_TYPE_IDENTIFIER)
+      if (GTK_FUNDAMENTAL_TYPE (sig->args[i].arg_type) == GTK_TYPE_STRING)
 	g_free (sig->args[i].d.string_data);
     }
   g_free (sig->args);
@@ -270,47 +262,57 @@ binding_compose_params (GtkBindingArg	*args,
   valid = TRUE;
   for (i = 0; i < query->nparams && valid; i++)
     {
+      GtkType param_ftype;
+
       params->type = *types;
       params->name = NULL;
-      switch (args->arg_type)
+      param_ftype = GTK_FUNDAMENTAL_TYPE (params->type);
+      switch (GTK_FUNDAMENTAL_TYPE (args->arg_type))
 	{
-	case  BINDING_TYPE_DOUBLE:
-	  if (params->type == GTK_TYPE_FLOAT)
+	case  GTK_TYPE_DOUBLE:
+	  if (param_ftype == GTK_TYPE_FLOAT)
 	    GTK_VALUE_FLOAT (*params) = args->d.double_data;
-	  else if (params->type == GTK_TYPE_DOUBLE)
+	  else if (param_ftype == GTK_TYPE_DOUBLE)
 	    GTK_VALUE_DOUBLE (*params) = args->d.double_data;
 	  else
 	    valid = FALSE;
 	  break;
-	case  BINDING_TYPE_LONG:
-	  if (params->type == GTK_TYPE_BOOL &&
+	case  GTK_TYPE_LONG:
+	  if (param_ftype == GTK_TYPE_BOOL &&
 	      (args->d.long_data == 0 ||
 	       args->d.long_data == 1))
 	    GTK_VALUE_BOOL (*params) = args->d.long_data;
-	  else if (params->type == GTK_TYPE_INT)
+	  else if (param_ftype == GTK_TYPE_INT ||
+		   param_ftype == GTK_TYPE_ENUM)
 	    GTK_VALUE_INT (*params) = args->d.long_data;
-	  else if (params->type == GTK_TYPE_UINT &&
+	  else if ((param_ftype == GTK_TYPE_UINT ||
+		    param_ftype == GTK_TYPE_FLAGS) &&
 		   args->d.long_data >= 0)
 	    GTK_VALUE_UINT (*params) = args->d.long_data;
-	  else if (params->type == GTK_TYPE_LONG)
+	  else if (param_ftype == GTK_TYPE_LONG)
 	    GTK_VALUE_LONG (*params) = args->d.long_data;
-	  else if (params->type == GTK_TYPE_ULONG &&
+	  else if (param_ftype == GTK_TYPE_ULONG &&
 		   args->d.long_data >= 0)
 	    GTK_VALUE_ULONG (*params) = args->d.long_data;
-	  else if (params->type == GTK_TYPE_FLOAT)
+	  else if (param_ftype == GTK_TYPE_FLOAT)
 	    GTK_VALUE_FLOAT (*params) = args->d.long_data;
-	  else if (params->type == GTK_TYPE_DOUBLE)
+	  else if (param_ftype == GTK_TYPE_DOUBLE)
 	    GTK_VALUE_DOUBLE (*params) = args->d.long_data;
 	  else
 	    valid = FALSE;
 	  break;
-	case  BINDING_TYPE_STRING:
-	  if (params->type == GTK_TYPE_STRING)
+	case  GTK_TYPE_STRING:
+	  if (param_ftype == GTK_TYPE_STRING)
 	    GTK_VALUE_STRING (*params) = args->d.string_data;
+	  else if (param_ftype == GTK_TYPE_ENUM ||
+		   param_ftype == GTK_TYPE_FLAGS)
+	    {
+	      /* FIXME: we need identifier lookups here */
+	      valid = FALSE;
+	    }
 	  else
 	    valid = FALSE;
 	  break;
-	case  BINDING_TYPE_IDENTIFIER:
 	default:
 	  valid = FALSE;
 	  break;
@@ -566,26 +568,28 @@ gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
 	  binding_signal_free (signal);
 	  return;
 	}
-      arg->arg_type = tmp_arg->arg_type;
-      switch (tmp_arg->arg_type)
+      switch (GTK_FUNDAMENTAL_TYPE (tmp_arg->arg_type))
 	{
-	case  BINDING_TYPE_INT:
-	case  BINDING_TYPE_LONG:
+	case  GTK_TYPE_LONG:
+	  arg->arg_type = GTK_TYPE_LONG;
 	  arg->d.long_data = tmp_arg->d.long_data;
 	  break;
-	case  BINDING_TYPE_FLOAT:
-	case  BINDING_TYPE_DOUBLE:
+	case  GTK_TYPE_DOUBLE:
+	  arg->arg_type = GTK_TYPE_DOUBLE;
 	  arg->d.double_data = tmp_arg->d.double_data;
 	  break;
-	case  BINDING_TYPE_STRING:
-	  if (!tmp_arg->d.string_data)
+	case  GTK_TYPE_STRING:
+          if (tmp_arg->arg_type != GTK_TYPE_IDENTIFIER)
+	    arg->arg_type = GTK_TYPE_STRING;
+	  else
+	    arg->arg_type = GTK_TYPE_IDENTIFIER;
+	  arg->d.string_data = g_strdup (tmp_arg->d.string_data);
+	  if (!arg->d.string_data)
 	    {
 	      g_warning ("gtk_binding_entry_add_signall(): value of `string' arg[%u] is `NULL'", n);
-	      arg->d.string_data = NULL;
 	      binding_signal_free (signal);
 	      return;
 	    }
-	  arg->d.string_data = g_strdup (tmp_arg->d.string_data);
 	  break;
 	default:
 	  g_warning ("gtk_binding_entry_add_signall(): unsupported type `%s' for arg[%u]",
@@ -637,27 +641,50 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
       slist = g_slist_prepend (slist, arg);
 
       arg->arg_type = va_arg (args, GtkType);
-      switch (arg->arg_type)
+      switch (GTK_FUNDAMENTAL_TYPE (arg->arg_type))
 	{
-	case  BINDING_TYPE_INT:
+	case GTK_TYPE_CHAR:
+	  arg->arg_type = GTK_TYPE_LONG;
+	  arg->d.long_data = va_arg (args, gchar);
+	  break;
+	case GTK_TYPE_BOOL:
+	  arg->arg_type = GTK_TYPE_LONG;
+	  arg->d.long_data = va_arg (args, gboolean) != 0;
+	  break;
+	case GTK_TYPE_INT:
+	case GTK_TYPE_UINT:
+	  arg->arg_type = GTK_TYPE_LONG;
 	  arg->d.long_data = va_arg (args, gint);
 	  break;
-	case  BINDING_TYPE_LONG:
+	case GTK_TYPE_LONG:
+	case GTK_TYPE_ULONG:
+	  arg->arg_type = GTK_TYPE_LONG;
 	  arg->d.long_data = va_arg (args, glong);
 	  break;
-	case  BINDING_TYPE_FLOAT:
+	case GTK_TYPE_FLOAT:
+	  arg->arg_type = GTK_TYPE_DOUBLE;
 	  arg->d.double_data = va_arg (args, gfloat);
 	  break;
-	case  BINDING_TYPE_DOUBLE:
+	case GTK_TYPE_DOUBLE:
+	  arg->arg_type = GTK_TYPE_DOUBLE;
 	  arg->d.double_data = va_arg (args, gdouble);
 	  break;
-	case  BINDING_TYPE_STRING:
+	case GTK_TYPE_STRING:
+	  if (arg->arg_type != GTK_TYPE_IDENTIFIER)
+	    arg->arg_type = GTK_TYPE_STRING;
 	  arg->d.string_data = va_arg (args, gchar*);
 	  if (!arg->d.string_data)
 	    {
-	      g_warning ("gtk_binding_entry_add_signal(): value of `string' arg[%u] is `NULL'", i);
+	      g_warning ("gtk_binding_entry_add_signal(): type `%s' arg[%u] is `NULL'",
+			 gtk_type_name (arg->arg_type),
+			 i);
 	      i += n_args + 1;
 	    }
+	  break;
+	case GTK_TYPE_ENUM:
+	case GTK_TYPE_FLAGS:
+	  arg->arg_type = GTK_TYPE_LONG;
+	  arg->d.long_data = va_arg (args, gint);
 	  break;
 	default:
 	  g_warning ("gtk_binding_entry_add_signal(): unsupported type `%s' for arg[%u]",

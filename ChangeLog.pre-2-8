@@ -1,3 +1,11 @@
+Fri Jul 10 04:20:35 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.h: 
+	* gtk/gtktypeutils.c: added a new internal type GTK_TYPE_IDENTIFIER
+	which is derived from GTK_TYPE_STRING.
+
+	* gtk/gtkbindings.c: reworked the argument type handling.
+
 Thu Jul  9 21:03:19 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* gtk/gtkpreview.c: add in just enough support for 1 or 4 bits

@@ -113,8 +113,9 @@ struct _GtkBindingArg
   } d;
 };
 
-/* Binding sets
- */
+
+/* Application-level methods */
+
 GtkBindingSet*	gtk_binding_set_new	(const gchar	*set_name);
 GtkBindingSet*	gtk_binding_set_by_class(gpointer	 object_class);
 GtkBindingSet*	gtk_binding_set_find	(const gchar	*set_name);
@@ -129,25 +130,28 @@ gboolean gtk_binding_set_activate	(GtkBindingSet	*binding_set,
 void	 gtk_binding_entry_clear	(GtkBindingSet	*binding_set,
 					 guint		 keyval,
 					 guint		 modifiers);
-void	 gtk_binding_entry_remove	(GtkBindingSet	*binding_set,
-					 guint		 keyval,
-					 guint		 modifiers);
 void	 gtk_binding_entry_add_signal	(GtkBindingSet	*binding_set,
 					 guint		 keyval,
 					 guint		 modifiers,
 					 const gchar	*signal_name,
 					 guint		 n_args,
 					 ...);
-void	 gtk_binding_entry_add_signall	(GtkBindingSet	*binding_set,
-					 guint		 keyval,
-					 guint		 modifiers,
-					 const gchar	*signal_name,
-					 GSList		*binding_args);
 void	 gtk_binding_set_add_path	(GtkBindingSet	*binding_set,
 					 GtkPathType	 path_type,
 					 const gchar	*path_pattern,
 					 GtkPathPriorityType priority);
 
+
+/* Non-public methods */
+
+void	 gtk_binding_entry_remove	(GtkBindingSet	*binding_set,
+					 guint		 keyval,
+					 guint		 modifiers);
+void	 gtk_binding_entry_add_signall	(GtkBindingSet	*binding_set,
+					 guint		 keyval,
+					 guint		 modifiers,
+					 const gchar	*signal_name,
+					 GSList		*binding_args);
 
 
 
