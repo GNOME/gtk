@@ -201,6 +201,7 @@ real_window_procedure (HWND   hwnd,
     return ret_val;
   else
     {
+      GDK_NOTE (EVENTS, g_print("calling DefWindowProc\n"));
 #ifndef HAVE_DIMM_H
       return DefWindowProc (hwnd, message, wparam, lparam);
 #else
@@ -529,8 +530,8 @@ gdk_pointer_grab (GdkWindow    *window,
   
   if (!cursor)
     hcursor = NULL;
-  else
-    hcursor = cursor_private->hcursor;
+  else if ((hcursor = CopyCursor (cursor_private->hcursor)) == NULL)
+    WIN32_API_FAILED ("CopyCursor");
 #if 0
   return_val = _gdk_input_grab_pointer (window,
 					owner_events,
@@ -564,6 +565,9 @@ gdk_pointer_grab (GdkWindow    *window,
     {
       p_grab_window = window;
       p_grab_cursor = hcursor;
+
+      if (p_grab_cursor != NULL)
+	SetCursor (p_grab_cursor);
     }
   
   return return_val;
@@ -586,6 +590,13 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
 #endif
 
   p_grab_window = NULL;
+  if (p_grab_cursor != NULL)
+    {
+      if (GetCursor () == p_grab_cursor)
+	SetCursor (NULL);
+      DestroyCursor (p_grab_cursor);
+      p_grab_cursor = NULL;
+    }
 }
 
 /*
@@ -2427,6 +2438,13 @@ gdk_event_translate (GdkDisplay *display,
       if (ignore_wm_char)
 	{
 	  ignore_wm_char = FALSE;
+	  
+	  if (msg->wParam != VK_SPACE && ret_val_flagp)
+	    {
+	      *ret_val_flagp = TRUE;
+	      *ret_valp = FALSE;
+	    }
+	  
 	  break;
 	}
 

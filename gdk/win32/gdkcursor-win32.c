@@ -96,10 +96,10 @@ gdk_cursor_new_for_display (GdkDisplay   *display,
   hcursor = _gdk_win32_data_to_wcursor (cursor_type);
 
   if (hcursor == NULL)
-    g_warning ("gdk_cursor_new: no cursor %d found", cursor_type);
+    g_warning ("gdk_cursor_new_for_display: no cursor %d found", cursor_type);
   else
-    GDK_NOTE (MISC, g_print ("gdk_cursor_new: %d: %#x\n",
-			     cursor_type, (guint) hcursor));
+    GDK_NOTE (MISC, g_print ("gdk_cursor_new_for_display: %d: %p\n",
+			     cursor_type, hcursor));
 
   private = g_new (GdkCursorPrivate, 1);
   private->hcursor = hcursor;
@@ -268,12 +268,12 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 			  and_mask, xor_mask);
 
   GDK_NOTE (MISC, g_print ("gdk_cursor_new_from_pixmap: "
-			   "%#x (%dx%d) %#x (%dx%d) = %#x (%dx%d)\n",
-			   (guint) GDK_PIXMAP_HBITMAP (source),
+			   "%p (%dx%d) %p (%dx%d) = %p (%dx%d)\n",
+			   GDK_PIXMAP_HBITMAP (source),
 			   source_impl->width, source_impl->height,
-			   (guint) GDK_PIXMAP_HBITMAP (mask),
+			   GDK_PIXMAP_HBITMAP (mask),
 			   mask_impl->width, mask_impl->height,
-			   (guint) hcursor, cursor_width, cursor_height));
+			   hcursor, cursor_width, cursor_height));
 
   g_free (xor_mask);
   g_free (and_mask);
@@ -295,11 +295,11 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   g_return_if_fail (cursor != NULL);
   private = (GdkCursorPrivate *) cursor;
 
-  GDK_NOTE (MISC, g_print ("_gdk_cursor_destroy: %#x\n",
-			   (cursor->type == GDK_CURSOR_IS_PIXMAP) ? (guint) private->hcursor : 0));
+  GDK_NOTE (MISC, g_print ("_gdk_cursor_destroy: %p\n",
+			   (cursor->type == GDK_CURSOR_IS_PIXMAP) ? private->hcursor : 0));
 
-  if (GetCursor() == private->hcursor)
-    SetCursor(NULL);
+  if (GetCursor () == private->hcursor)
+    SetCursor (NULL);
 
   if (!DestroyCursor (private->hcursor))
     WIN32_API_FAILED ("DestroyCursor");
