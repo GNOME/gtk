@@ -51,6 +51,12 @@
 #include "gtktypebuiltins.h"
 #include "gtkvbox.h"
 
+#if defined (G_OS_UNIX)
+#include "gtkfilesystemunix.h"
+#elif defined (G_OS_WIN32)
+#include "gtkfilesystemwin32.h"
+#endif
+
 #include <string.h>
 #include <time.h>
 
@@ -1735,6 +1741,45 @@ set_select_multiple (GtkFileChooserDefault *impl,
 }
 
 static void
+set_file_system_backend (GtkFileChooserDefault *impl,
+			 const char *backend)
+{
+  if (impl->file_system)
+    {
+      g_signal_handler_disconnect (impl->file_system, impl->volumes_changed_id);
+      impl->volumes_changed_id = 0;
+      g_signal_handler_disconnect (impl->file_system, impl->bookmarks_changed_id);
+      impl->bookmarks_changed_id = 0;
+      g_object_unref (impl->file_system);
+    }
+  
+  impl->file_system = NULL;
+  if (backend)
+    impl->file_system = _gtk_file_system_create (backend);
+  
+  if (!impl->file_system)
+    {
+#if defined (G_OS_UNIX)
+      impl->file_system = gtk_file_system_unix_new ();
+#elif defined (G_OS_WIN32)
+      impl->file_system = gtk_file_system_win32_new ();
+#else
+#error "No default filesystem implementation on the platform"
+#endif
+    }
+  
+  if (impl->file_system)
+    {
+      impl->volumes_changed_id = g_signal_connect (impl->file_system, "volumes-changed",
+						   G_CALLBACK (volumes_changed_cb),
+						   impl);
+      impl->bookmarks_changed_id = g_signal_connect (impl->file_system, "bookmarks-changed",
+						     G_CALLBACK (bookmarks_changed_cb),
+						     impl);
+    }
+}
+
+static void
 gtk_file_chooser_default_set_property (GObject      *object,
 				       guint         prop_id,
 				       const GValue *value,
@@ -1762,32 +1807,8 @@ gtk_file_chooser_default_set_property (GObject      *object,
 	gtk_widget_hide (impl->new_folder_button);
 
       break;
-    case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM:
-      {
-	GtkFileSystem *file_system = g_value_get_object (value);
-	if (impl->file_system != file_system)
-	  {
-	    if (impl->file_system)
-	      {
-		g_signal_handler_disconnect (impl->file_system, impl->volumes_changed_id);
-		impl->volumes_changed_id = 0;
-		g_signal_handler_disconnect (impl->file_system, impl->bookmarks_changed_id);
-		impl->bookmarks_changed_id = 0;
-		g_object_unref (impl->file_system);
-	      }
-	    impl->file_system = file_system;
-	    if (impl->file_system)
-	      {
-		g_object_ref (impl->file_system);
-		impl->volumes_changed_id = g_signal_connect (impl->file_system, "volumes-changed",
-							     G_CALLBACK (volumes_changed_cb),
-							     impl);
-		impl->bookmarks_changed_id = g_signal_connect (impl->file_system, "bookmarks-changed",
-							       G_CALLBACK (bookmarks_changed_cb),
-							       impl);
-	      }
-	  }
-      }
+    case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM_BACKEND:
+      set_file_system_backend (impl, g_value_get_string (value));
       break;
     case GTK_FILE_CHOOSER_PROP_FILTER:
       set_current_filter (impl, g_value_get_object (value));
@@ -3238,9 +3259,9 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 }
 
 GtkWidget *
-_gtk_file_chooser_default_new (GtkFileSystem *file_system)
+_gtk_file_chooser_default_new (const char *file_system)
 {
   return  g_object_new (GTK_TYPE_FILE_CHOOSER_DEFAULT,
-			"file-system", file_system,
+			"file-system-backend", file_system,
 			NULL);
 }

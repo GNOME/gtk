@@ -1,3 +1,25 @@
+2004-02-19  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkfilechooser.c: (gtk_file_chooser_class_init):
+	* gtk/gtkfilechooserutils.c:
+	* gtk/gtkfilechooserutils.h:
+	* gtk/gtkfilechooserwidget.c:
+	Remove old file-system property.
+	Add new file-system-backend string property
+	
+	* gtk/gtkfilechooserdefault.[ch]:
+	Handle the file-system-backend property
+	
+	* gtk/gtkfilechooserdialog.[ch]:
+	(gtk_file_chooser_dialog_new_with_backend):
+	Remove old file-system property.
+	Add new file-system-backend string property
+	Add new function gtk_file_chooser_dialog_new_with_backend
+	
+	* gtk/gtkfilesystem.c: 
+	* gtk/gtkfilesystem.h:
+	Add filesystem module support.	
+
 2004-02-18  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_tree_create): Renamed

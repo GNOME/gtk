@@ -23,23 +23,18 @@
 #include "gtkfilechooserutils.h"
 #include "gtktypebuiltins.h"
 
-#if defined (G_OS_UNIX)
-#include "gtkfilesystemunix.h"
-#elif defined (G_OS_WIN32)
-#include "gtkfilesystemwin32.h"
-#endif
-
 struct _GtkFileChooserWidgetPrivate
 {
   GtkWidget *impl;
 
-  GtkFileSystem *file_system;
+  char *file_system;
 };
 
 #define GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE(o)  (GTK_FILE_CHOOSER_WIDGET (o)->priv)
 
 static void gtk_file_chooser_widget_class_init   (GtkFileChooserWidgetClass *class);
 static void gtk_file_chooser_widget_init         (GtkFileChooserWidget      *chooser_widget);
+static void gtk_file_chooser_widget_finalize     (GObject                   *object);
 
 static GObject* gtk_file_chooser_widget_constructor  (GType                  type,
 						      guint                  n_construct_properties,
@@ -102,6 +97,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gobject_class->constructor = gtk_file_chooser_widget_constructor;
   gobject_class->set_property = gtk_file_chooser_widget_set_property;
   gobject_class->get_property = gtk_file_chooser_widget_get_property;
+  gobject_class->finalize = gtk_file_chooser_widget_finalize;
 
   _gtk_file_chooser_install_properties (gobject_class);
 
@@ -115,6 +111,14 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *chooser_widget)
 								   GTK_TYPE_FILE_CHOOSER_WIDGET,
 								   GtkFileChooserWidgetPrivate);
   chooser_widget->priv = priv;
+}
+
+static void
+gtk_file_chooser_widget_finalize (GObject *object)
+{
+  GtkFileChooserWidget *chooser = GTK_FILE_CHOOSER_WIDGET (object);
+
+  g_free (chooser->priv->file_system);
 }
 
 static GObject*
@@ -134,16 +138,8 @@ gtk_file_chooser_widget_constructor (GType                  type,
 
   gtk_widget_push_composite_child ();
 
-  if (!priv->file_system)
-    {
-#if defined (G_OS_UNIX)
-      priv->file_system = gtk_file_system_unix_new ();
-#elif defined (G_OS_WIN32)
-      priv->file_system = gtk_file_system_win32_new ();
-#endif
-    }
-      
   priv->impl = _gtk_file_chooser_default_new (priv->file_system);
+  
   gtk_box_pack_start (GTK_BOX (object), priv->impl, TRUE, TRUE, 0);
   gtk_widget_show (priv->impl);
 
@@ -174,18 +170,9 @@ gtk_file_chooser_widget_set_property (GObject         *object,
 
   switch (prop_id)
     {
-    case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM:
-      {
-	GtkFileSystem *file_system = g_value_get_object (value);
-	if (priv->file_system != file_system)
-	  {
-	    if (priv->file_system)
-	      g_object_unref (priv->file_system);
-	    priv->file_system = file_system;
-	    if (priv->file_system)
-	      g_object_ref (priv->file_system);
-	  }
-      }
+    case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM_BACKEND:
+      g_free (priv->file_system);
+      priv->file_system = g_value_dup_string (value);
       break;
     default:
       g_object_set_property (G_OBJECT (priv->impl), pspec->name, value);

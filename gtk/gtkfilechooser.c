@@ -95,10 +95,10 @@ gtk_file_chooser_class_init (gpointer g_iface)
 							  GTK_FILE_CHOOSER_ACTION_OPEN,
 							  G_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
-				       g_param_spec_object ("file-system",
-							    P_("File System"),
-							    P_("File system object to use"),
-							    GTK_TYPE_FILE_SYSTEM,
+				       g_param_spec_string ("file-system-backend",
+							    P_("File System Backend"),
+							    P_("Name of file system backend to use"),
+							    NULL, 
 							    G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
   g_object_interface_install_property (g_iface,
 				       g_param_spec_object ("filter",

@@ -18,9 +18,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
-
+#include <gmodule.h>
 #include "gtkfilesystem.h"
 #include "gtkicontheme.h"
+#include "gtkmain.h"
 
 #include <string.h>
 
@@ -885,4 +886,171 @@ gtk_file_paths_free (GSList *paths)
     gtk_file_path_free (tmp_list->data);
 
   g_slist_free (paths);
+}
+
+/*****************************************
+ *         GtkFileSystem modules         *
+ *****************************************/
+
+typedef struct _GtkFileSystemModule GtkFileSystemModule;
+typedef struct _GtkFileSystemModuleClass GtkFileSystemModuleClass;
+
+struct _GtkFileSystemModule
+{
+  GTypeModule parent_instance;
+  
+  GModule *library;
+
+  void            (*init)     (GTypeModule    *module);
+  void            (*exit)     (void);
+  GtkFileSystem * (*create)   (void);
+
+  gchar *path;
+};
+
+struct _GtkFileSystemModuleClass
+{
+  GTypeModuleClass parent_class;
+};
+
+G_DEFINE_TYPE (GtkFileSystemModule, gtk_file_system_module, G_TYPE_TYPE_MODULE);
+#define GTK_TYPE_FILE_SYSTEM_MODULE       (gtk_file_system_module_get_type ())
+#define GTK_FILE_SYSTEM_MODULE(module)	  (G_TYPE_CHECK_INSTANCE_CAST ((module), GTK_TYPE_FILE_SYSTEM_MODULE, GtkFileSystemModule))
+
+
+static GSList *loaded_file_systems;
+
+static gboolean
+gtk_file_system_module_load (GTypeModule *module)
+{
+  GtkFileSystemModule *fs_module = GTK_FILE_SYSTEM_MODULE (module);
+  
+  fs_module->library = g_module_open (fs_module->path, 0);
+  if (!fs_module->library)
+    {
+      g_warning (g_module_error());
+      return FALSE;
+    }
+  
+  /* extract symbols from the lib */
+  if (!g_module_symbol (fs_module->library, "fs_module_init",
+			(gpointer *)&fs_module->init) ||
+      !g_module_symbol (fs_module->library, "fs_module_exit", 
+			(gpointer *)&fs_module->exit) ||
+      !g_module_symbol (fs_module->library, "fs_module_create", 
+			(gpointer *)&fs_module->create))
+    {
+      g_warning (g_module_error());
+      g_module_close (fs_module->library);
+      
+      return FALSE;
+    }
+	    
+  /* call the filesystems's init function to let it */
+  /* setup anything it needs to set up. */
+  fs_module->init (module);
+
+  return TRUE;
+}
+
+static void
+gtk_file_system_module_unload (GTypeModule *module)
+{
+  GtkFileSystemModule *fs_module = GTK_FILE_SYSTEM_MODULE (module);
+  
+  fs_module->exit();
+
+  g_module_close (fs_module->library);
+  fs_module->library = NULL;
+
+  fs_module->init = NULL;
+  fs_module->exit = NULL;
+  fs_module->create = NULL;
+}
+
+/* This only will ever be called if an error occurs during
+ * initialization
+ */
+static void
+gtk_file_system_module_finalize (GObject *object)
+{
+  GtkFileSystemModule *module = GTK_FILE_SYSTEM_MODULE (object);
+
+  g_free (module->path);
+
+  G_OBJECT_CLASS (gtk_file_system_module_parent_class)->finalize (object);
+}
+
+static void
+gtk_file_system_module_class_init (GtkFileSystemModuleClass *class)
+{
+  GTypeModuleClass *module_class = G_TYPE_MODULE_CLASS (class);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  
+  module_class->load = gtk_file_system_module_load;
+  module_class->unload = gtk_file_system_module_unload;
+
+  gobject_class->finalize = gtk_file_system_module_finalize;
+}
+
+static void
+gtk_file_system_module_init (GtkFileSystemModule *fs_module)
+{
+}
+
+
+static GtkFileSystem *
+_gtk_file_system_module_create (GtkFileSystemModule *fs_module)
+{
+  GtkFileSystem *fs;
+  
+  if (g_type_module_use (G_TYPE_MODULE (fs_module)))
+    {
+      fs = fs_module->create ();
+      g_type_module_unuse (G_TYPE_MODULE (fs_module));
+      return fs;
+    }
+  return NULL;
+}
+
+
+GtkFileSystem *
+_gtk_file_system_create (const char *file_system_name)
+{
+  struct FileSystemInfo *file_system_info;
+  GSList *l;
+  char *module_path;
+  GtkFileSystemModule *fs_module;
+  GtkFileSystem *fs;
+
+  for (l = loaded_file_systems; l != NULL; l = l->next)
+    {
+      fs_module = l->data;
+      
+      if (strcmp (G_TYPE_MODULE (fs_module)->name, file_system_name) == 0)
+	return _gtk_file_system_module_create (fs_module);
+    }
+
+  fs = NULL;
+  if (g_module_supported ())
+    {
+      module_path = _gtk_find_module (file_system_name, "filesystems");
+
+      if (module_path)
+	{
+	  fs_module = g_object_new (GTK_TYPE_FILE_SYSTEM_MODULE, NULL);
+
+	  g_type_module_set_name (G_TYPE_MODULE (fs_module), file_system_name);
+	  fs_module->path = g_strdup (module_path);
+
+	  loaded_file_systems = g_slist_prepend (loaded_file_systems,
+						 fs_module);
+
+	  fs = _gtk_file_system_module_create (fs_module);
+	}
+      
+      g_free (module_path);
+    }
+  
+  return fs;
 }

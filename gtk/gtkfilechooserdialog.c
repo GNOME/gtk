@@ -33,13 +33,14 @@ struct _GtkFileChooserDialogPrivate
 {
   GtkWidget *widget;
 
-  GtkFileSystem *file_system;
+  char *file_system;
 };
 
 #define GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE(o)  (GTK_FILE_CHOOSER_DIALOG (o)->priv)
 
 static void gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class);
 static void gtk_file_chooser_dialog_init       (GtkFileChooserDialog      *dialog);
+static void gtk_file_chooser_dialog_finalize   (GObject                   *object);
 
 static GObject* gtk_file_chooser_dialog_constructor  (GType                  type,
 						      guint                  n_construct_properties,
@@ -109,6 +110,7 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
   gobject_class->constructor = gtk_file_chooser_dialog_constructor;
   gobject_class->set_property = gtk_file_chooser_dialog_set_property;
   gobject_class->get_property = gtk_file_chooser_dialog_get_property;
+  gobject_class->finalize = gtk_file_chooser_dialog_finalize;
 
   widget_class->realize = gtk_file_chooser_dialog_realize;
   widget_class->style_set = gtk_file_chooser_dialog_style_set;
@@ -128,6 +130,14 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
   dialog->priv = priv;
 
   gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
+}
+
+static void
+gtk_file_chooser_dialog_finalize (GObject *object)
+{
+  GtkFileChooserDialog *dialog = GTK_FILE_CHOOSER_DIALOG (object);
+
+  g_free (dialog->priv->file_system);
 }
 
 /* Callback used when the user activates a file in the file chooser widget */
@@ -155,7 +165,7 @@ gtk_file_chooser_dialog_constructor (GType                  type,
 
   if (priv->file_system)
     priv->widget = g_object_new (GTK_TYPE_FILE_CHOOSER_WIDGET,
-				 "file-system", priv->file_system,
+				 "file-system-backend", priv->file_system,
 				 NULL);
   else
     priv->widget = g_object_new (GTK_TYPE_FILE_CHOOSER_WIDGET, NULL);
@@ -185,18 +195,9 @@ gtk_file_chooser_dialog_set_property (GObject         *object,
 
   switch (prop_id)
     {
-    case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM:
-      {
-	GtkFileSystem *file_system = g_value_get_object (value);
-	if (priv->file_system != file_system)
-	  {
-	    if (priv->file_system)
-	      g_object_unref (priv->file_system);
-	    priv->file_system = file_system;
-	    if (priv->file_system)
-	      g_object_ref (priv->file_system);
-	  }
-      }
+    case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM_BACKEND:
+      g_free (priv->file_system);
+      priv->file_system = g_value_dup_string (value);
       break;
     default:
       g_object_set_property (G_OBJECT (priv->widget), pspec->name, value);
@@ -308,6 +309,37 @@ gtk_file_chooser_dialog_screen_changed (GtkWidget *widget,
     set_default_size (GTK_FILE_CHOOSER_DIALOG (widget));
 }
 
+static GtkWidget *
+gtk_file_chooser_dialog_new_valist (const gchar          *title,
+				    GtkWindow            *parent,
+				    GtkFileChooserAction  action,
+				    const gchar          *backend,
+				    const gchar          *first_button_text,
+				    va_list               varargs)
+{
+  GtkWidget *result;
+  const char *button_text = first_button_text;
+  gint response_id;
+
+  result = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+			 "title", title,
+			 "action", action,
+			 "file-system-backend", backend,
+			 NULL);
+
+  if (parent)
+    gtk_window_set_transient_for (GTK_WINDOW (result), parent);
+
+  while (button_text)
+    {
+      response_id = va_arg (varargs, gint);
+      gtk_dialog_add_button (GTK_DIALOG (result), button_text, response_id);
+      button_text = va_arg (varargs, const gchar *);
+    }
+
+  return result;
+}
+
 /**
  * gtk_file_chooser_dialog_new:
  * @title: Title of the dialog, or %NULL
@@ -332,26 +364,49 @@ gtk_file_chooser_dialog_new (const gchar         *title,
 {
   GtkWidget *result;
   va_list varargs;
-  const char *button_text = first_button_text;
-  gint response_id;
-
-  result = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
-			 "title", title,
-			 "action", action,
-			 NULL);
-
-  if (parent)
-    gtk_window_set_transient_for (GTK_WINDOW (result), parent);
-
+  
   va_start (varargs, first_button_text);
+  result = gtk_file_chooser_dialog_new_valist (title, parent, action,
+					       NULL, first_button_text,
+					       varargs);
+  va_end (varargs);
 
-  while (button_text)
-    {
-      response_id = va_arg (varargs, gint);
-      gtk_dialog_add_button (GTK_DIALOG (result), button_text, response_id);
-      button_text = va_arg (varargs, const gchar *);
-    }
+  return result;
+}
 
+/**
+ * gtk_file_chooser_dialog_new_with_backend:
+ * @title: Title of the dialog, or %NULL
+ * @parent: Transient parent of the dialog, or %NULL
+ * @backend: The name of the specific filesystem backend to use.
+ * @action: Open or save mode for the dialog
+ * @first_button_text: stock ID or text to go in the first button, or %NULL
+ * @Varargs: response ID for the first button, then additional (button, id) pairs, ending with %NULL
+ *
+ * Creates a new #GtkFileChooserDialog with a specified backend. This is
+ * especially useful if you use gtk_file_chooser_set_local_only() to allow
+ * non-local files and you use a more expressive vfs, such as gnome-vfs,
+ * to load files.
+ *
+ * Return value: a new #GtkFileChooserDialog
+ *
+ * Since: 2.4
+ **/
+GtkWidget *
+gtk_file_chooser_dialog_new_with_backend (const gchar          *title,
+					  GtkWindow            *parent,
+					  GtkFileChooserAction  action,
+					  const gchar          *backend,
+					  const gchar          *first_button_text,
+					  ...)
+{
+  GtkWidget *result;
+  va_list varargs;
+  
+  va_start (varargs, first_button_text);
+  result = gtk_file_chooser_dialog_new_valist (title, parent, action,
+					       backend, first_button_text,
+					       varargs);
   va_end (varargs);
 
   return result;

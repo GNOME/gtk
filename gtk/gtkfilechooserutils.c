@@ -83,8 +83,8 @@ _gtk_file_chooser_install_properties (GObjectClass *klass)
 				    GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET,
 				    "extra-widget");
   g_object_class_override_property (klass,
-				    GTK_FILE_CHOOSER_PROP_FILE_SYSTEM,
-				    "file-system");
+				    GTK_FILE_CHOOSER_PROP_FILE_SYSTEM_BACKEND,
+				    "file-system-backend");
   g_object_class_override_property (klass,
 				    GTK_FILE_CHOOSER_PROP_FILTER,
 				    "filter");

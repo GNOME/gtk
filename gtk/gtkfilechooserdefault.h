@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 typedef struct _GtkFileChooserDefault      GtkFileChooserDefault;
 
 GType      _gtk_file_chooser_default_get_type (void);
-GtkWidget *_gtk_file_chooser_default_new      (GtkFileSystem *file_system);
+GtkWidget *_gtk_file_chooser_default_new      (const char *file_system);
 
 G_END_DECLS
 

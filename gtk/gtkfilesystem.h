@@ -335,6 +335,10 @@ GSList *gtk_file_paths_sort (GSList *paths);
 GSList *gtk_file_paths_copy (GSList *paths);
 void    gtk_file_paths_free (GSList *paths);
 
+/* GtkFileSystem modules support */
+
+GtkFileSystem  *_gtk_file_system_create (const char *file_system_name);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_SYSTEM_H__ */
