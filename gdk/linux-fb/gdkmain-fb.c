@@ -626,7 +626,8 @@ gdk_fb_pointer_grab (GdkWindow *	  window,
   if (cursor)
     gdk_fb_cursor_reset ();
 
-  gdk_fb_window_visibility_crossing (window, TRUE, TRUE);
+  gdk_fb_window_send_crossing_events (window,
+				      GDK_CROSSING_GRAB);  
   
   return GDK_GRAB_SUCCESS;
 }
@@ -656,7 +657,8 @@ void
 gdk_fb_pointer_ungrab (guint32 time, gboolean implicit_grab)
 {
   gboolean have_grab_cursor = _gdk_fb_pointer_grab_cursor && 1;
-
+  GdkWindow *mousewin;
+  
   if (!_gdk_fb_pointer_grab_window)
     return;
 
@@ -674,7 +676,9 @@ gdk_fb_pointer_ungrab (guint32 time, gboolean implicit_grab)
   if (have_grab_cursor)
     gdk_fb_cursor_reset ();
 
-  gdk_fb_window_visibility_crossing (_gdk_fb_pointer_grab_window, FALSE, TRUE);
+  mousewin = gdk_window_at_pointer (NULL, NULL);
+  gdk_fb_window_send_crossing_events (mousewin,
+				      GDK_CROSSING_UNGRAB);  
   
   if (_gdk_fb_pointer_grab_window)
     gdk_window_unref (_gdk_fb_pointer_grab_window);

@@ -1,3 +1,29 @@
+2000-11-28  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkinput-ps2.c:
+	Implement correct EnterNotify/LeaveNotify:
+	(gdk_fb_window_send_crossing_events): New function that sends
+	all GdkCrossingEvents from the last mouse-window to the specified
+	destination.
+	(gdk_fb_window_visibility_crossing): Removed function.
+	(handle_mouse_input): Use gdk_fb_window_send_crossing_events()
+	(send_button_event, gdk_fb_cursor_reset): Use gdk_window_at_pointer
+	instead of gdk_window_get_pointer() for	better readability.
+
+	* gdk/linux-fb/gdkmain-fb.c (gdk_fb_pointer_grab,
+	gdk_fb_pointer_ungrab): Use gdk_fb_window_send_crossing_events.
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	removed gdk_fb_window_visibility_crossing, added
+	gdk_fb_window_send_crossing_events and gdk_fb_find_common_ancestor.
+
+	gdk/linux-fb/gdkwindow-fb.c (gdk_fb_find_common_ancestor):
+	New function that finds the least common ancestor of two windows.
+	(gdk_window_show, gdk_window_hide):
+	Use gdk_fb_window_send_crossing_events.
+	(gdk_fb_window_move_resize): Send configure events to toplevel
+	windows. Use gdk_fb_window_send_crossing_events.
+
 2000-11-27  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkprivate.h (enum): Remove a trailing comma

@@ -121,7 +121,7 @@ send_button_event (MouseDevice *mouse,
   if (_gdk_fb_pointer_grab_window_events)
     window = _gdk_fb_pointer_grab_window_events;
   else
-    window = gdk_window_get_pointer(NULL, NULL, NULL, NULL);
+    window = gdk_window_at_pointer(NULL, NULL);
 
   gdk_window_get_origin (window, &x, &y);
   x = mouse->x - x;
@@ -411,90 +411,153 @@ move_pointer (MouseDevice *mouse, GdkWindow *in_window)
 void
 gdk_fb_cursor_reset(void)
 {
-  GdkWindow *win = gdk_window_get_pointer (NULL, NULL, NULL, NULL);
+  GdkWindow *win = gdk_window_at_pointer (NULL, NULL);
 
   move_pointer (gdk_fb_mouse, win);
 }
 
 void
-gdk_fb_window_visibility_crossing (GdkWindow *window,
-				   gboolean is_show,
-				   gboolean is_grab)
+gdk_fb_window_send_crossing_events (GdkWindow *dest,
+				    GdkCrossingMode mode)
 {
-  gint winx, winy;
+  GdkWindow *c;
+  GdkWindow *win, *last, *next;
+  GdkEvent *event;
+  gint x, y, x_int, y_int;
   GdkModifierType my_mask;
+  GList *path, *list;
+  gboolean non_linear;
+  GdkWindow *a;
+  GdkWindow *b;
+  
+  if (gdk_fb_mouse->prev_window == NULL)
+    gdk_fb_mouse->prev_window = gdk_window_ref (gdk_parent_root);
 
-  gdk_input_get_mouseinfo (&winx, &winy, &my_mask);
+  a = gdk_fb_mouse->prev_window;
+  b = dest;
 
-  if (is_grab ||
-      (winx >= GDK_DRAWABLE_IMPL_FBDATA(window)->llim_x &&
-       winx < GDK_DRAWABLE_IMPL_FBDATA(window)->lim_x &&
-       winy >= GDK_DRAWABLE_IMPL_FBDATA(window)->llim_y &&
-       winy < GDK_DRAWABLE_IMPL_FBDATA(window)->lim_y)
-     )
+  if (a==b)
+    return;
+
+  gdk_input_get_mouseinfo (&x, &y, &my_mask);
+
+  c = gdk_fb_find_common_ancestor (a, b);
+
+  non_linear = (c != a) && (c != b);
+  
+  event = gdk_event_make (a, GDK_LEAVE_NOTIFY, TRUE);
+  if (event)
     {
-      GdkWindow *oldwin, *newwin, *curwin;
-      GdkEvent *event;
-
-      curwin = gdk_window_get_pointer (NULL, NULL, NULL, NULL);
-
-      if (is_show)
-	{
-	  /* Window is about to be shown */
-	  oldwin = curwin;
-	  newwin = window;
-	}
+      event->crossing.subwindow = NULL;
+      gdk_window_get_root_origin (a, &x_int, &y_int);
+      event->crossing.x = x - x_int;
+      event->crossing.y = y - y_int;
+      event->crossing.x_root = x;
+      event->crossing.y_root = y;
+      event->crossing.mode = mode;
+      if (non_linear)
+	event->crossing.detail = GDK_NOTIFY_NONLINEAR;
+      else if (c==a)
+	event->crossing.detail = GDK_NOTIFY_INFERIOR;
       else
-	{
-	  /* Window is about to be hidden */
-	  oldwin = window;
-	  newwin = curwin;
-	}
-
-      event = gdk_event_make (oldwin, GDK_LEAVE_NOTIFY, TRUE);
-      if (event)
-	{
-	  guint x_int, y_int;
-	  event->crossing.subwindow = gdk_window_ref (newwin);
-	  gdk_window_get_root_origin (oldwin, &x_int, &y_int);
-	  event->crossing.x = winx - x_int;
-	  event->crossing.y = winy - y_int;
-	  event->crossing.x_root = winx;
-	  event->crossing.y_root = winy;
-	  if (is_grab)
-	    {
-	      if (is_show)
-		event->crossing.mode = GDK_CROSSING_GRAB;
-	      else
-		event->crossing.mode = GDK_CROSSING_UNGRAB;
-	    }
-	  else
-	    event->crossing.mode = GDK_CROSSING_NORMAL;
-	  event->crossing.detail = GDK_NOTIFY_UNKNOWN;
-	  event->crossing.focus = FALSE;
-	  event->crossing.state = my_mask;
-	}
-
-      event = gdk_event_make (newwin, GDK_ENTER_NOTIFY, TRUE);
-      if (event)
-	{
-	  guint x_int, y_int;
-	  event->crossing.subwindow = gdk_window_ref (oldwin);
-	  gdk_window_get_root_origin (newwin, &x_int, &y_int);
-	  event->crossing.x = winx - x_int;
-	  event->crossing.y = winy - y_int;
-	  event->crossing.x_root = winx;
-	  event->crossing.y_root = winy;
-	  event->crossing.mode = GDK_CROSSING_NORMAL;
-	  event->crossing.detail = GDK_NOTIFY_UNKNOWN;
-	  event->crossing.focus = FALSE;
-	  event->crossing.state = my_mask;
-	}
-
-      if (gdk_fb_mouse->prev_window)
-	gdk_window_unref (gdk_fb_mouse->prev_window);
-      gdk_fb_mouse->prev_window = gdk_window_ref (newwin);
+	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
+      event->crossing.focus = FALSE;
+      event->crossing.state = my_mask;
     }
+  
+  /* Traverse up from a to (excluding) c */
+  if (c != a)
+    {
+      last = a;
+      win = GDK_WINDOW (GDK_WINDOW_OBJECT (a)->parent);
+      while (win != c)
+	{
+	  event = gdk_event_make (win, GDK_LEAVE_NOTIFY, TRUE);
+	  if (event)
+	    {
+	      event->crossing.subwindow = gdk_window_ref (last);
+	      gdk_window_get_root_origin (win, &x_int, &y_int);
+	      event->crossing.x = x - x_int;
+	      event->crossing.y = y - y_int;
+	      event->crossing.x_root = x;
+	      event->crossing.y_root = y;
+	      event->crossing.mode = mode;
+	      if (non_linear)
+		event->crossing.detail = GDK_NOTIFY_NONLINEAR_VIRTUAL;
+	      else
+		event->crossing.detail = GDK_NOTIFY_VIRTUAL;
+	      event->crossing.focus = FALSE;
+	      event->crossing.state = my_mask;
+	    }
+	  last = win;
+	  win = GDK_WINDOW (GDK_WINDOW_OBJECT (win)->parent);
+	}
+    }
+  
+  /* Traverse down from c to b */
+  if (c != b) 
+    {
+      path = NULL;
+      win = b;
+      while (win != c)
+	{
+	  path = g_list_prepend (path, win);
+	  win = GDK_WINDOW( GDK_WINDOW_OBJECT (win)->parent);
+	}
+      
+      list = path;
+      while (list) 
+	{
+	  win = (GdkWindow *)list->data;
+	  list = g_list_next (list);
+	  if (list)
+	    next = (GdkWindow *)list->data;
+	  else 
+	    next = b;
+	  
+	  event = gdk_event_make (win, GDK_ENTER_NOTIFY, TRUE);
+	  if (event)
+	    {
+	      event->crossing.subwindow = gdk_window_ref (next);
+	      gdk_window_get_root_origin (win, &x_int, &y_int);
+	      event->crossing.x = x - x_int;
+	      event->crossing.y = y - y_int;
+	      event->crossing.x_root = x;
+	      event->crossing.y_root = y;
+	      event->crossing.mode = mode;
+	      if (non_linear)
+		event->crossing.detail = GDK_NOTIFY_NONLINEAR_VIRTUAL;
+	      else
+		event->crossing.detail = GDK_NOTIFY_VIRTUAL;
+	      event->crossing.focus = FALSE;
+	      event->crossing.state = my_mask;
+	    }
+	}
+      g_list_free (path);
+    }
+
+  event = gdk_event_make (b, GDK_ENTER_NOTIFY, TRUE);
+  if (event)
+    {
+      event->crossing.subwindow = NULL;
+      gdk_window_get_root_origin (b, &x_int, &y_int);
+      event->crossing.x = x - x_int;
+      event->crossing.y = y - y_int;
+      event->crossing.x_root = x;
+      event->crossing.y_root = y;
+      event->crossing.mode = mode;
+      if (non_linear)
+	event->crossing.detail = GDK_NOTIFY_NONLINEAR;
+      else if (c==a)
+	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
+      else
+	event->crossing.detail = GDK_NOTIFY_INFERIOR;
+      event->crossing.focus = FALSE;
+      event->crossing.state = my_mask;
+    }
+
+  gdk_window_unref (gdk_fb_mouse->prev_window);
+  gdk_fb_mouse->prev_window = gdk_window_ref (b);
 }
 
 static void
@@ -525,7 +588,7 @@ handle_mouse_input(MouseDevice *mouse,
   if (!got_motion)
     return;
 
-  win = gdk_window_get_pointer (NULL, NULL, NULL, NULL);
+  win = gdk_window_at_pointer (NULL, NULL);
   move_pointer (mouse, win);
   if (_gdk_fb_pointer_grab_window_events)
     win = _gdk_fb_pointer_grab_window_events;
@@ -554,41 +617,8 @@ handle_mouse_input(MouseDevice *mouse,
     }
 
   if (win != mouse->prev_window)
-    {
-      GdkEvent *evel;
-
-      if (mouse->prev_window &&
-	  (evel = gdk_event_make (mouse->prev_window, GDK_LEAVE_NOTIFY, TRUE)))
-	{
-	  evel->crossing.subwindow = gdk_window_ref (win);
-	  evel->crossing.x = x;
-	  evel->crossing.y = y;
-	  evel->crossing.x_root = mouse->x;
-	  evel->crossing.y_root = mouse->y;
-	  evel->crossing.mode = GDK_CROSSING_NORMAL;
-	  evel->crossing.detail = GDK_NOTIFY_UNKNOWN;
-	  evel->crossing.focus = FALSE;
-	  evel->crossing.state = state;
-	}
-
-      evel = gdk_event_make (win, GDK_ENTER_NOTIFY, TRUE);
-      if (evel)
-	{
-	  evel->crossing.subwindow = gdk_window_ref (mouse->prev_window ? mouse->prev_window : gdk_parent_root);
-	  evel->crossing.x = x;
-	  evel->crossing.y = y;
-	  evel->crossing.x_root = mouse->x;
-	  evel->crossing.y_root = mouse->y;
-	  evel->crossing.mode = GDK_CROSSING_NORMAL;
-	  evel->crossing.detail = GDK_NOTIFY_UNKNOWN;
-	  evel->crossing.focus = FALSE;
-	  evel->crossing.state = state;
-	}
-
-      if (mouse->prev_window)
-	gdk_window_unref (mouse->prev_window);
-      mouse->prev_window = gdk_window_ref (win);
-    }
+    gdk_fb_window_send_crossing_events (win,
+					GDK_CROSSING_NORMAL);
 
   input_activity ();
 }

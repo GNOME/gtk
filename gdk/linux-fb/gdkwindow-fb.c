@@ -568,11 +568,48 @@ gdk_fb_redraw_all (void)
   gdk_window_process_all_updates ();
 }
 
+GdkWindow *
+gdk_fb_find_common_ancestor (GdkWindow *win1,
+			     GdkWindow *win2)
+{
+  GdkWindowObject *tmp;
+  GList *path1 = NULL, *path2 = NULL;
+  GList *list1, *list2;
+  
+  tmp = GDK_WINDOW_OBJECT (win1);
+  while (tmp) 
+    {
+      path1 = g_list_prepend(path1, tmp);
+      tmp = tmp->parent;
+    }
+
+  tmp = GDK_WINDOW_OBJECT (win2);
+  while (tmp) 
+    {
+      path2 = g_list_prepend(path2, tmp);
+      tmp = tmp->parent;
+    }
+  
+  list1 = path1;
+  list2 = path2;
+  tmp = NULL;
+  while (list1 && list2 && (list1->data == list2->data)) 
+    {
+      tmp = (GdkWindowObject *)list1->data;
+      list1 = g_list_next (list1);
+      list2 = g_list_next (list2);
+    }
+  g_list_free (path1);
+  g_list_free (path2);
+  return GDK_WINDOW (tmp);
+}
+
 void
 gdk_window_show (GdkWindow *window)
 {
   GdkWindowObject *private;
-  
+  GdkWindow *mousewin;
+
   g_return_if_fail (window != NULL);
   
   private = (GdkWindowObject*) window;
@@ -589,9 +626,9 @@ gdk_window_show (GdkWindow *window)
 
 	  send_map_events (private, TRUE);
 
-	  private->mapped = FALSE; /* a hack, ayup, to make gdk_window_get_pointer get the other window */
-	  gdk_fb_window_visibility_crossing (window, TRUE, FALSE);
-	  private->mapped = TRUE;
+	  mousewin = gdk_window_at_pointer (NULL, NULL);
+	  gdk_fb_window_send_crossing_events (mousewin, 
+					      GDK_CROSSING_NORMAL);
 
 	  if (private->input_only)
 	    return;
@@ -609,6 +646,7 @@ void
 gdk_window_hide (GdkWindow *window)
 {
   GdkWindowObject *private;
+  GdkWindow *mousewin;
   
   g_return_if_fail (window != NULL);
   
@@ -632,8 +670,9 @@ gdk_window_hide (GdkWindow *window)
       if (private->parent == GDK_WINDOW_P(gdk_parent_root))
 	gdk_fb_drawable_clear(gdk_parent_root);
 
-      if (all_parents_shown ((GdkWindowObject *)private->parent))
-	gdk_fb_window_visibility_crossing (window, FALSE, FALSE);
+      mousewin = gdk_window_at_pointer (NULL, NULL);
+      gdk_fb_window_send_crossing_events (mousewin, 
+					  GDK_CROSSING_NORMAL);
 
       do_hide = gdk_fb_cursor_need_hide (&r);
 
@@ -781,6 +820,8 @@ gdk_fb_window_move_resize (GdkWindow *window,
   GdkWindowObject *private;
   gint dx, dy, dw, dh;
   gint i, draw_dir;
+  GdkEvent *event;
+  GdkWindow *mousewin;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -872,6 +913,23 @@ gdk_fb_window_move_resize (GdkWindow *window,
 	      gdk_region_destroy (old_region);
 	      gdk_region_destroy (new_region);
 	    }
+	  /* Send GdkEventConfigure for toplevel windows */
+	  if (private->window_type != GDK_WINDOW_CHILD)
+	    {
+	      event = gdk_event_make (window, GDK_CONFIGURE, TRUE);
+	      if (event) 
+		{
+		  event->configure.x = private->x;
+		  event->configure.y = private->y;
+		  event->configure.width = GDK_DRAWABLE_IMPL_FBDATA (private)->width;
+		  event->configure.height = GDK_DRAWABLE_IMPL_FBDATA (private)->height;
+		}
+	    }
+
+	  /* The window the pointer is in might have changed */
+	  mousewin = gdk_window_at_pointer (NULL, NULL);
+	  gdk_fb_window_send_crossing_events (mousewin, 
+					      GDK_CROSSING_NORMAL);
 	}
     }
 }
