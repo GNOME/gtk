@@ -812,7 +812,7 @@ gdk_add_client_message_filter (GdkAtom       message_type,
   filter->function = func;
   filter->data = data;
   
-  client_filters = g_list_prepend (client_filters, filter);
+  client_filters = g_list_append (client_filters, filter);
 }
 
 static void

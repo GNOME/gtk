@@ -1,3 +1,18 @@
+Thu Feb 26 17:29:04 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_wm_protocols_filter): Return
+	GDK_FILTER_CONTINUE for unhandled message types.
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Allow
+	multiple filters for the same event type with the standard
+	"GDK_FILTER_CONTINUE == pretend I wasn't here" semantics.
+
+	* gdk/x11/gdkevents-x11.c (gdk_display_add_client_message_filter):
+	Append to the filter list not prepend, since order now matters.
+
+	* gdk/win32/gdkevents-win32.c (gdk_add_client_message_filter): 
+	Append to the filter list not prepend, since order now matters.
+	
 Thu Feb 26 23:39:07 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Fixes for #135333, analysed by Damon Chaplin:

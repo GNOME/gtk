@@ -355,8 +355,8 @@ gdk_display_add_client_message_filter (GdkDisplay   *display,
   filter->data = data;
   
   GDK_DISPLAY_X11(display)->client_filters = 
-    g_list_prepend (GDK_DISPLAY_X11 (display)->client_filters,
-		    filter);
+    g_list_append (GDK_DISPLAY_X11 (display)->client_filters,
+		   filter);
 }
 
 /**
@@ -1867,13 +1867,14 @@ gdk_event_translate (GdkDisplay *display,
 	while (tmp_list)
 	  {
 	    GdkClientFilter *filter = tmp_list->data;
+	    tmp_list = tmp_list->next;
+	    
 	    if (filter->type == message_type)
 	      {
 		result = (*filter->function) (xevent, event, filter->data);
-		break;
+		if (result != GDK_FILTER_CONTINUE)
+		  break;
 	      }
-	    
-	    tmp_list = tmp_list->next;
 	  }
 
 	switch (result)
@@ -2014,6 +2015,8 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
 	_gdk_x11_set_input_focus_safe (display, toplevel->focus_window,
 				       RevertToParent,
 				       xevent->xclient.data.l[1]);
+
+      return GDK_FILTER_REMOVE;
     }
   else if ((Atom) xevent->xclient.data.l[0] == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PING") &&
 	   !_gdk_x11_display_is_root_window (display,
@@ -2026,9 +2029,11 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
 		  xev.xclient.window,
 		  False, 
 		  SubstructureRedirectMask | SubstructureNotifyMask, &xev);
+
+      return GDK_FILTER_REMOVE;
     }
 
-  return GDK_FILTER_REMOVE;
+  return GDK_FILTER_CONTINUE;
 }
 
 void
