@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2000-07-03 17:11-0400\n"
-"PO-Revision-Date: 2000-02-04 09:54+0200\n"
+"POT-Creation-Date: 2000-07-13 13:46+0200\n"
+"PO-Revision-Date: 2000-07-13 13:47+02:00\n"
 "Last-Translator: Kjartan Maraas <kmaraas@online.no>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -42,17 +42,33 @@ msgid "Opacity:"
 msgstr "Ugjennomsiktighet:"
 
 #: gtk/gtkcolorsel.c:1438
-#, fuzzy
 msgid "Hex Value:"
-msgstr "Verdi:"
+msgstr "Heksadesimal verdi:"
 
 #: gtk/gtkcolorsel.c:1459
 msgid "Custom Palette"
-msgstr ""
+msgstr "Egendefinert palett"
 
 #: gtk/gtkcolorsel.c:1464
 msgid "Set Color"
-msgstr ""
+msgstr "Sett farge"
+
+#. The OK button
+#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
+#: gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "OK"
+
+#. The Cancel button
+#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
+#: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
+#: gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: gtk/gtkcolorseldialog.c:116
+msgid "Help"
+msgstr "Hjelp"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:514
@@ -63,17 +79,6 @@ msgstr "Kataloger"
 #: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "Filer"
-
-#. The OK button
-#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
-msgid "OK"
-msgstr "OK"
-
-#. The Cancel button
-#: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
-#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
-msgid "Cancel"
-msgstr "Avbryt"
 
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
@@ -138,9 +143,8 @@ msgid "Family:"
 msgstr "Familie:"
 
 #: gtk/gtkfontsel.c:194
-#, fuzzy
 msgid "Style:"
-msgstr "Legg til stil:"
+msgstr "Stil:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
@@ -234,7 +238,7 @@ msgstr "Y-helling"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Wheel"
-msgstr ""
+msgstr "Hjul"
 
 #: gtk/gtkinputdialog.c:516
 msgid "none"
@@ -258,12 +262,12 @@ msgstr "tøm"
 msgid "Page %u"
 msgstr "Side %u"
 
-#: gtk/gtkrc.c:1824
+#: gtk/gtkrc.c:1902
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kunne ikke finne bildefilen i pixmap_patg: \"%s\" linje %d"
 
-#: gtk/gtkrc.c:1827
+#: gtk/gtkrc.c:1905
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finne bildefil i pixmap_path: \"%s\""
@@ -276,180 +280,3 @@ msgstr "Kunne ikke finne lastbar modul i module_path: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Ingen tips ---"
-
-#~ msgid "Help"
-#~ msgstr "Hjelp"
-
-#~ msgid "Foundry:"
-#~ msgstr "Form:"
-
-#~ msgid "Weight:"
-#~ msgstr "Tyngde:"
-
-#~ msgid "Slant:"
-#~ msgstr "Helling:"
-
-#~ msgid "Set Width:"
-#~ msgstr "Sett vidde:"
-
-#~ msgid "Pixel Size:"
-#~ msgstr "Pixelstørrelse:"
-
-#~ msgid "Point Size:"
-#~ msgstr "Punktstørrelse:"
-
-#~ msgid "Resolution X:"
-#~ msgstr "Oppløsning X:"
-
-#~ msgid "Resolution Y:"
-#~ msgstr "Oppløsning Y:"
-
-#~ msgid "Spacing:"
-#~ msgstr "Mellomrom:"
-
-#~ msgid "Average Width:"
-#~ msgstr "Gjennomsnittlig bredde:"
-
-#~ msgid "Charset:"
-#~ msgstr "Tegnsett:"
-
-#~ msgid "Font Property"
-#~ msgstr "Egenskaper for skrifttype"
-
-#~ msgid "Requested Value"
-#~ msgstr "Etterspurt verdi"
-
-#~ msgid "Actual Value"
-#~ msgstr "Reell verdi"
-
-#~ msgid "Font"
-#~ msgstr "Skrifttype"
-
-#~ msgid "Font:"
-#~ msgstr "Skrifttype:"
-
-#~ msgid "Font Style:"
-#~ msgstr "Skrifttypens stil:"
-
-#~ msgid "Reset Filter"
-#~ msgstr "Sett tilbake filter"
-
-#~ msgid "Metric:"
-#~ msgstr "Tyngde:"
-
-#~ msgid "Points"
-#~ msgstr "Punkter"
-
-#~ msgid "Pixels"
-#~ msgstr "Piksler"
-
-#~ msgid "Font Information"
-#~ msgstr "Informasjon om skrifttype"
-
-#~ msgid "Requested Font Name:"
-#~ msgstr "Etterspurt navn på skrifttype:"
-
-#~ msgid "Actual Font Name:"
-#~ msgstr "Reelt navn på skrifttype:"
-
-#~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i skrifttyper tilgjengelig med totalt %i stiler."
-
-#~ msgid "Filter"
-#~ msgstr "Filter"
-
-#~ msgid "Font Types:"
-#~ msgstr "Skrifttyper:"
-
-#~ msgid "Bitmap"
-#~ msgstr "Bilde"
-
-#~ msgid "Scalable"
-#~ msgstr "Skalerbart"
-
-#~ msgid "Scaled Bitmap"
-#~ msgstr "Skalert bilde"
-
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "(nil)"
-#~ msgstr "(nil)"
-
-#~ msgid "regular"
-#~ msgstr "vanlig"
-
-#~ msgid "italic"
-#~ msgstr "kursiv"
-
-#~ msgid "oblique"
-#~ msgstr "hellende"
-
-#~ msgid "reverse italic"
-#~ msgstr "omvendt kursiv"
-
-#~ msgid "reverse oblique"
-#~ msgstr "omvendt hellende"
-
-#~ msgid "other"
-#~ msgstr "annet"
-
-#~ msgid "[M]"
-#~ msgstr "[M]"
-
-#~ msgid "[C]"
-#~ msgstr "[C]"
-
-#~ msgid "The selected font is not available."
-#~ msgstr "Den valgte skrifttypen er ikke tilgjengelig."
-
-#~ msgid "The selected font is not a valid font."
-#~ msgstr "Den valgte skrifttypen er ikke en gyldig skrifttype."
-
-#~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "Dette er en 2-byte skrifttype og vil kanskje ikke vises riktig."
-
-#~ msgid "roman"
-#~ msgstr "romansk"
-
-#~ msgid "proportional"
-#~ msgstr "proporsjonal"
-
-#~ msgid "monospaced"
-#~ msgstr "ensidig størrelse"
-
-#~ msgid "char cell"
-#~ msgstr "tegncelle"
-
-#~ msgid "Font: (Filter Applied)"
-#~ msgstr "Skrifttype: (med filter på)"
-
-#~ msgid "heavy"
-#~ msgstr "tung"
-
-#~ msgid "extrabold"
-#~ msgstr "ekstra fet"
-
-#~ msgid "bold"
-#~ msgstr "fet"
-
-#~ msgid "demibold"
-#~ msgstr "halvfet"
-
-#~ msgid "medium"
-#~ msgstr "middels"
-
-#~ msgid "normal"
-#~ msgstr "normal"
-
-#~ msgid "light"
-#~ msgstr "lys"
-
-#~ msgid "extralight"
-#~ msgstr "ekstra lys"
-
-#~ msgid "thin"
-#~ msgstr "tynn"
-
-#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "MAX_FONTS oversteget. Noen skrifttyper mangler kanskje."

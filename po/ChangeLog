@@ -1,3 +1,8 @@
+2000-07-12  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* POTFILES.in: Added gtkcolorseldialog.c
+	* no.po: Updated Norwegian translation.
+	
 2000-07-12  Benedikt Roth  <Benedikt.Roth@gmx.net>
 
 	* de.po: Updated German translation.

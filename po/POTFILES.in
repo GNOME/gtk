@@ -1,7 +1,7 @@
 # Files from the Gtk ditribution which have already been
 # marked to allow runtime translation of messages
-
 gtk/gtkcolorsel.c
+gtk/gtkcolorseldialog.c
 gtk/gtkfilesel.c
 gtk/gtkfontsel.c
 gtk/gtkgamma.c
