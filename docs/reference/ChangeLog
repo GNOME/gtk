@@ -1,3 +1,8 @@
+2004-08-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkrc.sgml: Fix a typo (#164470, Mariano 
+	Suarez-Alvarez)
+
 2004-08-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdk-sections.txt: Add gdk_drag_drop_succeeded.
