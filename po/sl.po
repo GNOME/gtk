@@ -3406,7 +3406,7 @@ msgstr "Smer besedila, npr. desna-proti-levi ali leva-proti-desni"
 
 #: gtk/gtktexttag.c:379 gtk/gtktextview.c:584
 msgid "Left, right, or center justification"
-msgstr "Leva, desna ali srednja poravnava"
+msgstr "Poravnava levo, desno ali po sredini"
 
 #: gtk/gtktexttag.c:387
 msgid "Language"
