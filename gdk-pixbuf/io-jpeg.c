@@ -466,7 +466,7 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 				rowptr = context->dptr;
 				for (i=0; i < cinfo->rec_outbuf_height; i++) {
 					*lptr++ = rowptr;
-					rowptr += cinfo->image_width * 3;
+					rowptr +=  context->pixbuf->art_pixbuf->rowstride;;
 				}
 				
 				nlines = jpeg_read_scanlines (cinfo, lines,
@@ -478,7 +478,7 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 				if (cinfo->output_components == 1)
 					explode_gray_into_buf (cinfo, lines);
 
-				context->dptr += nlines * cinfo->image_width * 3;
+				context->dptr += nlines * context->pixbuf->art_pixbuf->rowstride;
 #ifdef DEBUG_JPEG_PROGRESSIVE
 				
 				if (start_scanline != cinfo->output_scanline)
