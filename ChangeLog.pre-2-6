@@ -1,3 +1,10 @@
+2004-09-18  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* gtk/gtkentry.c: (gtk_entry_completion_key_press):
+
+        Make numeric pad enter activate the selected completion
+        entry. Fix bug 143486 reported by Edd Dumbill.
+
 2004-09-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* NEWS: Updates

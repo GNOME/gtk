@@ -5102,7 +5102,8 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
 
       return TRUE;
     }
-  else if (event->keyval == GDK_ISO_Enter || 
+  else if (event->keyval == GDK_ISO_Enter ||
+           event->keyval == GDK_KP_Enter ||
 	   event->keyval == GDK_Return)
     {
       _gtk_entry_completion_popdown (completion);
