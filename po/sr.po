@@ -9,13 +9,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-19 16:52+0100\n"
-"PO-Revision-Date: 2003-12-19 16:54+0100\n"
+"POT-Creation-Date: 2004-01-02 16:06+0100\n"
+"PO-Revision-Date: 2004-01-02 16:07+0100\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:731
 #: gdk-pixbuf/gdk-pixbuf-io.c:864 tests/testfilechooser.c:198
@@ -123,15 +124,17 @@ msgid "Image format unknown"
 msgstr "Непознат начин записа слике"
 
 # садржај уместо „пиксел“
-#: gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:456
+#: gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:458
 msgid "Image pixel data corrupt"
 msgstr "Оштећени подаци о тачкама слике"
 
-# bug: plural-forms
 #: gdk-pixbuf/gdk-pixdata.c:402
 #, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "неуспела потражња међуспремника слике од %u бајтова"
+msgid "failed to allocate image buffer of %u byte"
+msgid_plural "failed to allocate image buffer of %u bytes"
+msgstr[0] "неуспела потражња међуспремника слике од %u бајта"
+msgstr[1] "неуспела потражња међуспремника слике од %u бајта"
+msgstr[2] "неуспела потражња међуспремника слике од %u бајтова"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -145,7 +148,6 @@ msgstr "Неподржана врста анимације"
 msgid "Invalid header in animation"
 msgstr "Неисправно заглавље анимације"
 
-# негде сам видео добар превод за иконицу, али не сећам се који је, а ни где
 #: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382 gdk-pixbuf/io-ani.c:441
 #: gdk-pixbuf/io-ani.c:460 gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
 msgid "Not enough memory to load animation"
@@ -780,7 +782,7 @@ msgstr "Елемент за пречицу"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Елемент који треба пратити ради измена пречица"
 
-#: gtk/gtkaction.c:185 gtk/gtkactiongroup.c:117
+#: gtk/gtkaction.c:185 gtk/gtkactiongroup.c:118
 msgid "Name"
 msgstr "Име"
 
@@ -852,7 +854,7 @@ msgstr "Осетљив"
 msgid "Whether the action is enabled."
 msgstr "Да ли је акција укључена."
 
-#: gtk/gtkaction.c:242 gtk/gtktreeview.c:551 gtk/gtktreeviewcolumn.c:219
+#: gtk/gtkaction.c:242 gtk/gtktreeview.c:551 gtk/gtktreeviewcolumn.c:222
 #: gtk/gtkwidget.c:439
 msgid "Visible"
 msgstr "Видљив"
@@ -861,7 +863,7 @@ msgstr "Видљив"
 msgid "Whether the action is visible."
 msgstr "Да ли је акција видљива."
 
-#: gtk/gtkactiongroup.c:118
+#: gtk/gtkactiongroup.c:119
 msgid "A name for the action group."
 msgstr "Јединствено име за групу акција."
 
@@ -1069,7 +1071,7 @@ msgid "Whether the children should all be the same size"
 msgstr "Да ли сви садржани елементи треба да буду исте величине"
 
 #: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:467
-#: gtk/gtktreeviewcolumn.c:291
+#: gtk/gtktreeviewcolumn.c:294
 msgid "Expand"
 msgstr "Рашири"
 
@@ -1282,12 +1284,11 @@ msgstr "Уколико је постављено, приказују се бро
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
-#. Translate to calendar:week_start:1 if you want Monday to be the
-#. * first day of the week; otherwise translate to calendar:week_start:0.
-#. * Do *not* translate it to anything else, if it isn't calendar:week_start:1
-#. * or calendar:week_start:0 it will not work.
+#. Translate to calendar:week_start:0 if you want Sunday to be the
+#. * first day of the week to calendar:week_start:1 if you want Monday
+#. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:720
+#: gtk/gtkcalendar.c:719
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1475,19 +1476,19 @@ msgstr "У једном пасусу"
 msgid "Whether or not to keep all text in a single paragraph"
 msgstr "Да ли да задржи сав текст у једном пасусу"
 
-#: gtk/gtkcellrenderertext.c:225 gtk/gtkcellview.c:176 gtk/gtktexttag.c:205
+#: gtk/gtkcellrenderertext.c:225 gtk/gtkcellview.c:179 gtk/gtktexttag.c:205
 msgid "Background color name"
 msgstr "Име боје позадине"
 
-#: gtk/gtkcellrenderertext.c:226 gtk/gtkcellview.c:177 gtk/gtktexttag.c:206
+#: gtk/gtkcellrenderertext.c:226 gtk/gtkcellview.c:180 gtk/gtktexttag.c:206
 msgid "Background color as a string"
 msgstr "Боја позадине као низ знакова"
 
-#: gtk/gtkcellrenderertext.c:233 gtk/gtkcellview.c:183 gtk/gtktexttag.c:213
+#: gtk/gtkcellrenderertext.c:233 gtk/gtkcellview.c:186 gtk/gtktexttag.c:213
 msgid "Background color"
 msgstr "Боја позадине"
 
-#: gtk/gtkcellrenderertext.c:234 gtk/gtkcellview.c:184
+#: gtk/gtkcellrenderertext.c:234 gtk/gtkcellview.c:187
 msgid "Background color as a GdkColor"
 msgstr "Боја позадине као GdkColor"
 
@@ -1620,11 +1621,11 @@ msgstr ""
 "при исцртавању текста. Ако не разумете овај параметар, онда вам "
 "највероватније ни не треба"
 
-#: gtk/gtkcellrenderertext.c:397 gtk/gtkcellview.c:191 gtk/gtktexttag.c:508
+#: gtk/gtkcellrenderertext.c:397 gtk/gtkcellview.c:194 gtk/gtktexttag.c:508
 msgid "Background set"
 msgstr "Постављена позадина"
 
-#: gtk/gtkcellrenderertext.c:398 gtk/gtkcellview.c:192 gtk/gtktexttag.c:509
+#: gtk/gtkcellrenderertext.c:398 gtk/gtkcellview.c:195 gtk/gtktexttag.c:509
 msgid "Whether this tag affects the background color"
 msgstr "Да ли ове поставке утичу на боју позадине"
 
@@ -1728,9 +1729,9 @@ msgstr "Да ли ове поставке утичу на подвлачење"
 msgid "Language set"
 msgstr "Постављен језик "
 
-#: gtk/gtkcellrenderertext.c:450
-msgid "Whether this tag affects the language the text is renderer as"
-msgstr "Да ли ова поставка утиче на језик који се користи за текст"
+#: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:565
+msgid "Whether this tag affects the language the text is rendered as"
+msgstr "Да ли ова поставка утиче на језик у ком се текст исцртава"
 
 # Ovaj izraz se kod nas koristi za sve sto se ponasa kao "toggle", koliko mi je bar poznato
 #: gtk/gtkcellrenderertoggle.c:140
@@ -1815,7 +1816,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Да ли или не да боја буде делимично провидна"
 
 #: gtk/gtkcolorbutton.c:217 gtk/gtkfontbutton.c:175
-#: gtk/gtktreeviewcolumn.c:283
+#: gtk/gtktreeviewcolumn.c:286
 msgid "Title"
 msgstr "Наслов"
 
@@ -2048,51 +2049,51 @@ msgstr "Вредност са списка"
 msgid "Whether entered values must already be present in the list"
 msgstr "Да ли унете вредности морају већ бити присутне на списку"
 
-#: gtk/gtkcombobox.c:338
+#: gtk/gtkcombobox.c:341
 msgid "ComboBox model"
 msgstr "Модел падајуће листе"
 
-#: gtk/gtkcombobox.c:339
+#: gtk/gtkcombobox.c:342
 msgid "The model for the combo box"
 msgstr "Модел за падајућу листу"
 
-#: gtk/gtkcombobox.c:346
+#: gtk/gtkcombobox.c:349
 msgid "Wrap width"
 msgstr "Ширина за прелом"
 
-#: gtk/gtkcombobox.c:347
+#: gtk/gtkcombobox.c:350
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Ширина за прелом при распоређивању ставки у мрежи"
 
-#: gtk/gtkcombobox.c:356
+#: gtk/gtkcombobox.c:359
 msgid "Row span column"
 msgstr "Ред обухвата колону"
 
-#: gtk/gtkcombobox.c:357
+#: gtk/gtkcombobox.c:360
 msgid "TreeModel column containing the row span values"
 msgstr "Модел колоне дрвета који садржи вредности обухватања редова"
 
-#: gtk/gtkcombobox.c:366
+#: gtk/gtkcombobox.c:369
 msgid "Column span column"
 msgstr "Колона обухвата колону"
 
-#: gtk/gtkcombobox.c:367
+#: gtk/gtkcombobox.c:370
 msgid "TreeModel column containing the column span values"
 msgstr "Модел колоне дрвета који садржи вредности обухватања колона"
 
-#: gtk/gtkcombobox.c:376
+#: gtk/gtkcombobox.c:379
 msgid "Active item"
 msgstr "Активна ставка"
 
-#: gtk/gtkcombobox.c:377
+#: gtk/gtkcombobox.c:380
 msgid "The item which is currently active"
 msgstr "Ставка која је тренутно активна"
 
-#: gtk/gtkcombobox.c:385
+#: gtk/gtkcombobox.c:388
 msgid "ComboBox appareance"
 msgstr "Изглед падајуће листе"
 
-#: gtk/gtkcombobox.c:386
+#: gtk/gtkcombobox.c:389
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Изглед падајуће листе, ако је постављено означава Windows стил."
 
@@ -2309,19 +2310,19 @@ msgstr "Начини уноса"
 msgid "_Insert Unicode Control Character"
 msgstr "_Убацити Уникод контролни знак"
 
-#: gtk/gtkentrycompletion.c:193
+#: gtk/gtkentrycompletion.c:196
 msgid "Completion Model"
 msgstr "Модел допуњавања"
 
-#: gtk/gtkentrycompletion.c:194
+#: gtk/gtkentrycompletion.c:197
 msgid "The model to find matches in"
 msgstr "Модел по којем се траже поклапања"
 
-#: gtk/gtkentrycompletion.c:200
+#: gtk/gtkentrycompletion.c:203
 msgid "Minimum Key Length"
 msgstr "Најмања дужина кључа"
 
-#: gtk/gtkentrycompletion.c:201
+#: gtk/gtkentrycompletion.c:204
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Најмања дужина кључа за претрагу ради налажења поклапања"
 
@@ -2587,11 +2588,13 @@ msgstr ""
 msgid "shortcut %s does not exist"
 msgstr "пречица %s не постоји"
 
-# bug: plural-forms
 #: gtk/gtkfilechooserdefault.c:2949
 #, c-format
-msgid "%d bytes"
-msgstr "%d бајтова"
+msgid "%d byte"
+msgid_plural "%d bytes"
+msgstr[0] "%d бајт"
+msgstr[1] "%d бајта"
+msgstr[2] "%d бајтова"
 
 #: gtk/gtkfilechooserdefault.c:2951
 #, c-format
@@ -2612,17 +2615,17 @@ msgstr "%.1f G"
 msgid "Today"
 msgstr "Данас"
 
-#: gtk/gtkfilechooserdefault.c:3015
+#: gtk/gtkfilechooserdefault.c:2997
 msgid "Yesterday"
 msgstr "Јуче"
 
-#: gtk/gtkfilechooserdefault.c:3018 gtk/gtkfilechooserdefault.c:3029
-msgid "Unknown"
-msgstr "Непознато"
-
-#: gtk/gtkfilechooserdefault.c:3028
+#: gtk/gtkfilechooserdefault.c:3005
 msgid "%d/%b/%Y"
 msgstr "%d.%b.%Y."
+
+#: gtk/gtkfilechooserdefault.c:3008
+msgid "Unknown"
+msgstr "Непознато"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
@@ -3326,7 +3329,7 @@ msgstr "Усправна поправка"
 msgid "The GtkAdjustment for the vertical position"
 msgstr "GtkAdjustment за усправни положај"
 
-#: gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:235
+#: gtk/gtklayout.c:647 gtk/gtktreeviewcolumn.c:238
 msgid "Width"
 msgstr "Ширина"
 
@@ -3351,102 +3354,102 @@ msgstr "Висина приказа"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:349
+#: gtk/gtkmenu.c:352
 msgid "Tearoff Title"
 msgstr "Наслов отргнутог"
 
-#: gtk/gtkmenu.c:350
+#: gtk/gtkmenu.c:353
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "Наслов који може приказати управник прозора када се овај мени отргне"
 
-#: gtk/gtkmenu.c:356
+#: gtk/gtkmenu.c:359
 msgid "Vertical Padding"
 msgstr "Усправна попуна"
 
-#: gtk/gtkmenu.c:357
+#: gtk/gtkmenu.c:360
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Количина размака који се додаје на врху и на дну менија"
 
-#: gtk/gtkmenu.c:365
+#: gtk/gtkmenu.c:368
 msgid "Vertical Offset"
 msgstr "Усправни померај"
 
-#: gtk/gtkmenu.c:366
+#: gtk/gtkmenu.c:369
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "Када је мени заправо подмени, помери га усправно за овај број тачака"
 
-#: gtk/gtkmenu.c:374
+#: gtk/gtkmenu.c:377
 msgid "Horizontal Offset"
 msgstr "Водоравни померај"
 
-#: gtk/gtkmenu.c:375
+#: gtk/gtkmenu.c:378
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "Када је мени заправо подмени, помери га водоравно за овај број тачака"
 
-#: gtk/gtkmenu.c:385
+#: gtk/gtkmenu.c:388
 msgid "Left Attach"
 msgstr "Лево припајање"
 
-#: gtk/gtkmenu.c:386 gtk/gtktable.c:203
+#: gtk/gtkmenu.c:389 gtk/gtktable.c:203
 msgid "The column number to attach the left side of the child to"
 msgstr "Број колоне за коју прикачити леву страну садржаног елемента"
 
-#: gtk/gtkmenu.c:393
+#: gtk/gtkmenu.c:396
 msgid "Right Attach"
 msgstr "Десно припајање"
 
-#: gtk/gtkmenu.c:394
+#: gtk/gtkmenu.c:397
 msgid "The column number to attach the right side of the child to"
 msgstr "Број колоне за коју прикачити десну страну садржаног елемента"
 
-#: gtk/gtkmenu.c:401
+#: gtk/gtkmenu.c:404
 msgid "Top Attach"
 msgstr "Горње припајање"
 
-#: gtk/gtkmenu.c:402
+#: gtk/gtkmenu.c:405
 msgid "The row number to attach the top of the child to"
 msgstr "Број реда за који прикачити горњу страну садржаног елемента"
 
-#: gtk/gtkmenu.c:409
+#: gtk/gtkmenu.c:412
 msgid "Bottom Attach"
 msgstr "Доње припајање"
 
-#: gtk/gtkmenu.c:410 gtk/gtktable.c:224
+#: gtk/gtkmenu.c:413 gtk/gtktable.c:224
 msgid "The row number to attach the bottom of the child to"
 msgstr "Број реда за који прикачити доњу страну садржаног елемента"
 
-#: gtk/gtkmenu.c:497
+#: gtk/gtkmenu.c:500
 msgid "Can change accelerators"
 msgstr "Дозвољена измена пречица"
 
-#: gtk/gtkmenu.c:498
+#: gtk/gtkmenu.c:501
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Да ли је дозвољена измена пречица притиском на тастере над ставком менија"
 
-#: gtk/gtkmenu.c:503
+#: gtk/gtkmenu.c:506
 msgid "Delay before submenus appear"
 msgstr "Време пре појаве подменија"
 
-#: gtk/gtkmenu.c:504
+#: gtk/gtkmenu.c:507
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Најмање време које се показивач миша мора задржати преко ставке менија да би "
 "се појавио подмени"
 
-#: gtk/gtkmenu.c:511
+#: gtk/gtkmenu.c:514
 msgid "Delay before hiding a submenu"
 msgstr "Време пре скривања подменија"
 
-#: gtk/gtkmenu.c:512
+#: gtk/gtkmenu.c:515
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4967,10 +4970,6 @@ msgstr "Постављено слагање редова"
 msgid "Whether this tag affects paragraph justification"
 msgstr "Да ли ова поставка утиче на слагање редова"
 
-#: gtk/gtktexttag.c:565
-msgid "Whether this tag affects the language the text is rendered as"
-msgstr "Да ли ова поставка утиче на језик у ком се текст исцртава"
-
 #: gtk/gtktexttag.c:568
 msgid "Left margin set"
 msgstr "Постављена лева маргина"
@@ -5354,7 +5353,7 @@ msgstr "Колона гранања"
 msgid "Set the column for the expander column"
 msgstr "Поставите колону у којој се врши гранање"
 
-#: gtk/gtktreeview.c:575 gtk/gtktreeviewcolumn.c:326
+#: gtk/gtktreeview.c:575 gtk/gtktreeviewcolumn.c:329
 msgid "Reorderable"
 msgstr "Редослед променљив"
 
@@ -5444,104 +5443,104 @@ msgstr "Боја непарног реда"
 msgid "Color to use for odd rows"
 msgstr "Боја за непарне редове"
 
-#: gtk/gtktreeviewcolumn.c:220
+#: gtk/gtktreeviewcolumn.c:223
 msgid "Whether to display the column"
 msgstr "Да ли приказати колону"
 
-#: gtk/gtktreeviewcolumn.c:227 gtk/gtkwindow.c:481
+#: gtk/gtktreeviewcolumn.c:230 gtk/gtkwindow.c:481
 msgid "Resizable"
 msgstr "Величина променљива"
 
-#: gtk/gtktreeviewcolumn.c:228
+#: gtk/gtktreeviewcolumn.c:231
 msgid "Column is user-resizable"
 msgstr "Величину колоне може мењати корисник"
 
-#: gtk/gtktreeviewcolumn.c:236
+#: gtk/gtktreeviewcolumn.c:239
 msgid "Current width of the column"
 msgstr "Тренутна ширина колоне"
 
-#: gtk/gtktreeviewcolumn.c:244
+#: gtk/gtktreeviewcolumn.c:247
 msgid "Sizing"
 msgstr "Величина"
 
-#: gtk/gtktreeviewcolumn.c:245
+#: gtk/gtktreeviewcolumn.c:248
 msgid "Resize mode of the column"
 msgstr "Начин измене величине колоне"
 
-#: gtk/gtktreeviewcolumn.c:253
+#: gtk/gtktreeviewcolumn.c:256
 msgid "Fixed Width"
 msgstr "Утврђена ширина"
 
-#: gtk/gtktreeviewcolumn.c:254
+#: gtk/gtktreeviewcolumn.c:257
 msgid "Current fixed width of the column"
 msgstr "Тренутна утврђена ширина колоне"
 
-#: gtk/gtktreeviewcolumn.c:263
+#: gtk/gtktreeviewcolumn.c:266
 msgid "Minimum Width"
 msgstr "Најмања ширина"
 
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:267
 msgid "Minimum allowed width of the column"
 msgstr "Најмања дозвољена ширина колоне"
 
-#: gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeviewcolumn.c:276
 msgid "Maximum Width"
 msgstr "Највећа ширина"
 
-#: gtk/gtktreeviewcolumn.c:274
+#: gtk/gtktreeviewcolumn.c:277
 msgid "Maximum allowed width of the column"
 msgstr "Највећа дозвољена ширина колоне"
 
-#: gtk/gtktreeviewcolumn.c:284
+#: gtk/gtktreeviewcolumn.c:287
 msgid "Title to appear in column header"
 msgstr "Наслов који се појављује у заглављу колоне"
 
 # bug: a bit confusing, ain't it?
-#: gtk/gtktreeviewcolumn.c:292
+#: gtk/gtktreeviewcolumn.c:295
 msgid "Column gets share of extra width allocated to the widget"
 msgstr "Колоне деле додатну ширину коју добије елемент"
 
-#: gtk/gtktreeviewcolumn.c:299
+#: gtk/gtktreeviewcolumn.c:302
 msgid "Clickable"
 msgstr "Може се кликнути"
 
-#: gtk/gtktreeviewcolumn.c:300
+#: gtk/gtktreeviewcolumn.c:303
 msgid "Whether the header can be clicked"
 msgstr "Да ли је могуће кликнути на заглавље"
 
-#: gtk/gtktreeviewcolumn.c:308
+#: gtk/gtktreeviewcolumn.c:311
 msgid "Widget"
 msgstr "Елемент"
 
-#: gtk/gtktreeviewcolumn.c:309
+#: gtk/gtktreeviewcolumn.c:312
 msgid "Widget to put in column header button instead of column title"
 msgstr "Елемент који треба ставити у заглавље колоне наместо наслова"
 
-#: gtk/gtktreeviewcolumn.c:316
+#: gtk/gtktreeviewcolumn.c:319
 msgid "Alignment"
 msgstr "Поравнање"
 
-#: gtk/gtktreeviewcolumn.c:317
+#: gtk/gtktreeviewcolumn.c:320
 msgid "X Alignment of the column header text or widget"
 msgstr "Водоравно поравнање текста или елемента у заглављу колоне"
 
-#: gtk/gtktreeviewcolumn.c:327
+#: gtk/gtktreeviewcolumn.c:330
 msgid "Whether the column can be reordered around the headers"
 msgstr "Да ли се редослед колона може изменити око заглавља"
 
-#: gtk/gtktreeviewcolumn.c:334
+#: gtk/gtktreeviewcolumn.c:337
 msgid "Sort indicator"
 msgstr "Показатељ уређења"
 
-#: gtk/gtktreeviewcolumn.c:335
+#: gtk/gtktreeviewcolumn.c:338
 msgid "Whether to show a sort indicator"
 msgstr "Да ли треба приказати показатељ уређења"
 
-#: gtk/gtktreeviewcolumn.c:342
+#: gtk/gtktreeviewcolumn.c:345
 msgid "Sort order"
 msgstr "Редослед уређења"
 
-#: gtk/gtktreeviewcolumn.c:343
+#: gtk/gtktreeviewcolumn.c:346
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Смер уређивања који показатељ уређења треба да показује"
 
@@ -5576,7 +5575,7 @@ msgstr "Неочекивана почетна ознака „%s“ у %d. ре�
 msgid "Unexpected character data on line %d char %d"
 msgstr "Неочекивани знаковни подаци у %d. реду, %d. знак"
 
-#: gtk/gtkuimanager.c:1923
+#: gtk/gtkuimanager.c:1928
 msgid "Empty"
 msgstr "Празно"
 
@@ -6051,6 +6050,9 @@ msgstr "X начин уноса (XIM)"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Не могу да сазнам податке о датотеци „%s“: %s"
+
+#~ msgid "Whether this tag affects the language the text is renderer as"
+#~ msgstr "Да ли ова поставка утиче на језик који се користи за текст"
 
 # bug: this sucks in terms of l10n
 #~ msgid "%s's Home"
