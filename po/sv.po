@@ -1,13 +1,13 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# Tomas Ögren <stric@ing.umu.se>, 1998.
+# Swedish translation of GTK+
+# Copyright (C) 1999 Free Software Foundation, Inc.
+# Tomas Ögren <stric@ing.umu.se>, 1999.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.7\n"
-"POT-Creation-Date: 1999-01-04 03:55-0600\n"
-"PO-Revision-Date: 1998-12-20 03:25+0100\n"
+"Project-Id-Version: gtk+ 1.1.12\n"
+"POT-Creation-Date: 1999-01-12 22:47+0100\n"
+"PO-Revision-Date: 1999-01-12 22:50+0100\n"
 "Last-Translator: Tomas Ögren <stric@ing.umu.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,15 +16,15 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:202
 msgid "Hue:"
-msgstr ""
+msgstr "Nyans:"
 
 #: gtk/gtkcolorsel.c:203
 msgid "Saturation:"
-msgstr ""
+msgstr "Mättnad:"
 
 #: gtk/gtkcolorsel.c:204
 msgid "Value:"
-msgstr ""
+msgstr "Värde:"
 
 #: gtk/gtkcolorsel.c:205
 msgid "Red:"
@@ -38,24 +38,25 @@ msgstr "Grön:"
 msgid "Blue:"
 msgstr "Blå:"
 
+# FIXME
 #: gtk/gtkcolorsel.c:208
 msgid "Opacity:"
-msgstr ""
+msgstr "Opacity:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1637 gtk/gtkfilesel.c:462 gtk/gtkfontsel.c:3465
+#: gtk/gtkcolorsel.c:1640 gtk/gtkfilesel.c:462 gtk/gtkfontsel.c:3465
 #: gtk/gtkgamma.c:408
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1643 gtk/gtkfilesel.c:469 gtk/gtkfilesel.c:844
+#: gtk/gtkcolorsel.c:1646 gtk/gtkfilesel.c:469 gtk/gtkfilesel.c:844
 #: gtk/gtkfilesel.c:944 gtk/gtkfilesel.c:1059 gtk/gtkfontsel.c:3478
 #: gtk/gtkgamma.c:416
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: gtk/gtkcolorsel.c:1648
+#: gtk/gtkcolorsel.c:1651
 msgid "Help"
 msgstr "Hjälp"
 
@@ -69,7 +70,7 @@ msgstr "Kataloger"
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilesel.c:500 gtk/gtkfilesel.c:1455
+#: gtk/gtkfilesel.c:500 gtk/gtkfilesel.c:1454
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Katalog oläsbar: %s"
@@ -123,9 +124,14 @@ msgstr "Ta bort"
 msgid "Rename"
 msgstr "Döp om"
 
+#: gtk/gtkfilesel.c:1433
+msgid "Selection: "
+msgstr "Markering: "
+
+# FIXME
 #: gtk/gtkfontsel.c:203
 msgid "Foundry:"
-msgstr ""
+msgstr "Foundry:"
 
 #: gtk/gtkfontsel.c:204
 msgid "Family:"
@@ -165,29 +171,30 @@ msgstr "Upplösning Y:"
 
 #: gtk/gtkfontsel.c:213
 msgid "Spacing:"
-msgstr ""
+msgstr "Mellanrum:"
 
 #: gtk/gtkfontsel.c:214
 msgid "Average Width:"
-msgstr ""
+msgstr "Medelvidd:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Charset:"
-msgstr ""
+msgstr "Teckenuppsättning:"
 
+# FIXME
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
 #: gtk/gtkfontsel.c:452
 msgid "Font Property"
-msgstr ""
+msgstr "Font Property"
 
 #: gtk/gtkfontsel.c:453
 msgid "Requested Value"
-msgstr ""
+msgstr "Önskat värde"
 
 #: gtk/gtkfontsel.c:454
 msgid "Actual Value"
-msgstr ""
+msgstr "Erhållet värde"
 
 #: gtk/gtkfontsel.c:487
 msgid "Font"
@@ -199,7 +206,7 @@ msgstr "Typsnitt:"
 
 #: gtk/gtkfontsel.c:502
 msgid "Font Style:"
-msgstr ""
+msgstr "Typsnittsstil:"
 
 #: gtk/gtkfontsel.c:507
 msgid "Size:"
@@ -209,9 +216,10 @@ msgstr "Storlek:"
 msgid "Reset Filter"
 msgstr "Återställ filter"
 
+# FIXME
 #: gtk/gtkfontsel.c:653
 msgid "Metric:"
-msgstr ""
+msgstr "Metric:"
 
 #: gtk/gtkfontsel.c:657
 msgid "Points"
@@ -247,9 +255,10 @@ msgstr "%i typsnitt tillgängliga, med totalt %i stilar."
 msgid "Filter"
 msgstr "Filter"
 
+# FIXME
 #: gtk/gtkfontsel.c:792
 msgid "Font Types:"
-msgstr ""
+msgstr "Typsnittstyper:"
 
 #: gtk/gtkfontsel.c:800
 msgid "Bitmap"
@@ -263,30 +272,36 @@ msgstr "Skalbar"
 msgid "Scaled Bitmap"
 msgstr "Skalbar bitmapp"
 
+# FIXME
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1208
 msgid "regular"
-msgstr ""
+msgstr "regular"
 
+# FIXME
 #: gtk/gtkfontsel.c:1213 gtk/gtkfontsel.c:1938
 msgid "italic"
-msgstr ""
+msgstr "italic"
 
+# FIXME
 #: gtk/gtkfontsel.c:1214 gtk/gtkfontsel.c:1939
 msgid "oblique"
-msgstr ""
+msgstr "oblique"
 
+# FIXME
 #: gtk/gtkfontsel.c:1215 gtk/gtkfontsel.c:1940
 msgid "reverse italic"
-msgstr ""
+msgstr "reverse italic"
 
+# FIXME
 #: gtk/gtkfontsel.c:1216 gtk/gtkfontsel.c:1941
 msgid "reverse oblique"
-msgstr ""
+msgstr "reverse oblique"
 
+# FIXME
 #: gtk/gtkfontsel.c:1217 gtk/gtkfontsel.c:1942
 msgid "other"
-msgstr ""
+msgstr "other"
 
 #: gtk/gtkfontsel.c:1224
 msgid "[M]"
@@ -308,29 +323,33 @@ msgstr "Det valda typsnittet är ej ett giltigt typsnitt."
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr "Detta är ett 2-byte typsnitt och kanske inte visas helt korrekt."
 
+# FIXME
 #: gtk/gtkfontsel.c:1926 gtk/gtkinputdialog.c:599
 msgid "(unknown)"
-msgstr ""
+msgstr "(okänd)"
 
+# FIXME
 #: gtk/gtkfontsel.c:1937
 msgid "roman"
-msgstr ""
+msgstr "roman"
 
 #: gtk/gtkfontsel.c:1949
 msgid "proportional"
-msgstr ""
+msgstr "proportionell"
 
+# FIXME
 #: gtk/gtkfontsel.c:1950
 msgid "monospaced"
-msgstr ""
+msgstr "monospaced"
 
+# FIXME
 #: gtk/gtkfontsel.c:1951
 msgid "char cell"
-msgstr ""
+msgstr "char cell"
 
 #: gtk/gtkfontsel.c:2151
 msgid "Font: (Filter Applied)"
-msgstr ""
+msgstr "Typsnitt: (Filter applicerat)"
 
 #: gtk/gtkfontsel.c:2627
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
@@ -342,15 +361,15 @@ msgstr "Verkställ"
 
 #: gtk/gtkfontsel.c:3494
 msgid "Font Selection"
-msgstr ""
+msgstr "Typsnittsval"
 
 #: gtk/gtkgamma.c:388
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma value"
-msgstr ""
+msgstr "Gamma värde"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:192
@@ -363,7 +382,7 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:229
 msgid "Device:"
-msgstr ""
+msgstr "Enhet:"
 
 #: gtk/gtkinputdialog.c:245
 msgid "Disabled"
@@ -430,7 +449,7 @@ msgstr ""
 msgid "clear"
 msgstr ""
 
-#: gtk/gtknotebook.c:1946 gtk/gtknotebook.c:3966
+#: gtk/gtknotebook.c:1966 gtk/gtknotebook.c:3985
 #, c-format
 msgid "Page %u"
 msgstr ""
