@@ -1,3 +1,9 @@
+Fri Mar  8 20:41:51 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreestore.c (gtk_tree_store_drag_data_received): handle
+	gtk-tree-model-drop-append like the ListStore, includes some
+	tweaks to work right with trees
+
 Fri Mar  8 14:22:43 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (gtk_file_selection_init): Some packing
