@@ -1,3 +1,34 @@
+2001-06-01  Havoc Pennington  <hp@redhat.com>
+
+        Apply patch from sandmann@daimi.au.dk, with some tweaks.
+	Makes things a bit more robust, and adds test-loaders.c 
+	which is good for finding further robustness bugs to fix.
+	
+	* io-tiff.c: Try to work around libtiff suckiness a bit; 
+	put a giant thread lock on the whole loader, 
+	paranoically check both whether error handlers were called and
+	also whether functions return false. Handle case where width or
+	height is 0. Various cleanups.
+
+	* io-png.c (gdk_pixbuf__png_image_stop_load): only unref pixbuf
+	if it existed
+	(png_error_callback): apparently libpng expects you to longjmp out
+	of this thing?
+
+	* io-gif.c (struct _GifContext): remove unused "pixbuf" field
+	(lzw_read_byte): change "Mail jrb if this fails" g_warning 
+	to a g_set_error()
+	(gif_get_lzw): check for out-of-memory
+	(gif_prepare_lzw): catch/report an error
+	(new_context): use try_malloc, since GifContext is nearly 70K
+	(gdk_pixbuf__gif_image_load_increment): set context->buf to NULL
+	so we don't crash later.
+
+	* Makefile.am: Add test-loaders
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): handle context ==
+	NULL due to errors
+	
 2001-05-29  Darin Adler  <darin@eazel.com>
 
 	* gdk-pixbuf.h: Fix prototype to use "(void)" instead of "()".

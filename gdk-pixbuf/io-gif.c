@@ -123,7 +123,6 @@ struct _GifContext
         unsigned int frame_bit_pixel;
 
 	unsigned int aspect_ratio;
-	GdkPixbuf *pixbuf;
 	GdkPixbufGifAnim *animation;
 	GdkPixbufFrame *frame;
 	Gif89 gif89;
@@ -198,10 +197,10 @@ static int count = 0;
 
 /* Returns TRUE if read is OK,
  * FALSE if more memory is needed. */
-static int
+static gboolean
 gif_read (GifContext *context, guchar *buffer, size_t len)
 {
-	gint retval;
+	gboolean retval;
 #ifdef IO_GIFDEBUG
 	gint i;
 #endif
@@ -586,9 +585,13 @@ lzw_read_byte (GifContext *context)
 			int count;
 			unsigned char buf[260];
 
-			/*g_error (" DID WE EVER EVER GET HERE\n");*/
-			g_warning ("Unhandled Case.  If you have an image that causes this, let me <jrb@redhat.com> know.\n");
-
+                        /*  FIXME - we should handle this case */
+                        g_set_error (context->error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_FAILED,
+                                     _("GIF image loader can't understand this image."));
+                        return -2;
+                        
 			if (ZeroDataBlock) {
 				return -2;
 			}
@@ -735,7 +738,15 @@ gif_get_lzw (GifContext *context)
                                         8,
                                         context->frame_len,
                                         context->frame_height);
-                
+                if (!context->frame->pixbuf) {
+                        g_free (context->frame);
+                        g_set_error (context->error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Not enough memory to load GIF file"));
+                        return -2;
+                }
+
                 context->frame->x_offset = context->x_offset;
                 context->frame->y_offset = context->y_offset;
                 context->frame->need_recomposite = TRUE;
@@ -962,6 +973,14 @@ gif_prepare_lzw (GifContext *context)
 		/*g_message (_("GIF: EOF / read error on image data\n"));*/
 		return -1;
 	}
+        
+        if (context->lzw_set_code_size > MAX_LZW_BITS) {
+                g_set_error (context->error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("GIF image is corrupt (incorrect LZW compression)"));
+                return -2;
+        }
 
 	context->lzw_code_size = context->lzw_set_code_size + 1;
 	context->lzw_clear_code = 1 << context->lzw_set_code_size;
@@ -973,6 +992,9 @@ gif_prepare_lzw (GifContext *context)
 	context->code_lastbit = 0;
 	context->code_last_byte = 0;
 	context->code_done = FALSE;
+
+        g_assert (context->lzw_clear_code <= 
+                  G_N_ELEMENTS (context->lzw_table[0]));
 
 	for (i = 0; i < context->lzw_clear_code; ++i) {
 		context->lzw_table[0][i] = 0;
@@ -1188,7 +1210,7 @@ gif_get_next_step (GifContext *context)
 }
 
 
-#define LOG(x)
+#define LOG(x) /* g_print ("%d: %s\n", __LINE__, x); */
 
 static gint
 gif_main_loop (GifContext *context)
@@ -1269,8 +1291,12 @@ new_context (void)
 {
 	GifContext *context;
 
-	context = g_new0 (GifContext, 1);
+	context = g_try_malloc (sizeof (GifContext));
+        if (context == NULL)
+                return NULL;
 
+        memset (context, 0, sizeof (GifContext));
+        
         context->animation = g_object_new (GDK_TYPE_PIXBUF_GIF_ANIM, NULL);        
 	context->frame = NULL;
 	context->file = NULL;
@@ -1297,6 +1323,15 @@ gdk_pixbuf__gif_image_load (FILE *file, GError **error)
 	g_return_val_if_fail (file != NULL, NULL);
 
 	context = new_context ();
+
+        if (context == NULL) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                             _("Not enough memory to load GIF file"));
+                return NULL;
+        }
+        
 	context->file = file;
         context->error = error;
         
@@ -1333,6 +1368,15 @@ gdk_pixbuf__gif_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 	count = 0;
 #endif
 	context = new_context ();
+
+        if (context == NULL) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                             _("Not enough memory to load GIF file"));
+                return NULL;
+        }
+        
         context->error = error;
 	context->prepare_func = prepare_func;
 	context->update_func = update_func;
@@ -1401,8 +1445,10 @@ gdk_pixbuf__gif_image_load_increment (gpointer data,
 
 	retval = gif_main_loop (context);
 
-	if (retval == -2)
+	if (retval == -2) {
+                context->buf = NULL;
 		return FALSE;
+        }
 	if (retval == -1) {
 		/* we didn't have enough memory */
 		/* prepare for the next image_load_increment */
@@ -1437,6 +1483,14 @@ gdk_pixbuf__gif_image_load_animation (FILE *file,
 
 	context = new_context ();
 
+        if (context == NULL) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                             _("Not enough memory to load GIF file"));
+                return NULL;
+        }
+        
         context->error = error;
 	context->file = file;
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 8 -*- */
 /* GdkPixbuf library - PNG image loader
  *
  * Copyright (C) 1999 Mark Crichton
@@ -403,7 +404,8 @@ gdk_pixbuf__png_image_stop_load (gpointer context, GError **error)
          * we have unused image data
          */
         
-        gdk_pixbuf_unref(lc->pixbuf);
+        if (lc->pixbuf)
+                gdk_pixbuf_unref (lc->pixbuf);
         
         png_destroy_read_struct(&lc->png_read_ptr, NULL, NULL);
         g_free(lc);
@@ -606,6 +608,8 @@ png_error_callback(png_structp png_read_ptr,
                              _("Fatal error reading PNG image file: %s"),
                              error_msg);
         }
+
+        longjmp (png_read_ptr->jmpbuf, 1);
 }
 
 static void
@@ -639,7 +643,8 @@ gdk_pixbuf__png_image_save (FILE          *f,
        guchar *ptr;
        guchar *pixels;
        int x, y, j;
-       png_bytep row_ptr, data = NULL;
+       png_bytep row_ptr;
+       png_bytep data;
        png_color_8 sig_bit;
        int w, h, rowstride;
        int has_alpha;
@@ -661,6 +666,7 @@ gdk_pixbuf__png_image_save (FILE          *f,
                }
 #endif
        }
+       data = NULL;
        
        bpc = gdk_pixbuf_get_bits_per_sample (pixbuf);
        w = gdk_pixbuf_get_width (pixbuf);

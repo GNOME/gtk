@@ -160,8 +160,8 @@ builtin_objs = @INCLUDED_LOADER_OBJ@
 
 endif
 
-noinst_PROGRAMS = test-gdk-pixbuf
-TESTS = test-gdk-pixbuf
+TESTS = test-gdk-pixbuf test-loaders
+noinst_PROGRAMS = $(TESTS)
 
 DEPS = libgdk_pixbuf-1.3.la
 INCLUDES = -I$(top_srcdir) -I$(top_builddir) 	\
@@ -170,17 +170,22 @@ INCLUDES = -I$(top_srcdir) -I$(top_builddir) 	\
 	@INCLUDED_LOADER_DEFINE@ 		\
 	@GTK_DEBUG_FLAGS@			\
 	@GDK_PIXBUF_DEP_CFLAGS@
-AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(loaderdir)\""
+AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(loaderdir)\"" "-DBUILT_MODULES_DIR=\"$(srcdir)/.libs\""
 
 LDADDS = libgdk_pixbuf-1.3.la
 
 test_gdk_pixbuf_LDADD = $(LDADDS)
+test_loaders_LDADD = $(LDADDS)
+
+test_loaders_SOURCES = test-loaders.c test-images.h
 
 bin_PROGRAMS=make-inline-pixbuf
 
 make_inline_pixbuf_SOURCES=make-inline-pixbuf.c
 
 make_inline_pixbuf_LDADD = $(LDADDS)
+
+
 
 #
 # The GdkPixBuf library
