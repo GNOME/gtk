@@ -59,6 +59,7 @@ enum {
 
   /* Normal Props */
   PROP_TITLE,
+  PROP_ROLE,
   PROP_ALLOW_SHRINK,
   PROP_ALLOW_GROW,
   PROP_RESIZABLE,
@@ -469,6 +470,14 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                         G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
+                                   PROP_ROLE,
+                                   g_param_spec_string ("role",
+							_("Window Role"),
+							_("Unique identifier for the window to be used when restoring a session"),
+							NULL,
+							G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
                                    PROP_ALLOW_SHRINK,
                                    g_param_spec_boolean ("allow_shrink",
 							 _("Allow Shrink"),
@@ -759,6 +768,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_TITLE:
       gtk_window_set_title (window, g_value_get_string (value));
       break;
+    case PROP_ROLE:
+      gtk_window_set_role (window, g_value_get_string (value));
+      break;
     case PROP_ALLOW_SHRINK:
       window->allow_shrink = g_value_get_boolean (value);
       gtk_widget_queue_resize (GTK_WIDGET (window));
@@ -832,6 +844,9 @@ gtk_window_get_property (GObject      *object,
       GtkWindowGeometryInfo *info;
     case PROP_TYPE:
       g_value_set_enum (value, window->type);
+      break;
+    case PROP_ROLE:
+      g_value_set_string (value, window->wm_role);
       break;
     case PROP_TITLE:
       g_value_set_string (value, window->title);
@@ -1044,12 +1059,14 @@ gtk_window_set_role (GtkWindow   *window,
 
   if (role == window->wm_role)
     return;
-  
+
   g_free (window->wm_role);
   window->wm_role = g_strdup (role);
-  
+
   if (GTK_WIDGET_REALIZED (window))
-    g_warning ("gtk_window_set_role(): shouldn't set role after window is realized!\n");
+    gdk_window_set_role (GTK_WIDGET (window)->window, window->wm_role);
+
+  g_object_notify (G_OBJECT (window), "role");
 }
 
 /**

@@ -1,3 +1,8 @@
+2003-03-31  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwindow.c: Add a new property, role, corresponding to 
+	gtk_window_[gs]et_role().  (#93904)
+
 Sun Mar 30 03:57:42 2003  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreeselection.c (gtk_tree_selection_get_selected_rows):
