@@ -1,3 +1,16 @@
+2002-02-11  Darin Adler  <darin@bentspoon.com>
+
+	* gtk/gtktreemodelsort.c: (gtk_tree_model_sort_row_changed):
+	Consider reordering the row even when there's no sort column, if
+	there's a default sort function.
+	(gtk_tree_model_sort_rows_reordered): Use symbolic constants.
+	(gtk_tree_model_sort_level_find_insert): Add code to handle the
+	case where there is no sort column, but a default sort function.
+	(gtk_tree_model_sort_insert_value): Add code to handle the case
+	where there is no sort column an no default sort function.
+	(gtk_tree_model_sort_set_model): Use symbolic constant.
+	(gtk_tree_model_sort_reset_default_sort_func): Use symbolic constant.
+
 2002-02-11  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkfilesel.c: converted the "Delete File" dialog to
