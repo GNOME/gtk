@@ -40,6 +40,7 @@
 #include <pango/pango-utils.h>
 #include "gtk/gtkrc.h"
 #include "gtk/gtkimmodule.h"
+#include "gtk/gtkversion.h"
 
 static char *
 escape_string (const char *str)
@@ -159,8 +160,12 @@ int main (int argc, char **argv)
   gboolean error = FALSE;
 
   g_printf ("# GTK+ Input Method Modules file\n"
-	  "# Automatically generated file, do not edit\n"
-	  "#\n");
+	    "# Automatically generated file, do not edit\n"
+	    "# Created by %s from gtk+-%d.%d.%d\n"
+	    "#\n",
+	    argv[0],
+	    GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
+
 
   if (argc == 1)		/* No arguments given */
     {
