@@ -166,9 +166,12 @@ gtk_stock_lookup (const gchar  *stock_id,
       if (item->label)
 	{
 	  GtkStockTranslateFunc *translate;
-
-	  translate = (GtkStockTranslateFunc *) 
-	    g_hash_table_lookup (translate_hash, item->translation_domain);
+	  
+	  if (item->translation_domain)
+	    translate = (GtkStockTranslateFunc *) 
+	      g_hash_table_lookup (translate_hash, item->translation_domain);
+	  else
+	    translate = NULL;
 	  
 	  if (translate != NULL && translate->func != NULL)
 	    item->label = (* translate->func) (item->label, translate->data);

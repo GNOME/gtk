@@ -1,3 +1,8 @@
+2005-02-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkstock.c (gtk_stock_lookup): Handle item->translation_domain
+	being NULL.  (#166179, Diego Gonzalez)
+
 2005-02-04  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Revert gtk_binary_version to 2.4.0. Fix
