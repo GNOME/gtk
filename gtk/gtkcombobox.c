@@ -2458,6 +2458,10 @@ gtk_combo_box_list_key_press (GtkWidget   *widget,
 	    gtk_tree_path_free (path);
 	  }
       }
+
+    gtk_combo_box_popdown (combo_box);
+    
+    return TRUE;
   }
 
   return FALSE;

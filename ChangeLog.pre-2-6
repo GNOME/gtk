@@ -1,3 +1,8 @@
+Sat Mar 13 21:37:44 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_list_key_press): Pop down the
+	list when an item is selected via the keyboard.
+
 2004-03-13  Anders Carlsson  <andersca@gnome.org>
 
 	* gtk/gtkfilesystemunix.c: (remove_trailing_slash),
