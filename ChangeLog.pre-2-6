@@ -1,3 +1,12 @@
+Wed Oct  7 20:27:28 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.h (struct _GtkCTree): removed xor_gc, use clists
+	xor_gc instead
+	* gtk/gtkctree.c (create_xor_gc): removed
+	(gtk_ctree_button_press): set correct line_attributes for
+ 	clist->xor_gc on drag start
+	(gtk_ctree_button_release): reset clist->xor_gc
+
 Wed Oct  7 05:15:36 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtk*.h:

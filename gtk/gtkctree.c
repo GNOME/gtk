@@ -63,7 +63,6 @@ static void draw_row                    (GtkCList       *clist,
 					 GdkRectangle   *area,
 					 gint            row,
 					 GtkCListRow   *clist_row);
-static void create_xor_gc               (GtkCTree       *ctree);
 static void draw_xor_line               (GtkCTree       *ctree);
 static void draw_xor_rect               (GtkCTree       *ctree);
 static void create_drag_icon            (GtkCTree       *ctree,
@@ -392,7 +391,6 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 static void
 gtk_ctree_init (GtkCTree *ctree)
 {
-  ctree->xor_gc         = NULL;
   ctree->drag_icon      = NULL;
   ctree->tree_indent    = 20;
   ctree->tree_column    = 0;
@@ -476,9 +474,6 @@ gtk_ctree_realize (GtkWidget *widget)
 				  GDK_LINE_ON_OFF_DASH, None, None);
       gdk_gc_set_dashes (ctree->lines_gc, 0, "\1\1", 2);
     }
-
-  if (ctree->reorderable)
-    create_xor_gc (ctree);
 }
 
 static void
@@ -494,9 +489,6 @@ gtk_ctree_unrealize (GtkWidget *widget)
   ctree = GTK_CTREE (widget);
 
   gdk_gc_destroy (ctree->lines_gc);
-
-  if (ctree->reorderable)
-    gdk_gc_destroy (ctree->xor_gc);
 }
 
 static gint
@@ -544,6 +536,9 @@ gtk_ctree_button_press (GtkWidget      *widget,
 	  ctree->in_drag = TRUE;
 	  ctree->drag_source = work;
 	  ctree->drag_target = NULL;
+	  gdk_gc_set_line_attributes (clist->xor_gc, 1, GDK_LINE_ON_OFF_DASH, 
+				      None, None);
+	  gdk_gc_set_dashes (clist->xor_gc, 0, "\2\2", 2);
 	  return FALSE;
 	}
       else if (event->button == 1 &&
@@ -805,6 +800,12 @@ gtk_ctree_button_release (GtkWidget      *widget,
 	  ctree->drag_row = -1;
 	}
 
+      if (GTK_CLIST_ADD_MODE (clist))
+	gdk_gc_set_dashes (clist->xor_gc, 0, "\4\4", 2);
+      else
+	gdk_gc_set_line_attributes (clist->xor_gc, 1,
+				    GDK_LINE_SOLID, 0, 0);
+
       /* nop if out of bounds / source == target */
       if (event->x < 0 || event->y < -3 ||
 	  event->x > clist->clist_window_width ||
@@ -934,26 +935,6 @@ create_drag_icon (GtkCTree    *ctree,
 }
 
 static void
-create_xor_gc (GtkCTree *ctree)
-{
-  GtkCList *clist;
-  GdkGCValues values;
-
-  clist = GTK_CLIST (ctree);
-
-  values.foreground = GTK_WIDGET (clist)->style->bg[GTK_STATE_NORMAL];
-  values.function = GDK_XOR;
-  values.subwindow_mode = GDK_INCLUDE_INFERIORS;
-  ctree->xor_gc = gdk_gc_new_with_values (clist->clist_window, &values,
-					  GDK_GC_FOREGROUND |
-					  GDK_GC_FUNCTION |
-					  GDK_GC_SUBWINDOW);
-  gdk_gc_set_line_attributes (ctree->xor_gc, 1, GDK_LINE_ON_OFF_DASH, 
-			      None, None);
-  gdk_gc_set_dashes (ctree->xor_gc, 0, "\2\2", 2);
-}
-
-static void
 draw_xor_line (GtkCTree *ctree)
 {
   GtkCList *clist;
@@ -976,12 +957,12 @@ draw_xor_line (GtkCTree *ctree)
       case GTK_JUSTIFY_FILL:
       case GTK_JUSTIFY_LEFT:
 	if (ctree->tree_column > 0)
-	  gdk_draw_line (clist->clist_window, ctree->xor_gc, 
+	  gdk_draw_line (clist->clist_window, clist->xor_gc, 
 			 COLUMN_LEFT_XPIXEL(clist, 0), y,
 			 COLUMN_LEFT_XPIXEL(clist, ctree->tree_column - 1) +
 			 clist->column[ctree->tree_column - 1].area.width, y);
       
-	gdk_draw_line (clist->clist_window, ctree->xor_gc, 
+	gdk_draw_line (clist->clist_window, clist->xor_gc, 
 		       COLUMN_LEFT_XPIXEL(clist, ctree->tree_column) + 
 		       ctree->tree_indent * level -
 		       (ctree->tree_indent - PM_SIZE) / 2, y,
@@ -989,12 +970,12 @@ draw_xor_line (GtkCTree *ctree)
 	break;
       case GTK_JUSTIFY_RIGHT:
 	if (ctree->tree_column < clist->columns - 1)
-	  gdk_draw_line (clist->clist_window, ctree->xor_gc, 
+	  gdk_draw_line (clist->clist_window, clist->xor_gc, 
 			 COLUMN_LEFT_XPIXEL(clist, ctree->tree_column + 1), y,
 			 COLUMN_LEFT_XPIXEL(clist, clist->columns - 1) +
 			 clist->column[clist->columns - 1].area.width, y);
       
-	gdk_draw_line (clist->clist_window, ctree->xor_gc, 
+	gdk_draw_line (clist->clist_window, clist->xor_gc, 
 		       0, y, COLUMN_LEFT_XPIXEL(clist, ctree->tree_column)
 		       + clist->column[ctree->tree_column].area.width -
 		       ctree->tree_indent * level +
@@ -1002,7 +983,7 @@ draw_xor_line (GtkCTree *ctree)
 	break;
       }
   else
-    gdk_draw_line (clist->clist_window, ctree->xor_gc, 
+    gdk_draw_line (clist->clist_window, clist->xor_gc, 
 		   0, y, clist->clist_window_width, y);
 }
 
@@ -1038,7 +1019,7 @@ draw_xor_rect (GtkCTree *ctree)
 	points[2].y = points[3].y;
 
 	for (i = 0; i < 3; i++)
-	  gdk_draw_line (clist->clist_window, ctree->xor_gc,
+	  gdk_draw_line (clist->clist_window, clist->xor_gc,
 			 points[i].x, points[i].y,
 			 points[i+1].x, points[i+1].y);
 
@@ -1055,7 +1036,7 @@ draw_xor_rect (GtkCTree *ctree)
 	    points[2].y = points[3].y;
 
 	    for (i = 0; i < 3; i++)
-	      gdk_draw_line (clist->clist_window, ctree->xor_gc,
+	      gdk_draw_line (clist->clist_window, clist->xor_gc,
 			     points[i].x, points[i].y, points[i+1].x, 
 			     points[i+1].y);
 	  }
@@ -1073,7 +1054,7 @@ draw_xor_rect (GtkCTree *ctree)
 	points[2].y = points[3].y;
 
 	for (i = 0; i < 3; i++)
-	  gdk_draw_line (clist->clist_window, ctree->xor_gc,
+	  gdk_draw_line (clist->clist_window, clist->xor_gc,
 			 points[i].x, points[i].y,
 			 points[i+1].x, points[i+1].y);
 
@@ -1089,14 +1070,14 @@ draw_xor_rect (GtkCTree *ctree)
 	    points[2].y = points[3].y;
 
 	    for (i = 0; i < 3; i++)
-	      gdk_draw_line (clist->clist_window, ctree->xor_gc,
+	      gdk_draw_line (clist->clist_window, clist->xor_gc,
 			     points[i].x, points[i].y,
 			     points[i+1].x, points[i+1].y);
 	  }
 	break;
       }      
   else
-    gdk_draw_rectangle (clist->clist_window, ctree->xor_gc, FALSE,
+    gdk_draw_rectangle (clist->clist_window, clist->xor_gc, FALSE,
 			0, y - clist->row_height,
 			clist->clist_window_width - 1, clist->row_height);
 }
@@ -5262,20 +5243,7 @@ gtk_ctree_set_reorderable (GtkCTree *ctree,
   g_return_if_fail (ctree != NULL);
   g_return_if_fail (GTK_IS_CTREE (ctree));
 
-  reorderable = reorderable != FALSE;
-
-  if (ctree->reorderable == reorderable)
-    return;
-
   ctree->reorderable = reorderable;
-  
-  if (GTK_WIDGET_REALIZED (ctree))
-    {
-      if (ctree->reorderable)
-	create_xor_gc (ctree);
-      else
-	gdk_gc_destroy (ctree->xor_gc);
-    }
 }
 
 void

@@ -91,7 +91,6 @@ struct _GtkCTree
 {
   GtkCList clist;
   
-  GdkGC *xor_gc;
   GdkGC *lines_gc;
   GdkWindow *drag_icon;
   gint icon_width;
