@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2001-02-28 19:20-0500\n"
-"PO-Revision-Date: 2001-03-01 11:48+0100\n"
+"POT-Creation-Date: 2001-03-19 14:20+0100\n"
+"PO-Revision-Date: 2001-03-19 14:39+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -131,7 +131,7 @@ msgstr "Markering: "
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"
-msgstr "Form:"
+msgstr "Gjuteri:"
 
 #: gtk/gtkfontsel.c:211
 msgid "Family:"
@@ -217,7 +217,7 @@ msgstr "Återställ filter"
 
 #: gtk/gtkfontsel.c:660
 msgid "Metric:"
-msgstr "Tyngd:"
+msgstr "Mått:"
 
 #: gtk/gtkfontsel.c:664
 msgid "Points"
@@ -276,7 +276,7 @@ msgstr "*"
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "(nil)"
-msgstr "(nil)"
+msgstr "(ingen)"
 
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
@@ -308,7 +308,7 @@ msgstr "[M]"
 
 #: gtk/gtkfontsel.c:1232
 msgid "[C]"
-msgstr "[C]"
+msgstr "[K]"
 
 #: gtk/gtkfontsel.c:1792
 msgid "The selected font is not available."
@@ -348,7 +348,7 @@ msgstr "Typsnitt: (Filter applicerat)"
 
 #: gtk/gtkfontsel.c:2661
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS nått. Några typsnitt kanske saknas."
+msgstr "MAX_FONTS överskridet. Några typsnitt kanske saknas."
 
 #: gtk/gtkfontsel.c:3508
 msgid "Apply"
@@ -449,12 +449,12 @@ msgstr "töm"
 msgid "Page %u"
 msgstr "Sida %u"
 
-#: gtk/gtkrc.c:1702
+#: gtk/gtkrc.c:1703
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kunde inte hitta bildfil i \"pixmap_path\": \"%s\" rad %d"
 
-#: gtk/gtkrc.c:1705
+#: gtk/gtkrc.c:1706
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunde inte hitta bildfil i \"pixmap_path\": \"%s\""
