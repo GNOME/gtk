@@ -32,7 +32,7 @@ print_current_folder (GtkFileChooser *chooser)
   gchar *uri;
 
   uri = gtk_file_chooser_get_current_folder_uri (chooser);
-  g_print ("Current folder changed :\n  %s\n", uri);
+  g_print ("Current folder changed :\n  %s\n", uri ? uri : "(null)");
   g_free (uri);
 }
 

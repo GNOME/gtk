@@ -80,11 +80,14 @@ typedef enum
 
 #ifdef G_OS_WIN32
 
+const gchar *_gtk_get_datadir ();
 const gchar *_gtk_get_libdir ();
 const gchar *_gtk_get_sysconfdir ();
 const gchar *_gtk_get_localedir ();
 const gchar *_gtk_get_data_prefix ();
 
+#undef GTK_DATADIR
+#define GTK_DATADIR _gtk_get_datadir ()
 #undef GTK_LIBDIR
 #define GTK_LIBDIR _gtk_get_libdir ()
 #undef GTK_LOCALEDIR

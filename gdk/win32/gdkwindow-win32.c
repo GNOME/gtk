@@ -35,7 +35,7 @@
 #include "gdkprivate-win32.h"
 #include "gdkinput-win32.h"
 
-#ifdef __MINGW32__
+#if defined __MINGW32__ || (WINVER < 0x0500)
 typedef struct { 
   DWORD        bV5Size; 
   LONG         bV5Width; 

@@ -21,15 +21,21 @@
 #include "gdk.h"
 #include "gdkprivate-win32.h"
 
-#if defined(_MSC_VER) && (WINVER < 0x500)
+#define HAVE_MONITOR_INFO
+
+#if defined(_MSC_VER) && (WINVER < 0x500) && (WINVER > 0x0400)
 #include <multimon.h>
+#elif (WINVER <= 0x0400)
+#undef HAVE_MONITOR_INFO
 #endif
 
+#ifdef HAVE_MONITOR_INFO
 typedef BOOL (WINAPI *t_EnumDisplayMonitors)(HDC, LPCRECT, MONITORENUMPROC, LPARAM);
 typedef BOOL (WINAPI *t_GetMonitorInfoA)(HMONITOR, LPMONITORINFO);
 
 static t_EnumDisplayMonitors p_EnumDisplayMonitors = NULL;
 static t_GetMonitorInfoA p_GetMonitorInfoA = NULL;
+#endif
 
 void
 _gdk_windowing_set_default_display (GdkDisplay *display)
@@ -37,6 +43,7 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
   g_assert (_gdk_display == display);
 }
 
+#ifdef HVAE_MONITOR_INFO
 static BOOL CALLBACK
 count_monitor (HMONITOR hmonitor,
 	       HDC      hdc,
@@ -105,6 +112,7 @@ enum_monitor (HMONITOR hmonitor,
 
   return TRUE;
 }
+#endif /* HAVE_MONITOR_INFO */
 
 GdkDisplay *
 gdk_display_open (const gchar *display_name)
@@ -117,6 +125,7 @@ gdk_display_open (const gchar *display_name)
   _gdk_display = g_object_new (GDK_TYPE_DISPLAY, NULL);
   _gdk_screen = g_object_new (GDK_TYPE_SCREEN, NULL);
 
+#ifdef HAVE_MONITOR_INFO
   user32 = GetModuleHandle ("user32.dll");
   g_assert (user32 != NULL);
 
@@ -160,6 +169,7 @@ gdk_display_open (const gchar *display_name)
 #endif
     }
   else
+#endif /* HAVE_MONITOR_INFO */
     {
       RECT rect;
 

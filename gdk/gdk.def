@@ -507,6 +507,7 @@ EXPORTS
 	gdk_window_reparent
 	gdk_window_resize
 	gdk_window_scroll
+	gdk_window_set_accept_focus
 	gdk_window_set_back_pixmap
 	gdk_window_set_background
 	gdk_window_set_child_shapes

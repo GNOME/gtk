@@ -418,7 +418,11 @@ _gtk_im_module_list (const GtkIMContextInfo ***contexts,
     SIMPLE_ID,
     N_("Default"),
     GETTEXT_PACKAGE,
+#ifdef GTK_LOCALEDIR
     GTK_LOCALEDIR,
+#else
+    "",
+#endif
     ""
   };
 

@@ -22,6 +22,7 @@
 #include "gtkfilesystemwin32.h"
 #include "gtkintl.h"
 #include "gtkstock.h"
+#include "gtkiconfactory.h"
 
 #include <errno.h>
 #include <stdio.h>
@@ -31,9 +32,11 @@
 #ifdef G_OS_WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <shellapi.h> /* ExtractAssociatedIcon */
 #include <direct.h>
 #include <io.h>
 #define mkdir(p,m) _mkdir(p)
+#include <gdk/win32/gdkwin32.h> /* gdk_win32_hdc_get */
 #else
 #error "The implementation is win32 only yet."
 #endif /* G_OS_WIN32 */
@@ -118,6 +121,12 @@ static GtkFilePath *  gtk_file_system_win32_uri_to_path      (GtkFileSystem     
 							      const gchar              *uri);
 static GtkFilePath *  gtk_file_system_win32_filename_to_path (GtkFileSystem            *file_system,
 							      const gchar              *filename);
+static GdkPixbuf *gtk_file_system_win32_render_icon (GtkFileSystem     *file_system,
+                                                     const GtkFilePath *path,
+                                                     GtkWidget         *widget,
+                                                     gint               pixel_size,
+                                                     GError           **error);
+
 static gboolean       gtk_file_system_win32_add_bookmark     (GtkFileSystem            *file_system,
 							      const GtkFilePath        *path,
 							      GError                  **error);
@@ -224,6 +233,7 @@ gtk_file_system_win32_iface_init (GtkFileSystemIface *iface)
   iface->path_to_filename = gtk_file_system_win32_path_to_filename;
   iface->uri_to_path = gtk_file_system_win32_uri_to_path;
   iface->filename_to_path = gtk_file_system_win32_filename_to_path;
+  iface->render_icon = gtk_file_system_win32_render_icon;
   iface->add_bookmark = gtk_file_system_win32_add_bookmark;
   iface->remove_bookmark = gtk_file_system_win32_remove_bookmark;
   iface->list_bookmarks = gtk_file_system_win32_list_bookmarks;
@@ -304,6 +314,7 @@ gtk_file_system_win32_get_root_info (GtkFileSystem    *file_system,
         gtk_file_info_set_display_name (info, filename);
     }
 
+#if 0 /* it's dead in GtkFileSystemUnix.c, too */
   if (GTK_FILE_INFO_ICON & types)
     {
       switch (dt)
@@ -326,6 +337,7 @@ gtk_file_system_win32_get_root_info (GtkFileSystem    *file_system,
           g_assert_not_reached ();
         }
     }
+#endif
   g_free (filename);
   return info;
 }
@@ -633,7 +645,7 @@ bookmarks_serialize (GSList  **bookmarks,
     {
       gchar *contents = NULL;
       gsize  len = 0;
-      GList *entry;
+      GSList *entry;
       FILE  *f;   
        
       if (g_file_test (filename, G_FILE_TEST_EXISTS))
@@ -683,6 +695,168 @@ bookmarks_serialize (GSList  **bookmarks,
     }
   *bookmarks = list;
   return ok;
+}
+
+static GdkPixbuf*
+extract_icon (const char* filename)
+{
+  GdkPixbuf *pixbuf = NULL;
+  WORD iicon;
+  HICON hicon;
+  
+  if (!filename || !filename[0])
+    return NULL;
+
+  hicon = ExtractAssociatedIcon (GetModuleHandle (NULL), filename, &iicon);
+  if (hicon > (HICON)1)
+    {
+      ICONINFO ii;
+
+      if (GetIconInfo (hicon, &ii))
+        {
+          SIZE   size;
+          GdkPixmap *pixmap;
+          GdkGC *gc;
+          HDC    hdc;
+
+          if (!GetBitmapDimensionEx (ii.hbmColor, &size))
+            g_warning ("GetBitmapDimensionEx failed.");
+
+	  if (size.cx < 1) size.cx = 32;
+	  if (size.cy < 1) size.cy = 32;
+	    
+          pixmap = gdk_pixmap_new (NULL, size.cx, size.cy, 
+	                           gdk_screen_get_system_visual (gdk_screen_get_default ())->depth);
+          gc = gdk_gc_new (pixmap);
+          hdc = gdk_win32_hdc_get (GDK_DRAWABLE (pixmap), gc, 0);
+
+          if (!DrawIcon (hdc, 0, 0, hicon))
+            g_warning ("DrawIcon failed");
+
+          gdk_win32_hdc_release (GDK_DRAWABLE (pixmap), gc, 0);
+
+          pixbuf = gdk_pixbuf_get_from_drawable (
+		     NULL, pixmap, 
+		     gdk_screen_get_system_colormap (gdk_screen_get_default ()),
+		     0, 0, 0, 0, size.cx, size.cy);
+          g_object_unref (pixmap);
+          g_object_unref (gc);
+        }
+      else
+        g_print ("GetIconInfo failed: %s\n", g_win32_error_message (GetLastError ())); 
+
+      if (!DestroyIcon (hicon))
+        g_warning ("DestroyIcon failed");
+    }
+  else
+    g_print ("ExtractAssociatedIcon failed: %s\n", g_win32_error_message (GetLastError ()));
+
+  return pixbuf;
+}
+
+static GtkIconSet *
+win32_pseudo_mime_lookup (const char* name)
+{
+  static GHashTable *mime_hash = NULL;
+  GtkIconSet *is = NULL;
+  char *p = strrchr(name, '.');
+  char *extension = p ? g_ascii_strdown (p, -1) : g_strdup ("");
+
+  if (!mime_hash)
+    mime_hash = g_hash_table_new (g_str_hash, g_str_equal);
+
+  /* do we already have it ? */
+  is = g_hash_table_lookup (mime_hash, extension);
+  if (is)
+    {
+      g_free (extension);
+      return is;
+    }
+  /* create icon and set */
+  {
+    GdkPixbuf *pixbuf = extract_icon (name);
+    if (pixbuf)
+      {
+        GtkIconSource* source = gtk_icon_source_new ();
+
+        is = gtk_icon_set_new_from_pixbuf (pixbuf);
+	gtk_icon_source_set_pixbuf (source, pixbuf);
+	gtk_icon_set_add_source (is, source);
+
+	gtk_icon_source_free (source);
+      }
+
+    g_hash_table_insert (mime_hash, extension, is);
+    return is;
+  }
+}
+
+static GdkPixbuf *
+gtk_file_system_win32_render_icon (GtkFileSystem     *file_system,
+                                   const GtkFilePath *path,
+                                   GtkWidget         *widget,
+                                   gint               pixel_size,
+                                   GError           **error)
+{
+  GtkIconSet *icon_set = NULL;
+  const char* filename = gtk_file_path_get_string (path);
+
+  /* handle drives with stock icons */
+  if (filename_is_root (filename))
+    {
+      gchar *filename2 = g_strconcat(filename, "\\", NULL);
+      DWORD dt = GetDriveType (filename2);
+
+      switch (dt)
+        {
+        case DRIVE_REMOVABLE :
+          icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_FLOPPY);
+          break;
+        case DRIVE_CDROM :
+          icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_CDROM);
+          break;
+        case DRIVE_FIXED : /* need a hard disk icon */
+          icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_CDROM);
+          break;
+        default :
+          break;
+        }
+      g_free (filename2);
+    }
+  else if (g_file_test (filename, G_FILE_TEST_IS_DIR))
+    {
+      if (0 == strcmp (g_get_home_dir(), filename))
+        icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_HOME);
+      else
+        icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_OPEN);
+    }
+  else if (g_file_test (filename, G_FILE_TEST_IS_EXECUTABLE))
+    {
+      /* don't lookup all executable icons */
+      icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_EXECUTE);
+    }
+  else if (g_file_test (filename, G_FILE_TEST_EXISTS))
+    {
+      icon_set = win32_pseudo_mime_lookup (filename);
+    }
+
+  if (!icon_set)
+    {
+       g_set_error (error,
+     	          GTK_FILE_SYSTEM_ERROR,
+     	          GTK_FILE_SYSTEM_ERROR_FAILED,
+     	          _("This file system does not support icons for everything"));
+       return NULL;
+    }
+
+  // FIXME : I'd like to get from pixel_size (=20) back to
+  // icon size, which is an index, but there appears to be no way ?
+  return gtk_icon_set_render_icon (icon_set, 
+                                   widget->style,
+                                   gtk_widget_get_direction (widget),
+                                   GTK_STATE_NORMAL,
+                                   GTK_ICON_SIZE_BUTTON,
+				   widget, NULL); 
 }
 
 static GSList *_bookmarks = NULL;
@@ -881,7 +1055,9 @@ filename_get_info (const gchar     *filename,
 		   GError         **error)
 {
   GtkFileInfo *info;
+#if 0 /* it's dead in GtkFileSystemUnix.c, too */
   GtkFileIconType icon_type = GTK_FILE_ICON_REGULAR;
+#endif
   WIN32_FILE_ATTRIBUTE_DATA wfad;
 
   if (!GetFileAttributesEx (filename, GetFileExInfoStandard, &wfad))
@@ -940,6 +1116,7 @@ filename_get_info (const gchar     *filename,
       gtk_file_info_set_is_folder (info, !!(wfad.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY));
    }
 
+#if 0 /* it's dead in GtkFileSystemUnix.c, too */
   if (types & GTK_FILE_INFO_ICON)
     {
       if (wfad.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
@@ -947,9 +1124,13 @@ filename_get_info (const gchar     *filename,
 
       gtk_file_info_set_icon_type (info, icon_type);
     }
+#endif
 
-  if ((types & GTK_FILE_INFO_MIME_TYPE) ||
-      ((types & GTK_FILE_INFO_ICON) && icon_type == GTK_FILE_ICON_REGULAR))
+  if ((types & GTK_FILE_INFO_MIME_TYPE)
+#if 0 /* it's dead in GtkFileSystemUnix.c, too */
+      || ((types & GTK_FILE_INFO_ICON) && icon_type == GTK_FILE_ICON_REGULAR)
+#endif
+     )
     {
 #if 0
       const char *mime_type = xdg_mime_get_mime_type_for_file (filename);

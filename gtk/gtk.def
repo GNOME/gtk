@@ -376,6 +376,8 @@ EXPORTS
 	gtk_combo_disable_activate
 	gtk_combo_get_type
 	gtk_combo_new
+	gtk_combo_box_entry_new_with_model
+	gtk_combo_box_new_with_model
 	gtk_combo_set_case_sensitive
 	gtk_combo_set_item_string
 	gtk_combo_set_popdown_strings
@@ -717,7 +719,7 @@ EXPORTS
 	gtk_file_info_free
 	gtk_file_info_get_display_key
 	gtk_file_info_get_display_name
-	gtk_file_info_get_icon_type
+;	gtk_file_info_get_icon_type
 	gtk_file_info_get_is_folder
 	gtk_file_info_get_is_hidden
 	gtk_file_info_get_mime_type
@@ -725,9 +727,9 @@ EXPORTS
 	gtk_file_info_get_size
 	gtk_file_info_get_type
 	gtk_file_info_new
-	gtk_file_info_render_icon
+;	gtk_file_info_render_icon
 	gtk_file_info_set_display_name
-	gtk_file_info_set_icon_type
+;	gtk_file_info_set_icon_type
 	gtk_file_info_set_is_folder
 	gtk_file_info_set_is_hidden
 	gtk_file_info_set_mime_type
@@ -760,9 +762,9 @@ EXPORTS
 	gtk_file_system_path_to_filename
 	gtk_file_system_path_to_uri
 	gtk_file_system_remove_bookmark
-	gtk_file_system_unix_get_type
-	gtk_file_system_unix_new
 	gtk_file_system_uri_to_path
+	gtk_file_system_win32_get_type
+	gtk_file_system_win32_new
 	gtk_fixed_get_has_window
 	gtk_fixed_get_type
 	gtk_fixed_move
@@ -2055,7 +2057,6 @@ EXPORTS
 	gtk_toolbar_set_tooltips
 	gtk_toolbar_space_style_get_type
 	gtk_toolbar_style_get_type
-	gtk_toolbar_unhighlight_drop_location
 	gtk_toolbar_unset_icon_size
 	gtk_toolbar_unset_style
 	gtk_tooltips_data_get

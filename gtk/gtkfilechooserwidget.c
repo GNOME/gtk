@@ -23,8 +23,7 @@
 #include "gtkfilechooserutils.h"
 #ifdef G_OS_UNIX
 #include "gtkfilesystemunix.h"
-#endif
-#ifdef G_OS_WIN32
+#else if defined G_OS_WIN32
 #include "gtkfilesystemwin32.h"
 #endif
 #include "gtktypebuiltins.h"
@@ -135,7 +134,13 @@ gtk_file_chooser_widget_constructor (GType                  type,
   gtk_widget_push_composite_child ();
 
   if (!priv->file_system)
-    priv->file_system = gtk_file_system_unix_new ();
+    {
+#if defined G_OS_UNIX
+      priv->file_system = gtk_file_system_unix_new ();
+#else if defined G_OS_WIN32
+      priv->file_system = gtk_file_system_win32_new ();
+#endif
+    }
       
   priv->impl = _gtk_file_chooser_default_new (priv->file_system);
   gtk_box_pack_start (GTK_BOX (object), priv->impl, TRUE, TRUE, 0);

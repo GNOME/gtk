@@ -155,7 +155,7 @@ static HKL latin_locale = NULL;
 
 static gboolean in_ime_composition = FALSE;
 static gboolean resizing = FALSE;
-static UINT_PTR resize_timer;
+static UINT     resize_timer;
 
 static int debug_indent = 0;
 
@@ -1992,7 +1992,7 @@ handle_stuff_while_moving_or_resizing (void)
 static VOID CALLBACK
 resize_timer_proc (HWND     hwnd,
 		   UINT     msg,
-		   UINT_PTR id,
+		   UINT     id,
 		   DWORD    time)
 {
   if (resizing)

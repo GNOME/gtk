@@ -275,6 +275,17 @@ check_setugid (void)
 G_WIN32_DLLMAIN_FOR_DLL_NAME(static, dll_name)
 
 const gchar *
+_gtk_get_datadir (void)
+{
+  static char *gtk_datadir = NULL;
+  if (gtk_datadir == NULL)
+    gtk_datadir = g_win32_get_package_installation_subdirectory
+      (GETTEXT_PACKAGE, dll_name, "share");
+
+  return gtk_datadir;
+}
+
+const gchar *
 _gtk_get_libdir (void)
 {
   static char *gtk_libdir = NULL;

@@ -1,3 +1,30 @@
+2003-12-14  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkprivate.h gtk/gtkmain.c : handle GTK_DATADIR
+	similar as the other filesystem placement 'constants' (dynamic
+	resolving on win32)
+
+	* gtk/gtkfilechooserwidget.c : handle file system to win32
+	renaming here as will
+	* gtk/gtkfilesystemwin32.c : implement render_icon
+
+	* gtk/gtk.def gdk/gdk.def : updated externals
+
+	* gdk/win32/gdkdisplay-win32.c : make it compile without
+	<multimon.h> - i.e. even older sdk
+
+	* gdk/win32/gdkevents-win32.c : match resize_timer_proc
+	with TIMERPROC prototype
+
+	* gdk/win32/gdkwindow-win32.c : older msvc does not know
+	BITMAPV5HEADER (from win xp) either
+
+	* gtk/gtkimmodule.c : make it compile even if GTK_LOCALEDIR is
+	not defined
+
+	* tests/testfilechooser.c : recent GLib crashes on 
+	g_print ("%s", NULL) so avoid this
+
 2003-12-14  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkselection-win32.c: Calls to OpenClipboard() must be
