@@ -365,7 +365,20 @@ gtk_style_copy (GtkStyle *style)
   gdk_font_unref (new_style->font);
   new_style->font = style->font;
   gdk_font_ref (new_style->font);
+
+  if (style->rc_style)
+    {
+      new_style->rc_style = style->rc_style;
+      gtk_rc_style_ref (style->rc_style);
+    }
   
+  if (style->engine)
+    {
+      new_style->engine = style->engine;
+      gtk_theme_engine_ref(new_style->engine);
+      new_style->engine->duplicate_style (new_style, style);
+    }
+
   return new_style;
 }
 
@@ -380,18 +393,6 @@ gtk_style_duplicate (GtkStyle *style)
   
   style->styles = g_slist_append (style->styles, new_style);
   new_style->styles = style->styles;  
-  
-  if (style->rc_style)
-    {
-      new_style->rc_style = style->rc_style;
-      gtk_rc_style_ref (style->rc_style);
-    }
-  
-  if (style->engine)
-    {
-      new_style->engine = style->engine;
-      new_style->engine->duplicate_style (new_style, style);
-    }
   
   return new_style;
 }
