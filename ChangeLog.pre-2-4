@@ -3,7 +3,7 @@
 	A batch of changes mainly with improvements to 256-color mode. Add
 	possibility for the user to override size of palette used with
 	either the GDK_WIN32_MAX_COLORS environment variable, or a
-	-max-colors command line option. Plug some memory leaks.
+	-max-colors command line option. Plug some resource leaks.
 	
 	* gdk/gdkrgb.c: More debugging output added here and there, some
 	very verbose. I tried hard to also come up with a color cube and a
@@ -46,7 +46,7 @@
 	from gdk_image_put(). (Compare to XCopyArea(), XGetImage() and
 	XPutImage().)
 
-	Plug memory leak: always delete the outside_rgn HRGN.
+	Plug resource leak: always delete the outside_rgn HRGN.
 
 	(gdk_win32_draw_drawable): Just call gdk_win32_blit().
 
@@ -97,7 +97,7 @@
 	the restricted colormaps.
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_shape_combine_mask):
-	Plug memory leak: Delete temporary HRGN after use.
+	Plug resource leak: Delete temporary HRGN after use.
 	
 2002-01-28  Tor Lillqvist  <tml@iki.fi>
 
