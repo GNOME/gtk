@@ -1,3 +1,21 @@
+Fri Sep 17 09:57:15 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_set_sensitive): 
+	* gtk/gtknotebook.c (gtk_notebook_set_scrollable): 
+	* gtk/gtknotebook.c (gtk_notebook_set_show_border): 
+	* gtk/gtkclist.c (gtk_notebook_set_show_border): make gboolean args
+	in prototypes and implementations consistent (Tomas Ogren).
+
+	* gdk/gdk.h, gdk/gdkcolor.c: make return types (gint or gboolean)
+	for prototypes and function implementations consistent (reported
+	by Tomas Ogren).
+
+	* gtk/gtklayout.c (gtk_layout_remove): unset GTK_IS_OFFSCREEN flag
+	before the widget is unparented (reported by damon).
+
+	* gtk/gtkdnd.c: make the cursor and icon data _unsigned_ char,
+	since we provide unsigned data anyways.
+
 Thu Sep 16 21:32:01 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktooltips.c (gtk_tooltips_set_tip): Delay

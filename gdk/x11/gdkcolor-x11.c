@@ -430,7 +430,7 @@ gdk_colors_alloc (GdkColormap   *colormap,
 	}
     }
 
-  return return_val;
+  return return_val != 0;
 }
 
 /*
@@ -489,7 +489,7 @@ gdk_color_free (GdkColor *color)
   g_mem_chunk_free (color_chunk, color);
 }
 
-gint
+gboolean
 gdk_color_white (GdkColormap *colormap,
 		 GdkColor    *color)
 {
@@ -512,7 +512,7 @@ gdk_color_white (GdkColormap *colormap,
   return return_val;
 }
 
-gint
+gboolean
 gdk_color_black (GdkColormap *colormap,
 		 GdkColor    *color)
 {

@@ -3838,7 +3838,7 @@ gtk_notebook_prev_page (GtkNotebook *notebook)
  */
 void
 gtk_notebook_set_show_border (GtkNotebook *notebook,
-			      gint         show_border)
+			      gboolean     show_border)
 {
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
@@ -3975,7 +3975,7 @@ gtk_notebook_set_tab_vborder (GtkNotebook *notebook,
 
 void
 gtk_notebook_set_scrollable (GtkNotebook *notebook,
-			     gint         scrollable)
+			     gboolean     scrollable)
 {
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));

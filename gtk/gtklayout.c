@@ -705,14 +705,14 @@ gtk_layout_remove (GtkContainer *container,
 
   if (tmp_list)
     {
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_IS_OFFSCREEN);
+
       gtk_widget_unparent (widget);
 
       layout->children = g_list_remove_link (layout->children, tmp_list);
       g_list_free_1 (tmp_list);
       g_free (child);
     }
-
-  GTK_PRIVATE_UNSET_FLAG (widget, GTK_IS_OFFSCREEN);
 }
 
 static void
