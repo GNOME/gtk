@@ -1,3 +1,8 @@
+1998-04-22  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkbin.c (gtk_bin_remove): Remember whether the widget was
+	visible before we unparent it.
+
 Wed Apr 22 04:15:26 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c (gtk_handle_current_timeouts): prepend the
