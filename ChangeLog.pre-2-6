@@ -1,3 +1,8 @@
+2003-06-05  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Handle global
+	filters.
+
 2003-06-05  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c: Fix for #84668, reported by Torbjörn Andersson:

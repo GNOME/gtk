@@ -1901,6 +1901,23 @@ gdk_event_translate (GdkDisplay *display,
   if (ret_val_flagp)
     *ret_val_flagp = FALSE;
 
+  /* init these, since the done: block uses them */
+  ASSIGN_WINDOW (NULL);
+  event->any.window = NULL;
+
+  if (_gdk_default_filters)
+    {
+      /* Apply global filters */
+      GdkFilterReturn result;
+      result = gdk_event_apply_filters (msg, event, _gdk_default_filters);
+      
+      if (result != GDK_FILTER_CONTINUE)
+        {
+          return_val = (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
+          goto done;
+        }
+    }  
+
   ASSIGN_WINDOW (gdk_win32_handle_table_lookup ((GdkNativeWindow) msg->hwnd));
   orig_window = window;
   
