@@ -1,3 +1,9 @@
+Thu Feb 22 16:45:17 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_get_font[_name]):
+	Update the current font from the contents of the entry.
+	(#3123)
+
 Tue Feb  2 11:22:33 2001  Jody Goldberg <jgoldberg@home.com>
 
 	* gtk/gtkstyle.c : Remove duplicate fwd decl for

@@ -305,9 +305,9 @@ static void    gtk_font_selection_select_style	     (GtkWidget      *w,
 						      gpointer        data);
 static void    gtk_font_selection_show_available_sizes
 (GtkFontSelection *fs);
-static gint    gtk_font_selection_size_key_press     (GtkWidget      *w,
-						      GdkEventKey    *event,
-						      gpointer        data);
+static void     gtk_font_selection_size_activate  (GtkWidget *w,
+						   gpointer   data);
+
 static void    gtk_font_selection_select_best_size   (GtkFontSelection *fs);
 static void    gtk_font_selection_select_size	     (GtkWidget      *w,
 						      gint	      row,
@@ -534,8 +534,8 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_widget_show (fontsel->size_entry);
   gtk_table_attach (GTK_TABLE (table), fontsel->size_entry, 2, 3, 1, 2,
 		    GTK_FILL, 0, 0, 0);
-  gtk_signal_connect (GTK_OBJECT (fontsel->size_entry), "key_press_event",
-		      (GtkSignalFunc) gtk_font_selection_size_key_press,
+  gtk_signal_connect (GTK_OBJECT (fontsel->size_entry), "activate",
+		      GTK_SIGNAL_FUNC (gtk_font_selection_size_activate),
 		      fontsel);
   
   /* Create the clists  */
@@ -1495,56 +1495,51 @@ gtk_font_selection_show_available_sizes (GtkFontSelection *fontsel)
   gtk_clist_thaw (GTK_CLIST(fontsel->size_clist));
 }
 
-
-/* If the user hits return in the font size entry, we change to the new font
-   size. */
-static gint
-gtk_font_selection_size_key_press (GtkWidget   *w,
-				   GdkEventKey *event,
-				   gpointer     data)
+static void
+gtk_font_selection_update_size (GtkFontSelection *fontsel)
 {
-  GtkFontSelection *fontsel;
   gint new_size;
   gfloat new_size_float;
   gchar *text;
   
 #ifdef FONTSEL_DEBUG
-  g_message("In size_key_press\n");
+  g_message("In update_size\n");
 #endif
-  fontsel = GTK_FONT_SELECTION(data);
   
-  if (event->keyval == GDK_Return)
+  text = gtk_entry_get_text (GTK_ENTRY (fontsel->size_entry));
+  if (fontsel->metric == GTK_FONT_METRIC_PIXELS)
     {
-      text = gtk_entry_get_text (GTK_ENTRY (fontsel->size_entry));
-      if (fontsel->metric == GTK_FONT_METRIC_PIXELS)
-	{
-	  new_size = atoi (text);
-	  if (new_size < 2)
-	    new_size = 2;
-	}
-      else
-	{
-	  new_size_float = atof (text) * 10;
-	  new_size = (gint) new_size_float;
-	  if (new_size < 20)
-	    new_size = 20;
-	}
-      
-      /* Remember that this size was set explicitly. */
-      fontsel->selected_size = new_size;
-      
-      /* Check if the font size has changed, and return if it hasn't. */
-      if (fontsel->size == new_size)
-	return TRUE;
-      
-      fontsel->size = new_size;
-      gtk_font_selection_select_best_size (fontsel);
-      return TRUE;
+      new_size = atoi (text);
+      if (new_size < 2)
+	new_size = 2;
+    }
+  else
+    {
+      new_size_float = atof (text) * 10;
+      new_size = (gint) new_size_float;
+      if (new_size < 20)
+	new_size = 20;
     }
   
-  return FALSE;
+  /* Remember that this size was set explicitly. */
+  fontsel->selected_size = new_size;
+  
+  /* Check if the font size has changed, and return if it hasn't. */
+  if (fontsel->size == new_size)
+    return;
+  
+  fontsel->size = new_size;
+  gtk_font_selection_select_best_size (fontsel);
 }
 
+/* If the user hits return in the font size entry, we change to the new font
+   size. */
+static void
+gtk_font_selection_size_activate (GtkWidget *w,
+				  gpointer   data)
+{
+  gtk_font_selection_update_size (data);
+}
 
 /* This tries to select the closest size to the current size, though it
    may have to change the size if only unscaled bitmaps are available.
@@ -3099,7 +3094,10 @@ gtk_font_selection_insert_field (gchar		       *fontname,
 GdkFont*
 gtk_font_selection_get_font (GtkFontSelection *fontsel)
 {
-  g_return_val_if_fail (fontsel != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
+
+  gtk_font_selection_update_size (fontsel);
+  
   return fontsel->font;
 }
 
@@ -3114,6 +3112,8 @@ gtk_font_selection_get_font_name (GtkFontSelection *fontsel)
   
   g_return_val_if_fail (fontsel != NULL, NULL);
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
+  
+  gtk_font_selection_update_size (fontsel);
   
   /* If no family has been selected return NULL. */
   if (fontsel->font_index == -1)
