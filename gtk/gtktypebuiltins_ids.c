@@ -26,6 +26,8 @@
     GTK_TYPE_ENUM, _gtk_justification_values },
   { "GtkMatchType", &GTK_TYPE_MATCH_TYPE,
     GTK_TYPE_ENUM, _gtk_match_type_values },
+  { "GtkMenuDirectionType", &GTK_TYPE_MENU_DIRECTION_TYPE,
+    GTK_TYPE_ENUM, _gtk_menu_direction_type_values },
   { "GtkMenuFactoryType", &GTK_TYPE_MENU_FACTORY_TYPE,
     GTK_TYPE_ENUM, _gtk_menu_factory_type_values },
   { "GtkMetricType", &GTK_TYPE_METRIC_TYPE,

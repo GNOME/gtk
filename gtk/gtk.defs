@@ -91,6 +91,12 @@
    (exact GTK_MATCH_EXACT)
    (last GTK_MATCH_LAST))
 
+(define-enum GtkMenuDirectionType
+   (parent GTK_MENU_DIR_PARENT)
+   (child GTK_MENU_DIR_CHILD)
+   (next GTK_MENU_DIR_NEXT)
+   (prev GTK_MENU_DIR_PREV))
+
 (define-enum GtkMenuFactoryType
    (menu GTK_MENU_FACTORY_MENU)
    (menu-bar GTK_MENU_FACTORY_MENU_BAR)

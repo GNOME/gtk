@@ -101,6 +101,7 @@
 #include <gtk/gtkstyle.h>
 #include <gtk/gtkstatusbar.h>
 #include <gtk/gtktable.h>
+#include <gtk/gtktearoffmenuitem.h>
 #include <gtk/gtktext.h>
 #include <gtk/gtktipsquery.h>
 #include <gtk/gtktogglebutton.h>

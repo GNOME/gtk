@@ -113,7 +113,7 @@ typedef	struct	_GtkStateData	 GtkStateData;
 struct _GtkStateData
 {
   GtkStateType  state;
-  guint		state_restauration : 1;
+  guint		state_restoration : 1;
   guint         parent_sensitive : 1;
 };
 
@@ -2479,7 +2479,7 @@ gtk_widget_set_state (GtkWidget           *widget,
       GtkStateData data;
 
       data.state = state;
-      data.state_restauration = FALSE;
+      data.state_restoration = FALSE;
       if (widget->parent)
 	data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (widget->parent) != FALSE);
       else
@@ -2524,7 +2524,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_SENSITIVE);
       data.state = GTK_WIDGET_STATE (widget);
     }
-  data.state_restauration = TRUE;
+  data.state_restoration = TRUE;
 
   if (widget->parent)
     data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (widget->parent) != FALSE);
@@ -2566,7 +2566,7 @@ gtk_widget_set_parent (GtkWidget *widget,
     data.state = GTK_WIDGET_STATE (parent);
   else
     data.state = GTK_WIDGET_STATE (widget);
-  data.state_restauration = FALSE;
+  data.state_restoration = FALSE;
   data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (parent) != FALSE);
 
   gtk_widget_propagate_state (widget, &data);
@@ -3767,7 +3767,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 
       if (GTK_WIDGET_IS_SENSITIVE (widget))
 	{
-	  if (data->state_restauration)
+	  if (data->state_restoration)
 	    GTK_WIDGET_STATE (widget) = GTK_WIDGET_SAVED_STATE (widget);
 	  else
 	    GTK_WIDGET_STATE (widget) = data->state;
@@ -3775,7 +3775,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
       else
 	{
 	  GTK_WIDGET_STATE (widget) = GTK_STATE_INSENSITIVE;
-	  if (!data->state_restauration &&
+	  if (!data->state_restoration &&
 	      data->state != GTK_STATE_INSENSITIVE)
 	    GTK_WIDGET_SAVED_STATE (widget) = data->state;
 	}
@@ -3783,7 +3783,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
   else
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_PARENT_SENSITIVE);
-      if (!data->state_restauration)
+      if (!data->state_restoration)
 	{
 	  if (data->state != GTK_STATE_INSENSITIVE)
 	    GTK_WIDGET_SAVED_STATE (widget) = data->state;

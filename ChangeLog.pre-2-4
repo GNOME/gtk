@@ -1,3 +1,61 @@
+Tue Jul 21 12:42:01 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.h gdk/gdkfont.c: Added gdk_text/string_extents() - 
+	  too calculate all the metrics at once of a string, including
+	  things which weren't calculated before.
+
+	* gtk/Makefile.am gtk/gtk.h gtk/gtktearoffmenu.[ch]: New
+	  MenuItem type, that when put as the first thing in a
+	  menu, makes the menu tearoff. Currently drawn as a
+	  dashed line.
+
+	* gtk/gtkmenuitem.h gtk/gtkcheckmenuitem.c: Added a flag
+	  "hide_on_activate" to the MenuItem class structure to allow
+	  check and radio buttons to be changed with <Space> without
+	  hiding the menu.
+
+	* gtk/gtkaccellabel.[ch]: Added new capabilities to set
+	  a underline_group and underline_mods for the label - 
+	  accelerators added in the underline group matching
+	  underline_mods will be displayed as an underline character.
+
+	  This doesn't work - Save As needs to be underlined 
+	  as Save _As.
+	 
+	* gtk/gtkitemfactory.c: 
+	  - Create a AccelGroup for each MenuShell we create.
+	  - If an '&' appears before a  character 'c' in the path,
+	    then make 'c' an accelerator in the menu's accel group,
+	    and if the menuitem is menubar <alt>C an accelerator 
+	    in the itemfactory's accel group.
+
+	* gtk/gtklabel.[ch]: Add support for a pattern arg - 
+          which is a string. If an '_' appears in this string,
+	  the corresponding position in the label is underlined.
+
+          Add gtk_label_parse_uline() convenience function which
+	  takes a string with embedded underlines, sets the
+	  pattern and label, and returns the accelerator keyval.
+
+	* gtk/gtkmenu.[ch]: Make menus no longer a toplevel widget.
+	  Instead, they create a GtkWindow and add themselves
+	  to that. (When torn off, another new feature, they
+	  create another GtkWindow to hold the torn off menu)
+
+	  New function gtk_menu_set_tearoff_state()
+	
+	* gtk/gtkenums.h gtk/gtkmenushell.[ch] gtk/gtkenums.h: 
+	  Added action signals  for keyboard navigation of menus.
+
+	* gtk/gtkmenushell.c: Key press handler which activates
+          bindings for navigation, and accelerators, for handling
+	  underline accelerators. Exported functions to select 
+	  and activate menu items in a menushell.
+
+	* gtk/testgtk.c: Added a new "Item Factory" test which
+	  tests GtkItemFactory and the new keyboard navigation
+	  of menus.
+
 Tue Aug 11 20:52:58 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktypeutils.c (gtk_type_class_init): relookup nodes after
@@ -68,6 +126,7 @@ Thu Aug  6 22:37:21 1998  Stefan Jeske  <stefan@gtk.org>
 	* gtk/gtkclist.c: Renamed my_merge and my_mergesort to
  	gtk_clist_merge and gtk_clist_mergesort. :)
 
+>>>>>>> 1.579
 1998-08-06  Martin Baulig  <martin@home-of-linux.org>
 
 	* gtk/gtkclist.c: Renamed `merge' -> `my_merge' and
@@ -390,6 +449,15 @@ Wed Jul 15 17:44:47 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* Fix up line start cache when splitting a property
 	during an insert.
+
+Wed Jul 15 21:15:52 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c: restauration => restoration
+
+Thu Jul 16 20:11:36 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkxid.c (gdk_xid_table_lookup): If xid_ht
+	hasn't been created yet, don't do the lookup.
 
 1998-07-20  Raph Levien  <raph@acm.org>
 

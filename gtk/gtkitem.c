@@ -190,7 +190,8 @@ gtk_item_realize (GtkWidget *widget)
 			   GDK_BUTTON_PRESS_MASK |
 			   GDK_BUTTON_RELEASE_MASK |
 			   GDK_ENTER_NOTIFY_MASK |
-			   GDK_LEAVE_NOTIFY_MASK);
+			   GDK_LEAVE_NOTIFY_MASK |
+			   GDK_POINTER_MOTION_MASK);
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);

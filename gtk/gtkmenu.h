@@ -58,6 +58,11 @@ struct _GtkMenu
   GtkAccelGroup *accel_group;
   GtkMenuPositionFunc position_func;
   gpointer position_func_data;
+
+  GtkWidget *toplevel;
+  GtkWidget *tearoff_window;
+
+  guint torn_off : 1;
 };
 
 struct _GtkMenuClass
@@ -94,7 +99,8 @@ void	   gtk_menu_attach_to_widget	  (GtkMenu	       *menu,
 					   GtkMenuDetachFunc	detacher);
 GtkWidget* gtk_menu_get_attach_widget	  (GtkMenu	       *menu);
 void	   gtk_menu_detach		  (GtkMenu	       *menu);
-
+void       gtk_menu_set_tearoff_state    (GtkMenu              *menu,
+					  gboolean              torn_off);
 
 #ifdef __cplusplus
 }

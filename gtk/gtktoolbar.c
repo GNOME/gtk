@@ -775,6 +775,8 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
 	  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (child->widget), FALSE);
 	}
 
+      GTK_WIDGET_UNSET_FLAGS (child->widget, GTK_CAN_FOCUS);
+
       if (callback)
 	gtk_signal_connect (GTK_OBJECT (child->widget), "clicked",
 			    callback, user_data);

@@ -84,6 +84,7 @@ libgtk_1_1_la_SOURCES = \
 	gtkstyle.c		\
 	gtkstatusbar.c		\
 	gtktable.c		\
+	gtktearoffmenuitem.c    \
 	gtktext.c		\
 	gtktipsquery.c		\
 	gtktogglebutton.c	\
@@ -190,6 +191,7 @@ gtkinclude_HEADERS = \
 	gtkstyle.h		\
 	gtkstatusbar.h		\
 	gtktable.h		\
+	gtktearoffmenuitem.h    \
 	gtktext.h		\
 	gtktipsquery.h		\
 	gtktogglebutton.h	\

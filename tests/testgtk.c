@@ -1949,7 +1949,7 @@ create_tooltips (void)
  */
 
 static GtkWidget*
-create_menu (int depth)
+create_menu (gint depth, gboolean tearoff)
 {
   GtkWidget *menu;
   GtkWidget *menuitem;
@@ -1963,6 +1963,13 @@ create_menu (int depth)
   menu = gtk_menu_new ();
   group = NULL;
 
+  if (tearoff)
+    {
+      menuitem = gtk_tearoff_menu_item_new ();
+      gtk_menu_append (GTK_MENU (menu), menuitem);
+      gtk_widget_show (menuitem);
+    }
+
   for (i = 0, j = 1; i < 5; i++, j++)
     {
       sprintf (buf, "item %2d - %d", depth, j);
@@ -1975,7 +1982,7 @@ create_menu (int depth)
       if (i == 3)
 	gtk_widget_set_sensitive (menuitem, FALSE);
 
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (depth - 1));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (depth - 1, TRUE));
     }
 
   return menu;
@@ -2007,6 +2014,9 @@ create_menus (void)
 			  GTK_SIGNAL_FUNC (gtk_true),
 			  NULL);
       
+      accel_group = gtk_accel_group_new ();
+      gtk_accel_group_attach (accel_group, GTK_OBJECT (window));
+
       gtk_window_set_title (GTK_WINDOW (window), "menus");
       gtk_container_border_width (GTK_CONTAINER (window), 0);
       
@@ -2019,7 +2029,7 @@ create_menus (void)
       gtk_box_pack_start (GTK_BOX (box1), menubar, FALSE, TRUE, 0);
       gtk_widget_show (menubar);
       
-      menu = create_menu (2);
+      menu = create_menu (2, TRUE);
       
       menuitem = gtk_menu_item_new_with_label ("test\nline2");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
@@ -2027,12 +2037,12 @@ create_menus (void)
       gtk_widget_show (menuitem);
       
       menuitem = gtk_menu_item_new_with_label ("foo");
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (3));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (3, TRUE));
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
       gtk_widget_show (menuitem);
-      
+
       menuitem = gtk_menu_item_new_with_label ("bar");
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4, TRUE));
       gtk_menu_item_right_justify (GTK_MENU_ITEM (menuitem));
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
       gtk_widget_show (menuitem);
@@ -2042,8 +2052,7 @@ create_menus (void)
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
       gtk_widget_show (box2);
       
-      menu = create_menu (1);
-      accel_group = gtk_accel_group_get_default ();
+      menu = create_menu (1, FALSE);
       gtk_menu_set_accel_group (GTK_MENU (menu), accel_group);
 
       menuitem = gtk_check_menu_item_new_with_label ("Accelerate Me");
@@ -2108,6 +2117,99 @@ create_menus (void)
 
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
+
+static GtkItemFactoryEntry menu_items[] =
+{
+  { "/_File",            NULL,         NULL,       0, "<Branch>" },
+  { "/File/tearoff1",    NULL,         NULL,       0, "<Tearoff>" },
+  { "/File/_New",        "<control>N", NULL,       0 },
+  { "/File/_Open",       "<control>O", NULL,       0 },
+  { "/File/_Save",       "<control>S", NULL,       0 },
+  { "/File/Save _As...", NULL,         NULL,       0 },
+  { "/File/sep1",        NULL,         NULL,       0, "<Separator>" },
+  { "/File/_Quit",       "<control>Q", NULL,       0 },
+
+  { "/_Preferences",     NULL,         NULL,       0, "<Branch>" },
+  { "/_Preferences/_Color", NULL,         NULL,       0, "<Branch>" },
+  { "/_Preferences/Color/_Red",      NULL,         NULL,          0, "<RadioItem>" },
+  { "/_Preferences/Color/_Green",   NULL,         NULL,           0, "<RadioItem>" },
+  { "/_Preferences/Color/_Blue",        NULL,         NULL,       0, "<RadioItem>" },
+  { "/_Preferences/_Shape", NULL,         NULL,       0, "<Branch>" },
+  { "/_Preferences/Shape/_Square",      NULL,         NULL,       0, "<RadioItem>" },
+  { "/_Preferences/Shape/_Rectangle",   NULL,         NULL,       0, "<RadioItem>" },
+  { "/_Preferences/Shape/_Oval",        NULL,         NULL,       0, "<RadioItem>" },
+
+  { "/_Help",            NULL,         NULL,       0, "<LastBranch>" },
+  { "/Help/_About",      NULL,         NULL,       0 },
+};
+
+static int nmenu_items = sizeof (menu_items) / sizeof (menu_items[0]);
+
+static void
+create_item_factory (void)
+{
+  static GtkWidget *window = NULL;
+  
+  if (!window)
+    {
+      GtkWidget *box1;
+      GtkWidget *box2;
+      GtkWidget *separator;
+      GtkWidget *label;
+      GtkWidget *button;
+      GtkAccelGroup *accel_group;
+      GtkItemFactory *item_factory;
+      
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &window);
+      gtk_signal_connect (GTK_OBJECT (window), "delete-event",
+			  GTK_SIGNAL_FUNC (gtk_true),
+			  NULL);
+      
+      accel_group = gtk_accel_group_new ();
+      item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
+      gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
+      gtk_accel_group_attach (accel_group, GTK_OBJECT (window));
+      gtk_window_set_title (GTK_WINDOW (window), "Item Factory");
+      gtk_container_border_width (GTK_CONTAINER (window), 0);
+      
+      box1 = gtk_vbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (window), box1);
+      
+      gtk_box_pack_start (GTK_BOX (box1),
+			  gtk_item_factory_get_widget (item_factory, "<main>"),
+			  FALSE, FALSE, 0);
+
+      label = gtk_label_new ("Type\n<alt>\nto start");
+      gtk_widget_set_usize (label, 200, 200);
+      gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
+      gtk_box_pack_start (GTK_BOX (box1), label, TRUE, TRUE, 0);
+
+
+      separator = gtk_hseparator_new ();
+      gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
+
+
+      box2 = gtk_vbox_new (FALSE, 10);
+      gtk_container_border_width (GTK_CONTAINER (box2), 10);
+      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
+
+      button = gtk_button_new_with_label ("close");
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
+				 GTK_OBJECT (window));
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_grab_default (button);
+
+      gtk_widget_show_all (window);
+    }
   else
     gtk_widget_destroy (window);
 }
@@ -3144,6 +3246,7 @@ create_list (void)
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
+
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_border_width (GTK_CONTAINER (box2), 10);
@@ -7291,6 +7394,7 @@ create_main_window (void)
       { "font selection", create_font_selection },
       { "gamma curve", create_gamma_curve },
       { "handle box", create_handle_box },
+      { "item factory", create_item_factory },
       { "list", create_list },
       { "menus", create_menus },
       { "modal window", create_modal_window },

@@ -95,6 +95,13 @@ static GtkEnumValue _gtk_match_type_values[] = {
   { GTK_MATCH_LAST, "GTK_MATCH_LAST", "last" },
   { 0, NULL, NULL }
 };
+static GtkEnumValue _gtk_menu_direction_type_values[] = {
+  { GTK_MENU_DIR_PARENT, "GTK_MENU_DIR_PARENT", "parent" },
+  { GTK_MENU_DIR_CHILD, "GTK_MENU_DIR_CHILD", "child" },
+  { GTK_MENU_DIR_NEXT, "GTK_MENU_DIR_NEXT", "next" },
+  { GTK_MENU_DIR_PREV, "GTK_MENU_DIR_PREV", "prev" },
+  { 0, NULL, NULL }
+};
 static GtkEnumValue _gtk_menu_factory_type_values[] = {
   { GTK_MENU_FACTORY_MENU, "GTK_MENU_FACTORY_MENU", "menu" },
   { GTK_MENU_FACTORY_MENU_BAR, "GTK_MENU_FACTORY_MENU_BAR", "menu-bar" },

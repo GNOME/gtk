@@ -328,6 +328,92 @@ gdk_string_measure (GdkFont     *font,
   return gdk_text_measure (font, string, strlen (string));
 }
 
+void
+gdk_text_extents (GdkFont     *font,
+                  const gchar *text,
+                  gint         text_length,
+		  gint        *lbearing,
+		  gint        *rbearing,
+		  gint        *width,
+		  gint        *ascent,
+		  gint        *descent)
+{
+  GdkFontPrivate *private;
+  XCharStruct overall;
+  XFontStruct *xfont;
+  XFontSet    fontset;
+  XRectangle  ink, logical;
+  int direction;
+  int font_ascent;
+  int font_descent;
+
+  g_return_if_fail (font != NULL);
+  g_return_if_fail (text != NULL);
+
+  private = (GdkFontPrivate*) font;
+
+  switch (font->type)
+    {
+    case GDK_FONT_FONT:
+      xfont = (XFontStruct *) private->xfont;
+      if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
+	{
+	  XTextExtents (xfont, text, text_length,
+			&direction, &font_ascent, &font_descent,
+			&overall);
+	}
+      else
+	{
+	  XTextExtents16 (xfont, (XChar2b *) text, text_length / 2,
+			  &direction, &font_ascent, &font_descent,
+			  &overall);
+	}
+      if (lbearing)
+	*lbearing = overall.lbearing;
+      if (rbearing)
+	*rbearing = overall.rbearing;
+      if (width)
+	*width = overall.width;
+      if (ascent)
+	*ascent = overall.ascent;
+      if (descent)
+	*descent = overall.descent;
+      break;
+    case GDK_FONT_FONTSET:
+      fontset = (XFontSet) private->xfont;
+      XmbTextExtents (fontset, text, text_length, &ink, &logical);
+      if (lbearing)
+	*lbearing = -ink.x;
+      if (rbearing)
+	*rbearing = ink.y;
+      if (width)
+	*width = logical.width;
+      if (ascent)
+	*ascent = ink.height;
+      if (descent)
+	*descent = -ink.y;
+      break;
+    }
+
+}
+
+void
+gdk_string_extents (GdkFont     *font,
+		    const gchar *string,
+		    gint        *lbearing,
+		    gint        *rbearing,
+		    gint        *width,
+		    gint        *ascent,
+		    gint        *descent)
+{
+  g_return_if_fail (font != NULL);
+  g_return_if_fail (string != NULL);
+
+  gdk_text_extents (font, string, strlen (string),
+		    lbearing, rbearing, width, ascent, descent);
+}
+
+
 gint
 gdk_text_measure (GdkFont     *font,
                   const gchar *text,

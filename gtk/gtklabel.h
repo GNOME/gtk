@@ -44,6 +44,8 @@ struct _GtkLabel
   GtkMisc misc;
   
   gchar  *label;
+  gchar  *pattern;
+
   GSList *row;
   guint	  max_width : 16;
   guint   jtype : 2;
@@ -60,11 +62,21 @@ GtkType	   gtk_label_get_type	 (void);
 GtkWidget* gtk_label_new	 (const gchar	    *string);
 void	   gtk_label_set	 (GtkLabel	    *label,
 				  const gchar	    *string);
+void	   gtk_label_set_pattern (GtkLabel	    *label,
+				  const gchar	    *pattern);
 void	   gtk_label_set_justify (GtkLabel	    *label,
 				  GtkJustification   jtype);
 void	   gtk_label_get	 (GtkLabel	    *label,
 				  gchar		   **string);
 
+
+/* Convenience function to set the name and pattern by parsing
+ * a string with embedded underscores, and return the appropriate
+ * key symbol for the accelerator.
+ */
+
+guint      gtk_label_parse_uline    (GtkLabel         *label,
+				     const gchar      *string);
 
 #ifdef __cplusplus
 }

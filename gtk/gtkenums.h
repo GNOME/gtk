@@ -107,6 +107,15 @@ typedef enum
   GTK_MATCH_LAST
 } GtkMatchType;
 
+/* Menu keyboard movement types */
+typedef enum
+{
+  GTK_MENU_DIR_PARENT,
+  GTK_MENU_DIR_CHILD,
+  GTK_MENU_DIR_NEXT,
+  GTK_MENU_DIR_PREV
+} GtkMenuDirectionType;
+
 typedef enum
 {
   GTK_MENU_FACTORY_MENU,

@@ -20,6 +20,7 @@
 #include "gtkaccellabel.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
+#include "gtkmenubar.h"
 #include "gtkmenuitem.h"
 #include "gtksignal.h"
 
@@ -32,6 +33,7 @@
 
 enum {
   ACTIVATE,
+  ACTIVATE_ITEM,
   LAST_SIGNAL
 };
 
@@ -51,6 +53,7 @@ static gint gtk_menu_item_expose         (GtkWidget        *widget,
 					  GdkEventExpose   *event);
 static void gtk_real_menu_item_select    (GtkItem          *item);
 static void gtk_real_menu_item_deselect  (GtkItem          *item);
+static void gtk_real_menu_item_activate_item  (GtkMenuItem      *item);
 static gint gtk_menu_item_select_timeout (gpointer          data);
 static void gtk_menu_item_position_menu  (GtkMenu          *menu,
 					  gint             *x,
@@ -110,6 +113,14 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                     gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
+  menu_item_signals[ACTIVATE_ITEM] =
+    gtk_signal_new ("activate_item",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkMenuItemClass, activate_item),
+                    gtk_signal_default_marshaller,
+		    GTK_TYPE_NONE, 0);
+
   gtk_object_class_add_signals (object_class, menu_item_signals, LAST_SIGNAL);
 
   object_class->destroy = gtk_menu_item_destroy;
@@ -126,8 +137,10 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   item_class->deselect = gtk_real_menu_item_deselect;
 
   klass->activate = NULL;
+  klass->activate_item = gtk_real_menu_item_activate_item;
 
   klass->toggle_size = 0;
+  klass->hide_on_activate = TRUE;
 }
 
 static void
@@ -493,8 +506,16 @@ gtk_real_menu_item_select (GtkItem *item)
 
   menu_item = GTK_MENU_ITEM (item);
 
-  if (menu_item->submenu && !GTK_WIDGET_VISIBLE (menu_item->submenu))
-    menu_item->timer = gtk_timeout_add (SELECT_TIMEOUT, gtk_menu_item_select_timeout, menu_item);
+  /*  if (menu_item->submenu && !GTK_WIDGET_VISIBLE (menu_item->submenu))*/
+  if (menu_item->submenu)
+    {
+  /* Boy this is a hack! */
+      GdkEvent *current_event = gtk_get_current_event();
+      if (current_event && (current_event->type != GDK_ENTER_NOTIFY))
+	gtk_menu_item_select_timeout (menu_item);
+      else
+	menu_item->timer = gtk_timeout_add (SELECT_TIMEOUT, gtk_menu_item_select_timeout, menu_item);
+    }
 
   gtk_widget_set_state (GTK_WIDGET (menu_item), GTK_STATE_PRELIGHT);
   gtk_widget_draw (GTK_WIDGET (menu_item), NULL);
@@ -522,6 +543,38 @@ gtk_real_menu_item_deselect (GtkItem *item)
   gtk_widget_draw (GTK_WIDGET (menu_item), NULL);
 }
 
+static void
+gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
+{
+  GtkWidget *widget;
+
+  g_return_if_fail (menu_item != NULL);
+  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
+
+  widget = GTK_WIDGET (menu_item);
+  
+  if (widget->parent &&
+      GTK_IS_MENU_SHELL (widget->parent))
+    {
+      if (menu_item->submenu == NULL)
+	gtk_menu_shell_activate_item (GTK_MENU_SHELL (widget->parent),
+				      widget, TRUE);
+      else
+	{
+	  GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget->parent);
+
+	  if (!menu_shell->active)
+	    {
+	      gtk_grab_add (GTK_WIDGET (menu_shell));
+	      menu_shell->have_grab = TRUE;
+	      menu_shell->active = TRUE;
+	    }
+
+	  gtk_menu_shell_select_item (GTK_MENU_SHELL (widget->parent), widget);
+	}
+    }
+}
+
 static gint
 gtk_menu_item_select_timeout (gpointer data)
 {
@@ -537,6 +590,16 @@ gtk_menu_item_select_timeout (gpointer data)
 		  menu_item,
 		  GTK_MENU_SHELL (GTK_WIDGET (menu_item)->parent)->button,
 		  0);
+
+  /* This is a bit of a hack - we want to select the first item
+   * of menus hanging of a menu bar, but not for cascading submenus
+   */
+  if (GTK_IS_MENU_BAR (GTK_WIDGET (menu_item)->parent))
+    {
+      GtkMenuShell *submenu = GTK_MENU_SHELL (menu_item->submenu);
+      if (submenu->children)
+	gtk_menu_shell_select_item (submenu, submenu->children->data);
+    }
 
   return FALSE;
 }

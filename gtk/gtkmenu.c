@@ -18,10 +18,13 @@
  */
 #include <ctype.h>
 #include "gdk/gdkkeysyms.h"
+#include "gtkbindings.h"
+#include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtksignal.h"
+#include "gtkwindow.h"
 
 
 #define MENU_ITEM_CLASS(w)   GTK_MENU_ITEM_CLASS (GTK_OBJECT (w)->klass)
@@ -39,9 +42,6 @@ struct _GtkMenuAttachData
 static void gtk_menu_class_init	    (GtkMenuClass      *klass);
 static void gtk_menu_init	    (GtkMenu	       *menu);
 static void gtk_menu_destroy	    (GtkObject	       *object);
-static void gtk_menu_show	    (GtkWidget	       *widget);
-static void gtk_menu_map	    (GtkWidget	       *widget);
-static void gtk_menu_unmap	    (GtkWidget	       *widget);
 static void gtk_menu_realize	    (GtkWidget	       *widget);
 static void gtk_menu_size_request   (GtkWidget	       *widget,
 				     GtkRequisition    *requisition);
@@ -52,14 +52,14 @@ static void gtk_menu_draw	    (GtkWidget	       *widget,
 				     GdkRectangle      *area);
 static gint gtk_menu_expose	    (GtkWidget	       *widget,
 				     GdkEventExpose    *event);
-static gint gtk_menu_configure	    (GtkWidget	       *widget,
-				     GdkEventConfigure *event);
 static gint gtk_menu_key_press	    (GtkWidget	       *widget,
 				     GdkEventKey       *event);
-static void gtk_menu_check_resize    (GtkContainer      *container);
+static gint gtk_menu_motion_notify  (GtkWidget	       *widget,
+				     GdkEventMotion    *event);
 static void gtk_menu_deactivate	    (GtkMenuShell      *menu_shell);
 static void gtk_menu_show_all	    (GtkWidget	       *widget);
 static void gtk_menu_hide_all	    (GtkWidget	       *widget);
+static void gtk_menu_position       (GtkMenu           *menu);
 
 static GtkMenuShellClass *parent_class = NULL;
 static const gchar	*attach_data_key = "gtk-menu-attach-data";
@@ -97,6 +97,8 @@ gtk_menu_class_init (GtkMenuClass *class)
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
   GtkMenuShellClass *menu_shell_class;
+
+  GtkBindingSet *binding_set;
   
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
@@ -106,37 +108,62 @@ gtk_menu_class_init (GtkMenuClass *class)
   
   object_class->destroy = gtk_menu_destroy;
   
-  widget_class->show = gtk_menu_show;
-  widget_class->map = gtk_menu_map;
-  widget_class->unmap = gtk_menu_unmap;
   widget_class->realize = gtk_menu_realize;
   widget_class->draw = gtk_menu_draw;
   widget_class->size_request = gtk_menu_size_request;
   widget_class->size_allocate = gtk_menu_size_allocate;
   widget_class->expose_event = gtk_menu_expose;
-  widget_class->configure_event = gtk_menu_configure;
   widget_class->key_press_event = gtk_menu_key_press;
+  widget_class->motion_notify_event = gtk_menu_motion_notify;
   widget_class->show_all = gtk_menu_show_all;
   widget_class->hide_all = gtk_menu_hide_all;  
   
-  container_class->check_resize = gtk_menu_check_resize;
-  
   menu_shell_class->submenu_placement = GTK_LEFT_RIGHT;
   menu_shell_class->deactivate = gtk_menu_deactivate;
+
+  binding_set = gtk_binding_set_by_class (class);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Up, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_PREV);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Down, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_NEXT);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Left, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_PARENT);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_Right, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_CHILD);
 }
 
 static void
 gtk_menu_init (GtkMenu *menu)
 {
-  GTK_WIDGET_SET_FLAGS (menu, GTK_TOPLEVEL);
-  
-  gtk_container_set_resize_mode (GTK_CONTAINER (menu), GTK_RESIZE_QUEUE);
-  
   menu->parent_menu_item = NULL;
   menu->old_active_menu_item = NULL;
   menu->accel_group = NULL;
   menu->position_func = NULL;
   menu->position_func_data = NULL;
+
+  menu->toplevel = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_signal_connect_object (GTK_OBJECT (menu->toplevel),  "key_press_event",
+			     GTK_SIGNAL_FUNC (gtk_menu_key_press), 
+			     GTK_OBJECT (menu));
+  gtk_window_set_policy (GTK_WINDOW (menu->toplevel),
+			 FALSE, FALSE, TRUE);
+
+  gtk_container_add (GTK_CONTAINER (menu->toplevel), GTK_WIDGET (menu));
+
+  menu->tearoff_window = NULL;
+  menu->torn_off = FALSE;
 
   MENU_NEEDS_RESIZE (menu) = TRUE;
 }
@@ -144,19 +171,26 @@ gtk_menu_init (GtkMenu *menu)
 static void
 gtk_menu_destroy (GtkObject	    *object)
 {
+  GtkMenu *menu;
   GtkMenuAttachData *data;
   
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_MENU (object));
+
+  menu = GTK_MENU (object);
   
   gtk_widget_ref (GTK_WIDGET (object));
   
   data = gtk_object_get_data (object, attach_data_key);
   if (data)
-    gtk_menu_detach (GTK_MENU (object));
+    gtk_menu_detach (menu);
   
-  gtk_menu_set_accel_group (GTK_MENU (object), NULL);
+  gtk_menu_set_accel_group (menu, NULL);
   
+  gtk_widget_destroy (menu->toplevel);
+  if (menu->tearoff_window)
+    gtk_widget_destroy (menu->tearoff_window);
+
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
   
@@ -283,22 +317,75 @@ gtk_menu_popup (GtkMenu		    *menu,
 		guint		     button,
 		guint32		     activate_time)
 {
+  GtkWidget *widget;
   GtkWidget *xgrab_shell;
   GtkWidget *parent;
+  GdkEvent *current_event;
+  GtkMenuShell *menu_shell;
   
   g_return_if_fail (menu != NULL);
   g_return_if_fail (GTK_IS_MENU (menu));
   
-  GTK_MENU_SHELL (menu)->parent_menu_shell = parent_menu_shell;
-  GTK_MENU_SHELL (menu)->active = TRUE;
-  GTK_MENU_SHELL (menu)->button = button;
+  widget = GTK_WIDGET (menu);
+  menu_shell = GTK_MENU_SHELL (menu);
+  
+  menu_shell->parent_menu_shell = parent_menu_shell;
+  menu_shell->active = TRUE;
+  menu_shell->button = button;
+
+  /* If we are popping up the menu from something other than, a button
+   * press then, as a heuristic, we ignore enter events for the menu
+   * until we get a MOTION_NOTIFY.  
+   */
+
+  current_event = gtk_get_current_event();
+  if (current_event)
+    {
+      if ((current_event->type != GDK_BUTTON_PRESS) &&
+	  (current_event->type != GDK_ENTER_NOTIFY))
+	menu_shell->ignore_enter = TRUE;
+    }
+
+  if (menu->torn_off)
+    {
+      GdkPixmap *pixmap;
+      GdkGC *gc;
+      GdkGCValues gc_values;
+      
+      gc_values.subwindow_mode = GDK_INCLUDE_INFERIORS;
+      gc = gdk_gc_new_with_values (widget->window,
+				   &gc_values, GDK_GC_SUBWINDOW);
+      
+      pixmap = gdk_pixmap_new (widget->window,
+			       widget->requisition.width,
+			       widget->requisition.height,
+			       -1);
+      
+      gdk_draw_pixmap (pixmap, gc,
+		       widget->window,
+		       0, 0, 0, 0, -1, -1);
+      gdk_gc_unref(gc);
+      
+      gdk_window_set_back_pixmap (menu->tearoff_window->window, pixmap, FALSE);
+      gdk_pixmap_unref (pixmap);
+
+      gtk_container_remove (GTK_CONTAINER (menu->tearoff_window), widget);
+      gtk_container_add (GTK_CONTAINER (menu->toplevel), widget);
+    }
   
   menu->parent_menu_item = parent_menu_item;
   menu->position_func = func;
   menu->position_func_data = data;
-  GTK_MENU_SHELL (menu)->activate_time = activate_time;
-  
+  menu_shell->activate_time = activate_time;
+
+  gtk_menu_position (menu);
+
+  /* We need to show the menu _here_ because code expects to be
+   * able to tell if the menu is onscreen by looking at the
+   * GTK_WIDGET_VISIBLE (menu)
+   */
   gtk_widget_show (GTK_WIDGET (menu));
+  gtk_widget_show (menu->toplevel);
   
   /* Find the last viewable ancestor, and make an X grab on it
    */
@@ -328,12 +415,22 @@ gtk_menu_popup (GtkMenu		    *menu,
   if (xgrab_shell && (!GTK_MENU_SHELL (xgrab_shell)->have_xgrab))
     {
       GdkCursor *cursor = gdk_cursor_new (GDK_ARROW);
-      
-      GTK_MENU_SHELL (xgrab_shell)->have_xgrab = 
-	(gdk_pointer_grab (xgrab_shell->window, TRUE,
-			   GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-			   GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK,
-			   NULL, cursor, activate_time) == 0);
+
+      if ((gdk_pointer_grab (xgrab_shell->window, TRUE,
+			     GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+			     GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
+			     GDK_POINTER_MOTION_MASK,
+			     NULL, cursor, activate_time) == 0))
+	{
+	  if (gdk_keyboard_grab (xgrab_shell->window, TRUE,
+			      activate_time) == 0)
+	    GTK_MENU_SHELL (xgrab_shell)->have_xgrab = TRUE;
+	  else
+	    {
+	      gdk_pointer_ungrab (activate_time);
+	    }
+	}
+
       gdk_cursor_destroy (cursor);
     }
   
@@ -352,6 +449,7 @@ gtk_menu_popdown (GtkMenu *menu)
   
   menu_shell->parent_menu_shell = NULL;
   menu_shell->active = FALSE;
+  menu_shell->ignore_enter = FALSE;
   
   if (menu_shell->active_menu_item)
     {
@@ -362,9 +460,26 @@ gtk_menu_popdown (GtkMenu *menu)
   
   /* The X Grab, if present, will automatically be removed when we hide
    * the window */
-  gtk_widget_hide (GTK_WIDGET (menu));
+  gtk_widget_hide (menu->toplevel);
+
+  if (menu->torn_off)
+    {
+      if (GTK_BIN (menu->toplevel)->child)
+	gtk_widget_reparent (GTK_WIDGET (menu), menu->tearoff_window);
+      else
+	/* We popped up the menu from the tearoff, so we need to 
+	 * release the grab - we aren't actually hiding the menu.
+	 */
+	if (menu_shell->have_xgrab)
+	  {
+	    gdk_pointer_ungrab (GDK_CURRENT_TIME);
+	    gdk_keyboard_ungrab (GDK_CURRENT_TIME);
+	  }
+    }
+  else
+    gtk_widget_hide (GTK_WIDGET (menu));
+        
   menu_shell->have_xgrab = FALSE;
-  
   gtk_grab_remove (GTK_WIDGET (menu));
 }
 
@@ -435,99 +550,77 @@ gtk_menu_set_accel_group (GtkMenu	*menu,
 }
 
 
-static void
-gtk_menu_show (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_MENU (widget));
-  
-  GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
-  if (MENU_NEEDS_RESIZE (widget))
-    gtk_container_check_resize (GTK_CONTAINER (widget));
-  gtk_widget_map (widget);
-}
-
 void
 gtk_menu_reposition (GtkMenu *menu)
 {
-  GtkWidget *widget;
-
   g_return_if_fail (menu != NULL);
   g_return_if_fail (GTK_IS_MENU (menu));
 
-  widget = GTK_WIDGET (menu);
-  
-  if (GTK_WIDGET_DRAWABLE (menu))
+  if (GTK_WIDGET_DRAWABLE (menu) && !menu->torn_off)
+    gtk_menu_position (menu);
+}
+
+
+void       
+gtk_menu_set_tearoff_state (GtkMenu  *menu,
+			    gboolean  torn_off)
+{
+  g_return_if_fail (menu != NULL);
+  g_return_if_fail (GTK_IS_MENU (menu));
+
+  if (menu->torn_off != torn_off)
     {
-      gint x, y;
+      menu->torn_off = torn_off;
       
-      gdk_window_get_pointer (NULL, &x, &y, NULL);
-      
-      if (menu->position_func)
-	(* menu->position_func) (menu, &x, &y, menu->position_func_data);
+      if (menu->torn_off)
+	{
+	  if (GTK_WIDGET_VISIBLE (menu))
+	    gtk_menu_popdown (menu);
+
+	  if (!menu->tearoff_window)
+	    {
+	      GtkWidget *attach_widget;
+	      
+	      menu->tearoff_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	      gtk_signal_connect_object (GTK_OBJECT (menu->tearoff_window),  
+					 "key_press_event",
+					 GTK_SIGNAL_FUNC (gtk_menu_key_press), 
+					 GTK_OBJECT (menu));
+	      gtk_widget_realize (menu->tearoff_window);
+	      
+	      attach_widget = gtk_menu_get_attach_widget (menu);
+	      if (GTK_IS_MENU_ITEM (attach_widget))
+		{
+		  GtkWidget *child = GTK_BIN (attach_widget)->child;
+		  if (GTK_IS_LABEL (child))
+		    {
+		      gchar *ret;
+		      gtk_label_get (GTK_LABEL (child), &ret);
+		      gdk_window_set_title (menu->tearoff_window->window, ret);
+		    }
+		}
+
+	      gdk_window_set_decorations (menu->tearoff_window->window, 
+					  GDK_DECOR_ALL |
+					  GDK_DECOR_RESIZEH |
+					  GDK_DECOR_MINIMIZE |
+					  GDK_DECOR_MAXIMIZE);
+	      gtk_window_set_policy (GTK_WINDOW (menu->tearoff_window),
+				     FALSE, FALSE, TRUE);
+	    }
+	  gtk_widget_reparent (GTK_WIDGET (menu), menu->tearoff_window);
+
+	  gtk_menu_position (menu);
+	  
+	  gtk_widget_show (GTK_WIDGET (menu));
+	  gtk_widget_show (menu->tearoff_window);
+	}
       else
 	{
-	  gint screen_width;
-	  gint screen_height;
-	  
-	  screen_width = gdk_screen_width ();
-	  screen_height = gdk_screen_height ();
-	  
-	  x -= 2;
-	  y -= 2;
-	  
-	  if ((x + widget->requisition.width) > screen_width)
-	    x -= ((x + widget->requisition.width) - screen_width);
-	  if (x < 0)
-	    x = 0;
-	  if ((y + widget->requisition.height) > screen_height)
-	    y -= ((y + widget->requisition.height) - screen_height);
-	  if (y < 0)
-	    y = 0;
+	  gtk_widget_hide (menu->tearoff_window);
+	  gtk_widget_reparent (GTK_WIDGET (menu), menu->toplevel);
 	}
-      
-      gdk_window_move (widget->window, x, y);
     }
-}
-
-static void
-gtk_menu_map (GtkWidget *widget)
-{
-  GtkMenu *menu;
-  GtkMenuShell *menu_shell;
-  GtkWidget *child;
-  GList *children;
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_MENU (widget));
-  
-  menu = GTK_MENU (widget);
-  menu_shell = GTK_MENU_SHELL (widget);
-  GTK_WIDGET_SET_FLAGS (menu_shell, GTK_MAPPED);
-
-  gtk_menu_reposition (menu);
-  
-  children = menu_shell->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-      
-      if (GTK_WIDGET_VISIBLE (child) && !GTK_WIDGET_MAPPED (child))
-	gtk_widget_map (child);
-    }
-  
-  gdk_window_show (widget->window);
-}
-
-static void
-gtk_menu_unmap (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_MENU (widget));
-  
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-  gdk_window_hide (widget->window);
 }
 
 static void
@@ -541,6 +634,7 @@ gtk_menu_realize (GtkWidget *widget)
   
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   
+  attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x;
   attributes.y = widget->allocation.y;
   attributes.width = widget->allocation.width;
@@ -548,14 +642,11 @@ gtk_menu_realize (GtkWidget *widget)
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
-  attributes.window_type = GDK_WINDOW_TEMP;
   attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= (GDK_EXPOSURE_MASK |
-			    GDK_KEY_PRESS_MASK |
-			    GDK_STRUCTURE_MASK);
+  attributes.event_mask |= (GDK_EXPOSURE_MASK | GDK_KEY_PRESS_MASK);
   
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-  widget->window = gdk_window_new (NULL, &attributes, attributes_mask);
+  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, widget);
   
   widget->style = gtk_style_attach (widget->style, widget->window);
@@ -639,6 +730,11 @@ gtk_menu_size_allocate (GtkWidget     *widget,
   menu_shell = GTK_MENU_SHELL (widget);
   
   widget->allocation = *allocation;
+  if (GTK_WIDGET_REALIZED (widget))
+    gdk_window_move_resize (widget->window,
+			    allocation->x, allocation->y,
+			    allocation->width, allocation->height);
+
 
   if (menu_shell->children)
     {
@@ -664,13 +760,6 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 	      child_allocation.y += child_allocation.height;
 	    }
 	}
-    }
-
-  if (GTK_WIDGET_REALIZED (widget))
-    {
-      gdk_window_resize (widget->window,
-			 widget->requisition.width,
-			 widget->requisition.height);
     }
 }
 
@@ -759,55 +848,35 @@ gtk_menu_expose (GtkWidget	*widget,
 }
 
 static gint
-gtk_menu_configure (GtkWidget	      *widget,
-		    GdkEventConfigure *event)
-{
-  GtkAllocation allocation;
-  
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-  
-  /* If the window was merely moved, do nothing */
-  if ((widget->allocation.width == event->width) &&
-      (widget->allocation.height == event->height))
-    return FALSE;
-  
-  if (MENU_NEEDS_RESIZE (widget))
-    {
-      MENU_NEEDS_RESIZE (widget) = FALSE;
-      
-      allocation.x = 0;
-      allocation.y = 0;
-      allocation.width = event->width;
-      allocation.height = event->height;
-      
-      gtk_widget_size_allocate (widget, &allocation);
-    }
-  
-  return FALSE;
-}
-
-static gint
 gtk_menu_key_press (GtkWidget	*widget,
 		    GdkEventKey *event)
 {
-  gboolean delete;
+  GtkMenuShell *menu_shell;
+  gboolean delete = FALSE;
   
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
-  
-  delete = (event->keyval == GDK_Delete ||
-	    event->keyval == GDK_KP_Delete ||
-	    event->keyval == GDK_BackSpace);
-  
+      
+  menu_shell = GTK_MENU_SHELL (widget);
+
+  if (GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
+    return TRUE;
+
+  switch (event->keyval)
+    {
+    case GDK_Delete:
+    case GDK_KP_Delete:
+    case GDK_BackSpace:
+      delete = TRUE;
+      break;
+    default:
+      break;
+    }
+
+  /* Modify the accelerators */
   if (delete || gtk_accelerator_valid (event->keyval, event->keyval))
     {
-      GtkMenuShell *menu_shell;
-      
-      menu_shell = GTK_MENU_SHELL (widget);
-      
       if (menu_shell->active_menu_item &&
 	  GTK_BIN (menu_shell->active_menu_item)->child &&
 	  GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu == NULL)
@@ -861,32 +930,27 @@ gtk_menu_key_press (GtkWidget	*widget,
   return FALSE;
 }
 
-static void
-gtk_menu_check_resize (GtkContainer *container)
+static gint 
+gtk_menu_motion_notify  (GtkWidget	   *widget,
+			 GdkEventMotion    *event)
 {
-  GtkAllocation allocation;
-  GtkWidget *widget;
-  
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_MENU (container));
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
 
-  widget = GTK_WIDGET (container);
-  
-  if (GTK_WIDGET_VISIBLE (container))
-    {
-      MENU_NEEDS_RESIZE (container) = FALSE;
-      
-      gtk_widget_size_request (widget, &widget->requisition);
-      
-      allocation.x = widget->allocation.x;
-      allocation.y = widget->allocation.y;
-      allocation.width = widget->requisition.width;
-      allocation.height = widget->requisition.height;
-      
-      gtk_widget_size_allocate (widget, &allocation);
-    }
+  if (GTK_MENU_SHELL (widget)->ignore_enter)
+    GTK_MENU_SHELL (widget)->ignore_enter = FALSE;
   else
-    MENU_NEEDS_RESIZE (container) = TRUE;
+    {
+      GdkEvent send_event;
+
+      send_event.crossing.type = GDK_ENTER_NOTIFY;
+      send_event.crossing.window = event->window;
+      send_event.crossing.time = event->time;
+
+      gtk_widget_event (widget, &send_event);
+    }
+      
+  return FALSE;
 }
 
 static void
@@ -932,4 +996,52 @@ gtk_menu_hide_all (GtkWidget *widget)
   
   /* Hide children, but not self. */
   gtk_container_foreach (container, (GtkCallback) gtk_widget_hide_all, NULL);
+}
+
+static void
+gtk_menu_position (GtkMenu *menu)
+{
+  GtkWidget *widget;
+  gint x, y;
+ 
+  g_return_if_fail (menu != NULL);
+  g_return_if_fail (GTK_IS_MENU (menu));
+
+  widget = GTK_WIDGET (menu);
+
+  gdk_window_get_pointer (NULL, &x, &y, NULL);
+
+  /* We need the requisition to figure out the right place to
+   * popup the menu. In fact, we always need to ask here, since
+   * if one a size_request was queued while we weren't popped up,
+   * the requisition won't have been recomputed yet.
+   */
+  gtk_widget_size_request (widget, &widget->requisition);
+      
+  if (menu->position_func)
+    (* menu->position_func) (menu, &x, &y, menu->position_func_data);
+  else
+    {
+      gint screen_width;
+      gint screen_height;
+      
+      screen_width = gdk_screen_width ();
+      screen_height = gdk_screen_height ();
+	  
+      x -= 2;
+      y -= 2;
+      
+      if ((x + widget->requisition.width) > screen_width)
+	x -= ((x + widget->requisition.width) - screen_width);
+      if (x < 0)
+	x = 0;
+      if ((y + widget->requisition.height) > screen_height)
+	y -= ((y + widget->requisition.height) - screen_height);
+      if (y < 0)
+	y = 0;
+    }
+  
+  gtk_widget_set_uposition (GTK_MENU_SHELL (menu)->active ?
+			        menu->toplevel : menu->tearoff_window, 
+			    x, y);
 }

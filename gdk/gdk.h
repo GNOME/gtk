@@ -517,6 +517,21 @@ gint	 gdk_text_height    (GdkFont        *font,
 gint	 gdk_char_height    (GdkFont        *font,
 			     gchar           character);
 
+void     gdk_text_extents   (GdkFont     *font,
+			     const gchar *text,
+			     gint         text_length,
+			     gint        *lbearing,
+			     gint        *rbearing,
+			     gint        *width,
+			     gint        *ascent,
+			     gint        *descent);
+void     gdk_string_extents (GdkFont     *font,
+			     const gchar *string,
+			     gint        *lbearing,
+			     gint        *rbearing,
+			     gint        *width,
+			     gint        *ascent,
+			     gint        *descent);
 
 /* Drawing
  */
