@@ -234,9 +234,11 @@ static void gtk_text_view_page_horizontally (GtkTextView          *text_view,
                                              gboolean              extend_selection);
 static void gtk_text_view_set_anchor       (GtkTextView           *text_view);
 static void gtk_text_view_scroll_pages     (GtkTextView           *text_view,
-                                            gint                   count);
+                                            gint                   count,
+                                            gboolean               extend_selection);
 static void gtk_text_view_scroll_hpages    (GtkTextView           *text_view,
-                                            gint                   count);
+                                            gint                   count,
+                                            gboolean               extend_selection);
 static void gtk_text_view_insert_at_cursor (GtkTextView           *text_view,
                                             const gchar           *str);
 static void gtk_text_view_delete_from_cursor (GtkTextView           *text_view,
@@ -4396,6 +4398,20 @@ gtk_text_view_move_iter_by_lines (GtkTextView *text_view,
     }
 }
 
+static void
+move_cursor (GtkTextView       *text_view,
+             const GtkTextIter *new_location,
+             gboolean           extend_selection)
+{
+  if (extend_selection)
+    gtk_text_buffer_move_mark_by_name (get_buffer (text_view),
+                                       "insert",
+                                       new_location);
+  else
+    gtk_text_buffer_place_cursor (get_buffer (text_view),
+                                  new_location);
+}
+
 /* FIXME when we are unfrozen and can change GtkMovementStep,
  * fix this
  */
@@ -4416,13 +4432,13 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
 
   if (step == GTK_MOVEMENT_PAGES)
     {
-      gtk_text_view_scroll_pages (text_view, count);
+      gtk_text_view_scroll_pages (text_view, count, extend_selection);
       gtk_text_view_pend_cursor_blink (text_view);
       return;
     }
   else if (step == PAGE_HORIZONTALLY_HACK_VALUE)
     {
-      gtk_text_view_scroll_hpages (text_view, count);
+      gtk_text_view_scroll_hpages (text_view, count, extend_selection);
       gtk_text_view_pend_cursor_blink (text_view);
       return;
     }
@@ -4518,13 +4534,7 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
 
   if (!gtk_text_iter_equal (&insert, &newplace))
     {
-      if (extend_selection)
-        gtk_text_buffer_move_mark (get_buffer (text_view),
-                                   gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                             "insert"),
-                                   &newplace);
-      else
-        gtk_text_buffer_place_cursor (get_buffer (text_view), &newplace);
+      move_cursor (text_view, &newplace, extend_selection);
 
       DV(g_print (G_STRLOC": scrolling onscreen\n"));
       gtk_text_view_scroll_mark_onscreen (text_view,
@@ -4572,7 +4582,8 @@ gtk_text_view_set_anchor (GtkTextView *text_view)
 
 static void
 gtk_text_view_scroll_pages (GtkTextView *text_view,
-                            gint         count)
+                            gint         count,
+                            gboolean     extend_selection)
 {
   gdouble newval;
   gdouble oldval;
@@ -4608,13 +4619,13 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
     {
       /* already at top, just be sure we are at offset 0 */
       gtk_text_buffer_get_start_iter (get_buffer (text_view), &new_insert);
-      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+      move_cursor (text_view, &new_insert, extend_selection);
     }
   else if (count > 0 && adj->value >= (adj->upper - adj->page_size - 1e-12))
     {
       /* already at bottom, just be sure we are at the end */
       gtk_text_buffer_get_end_iter (get_buffer (text_view), &new_insert);
-      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+      move_cursor (text_view, &new_insert, extend_selection);
     }
   else
     {
@@ -4630,7 +4641,7 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
 
       gtk_text_layout_get_iter_at_pixel (text_view->layout, &new_insert, cursor_x_pos, cursor_y_pos);
       clamp_iter_onscreen (text_view, &new_insert);
-      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+      move_cursor (text_view, &new_insert, extend_selection);
 
       gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, cursor_y_pos);
     }
@@ -4646,7 +4657,8 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
 
 static void
 gtk_text_view_scroll_hpages (GtkTextView *text_view,
-                             gint         count)
+                             gint         count,
+                             gboolean     extend_selection)
 {
   gdouble newval;
   gdouble oldval;
@@ -4672,13 +4684,13 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
     {
       /* already at far left, just be sure we are at offset 0 */
       gtk_text_iter_set_line_offset (&new_insert, 0);
-      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+      move_cursor (text_view, &new_insert, extend_selection);
     }
   else if (count > 0 && adj->value >= (adj->upper - adj->page_size - 1e-12))
     {
       /* already at far right, just be sure we are at the end */
       gtk_text_iter_forward_to_line_end (&new_insert);
-      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+      move_cursor (text_view, &new_insert, extend_selection);
     }
   else
     {
@@ -4694,7 +4706,7 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
 
       gtk_text_layout_get_iter_at_pixel (text_view->layout, &new_insert, cursor_x_pos, cursor_y_pos);
       clamp_iter_onscreen (text_view, &new_insert);
-      gtk_text_buffer_place_cursor (get_buffer (text_view), &new_insert);
+      move_cursor (text_view, &new_insert, extend_selection);
 
       gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, cursor_y_pos);
     }
