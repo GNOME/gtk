@@ -201,19 +201,17 @@ gtk_accel_group_unref (GtkAccelGroup  *accel_group)
 }
 
 static void
-gtk_accel_group_object_destroy (GObject *object)
+gtk_accel_group_object_destroy (GSList *free_list,
+				GObject *where_the_object_was)
 {
-  GSList *free_list, *slist;
-  
-  free_list = g_object_get_qdata (object, accel_groups_key_id);
-  g_object_set_qdata (object, accel_groups_key_id, NULL);
+  GSList *slist;
   
   for (slist = free_list; slist; slist = slist->next)
     {
       GtkAccelGroup *accel_group;
       
       accel_group = slist->data;
-      accel_group->attach_objects = g_slist_remove (accel_group->attach_objects, object);
+      accel_group->attach_objects = g_slist_remove (accel_group->attach_objects, where_the_object_was);
       g_object_unref (accel_group);
     }
   g_slist_free (free_list);
@@ -232,12 +230,15 @@ gtk_accel_group_attach (GtkAccelGroup	*accel_group,
   accel_group->attach_objects = g_slist_prepend (accel_group->attach_objects, object);
   g_object_ref (accel_group);
   slist = g_object_get_qdata (object, accel_groups_key_id);
-  if (!slist)
-    g_object_weak_ref(object,
-		      (GWeakNotify)gtk_accel_group_object_destroy,
-		      object);
+  if (slist)
+    g_object_weak_unref(object,
+			(GWeakNotify)gtk_accel_group_object_destroy,
+			slist);
   slist = g_slist_prepend (slist, accel_group);
   g_object_set_qdata (object, accel_groups_key_id, slist);
+  g_object_weak_ref(object,
+		    (GWeakNotify)gtk_accel_group_object_destroy,
+		    slist);
 }
 
 void
@@ -253,12 +254,15 @@ gtk_accel_group_detach (GtkAccelGroup	*accel_group,
   accel_group->attach_objects = g_slist_remove (accel_group->attach_objects, object);
   g_object_unref (accel_group);
   slist = g_object_get_qdata (object, accel_groups_key_id);
+  g_object_weak_unref(object,
+		      (GWeakNotify)gtk_accel_group_object_destroy,
+		      slist);
   slist = g_slist_remove (slist, accel_group);
-  if (!slist)
-    g_object_weak_unref(object,
-			(GWeakNotify)gtk_accel_group_object_destroy,
-			object);
   g_object_set_qdata (object, accel_groups_key_id, slist);
+  if (slist)
+    g_object_weak_ref(object,
+		      (GWeakNotify)gtk_accel_group_object_destroy,
+		      slist);
 }
 
 void

@@ -1,3 +1,11 @@
+2001-08-18  James Henstridge  <james@daa.com.au>
+
+	* gtk/gtkaccelgroup.c (gtk_accel_group_object_destroy): use the
+	second argument to the weak ref notify, cleaning up some uglyness.
+	(gtk_accel_group_attach): remove and add the weak notifier when
+	changing the accel groups slist.
+	(gtk_accel_group_detach): same here.
+
 2001-08-17  Darin Adler  <darin@bentspoon.com>
 
 	* gtk/gtktreeview.c: (gtk_tree_view_search_equal_func): Add
