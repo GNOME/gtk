@@ -1,0 +1,58 @@
+<!-- ##### SECTION Title ##### -->
+GtkMessageDialog
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkMessageDialog ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM GtkMessageType ##### -->
+<para>
+
+</para>
+
+@GTK_MESSAGE_INFO: 
+@GTK_MESSAGE_WARNING: 
+@GTK_MESSAGE_QUESTION: 
+@GTK_MESSAGE_ERROR: 
+
+<!-- ##### ENUM GtkButtonsType ##### -->
+<para>
+
+</para>
+
+@GTK_BUTTONS_NONE: 
+@GTK_BUTTONS_OK: 
+@GTK_BUTTONS_CLOSE: 
+@GTK_BUTTONS_CANCEL: 
+@GTK_BUTTONS_YES_NO: 
+@GTK_BUTTONS_OK_CANCEL: 
+
+<!-- ##### FUNCTION gtk_message_dialog_new ##### -->
+<para>
+
+</para>
+
+@parent: 
+@flags: 
+@type: 
+@buttons: 
+@message_format: 
+@Varargs: 
+@Returns: 
+
+
