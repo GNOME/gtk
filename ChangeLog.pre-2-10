@@ -1,3 +1,9 @@
+Mon May 28 13:28:10  Shivram U  <shivaram.upadhyayula@wipro.com>
+
+	* gtk/gtktextbuffer.c (selection_data_get_buffer): Check if the owner
+	got is of type GDK_WINDOW_FOREIGN. If so the owner is not in-process,
+	and so return NULL.
+
 2002-05-24  Michael Meeks  <michael@ximian.com>
 
 	* gtk/gtkmain.c (_gtk_find_module): don't leak the paths.

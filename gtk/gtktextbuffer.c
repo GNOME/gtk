@@ -2894,6 +2894,9 @@ selection_data_get_buffer (GtkSelectionData *selection_data,
   if (owner == NULL)
     return NULL;
   
+  if (gdk_window_get_window_type (owner) == GDK_WINDOW_FOREIGN)
+    return NULL;
+ 
   if (selection_data->type != gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
     return NULL;
 
