@@ -31,6 +31,7 @@ noinst_PROGRAMS =			\
 	testcalendar			\
 	testdnd				\
 	testgtk				\
+	testicontheme			\
 	testinput			\
 	testmenus			\
 	testmultidisplay		\
@@ -55,6 +56,7 @@ noinst_PROGRAMS =			\
 	pixbuf-random			
 
 simple_DEPENDENCIES = $(TEST_DEPS)
+testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testdnd_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
@@ -81,6 +83,7 @@ simple_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
 testdnd_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)
+testicontheme_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
 testmenus_LDADD = $(LDADDS)
 testmultidisplay_LDADD = $(LDADDS)
