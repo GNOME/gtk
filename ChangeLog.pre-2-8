@@ -1,3 +1,7 @@
+2001-08-17  Matthias Clasen  <matthiasc@waldgeist.poet.de>
+
+	* gtk/demos/gtk-demo/*: Remove all uses of deprecated functions.
+
 2001-08-17  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkstyle.c (create_expander_affine): Divide with floating

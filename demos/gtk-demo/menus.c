@@ -60,7 +60,7 @@ create_menu (gint     depth,
     {
       sprintf (buf, "item %2d - %d", depth, j);
       menuitem = gtk_radio_menu_item_new_with_label (group, buf);
-      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menuitem));
+      group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menuitem));
 
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);

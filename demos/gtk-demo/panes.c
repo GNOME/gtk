@@ -156,12 +156,12 @@ do_panes (void)
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
-      gtk_widget_set_usize (frame, 80, 60);
+      gtk_widget_set_size_request (frame, 80, 60);
       gtk_paned_add2 (GTK_PANED (hpaned), frame);
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
-      gtk_widget_set_usize (frame, 60, 80);
+      gtk_widget_set_size_request (frame, 60, 80);
       gtk_paned_add2 (GTK_PANED (vpaned), frame);
 
       /* Now create toggle buttons to control sizing */

@@ -254,7 +254,7 @@ do_drawingarea (void)
       
       da = gtk_drawing_area_new ();
       /* set a minimum size */
-      gtk_widget_set_usize (da, 100, 100);
+      gtk_widget_set_size_request (da, 100, 100);
 
       gtk_container_add (GTK_CONTAINER (frame), da);
 
@@ -278,7 +278,7 @@ do_drawingarea (void)
       
       da = gtk_drawing_area_new ();
       /* set a minimum size */
-      gtk_widget_set_usize (da, 100, 100);
+      gtk_widget_set_size_request (da, 100, 100);
 
       gtk_container_add (GTK_CONTAINER (frame), da);
 

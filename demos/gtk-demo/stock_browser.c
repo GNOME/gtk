@@ -122,7 +122,7 @@ id_to_macro (const gchar *id)
       ++p;
     }
 
-  g_strup (macro->str);
+  g_ascii_strup (macro->str);
   
   return g_string_free (macro, FALSE);
 }
