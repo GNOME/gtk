@@ -13,6 +13,13 @@
 	GDK_CLIENT_EVENT unless there is a filter that matches and returns
 	something other than GDK_FILTER_CONTINUE. (#135552)
 
+	Merge from HEAD:
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): On
+	WM_MOUSEMOVE, don't check if this process owns the active
+	window. This makes cross-application widget embedding work better.
+	On WM_MOVE, don't bother checking for window visibility.
+
 2005-03-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_set_visible_func): 

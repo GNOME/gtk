@@ -2160,8 +2160,6 @@ gdk_event_translate (GdkDisplay *display,
 		     MSG        *msg,
 		     gint       *ret_valp)
 {
-  DWORD pidActWin;
-  DWORD pidThis;
   RECT rect, *drag, orig_drag;
   POINT point;
   MINMAXINFO *mmi;
@@ -2725,12 +2723,6 @@ gdk_event_translate (GdkDisplay *display,
 		g_print (" %#x (%d,%d)",
 			 msg->wParam,
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
-
-      /* HB: only process mouse move messages if we own the active window. */
-      GetWindowThreadProcessId (GetActiveWindow (), &pidActWin);
-      GetWindowThreadProcessId (msg->hwnd, &pidThis);
-      if (pidActWin != pidThis)
-	break;
 
       assign_object (&window, find_window_for_mouse_event (window, msg));
 
@@ -3316,8 +3308,7 @@ gdk_event_translate (GdkDisplay *display,
 				 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
       if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
-	  !IsIconic (msg->hwnd) &&
-	  IsWindowVisible (msg->hwnd))
+	  !IsIconic (msg->hwnd))
 	{
 	  if (!GDK_WINDOW_DESTROYED (window))
 	    handle_configure_event (msg, window);
