@@ -1,3 +1,8 @@
+2001-04-25  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkwindow.h: set_decorations_hint and set_functions_hint
+	were still in the header
+
 2001-04-24  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkclist.[ch]:

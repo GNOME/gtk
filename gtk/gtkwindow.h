@@ -148,10 +148,6 @@ void       gtk_window_set_type_hint            (GtkWindow           *window,
 						GdkWindowTypeHint    hint);
 void       gtk_window_set_destroy_with_parent  (GtkWindow           *window,
                                                 gboolean             setting);
-void       gtk_window_set_decorations_hint     (GtkWindow	    *window,
-                                                GdkWMDecoration      decorations);
-void       gtk_window_set_functions_hint       (GtkWindow	    *window,
-                                                GdkWMFunction	     functions);
 
 void       gtk_window_set_resizeable           (GtkWindow           *window,
                                                 gboolean             resizeable);
