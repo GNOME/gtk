@@ -163,7 +163,7 @@ selection_handle (GtkWidget *widget,
     }      
   else
     {
-      buffer = selection_string->str;
+      buffer = (guchar *)selection_string->str;
       len = selection_string->len;
     }
   

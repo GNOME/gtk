@@ -1734,12 +1734,16 @@ gtk_text_key_press (GtkWidget   *widget,
 	  break;
 	case GDK_Tab:
 	  gtk_text_insert_1_at_point (text, '\t');
+	  gtk_editable_changed (editable);
 	  break;
 	case GDK_Return:
 	  if (event->state & GDK_CONTROL_MASK)
 	    gtk_signal_emit_by_name (GTK_OBJECT (text), "activate");
 	  else
-	    gtk_text_insert_1_at_point (text, '\n');
+	    {
+	      gtk_text_insert_1_at_point (text, '\n');
+	      gtk_editable_changed (editable);
+	    }
 	  break;
 	case GDK_Escape:
 	  /* Don't insert literally */

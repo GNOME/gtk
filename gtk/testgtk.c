@@ -1276,6 +1276,13 @@ cb_create_tree(GtkWidget* w)
   nb_item = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sTreeSampleSelection.nb_item_spinner));
   recursion_level = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sTreeSampleSelection.recursion_spinner));
 
+  if (pow (nb_item, recursion_level) > 10000)
+    {
+      g_print ("%g total items? That will take a very long time. Try less\n",
+	       pow (nb_item, recursion_level));
+      return;
+    }
+
   create_tree_sample(selection_mode, draw_line, view_line, no_root_item, nb_item, recursion_level);
 }
 
@@ -4100,6 +4107,7 @@ create_panes ()
   GtkWidget *frame;
   GtkWidget *hpaned;
   GtkWidget *vpaned;
+  GtkWidget *button;
 
   if (!window)
     {
@@ -4125,6 +4133,10 @@ create_panes ()
       gtk_widget_set_usize (frame, 60, 60);
       gtk_paned_add1 (GTK_PANED (hpaned), frame);
       gtk_widget_show (frame);
+      
+      button = gtk_button_new_with_label ("Hi there");
+      gtk_container_add (GTK_CONTAINER(frame), button);
+      gtk_widget_show (button);
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_IN);
@@ -5486,46 +5498,46 @@ create_main_window ()
     void (*func) ();
   } buttons[] =
     {
-      { "buttons", create_buttons },
-      { "toggle buttons", create_toggle_buttons },
-      { "check buttons", create_check_buttons },
-      { "radio buttons", create_radio_buttons },
       { "button box", create_button_box },
-      { "toolbar", create_toolbar },
-      { "handle box", create_handle_box },
-      { "statusbar", create_statusbar },
-      { "reparent", create_reparent },
-      { "pixmap", create_pixmap },
-      { "tooltips", create_tooltips },
-      { "menus", create_menus },
-      { "scrolled windows", create_scrolled_windows },
-      { "cursors", create_cursors },
-      { "entry", create_entry },
-      { "spinbutton", create_spins },
-      { "list", create_list },
+      { "buttons", create_buttons },
+      { "check buttons", create_check_buttons },
       { "clist", create_clist},
-      { "tree", create_tree_mode_window},
       { "color selection", create_color_selection },
-      { "file selection", create_file_selection },
+      { "cursors", create_cursors },
       { "dialog", create_dialog },
+      { "dnd", create_dnd },
+      { "entry", create_entry },
+      { "file selection", create_file_selection },
+      { "gamma curve", create_gamma_curve },
+      { "handle box", create_handle_box },
+      { "list", create_list },
+      { "menus", create_menus },
       { "miscellaneous", NULL },
-      { "range controls", create_range_controls },
-      { "rulers", create_rulers },
-      { "text", create_text },
       { "notebook", create_notebook },
       { "panes", create_panes },
-      { "shapes", create_shapes },
-      { "dnd", create_dnd },
-      { "WM hints", create_wmhints },
-      { "progress bar", create_progress_bar },
+      { "pixmap", create_pixmap },
       { "preview color", create_color_preview },
       { "preview gray", create_gray_preview },
-      { "gamma curve", create_gamma_curve },
+      { "progress bar", create_progress_bar },
+      { "radio buttons", create_radio_buttons },
+      { "range controls", create_range_controls },
+      { "reparent", create_reparent },
+      { "rulers", create_rulers },
+      { "scrolled windows", create_scrolled_windows },
+      { "shapes", create_shapes },
+      { "spinbutton", create_spins },
+      { "statusbar", create_statusbar },
+      { "test idle", create_idle_test },
+      { "test mainloop", create_test },
       { "test scrolling", create_scroll_test },
       { "test selection", create_selection_test },
       { "test timeout", create_timeout_test },
-      { "test idle", create_idle_test },
-      { "test", create_test },
+      { "text", create_text },
+      { "toggle buttons", create_toggle_buttons },
+      { "toolbar", create_toolbar },
+      { "tooltips", create_tooltips },
+      { "tree", create_tree_mode_window},
+      { "WM hints", create_wmhints },
     };
   int nbuttons = sizeof (buttons) / sizeof (buttons[0]);
   GtkWidget *window;

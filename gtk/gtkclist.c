@@ -679,10 +679,7 @@ gtk_clist_set_column_title (GtkCList * clist,
   /* remove and destroy the old widget */
   old_widget = GTK_BUTTON (clist->column[column].button)->child;
   if (old_widget)
-    {
-      gtk_container_remove (GTK_CONTAINER (clist->column[column].button), old_widget);
-      gtk_widget_destroy (old_widget);
-    }
+    gtk_container_remove (GTK_CONTAINER (clist->column[column].button), old_widget);
 
   /* create new alignment based no column justification */
   switch (clist->column[column].justification)
@@ -742,10 +739,7 @@ gtk_clist_set_column_widget (GtkCList * clist,
   /* remove and destroy the old widget */
   old_widget = GTK_BUTTON (clist->column[column].button)->child;
   if (old_widget)
-    {
-      gtk_container_remove (GTK_CONTAINER (clist->column[column].button), old_widget);
-      gtk_widget_destroy (old_widget);
-    }
+    gtk_container_remove (GTK_CONTAINER (clist->column[column].button), old_widget);
 
   /* add and show the widget */
   if (widget)

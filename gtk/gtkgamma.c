@@ -42,6 +42,11 @@ static void gtk_gamma_curve_class_init (GtkGammaCurveClass *class);
 static void gtk_gamma_curve_init (GtkGammaCurve *curve);
 static void gtk_gamma_curve_destroy (GtkObject *object);
 
+static void curve_type_changed_callback (GtkWidget *w, gpointer data);
+static void button_realize_callback     (GtkWidget *w);
+static void button_toggled_callback     (GtkWidget *w, gpointer data);
+static void button_clicked_callback     (GtkWidget *w, gpointer data);
+
 enum
   {
     LINEAR = 0,
@@ -234,7 +239,54 @@ gtk_gamma_curve_class_init (GtkGammaCurveClass *class)
 static void
 gtk_gamma_curve_init (GtkGammaCurve *curve)
 {
+  GtkWidget *vbox;
+  int i;
+
   curve->gamma = 1.0;
+
+  curve->table = gtk_table_new (1, 2, FALSE);
+  gtk_table_set_col_spacings (GTK_TABLE (curve->table), 3);
+  gtk_container_add (GTK_CONTAINER (curve), curve->table);
+
+  curve->curve = gtk_curve_new ();
+  gtk_signal_connect (GTK_OBJECT (curve->curve), "curve_type_changed",
+		      (GtkSignalFunc) curve_type_changed_callback, curve);
+  gtk_table_attach_defaults (GTK_TABLE (curve->table), curve->curve, 0, 1, 0, 1);
+
+  vbox = gtk_vbox_new (/* homogeneous */ FALSE, /* spacing */ 3);
+  gtk_table_attach (GTK_TABLE (curve->table), vbox, 1, 2, 0, 1, 0, 0, 0, 0);
+
+  /* toggle buttons: */
+  for (i = 0; i < 3; ++i)
+    {
+      curve->button[i] = gtk_toggle_button_new ();
+      gtk_object_set_data (GTK_OBJECT (curve->button[i]), "_GtkGammaCurveIndex",
+			   (gpointer) (long) i);
+      gtk_container_add (GTK_CONTAINER (vbox), curve->button[i]);
+      gtk_signal_connect (GTK_OBJECT (curve->button[i]), "realize",
+			  (GtkSignalFunc) button_realize_callback, 0);
+      gtk_signal_connect (GTK_OBJECT (curve->button[i]), "toggled",
+			  (GtkSignalFunc) button_toggled_callback, curve);
+      gtk_widget_show (curve->button[i]);
+    }
+
+  /* push buttons: */
+  for (i = 3; i < 5; ++i)
+    {
+      curve->button[i] = gtk_button_new ();
+      gtk_object_set_data (GTK_OBJECT (curve->button[i]), "_GtkGammaCurveIndex",
+			   (gpointer) (long) i);
+      gtk_container_add (GTK_CONTAINER (vbox), curve->button[i]);
+      gtk_signal_connect (GTK_OBJECT (curve->button[i]), "realize",
+			  (GtkSignalFunc) button_realize_callback, 0);
+      gtk_signal_connect (GTK_OBJECT (curve->button[i]), "clicked",
+			  (GtkSignalFunc) button_clicked_callback, curve);
+      gtk_widget_show (curve->button[i]);
+    }
+
+  gtk_widget_show (vbox);
+  gtk_widget_show (curve->table);
+  gtk_widget_show (curve->curve);
 }
 
 static void
@@ -395,57 +447,7 @@ curve_type_changed_callback (GtkWidget *w, gpointer data)
 GtkWidget*
 gtk_gamma_curve_new (void)
 {
-  GtkGammaCurve *c;
-  GtkWidget *vbox;
-  int i;
-
-  c = gtk_type_new (gtk_gamma_curve_get_type ());
-
-  c->table = gtk_table_new (1, 2, FALSE);
-  gtk_table_set_col_spacings (GTK_TABLE (c->table), 3);
-  gtk_container_add (GTK_CONTAINER (c), c->table);
-
-  c->curve = gtk_curve_new ();
-  gtk_signal_connect (GTK_OBJECT (c->curve), "curve_type_changed",
-		      (GtkSignalFunc) curve_type_changed_callback, c);
-  gtk_table_attach_defaults (GTK_TABLE (c->table), c->curve, 0, 1, 0, 1);
-
-  vbox = gtk_vbox_new (/* homogeneous */ FALSE, /* spacing */ 3);
-  gtk_table_attach (GTK_TABLE (c->table), vbox, 1, 2, 0, 1, 0, 0, 0, 0);
-
-  /* toggle buttons: */
-  for (i = 0; i < 3; ++i)
-    {
-      c->button[i] = gtk_toggle_button_new ();
-      gtk_object_set_data (GTK_OBJECT (c->button[i]), "_GtkGammaCurveIndex",
-			   (gpointer) (long) i);
-      gtk_container_add (GTK_CONTAINER (vbox), c->button[i]);
-      gtk_signal_connect (GTK_OBJECT (c->button[i]), "realize",
-			  (GtkSignalFunc) button_realize_callback, 0);
-      gtk_signal_connect (GTK_OBJECT (c->button[i]), "toggled",
-			  (GtkSignalFunc) button_toggled_callback, c);
-      gtk_widget_show (c->button[i]);
-    }
-
-  /* push buttons: */
-  for (i = 3; i < 5; ++i)
-    {
-      c->button[i] = gtk_button_new ();
-      gtk_object_set_data (GTK_OBJECT (c->button[i]), "_GtkGammaCurveIndex",
-			   (gpointer) (long) i);
-      gtk_container_add (GTK_CONTAINER (vbox), c->button[i]);
-      gtk_signal_connect (GTK_OBJECT (c->button[i]), "realize",
-			  (GtkSignalFunc) button_realize_callback, 0);
-      gtk_signal_connect (GTK_OBJECT (c->button[i]), "clicked",
-			  (GtkSignalFunc) button_clicked_callback, c);
-      gtk_widget_show (c->button[i]);
-    }
-
-  gtk_widget_show (vbox);
-  gtk_widget_show (c->table);
-  gtk_widget_show (c->curve);
-
-  return GTK_WIDGET (c);
+  return gtk_type_new (gtk_gamma_curve_get_type ());
 }
 
 static void

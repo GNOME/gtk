@@ -149,6 +149,10 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
       else
 	paned->child1_size = 0;
     }
+  else
+    paned->child1_size = CLAMP (paned->child1_size, 0,
+				allocation->height - paned->gutter_size
+				- 2 * GTK_CONTAINER (paned)->border_width);
 
   /* Move the handle before the children so we don't get extra expose events */
 

@@ -43,10 +43,13 @@ static guint curve_type_changed_signal = 0;
 
 
 /* forward declarations: */
-static void gtk_curve_class_init (GtkCurveClass *class);
-static void gtk_curve_init (GtkCurve *curve);
-static void gtk_curve_finalize (GtkObject *object);
-
+static void gtk_curve_class_init   (GtkCurveClass *class);
+static void gtk_curve_init         (GtkCurve      *curve);
+static void gtk_curve_finalize     (GtkObject     *object);
+static gint gtk_curve_graph_events (GtkWidget     *widget, 
+				    GdkEvent      *event, 
+				    GtkCurve      *c);
+static void gtk_curve_size_graph   (GtkCurve      *curve);
 
 guint
 gtk_curve_get_type (void)
@@ -92,6 +95,8 @@ gtk_curve_class_init (GtkCurveClass *class)
 static void
 gtk_curve_init (GtkCurve *curve)
 {
+  gint old_mask;
+
   curve->cursor_type = GDK_TOP_LEFT_ARROW;
   curve->pixmap = NULL;
   curve->curve_type = GTK_CURVE_TYPE_SPLINE;
@@ -103,6 +108,17 @@ gtk_curve_init (GtkCurve *curve)
 
   curve->num_ctlpoints = 0;
   curve->ctlpoint = NULL;
+
+  curve->min_x = 0.0;
+  curve->max_x = 1.0;
+  curve->min_y = 0.0;
+  curve->max_y = 1.0;
+
+  old_mask = gtk_widget_get_events (GTK_WIDGET (curve));
+  gtk_widget_set_events (GTK_WIDGET (curve), old_mask | GRAPH_MASK);
+  gtk_signal_connect (GTK_OBJECT (curve), "event",
+		      (GtkSignalFunc) gtk_curve_graph_events, curve);
+  gtk_curve_size_graph (curve);
 }
 
 static int
@@ -823,22 +839,7 @@ gtk_curve_get_vector (GtkCurve *c, int veclen, gfloat vector[])
 GtkWidget*
 gtk_curve_new (void)
 {
-  GtkCurve *curve;
-  gint old_mask;
-
-  curve = gtk_type_new (gtk_curve_get_type ());
-  curve->min_x = 0.0;
-  curve->max_x = 1.0;
-  curve->min_y = 0.0;
-  curve->max_y = 1.0;
-
-  old_mask = gtk_widget_get_events (GTK_WIDGET (curve));
-  gtk_widget_set_events (GTK_WIDGET (curve), old_mask | GRAPH_MASK);
-  gtk_signal_connect (GTK_OBJECT (curve), "event",
-		      (GtkSignalFunc) gtk_curve_graph_events, curve);
-  gtk_curve_size_graph (curve);
-
-  return GTK_WIDGET (curve);
+  return gtk_type_new (gtk_curve_get_type ());
 }
 
 static void

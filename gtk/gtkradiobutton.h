@@ -55,6 +55,8 @@ GtkWidget*  gtk_radio_button_new_from_widget (GtkRadioButton *group);
 GtkWidget*  gtk_radio_button_new_with_label  (GSList         *group,
 					      const gchar    *label);
 GSList*     gtk_radio_button_group           (GtkRadioButton *radio_button);
+void        gtk_radio_button_set_group       (GtkRadioButton *radio_button,
+					      GSList         *group);
 
 
 #ifdef __cplusplus

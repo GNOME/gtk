@@ -1,3 +1,24 @@
+Wed Mar 18 11:09:10 1998  Owen Taylor  <owt1@cornell.edu>
+	( From: James Henstridge <james@daa.com.au> )
+
+	* gtk/gtkclist.c: Don't remove, then destroy labels in
+	  gtk_clist_set_column_[*], just remove them.
+	
+	* gtk/gtkmain.c (gtk_invoke_timeout_function): call
+	  marshal when appropriate, not function.
+
+Tue Mar 17 14:15:07 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/testgtk.c (create_main_window): Alphabetize tests
+
+	* gtk/gtk[hv]paned.c: Change division on resize if
+	  necessary to keep handle visible.
+
+	* gtk/gtkgamma.c gtk/gtkcurve.c: Moved initialization into 
+	  _init() functions.
+
+	* gtk/gtkscrolledwindow.c: Added missing _construct()
+	  functions.
 
 Wed Mar 18 17:38:25 CET 1998	Paolo Molaro <lupus@debian.org>
 
@@ -11,11 +32,6 @@ Wed Mar 18 02:06:52 1998  Tim Janik  <timj@gtk.org>
 	* gtk/gtkwindow.c (gtk_window_set_arg): gtk_window_set_hints() after
  	setting certain arguments, so they actually take affect.
 	(gtk_window_set_policy): likewise.
-
-Tue Mar 17 15:51:30 PST 1998 Manish Singh <yosh@gimp.org>
-
-	* glib.h: gboolean type changed to int
-	* garray.c: complete redo by Josh MacDonald
 
 Tue Mar 17 22:45:39 1998  Tim Janik  <timj@gtk.org>
 
