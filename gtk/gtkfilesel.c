@@ -2301,7 +2301,8 @@ gtk_file_selection_file_changed (GtkTreeSelection *selection,
 	   * was selected, which is used for subsequent range selections.
 	   * So search up from there.
 	   */
-	  if (compare_filenames (fs->last_selected,
+	  if (fs->last_selected &&
+	      compare_filenames (fs->last_selected,
 				 g_ptr_array_index (new_names, 0)) == 0)
 	    index = new_names->len - 1;
 	  else

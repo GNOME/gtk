@@ -1,3 +1,9 @@
+Tue Sep 24 23:54:20 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkfilesel.c: check if last_selected is valid before doing
+	a strcmp on it, which may happen if selections happen programmatically
+	instead of through the UI (#86566)
+
 Tue Sep 24 23:33:48 2002  Manish Singh  <yosh@gimp.org>
 
         * gtk/gtkfilesel.c: preserve ordering from gtk_tree_selection_foreach
