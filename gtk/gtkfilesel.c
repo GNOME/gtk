@@ -603,6 +603,8 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   char *dir_title [2];
   char *file_title [2];
 
+  gtk_widget_push_composite_child ();
+
   dialog = GTK_DIALOG (filesel);
 
   filesel->cmpl_state = cmpl_init_state ();
@@ -738,6 +740,8 @@ gtk_file_selection_init (GtkFileSelection *filesel)
     }
 
   gtk_widget_grab_focus (filesel->selection_entry);
+
+  gtk_widget_pop_composite_child ();
 }
 
 static gchar *

@@ -1750,6 +1750,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gint i, j;
   ColorSelectionPrivate *priv;
   
+  gtk_widget_push_composite_child ();
+
   priv = colorsel->private_data = g_new0 (ColorSelectionPrivate, 1);
   priv->changing = FALSE;
   priv->default_set = FALSE;
@@ -1904,6 +1906,8 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
     {
       gtk_widget_hide (priv->palette_frame);
     }
+
+  gtk_widget_pop_composite_child ();
 }
 
 static void

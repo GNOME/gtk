@@ -1,3 +1,11 @@
+2002-01-17  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkcolorsel.c, gtk/gtkfilesel.c, gtk/gtkfontsel.c:
+	Mark children as composite. (#66360)
+
+	* gtk/gtkwidget.c (gtk_widget_push_composite_child): Explain
+	composite children some more. (#66360)
+
 2002-01-17  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextlayout.c (_gtk_text_layout_get_line_xrange): new

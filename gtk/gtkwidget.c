@@ -5284,6 +5284,12 @@ gtk_widget_get_composite_name (GtkWidget *widget)
  * Makes all newly-created widgets as composite children until
  * the corresponding gtk_widget_pop_composite_child() call.
  * 
+ * A composite child is a child that's an implementation detail of the
+ * container it's inside and should not be visible to people using the
+ * container. Composite children aren't treated differently by GTK (but
+ * see gtk_container_foreach() vs. gtk_container_forall()), but e.g. GUI 
+ * builders might want to treat them in a different way.
+ * 
  * Here is a simple example:
  * <informalexample><programlisting>
  * <!>  gtk_widget_push_composite_child (<!>);

@@ -262,6 +262,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   GtkWidget *text_box;
   GtkWidget *table, *label;
 
+  gtk_widget_push_composite_child ();
+
   fontsel->size = 12 * PANGO_SCALE;
   
   /* Create the table of font, style & size. */
@@ -410,6 +412,8 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 		      TRUE, TRUE, 0);
 
   gtk_font_selection_update_preview (fontsel);
+
+  gtk_widget_pop_composite_child();
 }
 
 GtkWidget *
@@ -1017,6 +1021,8 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
 {
   GtkDialog *dialog;
 
+  gtk_widget_push_composite_child ();
+
   dialog = GTK_DIALOG (fontseldiag);
   
   fontseldiag->dialog_width = -1;
@@ -1058,6 +1064,7 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
   gtk_window_set_title (GTK_WINDOW (fontseldiag),
                         _("Font Selection"));
 
+  gtk_widget_pop_composite_child ();
 }
 
 GtkWidget*
