@@ -166,16 +166,16 @@ gtk_check_version (guint required_major,
 }
 
 
-void
-gtk_init (int	 *argc,
-	  char ***argv)
+gboolean
+gtk_init_check (int	 *argc,
+		char   ***argv)
 {
   GSList *gtk_modules = NULL;
   GSList *slist;
   gchar *env_string = NULL;
 
   if (gtk_initialized)
-    return;
+    return TRUE;
 
 #if	0
   g_set_error_handler (gtk_error);
@@ -187,7 +187,8 @@ gtk_init (int	 *argc,
   /* Initialize "gdk". We pass along the 'argc' and 'argv'
    *  parameters as they contain information that GDK uses
    */
-  gdk_init (argc, argv);
+  if (!gdk_init_check (argc, argv))
+    return FALSE;
 
   gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
   
@@ -401,6 +402,18 @@ gtk_init (int	 *argc,
 	}
     }
   g_slist_free (gtk_modules);
+
+  return TRUE;
+}
+
+void
+gtk_init (int *argc, char ***argv)
+{
+  if (!gtk_init_check (argc, argv))
+    {
+      g_warning ("cannot open display: %s", gdk_get_display ());
+      exit(1);
+    }
 }
 
 void

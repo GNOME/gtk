@@ -2131,7 +2131,7 @@ gdk_window_set_mwm_hints (GdkWindow *window,
 			      _XA_MOTIF_WM_HINTS, FALSE);
   
   XGetWindowProperty (window_private->xdisplay, window_private->xwindow,
-		      hints_atom, 0, sizeof (MotifWmHints)/4,
+		      hints_atom, 0, sizeof (MotifWmHints)/sizeof (long),
 		      False, AnyPropertyType, &type, &format, &nitems,
 		      &bytes_after, (guchar **)&hints);
   
@@ -2153,7 +2153,7 @@ gdk_window_set_mwm_hints (GdkWindow *window,
   
   XChangeProperty (window_private->xdisplay, window_private->xwindow,
 		   hints_atom, hints_atom, 32, PropModeReplace,
-		   (guchar *)hints, sizeof (MotifWmHints)/4);
+		   (guchar *)hints, sizeof (MotifWmHints)/sizeof (long));
   
   if (hints != new_hints)
     XFree (hints);

@@ -21,6 +21,14 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  *
+ *
+ * * Feb 21 1999 - George Lebl (jirka@5z.com)
+ *                 Owen Taylor (otaylor@redhat.com)
+ *
+ *   Modified so that the MotifWmHints structure defined here
+ *   is suitable for client side use on 64-bit architectures.
+ *   X expects fields with a format of 32 to be longs, even
+ *   when sizeof(long) == 8.
  **/
 
 #ifndef MWMUTIL_H_INCLUDED
@@ -33,11 +41,11 @@ extern "C" {
 #endif
 
 typedef struct {
-    CARD32 flags;
-    CARD32 functions;
-    CARD32 decorations;
-    INT32 input_mode;
-    CARD32 status;
+    unsigned long flags;
+    unsigned long functions;
+    unsigned long decorations;
+    long input_mode;
+    unsigned long status;
 } MotifWmHints, MwmHints;
 
 #define MWM_HINTS_FUNCTIONS     (1L << 0)
@@ -100,11 +108,11 @@ typedef MotifWmInfo MwmInfo;
  * _MWM_HINTS property
  */
 typedef struct {
-    CARD32 flags;
-    CARD32 functions;
-    CARD32 decorations;
-    INT32 inputMode;
-    CARD32 status;
+    unsigned long flags;
+    unsigned long functions;
+    unsigned long decorations;
+    long inputMode;
+    unsigned long status;
 } PropMotifWmHints;
 
 typedef PropMotifWmHints PropMwmHints;
@@ -116,8 +124,8 @@ typedef PropMotifWmHints PropMwmHints;
  * _MWM_INFO property, slight return
  */
 typedef struct {
-    CARD32 flags;
-    CARD32 wmWindow;
+    unsigned long flags;
+    unsigned long wmWindow;
 } PropMotifWmInfo;
 
 typedef PropMotifWmInfo PropMwmInfo;

@@ -32,6 +32,8 @@ extern "C" {
 #define	  GDK_PRIORITY_EVENTS		(G_PRIORITY_DEFAULT)
 void 	  gdk_init		   	(gint	   	*argc,
 					 gchar        ***argv);
+gboolean  gdk_init_check   	        (gint	   	*argc,
+					 gchar        ***argv);
 void  	  gdk_exit		   	(gint	    	 error_code);
 gchar*	  gdk_set_locale	   	(void);
 

@@ -124,7 +124,7 @@ static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
 
 /*
  *--------------------------------------------------------------
- * gdk_init
+ * gdk_init_heck
  *
  *   Initialize the library for use.
  *
@@ -135,7 +135,8 @@ static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
  * Results:
  *   "argc" and "argv" are modified to reflect any arguments
  *   which were not handled. (Such arguments should either
- *   be handled by the application or dismissed).
+ *   be handled by the application or dismissed). If initialization
+ *   fails, returns FALSE, otherwise TRUE.
  *
  * Side effects:
  *   The library is initialized.
@@ -143,9 +144,9 @@ static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
  *--------------------------------------------------------------
  */
 
-void
-gdk_init (int	 *argc,
-	  char ***argv)
+gboolean
+gdk_init_check (int	 *argc,
+		char ***argv)
 {
   XKeyboardState keyboard_state;
   gint synchronize;
@@ -155,7 +156,7 @@ gdk_init (int	 *argc,
   gint argc_orig = 0;
   
   if (gdk_initialized)
-    return;
+    return TRUE;
   
   if (g_thread_supported ())
     gdk_threads_mutex = g_mutex_new ();
@@ -370,10 +371,7 @@ gdk_init (int	 *argc,
   
   gdk_display = XOpenDisplay (gdk_display_name);
   if (!gdk_display)
-    {
-      g_warning ("cannot open display: %s", XDisplayName (gdk_display_name));
-      exit(1);
-    }
+    return FALSE;
   
   if (synchronize)
     XSynchronize (gdk_display, True);
@@ -428,6 +426,18 @@ gdk_init (int	 *argc,
 #endif
   
   gdk_initialized = 1;
+
+  return TRUE;
+}
+
+void
+gdk_init (int *argc, char ***argv)
+{
+  if (!gdk_init_check (argc, argv))
+    {
+      g_warning ("cannot open display: %s", gdk_get_display ());
+      exit(1);
+    }
 }
 
 /*

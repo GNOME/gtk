@@ -62,6 +62,8 @@ gchar* gtk_check_version (guint	required_major,
  */
 void	   gtk_init		 (int	       *argc,
 				  char	     ***argv);
+gboolean   gtk_init_check        (int	       *argc,
+				  char	     ***argv);
 void	   gtk_exit		 (gint		error_code);
 gchar*	   gtk_set_locale	 (void);
 gint	   gtk_events_pending	 (void);

@@ -1,3 +1,19 @@
+Sun Feb 21 15:59:55 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/MwmUtil.h gdk/gdkwindow.c: Account for the
+	fact that Xlib expects format == 32 to be a long,
+	even on 64-bit architectures.
+	
+	[ patch from George Lebl (jirka@5z.com) ]
+
+Sun Feb 21 14:46:02 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_init_check):
+	  gdk/gdk.c     (gdk_init_check):
+
+	Added initialization variants that return a status
+	instead of dying.
+
 Sun Feb 21 14:21:46 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c: removed debugging statements
