@@ -59,6 +59,7 @@ all: \
 	..\config.h \
 	gdkconfig.h \
 	gdkalias.h \
+	gdkaliasdef.c \
 	gdkenumtypes.h \
 	gdkenumtypes.c \
 	gdkmarshalers.h \
@@ -146,9 +147,12 @@ gdkconfig.h : gdkconfig.h.win32
 gdkalias.h: gdk.symbols
 	perl makegdkalias.pl < gdk.symbols > gdkalias.h
 
+gdkaliasdef.c: gdk.symbols
+	 perl makegdkalias.pl -def < gdk.symbols > gdkaliasdef.c
+
 gdk.def: gdk.symbols
 	echo EXPORTS > gdk.def
-	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DGDK_WINDOWING_WIN32 gdk.symbols >> gdk.def
+	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DGDK_WINDOWING_WIN32 -DALL_FILES gdk.symbols >> gdk.def
 
 libgdk-win32-$(GTK_VER)-0.dll : $(gdk_OBJECTS) gdk.def win32\gdk-win32.lib
 	$(CC) $(CFLAGS) -LD -Fe$@ $(gdk_OBJECTS) win32\gdk-win32.lib $(EXTRALIBS) \

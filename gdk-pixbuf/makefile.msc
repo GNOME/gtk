@@ -72,6 +72,13 @@ gdk-pixbuf-marshal.c: gdk-pixbuf-marshal.h gdk-pixbuf-marshal.list
 gdk-pixbuf-alias.h: gdk-pixbuf.symbols
 	perl makegdkpixbufalias.pl < gdk-pixbuf.symbols > gdk-pixbuf-alias.h
 
+gdk_pixbuf.def: gdk-pixbuf.symbols 
+	echo EXPORTS > gdk_pixbuf.def
+	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 gdk-pixbuf.symbols >> gdk_pixbuf.def
+
+gdk-pixbuf-aliasdef.c: gdk-pixbuf.symbols
+	 perl makegdkpixbufalias.pl -def < gdk-pixbuf.symbols > gdk-pixbuf-aliasdef.c
+
 ## common stuff
 
 INSTALL = copy
@@ -87,6 +94,7 @@ sub-pixops :
 all : \
 	$(PRJ_TOP)\config.h \
 	gdk-pixbuf-alias.h \
+	gdk-pixbuf-aliasdef.c \
 	gdk-pixbuf-marshal.h \
 	gdk-pixbuf-marshal.c \
 	sub-pixops \

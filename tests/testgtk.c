@@ -2922,11 +2922,11 @@ set_parent_signal (GtkWidget *child,
 		   GtkWidget *old_parent,
 		   gpointer   func_data)
 {
-  g_print ("set_parent for \"%s\": new parent: \"%s\", old parent: \"%s\", data: %d\n",
-	   g_type_name (G_OBJECT_TYPE (child)),
-	   child->parent ? g_type_name (G_OBJECT_TYPE (child->parent)) : "NULL",
-	   old_parent ? g_type_name (G_OBJECT_TYPE (old_parent)) : "NULL",
-	   GPOINTER_TO_INT (func_data));
+  g_message ("set_parent for \"%s\": new parent: \"%s\", old parent: \"%s\", data: %d\n",
+             g_type_name (G_OBJECT_TYPE (child)),
+             child->parent ? g_type_name (G_OBJECT_TYPE (child->parent)) : "NULL",
+             old_parent ? g_type_name (G_OBJECT_TYPE (old_parent)) : "NULL",
+             GPOINTER_TO_INT (func_data));
 }
 
 static void

@@ -1,3 +1,12 @@
+2005-03-18  Hans Breuer  <hans@breuer.org>
+
+	* gdk/makefile.msc gdk-pixbuf/makefile.msc : handle gdk*alias.def
+
+	* gdk/makefile.msc.in : add gtkmnemonichash.obj
+
+	* test/testgtk.c(set_parent_signal) : use g_message instead of
+	g_print to keep the 'testgtk --bench=all' output clean
+
 2005-03-17  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_set_markup): Fix formatting
