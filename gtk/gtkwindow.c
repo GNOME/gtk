@@ -4094,7 +4094,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
         case GTK_WIN_POS_CENTER:
           {
 	    gint px, py, monitor_num;
-	    GdkRectangle *monitor;
+	    GdkRectangle monitor;
 
 	    gdk_window_get_pointer (gdk_screen_get_root_window (window->screen),
 				    &px, &py, NULL);
@@ -4103,10 +4103,10 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 	    if (monitor_num == -1)
 	      monitor_num = 0;
 	    
-	    monitor = gdk_screen_get_monitor_geometry (window->screen, monitor_num);
+	    gdk_screen_get_monitor_geometry (window->screen, monitor_num, &monitor);
 	    
-	    x = (monitor->width - w) / 2 + monitor->x;
-	    y = (monitor->height - h) / 2 + monitor->y;
+	    x = (monitor.width - w) / 2 + monitor.x;
+	    y = (monitor.height - h) / 2 + monitor.y;
           }
           break;
       

@@ -47,30 +47,28 @@ struct _GdkScreenClass
 {
   GObjectClass parent_class;
   
-  GdkDisplay *  (*get_display)           (GdkScreen   *screen);
-  gint          (*get_width)             (GdkScreen   *screen);
-  gint          (*get_height)            (GdkScreen   *screen);
-  gint          (*get_width_mm)          (GdkScreen   *screen);
-  gint          (*get_height_mm)         (GdkScreen   *screen);
-  gint          (*get_root_depth)        (GdkScreen   *screen);
-  gint          (*get_screen_num)        (GdkScreen   *screen);
-  GdkWindow *   (*get_root_window)       (GdkScreen   *screen);
-  GdkColormap * (*get_default_colormap)  (GdkScreen   *screen);
-  void          (*set_default_colormap)  (GdkScreen   *screen,
-					  GdkColormap *colormap);
-  GdkWindow *   (*get_window_at_pointer) (GdkScreen   *screen,
-					  gint        *win_x,
-					  gint        *win_y);
-  gboolean      (*use_virtual_screen)    (GdkScreen   *screen);
-  gint          (*get_n_monitors)        (GdkScreen   *screen);
-  GdkRectangle *(*get_monitor_geometry)  (GdkScreen   *screen,
-					  gint         monitor_num);
-  
-  gint (*get_monitor_at_point)      (GdkScreen       *screen,
-				     gint             x,
-				     gint             y);
-  gint (*get_monitor_at_window)     (GdkScreen       *screen,
-				     GdkNativeWindow  anid);
+  GdkDisplay *  (*get_display)           (GdkScreen    *screen);
+  gint          (*get_width)             (GdkScreen    *screen);
+  gint          (*get_height)            (GdkScreen    *screen);
+  gint          (*get_width_mm)          (GdkScreen    *screen);
+  gint          (*get_height_mm)         (GdkScreen    *screen);
+  gint          (*get_root_depth)        (GdkScreen    *screen);
+  gint          (*get_screen_num)        (GdkScreen    *screen);
+  GdkWindow *   (*get_root_window)       (GdkScreen    *screen);
+  GdkColormap * (*get_default_colormap)  (GdkScreen    *screen);
+  void          (*set_default_colormap)  (GdkScreen    *screen,
+					  GdkColormap  *colormap);
+  GdkWindow *   (*get_window_at_pointer) (GdkScreen    *screen,
+					  gint         *win_x,
+					  gint         *win_y);
+  gboolean      (*use_virtual_screen)    (GdkScreen    *screen);
+  gint          (*get_n_monitors)        (GdkScreen    *screen);
+  void          (*get_monitor_geometry)  (GdkScreen    *screen,
+					  gint          monitor_num,
+					  GdkRectangle *dest);
+  gint          (*get_monitor_at_point)  (GdkScreen    *screen,
+					  gint          x,
+					  gint          y);
 };
 
 GType        gdk_screen_get_type              (void);
@@ -98,15 +96,16 @@ GList *      gdk_screen_list_visuals          (GdkScreen   *screen);
 GList *      gdk_screen_get_toplevel_windows  (GdkScreen   *screen);
 
 
-gboolean      gdk_screen_use_virtual_screen    (GdkScreen       *screen);
-gint          gdk_screen_get_n_monitors        (GdkScreen       *screen);
-GdkRectangle *gdk_screen_get_monitor_geometry  (GdkScreen       *screen,
-						gint             monitor_num);
-gint          gdk_screen_get_monitor_at_point  (GdkScreen       *screen,
-						gint             x,
-						gint             y);
-gint          gdk_screen_get_monitor_at_window (GdkScreen       *screen,
-						GdkNativeWindow  anid);
+gboolean      gdk_screen_use_virtual_screen    (GdkScreen *screen);
+gint          gdk_screen_get_n_monitors        (GdkScreen *screen);
+void          gdk_screen_get_monitor_geometry  (GdkScreen *screen,
+						gint       monitor_num,
+						GdkRectangle *dest);
+gint          gdk_screen_get_monitor_at_point  (GdkScreen *screen,
+						gint       x,
+						gint       y);
+gint          gdk_screen_get_monitor_at_window (GdkScreen *screen,
+						GdkWindow *window);
 
 void          gdk_screen_broadcast_client_message  (GdkScreen       *screen,
 						    GdkEvent        *event);

@@ -106,17 +106,22 @@ static gboolean
 check_solaris_xinerama (GdkScreen *screen)
 {
 #ifdef HAVE_SOLARIS_XINERAMA
+  
   if (XineramaGetState (GDK_SCREEN_XDISPLAY (screen),
 			gdk_screen_get_number (screen)))
     {
       XRectangle monitors[MAXFRAMEBUFFERS];
       char hints[16];
-      
+      gint result;
+      GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+
       result = XineramaGetInfo (GDK_SCREEN_XDISPLAY (screen),
 				gdk_screen_get_number (screen),
 				monitors, hints,
 				&screen_x11->num_monitors);
-      if (result != Success)
+      /* Yes I know it should be Success but the current implementation 
+          returns the num of monitor*/
+      if (result == 0)
 	{
 	  /* FIXME: We need to trap errors, since XINERAMA isn't always XINERAMA.
 	   */ 

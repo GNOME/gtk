@@ -275,24 +275,24 @@ gdk_screen_get_n_monitors (GdkScreen *screen)
  * gdk_screen_get_monitor_geometry:
  * @screen : a #GdkScreen.
  * @monitor_num: the monitor number. 
+ * @dest : a #GdkRectangle to be filled with the monitor geometry
  *
- * Returns a #GdkRectangle representing the size and start
+ * Retrieves the #GdkRectangle representing the size and start
  * coordinates of the individual monitor within the the entire virtual
  * screen.
  * 
  * Note that the virtual screen coordinates can be retrieved via 
  * gdk_screen_get_width() and gdk_screen_get_height().
  *
- * Returns: the size and start position of the monitor wrt to
- *	    the virtual screen.
  **/
-GdkRectangle *
-gdk_screen_get_monitor_geometry (GdkScreen *screen,
-				 gint       monitor_num)
+void 
+gdk_screen_get_monitor_geometry (GdkScreen    *screen,
+				 gint          monitor_num,
+				 GdkRectangle *dest)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  g_return_if_fail (GDK_IS_SCREEN (screen));
   
-  return GDK_SCREEN_GET_CLASS (screen)->get_monitor_geometry (screen, monitor_num);
+  GDK_SCREEN_GET_CLASS (screen)->get_monitor_geometry (screen, monitor_num, dest);
 }
 
 /**
@@ -328,9 +328,29 @@ gdk_screen_get_monitor_at_point (GdkScreen *screen,
  **/
 gint 
 gdk_screen_get_monitor_at_window (GdkScreen      *screen,
-				  GdkNativeWindow anid)
+				  GdkWindow	 *window)
 {
+  gint num_monitors, i, sum = 0, screen_num = 0;
+  GdkRectangle win_rect;
   g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
   
-  return GDK_SCREEN_GET_CLASS (screen)->get_monitor_at_window (screen, anid);
+  gdk_window_get_geometry (window, &win_rect.x, &win_rect.y, &win_rect.width,
+			   &win_rect.height, NULL);
+  gdk_window_get_origin (window, &win_rect.x, &win_rect.y);
+  num_monitors = gdk_screen_get_n_monitors (screen);
+  
+  for (i=0;i<num_monitors;i++)
+    {
+      GdkRectangle tmp_monitor, intersect;
+      
+      gdk_screen_get_monitor_geometry (screen, i, &tmp_monitor);
+      gdk_rectangle_intersect (&win_rect, &tmp_monitor, &intersect);
+      
+      if (intersect.width * intersect.height > sum)
+	{ 
+	  sum = intersect.width * intersect.height;
+	  screen_num = i;
+	}
+    }
+  return screen_num;
 }

@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
-#include "x11/gdkx.h"
 
 static gint num_monitors;
 
@@ -11,18 +10,19 @@ request (GtkWidget      *widget,
 {
   gchar *str;
   gint i = gdk_screen_get_monitor_at_window (gtk_widget_get_screen (widget),
-					     GDK_WINDOW_XWINDOW (widget->window));
+					     widget->window);
 
   if (i < 0)
     str = g_strdup ("<big><span foreground='white' background='black'>Not on a monitor </span></big>");
   else
     {
-      GdkRectangle *monitor = gdk_screen_get_monitor_geometry (gtk_widget_get_screen (widget), i);
+      GdkRectangle monitor;
+      gdk_screen_get_monitor_geometry (gtk_widget_get_screen (widget), i, &monitor);
       str = g_strdup_printf ("<big><span foreground='white' background='black'>"
 			     "Monitor %d of %d</span></big>\n"
 			     "<i>Width - Height       </i>: (%d,%d)\n"
 			     "<i>Top left coordinate </i>: (%d,%d)",i+1, num_monitors,
-			     monitor->width, monitor->height, monitor->x, monitor->y);
+			     monitor.width, monitor.height, monitor.x, monitor.y);
     }
   
   gtk_label_set_markup (GTK_LABEL (user_data), str);
@@ -42,25 +42,26 @@ main (int argc, char *argv[])
 
   num_monitors = gdk_screen_get_n_monitors (screen);
   if (num_monitors == 1)
-    g_warning ("The current display has only one monitor.");
+    g_warning ("The current display does not support xinerama.");
   
   for (i=0; i<num_monitors; i++)
     {
-      GdkRectangle *monitor = gdk_screen_get_monitor_geometry (screen, i);
+      GdkRectangle monitor; 
       gchar *str;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       
+      gdk_screen_get_monitor_geometry (screen, i, &monitor);
       gtk_window_set_default_size (GTK_WINDOW (window), 200, 200);
-      gtk_window_move (GTK_WINDOW (window), (monitor->width - 200) / 2 + monitor->x,
-		       (monitor->height - 200) / 2 + monitor->y);
+      gtk_window_move (GTK_WINDOW (window), (monitor.width - 200) / 2 + monitor.x,
+		       (monitor.height - 200) / 2 + monitor.y);
       
       label = gtk_label_new (NULL);
       str = g_strdup_printf ("<big><span foreground='white' background='black'>"
 			     "Monitor %d of %d</span></big>\n"
 			     "<i>Width - Height       </i>: (%d,%d)\n"
 			     "<i>Top left coordinate </i>: (%d,%d)",i+1, num_monitors,
-			     monitor->width, monitor->height, monitor->x, monitor->y);
+			     monitor.width, monitor.height, monitor.x, monitor.y);
       gtk_label_set_markup (GTK_LABEL (label), str);
       g_free (str);
       button = gtk_button_new_with_label ("Close");
