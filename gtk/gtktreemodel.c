@@ -397,7 +397,8 @@ gtk_tree_path_get_indices (GtkTreePath *path)
 void
 gtk_tree_path_free (GtkTreePath *path)
 {
-  g_return_if_fail (path != NULL);
+  if (!path)
+    return;
 
   g_free (path->indices);
   g_free (path);
