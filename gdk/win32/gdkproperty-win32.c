@@ -547,7 +547,11 @@ gdk_screen_get_setting (GdkScreen   *screen,
    * XXX : if these values get changed through the Windoze UI the
    *       respective gdk_events are not generated yet.
    */
-  if (strcmp ("gtk-double-click-time", name) == 0)
+  if (strcmp ("gtk-theme-name", name) == 0) 
+    {
+      g_value_set_string (value, "ms-windows");
+    }
+  else if (strcmp ("gtk-double-click-time", name) == 0)
     {
       gint i = GetDoubleClickTime ();
       GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %d\n", name, i));
