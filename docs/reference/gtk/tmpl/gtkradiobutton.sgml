@@ -36,6 +36,10 @@ gtk_radio_button_get_group().
 To remove a #GtkRadioButton from one group and make it part of a new one, use gtk_radio_button_set_group().
 </para>
 <para>
+The group list does not need to be freed, as each #GtkRadioButton will remove
+itself and its list item when it is destroyed.
+</para>
+<para>
 <example>
 <title>How to create a group of two radio buttons.</title>
 <programlisting>

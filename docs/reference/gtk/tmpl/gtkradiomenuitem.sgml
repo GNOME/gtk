@@ -10,7 +10,11 @@ A radio menu item is a check menu item that belongs to a group. At each
 instant exactly one of the radio menu items from a group is selected.
 </para>
 <para>
-The correct way to create a group of radio menu items is aproximativly
+The group list does not need to be freed, as each #GtkRadioMenuItem will 
+remove itself and its list item when it is destroyed.
+</para>
+<para>
+The correct way to create a group of radio menu items is approximatively
 this:
 </para>
 <example>
