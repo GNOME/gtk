@@ -2487,7 +2487,7 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
 
   return
     !gtk_text_iter_equal (iter, &orig) &&
-    !gtk_text_iter_is_last (iter);
+    !gtk_text_iter_is_end (iter);
 }
 
 /**
@@ -2557,7 +2557,7 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
 
   return
     !gtk_text_iter_equal (iter, &orig) &&
-    !gtk_text_iter_is_last (iter);
+    !gtk_text_iter_is_end (iter);
 }
 
 /**
@@ -2617,7 +2617,7 @@ gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
 
   return
     !gtk_text_iter_equal (iter, &orig) &&
-    !gtk_text_iter_is_last (iter);
+    !gtk_text_iter_is_end (iter);
 }
 
 
@@ -2850,7 +2850,7 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
   
   return
     !gtk_text_iter_equal (iter, &orig) &&
-    !gtk_text_iter_is_last (iter);
+    !gtk_text_iter_is_end (iter);
 }
 
 void

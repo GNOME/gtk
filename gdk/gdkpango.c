@@ -259,7 +259,7 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
               tmp.green = foreground->green;
             }
           
-          fg_gc = gdk_pango_get_gc (context, fg_set ? &fg_color : NULL,
+          fg_gc = gdk_pango_get_gc (context, fg_set ? &tmp : NULL,
                                     stipple, gc);
         }
       else
@@ -656,10 +656,15 @@ gdk_pango_attr_embossed_new (gboolean embossed)
  * @index_ranges: array of byte indexes into the layout, where even members of array are start indexes and odd elements are end indexes
  * @n_ranges: number of ranges in @index_ranges, i.e. half the size of @index_ranges
  * 
- * Obtains a clip region which contains the areas where the given ranges
- * of text would be drawn. @x_origin and @y_origin are the same position
- * you would pass to gdk_draw_layout_line(). @index_ranges should contain
- * ranges of bytes in the layout's text.
+ * Obtains a clip region which contains the areas where the given
+ * ranges of text would be drawn. @x_origin and @y_origin are the same
+ * position you would pass to gdk_draw_layout_line(). @index_ranges
+ * should contain ranges of bytes in the layout's text. The clip
+ * region will include space to the left or right of the line (to the
+ * layout bounding box) if you have indexes above or below the indexes
+ * contained inside the line. This is to draw the selection all the way
+ * to the side of the layout. However, the clip region is in line coordinates,
+ * not layout coordinates.
  * 
  * Return value: a clip region containing the given ranges
  **/
@@ -673,13 +678,20 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
   GdkRegion *clip_region;
   gint i;
   PangoRectangle logical_rect;
+  PangoLayoutIter *iter;
+  gint baseline;
   
   g_return_val_if_fail (line != NULL, NULL);
   g_return_val_if_fail (index_ranges != NULL, NULL);
   
   clip_region = gdk_region_new ();
 
-  pango_layout_line_get_extents (line, NULL, &logical_rect);
+  iter = pango_layout_get_iter (line->layout);
+  while (pango_layout_iter_get_line (iter) != line)
+    pango_layout_iter_next_line (iter);
+  
+  pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
+  baseline = pango_layout_iter_get_baseline (iter);
   
   i = 0;
   while (i < n_ranges)
@@ -687,7 +699,9 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
       gint *pixel_ranges = NULL;
       gint n_pixel_ranges = 0;
       gint j;
-      
+
+      /* Note that get_x_ranges returns layout coordinates
+       */
       pango_layout_line_get_x_ranges (line,
                                       index_ranges[i*2],
                                       index_ranges[i*2+1],
@@ -696,16 +710,17 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
       for (j=0; j < n_pixel_ranges; j++)
         {
           GdkRectangle rect;
-      
-          rect.x = x_origin + pixel_ranges[2*j] / PANGO_SCALE;
-          rect.y = y_origin - logical_rect.y / PANGO_SCALE;
+          
+          rect.x = x_origin + pixel_ranges[2*j] / PANGO_SCALE - logical_rect.x / PANGO_SCALE;
+          rect.y = y_origin - (baseline / PANGO_SCALE - logical_rect.y / PANGO_SCALE);
           rect.width = (pixel_ranges[2*j + 1] - pixel_ranges[2*j]) / PANGO_SCALE;
-          rect.height = logical_rect.height / PANGO_SCALE;      
-      
+          rect.height = logical_rect.height / PANGO_SCALE;
+          
           gdk_region_union_with_rect (clip_region, &rect);
         }
 
       g_free (pixel_ranges);
+      ++i;
     }
 
   return clip_region;
@@ -750,8 +765,8 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
       GdkRegion *line_region;
       gint baseline;
       
-      line = pango_layout_iter_get_line (iter);
-      
+      line = pango_layout_iter_get_line (iter);      
+
       pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
       baseline = pango_layout_iter_get_baseline (iter);      
 

@@ -291,7 +291,7 @@ void gtk_text_buffer_get_iter_at_offset      (GtkTextBuffer *buffer,
 void gtk_text_buffer_get_iter_at_line        (GtkTextBuffer *buffer,
                                               GtkTextIter   *iter,
                                               gint           line_number);
-void gtk_text_buffer_get_last_iter           (GtkTextBuffer *buffer,
+void gtk_text_buffer_get_end_iter            (GtkTextBuffer *buffer,
                                               GtkTextIter   *iter);
 void gtk_text_buffer_get_bounds              (GtkTextBuffer *buffer,
                                               GtkTextIter   *start,

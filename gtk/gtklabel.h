@@ -47,19 +47,24 @@ extern "C" {
 typedef struct _GtkLabel       GtkLabel;
 typedef struct _GtkLabelClass  GtkLabelClass;
 
+typedef struct _GtkLabelSelectionInfo GtkLabelSelectionInfo;
+
 struct _GtkLabel
 {
   GtkMisc misc;
 
+  /*< private >*/
+  
   gchar    *label;
   gchar    *pattern;
 
   guint   jtype : 2;
   guint   wrap : 1;
   
-  /*< private >*/
   PangoLayout *layout;
   PangoAttrList *attrs;
+
+  GtkLabelSelectionInfo *select_info;
 };
 
 struct _GtkLabelClass
@@ -94,6 +99,14 @@ void       gtk_label_set_line_wrap (GtkLabel         *label,
  */
 guint       gtk_label_parse_uline   (GtkLabel         *label,
 				     const gchar      *string);
+
+void     gtk_label_set_selectable (GtkLabel *label,
+                                   gboolean  setting);
+gboolean gtk_label_get_selectable (GtkLabel *label);
+
+void     gtk_label_select_region  (GtkLabel *label,
+                                   gint      start_offset,
+                                   gint      end_offset);
 
 #ifndef	GTK_DISABLE_COMPAT_H
 #  define gtk_label_set				gtk_label_set_text

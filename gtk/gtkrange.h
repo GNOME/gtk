@@ -69,7 +69,8 @@ struct _GtkRange
   guint click_child : 3;
   guint need_timer : 1;
   guint flippable : 1;
-
+  guint inverted : 1;
+  
   guint32 timer;
 
   gfloat old_value;
@@ -123,8 +124,12 @@ void           gtk_range_set_update_policy      (GtkRange      *range,
 void           gtk_range_set_adjustment         (GtkRange      *range,
 						 GtkAdjustment *adjustment);
 
+void           gtk_range_set_inverted           (GtkRange      *range,
+                                                 gboolean       setting);
+gboolean       gtk_range_get_inverted           (GtkRange      *range);
+
 void           gtk_range_draw_background        (GtkRange      *range);
-void           gtk_range_clear_background        (GtkRange      *range);
+void           gtk_range_clear_background       (GtkRange      *range);
 void           gtk_range_draw_trough            (GtkRange      *range);
 void           gtk_range_draw_slider            (GtkRange      *range);
 void           gtk_range_draw_step_forw         (GtkRange      *range);

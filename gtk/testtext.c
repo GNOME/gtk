@@ -665,7 +665,7 @@ fill_file_buffer (GtkTextBuffer *buffer, const char *filename)
   /* We had a newline in the buffer to begin with. (The buffer always contains
    * a newline, so we delete to the end of the buffer to clean up.
    */
-  gtk_text_buffer_get_last_iter (buffer, &end);
+  gtk_text_buffer_get_end_iter (buffer, &end);
   gtk_text_buffer_delete (buffer, &iter, &end);
   
   gtk_text_buffer_set_modified (buffer, FALSE);
@@ -1281,7 +1281,7 @@ save_buffer (Buffer *buffer)
   else
     {
       gtk_text_buffer_get_iter_at_offset (buffer->buffer, &start, 0);
-      gtk_text_buffer_get_last_iter (buffer->buffer, &end);
+      gtk_text_buffer_get_end_iter (buffer->buffer, &end);
   
       chars = gtk_text_buffer_get_slice (buffer->buffer, &start, &end, FALSE);
 
@@ -1972,7 +1972,7 @@ get_lines (GtkTextView  *text_view,
   count = 0;
   size = 0;
 
-  while (!gtk_text_iter_is_last (&iter))
+  while (!gtk_text_iter_is_end (&iter))
     {
       gint y, height;
       gint line_num;

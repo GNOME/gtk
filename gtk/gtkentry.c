@@ -2619,7 +2619,7 @@ gtk_entry_set_editable(GtkEntry *entry,
   gtk_editable_set_editable (GTK_EDITABLE (entry), editable);
 }
 
-gchar*
+G_CONST_RETURN gchar*
 gtk_entry_get_text (GtkEntry *entry)
 {
   g_return_val_if_fail (entry != NULL, NULL);

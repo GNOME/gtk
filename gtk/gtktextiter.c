@@ -730,7 +730,7 @@ gtk_text_iter_get_char (const GtkTextIter *iter)
 
   check_invariants (iter);
 
-  if (gtk_text_iter_is_last (iter))
+  if (gtk_text_iter_is_end (iter))
     return 0;
   else if (real->segment->type == &gtk_text_char_type)
     {
@@ -1382,18 +1382,18 @@ gtk_text_iter_ends_line (const GtkTextIter   *iter)
 }
 
 /**
- * gtk_text_iter_is_last:
+ * gtk_text_iter_is_end:
  * @iter: an iterator
  *
  * Returns TRUE if @iter is the end iterator, i.e. one past the last
- * dereferenceable iterator in the buffer. gtk_text_iter_is_last () is
+ * dereferenceable iterator in the buffer. gtk_text_iter_is_end () is
  * the most efficient way to check whether an iterator is the end
  * iterator.
  *
  * Return value: whether @iter is the end iterator
  **/
 gboolean
-gtk_text_iter_is_last (const GtkTextIter *iter)
+gtk_text_iter_is_end (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
 
@@ -1722,7 +1722,7 @@ forward_char (GtkTextRealIter *real)
 
       check_invariants ((GtkTextIter*)real);
 
-      if (gtk_text_iter_is_last ((GtkTextIter*)real))
+      if (gtk_text_iter_is_end ((GtkTextIter*)real))
         return FALSE;
       else
         return TRUE;
@@ -1813,7 +1813,7 @@ _gtk_text_iter_forward_indexable_segment (GtkTextIter *iter)
 
           check_invariants (iter);
 
-          if (gtk_text_iter_is_last (iter))
+          if (gtk_text_iter_is_end (iter))
             return FALSE;
           else
             return TRUE;
@@ -2111,7 +2111,7 @@ gtk_text_iter_forward_chars (GtkTextIter *iter, gint count)
       /* Return FALSE if we're on the non-dereferenceable end
        * iterator.
        */
-      if (gtk_text_iter_is_last (iter))
+      if (gtk_text_iter_is_end (iter))
         return FALSE;
       else
         return TRUE;
@@ -2303,7 +2303,7 @@ gtk_text_iter_forward_line (GtkTextIter *iter)
 
       check_invariants (iter);
 
-      if (gtk_text_iter_is_last (iter))
+      if (gtk_text_iter_is_end (iter))
         return FALSE;
       else
         return TRUE;
@@ -2415,7 +2415,7 @@ gtk_text_iter_forward_lines (GtkTextIter *iter, gint count)
       /* return whether it moved, and is dereferenceable. */
       return
         (gtk_text_iter_get_line (iter) != old_line) &&
-        !gtk_text_iter_is_last (iter);
+        !gtk_text_iter_is_end (iter);
     }
 }
 
@@ -2702,7 +2702,7 @@ find_by_log_attrs (GtkTextIter    *iter,
 
       return
         !gtk_text_iter_equal (iter, &orig) &&
-        !gtk_text_iter_is_last (iter);
+        !gtk_text_iter_is_end (iter);
     }
 }
 
@@ -3379,7 +3379,7 @@ gtk_text_iter_forward_to_end  (GtkTextIter *iter)
 
   buffer = _gtk_text_btree_get_buffer (real->tree);
 
-  gtk_text_buffer_get_last_iter (buffer, iter);
+  gtk_text_buffer_get_end_iter (buffer, iter);
 }
 
 /**
@@ -3477,7 +3477,7 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
           if (next_line == NULL)
             {
               /* End of search. Set to end of buffer. */
-              _gtk_text_btree_get_last_iter (real->tree, iter);
+              _gtk_text_btree_get_end_iter (real->tree, iter);
               return FALSE;
             }
 
@@ -4622,7 +4622,7 @@ _gtk_text_btree_get_iter_at_first_toggle (GtkTextBTree   *tree,
   if (line == NULL)
     {
       /* Set iter to last in tree */
-      _gtk_text_btree_get_last_iter (tree, iter);
+      _gtk_text_btree_get_end_iter (tree, iter);
       check_invariants (iter);
       return FALSE;
     }
@@ -4724,7 +4724,7 @@ _gtk_text_btree_get_iter_at_child_anchor (GtkTextBTree       *tree,
 }
 
 void
-_gtk_text_btree_get_last_iter         (GtkTextBTree   *tree,
+_gtk_text_btree_get_end_iter         (GtkTextBTree   *tree,
                                       GtkTextIter    *iter)
 {
   g_return_if_fail (iter != NULL);

@@ -306,6 +306,29 @@ gtk_range_set_adjustment (GtkRange      *range,
 }
 
 void
+gtk_range_set_inverted (GtkRange *range,
+                        gboolean  setting)
+{
+  g_return_if_fail (GTK_IS_RANGE (range));
+  
+  setting = setting != FALSE;
+
+  if (setting != range->inverted)
+    {
+      range->inverted = setting;
+      gtk_widget_queue_resize (GTK_WIDGET (range));
+    }
+}
+
+gboolean
+gtk_range_get_inverted (GtkRange *range)
+{
+  g_return_val_if_fail (GTK_IS_RANGE (range), FALSE);
+
+  return range->inverted;
+}
+
+void
 gtk_range_draw_background (GtkRange *range)
 {
   g_return_if_fail (range != NULL);
@@ -420,6 +443,19 @@ move_and_update_window (GdkWindow *window, gint x, gint y)
   gdk_window_process_updates (parent, TRUE);
 }
 
+static gboolean
+should_invert (GtkRange *range,
+               gboolean  horizontal)
+{  
+  if (horizontal)
+    return
+      (range->inverted && !range->flippable) ||
+      (range->inverted && range->flippable && gtk_widget_get_direction (GTK_WIDGET (range)) == GTK_TEXT_DIR_LTR) ||
+      (!range->inverted && range->flippable && gtk_widget_get_direction (GTK_WIDGET (range)) == GTK_TEXT_DIR_RTL);
+  else
+    return range->inverted;
+}
+
 void
 gtk_range_default_hslider_update (GtkRange *range)
 {
@@ -455,7 +491,7 @@ gtk_range_default_hslider_update (GtkRange *range)
       else if (x > right)
 	x = right;
 
-      if (range->flippable && gtk_widget_get_direction (GTK_WIDGET (range)) == GTK_TEXT_DIR_RTL)
+      if (should_invert (range, TRUE))
 	x = right - (x - left);
       
       move_and_update_window (range->slider, x, GTK_WIDGET (range)->style->ythickness);
@@ -497,6 +533,9 @@ gtk_range_default_vslider_update (GtkRange *range)
       else if (y > bottom)
 	y = bottom;
 
+      if (should_invert (range, FALSE))
+	y = bottom - (y - top);
+      
       move_and_update_window (range->slider, GTK_WIDGET (range)->style->xthickness, y);
     }
 }
@@ -523,7 +562,7 @@ gtk_range_default_htrough_click (GtkRange *range,
   gdk_window_get_size (range->slider, &slider_length, NULL);
   right += slider_length;
 
-  if (range->flippable && gtk_widget_get_direction (GTK_WIDGET (range)) == GTK_TEXT_DIR_RTL)
+  if (should_invert (range, TRUE))
     x = (right - x) + left;
 
   if ((x > left) && (y > ythickness))
@@ -571,7 +610,10 @@ gtk_range_default_vtrough_click (GtkRange *range,
   gtk_range_trough_vdims (range, &top, &bottom);
   gdk_window_get_size (range->slider, NULL, &slider_length);
   bottom += slider_length;
-	      
+
+  if (should_invert (range, FALSE))
+    y = (bottom - y) + top;
+  
   if ((x > xthickness) && (y > top))
     {
       gdk_window_get_size (range->trough, &trough_width, &trough_height);
@@ -618,7 +660,7 @@ gtk_range_default_hmotion (GtkRange *range,
 
   new_pos = slider_x + xdelta;
 
-  if (range->flippable && gtk_widget_get_direction (GTK_WIDGET (range)) == GTK_TEXT_DIR_RTL)
+  if (should_invert (range, TRUE))
     new_pos = (right - new_pos) + left;
 
   if (new_pos < left)
@@ -686,6 +728,9 @@ gtk_range_default_vmotion (GtkRange *range,
 
   new_pos = slider_y + ydelta;
 
+  if (should_invert (range, FALSE))
+    new_pos = (bottom - new_pos) + top;
+  
   if (new_pos < top)
     new_pos = top;
   else if (new_pos > bottom)

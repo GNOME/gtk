@@ -186,7 +186,7 @@ check_specific_tag (GtkTextBuffer *buffer,
   state = FALSE;
   count = 0;
   
-  gtk_text_buffer_get_last_iter (buffer, &iter);
+  gtk_text_buffer_get_end_iter (buffer, &iter);
   last_offset = gtk_text_iter_get_offset (&iter);
   if (gtk_text_iter_toggles_tag (&iter, tag) ||
       gtk_text_iter_backward_to_tag_toggle (&iter, tag))
@@ -292,7 +292,7 @@ run_tests (GtkTextBuffer *buffer)
           g_error ("Mark not created in the right place.");
         }
 
-      if (gtk_text_iter_is_last (&iter))
+      if (gtk_text_iter_is_end (&iter))
         g_error ("iterators ran out before chars (offset %d of %d)",
                  i, num_chars);
 
@@ -474,7 +474,7 @@ run_tests (GtkTextBuffer *buffer)
   tag_states = g_hash_table_new (NULL, NULL);
   count = 0;
   
-  gtk_text_buffer_get_last_iter (buffer, &iter);
+  gtk_text_buffer_get_end_iter (buffer, &iter);
   if (gtk_text_iter_toggles_tag (&iter, NULL) ||
       gtk_text_iter_backward_to_tag_toggle (&iter, NULL))
     {
@@ -715,7 +715,7 @@ fill_buffer (GtkTextBuffer *buffer)
   gtk_text_buffer_apply_tag (buffer, tag, &iter, &iter2);  
   
   tag = gtk_text_buffer_create_tag (buffer, "end_tag");
-  gtk_text_buffer_get_last_iter (buffer, &iter2);
+  gtk_text_buffer_get_end_iter (buffer, &iter2);
   gtk_text_iter_backward_chars (&iter2, 12);
   iter = iter2;
   gtk_text_iter_backward_chars (&iter, 157);

@@ -3614,7 +3614,7 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
 
     case GTK_MOVEMENT_BUFFER_ENDS:
       if (count > 0)
-        gtk_text_buffer_get_last_iter (get_buffer (text_view), &newplace);
+        gtk_text_buffer_get_end_iter (get_buffer (text_view), &newplace);
       else if (count < 0)
         gtk_text_buffer_get_iter_at_offset (get_buffer (text_view), &newplace, 0);
       break;

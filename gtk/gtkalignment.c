@@ -25,14 +25,17 @@
  */
 
 #include "gtkalignment.h"
-
+#include "gtkintl.h"
 
 enum {
-  ARG_0,
-  ARG_XALIGN,
-  ARG_YALIGN,
-  ARG_XSCALE,
-  ARG_YSCALE
+  PROP_0,
+
+  PROP_XALIGN,
+  PROP_YALIGN,
+  PROP_XSCALE,
+  PROP_YSCALE,
+  
+  PROP_LAST
 };
 
 
@@ -42,14 +45,16 @@ static void gtk_alignment_size_request  (GtkWidget         *widget,
 					 GtkRequisition    *requisition);
 static void gtk_alignment_size_allocate (GtkWidget         *widget,
 					 GtkAllocation     *allocation);
-static void gtk_alignment_set_arg       (GtkObject         *object,
-					 GtkArg            *arg,
-					 guint              arg_id);
-static void gtk_alignment_get_arg       (GtkObject         *object,
-					 GtkArg            *arg,
-					 guint              arg_id);
-
-
+static void gtk_alignment_set_property (GObject         *object,
+                                        guint            prop_id,
+                                        const GValue    *value,
+                                        GParamSpec      *pspec,
+                                        const gchar     *trailer);
+static void gtk_alignment_get_property (GObject         *object,
+                                        guint            prop_id,
+                                        GValue          *value,
+                                        GParamSpec      *pspec,
+                                        const gchar     *trailer);
 
 GtkType
 gtk_alignment_get_type (void)
@@ -85,13 +90,46 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
-  gtk_object_add_arg_type ("GtkAlignment::xalign", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_XALIGN);
-  gtk_object_add_arg_type ("GtkAlignment::yalign", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_YALIGN);
-  gtk_object_add_arg_type ("GtkAlignment::xscale", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_XSCALE);
-  gtk_object_add_arg_type ("GtkAlignment::yscale", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_YSCALE);
-
-  object_class->set_arg = gtk_alignment_set_arg;
-  object_class->get_arg = gtk_alignment_get_arg;
+  g_object_class_install_property(G_OBJECT_CLASS(object_class),
+				  PROP_XALIGN,
+				  g_param_spec_float("xalign",
+						     _("Horizontal alignment"),
+						     _("Value between 0.0 and 1.0 to indicate X alignment"),
+						     0.0,
+						     1.0,
+						     0.5,
+						     G_PARAM_READABLE | G_PARAM_WRITABLE));
+   
+  g_object_class_install_property(G_OBJECT_CLASS(object_class),
+				  PROP_YALIGN,
+				  g_param_spec_float("yalign",
+						     _("Vertical alignment"),
+						     _("Value between 0.0 and 1.0 to indicate Y alignment"),
+						     0.0,
+						     1.0,
+						      0.5,
+						     G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property(G_OBJECT_CLASS(object_class),
+				  PROP_XSCALE,
+				  g_param_spec_float("xscale",
+						     _("Horizontal scale"),
+						     _("Value between 0.0 and 1.0 to indicate X scale"),
+						     0.0,
+						     1.0,
+						     0.5,
+						     G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property(G_OBJECT_CLASS(object_class),
+				  PROP_YSCALE,
+				  g_param_spec_float("yscale",
+						     _("Vertical scale"),
+						     _("Value between 0.0 and 1.0 to indicate Y scale"),
+						     0.0,
+						     1.0,
+						     0.5,
+						     G_PARAM_READABLE | G_PARAM_WRITABLE));
+   
+  G_OBJECT_CLASS(object_class)->set_property = gtk_alignment_set_property;
+  G_OBJECT_CLASS(object_class)->get_property = gtk_alignment_get_property;
 
   widget_class->size_request = gtk_alignment_size_request;
   widget_class->size_allocate = gtk_alignment_size_allocate;
@@ -126,75 +164,79 @@ gtk_alignment_new (gfloat xalign,
   return GTK_WIDGET (alignment);
 }
 
-static void
-gtk_alignment_set_arg (GtkObject         *object,
-		       GtkArg            *arg,
-		       guint              arg_id)
+static void gtk_alignment_set_property (GObject         *object,
+                                        guint            prop_id,
+                                        const GValue    *value,
+                                        GParamSpec      *pspec,
+                                        const gchar     *trailer)
 {
   GtkAlignment *alignment;
 
   alignment = GTK_ALIGNMENT (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_XALIGN:
+    case PROP_XALIGN:
       gtk_alignment_set (alignment,
-			 GTK_VALUE_FLOAT (*arg),
+			 g_value_get_float(value),
 			 alignment->yalign,
 			 alignment->xscale,
 			 alignment->yscale);
       break;
-    case ARG_YALIGN:
+    case PROP_YALIGN:
       gtk_alignment_set (alignment,
 			 alignment->xalign,
-			 GTK_VALUE_FLOAT (*arg),
+			 g_value_get_float(value),
 			 alignment->xscale,
 			 alignment->yscale);
       break;
-    case ARG_XSCALE:
+    case PROP_XSCALE:
       gtk_alignment_set (alignment,
 			 alignment->xalign,
 			 alignment->yalign,
-			 GTK_VALUE_FLOAT (*arg),
+			 g_value_get_float(value),
 			 alignment->yscale);
       break;
-    case ARG_YSCALE:
+    case PROP_YSCALE:
       gtk_alignment_set (alignment,
 			 alignment->xalign,
 			 alignment->yalign,
 			 alignment->xscale,
-			 GTK_VALUE_FLOAT (*arg));
+			 g_value_get_float(value));
       break;
     default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
-static void
-gtk_alignment_get_arg (GtkObject         *object,
-		       GtkArg            *arg,
-		       guint              arg_id)
+static void gtk_alignment_get_property (GObject         *object,
+                                        guint            prop_id,
+                                        GValue          *value,
+                                        GParamSpec      *pspec,
+                                        const gchar     *trailer)
 {
   GtkAlignment *alignment;
 
   alignment = GTK_ALIGNMENT (object);
-
-  switch (arg_id)
+  g_assert (GTK_IS_ALIGNMENT(object));
+   
+  switch (prop_id)
     {
-    case ARG_XALIGN:
-      GTK_VALUE_FLOAT (*arg) = alignment->xalign;
+    case PROP_XALIGN:
+      g_value_set_float(value, alignment->xalign);
       break;
-    case ARG_YALIGN:
-      GTK_VALUE_FLOAT (*arg) = alignment->yalign;
+    case PROP_YALIGN:
+      g_value_set_float(value, alignment->yalign);
       break;
-    case ARG_XSCALE:
-      GTK_VALUE_FLOAT (*arg) = alignment->xscale;
+    case PROP_XSCALE:
+      g_value_set_float(value, alignment->xscale);
       break;
-    case ARG_YSCALE:
-      GTK_VALUE_FLOAT (*arg) = alignment->yscale;
+    case PROP_YSCALE:
+      g_value_set_float(value, alignment->yscale);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -206,6 +248,8 @@ gtk_alignment_set (GtkAlignment *alignment,
 		   gfloat        xscale,
 		   gfloat        yscale)
 {
+  gboolean values_changed = FALSE; 
+  
   g_return_if_fail (alignment != NULL);
   g_return_if_fail (GTK_IS_ALIGNMENT (alignment));
 
@@ -214,16 +258,33 @@ gtk_alignment_set (GtkAlignment *alignment,
   xscale = CLAMP (xscale, 0.0, 1.0);
   yscale = CLAMP (yscale, 0.0, 1.0);
 
-  if ((alignment->xalign != xalign) ||
-      (alignment->yalign != yalign) ||
-      (alignment->xscale != xscale) ||
-      (alignment->yscale != yscale))
+  if (alignment->xalign != xalign)
     {
-      alignment->xalign = xalign;
-      alignment->yalign = yalign;
-      alignment->xscale = xscale;
-      alignment->yscale = yscale;
+       values_changed = TRUE;
+       alignment->xalign = xalign;
+       g_object_notify(G_OBJECT(alignment), "xalign");
+    }
+  if (alignment->yalign != yalign)
+    {
+       values_changed = TRUE;
+       alignment->yalign = yalign;
+       g_object_notify(G_OBJECT(alignment), "yalign");
+    }
+  if (alignment->xscale != xscale)
+    {
+       values_changed = TRUE;
+       alignment->xscale = xscale;
+       g_object_notify(G_OBJECT(alignment), "xscale");
+    }
+  if (alignment->yscale != yscale)
+    {
+       values_changed = TRUE;
+       alignment->yscale = yscale;
+       g_object_notify(G_OBJECT(alignment), "yscale");
+    }
 
+   if (values_changed == TRUE)
+    {
       gtk_widget_size_allocate (GTK_WIDGET (alignment), &(GTK_WIDGET (alignment)->allocation));
       gtk_widget_queue_draw (GTK_WIDGET (alignment));
     }

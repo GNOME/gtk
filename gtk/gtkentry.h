@@ -149,10 +149,10 @@ void       gtk_entry_set_max_length 		(GtkEntry      *entry,
 
 /* Somewhat more convenient than the GtkEditable generic functions
  */
-void       gtk_entry_set_text       		(GtkEntry      *entry,
-						 const gchar   *text);
+void                  gtk_entry_set_text        (GtkEntry      *entry,
+                                                 const gchar   *text);
 /* returns a reference to the text */
-gchar*     gtk_entry_get_text       		(GtkEntry      *entry);
+G_CONST_RETURN gchar* gtk_entry_get_text        (GtkEntry      *entry);
 
 /* Deprecated compatibility functions
  */

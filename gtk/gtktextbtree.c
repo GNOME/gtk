@@ -5238,7 +5238,7 @@ get_tree_bounds (GtkTextBTree *tree,
                  GtkTextIter *end)
 {
   _gtk_text_btree_get_iter_at_line_char (tree, start, 0, 0);
-  _gtk_text_btree_get_last_iter (tree, end);
+  _gtk_text_btree_get_end_iter (tree, end);
 }
 
 static void

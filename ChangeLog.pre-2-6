@@ -1,6 +1,46 @@
+2001-02-15  Havoc Pennington  <hp@redhat.com>
+
+	* gdk/gdkpango.c (gdk_pango_layout_line_get_clip_region): convert
+	the X coordinates so they're with respect to the line, rather than 
+	with respect to the layout.
+
+	* gtk/gtkalignment.c: Convert to new property API, patch from Lee
+	Mallabone
+
+	* gtk/testgtk.c (create_range_controls): add vscale tests, 
+	and inverted test
+
+	* gtk/gtkrange.c (gtk_range_set_inverted): new function to fix 
+	#50806
+
+	* gtk/gtkentry.c (gtk_entry_get_text): add G_CONST_RETURN
+
+	* gtk/gtktextiter.h (gtk_text_iter_is_last): rename 
+	gtk_text_iter_is_end
+
+	* gtk/gtktextbuffer.h (gtk_text_buffer_get_last_iter):
+	rename gtk_text_buffer_get_end_iter
+
+	* gtk/testgtk.c (create_labels): Add test for selectable
+
+	* gtk/gtkentry.c (gtk_entry_draw_text): Use new GDK API to draw
+	the selection stuff. This code is kind of broken since it doesn't 
+	use the theme engine.
+
+	* gdk/gdkpango.c (gdk_pango_layout_line_get_clip_region): 
+	fix infinite loop and y offset problem
+	(gdk_draw_layout_line_with_colors): fix foreground color handling
+
+        * gtk/gtklabel.h, gtk/gtklabel.c: Implement a "selectable" flag 
+	that makes the label selectable.
+	
+	* gtk/gtklabel.c (gtk_label_style_set): recreate the label's
+	layout when the style is set, since fonts etc. could have changed.	
+
 Fri Feb 16 14:22:05 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/Makefile.am: Removed gtktreemodelsimple.[ch]
+
 	* gtk/gtktreemodelsimple.[ch]: removes
 
 2001-02-16  Alexander Larsson  <alexl@redhat.com>

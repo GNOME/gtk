@@ -1811,7 +1811,7 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
 
   real = *where;
 
-  if (gtk_text_iter_is_last (&real))
+  if (gtk_text_iter_is_end (&real))
     gtk_text_iter_backward_char (&real);
 
   _gtk_text_btree_place_cursor (get_btree (buffer), &real);
@@ -2130,7 +2130,7 @@ gtk_text_buffer_get_iter_at_offset         (GtkTextBuffer      *buffer,
 }
 
 /**
- * gtk_text_buffer_get_last_iter:
+ * gtk_text_buffer_get_end_iter:
  * @buffer: a #GtkTextBuffer 
  * @iter: iterator to initialize
  *
@@ -2143,13 +2143,13 @@ gtk_text_buffer_get_iter_at_offset         (GtkTextBuffer      *buffer,
  * 
  **/
 void
-gtk_text_buffer_get_last_iter         (GtkTextBuffer      *buffer,
+gtk_text_buffer_get_end_iter         (GtkTextBuffer      *buffer,
                                        GtkTextIter        *iter)
 {
   g_return_if_fail (iter != NULL);
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
-  _gtk_text_btree_get_last_iter (get_btree (buffer), iter);
+  _gtk_text_btree_get_end_iter (get_btree (buffer), iter);
 }
 
 /**
@@ -2172,7 +2172,7 @@ gtk_text_buffer_get_bounds (GtkTextBuffer *buffer,
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
   _gtk_text_btree_get_iter_at_char (get_btree (buffer), start, 0);
-  _gtk_text_btree_get_last_iter (get_btree (buffer), end);
+  _gtk_text_btree_get_end_iter (get_btree (buffer), end);
 }
 
 /*
@@ -3078,7 +3078,7 @@ _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
   
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
   g_return_val_if_fail (anywhere_in_line != NULL, NULL);
-  g_return_val_if_fail (!gtk_text_iter_is_last (anywhere_in_line), NULL);
+  g_return_val_if_fail (!gtk_text_iter_is_end (anywhere_in_line), NULL);
 
   /* FIXME we also need to recompute log attrs if the language tag at
    * the start of a paragraph changes

@@ -118,7 +118,7 @@ gboolean _gtk_text_btree_get_iter_at_mark_name    (GtkTextBTree       *tree,
 void     _gtk_text_btree_get_iter_at_mark         (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,
                                                    GtkTextMark        *mark);
-void     _gtk_text_btree_get_last_iter            (GtkTextBTree       *tree,
+void     _gtk_text_btree_get_end_iter             (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter);
 void     _gtk_text_btree_get_iter_at_line         (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,

@@ -2004,6 +2004,59 @@ create_sensitivity_control (GtkWidget *widget)
   return button;
 }
 
+static void
+set_selectable_recursive (GtkWidget *widget,
+                          gboolean   setting)
+{
+  if (GTK_IS_CONTAINER (widget))
+    {
+      GList *children;
+      GList *tmp;
+      
+      children = gtk_container_children (GTK_CONTAINER (widget));
+      tmp = children;
+      while (tmp)
+        {
+          set_selectable_recursive (tmp->data, setting);
+
+          tmp = tmp->next;
+        }
+      g_list_free (children);
+    }
+  else if (GTK_IS_LABEL (widget))
+    {
+      gtk_label_set_selectable (GTK_LABEL (widget), setting);
+    }
+}
+
+static void
+selectable_toggled (GtkWidget *toggle,
+                    GtkWidget *widget)
+{
+  set_selectable_recursive (widget,
+                            GTK_TOGGLE_BUTTON (toggle)->active);
+}
+
+static GtkWidget*
+create_selectable_control (GtkWidget *widget)
+{
+  GtkWidget *button;
+
+  button = gtk_toggle_button_new_with_label ("Selectable");  
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),
+                                FALSE);
+  
+  gtk_signal_connect (GTK_OBJECT (button),
+                      "toggled",
+                      GTK_SIGNAL_FUNC (selectable_toggled),
+                      widget);
+  
+  gtk_widget_show_all (button);
+
+  return button;
+}
+
 void create_labels (void)
 {
   static GtkWidget *window = NULL;
@@ -2032,6 +2085,10 @@ void create_labels (void)
       gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
       button = create_sensitivity_control (hbox);
+
+      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+      button = create_selectable_control (hbox);
 
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
       
@@ -6201,6 +6258,7 @@ create_range_controls (void)
   GtkWidget *scale;
   GtkWidget *separator;
   GtkObject *adjustment;
+  GtkWidget *hbox;
 
   if (!window)
     {
@@ -6241,6 +6299,25 @@ create_range_controls (void)
       gtk_box_pack_start (GTK_BOX (box2), scrollbar, TRUE, TRUE, 0);
       gtk_widget_show (scrollbar);
 
+      hbox = gtk_hbox_new (FALSE, 0);
+
+      scale = gtk_vscale_new (GTK_ADJUSTMENT (adjustment));
+      gtk_widget_set_usize (scale, -1, 200);
+      gtk_scale_set_digits (GTK_SCALE (scale), 2);
+      gtk_scale_set_draw_value (GTK_SCALE (scale), TRUE);
+      gtk_box_pack_start (GTK_BOX (hbox), scale, TRUE, TRUE, 0);
+      gtk_widget_show (scale);
+
+      scale = gtk_vscale_new (GTK_ADJUSTMENT (adjustment));
+      gtk_widget_set_usize (scale, -1, 200);
+      gtk_scale_set_digits (GTK_SCALE (scale), 2);
+      gtk_scale_set_draw_value (GTK_SCALE (scale), TRUE);
+      gtk_range_set_inverted (GTK_RANGE (scale), TRUE);
+      gtk_box_pack_start (GTK_BOX (hbox), scale, TRUE, TRUE, 0);
+      gtk_widget_show (scale);
+      
+      gtk_box_pack_start (GTK_BOX (box2), hbox, TRUE, TRUE, 0);
+      gtk_widget_show (hbox);
 
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
