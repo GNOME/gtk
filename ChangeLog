@@ -1,3 +1,20 @@
+Sat Dec 13 16:13:27 2003  Kristian Rietveld  <kris@gtk.org>
+
+	A trick for a faster treeview, step 1. Patch to short circuit
+	_build_tree(), inspired by Jonathan (#80868).
+
+	* gtk/gtktreeview.c (gtk_tree_view_init): don't put _IS_LIST in
+	flags by default,
+	(gtk_tree_view_build_tree): don't even try to recurse when the
+	model says that it is a list, remove flag unsetter,
+	(gtk_tree_view_set_model): change flag setting logic.
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_get_flags):
+	propagate whether or not the child model has _IS_LIST set.
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_get_flags):
+	ditto.
+
 Sat Dec 13 02:33:17 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkrange.c (gtk_range_scroll): Undo the last change, 

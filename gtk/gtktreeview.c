@@ -1013,7 +1013,9 @@ gtk_tree_view_init (GtkTreeView *tree_view)
 
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (tree_view), FALSE);
 
-  tree_view->priv->flags = GTK_TREE_VIEW_IS_LIST | GTK_TREE_VIEW_SHOW_EXPANDERS | GTK_TREE_VIEW_DRAW_KEYFOCUS | GTK_TREE_VIEW_HEADERS_VISIBLE;
+  tree_view->priv->flags =  GTK_TREE_VIEW_SHOW_EXPANDERS
+                            | GTK_TREE_VIEW_DRAW_KEYFOCUS
+                            | GTK_TREE_VIEW_HEADERS_VISIBLE;
 
   /* We need some padding */
   tree_view->priv->dy = 0;
@@ -6912,11 +6914,16 @@ gtk_tree_view_build_tree (GtkTreeView *tree_view,
 			  gboolean     recurse)
 {
   GtkRBNode *temp = NULL;
+  gboolean is_list = GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IS_LIST);
 
   do
     {
       gtk_tree_model_ref_node (tree_view->priv->model, iter);
       temp = _gtk_rbtree_insert_after (tree, temp, 0, FALSE);
+
+      if (is_list)
+        continue;
+
       if (recurse)
 	{
 	  GtkTreeIter child;
@@ -6933,7 +6940,6 @@ gtk_tree_view_build_tree (GtkTreeView *tree_view,
 	{
 	  if ((temp->flags&GTK_RBNODE_IS_PARENT) != GTK_RBNODE_IS_PARENT)
 	    temp->flags ^= GTK_RBNODE_IS_PARENT;
-	  GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_IS_LIST);
 	}
     }
   while (gtk_tree_model_iter_next (tree_view->priv->model, iter));
@@ -8433,7 +8439,6 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       g_object_unref (tree_view->priv->model);
 
       tree_view->priv->search_column = -1;
-      GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_IS_LIST);
       tree_view->priv->fixed_height_check = 0;
       tree_view->priv->dy = tree_view->priv->top_row_dy = 0;
     }
@@ -8446,6 +8451,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       gint i;
       GtkTreePath *path;
       GtkTreeIter iter;
+      GtkTreeModelFlags flags;
 
       if (tree_view->priv->search_column == -1)
 	{
@@ -8482,6 +8488,12 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 			"rows_reordered",
 			G_CALLBACK (gtk_tree_view_rows_reordered),
 			tree_view);
+
+      flags = gtk_tree_model_get_flags (tree_view->priv->model);
+      if ((flags & GTK_TREE_MODEL_LIST_ONLY) == GTK_TREE_MODEL_LIST_ONLY)
+        GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_IS_LIST);
+      else
+        GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_IS_LIST);
 
       path = gtk_tree_path_new_first ();
       if (gtk_tree_model_get_iter (tree_view->priv->model, &iter, path))

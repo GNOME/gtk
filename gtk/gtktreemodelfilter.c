@@ -1752,7 +1752,15 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
 static guint
 gtk_tree_model_filter_get_flags (GtkTreeModel *model)
 {
+  GtkTreeModelFlags flags;
+
   g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (model), 0);
+  g_return_val_if_fail (GTK_TREE_MODEL_FILTER (model)->priv->child_model != NULL, 0);
+
+  flags = gtk_tree_model_get_flags (GTK_TREE_MODEL_FILTER (model)->priv->child_model);
+
+  if ((flags & GTK_TREE_MODEL_LIST_ONLY) == GTK_TREE_MODEL_LIST_ONLY)
+    return GTK_TREE_MODEL_LIST_ONLY;
 
   return 0;
 }

@@ -899,7 +899,15 @@ gtk_tree_model_sort_rows_reordered (GtkTreeModel *s_model,
 static GtkTreeModelFlags
 gtk_tree_model_sort_get_flags (GtkTreeModel *tree_model)
 {
+  GtkTreeModelFlags flags;
+
   g_return_val_if_fail (GTK_IS_TREE_MODEL_SORT (tree_model), 0);
+  g_return_val_if_fail (GTK_TREE_MODEL_SORT (tree_model)->child_model != NULL, 0);
+
+  flags = gtk_tree_model_get_flags (GTK_TREE_MODEL_SORT (tree_model)->child_model);
+
+  if ((flags & GTK_TREE_MODEL_LIST_ONLY) == GTK_TREE_MODEL_LIST_ONLY)
+    return GTK_TREE_MODEL_LIST_ONLY;
 
   return 0;
 }
