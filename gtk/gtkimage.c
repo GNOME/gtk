@@ -1221,7 +1221,7 @@ gtk_image_expose (GtkWidget      *widget,
       GtkMisc *misc;
       GdkRectangle area, image_bound;
       gfloat xalign;
-      gint x, y;
+      gint x, y, mask_x, mask_y;
       GdkBitmap *mask;
       GdkPixbuf *pixbuf;
       gboolean needs_state_transform;
@@ -1253,6 +1253,8 @@ gtk_image_expose (GtkWidget      *widget,
       y = floor (widget->allocation.y + misc->ypad 
 		 + ((widget->allocation.height - widget->requisition.height) * misc->yalign)
 		 + 0.5);
+      mask_x = x;
+      mask_y = y;
       
       image_bound.x = x;
       image_bound.y = y;      
@@ -1398,7 +1400,7 @@ gtk_image_expose (GtkWidget      *widget,
       if (mask)
 	{
 	  gdk_gc_set_clip_mask (widget->style->black_gc, mask);
-	  gdk_gc_set_clip_origin (widget->style->black_gc, x, y);
+	  gdk_gc_set_clip_origin (widget->style->black_gc, mask_x, mask_y);
 	}
 
       if (gdk_rectangle_intersect (&image_bound, &area, &image_bound))
