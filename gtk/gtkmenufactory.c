@@ -216,6 +216,13 @@ gtk_menu_factory_create (GtkMenuFactory *factory,
    */
   if (!path || path[0] == '\0')
     return;
+  else if (strlen (path) >= 250)
+    {
+      /* security audit
+       */
+      g_warning ("gtk_menu_factory_create(): argument `path' exceeds maximum size.");
+      return;
+    }
 
   /* Strip off the next part of the path.
    */
@@ -329,7 +336,14 @@ gtk_menu_factory_remove (GtkMenuFactory *factory,
 
   if (!path || path[0] == '\0')
     return;
-
+  else if (strlen (path) >= 250)
+    {
+      /* security audit
+       */
+      g_warning ("gtk_menu_factory_remove(): argument `path' exceeds maximum size.");
+      return;
+    }
+  
   p = strchr (path, '/');
 
   if (!p)
@@ -468,7 +482,14 @@ gtk_menu_factory_find_recurse (GtkMenuFactory *factory,
 
   if (!path || path[0] == '\0')
     return NULL;
-
+  else if (strlen (path) >= 250)
+    {
+      /* security audit
+       */
+      g_warning ("gtk_menu_factory_find_recurse(): argument `path' exceeds maximum size.");
+      return NULL;
+    }
+  
   p = strchr (path, '/');
 
   if (!p)

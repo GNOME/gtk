@@ -1,3 +1,15 @@
+Tue May 12 02:17:19 1998  Tim Janik  <timj@gtk.org>
+
+	[security audit by Alan Cox]
+
+	* gtk/gtkobject.c (gtk_object_get_arg_type): check for arg_name to not
+	exceed maximum assumed size.
+
+	* gtk/gtkmenufactory.c (gtk_menu_factory_create): check that `path' does
+	not exceed maximum assumed size.
+	(gtk_menu_factory_remove): likewise.
+	(gtk_menu_factory_find_recurse): likewise.
+
 Tue May 12 00:21:33 1998  Tim Janik  <timj@gtk.org>
 
         * gtk/gtkwidget.c (gtk_widget_queue_resize): queue the idle_sizer with
