@@ -1,3 +1,19 @@
+Thu Jan 17 17:02:38 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_real_unrealize): Call
+	gtk_selection_remove_all() here, not in destroy/
+	finalize. (#66636, Sergey Vlasov)
+
+	* gtk/gtkselection.c (gtk_selection_request): Fix
+	reentrancy problem with multiple conversions.
+
+	* gtk/gtkselection.c (gtk_selection_remove_all): 
+	Don't remove incrs, we don't need the widget for
+	maintain the incr.
+
+	* gtk/gtkselection.c (struct _GtkIncrInfo): Remove
+	the widget field from here, we don't need it.
+
 Thu Jan 17 13:08:34 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkmain-x11.c (gdk_error_trap_push): Move

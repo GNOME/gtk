@@ -5570,7 +5570,6 @@ gtk_widget_real_destroy (GtkObject *object)
   g_object_set_qdata (G_OBJECT (widget), quark_accel_closures, NULL);
 
   gtk_grab_remove (widget);
-  gtk_selection_remove_all (widget);
   
   g_object_unref (widget->style);
   widget->style = gtk_widget_get_default_style ();
@@ -5589,7 +5588,6 @@ gtk_widget_finalize (GObject *object)
   GtkAccessible *accessible;
   
   gtk_grab_remove (widget);
-  gtk_selection_remove_all (widget);
 
   g_object_unref (widget->style);
   widget->style = NULL;
@@ -5729,6 +5727,8 @@ gtk_widget_real_unrealize (GtkWidget *widget)
       widget->window = NULL;
     }
 
+  gtk_selection_remove_all (widget);
+  
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED);
 }
 

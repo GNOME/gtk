@@ -102,7 +102,6 @@ struct _GtkIncrConversion
 
 struct _GtkIncrInfo
 {
-  GtkWidget *widget;		/* Selection owner */
   GdkWindow *requestor;		/* Requestor window - we create a GdkWindow
 				   so we can receive events */
   GdkAtom    selection;		/* Selection we're sending */
@@ -546,19 +545,6 @@ gtk_selection_remove_all (GtkWidget *widget)
   GtkSelectionInfo *selection_info;
   
   /* Remove pending requests/incrs for this widget */
-  
-  tmp_list = current_incrs;
-  while (tmp_list)
-    {
-      next = tmp_list->next;
-      if (((GtkIncrInfo *)tmp_list->data)->widget == widget)
-	{
-	  current_incrs = g_list_remove_link (current_incrs, tmp_list);
-	  /* structure will be freed in timeout */
-	  g_list_free (tmp_list);
-	}
-      tmp_list = next;
-    }
   
   tmp_list = current_retrievals;
   while (tmp_list)
@@ -1056,8 +1042,9 @@ gtk_selection_request (GtkWidget *widget,
     return FALSE;
   
   info = g_new (GtkIncrInfo, 1);
+
+  g_object_ref (widget);
   
-  info->widget = widget;
   info->selection = event->selection;
   info->num_incrs = 0;
   
@@ -1211,12 +1198,14 @@ gtk_selection_request (GtkWidget *widget,
       gdk_selection_send_notify (event->requestor, event->selection, 
 				 event->target, event->property, event->time);
     }
-  
+
   if (info->num_incrs == 0)
     {
       g_free (info->conversions);
       g_free (info);
     }
+
+  g_object_unref (widget);
   
   return TRUE;
 }
