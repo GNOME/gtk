@@ -1,3 +1,7 @@
+2002-03-08  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/Makefile.am (LDFLAGS): Add missing .la suffix for	libgdk_pixbuf.
+
 Thu Mar  7 21:32:01 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreestore.c (gtk_tree_store_sort_iter_changed): increase

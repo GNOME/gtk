@@ -73,7 +73,7 @@ LDFLAGS = @STRIP_BEGIN@ 						\
 	-rpath $(libdir) 						\
 	$(no_undefined)							\
 	@LIBTOOL_EXPORT_OPTIONS@					\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION)	\
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(gdk_win32_symbols)						\
 	@GDK_DEP_LIBS@							\
 @STRIP_END@
