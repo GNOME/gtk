@@ -1,3 +1,9 @@
+2005-01-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaboutdialog.c: Some visual tweaks to the about dialog,
+	obey HIG spacing a bit more, add a hand cursor when over the
+	link button.  (#163979, Jorn Baayen)
+
 2005-01-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_class_init): 
