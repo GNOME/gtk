@@ -96,10 +96,10 @@ void                  gtk_button_set_label         (GtkButton   *button,
 						    const gchar *label);
 G_CONST_RETURN gchar *gtk_button_get_label         (GtkButton   *button);
 void                  gtk_button_set_use_underline (GtkButton   *button,
-						    gboolean     value);
+						    gboolean     use_underline);
 gboolean              gtk_button_get_use_underline (GtkButton   *button);
 void                  gtk_button_set_use_stock     (GtkButton   *button,
-						    gboolean     value);
+						    gboolean     use_stock);
 gboolean              gtk_button_get_use_stock     (GtkButton   *button);
 void                  _gtk_button_set_depressed    (GtkButton   *button,
 						    gboolean     depressed);

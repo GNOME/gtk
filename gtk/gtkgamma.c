@@ -360,7 +360,8 @@ static void
 gamma_ok_callback (GtkWidget *w, gpointer data)
 {
   GtkGammaCurve *c = data;
-  gchar *start, *end;
+  const gchar *start;
+  gchar *end;
   gfloat v;
 
   start = gtk_entry_get_text (GTK_ENTRY (c->gamma_text));

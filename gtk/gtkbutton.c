@@ -1148,7 +1148,7 @@ gtk_button_set_use_underline (GtkButton *button,
 
 /**
  * gtk_button_get_use_underline:
- * @label: a #GtkButton
+ * @button: a #GtkButton
  *
  * Returns whether an embedded underline in the button label indicates a
  * mnemonic. See gtk_button_set_use_underline ().
