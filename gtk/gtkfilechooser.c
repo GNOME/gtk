@@ -25,7 +25,7 @@
 
 #define _(str) (str)
 
-static void gtk_file_chooser_base_init (gpointer g_iface);
+static void gtk_file_chooser_class_init (gpointer g_iface);
 
 static GtkFilePath *gtk_file_chooser_get_path         (GtkFileChooser *chooser);
 
@@ -39,8 +39,9 @@ gtk_file_chooser_get_type (void)
       static const GTypeInfo file_chooser_info =
       {
 	sizeof (GtkFileChooserIface),  /* class_size */
-	gtk_file_chooser_base_init,    /* base_init */
+	NULL,                          /* base_init */
 	NULL,			       /* base_finalize */
+	(GClassInitFunc)gtk_file_chooser_class_init, /* class_init */
       };
 
       file_chooser_type = g_type_register_static (G_TYPE_INTERFACE,
@@ -54,100 +55,94 @@ gtk_file_chooser_get_type (void)
 }
 
 static void
-gtk_file_chooser_base_init (gpointer g_iface)
+gtk_file_chooser_class_init (gpointer g_iface)
 {
-  static gboolean initialized = FALSE;
+  GType iface_type = G_TYPE_FROM_INTERFACE (g_iface);
+
+  g_signal_new ("current-folder-changed",
+		iface_type,
+		G_SIGNAL_RUN_LAST,
+		G_STRUCT_OFFSET (GtkFileChooserIface, current_folder_changed),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__VOID,
+		G_TYPE_NONE, 0);
+  g_signal_new ("selection-changed",
+		iface_type,
+		G_SIGNAL_RUN_LAST,
+		G_STRUCT_OFFSET (GtkFileChooserIface, selection_changed),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__VOID,
+		G_TYPE_NONE, 0);
+  g_signal_new ("update-preview",
+		iface_type,
+		G_SIGNAL_RUN_LAST,
+		G_STRUCT_OFFSET (GtkFileChooserIface, update_preview),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__VOID,
+		G_TYPE_NONE, 0);
   
-  if (!initialized)
-    {
-      GType iface_type = G_TYPE_FROM_INTERFACE (g_iface);
-
-      g_signal_new ("current-folder-changed",
-		    iface_type,
-		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkFileChooserIface, current_folder_changed),
-		    NULL, NULL,
-		    g_cclosure_marshal_VOID__VOID,
-		    G_TYPE_NONE, 0);
-      g_signal_new ("selection-changed",
-		    iface_type,
-		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkFileChooserIface, selection_changed),
-		    NULL, NULL,
-		    g_cclosure_marshal_VOID__VOID,
-		    G_TYPE_NONE, 0);
-      g_signal_new ("update-preview",
-		    iface_type,
-		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkFileChooserIface, update_preview),
-		    NULL, NULL,
-		    g_cclosure_marshal_VOID__VOID,
-		    G_TYPE_NONE, 0);
-
-      g_object_interface_install_property (g_iface,
-					   g_param_spec_enum ("action",
-							      _("Action"),
-							      _("The type of operation that the file selector is performing"),
-							      GTK_TYPE_FILE_CHOOSER_ACTION,
-							      GTK_FILE_CHOOSER_ACTION_OPEN,
-							      G_PARAM_READWRITE));
-      g_object_interface_install_property (g_iface,
-					   g_param_spec_object ("file-system",
-								_("File System"),
-								_("File system object to use"),
-								GTK_TYPE_FILE_SYSTEM,
-								G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
-      g_object_interface_install_property (g_iface,
-					   g_param_spec_object ("filter",
-								_("Filter"),
-								_("The current filter for selecting which files are displayed"),
-								GTK_TYPE_FILE_FILTER,
-								G_PARAM_READWRITE));
-      g_object_interface_install_property (g_iface,
-					   g_param_spec_boolean ("folder-mode",
-								 _("Folder Mode"),
-								 _("Whether to select folders rather than files"),
-								 FALSE,
-								 G_PARAM_READWRITE));
-      g_object_interface_install_property (g_iface,
-					   g_param_spec_boolean ("local-only",
-								 _("Local Only"),
-								 _("Whether the selected file(s) should be limited to local file: URLs"),
-								 TRUE,
-								 G_PARAM_READWRITE));
-      g_object_interface_install_property (g_iface,
-					   g_param_spec_object ("preview-widget",
-								_("Preview widget"),
-								_("Application supplied widget for custom previews."),
-								GTK_TYPE_WIDGET,
-								G_PARAM_READWRITE));
-      g_object_interface_install_property (g_iface,
-					   g_param_spec_boolean ("preview-widget-active",
-								 _("Preview Widget Active"),
-								 _("Whether the application supplied widget for custom previews should be shown."),
-								 TRUE,
-								 G_PARAM_READWRITE));
-      g_object_interface_install_property (g_iface,
-					   g_param_spec_object ("extra-widget",
-								_("Extra widget"),
-								_("Application supplied widget for extra options."),
-								GTK_TYPE_WIDGET,
-								G_PARAM_READWRITE));
-      g_object_interface_install_property (g_iface,
-					   g_param_spec_boolean ("select-multiple",
-								 _("Select Multiple"),
-								 _("Whether to allow multiple files to be selected"),
-								 FALSE,
-								 G_PARAM_READWRITE));
-      
-      g_object_interface_install_property (g_iface,
-					   g_param_spec_boolean ("show-hidden",
-								 _("Show Hidden"),
-								 _("Whether the hidden files and folders should be displayed"),
-								 FALSE,
-								 G_PARAM_READWRITE));
-      initialized = TRUE;
-    }
+  g_object_interface_install_property (g_iface,
+				       g_param_spec_enum ("action",
+							  _("Action"),
+							  _("The type of operation that the file selector is performing"),
+							  GTK_TYPE_FILE_CHOOSER_ACTION,
+							  GTK_FILE_CHOOSER_ACTION_OPEN,
+							  G_PARAM_READWRITE));
+  g_object_interface_install_property (g_iface,
+				       g_param_spec_object ("file-system",
+							    _("File System"),
+							    _("File system object to use"),
+							    GTK_TYPE_FILE_SYSTEM,
+							    G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_interface_install_property (g_iface,
+				       g_param_spec_object ("filter",
+							    _("Filter"),
+							    _("The current filter for selecting which files are displayed"),
+							    GTK_TYPE_FILE_FILTER,
+							    G_PARAM_READWRITE));
+  g_object_interface_install_property (g_iface,
+				       g_param_spec_boolean ("folder-mode",
+							     _("Folder Mode"),
+							     _("Whether to select folders rather than files"),
+							     FALSE,
+							     G_PARAM_READWRITE));
+  g_object_interface_install_property (g_iface,
+				       g_param_spec_boolean ("local-only",
+							     _("Local Only"),
+							     _("Whether the selected file(s) should be limited to local file: URLs"),
+							     TRUE,
+							     G_PARAM_READWRITE));
+  g_object_interface_install_property (g_iface,
+				       g_param_spec_object ("preview-widget",
+							    _("Preview widget"),
+							    _("Application supplied widget for custom previews."),
+							    GTK_TYPE_WIDGET,
+							    G_PARAM_READWRITE));
+  g_object_interface_install_property (g_iface,
+				       g_param_spec_boolean ("preview-widget-active",
+							     _("Preview Widget Active"),
+							     _("Whether the application supplied widget for custom previews should be shown."),
+							     TRUE,
+							     G_PARAM_READWRITE));
+  g_object_interface_install_property (g_iface,
+				       g_param_spec_object ("extra-widget",
+							    _("Extra widget"),
+							    _("Application supplied widget for extra options."),
+							    GTK_TYPE_WIDGET,
+							    G_PARAM_READWRITE));
+  g_object_interface_install_property (g_iface,
+				       g_param_spec_boolean ("select-multiple",
+							     _("Select Multiple"),
+							     _("Whether to allow multiple files to be selected"),
+							     FALSE,
+							     G_PARAM_READWRITE));
+  
+  g_object_interface_install_property (g_iface,
+				       g_param_spec_boolean ("show-hidden",
+							     _("Show Hidden"),
+							     _("Whether the hidden files and folders should be displayed"),
+							     FALSE,
+							     G_PARAM_READWRITE));
 }
 
 /**
