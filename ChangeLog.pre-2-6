@@ -1,3 +1,12 @@
+2004-01-01  Taneem Ahmed  <taneem@bengalinux.org>
+
+	* configure.in: Added "bn" to ALL_LINGUAS.
+
+2004-01-01  Taneem Ahmed  <taneem@bengalinux.org>
+
+	* bn.po: Added Bangla translation by 
+	of Ankur group <gnome-translation@bengalinux.org>.
+
 Fri Jan  2 02:50:11 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcalendar.c (gtk_calendar_compute_days): 
