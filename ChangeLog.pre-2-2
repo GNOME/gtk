@@ -1,3 +1,8 @@
+Mon Dec 16 17:20:02 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkaccellabel.c: Implement Owen's susggestion from
+	#80764. Fixes #101314.
+
 Sun Dec 15 18:47:30 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Some fixes for modal hint setting based on a patch
