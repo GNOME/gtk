@@ -321,7 +321,7 @@ gtk_im_context_filter_keypress (GtkIMContext *context,
  * @context: a #GtkIMContext
  *
  * Notify the input method that the widget to which this
- * input context corresponds has lost gained. The input method
+ * input context corresponds has gained focus. The input method
  * may, for example, change the displayed feedback to reflect
  * this change.
  **/
