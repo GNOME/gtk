@@ -1,3 +1,7 @@
+2004-12-08  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add gtk_text_view_get_iter_at_position.
+
 2004-12-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/images/colorsel.png:

@@ -1297,9 +1297,44 @@ gtk_text_view_get_iter_at_location (GtkTextView *text_view,
   gtk_text_view_ensure_layout (text_view);
   
   gtk_text_layout_get_iter_at_pixel (text_view->layout,
-                                     iter,
-                                     x,
-                                     y);
+                                     iter, x, y);
+}
+
+/**
+ * gtk_text_view_get_iter_at_position:
+ * @text_view: a #GtkTextView
+ * @iter: a #GtkTextIter
+ * @trailing: 
+ * @x: x position, in buffer coordinates
+ * @y: y position, in buffer coordinates
+ *
+ * Retrieves the iterator pointing to the character at buffer 
+ * coordinates @x and @y. Buffer coordinates are coordinates for 
+ * the entire buffer, not just the currently-displayed portion.  
+ * If you have coordinates from an event, you have to convert 
+ * those to buffer coordinates with 
+ * gtk_text_view_window_to_buffer_coords().
+ *
+ * Note that this is diffferent from gtk_text_view_get_iter_at_location(),
+ * which returns cursor locations, i.e. positions <emphasis>between</emphasis>
+ * characters.
+ *
+ * Since: 2.6
+ **/
+void
+gtk_text_view_get_iter_at_position (GtkTextView *text_view,
+				    GtkTextIter *iter,
+				    gint        *trailing,
+				    gint         x,
+				    gint         y)
+{
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (iter != NULL);
+
+  gtk_text_view_ensure_layout (text_view);
+  
+  gtk_text_layout_get_iter_at_position (text_view->layout,
+					iter, trailing, x, y);
 }
 
 /**

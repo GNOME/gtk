@@ -250,6 +250,11 @@ void           gtk_text_view_get_iter_at_location  (GtkTextView   *text_view,
                                                     GtkTextIter   *iter,
                                                     gint           x,
                                                     gint           y);
+void           gtk_text_view_get_iter_at_position  (GtkTextView   *text_view,
+                                                    GtkTextIter   *iter,
+						    gint          *trailing,
+                                                    gint           x,
+                                                    gint           y);
 void           gtk_text_view_get_line_yrange       (GtkTextView       *text_view,
                                                     const GtkTextIter *iter,
                                                     gint              *y,

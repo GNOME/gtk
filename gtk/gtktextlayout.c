@@ -2277,11 +2277,25 @@ gtk_text_layout_get_line_at_y (GtkTextLayout *layout,
 
 void
 gtk_text_layout_get_iter_at_pixel (GtkTextLayout *layout,
-                                   GtkTextIter *target_iter,
-                                   gint x, gint y)
+                                   GtkTextIter   *target_iter,
+                                   gint           x, 
+				   gint           y)
+{
+  gint trailing;
+
+  gtk_text_layout_get_iter_at_position (layout, target_iter, &trailing, x, y);
+
+  gtk_text_iter_forward_chars (target_iter, trailing);  
+}
+
+void gtk_text_layout_get_iter_at_position (GtkTextLayout     *layout,
+					   GtkTextIter       *target_iter,
+					   gint              *trailing,
+					   gint               x,
+					   gint               y)
 {
   GtkTextLine *line;
-  gint byte_index, trailing;
+  gint byte_index;
   gint line_top;
   GtkTextLineDisplay *display;
 
@@ -2301,7 +2315,7 @@ gtk_text_layout_get_iter_at_pixel (GtkTextLayout *layout,
   if (y > display->height - display->top_margin - display->bottom_margin)
     {
       byte_index = _gtk_text_line_byte_count (line);
-      trailing = 0;
+      *trailing = 0;
     }
   else
     {
@@ -2310,13 +2324,14 @@ gtk_text_layout_get_iter_at_pixel (GtkTextLayout *layout,
         * x-direction.
         */
       pango_layout_xy_to_index (display->layout, x * PANGO_SCALE, y * PANGO_SCALE,
-                                &byte_index, &trailing);
+                                &byte_index, trailing);
     }
 
-  line_display_index_to_iter (layout, display, target_iter, byte_index, trailing);
+  line_display_index_to_iter (layout, display, target_iter, byte_index, 0);
 
   gtk_text_layout_free_line_display (layout, display);
 }
+
 
 /**
  * gtk_text_layout_get_cursor_locations:

@@ -319,6 +319,11 @@ void gtk_text_layout_get_iter_at_pixel (GtkTextLayout     *layout,
                                         GtkTextIter       *iter,
                                         gint               x,
                                         gint               y);
+void gtk_text_layout_get_iter_at_position (GtkTextLayout     *layout,
+					   GtkTextIter       *iter,
+					   gint              *trailing,
+					   gint               x,
+					   gint               y);
 void gtk_text_layout_invalidate        (GtkTextLayout     *layout,
                                         const GtkTextIter *start,
                                         const GtkTextIter *end);
