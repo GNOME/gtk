@@ -252,25 +252,29 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
   if (child_model)
     {
       tree_model_sort->changed_id =
-	g_signal_connect (child_model,
-			  "changed",
-			  gtk_tree_model_sort_changed,
-			  tree_model_sort);
+	g_signal_connectc (child_model,
+			   "changed",
+			   gtk_tree_model_sort_changed,
+			   tree_model_sort,
+			   FALSE);
       tree_model_sort->inserted_id = 
-	g_signal_connect (child_model,
+	g_signal_connectc (child_model,
 			  "inserted",
 			  gtk_tree_model_sort_inserted,
-			  tree_model_sort);
+			   tree_model_sort,
+			   FALSE);
       tree_model_sort->has_child_toggled_id = 
-	g_signal_connect (child_model,
-			  "has_child_toggled",
-			  gtk_tree_model_sort_has_child_toggled,
-			  tree_model_sort);
+	g_signal_connectc (child_model,
+			   "has_child_toggled",
+			   gtk_tree_model_sort_has_child_toggled,
+			   tree_model_sort,
+			   FALSE);
       tree_model_sort->deleted_id =
-	g_signal_connect (child_model,
-			  "deleted",
-			  gtk_tree_model_sort_deleted,
-			  tree_model_sort);
+	g_signal_connectc (child_model,
+			   "deleted",
+			   gtk_tree_model_sort_deleted,
+			   tree_model_sort,
+			   FALSE);
       tree_model_sort->flags = gtk_tree_model_get_flags (child_model);
     }
 }

@@ -1,3 +1,16 @@
+Thu Mar  8 16:51:21 2001  Tim Janik  <timj@gtk.org>
+
+	* *.c: added accumulator data argument to g_signal_newc()
+	functions.
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_set_model): 
+	* gtk/gtktreeview.c (gtk_tree_view_setup_model): 
+	* gtk/treestoretest.c (make_window):
+	s/g_signal_connect/g_signal_connectc/.
+
+	* gtk/gtktextbuffer.c: completed signal arg fixups,
+	they also needed G_SIGNAL_TYPE_STATIC_SCOPE flag.
+
 Thu Mar  8 00:02:30 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.[ch] (gtk_widget_get_name): Make

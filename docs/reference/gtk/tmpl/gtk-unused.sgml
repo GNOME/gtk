@@ -1009,12 +1009,6 @@ This function is labeled private.
 
 @object: the object whose signal handlers should be destroyed.
 
-<!-- ##### FUNCTION gtk_signal_init ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### FUNCTION gtk_signal_n_emissions ##### -->
 <para>
 Find out the recursion depth of emissions for a particular type

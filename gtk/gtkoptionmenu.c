@@ -124,7 +124,7 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
                    G_OBJECT_CLASS_TYPE (class),
                    G_SIGNAL_RUN_LAST,
                    G_STRUCT_OFFSET (GtkOptionMenuClass, changed),
-                   NULL,
+                   NULL, NULL,
                    gtk_marshal_VOID__VOID,
                    G_TYPE_NONE, 0);
   
