@@ -93,7 +93,7 @@ pixops_scale_nearest (guchar        *dest_buf,
 
   for (i = 0; i < (render_y1 - render_y0); i++)
     {
-      const guchar *src  = src_buf + ((i * y_step + y_step / 2) >> SCALE_SHIFT) * src_rowstride;
+      const guchar *src  = src_buf + (((i + render_y0) * y_step + y_step / 2) >> SCALE_SHIFT) * src_rowstride;
       guchar       *dest = dest_buf + i * dest_rowstride;
 
       x = render_x0 * x_step + x_step / 2;

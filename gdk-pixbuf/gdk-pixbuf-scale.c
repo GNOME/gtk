@@ -68,7 +68,8 @@ gdk_pixbuf_scale (const GdkPixbuf *src,
   offset_y = floor (offset_y + 0.5);
   
   pixops_scale (dest->pixels + dest_y * dest->rowstride + dest_x * dest->n_channels,
-		-offset_x, -offset_y, dest_width - offset_x, dest_height - offset_y,
+		dest_x - offset_x, dest_y - offset_y, 
+		dest_x + dest_width - offset_x, dest_y + dest_height - offset_y,
 		dest->rowstride, dest->n_channels, dest->has_alpha,
 		src->pixels, src->width, src->height,
 		src->rowstride, src->n_channels, src->has_alpha,
@@ -118,7 +119,8 @@ gdk_pixbuf_composite (const GdkPixbuf *src,
   offset_x = floor (offset_x + 0.5);
   offset_y = floor (offset_y + 0.5);
   pixops_composite (dest->pixels + dest_y * dest->rowstride + dest_x * dest->n_channels,
-		    -offset_x, -offset_y, dest_width - offset_x, dest_height - offset_y,
+		    dest_x - offset_x, dest_y - offset_y, 
+		    dest_x + dest_width - offset_x, dest_y + dest_height - offset_y,
 		    dest->rowstride, dest->n_channels, dest->has_alpha,
 		    src->pixels, src->width, src->height,
 		    src->rowstride, src->n_channels, src->has_alpha,
@@ -180,7 +182,8 @@ gdk_pixbuf_composite_color (const GdkPixbuf *src,
   offset_y = floor (offset_y + 0.5);
   
   pixops_composite_color (dest->pixels + dest_y * dest->rowstride + dest_x * dest->n_channels,
-			  -offset_x, -offset_y, dest_width - offset_x, dest_height - offset_y,
+			  dest_x - offset_x, dest_y - offset_y, 
+			  dest_x + dest_width - offset_x, dest_y + dest_height - offset_y,
 			  dest->rowstride, dest->n_channels, dest->has_alpha,
 			  src->pixels, src->width, src->height,
 			  src->rowstride, src->n_channels, src->has_alpha,

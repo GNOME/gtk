@@ -1,3 +1,11 @@
+2000-04-22 05:27:43 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixbuf/pixops/pixops.c (pixops_scale_nearest): Properly
+	offset y coordinate accordining to render_y0.
+
+	* gdk-pixbuf/gdk-pixbuf-scale.c: Properly handle nonzero
+	dest_x, dest_y.
+
 2000-04-22  James Henstridge  <james@daa.com.au>
 
 	* gdk-pixbuf.spec.in (%files): moved %{prefix}/bin/* from the main
