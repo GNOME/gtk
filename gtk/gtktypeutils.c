@@ -894,6 +894,8 @@ gtk_type_query (GtkType type)
       query->type_name = node->type_info.type_name;
       query->object_size = node->type_info.object_size;
       query->class_size = node->type_info.class_size;
+
+      return query;
     }
   
   return NULL;

@@ -1,3 +1,9 @@
+Sat Dec 19 22:49:40 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.c (gtk_type_query): eek, fixed an embarrasing bug
+	that caused this function to always return NULL (noticed by marius
+ 	vollmer).
+
 Sat Dec 19 17:28:30 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Don't add the gthread libs to 
