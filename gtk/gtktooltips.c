@@ -20,6 +20,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "gtkdrawingarea.h"
 #include "gtkmain.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
@@ -44,6 +45,9 @@ static void gtk_tooltips_set_active_widget (GtkTooltips *tooltips,
                                             GtkWidget   *widget);
 static gint gtk_tooltips_timeout           (gpointer     data);
 static void gtk_tooltips_create_window     (GtkTooltips *tooltips);
+static gint gtk_tooltips_expose            (GtkTooltips    *tooltips, 
+					    GdkEventExpose *event);
+
 static void gtk_tooltips_draw_tips         (GtkTooltips *tooltips);
 
 static GtkDataClass *parent_class;
@@ -171,10 +175,19 @@ gtk_tooltips_destroy (GtkObject *object)
 static void
 gtk_tooltips_create_window (GtkTooltips *tooltips)
 {
+  GtkWidget *darea;
+  
   tooltips->tip_window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_widget_ref (tooltips->tip_window);
   gtk_window_set_policy (GTK_WINDOW (tooltips->tip_window), FALSE, FALSE, TRUE);
-  gtk_widget_realize (tooltips->tip_window);
+
+  darea = gtk_drawing_area_new ();
+  gtk_container_add (GTK_CONTAINER (tooltips->tip_window), darea);
+  gtk_widget_show (darea);
+
+  gtk_signal_connect_object (GTK_OBJECT (darea), "expose_event",
+			     GTK_SIGNAL_FUNC (gtk_tooltips_expose), 
+			     GTK_OBJECT (tooltips));
 }
 
 static void
@@ -374,10 +387,55 @@ gtk_tooltips_set_colors (GtkTooltips *tooltips,
     tooltips->background = background;
 }
 
+static gint
+gtk_tooltips_expose (GtkTooltips *tooltips, GdkEventExpose *event)
+{
+  GtkWidget *darea;
+  GtkStyle *style;
+  gint y, baseline_skip, gap;
+  GtkTooltipsData *data;
+  GList *el;
+
+  darea = GTK_BIN (tooltips->tip_window)->child;
+  style = darea->style;
+
+  gap = (style->font->ascent + style->font->descent) / 4;
+  if (gap < 2)
+    gap = 2;
+  baseline_skip = style->font->ascent + style->font->descent + gap;
+
+  data = tooltips->active_tips_data;
+
+  gtk_paint_flat_box(style, darea->window,
+		     GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
+		     NULL, GTK_WIDGET(darea), "tooltip",
+		     0, 0, -1, -1);
+
+  y = style->font->ascent + 4;
+  
+  for (el = data->row; el; el = el->next)
+    {
+      if (el->data)
+	{
+	  /*         gdk_draw_string (tooltips->tip_window->window, style->font,
+		     tooltips->gc, 4, y, el->data);*/
+	  gtk_paint_string (style, darea->window, 
+			    GTK_STATE_NORMAL, 
+			    NULL, GTK_WIDGET(darea), "tooltip",
+			    4, y, el->data);
+	  y += baseline_skip;
+	}
+      else
+	y += baseline_skip / 2;
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_tooltips_draw_tips (GtkTooltips * tooltips)
 {
-  GtkWidget *widget;
+  GtkWidget *widget, *darea;
   GtkStyle *style;
   gint gap, x, y, w, h, scr_w, scr_h, baseline_skip;
   GtkTooltipsData *data;
@@ -388,7 +446,8 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   else if (GTK_WIDGET_VISIBLE (tooltips->tip_window))
     gtk_widget_hide (tooltips->tip_window);
 
-  style = tooltips->tip_window->style;
+  darea = GTK_BIN (tooltips->tip_window)->child;
+  style = darea->style;
   
   widget = tooltips->active_tips_data->widget;
 
@@ -403,6 +462,7 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   if (gap < 2)
     gap = 2;
   baseline_skip = style->font->ascent + style->font->descent + gap;
+
   w = data->width;
   h = 8 - gap;
   for (el = data->row; el; el = el->next)
@@ -462,29 +522,8 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
 
   gdk_draw_rectangle (tooltips->tip_window->window, tooltips->gc, FALSE, 0, 0, w, h);
 */
-   gtk_paint_flat_box(tooltips->tip_window->style, 
-		      tooltips->tip_window->window,
-		      GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
-		      NULL, GTK_WIDGET(tooltips->tip_window), "tooltip",
-		      0, 0, w, h);
+  
 
-   y = style->font->ascent + 4;
-
-  for (el = data->row; el; el = el->next)
-    {
-      if (el->data)
-       {
-/*         gdk_draw_string (tooltips->tip_window->window, style->font,
-			  tooltips->gc, 4, y, el->data);*/
-	  gtk_paint_string (tooltips->tip_window->style, tooltips->tip_window->window, 
-			    GTK_STATE_NORMAL, 
-			    NULL, GTK_WIDGET(tooltips), "tooltip",
-			    4, y, el->data);
-         y += baseline_skip;
-       }
-      else
-       y += baseline_skip / 2;
-    }
 }
 
 static gint

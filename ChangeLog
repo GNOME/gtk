@@ -1,3 +1,32 @@
+Thu Aug  6 16:49:25 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.c (gtk_tooltips_expose): Draw into a
+	  drawing area, draw in an expose handler.
+
+	* gtk/gtknotebook.c (gtk_notebook_expose): Check for
+	  empty current page.
+
+Wed Aug  5 16:13:15 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_draw_wheel): Moved
+	  creation of GC's so that they will be set before
+	  they are used for map events (why are they used there?)
+
+	* gtk/gtkwidget.c: Fixed mistake that caused widgets to
+	  be queued in multiple times in the queue.
+
+Wed Aug  5 14:23:52 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_default_draw_shadow): Don't set
+	  clip rects (or do anything) for shadow_none.
+
+Wed Aug  5 13:14:57 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbutton.c (gtk_button_paint): Restored paint function.
+	  Yes, it was needed. draw() and expose() are _not_
+	  identical.su
+	
+
 Tue Aug  4 19:12:14 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_idle_draw): Fixed up

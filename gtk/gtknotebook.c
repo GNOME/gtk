@@ -1790,7 +1790,8 @@ gtk_notebook_expose (GtkWidget      *widget,
       notebook = GTK_NOTEBOOK (widget);
 
       gtk_notebook_paint (widget, &event->area);
-       if (gtk_widget_intersect (notebook->cur_page->tab_label, 
+      if (notebook->cur_page &&
+	  gtk_widget_intersect (notebook->cur_page->tab_label, 
 				 &event->area, &child_area))
 	 gtk_widget_draw_focus (widget);
 
