@@ -118,12 +118,15 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
   GList *li;
 
   /* completion */
-  if (event->keyval == GDK_Tab) 
+  if ((event->keyval == GDK_Tab) && (event->state & GDK_MOD1_MASK)) 
     {
     GCompletion * cmpl;
     gchar* prefix;
     gchar* nprefix = NULL;
     gint pos;
+
+    if ( !GTK_LIST(combo->list)->children )
+      return FALSE;
     
     gtk_signal_emit_stop_by_name (GTK_OBJECT (entry), "key_press_event");
     cmpl = g_completion_new((GCompletionFunc)gtk_combo_func);

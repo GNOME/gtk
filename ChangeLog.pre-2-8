@@ -1,3 +1,8 @@
+Wed, 14 Oct 1998 10:17:13 +0200 Paolo Molaro <lupus@debian.org>
+
+	* gtk/gtkcombo.c: try completion on MOD1-TAB.
+	Handle case when the combo->list is empty.
+
 Mon Oct 12 07:51:34 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.c (gtk_signal_handlers_destroy): only unref those
