@@ -2176,12 +2176,56 @@ gtk_icon_view_row_changed (GtkTreeModel *model,
 			   gpointer      data)
 {
   GtkIconViewItem *item;
-  gint index;
+  GList *list, *next;
+  gint index, i, pos;
   GtkIconView *icon_view;
+  gboolean iters_persist;
+  GtkTreePath *p;
 
   icon_view = GTK_ICON_VIEW (data);
+
+  iters_persist = gtk_tree_model_get_flags (icon_view->priv->model) & GTK_TREE_MODEL_ITERS_PERSIST;
   
   index = gtk_tree_path_get_indices(path)[0];
+
+  if (iters_persist)
+    {
+      for (list = icon_view->priv->items, pos = 0; list; list = list->next, pos++)
+	{
+	  item = list->data;
+	  p = gtk_tree_model_get_path (icon_view->priv->model, &item->iter);
+	  i = gtk_tree_path_get_indices (p)[0];
+	  gtk_tree_path_free (p);
+	  if (i == index)
+	    break;
+	}
+
+      if (pos != index)
+	{
+	  for (next = list->next; next; next = next->next)
+	    {
+	      item = next->data;
+	      
+	      item->index--;
+	    }
+	  
+	  item = list->data;
+	  icon_view->priv->items = g_list_delete_link (icon_view->priv->items, list);
+	  item->index = index;
+	  
+	  icon_view->priv->items = g_list_insert (icon_view->priv->items,
+						  item, index);
+	  
+	  list = g_list_nth (icon_view->priv->items, index + 1);
+	  for (; list; list = list->next)
+	    {
+	      item = list->data;
+	      
+	      item->index++;
+	    } 
+	}
+    }
+
   item = g_list_nth (icon_view->priv->items, index)->data;
 
   gtk_icon_view_item_invalidate_size (item);

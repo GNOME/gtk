@@ -1,3 +1,9 @@
+2004-12-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconview.c (gtk_icon_view_row_changed): Handle the
+	fact the the changed row may also be moved.  (#159387, Olivier 
+	Andrieu)
+
 2004-12-01  Tor Lillqvist  <tml@iki.fi>
 
 	* modules/input/imime.c (im_module_create): Use the module's
