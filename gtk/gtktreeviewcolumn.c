@@ -2248,7 +2248,7 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn *tree_column,
       info->requested_width = MAX (info->requested_width, new_width + focus_line_width * 2);
       if (width)
 	* width += info->requested_width;
-      first_cell = TRUE;
+      first_cell = FALSE;
     }
 }
 

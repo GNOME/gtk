@@ -3690,9 +3690,10 @@ validate_visible_area (GtkTreeView *tree_view)
 	    }
 	  if (tree_view->priv->scroll_to_use_align)
 	    {
-	      area_above = (total_height - MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size)) *
+	      gint height = MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size);
+	      area_above = (total_height - height) *
 		tree_view->priv->scroll_to_row_align;
-	      area_below = total_height - MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size) - area_above;
+	      area_below = total_height - height - area_above;
 	      area_above = MAX (area_above, 0);
 	      area_below = MAX (area_below, 0);
 	    }
@@ -3851,7 +3852,7 @@ validate_visible_area (GtkTreeView *tree_view)
       area_above -= MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size);
 
       _gtk_rbtree_prev_full (tree, node, &tree, &node);
-      if (! gtk_tree_path_prev (above_path))
+      if (! gtk_tree_path_prev (above_path) && node)
 	{
 	  gtk_tree_path_free (above_path);
 	  above_path = _gtk_tree_view_find_path (tree_view, tree, node);
@@ -4112,7 +4113,6 @@ gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view)
   tree_view->priv->dy += tree_view->priv->top_row_dy;
   gtk_adjustment_set_value (tree_view->priv->vadjustment,
 			    tree_view->priv->dy);
-  gtk_adjustment_changed (tree_view->priv->vadjustment);
 }
 
 void
@@ -10213,9 +10213,9 @@ gtk_tree_view_search_iter (GtkTreeModel     *model,
           (*count)++;
           if (*count == n)
             {
-              gtk_tree_selection_select_iter (selection, iter);
               gtk_tree_view_scroll_to_cell (tree_view, path, column,
 					    TRUE, 0.5, 0.5);
+              gtk_tree_selection_select_iter (selection, iter);
 	      gtk_tree_view_real_set_cursor (tree_view, path, FALSE);
 
 	      if (path)

@@ -1,3 +1,13 @@
+Fri Mar  1 23:59:35 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_get_size): set
+	first_cell to FALSE after first iteration
+
+	* gtk/gtktreeview.c (validate_visible_area): reduce usage of
+	GTK_RBNODE_GET_HEIGHT, check for node != NULL,
+	(gtk_tree_view_top_row_to_dy): remove call to gtk_adjustment_changed
+	(gtk_tree_view_search_iter): select iter after scrolling
+
 2002-03-02  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkitemfactory.c: Remove unneeded Win32 stuff inside #ifdef
