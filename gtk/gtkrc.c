@@ -311,19 +311,10 @@ gtk_rc_make_default_dir (const gchar *type)
 
   var = g_getenv ("GTK_EXE_PREFIX");
 
-#ifdef G_OS_WIN32
-  if (var)
-    var = g_locale_to_utf8 (var, -1, NULL, NULL, NULL);
-#endif
-
   if (var)
     path = g_build_filename (var, "lib", "gtk-2.0", GTK_BINARY_VERSION, type, NULL);
   else
     path = g_build_filename (GTK_LIBDIR, "gtk-2.0", GTK_BINARY_VERSION, type, NULL);
-
-#ifdef G_OS_WIN32
-  g_free ((void *) var);
-#endif
 
   return path;
 }
@@ -364,11 +355,6 @@ gtk_rc_get_im_module_file (void)
   const gchar *var = g_getenv ("GTK_IM_MODULE_FILE");
   gchar *result = NULL;
 
-#ifdef G_OS_WIN32
-  if (var)
-    var = g_locale_to_utf8 (var, -1, NULL, NULL, NULL);
-#endif
-
   if (var)
     result = g_strdup (var);
 
@@ -379,11 +365,6 @@ gtk_rc_get_im_module_file (void)
       else
 	result = g_build_filename (GTK_SYSCONFDIR, "gtk-2.0", "gtk.immodules", NULL);
     }
-
-#ifdef G_OS_WIN32
-  if (var)
-    g_free ((void *) var);
-#endif
 
   return result;
 }
@@ -396,20 +377,10 @@ gtk_rc_get_theme_dir (void)
 
   var = g_getenv ("GTK_DATA_PREFIX");
 
-#ifdef G_OS_WIN32
-  if (var)
-    var = g_locale_to_utf8 (var, -1, NULL, NULL, NULL);
-#endif
-
   if (var)
     path = g_build_filename (var, "share", "themes", NULL);
   else
     path = g_build_filename (GTK_DATA_PREFIX, "share", "themes", NULL);
-
-#ifdef G_OS_WIN32
-  if (var)
-    g_free ((void *) var);
-#endif
 
   return path;
 }
@@ -447,11 +418,6 @@ gtk_rc_add_initial_default_files (void)
 
   var = g_getenv ("GTK2_RC_FILES");
 
-#ifdef G_OS_WIN32
-  if (var)
-    var = g_locale_to_utf8 (var, -1, NULL, NULL, NULL);
-#endif
-
   if (var)
     {
       files = g_strsplit (var, G_SEARCHPATH_SEPARATOR_S, 128);
@@ -479,11 +445,6 @@ gtk_rc_add_initial_default_files (void)
 	  g_free (str);
 	}
     }
-
-#ifdef G_OS_WIN32
-  if (var)
-    g_free ((void *) var);
-#endif
 }
 
 /**
