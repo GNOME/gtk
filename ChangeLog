@@ -1,3 +1,11 @@
+2004-09-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmain.c (gtk_parse_args): Use gtk_get_option_group() 
+	to obtain an option group with correctly set pre- and post-
+	parse hooks, instead of manually calling the hooks. This fixes
+	a problem with setting the program class in the gdk preparse
+	hook.  (#153788, Robert Ögren)
+
 2004-09-27  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix #153082:

@@ -611,6 +611,7 @@ gtk_parse_args (int    *argc,
 		char ***argv)
 {
   GOptionContext *option_context;
+  GOptionGroup *gtk_group;
   
   if (gtk_initialized)
     return TRUE;
@@ -618,20 +619,14 @@ gtk_parse_args (int    *argc,
   if (!check_setugid ())
     return FALSE;
 
-  do_pre_parse_initialization (argc, argv);
-
   option_context = g_option_context_new (NULL);
   g_option_context_set_ignore_unknown_options (option_context, TRUE);
   g_option_context_set_help_enabled (option_context, FALSE);
-  
-  g_option_context_add_main_entries (option_context, gtk_args, GETTEXT_PACKAGE);
-  gdk_add_option_entries_libgtk_only (g_option_context_get_main_group (option_context));
-
+  gtk_group = gtk_get_option_group (FALSE);
+  g_option_context_set_main_group (option_context, gtk_group);
   g_option_context_parse (option_context, argc, argv, NULL);
   g_option_context_free (option_context);
 
-  do_post_parse_initialization (argc, argv);
-  
   return TRUE;
 }
 
