@@ -1,3 +1,12 @@
+Mon Jan 25 19:00:13 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_value_events): 
+	 Back out the last solution to updating problem. And
+	 try a different one that is less dependent on
+	 the state of the widget. Just redraw the value_marker
+	 when it gets mapped. Somebody needs to analyze
+	 this widget more carefully and figure out 
+
 Mon Jan 25 17:48:03 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcolorsel.c: Removed some GTK_WIDGET_DRAWABLE()
