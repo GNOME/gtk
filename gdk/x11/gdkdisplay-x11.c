@@ -47,11 +47,13 @@ static void                 gdk_display_x11_class_init         (GdkDisplayX11Cla
 static void                 gdk_display_x11_dispose            (GObject            *object);
 static void                 gdk_display_x11_finalize           (GObject            *object);
 
+#ifdef HAVE_X11R6
 static void gdk_internal_connection_watch (Display  *display,
 					   XPointer  arg,
 					   gint      fd,
 					   gboolean  opening,
 					   XPointer *watch_data);
+#endif /* HAVE_X11R6 */
 
 static gpointer parent_class = NULL;
 
@@ -130,8 +132,10 @@ gdk_display_open (const gchar *display_name)
   display_x11->use_xshm = TRUE;
   display_x11->xdisplay = xdisplay;
 
+#ifdef HAVE_X11R6  
   /* Set up handlers for Xlib internal connections */
   XAddConnectionWatch (xdisplay, gdk_internal_connection_watch, NULL);
+#endif /* HAVE_X11R6 */
   
   /* initialize the display's screens */ 
   display_x11->screens = g_new (GdkScreen *, ScreenCount (display_x11->xdisplay));
@@ -228,6 +232,7 @@ gdk_display_open (const gchar *display_name)
   return display;
 }
 
+#ifdef HAVE_X11R6
 /*
  * XLib internal connection handling
  */
@@ -299,6 +304,7 @@ gdk_internal_connection_watch (Display  *display,
   else
     gdk_remove_connection_handler ((GdkInternalConnection *)*watch_data);
 }
+#endif /* HAVE_X11R6 */
 
 /**
  * gdk_display_get_name:

@@ -1,3 +1,10 @@
+Fri Apr 18 16:31:49 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in gdk/x11/gdkdisplay-x11.c modules/input/Makefile.am:
+	Check for XAddConnectionWatch()/X11R6, and if found, disable XIM and
+	use of XAddConnectionWatch. Remove --enable-xim config option.
+	Should fix building on X11R6 (#110523, Albert Chin)
+
 Fri Apr 18 15:56:46 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdisplay-x11.[ch] gdk/x11/gdkdrawable-x11.[ch]:
