@@ -3636,8 +3636,8 @@ draw_row (GtkCList * clist,
 	  gdk_window_get_size (GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap, &width, &height);
 	  pixmap_width = width;
 	  width += GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing;
-	  width = gdk_string_width (GTK_WIDGET (clist)->style->font,
-				    GTK_CELL_PIXTEXT (clist_row->cell[i])->text);
+	  width += gdk_string_width (GTK_WIDGET (clist)->style->font,
+				     GTK_CELL_PIXTEXT (clist_row->cell[i])->text);
 	  break;
 
 	case GTK_CELL_WIDGET:

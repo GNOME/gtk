@@ -1033,6 +1033,7 @@ gtk_object_ref (GtkObject *object)
 {
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
+  g_return_if_fail (object->ref_count > 0);
 
   object->ref_count += 1;
 }
@@ -1042,12 +1043,16 @@ gtk_object_unref (GtkObject *object)
 {
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
+  g_return_if_fail (object->ref_count > 0);
   
   if (object->ref_count == 1)
-    gtk_object_destroy (object);
+    {
+      gtk_object_destroy (object);
   
-  if (object->ref_count > 0)
-    object->ref_count -= 1;
+      g_return_if_fail (object->ref_count > 0);
+    }
+
+  object->ref_count -= 1;
 
   if (object->ref_count == 0)
     {
