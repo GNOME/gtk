@@ -1,3 +1,13 @@
+Tue Jan 29 17:40:02 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_to_drawable):
+	Call _gdk_draw_pixbuf(), thus enabling using this function
+	for pixbufs with alpha. (#68801)
+
+	* gdk/gdkdraw.c (gdk_drawable_real_draw_pixbuf): Move
+	implementation of gdk_pixbuf_render_to_drawable()
+	to here.
+
 Tue Jan 29 17:16:17 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklayout.c: Patch from Jacob Berkman to fix problem

@@ -174,16 +174,12 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
 			       GdkRgbDither dither,
 			       int x_dither, int y_dither)
 {
-  int rowstride;
-  guchar *buf;
-
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
   g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
   g_return_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4);
   g_return_if_fail (pixbuf->bits_per_sample == 8);
 
   g_return_if_fail (drawable != NULL);
-  g_return_if_fail (gc != NULL);
 
   if (width == -1) 
     width = pixbuf->width;
@@ -197,33 +193,9 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
   if (width == 0 || height == 0)
     return;
 
-  /* This will have to be modified once we support other image types.
-   */
-
-  if (pixbuf->n_channels == 4)
-    {
-      buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 4;
-      rowstride = pixbuf->rowstride;
-
-      gdk_draw_rgb_32_image_dithalign (drawable, gc,
-				       dest_x, dest_y,
-				       width, height,
-				       dither,
-				       buf, rowstride,
-				       x_dither, y_dither);
-    }
-  else				/* n_channels == 3 */
-    {
-      buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 3;
-      rowstride = pixbuf->rowstride;
-
-      gdk_draw_rgb_image_dithalign (drawable, gc,
-				    dest_x, dest_y,
-				    width, height,
-				    dither,
-				    buf, rowstride,
-				    x_dither, y_dither);
-    }
+  _gdk_draw_pixbuf (drawable, gc, pixbuf,
+		    src_x, src_y, dest_x, dest_y, width, height,
+		    dither, x_dither, y_dither);
 }
 
 

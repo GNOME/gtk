@@ -1289,23 +1289,32 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
 
   if (composited)
     {
-      gdk_pixbuf_render_to_drawable (composited,
-                                     drawable, gc,
-                                     0, 0,
-                                     dest_x, dest_y,
-                                     width, height,
-                                     dither,
-                                     x_dither, y_dither);
+      src_x = 0;
+      src_y = 0;
+      pixbuf = composited;
     }
-  else
+  
+  if (pixbuf->n_channels == 4)
     {
-      gdk_pixbuf_render_to_drawable (pixbuf,
-                                     drawable, gc,
-                                     src_x, src_y,
-                                     dest_x, dest_y,
-                                     width, height,
-                                     dither,
-                                     x_dither, y_dither);
+      guchar *buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 4;
+
+      gdk_draw_rgb_32_image_dithalign (drawable, gc,
+				       dest_x, dest_y,
+				       width, height,
+				       dither,
+				       buf, pixbuf->rowstride,
+				       x_dither, y_dither);
+    }
+  else				/* n_channels == 3 */
+    {
+      guchar *buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 3;
+
+      gdk_draw_rgb_image_dithalign (drawable, gc,
+				    dest_x, dest_y,
+				    width, height,
+				    dither,
+				    buf, pixbuf->rowstride,
+				    x_dither, y_dither);
     }
 
  out:
