@@ -374,9 +374,11 @@ $(srcdir)/gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl $(gtk_public_h_sources
 
 
 gtkconfdir = $(sysconfdir)/gtk
-gtkconf_DATA = gtkrc.az gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
-	gtkrc.ko gtkrc.ru gtkrc.tr gtkrc.th gtkrc.uk gtkrc.iso-8859-2 \
-	gtkrc.iso-8859-5 gtkrc.iso-8859-13 gtkrc.iso-8859-14 \
+gtkconf_DATA = gtkrc.az gtkrc.he gtkrc.hy gtkrc.ja \
+	gtkrc.ko gtkrc.ru gtkrc.th gtkrc.uk \
+	gtkrc.utf-8 gtkrc.iso-8859-2 \
+	gtkrc.iso-8859-3 gtkrc.iso-8859-5 gtkrc.iso-8859-7 \
+	gtkrc.iso-8859-9 gtkrc.iso-8859-13 gtkrc.iso-8859-14 \
 	gtkrc.iso-8859-15 gtkrc.zh_CN gtkrc.zh_TW.big5 \
 	gtkrc.ka_GE.georgianacademy gtkrc.ka_GE.georgianps \
 	gtkrc.vi_VN.tcvn gtkrc.vi_VN.viscii gtkrc.cp1251 gtkrc.cp1255

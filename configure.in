@@ -192,6 +192,15 @@ LIBS="$LIBS $INTLLIBS"
 gtklocaledir='${prefix}/${DATADIRNAME}/locale'
 AC_SUBST(gtklocaledir)
 
+dnl Check for nl_langinfo and CODESET
+AC_MSG_CHECKING([for nl_langinfo (CODESET)])
+AC_TRY_COMPILE([#include <langinfo.h>],
+        [char *codeset = nl_langinfo (CODESET);],
+   AC_DEFINE(HAVE_CODESET,1,[Have nl_langinfo (CODESET)])
+   have_codeset=yes,
+   have_codeset=no)
+AC_MSG_RESULT($have_codeset)
+
 dnl The DU4 header files don't provide library prototypes unless 
 dnl -std1 is given to the native cc.
 AC_MSG_CHECKING([for extra flags to get ANSI library prototypes])

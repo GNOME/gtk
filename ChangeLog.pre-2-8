@@ -1,3 +1,11 @@
+2001-06-06  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* configure.in: Check for nl_langinfo (CODESET).  Code taken from
+        glib 1.3 branch.
+	* gtk/gtkrc.c,gtk/gtkrc.*,gtk/Makefile.am: changed the algorithm
+	ussed to look for locale dependent rc files so it does a better job
+	finding them based on charset.
+
 2001-06-01  Alex Larsson  <alexl@redhat.com>
 
 	* gdk/gdkevents.c (expose_predicate):
