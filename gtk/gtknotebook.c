@@ -834,6 +834,8 @@ gtk_notebook_unmap (GtkWidget *widget)
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
   gdk_window_hide (GTK_NOTEBOOK (widget)->event_window);
+
+  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
 }
 
 static void
@@ -2443,19 +2445,13 @@ gtk_notebook_paint (GtkWidget    *widget,
       switch (notebook->tab_pos)
 	{
 	case GTK_POS_TOP:
-	  gap_x = (notebook->cur_page->allocation.x - border_width);
-	  gap_width = notebook->cur_page->allocation.width;
-	  break;
 	case GTK_POS_BOTTOM:
-	  gap_x = (notebook->cur_page->allocation.x - border_width);
+	  gap_x = (notebook->cur_page->allocation.x - widget->allocation.x - border_width);
 	  gap_width = notebook->cur_page->allocation.width;
 	  break;
 	case GTK_POS_LEFT:
-	  gap_x = (notebook->cur_page->allocation.y - border_width);
-	  gap_width = notebook->cur_page->allocation.height;
-	  break;
 	case GTK_POS_RIGHT:
-	  gap_x = (notebook->cur_page->allocation.y - border_width);
+	  gap_x = (notebook->cur_page->allocation.y - widget->allocation.y - border_width);
 	  gap_width = notebook->cur_page->allocation.height;
 	  break;
 	}

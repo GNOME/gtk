@@ -1,3 +1,11 @@
+Tue Nov 20 12:37:10 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_paint): Fix problem
+	where notebook gap was double shifted by allocation.x/y
+
+	* gtk/gtknotebook.c (gtk_notebook_unmap): Chain up
+	to unmap children.
+
 Tue Nov 20 14:49:59 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkvpaned.c (gtk_vpaned_size_allocate): fix
