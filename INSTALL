@@ -7,8 +7,8 @@ you got this package.
 Simple install procedure
 ========================
 
-  % gzip -cd gtk+-1.1.5.tar.gz | tar xvf - # unpack the sources
-  % cd gtk+-1.1.5                          # change to the toplevel directory
+  % gzip -cd gtk+-1.1.6.tar.gz | tar xvf - # unpack the sources
+  % cd gtk+-1.1.6                          # change to the toplevel directory
   % ./configure                            # run the `configure' script
   % make                                   # build GTK
   [ Become root if necessary ]
@@ -92,7 +92,7 @@ You can compile GTK+ against a copy of GLIB that you have not
 yet installed. To do this, give the --with-glib=DIR options
 to ./configure. For instance:
 
- ./configure --with-glib=../glib-1.1.5
+ ./configure --with-glib=../glib-1.1.6
 
 This, however, will not work if you built GLIB with different
 source and build directories.

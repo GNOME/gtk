@@ -1,3 +1,14 @@
+Wed Dec  2 17:45:21 CST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkpixmap.c: Fixes for low-color displays and a slight
+	  enhancement for true-color displays.
+
+	* INSTALL:
+	  README:
+	  configure.in:
+	  gtk+.spec:
+	  docs/gtk-config.1: up to version 1.1.6
+
 Wed Dec  2 01:36:49 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/gtkfeatures.h.in: lets #define GTK_HAVE_FEATURES_1_1_6 before
