@@ -1,3 +1,7 @@
+Tue, 19 May 1998 09:03:03 +0200  Paolo Molaro <lupus@debian.org>
+
+	* gtk/gtkcombo.c: implemented completion in the entry.
+
 1998-05-18    <sopwith@moebuis.labs.redhat.com>
 
 	* gtk/gtk{debug.h,signal.c,main.c}: Allow GTK_DEBUG=signals

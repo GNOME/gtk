@@ -1,3 +1,7 @@
+Tue, 19 May 1998 09:00:02 +0200  §Paolo Molaro <lupus@debian.org>
+
+	* gcompletion.c: generic functions for com<TAB>pletion...
+
 Sun May 17 10:48:27 1998  Tim Janik  <timj@gtk.org>
 
 	* gscanner.c (g_scanner_unexp_token): provide usefull default

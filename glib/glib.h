@@ -1065,6 +1065,33 @@ void		g_scanner_warn			(GScanner	*scanner,
 gint		g_scanner_stat_mode		(const gchar	*filename);
 
 
+/* Completion */
+
+typedef gchar* (*GCompletionFunc)(gpointer);
+
+typedef struct _GCompletion GCompletion;
+
+struct _GCompletion {
+	GList* items;
+	GCompletionFunc func;
+
+	gchar* prefix;
+	GList* cache;
+
+};
+
+GCompletion* g_completion_new          (GCompletionFunc func);
+void         g_completion_add_items    (GCompletion* cmp, 
+                                        GList* items);
+void         g_completion_remove_items (GCompletion* cmp, 
+                                        GList* items);
+void         g_completion_clear_items  (GCompletion* cmp);
+GList*       g_completion_complete     (GCompletion* cmp, 
+                                        gchar* prefix,
+                                        gchar** new_prefix);
+void         g_completion_free         (GCompletion* cmp);
+
+
 
 #ifdef __cplusplus
 }
