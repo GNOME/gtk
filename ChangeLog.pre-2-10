@@ -1,5 +1,9 @@
 2004-06-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaccelmap.c (_gtk_accel_path_is_valid): Accept
+	"<WINDOWTYPE>" as a valid accel path.  (#144427, Philip 
+	Kendall)	
+
 	* gtk/gtkselection.c (GTK_SELECTION_MAX_SIZE): Make sure 
 	this gets defined for all backends, so linux-fb has a 
 	chance of compiling.
