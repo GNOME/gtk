@@ -1,3 +1,10 @@
+2002-11-20  Tor Lillqvist  <tml@iki.fi>
+
+	Fix by Arnaud Charlet (#98983):
+
+	* gtk+/gdk/win32/gdkwindow-win32.c
+	(gdk_window_get_frame_extents): Fix typo in setting y.
+
 2002-11-19  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_new): Yes, my change on
