@@ -75,6 +75,7 @@ void         gtk_file_info_free (GtkFileInfo *info);
 
 
 G_CONST_RETURN gchar *gtk_file_info_get_display_name      (const GtkFileInfo *info);
+G_CONST_RETURN gchar *gtk_file_info_get_display_key       (const GtkFileInfo *info);
 void                  gtk_file_info_set_display_name      (GtkFileInfo       *info,
 							   const gchar       *display_name);
 gboolean              gtk_file_info_get_is_folder         (const GtkFileInfo *info);
@@ -200,8 +201,8 @@ struct _GtkFileFolderIface
   /* Signals
    */
   void (*deleted)      (GtkFileFolder *monitor);
-  void (*file_added)   (GtkFileFolder *monitor,
-		        const gchar   *uri);
+  void (*files_added)   (GtkFileFolder *monitor,
+			 GSList        *uris);
   void (*file_changed) (GtkFileFolder *monitor,
 			const gchar   *uri);
   void (*file_removed) (GtkFileFolder *monitor,

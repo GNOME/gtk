@@ -84,9 +84,9 @@ GType gtk_file_chooser_get_type (void);
 void                 gtk_file_chooser_set_action          (GtkFileChooser       *chooser,
 							   GtkFileChooserAction  action);
 GtkFileChooserAction gtk_file_chooser_get_action          (GtkFileChooser       *chooser);
-void                 gtk_file_chooser_set_directory_mode  (GtkFileChooser       *chooser,
-							   gboolean              directory_mode);
-gboolean             gtk_file_chooser_get_directory_mode  (GtkFileChooser       *chooser);
+void                 gtk_file_chooser_set_folder_mode     (GtkFileChooser       *chooser,
+							   gboolean              folder_mode);
+gboolean             gtk_file_chooser_get_folder_mode     (GtkFileChooser       *chooser);
 void                 gtk_file_chooser_set_local_only      (GtkFileChooser       *chooser,
 							   gboolean              files_only);
 gboolean             gtk_file_chooser_get_local_only      (GtkFileChooser       *chooser);

@@ -571,7 +571,7 @@ name_sort_func (GtkTreeModel *model,
   const GtkFileInfo *info_a = _gtk_file_system_model_get_info (impl->tree_model, a);
   const GtkFileInfo *info_b = _gtk_file_system_model_get_info (impl->tree_model, b);
 
-  return g_utf8_collate (gtk_file_info_get_display_name (info_a), gtk_file_info_get_display_name (info_b));
+  return strcmp (gtk_file_info_get_display_key (info_a), gtk_file_info_get_display_key (info_b));
 }
 
 static gint

@@ -25,6 +25,7 @@ struct _GtkFileInfo
   GtkFileTime modification_time;
   gint64 size;
   gchar *display_name;
+  gchar *display_key;
   gchar *mime_type;
   GdkPixbuf *icon;
   guint is_folder : 1;
@@ -108,6 +109,33 @@ gtk_file_info_get_display_name (const GtkFileInfo *info)
   return info->display_name;
 }
 
+/**
+ * gtk_file_info_get_display_key:
+ * @info: a #GtkFileInfo
+ * 
+ * Returns results of g_utf8_collate_key() on the display name
+ * for @info. This is useful when sorting a bunch of #GtkFileInfo
+ * structures since the collate key will be only computed once.
+ * 
+ * Return value: The collate key for the display name, or %NULL
+ *   if the display name hasn't been set.
+ **/
+G_CONST_RETURN gchar *
+gtk_file_info_get_display_key (const GtkFileInfo *info)
+{
+  g_return_val_if_fail (info != NULL, NULL);
+
+  if (!info->display_key && info->display_name)
+    {
+      /* Since info->display_key is only a cache, we cast off the const
+       */
+      ((GtkFileInfo *)info)->display_key = g_utf8_collate_key (info->display_name, -1);
+    }
+	
+  
+  return info->display_key;
+}
+
 void
 gtk_file_info_set_display_name (GtkFileInfo *info,
 				const gchar *display_name)
@@ -116,6 +144,11 @@ gtk_file_info_set_display_name (GtkFileInfo *info,
 
   if (info->display_name)
     g_free (info->display_name);
+  if (info->display_key)
+    {
+      g_free (info->display_key);
+      info->display_key = NULL;
+    }
 
   info->display_name = g_strdup (display_name);
 }
@@ -473,27 +506,30 @@ gtk_file_folder_base_init (gpointer g_class)
 		    NULL, NULL,
 		    g_cclosure_marshal_VOID__VOID,
 		    G_TYPE_NONE, 0);
-      g_signal_new ("file_added",
+      g_signal_new ("files_added",
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkFileFolderIface, file_added),
+		    G_STRUCT_OFFSET (GtkFileFolderIface, files_added),
 		    NULL, NULL,
-		    g_cclosure_marshal_VOID__STRING,
-		    G_TYPE_NONE, 0);
+		    g_cclosure_marshal_VOID__POINTER,
+		    G_TYPE_NONE, 1,
+		    G_TYPE_POINTER);
       g_signal_new ("file_changed",
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkFileFolderIface, file_changed),
 		    NULL, NULL,
 		    g_cclosure_marshal_VOID__STRING,
-		    G_TYPE_NONE, 0);
+		    G_TYPE_NONE, 1,
+		    G_TYPE_STRING);
       g_signal_new ("file_removed",
 		    iface_type,
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkFileFolderIface, file_removed),
 		    NULL, NULL,
 		    g_cclosure_marshal_VOID__STRING,
-		    G_TYPE_NONE, 0);
+		    G_TYPE_NONE, 1,
+		    G_TYPE_STRING);
 
       initialized = TRUE;
     }
