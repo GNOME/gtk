@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-20 02:46+0100\n"
-"PO-Revision-Date: 2004-02-20 02:52+0100\n"
+"POT-Creation-Date: 2004-02-22 08:53+0100\n"
+"PO-Revision-Date: 2004-02-22 08:55+0100\n"
 "Last-Translator: Александар Урошевић <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -154,27 +154,27 @@ msgid "The stock icon displayed in widgets representing this action."
 msgstr ""
 "Испоручена икона која се приказује у елементима који представљају ову акцију."
 
-#: gtk/gtkaction.c:229 gtk/gtktoolitem.c:154
+#: gtk/gtkaction.c:229 gtk/gtktoolitem.c:157
 msgid "Visible when horizontal"
 msgstr "Видљиво када је водоравно"
 
-#: gtk/gtkaction.c:230 gtk/gtktoolitem.c:155
+#: gtk/gtkaction.c:230 gtk/gtktoolitem.c:158
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
 msgstr "Да ли се приказује ставка алатки када су постављене водоравно."
 
-#: gtk/gtkaction.c:236 gtk/gtktoolitem.c:161
+#: gtk/gtkaction.c:236 gtk/gtktoolitem.c:164
 msgid "Visible when vertical"
 msgstr "Видљиво када је усправно"
 
-#: gtk/gtkaction.c:237 gtk/gtktoolitem.c:162
+#: gtk/gtkaction.c:237 gtk/gtktoolitem.c:165
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr "Да ли се приказује ставка алатки када су постављене усправно."
 
-#: gtk/gtkaction.c:243 gtk/gtktoolitem.c:168
+#: gtk/gtkaction.c:243 gtk/gtktoolitem.c:171
 msgid "Is important"
 msgstr "Важно је"
 
@@ -1171,11 +1171,11 @@ msgstr "Стање једноизборника"
 msgid "Draw the toggle button as a radio button"
 msgstr "Исцртај жабицу као једноизборник"
 
-#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:199
+#: gtk/gtkcheckbutton.c:98 gtk/gtkcheckmenuitem.c:139 gtk/gtkoptionmenu.c:199
 msgid "Indicator Size"
 msgstr "Величина показатеља"
 
-#: gtk/gtkcheckbutton.c:99
+#: gtk/gtkcheckbutton.c:99 gtk/gtkcheckmenuitem.c:141
 msgid "Size of check or radio indicator"
 msgstr "Величина показатеља означавања или једноизборника"
 
@@ -1187,27 +1187,27 @@ msgstr "Размаци показатеља"
 msgid "Spacing around check or radio indicator"
 msgstr "Размаци око показатеља означавања или једноизборника"
 
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtktogglebutton.c:132
+#: gtk/gtkcheckmenuitem.c:116 gtk/gtktogglebutton.c:132
 msgid "Active"
 msgstr "Активан"
 
-#: gtk/gtkcheckmenuitem.c:119
+#: gtk/gtkcheckmenuitem.c:117
 msgid "Whether the menu item is checked"
 msgstr "Да ли је ставка менија означена"
 
-#: gtk/gtkcheckmenuitem.c:126 gtk/gtktogglebutton.c:140
+#: gtk/gtkcheckmenuitem.c:124 gtk/gtktogglebutton.c:140
 msgid "Inconsistent"
 msgstr "Недоследно"
 
-#: gtk/gtkcheckmenuitem.c:127
+#: gtk/gtkcheckmenuitem.c:125
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "Да ли приказати „недоследно“ стање"
 
-#: gtk/gtkcheckmenuitem.c:134
+#: gtk/gtkcheckmenuitem.c:132
 msgid "Draw as radio menu item"
 msgstr "Исцртај као радио дугме"
 
-#: gtk/gtkcheckmenuitem.c:135
+#: gtk/gtkcheckmenuitem.c:133
 msgid "Whether the menu item looks like a radio menu item"
 msgstr "Да ли ставка менија изгледа на искључиву ставку"
 
@@ -1571,19 +1571,19 @@ msgstr "Изабери кад је у жижи"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Да ли изабрати садржај када поље пређе у жижу"
 
-#: gtk/gtkentrycompletion.c:197
+#: gtk/gtkentrycompletion.c:199
 msgid "Completion Model"
 msgstr "Модел допуњавања"
 
-#: gtk/gtkentrycompletion.c:198
+#: gtk/gtkentrycompletion.c:200
 msgid "The model to find matches in"
 msgstr "Модел по којем се траже поклапања"
 
-#: gtk/gtkentrycompletion.c:204
+#: gtk/gtkentrycompletion.c:206
 msgid "Minimum Key Length"
 msgstr "Најмања дужина кључа"
 
-#: gtk/gtkentrycompletion.c:205
+#: gtk/gtkentrycompletion.c:207
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Најмања дужина кључа за претрагу ради налажења поклапања"
 
@@ -2894,11 +2894,11 @@ msgstr "Да ли се раздвајачи исцртавају, или су п
 
 # Da li je ovo novi izraz za dvostruki klik, ili ga je neko vec koristio?
 # Урке: ја сам га одавно користио :)
-#: gtk/gtksettings.c:170
+#: gtk/gtksettings.c:262
 msgid "Double Click Time"
 msgstr "Време двоклика"
 
-#: gtk/gtksettings.c:171
+#: gtk/gtksettings.c:263
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -2906,11 +2906,11 @@ msgstr ""
 "Најдужи дозвољени размак између два клика како би се они сматрали једним "
 "двокликом (у милисекундама)"
 
-#: gtk/gtksettings.c:178
+#: gtk/gtksettings.c:270
 msgid "Double Click Distance"
 msgstr "Размак двоклика"
 
-#: gtk/gtksettings.c:179
+#: gtk/gtksettings.c:271
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -2918,27 +2918,27 @@ msgstr ""
 "Највећи дозвољени размак између два клика како би се они сматрали једним "
 "двокликом (у тачкама)"
 
-#: gtk/gtksettings.c:186
+#: gtk/gtksettings.c:278
 msgid "Cursor Blink"
 msgstr "Треперење курсора"
 
-#: gtk/gtksettings.c:187
+#: gtk/gtksettings.c:279
 msgid "Whether the cursor should blink"
 msgstr "Да ли курсор треба да трепери"
 
-#: gtk/gtksettings.c:194
+#: gtk/gtksettings.c:286
 msgid "Cursor Blink Time"
 msgstr "Време трептаја курсора"
 
-#: gtk/gtksettings.c:195
+#: gtk/gtksettings.c:287
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Време између два трептаја курсора, у милисекундама"
 
-#: gtk/gtksettings.c:202
+#: gtk/gtksettings.c:294
 msgid "Split Cursor"
 msgstr "Раздвојени курсор"
 
-#: gtk/gtksettings.c:203
+#: gtk/gtksettings.c:295
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -2946,61 +2946,101 @@ msgstr ""
 "Да ли треба приказати два курсора за мешани текст са лева на десно и са "
 "десна на лево "
 
-#: gtk/gtksettings.c:210
+#: gtk/gtksettings.c:302
 msgid "Theme Name"
 msgstr "Име теме"
 
-#: gtk/gtksettings.c:211
+#: gtk/gtksettings.c:303
 msgid "Name of theme RC file to load"
 msgstr "Име RC датотеке теме за учитавање"
 
-#: gtk/gtksettings.c:218
+#: gtk/gtksettings.c:310
 msgid "Icon Theme Name"
 msgstr "Име теме икона"
 
-#: gtk/gtksettings.c:219
+#: gtk/gtksettings.c:311
 msgid "Name of icon theme to use"
 msgstr "Име теме икона која ће се користити"
 
-#: gtk/gtksettings.c:226
+#: gtk/gtksettings.c:318
 msgid "Key Theme Name"
 msgstr "Име теме тастера"
 
-#: gtk/gtksettings.c:227
+#: gtk/gtksettings.c:319
 msgid "Name of key theme RC file to load"
 msgstr "Име RC датотеке теме тастера за учитавање"
 
-#: gtk/gtksettings.c:235
+#: gtk/gtksettings.c:327
 msgid "Menu bar accelerator"
 msgstr "Пречица за линију менија"
 
-#: gtk/gtksettings.c:236
+#: gtk/gtksettings.c:328
 msgid "Keybinding to activate the menu bar"
 msgstr "Избор тастера за приступ линији менија"
 
-#: gtk/gtksettings.c:244
+#: gtk/gtksettings.c:336
 msgid "Drag threshold"
 msgstr "Праг превлачења"
 
-#: gtk/gtksettings.c:245
+#: gtk/gtksettings.c:337
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Колико се тачака сме курсор померити пре повлачења"
 
-#: gtk/gtksettings.c:253
+#: gtk/gtksettings.c:345
 msgid "Font Name"
 msgstr "Име писма"
 
-#: gtk/gtksettings.c:254
+#: gtk/gtksettings.c:346
 msgid "Name of default font to use"
 msgstr "Име уобичајеног писма које ће се користити"
 
-#: gtk/gtksettings.c:262
+#: gtk/gtksettings.c:354
 msgid "Icon Sizes"
 msgstr "Величине икона"
 
-#: gtk/gtksettings.c:263
+#: gtk/gtksettings.c:355
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 msgstr "Списак величина икона (gtk-menu=16,16;gtk-button=20,20...)"
+
+#: gtk/gtksettings.c:364
+msgid "Xft Antialias"
+msgstr "Xft омекшавање"
+
+#: gtk/gtksettings.c:365
+msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
+msgstr "Да ли да омекшава Xft фонтове; 0=не, 1=да, -1=подразумевано"
+
+#: gtk/gtksettings.c:374
+msgid "Xft Hinting"
+msgstr "Xft хинтови"
+
+#: gtk/gtksettings.c:375
+msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
+msgstr "Да ли да користи хинтове за Xft фонтове; 0=не, 1=да, -1=подразумевано"
+
+#: gtk/gtksettings.c:384
+msgid "Xft Hint Style"
+msgstr "Стил Xft хинтова"
+
+#: gtk/gtksettings.c:385
+msgid "What degree of hinting to use; none, slight, medium, or full"
+msgstr "Који степен хинтова да користим; „none“, „slight“, „medium“ или „full“"
+
+#: gtk/gtksettings.c:394
+msgid "Xft RGBA"
+msgstr "Xft RGBA"
+
+#: gtk/gtksettings.c:395
+msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
+msgstr "Врста омекшавања испод тачке; „none“, „rgb“, „bgr“, „vrgb“, „vbgr“"
+
+#: gtk/gtksettings.c:404
+msgid "Xft DPI"
+msgstr "Xft ТПИ"
+
+#: gtk/gtksettings.c:405
+msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
+msgstr "Резолуција за Xft, у 1024 * тачака/инчу. -1 за подразумевану вредност"
 
 #: gtk/gtksizegroup.c:241
 msgid "Mode"
@@ -3691,7 +3731,7 @@ msgstr "Елемент иконе"
 msgid "Icon widget to display in the item"
 msgstr "Елемент иконе који се приказује уз ставку"
 
-#: gtk/gtktoolitem.c:169
+#: gtk/gtktoolitem.c:172
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -3934,19 +3974,19 @@ msgstr "Редослед уређења"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Смер уређивања који показатељ уређења треба да показује"
 
-#: gtk/gtkuimanager.c:217
+#: gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Додај отцепљивање у меније"
 
-#: gtk/gtkuimanager.c:218
+#: gtk/gtkuimanager.c:221
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Да ли се додају ставке менија за отцепљивање у меније"
 
-#: gtk/gtkuimanager.c:225
+#: gtk/gtkuimanager.c:228
 msgid "Merged UI definition"
 msgstr "Спојена дефиниција сучеља"
 
-#: gtk/gtkuimanager.c:226
+#: gtk/gtkuimanager.c:229
 msgid "An XML string describing the merged UI"
 msgstr "XML ниска која описује спојено сучеље"
 
