@@ -643,7 +643,6 @@ gtk_range_draw (GtkWidget    *widget,
 		GdkRectangle *area)
 {
   GtkRange *range;
-  GdkRectangle tmp_area;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_RANGE (widget));

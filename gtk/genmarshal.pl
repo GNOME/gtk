@@ -45,7 +45,6 @@ print OH <<EOT;
 
 #ifdef __cplusplus
 extern "C" {
-#pragma }
 #endif /* __cplusplus */
 
 #define gtk_signal_default_marshaller gtk_marshal_NONE__NONE
