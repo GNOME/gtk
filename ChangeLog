@@ -1,3 +1,8 @@
+2004-08-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkaction.c (gtk_action_new): Fix the doc comment to generate
+	valid XML.
+
 Thu Aug 12 02:20:54 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* NEWS: Updates
