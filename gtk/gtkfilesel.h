@@ -50,8 +50,10 @@ typedef struct _GtkFileSelectionClass  GtkFileSelectionClass;
 
 struct _GtkFileSelection
 {
+  /*< private >*/
   GtkDialog parent_instance;
 
+  /*< public >*/
   GtkWidget *dir_list;
   GtkWidget *file_list;
   GtkWidget *selection_entry;
@@ -75,6 +77,7 @@ struct _GtkFileSelection
   GtkWidget *button_area;
   GtkWidget *action_area;
 
+  /*< private >*/
   GPtrArray *selected_names;
   gchar     *last_selected;
 };
