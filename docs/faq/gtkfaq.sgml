@@ -565,6 +565,7 @@ The GTK+ Tutorial lists the following widgets:
      | |   `GtkCheckButton
      | |     `GtkRadioButton
      | +GtkCList
+     |   `GtkCTree
      | +GtkFixed
      | +GtkList
      | +GtkMenuShell

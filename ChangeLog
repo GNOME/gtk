@@ -1,3 +1,10 @@
+1998-05-10  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/gtkctree.c (gtk_ctree_is_visible): Changed return value
+	to gboolean.
+
+	* docs/gtk.texi (GtkCTree): Started documentation of GtkCTree.
+
 Sat May  9 20:11:20 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* configure.in (LIBS): Try to figure out if this

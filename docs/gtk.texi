@@ -762,6 +762,7 @@ The available widgets (in alphabetical order):
 * GtkColorSelection::		The color selector widget.
 * GtkCombo::			The combo box widget.
 * GtkContainer::                The container widget.
+* GtkCTree::                    The multi-column tree widget.
 * GtkCurve::			The curve widget.
 * GtkGammaCurve::		The gamma curve widget.
 * GtkDialog::                   The dialog widget.
@@ -1774,7 +1775,7 @@ a @code{GtkWidget} object. @code{NULL} is returned on failure.
 @gtkstdmacros{Combo, COMBO}
 
 @page
-@node GtkContainer, GtkCurve, GtkCombo, Widgets
+@node GtkContainer, GtkCTree, GtkCombo, Widgets
 @comment node-name, next, previous, up
 @section The container widget
 
@@ -1853,8 +1854,111 @@ Remove @var{widget} from @var{container}.
 
 @gtkstdmacros{Container, CONTAINER}
 
+@page 
+@node GtkCTree, GtkCurve, GtkContainer, Widgets
+@comment node-name, next, previous, up
+@section The multi-column tree widget
+
+@subsection Description
+
+The GtkCTree widget is a multi-columned list with a designated column, the 
+@code{tree column}, to display hierarchically-organized data. Each node is
+either a folder (a branch of the tree) or a leaf. Nodes can be
+(recursively) expanded, collapsed, (un)selected, removed, moved, sorted etc. 
+
+GtkCTree is a descendant of @pxref{GtkCList}. Therefore, a cell in a column
+other than the tree column can only contain a string, a pixmap, both or 
+nothing. A node in the tree column can contain a string and up to two pixmaps
+and masks, indicating the "folder openend" and "folder closed" status.
+
+Compared to GtkCList, there is no concept of row numbers. Therefore, a number
+of GtkCList methods had to be re-implemented taking @code{GList *node} 
+arguments instead of @code{gint row}.
+
+@subsection Options
+
+@subsection Signals
+
+@deftypefn Signal void GtkCTree::tree_expand (GtkCTree *@var{ctree}, GList *@var{node})
+@end deftypefn
+@deftypefn Signal void GtkCTree::tree_collapse (GtkCTree *@var{ctree}, GList *@var{node})
+@end deftypefn
+@deftypefn Signal void GtkCTree::tree_move (GtkCTree *@var{ctree}, GList *@var{node}, GList *@var{new_parent}, GList *@var{new_sibling})
+@end deftypefn
+@deftypefn Signal void GtkCTree::tree_select_row (GtkCTree *@var{ctree}, GList *@var{row}, gint @var{column})
+@end deftypefn
+@deftypefn Signal void GtkCTree::tree_unselect_row (GtkCTree *@var{ctree}, GList *@var{row}, gint @var{column})
+@end deftypefn
+
+@subsection Functions
+
+@deftypefun GtkType gtk_ctree_get_type (void)
+Returns the @code{GtkCTree} type identifier.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_ctree_new (gint @var{columns}, gint @var{tree_column})
+Creates a new GtkCTree widget with the given number of columns and the given tree column.
+
+On success, a pointer to the newly created widget is returned, and @code{NULL} otherwise.
+@end deftypefun
+
+@deftypefun GtkWidget* gtk_ctree_new_with_titles (gint @var{columns}, gint @var{tree_column}, gchar *@var{titles[]})
+Creates a new GtkCTree widget with the given number of columns and the given tree column. The column titles are initialized to the strings of the array @var{titles}.
+
+On success, a pointer to the newly created widget is returned, and @code{NULL} otherwise.
+@end deftypefun
+
+@deftypefun GList* gtk_ctree_insert (GtkCTree *@var{ctree}, GList *@var{parent}, GList *@var{sibling}, gchar *@var{text[]}, guint8 @var{spacing}, GdkPixmap *@var{pixmap_closed}, GdkPixmap *@var{mask_closed}, GdkPixmap *@var{pixmap_opened}, GdkPixmap *@var{mask_opened}, gboolean @var{is_leaf}, gboolean @var{expanded})
+Inserts a new node at the given position. If @var{parent} == NULL, the node is
+inserted at root level. If @var{sibling} == NULL, the node is appended to the 
+existing list of siblings. Otherwise, the node is inserted before @var{sibling}.
+If not NULL, the two pixmaps/masks are used to indicate the opened/closed status
+of the node. @var{spacing} is the number of pixels between pixmap and text.
+If @var{is_leaf} == TRUE, the node cannot have any children.
+The initial expanded/collapsed status is given by @var{expanded}.
+
+On success, the pointer to the newly inserted node is returned, and NULL 
+otherwise.
+@end deftypefun
+
+@deftypefun void gtk_ctree_remove (GtkCTree *@var{ctree}, GList *@var{node})
+Removes the given node and all its children.
+@end deftypefun
+
+@deftypefun void gtk_ctree_clear (GtkCTree *@var{ctree})
+Removes all nodes of @var{ctree}.
+@end deftypefun
+
+@deftypefun void gtk_ctree_post_recursive (GtkCTree *@var{ctree}, GList *@var{node}, GtkCTreeFunc @var{func}, gpointer @var{data})
+Apply @var{func} to @var{node} and all its children, traversing @var{ctree} in
+post-order.
+@end deftypefun
+
+@deftypefun void gtk_ctree_pre_recursive (GtkCTree *@var{ctree}, GList *@var{node}, GtkCTreeFunc @var{func}, gpointer @var{data})
+Apply @var{func} to @var{node} and all its children, traversing @var{ctree} in
+pre-order.
+@end deftypefun
+
+@deftypefun gboolean gtk_ctree_is_visible (GtkCTree *@var{ctree}, GList *@var{node})
+Returns the visibility status of the given node. A node is said to be visible
+if in the chain of parent nodes every node is expanded. Or : the node is 
+currently being displayed (but not necessarily inside the viewing area).
+@end deftypefun
+
+@c @deftypefun void gtk_ctree_scroll_to (GtkCTree *@var{ctree}, gint @var{row}, gint@var{column}, gfloat @var{row_align}, gfloat @var{col_align})
+@c Scroll the viewing area of the @code{GtkCtree} in @var{ctree} to @var{column}
+@c and @var{row}. The @var{row_align} and @var{col_align} are between zero and
+@c one, representing the location the row should appear on screen. Setting 
+@c @var{row_align} or the @var{col_align} to 0.0 will be the top or left of the
+@c viewing area. Setting the @var{row_align} or @var{col_align} to 1.0 will
+@c be the bottom or right of the viewing area. If the @var{row} or @var{column}
+@c is -1 then there is no change.
+@c @end deftypefun
+
+@gtkstdmacros{CTree, CTREE}
+
 @page
-@node GtkCurve, GtkGammaCurve, GtkContainer, Widgets
+@node GtkCurve, GtkGammaCurve, GtkCTree, Widgets
 @comment node-name, next, previous, up
 @section The curve widget
 

@@ -1494,6 +1494,7 @@ For your reference, here is the class hierarchy tree used to implement widgets.
      | |   `GtkCheckButton
      | |     `GtkRadioButton
      | +GtkCList
+     |  `GtkCTree
      | +GtkFixed
      | +GtkList
      | +GtkMenuShell

@@ -1036,7 +1036,8 @@ draw_row (GtkCList     *clist,
   /* draw the cell borders and background */
   if (area)
     {
-      if (gdk_rectangle_intersect (area, &cell_rectangle, &intersect_rectangle))
+      if (gdk_rectangle_intersect (area, &cell_rectangle, 
+				   &intersect_rectangle))
 	gdk_draw_rectangle (clist->clist_window,
 			    widget->style->base_gc[GTK_STATE_NORMAL],
 			    TRUE,
@@ -1050,7 +1051,8 @@ draw_row (GtkCList     *clist,
 	{
 	  cell_rectangle.y += clist->row_height + CELL_SPACING;
 
-	  if (gdk_rectangle_intersect (area, &cell_rectangle, &intersect_rectangle))
+	  if (gdk_rectangle_intersect (area, &cell_rectangle, 
+				       &intersect_rectangle))
 	    gdk_draw_rectangle (clist->clist_window,
 				widget->style->base_gc[GTK_STATE_NORMAL],
 				TRUE,
@@ -1130,7 +1132,7 @@ draw_row (GtkCList     *clist,
       clip_rectangle.x = clist->column[i].area.x + clist->hoffset;
       clip_rectangle.width = clist->column[i].area.width;
 
-      /* calculate clipping region clipping region */
+      /* calculate clipping region */
       if (i == ctree->tree_column)
 	{
 	  clip_rectangle.y -= CELL_SPACING;
@@ -1163,7 +1165,8 @@ draw_row (GtkCList     *clist,
 	  break;
 
 	case GTK_CELL_PIXMAP:
-	  gdk_window_get_size (GTK_CELL_PIXMAP (clist_row->cell[i])->pixmap, &width, &height);
+	  gdk_window_get_size (GTK_CELL_PIXMAP (clist_row->cell[i])->pixmap, 
+			       &width, &height);
 	  pixmap_width = width;
 	  break;
 
@@ -1223,11 +1226,13 @@ draw_row (GtkCList     *clist,
 	  break;
 
 	case GTK_JUSTIFY_CENTER:
-	  offset = (clip_rectangle.x + (clip_rectangle.width / 2)) - (width / 2);
+	  offset = (clip_rectangle.x + (clip_rectangle.width / 2)) 
+	    - (width / 2);
 	  break;
 
 	case GTK_JUSTIFY_FILL:
-	  offset = (clip_rectangle.x + (clip_rectangle.width / 2)) - (width / 2);
+	  offset = (clip_rectangle.x + (clip_rectangle.width / 2)) 
+	    - (width / 2);
 	  break;
 
 	default:
@@ -1627,12 +1632,13 @@ draw_row (GtkCList     *clist,
 	      xsrc = 0;
 	      ysrc = 0;
 	      xdest = offset + clist_row->cell[i].horizontal;
-	      ydest = (clip_rectangle.y + (clip_rectangle.height / 2)) - height / 2 +
-		clist_row->cell[i].vertical;
+	      ydest = (clip_rectangle.y + (clip_rectangle.height / 2)) 
+		- height / 2 + clist_row->cell[i].vertical;
 
 	      if (GTK_CELL_PIXMAP (clist_row->cell[i])->mask)
 		{
-		  gdk_gc_set_clip_mask (fg_gc, GTK_CELL_PIXMAP (clist_row->cell[i])->mask);
+		  gdk_gc_set_clip_mask (fg_gc, GTK_CELL_PIXMAP 
+					(clist_row->cell[i])->mask);
 		  gdk_gc_set_clip_origin (fg_gc, xdest, ydest);
 		}
 	      gdk_draw_pixmap (clist->clist_window, fg_gc,
@@ -1651,12 +1657,13 @@ draw_row (GtkCList     *clist,
 	      xsrc = 0;
 	      ysrc = 0;
 	      xdest = offset + clist_row->cell[i].horizontal;
-	      ydest = (clip_rectangle.y + (clip_rectangle.height / 2)) - height / 2 +
-		clist_row->cell[i].vertical;
+	      ydest = (clip_rectangle.y + (clip_rectangle.height / 2)) 
+		- height / 2 + clist_row->cell[i].vertical;
 	      
 	      if (GTK_CELL_PIXTEXT (clist_row->cell[i])->mask)
 		{
-		  gdk_gc_set_clip_mask (fg_gc, GTK_CELL_PIXTEXT (clist_row->cell[i])->mask);
+		  gdk_gc_set_clip_mask (fg_gc, GTK_CELL_PIXTEXT
+					(clist_row->cell[i])->mask);
 		  gdk_gc_set_clip_origin (fg_gc, xdest, ydest);
 		}
               
@@ -1666,7 +1673,8 @@ draw_row (GtkCList     *clist,
 	      
 	      gdk_gc_set_clip_origin (fg_gc, 0, 0);
 	      
-	      xdest += pixmap_width + GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing;
+	      xdest += pixmap_width + GTK_CELL_PIXTEXT
+		(clist_row->cell[i])->spacing;
 	  
 	      /* draw the string */
 	      gdk_gc_set_clip_rectangle (fg_gc, rect);
@@ -2893,7 +2901,7 @@ gtk_ctree_pre_recursive (GtkCTree     *ctree,
     }
 }
 
-gint
+gboolean
 gtk_ctree_is_visible (GtkCTree *ctree, 
 		      GList    *node)
 { 
@@ -3144,9 +3152,11 @@ gtk_ctree_real_select_recursive (GtkCTree *ctree,
     }
 
   if (state)
-    gtk_ctree_post_recursive (ctree, node, GTK_CTREE_FUNC (tree_select), NULL);
+    gtk_ctree_post_recursive (ctree, node,
+			      GTK_CTREE_FUNC (tree_select), NULL);
   else 
-    gtk_ctree_post_recursive (ctree, node, GTK_CTREE_FUNC (tree_unselect), NULL);
+    gtk_ctree_post_recursive (ctree, node,
+			      GTK_CTREE_FUNC (tree_unselect), NULL);
   
   if (thaw)
     gtk_clist_thaw (clist);
@@ -3597,7 +3607,7 @@ gtk_ctree_scroll_to (GtkCTree *ctree,
 	gtk_adjustment_set_value (adj, adj->upper - adj->page_size);
       else
 	gtk_adjustment_set_value (adj, y);
-    } 
+    }
      
   /* adjust horizontal scrollbar */
   if (column >= 0)

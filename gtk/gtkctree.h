@@ -107,13 +107,13 @@ struct _GtkCTreeClass
 			     GList    *row,
 			     gint      column);
   void (*tree_expand)       (GtkCTree *ctree,
-			     GList    *child);
+			     GList    *node);
   void (*tree_collapse)     (GtkCTree *ctree,
-			     GList    *child);
+			     GList    *node);
   void (*tree_move)         (GtkCTree *ctree,
-			     GList    *child,
-			     GList    *parent,
-			     GList    *sibling);
+			     GList    *node,
+			     GList    *new_parent,
+			     GList    *new_sibling);
 };
 
 struct _GtkCTreeRow
@@ -178,7 +178,7 @@ void       gtk_ctree_pre_recursive          (GtkCTree     *ctree,
 					     GList        *node,
 					     GtkCTreeFunc  func,
 					     gpointer      data);
-gint       gtk_ctree_is_visible             (GtkCTree     *ctree, 
+gboolean   gtk_ctree_is_visible             (GtkCTree     *ctree, 
 					     GList        *node);
 GList *    gtk_ctree_last                   (GtkCTree     *ctree,
 					     GList        *node);

@@ -3755,7 +3755,7 @@ void toggle_sel_mode (GtkWidget *widget, GtkCTree *ctree)
 void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth, 
 		      gint num_books, gint num_pages, GList *parent)
 {
-  gchar *text [2];
+  gchar *text[2];
   gchar buf1[60];
   gchar buf2[60];
   GList *sibling;
@@ -3921,7 +3921,8 @@ void create_ctree (void)
 				GTK_SIGNAL_FUNC (after_move), NULL);
       gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (ctree), TRUE, TRUE, 0);
       gtk_clist_column_titles_passive (GTK_CLIST (ctree));
-      gtk_clist_set_column_justification (GTK_CLIST (ctree), 2, GTK_JUSTIFY_RIGHT);
+      gtk_clist_set_column_justification (GTK_CLIST (ctree), 2,
+					  GTK_JUSTIFY_RIGHT);
       gtk_clist_set_selection_mode (GTK_CLIST (ctree), GTK_SELECTION_MULTIPLE);
       gtk_clist_set_policy (GTK_CLIST (ctree), GTK_POLICY_ALWAYS, 
 			    GTK_POLICY_AUTOMATIC);
@@ -4029,7 +4030,8 @@ void create_ctree (void)
       gtk_option_menu_set_history (GTK_OPTION_MENU (omenu2), 1);
       
       omenu3 = gtk_option_menu_new ();
-      gtk_tooltips_set_tip (tooltips, omenu3, "The tree's justification.", NULL);
+      gtk_tooltips_set_tip (tooltips, omenu3, "The tree's justification.",
+			    NULL);
       
       menu = gtk_menu_new ();
       submenu = NULL;
@@ -4056,7 +4058,8 @@ void create_ctree (void)
       gtk_option_menu_set_history (GTK_OPTION_MENU (omenu3), 0);
       
       omenu = gtk_option_menu_new ();
-      gtk_tooltips_set_tip (tooltips, omenu, "The list's selection mode.", NULL);
+      gtk_tooltips_set_tip (tooltips, omenu, "The list's selection mode.",
+			    NULL);
       
       menu = gtk_menu_new ();
       submenu = NULL;
