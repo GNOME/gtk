@@ -1,3 +1,8 @@
+Tue Nov 26 01:55:47 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkprogressbar.c (gtk_progress_bar_paint_text): don't offset
+	one pixel when calculating the x position of the text.
+
 Tue Nov 26 00:40:53 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkprogressbar.c (gtk_progress_bar_paint_text): draw text

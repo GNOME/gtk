@@ -738,14 +738,14 @@ gtk_progress_bar_paint_text (GtkProgressBar            *pbar,
   layout = gtk_widget_create_pango_layout (widget, buf);
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   
-  x = widget->style->xthickness + 1 + 
+  x = widget->style->xthickness + 1 +
     (widget->allocation.width - 2 * widget->style->xthickness -
-     3 - logical_rect.width)
+     2 - logical_rect.width)
     * progress->x_align; 
 
   y = widget->style->ythickness + 1 +
     (widget->allocation.height - 2 * widget->style->ythickness -
-     3 - logical_rect.height)
+     2 - logical_rect.height)
     * progress->y_align;
 
   rect.x = widget->style->xthickness;
