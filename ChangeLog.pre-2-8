@@ -1,3 +1,7 @@
+Thu Dec 18 23:26:49 CST 1997 Shawn T. Amundson <amundson@gimp.org>
+
+	* removed configure, Makefile.in, and aclocal.m4 files
+
 Wed Dec 17 23:36:57 1997  Scott Goehring  <scott@poverty.bloomington.in.us>
 
 	* gdk/gdkcc.c (gdk_color_context_free): Caught a stray

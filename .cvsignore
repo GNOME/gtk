@@ -5,6 +5,9 @@ libtool
 config.status
 stamp-h
 Makefile
+Makefile.in
+aclocal.m4
+configure
 gtk+.xconfig
 config.cache
 

@@ -1,5 +1,6 @@
 *.lo
 Makefile
+Makefile.in
 .deps
 _libs
 .libs

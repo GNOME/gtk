@@ -1,5 +1,8 @@
 *.lo
 Makefile
+Makefile.in
+configure
+aclocal.m4
 .deps
 _libs
 libglib.la
