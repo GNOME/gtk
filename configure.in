@@ -984,7 +984,8 @@ if test "x$gdktarget" = "xlinux-fb" || test "x$gdktarget" = "xx11" ; then
 
       AC_MSG_CHECKING([For sufficiently new FreeType (at least 2.0.1)])
       AC_TRY_COMPILE([
-#include <freetype/freetype.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 #include FT_ERRORS_H
     ],
 	             [(void)1;],:,have_freetype=false)

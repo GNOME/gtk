@@ -1,3 +1,8 @@
+2003-11-17  Noah Levitt  <nlevitt@columbia.edu>
+
+	* configure.in: Check for freetype headers the way freetype
+	wants us to.
+
 2003-11-17  Mark McLoughlin  <mark@skynet.ie>
 
 	Patch from Jaiserca <jaiserca@inf.upv.es> to add a
