@@ -126,7 +126,7 @@ Overview of Changes in GTK+ 1.3.13
   [Mark Patton]
 * gtk_widget_set_accel_path() is now publically exported.
 
-Other contributors: Darin Adler, Jeffry Baker, Damon Chaplin, Brian Cameron, 
+Other contributors: Darin Adler, Jeffrey Baker, Damon Chaplin, Brian Cameron, 
   Murray Cumming, James Henstridge, Jacob Berkman, Arnaud Charlet, Jeff Franks, 
   Jeff Garzik, Jody Goldberg, Diego Gonzalez, Melvin Hadasht, Raja Harinath, 
   Tim Janik, Mike Kestner, Mathieu Lacage, Alex Larsson, Ryan Lovett, 

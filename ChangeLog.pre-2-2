@@ -1,3 +1,9 @@
+Tue Mar 12 10:50:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/gtkimcontextxim.c (gtk_im_context_xim_filter_keypress):
+	Fix incorrect return value, filter out returns of 0x7f for
+	the delete key. (#74179, Kang Jeong-He)
+
 Mon Mar 11 23:42:11 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_model_foreach): fix totally broken

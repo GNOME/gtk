@@ -379,9 +379,10 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
       result_utf8 = mb_to_utf8 (context_xim, buffer);
       if (result_utf8)
 	{
-	  if ((guchar)result_utf8[0] >= 0x20) /* Some IM have a nasty habit of converting
-					       * control characters into strings
-					       */
+	  if ((guchar)result_utf8[0] >= 0x20 &&
+	      result_utf8[0] != 0x7f) /* Some IM have a nasty habit of converting
+				       * control characters into strings
+				       */
 	    {
 	      g_signal_emit_by_name (context, "commit", result_utf8);
 	      result = TRUE;
@@ -391,7 +392,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
 	}
     }
 
-  return FALSE;
+  return result;
 }
 
 static void
