@@ -1,3 +1,9 @@
+Thu Sep 20 16:51:02 2001  Kristian Rietveld  <kristian@planet.nl>
+
+        * gtk/gtkwindow.c (gtk_window_get_frame_dimensions): returned
+        incorrect values for top, right and bottom due to cut-and-paste
+        bug. Pointed out by Vitaly Tishkov, fixes bug #59008
+
 Wed Sep 19 17:59:27 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_new): Set

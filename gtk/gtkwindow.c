@@ -5012,9 +5012,9 @@ gtk_window_get_frame_dimensions (GtkWindow *window,
   if (top)
     *top = window->frame_top;
   if (right)
-    *top = window->frame_right;
+    *right = window->frame_right;
   if (bottom)
-    *top = window->frame_bottom;
+    *bottom = window->frame_bottom;
 }
 
 /**
