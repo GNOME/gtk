@@ -380,6 +380,7 @@ EXPORTS
 	gtk_combo_box_entry_get_text_column
 	gtk_combo_box_entry_get_type
 	gtk_combo_box_entry_new
+	gtk_combo_box_entry_new_text
 	gtk_combo_box_entry_new_with_model
 	gtk_combo_box_entry_set_text_column
 	gtk_combo_box_get_active

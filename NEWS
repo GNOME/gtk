@@ -140,7 +140,7 @@ Overview of Changes from GTK+ 2.3.1 to GTK+ 2.3.2
 * Utility function for application launching in multi-screen scenarios.
   [Mark McLoughlin]
 * Support big and small and alpha-blended icons under Win32. [Tim Evans]
-* Misc Win32 improvements [Tor Lillquist, Hans]
+* Misc Win32 improvements [Tor Lillqvist, Hans]
 * GtkFileChooser [Federico]
  - Fix new filename entry in Save mode [Jan Arne Petersen]
  - Improved the look of GtkFileChooserDefault. [Tuomas Kuosmanen]
