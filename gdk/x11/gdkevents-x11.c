@@ -530,7 +530,7 @@ gdk_event_translate (GdkEvent *event,
     case KeyPress:
       /* Lookup the string corresponding to the given keysym.
        */
-      
+
 #ifdef USE_XIM
       if (buf_len == 0) 
 	{
@@ -613,6 +613,24 @@ gdk_event_translate (GdkEvent *event,
     case KeyRelease:
       /* Lookup the string corresponding to the given keysym.
        */
+
+      /* Emulate detectable auto-repeat by checking to see
+       * if the next event is a key press with the same
+       * keycode and timestamp, and if so, ignoring the event.
+       */
+
+      if (!_gdk_have_xkb_autorepeat && XPending (gdk_display))
+	{
+	  XEvent next_event;
+
+	  XPeekEvent (gdk_display, &next_event);
+
+	  if (next_event.type == KeyPress &&
+	      next_event.xkey.keycode == xevent->xkey.keycode &&
+	      next_event.xkey.time == xevent->xkey.time)
+	    break;
+	}
+      
 #ifdef USE_XIM
       if (buf_len == 0) 
 	{

@@ -113,8 +113,15 @@ extern GdkWindow *gdk_xim_window;	        /* currently using Window */
 
 /* Used to detect not-up-to-date keymap */
 extern guint _gdk_keymap_serial;
+
 #ifdef HAVE_XKB
 extern gboolean _gdk_use_xkb;
 #endif
+
+/* Whether we were able to turn on detectable-autorepeat using
+ * XkbSetDetectableAutorepeat. If FALSE, we'll fall back
+ * to checking the next event with XPending().
+ */
+extern gboolean _gdk_have_xkb_autorepeat;
 
 #endif /* __GDK_PRIVATE_X11_H__ */

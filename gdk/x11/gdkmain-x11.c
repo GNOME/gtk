@@ -214,12 +214,23 @@ _gdk_windowing_init_check (int argc, char **argv)
         if (XkbQueryExtension (gdk_display, NULL, NULL, NULL,
                                &xkb_major, &xkb_minor))
           {
+	    Bool detectable_autorepeat_supported;
+	    
             _gdk_use_xkb = TRUE;
 
             XkbSelectEvents (gdk_display,
                              XkbUseCoreKbd,
                              XkbMapNotifyMask,
                              XkbMapNotifyMask);
+
+	    XkbSetDetectableAutoRepeat (gdk_display,
+					True,
+					&detectable_autorepeat_supported);
+
+	    GDK_NOTE (MISC, g_message ("Detectable autorepeat %s.",
+				       detectable_autorepeat_supported ? "supported" : "not supported"));
+	    
+	    _gdk_have_xkb_autorepeat = detectable_autorepeat_supported;
           }
       }
   }

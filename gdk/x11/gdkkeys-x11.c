@@ -82,6 +82,12 @@ get_xkb (void)
 }
 #endif /* HAVE_XKB */
 
+/* Whether we were able to turn on detectable-autorepeat using
+ * XkbSetDetectableAutorepeat. If FALSE, we'll fall back
+ * to checking the next event with XPending().
+ */
+gboolean _gdk_have_xkb_autorepeat = FALSE;
+
 static KeySym* keymap = NULL;
 static gint keysyms_per_keycode = 0;
 static XModifierKeymap* mod_keymap = NULL;

@@ -1,3 +1,32 @@
+Sat Mar  3 16:26:33 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkmain-x11.c gdk/x11/gdkkeys-x11.c 
+	  gdk/x11/gdkevents-x11.c gdk/x11/gdkprivate-x11.c:
+
+	Detectable auto-repeat - make a repeating key generate
+	press/press/press/release instead of press/release pairs.
+
+	If we have Xkb and XkbSetDectableAutoRepeat supports
+	that, we do it that way. Otherwise, when we get
+	a release event, we check ahead with XPending to see
+	if the next key is a KeyPress with the same keycode
+	and timestamp. (Not 100% reliable, but pretty close.)
+	  
+Tue Feb 27 02:16:14 2001  Owen Taylor  <otaylor@redhat.com>
+	
+  	* gtk/gtkmain.c (gtk_propagate_event): Only do special
+        special key-press grab handling for widgets within
+        GtkWindows. Otherwise, fall through to normal case.
+ 
+        This prevents key events being sent twice to GtkInvisible
+        widgets, which can cause all sorts of mischief.
+ 
+Fri Feb  2 13:20:12 2001  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkmain.c (gtk_propagate_event): When a grab
+ 	widget is in effect, give the grab widget a first
+ 	crack at KEY_PRESS/RELEASE events. (#424)
+ 
 Sat Mar  3 15:39:49 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_button_press): Add shift-clicking
