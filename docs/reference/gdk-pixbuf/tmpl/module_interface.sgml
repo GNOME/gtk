@@ -34,8 +34,8 @@ setup of @pixbuf is done.
 signal.
 </para>
 
-@pixbuf: the #GdkPixbuf that is currently being loaded. 
-@anim: if an animation is being loaded, the #GdkPixbufAnimation, else %NULL. 
+@pixbuf: the #GdkPixbuf that is currently being loaded.
+@anim: if an animation is being loaded, the #GdkPixbufAnimation, else %NULL.
 @user_data: the loader.
 
 
@@ -50,7 +50,7 @@ of @pixbuf is updated.
 signal.
 </para>
 
-@pixbuf: the #GdkPixbuf that is currently being loaded. 
+@pixbuf: the #GdkPixbuf that is currently being loaded.
 @x: the X origin of the updated area.
 @y: the Y origin of the updated area.
 @width: the width of the updated area.
@@ -75,10 +75,10 @@ pointers of the #GdkPixbufModule.
   usual file extension for images of this type, eg. "xpm", "jpeg" or "png".
 @format_check: checks if the given data is the beginning of a valid image 
   in the format supported by the module.
-@module: the loaded #GModule. 
+@module: the loaded #GModule.
 @load: loads an image from a file.
 @load_xpm_data: loads an image from data in memory.
-@begin_load: begins an incremental load. 
+@begin_load: begins an incremental load.
 @stop_load: stops an incremental load.
 @load_increment: continues an incremental load.
 @load_animation: loads an animation from a file.
