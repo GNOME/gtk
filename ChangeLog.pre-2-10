@@ -1,3 +1,10 @@
+1999-05-25  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/testgtkrc: Add (commented out) Windows-style theme
+	include line.
+
+	* gdk/win32/gdk.def,gtk/gtk.def: Add some missing entry points.
+
 1999-05-18  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/makefile.{cygwin,msc}: Copy our gdkprivate.h and

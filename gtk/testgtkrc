@@ -19,6 +19,9 @@ include "testgtkrc2"
 #include "/usr/local/share/themes/Notif/gtk/gtkrc"
 #include "/usr/local/share/themes/Default/gtk/gtkrc"
 
+# On Windows, if you have installed gtk-engines, try this for instance:
+#include "\\windows\\gtk\\themes\\Pixmap\\gtk\\gtkrc"
+
 pixmap_path "."
 
 style "defaultfont"

@@ -228,6 +228,7 @@ EXPORTS
 	gdk_rgb_set_min_colors
 	gdk_rgb_set_verbose
 	gdk_rgb_xpixel_from_rgb
+	gdk_root_parent
 	gdk_screen_height
 	gdk_screen_height_mm
 	gdk_screen_width

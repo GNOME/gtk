@@ -247,6 +247,7 @@ EXPORTS
 	gtk_clist_get_cell_type
 	gtk_clist_get_column_title
 	gtk_clist_get_column_widget
+	gtk_clist_get_hadjustment
 	gtk_clist_get_pixmap
 	gtk_clist_get_pixtext
 	gtk_clist_get_row_data
@@ -255,6 +256,7 @@ EXPORTS
 	gtk_clist_get_selection_info
 	gtk_clist_get_text
 	gtk_clist_get_type
+	gtk_clist_get_vadjustment
 	gtk_clist_insert
 	gtk_clist_moveto
 	gtk_clist_new
@@ -263,6 +265,7 @@ EXPORTS
 	gtk_clist_prepend
 	gtk_clist_remove
 	gtk_clist_row_is_visible
+	gtk_clist_row_move
 	gtk_clist_select_all
 	gtk_clist_select_row
 	gtk_clist_set_auto_sort
@@ -280,6 +283,7 @@ EXPORTS
 	gtk_clist_set_column_width
 	gtk_clist_set_compare_func
 	gtk_clist_set_foreground
+	gtk_clist_set_hadjustment
 	gtk_clist_set_pixmap
 	gtk_clist_set_pixtext
 	gtk_clist_set_reorderable
@@ -291,10 +295,12 @@ EXPORTS
 	gtk_clist_set_selection_mode
 	gtk_clist_set_shadow_type
 	gtk_clist_set_shift
+	gtk_ctree_set_show_stub
 	gtk_clist_set_sort_column
 	gtk_clist_set_sort_type
 	gtk_clist_set_text
 	gtk_clist_set_use_drag_icons
+	gtk_clist_set_vadjustment
 	gtk_clist_sort
 	gtk_clist_swap_rows
 	gtk_clist_thaw
@@ -1005,6 +1011,7 @@ EXPORTS
 	gtk_signal_handler_unblock
 	gtk_signal_handler_unblock_by_data
 	gtk_signal_handler_unblock_by_func
+	gtk_signal_handlers_destroy
 	gtk_signal_init
 	gtk_signal_lookup
 	gtk_signal_n_emissions
@@ -1161,6 +1168,7 @@ EXPORTS
 	gtk_type_new
 	gtk_type_parent
 	gtk_type_parent_class
+	gtk_type_query
 	gtk_type_register_enum
 	gtk_type_register_flags
 	gtk_type_set_chunk_alloc
@@ -1248,6 +1256,7 @@ EXPORTS
 	gtk_widget_reset_rc_styles
 	gtk_widget_restore_default_style
 	gtk_widget_set
+	gtk_widget_set_colormap
 	gtk_widget_set_default_colormap
 	gtk_widget_set_default_style
 	gtk_widget_set_default_visual
@@ -1263,6 +1272,7 @@ EXPORTS
 	gtk_widget_set_style
 	gtk_widget_set_uposition
 	gtk_widget_set_usize
+	gtk_widget_set_visual
 	gtk_widget_setv
 	gtk_widget_shape_combine_mask
 	gtk_widget_show
