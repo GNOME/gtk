@@ -1,3 +1,9 @@
+Thu Nov 20 15:48:03 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtksocket.c (gtk_socket_focus): Use gtk_widget_is_focus()
+	instead of GTK_WIDGET_HAS_FOCUS. (#122327, Owen Taylor. Reported
+	by Frederic Crozat).
+
 Thu Nov 20 13:10:29 GMT 2003  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: Update Section 3 to 2.x
