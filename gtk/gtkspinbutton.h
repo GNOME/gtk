@@ -187,6 +187,6 @@ void            gtk_spin_button_update             (GtkSpinButton  *spin_button)
 #define gtk_spin_button_get_value_as_float gtk_spin_button_get_value
 #endif
 
-G_BEGIN_DECLS
+G_END_DECLS
 
 #endif /* __GTK_SPIN_BUTTON_H__ */

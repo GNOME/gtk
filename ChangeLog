@@ -1,5 +1,9 @@
 2005-03-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkspinbutton.h: Fix a typo.
+
+2005-03-21  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcellrendererprogress.c: 
 	* gtk/gtkcellrendererpixbuf.c: 
 	* gtk/gtkcellrenderercombo.c: 
