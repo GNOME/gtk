@@ -931,14 +931,14 @@ static int
 gtk_rbtree_reorder_sort_func (gconstpointer a,
 			      gconstpointer b)
 {
-  return ((GtkRBReorder *) a)->order > ((GtkRBReorder *) b)->order;
+  return ((GtkRBReorder *) a)->order - ((GtkRBReorder *) b)->order;
 }
 
 static int
 gtk_rbtree_reorder_invert_func (gconstpointer a,
 				gconstpointer b)
 {
-  return ((GtkRBReorder *) a)->invert_order > ((GtkRBReorder *) b)->invert_order;
+  return ((GtkRBReorder *) a)->invert_order - ((GtkRBReorder *) b)->invert_order;
 }
 
 static void

@@ -1,3 +1,32 @@
+Wed Nov 20 19:42:57 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Merged treeview fixes from HEAD.
+
+	* gtk/gtkrbtree.c (gtk_rbtree_reorder_sort_func): return a value
+	in the range of [-1, 1] instead [0, 1],
+	(gtk_rbtree_reorder_invert_func): ditto,
+	This makes treeview reordering working on platforms as FreeBSD and
+	solaris, thanks go to Heiner Eichmann for finding this out and
+	sending in a patch (#98251). 
+
+	* gtk/gtktreestore.c (node_free): only free the data list if
+	node->data is not NULL,
+	(gtk_tree_store_remove): free the data list from the node if
+	needed. (#94728, pointed out by Peter Bloomfield). 
+
+	* gtk/gtktreeview.c (gtk_tree_view_remove_column): stop editing
+	and set the edited_column to NULL if edited_column is set.
+	(#91288, modified patch from Josh Parsons). 
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_start_editing):
+	only _set_text if celltext->text is not NULL. (#97815, reported
+	and testcase provided by Vitaly Tishkov).
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_real_modify_range):
+	also update the anchor_path, makes behaviour consistent with the
+	other selection modification functions. (#96801, reported and
+	testcase provided by Vitaly Tishkov).
+
 2002-11-20  Tor Lillqvist  <tml@iki.fi>
 
 	Fix by Arnaud Charlet (#98983):

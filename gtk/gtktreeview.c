@@ -4037,6 +4037,7 @@ do_validate_rows (GtkTreeView *tree_view)
 		g_assert_not_reached ();
 	    }
 	  while (TRUE);
+
 	  path = _gtk_tree_view_find_path (tree_view, tree, node);
 	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
 	}
@@ -8036,10 +8037,18 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), -1);
   g_return_val_if_fail (column->tree_view == GTK_WIDGET (tree_view), -1);
 
-  _gtk_tree_view_column_unset_tree_view (column);
-
   if (tree_view->priv->focus_column == column)
     tree_view->priv->focus_column = NULL;
+
+  if (tree_view->priv->edited_column == column)
+    {
+      gtk_tree_view_stop_editing (tree_view, TRUE);
+
+      /* no need to, but just to be sure ... */
+      tree_view->priv->edited_column = NULL;
+    }
+
+  _gtk_tree_view_column_unset_tree_view (column);
 
   tree_view->priv->columns = g_list_remove (tree_view->priv->columns, column);
   tree_view->priv->n_columns--;
