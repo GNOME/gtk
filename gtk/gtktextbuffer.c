@@ -35,7 +35,6 @@
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
 #include <string.h>
-#include <gdk/gdkprivate.h>
 
 typedef struct _ClipboardRequest ClipboardRequest;
 
@@ -82,7 +81,6 @@ static void gtk_text_buffer_class_init (GtkTextBufferClass *klass);
 static void gtk_text_buffer_finalize   (GObject            *object);
 
 
-static void gtk_text_buffer_update_primary_selection   (GtkTextBuffer     *buffer);
 static void gtk_text_buffer_real_insert_text           (GtkTextBuffer     *buffer,
                                                         GtkTextIter       *iter,
                                                         const gchar       *text,
@@ -108,6 +106,10 @@ static void gtk_text_buffer_real_changed               (GtkTextBuffer     *buffe
 
 static GtkTextBTree* get_btree (GtkTextBuffer *buffer);
 static void          free_log_attr_cache (GtkTextLogAttrCache *cache);
+
+static void remove_all_clipboard_contents_buffers (GtkTextBuffer *buffer);
+static void remove_all_selection_clipboards       (GtkTextBuffer *buffer);
+static void update_selection_clipboards           (GtkTextBuffer *buffer);
 
 static GtkObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -300,8 +302,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
 void
 gtk_text_buffer_init (GtkTextBuffer *buffer)
 {
-  buffer->clipboard_contents = NULL;
-  buffer->clipboard_display = gdk_get_default_display ();
+  buffer->clipboard_contents_buffers = NULL;
 }
 
 /**
@@ -325,8 +326,6 @@ gtk_text_buffer_new (GtkTextTagTable *table)
 
       g_object_ref (G_OBJECT (text_buffer->tag_table));
     }
-
-  g_object_ref (G_OBJECT (text_buffer));
   
   return text_buffer;
 }
@@ -338,12 +337,9 @@ gtk_text_buffer_finalize (GObject *object)
 
   buffer = GTK_TEXT_BUFFER (object);
 
-  if (buffer->clipboard_contents)
-    {
-      g_object_unref (G_OBJECT (buffer->clipboard_contents));
-      buffer->clipboard_contents = NULL;
-    }
-  
+  remove_all_clipboard_contents_buffers (buffer);
+  remove_all_selection_clipboards (buffer);
+
   if (buffer->tag_table)
     {
       g_object_unref (G_OBJECT (buffer->tag_table));
@@ -559,7 +555,7 @@ gtk_text_buffer_insert_at_cursor (GtkTextBuffer *buffer,
  *
  * @default_editable indicates the editability of text that doesn't
  * have a tag affecting editability applied to it. Typically the
- * result of gtk_text_view_get_editable () is appropriate here.
+ * result of gtk_text_view_get_editable() is appropriate here.
  *
  * Return value: whether text was actually inserted
  **/
@@ -597,7 +593,7 @@ gtk_text_buffer_insert_interactive (GtkTextBuffer *buffer,
  *
  * @default_editable indicates the editability of text that doesn't
  * have a tag affecting editability applied to it. Typically the
- * result of gtk_text_view_get_editable () is appropriate here.
+ * result of gtk_text_view_get_editable() is appropriate here.
  * 
  * Return value: whether text was actually inserted
  **/
@@ -953,11 +949,11 @@ gtk_text_buffer_insert_range (GtkTextBuffer     *buffer,
  * @end: another position in the same buffer as @start
  * @default_editable: default editability of the buffer
  *
- * Same as gtk_text_buffer_insert_range (), but does nothing if the
+ * Same as gtk_text_buffer_insert_range(), but does nothing if the
  * insertion point isn't editable. The @default_editable parameter
  * indicates whether the text is editable at @iter if no tags
  * enclosing @iter affect editability. Typically the result of
- * gtk_text_view_get_editable () is appropriate here.
+ * gtk_text_view_get_editable() is appropriate here.
  *
  * Returns: whether an insertion was possible at @iter
  **/
@@ -1120,7 +1116,7 @@ gtk_text_buffer_real_delete_range (GtkTextBuffer *buffer,
   _gtk_text_btree_delete (start, end);
 
   /* may have deleted the selection... */
-  gtk_text_buffer_update_primary_selection (buffer);
+  update_selection_clipboards (buffer);
 
   g_signal_emit (G_OBJECT (buffer), signals[CHANGED], 0);
 }
@@ -1426,8 +1422,8 @@ gtk_text_buffer_real_insert_pixbuf (GtkTextBuffer     *buffer,
  * "object replacement character" 0xFFFC. Note that the "slice"
  * variants for obtaining portions of the buffer as a string include
  * this character for pixbufs, but the "text" variants do
- * not. e.g. see gtk_text_buffer_get_slice () and
- * gtk_text_buffer_get_text ().
+ * not. e.g. see gtk_text_buffer_get_slice() and
+ * gtk_text_buffer_get_text().
  * 
  **/
 void
@@ -1471,9 +1467,9 @@ gtk_text_buffer_real_insert_anchor (GtkTextBuffer      *buffer,
  * by the Unicode "object replacement character" 0xFFFC. Note that the
  * "slice" variants for obtaining portions of the buffer as a string
  * include this character for pixbufs, but the "text" variants do
- * not. e.g. see gtk_text_buffer_get_slice () and
- * gtk_text_buffer_get_text (). Consider
- * gtk_text_buffer_create_child_anchor () as a more convenient
+ * not. e.g. see gtk_text_buffer_get_slice() and
+ * gtk_text_buffer_get_text(). Consider
+ * gtk_text_buffer_create_child_anchor() as a more convenient
  * alternative to this function. The buffer will add a reference to
  * the anchor, so you can unref it after insertion.
  * 
@@ -1499,8 +1495,8 @@ gtk_text_buffer_insert_child_anchor (GtkTextBuffer      *buffer,
  * @iter: location in the buffer
  * 
  * This is a convenience function which simply creates a child anchor
- * with gtk_text_child_anchor_new () and inserts it into the buffer
- * with gtk_text_buffer_insert_child_anchor ().
+ * with gtk_text_child_anchor_new() and inserts it into the buffer
+ * with gtk_text_buffer_insert_child_anchor().
  * 
  * Return value: the created child anchor
  **/
@@ -1590,7 +1586,7 @@ gtk_text_buffer_set_mark (GtkTextBuffer *buffer,
   if (_gtk_text_btree_mark_is_insert (get_btree (buffer), mark) ||
       _gtk_text_btree_mark_is_selection_bound (get_btree (buffer), mark))
     {
-      gtk_text_buffer_update_primary_selection (buffer);
+      update_selection_clipboards (buffer);
     }
 
   _gtk_text_btree_get_iter_at_mark (get_btree (buffer),
@@ -1925,7 +1921,7 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
  * exist in the tag table for this buffer.
  *
  * The @first_property_name argument and subsequent arguments are a list
- * of properties to set on the tag, as with g_object_set ().
+ * of properties to set on the tag, as with g_object_set().
  *
  * Return value: a new tag
  **/
@@ -2082,8 +2078,8 @@ gtk_text_buffer_remove_tag (GtkTextBuffer *buffer,
  * @start: one bound of range to be tagged
  * @end: other bound of range to be tagged
  *
- * Calls gtk_text_tag_table_lookup () on the buffer's tag table to
- * get a #GtkTextTag, then calls gtk_text_buffer_apply_tag ().
+ * Calls gtk_text_tag_table_lookup() on the buffer's tag table to
+ * get a #GtkTextTag, then calls gtk_text_buffer_apply_tag().
  * 
  **/
 void
@@ -2120,8 +2116,8 @@ gtk_text_buffer_apply_tag_by_name (GtkTextBuffer *buffer,
  * @start: one bound of range to be untagged
  * @end: other bound of range to be untagged
  *
- * Calls gtk_text_tag_table_lookup () on the buffer's tag table to
- * get a #GtkTextTag, then calls gtk_text_buffer_remove_tag ().
+ * Calls gtk_text_tag_table_lookup() on the buffer's tag table to
+ * get a #GtkTextTag, then calls gtk_text_buffer_remove_tag().
  * 
  * 
  **/
@@ -2399,7 +2395,7 @@ gtk_text_buffer_get_start_iter (GtkTextBuffer *buffer,
  *
  * Initializes @iter with the "end iterator," one past the last valid
  * character in the text buffer. If dereferenced with
- * gtk_text_iter_get_char (), the end iterator has a character value of
+ * gtk_text_iter_get_char(), the end iterator has a character value of
  * 0. The entire buffer lies in the range from the first position in
  * the buffer (call gtk_text_buffer_get_start_iter() to get
  * character position 0) to the end iterator.
@@ -2571,7 +2567,6 @@ clipboard_get_selection_cb (GtkClipboard     *clipboard,
     {
       if (selection_data->target ==
           gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
-
         {
           /* Provide the address of the buffer; this will only be
            * used within-process
@@ -2593,6 +2588,87 @@ clipboard_get_selection_cb (GtkClipboard     *clipboard,
     }
 }
 
+typedef struct
+{
+  GtkClipboard *clipboard;
+  GtkTextBuffer *buffer;
+} ContentsBuffer;
+
+static void
+remove_all_clipboard_contents_buffers (GtkTextBuffer *buffer)
+{
+  GSList *tmp_list = buffer->clipboard_contents_buffers;
+  while (tmp_list)
+    {
+      ContentsBuffer *contents_buffer = tmp_list->data;
+
+      g_object_unref (contents_buffer->buffer);
+      g_free (contents_buffer);
+	  
+      tmp_list = tmp_list->next;
+    }
+
+  g_slist_free (buffer->clipboard_contents_buffers);
+  buffer->clipboard_contents_buffers = NULL;
+}
+
+static void
+remove_clipboard_contents_buffer (GtkTextBuffer *buffer,
+				  GtkClipboard  *clipboard)
+{
+  GSList *tmp_list = buffer->clipboard_contents_buffers;
+  while (tmp_list)
+    {
+      ContentsBuffer *contents_buffer = tmp_list->data;
+      
+      if (contents_buffer->clipboard == clipboard)
+	{
+	  buffer->clipboard_contents_buffers = g_slist_remove (buffer->clipboard_contents_buffers, contents_buffer);
+	  
+	  g_object_unref (contents_buffer->buffer);
+	  g_free (contents_buffer);
+	  
+	  return;
+	}
+
+      tmp_list = tmp_list->next;
+    }
+}
+
+static GtkTextBuffer *
+get_clipboard_contents_buffer (GtkTextBuffer *buffer,
+			       GtkClipboard  *clipboard,
+			       gboolean       create)
+{
+  ContentsBuffer *contents_buffer;
+  GSList *tmp_list;
+
+  tmp_list = buffer->clipboard_contents_buffers;
+  while (tmp_list)
+    {
+      contents_buffer = tmp_list->data;
+      if (contents_buffer->clipboard == clipboard)
+	return contents_buffer->buffer;
+    }
+  
+  if (create)
+    {
+      contents_buffer = g_new (ContentsBuffer, 1);
+      contents_buffer->clipboard = clipboard;
+      contents_buffer->buffer = gtk_text_buffer_new (gtk_text_buffer_get_tag_table (buffer));
+
+      g_object_set_data (G_OBJECT (contents_buffer->buffer), "gtk-text-buffer-clipboard",
+			 GUINT_TO_POINTER (1));
+
+      buffer->clipboard_contents_buffers = g_slist_prepend (buffer->clipboard_contents_buffers, contents_buffer);
+
+      
+      return contents_buffer->buffer;
+    }
+  else
+    return NULL;
+}
+
 /* Provide cut/copied data */
 static void
 clipboard_get_contents_cb (GtkClipboard     *clipboard,
@@ -2601,11 +2677,12 @@ clipboard_get_contents_cb (GtkClipboard     *clipboard,
                            gpointer          data)
 {
   GtkTextBuffer *buffer = GTK_TEXT_BUFFER (data);
-  GtkTextBuffer *contents = buffer->clipboard_contents;
+  GtkTextBuffer *contents = get_clipboard_contents_buffer (buffer, clipboard, FALSE);
+
+  g_assert (contents); /* This should never be called unless we own the clipboard */
 
   if (selection_data->target ==
       gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
-
     {
       /* Provide the address of the clipboard buffer; this will only
        * be used within-process. OK to supply a NULL value for contents.
@@ -2618,25 +2695,16 @@ clipboard_get_contents_cb (GtkClipboard     *clipboard,
     }
   else
     {
-      /* Just provide text from the clipboard buffer */
-      if (buffer->clipboard_contents)
-        {
-          gchar *str;
-          GtkTextIter start, end;
-          
-          gtk_text_buffer_get_bounds (contents, &start, &end);
-          /* strip off the trailing newline, it isn't part of the text that was cut */
-          gtk_text_iter_backward_char (&end);
-          
-          str = gtk_text_iter_get_visible_text (&start, &end);
-          gtk_selection_data_set_text (selection_data, str);
-          g_free (str);
-        }
-      else
-        {
-          gtk_selection_data_set_text (selection_data, "");
-          return;
-        }
+      gchar *str;
+      GtkTextIter start, end;
+      
+      gtk_text_buffer_get_bounds (contents, &start, &end);
+      /* strip off the trailing newline, it isn't part of the text that was cut */
+      gtk_text_iter_backward_char (&end);
+      
+      str = gtk_text_iter_get_visible_text (&start, &end);
+      gtk_selection_data_set_text (selection_data, str);
+      g_free (str);
     }
 }
 
@@ -2646,11 +2714,7 @@ clipboard_clear_contents_cb (GtkClipboard *clipboard,
 {
   GtkTextBuffer *buffer = GTK_TEXT_BUFFER (data);
 
-  if (buffer->clipboard_contents)
-    {
-      g_object_unref (G_OBJECT (buffer->clipboard_contents));
-      buffer->clipboard_contents = NULL;
-    }  
+  remove_clipboard_contents_buffer (buffer, clipboard);
 }
 
 static void
@@ -2762,15 +2826,12 @@ selection_data_get_buffer (GtkSelectionData *selection_data,
   GtkTextBuffer *src_buffer = NULL;
 
   /* If we can get the owner, the selection is in-process */
-  owner = gdk_selection_owner_get_for_display (selection_data->display,
-					       selection_data->selection);
+  owner = gdk_selection_owner_get (selection_data->selection);
 
   if (owner == NULL)
     return NULL;
   
-  if (selection_data->type != 
-      gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
-
+  if (selection_data->type != gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
     return NULL;
 
   if (selection_data->length != sizeof (src_buffer))
@@ -2858,39 +2919,21 @@ clipboard_clipboard_buffer_received (GtkClipboard     *clipboard,
     {
       GtkTextIter start, end;
 
-      gtk_text_buffer_get_bounds (src_buffer, &start, &end);
-      /* There's an extra newline on clipboard_contents */
-      gtk_text_iter_backward_char (&end);
+      if (g_object_get_data (G_OBJECT (src_buffer), "gtk-text-buffer-clipboard"))
+	{
+	  gtk_text_buffer_get_bounds (src_buffer, &start, &end);
+	  /* There's an extra newline on clipboard_contents */
+	  gtk_text_iter_backward_char (&end);
       
-      paste_from_buffer (request_data, src_buffer,
-                         &start, &end);
-    }
-  else
-    {
-      /* Request the text selection instead */
-      gtk_clipboard_request_text (clipboard,
-                                  clipboard_text_received,
-                                  data);
-    }
-}
-
-static void
-clipboard_selection_buffer_received (GtkClipboard     *clipboard,
-                                     GtkSelectionData *selection_data,
-                                     gpointer          data)
-{
-  ClipboardRequest *request_data = data;
-  GtkTextBuffer *src_buffer;
-  
-  src_buffer = selection_data_get_buffer (selection_data, request_data); 
-
-  if (src_buffer)
-    {
-      GtkTextIter start, end;
-
-      if (gtk_text_buffer_get_selection_bounds (src_buffer, &start, &end))
-        paste_from_buffer (request_data, src_buffer,
-                           &start, &end);
+	  paste_from_buffer (request_data, src_buffer,
+			     &start, &end);
+	}
+      else
+	{
+	  if (gtk_text_buffer_get_selection_bounds (src_buffer, &start, &end))
+	    paste_from_buffer (request_data, src_buffer,
+			       &start, &end);
+	}
     }
   else
     {
@@ -2909,51 +2952,179 @@ static const GtkTargetEntry targets[] = {
   { "GTK_TEXT_BUFFER_CONTENTS", 0, TARGET_TEXT_BUFFER_CONTENTS }
 };
 
-static void
-gtk_text_buffer_update_primary_selection (GtkTextBuffer *buffer)
+typedef struct
 {
-  GtkTextIter start;
-  GtkTextIter end;
+  GtkClipboard *clipboard;
+  guint ref_count;
+} SelectionClipboard;
 
-  GtkClipboard *clipboard = gtk_clipboard_get_for_display (buffer->clipboard_display, GDK_SELECTION_PRIMARY);
-
-
-  /* Determine whether we have a selection and adjust X selection
-   * accordingly.
-   */
-
-  if (!gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
+static void
+update_selection_clipboards (GtkTextBuffer *buffer)
+{
+  GSList *tmp_list = buffer->selection_clipboards;
+  while (tmp_list)
     {
-      if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (buffer))
-        gtk_clipboard_clear (clipboard);
+      GtkTextIter start;
+      GtkTextIter end;
+      
+      SelectionClipboard *selection_clipboard = tmp_list->data;
+      GtkClipboard *clipboard = selection_clipboard->clipboard;
+
+      /* Determine whether we have a selection and adjust X selection
+       * accordingly.
+       */
+      if (!gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
+	{
+	  if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (buffer))
+	    gtk_clipboard_clear (clipboard);
+	}
+      else
+	{
+	  /* Even if we already have the selection, we need to update our
+	   * timestamp.
+	   */
+	  if (!gtk_clipboard_set_with_owner (clipboard, targets, G_N_ELEMENTS (targets),
+					     clipboard_get_selection_cb,
+					     clipboard_clear_selection_cb,
+					     G_OBJECT (buffer)))
+	    clipboard_clear_selection_cb (clipboard, buffer);
+	}
+
+      tmp_list = tmp_list->next;
+    }
+}
+
+static SelectionClipboard *
+find_selection_clipboard (GtkTextBuffer *buffer,
+			  GtkClipboard  *clipboard)
+{
+  GSList *tmp_list = buffer->selection_clipboards;
+  while (tmp_list)
+    {
+      SelectionClipboard *selection_clipboard = tmp_list->data;
+      if (selection_clipboard->clipboard == clipboard)
+	return selection_clipboard;
+      
+      tmp_list = tmp_list->next;
+    }
+
+  return NULL;
+}
+
+/**
+ * gtk_text_buffer_add_selection_clipboard:
+ * @buffer: a #GtkTextBuffer
+ * @clipboard: a #GtkClipboard
+ * 
+ * Adds @clipboard to the list of clipboards in which the selection contents
+ * of @buffer are available. In most cases, @clipboard will be the #GtkClipboard
+ * of type %GDK_SELECTION_PRIMARY for a view of @buffer.
+ **/
+void
+gtk_text_buffer_add_selection_clipboard (GtkTextBuffer *buffer,
+					 GtkClipboard  *clipboard)
+{
+  SelectionClipboard *selection_clipboard;
+
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_if_fail (clipboard != NULL);
+
+  selection_clipboard = find_selection_clipboard (buffer, clipboard);
+  if (selection_clipboard)
+    {
+      selection_clipboard->ref_count++;
     }
   else
     {
-      /* Even if we already have the selection, we need to update our
-       * timestamp.
-       */
-      if (!gtk_clipboard_set_with_owner (clipboard, targets, G_N_ELEMENTS (targets),
-                                         clipboard_get_selection_cb,
-                                         clipboard_clear_selection_cb,
-                                         G_OBJECT (buffer)))
-        clipboard_clear_selection_cb (clipboard, buffer);
+      selection_clipboard = g_new (SelectionClipboard, 1);
+
+      selection_clipboard->clipboard = clipboard;
+      selection_clipboard->ref_count = 1;
+
+      buffer->selection_clipboards = g_slist_prepend (buffer->selection_clipboards, selection_clipboard);
+    }
+}
+
+/**
+ * gtk_text_buffer_remove_selection_clipboard:
+ * @buffer: a #GtkTextBuffer
+ * @clipboard: a #GtkClipboard added to @buffer by gtk_text_buffer_add_selection_clipboard().
+ * 
+ * Removes a #GtkClipboard added with gtk_text_buffer_add_selection_clipboard()
+ **/
+void 
+gtk_text_buffer_remove_selection_clipboard (GtkTextBuffer *buffer,
+					    GtkClipboard  *clipboard)
+{
+  SelectionClipboard *selection_clipboard;
+
+  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
+  g_return_if_fail (clipboard != NULL);
+
+  selection_clipboard = find_selection_clipboard (buffer, clipboard);
+  g_return_if_fail (selection_clipboard != NULL);
+
+  selection_clipboard->ref_count--;
+  if (selection_clipboard->ref_count == 0)
+    {
+      if (gtk_clipboard_get_owner (selection_clipboard->clipboard) == G_OBJECT (buffer))
+	gtk_clipboard_clear (selection_clipboard->clipboard);
+      
+      g_free (selection_clipboard);
     }
 }
 
 static void
-paste (GtkTextBuffer *buffer,
-       gboolean       is_clipboard,
-       gboolean       interactive,
-       gboolean       default_editable)
+remove_all_selection_clipboards (GtkTextBuffer *buffer)
+{
+  GSList *tmp_list = buffer->selection_clipboards;
+  while (tmp_list)
+    {
+      SelectionClipboard *selection_clipboard = tmp_list->data;
+      
+      if (gtk_clipboard_get_owner (selection_clipboard->clipboard) == G_OBJECT (buffer))
+	gtk_clipboard_clear (selection_clipboard->clipboard);
+      
+      g_free (selection_clipboard);
+
+      tmp_list = tmp_list->next;
+    }
+
+  g_slist_free (buffer->selection_clipboards);
+  buffer->selection_clipboards = NULL;
+}
+
+/**
+ * gtk_text_buffer_paste_clipboard:
+ * @buffer: a #GtkTextBuffer
+ * @clipboard: the #GtkClipboard to paste from
+ * @override_location: location to insert pasted text, or %NULL for at the cursor
+ * @default_editable: whether the buffer is editable by default
+ *
+ * Pastes the contents of a clipboard at the insertion point, or at @override_location.
+ * (Note: pasting is asynchronous, that is, we'll ask for the paste data and
+ * return, and at some point later after the main loop runs, the paste
+ * data will be inserted.)
+ * 
+ **/
+void
+gtk_text_buffer_paste_clipboard (GtkTextBuffer *buffer,
+				 GtkClipboard  *clipboard,
+				 GtkTextIter   *override_location,
+                                 gboolean       default_editable)
 {
   ClipboardRequest *data = g_new (ClipboardRequest, 1);
   GtkTextIter paste_point;
   GtkTextIter start, end;
-  GdkDisplay *display = buffer->clipboard_display;
-  
+
+  if (override_location != NULL)
+    gtk_text_buffer_create_mark (buffer,
+                                 "gtk_paste_point_override",
+                                 override_location, FALSE);
+
   data->buffer = buffer;
   g_object_ref (G_OBJECT (buffer));
-  data->interactive = interactive;
+  data->interactive = TRUE;
   data->default_editable = default_editable;
 
   /* When pasting with the cursor inside the selection area, you
@@ -2970,56 +3141,9 @@ paste (GtkTextBuffer *buffer,
        gtk_text_iter_equal (&paste_point, &end)))
     data->replace_selection = TRUE;
 
-  if (is_clipboard)
-    gtk_clipboard_request_contents (gtk_clipboard_get_for_display (display, GDK_NONE),
-                                    gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE),
-                                    clipboard_clipboard_buffer_received, data);
-  else
-    gtk_clipboard_request_contents (gtk_clipboard_get_for_display (display, GDK_SELECTION_PRIMARY),
-                                    gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE),
-                                    clipboard_selection_buffer_received, data);    
-}
-
-/**
- * gtk_text_buffer_paste_primary:
- * @buffer: a #GtkTextBuffer 
- * @override_location: location to insert pasted text, or %NULL for at the cursor
- * @default_editable: whether the buffer is editable by default 
- * 
- * Pastes the primary selection at the insertion point, or at @override_location.
- * (Note: pasting is asynchronous, that is, we'll ask for the paste data
- * and return, and at some point later after the main loop runs, the paste
- * data will be inserted.)
- **/
-void
-gtk_text_buffer_paste_primary (GtkTextBuffer       *buffer,
-                               const GtkTextIter   *override_location,
-                               gboolean             default_editable)
-{
-  if (override_location != NULL)
-    gtk_text_buffer_create_mark (buffer,
-                                 "gtk_paste_point_override",
-                                 override_location, FALSE);
-
-  paste (buffer, FALSE, TRUE, default_editable);
-}
-
-/**
- * gtk_text_buffer_paste_clipboard:
- * @buffer: a #GtkTextBuffer 
- * @default_editable: whether the buffer is editable by default
- *
- * Pastes the clipboard contents at the insertion point.  (Note:
- * pasting is asynchronous, that is, we'll ask for the paste data and
- * return, and at some point later after the main loop runs, the paste
- * data will be inserted.)
- * 
- **/
-void
-gtk_text_buffer_paste_clipboard (GtkTextBuffer *buffer,
-                                 gboolean       default_editable)
-{
-  paste (buffer, TRUE, TRUE, default_editable);
+  gtk_clipboard_request_contents (clipboard,
+				  gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE),
+				  clipboard_clipboard_buffer_received, data);
 }
 
 /**
@@ -3064,9 +3188,10 @@ gtk_text_buffer_delete_selection (GtkTextBuffer *buffer,
 
 static void
 cut_or_copy (GtkTextBuffer *buffer,
-             gboolean delete_region_after,
-             gboolean interactive,
-             gboolean default_editable)
+	     GtkClipboard  *clipboard,
+             gboolean       delete_region_after,
+             gboolean       interactive,
+             gboolean       default_editable)
 {
   /* We prefer to cut the selected region between selection_bound and
    * insertion point. If that region is empty, then we cut the region
@@ -3077,12 +3202,8 @@ cut_or_copy (GtkTextBuffer *buffer,
    */
   GtkTextIter start;
   GtkTextIter end;
-  
-  if (buffer->clipboard_contents)
-    {
-      g_object_unref (G_OBJECT (buffer->clipboard_contents));
-      buffer->clipboard_contents = NULL;
-    }
+
+  remove_clipboard_contents_buffer (buffer, clipboard);
   
   if (!gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
     {
@@ -3100,20 +3221,14 @@ cut_or_copy (GtkTextBuffer *buffer,
 
   if (!gtk_text_iter_equal (&start, &end))
     {
-      GtkClipboard *clipboard = gtk_clipboard_get_for_display (buffer->clipboard_display, GDK_NONE);
-
       GtkTextIter ins;
+      GtkTextBuffer *contents;
       
-      buffer->clipboard_contents =
-        gtk_text_buffer_new (gtk_text_buffer_get_tag_table (buffer));
+      contents = get_clipboard_contents_buffer (buffer, clipboard, TRUE);
 
-      gtk_text_buffer_get_iter_at_offset (buffer->clipboard_contents,
-                                          &ins, 0);
+      gtk_text_buffer_get_iter_at_offset (contents, &ins, 0);
       
-      gtk_text_buffer_insert_range (buffer->clipboard_contents,
-                                    &ins,
-                                    &start,
-                                    &end);
+      gtk_text_buffer_insert_range (contents, &ins, &start, &end);
                                     
       if (!gtk_clipboard_set_with_owner (clipboard, targets, G_N_ELEMENTS (targets),
                                          clipboard_get_contents_cb,
@@ -3134,34 +3249,38 @@ cut_or_copy (GtkTextBuffer *buffer,
 
 /**
  * gtk_text_buffer_cut_clipboard:
- * @buffer: a #GtkTextBuffer 
+ * @buffer: a #GtkTextBuffer
+ * @clipboard: the #GtkClipboard object to cut to.
  * @default_editable: default editability of the buffer
  *
- * Copies the currently-selected text to the clipboard, then deletes
+ * Copies the currently-selected text to a clipboard, then deletes
  * said text if it's editable.
  * 
  **/
 void
 gtk_text_buffer_cut_clipboard (GtkTextBuffer *buffer,
+			       GtkClipboard  *clipboard,
                                gboolean       default_editable)
 {
   gtk_text_buffer_begin_user_action (buffer);
-  cut_or_copy (buffer, TRUE, TRUE, default_editable);
+  cut_or_copy (buffer, clipboard, TRUE, TRUE, default_editable);
   gtk_text_buffer_end_user_action (buffer);
 }
 
 /**
  * gtk_text_buffer_copy_clipboard:
  * @buffer: a #GtkTextBuffer 
+ * @clipboard: the #GtkClipboard object to copy to.
  *
- * Copies the currently-selected text to the clipboard.
+ * Copies the currently-selected text to a clipboard.
  * 
  **/
 void
-gtk_text_buffer_copy_clipboard (GtkTextBuffer *buffer)
+gtk_text_buffer_copy_clipboard (GtkTextBuffer *buffer,
+				GtkClipboard  *clipboard)
 {
   gtk_text_buffer_begin_user_action (buffer);
-  cut_or_copy (buffer, FALSE, TRUE, TRUE);
+  cut_or_copy (buffer, clipboard, FALSE, TRUE, TRUE);
   gtk_text_buffer_end_user_action (buffer);
 }
 
@@ -3196,18 +3315,18 @@ gtk_text_buffer_get_selection_bounds   (GtkTextBuffer      *buffer,
  * @buffer: a #GtkTextBuffer
  * 
  * Called to indicate that the buffer operations between here and a
- * call to gtk_text_buffer_end_user_action () are part of a single
+ * call to gtk_text_buffer_end_user_action() are part of a single
  * user-visible operation. The operations between
- * gtk_text_buffer_begin_user_action () and
- * gtk_text_buffer_end_user_action () can then be grouped when creating
+ * gtk_text_buffer_begin_user_action() and
+ * gtk_text_buffer_end_user_action() can then be grouped when creating
  * an undo stack. #GtkTextBuffer maintains a count of calls to
- * gtk_text_buffer_begin_user_action () that have not been closed with
- * a call to gtk_text_buffer_end_user_action (), and emits the "begin_user_action"
+ * gtk_text_buffer_begin_user_action() that have not been closed with
+ * a call to gtk_text_buffer_end_user_action(), and emits the "begin_user_action"
  * and "end_user_action" signals only for the outermost pair of calls.
  * This allows you to build user actions from other user actions.
  *
  * The "interactive" buffer mutation functions, such as
- * gtk_text_buffer_insert_interactive (), automatically call begin/end
+ * gtk_text_buffer_insert_interactive(), automatically call begin/end
  * user action around the buffer operations they perform, so there's
  * no need to add extra calls if you user action consists solely of a
  * single call to one of those functions.
@@ -3230,7 +3349,7 @@ gtk_text_buffer_begin_user_action (GtkTextBuffer *buffer)
  * gtk_text_buffer_end_user_action:
  * @buffer: a #GtkTextBuffer
  * 
- * Should be paired with a call to gtk_text_buffer_begin_user_action ().
+ * Should be paired with a call to gtk_text_buffer_begin_user_action().
  * See that function for a full explanation.
  **/
 void
@@ -3392,47 +3511,6 @@ _gtk_text_buffer_get_line_log_attrs (GtkTextBuffer     *buffer,
   
   return cache->entries[0].attrs;
 }
-
-
-GtkTextBuffer*
-gtk_text_buffer_new_for_display (GdkDisplay *clipboard_display,
-				 GtkTextTagTable *table)
-{
-  GtkTextBuffer *text_buffer;
-
-  text_buffer = GTK_TEXT_BUFFER (g_object_new (gtk_text_buffer_get_type (), NULL));
-
-  if (table)
-    {
-      text_buffer->tag_table = table;
-
-      g_object_ref (G_OBJECT (text_buffer->tag_table));
-    }
-
-  text_buffer->clipboard_display = clipboard_display;
-
-  g_object_ref (G_OBJECT (text_buffer));
-  
-  return text_buffer;
-
-
-}
-void
-gtk_text_buffer_set_clipboard_display (GtkTextBuffer *buffer,
-				       GdkDisplay *clipboard_display)
-{
-  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
-  g_return_if_fail (clipboard_display != NULL);
-  buffer->clipboard_display = clipboard_display;
-}
-
-GdkDisplay* gtk_text_buffer_get_clipboard_display (GtkTextBuffer *buffer)
-{
-  g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));  
-  return buffer->clipboard_display;
-}
-
-
 
 /*
  * Debug spew

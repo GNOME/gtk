@@ -42,20 +42,21 @@ extern "C"
 #define GDK_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY, GdkDisplayClass))
 
 
-  struct _GdkDisplay
-  {
-    GObject parent_instance;
-  };
+struct _GdkDisplay
+{
+  GObject parent_instance;
+};
 
-  struct _GdkDisplayClass
-  {
-    GObjectClass parent_class;
-    GdkDisplay *(*new_display) (gchar * display_name);
-    gchar *(*get_display_name) (GdkDisplay * dpy);
-    gint (*get_n_screens) (GdkDisplay * dpy);
-    GdkScreen *(*get_screen) (GdkDisplay * dpy, gint screen_num);
-    GdkScreen *(*get_default_screen) (GdkDisplay * dpy);
-  };
+struct _GdkDisplayClass
+{
+  GObjectClass parent_class;
+  
+  gchar *     (*get_display_name)   (GdkDisplay *dpy);
+  gint        (*get_n_screens)      (GdkDisplay *dpy);
+  GdkScreen * (*get_screen)         (GdkDisplay *dpy,
+				     gint        screen_num);
+  GdkScreen * (*get_default_screen) (GdkDisplay *dpy);
+};
 
 GType       gdk_display_get_type           (void);
 GdkDisplay *gdk_display_init_new           (int          argc,

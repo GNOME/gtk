@@ -32,19 +32,23 @@ extern "C"
 {
 #endif				/* __cplusplus */
 
-void               gdk_x11_display_manager_class_init          (GdkDisplayManagerClass *class);
-GdkDisplay *       gdk_x11_display_manager_open_display        (GdkDisplayManager      *dpy_mgr,
-								gchar                  *display_name);
-void               gdk_x11_display_manager_set_default         (GdkDisplayManager      *dpy_mgr,
-								GdkDisplay             *default_display);
-GdkDisplay *       gdk_x11_display_manager_get_default         (GdkDisplayManager      *dpy_mgr);
-gint               gdk_x11_display_manager_get_display_count   (GdkDisplayManager      *dpy_mgr);
+struct _GdkDisplayManager
+{
+  GObject parent_instance;
+  GdkDisplay *default_display;
+  GSList *open_displays;
+};
+
+struct _GdkDisplayManagerClass
+{
+  GObjectClass parent_class;
+};
+
 GdkScreen *        gdk_x11_display_manager_get_screen_for_root (GdkDisplayManager      *dpy_mgr,
 								Window                  root);
 GdkDisplay *       gdk_x11_display_manager_get_display         (GdkDisplayManager      *dpy_mgr,
 								Display                *dpy);
 GdkDisplayImplX11 *gdk_lookup_xdisplay                         (Display                *dpy);
-
 
 #ifdef __cplusplus
 }

@@ -81,7 +81,7 @@ msgstr "Resim '%s' yüklenemedi: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:687
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr "Kaydedilen resim formatı gdk-pixbuf tarafından desteklenmiyor."
+msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:790
 #, c-format

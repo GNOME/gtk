@@ -220,9 +220,7 @@ gtk_selection_data_set_tree_row (GtkSelectionData *selection_data,
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
 
-  if (selection_data->target != 
-      gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
-
+  if (selection_data->target != gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
     return FALSE;
   
   path_str = gtk_tree_path_to_string (path);
@@ -241,7 +239,6 @@ gtk_selection_data_set_tree_row (GtkSelectionData *selection_data,
   
   gtk_selection_data_set (selection_data,
                           gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE),
-
                           8, /* bytes */
                           (void*)trd,
                           struct_size);
@@ -265,7 +262,7 @@ gtk_selection_data_set_tree_row (GtkSelectionData *selection_data,
  * get memory corruption. In the #GtkTreeDragDest drag_data_received handler,
  * you can assume that selection data of type %GTK_TREE_MODEL_ROW is
  * in from the current process. The returned path must be freed with
- * gtk_tree_path_free ().
+ * gtk_tree_path_free().
  * 
  * Return value: %TRUE if @selection_data had target type %GTK_TREE_MODEL_ROW and
  *  is otherwise valid
@@ -285,9 +282,7 @@ gtk_selection_data_get_tree_row (GtkSelectionData *selection_data,
   if (path)
     *path = NULL;
   
-  if (selection_data->target != 
-      gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
-
+  if (selection_data->target != gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
     return FALSE;
 
   trd = (void*) selection_data->data;

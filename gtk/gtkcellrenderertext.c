@@ -1225,9 +1225,16 @@ gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
   gtk_cell_renderer_text_get_size (cell, widget, cell_area, &x_offset, &y_offset, NULL, NULL);
 
   if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
-    state = GTK_STATE_SELECTED;
+    {
+      if (GTK_WIDGET_HAS_FOCUS (widget))
+	state = GTK_STATE_SELECTED;
+      else
+	state = GTK_STATE_ACTIVE;
+    }
   else
-    state = GTK_STATE_NORMAL;
+    {
+      state = GTK_STATE_NORMAL;
+    }
 
   if (celltext->background_set && state != GTK_STATE_SELECTED)
     {

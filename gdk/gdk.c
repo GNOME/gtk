@@ -333,14 +333,14 @@ gdk_init_check (int    *argc,
 
   if (!display)
     return FALSE;
-  screen = GDK_DISPLAY_GET_CLASS(display)->get_default_screen(display);
+  screen = gdk_display_get_default_screen (display);
   
   _gdk_visual_init (screen);
-  _gdk_windowing_window_init(screen);
+  _gdk_windowing_window_init (screen);
   _gdk_windowing_image_init (display);
   gdk_events_init (display);
   gdk_input_init ();
-  gdk_dnd_init (display);
+  gdk_dnd_init ();
 
   gdk_initialized = 1;
 

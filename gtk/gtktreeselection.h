@@ -34,12 +34,6 @@ extern "C" {
 #define GTK_IS_TREE_SELECTION_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_TREE_SELECTION))
 #define GTK_TREE_SELECTION_GET_CLASS(obj)       (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TREE_SELECTION, GtkTreeSelectionClass))
 
-typedef enum
-{
-  GTK_TREE_SELECTION_SINGLE,
-  GTK_TREE_SELECTION_MULTI
-} GtkTreeSelectionMode;
-
 typedef gboolean (* GtkTreeSelectionFunc)    (GtkTreeSelection  *selection,
 					      GtkTreeModel      *model,
 					      GtkTreePath       *path,
@@ -56,7 +50,7 @@ struct _GtkTreeSelection
   /*< private >*/
   
   GtkTreeView *tree_view;
-  GtkTreeSelectionMode type;
+  GtkSelectionMode type;
   GtkTreeSelectionFunc user_func;
   gpointer user_data;
   GtkDestroyNotify destroy;
@@ -73,8 +67,8 @@ struct _GtkTreeSelectionClass
 GtkType          gtk_tree_selection_get_type            (void);
 
 void             gtk_tree_selection_set_mode            (GtkTreeSelection            *selection,
-							 GtkTreeSelectionMode         type);
-GtkTreeSelectionMode gtk_tree_selection_get_mode        (GtkTreeSelection            *selection);
+							 GtkSelectionMode             type);
+GtkSelectionMode gtk_tree_selection_get_mode        (GtkTreeSelection            *selection);
 void             gtk_tree_selection_set_select_function (GtkTreeSelection            *selection,
 							 GtkTreeSelectionFunc         func,
 							 gpointer                     data,

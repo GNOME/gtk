@@ -58,7 +58,9 @@ enum {
 enum {
   PROP_0,
   PROP_LABEL,
-  PROP_RELIEF
+  PROP_RELIEF,
+  PROP_USE_UNDERLINE,
+  PROP_USE_STOCK
 };
 
 static void gtk_button_class_init     (GtkButtonClass   *klass);
@@ -91,19 +93,19 @@ static gint gtk_button_enter_notify   (GtkWidget        *widget,
 				       GdkEventCrossing *event);
 static gint gtk_button_leave_notify   (GtkWidget        *widget,
 				       GdkEventCrossing *event);
-static void gtk_button_add            (GtkContainer     *container,
-				       GtkWidget        *widget);
-static void gtk_button_remove         (GtkContainer     *container,
-				       GtkWidget        *widget);
 static void gtk_real_button_pressed   (GtkButton        *button);
 static void gtk_real_button_released  (GtkButton        *button);
-static void gtk_real_button_enter     (GtkButton        *button);
-static void gtk_real_button_leave     (GtkButton        *button);
 static void gtk_real_button_activate (GtkButton         *button);
+static void gtk_button_update_state   (GtkButton        *button);
 static GtkType gtk_button_child_type  (GtkContainer     *container);
-
 static void gtk_button_finish_activate (GtkButton *button,
 					gboolean   do_it);
+
+static GObject*	gtk_button_constructor     (GType                  type,
+					    guint                  n_construct_properties,
+					    GObjectConstructParam *construct_params);
+static void     gtk_button_construct_child (GtkButton             *button);
+
 
 static GtkBinClass *parent_class = NULL;
 static guint button_signals[LAST_SIGNAL] = { 0 };
@@ -138,18 +140,21 @@ gtk_button_get_type (void)
 static void
 gtk_button_class_init (GtkButtonClass *klass)
 {
+  GObjectClass *g_object_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
+  g_object_class = G_OBJECT_CLASS (klass);
   object_class = (GtkObjectClass*) klass;
   widget_class = (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
   
   parent_class = g_type_class_peek_parent (klass);
 
-  G_OBJECT_CLASS(object_class)->set_property = gtk_button_set_property;
-  G_OBJECT_CLASS(object_class)->get_property = gtk_button_get_property;
+  g_object_class->constructor = gtk_button_constructor;
+  g_object_class->set_property = gtk_button_set_property;
+  g_object_class->get_property = gtk_button_get_property;
 
   widget_class->realize = gtk_button_realize;
   widget_class->unrealize = gtk_button_unrealize;
@@ -162,15 +167,13 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->enter_notify_event = gtk_button_enter_notify;
   widget_class->leave_notify_event = gtk_button_leave_notify;
 
-  container_class->add = gtk_button_add;
-  container_class->remove = gtk_button_remove;
   container_class->child_type = gtk_button_child_type;
 
   klass->pressed = gtk_real_button_pressed;
   klass->released = gtk_real_button_released;
   klass->clicked = NULL;
-  klass->enter = gtk_real_button_enter;
-  klass->leave = gtk_real_button_leave;
+  klass->enter = gtk_button_update_state;
+  klass->leave = gtk_button_update_state;
   klass->activate = gtk_real_button_activate;
 
   g_object_class_install_property (G_OBJECT_CLASS(object_class),
@@ -179,7 +182,23 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                         _("Label"),
                                                         _("Text of the label widget inside the button, if the button contains a label widget."),
                                                         NULL,
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+  
+  g_object_class_install_property (G_OBJECT_CLASS(object_class),
+                                   PROP_USE_UNDERLINE,
+                                   g_param_spec_boolean ("use_underline",
+							 _("Use underline"),
+							 _("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
+                                                        FALSE,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+  
+  g_object_class_install_property (G_OBJECT_CLASS(object_class),
+                                   PROP_USE_STOCK,
+                                   g_param_spec_boolean ("use_stock",
+							 _("Use stock"),
+							 _("If set, the label is used to pick a stock item instead of being displayed"),
+                                                        FALSE,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   
   g_object_class_install_property (G_OBJECT_CLASS(object_class),
                                    PROP_RELIEF,
@@ -247,6 +266,22 @@ gtk_button_class_init (GtkButtonClass *klass)
 							       _("Extra space to add for CAN_DEFAULT buttons that is always drawn outside the border"),
 							       GTK_TYPE_BORDER,
 							       G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("child_displacement_x",
+							     _("Child X Displacement"),
+							     _("How far in the x direction to move the child when the button is depressed"),
+							     G_MININT,
+							     G_MAXINT,
+							     0,
+							     G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("child_displacement_y",
+							     _("Child Y Displacement"),
+							     _("How far in the y direction to move the child when the button is depressed"),
+							     G_MININT,
+							     G_MAXINT,
+							     0,
+							     G_PARAM_READABLE));
 }
 
 static void
@@ -255,11 +290,38 @@ gtk_button_init (GtkButton *button)
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_FOCUS | GTK_RECEIVES_DEFAULT);
   GTK_WIDGET_UNSET_FLAGS (button, GTK_NO_WINDOW);
 
-  button->child = NULL;
+  button->label_text = NULL;
+  
+  button->constructed = FALSE;
   button->in_button = FALSE;
   button->button_down = FALSE;
   button->relief = GTK_RELIEF_NORMAL;
+  button->use_stock = FALSE;
+  button->use_underline = FALSE;
+  button->depressed = FALSE;
 }
+
+static GObject*
+gtk_button_constructor (GType                  type,
+			guint                  n_construct_properties,
+			GObjectConstructParam *construct_params)
+{
+  GObject *object;
+  GtkButton *button;
+
+  object = (* G_OBJECT_CLASS (parent_class)->constructor) (type,
+							   n_construct_properties,
+							   construct_params);
+
+  button = GTK_BUTTON (object);
+  button->constructed = TRUE;
+
+  if (button->label_text != NULL)
+    gtk_button_construct_child (button);
+  
+  return object;
+}
+
 
 static GtkType
 gtk_button_child_type  (GtkContainer     *container)
@@ -282,23 +344,17 @@ gtk_button_set_property (GObject         *object,
 
   switch (prop_id)
     {
-      GtkWidget *child;
-
     case PROP_LABEL:
-      child = GTK_BIN (button)->child;
-      if (!child)
-	child = gtk_widget_new (GTK_TYPE_LABEL,
-				"visible", TRUE,
-				"parent", button,
-				NULL);
-      if (GTK_IS_LABEL (child))
-        {
-          gtk_label_set_text (GTK_LABEL (child),
-                              g_value_get_string (value) ? g_value_get_string (value) : "");
-        }
+      gtk_button_set_label (button, g_value_get_string (value));
       break;
     case PROP_RELIEF:
       gtk_button_set_relief (button, g_value_get_enum (value));
+      break;
+    case PROP_USE_UNDERLINE:
+      gtk_button_set_use_underline (button, g_value_get_boolean (value));
+      break;
+    case PROP_USE_STOCK:
+      gtk_button_set_use_stock (button, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -319,13 +375,16 @@ gtk_button_get_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_LABEL:
-      if (GTK_BIN (button)->child && GTK_IS_LABEL (GTK_BIN (button)->child))
-	 g_value_set_string (value, GTK_LABEL (GTK_BIN (button)->child)->label); 
-      else
-	 g_value_set_string (value, NULL);
+      g_value_set_string (value, button->label_text);
       break;
     case PROP_RELIEF:
       g_value_set_enum (value, gtk_button_get_relief (button));
+      break;
+    case PROP_USE_UNDERLINE:
+      g_value_set_boolean (value, button->use_underline);
+      break;
+    case PROP_USE_STOCK:
+      g_value_set_boolean (value, button->use_stock);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -339,20 +398,63 @@ gtk_button_new (void)
   return GTK_WIDGET (gtk_type_new (gtk_button_get_type ()));
 }
 
+static void
+gtk_button_construct_child (GtkButton *button)
+{
+  GtkStockItem item;
+  GtkWidget *label;
+  GtkWidget *image;
+  GtkWidget *hbox;
+
+  if (!button->constructed)
+    return;
+  
+  if (button->label_text == NULL)
+    return;
+
+  if (GTK_BIN (button)->child)
+    gtk_container_remove (GTK_CONTAINER (button),
+			  GTK_BIN (button)->child);
+
+  
+  if (button->use_stock &&
+      gtk_stock_lookup (button->label_text, &item))
+    {
+      label = gtk_label_new_with_mnemonic (item.label);
+
+      gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (button));
+      
+      image = gtk_image_new_from_stock (button->label_text, GTK_ICON_SIZE_BUTTON);
+      hbox = gtk_hbox_new (FALSE, 1);
+
+      gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+      
+      gtk_container_add (GTK_CONTAINER (button), hbox);
+      gtk_widget_show_all (hbox);
+
+      return;
+    }
+
+  if (button->use_underline)
+    {
+      label = gtk_label_new_with_mnemonic (button->label_text);
+      gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (button));
+    }
+  else
+    label = gtk_label_new (button->label_text);
+  
+  gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
+
+  gtk_widget_show (label);
+  gtk_container_add (GTK_CONTAINER (button), label);
+}
+
+
 GtkWidget*
 gtk_button_new_with_label (const gchar *label)
 {
-  GtkWidget *button;
-  GtkWidget *label_widget;
-
-  button = gtk_button_new ();
-  label_widget = gtk_label_new (label);
-  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.5, 0.5);
-
-  gtk_container_add (GTK_CONTAINER (button), label_widget);
-  gtk_widget_show (label_widget);
-
-  return button;
+  return g_object_new (GTK_TYPE_BUTTON, "label", label, NULL);
 }
 
 /**
@@ -367,36 +469,7 @@ gtk_button_new_with_label (const gchar *label)
 GtkWidget*
 gtk_button_new_from_stock (const gchar   *stock_id)
 {
-  GtkWidget *button;
-  GtkStockItem item;
-
-  if (gtk_stock_lookup (stock_id, &item))
-    {
-      GtkWidget *label;
-      GtkWidget *image;
-      GtkWidget *hbox;
-      
-      button = gtk_button_new ();
-
-      label = gtk_label_new_with_mnemonic (item.label);
-
-      gtk_label_set_mnemonic_widget (GTK_LABEL (label), button);
-
-      image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
-      hbox = gtk_hbox_new (FALSE, 1);
-
-      gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (hbox), label, TRUE, TRUE, 0);
-      
-      gtk_container_add (GTK_CONTAINER (button), hbox);
-      gtk_widget_show_all (hbox);
-    }
-  else
-    {
-      button = gtk_button_new_with_mnemonic (stock_id);
-    }
-  
-  return button;
+  return g_object_new (GTK_TYPE_BUTTON, "label", stock_id, "use_stock", TRUE,  NULL);
 }
 
 /**
@@ -413,19 +486,7 @@ gtk_button_new_from_stock (const gchar   *stock_id)
 GtkWidget*
 gtk_button_new_with_mnemonic (const gchar *label)
 {
-  GtkWidget *button;
-  GtkWidget *label_widget;
-
-  button = gtk_button_new ();
-  
-  label_widget = gtk_label_new_with_mnemonic (label);
-
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label_widget), button);
-  
-  gtk_container_add (GTK_CONTAINER (button), label_widget);
-  gtk_widget_show (label_widget);
-
-  return button;
+  return g_object_new (GTK_TYPE_BUTTON, "label", label, "use_underline", TRUE,  NULL);
 }
 
 void
@@ -656,6 +717,19 @@ gtk_button_size_allocate (GtkWidget     *widget,
 	  child_allocation.height = MAX (1, child_allocation.height - default_border.top - default_border.bottom);
 	}
 
+      if (button->depressed)
+	{
+	  gint child_displacement_x;
+	  gint child_displacement_y;
+	  
+	  gtk_widget_style_get (widget,
+				"child_displacement_x", &child_displacement_x, 
+				"child_displacement_y", &child_displacement_y,
+				NULL);
+	  child_allocation.x += child_displacement_x;
+	  child_allocation.y += child_displacement_y;
+	}
+
       gtk_widget_size_allocate (GTK_BIN (button)->child, &child_allocation);
     }
 }
@@ -740,11 +814,8 @@ gtk_button_paint (GtkWidget    *widget,
 	  width -= 2;
 	  height -= 2;
 	}
-	
-      if (GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE)
-	shadow_type = GTK_SHADOW_IN;
-      else
-	shadow_type = GTK_SHADOW_OUT;
+
+      shadow_type = button->depressed ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
 
       if ((button->relief != GTK_RELIEF_NONE) ||
 	  ((GTK_WIDGET_STATE(widget) != GTK_STATE_NORMAL) &&
@@ -909,113 +980,29 @@ gtk_button_leave_notify (GtkWidget        *widget,
 }
 
 static void
-gtk_button_add (GtkContainer *container,
-		GtkWidget    *widget)
-{
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (widget != NULL);
-
-  if (GTK_CONTAINER_CLASS (parent_class)->add)
-    GTK_CONTAINER_CLASS (parent_class)->add (container, widget);
-
-  GTK_BUTTON (container)->child = GTK_BIN (container)->child;
-}
-
-static void
-gtk_button_remove (GtkContainer *container,
-		   GtkWidget    *widget)
-{
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (widget != NULL);
-
-  if (GTK_CONTAINER_CLASS (parent_class)->remove)
-    GTK_CONTAINER_CLASS (parent_class)->remove (container, widget);
-
-  GTK_BUTTON (container)->child = GTK_BIN (container)->child;
-}
-
-static void
 gtk_real_button_pressed (GtkButton *button)
 {
-  GtkStateType new_state;
-
-  g_return_if_fail (GTK_IS_BUTTON (button));
-
   if (button->activate_timeout)
     return;
   
   button->button_down = TRUE;
-
-  new_state = (button->in_button ? GTK_STATE_ACTIVE : GTK_STATE_NORMAL);
-
-  if (GTK_WIDGET_STATE (button) != new_state)
-    {
-      gtk_widget_set_state (GTK_WIDGET (button), new_state);
-      gtk_widget_queue_draw (GTK_WIDGET (button));
-    }
+  gtk_button_update_state (button);
 }
 
 static void
 gtk_real_button_released (GtkButton *button)
 {
-  GtkStateType new_state;
-
-  g_return_if_fail (GTK_IS_BUTTON (button));
-
   if (button->button_down)
     {
       button->button_down = FALSE;
 
       if (button->activate_timeout)
 	return;
-  
+      
       if (button->in_button)
 	gtk_button_clicked (button);
 
-      new_state = (button->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL);
-
-      if (GTK_WIDGET_STATE (button) != new_state)
-	{
-	  gtk_widget_set_state (GTK_WIDGET (button), new_state);
-	  /* We _draw () instead of queue_draw so that if the operation
-	   * blocks, the label doesn't vanish.
-	   */
-	  gtk_widget_draw (GTK_WIDGET (button), NULL);
-	}
-    }
-}
-
-static void
-gtk_real_button_enter (GtkButton *button)
-{
-  GtkStateType new_state;
-
-  g_return_if_fail (GTK_IS_BUTTON (button));
-
-  new_state = (button->button_down ? GTK_STATE_ACTIVE : GTK_STATE_PRELIGHT);
-
-  if (button->activate_timeout)
-    return;
-  
-  if (GTK_WIDGET_STATE (button) != new_state)
-    {
-      gtk_widget_set_state (GTK_WIDGET (button), new_state);
-      gtk_widget_queue_draw (GTK_WIDGET (button));
-    }
-}
-
-static void
-gtk_real_button_leave (GtkButton *button)
-{
-  g_return_if_fail (GTK_IS_BUTTON (button));
-  
-  if (button->activate_timeout)
-    return;
-  
-  if (GTK_WIDGET_STATE (button) != GTK_STATE_NORMAL)
-    {
-      gtk_widget_set_state (GTK_WIDGET (button), GTK_STATE_NORMAL);
-      gtk_widget_queue_draw (GTK_WIDGET (button));
+      gtk_button_update_state (button);
     }
 }
 
@@ -1049,7 +1036,7 @@ gtk_real_button_activate (GtkButton *button)
 						    button_activate_timeout,
 						    button);
 	  button->button_down = TRUE;
-	  gtk_widget_set_state (widget, GTK_STATE_ACTIVE);
+	  gtk_button_update_state (button);
 	}
     }
 }
@@ -1063,15 +1050,189 @@ gtk_button_finish_activate (GtkButton *button,
   g_source_remove (button->activate_timeout);
   button->activate_timeout = 0;
 
-  gdk_display_keyboard_ungrab(gtk_widget_get_display (widget),
-			      gtk_get_current_event_time ());
+  gdk_display_keyboard_ungrab (gtk_widget_get_display (widget),
+			       gtk_get_current_event_time ());
   gtk_grab_remove (widget);
 
   button->button_down = FALSE;
-  gtk_widget_set_state (GTK_WIDGET (button),
-			button->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL);
+
+  gtk_button_update_state (button);
 
   if (do_it)
     gtk_button_clicked (button);
 }
 
+/**
+ * gtk_button_set_label:
+ * @button: a #GtkButton
+ * @label: a string
+ *
+ * Sets the text of the label of the button to @str. This text is
+ * also used to select the stock item if gtk_button_set_use_stock()
+ * is used.
+ *
+ * This will also clear any previously set labels.
+ **/
+void
+gtk_button_set_label (GtkButton   *button,
+		      const gchar *label)
+{
+  g_return_if_fail (GTK_IS_BUTTON (button));
+  
+  g_free (button->label_text);
+  button->label_text = g_strdup (label);
+  
+  gtk_button_construct_child (button);
+  
+  g_object_notify (G_OBJECT (button), "label");
+}
+
+/**
+ * gtk_button_get_label:
+ * @button: a #GtkButton
+ *
+ * Fetches the text from the label of the button, as set by
+ * gtk_button_set_label().
+ *
+ * Return value: the text of the label widget. This string is
+ *   owned by the widget and must not be modified or freed.
+ *   If the label text has not been set the return value
+ *   will be NULL. This will be the case if you create an
+ *   empty button with gtk_button_new() to use as a container.
+ **/
+G_CONST_RETURN gchar *
+gtk_button_get_label (GtkButton *button)
+{
+  g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
+  
+  return button->label_text;
+}
+
+/**
+ * gtk_button_set_use_underline:
+ * @button: a #GtkButton
+ * @use_underline: %TRUE if underlines in the text indicate mnemonics
+ *
+ * If true, an underline in the text of the button label indicates
+ * the next character should be used for the mnemonic accelerator key.
+ */
+void
+gtk_button_set_use_underline (GtkButton *button,
+			      gboolean   use_underline)
+{
+  g_return_if_fail (GTK_IS_BUTTON (button));
+
+  use_underline = use_underline != FALSE;
+
+  if (use_underline != button->use_underline)
+    {
+      button->use_underline = use_underline;
+  
+      gtk_button_construct_child (button);
+      
+      g_object_notify (G_OBJECT (button), "use_underline");
+    }
+}
+
+/**
+ * gtk_button_get_use_underline:
+ * @label: a #GtkButton
+ *
+ * Returns whether an embedded underline in the button label indicates a
+ * mnemonic. See gtk_button_set_use_underline ().
+ *
+ * Return value: %TRUE if an embedded underline in the button label
+ *               indicates the mnemonic accelerator keys.
+ **/
+gboolean
+gtk_button_get_use_underline (GtkButton *button)
+{
+  g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
+  
+  return button->use_underline;
+}
+
+/**
+ * gtk_button_set_use_stock:
+ * @button: a #GtkButton
+ * @use_stock: %TRUE if the button should use a stock item
+ *
+ * If true, the label set on the button is used as a
+ * stock id to select the stock item for the button.
+ */
+void
+gtk_button_set_use_stock (GtkButton *button,
+			  gboolean   use_stock)
+{
+  g_return_if_fail (GTK_IS_BUTTON (button));
+
+  use_stock = use_stock != FALSE;
+
+  if (use_stock != button->use_stock)
+    {
+      button->use_stock = use_stock;
+  
+      gtk_button_construct_child (button);
+      
+      g_object_notify (G_OBJECT (button), "use_stock");
+    }
+}
+
+/**
+ * gtk_button_get_use_stock:
+ * @button: a #GtkButton
+ *
+ * Returns whether the button label is a stock item.
+ *
+ * Return value: %TRUE if the button label is used to
+ *               select a stock item instead of being
+ *               used directly as the label text.
+ */
+gboolean
+gtk_button_get_use_stock (GtkButton *button)
+{
+  g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
+  
+  return button->use_stock;
+}
+
+/**
+ * _gtk_button_set_depressed:
+ * @button: a #GtkButton
+ * @depressed: %TRUE if the button should be drawn with a recessed shadow.
+ * 
+ * Sets whether the button is currently drawn as down or not. This is 
+ * purely a visual setting, and is meant only for use by derived widgets
+ * such as #GtkToggleButton.
+ **/
+void
+_gtk_button_set_depressed (GtkButton *button,
+			   gboolean   depressed)
+{
+  GtkWidget *widget = GTK_WIDGET (button);
+
+  depressed = depressed != FALSE;
+
+  if (depressed != button->depressed)
+    {
+      button->depressed = depressed;
+      gtk_widget_queue_resize (widget);
+    }
+}
+
+static void
+gtk_button_update_state (GtkButton *button)
+{
+  gboolean depressed;
+  GtkStateType new_state;
+
+  depressed = button->button_down && (button->in_button || button->activate_timeout);
+
+  if (!button->button_down && button->in_button)
+    new_state = GTK_STATE_PRELIGHT;
+  else
+    new_state = depressed ? GTK_STATE_ACTIVE: GTK_STATE_NORMAL;
+
+  _gtk_button_set_depressed (button, depressed); 
+  gtk_widget_set_state (GTK_WIDGET (button), new_state);
+}

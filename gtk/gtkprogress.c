@@ -354,8 +354,10 @@ gtk_progress_create_pixmap (GtkProgress *progress)
       if (progress->offscreen_pixmap)
 	gdk_pixmap_unref (progress->offscreen_pixmap);
 
-      progress->offscreen_pixmap = gdk_pixmap_new (widget->window, widget->allocation.width, widget->allocation.height, -1);
-
+      progress->offscreen_pixmap = gdk_pixmap_new (widget->window,
+						   widget->allocation.width,
+						   widget->allocation.height,
+						   -1);
       GTK_PROGRESS_GET_CLASS (progress)->paint (progress);
     }
 }
@@ -657,7 +659,7 @@ gtk_progress_set_format_string (GtkProgress *progress,
   g_return_if_fail (GTK_IS_PROGRESS (progress));
 
   /* Turn on format, in case someone called
-   * gtk_progress_bar_set_text () and turned it off.
+   * gtk_progress_bar_set_text() and turned it off.
    */
   progress->use_text_format = TRUE;
   

@@ -510,7 +510,7 @@ gtk_tree_path_up (GtkTreePath *path)
 {
   g_return_val_if_fail (path != NULL, FALSE);
 
-  if (path->depth == 1)
+  if (path->depth == 0)
     return FALSE;
 
   path->depth--;
@@ -676,36 +676,6 @@ gtk_tree_model_get_iter_root (GtkTreeModel *tree_model,
 
   path = gtk_tree_path_new_root ();
   retval = gtk_tree_model_get_iter (tree_model, iter, path);
-  gtk_tree_path_free (path);
-
-  return retval;
-}
-
-/**
- * gtk_tree_model_get_first:
- * @tree_model: a #GtkTreeModel
- * @iter: iterator to initialize
- *
- * Initialized @iter with the first iterator in the tree (the one at the
- * root path) and returns %TRUE, or returns %FALSE if there are no
- * iterable locations in the model (i.e. the tree is empty).
- *
- * Return value: %TRUE if @iter was initialized
- **/
-gboolean
-gtk_tree_model_get_first (GtkTreeModel *tree_model,
-                          GtkTreeIter  *iter)
-{
-  gboolean retval;
-  GtkTreePath *path;
-
-  g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
-  g_return_val_if_fail (iter != NULL, FALSE);
-
-  path = gtk_tree_path_new_root ();
-
-  retval = gtk_tree_model_get_iter (tree_model, iter, path);
-
   gtk_tree_path_free (path);
 
   return retval;
@@ -983,9 +953,6 @@ gtk_tree_model_get (GtkTreeModel *tree_model,
  * @tree_model: a #GtkTreeModel
  * @iter: a row in @tree_model
  * @var_args: va_list of column/return location pairs
- *
- * See gtk_tree_model_get(), this version takes a va_list for
- * language bindings to use.
  *
  * See gtk_tree_model_get(), this version takes a va_list for language bindings
  * to use.

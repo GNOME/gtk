@@ -64,7 +64,7 @@ enum {
   /* Construct */
   PROP_TYPE,
 
-  /* Style Props */
+  /* Normal Props */
   PROP_TITLE,
   PROP_ALLOW_SHRINK,
   PROP_ALLOW_GROW,
@@ -74,10 +74,21 @@ enum {
   PROP_DEFAULT_WIDTH,
   PROP_DEFAULT_HEIGHT,
   PROP_DESTROY_WITH_PARENT,
-  
+  PROP_ICON,
   PROP_SCREEN,
+  
   LAST_ARG
 };
+
+typedef struct
+{
+  GList     *icon_list;
+  GdkPixmap *icon_pixmap;
+  GdkPixmap *icon_mask;
+  guint      realized : 1;
+  guint      using_default_icon : 1;
+  guint      using_parent_icon : 1;
+} GtkWindowIconInfo;
 
 typedef struct {
   GdkGeometry    geometry; /* Last set of geometry hints we set */
@@ -218,11 +229,17 @@ static void     gtk_window_set_default_size_internal (GtkWindow    *window,
                                                       gboolean      change_height,
                                                       gint          height);
 
+static void     gtk_window_realize_icon               (GtkWindow    *window);
+static void     gtk_window_unrealize_icon             (GtkWindow    *window);
 
 static GSList      *toplevel_list = NULL;
 static GHashTable  *mnemonic_hash_table = NULL;
 static GtkBinClass *parent_class = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
+static GList       *default_icon_list = NULL;
+/* FIXME need to be per-screen */
+static GdkPixmap   *default_icon_pixmap = NULL;
+static GdkPixmap   *default_icon_mask = NULL;
 
 static void gtk_window_set_property (GObject         *object,
 				     guint            prop_id,
@@ -350,7 +367,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 						      GTK_WINDOW_TOPLEVEL,
 						      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
-  /* Style Props */
+  /* Regular Props */
   g_object_class_install_property (gobject_class,
                                    PROP_TITLE,
                                    g_param_spec_string ("title",
@@ -427,16 +444,22 @@ gtk_window_class_init (GtkWindowClass *klass)
 							 _("If this window should be destroyed when the parent is destroyed"),
                                                          FALSE,
 							 G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_ICON,
+                                   g_param_spec_object ("icon",
+                                                        _("Icon"),
+                                                        _("Icon for this window"),
+                                                        GDK_TYPE_PIXBUF,
+                                                        G_PARAM_READWRITE));
+  
   g_object_class_install_property (gobject_class,
 				   PROP_SCREEN,
-				   g_param_spec_pointer ("screen",
+				   g_param_spec_object ("screen",
  							_("Screen"),
- 							_("The screen representing where this window will be displayed."),
+ 							_("The screen where this window will be displayed."),
+							GDK_TYPE_SCREEN,
  							G_PARAM_READWRITE));
-
-  
-
-  /* Style props are set or not */
 
   window_signals[SET_FOCUS] =
     g_signal_new ("set_focus",
@@ -661,8 +684,13 @@ gtk_window_set_property (GObject      *object,
     case PROP_DESTROY_WITH_PARENT:
       gtk_window_set_destroy_with_parent (window, g_value_get_boolean (value));
       break;
+    case PROP_ICON:
+      gtk_window_set_icon (window,
+                           g_value_get_object (value));
+      break;
     case PROP_SCREEN:
-      gtk_window_set_screen (window, g_value_get_pointer (value));
+      gtk_window_set_screen (window, g_value_get_object (value));
+      break;
     default:
       break;
     }
@@ -719,8 +747,13 @@ gtk_window_get_property (GObject      *object,
     case PROP_DESTROY_WITH_PARENT:
       g_value_set_boolean (value, window->destroy_with_parent);
       break;
+    case PROP_ICON:
+      g_value_set_object (value,
+                          G_OBJECT (gtk_window_get_icon (window)));
+      break;
     case PROP_SCREEN:
-      g_value_set_pointer (value, window->screen);
+      g_value_set_object (value, window->screen);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -821,7 +854,7 @@ gtk_window_get_title (GtkWindow *window)
  * always set these to the same value for all windows in an
  * application, and GTK sets them to that value by default, so calling
  * this function is sort of pointless. However, you may want to call
- * gtk_window_set_role () on each window in your application, for the
+ * gtk_window_set_role() on each window in your application, for the
  * benefit of the session manager. Setting the role allows the window
  * manager to restore window positions when loading a saved session.
  * 
@@ -902,7 +935,7 @@ gtk_window_get_role (GtkWindow *window)
  * If @focus is not the current focus widget, and is focusable, emits
  * the "set_focus" signal to set @focus as the focus widget for the
  * window.  This function is more or less GTK-internal; to focus an
- * entry widget or the like, you should use gtk_widget_grab_focus ()
+ * entry widget or the like, you should use gtk_widget_grab_focus()
  * instead of this function.
  * 
  **/
@@ -932,8 +965,8 @@ gtk_window_set_focus (GtkWindow *window,
  * #GtkWindow about the current default widget; it's really a GTK
  * internal function and you shouldn't need it. Instead, to change the
  * default widget, first set the #GTK_CAN_DEFAULT flag on the widget
- * you'd like to make the default using GTK_WIDGET_SET_FLAGS (), then
- * call gtk_widget_grab_default () to move the default.
+ * you'd like to make the default using GTK_WIDGET_SET_FLAGS(), then
+ * call gtk_widget_grab_default() to move the default.
  * 
  **/
 void
@@ -1217,7 +1250,7 @@ gtk_window_activate_default (GtkWindow *window)
  * Sets a window modal or non-modal. Modal windows prevent interaction
  * with other windows in the same application. To keep modal dialogs
  * on top of main application windows, use
- * gtk_window_set_transient_for () to make the dialog transient for the
+ * gtk_window_set_transient_for() to make the dialog transient for the
  * parent; most window managers will then disallow lowering the dialog
  * below the parent.
  * 
@@ -1332,8 +1365,8 @@ _gtk_window_reposition (GtkWindow *window,
 			gint       x,
 			gint       y)
 {
-
   g_return_if_fail (GTK_IS_WINDOW (window));
+
   gtk_window_move (window, x, y);
 }
 
@@ -1394,8 +1427,8 @@ gtk_window_transient_parent_unrealized (GtkWidget *parent,
 					GtkWidget *window)
 {
   if (GTK_WIDGET_REALIZED (window))
-    gdk_property_delete (window->window, gdk_atom_intern ("WM_TRANSIENT_FOR", FALSE));
-
+    gdk_property_delete (window->window, 
+			 gdk_atom_intern ("WM_TRANSIENT_FOR", FALSE));
 }
 
 static void       
@@ -1428,9 +1461,9 @@ gtk_window_unset_transient_for  (GtkWindow *window)
  * Dialog windows should be set transient for the main application
  * window they were spawned from. This allows window managers to
  * e.g. keep the dialog on top of the main window, or center the
- * dialog over the main window. gtk_dialog_new_with_buttons () and
+ * dialog over the main window. gtk_dialog_new_with_buttons() and
  * other convenience functions in GTK+ will sometimes call
- * gtk_window_set_transient_for () on your behalf.
+ * gtk_window_set_transient_for() on your behalf.
  * 
  **/
 void       
@@ -1506,8 +1539,8 @@ gtk_window_get_transient_for (GtkWindow *window)
  *
  * This function should be called before the window becomes visible.
  *
- * gtk_dialog_new_with_buttons () and other convenience functions in GTK+
- * will sometimes call gtk_window_set_type_hint () on your behalf.
+ * gtk_dialog_new_with_buttons() and other convenience functions in GTK+
+ * will sometimes call gtk_window_set_type_hint() on your behalf.
  * 
  **/
 void
@@ -1720,6 +1753,505 @@ gtk_window_get_decorated (GtkWindow *window)
 }
 
 static void
+gdk_pixbuf_render_pixmap_and_mask_with_colormap (GdkPixbuf   *pixbuf,
+                                                 GdkPixmap  **pixmap_return,
+                                                 GdkBitmap  **mask_return,
+                                                 int          alpha_threshold,
+                                                 GdkColormap *cmap)
+{
+  g_return_if_fail (pixbuf != NULL);
+  
+  if (pixmap_return)
+    {
+      GdkGC *gc;
+      
+      *pixmap_return = gdk_pixmap_new (NULL, gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
+				       gdk_colormap_get_visual (cmap)->depth);
+      gdk_drawable_set_colormap (GDK_DRAWABLE (*pixmap_return),
+                                 cmap);
+      gc = gdk_gc_new (*pixmap_return);
+      gdk_pixbuf_render_to_drawable (pixbuf, *pixmap_return, gc,
+				     0, 0, 0, 0,
+				     gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
+				     GDK_RGB_DITHER_NORMAL,
+				     0, 0);
+      gdk_gc_unref (gc);
+    }
+  
+  if (mask_return)
+    {
+      if (gdk_pixbuf_get_has_alpha (pixbuf))
+	{
+	  *mask_return = gdk_pixmap_new (NULL, gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf), 1);
+          
+	  gdk_pixbuf_render_threshold_alpha (pixbuf, *mask_return,
+					     0, 0, 0, 0,
+					     gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
+					     alpha_threshold);
+	}
+      else
+	*mask_return = NULL;
+    }
+}
+
+static GtkWindowIconInfo*
+get_icon_info (GtkWindow *window)
+{
+  return g_object_get_data (G_OBJECT (window),
+                            "gtk-window-icon-info");
+}
+     
+static GtkWindowIconInfo*
+ensure_icon_info (GtkWindow *window)
+{
+  GtkWindowIconInfo *info;
+
+  info = get_icon_info (window);
+  
+  if (info == NULL)
+    {
+      info = g_new0 (GtkWindowIconInfo, 1);
+      g_object_set_data_full (G_OBJECT (window),
+                              "gtk-window-icon-info",
+                              info,
+                              g_free);
+    }
+
+  return info;
+}
+
+static void
+get_pixmap_and_mask (GtkWindowIconInfo  *parent_info,
+                     gboolean            is_default_list,
+                     GList              *icon_list,
+                     GdkPixmap         **pmap_return,
+                     GdkBitmap         **mask_return)
+{
+  GdkPixbuf *best_icon;
+  GList *tmp_list;
+  int best_size;
+
+  *pmap_return = NULL;
+  *mask_return = NULL;
+  
+  if (is_default_list &&
+      default_icon_pixmap != NULL)
+    {
+      /* Use shared icon pixmap (eventually will be stored on the
+       * GdkScreen)
+       */
+      if (default_icon_pixmap)
+        g_object_ref (G_OBJECT (default_icon_pixmap));
+      if (default_icon_mask)
+        g_object_ref (G_OBJECT (default_icon_mask));
+      
+      *pmap_return = default_icon_pixmap;
+      *mask_return = default_icon_mask;
+    }
+  else if (parent_info && parent_info->icon_pixmap)
+    {
+      if (parent_info->icon_pixmap)
+        g_object_ref (G_OBJECT (parent_info->icon_pixmap));
+      if (parent_info->icon_mask)
+        g_object_ref (G_OBJECT (parent_info->icon_mask));
+      
+      *pmap_return = parent_info->icon_pixmap;
+      *mask_return = parent_info->icon_mask;
+    }
+  else
+    {
+#define IDEAL_SIZE 48
+  
+      best_size = G_MAXINT;
+      best_icon = NULL;
+      tmp_list = icon_list;
+      while (tmp_list != NULL)
+        {
+          GdkPixbuf *pixbuf = tmp_list->data;
+          int this;
+      
+          /* average width and height - if someone passes in a rectangular
+           * icon they deserve what they get.
+           */
+          this = gdk_pixbuf_get_width (pixbuf) + gdk_pixbuf_get_height (pixbuf);
+          this /= 2;
+      
+          if (best_icon == NULL)
+            {
+              best_icon = pixbuf;
+              best_size = this;
+            }
+          else
+            {
+              /* icon is better if it's 32 pixels or larger, and closer to
+               * the ideal size than the current best.
+               */
+              if (this >= 32 &&
+                  (ABS (best_size - IDEAL_SIZE) <
+                   ABS (this - IDEAL_SIZE)))
+                {
+                  best_icon = pixbuf;
+                  best_size = this;
+                }
+            }
+
+          tmp_list = tmp_list->next;
+        }
+
+      if (best_icon)
+        gdk_pixbuf_render_pixmap_and_mask_with_colormap (best_icon,
+                                                         pmap_return,
+                                                         mask_return,
+                                                         128,
+                                                         gdk_colormap_get_system ());
+
+      /* Save pmap/mask for others to use if appropriate */
+      if (parent_info)
+        {
+          parent_info->icon_pixmap = *pmap_return;
+          parent_info->icon_mask = *mask_return;
+
+          if (parent_info->icon_pixmap)
+            g_object_ref (G_OBJECT (parent_info->icon_pixmap));
+          if (parent_info->icon_mask)
+            g_object_ref (G_OBJECT (parent_info->icon_mask));
+        }
+      else if (is_default_list)
+        {
+          default_icon_pixmap = *pmap_return;
+          default_icon_mask = *mask_return;
+
+          if (default_icon_pixmap)
+            g_object_add_weak_pointer (G_OBJECT (default_icon_pixmap),
+                                       (gpointer*)&default_icon_pixmap);
+          if (default_icon_mask)
+            g_object_add_weak_pointer (G_OBJECT (default_icon_mask),
+                                       (gpointer*)&default_icon_mask);
+        }
+    }
+}
+
+static void
+gtk_window_realize_icon (GtkWindow *window)
+{
+  GtkWidget *widget;
+  GtkWindowIconInfo *info;
+  GList *icon_list;
+  
+  widget = GTK_WIDGET (window);
+
+  g_return_if_fail (widget->window != NULL);
+
+  /* no point setting an icon on override-redirect */
+  if (window->type == GTK_WINDOW_POPUP)
+    return;
+
+  icon_list = NULL;
+  
+  info = ensure_icon_info (window);
+
+  if (info->realized)
+    return;
+
+  g_return_if_fail (info->icon_pixmap == NULL);
+  g_return_if_fail (info->icon_mask == NULL);
+  
+  info->using_default_icon = FALSE;
+  info->using_parent_icon = FALSE;
+  
+  icon_list = info->icon_list;
+  
+  /* Inherit from transient parent */
+  if (icon_list == NULL && window->transient_parent)
+    {
+      icon_list = ensure_icon_info (window->transient_parent)->icon_list;
+      if (icon_list)
+        info->using_parent_icon = TRUE;
+    }      
+
+  /* Inherit from default */
+  if (icon_list == NULL)
+    {
+      icon_list = default_icon_list;
+      if (icon_list)
+        info->using_default_icon = TRUE;
+    }
+  
+  gdk_window_set_icon_list (widget->window, icon_list);
+
+  get_pixmap_and_mask (info->using_parent_icon ?
+                       ensure_icon_info (window->transient_parent) : NULL,
+                       info->using_default_icon,
+                       icon_list,
+                       &info->icon_pixmap,
+                       &info->icon_mask);
+  
+  /* This is a slight ICCCM violation since it's a color pixmap not
+   * a bitmap, but everyone does it.
+   */
+  gdk_window_set_icon (widget->window,
+                       NULL,
+                       info->icon_pixmap,
+                       info->icon_mask);
+
+  info->realized = TRUE;
+}
+
+static void
+gtk_window_unrealize_icon (GtkWindow *window)
+{
+  GtkWindowIconInfo *info;
+  GtkWidget *widget;
+
+  widget = GTK_WIDGET (window);
+  
+  info = get_icon_info (window);
+
+  if (info == NULL)
+    return;
+  
+  if (info->icon_pixmap)
+    g_object_unref (G_OBJECT (info->icon_pixmap));
+
+  if (info->icon_mask)
+    g_object_unref (G_OBJECT (info->icon_mask));
+
+  info->icon_pixmap = NULL;
+  info->icon_mask = NULL;
+
+  /* We don't clear the properties on the window, just figure the
+   * window is going away.
+   */
+
+  info->realized = FALSE;
+}
+
+/**
+ * gtk_window_set_icon_list:
+ * @window: a #GtkWindow
+ * @list: list of #GdkPixbuf
+ *
+ * Sets up the icon representing a #GtkWindow. The icon is used when
+ * the window is minimized (also known as iconified).  Some window
+ * managers or desktop environments may also place it in the window
+ * frame, or display it in other contexts.
+ *
+ * gtk_window_set_icon_list() allows you to pass in the same icon in
+ * several hand-drawn sizes. The list should contain the natural sizes
+ * your icon is available in; that is, don't scale the image before
+ * passing it to GTK+. Scaling is postponed until the last minute,
+ * when the desired final size is known, to allow best quality.
+ *
+ * By passing several sizes, you may improve the final image quality
+ * of the icon, by reducing or eliminating automatic image scaling.
+ *
+ * Recommended sizes to provide: 16x16, 32x32, 48x48 at minimum, and
+ * larger images (64x64, 128x128) if you have them.
+ *
+ * See also gtk_window_set_default_icon_list() to set the icon
+ * for all windows in your application in one go.
+ *
+ * Note that transient windows (those who have been set transient for another
+ * window using gtk_window_set_transient_for()) will inherit their
+ * icon from their transient parent. So there's no need to explicitly
+ * set the icon on transient windows.
+ **/
+void
+gtk_window_set_icon_list (GtkWindow  *window,
+                          GList      *list)
+{
+  GtkWindowIconInfo *info;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  info = ensure_icon_info (window);
+
+  if (info->icon_list == list) /* check for NULL mostly */
+    return;
+
+  g_list_foreach (info->icon_list,
+                  (GFunc) g_object_unref, NULL);
+
+  g_list_free (info->icon_list);
+
+  info->icon_list = g_list_copy (list);
+  g_list_foreach (info->icon_list,
+                  (GFunc) g_object_ref, NULL);
+
+  g_object_notify (G_OBJECT (window), "icon");
+  
+  gtk_window_unrealize_icon (window);
+  
+  if (GTK_WIDGET_REALIZED (window))
+    gtk_window_realize_icon (window);
+
+  /* We could try to update our transient children, but I don't think
+   * it's really worth it. If we did it, the best way would probably
+   * be to have children connect to notify::icon_list
+   */
+}
+
+/**
+ * gtk_window_get_icon_list:
+ * @window: a #GtkWindow
+ * 
+ * Retrieves the list of icons set by gtk_window_set_icon_list().
+ * The list is copied, but the reference count on each
+ * member won't be incremented.
+ * 
+ * Return value: copy of window's icon list
+ **/
+GList*
+gtk_window_get_icon_list (GtkWindow  *window)
+{
+  GtkWindowIconInfo *info;
+  
+  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
+
+  info = get_icon_info (window);
+
+  if (info)
+    return g_list_copy (info->icon_list);
+  else
+    return NULL;  
+}
+
+/**
+ * gtk_window_set_icon:
+ * @window: a #GtkWindow
+ * @icon: icon image, or %NULL
+ * 
+ * Sets up the icon representing a #GtkWindow. This icon is used when
+ * the window is minimized (also known as iconified).  Some window
+ * managers or desktop environments may also place it in the window
+ * frame, or display it in other contexts.
+ *
+ * The icon should be provided in whatever size it was naturally
+ * drawn; that is, don't scale the image before passing it to
+ * GTK+. Scaling is postponed until the last minute, when the desired
+ * final size is known, to allow best quality.
+ *
+ * If you have your icon hand-drawn in multiple sizes, use
+ * gtk_window_set_icon_list(). Then the best size will be used.
+ *
+ * This function is equivalent to calling gtk_window_set_icon_list()
+ * with a 1-element list.
+ *
+ * See also gtk_window_set_default_icon_list() to set the icon
+ * for all windows in your application in one go.
+ **/
+void
+gtk_window_set_icon (GtkWindow  *window,
+                     GdkPixbuf  *icon)
+{
+  GList *list;
+  
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (icon == NULL || GDK_IS_PIXBUF (icon));
+
+  list = NULL;
+  list = g_list_append (list, icon);
+  gtk_window_set_icon_list (window, list);
+  g_list_free (list);  
+}
+
+/**
+ * gtk_window_get_icon:
+ * @window: a #GtkWindow
+ * 
+ * Gets the value set by gtk_window_set_icon() (or if you've
+ * called gtk_window_set_icon_list(), gets the first icon in
+ * the icon list).
+ * 
+ * Return value: icon for window
+ **/
+GdkPixbuf*
+gtk_window_get_icon (GtkWindow  *window)
+{
+  GtkWindowIconInfo *info;
+
+  info = get_icon_info (window);
+  if (info && info->icon_list)
+    return GDK_PIXBUF (info->icon_list->data);
+  else
+    return NULL;
+}
+
+/**
+ * gtk_window_set_default_icon_list:
+ * @list: a list of #GdkPixbuf
+ *
+ * Sets an icon list to be used as fallback for windows that haven't
+ * had gtk_window_set_icon_list() called on them to set up a
+ * window-specific icon list. This function allows you to set up the
+ * icon for all windows in your app at once.
+ *
+ * See gtk_window_set_icon_list() for more details.
+ * 
+ **/
+void
+gtk_window_set_default_icon_list (GList *list)
+{
+  GList *toplevels;
+  GList *tmp_list;
+  if (list == default_icon_list)
+    return;
+
+  if (default_icon_pixmap)
+    g_object_unref (G_OBJECT (default_icon_pixmap));
+  if (default_icon_mask)
+    g_object_unref (G_OBJECT (default_icon_mask));
+
+  default_icon_pixmap = NULL;
+  default_icon_mask = NULL;
+  
+  g_list_foreach (default_icon_list,
+                  (GFunc) g_object_unref, NULL);
+
+  g_list_free (default_icon_list);
+
+  default_icon_list = g_list_copy (list);
+  g_list_foreach (default_icon_list,
+                  (GFunc) g_object_ref, NULL);
+  
+  /* Update all toplevels */
+  toplevels = gtk_window_list_toplevels ();
+  tmp_list = toplevels;
+  while (tmp_list != NULL)
+    {
+      GtkWindowIconInfo *info;
+      GtkWindow *w = tmp_list->data;
+      
+      info = get_icon_info (w);
+      if (info && info->using_default_icon)
+        {
+          gtk_window_unrealize_icon (w);
+          if (GTK_WIDGET_REALIZED (w))
+            gtk_window_realize_icon (w);
+        }
+
+      tmp_list = tmp_list->next;
+    }
+  g_list_free (toplevels);
+}
+
+/**
+ * gtk_window_get_default_icon_list:
+ * 
+ * Gets the value set by gtk_window_set_default_icon_list().
+ * The list is a copy and should be freed with g_list_free(),
+ * but the pixbufs in the list have not had their reference count
+ * incremented.
+ * 
+ * Return value: copy of default icon list 
+ **/
+GList*
+gtk_window_get_default_icon_list (void)
+{
+  return g_list_copy (default_icon_list);
+}
+
+static void
 gtk_window_set_default_size_internal (GtkWindow    *window,
                                       gboolean      change_width,
                                       gint          width,
@@ -1788,11 +2320,11 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
  * use the "natural" default size (the size request of the window).
  *
  * For more control over a window's initial size and how resizing works,
- * investigate gtk_window_set_geometry_hints ().
+ * investigate gtk_window_set_geometry_hints().
  *
  * A useful feature: if you set the "geometry widget" via
- * gtk_window_set_geometry_hints (), the default size specified by
- * gtk_window_set_default_size () will be the default size of that
+ * gtk_window_set_geometry_hints(), the default size specified by
+ * gtk_window_set_default_size() will be the default size of that
  * widget, not of the entire window.
  *
  * For some uses, gtk_window_resize() is a more appropriate function.
@@ -2270,10 +2802,13 @@ gtk_window_destroy (GtkObject *object)
   g_return_if_fail (GTK_IS_WINDOW (object));
 
   window = GTK_WINDOW (object);
-
+  
   if (window->transient_parent)
     gtk_window_set_transient_for (window, NULL);
 
+  /* frees the icons */
+  gtk_window_set_icon_list (window, NULL);
+  
   if (window->has_user_ref_count)
     {
       window->has_user_ref_count = FALSE;
@@ -2653,6 +3188,9 @@ gtk_window_realize (GtkWidget *widget)
     gdk_window_set_modal_hint (widget->window, TRUE);
   else
     gdk_window_set_modal_hint (widget->window, FALSE);
+
+  /* Icons */
+  gtk_window_realize_icon (window);
 }
 
 static void
@@ -2689,6 +3227,9 @@ gtk_window_unrealize (GtkWidget *widget)
       gdk_window_destroy (window->frame);
       window->frame = NULL;
     }
+
+  /* Icons */
+  gtk_window_unrealize_icon (window);
   
   (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
@@ -3325,8 +3866,8 @@ gtk_window_compute_configure_request (GtkWindow    *window,
         case GTK_WIN_POS_CENTER_ALWAYS:
         case GTK_WIN_POS_CENTER:
           {
-            gint screen_width = gdk_screen_width ();
-            gint screen_height = gdk_screen_height ();
+            gint screen_width = gdk_screen_get_width (window->screen);
+            gint screen_height = gdk_screen_get_height (window->screen);
             
             x = (screen_width - w) / 2;
             y = (screen_height - h) / 2;
@@ -3349,8 +3890,8 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
         case GTK_WIN_POS_MOUSE:
           {
-            gint screen_width = gdk_screen_width ();
-            gint screen_height = gdk_screen_height ();
+            gint screen_width = gdk_screen_get_width (window->screen);
+            gint screen_height = gdk_screen_get_height (window->screen);
             int px, py;
             
             gdk_window_get_pointer (NULL, &px, &py, NULL);
@@ -3398,8 +3939,8 @@ gtk_window_constrain_position (GtkWindow    *window,
   if (window->position == GTK_WIN_POS_CENTER_ALWAYS)
     {
       gint center_x, center_y;
-      gint screen_width = gdk_screen_width ();
-      gint screen_height = gdk_screen_height ();
+      gint screen_width = gdk_screen_get_width (window->screen);
+      gint screen_height = gdk_screen_get_height (window->screen);
       
       center_x = (screen_width - new_width) / 2;
       center_y = (screen_height - new_height) / 2;
@@ -3503,6 +4044,15 @@ gtk_window_move_resize (GtkWindow *window)
        widget->allocation.height != new_request.height))
     configure_request_size_changed = TRUE;
 
+  
+  hints_changed = FALSE;
+  
+  if (!gtk_window_compare_hints (&info->last.geometry, info->last.flags,
+				 &new_geometry, new_flags))
+    {
+      hints_changed = TRUE;
+    }
+  
   /* Position Constraints
    * ====================
    * 
@@ -3565,14 +4115,6 @@ gtk_window_move_resize (GtkWindow *window)
         configure_request_pos_changed = TRUE;
       else
         configure_request_pos_changed = FALSE;
-    }
-  
-  hints_changed = FALSE;
-  
-  if (!gtk_window_compare_hints (&info->last.geometry, info->last.flags,
-				 &new_geometry, new_flags))
-    {
-      hints_changed = TRUE;
     }
 
 #if 0
@@ -3651,7 +4193,7 @@ gtk_window_move_resize (GtkWindow *window)
 				   &new_geometry,
 				   new_flags);
 
-   /* handle resizing/moving and widget tree allocation
+  /* handle resizing/moving and widget tree allocation
    */
   if (window->configure_notify_received)
     { 
@@ -3889,7 +4431,7 @@ gtk_window_constrain_size (GtkWindow   *window,
 
 /* Compute the set of geometry hints and flags for a window
  * based on the application set geometry, and requisiition
- * of the window. gtk_widget_size_request () must have been
+ * of the window. gtk_widget_size_request() must have been
  * called first.
  */
 static void
@@ -4114,13 +4656,13 @@ gtk_window_set_frame_dimensions (GtkWindow *window,
  * desktop, and/or giving it the keyboard focus, possibly dependent
  * on the user's platform, window manager, and preferences.
  *
- * If @window is hidden, this function calls gtk_widget_show ()
+ * If @window is hidden, this function calls gtk_widget_show()
  * as well.
  * 
  * This function should be used when the user tries to open a window
  * that's already open. Say for example the preferences dialog is
  * currently open, and the user chooses Preferences from the menu
- * a second time; use gtk_window_present () to move the already-open dialog
+ * a second time; use gtk_window_present() to move the already-open dialog
  * where the user can see it.
  * 
  **/
@@ -4139,7 +4681,7 @@ gtk_window_present (GtkWindow *window)
       
       gdk_window_show (widget->window);
 
-      /* note that gdk_window_focus () will also move the window to
+      /* note that gdk_window_focus() will also move the window to
        * the current desktop, for WM spec compliant window managers.
        */
       gdk_window_focus (widget->window,
@@ -4435,7 +4977,7 @@ gtk_window_set_gravity (GtkWindow *window,
     {
       window->gravity = gravity;
 
-      /* gtk_window_move_resize () will adapt gravity
+      /* gtk_window_move_resize() will adapt gravity
        */
       gtk_widget_queue_resize (GTK_WIDGET (window));
     }
@@ -4445,7 +4987,7 @@ gtk_window_set_gravity (GtkWindow *window,
  * gtk_window_get_gravity:
  * @window: a #GtkWindow
  *
- * Gets the value set by gtk_window_set_gravity ().
+ * Gets the value set by gtk_window_set_gravity().
  *
  * Return value: window gravity
  **/
@@ -4577,11 +5119,13 @@ gtk_window_set_screen (GtkWindow *window,
 {
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_SCREEN (screen));
-  if(GTK_WIDGET_VISIBLE(window))
-  {
-    g_warning("Trying to change the window's screen while widget is visible");
-    return;
-  }
+
+  if (GTK_WIDGET_VISIBLE (window))
+    {
+      g_warning ("Trying to change the window's screen while widget is visible");
+      return;
+    }
+  
   window->screen = screen;
 }
 
@@ -4589,6 +5133,7 @@ GdkScreen*
 gtk_window_get_screen (GtkWindow *window)
 {
    g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
+   
    return window->screen;
 }
 
@@ -4833,6 +5378,12 @@ gtk_XParseGeometry (const char   *string,
   int tempX, tempY;
   char *nextCharacter;
 
+  /* These initializations are just to silence gcc */
+  tempWidth = 0;
+  tempHeight = 0;
+  tempX = 0;
+  tempY = 0;
+  
   if ( (string == NULL) || (*string == '\0')) return(mask);
   if (*string == '=')
     string++;  /* ignore possible '=' at beg of geometry spec */
@@ -4981,11 +5532,11 @@ gtk_window_parse_geometry (GtkWindow   *window,
   
   if (grav == GDK_GRAVITY_SOUTH_WEST ||
       grav == GDK_GRAVITY_SOUTH_EAST)
-    y = gdk_screen_height () - h;
+    y = gdk_screen_get_height (window->screen) - h;
 
   if (grav == GDK_GRAVITY_SOUTH_EAST ||
       grav == GDK_GRAVITY_NORTH_EAST)
-    x = gdk_screen_width () - w;
+    x = gdk_screen_get_width (window->screen) - w;
 
   if (y < 0)
     y = 0;

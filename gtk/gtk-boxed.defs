@@ -23,6 +23,11 @@
   gtk_requisition_free
   "sizeof(GtkRequisition)")
 
+(define-boxed GtkIconSet
+  gtk_icon_set_ref
+  gtk_icon_set_unref
+  "sizeof(GtkIconSet)")
+
 ;; TextView
 
 (define-boxed GtkTextIter

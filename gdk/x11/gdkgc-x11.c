@@ -146,7 +146,7 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
 
   private->dirty_mask = 0;
   private->clip_region = NULL;
-
+    
   private->screen = GDK_DRAWABLE_IMPL_X11 (drawable)->screen;
 
   if (values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN))
@@ -737,9 +737,10 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
   x11_dst_gc->fg_pixel = x11_src_gc->fg_pixel;
 }
 
-GdkScreen *  gdk_gc_get_screen (GdkGC *gc){
-  GdkGCX11 *x11_gc;
-
-  x11_gc = GDK_GC_X11 (gc);
+GdkScreen *  
+gdk_gc_get_screen (GdkGC *gc)
+{
+  GdkGCX11 *x11_gc = GDK_GC_X11 (gc);
+  
   return x11_gc->screen;
 }

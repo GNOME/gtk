@@ -205,7 +205,7 @@ add_dll_suffix (gchar *module_name)
 static gboolean
 check_setugid (void)
 {
-/* this isn't at all relevant on Windoze and doesn't compile ... --hb */
+/* this isn't at all relevant on MS Windows and doesn't compile ... --hb */
 #ifndef G_OS_WIN32
   uid_t ruid, euid, suid; /* Real, effective and saved user ID's */
   gid_t rgid, egid, sgid; /* Real, effective and saved group ID's */
@@ -485,8 +485,8 @@ gtk_init_check (int	 *argc,
    *  used in creating widgets. (We want to use the system
    *  defaults so as to be nice to the colormap).
    */
-  gtk_visual = gdk_visual_get_system_for_screen (gdk_get_default_screen());
-  gtk_colormap = gdk_colormap_get_system_for_screen (gdk_get_default_screen());
+  gtk_visual = gdk_visual_get_system_for_screen (gdk_get_default_screen ());
+  gtk_colormap = gdk_colormap_get_system_for_screen (gdk_get_default_screen ());
 
   gtk_type_init (0);
   _gtk_rc_init ();
@@ -534,7 +534,7 @@ gtk_init (int *argc, char ***argv)
 {
   if (!gtk_init_check (argc, argv))
     {
-      g_error ("cannot open display: %s", gdk_get_display_arg_name ());
+      g_warning ("cannot open display: %s", gdk_get_display_arg_name ());
       exit (1);
     }
 }
@@ -576,7 +576,7 @@ gtk_exit (gint errorcode)
 {
   /* Only if "gtk" has been initialized should we de-initialize.
    */
-  /* de-initialisation is done by the gtk_exit_funct (),
+  /* de-initialisation is done by the gtk_exit_funct(),
    * no need to do this here (Alex J.)
    */
   gdk_exit (errorcode);
@@ -817,7 +817,7 @@ gtk_main_do_event (GdkEvent *event)
     }
   
   /* Push the event onto a stack of current events for
-   * gtk_current_event_get ().
+   * gtk_current_event_get().
    */
   current_events = g_list_prepend (current_events, event);
 
@@ -1474,7 +1474,7 @@ gtk_invoke_input (gpointer	    data,
  * Obtains a copy of the event currently being processed by GTK+.  For
  * example, if you get a "clicked" signal from #GtkButton, the current
  * event will be the #GdkEventButton that triggered the "clicked"
- * signal. The returned event must be freed with gdk_event_free ().
+ * signal. The returned event must be freed with gdk_event_free().
  * If there is no current event, the function returns %NULL.
  * 
  * Return value: a copy of the current event, or %NULL if no current event.
@@ -1588,20 +1588,20 @@ gtk_quit_invoke_function (GtkQuitFunction *quitf)
  *
  * Sends an event to a widget, propagating the event to parent widgets
  * if the event remains unhandled. Events received by GTK+ from GDK
- * normally begin in gtk_main_do_event (). Depending on the type of
+ * normally begin in gtk_main_do_event(). Depending on the type of
  * event, existence of modal dialogs, grabs, etc., the event may be
- * propagated; if so, this function is used. gtk_propagate_event ()
- * calls gtk_widget_event () on each widget it decides to send the
- * event to.  So gtk_widget_event () is the lowest-level function; it
+ * propagated; if so, this function is used. gtk_propagate_event()
+ * calls gtk_widget_event() on each widget it decides to send the
+ * event to.  So gtk_widget_event() is the lowest-level function; it
  * simply emits the "event" and possibly an event-specific signal on a
- * widget.  gtk_propagate_event () is a bit higher-level, and
- * gtk_main_do_event () is the highest level.
+ * widget.  gtk_propagate_event() is a bit higher-level, and
+ * gtk_main_do_event() is the highest level.
  *
  * All that said, you most likely don't want to use any of these
  * functions; synthesizing events is rarely needed. Consider asking on
  * the mailing list for better ways to achieve your goals. For
- * example, use gdk_window_invalidate_rect () or
- * gtk_widget_queue_draw () instead of making up expose events.
+ * example, use gdk_window_invalidate_rect() or
+ * gtk_widget_queue_draw() instead of making up expose events.
  * 
  **/
 void

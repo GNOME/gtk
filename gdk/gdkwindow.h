@@ -266,10 +266,10 @@ struct _GdkWindowObjectClass
 /* Windows
  */
 GType         gdk_window_object_get_type       (void) G_GNUC_CONST;
-GdkWindow*    gdk_window_new_for_screen	       (GdkScreen * screen,
-						GdkWindow * parent,
-						GdkWindowAttr * attributes,
-						gint attributes_mask);
+GdkWindow*    gdk_window_new_for_screen	       (GdkScreen     *screen,
+						GdkWindow     *parent,
+						GdkWindowAttr *attributes,
+						gint           attributes_mask);
 GdkWindow*    gdk_window_new                   (GdkWindow     *parent,
                                                 GdkWindowAttr *attributes,
                                                 gint           attributes_mask);
@@ -392,8 +392,8 @@ void          gdk_window_set_modal_hint  (GdkWindow       *window,
 void          gdk_window_set_geometry_hints (GdkWindow        *window,
 					     GdkGeometry      *geometry,
 					     GdkWindowHints    flags);
-void	      gdk_set_sm_client_id_for_screen (GdkScreen * screen,
-					       const gchar * sm_client_id);
+void	      gdk_set_sm_client_id_for_screen (GdkScreen   *screen,
+					       const gchar *sm_client_id);
 void          gdk_set_sm_client_id         (const gchar *sm_client_id);
 
 void	      gdk_window_begin_paint_rect   (GdkWindow    *window,
@@ -450,7 +450,7 @@ GdkEventMask  gdk_window_get_events	 (GdkWindow	  *window);
 void	      gdk_window_set_events	 (GdkWindow	  *window,
 					  GdkEventMask	   event_mask);
 
-gboolean      gdk_window_set_icon_list   (GdkWindow       *window,
+void          gdk_window_set_icon_list   (GdkWindow       *window,
 					  GList           *pixbufs);
 void	      gdk_window_set_icon	 (GdkWindow	  *window, 
 					  GdkWindow	  *icon_window,
@@ -515,8 +515,9 @@ void       gdk_window_constrain_size      (GdkGeometry  *geometry,
                                            gint          height,
                                            gint         *new_width,
                                            gint         *new_height);
-void	    gdk_window_set_screen	  (GdkWindow	*window,
-					   GdkScreen	*screen);
+
+void gdk_window_set_screen (GdkWindow *window,
+			    GdkScreen *screen);
 
 void gdk_window_get_internal_paint_info (GdkWindow    *window,
 					 GdkDrawable **real_drawable,

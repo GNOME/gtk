@@ -126,17 +126,7 @@ gtk_check_button_new (void)
 GtkWidget*
 gtk_check_button_new_with_label (const gchar *label)
 {
-  GtkWidget *check_button;
-  GtkWidget *label_widget;
-  
-  check_button = gtk_check_button_new ();
-  label_widget = gtk_label_new (label);
-  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
-  
-  gtk_container_add (GTK_CONTAINER (check_button), label_widget);
-  gtk_widget_show (label_widget);
-  
-  return check_button;
+  return g_object_new (GTK_TYPE_CHECK_BUTTON, "label", label, NULL);
 }
 
 /**
@@ -152,17 +142,7 @@ gtk_check_button_new_with_label (const gchar *label)
 GtkWidget*
 gtk_check_button_new_with_mnemonic (const gchar *label)
 {
-  GtkWidget *check_button;
-  GtkWidget *label_widget;
-  
-  check_button = gtk_check_button_new ();
-  label_widget = gtk_label_new_with_mnemonic (label);
-  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
-  
-  gtk_container_add (GTK_CONTAINER (check_button), label_widget);
-  gtk_widget_show (label_widget);
-  
-  return check_button;
+  return g_object_new (GTK_TYPE_CHECK_BUTTON, "label", label, "use_underline", TRUE, NULL);
 }
 
 
@@ -306,10 +286,11 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 	  child_allocation.x = (border_width + indicator_size + indicator_spacing * 3 + 1 +
 				widget->allocation.x);
 	  child_allocation.y = border_width + 1 + widget->allocation.y;
-	  child_allocation.width = MAX (1, allocation->width - 
-					(border_width + indicator_size + indicator_spacing * 3 + 1) -
-					border_width - 1);
-	  child_allocation.height = MAX (1, allocation->height - (border_width + 1) * 2);
+	  child_allocation.width = MIN (GTK_BIN (button)->child->requisition.width,
+					allocation->width -
+					((border_width + 1) * 2 + indicator_size + indicator_spacing * 3));
+	  child_allocation.height = MIN (GTK_BIN (button)->child->requisition.height,
+					 allocation->height - (border_width + 1) * 2);
 	  
 	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
 	    child_allocation.x = allocation->x + allocation->width

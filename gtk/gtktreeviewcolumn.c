@@ -1053,7 +1053,7 @@ void
 gtk_tree_view_column_set_cell_renderer (GtkTreeViewColumn *tree_column,
 					GtkCellRenderer   *cell)
 {
-  gtk_tree_view_column_pack_start_cell_renderer (tree_column, cell, TRUE, TRUE, 0);
+  gtk_tree_view_column_pack_start (tree_column, cell, TRUE, TRUE, 0);
 }
 
 static GtkTreeViewColumnCellInfo *
@@ -1068,7 +1068,7 @@ gtk_tree_view_column_get_cell_info (GtkTreeViewColumn *tree_column,
 }
 
 /**
- * gtk_tree_view_column_pack_start_cell_renderer:
+ * gtk_tree_view_column_pack_start:
  * @tree_column: A #GtkTreeViewColumn.
  * @cell: The #GtkCellRenderer, 
  * @expand: TRUE if @cell is to be given extra space allocated to box.
@@ -1078,11 +1078,11 @@ gtk_tree_view_column_get_cell_info (GtkTreeViewColumn *tree_column,
  * Packs a cell into 
  **/
 void
-gtk_tree_view_column_pack_start_cell_renderer (GtkTreeViewColumn  *tree_column,
-					       GtkCellRenderer    *cell,
-					       gboolean            expand,
-					       gboolean            fill,
-					       guint               padding)
+gtk_tree_view_column_pack_start (GtkTreeViewColumn *tree_column,
+				 GtkCellRenderer   *cell,
+				 gboolean           expand,
+				 gboolean           fill,
+				 guint              padding)
 {
   GtkTreeViewColumnCellInfo *cell_info;
 
@@ -1104,11 +1104,11 @@ gtk_tree_view_column_pack_start_cell_renderer (GtkTreeViewColumn  *tree_column,
 }
 
 void
-gtk_tree_view_column_pack_end_cell_renderer (GtkTreeViewColumn  *tree_column,
-					     GtkCellRenderer    *cell,
-					     gboolean            expand,
-					     gboolean            fill,
-					     guint               padding)
+gtk_tree_view_column_pack_end (GtkTreeViewColumn  *tree_column,
+			       GtkCellRenderer    *cell,
+			       gboolean            expand,
+			       gboolean            fill,
+			       guint               padding)
 {
   GtkTreeViewColumnCellInfo *cell_info;
 
@@ -1131,7 +1131,7 @@ gtk_tree_view_column_pack_end_cell_renderer (GtkTreeViewColumn  *tree_column,
 
 
 void
-gtk_tree_view_column_clear_cell_renderers (GtkTreeViewColumn *tree_column)
+gtk_tree_view_column_clear (GtkTreeViewColumn *tree_column)
 {
   GList *list;
   g_return_if_fail (tree_column != NULL);
@@ -1502,7 +1502,8 @@ gtk_tree_view_column_set_width (GtkTreeViewColumn *tree_column,
  * gtk_tree_view_column_get_width:
  * @tree_column: a #GtkTreeViewColumn
  * 
- * Gets the value set by gtk_tree_view_column_set_width().
+ * Gets the value set by gtk_tree_view_column_set_width().  This may not be the
+ * actual width of the column on the screen, just what is requested.
  * 
  * Return value: the width of the column
  **/
@@ -1587,7 +1588,9 @@ gtk_tree_view_column_get_min_width (GtkTreeViewColumn *tree_column)
  * @max_width: The maximum width of the column in pixels, or -1.
  * 
  * Sets the maximum width of the @tree_column.  If @max_width is -1, then the
- * maximum width is unset.
+ * maximum width is unset.  Note, the column can actually be wider than max
+ * width if it's the last column in a view.  In this case, the column expands to
+ * fill the view.
  **/
 void
 gtk_tree_view_column_set_max_width (GtkTreeViewColumn *tree_column,

@@ -52,15 +52,17 @@ struct _GtkButton
 {
   GtkBin bin;
 
-  GtkWidget *child /* deprecapted field,
-		    * use GTK_BIN (button)->child instead
-		    */;
+  gchar *label_text;
 
   guint activate_timeout;
 
+  guint constructed : 1;
   guint in_button : 1;
   guint button_down : 1;
   guint relief : 2;
+  guint use_underline : 1;
+  guint use_stock : 1;
+  guint depressed : 1;
 };
 
 struct _GtkButtonClass
@@ -76,7 +78,7 @@ struct _GtkButtonClass
 };
 
 
-GtkType        gtk_button_get_type       (void) G_GNUC_CONST;
+GtkType        gtk_button_get_type          (void) G_GNUC_CONST;
 GtkWidget*     gtk_button_new               (void);
 GtkWidget*     gtk_button_new_with_label    (const gchar    *label);
 GtkWidget*     gtk_button_new_from_stock    (const gchar    *stock_id);
@@ -90,6 +92,17 @@ void           gtk_button_set_relief        (GtkButton      *button,
 					     GtkReliefStyle  newstyle);
 GtkReliefStyle gtk_button_get_relief        (GtkButton      *button);
 
+void                  gtk_button_set_label         (GtkButton   *button,
+						    const gchar *label);
+G_CONST_RETURN gchar *gtk_button_get_label         (GtkButton   *button);
+void                  gtk_button_set_use_underline (GtkButton   *button,
+						    gboolean     value);
+gboolean              gtk_button_get_use_underline (GtkButton   *button);
+void                  gtk_button_set_use_stock     (GtkButton   *button,
+						    gboolean     value);
+gboolean              gtk_button_get_use_stock     (GtkButton   *button);
+void                  _gtk_button_set_depressed    (GtkButton   *button,
+						    gboolean     depressed);
 
 #ifdef __cplusplus
 }

@@ -64,8 +64,7 @@ gdk_display_class_init (GdkDisplayClass * class)
 GdkDisplay *
 gdk_display_new (gchar * display_name)
 {
-  return GDK_DISPLAY_MANAGER_GET_CLASS (gdk_display_manager)->
-    open_display (gdk_display_manager, display_name);
+  return gdk_display_manager_open_display (gdk_display_manager, display_name);
 }
 
 gchar *

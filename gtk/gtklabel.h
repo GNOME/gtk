@@ -132,6 +132,7 @@ void         gtk_label_get_layout_offsets (GtkLabel *label,
                                            gint     *x,
                                            gint     *y);
 
+
 #ifndef GTK_DISABLE_DEPRECATED
 
 #define  gtk_label_set           gtk_label_set_text

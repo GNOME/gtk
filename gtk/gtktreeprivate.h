@@ -165,6 +165,7 @@ struct _GtkTreeViewPrivate
   GtkTreeViewColumn *scroll_to_column;
   gfloat scroll_to_row_align;
   gfloat scroll_to_col_align;
+  guint scroll_to_use_align : 1;
 
   guint reorderable : 1;
   guint header_has_focus : 1;

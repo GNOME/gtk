@@ -33,10 +33,15 @@
 #include "gdkinternals.h"
 #include "gdkinputprivate.h"
 
-void gdk_x11_display_impl_class_init (GdkDisplayImplX11Class * class);
+static void       gdk_x11_display_impl_class_init         (GdkDisplayImplX11Class *class);
+static gint       gdk_x11_display_impl_get_n_screens      (GdkDisplay             *dpy);
+static GdkScreen *gdk_x11_display_impl_get_screen         (GdkDisplay             *dpy,
+							   gint                    screen_num);
+static char *     gdk_x11_display_impl_get_display_name   (GdkDisplay             *dpy);
+static GdkScreen *gdk_x11_display_impl_get_default_screen (GdkDisplay             *dpy);
 
 GType
-gdk_x11_display_impl_get_type ()
+_gdk_x11_display_impl_get_type ()
 {
   static GType object_type = 0;
 
@@ -60,22 +65,19 @@ gdk_x11_display_impl_get_type ()
   return object_type;
 }
 
-void
+static void
 gdk_x11_display_impl_class_init (GdkDisplayImplX11Class * class)
 {
   GdkDisplayClass *dpy_class = GDK_DISPLAY_CLASS (class);
-  dpy_class->new_display = gdk_x11_display_impl_display_new;
+  
   dpy_class->get_display_name = gdk_x11_display_impl_get_display_name;
   dpy_class->get_n_screens = gdk_x11_display_impl_get_n_screens;
   dpy_class->get_screen = gdk_x11_display_impl_get_screen;
   dpy_class->get_default_screen = gdk_x11_display_impl_get_default_screen;
 }
 
-
-
-
 GdkDisplay *
-gdk_x11_display_impl_display_new (gchar * display_name)
+_gdk_x11_display_impl_display_new (gchar * display_name)
 {
   GdkDisplay *dpy;
   GdkDisplayImplX11 *dpy_impl;
@@ -86,7 +88,7 @@ gdk_x11_display_impl_display_new (gchar * display_name)
   int i = 0;
   int scr_num;
 
-  dpy = g_object_new (gdk_x11_display_impl_get_type (), NULL);
+  dpy = g_object_new (_gdk_x11_display_impl_get_type (), NULL);
   dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
 
   if ((dpy_impl->xdisplay = XOpenDisplay (display_name)) == NULL)
@@ -121,14 +123,14 @@ gdk_x11_display_impl_display_new (gchar * display_name)
 }
 
 
-gchar *
+static gchar *
 gdk_x11_display_impl_get_display_name (GdkDisplay * dpy)
 {
   GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
   return (gchar *) DisplayString (dpy_impl->xdisplay);
 }
 
-gint
+static gint
 gdk_x11_display_impl_get_n_screens (GdkDisplay * dpy)
 {
   GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
@@ -136,35 +138,39 @@ gdk_x11_display_impl_get_n_screens (GdkDisplay * dpy)
 }
 
 
-GdkScreen *
-gdk_x11_display_impl_get_screen (GdkDisplay * dpy, gint screen_num)
+static GdkScreen *
+gdk_x11_display_impl_get_screen (GdkDisplay * dpy, 
+				 gint         screen_num)
 {
   Screen *desired_scr;
-  GSList *tmp;
+  GSList *tmp_list;
+
   GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
-  g_assert (ScreenCount (dpy_impl->xdisplay) > screen_num);
-  tmp = dpy_impl->screen_list;
-  g_assert (tmp != NULL);
+  g_return_val_if_fail (ScreenCount (dpy_impl->xdisplay) > screen_num, NULL);
+
+  tmp_list = dpy_impl->screen_list;
   desired_scr = ScreenOfDisplay (dpy_impl->xdisplay, screen_num);
-  while (tmp)
+  while (tmp_list)
     {
-      if ((((GdkScreenImplX11 *) tmp->data)->xscreen) == desired_scr)
+      GdkScreenImplX11 *screen_impl = tmp_list->data;
+      GdkScreen *screen = tmp_list->data;
+      
+      if (screen_impl->xscreen == desired_scr)
 	{
-	  GdkScreenImplX11 *desired_screen = (GdkScreenImplX11 *) tmp->data;
-	  if (!desired_screen->visual_initialised)
-	    _gdk_visual_init ((GdkScreen *) tmp->data);
-	  if (!desired_screen->colormap_initialised)
-	    _gdk_windowing_window_init ((GdkScreen *) tmp->data);
-	  return (GdkScreen *) tmp->data;
+	  if (!screen_impl->visual_initialised)
+	    _gdk_visual_init (screen);
+	  if (!screen_impl->colormap_initialised)
+	    _gdk_windowing_window_init (screen);
+	  return screen;
 	}
-      tmp = g_slist_next (tmp);
+      tmp_list = tmp_list->next;
     }
-  g_error ("Internal screen list is corrupted");
-  exit (1);
+
+  g_assert_not_reached ();
+  return NULL;
 }
 
-
-GdkScreen *
+static GdkScreen *
 gdk_x11_display_impl_get_default_screen (GdkDisplay * dpy)
 {
   GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
@@ -172,18 +178,23 @@ gdk_x11_display_impl_get_default_screen (GdkDisplay * dpy)
 }
 
 gboolean
-gdk_x11_display_impl_is_root_window (GdkDisplay * dpy, Window xroot_window)
+gdk_x11_display_is_root_window (GdkDisplay *dpy, 
+				Window      xroot_window)
 {
-  GSList *tmp;
+  GSList *tmp_list;
   GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
-  tmp = dpy_impl->screen_list;
-  g_assert (tmp != NULL);
-  while (tmp)
+  tmp_list = dpy_impl->screen_list;
+  
+  while (tmp_list)
     {
-      if ((((GdkScreenImplX11 *) tmp->data)->xroot_window) == xroot_window)
+      GdkScreenImplX11 *screen_impl = tmp_list->data;
+      
+      if (screen_impl->xroot_window == xroot_window)
 	return TRUE;
-      tmp = g_slist_next (tmp);
+      
+      tmp_list = tmp_list->next;
     }
+  
   return FALSE;
 }
 
@@ -199,7 +210,6 @@ gdk_display_get_use_xshm (GdkDisplay * display)
   return GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm;
 }
 
-
 void
 gdk_display_pointer_ungrab (GdkDisplay * display, guint32 time)
 {
@@ -208,7 +218,6 @@ gdk_display_pointer_ungrab (GdkDisplay * display, guint32 time)
   XUngrabPointer (GDK_DISPLAY_XDISPLAY (display), time);
   GDK_DISPLAY_IMPL_X11 (display)->gdk_xgrab_window = NULL;
 }
-
 
 gboolean
 gdk_display_pointer_is_grabbed (GdkDisplay * display)
@@ -231,5 +240,5 @@ gdk_display_beep (GdkDisplay * display)
 void
 gdk_display_sync (GdkDisplay * display)
 {
-  XSync (GDK_DISPLAY_IMPL_X11 (display)->xdisplay, False);
+  XSync (GDK_DISPLAY_XDISPLAY (display), False);
 }

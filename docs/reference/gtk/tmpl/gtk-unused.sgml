@@ -953,6 +953,14 @@ produce superscript and subscript.
 </para>
 
 
+<!-- ##### ENUM GtkTreeSelectionMode ##### -->
+<para>
+
+</para>
+
+@GTK_TREE_SELECTION_SINGLE: 
+@GTK_TREE_SELECTION_MULTI: 
+
 <!-- ##### ARG GtkVScale:adjustment ##### -->
 <para>
 the #GtkAdjustment which sets the range of the scale.
@@ -1031,6 +1039,12 @@ the #GtkAdjustment which sets the range of the scale.
 <!-- ##### ARG GtkWindow:auto-shrink ##### -->
 <para>
 If the window shrinks automatically when widgets within it shrink.
+</para>
+
+
+<!-- ##### ARG GtkWindow:icon-list ##### -->
+<para>
+
 </para>
 
 
@@ -1612,6 +1626,16 @@ Get the type of GtkIdentifier.
 
 @menu: 
 @Returns: 
+
+<!-- ##### FUNCTION gtk_menu_item_configure ##### -->
+<para>
+Sets whether the menu item should show a submenu indicator, which is a right
+arrow.
+</para>
+
+@menu_item: the menu item
+@show_toggle_indicator: unused
+@show_submenu_indicator: whether to show the arrow or not
 
 <!-- ##### FUNCTION gtk_object_arg_get ##### -->
 <para>
@@ -2296,6 +2320,13 @@ fundamental type.
 
 @style: 
 
+<!-- ##### FUNCTION gtk_widget_set_default_style ##### -->
+<para>
+
+</para>
+
+@style: 
+
 <!-- ##### FUNCTION gtk_window_activate_mnemonic ##### -->
 <para>
 
@@ -2307,14 +2338,6 @@ fundamental type.
 @Returns: 
 
 <!-- ##### FUNCTION gtk_window_get_default_accel_group ##### -->
-<para>
-
-</para>
-
-@window: 
-@Returns: 
-
-<!-- ##### FUNCTION gtk_window_get_resizeable ##### -->
 <para>
 
 </para>
@@ -2337,12 +2360,4 @@ fundamental type.
 
 @window: 
 @functions: 
-
-<!-- ##### FUNCTION gtk_window_set_resizeable ##### -->
-<para>
-
-</para>
-
-@window: 
-@resizeable: 
 

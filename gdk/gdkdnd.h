@@ -98,7 +98,7 @@ GdkAtom          gdk_drag_get_selection (GdkDragContext   *context);
 
 GdkDragContext * gdk_drag_begin      (GdkWindow      *window,
 				      GList          *targets);
-guint32         gdk_drag_get_protocol (GdkDisplay *display,
+guint32         gdk_drag_get_protocol (GdkDisplay      *display,
 				       guint32          xid,
 				       GdkDragProtocol *protocol);
 void             gdk_drag_find_window (GdkDragContext   *context,

@@ -26,10 +26,12 @@ struct _GdkCursor
 
 /* Cursors
  */
-GdkCursor* gdk_cursor_new_for_screen	 (GdkScreen * screen,
-					  GdkCursorType cursor_type);
-#ifndef GDK_MULTIHEAD_SAFE
+
 GType      gdk_cursor_get_type           (void);
+
+GdkCursor* gdk_cursor_new_for_screen	 (GdkScreen       *screen,
+					  GdkCursorType    cursor_type);
+#ifndef GDK_MULTIHEAD_SAFE
 GdkCursor* gdk_cursor_new		 (GdkCursorType	   cursor_type);
 #endif
 GdkCursor* gdk_cursor_new_from_pixmap	 (GdkPixmap	  *source,
@@ -38,8 +40,6 @@ GdkCursor* gdk_cursor_new_from_pixmap	 (GdkPixmap	  *source,
 					  GdkColor	  *bg,
 					  gint		   x,
 					  gint		   y);
-
-
 GdkCursor* gdk_cursor_ref                (GdkCursor      *cursor);
 void       gdk_cursor_unref              (GdkCursor      *cursor);
 

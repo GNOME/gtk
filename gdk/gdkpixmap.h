@@ -73,7 +73,7 @@ GdkPixmap* gdk_pixmap_colormap_create_from_xpm_d (GdkWindow    *window,
 						  GdkColor     *transparent_color,
 						  gchar       **data);
 
-GdkScreen *  gdk_pixmap_get_screen	(GdkDrawable *drawable);
+GdkScreen *gdk_pixmap_get_screen (GdkDrawable *drawable);
 
 #ifndef GDK_DISABLE_DEPRECATED
 #define gdk_bitmap_ref                 gdk_drawable_ref

@@ -268,40 +268,6 @@ gtk_paned_realize (GtkWidget *widget)
 }
 
 static void
-gtk_paned_map (GtkWidget *widget)
-{
-  GtkPaned *paned;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_PANED (widget));
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-  paned = GTK_PANED (widget);
-
-  if (paned->child1 &&
-      GTK_WIDGET_VISIBLE (paned->child1) &&
-      !GTK_WIDGET_MAPPED (paned->child1))
-    gtk_widget_map (paned->child1);
-  if (paned->child2 &&
-      GTK_WIDGET_VISIBLE (paned->child2) &&
-      !GTK_WIDGET_MAPPED (paned->child2))
-    gtk_widget_map (paned->child2);
-
-  gdk_window_show (widget->window);
-}
-
-static void
-gtk_paned_unmap (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_PANED (widget));
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-
-  gdk_window_hide (widget->window);
-}
-
-static void
 gtk_paned_unrealize (GtkWidget *widget)
 {
   GtkPaned *paned;

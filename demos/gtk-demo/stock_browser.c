@@ -494,7 +494,7 @@ do_stock_browser (void)
                           FALSE, FALSE, 0);
 
       selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
-      gtk_tree_selection_set_mode (selection, GTK_TREE_SELECTION_SINGLE);
+      gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
       
       g_signal_connect (G_OBJECT (selection),
 			"changed",

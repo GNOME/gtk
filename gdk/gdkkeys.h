@@ -61,13 +61,12 @@ typedef struct _GdkKeymapClass GdkKeymapClass;
 #define GDK_IS_KEYMAP_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_KEYMAP))
 #define GDK_KEYMAP_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_KEYMAP, GdkKeymapClass))
 
-
 struct _GdkKeymap
 {
   GObject	parent_instance;
   GdkDisplay*	display;
 };
-
+  
 struct _GdkKeymapClass
 {
   GObjectClass parent_class;
@@ -78,7 +77,7 @@ struct _GdkKeymapClass
 GType gdk_keymap_get_type (void) G_GNUC_CONST;
 
 GdkKeymap* gdk_keymap_get_default (void);
-GdkKeymap* gdk_keymap_get_for_display (GdkDisplay * display);
+GdkKeymap* gdk_keymap_get_for_display (GdkDisplay *display);
 
 
 guint          gdk_keymap_lookup_key               (GdkKeymap           *keymap,

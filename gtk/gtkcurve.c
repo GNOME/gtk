@@ -197,7 +197,6 @@ gtk_curve_init (GtkCurve *curve)
   gtk_widget_set_events (GTK_WIDGET (curve), old_mask | GRAPH_MASK);
   gtk_signal_connect (GTK_OBJECT (curve), "event",
 		      (GtkSignalFunc) gtk_curve_graph_events, curve);
-  g_object_set_data (G_OBJECT (curve), "screen", gdk_get_default_screen ());
   gtk_curve_size_graph (curve);
 }
 
@@ -471,8 +470,9 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
       /* fall through */
     case GDK_EXPOSE:
       if (!c->pixmap)
-	c->pixmap = gdk_pixmap_new (w->window, w->allocation.width, w->allocation.height, -1);
-
+	c->pixmap = gdk_pixmap_new (w->window,
+				    w->allocation.width,
+				    w->allocation.height, -1);
       gtk_curve_draw (c, width, height);
       break;
 
@@ -722,15 +722,15 @@ gtk_curve_size_graph (GtkCurve *curve)
 {
   gint width, height;
   gfloat aspect;
-  GdkScreen *scr = gtk_widget_get_screen (GTK_WIDGET (curve)); 
+  GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (curve)); 
 
   width  = (curve->max_x - curve->min_x) + 1;
   height = (curve->max_y - curve->min_y) + 1;
   aspect = width / (gfloat) height;
-  if (width > gdk_screen_get_width (scr) / 4)
-    width  = gdk_screen_get_width (scr) / 4;
-  if (height > gdk_screen_get_height (scr) / 4)
-    height = gdk_screen_get_height (scr) / 4;
+  if (width > gdk_screen_get_width (screen) / 4)
+    width  = gdk_screen_get_width (screen) / 4;
+  if (height > gdk_screen_get_height (screen) / 4)
+    height = gdk_screen_get_height (screen) / 4;
 
   if (aspect < 1.0)
     width  = height * aspect;
@@ -855,7 +855,7 @@ gtk_curve_set_vector (GtkCurve *c, int veclen, gfloat vector[])
   GtkCurveType old_type;
   gfloat rx, dx, ry;
   gint i, height;
-  GdkScreen *scr = gtk_widget_get_screen (GTK_WIDGET (c));
+  GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (c));
 
   old_type = c->curve_type;
   c->curve_type = GTK_CURVE_TYPE_FREE;
@@ -865,8 +865,8 @@ gtk_curve_set_vector (GtkCurve *c, int veclen, gfloat vector[])
   else
     {
       height = (c->max_y - c->min_y);
-      if (height > gdk_screen_get_height (scr) / 4)
-	height = gdk_screen_get_height (scr) / 4;
+      if (height > gdk_screen_get_height (screen) / 4)
+	height = gdk_screen_get_height (screen) / 4;
 
       c->height = height;
       c->num_points = veclen;

@@ -271,8 +271,7 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
               tmp.green = foreground->green;
             }
           
-          fg_gc = gdk_pango_get_gc (context,
-				    fg_set ? &tmp : NULL,
+          fg_gc = gdk_pango_get_gc (context, fg_set ? &tmp : NULL,
                                     stipple, gc);
         }
       else
@@ -288,10 +287,7 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
           if (embossed)
             {
               PangoColor color = { 65535, 65535, 65535 };
-              GdkGC *white_gc = gdk_pango_get_gc (context, 
-						  &color, 
-						  stipple, 
-						  fg_gc);
+              GdkGC *white_gc = gdk_pango_get_gc (context, &color, stipple, fg_gc);
               gdk_draw_glyphs (drawable, white_gc, run->item->analysis.font,
                                gx + 1,
                                gy + 1,
@@ -694,7 +690,7 @@ gdk_pango_attr_embossed_new (gboolean embossed)
  * 
  * Obtains a clip region which contains the areas where the given
  * ranges of text would be drawn. @x_origin and @y_origin are the same
- * position you would pass to gdk_draw_layout_line (). @index_ranges
+ * position you would pass to gdk_draw_layout_line(). @index_ranges
  * should contain ranges of bytes in the layout's text. The clip
  * region will include space to the left or right of the line (to the
  * layout bounding box) if you have indexes above or below the indexes
@@ -772,7 +768,7 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
  * 
  * Obtains a clip region which contains the areas where the given ranges
  * of text would be drawn. @x_origin and @y_origin are the same position
- * you would pass to gdk_draw_layout_line (). @index_ranges should contain
+ * you would pass to gdk_draw_layout_line(). @index_ranges should contain
  * ranges of bytes in the layout's text.
  * 
  * Return value: a clip region containing the given ranges

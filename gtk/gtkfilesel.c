@@ -631,9 +631,6 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   dir_title[0] = _("Directories");
   dir_title[1] = NULL;
   filesel->dir_list = gtk_clist_new_with_titles (1, (gchar**) dir_title);
-  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
-  gtk_box_pack_start (GTK_BOX (list_hbox), scrolled_win, TRUE, TRUE, 0);
-  gtk_container_add (GTK_CONTAINER (scrolled_win), filesel->dir_list);
   gtk_widget_set_usize (filesel->dir_list, DIR_LIST_WIDTH, DIR_LIST_HEIGHT);
   gtk_signal_connect (GTK_OBJECT (filesel->dir_list), "select_row",
 		      (GtkSignalFunc) gtk_file_selection_dir_button, 
@@ -641,9 +638,12 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_clist_set_column_auto_resize (GTK_CLIST (filesel->dir_list), 0, TRUE);
   gtk_clist_column_titles_passive (GTK_CLIST (filesel->dir_list));
 
+  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (scrolled_win), filesel->dir_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
   gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 5);
+  gtk_box_pack_start (GTK_BOX (list_hbox), scrolled_win, TRUE, TRUE, 0);
   gtk_widget_show (filesel->dir_list);
   gtk_widget_show (scrolled_win);
 
@@ -651,9 +651,6 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   file_title[0] = _("Files");
   file_title[1] = NULL;
   filesel->file_list = gtk_clist_new_with_titles (1, (gchar**) file_title);
-  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
-  gtk_box_pack_start (GTK_BOX (list_hbox), scrolled_win, TRUE, TRUE, 0);
-  gtk_container_add (GTK_CONTAINER (scrolled_win), filesel->file_list);
   gtk_widget_set_usize (filesel->file_list, FILE_LIST_WIDTH, FILE_LIST_HEIGHT);
   gtk_signal_connect (GTK_OBJECT (filesel->file_list), "select_row",
 		      (GtkSignalFunc) gtk_file_selection_file_button, 
@@ -661,9 +658,12 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_clist_set_column_auto_resize (GTK_CLIST (filesel->file_list), 0, TRUE);
   gtk_clist_column_titles_passive (GTK_CLIST (filesel->file_list));
 
+  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (scrolled_win), filesel->file_list);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
   gtk_container_set_border_width (GTK_CONTAINER (scrolled_win), 5);
+  gtk_box_pack_start (GTK_BOX (list_hbox), scrolled_win, TRUE, TRUE, 0);
   gtk_widget_show (filesel->file_list);
   gtk_widget_show (scrolled_win);
 

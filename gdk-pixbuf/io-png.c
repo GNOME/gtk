@@ -563,6 +563,17 @@ png_row_callback   (png_structp png_read_ptr,
         if (lc->fatal_error_occurred)
                 return;
 
+        if (row_num < 0 || row_num >= lc->pixbuf->height) {
+                lc->fatal_error_occurred = TRUE;
+                if (lc->error && *lc->error == NULL) {
+                        g_set_error (lc->error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                     _("Fatal error reading PNG image file"));
+                }
+                return;
+        }
+
         if (lc->first_row_seen_in_chunk < 0) {
                 lc->first_row_seen_in_chunk = row_num;
                 lc->first_pass_seen_in_chunk = pass_num;

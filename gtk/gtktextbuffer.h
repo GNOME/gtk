@@ -28,6 +28,7 @@
 #define GTK_TEXT_BUFFER_H
 
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkclipboard.h>
 #include <gtk/gtktexttagtable.h>
 #include <gtk/gtktextiter.h>
 #include <gtk/gtktextmark.h>
@@ -62,13 +63,12 @@ struct _GtkTextBuffer
   GtkTextTagTable *tag_table;
   GtkTextBTree *btree;
 
-  GtkTextBuffer *clipboard_contents;
+  GSList *clipboard_contents_buffers;
+  GSList *selection_clipboards;
 
   GtkTextLogAttrCache *log_attr_cache;
 
   guint user_action_count;
-
-  GdkDisplay *clipboard_display;
   
   /* Whether the buffer has been modified since last save */
   guint modified : 1;
@@ -326,13 +326,19 @@ gboolean        gtk_text_buffer_get_modified            (GtkTextBuffer *buffer);
 void            gtk_text_buffer_set_modified            (GtkTextBuffer *buffer,
                                                          gboolean       setting);
 
-void            gtk_text_buffer_paste_primary           (GtkTextBuffer       *buffer,
-                                                         const GtkTextIter   *override_location,
-                                                         gboolean             default_editable);
+void gtk_text_buffer_add_selection_clipboard    (GtkTextBuffer     *buffer,
+						 GtkClipboard      *clipboard);
+void gtk_text_buffer_remove_selection_clipboard (GtkTextBuffer     *buffer,
+						 GtkClipboard      *clipboard);
+
 void            gtk_text_buffer_cut_clipboard           (GtkTextBuffer *buffer,
+							 GtkClipboard  *clipboard,
                                                          gboolean       default_editable);
-void            gtk_text_buffer_copy_clipboard          (GtkTextBuffer *buffer);
+void            gtk_text_buffer_copy_clipboard          (GtkTextBuffer *buffer,
+							 GtkClipboard  *clipboard);
 void            gtk_text_buffer_paste_clipboard         (GtkTextBuffer *buffer,
+							 GtkClipboard  *clipboard,
+							 GtkTextIter   *override_location,
                                                          gboolean       default_editable);
 
 gboolean        gtk_text_buffer_get_selection_bounds    (GtkTextBuffer *buffer,
@@ -345,14 +351,6 @@ gboolean        gtk_text_buffer_delete_selection        (GtkTextBuffer *buffer,
 /* Called to specify atomic user actions, used to implement undo */
 void            gtk_text_buffer_begin_user_action       (GtkTextBuffer *buffer);
 void            gtk_text_buffer_end_user_action         (GtkTextBuffer *buffer);
-
-/* Called for multiple display applications */
-GtkTextBuffer*  gtk_text_buffer_new_for_display         (GdkDisplay *clipboard_display,
-							 GtkTextTagTable *table);
-void		gtk_text_buffer_set_clipboard_display	(GtkTextBuffer *buffer,
-							 GdkDisplay *clipboard_display);
-GdkDisplay*     gtk_text_buffer_get_clipboard_display	(GtkTextBuffer *buffer);
-
 
 /* INTERNAL private stuff */
 void            _gtk_text_buffer_spew                  (GtkTextBuffer      *buffer);

@@ -14,14 +14,6 @@ GtkTreeSelection
 
 </para>
 
-<!-- ##### ENUM GtkTreeSelectionMode ##### -->
-<para>
-
-</para>
-
-@GTK_TREE_SELECTION_SINGLE: 
-@GTK_TREE_SELECTION_MULTI: 
-
 <!-- ##### USER_FUNCTION GtkTreeSelectionFunc ##### -->
 <para>
 

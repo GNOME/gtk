@@ -35,6 +35,7 @@
 
 #include <gdk/x11/gdkwindow-x11.h>
 #include <gdk/x11/gdkpixmap-x11.h>
+#include <gdk/x11/gdkscreen-x11.h>
 #include <gdk/gdkdisplaymgr.h>
 #include <gdk/gdkdisplay.h>
 #include <gdk/gdkscreen.h>
@@ -44,7 +45,6 @@ G_BEGIN_DECLS
 typedef struct _GdkColormapPrivateX11  GdkColormapPrivateX11;
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
 typedef struct _GdkImagePrivateX11     GdkImagePrivateX11;
-typedef struct _GdkVisualPrivate       GdkVisualPrivate;
 
 struct _GdkCursorPrivate
 {
@@ -188,22 +188,19 @@ void          gdk_x11_ungrab_server    (GdkDisplay *display);
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
 
-GC     _gdk_x11_gc_flush           (GdkGC     *gc);
+GC _gdk_x11_gc_flush (GdkGC *gc);
 GList *gdk_list_visuals_for_screen (GdkScreen *scr);
 
 
 /* Functions to get the X Atom equivalent to the GdkAtom */
-GdkAtom      gdk_x11_get_real_atom         (GdkDisplay  *display,
-					    GdkAtom      virtual_atom,
-					    gboolean     only_if_exists);
-GdkAtom      gdk_x11_get_virtual_atom      (GdkDisplay  *display,
-					    GdkAtom      xatom);
-GdkAtom      gdk_x11_get_real_atom_by_name (GdkDisplay  *display,
-					    const gchar *atom_name);
-gchar	      *gdk_x11_get_real_atom_name    (GdkDisplay  *display,
-					      GdkAtom      xatom);
-
-
+GdkAtom     gdk_x11_get_real_atom         (GdkDisplay  *display,
+					   GdkAtom      virtual_atom);
+GdkAtom     gdk_x11_get_virtual_atom      (GdkDisplay  *display,
+					   GdkAtom      xatom);
+GdkAtom     gdk_x11_get_real_atom_by_name (GdkDisplay  *display,
+					   const gchar *atom_name);
+gchar	   *gdk_x11_get_real_atom_name    (GdkDisplay  *display,
+				           GdkAtom      xatom);
 
 #ifndef GDK_DISABLE_DEPRECATED
 

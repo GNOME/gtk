@@ -26,23 +26,23 @@
 #include "gdkscreen-x11.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-x11.h"
+#include "gdkx.h"
 
-static void gdk_x11_screen_impl_class_init (GdkScreenImplX11Class * class);
-static GdkDisplay *gdk_X11_screen_get_display (GdkScreen * screen);
-static gint gdk_X11_screen_get_width (GdkScreen * screen);
-static gint gdk_X11_screen_get_height (GdkScreen * screen);
-static gint gdk_X11_screen_get_width_mm (GdkScreen * screen);
-static gint gdk_X11_screen_get_height_mm (GdkScreen * screen);
-static gint gdk_X11_screen_get_default_depth (GdkScreen * screen);
-static GdkWindow *gdk_X11_screen_get_root_window (GdkScreen * screen);
-static gint gdk_X11_screen_get_screen_num (GdkScreen * screen);
-static GdkColormap *gdk_X11_screen_get_default_colormap (GdkScreen * screen);
-static void gdk_X11_screen_set_default_colormap (GdkScreen * screen,
-						 GdkColormap * colormap);
-static GdkWindow *gdk_X11_screen_get_window_at_pointer (GdkScreen * screen,
-							gint * win_x,
-							gint * win_y);
-
+static void         gdk_x11_screen_impl_class_init       (GdkScreenImplX11Class *class);
+static GdkDisplay * gdk_X11_screen_get_display           (GdkScreen             *screen);
+static gint         gdk_X11_screen_get_width             (GdkScreen             *screen);
+static gint         gdk_X11_screen_get_height            (GdkScreen             *screen);
+static gint         gdk_X11_screen_get_width_mm          (GdkScreen             *screen);
+static gint         gdk_X11_screen_get_height_mm         (GdkScreen             *screen);
+static gint         gdk_X11_screen_get_default_depth     (GdkScreen             *screen);
+static GdkWindow *  gdk_X11_screen_get_root_window       (GdkScreen             *screen);
+static gint         gdk_X11_screen_get_screen_num        (GdkScreen             *screen);
+static GdkColormap *gdk_X11_screen_get_default_colormap  (GdkScreen             *screen);
+static void         gdk_X11_screen_set_default_colormap  (GdkScreen             *screen,
+							  GdkColormap           *colormap);
+static GdkWindow *  gdk_X11_screen_get_window_at_pointer (GdkScreen             *screen,
+							  gint                  *win_x,
+							  gint                  *win_y);
 
 GType gdk_X11_screen_impl_get_type ();
 
@@ -92,6 +92,7 @@ static GdkDisplay *
 gdk_X11_screen_get_display (GdkScreen * screen)
 {
   GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (screen);
+
   return scr_impl->display;
 }
 
@@ -99,6 +100,7 @@ static gint
 gdk_X11_screen_get_width (GdkScreen * screen)
 {
   GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (screen);
+
   return (gint) WidthOfScreen (scr_impl->xscreen);
 }
 
@@ -106,6 +108,7 @@ static gint
 gdk_X11_screen_get_height (GdkScreen * screen)
 {
   GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (screen);
+
   return (gint) HeightOfScreen (scr_impl->xscreen);
 }
 
@@ -113,6 +116,7 @@ static gint
 gdk_X11_screen_get_width_mm (GdkScreen * screen)
 {
   GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (screen);
+
   return (gint) WidthMMOfScreen (scr_impl->xscreen);
 }
 
@@ -120,6 +124,7 @@ static gint
 gdk_X11_screen_get_height_mm (GdkScreen * screen)
 {
   GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (screen);
+
   return (gint) HeightMMOfScreen (scr_impl->xscreen);
 }
 
@@ -127,6 +132,7 @@ static gint
 gdk_X11_screen_get_default_depth (GdkScreen * screen)
 {
   GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (screen);
+
   return DefaultDepthOfScreen (scr_impl->xscreen);
 }
 
@@ -141,6 +147,7 @@ static GdkWindow *
 gdk_X11_screen_get_root_window (GdkScreen * screen)
 {
   GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (screen);
+
   gdk_drawable_ref(GDK_DRAWABLE(scr_impl->root_window));
   return scr_impl->root_window;
 }
@@ -149,6 +156,7 @@ static GdkColormap *
 gdk_X11_screen_get_default_colormap (GdkScreen * screen)
 {
   GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (screen);
+
   return scr_impl->default_colormap;
 }
 
@@ -157,12 +165,14 @@ gdk_X11_screen_set_default_colormap (GdkScreen * screen,
 				     GdkColormap * colormap)
 {
   GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (screen);
+  
   scr_impl->default_colormap = colormap;
 }
 
 static GdkWindow *
-gdk_X11_screen_get_window_at_pointer (GdkScreen * screen,
-				      gint * win_x, gint * win_y)
+gdk_X11_screen_get_window_at_pointer (GdkScreen *screen,
+				      gint      *win_x,
+				      gint      *win_y)
 {
   GdkWindow *window;
   Window root;

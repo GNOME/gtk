@@ -103,17 +103,14 @@ static GQuark clipboards_owned_key_id = 0;
  *             be created. Once a clipboard object has
  *             been created, it is persistant for all time.
  **/
-
 GtkClipboard *
 gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection)
-
 {
   GtkClipboard *clipboard = NULL;
   GSList *tmp_list;
 
   if (selection == GDK_NONE)
     selection = gdk_atom_intern ("CLIPBOARD", FALSE);
-
 
   tmp_list = clipboards;
   while (tmp_list)
@@ -139,10 +136,8 @@ gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection)
 GtkClipboard *
 gtk_clipboard_get (GdkAtom selection)
 {
-  return gtk_clipboard_get_for_display (gdk_get_default_display(), selection);
-
+  return gtk_clipboard_get_for_display (gdk_get_default_display (), selection);
 }
-
 
 static void 
 selection_get_cb (GtkWidget          *widget,
@@ -177,7 +172,7 @@ static GtkWidget *
 make_clipboard_widget (GdkDisplay *display, 
 		       gboolean    provider)
 {
-  GtkWidget *widget = gtk_invisible_new_for_screen (gdk_display_get_default_screen(display));
+  GtkWidget *widget = gtk_invisible_new_for_screen (gdk_display_get_default_screen (display));
 
   gtk_signal_connect (GTK_OBJECT (widget), "selection_received",
 		      GTK_SIGNAL_FUNC (selection_received), NULL);
@@ -202,24 +197,29 @@ get_clipboard_widget (GdkDisplay *display)
   GSList *tmp;
   GdkScreen *screen;
   GtkWidget *clip_widget;
+
   if (!clipboard_widget_list)
-  {
-    clip_widget = make_clipboard_widget (display, TRUE);
-    clipboard_widget_list = g_slist_prepend (clipboard_widget_list, 
-					     clip_widget);
-    return clip_widget;
-  }
+    {
+      clip_widget = make_clipboard_widget (display, TRUE);
+      clipboard_widget_list = g_slist_prepend (clipboard_widget_list, 
+					       clip_widget);
+      return clip_widget;
+    }
+  
   tmp = clipboard_widget_list;
   screen = gdk_display_get_default_screen (display);
+  
   while (tmp)
-  {
-    if (GTK_INVISIBLE(tmp->data)->screen == screen)
-	return GTK_WIDGET(tmp->data);
-    tmp = tmp->next;
-  }
+    {
+      if (GTK_INVISIBLE(tmp->data)->screen == screen)
+	return GTK_WIDGET (tmp->data);
+      tmp = tmp->next;
+    }
+  
   clip_widget = make_clipboard_widget (display, TRUE);
   clipboard_widget_list = g_slist_prepend (clipboard_widget_list, 
-					     clip_widget);
+					   clip_widget);
+  
   return clip_widget;
 }
 
@@ -470,9 +470,9 @@ gtk_clipboard_set_with_owner (GtkClipboard          *clipboard,
  * gtk_clipboard_get_owner:
  * @clipboard: a #GtkClipboard
  * 
- * If the clipboard contents callbacks were set with gtk_clipboard_set_owner (),
- * and the gtk_clipboard_set_with_data () or gtk_clipboard_clear () has not
- * subsequently called, returns the @owner set by gtk_clipboard_set_owner ().
+ * If the clipboard contents callbacks were set with gtk_clipboard_set_owner(),
+ * and the gtk_clipboard_set_with_data() or gtk_clipboard_clear() has not
+ * subsequently called, returns the @owner set by gtk_clipboard_set_owner().
  * 
  * Return value: the owner of the clipboard, if any; otherwise %NULL.
  **/
@@ -515,7 +515,7 @@ clipboard_unset (GtkClipboard *clipboard)
  * @clipboard:  a #GtkClipboard
  * 
  * Clear the contents of the clipboard. Generally this should only
- * be called between the time you call gtk_clipboard_set_contents (),
+ * be called between the time you call gtk_clipboard_set_contents(),
  * and when the @clear_func you supplied is called. Otherwise, the
  * clipboard may be owned by someone else.
  **/
@@ -552,7 +552,7 @@ text_clear_func (GtkClipboard *clipboard,
  * @clipboard: a #GtkClipboard object
  * @text:      a UTF-8 string.
  * @len:       length of @text, in bytes, or -1, in which case
- *             the length will be determined with strlen ().
+ *             the length will be determined with strlen().
  * 
  * Set the contents of the clipboard to the given UTF-8 string. GTK+ will
  * make a copy of the text and take responsibility for responding
@@ -776,7 +776,7 @@ clipboard_received_func (GtkClipboard     *clipboard,
  * 
  * Return value: a newly allocated #GtkSelectionData object or %NULL
  *               if retrieving the given target failed. If non-%NULL,
- *               this value freed with gtk_selection_data_free () when
+ *               this value freed with gtk_selection_data_free() when
  *               you are finished with it.
  **/
 GtkSelectionData *
@@ -829,7 +829,7 @@ clipboard_text_received_func (GtkClipboard *clipboard,
  * timeouts, etc, may be dispatched during the wait.
  * 
  * Return value: a newly allocated UTF-8 string which must
- *               be freed with g_free (), or %NULL if retrieving
+ *               be freed with g_free(), or %NULL if retrieving
  *               the selection data failed. (This could happen
  *               for various reasons, in particular if the
  *               clipboard was empty or if the contents of the

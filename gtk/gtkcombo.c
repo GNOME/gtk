@@ -272,7 +272,7 @@ gtk_combo_window_key_press (GtkWidget   *window,
 	  if (GTK_WIDGET_HAS_GRAB (combo->popwin))
 	    {
 	      gtk_grab_remove (combo->popwin);
-	      gdk_display_pointer_ungrab (gtk_widget_get_display(window),
+	      gdk_display_pointer_ungrab (gtk_widget_get_display (window),
 					  event->time);
 	    }
 	}
@@ -349,14 +349,14 @@ gtk_combo_entry_focus_out (GtkEntry * entry, GdkEventFocus * event, GtkCombo * c
 
   if (combo->value_in_list && !gtk_combo_find (combo))
     {
-      /* gdk_beep (); *//* this can be annoying */
+      /* gdk_beep(); *//* this can be annoying */
       if (combo->ok_if_empty && !strcmp (gtk_entry_get_text (entry), ""))
 	return FALSE;
 #ifdef TEST
       printf ("INVALID ENTRY: `%s'\n", gtk_entry_get_text (entry));
 #endif
       gtk_grab_add (GTK_WIDGET (combo));
-      /* this is needed because if we call gtk_widget_grab_focus () 
+      /* this is needed because if we call gtk_widget_grab_focus() 
          it isn't guaranteed it's the *last* call before the main-loop,
          so the focus can be lost anyway...
          the signal_emit_stop doesn't seem to work either...
@@ -595,7 +595,7 @@ gtk_combo_button_press (GtkWidget * widget, GdkEvent * event, GtkCombo * combo)
 
   gtk_widget_hide (combo->popwin);
   gtk_grab_remove (combo->popwin);
-  gdk_display_pointer_ungrab (gtk_widget_get_display(widget),
+  gdk_display_pointer_ungrab (gtk_widget_get_display (widget),
 			      event->button.time);
 
   return TRUE;
@@ -664,7 +664,7 @@ gtk_combo_button_release (GtkWidget *widget,
       if (GTK_WIDGET_HAS_GRAB (combo->popwin))
 	{
 	  gtk_grab_remove (combo->popwin);
-	  gdk_display_pointer_ungrab (gtk_widget_get_display(combo),
+	  gdk_display_pointer_ungrab (gtk_widget_get_display (combo),
 				      event->button.time);
 	}
     }
@@ -724,7 +724,7 @@ gtk_combo_list_key_press (GtkWidget * widget, GdkEventKey * event, GtkCombo * co
       if (GTK_WIDGET_HAS_GRAB (combo->popwin))
 	{
 	  gtk_grab_remove (combo->popwin);
-	  gdk_display_pointer_ungrab (gtk_widget_get_display(widget),
+	  gdk_display_pointer_ungrab (gtk_widget_get_display (widget),
 				      GDK_CURRENT_TIME);
 	}
       else if (GTK_WIDGET_HAS_GRAB (combo->list))

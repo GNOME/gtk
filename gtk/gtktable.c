@@ -340,14 +340,14 @@ gtk_table_set_child_property (GtkContainer    *container,
       if (table_child->right_attach <= table_child->left_attach)
 	table_child->right_attach = table_child->left_attach + 1;
       if (table_child->right_attach >= table->ncols)
-	gtk_table_resize (table, table->ncols, table_child->right_attach);
+	gtk_table_resize (table, table->nrows, table_child->right_attach);
       break;
     case CHILD_PROP_RIGHT_ATTACH:
       table_child->right_attach = g_value_get_uint (value);
       if (table_child->right_attach <= table_child->left_attach)
 	table_child->left_attach = table_child->right_attach - 1;
       if (table_child->right_attach >= table->ncols)
-	gtk_table_resize (table, table->ncols, table_child->right_attach);
+	gtk_table_resize (table, table->nrows, table_child->right_attach);
       break;
     case CHILD_PROP_TOP_ATTACH:
       table_child->top_attach = g_value_get_uint (value);

@@ -104,12 +104,14 @@ gboolean       gtk_target_list_find      (GtkTargetList  *list,
 
 /* Public interface */
 
-gboolean gtk_selection_owner_set     (GtkWidget            *widget,
-				      GdkAtom               selection,
-				      guint32               time);
-gboolean gtk_selection_owner_set_for_display (GdkDisplay   *display,
-					      GtkWidget    *widget,											  GdkAtom       selection,
-					      guint32       time);
+gboolean gtk_selection_owner_set             (GtkWidget  *widget,
+					      GdkAtom     selection,
+					      guint32     time);
+gboolean gtk_selection_owner_set_for_display (GdkDisplay *display,
+					      GtkWidget  *widget,
+					      GdkAtom     selection,
+					      guint32     time);
+
 void     gtk_selection_add_target    (GtkWidget            *widget,
 				      GdkAtom               selection,
 				      GdkAtom               target,

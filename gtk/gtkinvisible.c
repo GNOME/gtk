@@ -108,16 +108,23 @@ gtk_invisible_destroy (GtkObject *object)
 GtkWidget* 
 gtk_invisible_new_for_screen (GdkScreen *screen)
 {
-  GtkWidget *result = GTK_WIDGET (gtk_type_new (GTK_TYPE_INVISIBLE));
+  GtkWidget *result;
+
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  
+  result = g_object_new (GTK_TYPE_INVISIBLE, NULL);
   GTK_INVISIBLE (result)->screen = screen;
+
   gtk_widget_realize (result);
+
   return result;
 }
 
 GtkWidget*
 gtk_invisible_new (void)
 {
-  GtkWidget *result = GTK_WIDGET (gtk_type_new (GTK_TYPE_INVISIBLE));
+  GtkWidget *result = g_object_new (GTK_TYPE_INVISIBLE, NULL);
+
   gtk_widget_realize (result);
 
   return result;

@@ -91,7 +91,7 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
 static void
 gtk_tree_selection_init (GtkTreeSelection *selection)
 {
-  selection->type = GTK_TREE_SELECTION_SINGLE;
+  selection->type = GTK_SELECTION_SINGLE;
 }
 
 static void
@@ -169,19 +169,20 @@ _gtk_tree_selection_set_tree_view (GtkTreeSelection *selection,
  * @type: The selection mode
  *
  * Sets the selection mode of the @selection.  If the previous type was
- * #GTK_TREE_SELECTION_MULTI and @type is #GTK_TREE_SELECTION_SINGLE, then
- * the anchor is kept selected, if it was previously selected.
+ * #GTK_SELECTION_MULTIPLE and, then the anchor is kept selected, if it was
+ * previously selected.
  **/
 void
-gtk_tree_selection_set_mode (GtkTreeSelection     *selection,
-			     GtkTreeSelectionMode  type)
+gtk_tree_selection_set_mode (GtkTreeSelection *selection,
+			     GtkSelectionMode  type)
 {
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
 
   if (selection->type == type)
     return;
 
-  if (type == GTK_TREE_SELECTION_SINGLE)
+  if (type == GTK_SELECTION_SINGLE ||
+      type == GTK_SELECTION_BROWSE)
     {
       GtkRBTree *tree = NULL;
       GtkRBNode *node = NULL;
@@ -227,10 +228,10 @@ gtk_tree_selection_set_mode (GtkTreeSelection     *selection,
  *
  * Return value: the current selection mode
  **/
-GtkTreeSelectionMode
+GtkSelectionMode
 gtk_tree_selection_get_mode (GtkTreeSelection *selection)
 {
-  g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), GTK_TREE_SELECTION_SINGLE);
+  g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), GTK_SELECTION_SINGLE);
 
   return selection->type;
 }
@@ -290,10 +291,10 @@ gtk_tree_selection_get_tree_view (GtkTreeSelection *selection)
  * @iter: The #GtkTreeIter, or NULL.
  *
  * Sets @iter to the currently selected node if @selection is set to
- * #GTK_TREE_SELECTION_SINGLE.  @iter may be NULL if you just want to test if
- * @selection has any selected nodes.  @model is filled with the current model
- * as a convenience.  This function will not work if you use @selection is
- * #GTK_TREE_SELECTION_MULTI.
+ * #GTK_SELECTION_SINGLE or #GTK_SELECTION_BROWSE.  @iter may be NULL if you
+ * just want to test if @selection has any selected nodes.  @model is filled
+ * with the current model as a convenience.  This function will not work if you
+ * use @selection is #GTK_SELECTION_MULTIPLE.
  *
  * Return value: TRUE, if there is a selected node.
  **/
@@ -308,7 +309,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
   gboolean retval;
 
   g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), FALSE);
-  g_return_val_if_fail (selection->type == GTK_TREE_SELECTION_SINGLE, FALSE);
+  g_return_val_if_fail (selection->type != GTK_SELECTION_MULTIPLE, FALSE);
   g_return_val_if_fail (selection->tree_view != NULL, FALSE);
   g_return_val_if_fail (selection->tree_view->priv->model != NULL, FALSE);
 
@@ -380,7 +381,8 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
       selection->tree_view->priv->tree->root == NULL)
     return;
 
-  if (selection->type == GTK_TREE_SELECTION_SINGLE)
+  if (selection->type == GTK_SELECTION_SINGLE ||
+      selection->type == GTK_SELECTION_BROWSE)
     {
       if (gtk_tree_row_reference_valid (selection->tree_view->priv->anchor))
 	{
@@ -492,7 +494,7 @@ gtk_tree_selection_select_path (GtkTreeSelection *selection,
   if (node == NULL || GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
     return;
 
-  if (selection->type == GTK_TREE_SELECTION_MULTI)
+  if (selection->type == GTK_SELECTION_MULTIPLE)
     state = GDK_CONTROL_MASK;
 
   _gtk_tree_selection_internal_select_node (selection,
@@ -652,8 +654,8 @@ gtk_tree_selection_real_select_all (GtkTreeSelection *selection)
  * gtk_tree_selection_select_all:
  * @selection: A #GtkTreeSelection.
  *
- * Selects all the nodes.  @selection is must be set to
- * #GTK_TREE_SELECTION_MULTI mode.
+ * Selects all the nodes.  @selection is must be set to #GTK_SELECTION_MULTIPLE
+ * mode.
  **/
 void
 gtk_tree_selection_select_all (GtkTreeSelection *selection)
@@ -662,7 +664,7 @@ gtk_tree_selection_select_all (GtkTreeSelection *selection)
   g_return_if_fail (selection->tree_view != NULL);
   if (selection->tree_view->priv->tree == NULL)
     return;
-  g_return_if_fail (selection->type != GTK_TREE_SELECTION_MULTI);
+  g_return_if_fail (selection->type != GTK_SELECTION_MULTIPLE);
 
   if (gtk_tree_selection_real_select_all (selection))
     g_signal_emit (G_OBJECT (selection), tree_selection_signals[CHANGED], 0);
@@ -692,7 +694,8 @@ gtk_tree_selection_real_unselect_all (GtkTreeSelection *selection)
 {
   struct _TempTuple *tuple;
 
-  if (selection->type == GTK_TREE_SELECTION_SINGLE)
+  if (selection->type == GTK_SELECTION_SINGLE ||
+      selection->type == GTK_SELECTION_BROWSE)
     {
       GtkRBTree *tree = NULL;
       GtkRBNode *node = NULL;
@@ -881,10 +884,12 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
   if (selection->tree_view->priv->anchor)
     anchor_path = gtk_tree_row_reference_get_path (selection->tree_view->priv->anchor);
 
-  if (selection->type == GTK_TREE_SELECTION_SINGLE)
+  if (selection->type == GTK_SELECTION_SINGLE ||
+      selection->type == GTK_SELECTION_BROWSE)
     {
       /* Did we try to select the same node again? */
-      if (anchor_path && gtk_tree_path_compare (path, anchor_path) == 0)
+      if (selection->type == GTK_SELECTION_SINGLE &&
+	  anchor_path && gtk_tree_path_compare (path, anchor_path) == 0)
 	{
 	  if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
 	    {
@@ -921,7 +926,7 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 	    }
 	}
     }
-  else if (selection->type == GTK_TREE_SELECTION_MULTI)
+  else if (selection->type == GTK_SELECTION_MULTIPLE)
     {
       if (((state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK) && (anchor_path == NULL))
 	{
@@ -983,12 +988,6 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 /* NOTE: Any {un,}selection ever done _MUST_ be done through this function!
  */
 
-/* FIXME: user_func can screw up GTK_TREE_SELECTION_SINGLE.  If it prevents
- * unselection of a node, it can keep more then one node selected.
- */
-/* Perhaps the correct solution is to prevent selecting the new node, if
- * we fail to unselect the old node.
- */
 static gint
 gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
 				     GtkRBTree        *tree,

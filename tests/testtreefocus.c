@@ -329,7 +329,7 @@ main (int argc, char *argv[])
   tree_view = gtk_tree_view_new_with_model (model);
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_view), TRUE);
   gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
-			       GTK_TREE_SELECTION_MULTI);
+			       GTK_SELECTION_MULTIPLE);
   renderer = gtk_cell_renderer_text_new ();
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
 							    -1, "Holiday",

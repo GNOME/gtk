@@ -58,9 +58,10 @@
 /* Compiling as a part of Gtk 1.1 or later */
 #include "config.h"
 #include "gdkprivate.h"
+
 #endif
 
-#include "gdk.h"		/* For gdk_flush () */
+#include "gdk.h"		/* For gdk_flush() */
 #include "gdkrgb.h"
 #include "gdkscreen.h"
 #include "gdkinternals.h"
@@ -298,7 +299,7 @@ gdk_rgb_try_colormap (GdkRgbInfo *image_info, gboolean force,
     }
 
 #ifndef GAMMA
-  if (cmap == gdk_colormap_get_system_for_screen(image_info->visual->screen))
+  if (cmap == gdk_colormap_get_system_for_screen (image_info->visual->screen))
     /* find color cube colors that are already present */
     for (i = 0; i < MIN (256, cmap->size); i++)
       {
@@ -897,7 +898,7 @@ gdk_rgb_xpixel_from_rgb (guint32 rgb)
   guint32 g = rgb & 0xff00;
   guint32 b = rgb & 0xff;
 
-  return gdk_rgb_xpixel_from_rgb_internal (gdk_rgb_get_colormap_for_screen(gdk_get_default_screen ()),
+  return gdk_rgb_xpixel_from_rgb_internal (gdk_rgb_get_colormap_for_screen (gdk_get_default_screen ()),
 					   (r >> 8) + (r >> 16), g + (g >> 8), b + (b << 8));
 }
 
@@ -3089,7 +3090,7 @@ gdk_rgb_alloc_scratch_image (GdkRgbInfo *image_info)
   if (image_info->static_image_idx == N_REGIONS)
     {
 #ifndef NO_FLUSH
-      gdk_display_sync (gdk_screen_get_display(image_info->visual->screen));
+      gdk_display_sync (gdk_screen_get_display (image_info->visual->screen));
 #endif
 #ifdef VERBOSE
       g_print ("flush, %d puts since last flush\n", sincelast);
@@ -3245,7 +3246,7 @@ static GdkRgbInfo *
 gdk_rgb_get_info_from_drawable (GdkDrawable *drawable)
 {
   GdkColormap *cmap = gdk_drawable_get_colormap (drawable);
-  GdkScreen *scr = GDK_DRAWABLE_GET_CLASS (drawable)->get_screen (drawable);
+  GdkScreen *scr = gdk_drawable_get_screen (drawable);
 
   if (!cmap)
     {
@@ -3552,7 +3553,6 @@ gdk_rgb_ditherable (void)
   return gdk_rgb_colormap_ditherable (gdk_rgb_get_colormap ());
 }
 
-
 /**
  * gdk_rgb_get_colormap:
  * 
@@ -3568,17 +3568,20 @@ GdkColormap *
 gdk_rgb_get_colormap (void)
 {
   static GdkColormap *cmap = NULL;
-  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_rgb_get_colormap_for_screen instead\n"));
+  GDK_NOTE (MULTIHEAD,
+	    g_message ("Use gdk_rgb_get_colormap_for_screen instead\n"));
   if (!cmap)
     {
-      GdkRgbInfo *image_info = gdk_rgb_create_info (gdk_rgb_choose_visual (gdk_get_default_screen()), NULL);
+      GdkRgbInfo *image_info = gdk_rgb_create_info (gdk_rgb_choose_visual (gdk_get_default_screen ()), NULL);
       cmap = image_info->cmap;
     }
 
   return cmap;
 }
 
-GdkColormap *gdk_rgb_get_colormap_for_screen (GdkScreen *screen){
+GdkColormap *
+gdk_rgb_get_colormap_for_screen (GdkScreen *screen)
+{
   static GdkColormap *cmap = NULL;
   
   if (!cmap)

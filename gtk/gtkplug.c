@@ -33,6 +33,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "x11/gdkx.h"
 #include "x11/gdkscreen-x11.h"
+
 #include "xembed.h"
 
 static void            gtk_plug_class_init            (GtkPlugClass     *klass);
@@ -253,7 +254,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   
   gdk_window_hide (widget->window);
   gdk_window_reparent (widget->window,
-		       gdk_screen_get_root_window (GDK_WINDOW_SCREEN (widget->window)), 
+		       gdk_screen_get_root_window (GDK_WINDOW_SCREEN (widget->window)),
 		       0, 0);
 
   GTK_PRIVATE_SET_FLAG (plug, GTK_IN_REPARENT);
@@ -423,11 +424,9 @@ gtk_plug_realize (GtkWidget *widget)
       attributes.window_type = GDK_WINDOW_TOPLEVEL;
 
       gdk_error_trap_push ();
-      widget->window = gdk_window_new_for_screen (gtk_widget_get_screen (widget),
-      						  NULL,
-						  &attributes,
-						  attributes_mask);
-      gdk_display_sync (gtk_widget_get_display(widget));
+      widget->window = gdk_window_new (plug->socket_window, 
+				       &attributes, attributes_mask);
+      gdk_display_sync (gdk_drawable_get_display (widget->window));
       if (gdk_error_trap_pop ()) /* Uh-oh */
 	{
 	  gdk_error_trap_push ();
@@ -568,10 +567,11 @@ gtk_plug_key_press_event (GtkWidget   *widget,
 static void
 gtk_plug_forward_key_press (GtkPlug *plug, GdkEventKey *event)
 {
+  Display *xdisplay = GDK_WINDOW_XDISPLAY (plug->socket_window);
   XEvent xevent;
   
   xevent.xkey.type = KeyPress;
-  xevent.xkey.display = GDK_WINDOW_XDISPLAY (GTK_WIDGET(plug)->window);
+  xevent.xkey.display = xdisplay;
   xevent.xkey.window = GDK_WINDOW_XWINDOW (plug->socket_window);
   xevent.xkey.root = GDK_WINDOW_XROOTWIN (plug->socket_window); /* FIXME */
   xevent.xkey.time = event->time;
@@ -582,15 +582,14 @@ gtk_plug_forward_key_press (GtkPlug *plug, GdkEventKey *event)
   xevent.xkey.x_root = 0;
   xevent.xkey.y_root = 0;
   xevent.xkey.state = event->state;
-  xevent.xkey.keycode =  XKeysymToKeycode(GDK_WINDOW_XDISPLAY (plug->socket_window), 
-					  event->keyval);
+  xevent.xkey.keycode =  XKeysymToKeycode (xdisplay, event->keyval);
   xevent.xkey.same_screen = TRUE; /* FIXME ? */
 
   gdk_error_trap_push ();
-  XSendEvent (GDK_WINDOW_XDISPLAY (plug->socket_window),
+  XSendEvent (xdisplay,
 	      GDK_WINDOW_XWINDOW (plug->socket_window),
 	      False, NoEventMask, &xevent);
-  gdk_display_sync (GDK_WINDOW_DISPLAY(plug->socket_window));
+  gdk_display_sync (GDK_WINDOW_DISPLAY (plug->socket_window));
   gdk_error_trap_pop ();
 }
 
@@ -620,7 +619,7 @@ gtk_plug_set_focus (GtkWindow *window,
       XSendEvent (gdk_display,
 		  GDK_WINDOW_XWINDOW (plug->socket_window),
 		  False, NoEventMask, &xevent);
-      gdk_display_sync (GDK_WINDOW_DISPLAY(plug->socket_window));
+      gdk_display_sync (GDK_WINDOW_DISPLAY (plug->socket_window));
       gdk_error_trap_pop ();
 #endif
 
@@ -720,13 +719,11 @@ gtk_plug_accel_entries_changed (GtkWindow *window)
 
       for (i = 0; i < n_entries; i++)
 	{
+	  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display  (window));
 	  GdkKeymapKey *keys;
 	  gint n_keys;
 	  
-	  if (gdk_keymap_get_entries_for_keyval (
-		  gdk_keymap_get_for_display (gtk_widget_get_display  (window)),
-					      entries[i].accelerator_key, 
-					      &keys, &n_keys))
+	  if (gdk_keymap_get_entries_for_keyval (keymap, entries[i].accelerator_key, &keys, &n_keys))
 	    {
 	      GrabbedKey *key = g_new (GrabbedKey, 1);
 	      
@@ -814,7 +811,7 @@ gtk_plug_focus (GtkWidget        *widget,
 	      XSetInputFocus (GDK_WINDOW_XDISPLAY (plug->socket_window),
 			      GDK_WINDOW_XWINDOW (plug->socket_window),
 			      RevertToParent, event->time);
-	      gdk_display_sync(GDK_WINDOW_DISPLAY (plug->socket_window));
+	      gdk_display_sync (GDK_WINDOW_DISPLAY (plug->socket_window));
 	      gdk_error_trap_pop ();
 
 	      gtk_plug_forward_key_press (plug, event);
@@ -870,7 +867,7 @@ send_xembed_message (GtkPlug *plug,
       XSendEvent (GDK_WINDOW_XDISPLAY(plug->socket_window),
 		  GDK_WINDOW_XWINDOW (plug->socket_window),
 		  False, NoEventMask, &xevent);
-      gdk_display_sync(GDK_WINDOW_DISPLAY (plug->socket_window));
+      gdk_display_sync (GDK_WINDOW_DISPLAY (plug->socket_window));
       gdk_error_trap_pop ();
     }
 }
@@ -926,7 +923,7 @@ xembed_set_info (GdkWindow     *gdk_window,
   Window window = GDK_WINDOW_XWINDOW (gdk_window);
   unsigned long buffer[2];
   
-  Atom xembed_info_atom = gdk_atom_intern ("_XEMBED_INFO", FALSE);
+  Atom xembed_info_atom = gdk_x11_get_real_atom_by_name (gdk_drawable_get_display (gdk_window), "_XEMBED_INFO");
 
   buffer[1] = 0;		/* Protocol version */
   buffer[1] = flags;
@@ -953,11 +950,11 @@ handle_xembed_message (GtkPlug   *plug,
     case XEMBED_EMBEDDED_NOTIFY:
       break;
     case XEMBED_WINDOW_ACTIVATE:
-      GTK_NOTE (PLUGSOCKET,
+      GTK_NOTE(PLUGSOCKET,
 	       g_message ("GtkPlug: ACTIVATE received"));
       break;
     case XEMBED_WINDOW_DEACTIVATE:
-      GTK_NOTE (PLUGSOCKET,
+      GTK_NOTE(PLUGSOCKET,
 	       g_message ("GtkPlug: DEACTIVATE received"));
       break;
       
@@ -1004,7 +1001,7 @@ handle_xembed_message (GtkPlug   *plug,
       break;
       
     default:
-      GTK_NOTE (PLUGSOCKET,
+      GTK_NOTE(PLUGSOCKET,
 	       g_message ("GtkPlug: Ignoring unknown _XEMBED message of type %ld", message));
       break;
     }
@@ -1023,8 +1020,7 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
   switch (xevent->type)
     {
     case ClientMessage:
-      if (xevent->xclient.message_type == 
-	  gdk_x11_get_real_atom_by_name (gdk_drawable_get_display (plug->socket_window), "_XEMBED"))
+      if (xevent->xclient.message_type == gdk_x11_get_real_atom_by_name (gdk_drawable_get_display (plug->socket_window), "_XEMBED"))
 	{
 	  handle_xembed_message (plug,
 				 xevent->xclient.data.l[1],

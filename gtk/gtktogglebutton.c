@@ -58,8 +58,6 @@ static gint gtk_toggle_button_expose        (GtkWidget            *widget,
 static void gtk_toggle_button_pressed       (GtkButton            *button);
 static void gtk_toggle_button_released      (GtkButton            *button);
 static void gtk_toggle_button_clicked       (GtkButton            *button);
-static void gtk_toggle_button_enter         (GtkButton            *button);
-static void gtk_toggle_button_leave         (GtkButton            *button);
 static void gtk_toggle_button_set_property  (GObject              *object,
 					     guint                 prop_id,
 					     const GValue         *value,
@@ -68,11 +66,11 @@ static void gtk_toggle_button_get_property  (GObject              *object,
 					     guint                 prop_id,
 					     GValue               *value,
 					     GParamSpec           *pspec);
-static void gtk_toggle_button_leave         (GtkButton            *button);
 static void gtk_toggle_button_realize       (GtkWidget            *widget);
 static void gtk_toggle_button_unrealize     (GtkWidget            *widget);
 static void gtk_toggle_button_map           (GtkWidget            *widget);
 static void gtk_toggle_button_unmap         (GtkWidget            *widget);
+static void gtk_toggle_button_update_state  (GtkButton            *button);
 
 static guint toggle_button_signals[LAST_SIGNAL] = { 0 };
 static GtkContainerClass *parent_class = NULL;
@@ -133,8 +131,8 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   button_class->pressed = gtk_toggle_button_pressed;
   button_class->released = gtk_toggle_button_released;
   button_class->clicked = gtk_toggle_button_clicked;
-  button_class->enter = gtk_toggle_button_enter;
-  button_class->leave = gtk_toggle_button_leave;
+  button_class->enter = gtk_toggle_button_update_state;
+  button_class->leave = gtk_toggle_button_update_state;
 
   class->toggled = NULL;
 
@@ -189,17 +187,7 @@ gtk_toggle_button_new (void)
 GtkWidget*
 gtk_toggle_button_new_with_label (const gchar *label)
 {
-  GtkWidget *toggle_button;
-  GtkWidget *label_widget;
-
-  toggle_button = gtk_toggle_button_new ();
-  label_widget = gtk_label_new (label);
-  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.5, 0.5);
-
-  gtk_container_add (GTK_CONTAINER (toggle_button), label_widget);
-  gtk_widget_show (label_widget);
-
-  return toggle_button;
+  return g_object_new (GTK_TYPE_TOGGLE_BUTTON, "label", label, NULL);
 }
 
 /**
@@ -215,17 +203,7 @@ gtk_toggle_button_new_with_label (const gchar *label)
 GtkWidget*
 gtk_toggle_button_new_with_mnemonic (const gchar *label)
 {
-  GtkWidget *toggle_button;
-  GtkWidget *label_widget;
-
-  toggle_button = gtk_toggle_button_new ();
-  label_widget = gtk_label_new_with_mnemonic (label);
-  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.5, 0.5);
-
-  gtk_container_add (GTK_CONTAINER (toggle_button), label_widget);
-  gtk_widget_show (label_widget);
-
-  return toggle_button;
+  return g_object_new (GTK_TYPE_TOGGLE_BUTTON, "label", label, "use_underline", TRUE, NULL);
 }
 
 static void
@@ -406,6 +384,8 @@ gtk_toggle_button_set_inconsistent (GtkToggleButton *toggle_button,
   if (setting != toggle_button->inconsistent)
     {
       toggle_button->inconsistent = setting;
+      
+      gtk_toggle_button_update_state (GTK_BUTTON (toggle_button));
       gtk_widget_queue_draw (GTK_WIDGET (toggle_button));
 
       g_object_notify (G_OBJECT (toggle_button), "inconsistent");      
@@ -490,11 +470,8 @@ gtk_toggle_button_paint (GtkWidget    *widget,
             state_type = GTK_STATE_NORMAL;
           shadow_type = GTK_SHADOW_ETCHED_IN;
         }
-      else if ((GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE) ||
-	  toggle_button->active)
-        shadow_type = GTK_SHADOW_IN;
       else
-	shadow_type = GTK_SHADOW_OUT;
+	shadow_type = button->depressed ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
 
       if (button->relief != GTK_RELIEF_NONE ||
 	  (GTK_WIDGET_STATE(widget) != GTK_STATE_NORMAL &&
@@ -557,114 +534,36 @@ gtk_toggle_button_expose (GtkWidget      *widget,
 static void
 gtk_toggle_button_pressed (GtkButton *button)
 {
-  GtkToggleButton *toggle_button;
-  GtkStateType new_state;
-
-  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
-
-  toggle_button = GTK_TOGGLE_BUTTON (button);
-
   button->button_down = TRUE;
 
-  if (toggle_button->active)
-    new_state = (button->in_button ? GTK_STATE_NORMAL : GTK_STATE_ACTIVE);
-  else
-    new_state = (button->in_button ? GTK_STATE_ACTIVE : GTK_STATE_NORMAL);
-
-  if (GTK_WIDGET_STATE (button) != new_state)
-    gtk_widget_set_state (GTK_WIDGET (button), new_state);
+  gtk_toggle_button_update_state (button);
 }
 
 static void
 gtk_toggle_button_released (GtkButton *button)
 {
-  GtkToggleButton *toggle_button;
-  GtkStateType new_state;
-
-  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
-
   if (button->button_down)
     {
-      toggle_button = GTK_TOGGLE_BUTTON (button);
-
       button->button_down = FALSE;
 
       if (button->in_button)
-	{
-	  gtk_button_clicked (button);
-	}
-      else
-	{
-	  if (toggle_button->active)
-	    new_state = (button->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_ACTIVE);
-	  else
-	    new_state = (button->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL);
+	gtk_button_clicked (button);
 
-	  if (GTK_WIDGET_STATE (button) != new_state)
-	    gtk_widget_set_state (GTK_WIDGET (button), new_state);
-	}
+      gtk_toggle_button_update_state (button);
     }
 }
 
 static void
 gtk_toggle_button_clicked (GtkButton *button)
 {
-  GtkToggleButton *toggle_button;
-  GtkStateType new_state;
-
-  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
-
-  toggle_button = GTK_TOGGLE_BUTTON (button);
+  GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
   toggle_button->active = !toggle_button->active;
 
   gtk_toggle_button_toggled (toggle_button);
 
-  if (toggle_button->active)
-    new_state = (button->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_ACTIVE);
-  else
-    new_state = (button->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL);
-
-  if (GTK_WIDGET_STATE (button) != new_state)
-    gtk_widget_set_state (GTK_WIDGET (button), new_state);
-  else
-    gtk_widget_queue_draw (GTK_WIDGET (button));
+  gtk_toggle_button_update_state (button);
 
   g_object_notify (G_OBJECT (toggle_button), "active");
-}
-
-static void
-gtk_toggle_button_enter (GtkButton *button)
-{
-  GtkToggleButton *toggle_button;
-  GtkStateType new_state;
-
-  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
-
-  toggle_button = GTK_TOGGLE_BUTTON (button);
-
-  if (toggle_button->active)
-    new_state = (button->button_down ? GTK_STATE_NORMAL : GTK_STATE_PRELIGHT);
-  else
-    new_state = (button->button_down ? GTK_STATE_ACTIVE : GTK_STATE_PRELIGHT);
-
-  if (GTK_WIDGET_STATE (button) != new_state)
-    gtk_widget_set_state (GTK_WIDGET (button), new_state);
-}
-
-static void
-gtk_toggle_button_leave (GtkButton *button)
-{
-  GtkToggleButton *toggle_button;
-  GtkStateType new_state;
-
-  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
-
-  toggle_button = GTK_TOGGLE_BUTTON (button);
-
-  new_state = (toggle_button->active ? GTK_STATE_ACTIVE : GTK_STATE_NORMAL);
-
-  if (GTK_WIDGET_STATE (button) != new_state)
-    gtk_widget_set_state (GTK_WIDGET (button), new_state);
 }
 
 static void
@@ -763,4 +662,27 @@ gtk_toggle_button_unmap (GtkWidget *widget)
     gdk_window_hide (GTK_TOGGLE_BUTTON (widget)->event_window);
 
   GTK_WIDGET_CLASS (parent_class)->unmap (widget);
+}
+
+static void
+gtk_toggle_button_update_state (GtkButton *button)
+{
+  GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
+  gboolean depressed;
+  GtkStateType new_state;
+
+  if (toggle_button->inconsistent)
+    depressed = FALSE;
+  else if (button->in_button && button->button_down)
+    depressed = !toggle_button->active;
+  else
+    depressed = toggle_button->active;
+      
+  if (!button->button_down && button->in_button)
+    new_state = GTK_STATE_PRELIGHT;
+  else
+    new_state = depressed ? GTK_STATE_ACTIVE: GTK_STATE_NORMAL;
+
+  _gtk_button_set_depressed (button, depressed); 
+  gtk_widget_set_state (GTK_WIDGET (toggle_button), new_state);
 }

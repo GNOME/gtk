@@ -312,15 +312,17 @@ do_appwindow (void)
       /* Show text widget info in the statusbar */
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (contents));
       
-      g_signal_connect (G_OBJECT (buffer),
-                        "changed",
-                        G_CALLBACK (update_statusbar),
-                        statusbar);
+      g_signal_connect_object (buffer,
+                               "changed",
+                               G_CALLBACK (update_statusbar),
+                               statusbar,
+                               0);
 
-      g_signal_connect (G_OBJECT (buffer),
-                        "mark_set", /* cursor moved */
-                        G_CALLBACK (mark_set_callback),
-                        statusbar);
+      g_signal_connect_object (buffer,
+                               "mark_set", /* cursor moved */
+                               G_CALLBACK (mark_set_callback),
+                               statusbar,
+                               0);
       
       update_statusbar (buffer, GTK_STATUSBAR (statusbar));
     }

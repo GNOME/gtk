@@ -39,12 +39,20 @@
 #define DARKNESS_MULT   0.7
 
 /* --- typedefs & structures --- */
-typedef struct {
+
+typedef struct _PropertyValue PropertyValue;
+typedef struct _StyleDefaultFont StyleDefaultFont;
+
+struct _PropertyValue {
   GType       widget_type;
   GParamSpec *pspec;
   GValue      value;
-} PropertyValue;
+};
 
+struct _StyleDefaultFont {
+  GdkFont    *font;
+  GdkDisplay *display;
+};
 
 /* --- prototypes --- */
 static void	 gtk_style_init			(GtkStyle	*style);
@@ -378,7 +386,7 @@ static char radio_text_bits[] = {
 
 static struct {
   char      *bits;
-  GList	    *bmap_screen_list; /* list of GdkBitmap */
+  GList	    *bmap_list; /* list of GdkBitmap */
 } indicator_parts[] = {
   { check_aa_bits, NULL },
   { check_base_bits, NULL },
@@ -410,41 +418,36 @@ static GdkColor gtk_default_insensitive_bg = { 0, 0xd6d6, 0xd6d6, 0xd6d6 };
 
 static gpointer parent_class = NULL;
 
-typedef struct {
-    GdkFont    	*font;
-    GdkDisplay  *display;
-} _GtkStyleDefaultFont;
-
 static GdkFont*
-_get_default_font (GtkStyle *style, GdkDisplay *display)
+get_default_font (GtkStyle *style, GdkDisplay *display)
 {
   static GSList *static_default_font_list = NULL;
-  _GtkStyleDefaultFont *default_font = NULL;
-  if (static_default_font_list)
-  {
-    GSList *tmp = static_default_font_list;
-    while (tmp)
+  StyleDefaultFont *default_font;
+  GSList *tmp_list;
+
+  tmp_list = static_default_font_list;
+  while (tmp_list)
     {
-      if(((_GtkStyleDefaultFont*)tmp->data)->display == display)
-      {
-        gdk_font_ref (((_GtkStyleDefaultFont*)tmp->data)->font);
-        return ((_GtkStyleDefaultFont*)tmp->data)->font;
-      }
-      tmp = tmp->next;
+      default_font = tmp_list->data;
+      
+      if (default_font->display == display)
+	return gdk_font_ref (default_font->font);
+
+      tmp_list = tmp_list->next;
     }
-  }
-  default_font = g_new0 (_GtkStyleDefaultFont, 1);
+
+  default_font = g_new (StyleDefaultFont, 1);
   default_font->display = display;
+  
   default_font->font = gdk_font_from_description_for_display (display, style->font_desc);
   if (!default_font->font) 
     default_font->font = gdk_font_load_for_display (display, "fixed");
   if (!default_font->font) 
-	g_error ("Unable to load \"fixed\" font");
+    g_error ("Unable to load \"fixed\" font");
 
-  static_default_font_list = g_slist_append (static_default_font_list, default_font);
+  static_default_font_list = g_slist_prepend (static_default_font_list, default_font);
 
-  gdk_font_ref (default_font->font);
-  return default_font->font;
+  return gdk_font_ref (default_font->font);
 }
 
 
@@ -744,7 +747,7 @@ gtk_style_attach (GtkStyle  *style,
       if (style->colormap->screen != colormap->screen)
       {
 	if (new_style->font)
-	    gdk_font_unref (new_style->font);
+	  gdk_font_unref (new_style->font);
 	new_style->font = NULL;
       }
       gtk_style_realize (new_style, colormap);
@@ -1444,16 +1447,16 @@ gtk_style_real_realize (GtkStyle *style)
   gc_values_mask = GDK_GC_FOREGROUND | GDK_GC_FONT;
 
   if (!style->font)
-    style->font = _get_default_font (style, gdk_screen_get_display (style->colormap->screen));
+    style->font = get_default_font (style, gdk_screen_get_display (style->colormap->screen));
   
   if (style->font->type == GDK_FONT_FONT)
-  {
-    gc_values.font = style->font;
-  }
+    {
+      gc_values.font = style->font;
+    }
   else if (style->font->type == GDK_FONT_FONTSET)
-  {
-    gc_values.font = _get_default_font (style, gdk_screen_get_display (style->colormap->screen));
-  }
+    {
+      gc_values.font = get_default_font (style, gdk_screen_get_display (style->colormap->screen));
+    }
   
   gc_values.foreground = style->black;
   style->black_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
@@ -1776,23 +1779,31 @@ sanitize_size (GdkWindow *window,
 }
 
 static GdkBitmap * 
-get_indicator_for_screen (GdkScreen	*screen,
-			  IndicatorPart  part,
-			  GdkDrawable   *drawable)
+get_indicator_for_screen (GdkDrawable   *drawable,
+			  IndicatorPart  part)
+			  
 {
-    GdkBitmap * new_bmap;
-    GList *tmp_list = indicator_parts[part].bmap_screen_list;
-    while (tmp_list)
+  GdkScreen *screen = gdk_drawable_get_screen (drawable);
+  GdkBitmap *bitmap;
+  GList *tmp_list;
+  
+  tmp_list = indicator_parts[part].bmap_list;
+  while (tmp_list)
     {
-	if (gdk_drawable_get_screen ((GdkBitmap *)tmp_list->data) == screen)
-		return (GdkBitmap *)tmp_list->data;
-	tmp_list = tmp_list->next;
+      bitmap = tmp_list->data;
+      
+      if (gdk_drawable_get_screen (bitmap) == screen)
+	return bitmap;
+      
+      tmp_list = tmp_list->next;
     }
-    new_bmap = gdk_bitmap_create_from_data (drawable,
-					    indicator_parts[part].bits,
-					    INDICATOR_PART_SIZE, INDICATOR_PART_SIZE);
-    g_list_append (indicator_parts[part].bmap_screen_list, (gpointer) new_bmap);
-    return new_bmap;
+  
+  bitmap = gdk_bitmap_create_from_data (drawable,
+					indicator_parts[part].bits,
+					INDICATOR_PART_SIZE, INDICATOR_PART_SIZE);
+  indicator_parts[part].bmap_list = g_list_prepend (indicator_parts[part].bmap_list, bitmap);
+
+  return bitmap;
 }
 
 static void
@@ -1803,15 +1814,11 @@ draw_part (GdkDrawable  *drawable,
 	   gint          y,
 	   IndicatorPart part)
 {
-  GdkBitmap *indicator_bmap;
   if (area)
     gdk_gc_set_clip_rectangle (gc, area);
   
-  indicator_bmap = get_indicator_for_screen (gdk_drawable_get_screen (drawable),
-					     part, drawable);
-
   gdk_gc_set_ts_origin (gc, x, y);
-  gdk_gc_set_stipple (gc, indicator_bmap);
+  gdk_gc_set_stipple (gc, get_indicator_for_screen (drawable, part));
   gdk_gc_set_fill (gc, GDK_STIPPLED);
 
   gdk_draw_rectangle (drawable, gc, TRUE, x, y, INDICATOR_PART_SIZE, INDICATOR_PART_SIZE);
@@ -2994,13 +3001,16 @@ gtk_default_draw_flat_box (GtkStyle      *style,
         {
           if (!strcmp ("text", detail))
             gc1 = style->bg_gc[GTK_STATE_SELECTED];
-          else if (!strcmp ("cell_even_sorted", detail) ||
-                   !strcmp ("cell_odd_sorted", detail) ||
-                   !strcmp ("cell_even_ruled_sorted", detail) ||
-                   !strcmp ("cell_odd_ruled_sorted", detail))
+          else if (!strncmp ("cell_even", detail, strlen ("cell_even")) ||
+		   !strncmp ("cell_odd", detail, strlen ("cell_odd")))
             {
-              freeme = get_darkened_gc (window, &style->bg[state_type], 1);
-              gc1 = freeme;
+	      /* This has to be really broken; alex made me do it. -jrb */
+	      /* Red rum!!! REd RUM!!! */
+	      if (GTK_WIDGET_HAS_FOCUS (widget))
+		gc1 = style->bg_gc[state_type];
+	      else 
+		gc1 = style->bg_gc[GTK_STATE_ACTIVE];
+	      
             }
           else
             {
@@ -3026,14 +3036,14 @@ gtk_default_draw_flat_box (GtkStyle      *style,
                    !strcmp ("cell_odd", detail) ||
                    !strcmp ("cell_even_ruled", detail))
             {
-              gc1 = style->base_gc[state_type];
+	      gc1 = style->base_gc[state_type];
             }
           else if (!strcmp ("cell_even_sorted", detail) ||
                    !strcmp ("cell_odd_sorted", detail) ||
                    !strcmp ("cell_odd_ruled", detail) ||
                    !strcmp ("cell_even_ruled_sorted", detail))
             {
-              freeme = get_darkened_gc (window, &style->base[state_type], 1);
+	      freeme = get_darkened_gc (window, &style->base[state_type], 1);
               gc1 = freeme;
             }
           else if (!strcmp ("cell_odd_ruled_sorted", detail))

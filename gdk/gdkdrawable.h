@@ -111,8 +111,8 @@ struct _GdkDrawableClass
   void (*set_colormap)   (GdkDrawable  *drawable,
                           GdkColormap  *cmap);
 
-  GdkColormap* (*get_colormap)  (GdkDrawable  *drawable);
-  GdkVisual*   (*get_visual)    (GdkDrawable  *drawable);
+  GdkColormap* (*get_colormap) (GdkDrawable *drawable);
+  GdkVisual*   (*get_visual) (GdkDrawable  *drawable);
   GdkScreen*   (*get_screen)	(GdkDrawable  *drawable);
   GdkDisplay*  (*get_display)	(GdkDrawable  *drawable);
 
@@ -157,7 +157,7 @@ void	        gdk_drawable_set_colormap (GdkDrawable	  *drawable,
 GdkColormap*    gdk_drawable_get_colormap (GdkDrawable	  *drawable);
 GdkVisual*      gdk_drawable_get_visual   (GdkDrawable	  *drawable);
 gint            gdk_drawable_get_depth    (GdkDrawable	  *drawable);
-GdkScreen *	gdk_drawable_get_screen   (GdkDrawable    *drawable);
+GdkScreen*	gdk_drawable_get_screen   (GdkDrawable    *drawable);
 GdkDisplay*	gdk_drawable_get_display  (GdkDrawable    *drawable);
 GdkDrawable*    gdk_drawable_ref          (GdkDrawable    *drawable);
 void            gdk_drawable_unref        (GdkDrawable    *drawable);

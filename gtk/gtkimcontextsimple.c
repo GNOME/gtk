@@ -1061,6 +1061,7 @@ is_hex_keyval (guint keyval)
 static guint
 canonical_hex_keyval (GdkEventKey *event)
 {
+  GdkKeymap *keymap = gdk_keymap_get_for_display (gdk_drawable_get_display (event->window));
   guint keyval;
   guint *keyvals = NULL;
   gint n_vals = 0;
@@ -1073,10 +1074,10 @@ canonical_hex_keyval (GdkEventKey *event)
   /* See if this key would have generated a hex keyval in
    * any other state, and return that hex keyval if so
    */
-  gdk_keymap_get_entries_for_keycode (gdk_keymap_get_for_display (gdk_drawable_get_display  (event->window)),
-				     event->hardware_keycode,
-				     NULL,
-				     &keyvals, &n_vals);
+  gdk_keymap_get_entries_for_keycode (keymap,
+				      event->hardware_keycode,
+				      NULL,
+				      &keyvals, &n_vals);
 
   keyval = 0;
   i = 0;

@@ -409,36 +409,6 @@ gtk_viewport_get_shadow_type (GtkViewport *viewport)
 }
 
 static void
-gtk_viewport_map (GtkWidget *widget)
-{
-  GtkBin *bin;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_VIEWPORT (widget));
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-  bin = GTK_BIN (widget);
-
-  if (bin->child &&
-      GTK_WIDGET_VISIBLE (bin->child) &&
-      !GTK_WIDGET_MAPPED (bin->child))
-    gtk_widget_map (bin->child);
-
-  gdk_window_show (widget->window);
-}
-
-static void
-gtk_viewport_unmap (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_VIEWPORT (widget));
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-  
-  gdk_window_hide (widget->window);
-}
-
-static void
 gtk_viewport_realize (GtkWidget *widget)
 {
   GtkBin *bin;

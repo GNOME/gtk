@@ -700,6 +700,7 @@ gtk_old_editable_selection_received  (GtkWidget         *widget,
 				      guint              time)
 {
   GtkOldEditable *old_editable = GTK_OLD_EDITABLE (widget);
+
   gchar *text = gtk_selection_data_get_text (selection_data);
 
   if (!text)
@@ -747,6 +748,9 @@ gtk_old_editable_claim_selection (GtkOldEditable *old_editable,
 				  gboolean        claim, 
 				  guint32         time)
 {
+  GtkWidget *widget = GTK_WIDGET (old_editable);
+  GdkDisplay *display = gtk_widget_get_display (widget);
+  
   g_return_if_fail (GTK_IS_OLD_EDITABLE (old_editable));
   g_return_if_fail (GTK_WIDGET_REALIZED (old_editable));
 
@@ -754,15 +758,14 @@ gtk_old_editable_claim_selection (GtkOldEditable *old_editable,
   
   if (claim)
     {
-      if (gtk_selection_owner_set_for_display (gtk_widget_get_display(old_editable),
-					       GTK_WIDGET (old_editable),
+      if (gtk_selection_owner_set_for_display (display, widget,
 					       GDK_SELECTION_PRIMARY, time))
 	old_editable->has_selection = TRUE;
     }
   else
     {
-      if (gdk_selection_owner_get_for_display (gtk_widget_get_display(old_editable),GDK_SELECTION_PRIMARY) == GTK_WIDGET (old_editable)->window)
-	gtk_selection_owner_set_for_display (gtk_widget_get_display(old_editable), 
+      if (gdk_selection_owner_get_for_display (display, GDK_SELECTION_PRIMARY) == widget->window)
+	gtk_selection_owner_set_for_display (display,
 					     NULL,
 					     GDK_SELECTION_PRIMARY, time);
     }
@@ -831,9 +834,9 @@ gtk_old_editable_real_copy_clipboard (GtkOldEditable *old_editable)
 
       if (text)
 	{
-	  gtk_clipboard_set_text (gtk_clipboard_get_for_display (gtk_widget_get_display(old_editable), GDK_NONE),
-
-				  text, -1);
+	  GtkClipboard *clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (old_editable)), GDK_NONE);
+	  
+	  gtk_clipboard_set_text (clipboard, text, -1);
 	  g_free (text);
 	}
     }
@@ -842,10 +845,10 @@ gtk_old_editable_real_copy_clipboard (GtkOldEditable *old_editable)
 static void
 gtk_old_editable_real_paste_clipboard (GtkOldEditable *old_editable)
 {
-  g_object_ref (G_OBJECT (old_editable));
-  gtk_clipboard_request_text (gtk_clipboard_get_for_display (gtk_widget_get_display(old_editable), GDK_NONE),
+  GtkClipboard *clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (old_editable)), GDK_NONE);
 
-			      old_editable_text_received_cb, old_editable);
+  g_object_ref (G_OBJECT (old_editable));
+  gtk_clipboard_request_text (clipboard, old_editable_text_received_cb, old_editable);
 }
 
 void

@@ -57,13 +57,11 @@ typedef struct _GtkImageAnimationData GtkImageAnimationData;
 struct _GtkImagePixmapData
 {
   GdkPixmap *pixmap;
-  GdkBitmap *mask;
 };
 
 struct _GtkImageImageData
 {
   GdkImage *image;
-  GdkBitmap *mask;
 };
 
 struct _GtkImagePixbufData
@@ -74,13 +72,11 @@ struct _GtkImagePixbufData
 struct _GtkImageStockData
 {
   gchar *stock_id;
-  GtkIconSize size;
 };
 
 struct _GtkImageIconSetData
 {
   GtkIconSet *icon_set;
-  GtkIconSize size;
 };
 
 struct _GtkImageAnimationData
@@ -116,6 +112,12 @@ struct _GtkImage
     GtkImageIconSetData icon_set;
     GtkImageAnimationData anim;
   } data;
+
+  /* Only used with GTK_IMAGE_PIXMAP, GTK_IMAGE_IMAGE */
+  GdkBitmap *mask;
+
+  /* Only used with GTK_IMAGE_STOCK, GTK_IMAGE_ICON_SET */
+  GtkIconSize icon_size;
 };
 
 struct _GtkImageClass
@@ -125,6 +127,7 @@ struct _GtkImageClass
 
 GtkType    gtk_image_get_type (void) G_GNUC_CONST;
 
+GtkWidget* gtk_image_new                (void);
 GtkWidget* gtk_image_new_from_pixmap    (GdkPixmap       *pixmap,
                                          GdkBitmap       *mask);
 GtkWidget* gtk_image_new_from_image     (GdkImage        *image,
@@ -177,8 +180,6 @@ GdkPixbufAnimation* gtk_image_get_animation (GtkImage *image);
 #ifndef GTK_DISABLE_DEPRECATED
 /* These three are deprecated */
 
-GtkWidget* gtk_image_new      (GdkImage   *val,
-			       GdkBitmap  *mask);
 void       gtk_image_set      (GtkImage   *image,
 			       GdkImage   *val,
 			       GdkBitmap  *mask);

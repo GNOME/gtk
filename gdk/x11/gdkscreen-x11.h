@@ -25,20 +25,17 @@
 #define __GDK_SCREEN_X11_H__
 
 
-#include "gdkscreen.h"
+#include <gdk/gdkscreen.h>
+#include <gdk/gdkvisual.h>
 #include <X11/X.h>
 #include <X11/Xlib.h>
-#include "gdkx.h"
-#include "gdkdisplaymgr-x11.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif				/* __cplusplus */
+G_BEGIN_DECLS
+  
+typedef struct _GdkScreenImplX11 GdkScreenImplX11;
+typedef struct _GdkScreenImplX11Class GdkScreenImplX11Class;
 
-  typedef struct _GdkScreenImplX11 GdkScreenImplX11;
-  typedef struct _GdkScreenImplX11Class GdkScreenImplX11Class;
-
+typedef struct _GdkVisualPrivate       GdkVisualPrivate;
 
 #define GDK_TYPE_SCREEN_IMPL_X11              (gdk_X11_screen_impl_get_type ())
 #define GDK_SCREEN_IMPL_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SCREEN_IMPL_X11, GdkScreenImplX11))
@@ -49,47 +46,46 @@ extern "C"
 
 
 
-  struct _GdkScreenImplX11
-  {
-    GdkScreen parent_instance;
-    GdkDisplay *display;
-    Display *xdisplay;
-    Screen *xscreen;
-    gint scr_num;
-    Window xroot_window;
-    Window leader_window;
-    GdkWindow *root_window;
-    Window wmspec_check_window;
-    /* Visual Part */
-    gboolean visual_initialised;
-    GdkVisualPrivate *system_visual;
-    GdkVisualPrivate **visuals;
-    gint nvisuals;
-    gint available_depths[7];
-    gint navailable_depths;
-    GdkVisualType available_types[6];
-    gint navailable_types;
-    GHashTable *visual_hash;
-    /* Colormap Part */
-    gboolean colormap_initialised;
-    GdkColormap *default_colormap;
-  };
+struct _GdkScreenImplX11
+{
+  GdkScreen parent_instance;
+  GdkDisplay *display;
+  Display *xdisplay;
+  Screen *xscreen;
+  gint scr_num;
+  Window xroot_window;
+  Window leader_window;
+  GdkWindow *root_window;
+  Window wmspec_check_window;
+  /* Visual Part */
+  gboolean visual_initialised;
+  GdkVisualPrivate *system_visual;
+  GdkVisualPrivate **visuals;
+  gint nvisuals;
+  gint available_depths[7];
+  gint navailable_depths;
+  GdkVisualType available_types[6];
+  gint navailable_types;
+  GHashTable *visual_hash;
+  /* Colormap Part */
+  gboolean colormap_initialised;
+  GdkColormap *default_colormap;
+};
+  
+struct _GdkScreenImplX11Class
+{
+  GdkScreenClass parent_class;
+};
 
-  struct _GdkScreenImplX11Class
-  {
-    GdkScreenClass parent_class;
-  };
 
-
-  GType gdk_X11_screen_impl_get_type ();
+GType gdk_X11_screen_impl_get_type ();
 
 
 #define DEFAULT_X_SCREEN    GDK_SCREEN_IMPL_X11(gdk_get_default_screen())->xscreen
 #define DEFAULT_GDK_SCREEN_IMPL_X11_FOR_DISPLAY(display)  GDK_SCREEN_IMPL_X11(GDK_DISPLAY_GET_CLASS(display)->get_default_screen(display))
 #define GDK_SCREEN_XDISPLAY(scr)  (GDK_SCREEN_IMPL_X11(scr)->xdisplay)
 #define GDK_SCREEN_XROOTWIN(scr)  (GDK_SCREEN_IMPL_X11(scr)->xroot_window)
-#ifdef __cplusplus
-}
-#endif				/* __cplusplus */
+
+G_END_DECLS
 
 #endif				/* _GDK_SCREEN_X11_H__ */

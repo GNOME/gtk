@@ -24,15 +24,11 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#if HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <string.h>
 
-#include "gdk.h"          /* For gdk_flush () */
+#include "gdk.h"          /* For gdk_flush() */
 #include "gdkdnd.h"
 #include "gdkproperty.h"
 #include "gdkinternals.h"
@@ -60,7 +56,7 @@ typedef struct {
   GList *children;
   GHashTable *child_hash;
   guint old_event_mask;
-  GdkDisplay *display;
+  GdkScreen *screen;
 } GdkWindowCache;
 
 /* Structure that holds information about a drag in progress.
@@ -91,14 +87,12 @@ struct _GdkDragContextPrivateX11 {
 };
 
 #define PRIVATE_DATA(context) ((GdkDragContextPrivateX11 *) GDK_DRAG_CONTEXT (context)->windowing_data)
-/* get the X impl of the Display dnd default screen */
-#define GDK_DISPLAY_DND_SCREEN(dpy) (GDK_SCREEN_IMPL_X11(GDK_DISPLAY_IMPL_X11(dpy)->dnd_default_screen))
 
 /* Forward declarations */
 
 static void gdk_window_cache_destroy (GdkWindowCache *cache);
 
-static void motif_read_target_table_for_display (GdkDisplay *dpy);
+static void motif_read_target_table (GdkDisplay *display);
 
 static GdkFilterReturn motif_dnd_filter (GdkXEvent *xev,
 					 GdkEvent  *event,
@@ -137,7 +131,7 @@ static void gdk_drag_context_class_init (GdkDragContextClass *klass);
 static void gdk_drag_context_finalize   (GObject              *object);
 
 static gpointer parent_class = NULL;
-static GList  * contexts;
+static GList *contexts;
 
 GType
 gdk_drag_context_get_type (void)
@@ -414,38 +408,40 @@ gdk_window_cache_filter (GdkXEvent *xev,
 }
 
 static GdkWindowCache *
-gdk_window_cache_new_for_display (GdkDisplay *dpy){
+gdk_window_cache_new (GdkScreen *screen)
+{
   XWindowAttributes xwa;
   Window root, parent, *children;
   unsigned int nchildren;
   int i;
   
   gint old_warnings = gdk_error_warnings;
-  GdkScreenImplX11 *scr_impl = GDK_DISPLAY_DND_SCREEN (dpy);
+  Display *xdisplay = GDK_SCREEN_XDISPLAY (screen);
+  GdkWindow *root_window = gdk_screen_get_root_window (screen);
   
   GdkWindowCache *result = g_new (GdkWindowCache, 1);
 
   result->children = NULL;
   result->child_hash = g_hash_table_new (g_direct_hash, NULL);
-  result->display = dpy;
+  result->screen = screen;
 
-  XGetWindowAttributes (scr_impl->xdisplay,scr_impl->xroot_window,&xwa);
+  XGetWindowAttributes (xdisplay, GDK_WINDOW_XWINDOW (root_window), &xwa);
   result->old_event_mask = xwa.your_event_mask;
-  XSelectInput (scr_impl->xdisplay,scr_impl->xroot_window,
+  XSelectInput (xdisplay, GDK_WINDOW_XWINDOW (root_window),
 		result->old_event_mask | SubstructureNotifyMask);
-  gdk_window_add_filter (scr_impl->root_window, 
+  gdk_window_add_filter (gdk_screen_get_root_window (screen),
 			 gdk_window_cache_filter, result);
   
   gdk_error_code = 0;
   gdk_error_warnings = 0;
 
-  if (XQueryTree(scr_impl->xdisplay,scr_impl->xroot_window, 
-		 &root, &parent, &children, &nchildren) == 0)
+  if (XQueryTree (xdisplay, GDK_WINDOW_XWINDOW (root_window), 
+		  &root, &parent, &children, &nchildren) == 0)
     return result;
   
   for (i = 0; i < nchildren ; i++)
     {
-      XGetWindowAttributes (scr_impl->xdisplay, children[i], &xwa);
+      XGetWindowAttributes (xdisplay, children[i], &xwa);
 
       gdk_window_cache_add (result, children[i],
 			    xwa.x, xwa.y, xwa.width, xwa.height,
@@ -471,10 +467,12 @@ gdk_window_cache_new_for_display (GdkDisplay *dpy){
 static void
 gdk_window_cache_destroy (GdkWindowCache *cache)
 {
-  XSelectInput (GDK_DISPLAY_DND_SCREEN(cache->display)->xdisplay,
-		GDK_DISPLAY_DND_SCREEN(cache->display)->xroot_window, cache->old_event_mask);
-  gdk_window_remove_filter (GDK_DISPLAY_DND_SCREEN(cache->display)->root_window, 
-			    gdk_window_cache_filter, cache);
+  GdkWindow *root_window = gdk_screen_get_root_window (cache->screen);
+  
+  XSelectInput (GDK_WINDOW_XDISPLAY (root_window), 
+		GDK_WINDOW_XWINDOW (root_window),
+		cache->old_event_mask);
+  gdk_window_remove_filter (root_window, gdk_window_cache_filter, cache);
 
   g_list_foreach (cache->children, (GFunc)g_free, NULL);
   g_list_free (cache->children);
@@ -484,10 +482,11 @@ gdk_window_cache_destroy (GdkWindowCache *cache)
 }
 
 static Window
-get_client_window_at_coords_recurse_for_display (Window  win,
-						 GdkDisplay *dpy,
-						 gint    x,
-						 gint    y){
+get_client_window_at_coords_recurse (GdkDisplay *display,
+				     Window      win,
+				     gint        x,
+				     gint        y)
+{
   Window root, tmp_parent, *children;
   unsigned int nchildren;
   int i;
@@ -497,9 +496,9 @@ get_client_window_at_coords_recurse_for_display (Window  win,
   unsigned long nitems, after;
   unsigned char *data;
   
-  Atom wm_state_atom = gdk_x11_get_real_atom_by_name (dpy, "WM_STATE");
+  Atom wm_state_atom = gdk_x11_get_real_atom_by_name (display, "WM_STATE");
     
-  XGetWindowProperty (GDK_DISPLAY_XDISPLAY(dpy), win, 
+  XGetWindowProperty (GDK_DISPLAY_XDISPLAY(display), win, 
 		      wm_state_atom, 0, 0, False, AnyPropertyType,
 		      &type, &format, &nitems, &after, &data);
   
@@ -529,7 +528,7 @@ get_client_window_at_coords_recurse_for_display (Window  win,
     }
   
 #else
-  if (XQueryTree(GDK_DISPLAY_XDISPLAY(dpy), win,
+  if (XQueryTree(GDK_DISPLAY_XDISPLAY (display), win,
 		 &root, &tmp_parent, &children, &nchildren) == 0)
     return 0;
 
@@ -539,7 +538,7 @@ get_client_window_at_coords_recurse_for_display (Window  win,
 	{
 	  XWindowAttributes xwa;
 	  
-	  XGetWindowAttributes (GDK_DISPLAY_XDISPLAY(dpy), children[i], &xwa);
+	  XGetWindowAttributes (GDK_DISPLAY_XDISPLAY (display), children[i], &xwa);
 	  
 	  if (gdk_error_code)
 	    gdk_error_code = 0;
@@ -560,11 +559,10 @@ get_client_window_at_coords_recurse_for_display (Window  win,
 #endif  
 
   if (child)
-    return get_client_window_at_coords_recurse_for_display (child, dpy, x, y);
+    return get_client_window_at_coords_recurse (display, child, x, y);
   else
     return None;
 }
-
 
 static Window 
 get_client_window_at_coords (GdkWindowCache *cache,
@@ -591,8 +589,8 @@ get_client_window_at_coords (GdkWindowCache *cache,
 	  if ((x_root >= child->x) && (x_root < child->x + child->width) &&
 	      (y_root >= child->y) && (y_root < child->y + child->height))
 	    {
-	      retval = get_client_window_at_coords_recurse_for_display (child->xid,
-							    cache->display,
+	      retval = get_client_window_at_coords_recurse (gdk_screen_get_display (cache->screen),
+							    child->xid,
 							    x_root - child->x, 
 							    y_root - child->y);
 	      if (!retval)
@@ -607,7 +605,7 @@ get_client_window_at_coords (GdkWindowCache *cache,
   if (retval)
     return retval;
   else
-    return GDK_DISPLAY_DND_SCREEN (cache->display)->xroot_window;
+    return GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (cache->screen));
 }
 
 #if 0
@@ -770,14 +768,15 @@ static gchar local_byte_order = '\0';
 
 #ifdef G_ENABLE_DEBUG
 static void
-print_target_list (GList *targets, GdkDisplay *display)
+print_target_list (GdkDisplay *display,
+		   GList      *targets)
 {
   while (targets)
-  {  
-   gchar *name = gdk_atom_name ( GPOINTER_TO_INT (targets->data));
-   g_message ("\t%d %s", GPOINTER_TO_INT (targets->data), name);
-   g_free (name);
-   targets = targets->next;
+    {  
+      gchar *name = gdk_atom_name ( GPOINTER_TO_INT (targets->data));
+      g_message ("\t%d %s", GPOINTER_TO_INT (targets->data), name);
+      g_free (name);
+      targets = targets->next;
   }
 }
 #endif /* G_ENABLE_DEBUG */
@@ -862,36 +861,36 @@ motif_drag_window_filter (GdkXEvent *xevent,
 			  gpointer data)
 {
   XEvent *xev = (XEvent *)xevent;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (event->any.window)); 
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (event->any.window)); 
 
   switch (xev->xany.type)
     {
     case DestroyNotify:
-      dpy_impl->motif_drag_window = None;
-      dpy_impl->motif_drag_gdk_window = NULL;
+      display_impl->motif_drag_window = None;
+      display_impl->motif_drag_gdk_window = NULL;
       break;
     case PropertyNotify:
-      if (dpy_impl->motif_target_lists &&
-	  dpy_impl->motif_drag_targets_atom &&
-	  (xev->xproperty.atom == dpy_impl->motif_drag_targets_atom))
-	motif_read_target_table_for_display(GDK_WINDOW_DISPLAY(event->any.window));
+      if (display_impl->motif_target_lists &&
+	  display_impl->motif_drag_targets_atom &&
+	  (xev->xproperty.atom == display_impl->motif_drag_targets_atom))
+	motif_read_target_table (GDK_WINDOW_DISPLAY (event->any.window));
       break;
     }
   return GDK_FILTER_REMOVE;
 }
 
 static Window
-motif_lookup_drag_window_for_display (GdkDisplay *dpy){
+motif_lookup_drag_window (GdkDisplay *display,
+			  Display    *lookup_xdisplay)
+{
   Window retval = None;
   gulong bytes_after, nitems;
   GdkAtom type;
   gint format;
   guchar *data;
-  GdkScreenImplX11 *scr_impl = GDK_DISPLAY_DND_SCREEN (dpy);
 
-  XGetWindowProperty (scr_impl->xdisplay,
-		      scr_impl->xroot_window, 
-		      GDK_DISPLAY_IMPL_X11(dpy)->motif_drag_window_atom,
+  XGetWindowProperty (lookup_xdisplay, DefaultRootWindow (lookup_xdisplay),
+		      GDK_DISPLAY_IMPL_X11 (display)->motif_drag_window_atom,
 		      0, 1, FALSE,
 		      XA_WINDOW, &type, &format, &nitems, &bytes_after,
 		      &data);
@@ -900,8 +899,8 @@ motif_lookup_drag_window_for_display (GdkDisplay *dpy){
     {
       retval = *(Window *)data;
       GDK_NOTE (DND, 
-	       g_message ("Found drag window %#lx\n",
-		       GDK_DISPLAY_IMPL_X11(dpy)->motif_drag_window));
+	       g_message ("Found drag window %#lx\n", 
+			  GDK_DISPLAY_IMPL_X11 (display)->motif_drag_window));
     }
 
   if (type != None)
@@ -909,97 +908,100 @@ motif_lookup_drag_window_for_display (GdkDisplay *dpy){
 
   return retval;
 }
-/* Finds the window where global Motif drag information is stored. */
 
+/* Finds the window where global Motif drag information is stored.
+ * If it doesn't exist and 'create' is TRUE, create one.
+ */
 static Window 
-motif_find_drag_window_for_display (gboolean create, GdkDisplay *dpy)
+motif_find_drag_window (GdkDisplay *display,
+			gboolean    create)
 {
-  GdkScreenImplX11 * scr_impl = GDK_DISPLAY_DND_SCREEN (dpy);
-  GdkDisplayImplX11 * dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
-  if (!dpy_impl->motif_drag_window)
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
+  
+  if (!display_impl->motif_drag_window)
     {
-      if (!dpy_impl->motif_drag_window_atom)
-	dpy_impl->motif_drag_window_atom = 
-		gdk_x11_get_real_atom_by_name (dpy, "_MOTIF_DRAG_WINDOW");
+      if (!display_impl->motif_drag_window_atom)
+	display_impl->motif_drag_window_atom = 
+		gdk_x11_get_real_atom_by_name (display, "_MOTIF_DRAG_WINDOW");
 
-
-      dpy_impl->motif_drag_window = motif_lookup_drag_window_for_display (dpy);
+      display_impl->motif_drag_window = motif_lookup_drag_window (display, display_impl->xdisplay);
       
-      if (!dpy_impl->motif_drag_window && create)
+      if (!display_impl->motif_drag_window && create)
 	{
 	  /* Create a persistant window. (Copied from LessTif) */
 	  
-	  Display *display;
+	  Display *persistant_xdisplay;
 	  XSetWindowAttributes attr;
-	  display = XOpenDisplay (gdk_x11_display_impl_get_display_name(dpy));
-	  XSetCloseDownMode (dpy_impl->xdisplay, RetainPermanent);
+	  persistant_xdisplay = XOpenDisplay (gdk_display_get_name (display));
+	  XSetCloseDownMode (persistant_xdisplay, RetainPermanent);
 
-	  XGrabServer (dpy_impl->xdisplay);
+	  XGrabServer (persistant_xdisplay);
 	  
-	  dpy_impl->motif_drag_window = motif_lookup_drag_window_for_display (dpy);
+	  display_impl->motif_drag_window = motif_lookup_drag_window (display, persistant_xdisplay);
 
-	  if (!dpy_impl->motif_drag_window)
+	  if (!display_impl->motif_drag_window)
 	    {
 	      attr.override_redirect = True;
 	      attr.event_mask = PropertyChangeMask;
 	      
-	       dpy_impl->motif_drag_window = 
-		XCreateWindow( dpy_impl->xdisplay, scr_impl->xroot_window,
+	       display_impl->motif_drag_window = 
+		XCreateWindow (persistant_xdisplay, DefaultRootWindow (persistant_xdisplay),
 			      -100, -100, 10, 10, 0, 0,
 			      InputOnly, CopyFromParent,
 			      (CWOverrideRedirect | CWEventMask), &attr);
 	      
 	      GDK_NOTE (DND,
-			g_message ("Created drag window %#lx\n", dpy_impl->motif_drag_window));
+			g_message ("Created drag window %#lx\n", display_impl->motif_drag_window));
 	      
-	      XChangeProperty (dpy_impl->xdisplay, scr_impl->xroot_window,
-			       dpy_impl->motif_drag_window_atom, XA_WINDOW,
+	      XChangeProperty (persistant_xdisplay, DefaultRootWindow (persistant_xdisplay),
+			       display_impl->motif_drag_window_atom, XA_WINDOW,
 			       32, PropModeReplace,
-			       (guchar *)&dpy_impl->motif_drag_window_atom, 1);
+			       (guchar *)&display_impl->motif_drag_window_atom, 1);
 
 	    }
-	  XUngrabServer (dpy_impl->xdisplay);
-	  XCloseDisplay (dpy_impl->xdisplay);
+	  XUngrabServer (persistant_xdisplay);
+	  XCloseDisplay (persistant_xdisplay);
 	}
 
       /* There is a miniscule race condition here if the drag window
        * gets destroyed exactly now.
        */
-      if (dpy_impl->motif_drag_window)
+      if (display_impl->motif_drag_window)
 	{
-	  dpy_impl->motif_drag_gdk_window = 
-		  gdk_window_foreign_new_for_display (dpy, dpy_impl->motif_drag_window);
-	  gdk_window_add_filter (dpy_impl->motif_drag_gdk_window,
+	  display_impl->motif_drag_gdk_window = gdk_window_foreign_new_for_display (display,
+										    display_impl->motif_drag_window);
+	  gdk_window_add_filter (display_impl->motif_drag_gdk_window,
 				 motif_drag_window_filter,
 				 NULL);
 	}
     }
 
-  return dpy_impl->motif_drag_window;
+  return display_impl->motif_drag_window;
 }
 
 static void 
-motif_read_target_table_for_display (GdkDisplay *dpy)
+motif_read_target_table (GdkDisplay *display)
 {
   gulong bytes_after, nitems;
   GdkAtom type;
   gint format;
   gint i, j;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
-  if (!dpy_impl->motif_drag_targets_atom)
-   dpy_impl->motif_drag_targets_atom = gdk_x11_get_real_atom_by_name (dpy, "_MOTIF_DRAG_TARGETS");
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
+  
+  if (!display_impl->motif_drag_targets_atom)
+    display_impl->motif_drag_targets_atom = gdk_x11_get_real_atom_by_name (display, "_MOTIF_DRAG_TARGETS");
 
-  if (dpy_impl->motif_target_lists)
+  if (display_impl->motif_target_lists)
     {
-      for (i=0; i<dpy_impl->motif_n_target_lists; i++)
-	g_list_free (dpy_impl->motif_target_lists[i]);
+      for (i=0; i<display_impl->motif_n_target_lists; i++)
+	g_list_free (display_impl->motif_target_lists[i]);
       
-      g_free (dpy_impl->motif_target_lists);
-      dpy_impl->motif_target_lists = NULL;
-      dpy_impl->motif_n_target_lists = 0;
+      g_free (display_impl->motif_target_lists);
+      display_impl->motif_target_lists = NULL;
+      display_impl->motif_n_target_lists = 0;
     }
 
-  if (motif_find_drag_window_for_display (FALSE, dpy))
+  if (motif_find_drag_window (display, FALSE))
     {
       MotifTargetTableHeader *header = NULL;
       guchar *target_bytes = NULL;
@@ -1007,10 +1009,10 @@ motif_read_target_table_for_display (GdkDisplay *dpy)
       gboolean success = FALSE;
 
       gdk_error_trap_push ();
-      XGetWindowProperty (dpy_impl->xdisplay,dpy_impl->motif_drag_window, 
-			  dpy_impl->motif_drag_targets_atom,
+      XGetWindowProperty (display_impl->xdisplay, display_impl->motif_drag_window, 
+			  display_impl->motif_drag_targets_atom,
 			  0, (sizeof(MotifTargetTableHeader)+3)/4, FALSE,
-			  dpy_impl->motif_drag_targets_atom, 
+			  display_impl->motif_drag_targets_atom, 
 			  &type, &format, &nitems, &bytes_after,
 			  (guchar **)&header);
 
@@ -1021,20 +1023,20 @@ motif_read_target_table_for_display (GdkDisplay *dpy)
       header->total_size = card32_to_host (header->total_size, header->byte_order);
 
       gdk_error_trap_push ();
-      XGetWindowProperty (dpy_impl->xdisplay, dpy_impl->motif_drag_window, 
-		          dpy_impl->motif_drag_targets_atom,
+      XGetWindowProperty (display_impl->xdisplay, display_impl->motif_drag_window, 
+		          display_impl->motif_drag_targets_atom,
 			  (sizeof(MotifTargetTableHeader)+3)/4, 
 			  (header->total_size + 3)/4 - (sizeof(MotifTargetTableHeader) + 3)/4,
 			  FALSE,
-			  dpy_impl->motif_drag_targets_atom, &type, &format, &nitems, 
+			  display_impl->motif_drag_targets_atom, &type, &format, &nitems, 
 			  &bytes_after, &target_bytes);
       
       if (gdk_error_trap_pop () || (format != 8) || (bytes_after != 0) || 
 	  (nitems != header->total_size - sizeof(MotifTargetTableHeader)))
 	  goto error;
 
-      dpy_impl->motif_n_target_lists = header->n_lists;
-      dpy_impl->motif_target_lists = g_new0 (GList *, dpy_impl->motif_n_target_lists);
+      display_impl->motif_n_target_lists = header->n_lists;
+      display_impl->motif_target_lists = g_new0 (GList *, display_impl->motif_n_target_lists);
 
       p = target_bytes;
       for (i=0; i<header->n_lists; i++)
@@ -1058,12 +1060,12 @@ motif_read_target_table_for_display (GdkDisplay *dpy)
 	    goto error;
 
 	  for (j=0; j<n_targets; j++)
-	    dpy_impl->motif_target_lists[i] = 
-	      g_list_prepend (dpy_impl->motif_target_lists[i],
+	    display_impl->motif_target_lists[i] = 
+	      g_list_prepend (display_impl->motif_target_lists[i],
 			      GUINT_TO_POINTER (card32_to_host (targets[j], 
 								header->byte_order)));
 	  g_free (targets);
-	  dpy_impl->motif_target_lists[i] = g_list_reverse (dpy_impl->motif_target_lists[i]);
+	  display_impl->motif_target_lists[i] = g_list_reverse (display_impl->motif_target_lists[i]);
 	}
 
       success = TRUE;
@@ -1077,18 +1079,17 @@ motif_read_target_table_for_display (GdkDisplay *dpy)
 
       if (!success)
 	{
-	  if (dpy_impl->motif_target_lists)
+	  if (display_impl->motif_target_lists)
 	    {
-	      g_free (dpy_impl->motif_target_lists);
-	      dpy_impl->motif_target_lists = NULL;
-	      dpy_impl->motif_n_target_lists = 0;
+	      g_free (display_impl->motif_target_lists);
+	      display_impl->motif_target_lists = NULL;
+	      display_impl->motif_n_target_lists = 0;
 	    }
 	  g_warning ("Error reading Motif target table\n");
 	}
     }
 }
 	
-
 static gint
 targets_sort_func (gconstpointer a, gconstpointer b)
 {
@@ -1098,15 +1099,16 @@ targets_sort_func (gconstpointer a, gconstpointer b)
 
 /* Check if given (sorted) list is in the targets table */
 static gboolean
-motif_target_table_check_for_display (GList *sorted, GdkDisplay *dpy)
+motif_target_table_check (GdkDisplay *display,
+			  GList      *sorted)
 {
   GList *tmp_list1, *tmp_list2;
   gint i;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
 
-  for (i=0; i<dpy_impl->motif_n_target_lists; i++)
+  for (i=0; i<display_impl->motif_n_target_lists; i++)
     {
-      tmp_list1 = dpy_impl->motif_target_lists[i];
+      tmp_list1 = display_impl->motif_target_lists[i];
       tmp_list2 = sorted;
       
       while (tmp_list1 && tmp_list2)
@@ -1124,15 +1126,15 @@ motif_target_table_check_for_display (GList *sorted, GdkDisplay *dpy)
   return -1;
 }
 
-
 static gint
-motif_add_to_target_table_for_display (GList *targets, GdkDisplay *dpy)
+motif_add_to_target_table (GdkDisplay *display,
+			   GList      *targets)
 {
   GList *sorted = NULL;
   gint index = -1;
   gint i;
   GList *tmp_list;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
   
   /* make a sorted copy of the list */
   
@@ -1144,8 +1146,8 @@ motif_add_to_target_table_for_display (GList *targets, GdkDisplay *dpy)
 
   /* First check if it is their already */
 
-  if (dpy_impl->motif_target_lists)
-    index = motif_target_table_check_for_display (sorted, dpy);
+  if (display_impl->motif_target_lists)
+    index = motif_target_table_check (display, sorted);
 
   /* We need to grab the server while doing this, to ensure
    * atomiticity. Ugh
@@ -1157,15 +1159,15 @@ motif_add_to_target_table_for_display (GList *targets, GdkDisplay *dpy)
        * server, since we can't open a new connection after we
        * grab the server. 
        */
-      motif_find_drag_window_for_display (TRUE, dpy);
+      motif_find_drag_window (display, TRUE);
 
-      XGrabServer (dpy_impl->xdisplay);
-      motif_read_target_table_for_display (dpy);
+      gdk_x11_grab_server (display);
+      motif_read_target_table (display);
     
       /* Check again, in case it was added in the meantime */
       
-      if (dpy_impl->motif_target_lists)
-	index =  motif_target_table_check_for_display (sorted, dpy);
+      if (display_impl->motif_target_lists)
+	index =  motif_target_table_check (display, sorted);
 
       if (index < 0)
 	{
@@ -1175,25 +1177,24 @@ motif_add_to_target_table_for_display (GList *targets, GdkDisplay *dpy)
 	  guint16 *p16;
 	  MotifTargetTableHeader *header;
 	  
-	  if (!dpy_impl->motif_target_lists)
+	  if (!display_impl->motif_target_lists)
 	    {
-	      dpy_impl->motif_target_lists = g_new (GList *, 1);
-	      dpy_impl->motif_n_target_lists = 1;
+	      display_impl->motif_target_lists = g_new (GList *, 1);
+	      display_impl->motif_n_target_lists = 1;
 	    }
 	  else
 	    {
-	      dpy_impl->motif_n_target_lists++;
-	      dpy_impl->motif_target_lists = g_realloc (dpy_impl->motif_target_lists,
-					  sizeof(GList *) * dpy_impl->motif_n_target_lists);
+	      display_impl->motif_n_target_lists++;
+	      display_impl->motif_target_lists = g_realloc (display_impl->motif_target_lists,
+							    sizeof(GList *) * display_impl->motif_n_target_lists);
 	    }
-	  dpy_impl->motif_target_lists[dpy_impl->motif_n_target_lists - 1] = sorted;
+	  display_impl->motif_target_lists[display_impl->motif_n_target_lists - 1] = sorted;
 	  sorted = NULL;
-	  index = dpy_impl->motif_n_target_lists - 1;
+	  index = display_impl->motif_n_target_lists - 1;
 
 	  total_size = sizeof (MotifTargetTableHeader);
-	  for (i = 0; i < dpy_impl->motif_n_target_lists ; i++)
-	    total_size += sizeof(guint16) + 
-		    sizeof(guint32) * g_list_length (dpy_impl->motif_target_lists[i]);
+	  for (i = 0; i < display_impl->motif_n_target_lists ; i++)
+	    total_size += sizeof(guint16) + sizeof(guint32) * g_list_length (display_impl->motif_target_lists[i]);
 
 	  data = g_malloc (total_size);
 
@@ -1202,16 +1203,16 @@ motif_add_to_target_table_for_display (GList *targets, GdkDisplay *dpy)
 
 	  header->byte_order = local_byte_order;
 	  header->protocol_version = 0;
-	  header->n_lists = dpy_impl->motif_n_target_lists;
+	  header->n_lists = display_impl->motif_n_target_lists;
 	  header->total_size = total_size;
 
-	  for (i = 0; i < dpy_impl->motif_n_target_lists ; i++)
+	  for (i = 0; i < display_impl->motif_n_target_lists ; i++)
 	    {
-	      guint16 n_targets = g_list_length (dpy_impl->motif_target_lists[i]);
+	      guint16 n_targets = g_list_length (display_impl->motif_target_lists[i]);
 	      guint32 *targets = g_new (guint32, n_targets);
 	      guint32 *p32 = targets;
 	      
-	      tmp_list = dpy_impl->motif_target_lists[i];
+	      tmp_list = display_impl->motif_target_lists[i];
 	      while (tmp_list)
 		{
 		  *p32 = GPOINTER_TO_UINT (tmp_list->data);
@@ -1230,13 +1231,13 @@ motif_add_to_target_table_for_display (GList *targets, GdkDisplay *dpy)
 	      g_free (targets);
 	    }
 
-	  XChangeProperty (dpy_impl->xdisplay, dpy_impl->motif_drag_window,
-			   dpy_impl->motif_drag_targets_atom,
-			   dpy_impl->motif_drag_targets_atom,
+	  XChangeProperty (display_impl->xdisplay, display_impl->motif_drag_window,
+			   display_impl->motif_drag_targets_atom,
+			   display_impl->motif_drag_targets_atom,
 			   8, PropModeReplace,
 			   data, total_size);
 	}
-      gdk_x11_ungrab_server (dpy_impl->xdisplay);
+      gdk_x11_ungrab_server (display);
     }
 
   g_list_free (sorted);
@@ -1315,23 +1316,22 @@ motif_set_targets (GdkDragContext *context)
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
   MotifDragInitiatorInfo info;
   gint i;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (private->window_cache->display);
-  Atom motif_drag_initiator_info = gdk_x11_get_real_atom_by_name (private->window_cache->display,
-								     "_MOTIF_DRAG_INITIATOR_INFO");
+  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
+  Atom motif_drag_initiator_info = gdk_x11_get_real_atom_by_name (display,
+								  "_MOTIF_DRAG_INITIATOR_INFO");
+  
   info.byte_order = local_byte_order;
   info.protocol_version = 0;
   
-  info.targets_index = motif_add_to_target_table_for_display (context->targets, 
-						private->window_cache->display);
+  info.targets_index = motif_add_to_target_table (display, context->targets);
 
   for (i=0; ; i++)
     {
       gchar buf[20];
-      g_snprintf (buf, 20, "_GDK_SELECTION_%d", i);
+      g_snprintf(buf, 20, "_GDK_SELECTION_%d", i);
       
-      private->motif_selection = gdk_x11_get_real_atom_by_name (private->window_cache->display, buf);
-
-      if (!XGetSelectionOwner (dpy_impl->xdisplay, private->motif_selection))
+      private->motif_selection = gdk_x11_get_real_atom_by_name (display, buf);
+      if (!XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), private->motif_selection))
 	break;
     }
 
@@ -1347,18 +1347,18 @@ motif_set_targets (GdkDragContext *context)
 }
 
 static guint32
-motif_check_dest_for_display (Window win, GdkDisplay *dpy)
+motif_check_dest (GdkDisplay *display,
+		  Window      win)
 {
   gboolean retval = FALSE;
   MotifDragReceiverInfo *info;
   Atom type = None;
   int format;
   unsigned long nitems, after;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
-  Atom motif_drag_receiver_info_atom = gdk_x11_get_real_atom_by_name (dpy, "_MOTIF_DRAG_RECEIVER_INFO");
+  Atom motif_drag_receiver_info_atom = gdk_x11_get_real_atom_by_name (display, "_MOTIF_DRAG_RECEIVER_INFO");
 
   gdk_error_trap_push ();
-  XGetWindowProperty (dpy_impl->xdisplay, win, 
+  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), win, 
 		      motif_drag_receiver_info_atom, 
 		      0, (sizeof(*info)+3)/4, False, AnyPropertyType,
 		      &type, &format, &nitems, &after, 
@@ -1399,7 +1399,7 @@ motif_send_enter (GdkDragContext  *context,
 
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = 
-	  gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY(context->dest_window), "_MOTIF_DRAG_AND_DROP_MESSAGE");
+	  gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY (context->dest_window), "_MOTIF_DRAG_AND_DROP_MESSAGE");
 
   xev.xclient.format = 8;
   xev.xclient.window = GDK_DRAWABLE_XID (context->dest_window);
@@ -1431,7 +1431,7 @@ motif_send_leave (GdkDragContext  *context,
 
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = 
-	  gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY(context->dest_window), "_MOTIF_DRAG_AND_DROP_MESSAGE");
+	  gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY (context->dest_window), "_MOTIF_DRAG_AND_DROP_MESSAGE");
 
   xev.xclient.format = 8;
   xev.xclient.window = GDK_DRAWABLE_XID (context->dest_window);
@@ -1464,7 +1464,7 @@ motif_send_motion (GdkDragContext  *context,
 
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = 
-	  gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY(context->dest_window), "_MOTIF_DRAG_AND_DROP_MESSAGE");
+	  gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY (context->dest_window), "_MOTIF_DRAG_AND_DROP_MESSAGE");
 
   xev.xclient.format = 8;
   xev.xclient.window = GDK_DRAWABLE_XID (context->dest_window);
@@ -1510,7 +1510,7 @@ motif_send_drop (GdkDragContext *context, guint32 time)
 
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = 
-	  gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY(context->dest_window), "_MOTIF_DRAG_AND_DROP_MESSAGE");
+	  gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY (context->dest_window), "_MOTIF_DRAG_AND_DROP_MESSAGE");
   xev.xclient.format = 8;
   xev.xclient.window = GDK_DRAWABLE_XID (context->dest_window);
   xev.xclient.display = GDK_DRAWABLE_XDISPLAY (context->dest_window);
@@ -1536,23 +1536,23 @@ motif_send_drop (GdkDragContext *context, guint32 time)
 /* Target Side */
 
 static gboolean
-motif_read_initiator_info_for_display (Window source_window, 
-				       GdkDisplay *dpy,
-				       Atom atom,
-				       GList  **targets,
-				       GdkAtom *selection)
+motif_read_initiator_info (Window      source_window, 
+			   GdkDisplay *display,
+			   Atom        atom,
+			   GList     **targets,
+			   GdkAtom    *selection)
 {
   GList *tmp_list;
   GdkAtom type;
   gint format;
   gulong nitems;
   gulong bytes_after;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
   MotifDragInitiatorInfo *initiator_info;
-  Atom motif_drag_initiator_info = gdk_x11_get_real_atom_by_name (dpy, "_MOTIF_DRAG_INITIATOR_INFO");
+  Atom motif_drag_initiator_info = gdk_x11_get_real_atom_by_name (display, "_MOTIF_DRAG_INITIATOR_INFO");
 
   gdk_error_trap_push ();
-  XGetWindowProperty (GDK_DISPLAY_XDISPLAY(dpy), source_window, atom,
+  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), source_window, atom,
 		      0, sizeof(*initiator_info), FALSE,
 		      motif_drag_initiator_info, 
 		      &type, &format, &nitems, &bytes_after,
@@ -1564,33 +1564,33 @@ motif_read_initiator_info_for_display (Window source_window,
       return FALSE;
     }
 
-  motif_read_target_table_for_display (dpy);
+  motif_read_target_table (display);
 
   initiator_info->targets_index = 
     card16_to_host (initiator_info->targets_index, initiator_info->byte_order);
   initiator_info->selection_atom = 
     card32_to_host (initiator_info->selection_atom, initiator_info->byte_order);
   
-  if (initiator_info->targets_index >= dpy_impl->motif_n_target_lists)
+  if (initiator_info->targets_index >= display_impl->motif_n_target_lists)
     {
       g_warning ("Invalid target index in TOP_LEVEL_ENTER MESSAGE");
       XFree (initiator_info);
       return GDK_FILTER_REMOVE;
     }
 
-  tmp_list = g_list_last (dpy_impl->motif_target_lists[initiator_info->targets_index]);
+  tmp_list = g_list_last (display_impl->motif_target_lists[initiator_info->targets_index]);
 
   *targets = NULL;
   while (tmp_list)
     {
-      GdkAtom virtual = gdk_x11_get_virtual_atom (dpy,  GPOINTER_TO_INT (tmp_list->data));
+      GdkAtom virtual = gdk_x11_get_virtual_atom (display,  GPOINTER_TO_INT (tmp_list->data));
       *targets = g_list_prepend (*targets, GINT_TO_POINTER (virtual));
       tmp_list = tmp_list->prev;
     }
 
 #ifdef G_ENABLE_DEBUG
   if (gdk_debug_flags & GDK_DEBUG_DND)
-    print_target_list (*targets, dpy);
+    print_target_list (display, *targets);
 #endif /* G_ENABLE_DEBUG */
 
   /* need to X atom as this is an motif internal function */
@@ -1609,17 +1609,17 @@ motif_drag_context_new (GdkWindow *dest_window,
 {
   GdkDragContext *new_context;
   GdkDragContextPrivateX11 *private;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (dest_window));
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (dest_window));
 
   /* FIXME, current_dest_drag really shouldn't be NULL'd
    * if we error below.
    */
-  if (dpy_impl->current_dest_drag != NULL)
+  if (display_impl->current_dest_drag != NULL)
     {
-      if (timestamp >= dpy_impl->current_dest_drag->start_time)
+      if (timestamp >= display_impl->current_dest_drag->start_time)
 	{
-	  gdk_drag_context_unref (dpy_impl->current_dest_drag);
-	  dpy_impl->current_dest_drag = NULL;
+	  gdk_drag_context_unref (display_impl->current_dest_drag);
+	  display_impl->current_dest_drag = NULL;
 	}
       else
 	return NULL;
@@ -1636,9 +1636,8 @@ motif_drag_context_new (GdkWindow *dest_window,
     gdk_window_ref (new_context->source_window);
   else
     {
-      new_context->source_window = 
-      	gdk_window_foreign_new_for_display (GDK_DRAWABLE_DISPLAY(dest_window),
-      					    source_window);
+      new_context->source_window = gdk_window_foreign_new_for_display (GDK_DRAWABLE_DISPLAY (dest_window),
+								       source_window);
       if (!new_context->source_window)
 	{
 	  gdk_drag_context_unref (new_context);
@@ -1652,11 +1651,11 @@ motif_drag_context_new (GdkWindow *dest_window,
   /* using dest_window to get the display as dest_window and source_window
    * are sharing the same display */
 
-  if (!motif_read_initiator_info_for_display(source_window,
-					     GDK_WINDOW_DISPLAY(dest_window),
-					     atom,
-					    &new_context->targets,
-					    &private->motif_selection))
+  if (!motif_read_initiator_info (source_window,
+				  GDK_WINDOW_DISPLAY(dest_window),
+				  atom,
+				  &new_context->targets,
+				  &private->motif_selection))
     {
       gdk_drag_context_unref (new_context);
       return NULL;
@@ -1680,6 +1679,7 @@ motif_top_level_enter (GdkEvent *event,
 		       guint32   atom)
 {
   GdkDragContext *new_context;
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
 
   GDK_NOTE(DND, g_message ("Motif DND top level enter: flags: %#4x time: %d source_widow: %#4x atom: %d",
 			   flags, timestamp, source_window, atom));
@@ -1692,7 +1692,7 @@ motif_top_level_enter (GdkEvent *event,
   event->dnd.context = new_context;
   gdk_drag_context_ref (new_context);
 
-  GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window))->current_dest_drag = new_context;
+  display_impl->current_dest_drag = new_context;
 
   return GDK_FILTER_TRANSLATE;
 }
@@ -1702,19 +1702,20 @@ motif_top_level_leave (GdkEvent *event,
 		       guint16   flags, 
 		       guint32   timestamp)
 {
-  GdkDisplayImplX11 * dpy_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+
   GDK_NOTE(DND, g_message ("Motif DND top level leave: flags: %#4x time: %d",
 			   flags, timestamp));
 
-  if ((dpy_impl->current_dest_drag != NULL) &&
-      (dpy_impl->current_dest_drag->protocol == GDK_DRAG_PROTO_MOTIF) &&
-      (timestamp >= dpy_impl->current_dest_drag->start_time))
+  if ((display_impl->current_dest_drag != NULL) &&
+      (display_impl->current_dest_drag->protocol == GDK_DRAG_PROTO_MOTIF) &&
+      (timestamp >= display_impl->current_dest_drag->start_time))
     {
       event->dnd.type = GDK_DRAG_LEAVE;
       /* Pass ownership of context to the event */
-      event->dnd.context = dpy_impl->current_dest_drag;
+      event->dnd.context = display_impl->current_dest_drag;
 
-      dpy_impl->current_dest_drag = NULL;
+      display_impl->current_dest_drag = NULL;
 
       return GDK_FILTER_TRANSLATE;
     }
@@ -1730,23 +1731,24 @@ motif_motion (GdkEvent *event,
 	      gint16    y_root)
 {
   GdkDragContextPrivateX11 *private;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+  
   GDK_NOTE(DND, g_message ("Motif DND motion: flags: %#4x time: %d (%d, %d)",
 			   flags, timestamp, x_root, y_root));
 
-  if ((dpy_impl->current_dest_drag != NULL) &&
-      (dpy_impl->current_dest_drag->protocol == GDK_DRAG_PROTO_MOTIF) &&
-      (timestamp >= dpy_impl->current_dest_drag->start_time))
+  if ((display_impl->current_dest_drag != NULL) &&
+      (display_impl->current_dest_drag->protocol == GDK_DRAG_PROTO_MOTIF) &&
+      (timestamp >= display_impl->current_dest_drag->start_time))
     {
-      private = PRIVATE_DATA (dpy_impl->current_dest_drag);
+      private = PRIVATE_DATA (display_impl->current_dest_drag);
 
       event->dnd.type = GDK_DRAG_MOTION;
-      event->dnd.context = dpy_impl->current_dest_drag;
-      gdk_drag_context_ref (dpy_impl->current_dest_drag);
+      event->dnd.context = display_impl->current_dest_drag;
+      gdk_drag_context_ref (display_impl->current_dest_drag);
 
       event->dnd.time = timestamp;
 
-      motif_dnd_translate_flags (dpy_impl->current_dest_drag, flags);
+      motif_dnd_translate_flags (display_impl->current_dest_drag, flags);
 
       event->dnd.x_root = x_root;
       event->dnd.y_root = y_root;
@@ -1768,23 +1770,23 @@ motif_operation_changed (GdkEvent *event,
 			 guint32   timestamp)
 {
   GdkDragContextPrivateX11 *private;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
   GDK_NOTE(DND, g_message ("Motif DND operation changed: flags: %#4x time: %d",
 			   flags, timestamp));
 
-  if ((dpy_impl->current_dest_drag != NULL) &&
-      (dpy_impl->current_dest_drag->protocol == GDK_DRAG_PROTO_MOTIF) &&
-      (timestamp >= dpy_impl->current_dest_drag->start_time))
+  if ((display_impl->current_dest_drag != NULL) &&
+      (display_impl->current_dest_drag->protocol == GDK_DRAG_PROTO_MOTIF) &&
+      (timestamp >= display_impl->current_dest_drag->start_time))
     {
       event->dnd.type = GDK_DRAG_MOTION;
       event->dnd.send_event = FALSE;
-      event->dnd.context = dpy_impl->current_dest_drag;
-      gdk_drag_context_ref (dpy_impl->current_dest_drag);
+      event->dnd.context = display_impl->current_dest_drag;
+      gdk_drag_context_ref (display_impl->current_dest_drag);
 
       event->dnd.time = timestamp;
-      private = PRIVATE_DATA (dpy_impl->current_dest_drag);
+      private = PRIVATE_DATA (display_impl->current_dest_drag);
 
-      motif_dnd_translate_flags (dpy_impl->current_dest_drag, flags);
+      motif_dnd_translate_flags (display_impl->current_dest_drag, flags);
 
       event->dnd.x_root = private->last_x;
       event->dnd.y_root = private->last_y;
@@ -1966,6 +1968,7 @@ motif_dnd_filter (GdkXEvent *xev,
  *************************************************************/
 
 /* Utility functions */
+
 static struct {
   gchar *name;
   GdkAtom atom;
@@ -2017,7 +2020,7 @@ xdnd_action_to_atom (GdkDisplay *display, GdkDragAction action)
 
   for (i=0; i<xdnd_n_actions; i++)
     if (action == xdnd_actions_table[i].action)
-      return gdk_x11_get_real_atom (display, xdnd_actions_table[i].atom, FALSE);
+      return gdk_x11_get_real_atom (display, xdnd_actions_table[i].atom);
 
   return GDK_NONE;
 }
@@ -2102,20 +2105,20 @@ xdnd_set_targets (GdkDragContext *context)
   GList *tmp_list = context->targets;
   gint i;
   gint n_atoms = g_list_length (context->targets);
-  GdkDisplay *dpy = GDK_DRAWABLE_DISPLAY(context->source_window);
+  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
 
   atomlist = g_new (GdkAtom, n_atoms);
   i = 0;
   while (tmp_list)
     {
-      atomlist[i] = gdk_x11_get_real_atom (dpy, GPOINTER_TO_INT (tmp_list->data), FALSE);
+      atomlist[i] = gdk_x11_get_real_atom (display, GPOINTER_TO_INT (tmp_list->data));
       tmp_list = tmp_list->next;
       i++;
     }
 
   XChangeProperty (GDK_DRAWABLE_XDISPLAY (context->source_window),
 		   GDK_DRAWABLE_XID (context->source_window),
-		   gdk_x11_get_real_atom_by_name (dpy, "XdndTypeList"),
+		   gdk_x11_get_real_atom_by_name (display, "XdndTypeList"),
 		   XA_ATOM, 32, PropModeReplace,
 		   (guchar *)atomlist, n_atoms);
 
@@ -2132,10 +2135,10 @@ xdnd_set_actions (GdkDragContext *context)
   gint i;
   gint n_atoms;
   guint actions;
-  GdkDisplay *dpy = GDK_DRAWABLE_DISPLAY (context->source_window);
+  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->source_window);
 
   if (!xdnd_actions_initialized)
-    xdnd_initialize_actions ();
+    xdnd_initialize_actions();
   
   actions = context->actions;
   n_atoms = 0;
@@ -2157,14 +2160,14 @@ xdnd_set_actions (GdkDragContext *context)
       if (actions & xdnd_actions_table[i].action)
 	{
 	  actions &= ~xdnd_actions_table[i].action;
-	  atomlist[n_atoms] = gdk_x11_get_real_atom (dpy, xdnd_actions_table[i].atom, FALSE);
+	  atomlist[n_atoms] = gdk_x11_get_real_atom (display, xdnd_actions_table[i].atom);
 	  n_atoms++;
 	}
     }
 
   XChangeProperty (GDK_DRAWABLE_XDISPLAY (context->source_window),
 		   GDK_DRAWABLE_XID (context->source_window),
-		   gdk_x11_get_real_atom_by_name (dpy, "XdndActionList"),
+		   gdk_x11_get_real_atom_by_name (display, "XdndActionList"),
 		   XA_ATOM, 32, PropModeReplace,
 		   (guchar *)atomlist, n_atoms);
 
@@ -2175,7 +2178,7 @@ xdnd_set_actions (GdkDragContext *context)
 }
 
 /*************************************************************
- * xdnd_send_xevent_for_display:
+ * xdnd_send_xevent:
  *     Like gdk_send_event, but if the target is the root
  *     window, sets an event mask of ButtonPressMask, otherwise
  *     an event mask of 0.
@@ -2185,10 +2188,12 @@ xdnd_set_actions (GdkDragContext *context)
  *************************************************************/
 
 static gint
-xdnd_send_xevent_for_display (Window window, GdkDisplay* display, gboolean propagate, 
-		  XEvent *event_send)
+xdnd_send_xevent (GdkDisplay *display, 
+		  Window      window, 
+		  gboolean    propagate, 
+		  XEvent     *event_send)
 {
-  if (window == GDK_DISPLAY_DND_SCREEN(display)->xroot_window)
+  if (gdk_x11_display_is_root_window (display, window))
     return gdk_send_xevent (window, propagate, ButtonPressMask, event_send);
   else
     return gdk_send_xevent (window, propagate, 0, event_send);
@@ -2199,10 +2204,10 @@ xdnd_send_enter (GdkDragContext *context)
 {
   XEvent xev;
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
-  GdkDisplay *dpy = GDK_DRAWABLE_DISPLAY(context->dest_window);
+  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (context->dest_window);
 
   xev.xclient.type = ClientMessage;
-  xev.xclient.message_type = gdk_x11_get_real_atom_by_name (dpy, "XdndEnter");
+  xev.xclient.message_type = gdk_x11_get_real_atom_by_name (display, "XdndEnter");
 
   xev.xclient.format = 32;
   xev.xclient.window = private->drop_xid ? 
@@ -2216,7 +2221,7 @@ xdnd_send_enter (GdkDragContext *context)
   xev.xclient.data.l[4] = 0;
 
   if (!private->xdnd_selection)
-    private->xdnd_selection = gdk_x11_get_real_atom_by_name (dpy, "XdndSelection");
+    private->xdnd_selection = gdk_x11_get_real_atom_by_name (display, "XdndSelection");
 
   if (g_list_length (context->targets) > 3)
     {
@@ -2231,17 +2236,16 @@ xdnd_send_enter (GdkDragContext *context)
 
       while (tmp_list)
 	{
-	  xev.xclient.data.l[i] = gdk_x11_get_real_atom (dpy, 
-							 GPOINTER_TO_INT (tmp_list->data), 
-							 FALSE);
+	  xev.xclient.data.l[i] = gdk_x11_get_real_atom (display, 
+							 GPOINTER_TO_INT (tmp_list->data));
 	  tmp_list = tmp_list->next;
 	  i++;
 	}
     }
 
-  if (!xdnd_send_xevent_for_display (GDK_DRAWABLE_XID (context->dest_window),
-				     GDK_DRAWABLE_DISPLAY (context->source_window),
-				     FALSE, &xev))
+  if (!xdnd_send_xevent (GDK_DRAWABLE_DISPLAY (context->source_window),
+			 GDK_DRAWABLE_XID (context->dest_window),
+			 FALSE, &xev))
     {
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
@@ -2271,9 +2275,9 @@ xdnd_send_leave (GdkDragContext *context)
   xev.xclient.data.l[3] = 0;
   xev.xclient.data.l[4] = 0;
 
-  if (!xdnd_send_xevent_for_display (GDK_DRAWABLE_XID (context->dest_window),
-				     GDK_DRAWABLE_DISPLAY (context->source_window),
-				     FALSE, &xev))
+  if (!xdnd_send_xevent (GDK_DRAWABLE_DISPLAY (context->source_window),
+			 GDK_DRAWABLE_XID (context->dest_window),
+			 FALSE, &xev))
     {
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
@@ -2302,9 +2306,9 @@ xdnd_send_drop (GdkDragContext *context, guint32 time)
   xev.xclient.data.l[3] = 0;
   xev.xclient.data.l[4] = 0;
 
-  if (!xdnd_send_xevent_for_display (GDK_DRAWABLE_XID (context->dest_window),
-				     GDK_DRAWABLE_DISPLAY (context->source_window),
-				     FALSE, &xev))
+  if (!xdnd_send_xevent (GDK_DRAWABLE_DISPLAY (context->source_window),
+			 GDK_DRAWABLE_XID (context->dest_window),
+			 FALSE, &xev))
     {
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
@@ -2336,12 +2340,12 @@ xdnd_send_motion (GdkDragContext *context,
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = (x_root << 16) | y_root;
   xev.xclient.data.l[3] = time;
-  xev.xclient.data.l[4] = xdnd_action_to_atom (GDK_DRAWABLE_DISPLAY(context->dest_window), 
+  xev.xclient.data.l[4] = xdnd_action_to_atom (GDK_DRAWABLE_DISPLAY (context->dest_window), 
 					       action);
 
-  if (!xdnd_send_xevent_for_display (GDK_DRAWABLE_XID (context->dest_window),
-				     GDK_DRAWABLE_DISPLAY (context->source_window),
-				     FALSE, &xev))
+  if (!xdnd_send_xevent (GDK_DRAWABLE_DISPLAY (context->source_window),
+			 GDK_DRAWABLE_XID (context->dest_window),
+			 FALSE, &xev))
     {
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
@@ -2353,7 +2357,8 @@ xdnd_send_motion (GdkDragContext *context,
 }
 
 static guint32
-xdnd_check_dest_for_display (Window win, GdkDisplay *display)
+xdnd_check_dest (GdkDisplay *display,
+		 Window      win)
 {
   gboolean retval = FALSE;
   Atom type = None;
@@ -2362,7 +2367,7 @@ xdnd_check_dest_for_display (Window win, GdkDisplay *display)
   GdkAtom *version;
   Window *proxy_data;
   Window proxy;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
   GdkAtom xdnd_proxy_atom = gdk_x11_get_real_atom_by_name (display, "XdndProxy");
   GdkAtom xdnd_aware_atom = gdk_x11_get_real_atom_by_name (display, "XdndAware");
 
@@ -2373,7 +2378,7 @@ xdnd_check_dest_for_display (Window win, GdkDisplay *display)
   gdk_error_code = 0;
   gdk_error_warnings = 0;
 
-  XGetWindowProperty (dpy_impl->xdisplay, win, 
+  XGetWindowProperty (display_impl->xdisplay, win, 
 		      xdnd_proxy_atom, 0, 
 		      1, False, AnyPropertyType,
 		      &type, &format, &nitems, &after, 
@@ -2394,7 +2399,7 @@ xdnd_check_dest_for_display (Window win, GdkDisplay *display)
 	  XFree (proxy_data);
 	}
       
-      XGetWindowProperty (dpy_impl->xdisplay, proxy ? proxy : win,
+      XGetWindowProperty (display_impl->xdisplay, proxy ? proxy : win,
 			  xdnd_aware_atom, 0, 
 			  1, False, AnyPropertyType,
 			  &type, &format, &nitems, &after, 
@@ -2443,8 +2448,8 @@ xdnd_read_actions (GdkDragContext *context)
 
   XGetWindowProperty (GDK_DRAWABLE_XDISPLAY (context->source_window),
 		      GDK_DRAWABLE_XID (context->source_window),
-		      gdk_x11_get_real_atom_by_name (
-			GDK_DRAWABLE_DISPLAY (context->source_window), "XdndActionList"),
+		      gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY (context->source_window),
+						     "XdndActionList"),
 		      0, 65536,
 		      False, XA_ATOM, &type, &format, &nitems,
 		      &after, (guchar **)&data);
@@ -2476,7 +2481,7 @@ xdnd_read_actions (GdkDragContext *context)
 	}
 #endif /* G_ENABLE_DEBUG */
 
-      XFree (data);
+      XFree(data);
     }
 
   gdk_error_warnings = old_warnings;
@@ -2558,7 +2563,7 @@ xdnd_enter_filter (GdkXEvent *xev,
   guint32 source_window = xevent->xclient.data.l[0];
   gboolean get_types = ((xevent->xclient.data.l[1] & 1) != 0);
   gint version = (xevent->xclient.data.l[1] & 0xff000000) >> 24;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
   
   GDK_NOTE (DND, 
 	    g_message ("XdndEnter: source_window: %#x, version: %#x",
@@ -2571,10 +2576,10 @@ xdnd_enter_filter (GdkXEvent *xev,
       return GDK_FILTER_REMOVE;
     }
   
-  if (dpy_impl->current_dest_drag != NULL)
+  if (display_impl->current_dest_drag != NULL)
     {
-      gdk_drag_context_unref (dpy_impl->current_dest_drag);
-      dpy_impl->current_dest_drag = NULL;
+      gdk_drag_context_unref (display_impl->current_dest_drag);
+      display_impl->current_dest_drag = NULL;
     }
 
   new_context = gdk_drag_context_new ();
@@ -2587,7 +2592,7 @@ xdnd_enter_filter (GdkXEvent *xev,
   else
     {
       new_context->source_window = 
-        gdk_window_foreign_new_for_display (GDK_DRAWABLE_DISPLAY(event->any.window),
+        gdk_window_foreign_new_for_display (GDK_DRAWABLE_DISPLAY (event->any.window),
 					    source_window);
       if (!new_context->source_window)
 	{
@@ -2617,20 +2622,22 @@ xdnd_enter_filter (GdkXEvent *xev,
 	}
 
       for (i=0; i<nitems; i++)
-	new_context->targets = g_list_append (new_context->targets, GUINT_TO_POINTER (gdk_x11_get_virtual_atom (GDK_DRAWABLE_DISPLAY(event->any.window), data[i])));
+	new_context->targets = g_list_append (new_context->targets, 
+					      GUINT_TO_POINTER (gdk_x11_get_virtual_atom (GDK_DRAWABLE_DISPLAY (event->any.window), data[i])));
 
-      XFree (data);
+      XFree(data);
     }
   else
     {
       for (i=0; i<3; i++)
 	if (xevent->xclient.data.l[2+i])
-	  new_context->targets = g_list_append (new_context->targets, GUINT_TO_POINTER (gdk_x11_get_virtual_atom (GDK_DRAWABLE_DISPLAY(event->any.window), xevent->xclient.data.l[2+i])));
+	  new_context->targets = g_list_append (new_context->targets,
+						GUINT_TO_POINTER (gdk_x11_get_virtual_atom (GDK_DRAWABLE_DISPLAY (event->any.window), xevent->xclient.data.l[2+i])));
     }
 
 #ifdef G_ENABLE_DEBUG
   if (gdk_debug_flags & GDK_DEBUG_DND)
-    print_target_list (new_context->targets,GDK_DRAWABLE_DISPLAY(event->any.window));
+    print_target_list (GDK_DRAWABLE_DISPLAY (event->any.window), new_context->targets);
 #endif /* G_ENABLE_DEBUG */
 
   xdnd_manage_source_filter (new_context, new_context->source_window, TRUE);
@@ -2642,7 +2649,7 @@ xdnd_enter_filter (GdkXEvent *xev,
 
   GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window))->current_dest_drag = new_context;
 
-  (PRIVATE_DATA (new_context))->xdnd_selection = gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY(event->any.window), "XdndSelection");
+  (PRIVATE_DATA (new_context))->xdnd_selection = gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY (event->any.window), "XdndSelection");
 
   return GDK_FILTER_TRANSLATE;
 }
@@ -2654,20 +2661,21 @@ xdnd_leave_filter (GdkXEvent *xev,
 {
   XEvent *xevent = (XEvent *)xev;
   guint32 source_window = xevent->xclient.data.l[0];
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+
   GDK_NOTE (DND, 
 	    g_message ("XdndLeave: source_window: %#x",
 		       source_window));
 
-  if ((dpy_impl->current_dest_drag != NULL) &&
-      (dpy_impl->current_dest_drag->protocol == GDK_DRAG_PROTO_XDND) &&
-      (GDK_DRAWABLE_XID (dpy_impl->current_dest_drag->source_window) == source_window))
+  if ((display_impl->current_dest_drag != NULL) &&
+      (display_impl->current_dest_drag->protocol == GDK_DRAG_PROTO_XDND) &&
+      (GDK_DRAWABLE_XID (display_impl->current_dest_drag->source_window) == source_window))
     {
       event->dnd.type = GDK_DRAG_LEAVE;
       /* Pass ownership of context to the event */
-      event->dnd.context = dpy_impl->current_dest_drag;
+      event->dnd.context = display_impl->current_dest_drag;
 
-      dpy_impl->current_dest_drag = NULL;
+      display_impl->current_dest_drag = NULL;
 
       return GDK_FILTER_TRANSLATE;
     }
@@ -2685,34 +2693,35 @@ xdnd_position_filter (GdkXEvent *xev,
   gint16 x_root = xevent->xclient.data.l[2] >> 16;
   gint16 y_root = xevent->xclient.data.l[2] & 0xffff;
   guint32 time = xevent->xclient.data.l[3];
-  GdkAtom action = 
-    gdk_x11_get_virtual_atom (GDK_DRAWABLE_DISPLAY (event->any.window), xevent->xclient.data.l[4]);
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+  
+  GdkAtom action = gdk_x11_get_virtual_atom (GDK_DRAWABLE_DISPLAY (event->any.window), 
+					     xevent->xclient.data.l[4]);
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+
   GDK_NOTE (DND, 
 	    g_message ("XdndPosition: source_window: %#x  position: (%d, %d)  time: %d  action: %ld",
 		       source_window, x_root, y_root, time, action));
 
   
-  if ((dpy_impl->current_dest_drag != NULL) &&
-      (dpy_impl->current_dest_drag->protocol == GDK_DRAG_PROTO_XDND) &&
-      (GDK_DRAWABLE_XID (dpy_impl->current_dest_drag->source_window) == source_window))
+  if ((display_impl->current_dest_drag != NULL) &&
+      (display_impl->current_dest_drag->protocol == GDK_DRAG_PROTO_XDND) &&
+      (GDK_DRAWABLE_XID (display_impl->current_dest_drag->source_window) == source_window))
     {
       event->dnd.type = GDK_DRAG_MOTION;
-      event->dnd.context = dpy_impl->current_dest_drag;
-      gdk_drag_context_ref (dpy_impl->current_dest_drag);
+      event->dnd.context = display_impl->current_dest_drag;
+      gdk_drag_context_ref (display_impl->current_dest_drag);
 
       event->dnd.time = time;
 
-      dpy_impl->current_dest_drag->suggested_action = 
-         xdnd_action_from_atom (action);
-      if (!(PRIVATE_DATA (dpy_impl->current_dest_drag))->xdnd_have_actions)
-	dpy_impl->current_dest_drag->actions = dpy_impl->current_dest_drag->suggested_action;
+      display_impl->current_dest_drag->suggested_action = xdnd_action_from_atom (action);
+      if (!(PRIVATE_DATA (display_impl->current_dest_drag))->xdnd_have_actions)
+	display_impl->current_dest_drag->actions = display_impl->current_dest_drag->suggested_action;
 
       event->dnd.x_root = x_root;
       event->dnd.y_root = y_root;
 
-      (PRIVATE_DATA (dpy_impl->current_dest_drag))->last_x = x_root;
-      (PRIVATE_DATA (dpy_impl->current_dest_drag))->last_y = y_root;
+      (PRIVATE_DATA (display_impl->current_dest_drag))->last_x = x_root;
+      (PRIVATE_DATA (display_impl->current_dest_drag))->last_y = y_root;
       
       return GDK_FILTER_TRANSLATE;
     }
@@ -2728,22 +2737,22 @@ xdnd_drop_filter (GdkXEvent *xev,
   XEvent *xevent = (XEvent *)xev;
   guint32 source_window = xevent->xclient.data.l[0];
   guint32 time = xevent->xclient.data.l[2];
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (GDK_DRAWABLE_DISPLAY (event->any.window));
   GDK_NOTE (DND, 
 	    g_message ("XdndDrop: source_window: %#x  time: %d",
 		       source_window, time));
 
-  if ((dpy_impl->current_dest_drag != NULL) &&
-      (dpy_impl->current_dest_drag->protocol == GDK_DRAG_PROTO_XDND) &&
-      (GDK_DRAWABLE_XID (dpy_impl->current_dest_drag->source_window) == source_window))
+  if ((display_impl->current_dest_drag != NULL) &&
+      (display_impl->current_dest_drag->protocol == GDK_DRAG_PROTO_XDND) &&
+      (GDK_DRAWABLE_XID (display_impl->current_dest_drag->source_window) == source_window))
     {
       GdkDragContextPrivateX11 *private;
-      private = PRIVATE_DATA (dpy_impl->current_dest_drag);
+      private = PRIVATE_DATA (display_impl->current_dest_drag);
 
       event->dnd.type = GDK_DROP_START;
 
-      event->dnd.context = dpy_impl->current_dest_drag;
-      gdk_drag_context_ref (dpy_impl->current_dest_drag);
+      event->dnd.context = display_impl->current_dest_drag;
+      gdk_drag_context_ref (display_impl->current_dest_drag);
 
       event->dnd.time = time;
       event->dnd.x_root = private->last_x;
@@ -2759,7 +2768,8 @@ xdnd_drop_filter (GdkXEvent *xev,
  ************************** Public API ***********************
  *************************************************************/
 void
-gdk_dnd_init (){
+gdk_dnd_init ()
+{
   init_byte_order ();
 
   gdk_add_client_message_filter (
@@ -2839,22 +2849,20 @@ gdk_drag_begin (GdkWindow     *window,
   return new_context;
 }
 
-
 guint32
-gdk_drag_get_protocol (GdkDisplay *display,
-		       guint32 xid,
+gdk_drag_get_protocol (GdkDisplay      *display,
+		       guint32          xid,
 		       GdkDragProtocol *protocol)
 {
   guint32 retval;
-  GdkScreenImplX11 *dnd_scr_impl = GDK_DISPLAY_DND_SCREEN (display);
   
-  if ((retval = xdnd_check_dest_for_display (xid, display)))
+  if ((retval = xdnd_check_dest (display, xid)))
     {
       *protocol = GDK_DRAG_PROTO_XDND;
       GDK_NOTE (DND, g_message ("Entering dnd window %#x\n", xid));
       return retval;
     }
-  else if ((retval = motif_check_dest_for_display (xid, display)))
+  else if ((retval = motif_check_dest (display, xid)))
     {
       *protocol = GDK_DRAG_PROTO_MOTIF;
       GDK_NOTE (DND, g_message ("Entering motif window %#x\n", xid));
@@ -2871,7 +2879,7 @@ gdk_drag_get_protocol (GdkDisplay *display,
       unsigned long nitems, after;
       unsigned char *data;
 
-      if (gdk_x11_display_impl_is_root_window(display,(Window) xid))
+      if (gdk_x11_display_is_root_window (display, (Window) xid))
 	rootwin = TRUE;
 
       gdk_error_warnings = 0;
@@ -2880,9 +2888,8 @@ gdk_drag_get_protocol (GdkDisplay *display,
 	{
 	  gdk_error_code = 0;
 
-	  XGetWindowProperty (dnd_scr_impl->xdisplay, xid,
-			      gdk_x11_get_real_atom_by_name (display,
-						 "ENLIGHTENMENT_DESKTOP"),
+	  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xid,
+			      gdk_x11_get_real_atom_by_name (display, "ENLIGHTENMENT_DESKTOP"),
 			      0, 0, False, AnyPropertyType,
 			      &type, &format, &nitems, &after, &data);
 	  if ((gdk_error_code == 0) && type != None)
@@ -2932,15 +2939,17 @@ gdk_drag_find_window (GdkDragContext  *context,
 		      GdkDragProtocol *protocol)
 {
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
+  GdkDisplay *display;
   Window dest;
 
   g_return_if_fail (context != NULL);
 
-  if (!private->window_cache)
-    private->window_cache = 
-	    gdk_window_cache_new_for_display(GDK_WINDOW_DISPLAY(context->source_window));
+  display = GDK_WINDOW_DISPLAY (context->source_window);
 
-  dest = get_client_window_at_coords (private->window_cache,
+  if (!private->window_cache)
+    private->window_cache = gdk_window_cache_new (gdk_drawable_get_screen (context->source_window));
+
+  dest = get_client_window_at_coords (private->window_cache, 
 				      drag_window ? 
 				      GDK_DRAWABLE_XID (drag_window) : GDK_NONE,
 				      x_root, y_root);
@@ -2958,17 +2967,14 @@ gdk_drag_find_window (GdkDragContext  *context,
        * two are passed explicitely, the third implicitly through
        * protocol->dest_xid.
        */
-      if ((recipient = gdk_drag_get_protocol (GDK_WINDOW_DISPLAY(context->source_window), 
-			 		      dest,
-			 		      protocol)))
+      if ((recipient = gdk_drag_get_protocol (display, dest, protocol)))
 	{
 	  *dest_window = gdk_window_lookup (recipient);
 	  if (*dest_window)
 	    gdk_window_ref (*dest_window);
 	  else
 	    *dest_window = 
-	      gdk_window_foreign_new_for_display (GDK_WINDOW_DISPLAY(context->source_window),
-	    					  recipient);
+	      gdk_window_foreign_new_for_display (display, recipient);
 	}
       else
 	*dest_window = NULL;
@@ -3186,12 +3192,11 @@ gdk_drag_status (GdkDragContext   *context,
   if (context->protocol == GDK_DRAG_PROTO_MOTIF)
     {
       xev.xclient.type = ClientMessage;
-      xev.xclient.message_type = 
-	      gdk_x11_get_real_atom_by_name (display,
-					     "_MOTIF_DRAG_AND_DROP_MESSAGE");
+      xev.xclient.message_type = gdk_x11_get_real_atom_by_name (display,
+								"_MOTIF_DRAG_AND_DROP_MESSAGE");
       xev.xclient.format = 8;
       xev.xclient.window = GDK_DRAWABLE_XID (context->source_window);
-      xev.xclient.display = GDK_DRAWABLE_XDISPLAY (context->source_window);
+      xev.xclient.display = GDK_DISPLAY_XDISPLAY (display);
 
       if (private->drag_status == GDK_DRAG_STATUS_ACTION_WAIT)
 	{
@@ -3246,22 +3251,18 @@ gdk_drag_status (GdkDragContext   *context,
   else if (context->protocol == GDK_DRAG_PROTO_XDND)
     {
       xev.xclient.type = ClientMessage;
-      xev.xclient.message_type = gdk_x11_get_real_atom_by_name (display, 
-							        "XdndStatus");
-
+      xev.xclient.message_type = gdk_x11_get_real_atom_by_name (display, "XdndStatus");
       xev.xclient.format = 32;
       xev.xclient.window = GDK_DRAWABLE_XID (context->source_window);
-      xev.xclient.display = GDK_DRAWABLE_XDISPLAY (context->source_window);
+      xev.xclient.display = GDK_DISPLAY_XDISPLAY (display);
 
       xev.xclient.data.l[0] = GDK_DRAWABLE_XID (context->dest_window);
       xev.xclient.data.l[1] = (action != 0) ? (2 | 1) : 0;
       xev.xclient.data.l[2] = 0;
       xev.xclient.data.l[3] = 0;
-      xev.xclient.data.l[4] = xdnd_action_to_atom (GDK_DRAWABLE_DISPLAY(context->source_window), 
-						   action);
-      if (!xdnd_send_xevent_for_display (GDK_DRAWABLE_XID (context->source_window),
-					 GDK_DRAWABLE_DISPLAY (context->source_window),
-					 FALSE, &xev))
+      xev.xclient.data.l[4] = xdnd_action_to_atom (display, action);
+      if (!xdnd_send_xevent (display, GDK_DRAWABLE_XID (context->source_window),
+			     FALSE, &xev))
 	GDK_NOTE (DND, 
 		  g_message ("Send event to %lx failed",
 			     GDK_DRAWABLE_XID (context->source_window)));
@@ -3288,7 +3289,7 @@ gdk_drop_reply (GdkDragContext   *context,
       xev.xclient.type = ClientMessage;
       xev.xclient.display = GDK_DRAWABLE_XDISPLAY (context->source_window);
       xev.xclient.message_type = 
-	      gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY(context->source_window),
+	      gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY (context->source_window),
 					     "_MOTIF_DRAG_AND_DROP_MESSAGE");
       xev.xclient.format = 8;
 
@@ -3325,20 +3326,21 @@ gdk_drop_finish (GdkDragContext   *context,
 
       xev.xclient.type = ClientMessage;
       xev.xclient.message_type = 
-	    gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY(context->dest_window),
+	    gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY (context->dest_window),
 					   "XdndFinished");
       xev.xclient.format = 32;
       xev.xclient.window = GDK_DRAWABLE_XID (context->source_window);
       xev.xclient.display = GDK_DRAWABLE_XDISPLAY (context->dest_window);
+      
       xev.xclient.data.l[0] = GDK_DRAWABLE_XID (context->dest_window);
       xev.xclient.data.l[1] = 0;
       xev.xclient.data.l[2] = 0;
       xev.xclient.data.l[3] = 0;
       xev.xclient.data.l[4] = 0;
 
-      if (!xdnd_send_xevent_for_display (GDK_DRAWABLE_XID (context->source_window),
-					 GDK_DRAWABLE_DISPLAY(context->source_window),
-					 FALSE, &xev))
+      if (!xdnd_send_xevent (GDK_DRAWABLE_DISPLAY (context->source_window),
+			     GDK_DRAWABLE_XID (context->source_window),
+			     FALSE, &xev))
 	GDK_NOTE (DND, 
 		  g_message ("Send event to %lx failed",
 			     GDK_DRAWABLE_XID (context->source_window)));
@@ -3363,14 +3365,14 @@ gdk_window_register_dnd (GdkWindow      *window)
   
   /* Set Motif drag receiver information property */
 
-  motif_drag_receiver_info_atom = gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY(window),
+  motif_drag_receiver_info_atom = gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY (window),
 								 "_MOTIF_DRAG_RECEIVER_INFO");
   info.byte_order = local_byte_order;
   info.protocol_version = 0;
   info.protocol_style = XmDRAG_DYNAMIC;
   info.proxy_window = GDK_NONE;
   info.num_drop_sites = 0;
-  info.total_size = sizeof (info);
+  info.total_size = sizeof(info);
 
   XChangeProperty (GDK_DRAWABLE_XDISPLAY (window), GDK_DRAWABLE_XID (window),
 		   motif_drag_receiver_info_atom,
@@ -3381,7 +3383,7 @@ gdk_window_register_dnd (GdkWindow      *window)
 
   /* Set XdndAware */
 
-  xdnd_aware_atom = gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY(window),
+  xdnd_aware_atom = gdk_x11_get_real_atom_by_name (GDK_DRAWABLE_DISPLAY (window),
 						   "XdndAware");
 
   /* The property needs to be of type XA_ATOM, not XA_INTEGER. Blech */
@@ -3406,12 +3408,11 @@ gdk_drag_get_selection (GdkDragContext *context)
   g_return_val_if_fail (context != NULL, GDK_NONE);
 
   if (context->protocol == GDK_DRAG_PROTO_MOTIF)
-    return gdk_x11_get_virtual_atom(GDK_DRAWABLE_DISPLAY (context->source_window),
-				    (PRIVATE_DATA (context))->motif_selection);
+    return gdk_x11_get_virtual_atom (GDK_DRAWABLE_DISPLAY (context->source_window),
+				     (PRIVATE_DATA (context))->motif_selection);
   else if (context->protocol == GDK_DRAG_PROTO_XDND)
-    return gdk_x11_get_virtual_atom(GDK_DRAWABLE_DISPLAY (context->source_window),
-				    (PRIVATE_DATA (context))->xdnd_selection);
+    return gdk_x11_get_virtual_atom (GDK_DRAWABLE_DISPLAY (context->source_window),
+				     (PRIVATE_DATA (context))->xdnd_selection);
   else 
     return GDK_NONE;
 }
-

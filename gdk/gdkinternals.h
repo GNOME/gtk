@@ -145,7 +145,7 @@ void _gdk_cursor_destroy (GdkCursor *cursor);
 extern GdkArgDesc _gdk_windowing_args[];
 GdkDisplay *   _gdk_windowing_init_check        (int         argc,
 						 char      **argv);
-void	 _gdk_windowing_screen_init	        (GdkScreen * scr);
+void	 _gdk_windowing_screen_init	        (GdkScreen  *oscr);
 void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
 						 gint       *x_offset,
 						 gint       *y_offset);
@@ -204,8 +204,8 @@ GType _gdk_pixmap_impl_get_type (void) G_GNUC_CONST;
  ************************************/
 
 void _gdk_windowing_window_init (GdkScreen *screen);
-void _gdk_visual_init (GdkScreen *screen);
-void gdk_dnd_init    ();
+void _gdk_visual_init           (GdkScreen *screen);
+void gdk_dnd_init    (void);
 
 void _gdk_windowing_image_init  (GdkDisplay *display);
 void gdk_image_exit  (void);

@@ -144,9 +144,11 @@ gdk_pixmap_impl_x11_get_size   (GdkDrawable *drawable,
     *height = GDK_PIXMAP_IMPL_X11 (drawable)->height;
 }
 
-GdkPixmap *
-gdk_pixmap_new (GdkWindow * window, gint width, gint height, gint depth)
-
+GdkPixmap*
+gdk_pixmap_new (GdkWindow *window,
+		gint       width,
+		gint       height,
+		gint       depth)
 {
   GdkPixmap *pixmap;
   GdkDrawableImplX11 *draw_impl;
@@ -157,13 +159,13 @@ gdk_pixmap_new (GdkWindow * window, gint width, gint height, gint depth)
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail ((window != NULL) || (depth != -1), NULL);
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
-
+  
   if (!window)
-  {
-    GDK_NOTE(MULTIHEAD, g_message ("need to specify the screen parent window \
-		                   for gdk_pixmap_new to be multihead safe"));
-    window = GDK_SCREEN_IMPL_X11 (gdk_get_default_screen())->root_window;
-  }
+    {
+      GDK_NOTE (MULTIHEAD, g_message ("need to specify the screen parent window "
+				      "for gdk_pixmap_new to be multihead safe"));
+      window = GDK_SCREEN_IMPL_X11 (gdk_get_default_screen ())->root_window;
+    }
 
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
@@ -176,11 +178,11 @@ gdk_pixmap_new (GdkWindow * window, gint width, gint height, gint depth)
   draw_impl = GDK_DRAWABLE_IMPL_X11 (GDK_PIXMAP_OBJECT (pixmap)->impl);
   pix_impl = GDK_PIXMAP_IMPL_X11 (GDK_PIXMAP_OBJECT (pixmap)->impl);
   draw_impl->wrapper = GDK_DRAWABLE (pixmap);
-
+  
   draw_impl->screen = GDK_WINDOW_SCREEN (window);
   draw_impl->xid = XCreatePixmap (GDK_PIXMAP_XDISPLAY (pixmap),
-				  GDK_WINDOW_XID (window),
-				  width, height, depth);
+                                  GDK_WINDOW_XID (window),
+                                  width, height, depth);
 
   pix_impl->is_foreign = FALSE;
   pix_impl->width = width;
@@ -195,7 +197,7 @@ gdk_pixmap_new (GdkWindow * window, gint width, gint height, gint depth)
     }
   
   gdk_xid_table_insert (&GDK_PIXMAP_XID (pixmap), pixmap);
-
+  
   return pixmap;
 }
 
@@ -208,18 +210,18 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
   GdkPixmap *pixmap;
   GdkDrawableImplX11 *draw_impl;
   GdkPixmapImplX11 *pix_impl;
-
+  
   g_return_val_if_fail (data != NULL, NULL);
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
 
   if (!window) 
-  {
-    GDK_NOTE(MULTIHEAD, g_message ("need to specify the screen parent window \
-		                   for gdk_bitmap_create_from_data to be multihead safe"));
-    window = GDK_SCREEN_IMPL_X11 (gdk_get_default_screen())->root_window;
-  }
-
+    {
+      GDK_NOTE(MULTIHEAD, g_message ("need to specify the screen parent window "
+				     "for gdk_bitmap_create_from_data to be multihead safe"));
+      window = GDK_SCREEN_IMPL_X11 (gdk_get_default_screen ())->root_window;
+    }
+  
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
 
@@ -235,11 +237,11 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
 
   draw_impl->screen = GDK_WINDOW_SCREEN (window);
   draw_impl->xid = XCreateBitmapFromData (GDK_WINDOW_XDISPLAY (window),
-					  GDK_WINDOW_XID (window),
-					  (char *) data, width, height);
+                                          GDK_WINDOW_XID (window),
+                                          (char *)data, width, height);
 
   gdk_xid_table_insert (&GDK_PIXMAP_XID (pixmap), pixmap);
-
+  
   return pixmap;
 }
 
@@ -264,11 +266,11 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
 
   if (!window)
-  {
-    GDK_NOTE(MULTIHEAD, g_message ("need to specify the screen parent window \
-		                   for gdk_pixmap_create_from_data to be multihead safe"));
-    window = GDK_SCREEN_IMPL_X11 (gdk_get_default_screen())->root_window;
-  }
+    {
+      GDK_NOTE (MULTIHEAD, g_message ("need to specify the screen parent window"
+				      "for gdk_pixmap_create_from_data to be multihead safe"));
+      window = GDK_SCREEN_IMPL_X11 (gdk_get_default_screen ())->root_window;
+    }
 
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
@@ -280,7 +282,7 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
   draw_impl = GDK_DRAWABLE_IMPL_X11 (GDK_PIXMAP_OBJECT (pixmap)->impl);
   pix_impl = GDK_PIXMAP_IMPL_X11 (GDK_PIXMAP_OBJECT (pixmap)->impl);
   draw_impl->wrapper = GDK_DRAWABLE (pixmap);
-
+  
   pix_impl->is_foreign = FALSE;
   pix_impl->width = width;
   pix_impl->height = height;
@@ -288,9 +290,9 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
 
   draw_impl->screen = GDK_DRAWABLE_SCREEN (window);
   draw_impl->xid = XCreatePixmapFromBitmapData (GDK_WINDOW_XDISPLAY (window),
-						GDK_WINDOW_XID (window),
-						(char *) data, width, height,
-						fg->pixel, bg->pixel, depth);
+                                                GDK_WINDOW_XID (window),
+                                                (char *)data, width, height,
+                                                fg->pixel, bg->pixel, depth);
 
   gdk_xid_table_insert (&GDK_PIXMAP_XID (pixmap), pixmap);
 
@@ -298,7 +300,8 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
 }
 
 GdkPixmap *
-gdk_pixmap_foreign_new_for_screen ( GdkScreen * screen, GdkNativeWindow anid)
+gdk_pixmap_foreign_new_for_screen (GdkScreen       *screen,
+				   GdkNativeWindow  anid)
 {
   GdkPixmap *pixmap;
   GdkDrawableImplX11 *draw_impl;
@@ -308,23 +311,17 @@ gdk_pixmap_foreign_new_for_screen ( GdkScreen * screen, GdkNativeWindow anid)
   GdkScreenImplX11 *scr_impl;
   unsigned int x_ret, y_ret, w_ret, h_ret, bw_ret, depth_ret;
 
-  /*
-     check to make sure we were passed something at
-     least a little sane 
-   */
-  g_return_val_if_fail ((anid != 0), NULL);
-
+  /* check to make sure we were passed something at
+     least a little sane */
+  g_return_val_if_fail((anid != 0), NULL);
+  
   scr_impl = GDK_SCREEN_IMPL_X11 (screen);
 
-  /*
-     set the pixmap to the passed in value 
-   */
+  /* set the pixmap to the passed in value */
   xpixmap = anid;
 
-  /*
-     get information about the Pixmap to fill in the structure for
-     the gdk window 
-   */
+  /* get information about the Pixmap to fill in the structure for
+     the gdk window */
   if (!XGetGeometry (scr_impl->xdisplay,
 		     xpixmap, &root_return,
 		     &x_ret, &y_ret, &w_ret, &h_ret, &bw_ret, &depth_ret))
@@ -334,7 +331,7 @@ gdk_pixmap_foreign_new_for_screen ( GdkScreen * screen, GdkNativeWindow anid)
   draw_impl = GDK_DRAWABLE_IMPL_X11 (GDK_PIXMAP_OBJECT (pixmap)->impl);
   pix_impl = GDK_PIXMAP_IMPL_X11 (GDK_PIXMAP_OBJECT (pixmap)->impl);
   draw_impl->wrapper = GDK_DRAWABLE (pixmap);
-
+  
 
   draw_impl->screen = screen;
   draw_impl->xid = xpixmap;
@@ -343,8 +340,8 @@ gdk_pixmap_foreign_new_for_screen ( GdkScreen * screen, GdkNativeWindow anid)
   pix_impl->width = w_ret;
   pix_impl->height = h_ret;
   GDK_PIXMAP_OBJECT (pixmap)->depth = depth_ret;
-
-  gdk_xid_table_insert (&GDK_PIXMAP_XID (pixmap), pixmap);
+  
+  gdk_xid_table_insert(&GDK_PIXMAP_XID (pixmap), pixmap);
 
   return pixmap;
 }

@@ -639,7 +639,7 @@ static void OneLine(struct bmp_progressive_state *context)
 					  0,
 					  context->Lines,
 					  context->Header.width,
-					  context->Header.height,
+					  1,
 					  context->user_data);
 
 	}

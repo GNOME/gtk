@@ -102,7 +102,6 @@ typedef struct _GdkDrawable           GdkWindow;
 typedef struct _GdkDisplay	      GdkDisplay;
 typedef struct _GdkScreen	      GdkScreen;
 
-
 typedef enum
 {
   GDK_LSB_FIRST,

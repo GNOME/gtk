@@ -63,6 +63,7 @@ GdkColormap* gdk_colormap_new	  (GdkVisual   *visual,
 				   gboolean	allocate);
 GdkColormap* gdk_colormap_ref	  (GdkColormap *cmap);
 void	     gdk_colormap_unref	  (GdkColormap *cmap);
+
 #ifndef GDK_MULTIHEAD_SAFE
 GdkColormap* gdk_colormap_get_system	   (void);
 #endif

@@ -1,3 +1,7 @@
+Thu Aug 30 19:34:38 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/tmpl/gtkdialog.sgml: Fix obvious mistake.
+
 Tue Aug 21 12:42:19 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk-sections.txt: Remove GtkPacker

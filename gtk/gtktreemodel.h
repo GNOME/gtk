@@ -180,8 +180,6 @@ gboolean          gtk_tree_model_get_iter        (GtkTreeModel *tree_model,
 						  GtkTreePath  *path);
 gboolean          gtk_tree_model_get_iter_root   (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
-gboolean          gtk_tree_model_get_first       (GtkTreeModel *tree_model,
-						  GtkTreeIter  *iter);
 GtkTreePath *     gtk_tree_model_get_path        (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
 void              gtk_tree_model_get_value       (GtkTreeModel *tree_model,

@@ -59,13 +59,9 @@ GdkImage* _gdk_x11_get_image (GdkDrawable    *drawable,
                               gint            y,
                               gint            width,
                               gint            height);
- 
-int	    gdk_x_error			 (Display     *display, 
-						  XErrorEvent *error);
-int	    gdk_x_io_error		 (Display     *display);
 
 /* Please see gdkwindow.c for comments on how to use */ 
-Window gdk_window_xid_at        (Display   *xdisplay,
+Window gdk_window_xid_at        (Display  *xdisplay,
 				 Window    base,
 				 gint      bx,
 				 gint      by,
@@ -98,18 +94,15 @@ void     _gdk_region_get_xrectangles       (GdkRegion            *region,
                                             XRectangle          **rects,
                                             gint                 *n_rects);
 
-void     _gdk_moveresize_handle_event      (XEvent *event);
+void _gdk_moveresize_handle_event   (XEvent     *event);
+void _gdk_moveresize_configure_done (GdkDisplay *display);
 
-/* from gdkwindow-x11.c */
-void	 _gdk_moveresize_configure_done_for_display (GdkDisplay *dpy);
-
-void     _gdk_keymap_state_changed		    (GdkDisplay *display);
+void _gdk_keymap_state_changed      (GdkDisplay *display);
 
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         gdk_use_xshm;
 extern gboolean          gdk_null_window_warnings;
 extern const int         gdk_nevent_masks;
 extern const int         gdk_event_mask_table[];
-extern gboolean		 gdk_synchronize;
 
 #endif /* __GDK_PRIVATE_X11_H__ */

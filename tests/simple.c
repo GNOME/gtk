@@ -27,16 +27,13 @@ main (int argc, char *argv[])
 					     NULL),
 			     "signal::destroy", gtk_main_quit, NULL,
 			     NULL);
-/*  button = g_object_connect (gtk_widget_new (gtk_button_get_type (),
+  button = g_object_connect (gtk_widget_new (gtk_button_get_type (),
 					     "GtkButton::label", "hello world",
 					     "GtkWidget::parent", window,
 					     "GtkWidget::visible", TRUE,
 					     NULL),
 			     "signal::clicked", hello, NULL,
-			     NULL);*/
-  button = gtk_entry_new ();
-  gtk_container_add (GTK_CONTAINER (window), button);
-  gtk_widget_show (button);
+			     NULL);
   gtk_widget_show (window);
 
   gtk_main ();

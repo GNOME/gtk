@@ -716,9 +716,9 @@ gtk_real_menu_shell_deactivate (GtkMenuShell *menu_shell)
       if (menu_shell->have_xgrab)
 	{
 	  menu_shell->have_xgrab = FALSE;
-	  gdk_display_pointer_ungrab (gtk_widget_get_display (menu_shell),
+	  gdk_display_pointer_ungrab (gtk_widget_get_display (GTK_WIDGET (menu_shell)),
 				      GDK_CURRENT_TIME);
-	  gdk_display_keyboard_ungrab (gtk_widget_get_display (menu_shell),
+	  gdk_display_keyboard_ungrab (gtk_widget_get_display (GTK_WIDGET (menu_shell)),
 				       GDK_CURRENT_TIME);
 	}
     }
@@ -843,7 +843,7 @@ gtk_menu_shell_activate_item (GtkMenuShell      *menu_shell,
       /* flush the x-queue, so any grabs are removed and
        * the menu is actually taken down
        */
-      gdk_display_sync (gtk_widget_get_display(menu_item));
+      gdk_display_sync (gtk_widget_get_display (menu_item));
     }
 
   gtk_widget_activate (menu_item);
@@ -1006,7 +1006,7 @@ gtk_real_menu_shell_activate_current (GtkMenuShell      *menu_shell,
 static void
 gtk_real_menu_shell_cancel (GtkMenuShell      *menu_shell)
 {
-  /* Unset the active menu item so gtk_menu_popdown () doesn't see it.
+  /* Unset the active menu item so gtk_menu_popdown() doesn't see it.
    */
   gtk_menu_shell_deselect (menu_shell);
   

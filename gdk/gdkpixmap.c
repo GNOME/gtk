@@ -439,8 +439,8 @@ make_solid_mask (GdkScreen *screen, gint width, gint height)
   GdkGC *gc;
   GdkGCValues gc_values;
   
-  bitmap = gdk_pixmap_new (gdk_screen_get_root_window(screen), width, height, 1);
-
+  bitmap = gdk_pixmap_new (gdk_screen_get_root_window (screen),
+			   width, height, 1);
 
   gc_values.foreground.pixel = 1;
   gc = gdk_gc_new_with_values (bitmap, &gc_values, GDK_GC_FOREGROUND);
@@ -464,8 +464,10 @@ gdk_pixmap_colormap_new_from_pixbuf (GdkColormap *colormap,
   GdkPixbuf *render_pixbuf;
   GdkGC *tmp_gc;
   
-  pixmap = gdk_pixmap_new (gdk_screen_get_root_window(colormap->screen), gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf), gdk_colormap_get_visual (colormap)->depth);
-
+  pixmap = gdk_pixmap_new (gdk_screen_get_root_window (colormap->screen),
+			   gdk_pixbuf_get_width (pixbuf),
+			   gdk_pixbuf_get_height (pixbuf),
+			   gdk_colormap_get_visual (colormap)->depth);
   gdk_drawable_set_colormap (pixmap, colormap);
   
   if (transparent_color)
@@ -494,7 +496,8 @@ gdk_pixmap_colormap_new_from_pixbuf (GdkColormap *colormap,
     gdk_pixbuf_render_pixmap_and_mask_for_screen (pixbuf, colormap->screen, NULL, mask, 128);
 
   if (mask && !*mask)
-    *mask = make_solid_mask (colormap->screen, gdk_pixbuf_get_width (pixbuf),
+    *mask = make_solid_mask (colormap->screen,
+			     gdk_pixbuf_get_width (pixbuf),
 			     gdk_pixbuf_get_height (pixbuf));
 
   return pixmap;

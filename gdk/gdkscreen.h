@@ -42,29 +42,27 @@ extern "C"
 #define GDK_IS_SCREEN_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SCREEN))
 #define GDK_SCREEN_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SCREEN, GdkScreenClass))
 
+struct _GdkScreen
+{
+  GObject parent_instance;
+};
 
-
-  struct _GdkScreen
-  {
-    GObject parent_instance;
-  };
-
-  struct _GdkScreenClass
-  {
-    GObjectClass parent_class;
-    GdkDisplay *(*get_display) (GdkScreen * screen);
-    gint (*get_width) (GdkScreen * screen);
-    gint (*get_height) (GdkScreen * screen);
-    gint (*get_width_mm) (GdkScreen * screen);
-    gint (*get_height_mm) (GdkScreen * screen);
-    gint (*get_root_depth) (GdkScreen * screen);
-    gint (*get_screen_num) (GdkScreen * screen);
-    GdkWindow *(*get_root_window) (GdkScreen * screen);
-    GdkColormap *(*get_default_colormap) (GdkScreen * screen);
-    void (*set_default_colormap) (GdkScreen * screen, GdkColormap * colormap);
-    GdkWindow *(*get_window_at_pointer) (GdkScreen * screen,
+struct _GdkScreenClass
+{
+  GObjectClass parent_class;
+  GdkDisplay *(*get_display) (GdkScreen * screen);
+  gint (*get_width) (GdkScreen * screen);
+  gint (*get_height) (GdkScreen * screen);
+  gint (*get_width_mm) (GdkScreen * screen);
+  gint (*get_height_mm) (GdkScreen * screen);
+  gint (*get_root_depth) (GdkScreen * screen);
+  gint (*get_screen_num) (GdkScreen * screen);
+  GdkWindow *(*get_root_window) (GdkScreen * screen);
+  GdkColormap *(*get_default_colormap) (GdkScreen * screen);
+  void (*set_default_colormap) (GdkScreen * screen, GdkColormap * colormap);
+  GdkWindow *(*get_window_at_pointer) (GdkScreen * screen,
 					 gint * win_x, gint * win_y);
-  };
+};
 
 GType        gdk_screen_get_type              (void);
 GdkColormap *gdk_screen_get_default_colormap  (GdkScreen   *screen);

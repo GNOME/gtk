@@ -37,9 +37,6 @@ extern "C" {
 typedef struct _GtkTreeModelSort       GtkTreeModelSort;
 typedef struct _GtkTreeModelSortClass  GtkTreeModelSortClass;
 
-typedef gint (* GValueCompareFunc) (const GValue *a,
-				    const GValue *b);
-
 struct _GtkTreeModelSort
 {
   GObject parent;
@@ -49,6 +46,7 @@ struct _GtkTreeModelSort
   gint stamp;
   guint flags;
   GtkTreeModel *child_model;
+  gboolean cache_child_iters;
 
   /* sort information */
   GList *sort_list;
@@ -60,6 +58,7 @@ struct _GtkTreeModelSort
   guint inserted_id;
   guint has_child_toggled_id;
   guint deleted_id;
+  guint reordered_id;
 };
 
 struct _GtkTreeModelSortClass
@@ -76,8 +75,6 @@ void          gtk_tree_model_sort_set_model      (GtkTreeModelSort  *tree_model_
 GtkTreeModel *gtk_tree_model_sort_get_model      (GtkTreeModelSort  *tree_model);
 GtkTreePath  *gtk_tree_model_sort_convert_path   (GtkTreeModelSort  *tree_model_sort,
 						  GtkTreePath       *child_path);
-
-/* FIXME: not implemented yet */
 void          gtk_tree_model_sort_convert_iter    (GtkTreeModelSort  *tree_model_sort,
                                                    GtkTreeIter       *sort_iter,
                                                    GtkTreeIter       *child_iter);

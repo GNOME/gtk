@@ -37,23 +37,24 @@ void     gdk_property_change (GdkWindow     *window,
 			      gint           nelements);
 void     gdk_property_delete (GdkWindow     *window,
 			      GdkAtom        property);
-gint	 gdk_text_property_to_text_list_for_display (GdkDisplay * display,
-						     GdkAtom encoding,
-						     gint format,
-						     const guchar * text,
-						     gint length,
-						     gchar *** list);
+
+gint gdk_text_property_to_text_list_for_display (GdkDisplay     *display,
+						 GdkAtom         encoding,
+						 gint            format,
+						 const guchar   *text,
+						 gint            length,
+						 gchar        ***list);
 gint gdk_text_property_to_text_list (GdkAtom        encoding,
 				     gint           format,
 				     const guchar  *text,
 				     gint           length,
 				     gchar       ***list);
-gint gdk_text_property_to_utf8_list_for_display (GdkDisplay * display,
-						 GdkAtom encoding,
-						 gint format,
-						 const guchar * text,
-						 gint length, 
-						 gchar *** list);
+gint gdk_text_property_to_utf8_list_for_display (GdkDisplay     *display,
+						 GdkAtom         encoding,
+						 gint            format,
+						 const guchar   *text,
+						 gint            length,
+						 gchar        ***list);
 gint gdk_text_property_to_utf8_list (GdkAtom        encoding,
 				     gint           format,
 				     const guchar  *text,
@@ -61,18 +62,18 @@ gint gdk_text_property_to_utf8_list (GdkAtom        encoding,
 				     gchar       ***list);
   
 gchar   *gdk_utf8_to_string_target   (const gchar *str);
-gint gdk_string_to_compound_text_for_display (GdkDisplay * display,
-					      const gchar * str,
-					      GdkAtom * encoding,
-					      gint * format,
-					      guchar ** ctext, 
-					      gint * length);
-gboolean gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
-					        const gchar *str,
-					        GdkAtom     *encoding,
-					        gint        *format,
-					        guchar     **ctext,
-					        gint        *length);
+gint     gdk_string_to_compound_text_for_display (GdkDisplay   *display,
+						  const gchar  *str,
+						  GdkAtom      *encoding,
+						  gint         *format,
+						  guchar      **ctext,
+						  gint         *length);
+gboolean gdk_utf8_to_compound_text_for_display   (GdkDisplay   *display,
+						  const gchar  *str,
+						  GdkAtom      *encoding,
+						  gint         *format,
+						  guchar      **ctext,
+						  gint         *length);
 gboolean gdk_utf8_to_compound_text (const gchar *str,
 				    GdkAtom     *encoding,
 				    gint        *format,

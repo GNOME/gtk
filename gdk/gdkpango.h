@@ -34,7 +34,7 @@ extern "C" {
  * in it to create new GC's and to set the colors on those GC's.
  * A colormap is not sufficient.
  */
-PangoContext *gdk_pango_context_get_for_screen (GdkScreen * screen);
+PangoContext *gdk_pango_context_get_for_screen (GdkScreen    *screen);
 #ifndef GDK_MULTIHEAD_SAFE
 PangoContext *gdk_pango_context_get            (void);
 #endif

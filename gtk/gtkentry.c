@@ -874,7 +874,7 @@ gtk_entry_init (GtkEntry *entry)
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
   /* This object is completely private. No external entity can gain a reference
-   * to it; so we create it here and destroy it in finalize ().
+   * to it; so we create it here and destroy it in finalize().
    */
   entry->im_context = gtk_im_multicontext_new ();
   
@@ -999,8 +999,6 @@ gtk_entry_realize (GtkWidget *widget)
 
   gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
   gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
-  
-  gtk_entry_update_primary_selection (entry);
 
   gdk_window_show (entry->text_area);
 
@@ -1484,6 +1482,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 	  
 	  context = gtk_drag_begin (widget, target_list, GDK_ACTION_COPY | GDK_ACTION_MOVE,
 			  entry->button, (GdkEvent *)event);
+
 	  
 	  entry->in_drag = FALSE;
 	  entry->button = 0;
@@ -1546,7 +1545,7 @@ gtk_entry_focus_in (GtkWidget     *widget,
   entry->need_im_reset = TRUE;
   gtk_im_context_focus_in (entry->im_context);
 
-  g_signal_connect (gdk_keymap_get_default (),
+  g_signal_connect (gdk_keymap_get_for_display (gtk_widget_get_display (widget)),
 		    "direction_changed",
 		    G_CALLBACK (gtk_entry_keymap_direction_changed), entry);
 
@@ -1569,7 +1568,7 @@ gtk_entry_focus_out (GtkWidget     *widget,
 
   gtk_entry_check_cursor_blink (entry);
   
-  g_signal_handlers_disconnect_by_func (gdk_keymap_get_default (),
+  g_signal_handlers_disconnect_by_func (gdk_keymap_get_for_display (gtk_widget_get_display (widget)),
                                         gtk_entry_keymap_direction_changed,
                                         entry);
 
@@ -1750,7 +1749,7 @@ gtk_entry_get_selection_bounds (GtkEditable *editable,
 }
 
 static void 
-gtk_entry_style_set	 (GtkWidget      *widget,
+gtk_entry_style_set	(GtkWidget      *widget,
 			 GtkStyle       *previous_style)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
@@ -1783,7 +1782,7 @@ gtk_entry_real_insert_text (GtkEntry    *entry,
   n_chars = g_utf8_strlen (new_text, new_text_length);
   if (entry->text_max_length > 0 && n_chars + entry->text_length > entry->text_max_length)
     {
-      gdk_display_beep (gtk_widget_get_display (entry));
+      gdk_display_beep (gtk_widget_get_display (GTK_WIDGET (entry)));
       n_chars = entry->text_max_length - entry->text_length;
       new_text_length = g_utf8_offset_to_pointer (new_text, n_chars) - new_text;
     }
@@ -1876,8 +1875,9 @@ static gint
 get_better_cursor_x (GtkEntry *entry,
 		     gint      offset)
 {
+  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)));
   GtkTextDirection keymap_direction =
-    (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+    (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_LTR) ?
     GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
   GtkTextDirection widget_direction = gtk_widget_get_direction (GTK_WIDGET (entry));
   gboolean split_cursor;
@@ -2083,7 +2083,7 @@ gtk_entry_copy_clipboard (GtkEntry *entry)
   if (gtk_editable_get_selection_bounds (editable, &start, &end))
     {
       gchar *str = gtk_entry_get_public_chars (entry, start, end);
-      gtk_clipboard_set_text (gtk_clipboard_get_for_display (gtk_widget_get_display(entry),
+      gtk_clipboard_set_text (gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)),
 							     GDK_NONE),
 			      str, -1);
       g_free (str);
@@ -2546,8 +2546,9 @@ static void
 gtk_entry_draw_cursor (GtkEntry  *entry,
 		       CursorType type)
 {
+  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)));
   GtkTextDirection keymap_direction =
-    (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+    (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_LTR) ?
     GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
   GtkTextDirection widget_direction = gtk_widget_get_direction (GTK_WIDGET (entry));
   
@@ -2803,8 +2804,10 @@ gtk_entry_move_visually (GtkEntry *entry,
 	strong = TRUE;
       else
 	{
+	  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)));
+	  
 	  GtkTextDirection keymap_direction =
-	    (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+	    (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_LTR) ?
 	    GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
 
 	  strong = keymap_direction == gtk_widget_get_direction (GTK_WIDGET (entry));
@@ -3032,7 +3035,8 @@ gtk_entry_paste (GtkEntry *entry,
 		 GdkAtom   selection)
 {
   g_object_ref (G_OBJECT (entry));
-  gtk_clipboard_request_text (gtk_clipboard_get_for_display (gtk_widget_get_display(entry), selection),
+  gtk_clipboard_request_text (gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)),
+							     selection),
 
 			      paste_received, entry);
 }
@@ -3073,7 +3077,8 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
     { "COMPOUND_TEXT", 0, 0 }
   };
   
-  GtkClipboard *clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display(entry), GDK_SELECTION_PRIMARY);
+  GtkClipboard *clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)), 
+							   GDK_SELECTION_PRIMARY);
 
   gint start, end;
   
@@ -3198,7 +3203,7 @@ gtk_entry_get_visibility (GtkEntry *entry)
  * @ch: a Unicode character
  * 
  * Sets the character to use in place of the actual text when
- * gtk_entry_set_visibility () has been called to set text visibility
+ * gtk_entry_set_visibility() has been called to set text visibility
  * to %FALSE. i.e. this is the character used in "password mode" to
  * show the user how many characters have been typed. The default
  * invisible char is an asterisk ('*').  If you set the invisible char
@@ -3305,7 +3310,7 @@ gtk_entry_get_max_length (GtkEntry *entry)
  * widget is usually one of the dialog buttons.
  *
  * (For experts: if @setting is %TRUE, the entry calls
- * gtk_window_activate_default () on the window containing the entry, in
+ * gtk_window_activate_default() on the window containing the entry, in
  * the default handler for the "activate" signal.)
  * 
  **/
@@ -3327,7 +3332,7 @@ gtk_entry_set_activates_default (GtkEntry *entry,
  * gtk_entry_get_activates_default:
  * @entry: a #GtkEntry
  * 
- * Retrieves the value set by gtk_entry_set_activates_default ().
+ * Retrieves the value set by gtk_entry_set_activates_default().
  * 
  * Return value: %TRUE if the entry will activate the default widget
  **/
@@ -3369,7 +3374,7 @@ gtk_entry_set_width_chars (GtkEntry *entry,
  * gtk_entry_get_width_chars:
  * @entry: a #GtkEntry
  * 
- * Gets the value set by gtk_entry_set_width_chars ().
+ * Gets the value set by gtk_entry_set_width_chars().
  * 
  * Return value: number of chars to request space for, or negative if unset
  **/
@@ -3404,7 +3409,7 @@ gtk_entry_set_has_frame (GtkEntry *entry,
  * gtk_entry_get_has_frame:
  * @entry: a #GtkEntry
  * 
- * Gets the value set by gtk_entry_set_has_frame ().
+ * Gets the value set by gtk_entry_set_has_frame().
  * 
  * Return value: whether the entry has a beveled frame
  **/
@@ -3617,7 +3622,7 @@ popup_position_func (GtkMenu   *menu,
   widget = GTK_WIDGET (entry);
   
   g_return_if_fail (GTK_WIDGET_REALIZED (entry));
-  
+
   gdk_window_get_origin (widget->window, x, y);      
 
   gtk_widget_size_request (entry->popup_menu, &req);

@@ -132,7 +132,7 @@ gdk_image_exit (void)
 }
 
 GdkImage *
-gdk_image_new_bitmap (GdkVisual *visual, gpointer data, gint w, gint h)
+gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
 /*
  * Desc: create a new bitmap image
  */
@@ -141,7 +141,7 @@ gdk_image_new_bitmap (GdkVisual *visual, gpointer data, gint w, gint h)
   GdkImage *image;
   GdkImagePrivateX11 *private;
   image = g_object_new (gdk_image_get_type (), NULL);
-  private = GDK_IMAGE_PRIVATE_DATA (image);
+  private = PRIVATE_DATA (image);
   private->screen = visual->screen;
   image->type = GDK_IMAGE_NORMAL;
   image->visual = visual;
@@ -149,22 +149,22 @@ gdk_image_new_bitmap (GdkVisual *visual, gpointer data, gint w, gint h)
   image->height = h;
   image->depth = 1;
   image->bits_per_pixel = 1;
-  xvisual = ((GdkVisualPrivate *) visual)->xvisual;
-  private->ximage =
-    XCreateImage (GDK_SCREEN_XDISPLAY (visual->screen), xvisual, 1, XYBitmap, 0, 0, w,
-		  h, 8, 0);
+  xvisual = ((GdkVisualPrivate*) visual)->xvisual;
+  private->ximage = XCreateImage (GDK_SCREEN_XDISPLAY (visual->screen),
+				  xvisual, 1, XYBitmap,
+				  0, 0, w ,h, 8, 0);
   private->ximage->data = data;
   private->ximage->bitmap_bit_order = MSBFirst;
   private->ximage->byte_order = MSBFirst;
   image->byte_order = MSBFirst;
-  image->mem = private->ximage->data;
+  image->mem =  private->ximage->data;
   image->bpl = private->ximage->bytes_per_line;
   image->bpp = 1;
-  return (image);
-} /* gdk_image_new_bitmap () */
+  return(image);
+} /* gdk_image_new_bitmap() */
 
-int
-gdk_image_check_xshm (Display *display)
+static int
+gdk_image_check_xshm(Display *display)
 /* 
  * Desc: query the server for support for the MIT_SHM extension
  * Return:  0 = not available
@@ -190,11 +190,13 @@ gdk_image_check_xshm (Display *display)
 void
 _gdk_windowing_image_init (GdkDisplay *display)
 {
-  if (GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm) {
-    if (!gdk_image_check_xshm (GDK_DISPLAY_XDISPLAY (display))) {
-      GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm = False;
+  if (GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm)
+    {
+      if (!gdk_image_check_xshm (GDK_DISPLAY_XDISPLAY (display)))
+	{
+	  GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm = False;
+	}
     }
-  }
 }
 
 GdkImage*
@@ -207,124 +209,119 @@ gdk_image_new (GdkImageType  type,
   GdkImagePrivateX11 *private;
 #ifdef USE_SHM
   XShmSegmentInfo *x_shm_info;
-#endif /* use_shm */
+#endif /* USE_SHM */
   Visual *xvisual;
   GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (visual->screen);
 
-  switch (type) {
-  case GDK_IMAGE_FASTEST:
-    image =
-      gdk_image_new (GDK_IMAGE_SHARED, visual, width, height);
+  switch (type)
+    {
+    case GDK_IMAGE_FASTEST:
+      image = gdk_image_new (GDK_IMAGE_SHARED, visual, width, height);
 
-    if (!image)
-      image =
-	gdk_image_new (GDK_IMAGE_NORMAL, visual, width, height);
-    break;
+      if (!image)
+	image = gdk_image_new (GDK_IMAGE_NORMAL, visual, width, height);
+      break;
 
-  default:
-    image = g_object_new (gdk_image_get_type (), NULL);
+    default:
+      image = g_object_new (gdk_image_get_type (), NULL);
+      
+      private = PRIVATE_DATA (image);
 
-    private = GDK_IMAGE_PRIVATE_DATA (image);
+      private->screen = visual->screen;
 
-    private->screen = visual->screen;
+      image->type = type;
+      image->visual = visual;
+      image->width = width;
+      image->height = height;
+      image->depth = visual->depth;
 
-    image->type = type;
-    image->visual = visual;
-    image->width = width;
-    image->height = height;
-    image->depth = visual->depth;
+      xvisual = ((GdkVisualPrivate*) visual)->xvisual;
 
-    xvisual = ((GdkVisualPrivate *) visual)->xvisual;
-
-    switch (type) {
-    case GDK_IMAGE_SHARED:
+      switch (type)
+	{
+	case GDK_IMAGE_SHARED:
 #ifdef USE_SHM
-     if (GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm) 
-        {
-	   private->x_shm_info = g_new (XShmSegmentInfo, 1);
-	   x_shm_info = private->x_shm_info;
-	   x_shm_info->shmid = -1;
-	   x_shm_info->shmaddr = (char*) -1;
+	  if (GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm)
+	    {
+	      private->x_shm_info = g_new (XShmSegmentInfo, 1);
+	      x_shm_info = private->x_shm_info;
+	      x_shm_info->shmid = -1;
+	      x_shm_info->shmaddr = (char*) -1;
 
-	   private->ximage = XShmCreateImage (scr_impl->xdisplay, 
-					      xvisual, visual->depth,
-					      ZPixmap, NULL, 
-					      x_shm_info, width, height);
-	if (private->ximage == NULL) 
-	  {
-	    g_warning ("XShmCreateImage failed");
-	    GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = False;
-	    
-	    goto error;
-	  }
+	      private->ximage = XShmCreateImage (scr_impl->xdisplay, xvisual, visual->depth,
+						 ZPixmap, NULL, x_shm_info, width, height);
+	      if (private->ximage == NULL)
+		{
+		  g_warning ("XShmCreateImage failed");
+		  GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = FALSE;
 
-	x_shm_info->shmid = shmget (IPC_PRIVATE,
-				    private->ximage->bytes_per_line *
-				    private->ximage->height,
-				    IPC_CREAT | 0600);
+		  goto error;
+		}
 
-	if (x_shm_info->shmid == -1) {
-	  /*
-	     EINVAL indicates, most likely, that the segment we asked for
-	     * is bigger than SHMMAX, so we don't treat it as a permanently
-	     * fatal error. ENOSPC and ENOMEM may also indicate this, but
-	     * more likely are permanent errors.
-	   */
-	  if (errno != EINVAL) {
-	    g_warning ("shmget failed: error %d (%s)", errno,
-		       g_strerror (errno));
-	    GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = False;
-	  }
+	      x_shm_info->shmid = shmget (IPC_PRIVATE,
+					  private->ximage->bytes_per_line * private->ximage->height,
+					  IPC_CREAT | 0600);
 
-	  goto error;
-	}
+	      if (x_shm_info->shmid == -1)
+		{
+		  /* EINVAL indicates, most likely, that the segment we asked for
+		   * is bigger than SHMMAX, so we don't treat it as a permanent
+		   * error. ENOSPC and ENOMEM may also indicate this, but
+		   * more likely are permanent errors.
+		   */
+		  if (errno != EINVAL)
+		    {
+		      g_warning ("shmget failed: error %d (%s)", errno, g_strerror (errno));
+		      GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = FALSE;
+		    }
 
-	x_shm_info->readOnly = False;
-	x_shm_info->shmaddr = shmat (x_shm_info->shmid, 0, 0);
-	private->ximage->data = x_shm_info->shmaddr;
+		  goto error;
+		}
 
-	if (x_shm_info->shmaddr == (char *) -1) {
-	    g_warning ("shmat failed: error %d (%s)", errno, g_strerror (errno));
+	      x_shm_info->readOnly = False;
+	      x_shm_info->shmaddr = shmat (x_shm_info->shmid, 0, 0);
+	      private->ximage->data = x_shm_info->shmaddr;
+
+	      if (x_shm_info->shmaddr == (char*) -1)
+		{
+		  g_warning ("shmat failed: error %d (%s)", errno, g_strerror (errno));
 		  /* Failure in shmat is almost certainly permanent. Most likely error is
 		   * EMFILE, which would mean that we've exceeded the per-process
 		   * Shm segment limit.
 		   */
-	    GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = False;
-	    goto error;
-	  break;
+		  GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = FALSE;
+		  goto error;
+		}
 
-	}
+	      gdk_error_trap_push ();
 
-	gdk_error_trap_push ();
+	      XShmAttach (GDK_SCREEN_XDISPLAY (private->screen), x_shm_info);
+	      XSync (GDK_SCREEN_XDISPLAY (private->screen), False);
 
-	XShmAttach (scr_impl->xdisplay, x_shm_info);
-	XSync (scr_impl->xdisplay, False);
+	      if (gdk_error_trap_pop ())
+		{
+		  /* this is the common failure case so omit warning */
+		  GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = FALSE;
+		  goto error;
+		}
+	      
+	      /* We mark the segment as destroyed so that when
+	       * the last process detaches, it will be deleted.
+	       * There is a small possibility of leaking if
+	       * we die in XShmAttach. In theory, a signal handler
+	       * could be set up.
+	       */
+	      shmctl (x_shm_info->shmid, IPC_RMID, 0);		      
 
-        if (gdk_error_trap_pop ())
-	  {
-	   /* this is the common failure case so omit warning */
-	   GDK_DISPLAY_IMPL_X11 (scr_impl->display)->gdk_use_xshm = False;
-	   goto error;
-	  }
-      
-        /* We mark the segment as destroyed so that when
-         * the last process detaches, it will be deleted.
-         * There is a small possibility of leaking if
-         * we die in XShmAttach. In theory, a signal handler
-         * could be set up.
-         */
-        shmctl (x_shm_info->shmid, IPC_RMID, 0);		      
-
-        if (image)
-	  image_list = g_list_prepend (image_list, image);
-      }
-          else
-
+	      if (image)
+		image_list = g_list_prepend (image_list, image);
+	    }
+	  else
 #endif /* USE_SHM */
 	    goto error;
 	  break;
 	case GDK_IMAGE_NORMAL:
-	  private->ximage = XCreateImage (scr_impl->xdisplay, xvisual, visual->depth,
+	  private->ximage = XCreateImage (GDK_SCREEN_XDISPLAY (private->screen), xvisual, visual->depth,
 					  ZPixmap, 0, 0, width, height, 32, 0);
 
 	  /* Use malloc, not g_malloc here, because X will call free()
@@ -336,18 +333,19 @@ gdk_image_new (GdkImageType  type,
 	    goto error;
 	  break;
 
-    case GDK_IMAGE_FASTEST:
-      g_assert_not_reached ();
-    }
+	case GDK_IMAGE_FASTEST:
+	  g_assert_not_reached ();
+	}
 
-    if (image) {
-      image->byte_order = private->ximage->byte_order;
-      image->mem = private->ximage->data;
-      image->bpl = private->ximage->bytes_per_line;
-      image->bpp = (private->ximage->bits_per_pixel + 7) / 8;
-      image->bits_per_pixel = private->ximage->bits_per_pixel;
+      if (image)
+	{
+	  image->byte_order = private->ximage->byte_order;
+	  image->mem = private->ximage->data;
+	  image->bpl = private->ximage->bytes_per_line;
+	  image->bpp = (private->ximage->bits_per_pixel + 7) / 8;
+	  image->bits_per_pixel = private->ximage->bits_per_pixel;
+	}
     }
-  }
 
   return image;
 
@@ -401,19 +399,19 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
   
   have_grab = FALSE;
+
   if (GDK_IS_WINDOW_IMPL_X11 (drawable))
     {
       GdkRectangle screen_rect;
       Window child;
 
       g_assert (visual);
-      
+
       have_grab = TRUE;
-      gdk_x11_grab_server (gdk_screen_get_display(impl->screen));
-      
+      gdk_x11_grab_server (gdk_screen_get_display (impl->screen));
+
       /* Translate screen area into window coordinates */
-      
-      XTranslateCoordinates (GDK_SCREEN_XDISPLAY(impl->screen),
+      XTranslateCoordinates (GDK_SCREEN_XDISPLAY (impl->screen),
 			     GDK_SCREEN_XROOTWIN (impl->screen),
 			     impl->xid,
 			     0, 0, 
@@ -429,10 +427,11 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
       window_rect.y = 0;
       
       gdk_window_get_geometry (GDK_WINDOW (impl->wrapper),
-			       NULL, NULL,
+                               NULL, NULL,
                                &window_rect.width,
                                &window_rect.height,
                                NULL);
+      
       /* compute intersection of screen and window, in window
        * coordinates
        */
@@ -441,7 +440,7 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
                                     &window_rect))
         {
           if (have_grab)
-	    gdk_x11_ungrab_server (gdk_screen_get_display(impl->screen));
+            gdk_x11_ungrab_server (gdk_screen_get_display (impl->screen));
           return image = gdk_image_new (GDK_IMAGE_FASTEST,
                                         visual,
                                         width, height);
@@ -467,9 +466,9 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
    * the onscreen part.
    */
   if (!gdk_rectangle_intersect (&req, &window_rect, &req) && visual) 
-    {
+    {      
       if (have_grab)
-	gdk_x11_ungrab_server (gdk_screen_get_display(impl->screen));
+	gdk_x11_ungrab_server (gdk_screen_get_display (impl->screen));
       return image = gdk_image_new (GDK_IMAGE_FASTEST,
                                     visual,
                                     width, height);
@@ -486,7 +485,7 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
       if (image == NULL)
         {
           if (have_grab)
-	    gdk_x11_ungrab_server (gdk_screen_get_display(impl->screen));
+            gdk_x11_ungrab_server (gdk_screen_get_display (impl->screen));
           return NULL;
         }
 
@@ -494,7 +493,7 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
 
       gdk_error_trap_push ();
 
-      ximage = XGetSubImage (GDK_SCREEN_XDISPLAY(impl->screen),
+      ximage = XGetSubImage (GDK_SCREEN_XDISPLAY (impl->screen),
                              impl->xid,
                              req.x, req.y, req.width, req.height,
                              AllPlanes, ZPixmap,
@@ -502,7 +501,10 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
                              req.x - x, req.y - y);
 
       if (have_grab)
-        gdk_x11_ungrab_server (gdk_screen_get_display(impl->screen));
+        {
+          gdk_x11_ungrab_server (gdk_screen_get_display (impl->screen));
+          have_grab = FALSE;
+        }
       
       if (gdk_error_trap_pop () || ximage == NULL)
         {
@@ -518,15 +520,14 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
        * XGetImage() will do the right thing without
        * them.
        */
-      ximage = XGetImage (GDK_SCREEN_XDISPLAY(impl->screen),
+      ximage = XGetImage (GDK_SCREEN_XDISPLAY (impl->screen),
                           impl->xid,
                           x, y, width, height,
                           AllPlanes, ZPixmap);
 
-
       if (have_grab)
         {
-          gdk_x11_ungrab_server (gdk_screen_get_display(impl->screen));
+          gdk_x11_ungrab_server (gdk_screen_get_display (impl->screen));
           have_grab = FALSE;
         }      
 
@@ -604,7 +605,7 @@ gdk_x11_image_destroy (GdkImage *image)
 
   if (private == NULL) /* This means that gdk_image_exit() destroyed the
                         * image already, and now we're called a second
-                        * time from _finalize ()
+                        * time from _finalize()
                         */
     return;
 
@@ -618,11 +619,11 @@ gdk_x11_image_destroy (GdkImage *image)
 	  
 	case GDK_IMAGE_SHARED:
 #ifdef USE_SHM
-	  gdk_display_sync (GDK_SCREEN_IMPL_X11(private->screen)->display);
-
-	  XShmDetach (GDK_SCREEN_XDISPLAY(private->screen), private->x_shm_info);
+	  gdk_flush();
+	  
+	  XShmDetach (GDK_SCREEN_XDISPLAY (private->screen), private->x_shm_info);
 	  XDestroyImage (private->ximage);
-
+	  
 	  x_shm_info = private->x_shm_info;
 	  shmdt (x_shm_info->shmaddr);
 	  

@@ -131,6 +131,7 @@ typedef enum
 #define GTK_WIDGET_SET_FLAGS(wid,flag)	  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) |= (flag)); }G_STMT_END
 #define GTK_WIDGET_UNSET_FLAGS(wid,flag)  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) &= ~(flag)); }G_STMT_END
 
+
 /* forward declaration to avoid excessive includes (and concurrent includes)
  */
 typedef struct _GtkRequisition	   GtkRequisition;

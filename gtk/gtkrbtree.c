@@ -775,8 +775,11 @@ _gtk_rbtree_reorder (GtkRBTree *tree,
   GArray *array;
   GtkRBNode *node;
   gint i;
-
-
+  
+  g_return_if_fail (tree != NULL);
+  g_return_if_fail (length > 0);
+  g_return_if_fail (tree->root->count == length);
+  
   /* Sort the trees values in the new tree. */
   array = g_array_sized_new (FALSE, FALSE, sizeof (GtkRBReorder), length);
   for (i = 0; i < length; i++)

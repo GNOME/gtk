@@ -33,9 +33,6 @@
 #include "gdkinput.h"
 #include "gdkprivate.h"
 #include "gdkinputprivate.h"
-#include "gdkscreen-x11.h"
-#include "gdkdisplay-x11.h"
-
 
 static GdkDeviceAxis gdk_input_core_axes[] = {
   { GDK_AXIS_X, 0, 0 },

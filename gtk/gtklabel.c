@@ -519,8 +519,8 @@ gtk_label_hierarchy_changed (GtkWidget *widget,
  * @widget: the target #GtkWidget 
  *
  * If the label has been set so that it has an mnemonic key (using
- * i.e.  gtk_label_set_markup_with_mnemonic (),
- * gtk_label_set_text_with_mnemonic (), gtk_label_new_with_mnemonic ()
+ * i.e.  gtk_label_set_markup_with_mnemonic(),
+ * gtk_label_set_text_with_mnemonic(), gtk_label_new_with_mnemonic()
  * or the "use_underline" property) the label can be associated with a
  * widget that is the target of the mnemonic. When the label is inside
  * a widget (like a #GtkButton or a #GtkNotebook tab) it is
@@ -868,7 +868,7 @@ gtk_label_set_markup (GtkLabel    *label,
  * indicating that they represent a keyboard accelerator called a mnemonic.
  *
  * The mnemonic key can be used to activate another widget, chosen automatically,
- * or explicitly using gtk_label_set_mnemonic_widget ().
+ * or explicitly using gtk_label_set_mnemonic_widget().
  **/
 void
 gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
@@ -1196,6 +1196,8 @@ gtk_label_ensure_layout (GtkLabel *label,
 	}
       else
 	{
+	  GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (label));
+	  
 	  pango_layout_set_width (label->layout, -1);
 	  pango_layout_get_extents (label->layout, NULL, &logical_rect);
       
@@ -1210,7 +1212,7 @@ gtk_label_ensure_layout (GtkLabel *label,
 		       PANGO_SCALE * gdk_string_width (GTK_WIDGET (label)->style->font,
 						"This long string gives a good enough length for any line to have."));
 	  width = MIN (width,
-		       PANGO_SCALE * (gdk_screen_get_width (gtk_widget_get_screen (GTK_WIDGET(label))) + 1) / 2);
+		       PANGO_SCALE * (gdk_screen_get_width (screen) + 1) / 2);
 
 	  pango_layout_set_width (label->layout, width);
 	  pango_layout_get_extents (label->layout, NULL, &logical_rect);
@@ -1617,7 +1619,7 @@ gtk_label_parse_uline (GtkLabel    *label,
  * If characters in @str are preceded by an underscore, they are underlined
  * indicating that they represent a keyboard accelerator called a mnemonic.
  * The mnemonic key can be used to activate another widget, chosen automatically,
- * or explicitly using gtk_label_set_mnemonic_widget ().
+ * or explicitly using gtk_label_set_mnemonic_widget().
  **/
 void
 gtk_label_set_text_with_mnemonic (GtkLabel    *label,
@@ -2035,7 +2037,8 @@ get_text_callback (GtkClipboard     *clipboard,
       str = g_strndup (label->text + start,
                        end - start);
       
-      gtk_selection_data_set_text (selection_data, str);
+      gtk_selection_data_set_text (selection_data, 
+                                   str);
 
       g_free (str);
     }
@@ -2080,8 +2083,8 @@ gtk_label_select_region_index (GtkLabel *label,
       label->select_info->selection_anchor = anchor_index;
       label->select_info->selection_end = end_index;
 
-      clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display(label), GDK_SELECTION_PRIMARY);      
-      clipboard = gtk_clipboard_get (GDK_SELECTION_PRIMARY);      
+      clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (label)),
+						 GDK_SELECTION_PRIMARY);      
       
       if (anchor_index != end_index)
         {
@@ -2311,7 +2314,7 @@ gtk_label_set_use_underline (GtkLabel *label,
  * gtk_label_get_use_underline:
  * @label: a #GtkLabel
  *
- * Returns whether an embedded underline in thef label indicates a
+ * Returns whether an embedded underline in the label indicates a
  * mnemonic. See gtk_label_set_use_underline ().
  *
  * Return value: %TRUE whether an embedded underline in the label indicates

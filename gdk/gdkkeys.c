@@ -25,6 +25,7 @@
  */
 
 #include <config.h>
+
 #include "gdkdisplay.h"
 #include "gdkdisplaymgr.h"
 #include "gdkinternals.h"
@@ -35,10 +36,7 @@ enum {
   LAST_SIGNAL
 };
 
-static void gdk_keymap_init       (GdkKeymap      *keymap);
 static void gdk_keymap_class_init (GdkKeymapClass *klass);
-
-static gpointer parent_class = NULL;
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -59,7 +57,7 @@ gdk_keymap_get_type (void)
         NULL,           /* class_data */
         sizeof (GdkKeymap),
         0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_keymap_init,
+        (GInstanceInitFunc) NULL,
       };
       
       object_type = g_type_register_static (G_TYPE_OBJECT,
@@ -71,17 +69,9 @@ gdk_keymap_get_type (void)
 }
 
 static void
-gdk_keymap_init (GdkKeymap *keymap)
-{
-
-}
-
-static void
 gdk_keymap_class_init (GdkKeymapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   signals[DIRECTION_CHANGED] =
     g_signal_new ("direction_changed",
@@ -92,25 +82,6 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE,
 		  0);
-}
-
-GdkKeymap*
-gdk_keymap_get_for_display (GdkDisplay *display)
-{
- GdkKeymap *keymap = g_object_new (gdk_keymap_get_type (), NULL);
- keymap->display = display;
- return keymap;
-}
-
-GdkKeymap*
-gdk_keymap_get_default (void)
-{
-  static GdkKeymap *keymap = NULL;
-
-  if (keymap == NULL)
-    keymap = gdk_keymap_get_for_display (gdk_get_default_display ());
-
-  return keymap;
 }
 
 /* Other key-handling stuff

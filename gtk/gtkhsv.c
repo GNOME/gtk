@@ -851,7 +851,7 @@ gtk_hsv_button_release (GtkWidget      *widget,
     g_assert_not_reached ();
   
   gdk_display_pointer_ungrab (gdk_drawable_get_display (event->window),
-				  event->time);
+			      event->time);
   return TRUE;
 }
 
@@ -942,7 +942,7 @@ paint_ring (GtkHSV      *hsv,
     {
       p = buf + yy * width * 3;
       
-      dy = - (yy + y - center);
+      dy = -(yy + y - center);
       
       for (xx = 0; xx < width; xx++)
 	{
@@ -976,9 +976,7 @@ paint_ring (GtkHSV      *hsv,
   
   /* Create clipping mask */
   
-  mask = gdk_pixmap_new (
-	  gdk_screen_get_root_window (gtk_widget_get_screen (GTK_WIDGET(hsv))), 
-			 width, height, 1);
+  mask = gdk_pixmap_new (drawable, width, height, 1);
 
   gc = gdk_gc_new (mask);
   
@@ -1213,7 +1211,7 @@ paint_triangle (GtkHSV      *hsv,
   
   /* Create clipping mask */
   
-  mask = gdk_pixmap_new (gdk_screen_get_root_window(gtk_widget_get_screen (GTK_WIDGET (hsv))), width, height, 1);
+  mask = gdk_pixmap_new (drawable, width, height, 1);
 
   gc = gdk_gc_new (mask);
   
@@ -1326,8 +1324,8 @@ gtk_hsv_expose (GtkWidget      *widget,
   if (!gdk_rectangle_intersect (&event->area, &rect, &dest))
     return FALSE;
   
-  pixmap = gdk_pixmap_new (widget->window, dest.width, dest.height, gtk_widget_get_visual (widget)->depth);
-
+  pixmap = gdk_pixmap_new (widget->window, dest.width, dest.height,
+			   gtk_widget_get_visual (widget)->depth);
   
   rect = dest;
   rect.x = 0;

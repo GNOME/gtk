@@ -97,10 +97,10 @@ Adds a new #GtkMenuItem to the end of the menu's item list.
 </para>
 
 <!-- # Unused Parameters # -->
-@m: 
-@c: 
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
+@m: 
+@c: 
 
 
 <!-- ##### MACRO gtk_menu_prepend ##### -->
@@ -109,6 +109,7 @@ Adds a new #GtkMenuItem to the beginning of the menu's item list.
 </para>
 
 <!-- # Unused Parameters # -->
+@menu_child: 
 @m: 
 @c: 
 @menu: a #GtkMenu.
@@ -124,6 +125,7 @@ indicated by @position.
 <!-- # Unused Parameters # -->
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
+@pos: 
 @position: The position in the item list where @child is added.
 Positions are numbered from 0 to n-1.
 
@@ -292,4 +294,9 @@ will be called when the menu is later detached from the widget.
 @attach_widget: the #GtkWidget that the menu is being detached from.
 @menu: the #GtkMenu being detached.
 
+
+<!-- ##### ARG GtkMenu:tearoff-title ##### -->
+<para>
+
+</para>
 

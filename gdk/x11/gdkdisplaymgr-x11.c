@@ -25,21 +25,14 @@
 #include "gdkdisplaymgr.h"
 #include "gdkdisplaymgr-x11.h"
 #include "gdkdisplay-x11.h"
+#include "gdkprivate.h"
 #include "gdkscreen-x11.h"
 
-
-void gdk_x11_display_manager_class_init (GdkDisplayManagerClass * class);
-GdkDisplay *gdk_x11_display_manager_open_display (GdkDisplayManager * dpy_mgr,
-						  gchar * display_name);
-void gdk_x11_display_manager_set_default_display (GdkDisplayManager * dpy_mgr,
-						  GdkDisplay *
-						  default_display);
-GdkDisplay *gdk_x11_display_manager_get_default_display (GdkDisplayManager *
-							 dpy_mgr);
-gint gdk_x11_display_manager_get_display_count (GdkDisplayManager * dpy_mgr);
+static void gdk_display_manager_set_default_display (GdkDisplayManager *dpy_mgr,
+						     GdkDisplay        *default_display);
 
 GType
-gdk_display_manager_type (void)
+gdk_display_manager_get_type (void)
 {
   static GType object_type = 0;
 
@@ -49,7 +42,7 @@ gdk_display_manager_type (void)
 	sizeof (GdkDisplayManagerClass),
 	(GBaseInitFunc) NULL,
 	(GBaseFinalizeFunc) NULL,
-	(GClassInitFunc) gdk_x11_display_manager_class_init,
+	(GClassInitFunc) NULL,
 	NULL,			/* class_finalize */
 	NULL,			/* class_data */
 	sizeof (GdkDisplayManager),
@@ -63,49 +56,39 @@ gdk_display_manager_type (void)
   return object_type;
 }
 
-void
-gdk_x11_display_manager_class_init (GdkDisplayManagerClass * class)
-{
-
-  class->open_display = gdk_x11_display_manager_open_display;
-  class->set_default_display = gdk_x11_display_manager_set_default_display;
-  class->get_default_display = gdk_x11_display_manager_get_default_display;
-  class->get_display_count = gdk_x11_display_manager_get_display_count;
-}
-
 GdkDisplay *
-gdk_x11_display_manager_open_display (GdkDisplayManager * dpy_mgr,
-				      gchar * display_name)
+gdk_display_manager_open_display (GdkDisplayManager *dpy_mgr,
+				  gchar             *display_name)
 {
   GdkDisplay *dpy;
-  dpy = gdk_x11_display_impl_display_new (display_name);
+  dpy = _gdk_x11_display_impl_display_new (display_name);
   if (!dpy)
     return NULL;
 
   if (dpy_mgr->open_displays == NULL)
-    gdk_x11_display_manager_set_default_display (dpy_mgr, dpy);
+    gdk_display_manager_set_default_display (dpy_mgr, dpy);
 
   dpy_mgr->open_displays = g_slist_append (dpy_mgr->open_displays, dpy);
   return dpy;
 }
 
 
-void
-gdk_x11_display_manager_set_default_display (GdkDisplayManager * dpy_mgr,
-					     GdkDisplay * default_display)
+static void
+gdk_display_manager_set_default_display (GdkDisplayManager * dpy_mgr,
+					 GdkDisplay * default_display)
 {
   dpy_mgr->default_display = default_display;
 }
 
 GdkDisplay *
-gdk_x11_display_manager_get_default_display (GdkDisplayManager * dpy_mgr)
+gdk_display_manager_get_default_display (GdkDisplayManager * dpy_mgr)
 {
   g_assert (dpy_mgr->default_display != NULL);
   return dpy_mgr->default_display;
 }
 
 gint
-gdk_x11_display_manager_get_display_count (GdkDisplayManager * dpy_mgr)
+gdk_display_manager_get_display_count (GdkDisplayManager * dpy_mgr)
 {
   gint i = 0;
   GSList *tmp = dpy_mgr->open_displays;

@@ -28,11 +28,11 @@
 #include <pango/pangoxft.h>
 #endif
 
-
 PangoContext *
-gdk_pango_context_get_for_screen (GdkScreen * screen)
+gdk_pango_context_get_for_screen (GdkScreen *screen)
 {
   PangoContext *context;
+  
 #ifdef HAVE_XFT
   static gint use_xft = -1;
   if (use_xft == -1)
@@ -44,16 +44,18 @@ gdk_pango_context_get_for_screen (GdkScreen * screen)
   
   if (use_xft)
     context = pango_xft_get_context (GDK_SCREEN_XDISPLAY (screen),
-				  GDK_SCREEN_IMPL_X11 (screen)->scr_num);
+				     GDK_SCREEN_IMPL_X11 (screen)->scr_num);
   else
 #endif /* HAVE_XFT */
     context = pango_x_get_context (GDK_SCREEN_XDISPLAY (screen));
+  
   g_object_set_data (G_OBJECT (context), "gdk-screen", screen);
+  
   return context;
 }
 
 PangoContext *
 gdk_pango_context_get (void)
 {
-    return gdk_pango_context_get_for_screen (gdk_get_default_screen ());
+  return gdk_pango_context_get_for_screen (gdk_get_default_screen ());
 }

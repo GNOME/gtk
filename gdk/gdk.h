@@ -29,6 +29,8 @@
 
 #include <gdk/gdkcolor.h>
 #include <gdk/gdkcursor.h>
+#include <gdk/gdkdisplay.h>
+#include <gdk/gdkdisplaymgr.h>
 #include <gdk/gdkdnd.h>
 #include <gdk/gdkdrawable.h>
 #include <gdk/gdkenumtypes.h>
@@ -44,12 +46,11 @@
 #include <gdk/gdkproperty.h>
 #include <gdk/gdkregion.h>
 #include <gdk/gdkrgb.h>
+#include <gdk/gdkscreen.h>
 #include <gdk/gdkselection.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkvisual.h>
 #include <gdk/gdkwindow.h>
-#include <gdk/gdkdisplay.h>
-#include <gdk/gdkscreen.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -73,7 +74,10 @@ gchar*	  gdk_set_locale	   	(void);
  */
 void      gdk_error_trap_push           (void);
 gint      gdk_error_trap_pop            (void);
+
+
 void	  gdk_set_use_xshm		(gboolean	 use_xshm);
+
 gboolean  gdk_get_use_xshm		(void);
 gchar*	  gdk_get_display		(void);
 gchar*	  gdk_get_display_arg_name	(void);
@@ -106,11 +110,11 @@ gboolean      gdk_pointer_is_grabbed (void);
 
 gint gdk_screen_width  (void) G_GNUC_CONST;
 gint gdk_screen_height (void) G_GNUC_CONST;
+
 gint gdk_screen_width_mm  (void) G_GNUC_CONST;
 gint gdk_screen_height_mm (void) G_GNUC_CONST;
 
 void gdk_flush (void);
-
 void gdk_beep (void);
 
 void gdk_set_double_click_time (guint msec);
@@ -130,7 +134,7 @@ GType gdk_rectangle_get_type (void);
 
 /* Conversion functions between wide char and multibyte strings. 
  */
-gchar     *gdk_wcstombs             (const GdkWChar   *src);
+gchar     *gdk_wcstombs          (const GdkWChar   *src);
 gint       gdk_mbstowcs          (GdkWChar         *dest,
 				  const gchar      *src,
 				  gint              dest_max);

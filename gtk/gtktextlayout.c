@@ -1411,23 +1411,19 @@ add_child_attrs (GtkTextLayout      *layout,
 
   if (tmp_list == NULL)
     {
-      /* No widget at this anchor in this display;
-       * not an error.
+      /* If tmp_list == NULL then there is no widget at this anchor in
+       * this display; not an error. We make up an arbitrary size
+       * to use, just so the programmer can see the blank spot.
+       * We also put a NULL in the shaped objects list, to keep
+       * the correspondence between the list and the shaped chars in
+       * the layout. A bad hack, yes.
        */
 
-      return;
-    }
+      width = 30;
+      height = 20;
 
-  if (layout->preedit_string)
-    {
-      g_free (layout->preedit_string);
-      layout->preedit_string = NULL;
-    }
-
-  if (layout->preedit_attrs)
-    {
-      pango_attr_list_unref (layout->preedit_attrs);
-      layout->preedit_attrs = NULL;
+      display->shaped_objects =
+        g_slist_append (display->shaped_objects, NULL);
     }
   
   logical_rect.x = 0;
@@ -1540,7 +1536,10 @@ allocate_child_widgets (GtkTextLayout      *text_layout,
           GObject *shaped_object = shaped->data;
           shaped = shaped->next;
 
-          if (GTK_IS_WIDGET (shaped_object))
+          /* shaped_object is NULL for child anchors with no
+           * widgets stored at them
+           */
+          if (shaped_object && GTK_IS_WIDGET (shaped_object))
             {
               PangoRectangle extents;
 
