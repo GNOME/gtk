@@ -41,7 +41,8 @@ noinst_PROGRAMS = 		\
 	testtreeflow		\
 	testtreecolumns		\
 	testtreesort		\
-	treestoretest
+	treestoretest		\
+	testxinerama
 
 simple_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
@@ -61,6 +62,7 @@ testtreeflow_DEPENDENCIES = $(DEPS)
 testtreecolumns_DEPENDENCIES = $(DEPS)
 testtreesort_DEPENDENCIES = $(DEPS)
 treestoretest_DEPENDENCIES = $(TEST_DEPS)
+testxinerama_DEPENDENCIES = $(TEST_DEPS)
 
 simple_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
@@ -80,6 +82,7 @@ testtreecolumns_LDADD = $(LDADDS)
 testtreesort_LDADD = $(LDADDS)
 testtext_LDADD = $(LDADDS)
 treestoretest_LDADD = $(LDADDS)
+testxinerama_LDADD = $(LDADDS)
 
 testgtk_SOURCES =	\
 	prop-editor.c   \

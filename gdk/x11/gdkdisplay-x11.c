@@ -216,6 +216,7 @@ init_xinerama_support (GdkScreen * screen)
 GdkDisplay *
 gdk_open_display (const gchar *display_name)
 {
+  Display *xdisplay;
   GdkDisplay *display;
   GdkDisplayX11 *display_x11;
   gint argc;
@@ -225,19 +226,17 @@ gdk_open_display (const gchar *display_name)
   XKeyboardState keyboard_state;
   gulong pid;
   gint i;
+
+  xdisplay = XOpenDisplay (display_name);
+  if (!xdisplay)
+    return NULL;
   
   display = g_object_new (GDK_TYPE_DISPLAY_X11, NULL);
   display_x11 = GDK_DISPLAY_X11 (display);
 
   display_x11->use_xft = -1;
-  display_x11->xdisplay = XOpenDisplay (display_name);
+  display_x11->xdisplay = xdisplay;
   
-  if (!display_x11->xdisplay)
-    {
-      g_object_unref (display);
-      return NULL;
-    }
-
   /* populate the screen list and set default */
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     {

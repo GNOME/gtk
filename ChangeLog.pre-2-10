@@ -1,3 +1,13 @@
+Tue Apr 30 14:23:43 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_open_display): fix
+	problem with finalizing non-initialized fully display
+	when failing to open display.
+
+	* tests/testxinerama.c: Xinerama test case from
+	multihead branch, with some cleanups. (Start even
+	if there is only one monitor, for one.)
+
 Tue Apr 30 14:15:14 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c gtk/gtkselection.c: Doc fixes.
