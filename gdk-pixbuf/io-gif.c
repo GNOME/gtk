@@ -3,8 +3,10 @@
  * Copyright (C) 1999 Mark Crichton
  * Copyright (C) 1999 The Free Software Foundation
  *
- * Authors: Mark Crichton <crichton@gimp.org>
- *          Federico Mena-Quintero <federico@gimp.org>
+ * Authors: Jonathan Blandford <jrb@redhat.com>
+ *          Adapted from the gimp gif filter written by Adam Moss <adam@gimp.org>
+ *          Gimp work based on earlier work by ......
+ *          Permission to relicense under the LGPL obtained.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -72,6 +74,7 @@ struct _GifContext
 	unsigned int aspect_ratio;
 	int gray_scale;
 	GdkPixbuf *pixbuf;
+	guchar used_cmap[3][256];
 	Gif89 gif89;
 };
 
@@ -80,16 +83,24 @@ int verbose = FALSE;
 int showComment = TRUE;
 char *globalcomment = NULL;
 gint globalusecomment = TRUE;
-static guchar   highest_used_index;
 
 static int ReadColorMap (FILE *, int, CMap, int *);
 static int DoExtension (FILE *file, GifContext *context, int label);
 static int GetDataBlock (FILE *, unsigned char *);
 static int GetCode (FILE *, int, int);
 static int LWZReadByte (FILE *, int, int);
-static gint32 ReadImage (FILE *, char *, int, int, CMap, int, int, int, int,
-			 guint, guint, guint, guint);
 
+static void ReadImage (FILE *file,
+		       GifContext *context, 
+		       int   len,
+		       int   height,
+		       CMap  cmap,
+		       int   ncols,
+		       int   format,
+		       int   interlace,
+		       int   number,
+		       guint   leftpos,
+		       guint   toppos);
 
 static int
 ReadColorMap (FILE *file,
@@ -132,10 +143,14 @@ DoExtension (FILE *file, GifContext *context, int label)
 		context->gif89.disposal = (buf[0] >> 2) & 0x7;
 		context->gif89.input_flag = (buf[0] >> 1) & 0x1;
 		context->gif89.delay_time = LM_to_uint (buf[1], buf[2]);
-		if ((buf[0] & 0x1) != 0)
-			context->gif89.transparent = buf[3];
-		else
-			context->gif89.transparent = -1;
+		if (context->pixbuf == NULL) {
+			/* I only want to set the transparency if I haven't
+			 * created the pixbuf yet. */
+			if ((buf[0] & 0x1) != 0)
+				context->gif89.transparent = buf[3];
+			else
+				context->gif89.transparent = -1;
+		}
 		while (GetDataBlock (file, (unsigned char *) buf) != 0)
 			;
 		return FALSE;
@@ -335,10 +350,9 @@ LWZReadByte (FILE *file,
 	return code;
 }
 
-#if 0
-static gint32
+static void
 ReadImage (FILE *file,
-	   char *filename,
+	   GifContext *context, 
 	   int   len,
 	   int   height,
 	   CMap  cmap,
@@ -347,164 +361,46 @@ ReadImage (FILE *file,
 	   int   interlace,
 	   int   number,
 	   guint   leftpos,
-	   guint   toppos,
-	   guint screenwidth,
-	   guint screenheight)
+	   guint   toppos)
 {
-	static gint32 image_ID;
-
-	gint32 layer_ID;
-	GPixelRgn pixel_rgn;
-	GDrawable *drawable;
 	guchar *dest, *temp;
 	guchar c;
 	gint xpos = 0, ypos = 0, pass = 0;
-	gint cur_progress, max_progress;
 	gint v;
 	gint i, j;
-	gboolean alpha_frame = FALSE;
-	int nreturn_vals;
-	static int previous_disposal;
 
 	/*
 	**  Initialize the Compression routines
 	*/
 	if (!ReadOK (file, &c, 1)) {
 		/*g_message (_("GIF: EOF / read error on image data\n"));*/
-		return -1;
+		return;
 	}
 
 	if (LWZReadByte (file, TRUE, c) < 0) {
 		/*g_message (_("GIF: error while reading\n"));*/
-		return -1;
+		return;
 	}
 
-	if (frame_number == 1 ) {
-		image_ID = gimp_image_new (screenwidth, screenheight, INDEXED);
-		gimp_image_set_filename (image_ID, filename);
+	context->pixbuf = gdk_pixbuf_new (ART_PIX_RGB,
+					  context->gif89.transparent,
+					  8,
+					  context->width,
+					  context->height);
 
-		for (i = 0, j = 0; i < ncols; i++) {
-			used_cmap[0][i] = gimp_cmap[j++] = cmap[0][i];
-			used_cmap[1][i] = gimp_cmap[j++] = cmap[1][i];
-			used_cmap[2][i] = gimp_cmap[j++] = cmap[2][i];
-		}
-
-		gimp_image_set_cmap (image_ID, gimp_cmap, ncols);
-
-		if (Gif89.delayTime < 0)
-			strcpy(framename, _("Background"));
-		else
-			sprintf(framename, _("Background (%dms)"), 10*Gif89.delayTime);
-
-		previous_disposal = Gif89.disposal;
-
-		if (Gif89.transparent == -1) {
-			layer_ID = gimp_layer_new (image_ID, framename,
-						   len, height,
-						   INDEXED_IMAGE, 100, NORMAL_MODE);
-		} else {
-			layer_ID = gimp_layer_new (image_ID, framename,
-						   len, height,
-						   INDEXEDA_IMAGE, 100, NORMAL_MODE);
-			alpha_frame=TRUE;
-		}
-	}
-#if 0
-	else {
-		/* NOT FIRST FRAME */
-		/* If the colourmap is now different, we have to promote to
-		   RGB! */
-		if (!promote_to_rgb) {
-			for (i=0;i<ncols;i++) {
-				if ((used_cmap[0][i] != cmap[0][i]) ||
-				    (used_cmap[1][i] != cmap[1][i]) ||
-				    (used_cmap[2][i] != cmap[2][i])) {
-					/* Everything is RGB(A) from now on... sigh. */
-					promote_to_rgb = TRUE;
-
-					/* Promote everything we have so far into RGB(A) */
-					gimp_run_procedure("gimp_convert_rgb", &nreturn_vals,
-							   PARAM_IMAGE, image_ID,
-							   PARAM_END);
-					break;
-				}
-			}
-		}
-
-		if (Gif89.delayTime < 0)
-			sprintf(framename, _("Frame %d"), frame_number);
-		else
-			sprintf(framename, _("Frame %d (%dms)"),
-				frame_number, 10*Gif89.delayTime);
-
-		switch (previous_disposal) {
-		case 0x00: break; /* 'don't care' */
-		case 0x01: strcat(framename,_(" (combine)")); break;
-		case 0x02: strcat(framename,_(" (replace)")); break;
-		case 0x03: strcat(framename,_(" (combine)")); break;
-		case 0x04:
-		case 0x05:
-		case 0x06:
-		case 0x07:
-			strcat(framename,_(" (unknown disposal)"));
-			g_message (_("GIF: Hmm... please forward this GIF to the "
-				     "GIF plugin author!\n  (adam@foxbox.org)\n"));
-			break;
-		default: g_message (_("GIF: Something got corrupted.\n")); break;
-		}
-
-		previous_disposal = Gif89.disposal;
-
-		layer_ID = gimp_layer_new (image_ID, framename,
-					   len, height,
-					   promote_to_rgb ? RGBA_IMAGE : INDEXEDA_IMAGE,
-					   100, NORMAL_MODE);
-		alpha_frame = TRUE;
+	for (i = 0, j = 0; i < ncols; i++) {
+		context->used_cmap[0][i] = cmap[0][i];
+		context->used_cmap[1][i] = cmap[1][i];
+		context->used_cmap[2][i] = cmap[2][i];
 	}
 
-	frame_number++;
-#endif
-	gimp_image_add_layer (image_ID, layer_ID, 0);
-	gimp_layer_translate (layer_ID, (gint)leftpos, (gint)toppos);
-
-	drawable = gimp_drawable_get (layer_ID);
-
-	cur_progress = 0;
-	max_progress = height;
-
-	if (alpha_frame)
-		dest = (guchar *) g_malloc (len * height *
-					    (promote_to_rgb ? 4 : 2));
-	else
-		dest = (guchar *) g_malloc (len * height);
-
-	if (verbose)
-		g_print (_("GIF: reading %d by %d%s GIF image, ncols=%d\n"),
-	     len, height, interlace ? _(" interlaced") : "", ncols);
-
-	if (!alpha_frame && promote_to_rgb) {
-		g_message (_("GIF: Ouchie!  Can't handle non-alpha RGB frames.\n     Please mail the plugin author.  (adam@gimp.org)\n"));
-		exit(-1);
-	}
-
+	dest = gdk_pixbuf_get_pixels (context->pixbuf);
 	while ((v = LWZReadByte (file, FALSE, c)) >= 0) {
-		if (alpha_frame) {
-			if (((guchar)v > highest_used_index) && !(v == Gif89.transparent))
-				highest_used_index = (guchar)v;
-			if (promote_to_rgb) {
-				temp = dest + ( (ypos * len) + xpos ) * 4;
-				*(temp  ) = (guchar) cmap[0][v];
-				*(temp+1) = (guchar) cmap[1][v];
-				*(temp+2) = (guchar) cmap[2][v];
-				*(temp+3) = (guchar) ((v == Gif89.transparent) ? 0 : 255);
-			} else {
-				temp = dest + ( (ypos * len) + xpos ) * 2;
-				*temp = (guchar) v;
-				*(temp+1) = (guchar) ((v == Gif89.transparent) ? 0 : 255);
-			}
+		if (context->gif89.transparent) {
+			temp = dest + ( (ypos * len) + xpos ) * 2;
+			*temp = (guchar) v;
+			*(temp+1) = (guchar) ((v == context->gif89.transparent) ? 0 : 255);
 		} else {
-			if ((guchar)v > highest_used_index)
-				highest_used_index = (guchar)v;
 
 			temp = dest + (ypos * len) + xpos;
 			*temp = (guchar) v;
@@ -546,12 +442,6 @@ ReadImage (FILE *file,
 			} else {
 				ypos++;
 			}
-
-			if (run_mode != RUN_NONINTERACTIVE) {
-				cur_progress++;
-				if ((cur_progress % 16) == 0)
-					gimp_progress_update ((double) cur_progress / (double) max_progress);
-			}
 		}
 		if (ypos >= height)
 			break;
@@ -559,19 +449,8 @@ ReadImage (FILE *file,
 
  fini:
 	if (LWZReadByte (file, FALSE, c) >= 0)
-		g_print (_("GIF: too much input data, ignoring extra...\n"));
-
-	gimp_pixel_rgn_init (&pixel_rgn, drawable, 0, 0, drawable->width, drawable->height, TRUE, FALSE);
-	gimp_pixel_rgn_set_rect (&pixel_rgn, dest, 0, 0, drawable->width, drawable->height);
-
-	g_free (dest);
-
-	gimp_drawable_flush (drawable);
-	gimp_drawable_detach (drawable);
-
-	return image_ID;
+		g_print ("GIF: too much input data, ignoring extra...\n");
 }
-#endif
 
 /* Shared library entry point */
 GdkPixbuf *
@@ -636,8 +515,6 @@ image_load (FILE *file)
 		/*g_message (_("GIF: warning - non-square pixels\n"));*/
 	}
 
-	highest_used_index = 0;
-
 	for (;;) {
 		if (!ReadOK (file, &c, 1)) {
 			/*g_message (_("GIF: EOF / read error on image data\n"));*/
@@ -676,33 +553,27 @@ image_load (FILE *file)
 
 		bitPixel = 1 << ((buf[8] & 0x07) + 1);
 
-#if 0
 		if (!useGlobalColormap) {
-			if (ReadColorMap (file, bitPixel, localColorMap, &grayScale)) {
+			if (ReadColorMap (file, bitPixel, localColorMap, &context->gray_scale)) {
 				/*g_message (_("GIF: error reading local colormap\n"));*/
-				return image_ID; /* will be -1 if failed on first image! */
+				return context->pixbuf; /* will be -1 if failed on first image! */
 			}
-			image_ID = ReadImage (file, filename, LM_to_uint (buf[4], buf[5]),
-					      LM_to_uint (buf[6], buf[7]),
-					      localColorMap, bitPixel,
-					      grayScale,
-					      BitSet (buf[8], INTERLACE), imageCount,
-					      (guint) LM_to_uint (buf[0], buf[1]),
-					      (guint) LM_to_uint (buf[2], buf[3]),
-					      GifScreen.Width,
-					      GifScreen.Height);
+			ReadImage (file, context, LM_to_uint (buf[4], buf[5]),
+				   LM_to_uint (buf[6], buf[7]),
+				   localColorMap, bitPixel,
+				   context->gray_scale,
+				   BitSet (buf[8], INTERLACE), imageCount,
+				   (guint) LM_to_uint (buf[0], buf[1]),
+				   (guint) LM_to_uint (buf[2], buf[3]));
 		} else {
-			image_ID = ReadImage (file, filename, LM_to_uint (buf[4], buf[5]),
-					      LM_to_uint (buf[6], buf[7]),
-					      GifScreen.ColorMap, GifScreen.BitPixel,
-					      GifScreen.GrayScale,
-					      BitSet (buf[8], INTERLACE), imageCount,
-					      (guint) LM_to_uint (buf[0], buf[1]),
-					      (guint) LM_to_uint (buf[2], buf[3]),
-					      GifScreen.Width,
-					      GifScreen.Height);
+			ReadImage (file, context, LM_to_uint (buf[4], buf[5]),
+				   LM_to_uint (buf[6], buf[7]),
+				   context->color_map, context->bit_pixel,
+				   context->gray_scale,
+				   BitSet (buf[8], INTERLACE), imageCount,
+				   (guint) LM_to_uint (buf[0], buf[1]),
+				   (guint) LM_to_uint (buf[2], buf[3]));
 		}
-#endif
 	}
 
 	return context->pixbuf;

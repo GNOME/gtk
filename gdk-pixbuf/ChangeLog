@@ -1,3 +1,9 @@
+1999-10-30    <jrb@redhat.com>
+
+	* src/io-gif.c: Some more work.  Now it generates a gdk_pixbuf of
+	the right size, at a minimum, even if the image is squished and
+	the wrong color.
+
 1999-10-28  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_write): don't send a
