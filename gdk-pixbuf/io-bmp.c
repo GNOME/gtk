@@ -876,8 +876,18 @@ DoCompressed(struct bmp_progressive_state *context, GError **error)
 	guchar c;
 	gint idx;
 
-	if (context->compr.y >= context->Header.height)
+	/* context->compr.y might be past the last line because we are
+	 * on padding past the end of a valid data, or we might have hit
+	 * out-of-bounds data. Either way we just eat-and-ignore the
+	 * rest of the file. Doing the check only here and not when
+	 * we change y below is fine since BufferSize is always 2 here
+	 * and the BMP file format always starts new data on 16-bit
+	 * boundaries.
+	 */
+	if (context->compr.y >= context->Header.height) {
+		context->BufferDone = 0;
 		return TRUE;
+	}
 
 	y = context->compr.y;
 
