@@ -39,6 +39,11 @@
 #ifdef G_OS_UNIX
 #include <unistd.h>
 #endif
+#ifdef G_OS_WIN32
+#define STRICT
+#include <windows.h>
+#undef STRICT
+#endif
 
 #include <pango/pango-utils.h>	/* For pango_split_file_list */
 
@@ -224,6 +229,56 @@ check_setugid (void)
   return TRUE;
 }
 
+#ifdef G_OS_WIN32
+
+G_WIN32_DLLMAIN_FOR_DLL_NAME(static, dll_name)
+
+const gchar *
+_gtk_get_libdir (void)
+{
+  static char *gtk_libdir = NULL;
+  if (gtk_libdir == NULL)
+    gtk_libdir = g_win32_get_package_installation_subdirectory
+      (GETTEXT_PACKAGE, dll_name, "lib");
+
+  return gtk_libdir;
+}
+
+const gchar *
+_gtk_get_localedir (void)
+{
+  static char *gtk_localedir = NULL;
+  if (gtk_localedir == NULL)
+    gtk_localedir = g_win32_get_package_installation_subdirectory
+      (GETTEXT_PACKAGE, dll_name, "lib\\locale");
+
+  return gtk_localedir;
+}
+
+const gchar *
+_gtk_get_sysconfdir (void)
+{
+  static char *gtk_sysconfdir = NULL;
+  if (gtk_sysconfdir == NULL)
+    gtk_sysconfdir = g_win32_get_package_installation_subdirectory
+      (GETTEXT_PACKAGE, dll_name, "etc");
+
+  return gtk_sysconfdir;
+}
+
+const gchar *
+_gtk_get_data_prefix (void)
+{
+  static char *gtk_data_prefix = NULL;
+  if (gtk_data_prefix == NULL)
+    gtk_data_prefix = g_win32_get_package_installation_directory
+      (GETTEXT_PACKAGE, dll_name);
+
+  return gtk_data_prefix;
+}
+
+#endif /* G_OS_WIN32 */
+
 static gchar **
 get_module_path (void)
 {
@@ -236,13 +291,8 @@ get_module_path (void)
   if (exe_prefix)
     default_dir = g_build_filename (exe_prefix, "lib", "gtk-2.0", "modules", NULL);
   else
-    {
-#ifndef G_OS_WIN32
-      default_dir = g_build_filename (GTK_LIBDIR, "gtk-2.0", "modules", NULL);
-#else
-      default_dir = g_build_filename (get_gtk_win32_directory (""), "modules", NULL);
-#endif
-    }
+    default_dir = g_build_filename (GTK_LIBDIR, "gtk-2.0", "modules", NULL);
+
   module_path = g_strconcat (module_path_env ? module_path_env : "",
 			     module_path_env ? G_SEARCHPATH_SEPARATOR_S : "",
 			     default_dir, NULL);
@@ -548,19 +598,10 @@ gtk_init_check (int	 *argc,
     }
 
 #ifdef ENABLE_NLS
-#  ifndef G_OS_WIN32
   bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
 #    ifdef HAVE_BIND_TEXTDOMAIN_CODESET
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 #    endif
-#  else /* !G_OS_WIN32 */
-  {
-    bindtextdomain (GETTEXT_PACKAGE,
-		    g_win32_get_package_installation_subdirectory (GETTEXT_PACKAGE,
-								   g_strdup_printf ("gtk-win32-%d.%d.dll", GTK_MAJOR_VERSION, GTK_MINOR_VERSION),
-								   "locale"));
-  }
-#endif
 #endif  
 
   {

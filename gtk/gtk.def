@@ -4,10 +4,12 @@ EXPORTS
 	GTK_TYPE_ARG_FLAGS
 	GTK_TYPE_ARROW_TYPE
 	GTK_TYPE_ATTACH_OPTIONS
+	GTK_TYPE_BORDER
 	GTK_TYPE_BUTTONS_TYPE
 	GTK_TYPE_BUTTON_ACTION
 	GTK_TYPE_BUTTON_BOX_STYLE
 	GTK_TYPE_CALENDAR_DISPLAY_OPTIONS
+	GTK_TYPE_CELL_RENDERER_MODE
 	GTK_TYPE_CELL_RENDERER_STATE
 	GTK_TYPE_CELL_TYPE
 	GTK_TYPE_CLIST_DRAG_POS
@@ -22,7 +24,8 @@ EXPORTS
 	GTK_TYPE_DEST_DEFAULTS
 	GTK_TYPE_DIALOG_FLAGS
 	GTK_TYPE_DIRECTION_TYPE
-	GTK_TYPE_FUNDAMENTAL_TYPE
+	GTK_TYPE_EXPANDER_STYLE
+	GTK_TYPE_ICON_SET
 	GTK_TYPE_ICON_SIZE
 	GTK_TYPE_IMAGE_TYPE
 	GTK_TYPE_JUSTIFICATION
@@ -31,6 +34,7 @@ EXPORTS
 	GTK_TYPE_MESSAGE_TYPE
 	GTK_TYPE_METRIC_TYPE
 	GTK_TYPE_MOVEMENT_STEP
+	GTK_TYPE_NOTEBOOK_TAB
 	GTK_TYPE_OBJECT_FLAGS
 	GTK_TYPE_ORIENTATION
 	GTK_TYPE_PACK_TYPE
@@ -45,6 +49,7 @@ EXPORTS
 	GTK_TYPE_RC_FLAGS
 	GTK_TYPE_RC_TOKEN_TYPE
 	GTK_TYPE_RELIEF_STYLE
+	GTK_TYPE_REQUISITION
 	GTK_TYPE_RESIZE_MODE
 	GTK_TYPE_RESPONSE_TYPE
 	GTK_TYPE_SCROLL_TYPE
@@ -53,6 +58,7 @@ EXPORTS
 	GTK_TYPE_SHADOW_TYPE
 	GTK_TYPE_SIDE_TYPE
 	GTK_TYPE_SIGNAL_RUN_TYPE
+	GTK_TYPE_SIZE_GROUP_MODE
 	GTK_TYPE_SORT_TYPE
 	GTK_TYPE_SPIN_BUTTON_UPDATE_POLICY
 	GTK_TYPE_SPIN_TYPE
@@ -76,6 +82,7 @@ EXPORTS
 	GTK_TYPE_UPDATE_TYPE
 	GTK_TYPE_VISIBILITY
 	GTK_TYPE_WIDGET_FLAGS
+	GTK_TYPE_WIDGET_HELP_TYPE
 	GTK_TYPE_WINDOW_POSITION
 	GTK_TYPE_WINDOW_TYPE
 	GTK_TYPE_WRAP_MODE
@@ -214,7 +221,6 @@ EXPORTS
 	gtk_cell_renderer_text_get_type
 	gtk_cell_renderer_text_new
 	gtk_cell_renderer_text_set_fixed_height_from_font
-	gtk_cell_renderer_toggle_get_active
 	gtk_cell_renderer_toggle_get_radio
 	gtk_cell_renderer_toggle_get_type
 	gtk_cell_renderer_toggle_new
@@ -1095,10 +1101,10 @@ EXPORTS
 	gtk_pixmap_new
 	gtk_pixmap_set
 	gtk_pixmap_set_build_insensitive
-	gtk_plug_construct
-	gtk_plug_get_id
-	gtk_plug_get_type
-	gtk_plug_new
+;	gtk_plug_construct
+;	gtk_plug_get_id
+;	gtk_plug_get_type
+;	gtk_plug_new
 	gtk_preview_draw_row
 	gtk_preview_get_cmap
 	gtk_preview_get_info
@@ -1290,11 +1296,11 @@ EXPORTS
 	gtk_size_group_new
 	gtk_size_group_remove_widget
 	gtk_size_group_set_mode
-	gtk_socket_add_id
-	gtk_socket_get_id
-	gtk_socket_get_type
-	gtk_socket_new
-	gtk_socket_steal
+;	gtk_socket_add_id
+;	gtk_socket_get_id
+;	gtk_socket_get_type
+;	gtk_socket_new
+;	gtk_socket_steal
 	gtk_spin_button_configure
 	gtk_spin_button_get_adjustment
 	gtk_spin_button_get_digits
@@ -1859,6 +1865,7 @@ EXPORTS
 	gtk_tree_view_column_get_min_width
 	gtk_tree_view_column_get_reorderable
 	gtk_tree_view_column_get_sizing
+	gtk_tree_view_column_get_sizing
 	gtk_tree_view_column_get_sort_column_id
 	gtk_tree_view_column_get_sort_indicator
 	gtk_tree_view_column_get_sort_order
@@ -2168,6 +2175,3 @@ EXPORTS
 	gtk_window_stick
 	gtk_window_unmaximize
 	gtk_window_unstick
-
-
-

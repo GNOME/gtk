@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Build zipfile for GTK on Win32: both runtime and developer stuff
+
+# These two directory paths are obviously system-dependent.
+# These are what tml@iki.fi uses, change as appropriate.
+ZIP=/g/tmp/gtk+-@GTK_VERSION@-`date +%Y%m%d`.zip
+cd /target
+
+rm $ZIP
+zip -r $ZIP -@ <<EOF
+COPYING.LIB-2
+etc/gtk-2.0
+include/gtk-2.0
+lib/libgdk_pixbuf-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
+lib/libgdk_pixbuf-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.dll.a
+lib/gdk_pixbuf-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.lib
+lib/libgdk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
+lib/libgdk-win32.dll.a
+lib/gdk-win32.lib
+lib/libgtk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
+lib/libgtk-win32.dll.a
+lib/gtk-win32.lib
+lib/gtk-2.0
+lib/pkgconfig/gdk-pixbuf-2.0.pc
+lib/pkgconfig/gdk-2.0.pc
+lib/pkgconfig/gtk+-2.0.pc
+EOF
+
+zip -r $ZIP lib/locale/*/LC_MESSAGES/gtk20.mo

@@ -19,6 +19,7 @@ EXTRA_DIST =			\
 	README.win32		\
 	README.nanox		\
 	config.h.win32		\
+	gtk-zip.sh		\
 	po/README.tools		\
 	po/README.translators	\
 	po/desk.pl		\

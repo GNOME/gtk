@@ -1,3 +1,7 @@
+####
+#### Out of order! Use autoconfiscation.
+####
+
 ## Makefile for building the GDK DLL with gcc on Win32
 ## Use: make -f makefile.mingw
 

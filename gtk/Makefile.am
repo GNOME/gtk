@@ -11,6 +11,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGTK_VERSION=\"@GTK_VERSION@\"			\
 	-DGTK_BINARY_VERSION=\"@GTK_BINARY_VERSION@\"	\
 	-DTESTGTK_RCFILE=\"`pwd`/$(srcdir)/testgtkrc\"	\
+	-DGTK_COMPILATION				\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
@@ -21,6 +22,44 @@ INCLUDES = @STRIP_BEGIN@ \
 
 gtarget=@gdktarget@
 
+if PLATFORM_WIN32
+no_undefined = -no-undefined
+endif
+
+if OS_WIN32
+gtk_def = gtk.def
+gtk_win32_symbols = -export-symbols $(gtk_def)
+
+gtk_win32res_lo = gtk-win32res.lo
+
+gtk-win32res.lo : gtk-win32.rc
+	$(top_srcdir)/build/win32/lt-compile-resource gtk-win32.rc gtk-win32res.lo
+
+install-libtool-import-lib:
+	$(INSTALL) .libs/libgtk-win32-1.3.dll.a $(DESTDIR)$(libdir)
+uninstall-libtool-import-lib:
+	-rm $(DESTDIR)$(libdir)/libtk-win32-1.3.dll.a
+else
+install-libtool-import-lib:
+uninstall-libtool-import-lib:
+endif
+
+if MS_LIB_AVAILABLE
+noinst_DATA = gtk-win32-1.3.lib
+
+gtk-win32-1.3.lib: libgtk-win32-1.3.la gtk.def
+	lib -name:libgtk-win32-1.3-@LT_CURRENT_MINUS_AGE@.dll -def:gtk.def -out:$@
+
+install-ms-lib:
+	$(INSTALL) gtk-win32-1.3.lib $(DESTDIR)$(libdir)
+
+uninstall-ms-lib:
+	-rm $(DESTDIR)$(libdir)/gtk-win32-1.3.lib
+else
+install-ms-lib:
+uninstall-ms-lib:
+endif
+
 # libtool stuff: set version and export symbols for resolving
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
 # we use the general approach here
@@ -29,6 +68,7 @@ LDFLAGS = @STRIP_BEGIN@ \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)	\
 	-export-dynamic						\
 	-rpath @prefix@/lib					\
+	$(no_undefined)						\
 	@LIBTOOL_EXPORT_OPTIONS@				\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la		\
 	$(top_builddir)/gdk/@gdktargetlib@			\
@@ -394,7 +434,6 @@ gtk_extra_sources = @STRIP_BEGIN@ \
 	gtkmarshal.list		\
 @STRIP_END@
 
-
 #
 # setup GTK+ sources and their dependancies
 #
@@ -504,14 +543,24 @@ libgtk_linux_fb_includedir = $(includedir)/gtk-2.0/gtk
 libgtk_linux_fb_include_HEADERS = $(gtk_target_headers)
 libgtk_linux_fb_1_3_la_SOURCES = $(gtk_target_sources)
 endif
-EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-linux-fb-1.3.la
+if USE_WIN32
+libgtk_win32_includedir = $(includedir)/gtk-2.0/gtk
+libgtk_win32_include_HEADERS = $(gtk_target_headers)
+libgtk_win32_1_3_la_SOURCES = $(gtk_target_sources)
+libgtk_win32_1_3_la_LDFLAGS = $(gtk_win32_symbols) -lwsock32
+libgtk_win32_1_3_la_LIBADD = $(gtk_win32res_lo)
+libgtk_win32_1_3_la_DEPENDENCIES = $(gtk_def) $(gtk_win32res_lo)
+endif
+EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-linux-fb-1.3.la libgtk-win32-1.3.la
 
 
 # We create a dummy theme for the default GTK+ theme
-install-data-local:
+install-data-local:  install-ms-lib install-libtool-import-lib
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0
 	echo "# Empty gtkrc for default theme" > $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
+
+uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
 
 DEPS = @gtktargetlib@ $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la $(top_builddir)/gdk/@gdktargetlib@
 TEST_DEPS = $(DEPS) gtk.immodules

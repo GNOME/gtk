@@ -1,14 +1,12 @@
+####
+#### Out of order! Use autoconfiscation.
+####
+
 ## Makefile for building the GTK DLL with gcc on Win32
 ## Use: make -f makefile.mingw
 
 ## There is no install target, you have to decide where and 
 ## how to install for yourself.
-
-# This is the location of pthreads for Win32, 
-# see http://sourceware.cygnus.com/pthreads-win32/
-PTHREADS = ../../pthreads-snap-1999-05-30
-PTHREAD_LIB = -L $(PTHREADS) -lpthread
-PTHREAD_INC = -I $(PTHREADS)
 
 OPTIMIZE = -g
 
@@ -458,12 +456,6 @@ testtextbuffer.exe : testtextbuffer.o
 
 testtextbuffer.o : testtextbuffer.c
 	$(CC) $(CFLAGS) -UGTK_COMPILATION -c -DG_LOG_DOMAIN=\"testtextbuffer\" testtextbuffer.c
-
-testthreads.exe : testthreads.o
-	$(CC) $(CFLAGS) -o $@  testthreads.o $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(PTHREAD_LIB) $(LDFLAGS)
-
-testthreads.o : testthreads.c
-	$(CC) $(CFLAGS) -I$(PTHREAD_INC) -UGTK_COMPILATION -c -DG_LOG_DOMAIN=\"testthreads\" -DUSE_PTHREADS=1 testthreads.c
 
 simple.exe : simple.o
 	$(CC) $(CFLAGS) -o $@  simple.o $(GTK_LIBS) $(GDK_LIBS) $(GLIB_LIBS) $(LDFLAGS)

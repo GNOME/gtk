@@ -44,6 +44,9 @@
 #ifdef HAVE_PWD_H
 #include <pwd.h>
 #endif
+#ifdef HAVE_WINSOCK_H
+#include <winsock.h>		/* For gethostname */
+#endif
 
 #include "fnmatch.h"
 

@@ -1,3 +1,89 @@
+2001-10-29  Tor Lillqvist  <tml@iki.fi>
+
+	* README.win32: Updates.
+
+	* gtk-zip.sh.in: New file, used to build distribution package for
+	Windows.
+
+	* gdk/gdkglobals.c: Mark gdk_threads_mutex for DLL export when
+	applicable with GDKVAR.
+
+	* gdk/win32/libwntab32x.la: New file, hand-written wrapper for the
+	Wintab library.
+
+	* gdk/win32/gdkwin32.h
+	* gdk/win32/gdkprivate-win32.h: Reorganise to match corresponding
+	X11 headers better, and to enable gdkwin32.h to be installed and
+	included from applications, but not the *-win32.h headers.
+
+	* gdk/win32/*.c: Corresponding small changes, simplifications of
+	#includes.
+	
+	* gdk/win32/gdkregion-win32.c: Remove.
+
+	* gdk/win32/gdkevents-win32.c (print_event): Add GDK_SETTING.
+
+	* gdk/win32/gdkfont-win32.c
+	* gdk/win32/gdkgeometry-win32.c: Remove unused variables.
+
+	* gdk/win32/gdkproperty-win32.c (gdk_atom_intern): Don't insert
+	GDK_NONE values into hash table.
+
+	* gtk/gtk.def: Update.
+
+	* gtk/gtkfilesel.c: Include <winsock.h> (if available) for
+	gethostname().
+
+	* gtk/gtkmain.c 
+	* gtk/gtkrc.c: (Win32) Save actual DLL name for later use in DLL
+	entry function. Avoid hardcoded paths GTK_LIBDIR, GTK_SYSCONFDIR,
+	GTK_DATA_PREFIX and GTK_LOCALEDIR, instead add functions that call
+	g_win32_get_package_installation_subdirectory() with the actual
+	DLL name saved above. Redefine above directory name macros to call
+	these functions. Remove some ifdefs.
+
+	* gtk/maketypes.awk: Output GTKTYPEBUILTINS_VAR (that marks
+	variable for export on Win32) also to the _vars file.
+
+	Changes for autoconfiscated build on Win32, and addition of Win32
+	backend to the related files:
+	
+	* configure.in: Like in GLib, set LT_CURRENT_MINUS_AGE for use
+	when forming DLL name in some files. Set MS_LIB_AVAILABLE is
+	lib.exe is available. Call AC_LIBTOOL_WIN32_DLL. Set
+	PLATFORM_WIN32, OS_WIN32 and USE_WIN32 automake conditionals. Add
+	win32 target, using pangowin32. Don't use the
+	-export-symbols-regex option on Win32, we use .def files to list
+	exported symbols. Check <winsock.h> (for gethostname() in
+	gtkfilesel.c). Enclose nested AC_CHECK_* macros in brackets to
+	prevent premature m4 expansion.
+
+	* acconfig.h: Add HAVE_WINTAB.
+
+	* gdk/Makefile.am: Add libgdk-win32-1.3.la target and associated
+	macros and rules. Use -no-undefined on Win32. Use gdk.def file. If
+	MS_LIB_AVAILABLE, build MS import library. Install the import
+	libraries. If HAVE_WINTAB, link with the Wintab library.
+
+	* gdk/win32/Makefile.am: Actually enable building the win32
+	objects here, not just list all files in EXTRA_DIST. Link in the
+	compiled resource file from rc/gdk-win32res.lo. If HAVE_WINTAB,
+	copy the Wintab library into the .libs directory. 
+
+	* gdk/win32/gdkwindow-win32.c (RegisterGdkClass): Don't assume the
+	name of the GDK DLL when fetching the icon. Use the HMODULE saved
+	in gdk_dll_hinstance by DllMain.
+
+	* gdk/win32/rc/Makefile.am: Build gdk-win32res.lo using the
+	build/win32/lt-compile-resource script.
+
+	* gdk/win32/rc/gdk.rc.in
+	* gtk/gtk-win32.rc.in: Use the DLL name that libtool would use.
+
+	* gtk/Makefile.am: Add libgtk-win32-1.3.la target and associated
+	macros and rules. Use -no-undefined on Win32. Use gtk-win32.def
+	file. Install import libraries.
+
 2001-10-29  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkiconfactory.c (get_default_icons): Fix build.

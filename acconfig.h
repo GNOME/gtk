@@ -31,6 +31,7 @@
 #undef HAVE_SHAPE_EXT
 #undef HAVE_SYS_SELECT_H
 #undef HAVE_SYS_TIME_H
+#undef HAVE_WINTAB
 #undef HAVE_XCONVERTCASE
 #undef HAVE_XFT
 
