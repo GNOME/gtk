@@ -1,3 +1,10 @@
+1999-12-05  Arjan van de Ven <arjan@fenrus.demon.nl>
+
+	Added missing "include <string.h>" to:
+	* gdk-pixbuf/io-ras.c
+	* gdk-pixbuf/io-bmp.c
+	* gdk-pixbuf/io-ico.c
+
 1999-12-06  Federico Mena Quintero  <federico@redhat.com>
 
 	* gdk-pixbuf/gdk-pixbuf-io.c (file_formats): Patch from Arjan to

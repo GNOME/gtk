@@ -36,6 +36,7 @@ Known bugs:
 #include <config.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 #include "gdk-pixbuf.h"
 #include "gdk-pixbuf-io.h"
 
