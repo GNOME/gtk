@@ -1,3 +1,8 @@
+1999-10-26  Jonathan Blandford  <jrb@redhat.com>
+
+	* src/gdk-pixbuf-loader.h: New Class.  Beginning of progrssive
+	loading.
+
 1999-10-25  Federico Mena Quintero  <federico@redhat.com>
 
 	* configure.in (CFLAGS): Patch from Uwe Koloska

@@ -134,3 +134,9 @@ image_load (FILE *f)
 						 w, h, w * 3,
 						 free_buffer, NULL);
 }
+
+GdkImage *
+image_load_by_data (void *data, size_t count)
+{
+	return NULL;
+}
