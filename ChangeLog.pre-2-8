@@ -1,5 +1,7 @@
 2004-06-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version to 2.4.4
+
 	* === Released 2.4.3 ===
 
 Thu Jun 10 22:15:01 2004  Matthias Clasen  <maclas@gmx.de>
