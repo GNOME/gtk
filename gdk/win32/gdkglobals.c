@@ -48,5 +48,4 @@ gint              gdk_null_window_warnings = TRUE;
 
 GMutex *gdk_threads_mutex = NULL;          /* Global GDK lock */
 
-BOOL (WINAPI *p_TrackMouseEvent) (TRACKMOUSEEVENT *tme) = NULL;
-
+PFN_TrackMouseEvent p_TrackMouseEvent = NULL;

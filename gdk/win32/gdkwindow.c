@@ -421,10 +421,11 @@ gdk_window_new (GdkWindow     *parent,
 			TCI_SRCCODEPAGE);
 
   titlelen = strlen (title);
-  wctitle = g_new (wchar_t, titlelen);
+  wctitle = g_new (wchar_t, titlelen + 1);
   mbtitle = g_new (char, 3*titlelen + 1);
   wlen = gdk_nmbstowchar_ts (wctitle, title, titlelen, titlelen);
-  WideCharToMultiByte (GetACP (), 0, wctitle, wlen,
+  wctitle[wlen] = 0;
+  WideCharToMultiByte (GetACP (), 0, wctitle, -1,
 		       mbtitle, 3*titlelen, NULL, NULL);
   
   private->drawable.xwindow =
@@ -439,6 +440,21 @@ gdk_window_new (GdkWindow     *parent,
 		    gdk_ProgInstance,
 		    NULL);
 
+  GDK_NOTE (MISC,
+	    g_print ("gdk_window_create: %s %s %dx%d@+%d+%d %#x = %#x\n"
+		     "...locale %#x codepage %d\n",
+		     (private->drawable.window_type == GDK_WINDOW_TOPLEVEL ? "TOPLEVEL" :
+		      (private->drawable.window_type == GDK_WINDOW_CHILD ? "CHILD" :
+		       (private->drawable.window_type == GDK_WINDOW_DIALOG ? "DIALOG" :
+			(private->drawable.window_type == GDK_WINDOW_TEMP ? "TEMP" :
+			 "???")))),
+		     mbtitle,
+		     width, height, (x == CW_USEDEFAULT ? -9999 : x), y, 
+		     xparent,
+		     private->drawable.xwindow,
+		     private->input_locale,
+		     private->charset_info.ciACP));
+
   g_free (mbtitle);
   g_free (wctitle);
 
@@ -448,21 +464,6 @@ gdk_window_new (GdkWindow     *parent,
       g_free (private);
       return NULL;
     }
-
-  GDK_NOTE (MISC,
-	    g_print ("gdk_window_create: %s %s %dx%d@+%d+%d %#x = %#x\n"
-		     "...locale %#x codepage %d\n",
-		     (private->drawable.window_type == GDK_WINDOW_TOPLEVEL ? "TOPLEVEL" :
-		      (private->drawable.window_type == GDK_WINDOW_CHILD ? "CHILD" :
-		       (private->drawable.window_type == GDK_WINDOW_DIALOG ? "DIALOG" :
-			(private->drawable.window_type == GDK_WINDOW_TEMP ? "TEMP" :
-			 "???")))),
-		     title,
-		     width, height, (x == CW_USEDEFAULT ? -9999 : x), y, 
-		     xparent,
-		     private->drawable.xwindow,
-		     private->input_locale,
-		     private->charset_info.ciACP));
 
   gdk_window_ref (window);
   gdk_xid_table_insert (&private->drawable.xwindow, window);
@@ -1413,10 +1414,11 @@ gdk_window_set_title (GdkWindow   *window,
        * to the system codepage.
        */
       titlelen = strlen (title);
-      wcstr = g_new (wchar_t, titlelen);
+      wcstr = g_new (wchar_t, titlelen + 1);
       mbstr = g_new (char, 3*titlelen + 1);
       wlen = gdk_nmbstowchar_ts (wcstr, title, titlelen, titlelen);
-      WideCharToMultiByte (GetACP (), 0, wcstr, wlen,
+      wcstr[wlen] = 0;
+      WideCharToMultiByte (GetACP (), 0, wcstr, -1,
 			   mbstr, 3*titlelen, NULL, NULL);
 
       if (!SetWindowText (GDK_DRAWABLE_XID (window), mbstr))

@@ -451,7 +451,11 @@ gdk_font_load_internal (GdkFontType  type,
 GdkFont*
 gdk_font_load (const gchar *font_name)
 {
-  return gdk_font_load_internal (GDK_FONT_FONT, font_name);
+  /* Load all fonts as fontsets... Gtktext and gtkentry work better
+   * that way, they use wide chars, which is necessary for non-ASCII
+   * chars to work. (Yes, even Latin-1, as we use Unicode internally.)
+   */
+  return gdk_font_load_internal (GDK_FONT_FONTSET, font_name);
 }
 
 GdkFont*

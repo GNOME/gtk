@@ -1,3 +1,33 @@
+1999-11-04  Tor Lillqvist  <tml@iki.fi>
+
+	* config.h.win32: Don't define HAVE_DIMM_H if MSC, as you have to
+	get the Platform SDK to get <dimm.h>.
+
+	* gdk/win32/gdkevents.c: More event handling fixes and
+	simplification. Never generate motion events with is_hint true. We
+	used to do that on bogus grounds earlier. Windows sends
+	WM_MOUSEMOVE messages on button events even if the mouse hasn't
+	moved, ignore these.
+
+	* gdk/win32/gdkfont.c: Load all fonts as (pretended) fontsets.
+
+	* gdk/win32/gdkglobals.c
+	* gdk/win32/gdkprivate.h: Define a typedef for the pointer to
+	the TrackMouseEvent function, and use it.
+
+	* gdk/win32/gdkwindow.c: Terminate widechar string with a zero
+	char before calling WideCharToMultiByte in order to get a string
+	for the window title.
+
+	* gdk/win32/gdkdnd.c: Some more random hacking, ifdeffed out.
+
+	* gdk/win32/gdk.def: Remove obsolete functions.
+
+	* gdk/win32/makefile.{cygwin,msc}: Remove gdkcompat.{o,obj}. Add
+	/nodefaultlib and /defaultlib switches.
+
+	* gtk/gtkrc.c: s/gwin_getlocale/g_win32_getlocale/.
+
 1999-10-31  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdkkeysyms.h: Add new keysyms from X11R6.4 (including

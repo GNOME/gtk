@@ -29,6 +29,7 @@
 
 #define STRICT			/* We want strict type checks */
 #include <windows.h>
+#include <commctrl.h>
 
 /* Make up for some minor mingw32 lossage */
 
@@ -112,10 +113,6 @@ typedef int Status;
 /* For CreateColormap */
 #define AllocNone 0
 #define AllocAll 1
-
-/* Notify modes */
-#define NotifyNormal 0
-#define NotifyHint 1
 
 /* Some structs are somewhat useful to emulate internally, just to
    keep the code less #ifdefed.  */
@@ -422,7 +419,9 @@ extern UINT		 gdk_selection_clear_msg;
 extern GdkAtom		 gdk_clipboard_atom;
 extern GdkAtom		 gdk_win32_dropfiles_atom;
 extern GdkAtom		 gdk_ole2_dnd_atom;
-extern BOOL (WINAPI *p_TrackMouseEvent) (TRACKMOUSEEVENT *tme);
+
+typedef BOOL (WINAPI *PFN_TrackMouseEvent) (LPTRACKMOUSEEVENT);
+extern PFN_TrackMouseEvent p_TrackMouseEvent;
 
 extern LRESULT CALLBACK gdk_WindowProc (HWND, UINT, WPARAM, LPARAM);
 

@@ -277,12 +277,10 @@ EXPORTS
 	gdk_window_clear
 	gdk_window_clear_area
 	gdk_window_clear_area_e
-	gdk_window_copy_area
 	gdk_window_destroy
 	gdk_window_foreign_new
 	gdk_window_get_deskrelative_origin
 	gdk_window_get_children
-	gdk_window_get_colormap
 	gdk_window_get_events
 	gdk_window_get_geometry
 	gdk_window_get_origin
@@ -290,12 +288,9 @@ EXPORTS
 	gdk_window_get_pointer
 	gdk_window_get_position
 	gdk_window_get_root_origin
-	gdk_window_get_size
 	gdk_window_get_toplevel
 	gdk_window_get_toplevels
-	gdk_window_get_type
 	gdk_window_get_user_data
-	gdk_window_get_visual
 	gdk_window_hide
 	gdk_window_is_visible
 	gdk_window_is_viewable
@@ -313,7 +308,6 @@ EXPORTS
 	gdk_window_set_back_pixmap
 	gdk_window_set_background
 	gdk_window_set_child_shapes
-	gdk_window_set_colormap
 	gdk_window_set_cursor
 	gdk_window_set_decorations
 	gdk_window_set_events

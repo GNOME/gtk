@@ -44,10 +44,6 @@
 
 #include <windows.h>
 
-#ifdef HAVE_WINTAB
-#include <wintab.h>
-#endif
-
 #include <objbase.h>
 #include <imm.h>
 
@@ -55,6 +51,10 @@
 #include <dimm.h>
 #else
 #include "surrogate-dimm.h"
+#endif
+
+#ifdef HAVE_WINTAB
+#include <wintab.h>
 #endif
 
 #include "gdk.h"
@@ -505,14 +505,6 @@ gdk_event_get_graphics_expose (GdkWindow *window)
   return NULL;	
 #endif
 }
-
-/************************
- * Exposure compression *
- ************************/
-
-/* I don't bother with exposure compression on Win32. Windows compresses
- * WM_PAINT events by itself.
- */
 
 /*************************************************************
  * gdk_event_handler_set:
@@ -2819,6 +2811,31 @@ build_key_event_state (GdkEvent *event)
     }
 }
 
+static gint
+build_pointer_event_state (MSG *xevent)
+{
+  gint state;
+  
+  state = 0;
+  if (xevent->wParam & MK_CONTROL)
+    state |= GDK_CONTROL_MASK;
+  if (xevent->wParam & MK_LBUTTON)
+    state |= GDK_BUTTON1_MASK;
+  if (xevent->wParam & MK_MBUTTON)
+    state |= GDK_BUTTON2_MASK;
+  if (xevent->wParam & MK_RBUTTON)
+    state |= GDK_BUTTON3_MASK;
+  if (xevent->wParam & MK_SHIFT)
+    state |= GDK_SHIFT_MASK;
+  if (GetKeyState (VK_MENU) < 0)
+    state |= GDK_MOD1_MASK;
+  if (GetKeyState (VK_CAPITAL) & 0x1)
+    state |= GDK_LOCK_MASK;
+
+  return state;
+}
+
+
 static void
 build_keypress_event (GdkWindowPrivate *window_private,
 		      GdkEvent         *event,
@@ -3013,11 +3030,18 @@ print_event (GdkEvent *event)
 	       event->expose.count);
       break;
     case GDK_MOTION_NOTIFY:
+      g_print ("(%.4g,%.4g) %s",
+	       event->motion.x, event->motion.y,
+	       event->motion.is_hint ? "HINT " : "");
       print_event_state (event->motion.state);
       break;
     case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-      g_print ("%d ", event->button.button);
+      g_print ("%d (%.4g,%.4g) ",
+	       event->button.button,
+	       event->button.x, event->button.y);
       print_event_state (event->button.state);
       break;
     case GDK_KEY_PRESS: 
@@ -3050,7 +3074,6 @@ static void
 synthesize_crossing_events (GdkWindow *window,
 			    MSG       *xevent)
 {
-  TRACKMOUSEEVENT tme;
   GdkEvent *event;
   
   /* If we are not using TrackMouseEvent, generate a leave notify
@@ -3128,8 +3151,11 @@ synthesize_crossing_events (GdkWindow *window,
     gdk_window_unref (curWnd);
   curWnd = window;
   gdk_window_ref (curWnd);
+#ifdef USE_TRACKMOUSEEVENT
   if (p_TrackMouseEvent != NULL)
     {
+      TRACKMOUSEEVENT tme;
+
       tme.cbSize = sizeof (TRACKMOUSEEVENT);
       tme.dwFlags = TME_LEAVE;
       tme.hwndTrack = GDK_DRAWABLE_XID (curWnd);
@@ -3137,7 +3163,10 @@ synthesize_crossing_events (GdkWindow *window,
       
       (*p_TrackMouseEvent) (&tme);
     }
+#endif
 }
+
+#ifndef NEW_PROPAGATION_CODE
 
 static GdkWindow *
 key_propagate (GdkWindow *window,
@@ -3146,15 +3175,13 @@ key_propagate (GdkWindow *window,
   gdk_window_unref (window);
   window = WINDOW_PRIVATE(window)->parent;
   gdk_window_ref (window);
-  GDK_NOTE (EVENTS, g_print ("...propagating to %#x\n",
-			     GDK_DRAWABLE_XID (window)));
 
   return window;
 }  
 
 static GdkWindow *
-mouse_propagate (GdkWindow *window,
-		 MSG       *xevent)
+pointer_propagate (GdkWindow *window,
+		   MSG       *xevent)
 {
   POINT pt;
 
@@ -3166,9 +3193,25 @@ mouse_propagate (GdkWindow *window,
   gdk_window_ref (window);
   ScreenToClient (GDK_DRAWABLE_XID (window), &pt);
   xevent->lParam = MAKELPARAM (pt.x, pt.y);
-  GDK_NOTE (EVENTS, g_print ("...propagating to %#x\n",
-			     GDK_DRAWABLE_XID (window)));
+
   return window;
+}
+
+#endif /* !NEW_PROPAGATION_CODE */
+
+static void
+translate_mouse_coords (GdkWindow *window1,
+			GdkWindow *window2,
+			MSG       *xevent)
+{
+  POINT pt;
+
+  pt.x = LOWORD (xevent->lParam);
+  pt.y = HIWORD (xevent->lParam);
+  ClientToScreen (GDK_DRAWABLE_XID (window1), &pt);
+  ScreenToClient (GDK_DRAWABLE_XID (window2), &pt);
+  xevent->lParam = MAKELPARAM (pt.x, pt.y);
+  GDK_NOTE (EVENTS, g_print ("...new coords are (%d,%d)\n", pt.x, pt.y));
 }
 
 #ifdef NEW_PROPAGATION_CODE
@@ -3180,9 +3223,7 @@ propagate (GdkWindow  **window,
 	   gboolean     grab_owner_events,
 	   gint	        grab_mask,
 	   gboolean   (*doesnt_want_it) (gint mask,
-					 MSG *xevent),
-	   GdkWindow *(*propagate) (GdkWindow *window,
-				    MSG       *xevent))
+					 MSG *xevent))
 {
   if (grab_window != NULL && !grab_owner_events)
     {
@@ -3234,13 +3275,15 @@ propagate (GdkWindow  **window,
 		}
 	      else
 		{
-		  GDK_NOTE (EVENTS, "...undelivered\n");
+		  GDK_NOTE (EVENTS, g_print ("...undelivered\n"));
 		  return FALSE;
 		}
 	    }
 	  else
 	    {
-	      *window = (*propagate) (*window, xevent);
+	      gdk_window_unref (*window);
+	      *window = WINDOW_PRIVATE(*window)->parent;
+	      gdk_window_ref (*window);
 	      GDK_NOTE (EVENTS, g_print ("...propagating to %#x\n",
 					 GDK_DRAWABLE_XID (*window)));
 	      /* The only branch where we actually continue the loop */
@@ -3539,8 +3582,7 @@ gdk_event_translate (GdkEvent *event,
 #ifdef NEW_PROPAGATION_CODE
       if (!propagate (&window, xevent,
 		      k_grab_window, k_grab_owner_events, GDK_ALL_EVENTS_MASK,
-		      doesnt_want_key,
-		      key_propagate))
+		      doesnt_want_key))
 	  break;
       event->key.window = window;
 #else
@@ -3815,8 +3857,7 @@ gdk_event_translate (GdkEvent *event,
 #ifdef NEW_PROPAGATION_CODE
       if (!propagate (&window, xevent,
 		      k_grab_window, k_grab_owner_events, GDK_ALL_EVENTS_MASK,
-		      doesnt_want_char,
-		      key_propagate))
+		      doesnt_want_char))
 	  break;
       event->key.window = window;
 #else
@@ -3912,11 +3953,10 @@ gdk_event_translate (GdkEvent *event,
 
     buttondown0:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_%cBUTTONDOWN: %#x  x,y: %d %d  button: %d\n",
+		g_print ("WM_%cBUTTONDOWN: %#x  (%d,%d)\n",
 			 " LMR"[button],
 			 xevent->hwnd,
-			 LOWORD (xevent->lParam), HIWORD (xevent->lParam),
-			 button));
+			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
       if (WINDOW_PRIVATE(window)->extension_events != 0
 	  && gdk_input_ignore_core)
@@ -3932,8 +3972,7 @@ gdk_event_translate (GdkEvent *event,
 #ifdef NEW_PROPAGATION_CODE
       if (!propagate (&window, xevent,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
-		      doesnt_want_button_press,
-		      mouse_propagate))
+		      doesnt_want_button_press))
 	  break;
       event->button.window = window;
 #else
@@ -3981,7 +4020,7 @@ gdk_event_translate (GdkEvent *event,
 	    }
 	  else
 	    {
-	      window = mouse_propagate (window, xevent);
+	      window = pointer_propagate (window, xevent);
 	      /* Jump back up */
 	      goto buttondown; /* What did Dijkstra say? */
 	    }
@@ -4008,43 +4047,16 @@ gdk_event_translate (GdkEvent *event,
 	}
 
       event->button.time = xevent->time;
-      if (window == p_grab_window
-	  && p_grab_window != orig_window)
-	{
-	  /* Translate coordinates to grabber */
-	  pt.x = LOWORD (xevent->lParam);
-	  pt.y = HIWORD (xevent->lParam);
-	  ClientToScreen (xevent->hwnd, &pt);
-	  ScreenToClient (GDK_DRAWABLE_XID (p_grab_window), &pt);
-	  event->button.x = pt.x;
-	  event->button.y = pt.y;
-	  GDK_NOTE (EVENTS, g_print ("...new coords are +%d+%d\n", pt.x, pt.y));
-	}
-      else
-	{
-	  event->button.x = LOWORD (xevent->lParam);
-	  event->button.y = HIWORD (xevent->lParam);
-	}
+      if (window != orig_window)
+	translate_mouse_coords (orig_window, window, xevent);
+      event->button.x = curX = LOWORD (xevent->lParam);
+      event->button.y = curY = HIWORD (xevent->lParam);
       event->button.x_root = xevent->pt.x;
       event->button.y_root = xevent->pt.y;
       event->button.pressure = 0.5;
       event->button.xtilt = 0;
       event->button.ytilt = 0;
-      event->button.state = 0;
-      if (xevent->wParam & MK_CONTROL)
-	event->button.state |= GDK_CONTROL_MASK;
-      if (xevent->wParam & MK_LBUTTON)
-	event->button.state |= GDK_BUTTON1_MASK;
-      if (xevent->wParam & MK_MBUTTON)
-	event->button.state |= GDK_BUTTON2_MASK;
-      if (xevent->wParam & MK_RBUTTON)
-	event->button.state |= GDK_BUTTON3_MASK;
-      if (xevent->wParam & MK_SHIFT)
-	event->button.state |= GDK_SHIFT_MASK;
-      if (GetKeyState (VK_MENU) < 0)
-	event->button.state |= GDK_MOD1_MASK;
-      if (GetKeyState (VK_CAPITAL) & 0x1)
-	event->button.state |= GDK_LOCK_MASK;
+      event->button.state = build_pointer_event_state (xevent);
       event->button.button = button;
       event->button.source = GDK_SOURCE_MOUSE;
       event->button.deviceid = GDK_CORE_POINTER;
@@ -4098,11 +4110,10 @@ gdk_event_translate (GdkEvent *event,
 
     buttonup0:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_%cBUTTONUP: %#x  x,y: %d %d  button: %d\n",
+		g_print ("WM_%cBUTTONUP: %#x  (%d,%d)\n",
 			 " LMR"[button],
 			 xevent->hwnd,
-			 LOWORD (xevent->lParam), HIWORD (xevent->lParam),
-			 button));
+			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
       if (WINDOW_PRIVATE(window)->extension_events != 0
 	  && gdk_input_ignore_core)
@@ -4118,9 +4129,8 @@ gdk_event_translate (GdkEvent *event,
 #ifdef NEW_PROPAGATION_CODE
       if (!propagate (&window, xevent,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
-		      doesnt_want_button_release,
-		      mouse_propagate))
-	  break;
+		      doesnt_want_button_release))
+	  goto maybe_ungrab;
       event->button.window = window;
 #else
     buttonup:
@@ -4168,7 +4178,7 @@ gdk_event_translate (GdkEvent *event,
 	    }
 	  else
 	    {
-	      window = mouse_propagate (window, xevent);
+	      window = pointer_propagate (window, xevent);
 	      /* Jump back up */
 	      goto buttonup;
 	    }
@@ -4179,43 +4189,16 @@ gdk_event_translate (GdkEvent *event,
       g_assert (event->button.window == window);
 #endif
       event->button.time = xevent->time;
-      if (window == p_grab_window
-	  && p_grab_window != orig_window)
-	{
-	  /* Translate coordinates to grabber */
-	  pt.x = LOWORD (xevent->lParam);
-	  pt.y = HIWORD (xevent->lParam);
-	  ClientToScreen (xevent->hwnd, &pt);
-	  ScreenToClient (GDK_DRAWABLE_XID (p_grab_window), &pt);
-	  event->button.x = pt.x;
-	  event->button.y = pt.y;
-	  GDK_NOTE (EVENTS, g_print ("...new coords are +%d+%d\n", pt.x, pt.y));
-	}
-      else
-	{
-	  event->button.x = LOWORD (xevent->lParam);
-	  event->button.y = HIWORD (xevent->lParam);
-	}
+      if (window != orig_window)
+	translate_mouse_coords (orig_window, window, xevent);
+      event->button.x = LOWORD (xevent->lParam);
+      event->button.y = HIWORD (xevent->lParam);
       event->button.x_root = xevent->pt.x;
       event->button.y_root = xevent->pt.y;
       event->button.pressure = 0.5;
       event->button.xtilt = 0;
       event->button.ytilt = 0;
-      event->button.state = 0;
-      if (xevent->wParam & MK_CONTROL)
-	event->button.state |= GDK_CONTROL_MASK;
-      if (xevent->wParam & MK_LBUTTON)
-	event->button.state |= GDK_BUTTON1_MASK;
-      if (xevent->wParam & MK_MBUTTON)
-	event->button.state |= GDK_BUTTON2_MASK;
-      if (xevent->wParam & MK_RBUTTON)
-	event->button.state |= GDK_BUTTON3_MASK;
-      if (xevent->wParam & MK_SHIFT)
-	event->button.state |= GDK_SHIFT_MASK;
-      if (GetKeyState (VK_MENU) < 0)
-	event->button.state |= GDK_MOD1_MASK;
-      if (GetKeyState (VK_CAPITAL) & 0x1)
-	event->button.state |= GDK_LOCK_MASK;
+      event->button.state = build_pointer_event_state (xevent);
       event->button.button = button;
       event->button.source = GDK_SOURCE_MOUSE;
       event->button.deviceid = GDK_CORE_POINTER;
@@ -4231,12 +4214,20 @@ gdk_event_translate (GdkEvent *event,
 
     case WM_MOUSEMOVE:
       GDK_NOTE (EVENTS,
-		g_print ("WM_MOUSEMOVE: %#x  %#x +%d+%d\n",
+		g_print ("WM_MOUSEMOVE: %#x  %#x (%d,%d)\n",
 			 xevent->hwnd, xevent->wParam,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
-      /* HB: only process mouse move messages if we own the active window. */
+      /* If we haven't moved, don't create any event.
+       * Windows sends WM_MOUSEMOVE messages after button presses
+       * even if the mouse doesn't move. This disturbs gtk.
+       */
+      if (window == curWnd
+	  && LOWORD (xevent->lParam) == curX
+	  && HIWORD (xevent->lParam) == curY)
+	break;
 
+      /* HB: only process mouse move messages if we own the active window. */
       GetWindowThreadProcessId(GetActiveWindow(), &pidActWin);
       GetWindowThreadProcessId(xevent->hwnd, &pidThis);
       if (pidActWin != pidThis)
@@ -4256,8 +4247,7 @@ gdk_event_translate (GdkEvent *event,
 #ifdef NEW_PROPAGATION_CODE
       if (!propagate (&window, xevent,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
-		      doesnt_want_button_motion,
-		      mouse_propagate))
+		      doesnt_want_button_motion))
 	  break;
       event->motion.window = window;
 #else
@@ -4330,7 +4320,7 @@ gdk_event_translate (GdkEvent *event,
 	    }
 	  else
 	    {
-	      window = mouse_propagate (window, xevent);
+	      window = pointer_propagate (window, xevent);
 	      /* Jump back up */
 	      goto mousemotion;
 	    }
@@ -4339,23 +4329,10 @@ gdk_event_translate (GdkEvent *event,
 	event->motion.window = window;
 #endif
       event->motion.time = xevent->time;
-      if (window == p_grab_window
-	  && p_grab_window != orig_window)
-	{
-	  /* Translate coordinates to grabber */
-	  pt.x = curX = LOWORD (xevent->lParam);
-	  pt.y = curY = HIWORD (xevent->lParam);
-	  ClientToScreen (xevent->hwnd, &pt);
-	  ScreenToClient (GDK_DRAWABLE_XID (p_grab_window), &pt);
-	  event->motion.x = pt.x;
-	  event->motion.y = pt.y;
-	  GDK_NOTE (EVENTS, g_print ("...new coords are +%d+%d\n", pt.x, pt.y));
-	}
-      else
-	{
-	  event->motion.x = curX = LOWORD (xevent->lParam);
-	  event->motion.y = curY = HIWORD (xevent->lParam);
-	}
+      if (window != orig_window)
+	translate_mouse_coords (orig_window, window, xevent);
+      event->motion.x = curX = LOWORD (xevent->lParam);
+      event->motion.y = curY = HIWORD (xevent->lParam);
       event->motion.x_root = xevent->pt.x;
       event->motion.y_root = xevent->pt.y;
       curXroot = event->motion.x_root;
@@ -4363,25 +4340,8 @@ gdk_event_translate (GdkEvent *event,
       event->motion.pressure = 0.5;
       event->motion.xtilt = 0;
       event->motion.ytilt = 0;
-      event->button.state = 0;
-      if (xevent->wParam & MK_CONTROL)
-	event->button.state |= GDK_CONTROL_MASK;
-      if (xevent->wParam & MK_LBUTTON)
-	event->button.state |= GDK_BUTTON1_MASK;
-      if (xevent->wParam & MK_MBUTTON)
-	event->button.state |= GDK_BUTTON2_MASK;
-      if (xevent->wParam & MK_RBUTTON)
-	event->button.state |= GDK_BUTTON3_MASK;
-      if (xevent->wParam & MK_SHIFT)
-	event->button.state |= GDK_SHIFT_MASK;
-      if (GetKeyState (VK_MENU) < 0)
-	event->button.state |= GDK_MOD1_MASK;
-      if (GetKeyState (VK_CAPITAL) & 0x1)
-	event->button.state |= GDK_LOCK_MASK;
-      if (mask & GDK_POINTER_MOTION_HINT_MASK)
-	event->motion.is_hint = NotifyHint;
-      else
-	event->motion.is_hint = NotifyNormal;
+      event->motion.state = build_pointer_event_state (xevent);
+      event->motion.is_hint = FALSE;
       event->motion.source = GDK_SOURCE_MOUSE;
       event->motion.deviceid = GDK_CORE_POINTER;
 
@@ -4788,7 +4748,7 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_MOVE:
-      GDK_NOTE (EVENTS, g_print ("WM_MOVE: %#x  +%d+%d\n",
+      GDK_NOTE (EVENTS, g_print ("WM_MOVE: %#x  (%d,%d)\n",
 				 xevent->hwnd,
 				 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 

@@ -189,6 +189,4 @@
 /* Define if you have the <dimm.h> header file
  * (available in the Platform SDK)
 */
-#ifdef _MSC_VER
-#define HAVE_DIMM_H 1
-#endif
+/* #define HAVE_DIMM_H 1 */

@@ -468,7 +468,7 @@ gtk_rc_init (void)
   gint n_locale_suffixes = 0;
   gint i, j;
 #ifdef G_OS_WIN32
-  char *locale = gwin_getlocale ();
+  char *locale = g_win32_getlocale ();
 #else
 #ifdef HAVE_LC_MESSAGES
   char *locale = setlocale (LC_MESSAGES, NULL);

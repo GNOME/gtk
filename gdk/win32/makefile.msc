@@ -15,11 +15,11 @@ WTKIT = ..\..\..\wtkit126
 !IFNDEF DEBUG
 # Full optimization:
 OPTIMIZE = -Ox -MD
-LINKDEBUG =
+LINKDEBUG = /nodefaultlib:libc.lib
 !ELSE
 # Debugging:
 OPTIMIZE = -Zi -MDd
-LINKDEBUG = /debug
+LINKDEBUG = /defaultlib:libcd.lib /debug
 !ENDIF
 
 # cl -? describes the options
@@ -47,7 +47,6 @@ gdk_OBJECTS = \
 	gdk.obj		\
 	gdkcc.obj	\
 	gdkcolor.obj	\
-	gdkcompat.obj	\
 	gdkcursor.obj	\
 	gdkdnd.obj	\
 	gdkdraw.obj	\

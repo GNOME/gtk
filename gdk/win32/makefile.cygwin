@@ -40,7 +40,6 @@ gdk_OBJECTS = \
 	gdk.o		\
 	gdkcc.o		\
 	gdkcolor.o	\
-	gdkcompat.o	\
 	gdkcursor.o	\
 	gdkdnd.o	\
 	gdkdraw.o	\
