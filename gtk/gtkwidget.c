@@ -2405,8 +2405,8 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
   GtkWidget *ancestor;
   GdkWindow *window;
 
-  g_return_if_fail (GTK_IS_WIDGET (src_widget));
-  g_return_if_fail (GTK_IS_WIDGET (dest_widget));
+  g_return_val_if_fail (GTK_IS_WIDGET (src_widget), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (dest_widget), FALSE);
 
   ancestor = gtk_widget_common_ancestor (src_widget, dest_widget);
   if (!ancestor || !GTK_WIDGET_REALIZED (src_widget) || !GTK_WIDGET_REALIZED (dest_widget))

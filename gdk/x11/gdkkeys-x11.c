@@ -215,14 +215,13 @@ get_direction (void)
     result = PANGO_DIRECTION_LTR;
   else
     {
-      name = gdk_atom_name (xkb->names->groups[state_rec.locked_group]);
+      name = gdk_x11_get_xatom_name (xkb->names->groups[state_rec.locked_group]);
       if (g_strcasecmp (name, "arabic") == 0 ||
 	  g_strcasecmp (name, "hebrew") == 0 ||
 	  g_strcasecmp (name, "israelian") == 0)
 	result = PANGO_DIRECTION_RTL;
       else
 	result = PANGO_DIRECTION_LTR;
-      g_free (name);
     }
     
   return result;

@@ -159,7 +159,7 @@ extern Atom		 _gdk_wm_window_protocols[];
 extern const int         _gdk_nenvent_masks;
 extern const int         _gdk_event_mask_table[];
 extern gint		 _gdk_screen;
-extern Atom		 _gdk_selection_property;
+extern GdkAtom		 _gdk_selection_property;
 extern gchar		*_gdk_display_name;
 
 extern Window		 _gdk_leader_window;

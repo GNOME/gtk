@@ -51,7 +51,6 @@
 #include <gdkconfig.h>
 
 /* some common magic values */
-#define GDK_NONE	     0L
 #define GDK_CURRENT_TIME     0L
 #define GDK_PARENT_RELATIVE  1L
 
@@ -76,7 +75,14 @@ typedef struct _GdkSpan	              GdkSpan;
  * on Win32, wchar_t is unsigned short.
  */
 typedef guint32			    GdkWChar;
-typedef gulong     		    GdkAtom;
+
+typedef struct _GdkAtom            *GdkAtom;
+
+#define GDK_ATOM_TO_POINTER(atom) (atom)
+#define GDK_POINTER_TO_ATOM(ptr)  ((GdkAtom)(ptr))
+
+#define _GDK_MAKE_ATOM(val) ((GdkAtom)GUINT_TO_POINTER(val))
+#define GDK_NONE            _GDK_MAKE_ATOM (0)
 
 #ifdef GDK_NATIVE_WINDOW_POINTER
 typedef gpointer GdkNativeWindow;

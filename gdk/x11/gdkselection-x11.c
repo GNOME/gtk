@@ -77,7 +77,7 @@ _gdk_selection_filter_clear_event (XSelectionClearEvent *event)
   while (tmp_list)
     {
       OwnerInfo *info = tmp_list->data;
-      if (info->selection == event->selection)
+      if (info->selection == gdk_x11_xatom_to_atom (event->selection))
 	{
 	  if ((GDK_DRAWABLE_XID (info->owner) == event->window &&
 	       event->serial >= info->serial))
@@ -103,9 +103,12 @@ gdk_selection_owner_set (GdkWindow *owner,
 {
   Display *xdisplay;
   Window xwindow;
+  Atom xselection;
   GSList *tmp_list;
   OwnerInfo *info;
 
+  xselection = gdk_x11_atom_to_xatom (selection);
+  
   if (owner)
     {
       if (GDK_WINDOW_DESTROYED (owner))
@@ -143,9 +146,9 @@ gdk_selection_owner_set (GdkWindow *owner,
       owner_list = g_slist_prepend (owner_list, info);
     }
 
-  XSetSelectionOwner (xdisplay, selection, xwindow, time);
+  XSetSelectionOwner (xdisplay, xselection, xwindow, time);
 
-  return (XGetSelectionOwner (xdisplay, selection) == xwindow);
+  return (XGetSelectionOwner (xdisplay, xselection) == xwindow);
 }
 
 GdkWindow*
@@ -153,7 +156,7 @@ gdk_selection_owner_get (GdkAtom selection)
 {
   Window xwindow;
 
-  xwindow = XGetSelectionOwner (gdk_display, selection);
+  xwindow = XGetSelectionOwner (gdk_display, gdk_x11_atom_to_xatom (selection));
   if (xwindow == None)
     return NULL;
 
@@ -169,8 +172,11 @@ gdk_selection_convert (GdkWindow *requestor,
   if (GDK_WINDOW_DESTROYED (requestor))
     return;
 
-  XConvertSelection (GDK_WINDOW_XDISPLAY (requestor), selection, target,
-		     _gdk_selection_property, GDK_WINDOW_XID (requestor), time);
+  XConvertSelection (GDK_WINDOW_XDISPLAY (requestor),
+		     gdk_x11_atom_to_xatom (selection),
+		     gdk_x11_atom_to_xatom (target),
+		     gdk_x11_atom_to_xatom (_gdk_selection_property),
+		     GDK_WINDOW_XID (requestor), time);
 }
 
 gint
@@ -182,7 +188,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
   gulong nitems;
   gulong nbytes;
   gulong length;
-  GdkAtom prop_type;
+  Atom prop_type;
   gint prop_format;
   guchar *t = NULL;
 
@@ -199,12 +205,13 @@ gdk_selection_property_get (GdkWindow  *requestor,
   t = NULL;
   XGetWindowProperty (GDK_WINDOW_XDISPLAY (requestor),
 		      GDK_WINDOW_XID (requestor),
-		      _gdk_selection_property, 0, 0, False,
+		      gdk_x11_atom_to_xatom (_gdk_selection_property),
+		      0, 0, False,
 		      AnyPropertyType, &prop_type, &prop_format,
 		      &nitems, &nbytes, &t);
 
   if (ret_type)
-    *ret_type = prop_type;
+    *ret_type = gdk_x11_xatom_to_atom (prop_type);
   if (ret_format)
     *ret_format = prop_format;
 
@@ -230,14 +237,30 @@ gdk_selection_property_get (GdkWindow  *requestor,
      Otherwise there's no guarantee we'll win the race ... */
   XGetWindowProperty (GDK_DRAWABLE_XDISPLAY (requestor),
 		      GDK_DRAWABLE_XID (requestor),
-		      _gdk_selection_property, 0, (nbytes + 3) / 4, False,
+		      gdk_x11_atom_to_xatom (_gdk_selection_property),
+		      0, (nbytes + 3) / 4, False,
 		      AnyPropertyType, &prop_type, &prop_format,
 		      &nitems, &nbytes, &t);
 
   if (prop_type != None)
     {
       *data = g_new (guchar, length);
-      memcpy (*data, t, length);
+
+      if (prop_type == XA_ATOM)
+	{
+	  Atom* atoms = (Atom*) t;
+	  GdkAtom* atoms_dest = (GdkAtom*) *data;
+	  gint num_atom, i;
+	  
+	  num_atom = (length - 1) / sizeof (GdkAtom);
+	  for (i=0; i < num_atom; i++)
+	    atoms_dest[i] = gdk_x11_xatom_to_atom (atoms[i]);
+	}
+      else
+	{
+	  memcpy (*data, t, length);
+	}
+      
       if (t)
 	XFree (t);
       return length-1;
@@ -264,9 +287,9 @@ gdk_selection_send_notify (guint32  requestor,
   xevent.send_event = True;
   xevent.display = gdk_display;
   xevent.requestor = requestor;
-  xevent.selection = selection;
-  xevent.target = target;
-  xevent.property = property;
+  xevent.selection = gdk_x11_atom_to_xatom (selection);
+  xevent.target = gdk_x11_atom_to_xatom (target);
+  xevent.property = gdk_x11_atom_to_xatom (property);
   xevent.time = time;
 
   gdk_send_xevent (requestor, False, NoEventMask, (XEvent*) &xevent);
@@ -287,7 +310,7 @@ gdk_text_property_to_text_list (GdkAtom       encoding,
     return 0;
 
   property.value = (guchar *)text;
-  property.encoding = encoding;
+  property.encoding = gdk_x11_atom_to_xatom (encoding);
   property.format = format;
   property.nitems = length;
   res = XmbTextPropertyToTextList (GDK_DISPLAY(), &property, list, &count);
@@ -489,7 +512,7 @@ gdk_string_to_compound_text (const gchar *str,
     }
 
   if (encoding)
-    *encoding = property.encoding;
+    *encoding = gdk_x11_xatom_to_atom (property.encoding);
   if (format)
     *format = property.format;
   if (ctext)

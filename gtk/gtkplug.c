@@ -850,7 +850,7 @@ send_xembed_message (GtkPlug *plug,
 
       xevent.xclient.window = GDK_WINDOW_XWINDOW (plug->socket_window);
       xevent.xclient.type = ClientMessage;
-      xevent.xclient.message_type = gdk_atom_intern ("_XEMBED", FALSE);
+      xevent.xclient.message_type = gdk_x11_get_xatom_by_name ("_XEMBED");
       xevent.xclient.format = 32;
       xevent.xclient.data.l[0] = time;
       xevent.xclient.data.l[1] = message;
@@ -918,7 +918,7 @@ xembed_set_info (GdkWindow     *gdk_window,
   Window window = GDK_WINDOW_XWINDOW (gdk_window);
   unsigned long buffer[2];
   
-  Atom xembed_info_atom = gdk_atom_intern ("_XEMBED_INFO", FALSE);
+  Atom xembed_info_atom = gdk_x11_get_xatom_by_name ("_XEMBED_INFO");
 
   buffer[1] = 0;		/* Protocol version */
   buffer[1] = flags;
@@ -1015,7 +1015,7 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
   switch (xevent->type)
     {
     case ClientMessage:
-      if (xevent->xclient.message_type == gdk_atom_intern ("_XEMBED", FALSE))
+      if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name ("_XEMBED"))
 	{
 	  handle_xembed_message (plug,
 				 xevent->xclient.data.l[1],
@@ -1027,7 +1027,7 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 
 	  return GDK_FILTER_REMOVE;
 	}
-      else if (xevent->xclient.message_type == gdk_atom_intern ("WM_DELETE_WINDOW", FALSE))
+      else if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name ("WM_DELETE_WINDOW"))
 	{
 	  /* We filter these out because we take being reparented back to the
 	   * root window as the reliable end of the embedding protocol

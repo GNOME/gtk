@@ -162,9 +162,9 @@ _gdk_events_init (void)
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
 
-  _gdk_wm_window_protocols[0] = gdk_atom_intern ("WM_DELETE_WINDOW", FALSE);
-  _gdk_wm_window_protocols[1] = gdk_atom_intern ("WM_TAKE_FOCUS", FALSE);
-  _gdk_wm_window_protocols[2] = gdk_atom_intern ("_NET_WM_PING", FALSE);
+  _gdk_wm_window_protocols[0] = gdk_x11_get_xatom_by_name ("WM_DELETE_WINDOW");
+  _gdk_wm_window_protocols[1] = gdk_x11_get_xatom_by_name ("WM_TAKE_FOCUS");
+  _gdk_wm_window_protocols[2] = gdk_x11_get_xatom_by_name ("_NET_WM_PING");
   
   gdk_add_client_message_filter (gdk_atom_intern ("WM_PROTOCOLS", FALSE),
 				 gdk_wm_protocols_filter, NULL);
@@ -286,8 +286,8 @@ gdk_add_client_message_filter (GdkAtom       message_type,
   client_filters = g_list_prepend (client_filters, filter);
 }
 
-static GdkAtom wm_state_atom = 0;
-static GdkAtom wm_desktop_atom = 0;
+static Atom wm_state_atom = 0;
+static Atom wm_desktop_atom = 0;
 
 static void
 gdk_check_wm_state_changed (GdkWindow *window)
@@ -296,11 +296,11 @@ gdk_check_wm_state_changed (GdkWindow *window)
   gint format;
   gulong nitems;
   gulong bytes_after;
-  GdkAtom *atoms = NULL;
+  Atom *atoms = NULL;
   gulong i;
-  GdkAtom sticky_atom;
-  GdkAtom maxvert_atom;
-  GdkAtom maxhorz_atom;
+  Atom sticky_atom;
+  Atom maxvert_atom;
+  Atom maxhorz_atom;
   gboolean found_sticky, found_maxvert, found_maxhorz;
   GdkWindowState old_state;
   
@@ -308,10 +308,10 @@ gdk_check_wm_state_changed (GdkWindow *window)
     return;
   
   if (wm_state_atom == 0)
-    wm_state_atom = gdk_atom_intern ("_NET_WM_STATE", FALSE);
+    wm_state_atom = gdk_x11_get_xatom_by_name ("_NET_WM_STATE");
 
   if (wm_desktop_atom == 0)
-    wm_desktop_atom = gdk_atom_intern ("_NET_WM_DESKTOP", FALSE);
+    wm_desktop_atom = gdk_x11_get_xatom_by_name ("_NET_WM_DESKTOP");
   
   XGetWindowProperty (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
 		      wm_state_atom, 0, G_MAXLONG,
@@ -321,9 +321,9 @@ gdk_check_wm_state_changed (GdkWindow *window)
   if (type != None)
     {
 
-      sticky_atom = gdk_atom_intern ("_NET_WM_STATE_STICKY", FALSE);
-      maxvert_atom = gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_VERT", FALSE);
-      maxhorz_atom = gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_HORZ", FALSE);    
+      sticky_atom = gdk_x11_get_xatom_by_name ("_NET_WM_STATE_STICKY");
+      maxvert_atom = gdk_x11_get_xatom_by_name ("_NET_WM_STATE_MAXIMIZED_VERT");
+      maxhorz_atom = gdk_x11_get_xatom_by_name ("_NET_WM_STATE_MAXIMIZED_HORZ");    
 
       found_sticky = FALSE;
       found_maxvert = FALSE;
@@ -1373,15 +1373,12 @@ gdk_event_translate (GdkEvent *event,
       
     case PropertyNotify:
       GDK_NOTE (EVENTS,
-		gchar *atom = gdk_atom_name (xevent->xproperty.atom);
 		g_message ("property notify:\twindow: %ld, atom(%ld): %s%s%s",
 			   xevent->xproperty.window,
 			   xevent->xproperty.atom,
-			   atom ? "\"" : "",
-			   atom ? atom : "unknown",
-			   atom ? "\"" : "");
-		g_free (atom);
-		);
+			   "\"",
+			   gdk_x11_get_xatom_name (xevent->xproperty.atom),
+			   "\""));
 
       if (window_private == NULL)
         {
@@ -1391,18 +1388,18 @@ gdk_event_translate (GdkEvent *event,
       
       event->property.type = GDK_PROPERTY_NOTIFY;
       event->property.window = window;
-      event->property.atom = xevent->xproperty.atom;
+      event->property.atom = gdk_x11_xatom_to_atom (xevent->xproperty.atom);
       event->property.time = xevent->xproperty.time;
       event->property.state = xevent->xproperty.state;
 
       if (wm_state_atom == 0)
-        wm_state_atom = gdk_atom_intern ("_NET_WM_STATE", FALSE);
+        wm_state_atom = gdk_x11_get_xatom_by_name ("_NET_WM_STATE");
 
       if (wm_desktop_atom == 0)
-        wm_desktop_atom = gdk_atom_intern ("_NET_WM_DESKTOP", FALSE);
+        wm_desktop_atom = gdk_x11_get_xatom_by_name ("_NET_WM_DESKTOP");
       
-      if (event->property.atom == wm_state_atom ||
-          event->property.atom == wm_desktop_atom)
+      if (xevent->xproperty.atom == wm_state_atom || 
+	  xevent->xproperty.atom == wm_desktop_atom)
         {
           /* If window state changed, then synthesize those events. */
           gdk_check_wm_state_changed (event->property.window);
@@ -1419,7 +1416,7 @@ gdk_event_translate (GdkEvent *event,
 	{
 	  event->selection.type = GDK_SELECTION_CLEAR;
 	  event->selection.window = window;
-	  event->selection.selection = xevent->xselectionclear.selection;
+	  event->selection.selection = gdk_x11_xatom_to_atom (xevent->xselectionclear.selection);
 	  event->selection.time = xevent->xselectionclear.time;
 	}
       else
@@ -1434,9 +1431,9 @@ gdk_event_translate (GdkEvent *event,
       
       event->selection.type = GDK_SELECTION_REQUEST;
       event->selection.window = window;
-      event->selection.selection = xevent->xselectionrequest.selection;
-      event->selection.target = xevent->xselectionrequest.target;
-      event->selection.property = xevent->xselectionrequest.property;
+      event->selection.selection = gdk_x11_xatom_to_atom (xevent->xselectionrequest.selection);
+      event->selection.target = gdk_x11_xatom_to_atom (xevent->xselectionrequest.target);
+      event->selection.property = gdk_x11_xatom_to_atom (xevent->xselectionrequest.property);
       event->selection.requestor = xevent->xselectionrequest.requestor;
       event->selection.time = xevent->xselectionrequest.time;
       
@@ -1450,9 +1447,9 @@ gdk_event_translate (GdkEvent *event,
       
       event->selection.type = GDK_SELECTION_NOTIFY;
       event->selection.window = window;
-      event->selection.selection = xevent->xselection.selection;
-      event->selection.target = xevent->xselection.target;
-      event->selection.property = xevent->xselection.property;
+      event->selection.selection = gdk_x11_xatom_to_atom (xevent->xselection.selection);
+      event->selection.target = gdk_x11_xatom_to_atom (xevent->xselection.target);
+      event->selection.property = gdk_x11_xatom_to_atom (xevent->xselection.property);
       event->selection.time = xevent->xselection.time;
       
       break;
@@ -1470,6 +1467,7 @@ gdk_event_translate (GdkEvent *event,
       {
 	GList *tmp_list;
 	GdkFilterReturn result = GDK_FILTER_CONTINUE;
+	GdkAtom message_type = gdk_x11_xatom_to_atom (xevent->xclient.message_type);
 
 	GDK_NOTE (EVENTS,
 		  g_message ("client message:\twindow: %ld",
@@ -1479,7 +1477,7 @@ gdk_event_translate (GdkEvent *event,
 	while (tmp_list)
 	  {
 	    GdkClientFilter *filter = tmp_list->data;
-	    if (filter->type == xevent->xclient.message_type)
+	    if (filter->type == message_type)
 	      {
 		result = (*filter->function) (xevent, event, filter->data);
 		break;
@@ -1506,7 +1504,7 @@ gdk_event_translate (GdkEvent *event,
               {
                 event->client.type = GDK_CLIENT_EVENT;
                 event->client.window = window;
-                event->client.message_type = xevent->xclient.message_type;
+                event->client.message_type = message_type;
                 event->client.data_format = xevent->xclient.format;
                 memcpy(&event->client.data, &xevent->xclient.data,
                        sizeof(event->client.data));
@@ -1592,7 +1590,7 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
 {
   XEvent *xevent = (XEvent *)xev;
 
-  if ((Atom) xevent->xclient.data.l[0] == gdk_atom_intern ("WM_DELETE_WINDOW", FALSE))
+  if ((Atom) xevent->xclient.data.l[0] == gdk_x11_get_xatom_by_name ("WM_DELETE_WINDOW"))
     {
   /* The delete window request specifies a window
    *  to delete. We don't actually destroy the
@@ -1610,7 +1608,7 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
 
       return GDK_FILTER_TRANSLATE;
     }
-  else if ((Atom) xevent->xclient.data.l[0] == gdk_atom_intern ("WM_TAKE_FOCUS", FALSE))
+  else if ((Atom) xevent->xclient.data.l[0] == gdk_x11_get_xatom_by_name ("WM_TAKE_FOCUS"))
     {
       GdkWindow *win = event->any.window;
       Window focus_win = GDK_WINDOW_IMPL_X11(((GdkWindowObject *)win)->impl)->focus_window;
@@ -1626,7 +1624,7 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
       XSync (GDK_WINDOW_XDISPLAY (win), False);
       gdk_error_trap_pop ();
     }
-  else if ((Atom) xevent->xclient.data.l[0] == gdk_atom_intern ("_NET_WM_PING", FALSE))
+  else if ((Atom) xevent->xclient.data.l[0] == gdk_x11_get_xatom_by_name ("_NET_WM_PING"))
     {
       XEvent xev = *xevent;
       
@@ -1774,7 +1772,7 @@ gdk_event_send_client_message (GdkEvent *event, guint32 xid)
   sev.xclient.format = event->client.data_format;
   sev.xclient.window = xid;
   memcpy(&sev.xclient.data, &event->client.data, sizeof(sev.xclient.data));
-  sev.xclient.message_type = event->client.message_type;
+  sev.xclient.message_type = gdk_x11_atom_to_xatom (event->client.message_type);
   
   return gdk_send_xevent (xid, False, NoEventMask, &sev);
 }
@@ -1785,7 +1783,7 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
 					      guint32  xid,
 					      guint    level)
 {
-  static GdkAtom wm_state_atom = GDK_NONE;
+  static Atom wm_state_atom = None;
   Atom type = None;
   int format;
   unsigned long nitems, after;
@@ -1798,7 +1796,7 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
   int i;
 
   if (!wm_state_atom)
-    wm_state_atom = gdk_atom_intern ("WM_STATE", FALSE);
+    wm_state_atom = gdk_x11_get_xatom_by_name ("WM_STATE");
 
   _gdk_error_warnings = FALSE;
   _gdk_error_code = 0;
@@ -1860,7 +1858,7 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
   sev.xclient.display = gdk_display;
   sev.xclient.format = event->client.data_format;
   memcpy(&sev.xclient.data, &event->client.data, sizeof(sev.xclient.data));
-  sev.xclient.message_type = event->client.message_type;
+  sev.xclient.message_type = gdk_x11_atom_to_xatom (event->client.message_type);
 
   gdk_event_send_client_message_to_all_recurse(&sev, _gdk_root_window, 0);
 
@@ -1891,7 +1889,7 @@ gdk_flush (void)
   XSync (gdk_display, False);
 }
 
-static GdkAtom timestamp_prop_atom = 0;
+static Atom timestamp_prop_atom = 0;
 
 static Bool
 timestamp_predicate (Display *display,
@@ -1930,7 +1928,7 @@ gdk_x11_get_server_time (GdkWindow *window)
   g_return_val_if_fail (!GDK_WINDOW_DESTROYED (window), 0);
 
   if (!timestamp_prop_atom)
-    timestamp_prop_atom = gdk_atom_intern ("GDK_TIMESTAMP_PROP", FALSE);
+    timestamp_prop_atom = gdk_x11_get_xatom_by_name ("GDK_TIMESTAMP_PROP");
 
   xdisplay = GDK_WINDOW_XDISPLAY (window);
   xwindow = GDK_WINDOW_XWINDOW (window);
@@ -1967,10 +1965,11 @@ gdk_x11_get_server_time (GdkWindow *window)
 gboolean
 gdk_net_wm_supports (GdkAtom property)
 {
-  static GdkAtom wmspec_check_atom = 0;
-  static GdkAtom wmspec_supported_atom = 0;
-  static GdkAtom *atoms = NULL;
+  static Atom wmspec_check_atom = 0;
+  static Atom wmspec_supported_atom = 0;
+  static Atom *atoms = NULL;
   static gulong n_atoms = 0;
+  Atom xproperty = gdk_x11_atom_to_xatom (property);
   Atom type;
   gint format;
   gulong nitems;
@@ -1986,7 +1985,7 @@ gdk_net_wm_supports (GdkAtom property)
       i = 0;
       while (i < n_atoms)
         {
-          if (atoms[i] == property)
+          if (atoms[i] == xproperty)
             return TRUE;
           
           ++i;
@@ -2010,10 +2009,10 @@ gdk_net_wm_supports (GdkAtom property)
    */
   
   if (wmspec_check_atom == 0)
-    wmspec_check_atom = gdk_atom_intern ("_NET_SUPPORTING_WM_CHECK", FALSE);
+    wmspec_check_atom = gdk_x11_get_xatom_by_name ("_NET_SUPPORTING_WM_CHECK");
       
   if (wmspec_supported_atom == 0)
-    wmspec_supported_atom = gdk_atom_intern ("_NET_SUPPORTED", FALSE);
+    wmspec_supported_atom = gdk_x11_get_xatom_by_name ("_NET_SUPPORTED");
   
   XGetWindowProperty (gdk_display, _gdk_root_window,
 		      wmspec_check_atom, 0, G_MAXLONG,

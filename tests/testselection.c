@@ -289,9 +289,8 @@ selection_received (GtkWidget *widget, GtkSelectionData *data)
   if (seltype == SEL_TYPE_NONE)
     {
       char *name = gdk_atom_name (data->type);
-      g_print("Don't know how to handle type: %s (%ld)\n",
-	      name?name:"<unknown>",
-	      data->type);
+      g_print("Don't know how to handle type: %s\n",
+	      name?name:"<unknown>");
       return;
     }
 
@@ -335,9 +334,8 @@ selection_received (GtkWidget *widget, GtkSelectionData *data)
 	default:
 	  {
 	    char *name = gdk_atom_name (data->type);
-	    g_print("Can't convert type %s (%ld) to string\n",
-		    name?name:"<unknown>",
-		    data->type);
+	    g_print("Can't convert type %s to string\n",
+		    name?name:"<unknown>");
 	    position = data->length;
 	    continue;
 	  }

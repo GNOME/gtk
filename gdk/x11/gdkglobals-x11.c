@@ -37,7 +37,7 @@ gint              _gdk_screen;
 Window            _gdk_root_window;
 Window            _gdk_leader_window;
 Atom              _gdk_wm_window_protocols[3];
-Atom              _gdk_selection_property;
+GdkAtom           _gdk_selection_property;
 
 GdkWindowObject *_gdk_xgrab_window = NULL;  /* Window that currently holds the
                                             *	x pointer grab

@@ -7450,7 +7450,7 @@ gtk_clist_drag_leave (GtkWidget      *widget,
 	  list = context->targets;
 	  while (list)
 	    {
-	      if (atom == GPOINTER_TO_INT (list->data))
+	      if (atom == GDK_POINTER_TO_ATOM (list->data))
 		{
 		  GTK_CLIST_GET_CLASS (clist)->draw_drag_highlight
 		    (clist,
@@ -7505,7 +7505,7 @@ gtk_clist_drag_motion (GtkWidget      *widget,
       list = context->targets;
       while (list)
 	{
-	  if (atom == GPOINTER_TO_INT (list->data))
+	  if (atom == GDK_POINTER_TO_ATOM (list->data))
 	    break;
 	  list = list->next;
 	}
@@ -7581,7 +7581,7 @@ gtk_clist_drag_drop (GtkWidget      *widget,
       list = context->targets;
       while (list)
 	{
-	  if (atom == GPOINTER_TO_INT (list->data))
+	  if (atom == GDK_POINTER_TO_ATOM (list->data))
 	    return TRUE;
 	  list = list->next;
 	}

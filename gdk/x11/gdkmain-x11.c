@@ -144,7 +144,7 @@ _gdk_windowing_init_check (int argc, char **argv)
 
   pid = getpid();
   XChangeProperty (gdk_display, _gdk_leader_window,
-		   gdk_atom_intern ("_NET_WM_PID", FALSE),
+		   gdk_x11_get_xatom_by_name ("_NET_WM_PID"),
 		   XA_CARDINAL, 32,
 		   PropModeReplace,
 		   (guchar *)&pid, 1);
@@ -552,13 +552,13 @@ gdk_set_sm_client_id (const gchar* sm_client_id)
   if (sm_client_id && strcmp (sm_client_id, ""))
     {
       XChangeProperty (gdk_display, _gdk_leader_window,
-	   	       gdk_atom_intern ("SM_CLIENT_ID", FALSE),
+	   	       gdk_x11_get_xatom_by_name ("SM_CLIENT_ID"),
 		       XA_STRING, 8, PropModeReplace,
 		       sm_client_id, strlen(sm_client_id));
     }
   else
      XDeleteProperty (gdk_display, _gdk_leader_window,
-	   	      gdk_atom_intern ("SM_CLIENT_ID", FALSE));
+	   	      gdk_x11_get_xatom_by_name ("SM_CLIENT_ID"));
 }
 
 void

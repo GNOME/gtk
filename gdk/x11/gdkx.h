@@ -112,6 +112,11 @@ void          gdk_x11_ungrab_server    (void);
 /* returns TRUE if we support the given WM spec feature */
 gboolean      gdk_net_wm_supports      (GdkAtom property);
 
+Atom                  gdk_x11_atom_to_xatom     (GdkAtom      atom);
+GdkAtom               gdk_x11_xatom_to_atom     (Atom         xatom);
+Atom                  gdk_x11_get_xatom_by_name (const gchar *atom_name);
+G_CONST_RETURN gchar *gdk_x11_get_xatom_name    (Atom         xatom);
+
 #ifndef GDK_DISABLE_DEPRECATED
 
 Display *            gdk_x11_font_get_xdisplay (GdkFont *font);

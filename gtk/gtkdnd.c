@@ -1353,7 +1353,7 @@ gtk_drag_proxy_begin (GtkWidget       *widget,
   while (tmp_list)
     {
       gtk_target_list_add (source_info->target_list, 
-			   GPOINTER_TO_UINT (tmp_list->data), 0, 0);
+			   GDK_POINTER_TO_ATOM (tmp_list->data), 0, 0);
       tmp_list = tmp_list->next;
     }
 
@@ -2446,7 +2446,7 @@ gtk_drag_source_check_selection (GtkDragSourceInfo *info,
   tmp_list = info->selections;
   while (tmp_list)
     {
-      if (GPOINTER_TO_UINT (tmp_list->data) == selection)
+      if (GDK_POINTER_TO_ATOM (tmp_list->data) == selection)
 	return;
       tmp_list = tmp_list->next;
     }
@@ -2546,7 +2546,7 @@ gtk_drag_source_release_selections (GtkDragSourceInfo *info,
   GList *tmp_list = info->selections;
   while (tmp_list)
     {
-      GdkAtom selection = GPOINTER_TO_UINT (tmp_list->data);
+      GdkAtom selection = GDK_POINTER_TO_ATOM (tmp_list->data);
       if (gdk_selection_owner_get (selection) == info->ipc_widget->window)
 	gtk_selection_owner_set (NULL, selection, time);
       tmp_list = tmp_list->next;

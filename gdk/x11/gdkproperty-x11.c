@@ -28,67 +28,285 @@
 #include <X11/Xatom.h>
 #include <string.h>
 
+#include "gdk.h"          /* For gdk_error_trap_push/pop() */
 #include "gdkx.h"
 #include "gdkproperty.h"
 #include "gdkprivate.h"
 
-GdkAtom
-gdk_atom_intern (const gchar *atom_name,
-		 gboolean     only_if_exists)
+static GPtrArray *virtual_atom_array;
+static GHashTable *virtual_atom_hash;
+static GHashTable *atom_to_virtual;
+static GHashTable *atom_from_virtual;
+
+static gchar *XAtomsStrings[] = {
+  /* These are all the standard predefined X atoms */
+  "NONE",
+  "PRIMARY",
+  "SECONDARY",
+  "ARC",
+  "ATOM",
+  "BITMAP",
+  "CARDINAL",
+  "COLORMAP",
+  "CURSOR",
+  "CUT_BUFFER0",
+  "CUT_BUFFER1",
+  "CUT_BUFFER2",
+  "CUT_BUFFER3",
+  "CUT_BUFFER4",
+  "CUT_BUFFER5",
+  "CUT_BUFFER6",
+  "CUT_BUFFER7",
+  "DRAWABLE",
+  "FONT",
+  "INTEGER",
+  "PIXMAP",
+  "POINT",
+  "RECTANGLE",
+  "RESOURCE_MANAGER",
+  "RGB_COLOR_MAP",
+  "RGB_BEST_MAP",
+  "RGB_BLUE_MAP",
+  "RGB_DEFAULT_MAP",
+  "RGB_GRAY_MAP",
+  "RGB_GREEN_MAP",
+  "RGB_RED_MAP",
+  "STRING",
+  "VISUALID",
+  "WINDOW",
+  "WM_COMMAND",
+  "WM_HINTS",
+  "WM_CLIENT_MACHINE",
+  "WM_ICON_NAME",
+  "WM_ICON_SIZE",
+  "WM_NAME",
+  "WM_NORMAL_HINTS",
+  "WM_SIZE_HINTS",
+  "WM_ZOOM_HINTS",
+  "MIN_SPACE",
+  "NORM_SPACE",
+  "MAX_SPACE",  "END_SPACE",
+  "SUPERSCRIPT_X",
+  "SUPERSCRIPT_Y",
+  "SUBSCRIPT_X",
+  "SUBSCRIPT_Y",
+  "UNDERLINE_POSITION",
+  "UNDERLINE_THICKNESS",
+  "STRIKEOUT_ASCENT",
+  "STRIKEOUT_DESCENT",
+  "ITALIC_ANGLE",
+  "X_HEIGHT",
+  "QUAD_WIDTH",
+  "WEIGHT",
+  "POINT_SIZE",
+  "RESOLUTION",
+  "COPYRIGHT",
+  "NOTICE",
+  "FONT_NAME",
+  "FAMILY_NAME",
+  "FULL_NAME",
+  "CAP_HEIGHT",
+  "WM_CLASS",
+  "WM_TRANSIENT_FOR",
+  /* Below here, these our our additions. Increment N_CUSTOM_PREDEFINED
+   * if you add any.
+   */
+  "CLIPBOARD"			/* = 69 */
+};
+
+#define N_CUSTOM_PREDEFINED 1
+
+#define ATOM_TO_INDEX(atom) (GPOINTER_TO_UINT(atom))
+#define INDEX_TO_ATOM(atom) ((GdkAtom)GUINT_TO_POINTER(atom))
+
+void
+insert_atom_pair (GdkAtom     virtual_atom,
+		  Atom        xatom)
 {
-  GdkAtom retval;
-  static GHashTable *atom_hash = NULL;
-  
-  g_return_val_if_fail (atom_name != NULL, GDK_NONE);
-
-  if (!atom_hash)
-    atom_hash = g_hash_table_new (g_str_hash, g_str_equal);
-
-  retval = GPOINTER_TO_UINT (g_hash_table_lookup (atom_hash, atom_name));
-  if (!retval)
+  if (!atom_from_virtual)
     {
-      retval = XInternAtom (gdk_display, atom_name, only_if_exists);
-
-      if (retval != None)
-	g_hash_table_insert (atom_hash, 
-			     g_strdup (atom_name), 
-			     GUINT_TO_POINTER (retval));
+      atom_from_virtual = g_hash_table_new (g_direct_hash, NULL);
+      atom_to_virtual = g_hash_table_new (g_direct_hash, NULL);
     }
-
-  return retval;
+  
+  g_hash_table_insert (atom_from_virtual, 
+		       GDK_ATOM_TO_POINTER (virtual_atom), GUINT_TO_POINTER (xatom));
+  g_hash_table_insert (atom_to_virtual,
+		       GUINT_TO_POINTER (xatom), GDK_ATOM_TO_POINTER (virtual_atom));
 }
 
-gchar*
+/**
+ * gdk_x11_atom_to_xatom:
+ * @atom: A #GdkAtom 
+ * 
+ * Convert from a #GdkAtom to the X atom for the default GDK display
+ * with the same string value.x
+ * 
+ * Return value: the X atom corresponding to @atom.
+ **/
+Atom
+gdk_x11_atom_to_xatom (GdkAtom atom)
+{
+  Atom xatom = None;
+  
+  if (ATOM_TO_INDEX (atom) < G_N_ELEMENTS (XAtomsStrings) - N_CUSTOM_PREDEFINED)
+    return ATOM_TO_INDEX (atom);
+  
+  if (atom_from_virtual)
+    xatom = GPOINTER_TO_UINT (g_hash_table_lookup (atom_from_virtual,
+						   GDK_ATOM_TO_POINTER (atom)));
+  if (!xatom)
+    {
+      char *name;
+      
+      g_return_val_if_fail (ATOM_TO_INDEX (atom) < virtual_atom_array->len, None);
+
+      name = g_ptr_array_index (virtual_atom_array, ATOM_TO_INDEX (atom));
+      
+      xatom = XInternAtom (gdk_display, name, FALSE);
+      insert_atom_pair (atom, xatom);
+    }
+
+  return xatom;
+}
+
+/**
+ * gdk_x11_xatom_to_atom:
+ * @xatom: an X atom for the default GDK display
+ * 
+ * Convert from an X atom for the default display to the corresponding
+ * #GdkAtom.
+ * 
+ * Return value: the corresponding G#dkAtom.
+ **/
+GdkAtom
+gdk_x11_xatom_to_atom (Atom xatom)
+{
+  GdkAtom virtual_atom = GDK_NONE;
+  
+  if (xatom < G_N_ELEMENTS (XAtomsStrings) - N_CUSTOM_PREDEFINED)
+    return INDEX_TO_ATOM (xatom);
+  
+  if (atom_to_virtual)
+    virtual_atom = GDK_POINTER_TO_ATOM (g_hash_table_lookup (atom_to_virtual,
+							     GUINT_TO_POINTER (xatom)));
+  
+  if (!virtual_atom)
+    {
+      /* If this atom doesn't exist, we'll die with an X error unless
+       * we take precautions
+       */
+      char *name;
+      gdk_error_trap_push ();
+      name = XGetAtomName (gdk_display, xatom);
+      if (gdk_error_trap_pop ())
+	{
+	  g_warning (G_STRLOC " invalid X atom: %ld", xatom);
+	}
+      else
+	{
+	  virtual_atom = gdk_atom_intern (name, FALSE);
+	  XFree (name);
+	  
+	  insert_atom_pair (virtual_atom, xatom);
+	}
+    }
+
+  return virtual_atom;
+}
+
+static void
+virtual_atom_check_init (void)
+{
+  if (!virtual_atom_hash)
+    {
+      gint i;
+      
+      virtual_atom_hash = g_hash_table_new (g_str_hash, g_str_equal);
+      virtual_atom_array = g_ptr_array_new ();
+      
+      for (i = 0; i < G_N_ELEMENTS (XAtomsStrings); i++)
+	{
+	  g_ptr_array_add (virtual_atom_array, XAtomsStrings[i]);
+	  g_hash_table_insert (virtual_atom_hash, XAtomsStrings[i],
+			       GUINT_TO_POINTER (i));
+	}
+    }
+}
+
+GdkAtom
+gdk_atom_intern (const gchar *atom_name, 
+		 gboolean     only_if_exists)
+{
+  GdkAtom result;
+
+  virtual_atom_check_init ();
+  
+  result = GDK_POINTER_TO_ATOM (g_hash_table_lookup (virtual_atom_hash, atom_name));
+  if (!result)
+    {
+      result = INDEX_TO_ATOM (virtual_atom_array->len);
+      
+      g_ptr_array_add (virtual_atom_array, g_strdup (atom_name));
+      g_hash_table_insert (virtual_atom_hash, 
+			   g_ptr_array_index (virtual_atom_array,
+					      ATOM_TO_INDEX (result)),
+			   GDK_ATOM_TO_POINTER (result));
+    }
+
+  return result;
+}
+
+static G_CONST_RETURN char *
+get_atom_name (GdkAtom atom)
+{
+  virtual_atom_check_init ();
+
+  if (ATOM_TO_INDEX (atom) < virtual_atom_array->len)
+    return g_strdup (g_ptr_array_index (virtual_atom_array, ATOM_TO_INDEX (atom)));
+  else
+    return NULL;
+}
+
+gchar *
 gdk_atom_name (GdkAtom atom)
 {
-  gchar *t;
-  gchar *name;
-  gint old_error_warnings;
+  return g_strdup (get_atom_name (atom));
+}
 
-  /* If this atom doesn't exist, we'll die with an X error unless
-     we take precautions */
+/**
+ * gdk_x11_get_xatom_by_name:
+ * @atom_name: a string
+ * 
+ * Returns the X atom for GDK's default display corresponding to @atom_name.
+ * This function caches the result, so if called repeatedly it is much
+ * faster than XInternAtom, which is a round trip to the server each time.
+ * 
+ * Return value: a X atom for GDK's default display.
+ **/
+Atom
+gdk_x11_get_xatom_by_name (const gchar *atom_name)
+{
+  return gdk_x11_atom_to_xatom (gdk_atom_intern (atom_name, FALSE));
+}
 
-  old_error_warnings = _gdk_error_warnings;
-  _gdk_error_warnings = 0;
-  _gdk_error_code = 0;
-  t = XGetAtomName (gdk_display, atom);
-  _gdk_error_warnings = old_error_warnings;
-
-  if (_gdk_error_code)
-    {
-      if (t)
-	XFree (t);
-
-      return NULL;
-    }
-  else
-    {
-      name = g_strdup (t);
-      if (t)
-	XFree (t);
-      
-      return name;
-    }
+/**
+ * gdk_x11_get_xatom_name:
+ * @xatom: an X atom for GDK's default display
+ * 
+ * Returns the name of an X atom for GDK's default display. This
+ * function is meant mainly for debugging, so for convenience, unlike
+ * XAtomName() and gdk_atom_name(), the result doesn't need to
+ * be freed. Also, this function will never return %NULL, even
+ * if @xatom is invalid.
+ * 
+ * Return value: name of the X atom; this string is owned by GTK+,
+ *   so it shouldn't be modifed or freed. 
+ **/
+G_CONST_RETURN gchar *
+gdk_x11_get_xatom_name (Atom xatom)
+{
+  return get_atom_name (gdk_x11_xatom_to_atom (xatom));
 }
 
 gboolean
@@ -105,6 +323,8 @@ gdk_property_get (GdkWindow   *window,
 {
   Display *xdisplay;
   Window xwindow;
+  Atom xproperty;
+  Atom xtype;
   Atom ret_prop_type;
   gint ret_format;
   gulong ret_nitems;
@@ -113,6 +333,9 @@ gdk_property_get (GdkWindow   *window,
   guchar *ret_data;
 
   g_return_val_if_fail (!window || GDK_IS_WINDOW (window), FALSE);
+
+  xproperty = gdk_x11_atom_to_xatom (property);
+  xtype = gdk_x11_atom_to_xatom (type);
 
   if (window)
     {
@@ -129,9 +352,9 @@ gdk_property_get (GdkWindow   *window,
     }
 
   ret_data = NULL;
-  XGetWindowProperty (xdisplay, xwindow, property,
+  XGetWindowProperty (xdisplay, xwindow, xproperty,
 		      offset, (length + 3) / 4, pdelete,
-		      type, &ret_prop_type, &ret_format,
+		      xtype, &ret_prop_type, &ret_format,
 		      &ret_nitems, &ret_bytes_after,
 		      &ret_data);
 
@@ -140,19 +363,17 @@ gdk_property_get (GdkWindow   *window,
   }
 
   if (actual_property_type)
-    *actual_property_type = ret_prop_type;
+    *actual_property_type = gdk_x11_xatom_to_atom (ret_prop_type);
   if (actual_format_type)
     *actual_format_type = ret_format;
 
-  if ((type != AnyPropertyType) && (ret_prop_type != type))
+  if ((type != AnyPropertyType) && (ret_prop_type != xtype))
     {
-      gchar *rn, *pn;
-
       XFree (ret_data);
-      rn = gdk_atom_name(ret_prop_type);
-      pn = gdk_atom_name(type);
-      g_warning("Couldn't match property type %s to %s\n", rn, pn);
-      g_free(rn); g_free(pn);
+      
+      g_warning("Couldn't match property type %s to %s\n", 
+		gdk_x11_get_xatom_name (ret_prop_type),
+		gdk_x11_get_xatom_name (xtype));
       return FALSE;
     }
 
@@ -199,8 +420,13 @@ gdk_property_change (GdkWindow    *window,
 {
   Display *xdisplay;
   Window xwindow;
+  Atom xproperty;
+  Atom xtype;
 
   g_return_if_fail (!window || GDK_IS_WINDOW (window));
+
+  xproperty = gdk_x11_atom_to_xatom (property);
+  xtype = gdk_x11_atom_to_xatom (type);
 
   if (window)
     {
@@ -216,7 +442,7 @@ gdk_property_change (GdkWindow    *window,
       xwindow = _gdk_root_window;
     }
 
-  XChangeProperty (xdisplay, xwindow, property, type,
+  XChangeProperty (xdisplay, xwindow, xproperty, xtype,
 		   format, mode, (guchar *)data, nelements);
 }
 
@@ -243,5 +469,5 @@ gdk_property_delete (GdkWindow *window,
       xwindow = _gdk_root_window;
     }
 
-  XDeleteProperty (xdisplay, xwindow, property);
+  XDeleteProperty (xdisplay, xwindow, gdk_x11_atom_to_xatom (property));
 }

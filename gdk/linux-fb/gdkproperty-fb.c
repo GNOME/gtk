@@ -38,13 +38,58 @@ gdk_atom_intern (const gchar *atom_name,
 {
   g_return_val_if_fail (atom_name != NULL, GDK_NONE);
 
-  return g_quark_from_string (atom_name);
+  if (strcmp (atom_name, "PRIMARY") == 0)
+    return GDK_SELECTION_PRIMARY;
+  else if (strcmp (atom_name, "SECONDARY") == 0)
+    return GDK_SELECTION_SECONDARY;
+  else if (strcmp (atom_name, "CLIPBOARD") == 0)
+    return GDK_SELECTION_CLIPBOARD;
+  else if (strcmp (atom_name, "ATOM") == 0)
+    return GDK_SELECTION_TYPE_ATOM;
+  else if (strcmp (atom_name, "BITMAP") == 0)
+    return GDK_SELECTION_TYPE_BITMAP;
+  else if (strcmp (atom_name, "COLORMAP") == 0)
+    return GDK_SELECTION_TYPE_COLORMAP;
+  else if (strcmp (atom_name, "DRAWABLE") == 0)
+    return GDK_SELECTION_TYPE_DRAWABLE;
+  else if (strcmp (atom_name, "INTEGER") == 0)
+    return GDK_SELECTION_TYPE_INTEGER;
+  else if (strcmp (atom_name, "PIXMAP") == 0)
+    return GDK_SELECTION_TYPE_PIXMAP;
+  else if (strcmp (atom_name, "WINDOW") == 0)
+    return GDK_SELECTION_TYPE_WINDOW;
+  else if (strcmp (atom_name, "STRING") == 0)
+    return GDK_SELECTION_TYPE_STRING;
+  else
+    return GUINT_TO_POINTER (256 + g_quark_from_string (atom_name));
 }
 
 gchar*
 gdk_atom_name (GdkAtom atom)
 {
-  return g_strdup (g_quark_to_string (atom));
+  if (atom < 256)
+    {
+      
+      switch (GPOINTER_TO_UINT (atom))
+	{
+	case GDK_SELECTION_PRIMARY: return g_strdup ("PRIMARY");
+	case GDK_SELECTION_SECONDARY: return g_strdup ("SECONDARY");
+	case GDK_SELECTION_CLIPBOARD: return g_strdup ("CLIPBOARD");
+	case GDK_SELECTION_TYPE_ATOM: return g_strdup ("ATOM");
+	case GDK_SELECTION_TYPE_BITMAP: return g_strdup ("BITMAP");
+	case GDK_SELECTION_TYPE_COLORMAP: return g_strdup ("COLORMAP");
+	case GDK_SELECTION_TYPE_DRAWABLE: return g_strdup ("DRAWABLE");
+	case GDK_SELECTION_TYPE_INTEGER: return g_strdup ("INTEGER");
+	case GDK_SELECTION_TYPE_PIXMAP: return g_strdup ("PIXMAP");
+	case GDK_SELECTION_TYPE_WINDOW: return g_strdup ("WINDOW");
+	case GDK_SELECTION_TYPE_STRING: return g_strdup ("STRING");
+	default:
+	  g_warning (G_STRLOC "Invalid atom");
+	  return g_strdup ("<invalid>");
+	}
+    }
+  else
+    return g_strdup (g_quark_to_string (atom - 256));
 }
 
 static void

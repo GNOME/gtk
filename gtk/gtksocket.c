@@ -1077,7 +1077,7 @@ send_xembed_message (GtkSocket *socket,
 
       xevent.xclient.window = GDK_WINDOW_XWINDOW (socket->plug_window);
       xevent.xclient.type = ClientMessage;
-      xevent.xclient.message_type = gdk_atom_intern ("_XEMBED", FALSE);
+      xevent.xclient.message_type = gdk_x11_get_xatom_by_name ("_XEMBED");
       xevent.xclient.format = 32;
       xevent.xclient.data.l[0] = time;
       xevent.xclient.data.l[1] = message;
@@ -1101,7 +1101,7 @@ xembed_get_info (GdkWindow     *gdk_window,
 {
   Display *display = GDK_WINDOW_XDISPLAY (gdk_window);
   Window window = GDK_WINDOW_XWINDOW (gdk_window);
-  Atom xembed_info_atom = gdk_atom_intern ("_XEMBED_INFO", FALSE);
+  Atom xembed_info_atom = gdk_x11_get_xatom_by_name ("_XEMBED_INFO");
   Atom type;
   int format;
   unsigned long nitems, bytes_after;
@@ -1244,7 +1244,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
   switch (xevent->type)
     {
     case ClientMessage:
-      if (xevent->xclient.message_type == gdk_atom_intern ("_XEMBED", FALSE))
+      if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name ("_XEMBED"))
 	{
 	  handle_xembed_message (socket,
 				 xevent->xclient.data.l[1],
@@ -1394,8 +1394,8 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	{
 	  GdkDragProtocol protocol;
 
-	  if ((xevent->xproperty.atom == gdk_atom_intern ("XdndAware", FALSE)) ||
-	      (xevent->xproperty.atom == gdk_atom_intern ("_MOTIF_DRAG_RECEIVER_INFO", FALSE)))
+	  if ((xevent->xproperty.atom == gdk_x11_get_xatom_by_name ("XdndAware")) ||
+	      (xevent->xproperty.atom == gdk_x11_get_xatom_by_name ("_MOTIF_DRAG_RECEIVER_INFO")))
 	    {
 	      gdk_error_trap_push ();
 	      if (gdk_drag_get_protocol (xevent->xproperty.window, &protocol))
@@ -1405,7 +1405,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	      gdk_flush ();
 	      gdk_error_trap_pop ();
 	    }
-	  else if (xevent->xproperty.atom == gdk_atom_intern ("_XEMBED_INFO", FALSE))
+	  else if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name ("_XEMBED_INFO"))
 	    {
 	      unsigned long flags;
 	      

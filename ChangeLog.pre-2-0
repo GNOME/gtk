@@ -1,3 +1,40 @@
+Sun Oct 21 23:27:00 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_translate_coordinates): Fix
+	problem with g_return_if_fail return value.
+
+ 	* gdk/x11/gdkproperty-x11.c docs/Changes-2.0.txt: Move over the 
+	virtual atom code from the gdk-multihead branch, removing the per-display
+	part. Virtualizing atoms needs to be done now to prevent compat
+	breakage in direct Xlib accessing code in the future. (#62208)
+ 
+ 	* gdk/x11/gdkx.h: gdk/gdk/x11/gdkproperty-x11.c: Export
+ 	gdk_x11_xatom_to_atom, gdk_x11_atom_to_xatom().
+ 
+	* gdk/gdktypes.h docs/Changes-2.0.txt: Make GdkAtom
+	an opaque pointer type so the compiler catches attempts
+	to mingle it with X atoms.
+
+	* gdk/x11/{gdkdnd-x11.c,gdkevents-x11.c,gdkglobals-x11.c,
+	  gdkkeys-x11.c, gdkmain-x11.c, gdkprivate-x11.c, 
+	  gdkproperty-x11.c, gdkselection-x11.c, gdkwindow-x11.c}
+	  gtk/{gtkclist.c,gtkctree.c,gtkdnd.c,gtkplug.c,gtksocket.c}
+	  tests/testdnd.c,tests/testselection.c: 
+	Fix up for above atom changes.
+
+	* gdk/gdkselection.h (GDK_SELECTION_CLIPBOARD): Add, since we
+	now have the ability to add custom predefines.
+
+	* gtk/{gtkentry.c,gtklabel.c,gtkoldeditable.c,gtktextview.c}:
+	Use GDK_SELECTION_CLIPBOARD instead of GDK_NONE in calls
+	to gtk_clipboard_get().
+
+	* gdk/win32/gdkproperty-win32.c: Add CLIPBOARD, fix up
+	for GdkAtom => pointer change.
+
+	* gdk/linux-fb/gdkproperty-fb.c: Fix handling of predefined
+	atoms, fix for GdkAtom => pointer change.
+
 Mon Oct 22 00:26:46 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtkspinbutton.c: remove ARROW_SIZE constant, use
