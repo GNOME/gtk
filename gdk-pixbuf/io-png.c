@@ -1,4 +1,4 @@
-/* GdkPixbuf library - JPEG image loader
+/* GdkPixbuf library - PNG image loader
  *
  * Copyright (C) 1999 Mark Crichton
  * Copyright (C) 1999 The Free Software Foundation

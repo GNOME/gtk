@@ -1,3 +1,9 @@
+2000-10-05  Dan Winship  <danw@helixcode.com>
+
+	* io-png.c, io-tiff.c, io-xpm.c: Fix comments to not claim that
+	all three of these files are the JPEG image loader. (From
+	gdk-pixbuf module.)
+
 2000-10-03  Tor Lillqvist  <tml@iki.fi>
 
 	* makefile.mingw.in: Add rule for make-inline-pixbuf. Use
