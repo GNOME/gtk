@@ -29,11 +29,27 @@
 #ifndef GDK_PIXBUF_IO_H
 #define GDK_PIXBUF_IO_H
 
-#include "gdk-pixbuf/gdk-pixbuf.h"
-#include <gmodule.h>
 #include <stdio.h>
+#include <glib.h>
+#include <gmodule.h>
+#include <gdk-pixbuf/gdk-pixbuf-core.h>
+#include <gdk-pixbuf/gdk-pixbuf-animation.h>
 
 G_BEGIN_DECLS
+
+typedef struct _GdkPixbufFormat GdkPixbufFormat;
+ 
+GSList    *gdk_pixbuf_get_formats (void);
+gchar     *gdk_pixbuf_format_get_name        (GdkPixbufFormat *format);
+gchar     *gdk_pixbuf_format_get_description (GdkPixbufFormat *format);
+gchar    **gdk_pixbuf_format_get_mime_types  (GdkPixbufFormat *format);
+gchar    **gdk_pixbuf_format_get_extensions  (GdkPixbufFormat *format);
+gboolean   gdk_pixbuf_format_is_writable     (GdkPixbufFormat *format);
+gboolean   gdk_pixbuf_format_is_scalable     (GdkPixbufFormat *format);
+
+GdkPixbufFormat *gdk_pixbuf_get_file_info (const gchar  *filename,
+					   gint         *width, 
+					   gint         *height);
 
 #ifdef GDK_PIXBUF_ENABLE_BACKEND
 

@@ -26,6 +26,12 @@
 #ifndef GDK_PIXBUF_LOADER_H
 #define GDK_PIXBUF_LOADER_H
 
+#include <glib.h>
+#include <glib-object.h>
+#include <gdk-pixbuf/gdk-pixbuf-core.h>
+#include <gdk-pixbuf/gdk-pixbuf-animation.h>
+#include <gdk-pixbuf/gdk-pixbuf-io.h>
+
 G_BEGIN_DECLS
 
 #define GDK_TYPE_PIXBUF_LOADER		   (gdk_pixbuf_loader_get_type ())

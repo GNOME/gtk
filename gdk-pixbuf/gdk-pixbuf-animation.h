@@ -1,5 +1,5 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 8 -*- */
-/* GdkPixbuf library - Private declarations
+/* GdkPixbuf library - Animation support
  *
  * Copyright (C) 1999 The Free Software Foundation
  *
@@ -27,9 +27,49 @@
 #ifndef GDK_PIXBUF_ANIMATION_H
 #define GDK_PIXBUF_ANIMATION_H
 
-#include "gdk-pixbuf/gdk-pixbuf.h"
+#include <glib.h>
+#include <glib-object.h>
+#include <gdk-pixbuf/gdk-pixbuf-core.h>
 
 G_BEGIN_DECLS
+
+/* Animation support */
+
+typedef struct _GdkPixbufAnimation GdkPixbufAnimation;
+typedef struct _GdkPixbufAnimationIter GdkPixbufAnimationIter;
+
+#define GDK_TYPE_PIXBUF_ANIMATION              (gdk_pixbuf_animation_get_type ())
+#define GDK_PIXBUF_ANIMATION(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_PIXBUF_ANIMATION, GdkPixbufAnimation))
+#define GDK_IS_PIXBUF_ANIMATION(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_PIXBUF_ANIMATION))
+
+#define GDK_TYPE_PIXBUF_ANIMATION_ITER              (gdk_pixbuf_animation_iter_get_type ())
+#define GDK_PIXBUF_ANIMATION_ITER(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_PIXBUF_ANIMATION_ITER, GdkPixbufAnimationIter))
+#define GDK_IS_PIXBUF_ANIMATION_ITER(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_PIXBUF_ANIMATION_ITER))
+
+GType               gdk_pixbuf_animation_get_type        (void) G_GNUC_CONST;
+
+GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file   (const char         *filename,
+                                                          GError            **error);
+
+#ifndef GDK_PIXBUF_DISABLE_DEPRECATED
+GdkPixbufAnimation *gdk_pixbuf_animation_ref             (GdkPixbufAnimation *animation);
+void                gdk_pixbuf_animation_unref           (GdkPixbufAnimation *animation);
+#endif
+
+int                 gdk_pixbuf_animation_get_width       (GdkPixbufAnimation *animation);
+int                 gdk_pixbuf_animation_get_height      (GdkPixbufAnimation *animation);
+gboolean            gdk_pixbuf_animation_is_static_image  (GdkPixbufAnimation *animation);
+GdkPixbuf          *gdk_pixbuf_animation_get_static_image (GdkPixbufAnimation *animation);
+
+GdkPixbufAnimationIter *gdk_pixbuf_animation_get_iter                        (GdkPixbufAnimation     *animation,
+                                                                              const GTimeVal         *start_time);
+GType                   gdk_pixbuf_animation_iter_get_type                   (void) G_GNUC_CONST;
+int                     gdk_pixbuf_animation_iter_get_delay_time             (GdkPixbufAnimationIter *iter);
+GdkPixbuf              *gdk_pixbuf_animation_iter_get_pixbuf                 (GdkPixbufAnimationIter *iter);
+gboolean                gdk_pixbuf_animation_iter_on_currently_loading_frame (GdkPixbufAnimationIter *iter);
+gboolean                gdk_pixbuf_animation_iter_advance                    (GdkPixbufAnimationIter *iter,
+                                                                              const GTimeVal         *current_time);
+
 
 #ifdef GDK_PIXBUF_ENABLE_BACKEND
 
@@ -87,9 +127,9 @@ struct _GdkPixbufAnimationIterClass {
 
         GdkPixbuf* (*get_pixbuf)       (GdkPixbufAnimationIter *iter);
 
-        gboolean (*on_currently_loading_frame) (GdkPixbufAnimationIter *iter);
+        gboolean   (*on_currently_loading_frame) (GdkPixbufAnimationIter *iter);
 
-        gboolean (*advance)            (GdkPixbufAnimationIter *iter,
+        gboolean   (*advance)          (GdkPixbufAnimationIter *iter,
                                         const GTimeVal         *current_time);
 };
       

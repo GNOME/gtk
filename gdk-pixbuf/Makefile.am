@@ -311,6 +311,8 @@ libgdk_pixbuf_2_0_la_DEPENDENCIES = pixops/libpixops.la $(builtin_objs) $(gdk_pi
 
 gdk_pixbuf_headers = 			\
 	gdk-pixbuf.h			\
+	gdk-pixbuf-core.h		\
+	gdk-pixbuf-transform.h		\
 	gdk-pixbuf-io.h			\
 	gdk-pixbuf-animation.h		\
 	gdk-pixbuf-loader.h
