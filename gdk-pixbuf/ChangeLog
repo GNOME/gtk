@@ -1,3 +1,13 @@
+1999-10-28  Jonathan Blandford  <jrb@redhat.com>
+
+	* src/io-tiff.c (image_load_increment): started work on the tiff
+	non-incremental loader.
+
+	* src/io-gif.c (image_load_increment): started work on the gif
+	incremental loader.
+
+	* src/gdk-pixbuf-io.h: Changed ModuleType to GdkPixbufModule.
+
 1999-10-27  Federico Mena Quintero  <federico@redhat.com>
 
 	* src/gdk-pixbuf-render.c (gdk_pixbuf_render_threshold_alpha): New

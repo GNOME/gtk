@@ -27,7 +27,7 @@
 #include <glib.h>
 #include <gif_lib.h>
 #include "gdk-pixbuf.h"
-
+#include "gdk-pixbuf-io.h"
 
 
 /* Destroy notification function for the libart pixbuf */
@@ -44,10 +44,10 @@ image_load (FILE *f)
 	gint fn, is_trans = FALSE;
 	gint done = 0;
 	gint t_color = -1;
-	gint w, h, i, j;
+	gint w = 0, h = 0, i, j;
 	guchar *pixels, *tmpptr;
 	GifFileType *gif;
-	GifRowType *rows;
+	GifRowType *rows = NULL;
 	GifRecordType rec;
 	ColorMapObject *cmap;
 	int intoffset[] = { 0, 4, 2, 1 };
@@ -182,4 +182,72 @@ image_load (FILE *f)
 	return gdk_pixbuf_new_from_data (pixels, ART_PIX_RGB, is_trans,
 					 w, h, is_trans ? (w * 4) : (w * 3),
 					 free_buffer, NULL);
+}
+
+
+/* Progressive loader */
+typedef struct _GifData GifData;
+struct _GifData
+{
+	ModulePreparedNotifyFunc *func;
+	gpointer user_data;
+
+	GifFileType *gif_handle;
+	guchar *buf;
+	guint ptr;
+	gint size;
+};
+
+gpointer
+image_begin_load (ModulePreparedNotifyFunc *func, gpointer user_data)
+{
+	GifData *context;
+
+	context = g_new (GifData, 1);
+	context->func = func;
+	context->user_data = user_data;
+	context->buf = NULL;
+	context->gif_handle = NULL;
+	return context;
+}
+
+int
+myInputFunc (GifFileType *type, GifByteType *byte, int length)
+{
+	GifData *context;
+
+	context = (GifData *) type->UserData;
+	g_print ("in myInputFunc\nSize requested is %d\n", length);
+
+	if (length > context->size - context->ptr) {
+		memcpy (byte, context->buf + context->ptr, context->size - context->ptr);
+		return context->size - context->ptr;
+	}
+
+	memcpy (byte, context->buf + context->ptr, length);
+	return length;
+}
+
+void
+image_stop_load (gpointer context)
+{
+	g_free ((GifData *) context);
+}
+
+gboolean
+image_load_increment (gpointer data, guchar *buf, guint size)
+{
+	GifData *context = (GifData *) data;
+
+	g_print ("in load_increment: %d\n", size);
+	context->buf = g_realloc (context->buf, size);
+	context->ptr = 0;
+	context->size = size;
+	memcpy (context->buf, buf, size);
+
+	if ((context->gif_handle == NULL) && (context->size > 20))
+		context->gif_handle = DGifOpen (context, myInputFunc);
+
+	g_print ("width = %d, height = %d\n", context->gif_handle->SWidth, context->gif_handle->SHeight);
+	return FALSE;
 }

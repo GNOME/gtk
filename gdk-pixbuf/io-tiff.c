@@ -25,9 +25,11 @@
 /* Following code (almost) blatantly ripped from Imlib */
 
 #include <config.h>
-#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <tiffio.h>
 #include "gdk-pixbuf.h"
+#include "gdk-pixbuf-io.h"
 
 
 
@@ -98,4 +100,61 @@ image_load (FILE *f)
 	return gdk_pixbuf_new_from_data (pixels, ART_PIX_RGB, TRUE,
 					 w, h, w * 4,
 					 free_buffer, NULL);
+}
+
+/* Progressive loader */
+
+/*
+ * Tiff loading progressively cannot be done.  We write it to a file, then load
+ * the file when it's done.  
+ */
+
+typedef struct _TiffData TiffData;
+struct _TiffData
+{
+	ModulePreparedNotifyFunc *func;
+	gpointer user_data;
+
+	FILE *file;
+};
+
+gpointer
+image_begin_load (ModulePreparedNotifyFunc *func, gpointer user_data)
+{
+	TiffData *context;
+	gint fd;
+	char template[21];
+	
+	context = g_new (TiffData, 1);
+	context->func = func;
+	context->user_data = user_data;
+
+	strncpy (template, "/tmp/temp-tiffXXXXXX", strlen ("/tmp/temp-tiffXXXXXX"));
+	fd = mkstemp (template);
+	g_print ("fd=%d\n", fd);
+	context->file = fdopen (fd, "w");
+	if (context->file == NULL)
+		g_print ("it's null\n");
+	else
+		g_print ("it's not null\n");
+	return context;
+}
+
+void
+image_stop_load (gpointer data)
+{
+	TiffData *context = (TiffData*) data;
+	fclose (context->file);
+/*	unlink (context->file);*/
+	g_free ((TiffData *) context);
+}
+
+gboolean
+image_load_increment (gpointer data, guchar *buf, guint size)
+{
+	TiffData *context = (TiffData *) data;
+
+	g_assert (context->file != NULL);
+	fwrite (buf, sizeof (guchar), size, context->file);
+	return TRUE;
 }

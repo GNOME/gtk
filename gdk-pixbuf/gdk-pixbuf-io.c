@@ -135,7 +135,7 @@ pixbuf_check_ppm (guchar *buffer, int size)
 }
 #endif
 
-ModuleType file_formats [] = {
+GdkPixbufModule file_formats [] = {
 	{ "png",  pixbuf_check_png, NULL,  NULL, NULL, NULL, NULL, NULL },
 	{ "jpeg", pixbuf_check_jpeg, NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "tiff", pixbuf_check_tiff, NULL, NULL, NULL, NULL, NULL, NULL },
@@ -150,7 +150,7 @@ ModuleType file_formats [] = {
 };
 
 static void
-image_handler_load (ModuleType *image_module)
+image_handler_load (GdkPixbufModule *image_module)
 {
 	char *module_name;
 	char *path;
@@ -205,7 +205,7 @@ image_handler_load (ModuleType *image_module)
 
 
 
-ModuleType *
+GdkPixbufModule *
 gdk_pixbuf_get_module (gchar *buffer, gint size)
 {
 	gint i;
@@ -224,7 +224,7 @@ gdk_pixbuf_new_from_file (const char *filename)
 	gint size;
 	FILE *f;
 	char buffer [128];
-	ModuleType *image_module;
+	GdkPixbufModule *image_module;
 
 	f = fopen (filename, "r");
 	if (!f)

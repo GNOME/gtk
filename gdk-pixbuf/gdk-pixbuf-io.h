@@ -30,8 +30,8 @@
 
 typedef void (* ModulePreparedNotifyFunc) (GdkPixbuf *pixbuf, gpointer user_data);
 
-typedef struct _ModuleType ModuleType;
-struct _ModuleType {
+typedef struct _GdkPixbufModule GdkPixbufModule;
+struct _GdkPixbufModule {
 	char *module_name;
 	gboolean (* format_check) (guchar *buffer, int size);
 	GModule *module;
@@ -45,5 +45,5 @@ struct _ModuleType {
 };
 
 
-ModuleType *gdk_pixbuf_get_module (gchar *buffer, gint size);
+GdkPixbufModule *gdk_pixbuf_get_module (gchar *buffer, gint size);
 

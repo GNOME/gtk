@@ -53,7 +53,7 @@ typedef struct {
 	gboolean closed;
 	gchar buf[128];
 	gint buf_offset;
-	ModuleType *image_module;
+	GdkPixbufModule *image_module;
 	gpointer context;
 } GdkPixbufLoaderPrivate;
 
