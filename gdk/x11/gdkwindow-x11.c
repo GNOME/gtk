@@ -46,9 +46,9 @@ int event_mask_table[19] =
   FocusChangeMask,
   StructureNotifyMask,
   PropertyChangeMask,
+  VisibilityChangeMask,
   0,				/* PROXIMITY_IN */
-  0,				/* PROXIMTY_OUT */
-  VisibilityChangeMask
+  0				/* PROXIMTY_OUT */
 };
 
 

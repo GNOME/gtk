@@ -76,6 +76,7 @@ enum {
   DROP_DATA_AVAILABLE_EVENT,
   OTHER_EVENT,
   CLIENT_EVENT,
+  VISIBILITY_NOTIFY_EVENT,
   LAST_SIGNAL
 };
 
@@ -588,6 +589,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_widget_marshal_signal_4,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
+  widget_signals[VISIBILITY_NOTIFY_EVENT] =
+    gtk_signal_new ("visibility_notify_event",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, visibility_notify_event),
+		    gtk_widget_marshal_signal_4,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
 
   gtk_object_class_add_signals (object_class, widget_signals, LAST_SIGNAL);
   
@@ -638,6 +647,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->drop_leave_event = NULL;
   klass->drop_data_available_event = NULL;
   klass->other_event = NULL;
+  klass->visibility_notify_event = NULL;
 }
 
 /*****************************************
@@ -1571,6 +1581,9 @@ gtk_widget_event (GtkWidget *widget,
 	  break;
 	case GDK_OTHER_EVENT:
 	  signal_num = OTHER_EVENT;
+	  break;
+	case GDK_VISIBILITY_NOTIFY:
+	  signal_num = VISIBILITY_NOTIFY_EVENT;
 	  break;
 	case GDK_CLIENT_EVENT:
 	  signal_num = CLIENT_EVENT;

@@ -373,9 +373,9 @@ typedef enum
   GDK_FOCUS_CHANGE_MASK         = 1 << 14,
   GDK_STRUCTURE_MASK            = 1 << 15,
   GDK_PROPERTY_CHANGE_MASK      = 1 << 16,
-  GDK_PROXIMITY_IN_MASK         = 1 << 17,
-  GDK_PROXIMITY_OUT_MASK        = 1 << 18,
-  GDK_VISIBILITY_NOTIFY_MASK    = 1 << 19,
+  GDK_VISIBILITY_NOTIFY_MASK    = 1 << 17,
+  GDK_PROXIMITY_IN_MASK         = 1 << 18,
+  GDK_PROXIMITY_OUT_MASK        = 1 << 19,
   GDK_ALL_EVENTS_MASK           = 0x07FFFF
 } GdkEventMask;
 
