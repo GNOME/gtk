@@ -38,8 +38,6 @@ enum {
 
 static void gtk_check_menu_item_class_init           (GtkCheckMenuItemClass *klass);
 static void gtk_check_menu_item_init                 (GtkCheckMenuItem      *check_menu_item);
-static void gtk_check_menu_item_draw                 (GtkWidget             *widget,
-						      GdkRectangle          *area);
 static gint gtk_check_menu_item_expose               (GtkWidget             *widget,
 						      GdkEventExpose        *event);
 static void gtk_check_menu_item_activate             (GtkMenuItem           *menu_item);
@@ -93,7 +91,6 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
   
   parent_class = gtk_type_class (GTK_TYPE_MENU_ITEM);
   
-  widget_class->draw = gtk_check_menu_item_draw;
   widget_class->expose_event = gtk_check_menu_item_expose;
   
   menu_item_class->activate = gtk_check_menu_item_activate;
@@ -180,20 +177,6 @@ gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
 {
   check_menu_item->active = FALSE;
   check_menu_item->always_show_toggle = FALSE;
-}
-
-static void
-gtk_check_menu_item_draw (GtkWidget    *widget,
-			  GdkRectangle *area)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (widget));
-  g_return_if_fail (area != NULL);
-
-  if (GTK_WIDGET_CLASS (parent_class)->draw)
-    (* GTK_WIDGET_CLASS (parent_class)->draw) (widget, area);
-
-  gtk_check_menu_item_draw_indicator (GTK_CHECK_MENU_ITEM (widget), area);
 }
 
 static gint

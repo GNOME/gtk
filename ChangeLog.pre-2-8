@@ -1,3 +1,89 @@
+2000-12-02  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkwidget.h (struct _GtkWidgetClass): Remove "draw" virtual
+	method and signal
+	
+	* gtk/gtkwidget.c (gtk_widget_draw): Now just queues a draw then
+	calls gdk_window_process_updates() to push the exposes through
+	(gtk_widget_class_init): No more draw signal, no
+	gtk_widget_real_draw()	
+	
+	* gtk/gtkbin.c (gtk_bin_draw): remove
+
+	* gtk/gtkbox.c (gtk_box_draw): remove
+
+	* gtk/gtkbutton.c (gtk_button_draw): remove
+
+	* gtk/gtkcalendar.c (gtk_calendar_draw): remove
+
+	* gtk/gtkcheckbutton.c (gtk_check_button_draw): remove
+
+	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_draw): remove
+
+	* gtk/gtkclist.c (gtk_clist_draw): remove
+
+	* gtk/gtkentry.c (gtk_entry_draw): remove
+
+	* gtk/gtkeventbox.c (gtk_event_box_draw): remove
+
+	* gtk/gtkfixed.c (gtk_fixed_draw): remove
+
+	* gtk/gtkframe.c (gtk_frame_draw): remove
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_draw): remove
+
+	* gtk/gtkhpaned.c (gtk_hpaned_draw): remove
+
+	* gtk/gtklayout.c (gtk_layout_draw): remove
+
+	* gtk/gtklist.c (gtk_list_draw): remove
+
+	* gtk/gtklistitem.c (gtk_list_item_draw): remove
+
+	* gtk/gtkmenu.c (gtk_menu_draw): remove
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_draw): remove
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_draw): remove
+
+	* gtk/gtknotebook.c (gtk_notebook_draw): remove
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_draw): remove
+
+	* gtk/gtkpacker.c (gtk_packer_draw): remove
+
+	* gtk/gtkrange.c (gtk_range_draw): remove
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_draw): remove
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_draw): remove
+
+	* gtk/gtktable.c (gtk_table_draw): remove
+
+	* gtk/gtktearoffmenuitem.c (gtk_tearoff_menu_item_draw): remove
+
+	* gtk/gtktext.c (gtk_text_draw): remove
+
+	* gtk/gtktextview.c (gtk_text_view_draw): remove
+
+	* gtk/gtktogglebutton.c (gtk_toggle_button_draw): remove
+
+	* gtk/gtktoolbar.c (gtk_toolbar_draw): remove
+
+	* gtk/gtktree.c (gtk_tree_draw): remove
+
+	* gtk/gtktreeitem.c (gtk_tree_item_draw): remove
+
+	* gtk/gtktreeview.c (gtk_tree_view_draw): remove
+
+	* gtk/gtkviewport.c (gtk_viewport_draw): remove
+
+	* gtk/gtkvpaned.c (gtk_vpaned_draw): remove
+
+	* gtk/gtkvscale.c (gtk_vscale_draw): remove
+
+	* gtk/gtkwindow.c (gtk_window_draw): remove
+
 2000-20-01  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtktogglebutton.c (gtk_toggle_button_draw): Fix bug when

@@ -55,8 +55,6 @@ static void gtk_table_init	    (GtkTable	    *table);
 static void gtk_table_finalize	    (GObject	    *object);
 static void gtk_table_map	    (GtkWidget	    *widget);
 static void gtk_table_unmap	    (GtkWidget	    *widget);
-static void gtk_table_draw	    (GtkWidget	    *widget,
-				     GdkRectangle   *area);
 static gint gtk_table_expose	    (GtkWidget	    *widget,
 				     GdkEventExpose *event);
 static void gtk_table_size_request  (GtkWidget	    *widget,
@@ -147,7 +145,6 @@ gtk_table_class_init (GtkTableClass *class)
   
   widget_class->map = gtk_table_map;
   widget_class->unmap = gtk_table_unmap;
-  widget_class->draw = gtk_table_draw;
   widget_class->expose_event = gtk_table_expose;
   widget_class->size_request = gtk_table_size_request;
   widget_class->size_allocate = gtk_table_size_allocate;
@@ -715,34 +712,6 @@ gtk_table_unmap (GtkWidget *widget)
       if (GTK_WIDGET_VISIBLE (child->widget) &&
 	  GTK_WIDGET_MAPPED (child->widget))
 	gtk_widget_unmap (child->widget);
-    }
-}
-
-static void
-gtk_table_draw (GtkWidget    *widget,
-		GdkRectangle *area)
-{
-  GtkTable *table;
-  GtkTableChild *child;
-  GList *children;
-  GdkRectangle child_area;
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_TABLE (widget));
-  
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
-    {
-      table = GTK_TABLE (widget);
-      
-      children = table->children;
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
-	  
-	  if (gtk_widget_intersect (child->widget, area, &child_area))
-	    gtk_widget_draw (child->widget, &child_area);
-	}
     }
 }
 

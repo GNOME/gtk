@@ -34,8 +34,6 @@
 
 static void gtk_check_button_class_init          (GtkCheckButtonClass *klass);
 static void gtk_check_button_init                (GtkCheckButton      *check_button);
-static void gtk_check_button_draw                (GtkWidget           *widget,
-						  GdkRectangle        *area);
 static void gtk_check_button_draw_focus          (GtkWidget           *widget);
 static void gtk_check_button_size_request        (GtkWidget           *widget,
 						  GtkRequisition      *requisition);
@@ -86,7 +84,6 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   widget_class = (GtkWidgetClass*) class;
   parent_class = gtk_type_class (gtk_toggle_button_get_type ());
   
-  widget_class->draw = gtk_check_button_draw;
   widget_class->draw_focus = gtk_check_button_draw_focus;
   widget_class->size_request = gtk_check_button_size_request;
   widget_class->size_allocate = gtk_check_button_size_allocate;
@@ -156,40 +153,6 @@ gtk_check_button_paint (GtkWidget    *widget,
 			 border_width + widget->allocation.y,
 			 widget->allocation.width - 2 * border_width - 1,
 			 widget->allocation.height - 2 * border_width - 1);
-    }
-}
-
-static void
-gtk_check_button_draw (GtkWidget    *widget,
-		       GdkRectangle *area)
-{
-  GtkCheckButton *check_button;
-  GtkToggleButton *toggle_button;
-  GtkBin *bin;
-  GdkRectangle child_area;
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_CHECK_BUTTON (widget));
-  g_return_if_fail (area != NULL);
-  
-  check_button = GTK_CHECK_BUTTON (widget);
-  toggle_button = GTK_TOGGLE_BUTTON (widget);
-  bin = GTK_BIN (widget);
-  
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      if (toggle_button->draw_indicator)
-	{
-	  gtk_check_button_paint (widget, area);
-
-	  if (bin->child && gtk_widget_intersect (bin->child, area, &child_area))
-	    gtk_widget_draw (bin->child, &child_area);
-	}
-      else
-	{
-	  if (GTK_WIDGET_CLASS (parent_class)->draw)
-	    (* GTK_WIDGET_CLASS (parent_class)->draw) (widget, area);
-	}
     }
 }
 

@@ -54,8 +54,6 @@ static void gtk_menu_bar_size_allocate (GtkWidget       *widget,
 					GtkAllocation   *allocation);
 static void gtk_menu_bar_paint         (GtkWidget       *widget,
 					GdkRectangle    *area);
-static void gtk_menu_bar_draw          (GtkWidget       *widget,
-					GdkRectangle    *area);
 static gint gtk_menu_bar_expose        (GtkWidget       *widget,
 					GdkEventExpose  *event);
 
@@ -102,8 +100,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 
   object_class->set_arg = gtk_menu_bar_set_arg;
   object_class->get_arg = gtk_menu_bar_get_arg;
-
-  widget_class->draw = gtk_menu_bar_draw;
+  
   widget_class->size_request = gtk_menu_bar_size_request;
   widget_class->size_allocate = gtk_menu_bar_size_allocate;
   widget_class->expose_event = gtk_menu_bar_expose;
@@ -366,37 +363,6 @@ gtk_menu_bar_paint (GtkWidget *widget, GdkRectangle *area)
 		     area, widget, "menubar",
 		     0, 0,
 		     -1,-1);
-    }
-}
-
-static void
-gtk_menu_bar_draw (GtkWidget    *widget,
-		   GdkRectangle *area)
-{
-  GtkMenuShell *menu_shell;
-  GtkWidget *child;
-  GdkRectangle child_area;
-  GList *children;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_MENU_BAR (widget));
-  g_return_if_fail (area != NULL);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      gtk_menu_bar_paint (widget, area);
-
-      menu_shell = GTK_MENU_SHELL (widget);
-
-      children = menu_shell->children;
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
-
-	  if (gtk_widget_intersect (child, area, &child_area))
-	    gtk_widget_draw (child, &child_area);
-	}
     }
 }
 

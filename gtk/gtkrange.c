@@ -49,8 +49,6 @@ static void gtk_range_get_arg		       (GtkObject        *object,
 						GtkArg           *arg,
 						guint             arg_id);
 static void gtk_range_destroy                  (GtkObject        *object);
-static void gtk_range_draw                     (GtkWidget        *widget,
-						GdkRectangle     *area);
 static void gtk_range_draw_focus               (GtkWidget        *widget);
 static void gtk_range_unrealize                (GtkWidget        *widget);
 static gint gtk_range_expose                   (GtkWidget        *widget,
@@ -140,7 +138,6 @@ gtk_range_class_init (GtkRangeClass *class)
   object_class->get_arg = gtk_range_get_arg;
   object_class->destroy = gtk_range_destroy;
 
-  widget_class->draw = gtk_range_draw;
   widget_class->draw_focus = gtk_range_draw_focus;
   widget_class->unrealize = gtk_range_unrealize;
   widget_class->expose_event = gtk_range_expose;
@@ -753,28 +750,6 @@ gtk_range_destroy (GtkObject *object)
     }
 
   (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
-}
-
-static void
-gtk_range_draw (GtkWidget    *widget,
-		GdkRectangle *area)
-{
-  GtkRange *range;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_RANGE (widget));
-  g_return_if_fail (area != NULL);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      range = GTK_RANGE (widget);
-
-      gtk_range_draw_background (range);
-      gtk_range_draw_trough (range);
-      gtk_range_draw_slider (range);
-      gtk_range_draw_step_forw (range);
-      gtk_range_draw_step_back (range);
-    }
 }
 
 static void

@@ -242,8 +242,6 @@ struct _GtkWidgetClass
   void (* unmap)	       (GtkWidget        *widget);
   void (* realize)	       (GtkWidget        *widget);
   void (* unrealize)	       (GtkWidget        *widget);
-  void (* draw)		       (GtkWidget        *widget,
-				GdkRectangle     *area);
   void (* draw_focus)	       (GtkWidget        *widget);
   void (* draw_default)	       (GtkWidget        *widget);
   void (* size_request)	       (GtkWidget        *widget,

@@ -52,8 +52,6 @@ static void gtk_toggle_button_paint      (GtkWidget            *widget,
 					  GdkRectangle         *area);
 static void gtk_toggle_button_size_allocate (GtkWidget         *widget,
 					     GtkAllocation     *allocation);
-static void gtk_toggle_button_draw       (GtkWidget            *widget,
-					  GdkRectangle         *area);
 static gint gtk_toggle_button_expose     (GtkWidget            *widget,
 					  GdkEventExpose       *event);
 static void gtk_toggle_button_pressed    (GtkButton            *button);
@@ -133,7 +131,6 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   object_class->get_arg = gtk_toggle_button_get_arg;
 
   widget_class->size_allocate = gtk_toggle_button_size_allocate;
-  widget_class->draw = gtk_toggle_button_draw;
   widget_class->expose_event = gtk_toggle_button_expose;
   widget_class->realize = gtk_toggle_button_realize;
   widget_class->unrealize = gtk_toggle_button_unrealize;
@@ -417,33 +414,6 @@ gtk_toggle_button_expose (GtkWidget      *widget,
     }
   
   return TRUE;
-}
-
-static void
-gtk_toggle_button_draw (GtkWidget    *widget,
-			GdkRectangle *area)
-{
-  GdkRectangle child_area;
-  GdkRectangle tmp_area;
-  GtkBin *bin;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
-  g_return_if_fail (area != NULL);
-
-  bin = GTK_BIN (widget);
-
-  if (GTK_WIDGET_DRAWABLE (widget) && !GTK_WIDGET_NO_WINDOW (widget))
-    {
-      tmp_area = *area;
-      tmp_area.x -= GTK_CONTAINER (widget)->border_width;
-      tmp_area.y -= GTK_CONTAINER (widget)->border_width;
-
-      gtk_toggle_button_paint (widget, &tmp_area);
-
-      if (bin->child && gtk_widget_intersect (bin->child, &tmp_area, &child_area))
-	gtk_widget_draw (bin->child, &child_area);
-    }
 }
 
 static void

@@ -53,8 +53,6 @@ static void gtk_viewport_realize                  (GtkWidget        *widget);
 static void gtk_viewport_unrealize                (GtkWidget        *widget);
 static void gtk_viewport_paint                    (GtkWidget        *widget,
 						   GdkRectangle     *area);
-static void gtk_viewport_draw                     (GtkWidget        *widget,
-						   GdkRectangle     *area);
 static gint gtk_viewport_expose                   (GtkWidget        *widget,
 						   GdkEventExpose   *event);
 static void gtk_viewport_add                      (GtkContainer     *container,
@@ -117,7 +115,6 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->unmap = gtk_viewport_unmap;
   widget_class->realize = gtk_viewport_realize;
   widget_class->unrealize = gtk_viewport_unrealize;
-  widget_class->draw = gtk_viewport_draw;
   widget_class->expose_event = gtk_viewport_expose;
   widget_class->size_request = gtk_viewport_size_request;
   widget_class->size_allocate = gtk_viewport_size_allocate;
@@ -534,49 +531,6 @@ gtk_viewport_paint (GtkWidget    *widget,
       gtk_draw_shadow (widget->style, widget->window,
 		       GTK_STATE_NORMAL, viewport->shadow_type,
 		       0, 0, -1, -1);
-    }
-}
-
-static void
-gtk_viewport_draw (GtkWidget    *widget,
-		   GdkRectangle *area)
-{
-  GtkViewport *viewport;
-  GtkBin *bin;
-  GdkRectangle tmp_area;
-  GdkRectangle child_area;
-  gint border_width;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_VIEWPORT (widget));
-  g_return_if_fail (area != NULL);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      viewport = GTK_VIEWPORT (widget);
-      bin = GTK_BIN (widget);
-
-      border_width = GTK_CONTAINER (widget)->border_width;
-      
-      tmp_area = *area;
-      tmp_area.x -= border_width;
-      tmp_area.y -= border_width;
-      
-      gtk_viewport_paint (widget, &tmp_area);
-
-      tmp_area.x += viewport->hadjustment->value - widget->style->xthickness;
-      tmp_area.y += viewport->vadjustment->value - widget->style->ythickness;
-      
-      gtk_paint_flat_box(widget->style, viewport->bin_window, 
-			 GTK_STATE_NORMAL, GTK_SHADOW_NONE,
-			 &tmp_area, widget, "viewportbin",
-			 0, 0, -1, -1);
-
-      if (bin->child)
-	{
-	  if (gtk_widget_intersect (bin->child, &tmp_area, &child_area))
-	    gtk_widget_draw (bin->child, &child_area);
-	}
     }
 }
 

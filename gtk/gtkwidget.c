@@ -52,7 +52,6 @@ enum {
   UNMAP,
   REALIZE,
   UNREALIZE,
-  DRAW,
   DRAW_FOCUS,
   DRAW_DEFAULT,
   SIZE_REQUEST,
@@ -153,8 +152,6 @@ static void gtk_widget_real_map			 (GtkWidget	    *widget);
 static void gtk_widget_real_unmap		 (GtkWidget	    *widget);
 static void gtk_widget_real_realize		 (GtkWidget	    *widget);
 static void gtk_widget_real_unrealize		 (GtkWidget	    *widget);
-static void gtk_widget_real_draw		 (GtkWidget	    *widget,
-						  GdkRectangle	    *area);
 static void gtk_widget_real_size_request	 (GtkWidget	    *widget,
 						  GtkRequisition    *requisition);
 static void gtk_widget_real_size_allocate	 (GtkWidget	    *widget,
@@ -291,7 +288,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->unmap = gtk_widget_real_unmap;
   klass->realize = gtk_widget_real_realize;
   klass->unrealize = gtk_widget_real_unrealize;
-  klass->draw = gtk_widget_real_draw;
   klass->draw_focus = NULL;
   klass->size_request = gtk_widget_real_size_request;
   klass->size_allocate = gtk_widget_real_size_allocate;
@@ -398,14 +394,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, unrealize),
 		    gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
-  widget_signals[DRAW] =
-    gtk_signal_new ("draw",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, draw),
-		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_POINTER);
   widget_signals[DRAW_FOCUS] =
     gtk_signal_new ("draw_focus",
 		    GTK_RUN_FIRST,
@@ -2010,61 +1998,28 @@ gtk_widget_queue_resize (GtkWidget *widget)
  * widget. In GTK+ 2.0, the draw method is gone, and instead
  * gtk_widget_draw() simply invalidates the specified region of the
  * widget, then updates the invalid region of the widget immediately.
+ * Usually you don't want to update the region immediately for
+ * performance reasons, so in general gtk_widget_queue_draw_area() is
+ * a better choice if you want to draw a region of a widget.
  * 
  **/
 void
 gtk_widget_draw (GtkWidget    *widget,
 		 GdkRectangle *area)
 {
-  GdkRectangle temp_area;
-
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       if (area)
-	{
-	  if (area->width <= 0 || area->height <= 0)
-	    return;
-	}
+        gtk_widget_queue_draw_area (widget,
+                                    area->x, area->y,
+                                    area->width, area->height);
       else
-	{
-	  if (GTK_WIDGET_NO_WINDOW (widget))
-	    {
-	      temp_area.x = widget->allocation.x;
-	      temp_area.y = widget->allocation.y;
-	    }
-	  else
-	    {
-	      temp_area.x = 0;
-	      temp_area.y = 0;
-	    }
+        gtk_widget_queue_draw (widget);
 
-	  temp_area.width = widget->allocation.width;
-	  temp_area.height = widget->allocation.height;
-	  area = &temp_area;
-	}
-
-      if (!GTK_WIDGET_NO_WINDOW (widget) && GTK_WIDGET_DOUBLE_BUFFERED (widget))
-	{
-	  GdkRectangle tmp_area = *area;
-	  gint x, y;
-
-	  if (!GTK_WIDGET_TOPLEVEL (widget))
-	    {
-	      gdk_window_get_position (widget->window, &x, &y);
-	      tmp_area.x -= x - widget->allocation.x;
-	      tmp_area.y -= y - widget->allocation.y;
-	    }
-
-	  gdk_window_begin_paint_rect (widget->window, &tmp_area);
-	}
-      
-      gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DRAW], area);
-
-      if (!GTK_WIDGET_NO_WINDOW (widget) && GTK_WIDGET_DOUBLE_BUFFERED (widget))
-	gdk_window_end_paint (widget->window);
+      gdk_window_process_updates (widget->window, TRUE);
     }
 }
 
@@ -4835,30 +4790,6 @@ gtk_widget_real_unrealize (GtkWidget *widget)
     }
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED);
-}
-
-static void
-gtk_widget_real_draw (GtkWidget	   *widget,
-		      GdkRectangle *area)
-{
-  GdkEventExpose event;
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (area != NULL);
-  
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      event.type = GDK_EXPOSE;
-      event.send_event = TRUE;
-      event.window = widget->window;
-      event.area = *area;
-      event.count = 0;
-      
-      gdk_window_ref (event.window);
-      gtk_widget_event (widget, (GdkEvent*) &event);
-      gdk_window_unref (event.window);
-    }
 }
 
 static void

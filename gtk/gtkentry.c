@@ -97,8 +97,6 @@ static void   gtk_entry_size_request         (GtkWidget        *widget,
 					      GtkRequisition   *requisition);
 static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
-static void   gtk_entry_draw                 (GtkWidget        *widget,
-					      GdkRectangle     *area);
 static void   gtk_entry_draw_focus           (GtkWidget        *widget);
 static gint   gtk_entry_expose               (GtkWidget        *widget,
 					      GdkEventExpose   *event);
@@ -521,7 +519,6 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->draw_focus = gtk_entry_draw_focus;
   widget_class->size_request = gtk_entry_size_request;
   widget_class->size_allocate = gtk_entry_size_allocate;
-  widget_class->draw = gtk_entry_draw;
   widget_class->expose_event = gtk_entry_expose;
   widget_class->button_press_event = gtk_entry_button_press;
   widget_class->button_release_event = gtk_entry_button_release;
@@ -832,33 +829,6 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 			      requisition.height - widget->style->ythickness * 2);
 
       gtk_entry_recompute (entry);
-    }
-}
-
-static void
-gtk_entry_draw (GtkWidget    *widget,
-		GdkRectangle *area)
-{
-  GtkEntry *entry;
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_ENTRY (widget));
-  g_return_if_fail (area != NULL);
-
-  entry = GTK_ENTRY (widget);
-  
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      GdkRectangle tmp_area = *area;
-
-      tmp_area.x -= widget->style->xthickness;
-      tmp_area.y -= widget->style->xthickness;
-      
-      gdk_window_begin_paint_rect (entry->text_area, &tmp_area);
-      gtk_widget_draw_focus (widget);
-      gtk_entry_draw_text (GTK_ENTRY (widget));
-      gtk_entry_draw_cursor (GTK_ENTRY (widget));
-      gdk_window_end_paint (entry->text_area);
     }
 }
 

@@ -49,8 +49,6 @@ static void gtk_option_menu_size_allocate   (GtkWidget          *widget,
 					     GtkAllocation      *allocation);
 static void gtk_option_menu_paint           (GtkWidget          *widget,
 					     GdkRectangle       *area);
-static void gtk_option_menu_draw            (GtkWidget          *widget,
-					     GdkRectangle       *area);
 static gint gtk_option_menu_expose          (GtkWidget          *widget,
 					     GdkEventExpose     *event);
 static gint gtk_option_menu_button_press    (GtkWidget          *widget,
@@ -117,8 +115,7 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
   parent_class = gtk_type_class (gtk_button_get_type ());
 
   object_class->destroy = gtk_option_menu_destroy;
-
-  widget_class->draw = gtk_option_menu_draw;
+  
   widget_class->size_request = gtk_option_menu_size_request;
   widget_class->size_allocate = gtk_option_menu_size_allocate;
   widget_class->expose_event = gtk_option_menu_expose;
@@ -406,27 +403,6 @@ gtk_option_menu_paint (GtkWidget    *widget,
 			 button_area.y - 1, 
 			 button_area.width + 1,
 			 button_area.height + 1);
-    }
-}
-
-static void
-gtk_option_menu_draw (GtkWidget    *widget,
-		      GdkRectangle *area)
-{
-  GtkWidget *child;
-  GdkRectangle child_area;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_OPTION_MENU (widget));
-  g_return_if_fail (area != NULL);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      gtk_option_menu_paint (widget, area);
-
-      child = GTK_BIN (widget)->child;
-      if (child && gtk_widget_intersect (child, area, &child_area))
-	gtk_widget_draw (child, &child_area);
     }
 }
 

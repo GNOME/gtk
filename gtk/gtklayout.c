@@ -53,8 +53,6 @@ static void     gtk_layout_size_request       (GtkWidget      *widget,
 					       GtkRequisition *requisition);
 static void     gtk_layout_size_allocate      (GtkWidget      *widget,
 					       GtkAllocation  *allocation);
-static void     gtk_layout_draw               (GtkWidget      *widget, 
-					       GdkRectangle   *area);
 static gint     gtk_layout_expose             (GtkWidget      *widget, 
 					       GdkEventExpose *event);
 
@@ -387,7 +385,6 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class->map = gtk_layout_map;
   widget_class->size_request = gtk_layout_size_request;
   widget_class->size_allocate = gtk_layout_size_allocate;
-  widget_class->draw = gtk_layout_draw;
   widget_class->expose_event = gtk_layout_expose;
 
   container_class->remove = gtk_layout_remove;
@@ -604,36 +601,6 @@ gtk_layout_size_allocate (GtkWidget     *widget,
   layout->vadjustment->lower = 0;
   layout->vadjustment->upper = MAX (allocation->height, layout->height);
   gtk_signal_emit_by_name (GTK_OBJECT (layout->vadjustment), "changed");
-}
-
-static void 
-gtk_layout_draw (GtkWidget *widget, GdkRectangle *area)
-{
-  GList *tmp_list;
-  GtkLayout *layout;
-  GdkRectangle child_area;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_LAYOUT (widget));
-
-  layout = GTK_LAYOUT (widget);
-
-  /* We don't have any way of telling themes about this properly,
-   * so we just assume a background pixmap
-   */
-  if (!GTK_WIDGET_APP_PAINTABLE (widget))
-    gdk_window_clear_area (layout->bin_window,
-			   area->x, area->y, area->width, area->height);
-  
-  tmp_list = layout->children;
-  while (tmp_list)
-    {
-      GtkLayoutChild *child = tmp_list->data;
-      tmp_list = tmp_list->next;
-
-      if (gtk_widget_intersect (child->widget, area, &child_area))
-	gtk_widget_draw (child->widget, &child_area);
-    }
 }
 
 static gint 

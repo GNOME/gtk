@@ -36,8 +36,6 @@ static void gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass);
 static void gtk_tearoff_menu_item_init       (GtkTearoffMenuItem      *tearoff_menu_item);
 static void gtk_tearoff_menu_item_size_request (GtkWidget             *widget,
 				                GtkRequisition        *requisition);
-static void gtk_tearoff_menu_item_draw       (GtkWidget             *widget,
-					      GdkRectangle          *area);
 static gint gtk_tearoff_menu_item_expose     (GtkWidget             *widget,
 					      GdkEventExpose        *event);
 static void gtk_tearoff_menu_item_activate   (GtkMenuItem           *menu_item);
@@ -86,7 +84,6 @@ gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass)
   widget_class = (GtkWidgetClass*) klass;
   menu_item_class = (GtkMenuItemClass*) klass;
 
-  widget_class->draw = gtk_tearoff_menu_item_draw;
   widget_class->expose_event = gtk_tearoff_menu_item_expose;
   widget_class->size_request = gtk_tearoff_menu_item_size_request;
 
@@ -192,17 +189,6 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
 	  x += 2 * TEAR_LENGTH;
 	}
     }
-}
-
-static void
-gtk_tearoff_menu_item_draw (GtkWidget    *widget,
-			  GdkRectangle *area)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_TEAROFF_MENU_ITEM (widget));
-  g_return_if_fail (area != NULL);
-
-  gtk_tearoff_menu_item_paint (widget, area);
 }
 
 static gint

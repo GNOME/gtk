@@ -127,8 +127,6 @@ static void gtk_packer_class_init    (GtkPackerClass   *klass);
 static void gtk_packer_init          (GtkPacker        *packer);
 static void gtk_packer_map           (GtkWidget        *widget);
 static void gtk_packer_unmap         (GtkWidget        *widget);
-static void gtk_packer_draw          (GtkWidget        *widget,
-                                      GdkRectangle     *area);
 static gint gtk_packer_expose        (GtkWidget        *widget,
                                       GdkEventExpose   *event);
 static void gtk_packer_size_request  (GtkWidget      *widget,
@@ -224,7 +222,6 @@ gtk_packer_class_init (GtkPackerClass *klass)
 
   widget_class->map = gtk_packer_map;
   widget_class->unmap = gtk_packer_unmap;
-  widget_class->draw = gtk_packer_draw;
   widget_class->expose_event = gtk_packer_expose;
   
   widget_class->size_request = gtk_packer_size_request;
@@ -894,35 +891,6 @@ gtk_packer_unmap (GtkWidget *widget)
 	  GTK_WIDGET_MAPPED (child->widget))
 	gtk_widget_unmap (child->widget);
     }
-}
-
-static void 
-gtk_packer_draw (GtkWidget    *widget,
-		 GdkRectangle *area)
-{
-  GtkPacker *packer;
-  GtkPackerChild *child;
-  GdkRectangle child_area;
-  GList *children;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_PACKER (widget));
- 
-  if (GTK_WIDGET_DRAWABLE (widget)) 
-    {
-      packer = GTK_PACKER (widget);
-      
-      children = g_list_first(packer->children);
-      while (children != NULL) 
-	{
-	  child = children->data;
-	  children = g_list_next(children);
-	  
-	  if (gtk_widget_intersect (child->widget, area, &child_area))
-	    gtk_widget_draw (child->widget, &child_area);
-        }
-    }
-  
 }
 
 static gint 

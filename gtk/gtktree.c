@@ -43,8 +43,6 @@ static void gtk_tree_destroy         (GtkObject      *object);
 static void gtk_tree_map             (GtkWidget      *widget);
 static void gtk_tree_unmap           (GtkWidget      *widget);
 static void gtk_tree_realize         (GtkWidget      *widget);
-static void gtk_tree_draw            (GtkWidget      *widget,
-				      GdkRectangle   *area);
 static gint gtk_tree_expose          (GtkWidget      *widget,
 				      GdkEventExpose *event);
 static gint gtk_tree_motion_notify   (GtkWidget      *widget,
@@ -143,7 +141,6 @@ gtk_tree_class_init (GtkTreeClass *class)
   widget_class->map = gtk_tree_map;
   widget_class->unmap = gtk_tree_unmap;
   widget_class->realize = gtk_tree_realize;
-  widget_class->draw = gtk_tree_draw;
   widget_class->expose_event = gtk_tree_expose;
   widget_class->motion_notify_event = gtk_tree_motion_notify;
   widget_class->button_press_event = gtk_tree_button_press;
@@ -439,43 +436,6 @@ gtk_tree_destroy (GtkObject *object)
   
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
-}
-
-static void
-gtk_tree_draw (GtkWidget    *widget,
-	       GdkRectangle *area)
-{
-  GtkTree *tree;
-  GtkWidget *subtree;
-  GtkWidget *child;
-  GdkRectangle child_area;
-  GList *children;
-  
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_TREE (widget));
-  g_return_if_fail (area != NULL);
-  
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      tree = GTK_TREE (widget);
-      
-      children = tree->children;
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
-	  
-	  if (gtk_widget_intersect (child, area, &child_area))
-	    gtk_widget_draw (child, &child_area);
-	  
-	  if((subtree = GTK_TREE_ITEM(child)->subtree) &&
-	     GTK_WIDGET_VISIBLE(subtree) &&
-	     gtk_widget_intersect (subtree, area, &child_area))
-	    gtk_widget_draw (subtree, &child_area);
-	}
-    }
-  
 }
 
 static gint

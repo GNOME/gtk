@@ -72,8 +72,6 @@ static void gtk_button_size_allocate  (GtkWidget        *widget,
 				       GtkAllocation    *allocation);
 static void gtk_button_paint          (GtkWidget        *widget,
 				       GdkRectangle     *area);
-static void gtk_button_draw           (GtkWidget        *widget,
-				       GdkRectangle     *area);
 static void gtk_button_draw_focus     (GtkWidget        *widget);
 static void gtk_button_draw_default   (GtkWidget        *widget);
 static gint gtk_button_expose         (GtkWidget        *widget,
@@ -190,7 +188,6 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   widget_class->activate_signal = button_signals[CLICKED];
   widget_class->realize = gtk_button_realize;
-  widget_class->draw = gtk_button_draw;
   widget_class->draw_focus = gtk_button_draw_focus;
   widget_class->draw_default = gtk_button_draw_default;
   widget_class->size_request = gtk_button_size_request;
@@ -691,33 +688,6 @@ gtk_button_paint (GtkWidget    *widget,
 			   area, widget, "button",
 			   x, y, width - 1, height - 1);
 	}
-    }
-}
-
-static void
-gtk_button_draw (GtkWidget    *widget,
-		 GdkRectangle *area)
-{
-  GtkButton *button;
-  GdkRectangle child_area;
-  GdkRectangle tmp_area;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_BUTTON (widget));
-  g_return_if_fail (area != NULL);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      button = GTK_BUTTON (widget);
-
-      tmp_area = *area;
-      tmp_area.x -= GTK_CONTAINER (button)->border_width;
-      tmp_area.y -= GTK_CONTAINER (button)->border_width;
-
-      gtk_button_paint (widget, &tmp_area);
-
-      if (GTK_BIN (button)->child && gtk_widget_intersect (GTK_BIN (button)->child, &tmp_area, &child_area))
-	gtk_widget_draw (GTK_BIN (button)->child, &child_area);
     }
 }
 

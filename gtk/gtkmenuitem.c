@@ -57,8 +57,6 @@ static void gtk_menu_item_size_allocate  (GtkWidget        *widget,
 					  GtkAllocation    *allocation);
 static void gtk_menu_item_paint          (GtkWidget        *widget,
 					  GdkRectangle     *area);
-static void gtk_menu_item_draw           (GtkWidget        *widget,
-					  GdkRectangle     *area);
 static gint gtk_menu_item_expose         (GtkWidget        *widget,
 					  GdkEventExpose   *event);
 
@@ -172,7 +170,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->activate_signal = menu_item_signals[ACTIVATE];
   widget_class->size_request = gtk_menu_item_size_request;
   widget_class->size_allocate = gtk_menu_item_size_allocate;
-  widget_class->draw = gtk_menu_item_draw;
   widget_class->expose_event = gtk_menu_item_expose;
   widget_class->show_all = gtk_menu_item_show_all;
   widget_class->hide_all = gtk_menu_item_hide_all;
@@ -520,31 +517,6 @@ gtk_menu_item_paint (GtkWidget    *widget,
 			    area, widget, "menuitem",
 			    0, widget->allocation.width, 0);
 	}
-    }
-}
-
-static void
-gtk_menu_item_draw (GtkWidget    *widget,
-		    GdkRectangle *area)
-{
-  GtkBin *bin;
-  GdkRectangle child_area;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_MENU_ITEM (widget));
-  g_return_if_fail (area != NULL);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      gtk_menu_item_paint (widget, area);
-
-      bin = GTK_BIN (widget);
-
-      if (bin->child)
-        {
-          if (gtk_widget_intersect (bin->child, area, &child_area))
-            gtk_widget_draw (bin->child, &child_area);
-        }
     }
 }
 

@@ -155,8 +155,6 @@ static void gtk_window_compute_reposition (GtkWindow         *window,
 
 static void gtk_window_read_rcfiles       (GtkWidget         *widget,
 					   GdkEventClient    *event);
-static void gtk_window_draw               (GtkWidget         *widget,
-				           GdkRectangle      *area);
 static void gtk_window_paint              (GtkWidget         *widget,
 					   GdkRectangle      *area);
 static gint gtk_window_expose             (GtkWidget         *widget,
@@ -259,8 +257,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus_in_event = gtk_window_focus_in_event;
   widget_class->focus_out_event = gtk_window_focus_out_event;
   widget_class->client_event = gtk_window_client_event;
-
-  widget_class->draw = gtk_window_draw;
+  
   widget_class->expose_event = gtk_window_expose;
    
   container_class->check_resize = gtk_window_check_resize;
@@ -2295,15 +2292,4 @@ gtk_window_expose (GtkWidget      *widget,
     return GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
 
   return TRUE;
-}
-
-static void
-gtk_window_draw (GtkWidget    *widget,
-		 GdkRectangle *area)
-{
-  if (!GTK_WIDGET_APP_PAINTABLE (widget))
-    gtk_window_paint (widget, area);
-  
-  if (GTK_WIDGET_CLASS (parent_class)->draw)
-    (* GTK_WIDGET_CLASS (parent_class)->draw) (widget, area);
 }

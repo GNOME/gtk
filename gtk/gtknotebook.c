@@ -100,8 +100,6 @@ static void gtk_notebook_size_request        (GtkWidget        *widget,
 					      GtkRequisition   *requisition);
 static void gtk_notebook_size_allocate       (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
-static void gtk_notebook_draw                (GtkWidget        *widget,
-					      GdkRectangle     *area);
 static gint gtk_notebook_expose              (GtkWidget        *widget,
 					      GdkEventExpose   *event);
 static gint gtk_notebook_button_press        (GtkWidget        *widget,
@@ -290,7 +288,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->unrealize = gtk_notebook_unrealize;
   widget_class->size_request = gtk_notebook_size_request;
   widget_class->size_allocate = gtk_notebook_size_allocate;
-  widget_class->draw = gtk_notebook_draw;
   widget_class->expose_event = gtk_notebook_expose;
   widget_class->button_press_event = gtk_notebook_button_press;
   widget_class->button_release_event = gtk_notebook_button_release;
@@ -471,7 +468,6 @@ gtk_notebook_get_arg (GtkObject *object,
  * gtk_notebook_realize
  * gtk_notebook_size_request
  * gtk_notebook_size_allocate
- * gtk_notebook_draw
  * gtk_notebook_expose
  * gtk_notebook_button_press
  * gtk_notebook_button_release
@@ -922,49 +918,6 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
       gtk_notebook_pages_allocate (notebook, allocation);
     }
    gtk_notebook_set_shape (notebook);
-}
-
-static void
-gtk_notebook_draw (GtkWidget    *widget,
-		   GdkRectangle *area)
-{
-  GtkNotebook *notebook;
-  GdkRectangle child_area;
-  GdkRectangle draw_area;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_NOTEBOOK (widget));
-  g_return_if_fail (area != NULL);
-
-  notebook = GTK_NOTEBOOK (widget);
-
-  draw_area = *area;
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      gboolean have_visible_child;
-
-      have_visible_child = notebook->cur_page && GTK_WIDGET_VISIBLE (notebook->cur_page->child);
-
-      if (have_visible_child != notebook->have_visible_child)
-	{
-	  notebook->have_visible_child = have_visible_child;
-	  draw_area.x = 0;
-	  draw_area.y = 0;
-	  draw_area.width = widget->allocation.width;
-	  draw_area.height = widget->allocation.height;
-	}
-
-      gtk_notebook_paint (widget, &draw_area);
-
-      gtk_widget_draw_focus (widget);
-
-      if (notebook->cur_page && GTK_WIDGET_VISIBLE (notebook->cur_page->child) &&
-	  gtk_widget_intersect (notebook->cur_page->child, &draw_area, &child_area))
-	gtk_widget_draw (notebook->cur_page->child, &child_area);
-    }
-  else
-    notebook->have_visible_child = FALSE;
 }
 
 static gint

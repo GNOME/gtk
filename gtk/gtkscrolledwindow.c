@@ -90,8 +90,6 @@ static void gtk_scrolled_window_destroy            (GtkObject              *obje
 static void gtk_scrolled_window_finalize           (GObject                *object);
 static void gtk_scrolled_window_map                (GtkWidget              *widget);
 static void gtk_scrolled_window_unmap              (GtkWidget              *widget);
-static void gtk_scrolled_window_draw               (GtkWidget              *widget,
-						    GdkRectangle           *area);
 static gint gtk_scrolled_window_expose             (GtkWidget              *widget,
 						    GdkEventExpose         *event);
 static void gtk_scrolled_window_size_request       (GtkWidget              *widget,
@@ -162,7 +160,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 
   widget_class->map = gtk_scrolled_window_map;
   widget_class->unmap = gtk_scrolled_window_unmap;
-  widget_class->draw = gtk_scrolled_window_draw;
   widget_class->expose_event = gtk_scrolled_window_expose;
   widget_class->size_request = gtk_scrolled_window_size_request;
   widget_class->size_allocate = gtk_scrolled_window_size_allocate;
@@ -588,39 +585,6 @@ gtk_scrolled_window_paint (GtkWidget    *widget,
     }
 }
 
-static void
-gtk_scrolled_window_draw (GtkWidget    *widget,
-			  GdkRectangle *area)
-{
-  GtkScrolledWindow *scrolled_window;
-  GtkBin *bin;
-  GdkRectangle child_area;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (widget));
-  g_return_if_fail (area != NULL);
-  
-  scrolled_window = GTK_SCROLLED_WINDOW (widget);
-  bin = GTK_BIN (widget);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      gtk_scrolled_window_paint (widget, area);
-  
-      if (bin->child && GTK_WIDGET_VISIBLE (bin->child) &&
-	  gtk_widget_intersect (bin->child, area, &child_area))
-	gtk_widget_draw (bin->child, &child_area);
-      
-      if (GTK_WIDGET_VISIBLE (scrolled_window->hscrollbar) &&
-	  gtk_widget_intersect (scrolled_window->hscrollbar, area, &child_area))
-	gtk_widget_draw (scrolled_window->hscrollbar, &child_area);
-      
-      if (GTK_WIDGET_VISIBLE (scrolled_window->vscrollbar) &&
-	  gtk_widget_intersect (scrolled_window->vscrollbar, area, &child_area))
-	gtk_widget_draw (scrolled_window->vscrollbar, &child_area);
-    }
-}
-  
 static gint
 gtk_scrolled_window_expose (GtkWidget      *widget,
 			    GdkEventExpose *event)

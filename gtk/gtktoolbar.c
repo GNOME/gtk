@@ -75,8 +75,6 @@ static void gtk_toolbar_get_arg                  (GtkObject       *object,
 static void gtk_toolbar_destroy                  (GtkObject       *object);
 static void gtk_toolbar_map                      (GtkWidget       *widget);
 static void gtk_toolbar_unmap                    (GtkWidget       *widget);
-static void gtk_toolbar_draw                     (GtkWidget       *widget,
-				                  GdkRectangle    *area);
 static gint gtk_toolbar_expose                   (GtkWidget       *widget,
 						  GdkEventExpose  *event);
 static void gtk_toolbar_size_request             (GtkWidget       *widget,
@@ -165,7 +163,6 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
 
   widget_class->map = gtk_toolbar_map;
   widget_class->unmap = gtk_toolbar_unmap;
-  widget_class->draw = gtk_toolbar_draw;
   widget_class->expose_event = gtk_toolbar_expose;
   widget_class->size_request = gtk_toolbar_size_request;
   widget_class->size_allocate = gtk_toolbar_size_allocate;
@@ -403,37 +400,6 @@ gtk_toolbar_paint_space_line (GtkWidget       *widget,
 		     child_space->alloc_y +
 		     (toolbar->space_size -
 		      widget->style->ythickness) / 2);
-}
-
-static void
-gtk_toolbar_draw (GtkWidget    *widget,
-		  GdkRectangle *area)
-{
-  GtkToolbar *toolbar;
-  GList *children;
-  GtkToolbarChild *child;
-  GdkRectangle child_area;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_TOOLBAR (widget));
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      toolbar = GTK_TOOLBAR (widget);
-
-      for (children = toolbar->children; children; children = children->next)
-	{
-	  child = children->data;
-
-	  if (child->type == GTK_TOOLBAR_CHILD_SPACE)
-	    {
-	      if (toolbar->space_style == GTK_TOOLBAR_SPACE_LINE)
-		gtk_toolbar_paint_space_line (widget, area, child);
-	    }
-	  else if (gtk_widget_intersect (child->widget, area, &child_area))
-	    gtk_widget_draw (child->widget, &child_area);
-	}
-    }
 }
 
 static gint

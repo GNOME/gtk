@@ -114,8 +114,6 @@ static gint gtk_text_view_focus_out_event      (GtkWidget        *widget,
                                                 GdkEventFocus    *event);
 static gint gtk_text_view_motion_event         (GtkWidget        *widget,
                                                 GdkEventMotion   *event);
-static void gtk_text_view_draw                 (GtkWidget        *widget,
-                                                GdkRectangle     *area);
 static gint gtk_text_view_expose_event         (GtkWidget        *widget,
                                                 GdkEventExpose   *expose);
 static void gtk_text_view_draw_focus           (GtkWidget        *widget);
@@ -656,7 +654,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->focus_out_event = gtk_text_view_focus_out_event;
   widget_class->motion_notify_event = gtk_text_view_motion_event;
   widget_class->expose_event = gtk_text_view_expose_event;
-  widget_class->draw = gtk_text_view_draw;
   widget_class->draw_focus = gtk_text_view_draw_focus;
 
   widget_class->drag_begin = gtk_text_view_drag_begin;
@@ -2849,84 +2846,6 @@ gtk_text_view_paint (GtkWidget *widget, GdkRectangle *area)
                         text_view->yoffset,
                         area->x, area->y,
                         area->width, area->height);
-}
-
-static void
-send_expose (GtkTextView   *text_view,
-             GtkTextWindow *win,
-             GdkRectangle  *area)
-{
-  GdkEventExpose event;
-
-  event.type = GDK_EXPOSE;
-  event.send_event = TRUE;
-  event.window = win->bin_window;
-  event.area = *area;
-  event.count = 0;
-
-  /* Fix coordinates (convert widget coords to window coords) */
-  gtk_text_view_window_to_buffer_coords (text_view,
-                                         GTK_TEXT_WINDOW_WIDGET,
-                                         event.area.x,
-                                         event.area.y,
-                                         &event.area.x,
-                                         &event.area.y);
-
-  gtk_text_view_buffer_to_window_coords (text_view,
-                                         win->type,
-                                         event.area.x,
-                                         event.area.y,
-                                         &event.area.x,
-                                         &event.area.y);
-
-
-  gdk_window_ref (event.window);
-  gtk_widget_event (GTK_WIDGET (text_view), (GdkEvent*) &event);
-  gdk_window_unref (event.window);
-}
-
-static void
-gtk_text_view_draw (GtkWidget *widget, GdkRectangle *area)
-{
-  GdkRectangle intersection;
-  GtkTextView *text_view;
-
-  text_view = GTK_TEXT_VIEW (widget);
-
-  gtk_text_view_paint (widget, area);
-
-  /* If the area overlaps the "edge" of the widget, draw the focus
-   * rectangle
-   */
-  if (area->x < FOCUS_EDGE_WIDTH ||
-      area->y < FOCUS_EDGE_WIDTH ||
-      (area->x + area->width) > (widget->allocation.width - FOCUS_EDGE_WIDTH) ||
-      (area->y + area->height) > (widget->allocation.height - FOCUS_EDGE_WIDTH))
-    gtk_widget_draw_focus (widget);
-
-  /* Synthesize expose events for the user-drawn border windows,
-   * just as we would for a drawing area.
-   */
-
-  if (text_view->left_window &&
-      gdk_rectangle_intersect (area, &text_view->left_window->allocation,
-                               &intersection))
-    send_expose (text_view, text_view->left_window, &intersection);
-
-  if (text_view->right_window &&
-      gdk_rectangle_intersect (area, &text_view->right_window->allocation,
-                               &intersection))
-    send_expose (text_view, text_view->right_window, &intersection);
-
-  if (text_view->top_window &&
-      gdk_rectangle_intersect (area, &text_view->top_window->allocation,
-                               &intersection))
-    send_expose (text_view, text_view->top_window, &intersection);
-
-  if (text_view->bottom_window &&
-      gdk_rectangle_intersect (area, &text_view->bottom_window->allocation,
-                               &intersection))
-    send_expose (text_view, text_view->bottom_window, &intersection);
 }
 
 static gint

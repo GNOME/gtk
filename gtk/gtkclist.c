@@ -196,8 +196,6 @@ static void gtk_clist_realize         (GtkWidget        *widget);
 static void gtk_clist_unrealize       (GtkWidget        *widget);
 static void gtk_clist_map             (GtkWidget        *widget);
 static void gtk_clist_unmap           (GtkWidget        *widget);
-static void gtk_clist_draw            (GtkWidget        *widget,
-			               GdkRectangle     *area);
 static gint gtk_clist_expose          (GtkWidget        *widget,
 			               GdkEventExpose   *event);
 static gint gtk_clist_key_press       (GtkWidget        *widget,
@@ -671,7 +669,6 @@ gtk_clist_class_init (GtkCListClass *klass)
   widget_class->unrealize = gtk_clist_unrealize;
   widget_class->map = gtk_clist_map;
   widget_class->unmap = gtk_clist_unmap;
-  widget_class->draw = gtk_clist_draw;
   widget_class->button_press_event = gtk_clist_button_press;
   widget_class->button_release_event = gtk_clist_button_release;
   widget_class->motion_notify_event = gtk_clist_motion;
@@ -4425,7 +4422,6 @@ gtk_clist_finalize (GObject *object)
  *   gtk_clist_unrealize
  *   gtk_clist_map
  *   gtk_clist_unmap
- *   gtk_clist_draw
  *   gtk_clist_expose
  *   gtk_clist_style_set
  *   gtk_clist_key_press
@@ -4764,53 +4760,6 @@ gtk_clist_unmap (GtkWidget *widget)
 
       /* freeze the list */
       clist->freeze_count++;
-    }
-}
-
-static void
-gtk_clist_draw (GtkWidget    *widget,
-		GdkRectangle *area)
-{
-  GtkCList *clist;
-  gint border_width;
-  GdkRectangle child_area;
-  int i;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_CLIST (widget));
-  g_return_if_fail (area != NULL);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      clist = GTK_CLIST (widget);
-      border_width = GTK_CONTAINER (widget)->border_width;
-
-      gdk_window_clear_area (widget->window,
-			     area->x - border_width, 
-			     area->y - border_width,
-			     area->width, area->height);
-
-      /* draw list shadow/border */
-      gtk_draw_shadow (widget->style, widget->window,
-		       GTK_STATE_NORMAL, clist->shadow_type,
-		       0, 0, 
-		       clist->clist_window_width +
-		       (2 * widget->style->xthickness),
-		       clist->clist_window_height +
-		       (2 * widget->style->ythickness) +
-		       clist->column_title_area.height);
-
-      gdk_window_clear_area (clist->clist_window, 0, 0, 0, 0);
-      draw_rows (clist, NULL);
-
-      for (i = 0; i < clist->columns; i++)
-	{
-	  if (!clist->column[i].visible)
-	    continue;
-	  if (clist->column[i].button &&
-	      gtk_widget_intersect(clist->column[i].button, area, &child_area))
-	    gtk_widget_draw (clist->column[i].button, &child_area);
-	}
     }
 }
 

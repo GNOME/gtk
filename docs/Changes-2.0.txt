@@ -265,5 +265,17 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   that the items are placed in the same place as if the menu was placed
   outside the screen, using menu scrolling if necessary.
   
-  
+- The "draw" signal and virtual method on GtkWidget has been removed.
+  All drawing should now occur by invalidating a region of the widget
+  (call gdk_window_invalidate_rect() or gtk_widget_queue_draw() for
+  example to invalidate a region). GTK+ merges all invalid regions,
+  and sends expose events to the widget in an idle handler for the
+  invalid regions. gtk_widget_draw() is deprecated but still works; it
+  adds the passed-in area to the invalid region and immediately sends
+  expose events for the current invalid region. 
+ 
+  Most widgets will work fine if you just delete their "draw"
+  implementation, since they will already have working expose_event
+  implementations. The draw method was rarely called in practice
+  anyway.
  

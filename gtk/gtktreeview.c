@@ -61,8 +61,6 @@ static void     gtk_tree_view_size_request         (GtkWidget        *widget,
 						    GtkRequisition   *requisition);
 static void     gtk_tree_view_size_allocate        (GtkWidget        *widget,
 						    GtkAllocation    *allocation);
-static void     gtk_tree_view_draw                 (GtkWidget        *widget,
-						    GdkRectangle     *area);
 static gboolean gtk_tree_view_expose               (GtkWidget        *widget,
 						    GdkEventExpose   *event);
 static gboolean gtk_tree_view_motion               (GtkWidget        *widget,
@@ -203,7 +201,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->map = gtk_tree_view_map;
   widget_class->size_request = gtk_tree_view_size_request;
   widget_class->size_allocate = gtk_tree_view_size_allocate;
-  widget_class->draw = gtk_tree_view_draw;
   widget_class->expose_event = gtk_tree_view_expose;
   widget_class->motion_notify_event = gtk_tree_view_motion;
   widget_class->enter_notify_event = gtk_tree_view_enter_notify;
@@ -624,51 +621,6 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 
   if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_MODEL_SETUP))
     gtk_tree_view_size_allocate_buttons (widget);
-}
-
-static void
-gtk_tree_view_draw (GtkWidget    *widget,
-		    GdkRectangle *area)
-{
-  GList *tmp_list;
-  GtkTreeView *tree_view;
-  GtkTreeViewColumn *column;
-  GdkRectangle child_area;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_TREE_VIEW (widget));
-
-  tree_view = GTK_TREE_VIEW (widget);
-
-  /* We don't have any way of telling themes about this properly,
-   * so we just assume a background pixmap
-   */
-  if (!GTK_WIDGET_APP_PAINTABLE (widget))
-    {
-      gdk_window_clear_area (tree_view->priv->bin_window,
-			     area->x, area->y, area->width, area->height);
-      gdk_window_clear_area (tree_view->priv->header_window,
-			     area->x, area->y, area->width, area->height);
-    }
-
-  tmp_list = tree_view->priv->children;
-  while (tmp_list)
-    {
-      GtkTreeViewChild *child = tmp_list->data;
-      tmp_list = tmp_list->next;
-
-      if (gtk_widget_intersect (child->widget, area, &child_area))
-	gtk_widget_draw (child->widget, &child_area);
-    }
-  for (tmp_list = tree_view->priv->column; tmp_list; tmp_list = tmp_list->next)
-    {
-      column = tmp_list->data;
-      if (!column->visible)
-	continue;
-      if (column->button &&
-	  gtk_widget_intersect(column->button, area, &child_area))
-	gtk_widget_draw (column->button, &child_area);
-    }
 }
 
 /* Warning: Very scary function.

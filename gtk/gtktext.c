@@ -239,8 +239,6 @@ static void   gtk_text_real_set_editable (GtkOldEditable *old_editable,
 					  gboolean        is_editable);
 
 /* Event handlers */
-static void  gtk_text_draw              (GtkWidget         *widget,
-					 GdkRectangle      *area);
 static gint  gtk_text_expose            (GtkWidget         *widget,
 					 GdkEventExpose    *event);
 static gint  gtk_text_button_press      (GtkWidget         *widget,
@@ -557,7 +555,6 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->draw_focus = gtk_text_draw_focus;
   widget_class->size_request = gtk_text_size_request;
   widget_class->size_allocate = gtk_text_size_allocate;
-  widget_class->draw = gtk_text_draw;
   widget_class->expose_event = gtk_text_expose;
   widget_class->button_press_event = gtk_text_button_press;
   widget_class->button_release_event = gtk_text_button_release;
@@ -1667,21 +1664,6 @@ gtk_text_size_allocate (GtkWidget     *widget,
 #endif
       
       recompute_geometry (text);
-    }
-}
-
-static void
-gtk_text_draw (GtkWidget    *widget,
-	       GdkRectangle *area)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_TEXT (widget));
-  g_return_if_fail (area != NULL);
-  
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      expose_text (GTK_TEXT (widget), area, TRUE);
-      gtk_widget_draw_focus (widget);
     }
 }
 

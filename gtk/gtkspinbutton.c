@@ -84,10 +84,6 @@ static void gtk_spin_button_size_request   (GtkWidget          *widget,
 					    GtkRequisition     *requisition);
 static void gtk_spin_button_size_allocate  (GtkWidget          *widget,
 					    GtkAllocation      *allocation);
-static void gtk_spin_button_paint          (GtkWidget          *widget,
-					    GdkRectangle       *area);
-static void gtk_spin_button_draw           (GtkWidget          *widget,
-					    GdkRectangle       *area);
 static gint gtk_spin_button_expose         (GtkWidget          *widget,
 					    GdkEventExpose     *event);
 static gint gtk_spin_button_button_press   (GtkWidget          *widget,
@@ -180,7 +176,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->unrealize = gtk_spin_button_unrealize;
   widget_class->size_request = gtk_spin_button_size_request;
   widget_class->size_allocate = gtk_spin_button_size_allocate;
-  widget_class->draw = gtk_spin_button_draw;
   widget_class->expose_event = gtk_spin_button_expose;
   widget_class->scroll_event = gtk_spin_button_scroll;
   widget_class->button_press_event = gtk_spin_button_button_press;
@@ -541,60 +536,44 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
     }
 }
 
-static void
-gtk_spin_button_paint (GtkWidget    *widget,
-		       GdkRectangle *area)
+static gint
+gtk_spin_button_expose (GtkWidget      *widget,
+			GdkEventExpose *event)
 {
   GtkSpinButton *spin;
 
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (widget));
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
 
   spin = GTK_SPIN_BUTTON (widget);
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
+      /* FIXME this seems like really broken code -
+       * why aren't we looking at event->window
+       * and acting accordingly?
+       */
+      
       if (spin->shadow_type != GTK_SHADOW_NONE)
 	gtk_paint_box (widget->style, spin->panel,
 		       GTK_STATE_NORMAL, spin->shadow_type,
-		       area, widget, "spinbutton",
+		       &event->area, widget, "spinbutton",
 		       0, 0, 
 		       ARROW_SIZE + 2 * widget->style->xthickness,
 		       widget->requisition.height); 
       else
 	 {
 	    gdk_window_set_back_pixmap (spin->panel, NULL, TRUE);
-	    gdk_window_clear_area (spin->panel, area->x, area->y, area->width, area->height);
+	    gdk_window_clear_area (spin->panel,
+                                   event->area.x, event->area.y,
+                                   event->area.width, event->area.height);
 	 }
        gtk_spin_button_draw_arrow (spin, GTK_ARROW_UP);
        gtk_spin_button_draw_arrow (spin, GTK_ARROW_DOWN);
 
-       GTK_WIDGET_CLASS (parent_class)->draw (widget, area);
+       GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
     }
-}
-
-static void
-gtk_spin_button_draw (GtkWidget    *widget,
-		      GdkRectangle *area)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_SPIN_BUTTON (widget));
-  g_return_if_fail (area != NULL);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    gtk_spin_button_paint (widget, area);
-}
-
-static gint
-gtk_spin_button_expose (GtkWidget      *widget,
-			GdkEventExpose *event)
-{
-  g_return_val_if_fail (widget != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    gtk_spin_button_paint (widget, &event->area);
 
   return FALSE;
 }

@@ -62,8 +62,6 @@ static void gtk_hscale_pos_background (GtkHScale     *hscale,
                                        gint          *h);
 static void gtk_hscale_draw_slider   (GtkRange       *range);
 static void gtk_hscale_draw_value    (GtkScale       *scale);
-static void gtk_hscale_draw          (GtkWidget      *widget,
-                                      GdkRectangle   *area);
 static gint gtk_hscale_trough_keys   (GtkRange *range,
                                       GdkEventKey *key,
                                       GtkScrollType *scroll,
@@ -119,7 +117,6 @@ gtk_hscale_class_init (GtkHScaleClass *class)
   widget_class->realize = gtk_hscale_realize;
   widget_class->size_request = gtk_hscale_size_request;
   widget_class->size_allocate = gtk_hscale_size_allocate;
-  widget_class->draw = gtk_hscale_draw;
   
   range_class->slider_update = gtk_range_default_hslider_update;
   range_class->trough_click = gtk_range_default_htrough_click;
@@ -248,50 +245,6 @@ gtk_hscale_realize (GtkWidget *widget)
   gtk_range_slider_update (GTK_RANGE (widget));
   
   gdk_window_show (range->slider);
-}
-
-static void
-gtk_hscale_draw (GtkWidget    *widget,
-                 GdkRectangle *area)
-{
-  GtkRange *range;
-  GdkRectangle tmp_area;
-  GdkRectangle child_area;
-  gint x, y, width, height;
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_RANGE (widget));
-  g_return_if_fail (area != NULL);
-  
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
-    {
-      range = GTK_RANGE (widget);
-      
-      gtk_hscale_pos_background (GTK_HSCALE (widget), &x, &y, &width, &height);
-      
-      tmp_area.x = x;
-      tmp_area.y = y;
-      tmp_area.width = width;
-      tmp_area.height = height;
-      
-      if (gdk_rectangle_intersect (area, &tmp_area, &child_area))
-        gtk_range_draw_background (range);
-      
-      gtk_hscale_pos_trough (GTK_HSCALE (widget), &x, &y, &width, &height);
-      
-      tmp_area.x = x;
-      tmp_area.y = y;
-      tmp_area.width = width;
-      tmp_area.height = height;
-      
-      if (gdk_rectangle_intersect (area, &tmp_area, &child_area))
-        {
-          gtk_range_draw_trough (range);
-          gtk_range_draw_slider (range);
-          gtk_range_draw_step_forw (range);
-          gtk_range_draw_step_back (range);
-        }
-    }
 }
 
 static void 

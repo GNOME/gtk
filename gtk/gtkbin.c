@@ -31,8 +31,6 @@ static void gtk_bin_class_init (GtkBinClass    *klass);
 static void gtk_bin_init       (GtkBin         *bin);
 static void gtk_bin_map        (GtkWidget      *widget);
 static void gtk_bin_unmap      (GtkWidget      *widget);
-static void gtk_bin_draw       (GtkWidget      *widget,
-			        GdkRectangle   *area);
 static gint gtk_bin_expose     (GtkWidget      *widget,
 			        GdkEventExpose *event);
 static void gtk_bin_add        (GtkContainer   *container,
@@ -89,7 +87,6 @@ gtk_bin_class_init (GtkBinClass *class)
 
   widget_class->map = gtk_bin_map;
   widget_class->unmap = gtk_bin_unmap;
-  widget_class->draw = gtk_bin_draw;
   widget_class->expose_event = gtk_bin_expose;
 
   container_class->add = gtk_bin_add;
@@ -152,26 +149,6 @@ gtk_bin_unmap (GtkWidget *widget)
 
   if (bin->child && GTK_WIDGET_MAPPED (bin->child))
     gtk_widget_unmap (bin->child);
-}
-
-static void
-gtk_bin_draw (GtkWidget    *widget,
-	      GdkRectangle *area)
-{
-  GtkBin *bin;
-  GdkRectangle child_area;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_BIN (widget));
-
-  bin = GTK_BIN (widget);
-
-  if (GTK_WIDGET_DRAWABLE (bin))
-    {
-      if (bin->child && GTK_WIDGET_DRAWABLE (bin->child) &&
-	  gtk_widget_intersect (bin->child, area, &child_area))
-	gtk_widget_draw (bin->child, &child_area);
-    }
 }
 
 static gint

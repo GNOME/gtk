@@ -307,8 +307,6 @@ static void gtk_calendar_paint_day_num	(GtkWidget    *widget,
 static void gtk_calendar_paint_day	(GtkWidget    *widget,
 					 gint	       row,
 					 gint	       col);
-static void gtk_calendar_draw		(GtkWidget    *widget,
-					 GdkRectangle *area);
 static void gtk_calendar_compute_days	(GtkCalendar  *calendar);
 static gint left_x_for_column		(GtkCalendar  *calendar,
 					 gint	       column);
@@ -358,7 +356,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->realize = gtk_calendar_realize;
   widget_class->unrealize = gtk_calendar_unrealize;
   widget_class->expose_event = gtk_calendar_expose;
-  widget_class->draw = gtk_calendar_draw;
   widget_class->draw_focus = gtk_calendar_draw_focus;
   widget_class->size_request = gtk_calendar_size_request;
   widget_class->size_allocate = gtk_calendar_size_allocate;
@@ -1492,19 +1489,6 @@ gtk_calendar_expose (GtkWidget	    *widget,
     }
   
   return FALSE;
-}
-
-static void
-gtk_calendar_draw (GtkWidget	*widget,
-		   GdkRectangle *area)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_CALENDAR (widget));
-  g_return_if_fail (area != NULL);
-  
-  if (GTK_WIDGET_DRAWABLE (widget))
-    gtk_calendar_paint (widget, area);
-  
 }
 
 static void

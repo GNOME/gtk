@@ -51,8 +51,6 @@ static void gtk_box_set_arg    (GtkObject      *object,
 				guint           arg_id);
 static void gtk_box_map        (GtkWidget      *widget);
 static void gtk_box_unmap      (GtkWidget      *widget);
-static void gtk_box_draw       (GtkWidget      *widget,
-			        GdkRectangle   *area);
 static gint gtk_box_expose     (GtkWidget      *widget,
 			        GdkEventExpose *event);
 static void gtk_box_add        (GtkContainer   *container,
@@ -128,7 +126,6 @@ gtk_box_class_init (GtkBoxClass *class)
 
   widget_class->map = gtk_box_map;
   widget_class->unmap = gtk_box_unmap;
-  widget_class->draw = gtk_box_draw;
   widget_class->expose_event = gtk_box_expose;
 
   container_class->add = gtk_box_add;
@@ -629,35 +626,6 @@ gtk_box_unmap (GtkWidget *widget)
       if (GTK_WIDGET_VISIBLE (child->widget) &&
 	  GTK_WIDGET_MAPPED (child->widget))
 	gtk_widget_unmap (child->widget);
-    }
-}
-
-static void
-gtk_box_draw (GtkWidget    *widget,
-	      GdkRectangle *area)
-{
-  GtkBox *box;
-  GtkBoxChild *child;
-  GdkRectangle child_area;
-  GList *children;
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_BOX (widget));
-   
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      box = GTK_BOX (widget);
-	
-      children = box->children;
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
-	     
-	  if (GTK_WIDGET_DRAWABLE (child->widget) &&
-	      gtk_widget_intersect (child->widget, area, &child_area))
-	    gtk_widget_draw (child->widget, &child_area);
-	}
     }
 }
 

@@ -32,8 +32,6 @@ static void     gtk_hpaned_size_request   (GtkWidget      *widget,
 					   GtkRequisition *requisition);
 static void     gtk_hpaned_size_allocate  (GtkWidget      *widget,
 					   GtkAllocation  *allocation);
-static void     gtk_hpaned_draw           (GtkWidget      *widget,
-					   GdkRectangle   *area);
 static void     gtk_hpaned_xor_line       (GtkPaned       *paned);
 static gboolean gtk_hpaned_button_press   (GtkWidget      *widget,
 					   GdkEventButton *event);
@@ -76,7 +74,6 @@ gtk_hpaned_class_init (GtkHPanedClass *class)
 
   widget_class->size_request = gtk_hpaned_size_request;
   widget_class->size_allocate = gtk_hpaned_size_allocate;
-  widget_class->draw = gtk_hpaned_draw;
   widget_class->button_press_event = gtk_hpaned_button_press;
   widget_class->button_release_event = gtk_hpaned_button_release;
   widget_class->motion_notify_event = gtk_hpaned_motion;
@@ -221,56 +218,6 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
 	gtk_widget_size_allocate (paned->child1, &child1_allocation);
       if (paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
 	gtk_widget_size_allocate (paned->child2, &child2_allocation);
-    }
-}
-
-static void
-gtk_hpaned_draw (GtkWidget    *widget,
-		 GdkRectangle *area)
-{
-  GtkPaned *paned;
-  GdkRectangle handle_area, child_area;
-  guint16 border_width;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_PANED (widget));
-
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget)) 
-    {
-      paned = GTK_PANED (widget);
-      border_width = GTK_CONTAINER (paned)->border_width;
-
-      gdk_window_clear_area (widget->window,
-			     area->x, area->y, area->width,
-			     area->height);
-
-      handle_area.x = paned->handle_xpos;
-      handle_area.y = paned->handle_ypos;
-      handle_area.width = paned->handle_size;
-      handle_area.height = paned->handle_height;
-
-      if (gdk_rectangle_intersect (&handle_area, area, &child_area))
-	{
-	  child_area.x -= paned->handle_xpos;
-	  child_area.y -= paned->handle_ypos;
-
-	  gtk_paint_handle (widget->style,
-			    paned->handle,
-			    GTK_STATE_NORMAL,
-			    GTK_SHADOW_NONE,
-			    &child_area,
-			    widget,
-			    "paned",
-			    0, 0, -1, -1,
-			    GTK_ORIENTATION_VERTICAL);
-			    
-	}
-      /* Redraw the children
-       */
-      if (paned->child1 && gtk_widget_intersect (paned->child1, area, &child_area))
-	gtk_widget_draw(paned->child1, &child_area);
-      if (paned->child2 && gtk_widget_intersect(paned->child2, area, &child_area))
-	gtk_widget_draw(paned->child2, &child_area);
     }
 }
 

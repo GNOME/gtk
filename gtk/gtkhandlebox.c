@@ -116,8 +116,6 @@ static void gtk_handle_box_draw_ghost     (GtkHandleBox      *hb);
 static void gtk_handle_box_paint          (GtkWidget         *widget,
 					   GdkEventExpose    *event,
 					   GdkRectangle      *area);
-static void gtk_handle_box_draw           (GtkWidget         *widget,
-					   GdkRectangle      *area);
 static gint gtk_handle_box_expose         (GtkWidget         *widget,
 					   GdkEventExpose    *event);
 static gint gtk_handle_box_button_changed (GtkWidget         *widget,
@@ -205,7 +203,6 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   widget_class->style_set = gtk_handle_box_style_set;
   widget_class->size_request = gtk_handle_box_size_request;
   widget_class->size_allocate = gtk_handle_box_size_allocate;
-  widget_class->draw = gtk_handle_box_draw;
   widget_class->expose_event = gtk_handle_box_expose;
   widget_class->button_press_event = gtk_handle_box_button_changed;
   widget_class->button_release_event = gtk_handle_box_button_changed;
@@ -829,41 +826,6 @@ gtk_handle_box_paint (GtkWidget      *widget,
 	      gtk_widget_intersect (bin->child, &event->area, &child_event.area))
 	    gtk_widget_event (bin->child, (GdkEvent *) &child_event);
 	}
-    }
-}
-
-static void
-gtk_handle_box_draw (GtkWidget    *widget,
-		     GdkRectangle *area)
-{
-  GtkHandleBox *hb;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
-  g_return_if_fail (area != NULL);
-
-  hb = GTK_HANDLE_BOX (widget);
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      if (hb->child_detached)
-	{
-	  /* The area parameter does not make sense in this case, so we
-	   * repaint everything.
-	   */
-
-	  gtk_handle_box_draw_ghost (hb);
-
-	  area->x = 0;
-	  area->y = 0;
-	  area->width = 2 * GTK_CONTAINER (hb)->border_width + DRAG_HANDLE_SIZE;
-	  area->height = area->width + GTK_BIN (hb)->child->allocation.height;
-	  area->width += GTK_BIN (hb)->child->allocation.width;
-
-	  gtk_handle_box_paint (widget, NULL, area);
-	}
-      else
-	gtk_handle_box_paint (widget, NULL, area);
     }
 }
 

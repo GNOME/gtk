@@ -47,8 +47,6 @@ static void gtk_frame_get_arg       (GtkObject      *object,
 				     guint           arg_id);
 static void gtk_frame_paint         (GtkWidget      *widget,
 				     GdkRectangle   *area);
-static void gtk_frame_draw          (GtkWidget      *widget,
-				     GdkRectangle   *area);
 static gint gtk_frame_expose        (GtkWidget      *widget,
 				     GdkEventExpose *event);
 static void gtk_frame_size_request  (GtkWidget      *widget,
@@ -124,7 +122,6 @@ gtk_frame_class_init (GtkFrameClass *class)
   object_class->set_arg = gtk_frame_set_arg;
   object_class->get_arg = gtk_frame_get_arg;
 
-  widget_class->draw = gtk_frame_draw;
   widget_class->expose_event = gtk_frame_expose;
   widget_class->size_request = gtk_frame_size_request;
   widget_class->size_allocate = gtk_frame_size_allocate;
@@ -417,26 +414,6 @@ gtk_frame_paint (GtkWidget    *widget,
 			   GTK_STATE_NORMAL, frame->shadow_type,
 			   area, widget, "frame",
 			   x, y, width, height);
-    }
-}
-
-static void
-gtk_frame_draw (GtkWidget    *widget,
-		GdkRectangle *area)
-{
-  GtkBin *bin = GTK_BIN (widget);
-  GtkFrame *frame = GTK_FRAME (widget);
-  GdkRectangle child_area;
-
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      gtk_frame_paint (widget, area);
-
-      if (bin->child && gtk_widget_intersect (bin->child, area, &child_area))
-	gtk_widget_draw (bin->child, &child_area);
-
-      if (frame->label_widget && gtk_widget_intersect (frame->label_widget, area, &child_area))
-	gtk_widget_draw (frame->label_widget, &child_area);
     }
 }
 
