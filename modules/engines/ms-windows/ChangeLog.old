@@ -1,3 +1,8 @@
+2003-11-01  Raymond Penners  <raymond@dotsphinx.com>
+
+	* src/xp_theme.c: Do not display XP scrollbar grippers on tiny
+	scrollbars.
+
 2003-10-23  Raymond Penners  <raymond@dotsphinx.com>
 
 	* === Released 0.5.1 ===
