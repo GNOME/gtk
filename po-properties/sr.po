@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-01 03:19+0100\n"
-"PO-Revision-Date: 2004-03-01 03:20+0100\n"
+"POT-Creation-Date: 2004-03-01 13:38+0100\n"
+"PO-Revision-Date: 2004-03-01 13:38+0100\n"
 "Last-Translator: Александар Урошевић <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -849,7 +849,7 @@ msgstr "Детаљ"
 msgid "Render detail to pass to the theme engine"
 msgstr "Детаљ исцртавања који се прослеђује мотору теме"
 
-#: gtk/gtkcellrenderertext.c:192 gtk/gtkentry.c:534 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:192 gtk/gtkentry.c:544 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "Текст"
 
@@ -913,7 +913,7 @@ msgstr "Боја исцртавања"
 msgid "Foreground color as a GdkColor"
 msgstr "Боја исцртавања као GdkColor"
 
-#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:466 gtk/gtktexttag.c:273
+#: gtk/gtkcellrenderertext.c:258 gtk/gtkentry.c:476 gtk/gtktexttag.c:273
 #: gtk/gtktextview.c:585
 msgid "Editable"
 msgstr "Измењив"
@@ -1474,40 +1474,40 @@ msgstr "Ивица површине за деловање"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Ширина ивице око простора за дугмиће у дну прозорчета"
 
-#: gtk/gtkentry.c:446 gtk/gtklabel.c:366
+#: gtk/gtkentry.c:456 gtk/gtklabel.c:366
 msgid "Cursor Position"
 msgstr "Положај курзора"
 
-#: gtk/gtkentry.c:447 gtk/gtklabel.c:367
+#: gtk/gtkentry.c:457 gtk/gtklabel.c:367
 msgid "The current position of the insertion cursor in chars"
 msgstr "Тренутни положај курзора за унос као број знакова"
 
-#: gtk/gtkentry.c:456 gtk/gtklabel.c:376
+#: gtk/gtkentry.c:466 gtk/gtklabel.c:376
 msgid "Selection Bound"
 msgstr "Граница избора"
 
-#: gtk/gtkentry.c:457 gtk/gtklabel.c:377
+#: gtk/gtkentry.c:467 gtk/gtklabel.c:377
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Положај супротног краја избора у односу на курзор као број знакова"
 
-#: gtk/gtkentry.c:467
+#: gtk/gtkentry.c:477
 msgid "Whether the entry contents can be edited"
 msgstr "Дозвољена измена садржаја поља"
 
-#: gtk/gtkentry.c:474
+#: gtk/gtkentry.c:484
 msgid "Maximum length"
 msgstr "Највећа дужина"
 
-#: gtk/gtkentry.c:475
+#: gtk/gtkentry.c:485
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Највише дозвољених знакова за ово поље. Нула уколико нема ограничења"
 
-#: gtk/gtkentry.c:483
+#: gtk/gtkentry.c:493
 msgid "Visibility"
 msgstr "Видљивост"
 
-#: gtk/gtkentry.c:484
+#: gtk/gtkentry.c:494
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1515,27 +1515,27 @@ msgstr ""
 "Уколико није постављено, приказује се „невидљиви знак“ уместо правог текста "
 "(унос лозинке)"
 
-#: gtk/gtkentry.c:491
+#: gtk/gtkentry.c:501
 msgid "Has Frame"
 msgstr "Садржи оквир"
 
-#: gtk/gtkentry.c:492
+#: gtk/gtkentry.c:502
 msgid "FALSE removes outside bevel from entry"
 msgstr "Уколико није постављено, не приказује се спољашњи оквир"
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:509
 msgid "Invisible character"
 msgstr "Невидљиви знак"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:510
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "Знак који се користи када се сакрива садржај поља (за унос лозинке)"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:517
 msgid "Activates default"
 msgstr "Покреће подразумевани"
 
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:518
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1543,31 +1543,41 @@ msgstr ""
 "Да ли се покреће подразумевана акција (нпр. подразумевано дугме у "
 "прозорчету) када се притисне Ентер"
 
-#: gtk/gtkentry.c:514
+#: gtk/gtkentry.c:524
 msgid "Width in chars"
 msgstr "Ширина у знаковима"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:525
 msgid "Number of characters to leave space for in the entry"
 msgstr "За колико знакова има места у пољу"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:534
 msgid "Scroll offset"
 msgstr "Померај"
 
-#: gtk/gtkentry.c:525
+#: gtk/gtkentry.c:535
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Број тачака поља која су избачена са екрана улево"
 
-#: gtk/gtkentry.c:535
+#: gtk/gtkentry.c:545
 msgid "The contents of the entry"
 msgstr "Садржај поља"
 
-#: gtk/gtkentry.c:766
+#: gtk/gtkentry.c:552 gtk/gtkmisc.c:98
+msgid "X align"
+msgstr "X поравнање"
+
+#: gtk/gtkentry.c:553 gtk/gtkmisc.c:99
+msgid ""
+"The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
+"layouts"
+msgstr "Водоравно поравнање, од 0 (лево) до 1 (десно). Обрнуто за распореде са десна на лево"
+
+#: gtk/gtkentry.c:786
 msgid "Select on focus"
 msgstr "Изабери кад је у жижи"
 
-#: gtk/gtkentry.c:767
+#: gtk/gtkentry.c:787
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Да ли изабрати садржај када поље пређе у жижу"
 
@@ -2251,14 +2261,6 @@ msgstr "Дугмићи обавештења"
 #: gtk/gtkmessagedialog.c:141
 msgid "The buttons shown in the message dialog"
 msgstr "Дугмићи који се приказују у прозорчету са поруком"
-
-#: gtk/gtkmisc.c:98
-msgid "X align"
-msgstr "X поравнање"
-
-#: gtk/gtkmisc.c:99
-msgid "The horizontal alignment, from 0 (left) to 1 (right)"
-msgstr "Водоравно поравнање, од 0 (лево) до 1 (десно)"
 
 #: gtk/gtkmisc.c:108
 msgid "Y align"
