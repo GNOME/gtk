@@ -17,7 +17,7 @@
  */
 #include "../config.h"
 
-/* #define DEBUG_DND 1 */ /* Shouldn't be needed much these days */
+#define DEBUG_DND 1 /* Shouldn't be needed much these days */
 
 #include <X11/Xlocale.h>
 #include <ctype.h>
@@ -1836,7 +1836,7 @@ gdk_event_translate (GdkEvent *event,
 	    
 	    window_private->dnd_drag_savedeventmask = dnd_winattr.your_event_mask;
 	    dnd_setwinattr.event_mask = 
-	      window_private->dnd_drag_eventmask = ButtonMotionMask;
+	      window_private->dnd_drag_eventmask = ButtonMotionMask | EnterWindowMask | LeaveWindowMask;
 	    XChangeWindowAttributes(gdk_display, window_private->xwindow,
 				    CWEventMask, &dnd_setwinattr);
 	}
@@ -1968,6 +1968,10 @@ gdk_event_translate (GdkEvent *event,
 	      XTranslateCoordinates(gdk_display, curwin, childwin,
 				x, y, &x, &y, &childwin);
 	    }
+#ifdef DEBUG_DND
+	  g_print("Drag is now in window %#x, lastwin was %#x\n",
+		curwin, lastwin);
+#endif
 	  if(curwin != dnd_drag_curwin && curwin != lastwin)
 	    {
 	      /* We have left one window and entered another
@@ -2008,8 +2012,6 @@ gdk_event_translate (GdkEvent *event,
 		{
 		  /* We were outside drop zone but in the window
 		     - have to send enter events */
-#ifdef DEBUG_DND
-#endif
 		  gdk_dnd_drag_enter(curwin);
 		  dnd_drag_curwin = curwin;
 		  dnd_drag_dropzone.x = dnd_drag_dropzone.y = 0;
@@ -2026,7 +2028,9 @@ gdk_event_translate (GdkEvent *event,
     case EnterNotify:
       /* Print debugging info.
        */
+#ifndef DEBUG_DND
       if (gdk_show_events)
+#endif
 	g_print ("enter notify:\t\twindow: %ld  detail: %d subwin: %ld\n",
 		 xevent->xcrossing.window - base_id,
 		 xevent->xcrossing.detail,
@@ -2113,7 +2117,9 @@ gdk_event_translate (GdkEvent *event,
     case LeaveNotify:
       /* Print debugging info.
        */
+#ifndef DEBUG_DND
       if (gdk_show_events)
+#endif
 	g_print ("leave notify:\t\twindow: %ld  detail: %d subwin: %ld\n",
 		 xevent->xcrossing.window - base_id,
 		 xevent->xcrossing.detail, xevent->xcrossing.subwindow - base_id);
