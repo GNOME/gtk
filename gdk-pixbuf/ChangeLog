@@ -1,3 +1,7 @@
+Sun Apr 22 15:51:32 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (LDADDS): Add $(MATH_LIB).
+
 2001-04-18  Havoc Pennington  <hp@redhat.com>
 
 	* gdk-pixbuf.c (gdk_pixbuf_fill): Function to fill pixbuf with a

@@ -169,7 +169,7 @@ INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
 	@GLIB_CFLAGS@
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(loaderdir)\""
 
-LDADDS = libgdk_pixbuf-1.3.la $(GLIB_LIBS) $(STATIC_LIB_DEPS)
+LDADDS = libgdk_pixbuf-1.3.la $(GLIB_LIBS) $(STATIC_LIB_DEPS) $(MATH_LIB)
 
 test_gdk_pixbuf_LDADD = $(LDADDS)
 
