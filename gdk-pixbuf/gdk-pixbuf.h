@@ -131,6 +131,11 @@ GdkPixbuf *gdk_pixbuf_new_subpixbuf (GdkPixbuf *src_pixbuf,
 GdkPixbuf *gdk_pixbuf_new_from_file (const char *filename,
                                      GError    **error);
 
+GdkPixbuf *gdk_pixbuf_new_from_file_at_size (const char *filename,
+					     int         width, 
+					     int         height,
+					     GError    **error);
+
 GdkPixbuf *gdk_pixbuf_new_from_data (const guchar *data,
 				     GdkColorspace colorspace,
 				     gboolean has_alpha,

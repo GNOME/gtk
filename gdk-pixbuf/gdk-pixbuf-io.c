@@ -774,6 +774,90 @@ gdk_pixbuf_new_from_file (const char *filename,
 }
 
 /**
+ * gdk_pixbuf_new_from_file_at_size:
+ * @filename: Name of file to load.
+ * @width: The width the image should have
+ * @height: The height the image should have
+ * @error: Return location for an error
+ *
+ * Creates a new pixbuf by loading an image from a file.  The file format is
+ * detected automatically. If %NULL is returned, then @error will be set.
+ * Possible errors are in the #GDK_PIXBUF_ERROR and #G_FILE_ERROR domains.
+ * The image will be scaled to the requested size.
+ *
+ * Return value: A newly-created pixbuf with a reference count of 1, or %NULL if
+ * any of several error conditions occurred:  the file could not be opened,
+ * there was no loader for the file's format, there was not enough memory to
+ * allocate the image buffer, or the image file contained invalid data.
+ *
+ * Since: 2.4
+ **/
+GdkPixbuf *
+gdk_pixbuf_new_from_file_at_size (const char *filename,
+				  int         width, 
+				  int         height,
+				  GError    **error)
+{
+	GdkPixbufLoader *loader;
+	GdkPixbuf       *pixbuf;
+
+	guchar buffer [4096];
+	int length;
+	FILE *f;
+
+	g_return_val_if_fail (filename != NULL, NULL);
+        g_return_val_if_fail (width > 0 && height > 0, NULL);
+
+	f = fopen (filename, "rb");
+	if (!f) {
+                g_set_error (error,
+                             G_FILE_ERROR,
+                             g_file_error_from_errno (errno),
+                             _("Failed to open file '%s': %s"),
+                             filename, g_strerror (errno));
+		return NULL;
+        }
+
+	loader = gdk_pixbuf_loader_new ();
+	gdk_pixbuf_loader_set_size (loader, width, height);
+
+	while (!feof (f)) {
+		length = fread (buffer, 1, sizeof (buffer), f);
+		if (length > 0)
+			if (!gdk_pixbuf_loader_write (loader, buffer, length, error)) {
+				fclose (f);
+				g_object_unref (G_OBJECT (loader));
+				return NULL;
+			}
+	}
+
+	fclose (f);
+
+	if (!gdk_pixbuf_loader_close (loader, error)) {
+		g_object_unref (G_OBJECT (loader));
+		return NULL;
+	}
+
+	pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
+
+	if (!pixbuf) {
+		g_object_unref (G_OBJECT (loader));
+		g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_FAILED,
+                             _("Failed to load image '%s': reason not known, probably a corrupt image file"),
+                             filename);
+		return NULL;
+	}
+
+	g_object_ref (pixbuf);
+
+	g_object_unref (G_OBJECT (loader));
+
+	return pixbuf;
+}
+
+/**
  * gdk_pixbuf_new_from_xpm_data:
  * @data: Pointer to inline XPM data.
  *

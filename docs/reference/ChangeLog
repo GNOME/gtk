@@ -1,3 +1,7 @@
+2003-07-13  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add gdk_pixbuf_new_from_file_at_size.
+
 2003-07-08  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkfilesel.sgml: Fix the example.  (#116575)

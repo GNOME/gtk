@@ -1,3 +1,9 @@
+2003-07-13  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf.h: 
+	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_file_at_size): New function to load an image from a file at a 
+	specified size.  (#105326, Dom Lachowicz)
+
 2003-07-11  Matthias Clasen  <maclas@gmx.de>
 
 	* queryloaders.c (query_module): Handle absolute filenames properly. (#117170, Jens Elkner)
