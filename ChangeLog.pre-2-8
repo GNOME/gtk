@@ -1,3 +1,9 @@
+Sun Feb 21 15:37:25 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.h: marked gtk_window_set_focus, gtk_window_set_default,
+	gtk_window_remove_embedded_xid and gtk_window_add_embedded_xid as
+	internal functions.
+
 Sun Feb 21 11:39:06 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.c (find_line_containing_point): Revise

@@ -87,10 +87,6 @@ void       gtk_window_set_title                (GtkWindow           *window,
 void       gtk_window_set_wmclass              (GtkWindow           *window,
 						const gchar         *wmclass_name,
 						const gchar         *wmclass_class);
-void       gtk_window_set_focus                (GtkWindow           *window,
-						GtkWidget           *focus);
-void       gtk_window_set_default              (GtkWindow           *window,
-						GtkWidget           *defaultw);
 void       gtk_window_set_policy               (GtkWindow           *window,
 						gint                 allow_shrink,
 						gint                 allow_grow,
@@ -122,6 +118,11 @@ void       gtk_window_set_default_size         (GtkWindow           *window,
 void       gtk_window_set_modal                (GtkWindow           *window,
                                                 gboolean             modal);
 
+/* --- internal functions --- */
+void       gtk_window_set_focus                (GtkWindow           *window,
+						GtkWidget           *focus);
+void       gtk_window_set_default              (GtkWindow           *window,
+						GtkWidget           *defaultw);
 void       gtk_window_remove_embedded_xid      (GtkWindow           *window,
 				                guint                xid);
 void       gtk_window_add_embedded_xid         (GtkWindow           *window,
