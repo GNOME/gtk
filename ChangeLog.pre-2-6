@@ -1,3 +1,70 @@
+2003-12-14  Tor Lillqvist  <tml@iki.fi>
+
+	Merge from stable:
+
+	* gdk/gdkdisplaymanager.c: Mark default_display static.
+
+	* gdk/win32/gdkdnd-win32.c: Mark current_dest_drag static.
+
+	* gdk/win32/gdkkeys-win32.c: Disable some overly verbose debugging
+	output.
+
+	* gdk/win32/gdkevents-win32.c: Clean up the debugging output from
+	--gdk-debug=events. In general, output just one line of debugging
+	output for each Windows message, plus one line for each GDK event
+	generated. Indent all lines according to window procedure nesting
+	level.
+
+	(inner_window_procedure): Rename from real_window_procedure.
+
+	(find_real_window_for_grabbed_mouse_event): Don't get misled when
+	the point is in the non-client (decoration) area of the window
+	returned by WindowFromPoint(). Return the root window in that
+	case.
+
+	(build_pointer_event_state): Test also MK_XBUTTON1 and
+	MK_XBUTTON2 (buttons 4 and 5).
+
+	(synthesize_enter_event): Track the mouse leaving the window in
+	the event being generated, not the one mentioned in the Windows
+	message.
+
+	(propagate): Test for NULL parent earlier. Improves event
+	generation from a grabbed pointer. Part of fix for #107320.
+
+	(handle_stuff_while_moving_or_resizing): New function, to
+	dispatch the main loop (once).
+
+	(resize_timer_proc): New function, set to be called by an inerval
+	timer during resizes/moves. Calls handle_stuff_while_moving_or_resizing().
+
+	(gdk_event_translate): Drop unused return_exposes parameter.
+
+	Handle WM_XBUTTONDOWN and UP messages (buttons 4 and 5).
+
+	On WM_SYSKEYUP, generate a key release event also for just the Alt
+	key.
+
+	On WM_MOUSELEAVE, generate a leave event of type
+	GDK_NOTIFY_ANCESTOR (and not UNKNOWN) if the mouse left a
+	top-level window, and left the app completely.
+
+	On WM_ENTERSIZEMOVE, set a flag, and start an interval timer that
+	calls resize_timer_proc() at regular intervals. On
+	WM_EXITSIZEMOVE, kill the timer.
+
+	On WM_WINDOWPOSCHANGED, generate a configure event if necessary,
+	and dispatch the main loop (by calling
+	handle_stuff_while_moving_or_resizing()). Fixes #99540, idea by
+	Herman Bloggs.
+
+	* gdk/win32/gdkmain-win32.c (_gdk_win32_message_to_string): Handle
+	also wintab messages.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_skip_taskbar_hint):
+	Instead of using WS_EX_TOOLWINDOW, implement by setting/unsetting
+	the window's owner. Fixes #118093, reported by Maxime Romano.
+
 Tue Dec  8 09:41:00 2003  Tim Evans  <t.evans@aranz.com>
 
 	* gdk/win32/gdkwindow-win32.[ch]: Implement

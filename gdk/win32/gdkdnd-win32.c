@@ -97,7 +97,7 @@ struct _GdkDragContextPrivateWin32 {
 
 #define GDK_DRAG_CONTEXT_PRIVATE_DATA(context) ((GdkDragContextPrivateWin32 *) GDK_DRAG_CONTEXT (context)->windowing_data)
 
-GdkDragContext *current_dest_drag = NULL;
+static GdkDragContext *current_dest_drag = NULL;
 
 static void gdk_drag_context_init       (GdkDragContext      *dragcontext);
 static void gdk_drag_context_class_init (GdkDragContextClass *klass);
