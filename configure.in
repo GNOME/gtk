@@ -401,7 +401,7 @@ fi
 # sure that both po/ and po-properties/ have .po files that correspond
 # to your language.  If you only add one to po/, the build will break
 # in po-properties/.
-ALL_LINGUAS="af am ar az be bg bn br ca cs cy da de el en_CA en_GB es et eu fa fi fr ga gl he hi hr hu ia id it ja ko li lt lv mi mk ml mn ms ne nl nn no pl pt pt_BR ro ru sk sl sq sr sr@ije sr@Latn sv ta th tr uk uz uz@Latn vi wa yi zh_CN zh_TW"
+ALL_LINGUAS="af am ar az be bg bn br ca cs cy da de el en_CA en_GB es et eu fa fi fr ga gl he hi hr hu ia id it ja ko li lt lv mi mk ml mn mr ms ne nl nn no pl pt pt_BR ro ru sk sl sq sr sr@ije sr@Latn sv ta th tr uk uz uz@Latn vi wa yi zh_CN zh_TW"
 AM_GLIB_GNU_GETTEXT
 LIBS="$LIBS $INTLLIBS"
 AC_OUTPUT_COMMANDS([case "$CONFIG_FILES" in *po-properties/Makefile.in*)
