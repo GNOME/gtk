@@ -1367,41 +1367,50 @@ gdk_rgb_convert_565_br (GdkImage *image,
     }
 }
 
+/* Thanks to Ray Lehtiniemi for a patch that resulted in a ~25% speedup
+   in this mode. */
 static void
 gdk_rgb_convert_565_d (GdkImage *image,
-		       gint x0, gint y0, gint width, gint height,
-		       guchar *buf, int rowstride,
-		       gint x_align, gint y_align, GdkRgbCmap *cmap)
+                       gint x0, gint y0, gint width, gint height,
+                       guchar *buf, int rowstride,
+                       gint x_align, gint y_align, GdkRgbCmap *cmap)
 {
   int x, y;
   guchar *obuf;
   gint bpl;
-  guchar *bptr, *bp2;
-  guchar r, g, b;
-  gint dith;
-  gint r1, g1, b1;
-  guchar *dmp;
+  guchar *bptr;
 
+  width += x_align;
+  height += y_align;
+  
   bptr = buf;
   bpl = image->bpl;
-  obuf = ((guchar *)image->mem) + y0 * bpl + x0 * 2;
-  for (y = 0; y < height; y++)
+  obuf = ((guchar *)image->mem) + y0 * bpl + (x0 - x_align) * 2;
+
+  for (y = y_align; y < height; y++)
     {
-      dmp = DM[(y_align + y) & (DM_HEIGHT - 1)];
-      bp2 = bptr;
-      for (x = 0; x < width; x++)
-	{
-	  r = *bp2++;
-	  g = *bp2++;
-	  b = *bp2++;
-	  dith = dmp[(x_align + x) & (DM_WIDTH - 1)] >> 3;
-	  r1 = r + dith;
-	  g1 = g + ((7 - dith) >> 1);
-	  b1 = b + dith;
-	  ((unsigned short *)obuf)[x] = (((r1 - (r1 >> 5)) & 0xf8) << 8) |
-	    (((g1 - (g1 >> 6)) & 0xfc) << 3) |
-	    (((b1 - (b1 >> 5)) & 0xf8) >> 3);
-	}
+      guchar * dmp = DM[y & (DM_HEIGHT - 1)];
+      guchar * bp2 = bptr;
+
+      for (x = x_align; x < width; x++)
+        {
+          gint32 rgb = *bp2++ << 20;
+          rgb += *bp2++ << 10;
+          rgb += *bp2++;
+          {
+            gint32 dith = dmp[x & (DM_WIDTH - 1)] >> 3;
+            rgb += ((dith << 20) | dith | (((7 - dith) >> 1) << 10));
+          }
+          rgb += 0x10040100
+            - ((rgb & 0x1e0001e0) >> 5)
+            - ((rgb & 0x00070000) >> 6);
+
+          ((unsigned short *)obuf)[x] =
+            ((rgb & 0x0f800000) >> 12) |
+            ((rgb & 0x0003f000) >> 7) |
+            ((rgb & 0x000000f8) >> 3);
+        }
+
       bptr += rowstride;
       obuf += bpl;
     }

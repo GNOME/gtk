@@ -1,3 +1,8 @@
+Thu Aug 13 21:06:00 1998  Raph Levien  <raph@gtk.org>
+
+	* gdk/gdkrgb.c: committing a patch by Ray Lehtiniemi that
+	speeds up the 565_d case by about 25% total. Thanks Ray!
+
 Thu Aug 13 16:47:44 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* Changed GtkSignalFunc back to () from (void). (again!)
