@@ -31,6 +31,8 @@
 
 #include <gdk/gdkdrawable.h>
 
+#include <X11/Xlib.h>
+
 #ifdef HAVE_XFT
 #include <X11/extensions/Xrender.h>
 #endif

@@ -1,3 +1,7 @@
+Fri Apr 26 21:42:02 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gdk/x11/gdkdrawable-x11.h: include X11/Xlib.h, fixes the build
+
 Fri Apr 26 10:34:15 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/Makefile.am (libgdk_x11_la_SOURCES): Add
