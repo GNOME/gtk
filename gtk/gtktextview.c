@@ -608,7 +608,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                    g_param_spec_boxed ("tabs",
                                                        _("Tabs"),
                                                        _("Custom tabs for this text"),
-                                                       GTK_TYPE_PANGO_TAB_ARRAY,
+                                                       PANGO_TYPE_TAB_ARRAY,
 						       G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,

@@ -291,7 +291,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_boxed ("font_desc",
                                                        _("Font"),
                                                        _("Font description as a PangoFontDescription struct"),
-                                                       GTK_TYPE_PANGO_FONT_DESCRIPTION,
+                                                       PANGO_TYPE_FONT_DESCRIPTION,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   
@@ -492,7 +492,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_boxed ("tabs",
                                                        _("Tabs"),
                                                        _("Custom tabs for this text"),
-                                                       GTK_TYPE_PANGO_TAB_ARRAY,
+                                                       PANGO_TYPE_TAB_ARRAY,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
   
   g_object_class_install_property (object_class,

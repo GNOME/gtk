@@ -217,7 +217,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                    g_param_spec_boxed ("font_desc",
                                                        _("Font"),
                                                        _("Font description as a PangoFontDescription struct"),
-                                                       GTK_TYPE_PANGO_FONT_DESCRIPTION,
+                                                       PANGO_TYPE_FONT_DESCRIPTION,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   

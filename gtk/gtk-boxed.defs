@@ -27,6 +27,25 @@
   gtk_requisition_free
   "sizeof(GtkRequisition)")
 
+;; TextView
+
+(define-boxed GtkTextIter
+  gtk_text_iter_copy
+  gtk_text_iter_free)
+
+(define-boxed GtkTextAttributes
+  gtk_text_attributes_ref
+  gtk_text_attributes_unref)
+
+;; TreeView
+(define-boxed GtkTreeIter
+  gtk_tree_iter_copy
+  gtk_tree_iter_free)
+
+(define-boxed GtkTreePath
+  gtk_tree_path_copy
+  gtk_tree_path_free)
+
 ;;; Gdk boxed types
 
                                         ;(define-boxed GdkPoint
@@ -1288,34 +1307,6 @@
   none
   ((GtkText text)
    (uint nchars)))
-
-;; TextView
-
-(define-boxed GtkTextIter
-  gtk_text_iter_copy
-  gtk_text_iter_free)
-
-
-(define-boxed GtkTextAttributes
-  gtk_text_attributes_ref
-  gtk_text_attributes_unref)
-
-(define-boxed PangoTabArray
-  pango_tab_array_copy
-  pango_tab_array_free)
-
-(define-boxed PangoFontDescription
-  pango_font_description_copy
-  pango_font_description_free)
-
-;; TreeView
-(define-boxed GtkTreeIter
-  gtk_tree_iter_copy
-  gtk_tree_iter_free)
-
-(define-boxed GtkTreePath
-  gtk_tree_path_copy
-  gtk_tree_path_free)
 
 ;; Alignment
 
