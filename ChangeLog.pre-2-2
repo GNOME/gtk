@@ -1,3 +1,8 @@
+Mon Aug 27 14:18:12 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenubar.h (gtk_menu_bar_prepend): Fix a cuple
+	of typos in compat macros. (#59624, Skip Montaro)
+
 Sun Aug 26 20:00:00 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in acinclude.m4: Use autoconf 2.13/2.50 compat
