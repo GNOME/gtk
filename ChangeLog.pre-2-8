@@ -1,3 +1,9 @@
+Mon Nov  3 23:12:41 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c (_gtk_menu_is_empty): Return TRUE if 
+	menu is NULL.
+	(update_smart_separators): Remove some unneeded ifs.
+
 Mon Nov  3 22:45:58 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwindow-decorate.h: Add G_BEGIN_DECLS/G_END_DECLS to make 

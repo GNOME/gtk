@@ -1662,7 +1662,7 @@ _gtk_menu_is_empty (GtkWidget *menu)
   g_return_val_if_fail (menu == NULL || GTK_IS_MENU (menu), TRUE);
 
   if (!menu)
-    return FALSE;
+    return TRUE;
 
   children = gtk_container_get_children (GTK_CONTAINER (menu));
 
@@ -1772,10 +1772,8 @@ update_smart_separators (GtkWidget *proxy)
 	  GtkWidget *item;
 
 	  item = gtk_menu_get_attach_widget (GTK_MENU (parent));
-	  if (GTK_IS_MENU_ITEM (item))
-	    _gtk_action_sync_menu_visible (NULL, item, empty);
-	  if (GTK_IS_WIDGET (filler))
-	    g_object_set (G_OBJECT (filler), "visible", empty, NULL);
+	  _gtk_action_sync_menu_visible (NULL, item, empty);
+	  g_object_set (G_OBJECT (filler), "visible", empty, NULL);
 	}
     }
 }
