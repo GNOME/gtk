@@ -1,3 +1,8 @@
+2001-11-15  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdnd-win32.c (gdk_dropfiles_filter): Increment
+	source_window refcount.
+
 2001-11-14  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdkdrawable.h

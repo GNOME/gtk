@@ -648,6 +648,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       context->protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
       context->is_source = FALSE;
       context->source_window = gdk_parent_root;
+      gdk_window_ref (context->source_window);
       context->dest_window = event->any.window;
       gdk_window_ref (context->dest_window);
       /* WM_DROPFILES drops are always file names */
