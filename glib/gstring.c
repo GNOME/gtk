@@ -205,7 +205,7 @@ g_string_maybe_expand (GRealString* string, gint len)
 }
 
 GString*
-g_string_new (const gchar *init)
+g_string_sized_new (guint dfl_size)
 {
   GRealString *string;
 
@@ -216,14 +216,27 @@ g_string_new (const gchar *init)
 
   string = g_chunk_new (GRealString, string_mem_chunk);
 
-  string->alloc = 2;
+  string->alloc = 0;
   string->len   = 0;
-  string->str   = g_new0(char, 2);
+  string->str   = NULL;
 
-  if (init)
-    g_string_append ((GString*)string, init);
+  g_string_maybe_expand (string, MAX (dfl_size, 2));
+  string->str[0] = 0;
 
   return (GString*) string;
+}
+
+GString*
+g_string_new (const gchar *init)
+{
+  GString *string;
+
+  string = g_string_sized_new (2);
+
+  if (init)
+    g_string_append (string, init);
+
+  return string;
 }
 
 void

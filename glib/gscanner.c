@@ -347,8 +347,8 @@ g_scanner_add_symbol (GScanner		*scanner,
 {
   register GScannerHashVal	*hash_val;
   
-  g_return_if_fail (symbol != NULL);
   g_return_if_fail (scanner != NULL);
+  g_return_if_fail (symbol != NULL);
   
   hash_val = g_scanner_lookup_internal (scanner, symbol);
   
@@ -429,6 +429,8 @@ g_scanner_remove_symbol (GScanner	*scanner,
 {
   register GScannerHashVal	*hash_val;
   
+  g_return_if_fail (scanner != NULL);
+
   hash_val = g_scanner_lookup_internal (scanner, symbol);
   
   if (hash_val)
@@ -437,6 +439,22 @@ g_scanner_remove_symbol (GScanner	*scanner,
       g_free (hash_val->key);
       g_free (hash_val);
     }
+}
+
+void
+g_scanner_freeze_symbol_table (GScanner *scanner)
+{
+  g_return_if_fail (scanner != NULL);
+
+  g_hash_table_freeze (scanner->symbol_table);
+}
+
+void
+g_scanner_thaw_symbol_table (GScanner *scanner)
+{
+  g_return_if_fail (scanner != NULL);
+
+  g_hash_table_thaw (scanner->symbol_table);
 }
 
 GTokenType

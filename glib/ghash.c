@@ -122,6 +122,13 @@ g_hash_table_insert (GHashTable *hash_table,
 	       (* rhash_table->key_compare_func) (node->key, key)) ||
 	      (node->key == key))
 	    {
+	      /* do not reset node->key in this place, keeping
+	       * the old key might be intended.
+	       * a g_hash_table_remove/g_hash_table_insert pair
+	       * can be used otherwise.
+	       *
+	       * node->key = key;
+	       */
 	      node->value = value;
 	      return;
 	    }

@@ -1,3 +1,16 @@
+Mon Jun  1 04:43:27 1998  Tim Janik  <timj@gtk.org>
+
+	* ghash.c (g_hash_table_insert): wrote a comment describing why
+	a hash node's key should not also get replaced when overriding
+ 	previous entries.
+
+Tue May 26 18:30:06 1998  Tim Janik  <timj@gtk.org>
+
+	* glib.h (g_string_sized_new): new function to controll the preallocated
+	size of a GString.
+
+	* glib.h (g_strreversed): new function to reverse a string.
+
 Mon May 18 22:14:39 1998  Owen Taylor  <otaylor@gtk.org>
 (Yasuhiro SHIRASAKI <joke@awa.tohoku.ac.jp> : gtk-joke-980517-0.patch)
 	

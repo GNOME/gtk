@@ -731,6 +731,31 @@ g_strup (gchar  *string)
     }
 }
 
+void
+g_strreverse (gchar       *string)
+{
+  g_return_if_fail (string != NULL);
+
+  if (*string)
+    {
+      register gchar *h, *t;
+
+      h = string;
+      t = string + strlen (string) - 1;
+      
+      while (h < t)
+	{
+	  register gchar c;
+	  
+	  c = *h;
+	  *h = *t;
+	  h++;
+	  *t = c;
+	  t--;
+	}
+    }
+}
+
 gint
 g_strcasecmp (const gchar *s1,
 	      const gchar *s2)

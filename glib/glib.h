@@ -752,6 +752,7 @@ gint    g_strcasecmp 		(const gchar *s1,
 				 const gchar *s2);
 void    g_strdown    		(gchar       *string);
 void    g_strup      		(gchar       *string);
+void    g_strreverse   		(gchar       *string);
 guint   g_parse_debug_string	(const gchar *string, 
 				 GDebugKey   *keys, 
 				 guint        nkeys);
@@ -795,6 +796,7 @@ gchar*	      g_string_chunk_insert_const  (GStringChunk *chunk,
 /* Strings
  */
 GString* g_string_new	    (const gchar *init);
+GString* g_string_sized_new (guint	  dfl_size);
 void	 g_string_free	    (GString     *string,
 			     gint         free_segment);
 GString* g_string_assign    (GString     *lval,
@@ -1060,6 +1062,8 @@ void		g_scanner_foreach_symbol	(GScanner	*scanner,
 						 gpointer	 func_data);
 void		g_scanner_remove_symbol		(GScanner	*scanner,
 						 const gchar	*symbol);
+void		g_scanner_freeze_symbol_table	(GScanner	*scanner);
+void		g_scanner_thaw_symbol_table	(GScanner	*scanner);
 void		g_scanner_unexp_token		(GScanner	*scanner,
 						 GTokenType	expected_token,
 						 const gchar	*identifier_spec,
