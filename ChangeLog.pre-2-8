@@ -1,4 +1,6 @@
 2004-08-01  Matthias Clasen  <mclasen@redhat.com>
+	
+	* configure.in: Post-release version bump
 
 	* === Released 2.5.1 ===
  
