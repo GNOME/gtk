@@ -1,3 +1,8 @@
+Sat Sep  8 14:19:49 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkliststore.c: Write documentation
+	* gtk/gtktreestore.c: Write documentation
+
 Sat Sep  8 13:53:09 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.[ch] gtk/gtkstyle.[ch]: Replace uses of GBSearchArray

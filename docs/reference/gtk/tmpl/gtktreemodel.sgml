@@ -1,8 +1,8 @@
 <!-- ##### SECTION Title ##### -->
-gtktreemodel
+GtkTreeModel
 
 <!-- ##### SECTION Short_Description ##### -->
-
+The tree interface used by #GtkTreeView
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -11,7 +11,7 @@ gtktreemodel
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkTreeView, #GtkTreeStore, #GtkListStore
 </para>
 
 <!-- ##### MACRO GTK_TREE_MODEL_GET_IFACE ##### -->

@@ -225,6 +225,12 @@ has the focus.
 
 @clist: The #GtkCList widget to check.
 
+<!-- ##### MACRO GTK_HAVE_CONTAINER_FOCUS_ADJUSTMENTS ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### MACRO GTK_ICON_SIZE_BUTTON ##### -->
 <para>
 

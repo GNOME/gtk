@@ -572,15 +572,10 @@ gtk_list_store_iter_parent (GtkTreeModel *tree_model,
   return FALSE;
 }
 
-/* Public accessors */
-/* This is a somewhat inelegant function that does a lot of list
- * manipulations on it's own.
- */
-
 /**
  * gtk_list_store_set_value:
- * @store: a #GtkListStore
- * @iter: iterator for the row you're modifying
+ * @list_store: A #GtkListStore
+ * @iter: A valid #GtkTreeIter for the row being modified
  * @column: column number to modify
  * @value: new value for the cell
  *
@@ -688,11 +683,11 @@ gtk_list_store_set_value (GtkListStore *list_store,
 
 /**
  * gtk_list_store_set_valist:
- * @list_store: a #GtkListStore
- * @iter: row to set data for
+ * @list_store: A #GtkListStore
+ * @iter: A valid #GtkTreeIter for the row being modified
  * @var_args: va_list of column/value pairs
  *
- * See gtk_list_store_set(); this version takes a va_list for
+ * See @gtk_list_store_set; this version takes a va_list for
  * use by language bindings.
  *
  **/
@@ -837,11 +832,10 @@ gtk_list_store_remove_silently (GtkListStore *list_store,
 
 /**
  * gtk_list_store_remove:
- * @store: a #GtkListStore
- * @iter: a row in @list_store
+ * @list_store: A #GtkListStore
+ * @iter: A valid #GtkTreeIter
  *
- * Removes the given row from the list store, emitting the
- * "deleted" signal on #GtkTreeModel.
+ * Removes the given row from the list store.  After being removed, @iter is set to be the next valid row, or invalidated if it pointed to the last row inn @list_store
  *
  **/
 void
@@ -849,10 +843,12 @@ gtk_list_store_remove (GtkListStore *list_store,
 		       GtkTreeIter  *iter)
 {
   GtkTreePath *path;
+  GSList *next;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (VALID_ITER (iter, list_store));
 
+  next = G_SLIST (iter->user_data)->next;
   path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
 
   validate_list_store (list_store);
@@ -864,6 +860,16 @@ gtk_list_store_remove (GtkListStore *list_store,
   list_store->stamp ++;
   gtk_tree_model_deleted (GTK_TREE_MODEL (list_store), path);
   gtk_tree_path_free (path);
+
+  if (next)
+    {
+      iter->stamp = list_store->stamp;
+      iter->user_data = next;
+    }
+  else
+    {
+      iter->stamp = 0;
+    }
 }
 
 static void
@@ -887,13 +893,15 @@ insert_after (GtkListStore *list_store,
 
 /**
  * gtk_list_store_insert:
- * @store: a #GtkListStore
- * @iter: iterator to initialize with the new row
+ * @list_store: A #GtkListStore
+ * @iter: An unset #GtkTreeIter to set to the new row
  * @position: position to insert the new row
  *
- * Creates a new row at @position, initializing @iter to point to the
- * new row, and emitting the "inserted" signal from the #GtkTreeModel
- * interface.
+ * Creates a new row at @position.  @iter will be changed to point to this new
+ * row.  If @position is larger than the number of rows on the list, then the
+ * new row will be appended to the list.  The row will be empty before this
+ * function is called.  To fill in values, you need to call @gtk_list_store_set
+ * or @gtk_list_store_set_value.
  *
  **/
 void
@@ -941,13 +949,14 @@ gtk_list_store_insert (GtkListStore *list_store,
 
 /**
  * gtk_list_store_insert_before:
- * @store: a #GtkListStore
- * @iter: iterator to initialize with the new row
- * @sibling: an existing row
+ * @list_store: A #GtkListStore
+ * @iter: An unset #GtkTreeIter to set to the new row
+ * @sibling: A valid #GtkTreeIter, or %NULL
  *
- * Inserts a new row before @sibling, initializing @iter to point to
- * the new row, and emitting the "inserted" signal from the
- * #GtkTreeModel interface.
+ * Inserts a new row before @sibling.  If @sibling is %NULL, then the row will be
+ * appended to the beginning of the list.  @iter will be changed to point to
+ * this new row.  The row will be empty before this function is called.  To fill
+ * in values, you need to call @gtk_list_store_set or @gtk_list_store_set_value.
  *
  **/
 void
@@ -1028,13 +1037,14 @@ gtk_list_store_insert_before (GtkListStore *list_store,
 
 /**
  * gtk_list_store_insert_after:
- * @store: a #GtkListStore
- * @iter: iterator to initialize with the new row
- * @sibling: an existing row
+ * @list_store: A #GtkListStore
+ * @iter: An unset #GtkTreeIter to set to the new row
+ * @sibling: A valid #GtkTreeIter, or %NULL
  *
- * Inserts a new row after @sibling, initializing @iter to point to
- * the new row, and emitting the "inserted" signal from the
- * #GtkTreeModel interface.
+ * Inserts a new row after @sibling.  If @sibling is %NULL, then the row will be
+ * prepended to the beginning of the list.  @iter will be changed to point to
+ * this new row.  The row will be empty after this function is called.  To fill
+ * in values, you need to call @gtk_list_store_set or @gtk_list_store_set_value.
  *
  **/
 void
@@ -1080,12 +1090,12 @@ gtk_list_store_insert_after (GtkListStore *list_store,
 
 /**
  * gtk_list_store_prepend:
- * @store: a #GtkListStore
- * @iter: iterator to initialize with new row
+ * @list_store: A #GtkListStore
+ * @iter: An unset #GtkTreeIter to set to the prepend row
  *
- * Prepends a row to @store, initializing @iter to point to the
- * new row, and emitting the "inserted" signal on the #GtkTreeModel
- * interface for the @store.
+ * Prepend a new row to @list_store.  @iter will be changed to point to this new
+ * row.  The row will be empty after this function is called.  To fill in
+ * values, you need to call @gtk_list_store_set or @gtk_list_store_set_value.
  *
  **/
 void
@@ -1118,12 +1128,12 @@ gtk_list_store_prepend (GtkListStore *list_store,
 
 /**
  * gtk_list_store_append:
- * @store: a #GtkListStore
- * @iter: iterator to initialize with the new row
+ * @list_store: A #GtkListStore
+ * @iter: An unset #GtkTreeIter to set to the appended row
  *
- * Appends a row to @store, initializing @iter to point to the
- * new row, and emitting the "inserted" signal on the #GtkTreeModel
- * interface for the @store.
+ * Appends a new row to @list_store.  @iter will be changed to point to this new
+ * row.  The row will be empty after this function is called.  To fill in
+ * values, you need to call @gtk_list_store_set or @gtk_list_store_set_value.
  *
  **/
 void
