@@ -55,8 +55,12 @@ struct _GtkFileChooserIface
   void           (*remove_filter)      	   (GtkFileChooser    *chooser,
 					    GtkFileFilter     *filter);
   GSList *       (*list_filters)       	   (GtkFileChooser    *chooser);
-  void           (*set_shortcut_folders)   (GtkFileChooser    *chooser,
-					    GSList            *bookmarks);
+  gboolean       (*add_shortcut_folder)    (GtkFileChooser    *chooser,
+					    const GtkFilePath *path,
+					    GError           **error);
+  gboolean       (*remove_shortcut_folder) (GtkFileChooser    *chooser,
+					    const GtkFilePath *path,
+					    GError           **error);
   GSList *       (*list_shortcut_folders)  (GtkFileChooser    *chooser);
   
   /* Signals
@@ -77,6 +81,12 @@ void           _gtk_file_chooser_unselect_path           (GtkFileChooser    *cho
 							  const GtkFilePath *path);
 GSList *       _gtk_file_chooser_get_paths               (GtkFileChooser    *chooser);
 GtkFilePath *  _gtk_file_chooser_get_preview_path        (GtkFileChooser    *chooser);
+gboolean       _gtk_file_chooser_add_shortcut_folder     (GtkFileChooser    *chooser,
+							  const GtkFilePath *path,
+							  GError           **error);
+gboolean       _gtk_file_chooser_remove_shortcut_folder  (GtkFileChooser    *chooser,
+							  const GtkFilePath *path,
+							  GError           **error);
 
 G_END_DECLS
 

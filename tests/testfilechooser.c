@@ -373,7 +373,14 @@ main (int argc, char **argv)
   /* Extra widget */
   extra = gtk_check_button_new_with_mnemonic ("_Frobnicate the file");
   gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), extra);
-  
+
+  /* Shortcuts */
+
+  gtk_file_chooser_add_shortcut_folder_uri (GTK_FILE_CHOOSER (dialog),
+					    "file:///usr/share/pixmaps",
+					    NULL);
+
+  /* Done with the dialog */
   gtk_window_set_default_size (GTK_WINDOW (dialog), 600, 400);
   /* show_all() to reveal bugs in composite widget handling */
   gtk_widget_show_all (dialog);

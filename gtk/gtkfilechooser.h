@@ -40,6 +40,17 @@ typedef enum
 
 GType gtk_file_chooser_get_type (void);
 
+/* GError enumeration for GtkFileChooser */
+
+#define GTK_FILE_CHOOSER_ERROR (gtk_file_chooser_error_quark ())
+
+typedef enum {
+  GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
+  GTK_FILE_CHOOSER_ERROR_BAD_FILENAME
+} GtkFileChooserError;
+
+GQuark gtk_file_chooser_error_quark (void);
+
 /* Configuration
  */
 void                 gtk_file_chooser_set_action          (GtkFileChooser       *chooser,
@@ -123,9 +134,21 @@ GtkFileFilter *gtk_file_chooser_get_filter (GtkFileChooser *chooser);
 
 /* Per-application shortcut folders */
 
-void    gtk_file_chooser_set_shortcut_folders  (GtkFileChooser *chooser,
-					        GSList         *shortcut_directories);
-GSList *gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser);
+gboolean gtk_file_chooser_add_shortcut_folder    (GtkFileChooser *chooser,
+						  const char     *folder,
+						  GError        **error);
+gboolean gtk_file_chooser_remove_shortcut_folder (GtkFileChooser *chooser,
+						  const char     *folder,
+						  GError        **error);
+GSList *gtk_file_chooser_list_shortcut_folders   (GtkFileChooser *chooser);
+
+gboolean gtk_file_chooser_add_shortcut_folder_uri    (GtkFileChooser *chooser,
+						      const char     *folder,
+						      GError        **error);
+gboolean gtk_file_chooser_remove_shortcut_folder_uri (GtkFileChooser *chooser,
+						      const char     *folder,
+						      GError        **error);
+GSList *gtk_file_chooser_list_shortcut_folder_uris   (GtkFileChooser *chooser);
 
 G_END_DECLS
 

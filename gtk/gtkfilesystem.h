@@ -144,13 +144,6 @@ struct _GtkFileSystemIface
 					const GtkFilePath *path,
 			                GError           **error);
 
-  gboolean           (*supports_shortcuts) (GtkFileSystem *file_system);
-  GSList *           (*list_shortcuts)     (GtkFileSystem *file_system,
-					    GError       **error);
-  gboolean           (*set_shortcuts)      (GtkFileSystem *file_system,
-					    GSList        *shortcuts,
-					    GError       **error);
-
   /* Path Manipulation
    */
   gboolean      (*get_parent)      (GtkFileSystem      *file_system,
@@ -178,10 +171,12 @@ struct _GtkFileSystemIface
 
   /* Bookmarks */
 
-  gboolean       (*get_supports_bookmarks) (GtkFileSystem *file_system);
-  void           (*set_bookmarks)          (GtkFileSystem *file_system,
-					    GSList        *bookmarks,
-					    GError       **error);
+  gboolean       (*add_bookmark)           (GtkFileSystem     *file_system,
+					    const GtkFilePath *path,
+					    GError           **error);
+  gboolean       (*remove_bookmark)        (GtkFileSystem     *file_system,
+					    const GtkFilePath *path,
+					    GError           **error);
   GSList *       (*list_bookmarks)         (GtkFileSystem *file_system);
 
   /* Signals
@@ -197,13 +192,6 @@ GtkFileInfo *     gtk_file_system_get_root_info  (GtkFileSystem     *file_system
 						  const GtkFilePath *path,
 						  GtkFileInfoType    types,
 						  GError           **error);
-
-gboolean          gtk_file_system_supports_shortcuts (GtkFileSystem *file_system);
-GSList *          gtk_file_system_list_shortcuts     (GtkFileSystem *file_system,
-						      GError       **error);
-gboolean          gtk_file_system_set_shortcuts      (GtkFileSystem *file_system,
-						      GSList        *shortcuts,
-						      GError       **error);
 
 gboolean          gtk_file_system_get_parent     (GtkFileSystem     *file_system,
 						  const GtkFilePath *path,
@@ -236,12 +224,13 @@ GtkFilePath *gtk_file_system_uri_to_path      (GtkFileSystem     *file_system,
 GtkFilePath *gtk_file_system_filename_to_path (GtkFileSystem     *file_system,
 					       const gchar       *filename);
 
-gboolean gtk_file_system_get_supports_bookmarks (GtkFileSystem *file_system);
-
-void    gtk_file_system_set_bookmarks  (GtkFileSystem *file_system,
-					GSList        *bookmarks,
-					GError       **error);
-GSList *gtk_file_system_list_bookmarks (GtkFileSystem *file_system);
+gboolean gtk_file_system_add_bookmark    (GtkFileSystem     *file_system,
+					  const GtkFilePath *path,
+					  GError           **error);
+gboolean gtk_file_system_remove_bookmark (GtkFileSystem     *file_system,
+					  const GtkFilePath *path,
+					  GError           **error);
+GSList  *gtk_file_system_list_bookmarks  (GtkFileSystem     *file_system);
 
 
 /*

@@ -652,45 +652,49 @@ gtk_file_system_filename_to_path (GtkFileSystem *file_system,
 }
 
 /**
- * gtk_file_system_get_supports_bookmarks:
- * @chooser: a #GtkFileSystem
+ * gtk_file_system_add_bookmark:
+ * @file_system: a #GtkFileSystem
+ * @bookmark: path of the bookmark to add
+ * @error: location to store error, or %NULL
  * 
- * Queries whether the file system supports the bookmarks feature.  If this
- * returns FALSE, then gtk_file_system_set_bookmarks() and
- * gtk_file_system_list_bookmarks() will do nothing.
+ * Adds a bookmark folder to the user's bookmarks list.  If the operation succeeds,
+ * the "bookmarks_changed" signal will be emitted.
  * 
- * Return value: TRUE if the file system supports bookmarks, FALSE otherwise.
+ * Return value: TRUE if the operation succeeds, FALSE otherwise.  In the latter case,
+ * the @error value will be set.
  **/
 gboolean
-gtk_file_system_get_supports_bookmarks (GtkFileSystem *file_system)
+gtk_file_system_add_bookmark (GtkFileSystem     *file_system,
+			      const GtkFilePath *path,
+			      GError           **error)
 {
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
 
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_supports_bookmarks (file_system);
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->add_bookmark (file_system, path, error);
 }
 
 /**
- * gtk_file_system_set_bookmarks:
+ * gtk_file_system_remove_bookmark:
  * @file_system: a #GtkFileSystem
- * @bookmarks: a list of #GtkFilePath, or NULL if you want to clear the current
- * list of bookmarks.
- * @error: location to store error, or %NULL.
+ * @bookmark: path of the bookmark to remove
+ * @error: location to store error, or %NULL
  * 
- * Sets the list of bookmarks to be stored by a file system.  This will also
- * cause the bookmarks list to get saved.  The ::bookmarks_changed signal will
- * be emitted.  Normally you do not need to call this function.
- *
- * See also: gtk_file_system_get_supports_bookmarks()
+ * Removes a bookmark folder from the user's bookmarks list.  If the operation
+ * succeeds, the "bookmarks_changed" signal will be emitted.
+ * 
+ * Return value: TRUE if the operation succeeds, FALSE otherwise.  In the latter
+ * case, the @error value will be set.
  **/
-void
-gtk_file_system_set_bookmarks (GtkFileSystem *file_system,
-			       GSList        *bookmarks,
-			       GError       **error)
+gboolean
+gtk_file_system_remove_bookmark (GtkFileSystem     *file_system,
+				 const GtkFilePath *path,
+				 GError           **error)
 {
-  g_return_if_fail (GTK_IS_FILE_SYSTEM (file_system));
-  g_return_if_fail (gtk_file_system_get_supports_bookmarks (file_system));
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
 
-  GTK_FILE_SYSTEM_GET_IFACE (file_system)->set_bookmarks (file_system, bookmarks, error);
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->remove_bookmark (file_system, path, error);
 }
 
 /**
@@ -708,7 +712,6 @@ GSList *
 gtk_file_system_list_bookmarks (GtkFileSystem *file_system)
 {
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
-  g_return_val_if_fail (gtk_file_system_get_supports_bookmarks (file_system), NULL);
 
   return GTK_FILE_SYSTEM_GET_IFACE (file_system)->list_bookmarks (file_system);
 }

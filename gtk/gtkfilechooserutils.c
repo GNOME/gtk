@@ -43,6 +43,13 @@ static void           delegate_add_filter             (GtkFileChooser    *choose
 static void           delegate_remove_filter          (GtkFileChooser    *chooser,
 						       GtkFileFilter     *filter);
 static GSList *       delegate_list_filters           (GtkFileChooser    *chooser);
+static gboolean       delegate_add_shortcut_folder    (GtkFileChooser    *chooser,
+						       const GtkFilePath *path,
+						       GError           **error);
+static gboolean       delegate_remove_shortcut_folder (GtkFileChooser    *chooser,
+						       const GtkFilePath *path,
+						       GError           **error);
+static GSList *       delegate_list_shortcut_folders  (GtkFileChooser    *chooser);
 static void           delegate_notify                 (GObject           *object,
 						       GParamSpec        *pspec,
 						       gpointer           data);
@@ -128,6 +135,9 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
   iface->add_filter = delegate_add_filter;
   iface->remove_filter = delegate_remove_filter;
   iface->list_filters = delegate_list_filters;
+  iface->add_shortcut_folder = delegate_add_shortcut_folder;
+  iface->remove_shortcut_folder = delegate_remove_shortcut_folder;
+  iface->list_shortcut_folders = delegate_list_shortcut_folders;
 }
 
 /**
@@ -230,6 +240,28 @@ static GSList *
 delegate_list_filters (GtkFileChooser *chooser)
 {
   return gtk_file_chooser_list_filters (get_delegate (chooser));
+}
+
+static gboolean
+delegate_add_shortcut_folder (GtkFileChooser    *chooser,
+			      const GtkFilePath *path,
+			      GError           **error)
+{
+  return _gtk_file_chooser_add_shortcut_folder (get_delegate (chooser), path, error);
+}
+
+static gboolean
+delegate_remove_shortcut_folder (GtkFileChooser    *chooser,
+				 const GtkFilePath *path,
+				 GError           **error)
+{
+  return _gtk_file_chooser_remove_shortcut_folder (get_delegate (chooser), path, error);
+}
+
+static GSList *
+delegate_list_shortcut_folders (GtkFileChooser *chooser)
+{
+  return gtk_file_chooser_list_shortcut_folders (get_delegate (chooser));
 }
 
 static void

@@ -153,6 +153,22 @@ gtk_file_chooser_class_init (gpointer g_iface)
 }
 
 /**
+ * gtk_file_chooser_error_quark:
+ *
+ * Registers an error quark for #GtkFileChooser if necessary.
+ * 
+ * Return value: The error quark used for #GtkFileChooser errors.
+ **/
+GQuark
+gtk_file_chooser_error_quark (void)
+{
+  static GQuark quark = 0;
+  if (quark == 0)
+    quark = g_quark_from_static_string ("gtk-file-chooser-error-quark");
+  return quark;
+}
+
+/**
  * gtk_file_chooser_set_action:
  * @chooser: a #GtkFileChooser
  * @action: the action that the file selector is performing
@@ -436,6 +452,31 @@ gtk_file_chooser_unselect_filename (GtkFileChooser *chooser,
     }
 }
 
+/* Converts a list of GtkFilePath* to a list of strings using the specified function */
+static GSList *
+file_paths_to_strings (GtkFileSystem *fs,
+		       GSList        *paths,
+		       gchar *      (*convert_func) (GtkFileSystem *fs, const GtkFilePath *path))
+{
+  GSList *strings;
+
+  strings = NULL;
+
+  for (; paths; paths = paths->next)
+    {
+      GtkFilePath *path;
+      gchar *string;
+
+      path = paths->data;
+      string = (* convert_func) (fs, path);
+
+      if (string)
+	strings = g_slist_prepend (strings, string);
+    }
+
+  return g_slist_reverse (strings);
+}
+
 /**
  * gtk_file_chooser_get_filenames:
  * @chooser: a #GtkFileChooser
@@ -454,24 +495,16 @@ gtk_file_chooser_get_filenames (GtkFileChooser *chooser)
 {
   GtkFileSystem *file_system;
   GSList *paths;
-  GSList *tmp_list;
-  GSList *result = NULL;
+  GSList *result;
   
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
   file_system = _gtk_file_chooser_get_file_system (chooser);
   paths = _gtk_file_chooser_get_paths (chooser);
 
-  for (tmp_list = paths; tmp_list; tmp_list = tmp_list->next)
-    {
-      gchar *filename = gtk_file_system_path_to_filename (file_system, tmp_list->data);
-      if (filename)
-	result = g_slist_prepend (result, filename);
-    }
-
+  result = file_paths_to_strings (file_system, paths, gtk_file_system_path_to_filename);
   gtk_file_paths_free (paths);
-
-  return g_slist_reverse (result);
+  return result;
 }
 
 /**
@@ -702,24 +735,16 @@ gtk_file_chooser_get_uris (GtkFileChooser *chooser)
 {
   GtkFileSystem *file_system;
   GSList *paths;
-  GSList *tmp_list;
-  GSList *result = NULL;
+  GSList *result;
   
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
   file_system = _gtk_file_chooser_get_file_system (chooser);
   paths = _gtk_file_chooser_get_paths (chooser);
 
-  for (tmp_list = paths; tmp_list; tmp_list = tmp_list->next)
-    {
-      gchar *uri = gtk_file_system_path_to_uri (file_system, tmp_list->data);
-      if (uri)
-	result = g_slist_prepend (result, uri);
-    }
-
+  result = file_paths_to_strings (file_system, paths, gtk_file_system_path_to_uri);
   gtk_file_paths_free (paths);
-
-  return g_slist_reverse (result);
+  return result;
 }
 
 /**
@@ -1012,7 +1037,7 @@ gtk_file_chooser_get_preview_widget_active (GtkFileChooser *chooser)
  * @chooser: a #GtkFileChooser
  * 
  * Gets the filename that should be previewed in a custom preview
- * Internal function, see gtk_file_chooser_get_preview_uri().n
+ * Internal function, see gtk_file_chooser_get_preview_uri().
  * 
  * Return value: the #GtkFilePath for the file to preview, or %NULL if no file
  *  is selected. Free with gtk_file_path_free().
@@ -1023,6 +1048,52 @@ _gtk_file_chooser_get_preview_path (GtkFileChooser *chooser)
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
   return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_preview_path (chooser);
+}
+
+/**
+ * _gtk_file_chooser_add_shortcut_folder:
+ * @chooser: a #GtkFileChooser
+ * @path: path of the folder to add
+ * @error: location to store error, or %NULL
+ * 
+ * Adds a folder to be displayed with the shortcut folders in a file chooser.
+ * Internal function, see gtk_file_chooser_add_shortcut_folder().
+ * 
+ * Return value: TRUE if the folder could be added successfully, FALSE
+ * otherwise.
+ **/
+gboolean
+_gtk_file_chooser_add_shortcut_folder (GtkFileChooser    *chooser,
+				       const GtkFilePath *path,
+				       GError           **error)
+{
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->add_shortcut_folder (chooser, path, error);
+}
+
+/**
+ * _gtk_file_chooser_remove_shortcut_folder:
+ * @chooser: a #GtkFileChooser
+ * @path: path of the folder to remove
+ * @error: location to store error, or %NULL
+ * 
+ * Removes a folder from the shortcut folders in a file chooser.  Internal
+ * function, see gtk_file_chooser_remove_shortcut_folder().
+ * 
+ * Return value: TRUE if the folder could be removed successfully, FALSE
+ * otherwise.
+ **/
+gboolean
+_gtk_file_chooser_remove_shortcut_folder (GtkFileChooser    *chooser,
+					  const GtkFilePath *path,
+					  GError           **error)
+{
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->remove_shortcut_folder (chooser, path, error);
 }
 
 /**
@@ -1232,23 +1303,89 @@ gtk_file_chooser_get_filter (GtkFileChooser *chooser)
   return filter;
 }
 
-/* gtk_file_chooser_set_shortcut_folders:
+/**
+ * gtk_file_chooser_add_shortcut_folder:
  * @chooser: a #GtkFileChooser
- * @shortcut_folders: a list of #GtkFilePath, or NULL if you want to clear the
- * current list of shortcut folders.
+ * @folder: filename of the folder to add
+ * @error: location to store error, or %NULL
  * 
- * Sets the list of shortcut folders to be shown in a file chooser.  Note that
- * these do not get saved, as they are provided by the application.  For
- * example, you can use this to add a "/usr/share/myapp/Clipart" folder to the
- * volume list.
+ * Adds a folder to be displayed with the shortcut folders in a file chooser.
+ * Note that shortcut folders do not get saved, as they are provided by the
+ * application.  For example, you can use this to add a
+ * "/usr/share/mydrawprogram/Clipart" folder to the volume list.
+ * 
+ * Return value: TRUE if the folder could be added successfully, FALSE
+ * otherwise.  In the latter case, the @error will be set as appropriate.
  **/
-void
-gtk_file_chooser_set_shortcut_folders (GtkFileChooser *chooser,
-				       GSList         *shortcut_folders)
+gboolean
+gtk_file_chooser_add_shortcut_folder (GtkFileChooser    *chooser,
+				      const char        *folder,
+				      GError           **error)
 {
-  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+  GtkFilePath *path;
+  gboolean result;
 
-  GTK_FILE_CHOOSER_GET_IFACE (chooser)->set_shortcut_folders (chooser, shortcut_folders);
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+  g_return_val_if_fail (folder != NULL, FALSE);
+
+  path = gtk_file_system_filename_to_path (_gtk_file_chooser_get_file_system (chooser), folder);
+  if (!path)
+    {
+      g_set_error (error,
+		   GTK_FILE_CHOOSER_ERROR,
+		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
+		   "Invalid filename: %s",
+		   folder);
+      return FALSE;
+    }
+
+  result = GTK_FILE_CHOOSER_GET_IFACE (chooser)->add_shortcut_folder (chooser, path, error);
+
+  gtk_file_path_free (path);
+
+  return result;
+}
+
+/**
+ * gtk_file_chooser_remove_shortcut_folder:
+ * @chooser: a #GtkFileChooser
+ * @folder: filename of the folder to remove
+ * @error: location to store error, or %NULL
+ * 
+ * Removes a folder from a file chooser's list of shortcut folders.
+ * 
+ * Return value: TRUE if the operation succeeds, FALSE otherwise.  In the latter
+ * case, the @error will be set as appropriate.
+ *
+ * See also: gtk_file_chooser_add_shortcut_folder()
+ **/
+gboolean
+gtk_file_chooser_remove_shortcut_folder (GtkFileChooser    *chooser,
+					 const char        *folder,
+					 GError           **error)
+{
+  GtkFilePath *path;
+  gboolean result;
+
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+  g_return_val_if_fail (folder != NULL, FALSE);
+
+  path = gtk_file_system_filename_to_path (_gtk_file_chooser_get_file_system (chooser), folder);
+  if (!path)
+    {
+      g_set_error (error,
+		   GTK_FILE_CHOOSER_ERROR,
+		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
+		   "Invalid filename: %s",
+		   folder);
+      return FALSE;
+    }
+
+  result = GTK_FILE_CHOOSER_GET_IFACE (chooser)->remove_shortcut_folder (chooser, path, error);
+
+  gtk_file_path_free (path);
+
+  return result;
 }
 
 /**
@@ -1258,13 +1395,136 @@ gtk_file_chooser_set_shortcut_folders (GtkFileChooser *chooser,
  * Queries the list of shortcut folders in the file chooser, as set by
  * gtk_file_chooser_set_shortcut_folders().
  * 
- * Return value: A list of #GtkFilePath, or NULL if there are no shortcut
- * folders.  You should use gtk_file_paths_free() to free this list.
+ * Return value: A list of folder filenames, or NULL if there are no shortcut
+ * folders.  Free the returned list with g_slist_free(), and the filenames with
+ * g_free().
  **/
 GSList *
 gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
 {
+  GSList *folders;
+  GSList *result;
+
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->list_shortcut_folders (chooser);
+  folders = GTK_FILE_CHOOSER_GET_IFACE (chooser)->list_shortcut_folders (chooser);
+
+  result = file_paths_to_strings (_gtk_file_chooser_get_file_system (chooser),
+				  folders,
+				  gtk_file_system_path_to_filename);
+  gtk_file_paths_free (folders);
+  return result;
+}
+
+/**
+ * gtk_file_chooser_add_shortcut_folder_uri:
+ * @chooser: a #GtkFileChooser
+ * @folder: URI of the folder to add
+ * @error: location to store error, or %NULL
+ * 
+ * Adds a folder URI to be displayed with the shortcut folders in a file
+ * chooser.  Note that shortcut folders do not get saved, as they are provided
+ * by the application.  For example, you can use this to add a
+ * "file:///usr/share/mydrawprogram/Clipart" folder to the volume list.
+ * 
+ * Return value: TRUE if the folder could be added successfully, FALSE
+ * otherwise.  In the latter case, the @error will be set as appropriate.
+ **/
+gboolean
+gtk_file_chooser_add_shortcut_folder_uri (GtkFileChooser    *chooser,
+					  const char        *uri,
+					  GError           **error)
+{
+  GtkFilePath *path;
+  gboolean result;
+
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+  g_return_val_if_fail (uri != NULL, FALSE);
+
+  path = gtk_file_system_uri_to_path (_gtk_file_chooser_get_file_system (chooser), uri);
+  if (!path)
+    {
+      g_set_error (error,
+		   GTK_FILE_CHOOSER_ERROR,
+		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
+		   "Invalid filename: %s",
+		   uri);
+      return FALSE;
+    }
+
+  result = GTK_FILE_CHOOSER_GET_IFACE (chooser)->add_shortcut_folder (chooser, path, error);
+
+  gtk_file_path_free (path);
+
+  return result;
+}
+
+/**
+ * gtk_file_chooser_remove_shortcut_folder_uri:
+ * @chooser: a #GtkFileChooser
+ * @uri: URI of the folder to remove
+ * @error: location to store error, or %NULL
+ * 
+ * Removes a folder URI from a file chooser's list of shortcut folders.
+ * 
+ * Return value: TRUE if the operation succeeds, FALSE otherwise.  In the latter
+ * case, the @error will be set as appropriate.
+ *
+ * See also: gtk_file_chooser_add_shortcut_folder_uri()
+ **/
+gboolean
+gtk_file_chooser_remove_shortcut_folder_uri (GtkFileChooser    *chooser,
+					     const char        *uri,
+					     GError           **error)
+{
+  GtkFilePath *path;
+  gboolean result;
+
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+  g_return_val_if_fail (uri != NULL, FALSE);
+
+  path = gtk_file_system_filename_to_path (_gtk_file_chooser_get_file_system (chooser), uri);
+  if (!path)
+    {
+      g_set_error (error,
+		   GTK_FILE_CHOOSER_ERROR,
+		   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
+		   "Invalid filename: %s",
+		   uri);
+      return FALSE;
+    }
+
+  result = GTK_FILE_CHOOSER_GET_IFACE (chooser)->remove_shortcut_folder (chooser, path, error);
+
+  gtk_file_path_free (path);
+
+  return result;
+}
+
+/**
+ * gtk_file_chooser_list_shortcut_folder_uris:
+ * @chooser: a #GtkFileChooser
+ * 
+ * Queries the list of shortcut folders in the file chooser, as set by
+ * gtk_file_chooser_set_shortcut_folder_uris().
+ * 
+ * Return value: A list of folder URIs, or NULL if there are no shortcut
+ * folders.  Free the returned list with g_slist_free(), and the URIs with
+ * g_free().
+ **/
+GSList *
+gtk_file_chooser_list_shortcut_folder_uris (GtkFileChooser *chooser)
+{
+  GSList *folders;
+  GSList *result;
+
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
+
+  folders = GTK_FILE_CHOOSER_GET_IFACE (chooser)->list_shortcut_folders (chooser);
+
+  result = file_paths_to_strings (_gtk_file_chooser_get_file_system (chooser),
+				  folders,
+				  gtk_file_system_path_to_uri);
+  gtk_file_paths_free (folders);
+  return result;
 }
