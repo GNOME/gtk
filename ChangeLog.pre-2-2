@@ -1,3 +1,8 @@
+Wed Jan 30 20:29:01 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkscale.c (gtk_scale_set_digits): fix revrted bug fix.
+	(use a define for max digits).
+
 Wed Jan 30 13:55:59 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_show): Try to make

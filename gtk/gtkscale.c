@@ -398,7 +398,7 @@ gtk_scale_set_digits (GtkScale *scale,
 
   range = GTK_RANGE (scale);
   
-  digits = CLAMP (digits, -1, 16);
+  digits = CLAMP (digits, -1, MAX_DIGITS);
 
   if (scale->digits != digits)
     {
