@@ -1,5 +1,7 @@
 2004-08-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Post-release version bump.
+
 	* === Released 2.4.6 ===
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_style_set): 
