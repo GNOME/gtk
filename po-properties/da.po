@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-11-16 15:07+0100\n"
-"PO-Revision-Date: 2004-11-16 17:36+0100\n"
+"PO-Revision-Date: 2004-11-22 15:42+0100\n"
 "Last-Translator: Martin Willemoes Hansen <mwh@sysrq.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -193,16 +193,17 @@ msgstr "Kunstnere"
 
 #: gtk/gtkaboutdialog.c:345
 msgid "List of people who have contributed artwork to the program"
-msgstr "Liste over mennesker der har bidraget med kunstværk til programmmet"
+msgstr ""
+"Liste over mennesker der har bidraget med grafik og/eller lyd til programmmet"
 
 #: gtk/gtkaboutdialog.c:362
 msgid "Translator credits"
-msgstr "Bidragydere af oversættelse"
+msgstr "Bidragydere til oversættelse"
 
 #: gtk/gtkaboutdialog.c:363
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
-msgstr "Bidragydere af oversættelse. Denne streng skal markeres som oversætbar"
+msgstr "Bidragydere til oversættelse. Denne streng skal markeres som oversætbar"
 
 #: gtk/gtkaboutdialog.c:378
 msgid "Logo"
@@ -2344,7 +2345,7 @@ msgstr "Ikonstørrelse"
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
 "Symbolsk størrelse der skal bruges for standardikon, ikonsæt "
-"eller navngivetikon"
+"eller navngivet ikon"
 
 #: gtk/gtkimage.c:232
 msgid "Pixel size"
@@ -2352,7 +2353,7 @@ msgstr "Punktstørrelse"
 
 #: gtk/gtkimage.c:233
 msgid "Pixel size to use for named icon"
-msgstr "Punktstørrelse der skal bruges for navngivetikon"
+msgstr "Punktstørrelse der skal bruges for navngivet ikon"
 
 #: gtk/gtkimage.c:241
 msgid "Animation"
@@ -3436,7 +3437,7 @@ msgstr "GTK-moduler"
 
 #: gtk/gtksettings.c:373
 msgid "List of currently active GTK modules"
-msgstr "Liste over nuværende aktive gtk-moduler"
+msgstr "Liste over nuværende aktive GTK-moduler"
 
 #: gtk/gtksettings.c:382
 msgid "Xft Antialias"
