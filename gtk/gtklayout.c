@@ -101,6 +101,8 @@ static void gtk_layout_allocate_child     (GtkLayout      *layout,
                                            GtkLayoutChild *child);
 static void gtk_layout_adjustment_changed (GtkAdjustment  *adjustment,
                                            GtkLayout      *layout);
+static void gtk_layout_style_set          (GtkWidget      *widget,
+					   GtkStyle       *old_style);
 
 
 static GtkWidgetClass *parent_class = NULL;
@@ -630,6 +632,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class->size_request = gtk_layout_size_request;
   widget_class->size_allocate = gtk_layout_size_allocate;
   widget_class->expose_event = gtk_layout_expose;
+  widget_class->style_set = gtk_layout_style_set;
 
   container_class->remove = gtk_layout_remove;
   container_class->forall = gtk_layout_forall;
@@ -831,6 +834,18 @@ gtk_layout_realize (GtkWidget *widget)
       tmp_list = tmp_list->next;
 
       gtk_widget_set_parent_window (child->widget, layout->bin_window);
+    }
+}
+
+static void
+gtk_layout_style_set (GtkWidget *widget, GtkStyle *old_style)
+{
+  if (GTK_WIDGET_CLASS (parent_class)->style_set)
+    (* GTK_WIDGET_CLASS (parent_class)->style_set) (widget, old_style);
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      gtk_style_set_background (widget->style, GTK_LAYOUT (widget)->bin_window, GTK_STATE_NORMAL);
     }
 }
 

@@ -1,3 +1,8 @@
+2002-01-09  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtklayout.c (gtk_layout_style_set): set the background of
+	our bin window also (fixes #58957)
+
 Wed Jan  9 19:10:07 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeselection.c
