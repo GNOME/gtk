@@ -1,3 +1,9 @@
+1999-12-26  Peter Teichman  <pat@gnu.org>
+
+	* gdk-pixbuf/Makefile.am (libpixbuf_tiff_la_LIBADD): add
+	$(LIBTIFF) to libpixbuf_tiff_la_LIBADD, proxying for mmarker.
+	This closes bug #4676.
+
 1999-12-23  Havoc Pennington  <hp@pobox.com>
 
 	* gdk-pixbuf/io-gif.c (image_load): Stuff that should have been

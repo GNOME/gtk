@@ -154,7 +154,7 @@ libpixbuf_ras_la_LIBADD =
 #
 libpixbuf_tiff_la_SOURCES = io-tiff.c
 libpixbuf_tiff_la_LDFLAGS = -avoid-version -module
-libpixbuf_tiff_la_LIBADD =
+libpixbuf_tiff_la_LIBADD = $(LIBTIFF)
 
 #
 # The PNM loader
