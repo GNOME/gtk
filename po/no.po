@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-02-24 09:29+0100\n"
+"PO-Revision-Date: 2004-03-03 13:41+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -966,9 +966,8 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:1331 gtk/gtkfilechooserdefault.c:1854
-#, fuzzy
 msgid "Name"
-msgstr "_Navn:"
+msgstr "Navn"
 
 #: gtk/gtkfilechooserdefault.c:1422
 #, c-format
@@ -1911,24 +1910,3 @@ msgstr "X-inndatametode"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Kunne ikke hente informasjon for fil «%s»: %s"
-
-#~ msgid "File name"
-#~ msgstr "Filnavn"
-
-#~ msgid "Preview"
-#~ msgstr "Forhåndsvisning"
-
-#~ msgid "Up"
-#~ msgstr "Opp"
-
-#~ msgid "Add"
-#~ msgstr "Legg til"
-
-#~ msgid "Remove"
-#~ msgstr "Fjern"
-
-#~ msgid "_Filename:"
-#~ msgstr "_Filnavn:"
-
-#~ msgid "Current folder: %s"
-#~ msgstr "Aktiv mappe: %s"
