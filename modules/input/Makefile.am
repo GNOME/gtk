@@ -75,6 +75,18 @@ im_ipa_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_ipa_la_SOURCES = imipa.c
 im_ipa_la_LIBADD = $(LDADDS)
 
+
+im_ime_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
+im_ime_la_SOURCES = \
+	gtkimcontextime.c \
+	gtkimcontextime.h \
+	imime.c 	  \
+	imm-extra.h
+im_ime_la_LIBADD = $(LDADDS)
+if PLATFORM_WIN32
+IM_IME_MODULE=im-ime.la 
+endif
+
 if CROSS_COMPILING
 RUN_QUERY_IMMODULES_TEST=false
 else
@@ -115,7 +127,8 @@ module_LTLIBRARIES =				\
 	im-thai-broken.la			\
 	im-ti-er.la				\
 	im-ti-et.la				\
-	im-viqr.la
+	im-viqr.la				\
+	$(IM_IME_MODULE)
 
 gtk.immodules: Makefile.am $(module_LTLIBRARIES)
 	$(top_builddir)/gtk/gtk-query-immodules-2.0 $(module_LTLIBRARIES) > gtk.immodules
