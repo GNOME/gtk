@@ -26,7 +26,7 @@
 
 
 #define BORDER_SPACING  3
-#define SELECT_TIMEOUT  20
+#define SELECT_TIMEOUT  75
 
 #define MENU_ITEM_CLASS(w)  GTK_MENU_ITEM_CLASS (GTK_OBJECT (w)->klass)
 
@@ -68,6 +68,8 @@ static void gtk_menu_item_forall         (GtkContainer    *container,
 
 static GtkItemClass *parent_class;
 static guint menu_item_signals[LAST_SIGNAL] = { 0 };
+static guint32	last_submenu_deselect_time = 0;
+
 
 
 GtkType
@@ -532,14 +534,19 @@ gtk_real_menu_item_select (GtkItem *item)
   /*  if (menu_item->submenu && !GTK_WIDGET_VISIBLE (menu_item->submenu))*/
   if (menu_item->submenu)
     {
-  /* Boy this is a hack! */
-      GdkEvent *current_event = gtk_get_current_event();
-      if (current_event && (current_event->type != GDK_ENTER_NOTIFY))
-	gtk_menu_item_select_timeout (menu_item);
-      else
-	menu_item->timer = gtk_timeout_add (SELECT_TIMEOUT, gtk_menu_item_select_timeout, menu_item);
-    }
+      guint32 etime;
+      GdkEvent *event = gtk_get_current_event ();
 
+      etime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
+      if (etime >= last_submenu_deselect_time &&
+	  last_submenu_deselect_time + SELECT_TIMEOUT > etime)
+	menu_item->timer = gtk_timeout_add (SELECT_TIMEOUT - (etime - last_submenu_deselect_time),
+					    gtk_menu_item_select_timeout,
+					    menu_item);
+      else
+	gtk_menu_item_select_timeout (menu_item);
+    }
+  
   gtk_widget_set_state (GTK_WIDGET (menu_item), GTK_STATE_PRELIGHT);
   gtk_widget_draw (GTK_WIDGET (menu_item), NULL);
 }
@@ -556,10 +563,20 @@ gtk_real_menu_item_deselect (GtkItem *item)
 
   if (menu_item->submenu)
     {
+      guint32 etime;
+      GdkEvent *event = gtk_get_current_event ();
+
       if (menu_item->timer)
-	gtk_timeout_remove (menu_item->timer);
+	{
+	  gtk_timeout_remove (menu_item->timer);
+	  menu_item->timer = 0;
+	}
       else
 	gtk_menu_popdown (GTK_MENU (menu_item->submenu));
+
+      etime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
+      if (etime > last_submenu_deselect_time)
+	last_submenu_deselect_time = etime;
     }
 
   gtk_widget_set_state (GTK_WIDGET (menu_item), GTK_STATE_NORMAL);
