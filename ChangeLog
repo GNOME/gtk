@@ -1,3 +1,8 @@
+Sat Aug 21 23:52:13 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreestore.c (gtk_tree_store_swap): Don't use an 
+	uninitialized tree iter.  (#150414, Torsten Schoenfeld)
+
 Sat Aug 21 23:29:54 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Fix #150738, Tomislav Jonjic.
