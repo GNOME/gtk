@@ -1,3 +1,9 @@
+2001-06-08  Anders Carlsson  <andersca@codefactory.se>
+
+	* demos/gtk-demo/main.c (create_tree): Changed signal name from
+	selection_changed to changed in signal connection to GtkTreeSelection,
+	also used g_signal_connectc since GtkTreeSelection is now a GObject.
+
 Thu Jun  7 18:25:42 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeselection.c: Now it's a GObject instead of a
