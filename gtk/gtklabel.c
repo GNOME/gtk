@@ -1537,7 +1537,10 @@ gtk_label_ensure_layout (GtkLabel *label)
       pango_layout_set_alignment (label->layout, align);
       pango_layout_set_ellipsize (label->layout, label->ellipsize);
 
-      if (label->wrap)
+      if (label->ellipsize)
+	pango_layout_set_width (label->layout, 
+				widget->allocation.width * PANGO_SCALE);
+      else if (label->wrap)
 	{
 	  GtkWidgetAuxInfo *aux_info;
 	  gint longest_paragraph;
@@ -1604,7 +1607,7 @@ gtk_label_ensure_layout (GtkLabel *label)
 	      pango_layout_set_width (label->layout, width);
 	    }
 	}
-      else		/* !label->wrap */
+      else /* !label->wrap */
 	pango_layout_set_width (label->layout, -1);
     }
 }
@@ -1687,7 +1690,10 @@ gtk_label_size_allocate (GtkWidget     *widget,
   (* GTK_WIDGET_CLASS (parent_class)->size_allocate) (widget, allocation);
 
   if (label->ellipsize)
-    pango_layout_set_width (label->layout, allocation->width * PANGO_SCALE);
+    {
+      if (label->layout)
+	pango_layout_set_width (label->layout, allocation->width * PANGO_SCALE);
+    }
 
   if (label->select_info && label->select_info->window)
     {

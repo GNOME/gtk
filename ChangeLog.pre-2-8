@@ -1,5 +1,14 @@
 2004-08-23  Matthias Clasen  <mclasen@redhat.com>
 
+	Fix #150822, reported by Christian Persch
+	
+	* gtk/gtklabel.c (gtk_label_ensure_layout): Set the layout width
+	appropriately when ellipsized.
+	(gtk_label_size_allocate): Only set the layout width if there
+	is a layout.
+
+2004-08-23  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/x11/gdkwindow-x11.c (gdk_window_focus): Support the latest
 	EWMH additions to the _NET_ACTIVE_WINDOW client message 
 	format.  (#150668, Elijah Newren)
