@@ -293,7 +293,15 @@ gtk_cell_view_style_set (GtkWidget *widget,
 static void
 gtk_cell_view_finalize (GObject *object)
 {
-  gtk_cell_view_cell_layout_clear (GTK_CELL_LAYOUT (object));
+  GtkCellView *cellview = GTK_CELL_VIEW (object);
+
+  gtk_cell_view_cell_layout_clear (GTK_CELL_LAYOUT (cellview));
+
+  if (cellview->priv->model)
+     g_object_unref (cellview->priv->model);
+
+  if (cellview->priv->displayed_row)
+     gtk_tree_row_reference_free (cellview->priv->displayed_row);
 
   if (G_OBJECT_CLASS (parent_class)->finalize)
     (* G_OBJECT_CLASS (parent_class)->finalize) (object);
