@@ -1,3 +1,8 @@
+Wed Apr 21 14:20:22 1999  George Lebl  <jirka@5z.com>
+
+	* gdk/gdkwindow.c: (gdk_window_remove_filter) correctly remove the
+	  default filter from the list
+
 Mon Apr 19 12:05:31 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_style_init): Fixed leak of
