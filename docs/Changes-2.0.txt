@@ -528,6 +528,14 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
      you must make sure you call gtk_container_propagate_expose()
      correctly, as you must for any NO_WINDOW widgets.
 
+  GtkFixed is a little special; it is now created by default as
+  a NO_WINDOW widget, but if you do 
+
+    GTK_WIDGET_UNSET_FLAGS (fixed, GTK_WIDGET_NO_WINDOW)
+
+  after creating a fixed widget, it will create a window and
+  handle it properly.
+
 * GtkLayout no longer has the xoffset, yoffset fields, which used
   to store the difference between world and window coordinates for
   layout->bin_window. These coordinate systems are now always

@@ -1,3 +1,9 @@
+Sun Nov 18 18:18:11 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfixed.c: Make a NO_WINDOW widget, as it should
+	have been since the beginning, but as special hack,
+	allow clearing the NO_WINDOW flag to get a window widget.
+
 Sun Nov 18 22:01:36  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtktreestore.c: return TRUE when value changed, so
