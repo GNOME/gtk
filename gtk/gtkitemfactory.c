@@ -710,8 +710,11 @@ gtk_item_factory_get_widget (GtkItemFactory *ifactory,
  * @returns: the widget which corresponds to the given action, or %NULL
  *   if no widget was found
  *
- * Obtains the widget which was constructed from the first #GtkItemFactoryEntry
+ * Obtains the widget which was constructed from the #GtkItemFactoryEntry
  * with the given @action.
+ *
+ * If there are multiple items with the same action, the result is 
+ * undefined.
  */
 GtkWidget*
 gtk_item_factory_get_widget_by_action (GtkItemFactory *ifactory,

@@ -459,6 +459,9 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
 
   if (progress->show_text && pbar->bar_style != GTK_PROGRESS_DISCRETE)
     {
+      if (!progress->adjustment)
+	gtk_progress_set_adjustment (progress, NULL);
+
       buf = gtk_progress_get_text_from_value (progress, progress->adjustment->upper);
 
       layout = gtk_widget_create_pango_layout (widget, buf);
