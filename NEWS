@@ -1,3 +1,24 @@
+What is new in GTK+ 1.1.14:
+
+* Additions to docs/Changes-1.2.txt
+* Just warn when loading theme engine fails
+* CLAMP GtkScale digits to a meaningful range
+* GTK_LOCALDIR is now defined in a better fashion
+* New functions (feature freeze, we know...):
+    gtk_menu_set_title()
+    gtk_toggle_button_get_active()
+* Some locale fixups in gtkrc code
+* Fixes to make gtk_radio_button_set_group() keep only
+  one radio button in the group active
+* Foreign windows are now always treated as viewable; this fixes
+  a problem where updating didn't occure properly in GtkPlug
+* DND fixes for 64 bit architectures, and for specifying operations 
+  with modifier keys.
+* Major revisions to GtkLayout: avoid having to create window
+  for NO_WINDOW children, adjust allocations of children as 
+  scrolled so queued draws work, and a resize is queued instead
+  of allocating directly in a put() or move()
+
 What is new in GTK+ 1.1.13:
 
 * Dnd and selection bug fixes and memory purification.

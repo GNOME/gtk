@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.12\n"
-"POT-Creation-Date: 1999-01-17 17:28-0600\n"
+"POT-Creation-Date: 1999-01-28 00:37-0600\n"
 "PO-Revision-Date: 1999-01-12 22:50+0100\n"
 "Last-Translator: Tomas Ögren <stric@ing.umu.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -43,46 +43,46 @@ msgid "Opacity:"
 msgstr ""
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1640 gtk/gtkfilesel.c:462 gtk/gtkfontsel.c:3465
+#: gtk/gtkcolorsel.c:1644 gtk/gtkfilesel.c:461 gtk/gtkfontsel.c:3465
 #: gtk/gtkgamma.c:408
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1646 gtk/gtkfilesel.c:469 gtk/gtkfilesel.c:844
-#: gtk/gtkfilesel.c:944 gtk/gtkfilesel.c:1059 gtk/gtkfontsel.c:3478
+#: gtk/gtkcolorsel.c:1650 gtk/gtkfilesel.c:468 gtk/gtkfilesel.c:843
+#: gtk/gtkfilesel.c:943 gtk/gtkfilesel.c:1058 gtk/gtkfontsel.c:3478
 #: gtk/gtkgamma.c:416
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: gtk/gtkcolorsel.c:1651
+#: gtk/gtkcolorsel.c:1655
 msgid "Help"
 msgstr "Hjälp"
 
 #. The directories clist
-#: gtk/gtkfilesel.c:411
+#: gtk/gtkfilesel.c:410
 msgid "Directories"
 msgstr "Kataloger"
 
 #. The files clist
-#: gtk/gtkfilesel.c:430
+#: gtk/gtkfilesel.c:429
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilesel.c:500 gtk/gtkfilesel.c:1454
+#: gtk/gtkfilesel.c:499 gtk/gtkfilesel.c:1453
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Katalog oläsbar: %s"
 
-#: gtk/gtkfilesel.c:532
+#: gtk/gtkfilesel.c:531
 msgid "Create Dir"
 msgstr "Skapa katalog"
 
-#: gtk/gtkfilesel.c:543 gtk/gtkfilesel.c:913
+#: gtk/gtkfilesel.c:542 gtk/gtkfilesel.c:912
 msgid "Delete File"
 msgstr "Ta bort fil"
 
-#: gtk/gtkfilesel.c:554 gtk/gtkfilesel.c:1017
+#: gtk/gtkfilesel.c:553 gtk/gtkfilesel.c:1016
 msgid "Rename File"
 msgstr "Döp om fil"
 
@@ -91,39 +91,39 @@ msgstr "Döp om fil"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:715
+#: gtk/gtkfilesel.c:714
 msgid "Error"
 msgstr "Fel"
 
 #. close button
-#: gtk/gtkfilesel.c:733 gtk/gtkinputdialog.c:346
+#: gtk/gtkfilesel.c:732 gtk/gtkinputdialog.c:346
 msgid "Close"
 msgstr "Stäng"
 
-#: gtk/gtkfilesel.c:808
+#: gtk/gtkfilesel.c:807
 msgid "Create Directory"
 msgstr "Skapa katalog"
 
-#: gtk/gtkfilesel.c:822
+#: gtk/gtkfilesel.c:821
 msgid "Directory name:"
 msgstr "Katalogens namn:"
 
 #. buttons
-#: gtk/gtkfilesel.c:835
+#: gtk/gtkfilesel.c:834
 msgid "Create"
 msgstr "Skapa"
 
 #. buttons
-#: gtk/gtkfilesel.c:935
+#: gtk/gtkfilesel.c:934
 msgid "Delete"
 msgstr "Ta bort"
 
 #. buttons
-#: gtk/gtkfilesel.c:1050
+#: gtk/gtkfilesel.c:1049
 msgid "Rename"
 msgstr "Döp om"
 
-#: gtk/gtkfilesel.c:1433
+#: gtk/gtkfilesel.c:1432
 msgid "Selection: "
 msgstr "Markering: "
 
@@ -434,17 +434,17 @@ msgstr ""
 msgid "clear"
 msgstr ""
 
-#: gtk/gtknotebook.c:1967 gtk/gtknotebook.c:3986
+#: gtk/gtknotebook.c:2009 gtk/gtknotebook.c:4082
 #, c-format
 msgid "Page %u"
 msgstr "Sida %u"
 
-#: gtk/gtkrc.c:1517
+#: gtk/gtkrc.c:1521
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kunde ej hitta bild i 'pixmap_path': \"%s\" rad %d"
 
-#: gtk/gtkrc.c:1520
+#: gtk/gtkrc.c:1524
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunde ej hitta bild i 'pixmap_path': \"%s\""

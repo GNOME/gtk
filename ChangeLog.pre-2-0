@@ -1,3 +1,14 @@
+Thu Jan 28 01:57:06 CST 1999 Shawn T. Amundson <amundson@gtk.org>
+
+	* INSTALL
+	  NEWS
+	  README
+	  configure.in
+	  gtk+.spec
+	  docs/gtk-config.1: version=1.1.14
+
+	* Released GTK+ 1.1.14
+
 Thu Jan 28 01:34:29 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtkfontsel.c gtkcolorsel.c: When translating
