@@ -1089,7 +1089,7 @@ gtk_entry_completion_set_text_column (GtkEntryCompletion *completion,
                                  cell,
                                  "text", column);
 
-  g_object_notify (completion, "text_column");
+  g_object_notify (G_OBJECT (completion), "text_column");
 }
 
 /**
@@ -1105,7 +1105,7 @@ gtk_entry_completion_set_text_column (GtkEntryCompletion *completion,
 gint
 gtk_entry_completion_get_text_column (GtkEntryCompletion *completion)
 {
-  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
+  g_return_val_if_fail (GTK_IS_ENTRY_COMPLETION (completion), -1);
 
   return completion->priv->text_column;  
 }

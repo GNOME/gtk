@@ -1,3 +1,11 @@
+2004-07-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentrycompletion.c: Warning fixes.  (#147420,
+	Morten Welinder)
+
+	* gtk/gtkcombobox.c (gtk_combo_box_destroy): Pop down 
+	first. (#147399, John Cupitt)
+
 Mon Jul 12 01:56:26 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_toplevel_x11_free_contents): 
