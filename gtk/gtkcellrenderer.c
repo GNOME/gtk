@@ -212,13 +212,13 @@ gtk_cell_renderer_get_size (GtkCellRenderer *cell,
 }
 
 void
-gtk_cell_renderer_render (GtkCellRenderer *cell,
-			  GdkWindow       *window,
-			  GtkWidget       *widget,
-			  GdkRectangle    *background_area,
-			  GdkRectangle    *cell_area,
-			  GdkRectangle    *expose_area,
-			  guint            flags)
+gtk_cell_renderer_render (GtkCellRenderer     *cell,
+			  GdkWindow           *window,
+			  GtkWidget           *widget,
+			  GdkRectangle        *background_area,
+			  GdkRectangle        *cell_area,
+			  GdkRectangle        *expose_area,
+			  GtkCellRendererState flags)
 {
   /* It's actually okay to pass in a NULL cell, as we run into that
    * a lot
@@ -238,13 +238,13 @@ gtk_cell_renderer_render (GtkCellRenderer *cell,
 }
 
 gint
-gtk_cell_renderer_event (GtkCellRenderer *cell,
-			 GdkEvent        *event,
-			 GtkWidget       *widget,
-			 gchar           *path,
-			 GdkRectangle    *background_area,
-			 GdkRectangle    *cell_area,
-			 guint            flags)
+gtk_cell_renderer_event (GtkCellRenderer     *cell,
+			 GdkEvent            *event,
+			 GtkWidget           *widget,
+			 gchar               *path,
+			 GdkRectangle        *background_area,
+			 GdkRectangle        *cell_area,
+			 GtkCellRendererState flags)
 {
   /* It's actually okay to pass in a NULL cell, as we run into that
    * a lot

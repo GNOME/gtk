@@ -92,7 +92,7 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
 {
   tree_column->button = NULL;
   tree_column->justification = GTK_JUSTIFY_LEFT;
-  tree_column->size = 0;
+  tree_column->width = 0;
   tree_column->min_width = -1;
   tree_column->max_width = -1;
   tree_column->cell = NULL;
@@ -469,7 +469,7 @@ gtk_tree_view_column_get_size (GtkTreeViewColumn *tree_column)
   g_return_val_if_fail (tree_column != NULL, 0);
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), 0);
 
-  return tree_column->size;
+  return tree_column->width;
 }
 
 /**
@@ -490,10 +490,10 @@ gtk_tree_view_column_set_width (GtkTreeViewColumn *tree_column,
   g_return_if_fail (size > 0);
 
   if (tree_column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE ||
-      tree_column->size == size)
+      tree_column->width == size)
     return;
 
-  tree_column->size = size;
+  tree_column->width = size;
 
   if (GTK_WIDGET_REALIZED (tree_column->tree_view))
     gtk_widget_queue_resize (tree_column->tree_view);
@@ -526,12 +526,12 @@ gtk_tree_view_column_set_min_width (GtkTreeViewColumn *tree_column,
   /* We want to queue a resize if the either the old min_size or the
    * new min_size determined the size of the column */
   if (GTK_WIDGET_REALIZED (tree_column->tree_view) &&
-      ((tree_column->min_width > tree_column->size) ||
+      ((tree_column->min_width > tree_column->width) ||
        (tree_column->min_width == -1 &&
-	tree_column->button->requisition.width > tree_column->size) ||
-       (min_width > tree_column->size) ||
+	tree_column->button->requisition.width > tree_column->width) ||
+       (min_width > tree_column->width) ||
        (min_width == -1 &&
-	tree_column->button->requisition.width > tree_column->size)))
+	tree_column->button->requisition.width > tree_column->width)))
     gtk_widget_queue_resize (tree_column->tree_view);
 
   if (tree_column->max_width != -1 &&
@@ -584,8 +584,8 @@ gtk_tree_view_column_set_max_width (GtkTreeViewColumn *tree_column,
     tree_column->button->requisition.width : tree_column->min_width;
 
   if (GTK_WIDGET_REALIZED (tree_column->tree_view) &&
-      ((tree_column->max_width < tree_column->size) ||
-       (max_width != -1 && max_width < tree_column->size)))
+      ((tree_column->max_width < tree_column->width) ||
+       (max_width != -1 && max_width < tree_column->width)))
     gtk_widget_queue_resize (tree_column->tree_view);
 
   tree_column->max_width = max_width;

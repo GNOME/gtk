@@ -76,7 +76,7 @@ void             gtk_tree_selection_set_select_function (GtkTreeSelection       
 							 GtkTreeSelectionFunc         func,
 							 gpointer                     data);
 gpointer         gtk_tree_selection_get_user_data       (GtkTreeSelection            *selection);
-
+GtkTreeView*     gtk_tree_selection_get_tree_view       (GtkTreeSelection            *selection);
 
 /* Only meaningful if GTK_TREE_SELECTION_SINGLE is set */
 /* Use selected_foreach for GTK_TREE_SELECTION_MULTI */
@@ -102,9 +102,6 @@ void             gtk_tree_selection_select_range        (GtkTreeSelection       
 							 GtkTreePath                 *start_path,
 							 GtkTreePath                 *end_path);
 
-
-/*< private >*/
-/* FIXME underscores, return GtkTreeSelection, rename from_tree_view */
 
 #ifdef __cplusplus
 }

@@ -519,7 +519,7 @@ gtk_tree_view_size_request_buttons (GtkTreeView *tree_view)
           
           gtk_widget_size_request (column->button, &requisition);
           
-          column->size = MAX (column->size, requisition.width);
+          column->width = MAX (column->width, requisition.width);
           tree_view->priv->header_height = MAX (tree_view->priv->header_height, requisition.height);
         }
     }
@@ -587,8 +587,8 @@ gtk_tree_view_size_allocate_buttons (GtkWidget *widget)
 	continue;
 
       allocation.x = width;
-      allocation.width = column->size;
-      width += column->size;
+      allocation.width = column->width;
+      width += column->width;
       gtk_widget_size_allocate (column->button, &allocation);
 
       if (column->window)
@@ -795,7 +795,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 					      &iter);
 
 	  background_area.x = cell_offset;
-	  background_area.width = TREE_VIEW_COLUMN_SIZE (column);
+	  background_area.width = TREE_VIEW_COLUMN_WIDTH (column);
 	  if (i == 0 && TREE_VIEW_DRAW_EXPANDERS(tree_view))
 	    {
 	      cell_area = background_area;
@@ -829,7 +829,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 					&event->area,
 					flags);
 	    }
-	  cell_offset += TREE_VIEW_COLUMN_SIZE (column);
+	  cell_offset += TREE_VIEW_COLUMN_WIDTH (column);
 	}
 
       if (node == cursor &&
@@ -1175,7 +1175,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	  if (!column->visible)
 	    continue;
 
-	  background_area.width = TREE_VIEW_COLUMN_SIZE (column);
+	  background_area.width = TREE_VIEW_COLUMN_WIDTH (column);
 	  if (i == 0 && TREE_VIEW_DRAW_EXPANDERS(tree_view))
 	    {
 	      cell_area = background_area;
@@ -2214,9 +2214,9 @@ gtk_tree_view_insert_iter_height (GtkTreeView *tree_view,
       max_height = MAX (max_height, TREE_VIEW_VERTICAL_SEPARATOR + height);
 
       if (first == TRUE && TREE_VIEW_DRAW_EXPANDERS (tree_view))
-	column->size = MAX (column->size, depth * tree_view->priv->tab_offset + width);
+	column->width = MAX (column->width, depth * tree_view->priv->tab_offset + width);
       else
-	column->size = MAX (column->size, width);
+	column->width = MAX (column->width, width);
 
       first = FALSE;
     }
@@ -2309,9 +2309,9 @@ gtk_tree_view_calc_size (GtkTreeView *tree_view,
 	    continue;
 
 	  if (i == 0 && TREE_VIEW_DRAW_EXPANDERS (tree_view))
-	    column->size = MAX (column->size, depth * tree_view->priv->tab_offset + width);
+	    column->width = MAX (column->width, depth * tree_view->priv->tab_offset + width);
 	  else
-	    column->size = MAX (column->size, width);
+	    column->width = MAX (column->width, width);
 	}
       _gtk_rbtree_node_set_height (tree, temp, max_height);
       if (temp->children != NULL &&
@@ -2361,7 +2361,7 @@ gtk_tree_view_discover_dirty_iter (GtkTreeView *tree_view,
 	}
       if (i == 0 && TREE_VIEW_DRAW_EXPANDERS (tree_view))
 	{
-	  if (depth * tree_view->priv->tab_offset + width > column->size)
+	  if (depth * tree_view->priv->tab_offset + width > column->width)
 	    {
 	      column->dirty = TRUE;
 	      retval = TRUE;
@@ -2369,7 +2369,7 @@ gtk_tree_view_discover_dirty_iter (GtkTreeView *tree_view,
 	}
       else
 	{
-	  if (width > column->size)
+	  if (width > column->width)
 	    {
 	      column->dirty = TRUE;
 	      retval = TRUE;
@@ -2442,7 +2442,7 @@ gtk_tree_view_check_dirty (GtkTreeView *tree_view)
 	  dirty = TRUE;
 	  if (column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
 	    {
-	      column->size = column->button->requisition.width;
+	      column->width = column->button->requisition.width;
 	    }
 	}
     }
@@ -2741,7 +2741,7 @@ _gtk_tree_view_set_size (GtkTreeView     *tree_view,
 	  column = list->data;
 	  if (!column->visible)
 	    continue;
-	  width += TREE_VIEW_COLUMN_SIZE (column);
+	  width += TREE_VIEW_COLUMN_WIDTH (column);
 	}
     }
   if (height == -1)
@@ -3526,12 +3526,12 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
 	    continue;
 
 	  last_column = tmp_column;
-	  if (x <= tmp_column->size)
+	  if (x <= tmp_column->width)
 	    {
 	      *column = tmp_column;
 	      break;
 	    }
-	  x -= tmp_column->size;
+	  x -= tmp_column->width;
 	}
 
       if (*column == NULL)

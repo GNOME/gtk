@@ -286,10 +286,10 @@ gtk_tree_store_get_path (GtkTreeModel *tree_model,
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), NULL);
   g_return_val_if_fail (iter != NULL, NULL);
   g_return_val_if_fail (GTK_TREE_STORE (tree_model)->stamp == iter->stamp, NULL);
-  if (iter->tree_node == NULL)
+  if (iter->user_data == NULL)
     return NULL;
 
-  if (G_NODE (iter->tree_node)->parent == G_NODE (GTK_TREE_STORE (tree_model)->root))
+  if (G_NODE (iter->user_data)->parent == G_NODE (GTK_TREE_STORE (tree_model)->root))
     {
       retval = gtk_tree_path_new ();
       tmp_node = G_NODE (GTK_TREE_STORE (tree_model)->root)->children;
@@ -297,11 +297,11 @@ gtk_tree_store_get_path (GtkTreeModel *tree_model,
   else
     {
       GtkTreeIter tmp_iter = *iter;
-      tmp_iter.tree_node = G_NODE (tmp_iter.tree_node)->parent;
+      tmp_iter.user_data = G_NODE (tmp_iter.user_data)->parent;
 
       retval = gtk_tree_store_get_path (tree_model,
 					&tmp_iter);
-      tmp_node = G_NODE (iter->tree_node)->parent->children;
+      tmp_node = G_NODE (iter->user_data)->parent->children;
     }
 
   if (retval == NULL)
@@ -315,7 +315,7 @@ gtk_tree_store_get_path (GtkTreeModel *tree_model,
 
   for (; tmp_node; tmp_node = tmp_node->next)
     {
-      if (tmp_node == G_NODE (iter->tree_node))
+      if (tmp_node == G_NODE (iter->user_data))
 	break;
       i++;
     }
@@ -349,7 +349,7 @@ gtk_tree_store_get_value (GtkTreeModel *tree_model,
   g_return_if_fail (iter->stamp == GTK_TREE_STORE (tree_model)->stamp);
   g_return_if_fail (column < GTK_TREE_STORE (tree_model)->n_columns);
 
-  list = G_NODE (iter->tree_node)->data;
+  list = G_NODE (iter->user_data)->data;
 
   while (tmp_column-- > 0 && list)
     list = list->next;
@@ -371,12 +371,12 @@ static gboolean
 gtk_tree_store_iter_next (GtkTreeModel  *tree_model,
 			  GtkTreeIter   *iter)
 {
-  if (iter->tree_node == NULL)
+  if (iter->user_data == NULL)
     return FALSE;
 
-  iter->tree_node = G_NODE (iter->tree_node)->next;
+  iter->user_data = G_NODE (iter->user_data)->next;
 
-  return (iter->tree_node != NULL);
+  return (iter->user_data != NULL);
 }
 
 static gboolean
@@ -386,11 +386,11 @@ gtk_tree_store_iter_children (GtkTreeModel *tree_model,
 {
   iter->stamp = GTK_TREE_STORE (tree_model)->stamp;
   if (parent)
-    iter->tree_node = G_NODE (parent->tree_node)->children;
+    iter->user_data = G_NODE (parent->user_data)->children;
   else
-    iter->tree_node = G_NODE (GTK_TREE_STORE (tree_model)->root)->children;
+    iter->user_data = G_NODE (GTK_TREE_STORE (tree_model)->root)->children;
 
-  return iter->tree_node != NULL;
+  return iter->user_data != NULL;
 }
 
 static gboolean
@@ -402,7 +402,7 @@ gtk_tree_store_iter_has_child (GtkTreeModel *tree_model,
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (iter->stamp == GTK_TREE_STORE (tree_model)->stamp, FALSE);
 
-  return G_NODE (iter->tree_node)->children != NULL;
+  return G_NODE (iter->user_data)->children != NULL;
 }
 
 static gint
@@ -420,7 +420,7 @@ gtk_tree_store_iter_n_children (GtkTreeModel *tree_model,
   if (iter == NULL)
     node = G_NODE (GTK_TREE_STORE (tree_model)->root)->children;
   else
-    node = G_NODE (iter->tree_node)->children;
+    node = G_NODE (iter->user_data)->children;
   while (node)
     {
       i++;
@@ -447,16 +447,16 @@ gtk_tree_store_iter_nth_child (GtkTreeModel *tree_model,
   if (parent == NULL)
     parent_node = GTK_TREE_STORE (tree_model)->root;
   else
-    parent_node = parent->tree_node;
+    parent_node = parent->user_data;
 
-  iter->tree_node = g_node_nth_child (parent_node, n);
+  iter->user_data = g_node_nth_child (parent_node, n);
 
-  if (iter->tree_node == NULL)
+  if (iter->user_data == NULL)
     iter->stamp = 0;
   else
     iter->stamp = GTK_TREE_STORE (tree_model)->stamp;
 
-  return (iter->tree_node != NULL);
+  return (iter->user_data != NULL);
 }
 
 static gboolean
@@ -465,9 +465,9 @@ gtk_tree_store_iter_parent (GtkTreeModel *tree_model,
 			    GtkTreeIter  *child)
 {
   iter->stamp = GTK_TREE_STORE (tree_model)->stamp;
-  iter->tree_node = G_NODE (child->tree_node)->parent;
+  iter->user_data = G_NODE (child->user_data)->parent;
 
-  if (iter->tree_node == GTK_TREE_STORE (tree_model)->root)
+  if (iter->user_data == GTK_TREE_STORE (tree_model)->root)
     {
       iter->stamp = 0;
       return FALSE;
@@ -493,7 +493,7 @@ gtk_tree_store_set_cell (GtkTreeStore *tree_store,
   g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
   g_return_if_fail (column >= 0 && column < tree_store->n_columns);
 
-  prev = list = G_NODE (iter->tree_node)->data;
+  prev = list = G_NODE (iter->user_data)->data;
 
   while (list != NULL)
     {
@@ -511,9 +511,9 @@ gtk_tree_store_set_cell (GtkTreeStore *tree_store,
       list = list->next;
     }
 
-  if (G_NODE (iter->tree_node)->data == NULL)
+  if (G_NODE (iter->user_data)->data == NULL)
     {
-      G_NODE (iter->tree_node)->data = list = _gtk_tree_data_list_alloc ();
+      G_NODE (iter->user_data)->data = list = _gtk_tree_data_list_alloc ();
       list->next = NULL;
     }
   else
@@ -662,14 +662,14 @@ gtk_tree_store_remove (GtkTreeStore *model,
   g_return_if_fail (model != NULL);
   g_return_if_fail (GTK_IS_TREE_STORE (model));
 
-  parent = G_NODE (iter->tree_node)->parent;
+  parent = G_NODE (iter->user_data)->parent;
 
-  if (G_NODE (iter->tree_node)->data)
-    _gtk_tree_data_list_free ((GtkTreeDataList *) G_NODE (iter->tree_node)->data,
+  if (G_NODE (iter->user_data)->data)
+    _gtk_tree_data_list_free ((GtkTreeDataList *) G_NODE (iter->user_data)->data,
 			      model->column_headers);
 
   path = gtk_tree_store_get_path (GTK_TREE_MODEL (model), iter);
-  g_node_destroy (G_NODE (iter->tree_node));
+  g_node_destroy (G_NODE (iter->user_data));
 
   model->stamp++;
   gtk_signal_emit_by_name (GTK_OBJECT (model),
@@ -697,12 +697,12 @@ gtk_tree_store_insert (GtkTreeStore *model,
   g_return_if_fail (model != NULL);
   g_return_if_fail (GTK_IS_TREE_STORE (model));
 
-  if (parent->tree_node == NULL)
-    parent->tree_node = model->root;
+  if (parent->user_data == NULL)
+    parent->user_data = model->root;
 
   iter->stamp = model->stamp;
-  iter->tree_node = g_node_new (NULL);
-  g_node_insert (G_NODE (parent->tree_node), position, G_NODE (iter->tree_node));
+  iter->user_data = g_node_new (NULL);
+  g_node_insert (G_NODE (parent->user_data), position, G_NODE (iter->user_data));
   
   path = gtk_tree_store_get_path (GTK_TREE_MODEL (model), iter);
   gtk_signal_emit_by_name (GTK_OBJECT (model),
@@ -729,18 +729,18 @@ gtk_tree_store_insert_before (GtkTreeStore *model,
     g_return_if_fail (sibling->stamp == model->stamp);
 
   iter->stamp = model->stamp;
-  iter->tree_node = g_node_new (NULL);
+  iter->user_data = g_node_new (NULL);
 
   if (parent == NULL && sibling == NULL)
     parent_node = model->root;
   else if (parent == NULL)
-    parent_node = G_NODE (sibling->tree_node)->parent;
+    parent_node = G_NODE (sibling->user_data)->parent;
   else
-    parent_node = G_NODE (parent->tree_node);
+    parent_node = G_NODE (parent->user_data);
 
   g_node_insert_before (parent_node,
-			sibling ? G_NODE (sibling->tree_node) : NULL,
-			G_NODE (iter->tree_node));
+			sibling ? G_NODE (sibling->user_data) : NULL,
+			G_NODE (iter->user_data));
 
   path = gtk_tree_store_get_path (GTK_TREE_MODEL (model), iter);
   gtk_signal_emit_by_name (GTK_OBJECT (model),
@@ -767,18 +767,18 @@ gtk_tree_store_insert_after (GtkTreeStore *model,
     g_return_if_fail (sibling->stamp == model->stamp);
 
   iter->stamp = model->stamp;
-  iter->tree_node = g_node_new (NULL);
+  iter->user_data = g_node_new (NULL);
 
   if (parent == NULL && sibling == NULL)
     parent_node = model->root;
   else if (parent == NULL)
-    parent_node = G_NODE (sibling->tree_node)->parent;
+    parent_node = G_NODE (sibling->user_data)->parent;
   else
-    parent_node = G_NODE (parent->tree_node);
+    parent_node = G_NODE (parent->user_data);
 
   g_node_insert_after (parent_node,
-		       sibling ? G_NODE (sibling->tree_node) : NULL,
-		       G_NODE (iter->tree_node));
+		       sibling ? G_NODE (sibling->user_data) : NULL,
+		       G_NODE (iter->user_data));
 
   path = gtk_tree_store_get_path (GTK_TREE_MODEL (model), iter);
   gtk_signal_emit_by_name (GTK_OBJECT (model),
@@ -803,16 +803,16 @@ gtk_tree_store_prepend (GtkTreeStore *model,
   if (parent == NULL)
     parent_node = model->root;
   else
-    parent_node = parent->tree_node;
+    parent_node = parent->user_data;
 
   iter->stamp = model->stamp;
-  iter->tree_node = g_node_new (NULL);
+  iter->user_data = g_node_new (NULL);
 
   if (parent_node->children == NULL)
     {
       GtkTreePath *path;
 
-      g_node_prepend (parent_node, G_NODE (iter->tree_node));
+      g_node_prepend (parent_node, G_NODE (iter->user_data));
 
       if (parent_node != model->root)
 	{
@@ -855,16 +855,16 @@ gtk_tree_store_append (GtkTreeStore *model,
   if (parent == NULL)
     parent_node = model->root;
   else
-    parent_node = parent->tree_node;
+    parent_node = parent->user_data;
 
   iter->stamp = model->stamp;
-  iter->tree_node = g_node_new (NULL);
+  iter->user_data = g_node_new (NULL);
 
   if (parent_node->children == NULL)
     {
       GtkTreePath *path;
 
-      g_node_append (parent_node, G_NODE (iter->tree_node));
+      g_node_append (parent_node, G_NODE (iter->user_data));
 
       if (parent_node != model->root)
 	{
@@ -900,7 +900,7 @@ gtk_tree_store_get_root_iter (GtkTreeStore *model,
   g_return_if_fail (iter != NULL);
 
   iter->stamp = model->stamp;
-  iter->tree_node = G_NODE (model->root)->children;
+  iter->user_data = G_NODE (model->root)->children;
 }
 
 
@@ -916,8 +916,8 @@ gtk_tree_store_is_ancestor (GtkTreeStore *model,
   g_return_val_if_fail (iter->stamp == model->stamp, FALSE);
   g_return_val_if_fail (descendant->stamp == model->stamp, FALSE);
 
-  return g_node_is_ancestor (G_NODE (iter->tree_node),
-			     G_NODE (descendant->tree_node));
+  return g_node_is_ancestor (G_NODE (iter->user_data),
+			     G_NODE (descendant->user_data));
 }
 
 
@@ -930,5 +930,5 @@ gtk_tree_store_iter_depth (GtkTreeStore *model,
   g_return_val_if_fail (iter != NULL, 0);
   g_return_val_if_fail (iter->stamp == model->stamp, 0);
 
-  return g_node_depth (G_NODE (iter->tree_node)) - 1;
+  return g_node_depth (G_NODE (iter->user_data)) - 1;
 }

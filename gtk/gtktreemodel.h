@@ -46,9 +46,9 @@ typedef enum
 struct _GtkTreeIter
 {
   gint stamp;
-  gpointer tree_node;
-  gpointer tree_node2;
-  gpointer tree_node3;
+  gpointer user_data;
+  gpointer user_data2;
+  gpointer user_data3;
 };
 
 struct _GtkTreeModelIface

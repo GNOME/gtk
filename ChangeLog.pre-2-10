@@ -1,5 +1,22 @@
 2001-01-04  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktreeselection.c (gtk_tree_selection_get_tree_view): add
+	this
+
+	* gtk/gtktreemodel.h (struct _GtkTreeIter): rename fields to
+	user_data instead of tree_node
+
+	* gtk/gtktreeprivate.h (TREE_VIEW_COLUMN_WIDTH): rename from
+	TREE_VIEW_COLUMN_SIZE
+
+	* gtk/gtktreeviewcolumn.h (struct _GtkTreeViewColumn): rename
+	"size" field to "width" finishes bug 40061
+
+	* gtk/gtkcellrenderer.h: Use GtkCellRendererState instead of guint
+	for bitfields, bug 40268
+
+2001-01-04  Havoc Pennington  <hp@redhat.com>
+
         Rename some stuff:
 	
 	s/gtk_tree_view_column_set_size/gtk_tree_view_column_set_width/g;

@@ -59,8 +59,8 @@ struct _GtkTreeViewColumn
   GtkJustification justification;
 
   gint id;
-  /* FIXME change this field to "width" bug 40061 */
-  gint size;
+
+  gint width;
   gint min_width;
   gint max_width;
 

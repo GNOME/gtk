@@ -239,6 +239,14 @@ gtk_tree_selection_get_user_data (GtkTreeSelection *selection)
   return selection->user_data;
 }
 
+GtkTreeView*
+gtk_tree_selection_get_tree_view (GtkTreeSelection *selection)
+{
+  g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), NULL);
+
+  return selection->tree_view;
+}
+
 /**
  * gtk_tree_selection_get_selected:
  * @selection: A #GtkTreeSelection.
