@@ -35,8 +35,7 @@ Wed Sep 12 11:21:14 2001  Owen Taylor  <otaylor@redhat.com>
   
   	* gtk/gtktext.c gtk/gtklabel.c: Use gtk_style_get_font() instead of 
 	style->font.
-  
->>>>>>> 1.2293
+
 Tue Sep 18 13:51:35 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcellrenderer.h (enum): Get rid of broken "can_edit" and
