@@ -4704,7 +4704,6 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
   gint cursor_x_pos, cursor_y_pos;
   GtkTextIter new_insert;
   gint y, height;
-  gint x, width;
   
   g_return_if_fail (text_view->hadjustment != NULL);
 
@@ -6695,11 +6694,14 @@ gtk_text_view_get_window (GtkTextView *text_view,
         return NULL;
       break;
 
-    default:
-      g_warning ("%s: Unknown GtkTextWindowType", G_STRLOC);
+    case GTK_TEXT_WINDOW_PRIVATE:
+      g_warning ("%s: You can't get GTK_TEXT_WINDOW_PRIVATE, it has \"PRIVATE\" in the name because it is private.", __FUNCTION__);
       return NULL;
       break;
     }
+
+  g_warning ("%s: Unknown GtkTextWindowType", __FUNCTION__);
+  return NULL;
 }
 
 /**
