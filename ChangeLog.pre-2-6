@@ -1,3 +1,7 @@
+2004-09-27  Roozbeh Pournader  <roozbeh@farsiweb.info>
+ 
+	* configure.in: Added Iranian Azerbaijani (az_IR) to ALL_LINUGAS.
+
 2004-09-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_append_column): Fix typo in
