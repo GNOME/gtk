@@ -1400,7 +1400,7 @@ gtk_image_expose (GtkWidget      *widget,
                                                     gtk_widget_get_direction (widget),
                                                     GTK_WIDGET_STATE (widget),
                                                     /* arbitrary */
-                                                    GTK_ICON_SIZE_SMALL_TOOLBAR,
+                                                    (GtkIconSize)-1,
                                                     widget,
                                                     "gtk-image");
 

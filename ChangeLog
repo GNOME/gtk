@@ -1,3 +1,16 @@
+Tue Jan 29 19:04:41 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_style_render_icon): Document that
+	a size of (GtkIconSize)-1 means don't scale.
+
+	* gtk/gtkstyle.c (gtk_default_render_icon): Obey the
+	-1 convention.
+
+	* gtk/gtkimage.c (gtk_image_expose): Pass in -1 to
+	gtk_style_render_icon() to make sure that we catch it
+	obviously if the style's render function tries to
+	scale.
+
 Tue Jan 29 18:50:59 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimage.c (gtk_image_expose): Optimize exposes of

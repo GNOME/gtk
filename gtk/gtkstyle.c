@@ -1760,7 +1760,8 @@ gtk_style_real_set_background (GtkStyle    *style,
  * @source: the #GtkIconSource specifying the icon to render
  * @direction: a text direction
  * @state: a state
- * @size: the size to render the icon at
+ * @size: the size to render the icon at. A size of (GtkIconSize)-1
+ *        means render at the size of the source and don't scale.
  * @widget: the widget 
  * @detail: a style detail
  * @returns: a newly-created #GdkPixbuf containing the rendered icon
@@ -1905,10 +1906,10 @@ gtk_default_render_icon (GtkStyle            *style,
       return NULL;
     }
 
-  /* If the size was wildcarded, then scale; otherwise, leave it
-   * alone.
+  /* If the size was wildcarded, and we're allowed to scale, then scale; otherwise,
+   * leave it alone.
    */
-  if (gtk_icon_source_get_size_wildcarded (source))
+  if (size != (GtkIconSize)-1 && gtk_icon_source_get_size_wildcarded (source))
     scaled = scale_or_ref (base_pixbuf, width, height);
   else
     scaled = GDK_PIXBUF (g_object_ref (G_OBJECT (base_pixbuf)));
