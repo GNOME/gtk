@@ -1,8 +1,11 @@
 2004-08-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/makegdkalias.pl: 
-	* gtk/makegtkalias.pl: Protect gtkalias.h by G_HAVE_GNUC_VISIBILITY.
+	* gtk/makegtkalias.pl: Include glib.h before using glib symbols. D'oh.
 
+	* gdk/makegdkalias.pl: 
+	* gtk/makegtkalias.pl: Protect gtkalias.h by G_HAVE_GNUC_VISIBILITY.
+	
 	* gtk/Makefile.am: Include gtkalias.h in the generated
 	sources gtkmarhalers.c and gtkmarshal.c.
 
