@@ -26,6 +26,7 @@
 
 enum {
   TOKEN_INVALID = G_TOKEN_LAST,
+  TOKEN_INCLUDE,
   TOKEN_ACTIVE,
   TOKEN_BASE,
   TOKEN_BG,
@@ -47,7 +48,8 @@ enum {
 enum {
   PARSE_OK,
   PARSE_ERROR,
-  PARSE_SYNTAX
+  PARSE_SYNTAX,
+  PARSE_DONE
 };
 
 enum {
@@ -175,30 +177,28 @@ static	GScannerConfig	gtk_rc_scanner_config =
 
 static struct
 {
-  char *name;
-  int token;
-} symbols[] =
-  {
-    { "ACTIVE", TOKEN_ACTIVE },
-    { "base", TOKEN_BASE },
-    { "bg", TOKEN_BG },
-    { "bg_pixmap", TOKEN_BG_PIXMAP },
-    { "fg", TOKEN_FG },
-    { "font", TOKEN_FONT },
-    { "fontset", TOKEN_FONTSET },
-    { "INSENSITIVE", TOKEN_INSENSITIVE },
-    { "NORMAL", TOKEN_NORMAL },
-    { "pixmap_path", TOKEN_PIXMAP_PATH },
-    { "PRELIGHT", TOKEN_PRELIGHT },
-    { "SELECTED", TOKEN_SELECTED },
-    { "style", TOKEN_STYLE },
-    { "text", TOKEN_TEXT },
-    { "widget", TOKEN_WIDGET },
-    { "widget_class", TOKEN_WIDGET_CLASS },
-  };
-static int nsymbols = sizeof (symbols) / sizeof (symbols[0]);
-
-static int done;
+  gchar *name;
+  gint token;
+} symbols[] = {
+  { "include", TOKEN_INCLUDE },
+  { "ACTIVE", TOKEN_ACTIVE },
+  { "base", TOKEN_BASE },
+  { "bg", TOKEN_BG },
+  { "bg_pixmap", TOKEN_BG_PIXMAP },
+  { "fg", TOKEN_FG },
+  { "font", TOKEN_FONT },
+  { "fontset", TOKEN_FONTSET },
+  { "INSENSITIVE", TOKEN_INSENSITIVE },
+  { "NORMAL", TOKEN_NORMAL },
+  { "pixmap_path", TOKEN_PIXMAP_PATH },
+  { "PRELIGHT", TOKEN_PRELIGHT },
+  { "SELECTED", TOKEN_SELECTED },
+  { "style", TOKEN_STYLE },
+  { "text", TOKEN_TEXT },
+  { "widget", TOKEN_WIDGET },
+  { "widget_class", TOKEN_WIDGET_CLASS },
+};
+static guint nsymbols = sizeof (symbols) / sizeof (symbols[0]);
 
 static GHashTable *rc_style_ht = NULL;
 static GSList *widget_sets = NULL;
@@ -341,6 +341,7 @@ gtk_rc_parse_any (const gchar  *input_name,
 {
   GScanner *scanner;
   guint	   i;
+  gboolean done;
   
   scanner = g_scanner_new (&gtk_rc_scanner_config);
   
@@ -363,8 +364,15 @@ gtk_rc_parse_any (const gchar  *input_name,
   done = FALSE;
   while (!done)
     {
-      if (gtk_rc_parse_statement (scanner) != PARSE_OK)
+      gint return_val;
+
+      return_val = gtk_rc_parse_statement (scanner);
+
+      switch (return_val)
 	{
+	case PARSE_OK:
+	  break;
+	default:
 	  if (scanner->next_token != G_TOKEN_NONE)
 	    g_scanner_get_next_token (scanner);
 	  
@@ -375,8 +383,10 @@ gtk_rc_parse_any (const gchar  *input_name,
 	    g_warning ("rc file parse error: \"%s\" line %d",
 		       input_name,
 		       scanner->line);
-	  
+	  /* fall through */
+	case PARSE_DONE:
 	  done = TRUE;
+	  break;
 	}
     }
   g_scanner_destroy (scanner);
@@ -569,8 +579,18 @@ gtk_rc_parse_statement (GScanner *scanner)
   
   token = g_scanner_peek_next_token (scanner);
   if (token == G_TOKEN_EOF)
+    return PARSE_DONE;
+
+  if (token == TOKEN_INCLUDE)
     {
-      done = TRUE;
+      g_scanner_get_next_token (scanner);
+      token = g_scanner_get_next_token (scanner);
+
+      if (token != G_TOKEN_STRING)
+	return PARSE_ERROR;
+
+      gtk_rc_parse (scanner->value.v_string);
+
       return PARSE_OK;
     }
   

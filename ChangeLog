@@ -1,3 +1,8 @@
+Tue Apr 28 15:46:41 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkrc.c (gtk_rc_parse_statement): allow the inclusion of other
+	rc-files.
+
 Mon Apr 27 15:11:52 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c (gtk_widget_grab_focus): only allow grabbing of focus
