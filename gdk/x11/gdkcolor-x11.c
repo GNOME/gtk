@@ -876,7 +876,7 @@ gdk_colormap_alloc_colors_private (GdkColormap *colormap,
 	      success[i] = TRUE;
 	      colors[i].pixel = index;
 
-	      colormap->colors[i] = colors[i];
+	      colormap->colors[index] = colors[i];
 	      private->info[index].ref_count++;
 
 	      g_hash_table_insert (private->hash,
