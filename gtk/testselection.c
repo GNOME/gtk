@@ -384,9 +384,9 @@ main (int argc, char *argv[])
   GtkWidget *hbox;
 
   static GtkTargetEntry targetlist[] = {
-    { "STRING", STRING },
-    { "TEXT",   TEXT },
-    { "COMPOUND_TEXT", COMPOUND_TEXT }
+    { "STRING",        0, STRING },
+    { "TEXT",          0, TEXT },
+    { "COMPOUND_TEXT", 0, COMPOUND_TEXT }
   };
   static gint ntargets = sizeof(targetlist) / sizeof(targetlist[0]);
   

@@ -1,3 +1,11 @@
+Wed Dec  9 12:23:30 1998  Owen Taylor  <otaylor@redhat.com>
+	
+	* gtk/testselection.c (main): Add in missing 'flags'
+	field to target list.
+
+	* gdk/gdkproperty.c (gdk_atom_intern): Actually
+	add the atoms to the local cache.
+
 Wed Dec  9 04:57:31 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gdk/gdkprivate.h: put text after #endif in comment

@@ -34,7 +34,13 @@ gdk_atom_intern (const gchar *atom_name,
 
   retval = GPOINTER_TO_UINT (g_hash_table_lookup (atom_hash, atom_name));
   if (!retval)
-    retval = XInternAtom (gdk_display, atom_name, only_if_exists);
+    {
+      retval = XInternAtom (gdk_display, atom_name, only_if_exists);
+
+      g_hash_table_insert (atom_hash, 
+			   g_strdup (atom_name), 
+			   GUINT_TO_POINTER (retval));
+    }
 
   return retval;
 }
