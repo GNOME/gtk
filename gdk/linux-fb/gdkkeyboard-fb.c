@@ -75,6 +75,7 @@ struct _GdkFBKeyboardDevice {
 };
 
 static GdkFBKeyboard *gdk_fb_keyboard = NULL;
+static GdkKeymap *default_keymap = NULL;
 
 static gboolean xlate_open            (GdkFBKeyboard       *kb);
 static void     xlate_close           (GdkFBKeyboard       *kb);
@@ -142,6 +143,22 @@ static GdkFBKeyboardDevice keyb_devs[] =
     raw_get_for_keycode
   },
 };
+
+GdkKeymap*
+gdk_keymap_get_default (void)
+{
+  if (default_keymap == NULL)
+    default_keymap = g_object_new (gdk_keymap_get_type (), NULL);
+
+  return default_keymap;
+}
+
+PangoDirection
+gdk_keymap_get_direction (GdkKeymap *keymap)
+{
+  /* FIXME: Only supports LTR keymaps at the moment */
+  return PANGO_DIRECTION_LTR;
+}
 
 guint
 gdk_fb_keyboard_modifiers ()

@@ -1,3 +1,8 @@
+2001-06-12  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gdk/linux-fb/gdkkeyboard-fb.c (gdk_keymap_get_default,
+	gdk_keymap_get_direction): New functions.
+
 Tue Jun 12 12:41:27 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.h (GTK_TREE_MODEL_LIST_ONLY): further justify
