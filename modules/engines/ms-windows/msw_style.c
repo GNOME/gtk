@@ -519,8 +519,16 @@ setup_system_font(GtkStyle *style)
 {
   char buf[256], * font; /* It's okay, lfFaceName is smaller than 32 chars */
 
-  if ((font = sys_font_to_pango_font(XP_THEME_CLASS_TEXT, XP_THEME_FONT_MESSAGE, buf, sizeof (buf))) != NULL)
-    style->font_desc = pango_font_description_from_string(font);
+  if ((font = sys_font_to_pango_font(XP_THEME_CLASS_TEXT,
+                                     XP_THEME_FONT_MESSAGE,
+                                     buf, sizeof (buf))) != NULL)
+    {
+      if (style->font_desc)
+        {
+          pango_font_description_free (style->font_desc);
+        }
+      style->font_desc = pango_font_description_from_string(font);
+    }
 }
 
 static void
