@@ -88,6 +88,9 @@ static void     gtk_statusbar_set_property      (GObject           *object,
 						 guint              prop_id,
 						 const GValue      *value,
 						 GParamSpec        *pspec);
+static void     label_selectable_changed        (GtkWidget         *label,
+                                                 GParamSpec        *pspec,
+						 gpointer           data);
 
 
 static GtkContainerClass *parent_class;
@@ -231,6 +234,8 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
   /* don't expand the size request for the label; if we
    * do that then toplevels weirdly resize
    */
+  g_signal_connect (statusbar->label, "notify::selectable",
+		    G_CALLBACK (label_selectable_changed), statusbar);
   gtk_widget_set_size_request (statusbar->label, 1, -1);
   gtk_container_add (GTK_CONTAINER (statusbar->frame), statusbar->label);
   gtk_widget_show (statusbar->label);
@@ -418,7 +423,8 @@ gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
           if (statusbar->has_resize_grip && statusbar->grip_window == NULL)
 	    {
 	      gtk_statusbar_create_window (statusbar);
-	      gdk_window_show (statusbar->grip_window);
+	      if (GTK_WIDGET_MAPPED (statusbar))
+		gdk_window_show (statusbar->grip_window);
 	    }
           else if (!statusbar->has_resize_grip && statusbar->grip_window != NULL)
             gtk_statusbar_destroy_window (statusbar);
@@ -775,10 +781,22 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
       GdkRectangle rect;
       
       get_grip_rect (statusbar, &rect);
-  
-        gdk_window_move_resize (statusbar->grip_window,
-                                rect.x, rect.y,
-                                rect.width, rect.height);
+      
+      gdk_window_raise (statusbar->grip_window);
+      gdk_window_move_resize (statusbar->grip_window,
+			      rect.x, rect.y,
+			      rect.width, rect.height);
     }
 }
 
+static void
+label_selectable_changed (GtkWidget  *label,
+			  GParamSpec *pspec,
+			  gpointer    data)
+{
+  GtkStatusbar *statusbar = GTK_STATUSBAR (data);
+
+  if (statusbar && 
+      statusbar->has_resize_grip && statusbar->grip_window)
+    gdk_window_raise (statusbar->grip_window);
+}
