@@ -564,6 +564,7 @@ gdk_pixbuf_loader_new_with_type (const char *image_type,
         if (tmp != NULL)
                 {
                         g_propagate_error (error, tmp);
+                        gdk_pixbuf_loader_close (retval, NULL);
                         g_object_unref (retval);
                         return NULL;
                 }
@@ -619,10 +620,11 @@ gdk_pixbuf_loader_new_with_mime_type (const char *mime_type,
         retval = g_object_new (GDK_TYPE_PIXBUF_LOADER, NULL);
 
         tmp = NULL;
-        gdk_pixbuf_loader_load_module(retval, image_type, &tmp);
+        gdk_pixbuf_loader_load_module (retval, image_type, &tmp);
         if (tmp != NULL)
                 {
                         g_propagate_error (error, tmp);
+                        gdk_pixbuf_loader_close (retval, NULL);
                         g_object_unref (retval);
                         return NULL;
                 }
