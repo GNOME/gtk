@@ -1,3 +1,8 @@
+2000-01-07  Jonathan Blandford  <jrb@redhat.com>
+
+	* doc/tmpl/gdk-pixbuf-loader.sgml: much longer long description
+	added. 
+
 2000-01-05  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixbuf/pixops/pixops.c (pixops_process): Fix computation of end of run indices.
