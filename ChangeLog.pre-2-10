@@ -1,3 +1,8 @@
+Wed Nov 21 17:41:39 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkimage.c (gdk_image_get): Fix problem with
+	lost parameter.
+
 Wed Nov 21 17:01:25 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcellrenderer.h gtk/gtktreemodel.h 
