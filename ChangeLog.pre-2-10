@@ -1,3 +1,11 @@
+1998-09-16  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_insert_element): Test whether type
+	is not equal to GTK_TOOLBAR_CHILD_RADIOBUTTON before checking that
+	(widget != NULL), otherwise radio button insertion will not work
+	-- the widget argument is NULL for the first radio button in the
+	group.
+
 Tue Sep 15 13:09:24 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkimage.c (gdk_image_new): Reverted global changes
@@ -55,6 +63,7 @@ Mon Sep 14 21:47:35 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 	  free()s.  X itself uses free() on some of the 
 	  malloced memory.
 
+>>>>>>> 1.633
 Sat Sep 12 10:44:06 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtkfilesel.c: Maintain a list of directories like
