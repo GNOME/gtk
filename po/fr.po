@@ -2,11 +2,10 @@
 # Copyright (C) 1998 Free Software Foundation, Inc.
 # Vincent Renardias <vincent@debian.org>, 1998.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 1999-01-12 10:38-0800\n"
+"POT-Creation-Date: 1999-01-16 23:30+0100\n"
 "PO-Revision-Date: 1998-12-18 20:32+0100\n"
 "Last-Translator: Vincent Renardias <vincent@debian.org>\n"
 "Language-Team: Vincent Renardias <vincent@debian.org>\n"
@@ -124,9 +123,8 @@ msgid "Rename"
 msgstr "Renommer"
 
 #: gtk/gtkfilesel.c:1433
-#, fuzzy
 msgid "Selection: "
-msgstr "Sélection de police"
+msgstr "Sélection:"
 
 #: gtk/gtkfontsel.c:203
 msgid "Foundry:"
@@ -178,7 +176,7 @@ msgstr "Largeur moyenne:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Charset:"
-msgstr ""
+msgstr "Jeu de caractéres:"
 
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
@@ -311,7 +309,7 @@ msgstr "La police sélectionnée n'est pas valide."
 
 #: gtk/gtkfontsel.c:1834
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr ""
+msgstr "Ceci est un police codée sur 2 octets et peux ne pas être affichée correctement."
 
 #: gtk/gtkfontsel.c:1926 gtk/gtkinputdialog.c:599
 msgid "(unknown)"
@@ -319,7 +317,7 @@ msgstr "(inconnu)"
 
 #: gtk/gtkfontsel.c:1937
 msgid "roman"
-msgstr ""
+msgstr "roman"
 
 #: gtk/gtkfontsel.c:1949
 msgid "proportional"
@@ -327,7 +325,7 @@ msgstr "proportionnelle"
 
 #: gtk/gtkfontsel.c:1950
 msgid "monospaced"
-msgstr ""
+msgstr "monospace"
 
 #: gtk/gtkfontsel.c:1951
 msgid "char cell"
@@ -435,18 +433,18 @@ msgstr "(désactivé)"
 msgid "clear"
 msgstr "affacer"
 
-#: gtk/gtknotebook.c:1966 gtk/gtknotebook.c:3985
+#: gtk/gtknotebook.c:1967 gtk/gtknotebook.c:3986
 #, c-format
 msgid "Page %u"
 msgstr "Page %u"
 
-#: gtk/gtkrc.c:1507
+#: gtk/gtkrc.c:1508
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "Impossible de localiser le fichier image dans pixmap_path: \"%s\" ligne %d"
 
-#: gtk/gtkrc.c:1510
+#: gtk/gtkrc.c:1511
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Impossible de localiser le fichier image dans pixmap_path: \"%s\""
