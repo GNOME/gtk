@@ -1,3 +1,14 @@
+Sat Aug 16 10:34:49 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/imcedilla.c: Make the list of default
+	languages more comprehensive. (Suggestion of
+	Fco. Javier F. Serrador)
+
+Sat Aug  9 12:47:11 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_arg_context_parse): Fix broken 
+	parentheses when skipping args.
+
 Sat Aug 16 16:22:23 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Fix major bug in row ref handling, so the new combo box
