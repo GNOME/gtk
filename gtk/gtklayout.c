@@ -1048,7 +1048,6 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
    */
 
   gdk_flush();
-  g_print ("==== %d =====\n", XPending(GDK_DISPLAY()));
   while (XCheckIfEvent(GDK_WINDOW_XDISPLAY (layout->bin_window),
 		       &xevent,
 		       gtk_layout_expose_predicate,
@@ -1057,8 +1056,6 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
       GdkEvent event;
       GtkWidget *event_widget;
 
-      g_print ("#");
-      
       if ((xevent.xany.window == GDK_WINDOW_XWINDOW (layout->bin_window)) &&
 	  (gtk_layout_filter (&xevent, &event, layout) == GDK_FILTER_REMOVE))
 	continue;
