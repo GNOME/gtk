@@ -1,3 +1,11 @@
+Thu Mar 12 08:55:34 1998  Tim Janik  <timj@gimp.org>
+
+	* gtkitem.c:
+ 	* gtktree.c:
+ 	* gtklist.c: fetch the inintial value of attributes.event_mask from
+	gtk_widget_get_events (widget) (pointed out by Damon Chaplin
+ 	<DAChaplin@email.msn.com>).
+
 Thu Mar 12 07:43:33 1998  Tim Janik  <timj@gimp.org>
 
 	* gdk/gdk.h:

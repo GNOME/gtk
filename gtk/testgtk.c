@@ -1494,8 +1494,10 @@ static void
 create_handle_box ()
 {
   static GtkWidget* window = NULL;
+  GtkWidget *handle_box;
   GtkWidget *hbox;
   GtkWidget *toolbar;
+  GtkWidget *label;
 	
   if (!window)
   {
@@ -1509,22 +1511,42 @@ create_handle_box ()
 			GTK_SIGNAL_FUNC(destroy_window), &window);
     
     gtk_container_border_width (GTK_CONTAINER (window), 20);
-    
-    hbox = gtk_handle_box_new ();
+
+    hbox = gtk_hbox_new (FALSE, 10);
     gtk_container_add (GTK_CONTAINER (window), hbox);
-    gtk_signal_connect (GTK_OBJECT (hbox),
+    gtk_widget_show (hbox);
+    
+    handle_box = gtk_handle_box_new ();
+    gtk_container_add (GTK_CONTAINER (hbox), handle_box);
+    gtk_signal_connect (GTK_OBJECT (handle_box),
 			"child_attached",
 			GTK_SIGNAL_FUNC (handle_box_child_signal),
 			"attached");
-    gtk_signal_connect (GTK_OBJECT (hbox),
+    gtk_signal_connect (GTK_OBJECT (handle_box),
 			"child_detached",
 			GTK_SIGNAL_FUNC (handle_box_child_signal),
 			"detached");
-    gtk_widget_show (hbox);
+    gtk_widget_show (handle_box);
 
     toolbar = make_toolbar (window);
-    gtk_container_add (GTK_CONTAINER (hbox), toolbar);
+    gtk_container_add (GTK_CONTAINER (handle_box), toolbar);
     gtk_widget_show (toolbar);
+
+    handle_box = gtk_handle_box_new ();
+    gtk_container_add (GTK_CONTAINER (hbox), handle_box);
+    gtk_signal_connect (GTK_OBJECT (handle_box),
+			"child_attached",
+			GTK_SIGNAL_FUNC (handle_box_child_signal),
+			"attached");
+    gtk_signal_connect (GTK_OBJECT (handle_box),
+			"child_detached",
+			GTK_SIGNAL_FUNC (handle_box_child_signal),
+			"detached");
+    gtk_widget_show (handle_box);
+
+    label = gtk_label_new ("Fooo!");
+    gtk_container_add (GTK_CONTAINER (handle_box), label);
+    gtk_widget_show (label);
   }
 
   if (!GTK_WIDGET_VISIBLE (window))
