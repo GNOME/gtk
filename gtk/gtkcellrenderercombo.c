@@ -77,9 +77,8 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
   /**
    * GtkCellRendererCombo:model:
    *
-   * The :model property holds a tree model containing the possible
-   * values for the combo box. Use the :text_column property to specify
-   * the column holding the values.
+   * Holds a tree model containing the possible values for the combo box. 
+   * Use the text_column property to specify the column holding the values.
    * 
    * Since: 2.6
    */
@@ -92,13 +91,12 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
 							G_PARAM_READWRITE));
 
   /**
-   * GtkCellRendererCombo:text_column:
+   * GtkCellRendererCombo:text-column:
    *
-   * The :text_column property specifies the model column which
-   * holds the possible values for the combo box. Note that this
-   * refers to the model specified in the :model property, 
-   * <emphasis>not</emphasis> the model backing the tree view to 
-   * which this cell renderer is attached.
+   * Specifies the model column which holds the possible values for the combo box. 
+   * Note that this refers to the model specified in the model property, 
+   * <emphasis>not</emphasis> the model backing the tree view to which this cell 
+   * renderer is attached.
    * 
    * Since: 2.6
    */
@@ -113,11 +111,10 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
                                                      G_PARAM_READWRITE));
 
   /** 
-   * GtkCellRendererCombo:has_entry:
+   * GtkCellRendererCombo:has-entry:
    *
-   * If the :has_entry property is %TRUE, the cell renderer will 
-   * include an entry and allow to enter values other than the ones 
-   * in the popup list. 
+   * If  %TRUE, the cell renderer will include an entry and allow to enter values 
+   * other than the ones in the popup list. 
    *
    * Since: 2.6
    */
@@ -125,7 +122,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
                                    PROP_HAS_ENTRY,
                                    g_param_spec_boolean ("has_entry",
 							 P_("Has Entry"),
-							 P_("If %FALSE, don't allow to enter strings other than the chosen ones"),
+							 P_("If FALSE, don't allow to enter strings other than the chosen ones"),
 							 TRUE,
 							 G_PARAM_READWRITE));
 

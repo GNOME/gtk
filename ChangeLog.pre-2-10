@@ -1,3 +1,8 @@
+2004-10-31  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcellrenderercombo.c (gtk_cell_renderer_combo_class_init): 
+	Update doc comments.
+
 2004-10-31  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkprivate-win32.h
