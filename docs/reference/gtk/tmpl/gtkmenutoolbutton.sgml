@@ -2,7 +2,7 @@
 GtkMenuToolButton
 
 <!-- ##### SECTION Short_Description ##### -->
-A #GtkToolItem containing a button with an additional dropdown menu.
+A GtkToolItem containing a button with an additional dropdown menu
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

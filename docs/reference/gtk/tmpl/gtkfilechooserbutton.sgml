@@ -2,7 +2,7 @@
 GtkFileChooserButton
 
 <!-- ##### SECTION Short_Description ##### -->
-
+A button to launch a file selection dialog
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
