@@ -1,3 +1,8 @@
+Mon Sep 23 18:45:46 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_set_accel_path): 
+	Allow accel_path == NULL. (#84241, James Henstridge.)
+
 Mon Sep 23 18:01:52 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.[ch]: Add gtk_notebook_get_n_pages

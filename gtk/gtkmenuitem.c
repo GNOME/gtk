@@ -1129,7 +1129,8 @@ _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
 /**
  * gtk_menu_item_set_accel_path
  * @menu_item:  a valid #GtkMenuItem
- * @accel_path: accelerator path, corresponding to this menu item's functionality
+ * @accel_path: accelerator path, corresponding to this menu item's
+ *              functionality, or %NULL to unset the current path.
  *
  * Set the accelerator path on @menu_item, through which runtime changes of the
  * menu item's accelerator caused by the user can be identified and saved to
@@ -1150,7 +1151,8 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-  g_return_if_fail (accel_path && accel_path[0] == '<' && strchr (accel_path, '/'));
+  g_return_if_fail (accel_path == NULL ||
+		    (accel_path[0] == '<' && strchr (accel_path, '/')));
 
   widget = GTK_WIDGET (menu_item);
 
