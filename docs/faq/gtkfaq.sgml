@@ -163,6 +163,23 @@ name="http://www.gnome.org">)
 is using GTK+ to build a free desktop for Linux. Many more programs can be found
 there.
 
+<!-- ----------------------------------------------------------------- -->
+<sect1>I'm looking for an application to write in GTK+. How about an IRC client?
+<p> 
+
+Ask on gtk-list for suggestions. There are at least four IRC
+clients already under development
+
+<itemize>
+<item>girc. (Included with GNOME)
+<item>Bezerk (<htmlurl url="http://www.gtk.org/~trog/"
+                       name="http://www.gtk.org/~trog/">)
+<item>gsirc. (Location?)
+<item>Gnirc. (<htmlurl url="http://www.imaginet.fr/~dramboz/gnirc"
+                       name="http://www.imaginet.fr/~dramboz/gnirc">)
+</itemize>
+
+
 <!-- ***************************************************************** -->
 <sect>How to find, configure, install, and troubleshoot GTK+
 
@@ -202,8 +219,7 @@ handle the automatically generated Makefiles.
 
 <!-- ----------------------------------------------------------------- -->
  
-<sect1>I've compiled and installed GTK+, but I can't get any programs to link
-with it!
+<sect1>I've compiled and installed GTK+, but I can't get any programs to link with it!
 <p>
 This problem is most often encountered when the GTK+ libraries can't be 
 found or are the wrong version. Generally, the compiler will complain about an
@@ -248,6 +264,47 @@ the libraries libgtk, libgdk, libglib, or libgck.  If they do exist, remove them
 (and any gtk include files, such as /usr/include/gtk and /usr/include/gdk) 
 and reinstall gtk+.
 </itemize>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>When compiling programs with GTK+, I get compiler error messages about not being able to find <tt/"glibconfig.h"/.
+
+<p> The header file "glibconfig.h" was moved to the directory
+$exec_prefix/lib/glib/include/. $exec_prefix is the
+directory that was specified by giving the --exec-prefix
+flags to ./configure when compiling GTK+. It defaults to 
+$prefix, (specified with --prefix), which in turn defaults
+to /usr/local/.
+
+<p> This was done because "glibconfig.h" includes architecture
+dependent information, and the rest of the include files
+are put in $prefix/include, which can be shared between different
+architectures. 
+
+<p> GTK+ includes a shell script, <tt/gtk-config/, that
+makes it easy to find out the correct include paths.
+The GTK+ tutorial includes an example of using <tt/gtk-config/
+for simple compilation from the command line. For information
+about more complicated configuration, see the file
+docs/gtk-config.txt in the GTK+ distribution.
+
+<p> If you are trying to compile an old program, you may
+be able to work around the problem by configuring it
+with a command line like: 
+
+<tscreen><verb>
+CPPFLAGS="-I/usr/local/include/glib/include ./configure
+</verb></tscreen>
+
+<p>
+for Bourne-compatible shells like bash, or for csh variants:
+
+<tscreen><verb>
+setenv CPPFLAGS "-I/usr/local/include/glib/include 
+./configure
+</verb></tscreen>
+
+<p>
+(Substitute the appropriate value of $exec_prefix for /usr/local.)
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>When installing The GIMP, configure reports that it can't find GTK.
