@@ -1,3 +1,8 @@
+2002-11-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tree_widget.sgml (select): use GTK_SELECTION_SINGLE, not
+	GTK_SELECT_SINGLE.  (#96516, Erik Grinaker) 
+
 Mon Jul 29 22:36:06 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtkfilesel.sgml: Fix up the example program
