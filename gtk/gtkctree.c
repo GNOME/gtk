@@ -2947,6 +2947,8 @@ set_cell_contents (GtkCList    *clist,
   if (column == ctree->tree_column && type != GTK_CELL_EMPTY)
     type = GTK_CELL_PIXTEXT;
 
+  /* Note that pixmap and mask were already ref'ed by the caller
+   */
   switch (type)
     {
     case GTK_CELL_TEXT:

@@ -2452,8 +2452,7 @@ set_cell_contents (GtkCList    *clist,
       break;
     case GTK_CELL_PIXMAP:
       old_pixmap = GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap;
-      if (GTK_CELL_PIXMAP (clist_row->cell[column])->mask)
-	old_mask = GTK_CELL_PIXMAP (clist_row->cell[column])->mask;
+      old_mask = GTK_CELL_PIXMAP (clist_row->cell[column])->mask;
       break;
     case GTK_CELL_PIXTEXT:
       old_text = GTK_CELL_PIXTEXT (clist_row->cell[column])->text;
@@ -2469,9 +2468,8 @@ set_cell_contents (GtkCList    *clist,
 
   clist_row->cell[column].type = GTK_CELL_EMPTY;
 
-  /* Note that pixmap and mask were already 'reffed by the caller
+  /* Note that pixmap and mask were already ref'ed by the caller
    */
-  
   switch (type)
     {
     case GTK_CELL_TEXT:

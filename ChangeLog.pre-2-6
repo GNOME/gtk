@@ -3,7 +3,7 @@ Mon Jan 29 19:00:01 2001  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtk{ctree.c,clist.c} (set_cell_contents): Handle setting
 	the text of a cell to the old pointer value better, by
 	copying the new text before freeing the old text. Some code
-	cleanup.
+	cleanup. (#8079, Karl Nelson)
 
 Mon Jan 29 18:33:24 2001  Owen Taylor  <otaylor@redhat.com>
 
