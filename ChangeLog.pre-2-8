@@ -1,3 +1,38 @@
+2003-08-28  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c: Change the XML format:
+	<Root> element is replaced by <ui>,
+	<menu> element is replaced by <menubar>,
+	<submenu> element is replaced by <menu>,
+	<dockitem> element is replaced by <toolbar>,
+	<popups> element is gone,
+	verb attribute is replaced by action,
+	name defaults to action or the element name. 
+
+	* gtk/gtkactiongroup.[hc]: Replace GtkActionGroupEntry by GtkActionEntry
+	and GtkRadioActionEntry. GtkActionEntry is simplified by removing 
+	the user_data, entry_type and extra_data fields, GtkRadioActionEntry is
+	further simplified by removing the callback. The user_data can now be
+	specified as an argument to gtk_action_group_add_actions(). There is
+	a new method gtk_action_group_add_radio_actions(), which is similar
+	to gtk_action_group_add_actions(), but takes GtkRadioActionEntrys
+	and a callback parameter in addition to the user_data. The callback
+	is connected to the ::changed signal of the first group member.
+	There are _full() variants taking a GDestroyNotify of 
+	gtk_action_group_add_[radio_]actions().
+
+	* gtk/gtkradioaction.[hc]: Add a ::changed signal which gets emitted 
+	on every member of the radio group when the active member is changed. 
+	Add an integer property "value", and a getter for the value of "value"
+	on the currently active group member. 
+
+	* tests/testactions.c: 
+	* tests/testmerge.c: 
+	* tests/merge-[123].ui:  
+	* demos/gtk-demo/appwindow.c: Adjust to these changes.
+
+	* gtk/gtktoolbar.c (gtk_toolbar_append_element): Trivial doc fix.
+
 2003-08-27  Anders Carlsson  <andersca@gnome.org>
 
 	* demos/gtk-demo/appwindow.c (do_appwindow): Focus the

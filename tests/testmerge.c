@@ -2,11 +2,6 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
-#ifndef _
-#  define _(String) (String)
-#  define N_(String) (String)
-#endif
-
 struct { const gchar *filename; guint merge_id; } merge_ids[] = {
   { "merge-1.ui", 0 },
   { "merge-2.ui", 0 },
@@ -44,42 +39,53 @@ toggle_action (GtkAction *action)
 }
 
 
-static GtkActionGroupEntry entries[] = {
-  { "StockFileMenuAction", N_("_File"), NULL, NULL, NULL, NULL, NULL },
-  { "StockEditMenuAction", N_("_Edit"), NULL, NULL, NULL, NULL, NULL },
-  { "StockHelpMenuAction", N_("_Help"), NULL, NULL, NULL, NULL, NULL },
-  { "Test", N_("Test"), NULL, NULL, NULL, NULL, NULL },
+static void
+radio_action_changed (GtkAction *action, GtkRadioAction *current)
+{
+  g_message ("Action %s (type=%s) activated (active=%d) (value %d)", 
+	     gtk_action_get_name (GTK_ACTION (current)), 
+	     G_OBJECT_TYPE_NAME (GTK_ACTION (current)),
+	     gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (current)),
+	     gtk_radio_action_get_current_value (current));
+}
 
-  { "NewAction", NULL, GTK_STOCK_NEW, "<control>n", NULL,
-    G_CALLBACK (activate_action), NULL },
-  { "New2Action", NULL, GTK_STOCK_NEW, "<control>m", NULL,
-    G_CALLBACK (activate_action), NULL },
-  { "OpenAction", NULL, GTK_STOCK_OPEN, "<control>o", NULL,
-    G_CALLBACK (activate_action), NULL },
-  { "QuitAction", NULL, GTK_STOCK_QUIT, "<control>q", NULL,
-    G_CALLBACK (gtk_main_quit), NULL },
-  { "CutAction", NULL, GTK_STOCK_CUT, "<control>x", NULL,
-    G_CALLBACK (activate_action), NULL },
-  { "CopyAction", NULL, GTK_STOCK_COPY, "<control>c", NULL,
-    G_CALLBACK (activate_action), NULL },
-  { "PasteAction", NULL, GTK_STOCK_PASTE, "<control>v", NULL,
-    G_CALLBACK (activate_action), NULL },
-  { "justify-left", NULL, GTK_STOCK_JUSTIFY_LEFT, "<control>L",
-    N_("Left justify the text"),
-    G_CALLBACK (toggle_action), NULL, GTK_ACTION_RADIO, NULL },
-  { "justify-center", NULL, GTK_STOCK_JUSTIFY_CENTER, "<control>E",
-    N_("Center justify the text"),
-    G_CALLBACK (toggle_action), NULL, GTK_ACTION_RADIO, "justify-left" },
-  { "justify-right", NULL, GTK_STOCK_JUSTIFY_RIGHT, "<control>R",
-    N_("Right justify the text"),
-    G_CALLBACK (toggle_action), NULL, GTK_ACTION_RADIO, "justify-left" },
-  { "justify-fill", NULL, GTK_STOCK_JUSTIFY_FILL, "<control>J",
-    N_("Fill justify the text"),
-    G_CALLBACK (toggle_action), NULL, GTK_ACTION_RADIO, "justify-left" },
-  { "AboutAction", N_("_About"), NULL, NULL, NULL,
-    G_CALLBACK (activate_action), NULL },
+
+static GtkActionEntry entries[] = {
+  { "FileMenuAction", NULL, "_File" },
+  { "EditMenuAction", NULL, "_Edit" },
+  { "HelpMenuAction", NULL, "_Help" },
+  { "JustifyMenuAction", NULL, "_Justify" },
+  { "Test", NULL, "Test" },
+
+  { "QuitAction",  GTK_STOCK_QUIT,  NULL, "<control>q", NULL, G_CALLBACK (gtk_main_quit) },
+  { "NewAction",   GTK_STOCK_NEW,   NULL, "<control>n", NULL, G_CALLBACK (activate_action) },
+  { "New2Action",  GTK_STOCK_NEW,   NULL, "<control>m", NULL, G_CALLBACK (activate_action) },
+  { "OpenAction",  GTK_STOCK_OPEN,  NULL, "<control>o", NULL, G_CALLBACK (activate_action) },
+  { "CutAction",   GTK_STOCK_CUT,   NULL, "<control>x", NULL, G_CALLBACK (activate_action) },
+  { "CopyAction",  GTK_STOCK_COPY,  NULL, "<control>c", NULL, G_CALLBACK (activate_action) },
+  { "PasteAction", GTK_STOCK_PASTE, NULL, "<control>v", NULL, G_CALLBACK (activate_action) },
+  { "AboutAction", NULL,            "_About", NULL,     NULL, G_CALLBACK (activate_action) },
 };
 static guint n_entries = G_N_ELEMENTS (entries);
+
+enum {
+  JUSTIFY_LEFT,
+  JUSTIFY_CENTER,
+  JUSTIFY_RIGHT,
+  JUSTIFY_FILL
+};
+
+static GtkRadioActionEntry radio_entries[] = {
+  { "justify-left", GTK_STOCK_JUSTIFY_LEFT, NULL, "<control>L", 
+    "Left justify the text", JUSTIFY_LEFT },
+  { "justify-center", GTK_STOCK_JUSTIFY_CENTER, NULL, "<control>E",
+    "Center justify the text", JUSTIFY_CENTER },
+  { "justify-right", GTK_STOCK_JUSTIFY_RIGHT, NULL, "<control>R",
+    "Right justify the text", JUSTIFY_RIGHT },
+  { "justify-fill", GTK_STOCK_JUSTIFY_FILL, NULL, "<control>J",
+    "Fill justify the text", JUSTIFY_FILL },
+};
+static guint n_radio_entries = G_N_ELEMENTS (radio_entries);
 
 static void
 add_widget (GtkUIManager *merge, 
@@ -322,7 +328,7 @@ area_press (GtkWidget      *drawing_area,
   if (event->button == 3 &&
       event->type == GDK_BUTTON_PRESS)
     {
-      GtkWidget *menu = gtk_ui_manager_get_widget (merge, "/popups/FileMenu");
+      GtkWidget *menu = gtk_ui_manager_get_widget (merge, "/FileMenu");
       
       if (GTK_IS_MENU (menu)) 
 	{
@@ -349,7 +355,9 @@ main (int argc, char **argv)
   gtk_init (&argc, &argv);
 
   action_group = gtk_action_group_new ("TestActions");
-  gtk_action_group_add_actions (action_group, entries, n_entries);
+  gtk_action_group_add_actions (action_group, entries, n_entries, NULL);
+  gtk_action_group_add_radio_actions (action_group, radio_entries, n_radio_entries, 
+				      G_CALLBACK (radio_action_changed), NULL);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 400);

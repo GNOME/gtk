@@ -43,7 +43,8 @@
 typedef struct _GtkActionGroup        GtkActionGroup;
 typedef struct _GtkActionGroupPrivate GtkActionGroupPrivate;
 typedef struct _GtkActionGroupClass   GtkActionGroupClass;
-typedef struct _GtkActionGroupEntry   GtkActionGroupEntry;
+typedef struct _GtkActionEntry        GtkActionEntry;
+typedef struct _GtkRadioActionEntry   GtkRadioActionEntry;
 
 struct _GtkActionGroup
 {
@@ -68,26 +69,28 @@ struct _GtkActionGroupClass
   void (*_gtk_reserved4) (void);
 };
 
-typedef enum 
-{
-  GTK_ACTION_NORMAL,
-  GTK_ACTION_TOGGLE,
-  GTK_ACTION_RADIO
-} GtkActionGroupEntryType;
-
-struct _GtkActionGroupEntry 
+struct _GtkActionEntry 
 {
   gchar *name;
-  gchar *label;
   gchar *stock_id;
+  gchar *label;
   gchar *accelerator;
   gchar *tooltip;
 
   GCallback callback;
-  gpointer user_data;
 
-  GtkActionGroupEntryType entry_type;
-  gchar *extra_data;
+  gboolean is_toggle;
+};
+
+struct _GtkRadioActionEntry 
+{
+  gchar *name;
+  gchar *stock_id;
+  gchar *label;
+  gchar *accelerator;
+  gchar *tooltip;
+
+  gint  value; 
 };
 
 GType           gtk_action_group_get_type      (void);
@@ -103,9 +106,26 @@ void            gtk_action_group_add_action    (GtkActionGroup      *action_grou
 void            gtk_action_group_remove_action (GtkActionGroup      *action_group,
 						GtkAction           *action);
 
-void            gtk_action_group_add_actions   (GtkActionGroup      *action_group,
-						GtkActionGroupEntry *entries,
-						guint                n_entries);
+void            gtk_action_group_add_actions       (GtkActionGroup      *action_group,
+						    GtkActionEntry      *entries,
+						    guint                n_entries,
+						    gpointer             user_data);
+void            gtk_action_group_add_radio_actions (GtkActionGroup      *action_group,
+						    GtkRadioActionEntry *entries,
+						    guint                n_entries,
+						    GCallback            on_change,
+                                                    gpointer             user_data);
+void            gtk_action_group_add_actions_full  (GtkActionGroup      *action_group,
+						    GtkActionEntry      *entries,
+						    guint                n_entries,
+						    gpointer             user_data,
+						    GDestroyNotify       destroy);
+void            gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
+						         GtkRadioActionEntry *entries,
+						         guint                n_entries,
+						         GCallback            on_change,
+                                                         gpointer             user_data,
+							 GDestroyNotify       destroy);
 
 void            gtk_action_group_set_translate_func (GtkActionGroup      *action_group,
 						     GtkTranslateFunc     func,

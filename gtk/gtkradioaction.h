@@ -56,6 +56,8 @@ struct _GtkRadioActionClass
 {
   GtkToggleActionClass parent_class;
 
+  void       (* changed) (GtkRadioAction *action, GtkRadioAction *current);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -63,11 +65,11 @@ struct _GtkRadioActionClass
   void (*_gtk_reserved4) (void);
 };
 
-GType    gtk_radio_action_get_type  (void);
+GType    gtk_radio_action_get_type          (void);
 
-GSList  *gtk_radio_action_get_group (GtkRadioAction *action);
-void     gtk_radio_action_set_group (GtkRadioAction *action,
-				     GSList         *group);
-
+GSList  *gtk_radio_action_get_group         (GtkRadioAction *action);
+void     gtk_radio_action_set_group         (GtkRadioAction *action,
+				             GSList         *group);
+gint     gtk_radio_action_get_current_value (GtkRadioAction *action);
 
 #endif  /* __GTK_RADIO_ACTION_H__ */

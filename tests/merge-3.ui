@@ -1,16 +1,22 @@
 <!--*- xml -*-->
 <ui>
   <menubar>
-    <menu name="FileMenu" action="StockFileMenuAction">
+    <menu name="FileMenu" action="FileMenuAction">
       <menuitem name="New" action="New2Action" />
     </menu>
+    <menu name="JustifyMenu" action="JustifyMenuAction">
+      <menuitem name="Left" action="justify-left"/>
+      <menuitem name="Centre" action="justify-center"/>
+      <menuitem name="Right" action="justify-right"/>
+      <menuitem name="Fill" action="justify-fill"/>
+    </menu>
     <placeholder name="TestPlaceholder">
-      <menu name="Test">
+      <menu action="Test">
         <menuitem name="Cut" action="CutAction" />
       </menu>
     </placeholder>
   </menubar>
-  <toolbar name="toolbar1">
+  <toolbar action="toolbar1">
     <placeholder name="JustifyToolItems">
       <separator name="first-sep"/>
       <toolitem name="Left" action="justify-left"/>

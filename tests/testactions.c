@@ -1,11 +1,6 @@
 #undef GTK_DISABLE_DEPRECATED
 #include <gtk/gtk.h>
 
-#ifndef _
-#  define _(String) (String)
-#  define N_(String) (String)
-#endif
-
 static GtkActionGroup *action_group = NULL;
 static GtkToolbar *toolbar = NULL;
 
@@ -28,6 +23,18 @@ toggle_action (GtkAction *action)
 	     gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)));
 }
 
+
+static void
+radio_action (GtkAction *action)
+{
+  const gchar *name = gtk_action_get_name (action);
+  const gchar *typename = G_OBJECT_TYPE_NAME (action);
+
+  g_message ("Action %s (type=%s) activated (active=%d) (value %d)", name, typename,
+	     gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)),
+	     gtk_radio_action_get_current_value (GTK_RADIO_ACTION (action)));
+}
+
 static void
 toggle_cnp_actions (GtkAction *action)
 {
@@ -43,9 +50,9 @@ toggle_cnp_actions (GtkAction *action)
 
   action = gtk_action_group_get_action (action_group, "toggle-cnp");
   if (sensitive)
-    g_object_set (action, "label", _("Disable Cut and paste ops"), NULL);
+    g_object_set (action, "label", "Disable Cut and paste ops", NULL);
   else
-    g_object_set (action, "label", _("Enable Cut and paste ops"), NULL);
+    g_object_set (action, "label", "Enable Cut and paste ops", NULL);
 }
 
 static void
@@ -67,76 +74,73 @@ toolbar_style (GtkAction *action,
 }
 
 static void
-toolbar_size (GtkAction *action, 
-	      gpointer   user_data)
+toolbar_size_small (GtkAction *action)
 {
-  GtkIconSize size;
-
   g_return_if_fail (toolbar != NULL);
-  size = GPOINTER_TO_INT (user_data);
 
-  gtk_toolbar_set_icon_size (toolbar, size);
+  gtk_toolbar_set_icon_size (toolbar, GTK_ICON_SIZE_SMALL_TOOLBAR);
+}
+
+static void
+toolbar_size_large (GtkAction *action)
+{
+  g_return_if_fail (toolbar != NULL);
+
+  gtk_toolbar_set_icon_size (toolbar, GTK_ICON_SIZE_LARGE_TOOLBAR);
 }
 
 /* convenience functions for declaring actions */
-static GtkActionGroupEntry entries[] = {
-  { "Menu1Action", N_("Menu _1"), NULL, NULL, NULL, NULL, NULL },
-  { "Menu2Action", N_("Menu _2"), NULL, NULL, NULL, NULL, NULL },
+static GtkActionEntry entries[] = {
+  { "Menu1Action", NULL, "Menu _1" },
+  { "Menu2Action", NULL, "Menu _2" },
 
-  { "cut", N_("C_ut"), GTK_STOCK_CUT, "<control>X",
-    N_("Cut the selected text to the clipboard"),
-    G_CALLBACK (activate_action), NULL },
-  { "copy", N_("_Copy"), GTK_STOCK_COPY, "<control>C",
-    N_("Copy the selected text to the clipboard"),
-    G_CALLBACK (activate_action), NULL },
-  { "paste", N_("_Paste"), GTK_STOCK_PASTE, "<control>V",
-    N_("Paste the text from the clipboard"),
-    G_CALLBACK (activate_action), NULL },
-  { "bold", N_("_Bold"), GTK_STOCK_BOLD, "<control>B",
-    N_("Change to bold face"),
-    G_CALLBACK (toggle_action), NULL, GTK_ACTION_TOGGLE },
-
-  { "justify-left", N_("_Left"), GTK_STOCK_JUSTIFY_LEFT, "<control>L",
-    N_("Left justify the text"),
-    G_CALLBACK (toggle_action), NULL, GTK_ACTION_RADIO },
-  { "justify-center", N_("C_enter"), GTK_STOCK_JUSTIFY_CENTER, "<control>E",
-    N_("Center justify the text"),
-    G_CALLBACK (toggle_action), NULL, GTK_ACTION_RADIO, "justify-left" },
-  { "justify-right", N_("_Right"), GTK_STOCK_JUSTIFY_RIGHT, "<control>R",
-    N_("Right justify the text"),
-    G_CALLBACK (toggle_action), NULL, GTK_ACTION_RADIO, "justify-left" },
-  { "justify-fill", N_("_Fill"), GTK_STOCK_JUSTIFY_FILL, "<control>J",
-    N_("Fill justify the text"),
-    G_CALLBACK (toggle_action), NULL, GTK_ACTION_RADIO, "justify-left" },
-  { "quit", NULL, GTK_STOCK_QUIT, "<control>Q",
-    N_("Quit the application"),
-    G_CALLBACK (gtk_main_quit), NULL },
-  { "toggle-cnp", N_("Enable Cut/Copy/Paste"), NULL, NULL,
-    N_("Change the sensitivity of the cut, copy and paste actions"),
-    G_CALLBACK (toggle_cnp_actions), NULL, GTK_ACTION_TOGGLE },
-  { "customise-accels", N_("Customise _Accels"), NULL, NULL,
-    N_("Customise keyboard shortcuts"),
-    G_CALLBACK (show_accel_dialog), NULL },
-  { "toolbar-icons", N_("Icons"), NULL, NULL,
-    NULL, G_CALLBACK (toolbar_style), GINT_TO_POINTER (GTK_TOOLBAR_ICONS),
-    GTK_ACTION_RADIO, NULL },
-  { "toolbar-text", N_("Text"), NULL, NULL,
-    NULL, G_CALLBACK (toolbar_style), GINT_TO_POINTER (GTK_TOOLBAR_TEXT),
-    GTK_ACTION_RADIO, "toolbar-icons" },
-  { "toolbar-both", N_("Both"), NULL, NULL,
-    NULL, G_CALLBACK (toolbar_style), GINT_TO_POINTER (GTK_TOOLBAR_BOTH),
-    GTK_ACTION_RADIO, "toolbar-icons" },
-  { "toolbar-both-horiz", N_("Both Horizontal"), NULL, NULL,
-    NULL, G_CALLBACK (toolbar_style), GINT_TO_POINTER(GTK_TOOLBAR_BOTH_HORIZ),
-    GTK_ACTION_RADIO, "toolbar-icons" },
-  { "toolbar-small-icons", N_("Small Icons"), NULL, NULL,
-    NULL,
-    G_CALLBACK (toolbar_size), GINT_TO_POINTER (GTK_ICON_SIZE_SMALL_TOOLBAR) },
-  { "toolbar-large-icons", N_("Large Icons"), NULL, NULL,
-    NULL,
-    G_CALLBACK (toolbar_size), GINT_TO_POINTER (GTK_ICON_SIZE_LARGE_TOOLBAR) },
+  { "cut", GTK_STOCK_CUT, "C_ut", "<control>X",
+    "Cut the selected text to the clipboard", G_CALLBACK (activate_action) },
+  { "copy", GTK_STOCK_COPY, "_Copy", "<control>C",
+    "Copy the selected text to the clipboard", G_CALLBACK (activate_action) },
+  { "paste", GTK_STOCK_PASTE, "_Paste", "<control>V",
+    "Paste the text from the clipboard", G_CALLBACK (activate_action) },
+  { "bold", GTK_STOCK_BOLD, "_Bold", "<control>B",
+    "Change to bold face", G_CALLBACK (toggle_action), TRUE },
+  { "quit", GTK_STOCK_QUIT,  NULL, "<control>Q",
+    "Quit the application", G_CALLBACK (gtk_main_quit) },
+  { "toggle-cnp", NULL, "Enable Cut/Copy/Paste", NULL,
+    "Change the sensitivity of the cut, copy and paste actions", G_CALLBACK (toggle_cnp_actions), TRUE },
+  { "customise-accels", NULL, "Customise _Accels", NULL,
+    "Customise keyboard shortcuts", G_CALLBACK (show_accel_dialog) },
+  { "toolbar-small-icons", NULL, "Small Icons", NULL, 
+    NULL, G_CALLBACK (toolbar_size_small) },
+  { "toolbar-large-icons", NULL, "Large Icons", NULL,
+    NULL, G_CALLBACK (toolbar_size_large) }
 };
 static guint n_entries = G_N_ELEMENTS (entries);
+
+enum {
+  JUSTIFY_LEFT,
+  JUSTIFY_CENTER,
+  JUSTIFY_RIGHT,
+  JUSTIFY_FILL
+};
+
+static GtkRadioActionEntry justify_entries[] = {
+  { "justify-left", GTK_STOCK_JUSTIFY_LEFT, "_Left", "<control>L",
+    "Left justify the text", JUSTIFY_LEFT },
+  { "justify-center", GTK_STOCK_JUSTIFY_CENTER, "C_enter", "<control>E",
+    "Center justify the text", JUSTIFY_CENTER },
+  { "justify-right", GTK_STOCK_JUSTIFY_RIGHT, "_Right", "<control>R",
+    "Right justify the text", JUSTIFY_RIGHT },
+  { "justify-fill", GTK_STOCK_JUSTIFY_FILL, "_Fill", "<control>J",
+    "Fill justify the text", JUSTIFY_FILL }
+};
+static guint n_justify_entries = G_N_ELEMENTS (justify_entries);
+
+static GtkRadioActionEntry toolbar_entries[] = {
+  { "toolbar-icons", NULL, "Icons", NULL, NULL, GTK_TOOLBAR_ICONS },
+  { "toolbar-text", NULL, "Text", NULL, NULL, GTK_TOOLBAR_TEXT },
+  { "toolbar-both", NULL, "Both", NULL, NULL, GTK_TOOLBAR_BOTH },
+  { "toolbar-both-horiz", NULL, "Both Horizontal", NULL, NULL, GTK_TOOLBAR_BOTH_HORIZ }
+};
+static guint n_toolbar_entries = G_N_ELEMENTS (toolbar_entries);
 
 /* XML description of the menus for the test app.  The parser understands
  * a subset of the Bonobo UI XML format, and uses GMarkup for parsing */
@@ -250,9 +254,14 @@ main (int argc, char **argv)
     gtk_accel_map_load ("accels");
 
   action_group = gtk_action_group_new ("TestActions");
-  gtk_action_group_add_actions (action_group, entries, n_entries);
+  gtk_action_group_add_actions (action_group, entries, n_entries, NULL);
+  gtk_action_group_add_radio_actions (action_group, justify_entries, n_justify_entries, 
+				      G_CALLBACK (radio_action), NULL);
+  gtk_action_group_add_radio_actions (action_group, toolbar_entries, n_toolbar_entries, 
+				      G_CALLBACK (radio_action), NULL);
 
-  gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (gtk_action_group_get_action (action_group, "toggle-cnp")), TRUE);
+  gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (gtk_action_group_get_action (action_group, "toggle-cnp")), 
+				FALSE);
 
   create_window (action_group);
 

@@ -32,106 +32,143 @@ activate_action (GtkAction *action)
   gtk_widget_show (dialog);
 }
 
+static void
+activate_radio_action (GtkAction *action, GtkRadioAction *current)
+{
+  const gchar *name = gtk_action_get_name (GTK_ACTION (current));
+  const gchar *typename = G_OBJECT_TYPE_NAME (GTK_ACTION (current));
+  gboolean active = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (current));
+  gint value = gtk_radio_action_get_current_value (GTK_RADIO_ACTION (current));
 
-static GtkActionGroupEntry entries[] = {
-  { "FileMenu", "_File" },               /* name, label */
-  { "PreferencesMenu", "_Preferences" }, /* name, label */
-  { "ColorMenu", "_Color"  },            /* name, label */
-  { "ShapeMenu", "_Shape" },             /* name, label */
-  { "HelpMenu", "_Help" },               /* name, label */
-  { "New", "_New",                       /* name, label */
-    GTK_STOCK_NEW, "<control>N",         /* stock_id, accelerator */
-    "Create a new file",                 /* tooltip */ 
+  if (active) 
+    {
+      GtkWidget *dialog;
+  
+      dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+				       GTK_DIALOG_DESTROY_WITH_PARENT,
+				       GTK_MESSAGE_INFO,
+				       GTK_BUTTONS_CLOSE,
+				       "You activated radio action: \"%s\" of type \"%s\".\nCurrent value: %d",
+				       name, typename, value);
+
+      /* Close dialog on user response */
+      g_signal_connect (dialog,
+			"response",
+			G_CALLBACK (gtk_widget_destroy),
+			NULL);
+      
+      gtk_widget_show (dialog);
+    }
+}
+
+
+static GtkActionEntry entries[] = {
+  { "FileMenu", NULL, "_File" },               /* name, stock id, label */
+  { "PreferencesMenu", NULL, "_Preferences" }, /* name, stock id, label */
+  { "ColorMenu", NULL, "_Color"  },            /* name, stock id, label */
+  { "ShapeMenu", NULL, "_Shape" },             /* name, stock id, label */
+  { "HelpMenu", NULL, "_Help" },               /* name, stock id, label */
+  { "New", GTK_STOCK_NEW,                      /* name, stock id */
+    "_New", "<control>N",                      /* label, accelerator */
+    "Create a new file",                       /* tooltip */ 
     G_CALLBACK (activate_action) },      
-  { "Open", "_Open",                     /* name, label */
-    GTK_STOCK_OPEN, "<control>O",        /* stock_id, accelerator */     
-    "Open a file",                       /* tooltip */
+  { "Open", GTK_STOCK_OPEN,                    /* name, stock id */
+    "_Open","<control>O",                      /* label, accelerator */     
+    "Open a file",                             /* tooltip */
+    G_CALLBACK (activate_action) }, 
+  { "Save", GTK_STOCK_SAVE,                    /* name, stock id */
+    "_Save","<control>S",                      /* label, accelerator */     
+    "Save current file",                       /* tooltip */
     G_CALLBACK (activate_action) },
-  { "Save", "_Save",                     /* name, label */
-    GTK_STOCK_SAVE, "<control>S",        /* stock_id, accelerator */     
-    "Save current file",                 /* tooltip */
+  { "SaveAs", GTK_STOCK_SAVE,                  /* name, stock id */
+    "Save _As...", NULL,                       /* label, accelerator */     
+    "Save to a file",                          /* tooltip */
     G_CALLBACK (activate_action) },
-  { "SaveAs", "Save _As...",             /* name, label */
-    GTK_STOCK_SAVE, NULL,                /* stock_id, accelerator */     
-    "Save to a file",                    /* tooltip */
+  { "Quit", GTK_STOCK_QUIT,                    /* name, stock id */
+    "_Quit", "<control>Q",                     /* label, accelerator */     
+    "Quit",                                    /* tooltip */
     G_CALLBACK (activate_action) },
-  { "Quit", "_Quit",                     /* name, label */
-    GTK_STOCK_QUIT, "<control>Q",        /* stock_id, accelerator */     
-    "Quit",                              /* tooltip */
+  { "About", NULL,                             /* name, stock id */
+    "_About", "<control>A",                    /* label, accelerator */     
+    "About",                                   /* tooltip */  
     G_CALLBACK (activate_action) },
-  { "Red", "_Red",                       /* name, label */
-    NULL, "<control>R",                  /* stock_id, accelerator */     
-    "Blood",                             /* tooltip */
-    G_CALLBACK (activate_action), NULL,  
-    GTK_ACTION_RADIO },                  /* entry type */
-  { "Green", "_Green",                   /* name, label */
-    NULL, "<control>G",                  /* stock_id, accelerator */     
-    "Grass",                             /* tooltip */
-    G_CALLBACK (activate_action), NULL, 
-    GTK_ACTION_RADIO, "Red" },           /* entry type, radio group */
-  { "Blue", "_Blue",                     /* name, label */
-    NULL, "<control>B",                  /* stock_id, accelerator */     
-    "Sky",                               /* tooltip */
-    G_CALLBACK (activate_action), NULL, 
-    GTK_ACTION_RADIO, "Red" },           /* entry type, radio group */
-  { "Square", "_Square",                 /* name, label */
-    NULL, "<control>S",                  /* stock_id, accelerator */     
-    "Square",                            /* tooltip */
-    G_CALLBACK (activate_action), NULL, 
-    GTK_ACTION_RADIO },                  /* entry type */
-  { "Rectangle", "_Rectangle",           /* name, label */
-    NULL, "<control>R",                  /* stock_id, accelerator */     
-    "Rectangle",                         /* tooltip */
-    G_CALLBACK (activate_action), NULL, 
-    GTK_ACTION_RADIO, "Square" },        /* entry type, radio group */
-  { "Oval", "_Oval",                     /* name, label */
-    NULL, "<control>O",                  /* stock_id, accelerator */     
-    "Egg",                               /* tooltip */  
-    G_CALLBACK (activate_action), NULL, 
-    GTK_ACTION_RADIO, "Square" },        /* entry type, radio group */
-  { "About", "_About",                   /* name, label */
-    NULL, "<control>A",                  /* stock_id, accelerator */     
-    "About",                             /* tooltip */  
-    G_CALLBACK (activate_action) },
-  { "Logo", NULL,                        /* name, label */
-    "demo-gtk-logo", NULL,               /* stock_id, accelerator */     
-    "GTK+",                              /* tooltip */
+  { "Logo", "demo-gtk-logo",                   /* name, stock id */
+     NULL, NULL,                               /* label, accelerator */     
+    "GTK+",                                    /* tooltip */
     G_CALLBACK (activate_action) },
 };
 static guint n_entries = G_N_ELEMENTS (entries);
 
+enum {
+  COLOR_RED,
+  COLOR_GREEN,
+  COLOR_BLUE
+};
+
+static GtkRadioActionEntry color_entries[] = {
+  { "Red", NULL,                               /* name, stock id */
+    "_Red", "<control>R",                      /* label, accelerator */     
+    "Blood", COLOR_RED },                      /* tooltip, value */
+  { "Green", NULL,                             /* name, stock id */
+    "_Green", "<control>G",                    /* label, accelerator */     
+    "Grass", COLOR_GREEN },                    /* tooltip, value */
+  { "Blue", NULL,                              /* name, stock id */
+    "_Blue", "<control>B",                     /* label, accelerator */     
+    "Sky", COLOR_BLUE },                       /* tooltip, value */
+};
+static guint n_color_entries = G_N_ELEMENTS (color_entries);
+
+enum {
+  SHAPE_SQUARE,
+  SHAPE_RECTANGLE,
+  SHAPE_OVAL,
+};
+
+static GtkRadioActionEntry shape_entries[] = {
+  { "Square", NULL,                            /* name, stock id */
+    "_Square", "<control>S",                   /* label, accelerator */     
+    "Square",  SHAPE_SQUARE },                 /* tooltip, value */
+  { "Rectangle", NULL,                         /* name, stock id */
+    "_Rectangle", "<control>R",                /* label, accelerator */     
+    "Rectangle", SHAPE_RECTANGLE },            /* tooltip, value */
+  { "Oval", NULL,                              /* name, stock id */
+    "_Oval", "<control>O",                     /* label, accelerator */     
+    "Egg", SHAPE_OVAL },                       /* tooltip, value */  
+};
+static guint n_shape_entries = G_N_ELEMENTS (shape_entries);
+
 static const gchar *ui_info = 
 "<ui>"
 "  <menubar name='MenuBar'>"
-"    <menu name='FileMenu'>"
-"      <menuitem name='New'/>"
-"      <menuitem name='Open'/>"
-"      <menuitem name='Save'/>"
-"      <menuitem name='SaveAs'/>"
-"      <separator name='Sep1'/>"
-"      <menuitem name='Quit'/>"
+"    <menu action='FileMenu'>"
+"      <menuitem action='New'/>"
+"      <menuitem action='Open'/>"
+"      <menuitem action='Save'/>"
+"      <menuitem action='SaveAs'/>"
+"      <separator/>"
+"      <menuitem action='Quit'/>"
 "    </menu>"
-"    <menu name='PreferencesMenu'>"
-"      <menu name='ColorMenu'>"
-"	<menuitem name='Red'/>"
-"	<menuitem name='Green'/>"
-"	<menuitem name='Blue'/>"
+"    <menu action='PreferencesMenu'>"
+"      <menu action='ColorMenu'>"
+"	<menuitem action='Red'/>"
+"	<menuitem action='Green'/>"
+"	<menuitem action='Blue'/>"
 "      </menu>"
-"      <menu name='ShapeMenu'>"
-"        <menuitem name='Square'/>"
-"        <menuitem name='Rectangle'/>"
-"        <menuitem name='Oval'/>"
+"      <menu action='ShapeMenu'>"
+"        <menuitem action='Square'/>"
+"        <menuitem action='Rectangle'/>"
+"        <menuitem action='Oval'/>"
 "      </menu>"
 "    </menu>"
-"    <menu name='HelpMenu'>"
-"      <menuitem name='About'/>"
+"    <menu action='HelpMenu'>"
+"      <menuitem action='About'/>"
 "    </menu>"
 "  </menubar>"
-"  <toolbar name='ToolBar'>"
-"    <toolitem name='Open'/>"
-"    <toolitem name='Quit'/>"
-"    <separator name='Sep1'/>"
-"    <toolitem name='Logo'/>"
+"  <toolbar  name='ToolBar'>"
+"    <toolitem action='Open'/>"
+"    <toolitem action='Quit'/>"
+"    <separator action='Sep1'/>"
+"    <toolitem action='Logo'/>"
 "  </toolbar>"
 "</ui>";
 
@@ -288,7 +325,11 @@ do_appwindow (void)
        */
       
       action_group = gtk_action_group_new ("AppWindowActions");
-      gtk_action_group_add_actions (action_group, entries, n_entries);
+      gtk_action_group_add_actions (action_group, entries, n_entries, NULL);
+      gtk_action_group_add_radio_actions (action_group, color_entries, n_color_entries, 
+					  G_CALLBACK (activate_radio_action), NULL);
+      gtk_action_group_add_radio_actions (action_group, shape_entries, n_shape_entries, 
+					  G_CALLBACK (activate_radio_action), NULL);
 
       action = gtk_action_group_get_action (action_group, "Red");
       gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);

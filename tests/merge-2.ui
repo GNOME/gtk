@@ -1,12 +1,12 @@
 <!--*- xml -*-->
 <ui>
   <menubar>
-    <menu name="FileMenu" action="StockFileMenuAction">
+    <menu name="FileMenu" action="FileMenuAction">
       <menuitem name="New" action="NewAction" pos="top" />
       <separator />
       <menuitem name="Quit" action="QuitAction" />
     </menu>
-    <menu name="HelpMenu" action="StockHelpMenuAction">
+    <menu name="HelpMenu" action="HelpMenuAction">
       <menuitem name="About" action="AboutAction" />
     </menu>
   </menubar>
@@ -16,12 +16,10 @@
       <separator />
     </placeholder>
   </toolbar>
-  <popups>
-    <popup name="FileMenu" action="StockFileMenuAction">
-      <menuitem name="New" action="NewAction" pos="top" />
-      <menu name="HelpMenu" action="StockHelpMenuAction">
-        <menuitem name="About" action="AboutAction" />
-      </menu>
-    </popup>
-  </popups>
+  <popup name="FileMenu" action="FileMenuAction">
+    <menuitem name="New" action="NewAction" pos="top" />
+    <menu name="HelpMenu" action="HelpMenuAction">
+      <menuitem name="About" action="AboutAction" />
+    </menu>
+  </popup>
 </ui>

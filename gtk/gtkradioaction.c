@@ -31,17 +31,43 @@
 #include <config.h>
 
 #include "gtkradioaction.h"
+#include "gtkradiomenuitem.h"
 #include "gtktoggleactionprivate.h"
+#include "gtkintl.h"
 
 #define GTK_RADIO_ACTION_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RADIO_ACTION, GtkRadioActionPrivate))
 
 struct _GtkRadioActionPrivate 
 {
   GSList *group;
+  gint    value;
 };
 
-static void gtk_radio_action_init       (GtkRadioAction *action);
-static void gtk_radio_action_class_init (GtkRadioActionClass *class);
+enum 
+{
+  CHANGED,
+  LAST_SIGNAL
+};
+
+enum 
+{
+  PROP_0,
+  PROP_VALUE
+};
+
+static void gtk_radio_action_init         (GtkRadioAction *action);
+static void gtk_radio_action_class_init   (GtkRadioActionClass *class);
+static void gtk_radio_action_finalize     (GObject *object);
+static void gtk_radio_action_set_property (GObject         *object,
+				           guint            prop_id,
+				           const GValue    *value,
+				           GParamSpec      *pspec);
+static void gtk_radio_action_get_property (GObject         *object,
+				           guint            prop_id,
+				           GValue          *value,
+				           GParamSpec      *pspec);
+static void gtk_radio_action_activate     (GtkAction *action);
+
 
 GType
 gtk_radio_action_get_type (void)
@@ -71,10 +97,8 @@ gtk_radio_action_get_type (void)
   return type;
 }
 
-static void gtk_radio_action_finalize (GObject *object);
-static void gtk_radio_action_activate (GtkAction *action);
-
 static GObjectClass *parent_class = NULL;
+static guint         radio_action_signals[LAST_SIGNAL] = { 0 };
 
 static void
 gtk_radio_action_class_init (GtkRadioActionClass *klass)
@@ -87,8 +111,50 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
   action_class = GTK_ACTION_CLASS (klass);
 
   gobject_class->finalize = gtk_radio_action_finalize;
+  gobject_class->set_property = gtk_radio_action_set_property;
+  gobject_class->get_property = gtk_radio_action_get_property;
 
   action_class->activate = gtk_radio_action_activate;
+
+  /**
+   * GtkRadioAction:value:
+   *
+   * The value is an arbitrary integer which can be used as a
+   * convenient way to determine which action in the group is 
+   * currently active in an ::activate or ::changed signal handler.
+   * See gtk_radio_action_get_current_value() and #GtkRadioActionEntry
+   * for convenient ways to get and set this property.
+   *
+   * Since: 2.4
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_VALUE,
+				   g_param_spec_int ("value",
+						     _("The value"),
+						     _("The value returned by gtk_radio_action_get_current_value() when this action is the current action of its group."),
+						     G_MININT,
+						     G_MAXINT,
+						     0,
+						     G_PARAM_READWRITE));
+
+  /**
+   * GtkRadioAction::changed:
+   * @action: the action on which the signal is emitted
+   * @current: the member of @action<!-- -->s group which has just been activated
+   *
+   * The ::changed signal is emitted on every member of a radio group when the
+   * active member is changed. The signal gets emitted after the ::activate signals
+   * for the previous and current active members.
+   *
+   * Since: 2.4
+   */
+  radio_action_signals[CHANGED] =
+    g_signal_new ("changed",
+		  G_OBJECT_CLASS_TYPE (klass),
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
+		  G_STRUCT_OFFSET (GtkRadioActionClass, changed),  NULL, NULL,
+		  g_cclosure_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1, GTK_TYPE_RADIO_ACTION);
 
   g_type_class_add_private (gobject_class, sizeof (GtkRadioActionPrivate));
 }
@@ -98,6 +164,7 @@ gtk_radio_action_init (GtkRadioAction *action)
 {
   action->private_data = GTK_RADIO_ACTION_GET_PRIVATE (action);
   action->private_data->group = g_slist_prepend (NULL, action);
+  action->private_data->value = 0;
 }
 
 static void
@@ -122,6 +189,48 @@ gtk_radio_action_finalize (GObject *object)
 
   if (parent_class->finalize)
     (* parent_class->finalize) (object);
+}
+
+static void
+gtk_radio_action_set_property (GObject         *object,
+			       guint            prop_id,
+			       const GValue    *value,
+			       GParamSpec      *pspec)
+{
+  GtkRadioAction *radio_action;
+  
+  radio_action = GTK_RADIO_ACTION (object);
+
+  switch (prop_id)
+    {
+    case PROP_VALUE:
+      radio_action->private_data->value = g_value_get_int (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_radio_action_get_property (GObject    *object,
+			       guint       prop_id,
+			       GValue     *value,
+			       GParamSpec *pspec)
+{
+  GtkRadioAction *radio_action;
+
+  radio_action = GTK_RADIO_ACTION (object);
+
+  switch (prop_id)
+    {
+    case PROP_VALUE:
+      g_value_set_int (value, radio_action->private_data->value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -166,6 +275,15 @@ gtk_radio_action_activate (GtkAction *action)
 	      gtk_action_activate (GTK_ACTION (tmp_action));
 	      break;
 	    }
+	}
+
+      tmp_list = radio_action->private_data->group;
+      while (tmp_list)
+	{
+	  tmp_action = tmp_list->data;
+	  tmp_list = tmp_list->next;
+	  
+	  g_signal_emit (tmp_action, radio_action_signals[CHANGED], 0, radio_action);
 	}
     }
 
@@ -237,4 +355,36 @@ gtk_radio_action_set_group (GtkRadioAction *action,
     {
       gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
     }
+}
+
+/**
+ * gtk_radio_action_get_current_value:
+ * @action: a #GtkRadioAction
+ * 
+ * Obtains the value property of the the currently active member of 
+ * the group to which @action belongs.
+ * 
+ * Return value: The value of the currently active group member
+ *
+ * Since: 2.4
+ **/
+gint
+gtk_radio_action_get_current_value (GtkRadioAction *action)
+{
+  GSList *slist;
+
+  g_return_val_if_fail (GTK_IS_RADIO_ACTION (action), 0);
+
+  if (action->private_data->group)
+    {
+      for (slist = action->private_data->group; slist; slist = slist->next)
+	{
+	  GtkToggleAction *toggle_action = slist->data;
+
+	  if (toggle_action->private_data->active)
+	    return GTK_RADIO_ACTION (toggle_action)->private_data->value;
+	}
+    }
+
+  return action->private_data->value;
 }

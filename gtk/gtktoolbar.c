@@ -3001,7 +3001,7 @@ gtk_toolbar_append_element (GtkToolbar          *toolbar,
  * If @type == %GTK_TOOLBAR_CHILD_WIDGET, @widget is used as the new element.
  * If @type == %GTK_TOOLBAR_CHILD_RADIOBUTTON, @widget is used to determine
  * the radio group for the new element. In all other cases, @widget must
- * *be %NULL.
+ * be %NULL.
  * 
  * Return value: the new toolbar element as a #GtkWidget.
  **/

@@ -1,10 +1,10 @@
 <!--*- xml -*-->
 <ui>
   <menubar>
-    <menu name="FileMenu" action="StockFileMenuAction">
+    <menu name="FileMenu" action="FileMenuAction">
       <menuitem name="Open" action="OpenAction" />
     </menu>
-    <menu name="EditMenu" action="StockEditMenuAction">
+    <menu name="EditMenu" action="EditMenuAction">
       <menuitem name="Cut" action="CutAction" />
     </menu>
     <placeholder name="TestPlaceholder" />

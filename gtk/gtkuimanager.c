@@ -51,7 +51,7 @@ typedef enum
   GTK_UI_MANAGER_TOOLBAR,
   GTK_UI_MANAGER_MENU_PLACEHOLDER,
   GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER,
-  GTK_UI_MANAGER_POPUPS,
+  GTK_UI_MANAGER_POPUP,
   GTK_UI_MANAGER_MENUITEM,
   GTK_UI_MANAGER_TOOLITEM,
   GTK_UI_MANAGER_SEPARATOR,
@@ -215,9 +215,6 @@ gtk_ui_manager_init (GtkUIManager *self)
   node = get_child_node (self, NULL, "ui", 4,
 			GTK_UI_MANAGER_ROOT, TRUE, FALSE);
   gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (node), merge_id, 0);
-  node = get_child_node (self, self->private_data->root_node, "popups", 6,
-			 GTK_UI_MANAGER_POPUPS, TRUE, FALSE);
-  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (node), merge_id, 0);
 }
 
 
@@ -333,8 +330,9 @@ gtk_ui_manager_get_accel_group (GtkUIManager   *self)
  * 
  * Looks up a widget by following a path. The path consists of the names specified
  * in the XML description of the UI. separated by '/'. Elements which don't have
- * a name attribute in the XML (e.g. &lt;popups&gt;) can be addressed by their
- * XML element name (e.g. "popups").
+ * a name attribute in the XML (e.g. &lt;popup&gt;) can be addressed by their
+ * XML element name (e.g. "popup"). The root element (&lt;ui&gt;) can be omitted in 
+ * the path.
  * 
  * Return value: the widget found by following the path, or %NULL if no widget
  *   was found.
@@ -535,7 +533,6 @@ typedef enum
   STATE_ROOT,
   STATE_MENU,
   STATE_TOOLBAR,
-  STATE_POPUPS,
   STATE_MENUITEM,
   STATE_TOOLITEM,
   STATE_END
@@ -567,15 +564,15 @@ start_element_handler (GMarkupParseContext *context,
 
   gint i;
   const gchar *node_name;
+  const gchar *action;
   GQuark action_quark;
   gboolean top;
 
   gboolean raise_error = TRUE;
   gchar *error_attr = NULL;
 
-  /* work out a name for this node.  Either the name attribute, or
-   * element name */
-  node_name = element_name;
+  node_name = NULL;
+  action = NULL;
   action_quark = 0;
   top = FALSE;
   for (i = 0; attribute_names[i] != NULL; i++)
@@ -586,6 +583,7 @@ start_element_handler (GMarkupParseContext *context,
 	}
       else if (!strcmp (attribute_names[i], "action"))
 	{
+	  action = attribute_values[i];
 	  action_quark = g_quark_from_string (attribute_values[i]);
 	}
       else if (!strcmp (attribute_names[i], "pos"))
@@ -593,9 +591,16 @@ start_element_handler (GMarkupParseContext *context,
 	  top = !strcmp (attribute_values[i], "top");
 	}
     }
-  /* if no action, then set it to the node's name */
-  if (action_quark == 0)
-    action_quark = g_quark_from_string (node_name);
+
+  /* Work out a name for this node.  Either the name attribute, or
+   * the action, or the element name */
+  if (node_name == NULL) 
+    {
+      if (action != NULL)
+	node_name = action;
+      else 
+	node_name = element_name;
+    }
 
   switch (element_name[0])
     {
@@ -663,26 +668,12 @@ start_element_handler (GMarkupParseContext *context,
 	}
       break;
     case 'p':
-      if (ctx->state == STATE_ROOT && !strcmp (element_name, "popups"))
-	{
-	  ctx->state = STATE_POPUPS;
-	  ctx->current = get_child_node (self, ctx->current,
-					 node_name, strlen (node_name),
-					 GTK_UI_MANAGER_POPUPS,
-					 TRUE, FALSE);
-	  
-	  gtk_ui_manager_node_prepend_ui_reference (NODE_INFO (ctx->current),
-						    ctx->merge_id, action_quark);
-	  NODE_INFO (ctx->current)->dirty = TRUE;
-	  
-	  raise_error = FALSE;
-	}
-      else if (ctx->state == STATE_POPUPS && !strcmp (element_name, "popup"))
+      if (ctx->state == STATE_ROOT && !strcmp (element_name, "popup"))
 	{
 	  ctx->state = STATE_MENU;
 	  ctx->current = get_child_node (self, ctx->current,
 					 node_name, strlen (node_name),
-					 GTK_UI_MANAGER_MENU,
+					 GTK_UI_MANAGER_POPUP,
 					 TRUE, FALSE);
 	  if (NODE_INFO (ctx->current)->action_name == 0)
 	    NODE_INFO (ctx->current)->action_name = action_quark;
@@ -823,10 +814,8 @@ end_element_handler (GMarkupParseContext *context,
       break;
     case STATE_MENU:
       ctx->current = ctx->current->parent;
-      if (NODE_INFO (ctx->current)->type == GTK_UI_MANAGER_ROOT) /* menubar */
+      if (NODE_INFO (ctx->current)->type == GTK_UI_MANAGER_ROOT) 
 	ctx->state = STATE_ROOT;
-      else if (NODE_INFO (ctx->current)->type == GTK_UI_MANAGER_POPUPS) /* popup */
-	ctx->state = STATE_POPUPS;
       /* else, stay in STATE_MENU state */
       break;
     case STATE_TOOLBAR:
@@ -836,10 +825,6 @@ end_element_handler (GMarkupParseContext *context,
       if (NODE_INFO (ctx->current)->type == GTK_UI_MANAGER_ROOT)
 	ctx->state = STATE_ROOT;
       /* else, stay in STATE_TOOLBAR state */
-      break;
-    case STATE_POPUPS:
-      ctx->current = ctx->current->parent;
-      ctx->state = STATE_ROOT;
       break;
     case STATE_MENUITEM:
       ctx->state = STATE_MENU;
@@ -1089,6 +1074,7 @@ find_menu_position (GNode      *node,
 	  pos = 0;
 	  break;
 	case GTK_UI_MANAGER_MENU:
+	case GTK_UI_MANAGER_POPUP:
 	  menushell = NODE_INFO (parent)->proxy;
 	  if (GTK_IS_MENU_ITEM (menushell))
 	    menushell = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menushell));
@@ -1281,61 +1267,58 @@ update_node (GtkUIManager *self,
 	      g_signal_emit (self, merge_signals[ADD_WIDGET], 0, info->proxy);
 	    }
 	  break;
+	case GTK_UI_MANAGER_POPUP:
+	  if (info->proxy == NULL) 
+	    {
+	      info->proxy = gtk_menu_new ();
+	      gtk_menu_set_accel_group (GTK_MENU (info->proxy), 
+					self->private_data->accel_group);
+	    }
+	  break;
 	case GTK_UI_MANAGER_MENU:
-	  if (NODE_INFO (node->parent)->type == GTK_UI_MANAGER_POPUPS)
-	    {
-	      if (info->proxy == NULL) 
-		{
-		  GtkWidget *menu;
-		  menu = gtk_menu_new ();
-		  gtk_menu_set_accel_group (GTK_MENU (menu), self->private_data->accel_group);
-		  info->proxy = menu;
-		}
-	    }
-	  else
-	    {
-	      GtkWidget *prev_submenu = NULL;
-	      /* remove the proxy if it is of the wrong type ... */
-	      if (info->proxy &&  G_OBJECT_TYPE (info->proxy) !=
-		  GTK_ACTION_GET_CLASS (info->action)->menu_item_type)
-		{
-		  prev_submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
-		  if (prev_submenu)
-		    {
-		      g_object_ref (prev_submenu);
-		      gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy),NULL);
-		    }
-		  gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
-					info->proxy);
-		  info->proxy = NULL;
-		}
-	      /* create proxy if needed ... */
-	      if (info->proxy == NULL)
-		{
-		  GtkWidget *menushell;
-		  gint pos;
-		  
-		  if (find_menu_position (node, &menushell, &pos))
-		    {
-		      GtkWidget *menu;
-		      info->proxy = gtk_action_create_menu_item (info->action);
-		      menu = gtk_menu_new ();
-		      gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
-		      gtk_menu_set_accel_group (GTK_MENU (menu), self->private_data->accel_group);
-		      gtk_menu_shell_insert (GTK_MENU_SHELL (menushell), info->proxy, pos);
-		    }
-		}
-	      else
-		{
-		  gtk_action_connect_proxy (info->action, info->proxy);
-		}
-	      if (prev_submenu)
-		{
-		  gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy),
-					     prev_submenu);
-		  g_object_unref (prev_submenu);
-		}
-	    }
+	  {
+	    GtkWidget *prev_submenu = NULL;
+	    /* remove the proxy if it is of the wrong type ... */
+	    if (info->proxy &&  G_OBJECT_TYPE (info->proxy) !=
+		GTK_ACTION_GET_CLASS (info->action)->menu_item_type)
+	      {
+		prev_submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
+		if (prev_submenu)
+		  {
+		    g_object_ref (prev_submenu);
+		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy),NULL);
+		  }
+		gtk_container_remove (GTK_CONTAINER (info->proxy->parent),
+				      info->proxy);
+		info->proxy = NULL;
+	      }
+	    /* create proxy if needed ... */
+	    if (info->proxy == NULL)
+	      {
+		GtkWidget *menushell;
+		gint pos;
+		
+		if (find_menu_position (node, &menushell, &pos))
+		  {
+		    GtkWidget *menu;
+		    info->proxy = gtk_action_create_menu_item (info->action);
+		    menu = gtk_menu_new ();
+		    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
+		    gtk_menu_set_accel_group (GTK_MENU (menu), self->private_data->accel_group);
+		    gtk_menu_shell_insert (GTK_MENU_SHELL (menushell), info->proxy, pos);
+		  }
+	      }
+	    else
+	      {
+		gtk_action_connect_proxy (info->action, info->proxy);
+	      }
+	    if (prev_submenu)
+	      {
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy),
+					   prev_submenu);
+		g_object_unref (prev_submenu);
+	      }
+	  }
 	  break;
 	case GTK_UI_MANAGER_UNDECIDED:
 	  g_warning ("found 'undecided node!");
@@ -1413,8 +1396,6 @@ update_node (GtkUIManager *self,
 		  NODE_INFO (node)->extra = GTK_WIDGET (item);
 		}
 	    }
-	  break;
-	case GTK_UI_MANAGER_POPUPS:
 	  break;
 	case GTK_UI_MANAGER_MENUITEM:
 	  /* remove the proxy if it is of the wrong type ... */
@@ -1609,15 +1590,14 @@ static const gchar *open_tag_format[] = {
   "%*s<UNDECIDED>\n",
   "%*s<ui>\n",
   "%*s<menubar name=\"%s\">\n",  
-  "%*s<menu name=\"%s\" action=\"%s\">\n",
+  "%*s<menu name='%s' action=\"%s\">\n",
   "%*s<toolbar name=\"%s\">\n",
   "%*s<placeholder name=\"%s\">\n",
   "%*s<placeholder name=\"%s\">\n",
-  "%*s<popups>\n",
+  "%*s<popup name='%s' action=\"%s\">\n",
   "%*s<menuitem name=\"%s\" action=\"%s\"/>\n", 
   "%*s<toolitem name=\"%s\" action=\"%s\"/>\n", 
   "%*s<separator/>\n",
-  "%*s<popup name=\"%s\">\n"
 };
 
 static const gchar *close_tag_format[] = {
@@ -1628,11 +1608,10 @@ static const gchar *close_tag_format[] = {
   "%*s</toolbar>\n",
   "%*s</placeholder>\n",
   "%*s</placeholder>\n",
-  "%*s</popups>\n",
+  "%*s</popup>\n",
   "",
   "",
   "",
-  "%*s</popup>\n"
 };
 
 static void
@@ -1643,16 +1622,10 @@ print_node (GtkUIManager *self,
 {
   GtkUIManagerNode *mnode;
   GNode *child;
-  guint type;
   
   mnode = node->data;
-  if (mnode->type == GTK_UI_MANAGER_MENU &&
-      NODE_INFO (node->parent)->type == GTK_UI_MANAGER_POPUPS)
-      type = GTK_UI_MANAGER_SEPARATOR + 1;
-  else
-    type = mnode->type;
 
-  g_string_append_printf (buffer, open_tag_format[type],
+  g_string_append_printf (buffer, open_tag_format[mnode->type],
 			  indent_level, "",
 			  mnode->name, 
 			  g_quark_to_string (mnode->action_name));
@@ -1660,7 +1633,7 @@ print_node (GtkUIManager *self,
   for (child = node->children; child != NULL; child = child->next) 
     print_node (self, child, indent_level + 2, buffer);
 
-  g_string_append_printf (buffer, close_tag_format[type],
+  g_string_append_printf (buffer, close_tag_format[mnode->type],
 			  indent_level, "");
 
 }

@@ -280,6 +280,7 @@ gtk_action_group_list_actions (GtkActionGroup *action_group)
  * @action_group: the action group
  * @entries: an array of action descriptions
  * @n_entries: the number of entries
+ * @user_data: data to pass to the action callbacks
  *
  * This is a convenience routine to create a number of actions and add
  * them to the action group.  Each member of the array describes an
@@ -288,9 +289,36 @@ gtk_action_group_list_actions (GtkActionGroup *action_group)
  * Since: 2.4
  */
 void
-gtk_action_group_add_actions (GtkActionGroup      *action_group,
-			      GtkActionGroupEntry *entries,
-			      guint                n_entries)
+gtk_action_group_add_actions (GtkActionGroup *action_group,
+			      GtkActionEntry *entries,
+			      guint           n_entries,
+			      gpointer        user_data)
+{
+  gtk_action_group_add_actions_full (action_group, 
+				     entries, n_entries, 
+				     user_data, NULL);
+}
+
+
+/**
+ * gtk_action_group_add_actions_full:
+ * @action_group: the action group
+ * @entries: an array of action descriptions
+ * @n_entries: the number of entries
+ * @user_data: data to pass to the action callbacks
+ * @destroy: destroy notification callback for @user_data
+ *
+ * This variant of gtk_action_group_add_actions() adds a #GDestroyNotify
+ * callback for @user_data. 
+ * 
+ * Since: 2.4
+ */
+void
+gtk_action_group_add_actions_full (GtkActionGroup *action_group,
+				   GtkActionEntry *entries,
+				   guint           n_entries,
+				   gpointer        user_data,
+				   GDestroyNotify  destroy)
 {
   guint i;
   GtkTranslateFunc translate_func;
@@ -309,20 +337,10 @@ gtk_action_group_add_actions (GtkActionGroup      *action_group,
       gchar *label;
       gchar *tooltip;
 
-      switch (entries[i].entry_type) {
-      case GTK_ACTION_NORMAL:
-	action_type = GTK_TYPE_ACTION;
-	break;
-      case GTK_ACTION_TOGGLE:
+      if (entries[i].is_toggle)
 	action_type = GTK_TYPE_TOGGLE_ACTION;
-	break;
-      case GTK_ACTION_RADIO:
-	action_type = GTK_TYPE_RADIO_ACTION;
-	break;
-      default:
-	g_warning ("unsupported action type");
+      else
 	action_type = GTK_TYPE_ACTION;
-      }
 
       if (translate_func)
 	{
@@ -342,27 +360,10 @@ gtk_action_group_add_actions (GtkActionGroup      *action_group,
 			     "stock_id", entries[i].stock_id,
 			     NULL);
 
-      if (entries[i].entry_type == GTK_ACTION_RADIO &&
-	  entries[i].extra_data != NULL)
-	{
-	  GtkAction *radio_action;
-	  GSList *group;
-
-	  radio_action =
-	    gtk_action_group_get_action (GTK_ACTION_GROUP (action_group),
-					 entries[i].extra_data);
-	  if (radio_action)
-	    {
-	      group = gtk_radio_action_get_group (GTK_RADIO_ACTION (radio_action));
-	      gtk_radio_action_set_group (GTK_RADIO_ACTION (action), group);
-	    }
-	  else
-	    g_warning (G_STRLOC " could not look up `%s'", entries[i].extra_data);
-	}
-
       if (entries[i].callback)
-	g_signal_connect (action, "activate",
-			  entries[i].callback, entries[i].user_data);
+	g_signal_connect_data (action, "activate",
+			       entries[i].callback, 
+			       user_data, (GClosureNotify)destroy, 0);
 
       /* set the accel path for the menu item */
       accel_path = g_strconcat ("<Actions>/", action_group->private_data->name, "/",
@@ -381,6 +382,114 @@ gtk_action_group_add_actions (GtkActionGroup      *action_group,
       gtk_action_set_accel_path (action, accel_path);
       g_free (accel_path);
 
+      gtk_action_group_add_action (action_group, action);
+      g_object_unref (action);
+    }
+}
+
+/**
+ * gtk_action_group_add_radio_actions:
+ * @action_group: the action group
+ * @entries: an array of radio action descriptions
+ * @n_entries: the number of entries
+ * @on_change: the callback to connect to the changed signal
+ * @user_data: data to pass to the action callbacks
+ * 
+ * This is a convenience routine to create a group of radio actions and 
+ * add them to the action group.  Each member of the array describes a
+ * radio action to create.
+ * 
+ * Since: 2.4
+ * 
+ **/
+void            
+gtk_action_group_add_radio_actions (GtkActionGroup      *action_group,
+				    GtkRadioActionEntry *entries,
+				    guint                n_entries,
+				    GCallback            on_change,
+				    gpointer             user_data)
+{
+  gtk_action_group_add_radio_actions_full (action_group, 
+					   entries, n_entries, 
+					   on_change, user_data, NULL);
+}
+
+void            
+gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
+					 GtkRadioActionEntry *entries,
+					 guint                n_entries,
+					 GCallback            on_change,
+					 gpointer             user_data,
+					 GDestroyNotify       destroy)
+{
+  guint i;
+  GtkTranslateFunc translate_func;
+  gpointer translate_data;
+  GtkRadioAction *radio_action;
+
+  g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
+
+  translate_func = action_group->private_data->translate_func;
+  translate_data = action_group->private_data->translate_data;
+
+  for (i = 0; i < n_entries; i++)
+    {
+      GtkAction *action;
+      gchar *accel_path;
+      gchar *label;
+      gchar *tooltip;
+      
+      if (translate_func)
+	{
+	  label = translate_func (entries[i].label, translate_data);
+	  tooltip = translate_func (entries[i].tooltip, translate_data);
+	}
+      else
+	{
+	  label = entries[i].label;
+	  tooltip = entries[i].tooltip;
+	}
+
+      action = g_object_new (GTK_TYPE_RADIO_ACTION,
+			     "name", entries[i].name,
+			     "label", label,
+			     "tooltip", tooltip,
+			     "stock_id", entries[i].stock_id,
+			     "value", entries[i].value,
+			     NULL);
+
+      if (i == 0) 
+	{
+	  radio_action = GTK_RADIO_ACTION (action);
+
+	  if (on_change)
+	    g_signal_connect_data (radio_action, "changed",
+				   on_change, user_data, 
+				   (GClosureNotify)destroy, 0);
+	}
+      else
+	{
+	  GSList *group = gtk_radio_action_get_group (radio_action);
+	  gtk_radio_action_set_group (GTK_RADIO_ACTION (action), group);
+	}
+
+      /* set the accel path for the menu item */
+      accel_path = g_strconcat ("<Actions>/", action_group->private_data->name, "/",
+				entries[i].name, NULL);
+      if (entries[i].accelerator)
+	{
+	  guint accel_key = 0;
+	  GdkModifierType accel_mods;
+
+	  gtk_accelerator_parse (entries[i].accelerator, &accel_key,
+				 &accel_mods);
+	  if (accel_key)
+	    gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
+	}
+
+      gtk_action_set_accel_path (action, accel_path);
+      g_free (accel_path);
+      
       gtk_action_group_add_action (action_group, action);
       g_object_unref (action);
     }
@@ -431,7 +540,7 @@ dgettext_swapped (const gchar *msgid,
  * @domain: the translation domain to use for dgettext() calls
  * 
  * Sets the translation domain and uses dgettext() for translating the 
- * @label and @tooltip of #GtkActionGroupEntry<!-- -->s added by 
+ * @label and @tooltip of #GtkActionEntry<!-- -->s added by 
  * gtk_action_group_add_actions().
  *
  * If you're not using gettext() for localization, see 
