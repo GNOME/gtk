@@ -6246,7 +6246,7 @@ gtk_widget_class_install_style_property (GtkWidgetClass *class,
 
 /**
  * gtk_widget_class_find_style_property:
- * @class: a #GtkWidgetClass
+ * @klass: a #GtkWidgetClass
  * @property_name: the name of the style property to find
  * @returns: the #GParamSpec of the style property or %NULL if @class has ho
  *   style property with that name.
@@ -6254,34 +6254,34 @@ gtk_widget_class_install_style_property (GtkWidgetClass *class,
  * Finds a style property of a widget class by name.
  */
 GParamSpec*
-gtk_widget_class_find_style_property (GtkWidgetClass *class,
+gtk_widget_class_find_style_property (GtkWidgetClass *klass,
 				      const gchar    *property_name)
 {
   g_return_val_if_fail (property_name != NULL, NULL);
 
   return g_param_spec_pool_lookup (style_property_spec_pool,
 				   property_name,
-				   G_OBJECT_CLASS_TYPE (class),
+				   G_OBJECT_CLASS_TYPE (klass),
 				   TRUE);
 }
 
 /**
  * gtk_widget_class_list_style_properties:
- * @class: a #GtkWidgetClass
+ * @klass: a #GtkWidgetClass
  * @n_properties: location to return the number of style properties found
  * @returns: an newly allocated array of #GParamSpec*. The array must be freed with g_free().
  *
  * Returns all style properties of a widget class.
  */
 GParamSpec**
-gtk_widget_class_list_style_properties (GtkWidgetClass *class,
+gtk_widget_class_list_style_properties (GtkWidgetClass *klass,
 					guint          *n_properties)
 {
   GParamSpec **pspecs;
   guint n;
 
   pspecs = g_param_spec_pool_list (style_property_spec_pool,
-				   G_OBJECT_CLASS_TYPE (class),
+				   G_OBJECT_CLASS_TYPE (klass),
 				   &n);
   if (n_properties)
     *n_properties = n;

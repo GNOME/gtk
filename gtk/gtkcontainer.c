@@ -625,37 +625,37 @@ gtk_container_child_get (GtkContainer      *container,
 }
 
 void
-gtk_container_class_install_child_property (GtkContainerClass *class,
+gtk_container_class_install_child_property (GtkContainerClass *cclass,
 					    guint              property_id,
 					    GParamSpec        *pspec)
 {
-  g_return_if_fail (GTK_IS_CONTAINER_CLASS (class));
+  g_return_if_fail (GTK_IS_CONTAINER_CLASS (cclass));
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
   if (pspec->flags & G_PARAM_WRITABLE)
-    g_return_if_fail (class->set_child_property != NULL);
+    g_return_if_fail (cclass->set_child_property != NULL);
   if (pspec->flags & G_PARAM_READABLE)
-    g_return_if_fail (class->get_child_property != NULL);
+    g_return_if_fail (cclass->get_child_property != NULL);
   g_return_if_fail (property_id > 0);
   g_return_if_fail (PARAM_SPEC_PARAM_ID (pspec) == 0);  /* paranoid */
   if (pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY))
     g_return_if_fail ((pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY)) == 0);
 
-  if (g_param_spec_pool_lookup (_gtk_widget_child_property_pool, pspec->name, G_OBJECT_CLASS_TYPE (class), FALSE))
+  if (g_param_spec_pool_lookup (_gtk_widget_child_property_pool, pspec->name, G_OBJECT_CLASS_TYPE (cclass), FALSE))
     {
       g_warning (G_STRLOC ": class `%s' already contains a child property named `%s'",
-		 G_OBJECT_CLASS_NAME (class),
+		 G_OBJECT_CLASS_NAME (cclass),
 		 pspec->name);
       return;
     }
   g_param_spec_ref (pspec);
   g_param_spec_sink (pspec);
   PARAM_SPEC_SET_PARAM_ID (pspec, property_id);
-  g_param_spec_pool_insert (_gtk_widget_child_property_pool, pspec, G_OBJECT_CLASS_TYPE (class));
+  g_param_spec_pool_insert (_gtk_widget_child_property_pool, pspec, G_OBJECT_CLASS_TYPE (cclass));
 }
 
 /**
  * gtk_container_class_find_child_property:
- * @class: a #GtkContainerClass
+ * @cclass: a #GtkContainerClass
  * @property_name: the name of the child property to find
  * @returns: the #GParamSpec of the child property or %NULL if @class has ho
  *   child property with that name.
@@ -663,37 +663,37 @@ gtk_container_class_install_child_property (GtkContainerClass *class,
  * Finds a child property of a container class by name.
  */
 GParamSpec*
-gtk_container_class_find_child_property (GObjectClass *class,
+gtk_container_class_find_child_property (GObjectClass *cclass,
 					 const gchar  *property_name)
 {
-  g_return_val_if_fail (GTK_IS_CONTAINER_CLASS (class), NULL);
+  g_return_val_if_fail (GTK_IS_CONTAINER_CLASS (cclass), NULL);
   g_return_val_if_fail (property_name != NULL, NULL);
 
   return g_param_spec_pool_lookup (_gtk_widget_child_property_pool,
 				   property_name,
-				   G_OBJECT_CLASS_TYPE (class),
+				   G_OBJECT_CLASS_TYPE (cclass),
 				   TRUE);
 }
 
 /**
  * gtk_container_class_list_child_properties:
- * @class: a #GtkContainerClass
+ * @cclass: a #GtkContainerClass
  * @n_properties: location to return the number of child properties found
  * @returns: an newly allocated array of #GParamSpec*. The array must be freed with g_free().
  *
  * Returns all child properties of a container class.
  */
 GParamSpec**
-gtk_container_class_list_child_properties (GObjectClass *class,
+gtk_container_class_list_child_properties (GObjectClass *cclass,
 					   guint        *n_properties)
 {
   GParamSpec **pspecs;
   guint n;
 
-  g_return_val_if_fail (GTK_IS_CONTAINER_CLASS (class), NULL);
+  g_return_val_if_fail (GTK_IS_CONTAINER_CLASS (cclass), NULL);
 
   pspecs = g_param_spec_pool_list (_gtk_widget_child_property_pool,
-				   G_OBJECT_CLASS_TYPE (class),
+				   G_OBJECT_CLASS_TYPE (cclass),
 				   &n);
   if (n_properties)
     *n_properties = n;
