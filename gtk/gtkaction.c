@@ -822,7 +822,7 @@ connect_proxy (GtkAction     *action,
 	    }
 	  gtk_image_set_from_stock (GTK_IMAGE (image),
 				    action->private_data->stock_id, GTK_ICON_SIZE_MENU);
-	  g_signal_connect_object (action, "notify::stock_id",
+	  g_signal_connect_object (action, "notify::stock-id",
 				   G_CALLBACK (gtk_action_sync_stock_id),
 				   proxy, 0);
 	}
@@ -845,13 +845,13 @@ connect_proxy (GtkAction     *action,
       /* FIXME: we should set the tooltip here, but the current api
        * doesn't allow it before the item is added to a toolbar. 
        */
-      g_signal_connect_object (action, "notify::visible_horizontal",
+      g_signal_connect_object (action, "notify::visible-horizontal",
 			       G_CALLBACK (gtk_action_sync_property), 
 			       proxy, 0);
-      g_signal_connect_object (action, "notify::visible_vertical",
+      g_signal_connect_object (action, "notify::visible-vertical",
 			       G_CALLBACK (gtk_action_sync_property), 
 			       proxy, 0);
-      g_signal_connect_object (action, "notify::is_important",
+      g_signal_connect_object (action, "notify::is-important",
 			       G_CALLBACK (gtk_action_sync_property), 
 			       proxy, 0);
       g_signal_connect_object (action, "notify::tooltip",
@@ -873,10 +873,10 @@ connect_proxy (GtkAction     *action,
 	  /* FIXME: we should set the tooltip here, but the current api
 	   * doesn't allow it before the item is added to a toolbar. 
 	   */
-	  g_signal_connect_object (action, "notify::short_label",
+	  g_signal_connect_object (action, "notify::short-label",
 				   G_CALLBACK (gtk_action_sync_short_label),
 				   proxy, 0);      
-	  g_signal_connect_object (action, "notify::stock_id",
+	  g_signal_connect_object (action, "notify::stock-id",
 				   G_CALLBACK (gtk_action_sync_property), 
 				   proxy, 0);
       g_signal_connect_object (proxy, "clicked",
@@ -893,7 +893,7 @@ connect_proxy (GtkAction     *action,
 		    "label", action->private_data->short_label,
 		    "use_underline", TRUE,
 		    NULL);
-      g_signal_connect_object (action, "notify::short_label",
+      g_signal_connect_object (action, "notify::short-label",
 			       G_CALLBACK (gtk_action_sync_short_label),
 			       proxy, 0);
       

@@ -2869,7 +2869,7 @@ gtk_window_set_icon_list (GtkWindow  *window,
 
   /* We could try to update our transient children, but I don't think
    * it's really worth it. If we did it, the best way would probably
-   * be to have children connect to notify::icon_list
+   * be to have children connect to notify::icon-list
    */
 }
 

@@ -4115,7 +4115,7 @@ gtk_entry_text_index_to_layout_index (GtkEntry *entry,
  * is clicked.
  * 
  * Note that as the user scrolls around in the entry the offsets will
- * change; you'll need to connect to the "notify::scroll_offset"
+ * change; you'll need to connect to the "notify::scroll-offset"
  * signal to track this. Remember when using the #PangoLayout
  * functions you need to convert to and from pixels using
  * PANGO_PIXELS() or #PANGO_SCALE.
@@ -5134,9 +5134,9 @@ connect_completion_signals (GtkEntry           *entry,
       g_signal_connect (entry, "focus_out_event",
 			G_CALLBACK (accept_completion_callback), completion);
     }
-  g_signal_connect (completion, "notify::popup_completion",
+  g_signal_connect (completion, "notify::popup-completion",
 		    G_CALLBACK (completion_changed), entry);
-  g_signal_connect (completion, "notify::inline_completion",
+  g_signal_connect (completion, "notify::inline-completion",
 		    G_CALLBACK (completion_changed), entry);
 }
 
