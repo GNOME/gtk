@@ -1208,7 +1208,6 @@ static void
 gtk_tree_view_destroy (GtkObject *object)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (object);
-  GtkWidget *search_dialog;
   GList *list;
 
   gtk_tree_view_stop_editing (tree_view, TRUE);
@@ -2338,9 +2337,15 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 
       gtk_tree_path_free (path);
 
-      if (!GTK_WIDGET_HAS_FOCUS (widget))
-	gtk_widget_grab_focus (widget);
-      GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
+      /* If we activated the row we don't want to grab focus back, as moving
+       * focus to another widget is pretty common.
+       */
+      if (!row_double_click)
+	{
+	  if (!GTK_WIDGET_HAS_FOCUS (widget))
+	    gtk_widget_grab_focus (widget);
+	  GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
+	}
 
       return TRUE;
     }
