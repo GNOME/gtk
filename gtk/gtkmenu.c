@@ -956,6 +956,12 @@ menu_change_screen (GtkMenu   *menu,
 {
   GtkMenuPrivate *private = gtk_menu_get_private (menu);
 
+  if (gtk_widget_has_screen (menu))
+    {
+      if (new_screen == gtk_widget_get_screen (menu))
+	return;
+    }
+
   if (menu->torn_off)
     {
       gtk_window_set_screen (GTK_WINDOW (menu->tearoff_window), new_screen);
