@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-16 14:27-0500\n"
-"PO-Revision-Date: 2004-03-08 21:48+0000\n"
+"PO-Revision-Date: 2004-03-21 21:48+0000\n"
 "Last-Translator: Alastair McKinstry <mckinstry@computer.org\n"
 "Language-Team: Gaeilge <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1587,7 +1587,7 @@ msgstr ""
 
 #: gtk/gtkstock.c:300
 msgid "_Help"
-msgstr "C_uidiú"
+msgstr "Cab_hair"
 
 #: gtk/gtkstock.c:301
 msgid "_Home"
@@ -1876,29 +1876,29 @@ msgstr ""
 msgid "Could not get information for file '%s': %s"
 msgstr ""
 
-#~ msgid "%d/%b/%Y"
-#~ msgstr "%d/%b/%Y"
+msgid "%d/%b/%Y"
+msgstr "%d/%b/%Y"
 
-#~ msgid "File name"
-#~ msgstr "Ainm Comhad"
+msgid "File name"
+msgstr "Ainm Comhad"
 
-#~ msgid "Preview"
-#~ msgstr "Réamhthaispeántas"
+msgid "Preview"
+msgstr "Réamhthaispeántas"
 
-#~ msgid "Add"
-#~ msgstr "Suimigh"
+msgid "Add"
+msgstr "Suimigh"
 
-#~ msgid "Remove"
-#~ msgstr "Scríos"
+msgid "Remove"
+msgstr "Scríos"
 
-#~ msgid "Up"
-#~ msgstr "Suas"
+msgid "Up"
+msgstr "Suas"
 
-#~ msgid "_Filename:"
-#~ msgstr "_Ainm Comhad:"
+msgid "_Filename:"
+msgstr "_Ainm Comhad:"
 
-#~ msgid "Current folder: %s"
-#~ msgstr "Fillteán reatha: %s"
+msgid "Current folder: %s"
+msgstr "Fillteán reatha: %s"
 
-#~ msgid "Zoom _100%"
-#~ msgstr "Súmáil _100%"
+msgid "Zoom _100%"
+msgstr "Súmáil _100%"
