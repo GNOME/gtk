@@ -45,24 +45,24 @@
 
 typedef enum 
 {
-  GTK_UI_MANAGER_UNDECIDED,
-  GTK_UI_MANAGER_ROOT,
-  GTK_UI_MANAGER_MENUBAR,
-  GTK_UI_MANAGER_MENU,
-  GTK_UI_MANAGER_TOOLBAR,
-  GTK_UI_MANAGER_MENU_PLACEHOLDER,
-  GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER,
-  GTK_UI_MANAGER_POPUP,
-  GTK_UI_MANAGER_MENUITEM,
-  GTK_UI_MANAGER_TOOLITEM,
-  GTK_UI_MANAGER_SEPARATOR,
-} GtkUIManagerNodeType;
+  NODE_TYPE_UNDECIDED,
+  NODE_TYPE_ROOT,
+  NODE_TYPE_MENUBAR,
+  NODE_TYPE_MENU,
+  NODE_TYPE_TOOLBAR,
+  NODE_TYPE_MENU_PLACEHOLDER,
+  NODE_TYPE_TOOLBAR_PLACEHOLDER,
+  NODE_TYPE_POPUP,
+  NODE_TYPE_MENUITEM,
+  NODE_TYPE_TOOLITEM,
+  NODE_TYPE_SEPARATOR,
+} NodeType;
 
 
-typedef struct _GtkUIManagerNode  GtkUIManagerNode;
+typedef struct _Node  Node;
 
-struct _GtkUIManagerNode {
-  GtkUIManagerNodeType type;
+struct _Node {
+  NodeType type;
 
   const gchar *name;
 
@@ -92,7 +92,7 @@ struct _GtkUIManagerPrivate
   gboolean add_tearoffs;
 };
 
-#define NODE_INFO(node) ((GtkUIManagerNode *)node->data)
+#define NODE_INFO(node) ((Node *)node->data)
 
 typedef struct _NodeUIReference NodeUIReference;
 
@@ -119,18 +119,18 @@ static GNode *get_child_node              (GtkUIManager *self,
 				           GNode *parent,
 					   const gchar *childname,
 					   gint childname_length,
-					   GtkUIManagerNodeType node_type,
+					   NodeType node_type,
 					   gboolean create, 
 					   gboolean top);
 static GNode *get_node                    (GtkUIManager *self,
 					   const gchar *path,
-					   GtkUIManagerNodeType node_type,
+					   NodeType node_type,
 					   gboolean create);
 
-static void  node_prepend_ui_reference    (GtkUIManagerNode *node,
+static void  node_prepend_ui_reference    (Node *node,
 					   guint merge_id,
 					   GQuark action_quark);
-static void  node_remove_ui_reference     (GtkUIManagerNode *node,
+static void  node_remove_ui_reference     (Node *node,
 					   guint merge_id);
 
 
@@ -187,7 +187,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
   gobject_class = G_OBJECT_CLASS (klass);
 
   if (!merge_node_chunk)
-    merge_node_chunk = g_mem_chunk_create (GtkUIManagerNode, 64,
+    merge_node_chunk = g_mem_chunk_create (Node, 64,
 					   G_ALLOC_AND_FREE);
 
   gobject_class->finalize = gtk_ui_manager_finalize;
@@ -272,7 +272,7 @@ gtk_ui_manager_init (GtkUIManager *self)
 
   merge_id = gtk_ui_manager_new_merge_id (self);
   node = get_child_node (self, NULL, "ui", 4,
-			GTK_UI_MANAGER_ROOT, TRUE, FALSE);
+			NODE_TYPE_ROOT, TRUE, FALSE);
   node_prepend_ui_reference (NODE_INFO (node), merge_id, 0);
 }
 
@@ -516,7 +516,7 @@ gtk_ui_manager_get_widget (GtkUIManager *self,
    * widget */
   gtk_ui_manager_ensure_update (self);
 
-  node = get_node (self, path, GTK_UI_MANAGER_UNDECIDED, FALSE);
+  node = get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
 
   if (node == NULL)
     return NULL;
@@ -550,7 +550,7 @@ gtk_ui_manager_get_action (GtkUIManager   *self,
    * the action */
   gtk_ui_manager_ensure_update (self);
   
-  node = get_node (self, path, GTK_UI_MANAGER_UNDECIDED, FALSE);
+  node = get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
 
   if (node == NULL)
     return NULL;
@@ -563,15 +563,15 @@ get_child_node (GtkUIManager        *self,
 		GNode               *parent,
 		const gchar         *childname, 
 		gint                 childname_length,
-		GtkUIManagerNodeType node_type,
+		NodeType node_type,
 		gboolean             create, 
 		gboolean             top)
 {
   GNode *child = NULL;
 
   g_return_val_if_fail (parent == NULL ||
-			(NODE_INFO (parent)->type != GTK_UI_MANAGER_MENUITEM &&
-			 NODE_INFO (parent)->type != GTK_UI_MANAGER_TOOLITEM), 
+			(NODE_INFO (parent)->type != NODE_TYPE_MENUITEM &&
+			 NODE_INFO (parent)->type != NODE_TYPE_TOOLITEM), 
 			NULL);
 
   if (parent)
@@ -584,12 +584,12 @@ get_child_node (GtkUIManager        *self,
 		  !strncmp (NODE_INFO (child)->name, childname, childname_length))
 		{
 		  /* if undecided about node type, set it */
-		  if (NODE_INFO (child)->type == GTK_UI_MANAGER_UNDECIDED)
+		  if (NODE_INFO (child)->type == NODE_TYPE_UNDECIDED)
 		    NODE_INFO (child)->type = node_type;
 		  
 		  /* warn about type mismatch */
-		  if (NODE_INFO (child)->type != GTK_UI_MANAGER_UNDECIDED &&
-		      node_type != GTK_UI_MANAGER_UNDECIDED &&
+		  if (NODE_INFO (child)->type != NODE_TYPE_UNDECIDED &&
+		      node_type != NODE_TYPE_UNDECIDED &&
 		      NODE_INFO (child)->type != node_type)
 		    g_warning ("node type doesn't match %d (%s is type %d)",
 			       node_type, 
@@ -602,9 +602,9 @@ get_child_node (GtkUIManager        *self,
 	}
       if (!child && create)
 	{
-	  GtkUIManagerNode *mnode;
+	  Node *mnode;
 	  
-	  mnode = g_chunk_new0 (GtkUIManagerNode, merge_node_chunk);
+	  mnode = g_chunk_new0 (Node, merge_node_chunk);
 	  mnode->type = node_type;
 	  mnode->name = g_strndup (childname, childname_length);
 	  mnode->dirty = TRUE;
@@ -624,14 +624,14 @@ get_child_node (GtkUIManager        *self,
 	  if (strncmp (NODE_INFO (child)->name, childname, childname_length) != 0)
 	    g_warning ("root node name '%s' doesn't match '%s'",
 		       childname, NODE_INFO (child)->name);
-	  if (NODE_INFO (child)->type != GTK_UI_MANAGER_ROOT)
+	  if (NODE_INFO (child)->type != NODE_TYPE_ROOT)
 	    g_warning ("base element must be of type ROOT");
 	}
       else if (create)
 	{
-	  GtkUIManagerNode *mnode;
+	  Node *mnode;
 
-	  mnode = g_chunk_new0 (GtkUIManagerNode, merge_node_chunk);
+	  mnode = g_chunk_new0 (Node, merge_node_chunk);
 	  mnode->type = node_type;
 	  mnode->name = g_strndup (childname, childname_length);
 	  mnode->dirty = TRUE;
@@ -646,7 +646,7 @@ get_child_node (GtkUIManager        *self,
 static GNode *
 get_node (GtkUIManager        *self, 
 	  const gchar         *path,
-	  GtkUIManagerNodeType node_type, 
+	  NodeType node_type, 
 	  gboolean             create)
 {
   const gchar *pos, *end;
@@ -666,7 +666,7 @@ get_node (GtkUIManager        *self,
       else
 	length = strlen (pos);
 
-      node = get_child_node (self, parent, pos, length, GTK_UI_MANAGER_UNDECIDED,
+      node = get_child_node (self, parent, pos, length, NODE_TYPE_UNDECIDED,
 			     create, FALSE);
       if (!node)
 	return NULL;
@@ -675,7 +675,7 @@ get_node (GtkUIManager        *self,
       parent = node;
     }
 
-  if (node != NULL && NODE_INFO (node)->type == GTK_UI_MANAGER_UNDECIDED)
+  if (node != NULL && NODE_INFO (node)->type == NODE_TYPE_UNDECIDED)
     NODE_INFO (node)->type = node_type;
   return node;
 }
@@ -700,7 +700,7 @@ gtk_ui_manager_new_merge_id (GtkUIManager *self)
 }
 
 static void
-node_prepend_ui_reference (GtkUIManagerNode *node,
+node_prepend_ui_reference (Node *node,
 			   guint             merge_id, 
 			   GQuark            action_quark)
 {
@@ -717,7 +717,7 @@ node_prepend_ui_reference (GtkUIManagerNode *node,
 }
 
 static void
-node_remove_ui_reference (GtkUIManagerNode *node,
+node_remove_ui_reference (Node *node,
 			  guint             merge_id)
 {
   GList *p;
@@ -846,7 +846,7 @@ start_element_handler (GMarkupParseContext *context,
 	  ctx->state = STATE_MENU;
 	  ctx->current = get_child_node (self, ctx->current,
 					 node_name, strlen (node_name),
-					 GTK_UI_MANAGER_MENUBAR,
+					 NODE_TYPE_MENUBAR,
 					 TRUE, FALSE);
 	  if (NODE_INFO (ctx->current)->action_name == 0)
 	    NODE_INFO (ctx->current)->action_name = action_quark;
@@ -861,7 +861,7 @@ start_element_handler (GMarkupParseContext *context,
 	{
 	  ctx->current = get_child_node (self, ctx->current,
 					 node_name, strlen (node_name),
-					 GTK_UI_MANAGER_MENU,
+					 NODE_TYPE_MENU,
 					 TRUE, top);
 	  if (NODE_INFO (ctx->current)->action_name == 0)
 	    NODE_INFO (ctx->current)->action_name = action_quark;
@@ -879,7 +879,7 @@ start_element_handler (GMarkupParseContext *context,
 	  ctx->state = STATE_MENUITEM;
 	  node = get_child_node (self, ctx->current,
 				 node_name, strlen (node_name),
-				 GTK_UI_MANAGER_MENUITEM,
+				 NODE_TYPE_MENUITEM,
 				 TRUE, top);
 	  if (NODE_INFO (node)->action_name == 0)
 	    NODE_INFO (node)->action_name = action_quark;
@@ -897,7 +897,7 @@ start_element_handler (GMarkupParseContext *context,
 	  ctx->state = STATE_MENU;
 	  ctx->current = get_child_node (self, ctx->current,
 					 node_name, strlen (node_name),
-					 GTK_UI_MANAGER_POPUP,
+					 NODE_TYPE_POPUP,
 					 TRUE, FALSE);
 	  if (NODE_INFO (ctx->current)->action_name == 0)
 	    NODE_INFO (ctx->current)->action_name = action_quark;
@@ -914,12 +914,12 @@ start_element_handler (GMarkupParseContext *context,
 	  if (ctx->state == STATE_TOOLBAR)
 	    ctx->current = get_child_node (self, ctx->current,
 					   node_name, strlen (node_name),
-					   GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER,
+					   NODE_TYPE_TOOLBAR_PLACEHOLDER,
 					   TRUE, top);
 	  else
 	    ctx->current = get_child_node (self, ctx->current,
 					   node_name, strlen (node_name),
-					   GTK_UI_MANAGER_MENU_PLACEHOLDER,
+					   NODE_TYPE_MENU_PLACEHOLDER,
 					   TRUE, top);
 	  
 	  node_prepend_ui_reference (NODE_INFO (ctx->current),
@@ -941,7 +941,7 @@ start_element_handler (GMarkupParseContext *context,
 	    ctx->state = STATE_MENUITEM;
 	  node = get_child_node (self, ctx->current,
 				 node_name, strlen (node_name),
-				 GTK_UI_MANAGER_SEPARATOR,
+				 NODE_TYPE_SEPARATOR,
 				 TRUE, top);
 	  if (NODE_INFO (node)->action_name == 0)
 	    NODE_INFO (node)->action_name = action_quark;
@@ -959,7 +959,7 @@ start_element_handler (GMarkupParseContext *context,
 	  ctx->state = STATE_TOOLBAR;
 	  ctx->current = get_child_node (self, ctx->current,
 					 node_name, strlen (node_name),
-					 GTK_UI_MANAGER_TOOLBAR,
+					 NODE_TYPE_TOOLBAR,
 					 TRUE, FALSE);
 	  if (NODE_INFO (ctx->current)->action_name == 0)
 	    NODE_INFO (ctx->current)->action_name = action_quark;
@@ -977,7 +977,7 @@ start_element_handler (GMarkupParseContext *context,
 	  ctx->state = STATE_TOOLITEM;
 	  node = get_child_node (self, ctx->current,
 				node_name, strlen (node_name),
-				 GTK_UI_MANAGER_TOOLITEM,
+				 NODE_TYPE_TOOLITEM,
 				 TRUE, top);
 	  if (NODE_INFO (node)->action_name == 0)
 	    NODE_INFO (node)->action_name = action_quark;
@@ -1028,7 +1028,7 @@ end_element_handler (GMarkupParseContext *context,
     case STATE_MENU:
     case STATE_TOOLBAR:
       ctx->current = ctx->current->parent;
-      if (NODE_INFO (ctx->current)->type == GTK_UI_MANAGER_ROOT) 
+      if (NODE_INFO (ctx->current)->type == NODE_TYPE_ROOT) 
 	ctx->state = STATE_ROOT;
       /* else, stay in same state */
       break;
@@ -1216,33 +1216,33 @@ gtk_ui_manager_add_ui (GtkUIManager *self,
 {
   GNode *node;
   GNode *child;
-  GtkUIManagerNodeType type;
+  NodeType type;
   GQuark action_quark = 0;
 
   g_return_if_fail (GTK_IS_UI_MANAGER (self));  
   g_return_if_fail (merge_id > 0);
 
-  node = get_node (self, path, GTK_UI_MANAGER_UNDECIDED, FALSE);
+  node = get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
   
   if (node == NULL)
     return;
 
   switch (NODE_INFO (node)->type) 
     {
-    case GTK_UI_MANAGER_MENU:
-    case GTK_UI_MANAGER_POPUP:
-    case GTK_UI_MANAGER_MENU_PLACEHOLDER:
+    case NODE_TYPE_MENU:
+    case NODE_TYPE_POPUP:
+    case NODE_TYPE_MENU_PLACEHOLDER:
       if (action != NULL)
-	type = GTK_UI_MANAGER_MENUITEM;
+	type = NODE_TYPE_MENUITEM;
       else
-	type = GTK_UI_MANAGER_SEPARATOR;
+	type = NODE_TYPE_SEPARATOR;
       break;
-    case GTK_UI_MANAGER_TOOLBAR:
-    case GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER:
+    case NODE_TYPE_TOOLBAR:
+    case NODE_TYPE_TOOLBAR_PLACEHOLDER:
       if (action != NULL)
-	type = GTK_UI_MANAGER_TOOLITEM;
+	type = NODE_TYPE_TOOLITEM;
       else
-	type = GTK_UI_MANAGER_SEPARATOR;
+	type = NODE_TYPE_SEPARATOR;
       break;
     default:
       return;
@@ -1252,13 +1252,13 @@ gtk_ui_manager_add_ui (GtkUIManager *self,
     {
       switch (type)
 	{
-	case GTK_UI_MANAGER_MENUITEM:
+	case NODE_TYPE_MENUITEM:
 	  name = "menuitem";
 	  break;
-	case GTK_UI_MANAGER_TOOLITEM:
+	case NODE_TYPE_TOOLITEM:
 	  name = "toolitem";
 	  break;
-	case GTK_UI_MANAGER_SEPARATOR:
+	case NODE_TYPE_SEPARATOR:
 	  name = "separator";
 	  break;
 	default:
@@ -1353,11 +1353,11 @@ find_menu_position (GNode      *node,
   gint pos;
 
   g_return_val_if_fail (node != NULL, FALSE);
-  g_return_val_if_fail (NODE_INFO (node)->type == GTK_UI_MANAGER_MENU ||
-			NODE_INFO (node)->type == GTK_UI_MANAGER_POPUP ||
-			NODE_INFO (node)->type == GTK_UI_MANAGER_MENU_PLACEHOLDER ||
-			NODE_INFO (node)->type == GTK_UI_MANAGER_MENUITEM ||
-			NODE_INFO (node)->type == GTK_UI_MANAGER_SEPARATOR,
+  g_return_val_if_fail (NODE_INFO (node)->type == NODE_TYPE_MENU ||
+			NODE_INFO (node)->type == NODE_TYPE_POPUP ||
+			NODE_INFO (node)->type == NODE_TYPE_MENU_PLACEHOLDER ||
+			NODE_INFO (node)->type == NODE_TYPE_MENUITEM ||
+			NODE_INFO (node)->type == NODE_TYPE_SEPARATOR,
 			FALSE);
 
   /* first sibling -- look at parent */
@@ -1369,12 +1369,12 @@ find_menu_position (GNode      *node,
       parent = node->parent;
       switch (NODE_INFO (parent)->type)
 	{
-	case GTK_UI_MANAGER_MENUBAR:
-	case GTK_UI_MANAGER_POPUP:
+	case NODE_TYPE_MENUBAR:
+	case NODE_TYPE_POPUP:
 	  menushell = NODE_INFO (parent)->proxy;
 	  pos = 0;
 	  break;
-	case GTK_UI_MANAGER_MENU:
+	case NODE_TYPE_MENU:
 	  menushell = NODE_INFO (parent)->proxy;
 	  if (GTK_IS_MENU_ITEM (menushell))
 	    menushell = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menushell));
@@ -1384,7 +1384,7 @@ find_menu_position (GNode      *node,
 	  else
 	    pos = 0;
 	  break;
-	case GTK_UI_MANAGER_MENU_PLACEHOLDER:
+	case NODE_TYPE_MENU_PLACEHOLDER:
 	  menushell = gtk_widget_get_parent (NODE_INFO (parent)->proxy);
 	  g_return_val_if_fail (GTK_IS_MENU_SHELL (menushell), FALSE);
 	  pos = g_list_index (GTK_MENU_SHELL (menushell)->children,
@@ -1402,7 +1402,7 @@ find_menu_position (GNode      *node,
       GNode *sibling;
 
       sibling = node->prev;
-      if (NODE_INFO (sibling)->type == GTK_UI_MANAGER_MENU_PLACEHOLDER)
+      if (NODE_INFO (sibling)->type == NODE_TYPE_MENU_PLACEHOLDER)
 	prev_child = NODE_INFO (sibling)->extra; /* second Separator */
       else
 	prev_child = NODE_INFO (sibling)->proxy;
@@ -1431,10 +1431,10 @@ find_toolbar_position (GNode      *node,
   gint pos;
 
   g_return_val_if_fail (node != NULL, FALSE);
-  g_return_val_if_fail (NODE_INFO (node)->type == GTK_UI_MANAGER_TOOLBAR ||
-			NODE_INFO (node)->type == GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER ||
-			NODE_INFO (node)->type == GTK_UI_MANAGER_TOOLITEM ||
-			NODE_INFO (node)->type == GTK_UI_MANAGER_SEPARATOR,
+  g_return_val_if_fail (NODE_INFO (node)->type == NODE_TYPE_TOOLBAR ||
+			NODE_INFO (node)->type == NODE_TYPE_TOOLBAR_PLACEHOLDER ||
+			NODE_INFO (node)->type == NODE_TYPE_TOOLITEM ||
+			NODE_INFO (node)->type == NODE_TYPE_SEPARATOR,
 			FALSE);
 
   /* first sibling -- look at parent */
@@ -1445,11 +1445,11 @@ find_toolbar_position (GNode      *node,
       parent = node->parent;
       switch (NODE_INFO (parent)->type)
 	{
-	case GTK_UI_MANAGER_TOOLBAR:
+	case NODE_TYPE_TOOLBAR:
 	  toolbar = NODE_INFO (parent)->proxy;
 	  pos = 0;
 	  break;
-	case GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER:
+	case NODE_TYPE_TOOLBAR_PLACEHOLDER:
 	  toolbar = gtk_widget_get_parent (NODE_INFO (parent)->proxy);
 	  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), FALSE);
 	  pos = gtk_toolbar_get_item_index (GTK_TOOLBAR (toolbar),
@@ -1467,7 +1467,7 @@ find_toolbar_position (GNode      *node,
       GNode *sibling;
 
       sibling = node->prev;
-      if (NODE_INFO (sibling)->type == GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER)
+      if (NODE_INFO (sibling)->type == NODE_TYPE_TOOLBAR_PLACEHOLDER)
 	prev_child = NODE_INFO (sibling)->extra; /* second Separator */
       else
 	prev_child = NODE_INFO (sibling)->proxy;
@@ -1493,7 +1493,7 @@ update_node (GtkUIManager *self,
 	     GNode        *node,
 	     gboolean      add_tearoffs)
 {
-  GtkUIManagerNode *info;
+  Node *info;
   GNode *child;
   GtkAction *action;
 #ifdef DEBUG_UI_MANAGER
@@ -1537,11 +1537,11 @@ update_node (GtkUIManager *self,
 
       /* Check if the node doesn't have an action and must have an action */
       if (action == NULL &&
-	  info->type != GTK_UI_MANAGER_MENUBAR &&
-	  info->type != GTK_UI_MANAGER_TOOLBAR &&
-	  info->type != GTK_UI_MANAGER_SEPARATOR &&
-	  info->type != GTK_UI_MANAGER_MENU_PLACEHOLDER &&
-	  info->type != GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER)
+	  info->type != NODE_TYPE_MENUBAR &&
+	  info->type != NODE_TYPE_TOOLBAR &&
+	  info->type != NODE_TYPE_SEPARATOR &&
+	  info->type != NODE_TYPE_MENU_PLACEHOLDER &&
+	  info->type != NODE_TYPE_TOOLBAR_PLACEHOLDER)
 	{
 	  /* FIXME: Should we warn here? */
 	  goto recurse_children;
@@ -1552,7 +1552,7 @@ update_node (GtkUIManager *self,
        */
       if (info->proxy != NULL && action == info->action)
 	{
-	  if (info->type == GTK_UI_MANAGER_MENU) 
+	  if (info->type == NODE_TYPE_MENU) 
 	    {
 	      GtkWidget *menu;
 	      GList *siblings;
@@ -1574,7 +1574,7 @@ update_node (GtkUIManager *self,
 
       switch (info->type)
 	{
-	case GTK_UI_MANAGER_MENUBAR:
+	case NODE_TYPE_MENUBAR:
 	  if (info->proxy == NULL)
 	    {
 	      info->proxy = gtk_menu_bar_new ();
@@ -1582,7 +1582,7 @@ update_node (GtkUIManager *self,
 	      g_signal_emit (self, merge_signals[ADD_WIDGET], 0, info->proxy);
 	    }
 	  break;
-	case GTK_UI_MANAGER_POPUP:
+	case NODE_TYPE_POPUP:
 	  if (info->proxy == NULL) 
 	    {
 	      info->proxy = gtk_menu_new ();
@@ -1590,7 +1590,7 @@ update_node (GtkUIManager *self,
 					self->private_data->accel_group);
 	    }
 	  break;
-	case GTK_UI_MANAGER_MENU:
+	case NODE_TYPE_MENU:
 	  {
 	    GtkWidget *prev_submenu = NULL;
 	    GtkWidget *menu;
@@ -1640,12 +1640,12 @@ update_node (GtkUIManager *self,
 	      g_object_set (G_OBJECT (siblings->data), "visible", add_tearoffs, 0);
 	  }
 	  break;
-	case GTK_UI_MANAGER_UNDECIDED:
+	case NODE_TYPE_UNDECIDED:
 	  g_warning ("found 'undecided node!");
 	  break;
-	case GTK_UI_MANAGER_ROOT:
+	case NODE_TYPE_ROOT:
 	  break;
-	case GTK_UI_MANAGER_TOOLBAR:
+	case NODE_TYPE_TOOLBAR:
 	  if (info->proxy == NULL)
 	    {
 	      info->proxy = gtk_toolbar_new ();
@@ -1653,7 +1653,7 @@ update_node (GtkUIManager *self,
 	      g_signal_emit (self, merge_signals[ADD_WIDGET], 0, info->proxy);
 	    }
 	  break;
-	case GTK_UI_MANAGER_MENU_PLACEHOLDER:
+	case NODE_TYPE_MENU_PLACEHOLDER:
 	  /* create menu items for placeholders if necessary ... */
 	  if (!GTK_IS_SEPARATOR_MENU_ITEM (info->proxy) ||
 	      !GTK_IS_SEPARATOR_MENU_ITEM (info->extra))
@@ -1684,7 +1684,7 @@ update_node (GtkUIManager *self,
 		}
 	    }
 	  break;
-	case GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER:
+	case NODE_TYPE_TOOLBAR_PLACEHOLDER:
 	  /* create toolbar items for placeholders if necessary ... */
 	  if (!GTK_IS_SEPARATOR_TOOL_ITEM (info->proxy) ||
 	      !GTK_IS_SEPARATOR_TOOL_ITEM (info->extra))
@@ -1717,7 +1717,7 @@ update_node (GtkUIManager *self,
 		}
 	    }
 	  break;
-	case GTK_UI_MANAGER_MENUITEM:
+	case NODE_TYPE_MENUITEM:
 	  /* remove the proxy if it is of the wrong type ... */
 	  if (info->proxy &&  G_OBJECT_TYPE (info->proxy) !=
 	      GTK_ACTION_GET_CLASS (info->action)->menu_item_type)
@@ -1746,7 +1746,7 @@ update_node (GtkUIManager *self,
 	      gtk_action_connect_proxy (info->action, info->proxy);
 	    }
 	  break;
-	case GTK_UI_MANAGER_TOOLITEM:
+	case NODE_TYPE_TOOLITEM:
 	  /* remove the proxy if it is of the wrong type ... */
 	  if (info->proxy &&  G_OBJECT_TYPE (info->proxy) !=
 	      GTK_ACTION_GET_CLASS (info->action)->toolbar_item_type)
@@ -1774,9 +1774,9 @@ update_node (GtkUIManager *self,
 	      gtk_action_connect_proxy (info->action, info->proxy);
 	    }
 	  break;
-	case GTK_UI_MANAGER_SEPARATOR:
-	  if (NODE_INFO (node->parent)->type == GTK_UI_MANAGER_TOOLBAR ||
-	      NODE_INFO (node->parent)->type == GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER)
+	case NODE_TYPE_SEPARATOR:
+	  if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLBAR ||
+	      NODE_INFO (node->parent)->type == NODE_TYPE_TOOLBAR_PLACEHOLDER)
 	    {
 	      GtkWidget *toolbar;
 	      gint pos;
@@ -1831,7 +1831,7 @@ update_node (GtkUIManager *self,
 
       current = child;
       child = current->next;
-      update_node (self, current, add_tearoffs && (info->type != GTK_UI_MANAGER_POPUP));
+      update_node (self, current, add_tearoffs && (info->type != NODE_TYPE_POPUP));
     }
 
   /* handle cleanup of dead nodes */
@@ -1839,8 +1839,8 @@ update_node (GtkUIManager *self,
     {
       if (info->proxy)
 	gtk_widget_destroy (info->proxy);
-      if ((info->type == GTK_UI_MANAGER_MENU_PLACEHOLDER ||
-	   info->type == GTK_UI_MANAGER_TOOLBAR_PLACEHOLDER) &&
+      if ((info->type == NODE_TYPE_MENU_PLACEHOLDER ||
+	   info->type == NODE_TYPE_TOOLBAR_PLACEHOLDER) &&
 	  info->extra)
 	gtk_widget_destroy (info->extra);
       g_chunk_free (info, merge_node_chunk);
@@ -1966,7 +1966,7 @@ print_node (GtkUIManager *self,
 	    gint          indent_level,
 	    GString      *buffer)
 {
-  GtkUIManagerNode *mnode;
+  Node *mnode;
   GNode *child;
 
   mnode = node->data;
