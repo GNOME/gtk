@@ -4689,7 +4689,7 @@ gtk_window_real_set_focus (GtkWindow *window,
 			   GtkWidget *focus)
 {
   GtkWidget *old_focus = window->focus_widget;
-  gboolean def_flags = 0;
+  gboolean had_default = FALSE;
 
   if (old_focus)
     {
@@ -4703,7 +4703,7 @@ gtk_window_real_set_focus (GtkWindow *window,
     }
   
   if (window->default_widget)
-    def_flags = GTK_WIDGET_HAS_DEFAULT (window->default_widget);
+    had_default = GTK_WIDGET_HAS_DEFAULT (window->default_widget);
   
   if (window->focus_widget)
     {
@@ -4754,7 +4754,7 @@ gtk_window_real_set_focus (GtkWindow *window,
    * is harmless.
    */
   if (window->default_widget &&
-      (def_flags != GTK_WIDGET_FLAGS (window->default_widget)))
+      (had_default != GTK_WIDGET_HAS_DEFAULT (window->default_widget)))
     gtk_widget_queue_draw (window->default_widget);
 
   if (old_focus)

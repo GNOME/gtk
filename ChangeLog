@@ -1,5 +1,8 @@
 2004-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkwindow.c (gtk_window_real_set_focus): Compare only
+	the HAS_DEFAULT flags.  (#160711, Tommi Komulainen)
+
 	* gtk/gtkimage.c (gtk_image_set_property): Add a missing break
 	statement.  (#161172, Damon Chaplin)
 
