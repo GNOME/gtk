@@ -1,5 +1,9 @@
 1999-10-22  Havoc Pennington  <hp@pobox.com>
 
+	* src/gdk-pixbuf.h: Export gdk_pixbuf_new_from_xpm_data()
+
+1999-10-22  Havoc Pennington  <hp@pobox.com>
+
 	* src/io-xpm.c (image_load_xpm_data): Export this symbol for 
 	loading an XPM from memory.
 

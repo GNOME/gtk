@@ -64,6 +64,7 @@ GdkPixbuf *gdk_pixbuf_new_from_file (const char *filename);
 GdkPixbuf *gdk_pixbuf_new_from_data (guchar *data, ArtPixFormat format, gboolean has_alpha,
 				     int width, int height, int rowstride,
 				     ArtDestroyNotify dfunc, gpointer dfunc_data);
+GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const gchar **data);
 
 /* Transformations */
 #if 0
