@@ -42,15 +42,12 @@ msgid "Opacity:"
 msgstr "Ugjennomsiktighet:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:481 gtk/gtkfontsel.c:3501
-#: gtk/gtkgamma.c:416
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:481 gtk/gtkfontsel.c:3501 gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:488 gtk/gtkfilesel.c:868
-#: gtk/gtkfilesel.c:968 gtk/gtkfilesel.c:1083 gtk/gtkfontsel.c:3514
-#: gtk/gtkgamma.c:424
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:488 gtk/gtkfilesel.c:868 gtk/gtkfilesel.c:968 gtk/gtkfilesel.c:1083 gtk/gtkfontsel.c:3514 gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -449,17 +446,17 @@ msgstr "Side %u"
 #: gtk/gtkrc.c:1703
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Kunne ikke finne bildefilen i pixmap_path: \"%s\" linje %d"
+msgstr "Kunne ikke finne bildefilen i pixmap_path: «%s» linje %d"
 
 #: gtk/gtkrc.c:1706
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Kunne ikke finne bildefil i pixmap_path: \"%s\""
+msgstr "Kunne ikke finne bildefil i pixmap_path: «%s»"
 
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Kunne ikke finne lastbar modul i module_path: \"%s\","
+msgstr "Kunne ikke finne lastbar modul i module_path: «%s»."
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
