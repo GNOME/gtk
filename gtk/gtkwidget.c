@@ -56,6 +56,7 @@ enum {
   SIZE_ALLOCATE,
   STATE_CHANGED,
   PARENT_SET,
+  HIERARCHY_CHANGED,
   STYLE_SET,
   DIRECTION_CHANGED,
   ADD_ACCELERATOR,
@@ -182,6 +183,9 @@ static void gtk_widget_set_style_internal	 (GtkWidget	*widget,
 static void gtk_widget_set_style_recurse	 (GtkWidget	*widget,
 						  gpointer	 client_data);
 
+static void gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
+						    gpointer   client_data);
+
 static GtkWidgetAuxInfo* gtk_widget_aux_info_new     (void);
 static void		 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info);
 
@@ -286,6 +290,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->size_allocate = gtk_widget_real_size_allocate;
   klass->state_changed = NULL;
   klass->parent_set = NULL;
+  klass->hierarchy_changed = NULL;
   klass->style_set = gtk_widget_style_set;
   klass->direction_changed = gtk_widget_direction_changed;
   klass->add_accelerator = (void*) gtk_accel_group_handle_add;
@@ -418,6 +423,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_OBJECT);
+  widget_signals[HIERARCHY_CHANGED] =
+    gtk_signal_new ("hierarchy_changed",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, hierarchy_changed),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
   widget_signals[STYLE_SET] =
     gtk_signal_new ("style_set",
 		    GTK_RUN_FIRST,
@@ -1213,6 +1225,7 @@ gtk_widget_unparent (GtkWidget *widget)
   widget->parent = NULL;
   gtk_widget_set_parent_window (widget, NULL);
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], old_parent);
+  gtk_widget_propagate_hierarchy_changed (widget, NULL);
   
   gtk_widget_unref (widget);
 }
@@ -2761,7 +2774,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
  * 
  * Return value: name of the widget
  **/
-gchar*
+G_CONST_RETURN gchar*
 gtk_widget_get_name (GtkWidget *widget)
 {
   g_return_val_if_fail (widget != NULL, NULL);
@@ -2961,6 +2974,7 @@ gtk_widget_set_parent (GtkWidget *widget,
   gtk_widget_set_style_recurse (widget, NULL);
 
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], NULL);
+  gtk_widget_propagate_hierarchy_changed (widget, NULL);
 }
 
 /*****************************************
@@ -3440,6 +3454,34 @@ gtk_widget_set_style_recurse (GtkWidget *widget,
     gtk_container_forall (GTK_CONTAINER (widget),
 			  gtk_widget_set_style_recurse,
 			  NULL);
+}
+
+static void
+gtk_widget_propagate_hierarchy_changed (GtkWidget	*widget,
+					gpointer	 client_data)
+{
+  gboolean new_anchored;
+
+  new_anchored = widget->parent && GTK_WIDGET_ANCHORED (widget->parent);
+
+  if (GTK_WIDGET_ANCHORED (widget) != new_anchored)
+    {
+      gtk_widget_ref (widget);
+      
+      if (new_anchored)
+	GTK_PRIVATE_SET_FLAG (widget, GTK_ANCHORED);
+      else
+	GTK_PRIVATE_UNSET_FLAG (widget, GTK_ANCHORED);
+      
+      g_signal_emit (GTK_OBJECT (widget), widget_signals[HIERARCHY_CHANGED], 0);
+  
+      if (GTK_IS_CONTAINER (widget))
+	gtk_container_forall (GTK_CONTAINER (widget),
+			      gtk_widget_propagate_hierarchy_changed,
+			      NULL);
+      
+      gtk_widget_unref (widget);
+    }
 }
 
 void
@@ -4991,8 +5033,9 @@ gtk_widget_path (GtkWidget *widget,
   len = 0;
   do
     {
-      gchar *string;
-      gchar *d, *s;
+      const gchar *string;
+      const gchar *s;
+      gchar *d;
       guint l;
       
       string = gtk_widget_get_name (widget);
@@ -5055,8 +5098,9 @@ gtk_widget_class_path (GtkWidget *widget,
   len = 0;
   do
     {
-      gchar *string;
-      gchar *d, *s;
+      const gchar *string;
+      const gchar *s;
+      gchar *d;
       guint l;
       
       string = gtk_type_name (GTK_WIDGET_TYPE (widget));

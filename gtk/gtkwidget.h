@@ -250,6 +250,7 @@ struct _GtkWidgetClass
 				GtkStateType   	  previous_state);
   void (* parent_set)	       (GtkWidget        *widget,
 				GtkWidget        *previous_parent);
+  void (* hierarchy_changed)   (GtkWidget        *widget);
   void (* style_set)	       (GtkWidget        *widget,
 				GtkStyle         *previous_style);
   void (* direction_changed)   (GtkWidget        *widget,
@@ -486,7 +487,7 @@ void	   gtk_widget_grab_default	  (GtkWidget	       *widget);
 
 void	   gtk_widget_set_name		  (GtkWidget	       *widget,
 					   const gchar	       *name);
-gchar*	   gtk_widget_get_name		  (GtkWidget	       *widget);
+G_CONST_RETURN gchar* gtk_widget_get_name (GtkWidget	       *widget);
 void	   gtk_widget_set_state		  (GtkWidget	       *widget,
 					   GtkStateType		state);
 void	   gtk_widget_set_sensitive	  (GtkWidget	       *widget,

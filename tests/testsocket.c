@@ -36,7 +36,7 @@ void
 steal (GtkWidget *window, GtkEntry *entry)
 {
   guint32 xid;
-  gchar *text;
+  const gchar *text;
   GtkWidget *socket;
 
   text = gtk_entry_get_text (entry);

@@ -292,6 +292,8 @@ gtk_window_init (GtkWindow *window)
   GTK_WIDGET_UNSET_FLAGS (window, GTK_NO_WINDOW);
   GTK_WIDGET_SET_FLAGS (window, GTK_TOPLEVEL);
 
+  GTK_PRIVATE_SET_FLAG (window, GTK_ANCHORED);
+
   gtk_container_set_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
 
   window->title = NULL;

@@ -1,3 +1,15 @@
+Thu Mar  8 00:02:30 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.[ch] (gtk_widget_get_name): Make
+	G_CONST_RETURN.
+
+	* gtk/gtkwidget.[ch] gtk/gtkprivate.h: Add a 
+	::hierarchy-changed signal when a widget changes
+	from anchored to unanchored or vice versa.
+	(anchored means 
+	 gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW) != NULL.)
+	Use a private flag to keep track of this efficiently.
+
 2001-03-07  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/testgtk.c (create_spins): uglify so that size request gets

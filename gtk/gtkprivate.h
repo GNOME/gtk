@@ -48,7 +48,8 @@ typedef enum
   PRIVATE_GTK_HAS_SHAPE_MASK	= 1 <<  5,
   PRIVATE_GTK_IN_REPARENT       = 1 <<  6,
   PRIVATE_GTK_DIRECTION_SET     = 1 <<  7,   /* If the reading direction is not DIR_NONE */
-  PRIVATE_GTK_DIRECTION_LTR     = 1 <<  8    /* If the reading direction is DIR_LTR */
+  PRIVATE_GTK_DIRECTION_LTR     = 1 <<  8,   /* If the reading direction is DIR_LTR */
+  PRIVATE_GTK_ANCHORED          = 1 <<  9    /* If widget has a GtkWindow ancestor */
 } GtkPrivateFlags;
 
 /* Macros for extracting a widgets private_flags from GtkWidget.
@@ -62,6 +63,7 @@ typedef enum
 #define GTK_WIDGET_IN_REPARENT(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_IN_REPARENT) != 0)
 #define GTK_WIDGET_DIRECTION_SET(obj)	  ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_DIRECTION_SET) != 0)
 #define GTK_WIDGET_DIRECTION_LTR(obj)     ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_DIRECTION_LTR) != 0)
+#define GTK_WIDGET_ANCHORED(obj)          ((GTK_PRIVATE_FLAGS (obj) & PRIVATE_GTK_ANCHORED) != 0)
 
 /* Macros for setting and clearing private widget flags.
  * we use a preprocessor string concatenation here for a clear
