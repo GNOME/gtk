@@ -1,4 +1,9 @@
-Mon Dec 21 22:04:48 PST 1998 Manish Singh <yosh2gimp.org>
+Sat Jan  2 13:12:47 PST 1999 Manish Singh <yosh@gimp.org>
+
+	* ltconfig: cases for Unixware 2.1.2 (from Geoff Clare)
+	and BSD/OS 4.0 (from Chris P. Ross)
+
+Mon Dec 21 22:04:48 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/gtkentry.c: warning fixup
 
