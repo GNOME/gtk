@@ -1,3 +1,9 @@
+Wed Jan  7 23:03:32 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkactiongroup.h: 
+	* gtk/gtkactiongroup.c (gtk_action_group_add_action_with_accel): 
+	Remove the redundant name and stock_id parameters, adjust all callers.
+
 Wed Jan  7 22:20:20 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaction.h: 

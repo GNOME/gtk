@@ -295,17 +295,16 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
 
 /**
  * gtk_action_group_add_action_with_accel:
- * @action_group: the action group (#GtkActionGroup)
- * @action: the action to add (#GtkAction)
- * @name: the name of the action to add
+ * @action_group: the action group 
+ * @action: the action to add 
  * @accelerator: the accelerator for the action, in
- *   the format understood by gtk_accelerator_parse().
- * @stock_id: the stock icon to display
+ *   the format understood by gtk_accelerator_parse(), or %NULL to use the
+ *   stock accelerator 
  *
  * Adds an action object to the action group and sets up the accelerator.
  *
- * If @accelerator is %NULL, attempt to use the accelerator associated with
- * @stock_id.
+ * If @accelerator is %NULL, attempts to use the accelerator associated 
+ * with the stock_id of the action.
  *
  * Accel paths are set to
  * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.
@@ -315,14 +314,16 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
 void
 gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
 					GtkAction *action,
-					const char *name,
-					const char *accelerator,
-					const char *stock_id)
+					const gchar *accelerator)
 {
   gchar *accel_path;
   guint  accel_key = 0;
   GdkModifierType accel_mods;
   GtkStockItem stock_item;
+  const gchar *name;
+  const gchar *stock_id;
+  
+  g_object_get (action, "name", &name, "stock_id", &stock_id, NULL);
 
   accel_path = g_strconcat ("<Actions>/",
 			    action_group->private_data->name, "/", name, NULL);
@@ -487,10 +488,9 @@ gtk_action_group_add_actions_full (GtkActionGroup *action_group,
 			       entries[i].callback, 
 			       user_data, (GClosureNotify)destroy, 0);
 
-      gtk_action_group_add_action_with_accel (action_group, action,
-					      entries[i].name,
-					      entries[i].accelerator,
-					      entries[i].stock_id);
+      gtk_action_group_add_action_with_accel (action_group, 
+					      action,
+					      entries[i].accelerator);
       g_object_unref (action);
     }
 }
@@ -586,9 +586,7 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup       *action_group,
 
       gtk_action_group_add_action_with_accel (action_group, 
 					      action,
-					      entries[i].name,
-					      entries[i].accelerator,
-					      entries[i].stock_id);
+					      entries[i].accelerator);
       g_object_unref (action);
     }
 }
@@ -699,9 +697,7 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
 
       gtk_action_group_add_action_with_accel (action_group, 
 					      action,
-					      entries[i].name,
-					      entries[i].accelerator,
-					      entries[i].stock_id);
+					      entries[i].accelerator);
       g_object_unref (action);
     }
 

@@ -112,10 +112,8 @@ GList          *gtk_action_group_list_actions            (GtkActionGroup       *
 void            gtk_action_group_add_action              (GtkActionGroup       *action_group,
 							  GtkAction            *action);
 void		gtk_action_group_add_action_with_accel	 (GtkActionGroup *action_group,
-							  GtkAction *action,
-							  const char *name,
-							  const char *accelerator,
-							  const char *stock_id);
+							  GtkAction   *action,
+							  const gchar *accelerator);
 
 void            gtk_action_group_remove_action           (GtkActionGroup       *action_group,
 							  GtkAction            *action);
