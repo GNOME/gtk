@@ -1617,6 +1617,30 @@ gtk_drag_source_set  (GtkWidget         *widget,
 }
 
 /*************************************************************
+ * gtk_drag_source_unset
+ *     Unregister this widget as a drag source.
+ *   arguments:
+ *     widget:
+ *   results:
+ *************************************************************/
+
+void 
+gtk_drag_source_unset (GtkWidget        *widget)
+{
+  GtkDragSourceSite *site;
+
+  g_return_if_fail (widget != NULL);
+
+  site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data");
+
+  if (site)
+    {
+      gtk_signal_disconnect_by_data (GTK_OBJECT (widget), site);
+      gtk_object_set_data (GTK_OBJECT (widget), "gtk-site-data", NULL);
+    }
+}
+
+/*************************************************************
  * gtk_drag_source_set_icon:
  *     Set an icon for drags from this source.
  *   arguments:

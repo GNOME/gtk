@@ -83,6 +83,8 @@ void gtk_drag_source_set  (GtkWidget         *widget,
 			   gint               n_targets,
 			   GdkDragAction      actions);
 
+void gtk_drag_source_unset (GtkWidget        *widget);
+
 void gtk_drag_source_set_icon (GtkWidget     *widget,
 			       GdkColormap   *colormap,
 			       GdkPixmap     *pixmap,

@@ -1,3 +1,7 @@
+Thu Dec 10 21:48:34 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.[ch]: Added gtk_drag_source_unset()
+
 Thu Dec 10 20:42:22 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_dest_handle_event): Use 
