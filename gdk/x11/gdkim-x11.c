@@ -99,7 +99,7 @@ gdk_set_locale (void)
   if (!XSetLocaleModifiers (""))
     g_message ("can not set locale modifiers");
 
-  current_locale = setlocale (LC_ALL, "");
+  current_locale = setlocale (LC_ALL, NULL);
 
   if ((strcmp (current_locale, "C")) && (strcmp (current_locale, "POSIX")))
     {
@@ -126,7 +126,7 @@ gdk_set_locale (void)
 	    g_message ("%s multi-byte string functions.", 
 		       gdk_use_mb ? "Using" : "Not using"));
   
-  return setlocale (LC_ALL,NULL);
+  return current_locale;
 }
 
 #ifdef USE_XIM

@@ -37,7 +37,6 @@ Wed Dec 16 22:38:22 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 	* gdk/gdkevents.c: updated call to g_main_add_poll
           instead of g_main_poll_add
 
->>>>>>> 1.848
 Wed Dec 16 23:32:05 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_expose): Remove 
