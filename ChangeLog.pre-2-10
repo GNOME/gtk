@@ -1,3 +1,8 @@
+Tue Mar 17 15:51:30 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* glib.h: gboolean type changed to int
+	* garray.c: complete redo by Josh MacDonald
+
 Tue Mar 17 22:45:39 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c (gtk_widget_get_arg): return real boolean values

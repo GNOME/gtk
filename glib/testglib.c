@@ -339,23 +339,13 @@ main (int   argc,
 
   g_print ("checking arrays...");
 
-  garray = g_array_new (FALSE);
+  garray = g_array_new ();
   for (i = 0; i < 10000; i++)
-    g_array_append_val (garray, gint, i);
+    g_array_add (garray, (void*)i);
 
   for (i = 0; i < 10000; i++)
-    if (g_array_index (garray, gint, i) != i)
-      g_print ("uh oh: %d ( %d )\n", g_array_index (garray, gint, i), i);
-
-  g_array_free (garray, TRUE);
-
-  garray = g_array_new (FALSE);
-  for (i = 0; i < 10000; i++)
-    g_array_prepend_val (garray, gint, i);
-
-  for (i = 0; i < 10000; i++)
-    if (g_array_index (garray, gint, i) != (10000 - i - 1))
-      g_print ("uh oh: %d ( %d )\n", g_array_index (garray, gint, i), 10000 - i - 1);
+    if (g_array_index (garray, i) != (void*)i)
+      g_print ("array fails: %p ( %p )\n", g_array_index (garray, i), (void*)i);
 
   g_array_free (garray, TRUE);
 

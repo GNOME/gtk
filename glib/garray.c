@@ -26,12 +26,10 @@ typedef struct _GRealArray  GRealArray;
 
 struct _GRealArray
 {
-  guint8 *data;
+  gpointer *data;
   guint   len;
   guint   alloc;
-  guint   zero_terminated;
 };
-
 
 static gint g_nearest_pow        (gint        num);
 static void g_array_maybe_expand (GRealArray *array,
@@ -41,8 +39,9 @@ static void g_array_maybe_expand (GRealArray *array,
 static GMemChunk *array_mem_chunk = NULL;
 
 
+
 GArray*
-g_array_new (gint zero_terminated)
+g_array_new ()
 {
   GRealArray *array;
 
@@ -56,61 +55,21 @@ g_array_new (gint zero_terminated)
   array->data = NULL;
   array->len = 0;
   array->alloc = 0;
-  array->zero_terminated = (zero_terminated ? 1 : 0);
 
   return (GArray*) array;
 }
 
 void
 g_array_free (GArray *array,
-	      gint    free_segment)
+	      gboolean  free_segment)
 {
+  g_return_if_fail (array);
+
   if (free_segment)
     g_free (array->data);
 
   g_mem_chunk_free (array_mem_chunk, array);
 }
-
-GArray*
-g_rarray_append (GArray   *array,
-		 gpointer  data,
-		 gint      size)
-{
-  g_array_maybe_expand ((GRealArray*) array, size);
-
-  memcpy (array->data + array->len, data, size);
-
-  array->len += size;
-
-  return array;
-}
-
-GArray*
-g_rarray_prepend (GArray   *array,
-		  gpointer  data,
-		  gint      size)
-{
-  g_array_maybe_expand ((GRealArray*) array, size);
-
-  g_memmove (array->data + size, array->data, array->len);
-  memcpy (array->data, data, size);
-
-  array->len += size;
-
-  return array;
-}
-
-GArray*
-g_rarray_truncate (GArray *array,
-		   gint    length,
-		   gint    size)
-{
-  if (array->data)
-    memset (array->data + length * size, 0, size);
-  array->len = length;
-  return array;
-}
-
 
 static gint
 g_nearest_pow (gint num)
@@ -133,10 +92,78 @@ g_array_maybe_expand (GRealArray *array,
     {
       old_alloc = array->alloc;
 
-      array->alloc = g_nearest_pow (array->len + array->zero_terminated + len);
+      array->alloc = g_nearest_pow (array->len + len);
       array->alloc = MAX (array->alloc, MIN_ARRAY_SIZE);
-      array->data = g_realloc (array->data, array->alloc);
+      if (array->data)
+	array->data = g_realloc (array->data, sizeof(gpointer) * array->alloc);
+      else
+	array->data = g_new0 (gpointer, array->alloc);
 
       memset (array->data + old_alloc, 0, array->alloc - old_alloc);
     }
+}
+
+void
+g_array_set_size  (GArray   *farray,
+		   gint	     length)
+{
+  GRealArray* array = (GRealArray*) farray;
+
+  g_return_if_fail (array);
+
+  if (length > array->len)
+    g_array_maybe_expand (array, (length - array->len));
+
+  array->len = length;
+}
+
+void
+g_array_remove_index (GArray* farray,
+		      gint index)
+{
+  GRealArray* array = (GRealArray*) farray;
+
+  g_return_if_fail (array);
+
+  g_return_if_fail (index >= array->len);
+
+  array->data[index] = array->data[array->len - 1];
+
+  array->data[array->len - 1] = NULL;
+
+  array->len -= 1;
+}
+
+gboolean
+g_array_remove (GArray* farray,
+		gpointer data)
+{
+  GRealArray* array = (GRealArray*) farray;
+  int i;
+
+  g_return_val_if_fail (array, FALSE);
+
+  for (i = 0; i < array->len; i += 1)
+    {
+      if (array->data[i] == data)
+	{
+	  g_array_remove_index (farray, i);
+	  return TRUE;
+	}
+    }
+
+  return FALSE;
+}
+
+void
+g_array_add (GArray* farray,
+	     gpointer data)
+{
+  GRealArray* array = (GRealArray*) farray;
+
+  g_return_if_fail (array);
+
+  g_array_maybe_expand (array, 1);
+
+  array->data[array->len++] = data;
 }
