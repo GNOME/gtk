@@ -225,7 +225,7 @@ gtk_label_set (GtkLabel	   *label,
   if (GTK_WIDGET_VISIBLE (label))
     {
       if (GTK_WIDGET_MAPPED (label))
-	gtk_widget_queue_clear (label);
+	gtk_widget_queue_clear (GTK_WIDGET (label));
 
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }

@@ -1,3 +1,10 @@
+Tue Oct 20 11:55:24 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_event_translate): Handle DestroyNotify
+	on destroyed windows so we clear the XID table properly.
+	Finish up restructure of return value handling that
+	was half-done before.
+
 Mon Oct 19 16:41:44 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.h (struct _GtkWidgetClass): Add in coordinates

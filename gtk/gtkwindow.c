@@ -962,33 +962,41 @@ gtk_window_focus_out_event (GtkWidget     *widget,
   return FALSE;
 }
 
+static GdkAtom atom_rcfiles = GDK_NONE;
+
 static void
 gtk_window_read_rcfiles (GtkWidget *widget,
 			 GdkEventClient *event)
 {
-  GList *toplevels;
-  
-  if (gtk_rc_reparse_all ())
+  GList *embedded_windows;
+
+  embedded_windows = gtk_object_get_data (GTK_OBJECT (widget), "gtk-embedded");
+  if (embedded_windows)
     {
-      toplevels = gdk_window_get_toplevels();
-      while (toplevels)
+      GdkEventClient sev;
+      int i;
+      
+      for(i = 0; i < 5; i++)
+	sev.data.l[i] = 0;
+      sev.data_format = 32;
+      sev.message_type = atom_rcfiles;
+      
+      while (embedded_windows)
 	{
-	  gdk_window_get_user_data (toplevels->data, (gpointer*) &widget);
-	  
-	  if (widget)
-	    gtk_widget_reset_rc_styles (widget);
-	  
-	  toplevels = toplevels->next;
+	  guint xid = GPOINTER_TO_UINT (embedded_windows->data);
+	  gdk_event_send_client_message ((GdkEvent *) &sev, xid);
+	  embedded_windows = embedded_windows->next;
 	}
-      g_list_free (toplevels);
     }
+
+  if (gtk_rc_reparse_all ())
+    gtk_widget_reset_rc_styles (widget);
 }
 
 static gint
 gtk_window_client_event (GtkWidget	*widget,
 			 GdkEventClient	*event)
 {
-  static GdkAtom atom_rcfiles = GDK_NONE;
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);

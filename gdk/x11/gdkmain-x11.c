@@ -2082,22 +2082,25 @@ gdk_event_translate (GdkEvent *event,
   event->any.send_event = xevent->xany.send_event;
   
   if (window_private && window_private->destroyed)
-    return FALSE;
-
-  /* Check for filters for this window */
+    {
+      if (xevent->type != DestroyNotify)
+	return FALSE;
+    }
+  else
+    {
+      /* Check for filters for this window */
   
-  {
-    GdkFilterReturn result;
-    result = gdk_event_apply_filters (xevent, event,
-				      window_private
-				      ?window_private->filters
-				      :gdk_default_filters);
-    
-    if (result != GDK_FILTER_CONTINUE)
-      {
-	return (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
-      }
-  }
+      GdkFilterReturn result;
+      result = gdk_event_apply_filters (xevent, event,
+					window_private
+					?window_private->filters
+					:gdk_default_filters);
+      
+      if (result != GDK_FILTER_CONTINUE)
+	{
+	  return (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
+	}
+    }
 
   /* We do a "manual" conversion of the XEvent to a
    *  GdkEvent. The structures are mostly the same so
@@ -2105,10 +2108,9 @@ gdk_event_translate (GdkEvent *event,
    *  optionally print debugging info regarding events
    *  received.
    */
-  /* Addendum:
-   * During drag & drop you get events where the pointer is
-   * in other windows. Need to just do finer-grained checking
-   */
+
+  return_val = TRUE;
+
   switch (xevent->type)
     {
     case KeyPress:
@@ -2186,11 +2188,6 @@ gdk_event_translate (GdkEvent *event,
       event->key.string = g_strdup (buf);
       event->key.length = charcount;
       
-      return_val = window_private && !window_private->destroyed;
-      
-      if (!return_val)
-	g_free (event->key.string);
-      
       break;
       
     case KeyRelease:
@@ -2216,7 +2213,6 @@ gdk_event_translate (GdkEvent *event,
       event->key.length = 0;
       event->key.string = NULL;
       
-      return_val = window_private && !window_private->destroyed;
       break;
       
     case ButtonPress:
@@ -2232,7 +2228,10 @@ gdk_event_translate (GdkEvent *event,
       if (window_private &&
 	  (window_private->extension_events != 0) &&
 	  gdk_input_ignore_core)
-	break;
+	{
+	  return_val = FALSE;
+	  break;
+	}
       
       event->button.type = GDK_BUTTON_PRESS;
       event->button.window = window;
@@ -2285,7 +2284,6 @@ gdk_event_translate (GdkEvent *event,
 	  button_number[0] = event->button.button;
 	}
 
-      return_val = window_private && !window_private->destroyed;
       break;
       
     case ButtonRelease:
@@ -2301,7 +2299,10 @@ gdk_event_translate (GdkEvent *event,
       if (window_private &&
 	  (window_private->extension_events != 0) &&
 	  gdk_input_ignore_core)
-	break;
+	{
+	  return_val = FALSE;
+	  break;
+	}
       
       event->button.type = GDK_BUTTON_RELEASE;
       event->button.window = window;
@@ -2318,8 +2319,6 @@ gdk_event_translate (GdkEvent *event,
       event->button.source = GDK_SOURCE_MOUSE;
       event->button.deviceid = GDK_CORE_POINTER;
       
-      return_val = window_private && !window_private->destroyed;
-
       break;
       
     case MotionNotify:
@@ -2334,7 +2333,10 @@ gdk_event_translate (GdkEvent *event,
       if (window_private &&
 	  (window_private->extension_events != 0) &&
 	  gdk_input_ignore_core)
-	break;
+	{
+	  return_val = FALSE;
+	  break;
+	}
       
       event->motion.type = GDK_MOTION_NOTIFY;
       event->motion.window = window;
@@ -2351,7 +2353,6 @@ gdk_event_translate (GdkEvent *event,
       event->motion.source = GDK_SOURCE_MOUSE;
       event->motion.deviceid = GDK_CORE_POINTER;
       
-      return_val = window_private && !window_private->destroyed;
       break;
       
     case EnterNotify:
@@ -2429,7 +2430,6 @@ gdk_event_translate (GdkEvent *event,
       event->crossing.focus = xevent->xcrossing.focus;
       event->crossing.state = xevent->xcrossing.state;
   
-      return_val = window_private && !window_private->destroyed;
       break;
       
     case LeaveNotify:
@@ -2499,7 +2499,6 @@ gdk_event_translate (GdkEvent *event,
       event->crossing.focus = xevent->xcrossing.focus;
       event->crossing.state = xevent->xcrossing.state;
       
-      return_val = window_private && !window_private->destroyed;
       break;
       
     case FocusIn:
@@ -2522,11 +2521,10 @@ gdk_event_translate (GdkEvent *event,
 	  event->focus_change.type = GDK_FOCUS_CHANGE;
 	  event->focus_change.window = window;
 	  event->focus_change.in = (xevent->xany.type == FocusIn);
-	  
-	  return_val = window_private && !window_private->destroyed;
+
 	  break;
 	default:
-	  ;
+	  return_val = FALSE;
 	}
       break;
       
@@ -2535,8 +2533,9 @@ gdk_event_translate (GdkEvent *event,
        */
       GDK_NOTE (EVENTS,
 		g_message ("keymap notify"));
-      
+
       /* Not currently handled */
+      return_val = FALSE;
       break;
       
     case Expose:
@@ -2557,7 +2556,6 @@ gdk_event_translate (GdkEvent *event,
       event->expose.area.height = xevent->xexpose.height;
       event->expose.count = xevent->xexpose.count;
       
-      return_val = window_private && !window_private->destroyed;
       break;
       
     case GraphicsExpose:
@@ -2575,7 +2573,6 @@ gdk_event_translate (GdkEvent *event,
       event->expose.area.height = xevent->xgraphicsexpose.height;
       event->expose.count = xevent->xexpose.count;
       
-      return_val = window_private && !window_private->destroyed;
       break;
       
     case NoExpose:
@@ -2588,7 +2585,6 @@ gdk_event_translate (GdkEvent *event,
       event->no_expose.type = GDK_NO_EXPOSE;
       event->no_expose.window = window;
       
-      return_val = window_private && !window_private->destroyed;
       break;
       
     case VisibilityNotify:
@@ -2631,7 +2627,6 @@ gdk_event_translate (GdkEvent *event,
 	  break;
 	}
       
-      return_val = window_private && !window_private->destroyed;
       break;
       
     case CreateNotify:
@@ -2667,7 +2662,6 @@ gdk_event_translate (GdkEvent *event,
       if (xgrab_window == window_private)
 	xgrab_window = NULL;
       
-      return_val = window_private && !window_private->destroyed;
       break;
       
     case MapNotify:
@@ -2680,7 +2674,6 @@ gdk_event_translate (GdkEvent *event,
       event->any.type = GDK_MAP;
       event->any.window = window;
       
-      return_val = window_private && !window_private->destroyed;
       break;
       
     case ReparentNotify:
@@ -2689,8 +2682,9 @@ gdk_event_translate (GdkEvent *event,
       GDK_NOTE (EVENTS,
 		g_message ("reparent notify:\twindow: %ld",
 			   xevent->xreparent.window - base_id));
-      
+
       /* Not currently handled */
+      return_val = FALSE;
       break;
       
     case ConfigureNotify:
@@ -2735,53 +2729,50 @@ gdk_event_translate (GdkEvent *event,
 			   xevent->xconfigure.above - base_id,
 			   xevent->xconfigure.override_redirect));
       
-      if (window_private)
+      if (!window_private->destroyed &&
+	  (window_private->extension_events != 0) &&
+	  gdk_input_vtable.configure_event)
+	gdk_input_vtable.configure_event (&xevent->xconfigure, window);
+
+      if (window_private->window_type == GDK_WINDOW_CHILD)
+	return_val = FALSE;
+      else
 	{
-	  if (!window_private->destroyed &&
-	      (window_private->extension_events != 0) &&
-	      gdk_input_vtable.configure_event)
-	    gdk_input_vtable.configure_event (&xevent->xconfigure, window);
+	  event->configure.type = GDK_CONFIGURE;
+	  event->configure.window = window;
+	  event->configure.width = xevent->xconfigure.width;
+	  event->configure.height = xevent->xconfigure.height;
 	  
-	  if (window_private->window_type != GDK_WINDOW_CHILD)
+	  if (!xevent->xconfigure.x &&
+	      !xevent->xconfigure.y &&
+	      !window_private->destroyed)
 	    {
-	      event->configure.type = GDK_CONFIGURE;
-	      event->configure.window = window;
-	      event->configure.width = xevent->xconfigure.width;
-	      event->configure.height = xevent->xconfigure.height;
+	      gint tx = 0;
+	      gint ty = 0;
+	      Window child_window = 0;
 	      
-	      if (!xevent->xconfigure.x &&
-		  !xevent->xconfigure.y &&
-		  !window_private->destroyed)
-		{
-		  gint tx = 0;
-		  gint ty = 0;
-		  Window child_window = 0;
-		  
-		  if (!XTranslateCoordinates (window_private->xdisplay,
-					      window_private->xwindow,
-					      gdk_root_window,
-					      0, 0,
-					      &tx, &ty,
-					      &child_window))
-		    g_warning ("GdkWindow %ld doesn't share root windows display?",
-			       window_private->xwindow - base_id);
-		  event->configure.x = tx;
-		  event->configure.y = ty;
-		}
-	      else
-		{
-		  event->configure.x = xevent->xconfigure.x;
-		  event->configure.y = xevent->xconfigure.y;
-		}
-	      window_private->x = event->configure.x;
-	      window_private->y = event->configure.y;
-	      window_private->width = xevent->xconfigure.width;
-	      window_private->height = xevent->xconfigure.height;
-	      if (window_private->resize_count > 1)
-		window_private->resize_count -= 1;
-	      
-	      return_val = !window_private->destroyed;
+	      if (!XTranslateCoordinates (window_private->xdisplay,
+					  window_private->xwindow,
+					  gdk_root_window,
+					  0, 0,
+					  &tx, &ty,
+					  &child_window))
+		g_warning ("GdkWindow %ld doesn't share root windows display?",
+			   window_private->xwindow - base_id);
+	      event->configure.x = tx;
+	      event->configure.y = ty;
 	    }
+	  else
+	    {
+	      event->configure.x = xevent->xconfigure.x;
+	      event->configure.y = xevent->xconfigure.y;
+	    }
+	  window_private->x = event->configure.x;
+	  window_private->y = event->configure.y;
+	  window_private->width = xevent->xconfigure.width;
+	  window_private->height = xevent->xconfigure.height;
+	  if (window_private->resize_count > 1)
+	    window_private->resize_count -= 1;
 	}
       break;
       
@@ -2798,7 +2789,6 @@ gdk_event_translate (GdkEvent *event,
       event->property.time = xevent->xproperty.time;
       event->property.state = xevent->xproperty.state;
       
-      return_val = window_private && !window_private->destroyed;
       break;
       
     case SelectionClear:
@@ -2811,7 +2801,6 @@ gdk_event_translate (GdkEvent *event,
       event->selection.selection = xevent->xselectionclear.selection;
       event->selection.time = xevent->xselectionclear.time;
       
-      return_val = window_private && !window_private->destroyed;
       break;
       
     case SelectionRequest:
@@ -2827,7 +2816,6 @@ gdk_event_translate (GdkEvent *event,
       event->selection.requestor = xevent->xselectionrequest.requestor;
       event->selection.time = xevent->xselectionrequest.time;
       
-      return_val = window_private && !window_private->destroyed;
       break;
       
     case SelectionNotify:
@@ -2843,7 +2831,6 @@ gdk_event_translate (GdkEvent *event,
       event->selection.property = xevent->xselection.property;
       event->selection.time = xevent->xselection.time;
       
-      return_val = window_private && !window_private->destroyed;
       break;
       
     case ColormapNotify:
@@ -2854,6 +2841,7 @@ gdk_event_translate (GdkEvent *event,
 			   xevent->xcolormap.window - base_id));
       
       /* Not currently handled */
+      return_val = FALSE;
       break;
       
     case ClientMessage:
@@ -2896,13 +2884,9 @@ gdk_event_translate (GdkEvent *event,
 	    event->client.data_format = xevent->xclient.format;
 	    memcpy(&event->client.data, &xevent->xclient.data,
 		   sizeof(event->client.data));
-	    
-	    return_val = (window != NULL);
 	  }
       }
       
-      if(window_private)
-	return_val = return_val && !window_private->destroyed;
       break;
       
     case MappingNotify:
@@ -2914,6 +2898,7 @@ gdk_event_translate (GdkEvent *event,
       /* Let XLib know that there is a new keyboard mapping.
        */
       XRefreshKeyboardMapping (&xevent->xmapping);
+      return_val = FALSE;
       break;
       
     default:
@@ -2926,8 +2911,6 @@ gdk_event_translate (GdkEvent *event,
 	return_val = gdk_input_vtable.other_event(event, xevent, window);
       else
 	return_val = FALSE;
-      
-      return_val = return_val && !window_private->destroyed;
       
       break;
     }
@@ -3902,90 +3885,95 @@ gdk_drop_get_real_window (GdkWindow   *w,
 }
 #endif
 
-/* 
- * used only by below routine and itself 
- */
-static Window 
-getchildren (Display	 *dpy, 
-	     Window	  win, 
-	     Atom	  wm_state_atom)
+/* Sends a ClientMessage to all toplevel client windows */
+gboolean
+gdk_event_send_client_message (GdkEvent *event, guint32 xid)
 {
-  Window root, parent, *children, inf = 0;
-  Atom type = None;
-  unsigned int nchildren, i;
-  int format;
-  unsigned long nitems, after;
-  unsigned char *data;
+  XEvent sev;
   
-  if (XQueryTree(dpy, win, &root, &parent, &children, &nchildren) == 0)
-    return 0;
+  g_return_val_if_fail(event != NULL, FALSE);
   
-  for (i = 0; !inf && (i < nchildren); i++)
-    {
-      XGetWindowProperty (dpy, children[i], wm_state_atom, 0, 0, False,
-			  AnyPropertyType, &type, &format, &nitems,
-			  &after, &data);
-      if (type != 0)
-	inf = children[i];
-      XFree(data);
-    }
+  /* Set up our event to send, with the exception of its target window */
+  sev.xclient.type = ClientMessage;
+  sev.xclient.display = gdk_display;
+  sev.xclient.format = event->client.data_format;
+  sev.xclient.window = xid;
+  memcpy(&sev.xclient.data, &event->client.data, sizeof(sev.xclient.data));
+  sev.xclient.message_type = event->client.message_type;
   
-  for (i = 0; !inf && (i < nchildren); i++)
-    inf = getchildren (dpy, children[i], wm_state_atom);
-  
-  if (children != None)
-    XFree ((char *) children);
-  
-  return inf;
-}
-
-/* 
- * find a window with WM_STATE, else return win itself, as per ICCCM
- *
- * modification of the XmuClientWindow() routine from X11R6.3
- */
-Window
-gdk_get_client_window (Display	*dpy, 
-		       Window	 win)
-{
-  static Atom wm_state_atom = None;
-  Atom type = None;
-  int format;
-  unsigned long nitems, after;
-  unsigned char *data;
-  Window inf;
-  
-  if (win == 0)
-    return DefaultRootWindow(dpy);
-  
-  if ((wm_state_atom = XInternAtom (dpy, "WM_STATE", True)) == 0)
-    return win;
-
-  XGetWindowProperty (dpy, win, wm_state_atom, 0, 0, False, AnyPropertyType,
-		      &type, &format, &nitems, &after, &data);
-  if (type)
-    {
-      XFree (data);
-      return win;
-    }
-  
-  inf = getchildren (dpy, win, wm_state_atom);
-  
-  if (inf == 0)
-    return win;
-  else
-    return inf;
+  return gdk_send_xevent (xid, False, NoEventMask, &sev);
 }
 
 /* Sends a ClientMessage to all toplevel client windows */
+gboolean
+gdk_event_send_client_message_to_all_recurse (XEvent  *xev, 
+					      guint32  xid,
+					      gboolean send_anyways)
+{
+  static GdkAtom wm_state_atom = GDK_NONE;
+
+  Atom type = None;
+  int format;
+  unsigned long nitems, after;
+  unsigned char *data;
+  
+  Window *ret_children, ret_root, ret_parent;
+  unsigned int ret_nchildren;
+  int i;
+  
+  gboolean send = TRUE;
+  gboolean found = FALSE;
+
+  if (!wm_state_atom)
+    wm_state_atom = gdk_atom_intern ("WM_STATE", FALSE);
+
+  gdk_error_code = 0;
+  XGetWindowProperty (gdk_display, xid, wm_state_atom, 0, 0, False, AnyPropertyType,
+		      &type, &format, &nitems, &after, &data);
+
+  if (gdk_error_code)
+    {
+      gdk_error_code = 0;
+      return FALSE;
+    }
+
+  if (type)
+    {
+      send = TRUE;
+      XFree (data);
+    }
+  else
+    {
+      /* OK, we're all set, now let's find some windows to send this to */
+      if (XQueryTree(gdk_display, xid, &ret_root, &ret_parent,
+		     &ret_children, &ret_nchildren) != True)
+	return FALSE;
+      
+      if (gdk_error_code)
+	return FALSE;
+
+      for(i = 0; i < ret_nchildren; i++)
+	if (gdk_event_send_client_message_to_all_recurse(xev, ret_children[i], FALSE))
+	  found = TRUE;
+
+      XFree(ret_children);
+    }
+
+  if (send || (!found && send_anyways))
+    {
+      xev->xclient.window = xid;
+      gdk_send_xevent (xid, False, NoEventMask, xev);
+    }
+
+  return (send || found);
+}
+
 void
 gdk_event_send_clientmessage_toall (GdkEvent *event)
 {
   XEvent sev;
-  Window *ret_children, ret_root, ret_parent, curwin;
-  unsigned int ret_nchildren;
-  int i;
-  
+  gint old_warnings = gdk_error_warnings;
+
   g_return_if_fail(event != NULL);
   
   /* Set up our event to send, with the exception of its target window */
@@ -3994,22 +3982,10 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
   sev.xclient.format = event->client.data_format;
   memcpy(&sev.xclient.data, &event->client.data, sizeof(sev.xclient.data));
   sev.xclient.message_type = event->client.message_type;
-  
-  /* OK, we're all set, now let's find some windows to send this to */
-  if(XQueryTree(gdk_display, gdk_root_window, &ret_root, &ret_parent,
-		&ret_children, &ret_nchildren) != True)
-    return;
-  
-  /* foreach true child window of the root window, send an event to it */
-  for(i = 0; i < ret_nchildren; i++) {
-    curwin = gdk_get_client_window(gdk_display, ret_children[i]);
-    sev.xclient.window = curwin;
-    if (!gdk_send_xevent (curwin, False, NoEventMask, &sev))
-      GDK_NOTE (MISC, g_message ("Sending client message %ld to %#lx failed",
-				 event->client.message_type, curwin));
-  }
-  
-  XFree(ret_children);
+
+  gdk_event_send_client_message_to_all_recurse(&sev, gdk_root_window, TRUE);
+
+  gdk_error_warnings = old_warnings;
 }
 
 gchar *

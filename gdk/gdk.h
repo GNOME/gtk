@@ -932,6 +932,8 @@ void          gdk_threads_wake (void);
 
 /* Miscellaneous */
 void     gdk_event_send_clientmessage_toall (GdkEvent    *event);
+gboolean gdk_event_send_client_message (GdkEvent    *event,
+					guint32      xid);
 
 /* Key values
  */
