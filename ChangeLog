@@ -1,3 +1,33 @@
+Thu Oct  1 10:40:20 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkclist.h (gtk_clist_prepend):
+	* gtk/gtkclist.c (gtk_clist_prepend): new function.
+	(gtk_clist_insert): added g_return_val_if_fail()
+	statements. accept a row parameter < 0 or > clist->rows to indicate
+	append mode.
+	(real_clear): first clean up all internal pointers and lists (e.g.
+	clist->row_list or clist->rows), then delete the distinct rows. this
+	is required because of destroy notifiers, we need to have all internal
+	structures updated and be reentrant.
+
+	* gtk/gtkcalendar.h: 
+	* gtk/gtkcalendar.c: removed the `gtk_calendar_' prefix from the
+	GtkCalendarClass signal methods.
+	GtkType and macro fixups, put `void' into () prototypes, avoid C++
+	style comments, indentation fixes, fixed some g_return_if_fail()
+ 	statements.
+	(gtk_calendar_paint_header):
+	(gtk_calendar_paint_day_names): 
+	(gtk_calendar_paint_week_numbers): 
+	(gtk_calendar_paint_main): made these static functions.
+	(gtk_calendar_select_month):
+	(gtk_calendar_select_day):
+	(gtk_calendar_mark_day):
+	(gtk_calendar_unmark_day):
+	(gtk_calendar_get_date): signedness corrections, use guints
+ 	rather than gints.
+	(gtk_calendar_size_request): removed unused variables.
+
 Wed Sep 30 13:11:09 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_add_item): list all

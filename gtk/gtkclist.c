@@ -1685,8 +1685,19 @@ gtk_clist_get_selectable (GtkCList *clist,
 }
 
 gint
-gtk_clist_append (GtkCList * clist,
-		  gchar * text[])
+gtk_clist_prepend (GtkCList *clist,
+		   gchar    *text[])
+{
+  g_return_val_if_fail (clist != NULL, -1);
+  g_return_val_if_fail (GTK_IS_CLIST (clist), -1);
+  g_return_val_if_fail (text != NULL, -1);
+
+  return GTK_CLIST_CLASS_FW (clist)->insert_row (clist, 0, text);
+}
+
+gint
+gtk_clist_append (GtkCList *clist,
+		  gchar    *text[])
 {
   g_return_val_if_fail (clist != NULL, -1);
   g_return_val_if_fail (GTK_IS_CLIST (clist), -1);
@@ -1696,17 +1707,24 @@ gtk_clist_append (GtkCList * clist,
 }
 
 gint
-gtk_clist_insert (GtkCList * clist,
-		  gint row,
-		  gchar * text[])
+gtk_clist_insert (GtkCList *clist,
+		  gint      row,
+		  gchar    *text[])
 {
+  g_return_val_if_fail (clist != NULL, -1);
+  g_return_val_if_fail (GTK_IS_CLIST (clist), -1);
+  g_return_val_if_fail (text != NULL, -1);
+
+  if (row < 0 || row > clist->rows)
+    row = clist->rows;
+
   return GTK_CLIST_CLASS_FW (clist)->insert_row (clist, row, text);
 }
 
 static gint
-real_insert_row (GtkCList * clist,
-		 gint row,
-		 gchar * text[])
+real_insert_row (GtkCList *clist,
+		 gint      row,
+		 gchar    *text[])
 {
   gint i;
   GtkCListRow *clist_row;
@@ -1924,35 +1942,35 @@ gtk_clist_clear (GtkCList * clist)
 static void
 real_clear (GtkCList * clist)
 {
-  GList *list;
+  GList *list, *free_list;
 
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
-
-  /* remove all the rows */
-  for (list = clist->row_list; list; list = list->next)
-    row_delete (clist, GTK_CLIST_ROW (list));
-
-  g_list_free (clist->row_list);
 
   /* free up the selection list */
   g_list_free (clist->selection);
   g_list_free (clist->undo_selection);
   g_list_free (clist->undo_unselection);
 
-  clist->row_list = NULL;
-  clist->row_list_end = NULL;
   clist->selection = NULL;
   clist->selection_end = NULL;
   clist->undo_selection = NULL;
   clist->undo_unselection = NULL;
   clist->voffset = 0;
-  clist->rows = 0;
   clist->focus_row = -1;
   clist->anchor = -1;
   clist->undo_anchor = -1;
   clist->anchor_state = GTK_STATE_SELECTED;
   clist->drag_pos = -1;
+
+  /* remove all the rows */
+  free_list = clist->row_list;
+  clist->row_list = NULL;
+  clist->row_list_end = NULL;
+  clist->rows = 0;
+  for (list = free_list; list; list = list->next)
+    row_delete (clist, GTK_CLIST_ROW (list));
+  g_list_free (free_list);
 
   /* zero-out the scrollbars */
   if (clist->vscrollbar)

@@ -526,11 +526,13 @@ void gtk_clist_set_selectable (GtkCList *clist,
 gboolean gtk_clist_get_selectable (GtkCList *clist,
 				   gint      row);
 
-/* append returns the index of the row you just added, making
- * it easier to append and modify a row
+/* prepend/append returns the index of the row you just added,
+ * making it easier to append and modify a row
  */
-gint gtk_clist_append (GtkCList *clist,
-		       gchar    *text[]);
+gint gtk_clist_prepend (GtkCList *clist,
+		        gchar    *text[]);
+gint gtk_clist_append  (GtkCList *clist,
+			gchar    *text[]);
 
 /* inserts a row at index row and returns the row where it was actually
  * inserted (may be different from "row" in auto_sort mode)
