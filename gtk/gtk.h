@@ -139,7 +139,6 @@
 #include <gtk/gtktooltips.h>
 #include <gtk/gtktree.h>
 #include <gtk/gtktreeitem.h>
-#include <gtk/gtktreedatalist.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktreestore.h>

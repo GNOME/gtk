@@ -1,5 +1,9 @@
 2000-10-17    <jrb@redhat.com>
 
+	* gtk/gtktreemodel.c: Added user docs.
+
+	* gtk/gtk.h: remove gtktreedatalist.h.
+
 	* gtk/gtktreestore.c (gtk_tree_store_get_type): Get the correct
 	parent when generating my type.
 
