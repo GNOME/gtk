@@ -513,15 +513,18 @@ gtk_label_size_request (GtkWidget      *widget,
        * permanently, and just modifes or creates the AttrList
        */
       if (label->attrs)
-        {
-          attrs = pango_attr_list_copy (label->attrs);
-          pango_layout_set_attributes (label->layout, attrs);
-        }
-      else
+	attrs = pango_attr_list_copy (label->attrs);
+      else if (label->pattern)
         attrs = pango_attr_list_new ();
-      
-      gtk_label_pattern_to_attrs (label, attrs);
-      pango_attr_list_unref (attrs);
+
+      if (label->pattern)
+	gtk_label_pattern_to_attrs (label, attrs);
+
+      if (attrs)
+	{
+	  pango_layout_set_attributes (label->layout, attrs);
+	  pango_attr_list_unref (attrs);
+	}
       
       switch (label->jtype)
 	{

@@ -1,3 +1,9 @@
+Wed Jan 17 16:22:54 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_size_request): Set the
+	attributes onto the PangoLayout even if they are newly
+	created from label->pattern.
+
 Tue Jan  9 11:20:48 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdnd-x11.c: Remove unused variable.
