@@ -883,10 +883,10 @@ Turns off certain widget flags.
 
 <!-- ##### MACRO gtk_widget_set_rc_style ##### -->
 <para>
-
+Equivalent to <literal>gtk_widget_set_style (widget, NULL)</literal>.
 </para>
 
-@widget: 
+@widget: a #GtkWidget.
 
 
 <!-- ##### FUNCTION gtk_widget_ensure_style ##### -->
@@ -908,18 +908,18 @@ Turns off certain widget flags.
 
 <!-- ##### MACRO gtk_widget_restore_default_style ##### -->
 <para>
-
+Equivalent to <literal>gtk_widget_set_style (widget, NULL)</literal>.
 </para>
 
-@widget: 
+@widget: a #GtkWidget.
 
 
 <!-- ##### FUNCTION gtk_widget_reset_rc_styles ##### -->
 <para>
-
+Calls gtk_widget_set_rc_style() recursively on all descendants.
 </para>
 
-@widget: 
+@widget: a #GtkWidget. 
 
 
 <!-- ##### FUNCTION gtk_widget_push_colormap ##### -->

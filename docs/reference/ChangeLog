@@ -1,5 +1,9 @@
 2002-01-04  Matthias Clasen  <matthiasc@poet.de>
 
+	* gtk/tmpl/gtkwidget.sgml: Additions.
+
+2002-01-04  Matthias Clasen  <matthiasc@poet.de>
+
 	* gtk/changes-1.2.sgml, gtk/changes-2.0.sgml: SGML fixes.
 
 	* gtk/tmpl/gtkobject.sgml: Document GTK_IN_DESTRUCTION.

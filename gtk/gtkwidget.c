@@ -1338,6 +1338,12 @@ gtk_widget_child_notify (GtkWidget    *widget,
   g_object_unref (widget);
 }
 
+/**
+ * gtk_widget_thaw_child_notify:
+ * @widget: a #GtkWidget
+ *
+ * Reverts the effect of a previous call to gtk_widget_freeze_child_notify().
+ */ 
 void
 gtk_widget_thaw_child_notify (GtkWidget *widget)
 {
@@ -4249,6 +4255,14 @@ gtk_widget_reset_rc_styles (GtkWidget *widget)
   gtk_widget_set_style_recurse (widget, NULL);
 }
 
+/**
+ * gtk_widget_get_default_style:
+ * 
+ * Returns the default style used by all widgets initially.
+ * 
+ * Returns: the default style. This #GtkStyle object is owned by GTK+ and
+ * should not be modified or freed.
+ */ 
 GtkStyle*
 gtk_widget_get_default_style (void)
 {
@@ -6044,6 +6058,14 @@ gtk_widget_class_install_style_property (GtkWidgetClass *class,
   gtk_widget_class_install_style_property_parser (class, pspec, parser);
 }
 
+/**
+ * gtk_widget_style_get_property:
+ * @widget: a #GtkWidget
+ * @property_name: the name of a style property
+ * @value: location to return the property value 
+ *
+ * Gets the value of a style property of @widget.
+ */
 void
 gtk_widget_style_get_property (GtkWidget   *widget,
 			       const gchar *property_name,
@@ -6089,6 +6111,17 @@ gtk_widget_style_get_property (GtkWidget   *widget,
   g_object_unref (widget);
 }
 
+/**
+ * gtk_widget_style_get_valist:
+ * @widget: a #GtkWidget
+ * @first_property_name: the name of the first property to get
+ * @var_args: a <type>va_list</type> of pairs of property names and
+ *     locations to return the property values, starting with the location
+ *     for @first_property_name.
+ * 
+ * Non-vararg variant of gtk_widget_style_get(). Used primarily by language 
+ * bindings.
+ */ 
 void
 gtk_widget_style_get_valist (GtkWidget   *widget,
 			     const gchar *first_property_name,
@@ -6139,6 +6172,16 @@ gtk_widget_style_get_valist (GtkWidget   *widget,
   g_object_unref (widget);
 }
 
+/**
+ * gtk_widget_style_get:
+ * @widget: a #GtkWidget
+ * @first_property_name: the name of the first property to get
+ * @Varargs: pairs of property names and locations to 
+ *   return the property values, starting with the location for 
+ *   @first_property_name, terminated by %NULL.
+ *
+ * Gets the values of a multiple style properties of @widget.
+ */
 void
 gtk_widget_style_get (GtkWidget   *widget,
 		      const gchar *first_property_name,
