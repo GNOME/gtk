@@ -1,3 +1,9 @@
+Thu Dec 18 01:37:59 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwidget.c (gtk_widget_activate): Correct misleading docs.
+	* gtk/gtkbutton.c (gtk_button_class_init): Add docs for the 
+	"activate" signal.  (#129358, Ka-Hing Cheung)
+
 Thu Dec 18 01:21:59 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): Jonathan got

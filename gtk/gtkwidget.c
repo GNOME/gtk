@@ -3557,9 +3557,8 @@ gtk_widget_event_internal (GtkWidget *widget,
  * 
  * For widgets that can be "activated" (buttons, menu items, etc.)
  * this function activates them. Activation is what happens when you
- * press Enter on a widget during key navigation; clicking a button,
- * selecting a menu item, etc. If @widget isn't activatable,
- * the function returns %FALSE.
+ * press Enter on a widget during key navigation. If @widget isn't 
+ * activatable, the function returns %FALSE.
  * 
  * Return value: %TRUE if the widget was activatable
  **/

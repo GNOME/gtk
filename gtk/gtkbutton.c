@@ -316,6 +316,15 @@ gtk_button_class_init (GtkButtonClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkButton::activate:
+   *
+   * The "activate" signal on GtkButton is an action signal and
+   * emitting it causes the button to animate press then release. 
+   * Applications should never connect to this signal, but use the
+   * "clicked" signal.
+   */
   button_signals[ACTIVATE] =
     g_signal_new ("activate",
 		  G_OBJECT_CLASS_TYPE (object_class),
