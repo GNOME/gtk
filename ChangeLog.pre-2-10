@@ -1,5 +1,7 @@
 2004-08-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.h: Remove some erroneous declarations.
+
 	* gtk/gtkcellview.c (gtk_cell_view_set_cell_data): Don't
 	crash if the displayed row is gone.
 

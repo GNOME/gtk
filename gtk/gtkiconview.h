@@ -100,9 +100,6 @@ void             gtk_icon_view_selected_foreach   (GtkIconView            *icon_
 void             gtk_icon_view_set_selection_mode (GtkIconView            *icon_view,
 						   GtkSelectionMode        mode);
 GtkSelectionMode gtk_icon_view_get_selection_mode (GtkIconView            *icon_view);
-gboolean         gtk_icon_view_get_text_beside_icon (GtkIconView          *icon_view);
-void             gtk_icon_view_set_text_beside_icon (GtkIconView          *icon_view,
-						     gboolean              text_beside_icon);
 void             gtk_icon_view_select_path        (GtkIconView            *icon_view,
 						   GtkTreePath            *path);
 void             gtk_icon_view_unselect_path      (GtkIconView            *icon_view,
