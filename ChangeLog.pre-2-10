@@ -26,7 +26,7 @@ Mon Aug  4 14:53:46 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcolorsel.c (color_sample_drop_handle) 
 	(palette_drop_handle): Accept drops with the wrong format, since the KDE color chooser 
-	incorrectly drops application/x-color with format 8.
+	incorrectly drops application/x-color with format 8.  (#118810)
 
 2003-08-02  Tor Lillqvist  <tml@iki.fi>
 
