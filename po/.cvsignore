@@ -8,5 +8,6 @@ cat-id-tbl.c
 gtk20.pot
 gtk+.pot
 messages
+missing
 stamp-cat-id
 po2tbl.sed
