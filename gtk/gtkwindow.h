@@ -255,6 +255,7 @@ GList*     gtk_window_get_default_icon_list        (void);
 gboolean   gtk_window_set_default_icon_from_file   (const gchar *filename,
 						    GError     **err);
 
+void       gtk_window_set_auto_startup_notification (gboolean setting);
 
 /* If window is set modal, input will be grabbed when show and released when hide */
 void       gtk_window_set_modal      (GtkWindow *window,

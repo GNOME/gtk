@@ -535,7 +535,7 @@ gtk_combo_popup_list (GtkCombo * combo)
   else
     {
       GTK_WIDGET_SET_FLAGS (list, GTK_CAN_FOCUS);
-      gtk_widget_grab_focus (list);
+      gtk_widget_grab_focus (combo->list);
       GTK_WIDGET_UNSET_FLAGS (list, GTK_CAN_FOCUS);
     }
   

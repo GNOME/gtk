@@ -213,3 +213,8 @@ gdk_error_trap_pop (void)
 {
   return 0;
 }
+
+void
+gdk_notify_startup_complete (void)
+{
+}

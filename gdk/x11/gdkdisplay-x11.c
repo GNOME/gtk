@@ -143,7 +143,8 @@ gdk_display_open (const gchar *display_name)
   display_x11->default_screen = display_x11->screens[DefaultScreen (display_x11->xdisplay)];
   display_x11->leader_window = XCreateSimpleWindow (display_x11->xdisplay,
 						    GDK_SCREEN_X11 (display_x11->default_screen)->xroot_window,
-						    10, 10, 10, 10, 0, 0, 0);  
+						    10, 10, 10, 10, 0, 0, 0);
+
   display_x11->have_shape = GDK_UNKNOWN;
   display_x11->gravity_works = GDK_UNKNOWN;
 
@@ -568,6 +569,8 @@ gdk_display_x11_finalize (GObject *object)
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     g_object_unref (display_x11->screens[i]);
   g_free (display_x11->screens);
+  g_free (display_x11->startup_notification_id);
+  
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -631,4 +634,194 @@ Display *
 gdk_x11_display_get_xdisplay (GdkDisplay  *display)
 {
   return GDK_DISPLAY_X11 (display)->xdisplay;
+}
+
+void
+_gdk_windowing_set_default_display (GdkDisplay *display)
+{
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  const gchar *startup_id;
+  
+  if (display)
+    gdk_display = GDK_DISPLAY_XDISPLAY (display);
+  else
+    gdk_display = NULL;
+
+  g_free (display_x11->startup_notification_id);
+  display_x11->startup_notification_id = NULL;
+  
+  startup_id = g_getenv ("DESKTOP_STARTUP_ID");
+  if (startup_id && *startup_id != '\0')
+    {
+      if (!g_utf8_validate (startup_id, -1, NULL))
+	g_warning ("DESKTOP_STARTUP_ID contains invalid UTF-8");
+      else
+	display_x11->startup_notification_id = g_strdup (startup_id);
+      
+      /* Clear the environment variable so it won't be inherited by
+       * child processes and confuse things.  unsetenv isn't portable,
+       * right...
+       */
+      putenv ("DESKTOP_STARTUP_ID=");
+
+      /* Set the startup id on the leader window so it
+       * applies to all windows we create on this display
+       */
+      XChangeProperty (display_x11->xdisplay,
+		       display_x11->leader_window,
+		       gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"),
+		       gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
+		       PropModeReplace,
+		       startup_id, strlen (startup_id));
+    }
+}
+
+char*
+escape_for_xmessage (const char *str)
+{
+  GString *retval;
+  const char *p;
+  
+  retval = g_string_new ("");
+
+  p = str;
+  while (*p)
+    {
+      switch (*p)
+        {
+        case ' ':
+        case '"':
+        case '\\':
+          g_string_append_c (retval, '\\');
+          break;
+        }
+
+      g_string_append_c (retval, *p);
+      ++p;
+    }
+
+  return g_string_free (retval, FALSE);
+}
+
+static void
+broadcast_xmessage   (GdkDisplay   *display,
+                      const char   *message_type,
+                      const char   *message_type_begin,
+                      const char   *message)
+{
+  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  GdkScreen *screen = gdk_display_get_default_screen (display);
+  GdkWindow *root_window = gdk_screen_get_root_window (screen);
+  Window xroot_window = GDK_WINDOW_XID (root_window);
+  
+  Atom type_atom;
+  Atom type_atom_begin;
+  Window xwindow;
+
+  {
+    XSetWindowAttributes attrs;
+
+    attrs.override_redirect = True;
+    attrs.event_mask = PropertyChangeMask | StructureNotifyMask;
+
+    xwindow =
+      XCreateWindow (xdisplay,
+                     xroot_window,
+                     -100, -100, 1, 1,
+                     0,
+                     CopyFromParent,
+                     CopyFromParent,
+                     CopyFromParent,
+                     CWOverrideRedirect | CWEventMask,
+                     &attrs);
+  }
+
+  type_atom = gdk_x11_get_xatom_by_name_for_display (display,
+                                                     message_type);
+  type_atom_begin = gdk_x11_get_xatom_by_name_for_display (display,
+                                                           message_type_begin);
+  
+  {
+    XEvent xevent;
+    const char *src;
+    const char *src_end;
+    char *dest;
+    char *dest_end;
+    
+    xevent.xclient.type = ClientMessage;
+    xevent.xclient.message_type = type_atom_begin;
+    xevent.xclient.display =xdisplay;
+    xevent.xclient.window = xwindow;
+    xevent.xclient.format = 8;
+
+    src = message;
+    src_end = message + strlen (message) + 1; /* +1 to include nul byte */
+    
+    while (src != src_end)
+      {
+        dest = &xevent.xclient.data.b[0];
+        dest_end = dest + 20;        
+        
+        while (dest != dest_end &&
+               src != src_end)
+          {
+            *dest = *src;
+            ++dest;
+            ++src;
+          }
+        
+        XSendEvent (xdisplay,
+                    xroot_window,
+                    False,
+                    PropertyChangeMask,
+                    &xevent);
+
+        xevent.xclient.message_type = type_atom;
+      }
+  }
+
+  XDestroyWindow (xdisplay, xwindow);
+  XFlush (xdisplay);
+}
+
+/**
+ * gdk_notify_startup_complete:
+ * 
+ * Indicates to the GUI environment that the application has finished
+ * loading. If the applications opens windows, this function is
+ * normally called after opening the application's initial set of
+ * windows.
+ * 
+ * GTK+ will call this function automatically after opening the first
+ * #GtkWindow unless
+ * gtk_window_set_auto_startup_notification() is called to disable
+ * that feature.
+ **/
+void
+gdk_notify_startup_complete (void)
+{
+  GdkDisplay *display;
+  GdkDisplayX11 *display_x11;
+  gchar *escaped_id;
+  gchar *message;
+
+  display = gdk_display_get_default ();
+  if (!display)
+    return;
+  
+  display_x11 = GDK_DISPLAY_X11 (display);
+
+  if (display_x11->startup_notification_id == NULL)
+    return;
+
+  escaped_id = escape_for_xmessage (display_x11->startup_notification_id);
+  message = g_strdup_printf ("remove: ID=%s", escaped_id);
+  g_free (escaped_id);
+
+  broadcast_xmessage (display,
+		      "_NET_STARTUP_INFO",
+                      "_NET_STARTUP_INFO_BEGIN",
+                      message);
+
+  g_free (message);
 }

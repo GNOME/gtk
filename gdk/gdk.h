@@ -160,6 +160,9 @@ void     gdk_event_send_clientmessage_toall (GdkEvent  *event);
 gboolean gdk_event_send_client_message_for_display (GdkDisplay *display,
 						    GdkEvent       *event,
 						    GdkNativeWindow winid);
+
+void gdk_notify_startup_complete (void);
+
 /* Threading
  */
 

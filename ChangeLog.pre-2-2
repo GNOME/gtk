@@ -1,3 +1,30 @@
+Sat Nov  2 00:22:33 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Add startup notification hooks - mostly based on patch
+	by Havoc Pennington in #96772.
+	
+	* gdk/gdk.h gdk/x11/gdkdisplay-x11.c 
+	gdk/{win32,linux-fb}/gdkmain-*.c: (gdk_notify_startup_complete):
+	new function that indicates an application has finished starting
+	up.
+	
+	* gdk/x11/gdkmain-x11.c gdk/x11/gdkdisplay-x11.c
+	(_gdk_windowing_set_default_display): store value of 
+	DESKTOP_STARTUP_ID on the default screen, and clear it from the 
+	environment.
+	
+	* gdk/x11/gdkdisplay-x11.c: 
+	Set _NET_STARTUP_ID hint on display's group leader window.
+	
+	* gtk/gtkwindow.c (gtk_window_set_auto_startup_notification):
+	function to toggle whether we automatically broadcast that we've
+	started up, after mapping the first toplevel window.
+	(gtk_window_map): call gdk_screen_notify_startup_complete() by
+	default, unless enabled by above.
+
+	* gtk/gtkmain.c gtk/gtkcombo.c gtk/gtktoolbar.c: 
+	Couple of warning fixes.
+
 Fri Nov  1 21:03:59 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c: Add a mnemonic to the "selection"

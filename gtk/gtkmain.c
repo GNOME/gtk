@@ -866,8 +866,6 @@ gboolean
 gtk_init_check (int	 *argc,
 		char   ***argv)
 {
-  GdkDisplay *display;
-  
   if (!gtk_parse_args (argc, argv))
     return FALSE;
 
@@ -902,7 +900,7 @@ gtk_init (int *argc, char ***argv)
 {
   if (!gtk_init_check (argc, argv))
     {
-      char *display_name_arg = gdk_get_display_arg_name ();
+      const char *display_name_arg = gdk_get_display_arg_name ();
       g_warning ("cannot open display: %s", display_name_arg ? display_name_arg : " ");
       exit (1);
     }

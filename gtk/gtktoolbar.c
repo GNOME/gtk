@@ -713,7 +713,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   gint space_size;
   gint ipadding;
   GtkTextDirection direction;
-  gint ltr_x;
+  gint ltr_x = 0;		/* Quiet GCC */
   
   g_return_if_fail (GTK_IS_TOOLBAR (widget));
   g_return_if_fail (allocation != NULL);

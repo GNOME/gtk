@@ -261,6 +261,8 @@ static GtkBinClass *parent_class = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
 static GList       *default_icon_list = NULL;
 static guint        default_icon_serial = 0;
+static gboolean     disable_startup_notification = FALSE;
+static gboolean     sent_startup_notification = FALSE;
 
 static void gtk_window_set_property (GObject         *object,
 				     guint            prop_id,
@@ -3548,6 +3550,13 @@ gtk_window_map (GtkWidget *widget)
 
   if (window->frame)
     gdk_window_show (window->frame);
+
+  if (!disable_startup_notification &&
+      !sent_startup_notification)
+    {
+      sent_startup_notification = TRUE;
+      gdk_notify_startup_complete ();
+    }
 }
 
 static void
@@ -6708,4 +6717,26 @@ _gtk_window_set_has_toplevel_focus (GtkWindow *window,
 
       g_object_notify (G_OBJECT (window), "has_toplevel_focus");
     }
+}
+
+/**
+ * gtk_window_set_auto_startup_notification:
+ * @setting: %TRUE to automatically do startup notification
+ *
+ * By default, after showing the first #GtkWindow for each #GdkScreen,
+ * GTK+ calls gdk_screen_notify_startup_complete().  Call this
+ * function to disable the automatic startup notification. You might
+ * do this if your first window is a splash screen, and you want to
+ * delay notification until after your real main window has been
+ * shown, for example.
+ *
+ * In that example, you would disable startup notification
+ * temporarily, show your splash screen, then re-enable it so that
+ * showing the main window would automatically result in notification.
+ * 
+ **/
+void
+gtk_window_set_auto_startup_notification (gboolean setting)
+{
+  disable_startup_notification = !setting;
 }
