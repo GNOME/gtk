@@ -370,7 +370,7 @@ gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl $(gtk_public_h_sources) $(gdk_he
 
 
 gtkconfdir = $(sysconfdir)/gtk
-gtkconf_DATA = gtkrc gtkrc.bg gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
+gtkconf_DATA = gtkrc.bg gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
 	gtkrc.ko gtkrc.ru gtkrc.tr gtkrc.th gtkrc.uk gtkrc.iso-8859-2 \
 	gtkrc.iso88592 gtkrc.iso88595 gtkrc.iso885913 gtkrc.iso885914 \
 	gtkrc.iso885915 gtkrc.zh_CN gtkrc.zh_TW.Big5 \
