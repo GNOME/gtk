@@ -118,6 +118,24 @@ gtk_scale_class_init (GtkScaleClass *class)
   
   parent_class = gtk_type_class (GTK_TYPE_RANGE);
   
+  gobject_class->set_property = gtk_scale_set_property;
+  gobject_class->get_property = gtk_scale_get_property;
+
+  widget_class->map = gtk_scale_map;
+  widget_class->unmap = gtk_scale_unmap;
+  
+  range_class->draw_background = gtk_scale_draw_background;
+
+  signals[FORMAT_VALUE] =
+    g_signal_newc ("format_value",
+		   G_TYPE_FROM_CLASS (object_class),
+		   G_SIGNAL_RUN_LAST,
+		   G_STRUCT_OFFSET (GtkScaleClass, format_value),
+		   single_string_accumulator, NULL,
+		   gtk_marshal_STRING__DOUBLE,
+		   G_TYPE_STRING, 1,
+		   G_TYPE_DOUBLE);
+
   g_object_class_install_property (gobject_class,
                                    PROP_DIGITS,
                                    g_param_spec_int ("digits",
@@ -144,25 +162,6 @@ gtk_scale_class_init (GtkScaleClass *class)
 						      GTK_TYPE_POSITION_TYPE,
 						      GTK_POS_LEFT,
 						      G_PARAM_READWRITE));
-
-  signals[FORMAT_VALUE] =
-    g_signal_newc ("format_value",
-		   G_TYPE_FROM_CLASS (object_class),
-		   G_SIGNAL_RUN_LAST,
-		   G_STRUCT_OFFSET (GtkScaleClass, format_value),
-		   single_string_accumulator, NULL,
-		   gtk_marshal_STRING__DOUBLE,
-		   G_TYPE_STRING, 1,
-		   G_TYPE_DOUBLE);
-  
-  
-  gobject_class->set_property = gtk_scale_set_property;
-  gobject_class->get_property = gtk_scale_get_property;
-
-  widget_class->map = gtk_scale_map;
-  widget_class->unmap = gtk_scale_unmap;
-  
-  range_class->draw_background = gtk_scale_draw_background;
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("slider_length",

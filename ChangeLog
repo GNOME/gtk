@@ -1,3 +1,11 @@
+Tue May 15 10:11:59 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkpreview.c: Apply patch from John Margaglione converting
+	from args to properties. (#51957)
+
+	* gtk/gtkscale.c (gtk_scale_class_init): Move install property
+	calls to after ->set_property call.
+
 Mon May 14 14:56:21 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/prop-editor.c: Block against redundant changes.

@@ -35,24 +35,27 @@
 #include "gdk/gdkrgb.h"
 #include "gtkpreview.h"
 #include "gtksignal.h"
+#include "gtkintl.h"
 
 
 #define PREVIEW_CLASS(w)      GTK_PREVIEW_CLASS (GTK_OBJECT (w)->klass)
 
 enum {
-  ARG_0,
-  ARG_EXPAND
+  PROP_0,
+  PROP_EXPAND
 };
 
 
 static void   gtk_preview_class_init    (GtkPreviewClass  *klass);
 static void   gtk_preview_init          (GtkPreview       *preview);
-static void   gtk_preview_set_arg	(GtkObject        *object,
-					 GtkArg           *arg,
-					 guint             arg_id);
-static void   gtk_preview_get_arg	(GtkObject        *object,
-					 GtkArg           *arg,
-					 guint             arg_id);
+static void   gtk_preview_set_property  (GObject          *object,
+					 guint             prop_id,
+					 const GValue     *value,
+					 GParamSpec       *pspec);
+static void   gtk_preview_get_property  (GObject          *object,
+					 guint             prop_id,
+					 GValue           *value,
+					 GParamSpec       *pspec);
 static void   gtk_preview_finalize      (GObject          *object);
 static void   gtk_preview_realize       (GtkWidget        *widget);
 static void   gtk_preview_size_allocate (GtkWidget        *widget,
@@ -107,8 +110,8 @@ gtk_preview_class_init (GtkPreviewClass *klass)
 
   gobject_class->finalize = gtk_preview_finalize;
 
-  object_class->set_arg = gtk_preview_set_arg;
-  object_class->get_arg = gtk_preview_get_arg;
+  gobject_class->set_property = gtk_preview_set_property;
+  gobject_class->get_property = gtk_preview_get_property;
 
   widget_class->realize = gtk_preview_realize;
   widget_class->size_allocate = gtk_preview_size_allocate;
@@ -125,43 +128,51 @@ gtk_preview_class_init (GtkPreviewClass *klass)
   klass->info.cmap = gdk_rgb_get_cmap ();
   klass->info.visual = gdk_rgb_get_visual ();
 
-  gtk_object_add_arg_type ("GtkPreview::expand",
-			   GTK_TYPE_BOOL,
-			   GTK_ARG_READWRITE,
-			   ARG_EXPAND);
+  g_object_class_install_property (gobject_class,
+                                   PROP_EXPAND,
+                                   g_param_spec_boolean ("expand",
+							 _("Expand"),
+							 _("Whether the preview widget should take up the entire space it is allocated"),
+							 FALSE,
+							 G_PARAM_READWRITE));
 }
 
 static void
-gtk_preview_set_arg (GtkObject *object,
-		     GtkArg    *arg,
-		     guint      arg_id)
+gtk_preview_set_property (GObject      *object,
+			  guint         prop_id,
+			  const GValue *value,
+			  GParamSpec   *pspec)
 {
   GtkPreview *preview = GTK_PREVIEW (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_EXPAND:
-      gtk_preview_set_expand (preview, GTK_VALUE_BOOL (*arg));
+    case PROP_EXPAND:
+      gtk_preview_set_expand (preview, g_value_get_boolean (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
 static void
-gtk_preview_get_arg (GtkObject *object,
-		     GtkArg    *arg,
-		     guint      arg_id)
+gtk_preview_get_property (GObject      *object,
+			  guint         prop_id,
+			  GValue       *value,
+			  GParamSpec   *pspec)
 {
   GtkPreview *preview;
   
   preview = GTK_PREVIEW (object);
   
-  switch (arg_id)
+  switch (prop_id)
     {
-    case ARG_EXPAND:
-      GTK_VALUE_BOOL (*arg) = preview->expand;
+    case PROP_EXPAND:
+      g_value_set_boolean (value, preview->expand);
       break;
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -360,6 +371,8 @@ gtk_preview_set_expand (GtkPreview *preview,
     {
       preview->expand = expand;
       gtk_widget_queue_resize (GTK_WIDGET (preview));
+ 
+      g_object_notify (G_OBJECT (preview), "expand"); 
     }
 }
 
