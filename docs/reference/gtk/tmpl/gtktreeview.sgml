@@ -742,13 +742,6 @@ Function used for #gtk_tree_view_map_expanded_rows.
 @arg2: 
 @arg3: 
 
-<!-- ##### SIGNAL GtkTreeView::focus-column-header ##### -->
-<para>
-
-</para>
-
-@treeview: the object which received the signal.
-
 <!-- ##### SIGNAL GtkTreeView::move-cursor ##### -->
 <para>
 

@@ -8,7 +8,7 @@ Manipulating stock icons
 <!-- ##### SECTION Long_Description ##### -->
 
 
-<para>
+<para id="GtkIconFactory">
 Browse the available stock icons in the list of stock IDs found <link
 linkend="gtk-Stock-Items">here</link>. You can also use 
 the <application>gtk-demo</application> application for this purpose.

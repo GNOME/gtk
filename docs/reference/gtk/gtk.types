@@ -121,3 +121,9 @@ gtk_vseparator_get_type
 gtk_widget_get_type
 gtk_window_get_type
 gtk_window_group_get_type
+gtk_editable_get_type
+gtk_cell_editable_get_type
+gtk_tree_model_get_type
+gtk_tree_sortable_get_type
+gtk_tree_drag_source_get_type
+gtk_tree_drag_dest_get_type

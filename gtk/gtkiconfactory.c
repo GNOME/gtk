@@ -639,6 +639,12 @@ get_default_icons (GtkIconFactory *factory)
                            GTK_STOCK_PRINT_PREVIEW);
 
   add_sized_with_fallback (factory,
+			   stock_properties_24,
+			   stock_properties_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_PROPERTIES);
+  
+  add_sized_with_fallback (factory,
                            stock_redo_24,
                            stock_redo_16,
                            GTK_ICON_SIZE_MENU,
@@ -776,7 +782,6 @@ get_default_icons (GtkIconFactory *factory)
   add_unsized (factory, stock_clear_24, GTK_STOCK_CLEAR);
   add_unsized (factory, stock_colorselector_24, GTK_STOCK_SELECT_COLOR);
   add_unsized (factory, stock_index_24, GTK_STOCK_INDEX);
-  add_unsized (factory, stock_properties_24, GTK_STOCK_PROPERTIES);
   add_unsized (factory, stock_remove_24, GTK_STOCK_REMOVE);
   add_unsized (factory, stock_zoom_1_24, GTK_STOCK_ZOOM_100);
   add_unsized (factory, stock_zoom_fit_24, GTK_STOCK_ZOOM_FIT);

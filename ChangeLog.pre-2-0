@@ -1,13 +1,164 @@
-2002-02-01  Anders Carlsson  <andersca@gnu.org>
+Mon Mar 11 23:42:11 2002  Jonathan Blandford  <jrb@redhat.com>
 
-	* gtk/gtkentry.c (gtk_entry_motion_notify): Use gdk_cursor_new_for_screen.
+	* gtk/gtktreemodel.c (gtk_tree_model_foreach): fix totally broken
+	foreach function.
 
-	* gdk/x11/gdkgc-x11.c (_gdk_x11_gc_get_fg_picture): Remove ;
+2002-03-11  Matthias Clasen  <maclas@gmx.de>
 
-	* gdk/x11/gdkdrawable-x11.c (draw_with_pixmaps): The drawable is actually 
-	a GdkDrawableImplX11, so get the display from that.
-	(draw_with_images): Use the screen's root window when creating the pixmap.
-	(draw_with_images): Get the screen from the GdkDrawableImplX11.
+	* gtk/gtkitemfactory.c (gtk_item_factory_add_foreign): Document
+	gtk_{menu_item,widget}_set_accel_path() as the recommended API.  
+	(#69244)
+
+2002-03-11  James Henstridge  <james@daa.com.au>
+
+	* configure.in: set CCAS and CCASFLAGS to get automake 1.6
+	compatibility without breaking things for people using 1.4.
+
+Sun Mar 10 21:04:30 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): finally get the
+	right behavior.
+
+Mon Mar 11 01:25:14 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): compare path with
+	cursor path and not with the selected iter in the 'decide to edit'
+	check
+
+Fri Mar  8 14:45:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* ======== Released GTK+-2.0 ========
+
+Fri Mar  8 20:41:51 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreestore.c (gtk_tree_store_drag_data_received): handle
+	gtk-tree-model-drop-append like the ListStore, includes some
+	tweaks to work right with trees
+
+Fri Mar  8 14:22:43 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_init): Some packing
+	tweaks.
+
+	* configure.in: Include GLIB_LIBS when checking
+	for bind_textdomain_codeset, to catch the case where
+	it is in -lintl.
+
+Thu Mar  7 16:46:58 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (validate_visible_area): get rid of really
+	bad focus loop.
+	(gtk_tree_view_clamp_node_visible): only clamp the node when
+	realized.  Need to replace this with scroll_to_cell sometime.
+	(gtk_tree_view_header_focus): clickable or reorderable columns are
+	focusable, #73656
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_get_widget): fix
+	docs to reflect behaviour change, #73682
+
+Fri Mar  8 11:12:32 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* NEWS: Fix version numbers. (Johan Dahlin.)
+
+	* INSTALL.in: Update, just refer to gtk-building.html
+	rather than duplicating information.
+
+	* README.in: Add release specific notes.
+
+	* Makefile.am (EXTRA_DIST): Remove TODO and TODO.xml
+	from the distribution.
+
+Thu Mar  7 23:29:35 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* NEWS: Final updates for 2.0.0
+
+	* README.in: Updates.
+
+2002-03-08  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/Makefile.am (LDFLAGS): Add missing .la suffix for	libgdk_pixbuf.
+
+Thu Mar  7 21:32:01 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreestore.c (gtk_tree_store_sort_iter_changed): increase
+	value of new_location by one if cmp_a > 0 and we hit the end of
+	the list.
+
+Thu Mar  7 10:31:57 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_timer): Fix problem where
+	there were two copies of the "do an arrow step" code, 
+	one correct for rotated notebooks, one not. (#73855,
+	Thomas Leonard.)
+
+Wed Mar  6 23:20:51 2002  Jonathan Blandford  <jrb@redhat.com>
+and			  Kristian Rietveld  <kris@gtk.org>
+
+	Finishing touch for 2.0.0 release, fixes #70782, #72729, the
+	'stealth' bug and other last-minute minor issues.
+
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): set dnd dest line
+	drawing right. We can't draw the line at the position of the next
+	row, because that one still has to be drawn. So draw everthing at
+	a -1 offset.
+	(validate_visible_area): add check for invalid descendants and
+	NULL scroll_to_path path, get scrolling right.  Also, fix the
+	area_above value.  Pretty amazing I got it wrong.
+	(get_logical_dest_row): add gtk-tree-model-drop-append magic, so
+	dragging a row to the end of the model works right.
+	(gtk_tree_view_get_dest_row_at_pos): minor floating point fix
+	(gtk_tree_view_start_editing): add call to validate_row
+	(gtk_tree_view_tree_to_widget_coords): Never subtract
+	HEADER_HEIGHT from y values anymore!!!
+	(gtk_tree_view_widget_coords_to_tree): ditto.
+	(gtk_tree_view_scroll_to_point): allow -1 as values for the
+	scroll_to coords
+	(gtk_tree_view_move_cursor_page_up_down): Don't need scroll_to_y
+	as clamp_node_visible will make it work.
+
+	* gtk/gtktreestore.c (gtk_tree_store_drag_data_received): also check
+	path depth, as we can't get iters from empty paths
+
+	* gtk/gtkliststore.c (gtk_list_store_drag_data_received): handle
+	gtk-tree-model-drop-append
+
+	* gtk/gtktreednd.c (gtk_tree_set_row_drag_data): free path_str
+
+	* tests/testtreeflow.c (main): select path where we are scrolling to
+
+2002-03-06  Darin Adler  <darin@bentspoon.com>
+
+	* gtk/gtktreemodelsort.c: (gtk_tree_model_sort_insert_value):
+	Update offsets before finding where to insert the new value.
+
+	* gtk/gtktreeview.c: (validate_visible_area): Make sure we redraw when
+	we scroll, instead of just updating the scroll position variables.
+
+2002-03-06  Manish Singh  <yosh@gimp.org>
+
+	* gdk/Makefile.am
+	* gtk/Makefile.am: rework so that only things that really need to be
+	done post install are in the hook
+
+2002-03-06  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtkiconfactory.c (get_default_icons): Register 16x16 version
+	of properties stock icon.
+
+	* gtk/stock-icons/Makefile.am: Add stock_properties_16.png
+
+Wed Mar  6 00:38:29 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_real_insert_text): Fix various problems
+	when truncating the inserted text to fit into the GtkEntry
+	size limit of 65kb. (#73119)
+
+Wed Mar  6 00:20:59 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c
+	(gtk_tree_view_column_cell_process_action): move event handling to
+	the process_action function so we can have the event go to
+	individual cells.
 
 Tue Mar  5 22:16:58 2002  Owen Taylor  <otaylor@redhat.com>
 
@@ -41,6 +192,7 @@ Tue Mar  5 22:16:58 2002  Owen Taylor  <otaylor@redhat.com>
 	suprious "no" with --disable-modules.
 
 2002-03-06  Tor Lillqvist  <tml@iki.fi>
+
 	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab,
 	gdk_pointer_ungrab): Bypass calls to the grab/ungrab functions in
 	gdkinput-win32.c, as they don't effectively do anything anyway.

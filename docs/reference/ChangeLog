@@ -1,3 +1,72 @@
+Tue Mar 12 00:29:31 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/question_index.sgml: new FAQ.
+
+	* gtk/tmpl/gtktreemodel.sgml: clean up example
+
+2002-03-12  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/tmpl/windows.sgml: Document GdkScreen.
+
+	* gtk/gtk-sections.txt: Move a few Class structs to Standard sections.
+
+2002-03-11  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtktreemodel.sgml, gtk/tmpl/gtkprogress.sgml,
+	gtk/tmpl/gtksignal.sgml, gtk/tmpl/gtkimage.sgml: Generate proper
+	markup for format strings in examples, also fix an oversight in
+	the GtkTreeModel example.  (#74213)
+
+	* gtk/gtk.types: Add interfaces to get docs on their signals.
+
+Sat Mar  9 13:00:38 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/tmpl/gtktreemodel.sgml: Lots of docs.
+
+Fri Mar  8 15:14:32 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/building.sgml: List -I/opt/gtk/include not
+	-I /opt/gtk/include.
+
+	* gtk/building.sgml: Add a gloss for XIM.
+
+2002-03-07  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/tmpl/animation.sgml, gdk-pixbuf/tmpl/gdk-pixbuf.sgml,
+	gtk/tmpl/gtkrc.sgml, gtk/tmpl/gtktextview.sgml, gtk/tmpl/gtkiconfactory.sgml,
+	gtk/tmpl/gtkaccelgroup.sgml: Add some ids which are referenced
+	from the object hierarchy.
+
+	* gtk/gtk-docs.sgml: Use parts as top-level division (#61575),
+	include gtkaccessible docs.
+
+	* gtk/building.sgml: Some typo and markup fixes.
+
+Thu Mar  7 02:58:16 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/tmpl/gtkliststore.sgml: start implementing
+
+	* gtk/question_index.sgml: "I can set with the tree, but not
+	get???!?!"
+
+Wed Mar  6 18:11:05 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/resources.sgml: Mention the need to subscribe
+	to the GTK+ mailing lists.
+
+        * gtk/building.sgml: Go into much more details about
+	building the entire set of GTK+ libraries and about the
+	dependencies that are required.
+
+	* gtk/building.sgml: Add docs for --enable-explicit-deps,
+	--with-xinput.
+
+Wed Mar  6 14:12:34 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/tmpl/gtktreeselection.sgml: docs
+
+	* gtk/tree_widget.sgml: clean up docs
+
 2002-03-05  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Remove gtk_win32_get_installation_directory.

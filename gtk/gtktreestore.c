@@ -1653,7 +1653,8 @@ gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
           /* Get the parent, NULL if parent is the root */
           dest_parent_p = NULL;
           parent = gtk_tree_path_copy (dest);
-          if (gtk_tree_path_up (parent))
+          if (gtk_tree_path_up (parent) &&
+	      gtk_tree_path_get_depth (parent) > 0)
             {
               gtk_tree_model_get_iter (tree_model,
                                        &dest_parent,
@@ -1676,14 +1677,30 @@ gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
                                        prev))
             {
               GtkTreeIter tmp_iter = dest_iter;
-              gtk_tree_store_insert_after (GTK_TREE_STORE (tree_model),
-                                           &dest_iter,
-                                           NULL,
-                                           &tmp_iter);
+
+	      if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (tree_model), "gtk-tree-model-drop-append")))
+	        {
+		  GtkTreeIter parent;
+
+		  if (gtk_tree_model_iter_parent (GTK_TREE_MODEL (tree_model), &parent, &tmp_iter))
+		    gtk_tree_store_append (GTK_TREE_STORE (tree_model),
+					   &dest_iter, &parent);
+		  else
+		    gtk_tree_store_append (GTK_TREE_STORE (tree_model),
+					   &dest_iter, NULL);
+		}
+	      else
+		gtk_tree_store_insert_after (GTK_TREE_STORE (tree_model),
+					     &dest_iter,
+					     NULL,
+					     &tmp_iter);
               retval = TRUE;
 
             }
         }
+
+      g_object_set_data (G_OBJECT (tree_model), "gtk-tree-model-drop-append",
+			 NULL);
 
       gtk_tree_path_free (prev);
 
@@ -2055,6 +2072,7 @@ gtk_tree_store_sort_iter_changed (GtkTreeStore *tree_store,
 
   if ((!node->next) && (cmp_a > 0))
     {
+      new_location++;
       node->next = G_NODE (iter->user_data);
       node->next->prev = node;
     }

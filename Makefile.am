@@ -10,8 +10,6 @@ EXTRA_DIST =			\
 	HACKING			\
 	gtk+.spec.in		\
 	makecopyright		\
-	TODO			\
-	TODO.xml		\
 	NEWS.pre-1-0		\
 	ChangeLog.pre-1-0	\
 	ChangeLog.pre-1-2	\

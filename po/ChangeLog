@@ -1,3 +1,43 @@
+2002-03-12  Changwoo Ryu  <cwryu@debian.org>
+
+	* ko.po: Updated Korean translation.
+
+2002-03-09  Simos Xenitellis  <simos@hellug.gr>
+
+	* el.po: Updated Greek translation.
+
+2002-03-08  Valek Filippov  <frob@df.ru>
+
+	* ru.po: updated russian translation.
+
+Fri Mar 08 13:09:28 2002  Matthias Warkus <mawarkus@gnome.org>
+
+    * de.po: Last-minute update.
+
+2002-03-07  Ole Laursen  <olau@hardworking.dk>
+
+	* da.po: Updated Danish translation.
+
+2002-03-07  Carlos Perello Marin <carlos@gnome-db.org>
+
+	* es.po: Updated Spanish translation.
+
+2002-03-07  Changwoo Ryu  <cwryu@debian.org>
+
+	* ko.po: Updated Korean translation.
+
+2002-03-06  Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>
+
+	* nl.po: Updated Dutch translation (by Ronald Hummelink).
+	
+2002-03-06  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* no.po: Updated Norwegian (bokmål) translation.
+	
+2002-03-06  Germán Poo-Caamaño <gpoo@ubiobio.cl>
+
+        * es.po: Updated spanish translation.
+
 2002-03-06  Duarte Loreto <happyguy_pt@hotmail.com>
 
         * pt.po: Updated Portuguese translation.

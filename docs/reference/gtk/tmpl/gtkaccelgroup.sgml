@@ -6,7 +6,7 @@ Keyboard Accelerator Groups
 Groups of global keyboard accelerators for an entire #GtkWindow
 
 <!-- ##### SECTION Long_Description ##### -->
-<para>
+<para id="GtkAccelGroup">
 A #GtkAccelGroup represents a group of keyboard accelerators,
 typically attached to a toplevel #GtkWindow (with
 gtk_window_add_accel_group()). Usually you won't need to create a
