@@ -1,3 +1,12 @@
+2004-10-26  Anders Carlsson  <andersca@imendio.com>
+
+	* gtk/gtktextbuffer.c: (gtk_text_buffer_finalize),
+	(create_clipboard_contents_buffer), (clipboard_get_contents_cb),
+	(clipboard_clear_contents_cb), (cut_or_copy):
+	Rewrite clipboard handling so that the clipboard contents won't be
+	freed when the text buffer is finalized. Also add clipboard manager support.
+	Fixes #95496.
+
 2004-10-25  Anders Carlsson  <andersca@gnome.org>
 
 	* gtk/gtkentry.c: (gtk_entry_completion_timeout):

@@ -113,9 +113,10 @@ static void gtk_text_buffer_real_changed               (GtkTextBuffer     *buffe
 static GtkTextBTree* get_btree (GtkTextBuffer *buffer);
 static void          free_log_attr_cache (GtkTextLogAttrCache *cache);
 
-static void remove_all_clipboard_contents_buffers (GtkTextBuffer *buffer);
 static void remove_all_selection_clipboards       (GtkTextBuffer *buffer);
 static void update_selection_clipboards           (GtkTextBuffer *buffer);
+
+static GtkTextBuffer *create_clipboard_contents_buffer (GtkTextBuffer *buffer);
 
 static GObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -436,7 +437,6 @@ gtk_text_buffer_finalize (GObject *object)
 
   buffer = GTK_TEXT_BUFFER (object);
 
-  remove_all_clipboard_contents_buffers (buffer);
   remove_all_selection_clipboards (buffer);
 
   if (buffer->tag_table)
@@ -2761,85 +2761,16 @@ clipboard_get_selection_cb (GtkClipboard     *clipboard,
     }
 }
 
-typedef struct
-{
-  GtkClipboard *clipboard;
-  GtkTextBuffer *buffer;
-} ContentsBuffer;
-
-static void
-remove_all_clipboard_contents_buffers (GtkTextBuffer *buffer)
-{
-  GSList *tmp_list = buffer->clipboard_contents_buffers;
-  while (tmp_list)
-    {
-      ContentsBuffer *contents_buffer = tmp_list->data;
-
-      g_object_unref (contents_buffer->buffer);
-      g_free (contents_buffer);
-	  
-      tmp_list = tmp_list->next;
-    }
-
-  g_slist_free (buffer->clipboard_contents_buffers);
-  buffer->clipboard_contents_buffers = NULL;
-}
-
-static void
-remove_clipboard_contents_buffer (GtkTextBuffer *buffer,
-				  GtkClipboard  *clipboard)
-{
-  GSList *tmp_list = buffer->clipboard_contents_buffers;
-  while (tmp_list)
-    {
-      ContentsBuffer *contents_buffer = tmp_list->data;
-      
-      if (contents_buffer->clipboard == clipboard)
-	{
-	  buffer->clipboard_contents_buffers = g_slist_remove (buffer->clipboard_contents_buffers, contents_buffer);
-	  
-	  g_object_unref (contents_buffer->buffer);
-	  g_free (contents_buffer);
-	  
-	  return;
-	}
-
-      tmp_list = tmp_list->next;
-    }
-}
-
 static GtkTextBuffer *
-get_clipboard_contents_buffer (GtkTextBuffer *buffer,
-			       GtkClipboard  *clipboard,
-			       gboolean       create)
+create_clipboard_contents_buffer (GtkTextBuffer *buffer)
 {
-  ContentsBuffer *contents_buffer;
-  GSList *tmp_list;
+  GtkTextBuffer *contents;
 
-  tmp_list = buffer->clipboard_contents_buffers;
-  while (tmp_list)
-    {
-      contents_buffer = tmp_list->data;
-      if (contents_buffer->clipboard == clipboard)
-	return contents_buffer->buffer;
-    }
+  contents = gtk_text_buffer_new (gtk_text_buffer_get_tag_table (buffer));
+
+  g_object_set_data (G_OBJECT (contents), "gtk-text-buffer-clipboard", GINT_TO_POINTER (1));
   
-  if (create)
-    {
-      contents_buffer = g_new (ContentsBuffer, 1);
-      contents_buffer->clipboard = clipboard;
-      contents_buffer->buffer = gtk_text_buffer_new (gtk_text_buffer_get_tag_table (buffer));
-
-      g_object_set_data (G_OBJECT (contents_buffer->buffer), "gtk-text-buffer-clipboard",
-			 GUINT_TO_POINTER (1));
-
-      buffer->clipboard_contents_buffers = g_slist_prepend (buffer->clipboard_contents_buffers, contents_buffer);
-
-      
-      return contents_buffer->buffer;
-    }
-  else
-    return NULL;
+  return contents;
 }
 
 /* Provide cut/copied data */
@@ -2849,11 +2780,9 @@ clipboard_get_contents_cb (GtkClipboard     *clipboard,
                            guint             info,
                            gpointer          data)
 {
-  GtkTextBuffer *buffer;
   GtkTextBuffer *contents;
 
-  buffer = GTK_TEXT_BUFFER (data);
-  contents = get_clipboard_contents_buffer (buffer, clipboard, FALSE);
+  contents = GTK_TEXT_BUFFER (data);
   
   g_assert (contents); /* This should never be called unless we own the clipboard */
 
@@ -2886,9 +2815,9 @@ static void
 clipboard_clear_contents_cb (GtkClipboard *clipboard,
                              gpointer      data)
 {
-  GtkTextBuffer *buffer = GTK_TEXT_BUFFER (data);
+  GtkTextBuffer *contents = GTK_TEXT_BUFFER (data);
 
-  remove_clipboard_contents_buffer (buffer, clipboard);
+  g_object_unref (contents);
 }
 
 static void
@@ -3512,19 +3441,20 @@ cut_or_copy (GtkTextBuffer *buffer,
       GtkTextIter ins;
       GtkTextBuffer *contents;
 
-      remove_clipboard_contents_buffer (buffer, clipboard);
-      contents = get_clipboard_contents_buffer (buffer, clipboard, TRUE);
+      contents = create_clipboard_contents_buffer (buffer);
 
       gtk_text_buffer_get_iter_at_offset (contents, &ins, 0);
       
       gtk_text_buffer_insert_range (contents, &ins, &start, &end);
                                     
-      if (!gtk_clipboard_set_with_owner (clipboard, targets, G_N_ELEMENTS (targets),
-                                         clipboard_get_contents_cb,
-                                         clipboard_clear_contents_cb,
-                                         G_OBJECT (buffer)))
-        clipboard_clear_contents_cb (clipboard, buffer);      
-
+      if (!gtk_clipboard_set_with_data (clipboard, targets, G_N_ELEMENTS (targets),
+					clipboard_get_contents_cb,
+					clipboard_clear_contents_cb,
+					contents))
+	g_object_unref (contents);
+      else
+	gtk_clipboard_set_can_store (clipboard, targets, G_N_ELEMENTS (targets) -1);
+				     
       if (delete_region_after)
         {
           if (interactive)
