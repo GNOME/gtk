@@ -49,7 +49,7 @@ gdk_pango_context_get (void)
     {
       const char *val = g_getenv ("GDK_USE_XFT");
 
-      use_xft = val && (atoi (val) != 0);
+      use_xft = val && (atoi (val) != 0) && _gdk_x11_have_render ();
     }
   
   if (use_xft)

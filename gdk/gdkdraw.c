@@ -27,15 +27,34 @@
 #include "gdkdrawable.h"
 #include "gdkinternals.h"
 #include "gdkwindow.h"
+#include "gdk-pixbuf-private.h"
+#include "gdkpixbuf.h"
 
-static GdkDrawable* gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
-							      gint         x,
-							      gint         y,
-							      gint         width,
-							      gint         height,
-							      gint        *composite_x_offset,
-							      gint        *composite_y_offset);
-static GdkRegion *  gdk_drawable_real_get_visible_region     (GdkDrawable *drawable);
+static GdkImage*    gdk_drawable_real_get_image (GdkDrawable     *drawable,
+						 gint             x,
+						 gint             y,
+						 gint             width,
+						 gint             height);
+static GdkDrawable* gdk_drawable_real_get_composite_drawable (GdkDrawable  *drawable,
+							      gint          x,
+							      gint          y,
+							      gint          width,
+							      gint          height,
+							      gint         *composite_x_offset,
+							      gint         *composite_y_offset);
+static GdkRegion *  gdk_drawable_real_get_visible_region     (GdkDrawable  *drawable);
+static void         gdk_drawable_real_draw_pixbuf            (GdkDrawable  *drawable,
+							      GdkGC        *gc,
+							      GdkPixbuf    *pixbuf,
+							      gint          src_x,
+							      gint          src_y,
+							      gint          dest_x,
+							      gint          dest_y,
+							      gint          width,
+							      gint          height,
+							      GdkRgbDither  dither,
+							      gint          x_dither,
+							      gint          y_dither);
 
 static void gdk_drawable_class_init (GdkDrawableClass *klass);
 
@@ -70,10 +89,12 @@ gdk_drawable_get_type (void)
 static void
 gdk_drawable_class_init (GdkDrawableClass *klass)
 {
+  klass->get_image = gdk_drawable_real_get_image;
   klass->get_composite_drawable = gdk_drawable_real_get_composite_drawable;
   /* Default implementation for clip and visible region is the same */
   klass->get_clip_region = gdk_drawable_real_get_visible_region;
   klass->get_visible_region = gdk_drawable_real_get_visible_region;
+  klass->_draw_pixbuf = gdk_drawable_real_draw_pixbuf;
 }
 
 /* Manipulation of drawables
@@ -529,6 +550,57 @@ gdk_draw_image (GdkDrawable *drawable,
                                                  xdest, ydest, width, height);
 }
 
+/**
+ * _gdk_draw_pixbuf:
+ * @drawable: Destination drawable.
+ * @gc: a #GdkGC, used for clipping, or %NULL
+ * @pixbuf: a #GdkPixbuf
+ * @src_x: Source X coordinate within pixbuf.
+ * @src_y: Source Y coordinates within pixbuf.
+ * @dest_x: Destination X coordinate within drawable.
+ * @dest_y: Destination Y coordinate within drawable.
+ * @width: Width of region to render, in pixels, or -1 to use pixbuf width.
+ * @height: Height of region to render, in pixels, or -1 to use pixbuf height.
+ * @dither: Dithering mode for GdkRGB.
+ * @x_dither: X offset for dither.
+ * @y_dither: Y offset for dither.
+ * 
+ * Renders a rectangular portion of a pixbuf to a drawable.  The destination
+ * drawable must have a colormap. All windows have a colormap, however, pixmaps
+ * only have colormap by default if they were created with a non-NULL window argument.
+ * Otherwise a colormap must be set on them with gdk_drawable_set_colormap.
+ *
+ * On older X servers, rendering pixbufs with an alpha channel involves round trips
+ * to the X server, and may be somewhat slow.
+ **/
+void
+_gdk_draw_pixbuf (GdkDrawable     *drawable,
+		  GdkGC           *gc,
+		  GdkPixbuf       *pixbuf,
+		  gint             src_x,
+		  gint             src_y,
+		  gint             dest_x,
+		  gint             dest_y,
+		  gint             width,
+		  gint             height,
+		  GdkRgbDither     dither,
+		  gint             x_dither,
+		  gint             y_dither)
+{
+  g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  g_return_if_fail (gc == NULL || GDK_IS_GC (gc));
+  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+
+  if (width == -1)
+    width = gdk_pixbuf_get_width (pixbuf);
+  if (height == -1)
+    height = gdk_pixbuf_get_height (pixbuf);
+
+  GDK_DRAWABLE_GET_CLASS (drawable)->_draw_pixbuf (drawable, gc, pixbuf,
+						   src_x, src_y, dest_x, dest_y, width, height,
+						   dither, x_dither, y_dither);
+}
+
 void
 gdk_draw_points (GdkDrawable *drawable,
 		 GdkGC       *gc,
@@ -618,6 +690,80 @@ gdk_draw_glyphs (GdkDrawable      *drawable,
 
 
 /**
+ * _gdk_drawable_copy_to_image:
+ * @drawable: a #GdkDrawable
+ * @image: a #GdkDrawable, or %NULL if a new @image should be created.
+ * @src_x: x coordinate on @drawable
+ * @src_y: y coordinate on @drawable
+ * @dest_x: x coordinate within @image. Must be 0 if @image is %NULL
+ * @dest_y: y coordinate within @image. Must be 0 if @image is %NULL
+ * @width: width of region to get
+ * @height: height or region to get
+ *
+ * Copies a portion of @drawable into the client side image structure
+ * @image. If @image is %NULL, creates a new image of size @width x @height
+ * and copies into that. See gdk_drawable_get_image() for further details.
+ * 
+ * Return value: @image, or a new a #GdkImage containing the contents
+                 of @drawable
+ **/
+GdkImage*
+_gdk_drawable_copy_to_image (GdkDrawable *drawable,
+			     GdkImage    *image,
+			     gint         src_x,
+			     gint         src_y,
+			     gint         dest_x,
+			     gint         dest_y,
+			     gint         width,
+			     gint         height)
+{
+  GdkDrawable *composite;
+  gint composite_x_offset = 0;
+  gint composite_y_offset = 0;
+  GdkImage *retval;
+  GdkColormap *cmap;
+  
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+  g_return_val_if_fail (src_x >= 0, NULL);
+  g_return_val_if_fail (src_y >= 0, NULL);
+
+  /* FIXME? Note race condition since we get the size then
+   * get the image, and the size may have changed.
+   */
+  
+  if (width < 0 || height < 0)
+    gdk_drawable_get_size (drawable,
+                           width < 0 ? &width : NULL,
+                           height < 0 ? &height : NULL);
+  
+  composite =
+    GDK_DRAWABLE_GET_CLASS (drawable)->get_composite_drawable (drawable,
+                                                               src_x, src_y,
+                                                               width, height,
+                                                               &composite_x_offset,
+                                                               &composite_y_offset); 
+  
+  retval = GDK_DRAWABLE_GET_CLASS (composite)->_copy_to_image (composite,
+							       image,
+							       src_x - composite_x_offset,
+							       src_y - composite_y_offset,
+							       dest_x, dest_y,
+							       width, height);
+
+  g_object_unref (G_OBJECT (composite));
+
+  if (!image && retval)
+    {
+      cmap = gdk_drawable_get_colormap (drawable);
+      
+      if (cmap)
+	gdk_image_set_colormap (retval, cmap);
+    }
+  
+  return retval;
+}
+
+/**
  * gdk_drawable_get_image:
  * @drawable: a #GdkDrawable
  * @x: x coordinate on @drawable
@@ -705,6 +851,16 @@ gdk_drawable_get_image (GdkDrawable *drawable,
   return retval;
 }
 
+static GdkImage*
+gdk_drawable_real_get_image (GdkDrawable     *drawable,
+			     gint             x,
+			     gint             y,
+			     gint             width,
+			     gint             height)
+{
+  return _gdk_drawable_copy_to_image (drawable, NULL, x, y, 0, 0, width, height);
+}
+
 static GdkDrawable*
 gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
                                           gint         x,
@@ -775,4 +931,387 @@ gdk_drawable_real_get_visible_region (GdkDrawable *drawable)
   gdk_drawable_get_size (drawable, &rect.width, &rect.height);
 
   return gdk_region_rectangle (&rect);
+}
+
+static void
+composite (guchar *src_buf,
+	   gint    src_rowstride,
+	   guchar *dest_buf,
+	   gint    dest_rowstride,
+	   gint    width,
+	   gint    height)
+{
+  guchar *src = src_buf;
+  guchar *dest = dest_buf;
+
+  while (height--)
+    {
+      gint twidth = width;
+      guchar *p = src;
+      guchar *q = dest;
+
+      while (twidth--)
+	{
+	  guchar a = p[3];
+	  guint t;
+
+	  t = a * p[0] + (255 - a) * q[0] + 0x80;
+	  q[0] = (t + (t >> 8)) >> 8;
+	  t = a * p[1] + (255 - a) * q[1] + 0x80;
+	  q[1] = (t + (t >> 8)) >> 8;
+	  t = a * p[2] + (255 - a) * q[2] + 0x80;
+	  q[2] = (t + (t >> 8)) >> 8;
+
+	  p += 4;
+	  q += 3;
+	}
+      
+      src += src_rowstride;
+      dest += dest_rowstride;
+    }
+}
+
+static void
+composite_0888 (guchar      *src_buf,
+		gint         src_rowstride,
+		guchar      *dest_buf,
+		gint         dest_rowstride,
+		GdkByteOrder dest_byte_order,
+		gint         width,
+		gint         height)
+{
+  guchar *src = src_buf;
+  guchar *dest = dest_buf;
+
+  while (height--)
+    {
+      gint twidth = width;
+      guchar *p = src;
+      guchar *q = dest;
+
+      if (dest_byte_order == GDK_LSB_FIRST)
+	{
+	  while (twidth--)
+	    {
+	      guint t;
+	      
+	      t = p[3] * p[2] + (255 - p[3]) * q[0] + 0x80;
+	      q[0] = (t + (t >> 8)) >> 8;
+	      t = p[3] * p[1] + (255 - p[3]) * q[1] + 0x80;
+	      q[1] = (t + (t >> 8)) >> 8;
+	      t = p[3] * p[0] + (255 - p[3]) * q[2] + 0x80;
+	      q[2] = (t + (t >> 8)) >> 8;
+	      p += 4;
+	      q += 4;
+	    }
+	}
+      else
+	{
+	  while (twidth--)
+	    {
+	      guint t;
+	      
+	      t = p[3] * p[0] + (255 - p[3]) * q[1] + 0x80;
+	      q[1] = (t + (t >> 8)) >> 8;
+	      t = p[3] * p[1] + (255 - p[3]) * q[2] + 0x80;
+	      q[2] = (t + (t >> 8)) >> 8;
+	      t = p[3] * p[2] + (255 - p[3]) * q[3] + 0x80;
+	      q[3] = (t + (t >> 8)) >> 8;
+	      p += 4;
+	      q += 4;
+	    }
+	}
+      
+      src += src_rowstride;
+      dest += dest_rowstride;
+    }
+}
+
+static void
+composite_565 (guchar      *src_buf,
+	       gint         src_rowstride,
+	       guchar      *dest_buf,
+	       gint         dest_rowstride,
+	       GdkByteOrder dest_byte_order,
+	       gint         width,
+	       gint         height)
+{
+  guchar *src = src_buf;
+  guchar *dest = dest_buf;
+
+  while (height--)
+    {
+      gint twidth = width;
+      guchar *p = src;
+      gushort *q = (gushort *)dest;
+
+      while (twidth--)
+	{
+	  guchar a = p[3];
+	  guint tr, tg, tb;
+	  guint tr1, tg1, tb1;
+	  guint tmp = *q;
+
+#if 1
+	  /* This is fast, and corresponds to what composite() above does
+	   * if we converted to 8-bit first.
+	   */
+	  tr = (tmp & 0xf800);
+	  tr1 = a * p[0] + (255 - a) * ((tr >> 8) + (tr >> 13)) + 0x80;
+	  tg = (tmp & 0x07e0);
+	  tg1 = a * p[1] + (255 - a) * ((tg >> 3) + (tg >> 9)) + 0x80;
+	  tb = (tmp & 0x001f);
+	  tb1 = a * p[2] + (255 - a) * ((tb << 3) + (tb >> 2)) + 0x80;
+
+	  *q = (((tr1 + (tr1 >> 8)) & 0xf800) |
+		(((tg1 + (tg1 >> 8)) & 0xfc00) >> 5)  |
+		((tb1 + (tb1 >> 8)) >> 11));
+#else
+	  /* This version correspond to the result we get with XRENDER -
+	   * a bit of precision is lost since we convert to 8 bit after premultiplying
+	   * instead of at the end
+	   */
+	  guint tr2, tg2, tb2;
+	  guint tr3, tg3, tb3;
+	  
+	  tr = (tmp & 0xf800);
+	  tr1 = (255 - a) * ((tr >> 8) + (tr >> 13)) + 0x80;
+	  tr2 = a * p[0] + 0x80;
+	  tr3 = ((tr1 + (tr1 >> 8)) >> 8) + ((tr2 + (tr2 >> 8)) >> 8);
+
+	  tg = (tmp & 0x07e0);
+	  tg1 = (255 - a) * ((tg >> 3) + (tg >> 9)) + 0x80;
+	  tg2 = a * p[0] + 0x80;
+	  tg3 = ((tg1 + (tg1 >> 8)) >> 8) + ((tg2 + (tg2 >> 8)) >> 8);
+
+	  tb = (tmp & 0x001f);
+	  tb1 = (255 - a) * ((tb << 3) + (tb >> 2)) + 0x80;
+	  tb2 = a * p[0] + 0x80;
+	  tb3 = ((tb1 + (tb1 >> 8)) >> 8) + ((tb2 + (tb2 >> 8)) >> 8);
+
+	  *q = (((tr3 & 0xf8) << 8) |
+		((tg3 & 0xfc) << 3) |
+		((tb3 >> 3)));
+#endif
+	  
+	  p += 4;
+	  q++;
+	}
+      
+      src += src_rowstride;
+      dest += dest_rowstride;
+    }
+}
+
+static void
+gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
+			       GdkGC        *gc,
+			       GdkPixbuf    *pixbuf,
+			       gint          src_x,
+			       gint          src_y,
+			       gint          dest_x,
+			       gint          dest_y,
+			       gint          width,
+			       gint          height,
+			       GdkRgbDither  dither,
+			       gint          x_dither,
+			       gint          y_dither)
+{
+  gboolean free_gc = FALSE;
+  GdkPixbuf *composited = NULL;
+  gint dwidth, dheight;
+  GdkRegion *clip;
+  GdkRegion *drect;
+  GdkRectangle tmp_rect;
+				       
+  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+  g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
+  g_return_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4);
+  g_return_if_fail (pixbuf->bits_per_sample == 8);
+
+  g_return_if_fail (drawable != NULL);
+
+  if (width == -1) 
+    width = pixbuf->width;
+  if (height == -1)
+    height = pixbuf->height;
+
+  g_return_if_fail (width >= 0 && height >= 0);
+  g_return_if_fail (src_x >= 0 && src_x + width <= pixbuf->width);
+  g_return_if_fail (src_y >= 0 && src_y + height <= pixbuf->height);
+
+  /* Clip to the drawable; this is required for get_from_drawable() so
+   * can't be done implicitly
+   */
+  
+  if (dest_x < 0)
+    {
+      src_x -= dest_x;
+      width += dest_x;
+      dest_x = 0;
+    }
+
+  if (dest_y < 0)
+    {
+      src_y -= dest_y;
+      height += dest_y;
+      dest_y = 0;
+    }
+
+  gdk_drawable_get_size (drawable, &dwidth, &dheight);
+
+  if ((dest_x + width) > dwidth)
+    width = dwidth - dest_x;
+
+  if ((dest_y + height) > dheight)
+    height = dheight - dest_y;
+
+  if (width <= 0 || height <= 0)
+    return;
+
+  /* Clip to the clip region; this avoids getting more
+   * image data from the server than we need to.
+   */
+  
+  tmp_rect.x = dest_x;
+  tmp_rect.y = dest_y;
+  tmp_rect.width = width;
+  tmp_rect.height = height;
+
+  drect = gdk_region_rectangle (&tmp_rect);
+  clip = gdk_drawable_get_clip_region (drawable);
+
+  gdk_region_intersect (drect, clip);
+
+  gdk_region_get_clipbox (drect, &tmp_rect);
+  
+  gdk_region_destroy (drect);
+  gdk_region_destroy (clip);
+
+  if (tmp_rect.width == 0 ||
+      tmp_rect.height == 0)
+    return;
+  
+  /* Actually draw */
+
+  if (!gc)
+    {
+      gc = gdk_gc_new (drawable);
+      free_gc = TRUE;
+    }
+  
+  if (pixbuf->has_alpha)
+    {
+      GdkVisual *visual = gdk_drawable_get_visual (drawable);
+      void (*composite_func) (guchar       *src_buf,
+			      gint          src_rowstride,
+			      guchar       *dest_buf,
+			      gint          dest_rowstride,
+			      GdkByteOrder  dest_byte_order,
+			      gint          width,
+			      gint          height) = NULL;
+
+      /* First we see if we have a visual-specific composition function that can composite
+       * the pixbuf data directly onto the image
+       */
+      if (visual)
+	{
+	  gint bits_per_pixel = _gdk_windowing_get_bits_for_depth (visual->depth);
+	  
+	  if (visual->byte_order == (G_BYTE_ORDER == G_BIG_ENDIAN ? GDK_MSB_FIRST : GDK_LSB_FIRST) &&
+	      visual->depth == 16 &&
+	      visual->red_mask   == 0xf800 &&
+	      visual->green_mask == 0x07e0 &&
+	      visual->blue_mask  == 0x001f)
+	    composite_func = composite_565;
+	  else if (visual->depth == 24 && bits_per_pixel == 32 &&
+		   visual->red_mask   == 0xff0000 &&
+		   visual->green_mask == 0x00ff00 &&
+		   visual->blue_mask  == 0x0000ff)
+	    composite_func = composite_0888;
+	}
+
+      /* We can't use our composite func if we are required to dither
+       */
+      if (composite_func && !(dither == GDK_RGB_DITHER_MAX && visual->depth != 24))
+	{
+	  gint x0, y0;
+	  for (y0 = 0; y0 < height; y0 += GDK_SCRATCH_IMAGE_HEIGHT)
+	    {
+	      gint height1 = MIN (height - y0, GDK_SCRATCH_IMAGE_HEIGHT);
+	      for (x0 = 0; x0 < width; x0 += GDK_SCRATCH_IMAGE_WIDTH)
+		{
+		  gint xs0, ys0;
+		  
+		  gint width1 = MIN (width - x0, GDK_SCRATCH_IMAGE_WIDTH);
+		  
+		  GdkImage *image = _gdk_image_get_scratch (width1, height1, gdk_drawable_get_depth (drawable), &xs0, &ys0);
+		  
+		  _gdk_drawable_copy_to_image (drawable, image,
+					       dest_x + x0, dest_y + y0,
+					       xs0, ys0,
+					       width1, height1);
+		  (*composite_func) (pixbuf->pixels + (src_y + y0) * pixbuf->rowstride + (src_x + x0) * 4,
+				     pixbuf->rowstride,
+				     image->mem + ys0 * image->bpl + xs0 * image->bpp,
+				     image->bpl,
+				     visual->byte_order,
+				     width1, height1);
+		  gdk_draw_image (drawable, gc, image,
+				  xs0, ys0,
+				  dest_x + x0, dest_y + y0,
+				  width1, height1);
+		}
+	    }
+	  
+	  goto out;
+	}
+      else
+	{
+	  /* No special composition func, convert dest to 24 bit RGB data, composite against
+	   * that, and convert back.
+	   */
+	  composited = gdk_pixbuf_get_from_drawable (NULL,
+						     drawable,
+						     NULL,
+						     dest_x, dest_y,
+						     0, 0,
+						     width, height);
+	  
+	  if (composited)
+	    composite (pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 4,
+		       pixbuf->rowstride,
+		       composited->pixels,
+		       composited->rowstride,
+		       width, height);
+	}
+    }
+
+  if (composited)
+    {
+      gdk_pixbuf_render_to_drawable (composited,
+                                     drawable, gc,
+                                     0, 0,
+                                     dest_x, dest_y,
+                                     width, height,
+                                     dither,
+                                     x_dither, y_dither);
+    }
+  else
+    {
+      gdk_pixbuf_render_to_drawable (pixbuf,
+                                     drawable, gc,
+                                     src_x, src_y,
+                                     dest_x, dest_y,
+                                     width, height,
+                                     dither,
+                                     x_dither, y_dither);
+    }
+
+ out:
+  if (composited)
+    g_object_unref (G_OBJECT (composited));
+
+  if (free_gc)
+    gdk_gc_unref (gc);
 }

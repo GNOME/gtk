@@ -126,12 +126,27 @@ static void   gdk_window_draw_image     (GdkDrawable     *drawable,
                                          gint             width,
                                          gint             height);
 
-static GdkImage*  gdk_window_get_image  (GdkDrawable     *drawable,
-                                         gint             x,
-                                         gint             y,
-                                         gint             width,
-                                         gint             height);
+static void gdk_window_draw_pixbuf (GdkDrawable     *drawable,
+				    GdkGC           *gc,
+				    GdkPixbuf       *pixbuf,
+				    gint             src_x,
+				    gint             src_y,
+				    gint             dest_x,
+				    gint             dest_y,
+				    gint             width,
+				    gint             height,
+				    GdkRgbDither     dither,
+				    gint             x_dither,
+				    gint             y_dither);
 
+static GdkImage* gdk_window_copy_to_image (GdkDrawable *drawable,
+					   GdkImage    *image,
+					   gint         src_x,
+					   gint         src_y,
+					   gint         dest_x,
+					   gint         dest_y,
+					   gint         width,
+					   gint         height);
 
 static void   gdk_window_real_get_size  (GdkDrawable     *drawable,
                                          gint            *width,
@@ -223,12 +238,13 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->draw_lines = gdk_window_draw_lines;
   drawable_class->draw_glyphs = gdk_window_draw_glyphs;
   drawable_class->draw_image = gdk_window_draw_image;
+  drawable_class->_draw_pixbuf = gdk_window_draw_pixbuf;
   drawable_class->get_depth = gdk_window_real_get_depth;
   drawable_class->get_size = gdk_window_real_get_size;
   drawable_class->set_colormap = gdk_window_real_set_colormap;
   drawable_class->get_colormap = gdk_window_real_get_colormap;
   drawable_class->get_visual = gdk_window_real_get_visual;
-  drawable_class->get_image = gdk_window_get_image;
+  drawable_class->_copy_to_image = gdk_window_copy_to_image;
   drawable_class->get_clip_region = gdk_window_get_clip_region;
   drawable_class->get_visible_region = gdk_window_get_visible_region;
   drawable_class->get_composite_drawable = gdk_window_get_composite_drawable;
@@ -1862,6 +1878,65 @@ gdk_window_draw_image (GdkDrawable *drawable,
   RESTORE_GC (gc);
 }
 
+static void
+gdk_window_draw_pixbuf (GdkDrawable     *drawable,
+			GdkGC           *gc,
+			GdkPixbuf       *pixbuf,
+			gint             src_x,
+			gint             src_y,
+			gint             dest_x,
+			gint             dest_y,
+			gint             width,
+			gint             height,
+			GdkRgbDither     dither,
+			gint             x_dither,
+			gint             y_dither)
+{
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
+
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
+  
+  if (gc)
+    {
+      OFFSET_GC (gc);
+  
+      if (private->paint_stack)
+	{
+	  GdkWindowPaint *paint = private->paint_stack->data;
+	  _gdk_draw_pixbuf (paint->pixmap, gc, pixbuf, src_x, src_y,
+			    dest_x - x_offset, dest_y - y_offset,
+			    width, height,
+			    dither, x_dither - x_offset, y_dither - y_offset);
+	}
+      else
+	_gdk_draw_pixbuf (private->impl, gc, pixbuf, src_x, src_y,
+			  dest_x - x_offset, dest_y - y_offset,
+			  width, height,
+			  dither, x_dither, y_dither);
+      
+      RESTORE_GC (gc);
+    }
+  else
+    {
+      gint x_offset, y_offset;
+      gdk_window_get_offsets (drawable, &x_offset, &y_offset);
+      
+      if (private->paint_stack)
+	{
+	  GdkWindowPaint *paint = private->paint_stack->data;
+	  _gdk_draw_pixbuf (paint->pixmap, gc, pixbuf, src_x, src_y,
+			    dest_x - x_offset, dest_y - y_offset,
+			    width, height,
+			    dither, x_dither - x_offset, y_dither - y_offset);
+	}
+      else
+	_gdk_draw_pixbuf (private->impl, gc, pixbuf, src_x, src_y,
+			  dest_x - x_offset, dest_y - y_offset,
+			  width, height,
+			  dither, x_dither, y_dither);
+    }
+}
 
 static void
 gdk_window_real_get_size (GdkDrawable *drawable,
@@ -1927,11 +2002,14 @@ gdk_window_real_get_colormap (GdkDrawable *drawable)
 }
                       
 static GdkImage*
-gdk_window_get_image (GdkDrawable *drawable,
-                      gint         x,
-                      gint         y,
-                      gint         width,
-                      gint         height)
+gdk_window_copy_to_image (GdkDrawable     *drawable,
+			  GdkImage        *image,
+			  gint             src_x,
+			  gint             src_y,
+			  gint             dest_x,
+			  gint             dest_y,
+			  gint             width,
+			  gint             height)
 {
   gint x_offset, y_offset;
   
@@ -1946,10 +2024,12 @@ gdk_window_get_image (GdkDrawable *drawable,
   
   _gdk_windowing_window_get_offsets (drawable, &x_offset, &y_offset);
   
-  return gdk_drawable_get_image (((GdkWindowObject*)drawable)->impl,
-                                 x - x_offset,
-                                 y - y_offset,
-                                 width, height);
+  return _gdk_drawable_copy_to_image (((GdkWindowObject*)drawable)->impl,
+				      image,
+				      src_x - x_offset,
+				      src_y - y_offset,
+				      dest_x, dest_y,
+				      width, height);
 }
 
 /* Code for dirty-region queueing

@@ -46,22 +46,10 @@
 
 #define ENABLE_GRAYSCALE
 
-#ifdef GDK_RGB_STANDALONE
-
-/* Compiling as a standalone module (i.e. with Gtk 1.0) */
-/* gtk/gtk.h is already included in gdkrgbstub.c */
-#include "config.h"
-#include <gdk/gdkprivate.h>
-
-#else
-
-/* Compiling as a part of Gtk 1.1 or later */
 #include "config.h"
 #include "gdkprivate.h"
+#include "gdkinternals.h"	/* _gdk_windowing_get_bits_for_depth() */
 
-#endif
-
-#include "gdk.h"		/* For gdk_flush() */
 #include "gdkrgb.h"
 
 typedef struct _GdkRgbInfo     GdkRgbInfo;
@@ -84,30 +72,10 @@ static const gchar* visual_names[] =
   "direct color",
 };
 
-#define REGION_WIDTH 256
-#define STAGE_ROWSTRIDE (REGION_WIDTH * 3)
-#define REGION_HEIGHT 64
+#define STAGE_ROWSTRIDE (GDK_SCRATCH_IMAGE_WIDTH * 3)
 
-/* We have N_REGION REGION_WIDTH x REGION_HEIGHT regions divided
- * up between n_images different images. possible_n_images gives
- * various divisors of N_REGIONS. The reason for allowing this
- * flexibility is that we want to create as few images as possible,
- * but we want to deal with the abberant systems that have a SHMMAX
- * limit less than
- *
- * REGION_WIDTH * REGION_HEIGHT * N_REGIONS * 4 (384k)
- *
- * (Are there any such?)
+/* Some of these fields should go, as they're not being used at all. (?)
  */
-#define N_REGIONS 6
-static const int possible_n_images[] = { 1, 2, 3, 6 };
-
-/* Some of these fields should go, as they're not being used at all.
-   Globals should generally migrate into here - it's very likely that
-   we'll want to run more than one GdkRgbInfo context at the same time
-   (i.e. some but not all windows have privately installed
-   colormaps). */
-
 struct _GdkRgbInfo
 {
   GdkVisual *visual;
@@ -146,32 +114,6 @@ struct _GdkRgbInfo
 
   GdkRgbConvFunc conv_indexed;
   GdkRgbConvFunc conv_indexed_d;
-
-  gint n_images;
-  GdkImage *static_image[N_REGIONS];
-  gint static_image_idx;
-
-  /* In order to optimize filling fractions, we simultaneously fill in up
-   * to three regions of size REGION_WIDTH * REGION_HEIGHT: one
-   * for images that are taller than REGION_HEIGHT / 2, and must
-   * be tiled horizontally. One for images that are wider than
-   * REGION_WIDTH / 2 and must be tiled vertically, and a third
-   * for images smaller than REGION_HEIGHT / 2 x REGION_WIDTH x 2
-   * that we tile in horizontal rows.
-   */
-  gint horiz_idx;
-  gint horiz_y;
-  gint vert_idx;
-  gint vert_x;
-  
-  /* tile_y1 and tile_y2 define the horizontal band into
-   * which we are tiling images. tile_x is the x extent to
-   * which that is filled
-   */
-  gint tile_idx;
-  gint tile_x;
-  gint tile_y1;
-  gint tile_y2;
 
   guchar *colorcube;
   guchar *colorcube_d;
@@ -562,7 +504,7 @@ gdk_rgb_choose_visual (void)
   return best_visual;
 }
 
-static void gdk_rgb_select_conv (GdkRgbInfo *image_info, GdkImage *image);
+static void gdk_rgb_select_conv (GdkRgbInfo *image_info);
 
 static void
 gdk_rgb_set_gray_cmap (GdkRgbInfo  *image_info,
@@ -606,39 +548,10 @@ gdk_rgb_set_gray_cmap (GdkRgbInfo  *image_info,
     }
 }
 
-static gboolean
-gdk_rgb_allocate_images (GdkRgbInfo *image_info,
-			 gint        n_images,
-			 gboolean    shared)
-{
-  gint i;
-  
-  for (i = 0; i < n_images; i++)
-    {
-      image_info->static_image[i] = gdk_image_new (shared ? GDK_IMAGE_SHARED : GDK_IMAGE_NORMAL,
-						   image_info->visual,
-						   REGION_WIDTH * (N_REGIONS / n_images), REGION_HEIGHT);
-
-      if (!image_info->static_image[i])
-	{
-	  gint j;
-
-	  for (j = 0; j < i; j++)
-	    gdk_image_unref (image_info->static_image[i]);
-
-	  return FALSE;
-	}
-    }
-  
-  return TRUE;
-}
-
 static void
 gdk_rgb_free_info (GdkRgbInfo *image_info)
 {
-  gint i;
   GSList *tmp_list;
-
   
   if (image_info->stage_buf)
     g_free (image_info->stage_buf);
@@ -648,9 +561,6 @@ gdk_rgb_free_info (GdkRgbInfo *image_info)
 
   if (image_info->own_gc)
     gdk_gc_unref (image_info->own_gc);
-
-  for (i = 0; i < image_info->n_images; i++)
-    gdk_image_unref (image_info->static_image[i]);
 
   if (image_info->colorcube)
     g_free (image_info->colorcube);
@@ -679,7 +589,6 @@ static GdkRgbInfo *
 gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 {
   GdkRgbInfo *image_info;
-  gint i;
 
   image_info = g_new0 (GdkRgbInfo, 1);
 
@@ -765,33 +674,9 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 
   image_info->bitmap = (image_info->visual->depth == 1);
 
-  /* Try to allocate as few possible shared images */
-  for (i=0; i < G_N_ELEMENTS (possible_n_images); i++)
-    {
-      if (gdk_rgb_allocate_images (image_info, possible_n_images[i], TRUE))
-	{
-	  image_info->n_images = possible_n_images[i];
-	  break;
-	}
-    }
+  image_info->bpp = (_gdk_windowing_get_bits_for_depth (image_info->visual->depth) + 7) / 8;
 
-  /* If that fails, just allocate N_REGIONS normal images */
-  if (i == G_N_ELEMENTS (possible_n_images))
-    {
-      gdk_rgb_allocate_images (image_info, N_REGIONS, FALSE);
-      image_info->n_images = N_REGIONS;
-    }
-
-  image_info->bpp = image_info->static_image[0]->bpp;
-
-  image_info->static_image_idx = 0;
-
-  image_info->horiz_y = REGION_HEIGHT;
-  image_info->vert_x = REGION_WIDTH;
-  image_info->tile_x = REGION_WIDTH;
-  image_info->tile_y1 = image_info->tile_y2 = REGION_HEIGHT;
-
-  gdk_rgb_select_conv (image_info, image_info->static_image[0]);
+  gdk_rgb_select_conv (image_info);
 
   if (!gdk_rgb_quark)
     gdk_rgb_quark = g_quark_from_static_string (gdk_rgb_key);
@@ -1415,7 +1300,7 @@ gdk_rgb_convert_gray8_gray (GdkRgbInfo *image_info, GdkImage *image,
 #ifdef HAIRY_CONVERT_565
 /* Render a 24-bit RGB image in buf into the GdkImage, without dithering.
    This assumes native byte ordering - what should really be done is to
-   check whether static_image->byte_order is consistent with the _ENDIAN
+   check whether the the image byte_order is consistent with the _ENDIAN
    config flag, and if not, use a different function.
 
    This one is even faster than the one below - its inner loop loads 3
@@ -1499,7 +1384,7 @@ gdk_rgb_convert_565 (GdkRgbInfo *image_info, GdkImage *image,
 #else
 /* Render a 24-bit RGB image in buf into the GdkImage, without dithering.
    This assumes native byte ordering - what should really be done is to
-   check whether static_image->byte_order is consistent with the _ENDIAN
+   check whether the image byte_order is consistent with the _ENDIAN
    config flag, and if not, use a different function.
 
    This routine is faster than the one included with Gtk 1.0 for a number
@@ -2670,7 +2555,7 @@ static guchar *
 gdk_rgb_ensure_stage (GdkRgbInfo *image_info)
 {
   if (image_info->stage_buf == NULL)
-    image_info->stage_buf = g_malloc (REGION_HEIGHT * STAGE_ROWSTRIDE);
+    image_info->stage_buf = g_malloc (GDK_SCRATCH_IMAGE_HEIGHT * STAGE_ROWSTRIDE);
   return image_info->stage_buf;
 }
 
@@ -2873,7 +2758,7 @@ gdk_rgb_convert_indexed_generic_d (GdkRgbInfo *image_info, GdkImage *image,
 /* Select a conversion function based on the visual and a
    representative image. */
 static void
-gdk_rgb_select_conv (GdkRgbInfo *image_info, GdkImage *image)
+gdk_rgb_select_conv (GdkRgbInfo *image_info)
 {
   GdkByteOrder byte_order;
   gint depth, bpp, byterev;
@@ -2887,9 +2772,9 @@ gdk_rgb_select_conv (GdkRgbInfo *image_info, GdkImage *image)
 
   depth = image_info->visual->depth;
 
-  bpp = image->bits_per_pixel;
+  bpp = _gdk_windowing_get_bits_for_depth (image_info->visual->depth);
 
-  byte_order = image->byte_order;
+  byte_order = image_info->visual->byte_order;
   if (gdk_rgb_verbose)
     g_print ("Chose visual type=%s depth=%d, image bpp=%d, %s first\n",
 	     visual_names[image_info->visual->type], image_info->visual->depth,
@@ -3066,116 +2951,6 @@ gdk_rgb_select_conv (GdkRgbInfo *image_info, GdkImage *image)
   image_info->conv_indexed_d = conv_indexed_d;
 }
 
-#ifdef VERBOSE
-static gint sincelast;
-#endif
-
-/* Defining NO_FLUSH can cause inconsistent screen updates, but is useful
-   for performance evaluation. */
-
-#undef NO_FLUSH
-
-static gint
-gdk_rgb_alloc_scratch_image (GdkRgbInfo *image_info)
-{
-  if (image_info->static_image_idx == N_REGIONS)
-    {
-#ifndef NO_FLUSH
-      gdk_flush ();
-#endif
-#ifdef VERBOSE
-      g_print ("flush, %d puts since last flush\n", sincelast);
-      sincelast = 0;
-#endif
-      image_info->static_image_idx = 0;
-
-      /* Mark all regions that we might be filling in as completely
-       * full, to force new tiles to be allocated for subsequent
-       * images
-       */
-      image_info->horiz_y = REGION_HEIGHT;
-      image_info->vert_x = REGION_WIDTH;
-      image_info->tile_x = REGION_WIDTH;
-      image_info->tile_y1 = image_info->tile_y2 = REGION_HEIGHT;
-    }
-  return image_info->static_image_idx++;
-}
-
-static GdkImage *
-gdk_rgb_alloc_scratch (GdkRgbInfo *image_info,
-		       gint width, gint height, gint *x0, gint *y0)
-{
-  GdkImage *image;
-  gint idx;
-
-  if (width >= (REGION_WIDTH >> 1))
-    {
-      if (height >= (REGION_HEIGHT >> 1))
-	{
-	  idx = gdk_rgb_alloc_scratch_image (image_info);
-	  *x0 = 0;
-	  *y0 = 0;
-	}
-      else
-	{
-	  if (height + image_info->horiz_y > REGION_HEIGHT)
-	    {
-	      image_info->horiz_idx = gdk_rgb_alloc_scratch_image (image_info);
-	      image_info->horiz_y = 0;
-	    }
-	  idx = image_info->horiz_idx;
-	  *x0 = 0;
-	  *y0 = image_info->horiz_y;
-	  image_info->horiz_y += height;
-	}
-    }
-  else
-    {
-      if (height >= (REGION_HEIGHT >> 1))
-	{
-	  if (width + image_info->vert_x > REGION_WIDTH)
-	    {
-	      image_info->vert_idx = gdk_rgb_alloc_scratch_image (image_info);
-	      image_info->vert_x = 0;
-	    }
-	  idx = image_info->vert_idx;
-	  *x0 = image_info->vert_x;
-	  *y0 = 0;
-	  /* using 3 and -4 would be slightly more efficient on 32-bit machines
-	     with > 1bpp displays */
-	  image_info->vert_x += (width + 7) & -8;
-	}
-      else
-	{
-	  if (width + image_info->tile_x > REGION_WIDTH)
-	    {
-	      image_info->tile_y1 = image_info->tile_y2;
-	      image_info->tile_x = 0;
-	    }
-	  if (height + image_info->tile_y1 > REGION_HEIGHT)
-	    {
-	      image_info->tile_idx = gdk_rgb_alloc_scratch_image (image_info);
-	      image_info->tile_x = 0;
-	      image_info->tile_y1 = 0;
-	      image_info->tile_y2 = 0;
-	    }
-	  if (height + image_info->tile_y1 > image_info->tile_y2)
-	    image_info->tile_y2 = height + image_info->tile_y1;
-	  idx = image_info->tile_idx;
-	  *x0 = image_info->tile_x;
-	  *y0 = image_info->tile_y1;
-	  image_info->tile_x += (width + 7) & -8;
-	}
-    }
-  image = image_info->static_image[idx * image_info->n_images / N_REGIONS];
-  *x0 += REGION_WIDTH * (idx % (N_REGIONS / image_info->n_images));
-#ifdef VERBOSE
-  g_print ("index %d, x %d, y %d (%d x %d)\n", idx, *x0, *y0, width, height);
-  sincelast++;
-#endif
-  return image;
-}
-
 static void
 gdk_draw_rgb_image_core (GdkRgbInfo *image_info,
 			 GdkDrawable *drawable,
@@ -3212,15 +2987,15 @@ gdk_draw_rgb_image_core (GdkRgbInfo *image_info,
 	}
       gc = image_info->own_gc;
     }
-  for (y0 = 0; y0 < height; y0 += REGION_HEIGHT)
+  for (y0 = 0; y0 < height; y0 += GDK_SCRATCH_IMAGE_HEIGHT)
     {
-      height1 = MIN (height - y0, REGION_HEIGHT);
-      for (x0 = 0; x0 < width; x0 += REGION_WIDTH)
+      height1 = MIN (height - y0, GDK_SCRATCH_IMAGE_HEIGHT);
+      for (x0 = 0; x0 < width; x0 += GDK_SCRATCH_IMAGE_WIDTH)
 	{
-	  width1 = MIN (width - x0, REGION_WIDTH);
+	  width1 = MIN (width - x0, GDK_SCRATCH_IMAGE_WIDTH);
 	  buf_ptr = buf + y0 * rowstride + x0 * pixstride;
 
-	  image = gdk_rgb_alloc_scratch (image_info, width1, height1, &xs0, &ys0);
+	  image = _gdk_image_get_scratch (width1, height1, image_info->visual->depth, &xs0, &ys0);
 
 	  conv (image_info, image, xs0, ys0, width1, height1, buf_ptr, rowstride,
 		x + x0 + xdith, y + y0 + ydith, cmap);

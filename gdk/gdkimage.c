@@ -27,8 +27,10 @@
 #include <stdlib.h>
 #include <sys/types.h>
 
+#include "gdk.h"		/* For gdk_flush() */
 #include "gdkimage.h"
 #include "gdkprivate.h"
+#include "gdkinternals.h"	/* For scratch_image code */
 
 /**
  * gdk_image_ref:
@@ -136,4 +138,265 @@ gdk_image_get_colormap (GdkImage *image)
   g_return_val_if_fail (GDK_IS_IMAGE (image), NULL);
 
   return image->colormap;
+}
+
+/* We have N_REGION GDK_SCRATCH_IMAGE_WIDTH x GDK_SCRATCH_IMAGE_HEIGHT regions divided
+ * up between n_images different images. possible_n_images gives
+ * various divisors of N_REGIONS. The reason for allowing this
+ * flexibility is that we want to create as few images as possible,
+ * but we want to deal with the abberant systems that have a SHMMAX
+ * limit less than
+ *
+ * GDK_SCRATCH_IMAGE_WIDTH * GDK_SCRATCH_IMAGE_HEIGHT * N_REGIONS * 4 (384k)
+ *
+ * (Are there any such?)
+ */
+#define N_REGIONS 6
+static const int possible_n_images[] = { 1, 2, 3, 6 };
+
+/* We allocate one GdkScratchImageInfo structure for each
+ * depth where we are allocating scratch images. (Future: one
+ * per depth, per display)
+ */
+typedef struct _GdkScratchImageInfo GdkScratchImageInfo;
+
+struct _GdkScratchImageInfo {
+  gint depth;
+  
+  gint n_images;
+  GdkImage *static_image[N_REGIONS];
+  gint static_image_idx;
+
+  /* In order to optimize filling fractions, we simultaneously fill in up
+   * to three regions of size GDK_SCRATCH_IMAGE_WIDTH * GDK_SCRATCH_IMAGE_HEIGHT: one
+   * for images that are taller than GDK_SCRATCH_IMAGE_HEIGHT / 2, and must
+   * be tiled horizontally. One for images that are wider than
+   * GDK_SCRATCH_IMAGE_WIDTH / 2 and must be tiled vertically, and a third
+   * for images smaller than GDK_SCRATCH_IMAGE_HEIGHT / 2 x GDK_SCRATCH_IMAGE_WIDTH x 2
+   * that we tile in horizontal rows.
+   */
+  gint horiz_idx;
+  gint horiz_y;
+  gint vert_idx;
+  gint vert_x;
+  
+  /* tile_y1 and tile_y2 define the horizontal band into
+   * which we are tiling images. tile_x is the x extent to
+   * which that is filled
+   */
+  gint tile_idx;
+  gint tile_x;
+  gint tile_y1;
+  gint tile_y2;
+};
+
+static GSList *scratch_image_infos = NULL;
+
+static gboolean
+allocate_scratch_images (GdkScratchImageInfo *info,
+			 gint                 n_images,
+			 gboolean             shared)
+{
+  gint i;
+  
+  for (i = 0; i < n_images; i++)
+    {
+      info->static_image[i] = _gdk_image_new_for_depth (shared ? GDK_IMAGE_SHARED : GDK_IMAGE_NORMAL,
+							NULL,
+							GDK_SCRATCH_IMAGE_WIDTH * (N_REGIONS / n_images), GDK_SCRATCH_IMAGE_HEIGHT,
+							info->depth);
+      
+      if (!info->static_image[i])
+	{
+	  gint j;
+	  
+	  for (j = 0; j < i; j++)
+	    gdk_image_unref (info->static_image[i]);
+	  
+	  return FALSE;
+	}
+    }
+  
+  return TRUE;
+}
+
+GdkScratchImageInfo *
+scratch_image_info_for_depth (gint depth)
+{
+  GSList *tmp_list;
+  GdkScratchImageInfo *image_info;
+  gint i;
+
+  tmp_list = scratch_image_infos;
+  while (tmp_list)
+    {
+      image_info = tmp_list->data;
+      if (image_info->depth == depth)
+	return image_info;
+      
+      tmp_list = tmp_list->next;
+    }
+
+  image_info = g_new (GdkScratchImageInfo, 1);
+
+  image_info->depth = depth;
+
+    /* Try to allocate as few possible shared images */
+  for (i=0; i < G_N_ELEMENTS (possible_n_images); i++)
+    {
+      if (allocate_scratch_images (image_info, possible_n_images[i], TRUE))
+	{
+	  image_info->n_images = possible_n_images[i];
+	  break;
+	}
+    }
+
+  /* If that fails, just allocate N_REGIONS normal images */
+  if (i == G_N_ELEMENTS (possible_n_images))
+    {
+      allocate_scratch_images (image_info, N_REGIONS, FALSE);
+      image_info->n_images = N_REGIONS;
+    }
+
+  image_info->static_image_idx = 0;
+
+  image_info->horiz_y = GDK_SCRATCH_IMAGE_HEIGHT;
+  image_info->vert_x = GDK_SCRATCH_IMAGE_WIDTH;
+  image_info->tile_x = GDK_SCRATCH_IMAGE_WIDTH;
+  image_info->tile_y1 = image_info->tile_y2 = GDK_SCRATCH_IMAGE_HEIGHT;
+
+  scratch_image_infos = g_slist_prepend (scratch_image_infos, image_info);
+
+  return image_info;
+}
+
+/* Defining NO_FLUSH can cause inconsistent screen updates, but is useful
+   for performance evaluation. */
+
+#undef NO_FLUSH
+
+#ifdef VERBOSE
+static gint sincelast;
+#endif
+
+static gint
+alloc_scratch_image (GdkScratchImageInfo *image_info)
+{
+  if (image_info->static_image_idx == N_REGIONS)
+    {
+#ifndef NO_FLUSH
+      gdk_flush ();
+#endif
+#ifdef VERBOSE
+      g_print ("flush, %d puts since last flush\n", sincelast);
+      sincelast = 0;
+#endif
+      image_info->static_image_idx = 0;
+
+      /* Mark all regions that we might be filling in as completely
+       * full, to force new tiles to be allocated for subsequent
+       * images
+       */
+      image_info->horiz_y = GDK_SCRATCH_IMAGE_HEIGHT;
+      image_info->vert_x = GDK_SCRATCH_IMAGE_WIDTH;
+      image_info->tile_x = GDK_SCRATCH_IMAGE_WIDTH;
+      image_info->tile_y1 = image_info->tile_y2 = GDK_SCRATCH_IMAGE_HEIGHT;
+    }
+  return image_info->static_image_idx++;
+}
+
+/**
+ * _gdk_image_get_scratch:
+ * @width: desired width
+ * @height: desired height
+ * @depth: depth of image 
+ * @x: X location within returned image of scratch image
+ * @y: Y location within returned image of scratch image
+ * 
+ * Allocates an image of size width/height, up to a maximum
+ * of GDK_SCRATCH_IMAGE_WIDTHxGDK_SCRATCH_IMAGE_HEIGHT
+ * 
+ * Return value: a scratch image. This must be used by a
+ *  call to gdk_image_put() before any other calls to
+ *  _gdk_image_get_scratch()
+ **/
+GdkImage *
+_gdk_image_get_scratch (gint  width,
+			gint  height,
+			gint  depth,
+			gint *x,
+			gint *y)
+{
+  GdkScratchImageInfo *image_info;
+  GdkImage *image;
+  gint idx;
+
+  image_info = scratch_image_info_for_depth (depth);
+
+  if (width >= (GDK_SCRATCH_IMAGE_WIDTH >> 1))
+    {
+      if (height >= (GDK_SCRATCH_IMAGE_HEIGHT >> 1))
+	{
+	  idx = alloc_scratch_image (image_info);
+	  *x = 0;
+	  *y = 0;
+	}
+      else
+	{
+	  if (height + image_info->horiz_y > GDK_SCRATCH_IMAGE_HEIGHT)
+	    {
+	      image_info->horiz_idx = alloc_scratch_image (image_info);
+	      image_info->horiz_y = 0;
+	    }
+	  idx = image_info->horiz_idx;
+	  *x = 0;
+	  *y = image_info->horiz_y;
+	  image_info->horiz_y += height;
+	}
+    }
+  else
+    {
+      if (height >= (GDK_SCRATCH_IMAGE_HEIGHT >> 1))
+	{
+	  if (width + image_info->vert_x > GDK_SCRATCH_IMAGE_WIDTH)
+	    {
+	      image_info->vert_idx = alloc_scratch_image (image_info);
+	      image_info->vert_x = 0;
+	    }
+	  idx = image_info->vert_idx;
+	  *x = image_info->vert_x;
+	  *y = 0;
+	  /* using 3 and -4 would be slightly more efficient on 32-bit machines
+	     with > 1bpp displays */
+	  image_info->vert_x += (width + 7) & -8;
+	}
+      else
+	{
+	  if (width + image_info->tile_x > GDK_SCRATCH_IMAGE_WIDTH)
+	    {
+	      image_info->tile_y1 = image_info->tile_y2;
+	      image_info->tile_x = 0;
+	    }
+	  if (height + image_info->tile_y1 > GDK_SCRATCH_IMAGE_HEIGHT)
+	    {
+	      image_info->tile_idx = alloc_scratch_image (image_info);
+	      image_info->tile_x = 0;
+	      image_info->tile_y1 = 0;
+	      image_info->tile_y2 = 0;
+	    }
+	  if (height + image_info->tile_y1 > image_info->tile_y2)
+	    image_info->tile_y2 = height + image_info->tile_y1;
+	  idx = image_info->tile_idx;
+	  *x = image_info->tile_x;
+	  *y = image_info->tile_y1;
+	  image_info->tile_x += (width + 7) & -8;
+	}
+    }
+  image = image_info->static_image[idx * image_info->n_images / N_REGIONS];
+  *x += GDK_SCRATCH_IMAGE_WIDTH * (idx % (N_REGIONS / image_info->n_images));
+#ifdef VERBOSE
+  g_print ("index %d, x %d, y %d (%d x %d)\n", idx, *x, *y, width, height);
+  sincelast++;
+#endif
+  return image;
 }

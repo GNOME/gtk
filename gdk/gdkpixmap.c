@@ -102,16 +102,32 @@ static void   gdk_pixmap_draw_image     (GdkDrawable     *drawable,
                                          gint             ydest,
                                          gint             width,
                                          gint             height);
+static void   gdk_pixmap_draw_pixbuf    (GdkDrawable     *drawable,
+					 GdkGC           *gc,
+					 GdkPixbuf       *pixbuf,
+					 gint             src_x,
+					 gint             src_y,
+					 gint             dest_x,
+					 gint             dest_y,
+					 gint             width,
+					 gint             height,
+					 GdkRgbDither     dither,
+					 gint             x_dither,
+					 gint             y_dither);
+
 
 static void   gdk_pixmap_real_get_size  (GdkDrawable     *drawable,
                                          gint            *width,
                                          gint            *height);
 
-static GdkImage* gdk_pixmap_get_image (GdkDrawable *drawable,
-				       gint         x,
-				       gint         y,
-				       gint         width,
-				       gint         height);
+static GdkImage* gdk_pixmap_copy_to_image (GdkDrawable *drawable,
+					   GdkImage    *image,
+					   gint         src_x,
+					   gint         src_y,
+					   gint         dest_x,
+					   gint         dest_y,
+					   gint         width,
+					   gint         height);
 
 static GdkVisual*   gdk_pixmap_real_get_visual   (GdkDrawable *drawable);
 static gint         gdk_pixmap_real_get_depth    (GdkDrawable *drawable);
@@ -182,12 +198,13 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   drawable_class->draw_lines = gdk_pixmap_draw_lines;
   drawable_class->draw_glyphs = gdk_pixmap_draw_glyphs;
   drawable_class->draw_image = gdk_pixmap_draw_image;
+  drawable_class->_draw_pixbuf = gdk_pixmap_draw_pixbuf;
   drawable_class->get_depth = gdk_pixmap_real_get_depth;
   drawable_class->get_size = gdk_pixmap_real_get_size;
   drawable_class->set_colormap = gdk_pixmap_real_set_colormap;
   drawable_class->get_colormap = gdk_pixmap_real_get_colormap;
   drawable_class->get_visual = gdk_pixmap_real_get_visual;
-  drawable_class->get_image = gdk_pixmap_get_image;
+  drawable_class->_copy_to_image = gdk_pixmap_copy_to_image;
 }
 
 static void
@@ -367,6 +384,27 @@ gdk_pixmap_draw_image (GdkDrawable     *drawable,
 }
 
 static void
+gdk_pixmap_draw_pixbuf (GdkDrawable     *drawable,
+			GdkGC           *gc,
+			GdkPixbuf       *pixbuf,
+			gint             src_x,
+			gint             src_y,
+			gint             dest_x,
+			gint             dest_y,
+			gint             width,
+			gint             height,
+			GdkRgbDither     dither,
+			gint             x_dither,
+			gint             y_dither)
+{
+  GdkPixmapObject *private = (GdkPixmapObject *)drawable;
+
+  _gdk_draw_pixbuf (private->impl, gc, pixbuf,
+		    src_x, src_y, dest_x, dest_y, width, height,
+		    dither, x_dither, y_dither);
+}
+
+static void
 gdk_pixmap_real_get_size (GdkDrawable *drawable,
                           gint *width,
                           gint *height)
@@ -418,16 +456,21 @@ gdk_pixmap_real_get_colormap (GdkDrawable *drawable)
 }
 
 static GdkImage*
-gdk_pixmap_get_image (GdkDrawable     *drawable,
-                      gint             x,
-                      gint             y,
-                      gint             width,
-                      gint             height)
+gdk_pixmap_copy_to_image (GdkDrawable     *drawable,
+			  GdkImage        *image,
+			  gint             src_x,
+			  gint             src_y,
+			  gint             dest_x,
+			  gint             dest_y,
+			  gint             width,
+			  gint             height)
 {
   g_return_val_if_fail (GDK_IS_PIXMAP (drawable), NULL);
   
-  return gdk_drawable_get_image (((GdkPixmapObject*)drawable)->impl,
-                                 x, y, width, height);
+  return _gdk_drawable_copy_to_image (((GdkPixmapObject*)drawable)->impl,
+				      image,
+				      src_x, src_y, dest_x, dest_y,
+				      width, height);
 }
 
 static GdkBitmap *

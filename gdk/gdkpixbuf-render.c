@@ -237,30 +237,19 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
  * @dest_y: Destination Y coordinate within drawable.
  * @width: Width of region to render, in pixels, or -1 to use pixbuf width.
  * @height: Height of region to render, in pixels, or -1 to use pixbuf height.
- * @alpha_mode: If the image does not have opacity information, this is ignored.
- * Otherwise, specifies how to handle transparency when rendering.
- * @alpha_threshold: If the image does have opacity information and @alpha_mode
- * is GDK_PIXBUF_ALPHA_BILEVEL, specifies the threshold value for opacity
- * values.
+ * @alpha_mode: Ignored. Present for backwards compatibility.
+ * @alpha_threshold: Ignored. Present for backwards compatibility
  * @dither: Dithering mode for GdkRGB.
  * @x_dither: X offset for dither.
  * @y_dither: Y offset for dither.
  *
- * Renders a rectangular portion of a pixbuf to a drawable.  This is done using
- * GdkRGB, so the specified drawable must have the GdkRGB visual and colormap.
+ * Renders a rectangular portion of a pixbuf to a drawable.  The destination
+ * drawable must have a colormap. All windows have a colormap, however, pixmaps
+ * only have colormap by default if they were created with a non-NULL window argument.
+ * Otherwise a colormap must be set on them with gdk_drawable_set_colormap.
  *
- * When used with #GDK_PIXBUF_ALPHA_BILEVEL, this function has to create a bitmap
- * out of the thresholded alpha channel of the image and, it has to set this
- * bitmap as the clipping mask for the GC used for drawing.  This can be a
- * significant performance penalty depending on the size and the complexity of
- * the alpha channel of the image.  If performance is crucial, consider handling
- * the alpha channel yourself (possibly by caching it in your application) and
- * using gdk_pixbuf_render_to_drawable() or GdkRGB directly instead.
- *
- * The #GDK_PIXBUF_ALPHA_FULL mode involves round trips to the X
- * server, and may also be somewhat slow in its current implementation
- * (though in the future it could be made significantly faster, in
- * principle).
+ * On older X servers, rendering pixbufs with an alpha channel involves round trips
+ * to the X server, and may be somewhat slow.
  **/
 void
 gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
@@ -273,165 +262,9 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
 				     GdkRgbDither       dither,
 				     int x_dither, int y_dither)
 {
-  GdkBitmap *bitmap = NULL;
-  GdkGC *gc;
-  GdkPixbuf *composited = NULL;
-  gint dwidth, dheight;
-  GdkRegion *clip;
-  GdkRegion *drect;
-  GdkRectangle tmp_rect;
-  
-  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
-  g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
-  g_return_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4);
-  g_return_if_fail (pixbuf->bits_per_sample == 8);
-
-  g_return_if_fail (drawable != NULL);
-
-  if (width == -1) 
-    width = pixbuf->width;
-  if (height == -1)
-    height = pixbuf->height;
-
-  g_return_if_fail (width >= 0 && height >= 0);
-  g_return_if_fail (src_x >= 0 && src_x + width <= pixbuf->width);
-  g_return_if_fail (src_y >= 0 && src_y + height <= pixbuf->height);
-
-  /* Clip to the drawable; this is required for get_from_drawable() so
-   * can't be done implicitly
-   */
-  
-  if (dest_x < 0)
-    {
-      src_x -= dest_x;
-      width += dest_x;
-      dest_x = 0;
-    }
-
-  if (dest_y < 0)
-    {
-      src_y -= dest_y;
-      height += dest_y;
-      dest_y = 0;
-    }
-
-  gdk_drawable_get_size (drawable, &dwidth, &dheight);
-
-  if ((dest_x + width) > dwidth)
-    width = dwidth - dest_x;
-
-  if ((dest_y + height) > dheight)
-    height = dheight - dest_y;
-
-  if (width <= 0 || height <= 0)
-    return;
-
-  /* Clip to the clip region; this avoids getting more
-   * image data from the server than we need to.
-   */
-  
-  tmp_rect.x = dest_x;
-  tmp_rect.y = dest_y;
-  tmp_rect.width = width;
-  tmp_rect.height = height;
-
-  drect = gdk_region_rectangle (&tmp_rect);
-  clip = gdk_drawable_get_clip_region (drawable);
-
-  gdk_region_intersect (drect, clip);
-
-  gdk_region_get_clipbox (drect, &tmp_rect);
-  
-  gdk_region_destroy (drect);
-  gdk_region_destroy (clip);
-
-  if (tmp_rect.width == 0 ||
-      tmp_rect.height == 0)
-    return;
-  
-  /* Actually draw */
-  
-  gc = gdk_gc_new (drawable);
-
-  if (pixbuf->has_alpha)
-    {
-      if (alpha_mode == GDK_PIXBUF_ALPHA_FULL)
-        {
-          GdkPixbuf *sub = NULL;
-          
-          composited = gdk_pixbuf_get_from_drawable (NULL,
-                                                     drawable,
-                                                     NULL,
-                                                     dest_x, dest_y,
-                                                     0, 0,
-                                                     width, height);
-
-          if (composited)
-            {
-              if (src_x != 0 || src_y != 0)
-                {
-                  sub = gdk_pixbuf_new_subpixbuf (pixbuf, src_x, src_y,
-                                                  width, height);
-                }
-              
-              gdk_pixbuf_composite (sub ? sub : pixbuf,
-                                    composited,
-                                    0, 0,
-                                    width, height,
-                                    0, 0,
-                                    1.0, 1.0,
-                                    GDK_INTERP_BILINEAR,
-                                    255);
-              
-              if (sub)
-                g_object_unref (G_OBJECT (sub));
-            }
-          else
-            alpha_mode = GDK_PIXBUF_ALPHA_BILEVEL; /* fall back */
-        }
-
-      if (alpha_mode == GDK_PIXBUF_ALPHA_BILEVEL)
-        {
-          bitmap = gdk_pixmap_new (NULL, width, height, 1);
-          gdk_pixbuf_render_threshold_alpha (pixbuf, bitmap,
-                                             src_x, src_y,
-                                             0, 0,
-                                             width, height,
-                                             alpha_threshold);
-          
-          gdk_gc_set_clip_mask (gc, bitmap);
-          gdk_gc_set_clip_origin (gc, dest_x, dest_y);
-        }
-    }
-
-  if (composited)
-    {
-      gdk_pixbuf_render_to_drawable (composited,
-                                     drawable, gc,
-                                     0, 0,
-                                     dest_x, dest_y,
-                                     width, height,
-                                     dither,
-                                     x_dither, y_dither);
-    }
-  else
-    {
-      gdk_pixbuf_render_to_drawable (pixbuf,
-                                     drawable, gc,
-                                     src_x, src_y,
-                                     dest_x, dest_y,
-                                     width, height,
-                                     dither,
-                                     x_dither, y_dither);
-    }
-
-  if (bitmap)
-    gdk_bitmap_unref (bitmap);
-
-  if (composited)
-    g_object_unref (G_OBJECT (composited));
-
-  gdk_gc_unref (gc);
+  _gdk_draw_pixbuf (drawable, NULL, pixbuf,
+		    src_x, src_y, dest_x, dest_y, width, height,
+		    dither, x_dither, y_dither);
 }
 
 /**
@@ -531,5 +364,3 @@ gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf   *pixbuf,
 	*mask_return = NULL;
     }
 }
-
-

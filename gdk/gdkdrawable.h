@@ -3,6 +3,8 @@
 
 #include <gdk/gdktypes.h>
 #include <gdk/gdkgc.h>
+#include <gdk/gdkrgb.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -130,7 +132,28 @@ struct _GdkDrawableClass
                                           gint         height,
                                           gint        *composite_x_offset,
                                           gint        *composite_y_offset);
-  
+
+  void         (*_draw_pixbuf) (GdkDrawable *drawable,
+			        GdkGC       *gc,
+			        GdkPixbuf   *pixbuf,
+			        gint         src_x,
+			        gint         src_y,
+			        gint         dest_x,
+			        gint         dest_y,
+			        gint         width,
+			        gint         height,
+			        GdkRgbDither dither,
+			        gint         x_dither,
+			        gint         y_dither);
+  GdkImage*    (*_copy_to_image) (GdkDrawable    *drawable,
+				  GdkImage       *image,
+				  gint            src_x,
+				  gint            src_y,
+				  gint            dest_x,
+				  gint            dest_y,
+				  gint            width,
+				  gint            height);
+
   void         (*_gdk_reserved1) (void);
   void         (*_gdk_reserved2) (void);
   void         (*_gdk_reserved3) (void);

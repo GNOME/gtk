@@ -1,3 +1,73 @@
+Thu Jan  3 22:18:15 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdrawable-x11.c gdk/x11/gdkprivate-x11.h
+	(_gdk_x11_have_render): Private function to tell if we have RENDER
+	extension.
+
+	* gdk/x11/gdkgc-x11.c (_gdk_x11_gc_get_fg_picture): Return
+	None if we don't have RENDER extension.
+
+	* gdk/x11/gdkpango-x11.c (gdk_pango_context_get): Don't
+	use Xft unless we have render extension.
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_drawable_get_picture):
+	Handle missing render extension.
+
+	* gdk/gdkdraw.c gdk/gdkdrawable.h gdk/gdkpixmap.c gdk/gdkwindow.c
+	gdk/gdkinternals.h: Add a private copy_to_image() virtual function
+	to the GdkDrawable vtable that extends get_image() to allow
+	copying onto existing images.  Make the default implementation of
+	get_image() use this so that backends don't have to implement
+	both. Add private wrapper _gdk_drawable_copy_to_image().
+
+	* gdk/x11/gdkimage-x11.c gdk/x11/gdkprivate-x11.c
+	gdk/x11/gdkdrawable-x11.c (_gdk_x11_copy_to_image): Implement
+	copy_to_image() semantics, speed up by using ShmPixmaps and
+	XCopyArea when possible, XFlush() after ungrabbing the server,
+	generally redo the logic once again.
+
+	* gdk/gdkinternals.h gdk/x11/gdkimage-x11.c
+	_gdk_windowing_bits_per_depth(): Function to convert from depth to
+	bits-per-pixel. (We assume only one bpp per depth - X requires
+	this.)
+
+	* gdk/gdkinternals.h gdk/gdkrgb.c gdk/gdkimage.c: Move the GdkRGB
+	scratch image code into a generic _gdk_image_get_scratch() chunk
+	of code that we can use other places we need scratch images.
+
+	* gdk/gdkimage.c gdk/x11/gdkimage.c gdk/gdkinternals.h:
+	Add _gdk_image_new_for_depth() as the backend 
+	to _gdk_image_new() to allowing creating images with
+	a depth and no visual.
+
+	* gdk/gdkpixbuf-drawable.c: Fix so that getting 
+	parts of images not at 0,0 actually works.
+
+	* gdk/gdkdrawable.h gdk/gdkinternals.h gdk/gdkdraw.c
+	gdk/gdkwindow.c gdk/gdkpixmap.c gdk/gdkpixbuf-render.c: 
+	 - Add a new GdkDrawableClass vfunc _draw_pixbuf, and 
+	  _gdk_draw_pixbuf() [ will be made public later ], to allow 
+	  backends to accelerate drawing pixbufs. 
+	 - Move the implementation of gdk_pixbuf_render_to_drawable_alpha()
+	   to be the default implementation. 
+	 - Update docs for gdk_pixbuf_render_to_drawable_alpha(). 
+	 - Optimize the default implementation by using 
+	   _gdk_image_copy_to_pixmap() and scratch shared images, and
+	   special casing the compositing.
+
+	* gdk/x11/gdkdrawable-x11.c: Accelerate _gdk_draw_pixbuf()
+	with alpha using the RENDER extension.
+
+        * gdk/gdkpixbuf-drawable.c (gdk_pixbuf_get_from_drawable):
+	Optimize by _gdk_image_copy_to_pixmap() and scratch images.
+
+	* tests/testrgb.c: Add test for speed of alpha composition,
+	reduce the number of iterations since alpha composition
+	can be a bit slow.
+
+	* gdk/x11/gdkimage-x11.c gdk/gdkprivate-x11.h (_gdk_x11_image_get_shm_pixmap): 
+	Private function to get a ShmPixmap for an image, if possible.
+
 2002-01-04  Anders Carlsson  <andersca@gnu.org>
 
 	* tests/testtreesort.c: Add my cool list of integers.

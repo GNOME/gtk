@@ -810,9 +810,13 @@ _gdk_x11_gc_get_fg_picture (GdkGC *gc)
     {
       XRenderPictureAttributes pa;
       XRenderPictFormat *pix_format = foreground_format (gc);
+      Pixmap pix;
 
-      Pixmap pix = XCreatePixmap (x11_gc->xdisplay, _gdk_root_window,
-				  1, 1, pix_format->depth);
+      if (!pix_format)
+	return None;
+
+      pix = XCreatePixmap (x11_gc->xdisplay, _gdk_root_window,
+			   1, 1, pix_format->depth);
       pa.repeat = True;
       x11_gc->fg_picture = XRenderCreatePicture (x11_gc->xdisplay, 
 						 pix,
