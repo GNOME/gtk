@@ -26,7 +26,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#pragma }
 #endif /* __cplusplus */
 
 #define GTK_TYPE_LABEL			(gtk_label_get_type ())

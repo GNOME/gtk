@@ -743,7 +743,7 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
       g_return_val_if_fail (widget != NULL, NULL);
       g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
     }
-  else
+  else if (type != GTK_TOOLBAR_CHILD_RADIOBUTTON)
     g_return_val_if_fail (widget == NULL, NULL);
 
   child = g_new (GtkToolbarChild, 1);

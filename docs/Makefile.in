@@ -59,11 +59,19 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
+AWK = @AWK@
 CC = @CC@
+DL_LIBS = @DL_LIBS@
+GLIB_CFLAGS = @GLIB_CFLAGS@
+GLIB_CONFIG = @GLIB_CONFIG@
+GLIB_LIBS = @GLIB_LIBS@
+GTK_BINARY_AGE = @GTK_BINARY_AGE@
+GTK_INTERFACE_AGE = @GTK_INTERFACE_AGE@
 GTK_MAJOR_VERSION = @GTK_MAJOR_VERSION@
 GTK_MICRO_VERSION = @GTK_MICRO_VERSION@
 GTK_MINOR_VERSION = @GTK_MINOR_VERSION@
 GTK_VERSION = @GTK_VERSION@
+INDENT = @INDENT@
 LD = @LD@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
@@ -75,8 +83,12 @@ MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 NM = @NM@
 PACKAGE = @PACKAGE@
+PERL = @PERL@
 RANLIB = @RANLIB@
+REBUILD = @REBUILD@
 VERSION = @VERSION@
+glib_cflags = @glib_cflags@
+glib_libs = @glib_libs@
 x_cflags = @x_cflags@
 x_includes = @x_includes@
 x_ldflags = @x_ldflags@
@@ -96,6 +108,7 @@ EXTRA_DIST =	\
         gtk-config.txt          \
 	gtk_tut.sgml		\
 	gtk_tut_it.sgml		\
+	gtk_tut_fr.sgml		\
 	debugging.txt		\
 	developers.txt		\
 	refcounting.txt		\

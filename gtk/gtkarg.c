@@ -263,7 +263,7 @@ gtk_args_collect (GtkType	  object_type,
 
 	  arg = gtk_arg_new (info->type);
 	  arg->name = (gchar*) arg_name;
-	  GTK_ARG_COLLECT_VALUE (GTK_FUNDAMENTAL_TYPE (arg->type), arg, var_args, error);
+	  GTK_ARG_COLLECT_VALUE (arg, var_args, error);
 	  arg_list = g_slist_prepend (arg_list, arg);
 	}
       if (error)

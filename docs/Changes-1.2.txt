@@ -1,0 +1,49 @@
+Incompatible Changes from GTK+-1.0 to GTK+-1.2:
+
+* GtkAcceleratorTable has been replaced with GtkAccelGroup
+
+* GtkMenuFactory has been replaced with GtkItemFactory, although
+  a version of GtkMenuFactory is provided to ease compatibility.
+
+* GtkButton has been changed to derive from GtkBin. 
+ 
+ To access a button's child, use GTK_BIN (button)->child, instead
+ of the old GTK_BUTTON (button)->child.
+
+* The selection API has been slightly modified:
+
+ gtk_selection_add_handler() and gtk_selection_add_handler_full() 
+ have been removed. To supply the selection, one now register
+ the targets one is interested in with:
+
+  void gtk_selection_add_target (GtkWidget           *widget, 
+	  	                 GdkAtom              selection,
+			         GdkAtom              target,
+			         guint                info);
+
+ or:
+  
+  void gtk_selection_add_targets (GtkWidget           *widget, 
+	  			  GdkAtom              selection,
+				  GtkTargetEntry      *targets,
+				  guint                ntargets);
+
+ When a request for a selection is received, the new "selection_get"
+ signal will be called:
+
+   void  "selection_get"           (GtkWidget          *widget,
+				    GtkSelectionData   *selection_data,
+				    guint               info,
+				    guint               time);
+
+ A "time" parameter has also been added to the "selection_received"
+ signal.
+
+  void  "selection_received"       (GtkWidget          *widget,
+				    GtkSelectionData   *selection_data,
+				    guint               time);
+
+* The old drag and drop API has been completely removed and replaced.
+  See the reference documentation for details on the new API.
+
+

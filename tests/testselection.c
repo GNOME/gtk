@@ -48,50 +48,49 @@ typedef struct _Target {
   SelType type;
   GdkAtom target;
   gint format;
-  GtkSelectionFunction *handler;
 } Target;
 
 /* The following is a list of all the selection targets defined
    in the ICCCM */
 
 static Target targets[] = {
-  { "ADOBE_PORTABLE_DOCUMENT_FORMAT",	    STRING, 	   0, 8,  NULL },
-  { "APPLE_PICT", 			    APPLE_PICT,    0, 8,  NULL },
-  { "BACKGROUND",			    PIXEL,         0, 32, NULL },
-  { "BITMAP", 				    BITMAP,        0, 32, NULL },
-  { "CHARACTER_POSITION",                   SPAN, 	   0, 32, NULL },
-  { "CLASS", 				    TEXT, 	   0, 8,  NULL },
-  { "CLIENT_WINDOW", 			    WINDOW, 	   0, 32, NULL },
-  { "COLORMAP", 			    COLORMAP,      0, 32, NULL },
-  { "COLUMN_NUMBER", 			    SPAN, 	   0, 32, NULL },
-  { "COMPOUND_TEXT", 			    COMPOUND_TEXT, 0, 8,  NULL },
-  /*  { "DELETE", "NULL", 0, ?, NULL }, */
-  { "DRAWABLE", 			    DRAWABLE,      0, 32, NULL },
-  { "ENCAPSULATED_POSTSCRIPT", 		    STRING, 	   0, 8,  NULL },
-  { "ENCAPSULATED_POSTSCRIPT_INTERCHANGE",  STRING, 	   0, 8,  NULL },
-  { "FILE_NAME", 			    TEXT, 	   0, 8,  NULL },
-  { "FOREGROUND", 			    PIXEL, 	   0, 32, NULL },
-  { "HOST_NAME", 			    TEXT, 	   0, 8,  NULL },
+  { "ADOBE_PORTABLE_DOCUMENT_FORMAT",	    STRING, 	   0, 8 },
+  { "APPLE_PICT", 			    APPLE_PICT,    0, 8 },
+  { "BACKGROUND",			    PIXEL,         0, 32 },
+  { "BITMAP", 				    BITMAP,        0, 32 },
+  { "CHARACTER_POSITION",                   SPAN, 	   0, 32 },
+  { "CLASS", 				    TEXT, 	   0, 8 },
+  { "CLIENT_WINDOW", 			    WINDOW, 	   0, 32 },
+  { "COLORMAP", 			    COLORMAP,      0, 32 },
+  { "COLUMN_NUMBER", 			    SPAN, 	   0, 32 },
+  { "COMPOUND_TEXT", 			    COMPOUND_TEXT, 0, 8 },
+  /*  { "DELETE", "NULL", 0, ? }, */
+  { "DRAWABLE", 			    DRAWABLE,      0, 32 },
+  { "ENCAPSULATED_POSTSCRIPT", 		    STRING, 	   0, 8 },
+  { "ENCAPSULATED_POSTSCRIPT_INTERCHANGE",  STRING, 	   0, 8 },
+  { "FILE_NAME", 			    TEXT, 	   0, 8 },
+  { "FOREGROUND", 			    PIXEL, 	   0, 32 },
+  { "HOST_NAME", 			    TEXT, 	   0, 8 },
   /*  { "INSERT_PROPERTY", "NULL", 0, ? NULL }, */
   /*  { "INSERT_SELECTION", "NULL", 0, ? NULL }, */
-  { "LENGTH", 				    INTEGER, 	   0, 32, NULL },
-  { "LINE_NUMBER", 			    SPAN, 	   0, 32, NULL },
-  { "LIST_LENGTH", 			    INTEGER,       0, 32, NULL },
-  { "MODULE", 				    TEXT, 	   0, 8,  NULL },
-  /*  { "MULTIPLE", "ATOM_PAIR", 0, 32, NULL }, */
-  { "NAME", 				    TEXT, 	   0, 8,  NULL },
-  { "ODIF", 				    TEXT,          0, 8,  NULL },
-  { "OWNER_OS", 			    TEXT, 	   0, 8,  NULL },
-  { "PIXMAP", 				    PIXMAP,        0, 32, NULL },
-  { "POSTSCRIPT", 			    STRING,        0, 8,  NULL },
-  { "PROCEDURE", 			    TEXT,          0, 8,  NULL },
-  { "PROCESS",				    INTEGER,       0, 32, NULL },
-  { "STRING", 				    STRING,        0, 8,  NULL },
-  { "TARGETS", 				    ATOM, 	   0, 32, NULL },
-  { "TASK", 				    INTEGER,       0, 32, NULL },
-  { "TEXT", 				    TEXT,          0, 8 , NULL },
-  { "TIMESTAMP", 			    INTEGER,       0, 32, NULL },
-  { "USER", 				    TEXT, 	   0, 8,  NULL },
+  { "LENGTH", 				    INTEGER, 	   0, 32 },
+  { "LINE_NUMBER", 			    SPAN, 	   0, 32 },
+  { "LIST_LENGTH", 			    INTEGER,       0, 32 },
+  { "MODULE", 				    TEXT, 	   0, 8 },
+  /*  { "MULTIPLE", "ATOM_PAIR", 0, 32 }, */
+  { "NAME", 				    TEXT, 	   0, 8 },
+  { "ODIF", 				    TEXT,          0, 8 },
+  { "OWNER_OS", 			    TEXT, 	   0, 8 },
+  { "PIXMAP", 				    PIXMAP,        0, 32 },
+  { "POSTSCRIPT", 			    STRING,        0, 8 },
+  { "PROCEDURE", 			    TEXT,          0, 8 },
+  { "PROCESS",				    INTEGER,       0, 32 },
+  { "STRING", 				    STRING,        0, 8 },
+  { "TARGETS", 				    ATOM, 	   0, 32 },
+  { "TASK", 				    INTEGER,       0, 32 },
+  { "TEXT", 				    TEXT,          0, 8  },
+  { "TIMESTAMP", 			    INTEGER,       0, 32 },
+  { "USER", 				    TEXT, 	   0, 8 },
 };
 
 static int num_targets = sizeof(targets)/sizeof(Target);
@@ -152,11 +151,15 @@ selection_toggled (GtkWidget *widget)
 }
 
 void
-selection_handle (GtkWidget *widget, 
-		  GtkSelectionData *selection_data, gpointer data)
+selection_get (GtkWidget *widget, 
+	       GtkSelectionData *selection_data,
+	       guint      info,
+	       guint      time,
+	       gpointer   data)
 {
   guchar *buffer;
   gint len;
+  GdkAtom type = GDK_NONE;
 
   if (!selection_string)
     {
@@ -168,11 +171,17 @@ selection_handle (GtkWidget *widget,
       buffer = (guchar *)selection_string->str;
       len = selection_string->len;
     }
+
+  switch (info)
+    {
+    case COMPOUND_TEXT:
+    case TEXT:
+      type = seltypes[COMPOUND_TEXT];
+    case STRING:
+      type = seltypes[STRING];
+    }
   
-  gtk_selection_data_set (selection_data,
-			  selection_data->target == seltypes[COMPOUND_TEXT] ?
-			          seltypes[COMPOUND_TEXT] : seltypes[STRING],
-			  8, buffer, len);
+  gtk_selection_data_set (selection_data, type, 8, buffer, len);
 }
 
 gint
@@ -373,6 +382,13 @@ main (int argc, char *argv[])
   GtkWidget *hscrollbar;
   GtkWidget *vscrollbar;
   GtkWidget *hbox;
+
+  static GtkTargetEntry targetlist[] = {
+    { "STRING", STRING },
+    { "TEXT",   TEXT },
+    { "COMPOUND_TEXT", COMPOUND_TEXT }
+  };
+  static gint ntargets = sizeof(targetlist) / sizeof(targetlist[0]);
   
   gtk_init (&argc, &argv);
 
@@ -408,15 +424,11 @@ main (int argc, char *argv[])
   gtk_signal_connect (GTK_OBJECT(selection_button), "selection_received",
 		      GTK_SIGNAL_FUNC (selection_received), NULL);
 
-  gtk_selection_add_handler (selection_button, GDK_SELECTION_PRIMARY,
-			     seltypes[STRING], selection_handle, NULL);
+  gtk_selection_add_targets (selection_button, GDK_SELECTION_PRIMARY,
+			     targetlist, ntargets);
 
-  gtk_selection_add_handler (selection_button, GDK_SELECTION_PRIMARY,
-			     seltypes[TEXT], selection_handle, NULL);
-
-  gtk_selection_add_handler (selection_button, GDK_SELECTION_PRIMARY,
-			     seltypes[COMPOUND_TEXT],
-			     selection_handle, NULL);
+  gtk_signal_connect (GTK_OBJECT(selection_button), "selection_get",
+		      GTK_SIGNAL_FUNC (selection_get), NULL);
 
   selection_text = gtk_text_new (NULL, NULL);
   gtk_table_attach_defaults (GTK_TABLE (table), selection_text, 0, 1, 1, 2);

@@ -519,7 +519,7 @@ gtk_type_class_init (GtkType type)
 	  if (node->type_info.class_size < parent->type_info.class_size)
 	    g_warning ("The `%s' class is smaller than its parent class `%s'",
 		       node->type_info.type_name,
-		       node->type_info.type_name);
+		       parent->type_info.type_name);
 	  
 	  if (!parent->klass)
 	    {
@@ -683,18 +683,19 @@ gtk_type_enum_find_value (GtkType        enum_type,
       GtkEnumValue *vals;
 
       vals = gtk_type_enum_get_values (enum_type);
-      while (vals)
-	{
-	  if (strcmp (vals->value_name, value_name) == 0 ||
-	      strcmp (vals->value_nick, value_name) == 0)
-	    return vals;
-	  vals++;
-	}
+      if (vals)
+	while (vals->value_name)
+	  {
+	    if (strcmp (vals->value_name, value_name) == 0 ||
+		strcmp (vals->value_nick, value_name) == 0)
+	      return vals;
+	    vals++;
+	  }
     }
   else
     g_warning ("gtk_type_enum_find_value(): type `%s' is not derived from `GtkEnum' or `GtkFlags'",
 	       gtk_type_name (enum_type));
-
+  
   return NULL;
 }
 
@@ -705,6 +706,65 @@ gtk_type_flags_find_value (GtkType         flag_type,
   g_return_val_if_fail (value_name != NULL, NULL);
 
   return gtk_type_enum_find_value (flag_type, value_name);
+}
+
+typedef struct _GtkTypeVarargType GtkTypeVarargType;
+struct _GtkTypeVarargType
+{
+  GtkType foreign_type;
+  GtkType varargs_type;
+};
+
+static GtkTypeVarargType *vararg_types = NULL;
+static guint              n_vararg_types = 0;
+
+void
+gtk_type_set_varargs_type (GtkType        foreign_type,
+			   GtkType        varargs_type)
+{
+  g_return_if_fail (foreign_type == GTK_FUNDAMENTAL_TYPE (foreign_type));
+  g_return_if_fail (foreign_type > GTK_TYPE_FUNDAMENTAL_LAST);
+
+  if (!((varargs_type >= GTK_TYPE_STRUCTURED_FIRST &&
+	 varargs_type <= GTK_TYPE_STRUCTURED_LAST) ||
+	(varargs_type >= GTK_TYPE_FLAT_FIRST &&
+	 varargs_type <= GTK_TYPE_FLAT_LAST) ||
+	varargs_type == GTK_TYPE_NONE))
+    {
+      g_warning ("invalid varargs type `%s' for fundamental type `%s'",
+		 gtk_type_name (varargs_type),
+		 gtk_type_name (foreign_type));
+      return;
+    }
+  if (gtk_type_get_varargs_type (foreign_type))
+    {
+      g_warning ("varargs type is already registered for fundamental type `%s'",
+		 gtk_type_name (foreign_type));
+      return;
+    }
+
+  n_vararg_types++;
+  vararg_types = g_realloc (vararg_types, sizeof (GtkTypeVarargType) * n_vararg_types);
+
+  vararg_types[n_vararg_types - 1].foreign_type = foreign_type;
+  vararg_types[n_vararg_types - 1].varargs_type = varargs_type;
+}
+
+GtkType
+gtk_type_get_varargs_type (GtkType        foreign_type)
+{
+  GtkType type;
+  guint i;
+
+  type = GTK_FUNDAMENTAL_TYPE (foreign_type);
+  if (type <= GTK_TYPE_FUNDAMENTAL_LAST)
+    return type;
+
+  for (i = 0; i < n_vararg_types; i++)
+    if (vararg_types[i].foreign_type == type)
+      return vararg_types[i].varargs_type;
+
+  return 0;
 }
 
 static inline GtkType

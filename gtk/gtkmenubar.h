@@ -26,7 +26,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#pragma }
 #endif /* __cplusplus */
 
 #define	GTK_TYPE_MENU_BAR		(gtk_menu_bar_get_type ())

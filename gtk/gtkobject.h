@@ -28,7 +28,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#pragma }
 #endif /* __cplusplus */
 
 
@@ -118,8 +117,8 @@ struct _GtkObject
 {
   /* GtkTypeObject related fields: */
   GtkObjectClass *klass;
-
-
+  
+  
   /* 32 bits of flags. GtkObject only uses 4 of these bits and
    *  GtkWidget uses the rest. This is done because structs are
    *  aligned on 4 or 8 byte boundaries. If a new bitfield were
@@ -132,10 +131,10 @@ struct _GtkObject
    */
   guint ref_count;
   
-  /* The list of signal handlers and other data
-   *  fields for this object.
+  /* A list of keyed data pointers, used for e.g. the list of signal
+   * handlers or an object's user_data.
    */
-  gpointer object_data;
+  GData *object_data;
 };
 
 /* The GtkObjectClass is the base of the Gtk+ objects classes hierarchy,
@@ -150,7 +149,7 @@ struct _GtkObjectClass
   /* GtkTypeClass fields: */
   GtkType type;
   
-
+  
   /* The signals this object class handles. "signals" is an
    *  array of signal ID's.
    */
@@ -239,7 +238,7 @@ void	gtk_object_getv		(GtkObject	*object,
  * more than one c-function argument.
  */
 void	gtk_object_set		(GtkObject	*object,
-				 const gchar    *first_arg_name,
+				 const gchar	*first_arg_name,
 				 ...);
 void	gtk_object_setv		(GtkObject	*object,
 				 guint		n_args,
@@ -280,6 +279,8 @@ void	 gtk_object_remove_data	    (GtkObject	     *object,
 				     const gchar     *key);
 gpointer gtk_object_get_data	    (GtkObject	     *object,
 				     const gchar     *key);
+void	 gtk_object_remove_no_notify(GtkObject	     *object,
+				     const gchar     *key);
 
 /* Set/get the "user_data" object data field of "object". It should
  *  be noted that these functions are no different than calling
@@ -298,23 +299,25 @@ void	gtk_object_class_add_signals	(GtkObjectClass	*klass,
 					 guint		*signals,
 					 guint		 nsignals);
 /* the `arg_name' argument needs to be a const static string */
-void	gtk_object_add_arg_type	        (const gchar	*arg_name,
-					 GtkType	arg_type,
-					 guint		arg_flags,
-					 guint		arg_id);
+void	gtk_object_add_arg_type		(const gchar	*arg_name,
+					 GtkType	 arg_type,
+					 guint		 arg_flags,
+					 guint		 arg_id);
 
 /* Object data method variants that operate on key ids. */
-void gtk_object_set_data_by_id	    (GtkObject	     *object,
-				     GQuark	      data_id,
-				     gpointer	      data);
-void gtk_object_set_data_by_id_full (GtkObject	     *object,
-				     GQuark	      data_id,
-				     gpointer	      data,
-				     GtkDestroyNotify destroy);
-gpointer gtk_object_get_data_by_id  (GtkObject	     *object,
-				     GQuark	      data_id);
-void  gtk_object_remove_data_by_id  (GtkObject	     *object,
-				     GQuark	      data_id);
+void gtk_object_set_data_by_id		(GtkObject	*object,
+					 GQuark		 data_id,
+					 gpointer	 data);
+void gtk_object_set_data_by_id_full	(GtkObject	*object,
+					 GQuark		 data_id,
+					 gpointer	 data,
+					 GtkDestroyNotify destroy);
+gpointer gtk_object_get_data_by_id	(GtkObject	*object,
+					 GQuark		 data_id);
+void  gtk_object_remove_data_by_id	(GtkObject	*object,
+					 GQuark		 data_id);
+void  gtk_object_remove_no_notify_by_id	(GtkObject	*object,
+					 GQuark		 key_id);
 #define	gtk_object_data_try_key	    g_quark_try_string
 #define	gtk_object_data_force_id    g_quark_from_string
 
@@ -332,7 +335,7 @@ gchar*	gtk_object_args_collect (GtkType      object_type,
 				 GSList	    **info_list_p,
 				 const gchar *first_arg_name,
 				 va_list      var_args);
-gchar*  gtk_object_arg_get_info (GtkType      object_type,
+gchar*	gtk_object_arg_get_info (GtkType      object_type,
 				 const gchar *arg_name,
 				 GtkArgInfo **info_p);
 void	gtk_trace_referencing	(GtkObject   *object,

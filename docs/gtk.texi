@@ -84,7 +84,8 @@ This is edition @value{edition} of the GTK documentation,
 @menu
 * Copying::                     Your rights.
 * Overview::                    What is GTK?
-* Types and Objects::           
+* Types::                       
+* Objects::                     
 * Signals::                     Signals overview.
 * Widgets::                     Widget overview.
 * Other Objects::               Utility objects.
@@ -131,7 +132,7 @@ The precise conditions of the licenses for GTK are found in the General
 Public Licenses that accompany it.
 
 
-@node Overview, Types and Objects, Copying, Top
+@node Overview, Types, Copying, Top
 @comment node-name, next, previous, up
 @chapter What is GTK?
 @cindex Overview
@@ -167,29 +168,36 @@ than C.  Especially more dynamic languages like Perl, Python or Scheme
 will find amble support, and in fact, bindings to these languages
 already exist.
 
-@node Types and Objects, Signals, Overview, Top
+@node Types, Objects, Overview, Top
 @comment node-name, next, previous, up
-@chapter Types and Object Overview
-@cindex object, type, type system, class
+@chapter Types
+@cindex type
+@cindex type system
+@cindex class
 
 @flushright
 Other kid's games are all such a bore!
 They've gotta have rules and they gotta keep score!
-
+@*
 -- Calvin about CalvinBall(tm)
 @end flushright
 
-GTK implements a semi-simple class mechanism and an associated class
-hierarchy for widgets and several other useful objects. The GtkObject
-type is the root of the class hierarchy. It provides a few items needed
-by all classes, the foundation for the signal (@pxref{Signals})
-mechanism and the ``destroy'' method.
+GTK implements a semi-simple type system with an associated class
+mechanism for widgets and several other useful objects.  This type
+system is intended to be general enough to allow both a smooth binding
+of dynamically typed languages to Gtk, as well as to serve for a
+rigorous and formalistic definition of the larger part of the Gtk API.
 
-This class hierarchy is part of a slightly more general type system.
+@c  The GtkObject
+@c  type is the root of the class hierarchy. It provides a few items needed
+@c  by all classes, the foundation for the signal (@pxref{Signals})
+@c  mechanism and the ``destroy'' method.
+
 The classes for the individual widgets are by far the most important
 part of this type system, but before we get to them, we describe the
 basics of the type system itself.  This is mostly of interest for widget
-writers, so you might want to skip ahead to the Object section.
+writers and language binders, so you might want to skip ahead to the
+next chapter, which talks about the object oriented stuff.
 
 @menu
 * Type introduction::           
@@ -197,12 +205,12 @@ writers, so you might want to skip ahead to the Object section.
 * Simple types::                
 * Enumerations and flags::      
 * Strings::                     
+* Boxed types::                 
 * Callbacks::                   
 * Composite types::             
-* Objects::                     
 @end menu
 
-@node Type introduction, Basics, Types and Objects, Types and Objects
+@node Type introduction, Basics, Types, Types
 @section Introduction to the Type System
 
 Gtk defines its own system of types, much like a computer language
@@ -223,7 +231,7 @@ for the dynamic languages that want to interface with Gtk.
 
 Let me restate this with different words, because I think it is
 important to understand this idea.  We will see in a moment that the
-type system is indeed weel defined and all this detail is implemented
+type system is indeed well defined and all this detail is implemented
 with functions and data structures in Gtk.  For example, every type (and
 there can be any number of them) can be represented with a unique
 integer and Gtk has support for the necessary bookkeeping for this.
@@ -244,24 +252,24 @@ char *gtk_foo (char *);
 
 This looks like it does something with strings.  But what does it do
 with the memory of the string that has been passed in, and what are we
-supposed or allowed to do with the string that is returned?  The more
-restricted type @samp{string} from the Gtk type system can be used to be
-more precise.  In fact, the definition of @samp{string} below includes
-the rule that when a @samp{string} is passed to a function, that
-function is not allowed to retain a pointer into the string beyond the
-life time of that function call.  Se we are safe to deallocate it or
-override it when the function has returned.  Likewise, the definition
-specifies that the memory of a @samp{string} that is returned from a
-function becomes the sole property of the calling function.  The calling
-function is responsible for deallocating it eventually and it can be
-sure that nobody else scribbles in it.  When @samp{gtk_foo} really obeys
-these rules, we can say that it takes one argument, which is a
-@samp{string}, and it returns a @samp{string}.
+supposed or allowed to do with the memory that the returned pointer
+points to?  The more restricted type @samp{string} from the Gtk type
+system can be used to be more precise.  In fact, the definition of
+@samp{string} below includes the rule that when a @samp{string} is
+passed to a function, that function is not allowed to retain a pointer
+into the string beyond the life time of that function call.  So we are
+safe to deallocate it or override it when the function has returned.
+Likewise, the definition specifies that the memory of a @samp{string}
+that is returned from a function becomes the sole property of the
+calling function.  The calling function is responsible for deallocating
+it eventually and it can be sure that nobody else scribbles in it.  When
+@samp{gtk_foo} really obeys these rules, we can say that it takes one
+argument, which is a @samp{string}, and it returns a @samp{string}.
 
 Now we can understand why it makes sense to have a more restrictive type
 system than that of C.  With it, it is possible to be more precise and
 we actually have a framework where we can be sure that as long as we
-stay inside this framework we are not gratitously causing trouble for
+stay inside this framework we are not gratuitously causing trouble for
 languages that are more disciplined than C.  Of course, you are not
 restricted to making all your interfaces expressible within the
 framework.  There are valid reasons for breaking it, for performance or
@@ -351,7 +359,7 @@ zero-terminated arrays.
 Obsolete types.
 @end table
 
-@node Basics, Simple types, Type introduction, Types and Objects
+@node Basics, Simple types, Type introduction, Types
 @section Basic Concepts
 
 The basis for the type system are the fundamental types.  At run-time,
@@ -361,15 +369,14 @@ unique name.
 
 @deftp {Enumeration} GtkFundamentalType
 This enumeration contains a member for each defined fundamental type.
-Most members are listed along with the description if their semantics,
-but two are simple enough to list them here:
+Most members are listed along with the description of their semantics,
+but one is listed here:
+
 @table @code
 @item GTK_TYPE_INVALID
 No valid type is derived from this.  Use @code{GTK_TYPE_INVALID} to
-express exceptional situations.  This member does not correspond to a
-fundamental type and thus there is no name for it.
-@item GTK_TYPE_NONE
-The type without value.
+express exceptional situations.  This member does not really correspond
+to a fundamental type and thus there is no name for it.
 @end table
 @end deftp
 
@@ -388,9 +395,19 @@ you might encounter.
 @deftypefn {Macro} GtkFundamentalType GTK_FUNDAMENTAL_TYPE (GtkType type)
 Returns the fundamental type of @var{type}.
 @end deftypefn
+
 Both macros simply access different bit-fields of a @code{GtkType}, so
 they are very efficient.
 @end deftp
+
+New types are registered with the @code{gtk_type_unique} function.  Any
+kind oftype can be registered with @code{gtk_type_unique} but there are
+convenience functions for most fundamental types.  Each fundamental type
+has its own interpretation of the rules below and these convenience
+functions should be used to automatically get the type registration
+right.  So, don't be put off by the apparent complexity of the interface
+to @code{gtk_type_unique}.  You will be using it only for new widgets,
+and there the rules are simple.
 
 The @code{GtkTypeInfo} structure is used to communicate information to
 @code{gtk_type_unique} as opposed to passing in large numbers of
@@ -406,134 +423,230 @@ struct _GtkTypeInfo
   guint class_size;
   GtkClassInitFunc class_init_func;
   GtkObjectInitFunc object_init_func;
-  GtkArgSetFunc arg_set_func;
-  GtkArgGetFunc arg_get_func;
+  gpointer reserved_1;
+  gpointer reserved_2;
+  GtkClassInitFunc base_class_init_func;
 @}
 @end example
 
 @itemize @bullet
 @item
-The @code{type_name} field refers to the name of the type. It is
-convention for the type name to be the same as the C structure type. For
-example, the type name of the @code{GtkObject} structure is
-``GtkObject''.
+The @code{type_name} field refers to the name of the type.  This is the
+same name that is used in the static definitions.  It is convention for
+the type name to be closely related to the name of the underlying C
+type. For example, the type name of the @code{GtkObject} structure is
+``GtkObject'', and the name of the @code{GtkWindowType} enumeration is
+``GtkWindowType''.  Note that the C type corresponding to ``GtkObject''
+is really a pointer to a @code{GtkObject} struct, but the name has no
+``*'' in it.
 
 @item
 The @code{object_size} field refers to the size in bytes of the C
-structure. The easiest (and portable) means of computing this size is by
-using the C @code{sizeof} operator. For instance, the sizeof of the
-@code{GtkObject} structure is computed by doing @code{sizeof
-(GtkObject)}.
+structure for types that have such a structure. The easiest (and
+portable) means of computing this size is by using the C @code{sizeof}
+operator. For instance, the sizeof of the @code{GtkObject} structure is
+computed by doing @code{sizeof (GtkObject)}.  When the type has no
+associated structure or when you do not want to support the
+@code{gtk_type_new} function for the new type, set @code{object_size} to
+0.  Only types derived from GTK_TYPE_OBJECT can be handled by
+@code{gtk_type_new}, anyway.
 
 @item
 The @code{class_size} field refers to the size in bytes of the C
-structure for the class. Again, the @code{sizeof} operator should be
-used to compute this value.
+structure for the class.  Again, the @code{sizeof} operator should be
+used to compute this value.  If you don't want to have a class structure
+for this type, set the field to 0.  @code{gtk_type_class} will then
+always return @code{NULL}.
 
 @item
-The @code{class_init_func} field is a callback which is used by the type
-mechanism to initialize class specific fields. The single argument this
-function takes is a pointer to a class structure.
+The @code{class_init_func} and @code{base_class_init_func} fields are
+callbacks which are used by the type mechanism to initialize class
+specific fields. The single argument these function taks is a pointer to
+a class structure.  When you do not need one or both of them, set the
+corresponding field to @code{NULL}.  The @code{class_init_func} will be
+called at most once, right after the class structure of size
+@code{class_size} has been allocated.  The interaction between
+@code{class_init_func} and @code{base_class_init_func} is only really
+useful for the full-fledged object system.  It is described there
+@pxref{Objects}.
 
 @item
 The @code{object_init_func} field is a callback which is used by the
-type mechanism to initialize object specific fields. The single argument
-this functions takes is a pointer to an object structure.
-
-@c FIXME!! Document the arg_set_func and arg_get_func..
+type mechanism to initialize object specific fields for structures that
+have been allocated via @code{gtk_type_new}. The single argument this
+functions takes is a pointer to an object structure.  If you do not want
+any special object initialization to take place, set this to
+@code{NULL}.  All object initialization functions for all types that are
+part of the inheritance chain are called, starting with the most basic
+type.
 
 @end itemize
 
-@deftypefun guint gtk_type_unique (guint @var{parent_type}, GtkTypeInfo *@var{type_info})
-The @var{parent_type} is simply the value of the new types parent
-type. If @var{parent_type} is 0, then the new type is the root of the
-type hierarchy. @var{type_info} is a pointer to a structure which
-contains necessary information for construction of the new
-type. Specifically, the @code{type_name}, @code{object_size} and
-@code{class_size} fields are required. The @code{class_init_func},
-@code{object_init_func} and @code{value_init_func} fields may be NULL.
+@deftypefun guint gtk_type_unique (GtkType @var{parent_type}, GtkTypeInfo *@var{type_info})
+The @var{parent_type} is simply the new types parent type. If
+@var{parent_type} is GTK_TYPE_INVALID, then the new type is a new
+fundamental type.  You should @b{never} register new fundamental types.
+@var{type_info} is a pointer to a structure which contains necessary
+information for construction of the new type.
+
+You can only register a specific name once.
 @end deftypefun
 
-@deftypefun gchar* gtk_type_name (guint @var{type})
+@deftypefun gchar* gtk_type_name (GtkType @var{type})
 The returned string is the name of @var{type} as specified to
 @code{gtk_type_unique}.
 @end deftypefun
 
-@deftypefun guint gtk_type_from_name (guchar *@var{name})
+@deftypefun GtkType gtk_type_from_name (guchar *@var{name})
 Return the type associated with @var{name}. If there is no type
-associated with @var{name}, then 0 will be returned.
+associated with @var{name}, then GTK_TYPE_INVALID will be returned.
 @end deftypefun
 
-@deftypefun guint gtk_type_parent (guint @var{type})
-Returns the parent type of @var{type} or 0 if @var{type} is the root of
-the type hierarchy.
+@deftypefun GtkType gtk_type_parent (GtkType @var{type})
+Returns the parent type of @var{type} or GTK_TYPE_INVALID if @var{type}
+is a fundamental type.
 @end deftypefun
 
-@deftypefun gpointer gtk_type_class (guint @var{type})
+@deftypefun gpointer gtk_type_class (GtkType @var{type})
 Returns the initialized class structure for @var{type}. The class
 structure is actually created and initialized the first time it is
-needed. If creation and initialization occurs, the @code{class_size}
-field of the @code{GtkTypeInfo} structure used to initialize this type
-is used to determine how large the class structure is. The
-@code{class_init_func} field from the @code{GtkTypeInfo} structure is
-called for all the members in the types ancestry, including the
-type. The order of this invocation proceeds from the root on down. For
-example, the @code{GtkWidgetClass} is first initialized as an
-@code{GtkObjectClass} by the object class initialization routine and
-then by the widget class initialization routine. This allows the widget
-class initialization routine to override values set by the object class
-initialization routine. The returned structure is shared by all objects
-of @var{type} and, as such, should not be modified.
+needed.  Refer to @pxref{Objects} for details on how this initialization works for GTK_TYPE_OBJECT derived types.
+
+@c  If creation and initialization occurs, the @code{class_size}
+@c  field of the @code{GtkTypeInfo} structure used to initialize this type
+@c  is used to determine how large the class structure is. The
+@c  @code{class_init_func} field from the @code{GtkTypeInfo} structure is
+@c  called for all the members in the types ancestry, including the
+@c  type. The order of this invocation proceeds from the root on down. For
+@c  example, the @code{GtkWidgetClass} is first initialized as an
+@c  @code{GtkObjectClass} by the object class initialization routine and
+@c  then by the widget class initialization routine. This allows the widget
+@c  class initialization routine to override values set by the object class
+@c  initialization routine.
+
+The returned structure is shared by all objects of @var{type} and, as
+such, should not be modified.
 @end deftypefun
 
-@deftypefun gpointer gtk_type_new (guint @var{type})
-Returns a new instance of an @var{type} object. The object structure is
-created and initialized similarly to the class structure (as described
-above). The @code{object_size} and @code{object_init_func} fields of the
-@code{GtkTypeInfo} structure are used to determine the objects allocated
-size and the object specific initialization routine. Similarly to the
-class initialization, all the object initialization routines from the
-root on down to the particular type being created are invoked.
+@deftypefun gpointer gtk_type_new (GtkType @var{type})
+Returns a new instance of an @var{type} object.  This works only for GTK_TYPE_OBJECT derived types.  Please see @pxref{Objects}.
+@c  The @code{object_size}
+@c  and @code{object_init_func} fields of the @code{GtkTypeInfo} structure
+@c  are used to determine the objects allocated size and the object specific
+@c  initialization routine. Similarly to the class initialization, all the
+@c  object initialization routines from the root on down to the particular
+@c  type being created are invoked.
 @end deftypefun
 
-@deftypefun void gtk_type_describe_heritage (guint @var{type})
+@deftypefun void gtk_type_describe_heritage (GtkType @var{type})
 Prints the type heritage for @var{type}. The heritage for a type
 includes the type and all its parent types up the type tree.
 @end deftypefun
 
-@deftypefun void gtk_type_describe_tree (guint @var{type}, gint @var{show_size})
+@deftypefun void gtk_type_describe_tree (GtkType @var{type}, gboolean @var{show_size})
 Prints the type tree which starts at @var{type}. @var{show_size} is a
 boolean which determines whether type sizes are printed.
 @end deftypefun
 
-@deftypefun gint gtk_type_is_a (guint @var{type}, guint @var{is_a_type})
+@deftypefun gboolean gtk_type_is_a (GtkType @var{type}, GtkType @var{is_a_type})
 A predicate function which determines whether the relation @var{type}
 is_a @var{is_a_type} is true.
 @end deftypefun
 
-@deftypefun void gtk_type_get_arg (GtkObject *@var{object}, GtkType @var{type}, GtkArg *@var{arg}, guint @var{arg_id})
-@end deftypefun
+@c  @deftypefun void gtk_type_get_arg (GtkObject *@var{object}, GtkType @var{type}, GtkArg *@var{arg}, guint @var{arg_id})
+@c  @end deftypefun
 
-@deftypefun void gtk_type_set_arg (GtkObject *@var{object}, GtkType @var{type}, GtkArg *@var{arg}, guint @var{arg_id})
-@end deftypefun
+@c  @deftypefun void gtk_type_set_arg (GtkObject *@var{object}, GtkType @var{type}, GtkArg *@var{arg}, guint @var{arg_id})
+@c  @end deftypefun
 
-@node Simple types, Enumerations and flags, Basics, Types and Objects
+Values of all types can be handled uniformly by storing them into a
+@code{GtkArg} structure.  The @code{GtkArg} has the following fields:
+
+@table @code
+@item gchar *name
+This can be used to give the value represented by this @code{GtkArg}
+structure a name.  It is not used much.
+
+@item GtkType type
+The type of this value.
+
+@item union d
+A big union that has (at least conceptually) one member for each
+fundamental type.  You should not access these members directly.
+Rather, use the @code{GTK_VALUE_*} macros.  There is one macro for each
+fundamental type, and its name is derived from the name of the
+GtkFundamentalType enumeration members simply by replacing ``Gtk_TYPE''
+with ``GTK_VALUE''.  All @code{GTK_VALUE_*} macros take a @code{GtkArg}
+structure as their only parameter (@emph{not} a pointer) and evaluate to
+a lvalue.
+@end table
+
+For example, the accessor for the fundamental type GTK_TYPE_INT is
+called GTK_VALUE_INT and you could use it like this:
+
+@example
+GtkArg value;
+
+value.name = NULL;
+value.type = GTK_TYPE_INT;
+GTK_VALUE_INT(value) = 7;
+@end example
+
+@node Simple types, Enumerations and flags, Basics, Types
 @section Simple Types
 
-@node Enumerations and flags, Strings, Simple types, Types and Objects
+The Gtk type system has a full set of the usual simple types: integers,
+floating point numbers, but also boolean and character.  You can not
+derive new types from these.
+
+@multitable {GTK_TYPE_POINTER} {"gpointer"} {xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}
+@item Enum @tab Name @tab Description
+@item GTK_TYPE_NONE @tab "void"
+@tab A type without value.
+@item GTK_TYPE_CHAR @tab "char"
+@tab A 8-bit unsigned number representing a character.  Numbers
+     between 0 and 127 are ASCII, the rest is undefined.
+@item GTK_TYPE_BOOL @tab "gboolean"
+@tab The boolean type.  It is some small integer where the number 0
+     represents false and 1 is true.  No other values are allowed.
+@item GTK_TYPE_INT @tab "gint"
+@tab A signed integer with at least 32 bits.
+@item GTK_TYPE_UINT @tab "guint"
+@tab A unsigned integer with at least 32 bits.
+@item GTK_TYPE_LONG @tab "glong"
+@tab A signed integer with at least 32 bits.
+@item GTK_TYPE_ULONG @tab "gulong"
+@tab A unsigned integer with at least 32 bits.  This is large enough to
+     hold a coerced pointer.
+@item GTK_TYPE_FLOAT @tab "gfloat"
+@tab A single precision floating point number.
+@item GTK_TYPE_DOUBLE @tab "gfloat"
+@tab A souble precision floating point number.
+@item GTK_TYPE_POINTER @tab "gpointer"
+@tab A untyped pointer.  Do not use this if you can avoid it.
+@end multitable
+
+The values of these types are all represented `directly' with the C
+types that are indicated in the `name' column above.  @pxref{Boxed
+types} for a discussion of this.
+
+@node Enumerations and flags, Strings, Simple types, Types
 @section Enumerations and Flags
 
-@node Strings, Callbacks, Enumerations and flags, Types and Objects
+@node Strings, Boxed types, Enumerations and flags, Types
 @section Strings
 
-@node Callbacks, Composite types, Strings, Types and Objects
+@node Boxed types, Callbacks, Strings, Types
+@section Boxed Types
+
+@node Callbacks, Composite types, Boxed types, Types
 @section Callbacks
 
-@node Composite types, Objects, Callbacks, Types and Objects
+@node Composite types,  , Callbacks, Types
 @section Composite Types
 
-@node Objects,  , Composite types, Types and Objects
-@section Objects and Classes
+@node Objects, Signals, Types, Top
+@chapter Objects
 
 
 
@@ -558,9 +671,9 @@ is_a @var{is_a_type} is true.
 @section Object functions
 
 The GtkObject type is the root of the type hierarchy used by GTK. It
-provides a minimal set of fields used to implement the actual
-object, class and signal mechanisms, as well as several utility routines
-which make dealing with objects easier.
+provides a minimal set of fields used to implement the actual object,
+class and signal mechanisms, as well as several utility routines which
+make dealing with objects easier.
 
 For the adventurous, see @ref{Object Implementation}.
 
@@ -681,7 +794,7 @@ return @code{FALSE}. On success it will return @code{TRUE}.
 @end deftypefun
 
 
-@node Signals, Widgets, Types and Objects, Top
+@node Signals, Widgets, Objects, Top
 @comment node-name, next, previous, up
 @chapter Signals Overview
 @cindex Signals
@@ -5177,7 +5290,7 @@ Cast a generic pointer to @code{Gtk<ObjectType>Class*}. Like
 @deftypefun gint GTK_IS_<ObjectType> (gpointer @var{obj})
 Determine if a generic pointer refers to a @code{Gtk<ObjectType>}
 object. This function is, in reality, a macro wrapper around the
-@code{gtk_type_is_a} function (@pxref{Types and Objects}).
+@code{gtk_type_is_a} function (@pxref{Types}).
 @end deftypefun
 
 
@@ -5531,3 +5644,5 @@ array instead of a linked list. This would shrink the overhead of the
 @summarycontents
 @contents
 @bye
+
+@c  LocalWords:  Gtk API formalistic

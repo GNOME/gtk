@@ -290,7 +290,7 @@ gtk_signal_newv (const gchar	     *r_name,
   if (return_val != GTK_TYPE_NONE &&
       (signal_flags & GTK_RUN_BOTH) == GTK_RUN_FIRST)
     {
-      g_warning ("gtk_signal_newv(): signal \"%s\" with return value `%s' excludes GTK_RUN_LAST",
+      g_warning ("gtk_signal_newv(): signal \"%s\" - return value `%s' incompatible with GTK_RUN_FIRST",
 		 name, gtk_type_name (return_val));
       g_free (name);
       return 0;
@@ -1151,11 +1151,13 @@ gtk_signal_handlers_destroy (GtkObject *object)
 	  GtkHandler *next;
 	  
 	  next = handler->next;
-	  gtk_signal_handler_unref (handler, object);
+	  if (handler->id > 0)
+	    gtk_signal_handler_unref (handler, object);
 	  handler = next;
 	}
       handler = gtk_object_get_data_by_id (object, handler_quark);
-      gtk_signal_handler_unref (handler, object);
+      if (handler->id > 0)
+	gtk_signal_handler_unref (handler, object);
     }
 }
 
@@ -1778,10 +1780,9 @@ gtk_signal_collect_params (GtkArg	       *params,
     {
       register gchar *error;
 
-      params->type = *(param_types++);
       params->name = NULL;
-      GTK_ARG_COLLECT_VALUE (GTK_FUNDAMENTAL_TYPE (params->type),
-			     params,
+      params->type = *(param_types++);
+      GTK_ARG_COLLECT_VALUE (params,
 			     var_args,
 			     error);
       if (error)

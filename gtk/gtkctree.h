@@ -27,9 +27,7 @@
 #include <gtk/gtkclist.h>
 
 #ifdef __cplusplus
-extern "C"
-{
-#pragma }
+extern "C" {
 #endif				/* __cplusplus */
 
 #define GTK_TYPE_CTREE            (gtk_ctree_get_type ())
@@ -53,11 +51,19 @@ typedef enum
 
 typedef enum
 {
+  GTK_CTREE_LINES_NONE,
   GTK_CTREE_LINES_SOLID,
   GTK_CTREE_LINES_DOTTED,
-  GTK_CTREE_LINES_TABBED,
-  GTK_CTREE_LINES_NONE
+  GTK_CTREE_LINES_TABBED
 } GtkCTreeLineStyle;
+
+typedef enum
+{
+  GTK_CTREE_EXPANDER_NONE,
+  GTK_CTREE_EXPANDER_SQUARE,
+  GTK_CTREE_EXPANDER_TRIANGLE,
+  GTK_CTREE_EXPANDER_CIRCULAR
+} GtkCTreeExpanderStyle;
 
 typedef enum
 {
@@ -93,25 +99,26 @@ struct _GtkCTree
 {
   GtkCList clist;
   
-  GdkGC *xor_gc;
   GdkGC *lines_gc;
   GdkWindow *drag_icon;
   gint icon_width;
   gint icon_height;
   
   gint tree_indent;
+  gint tree_spacing;
   gint tree_column;
   gint drag_row;
   GtkCTreeNode *drag_source;
   GtkCTreeNode *drag_target;
   gint insert_pos;
 
-  guint reorderable : 1;
-  guint use_icons   : 1;
-  guint in_drag     : 1;
-  guint drag_rect   : 1;
-  guint line_style  : 2;
-  guint show_stub   : 1;
+  guint reorderable    : 1;
+  guint use_icons      : 1;
+  guint in_drag        : 1;
+  guint drag_rect      : 1;
+  guint line_style     : 2;
+  guint expander_style : 2;
+  guint show_stub      : 1;
 
   GtkCTreeCompareDragFunc drag_compare;
 };
@@ -240,7 +247,16 @@ gboolean gtk_ctree_is_ancestor                   (GtkCTree     *ctree,
 GtkCTreeNode * gtk_ctree_find_by_row_data        (GtkCTree     *ctree,
 					          GtkCTreeNode *node,
 					          gpointer      data);
+/* returns a GList of all GtkCTreeNodes with row->data == data. */
+GList * gtk_ctree_find_all_by_row_data           (GtkCTree     *ctree,
+						  GtkCTreeNode *node,
+						  gpointer      data);
 GtkCTreeNode * gtk_ctree_find_by_row_data_custom (GtkCTree     *ctree,
+						  GtkCTreeNode *node,
+						  gpointer      data,
+						  GCompareFunc  func);
+/* returns a GList of all GtkCTreeNodes with row->data == data. */
+GList * gtk_ctree_find_all_by_row_data_custom    (GtkCTree     *ctree,
 						  GtkCTreeNode *node,
 						  gpointer      data,
 						  GCompareFunc  func);
@@ -355,6 +371,18 @@ gint gtk_ctree_get_node_info                     (GtkCTree     *ctree,
 						  GdkBitmap   **mask_opened,
 						  gboolean     *is_leaf,
 						  gboolean     *expanded);
+void gtk_ctree_node_set_row_style                (GtkCTree     *ctree,
+						  GtkCTreeNode *node,
+						  GtkStyle     *style);
+GtkStyle * gtk_ctree_node_get_row_style          (GtkCTree     *ctree,
+						  GtkCTreeNode *node);
+void gtk_ctree_node_set_cell_style               (GtkCTree     *ctree,
+						  GtkCTreeNode *node,
+						  gint          column,
+						  GtkStyle     *style);
+GtkStyle * gtk_ctree_node_get_cell_style         (GtkCTree     *ctree,
+						  GtkCTreeNode *node,
+						  gint          column);
 void gtk_ctree_node_set_foreground               (GtkCTree     *ctree,
 						  GtkCTreeNode *node,
 						  GdkColor     *color);
@@ -382,18 +410,22 @@ GtkVisibility gtk_ctree_node_is_visible          (GtkCTree     *ctree,
  *             GtkCTree specific functions                 *
  ***********************************************************/
 
-void gtk_ctree_set_indent                        (GtkCTree     *ctree, 
-						  gint          indent);
-void gtk_ctree_show_stub                         (GtkCTree     *ctree, 
-						  gboolean      show_stub);
-void gtk_ctree_set_reorderable                   (GtkCTree     *ctree,
-						  gboolean      reorderable);
-void gtk_ctree_set_use_drag_icons                (GtkCTree     *ctree,
-						  gboolean      use_icons);
-void gtk_ctree_set_line_style                    (GtkCTree     *ctree, 
-						  GtkCTreeLineStyle line_style);
-void gtk_ctree_set_drag_compare_func              (GtkCTree     		*ctree,
-						   GtkCTreeCompareDragFunc	cmp_func);
+void gtk_ctree_set_indent            (GtkCTree                *ctree, 
+				      gint                     indent);
+void gtk_ctree_set_spacing           (GtkCTree                *ctree, 
+				      gint                     spacing);
+void gtk_ctree_show_stub             (GtkCTree                *ctree, 
+				      gboolean                 show_stub);
+void gtk_ctree_set_reorderable       (GtkCTree                *ctree,
+				      gboolean                 reorderable);
+void gtk_ctree_set_use_drag_icons    (GtkCTree                *ctree,
+				      gboolean                 use_icons);
+void gtk_ctree_set_line_style        (GtkCTree                *ctree, 
+				      GtkCTreeLineStyle        line_style);
+void gtk_ctree_set_expander_style    (GtkCTree                *ctree, 
+				      GtkCTreeExpanderStyle    expander_style);
+void gtk_ctree_set_drag_compare_func (GtkCTree     	      *ctree,
+				      GtkCTreeCompareDragFunc  cmp_func);
 
 /***********************************************************
  *             Tree sorting functions                      *

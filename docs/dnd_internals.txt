@@ -1,0 +1,210 @@
+This document describes some of the internals of the DND handling
+code.
+
+Organization
+============
+
+The DND code is split between a lowlevel part - gdkdnd.c and a
+highlevel part - gtkdnd.c.  To put it simply, gdkdnd.c contain the
+portions of DND code that are easiest to do in raw X, while gtkdnd.c
+contains the portions of DND that are easiest to do with an event loop
+and high level selection handling.
+
+Except for a few details of selection handling, most of the
+dependencies on the DND protocol are confined to gdkdnd.c.
+There are two or three supported protocols - Motif DND,
+Xdnd and a pseudo-protocol ROOTWIN, which is used for drops
+on root windows that aren't really accepting drops.
+gdkdnd.c divides into 4 pieces:
+
+ 1) Utility functions (finding client windows)
+ 2) Motif specific code (the biggest chunk)
+ 3) Xdnd specific code
+ 4) The public interfaces
+
+The code in gtkdnd.c roughly consists of three parts  
+  
+ 1) General utility functions
+ 2) Destination side code
+ 3) Source side code.
+
+Both on the source and dest side, there is some division
+between the low level layers and the default handlers,
+though they are rather mixed in many cases.
+
+Structures and Memory Management
+================================
+
+Information about source sites and drop sites is stored
+in the structures GtkSourceSite and GtkDestSite.
+
+Information about in-progress drags and drops is stored
+in the structures GtkSourceInfo and GtkDestInfo.
+
+The GtkSourceInfo structure is created when the drag
+begins, and persists until the drag either completes
+or times out. A pointer to it is stored in 
+dataset-data for the GdkDragContext, however there
+is no ownership. If the SourceInfo is destroyed
+before the context, the field is simply cleared.
+
+A GtkDestInfo is attached to each GdkDragContext
+that is received for an incoming drag. In contrast
+to the SourceInfo the DestInfo is "owned" by the
+context, and when the context is destroyed, destroyed.
+
+The GDK API
+===========
+
+It is expect that the GDK DND API will never be
+used by anything other than the DND code in GTK+.
+
+/* Drag and Drop */
+
+GdkDragContext * gdk_drag_context_new        (void);
+void             gdk_drag_context_ref        (GdkDragContext *context);
+void             gdk_drag_context_unref      (GdkDragContext *context);
+
+These create and refcount GdkDragContexts in a
+straightforward manner.
+
+/* Destination side */
+
+void             gdk_drag_status        (GdkDragContext   *context,
+				         GdkDragAction     action,
+					 guint32           time);
+void             gdk_drop_reply         (GdkDragContext   *context,
+					 gboolean          ok,
+					 guint32           time);
+void             gdk_drop_finish        (GdkDragContext   *context,
+					 gboolean          success,
+					 guint32           time);
+GdkAtom          gdk_drag_get_selection (GdkDragContext   *context);
+
+/* Source side */
+
+GdkDragContext * gdk_drag_begin      (GdkWindow      *window,
+				      GList          *targets,
+				      GdkDragAction   actions);
+gboolean         gdk_drag_get_protocol (guint32          xid,
+					GdkDragProtocol *protocol);
+void             gdk_drag_find_window (GdkDragContext   *context,
+				       GdkWindow       *drag_window,
+			 	       gint             x_root,
+				       gint             y_root,
+				       GdkWindow      **dest_window,
+				       GdkDragProtocol *protocol);
+gboolean        gdk_drag_motion      (GdkDragContext *context,
+				      GdkWindow      *dest_window,
+				      GdkDragProtocol protocol,
+				      gint            x_root, 
+				      gint            y_root,
+				      GdkDragAction   action,
+				      guint32         time);
+void            gdk_drag_drop        (GdkDragContext *context,
+				      guint32         time);
+void            gdk_drag_abort       (GdkDragContext *context,
+				      guint32         time);
+
+GdkAtom       gdk_drag_get_selection (GdkDragContext *context);
+
+Retrieves the selection that will be used to communicate
+the data for the drag context (valid on both source
+and dest sides)
+
+Cursors and window heirarchies
+==============================
+
+The DND code, when possible (and it isn't possible over
+Motif window) uses a shaped window as a drag icon.
+Because the cursor may fall inside this window during the
+drag, we actually have to figure out which window
+the cursor is in _ourselves_ so we can ignore the
+drag icon properly. (Oh for OutputOnly windows!)
+
+To avoid obscene amounts of server traffic (which are only
+slighly observerable locally, but would really kill a
+session over a slow link), the code in GDK does
+XGetWindowAttributes for every child of the root window at
+the beginning of the drag, then selects with
+SubstructureNotifyMask on the root window, so that
+it can update this list.
+
+It probably would be easier to just reread the entire
+list when one of these events occurs, instead of 
+incrementally updating, but updating the list in
+sync was sort of fun code, so I did it that way ;-)
+
+There is also a problem of trying to follow the
+mouse cursor as well as possible. Currently, the
+code uses PointerMotionHint, and an XQueryPointer
+on MotionNotify events. This results in pretty
+good syncing, but may result in somewhat poor
+accuracy for drops. (Because the coordinates of
+the drop are the coordinates when the server receives
+the button press, which might actually be before
+the XQueryPointer for the previous MotionNotify
+event is done.)
+
+Probably better is doing MotionNotify compression 
+and discarding MotionNotify events when there
+are more on the queue before the next ButtonPress/Release.
+
+Proxying
+========
+
+A perhaps rather unusual feature of GTK's DND is proxying. A
+dest site can be specified as a proxy drop site for another
+window. This is most needed for the plug-socket code - the
+socket needs to pass on drags to the plug since the original
+source only sees toplevel windows. However, it can also be
+used as a user visible proxy - i.e., dragging to buttons on
+the taskbar.
+
+Internally, when the outer drag enters a proxy dest site, a
+new source drag is created, with SourceInfo and
+GdkDragContext. From the GDK side, it looks much like a
+normal source drag; on the GTK+ side, most of the code is
+disjoint. The need to pass in a specific target window
+is the reason why the GDK DND API splits
+gdk_drag_find_window() and gdk_drag_motion().
+
+For proxy drags, the GtkDestInfo and GtkSourceInfo for the
+drag point at each other.
+
+Because the abstraction of the drag protocol is at the GDK
+level, a proxy drag from Motif to Xdnd or vice versa happens
+pretty much automatically during the drag, though the
+drop can get complicated. For Xdnd <-> Motif,
+Motif <-> Xdnd, or Motif <-> Motif drags, it is necessary to 
+for the Proxy to retrieve the data and pass it on to
+the true destination, since either the selection names
+differ or (Motif<->Motif), the proxy needs to know
+about the XmDRAG_SUCCESS/FAILURE selection targets.
+
+Further Reading:
+================
+
+Xdnd:
+
+The spec is at:
+
+ http://www.cco.caltech.edu/~jafl/xdnd/
+
+Motif:
+
+The Motif DND protocol is best described in the 
+Hungry Programmers _Inside Lesstif_ book, available
+from:
+
+  http://www.igpm.rwth-aachen.de/~albrecht/hungry.html
+
+Harald Albrecht and Mitch Miers have done a far
+better job at documenting the DND protocol then
+anything the OpenGroup has produced.
+
+
+
+Owen Taylor
+otaylor@redhat.com
+Oct 18, 1998

@@ -59,11 +59,19 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
+AWK = @AWK@
 CC = @CC@
+DL_LIBS = @DL_LIBS@
+GLIB_CFLAGS = @GLIB_CFLAGS@
+GLIB_CONFIG = @GLIB_CONFIG@
+GLIB_LIBS = @GLIB_LIBS@
+GTK_BINARY_AGE = @GTK_BINARY_AGE@
+GTK_INTERFACE_AGE = @GTK_INTERFACE_AGE@
 GTK_MAJOR_VERSION = @GTK_MAJOR_VERSION@
 GTK_MICRO_VERSION = @GTK_MICRO_VERSION@
 GTK_MINOR_VERSION = @GTK_MINOR_VERSION@
 GTK_VERSION = @GTK_VERSION@
+INDENT = @INDENT@
 LD = @LD@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
@@ -75,31 +83,41 @@ MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 NM = @NM@
 PACKAGE = @PACKAGE@
+PERL = @PERL@
 RANLIB = @RANLIB@
+REBUILD = @REBUILD@
 VERSION = @VERSION@
+glib_cflags = @glib_cflags@
+glib_libs = @glib_libs@
 x_cflags = @x_cflags@
 x_includes = @x_includes@
 x_ldflags = @x_ldflags@
 x_libs = @x_libs@
 xinput_progs = @xinput_progs@
 
-SRC_SUBDIRS = glib gdk gtk
+SRC_SUBDIRS = gdk gtk
 SUBDIRS = $(SRC_SUBDIRS) docs
 
 bin_SCRIPTS = gtk-config
 
 EXTRA_DIST =	\
+	HACKING		\
 	gtk+.spec	\
         gtk.m4          \
 	makecopyright	\
 	TODO		\
 	NEWS.pre-1-0	\
 	ChangeLog.pre-1-0	\
+	README.cvs-commits	\
+	examples/README.1ST	\
+	examples/extract.awk	\
+	examples/extract.sh	\
 	examples/aspectframe/Makefile  \
 	examples/aspectframe/aspectframe.c  \
 	examples/buttons/Makefile  \
 	examples/buttons/buttons.c  \
 	examples/buttons/info.xpm  \
+	examples/clist/clist.c \
 	examples/entry/Makefile  \
 	examples/entry/entry.c  \
 	examples/eventbox/Makefile  \
@@ -124,6 +142,8 @@ EXTRA_DIST =	\
 	examples/menu/mfmain.h  \
 	examples/notebook/Makefile  \
 	examples/notebook/notebook.c  \
+	examples/packer/Makefile  \
+	examples/packer/pack.c \
 	examples/packbox/Makefile  \
 	examples/packbox/packbox.c  \
 	examples/paned/Makefile  \
@@ -166,9 +186,9 @@ SCRIPTS =  $(bin_SCRIPTS)
 DATA =  $(m4data_DATA)
 
 DIST_COMMON =  README AUTHORS COPYING ChangeLog INSTALL Makefile.am \
-Makefile.in NEWS TODO acconfig.h aclocal.m4 config.guess config.h.in \
-config.sub configure configure.in gtk-config.in install-sh ltconfig \
-ltmain.sh missing mkinstalldirs stamp-h.in
+Makefile.in NEWS TODO acconfig.h acinclude.m4 aclocal.m4 config.guess \
+config.h.in config.sub configure configure.in gtk-config.in install-sh \
+ltconfig ltmain.sh missing mkinstalldirs stamp-h.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
@@ -185,7 +205,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(ACLOCAL_M4): @MAINT@ configure.in 
+$(ACLOCAL_M4): @MAINT@ configure.in  acinclude.m4
 	cd $(srcdir) && $(ACLOCAL)
 
 config.status: $(srcdir)/configure
@@ -361,13 +381,15 @@ distdir: $(DISTFILES)
 	cd $(top_srcdir) \
 	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu Makefile
 	$(mkinstalldirs) $(distdir)/examples $(distdir)/examples/aspectframe \
-	   $(distdir)/examples/buttons $(distdir)/examples/entry \
-	   $(distdir)/examples/eventbox $(distdir)/examples/filesel \
-	   $(distdir)/examples/gtkdial $(distdir)/examples/helloworld \
+	   $(distdir)/examples/buttons $(distdir)/examples/clist \
+	   $(distdir)/examples/entry $(distdir)/examples/eventbox \
+	   $(distdir)/examples/filesel $(distdir)/examples/gtkdial \
+	   $(distdir)/examples/helloworld \
 	   $(distdir)/examples/helloworld2 $(distdir)/examples/list \
 	   $(distdir)/examples/menu $(distdir)/examples/notebook \
-	   $(distdir)/examples/packbox $(distdir)/examples/paned \
-	   $(distdir)/examples/pixmap $(distdir)/examples/progressbar \
+	   $(distdir)/examples/packbox $(distdir)/examples/packer \
+	   $(distdir)/examples/paned $(distdir)/examples/pixmap \
+	   $(distdir)/examples/progressbar \
 	   $(distdir)/examples/radiobuttons $(distdir)/examples/rulers \
 	   $(distdir)/examples/scribble-simple \
 	   $(distdir)/examples/scrolledwin \

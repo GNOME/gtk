@@ -21,10 +21,20 @@
 		);
 
 $srcdir = $ENV{'srcdir'} || '.';
+$indent = $ENV{'INDENT'};
+
+sub indent {
+    my $filename = shift;
+    if (defined($indent) && $indent ne "") {
+	system($indent, $filename);
+	# we try the most likely names for backup files
+	system("rm", "-f", "$filename.bak", "$filename~");
+    }
+}
 
 open(IL, "<$srcdir/gtkmarshal.list") || die("Open failed: $!");
-open(OH, "|indent > $srcdir/gtkmarshal.h") || die("Open failed: $!");
-open(OS, "|indent > $srcdir/gtkmarshal.c") || die("Open failed: $!");
+open(OH, ">$srcdir/gtkmarshal.h") || die("Open failed: $!");
+open(OS, ">$srcdir/gtkmarshal.c") || die("Open failed: $!");
 
 print OH <<EOT;
 #ifndef __GTKMARSHAL_H__
@@ -44,7 +54,8 @@ EOT
 
 print OS qq(#include "gtkmarshal.h"\n\n);
 
-while(chomp($aline = <IL>)) {
+while (defined($aline = <IL>)) {
+  chomp $aline;
   ($retval, $paramlist) = split(/:/, $aline, 2);
   @params = split(/\s*,\s*/, $paramlist);
 
@@ -190,3 +201,6 @@ print OH <<EOT;
 EOT
 
 close(IL); close(OH); close(OS);
+
+indent("$srcdir/gtkmarshal.h");
+indent("$srcdir/gtkmarshal.c");

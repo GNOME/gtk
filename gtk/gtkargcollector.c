@@ -20,16 +20,23 @@
 /* collect a single argument value from a va_list.
  * this is implemented as a huge macro <shrug>, because we can't
  * pass va_list variables by reference on some systems.
- * the former prototype was:
+ * the corresponding prototype would be:
  * static inline gchar*
- * gtk_arg_collect_value (GtkType  fundamental_type,
- * 		          GtkArg  *arg,
+ * gtk_arg_collect_value (GtkArg  *arg,
  *		          va_list  var_args);
  */
-#define	GTK_ARG_COLLECT_VALUE(_ft, arg, var_args, _error)	\
+#define	GTK_ARG_COLLECT_VALUE(arg, var_args, _error)	\
 G_STMT_START { \
-  GtkType fundamental_type = _ft; \
   gchar *error_msg; \
+  GtkType fundamental_type; \
+  \
+  fundamental_type = GTK_FUNDAMENTAL_TYPE (arg->type); \
+  if (fundamental_type > GTK_TYPE_FUNDAMENTAL_LAST) \
+    { \
+      fundamental_type = gtk_type_get_varargs_type (fundamental_type); \
+      if (!fundamental_type) \
+        fundamental_type = GTK_FUNDAMENTAL_TYPE (arg->type); \
+    } \
  \
   error_msg = NULL; \
   switch (fundamental_type) \

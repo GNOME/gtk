@@ -21,7 +21,10 @@
 #include <math.h>
 #include <gdk/gdk.h>
 #include "gtkcolorsel.h"
+#include "gtkdrawwindow.h"
 #include "gtkhbbox.h"
+#include "gtkdnd.h"
+#include "gtkselection.h"
 
 /*
  * If you change the way the color values are stored,
@@ -144,12 +147,23 @@ static gint gtk_color_selection_wheel_events      (GtkWidget          *area,
 static gint gtk_color_selection_wheel_timeout     (GtkColorSelection  *colorsel);
 static void gtk_color_selection_sample_resize     (GtkWidget          *widget,
                                                    gpointer            data);
-static void gtk_color_selection_drop_handle       (GtkWidget          *widget,
-						   GdkEvent           *event,
-						   GtkWidget          *theclorsel);
-static void gtk_color_selection_drag_handle       (GtkWidget          *widget,
-						   GdkEvent           *event,
-						   GtkWidget          *thecolorsel);
+static void gtk_color_selection_drag_begin        (GtkWidget          *widget,
+						   GdkDragContext     *context,
+						   gpointer            data);
+static void gtk_color_selection_drop_handle       (GtkWidget          *widget, 
+						   GdkDragContext     *context,
+						   gint                x,
+						   gint                y,
+						   GtkSelectionData   *selection_data,
+						   guint               info,
+						   guint               time,
+						   gpointer            data);
+static void gtk_color_selection_drag_handle       (GtkWidget        *widget, 
+						   GdkDragContext   *context,
+						   GtkSelectionData *selection_data,
+						   guint             info,
+						   guint             time,
+						   gpointer          data);
 static void gtk_color_selection_draw_wheel_marker (GtkColorSelection  *colorsel);
 static void gtk_color_selection_draw_wheel_frame  (GtkColorSelection  *colorsel);
 static void gtk_color_selection_draw_value_marker (GtkColorSelection  *colorsel);
@@ -502,7 +516,10 @@ static void
 gtk_color_selection_realize (GtkWidget         *widget)
 {
   GtkColorSelection *colorsel;
-  gchar *type_accept_list[] = {"application/x-color"};
+
+  GtkTargetEntry targets[] = {
+    { "application/x-color", 0 }
+  };
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_COLOR_SELECTION (widget));
@@ -512,18 +529,30 @@ gtk_color_selection_realize (GtkWidget         *widget)
   if (GTK_WIDGET_CLASS (color_selection_parent_class)->realize)
     (*GTK_WIDGET_CLASS (color_selection_parent_class)->realize) (widget);
 
-  gtk_widget_dnd_drag_set (colorsel->sample_area,
-			   1, type_accept_list, 1);
-  gtk_widget_dnd_drop_set (colorsel->sample_area,
-			   1, type_accept_list, 1, 0);
-  gtk_signal_connect_after (GTK_OBJECT (colorsel->sample_area),
-			    "drop_data_available_event",
-			    GTK_SIGNAL_FUNC (gtk_color_selection_drop_handle),
-			    colorsel);
-  gtk_signal_connect_after (GTK_OBJECT (colorsel->sample_area),
-			    "drag_request_event",
-			    GTK_SIGNAL_FUNC (gtk_color_selection_drag_handle),
-			    colorsel);
+  gtk_drag_dest_set (colorsel->sample_area,
+		       GTK_DEST_DEFAULT_HIGHLIGHT |
+		       GTK_DEST_DEFAULT_MOTION |
+		       GTK_DEST_DEFAULT_DROP,
+		       targets, 1,
+		       GDK_ACTION_COPY);
+
+  gtk_drag_source_set (colorsel->sample_area, 
+		       GDK_BUTTON1_MASK | GDK_BUTTON3_MASK,
+		       targets, 1,
+		       GDK_ACTION_COPY | GDK_ACTION_MOVE);
+
+  gtk_signal_connect (GTK_OBJECT (colorsel->sample_area),
+		      "drag_begin",
+		      GTK_SIGNAL_FUNC (gtk_color_selection_drag_begin),
+		      colorsel);
+  gtk_signal_connect (GTK_OBJECT (colorsel->sample_area),
+		      "drag_data_get",
+		      GTK_SIGNAL_FUNC (gtk_color_selection_drag_handle),
+		      colorsel);
+  gtk_signal_connect (GTK_OBJECT (colorsel->sample_area),
+		      "drag_data_received",
+		      GTK_SIGNAL_FUNC (gtk_color_selection_drop_handle),
+		      colorsel);
 }
 
 static void
@@ -824,39 +853,97 @@ gtk_color_selection_sample_resize (GtkWidget *widget,
 }
 
 static void
-gtk_color_selection_drop_handle (GtkWidget *widget, GdkEvent *event,
-				 GtkWidget *thecolorsel)
+gtk_color_selection_drag_begin (GtkWidget      *widget,
+				GdkDragContext *context,
+				gpointer        data)
 {
-  /* This is currently a gdouble array of the format (I think):
-     use_opacity
+  GtkColorSelection *colorsel = data;
+  GtkWidget *window;
+  gdouble colors[4];
+  GdkColor bg;
+
+  window = gtk_draw_window_new(GTK_WINDOW_POPUP);
+  gtk_widget_set_usize (window, 48, 32);
+  gtk_widget_realize (window);
+
+  gtk_color_selection_get_color (colorsel, colors);
+  bg.red = 0xffff * colors[0];
+  bg.green = 0xffff * colors[1];
+  bg.blue = 0xffff * colors[2];
+
+  gdk_color_alloc (gtk_widget_get_colormap (window), &bg);
+  gdk_window_set_background (window->window, &bg);
+
+  gtk_drag_set_icon_widget (context, window, -2, -2);
+}
+
+static void
+gtk_color_selection_drop_handle (GtkWidget        *widget, 
+				 GdkDragContext   *context,
+				 gint              x,
+				 gint              y,
+				 GtkSelectionData *selection_data,
+				 guint             info,
+				 guint             time,
+				 gpointer          data)
+{
+  GtkColorSelection *colorsel = data;
+  guint16 *vals;
+  gdouble colors[4];
+
+  /* This is currently a guint16 array of the format:
      R
      G
      B
      opacity
   */
-  gdouble *v = event->dropdataavailable.data;
-  gtk_color_selection_set_opacity(GTK_COLOR_SELECTION(thecolorsel),
-				  (v[0]==1.0)?TRUE:FALSE);
-  gtk_color_selection_set_color(GTK_COLOR_SELECTION(thecolorsel),
-				v + 1);
-  g_free(event->dropdataavailable.data);
-  g_free(event->dropdataavailable.data_type);
+
+  if (selection_data->length < 0)
+    return;
+
+  if ((selection_data->format != 16) || 
+      (selection_data->length != 8))
+    {
+      g_warning ("Received invalid color data\n");
+      return;
+    }
+  
+  vals = (guint16 *)selection_data->data;
+
+  colors[0] = (gdouble)vals[0] / 0xffff;
+  colors[1] = (gdouble)vals[1] / 0xffff;
+  colors[2] = (gdouble)vals[2] / 0xffff;
+  colors[3] = (gdouble)vals[3] / 0xffff;
+  
+  gtk_color_selection_set_color(colorsel, colors);
 }
 
 static void
-gtk_color_selection_drag_handle (GtkWidget *widget, GdkEvent *event,
-				 GtkWidget *thecolorsel)
+gtk_color_selection_drag_handle (GtkWidget        *widget, 
+				 GdkDragContext   *context,
+				 GtkSelectionData *selection_data,
+				 guint             info,
+				 guint             time,
+				 gpointer          data)
 {
-  gdouble sendvals[(BLUE - RED + 1) + 3];
+  GtkColorSelection *colorsel = data;
+  guint16 vals[4];
+  gdouble colors[4];
 
-  sendvals[0] = (GTK_COLOR_SELECTION(thecolorsel)->use_opacity)?1.0:0.0;
-  gtk_color_selection_get_color(GTK_COLOR_SELECTION(thecolorsel),
-				sendvals + 1);
+  gtk_color_selection_get_color(colorsel, colors);
 
-  gtk_widget_dnd_data_set(widget,
-			  event,
-			  (gpointer)sendvals,
-			  sizeof(sendvals));
+  vals[0] = colors[0] * 0xffff;
+  vals[1] = colors[1] * 0xffff;
+  vals[2] = colors[2] * 0xffff;
+  vals[3] = colorsel->use_opacity ? colors[3] * 0xffff : 0xffff;
+
+  g_print ("%x %x\n", vals[0], vals[4]);
+  g_print ("%g\n", colorsel->values[OPACITY]);
+  g_print ("%d\n", colorsel->use_opacity);
+
+  gtk_selection_data_set (selection_data,
+			  gdk_atom_intern ("application/x-color", FALSE),
+			  16, (guchar *)vals, 8);
 }
 
 static void
@@ -985,6 +1072,13 @@ gtk_color_selection_value_events (GtkWidget *area,
       gtk_color_selection_color_changed (colorsel);
       break;
     case GDK_MOTION_NOTIFY:
+      /* Even though we select BUTTON_MOTION_MASK, we seem to need
+       * to occasionally get events without buttons pressed.
+       */
+      if (!(event->motion.state &
+	    (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)))
+	return FALSE;
+      
       y = event->motion.y;
 
       if (event->motion.is_hint || (event->motion.window != area->window))
@@ -1076,6 +1170,13 @@ gtk_color_selection_wheel_events (GtkWidget *area,
       gtk_color_selection_color_changed (colorsel);
       break;
     case GDK_MOTION_NOTIFY:
+      /* Even though we select BUTTON_MOTION_MASK, we seem to need
+       * to occasionally get events without buttons pressed.
+       */
+      if (!(event->motion.state &
+	    (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)))
+	return FALSE;
+      
       x = event->motion.x;
       y = event->motion.y;
 
@@ -1327,12 +1428,13 @@ gtk_color_selection_eval_wheel (gint     x,  gint     y,
 				gdouble  cx, gdouble  cy,
 				gdouble *h,  gdouble *s)
 {
-  gdouble d, r, rx, ry, l;
+  gdouble r, rx, ry;
 
-  rx = (gdouble) x - cx;
-  ry = (gdouble) y - cy;
+  rx = ((gdouble) x - cx);
+  ry = ((gdouble) y - cy);
 
-  d = (SQR (cy) * SQR (rx) + SQR (cx) * SQR (ry) - SQR (cx) * SQR (cy));
+  rx = rx/cx;
+  ry = ry/cy;
 
   r = sqrt (SQR (rx) + SQR (ry));
 
@@ -1341,16 +1443,17 @@ gtk_color_selection_eval_wheel (gint     x,  gint     y,
   else
     *h = 0.0;
 
-  l = sqrt (SQR ((cx * cos (*h + 0.5 * M_PI))) + SQR ((cy * sin (*h + 0.5 * M_PI))));
-  *s = r / l;
+  *s = r;
   *h = 360.0 * (*h) / (2.0 * M_PI) + 180;
 
   if (*s == 0.0)
     *s = 0.00001;
   else if (*s > 1.0)
-    *s = 1.0;
-
-  return ((d > 0.0));
+    {
+      *s = 1.0;
+      return TRUE;
+    }
+  return FALSE;
 }
 
 static void

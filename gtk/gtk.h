@@ -33,6 +33,7 @@
 #include <gtk/gtkbox.h>
 #include <gtk/gtkbbox.h>
 #include <gtk/gtkbutton.h>
+#include <gtk/gtkcalendar.h>
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkcheckmenuitem.h>
 #include <gtk/gtkclist.h>
@@ -43,7 +44,9 @@
 #include <gtk/gtkcurve.h>
 #include <gtk/gtkdata.h>
 #include <gtk/gtkdialog.h>
+#include <gtk/gtkdnd.h>
 #include <gtk/gtkdrawingarea.h>
+#include <gtk/gtkdrawwindow.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkenums.h>

@@ -1,3 +1,16 @@
+Mon Oct 19 08:31:36 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_selection_received): Fixed
+	typo - look for right atom on transfer failures.
+
+Sun Oct 18 22:48:27 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdrawwindow.c (gtk_draw_window_get_type): Added
+	the "GtkDrawWindow" class, which is a descendent
+	of the Window class which leaves its background alone.
+	Essentially, a toplevel drawing area, though it does
+	allow adding a child.
+
 Sat Oct 17 00:40:51 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_style_init): Duplicate bg_pixmap_name when
@@ -177,6 +190,579 @@ Thu Aug 20 18:27:29 EDT 1998 The Rasterman <raster@redhat.com>
 	
 Thu Aug 20 18:27:29 EDT 1998 The Rasterman <raster@redhat.com>
 	* made gtkrc scanner append dir that gtkrc is read from to pixmap path.
+
+=======
+Sun Oct 18 20:52:22 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkwidget.c gtkmarshal.list: Change signal 
+	for drag_data_get to match the use that was being
+	made of it everywhere else...
+
+Sun Oct 18 18:16:39 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdk.c gdkprivate.h: Added a modular client-message-filter
+	mechanism, that is used for the DND messages.
+
+	  Removed all the old DND code.
+
+	* gdk/gdkcolormap.c gdk/gdkcolormap.h: Add a function to
+	get the visual of a given colormap.
+	
+	* gtk/gtkcolorsel.c: Conversion to new DND, drag 
+	a color-swatch.
+
+	* gdk/gdk.h gdk/gdkdnd.c: The low-level
+	X oriented portions of drag and drop protocols.
+	Sending and receiving client messages, and navigating
+	window trees.
+
+	* gdk/gdkimage.c: added a gdk_flush() when destroying
+	SHM images to hopefully make it more likely that
+        X will gracefully handle the segment being destroyed.
+
+	* gdk/gdkprivate.h gtk/gtkdebug.h: Add new 
+	DND debugging flags.
+
+	* gtk/gtkeditable.[ch]: Updates for the selection handling
+	changes.
+	
+	* gtk/gtkselection.[ch]: Added GtkTargetList, a 
+	refcounted data structure for keeping track of lists
+	of GdkAtom + information. Removed selection_handler_add
+	in favor of a "drag_data_get" signal.
+
+	* gtk/gtkdnd.[ch] gtk/gtk.h: New files - highlevel (event loop
+	dependent) parts of the DND protocols, display of drag icons,
+	drag-under highlighting, and the "default handlers".
+
+	* gtk/gtkinvisible.[ch]: New widget - InputOnly offscreen
+	windows that are used for reliable pointer grabs and
+	selection handling in the DND code.
+
+	* gtk/testdnd.c: New test program for new DND. (Old
+	DND tests in testgtk still need to be converted.)
+
+	* gtk/testselection.c: Use the new selection API.
+	
+	* docs/dnd_internals: Start at describing how
+	all the new code works inside.
+
+	* docs/Changes-1.2.txt: New file describing source-incompatible
+	changes in GTK+-1.2.
+
+Sat Oct 17 22:50:34 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkwindow.c (gdk_window_remove_filter): Free
+	the right list node.
+
+	* gdk/gdkwindow.c (gdk_window_init): Add gdk_root_parent
+	to the XID table so we can receive events on it.
+
+Wed Oct 14 12:57:40 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c gdk/gdk.h (gdk_event_get_time): New function
+	to get the timestamp from a generic event.
+
+Fri Oct  9 13:16:04 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_add_events): Added function
+	that safely adds additional events to a widget's event 
+	mask, even if the widget has previously been realized.
+	(We can do this, but not remove events from the event
+	 mask).
+
+Fri Oct  2 17:35:35 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkproperty.c (gdk_property_get): Allow type == 0,
+	for AnyPropertyType.
+
+Fri Oct  2 10:32:21 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkproperty.c (gdk_atom_intern): Add client-local
+	hashing.
+
+Thu Sep 24 20:33:54 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_event_send_clientmessage_toall): serial
+	isn't a timestamp.
+
+Thu Sep 17 14:23:03 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_event_translate): Removed printing
+	of unknown window lookup warnings. (Made it
+	a GDK_NOTE) - they happen in many circumstances.
+
+Tue Sep  8 12:38:43 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* Call XFilterEvent() on events we get for unknown
+        windows, since it may be the window Xlib uses to
+	communicate with the IM. 
+	(From Yung-Ching Hsiao <yhsiao@cae.wisc.edu>)
+
+Tue Sep  1 10:53:52 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkprogress.c (gtk_progress_finalize): Unref
+	the adjustment.
+
+Thu Aug 27 12:03:14 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksignal.c (gtk_signal_newv): Improve warning
+	message for return_value + GTK_RUN_FIRST.
+
+1998-10-18  Martin Baulig  <martin@home-of-linux.org>
+
+	* gtk/gtktext.c (gtk_text_set_line_wrap): new function to toggle
+	line wrapping like gtk_text_set_word_wrap () toggles word wrapping.
+
+Fri Oct 16 15:59:02 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/testgtk.c (insert_row_clist) (create_clist): change a few cell
+	styles of inserted row
+	(change_style): change style of focus_row
+
+	* gtk/gtkclist.c (gtk_clist_get_row_style) (gtk_clist_set_row_style)
+	(gtk_clist_get_cell_style) (gtk_clist_set_cell_style): new functions
+	to set/get row/cell styles.
+	(gtk_clist_realize): attach row and cell style, allocate row colors.
+	(gtk_clist_unrealize): detach row and cell styles.
+	(get_cell_style): new function. get correct cell style.
+	(draw_cell_pixmap): new function. 
+	(draw_row): draw cells with row or cell styles.
+	(row_new): set cell and row styles to NULL.
+	(row_delete): detach & unref cell and row styles.
+
+	* gtk/gtkctree.c (ctree_detach_styles) (ctree_attach_styles): 
+	new functions to attach/detach styles and allocate colors.
+	(gtk_ctree_realize) (gtk_ctree_unrealize): attach/detach cell and row
+	styles of invisible nodes.
+	(draw_cell_pixmap): new function. 
+	(get_cell_style):  new function. get correct cell style.
+	(gtk_ctree_draw_expander): new function. draw tree expander.
+	(gtk_ctree_draw_lines): new function.draw tree lines.
+	(draw_row): draw cells with row or cell styles.
+	(row_new): set cell and row styles to NULL.
+	(row_delete): detach & unref cell and row styles.
+	(gtk_ctree_node_get_row_style) (gtk_ctree_node_set_row_style) 
+	(gtk_ctree_node_get_cell_style) (gtk_ctree_node_set_cell_style): 
+	Analogons of GtkCList functions	
+	(gtk_ctree_set_spacing): new function. set spacing between
+	tree expander and cell contents
+	(gtk_ctree_set_expander_style): new function. set expander style
+	of ctree.
+	(ctree_is_hot_spot): few changes due to draw_row modifications.
+
+Wed 14 Oct 1998 10:17:13 +0200 Paolo Molaro <lupus@debian.org>
+
+	* gtk/gtkcombo.c: try completion on MOD1-TAB.
+	Handle case when the combo->list is empty.
+
+Mon Oct 12 07:51:34 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.c (gtk_signal_handlers_destroy): only unref those
+ 	handlers that have not yet been disconnected (finally managed to
+	trigger the gtk_signal_handler_unref() paranoid warning).
+
+Sat Oct 10 03:37:50 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_get_arg): fixed default value for x, y,
+	width and height which is -1 and not -2.
+
+Sat Oct 10 00:50:53 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* HACKING
+	* autogen.sh: we need libtool 1.2b now
+
+Sat Oct 10 03:37:50 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktable.c (gtk_table_set_child_arg): take the left, right, top
+ 	and bottom attach arguments as mandatory and readjust the table size
+	and opposing edge accordingly if required. this way the order in which
+ 	the arguments are set doesn't matter.
+
+Thu Oct  8 15:53:59 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktypeutils.c (gtk_type_class_init): Fixed warning
+	message to print out parent class name correctly.
+
+Thu Oct  8 07:07:10 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkobject.h: 
+	* gtk/gtkobject.c:
+	removed functions gtk_object_set_data_destroy and
+ 	gtk_object_set_data_destroy_by_id.
+	added functions gtk_object_remove_no_notify and
+ 	gtk_object_remove_no_notify_by_id which will remove a certain data
+ 	portion without invokation of its destroy notifier, this should only
+ 	be used in very controled circumstances.
+
+Wed Oct  7 23:59:37 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_set_column_resizeable): added
+	size_allocate_title_buttons call
+	(gtk_clist_realize): changed initial column.window position
+
+Wed Oct  7 20:27:28 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.h (struct _GtkCTree): removed xor_gc, use clists
+	xor_gc instead
+	* gtk/gtkctree.c (create_xor_gc): removed
+	(gtk_ctree_button_press): set correct line_attributes for
+ 	clist->xor_gc on drag start
+	(gtk_ctree_button_release): reset clist->xor_gc
+
+Wed Oct  7 05:15:36 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtk*.h:
+	* gdk/gdk.h: removed all occourances of #pragma } and #pragma {
+	which were in place to fixup emacs' cc-mode indentation.
+	putting (c-set-offset 'inextern-lang 0) into ~/.emacs is the
+	proper way to achive this and doesn't produce problems for
+	stupid pragma-related compiler bugs. ;)
+
+Wed Oct  7 00:59:46 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.h: new signal GtkCList::resize_column.
+	* gtk/gtkclist.c (draw_row): don't draw invisible columns
+	(size_allocate_title_buttons) (size_allocate_columns):
+	skip invisible columns
+	(new_column_width): take min/max_width into account 
+	(gtk_clist_button_release) (gtk_clist_motion):
+ 	changes due to changed new_column_width function
+	(LIST_WIDTH): changed define to inline function.
+	(real_resize_column): class function for resize_column signal
+	(gtk_clist_motion): fixed autoscrolling for column resizes
+	(gtk_clist_set_column_visibility): don't hide last visible column,
+	changed visible arg to gboolean
+	(gtk_clist_set_column_min_width)(gtk_clist_set_column_max_width):
+	new functions : set min/max width of a column
+	(gtk_clist_set_column_resizeable): new function : enable/disable
+	column resize operations by mouse
+
+	* gtk/gtkctree.c (draw_row): don't draw invisible columns
+	(ctree_is_hot_spot): return FALSE if tree_column is invisible
+	(draw_xor_line)  (draw_xor_rect): draw full rectangle/line if
+	tree_column is invisible
+	(gtk_ctree_find_all_by_row_data)
+	(gtk_ctree_find_all_by_row_data_custom):  new function from
+	Ronan Bourlier <ronan@radioss.com>. Returns a GList of all
+ 	GtkCTreeNodes with row->data == data.
+
+Tue Oct  6 14:05:00 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/testgtk.c (cb_tree_destroy_event): use g_free to free g_malloced
+	memory (Martin Pool <mbp@wistful.humbug.org.au>).
+
+Mon Oct  5 15:26:30 1998  Raph Levien  <raph@gimp.org>
+
+	* gdk/gdkrgb.c (gdk_rgb_convert_0888_br): Fixed a few long's that
+	should have been guint32. Thanks to Tristan Colgate for finding it.
+
+Sun Oct  4 22:47:22 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkcalendar.h:
+	  gtk/gtkcalendar.c: More changes:
+	  - The day with focus is now seperated from the day selected
+	  - The day with focus has the xor's line around it
+	  - The selected day is now standard selected style
+	  - The week names and week numbers are now also drawn
+	    with selected style
+	  - Space now selects the day which has focus
+
+Sun Oct  4 17:55:52 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkcalendar.h:
+	  gtk/gtkcalendar.c: Some significant changes, including:
+	  - No longer draw focus around entire widget, only around
+	    the day which has focus
+	  - Draw relief around entire widget like originally planned
+	  - Show header and day names by default 
+	  - Move data private to the widget out of GtkCalendar struct
+	    and only point to it with a gpointer
+	  - Remove some old unused variables from GtkCalendar struct
+
+Sun Oct  4 17:45:43 BST 1998  Tony Gale  <gale@gtk.org>
+
+	* docs/gtk_tut.sgml: update I've had sat around:
+	  - Grammar patch from James R. Van Zandt <jrv@vanzandt.mv.com>
+	  - Range Widget update from David Huggins-Daines <bn711@freenet.carleton.ca>
+	  - New Toolbar section from Jacek Wojdel <J.C.Wojdel@cs.tudelft.nl>
+
+1998-10-01  Martin Baulig  <martin@home-of-linux.org>
+
+	* gtk/gtkclist.h (GtkCListColumn): Added `visible'.
+	
+	* gtk/gtkclist.c (gtk_clist_set_column_visibility): New function.
+	Makes it possible to individually show and hide columns.
+	(size_allocate_columns): Adapted to keep track of hidden columns.
+	(size_allocate_title_buttons): Likewise.
+
+Sat Oct  3 17:54:48 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkargcollector.c (GTK_ARG_COLLECT_VALUE): for unknown foreign
+	fundamental types, collect an argument of the type returned from
+	gtk_type_get_varargs_type(). removed the first macro argument which
+	was just the same as the fundamental type of the *arg passed to
+	the macro.
+	* gtk/gtkarg.c (gtk_args_collect): 
+	* gtk/gtksignal.c (gtk_signal_collect_params): changed callers.
+
+	* gtk/gtktypeutils.h: 
+	* gtk/gtktypeutils.c: new functions gtk_type_set_varargs_type() and
+	gtk_type_get_varargs_type() to set and query the varargs collect
+	type used for a fundamental type, registered outside of Gtk.
+
+	* gtk/gtkmisc.c (gtk_misc_class_init): changed object arguments
+	GtkMisc::xalign and GtkMisc::yalign from GTK_TYPE_DOUBLE to
+	GTK_TYPE_FLOAT.
+
+	* gtk/gtkframe.c (gtk_frame_class_init): changed object arguments
+	GtkFrame::label_xalign and GtkFrame::label_yalign from GTK_TYPE_DOUBLE
+	to GTK_TYPE_FLOAT.
+
+Sat Oct  3 01:25:24 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.c (gtk_ctree_insert_gnode) (real_tree_collapse)
+	(gtk_ctree_link) (gtk_ctree_unlink) (real_tree_expand): 
+	fixes for assignment errors with GTK_CTREE_NODE_NEXT/PREV
+
+	(real_tree_expand) (real_tree_collapse):
+	don't expand/collapse a leaf
+
+Fri Oct  2 16:10:36 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.c (gtk_type_enum_find_value): make sure we don't
+	segfault when looking up a non-existant value name (reported by
+	Pablo <pcj+gtk@primenet.com>).
+
+Thu Oct  1 10:40:20 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkclist.h (gtk_clist_prepend):
+	* gtk/gtkclist.c (gtk_clist_prepend): new function.
+	(gtk_clist_insert): added g_return_val_if_fail()
+	statements. accept a row parameter < 0 or > clist->rows to indicate
+	append mode.
+	(real_clear): first clean up all internal pointers and lists (e.g.
+	clist->row_list or clist->rows), then delete the distinct rows. this
+	is required because of destroy notifiers, we need to have all internal
+	structures updated and be reentrant.
+
+	* gtk/gtkcalendar.h: 
+	* gtk/gtkcalendar.c: removed the `gtk_calendar_' prefix from the
+	GtkCalendarClass signal methods.
+	GtkType and macro fixups, put `void' into () prototypes, avoid C++
+	style comments, indentation fixes, fixed some g_return_if_fail()
+ 	statements.
+	(gtk_calendar_paint_header):
+	(gtk_calendar_paint_day_names): 
+	(gtk_calendar_paint_week_numbers): 
+	(gtk_calendar_paint_main): made these static functions.
+	(gtk_calendar_select_month):
+	(gtk_calendar_select_day):
+	(gtk_calendar_mark_day):
+	(gtk_calendar_unmark_day):
+	(gtk_calendar_get_date): signedness corrections, use guints
+ 	rather than gints.
+	(gtk_calendar_size_request): removed unused variables.
+
+Wed Sep 30 13:11:09 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_add_item): list all
+	widgets in the ->widgets_by_action list that have a callback
+	defined (not only those with a callback_action!=0).
+
+Sun Sep 27 22:02:48 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkcalendar.h:
+	  gtk/gtkcalendar.c:
+	  examples/calendar/gcalendar.c: remove HAVE_FEATURES stuff
+
+Sun Sep 27 02:18:06 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/gtkcalendar.h:
+	  gtk/gtkcalendar.c:
+	  examples/calendar: Added gtkcalendar widget and demo
+
+Sat Sep 26 06:15:34 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_sort): 
+	(gtk_clist_clear): 
+	(gtk_clist_unselect_all): 
+	(gtk_clist_select_all): adde g_return_if_fail() statements.
+
+Sat Sep 26 04:46:22 1998  Tim Janik  <timj@gtk.org>
+
+	* configure.in: set binary age and interface age to 0.
+
+	* gtk/gtkspinbutton.h: 
+	* gtk/gtkspinbutton.c: changed gtk_spin_button_construct to
+	gtk_spin_button_configure. gtk_spin_button_construct is still defined
+	as an alias for gtk_spin_button_configure for source compatibility,
+ 	but actuall use is deprecated.
+	typeness corrections, i.e. gint->gboolean and gint->guint.
+	added object arguments: GtkSpinButton::value, GtkSpinButton::wrap,
+	GtkSpinButton::shadow_type, GtkSpinButton::update_policy,
+	GtkSpinButton::numeric, GtkSpinButton::snap_to_ticks,
+	GtkSpinButton::adjustment, GtkSpinButton::digits and
+ 	GtkSpinButton::climb_rate.
+	GtkType and macro fixups.
+
+Sat Sep 25 23:33:55 1998  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdkwindow.c (gdk_window_get_root_origin): new function to get
+	the *real* geometry position of a window, taken possible window
+	manager offsets into account.
+	this has been succesfully tested with fvwm, fvwm-2, bowman, olwm,
+ 	olvwm, twm, ctwm, mlvwm, windowmaker and enlightenment.
+	it does fail though for amiwm which adds windows to a pseudo root
+	window, and for icewm by a small offset because it defines the
+	geometry position whithin its border.
+
+	* gtk/testgtk.c: added "saved position" test to figure how
+	gdk_window_get_root_origin() interacts with window managers (repopup
+	this window to figure ;).
+
+Wed Sep 23 06:09:19 1998  Tim Janik  <timj@gtk.org>
+
+	* configure.in: update to Gtk+ version 1.1.3, binary age 1,
+	interface age 1.
+
+	* gtk/gtkobject.c
+ 	(gtk_object_ref): 
+ 	(gtk_object_unref): check for ->ref_count to be greater than 0 (the
+	existing code was buggy in letting ->ref_count==0 pass through and
+ 	then failing the living_objs_ht assertion).
+
+	* gtk/gtkclist.c (draw_row): fix chopping bug for right justified
+ 	pixtext fields (Roman Pozlevich <roma@botik.ru>).
+
+Mon Sep 21 23:53:18 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.1.2
+
+Mon Sep 21 01:12:44 1998  Jay Cox  (jaycox@earthlink.net)
+
+	* gtk/Makefile.am: use $(PERL) instead of perl
+	* gtk/gtkcolorsel.c: render properly in non-square aspect ratios.
+	also much faster to render.
+
+Mon Sep 21 07:44:30 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkobject.c (gtk_object_class_add_signals): reallocate
+	the required memory block, rather than allocating it newly from
+	scratch and doing a full-blown block copy on it.
+
+Mon Sep 21 02:30:06 1998  Tim Janik  <timj@gtk.org>
+
+        * NEWS file update for upcoming release of Gtk+ version 1.1.2,
+        binary age 0, interface age 0.
+
+       	* gtk/gtkmain.c (gtk_init): enforce gtk-modules to always be resident.
+
+Sun Sep 20 18:21:46 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* ltmain.sh: Patch to libtool-1.2b to make --disable-static
+	work.
+
+Sun Sep 20 09:52:39 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* HACKING: indent other than GNU indent should be OK
+	  now.
+
+	* gtk/genmarshal.pl gtk/Makefile.am: Call indent on file
+	  instead of piping through indent. If indent wasn't
+	  found in ./configure don't bother indenting at 
+	  all.
+
+Fri Sep 18 19:11:10 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.h: Add names to prototype for gdk_image_new_bitmap.
+
+Fri Sep 18 18:54:59 1998  Jay Cox  (jaycox@earthlink.net)
+
+	* gtk/Makefile.am: use $(AWK) instead of awk
+
+1998-09-18  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* gtk/Makefile.am (gdk_headers): 
+	Remove references to $(top_srcdir). 
+	(gtk.defs, gtktypebuiltins{.h,_vars.c,_ids.c,_evals.c}): Simplify.
+	* gtk/makeenums.pl (parse_entries): Don't look for $srcdir.
+
+Fri Sep 18 19:58:24 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkobject.h (struct _GtkObject): changed gpointer object_data; to
+	GData*object_data to cure compiler warnings.
+
+Thu Sep 17 19:06:47 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* install-sh
+	* missing
+	* mkinstalldirs: updated to latest automake version
+
+1998-09-17  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* gtk/Makefile.am (source_headers): Move `gtkfeature.h' ...
+	(gtkinclude_HEADERS): ... here.
+	(gtk.defs): Pass `g' flag to sed, to replace all occurances.
+
+Thu Sep 17 10:49:51 1998  Raph Levien  <raph@gimp.org>
+
+	* HACKING: added GNU indent, as it is now required to successfully
+	build gtk+. Should this be detected in autoconf, possibly?
+
+Tue Sep 15 14:57:30 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am gtk-config.in l*: Update to libtool-1.2b,
+	change library versioning scheme to drop LT_RELEASE
+	from the -l line, while keeping it in the soname.
+
+Tue Sep 15 14:10:33 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in Makefile.in: define a MAINT-like variable REBUILD
+	which is set if Perl and awk are found, and autogenerated sources
+	can be rebuilt. Remove the auto-generated sources from
+	CVS. 
+
+	Add dependencies so that the autogenerated sources are 
+	rebuilt if the files they depend on change. 
+	(This unfortunately currently results in the entire
+	gtk/ directory being rebuilt when any header changes.
+	Moving all enums to gtkenums.h would fix this.)
+
+Thu Sep 17 05:12:48 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkobject.h: added gtk_object_set_data_destroy and
+	gtk_object_set_data_destroy_by_id functions to set the destroy
+	function pointer for an existing data portion.
+
+	* gtk/gtkobject.c: removed the GtkObjectData implementation and
+	made all gtk_object_*data* functions use the GLib equivalents.
+
+1998-09-16  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_insert_element): Test whether type
+	is not equal to GTK_TOOLBAR_CHILD_RADIOBUTTON before checking that
+	(widget != NULL), otherwise radio button insertion will not work
+	-- the widget argument is NULL for the first radio button in the
+	group.
+
+Tue Sep 15 13:09:24 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkimage.c (gdk_image_new): Reverted global changes
+	of g_new to malloc(), added back in the one place where
+	it actually mattered. #include <stdlib.h>.
+
+	* gdk/gdkrgb.c: g_malloc() to malloc() as above.
+
+Tue Sep 15 11:30:03 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c: Keep a list of directories in which we never
+	want to stat the entries (like /afs), and assume everything in
+	those directories is a subdirectory.
+
+	- When following a path, try to open components even when
+	we don't find them in their parent's directory to
+	support automounters.
 
 Tue Sep 15 11:06:13 1998  Owen Taylor  <otaylor@redhat.com>
 

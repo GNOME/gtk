@@ -27,7 +27,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#pragma }
 #endif /* __cplusplus */
 
 
@@ -59,6 +58,10 @@ struct _GtkMenu
   GtkMenuPositionFunc position_func;
   gpointer position_func_data;
 
+  /* Do _not_ touch these widgets directly. We hide the reference
+   * count from the toplevel to the menu, so it must be restored
+   * before operating on these widgets
+   */
   GtkWidget *toplevel;
   GtkWidget *tearoff_window;
 

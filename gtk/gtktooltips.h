@@ -25,7 +25,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#pragma }
 #endif /* __cplusplus */
 
 #define GTK_TYPE_TOOLTIPS                  (gtk_tooltips_get_type ())

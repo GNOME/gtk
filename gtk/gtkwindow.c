@@ -183,8 +183,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->client_event = gtk_window_client_event;
   widget_class->style_set = gtk_window_style_set;
 
-   widget_class->draw = gtk_window_draw;
-   widget_class->expose_event = gtk_window_expose;
+  widget_class->draw = gtk_window_draw;
+  widget_class->expose_event = gtk_window_expose;
    
   container_class->check_resize = gtk_window_check_resize;
 

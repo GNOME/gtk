@@ -31,7 +31,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#pragma }
 #endif /* __cplusplus */
 
 /* clist flags */
@@ -194,60 +193,63 @@ struct _GtkCListClass
 {
   GtkContainerClass parent_class;
   
-  void   (*select_row)          (GtkCList     *clist,
-				 gint          row,
-				 gint          column,
-				 GdkEvent     *event);
-  void   (*unselect_row)        (GtkCList     *clist,
-				 gint          row,
-				 gint          column,
-				 GdkEvent     *event);
-  void   (*click_column)        (GtkCList     *clist,
-				 gint          column);
-  void   (*toggle_focus_row)    (GtkCList     *clist);
-  void   (*select_all)          (GtkCList     *clist);
-  void   (*unselect_all)        (GtkCList     *clist);
-  void   (*undo_selection)      (GtkCList     *clist);
-  void   (*start_selection)     (GtkCList     *clist);
-  void   (*end_selection)       (GtkCList     *clist);
-  void   (*extend_selection)    (GtkCList     *clist,
-				 GtkScrollType scroll_type,
-				 gfloat        position,
-				 gboolean      auto_start_selection);
-  void   (*scroll_horizontal)   (GtkCList     *clist,
-				 GtkScrollType scroll_type,
-				 gfloat        position);
-  void   (*scroll_vertical)     (GtkCList     *clist,
-				 GtkScrollType scroll_type,
-				 gfloat        position);
-  void   (*toggle_add_mode)     (GtkCList     *clist);
-  void   (*abort_column_resize) (GtkCList     *clist);
-  void   (*resync_selection)    (GtkCList     *clist,
-				 GdkEvent     *event);
-  GList* (*selection_find)      (GtkCList     *clist,
-				 gint          row_number,
-				 GList        *row_list_element);
-  void   (*draw_row)            (GtkCList     *clist,
-				 GdkRectangle *area,
-				 gint          row,
-				 GtkCListRow  *clist_row);
-  void   (*clear)               (GtkCList     *clist);
-  void   (*fake_unselect_all)   (GtkCList     *clist,
-				 gint          row);
-  void   (*sort_list)           (GtkCList     *clist);
-  gint   (*insert_row)          (GtkCList     *clist,
-				 gint          row,
-				 gchar       *text[]);
-  void   (*remove_row)          (GtkCList    *clist,
-				 gint         row);
-  void   (*set_cell_contents)   (GtkCList    *clist,
-				 GtkCListRow *clist_row,
-				 gint         column,
-				 GtkCellType  type,
-				 const gchar *text,
-				 guint8       spacing,
-				 GdkPixmap   *pixmap,
-				 GdkBitmap   *mask);
+  void   (*select_row)          (GtkCList      *clist,
+				 gint           row,
+				 gint           column,
+				 GdkEvent      *event);
+  void   (*unselect_row)        (GtkCList      *clist,
+				 gint           row,
+				 gint           column,
+				 GdkEvent      *event);
+  void   (*click_column)        (GtkCList      *clist,
+				 gint           column);
+  void   (*resize_column)       (GtkCList      *clist,
+				 gint           column,
+                                 gint           width);
+  void   (*toggle_focus_row)    (GtkCList      *clist);
+  void   (*select_all)          (GtkCList      *clist);
+  void   (*unselect_all)        (GtkCList      *clist);
+  void   (*undo_selection)      (GtkCList      *clist);
+  void   (*start_selection)     (GtkCList      *clist);
+  void   (*end_selection)       (GtkCList      *clist);
+  void   (*extend_selection)    (GtkCList      *clist,
+				 GtkScrollType  scroll_type,
+				 gfloat         position,
+				 gboolean       auto_start_selection);
+  void   (*scroll_horizontal)   (GtkCList      *clist,
+				 GtkScrollType  scroll_type,
+				 gfloat         position);
+  void   (*scroll_vertical)     (GtkCList      *clist,
+				 GtkScrollType  scroll_type,
+				 gfloat         position);
+  void   (*toggle_add_mode)     (GtkCList      *clist);
+  void   (*abort_column_resize) (GtkCList      *clist);
+  void   (*resync_selection)    (GtkCList      *clist,
+				 GdkEvent      *event);
+  GList* (*selection_find)      (GtkCList      *clist,
+				 gint           row_number,
+				 GList         *row_list_element);
+  void   (*draw_row)            (GtkCList      *clist,
+				 GdkRectangle  *area,
+				 gint           row,
+				 GtkCListRow   *clist_row);
+  void   (*clear)               (GtkCList      *clist);
+  void   (*fake_unselect_all)   (GtkCList      *clist,
+				 gint           row);
+  void   (*sort_list)           (GtkCList      *clist);
+  gint   (*insert_row)          (GtkCList      *clist,
+				 gint           row,
+				 gchar         *text[]);
+  void   (*remove_row)          (GtkCList      *clist,
+				 gint           row);
+  void   (*set_cell_contents)   (GtkCList      *clist,
+				 GtkCListRow   *clist_row,
+				 gint           column,
+				 GtkCellType    type,
+				 const gchar   *text,
+				 guint8         spacing,
+				 GdkPixmap     *pixmap,
+				 GdkBitmap     *mask);
   
   gint scrollbar_spacing;
 };
@@ -261,9 +263,13 @@ struct _GtkCListColumn
   GdkWindow *window;
   
   gint width;
+  gint min_width;
+  gint max_width;
   GtkJustification justification;
   
-  gint width_set : 1;
+  gint visible    : 1;  
+  gint width_set  : 1;
+  gint resizeable : 1;
 };
 
 struct _GtkCListRow
@@ -274,6 +280,8 @@ struct _GtkCListRow
   GdkColor foreground;
   GdkColor background;
   
+  GtkStyle *style;
+
   gpointer data;
   GtkDestroyNotify destroy;
   
@@ -287,9 +295,11 @@ struct _GtkCellText
 {
   GtkCellType type;
   
-  gint vertical;
-  gint horizontal;
+  gint16 vertical;
+  gint16 horizontal;
   
+  GtkStyle *style;
+
   gchar *text;
 };
 
@@ -297,9 +307,11 @@ struct _GtkCellPixmap
 {
   GtkCellType type;
   
-  gint vertical;
-  gint horizontal;
+  gint16 vertical;
+  gint16 horizontal;
   
+  GtkStyle *style;
+
   GdkPixmap *pixmap;
   GdkBitmap *mask;
 };
@@ -308,9 +320,11 @@ struct _GtkCellPixText
 {
   GtkCellType type;
   
-  gint vertical;
-  gint horizontal;
+  gint16 vertical;
+  gint16 horizontal;
   
+  GtkStyle *style;
+
   gchar *text;
   guint8 spacing;
   GdkPixmap *pixmap;
@@ -321,9 +335,11 @@ struct _GtkCellWidget
 {
   GtkCellType type;
   
-  gint vertical;
-  gint horizontal;
+  gint16 vertical;
+  gint16 horizontal;
   
+  GtkStyle *style;
+
   GtkWidget *widget;
 };
 
@@ -331,9 +347,11 @@ struct _GtkCell
 {
   GtkCellType type;
   
-  gint vertical;
-  gint horizontal;
+  gint16 vertical;
+  gint16 horizontal;
   
+  GtkStyle *style;
+
   union {
     gchar *text;
     
@@ -358,7 +376,7 @@ GtkType gtk_clist_get_type (void);
 /* constructers useful for gtk-- wrappers */
 void gtk_clist_construct (GtkCList *clist,
 			  gint      columns,
-			  gchar   *titles[]);
+			  gchar    *titles[]);
 
 /* create a new GtkCList */
 GtkWidget *gtk_clist_new             (gint   columns);
@@ -366,24 +384,24 @@ GtkWidget *gtk_clist_new_with_titles (gint   columns,
 				      gchar *titles[]);
 
 /* set the border style of the clist */
-void gtk_clist_set_border (GtkCList     *clist,
-			   GtkShadowType border);
+void gtk_clist_set_border (GtkCList      *clist,
+			   GtkShadowType  border);
 
 /* set the clist's selection mode */
-void gtk_clist_set_selection_mode (GtkCList        *clist,
-				   GtkSelectionMode mode);
+void gtk_clist_set_selection_mode (GtkCList         *clist,
+				   GtkSelectionMode  mode);
 
 /* set policy on the scrollbar, to either show them all the time
- * or show them only when they are needed, ie., when there is more than one page
- * of information
+ * or show them only when they are needed, ie., when there is more
+ * than one page of information
  */
-void gtk_clist_set_policy (GtkCList     *clist,
-			   GtkPolicyType vscrollbar_policy,
-			   GtkPolicyType hscrollbar_policy);
+void gtk_clist_set_policy (GtkCList      *clist,
+			   GtkPolicyType  vscrollbar_policy,
+			   GtkPolicyType  hscrollbar_policy);
 
-/* freeze all visual updates of the list, and then thaw the list after you have made
- * a number of changes and the updates wil occure in a more efficent mannor than if
- * you made them on a unfrozen list
+/* freeze all visual updates of the list, and then thaw the list after
+ * you have made a number of changes and the updates wil occure in a
+ * more efficent mannor than if you made them on a unfrozen list
  */
 void gtk_clist_freeze (GtkCList *clist);
 void gtk_clist_thaw   (GtkCList *clist);
@@ -414,9 +432,19 @@ void gtk_clist_set_column_widget (GtkCList  *clist,
 				  GtkWidget *widget);
 
 /* set the justification on a column */
-void gtk_clist_set_column_justification (GtkCList        *clist,
-					 gint             column,
-					 GtkJustification justification);
+void gtk_clist_set_column_justification (GtkCList         *clist,
+					 gint              column,
+					 GtkJustification  justification);
+
+/* set visibility of a column */
+void gtk_clist_set_column_visibility (GtkCList *clist,
+				      gint      column,
+				      gboolean  visible);
+
+/* enable/disable column resize operations by mouse */
+void gtk_clist_set_column_resizeable (GtkCList *clist,
+				      gint      column,
+				      gboolean  resizeable);
 
 /* set the pixel width of a column; this is a necessary step in
  * creating a CList because otherwise the column width is chozen from
@@ -426,17 +454,24 @@ void gtk_clist_set_column_width (GtkCList *clist,
 				 gint      column,
 				 gint      width);
 
+/* set column minimum/maximum width. min/max_width < 0 => no restriction */
+void gtk_clist_set_column_min_width (GtkCList *clist,
+				     gint      column,
+				     gint      min_width);
+void gtk_clist_set_column_max_width (GtkCList *clist,
+				     gint      column,
+				     gint      max_width);
+
 /* change the height of the rows, the default is the hight
  * of the current font
  */
 void gtk_clist_set_row_height (GtkCList *clist,
 			       gint      height);
 
-/* scroll the viewing area of the list to the given column
- * and row; row_align and col_align are between 0-1 representing the
- * location the row should appear on the screnn, 0.0 being top or left,
- * 1.0 being bottom or right; if row or column is -1 then then there
- * is no change
+/* scroll the viewing area of the list to the given column and row;
+ * row_align and col_align are between 0-1 representing the location the
+ * row should appear on the screnn, 0.0 being top or left, 1.0 being
+ * bottom or right; if row or column is -1 then then there is no change
  */
 void gtk_clist_moveto (GtkCList *clist,
 		       gint      row,
@@ -462,10 +497,10 @@ void gtk_clist_set_text (GtkCList    *clist,
 /* for the "get" functions, any of the return pointer can be
  * NULL if you are not interested
  */
-gint gtk_clist_get_text (GtkCList *clist,
-			 gint      row,
-			 gint      column,
-			 gchar   **text);
+gint gtk_clist_get_text (GtkCList  *clist,
+			 gint       row,
+			 gint       column,
+			 gchar    **text);
 
 /* sets a given cell's pixmap, replacing it's current contents */
 void gtk_clist_set_pixmap (GtkCList  *clist,
@@ -489,13 +524,13 @@ void gtk_clist_set_pixtext (GtkCList    *clist,
 			    GdkPixmap   *pixmap,
 			    GdkBitmap   *mask);
 
-gint gtk_clist_get_pixtext (GtkCList    *clist,
-			    gint         row,
-			    gint         column,
-			    gchar      **text,
-			    guint8      *spacing,
-			    GdkPixmap  **pixmap,
-			    GdkBitmap  **mask);
+gint gtk_clist_get_pixtext (GtkCList   *clist,
+			    gint        row,
+			    gint        column,
+			    gchar     **text,
+			    guint8     *spacing,
+			    GdkPixmap **pixmap,
+			    GdkBitmap **mask);
 
 /* sets the foreground color of a row, the colar must already
  * be allocated
@@ -511,9 +546,26 @@ void gtk_clist_set_background (GtkCList *clist,
 			       gint      row,
 			       GdkColor *color);
 
+/* set / get cell styles */
+void gtk_clist_set_cell_style (GtkCList *clist,
+			       gint row,
+			       gint column,
+			       GtkStyle *style);
+
+GtkStyle *gtk_clist_get_cell_style (GtkCList *clist,
+				    gint row,
+				    gint column);
+
+void gtk_clist_set_row_style (GtkCList *clist,
+			      gint row,
+			      GtkStyle *style);
+
+GtkStyle *gtk_clist_get_row_style (GtkCList *clist,
+				   gint row);
+
 /* this sets a horizontal and vertical shift for drawing
- * the contents of a cell; it can be positive or negitive; this is
- * particulary useful for indenting items in a column
+ * the contents of a cell; it can be positive or negitive;
+ * this is particulary useful for indenting items in a column
  */
 void gtk_clist_set_shift (GtkCList *clist,
 			  gint      row,
@@ -528,14 +580,16 @@ void gtk_clist_set_selectable (GtkCList *clist,
 gboolean gtk_clist_get_selectable (GtkCList *clist,
 				   gint      row);
 
-/* append returns the index of the row you just added, making
- * it easier to append and modify a row
+/* prepend/append returns the index of the row you just added,
+ * making it easier to append and modify a row
  */
-gint gtk_clist_append (GtkCList *clist,
-		       gchar    *text[]);
+gint gtk_clist_prepend (GtkCList *clist,
+		        gchar    *text[]);
+gint gtk_clist_append  (GtkCList *clist,
+			gchar    *text[]);
 
-/* inserts a row at index row and returns the row where it was actually
- * inserted (may be different from "row" in auto_sort mode)
+/* inserts a row at index row and returns the row where it was
+ * actually inserted (may be different from "row" in auto_sort mode)
  */
 gint gtk_clist_insert (GtkCList *clist,
 		       gint      row,
@@ -551,10 +605,10 @@ void gtk_clist_set_row_data (GtkCList *clist,
 			     gpointer  data);
 
 /* sets a data pointer for a given row with destroy notification */
-void gtk_clist_set_row_data_full (GtkCList        *clist,
-			          gint             row,
-			          gpointer         data,
-				  GtkDestroyNotify destroy);
+void gtk_clist_set_row_data_full (GtkCList         *clist,
+			          gint              row,
+			          gpointer          data,
+				  GtkDestroyNotify  destroy);
 
 /* returns the data set for a row */
 gpointer gtk_clist_get_row_data (GtkCList *clist,
@@ -579,12 +633,15 @@ void gtk_clist_unselect_row (GtkCList *clist,
 /* undo the last select/unselect operation */
 void gtk_clist_undo_selection (GtkCList *clist);
 
-/* clear the entire list -- this is much faster than removing each item 
- * with gtk_clist_remove
+/* clear the entire list -- this is much faster than removing
+ * each item with gtk_clist_remove
  */
 void gtk_clist_clear (GtkCList *clist);
 
-/* return the row column corresponding to the x and y coordinates */
+/* return the row column corresponding to the x and y coordinates,
+ * the returned values are only valid if the x and y coordinates
+ * are respectively to a window == clist->clist_window
+ */
 gint gtk_clist_get_selection_info (GtkCList *clist,
 			     	   gint      x,
 			     	   gint      y,
@@ -611,8 +668,8 @@ void gtk_clist_set_sort_column (GtkCList *clist,
 				gint      column);
 
 /* how to sort : ascending or descending */
-void gtk_clist_set_sort_type (GtkCList   *clist,
-			      GtkSortType sort_type);
+void gtk_clist_set_sort_type (GtkCList    *clist,
+			      GtkSortType  sort_type);
 
 /* sort the list with the current compare function */
 void gtk_clist_sort (GtkCList *clist);

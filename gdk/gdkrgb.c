@@ -24,6 +24,7 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define ENABLE_GRAYSCALE
 
@@ -628,8 +629,9 @@ gdk_rgb_init (void)
 
       for (i = 0; i < N_IMAGES; i++)
 	if (image_info->bitmap)
+	  /* Use malloc() instead of g_malloc since X will free() this mem */
 	  static_image[i] = gdk_image_new_bitmap (image_info->visual,
-						  g_malloc (IMAGE_WIDTH * IMAGE_HEIGHT >> 3),
+						  malloc (IMAGE_WIDTH * IMAGE_HEIGHT >> 3),
 						  IMAGE_WIDTH, IMAGE_HEIGHT);
 	else
 	  static_image[i] = gdk_image_new (GDK_IMAGE_FASTEST,
@@ -1865,7 +1867,7 @@ gdk_rgb_convert_0888 (GdkImage *image,
 	  r = bp2[0];
 	  g = bp2[1];
 	  b = bp2[2];
-	  ((unsigned long *)obuf)[x] = (r << 16) | (g << 8) | b;
+	  ((guint32 *)obuf)[x] = (r << 16) | (g << 8) | b;
 	  bp2 += 3;
 	}
       bptr += rowstride;
@@ -1896,7 +1898,7 @@ gdk_rgb_convert_0888_br (GdkImage *image,
 	  r = bp2[0];
 	  g = bp2[1];
 	  b = bp2[2];
-	  ((unsigned long *)obuf)[x] = (b << 24) | (g << 16) | (r << 8);
+	  ((guint32 *)obuf)[x] = (b << 24) | (g << 16) | (r << 8);
 	  bp2 += 3;
 	}
       bptr += rowstride;
@@ -1927,7 +1929,7 @@ gdk_rgb_convert_8880_br (GdkImage *image,
 	  r = bp2[0];
 	  g = bp2[1];
 	  b = bp2[2];
-	  ((unsigned long *)obuf)[x] = (b << 16) | (g << 8) | r;
+	  ((guint32 *)obuf)[x] = (b << 16) | (g << 8) | r;
 	  bp2 += 3;
 	}
       bptr += rowstride;
