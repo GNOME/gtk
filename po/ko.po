@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-07-10 00:22-0400\n"
-"PO-Revision-Date: 2004-04-16 23:15+0900\n"
+"PO-Revision-Date: 2004-07-15 06:21+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -1325,9 +1325,9 @@ msgid "Filesystem"
 msgstr "파일시스템"
 
 #: gtk/gtkfilesystemunix.c:731
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "파일 '%s'의 정보를 가져올 수 없습니다: %s"
+msgstr "'%s'에 대한 스톡 아이콘을 가져올 수 없습니다"
 
 #: gtk/gtkfilesystemunix.c:826
 #, c-format
@@ -1956,16 +1956,3 @@ msgstr "X 입력기"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "파일 '%s'의 정보를 가져올 수 없습니다: %s"
-
-#~ msgid "Unsupported TIFF variant"
-#~ msgstr "지원하지 않는 TIFF 그림 형식"
-
-#~ msgid "%d/%b/%Y"
-#~ msgstr "%Y/%b/%d"
-
-#~ msgid ""
-#~ "Could not go to the parent folder of %s:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "%s의 상위 폴더로 이동할 수 없습니다:\n"
-#~ "%s"
