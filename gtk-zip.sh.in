@@ -10,9 +10,11 @@ rm $ZIP
 DLLDIR=lib
 [ -f bin/libgdk_pixbuf-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll ] && DLLDIR=bin
 
-zip -r $ZIP -@ <<EOF
+zip $ZIP -@ <<EOF
 COPYING.LIB-2
-etc/gtk-2.0
+etc/gtk-2.0/gdk-pixbuf.loaders
+etc/gtk-2.0/gtkrc
+etc/gtk-2.0/gtk.immodues
 $DLLDIR/libgdk_pixbuf-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 $DLLDIR/libgdk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 $DLLDIR/libgtk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll

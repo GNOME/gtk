@@ -840,15 +840,11 @@ gtk_rc_context_parse_file (GtkRcContext *context,
   gchar *locale_suffixes[2];
   gint n_locale_suffixes = 0;
   gchar *p;
-  const gchar *locale;
+  gchar *locale;
   gint length, j;
   gboolean found = FALSE;
 
-#ifdef G_OS_WIN32      
-  locale = g_win32_getlocale ();
-#else      
-  locale = setlocale (LC_CTYPE, NULL);
-#endif
+  locale = _gtk_get_lc_ctype ();
 
   if (strcmp (locale, "C") && strcmp (locale, "POSIX"))
     {
@@ -873,6 +869,8 @@ gtk_rc_context_parse_file (GtkRcContext *context,
 	  locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
 	}
     }
+
+  g_free (locale);
   
   gtk_rc_context_parse_one_file (context, filename, priority, reload);
   for (j = 0; j < n_locale_suffixes; j++)
