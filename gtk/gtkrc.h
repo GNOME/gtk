@@ -97,7 +97,7 @@ struct _GtkRcStyleClass
   GtkRcStyle * (*create_rc_style) (GtkRcStyle *rc_style);
 
   /* Fill in engine specific parts of GtkRcStyle by parsing contents
-   * of brackets. Returns G_TOKEN_NONE if succesful, otherwise returns
+   * of brackets. Returns G_TOKEN_NONE if successful, otherwise returns
    * the token it expected but didn't get.
    */
   guint     (*parse)  (GtkRcStyle   *rc_style,

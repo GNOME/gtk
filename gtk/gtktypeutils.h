@@ -169,7 +169,7 @@ struct _GtkArg
 
 /* argument value access macros, these must not contain casts,
  * to allow the usage of these macros in combination with the
- * adress operator, e.g. &GTK_VALUE_CHAR (*arg)
+ * address operator, e.g. &GTK_VALUE_CHAR (*arg)
  */
 #define GTK_VALUE_CHAR(a)	((a).d.char_data)
 #define GTK_VALUE_UCHAR(a)	((a).d.uchar_data)

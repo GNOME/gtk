@@ -1383,7 +1383,7 @@ gtk_range_scroll_event (GtkWidget      *widget,
 
       /* Policy DELAYED makes sense with scroll events,
        * but DISCONTINUOUS doesn't, so we update immediately
-       * for DISCONTINOUS
+       * for DISCONTINUOUS
        */
       if (range->update_policy == GTK_UPDATE_DISCONTINUOUS)
         gtk_range_update_value (range);
@@ -1659,7 +1659,7 @@ gtk_range_move_slider (GtkRange     *range,
 
   /* Policy DELAYED makes sense with key events,
    * but DISCONTINUOUS doesn't, so we update immediately
-   * for DISCONTINOUS
+   * for DISCONTINUOUS
    */
   if (range->update_policy == GTK_UPDATE_DISCONTINUOUS)
     gtk_range_update_value (range);

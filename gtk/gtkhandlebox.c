@@ -1309,7 +1309,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	  gdk_window_show (hb->float_window);
 	  hb->float_window_mapped = TRUE;
 #if	0
-	  /* this extra move is neccessary if we use decorations, or our
+	  /* this extra move is necessary if we use decorations, or our
 	   * window manager insists on decorations.
 	   */
 	  gdk_display_sync (gtk_widget_get_display (widget));

@@ -1279,7 +1279,7 @@ gif_get_next_step (GifContext *context)
 		}
 
 		if (c == '!') {
-			/* Check the extention */
+			/* Check the extension */
 			gif_set_get_extension (context);
 			return 0;
 		}

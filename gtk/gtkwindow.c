@@ -5422,7 +5422,7 @@ gtk_window_expose (GtkWidget      *widget,
  * If this function is called on a window with setting of %TRUE, before
  * it is realized or showed, it will have a "frame" window around
  * @window->window, accessible in @window->frame. Using the signal 
- * frame_event you can recieve all events targeted at the frame.
+ * frame_event you can receive all events targeted at the frame.
  * 
  * This function is used by the linux-fb port to implement managed
  * windows, but it could concievably be used by X-programs that
