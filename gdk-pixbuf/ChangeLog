@@ -1,3 +1,6 @@
+	* src/testpixbuf.c: A GtkFunction needs to return a value for deterministic behaviour.
+	  Also put dot printing back in.
+
 1999-11-03    <jrb@redhat.com>
 
 	* src/io-gif.c (gif_get_extension): Read 'til the next empty block
