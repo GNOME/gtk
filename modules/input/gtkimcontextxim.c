@@ -991,6 +991,13 @@ preedit_done_callback (XIC      xic,
   GtkIMContext *context = GTK_IM_CONTEXT (client_data);
   GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (context);
 
+  if (context_xim->preedit_length)
+    {
+      context_xim->preedit_length = 0;
+      if (!context_xim->finalizing)
+	g_signal_emit_by_name (context_xim, "preedit_changed");
+    }
+
   if (!context_xim->finalizing)
     g_signal_emit_by_name (context, "preedit_end");  
 }		     
