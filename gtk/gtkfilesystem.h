@@ -307,6 +307,10 @@ struct _GtkFileFolderIface
 			 GSList        *paths);
   void (*files_removed) (GtkFileFolder *monitor,
 			 GSList        *paths);
+
+  /* Method / signal */
+  gboolean (*is_finished_loading) (GtkFileFolder *folder);
+  void     (*finished_loading)    (GtkFileFolder *folder);
 };
 
 GType        gtk_file_folder_get_type      (void);
@@ -316,6 +320,8 @@ gboolean     gtk_file_folder_list_children (GtkFileFolder      *folder,
 GtkFileInfo *gtk_file_folder_get_info      (GtkFileFolder      *folder,
 					    const GtkFilePath  *path,
 					    GError            **error);
+
+gboolean     gtk_file_folder_is_finished_loading (GtkFileFolder *folder);
 
 
 /* GtkFilePath */

@@ -664,19 +664,25 @@ error_message_with_parent (GtkWindow  *parent,
   gtk_widget_destroy (dialog);
 }
 
+/* Returns a toplevel GtkWindow, or NULL if none */
+static GtkWindow *
+get_toplevel (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (!GTK_WIDGET_TOPLEVEL (toplevel))
+    return NULL;
+  else
+    return GTK_WINDOW (toplevel);
+}
+
 /* Shows an error dialog for the file chooser */
 static void
 error_message (GtkFileChooserDefault *impl,
 	       const char            *msg)
 {
-  GtkWidget *toplevel;
-
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (impl));
-  if (!GTK_WIDGET_TOPLEVEL (toplevel))
-    toplevel = NULL;
-
-  error_message_with_parent (toplevel ? GTK_WINDOW (toplevel) : NULL,
-			     msg);
+  error_message_with_parent (get_toplevel (GTK_WIDGET (impl)), msg);
 }
 
 /* Shows a simple error dialog relative to a path.  Frees the GError as well. */
@@ -2554,21 +2560,15 @@ trap_activate_cb (GtkWidget   *widget,
       || event->keyval == GDK_KP_Enter
       || event->keyval == GDK_space)
     {
-      GtkWidget *toplevel;
+      GtkWindow *window;
 
-      toplevel = gtk_widget_get_toplevel (widget);
-      if (GTK_IS_WINDOW (toplevel))
-	{
-	  GtkWindow *window;
+      window = get_toplevel (widget);
+      if (window
+	  && widget != window->default_widget
+	  && !(widget == window->focus_widget &&
+	       (!window->default_widget || !GTK_WIDGET_SENSITIVE (window->default_widget))))
+	gtk_window_activate_default (window);
 
-	  window = GTK_WINDOW (toplevel);
-
-	  if (window &&
-	      widget != window->default_widget &&
-	      !(widget == window->focus_widget &&
-		(!window->default_widget || !GTK_WIDGET_SENSITIVE (window->default_widget))))
-	    gtk_window_activate_default (window);
-	}
       return TRUE;
     }
   return FALSE;
@@ -3599,6 +3599,40 @@ list_sort_column_changed_cb (GtkTreeSortable       *sortable,
     impl->list_sort_ascending = (sort_type == GTK_SORT_ASCENDING);
 }
 
+static void
+set_busy_cursor (GtkFileChooserDefault *impl,
+		 gboolean               busy)
+{
+  GtkWindow *toplevel;
+  GdkDisplay *display;
+  GdkCursor *cursor;
+
+  toplevel = get_toplevel (GTK_WIDGET (impl));
+  if (!toplevel || !GTK_WIDGET_REALIZED (toplevel))
+    return;
+
+  display = gtk_widget_get_display (GTK_WIDGET (toplevel));
+
+  if (busy)
+    cursor = gdk_cursor_new_for_display (display, GDK_WATCH);
+  else
+    cursor = NULL;
+
+  gdk_window_set_cursor (GTK_WIDGET (toplevel)->window, cursor);
+  gdk_display_flush (display);
+
+  if (cursor)
+    gdk_cursor_unref (cursor);
+}
+
+/* Callback used when the file system model finishes loading */
+static void
+browse_files_model_finished_loading_cb (GtkFileSystemModel    *model,
+					GtkFileChooserDefault *impl)
+{
+  set_busy_cursor (impl, FALSE);
+}
+
 /* Gets rid of the old list model and creates a new one for the current folder */
 static void
 set_list_model (GtkFileChooserDefault *impl)
@@ -3609,9 +3643,14 @@ set_list_model (GtkFileChooserDefault *impl)
       g_object_unref (impl->sort_model);
     }
 
+  set_busy_cursor (impl, TRUE);
+
   impl->browse_files_model = _gtk_file_system_model_new (impl->file_system,
 							 impl->current_folder, 0,
 							 GTK_FILE_INFO_ALL);
+  g_signal_connect (impl->browse_files_model, "finished-loading",
+		    G_CALLBACK (browse_files_model_finished_loading_cb), impl);
+
   _gtk_file_system_model_set_show_hidden (impl->browse_files_model, impl->show_hidden);
   switch (impl->action)
     {
@@ -5042,7 +5081,7 @@ static void
 location_popup_handler (GtkFileChooserDefault *impl)
 {
   GtkWidget *dialog;
-  GtkWidget *toplevel;
+  GtkWindow *toplevel;
   GtkWidget *hbox;
   GtkWidget *label;
   GtkWidget *entry;
@@ -5051,9 +5090,7 @@ location_popup_handler (GtkFileChooserDefault *impl)
 
   /* Create dialog */
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (impl));
-  if (!GTK_WIDGET_TOPLEVEL (toplevel))
-    toplevel = NULL;
+  toplevel = get_toplevel (GTK_WIDGET (impl));
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
       || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
@@ -5068,7 +5105,7 @@ location_popup_handler (GtkFileChooserDefault *impl)
     }
 
   dialog = gtk_dialog_new_with_buttons (title,
-					GTK_WINDOW (toplevel),
+					toplevel,
 					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
@@ -5116,11 +5153,11 @@ location_popup_handler (GtkFileChooserDefault *impl)
 
   if (refocus)
     {
-      GtkWidget *toplevel;
+      GtkWindow *toplevel;
 
-      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (impl));
-      if (GTK_WIDGET_TOPLEVEL (toplevel) && GTK_WINDOW (toplevel)->focus_widget)
-	gtk_widget_grab_focus (GTK_WINDOW (toplevel)->focus_widget);
+      toplevel = get_toplevel (GTK_WIDGET (impl));
+      if (toplevel && toplevel->focus_widget)
+	gtk_widget_grab_focus (toplevel->focus_widget);
     }
 
   gtk_widget_destroy (dialog);

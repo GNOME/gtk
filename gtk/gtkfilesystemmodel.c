@@ -24,6 +24,7 @@
 #include "gtkfilesystemmodel.h"
 #include "gtkfilesystem.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 #include "gtktreednd.h"
 #include "gtktreemodel.h"
 
@@ -37,6 +38,10 @@ typedef struct _FileModelNode           FileModelNode;
 struct _GtkFileSystemModelClass
 {
   GObjectClass parent_class;
+
+  /* Signals */
+
+  void (*finished_loading) (GtkFileSystemModel *model);
 };
 
 struct _GtkFileSystemModel
@@ -54,6 +59,7 @@ struct _GtkFileSystemModel
 
   GSList *idle_clears;
   GSource *idle_clear_source;
+  GSource *idle_finished_loading_source;
 
   gushort max_depth;
   
@@ -186,6 +192,16 @@ static void root_files_removed_callback (GtkFileFolder      *folder,
 
 static GObjectClass *parent_class = NULL;
 
+/* Signal IDs */
+enum {
+  FINISHED_LOADING,
+  LAST_SIGNAL
+};
+
+static guint file_system_model_signals[LAST_SIGNAL] = { 0 };
+
+
+
 GType
 _gtk_file_system_model_get_type (void)
 {
@@ -242,6 +258,15 @@ gtk_file_system_model_class_init (GtkFileSystemModelClass *class)
   parent_class = g_type_class_peek_parent (class);
 
   gobject_class->finalize = gtk_file_system_model_finalize;
+
+  file_system_model_signals[FINISHED_LOADING] =
+    g_signal_new ("finished-loading",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkFileSystemModelClass, finished_loading),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 }
 
 static void
@@ -285,6 +310,9 @@ gtk_file_system_model_finalize (GObject *object)
 
   if (model->file_system)
     g_object_unref (model->file_system);
+
+  if (model->idle_finished_loading_source)
+    g_source_destroy (model->idle_finished_loading_source);
 
   children = model->roots;
   while (children)
@@ -647,6 +675,39 @@ drag_source_drag_data_get (GtkTreeDragSource *drag_source,
   return TRUE;
 }
 
+/* Callback used when the root folder finished loading */
+static void
+root_folder_finished_loading_cb (GtkFileFolder      *folder,
+				 GtkFileSystemModel *model)
+{
+  g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0);
+}
+
+/* Emits the "finished-loading" signal as an idle handler; see the comment in
+ * _gtk_file_system_model_new()
+ */
+static gboolean
+idle_finished_loading_cb (GtkFileSystemModel *model)
+{
+  g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0);
+
+  g_source_destroy (model->idle_finished_loading_source);
+  model->idle_finished_loading_source = NULL;
+
+  return FALSE;
+}
+
+/* Queues an idle handler to emit the "finished-loading" signal */
+static void
+queue_finished_loading (GtkFileSystemModel *model)
+{
+  model->idle_finished_loading_source = g_idle_source_new ();
+  g_source_set_closure (model->idle_finished_loading_source,
+			g_cclosure_new_object (G_CALLBACK (idle_finished_loading_cb),
+					       G_OBJECT (model)));
+  g_source_attach (model->idle_finished_loading_source, NULL);
+}
+
 /**
  * _gtk_file_system_model_new:
  * @file_system: an object implementing #GtkFileSystem
@@ -699,13 +760,19 @@ _gtk_file_system_model_new (GtkFileSystem     *file_system,
 						       model->types,
 						       NULL);   /* NULL-GError */
 
-      if (model->root_folder &&
-	  gtk_file_folder_list_children (model->root_folder,
-					 &child_paths,
-					 NULL)) /* NULL-GError */
+      if (model->root_folder)
 	{
-	  roots = child_paths;
-	  
+	  if (gtk_file_folder_list_children (model->root_folder,
+					     &child_paths,
+					     NULL)) /* NULL-GError */
+	    roots = child_paths;
+
+	  if (gtk_file_folder_is_finished_loading (model->root_folder))
+	    queue_finished_loading (model); /* done in an idle because we are being created */
+	  else
+	    g_signal_connect (model->root_folder, "finished-loading",
+			      G_CALLBACK (root_folder_finished_loading_cb), model);
+
 	  g_signal_connect_object (model->root_folder, "deleted",
 				   G_CALLBACK (root_deleted_callback), model, 0);
 	  g_signal_connect_object (model->root_folder, "files-added",
