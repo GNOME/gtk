@@ -2935,7 +2935,8 @@ synthesize_crossing_events (GdkWindow *window,
   if (curWnd)
     gdk_window_unref (curWnd);
   curWnd = window;
-  gdk_window_ref (curWnd);
+  if (curWnd)
+    gdk_window_ref (curWnd);
 }
 
 static void
@@ -3106,6 +3107,11 @@ propagate (GdkWindow  **window,
 		  GDK_NOTE (EVENTS, g_print ("...undelivered\n"));
 		  return FALSE;
 		}
+	    }
+	  else if (((GdkWindowPrivate *) *window)->parent == NULL)
+	    {
+	      GDK_NOTE (EVENTS, g_print ("...parent NULL (?), undelivered\n"));
+	      return FALSE;
 	    }
 	  else
 	    {
@@ -3538,9 +3544,10 @@ gdk_event_translate (GdkEvent *event,
     case WM_SYSKEYUP:
     case WM_SYSKEYDOWN:
       GDK_NOTE (EVENTS,
-		g_print ("WM_SYSKEY%s: %p  %s %#x %s\n",
+		g_print ("WM_SYSKEY%s: %p  %#lx %s %#x %s\n",
 			 (xevent->message == WM_SYSKEYUP ? "UP" : "DOWN"),
 			 xevent->hwnd,
+			 xevent->lParam,
 			 (GetKeyNameText (xevent->lParam, buf,
 					  sizeof (buf)) > 0 ?
 			  buf : ""),
@@ -3566,9 +3573,10 @@ gdk_event_translate (GdkEvent *event,
     case WM_KEYUP:
     case WM_KEYDOWN:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_KEY%s: %p  %s %#x %s\n",
+		g_print ("WM_KEY%s: %p  %#lx %s %#x %s\n",
 			 (xevent->message == WM_KEYUP ? "UP" : "DOWN"),
 			 xevent->hwnd,
+			 xevent->lParam,
 			 (GetKeyNameText (xevent->lParam, buf,
 					  sizeof (buf)) > 0 ?
 			  buf : ""),
@@ -3882,7 +3890,7 @@ gdk_event_translate (GdkEvent *event,
 
       event->key.window = window;
       return_val = !GDK_DRAWABLE_DESTROYED (window);
-      GDK_NOTE (EVENTS, g_print (G_STRLOC ":event_mask: %s\n", event_mask_string (GDK_WINDOW_WIN32DATA (window)->event_mask)));
+      GDK_NOTE (EVENTS, g_print ("event_mask: %s\n", event_mask_string (GDK_WINDOW_WIN32DATA (window)->event_mask)));
       if (return_val && (event->key.window == k_grab_window
 			 || (GDK_WINDOW_WIN32DATA (window)->event_mask & GDK_KEY_RELEASE_MASK)))
 	{
@@ -4073,6 +4081,7 @@ gdk_event_translate (GdkEvent *event,
       /* HB: only process mouse move messages if we own the active window. */
       GetWindowThreadProcessId(GetActiveWindow(), &pidActWin);
       GetWindowThreadProcessId(xevent->hwnd, &pidThis);
+
       if (pidActWin != pidThis)
 	break;
 
@@ -4090,7 +4099,7 @@ gdk_event_translate (GdkEvent *event,
       if (!propagate (&window, xevent,
 		      p_grab_window, p_grab_owner_events, p_grab_mask,
 		      doesnt_want_button_motion))
-	  break;
+	break;
 
       event->motion.window = window;
       event->motion.time = xevent->time;

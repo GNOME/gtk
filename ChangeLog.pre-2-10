@@ -1,3 +1,17 @@
+2002-08-01  Tor Lillqvist  <tml@iki.fi>
+
+	Fix for problem reported by Mark Raine: When Windows is set up not
+	to have any Explorer desktop (icons), dragging the mouse from a
+	popped-down menu onto the "root" window causes a crash.
+	
+	* gdk/win32/gdkevents-win32.c (propagate): Check for parent being
+	NULL before trying to propagate to it, and return FALSE in that
+	case. (If parent is NULL, we are handling gdk_parent_root, and
+	probably should have noticed that and bailed out earlier. But
+	better late than never.)
+	(synthesize_crossing_events): Check for curWnd being non-NULL
+	before gdk_window_ref'ing it.
+
 2002-03-22  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkgc-win32.c (gdk_win32_gc_set_dashes): Backport from
