@@ -1389,6 +1389,20 @@ get_focus_chain (GtkContainer *container)
   return g_object_get_data (G_OBJECT (container), "gtk-container-focus-chain");
 }
 
+/* same as gtk_container_get_children, except it includes internals
+ */
+static GList *
+gtk_container_get_all_children (GtkContainer *container)
+{
+  GList *children = NULL;
+
+  gtk_container_forall (container,
+			 gtk_container_children_callback,
+			 &children);
+
+  return children;
+}
+
 static gboolean
 gtk_container_focus (GtkWidget        *widget,
                      GtkDirectionType  direction)
@@ -1420,7 +1434,7 @@ gtk_container_focus (GtkWidget        *widget,
       if (container->has_focus_chain)
 	children = g_list_copy (get_focus_chain (container));
       else
-	children = gtk_container_get_children (container);
+	children = gtk_container_get_all_children (container);
 
       if (container->has_focus_chain &&
 	  (direction == GTK_DIR_TAB_FORWARD ||

@@ -1,3 +1,10 @@
+Mon Apr 15 15:41:56 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkcontainer.c (gtk_container_focus): include internal
+	children when doing focus.
+	(gtk_container_get_all_children): new static function to include
+	internal children when making a list of them.
+
 Sun Apr 14 16:56:59 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeprivate.h: add _gtk_tree_view_column_get_editable_cell and
