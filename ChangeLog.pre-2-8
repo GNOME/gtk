@@ -1,3 +1,14 @@
+Thu Dec  3 16:49:18 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (DROP_ABORT_TIME): Changed to 5 min
+	from 10 seconds, so it doesn't abort while users
+	have an ACTION_ASK menu up.
+
+	* gtk/gtkdnd.c: Hide the icon window between sending a a 
+	drop event to the destination and displaying the
+	snapback animation, so that it doesn't hang around
+	during ACTION_ASK.
+
 Thu Dec  3 16:37:42 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c (get_cell_style): Use GTK_STATE_INSENSITIVE

@@ -103,7 +103,7 @@ struct _GtkDragDestInfo {
   gint               drop_x, drop_y; /* Position of drop */
 };
 
-#define DROP_ABORT_TIME 10000
+#define DROP_ABORT_TIME 300000
 
 #define ANIM_STEP_TIME 50
 #define ANIM_STEP_LENGTH 50
@@ -1997,6 +1997,11 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 	  anim->n_steps = MAX (info->cur_x - info->start_x,
 			       info->cur_y - info->start_y) / ANIM_STEP_LENGTH;
 	  anim->n_steps = CLAMP (anim->n_steps, ANIM_MIN_STEPS, ANIM_MAX_STEPS);
+	  if (info->icon_window)
+	    {
+	      gtk_widget_show(info->icon_window);
+	      gdk_window_raise (info->icon_window->window);
+	    }
 	  
 	  gtk_timeout_add (ANIM_STEP_TIME, gtk_drag_anim_timeout, anim);
 	}
@@ -2066,6 +2071,9 @@ gtk_drag_drop (GtkDragSourceInfo *info, guint32 time)
     }
   else
     {
+      if (info->icon_window)
+	gtk_widget_hide (info->icon_window);
+	
       gdk_drag_drop (info->context, time);
       info->drop_timeout = gtk_timeout_add (DROP_ABORT_TIME,
 					    gtk_drag_abort_timeout,
