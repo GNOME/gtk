@@ -24,6 +24,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkenums.h>
+#include <gtk/gtkpixmap.h>
 
 
 #ifdef __cplusplus
