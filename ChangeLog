@@ -1,5 +1,13 @@
 2001-10-23  Tor Lillqvist  <tml@iki.fi>
 
+	* gtk/gtkprivate.h
+	* gtk/gtkmain.c
+	* gtk/gtkrc.c: As G_HARDCODED_PATH_WRAPPER didn't make it into GLib
+	after all, write out its expansion when defining the _gtk_get_* 
+	functions.
+	
+2001-10-23  Tor Lillqvist  <tml@iki.fi>
+
 	* gtk-config.in: Remove.
 
 	* gdk-1.3-win32-production.pc.in

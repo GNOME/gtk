@@ -76,10 +76,25 @@ typedef enum
 }
 #endif /* __cplusplus */
 
+#ifdef G_PLATFORM_WIN32
+
 const gchar *_gtk_get_libdir ();
 const gchar *_gtk_get_sysconfdir ();
 const gchar *_gtk_get_localedir ();
 const gchar *_gtk_get_exe_prefix ();
 const gchar *_gtk_get_data_prefix ();
+
+#undef GTK_LIBDIR
+#define GTK_LIBDIR _gtk_get_libdir ()
+#undef GTK_LOCALEDIR
+#define GTK_LOCALEDIR _gtk_get_localedir ()
+#undef GTK_SYSCONFDIR
+#define GTK_SYSCONFDIR _gtk_get_sysconfdir ()
+#undef GTK_EXE_PREFIX
+#define GTK_EXE_PREFIX _gtk_get_exe_prefix ()
+#undef GTK_DATA_PREFIX
+#define GTK_DATA_PREFIX _gtk_get_data_prefix ()
+
+#endif
 
 #endif /* __GTK_PRIVATE_H__ */

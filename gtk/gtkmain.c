@@ -199,15 +199,68 @@ static gchar *add_dll_suffix(gchar *module_name)
 }
 #endif
 
-#undef gtk_init_check
+#ifdef G_PLATFORM_WIN32
 
 G_WIN32_DLLMAIN_FOR_DLL_NAME(static, dll_name)
 
-G_HARDCODED_PATH_WRAPPER (GTK_LIBDIR, "gtk+", _gtk_get_libdir, dll_name, "lib")
-G_HARDCODED_PATH_WRAPPER (GTK_LOCALEDIR, "gtk+", _gtk_get_localedir, dll_name, "lib/locale")
-G_HARDCODED_PATH_WRAPPER (GTK_SYSCONFDIR, "gtk+", _gtk_get_sysconfdir, dll_name, "etc")
-G_HARDCODED_PATH_WRAPPER (GTK_EXE_PREFIX, "gtk+", _gtk_get_exe_prefix, dll_name, "")
-G_HARDCODED_PATH_WRAPPER (GTK_DATA_PREFIX, "gtk+", _gtk_get_data_prefix, dll_name, "")
+const gchar *
+_gtk_get_libdir (void)
+{
+  static const gchar *cache = NULL;
+  if (cache == NULL)
+    cache = g_win32_get_package_installation_subdirectory
+      ("gtk+", dll_name, "lib");
+
+  return cache;
+}
+
+const gchar *
+_gtk_get_localedir (void)
+{
+  static const gchar *cache = NULL;
+  if (cache == NULL)
+    cache = g_win32_get_package_installation_subdirectory
+      ("gtk+", dll_name, "lib/locale");
+
+  return cache;
+}
+
+const gchar *
+_gtk_get_sysconfdir (void)
+{
+  static const gchar *cache = NULL;
+  if (cache == NULL)
+    cache = g_win32_get_package_installation_subdirectory
+      ("gtk+", dll_name, "etc");
+
+  return cache;
+}
+
+const gchar *
+_gtk_get_exe_prefix (void)
+{
+  static const gchar *cache = NULL;
+  if (cache == NULL)
+    cache = g_win32_get_package_installation_subdirectory
+      ("gtk+", dll_name, "");
+
+  return cache;
+}
+
+const gchar *
+_gtk_get_data_prefix (void)
+{
+  static const gchar *cache = NULL;
+  if (cache == NULL)
+    cache = g_win32_get_package_installation_subdirectory
+      ("gtk+", dll_name, "");
+
+  return cache;
+}
+
+#endif /* G_PLATFORM_WIN32 */
+
+#undef gtk_init_check
 
 gboolean
 gtk_init_check (int	 *argc,
@@ -416,7 +469,7 @@ gtk_init_check (int	 *argc,
     }
 
 #ifdef ENABLE_NLS
-  bindtextdomain("gtk+", _gtk_get_localedir ());
+  bindtextdomain("gtk+", GTK_LOCALEDIR);
 #endif  
 
   /* Initialize the default visual and colormap to be

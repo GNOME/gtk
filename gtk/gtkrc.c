@@ -255,7 +255,7 @@ gtk_rc_get_theme_dir(void)
   if (var)
     path = g_strdup_printf("%s%s", var, "/share/themes");
   else
-    path = g_strdup_printf("%s%s", _gtk_get_data_prefix (), "/share/themes");
+    path = g_strdup_printf("%s%s", GTK_DATA_PREFIX, "/share/themes");
 
   return path;
 }
@@ -269,7 +269,7 @@ gtk_rc_get_module_dir(void)
   if (var)
     path = g_strdup_printf("%s%s", var, "/lib/gtk/themes/engines");
   else
-    path = g_strdup_printf("%s%s", _gtk_get_exe_prefix (), "/lib/gtk/themes/engines");
+    path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
 
   return path;
 }
@@ -284,7 +284,7 @@ gtk_rc_append_default_pixmap_path(void)
   if (var)
     path = g_strdup_printf("%s%s", var, "/share/gtk/themes");
   else
-    path = g_strdup_printf("%s%s", _gtk_get_data_prefix (), "/share/gtk/themes");
+    path = g_strdup_printf("%s%s", GTK_DATA_PREFIX, "/share/gtk/themes");
   
   for (n = 0; pixmap_path[n]; n++) ;
   if (n >= GTK_RC_MAX_PIXMAP_PATHS - 1)
@@ -310,7 +310,7 @@ gtk_rc_append_default_module_path(void)
   if (var)
     path = g_strdup_printf("%s%s", var, "/lib/gtk/themes/engines");
   else
-    path = g_strdup_printf("%s%s", _gtk_get_exe_prefix (), "/lib/gtk/themes/engines");
+    path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
   module_path[n++] = path;
 
   var = g_get_home_dir ();
@@ -350,7 +350,7 @@ gtk_rc_add_initial_default_files (void)
     }
   else
     {
-      str = g_strconcat (_gtk_get_sysconfdir (), G_DIR_SEPARATOR_S "gtk" G_DIR_SEPARATOR_S "gtkrc", NULL);
+      str = g_strconcat (GTK_SYSCONFDIR, G_DIR_SEPARATOR_S "gtk" G_DIR_SEPARATOR_S "gtkrc", NULL);
       gtk_rc_add_default_file (str);
       g_free (str);
 
