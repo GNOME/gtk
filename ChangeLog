@@ -1,3 +1,10 @@
+Wed May 17 10:52:12 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c: Patch from David Santiago
+	<mrcooger@cyberverse.com> to change things so that the 
+	indicator of the active palette entry is done independently,
+	not via the focus, since it should always be visible.
+
 2000-05-17  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Plug same

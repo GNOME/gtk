@@ -525,8 +525,8 @@ color_sample_new (GtkColorSelection *colorsel)
  * The palette area code
  *
  */
-#define CUSTOM_PALETTE_ENTRY_WIDTH   18
-#define CUSTOM_PALETTE_ENTRY_HEIGHT  18
+#define CUSTOM_PALETTE_ENTRY_WIDTH   16
+#define CUSTOM_PALETTE_ENTRY_HEIGHT  16
 
 static void
 palette_get_color (GtkWidget *drawing_area, gdouble *color)
@@ -558,6 +558,9 @@ palette_paint (GtkWidget    *drawing_area,
 	       GdkRectangle *area,
 	       gpointer      data)
 {
+  GtkColorSelection *colorsel = GTK_COLOR_SELECTION (data); 
+  ColorSelectionPrivate *priv = colorsel->private; 
+
   if (drawing_area->window == NULL)
     return;
   
@@ -567,7 +570,7 @@ palette_paint (GtkWidget    *drawing_area,
 			 area->width, 
 			 area->height);
   
-  if (GTK_WIDGET_HAS_FOCUS (drawing_area))
+  if (priv->last_palette == drawing_area)
     {
       GdkGC *gc;
       gdouble color[4];
@@ -598,43 +601,26 @@ palette_expose (GtkWidget      *drawing_area,
 }
 
 static void
-palette_focus_in (GtkWidget     *drawing_area,
-		  GdkEventFocus *event,
-		  gpointer       data)
-{
-  ColorSelectionPrivate *priv;
-  
-  if (drawing_area->window == NULL)
-    return;
-  
-  priv = GTK_COLOR_SELECTION (data)->private;
-  priv->last_palette = drawing_area;
-  GTK_WIDGET_SET_FLAGS (drawing_area, GTK_HAS_FOCUS);
-  
-  gtk_widget_queue_clear_area (drawing_area, 0, 0, drawing_area->allocation.x, drawing_area->allocation.y);
-}
-
-static void
-palette_focus_out (GtkWidget     *drawing_area,
-		   GdkEventFocus *event,
-		   gpointer       data)
-{
-  GTK_WIDGET_UNSET_FLAGS (drawing_area, GTK_HAS_FOCUS);
-  gtk_widget_queue_clear_area (drawing_area, 0, 0, drawing_area->allocation.x, drawing_area->allocation.y);
-}
-
-static void
 palette_press (GtkWidget      *drawing_area,
 	       GdkEventButton *event,
 	       gpointer        data)
 {
-  gtk_widget_grab_focus (drawing_area);
+  GtkColorSelection *colorsel = GTK_COLOR_SELECTION (data); 
+  ColorSelectionPrivate *priv = colorsel->private; 
+ 
+  if (priv->last_palette != NULL) 
+    gtk_widget_queue_clear (priv->last_palette);
+  
+  priv->last_palette = drawing_area;
+
   if (GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (drawing_area), "color_set")) != 0)
     {
       gdouble color[4];
       palette_get_color (drawing_area, color);
       gtk_color_selection_set_color (GTK_COLOR_SELECTION (data), color);
     }
+
+  gtk_widget_queue_clear (priv->last_palette);
 }
 
 static void
@@ -835,9 +821,6 @@ palette_new (GtkColorSelection *colorsel)
   gtk_object_set_data (GTK_OBJECT (retval), "color_set", GINT_TO_POINTER (0)); 
   gtk_widget_set_events (retval, GDK_BUTTON_PRESS_MASK | GDK_EXPOSURE_MASK);
   
-  GTK_WIDGET_SET_FLAGS (retval, GTK_CAN_FOCUS);
-  gtk_signal_connect (GTK_OBJECT (retval), "focus_in_event", palette_focus_in, colorsel);
-  gtk_signal_connect (GTK_OBJECT (retval), "focus_out_event", palette_focus_out, colorsel);
   gtk_signal_connect (GTK_OBJECT (retval), "draw", palette_draw, colorsel);
   gtk_signal_connect (GTK_OBJECT (retval), "expose_event", palette_expose, colorsel);
   gtk_signal_connect (GTK_OBJECT (retval), "button_press_event", palette_press, colorsel);
@@ -1224,6 +1207,20 @@ make_palette_frame (GtkColorSelection *colorsel,
   gtk_table_attach_defaults (GTK_TABLE (table), frame, i, i+1, j, j+1);
 }
 
+/* Set the palette entry [x][y] to be the currently selected one. */
+static void 
+set_selected_palette (GtkColorSelection *colorsel, int x, int y)
+{
+  ColorSelectionPrivate *priv = colorsel->private; 
+
+  if (priv->last_palette != NULL) 
+    gtk_widget_queue_clear (priv->last_palette);
+
+  priv->last_palette = priv->custom_palette[x][y]; 
+
+  gtk_widget_queue_clear (priv->last_palette);
+}
+
 static void
 update_color (GtkColorSelection *colorsel)
 {
@@ -1299,11 +1296,11 @@ add_button_pressed (GtkWidget         *button,
 
 	      /* forward the selection */
 	      if ((i == GTK_CUSTOM_PALETTE_WIDTH - 1) && (j == GTK_CUSTOM_PALETTE_HEIGHT - 1))
-		gtk_widget_grab_focus (priv->custom_palette[0][0]);
+ 		set_selected_palette (colorsel, 0, 0);
 	      else if (i == GTK_CUSTOM_PALETTE_WIDTH - 1)
-		gtk_widget_grab_focus (priv->custom_palette[0][j + 1]);
+ 		set_selected_palette (colorsel, 0, j + 1);
 	      else
-		gtk_widget_grab_focus (priv->custom_palette[i + 1][j]);
+ 		set_selected_palette (colorsel, i + 1, j);
 
 	      return;
 	    }
@@ -1314,7 +1311,7 @@ add_button_pressed (GtkWidget         *button,
   palette_set_color (priv->custom_palette[0][0], colorsel, priv->color);
 
   /* forward the selection */
-  gtk_widget_grab_focus (priv->custom_palette[1][0]);
+  set_selected_palette (colorsel, 1, 0);
 }
 
 GtkType
@@ -1453,7 +1450,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   priv->hex_entry = gtk_entry_new ();
   gtk_signal_connect (GTK_OBJECT (priv->hex_entry), "activate", hex_changed, colorsel);
   gtk_widget_set_usize (priv->hex_entry, 75, -1);  
-  gtk_table_set_col_spacing (GTK_TABLE (table), 3, 25);
+  gtk_table_set_col_spacing (GTK_TABLE (table), 3, 15);
   gtk_table_attach_defaults (GTK_TABLE (table), priv->hex_entry, 1, 5, 5, 6);
   
   /* Set up the palette */
@@ -1467,6 +1464,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 	  make_palette_frame (colorsel, table, i, j);
 	}
     }
+  set_selected_palette (colorsel, 0, 0);
   priv->palette_frame = gtk_frame_new (_("Custom Palette"));
   gtk_box_pack_end (GTK_BOX (top_right_vbox), priv->palette_frame, FALSE, FALSE, 0);
   vbox = gtk_vbox_new (FALSE, 4);

@@ -5216,10 +5216,6 @@ create_color_selection (void)
       
       window = gtk_color_selection_dialog_new ("color selection dialog");
 
-      gtk_color_selection_set_use_opacity (
-        GTK_COLOR_SELECTION (GTK_COLOR_SELECTION_DIALOG (window)->colorsel),
-	TRUE);
-
       gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_MOUSE);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
