@@ -1,3 +1,17 @@
+2004-02-28  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkdnd-win32.c : set current_dest_drag to NULL
+	when destroying, fixes bug #120007. Also removed the mirrored
+	ref counting for deprecated gdk_drag_context_<ref|unref>()
+	cause it wasn't reliable anymore anyway.
+
+	* gdk/win32/gdkdisplay-win32.c : fix typo, which should
+	have broken the win32 build for everyone not using msvc
+
+	* gdk/win32/gdkevents-win32.c : WM_GETMINAMXINFO ensure not to
+	return negative values for ptMaxTrackSize, it caused snapping
+	windows to their minimum size
+
 Sat Feb 28 01:39:01 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_wrap_width): Support

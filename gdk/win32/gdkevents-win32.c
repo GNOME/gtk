@@ -3177,14 +3177,19 @@ gdk_event_translate (GdkDisplay *display,
 
       if (impl->hint_flags & GDK_HINT_MAX_SIZE)
 	{
+	  int maxw, maxh;
+
 	  rect.left = rect.top = 0;
 	  rect.right = impl->hints.max_width;
 	  rect.bottom = impl->hints.max_height;
 
 	  _gdk_win32_adjust_client_rect (window, &rect);
 
-	  mmi->ptMaxTrackSize.x = rect.right - rect.left;
-	  mmi->ptMaxTrackSize.y = rect.bottom - rect.top;
+	  /* at least on win9x we have the 16 bit trouble */
+	  maxw = rect.right - rect.left;
+	  maxh = rect.bottom - rect.top;
+	  mmi->ptMaxTrackSize.x = maxw > 0 && maxw < G_MAXSHORT ? maxw : G_MAXSHORT;
+	  mmi->ptMaxTrackSize.y = maxh > 0 && maxh < G_MAXSHORT ? maxw : G_MAXSHORT;
 	}
 
       if (impl->hint_flags & (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE))

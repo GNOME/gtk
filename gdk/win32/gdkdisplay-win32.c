@@ -43,7 +43,7 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
   g_assert (_gdk_display == display);
 }
 
-#ifdef HVAE_MONITOR_INFO
+#ifdef HAVE_MONITOR_INFO
 static BOOL CALLBACK
 count_monitor (HMONITOR hmonitor,
 	       HDC      hdc,

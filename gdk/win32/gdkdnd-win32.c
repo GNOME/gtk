@@ -87,8 +87,6 @@ static int nformats;
  * this is used on both source and destination sides.
  */
 struct _GdkDragContextPrivateWin32 {
-  gint    ref_count;
-
   guint16 last_x;		/* Coordinates from last event */
   guint16 last_y;
   HWND    dest_xid;
@@ -140,7 +138,6 @@ gdk_drag_context_init (GdkDragContext *dragcontext)
   GdkDragContextPrivateWin32 *private = g_new0 (GdkDragContextPrivateWin32, 1);
 
   dragcontext->windowing_data = private;
-  private->ref_count = 1;
 
   contexts = g_list_prepend (contexts, dragcontext);
 }
@@ -160,7 +157,9 @@ gdk_drag_context_finalize (GObject *object)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
   GdkDragContextPrivateWin32 *private = GDK_DRAG_CONTEXT_PRIVATE_DATA (context);
-  
+ 
+  GDK_NOTE (DND, g_print ("gdk_drag_context_finalize\n"));
+ 
   g_list_free (context->targets);
 
   if (context->source_window)
@@ -172,6 +171,9 @@ gdk_drag_context_finalize (GObject *object)
     g_object_unref (context->dest_window);
   
   contexts = g_list_remove (contexts, context);
+
+  if (context == current_dest_drag)
+    current_dest_drag = NULL;
 
   g_free (private);
   
@@ -191,8 +193,6 @@ gdk_drag_context_ref (GdkDragContext *context)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  GDK_NOTE (DND, g_print ("gdk_drag_context_ref: %p %d\n", context, G_OBJECT(context)->ref_count));
-
   g_object_ref (context);
 }
 
@@ -201,7 +201,6 @@ gdk_drag_context_unref (GdkDragContext *context)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  GDK_NOTE (DND, g_print ("gdk_drag_context_unref: %p %d\n", context, G_OBJECT(context)->ref_count));
   g_object_unref (context);
 }
 
@@ -1171,6 +1170,7 @@ local_send_drop (GdkDragContext *context,
       GdkDragContextPrivateWin32 *private;
       private = GDK_DRAG_CONTEXT_PRIVATE_DATA (current_dest_drag);
 
+      /* Pass ownership of context to the event */
       tmp_event.dnd.type = GDK_DROP_START;
       tmp_event.dnd.window = current_dest_drag->dest_window;
       tmp_event.dnd.send_event = FALSE;
@@ -1180,6 +1180,8 @@ local_send_drop (GdkDragContext *context,
       tmp_event.dnd.x_root = private->last_x;
       tmp_event.dnd.y_root = private->last_y;
       
+      current_dest_drag = NULL;
+
       gdk_event_put (&tmp_event);
     }
 
@@ -1607,7 +1609,7 @@ gdk_drop_finish (GdkDragContext *context,
 	
   g_return_if_fail (context != NULL);
 
-  GDK_NOTE (DND, g_print ("gdk_drop_finish\n"));
+  GDK_NOTE (DND, g_print ("gdk_drop_finish"));
 
   private = GDK_DRAG_CONTEXT_PRIVATE_DATA (context);
 
