@@ -11,10 +11,10 @@ Mon Mar 22 05:51:34 1999  Tim Janik  <timj@gtk.org>
 	* gtk/gtkvscale.c (gtk_vscale_draw):
 	hm, this is an ugly one. we first compute the size of our trough area
 	here (window relative) and then check intersection with the draw_area
-	which is widget relative, so we need to offset the trough area by
-	allocation.x and allocation.y before the check. (this must not be done
-	for the background area though, sicne that's already computed parent
-	relative).
+	which is parent relative because we're a NO_WINDOW widget, so we need
+	to offset the trough area by allocation.x and allocation.y before the
+	check. (this must not be done for the background area though, since
+	that's already computed parent relative).
 
 Mon Mar 22 00:41:39 1999  Lars Hamann  <lars@gtk.org>
 
