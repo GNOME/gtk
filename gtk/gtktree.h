@@ -32,6 +32,15 @@ extern "C" {
 #define GTK_TREE_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_tree_get_type (), GtkTreeClass)
 #define GTK_IS_TREE(obj)       GTK_CHECK_TYPE (obj, gtk_tree_get_type ())
 
+#define GTK_IS_ROOT_TREE(obj)   (GTK_TREE(obj)->root_tree == NULL)
+#define GTK_TREE_ROOT_TREE(obj) (GTK_TREE(obj)->root_tree ? GTK_TREE(obj)->root_tree : GTK_TREE(obj))
+#define GTK_TREE_SELECTION(obj) (GTK_TREE_ROOT_TREE(obj)->selection)
+
+typedef enum 
+{
+  GTK_TREE_VIEW_LINE,  /* default view mode */
+  GTK_TREE_VIEW_ITEM
+} GtkTreeViewMode;
 
 typedef struct _GtkTree       GtkTree;
 typedef struct _GtkTreeClass  GtkTreeClass;
@@ -41,25 +50,58 @@ struct _GtkTree
   GtkContainer container;
 
   GList *children;
+  
+  GtkTree* root_tree; /* owner of selection list */
+  GtkWidget* tree_owner;
+  GList *selection;
+  guint indent_value;
+  guint current_indent;
+  guint selection_mode : 2;
+  guint view_mode : 1;
 };
 
 struct _GtkTreeClass
 {
   GtkContainerClass parent_class;
+
+  void (* selection_changed) (GtkTree   *tree);
+  void (* select_child)      (GtkTree   *tree,
+			      GtkWidget *child);
+  void (* unselect_child)    (GtkTree   *tree,
+			      GtkWidget *child);
 };
 
 
-guint      gtk_tree_get_type   (void);
-GtkWidget* gtk_tree_new        (void);
-void       gtk_tree_append     (GtkTree   *tree,
-				GtkWidget *child);
-void       gtk_tree_prepend    (GtkTree   *tree,
-				GtkWidget *child);
-void       gtk_tree_insert     (GtkTree   *tree,
-				GtkWidget *child,
-				gint       position);
-
-
+guint      gtk_tree_get_type           (void);
+GtkWidget* gtk_tree_new                (void);
+void       gtk_tree_append             (GtkTree          *tree,
+				        GtkWidget        *child);
+void       gtk_tree_prepend            (GtkTree          *tree,
+				        GtkWidget        *child);
+void       gtk_tree_insert             (GtkTree          *tree,
+				        GtkWidget        *child,
+				        gint              position);
+void       gtk_tree_remove_item        (GtkTree          *tree,
+				        GtkWidget        *child);
+void       gtk_tree_remove_items       (GtkTree          *tree,
+				        GList            *items);
+void       gtk_tree_clear_items        (GtkTree          *tree,
+				        gint              start,
+				        gint              end);
+void       gtk_tree_select_item        (GtkTree          *tree,
+				        gint              item);
+void       gtk_tree_unselect_item      (GtkTree          *tree,
+				        gint              item);
+void       gtk_tree_select_child       (GtkTree          *tree,
+				        GtkWidget        *child);
+void       gtk_tree_unselect_child     (GtkTree          *tree,
+				        GtkWidget        *child);
+gint       gtk_tree_child_position     (GtkTree          *tree,
+				        GtkWidget        *child);
+void       gtk_tree_set_selection_mode (GtkTree          *tree,
+				        GtkSelectionMode  mode);
+void       gtk_tree_set_view_mode      (GtkTree          *tree,
+				        GtkTreeViewMode   mode); 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

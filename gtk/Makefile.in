@@ -259,11 +259,15 @@ EXTRA_DIST = \
 	marble.xpm		\
 	3DRings.xpm		\
 	FilesQueue.xpm		\
-	Modeller.xpm
+	Modeller.xpm		\
+	tree_plus.xpm		\
+	tree_minus.xpm		\
+	tree_plus.xbm		\
+	tree_minus.xbm
 
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/glib @x_cflags@ 
 
-noinst_PROGRAMS = testgtk testinput testselection simple
+noinst_PROGRAMS = testgtk testinput testselection simple testtree
 testgtk_LDADD = \
 	libgtk.la				\
 	$(top_builddir)/gdk/libgdk.la		\
@@ -296,6 +300,14 @@ simple_LDADD = \
 	$(top_builddir)/glib/libglib.la		\
 	-lm
 
+testtree_LDADD = \
+	libgtk.la				\
+	$(top_builddir)/gdk/libgdk.la		\
+	@x_ldflags@				\
+	@x_libs@				\
+	$(top_builddir)/glib/libglib.la		\
+	-lm
+
 DEPS = \
 	$(top_builddir)/gtk/libgtk.la		\
 	$(top_builddir)/gdk/libgdk.la		\
@@ -305,6 +317,7 @@ testgtk_DEPENDENCIES = $(DEPS)
 testinput_DEPENDENCIES = $(DEPS)
 testselection_DEPENDENCIES = $(DEPS)
 simple_DEPENDENCIES = $(DEPS)
+testtree_DEPENDENCIES = $(DEPS)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
@@ -352,6 +365,9 @@ testselection_LDFLAGS =
 simple_SOURCES = simple.c
 simple_OBJECTS =  simple.o
 simple_LDFLAGS = 
+testtree_SOURCES = testtree.c
+testtree_OBJECTS =  testtree.o
+testtree_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
@@ -363,7 +379,7 @@ DIST_COMMON =  Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP = --best
 DEP_FILES =  .deps/fnmatch.P .deps/gtkaccelerator.P \
 .deps/gtkadjustment.P .deps/gtkalignment.P .deps/gtkarrow.P \
@@ -391,9 +407,9 @@ DEP_FILES =  .deps/fnmatch.P .deps/gtkaccelerator.P \
 .deps/gtkviewport.P .deps/gtkvpaned.P .deps/gtkvruler.P \
 .deps/gtkvscale.P .deps/gtkvscrollbar.P .deps/gtkvseparator.P \
 .deps/gtkwidget.P .deps/gtkwindow.P .deps/simple.P .deps/testgtk.P \
-.deps/testinput.P .deps/testselection.P
-SOURCES = $(libgtk_la_SOURCES) testgtk.c testinput.c testselection.c simple.c
-OBJECTS = $(libgtk_la_OBJECTS) testgtk.o testinput.o testselection.o simple.o
+.deps/testinput.P .deps/testselection.P .deps/testtree.P
+SOURCES = $(libgtk_la_SOURCES) testgtk.c testinput.c testselection.c simple.c testtree.c
+OBJECTS = $(libgtk_la_OBJECTS) testgtk.o testinput.o testselection.o simple.o testtree.o
 
 default: all
 
@@ -497,6 +513,10 @@ testselection: $(testselection_OBJECTS) $(testselection_DEPENDENCIES)
 simple: $(simple_OBJECTS) $(simple_DEPENDENCIES)
 	@rm -f simple
 	$(LINK) $(simple_LDFLAGS) $(simple_OBJECTS) $(simple_LDADD) $(LIBS)
+
+testtree: $(testtree_OBJECTS) $(testtree_DEPENDENCIES)
+	@rm -f testtree
+	$(LINK) $(testtree_LDFLAGS) $(testtree_OBJECTS) $(testtree_LDADD) $(LIBS)
 
 install-gtkincludeHEADERS: $(gtkinclude_HEADERS)
 	@$(NORMAL_INSTALL)

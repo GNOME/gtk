@@ -32,6 +32,7 @@ extern "C" {
 #define GTK_TREE_ITEM_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_tree_item_get_type (), GtkTreeItemClass)
 #define GTK_IS_TREE_ITEM(obj)       GTK_CHECK_TYPE (obj, gtk_tree_item_get_type ())
 
+#define GTK_TREE_ITEM_SUBTREE(obj)  GTK_TREE_ITEM(obj)->subtree;
 
 typedef struct _GtkTreeItem       GtkTreeItem;
 typedef struct _GtkTreeItemClass  GtkTreeItemClass;
@@ -40,8 +41,11 @@ struct _GtkTreeItem
 {
   GtkItem item;
 
-  GtkWidget *child;
   GtkWidget *subtree;
+  GtkWidget *pixmaps_box;
+  GtkWidget *plus_pix_widget, *minus_pix_widget;
+
+  guint expanded : 1;
 };
 
 struct _GtkTreeItemClass
@@ -58,6 +62,7 @@ GtkWidget* gtk_tree_item_new            (void);
 GtkWidget* gtk_tree_item_new_with_label (gchar       *label);
 void       gtk_tree_item_set_subtree    (GtkTreeItem *tree_item,
 					 GtkWidget   *subtree);
+void       gtk_tree_item_remove_subtree (GtkTreeItem *tree_item);
 void       gtk_tree_item_select         (GtkTreeItem *tree_item);
 void       gtk_tree_item_deselect       (GtkTreeItem *tree_item);
 void       gtk_tree_item_expand         (GtkTreeItem *tree_item);
