@@ -1,3 +1,57 @@
+2001-07-22  Anders Carlsson  <andersca@gnome.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): Replace the
+	expander_height and expander_width properties with a single
+	property, expander_size.
+	(gtk_tree_view_init): Set the tab_offset to expander_size
+	plus some padding.
+	(gtk_tree_view_unrealize): Remove the expand/collapse
+	timeout if it exists.
+	(coords_are_over_arrow): Fix a small bug.
+	(gtk_tree_view_motion_draw_column_motion_arrow): Use
+	expander_size.
+	(gtk_tree_view_draw_focus): Use "treeview" instead of
+	"add-mode" as detail when drawing the focus.
+	(gtk_tree_view_bin_expose): Use "treeview-drop-indicator"
+	instead of "add-mode" as detail when drawing the focus.
+	(gtk_tree_view_deleted): If we have a node currently being
+	expanded or collapsed, remove the timeout and set the node 
+	to NULL.
+	(gtk_tree_view_queue_draw_arrow): New function that just
+	redraws the arrow of a node.
+	(gtk_tree_view_draw_arrow): Use expander_size instead of
+	expander_width/expander_height, also pass a different
+	expander_style to gtk_paint_expander depending on the 
+	state of the node being drawn.
+	(expand_collapse_timeout): New function for expanding 
+	or collapsing a node depending on the previous state.
+	(gtk_tree_view_real_expand_row): Add timeout and set 
+	correct state for node being expanded.
+	(gtk_tree_view_real_collapse_row): Add timeout and set
+	correct state for node being collapsed.
+
+	* gtk/gtktreeprivate.h (struct _GtkTreeViewPrivate): Add
+	information about the node currently being expanded or
+	collapsed, and also a timeout id.
+
+	* gtk/gtkstyle.h (struct _GtkStyleClass): Replace is_open
+	with expander_style for draw_expander.
+
+	* gtk/gtkstyle.c (gtk_draw_expander): Replace is_open with
+	expander_style.
+	(create_expander_affine): New function for creating an 
+	expander affine.
+	(apply_affine_on_point): New function for applying an 
+	affine to a point.
+	(gtk_default_draw_expander): Modified to take expander_style
+	instead of is_open, and to draw the rectangle rotated differently
+	depending on the expander style.
+	(gtk_paint_expander): Replace is_open with expander_style.
+
+	* gtk/gtkrbtree.h: Add expander states to GtkRBNodeColor.
+
+	* gtk/gtkenums.h: Add expander style enum.
+
 2001-07-21  Jonas Borgström  <jonas@codefactory.se>
 
 	* gtk/gtktreemodel.c (gtk_tree_model_foreach): Check the return

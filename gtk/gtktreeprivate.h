@@ -121,6 +121,11 @@ struct _GtkTreeViewPrivate
   GtkRBNode *prelight_node;
   GtkRBTree *prelight_tree;
 
+  /* The node that's currently being collapsed or expanded */
+  GtkRBNode *expanded_collapsed_node;
+  GtkRBTree *expanded_collapsed_tree;
+  guint expand_collapse_timeout;
+
   /* Selection information */
   GtkTreeSelection *selection;
 

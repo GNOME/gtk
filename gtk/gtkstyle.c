@@ -278,7 +278,7 @@ static void gtk_default_draw_expander   (GtkStyle        *style,
                                          const gchar     *detail,
                                          gint             x,
                                          gint             y,
-                                         gboolean         is_open);
+					 GtkExpanderStyle expander_style);
 static void gtk_default_draw_layout     (GtkStyle        *style,
                                          GdkWindow       *window,
                                          GtkStateType     state_type,
@@ -1103,14 +1103,14 @@ gtk_draw_expander (GtkStyle        *style,
                    GtkStateType     state_type,
                    gint             x,
                    gint             y,
-                   gboolean         is_open)
+		   GtkExpanderStyle expander_style)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_expander != NULL);
   
   GTK_STYLE_GET_CLASS (style)->draw_expander (style, window, state_type,
                                               NULL, NULL, NULL,
-                                              x, y, is_open);
+                                              x, y, expander_style);
 }
 
 void
@@ -3804,7 +3804,7 @@ gtk_default_draw_focus (GtkStyle      *style,
   GdkPoint points[5];
   
   sanitize_size (window, &width, &height);
-
+  
   if (area)
     gdk_gc_set_clip_rectangle (style->black_gc, area);
 
@@ -3992,6 +3992,43 @@ gtk_default_draw_handle (GtkStyle      *style,
 }
 
 static void
+create_expander_affine (gdouble affine[6],
+			gint    degrees,
+			gint    expander_size,
+			gint    x,
+			gint    y)
+{
+  gdouble s, c;
+  gdouble width;
+  gdouble height;
+
+  width = expander_size / 4;
+  height = expander_size / 2;
+  
+  s = sin (degrees * M_PI / 180.0);
+  c = cos (degrees * M_PI / 180.0);
+  
+  affine[0] = c;
+  affine[1] = s;
+  affine[2] = -s;
+  affine[3] = c;
+  affine[4] = -width * c - height * -s + x;
+  affine[5] = -width * s - height * c + y;
+}
+
+static void
+apply_affine_on_point (double affine[6], GdkPoint *point)
+{
+  gdouble x, y;
+
+  x = point->x * affine[0] + point->y * affine[2] + affine[4];
+  y = point->x * affine[1] + point->y * affine[3] + affine[5];
+
+  point->x = x;
+  point->y = y;
+}
+
+static void
 gtk_default_draw_expander (GtkStyle        *style,
                            GdkWindow       *window,
                            GtkStateType     state_type,
@@ -4000,12 +4037,17 @@ gtk_default_draw_expander (GtkStyle        *style,
                            const gchar     *detail,
                            gint             x,
                            gint             y,
-                           gboolean         is_open)
+			   GtkExpanderStyle expander_style)
 {
-  /* FIXME replace macro with a style property */
-#define PM_SIZE 8
-  
+  gint expander_size;
   GdkPoint points[3];
+  gint i;
+  gdouble affine[6];
+  gint degrees = 0;
+  
+  gtk_widget_style_get (widget,
+			"expander_size", &expander_size,
+			NULL);
 
   if (area)
     {
@@ -4013,38 +4055,46 @@ gtk_default_draw_expander (GtkStyle        *style,
       gdk_gc_set_clip_rectangle (style->base_gc[GTK_STATE_NORMAL], area);
     }
 
-  if (is_open)
+  points[0].x = 0;
+  points[0].y = 0;
+  points[1].x = expander_size / 2;
+  points[1].y =  expander_size / 2;
+  points[2].x = 0;
+  points[2].y = expander_size;
+
+  switch (expander_style)
     {
-      points[0].x = x;
-      points[0].y = y + (PM_SIZE + 2) / 6;
-      points[1].x = points[0].x + 1 * (PM_SIZE + 2);
-      points[1].y = points[0].y;
-      points[2].x = (points[0].x + 1 * (PM_SIZE + 2) / 2);
-      points[2].y = y + 2 * (PM_SIZE + 2) / 3;
+    case GTK_EXPANDER_COLLAPSED:
+      degrees = 0;
+      break;
+    case GTK_EXPANDER_SEMI_COLLAPSED:
+      degrees = 30;
+      break;
+    case GTK_EXPANDER_SEMI_EXPANDED:
+      degrees = 60;
+      break;
+    case GTK_EXPANDER_EXPANDED:
+      degrees = 90;
+      break;
+    default:
+      g_assert_not_reached ();
     }
-  else
-    {
-      points[0].x = x + 1 * ((PM_SIZE + 2) / 6 + 2);
-      points[0].y = y - 1;
-      points[1].x = points[0].x;
-      points[1].y = points[0].y + (PM_SIZE + 2);
-      points[2].x = (points[0].x + 1 * (2 * (PM_SIZE + 2) / 3 - 1));
-      points[2].y = points[0].y + (PM_SIZE + 2) / 2;
-    }
+  
+  create_expander_affine (affine, degrees, expander_size, x, y);
+
+  for (i = 0; i < 3; i++)
+    apply_affine_on_point (affine, &points[i]);
 
   gdk_draw_polygon (window, style->base_gc[GTK_STATE_NORMAL],
-                    TRUE, points, 3);
+		    TRUE, points, 3);
   gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
                     FALSE, points, 3);
-  
 
   if (area)
     {
       gdk_gc_set_clip_rectangle (style->fg_gc[GTK_STATE_NORMAL], NULL);
       gdk_gc_set_clip_rectangle (style->base_gc[GTK_STATE_NORMAL], NULL);
     }
-  
-#undef PM_SIZE
 }
 
 typedef struct _ByteRange ByteRange;
@@ -4866,13 +4916,13 @@ gtk_paint_expander (GtkStyle        *style,
                     const gchar     *detail,
                     gint             x,
                     gint             y,
-                    gboolean         is_open)
+		    GtkExpanderStyle expander_style)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_expander != NULL);
   
   GTK_STYLE_GET_CLASS (style)->draw_expander (style, window, state_type, area,
-                                              widget, detail, x, y, is_open);
+                                              widget, detail, x, y, expander_style);
 }
 
 void
