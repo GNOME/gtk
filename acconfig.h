@@ -54,6 +54,8 @@
 /* Most machines will be happy with int or void.  IRIX requires '...' */
 #undef SIGNAL_ARG_TYPE
 
+#undef GETTEXT_PACKAGE
+
 /* #undef PACKAGE */
 /* #undef VERSION */
 

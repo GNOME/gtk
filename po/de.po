@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 2000-07-12 23:26+0200\n"
+"POT-Creation-Date: 2000-07-14 14:48-0400\n"
 "PO-Revision-Date: 2000-07-12 23:25+02:00\n"
 "Last-Translator: Benedikt Roth <Benedikt.Roth@gmx.net>>\n"
 "Language-Team: German <de@li.org>\n"
@@ -54,6 +54,23 @@ msgstr "Angepasste Palette"
 msgid "Set Color"
 msgstr "Farbe setzen:"
 
+#. The OK button
+#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
+#: gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "OK"
+
+#. The Cancel button
+#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
+#: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
+#: gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: gtk/gtkcolorseldialog.c:116
+msgid "Help"
+msgstr "Hilfe"
+
 #. The directories clist
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
@@ -63,17 +80,6 @@ msgstr "Verzeichnisse"
 #: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "Dateien"
-
-#. The OK button
-#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
-msgid "OK"
-msgstr "OK"
-
-#. The Cancel button
-#: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
-#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
-msgid "Cancel"
-msgstr "Abbrechen"
 
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
@@ -257,12 +263,12 @@ msgstr "gelöscht"
 msgid "Page %u"
 msgstr "Seite %u"
 
-#: gtk/gtkrc.c:1902
+#: gtk/gtkrc.c:1903
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kann Bilddatei in Pixmap-Pfad: \"%s\" nicht finden. Zeile %d"
 
-#: gtk/gtkrc.c:1905
+#: gtk/gtkrc.c:1906
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kann Bilddatei in Pixmap-Pfad: \"%s\" nicht finden"
@@ -275,9 +281,6 @@ msgstr "Kann ladbares Modul in Module-Pfad: \"%s\" nicht finden,"
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Kein Tip ---"
-
-#~ msgid "Help"
-#~ msgstr "Hilfe"
 
 #~ msgid "Foundry:"
 #~ msgstr "Ursprung:"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.7\n"
-"POT-Creation-Date: 2000-07-03 17:11-0400\n"
+"POT-Creation-Date: 2000-07-14 14:48-0400\n"
 "PO-Revision-Date: 2000-06-23 05:05+02:00\n"
 "Last-Translator: Christopher R. Gabriel <cgabriel@pluto.linux.it>\n"
 "Language-Team: Italiano <it@li.org>\n"
@@ -53,6 +53,23 @@ msgstr "Tavolozza personalizzata"
 msgid "Set Color"
 msgstr "Imposta il colore"
 
+#. The OK button
+#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
+#: gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "OK"
+
+#. The Cancel button
+#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
+#: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
+#: gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "Annulla"
+
+#: gtk/gtkcolorseldialog.c:116
+msgid "Help"
+msgstr "Aiuto"
+
 #. The directories clist
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
@@ -62,17 +79,6 @@ msgstr "Directory"
 #: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "File"
-
-#. The OK button
-#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
-msgid "OK"
-msgstr "OK"
-
-#. The Cancel button
-#: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
-#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
-msgid "Cancel"
-msgstr "Annulla"
 
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
@@ -256,14 +262,14 @@ msgstr "cancella"
 msgid "Page %u"
 msgstr "Pagina %u"
 
-#: gtk/gtkrc.c:1824
+#: gtk/gtkrc.c:1903
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "Impossibile trovare il file di immagine nella cartella immagini: \"%s\". "
 "Linea %d"
 
-#: gtk/gtkrc.c:1827
+#: gtk/gtkrc.c:1906
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""
@@ -278,9 +284,6 @@ msgstr "Impossibile trovare il modulo nella cartella moduli: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Nessun aiuto ---"
-
-#~ msgid "Help"
-#~ msgstr "Aiuto"
 
 #~ msgid "Foundry:"
 #~ msgstr "Fornitore:"

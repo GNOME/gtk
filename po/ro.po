@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2000-07-03 17:11-0400\n"
+"POT-Creation-Date: 2000-07-14 14:48-0400\n"
 "PO-Revision-Date: 2000-04-05 19:30+030\n"
 "Last-Translator: Dan Damian <dand@dnttm.ro>\n"
 "Language-Team: Romanian <ro@li.org>\n"
@@ -54,6 +54,23 @@ msgstr ""
 msgid "Set Color"
 msgstr ""
 
+#. The OK button
+#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
+#: gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "OK"
+
+#. The Cancel button
+#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
+#: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
+#: gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "Renunþã"
+
+#: gtk/gtkcolorseldialog.c:116
+msgid "Help"
+msgstr "Ajutor"
+
 #. The directories clist
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
@@ -63,17 +80,6 @@ msgstr "Directoare"
 #: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "Fiºiere"
-
-#. The OK button
-#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
-msgid "OK"
-msgstr "OK"
-
-#. The Cancel button
-#: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
-#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
-msgid "Cancel"
-msgstr "Renunþã"
 
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
@@ -258,12 +264,12 @@ msgstr "ºterge"
 msgid "Page %u"
 msgstr "Pagina %u"
 
-#: gtk/gtkrc.c:1824
+#: gtk/gtkrc.c:1903
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Nu pot localiza fiºierul imagine în pixmap_path: \"%s\" line %d"
 
-#: gtk/gtkrc.c:1827
+#: gtk/gtkrc.c:1906
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nu pot localiza fiºierul imagine în pixmap_path: \"%s\""
@@ -276,9 +282,6 @@ msgstr "Nu pot localiza modulul încãrcabil în module_path: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Nici un tip ---"
-
-#~ msgid "Help"
-#~ msgstr "Ajutor"
 
 #~ msgid "Foundry:"
 #~ msgstr "Producãtor:"

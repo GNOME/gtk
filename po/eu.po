@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 2000-07-03 17:11-0400\n"
+"POT-Creation-Date: 2000-07-14 14:48-0400\n"
 "PO-Revision-Date: 1999-07-05 19:17+0200\n"
 "Last-Translator: Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>\n"
 "Language-Team: euskare <linux-eu@chanae.alphanet.ch>\n"
@@ -54,6 +54,23 @@ msgstr ""
 msgid "Set Color"
 msgstr ""
 
+#. The OK button
+#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
+#: gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "Ados"
+
+#. The Cancel button
+#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
+#: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
+#: gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "Ezeztatu"
+
+#: gtk/gtkcolorseldialog.c:116
+msgid "Help"
+msgstr "Laguntza"
+
 #. The directories clist
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
@@ -63,17 +80,6 @@ msgstr "Direktorioak"
 #: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "Fitxategiak"
-
-#. The OK button
-#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
-msgid "OK"
-msgstr "Ados"
-
-#. The Cancel button
-#: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
-#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
-msgid "Cancel"
-msgstr "Ezeztatu"
 
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
@@ -258,12 +264,12 @@ msgstr "garbitu"
 msgid "Page %u"
 msgstr "Orria %u"
 
-#: gtk/gtkrc.c:1824
+#: gtk/gtkrc.c:1903
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Imaginaren fitxategia ezin aurkitu pixmap_path-en: \"%s\",%d lerroa"
 
-#: gtk/gtkrc.c:1827
+#: gtk/gtkrc.c:1906
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Imaginaren fitxategia ezin aurkitu pixmap_path-en: \"%s\""
@@ -276,9 +282,6 @@ msgstr "Modulua ezin aurkitu modulu_path-en: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Erpinik ez ---"
-
-#~ msgid "Help"
-#~ msgstr "Laguntza"
 
 #~ msgid "Foundry:"
 #~ msgstr "Ola:"

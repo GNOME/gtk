@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2000-07-03 17:11-0400\n"
+"POT-Creation-Date: 2000-07-14 14:48-0400\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: walon <linux-wa@chanae.alphanet.ch>\n"
@@ -60,6 +60,23 @@ msgstr ""
 msgid "Set Color"
 msgstr ""
 
+#. The OK button
+#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
+#: gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "I Va"
+
+#. The Cancel button
+#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
+#: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
+#: gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "Rinoncî"
+
+#: gtk/gtkcolorseldialog.c:116
+msgid "Help"
+msgstr "Aide"
+
 #. The directories clist
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
@@ -69,17 +86,6 @@ msgstr "Ridants"
 #: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "Fitchîs"
-
-#. The OK button
-#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
-msgid "OK"
-msgstr "I Va"
-
-#. The Cancel button
-#: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
-#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
-msgid "Cancel"
-msgstr "Rinoncî"
 
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
@@ -264,13 +270,13 @@ msgstr "netyî"
 msgid "Page %u"
 msgstr "Pådje %u"
 
-#: gtk/gtkrc.c:1824
+#: gtk/gtkrc.c:1903
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "Dji n' pout nén trover on fitchî imådje è pixmap_path: \"%s\" al roye %d"
 
-#: gtk/gtkrc.c:1827
+#: gtk/gtkrc.c:1906
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Dji n' pout nén trover on fitchî imådje è pixmap_path: \"%s\""
@@ -283,9 +289,6 @@ msgstr "Dji n' pout nén trover on module tcherdjåve è module_path: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Nole Racsegne ---"
-
-#~ msgid "Help"
-#~ msgstr "Aide"
 
 #~ msgid "Foundry:"
 #~ msgstr "Fondeu:"

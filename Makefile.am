@@ -3,7 +3,7 @@
 SRC_SUBDIRS = gdk-pixbuf gdk modules gtk demos
 SUBDIRS = po $(SRC_SUBDIRS) docs
 
-bin_SCRIPTS = gtk-config
+bin_SCRIPTS = gtk-config-2.0
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
@@ -11,7 +11,7 @@ AUTOMAKE_OPTIONS = 1.4
 EXTRA_DIST =			\
 	HACKING			\
 	gtk+.spec.in		\
-        gtk.m4          	\
+        gtk-2.0.m4          	\
 	makecopyright		\
 	TODO			\
 	TODO.xml		\
@@ -122,7 +122,7 @@ dist-hook: gtk+.spec
 	&& cp gtk+.spec $(distdir)
 
 m4datadir = $(datadir)/aclocal
-m4data_DATA = gtk.m4
+m4data_DATA = gtk-2.0.m4
 
 .PHONY: files release sanity snapshot
 

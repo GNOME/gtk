@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.12\n"
-"POT-Creation-Date: 2000-07-12 12:41-0300\n"
+"POT-Creation-Date: 2000-07-14 14:48-0400\n"
 "PO-Revision-Date: 1999-09-29 17:40-03:00\n"
 "Last-Translator: Alex Sandro Queiroz e Silva <asandro@lcg.dc.ufc.br>\n"
 "Language-Team: Brazilian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
@@ -54,6 +54,23 @@ msgstr ""
 msgid "Set Color"
 msgstr ""
 
+#. The OK button
+#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
+#: gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "OK"
+
+#. The Cancel button
+#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
+#: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
+#: gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: gtk/gtkcolorseldialog.c:116
+msgid "Help"
+msgstr "Ajuda"
+
 #. The directories clist
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
@@ -63,17 +80,6 @@ msgstr "Diretórios"
 #: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "Arquivos"
-
-#. The OK button
-#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
-msgid "OK"
-msgstr "OK"
-
-#. The Cancel button
-#: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
-#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
-msgid "Cancel"
-msgstr "Cancelar"
 
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
@@ -258,12 +264,12 @@ msgstr "limpar"
 msgid "Page %u"
 msgstr "Página %u"
 
-#: gtk/gtkrc.c:1902
+#: gtk/gtkrc.c:1903
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Não encontrei arquivo de imagem no pixmap_path: \"%s\" linha %d"
 
-#: gtk/gtkrc.c:1905
+#: gtk/gtkrc.c:1906
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Não encontrei arquivo de imagem no pixmap_path: \"%s\""
@@ -277,179 +283,176 @@ msgstr "Não encontrei módulo no module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Sem Ajuda ---"
 
-msgid "Help"
-msgstr "Ajuda"
+#~ msgid "Foundry:"
+#~ msgstr "Estilo:"
 
-msgid "Foundry:"
-msgstr "Estilo:"
+#~ msgid "Weight:"
+#~ msgstr "Peso:"
 
-msgid "Weight:"
-msgstr "Peso:"
+#~ msgid "Slant:"
+#~ msgstr "Inclinação:"
 
-msgid "Slant:"
-msgstr "Inclinação:"
+#~ msgid "Set Width:"
+#~ msgstr "Espaçamento:"
 
-msgid "Set Width:"
-msgstr "Espaçamento:"
+#~ msgid "Pixel Size:"
+#~ msgstr "Tamanho em Pixeis:"
 
-msgid "Pixel Size:"
-msgstr "Tamanho em Pixeis:"
+#~ msgid "Point Size:"
+#~ msgstr "Tamanho em Pontos:"
 
-msgid "Point Size:"
-msgstr "Tamanho em Pontos:"
+#~ msgid "Resolution X:"
+#~ msgstr "Resolução X:"
 
-msgid "Resolution X:"
-msgstr "Resolução X:"
+#~ msgid "Resolution Y:"
+#~ msgstr "Resolução Y:"
 
-msgid "Resolution Y:"
-msgstr "Resolução Y:"
+#~ msgid "Spacing:"
+#~ msgstr "Espaçamento:"
 
-msgid "Spacing:"
-msgstr "Espaçamento:"
+#~ msgid "Average Width:"
+#~ msgstr "Largura Média:"
 
-msgid "Average Width:"
-msgstr "Largura Média:"
+#~ msgid "Charset:"
+#~ msgstr "Charset:"
 
-msgid "Charset:"
-msgstr "Charset:"
+#~ msgid "Font Property"
+#~ msgstr "Propriedade da Fonte"
 
-msgid "Font Property"
-msgstr "Propriedade da Fonte"
+#~ msgid "Requested Value"
+#~ msgstr "Valor Pedido"
 
-msgid "Requested Value"
-msgstr "Valor Pedido"
+#~ msgid "Actual Value"
+#~ msgstr "Valor Real"
 
-msgid "Actual Value"
-msgstr "Valor Real"
+#~ msgid "Font"
+#~ msgstr "Fonte"
 
-msgid "Font"
-msgstr "Fonte"
+#~ msgid "Font:"
+#~ msgstr "Fonte:"
 
-msgid "Font:"
-msgstr "Fonte:"
+#~ msgid "Font Style:"
+#~ msgstr "Estilo de Fonte:"
 
-msgid "Font Style:"
-msgstr "Estilo de Fonte:"
+#~ msgid "Reset Filter"
+#~ msgstr "Reiniciar Filtro"
 
-msgid "Reset Filter"
-msgstr "Reiniciar Filtro"
+#~ msgid "Metric:"
+#~ msgstr "Métrica:"
 
-msgid "Metric:"
-msgstr "Métrica:"
+#~ msgid "Points"
+#~ msgstr "Pontos"
 
-msgid "Points"
-msgstr "Pontos"
+#~ msgid "Pixels"
+#~ msgstr "Pixels"
 
-msgid "Pixels"
-msgstr "Pixels"
+#~ msgid "Font Information"
+#~ msgstr "Informação da Fonte"
 
-msgid "Font Information"
-msgstr "Informação da Fonte"
+#~ msgid "Requested Font Name:"
+#~ msgstr "Nome da Fonte Pedida:"
 
-msgid "Requested Font Name:"
-msgstr "Nome da Fonte Pedida:"
+#~ msgid "Actual Font Name:"
+#~ msgstr "Nome Real da Fonte:"
 
-msgid "Actual Font Name:"
-msgstr "Nome Real da Fonte:"
+#~ msgid "%i fonts available with a total of %i styles."
+#~ msgstr "%i fontes disponíveis com um total de %i estilos."
 
-msgid "%i fonts available with a total of %i styles."
-msgstr "%i fontes disponíveis com um total de %i estilos."
+#~ msgid "Filter"
+#~ msgstr "Filtro"
 
-msgid "Filter"
-msgstr "Filtro"
+#~ msgid "Font Types:"
+#~ msgstr "Tipos de Fonte:"
 
-msgid "Font Types:"
-msgstr "Tipos de Fonte:"
+#~ msgid "Bitmap"
+#~ msgstr "Imagem"
 
-msgid "Bitmap"
-msgstr "Imagem"
+#~ msgid "Scalable"
+#~ msgstr "Escalável"
 
-msgid "Scalable"
-msgstr "Escalável"
+#~ msgid "Scaled Bitmap"
+#~ msgstr "Bitmap Escalado"
 
-msgid "Scaled Bitmap"
-msgstr "Bitmap Escalado"
+#~ msgid "*"
+#~ msgstr "*"
 
-msgid "*"
-msgstr "*"
+#~ msgid "(nil)"
+#~ msgstr "(nulo)"
 
-msgid "(nil)"
-msgstr "(nulo)"
+#~ msgid "regular"
+#~ msgstr "regular"
 
-msgid "regular"
-msgstr "regular"
+#~ msgid "italic"
+#~ msgstr "itálico"
 
-msgid "italic"
-msgstr "itálico"
+#~ msgid "oblique"
+#~ msgstr "oblíquo"
 
-msgid "oblique"
-msgstr "oblíquo"
+#~ msgid "reverse italic"
+#~ msgstr "itálico invertido"
 
-msgid "reverse italic"
-msgstr "itálico invertido"
+#~ msgid "reverse oblique"
+#~ msgstr "oblíquo invertido"
 
-msgid "reverse oblique"
-msgstr "oblíquo invertido"
+#~ msgid "other"
+#~ msgstr "outro"
 
-msgid "other"
-msgstr "outro"
+#~ msgid "[M]"
+#~ msgstr "[M]"
 
-msgid "[M]"
-msgstr "[M]"
+#~ msgid "[C]"
+#~ msgstr "[C]"
 
-msgid "[C]"
-msgstr "[C]"
+#~ msgid "The selected font is not available."
+#~ msgstr "A fonte selecionada não está disponível."
 
-msgid "The selected font is not available."
-msgstr "A fonte selecionada não está disponível."
+#~ msgid "The selected font is not a valid font."
+#~ msgstr "A fonte selecionada não é uma fonte válida."
 
-msgid "The selected font is not a valid font."
-msgstr "A fonte selecionada não é uma fonte válida."
+#~ msgid "This is a 2-byte font and may not be displayed correctly."
+#~ msgstr "Esta é uma fonte de 2 bytes e pode não ser mostrada corretamente."
 
-msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Esta é uma fonte de 2 bytes e pode não ser mostrada corretamente."
+#~ msgid "roman"
+#~ msgstr "romano"
 
-msgid "roman"
-msgstr "romano"
+#~ msgid "proportional"
+#~ msgstr "proporcional"
 
-msgid "proportional"
-msgstr "proporcional"
+#~ msgid "monospaced"
+#~ msgstr "monoespaçada"
 
-msgid "monospaced"
-msgstr "monoespaçada"
+#~ msgid "char cell"
+#~ msgstr "célula de caracter"
 
-msgid "char cell"
-msgstr "célula de caracter"
+#~ msgid "Font: (Filter Applied)"
+#~ msgstr "Fonte: (Filtro Aplicado)"
 
-msgid "Font: (Filter Applied)"
-msgstr "Fonte: (Filtro Aplicado)"
+#~ msgid "heavy"
+#~ msgstr "forte"
 
-msgid "heavy"
-msgstr "forte"
+#~ msgid "extrabold"
+#~ msgstr "extranegrito"
 
-msgid "extrabold"
-msgstr "extranegrito"
+#~ msgid "bold"
+#~ msgstr "negrito"
 
-msgid "bold"
-msgstr "negrito"
+#~ msgid "demibold"
+#~ msgstr "seminegrito"
 
-msgid "demibold"
-msgstr "seminegrito"
+#~ msgid "medium"
+#~ msgstr "médio"
 
-msgid "medium"
-msgstr "médio"
+#~ msgid "normal"
+#~ msgstr "normal"
 
-msgid "normal"
-msgstr "normal"
+#~ msgid "light"
+#~ msgstr "fraca"
 
-msgid "light"
-msgstr "fraca"
+#~ msgid "extralight"
+#~ msgstr "extrafraca"
 
-msgid "extralight"
-msgstr "extrafraca"
+#~ msgid "thin"
+#~ msgstr "fina"
 
-msgid "thin"
-msgstr "fina"
-
-msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS foi excedido. Podem faltar algumas fontes."
+#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
+#~ msgstr "MAX_FONTS foi excedido. Podem faltar algumas fontes."

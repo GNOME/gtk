@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
-libgdkincludedir = $(includedir)/gdk
-libgdkx11includedir = $(includedir)/gdk/x11
+libgdkincludedir = $(includedir)/gtk-2.0/gdk
+libgdkx11includedir = $(includedir)/gtk-2.0/gdk/x11
 
 INCLUDES = @STRIP_BEGIN@ 	\
 	-DG_LOG_DOMAIN=\"Gdk\"	\

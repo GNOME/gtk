@@ -320,9 +320,9 @@ gtk_rc_get_module_dir(void)
 #ifndef G_OS_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
-    path = g_strdup_printf("%s%s", var, "/lib/gtk/themes/engines");
+    path = g_strdup_printf("%s%s", var, "/lib/gtk-2.0/" GTK_VERSION "/engines");
   else
-    path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
+    path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk-2.0/" GTK_VERSION "/engines");
 #else
   path = g_strdup_printf ("%s%s", get_themes_directory (), "\\engines");
 #endif
@@ -369,9 +369,9 @@ gtk_rc_append_default_module_path(void)
 #ifndef G_OS_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
-    path = g_strdup_printf("%s%s", var, "/lib/gtk/themes/engines");
+    path = g_strdup_printf("%s%s", var, "/lib/gtk-2.0/" GTK_VERSION "/engines");
   else
-    path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
+    path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk-2.0/" GTK_VERSION "/engines");
 #else
   path = g_strdup_printf ("%s%s", get_themes_directory (), "\\engines");
 #endif
@@ -381,7 +381,7 @@ gtk_rc_append_default_module_path(void)
   if (var)
     {
 #ifndef G_OS_WIN32
-      path = g_strdup_printf ("%s%s", var, "/.gtk/lib/themes/engines");
+      path = g_strdup_printf ("%s%s", var, "/.gtk-2.0/" GTK_VERSION "/engines");
 #else
       path = g_strdup_printf ("%s%s", var, "\\_gtk\\themes\\engines");
 #endif
@@ -419,17 +419,18 @@ gtk_rc_add_initial_default_files (void)
   else
     {
 #ifndef G_OS_WIN32
-      str = g_strdup (GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk" G_DIR_SEPARATOR_S "gtkrc");
+      str = g_strdup (GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk-2.0" G_DIR_SEPARATOR_S "gtkrc");
 #else
       str = g_strdup_printf ("%s\\gtkrc", get_gtk_sysconf_directory ());
 #endif
+
       gtk_rc_add_default_file (str);
       g_free (str);
 
       var = g_get_home_dir ();
       if (var)
 	{
-	  str = g_strdup_printf ("%s" G_DIR_SEPARATOR_S ".gtkrc", var);
+	  str = g_strdup_printf ("%s" G_DIR_SEPARATOR_S ".gtkrc-2.0", var);
 	  gtk_rc_add_default_file (str);
 	  g_free (str);
 	}

@@ -15,7 +15,6 @@ BuildRoot: /var/tmp/gtk-%{PACKAGE_VERSION}-root
 Obsoletes: gtk
 Packager: Christopher Blizzard <blizzard@redhat.com>
 URL: http://www.gtk.org
-Prereq: /sbin/install-info
 Requires: glib
 Docdir: %{prefix}/doc
 
@@ -28,7 +27,6 @@ Summary: GIMP Toolkit and GIMP Drawing Kit
 Group: X11/Libraries
 Requires: gtk+
 Obsoletes: gtk-devel
-PreReq: /sbin/install-info
 
 %description devel
 Static libraries and header files for the GIMP's X libraries, which are
@@ -130,24 +128,12 @@ rm -rf $RPM_BUILD_ROOT
 
 make prefix=$RPM_BUILD_ROOT%{prefix} install
 
-gzip -9n $RPM_BUILD_ROOT%{prefix}/info/*
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
-
-%post devel
-/sbin/install-info %{prefix}/info/gdk.info.gz %{prefix}/info/dir
-/sbin/install-info %{prefix}/info/gtk.info.gz %{prefix}/info/dir
-
-%preun devel
-if [ $1 = 0 ]; then
-    /sbin/install-info --delete %{prefix}/info/gdk.info.gz %{prefix}/info/dir
-    /sbin/install-info --delete %{prefix}/info/gtk.info.gz %{prefix}/info/dir
-fi
 
 %files
 %defattr(-, root, root)
@@ -165,8 +151,7 @@ fi
 %{prefix}/lib/lib*.so
 %{prefix}/lib/*a
 %{prefix}/include/*
-%{prefix}/include/lib/gtk+/include/*
-%{prefix}/info/*
+%{prefix}/include/lib/gtk+-2.0/include/*
 %{prefix}/man/man1/*
 %{prefix}/share/aclocal/*
 %{prefix}/bin/*

@@ -71,6 +71,12 @@ echo "Running gettextize...  Ignore non-fatal messages."
 # while making dist.
 echo "no" | gettextize --copy --force
 
+#
+# Really bad hack
+echo "Munging po/Makefile.in.in"
+sed s%@PACKAGE@%@GETTEXT_PACKAGE@% < po/Makefile.in.in > po/Makefile.in.in.new
+mv po/Makefile.in.in.new po/Makefile.in.in
+
 aclocal $ACLOCAL_FLAGS
 
 # optionally feature autoheader

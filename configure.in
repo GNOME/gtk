@@ -70,6 +70,10 @@ AC_SUBST(GDK_PIXBUF_VERSION)
 VERSION=$GTK_VERSION
 PACKAGE=gtk+
 
+GETTEXT_PACKAGE=gtk20
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"gtk2")
+
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
 
@@ -114,8 +118,8 @@ AC_ARG_WITH(locale, [  --with-locale=LOCALE    locale name you want to use ])
 AC_ARG_WITH(xinput, [  --with-xinput=[no/gxi/xfree] support XInput ])
 
 gdktarget=x11
-gdktargetlib=libgdk-x11.la
-gtktargetlib=libgtk-x11.la
+gdktargetlib=libgdk-x11-1.3.la
+gtktargetlib=libgtk-x11-1.3.la
 AC_ARG_WITH(gdktarget, [  --with-gdktarget=[x11/nanox/linux-fb] select GDK target [default=x11] ],
 	gdktarget=$with_gdktarget)
 
@@ -277,36 +281,36 @@ fi
 if test x$with_glib = x ; then 
   # Look for separately installed glib
 
-  AM_PATH_GLIB(1.3.1,,
+  AM_PATH_GLIB_2_0(1.3.1,,
     AC_MSG_ERROR([
 *** GLIB 1.3.1 or better is required. The latest version of GLIB
 *** is always available from ftp://ftp.gtk.org/.]),
     gobject gmodule gthread)
 
   # we do not want to make all gtk progs to link to thread libraries.
-  glib_cflags=`$GLIB_CONFIG glib gobject gmodule --cflags`
+  glib_cflags=`$GLIB_CONFIG_2_0 glib gobject gmodule --cflags`
   glib_thread_cflags="$GLIB_CFLAGS"
-  glib_libs=`$GLIB_CONFIG glib gobject gmodule --libs`
+  glib_libs=`$GLIB_CONFIG_2_0 glib gobject gmodule --libs`
   glib_thread_libs="$GLIB_LIBS"
   GLIB_LIBS="$glib_libs"
   GLIB_DEPLIBS="$glib_libs"
 else
   # Use uninstalled glib (assume they got the version right)
 
-  GLIB_CONFIG=$with_glib/glib-config
-  if test -x $GLIB_CONFIG ; then 
+  GLIB_CONFIG_2_0=$with_glib/glib-config-2.0
+  if test -x $GLIB_CONFIG_2_0 ; then 
     :
   else
     AC_MSG_ERROR([GLIB directory ($with_glib) not present or not configured])
   fi
 
   # For use in gtk-config
-  glib_cflags=`$GLIB_CONFIG --cflags gmodule`
-  glib_thread_cflags=`$GLIB_CONFIG --cflags gmodule gthread`
-  glib_libs=`$GLIB_CONFIG --libs gmodule`
-  glib_thread_libs=`$GLIB_CONFIG --libs gmodule gthread`
+  glib_cflags=`$GLIB_CONFIG_2_0 --cflags gmodule`
+  glib_thread_cflags=`$GLIB_CONFIG_2_0 --cflags gmodule gthread`
+  glib_libs=`$GLIB_CONFIG_2_0 --libs gmodule`
+  glib_thread_libs=`$GLIB_CONFIG_2_0 --libs gmodule gthread`
 
-  glib_release=`$GLIB_CONFIG --version | sed 's%\\.[[0-9]]*$%%'`
+  glib_release=`$GLIB_CONFIG_2_0 --version | sed 's%\\.[[0-9]]*$%%'`
 
   # canonicalize relative paths
   case $with_glib in 
@@ -319,7 +323,7 @@ else
   esac
 
   GLIB_CFLAGS="-I$glib_dir -I$glib_dir/gmodule"
-  GLIB_LIBS="$glib_dir/libglib.la $glib_dir/gmodule/libgmodule.la"
+  GLIB_LIBS="$glib_dir/libglib-1.3.la $glib_dir/gmodule/libgmodule-1.3.la"
   GLIB_DEPLIBS=
 
   AC_SUBST(GLIB_CFLAGS)
@@ -466,8 +470,8 @@ if test "x$gdktarget" = "xx11"; then
   more_includes="$x_includes"
 
   # these are already defined above
-  #gdktargetlib = "libgdk-x11.la"
-  #gtktargetlib = "libgtk-x11.la"
+  #gdktargetlib = "libgdk-x11-1.3.la"
+  #gtktargetlib = "libgtk-x11-1.3.la"
 
   AM_CONDITIONAL(USE_X11, true)
 else
@@ -482,8 +486,8 @@ if test "x$gdktarget" = "xnanox"; then
   more_libs="-lnano-X"
   more_includes=
 
-  gdktargetlib="libgdk-nanox.la"
-  gtktargetlib="libgtk-nanox.la"
+  gdktargetlib="libgdk-nanox-1.3.la"
+  gtktargetlib="libgtk-nanox-1.3.la"
 
   with_xinput=no
   AC_DEFINE(XINPUT_NONE)
@@ -503,8 +507,8 @@ if test "x$gdktarget" = "xlinux-fb"; then
   more_libs=
   more_includes=
 
-  gdktargetlib="libgdk-linux-fb.la"
-  gtktargetlib="libgtk-linux-fb.la"
+  gdktargetlib="libgdk-linux-fb-1.3.la"
+  gtktargetlib="libgtk-linux-fb-1.3.la"
 
   with_xinput=no
   AC_DEFINE(XINPUT_NONE)
@@ -715,8 +719,8 @@ fi
 
 if $dynworks; then
    AC_DEFINE(USE_GMODULE)
-   GMODULE_LIBS="`glib-config --libs gmodule`"
-   GMODULE_FLAGS="`glib-config --cflags gmodule`"
+   GMODULE_LIBS="`$GLIB_CONFIG_2_0 --libs gmodule`"
+   GMODULE_FLAGS="`$GLIB_CONFIG_2_0 --cflags gmodule`"
    AC_SUBST(GMODULE_LIBS)
    AC_SUBST(GMODULE_FLAGS)
    AC_MSG_RESULT(yes)
@@ -987,7 +991,7 @@ AC_OUTPUT([
 gtk+.spec
 docs/gtk-config.1
 Makefile
-gtk-config
+gtk-config-2.0
 po/Makefile.in
 demos/Makefile
 docs/Makefile
@@ -1007,4 +1011,4 @@ gtk/Makefile
 gtk/gtkcompat.h
 modules/Makefile
 modules/linux-fb/Makefile
-], [chmod +x gtk-config])
+], [chmod +x gtk-config-2.0])

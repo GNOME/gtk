@@ -7,6 +7,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	-DGTK_DATA_PREFIX=\"$(prefix)\"			\
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
+	-DGTK_VERSION=\"@GTK_VERSION@\"			\
 	-DTESTGTK_RCFILE=\"`pwd`/$(srcdir)/testgtkrc\"	\
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
@@ -24,10 +25,9 @@ gtarget=@gdktarget@
 # libtool stuff: set version and export symbols for resolving
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
 # we use the general approach here
-libgtkincludedir = $(includedir)/gtk
+libgtkincludedir = $(includedir)/gtk-2.0/gtk
 LDFLAGS = @STRIP_BEGIN@ \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)	\
-	-release $(LT_RELEASE) 					\
 	-export-dynamic						\
 	-rpath @prefix@/lib					\
 	@PANGO_LIBS@						\
@@ -37,7 +37,7 @@ LDFLAGS = @STRIP_BEGIN@ \
 	-lm							\
 @STRIP_END@
 
-#	$(top_builddir)/gdk/libgdk.la
+#	$(top_builddir)/gdk/libgdk-1.3.la
 
 
 #
@@ -389,27 +389,27 @@ all_sources = $(gtk_c_sources)
 
 extra = @gtktargetlib@
 if USE_X11
-libgtk_x11_includedir = $(includedir)/gtk
+libgtk_x11_includedir = $(includedir)/gtk-2.0/gtk
 libgtk_x11_include_HEADERS = $(all_headers)
-libgtk_x11_la_SOURCES = $(all_sources)
+libgtk_x11_1_3_la_SOURCES = $(all_sources)
 endif
 
 if USE_NANOX
-libgtk_nanox_includedir = $(includedir)/gtk
+libgtk_nanox_includedir = $(includedir)/gtk-2.0/gtk
 libgtk_nanox_include_HEADERS = $(all_headers)
-libgtk_nanox_la_SOURCES = $(all_sources)
+libgtk_nanox_1_3_la_SOURCES = $(all_sources)
 endif
 
 if USE_LINUX_FB
-libgtk_linux_fb_includedir = $(includedir)/gtk
+libgtk_linux_fb_includedir = $(includedir)/gtk-2.0/gtk
 libgtk_linux_fb_include_HEADERS = $(all_headers)
-libgtk_linux_fb_la_SOURCES = $(all_sources)
+libgtk_linux_fb_1_3_la_SOURCES = $(all_sources)
 endif
 
 # now define the real one to workaround automake's mishandling
 lib_LTLIBRARIES = $(extra)
 
-EXTRA_LTLIBRARIES = libgtk-x11.la libgtk-nanox.la libgtk-linux-fb.la
+EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-nanox-1.3.la libgtk-linux-fb-1.3.la
 
 MAINTAINERCLEANFILES += $(gtk_built_public_sources) $(gtk_built_sources)
 EXTRA_HEADERS +=
@@ -473,7 +473,7 @@ $(srcdir)/gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl $(gtk_public_h_sources
 	&& rm -f xgen-gtbec
 
 
-gtkconfdir = $(sysconfdir)/gtk
+gtkconfdir = $(sysconfdir)/gtk-2.0
 gtkconf_DATA = gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
 	gtkrc.ko gtkrc.ru gtkrc.tr gtkrc.th gtkrc.uk gtkrc.iso-8859-2 \
 	gtkrc.iso-8859-5 gtkrc.iso-8859-13 gtkrc.iso-8859-14 \
@@ -484,9 +484,9 @@ gtkconf_DATA = gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
 
 # We create a dummy theme for the default GTK+ theme
 install-data-local:
-	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk
+	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0
 	echo "# Empty gtkrc for default theme" > \
-	    $(DESTDIR)$(datadir)/themes/Default/gtk/gtkrc
+	    $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 	$(mkinstalldirs) $(DESTDIR)$(gtkconfdir)
 	cd $(DESTDIR)$(gtkconfdir) && \
 	  for i in cs hr hu pl ro sk sl sq sr ; do \
@@ -513,16 +513,16 @@ install-data-local:
 	ln -s gtkrc.cp1251 gtkrc.bg 
 
 uninstall-local:
-	rm -f $(DESTDIR)$(datadir)/themes/Default/gtkrc
+	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 
 #
 # test programs, not to be installed
 #
 noinst_PROGRAMS = testgtk testcalendar testinput testselection testrgb testdnd testtext simple testtextbuffer # testthreads
-DEPS = @gtktargetlib@ $(top_builddir)/gdk-pixbuf/libgdk_pixbuf.la  $(top_builddir)/gdk/@gdktargetlib@
+DEPS = @gtktargetlib@ $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la  $(top_builddir)/gdk/@gdktargetlib@
 LDADDS = @STRIP_BEGIN@ \
 	@gtktargetlib@					\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf.la	\
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la	\
 	$(top_builddir)/gdk/@gdktargetlib@ 		\
 	@more_ldflags@					\
 	@more_libs@					\

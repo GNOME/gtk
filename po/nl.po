@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2000-07-12 23:04+0200\n"
+"POT-Creation-Date: 2000-07-14 14:48-0400\n"
 "PO-Revision-Date: 2000-07-12 23:04+0200\n"
 "Last-Translator: Dennis Smit <synap@area101.penguin.nl>\n"
 "Language-Team: dutch <nl@li.org>\n"
@@ -53,6 +53,23 @@ msgstr "Eigen Palette"
 msgid "Set Color"
 msgstr "Set kleur"
 
+#. The OK button
+#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
+#: gtk/gtkgamma.c:415
+msgid "OK"
+msgstr "OK"
+
+#. The Cancel button
+#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
+#: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
+#: gtk/gtkgamma.c:423
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: gtk/gtkcolorseldialog.c:116
+msgid "Help"
+msgstr "Help"
+
 #. The directories clist
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
@@ -62,17 +79,6 @@ msgstr "Directories"
 #: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "Bestanden"
-
-#. The OK button
-#: gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952 gtk/gtkgamma.c:415
-msgid "OK"
-msgstr "OK"
-
-#. The Cancel button
-#: gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963 gtk/gtkfilesel.c:1067
-#: gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965 gtk/gtkgamma.c:423
-msgid "Cancel"
-msgstr "Annuleren"
 
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
@@ -256,12 +262,12 @@ msgstr "wissen"
 msgid "Page %u"
 msgstr "Pagina %u"
 
-#: gtk/gtkrc.c:1902
+#: gtk/gtkrc.c:1903
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" regel %d niet vinden"
 
-#: gtk/gtkrc.c:1905
+#: gtk/gtkrc.c:1906
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan plaatjes bestand in pixmap_path: \"s\" niet vinden"
@@ -274,9 +280,6 @@ msgstr "Kan module in module_path: \"%s\" niet vinden,"
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Geen Tip ---"
-
-#~ msgid "Help"
-#~ msgstr "Help"
 
 #~ msgid "Foundry:"
 #~ msgstr "Oorsprong:"

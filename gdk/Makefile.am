@@ -30,7 +30,6 @@ gtarget=@gdktarget@
 # we use the general approach here
 LDFLAGS = @STRIP_BEGIN@ 					\
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) 	\
-	-release $(LT_RELEASE) 					\
 	-export-dynamic 					\
 	-rpath @prefix@/lib 					\
 	@PANGO_LIBS@						\
@@ -109,39 +108,39 @@ gdk_c_sources = @STRIP_BEGIN@ 	\
 extra = @gdktargetlib@
 
 if USE_X11
-libgdk_x11_includedir = $(includedir)/gdk
+libgdk_x11_includedir = $(includedir)/gtk-2.0/gdk
 
-libgdk_x11_la_LIBADD = \
+libgdk_x11_1_3_la_LIBADD = \
 	$(gtarget)/libgdk-$(gtarget).la	
 
 libgdk_x11_include_HEADERS = $(gdk_public_h_sources)
-libgdk_x11_la_SOURCES = $(gdk_c_sources)
+libgdk_x11_1_3_la_SOURCES = $(gdk_c_sources)
 endif
 
 if USE_NANOX
-libgdk_nanox_includedir = $(includedir)/gdk
+libgdk_nanox_includedir = $(includedir)/gtk-2.0/gdk
 
-libgdk_nanox_la_LIBADD = \
+libgdk_nanox_1_3_la_LIBADD = \
 	$(gtarget)/libgdk-$(gtarget).la	
 
 libgdk_nanox_include_HEADERS = $(gdk_public_h_sources)
-libgdk_nanox_la_SOURCES = $(gdk_c_sources)
+libgdk_nanox_1_3_la_SOURCES = $(gdk_c_sources)
 endif
 
 if USE_LINUX_FB
-libgdk_linux_fb_includedir = $(includedir)/gdk
+libgdk_linux_fb_includedir = $(includedir)/gtk-2.0/gdk
 
-libgdk_linux_fb_la_LIBADD = \
+libgdk_linux_fb_1_3_la_LIBADD = \
 	$(gtarget)/libgdk-$(gtarget).la	
 
 libgdk_linux_fb_include_HEADERS = $(gdk_public_h_sources)
-libgdk_linux_fb_la_SOURCES = $(gdk_c_sources)
+libgdk_linux_fb_1_3_la_SOURCES = $(gdk_c_sources)
 endif
 
 # now define the real one to workaround automake's mishandling
 lib_LTLIBRARIES = $(extra)
 
-EXTRA_LTLIBRARIES = libgdk-x11.la libgdk-nanox.la libgdk-linux-fb.la
+EXTRA_LTLIBRARIES = libgdk-x11-1.3.la libgdk-nanox-1.3.la libgdk-linux-fb-1.3.la
 
 MAINTAINERCLEANFILES +=
 EXTRA_HEADERS +=
@@ -164,7 +163,7 @@ X-derived-headers:
 #
 # Rule to install gdkconfig.h header file
 #
-configexecincludedir = $(pkglibdir)/include
+configexecincludedir = $(libdir)/gtk-2.0/include
 #configexecinclude_DATA = gdkconfig.h
 install-exec-local: gdkconfig.h
 	$(mkinstalldirs) $(DESTDIR)$(configexecincludedir)

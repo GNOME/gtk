@@ -13,7 +13,7 @@ exec_prefix_set=no
 usage()
 {
 	cat <<EOF
-Usage: gtk-config [OPTIONS] [LIBRARIES]
+Usage: gtk2-config [OPTIONS] [LIBRARIES]
 Options:
 	[--prefix[=DIR]]
 	[--exec-prefix[=DIR]]
@@ -96,15 +96,8 @@ if test "$lib_gthread" = "yes"; then
 fi
 
 if test "$echo_cflags" = "yes"; then
-      if test @includedir@ != /usr/include ; then
-        includes=-I@includedir@
-        for i in $glib_cflags ; do
-          if test $i = -I@includedir@ ; then
-            includes=""
-          fi
-        done
-      fi
-      echo -I@libdir@/gtk+/include $includes $glib_cflags @PANGO_CFLAGS@ @more_cflags@ 
+      includes=-I@includedir@/gtk2
+      echo -I@libdir@/gtk2/include $includes $glib_cflags @PANGO_CFLAGS@ @more_cflags@ 
 fi
 
 if test "$echo_libs" = "yes"; then
@@ -120,6 +113,6 @@ if test "$echo_libs" = "yes"; then
         fi
       done
 
-      echo $libdirs @more_ldflags@ -lgtk-$target -lgdk_pixbuf -lgdk-$target $my_glib_libs @INTLLIBS@ @PANGO_LIBS@ @more_libs@ @GDK_WLIBS@ @MATH_LIB@
+      echo $libdirs @more_ldflags@ -lgtk-$target-1.3 -lgdk_pixbuf-1.3 -lgdk-$target-1.3 $my_glib_libs @INTLLIBS@ @PANGO_LIBS@ @more_libs@ @GDK_WLIBS@ @MATH_LIB@
 fi      
 

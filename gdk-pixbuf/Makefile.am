@@ -1,9 +1,9 @@
 SUBDIRS = pixops
 
 lib_LTLIBRARIES = 		\
-	libgdk_pixbuf.la
+	libgdk_pixbuf-1.3.la
 
-libexecdir = $(libdir)/gdk-pixbuf/loaders
+loaderdir = $(libdir)/gtk-2.0/$(GTK_VERSION)/loaders
 
 #
 # The PNG plugin.
@@ -94,7 +94,7 @@ BMP_LIB = libpixbufloader-bmp.la
 
 if BUILD_DYNAMIC_MODULES
 
-libexec_LTLIBRARIES = 	\
+loader_LTLIBRARIES = 	\
 	$(PNG_LIB)	\
 	$(JPEG_LIB)	\
 	$(GIF_LIB)	\
@@ -109,7 +109,7 @@ libexec_LTLIBRARIES = 	\
 extra_sources = 
 
 else
-libexec_LTLIBRARIES = 
+loader_LTLIBRARIES = 
 
 extra_sources = $(libpixbufloader_png_la_SOURCES) 	\
 		$(libpixbufloader_jpeg_la_SOURCES) 	\
@@ -127,14 +127,14 @@ endif
 noinst_PROGRAMS = test-gdk-pixbuf
 TESTS = test-gdk-pixbuf
 
-DEPS = libgdk_pixbuf.la
+DEPS = libgdk_pixbuf-1.3.la
 INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
 	-I$(top_srcdir)/gdk-pixbuf \
 	-I$(top_builddir)/gdk-pixbuf \
 	$(GLIB_CFLAGS)
-AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
+AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(loaderdir)\""
 
-LDADDS = libgdk_pixbuf.la $(GLIB_LIBS) $(STATIC_LIB_DEPS)
+LDADDS = libgdk_pixbuf-1.3.la $(GLIB_LIBS) $(STATIC_LIB_DEPS)
 
 test_gdk_pixbuf_LDADD = $(LDADDS) -lgmodule
 
@@ -144,9 +144,9 @@ GDK_PIXBUF_LIBS = $(GLIB_LIBS)
 # The GdkPixBuf library
 #
 
-libgdk_pixbufincludedir = $(includedir)/gdk-pixbuf
+libgdk_pixbufincludedir = $(includedir)/gtk-2.0/gdk-pixbuf
 
-libgdk_pixbuf_la_SOURCES = 	\
+libgdk_pixbuf_1_3_la_SOURCES = 	\
 	gdk-pixbuf.c		\
 	gdk-pixbuf-animation.c	\
 	gdk-pixbuf-data.c	\
@@ -155,11 +155,10 @@ libgdk_pixbuf_la_SOURCES = 	\
 	gdk-pixbuf-util.c	\
 	$(extra_sources)
 
-libgdk_pixbuf_la_LDFLAGS = 				        \
+libgdk_pixbuf_1_3_la_LDFLAGS = 				        \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)    \
-	-release $(LT_RELEASE)					\
 	$(GLIB_LIBS) 
-libgdk_pixbuf_la_LIBADD = pixops/libpixops.la
+libgdk_pixbuf_1_3_la_LIBADD = pixops/libpixops.la
 
 libgdk_pixbufinclude_HEADERS =	\
 	gdk-pixbuf.h		\
