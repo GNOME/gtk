@@ -1,3 +1,12 @@
+Fri Nov  2 16:14:15 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkviewport.c (gtk_viewport_size_request): Remove
+	random + 5 for width and height. If people want padding,
+	they should add padding. (Note the +5 isn't padding
+	that will always appear - it just appears in the case
+	where the widget is allocated it's requisition.)
+	(#51018, Janet Davis)
+
 Fri Nov  2 15:53:23 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimcontext.h (struct _GtkIMContextClass): Pad
