@@ -1,3 +1,9 @@
+1999-09-17  Federico Mena Quintero  <federico@redhat.com>
+
+	* src/gdk-pixbuf.c (gdk_pixbuf_ref): Be more paranoid with sanity
+	checking.
+	(gdk_pixbuf_unref): Fix incorrect sanity check and comparison.
+
 1999-08-09  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* src/io-png.c (image_save): Fixed compiler warnings.  Fixed write

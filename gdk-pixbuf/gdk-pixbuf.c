@@ -28,6 +28,7 @@ void
 gdk_pixbuf_ref (GdkPixBuf *pixbuf)
 {
      g_return_if_fail (pixbuf != NULL);
+     g_return_if_fail (pixbuf->ref_count > 0);
 
      pixbuf->ref_count++;
 }
@@ -36,10 +37,11 @@ void
 gdk_pixbuf_unref (GdkPixBuf *pixbuf)
 {
     g_return_if_fail (pixbuf != NULL);
-    g_return_if_fail (pixbuf->ref_count == 0);
+    g_return_if_fail (pixbuf->ref_count > 0);
 
     pixbuf->ref_count--;
-    if (pixbuf->ref_count)
+
+    if (pixbuf->ref_count == 0)
 	gdk_pixbuf_destroy (pixbuf);
 }
 
