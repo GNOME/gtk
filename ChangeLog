@@ -1,3 +1,12 @@
+2003-07-04  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_polygon,
+	gdk_win32_draw_segments, gdk_win32_draw_lines): We can calculate
+	the width and height of the bounding rectangle only after the
+	minumum x and y have been found, and need a separate loop for
+	it. Thanks to Bruce Hochstetler for providing a sample program
+	exhibiting the bug.
+
 2003-07-03  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdk.def: Add gdk_string_to_compound_text_for_display.

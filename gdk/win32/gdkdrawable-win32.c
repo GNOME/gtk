@@ -955,10 +955,14 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
     {
       bounds.x = MIN (bounds.x, points[i].x);
       bounds.y = MIN (bounds.y, points[i].y);
-      bounds.width = MAX (bounds.width, points[i].x - bounds.x);
-      bounds.height = MAX (bounds.height, points[i].y - bounds.y);
       pts[i].x = points[i].x;
       pts[i].y = points[i].y;
+    }
+
+  for (i = 0; i < npoints; i++)
+    {
+      bounds.width = MAX (bounds.width, points[i].x - bounds.x);
+      bounds.height = MAX (bounds.height, points[i].y - bounds.y);
     }
 
   if (points[0].x != points[npoints-1].x ||
@@ -1250,6 +1254,10 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
       bounds.x = MIN (bounds.x, segs[i].x2);
       bounds.y = MIN (bounds.y, segs[i].y1);
       bounds.y = MIN (bounds.y, segs[i].y2);
+    }
+
+  for (i = 0; i < nsegs; i++)
+    {
       bounds.width = MAX (bounds.width, segs[i].x1 - bounds.x);
       bounds.width = MAX (bounds.width, segs[i].x2 - bounds.x);
       bounds.height = MAX (bounds.height, segs[i].y1 - bounds.y);
@@ -1353,10 +1361,14 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
     {
       bounds.x = MIN (bounds.x, points[i].x);
       bounds.y = MIN (bounds.y, points[i].y);
-      bounds.width = MAX (bounds.width, points[i].x - bounds.x);
-      bounds.height = MAX (bounds.height, points[i].y - bounds.y);
       pts[i].x = points[i].x;
       pts[i].y = points[i].y;
+    }
+
+  for (i = 0; i < npoints; i++)
+    {
+      bounds.width = MAX (bounds.width, points[i].x - bounds.x);
+      bounds.height = MAX (bounds.height, points[i].y - bounds.y);
     }
 
   region = widen_bounds (&bounds, GDK_GC_WIN32 (gc)->pen_width);
