@@ -1022,7 +1022,6 @@ create_toolbar (GtkWidget *widget)
 			     gtk_widget_get_screen (widget));
       
       gtk_window_set_title (GTK_WINDOW (window), "Toolbar test");
-      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed),
@@ -1116,6 +1115,8 @@ create_toolbar (GtkWidget *widget)
 			       NULL, toolbar);
 
       gtk_container_add (GTK_CONTAINER (window), toolbar);
+
+      gtk_widget_set_size_request (toolbar, 200, -1);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

@@ -1,3 +1,40 @@
+Sun Jan 18 13:16:34 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* tests/testgtk.c (create_toolbar): Set a small size request and
+	make the window resizable, to test mapping/unmapping of buttons.
+
+	* gtk/gtktoolbar.c (gtk_toolbar_remove_content,
+	gtk_toolbar_insert_tool_item): remove these functions.
+
+	* gtk/gtktoolbar.c (gtk_toolbar_show_all,
+	toolbar_content_show_all, gtk_toolbar_hide_all,
+	toolbar_content_hide_all): New functions. 
+
+	Ignore show_all/hide_all for buttons created in compatibility mode.
+
+	* gtk/gtktoolbar.c (internal_insert_element, gtk_toolbar_show_all,
+	gtk_toolbar_hide_all): Make sure buttons are ignored by
+	gtk_toolbar_show_all() and gtk_toolbar_hide_all().
+	
+	* gtk/gtktoolbar.c: s/regular_widget/compatibility/g
+
+	* gtk/gtktoolbar.c (struct _ToolbarContent): Allocate
+	GtkToolbarChild inline. Get rid of GtkToolbarChildSpace.
+
+	* gtk/gtktoolbar.c (toolbar_content_expose): Fix bug where widget
+	could become NULL.
+
+	* gtk/gtktoolbar.c (gtk_toolbar_add): Append new tool items
+	instead of prepending them.
+
+	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Use the same
+	'elapsed' for all items.
+
+	* gtk/gtktoolbar.c (struct _GtkToolbarPrivate): Turn booleans
+	into bitfields.
+
+	* gtk/gtktoolbar.c: Many formatting fixes
+	
 Sun Jan 18 01:51:12 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* configure.in: Add the necessary magic to create
