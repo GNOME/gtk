@@ -1,3 +1,12 @@
+Thu Aug 20 20:08:15 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c ([un]draw_cursor): Check to see if we've
+	computed our geometry yet, and if not, ignore the request.
+
+	  gtk/gtktext.c (correct_cache_insert): Fiddled around]
+	some more. All the bug-test codes seem to work at once
+	now. (fingers crossed...)
+
 Thu Aug 20 13:04:08 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* gdk/gdkrgb.c: silly visual fixes

@@ -1154,7 +1154,7 @@ gtk_text_realize (GtkWidget *widget)
 #endif
   
   init_properties (text);
-  
+
   gdk_window_show (text->text_area);
   
   if (editable->selection_start_pos != editable->selection_end_pos)
@@ -2484,23 +2484,21 @@ correct_cache_insert (GtkText* text, gint nchars)
   /* If we inserted a property exactly at the beginning of the
    * line, we have to correct here, or fetch_lines will
    * fetch junk.
-   *
-   * This also handles the case when we split exactly
-   *  at the beginning and start->offset is now invalid
    */
-  
   start = &CACHE_DATA(text->current_line).start;
-  if (was_split)
-    {
-      /* If we split exactly at the beginning... */
-      if (start->offset ==  MARK_CURRENT_PROPERTY (start)->length)
-	SET_PROPERTY_MARK (start, start->property->next, 0);
-      /* If we inserted a property at the beginning of the text... */
-      else if ((start->property == text->point.property) &&
-	       (start->index == text->point.index - nchars))
-	SET_PROPERTY_MARK (start, start->property->prev, 0);
-    }
-  
+
+  /* Check if if we split exactly at the beginning of the line:
+   * (was_split won't be set if we are inserting at the end of the text, 
+   *  so we don't check)
+   */
+  if (start->offset ==  MARK_CURRENT_PROPERTY (start)->length)
+    SET_PROPERTY_MARK (start, start->property->next, 0);
+  /* Check if we inserted a property at the beginning of the text: */
+  else if (was_split &&
+	   (start->property == text->point.property) &&
+	   (start->index == text->point.index - nchars))
+    SET_PROPERTY_MARK (start, start->property->prev, 0);
+
   /* Now correct the offsets, and check for start or end marks that
    * are after the point, yet point to a property before the point's
    * property. This indicates that they are meant to point to the
@@ -4621,7 +4619,7 @@ undraw_cursor (GtkText* text, gint absolute)
   
   if ((text->cursor_drawn_level ++ == 0) &&
       (editable->selection_start_pos == editable->selection_end_pos) &&
-      GTK_WIDGET_DRAWABLE (text))
+      GTK_WIDGET_DRAWABLE (text) && text->line_start_cache)
     {
       GdkFont* font;
       
@@ -4702,7 +4700,7 @@ draw_cursor (GtkText* text, gint absolute)
   if ((--text->cursor_drawn_level == 0) &&
       editable->editable &&
       (editable->selection_start_pos == editable->selection_end_pos) &&
-      GTK_WIDGET_DRAWABLE (text))
+      GTK_WIDGET_DRAWABLE (text) && text->line_start_cache)
     {
       GdkFont* font;
       
