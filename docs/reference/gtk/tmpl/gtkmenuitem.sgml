@@ -27,7 +27,7 @@ only a few are really useful.
 <listitem><para>is the abstract class for all sorts of items.</para></listitem>
 </varlistentry>
 <varlistentry>
-<term>#GtkMenu</term>
+<term>#GtkMenuShell</term>
 <listitem><para>is always the parent of #GtkMenuItem.</para></listitem>
 </varlistentry>
 </variablelist>

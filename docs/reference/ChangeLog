@@ -1,3 +1,8 @@
+2000-02-29  Damon Chaplin  <damon@helixcode.com>
+
+	* gtk/tmpl/gtkmenuitem.sgml: minor fix from Nicolas GEORGE
+	<nicolas.george@ens.fr>.
+
 2000-02-28  Damon Chaplin  <damon@helixcode.com>
 
 	* gtk/tmpl/gtkradiomenuitem.sgml: 
