@@ -1,3 +1,9 @@
+Tue Aug  4 10:59:19 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktable.[ch]: Empty rows/columns of the table
+        should not have been marked as being able to shrink.
+	(Fixes prorlem with shrinking scrollbarless GIMP canvases)
+
 1998-08-03  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtkctree.c (gtk_ctree_find_by_row_data_custom): New public
