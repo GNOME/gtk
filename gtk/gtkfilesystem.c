@@ -31,7 +31,9 @@ struct _GtkFileInfo
   gchar *display_name;
   gchar *display_key;
   gchar *mime_type;
+#if 0
   GtkFileIconType icon_type : 4;
+#endif
   guint is_folder : 1;
   guint is_hidden : 1;
 };
@@ -245,6 +247,7 @@ gtk_file_info_set_size (GtkFileInfo *info,
   info->size = size;
 }
 
+#if 0
 void
 gtk_file_info_set_icon_type  (GtkFileInfo      *info,
 			      GtkFileIconType   icon_type)
@@ -406,6 +409,7 @@ gtk_file_info_render_icon (const GtkFileInfo *info,
 
   return get_cached_icon (widget, "gnome-fs-regular", pixel_size);
 }
+#endif
 
 /*****************************************
  *             GtkFileSystem             *
@@ -665,6 +669,21 @@ gtk_file_system_filename_to_path (GtkFileSystem *file_system,
   g_return_val_if_fail (filename != NULL, NULL);
 
   return GTK_FILE_SYSTEM_GET_IFACE (file_system)->filename_to_path (file_system, filename);
+}
+
+GdkPixbuf *
+gtk_file_system_render_icon (GtkFileSystem      *file_system,
+			     const GtkFilePath  *path,
+			     GtkWidget          *widget,
+			     gint                pixel_size,
+			     GError            **error)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
+  g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (pixel_size > 0, NULL);
+
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->render_icon (file_system, path, widget, pixel_size, error);
 }
 
 /**

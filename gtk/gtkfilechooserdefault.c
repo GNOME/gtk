@@ -139,7 +139,8 @@ enum {
 };
 
 /* Standard icon size */
-#define ICON_SIZE 36
+/* FIXME: maybe this should correspond to the font size in the tree views... */
+#define ICON_SIZE 20
 
 static void gtk_file_chooser_default_class_init   (GtkFileChooserDefaultClass *class);
 static void gtk_file_chooser_default_iface_init   (GtkFileChooserIface        *iface);
@@ -434,7 +435,11 @@ get_file_info (GtkFileSystem *file_system, const GtkFilePath *path, GError **err
     return NULL;
 
   parent_folder = gtk_file_system_get_folder (file_system, parent_path,
+#if 0
 					      GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
+#else
+					      GTK_FILE_INFO_DISPLAY_NAME,
+#endif
 					      error);
   gtk_file_path_free (parent_path);
 
@@ -471,15 +476,22 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
   if (is_root)
     info = gtk_file_system_get_root_info (impl->file_system,
 					  path,
+#if 0
 					  GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_ICON,
+#else
+					  GTK_FILE_INFO_DISPLAY_NAME,
+#endif
 					  error);
   else
     info = get_file_info (impl->file_system, path, error);
 
   if (!info)
     return FALSE;
-
+#if 0
   pixbuf = gtk_file_info_render_icon (info, impl->shortcuts_tree, ICON_SIZE);
+#endif
+  /* FIXME: NULL GError */
+  pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl), ICON_SIZE, NULL);
 
   gtk_tree_store_insert (impl->shortcuts_model, &iter, NULL, pos);
   path_copy = gtk_file_path_copy (path);
@@ -715,6 +727,8 @@ static GtkWidget *
 toolbar_create (GtkFileChooserDefault *impl)
 {
   impl->toolbar = gtk_toolbar_new ();
+  gtk_toolbar_set_style (GTK_TOOLBAR (impl->toolbar), GTK_TOOLBAR_ICONS);
+
   impl->up_button = toolbar_add_item (impl, GTK_STOCK_GO_UP, G_CALLBACK (toolbar_up_cb));
 
   return impl->toolbar;
@@ -1585,7 +1599,9 @@ set_list_model (GtkFileChooserDefault *impl)
 
   impl->list_model = _gtk_file_system_model_new (impl->file_system,
 						 impl->current_folder, 0,
+#if 0
 						 GTK_FILE_INFO_ICON |
+#endif
 						 GTK_FILE_INFO_DISPLAY_NAME |
 						 GTK_FILE_INFO_IS_FOLDER |
 						 GTK_FILE_INFO_SIZE |
@@ -2395,6 +2411,25 @@ list_icon_data_func (GtkTreeViewColumn *tree_column,
 		     gpointer           data)
 {
   GtkFileChooserDefault *impl = data;
+  GtkTreeIter child_iter;
+  const GtkFilePath *path;
+  GdkPixbuf *pixbuf;
+
+  gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model,
+						  &child_iter,
+						  iter);
+  path = _gtk_file_system_model_get_path (impl->list_model, &child_iter);
+
+  /* FIXME: NULL GError */
+  pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl), ICON_SIZE, NULL);
+  g_object_set (cell,
+		"pixbuf", pixbuf,
+		NULL);
+
+  if (pixbuf)
+    g_object_unref (pixbuf);
+		
+#if 0
   const GtkFileInfo *info = get_list_file_info (impl, iter);
 
   if (info)
@@ -2409,6 +2444,7 @@ list_icon_data_func (GtkTreeViewColumn *tree_column,
       if (pixbuf)
 	g_object_unref (pixbuf);
     }
+#endif
 }
 
 /* Sets a cellrenderer's text, making it bold if the GtkFileInfo is a folder */

@@ -114,6 +114,12 @@ static GtkFilePath *gtk_file_system_unix_uri_to_path      (GtkFileSystem     *fi
 static GtkFilePath *gtk_file_system_unix_filename_to_path (GtkFileSystem     *file_system,
 							   const gchar       *filename);
 
+static GdkPixbuf *gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
+						    const GtkFilePath *path,
+						    GtkWidget         *widget,
+						    gint               pixel_size,
+						    GError           **error);
+
 static gboolean gtk_file_system_unix_add_bookmark    (GtkFileSystem     *file_system,
 						      const GtkFilePath *path,
 						      GError           **error);
@@ -223,6 +229,7 @@ gtk_file_system_unix_iface_init   (GtkFileSystemIface *iface)
   iface->path_to_filename = gtk_file_system_unix_path_to_filename;
   iface->uri_to_path = gtk_file_system_unix_uri_to_path;
   iface->filename_to_path = gtk_file_system_unix_filename_to_path;
+  iface->render_icon = gtk_file_system_unix_render_icon;
   iface->add_bookmark = gtk_file_system_unix_add_bookmark;
   iface->remove_bookmark = gtk_file_system_unix_remove_bookmark;
   iface->list_bookmarks = gtk_file_system_unix_list_bookmarks;
@@ -545,6 +552,21 @@ gtk_file_system_unix_filename_to_path (GtkFileSystem *file_system,
   return gtk_file_path_new_dup (filename);
 }
 
+static GdkPixbuf *
+gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
+				  const GtkFilePath *path,
+				  GtkWidget         *widget,
+				  gint               pixel_size,
+				  GError           **error)
+{
+  /* FIXME: Implement this */
+  g_set_error (error,
+	       GTK_FILE_SYSTEM_ERROR,
+	       GTK_FILE_SYSTEM_ERROR_FAILED,
+	       _("This file system does not support icons"));
+  return NULL;
+}
+
 static gboolean
 gtk_file_system_unix_add_bookmark (GtkFileSystem     *file_system,
 				   const GtkFilePath *path,
@@ -726,7 +748,9 @@ filename_get_info (const gchar     *filename,
 		   GError         **error)
 {
   GtkFileInfo *info;
+#if 0
   GtkFileIconType icon_type = GTK_FILE_ICON_REGULAR;
+#endif
   struct stat statbuf;
   
   /* If stat fails, try to fall back to lstat to catch broken links
@@ -784,6 +808,7 @@ filename_get_info (const gchar     *filename,
       gtk_file_info_set_is_folder (info, S_ISDIR (statbuf.st_mode));
    }
 
+#if 0
   if (types & GTK_FILE_INFO_ICON)
     {
       if (S_ISBLK (statbuf.st_mode))
@@ -804,16 +829,21 @@ filename_get_info (const gchar     *filename,
 
   if ((types & GTK_FILE_INFO_MIME_TYPE) ||
       ((types & GTK_FILE_INFO_ICON) && icon_type == GTK_FILE_ICON_REGULAR))
+#else
+  if (types & GTK_FILE_INFO_MIME_TYPE)
+#endif
     {
       const char *mime_type = xdg_mime_get_mime_type_for_file (filename);
       gtk_file_info_set_mime_type (info, mime_type);
 
+#if 0
       if ((types & GTK_FILE_INFO_ICON) && icon_type == GTK_FILE_ICON_REGULAR &&
 	  (statbuf.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) &&
 	  (strcmp (mime_type, XDG_MIME_TYPE_UNKNOWN) == 0 ||
 	   strcmp (mime_type, "application/x-executable") == 0 ||
 	   strcmp (mime_type, "application/x-shellscript") == 0))
 	gtk_file_info_set_icon_type (info, GTK_FILE_ICON_EXECUTABLE);
+#endif
     }
 
   if (types & GTK_FILE_INFO_MODIFICATION_TIME)

@@ -54,10 +54,13 @@ typedef enum {
   GTK_FILE_INFO_MIME_TYPE         = 1 << 3,
   GTK_FILE_INFO_MODIFICATION_TIME = 1 << 4,
   GTK_FILE_INFO_SIZE              = 1 << 5,
+#if 0
   GTK_FILE_INFO_ICON              = 1 << 6,
+#endif
   GTK_FILE_INFO_ALL               = (1 << 7) - 1
 } GtkFileInfoType;
 
+#if 0
 /* Icon type, supplemented by MIME type
  */
 typedef enum {
@@ -70,6 +73,7 @@ typedef enum {
   GTK_FILE_ICON_FIFO,
   GTK_FILE_ICON_SOCKET
 } GtkFileIconType;
+#endif
 
 /* GError enumeration for GtkFileSystem
  */
@@ -117,12 +121,14 @@ void                  gtk_file_info_set_modification_time (GtkFileInfo       *in
 gint64                gtk_file_info_get_size              (const GtkFileInfo *info);
 void                  gtk_file_info_set_size              (GtkFileInfo       *info,
 							   gint64             size);
+#if 0
 void                  gtk_file_info_set_icon_type         (GtkFileInfo       *info,
 							   GtkFileIconType    icon_type);
 GtkFileIconType       gtk_file_info_get_icon_type         (const GtkFileInfo *info);
 GdkPixbuf *           gtk_file_info_render_icon           (const GtkFileInfo *info,
 							   GtkWidget         *widget,
 							   gint               pixel_size);
+#endif
 
 /* The base GtkFileSystem interface
  */
@@ -176,6 +182,14 @@ struct _GtkFileSystemIface
 				    const gchar        *uri);
   GtkFilePath *(*filename_to_path) (GtkFileSystem      *file_system,
 				    const gchar        *path);
+
+  /* Icons */
+
+  GdkPixbuf *  (*render_icon)    (GtkFileSystem     *file_system,
+				  const GtkFilePath *path,
+				  GtkWidget         *widget,
+				  gint               pixel_size,
+				  GError           **error);
 
   /* Bookmarks */
 
@@ -231,6 +245,12 @@ GtkFilePath *gtk_file_system_uri_to_path      (GtkFileSystem     *file_system,
 					       const gchar       *uri);
 GtkFilePath *gtk_file_system_filename_to_path (GtkFileSystem     *file_system,
 					       const gchar       *filename);
+
+GdkPixbuf   *gtk_file_system_render_icon   (GtkFileSystem      *file_system,
+					    const GtkFilePath  *path,
+					    GtkWidget          *widget,
+					    gint                pixel_size,
+					    GError            **error);
 
 gboolean gtk_file_system_add_bookmark    (GtkFileSystem     *file_system,
 					  const GtkFilePath *path,

@@ -1532,7 +1532,7 @@ gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
 /**
  * gtk_file_chooser_add_shortcut_folder_uri:
  * @chooser: a #GtkFileChooser
- * @folder: URI of the folder to add
+ * @uri: URI of the folder to add
  * @error: location to store error, or %NULL
  * 
  * Adds a folder URI to be displayed with the shortcut folders in a file
