@@ -1,3 +1,15 @@
+2001-10-24  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtktreeview.c: 
+	(gtk_tree_view_real_expand_row): add an animate argument
+	(gtk_tree_view_real_collapse_row): likewise
+	
+	(gtk_tree_view_button_press), (gtk_tree_view_button_release), 
+	(gtk_tree_view_collapse_all), (gtk_tree_view_expand_row),
+	(gtk_tree_view_collapse_row): update functions that call
+	real_{expand|collapse}_row to set the animate argument 
+	accordingly.
+	
 2001-10-24  Alex Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkfont-fb.c:

@@ -329,12 +329,14 @@ static void     gtk_tree_view_move_cursor_start_end          (GtkTreeView       
 static gboolean gtk_tree_view_real_collapse_row              (GtkTreeView       *tree_view,
 							      GtkTreePath       *path,
 							      GtkRBTree         *tree,
-							      GtkRBNode         *node);
+							      GtkRBNode         *node,
+							      gboolean           animate);
 static gboolean gtk_tree_view_real_expand_row                (GtkTreeView       *tree_view,
 							      GtkTreePath       *path,
 							      GtkRBTree         *tree,
 							      GtkRBNode         *node,
-							      gboolean           open_all);
+							      gboolean           open_all,
+							      gboolean           animate);
 static void     gtk_tree_view_real_set_cursor                (GtkTreeView       *tree_view,
 							      GtkTreePath       *path,
 							      gboolean           clear_and_select);
@@ -1693,10 +1695,10 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	    {
 	      if (node->children == NULL)
 		gtk_tree_view_real_expand_row (tree_view, path,
-					       tree, node, FALSE);
+					       tree, node, FALSE, TRUE);
 	      else
 		gtk_tree_view_real_collapse_row (GTK_TREE_VIEW (widget), path,
-						 tree, node);
+						 tree, node, TRUE);
 	    }
 
 	  gtk_tree_view_row_activated (tree_view, path, column);
@@ -1856,11 +1858,11 @@ gtk_tree_view_button_release (GtkWidget      *widget,
 	    gtk_tree_view_real_expand_row (tree_view, path,
 					   tree_view->priv->button_pressed_tree,
 					   tree_view->priv->button_pressed_node,
-					   FALSE);
+					   FALSE, TRUE);
 	  else
 	    gtk_tree_view_real_collapse_row (GTK_TREE_VIEW (widget), path,
 					     tree_view->priv->button_pressed_tree,
-					     tree_view->priv->button_pressed_node);
+					     tree_view->priv->button_pressed_node, TRUE);
 	  gtk_tree_path_free (path);
 	}
 
@@ -7465,7 +7467,7 @@ gtk_tree_view_collapse_all (GtkTreeView *tree_view)
   while (node)
     {
       if (node->children)
-	gtk_tree_view_real_collapse_row (tree_view, path, tree, node);
+	gtk_tree_view_real_collapse_row (tree_view, path, tree, node, FALSE);
       indices[0]++;
       node = _gtk_rbtree_next (tree, node);
     }
@@ -7484,7 +7486,8 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
 			       GtkTreePath *path,
 			       GtkRBTree   *tree,
 			       GtkRBNode   *node,
-			       gboolean     open_all)
+			       gboolean     open_all,
+			       gboolean     animate)
 {
   GtkTreeIter iter;
   GtkTreeIter temp;
@@ -7517,19 +7520,27 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
 			    GTK_WIDGET_REALIZED (tree_view));
 
   if (tree_view->priv->expand_collapse_timeout)
-    gtk_timeout_remove (tree_view->priv->expand_collapse_timeout);
+    {
+      gtk_timeout_remove (tree_view->priv->expand_collapse_timeout);
+      tree_view->priv->expand_collapse_timeout = 0;
+    }
 
   if (tree_view->priv->expanded_collapsed_node != NULL)
     {
       GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_EXPANDED);
       GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_COLLAPSED);
+
+      tree_view->priv->expanded_collapsed_node = NULL;
     }
 
-  tree_view->priv->expand_collapse_timeout = gtk_timeout_add (50, expand_collapse_timeout, tree_view);
-  tree_view->priv->expanded_collapsed_node = node;
-  tree_view->priv->expanded_collapsed_tree = tree;
+  if (animate)
+    {
+      tree_view->priv->expand_collapse_timeout = gtk_timeout_add (50, expand_collapse_timeout, tree_view);
+      tree_view->priv->expanded_collapsed_node = node;
+      tree_view->priv->expanded_collapsed_tree = tree;
 
-  GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_SEMI_COLLAPSED);
+      GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_SEMI_COLLAPSED);
+    }
 
   if (GTK_WIDGET_MAPPED (tree_view))
     {
@@ -7571,7 +7582,7 @@ gtk_tree_view_expand_row (GtkTreeView *tree_view,
     return FALSE;
 
   if (tree != NULL)
-    return gtk_tree_view_real_expand_row (tree_view, path, tree, node, open_all);
+    return gtk_tree_view_real_expand_row (tree_view, path, tree, node, open_all, FALSE);
   else
     return FALSE;
 }
@@ -7580,7 +7591,8 @@ static gboolean
 gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
 				 GtkTreePath *path,
 				 GtkRBTree   *tree,
-				 GtkRBNode   *node)
+				 GtkRBNode   *node,
+				 gboolean     animate)
 {
   GtkTreeIter iter;
   GtkTreeIter children;
@@ -7646,20 +7658,28 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   _gtk_rbtree_remove (node->children);
 
   if (tree_view->priv->expand_collapse_timeout)
-    gtk_timeout_remove (tree_view->priv->expand_collapse_timeout);
-
+    {
+      gtk_timeout_remove (tree_view->priv->expand_collapse_timeout);
+      tree_view->priv->expand_collapse_timeout = 0;
+    }
+  
   if (tree_view->priv->expanded_collapsed_node != NULL)
     {
       GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_EXPANDED);
       GTK_RBNODE_UNSET_FLAG (tree_view->priv->expanded_collapsed_node, GTK_RBNODE_IS_SEMI_COLLAPSED);
+      
+      tree_view->priv->expanded_collapsed_node = NULL;
     }
 
-  tree_view->priv->expand_collapse_timeout = gtk_timeout_add (50, expand_collapse_timeout, tree_view);
-  tree_view->priv->expanded_collapsed_node = node;
-  tree_view->priv->expanded_collapsed_tree = tree;
+  if (animate)
+    {
+      tree_view->priv->expand_collapse_timeout = gtk_timeout_add (50, expand_collapse_timeout, tree_view);
+      tree_view->priv->expanded_collapsed_node = node;
+      tree_view->priv->expanded_collapsed_tree = tree;
 
-  GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_SEMI_EXPANDED);
-
+      GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_SEMI_EXPANDED);
+    }
+  
   if (GTK_WIDGET_MAPPED (tree_view))
     {
       gtk_widget_queue_draw (GTK_WIDGET (tree_view));
@@ -7741,7 +7761,7 @@ gtk_tree_view_collapse_row (GtkTreeView *tree_view,
   if (tree == NULL || node->children == NULL)
     return FALSE;
 
-  return gtk_tree_view_real_collapse_row (tree_view, path, tree, node);
+  return gtk_tree_view_real_collapse_row (tree_view, path, tree, node, FALSE);
 }
 
 static void
