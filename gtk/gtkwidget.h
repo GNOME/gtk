@@ -184,9 +184,10 @@ struct _GtkWidget
   guint8 state;
 
   /* The saved state of the widget. When a widgets state
-   *  is changed via "gtk_widget_set_state" the old state
-   *  is kept around in this field. The state may be
-   *  restored using "gtk_widget_restore_state".
+   *  is changed to GTK_STATE_INSENSITIVE via
+   *  "gtk_widget_set_state" or "gtk_widget_set_sensitive"
+   *  the old state is kept around in this field. The state
+   *  will be restored once the widget gets sensitive again.
    */
   guint8 saved_state;
 
@@ -257,7 +258,8 @@ struct _GtkWidgetClass
 				GtkRequisition *requisition);
   void (* size_allocate)       (GtkWidget      *widget,
 				GtkAllocation  *allocation);
-  void (* state_changed)       (GtkWidget      *widget);
+  void (* state_changed)       (GtkWidget      *widget,
+				guint           previous_state);
 
   /* accelerators */
   gint (* install_accelerator) (GtkWidget      *widget,
@@ -413,7 +415,6 @@ gint       gtk_widget_basic               (GtkWidget           *widget);
 void       gtk_widget_grab_focus          (GtkWidget           *widget);
 void       gtk_widget_grab_default        (GtkWidget           *widget);
 
-void       gtk_widget_restore_state       (GtkWidget           *widget);
 void       gtk_widget_set_name            (GtkWidget           *widget,
 					   const gchar         *name);
 gchar*     gtk_widget_get_name            (GtkWidget           *widget);

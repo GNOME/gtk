@@ -114,6 +114,17 @@ typedef void (*GtkWidgetSignal3) (GtkObject *object,
 typedef gint (*GtkWidgetSignal4) (GtkObject *object,
 				  gpointer   arg1,
 				  gpointer   data);
+typedef void (*GtkWidgetSignal5) (GtkObject *object,
+				  guint      arg1,
+				  gpointer   data);
+
+typedef	struct	_GtkStateData	 GtkStateData;
+
+struct _GtkStateData
+{
+  GtkStateType  state;
+  gint          parent_sensitive;
+};
 
 
 static void gtk_widget_marshal_signal_1 (GtkObject	*object,
@@ -129,6 +140,10 @@ static void gtk_widget_marshal_signal_3 (GtkObject	*object,
 					 gpointer	 func_data,
 					 GtkArg		*args);
 static void gtk_widget_marshal_signal_4 (GtkObject	*object,
+					 GtkSignalFunc	 func,
+					 gpointer	 func_data,
+					 GtkArg		*args);
+static void gtk_widget_marshal_signal_5 (GtkObject	*object,
 					 GtkSignalFunc	 func,
 					 gpointer	 func_data,
 					 GtkArg		*args);
@@ -161,18 +176,14 @@ static GtkStyle*    gtk_widget_peek_style    (void);
 
 static void gtk_widget_reparent_container_child  (GtkWidget     *widget,
 						  gpointer       client_data);
-static void gtk_widget_set_parent_sensitive  (GtkWidget *widget,
-					      gpointer	 client_data);
-static void gtk_widget_propagate_restore     (GtkWidget *widget,
-					      gpointer	 client_data);
-static void gtk_widget_propagate_state	     (GtkWidget *widget,
-					      gpointer	 client_data);
-static void gtk_widget_draw_children_recurse (GtkWidget *widget,
-					      gpointer	 client_data);
-static void gtk_widget_set_style_internal    (GtkWidget *widget,
-					      GtkStyle	*style);
-static void gtk_widget_set_style_recurse     (GtkWidget *widget,
-					      gpointer	 client_data);
+static void gtk_widget_propagate_state		 (GtkWidget	*widget,
+						  GtkStateData 	*data);
+static void gtk_widget_draw_children_recurse	 (GtkWidget	*widget,
+						  gpointer	 client_data);
+static void gtk_widget_set_style_internal	 (GtkWidget	*widget,
+						  GtkStyle	*style);
+static void gtk_widget_set_style_recurse	 (GtkWidget	*widget,
+						  gpointer	 client_data);
 
 extern GtkArg* gtk_object_collect_args (guint	*nargs,
 					va_list	 args1,
@@ -357,8 +368,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, state_changed),
-		    gtk_signal_default_marshaller,
-		    GTK_TYPE_NONE, 0);
+		    gtk_widget_marshal_signal_5,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_UINT);
   widget_signals[INSTALL_ACCELERATOR] =
     gtk_signal_new ("install_accelerator",
 		    GTK_RUN_FIRST,
@@ -754,7 +766,7 @@ gtk_widget_set_arg (GtkWidget	*widget,
 }
 
 /*****************************************
- * gtk_widget_set_arg:
+ * gtk_widget_get_arg:
  *
  *   arguments:
  *
@@ -1118,9 +1130,11 @@ gtk_widget_destroy (GtkWidget *widget)
 }
 
 /*****************************************
- * gtk_widget_unparent: do any cleanup necessary necessary before
- *			setting parent = NULL. In particular, remove
- *			the focus properly.
+ * gtk_widget_unparent:
+ *   do any cleanup necessary necessary
+ *   before setting parent = NULL.
+ *   In particular, remove the focus
+ *   properly.
  *
  *   arguments:
  *
@@ -1793,7 +1807,8 @@ gtk_widget_activate (GtkWidget *widget)
 }
 
 /*****************************************
- * gtk_widget_reparent:
+ * gtk_widget_reparent_container_child:
+ *   assistent function to gtk_widget_reparent
  *
  *   arguments:
  *
@@ -1818,6 +1833,13 @@ gtk_widget_reparent_container_child(GtkWidget *widget,
     widget->window = (GdkWindow *)client_data;
 }
 
+/*****************************************
+ * gtk_widget_reparent:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
 
 void
 gtk_widget_reparent (GtkWidget *widget,
@@ -2028,29 +2050,6 @@ gtk_widget_grab_default (GtkWidget *widget)
 }
 
 /*****************************************
- * gtk_widget_restore_state:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-void
-gtk_widget_restore_state (GtkWidget *widget)
-{
-  g_return_if_fail (widget != NULL);
-  
-  widget->state = widget->saved_state;
-  if (gtk_signal_emit (GTK_OBJECT (widget), widget_signals[STATE_CHANGED]))
-    {
-      if (GTK_IS_CONTAINER (widget))
-	gtk_container_foreach (GTK_CONTAINER (widget),
-			       gtk_widget_propagate_restore,
-			       NULL);
-    }
-}
-
-/*****************************************
  * gtk_widget_set_name:
  *
  *   arguments:
@@ -2099,72 +2098,82 @@ gtk_widget_get_name (GtkWidget *widget)
  * gtk_widget_set_state:
  *
  *   arguments:
+ *     widget
+ *     state
  *
  *   results:
  *****************************************/
 
 void
-gtk_widget_set_state (GtkWidget	   *widget,
-		      GtkStateType  state)
+gtk_widget_set_state (GtkWidget           *widget,
+		      GtkStateType         state)
 {
   g_return_if_fail (widget != NULL);
-  
-  if (widget->state != state)
+
+  if (state == GTK_WIDGET_STATE (widget))
+    return;
+
+  if (state == GTK_STATE_INSENSITIVE)
+    gtk_widget_set_sensitive (widget, FALSE);
+  else
     {
-      widget->saved_state = widget->state;
-      widget->state = state;
-      
-      if (!gtk_signal_emit (GTK_OBJECT (widget), widget_signals[STATE_CHANGED]))
-	return;
+      GtkStateData data;
+      GtkStateType old_state;
+
+      data.state = state;
+      if (widget->parent)
+	data.parent_sensitive = GTK_WIDGET_IS_SENSITIVE (widget->parent);
+      else
+	data.parent_sensitive = GTK_PARENT_SENSITIVE;
+
+      old_state = GTK_WIDGET_STATE (widget);
+      gtk_widget_propagate_state (widget, &data);
+      if (old_state != GTK_WIDGET_STATE (widget))
+	gtk_widget_queue_draw (widget);
     }
-  
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_foreach (GTK_CONTAINER (widget),
-			   gtk_widget_propagate_state,
-			   (gpointer) &state);
 }
 
 /*****************************************
  * gtk_widget_set_sensitive:
  *
  *   arguments:
+ *     widget
+ *     boolean value for sensitivity
  *
  *   results:
  *****************************************/
 
 void
 gtk_widget_set_sensitive (GtkWidget *widget,
-			  gint	     sensitive)
+			  gint       sensitive)
 {
-  GtkWidget *window;
-  gint old_val;
-  
+  GtkStateData data;
+  GtkStateType old_state;
+
   g_return_if_fail (widget != NULL);
-  
-  old_val = GTK_WIDGET_IS_SENSITIVE (widget);
-  
+
   if (sensitive)
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_SENSITIVE);
+      if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE)
+	data.state = GTK_WIDGET_SAVED_STATE (widget);
+      else
+	data.state = GTK_WIDGET_STATE (widget);
     }
   else
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_SENSITIVE);
-      
-      if (GTK_WIDGET_HAS_FOCUS (widget))
-	{
-	  window = gtk_widget_get_ancestor (widget, gtk_window_get_type ());
-	  if (window)
-	    gtk_window_set_focus (GTK_WINDOW (window), NULL);
-	}
+      data.state = GTK_WIDGET_STATE (widget);
     }
-  
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_foreach (GTK_CONTAINER (widget),
-			   gtk_widget_set_parent_sensitive,
-			   &sensitive);
-  
-  if (old_val != GTK_WIDGET_IS_SENSITIVE (widget))
+
+  if (widget->parent)
+    data.parent_sensitive = GTK_WIDGET_IS_SENSITIVE (widget->parent);
+  else
+    data.parent_sensitive = GTK_PARENT_SENSITIVE;
+
+  old_state = GTK_WIDGET_STATE (widget);
+  gtk_widget_propagate_state (widget, &data);
+  if (old_state != GTK_WIDGET_STATE (widget))
     gtk_widget_queue_draw (widget);
 }
 
@@ -2181,7 +2190,7 @@ gtk_widget_set_parent (GtkWidget *widget,
 		       GtkWidget *parent)
 {
   GtkStyle *style;
-  gint sensitive;
+  GtkStateData data;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (parent != NULL);
@@ -2189,13 +2198,14 @@ gtk_widget_set_parent (GtkWidget *widget,
   gtk_object_ref (GTK_OBJECT (widget));
   
   widget->parent = parent;
-  
-  sensitive = GTK_WIDGET_IS_SENSITIVE (parent);
-  gtk_widget_set_parent_sensitive (widget, &sensitive);
-  
-  if ((widget->parent->state != GTK_STATE_NORMAL) &&
-      (widget->parent->state != widget->state))
-    gtk_widget_set_state (widget, widget->parent->state);
+
+  if (GTK_WIDGET_STATE (parent) != GTK_STATE_NORMAL)
+    data.state = GTK_WIDGET_STATE (parent);
+  else
+    data.state = GTK_WIDGET_STATE (widget);
+  data.parent_sensitive = GTK_WIDGET_IS_SENSITIVE (parent);
+
+  gtk_widget_propagate_state (widget, &data);
   
   while (parent->parent != NULL)
     parent = parent->parent;
@@ -2994,6 +3004,29 @@ gtk_widget_marshal_signal_4 (GtkObject	    *object,
 }
 
 /*****************************************
+ * gtk_widget_marshal_signal_5:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+static void
+gtk_widget_marshal_signal_5 (GtkObject	    *object,
+			     GtkSignalFunc   func,
+			     gpointer	     func_data,
+			     GtkArg	    *args)
+{
+  GtkWidgetSignal5 rfunc;
+  gint *return_val;
+  
+  rfunc = (GtkWidgetSignal5) func;
+  return_val = GTK_RETLOC_BOOL (args[1]);
+  
+  (* rfunc) (object, GTK_VALUE_UINT (args[0]), func_data);
+}
+
+/*****************************************
  * gtk_real_widget_destroy:
  *
  *   arguments:
@@ -3399,81 +3432,74 @@ gtk_widget_peek_style ()
   return gtk_widget_get_default_style ();
 }
 
-
-/*****************************************
- * gtk_widget_set_parent_sensitive:
+/*************************************************************
+ * gtk_widget_propagate_state:
+ *     Propagate a change in the widgets state down the tree
  *
  *   arguments:
+ *     widget
+ *     GtkStateData: state
+ *                   parent_sensitive
  *
  *   results:
- *****************************************/
+ *************************************************************/
 
-static void
-gtk_widget_set_parent_sensitive (GtkWidget *widget,
-				 gpointer   client_data)
+void
+gtk_widget_propagate_state (GtkWidget           *widget,
+			    GtkStateData        *data)
 {
-  GtkWidget *window;
-  gint *sensitive;
-  
-  sensitive = client_data;
-  if (*sensitive)
+  guint8 old_state;
+
+  /* don't call this function with state=GTK_STATE_INSENSITIVE,
+   * parent_sensitive=TRUE and a sensitive widget
+   */
+
+  old_state = GTK_WIDGET_STATE (widget);
+
+  if (data->parent_sensitive)
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_PARENT_SENSITIVE);
-      
-      if (GTK_IS_CONTAINER (widget) && GTK_WIDGET_SENSITIVE (widget))
-	gtk_container_foreach (GTK_CONTAINER (widget),
-			       gtk_widget_set_parent_sensitive,
-			       client_data);
+
+      if (GTK_WIDGET_IS_SENSITIVE (widget))
+	GTK_WIDGET_STATE (widget) = data->state;
+      else
+	{
+	  GTK_WIDGET_STATE (widget) = GTK_STATE_INSENSITIVE;
+	  if (data->state != GTK_STATE_INSENSITIVE)
+	    GTK_WIDGET_SAVED_STATE (widget) = data->state;
+	}
     }
   else
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_PARENT_SENSITIVE);
-      
-      if (GTK_WIDGET_HAS_FOCUS (widget))
-	{
-	  window = gtk_widget_get_ancestor (widget, gtk_window_get_type ());
-	  if (window)
-	    gtk_window_set_focus (GTK_WINDOW (window), NULL);
-	}
-      
-      if (GTK_IS_CONTAINER (widget))
-	gtk_container_foreach (GTK_CONTAINER (widget),
-			       gtk_widget_set_parent_sensitive,
-			       client_data);
+      GTK_WIDGET_STATE (widget) = GTK_STATE_INSENSITIVE;
+      if (data->state != GTK_STATE_INSENSITIVE)
+	GTK_WIDGET_SAVED_STATE (widget) = data->state;
     }
-}
 
-/*****************************************
- * gtk_widget_propagate_restore:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
+  if (GTK_WIDGET_HAS_FOCUS (widget) && !GTK_WIDGET_IS_SENSITIVE (widget))
+    {
+      GtkWidget *window;
 
-static void
-gtk_widget_propagate_restore (GtkWidget *widget,
-			      gpointer	 client_data)
-{
-  gtk_widget_restore_state (widget);
-}
+      window = gtk_widget_get_ancestor (widget, gtk_window_get_type ());
+      if (window)
+	gtk_window_set_focus (GTK_WINDOW (window), NULL);
+    }
 
-/*****************************************
- * gtk_widget_propagate_state:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
+  if (old_state != GTK_WIDGET_STATE (widget))
+    {
+      if (!gtk_signal_emit (GTK_OBJECT (widget), widget_signals[STATE_CHANGED], old_state))
+	return;
 
-static void
-gtk_widget_propagate_state (GtkWidget *widget,
-			    gpointer   client_data)
-{
-  GtkStateType *state;
-  
-  state = (GtkStateType*) client_data;
-  gtk_widget_set_state (widget, *state);
+      if (GTK_IS_CONTAINER (widget))
+	{
+	  data->parent_sensitive = GTK_WIDGET_IS_SENSITIVE (widget);
+	  data->state = GTK_WIDGET_STATE (widget);
+	  gtk_container_foreach (GTK_CONTAINER (widget),
+				 (GtkCallback) gtk_widget_propagate_state,
+				 data);
+	}
+    }
 }
 
 /*****************************************
