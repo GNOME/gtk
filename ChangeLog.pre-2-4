@@ -1,3 +1,9 @@
+Mon Feb 14 15:01:23 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkpaned.c (gtk_paned_compute_position): Add some sanity checks
+	to make sure we never divide by zero. 
+	(Problem pointed out by Michal Jaegermann <michal@ellpspace.math.ualberta.ca>)
+
 Mon Feb 14 12:29:38 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfontsel.c: Apply patch from
