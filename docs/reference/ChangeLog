@@ -1,5 +1,13 @@
 2004-02-16  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/migrating-checklist.sgml: Umm, I'm on crack.  Use
+	gtk_accelerator_get_default_mod_mask().
+
+	* gdk/tmpl/windows.sgml: Removed the incorrect description from
+	GDK_MODIFIER_MASK.
+
+2004-02-16  Federico Mena Quintero  <federico@ximian.com>
+
 	* gdk/tmpl/windows.sgml: Added an example of how to use
 	GDK_MODIFIER_MASK to test for modifier keys correctly.
 

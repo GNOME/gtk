@@ -1126,38 +1126,7 @@ Like the X Window System, GDK supports 8 modifier keys and 5 mouse buttons.
 @GDK_BUTTON5_MASK: the fifth mouse button.
 @GDK_RELEASE_MASK: not used in GDK itself. GTK+ uses it to differentiate 
   between (keyval, modifiers) pairs from key press and release events.
-@GDK_MODIFIER_MASK: Mask that can be used to see if modifier keys are
-  pressed.  See <xref linkend="keys-with-modifiers"/> for an example
-  of how to use this mask.
-
-  <example id="keys-with-modifiers">
-    <title>Testing for keys with modifiers</title>
-
-    <para>
-      The following code shows how you should use GDK_MODIFIER_MASK to
-      test for
-      <keycombo><keycap>Control</keycap><keycap>F10</keycap></keycombo>
-      being pressed.  If you do something like testing for
-      <literal>event-&gt;state == GDK_CONTROL_MASK</literal>, your
-      program will not work correctly if some other modifier is
-      pressed, such as <keycap>NumLock</keycap>.
-    </para>
-
-    <programlisting>
-static gboolean
-my_widget_key_press_handler (GtkWidget *widget, GdkEventKey *event)
-{
-  if (event-&gt;keysym == GDK_F10
-      &amp;&amp; (event-&gt;state &amp; GDK_MODIFIER_MASK) == GDK_CONTROL_MASK)
-    {
-      g_print ("Control-F10 was pressed\n");
-      return TRUE;
-    }
-
-  return FALSE;
-}
-    </programlisting>
-  </example>
+@GDK_MODIFIER_MASK: 
 
 <!-- ##### FUNCTION gdk_window_get_parent ##### -->
 <para>
