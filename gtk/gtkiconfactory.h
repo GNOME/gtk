@@ -82,23 +82,16 @@ GtkIconSet* gtk_icon_factory_lookup_default  (const gchar     *stock_id);
  * size from the rendered pixbuf, not from here.
  */
 
-gboolean gtk_icon_size_lookup         (const gchar *alias,
-                                       gint        *width,
-                                       gint        *height);
-void     gtk_icon_size_register       (const gchar *alias,
-                                       gint         width,
-                                       gint         height);
-void     gtk_icon_size_register_alias (const gchar *alias,
-                                       const gchar *target);
-
-
-/* Standard sizes */
-
-#define GTK_ICON_SIZE_MENU          "gtk-menu"
-#define GTK_ICON_SIZE_SMALL_TOOLBAR "gtk-small-toolbar"
-#define GTK_ICON_SIZE_LARGE_TOOLBAR "gtk-large-toolbar"
-#define GTK_ICON_SIZE_BUTTON        "gtk-button"
-#define GTK_ICON_SIZE_DIALOG        "gtk-dialog"
+gboolean              gtk_icon_size_lookup         (GtkIconSize  size,
+                                                    gint        *width,
+                                                    gint        *height);
+GtkIconSize           gtk_icon_size_register       (const gchar *name,
+                                                    gint         width,
+                                                    gint         height);
+void                  gtk_icon_size_register_alias (const gchar *alias,
+                                                    GtkIconSize  target);
+GtkIconSize           gtk_icon_size_from_name      (const gchar *name);
+G_CONST_RETURN gchar* gtk_icon_size_get_name       (GtkIconSize  size);
 
 /* Icon sets */
 
@@ -116,7 +109,7 @@ GdkPixbuf*  gtk_icon_set_render_icon     (GtkIconSet      *icon_set,
                                           GtkStyle        *style,
                                           GtkTextDirection direction,
                                           GtkStateType     state,
-                                          const gchar     *size,
+                                          GtkIconSize      size,
                                           GtkWidget       *widget,
                                           const char      *detail);
 
@@ -138,7 +131,7 @@ struct _GtkIconSource
 
   GtkTextDirection direction;
   GtkStateType state;
-  gchar *size;
+  GtkIconSize size;
 
   /* If TRUE, then the parameter is wildcarded, and the above
    * fields should be ignored. If FALSE, the parameter is

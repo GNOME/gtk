@@ -188,50 +188,17 @@ looking up the icon to use for a given stock ID.
 @icon_set: 
 
 
-<!-- ##### MACRO GTK_ICON_SIZE_MENU ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO GTK_ICON_SIZE_BUTTON ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO GTK_ICON_SIZE_SMALL_TOOLBAR ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO GTK_ICON_SIZE_LARGE_TOOLBAR ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO GTK_ICON_SIZE_DIALOG ##### -->
-<para>
-
-</para>
-
-
-
 <!-- ##### FUNCTION gtk_icon_size_lookup ##### -->
 <para>
 
 </para>
 
-@alias: 
+@size: 
 @width: 
 @height: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@alias: 
 
 
 <!-- ##### FUNCTION gtk_icon_size_register ##### -->
@@ -239,9 +206,12 @@ looking up the icon to use for a given stock ID.
 
 </para>
 
-@alias: 
+@name: 
 @width: 
 @height: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@alias: 
 
 
 <!-- ##### FUNCTION gtk_icon_size_register_alias ##### -->

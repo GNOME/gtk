@@ -3764,12 +3764,12 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
  * identifies the widget or code doing the rendering, so that
  * theme engines can special-case rendering for that widget or code.
  * 
- * Return value: a new pixbuf, or NULL if the stock ID wasn't known
+ * Return value: a new pixbuf, or %NULL if the stock ID wasn't known
  **/
 GdkPixbuf*
 gtk_widget_render_icon (GtkWidget      *widget,
                         const gchar    *stock_id,
-                        const gchar    *size,
+                        GtkIconSize     size,
                         const gchar    *detail)
 {
   GtkIconSet *icon_set;

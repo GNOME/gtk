@@ -1,3 +1,11 @@
+2001-03-12  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkiconfactory.h, gtk/gtkiconfactory.c: Switch to using an
+	enum with registration for icon sizes, instead of strings.
+
+	* gtkimage.h, gtkimage.c, gtkstyle.h, gtkstyle.c, gtkwidget.h, 
+	gtkwidget.c: Fix to reflect GtkIconSize
+	
 2001-03-12  Alexander Larsson  <alexl@redhat.com>
 
 	Make GtkFB compile and link.

@@ -92,6 +92,17 @@ typedef enum
   GTK_DIR_RIGHT
 } GtkDirectionType;
 
+/* Built-in stock icon sizes */
+typedef enum
+{
+  GTK_ICON_SIZE_INVALID,
+  GTK_ICON_SIZE_MENU,
+  GTK_ICON_SIZE_SMALL_TOOLBAR,
+  GTK_ICON_SIZE_LARGE_TOOLBAR,
+  GTK_ICON_SIZE_BUTTON,
+  GTK_ICON_SIZE_DIALOG
+} GtkIconSize;
+
 /* Reading directions for text */
 typedef enum
 {

@@ -291,14 +291,14 @@ gtk_icon_factory_lookup_default (const gchar *stock_id)
 
 static GtkIconSet *
 sized_icon_set_from_inline (const guchar *inline_data,
-                            const gchar  *size)
+                            GtkIconSize   size)
 {
   GtkIconSet *set;
 
-  GtkIconSource source = { NULL, NULL, 0, 0, NULL,
+  GtkIconSource source = { NULL, NULL, 0, 0, 0,
                            TRUE, TRUE, FALSE };
 
-  source.size = (gchar*) size;
+  source.size = size;
 
   set = gtk_icon_set_new ();
 
@@ -338,7 +338,7 @@ unsized_icon_set_from_inline (const guchar *inline_data)
 static void
 add_sized (GtkIconFactory *factory,
            const guchar   *inline_data,
-           const gchar    *size,
+           GtkIconSize     size,
            const gchar    *stock_id)
 {
   GtkIconSet *set;
@@ -393,214 +393,232 @@ get_default_icons (GtkIconFactory *factory)
 
 /* Sizes */
 
-static GHashTable *icon_sizes = NULL;
-
 typedef struct _IconSize IconSize;
 
 struct _IconSize
 {
+  gint size;
   gchar *name;
   
-  gboolean is_alias;
-
-  union
-  {
-    gchar *target;
-    struct
-    {
-      gint width;
-      gint height;
-    } size;
-  } d;
+  gint width;
+  gint height;
 };
 
-static IconSize*
-icon_size_new (const gchar *name)
+typedef struct _IconAlias IconAlias;
+
+struct _IconAlias
 {
-  IconSize *is;
+  gchar *name;
+  gint   target;
+};
 
-  is = g_new0 (IconSize, 1);
-
-  is->name = g_strdup (name);
-
-  return is;
-}
-
-static void
-icon_size_free (IconSize *is)
-{
-  g_free (is->name);
-  
-  if (is->is_alias)
-    g_free (is->d.target);
-
-  g_free (is);
-}
-
-static void
-icon_size_insert (IconSize *is)
-{
-  gpointer old_key, old_value;
-
-  /* Remove old ones */
-  if (g_hash_table_lookup_extended (icon_sizes,
-                                    is->name,
-                                    &old_key, &old_value))
-    {
-      g_hash_table_remove (icon_sizes, is->name);
-      icon_size_free (old_value);
-    }
-  
-  g_hash_table_insert (icon_sizes,
-                       is->name, is);
-
-}
-
-static IconSize*
-icon_size_lookup (const gchar *name)
-{
-  IconSize *is;
-
-  is = g_hash_table_lookup (icon_sizes,
-                            name);
-
-  while (is && is->is_alias)
-    {
-      is = g_hash_table_lookup (icon_sizes,
-                                is->d.target);
-
-    }
-
-  return is;
-}
-
-static void
-icon_size_add (const gchar *name,
-               gint         width,
-               gint         height)
-{
-  IconSize *is;
-  
-  is = icon_size_new (name);
-  is->d.size.width = width;
-  is->d.size.height = height;
-  
-  icon_size_insert (is);
-}
-
-static void
-icon_alias_add (const gchar *name,
-                const gchar *target)
-{
-  IconSize *is;
-  
-  is = icon_size_new (name);
-  is->is_alias = TRUE;
-
-  is->d.target = g_strdup (target);
-
-  icon_size_insert (is);
-}
+static GHashTable *icon_aliases = NULL;
+static IconSize *icon_sizes = NULL;
+static gint      icon_sizes_allocated = 0;
+static gint      icon_sizes_used = 0;
 
 static void
 init_icon_sizes (void)
 {
   if (icon_sizes == NULL)
     {
-      icon_sizes = g_hash_table_new (g_str_hash, g_str_equal);
+#define NUM_BUILTIN_SIZES 6
+      gint i;
 
-      icon_size_add (GTK_ICON_SIZE_MENU, 16, 16);
-      icon_size_add (GTK_ICON_SIZE_BUTTON, 24, 24);
-      icon_size_add (GTK_ICON_SIZE_SMALL_TOOLBAR, 18, 18);
-      icon_size_add (GTK_ICON_SIZE_LARGE_TOOLBAR, 24, 24);
-      icon_size_add (GTK_ICON_SIZE_DIALOG, 48, 48);
+      icon_aliases = g_hash_table_new (g_str_hash, g_str_equal);
+      
+      icon_sizes = g_new (IconSize, NUM_BUILTIN_SIZES);
+      icon_sizes_allocated = NUM_BUILTIN_SIZES;
+      icon_sizes_used = NUM_BUILTIN_SIZES;
+
+      icon_sizes[GTK_ICON_SIZE_INVALID].size = 0;
+      icon_sizes[GTK_ICON_SIZE_INVALID].name = NULL;
+      icon_sizes[GTK_ICON_SIZE_INVALID].width = 0;
+      icon_sizes[GTK_ICON_SIZE_INVALID].height = 0;
+
+      /* the name strings aren't copied since we don't ever remove
+       * icon sizes, so we don't need to know whether they're static.
+       * Even if we did I suppose removing the builtin sizes would be
+       * disallowed.
+       */
+      
+      icon_sizes[GTK_ICON_SIZE_MENU].size = GTK_ICON_SIZE_MENU;
+      icon_sizes[GTK_ICON_SIZE_MENU].name = "gtk-menu";
+      icon_sizes[GTK_ICON_SIZE_MENU].width = 16;
+      icon_sizes[GTK_ICON_SIZE_MENU].height = 16;
+
+      icon_sizes[GTK_ICON_SIZE_BUTTON].size = GTK_ICON_SIZE_BUTTON;
+      icon_sizes[GTK_ICON_SIZE_BUTTON].name = "gtk-button";
+      icon_sizes[GTK_ICON_SIZE_BUTTON].width = 24;
+      icon_sizes[GTK_ICON_SIZE_BUTTON].height = 24;
+
+      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].size = GTK_ICON_SIZE_SMALL_TOOLBAR;
+      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].name = "gtk-small-toolbar";
+      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].width = 18;
+      icon_sizes[GTK_ICON_SIZE_SMALL_TOOLBAR].height = 18;
+      
+      icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].size = GTK_ICON_SIZE_LARGE_TOOLBAR;
+      icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].name = "gtk-large-toolbar";
+      icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].width = 24;
+      icon_sizes[GTK_ICON_SIZE_LARGE_TOOLBAR].height = 24;
+
+      icon_sizes[GTK_ICON_SIZE_DIALOG].size = GTK_ICON_SIZE_DIALOG;
+      icon_sizes[GTK_ICON_SIZE_DIALOG].name = "gtk-dialog";
+      icon_sizes[GTK_ICON_SIZE_DIALOG].width = 48;
+      icon_sizes[GTK_ICON_SIZE_DIALOG].height = 48;
+
+      g_assert ((GTK_ICON_SIZE_DIALOG + 1) == NUM_BUILTIN_SIZES);
+
+      /* Alias everything to itself. */
+      i = 1; /* skip invalid size */
+      while (i < NUM_BUILTIN_SIZES)
+        {
+          gtk_icon_size_register_alias (icon_sizes[i].name, icon_sizes[i].size);
+          
+          ++i;
+        }
+      
+#undef NUM_BUILTIN_SIZES
     }
 }
 
 /**
  * gtk_icon_size_lookup:
- * @alias: name of an icon size
+ * @size: an icon size
  * @width: location to store icon width
  * @height: location to store icon height
  *
- * Obtains the pixel size of an icon, normally @alias would be
+ * Obtains the pixel size of a semantic icon size, normally @size would be
  * #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_BUTTON, etc.  This function
  * isn't normally needed, gtk_widget_render_icon() is the usual
  * way to get an icon for rendering, then just look at the size of
  * the rendered pixbuf. The rendered pixbuf may not even correspond to
  * the width/height returned by gtk_icon_size_lookup(), because themes
- * are free to render the pixbuf however they like.
+ * are free to render the pixbuf however they like, including changing
+ * the usual size.
  * 
- * Return value: %TRUE if @alias was known.
+ * Return value: %TRUE if @size was a valid size
  **/
 gboolean
-gtk_icon_size_lookup (const gchar *alias,
+gtk_icon_size_lookup (GtkIconSize  size,
                       gint        *widthp,
                       gint        *heightp)
 {
-  IconSize *is;
-  
-  g_return_val_if_fail (alias != NULL, FALSE);
-  
   init_icon_sizes ();
-  
-  is = icon_size_lookup (alias);
 
-  if (is == NULL)
+  if (size >= icon_sizes_used)
     return FALSE;
 
+  if (size == GTK_ICON_SIZE_INVALID)
+    return FALSE;
+  
   if (widthp)
-    *widthp = is->d.size.width;
+    *widthp = icon_sizes[size].width;
 
   if (heightp)
-    *heightp = is->d.size.height;
+    *heightp = icon_sizes[size].height;
 
   return TRUE;
 }
 
 /**
  * gtk_icon_size_register:
- * @alias: name of the icon size
+ * @name: name of the icon size
  * @width: the icon width
  * @height: the icon height
  *
  * Registers a new icon size, along the same lines as #GTK_ICON_SIZE_MENU,
- * etc.
+ * etc. Returns the integer value for the size.
+ *
+ * Returns: integer value representing the size
  * 
  **/
-void
-gtk_icon_size_register (const gchar *alias,
+GtkIconSize
+gtk_icon_size_register (const gchar *name,
                         gint         width,
                         gint         height)
 {
-  g_return_if_fail (alias != NULL);
-  g_return_if_fail (width > 0);
-  g_return_if_fail (height > 0);
+  g_return_val_if_fail (name != NULL, 0);
+  g_return_val_if_fail (width > 0, 0);
+  g_return_val_if_fail (height > 0, 0);
   
   init_icon_sizes ();
 
-  icon_size_add (alias, width, height);
+  if (icon_sizes_used == icon_sizes_allocated)
+    {
+      icon_sizes_allocated *= 2;
+      icon_sizes = g_renew (IconSize, icon_sizes, icon_sizes_allocated);
+    }
+  
+  icon_sizes[icon_sizes_used].size = icon_sizes_used;
+  icon_sizes[icon_sizes_used].name = g_strdup (name);
+  icon_sizes[icon_sizes_used].width = width;
+  icon_sizes[icon_sizes_used].height = height;
+
+  /* alias to self. */
+  gtk_icon_size_register_alias (icon_sizes[icon_sizes_used].name,
+                                icon_sizes[icon_sizes_used].size);
+  
+  ++icon_sizes_used;
+
+  return icon_sizes_used - 1;
 }
 
 /**
  * gtk_icon_size_register_alias:
  * @alias: an alias for @target
- * @target: an existing icon size name
+ * @target: an existing icon size
  *
- * Registers @alias as another name for @target, usable when calling
- * gtk_icon_size_lookup().
- * 
+ * Registers @alias as another name for @target.
+ * So calling gtk_icon_size_from_name() with @alias as argument
+ * will return @target.
+ *
  **/
 void
 gtk_icon_size_register_alias (const gchar *alias,
-                              const gchar *target)
+                              GtkIconSize  target)
 {
+  IconAlias *ia;
+  
   g_return_if_fail (alias != NULL);
-  g_return_if_fail (target != NULL);
 
   init_icon_sizes ();
 
-  icon_alias_add (alias, target);
+  if (g_hash_table_lookup (icon_aliases, alias))
+    g_warning ("gtk_icon_size_register_alias: Icon size name '%s' already exists", alias);
+
+  if (!gtk_icon_size_lookup (target, NULL, NULL))
+    g_warning ("gtk_icon_size_register_alias: Icon size %d does not exist", target);
+  
+  ia = g_new (IconAlias, 1);
+  ia->name = g_strdup (alias);
+  ia->target = target;
+
+  g_hash_table_insert (icon_aliases, ia->name, ia);
+}
+
+GtkIconSize
+gtk_icon_size_from_name (const gchar *name)
+{
+  IconAlias *ia;
+
+  init_icon_sizes ();
+  
+  ia = g_hash_table_lookup (icon_aliases, name);
+
+  if (ia)
+    return ia->target;
+  else
+    return GTK_ICON_SIZE_INVALID;
+}
+
+G_CONST_RETURN gchar*
+gtk_icon_size_get_name (GtkIconSize  size)
+{
+  if (size >= icon_sizes_used)
+    return NULL;
+  else
+    return icon_sizes[size].name;
 }
 
 /* Icon Set */
@@ -614,12 +632,12 @@ static GdkPixbuf *find_in_cache     (GtkIconSet       *icon_set,
                                      GtkStyle         *style,
                                      GtkTextDirection  direction,
                                      GtkStateType      state,
-                                     const gchar      *size);
+                                     GtkIconSize       size);
 static void       add_to_cache      (GtkIconSet       *icon_set,
                                      GtkStyle         *style,
                                      GtkTextDirection  direction,
                                      GtkStateType      state,
-                                     const gchar      *size,
+                                     GtkIconSize       size,
                                      GdkPixbuf        *pixbuf);
 static void       clear_cache       (GtkIconSet       *icon_set,
                                      gboolean          style_detach);
@@ -691,7 +709,7 @@ gtk_icon_set_new_from_pixbuf (GdkPixbuf *pixbuf)
 {
   GtkIconSet *set;
 
-  GtkIconSource source = { NULL, NULL, 0, 0, NULL,
+  GtkIconSource source = { NULL, NULL, 0, 0, 0,
                            TRUE, TRUE, TRUE };
 
   g_return_val_if_fail (pixbuf != NULL, NULL);
@@ -792,7 +810,8 @@ gtk_icon_set_copy (GtkIconSet *icon_set)
 
 
 static gboolean
-sizes_equivalent (const gchar *rhs, const gchar *lhs)
+sizes_equivalent (GtkIconSize lhs,
+                  GtkIconSize rhs)
 {
   gint r_w, r_h, l_w, l_h;
 
@@ -806,7 +825,7 @@ static GtkIconSource*
 find_and_prep_icon_source (GtkIconSet       *icon_set,
                            GtkTextDirection  direction,
                            GtkStateType      state,
-                           const gchar      *size)
+                           GtkIconSize       size)
 {
   GtkIconSource *source;
   GSList *tmp_list;
@@ -920,7 +939,7 @@ gtk_icon_set_render_icon (GtkIconSet        *icon_set,
                           GtkStyle          *style,
                           GtkTextDirection   direction,
                           GtkStateType       state,
-                          const gchar       *size,
+                          GtkIconSize        size,
                           GtkWidget         *widget,
                           const char        *detail)
 {
@@ -1048,7 +1067,7 @@ gtk_icon_source_copy (const GtkIconSource *source)
   *copy = *source;
   
   copy->filename = g_strdup (source->filename);
-  copy->size = g_strdup (source->size);
+  copy->size = source->size;
   if (copy->pixbuf)
     g_object_ref (G_OBJECT (copy->pixbuf));
 
@@ -1068,7 +1087,6 @@ gtk_icon_source_free (GtkIconSource *source)
   g_return_if_fail (source != NULL);
 
   g_free ((char*) source->filename);
-  g_free ((char*) source->size);
   if (source->pixbuf)
     g_object_unref (G_OBJECT (source->pixbuf));
 
@@ -1090,7 +1108,7 @@ struct _CachedIcon
   GtkStyle *style;
   GtkTextDirection direction;
   GtkStateType state;
-  gchar *size;
+  GtkIconSize size;
 
   GdkPixbuf *pixbuf;
 };
@@ -1105,7 +1123,6 @@ ensure_cache_up_to_date (GtkIconSet *icon_set)
 static void
 cached_icon_free (CachedIcon *icon)
 {
-  g_free (icon->size);
   g_object_unref (G_OBJECT (icon->pixbuf));
 
   g_free (icon);
@@ -1116,7 +1133,7 @@ find_in_cache (GtkIconSet      *icon_set,
                GtkStyle        *style,
                GtkTextDirection direction,
                GtkStateType     state,
-               const gchar     *size)
+               GtkIconSize      size)
 {
   GSList *tmp_list;
   GSList *prev;
@@ -1132,7 +1149,7 @@ find_in_cache (GtkIconSet      *icon_set,
       if (icon->style == style &&
           icon->direction == direction &&
           icon->state == state &&
-          strcmp (icon->size, size) == 0)
+          icon->size == size)
         {
           if (prev)
             {
@@ -1157,7 +1174,7 @@ add_to_cache (GtkIconSet      *icon_set,
               GtkStyle        *style,
               GtkTextDirection direction,
               GtkStateType     state,
-              const gchar     *size,
+              GtkIconSize      size,
               GdkPixbuf       *pixbuf)
 {
   CachedIcon *icon;
@@ -1181,7 +1198,7 @@ add_to_cache (GtkIconSet      *icon_set,
   icon->style = style;
   icon->direction = direction;
   icon->state = state;
-  icon->size = g_strdup (size);
+  icon->size = size;
   icon->pixbuf = pixbuf;
 
   if (icon->style)
@@ -1272,7 +1289,7 @@ copy_cache (GtkIconSet *icon_set,
         
       g_object_ref (G_OBJECT (icon_copy->pixbuf));
 
-      icon_copy->size = g_strdup (icon->size);
+      icon_copy->size = icon->size;
       
       copy = g_slist_prepend (copy, icon_copy);      
       

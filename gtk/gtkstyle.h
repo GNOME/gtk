@@ -157,7 +157,7 @@ struct _GtkStyleClass
                                  const GtkIconSource    *source,
                                  GtkTextDirection        direction,
                                  GtkStateType            state,
-                                 const gchar            *size,
+                                 GtkIconSize             size,
                                  GtkWidget              *widget,
                                  const gchar            *detail);
   
@@ -413,7 +413,7 @@ GdkPixbuf * gtk_style_render_icon     (GtkStyle            *style,
                                        const GtkIconSource *source,
                                        GtkTextDirection     direction,
                                        GtkStateType         state,
-                                       const gchar *        size,
+                                       GtkIconSize          size,
                                        GtkWidget           *widget,
                                        const gchar         *detail);
 void gtk_draw_hline      (GtkStyle        *style,

@@ -580,7 +580,7 @@ PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
 
 GdkPixbuf    *gtk_widget_render_icon          (GtkWidget   *widget,
                                                const gchar *stock_id,
-                                               const gchar *size,
+                                               GtkIconSize  size,
                                                const gchar *detail);
 
 /* handle composite names for GTK_COMPOSITE_CHILD widgets,

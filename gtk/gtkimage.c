@@ -224,7 +224,7 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
  **/
 GtkWidget*
 gtk_image_new_from_stock (const gchar    *stock_id,
-                          const gchar    *size)
+                          GtkIconSize     size)
 {
   GtkImage *image;
 
@@ -257,7 +257,7 @@ gtk_image_new_from_stock (const gchar    *stock_id,
  **/
 GtkWidget*
 gtk_image_new_from_icon_set (GtkIconSet     *icon_set,
-                             const gchar    *size)
+                             GtkIconSize     size)
 {
   GtkImage *image;
 
@@ -446,7 +446,7 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
 void
 gtk_image_set_from_stock  (GtkImage       *image,
                            const gchar    *stock_id,
-                           const gchar    *size)
+                           GtkIconSize     size)
 {
   g_return_if_fail (GTK_IS_IMAGE (image));
   
@@ -457,7 +457,7 @@ gtk_image_set_from_stock  (GtkImage       *image,
       image->storage_type = GTK_IMAGE_STOCK;
       
       image->data.stock.stock_id = g_strdup (stock_id);
-      image->data.stock.size = g_strdup (size);
+      image->data.stock.size = size;
 
       /* Size is demand-computed in size request method
        * if we're a stock image, since changing the
@@ -478,7 +478,7 @@ gtk_image_set_from_stock  (GtkImage       *image,
 void
 gtk_image_set_from_icon_set  (GtkImage       *image,
                               GtkIconSet     *icon_set,
-                              const gchar    *size)
+                              GtkIconSize     size)
 {
   g_return_if_fail (GTK_IS_IMAGE (image));
 
@@ -492,7 +492,7 @@ gtk_image_set_from_icon_set  (GtkImage       *image,
       image->storage_type = GTK_IMAGE_ICON_SET;
       
       image->data.icon_set.icon_set = icon_set;
-      image->data.icon_set.size = g_strdup (size);
+      image->data.icon_set.size = size;
 
       /* Size is demand-computed in size request method
        * if we're an icon set
@@ -610,14 +610,14 @@ gtk_image_get_pixbuf (GtkImage *image)
  * Gets the stock icon name and size being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
  * %GTK_IMAGE_STOCK (see gtk_image_get_storage_type()).
- * The returned strings are owned by the #GtkImage and should not
+ * The returned string is owned by the #GtkImage and should not
  * be freed.
  * 
  **/
 void
 gtk_image_get_stock  (GtkImage        *image,
                       gchar          **stock_id,
-                      gchar          **size)
+                      GtkIconSize     *size)
 {
   g_return_if_fail (GTK_IS_IMAGE (image));
   g_return_if_fail (image->storage_type == GTK_IMAGE_STOCK ||
@@ -642,14 +642,12 @@ gtk_image_get_stock  (GtkImage        *image,
  * Gets the icon set and size being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
  * %GTK_IMAGE_ICON_SET (see gtk_image_get_storage_type()).
- * The returned size string is owned by the #GtkImage and should not
- * be freed.
  * 
  **/
 void
 gtk_image_get_icon_set  (GtkImage        *image,
                          GtkIconSet     **icon_set,
-                         gchar          **size)
+                         GtkIconSize     *size)
 {
   g_return_if_fail (GTK_IS_IMAGE (image));
   g_return_if_fail (image->storage_type == GTK_IMAGE_ICON_SET ||
@@ -907,11 +905,10 @@ gtk_image_clear (GtkImage *image)
 
     case GTK_IMAGE_STOCK:
 
-      g_free (image->data.stock.size);
       g_free (image->data.stock.stock_id);
 
       image->data.stock.stock_id = NULL;
-      image->data.stock.size = NULL;
+      image->data.stock.size = 0;
       
       break;
 
@@ -919,9 +916,7 @@ gtk_image_clear (GtkImage *image)
       if (image->data.icon_set.icon_set)
         gtk_icon_set_unref (image->data.icon_set.icon_set);
 
-      g_free (image->data.icon_set.size);
-
-      image->data.icon_set.size = NULL;
+      image->data.icon_set.size = 0;
       image->data.icon_set.icon_set = NULL;
       
       break;

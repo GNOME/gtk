@@ -2711,7 +2711,6 @@ static void
 cleanup_source (GtkIconSource *source)
 {
   g_free (source->filename);
-  g_free (source->size);
 }
 
 static guint
@@ -2848,14 +2847,21 @@ gtk_rc_parse_icon_source (GScanner	 *scanner,
 
   if (token != '*')
     {
+      GtkIconSize size;
+      
       if (token != G_TOKEN_STRING)
         {
           cleanup_source (&source);
           return G_TOKEN_STRING;
         }
-      
-      source.size = g_strdup (scanner->value.v_string);
-      source.any_size = FALSE;
+
+      size = gtk_icon_size_from_name (scanner->value.v_string);
+
+      if (size != GTK_ICON_SIZE_INVALID)
+        {
+          source.size = size;
+          source.any_size = FALSE;
+        }
     }
 
   /* Check the close brace */

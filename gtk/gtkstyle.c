@@ -63,7 +63,7 @@ static GdkPixbuf *gtk_default_render_icon      (GtkStyle            *style,
                                                 const GtkIconSource *source,
                                                 GtkTextDirection     direction,
                                                 GtkStateType         state,
-                                                const gchar         *size,
+                                                GtkIconSize          size,
                                                 GtkWidget           *widget,
                                                 const gchar         *detail);
 
@@ -1270,7 +1270,7 @@ gtk_style_render_icon (GtkStyle            *style,
                        const GtkIconSource *source,
                        GtkTextDirection     direction,
                        GtkStateType         state,
-                       const gchar         *size,
+                       GtkIconSize          size,
                        GtkWidget           *widget,
                        const gchar         *detail)
 {
@@ -1373,12 +1373,12 @@ scale_or_ref (GdkPixbuf *src,
 
 static GdkPixbuf *
 gtk_default_render_icon (GtkStyle            *style,
-                          const GtkIconSource *source,
-                          GtkTextDirection     direction,
-                          GtkStateType         state,
-                          const gchar         *size,
-                          GtkWidget           *widget,
-                          const gchar         *detail)
+                         const GtkIconSource *source,
+                         GtkTextDirection     direction,
+                         GtkStateType         state,
+                         GtkIconSize          size,
+                         GtkWidget           *widget,
+                         const gchar         *detail)
 {
   gint width = 1;
   gint height = 1;

@@ -73,13 +73,13 @@ struct _GtkImagePixbufData
 struct _GtkImageStockData
 {
   gchar *stock_id;
-  gchar *size;
+  GtkIconSize size;
 };
 
 struct _GtkImageIconSetData
 {
   GtkIconSet *icon_set;
-  gchar      *size;
+  GtkIconSize size;
 };
 
 typedef enum
@@ -122,9 +122,9 @@ GtkWidget* gtk_image_new_from_image    (GdkImage        *image,
 GtkWidget* gtk_image_new_from_file     (const gchar     *filename);
 GtkWidget* gtk_image_new_from_pixbuf   (GdkPixbuf       *pixbuf);
 GtkWidget* gtk_image_new_from_stock    (const gchar     *stock_id,
-                                        const gchar     *size);
+                                        GtkIconSize      size);
 GtkWidget* gtk_image_new_from_icon_set (GtkIconSet      *icon_set,
-                                        const gchar     *size);
+                                        GtkIconSize      size);
 
 void gtk_image_set_from_pixmap   (GtkImage        *image,
                                   GdkPixmap       *pixmap,
@@ -138,10 +138,10 @@ void gtk_image_set_from_pixbuf   (GtkImage        *image,
                                   GdkPixbuf       *pixbuf);
 void gtk_image_set_from_stock    (GtkImage        *image,
                                   const gchar     *stock_id,
-                                  const gchar     *size);
+                                  GtkIconSize      size);
 void gtk_image_set_from_icon_set (GtkImage        *image,
                                   GtkIconSet      *icon_set,
-                                  const gchar     *size);
+                                  GtkIconSize      size);
 
 GtkImageType gtk_image_get_storage_type (GtkImage   *image);
 
@@ -154,10 +154,10 @@ void       gtk_image_get_image    (GtkImage         *image,
 GdkPixbuf* gtk_image_get_pixbuf   (GtkImage         *image);
 void       gtk_image_get_stock    (GtkImage         *image,
                                    gchar           **stock_id,
-                                   gchar           **size);
+                                   GtkIconSize      *size);
 void       gtk_image_get_icon_set (GtkImage         *image,
                                    GtkIconSet      **icon_set,
-                                   gchar           **size);
+                                   GtkIconSize      *size);
 
 
 #ifndef GTK_DISABLE_DEPRECATED
