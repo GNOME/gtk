@@ -67,7 +67,7 @@
 #define DESKTOP_DISPLAY_NAME	N_("Desktop")
 #define FALLBACK_DISPLAY_NAME	N_("(None)")
 #define FALLBACK_ICON_NAME	"stock_unknown"
-#define FALLBACK_ICON_SIZE	20
+#define FALLBACK_ICON_SIZE	16
 
 
 /* ********************** *
@@ -413,7 +413,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   gtk_widget_show (sep);
 
   image = gtk_image_new_from_stock (GTK_STOCK_OPEN,
-				    GTK_ICON_SIZE_SMALL_TOOLBAR);
+				    GTK_ICON_SIZE_MENU);
   gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
   gtk_widget_show (image);
 
@@ -1043,7 +1043,7 @@ change_icon_theme (GtkFileChooserButton *button)
 
   settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
 
-  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_SMALL_TOOLBAR,
+  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU,
 					 &width, &height))
     priv->icon_size = MAX (width, height);
   else
