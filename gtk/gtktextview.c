@@ -699,8 +699,12 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * @extend_selection: %TRUE if the move should extend the selection
    *  
    * The ::move-cursor signal is a keybinding signal which gets emitted
-   * when the user initiates a cursor movement. Applications should not
-   * use it.
+   * when the user initiates a cursor movement. 
+   *
+   * Applications should not connect to it, but may emit it with 
+   * g_signal_emit_by_name() if they need to control scrolling 
+   * programmatically.
+   *
    */
   signals[MOVE_CURSOR] = 
     g_signal_new ("move_cursor",

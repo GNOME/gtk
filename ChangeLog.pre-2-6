@@ -1,5 +1,8 @@
 2004-06-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_class_init): Improve docs
+	for the ::move_cursor signal.
+
 	* gtk/gtkaccelmap.c (_gtk_accel_path_is_valid): Accept
 	"<WINDOWTYPE>" as a valid accel path.  (#144427, Philip 
 	Kendall)	
