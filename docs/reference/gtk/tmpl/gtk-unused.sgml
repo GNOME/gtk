@@ -514,6 +514,19 @@ This is a private struct used by GTK+ internally, don't worry about it.
 </para>
 
 
+<!-- ##### USER_FUNCTION GtkAccelMapNotify ##### -->
+<para>
+
+</para>
+
+@data: 
+@accel_path_quark: 
+@accel_key: 
+@accel_mods: 
+@accel_group: 
+@old_accel_key: 
+@old_accel_mods: 
+
 <!-- ##### ENUM GtkAnchorType ##### -->
 <para>
 
@@ -1299,6 +1312,13 @@ the #GtkAdjustment which sets the range of the scale.
 </para>
 
 
+<!-- ##### SIGNAL GtkWindow::accels-changed ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+
 <!-- ##### ARG GtkWindow:auto-shrink ##### -->
 <para>
 If the window shrinks automatically when widgets within it shrink.
@@ -1483,6 +1503,25 @@ If the window shrinks automatically when widgets within it shrink.
 
 @accel_label: 
 @accel_object: 
+
+<!-- ##### FUNCTION gtk_accel_map_add_notifer ##### -->
+<para>
+
+</para>
+
+@accel_path: 
+@notify_data: 
+@notify_func: 
+@accel_group: 
+
+<!-- ##### FUNCTION gtk_accel_map_remove_notifer ##### -->
+<para>
+
+</para>
+
+@accel_path: 
+@notify_data: 
+@notify_func: 
 
 <!-- ##### FUNCTION gtk_arg_copy ##### -->
 <para>

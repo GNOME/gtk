@@ -1,3 +1,54 @@
+Tue Nov 20 21:25:08 2001  Tim Janik  <timj@gtk.org>
+
+	* applied patch from owen to get rid of accel map notifiers.
+	changed things to fix reentrancy and API as discussed on gtk-devel.
+
+	* gtk/gtkaccelgroup.[hc]:
+	(gtk_accel_group_finalize): unregister this accel group from all
+	accel map paths.
+	(accel_closure_invalidate): handle invalidation of closures by
+	disconnecting their accelerators.
+	(quick_accel_add): move closure connection and changed notification
+	into this function to reduce code duplication. don't emit change
+	notification on closurers without accelerators.
+	(quick_accel_remove): rewrite, do the exact opposite of quick_accel_add
+	for a GtkAccelGroupEntry.
+	(gtk_accel_group_connect): get rid of the accel_path_quark argument.
+	(gtk_accel_group_connect_by_path): new function to add accelerators
+	with an accel path.
+	(gtk_accel_group_disconnect_closure): new function, disconnect a
+	closure from of an accel group.
+	(gtk_accel_group_disconnect): loop over all closure for a accel_ley,
+	accel_mods pair and remove them.
+	(_gtk_accel_group_reconnect): new function that basically does
+	gtk_accel_group_disconnect_closure() and
+	gtk_accel_group_connect_by_path() once an accel path changed.
+	(gtk_accel_groups_disconnect_closure): remove this, there's
+	gtk_accel_group_disconnect_closure().
+	
+	* gtk/gtkaccelmap.[hc]: keep list of accel groups per entry now,
+	nuke notifiers.
+	(_gtk_accel_path_is_valid): make this non-static for
+	gtkwidget.c and gtkaccelgroup.c assertions.
+	(gtk_accel_map_add_notifer): removed this function.
+	(gtk_accel_map_remove_notifer): same.
+	(_gtk_accel_map_add_group):
+	(_gtk_accel_map_remove_group): (un-)register accel groups, with
+	accel paths for correct propagation.
+	(gtk_accel_map_add_entry): return void.
+	(gtk_accel_map_lookup): return gboolean instead of GQuark.
+	
+	* gtk/gtkitemfactory.c (gtk_item_factory_add_foreign): always
+	set accel_path on widgets.
+	
+	* gtk/gtkwidget.[hc]:
+	(accel_path_changed): got rid of this, changes are handled by
+	accel maps internally now.
+	(_gtk_widget_set_accel_path): get things to work without notifiers.
+	(gtk_widget_list_accel_closures): list accel closures of a widget.
+	
+	* gtk/gtkwindow.[hc]: rename ::accels_changed, to ::keys_changed.
+
 2001-11-20  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkcontainer.c (gtk_container_propagate_expose): Typo fix.

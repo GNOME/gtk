@@ -105,7 +105,7 @@ struct _GtkWindow
   guint frame_right;
   guint frame_bottom;
 
-  guint accels_changed_handler;
+  guint keys_changed_handler;
   
   GdkModifierType mnemonic_modifier;
   gpointer gtk_reserved1;	/* For future GdkScreen * */
@@ -126,7 +126,7 @@ struct _GtkWindowClass
   void     (* activate_default)        (GtkWindow       *window);
   void     (* move_focus)              (GtkWindow       *window,
                                         GtkDirectionType direction);  
-  void	   (*accels_changed)	       (GtkWindow	*window);
+  void	   (*keys_changed)	       (GtkWindow	*window);
 };
 
 #define GTK_TYPE_WINDOW_GROUP             (gtk_window_group_get_type ())

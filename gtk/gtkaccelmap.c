@@ -42,7 +42,7 @@ typedef struct {
   guint	       std_accel_key;
   guint	       std_accel_mods;
   guint        changed : 1;
-  GHookList   *hooks;
+  GSList      *groups;
 } AccelEntry;
 
 
@@ -89,8 +89,8 @@ _gtk_accel_map_init (void)
   accel_entry_ht = g_hash_table_new (accel_entry_hash, accel_entry_equal);
 }
 
-static gboolean
-gtk_accel_path_is_valid (const gchar *accel_path)
+gboolean
+_gtk_accel_path_is_valid (const gchar *accel_path)
 {
   gchar *p;
 
@@ -108,14 +108,13 @@ gtk_accel_path_is_valid (const gchar *accel_path)
  * @accel_path: valid accelerator path
  * @accel_key:  the accelerator key
  * @accel_mods: the accelerator modifiers
- * @returns:    the GQuark for the @accel_path (to ease local storage)
  *
  * Register a new accelerator with the global accelerator map.
  * This function should only be called once per @accel_path
  * with the canonical @accel_key and @accel_mods for this path.
  * To change the accelerator during runtime programatically, use
  * gtk_accel_map_change_entry().
- * The accelerator path must consist of "<WINDOWTYPE>/Category1/Category2/.../Action",
+ * The accelerator path must consist of "&lt;WINDOWTYPE&gt;/Category1/Category2/.../Action",
  * where WINDOWTYPE should be a unique application specifc identifier, that
  * corresponds to the kind of window the accelerator is being used in, e.g. "Gimp-Image",
  * "Abiword-Document" or "Gnumeric-Settings".
@@ -123,18 +122,21 @@ gtk_accel_path_is_valid (const gchar *accel_path)
  * accelerator triggers, i.e. for accelerators on menu items, choose the item's menu path,
  * e.g. "File/Save As", "Image/View/Zoom" or "Edit/Select All".
  * So a full valid accelerator path may look like:
- * "<Gimp-Toolbox>/File/Dialogs/Tool Options...".
+ * "&lt;Gimp-Toolbox&gt;/File/Dialogs/Tool Options...".
  */
-GQuark
+void
 gtk_accel_map_add_entry (const gchar *accel_path,
 			 guint        accel_key,
 			 guint        accel_mods)
 {
   AccelEntry *entry;
 
-  g_return_val_if_fail (gtk_accel_path_is_valid (accel_path), 0);
+  g_return_if_fail (_gtk_accel_path_is_valid (accel_path));
 
-  accel_mods &= gtk_accelerator_get_default_mod_mask ();
+  if (!accel_key)
+    accel_mods = 0;
+  else
+    accel_mods &= gtk_accelerator_get_default_mod_mask ();
 
   entry = accel_path_lookup (accel_path);
   if (entry)
@@ -159,154 +161,35 @@ gtk_accel_map_add_entry (const gchar *accel_path,
       entry->changed = FALSE;
       g_hash_table_insert (accel_entry_ht, entry, entry);
     }
-  return g_quark_try_string (entry->accel_path);
-}
-
-typedef struct {
-  GHook          hook;
-  GtkAccelGroup *accel_group;
-} AccelHook;
-
-static void
-accel_hook_finalize (GHookList *hook_list,
-		     GHook     *hook)
-{
-  GDestroyNotify destroy = hook->destroy;
-  AccelHook *ahook = (AccelHook*) hook;
-
-  if (ahook->accel_group)
-    g_object_unref (ahook->accel_group);
-
-  if (destroy)
-    {
-      hook->destroy = NULL;
-      destroy (hook->data);
-    }
-}
-
-/**
- * GtkAccelMapNotify
- * @data:             notifier user data
- * @accel_path_quark: accelerator path (as #GQuark) which has just changed
- * @accel_key:        new accelerator key
- * @accel_mods:       new accelerator modifiers
- * @accel_group:      accelerator group of this notifier
- * @old_accel_key:    former accelerator key
- * @old_accel_mods):  former accelerator modifiers
- *
- * #GtkAccelMapNotify is the signature of user callbacks, installed via
- * gtk_accel_map_add_notifier(). Once the accel path of the notifier changes,
- * the notifier is invoked with this signature, where @accel_path_quark
- * indicates the accel path that changed, and @data and @accel_group are
- * the notifier's arguments as passed into gtk_accel_map_add_notifier().
- */
-
-/**
- * gtk_accel_map_add_notifer
- * @accel_path:  valid accelerator path
- * @notify_data: data argument to the notifier
- * @notify_func: the notifier function
- * @accel_group: accelerator group used by the notifier function
- *
- * Install a notifier function to be called if an accelerator
- * map entry changes. @accel_group has to be the accel group
- * that is being affected (gets an accelerator removed or added,
- * when the notifier function is executed).
- */
-void
-gtk_accel_map_add_notifer (const gchar      *accel_path,
-			   gpointer          notify_data,
-			   GtkAccelMapNotify notify_func,
-			   GtkAccelGroup    *accel_group)
-{
-  AccelEntry *entry;
-  AccelHook *ahook;
-  GHook *hook;
-
-  g_return_if_fail (gtk_accel_path_is_valid (accel_path));
-  g_return_if_fail (notify_func != NULL);
-  if (accel_group)
-    g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
-
-  entry = accel_path_lookup (accel_path);
-  if (!entry)
-    {
-      gtk_accel_map_add_entry (accel_path, 0, 0);
-      entry = accel_path_lookup (accel_path);
-    }
-  if (!entry->hooks)
-    {
-      entry->hooks = g_new (GHookList, 1);
-      g_hook_list_init (entry->hooks, sizeof (AccelHook));
-      entry->hooks->finalize_hook = accel_hook_finalize;
-    }
-  hook = g_hook_alloc (entry->hooks);
-  hook->data = notify_data;
-  hook->func = notify_func;
-  hook->destroy = NULL;
-  ahook = (AccelHook*) hook;
-  ahook->accel_group = accel_group ? g_object_ref (accel_group) : NULL;
-  g_hook_append (entry->hooks, hook);
-}
-
-/**
- * gtk_accel_map_remove_notifer
- * @accel_path:  valid accelerator path
- * @notify_data: data argument to the notifier
- * @notify_func: the notifier function
- *
- * Remove a notifier function, previously installed through
- * gtk_accel_map_add_notifer().
- */
-void
-gtk_accel_map_remove_notifer (const gchar      *accel_path,
-			      gpointer          notify_data,
-			      GtkAccelMapNotify notify_func)
-{
-  AccelEntry *entry;
-
-  g_return_if_fail (gtk_accel_path_is_valid (accel_path));
-  g_return_if_fail (notify_func != NULL);
-
-  entry = accel_path_lookup (accel_path);
-  if (entry && entry->hooks)
-    {
-      GHook *hook = g_hook_find_func_data (entry->hooks, TRUE, notify_func, notify_data);
-
-      if (hook && g_hook_destroy (entry->hooks, hook->hook_id))
-	return; /* successfully removed */
-    }
-  g_warning (G_STRLOC ": no notifier %p(%p) installed for accel path \"%s\"",
-	     notify_func, notify_data, accel_path);
 }
 
 /**
  * gtk_accel_map_lookup_entry
  * @accel_path:  valid accelerator path
  * @key:         accelerator key to be filled in (optional)
- * @returns:     #GQuark for @accel_path or (0) if @accel_path is not known
+ * @returns:     %TRUE if @accel_path is known, %FALSE otherwise
  *
  * Lookup the accelerator entry for @accel_path and fill in @key.
  * If the lookup revealed no results, (0) is returned, the entry's
  * #GQuark otherwise.
  */
-GQuark
+gboolean
 gtk_accel_map_lookup_entry (const gchar *accel_path,
 			    GtkAccelKey *key)
 {
   AccelEntry *entry;
 
-  g_return_val_if_fail (gtk_accel_path_is_valid (accel_path), 0);
+  g_return_val_if_fail (_gtk_accel_path_is_valid (accel_path), FALSE);
 
   entry = accel_path_lookup (accel_path);
   if (entry && key)
     {
       key->accel_key = entry->accel_key;
       key->accel_mods = entry->accel_mods;
-      key->accel_flags = 0;	// FIXME: global lock?
+      key->accel_flags = 0;
     }
 
-  return entry ? g_quark_try_string (entry->accel_path) : 0;
+  return entry ? TRUE : FALSE;
 }
 
 static void
@@ -340,9 +223,8 @@ internal_change_entry (const gchar    *accel_path,
 {
   GSList *node, *slist, *win_list, *group_list, *replace_list = NULL;
   GHashTable *group_hm, *win_hm;
-  gboolean change_accel, removable, can_change = TRUE, seen_accel = FALSE, hooks_may_recurse = TRUE;
+  gboolean change_accel, removable, can_change = TRUE, seen_accel = FALSE;
   GQuark entry_quark;
-  GHook *hook;
   AccelEntry *entry = accel_path_lookup (accel_path);
 
   /* not much todo if there's no entry yet */
@@ -364,7 +246,7 @@ internal_change_entry (const gchar    *accel_path,
     return FALSE;
 
   /* nobody's interested, easy going */
-  if (!entry->hooks)
+  if (!entry->groups)
     {
       if (!simulate)
 	{
@@ -379,15 +261,8 @@ internal_change_entry (const gchar    *accel_path,
   entry_quark = g_quark_try_string (entry->accel_path);
   group_hm = g_hash_table_new (NULL, NULL);
   win_hm = g_hash_table_new (NULL, NULL);
-  hook = g_hook_first_valid (entry->hooks, hooks_may_recurse);
-  while (hook)
-    {
-      AccelHook *ahook = (AccelHook*) hook;
-      
-      if (ahook->accel_group)
-	g_hash_table_insert (group_hm, ahook->accel_group, ahook->accel_group);
-      hook = g_hook_next_valid (entry->hooks, hook, hooks_may_recurse);
-    }
+  for (slist = entry->groups; slist; slist = slist->next)
+    g_hash_table_insert (group_hm, slist->data, slist->data);
 
   /* 2) collect acceleratables affected */
   group_list = g_hash_table_slist_values (group_hm);
@@ -408,62 +283,69 @@ internal_change_entry (const gchar    *accel_path,
       g_hash_table_insert (group_hm, node->data, node->data);
   group_list = g_hash_table_slist_values (group_hm);
   g_hash_table_destroy (group_hm);
-
+  
   /* 4) walk the acceleratables and figure whether they occupy accel_key&accel_mods */
-  for (slist = accel_key ? win_list : NULL; slist; slist = slist->next)
-    if (GTK_IS_WINDOW (slist->data))	/* bad kludge in lack of a GtkAcceleratable */
-      if (_gtk_window_query_nonaccels (slist->data, accel_key, accel_mods))
-	{
-	  seen_accel = TRUE;
-	  break;
-	}
-  removable = !seen_accel;
-
-  /* 5) walk all accel groups and search for locks */
-  for (slist = removable ? group_list : NULL; slist; slist = slist->next)
-    {
-      GtkAccelGroup *group = slist->data;
-      GtkAccelGroupEntry *ag_entry;
-      guint i, n;
-      
-      n = 0;
-      ag_entry = entry->accel_key ? gtk_accel_group_query (group, entry->accel_key, entry->accel_mods, &n) : NULL;
-      for (i = 0; i < n; i++)
-	if (ag_entry[i].accel_path_quark == entry_quark)
+  if (accel_key)
+    for (slist = win_list; slist; slist = slist->next)
+      if (GTK_IS_WINDOW (slist->data))	/* bad kludge in lack of a GtkAcceleratable */
+	if (_gtk_window_query_nonaccels (slist->data, accel_key, accel_mods))
 	  {
-	    can_change = !(ag_entry[i].key.accel_flags & GTK_ACCEL_LOCKED);
-	    if (!can_change)
-	      goto break_loop_step5;
+	    seen_accel = TRUE;
+	    break;
 	  }
-
-      n = 0;
-      ag_entry = accel_key ? gtk_accel_group_query (group, accel_key, accel_mods, &n) : NULL;
-      for (i = 0; i < n; i++)
-	{
-	  seen_accel = TRUE;
-	  removable = !group->lock_count && !(ag_entry[i].key.accel_flags & GTK_ACCEL_LOCKED);
-	  if (!removable)
-	    goto break_loop_step5;
-	  if (ag_entry[i].accel_path_quark)
-	    replace_list = g_slist_prepend (replace_list, GUINT_TO_POINTER (ag_entry->accel_path_quark));
-	}
-    }
+  removable = !seen_accel;
+  
+  /* 5) walk all accel groups and search for locks */
+  if (removable)
+    for (slist = group_list; slist; slist = slist->next)
+      {
+	GtkAccelGroup *group = slist->data;
+	GtkAccelGroupEntry *ag_entry;
+	guint i, n;
+	
+	n = 0;
+	ag_entry = entry->accel_key ? gtk_accel_group_query (group, entry->accel_key, entry->accel_mods, &n) : NULL;
+	for (i = 0; i < n; i++)
+	  if (ag_entry[i].accel_path_quark == entry_quark)
+	    {
+	      can_change = !(ag_entry[i].key.accel_flags & GTK_ACCEL_LOCKED);
+	      if (!can_change)
+		goto break_loop_step5;
+	    }
+	
+	n = 0;
+	ag_entry = accel_key ? gtk_accel_group_query (group, accel_key, accel_mods, &n) : NULL;
+	for (i = 0; i < n; i++)
+	  {
+	    seen_accel = TRUE;
+	    removable = !group->lock_count && !(ag_entry[i].key.accel_flags & GTK_ACCEL_LOCKED);
+	    if (!removable)
+	      goto break_loop_step5;
+	    if (ag_entry[i].accel_path_quark)
+	      replace_list = g_slist_prepend (replace_list, GUINT_TO_POINTER (ag_entry->accel_path_quark));
+	  }
+      }
  break_loop_step5:
   
   /* 6) check whether we can remove existing accelerators */
-  for (slist = removable ? replace_list : NULL; slist; slist = slist->next)
-    if (!internal_change_entry (g_quark_to_string (GPOINTER_TO_UINT (slist->data)), 0, 0, FALSE, TRUE))
-      {
-	removable = FALSE;
-	break;
-      }
-
+  if (removable && can_change)
+    for (slist = replace_list; slist; slist = slist->next)
+      if (!internal_change_entry (g_quark_to_string (GPOINTER_TO_UINT (slist->data)), 0, 0, FALSE, TRUE))
+	{
+	  removable = FALSE;
+	  break;
+	}
+  
   /* 7) check conditions and proceed if possible */
   change_accel = can_change && (!seen_accel || (removable && replace));
-
+  
   if (change_accel && !simulate)
     {
       guint old_accel_key, old_accel_mods;
+      
+      /* ref accel groups */
+      for (slist = group_list; slist; slist = slist->next)
+	g_object_ref (slist->data);
 
       /* 8) remove existing accelerators */
       for (slist = replace_list; slist; slist = slist->next)
@@ -475,25 +357,12 @@ internal_change_entry (const gchar    *accel_path,
       entry->accel_key = accel_key;
       entry->accel_mods = accel_mods;
       entry->changed = TRUE;
-      hook = g_hook_first_valid (entry->hooks, hooks_may_recurse);
-      while (hook)
-	{
-	  gboolean was_in_call, need_destroy = FALSE;
-	  GtkAccelMapNotify hook_func = hook->func;
-	  AccelHook *ahook = (AccelHook*) hook;
-	  
-	  was_in_call = G_HOOK_IN_CALL (hook);
-	  hook->flags |= G_HOOK_FLAG_IN_CALL;
-	  /* need_destroy = */ hook_func (hook->data, g_quark_try_string (entry->accel_path),
-					  entry->accel_key, entry->accel_mods,
-					  ahook->accel_group,
-					  old_accel_key, old_accel_mods);
-	  if (!was_in_call)
-	    hook->flags &= ~G_HOOK_FLAG_IN_CALL;
-	  if (need_destroy)
-	    g_hook_destroy_link (entry->hooks, hook);
-	  hook = g_hook_next_valid (entry->hooks, hook, hooks_may_recurse);
-	}
+      for (slist = group_list; slist; slist = slist->next)
+	_gtk_accel_group_reconnect (slist->data, g_quark_from_string (entry->accel_path));
+
+      /* unref accel groups */
+      for (slist = group_list; slist; slist = slist->next)
+	g_object_unref (slist->data);
     }
   g_slist_free (replace_list);
   g_slist_free (group_list);
@@ -513,12 +382,9 @@ internal_change_entry (const gchar    *accel_path,
  * Change the @accel_key and @accel_mods currently associated with @accel_path.
  * Due to conflicts with other accelerators, a change may not alwys be possible,
  * @replace indicates whether other accelerators may be deleted to resolve such
- * conflicts. A change will only occour if all conflicts could be resolved (which
- * might not be the case if conflicting accelerators are locked). Succesfull
+ * conflicts. A change will only occur if all conflicts could be resolved (which
+ * might not be the case if conflicting accelerators are locked). Succesful
  * changes are indicated by a %TRUE return value.
- * Changes occouring are also indicated by invocation of notifiers attached to
- * @accel_path (see gtk_accel_map_add_notifer() on this) and other accelerators
- * that are being deleted.
  */
 gboolean
 gtk_accel_map_change_entry (const gchar    *accel_path,
@@ -526,7 +392,7 @@ gtk_accel_map_change_entry (const gchar    *accel_path,
 			    GdkModifierType accel_mods,
 			    gboolean        replace)
 {
-  g_return_val_if_fail (gtk_accel_path_is_valid (accel_path), FALSE);
+  g_return_val_if_fail (_gtk_accel_path_is_valid (accel_path), FALSE);
 
   return internal_change_entry (accel_path, accel_key, accel_key ? accel_mods : 0, replace, FALSE);
 }
@@ -864,4 +730,35 @@ gtk_accel_map_add_filter (const gchar *filter_pattern)
 	return;
       }
   accel_filters = g_slist_prepend (accel_filters, pspec);
+}
+
+void
+_gtk_accel_map_add_group (const gchar   *accel_path,
+			  GtkAccelGroup *accel_group)
+{
+  AccelEntry *entry;
+
+  g_return_if_fail (_gtk_accel_path_is_valid (accel_path));
+  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
+
+  entry = accel_path_lookup (accel_path);
+  if (!entry)
+    {
+      gtk_accel_map_add_entry (accel_path, 0, 0);
+      entry = accel_path_lookup (accel_path);
+    }
+  entry->groups = g_slist_prepend (entry->groups, accel_group);
+}
+
+void
+_gtk_accel_map_remove_group (const gchar   *accel_path,
+			     GtkAccelGroup *accel_group)
+{
+  AccelEntry *entry;
+
+  entry = accel_path_lookup (accel_path);
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (g_slist_find (entry->groups, accel_group));
+
+  entry->groups = g_slist_remove (entry->groups, accel_group);
 }

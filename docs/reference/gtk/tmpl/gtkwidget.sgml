@@ -530,6 +530,15 @@ GtkWidget
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_widget_list_accel_closures ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_widget_event ##### -->
 <para>
 

@@ -94,6 +94,15 @@ Creates a new #GtkAccelLabel.
 @Returns: a new #GtkAccelLabel.
 
 
+<!-- ##### FUNCTION gtk_accel_label_set_accel_closure ##### -->
+<para>
+
+</para>
+
+@accel_label: 
+@closure: 
+
+
 <!-- ##### FUNCTION gtk_accel_label_get_accel_widget ##### -->
 <para>
 

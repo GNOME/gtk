@@ -293,7 +293,7 @@ gtk_item_factory_add_foreign (GtkWidget      *accel_widget,
    */
   if (gtk_signal_lookup ("activate", GTK_OBJECT_TYPE (accel_widget)))
     {
-      if (accel_key && accel_group)
+      if (accel_group)
 	{
 	  gtk_accel_map_add_entry (full_path, accel_key, accel_mods);
 	  _gtk_widget_set_accel_path (accel_widget, full_path, accel_group);

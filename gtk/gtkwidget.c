@@ -2615,6 +2615,8 @@ gtk_widget_add_accelerator (GtkWidget     *widget,
 
   closure = widget_new_accel_closure (widget, query.signal_id);
 
+  g_object_ref (widget);
+
   /* install the accelerator. since we don't map this onto an accel_path,
    * the accelerator will automatically be locked.
    */
@@ -2622,10 +2624,11 @@ gtk_widget_add_accelerator (GtkWidget     *widget,
 			   accel_key,
 			   accel_mods,
 			   accel_flags | GTK_ACCEL_LOCKED,
-			   closure,
-			   0);
+			   closure);
 
   g_signal_emit (widget, widget_signals[ACCEL_CLOSURES_CHANGED], 0);
+
+  g_object_unref (widget);
 }
 
 /**
@@ -2646,24 +2649,31 @@ gtk_widget_remove_accelerator (GtkWidget     *widget,
 			       guint          accel_mods)
 {
   GtkAccelGroupEntry *ag_entry;
-  GSList *slist;
-  guint n, i;
+  GList *slist, *clist;
+  guint n;
   
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), FALSE);
 
   ag_entry = gtk_accel_group_query (accel_group, accel_key, accel_mods, &n);
-  for (slist = _gtk_widget_get_accel_closures (widget); slist; slist = slist->next)
+  clist = gtk_widget_list_accel_closures (widget);
+  for (slist = clist; slist; slist = slist->next)
     {
-      /* paranoid sanity checking */
+      guint i;
+
       for (i = 0; i < n; i++)
 	if (slist->data == (gpointer) ag_entry[i].closure)
 	  {
-	    gboolean is_removed = gtk_accel_groups_disconnect_closure (slist->data);
+	    gboolean is_removed = gtk_accel_group_disconnect (accel_group, slist->data);
+
 	    g_signal_emit (widget, widget_signals[ACCEL_CLOSURES_CHANGED], 0);
+
+	    g_list_free (clist);
+
 	    return is_removed;
 	  }
     }
+  g_list_free (clist);
 
   g_warning (G_STRLOC ": no accelerator (%u,%u) installed in accel group (%p) for %s (%p)",
 	     accel_key, accel_mods, accel_group,
@@ -2672,73 +2682,48 @@ gtk_widget_remove_accelerator (GtkWidget     *widget,
   return FALSE;
 }
 
-GSList*
-_gtk_widget_get_accel_closures (GtkWidget *widget)
+/**
+ * gtk_widget_list_accel_closures
+ * @widget:  widget to list accelerator closures for
+ * @returns: a newly allocated #GList of closures
+ *
+ * List the closures used by @widget for accelerator group connections
+ * with gtk_accel_group_connect_by_path() or gtk_accel_group_connect().
+ * The closures can be used to monitor accelerator changes on @widget,
+ * by connecting to the ::accel_changed signal of the #GtkAccelGroup
+ * of a closure which can be found out with gtk_accel_group_from_accel_closure().
+ */
+GList*
+gtk_widget_list_accel_closures (GtkWidget *widget)
 {
+  GSList *slist;
+  GList *clist = NULL;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return g_object_get_qdata (G_OBJECT (widget), quark_accel_closures);
+  for (slist = g_object_get_qdata (G_OBJECT (widget), quark_accel_closures); slist; slist = slist->next)
+    if (gtk_accel_group_from_accel_closure (slist->data))
+      clist = g_list_prepend (clist, slist->data);
+  return clist;
 }
 
 typedef struct {
+  GQuark         path_quark;
   GtkWidget     *widget;
   GtkAccelGroup *accel_group;
-  const gchar   *path;
   GClosure      *closure;
 } AccelPath;
-
-static void
-accel_path_changed (gpointer        data,
-		    GQuark	    accel_path_quark,
-		    guint           accel_key,
-		    guint           accel_mods,
-		    GtkAccelGroup  *accel_group,
-		    guint           old_accel_key,
-		    guint           old_accel_mods)
-{
-  AccelPath *apath = data;
-  gboolean notify = FALSE;
-  
-  if (apath->closure)
-    {
-      /* the closure might have been removed already (due to replacements) */
-      gtk_accel_groups_disconnect_closure (apath->closure);
-      g_closure_unref (apath->closure);
-      apath->closure = NULL;
-      notify = TRUE;
-    }
-  if (accel_key)
-    {
-      apath->closure = widget_new_accel_closure (apath->widget, GTK_WIDGET_GET_CLASS (apath->widget)->activate_signal);
-      g_closure_ref (apath->closure);
-      /* need to specify path to get an unlocked accelerator */
-      gtk_accel_group_connect (apath->accel_group,
-			       accel_key,
-			       accel_mods,
-			       GTK_ACCEL_VISIBLE,
-			       apath->closure,
-			       accel_path_quark);
-      notify = TRUE;
-    }
-  if (notify)
-    g_signal_emit (apath->widget, widget_signals[ACCEL_CLOSURES_CHANGED], 0);
-}
 
 static void
 destroy_accel_path (gpointer data)
 {
   AccelPath *apath = data;
 
-  /* stop notification */
-  gtk_accel_map_remove_notifer (apath->path, apath, accel_path_changed);
+  gtk_accel_group_disconnect (apath->accel_group, apath->closure);
 
-  /* if the closure is currently connected, get rid of that connection */
-  if (apath->closure)
-    {
-      gtk_accel_groups_disconnect_closure (apath->closure);
-      g_closure_unref (apath->closure);
-    }
+  /* closures_destroy takes care of unrefing the closure */
   g_object_unref (apath->accel_group);
+  
   g_free (apath);
 }
 
@@ -2753,25 +2738,21 @@ _gtk_widget_set_accel_path (GtkWidget     *widget,
 			    GtkAccelGroup *accel_group)
 {
   AccelPath *apath;
-  GtkAccelKey key;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_WIDGET_GET_CLASS (widget)->activate_signal != 0);
-  if (accel_path)
-    g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
 
   if (accel_path)
     {
-      GQuark quark_path = gtk_accel_map_add_entry (accel_path, 0, 0);
+      g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
+      g_return_if_fail (_gtk_accel_path_is_valid (accel_path));
 
-      if (!quark_path)
-	return;		/* pathologic anyway */
-
+      gtk_accel_map_add_entry (accel_path, 0, 0);
       apath = g_new (AccelPath, 1);
       apath->widget = widget;
       apath->accel_group = g_object_ref (accel_group);
-      apath->path = g_quark_to_string (quark_path);
-      apath->closure = NULL;
+      apath->path_quark = g_quark_from_string (accel_path);
+      apath->closure = widget_new_accel_closure (apath->widget, GTK_WIDGET_GET_CLASS (apath->widget)->activate_signal);
     }
   else
     apath = NULL;
@@ -2780,14 +2761,9 @@ _gtk_widget_set_accel_path (GtkWidget     *widget,
   g_object_set_qdata_full (G_OBJECT (widget), quark_accel_path, apath, destroy_accel_path);
 
   if (apath)
-    {
-      /* setup accel path hooks to react to changes */
-      gtk_accel_map_add_notifer (apath->path, apath, accel_path_changed, apath->accel_group);
+    gtk_accel_group_connect_by_path (apath->accel_group, g_quark_to_string (apath->path_quark), apath->closure);
 
-      /* install accelerators for this path */
-      if (gtk_accel_map_lookup_entry (apath->path, &key))
-	accel_path_changed (apath, g_quark_try_string (apath->path), key.accel_key, key.accel_mods, NULL, 0, 0);
-    }
+  g_signal_emit (widget, widget_signals[ACCEL_CLOSURES_CHANGED], 0);
 }
 
 const gchar*
@@ -2798,7 +2774,7 @@ _gtk_widget_get_accel_path (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   apath = g_object_get_qdata (G_OBJECT (widget), quark_accel_path);
-  return apath ? apath->path : NULL;
+  return apath ? g_quark_to_string (apath->path_quark) : NULL;
 }
 
 gboolean

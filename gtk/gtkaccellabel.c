@@ -351,19 +351,21 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 static void
 refetch_widget_accel_closure (GtkAccelLabel *accel_label)
 {
-  GSList *slist;
-
+  GClosure *closure = NULL;
+  GList *clist, *list;
+  
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
   g_return_if_fail (GTK_IS_WIDGET (accel_label->accel_widget));
   
-  for (slist = _gtk_widget_get_accel_closures (accel_label->accel_widget); slist; slist = slist->next)
-    if (gtk_accel_group_from_accel_closure (slist->data))
-      {
-	/* we just take the first correctly used closure */
-	gtk_accel_label_set_accel_closure (accel_label, slist->data);
-	return;
-      }
-  gtk_accel_label_set_accel_closure (accel_label, NULL);
+  clist = gtk_widget_list_accel_closures (accel_label->accel_widget);
+  for (list = clist; list; list = list->next)
+    {
+      /* we just take the first closure used */
+      closure = list->data;
+      break;
+    }
+  g_list_free (clist);
+  gtk_accel_label_set_accel_closure (accel_label, closure);
 }
 
 void

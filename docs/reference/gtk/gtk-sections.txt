@@ -8,12 +8,14 @@ GtkAccelGroup
 gtk_accel_group_get_type
 gtk_accel_group_new
 gtk_accel_group_connect
+gtk_accel_group_connect_by_path
 gtk_accel_group_disconnect
+gtk_accel_group_disconnect_key
 gtk_accel_group_query
-gtk_accel_group_activate
-gtk_accel_groups_activate
 gtk_accel_group_lock
 gtk_accel_group_unlock
+gtk_accel_group_from_accel_closure
+gtk_accel_groups_activate
 gtk_accelerator_valid
 gtk_accelerator_parse
 gtk_accelerator_name
@@ -33,18 +35,16 @@ GTK_ACCEL_GROUP_GET_CLASS
 <SECTION>
 <FILE>gtkaccelmap</FILE>
 <TITLE>Accelerator Maps</TITLE>
-GtkAccelMapNotify
 GtkAccelMapForeach
 gtk_accel_map_add_entry
 gtk_accel_map_lookup_entry
 gtk_accel_map_change_entry
-gtk_accel_map_add_notifer
-gtk_accel_map_remove_notifer
 gtk_accel_map_load
 gtk_accel_map_save
 gtk_accel_map_foreach
 gtk_accel_map_load_fd
 gtk_accel_map_save_fd
+gtk_accel_map_load_scanner
 </SECTION>
 
 <SECTION>
@@ -52,8 +52,8 @@ gtk_accel_map_save_fd
 <TITLE>GtkAccelLabel</TITLE>
 GtkAccelLabel
 gtk_accel_label_new
-gtk_accel_label_get_accel_object
-gtk_accel_label_set_accel_object
+gtk_accel_label_get_accel_closure
+gtk_accel_label_set_accel_closure
 gtk_accel_label_get_accel_widget
 gtk_accel_label_set_accel_widget
 gtk_accel_label_get_accel_width
@@ -1290,9 +1290,6 @@ GtkItemFactoryEntry
 GtkItemFactoryItem
 gtk_item_factory_new
 gtk_item_factory_construct
-gtk_item_factory_parse_rc
-gtk_item_factory_parse_rc_string
-gtk_item_factory_parse_rc_scanner
 gtk_item_factory_add_foreign
 gtk_item_factory_from_widget
 gtk_item_factory_path_from_widget
@@ -1300,9 +1297,6 @@ gtk_item_factory_get_item
 gtk_item_factory_get_widget
 gtk_item_factory_get_widget_by_action
 gtk_item_factory_get_item_by_action
-gtk_item_factory_dump_items
-gtk_item_factory_dump_rc
-gtk_item_factory_print_func
 gtk_item_factory_create_item
 gtk_item_factory_create_items
 gtk_item_factory_create_items_ac
@@ -1674,7 +1668,6 @@ GTK_OBJECT_TYPE
 GTK_OBJECT_TYPE_NAME
 GtkObjectFlags
 GTK_OBJECT_FLAGS
-GTK_OBJECT_DESTROYED
 GTK_OBJECT_FLOATING
 GTK_OBJECT_CONNECTED
 GTK_OBJECT_SET_FLAGS
@@ -3467,8 +3460,7 @@ gtk_widget_get_child_requisition
 gtk_widget_size_allocate
 gtk_widget_add_accelerator
 gtk_widget_remove_accelerator
-gtk_widget_remove_accelerators
-gtk_widget_accelerator_signal
+gtk_widget_list_accel_closures
 gtk_widget_event
 gtk_widget_activate
 gtk_widget_reparent
@@ -3519,7 +3511,6 @@ gtk_widget_shape_combine_mask
 gtk_widget_path
 gtk_widget_class_path
 gtk_widget_get_composite_name
-gtk_widget_lock_accelerators
 gtk_widget_modify_style
 gtk_widget_get_modifier_style
 gtk_widget_modify_fg
@@ -3541,8 +3532,6 @@ gtk_widget_set_app_paintable
 gtk_widget_set_double_buffered
 gtk_widget_set_composite_name
 gtk_widget_set_scroll_adjustments
-gtk_widget_unlock_accelerators
-gtk_widget_accelerators_locked
 gtk_widget_mnemonic_activate
 gtk_widget_class_install_style_property
 gtk_widget_class_install_style_property_parser

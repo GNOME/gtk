@@ -133,6 +133,9 @@ static void gtk_menu_reparent       (GtkMenu           *menu,
 static void gtk_menu_remove         (GtkContainer      *menu,
 				     GtkWidget         *widget);
 
+static void _gtk_menu_refresh_accel_paths (GtkMenu *menu,
+					   gboolean group_changed);
+
 static GtkMenuShellClass *parent_class = NULL;
 static const gchar	 *attach_data_key = "gtk-menu-attach-data";
 
@@ -866,8 +869,8 @@ gtk_menu_get_accel_group (GtkMenu *menu)
  * each menu item of this menu, that contains a label describing its purpose,
  * automatically gets an accel path assigned. For example, a menu containing
  * menu items "New" and "Exit", will, after gtk_menu_set_accel_path (menu,
- * "<Gnumeric-Sheet>/File"); has been called, assign its items the accel paths:
- * "<Gnumeric-Sheet>/File/New" and "<Gnumeric-Sheet>/File/Exit".
+ * "&lt;Gnumeric-Sheet&gt;/File"); has been called, assign its items the accel paths:
+ * "&lt;Gnumeric-Sheet&gt;/File/New" and "&lt;Gnumeric-Sheet&gt;/File/Exit".
  * Assigning accel paths to menu items then enables the user to change
  * their accelerators at runtime. More details about accelerator paths
  * and their default setups can be found at gtk_accel_map_add_entry().
@@ -892,7 +895,7 @@ typedef struct {
 } AccelPropagation;
 
 static void
-refresh_accel_paths_froeach (GtkWidget *widget,
+refresh_accel_paths_foreach (GtkWidget *widget,
 			     gpointer   data)
 {
   AccelPropagation *prop = data;
@@ -904,7 +907,7 @@ refresh_accel_paths_froeach (GtkWidget *widget,
 				       prop->group_changed);
 }
 
-void
+static void
 _gtk_menu_refresh_accel_paths (GtkMenu *menu,
 			       gboolean group_changed)
 {
@@ -917,7 +920,7 @@ _gtk_menu_refresh_accel_paths (GtkMenu *menu,
       prop.menu = menu;
       prop.group_changed = group_changed;
       gtk_container_foreach (GTK_CONTAINER (menu),
-			     refresh_accel_paths_froeach,
+			     refresh_accel_paths_foreach,
 			     &prop);
     }
 }

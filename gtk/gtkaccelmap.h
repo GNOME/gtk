@@ -26,13 +26,6 @@ G_BEGIN_DECLS
 
 
 /* --- notifier --- */
-typedef void (*GtkAccelMapNotify)		(gpointer	 data,
-						 GQuark          accel_path_quark,
-						 guint           accel_key,
-						 guint           accel_mods,
-						 GtkAccelGroup  *accel_group,
-						 guint           old_accel_key,
-						 guint           old_accel_mods);
 typedef void (*GtkAccelMapForeach)		(gpointer	 data,
 						 const gchar	*accel_path,
 						 guint           accel_key,
@@ -41,17 +34,10 @@ typedef void (*GtkAccelMapForeach)		(gpointer	 data,
 
 
 /* --- public API --- */
-GQuark	   gtk_accel_map_add_entry	(const gchar		*accel_path,
+void	   gtk_accel_map_add_entry	(const gchar		*accel_path,
 					 guint			 accel_key,
 					 guint			 accel_mods);
-void	   gtk_accel_map_add_notifer	(const gchar		*accel_path,
-					 gpointer		 notify_data,
-					 GtkAccelMapNotify	 notify_func,
-					 GtkAccelGroup		*accel_group);
-void	   gtk_accel_map_remove_notifer	(const gchar		*accel_path,
-					 gpointer		 notify_data,
-					 GtkAccelMapNotify	 notify_func);
-GQuark     gtk_accel_map_lookup_entry	(const gchar		*accel_path,
+gboolean   gtk_accel_map_lookup_entry	(const gchar		*accel_path,
 					 GtkAccelKey		*key);
 gboolean   gtk_accel_map_change_entry	(const gchar		*accel_path,
 					 guint			 accel_key,
@@ -74,6 +60,12 @@ void	gtk_accel_map_foreach_unfilterd	(gpointer		 data,
 
 /* --- internal API --- */
 void		_gtk_accel_map_init		(void);
+
+void            _gtk_accel_map_add_group	 (const gchar   *accel_path,
+						  GtkAccelGroup *accel_group);
+void            _gtk_accel_map_remove_group 	 (const gchar   *accel_path,
+						  GtkAccelGroup *accel_group);
+gboolean	_gtk_accel_path_is_valid	 (const gchar	*accel_path);
 
 
 G_END_DECLS

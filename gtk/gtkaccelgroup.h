@@ -88,20 +88,23 @@ struct _GtkAccelKey
 
 
 /* -- Accelerator Groups --- */
-GType           gtk_accel_group_get_type        (void);
-GtkAccelGroup*  gtk_accel_group_new	      	(void);
-void		gtk_accel_group_lock		(GtkAccelGroup	*accel_group);
-void		gtk_accel_group_unlock		(GtkAccelGroup	*accel_group);
-void		gtk_accel_group_connect		(GtkAccelGroup	*accel_group,
-						 guint		 accel_key,
-						 GdkModifierType accel_mods,
-						 GtkAccelFlags	 accel_flags,
-						 GClosure	*closure,
-						 GQuark		 accel_path_quark);
-gboolean	gtk_accel_group_disconnect	(GtkAccelGroup	*accel_group,
-						 guint		 accel_key,
-						 GdkModifierType accel_mods);
-gboolean    gtk_accel_groups_disconnect_closure	(GClosure	*closure);
+GType          gtk_accel_group_get_type           (void);
+GtkAccelGroup* gtk_accel_group_new	      	  (void);
+void	       gtk_accel_group_lock		  (GtkAccelGroup  *accel_group);
+void	       gtk_accel_group_unlock		  (GtkAccelGroup  *accel_group);
+void	       gtk_accel_group_connect		  (GtkAccelGroup  *accel_group,
+						   guint	   accel_key,
+						   GdkModifierType accel_mods,
+						   GtkAccelFlags   accel_flags,
+						   GClosure	  *closure);
+void           gtk_accel_group_connect_by_path    (GtkAccelGroup  *accel_group,
+						   const gchar	  *accel_path,
+						   GClosure	  *closure);
+gboolean       gtk_accel_group_disconnect	  (GtkAccelGroup  *accel_group,
+						   GClosure	  *closure);
+gboolean       gtk_accel_group_disconnect_key	  (GtkAccelGroup  *accel_group,
+						   guint	   accel_key,
+						   GdkModifierType accel_mods);
 
 
 /* --- GtkActivatable glue --- */
@@ -138,6 +141,10 @@ GtkAccelGroupEntry*	gtk_accel_group_query	(GtkAccelGroup	*accel_group,
 						 guint		 accel_key,
 						 GdkModifierType accel_mods,
 						 guint          *n_entries);
+
+void		     _gtk_accel_group_reconnect (GtkAccelGroup *accel_group,
+						 GQuark         accel_path_quark);
+
 struct _GtkAccelGroupEntry
 {
   GtkAccelKey  key;

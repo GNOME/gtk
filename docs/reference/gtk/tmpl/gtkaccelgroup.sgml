@@ -64,12 +64,35 @@ An object representing and maintaining a group of accelerators.
 @accel_mods: 
 @accel_flags: 
 @closure: 
-@accel_path_quark: 
 <!-- # Unused Parameters # -->
+@accel_path_quark: 
 @path_quark: 
 
 
+<!-- ##### FUNCTION gtk_accel_group_connect_by_path ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_path: 
+@closure: 
+
+
 <!-- ##### FUNCTION gtk_accel_group_disconnect ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@closure: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@accel_key: 
+@accel_mods: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_disconnect_key ##### -->
 <para>
 
 </para>
@@ -92,19 +115,6 @@ An object representing and maintaining a group of accelerators.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_accel_groups_activate ##### -->
-<para>
-
-</para>
-
-@acceleratable: 
-@accel_key: 
-@accel_mods: 
-@Returns: 
-<!-- # Unused Parameters # -->
-@object: 
-
-
 <!-- ##### FUNCTION gtk_accel_group_lock ##### -->
 <para>
 
@@ -119,6 +129,28 @@ An object representing and maintaining a group of accelerators.
 </para>
 
 @accel_group: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_from_accel_closure ##### -->
+<para>
+
+</para>
+
+@closure: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_groups_activate ##### -->
+<para>
+
+</para>
+
+@acceleratable: 
+@accel_key: 
+@accel_mods: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@object: 
 
 
 <!-- ##### FUNCTION gtk_accelerator_valid ##### -->

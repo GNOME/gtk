@@ -492,7 +492,7 @@ void         _gtk_widget_set_accel_path   (GtkWidget           *widget,
 					   const gchar         *accel_path,
 					   GtkAccelGroup       *accel_group);
 const gchar* _gtk_widget_get_accel_path   (GtkWidget           *widget);
-GSList*    _gtk_widget_get_accel_closures (GtkWidget	       *widget);
+GList*     gtk_widget_list_accel_closures (GtkWidget	       *widget);
 gboolean   gtk_widget_mnemonic_activate   (GtkWidget           *widget,
 					   gboolean             group_cycling);
 gboolean   gtk_widget_event		  (GtkWidget	       *widget,

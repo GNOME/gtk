@@ -149,8 +149,6 @@ void	       gtk_menu_set_accel_group	  (GtkMenu	       *menu,
 GtkAccelGroup* gtk_menu_get_accel_group	  (GtkMenu	       *menu);
 void           gtk_menu_set_accel_path    (GtkMenu             *menu,
 					   const gchar         *accel_path);
-void	    _gtk_menu_refresh_accel_paths (GtkMenu	       *menu,
-					   gboolean	        group_changed);
 
 /* A reference count is kept for a widget when it is attached to
  * a particular widget. This is typically a menu item; it may also

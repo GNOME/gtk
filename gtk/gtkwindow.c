@@ -46,7 +46,7 @@ enum {
   ACTIVATE_FOCUS,
   ACTIVATE_DEFAULT,
   MOVE_FOCUS,
-  ACCELS_CHANGED,
+  KEYS_CHANGED,
   LAST_SIGNAL
 };
 
@@ -222,7 +222,7 @@ static void     gtk_window_set_default_size_internal (GtkWindow    *window,
 
 static void     gtk_window_realize_icon               (GtkWindow    *window);
 static void     gtk_window_unrealize_icon             (GtkWindow    *window);
-static void	gtk_window_notify_accels_changed      (GtkWindow    *window);
+static void	gtk_window_notify_keys_changed      (GtkWindow    *window);
 
 static GSList      *toplevel_list = NULL;
 static GHashTable  *mnemonic_hash_table = NULL;
@@ -350,7 +350,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   klass->activate_default = gtk_window_real_activate_default;
   klass->activate_focus = gtk_window_real_activate_focus;
   klass->move_focus = gtk_window_move_focus;
-  klass->accels_changed = NULL;
+  klass->keys_changed = NULL;
   
   /* Construct */
   g_object_class_install_property (gobject_class,
@@ -500,11 +500,11 @@ gtk_window_class_init (GtkWindowClass *klass)
                   1,
                   GTK_TYPE_DIRECTION_TYPE);
 
-  window_signals[ACCELS_CHANGED] =
-    g_signal_new ("accels_changed",
+  window_signals[KEYS_CHANGED] =
+    g_signal_new ("keys_changed",
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_FIRST,
-                  GTK_SIGNAL_OFFSET (GtkWindowClass, accels_changed),
+                  GTK_SIGNAL_OFFSET (GtkWindowClass, keys_changed),
                   NULL, NULL,
                   gtk_marshal_VOID__VOID,
                   G_TYPE_NONE,
@@ -1042,30 +1042,30 @@ gtk_window_set_policy (GtkWindow *window,
 }
 
 static gboolean
-handle_accels_changed (gpointer data)
+handle_keys_changed (gpointer data)
 {
   GtkWindow *window;
 
   GDK_THREADS_ENTER ();
   window = GTK_WINDOW (data);
 
-  if (window->accels_changed_handler)
+  if (window->keys_changed_handler)
     {
-      gtk_idle_remove (window->accels_changed_handler);
-      window->accels_changed_handler = 0;
+      gtk_idle_remove (window->keys_changed_handler);
+      window->keys_changed_handler = 0;
     }
 
-  g_signal_emit (window, window_signals[ACCELS_CHANGED], 0);
+  g_signal_emit (window, window_signals[KEYS_CHANGED], 0);
   GDK_THREADS_LEAVE ();
   
   return FALSE;
 }
 
 static void
-gtk_window_notify_accels_changed (GtkWindow *window)
+gtk_window_notify_keys_changed (GtkWindow *window)
 {
-  if (!window->accels_changed_handler)
-    window->accels_changed_handler = gtk_idle_add (handle_accels_changed, window);
+  if (!window->keys_changed_handler)
+    window->keys_changed_handler = gtk_idle_add (handle_keys_changed, window);
 }
 
 /**
@@ -1078,15 +1078,15 @@ gtk_window_notify_accels_changed (GtkWindow *window)
  * in @accel_group.
  **/
 void
-gtk_window_add_accel_group (GtkWindow        *window,
-			    GtkAccelGroup    *accel_group)
+gtk_window_add_accel_group (GtkWindow     *window,
+			    GtkAccelGroup *accel_group)
 {
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (accel_group != NULL);
+  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
 
   _gtk_accel_group_attach (accel_group, G_OBJECT (window));
   g_signal_connect_object (accel_group, "accel_changed",
-			   G_CALLBACK (gtk_window_notify_accels_changed),
+			   G_CALLBACK (gtk_window_notify_keys_changed),
 			   window, G_CONNECT_SWAPPED);
 }
 
@@ -1098,14 +1098,14 @@ gtk_window_add_accel_group (GtkWindow        *window,
  * Reverses the effects of gtk_window_add_accel_group().
  **/
 void
-gtk_window_remove_accel_group (GtkWindow       *window,
-			       GtkAccelGroup   *accel_group)
+gtk_window_remove_accel_group (GtkWindow     *window,
+			       GtkAccelGroup *accel_group)
 {
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (accel_group != NULL);
 
   g_signal_handlers_disconnect_by_func (accel_group,
-					G_CALLBACK (gtk_window_notify_accels_changed),
+					G_CALLBACK (gtk_window_notify_keys_changed),
 					window);
   _gtk_accel_group_detach (accel_group, G_OBJECT (window));
 }
@@ -1137,7 +1137,7 @@ gtk_window_add_mnemonic (GtkWindow *window,
       mnemonic->targets = g_slist_prepend (NULL, target);
       g_hash_table_insert (mnemonic_hash_table, mnemonic, mnemonic);
     }
-  gtk_window_notify_accels_changed (window);
+  gtk_window_notify_keys_changed (window);
 }
 
 void
@@ -1163,7 +1163,7 @@ gtk_window_remove_mnemonic (GtkWindow *window,
       g_hash_table_remove (mnemonic_hash_table, mnemonic);
       g_free (mnemonic);
     }
-  gtk_window_notify_accels_changed (window);
+  gtk_window_notify_keys_changed (window);
 }
 
 gboolean
@@ -1231,7 +1231,7 @@ gtk_window_set_mnemonic_modifier (GtkWindow      *window,
   g_return_if_fail ((modifier & ~GDK_MODIFIER_MASK) == 0);
 
   window->mnemonic_modifier = modifier;
-  gtk_window_notify_accels_changed (window);
+  gtk_window_notify_keys_changed (window);
 }
 
 /**
@@ -2929,10 +2929,10 @@ gtk_window_finalize (GObject *object)
       g_free (window->geometry_info);
     }
 
-  if (window->accels_changed_handler)
+  if (window->keys_changed_handler)
     {
-      gtk_idle_remove (window->accels_changed_handler);
-      window->accels_changed_handler = 0;
+      gtk_idle_remove (window->keys_changed_handler);
+      window->keys_changed_handler = 0;
     }
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
