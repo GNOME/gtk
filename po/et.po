@@ -5,10 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.0\n"
-"POT-Creation-Date: 1999-09-23 19:59-0500\n"
-"PO-Revision-Date: 1999-02-27 15:29 +0200\n"
+"POT-Creation-Date: 1999-09-26 23:20+0300\n"
+"PO-Revision-Date: 1999-09-26 23:40+0300\n"
 "Last-Translator: Lauris Kaplinski <lauris@ariman.ee>\n"
-"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -124,11 +123,11 @@ msgstr "Nimeta ümber"
 
 #: gtk/gtkfilesel.c:1445
 msgid "Selection: "
-msgstr "Valitud: "
+msgstr "Valik: "
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"
-msgstr "Looja:"
+msgstr "Päritolu:"
 
 #: gtk/gtkfontsel.c:211
 msgid "Family:"
@@ -148,7 +147,7 @@ msgstr "Laius:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
-msgstr "Stiil:"
+msgstr "Lisa stiil:"
 
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
@@ -160,11 +159,11 @@ msgstr "Punktisuurus:"
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
-msgstr "Lahutus X:"
+msgstr "X lahutus:"
 
 #: gtk/gtkfontsel.c:219
 msgid "Resolution Y:"
-msgstr "Lahutus Y:"
+msgstr "Y Lahutus:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
@@ -214,15 +213,15 @@ msgstr "Nulli filter"
 
 #: gtk/gtkfontsel.c:660
 msgid "Metric:"
-msgstr "Suurus:"
+msgstr "Ühikud:"
 
 #: gtk/gtkfontsel.c:664
 msgid "Points"
-msgstr "Punktides"
+msgstr "Punktid"
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
-msgstr "Pikslites"
+msgstr "Pikslid"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
@@ -235,11 +234,11 @@ msgstr "Lähem info"
 
 #: gtk/gtkfontsel.c:749
 msgid "Requested Font Name:"
-msgstr "Valitud shrifti nimi:"
+msgstr "Soovitud shrifti nimi:"
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
-msgstr "Tegelik shrifti nimi:"
+msgstr "Tegeliku shrifti nimi:"
 
 #: gtk/gtkfontsel.c:771
 #, c-format
@@ -252,7 +251,7 @@ msgstr "Filter"
 
 #: gtk/gtkfontsel.c:799
 msgid "Font Types:"
-msgstr "Shrifti tüübid:"
+msgstr "Shriftitüübid:"
 
 #: gtk/gtkfontsel.c:807
 msgid "Bitmap"
@@ -268,12 +267,12 @@ msgstr "Skaleeritav bitmap"
 
 #: gtk/gtkfontsel.c:890
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "(nil)"
-msgstr ""
+msgstr "(ei ole)"
 
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
@@ -289,11 +288,11 @@ msgstr "obliikva"
 
 #: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1952
 msgid "reverse italic"
-msgstr "tagurpidi kursiiv"
+msgstr "vasakule kursiiv"
 
 #: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1953
 msgid "reverse oblique"
-msgstr "tagurpidi obliikva"
+msgstr "vasakule obliikva"
 
 #: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1954
 msgid "other"
@@ -321,11 +320,11 @@ msgstr "See on 2-baidine shrift ja ei pruugi korralikult esituda."
 
 #: gtk/gtkfontsel.c:1938 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
-msgstr "(teadmata)"
+msgstr "(tundmatu)"
 
 #: gtk/gtkfontsel.c:1949
 msgid "roman"
-msgstr "roman"
+msgstr "romaani"
 
 #: gtk/gtkfontsel.c:1961
 msgid "proportional"
@@ -366,7 +365,7 @@ msgstr "Gamma väärtus"
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:200
 msgid "Input"
-msgstr "Sisend:"
+msgstr "Sisend"
 
 #: gtk/gtkinputdialog.c:208
 msgid "No input devices"
@@ -444,23 +443,23 @@ msgstr "kustuta"
 #: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4120
 #, c-format
 msgid "Page %u"
-msgstr "Leht %u"
+msgstr "Lehekülg %u"
 
 #: gtk/gtkrc.c:1627
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Ei leia pildifaili \"%s\" rajal 'pixmap_path'. Rida %d"
+msgstr "Ei leia pildifaili otsingurajalt 'pixmap_path': \"%s\" rida %d"
 
 #: gtk/gtkrc.c:1630
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Ei leia pildifail \"%s\" rajal pixmap_path"
+msgstr "Ei leia pildifaili otsingurajalt 'pixmap_path': \"%s\""
 
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Ei leia moodulit \"%s\" rajal module_path,"
+msgstr "Ei leia moodulit otsingurajalt 'module_path': \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "--- Tühi ---"
+msgstr "--- Vihjet ei ole ---"
