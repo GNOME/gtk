@@ -1577,10 +1577,10 @@ gdk_window_get_geometry (GdkWindow *window,
       if (!GetClientRect (GDK_DRAWABLE_XID (window), &rect))
 	WIN32_API_FAILED ("GetClientRect");
 
-      if (window != _gdk_parent_root)
+      if (window != gdk_parent_root)
 	{
-	  ClientToScreen (GDK_WINDOW_HWND (window), &rect);
-	  ScreenToClient (GDK_WINDOW_HWND (gdk_window_get_parent (window)), &rect);
+	  ClientToScreen (GDK_DRAWABLE_XID (window), &rect);
+	  ScreenToClient (GDK_DRAWABLE_XID (gdk_window_get_parent (window)), &rect);
 	}
 
       if (x)
