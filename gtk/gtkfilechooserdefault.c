@@ -707,7 +707,7 @@ set_preview_widget (GtkFileChooserDefault *impl,
   impl->preview_widget = preview_widget;
   if (impl->preview_widget)
     {
-      gtk_widget_show_all (impl->preview_widget);
+      gtk_widget_show (impl->preview_widget);
       gtk_box_pack_start (GTK_BOX (impl->preview_box), impl->preview_widget, TRUE, TRUE, 0);
       gtk_box_reorder_child (GTK_BOX (impl->preview_box),
 			     impl->preview_widget,
@@ -2615,7 +2615,12 @@ gtk_file_chooser_default_dispose (GObject *object)
 static void
 gtk_file_chooser_default_show_all (GtkWidget *widget)
 {
+  GtkFileChooserDefault *impl = (GtkFileChooserDefault *) object;
+
   gtk_widget_show (widget);
+
+  if (impl->extra_widget)
+    gtk_widget_show_all (impl->extra_widget);
 }
 
 static void
