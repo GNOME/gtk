@@ -1,3 +1,9 @@
+2001-10-27  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_new_with_range): 
+	Clarify that we're returning a spin button in the _new function.
+	This fixes #54097.
+	
 Fri Oct 26 20:55:57 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkbutton.c: Revert changes to GTK_RUN_LAST. 
@@ -30,6 +36,7 @@ Fri Oct 26 20:55:57 2001  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtk.def : added the remaining exported functions
 
 2001-10-27  Anders Carlsson  <andersca@gnu.org>
+>>>>>>> 1.2471
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_fixed_width): 
 	Add note about width having to be greater than 0. This fixes

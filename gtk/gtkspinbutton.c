@@ -1561,7 +1561,7 @@ gtk_spin_button_new (GtkAdjustment *adjustment,
  * is the default. The precision of the spin button is equivalent to the 
  * precision of @step.
  * 
- * Return value: the newly instantiated spin button
+ * Return value: The new spin button as a #GtkWidget.
  **/
 GtkWidget *
 gtk_spin_button_new_with_range (gdouble min,
