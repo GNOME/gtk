@@ -611,8 +611,13 @@ static gboolean try_preload(TGAContext *ctx, GError **err)
 			ctx->in = io_buffer_free_segment(ctx->in, sizeof(TGAHeader), err);
 			if (!ctx->in)
 				return FALSE;
-			if (!fill_in_context(ctx, err))
+			if (LE16(ctx->hdr->width) == 0 || 
+			    LE16(ctx->hdr->height) == 0) {
+				g_set_error(err, GDK_PIXBUF_ERROR,
+					    GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+					    _("TGA image has invalid dimensions"));
 				return FALSE;
+			}
 			if (ctx->hdr->infolen > 255) {
 				g_set_error(err, GDK_PIXBUF_ERROR,
 					    GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
@@ -628,6 +633,8 @@ static gboolean try_preload(TGAContext *ctx, GError **err)
 					    _("TGA image type not supported"));
 				return FALSE;
 			}
+			if (!fill_in_context(ctx, err))
+				return FALSE;
 		} else {
 			return TRUE;
 		}
@@ -752,7 +759,8 @@ static gboolean gdk_pixbuf__tga_stop_load(gpointer data, GError **err)
 	g_free(ctx->hdr);
 	if (ctx->cmap)
 		g_free(ctx->cmap);
-	g_object_unref(ctx->pbuf);
+	if (ctx->pbuf)
+		g_object_unref(ctx->pbuf);
 	if (ctx->in->size)
 		ctx->in = io_buffer_free_segment(ctx->in, ctx->in->size, err);
 	if (!ctx->in) {

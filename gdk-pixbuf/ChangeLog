@@ -1,3 +1,17 @@
+2002-02-10  Matthias Clasen  <matthias@local>
+
+	* test-loaders.c (main): Enable some tests which should work
+	now.
+
+	* io-wbmp.c (gdk_pixbuf__wbmp_image_load_increment): Detect
+	invalid image dimensions and insufficient memory.
+
+	* io-tga.c (try_preload): Detect invalid image dimensions.
+	(gdk_pixbuf__tga_stop_load): Don't try to unref NULL pointers.
+
+	* io-ico.c (DecodeHeader): Detect some invalid headers and
+	don't segfault.
+
 Fri Feb  8 23:11:15 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* pixops/pixops.c: Force all weight arrays to sum exactly
