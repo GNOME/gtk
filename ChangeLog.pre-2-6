@@ -1,3 +1,7 @@
+2002-09-06  Matthias Clasen  <maclas@gmx.de>
+
+	* configure.in: Add ani to all_loaders.
+
 Fri Sep  6 15:59:54 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdisplay.h: Remove unused prototype for 
