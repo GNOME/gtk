@@ -3809,7 +3809,7 @@ gtk_icon_view_get_item_width (GtkIconView *icon_view)
 
 
 /**
- * gtk_icon_view_set_item_width:
+ * gtk_icon_view_set_spacing:
  * @icon_view: a #GtkIconView
  * @spacing: the spacing
  * 
@@ -3857,7 +3857,7 @@ gtk_icon_view_get_spacing (GtkIconView *icon_view)
 /**
  * gtk_icon_view_set_row_spacing:
  * @icon_view: a #GtkIconView
- * @spacing: the row spacing
+ * @row_spacing: the row spacing
  * 
  * Sets the ::row-spacing property which specifies the space 
  * which is inserted between the rows of the icon view.
@@ -3902,7 +3902,7 @@ gtk_icon_view_get_row_spacing (GtkIconView *icon_view)
 /**
  * gtk_icon_view_set_column_spacing:
  * @icon_view: a #GtkIconView
- * @spacing: the column spacing
+ * @column_spacing: the column spacing
  * 
  * Sets the ::column-spacing property which specifies the space 
  * which is inserted between the columns of the icon view.

@@ -1,3 +1,10 @@
+2005-03-31  Sven Neumann  <sven@gimp.org>
+
+	Merged from gtk-2-6:
+
+	* gtk/gtkbutton.c
+	* gtk/gtkiconview.c: fixed gtk-doc comments.
+
 2005-03-31  Michael Natterer  <mitch@gimp.org>
 
 	Allow to pop up menus without grabbing the keyboard. Useful for
