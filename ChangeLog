@@ -1,3 +1,22 @@
+Tue Apr 23 18:35:34 2002  Kristian Rietveld  <kris@gtk.org>
+
+	This commit adds a cell_background property for cell renderers. With
+	this property you can make your TreeView look incredibly ugly.
+
+	* gtk/gtkcellrenderer.c: add cell_background, cell_background_gdk and
+	cell_background_set properties,
+	(set_cell_bg_color): new function,
+	(gtk_cell_renderer_get_property), (gtk_cell_renderer_set_property):
+	support for new properties,
+	(gtk_cell_renderer_render): render a background when set.
+
+	* gtk/gtkcellrenderer.h: add cell_background_set and cell_background
+	fields.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_process_action):
+	when rendering, pass in just the background_area of the cell and not
+	the background_area of the entire column.
+
 2002-04-22  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkentry.c (gtk_entry_drag_data_get): Use 
@@ -17,7 +36,6 @@ Mon Apr 22 19:24:29 2002  Kristian Rietveld  <kris@gtk.org>
 	* demos/gtk-demo/stock_browser.c: modified to use the stock
 	icon stuff in the cellrendererpixbuf instead of its own stock icon
 	rendering code.
-
 
 2002-04-21  Alexander Larsson  <alla@lysator.liu.se>
 

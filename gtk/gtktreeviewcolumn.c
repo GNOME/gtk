@@ -2326,11 +2326,13 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 {
   GList *list;
   GdkRectangle real_cell_area;
+  GdkRectangle real_background_area;
   gint expand_cell_count = 0;
   gint full_requested_width = 0;
   gint extra_space;
   gint min_x, min_y, max_x, max_y;
   gint focus_line_width;
+  gint dx;
 
   min_x = G_MAXINT;
   min_y = G_MAXINT;
@@ -2338,6 +2340,8 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
   max_y = 0;
 
   real_cell_area = *cell_area;
+  real_background_area = *background_area;
+  dx = real_cell_area.x - real_background_area.x;
 
   gtk_widget_style_get (GTK_WIDGET (tree_column->tree_view),
 			"focus-line-width", &focus_line_width,
@@ -2373,12 +2377,18 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 	(info->expand?extra_space:0);
       info->real_width = real_cell_area.width;
       real_cell_area.x += focus_line_width;
+
+      real_background_area.width = real_cell_area.width;
+      real_background_area.x += focus_line_width;
+      if (!list->prev)
+	real_background_area.width += dx;
+
       if (action == CELL_ACTION_RENDER)
 	{
 	  gtk_cell_renderer_render (info->cell,
 				    window,
 				    tree_column->tree_view,
-				    background_area,
+				    &real_background_area,
 				    &real_cell_area,
 				    expose_area,
 				    flags);
@@ -2457,6 +2467,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 	    }
 	}
       real_cell_area.x += (info->requested_width + tree_column->spacing);
+      real_background_area.x += (info->requested_width + tree_column->spacing);
     }
   for (list = g_list_last (tree_column->cell_list); list; list = list->prev)
     {
@@ -2471,12 +2482,13 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       real_cell_area.width = info->requested_width +
 	(info->expand?extra_space:0);
       info->real_width = real_cell_area.width;
+      real_background_area.width = real_background_area.width;
       if (action == CELL_ACTION_RENDER)
 	{
 	  gtk_cell_renderer_render (info->cell,
 				    window,
 				    tree_column->tree_view,
-				    background_area,
+				    &real_background_area,
 				    &real_cell_area,
 				    expose_area,
 				    flags);
@@ -2501,6 +2513,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 	    max_y = real_cell_area.y + y_offset + height;
 	}
       real_cell_area.x += (info->requested_width + tree_column->spacing);
+      real_background_area.x += (info->requested_width + tree_column->spacing);
     }
 
   if (action == CELL_ACTION_FOCUS)

@@ -30,6 +30,8 @@ static void gtk_cell_renderer_set_property  (GObject              *object,
 					     guint                 param_id,
 					     const GValue         *value,
 					     GParamSpec           *pspec);
+static void set_cell_bg_color               (GtkCellRenderer      *cell,
+					     GdkColor             *color);
 
 
 enum {
@@ -43,7 +45,10 @@ enum {
   PROP_WIDTH,
   PROP_HEIGHT,
   PROP_IS_EXPANDER,
-  PROP_IS_EXPANDED
+  PROP_IS_EXPANDED,
+  PROP_CELL_BACKGROUND,
+  PROP_CELL_BACKGROUND_GDK,
+  PROP_CELL_BACKGROUND_SET
 };
 
 
@@ -200,6 +205,29 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							 FALSE,
 							 G_PARAM_READABLE |
 							 G_PARAM_WRITABLE));
+
+  g_object_class_install_property (object_class,
+				   PROP_CELL_BACKGROUND,
+				   g_param_spec_string ("cell_background",
+							_("Cell background color name"),
+							_("Cell background color as a string"),
+							NULL,
+							G_PARAM_WRITABLE));
+
+  g_object_class_install_property (object_class,
+				   PROP_CELL_BACKGROUND_GDK,
+				   g_param_spec_boxed ("cell_background_gdk",
+						       _("Cell background color"),
+						       _("Cell background color as a GdkColor"),
+						       GDK_TYPE_COLOR,
+						       G_PARAM_READABLE | G_PARAM_WRITABLE));
+
+
+#define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, G_PARAM_READABLE | G_PARAM_WRITABLE))
+
+  ADD_SET_PROP ("cell_background_set", PROP_CELL_BACKGROUND_SET,
+                _("Cell background set"),
+                _("Whether this tag affects the cell background color"));
 }
 
 static void
@@ -242,6 +270,21 @@ gtk_cell_renderer_get_property (GObject     *object,
     case PROP_IS_EXPANDED:
       g_value_set_int (value, cell->is_expanded);
       break;
+    case PROP_CELL_BACKGROUND_GDK:
+      {
+	GdkColor color;
+
+	color.red = cell->cell_background.red;
+	color.green = cell->cell_background.green;
+	color.blue = cell->cell_background.blue;
+
+	g_value_set_boxed (value, &color);
+      }
+      break;
+    case PROP_CELL_BACKGROUND_SET:
+      g_value_set_boolean (value, cell->cell_background_set);
+      break;
+    case PROP_CELL_BACKGROUND:
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -289,9 +332,55 @@ gtk_cell_renderer_set_property (GObject      *object,
     case PROP_IS_EXPANDED:
       cell->is_expanded = g_value_get_boolean (value);
       break;
+    case PROP_CELL_BACKGROUND:
+      {
+	GdkColor color;
+
+	if (!g_value_get_string (value))
+	  set_cell_bg_color (cell, NULL);
+	else if (gdk_color_parse (g_value_get_string (value), &color))
+	  set_cell_bg_color (cell, &color);
+	else
+	  g_warning ("Don't know color `%s'", g_value_get_string (value));
+
+	g_object_notify (object, "cell_background_gdk");
+      }
+      break;
+    case PROP_CELL_BACKGROUND_GDK:
+      set_cell_bg_color (cell, g_value_get_boxed (value));
+      break;
+    case PROP_CELL_BACKGROUND_SET:
+      cell->cell_background_set = g_value_get_boolean (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
+    }
+}
+
+static void
+set_cell_bg_color (GtkCellRenderer *cell,
+		   GdkColor        *color)
+{
+  if (color)
+    {
+      if (!cell->cell_background_set)
+        {
+	  cell->cell_background_set = TRUE;
+	  g_object_notify (G_OBJECT (cell), "cell_background_set");
+	}
+
+      cell->cell_background.red = color->red;
+      cell->cell_background.green = color->green;
+      cell->cell_background.blue = color->blue;
+    }
+  else
+    {
+      if (cell->cell_background_set)
+        {
+	  cell->cell_background_set = FALSE;
+	  g_object_notify (G_OBJECT (cell), "cell_background_set");
+	}
     }
 }
 
@@ -369,8 +458,29 @@ gtk_cell_renderer_render (GtkCellRenderer     *cell,
 			  GdkRectangle        *expose_area,
 			  GtkCellRendererState flags)
 {
+  gboolean selected = FALSE;
+
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->render != NULL);
+
+  selected = (flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED;
+
+  if (cell->cell_background_set && !selected)
+    {
+      GdkColor color;
+      GdkGC *gc;
+
+      color.red = cell->cell_background.red;
+      color.green = cell->cell_background.green;
+      color.blue = cell->cell_background.blue;
+
+      gc = gdk_gc_new (window);
+      gdk_gc_set_rgb_fg_color (gc, &color);
+      gdk_draw_rectangle (window, gc, TRUE,
+                          background_area->x, background_area->y,
+                          background_area->width, background_area->height);
+      g_object_unref (G_OBJECT (gc));
+    }
 
   GTK_CELL_RENDERER_GET_CLASS (cell)->render (cell,
 					      window,
