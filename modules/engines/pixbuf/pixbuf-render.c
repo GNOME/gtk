@@ -25,6 +25,10 @@
 
 GCache *pixbuf_cache = NULL;
 
+/* Scale the rectangle (src_x, src_y, src_width, src_height)
+ * onto the rectangle (dest_x, dest_y, dest_width, dest_height)
+ * of the destination, clip by clip_rect and render
+ */
 static void
 pixbuf_render (GdkPixbuf    *src,
 	       GdkWindow    *window,
@@ -42,6 +46,9 @@ pixbuf_render (GdkPixbuf    *src,
   GdkPixbuf *tmp_pixbuf;
   GdkRectangle rect;
   int x_offset, y_offset;
+  gboolean has_alpha = gdk_pixbuf_get_has_alpha (src);
+  gint src_rowstride = gdk_pixbuf_get_rowstride (src);
+  gint src_n_channels = gdk_pixbuf_get_n_channels (src);
 
   if (dest_width <= 0 || dest_height <= 0)
     return;
@@ -51,45 +58,53 @@ pixbuf_render (GdkPixbuf    *src,
   rect.width = dest_width;
   rect.height = dest_height;
 
-  /* FIXME: we need the full mask, not a partial mask; the following is, however,
-   *  horribly expensive
+  /* FIXME: Because we use the mask to shape windows, we don't use
+   * clip_rect to clip what we draw to the mask, only to clip
+   * what we actually draw. But this leads to the horrible ineffiency
+   * of scale the whole image to get a little bit of it.
    */
-  if (!mask && clip_rect && !gdk_rectangle_intersect (clip_rect, &rect, &rect))
-    return;
-  
-  if (dest_width != src->art_pixbuf->width ||
-      dest_height != src->art_pixbuf->height)
+  if (!mask && clip_rect)
     {
-      ArtPixBuf *partial_src_art;
-      GdkPixbuf *partial_src_gdk;
-
-      if (src->art_pixbuf->n_channels == 3)
-	{
-	  partial_src_art = 
-	    art_pixbuf_new_const_rgb (src->art_pixbuf->pixels + src_y * src->art_pixbuf->rowstride + src_x * src->art_pixbuf->n_channels,
-				      src_width, 
-				      src_height, 
-				      src->art_pixbuf->rowstride);
-	}
-      else
-	{
-	  partial_src_art = 
-	    art_pixbuf_new_const_rgba (src->art_pixbuf->pixels + src_y * src->art_pixbuf->rowstride + src_x * src->art_pixbuf->n_channels,
-				       src_width, 
-				       src_height, 
-				       src->art_pixbuf->rowstride);
-	}
-
-      partial_src_gdk = gdk_pixbuf_new_from_art_pixbuf (partial_src_art);
-      tmp_pixbuf = gdk_pixbuf_new (ART_PIX_RGB, src->art_pixbuf->has_alpha, 8, rect.width, rect.height);
-
-      gdk_pixbuf_scale (partial_src_gdk, tmp_pixbuf, 0, 0, rect.width, rect.height,
-			dest_x - rect.x, dest_y - rect.y, 
-			(double)dest_width / src_width, (double)dest_height / src_height,
-			ART_FILTER_BILINEAR);
-
-      gdk_pixbuf_unref (partial_src_gdk);
+      /* The temporary is necessary only for GDK+-1.2, and not
+       * for later versions of GDK, where you can have the
+       * same source and dest for gdk_rectangle_intersect().
+       */
+      GdkRectangle tmp_rect = rect;
       
+      if (!gdk_rectangle_intersect (clip_rect, &tmp_rect, &rect))
+	return;
+    }
+  
+  if (dest_width != src_width ||
+      dest_height != src_height)
+    {
+      double x_scale = (double)dest_width / src_width;
+      double y_scale = (double)dest_height / src_height;
+      guchar *pixels;
+      GdkPixbuf *partial_src;
+      
+      pixels = (gdk_pixbuf_get_pixels (src)
+		+ src_y * src_rowstride
+		+ src_x * src_n_channels);
+
+      partial_src = gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB,
+					      has_alpha,
+					      8, src_width, src_height,
+					      src_rowstride,
+					      NULL, NULL);
+						  
+      tmp_pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
+				   has_alpha, 8,
+				   rect.width, rect.height);
+
+      gdk_pixbuf_scale (partial_src, tmp_pixbuf,
+			0, 0, rect.width, rect.height,
+			dest_x - rect.x, dest_y - rect.y, 
+			x_scale, y_scale,
+			GDK_INTERP_BILINEAR);
+
+      gdk_pixbuf_unref (partial_src);
+
       x_offset = 0;
       y_offset = 0;
     }
@@ -113,6 +128,9 @@ pixbuf_render (GdkPixbuf    *src,
 					 128);
 
       tmp_gc = gdk_gc_new (window);
+      if (clip_rect)
+	gdk_gc_set_clip_rectangle (tmp_gc, clip_rect);
+	  
       gdk_pixbuf_render_to_drawable (tmp_pixbuf, window, tmp_gc, 
 				     x_offset, y_offset,
 				     rect.x, rect.y,
@@ -233,6 +251,8 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
 {
   GdkPixbuf *pixbuf = theme_pixbuf_get_pixbuf (theme_pb);
   gint src_x[4], src_y[4], dest_x[4], dest_y[4];
+  gint pixbuf_width = gdk_pixbuf_get_width (pixbuf);
+  gint pixbuf_height = gdk_pixbuf_get_height (pixbuf);
 
   if (!pixbuf)
     return;
@@ -241,13 +261,13 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
     {
       src_x[0] = 0;
       src_x[1] = theme_pb->border_left;
-      src_x[2] = pixbuf->art_pixbuf->width - theme_pb->border_right;
-      src_x[3] = pixbuf->art_pixbuf->width;
+      src_x[2] = pixbuf_width - theme_pb->border_right;
+      src_x[3] = pixbuf_width;
       
       src_y[0] = 0;
       src_y[1] = theme_pb->border_top;
-      src_y[2] = pixbuf->art_pixbuf->height - theme_pb->border_bottom;
-      src_y[3] = pixbuf->art_pixbuf->height;
+      src_y[2] = pixbuf_height - theme_pb->border_bottom;
+      src_y[3] = pixbuf_height;
       
       dest_x[0] = x;
       dest_x[1] = x + theme_pb->border_left;
@@ -300,14 +320,14 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
     {
       if (center)
 	{
-	  x += (width - pixbuf->art_pixbuf->width) / 2;
-	  y += (height - pixbuf->art_pixbuf->height) / 2;
+	  x += (width - pixbuf_width) / 2;
+	  y += (height - pixbuf_height) / 2;
 	  
 	  pixbuf_render (pixbuf, window, NULL, clip_rect,
 			 0, 0,
-			 pixbuf->art_pixbuf->width, pixbuf->art_pixbuf->height,
+			 pixbuf_width, pixbuf_height,
 			 x, y,
-			 pixbuf->art_pixbuf->width, pixbuf->art_pixbuf->height);
+			 pixbuf_width, pixbuf_height);
 	}
       else
 	{
@@ -316,14 +336,14 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
 	  GdkGCValues gc_values;
 
 	  tmp_pixmap = gdk_pixmap_new (window,
-				       pixbuf->art_pixbuf->width,
-				       pixbuf->art_pixbuf->height,
+				       pixbuf_width,
+				       pixbuf_height,
 				       -1);
 	  tmp_gc = gdk_gc_new (tmp_pixmap);
 	  gdk_pixbuf_render_to_drawable (pixbuf, tmp_pixmap, tmp_gc,
 					 0, 0, 
 					 0, 0,
-					 pixbuf->art_pixbuf->width, pixbuf->art_pixbuf->height,
+					 pixbuf_width, pixbuf_height,
 					 GDK_RGB_DITHER_NORMAL,
 					 0, 0);
 	  gdk_gc_unref (tmp_gc);

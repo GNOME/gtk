@@ -11,4 +11,4 @@ libpixmap_la_SOURCES = 		\
 	pixbuf.h
 
 libpixmap_la_LDFLAGS = -module -avoid-version
-libpixmap_la_LIBADD =
+libpixmap_la_LIBADD = -lgdk_pixbuf

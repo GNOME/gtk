@@ -20,8 +20,10 @@
  * Carsten Haitzler <raster@rasterman.com>
  */
 
-#include "pixbuf.h"
 #include <math.h>
+#include <string.h>
+
+#include "pixbuf.h"
 
 static ThemeImage *
 match_theme_image(GtkStyle       *style,
@@ -124,7 +126,7 @@ draw_simple_image(GtkStyle       *style,
 	      gdk_window_get_type (window) != GDK_WINDOW_PIXMAP)
 	    {
 	      GdkPixbuf *pixbuf = theme_pixbuf_get_pixbuf (image->background);
-	      if (pixbuf && pixbuf->art_pixbuf->has_alpha)
+	      if (pixbuf && gdk_pixbuf_get_has_alpha (pixbuf))
 		mask = gdk_pixmap_new (window, width, height, 1);
 	    }
 	  
@@ -208,7 +210,7 @@ draw_gap_image(GtkStyle       *style,
 	{
 	case GTK_POS_TOP:
 	  if (pixbuf)
-	    thickness = pixbuf->art_pixbuf->height;
+	    thickness = gdk_pixbuf_get_height (pixbuf);
 	  else
 	    thickness = style->klass->ythickness;
 	  
@@ -231,7 +233,7 @@ draw_gap_image(GtkStyle       *style,
 	  
 	case GTK_POS_BOTTOM:
 	  if (pixbuf)
-	    thickness = pixbuf->art_pixbuf->height;
+	    thickness = gdk_pixbuf_get_height (pixbuf);
 	  else
 	    thickness = style->klass->ythickness;
 
@@ -254,7 +256,7 @@ draw_gap_image(GtkStyle       *style,
 	  
 	case GTK_POS_LEFT:
 	  if (pixbuf)
-	    thickness = pixbuf->art_pixbuf->width;
+	    thickness = gdk_pixbuf_get_width (pixbuf);
 	  else
 	    thickness = style->klass->xthickness;
 
@@ -277,7 +279,7 @@ draw_gap_image(GtkStyle       *style,
 	  
 	case GTK_POS_RIGHT:
 	  if (pixbuf)
-	    thickness = pixbuf->art_pixbuf->width;
+	    thickness = gdk_pixbuf_get_width (pixbuf);
 	  else
 	    thickness = style->klass->xthickness;
 
