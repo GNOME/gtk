@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 1.4.0\n"
-"POT-Creation-Date: 2002-04-23 14:58+0200\n"
+"POT-Creation-Date: 2002-04-25 20:39+0200\n"
 "PO-Revision-Date: 2002-02-26 00:23+0100\n"
 "Last-Translator: Andraž Tori <andraz.tori1@guest.arnes.si>\n"
 "Language-Team: slovenian <sl@li.org>\n"
@@ -86,12 +86,12 @@ msgstr "Nisem uspel naložiti slike '%s': %s"
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Ta izgradnja gdk-pixbuf ne podpira shranjevanja v obliki zapisa: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:859
+#: gdk-pixbuf/gdk-pixbuf-io.c:857
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Nisem uspel odpreti '%s' za pisanje: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:880
+#: gdk-pixbuf/gdk-pixbuf-io.c:878
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -309,11 +309,11 @@ msgstr "Pretvorjen PNG ima nepodprto število kanalov, mora biti 3 ali 4."
 msgid "Fatal error in PNG image file: %s"
 msgstr "Usodna napak v slikovni datoteki PNG: %s"
 
-#: gdk-pixbuf/io-png.c:296
+#: gdk-pixbuf/io-png.c:301
 msgid "Insufficient memory to load PNG file"
 msgstr "Ni dovolj pomnilnika za naložitev datoteke PNG"
 
-#: gdk-pixbuf/io-png.c:599
+#: gdk-pixbuf/io-png.c:604
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -322,28 +322,29 @@ msgstr ""
 "Ni dovolj pomnilnika za shranitev slike velikosti %ld x %ld; za sprostitev "
 "pomnilnika zaprite nekaj programov"
 
-#: gdk-pixbuf/io-png.c:650
+#: gdk-pixbuf/io-png.c:655
 msgid "Fatal error reading PNG image file"
 msgstr "Usodna napaka med branjem slikovne datoteke PNG"
 
-#: gdk-pixbuf/io-png.c:699
+#: gdk-pixbuf/io-png.c:704
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Usodna napaka med branjem slikovne datoteke PNG: %s"
 
-#: gdk-pixbuf/io-png.c:765
+#: gdk-pixbuf/io-png.c:770
 msgid ""
-"Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
-msgstr "Ključi za sklope PNG tEXt morajo imeti vsaj 1 in največ 79 znakov"
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgstr "Ključi za sklope besedila PNG morajo imeti vsaj 1 in največ 79 znakov."
 
-#: gdk-pixbuf/io-png.c:773
-msgid "Keys for PNG tEXt chunks must be ASCII characters."
-msgstr "Ključi za sklope PNG tEXt morajo biti znaki ASCII"
+#: gdk-pixbuf/io-png.c:778
+msgid "Keys for PNG text chunks must be ASCII characters."
+msgstr "Ključi za sklope besedila PNG morajo biti znaki ASCII."
 
-#: gdk-pixbuf/io-png.c:794
-msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
+#: gdk-pixbuf/io-png.c:811
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
-"Vrednost za sklop PNG tEXT ne more biti pretvorjena v kodno tabelo ISO-8859-1"
+"Vrednosti za sklop besedila PNG %s ni mogoče pretvoriti v kodno tabelo ISO-8859-1."
 
 #: gdk-pixbuf/io-pnm.c:247
 msgid "PNM loader expected to find an integer, but didn't"
@@ -921,85 +922,109 @@ msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "Kako daleč v smeri Y naj se premakne otrok, ko je gumb spuščen"
 
-#: gtk/gtkcellrenderer.c:103
+#: gtk/gtkcellrenderer.c:108
 msgid "mode"
 msgstr "način"
 
-#: gtk/gtkcellrenderer.c:104
+#: gtk/gtkcellrenderer.c:109
 msgid "Editable mode of the CellRenderer"
 msgstr "Uredljiv način CellRendererja"
 
-#: gtk/gtkcellrenderer.c:113
+#: gtk/gtkcellrenderer.c:118
 msgid "visible"
 msgstr "viden"
 
-#: gtk/gtkcellrenderer.c:114
+#: gtk/gtkcellrenderer.c:119
 msgid "Display the cell"
 msgstr "Kaži celico"
 
-#: gtk/gtkcellrenderer.c:122
+#: gtk/gtkcellrenderer.c:127
 msgid "xalign"
 msgstr "xalign"
 
-#: gtk/gtkcellrenderer.c:123
+#: gtk/gtkcellrenderer.c:128
 msgid "The x-align."
 msgstr "X-align."
 
-#: gtk/gtkcellrenderer.c:133
+#: gtk/gtkcellrenderer.c:138
 msgid "yalign"
 msgstr "yalign"
 
-#: gtk/gtkcellrenderer.c:134
+#: gtk/gtkcellrenderer.c:139
 msgid "The y-align."
 msgstr "Y-align."
 
-#: gtk/gtkcellrenderer.c:144
+#: gtk/gtkcellrenderer.c:149
 msgid "xpad"
 msgstr "xpad"
 
-#: gtk/gtkcellrenderer.c:145
+#: gtk/gtkcellrenderer.c:150
 msgid "The xpad."
 msgstr "Xpad."
 
-#: gtk/gtkcellrenderer.c:155
+#: gtk/gtkcellrenderer.c:160
 msgid "ypad"
 msgstr "ypad"
 
-#: gtk/gtkcellrenderer.c:156
+#: gtk/gtkcellrenderer.c:161
 msgid "The ypad."
 msgstr "Ypad."
 
-#: gtk/gtkcellrenderer.c:166
+#: gtk/gtkcellrenderer.c:171
 msgid "width"
 msgstr "širina"
 
-#: gtk/gtkcellrenderer.c:167
+#: gtk/gtkcellrenderer.c:172
 msgid "The fixed width."
 msgstr "Stalna širina."
 
-#: gtk/gtkcellrenderer.c:177
+#: gtk/gtkcellrenderer.c:182
 msgid "height"
 msgstr "višina"
 
-#: gtk/gtkcellrenderer.c:178
+#: gtk/gtkcellrenderer.c:183
 msgid "The fixed height."
 msgstr "Stalna višina"
 
-#: gtk/gtkcellrenderer.c:188
+#: gtk/gtkcellrenderer.c:193
 msgid "Is Expander"
 msgstr "Je razširljiv"
 
-#: gtk/gtkcellrenderer.c:189
+#: gtk/gtkcellrenderer.c:194
 msgid "Row has children."
 msgstr "Vrstica ima otroke"
 
-#: gtk/gtkcellrenderer.c:198
+#: gtk/gtkcellrenderer.c:203
 msgid "Is Expanded"
 msgstr "Je razširjen"
 
-#: gtk/gtkcellrenderer.c:199
+#: gtk/gtkcellrenderer.c:204
 msgid "Row is an expander row, and is expanded"
 msgstr "Vrstica ima otroke in je razširjena"
+
+#: gtk/gtkcellrenderer.c:212
+msgid "Cell background color name"
+msgstr "Ime barve ozadja celice"
+
+#: gtk/gtkcellrenderer.c:213
+msgid "Cell background color as a string"
+msgstr "Barva ozadja celice kot niz"
+
+#: gtk/gtkcellrenderer.c:220
+msgid "Cell background color"
+msgstr "Barva ozadja celice"
+
+#: gtk/gtkcellrenderer.c:221
+msgid "Cell background color as a GdkColor"
+msgstr "Barva ozadja celice kot GdkColor"
+
+#: gtk/gtkcellrenderer.c:229
+msgid "Cell background set"
+msgstr "Nastavi barvo ozadja celice"
+
+#: gtk/gtkcellrenderer.c:230
+msgid "Whether this tag affects the cell background color"
+msgstr "Ali ta oznaka vpliva na barvo ozadja celice"
 
 #: gtk/gtkcellrendererpixbuf.c:117
 msgid "Pixbuf Object"
@@ -1815,6 +1840,7 @@ msgid "Folder unreadable: %s"
 msgstr "Neberljiv imenik: %s"
 
 #: gtk/gtkfilesel.c:946
+#, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
 "available to this program.\n"
@@ -1952,6 +1978,7 @@ msgid "Selection: "
 msgstr "Izbira: "
 
 #: gtk/gtkfilesel.c:2983
+#, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
