@@ -505,10 +505,18 @@ gtk_menu_window_size_request (GtkWidget      *window,
   if (private->have_position)
     {
       GdkScreen *screen = gtk_widget_get_screen (window);
-      gint screen_height = gdk_screen_get_height (screen);
+      GdkRectangle monitor;
+      gint monitor_num;
+      
+      monitor_num = gdk_screen_get_monitor_at_point (screen,
+						     private->x, private->y);
+      gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 
-      if (private->y + requisition->height > screen_height)
-	requisition->height = screen_height - private->y;
+      if (private->y + requisition->height > monitor.y + monitor.height)
+	requisition->height = monitor.y + monitor.height - private->y;
+
+      if (private->y < monitor.y)
+	requisition->height -= monitor.y - private->y;
     }
 }
 
@@ -2878,7 +2886,7 @@ gtk_menu_position (GtkMenu *menu)
   
       if (y < monitor.y)
 	{
-	  scroll_offset -= y;
+	  scroll_offset += monitor.y - y;
 	  y = monitor.y;
 	}
     }
@@ -2886,13 +2894,21 @@ gtk_menu_position (GtkMenu *menu)
   /* FIXME: should this be done in the various position_funcs ? */
   x = CLAMP (x, monitor.x, MAX (monitor.x, monitor.x + monitor.width - requisition.width));
  
+  if (GTK_MENU_SHELL (menu)->active)
+    {
+      private = gtk_menu_get_private (menu);
+      private->have_position = TRUE;
+      private->x = x;
+      private->y = y;
+    }
+  
   if (y + requisition.height > monitor.y + monitor.height)
     requisition.height = (monitor.y + monitor.height) - y;
   
   if (y < monitor.y)
     {
-      scroll_offset -= y;
-      requisition.height -= -y;
+      scroll_offset += monitor.y - y;
+      requisition.height -= monitor.y - y;
       y = monitor.y;
     }
 
@@ -2902,16 +2918,7 @@ gtk_menu_position (GtkMenu *menu)
   gtk_window_move (GTK_WINDOW (GTK_MENU_SHELL (menu)->active ? menu->toplevel : menu->tearoff_window), 
 		   x, y);
 
-  if (GTK_MENU_SHELL (menu)->active)
-    {
-      private = gtk_menu_get_private (menu);
-      private->have_position = TRUE;
-      private->x = x;
-      private->y = y;
-
-      gtk_widget_queue_resize (menu->toplevel);
-    }
-  else
+  if (!GTK_MENU_SHELL (menu)->active)
     {
       gtk_window_resize (GTK_WINDOW (menu->tearoff_window),
 			 requisition.width, requisition.height);

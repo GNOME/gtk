@@ -1,3 +1,11 @@
+Wed Aug 13 16:32:43 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_position, gtk_menu_window_size_request): 
+	Fix some places that weren't properly Xinerama-ified.
+
+	* gtk/gtkmenu.c: Fix problem with windows that scroll
+	at the top of the screen.
+
 Wed Aug 13 11:34:53 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcombo.c (gtk_combo_init): connect_after() to 
