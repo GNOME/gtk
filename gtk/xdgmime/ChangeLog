@@ -1,7 +1,12 @@
+Wed Aug 11 20:44:35 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* xdgmime.h (xdg_mime_shutdown): Add the XDG_PREFIX to
+	this function as well.
+
 2004-08-01  Matthias Clasen  <mclasen@redhat.com>
-                                                                                
+
         * === Released 2.5.1 ===
-                                                                                
+
 Tue Jul 20 22:24:35 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* xdgmimeglob.h: Remove trailing commas from 
@@ -9,7 +14,7 @@ Tue Jul 20 22:24:35 2004  Matthias Clasen  <maclas@gmx.de>
 
 Sun Jul 18 20:17:41 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
-	* === released 2.5.0 ==
+	* === Released 2.5.0 ==
 
 Thu May 27 15:23:17 2004  Jonathan Blandford  <jrb@gnome.org>
 

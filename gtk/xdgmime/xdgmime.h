@@ -49,6 +49,7 @@ extern "C" {
 #define xdg_mime_is_valid_mime_type           XDG_ENTRY(is_valid_mime_type)
 #define xdg_mime_get_max_buffer_extents       XDG_ENTRY(get_max_buffer_extents)
 #define xdg_mime_type_unknown                 XDG_ENTRY(type_unknown)
+#define xdg_mime_shutdown                     XDG_ENTRY(shutdown)
 #endif
 
 extern const char *xdg_mime_type_unknown;
