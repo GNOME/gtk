@@ -228,8 +228,8 @@ gtk_item_factory_class_init (GtkItemFactoryClass  *class)
   quark_type_toggle_item	= g_quark_from_static_string ("<ToggleItem>");
   quark_type_image_item         = g_quark_from_static_string ("<ImageItem>");
   quark_type_stock_item         = g_quark_from_static_string ("<StockItem>");
-  quark_type_tearoff_item	= g_quark_from_static_string ("<Tearoff>");
   quark_type_separator_item	= g_quark_from_static_string ("<Separator>");
+  quark_type_tearoff_item	= g_quark_from_static_string ("<Tearoff>");
   quark_type_branch		= g_quark_from_static_string ("<Branch>");
   quark_type_last_branch	= g_quark_from_static_string ("<LastBranch>");
 }
@@ -1228,14 +1228,14 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
     gtk_radio_menu_item_set_group (GTK_RADIO_MENU_ITEM (widget), radio_group);
   if (GTK_IS_CHECK_MENU_ITEM (widget))
     gtk_check_menu_item_set_show_toggle (GTK_CHECK_MENU_ITEM (widget), TRUE);
-  if (GTK_IS_IMAGE_MENU_ITEM (widget))
+  if (type_id == quark_type_image_item)
     {
       GdkPixbuf *pixbuf = NULL;
       image = NULL;
 
-      pixbuf = gdk_pixbuf_new_from_inline (entry->extra_data,
+      pixbuf = gdk_pixbuf_new_from_stream (-1,
+					   entry->extra_data,
 					   FALSE,
-					   entry->extra_data2,
 					   NULL);
 
       if (pixbuf)

@@ -24,6 +24,12 @@ Tue Jun 26 11:06:34 2001  Owen Taylor  <otaylor@redhat.com>
 	with font lists in descriptions. (#56184, reported by
 	Jonas Borgström)
 
+Tue Jun 26 10:04:30 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkiconfactory.c:
+	* gtk/gtkitemfactory.c: use gdk_pixbuf_new_from_stream(). fixed up
+	item factory so inlined pixbufs actually work.
+
 2001-06-25  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktreeviewcolumn.h, gtk/gtktreeviewcolumn.c:
