@@ -1,3 +1,9 @@
+2004-03-26  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/tmpl/gtkfilechooserdialog.sgml: Added a section about using
+	known response codes for "accept"-type buttons, rather than custom
+	responses.  This is related to bugs #136237 and #138263.
+
 Tue Mar 16 13:17:26 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.4.0 ===

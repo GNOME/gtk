@@ -34,8 +34,8 @@ GtkWidget *dialog;
 dialog = gtk_file_chooser_dialog_new ("Open File",
 				      parent_window,
 				      GTK_FILE_CHOOSER_ACTION_OPEN,
-				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 				      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 				      NULL);
 
 if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
@@ -50,6 +50,61 @@ if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
 gtk_widget_destroy (dialog);
       </programlisting>
     </example>
+
+  <section id="gtkfilechooserdialog-response-codes">
+    <title>Response Codes</title>
+
+    <para>
+      #GtkFileChooserDialog inherits from #GtkDialog, so buttons that
+      go in its action area have response codes such as
+      #GTK_RESPONSE_ACCEPT and #GTK_RESPONSE_CANCEL.  For example, you
+      could call gtk_file_chooser_dialog_new() as follows:
+    </para>
+
+    <programlisting>
+GtkWidget *dialog;
+
+dialog = gtk_file_chooser_dialog_new ("Open File",
+				      parent_window,
+				      GTK_FILE_CHOOSER_ACTION_OPEN,
+				      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+				      NULL);
+    </programlisting>
+
+    <para>
+      This will create buttons for "Cancel" and "Open" that use stock
+      response identifiers from #GtkResponseType.  For most dialog
+      boxes you can use your own custom response codes rather than the
+      ones in #GtkResponseType, but #GtkFileChooserDialog assumes that
+      its "accept"-type action, e.g. an "Open" or "Save" button,
+      <emphasis>will</emphasis> have one of the following response
+      codes:
+      <simplelist id="gtkfilechooserdialog-responses">
+	<member>#GTK_RESPONSE_ACCEPT</member>
+	<member>#GTK_RESPONSE_OK</member>
+	<member>#GTK_RESPONSE_YES</member>
+	<member>#GTK_RESPONSE_APPLY</member>
+      </simplelist>
+    </para>
+
+    <para>
+      This is because #GtkFileChooserDialog must intercept responses
+      and switch to folders if appropriate, rather than letting the
+      dialog terminate &mdash; the implementation uses these known
+      response codes to know which responses can be blocked if
+      appropriate.
+    </para>
+
+    <note>
+      <para>
+	To summarize, make sure you use a <link
+	linkend="gtkfilechooserdialog-responses">stock response
+	code</link> when you use #GtkFileChooserDialog to ensure
+	proper operation.
+      </para>
+    </note>
+  </section>
 
 <!-- ##### SECTION See_Also ##### -->
     <para>
@@ -75,13 +130,6 @@ gtk_widget_destroy (dialog);
 @Returns: 
 
 
-<!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gtk-docs.sgml" "book" "refentry")
-End:
--->
-
 
 <!-- ##### FUNCTION gtk_file_chooser_dialog_new_with_backend ##### -->
 <para>
@@ -97,3 +145,9 @@ End:
 @Returns: 
 
 
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gtk-docs.sgml" "book" "refsect1")
+End:
+-->
