@@ -1,14 +1,14 @@
 # YIDDISH
-# Copyright (C) 2003 Free Software Foundation, Inc.
+# Copyright (2003) Free Software Foundation, Inc.
 # Raphael Finkel <raphael@cs.uky.edu>, 2003.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2003-02-07 13:45-0500\n"
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2003-02-13 13:01-0500\n"
 "PO-Revision-Date: 2003-02-11\n"
 "Last-Translator: Raphael Finkel <raphael@cs.uky.edu>\n"
-"Language-Team: Yiddish <>\n"
+"Language-Team: None <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,23 +16,28 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr ""
+msgstr "‫ניט געקענט עפֿענען טעקע '%s': %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:591
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr ""
+msgstr "בילד טעקע '%s' האָט קײן דאַטן ניט"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:183
 #, c-format
 msgid "Don't know how to load the animation in file '%s'"
 msgstr ""
+"ניט געװוּסט װי אַרײַנצושטעלן דאָס "
+"באַװעג־בילד אין טעקע '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:636
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
+"ניט געקענט אַרײַנצושטעלן בילד '%s' צוליב "
+"אומבאַקאַנטע סיבות, מסתּמא אַ צעבראָכענע "
+"בילד טעקע"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
@@ -40,11 +45,16 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
+"ניט געקענט אַרײַנצושטעלן באַװעג־בילד '%s' "
+"צוליב אומבאַקאַנטע סיבות, מסתּמא אַ "
+"צעבראָכענע באַװעג־בילד טעקע"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:354
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr ""
+"ניט געקענט אַרײַנצושטעלן "
+"בילד־אַרײַנשטעל פּראָגראַם־טײל: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:373
 #, c-format
@@ -52,40 +62,49 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
+"בילד־אַרײַנשטעל פּראָגראַם־טײל %s "
+"עקספּאָרטירט ניט דעם פּאַסיקן צובינד; "
+"אפֿשר פֿון אַ צװײטע GTK װערסיע?"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:490 gdk-pixbuf/gdk-pixbuf-io.c:516
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr ""
+msgstr "בילד־סאָרט '%s' ניט אונטערגעשטיצט"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:538
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr ""
+"ניט געקענט דערקענען בילד־טעקע "
+"פֿאָרמאַטירונג אין טעקע '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:544
 msgid "Unrecognized image file format"
-msgstr ""
+msgstr "ניט דערקענט בילד־טעקע פֿאָרמאַטירונג"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:614
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
 msgstr ""
+"ניט געװוּסט װי אַרײַנצושטעלן בילד אין "
+"טעקע '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:647
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr ""
+msgstr "‫ניט געקענט אַרײַנשטעלן בילד '%s': %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:752
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
+"דער געבױ פֿון gdk-pixbuf שטיצט ניט אונטער "
+"אױפֿהיט פֿון בילד פֿאָרמאַטירונג: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:859
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr ""
+msgstr "‫ניט געקענט עפֿענען '%s' צו שרײַבן: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:880
 #, c-format
@@ -93,11 +112,16 @@ msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: "
 "%s"
 msgstr ""
+"ניט געקענט פֿאַרמאַכן '%s' בשעת שרײַבן די "
+"בילד; קען זײַן אַז ניט אױפֿגעהיט אַלע "
+"דאַטן: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr ""
+"צוגעבלעך אַרײַנשטעל פֿון בילד־סאָרט '%s' "
+"ניט אונטערגעשטיצט"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:273 gdk-pixbuf/gdk-pixbuf-loader.c:374
 #, c-format
@@ -105,133 +129,166 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
+"אינערלעכע טעות: בילד אַרײַנשטעל "
+"פּראָגראַם־טײל '%s' האָט ניט אָנגעהױבן "
+"אַרײַנשטעלן אַ בילד, אָבער זי האָט ניט "
+"געגעבן קײן סיבה דערצו"
 
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
 msgstr ""
+"ניט גענוג זכּרון אַרײַנצושטעלן "
+"אײנסל־מאַפּע בילד"
 
 #: gdk-pixbuf/io-bmp.c:275
 msgid "BMP image has unsupported header size"
 msgstr ""
+"BMP בילד האָט אַ ניט־אונטערגעשטיצט "
+"קאָפּ־צעטל גרײס"
 
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323
 msgid "BMP image has bogus header data"
-msgstr ""
+msgstr "BMP בילד האָט פֿאַלשע קאָפּ־צעטל דאַטן"
 
 #: gdk-pixbuf/io-ico.c:207
 #, c-format
 msgid "Failure reading ICO: %s"
-msgstr ""
+msgstr "‫דורכפֿאַל אין לײענען ICO: %s"
 
 #: gdk-pixbuf/io-ico.c:224
 msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
+"אין ICO טעקע פֿעלן דאַטן (אפֿשר איז די טעקע "
+"פֿאַרקירצט?)"
 
 #: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
 #: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
 msgid "Not enough memory to load icon"
-msgstr ""
+msgstr "ניט גענוג זכּרון אַרײַנצושטעלן בילדל"
 
 #: gdk-pixbuf/io-ico.c:303
 msgid "Invalid header in icon"
-msgstr ""
+msgstr "אומלעקסיק קאָפּ־צעטל אין בילדל"
 
 #: gdk-pixbuf/io-ico.c:340
 msgid "Icon has zero width"
-msgstr ""
+msgstr "בילדל האָט אַ נולע ברײט"
 
 #: gdk-pixbuf/io-ico.c:350
 msgid "Icon has zero height"
-msgstr ""
+msgstr "בילדל האָט אַ נולע הײך"
 
 #: gdk-pixbuf/io-ico.c:395
 msgid "Compressed icons are not supported"
 msgstr ""
+"אײַנגעקװעטשטע בילדלעך זײַנען ניט "
+"אונטערגעשטיצט"
 
 #: gdk-pixbuf/io-ico.c:428
 msgid "Unsupported icon type"
-msgstr ""
+msgstr "בילדל סאָרט ניט אונטערגעשטיצט"
 
 #: gdk-pixbuf/io-ico.c:499
 msgid "Not enough memory to load ICO file"
-msgstr ""
+msgstr "ניט גענוג זכּרון אַרײַנצושטעלן ICO טעקע"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr ""
+msgstr "‫דורכפֿאַל אין לײענען GIF: %s"
 
 #: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1371 gdk-pixbuf/io-gif.c:1530
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
+"אין GIF טעקע פֿעלן דאַטן (אפֿשר איז די טעקע "
+"פֿאַרקירצט?)"
 
 #: gdk-pixbuf/io-gif.c:469
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr ""
+msgstr "אינערלעכע טעות אין GIF אַרײַנשטעל (%s)"
 
 #: gdk-pixbuf/io-gif.c:592
 msgid "GIF image loader can't understand this image."
 msgstr ""
+"GIF בילד־אַרײַנשטעל פֿאַרשטײט ניט דאָס "
+"בילד"
 
 #: gdk-pixbuf/io-gif.c:621
 msgid "Bad code encountered"
-msgstr ""
+msgstr "געפֿונען אומלעקסיקע פּראָגראַמװאַרג"
 
 #: gdk-pixbuf/io-gif.c:630
 msgid "Circular table entry in GIF file"
-msgstr ""
+msgstr "צעפּלאָשעטע טאַבעלע אָרט אין GIF טעקע"
 
 #: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1359 gdk-pixbuf/io-gif.c:1404
 #: gdk-pixbuf/io-gif.c:1518
 msgid "Not enough memory to load GIF file"
-msgstr ""
+msgstr "ניט גענוג זכּרון אַרײַנצושטעלן GIF טעקע"
 
 #: gdk-pixbuf/io-gif.c:1009
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr ""
+"צעבראָכן GIF בילד (אומלעקסיקער LZW אײַנקװעטש)"
 
 #: gdk-pixbuf/io-gif.c:1059
 msgid "File does not appear to be a GIF file"
-msgstr ""
+msgstr "טעקע זעט ניט אױס װי קײן GIF טעקע"
 
 #: gdk-pixbuf/io-gif.c:1071
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr ""
+"װערסיע %s פֿון GIF טעקע פֿאָרמאַטירונג ניט "
+"אונטערגעשטיצט"
 
 #: gdk-pixbuf/io-gif.c:1146
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
+"GIF בילד האָט אַ ראָם אין דרױסן פֿון די בילד "
+"גרענעצן"
 
 #: gdk-pixbuf/io-gif.c:1162
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
+"ערשטע ראָם פֿון GIF בילד האָט 'צוריק צו "
+"פֿריִער' װי זײַן אַװעקװאַרף מאָדע."
 
 #: gdk-pixbuf/io-gif.c:1197
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
+"דאָס GIF בילד האָט ניט קײן גלאָבאַלע "
+"פֿאַרבמאַפּע, און אַ ראָם אין אים האָט ניט "
+"קײן לאָקאַלע פֿאַרבמאַפּע"
 
 #: gdk-pixbuf/io-gif.c:1426
 msgid "GIF image was truncated or incomplete."
 msgstr ""
+"דאָס GIF בילד איז אָדער פֿאַרקירצט אָדער "
+"פּאָלנע"
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr ""
+msgstr "טעות אין באַשײדן JPEG בילד טעקע (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:234
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
+"ניט גענוג זכּרון אַרײַנצושטעלן בילד; "
+"פּרוּװ ענדיקן אַנדערע פּראָגראַמען צו "
+"דערלײזן זכּרון"
 
 #: gdk-pixbuf/io-jpeg.c:345 gdk-pixbuf/io-jpeg.c:538 gdk-pixbuf/io-jpeg.c:710
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr ""
+"ניט געקענט געפֿינען זכּרון אַרײַנצושטעלן "
+"JPEG טעקע"
 
 #: gdk-pixbuf/io-jpeg.c:664
 #, c-format
@@ -239,21 +296,25 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
+"די JPEG קװאַליטעט מוז האָבן אַ באַטרעף "
+"צװישן 0 און 100; דער באַטרעף '%s' איז אומלעקסיק"
 
 #: gdk-pixbuf/io-jpeg.c:679
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
+"די JPEG קװאַליטעט מוז האָבן אַ באַטרעף "
+"צװישן 0 און 100; דער באַטרעף '%d' איז אומלעקסיק"
 
 #: gdk-pixbuf/io-png.c:161
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr ""
+msgstr "‫טױטפֿאַל אין PNG בילד טעקע: %s"
 
 #: gdk-pixbuf/io-png.c:273
 msgid "Insufficient memory to load PNG file"
-msgstr ""
+msgstr "ניט גענוג זכּרון אַרײַנצושטעלן PNG טעקע"
 
 #: gdk-pixbuf/io-png.c:591
 #, c-format
@@ -261,301 +322,366 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
+"ניט גענוג זכּרון פֿאַרהאַלטן אַ בילד מיט "
+"גרײס %ld מיט %ld; פּרוּװ ענדיקן עטלעכע "
+"פּראָגראַמען צו פֿאַרקלענערן דעם מאַנגל "
+"אין זכּרון"
 
 #: gdk-pixbuf/io-png.c:642
 msgid "Fatal error reading PNG image file"
-msgstr ""
+msgstr "טױטפֿאַל אין לײענען PNG בילד טעקע"
 
 #: gdk-pixbuf/io-png.c:691
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr ""
+msgstr "‫טױטפֿאַל אין לײענען PNG בילד טעקע: %s"
 
 #: gdk-pixbuf/io-png.c:757
 msgid ""
 "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr ""
+"שליסלעך פֿאַר PNG tEXt שטיקער מוזן האָבן "
+"צװישן 1 און 79 כאַראַקטערס"
 
 #: gdk-pixbuf/io-png.c:765
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
 msgstr ""
+"שליסלעך פֿאַר PNG tEXt שטיקער מוזן זײַן ASCII "
+"כאַראַקטערס"
 
 #: gdk-pixbuf/io-png.c:786
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
 msgstr ""
+"באַטרעף פֿאַר PNG tEXt שטיקער לאָזט זיך ניט "
+"איבערמאַכן אין ISO-8859-1 קאָדירונג"
 
 #: gdk-pixbuf/io-pnm.c:254
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr ""
+"PNM אַרײַנשטעל האָט דערװאַרט אַ גאַנצער "
+"נומער, אָבער ניט געפֿונען"
 
 #: gdk-pixbuf/io-pnm.c:286
 msgid "PNM file has an incorrect initial byte"
-msgstr ""
+msgstr "PNM טעקע האָט אַ פֿאַלש ערשט אַכטעלע"
 
 #: gdk-pixbuf/io-pnm.c:316
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr ""
+"PNM טעקע האָט ניט קײן באַקאַנטע PNM "
+"אונטער־פֿאָרמאַטירונג"
 
 #: gdk-pixbuf/io-pnm.c:341
 msgid "PNM file has an image width of 0"
-msgstr ""
+msgstr "PNM טעקע האָט אַ נולע בילד־ברײט"
 
 #: gdk-pixbuf/io-pnm.c:362
 msgid "PNM file has an image height of 0"
-msgstr ""
+msgstr "PNM טעקע האָט אַ נולע בילד־הײך"
 
 #: gdk-pixbuf/io-pnm.c:385
 msgid "Maximum color value in PNM file is 0"
 msgstr ""
+"PNM טעקע האָט אַ נולן העכסטן פֿאַרב־באַטרעף"
 
 #: gdk-pixbuf/io-pnm.c:393
 msgid "Maximum color value in PNM file is too large"
 msgstr ""
+"PNM טעקע האָט אַ צו־גרױסן העכסטן "
+"פֿאַרב־באַטרעף"
 
 #: gdk-pixbuf/io-pnm.c:401
 msgid "Can't handle PNM files with maximum color values greater than 255"
 msgstr ""
+"PNM טעקעס מיט העכסטן פֿאַרב־באַטרעף איבער "
+"255 ניט אונטערגעשטיצט"
 
 #: gdk-pixbuf/io-pnm.c:440 gdk-pixbuf/io-pnm.c:468 gdk-pixbuf/io-pnm.c:500
 msgid "Raw PNM image type is invalid"
-msgstr ""
+msgstr "רױער PNM בילד־סאָרט איז אומלעקסיק"
 
 #: gdk-pixbuf/io-pnm.c:560 gdk-pixbuf/io-pnm.c:602
 msgid "PNM image format is invalid"
-msgstr ""
+msgstr "PNM בילד פֿאָרמאַטירונג איז אומלעקסיק"
 
 #: gdk-pixbuf/io-pnm.c:661
 msgid "PNM image loader does not support this PNM subformat"
 msgstr ""
+"PNM בילד אַרײַנשטעל שטיצט ניט אונטער דעם PNM "
+"אונטער־פֿאָרמאַטירונג"
 
 #: gdk-pixbuf/io-pnm.c:716
 msgid "Premature end-of-file encountered"
-msgstr ""
+msgstr "צו־פֿריִיקער סוף־טעקע"
 
 #: gdk-pixbuf/io-pnm.c:748 gdk-pixbuf/io-pnm.c:967
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
+"רױע PNM פֿאָרמאַטירונגען פֿאָדערן "
+"פּינקטלעך אײן לײדיק אָרט פֿאַר "
+"בײַשפּיל־דאַטן"
 
 #: gdk-pixbuf/io-pnm.c:775
 msgid "Can't allocate memory for loading PNM image"
-msgstr ""
+msgstr "ניט גענוג זכּרון אַרײַנצושטעלן PNM בילד"
 
 #: gdk-pixbuf/io-pnm.c:824
 msgid "Insufficient memory to load PNM context struct"
 msgstr ""
+"ניט גענוג זכּרון אַרײַנצושטעלן PNM "
+"אַרומס־סטרוקטור"
 
 #: gdk-pixbuf/io-pnm.c:874
 msgid "Unexpected end of PNM image data"
-msgstr ""
+msgstr "ניט דערװאַרטער סוף פֿון PNM בילד דאַטן"
 
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
-msgstr ""
+msgstr "ניט גענוג זכּרון אַרײַנצושטעלן PNM טעקע"
 
 #: gdk-pixbuf/io-tga.c:157
 msgid "Can't allocate memory for IOBuffer struct"
-msgstr ""
+msgstr "ניט גענוג זכּרון פֿאַר IOBuffer סטרוקטור"
 
 #: gdk-pixbuf/io-tga.c:176
 msgid "Can't allocate memory for IOBuffer data"
-msgstr ""
+msgstr "ניט גענוג זכּרון פֿאַר IOBuffer דאַטן"
 
 #: gdk-pixbuf/io-tga.c:187
 msgid "Can't realloc IOBuffer data"
-msgstr ""
+msgstr "ניט געקענט איבערטײלן IOBuffer דאַטן"
 
 #: gdk-pixbuf/io-tga.c:216
 msgid "Can't allocate temporary IOBuffer data"
 msgstr ""
+"ניט געקענט צוטײלן צײַטװײַליקע IOBuffer דאַטן"
 
 #: gdk-pixbuf/io-tga.c:249
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr ""
+"fread() דורכגעפֿאַלן; מסתּמא צו־פֿריִיקער "
+"סוף־טעקע"
 
 #: gdk-pixbuf/io-tga.c:259
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr ""
+"fseek() דורכגעפֿאַלן; מסתּמא צו־פֿריִיקער "
+"סוף־טעקע"
 
 #: gdk-pixbuf/io-tga.c:288
 msgid "Can't allocate new pixbuf"
-msgstr ""
+msgstr "‫ניט גענוג זכּרון פֿאַר נײַעם pixbuf"
 
 #: gdk-pixbuf/io-tga.c:557
 msgid "Can't allocate colormap structure"
 msgstr ""
+"ניט גענוג זכּרון פֿאַר פֿאַרבמאַפּע "
+"סטרוקטור"
 
 #: gdk-pixbuf/io-tga.c:564
 msgid "Can't allocate colormap entries"
-msgstr ""
+msgstr "ניט גענוג פֿאַרבמאַפּע ערטער"
 
 #: gdk-pixbuf/io-tga.c:587
 msgid "Unexpected bitdepth for colormap entries"
 msgstr ""
+"ניט־דערװאַרטע אײנסל־טיפֿקײט פֿאַר "
+"פֿאַרבמאַפּע ערטער"
 
 #: gdk-pixbuf/io-tga.c:607
 msgid "Can't allocate TGA header memory"
-msgstr ""
+msgstr "ניט גענוג זכּרון פֿאַר TGA קאָפּ־צעטל"
 
 #: gdk-pixbuf/io-tga.c:618
 msgid "TGA image has invalid dimensions"
-msgstr ""
+msgstr "TGA בילד האָט אומלעקסיקע דימענסיעס"
 
 #: gdk-pixbuf/io-tga.c:624
 msgid "TGA image comment length is too long"
-msgstr ""
+msgstr "TGA בילד קאָמענטאַר צו לאַנג"
 
 #: gdk-pixbuf/io-tga.c:633 gdk-pixbuf/io-tga.c:647
 msgid "TGA image type not supported"
-msgstr ""
+msgstr "TGA בילד סאָרט ניט אונטערגעשטיצט"
 
 #: gdk-pixbuf/io-tga.c:692
 msgid "Can't allocate memory for TGA context struct"
 msgstr ""
+"ניט גענוג זכּרון פֿאַר TGA אַרומס־סטרוקטור"
 
 #: gdk-pixbuf/io-tga.c:756
 msgid "Excess data in file"
-msgstr ""
+msgstr "איבעריקע דאַטן אין טעקע"
 
 #: gdk-pixbuf/io-tga.c:798
 msgid "Can't allocate memory for TGA header"
-msgstr ""
+msgstr "ניט גענוג זכּרון פֿאַר TGA קאָפּ־צעטל"
 
 #: gdk-pixbuf/io-tga.c:808
 msgid "Too big value in the infolen field of TGA header."
 msgstr ""
+"TGA קאָפּ־צעטל האָט אַ צו־גרױסן infolen "
+"באַטרעף"
 
 #: gdk-pixbuf/io-tga.c:832
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr ""
+"ניט גענוג זכּרון פֿאַר TGA cmap צײַטװײַליקן "
+"באַהאַלט־אָרט"
 
 #: gdk-pixbuf/io-tga.c:844
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr ""
+"ניט גענוג זכּרון פֿאַר TGA פֿאַרבמאַפּע "
+"סטרוקטור"
 
 #: gdk-pixbuf/io-tga.c:853
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr ""
+"ניט גענוג זכּרון פֿאַר TGA פֿאַרבמאַפּע "
+"ערטער"
 
 #: gdk-pixbuf/io-tga.c:863
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr ""
+"ניט־דערװאַרטע אײנסל־טיפֿקײט פֿאַר TGA "
+"פֿאַרבמאַפּע"
 
 #: gdk-pixbuf/io-tga.c:903
 msgid "Pseudo-Color image without colormap"
 msgstr ""
+"כּאילו־פֿאַרב בילד אָן קײן פֿאַרבמאַפּע"
 
 #: gdk-pixbuf/io-tga.c:910
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr ""
+"ניט געגעבן זיך שטעלן בײַ בילד צולײג; "
+"מסתּמא צו־פֿריִיקער סוף־טעקע"
 
 #: gdk-pixbuf/io-tga.c:919 gdk-pixbuf/io-tga.c:1015 gdk-pixbuf/io-tga.c:1081
 msgid "Can't allocate pixbuf"
-msgstr ""
+msgstr "‫ניט גענוג זכּרון פֿאַר pixbuf"
 
 #: gdk-pixbuf/io-tga.c:1147 gdk-pixbuf/io-tga.c:1176
 msgid "Unsupported TGA image type"
-msgstr ""
+msgstr "TGA בילד־סאָרט ניט אונטערגעשטיצט"
 
 #: gdk-pixbuf/io-tiff.c:152
 msgid "Could not get image width (bad TIFF file)"
 msgstr ""
+"ניט געקענט דערטאַפּן בילד־ברײט "
+"(אומלעקסיקע TIFF טעקע"
 
 #: gdk-pixbuf/io-tiff.c:159
 msgid "Could not get image height (bad TIFF file)"
 msgstr ""
+"ניט געקענט דערטאַפּן בילד־הײך "
+"(אומלעקסיקע TIFF טעקע)"
 
 #: gdk-pixbuf/io-tiff.c:169
 msgid "Width or height of TIFF image is zero"
-msgstr ""
+msgstr "נולע ברײט אָדער הײך פֿון TIFF בילד"
 
 #: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:482
 msgid "Insufficient memory to open TIFF file"
-msgstr ""
+msgstr "ניט גענוג זכּרון עפֿענען TIFF טעקע"
 
 #: gdk-pixbuf/io-tiff.c:201
 msgid "Failed to load RGB data from TIFF file"
 msgstr ""
+"דורכפֿאַל אין אַרײַנשטעלן RGB דאַטן פֿון "
+"TIFF טעקע"
 
 #: gdk-pixbuf/io-tiff.c:270
 msgid "Failed to open TIFF image"
-msgstr ""
+msgstr "דורכפֿאַל אין עפֿענען TIFF בילד"
 
 #: gdk-pixbuf/io-tiff.c:283
 msgid "TIFFClose operation failed"
-msgstr ""
+msgstr "‫דורכפֿאַל אין פֿאַרמאַכן TIFF"
 
 #: gdk-pixbuf/io-tiff.c:416 gdk-pixbuf/io-tiff.c:430
 msgid "Failed to load TIFF image"
-msgstr ""
+msgstr "דורכפֿאַל אין אַרײַנשטעלן TIFF בילד"
 
 #: gdk-pixbuf/io-wbmp.c:278
 msgid "Image has zero width"
-msgstr ""
+msgstr "בילד האָט אַ נולע ברײט"
 
 #: gdk-pixbuf/io-wbmp.c:296
 msgid "Image has zero height"
-msgstr ""
+msgstr "בילד האָט אַ נולע הײך"
 
 #: gdk-pixbuf/io-wbmp.c:307
 msgid "Not enough memory to load image"
-msgstr ""
+msgstr "ניט גענוג זכּרון אַרײַנשטעלן בילד"
 
 #: gdk-pixbuf/io-wbmp.c:365
 msgid "Couldn't save the rest"
-msgstr ""
+msgstr "ניט געקענט אױפֿהיטן דאָס רעשטל"
 
 #: gdk-pixbuf/io-xbm.c:283
 msgid "Invalid XBM file"
-msgstr ""
+msgstr "אומלעקסיקע XBM טעקע"
 
 #: gdk-pixbuf/io-xbm.c:293
 msgid "Insufficient memory to load XBM image file"
 msgstr ""
+"ניט גענוג זכּרון אַרײַנשטעלן XBM בילד טעקע"
 
 #: gdk-pixbuf/io-xbm.c:427
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr ""
+"דורכפֿאַל אין שרײַבן צײַטװײַליקע טעקע "
+"בשעת אַרײַנשטעלן XBM בילד"
 
 #: gdk-pixbuf/io-xpm.c:1235
 msgid "No XPM header found"
-msgstr ""
+msgstr "ניט געפֿונען קײן XPM קאָפּ־צעטל"
 
 #: gdk-pixbuf/io-xpm.c:1243
 msgid "XPM file has image width <= 0"
-msgstr ""
+msgstr "‫XPM טעקע האָט בילד ברײט <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1251
 msgid "XPM file has image height <= 0"
-msgstr ""
+msgstr "‫XPM טעקע האָט בילד הײך <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1259
 msgid "XPM file has invalid number of colors"
 msgstr ""
+"XPM טעקע האָט אַן אומלעקסיקן צאָל פֿאַרבן"
 
 #: gdk-pixbuf/io-xpm.c:1267
 msgid "XPM has invalid number of chars per pixel"
 msgstr ""
+"XPM האָט אַן אומלעקסיקן צאָל כאַראַקטערס "
+"אין אַ בילדצעל"
 
 #: gdk-pixbuf/io-xpm.c:1285
 msgid "Can't read XPM colormap"
-msgstr ""
+msgstr "ניט געקענט לײענען XPM פֿאַרבמאַפּע"
 
 #: gdk-pixbuf/io-xpm.c:1326
 msgid "Can't allocate memory for loading XPM image"
-msgstr ""
+msgstr "ניט גענוג זכּרון אַרײַנשטעלן XPM בילד"
 
 #: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr ""
+"דורכפֿאַל אין שרײַבן צײַטװײַליקע טעקע "
+"בשעת אַרײַנשטעלן XPM בילד"
 
 #: gdk-pixbuf/gdk-pixdata.c:403
 #, c-format
 msgid "failed to allocate image buffer of %u bytes"
 msgstr ""
+"ניט גענוג זכּרון צוצוטײלן בילד "
+"באַהאַלט־אָרט פֿון %u אַכטעלעך"
 
 #: gdk-pixbuf/gdk-pixdata.c:457
 msgid "Image pixel data corrupt"
-msgstr ""
+msgstr "פֿאַלשע בילדצעל דאַטן"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -564,7 +690,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:116
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -573,7 +699,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:122
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -582,620 +708,640 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:128
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: gtk/gtkaccellabel.c:136
 msgid "Accelerator Closure"
-msgstr ""
+msgstr "פֿאַרפֿלינקער צומאַך"
 
 #: gtk/gtkaccellabel.c:137
 msgid "The closure to be monitored for accelerator changes"
 msgstr ""
+"צומאַך צו קאָנטראָלירן צוליב "
+"פֿאַרפֿלינקער ענדערונגען"
 
 #: gtk/gtkaccellabel.c:143
 msgid "Accelerator Widget"
-msgstr ""
+msgstr "פֿאַרפֿלינקער צעפּיכעסל"
 
 #: gtk/gtkaccellabel.c:144
 msgid "The widget to be monitored for accelerator changes"
 msgstr ""
+"דאָס צעפּיכעסל צו קאָנטראָלירן צוליב "
+"פֿאַרפֿלינקער ענדערונגען"
 
 #: gtk/gtkalignment.c:102
 msgid "Horizontal alignment"
-msgstr ""
+msgstr "האָריזאָנטאַלישע פֿאַרגלײַכונג"
 
 #: gtk/gtkalignment.c:103
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
 msgstr ""
+"האָריזאָנטאַליש אָרט פֿון קינד אין רױם "
+"װאָס איז בנימצא.  0.0 מײנט פֿאַרגלײַך צום "
+"לינקס, 1.0 מײנט פֿאַרגלײַך צום רעכטס"
 
 #: gtk/gtkalignment.c:112
 msgid "Vertical alignment"
-msgstr ""
+msgstr "װערטיקאַלישע פֿאַרגלײַכונג"
 
 #: gtk/gtkalignment.c:113
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
 msgstr ""
+"װערטיקאַליש אָרט פֿון קינד אין רױם װאָס "
+"איז בנימצא.  0.0 מײנט פֿאַרגלײַך צום לינקס, "
+"1.0 מײנט פֿאַרגלײַך צום רעכטס"
 
 #: gtk/gtkalignment.c:121
 msgid "Horizontal scale"
-msgstr ""
+msgstr "האָריזאָנטאַלישע מאָס"
 
 #: gtk/gtkalignment.c:122
 msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
+"אױב עס געפֿינט זיך מער האָריזאָנטאַליש "
+"אָרט װי דאָס קינד דאַרף, װיפֿל צו ניצן "
+"צוליב דעם קינד.  0.0 מײנט גאָרניט; 1.0 מײנט "
+"אַלץ"
 
 #: gtk/gtkalignment.c:130
 msgid "Vertical scale"
-msgstr ""
+msgstr "װערטיקאַלישע מאָס"
 
 #: gtk/gtkalignment.c:131
 msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
+"אױב עס געפֿינט זיך מער װערטיקאַליש אָרט "
+"װי דאָס קינד דאַרף, װיפֿל צו ניצן צוליב "
+"דעם קינד.  0.0 מײנט גאָרניט; 1.0 מײנט אַלץ"
 
 #: gtk/gtkarrow.c:98
 msgid "Arrow direction"
-msgstr ""
+msgstr "פֿײַל ריכטונג"
 
 #: gtk/gtkarrow.c:99
 msgid "The direction the arrow should point"
-msgstr ""
+msgstr "ריכטונג װוּ אַהין די פֿײַל זאָל װײַזן"
 
 #: gtk/gtkarrow.c:106
 msgid "Arrow shadow"
-msgstr ""
+msgstr "פֿײַל־שאָטן"
 
 #: gtk/gtkarrow.c:107
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr ""
+"געשטאַלט פֿון שאָטן װאָס אַרום דער פֿײַל"
 
 #: gtk/gtkaspectframe.c:107
 msgid "Horizontal Alignment"
-msgstr ""
+msgstr "האָריזאָנטאַלישע פֿאַרגלײַכונג"
 
 #: gtk/gtkaspectframe.c:108
 msgid "X alignment of the child"
-msgstr ""
+msgstr "X פֿאַרגלײַכונג פֿון קינד"
 
 #: gtk/gtkaspectframe.c:114
 msgid "Vertical Alignment"
-msgstr ""
+msgstr "װערטיקאַליש פֿאַרגלײַכונג"
 
 #: gtk/gtkaspectframe.c:115
 msgid "Y alignment of the child"
-msgstr ""
+msgstr "Y פֿאַרגלײַכונג פֿון קינד"
 
 #: gtk/gtkaspectframe.c:121
 msgid "Ratio"
-msgstr ""
+msgstr "פֿאַרגלײַך"
 
 #: gtk/gtkaspectframe.c:122
 msgid "Aspect ratio if obey_child is FALSE"
 msgstr ""
+"אַספּעקט פֿאַרגלײַך אױב מען פֿאָלגט ניט דאָס "
+"קינד"
 
 #: gtk/gtkaspectframe.c:128
 msgid "Obey child"
-msgstr ""
+msgstr "פֿאָלג דאָס קינד"
 
 #: gtk/gtkaspectframe.c:129
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr ""
+msgstr "צװינג אַספּעקט פֿאַרגלײַך ער זאָל שטימען מיט דער ראָמס קינד"
 
 #: gtk/gtkbbox.c:115
 msgid "Minimum child width"
-msgstr ""
+msgstr "קלענסטע קינד ברײט"
 
 #: gtk/gtkbbox.c:116
 msgid "Minimum width of buttons inside the box"
-msgstr ""
+msgstr "קלענסטע ברײט פֿון קנעפּלעך אין דרינען פֿון קעסטל"
 
 #: gtk/gtkbbox.c:124
 msgid "Minimum child height"
-msgstr ""
+msgstr "קלענסטע קינד הײך"
 
 #: gtk/gtkbbox.c:125
 msgid "Minimum height of buttons inside the box"
-msgstr ""
+msgstr "קלענסטע הײך פֿון קנעפּלעך אין דרינען פֿון קעסטל"
 
 #: gtk/gtkbbox.c:133
 msgid "Child internal width padding"
-msgstr ""
+msgstr "קינדס אינערלעך לײדיק אָרט אין דער ברײט"
 
 #: gtk/gtkbbox.c:134
 msgid "Amount to increase child's size on either side"
-msgstr ""
+msgstr "װיפֿל צו פֿאַרגרעסערן קינדס גרײס אױף יעדער זײַט"
 
 #: gtk/gtkbbox.c:142
 msgid "Child internal height padding"
-msgstr ""
+msgstr "קינדס אינערלעך לײדיק אָרט אין דער הײך"
 
 #: gtk/gtkbbox.c:143
 msgid "Amount to increase child's size on the top and bottom"
-msgstr ""
+msgstr "װיפֿל צו פֿאַרגרעסערן קינדס גרײס אױבן און אונטן"
 
 #: gtk/gtkbbox.c:151
 msgid "Layout style"
-msgstr ""
+msgstr "אױסשטעל סטיל"
 
 #: gtk/gtkbbox.c:152
 msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
-msgstr ""
+msgstr "װי אױסצושטעלן די קנעפּלעך אין קעסטל: געװײנטלעך, געשפּרײט, ראַנד, אָנהײב, אָדער סוף"
 
 #: gtk/gtkbbox.c:160
 msgid "Secondary"
-msgstr ""
+msgstr "אין צװײטן אָרט"
 
 #: gtk/gtkbbox.c:161
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, "
 "e.g., help buttons."
-msgstr ""
+msgstr "אױב יאָ, װײַזט זיך דאָס קינד אין אַ צװײטע גרופּע קינדער, פּאַסיק למשל פֿאַר געהילפֿס־קנעפּלעך"
 
 #: gtk/gtkbox.c:125
 msgid "Spacing"
-msgstr ""
+msgstr "אָפּרוקונג"
 
 #: gtk/gtkbox.c:126
 msgid "The amount of space between children."
-msgstr ""
+msgstr "באַטרעף פֿון אָפּרוקונג צװישן קינדער"
 
 #: gtk/gtkbox.c:135 gtk/gtknotebook.c:434
 msgid "Homogeneous"
-msgstr ""
+msgstr "אַלע דאָס גלײַך"
 
 #: gtk/gtkbox.c:136
 msgid "Whether the children should all be the same size."
-msgstr ""
+msgstr "אױב די קינדער זאָלן אַלע האָבן אײן גרײס"
 
 #: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:280
 msgid "Label"
-msgstr ""
+msgstr "עטיקעט"
 
 #: gtk/gtkbutton.c:190
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget."
-msgstr ""
+msgstr "טעכט פֿון עטיקעט־צעפּיכעסל אין דרינען פֿון קענפּל, אױב דאָס קענפּל האָט אַן עטיקעט־צעפּיכעסל"
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:301
 msgid "Use underline"
-msgstr ""
+msgstr "שטריך אונטער"
 
 #: gtk/gtkbutton.c:198 gtk/gtklabel.c:302
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
-msgstr ""
+msgstr "אױב יאָ, װעט אַן אונטערשטריך אין טעקסט באַדײַטן אַז דעם קומעדיקן כאַראַקטער ניצט מען װי אַ ראָשי־תּיבֿשתדיקער פֿאַרפֿלינקער־קלאַװיש"
 
 #: gtk/gtkbutton.c:205
 msgid "Use stock"
-msgstr ""
+msgstr "ניצט הורט"
 
 #: gtk/gtkbutton.c:206
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
-msgstr ""
+msgstr "אױב באַשטעטיקט, װעט דער עטיקעט קלײַבן אַ הורט־זאַך אַנשטאָט זיך לאָזן װײַזן"
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
-msgstr ""
+msgstr "צאַמרינע אױסװײַז"
 
 #: gtk/gtkbutton.c:214
 msgid "The border relief style."
-msgstr ""
+msgstr "דער סטיל פֿון צאַמרינע אױסװײַז"
 
 #: gtk/gtkbutton.c:265
 msgid "Default Spacing"
-msgstr ""
+msgstr "געװײנטלעכע אָפּרוקונג"
 
 #: gtk/gtkbutton.c:266
 msgid "Extra space to add for CAN_DEFAULT buttons"
-msgstr ""
+msgstr "איבעריקע אָפּרוקונג צוצולײגן פֿאַר CAN_DEFAULT קנעפּלעך"
 
 #: gtk/gtkbutton.c:272
 msgid "Default Outside Spacing"
-msgstr ""
+msgstr "געװײנטלעכע אױסערלעכע אָפּרוקונג"
 
 #: gtk/gtkbutton.c:273
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
-msgstr ""
+msgstr "איבעריקע אָפּרוקונג צוצולײגן פֿאַר CAN_DEFAULT קנעפּלעך װאָס װײַזט זיך אַלע מאָל אין דרױסן פֿון צאַמרינע"
 
 #: gtk/gtkbutton.c:278
 msgid "Child X Displacement"
-msgstr ""
+msgstr "קינדס X פֿונאַנדעררוקונג"
 
 #: gtk/gtkbutton.c:279
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
-msgstr ""
+msgstr "װי װײַט אין X ריכטונג פֿאַררוקן דאָס קינד װען מען דריקט דאָס קנעפּל"
 
 #: gtk/gtkbutton.c:286
 msgid "Child Y Displacement"
-msgstr ""
+msgstr "קינדס Y פֿונאַנדעררוקונג"
 
 #: gtk/gtkbutton.c:287
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
-msgstr ""
+msgstr "װי װײַט אין Y ריכטונג פֿאַררוקן דאָס קינד װען מען דריקט דאָס קנעפּל"
 
 #: gtk/gtkcellrenderer.c:103
 msgid "mode"
-msgstr ""
+msgstr "מאָדע"
 
 #: gtk/gtkcellrenderer.c:104
 msgid "Editable mode of the CellRenderer"
-msgstr ""
+msgstr "רעדאַקטיר־מאָדע פֿון צעלװײַזער"
 
 #: gtk/gtkcellrenderer.c:113
 msgid "visible"
-msgstr ""
+msgstr "זעעװדיק"
 
 #: gtk/gtkcellrenderer.c:114
 msgid "Display the cell"
-msgstr ""
+msgstr "װײַז דעם צעל"
 
 #: gtk/gtkcellrenderer.c:122
 msgid "xalign"
-msgstr ""
+msgstr "X פֿאַרגלײַכונג"
 
 #: gtk/gtkcellrenderer.c:123
 msgid "The x-align."
-msgstr ""
+msgstr "X פֿאַרגלײַכונג"
 
 #: gtk/gtkcellrenderer.c:133
 msgid "yalign"
-msgstr ""
+msgstr "Y פֿאַרגלײַכונג"
 
 #: gtk/gtkcellrenderer.c:134
 msgid "The y-align."
-msgstr ""
+msgstr "Y פֿאַרגלײַכונג"
 
 #: gtk/gtkcellrenderer.c:144
 msgid "xpad"
-msgstr ""
+msgstr "X לײדיק אָרט"
 
 #: gtk/gtkcellrenderer.c:145
 msgid "The xpad."
-msgstr ""
+msgstr "X לײדיק אָרט"
 
 #: gtk/gtkcellrenderer.c:155
 msgid "ypad"
-msgstr ""
+msgstr "Y לײדיק אָרט"
 
 #: gtk/gtkcellrenderer.c:156
 msgid "The ypad."
-msgstr ""
+msgstr "Y לײדיק אָרט"
 
 #: gtk/gtkcellrenderer.c:166
 msgid "width"
-msgstr ""
+msgstr "ברײט"
 
 #: gtk/gtkcellrenderer.c:167
 msgid "The fixed width."
-msgstr ""
+msgstr "ברײט ניט צו ענדערן"
 
 #: gtk/gtkcellrenderer.c:177
 msgid "height"
-msgstr ""
+msgstr "הײך"
 
 #: gtk/gtkcellrenderer.c:178
 msgid "The fixed height."
-msgstr ""
+msgstr "הײך ניט צו ענדערן"
 
 #: gtk/gtkcellrenderer.c:188
 msgid "Is Expander"
-msgstr ""
+msgstr "איז אַ פֿאַרגרעסערער"
 
 #: gtk/gtkcellrenderer.c:189
 msgid "Row has children."
-msgstr ""
+msgstr "שורה האָט קינדער"
 
 #: gtk/gtkcellrenderer.c:198
 msgid "Is Expanded"
-msgstr ""
+msgstr "איז פֿאַרגרעסערט"
 
 #: gtk/gtkcellrenderer.c:199
 msgid "Row is an expander row, and is expanded"
-msgstr ""
+msgstr "שורה האָט אַ פֿאַרגרעסער שורה און איז אַלײן פֿאַרגרעסערט"
 
 #: gtk/gtkcellrendererpixbuf.c:104
 msgid "Pixbuf Object"
-msgstr ""
+msgstr "בילדבאַהאַלט זאַך"
 
 #: gtk/gtkcellrendererpixbuf.c:105
 msgid "The pixbuf to render."
-msgstr ""
+msgstr "‫בילדבאַהאַלט צו װײַזן."
 
 #: gtk/gtkcellrendererpixbuf.c:113
 msgid "Pixbuf Expander Open"
-msgstr ""
+msgstr "בילדבאַהאַלט פֿאַרגרעסערער אָפֿן"
 
 #: gtk/gtkcellrendererpixbuf.c:114
 msgid "Pixbuf for open expander."
-msgstr ""
+msgstr "בילדבאַהאַלט פֿאַר אָפֿענעם פֿאַרגרעסערער"
 
 #: gtk/gtkcellrendererpixbuf.c:122
 msgid "Pixbuf Expander Closed"
-msgstr ""
+msgstr "בילדבאַהאַלט פֿאַרגרעסערער פֿאַרמאַכט"
 
 #: gtk/gtkcellrendererpixbuf.c:123
 msgid "Pixbuf for closed expander."
-msgstr ""
+msgstr "בילדבאַהאַלט פֿאַר פֿאַרמאַכטן פֿאַרגרעסערער"
 
 #: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
-msgstr ""
+msgstr "טעקסט"
 
 #: gtk/gtkcellrenderertext.c:175
 msgid "Text to render"
-msgstr ""
+msgstr "טעקסט צו פֿאָרמירן"
 
 #: gtk/gtkcellrenderertext.c:182
 msgid "Markup"
-msgstr ""
+msgstr "פֿאַרצײַכענונג"
 
 #: gtk/gtkcellrenderertext.c:183
 msgid "Marked up text to render"
-msgstr ""
+msgstr "פֿאַרצײַכענטער טעקסט צו פֿאָרמירן"
 
 #: gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:287
 msgid "Attributes"
-msgstr ""
+msgstr "מידות"
 
 #: gtk/gtkcellrenderertext.c:191
 msgid "A list of style attributes to apply to the text of the renderer."
-msgstr ""
+msgstr "אַ רשימה סטיל־מידות צו אַפּליקירן צום טעקסט פֿון דעם פֿאָרמירער"
 
 #: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:209
 msgid "Background color name"
-msgstr ""
+msgstr "הינטער־פֿאַרב נאָמען"
 
 #: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:210
 msgid "Background color as a string"
-msgstr ""
+msgstr "הינטער־פֿאַרב װי אַן אות־פֿאָדעם"
 
 #: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:217
 msgid "Background color"
-msgstr ""
+msgstr "הינטער־פֿאַרב"
 
 #: gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:218
 msgid "Background color as a GdkColor"
-msgstr ""
+msgstr "‫הינטער־פֿאַרב װי אַ GdkColor"
 
 #: gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:243
 msgid "Foreground color name"
-msgstr ""
+msgstr "פֿאַר־פֿאַרב נאָמען"
 
 #: gtk/gtkcellrenderertext.c:215 gtk/gtktexttag.c:244
 msgid "Foreground color as a string"
-msgstr ""
+msgstr "פֿאַר־פֿאַרב װי אַן אות־פֿאָדעם"
 
 #: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:251
 msgid "Foreground color"
-msgstr ""
+msgstr "פֿאַר־פֿאַרב"
 
 #: gtk/gtkcellrenderertext.c:223 gtk/gtktexttag.c:252
 msgid "Foreground color as a GdkColor"
-msgstr ""
+msgstr "‫פֿאַר־פֿאַרב װי אַ GdkColor"
 
 #: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 #: gtk/gtktextview.c:566
 msgid "Editable"
-msgstr ""
+msgstr "רעדאַגיר־גרײט"
 
 #: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:567
 msgid "Whether the text can be modified by the user"
-msgstr ""
+msgstr "צי דער ניצער מעג ענדערן דעם טעקסט"
 
 #: gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
 #: gtk/gtkfontsel.c:209 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
-msgstr ""
+msgstr "שריפֿט"
 
 #: gtk/gtkcellrenderertext.c:240 gtk/gtktexttag.c:286
 msgid "Font description as a string"
-msgstr ""
+msgstr "שריפֿט באַשרײַבונג װי אַן אות־פֿאָדעם"
 
 #: gtk/gtkcellrenderertext.c:248 gtk/gtktexttag.c:294
 msgid "Font description as a PangoFontDescription struct"
-msgstr ""
+msgstr "שריפֿט באַשרײַבונג װי אַ PangoFontDescription סטרוקטור"
 
 #: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:302
 msgid "Font family"
-msgstr ""
+msgstr "שריפֿט משפּחה"
 
 #: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:303
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr ""
+msgstr "‫נאָמען פֿון שריפֿט משפּחה, װי למשל Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:264 gtk/gtkcellrenderertext.c:265
 #: gtk/gtktexttag.c:310 gtk/gtktexttag.c:311
 msgid "Font style"
-msgstr ""
+msgstr "שריפֿט סטיל"
 
 #: gtk/gtkcellrenderertext.c:273 gtk/gtkcellrenderertext.c:274
 #: gtk/gtktexttag.c:319 gtk/gtktexttag.c:320
 msgid "Font variant"
-msgstr ""
+msgstr "שריפֿט װאַריאַנט"
 
 #: gtk/gtkcellrenderertext.c:282 gtk/gtkcellrenderertext.c:283
 #: gtk/gtktexttag.c:328 gtk/gtktexttag.c:329
 msgid "Font weight"
-msgstr ""
+msgstr "שריפֿט װאָג"
 
 #: gtk/gtkcellrenderertext.c:292 gtk/gtkcellrenderertext.c:293
 #: gtk/gtktexttag.c:339 gtk/gtktexttag.c:340
 msgid "Font stretch"
-msgstr ""
+msgstr "שריפֿט שטרעך"
 
 #: gtk/gtkcellrenderertext.c:301 gtk/gtkcellrenderertext.c:302
 #: gtk/gtktexttag.c:348 gtk/gtktexttag.c:349
 msgid "Font size"
-msgstr ""
+msgstr "שריפֿט גרײס"
 
 #: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:368
 msgid "Font points"
-msgstr ""
+msgstr "שריפֿט פּונקטן"
 
 #: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:369
 msgid "Font size in points"
-msgstr ""
+msgstr "שריפֿט גרײס אין פּונקטן"
 
 #: gtk/gtkcellrenderertext.c:321 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
 msgid "Font scale"
-msgstr ""
+msgstr "שריפֿט מאָס"
 
 #: gtk/gtkcellrenderertext.c:322
 msgid "Font scaling factor"
-msgstr ""
+msgstr "שריפֿט שטרעך־פֿאַקטאָר"
 
 #: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:427
 msgid "Rise"
-msgstr ""
+msgstr "הײב"
 
 #: gtk/gtkcellrenderertext.c:332 gtk/gtktexttag.c:428
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
-msgstr ""
+msgstr "צולײג פֿון טעקסט איבער דעם אונטערגרונט (אונטער דעם אונטערגרונט אױב דער הײב איז נעגאַטיװ)"
 
 #: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:467
 msgid "Strikethrough"
-msgstr ""
+msgstr "דורך־שטריך"
 
 #: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:468
 msgid "Whether to strike through the text"
-msgstr ""
+msgstr "צי מען זאָל דורכשטריכן דעם טעקסט"
 
 #: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:475
 msgid "Underline"
-msgstr ""
+msgstr "אונטערשטריך"
 
 #: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:476
 msgid "Style of underline for this text"
-msgstr ""
+msgstr "סטיל פֿון אונטערשטריך אין דעם טעקסט"
 
 #: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:512
 msgid "Background set"
-msgstr ""
+msgstr "באַשטעטיק די הינטער־פֿאַרב"
 
 #: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:513
 msgid "Whether this tag affects the background color"
-msgstr ""
+msgstr "צי דאָס הענטל איז משפּיע די הינטער־פֿאַרב"
 
 #: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:524
 msgid "Foreground set"
-msgstr ""
+msgstr "באַשטעטיק די פֿאַר־פֿאַרב"
 
 #: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:525
 msgid "Whether this tag affects the foreground color"
-msgstr ""
+msgstr "צי דאָס הענטל איז משפּיע די פֿאַר־פֿאַרב"
 
 #: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:532
 msgid "Editability set"
-msgstr ""
+msgstr "באַשטעטיק די רעדאַגיר־גרײטקײַט"
 
 #: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:533
 msgid "Whether this tag affects text editability"
-msgstr ""
+msgstr "צי דאָס הענטל איז משפּיע די טעקסט רעדאַגיר־גרײטקײַט"
 
 #: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:536
 msgid "Font family set"
-msgstr ""
+msgstr "באַשטעטיק די שריפֿט משפּחה"
 
 #: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font family"
-msgstr ""
+msgstr "צי דאָס הענטל איז משפּיע די שריפֿט משפּחה"
 
 #: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:540
 msgid "Font style set"
-msgstr ""
+msgstr "באַשטעטיק דעם שריפֿט סטיל"
 
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font style"
-msgstr ""
+msgstr "צי דאָס הענטל איז משפּיע דעם שריפֿט סטיל"
 
 #: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:544
 msgid "Font variant set"
-msgstr ""
+msgstr "באַשטעטיק דעם שריפֿט װאַריאַנט"
 
 #: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font variant"
-msgstr ""
+msgstr "צי דאָס הענטל איז משפּיע דעם שריפֿט װאַריאַנט"
 
 #: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:548
 msgid "Font weight set"
-msgstr ""
+msgstr "באַשטעטיק די שריפֿט װאָג"
 
 #: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font weight"
-msgstr ""
+msgstr "צי דאָס הענטל איז משפּיע די שריפֿט װאָג"
 
 #: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:552
 msgid "Font stretch set"
-msgstr ""
+msgstr "באַשטעטיק דעם שריפֿט שטרעך"
 
 #: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font stretch"
-msgstr ""
+msgstr "צי דאָס הענטל איז משפּיע דעם שריפֿט שטרעך"
 
 #: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:556
 msgid "Font size set"
-msgstr ""
+msgstr "באַשטעטיק די שטרעך גרײס"
 
 #: gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:557
 msgid "Whether this tag affects the font size"
-msgstr ""
+msgstr "צי דאָס הענטל איז משפּיע די שריפֿט גרײס"
 
 #: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:560
 msgid "Font scale set"
-msgstr ""
+msgstr "באַשטעטיק די שריפֿט מאָס"
 
 #: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:561
 msgid "Whether this tag scales the font size by a factor"
-msgstr ""
+msgstr "צי דאָס הענטל איז משפּיע די שריפֿט מאָס"
 
 #: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:580
 msgid "Rise set"
-msgstr ""
+msgstr "באַשטעטיק דעם הײב"
 
 #: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:581
 msgid "Whether this tag affects the rise"
-msgstr ""
+msgstr "צי דאָס הענטל איז משפּיע דעם הײב"
 
 #: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:596
 msgid "Strikethrough set"
-msgstr ""
+msgstr "באַשטעטיק דעם דורכשטריך"
 
 #: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:597
 msgid "Whether this tag affects strikethrough"
-msgstr ""
+msgstr "צי דאָס הענטל איז משפּיע דעם דורכשטריך"
 
 #: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:604
 msgid "Underline set"
-msgstr ""
+msgstr "באַשטעטיק דעם אונטערשטריך"
 
 #: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:605
 msgid "Whether this tag affects underlining"
-msgstr ""
+msgstr "צי דאָס הענטל איז משפּיע דעם אונטערשטריך"
 
 #: gtk/gtkcellrenderertoggle.c:130
 msgid "Toggle state"
-msgstr ""
+msgstr "פֿאַרקער מצבֿ"
 
 #: gtk/gtkcellrenderertoggle.c:131
 msgid "The toggle state of the button"
-msgstr ""
+msgstr "פֿאַרקער דעם מצבֿ פֿונעם קנעפּל"
 
 #: gtk/gtkcellrenderertoggle.c:139
 msgid "Activatable"
