@@ -1442,11 +1442,11 @@ gtk_tree_view_column_get_cell_info (GtkTreeViewColumn *tree_column,
  * gtk_tree_view_column_pack_start:
  * @tree_column: A #GtkTreeViewColumn.
  * @cell: The #GtkCellRenderer. 
- * @expand: %TRUE if @cell is to be given extra space allocated to box.
+ * @expand: %TRUE if @cell is to be given extra space allocated to @tree_column.
  *
- * Packs the @cell into the beginning of the column. If @expand is FALSE, then
+ * Packs the @cell into the beginning of the column. If @expand is %FALSE, then
  * the @cell is allocated no more space than it needs. Any unused space is divided
- * evenly between cells for which @expand is TRUE.
+ * evenly between cells for which @expand is %TRUE.
  **/
 void
 gtk_tree_view_column_pack_start (GtkTreeViewColumn *tree_column,
@@ -1460,11 +1460,11 @@ gtk_tree_view_column_pack_start (GtkTreeViewColumn *tree_column,
  * gtk_tree_view_column_pack_end:
  * @tree_column: A #GtkTreeViewColumn.
  * @cell: The #GtkCellRenderer. 
- * @expand: %TRUE if @cell is to be given extra space allocated to box.
+ * @expand: %TRUE if @cell is to be given extra space allocated to @tree_column.
  *
- * Adds the @cell to end of the column. If @expand is FALSE, then the @cell
+ * Adds the @cell to end of the column. If @expand is %FALSE, then the @cell
  * is allocated no more space than it needs. Any unused space is divided
- * evenly between cells for which @expand is TRUE.
+ * evenly between cells for which @expand is %TRUE.
  **/
 void
 gtk_tree_view_column_pack_end (GtkTreeViewColumn  *tree_column,

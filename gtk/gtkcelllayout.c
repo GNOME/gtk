@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "gtkcelllayout.h"
+#include <gtk/gtkcelllayout.h>
 
 GType
 gtk_cell_layout_get_type (void)
@@ -49,7 +49,18 @@ gtk_cell_layout_get_type (void)
   return cell_layout_type;
 }
 
-
+/**
+ * gtk_cell_layout_pack_start:
+ * @cell_layout: A #GtkCellLayout.
+ * @cell: A #GtkCellRenderer.
+ * @expand: %TRUE if @cell is to be given extra space allocated to @cell_layout.
+ *
+ * Packs the @cell into the beginning of @cell_layout. If @expand is %FALSE,
+ * then the @cell is allocated no more space than it needs. Any unused space
+ * is divided evenly between cells for which @expand is %TRUE.
+ *
+ * Since: 2.4
+ */
 void
 gtk_cell_layout_pack_start (GtkCellLayout   *cell_layout,
                             GtkCellRenderer *cell,
@@ -63,6 +74,18 @@ gtk_cell_layout_pack_start (GtkCellLayout   *cell_layout,
                                                            expand);
 }
 
+/**
+ * gtk_cell_layout_pack_end:
+ * @cell_layout: A #GtkCellLayout.
+ * @cell: A #GtkCellRenderer.
+ * @expand: %TRUE if @cell is to be given extra space allocated to @cell_layout.
+ *
+ * Adds the @cell to the end of @cell_layout. If @expand is %FALSE, then the
+ * @cell is allocated no more space than it needs. Any unused space is
+ * divided evenly between cells for which @expand is %TRUE.
+ *
+ * Since: 2.4
+ */
 void
 gtk_cell_layout_pack_end (GtkCellLayout   *cell_layout,
                           GtkCellRenderer *cell,
@@ -76,6 +99,14 @@ gtk_cell_layout_pack_end (GtkCellLayout   *cell_layout,
                                                          expand);
 }
 
+/**
+ * gtk_cell_layout_clear:
+ * @cell_layout: A #GtkCellLayout.
+ *
+ * Unsets all the mappings on all renderers on @cell_layout.
+ *
+ * Since: 2.4
+ */
 void
 gtk_cell_layout_clear (GtkCellLayout *cell_layout)
 {
@@ -107,6 +138,19 @@ gtk_cell_layout_set_attributesv (GtkCellLayout   *cell_layout,
     }
 }
 
+/**
+ * gtk_cell_layout_set_attributes:
+ * @cell_layout: A #GtkCellLayout.
+ * @cell: A #GtkCellRenderer.
+ * @Varargs: A %NULL-terminated list of attributes.
+ *
+ * Sets the attributes in list as the attributes of @cell_layout. The
+ * attributes should be in attribute/column order, as in
+ * gtk_cell_layout_add_attribute(). All existing attributes are removed, and
+ * replaced with the new attributes.
+ *
+ * Since: 2.4
+ */
 void
 gtk_cell_layout_set_attributes (GtkCellLayout   *cell_layout,
                                 GtkCellRenderer *cell,
@@ -122,6 +166,21 @@ gtk_cell_layout_set_attributes (GtkCellLayout   *cell_layout,
   va_end (args);
 }
 
+/**
+ * gtk_cell_layout_add_attribute:
+ * @cell_layout: A #GtkCellLayout.
+ * @cell: A #GtkCellRenderer.
+ * @attribute: An attribute on the renderer.
+ * @column: The column position on the model to get the attribute from.
+ *
+ * Adds an attribute mapping to the list in @cell_layout. The @column is the
+ * column of the model to get a value from, and the @attribute is the
+ * parameter on @cell to be set from the value. So for example if column 2
+ * of the model contains strings, you could have the "text" attribute of a
+ * #GtkCellRendererText get its values from column 2.
+ *
+ * Since: 2.4
+ */
 void
 gtk_cell_layout_add_attribute (GtkCellLayout   *cell_layout,
                                GtkCellRenderer *cell,
@@ -139,6 +198,21 @@ gtk_cell_layout_add_attribute (GtkCellLayout   *cell_layout,
                                                               column);
 }
 
+/**
+ * gtk_cell_layout_set_cell_data_func:
+ * @cell_layout: A #GtkCellLayout.
+ * @cell: A #GtkCellRenderer.
+ * @func: The #GtkCellLayoutDataFunc to use.
+ * @func_data: The user data for @func.
+ * @destroy: The destroy notification for @func_data.
+ *
+ * Sets the #GtkCellLayoutDataFunc to use for @cell_layout. This function
+ * is used instead of the standard attributes mapping for setting the
+ * column value, and should set the value of @cell_layout's cell renderer(s)
+ * as appropriate. @func may be %NULL to remove and older one.
+ *
+ * Since: 2.4
+ */
 void
 gtk_cell_layout_set_cell_data_func (GtkCellLayout         *cell_layout,
                                     GtkCellRenderer       *cell,
@@ -156,6 +230,16 @@ gtk_cell_layout_set_cell_data_func (GtkCellLayout         *cell_layout,
                                                                    destroy);
 }
 
+/**
+ * gtk_cell_layout_clear_attributes:
+ * @cell_layout: A #GtkCellLayout.
+ * @cell: A #GtkCellRenderer to clear the attribute mapping on.
+ *
+ * Clears all existing attributes previously set with
+ * gtk_cell_layout_set_attributes().
+ *
+ * Since: 2.4
+ */
 void
 gtk_cell_layout_clear_attributes (GtkCellLayout   *cell_layout,
                                   GtkCellRenderer *cell)

@@ -1,3 +1,9 @@
+Tue Sep 30 22:59:58 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeviewcolumn.c: Some API doc comment fixes.
+
+	* gtk/gtkcellayout.c: Fix #include and oooooh API doc comments!
+
 2003-09-30  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/merge-*.ui: 
