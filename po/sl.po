@@ -1,92 +1,90 @@
-# Polish translation
-# Copyright (C) 1998 Free Software Foundation, Inc.
-# Krzysztof Krzy¿aniak <eloy@venco.com.pl>, 1998.
-# Pre-translation has bean done using PePeSza v0.7[C
-# get your own copy of PePeSza from http://www.ids.pl/~pkollegu/pepesza.html
+# Slovenian translations of GTK+ messages
+# Copyright (C) 1999 Free Software Foundation, Inc.
+# 
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.2.1\n"
-"POT-Creation-Date: 1999-03-24 23:06-0600\n"
-"PO-Revision-Date: 1998-12-18 02:21+0100\n"
-"Last-Translator: Tomasz K³oczko <kloczek@pld.org.pl>\n"
-"Language-Team: Polish <pl@li.org>\n"
+"Project-Id-Version: GTK+ 1.2.0\n"
+"POT-Creation-Date: 1999-02-25 05:04-0600\n"
+"PO-Revision-Date: 1999-03-06 10:00+0100\n"
+"Last-Translator: Miha Tom¹iè <miha.tomsic@guest.arnes.si>\n"
+"Language-Team: slovenian <sl@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=iso8859-2\n"
+"Content-Transfer-Encoding: 8-bit\n"
 
 #: gtk/gtkcolorsel.c:213
 msgid "Hue:"
-msgstr "Odcieñ:"
+msgstr "Odtenek:"
 
 #: gtk/gtkcolorsel.c:214
 msgid "Saturation:"
-msgstr "Nasycenie:"
+msgstr "Nasièenost:"
 
 #: gtk/gtkcolorsel.c:215
 msgid "Value:"
-msgstr "Warto¶æ:"
+msgstr "Vrednost:"
 
 #: gtk/gtkcolorsel.c:216
 msgid "Red:"
-msgstr "Czerwony:"
+msgstr "Rdeèa:"
 
 #: gtk/gtkcolorsel.c:217
 msgid "Green:"
-msgstr "Zielony:"
+msgstr "Zelena:"
 
 #: gtk/gtkcolorsel.c:218
 msgid "Blue:"
-msgstr "Niebieski:"
+msgstr "Modra:"
 
 #: gtk/gtkcolorsel.c:219
 msgid "Opacity:"
-msgstr "Krycie:"
+msgstr "Neprosojnost:"
 
 #. The OK button
 #: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3475
 #: gtk/gtkgamma.c:416
 msgid "OK"
-msgstr "OK"
+msgstr "Potrdi"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
 #: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3488
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
-msgstr "Anuluj"
+msgstr "Preklièi"
 
 #: gtk/gtkcolorsel.c:1679
 msgid "Help"
-msgstr "Pomoc"
+msgstr "Pomoè"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:418
 msgid "Directories"
-msgstr "Katalogi"
+msgstr "Imeniki"
 
 #. The files clist
 #: gtk/gtkfilesel.c:437
 msgid "Files"
-msgstr "Pliki"
+msgstr "Datoteke"
 
 #: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1461
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Nie mo¿na odczytaæ katalogu: %s"
+msgstr "Neberljiv imenik: %s"
 
 #: gtk/gtkfilesel.c:539
 msgid "Create Dir"
-msgstr "Utwórz katalog"
+msgstr "Kreiraj imenik"
 
 #: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:920
 msgid "Delete File"
-msgstr "Skasuj plik"
+msgstr "Zbri¹i datoteko"
 
 #: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1024
 msgid "Rename File"
-msgstr "Zmieñ nazwê"
+msgstr "Preimenuj datoteko"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -95,190 +93,188 @@ msgstr "Zmieñ nazwê"
 #.
 #: gtk/gtkfilesel.c:722
 msgid "Error"
-msgstr "B³±d"
+msgstr "Napaka"
 
 #. close button
 #: gtk/gtkfilesel.c:740 gtk/gtkinputdialog.c:354
 msgid "Close"
-msgstr "Zamknij"
+msgstr "Zapri"
 
 #: gtk/gtkfilesel.c:815
 msgid "Create Directory"
-msgstr "Utwórz katalog"
+msgstr "Kreiraj imenik"
 
 #: gtk/gtkfilesel.c:829
 msgid "Directory name:"
-msgstr "Nazwa katalogu:"
+msgstr "Ime imenika:"
 
 #. buttons
 #: gtk/gtkfilesel.c:842
 msgid "Create"
-msgstr "Utwórz"
+msgstr "Kreiraj"
 
 #. buttons
 #: gtk/gtkfilesel.c:942
 msgid "Delete"
-msgstr "Skasuj"
+msgstr "Zbri¹i"
 
 #. buttons
 #: gtk/gtkfilesel.c:1057
 msgid "Rename"
-msgstr "Zmieñ nazwê"
+msgstr "Preimenuj"
 
 #: gtk/gtkfilesel.c:1440
 msgid "Selection: "
-msgstr "Zaznaczenie: "
+msgstr "Izbor: "
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"
-msgstr ""
+msgstr "Osnova:"
 
 #: gtk/gtkfontsel.c:211
 msgid "Family:"
-msgstr ""
+msgstr "Dru¾ina:"
 
 #: gtk/gtkfontsel.c:212
 msgid "Weight:"
-msgstr ""
+msgstr "Krepkost:"
 
 #: gtk/gtkfontsel.c:213
 msgid "Slant:"
-msgstr ""
+msgstr "Po¹evnost:"
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
-msgstr "Ustaw szeroko¶æ:"
+msgstr "Nastavi ¹irino:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
-msgstr ""
+msgstr "Dodaj stil:"
 
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
-msgstr ""
+msgstr "Velikost v toèkah:"
 
 #: gtk/gtkfontsel.c:217
 msgid "Point Size:"
-msgstr ""
+msgstr "Velikost v pikah:"
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
-msgstr "Rozdzielczo¶æ X:"
+msgstr "Loèljivost po X:"
 
 #: gtk/gtkfontsel.c:219
 msgid "Resolution Y:"
-msgstr "Rozdzielczo¶æ Y:"
+msgstr "Loèljivost po Y:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
-msgstr "Odstêp:"
+msgstr "Razmik:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr "¦rednia szeroko¶æ:"
+msgstr "Povpreèna ¹irina:"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
-msgstr "Strona kodowa:"
+msgstr "Kodni nabor:"
 
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
 #: gtk/gtkfontsel.c:459
 msgid "Font Property"
-msgstr ""
+msgstr "Lastnost pisave"
 
 #: gtk/gtkfontsel.c:460
 msgid "Requested Value"
-msgstr ""
+msgstr "Zahtevana vrednost"
 
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
-msgstr "Warto¶æ bierz±ca"
+msgstr "Dejanska vrednost"
 
 #: gtk/gtkfontsel.c:494
 msgid "Font"
-msgstr "Font"
+msgstr "Pisava"
 
 #: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2156 gtk/gtkfontsel.c:2386
 msgid "Font:"
-msgstr "Font:"
+msgstr "Pisava:"
 
 #: gtk/gtkfontsel.c:509
 msgid "Font Style:"
-msgstr ""
+msgstr "Stil pisave:"
 
 #: gtk/gtkfontsel.c:514
 msgid "Size:"
-msgstr "Rozmiar:"
+msgstr "Velikost:"
 
 #: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
-#, fuzzy
 msgid "Reset Filter"
-msgstr "Skasuj plik"
+msgstr "Prenastavi filter"
 
 #: gtk/gtkfontsel.c:660
 msgid "Metric:"
-msgstr ""
+msgstr "Metrièno:"
 
 #: gtk/gtkfontsel.c:664
 msgid "Points"
-msgstr "Punktów"
+msgstr "Pike"
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
-msgstr "Piksele"
+msgstr "Toèke"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
 msgid "Preview:"
-msgstr "Podgl±d:"
+msgstr "Predogled:"
 
 #: gtk/gtkfontsel.c:716
 msgid "Font Information"
-msgstr ""
+msgstr "Informacije o pisavi"
 
 #: gtk/gtkfontsel.c:749
 msgid "Requested Font Name:"
-msgstr ""
+msgstr "Zahtevano ime pisave:"
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
-msgstr ""
+msgstr "Dejansko ime pisave:"
 
 #: gtk/gtkfontsel.c:771
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr ""
+msgstr "Na voljo je %i pisav; skupaj %i stilov. "
 
 #: gtk/gtkfontsel.c:786
-#, fuzzy
 msgid "Filter"
-msgstr "Pliki"
+msgstr "Filtriraj"
 
 #: gtk/gtkfontsel.c:799
 msgid "Font Types:"
-msgstr "Typ fontu:"
+msgstr "Tipi fontov:"
 
 #: gtk/gtkfontsel.c:807
 msgid "Bitmap"
-msgstr ""
+msgstr "Rastersko"
 
 #: gtk/gtkfontsel.c:813
 msgid "Scalable"
-msgstr "Skalowalny"
+msgstr "Raztegljivo"
 
 #: gtk/gtkfontsel.c:819
 msgid "Scaled Bitmap"
-msgstr ""
+msgstr "Raztegnjen raster"
 
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
-msgstr ""
+msgstr "navadno"
 
 #: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1948
 msgid "italic"
-msgstr ""
+msgstr "kurzivno"
 
 #: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1949
 msgid "oblique"
@@ -286,7 +282,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1950
 msgid "reverse italic"
-msgstr ""
+msgstr "obratno kurzivno"
 
 #: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1951
 msgid "reverse oblique"
@@ -294,7 +290,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1952
 msgid "other"
-msgstr "inny"
+msgstr "ostalo"
 
 #: gtk/gtkfontsel.c:1231
 msgid "[M]"
@@ -306,19 +302,19 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:1780
 msgid "The selected font is not available."
-msgstr "Wybrany font nie jest dostêpny."
+msgstr "Izbrana pisava ni dostopna."
 
 #: gtk/gtkfontsel.c:1786
 msgid "The selected font is not a valid font."
-msgstr "Wybrany font nie jest prawid³owym fontem."
+msgstr "Izbrana pisava je popaèena."
 
 #: gtk/gtkfontsel.c:1844
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr ""
+msgstr "Ta pisava uporablja dva bajtni zapis in morebiti ne bo prikazana pravilno."
 
 #: gtk/gtkfontsel.c:1936 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
-msgstr "(nieznany)"
+msgstr "(neznano)"
 
 #: gtk/gtkfontsel.c:1947
 msgid "roman"
@@ -326,7 +322,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:1959
 msgid "proportional"
-msgstr "proporcjonalny"
+msgstr "proporcionalno"
 
 #: gtk/gtkfontsel.c:1960
 msgid "monospaced"
@@ -334,52 +330,52 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:1961
 msgid "char cell"
-msgstr ""
+msgstr "celica znaka"
 
 #: gtk/gtkfontsel.c:2161
 msgid "Font: (Filter Applied)"
-msgstr ""
+msgstr "Pisava: (z uporabo filtra)"
 
 #: gtk/gtkfontsel.c:2637
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr ""
+msgstr "MAX_FONTS prese¾en. Nekatere pisave utegnejo manjkati."
 
 #: gtk/gtkfontsel.c:3482
 msgid "Apply"
-msgstr "Zastosuj"
+msgstr "Uporabi"
 
 #: gtk/gtkfontsel.c:3504
 msgid "Font Selection"
-msgstr ""
+msgstr "Izbor pisav"
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
-msgstr "Gamma"
+msgstr ""
 
 #: gtk/gtkgamma.c:403
 msgid "Gamma value"
-msgstr "Wart¶æ gamma"
+msgstr "Vrednost gamma"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:200
 msgid "Input"
-msgstr "Wej¶cie"
+msgstr "Vnos"
 
 #: gtk/gtkinputdialog.c:208
 msgid "No input devices"
-msgstr "Brak urz±dzeñ wej¶ciowych"
+msgstr "Nobene naprave za vnos"
 
 #: gtk/gtkinputdialog.c:237
 msgid "Device:"
-msgstr "Urz±dzenie:"
+msgstr "Naprava:"
 
 #: gtk/gtkinputdialog.c:253
 msgid "Disabled"
-msgstr "Wy³±czone"
+msgstr "Onemogoèeno"
 
 #: gtk/gtkinputdialog.c:261
 msgid "Screen"
-msgstr "Ekran"
+msgstr "Zaslon"
 
 #: gtk/gtkinputdialog.c:269
 msgid "Window"
@@ -387,23 +383,23 @@ msgstr "Okno"
 
 #: gtk/gtkinputdialog.c:277
 msgid "Mode: "
-msgstr "Tryb: "
+msgstr "Naèin: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
 msgid "Axes"
-msgstr "Stra³ki"
+msgstr "Osi"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:323
 msgid "Keys"
-msgstr "Klawisze"
+msgstr "Tipke"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
 #: gtk/gtkinputdialog.c:345
 msgid "Save"
-msgstr "Zachowaj"
+msgstr "Shrani"
 
 #: gtk/gtkinputdialog.c:500
 msgid "X"
@@ -415,50 +411,49 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:502
 msgid "Pressure"
-msgstr "Ci¶nienie"
+msgstr "Pritisk"
 
 #: gtk/gtkinputdialog.c:503
 msgid "X Tilt"
-msgstr ""
+msgstr "Nagib X"
 
 #: gtk/gtkinputdialog.c:504
 msgid "Y Tilt"
-msgstr ""
+msgstr "Nagib Y"
 
 #: gtk/gtkinputdialog.c:544
 msgid "none"
-msgstr "brak"
+msgstr "nobeno"
 
 #: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
 msgid "(disabled)"
-msgstr "(wy³±czone)"
+msgstr "(onemogoèeno)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:692
 msgid "clear"
-msgstr ""
+msgstr "izprazni"
 
 #: gtk/gtknotebook.c:2017 gtk/gtknotebook.c:4092
 #, c-format
 msgid "Page %u"
-msgstr "Strona %u"
+msgstr "%u stran"
 
 #: gtk/gtkrc.c:1529
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Nie znaleziono pliku obrazka w pixmap_path: \"%s\" linia %d"
+msgstr "Ne najdem datoteke s sliko v poti pixmap_path: \"%s\" vrstica %d"
 
 #: gtk/gtkrc.c:1532
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Nie znaleziono pliku obrazka w pixmap_path: \"%s\""
+msgstr "Ne najdem datoteke s sliko v poti pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Nie znaleziono pliku ³adowalnego modu³u w module_path: \"%s\","
+msgstr "Ne najdem nalo¾ljivega module v poti module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr ""
-
+msgstr "--- Ni namiga ---"

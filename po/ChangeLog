@@ -1,3 +1,10 @@
+Tue May  4 09:09:52 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* fi.wa wa.po ca.po: Backmerge from HEAD
+	  sk.po sl.po zh_TW.Big5.po: New additions
+
+	* pl.po: Backported updates from HEAD
+
 1999-04-24  Changwoo Ryu  <cwryu@adam.kaist.ac.kr>
 
 	* ko.po: Updated.
