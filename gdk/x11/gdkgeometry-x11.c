@@ -28,6 +28,7 @@
 #include "gdkprivate-x11.h"
 #include "gdkx.h"
 #include "gdkregion.h"
+#include "gdkinternals.h"
 
 typedef struct _GdkWindowQueueItem GdkWindowQueueItem;
 typedef struct _GdkWindowParentPos GdkWindowParentPos;
@@ -332,7 +333,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
       if (impl->position_info.no_bg)
 	gdk_window_tmp_reset_bg (window);
 
-      if (!impl->position_info.mapped && new_info.mapped && obj->mapped)
+      if (!impl->position_info.mapped && new_info.mapped && GDK_WINDOW_IS_MAPPED (obj))
 	XMapWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
       
       impl->position_info = new_info;
@@ -378,7 +379,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
       if (impl->position_info.no_bg)
 	gdk_window_tmp_reset_bg (window);
 
-      if (!impl->position_info.mapped && new_info.mapped && obj->mapped)
+      if (!impl->position_info.mapped && new_info.mapped && GDK_WINDOW_IS_MAPPED (obj))
 	XMapWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
 
       impl->position_info = new_info;
@@ -651,7 +652,7 @@ gdk_window_postmove (GdkWindow          *window,
 			 new_info.x, new_info.y, new_info.width, new_info.height);
     }
 
-  if (!impl->position_info.mapped && new_info.mapped && obj->mapped)
+  if (!impl->position_info.mapped && new_info.mapped && GDK_WINDOW_IS_MAPPED (obj))
     XMapWindow (GDK_DRAWABLE_XDISPLAY (window), GDK_DRAWABLE_XID (window));
 
   if (impl->position_info.no_bg)

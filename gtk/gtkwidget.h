@@ -325,7 +325,9 @@ struct _GtkWidgetClass
 				    GdkEventClient     *event);
   gint (* no_expose_event)	   (GtkWidget	       *widget,
 				    GdkEventAny	       *event);
-
+  gint (* window_state_event)      (GtkWidget          *widget,
+                                    GdkEventWindowState *event);
+  
   /* selection */
   void (* selection_get)           (GtkWidget          *widget,
 				    GtkSelectionData   *selection_data,

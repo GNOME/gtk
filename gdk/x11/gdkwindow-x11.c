@@ -635,7 +635,12 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   impl->height = attrs.height;
   private->window_type = GDK_WINDOW_FOREIGN;
   private->destroyed = FALSE;
-  private->mapped = (attrs.map_state != IsUnmapped);
+
+  if (attrs.map_state == IsUnmapped)
+    private->state = GDK_WINDOW_STATE_WITHDRAWN;
+  else
+    private->state = 0;
+
   private->depth = attrs.depth;
   
   gdk_drawable_ref (window);
@@ -709,6 +714,73 @@ gdk_window_destroy_notify (GdkWindow *window)
   gdk_drawable_unref (window);
 }
 
+static void
+set_initial_hints (GdkWindow *window)
+{
+  GdkWindowObject *private;
+  GdkAtom atoms[5];
+  gint i;
+  
+  private = (GdkWindowObject*) window;
+
+  if (private->state & GDK_WINDOW_STATE_ICONIFIED)
+    {
+      XWMHints *wm_hints;
+      
+      wm_hints = XGetWMHints (GDK_WINDOW_XDISPLAY (window),
+                              GDK_WINDOW_XID (window));
+      if (!wm_hints)
+        wm_hints = XAllocWMHints ();
+
+      wm_hints->flags |= StateHint;
+      wm_hints->initial_state = IconicState;
+      
+      XSetWMHints (GDK_WINDOW_XDISPLAY (window),
+                   GDK_WINDOW_XID (window), wm_hints);
+      XFree (wm_hints);
+    }
+
+  /* We set the spec hints regardless of whether the spec is supported,
+   * since it can't hurt and it's kind of expensive to check whether
+   * it's supported.
+   */
+  
+  i = 0;
+
+  if (private->state & GDK_WINDOW_STATE_MAXIMIZED)
+    {
+      atoms[i] = gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_VERT", FALSE);
+      ++i;
+      atoms[i] = gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_HORZ", FALSE);
+      ++i;
+    }
+
+  if (private->state & GDK_WINDOW_STATE_STICKY)
+    {
+      atoms[i] = gdk_atom_intern ("_NET_WM_STATE_STICKY", FALSE);
+      ++i;
+    }
+
+  if (i > 0)
+    {
+      XChangeProperty (GDK_WINDOW_XDISPLAY (window),
+                       GDK_WINDOW_XID (window),
+                       gdk_atom_intern ("_NET_WM_STATE", FALSE),
+                       XA_ATOM, 32, PropModeReplace,
+                       (guchar*) atoms, i);
+    }
+
+  if (private->state & GDK_WINDOW_STATE_STICKY)
+    {
+      atoms[0] = 0xFFFFFFFF;
+      XChangeProperty (GDK_WINDOW_XDISPLAY (window),
+                       GDK_WINDOW_XID (window),
+                       gdk_atom_intern ("_NET_WM_DESKTOP", FALSE),
+                       XA_CARDINAL, 32, PropModeReplace,
+                       (guchar*) atoms, 1);
+    }
+}
+
 void
 gdk_window_show (GdkWindow *window)
 {
@@ -719,13 +791,23 @@ gdk_window_show (GdkWindow *window)
   private = (GdkWindowObject*) window;
   if (!private->destroyed)
     {
-      private->mapped = TRUE;
       XRaiseWindow (GDK_WINDOW_XDISPLAY (window),
 		    GDK_WINDOW_XID (window));
+
+      if (!GDK_WINDOW_IS_MAPPED (window))
+        {
+          set_initial_hints (window);
+          
+          gdk_synthesize_window_state (window,
+                                       GDK_WINDOW_STATE_WITHDRAWN,
+                                       0);
+        }
+      
+      g_assert (GDK_WINDOW_IS_MAPPED (window));
       
       if (GDK_WINDOW_IMPL_X11 (private->impl)->position_info.mapped)
-	XMapWindow (GDK_WINDOW_XDISPLAY (window),
-		    GDK_WINDOW_XID (window));
+        XMapWindow (GDK_WINDOW_XDISPLAY (window),
+                    GDK_WINDOW_XID (window));
     }
 }
 
@@ -737,14 +819,36 @@ gdk_window_hide (GdkWindow *window)
   g_return_if_fail (window != NULL);
 
   private = (GdkWindowObject*) window;
+
+  /* You can't simply unmap toplevel windows. */
+  switch (private->window_type)
+    {
+    case GDK_WINDOW_TOPLEVEL:
+    case GDK_WINDOW_DIALOG:
+    case GDK_WINDOW_TEMP: /* ? */
+      gdk_window_withdraw (window);
+      return;
+      break;
+      
+    case GDK_WINDOW_FOREIGN:
+    case GDK_WINDOW_ROOT:
+    case GDK_WINDOW_CHILD:
+      break;
+    }
+  
   if (!private->destroyed)
     {
-      private->mapped = FALSE;
+      if (GDK_WINDOW_IS_MAPPED (window))
+        gdk_synthesize_window_state (window,
+                                     0,
+                                     GDK_WINDOW_STATE_WITHDRAWN);
 
+      g_assert (!GDK_WINDOW_IS_MAPPED (window));
+      
       _gdk_window_clear_update_area (window);
       
       XUnmapWindow (GDK_WINDOW_XDISPLAY (window),
-		    GDK_WINDOW_XID (window));
+                    GDK_WINDOW_XID (window));
     }
 }
 
@@ -757,8 +861,17 @@ gdk_window_withdraw (GdkWindow *window)
   
   private = (GdkWindowObject*) window;
   if (!private->destroyed)
-    XWithdrawWindow (GDK_WINDOW_XDISPLAY (window),
-		     GDK_WINDOW_XID (window), 0);
+    {
+      if (GDK_WINDOW_IS_MAPPED (window))
+        gdk_synthesize_window_state (window,
+                                     0,
+                                     GDK_WINDOW_STATE_WITHDRAWN);
+
+      g_assert (!GDK_WINDOW_IS_MAPPED (window));
+      
+      XWithdrawWindow (GDK_WINDOW_XDISPLAY (window),
+                       GDK_WINDOW_XID (window), 0);
+    }
 }
 
 void
@@ -942,6 +1055,41 @@ gdk_window_lower (GdkWindow *window)
   
   if (!GDK_WINDOW_DESTROYED (window))
     XLowerWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
+}
+
+void
+gdk_window_focus (GdkWindow *window,
+                  guint32    timestamp)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+  
+  if (gdk_wmspec_supported (gdk_atom_intern ("_NET_ACTIVE_WINDOW", FALSE)))
+    {
+      XEvent xev;
+
+      xev.xclient.type = ClientMessage;
+      xev.xclient.serial = 0;
+      xev.xclient.send_event = True;
+      xev.xclient.window = GDK_WINDOW_XWINDOW (window);
+      xev.xclient.display = gdk_display;
+      xev.xclient.message_type = gdk_atom_intern ("_NET_ACTIVE_WINDOW", FALSE);
+      xev.xclient.format = 32;
+      xev.xclient.data.l[0] = 0;
+      
+      XSendEvent (gdk_display, gdk_root_window, False,
+                  SubstructureRedirectMask | SubstructureNotifyMask,
+                  &xev);
+    }
+  else
+    {
+      XSetInputFocus (GDK_DISPLAY (),
+                      GDK_WINDOW_XWINDOW (window),
+                      RevertToNone,
+                      timestamp);
+    }
 }
 
 void
@@ -1807,12 +1955,13 @@ gdk_window_set_icon_name (GdkWindow   *window,
 		      GUINT_TO_POINTER (TRUE));
 
   set_text_property (window, gdk_atom_intern ("WM_ICON_NAME", FALSE), name);
-}  
+}
 
 void
 gdk_window_iconify (GdkWindow *window)
 {
   Display *display;
+  GdkWindowObject *private;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1821,7 +1970,251 @@ gdk_window_iconify (GdkWindow *window)
     return;
 
   display = GDK_WINDOW_XDISPLAY (window);
-  XIconifyWindow (display, GDK_WINDOW_XWINDOW (window), DefaultScreen (display));
+
+  private = (GdkWindowObject*) window;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {  
+      XIconifyWindow (display, GDK_WINDOW_XWINDOW (window), DefaultScreen (display));
+
+    }
+  else
+    {
+      /* Flip our client side flag, the real work happens on map. */
+      gdk_synthesize_window_state (window,
+                                   0,
+                                   GDK_WINDOW_STATE_ICONIFIED);
+    }
+}
+
+void
+gdk_window_deiconify (GdkWindow *window)
+{
+  Display *display;
+  GdkWindowObject *private;
+  
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  display = GDK_WINDOW_XDISPLAY (window);
+
+  private = (GdkWindowObject*) window;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {  
+      gdk_window_show (window);
+    }
+  else
+    {
+      /* Flip our client side flag, the real work happens on map. */
+      gdk_synthesize_window_state (window,
+                                   GDK_WINDOW_STATE_ICONIFIED,
+                                   0);
+    }
+}
+
+void
+gdk_window_stick (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      /* "stick" means stick to all desktops _and_ do not scroll with the
+       * viewport. i.e. glue to the monitor glass in all cases.
+       */
+      
+      XEvent xev;
+
+      /* Request stick during viewport scroll */
+      xev.xclient.type = ClientMessage;
+      xev.xclient.serial = 0;
+      xev.xclient.send_event = True;
+      xev.xclient.window = GDK_WINDOW_XWINDOW (window);
+      xev.xclient.display = gdk_display;
+      xev.xclient.message_type = gdk_atom_intern ("_NET_WM_STATE", FALSE);
+      xev.xclient.format = 32;
+
+      xev.xclient.data.l[0] = gdk_atom_intern ("_NET_WM_STATE_ADD", FALSE);
+      xev.xclient.data.l[1] = gdk_atom_intern ("_NET_WM_STATE_STICKY", FALSE);
+      xev.xclient.data.l[2] = 0;
+      
+      XSendEvent (gdk_display, gdk_root_window, False,
+                  SubstructureRedirectMask | SubstructureNotifyMask,
+                  &xev);
+
+      /* Request desktop 0xFFFFFFFF */
+      xev.xclient.type = ClientMessage;
+      xev.xclient.serial = 0;
+      xev.xclient.send_event = True;
+      xev.xclient.window = GDK_WINDOW_XWINDOW (window);
+      xev.xclient.display = gdk_display;
+      xev.xclient.message_type = gdk_atom_intern ("_NET_WM_DESKTOP", FALSE);
+      xev.xclient.format = 32;
+
+      xev.xclient.data.l[0] = 0xFFFFFFFF;
+      
+      XSendEvent (gdk_display, gdk_root_window, False,
+                  SubstructureRedirectMask | SubstructureNotifyMask,
+                  &xev);
+    }
+  else
+    {
+      /* Flip our client side flag, the real work happens on map. */
+      gdk_synthesize_window_state (window,
+                                   0,
+                                   GDK_WINDOW_STATE_STICKY);
+    }
+}
+
+void
+gdk_window_unstick (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      XEvent xev;
+      Atom type;
+      gint format;
+      gulong nitems;
+      gulong bytes_after;
+      gulong *current_desktop;
+      
+      /* Request unstick from viewport */
+      xev.xclient.type = ClientMessage;
+      xev.xclient.serial = 0;
+      xev.xclient.send_event = True;
+      xev.xclient.window = GDK_WINDOW_XWINDOW (window);
+      xev.xclient.display = gdk_display;
+      xev.xclient.message_type = gdk_atom_intern ("_NET_WM_STATE", FALSE);
+      xev.xclient.format = 32;
+
+      xev.xclient.data.l[0] = gdk_atom_intern ("_NET_WM_STATE_REMOVE", FALSE);
+      xev.xclient.data.l[1] = gdk_atom_intern ("_NET_WM_STATE_STICKY", FALSE);
+      xev.xclient.data.l[2] = 0;
+      
+      XSendEvent (gdk_display, gdk_root_window, False,
+                  SubstructureRedirectMask | SubstructureNotifyMask,
+                  &xev);
+
+      /* Get current desktop, then set it; this is a race, but not
+       * one that matters much in practice.
+       */
+      XGetWindowProperty (gdk_display, gdk_root_window,
+                          gdk_atom_intern ("_NET_CURRENT_DESKTOP", FALSE),
+                          0, G_MAXLONG,
+                          False, XA_CARDINAL, &type, &format, &nitems,
+                          &bytes_after, (guchar **)&current_desktop);
+
+      if (type == XA_CARDINAL)
+        {
+          xev.xclient.type = ClientMessage;
+          xev.xclient.serial = 0;
+          xev.xclient.send_event = True;
+          xev.xclient.window = GDK_WINDOW_XWINDOW (window);
+          xev.xclient.display = gdk_display;
+          xev.xclient.message_type = gdk_atom_intern ("_NET_WM_DESKTOP", FALSE);
+          xev.xclient.format = 32;
+
+          xev.xclient.data.l[0] = *current_desktop;
+      
+          XSendEvent (gdk_display, gdk_root_window, False,
+                      SubstructureRedirectMask | SubstructureNotifyMask,
+                      &xev);
+
+          XFree (current_desktop);
+        }
+    }
+  else
+    {
+      /* Flip our client side flag, the real work happens on map. */
+      gdk_synthesize_window_state (window,
+                                   GDK_WINDOW_STATE_STICKY,
+                                   0);
+
+    }
+}
+
+void
+gdk_window_maximize (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      XEvent xev;
+
+      xev.xclient.type = ClientMessage;
+      xev.xclient.serial = 0;
+      xev.xclient.send_event = True;
+      xev.xclient.window = GDK_WINDOW_XWINDOW (window);
+      xev.xclient.display = gdk_display;
+      xev.xclient.message_type = gdk_atom_intern ("_NET_WM_STATE", FALSE);
+      xev.xclient.format = 32;
+
+      xev.xclient.data.l[0] = gdk_atom_intern ("_NET_WM_STATE_ADD", FALSE);
+      xev.xclient.data.l[1] = gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_VERT", FALSE);
+      xev.xclient.data.l[2] = gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_HORZ", FALSE);
+      
+      XSendEvent (gdk_display, gdk_root_window, False,
+                  SubstructureRedirectMask | SubstructureNotifyMask,
+                  &xev);
+    }
+  else
+    {
+      gdk_synthesize_window_state (window,
+                                   0,
+                                   GDK_WINDOW_STATE_MAXIMIZED);
+    }
+}
+
+void
+gdk_window_unmaximize (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      XEvent xev;
+
+      xev.xclient.type = ClientMessage;
+      xev.xclient.serial = 0;
+      xev.xclient.send_event = True;
+      xev.xclient.window = GDK_WINDOW_XWINDOW (window);
+      xev.xclient.display = gdk_display;
+      xev.xclient.message_type = gdk_atom_intern ("_NET_WM_STATE", FALSE);
+      xev.xclient.format = 32;
+
+      xev.xclient.data.l[0] = gdk_atom_intern ("_NET_WM_STATE_REMOVE", FALSE);
+      xev.xclient.data.l[1] = gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_VERT", FALSE);
+      xev.xclient.data.l[2] = gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_HORZ", FALSE);
+      
+      XSendEvent (gdk_display, gdk_root_window, False,
+                  SubstructureRedirectMask | SubstructureNotifyMask,
+                  &xev);
+    }
+  else
+    {
+      gdk_synthesize_window_state (window,
+                                   GDK_WINDOW_STATE_MAXIMIZED,
+                                   0);
+    }
 }
 
 void          

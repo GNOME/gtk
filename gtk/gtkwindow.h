@@ -85,6 +85,11 @@ struct _GtkWindow
   
   guint has_frame : 1;
 
+  /* gtk_window_iconify() called before realization */
+  guint iconify_initially : 1;
+  guint stick_initially : 1;
+  guint maximize_initially : 1;
+  
   guint frame_left;
   guint frame_top;
   guint frame_right;
@@ -152,6 +157,14 @@ GList*	   gtk_window_list_toplevels	       (void);
 
 /* Get the "built-in" accel group (convenience thing) */
 GtkAccelGroup* gtk_window_get_default_accel_group (GtkWindow *window);
+
+void     gtk_window_present       (GtkWindow *window);
+void     gtk_window_iconify       (GtkWindow *window);
+void     gtk_window_deiconify     (GtkWindow *window);
+void     gtk_window_stick         (GtkWindow *window);
+void     gtk_window_unstick       (GtkWindow *window);
+void     gtk_window_maximize      (GtkWindow *window);
+void     gtk_window_unmaximize    (GtkWindow *window);
 
 
 /* --- internal functions --- */

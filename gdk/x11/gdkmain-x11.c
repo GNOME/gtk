@@ -737,4 +737,3 @@ gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
   
   return result && !gdk_error_code;
 }
-

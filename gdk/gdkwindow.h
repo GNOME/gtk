@@ -199,7 +199,9 @@ struct _GdkWindowObject
   guint8 window_type;
   guint8 depth;
   guint8 resize_count;
-  guint mapped : 1;
+
+  GdkWindowState state;
+  
   guint guffaw_gravity : 1;
   guint input_only : 1;
   
@@ -254,6 +256,8 @@ void          gdk_window_clear_area_e          (GdkWindow     *window,
                                                 gint           height);
 void          gdk_window_raise                 (GdkWindow     *window);
 void          gdk_window_lower                 (GdkWindow     *window);
+void          gdk_window_focus                 (GdkWindow     *window,
+                                                guint32        timestamp);
 void          gdk_window_set_user_data         (GdkWindow     *window,
                                                 gpointer       user_data);
 void          gdk_window_set_override_redirect (GdkWindow     *window,
@@ -304,6 +308,8 @@ void gdk_window_merge_child_shapes (GdkWindow *window);
  */
 gboolean gdk_window_is_visible     (GdkWindow *window);
 gboolean gdk_window_is_viewable    (GdkWindow *window);
+
+GdkWindowState gdk_window_get_state (GdkWindow *window);
 
 /* Set static bit gravity on the parent, and static
  * window gravity on all children.
@@ -393,7 +399,13 @@ gboolean      gdk_window_get_decorations (GdkWindow       *window,
 void	      gdk_window_set_functions	 (GdkWindow	  *window,
 					  GdkWMFunction	   functions);
 GList *       gdk_window_get_toplevels   (void);
+
 void          gdk_window_iconify         (GdkWindow       *window);
+void          gdk_window_deiconify       (GdkWindow       *window);
+void          gdk_window_stick           (GdkWindow       *window);
+void          gdk_window_unstick         (GdkWindow       *window);
+void          gdk_window_maximize        (GdkWindow       *window);
+void          gdk_window_unmaximize      (GdkWindow       *window);
 
 void          gdk_window_register_dnd    (GdkWindow       *window);
 

@@ -1,3 +1,52 @@
+2001-02-26  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/testgtk.c: test the window state stuff
+
+	* gtk/gtkwindow.c (gtk_window_present): new function, makes a
+	window come to the user's attention as if it were just created
+	(gtk_window_iconify): new function
+	(gtk_window_deiconify): new function
+	(gtk_window_stick): new function
+	(gtk_window_unstick): new function
+	(gtk_window_maximize): new function
+	(gtk_window_unmaximize): new function
+
+	* gtk/gtkwidget.h, gtk/gtkwidget.c: add window_state_event signal
+
+	* gtk/gtkmain.c (gtk_main_do_event): handle GDK_WINDOW_STATE
+
+	* gdk/x11/gdkevents-x11.c: create window state events when
+	appropriate
+	(gdk_wmspec_supported): new function
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_iconify): handle
+	iconification before showing the window
+	(gdk_window_deiconify): new function
+	(gdk_window_stick): new function
+	(gdk_window_unstick): new function
+	(gdk_window_maximize): new function
+	(gdk_window_unmaximize): new function
+
+	* gdk/gdkwindow.c: store the window state in the window; 
+	change to using the GDK_WINDOW_STATE_WITHDRAWN flag instead of
+	window->mapped.
+	(gdk_window_get_state): return the current window state
+
+	* gdk/gdkevents.c (gdk_event_get_time): handle GDK_WINDOW_STATE
+	(gdk_event_get_state): handle GDK_WINDOW_STATE
+	(gdk_synthesize_window_state): function to create the window state
+	events
+
+	* gdk/gdkevents.h (struct _GdkEventWindowState): new type of
+	event, for changes to "window state" such as maximized, sticky, 
+	etc.
+	
+	* gdk/x11/gdkwindow-x11.c (gdk_window_focus): new function,
+	focuses a window
+
+	* gdk/x11/gdkmain-x11.c (_gdk_wmspec_supported): new function, 
+	finds out if we support a given WM spec hint
+
 Tue Feb 27 13:37:38 GMT 2001  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: New question re memory leaks.
@@ -23,7 +72,6 @@ Tue Feb 27 13:37:38 GMT 2001  Tony Gale <gale@gtk.org>
 Sat Feb 24 20:11:39 2001  Jonathan Blandford  <jrb@webwynk.net>
 
 	* gtk/gtkclipboard.h: actually put /* */ around #endif comment.
-
 
 Fri Feb 23 17:50:13 2001  Jonathan Blandford  <jrb@redhat.com>
 

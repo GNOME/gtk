@@ -7663,6 +7663,199 @@ create_wmhints (void)
     gtk_widget_destroy (window);
 }
 
+
+/*
+ * Window state tracking
+ */
+
+static gint
+window_state_callback (GtkWidget *widget,
+                       GdkEventWindowState *event,
+                       gpointer data)
+{
+  GtkWidget *label = data;
+  gchar *msg;
+
+  msg = g_strconcat (GTK_WINDOW (widget)->title, ": ",
+                     (event->new_window_state & GDK_WINDOW_STATE_WITHDRAWN) ?
+                     "withdrawn" : "not withdrawn", ", ",
+                     (event->new_window_state & GDK_WINDOW_STATE_ICONIFIED) ?
+                     "iconified" : "not iconified", ", ",
+                     (event->new_window_state & GDK_WINDOW_STATE_STICKY) ?
+                     "sticky" : "not sticky", ", ",
+                     (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) ?
+                     "maximized" : "not maximized",
+                     NULL);
+  
+  gtk_label_set_text (GTK_LABEL (label), msg);
+
+  g_free (msg);
+
+  return FALSE;
+}
+
+static GtkWidget*
+tracking_label (GtkWidget *window)
+{
+  GtkWidget *label;
+  GtkWidget *hbox;
+  GtkWidget *button;
+
+  hbox = gtk_hbox_new (FALSE, 5);
+  
+  gtk_signal_connect_object (GTK_OBJECT (hbox),
+                             "destroy",
+                             GTK_SIGNAL_FUNC (gtk_widget_destroy),
+                             GTK_OBJECT (window));
+
+  label = gtk_label_new ("<no window state events received>");
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+  
+  gtk_signal_connect (GTK_OBJECT (window),
+                      "window_state_event",
+                      GTK_SIGNAL_FUNC (window_state_callback),
+                      label);
+
+  button = gtk_button_new_with_label ("Deiconify");
+  gtk_signal_connect_object (GTK_WIDGET (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_window_deiconify),
+                             GTK_OBJECT (window));
+  gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Iconify");
+  gtk_signal_connect_object (GTK_WIDGET (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_window_iconify),
+                             GTK_OBJECT (window));
+  gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+  
+  button = gtk_button_new_with_label ("Present");
+  gtk_signal_connect_object (GTK_WIDGET (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_window_present),
+                             GTK_OBJECT (window));
+  gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Show");
+  gtk_signal_connect_object (GTK_WIDGET (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_widget_show),
+                             GTK_OBJECT (window));
+  gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+  
+  gtk_widget_show_all (hbox);
+  
+  return hbox;
+}
+
+static GtkWidget*
+get_state_controls (GtkWidget *window)
+{
+  GtkWidget *vbox;
+  GtkWidget *button;
+
+  vbox = gtk_vbox_new (FALSE, 0);
+  
+  button = gtk_button_new_with_label ("Stick");
+  gtk_signal_connect_object (GTK_WIDGET (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_window_stick),
+                             GTK_OBJECT (window));
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Unstick");
+  gtk_signal_connect_object (GTK_WIDGET (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_window_unstick),
+                             GTK_OBJECT (window));
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  
+  button = gtk_button_new_with_label ("Maximize");
+  gtk_signal_connect_object (GTK_WIDGET (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_window_maximize),
+                             GTK_OBJECT (window));
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Unmaximize");
+  gtk_signal_connect_object (GTK_WIDGET (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_window_unmaximize),
+                             GTK_OBJECT (window));
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Iconify");
+  gtk_signal_connect_object (GTK_WIDGET (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_window_iconify),
+                             GTK_OBJECT (window));
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Hide (withdraw)");
+  gtk_signal_connect_object (GTK_WIDGET (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_widget_hide),
+                             GTK_OBJECT (window));
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  
+  gtk_widget_show_all (vbox);
+
+  return vbox;
+}
+
+void
+create_window_states (void)
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *label;
+  GtkWidget *box1;
+  GtkWidget *iconified;
+  GtkWidget *normal;
+  GtkWidget *controls;
+  
+  if (!window)
+    {
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &window);
+
+      gtk_window_set_title (GTK_WINDOW (window), "Window states");
+      
+      box1 = gtk_vbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (window), box1);
+
+      iconified = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_iconify (iconified);
+      gtk_window_set_title (GTK_WINDOW (iconified), "Iconified initially");
+      controls = get_state_controls (iconified);
+      gtk_container_add (GTK_CONTAINER (iconified), controls);
+      
+      normal = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_title (GTK_WINDOW (normal), "Deiconified initially");
+      controls = get_state_controls (normal);
+      gtk_container_add (GTK_CONTAINER (normal), controls);
+      
+      label = tracking_label (iconified);
+      gtk_container_add (GTK_CONTAINER (box1), label);
+
+      label = tracking_label (normal);
+      gtk_container_add (GTK_CONTAINER (box1), label);
+
+      gtk_widget_show_all (iconified);
+      gtk_widget_show_all (normal);
+      gtk_widget_show_all (box1);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
+
 /*
  * GtkProgressBar
  */
@@ -9361,6 +9554,7 @@ create_main_window (void)
       { "tooltips", create_tooltips },
       { "tree", create_tree_mode_window},
       { "WM hints", create_wmhints },
+      { "window states", create_window_states }
     };
   int nbuttons = sizeof (buttons) / sizeof (buttons[0]);
   GtkWidget *window;

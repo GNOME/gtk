@@ -188,6 +188,8 @@ gdk_window_init (GdkWindowObject *window)
 
   window->window_type = GDK_WINDOW_CHILD;
 
+  window->state = GDK_WINDOW_STATE_WITHDRAWN;
+  
   window->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
 }
 
@@ -290,7 +292,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
     case GDK_WINDOW_FOREIGN:
       if (!GDK_WINDOW_DESTROYED (window))
 	{
-	  private->mapped = FALSE;
+	  private->state |= GDK_WINDOW_STATE_WITHDRAWN;
 	  private->destroyed = TRUE;
 	  
 	  _gdk_windowing_window_destroy (window, recursing, foreign_destroy);
@@ -573,12 +575,9 @@ gdk_window_get_toplevels (void)
 gboolean 
 gdk_window_is_visible (GdkWindow *window)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  
-  g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
   
-  return private->mapped;
+  return GDK_WINDOW_IS_MAPPED (window);
 }
 
 /*************************************************************
@@ -605,13 +604,32 @@ gdk_window_is_viewable (GdkWindow *window)
 	 (private != (GdkWindowObject *)gdk_parent_root) &&
 	 (GDK_WINDOW_TYPE (private) != GDK_WINDOW_FOREIGN))
     {
-      if (!private->mapped)
+      if (!GDK_WINDOW_IS_MAPPED (window))
 	return FALSE;
       
       private = (GdkWindowObject *)private->parent;
     }
   
   return TRUE;
+}
+
+/**
+ * gdk_window_get_state:
+ * @window: a #GdkWindow
+ * 
+ * Gets the bitwise OR of the currently active window state flags,
+ * from the #GdkWindowState enumeration.
+ * 
+ * Return value: window state bitfield
+ **/
+GdkWindowState
+gdk_window_get_state (GdkWindow *window)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  
+  return private->state;
 }
 
 /**
@@ -1871,7 +1889,7 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
   
-  if (private->input_only || !private->mapped)
+  if (private->input_only || !GDK_WINDOW_IS_MAPPED (window))
     return;
 
   if (!rect)
@@ -1927,7 +1945,7 @@ gdk_window_invalidate_region (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
   
-  if (private->input_only || !private->mapped)
+  if (private->input_only || !GDK_WINDOW_IS_MAPPED (window))
     return;
 
   visible_region = gdk_drawable_get_visible_region (window);

@@ -44,6 +44,8 @@
 #include <X11/XKBlib.h>
 #endif
 
+#include <X11/Xatom.h>
+
 typedef struct _GdkIOClosure GdkIOClosure;
 typedef struct _GdkEventPrivate GdkEventPrivate;
 
@@ -119,7 +121,9 @@ static GSourceFuncs event_funcs = {
   NULL
 };
 
-GPollFD event_poll_fd;
+static GPollFD event_poll_fd;
+
+static Window wmspec_check_window = None;
 
 /*********************************************
  * Functions for maintaining the event queue *
@@ -260,6 +264,128 @@ gdk_add_client_message_filter (GdkAtom       message_type,
   client_filters = g_list_prepend (client_filters, filter);
 }
 
+static GdkAtom wm_state_atom = 0;
+static GdkAtom wm_desktop_atom = 0;
+
+static void
+gdk_check_wm_state_changed (GdkWindow *window)
+{  
+  Atom type;
+  gint format;
+  gulong nitems;
+  gulong bytes_after;
+  GdkAtom *atoms = NULL;
+  gulong i;
+  GdkAtom sticky_atom;
+  GdkAtom maxvert_atom;
+  GdkAtom maxhorz_atom;
+  gboolean found_sticky, found_maxvert, found_maxhorz;
+  GdkWindowState old_state;
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+  
+  if (wm_state_atom == 0)
+    wm_state_atom = gdk_atom_intern ("_NET_WM_STATE", FALSE);
+
+  if (wm_desktop_atom == 0)
+    wm_desktop_atom = gdk_atom_intern ("_NET_WM_DESKTOP", FALSE);
+  
+  XGetWindowProperty (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
+		      wm_state_atom, 0, G_MAXLONG,
+		      False, XA_ATOM, &type, &format, &nitems,
+		      &bytes_after, (guchar **)&atoms);
+
+  if (type != None)
+    {
+
+      sticky_atom = gdk_atom_intern ("_NET_WM_STATE_STICKY", FALSE);
+      maxvert_atom = gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_VERT", FALSE);
+      maxhorz_atom = gdk_atom_intern ("_NET_WM_STATE_MAXIMIZED_HORZ", FALSE);    
+
+      found_sticky = FALSE;
+      found_maxvert = FALSE;
+      found_maxhorz = FALSE;
+  
+      i = 0;
+      while (i < nitems)
+        {
+          if (atoms[i] == sticky_atom)
+            found_sticky = TRUE;
+          else if (atoms[i] == maxvert_atom)
+            found_maxvert = TRUE;
+          else if (atoms[i] == maxhorz_atom)
+            found_maxhorz = TRUE;
+
+          ++i;
+        }
+
+      XFree (atoms);
+    }
+  else
+    {
+      found_sticky = FALSE;
+      found_maxvert = FALSE;
+      found_maxhorz = FALSE;
+    }
+
+  /* For found_sticky to remain TRUE, we have to also be on desktop
+   * 0xFFFFFFFF
+   */
+
+  if (found_sticky)
+    {
+      gulong *desktop;
+      
+      XGetWindowProperty (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
+                          wm_desktop_atom, 0, G_MAXLONG,
+                          False, XA_CARDINAL, &type, &format, &nitems,
+                          &bytes_after, (guchar **)&desktop);
+
+      if (type != None)
+        {
+          if (*desktop != 0xFFFFFFFF)
+            found_sticky = FALSE;
+          XFree (desktop);
+        }
+    }
+          
+  old_state = gdk_window_get_state (window);
+
+  if (old_state & GDK_WINDOW_STATE_STICKY)
+    {
+      if (!found_sticky)
+        gdk_synthesize_window_state (window,
+                                     GDK_WINDOW_STATE_STICKY,
+                                     0);
+    }
+  else
+    {
+      if (found_sticky)
+        gdk_synthesize_window_state (window,
+                                     0,
+                                     GDK_WINDOW_STATE_STICKY);
+    }
+
+  /* Our "maximized" means both vertical and horizontal; if only one,
+   * we don't expose that via GDK
+   */
+  if (old_state & GDK_WINDOW_STATE_MAXIMIZED)
+    {
+      if (!(found_maxvert && found_maxhorz))
+        gdk_synthesize_window_state (window,
+                                     GDK_WINDOW_STATE_MAXIMIZED,
+                                     0);
+    }
+  else
+    {
+      if (found_maxvert && found_maxhorz)
+        gdk_synthesize_window_state (window,
+                                     0,
+                                     GDK_WINDOW_STATE_MAXIMIZED);
+    }
+}
+
 static gint
 gdk_event_translate (GdkEvent *event,
 		     XEvent   *xevent,
@@ -306,6 +432,19 @@ gdk_event_translate (GdkEvent *event,
   
   if (window != NULL)
     gdk_window_ref (window);
+
+  if (wmspec_check_window != None &&
+      xevent->xany.window == wmspec_check_window)
+    {
+      if (xevent->type == DestroyNotify)
+        wmspec_check_window = None;
+      
+      /* Eat events on this window unless someone had wrapped
+       * it as a foreign window
+       */
+      if (window == NULL)
+        return FALSE;
+    }
   
   event->any.window = window;
   event->any.send_event = xevent->xany.send_event ? TRUE : FALSE;
@@ -948,7 +1087,17 @@ gdk_event_translate (GdkEvent *event,
 			   xevent->xmap.window));
       
       event->any.type = GDK_UNMAP;
-      event->any.window = window;
+      event->any.window = window;      
+
+      /* If we are shown (not withdrawn) and get an unmap, it means we
+       * were iconified in the X sense. If we are withdrawn, and get
+       * an unmap, it means we hid the window ourselves, so we
+       * will have already flipped the iconified bit off.
+       */
+      if (GDK_WINDOW_IS_MAPPED (window))
+        gdk_synthesize_window_state (window,
+                                     0,
+                                     GDK_WINDOW_STATE_ICONIFIED);
       
       if (gdk_xgrab_window == window_private)
 	gdk_xgrab_window = NULL;
@@ -962,6 +1111,12 @@ gdk_event_translate (GdkEvent *event,
       
       event->any.type = GDK_MAP;
       event->any.window = window;
+
+      /* Unset iconified if it was set */
+      if (((GdkWindowObject*)window)->state & GDK_WINDOW_STATE_ICONIFIED)
+        gdk_synthesize_window_state (window,
+                                     GDK_WINDOW_STATE_ICONIFIED,
+                                     0);
       
       break;
       
@@ -1064,6 +1219,19 @@ gdk_event_translate (GdkEvent *event,
       event->property.atom = xevent->xproperty.atom;
       event->property.time = xevent->xproperty.time;
       event->property.state = xevent->xproperty.state;
+
+      if (wm_state_atom == 0)
+        wm_state_atom = gdk_atom_intern ("_NET_WM_STATE", FALSE);
+
+      if (wm_desktop_atom == 0)
+        wm_desktop_atom = gdk_atom_intern ("_NET_WM_DESKTOP", FALSE);
+      
+      if (event->property.atom == wm_state_atom ||
+          event->property.atom == wm_desktop_atom)
+        {
+          /* If window state changed, then synthesize those events. */
+          gdk_check_wm_state_changed (event->property.window);
+        }
       
       break;
       
@@ -1585,4 +1753,95 @@ gdk_x11_get_server_time (GdkWindow *window)
 
   return xevent.xproperty.time;
 }
+
+
+gboolean
+gdk_wmspec_supported (GdkAtom property)
+{
+  static GdkAtom wmspec_check_atom = 0;
+  static GdkAtom wmspec_supported_atom = 0;
+  static GdkAtom *atoms = NULL;
+  static gulong n_atoms = 0;
+  Atom type;
+  gint format;
+  gulong nitems;
+  gulong bytes_after;
+  Window *xwindow;
+  gulong i;
+
+  if (wmspec_check_window != None)
+    {
+      if (atoms == NULL)
+        return FALSE;
+
+      i = 0;
+      while (i < n_atoms)
+        {
+          if (atoms[i] == property)
+            return TRUE;
+          
+          ++i;
+        }
+
+      return FALSE;
+    }
+
+  if (atoms)
+    XFree (atoms);
+
+  atoms = NULL;
+  n_atoms = 0;
+  
+  /* This function is very slow on every call if you are not running a
+   * spec-supporting WM. For now not optimized, because it isn't in
+   * any critical code paths, but if you used it somewhere that had to
+   * be fast you want to avoid "GTK is slow with old WMs" complaints.
+   * Probably at that point the function should be changed to query
+   * _NET_SUPPORTING_WM_CHECK only once every 10 seconds or something.
+   */
+  
+  if (wmspec_check_atom == 0)
+    wmspec_check_atom = gdk_atom_intern ("_NET_SUPPORTING_WM_CHECK", FALSE);
+      
+  if (wmspec_supported_atom == 0)
+    wmspec_supported_atom = gdk_atom_intern ("_NET_SUPPORTED", FALSE);
+  
+  XGetWindowProperty (gdk_display, gdk_root_window,
+		      wmspec_check_atom, 0, G_MAXLONG,
+		      False, XA_WINDOW, &type, &format, &nitems,
+		      &bytes_after, (guchar **)&xwindow);
+
+  if (type != XA_WINDOW)
+    return FALSE;
+
+  gdk_error_trap_push ();
+
+  /* Find out if this WM goes away, so we can reset everything. */
+  XSelectInput (gdk_display, *xwindow,
+                StructureNotifyMask);
+  
+  gdk_flush ();
+  
+  if (gdk_error_trap_pop ())
+    {
+      XFree (xwindow);
+      return FALSE;
+    }
+
+  XGetWindowProperty (gdk_display, gdk_root_window,
+		      wmspec_supported_atom, 0, G_MAXLONG,
+		      False, XA_ATOM, &type, &format, &n_atoms,
+		      &bytes_after, (guchar **)&atoms);
+  
+  if (type != XA_ATOM)
+    return FALSE;
+  
+  wmspec_check_window = *xwindow;
+  XFree (xwindow);
+  
+  /* since wmspec_check_window != None this isn't infinite. ;-) */
+  return gdk_wmspec_supported (property);
+}
+
+
 

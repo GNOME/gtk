@@ -99,6 +99,7 @@ enum {
   CLIENT_EVENT,
   NO_EXPOSE_EVENT,
   VISIBILITY_NOTIFY_EVENT,
+  WINDOW_STATE_EVENT,
   DEBUG_MSG,
   LAST_SIGNAL
 };
@@ -314,6 +315,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->focus_out_event = NULL;
   klass->map_event = NULL;
   klass->unmap_event = NULL;
+  klass->window_state_event = NULL;
   klass->property_notify_event = gtk_selection_property_notify;
   klass->selection_clear_event = gtk_selection_clear;
   klass->selection_request_event = gtk_selection_request;
@@ -769,6 +771,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_TYPE_GDK_EVENT);
   widget_signals[NO_EXPOSE_EVENT] =
     gtk_signal_new ("no_expose_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, no_expose_event),
+		    gtk_marshal_BOOLEAN__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[WINDOW_STATE_EVENT] =
+    gtk_signal_new ("window_state_event",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, no_expose_event),
@@ -2336,6 +2346,9 @@ gtk_widget_event (GtkWidget *widget,
       break;
     case GDK_UNMAP:
       signal_num = UNMAP_EVENT;
+      break;
+    case GDK_WINDOW_STATE:
+      signal_num = WINDOW_STATE_EVENT;
       break;
     case GDK_PROPERTY_NOTIFY:
       signal_num = PROPERTY_NOTIFY_EVENT;

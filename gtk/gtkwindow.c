@@ -1247,7 +1247,8 @@ static void
 gtk_window_map (GtkWidget *widget)
 {
   GtkWindow *window;
-
+  GdkWindow *toplevel;
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WINDOW (widget));
 
@@ -1260,7 +1261,28 @@ gtk_window_map (GtkWidget *widget)
       !GTK_WIDGET_MAPPED (window->bin.child))
     gtk_widget_map (window->bin.child);
 
+  if (window->frame)
+    toplevel = window->frame;
+  else
+    toplevel = widget->window;
+  
+  if (window->maximize_initially)
+    gdk_window_maximize (toplevel);
+  else
+    gdk_window_unmaximize (toplevel);
+  
+  if (window->stick_initially)
+    gdk_window_stick (toplevel);
+  else
+    gdk_window_unstick (toplevel);
+  
+  if (window->iconify_initially)
+    gdk_window_iconify (toplevel);
+  else
+    gdk_window_deiconify (toplevel);
+  
   gdk_window_show (widget->window);
+
   if (window->frame)
     gdk_window_show (window->frame);
 }
@@ -1398,7 +1420,8 @@ gtk_window_realize (GtkWidget *widget)
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
   if (window->frame)
     gtk_style_set_background (widget->style, window->frame, GTK_STATE_NORMAL);
-  
+
+  /* This is a bad hack to set the window background. */
   gtk_window_paint (widget, NULL);
   
   if (window->transient_parent &&
@@ -1406,7 +1429,6 @@ gtk_window_realize (GtkWidget *widget)
     gdk_window_set_transient_for (widget->window,
 				  GTK_WIDGET (window->transient_parent)->window);
 }
-
 
 static void
 gtk_window_unrealize (GtkWidget *widget)
@@ -2784,5 +2806,280 @@ gtk_window_set_frame_dimensions (GtkWindow *window,
 					       widget->allocation.height);
     }
 }
+
+
+
+/**
+ * gtk_window_present:
+ * @window: a #GtkWindow
+ *
+ * Presents a window to the user. This may mean raising the window
+ * in the stacking order, deiconifying it, moving it to the current
+ * desktop, and/or giving it the keyboard focus, possibly dependent
+ * on the user's platform, window manager, and preferences.
+ *
+ * If @window is hidden, this function calls gtk_widget_show()
+ * as well.
+ * 
+ * This function should be used when the user tries to open a window
+ * that's already open. Say for example the preferences dialog is
+ * currently open, and the user chooses Preferences from the menu
+ * a second time; use gtk_window_present() to move the already-open dialog
+ * where the user can see it.
+ * 
+ **/
+void
+gtk_window_present (GtkWindow *window)
+{
+  GtkWidget *widget;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  widget = GTK_WIDGET (window);
+
+  if (GTK_WIDGET_VISIBLE (window))
+    {
+      g_assert (widget->window != NULL);
+      
+      gdk_window_show (widget->window);
+
+      /* note that gdk_window_focus() will also move the window to
+       * the current desktop, for WM spec compliant window managers.
+       */
+      gdk_window_focus (widget->window,
+                        gtk_get_current_event_time ());
+    }
+  else
+    {
+      gtk_widget_show (widget);
+    }
+}
+
+/**
+ * gtk_window_iconify:
+ * @window: a #GtkWindow
+ *
+ * Asks to iconify @window. Note that you shouldn't assume the window
+ * is definitely iconified afterward, because other entities (e.g. the
+ * user or window manager) could deiconify it again, or there may not
+ * be a window manager in which case iconification isn't possible,
+ * etc. But normally the window will end up iconified. Just don't write
+ * code that crashes if not.
+ *
+ * It's permitted to call this function before showing a window,
+ * in which case the window will be iconified before it ever appears
+ * onscreen.
+ *
+ * You can track iconification via the "window_state_event" signal
+ * on #GtkWidget.
+ * 
+ **/
+void
+gtk_window_iconify (GtkWindow *window)
+{
+  GtkWidget *widget;
+  GdkWindow *toplevel;
+  
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  widget = GTK_WIDGET (window);
+
+  window->iconify_initially = TRUE;
+
+  if (window->frame)
+    toplevel = window->frame;
+  else
+    toplevel = widget->window;
+  
+  if (toplevel != NULL)
+    gdk_window_iconify (toplevel);
+}
+
+/**
+ * gtk_window_deiconify:
+ * @window: a #GtkWindow
+ *
+ * Asks to deiconify @window. Note that you shouldn't assume the
+ * window is definitely deiconified afterward, because other entities
+ * (e.g. the user or window manager) could iconify it again before
+ * your code which assumes deiconification gets to run.
+ *
+ * You can track iconification via the "window_state_event" signal
+ * on #GtkWidget.
+ **/
+void
+gtk_window_deiconify (GtkWindow *window)
+{
+  GtkWidget *widget;
+  GdkWindow *toplevel;
+  
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  widget = GTK_WIDGET (window);
+
+  window->iconify_initially = FALSE;
+
+  if (window->frame)
+    toplevel = window->frame;
+  else
+    toplevel = widget->window;
+  
+  if (toplevel != NULL)
+    gdk_window_deiconify (toplevel);
+}
+
+/**
+ * gtk_window_stick:
+ * @window: a #GtkWindow
+ *
+ * Asks to stick @window, which means that it will appear on all user
+ * desktops. Note that you shouldn't assume the window is definitely
+ * stuck afterward, because other entities (e.g. the user or window
+ * manager) could unstick it again, and some window managers do not
+ * support sticking windows. But normally the window will end up
+ * stuck. Just don't write code that crashes if not.
+ *
+ * It's permitted to call this function before showing a window.
+ *
+ * You can track stickiness via the "window_state_event" signal
+ * on #GtkWidget.
+ * 
+ **/
+void
+gtk_window_stick (GtkWindow *window)
+{
+  GtkWidget *widget;
+  GdkWindow *toplevel;
+  
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  widget = GTK_WIDGET (window);
+
+  window->stick_initially = TRUE;
+
+  if (window->frame)
+    toplevel = window->frame;
+  else
+    toplevel = widget->window;
+  
+  if (toplevel != NULL)
+    gdk_window_stick (toplevel);
+}
+
+/**
+ * gtk_window_unstick:
+ * @window: a #GtkWindow
+ *
+ * Asks to unstick @window, which means that it will appear on only
+ * one of the user's desktops. Note that you shouldn't assume the
+ * window is definitely unstuck afterward, because other entities
+ * (e.g. the user or window manager) could stick it again. But
+ * normally the window will end up stuck. Just don't write code that
+ * crashes if not.
+ *
+ * You can track stickiness via the "window_state_event" signal
+ * on #GtkWidget.
+ * 
+ **/
+void
+gtk_window_unstick (GtkWindow *window)
+{
+  GtkWidget *widget;
+  GdkWindow *toplevel;
+  
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  widget = GTK_WIDGET (window);
+
+  window->stick_initially = FALSE;
+
+  if (window->frame)
+    toplevel = window->frame;
+  else
+    toplevel = widget->window;
+  
+  if (toplevel != NULL)
+    gdk_window_unstick (toplevel);
+}
+
+/**
+ * gtk_window_maximize:
+ * @window: a #GtkWindow
+ *
+ * Asks to maximize @window, so that it becomes full-screen. Note that
+ * you shouldn't assume the window is definitely maximized afterward,
+ * because other entities (e.g. the user or window manager) could
+ * unmaximize it again, and not all window managers support
+ * maximization. But normally the window will end up maximized. Just
+ * don't write code that crashes if not.
+ *
+ * It's permitted to call this function before showing a window,
+ * in which case the window will be maximized when it appears onscreen
+ * initially.
+ *
+ * You can track maximization via the "window_state_event" signal
+ * on #GtkWidget.
+ * 
+ **/
+void
+gtk_window_maximize (GtkWindow *window)
+{
+  GtkWidget *widget;
+  GdkWindow *toplevel;
+  
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  widget = GTK_WIDGET (window);
+
+  window->maximize_initially = TRUE;
+
+  if (window->frame)
+    toplevel = window->frame;
+  else
+    toplevel = widget->window;
+  
+  if (toplevel != NULL)
+    gdk_window_maximize (toplevel);
+}
+
+/**
+ * gtk_window_unmaximize:
+ * @window: a #GtkWindow
+ *
+ * Asks to unmaximize @window. Note that you shouldn't assume the
+ * window is definitely unmaximized afterward, because other entities
+ * (e.g. the user or window manager) could maximize it again, and not
+ * all window managers honor requests to unmaximize. But normally the
+ * window will end up unmaximized. Just don't write code that crashes
+ * if not.
+ *
+ * You can track maximization via the "window_state_event" signal
+ * on #GtkWidget.
+ * 
+ **/
+void
+gtk_window_unmaximize (GtkWindow *window)
+{
+  GtkWidget *widget;
+  GdkWindow *toplevel;
+  
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  widget = GTK_WIDGET (window);
+
+  window->maximize_initially = FALSE;
+
+  if (window->frame)
+    toplevel = window->frame;
+  else
+    toplevel = widget->window;
+  
+  if (toplevel != NULL)
+    gdk_window_unmaximize (toplevel);
+}
+
+
+
+
 
 

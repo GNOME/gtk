@@ -117,6 +117,9 @@ void   gdk_event_queue_remove_link (GList    *node);
 void   gdk_event_queue_append      (GdkEvent *event);
 
 void gdk_event_button_generate (GdkEvent *event);
+void gdk_synthesize_window_state (GdkWindow     *window,
+                                  GdkWindowState unset_flags,
+                                  GdkWindowState set_flags);
 
 /*************************************
  * Interfaces used by windowing code *
@@ -162,6 +165,8 @@ void     _gdk_windowing_window_clear_area_e     (GdkWindow  *window,
 						 gint        y,
 						 gint        width,
 						 gint        height);
+
+#define GDK_WINDOW_IS_MAPPED(window) ((((GdkWindowObject*)window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
 
 /* Called before processing updates for a window. This gives the windowing
  * layer a chance to save the region for later use in avoiding duplicate

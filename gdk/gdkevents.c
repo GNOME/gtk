@@ -454,6 +454,7 @@ gdk_event_get_time (GdkEvent *event)
       case GDK_EXPOSE:
       case GDK_MAP:
       case GDK_UNMAP:
+      case GDK_WINDOW_STATE:
         /* return current time */
         break;
       }
@@ -529,6 +530,7 @@ gdk_event_get_state (GdkEvent        *event,
       case GDK_EXPOSE:
       case GDK_MAP:
       case GDK_UNMAP:
+      case GDK_WINDOW_STATE:
         /* no state field */
         break;
       }
@@ -803,3 +805,56 @@ gdk_event_button_generate (GdkEvent *event)
       button_number[0] = event->button.button;
     }
 }
+
+
+void
+gdk_synthesize_window_state (GdkWindow     *window,
+                             GdkWindowState unset_flags,
+                             GdkWindowState set_flags)
+{
+  GdkEventWindowState temp_event;
+  GdkWindowState old;
+  
+  g_return_if_fail (window != NULL);
+  
+  temp_event.window = window;
+  temp_event.type = GDK_WINDOW_STATE;
+  temp_event.send_event = FALSE;
+  
+  old = ((GdkWindowObject*) temp_event.window)->state;
+  
+  temp_event.changed_mask = (unset_flags | set_flags) ^ old;
+  temp_event.new_window_state = old;
+  temp_event.new_window_state |= set_flags;
+  temp_event.new_window_state &= ~unset_flags;
+
+  if (temp_event.new_window_state == old)
+    return; /* No actual work to do, nothing changed. */
+
+  /* Actually update the field in GdkWindow, this is sort of an odd
+   * place to do it, but seems like the safest since it ensures we expose no
+   * inconsistent state to the user.
+   */
+  
+  ((GdkWindowObject*) window)->state = temp_event.new_window_state;
+
+  /* We only really send the event to toplevels, since
+   * all the window states don't apply to non-toplevels.
+   * Non-toplevels do use the GDK_WINDOW_STATE_WITHDRAWN flag
+   * internally so we needed to update window->state.
+   */
+  switch (((GdkWindowObject*) window)->window_type)
+    {
+    case GDK_WINDOW_TOPLEVEL:
+    case GDK_WINDOW_DIALOG:
+    case GDK_WINDOW_TEMP: /* ? */
+      gdk_event_put ((GdkEvent*) &temp_event);
+      break;
+      
+    case GDK_WINDOW_FOREIGN:
+    case GDK_WINDOW_ROOT:
+    case GDK_WINDOW_CHILD:
+      break;
+    }
+}
+

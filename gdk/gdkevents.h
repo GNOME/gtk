@@ -28,8 +28,8 @@ typedef struct _GdkEventProperty    GdkEventProperty;
 typedef struct _GdkEventSelection   GdkEventSelection;
 typedef struct _GdkEventProximity   GdkEventProximity;
 typedef struct _GdkEventClient	    GdkEventClient;
-
 typedef struct _GdkEventDND         GdkEventDND;
+typedef struct _GdkEventWindowState GdkEventWindowState;
 
 typedef union  _GdkEvent	    GdkEvent;
 
@@ -110,7 +110,8 @@ typedef enum
   GDK_CLIENT_EVENT	= 28,
   GDK_VISIBILITY_NOTIFY = 29,
   GDK_NO_EXPOSE		= 30,
-  GDK_SCROLL            = 31
+  GDK_SCROLL            = 31,
+  GDK_WINDOW_STATE      = 32
 } GdkEventType;
 
 /* Event masks. (Used to select what types of events a window
@@ -192,6 +193,14 @@ typedef enum
   GDK_PROPERTY_NEW_VALUE,
   GDK_PROPERTY_DELETE
 } GdkPropertyState;
+
+typedef enum
+{
+  GDK_WINDOW_STATE_WITHDRAWN = 1 << 0,
+  GDK_WINDOW_STATE_ICONIFIED = 1 << 1,
+  GDK_WINDOW_STATE_MAXIMIZED = 1 << 2,
+  GDK_WINDOW_STATE_STICKY    = 1 << 3
+} GdkWindowState;
 
 struct _GdkEventAny
 {
@@ -366,6 +375,16 @@ struct _GdkEventClient
   } data;
 };
 
+
+struct _GdkEventWindowState
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  GdkWindowState changed_mask;
+  GdkWindowState new_window_state;
+};
+
 /* Event types for DND */
 
 struct _GdkEventDND {
@@ -397,6 +416,7 @@ union _GdkEvent
   GdkEventProximity	    proximity;
   GdkEventClient	    client;
   GdkEventDND               dnd;
+  GdkEventWindowState       window_state;
 };
 
 gboolean  gdk_events_pending	 	(void);
