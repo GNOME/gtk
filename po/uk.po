@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2003-02-13 18:23+0200\n"
-"PO-Revision-Date: 2003-02-19 15:06--500\n"
+"PO-Revision-Date: 2003-02-19 15:21--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1572,9 +1572,8 @@ msgid "Has Opacity Control"
 msgstr "Має керування прозорістю"
 
 #: gtk/gtkcolorsel.c:1743
-#, fuzzy
 msgid "Whether the color selector should allow setting opacity"
-msgstr "Стан відображення індикатора сортування"
+msgstr "Чи має вибір кольору дозволяти встаноити прозорість"
 
 #: gtk/gtkcolorsel.c:1749
 msgid "Has palette"
@@ -1910,14 +1909,12 @@ msgid "The contents of the entry"
 msgstr "Вміст поля"
 
 #: gtk/gtkentry.c:756
-#, fuzzy
 msgid "Select on focus"
-msgstr "Вибір: "
+msgstr "Вибір на фокусуванні"
 
 #: gtk/gtkentry.c:757
-#, fuzzy
 msgid "Whether to select the contents of an entry when it is focused"
-msgstr "Чи може віджет мати фокус вводу"
+msgstr "Чи вибирати вміст поля, коли йому передано фокус "
 
 #: gtk/gtkentry.c:3980
 #: gtk/gtklabel.c:3222
@@ -2780,9 +2777,8 @@ msgid "Tab fill"
 msgstr ""
 
 #: gtk/gtknotebook.c:481
-#, fuzzy
 msgid "Wheather the childs tab should fill the allocated area or not"
-msgstr "Чи всі нащадки мають мати однаковий розмір."
+msgstr "Чи мають вкладкизаповнювати виділиний простір"
 
 #: gtk/gtknotebook.c:487
 msgid "Tab pack type"
@@ -2803,23 +2799,20 @@ msgid "The menu of options"
 msgstr "Параметри меню"
 
 #: gtk/gtkoptionmenu.c:198
-#, fuzzy
 msgid "Size of dropdown indicator"
-msgstr "Індикатор сортування"
+msgstr "Розмір спадного індикатора"
 
 #: gtk/gtkoptionmenu.c:204
-#, fuzzy
 msgid "Spacing around indicator"
-msgstr "Індикатор сортування"
+msgstr "Проміжок навколо індикатора"
 
 #: gtk/gtkpaned.c:219
 msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 
 #: gtk/gtkpaned.c:227
-#, fuzzy
 msgid "Position Set"
-msgstr "Позиція в тексті"
+msgstr "Встановлення позиції"
 
 #: gtk/gtkpaned.c:228
 msgid "TRUE if the Position property should be used"
@@ -3020,7 +3013,7 @@ msgstr ""
 #: gtk/gtkrc.c:2376
 #, c-format
 msgid "Unable to find include file: \"%s\""
-msgstr ""
+msgstr "Не вдалося знайти файл для включення \"%s\""
 
 #: gtk/gtkrc.c:3018
 #: gtk/gtkrc.c:3021
@@ -3031,7 +3024,7 @@ msgstr "Файл із зображенням не знайдено в pixmap_pat
 #: gtk/gtkrc.c:3456
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr ""
+msgstr "Компонент шляху до зображення \"%s\" має бути абсолютним, %s, рядок %d"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -3100,7 +3093,7 @@ msgstr "Відступ значення"
 
 #: gtk/gtkscale.c:192
 msgid "Space between value text and the slider/trough area"
-msgstr ""
+msgstr "Проміжок між зображеним значенням і ділянкою повчунка чи напрямної"
 
 #: gtk/gtkscrollbar.c:80
 msgid "Minimum Slider Length"
@@ -3120,35 +3113,35 @@ msgstr "Не змінювати розмір повзунка, встанови�
 
 #: gtk/gtkscrollbar.c:97
 msgid "Backward stepper"
-msgstr ""
+msgstr "Кнопка переміщення назад"
 
 #: gtk/gtkscrollbar.c:98
 msgid "Display the standard backward arrow button"
-msgstr ""
+msgstr "Відображати стандартну кнопку із стрілкою назад"
 
 #: gtk/gtkscrollbar.c:105
 msgid "Forward stepper"
-msgstr ""
+msgstr "Кнопка переміщення вперед"
 
 #: gtk/gtkscrollbar.c:106
 msgid "Display the standard forward arrow button"
-msgstr ""
+msgstr "Відображати стандартну кнопку із стрілкою вперед"
 
 #: gtk/gtkscrollbar.c:113
 msgid "Secondary backward stepper"
-msgstr ""
+msgstr "Додаткова кнопка переміщення назад"
 
 #: gtk/gtkscrollbar.c:114
 msgid "Display a second backward arrow button on the opposite end of the scrollbar"
-msgstr ""
+msgstr "Відобрадати другу кнопку із стрілкою назад на протилежні стороні смуги прокрутки"
 
 #: gtk/gtkscrollbar.c:121
 msgid "Secondary forward stepper"
-msgstr ""
+msgstr "Додаткова кнопка переміщення вперед"
 
 #: gtk/gtkscrollbar.c:122
 msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
-msgstr ""
+msgstr "Відобрадати другу кнопку із стрілкою вперед на протилежні стороні смуги прокрутки"
 
 #: gtk/gtkscrolledwindow.c:235
 #: gtk/gtktext.c:601
@@ -3714,18 +3707,16 @@ msgid "Options specifying the vertical behaviour of the child"
 msgstr ""
 
 #: gtk/gtktable.c:244
-#, fuzzy
 msgid "Horizontal padding"
-msgstr "Горизонтальне вирівнювання"
+msgstr "Горизонтальний відступ"
 
 #: gtk/gtktable.c:245
 msgid "Extra space to put between the child and its left and right neighbors, in pixels"
 msgstr ""
 
 #: gtk/gtktable.c:251
-#, fuzzy
 msgid "Vertical padding"
-msgstr "Внутрішній відступ"
+msgstr "Вертикальний відступ"
 
 #: gtk/gtktable.c:252
 msgid "Extra space to put between the child and its upper and lower neighbors, in pixels"
@@ -3760,9 +3751,8 @@ msgid "Tag Table"
 msgstr ""
 
 #: gtk/gtktextbuffer.c:181
-#, fuzzy
 msgid "Text Tag Table"
-msgstr "Вирівнювання тексту по X"
+msgstr ""
 
 #: gtk/gtktexttag.c:195
 msgid "Tag name"
