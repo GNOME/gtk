@@ -839,28 +839,28 @@ gtk_widget_get_arg (GtkObject   *object,
     case ARG_X:
       aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
       if (!aux_info)
-	GTK_VALUE_INT (*arg) = -2;
+	GTK_VALUE_INT (*arg) = -1;
       else
 	GTK_VALUE_INT (*arg) = aux_info->x;
       break;
     case ARG_Y:
       aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
       if (!aux_info)
-	GTK_VALUE_INT (*arg) = -2;
+	GTK_VALUE_INT (*arg) = -1;
       else
 	GTK_VALUE_INT (*arg) = aux_info->y;
       break;
     case ARG_WIDTH:
       aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
       if (!aux_info)
-	GTK_VALUE_INT (*arg) = -2;
+	GTK_VALUE_INT (*arg) = -1;
       else
 	GTK_VALUE_INT (*arg) = aux_info->width;
       break;
     case ARG_HEIGHT:
       aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), aux_info_key_id);
       if (!aux_info)
-	GTK_VALUE_INT (*arg) = -2;
+	GTK_VALUE_INT (*arg) = -1;
       else
 	GTK_VALUE_INT (*arg) = aux_info->height;
       break;

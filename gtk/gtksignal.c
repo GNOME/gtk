@@ -1151,11 +1151,13 @@ gtk_signal_handlers_destroy (GtkObject *object)
 	  GtkHandler *next;
 	  
 	  next = handler->next;
-	  gtk_signal_handler_unref (handler, object);
+	  if (handler->id > 0)
+	    gtk_signal_handler_unref (handler, object);
 	  handler = next;
 	}
       handler = gtk_object_get_data_by_id (object, handler_quark);
-      gtk_signal_handler_unref (handler, object);
+      if (handler->id > 0)
+	gtk_signal_handler_unref (handler, object);
     }
 }
 

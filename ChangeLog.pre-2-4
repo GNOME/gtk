@@ -1,3 +1,14 @@
+Mon Oct 12 07:51:34 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.c (gtk_signal_handlers_destroy): only unref those
+ 	handlers that have not yet been disconnected (finally managed to
+	trigger the gtk_signal_handler_unref() paranoid warning).
+
+Sat Oct 10 03:37:50 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_get_arg): fixed default value for x, y,
+	width and height which is -1 and not -2.
+
 Sat Oct 10 00:50:53 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* HACKING
