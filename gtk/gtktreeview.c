@@ -3094,12 +3094,6 @@ gtk_tree_view_leave_notify (GtkWidget        *widget,
 
   ensure_unprelighted (tree_view);
 
-  /* destroy interactive search dialog */
-  search_dialog = gtk_object_get_data (GTK_OBJECT (widget),
-				       GTK_TREE_VIEW_SEARCH_DIALOG_KEY);
-  if (search_dialog)
-    gtk_tree_view_search_dialog_destroy (search_dialog, GTK_TREE_VIEW (widget));
-
 return TRUE;
 }
 
@@ -6223,6 +6217,7 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
   cursor_path = _gtk_tree_view_find_path (tree_view, cursor_tree, cursor_node);
   g_return_if_fail (cursor_path != NULL);
   gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE);
+  gtk_tree_path_free (cursor_path);
 }
 
 static void
@@ -6524,13 +6519,14 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view)
   GtkWidget *window;
   GtkWidget *entry;
   GtkWidget *search_dialog;
+  GdkEventFocus focus_event;
 
   if (tree_view->priv->enable_search == FALSE ||
       tree_view->priv->search_column < 0)
     return;
 
-  search_dialog = gtk_object_get_data (GTK_OBJECT (tree_view),
-				       GTK_TREE_VIEW_SEARCH_DIALOG_KEY);
+  search_dialog = g_object_get_data (G_OBJECT (tree_view),
+				     GTK_TREE_VIEW_SEARCH_DIALOG_KEY);
   if (search_dialog)
     return;
 
@@ -6539,26 +6535,21 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view)
   gtk_window_set_title (GTK_WINDOW (window), "search dialog");
   gtk_container_set_border_width (GTK_CONTAINER (window), 3);
   gtk_window_set_modal (GTK_WINDOW (window), TRUE);
-  gtk_signal_connect
-    (GTK_OBJECT (window), "delete_event",
-     GTK_SIGNAL_FUNC (gtk_tree_view_search_delete_event),
-     tree_view);
-  gtk_signal_connect
-    (GTK_OBJECT (window), "key_press_event",
-     GTK_SIGNAL_FUNC (gtk_tree_view_search_key_press_event),
-     tree_view);
-  gtk_signal_connect
-    (GTK_OBJECT (window), "button_press_event",
-     GTK_SIGNAL_FUNC (gtk_tree_view_search_button_press_event),
-     tree_view);
+  g_signal_connect (G_OBJECT (window), "delete_event",
+		    G_CALLBACK (gtk_tree_view_search_delete_event),
+		    tree_view);
+  g_signal_connect (G_OBJECT (window), "key_press_event",
+		    G_CALLBACK (gtk_tree_view_search_key_press_event),
+		    tree_view);
+  g_signal_connect (G_OBJECT (window), "button_press_event",
+		    G_CALLBACK (gtk_tree_view_search_button_press_event),
+		    tree_view);
 
   /* add entry */
   entry = gtk_entry_new ();
   gtk_widget_show (entry);
-  gtk_signal_connect
-    (GTK_OBJECT (entry), "changed",
-     GTK_SIGNAL_FUNC (gtk_tree_view_search_init),
-     tree_view);
+  g_signal_connect (G_OBJECT (entry), "changed",
+		    G_CALLBACK (gtk_tree_view_search_init), tree_view);
   gtk_container_add (GTK_CONTAINER (window), entry);
 
   /* done, show it */
@@ -6566,13 +6557,18 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view)
   gtk_widget_show_all (window);
   gtk_widget_grab_focus (entry);
 
+  /* send focus-in event */
+  focus_event.type = GDK_FOCUS_CHANGE;
+  focus_event.in = TRUE;
+  gtk_widget_event (entry, (GdkEvent *) &focus_event);
+
   /* position window */
 
   /* yes, we point to the entry's private text thing here, a bit evil */
-  gtk_object_set_data (GTK_OBJECT (window), "gtk-tree-view-text",
-		       (char *) gtk_entry_get_text (GTK_ENTRY (entry)));
-  gtk_object_set_data (GTK_OBJECT (tree_view),
-		       GTK_TREE_VIEW_SEARCH_DIALOG_KEY, window);
+  g_object_set_data (G_OBJECT (window), "gtk-tree-view-text",
+		     (gchar *) gtk_entry_get_text (GTK_ENTRY (entry)));
+  g_object_set_data (G_OBJECT (tree_view),
+		     GTK_TREE_VIEW_SEARCH_DIALOG_KEY, window);
 
   /* search first matching iter */
   gtk_tree_view_search_init (entry, tree_view);
@@ -9259,9 +9255,28 @@ static void
 gtk_tree_view_search_dialog_destroy (GtkWidget   *search_dialog,
 				     GtkTreeView *tree_view)
 {
+  GtkEntry *entry = (GtkWidget *)(gtk_container_get_children (GTK_CONTAINER (search_dialog)))->data;
+  gint *selected_iter;
+
+  if (entry)
+    {
+      GdkEventFocus focus_event;
+
+      focus_event.type = GDK_FOCUS_CHANGE;
+      focus_event.in = FALSE;
+      gtk_widget_event (entry, (GdkEvent *) &focus_event);
+    }
+
   /* remove data from tree_view */
-  gtk_object_remove_data (GTK_OBJECT (tree_view),
-			  GTK_TREE_VIEW_SEARCH_DIALOG_KEY);
+  g_object_set_data (G_OBJECT (tree_view), GTK_TREE_VIEW_SEARCH_DIALOG_KEY,
+		     NULL);
+
+  selected_iter = g_object_get_data (G_OBJECT (search_dialog),
+				     "gtk-tree-view-selected-iter");
+  if (selected_iter)
+    g_free (selected_iter);
+  g_object_set_data (G_OBJECT (search_dialog), "gtk-tree-view-selected-iter",
+		     NULL);
 
   gtk_widget_destroy (search_dialog);
 }
@@ -9270,20 +9285,35 @@ static void
 gtk_tree_view_search_position_func (GtkTreeView *tree_view,
 				    GtkWidget   *search_dialog)
 {
+  gint x, y;
   gint tree_x, tree_y;
   gint tree_width, tree_height;
   GdkWindow *tree_window = GTK_WIDGET (tree_view)->window;
   GtkRequisition requisition;
 
-  /* put window in the lower right corner */
+  gtk_widget_realize (search_dialog);
+
   gdk_window_get_origin (tree_window, &tree_x, &tree_y);
   gdk_window_get_size (tree_window,
 		       &tree_width,
 		       &tree_height);
   gtk_widget_size_request (search_dialog, &requisition);
-  gtk_window_move (GTK_WINDOW (search_dialog),
-		   tree_x + tree_width - requisition.width,
-		   tree_y + tree_height);
+
+  if (tree_x + tree_width - requisition.width > gdk_screen_width ())
+    x = gdk_screen_width () - requisition.width;
+  else if (tree_x + tree_width - requisition.width < 0)
+    x = 0;
+  else
+    x = tree_x + tree_width - requisition.width;
+
+  if (tree_y + tree_height > gdk_screen_height ())
+    y = gdk_screen_height () - requisition.height;
+  else if (tree_y + tree_height < 0) /* isn't really possible ... */
+    y = 0;
+  else
+    y = tree_y + tree_height;
+
+  gtk_window_move (GTK_WINDOW (search_dialog), x, y);
 }
 
 static gboolean
@@ -9358,8 +9388,8 @@ gtk_tree_view_search_move (GtkWidget   *window,
   GtkTreeModel *model;
   GtkTreeSelection *selection;
 
-  text = gtk_object_get_data (GTK_OBJECT (window), "gtk-tree-view-text");
-  selected_iter = gtk_object_get_data (GTK_OBJECT (window), "gtk-tree-view-selected-iter");
+  text = g_object_get_data (G_OBJECT (window), "gtk-tree-view-text");
+  selected_iter = g_object_get_data (G_OBJECT (window), "gtk-tree-view-selected-iter");
 
   g_return_if_fail (text != NULL);
 
@@ -9570,10 +9600,10 @@ gtk_tree_view_search_init (GtkWidget   *entry,
 
   /* search */
   gtk_tree_selection_unselect_all (selection);
-  selected_iter = gtk_object_get_data (GTK_OBJECT (window), "gtk-tree-view-selected-iter");
+  selected_iter = g_object_get_data (G_OBJECT (window), "gtk-tree-view-selected-iter");
   if (selected_iter)
     g_free (selected_iter);
-  gtk_object_remove_data (GTK_OBJECT (window), "gtk-tree-view-selected-iter");
+  g_object_set_data (G_OBJECT (window), "gtk-tree-view-selected-iter", NULL);
 
   if (len < 1)
     return;
@@ -9588,8 +9618,8 @@ gtk_tree_view_search_init (GtkWidget   *entry,
     {
       selected_iter = g_malloc (sizeof (int));
       *selected_iter = 1;
-      gtk_object_set_data (GTK_OBJECT (window), "gtk-tree-view-selected-iter",
-                           selected_iter);
+      g_object_set_data (G_OBJECT (window), "gtk-tree-view-selected-iter",
+			 selected_iter);
     }
 }
 

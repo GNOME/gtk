@@ -1,3 +1,25 @@
+Tue Jan 29 18:50:46 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down): free
+	cursor_path after usage
+	(gtk_tree_view_real_start_interactive_search): use new g_signal
+	and g_object calls
+	(gtk_tree_view_search_dialog_destroy): use g_object calls and free
+	selected_iter if set
+	(gtk_tree_view_search_position_func): rework so it will never ever
+	appear offscreen (#68492)
+	(gtk_tree_view_search_move): use new g_object calls
+	(gtk_tree_view_search_init): free selected_iter if set, use new
+	g_object calls
+	(gtk_tree_view_leave_notify): don't destroy interactive search
+	dialog
+
+Tue Jan 29 23:07:03 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_start_interactive_search):
+	send focus in event
+	(gtk_tree_view_search_dialog_destroy): send focus out event (#66466)
+
 2002-01-29  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkfontsel.c (gtk_font_selection_select_size): Show correct
