@@ -21,17 +21,29 @@
 
 #define MIN_ARROW_SIZE  11
 
+enum {
+  ARG_0,
+  ARG_ARROW_TYPE,
+  ARG_SHADOW_TYPE
+};
+
 
 static void gtk_arrow_class_init (GtkArrowClass  *klass);
 static void gtk_arrow_init       (GtkArrow       *arrow);
 static gint gtk_arrow_expose     (GtkWidget      *widget,
 				  GdkEventExpose *event);
+static void gtk_arrow_set_arg    (GtkObject      *object,
+				  GtkArg         *arg,
+				  guint           arg_id);
+static void gtk_arrow_get_arg    (GtkObject      *object,
+				  GtkArg         *arg,
+				  guint           arg_id);
 
 
-guint
+GtkType
 gtk_arrow_get_type (void)
 {
-  static guint arrow_type = 0;
+  static GtkType arrow_type = 0;
 
   if (!arrow_type)
     {
@@ -47,7 +59,7 @@ gtk_arrow_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      arrow_type = gtk_type_unique (gtk_misc_get_type (), &arrow_info);
+      arrow_type = gtk_type_unique (GTK_TYPE_MISC, &arrow_info);
     }
 
   return arrow_type;
@@ -56,11 +68,67 @@ gtk_arrow_get_type (void)
 static void
 gtk_arrow_class_init (GtkArrowClass *class)
 {
+  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
+  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
+  gtk_object_add_arg_type ("GtkArrow::arrow_type", GTK_TYPE_ARROW_TYPE, GTK_ARG_READWRITE, ARG_ARROW_TYPE);
+  gtk_object_add_arg_type ("GtkArrow::shadow_type", GTK_TYPE_SHADOW_TYPE, GTK_ARG_READWRITE, ARG_SHADOW_TYPE);
+
+  object_class->set_arg = gtk_arrow_set_arg;
+  object_class->get_arg = gtk_arrow_get_arg;
+
   widget_class->expose_event = gtk_arrow_expose;
+}
+
+static void
+gtk_arrow_set_arg (GtkObject      *object,
+		   GtkArg         *arg,
+		   guint           arg_id)
+{
+  GtkArrow *arrow;
+
+  arrow = GTK_ARROW (object);
+
+  switch (arg_id)
+    {
+    case ARG_ARROW_TYPE:
+      gtk_arrow_set (arrow,
+		     GTK_VALUE_ENUM (*arg),
+		     arrow->shadow_type);
+      break;
+    case ARG_SHADOW_TYPE:
+      gtk_arrow_set (arrow,
+		     arrow->arrow_type,
+		     GTK_VALUE_ENUM (*arg));
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_arrow_get_arg (GtkObject      *object,
+		   GtkArg         *arg,
+		   guint           arg_id)
+{
+  GtkArrow *arrow;
+
+  arrow = GTK_ARROW (object);
+  switch (arg_id)
+    {
+    case ARG_ARROW_TYPE:
+      GTK_VALUE_ENUM (*arg) = arrow->arrow_type;
+      break;
+    case ARG_SHADOW_TYPE:
+      GTK_VALUE_ENUM (*arg) = arrow->shadow_type;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 static void

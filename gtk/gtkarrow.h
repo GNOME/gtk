@@ -29,9 +29,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_ARROW(obj)          GTK_CHECK_CAST (obj, gtk_arrow_get_type (), GtkArrow)
-#define GTK_ARROW_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_arrow_get_type (), GtkArrowClass)
-#define GTK_IS_ARROW(obj)       GTK_CHECK_TYPE (obj, gtk_arrow_get_type ())
+#define GTK_TYPE_ARROW                  (gtk_arrow_get_type ())
+#define GTK_ARROW(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_ARROW, GtkArrow))
+#define GTK_ARROW_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_ARROW, GtkArrowClass))
+#define GTK_IS_ARROW(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_ARROW))
+#define GTK_IS_ARROW_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ARROW))
 
 
 typedef struct _GtkArrow       GtkArrow;
@@ -51,7 +53,7 @@ struct _GtkArrowClass
 };
 
 
-guint      gtk_arrow_get_type   (void);
+GtkType    gtk_arrow_get_type   (void);
 GtkWidget* gtk_arrow_new        (GtkArrowType   arrow_type,
 				 GtkShadowType  shadow_type);
 void       gtk_arrow_set        (GtkArrow      *arrow,

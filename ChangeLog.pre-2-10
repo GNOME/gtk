@@ -1,3 +1,9 @@
+Mon Jun 29 13:39:45 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkarrow.h: GtkType and macro fixups.
+	* gtk/gtkarrow.c: widget argument implementation: "GtkArrow::arrow_type",
+	"GtkArrow::shadow_type".
+
 Sun Jun 28 11:39:17 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkalignment.h:
