@@ -1,3 +1,12 @@
+
+Thu Dec 18 23:46:11 CST 1997 Shawn T. Amundson <amundson@gimp.org>
+
+	* Changes from Bolliet Jerome <bolliet@in2p3.fr> to gtktree.
+          Corrects a bug in gtk_tree_remove_items and gtk_tree_item_destroy.
+          Adds the possibility to connect all items by lines. This is the 
+          default now.  You can overide this with the function 
+          gtk_tree_set_view_line which take a tree and a boolean.
+
 Thu Dec 18 23:26:49 CST 1997 Shawn T. Amundson <amundson@gimp.org>
 
 	* removed configure, Makefile.in, and aclocal.m4 files

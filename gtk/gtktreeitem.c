@@ -448,6 +448,7 @@ gtk_tree_item_size_allocate (GtkWidget     *widget,
   GtkTreeItem* item;
   GtkAllocation child_allocation;
   guint border_width;
+  int temp;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (widget));
@@ -470,6 +471,7 @@ gtk_tree_item_size_allocate (GtkWidget     *widget,
       child_allocation.x = border_width + GTK_TREE(widget->parent)->current_indent;
       child_allocation.y = GTK_CONTAINER (widget)->border_width;
 
+#ifdef 0
       child_allocation.height = allocation->height - child_allocation.y * 2;
       child_allocation.width = item->pixmaps_box->requisition.width;
 
@@ -478,6 +480,18 @@ gtk_tree_item_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (item->pixmaps_box, &child_allocation);
 
       child_allocation.height += 2;
+#else
+      child_allocation.width = item->pixmaps_box->requisition.width;
+      child_allocation.height = item->pixmaps_box->requisition.height;
+      
+      temp = allocation->height - child_allocation.height;
+      child_allocation.y += ( temp / 2 ) + ( temp % 2 );
+
+      gtk_widget_size_allocate (item->pixmaps_box, &child_allocation);
+
+      child_allocation.y = GTK_CONTAINER (widget)->border_width;
+      child_allocation.height = allocation->height - child_allocation.y * 2;
+#endif
       child_allocation.x += item->pixmaps_box->requisition.width+DEFAULT_DELTA;
 
       child_allocation.width = 
@@ -486,6 +500,67 @@ gtk_tree_item_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (bin->child, &child_allocation);
     }
 
+}
+
+static void 
+gtk_tree_item_draw_lines(GtkWidget *widget) 
+{
+  GtkTreeItem* item;
+  GtkTree* tree;
+  guint lx1, ly1, lx2, ly2;
+
+  item = GTK_TREE_ITEM(widget);
+  tree = GTK_TREE(widget->parent);
+
+  /* draw vertical line */
+  lx1 = item->pixmaps_box->allocation.width;
+  lx1 = lx2 = ( lx1 / 2 ) + ( lx1 % 2 ) + 
+    GTK_CONTAINER(widget)->border_width + 1 + tree->current_indent;
+  ly1 = 0;
+  ly2 = widget->allocation.height;
+
+  if(g_list_last(tree->children)->data == (gpointer)widget)
+    ly2 = (ly2 / 2) + (ly2 % 2);
+
+  if(tree != tree->root_tree)
+    gdk_draw_line(widget->window, widget->style->black_gc,
+		  lx1, ly1, lx2, ly2);
+
+  /* draw vertical line for subtree connecting */
+  if(g_list_last(tree->children)->data != (gpointer)widget)
+    ly2 = (ly2 / 2) + (ly2 % 2);
+  
+  lx2 += DEFAULT_DELTA;
+
+  if(item->subtree && item->expanded)
+    gdk_draw_line(widget->window, widget->style->black_gc,
+		  lx2, ly2, lx2, widget->allocation.height);
+
+  /* draw horizontal line */
+  ly1 = ly2;
+  lx2 += 2;
+
+  gdk_draw_line(widget->window, widget->style->black_gc,
+		lx1, ly1, lx2, ly2);
+
+  lx2 -= DEFAULT_DELTA+2;
+  ly1 = 0;
+  ly2 = widget->allocation.height;
+
+  if(tree != tree->root_tree)
+    {
+      item = GTK_TREE_ITEM(tree->tree_owner);
+      tree = GTK_TREE(GTK_WIDGET(tree)->parent);
+      while(tree != tree->root_tree) {
+	lx1 = lx2 -= tree->indent_value;
+      
+	if(g_list_last(tree->children)->data != (gpointer)item)
+	  gdk_draw_line(widget->window, widget->style->black_gc,
+			lx1, ly1, lx2, ly2);
+	item = GTK_TREE_ITEM(tree->tree_owner);
+	tree = GTK_TREE(GTK_WIDGET(tree)->parent);
+      } 
+    }
 }
 
 static void
@@ -525,6 +600,8 @@ gtk_tree_item_draw (GtkWidget    *widget,
 	gdk_window_clear_area (widget->window, 
 			       child_area.x, child_area.y,
 			       child_area.width, child_area.height);
+
+/* 	gtk_tree_item_draw_lines(widget); */
 
 	if (tree_item->pixmaps_box && 
 	    GTK_WIDGET_VISIBLE(tree_item->pixmaps_box) &&
@@ -585,6 +662,9 @@ gtk_tree_item_draw_focus (GtkWidget *widget)
       gdk_draw_rectangle (widget->window, gc, FALSE, dx, 0,
 			  widget->allocation.width - 1 - dx,
 			  widget->allocation.height - 1);
+
+      if(GTK_TREE(widget->parent)->view_line) 
+	gtk_tree_item_draw_lines(widget);
     }
 }
 
@@ -660,11 +740,11 @@ gtk_real_tree_item_select (GtkItem *item)
   if (GTK_WIDGET (item)->state == GTK_STATE_SELECTED)
     return;
 
-  gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_SELECTED);
-
   if(GTK_TREE(GTK_WIDGET(item)->parent)->view_mode == GTK_TREE_VIEW_LINE)
     gtk_widget_set_state (GTK_TREE_ITEM (item)->pixmaps_box, GTK_STATE_SELECTED);
-  
+
+  gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_SELECTED);
+
   gtk_widget_queue_draw (GTK_WIDGET (item));
 }
 
@@ -678,12 +758,15 @@ gtk_real_tree_item_deselect (GtkItem *item)
   if (GTK_WIDGET (item)->state == GTK_STATE_NORMAL)
     return;
 
-  gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_NORMAL);
+  if(GTK_WIDGET_MAPPED(GTK_WIDGET (item))) 
+    {
+      gtk_widget_set_state (GTK_WIDGET (item), GTK_STATE_NORMAL);
+      
+      if(GTK_TREE(GTK_WIDGET(item)->parent)->view_mode == GTK_TREE_VIEW_LINE)
+	gtk_widget_set_state (GTK_TREE_ITEM (item)->pixmaps_box, GTK_STATE_NORMAL);
 
-  if(GTK_TREE(GTK_WIDGET(item)->parent)->view_mode == GTK_TREE_VIEW_LINE)
-    gtk_widget_set_state (GTK_TREE_ITEM (item)->pixmaps_box, GTK_STATE_NORMAL);
-
-  gtk_widget_queue_draw (GTK_WIDGET (item));
+      gtk_widget_queue_draw (GTK_WIDGET (item));
+    }
 }
 
 static void
@@ -795,6 +878,14 @@ gtk_tree_item_destroy (GtkObject *object)
 
   /* free sub tree if it exist */
   if((child = item->subtree)) 
+    {
+      child->parent = NULL; 
+      gtk_object_unref (GTK_OBJECT (child));
+      gtk_widget_destroy (child);
+    }
+
+  /* free pixmaps box */
+  if((child = item->pixmaps_box))
     {
       child->parent = NULL; 
       gtk_object_unref (GTK_OBJECT (child));

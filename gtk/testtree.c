@@ -43,6 +43,7 @@ static void add_tree_item(GtkWidget* w, GtkTree* tree) {
 
     selected = GTK_TREE_SELECTION(tree);
     nb_selected = g_list_length(selected);
+    selected_item = NULL;
 
     if(nb_selected > 1) return;
 
@@ -110,18 +111,15 @@ void create_tree_item(GtkWidget* parent, int level, int nb_item, int level_max) 
 	gtk_tree_append(GTK_TREE(parent), item);
 	gtk_widget_show(item);
 
-/* 	g_print("item '%s' : 0x%x\n", buffer, (int)item); */
-
 	if(level < level_max) {
 	    tree = gtk_tree_new();
 
-/* 	    g_print("subtree '%s' : 0x%x\n", buffer, (int)tree); */
 	    gtk_signal_connect(GTK_OBJECT(tree), "selection_changed",
 			       (GtkSignalFunc)cb_tree_changed,
 			       (gpointer)NULL);
 	    create_tree_item(tree, level+1, nb_item, level_max);
 	    gtk_tree_item_set_subtree(GTK_TREE_ITEM(item), tree);
-/* 	    gtk_tree_item_expand(GTK_TREE_ITEM(item)); */
+/*  	    gtk_tree_item_expand(GTK_TREE_ITEM(item)); */
 
 	}
     }
@@ -131,6 +129,7 @@ void create_tree_item(GtkWidget* parent, int level, int nb_item, int level_max) 
 void create_tree_page(GtkWidget* parent, GtkSelectionMode mode, 
 		      char* page_name) {
     GtkWidget *root, *scrolled_win;
+    GtkWidget *root_item, *root_subtree;
     GtkWidget *box, *label;
     GtkWidget *button;
     sTreeButton* tree_buttons;
@@ -151,16 +150,25 @@ void create_tree_page(GtkWidget* parent, GtkSelectionMode mode,
     gtk_widget_show (scrolled_win);
 
     root = gtk_tree_new();
-/*     g_print("root: 0x%x\n", (int)root); */
     gtk_container_add(GTK_CONTAINER(scrolled_win), root);
     gtk_tree_set_selection_mode(GTK_TREE(root), mode);
+/*     gtk_tree_set_view_lines(GTK_TREE(root), 0); */
 /*     gtk_tree_set_view_mode(GTK_TREE(root), GTK_TREE_VIEW_ITEM); */
     gtk_signal_connect(GTK_OBJECT(root), "selection_changed",
 		       (GtkSignalFunc)cb_tree_changed,
 		       (gpointer)NULL);
     gtk_widget_show(root);
+
+    root_item = gtk_tree_item_new_with_label("root");
+    gtk_tree_append(GTK_TREE(root), root_item);
+    gtk_widget_show(root_item);
     
-    create_tree_item(root, 1, 3, 3);
+    root_subtree = gtk_tree_new();
+    gtk_signal_connect(GTK_OBJECT(root_subtree), "selection_changed",
+		       (GtkSignalFunc)cb_tree_changed,
+		       (gpointer)NULL);
+    create_tree_item(root_subtree, 1, 3, 3);
+    gtk_tree_item_set_subtree(GTK_TREE_ITEM(root_item), root_subtree);
 
     tree_buttons = g_malloc(sizeof(sTreeButton));
 

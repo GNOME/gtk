@@ -54,10 +54,12 @@ struct _GtkTree
   GtkTree* root_tree; /* owner of selection list */
   GtkWidget* tree_owner;
   GList *selection;
+  guint level;
   guint indent_value;
   guint current_indent;
   guint selection_mode : 2;
   guint view_mode : 1;
+  guint view_line : 1;
 };
 
 struct _GtkTreeClass
@@ -102,6 +104,8 @@ void       gtk_tree_set_selection_mode (GtkTree          *tree,
 				        GtkSelectionMode  mode);
 void       gtk_tree_set_view_mode      (GtkTree          *tree,
 				        GtkTreeViewMode   mode); 
+void       gtk_tree_set_view_lines     (GtkTree          *tree,
+					guint            flag);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

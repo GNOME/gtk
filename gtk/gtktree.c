@@ -166,9 +166,11 @@ gtk_tree_init (GtkTree *tree)
   tree->selection = NULL;
   tree->tree_owner = NULL;
   tree->selection_mode = GTK_SELECTION_SINGLE;
-  tree->indent_value = 10;
+  tree->indent_value = 9;
   tree->current_indent = 0;
+  tree->level = 0;
   tree->view_mode = GTK_TREE_VIEW_LINE;
+  tree->view_line = 1;
 }
 
 GtkWidget*
@@ -523,12 +525,15 @@ gtk_tree_map (GtkWidget *widget)
       /* set root tree for this tree */
       tree->root_tree = GTK_TREE(widget->parent)->root_tree;
 
+      tree->level = GTK_TREE(GTK_WIDGET(tree)->parent)->level+1;
       tree->indent_value = GTK_TREE(GTK_WIDGET(tree)->parent)->indent_value;
       tree->current_indent = GTK_TREE(GTK_WIDGET(tree)->parent)->current_indent + 
 	tree->indent_value;
       tree->view_mode = GTK_TREE(GTK_WIDGET(tree)->parent)->view_mode;
-    } else
-      tree->root_tree = tree;
+      tree->view_line = GTK_TREE(GTK_WIDGET(tree)->parent)->view_line;
+    } 
+  else
+    tree->root_tree = tree;
 
   children = tree->children;
   while (children)
@@ -1034,4 +1039,14 @@ gtk_tree_set_view_mode (GtkTree       *tree,
   g_return_if_fail (GTK_IS_TREE (tree));
 
   tree->view_mode = mode;
+}
+
+void
+gtk_tree_set_view_lines (GtkTree       *tree,
+			 guint          flag) 
+{
+  g_return_if_fail (tree != NULL);
+  g_return_if_fail (GTK_IS_TREE (tree));
+
+  tree->view_line = flag;
 }
