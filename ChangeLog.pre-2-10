@@ -1,3 +1,9 @@
+Mon Oct 14 18:50:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Version 2.1.1, interface age 0, binary age 101.
+
+	* NEWS: Updates
+
 Tue Oct 15 00:53:14 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Behaviour change, apply changes if the entry of the editable gets

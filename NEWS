@@ -1,3 +1,32 @@
+Overview of Changes in GTK+ 2.1.1
+=================================
+* Cleanup of use of deprecated functions in GTK+ [Manish Singh]
+* Add support for separately installed Pixbuf loaders [Matthias Clasen]
+* linux-fb improvements including window maximization. [Eric Warmenhoven]
+* Fix to compile again with Xft version 1 [Owen Taylor]
+* Fix handling of pointer on multiple screens [Owen]
+  - Add gdk_event_set/get_screen() via evil hack
+  - Add GdkDisplayPointerHooks to replace GdkPointerHooks
+  - gdk_screen_get_window_at_pointer() => gdk_display_get_window_at_pointer()
+  - Add gdk_display_get_pointer()
+  - Make drag-and-drop between multiple screens work
+* Export gdk_event_new(), discourage stack allocated events [Owen]
+* gdk_draw_pixbuf() as better name for gdk_pixbuf_render_to_drawable() [Owen]
+* Basic support for RandR extension [Keith Packard, Owen]
+* Allow moving paned sliders all the way to the edge [Owen, Darin Adler]
+* Add tag_table construct property to GtkTextBuffer [Daniel Elstner]
+* gtk_window_set_[default_]icon_from_file [Owen, Havoc]
+* Fix handling of GtkSettings set from RC files on reload [Owen]
+* Fixes for GtkIMContextXIM 
+  [Takuro Ashie, Motonobu Ichimura, Owen, HideToshi Tajima]
+* Documentation fixes [Soeren Sandmann, Matthias Clasen; Joost Faassen, 
+  Alexey A. Malyshev, Ben Martin, Havoc Pennington, Boris Shingarov, Owen, 
+  Vitaly Tishkov, Dan Winship, Yao Zhang]
+* Some performance tweaks [Soeren, Padraig O'Briain]
+* Miscellaneous bug fixes
+
+Other contributors: Jacob Berkman, Phil Blundell, Kenneth Christiansen, Murray Cumming, Bill Haneman, Jon-Kare Hellan, Kristian Rietveld, Hema Seetharamaiah
+
 Overview of Changes from GTK+-2.0.x to GTK+-2.1.0
 =================================================
 
