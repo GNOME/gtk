@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-03 04:29+0100\n"
-"PO-Revision-Date: 2004-02-03 16:44+0100\n"
+"POT-Creation-Date: 2004-02-06 04:22+0100\n"
+"PO-Revision-Date: 2004-02-06 17:54+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1460,11 +1460,11 @@ msgstr "(neznámá)"
 msgid "clear"
 msgstr "vyčistit"
 
-#: gtk/gtklabel.c:3227
+#: gtk/gtklabel.c:3217
 msgid "Select All"
 msgstr "Vybrat vše"
 
-#: gtk/gtklabel.c:3237
+#: gtk/gtklabel.c:3227
 msgid "Input Methods"
 msgstr "Vstupní metody"
 
@@ -1778,11 +1778,11 @@ msgid "_Yes"
 msgstr "_Ano"
 
 #: gtk/gtkstock.c:338
-msgid "Zoom _100%"
-msgstr "Zvětšení _100%"
+msgid "_Normal Size"
+msgstr "_Normální velikost"
 
 #: gtk/gtkstock.c:339
-msgid "Zoom to _Fit"
+msgid "Best _Fit"
 msgstr "Při_způsobit velikost"
 
 #: gtk/gtkstock.c:340
