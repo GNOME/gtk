@@ -7,7 +7,7 @@ bin_SCRIPTS = gtk-config
 
 EXTRA_DIST =	\
 	HACKING		\
-	gtk+.spec	\
+	gtk+.spec.in	\
         gtk.m4          \
 	makecopyright	\
 	TODO		\
@@ -97,6 +97,8 @@ EXTRA_DIST =	\
 	examples/spinbutton/Makefile  \
 	examples/find-examples.sh
 
+dist-hook:
+	cp gtk+.spec $(distdir)
 
 m4datadir = $(datadir)/aclocal
 m4data_DATA = gtk.m4

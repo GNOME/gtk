@@ -1,5 +1,5 @@
 # Note that this is NOT a relocatable package
-%define ver      1.1.16
+%define ver      @VERSION@
 %define rel      SNAP
 %define prefix   /usr
 
@@ -10,7 +10,7 @@ Release: %rel
 Copyright: LGPL
 Group: X11/Libraries
 Source: ftp://ftp.gimp.org/pub/gtk/v1.1/gtk+-%{ver}.tar.gz
-BuildRoot: /tmp/gtk-root
+BuildRoot: /var/tmp/gtk-%{PACKAGE_VERSION}-root
 Obsoletes: gtk
 Packager: Christopher Blizzard <blizzard@redhat.com>
 URL: http://www.gtk.org
@@ -37,6 +37,8 @@ Xlib to help automate things like dealing with different color depths,
 and GTK is a widget set for creating user interfaces.
 
 %changelog
+* Sun Feb 21 1999 Michael Fulbright <drmike@redhat.com>
+- updated spec file
 
 * Sun Oct 25 1998 Shawn T. Amundson <amundson@gtk.org>
 
@@ -148,6 +150,9 @@ fi
 %doc AUTHORS COPYING ChangeLog NEWS README TODO
 %{prefix}/lib/libgtk-1.1.so.*
 %{prefix}/lib/libgdk-1.1.so.*
+{prefix}/share/themes/Default
++%{prefix}/share/locale/*/*/*
+ 
 
 %files devel
 %defattr(-, root, root)
@@ -156,5 +161,6 @@ fi
 %{prefix}/lib/*a
 %{prefix}/include/*
 %{prefix}/info/*
+%{prefix}/man/man1/*
 %{prefix}/share/aclocal/*
 %{prefix}/bin/*

@@ -510,6 +510,7 @@ AC_SUBST(GTK_XIM_FLAGS)
 AC_SUBST(GTK_LOCALE_FLAGS)
 
 AC_OUTPUT([
+gtk+.spec
 Makefile
 gtk-config
 po/Makefile.in
