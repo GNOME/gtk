@@ -54,7 +54,7 @@ extern "C" {
  * - gdk_rgb_*() functions are in place.
  * - stringified enum values can be queried for enum types now.
  * - new key binding system is in place (GtkBindingSet).
- * - simple algorithm for pattern matching is expoted now (GtkPatternSpec).
+ * - simple algorithm for pattern matching is exported now (GtkPatternSpec).
  */
 #define GTK_HAVE_FEATURES_1_1_0				1-1-0
 
