@@ -73,6 +73,7 @@ enum {
   PROP_TYPE_HINT,
   PROP_SKIP_TASKBAR_HINT,
   PROP_SKIP_PAGER_HINT,
+  PROP_ACCEPT_FOCUS,
   PROP_DECORATED,
   PROP_GRAVITY,
   
@@ -159,6 +160,7 @@ struct _GtkWindowPrivate
   guint fullscreen_initially : 1;
   guint skips_taskbar : 1;
   guint skips_pager : 1;
+  guint accept_focus : 1;
 };
 
 static void gtk_window_class_init         (GtkWindowClass    *klass);
@@ -584,6 +586,21 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                          G_PARAM_READWRITE));  
 
   /**
+   * GtkWindow:accept-focus-hint:
+   *
+   * Whether the window should receive the input focus.
+   *
+   * Since: 2.4
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_ACCEPT_FOCUS,
+				   g_param_spec_boolean ("accept_focus",
+                                                         _("Accept focus"),
+                                                         _("TRUE if the window should receive the input focus."),
+                                                         TRUE,
+                                                         G_PARAM_READWRITE));  
+
+  /**
    * GtkWindow:decorated:
    *
    * Whether the window should be decorated by the window manager.
@@ -708,6 +725,7 @@ static void
 gtk_window_init (GtkWindow *window)
 {
   GdkColormap *colormap;
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
   
   GTK_WIDGET_UNSET_FLAGS (window, GTK_NO_WINDOW);
   GTK_WIDGET_SET_FLAGS (window, GTK_TOPLEVEL);
@@ -743,7 +761,9 @@ gtk_window_init (GtkWindow *window)
   window->decorated = TRUE;
   window->mnemonic_modifier = GDK_MOD1_MASK;
   window->screen = gdk_screen_get_default ();
-  
+
+  priv->accept_focus = TRUE;
+
   colormap = _gtk_widget_peek_colormap ();
   if (colormap)
     gtk_widget_set_colormap (GTK_WIDGET (window), colormap);
@@ -834,6 +854,10 @@ gtk_window_set_property (GObject      *object,
       gtk_window_set_skip_pager_hint (window,
                                       g_value_get_boolean (value));
       break;
+    case PROP_ACCEPT_FOCUS:
+      gtk_window_set_accept_focus (window,
+				   g_value_get_boolean (value));
+      break;
     case PROP_DECORATED:
       gtk_window_set_decorated (window, g_value_get_boolean (value));
       break;
@@ -922,6 +946,10 @@ gtk_window_get_property (GObject      *object,
     case PROP_SKIP_PAGER_HINT:
       g_value_set_boolean (value,
                            gtk_window_get_skip_pager_hint (window));
+      break;
+    case PROP_ACCEPT_FOCUS:
+      g_value_set_boolean (value,
+                           gtk_window_get_accept_focus (window));
       break;
     case PROP_DECORATED:
       g_value_set_boolean (value, gtk_window_get_decorated (window));
@@ -1969,7 +1997,7 @@ gtk_window_get_type_hint (GtkWindow *window)
  * @setting: %TRUE to keep this window from appearing in the task bar
  * 
  * Windows may set a hint asking the desktop environment not to display
- * the window in the task bar. This function toggles this hint.
+ * the window in the task bar. This function sets this hint.
  * 
  * Since: 2.2
  **/
@@ -2023,7 +2051,7 @@ gtk_window_get_skip_taskbar_hint (GtkWindow *window)
  * @setting: %TRUE to keep this window from appearing in the pager
  * 
  * Windows may set a hint asking the desktop environment not to display
- * the window in the pager. This function toggles this hint.
+ * the window in the pager. This function sets this hint.
  * (A "pager" is any desktop navigation tool such as a workspace
  * switcher that displays a thumbnail representation of the windows
  * on the screen.)
@@ -2072,6 +2100,60 @@ gtk_window_get_skip_pager_hint (GtkWindow *window)
   priv = GTK_WINDOW_GET_PRIVATE (window);
 
   return priv->skips_pager;
+}
+
+/**
+ * gtk_window_set_accept_focus:
+ * @window: a #GtkWindow 
+ * @setting: %TRUE to let this window receive input focus
+ * 
+ * Windows may set a hint asking the desktop environment not to receive
+ * the input focus. This function sets this hint.
+ * 
+ * Since: 2.4
+ **/
+void
+gtk_window_set_accept_focus (GtkWindow *window,
+			     gboolean   setting)
+{
+  GtkWindowPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  
+  priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  setting = setting != FALSE;
+
+  if (priv->accept_focus != setting)
+    {
+      priv->accept_focus = setting;
+      if (GTK_WIDGET_REALIZED (window))
+        gdk_window_set_accept_focus (GTK_WIDGET (window)->window,
+				     priv->accept_focus);
+      g_object_notify (G_OBJECT (window), "accept_focus");
+    }
+}
+
+/**
+ * gtk_window_get_accept_focus:
+ * @window: a #GtkWindow
+ * 
+ * Gets the value set by gtk_window_set_accept_focus().
+ * 
+ * Return value: %TRUE if window should receive the input focus
+ * 
+ * Since: 2.4
+ **/
+gboolean
+gtk_window_get_accept_focus (GtkWindow *window)
+{
+  GtkWindowPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+  
+  priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  return priv->accept_focus;
 }
 
 /**
@@ -3833,13 +3915,15 @@ gtk_window_realize (GtkWidget *widget)
   gdk_window_set_type_hint (widget->window, window->type_hint);
 
   if (gtk_window_get_skip_pager_hint (window))
-    {
-      g_print ("setting skip pager when realizing\n");
     gdk_window_set_skip_pager_hint (widget->window, TRUE);
-    }
 
   if (gtk_window_get_skip_taskbar_hint (window))
     gdk_window_set_skip_taskbar_hint (widget->window, TRUE);
+
+  if (gtk_window_get_accept_focus (window))
+    gdk_window_set_accept_focus (widget->window, TRUE);
+  else
+    gdk_window_set_accept_focus (widget->window, FALSE);
   
   if (window->modal)
     gdk_window_set_modal_hint (widget->window, TRUE);

@@ -1969,11 +1969,12 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
   else if ((Atom) xevent->xclient.data.l[0] == gdk_x11_get_xatom_by_name_for_display (display, "WM_TAKE_FOCUS"))
     {
       GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (event->any.window);
+      GdkWindowObject *private = (GdkWindowObject *)win;
 
       /* There is no way of knowing reliably whether we are viewable;
        * _gdk_x11_set_input_focus_safe() traps errors asynchronously.
        */
-      if (toplevel)
+      if (toplevel && private->accept_focus)
 	_gdk_x11_set_input_focus_safe (display, toplevel->focus_window,
 				       RevertToParent,
 				       xevent->xclient.data.l[1]);

@@ -468,6 +468,8 @@ gdk_window_new (GdkWindow     *parent,
   
   private->parent = (GdkWindowObject *)parent;
 
+  private->accept_focus = TRUE;
+
   if (attributes_mask & GDK_WA_X)
     private->x = attributes->x;
   else
@@ -2149,6 +2151,22 @@ gdk_window_set_override_redirect (GdkWindow *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   g_warning ("gdk_window_set_override_redirect not implemented");
+}
+
+void
+gdk_window_set_accept_focus (GdkWindow *window,
+			     gboolean accept_focus)
+{
+  GdkWindowObject *private;
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *)window;  
+  
+  accept_focus = accept_focus != FALSE;
+
+  if (private->accept_focus != accept_focus)
+    private->accept_focus = accept_focus;
 }
 
 void          

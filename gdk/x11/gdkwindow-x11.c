@@ -343,6 +343,7 @@ _gdk_windowing_window_init (GdkScreen * screen)
 static void
 set_wm_protocols (GdkWindow *window)
 {
+  GdkWindowObject *private = (GdkWindowObject *)window;
   GdkDisplay *display = gdk_drawable_get_display (window);
   Atom protocols[3];
   
@@ -462,6 +463,8 @@ gdk_window_new (GdkWindow     *parent,
     parent = gdk_screen_get_root_window (screen);
   
   private->parent = (GdkWindowObject *)parent;
+
+  private->accept_focus = TRUE;
 
   xattributes_mask = 0;
   
@@ -989,8 +992,8 @@ update_wm_hints (GdkWindow *window,
       private->state & GDK_WINDOW_STATE_WITHDRAWN)
     return;
 
-  wm_hints.flags = StateHint;
-  wm_hints.input = True;
+  wm_hints.flags = StateHint | InputHint;
+  wm_hints.input = private->accept_focus ? True : False;
   wm_hints.initial_state = NormalState;
   
   if (private->state & GDK_WINDOW_STATE_ICONIFIED)
@@ -3220,6 +3223,40 @@ gdk_window_set_override_redirect (GdkWindow *window,
 			       GDK_WINDOW_XID (window),
 			       CWOverrideRedirect,
 			       &attr);
+    }
+}
+
+/**
+ * gdk_window_set_accept_focus:
+ * @window: a toplevel #GdkWindow
+ * @accept_focus: %TRUE if the window should receive input focus
+ *
+ * Setting @accept_focus to %FALSE hints the desktop environment that the
+ * window doesn't want to receive input focus. 
+ *
+ * On X, it is the responsibility of the window manager to interpret this 
+ * hint. ICCCM-compliant window manager usually respect it.
+ *
+ * Since: 2.4 
+ **/
+void
+gdk_window_set_accept_focus (GdkWindow *window,
+			     gboolean accept_focus)
+{
+  GdkWindowObject *private;
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *)window;  
+  
+  accept_focus = accept_focus != FALSE;
+
+  if (private->accept_focus != accept_focus)
+    {
+      private->accept_focus = accept_focus;
+
+      if (!GDK_WINDOW_DESTROYED (window))
+	update_wm_hints (window, FALSE);
     }
 }
 

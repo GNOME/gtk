@@ -1,3 +1,8 @@
+Thu Dec 11 00:04:10 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_window_[sg]et_accept_focus().
+	* gdk/gdk-sections.txt: Add gdk_window_set_accept_focus().
+
 Wed Dec 10 00:09:51 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdk-sections.txt: Add gdk_window_get_group(), 

@@ -1,3 +1,33 @@
+Thu Dec 11 00:35:12 2003  Matthias Clasen  <maclas@gmx.de>
+
+	Changes to allow "no input" windows (#64613):
+	
+	* gdk/gdkwindow.h (struct _GdkWindowObject): Add a new boolean
+	field accept_focus.
+	
+	* gdk/gdkwindow.h (gdk_window_set_accept_focus): New function to
+	set it.
+
+	* gtk/gtkwindow.[hc]: Add a boolean property "accept_focus"
+	and gtk_window_get_focus() and gtk_window_set_focus().
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_new): 
+	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_new): 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_new):
+	Initialize the accept_focus field to TRUE.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_accept_focus): 
+	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_set_accept_focus): 
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_accept_focus): 
+	Implementations for the various backends. The Win32 and linux-fb
+	implementations set the accept_focus field, but don't use it yet 
+	to actually implement noinput windows. The X implementation updates
+	the WM_HINTS to select the globally active input model (see the
+	ICCCM) if accept_focus is FALSE.
+
+	* gdk/x11/gdkevents-x11.c (gdk_wm_protocols_filter): Ignore the
+	WM_TAKE_FOCUS message if accept_focus is FALSE.
+	
 2003-12-10  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault):
