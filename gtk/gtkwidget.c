@@ -645,7 +645,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  * GtkWidget::child-notify:
  * @widget: the object which received the signal.
  * @pspec: the #GParamSpec of the changed child property.
- * @user_data: user data set when the signal handler was connected.
  *
  * The ::child-notify signal is emitted for each child property that has 
  * changed on an object. The signal's detail holds the property name. 

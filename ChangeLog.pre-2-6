@@ -1,3 +1,7 @@
+2003-06-29  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): Remove a duplicate parameter from docs.
+
 2003-06-28  Tor Lillqvist  <tml@iki.fi>
 
 	Fix for #111028, thanks to J. Ali Harlow, who writes:
