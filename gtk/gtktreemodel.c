@@ -364,7 +364,7 @@ gtk_tree_path_copy (GtkTreePath *path)
  * @a: A #GtkTreePath.
  * @b: A #GtkTreePath to compare with.
  *
- * Compares two paths.  If @a appears before @b in a tree, then -1, is returned.
+ * Compares two paths.  If @a appears before @b in a tree, then -1 is returned.
  * If @b appears before @a, then 1 is returned.  If the two nodes are equal,
  * then 0 is returned.
  *
@@ -1176,7 +1176,7 @@ gtk_tree_model_foreach_helper (GtkTreeModel            *model,
  * @user_data: User data to passed to func.
  * 
  * Calls func on each node in model in a depth-first fashion.  If func returns
- * %TRUE, then the tree ceases to be walked, and gtk_tree_model_foreach returns.
+ * %TRUE, then the tree ceases to be walked, and gtk_tree_model_foreach() returns.
  **/
 
 void

@@ -1971,7 +1971,7 @@ gtk_tree_model_sort_convert_child_iter_to_iter (GtkTreeModelSort *tree_model_sor
  * is, @sort_path points ot a location in @tree_model_sort.  The returned path
  * will point to the same location in the model not being sorted.  If @path does not point to a 
  * 
- * Return value: A newly allocated #GtkTreePath, or %NULLL
+ * Return value: A newly allocated #GtkTreePath, or %NULL
  **/
 GtkTreePath *
 gtk_tree_model_sort_convert_path_to_child_path (GtkTreeModelSort *tree_model_sort,

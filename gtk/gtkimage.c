@@ -796,7 +796,7 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
  * @stock_id: a stock icon name
  * @size: a stock icon size
  *
- * See gtk_image_new_from_stock for details.
+ * See gtk_image_new_from_stock() for details.
  * 
  **/
 void

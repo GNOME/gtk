@@ -1,3 +1,11 @@
+2002-01-10            Vitaly Tishkov       <tvv@sparc.spb.su>
+        * gtk/gtkimage.c
+	* gtk/gtkimcontext.c
+	* gtk/gtktreemodel.c
+	* gtk/gtktreemodelsort.c
+	* gtk/gtkwindow.c
+	fix docs	
+
 Wed Jan  9 20:56:42 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gdk/x11/gdkkeys-x11.c (get_xkb): get the types as well as the

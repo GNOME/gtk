@@ -2523,7 +2523,7 @@ gtk_window_resize (GtkWindow *window,
  * way is to simply set the window's semantic type with
  * gtk_window_set_type_hint(), which allows the window manager to
  * e.g. center dialogs. Also, if you set the transient parent of
- * dialogs with gtk_widget_set_transient_for() window managers
+ * dialogs with gtk_window_set_transient_for() window managers
  * will often center the dialog over its parent window. It's
  * much preferred to let the window manager handle these
  * things rather than doing it yourself, because all apps will

@@ -101,7 +101,7 @@ Increases the reference count of a #GtkTargetList by one.
 <!-- ##### FUNCTION gtk_target_list_unref ##### -->
 <para>
 Decreases the reference count of a #GtkTargetList by one.
-If the resulting reference count is zero, free the list.
+If the resulting reference count is zero, frees the list.
 </para>
 
 @list: a #GtkTargetList
@@ -212,8 +212,8 @@ a "selection_received" signal will be generated.
 <!-- ##### FUNCTION gtk_selection_data_set ##### -->
 <para>
 Stores new data into a #GtkSelectionData object. Should
-<emphasis>only</emphasis> by called from a selection handler callback.
-zero-terminates the stored data.
+<emphasis>only</emphasis> be called from a selection handler callback.
+Zero-terminates the stored data.
 </para>
 
 @selection_data: 
