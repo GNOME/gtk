@@ -224,7 +224,7 @@ gtk_file_chooser_widget_new (GtkFileChooserAction action)
 }
 
 /**
- * gtk_file_chooser_widget_new:
+ * gtk_file_chooser_widget_new_with_backend:
  * @action: Open or save mode for the widget
  * @backend: The name of the specific filesystem backend to use.
  * 
