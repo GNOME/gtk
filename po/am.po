@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "POT-Creation-Date: 2002-10-24 05:28+0200\n"
-"PO-Revision-Date: 2002-11-23 23:19+EDT\n"
+"PO-Revision-Date: 2002-12-10 19:37+EDT\n"
 "Last-Translator: Ge'ez Frontier Foundation <locales@geez.org>\n"
 "Language-Team: Amharic <locales@geez.org>\n"
 "MIME-Version: 1.0\n"
@@ -1035,7 +1035,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:205 gtk/gtktexttag.c:217
 msgid "Background color"
-msgstr "መደቡ ቀለም"
+msgstr "የመደቡ ቀለም"
 
 #: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:218
 msgid "Background color as a GdkColor"
@@ -1090,7 +1090,7 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:263 gtk/gtkcellrenderertext.c:264
 #: gtk/gtktexttag.c:310 gtk/gtktexttag.c:311
 msgid "Font style"
-msgstr "የፊደል ቅርጽ ዘዴ"
+msgstr "የፊደል ቅርጽ ዘይቤ"
 
 #: gtk/gtkcellrenderertext.c:272 gtk/gtkcellrenderertext.c:273
 #: gtk/gtktexttag.c:319 gtk/gtktexttag.c:320
@@ -1759,7 +1759,7 @@ msgstr "_አዲስ ዶሴ"
 
 #: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
-msgstr ""
+msgstr "ፋይል _ሰረዝ"
 
 #: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
@@ -1827,7 +1827,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1552
 msgid "Delete File"
-msgstr ""
+msgstr "ፋይል ሰረዝ"
 
 #: gtk/gtkfilesel.c:1598 gtk/gtkfilesel.c:1612
 #, c-format
@@ -1864,7 +1864,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1717
 msgid "Rename"
-msgstr ""
+msgstr "እንደገና ሰይም"
 
 #: gtk/gtkfilesel.c:2117
 msgid "Selection: "
@@ -2925,7 +2925,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:180
 msgid "Theme Name"
-msgstr ""
+msgstr "የጭብጥ ስም"
 
 #: gtk/gtksettings.c:181
 msgid "Name of theme RC file to load"
@@ -3058,7 +3058,7 @@ msgstr "ጥያቄ"
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr "ተጨማሪ (_A)"
+msgstr "ጨምር (_A)"
 
 #: gtk/gtkstock.c:276
 msgid "_Apply"
@@ -3102,7 +3102,7 @@ msgstr "መሰረዣ (_D)"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr ""
+msgstr "ስራ (_E)"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
@@ -3170,7 +3170,7 @@ msgstr "ይለፉ ወደ (_J)"
 
 #: gtk/gtkstock.c:303
 msgid "_Center"
-msgstr "መሐከል (_C)"
+msgstr "መሀከል (_C)"
 
 #: gtk/gtkstock.c:304
 msgid "_Fill"
@@ -3214,11 +3214,11 @@ msgstr "አትም (_P)"
 
 #: gtk/gtkstock.c:314
 msgid "Print Pre_view"
-msgstr "የቅድመ ህትመት ዕይታ (_v)"
+msgstr "ቅድመ ህትመት ዕይታ (_v)"
 
 #: gtk/gtkstock.c:315
 msgid "_Properties"
-msgstr "ሁኔታዎች (_P)"
+msgstr "ምርጫዎች (_P)"
 
 #: gtk/gtkstock.c:316
 msgid "_Quit"
@@ -3234,7 +3234,7 @@ msgstr ""
 
 #: gtk/gtkstock.c:319
 msgid "_Remove"
-msgstr "ሰርዝ (_R)"
+msgstr "አስወግድ (_R)"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
@@ -3270,7 +3270,7 @@ msgstr ""
 
 #: gtk/gtkstock.c:328
 msgid "_Stop"
-msgstr "ቆመ (_S)"
+msgstr "አቁም (_S)"
 
 #: gtk/gtkstock.c:329
 msgid "_Strikethrough"
@@ -3310,7 +3310,7 @@ msgstr "ከርቀት እይታ (_O)"
 
 #: gtk/gtktable.c:156
 msgid "Rows"
-msgstr ""
+msgstr "መደዳዎች"
 
 #: gtk/gtktable.c:157
 msgid "The number of rows in the table"
@@ -3428,7 +3428,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:395
 msgid "Left margin"
-msgstr "የግራ ጠርዝ"
+msgstr "የግራ ህዳግ"
 
 #: gtk/gtktexttag.c:396 gtk/gtktextview.c:595
 msgid "Width of the left margin in pixels"
@@ -3436,7 +3436,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:405
 msgid "Right margin"
-msgstr "የቀኝ ጠርዝ"
+msgstr "የቀኝ ህዳግ"
 
 #: gtk/gtktexttag.c:406 gtk/gtktextview.c:605
 msgid "Width of the right margin in pixels"
@@ -3485,7 +3485,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
 msgid "Tabs"
-msgstr "የዶሴ ምክፈቻ"
+msgstr "ምክፈቻዎች"
 
 #: gtk/gtktexttag.c:495 gtk/gtktextview.c:625
 msgid "Custom tabs for this text"
@@ -3665,11 +3665,11 @@ msgstr "የመሸፈኛ ዘዴ"
 
 #: gtk/gtktextview.c:594
 msgid "Left Margin"
-msgstr "የግራ ጠርዝ"
+msgstr "የግራ ህዳግ"
 
 #: gtk/gtktextview.c:604
 msgid "Right Margin"
-msgstr "የቀኝ ጠርዝ"
+msgstr "የቀኝ ህዳግ"
 
 #: gtk/gtktextview.c:632
 msgid "Cursor Visible"
