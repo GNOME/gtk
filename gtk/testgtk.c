@@ -5903,6 +5903,7 @@ typedef struct _ProgressData {
   GtkWidget *x_align_spin;
   GtkWidget *y_align_spin;
   GtkWidget *step_spin;
+  GtkWidget *act_blocks_spin;
   GtkWidget *label;
   GtkWidget *omenu1;
   GtkWidget *omenu3;
@@ -6005,7 +6006,7 @@ static void
 adjust_blocks (GtkAdjustment *adj, ProgressData *pdata)
 {
   gtk_progress_set_percentage (GTK_PROGRESS (pdata->pbar), 0);
-  gtk_progress_bar_set_number_of_blocks (GTK_PROGRESS_BAR (pdata->pbar),
+  gtk_progress_bar_set_discrete_blocks (GTK_PROGRESS_BAR (pdata->pbar),
      gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (pdata->block_spin)));
 }
 
@@ -6014,6 +6015,14 @@ adjust_step (GtkAdjustment *adj, ProgressData *pdata)
 {
   gtk_progress_bar_set_activity_step (GTK_PROGRESS_BAR (pdata->pbar),
      gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (pdata->step_spin)));
+}
+
+static void
+adjust_act_blocks (GtkAdjustment *adj, ProgressData *pdata)
+{
+  gtk_progress_bar_set_activity_blocks (GTK_PROGRESS_BAR (pdata->pbar),
+               gtk_spin_button_get_value_as_int 
+		      (GTK_SPIN_BUTTON (pdata->act_blocks_spin)));
 }
 
 static void
@@ -6032,6 +6041,8 @@ toggle_activity_mode (GtkWidget *widget, ProgressData *pdata)
   gtk_progress_set_activity_mode (GTK_PROGRESS (pdata->pbar),
 				  GTK_TOGGLE_BUTTON (widget)->active);
   gtk_widget_set_sensitive (pdata->step_spin, 
+			    GTK_TOGGLE_BUTTON (widget)->active);
+  gtk_widget_set_sensitive (pdata->act_blocks_spin, 
 			    GTK_TOGGLE_BUTTON (widget)->active);
 }
 
@@ -6119,7 +6130,7 @@ create_progress_bar (void)
       vbox2 = gtk_vbox_new (FALSE, 5);
       gtk_container_add (GTK_CONTAINER (frame), vbox2);
 
-      tab = gtk_table_new (6, 2, FALSE);
+      tab = gtk_table_new (7, 2, FALSE);
       gtk_box_pack_start (GTK_BOX (vbox2), tab, FALSE, TRUE, 0);
 
       label = gtk_label_new ("Orientation :");
@@ -6305,6 +6316,20 @@ create_progress_bar (void)
 			  GTK_SIGNAL_FUNC (adjust_step), pdata);
       gtk_box_pack_start (GTK_BOX (hbox), pdata->step_spin, FALSE, TRUE, 0);
       gtk_widget_set_sensitive (pdata->step_spin, FALSE);
+
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 6, 7,
+			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
+			5, 5);
+      label = gtk_label_new ("Blocks :     ");
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+      adj = (GtkAdjustment *) gtk_adjustment_new (5, 2, 10, 1, 5, 0);
+      pdata->act_blocks_spin = gtk_spin_button_new (adj, 0, 0);
+      gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
+			  GTK_SIGNAL_FUNC (adjust_act_blocks), pdata);
+      gtk_box_pack_start (GTK_BOX (hbox), pdata->act_blocks_spin, FALSE, TRUE,
+			  0);
+      gtk_widget_set_sensitive (pdata->act_blocks_spin, FALSE);
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",

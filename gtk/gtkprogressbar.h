@@ -64,6 +64,7 @@ struct _GtkProgressBar
 
   gint  activity_pos;
   guint activity_step;
+  guint activity_blocks;
   guint activity_dir : 1;
 };
 
@@ -80,10 +81,12 @@ void       gtk_progress_bar_construct            (GtkProgressBar *pbar,
 						  GtkAdjustment  *adjustment);
 void       gtk_progress_bar_set_bar_style        (GtkProgressBar *pbar,
 						  GtkProgressBarStyle style);
-void       gtk_progress_bar_set_number_of_blocks (GtkProgressBar *pbar,
+void       gtk_progress_bar_set_discrete_blocks  (GtkProgressBar *pbar,
 						  guint           blocks);
 void       gtk_progress_bar_set_activity_step    (GtkProgressBar *pbar,
                                                   guint           step);
+void       gtk_progress_bar_set_activity_blocks  (GtkProgressBar *pbar,
+						  guint           blocks);
 void       gtk_progress_bar_set_orientation      (GtkProgressBar *pbar,
 						  GtkProgressBarOrientation orientation);
 void       gtk_progress_bar_update               (GtkProgressBar *pbar,

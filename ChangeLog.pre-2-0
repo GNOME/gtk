@@ -1,3 +1,11 @@
+Tue Jul 21 06:32:43 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/gtkprogressbar.{c,h} gtk/testgtk.c: Fixed wrong size of
+ 	activity indicator. It is settable now as a fraction of the
+	total width/height using gtk_progress_bar_set_activity_blocks.
+	Renamed gtk_progress_bar_set_number_of_blocks to
+	gtk_progress_bar_set_discrete_blocks.
+
 Mon Jul 20 21:28:18 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.c (gtk_ctree_post_recursive_to_depth)
