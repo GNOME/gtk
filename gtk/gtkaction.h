@@ -88,8 +88,12 @@ GtkAction   *gtk_action_new                    (const gchar *name,
 const gchar* gtk_action_get_name               (GtkAction     *action);
 gboolean     gtk_action_is_sensitive           (GtkAction     *action);
 gboolean     gtk_action_get_sensitive          (GtkAction     *action);
+void         gtk_action_set_sensitive          (GtkAction     *action,
+						gboolean       sensitive);
 gboolean     gtk_action_is_visible             (GtkAction     *action);
 gboolean     gtk_action_get_visible            (GtkAction     *action);
+void         gtk_action_set_visible            (GtkAction     *action,
+						gboolean       visible);
 void         gtk_action_activate               (GtkAction     *action);
 GtkWidget*   gtk_action_create_icon            (GtkAction     *action,
 						GtkIconSize    icon_size);

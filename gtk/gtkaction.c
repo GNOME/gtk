@@ -1242,6 +1242,34 @@ gtk_action_get_sensitive (GtkAction *action)
 }
 
 /**
+ * gtk_action_set_sensitive:
+ * @action: the action object
+ * @sensitive: %TRUE to make the action sensitive
+ * 
+ * Sets the ::sensitive property of the action to @sensitive. Note that 
+ * this doesn't necessarily mean effective sensitivity. See 
+ * gtk_action_is_sensitive() 
+ * for that.
+ *
+ * Since: 2.6
+ **/
+void
+gtk_action_set_sensitive (GtkAction *action,
+			  gboolean   sensitive)
+{
+  g_return_if_fail (GTK_IS_ACTION (action));
+
+  sensitive = sensitive != FALSE;
+  
+  if (action->private_data->sensitive != sensitive)
+    {
+      action->private_data->sensitive = sensitive;
+
+      g_object_notify (G_OBJECT (action), "sensitive");
+    }
+}
+
+/**
  * gtk_action_is_visible:
  * @action: the action object
  * 
@@ -1282,6 +1310,34 @@ gtk_action_get_visible (GtkAction *action)
   g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
 
   return action->private_data->visible;
+}
+
+/**
+ * gtk_action_set_visible:
+ * @action: the action object
+ * @visible: %TRUE to make the action visible
+ * 
+ * Sets the ::visible property of the action to @visible. Note that 
+ * this doesn't necessarily mean effective visibility. See 
+ * gtk_action_is_visible() 
+ * for that.
+ *
+ * Since: 2.6
+ **/
+void
+gtk_action_set_visible (GtkAction *action,
+			gboolean   visible)
+{
+  g_return_if_fail (GTK_IS_ACTION (action));
+
+  visible = visible != FALSE;
+  
+  if (action->private_data->visible != visible)
+    {
+      action->private_data->visible = visible;
+
+      g_object_notify (G_OBJECT (action), "visible");
+    }
 }
 
 /**

@@ -1,3 +1,11 @@
+Wed Aug 11 23:14:25 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk.symbols: 
+	* gtk/gtkaction.h:
+	* gtk/gtkaction.c (gtk_action_set_sensitive): 
+	(gtk_action_set_visible): Add setters for the ::sensitive
+	and ::visible properties of GtkAction.  (#149622, David Malcolm)
+
 2004-08-11  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #149422, #143457:
@@ -26,11 +34,13 @@ Wed Aug 11 19:20:34 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreedatalist.[hc]: 
 	* gtk/gtkliststore.c:
-	* gtk/gtktreestore.c: Underscore-prefix gtk_tree_data_list_compare_func. 
+	* gtk/gtktreestore.c: Underscore-prefix 
+	gtk_tree_data_list_compare_func. 
 
 	* gtk/gtk.symbols: Remove gtk_tree_data_list_compare_func.
 
-	* gtk/makegtkalias.pl: No need to include gtktreedatalist.h any more.
+	* gtk/makegtkalias.pl: No need to include gtktreedatalist.h 
+	any more.
 
 2004-08-10  Matthias Clasen  <mclasen@redhat.com>
 
