@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-03-01 15:24+0100\n"
+"POT-Creation-Date: 2004-03-03 04:13+0100\n"
+"PO-Revision-Date: 2004-03-03 13:30+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -943,7 +943,7 @@ msgstr ""
 "Nemohu přidat záložku pro %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:638 gtk/gtkfilechooserdefault.c:4010
+#: gtk/gtkfilechooserdefault.c:638 gtk/gtkfilechooserdefault.c:4020
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1034,16 +1034,21 @@ msgstr "Uložit do _adresáře:"
 msgid "_Browse for other folders"
 msgstr "_Procházet jiné adresáře"
 
-#: gtk/gtkfilechooserdefault.c:3262
+#: gtk/gtkfilechooserdefault.c:2846
+#, c-format
+msgid "Could not set current folder: %s"
+msgstr "Nemohu nastavit aktuální adresář: %s"
+
+#: gtk/gtkfilechooserdefault.c:3272
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "zkratka %s neexistuje"
 
-#: gtk/gtkfilechooserdefault.c:3834
+#: gtk/gtkfilechooserdefault.c:3844
 msgid "Type name of new folder"
 msgstr "Napište název nového adresáře"
 
-#: gtk/gtkfilechooserdefault.c:3863
+#: gtk/gtkfilechooserdefault.c:3873
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1051,51 +1056,51 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajty"
 msgstr[2] "%d bajtů"
 
-#: gtk/gtkfilechooserdefault.c:3865
+#: gtk/gtkfilechooserdefault.c:3875
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3867
+#: gtk/gtkfilechooserdefault.c:3877
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3869
+#: gtk/gtkfilechooserdefault.c:3879
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3914
+#: gtk/gtkfilechooserdefault.c:3924
 msgid "Today"
 msgstr "Dnes"
 
-#: gtk/gtkfilechooserdefault.c:3916
+#: gtk/gtkfilechooserdefault.c:3926
 msgid "Yesterday"
 msgstr "Včera"
 
 #. FIXME: Get the right format for the locale
-#: gtk/gtkfilechooserdefault.c:3925
+#: gtk/gtkfilechooserdefault.c:3935
 msgid "%d/%b/%Y"
 msgstr "%d. %b %Y"
 
-#: gtk/gtkfilechooserdefault.c:3928
+#: gtk/gtkfilechooserdefault.c:3938
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: gtk/gtkfilechooserdefault.c:3973
+#: gtk/gtkfilechooserdefault.c:3983
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Nemohu přejít do určeného adresáře, protože je to neplatná cesta."
 
-#: gtk/gtkfilechooserdefault.c:4065
+#: gtk/gtkfilechooserdefault.c:4075
 msgid "Open Location"
 msgstr "Otevřít umístění"
 
-#: gtk/gtkfilechooserdefault.c:4080
+#: gtk/gtkfilechooserdefault.c:4090
 msgid "_Location:"
 msgstr "_Umístění:"
 
-#: gtk/gtkfilechooserdefault.c:4114
+#: gtk/gtkfilechooserdefault.c:4124
 #, c-format
 msgid ""
 "Could not go to the parent folder of %s:\n"
@@ -1303,7 +1308,7 @@ msgstr "Tento systém souborů nepodporuje připojování"
 msgid "Filesystem"
 msgstr "Systém souborů"
 
-#: gtk/gtkfilesystemunix.c:471 gtk/gtkfilesystemunix.c:1376
+#: gtk/gtkfilesystemunix.c:471 gtk/gtkfilesystemunix.c:1375
 #: gtk/gtkfilesystemwin32.c:1175
 #, c-format
 msgid "error getting information for '%s': %s"

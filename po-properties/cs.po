@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-03-02 13:25+0100\n"
+"POT-Creation-Date: 2004-03-03 04:13+0100\n"
+"PO-Revision-Date: 2004-03-03 13:32+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1352,11 +1352,11 @@ msgstr "Položka, která je právě aktivní"
 
 #: gtk/gtkcombobox.c:477
 msgid "Appears as list"
-msgstr ""
+msgstr "Vypadá jako seznam"
 
 #: gtk/gtkcombobox.c:478
 msgid "Whether combobox dropdowns should look like lists rather than menus"
-msgstr ""
+msgstr "Jestli má rozbalený combobox vypadat jako seznam a ne jako menu"
 
 #: gtk/gtkcomboboxentry.c:109
 msgid "Text Column"
@@ -4382,12 +4382,6 @@ msgstr "Styl stavu IM"
 #: modules/input/gtkimcontextxim.c:335
 msgid "How to draw the input method statusbar"
 msgstr "Jak kreslit stavovou lištu vstupní metody"
-
-#~ msgid "ComboBox appareance"
-#~ msgstr "Vzhled ComboBoxu"
-
-#~ msgid "ComboBox appearance, where TRUE means Windows-style."
-#~ msgstr "Vzhled ComboBoxu, kde TRUE znamená ve stylu Windows."
 
 #~ msgid "Folder Mode"
 #~ msgstr "Režim adresáře"
