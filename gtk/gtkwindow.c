@@ -1653,6 +1653,8 @@ gtk_window_set_decorated (GtkWindow *window,
   if (setting == window->decorated)
     return;
 
+  window->decorated = setting;
+  
   if (GTK_WIDGET (window)->window)
     {
       if (window->decorated)

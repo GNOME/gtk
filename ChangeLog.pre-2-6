@@ -1,3 +1,9 @@
+Thu Jul 19 12:14:28 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_set_decorated): Actualy
+	set window->decorated. (Patch from Hidetoshi Tajima,
+	#55846)
+
 Sat Jul  7 02:50:14 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_set_parent): Enforce
