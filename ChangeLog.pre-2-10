@@ -1,3 +1,8 @@
+2005-01-16  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdialog.c (gtk_file_chooser_dialog_new_with_backend):
+	Fix argument order in docs.  
+
 2005-01-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_check_keymap_direction): 
