@@ -437,7 +437,7 @@ gdk_window_new (GdkWindow     *parent,
   if (attributes_mask & GDK_WA_TITLE)
     title = attributes->title;
   else
-    title = gdk_progname;
+    title = g_get_prgname ();
 
   XmbSetWMProperties (private->xdisplay, private->xwindow,
                       title, title,

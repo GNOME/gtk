@@ -1255,8 +1255,8 @@ gtk_trim_cmap (GtkPreviewClass *klass)
   
   if ((nred < 2) || (ngreen < 2) || (nblue < 2) || (ngray < 2))
     {
-      g_message ("Unable to allocate sufficient colormap entries.\n");
-      g_message ("Try exiting other color intensive applications.\n");
+      g_message ("Unable to allocate sufficient colormap entries.");
+      g_message ("Try exiting other color intensive applications.");
       return;
     }
   
@@ -1266,8 +1266,8 @@ gtk_trim_cmap (GtkPreviewClass *klass)
       (nblue != klass->info.nblue_shades) ||
       (ngray != klass->info.ngray_shades))
     {
-      g_message ("Not enough colors to satisfy requested color cube.\n");
-      g_message ("Reduced color cube shades from\n");
+      g_message ("Not enough colors to satisfy requested color cube.");
+      g_message ("Reduced color cube shades from");
       g_message ("[%d of Red, %d of Green, %d of Blue, %d of Gray] ==> [%d of Red, %d of Green, %d of Blue, %d of Gray]\n",
 		 klass->info.nred_shades, klass->info.ngreen_shades,
 		 klass->info.nblue_shades, klass->info.ngray_shades,

@@ -48,7 +48,6 @@ GdkDndGlobals     gdk_dnd = {None,None,None,
 			     {0,0},
 			     {0,0}, {0,0},
 			     {0,0,0,0}, NULL, None, 0};
-gchar            *gdk_progname = NULL;
 gchar            *gdk_progclass = NULL;
 gint              gdk_error_code;
 gint              gdk_error_warnings = TRUE;

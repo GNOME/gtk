@@ -410,7 +410,7 @@ gtk_init (int	 *argc,
   g_free (current_locale);
 
   GTK_NOTE (MISC,
-	    g_message ("%s multi-byte string functions.\n", 
+	    g_message ("%s multi-byte string functions.", 
 		       gtk_use_mb ? "Using" : "Not using"));
   
   /* Initialize the default visual and colormap to be

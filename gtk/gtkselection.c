@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -28,7 +28,7 @@
  * guaranteed with the way we do things, since if we are doing INCR
  * transfers, the order will depend on the timing of the requestor.
  *
- * By Owen Taylor <owt1@cornell.edu>          8/16/97
+ * By Owen Taylor <owt1@cornell.edu>	      8/16/97
  */
 
 /* Terminology note: when not otherwise specified, the term "incr" below
@@ -81,13 +81,13 @@ struct _GtkSelectionInfo
 
 struct _GtkIncrConversion 
 {
-  GdkAtom           target;	/* Requested target */
-  GdkAtom           property;	/* Property to store in */
+  GdkAtom	    target;	/* Requested target */
+  GdkAtom	    property;	/* Property to store in */
   GtkSelectionData  data;	/* The data being supplied */
-  gint	            offset;	/* Current offset in sent selection.
+  gint		    offset;	/* Current offset in sent selection.
 				 *  -1 => All done
 				 *  -2 => Only the final (empty) portion
-				 *        left to send */
+				 *	  left to send */
 };
 
 struct _GtkIncrInfo
@@ -115,7 +115,7 @@ struct _GtkRetrievalInfo
   guint32 idle_time;		/* Number of seconds since we last heard
 				   from selection owner */
   guchar   *buffer;		/* Buffer in which to accumulate results */
-  gint     offset;		/* Current offset in buffer, -1 indicates
+  gint	   offset;		/* Current offset in buffer, -1 indicates
 				   not yet started */
 };
 
@@ -124,21 +124,21 @@ struct _GtkSelectionHandler
   GdkAtom selection;		/* selection thats handled */
   GdkAtom target;		/* target thats handled */
   GtkSelectionFunction function; /* callback function */
-  GtkCallbackMarshal marshal;    /* Marshalling function */
+  GtkCallbackMarshal marshal;	 /* Marshalling function */
   gpointer data;		 /* callback data */
-  GtkDestroyNotify destroy;      /* called when callback is removed */
+  GtkDestroyNotify destroy;	 /* called when callback is removed */
 };
 
 /* Local Functions */
-static void gtk_selection_init                   (void);
-static gint gtk_selection_incr_timeout           (GtkIncrInfo *info);
-static gint gtk_selection_retrieval_timeout      (GtkRetrievalInfo *info);
-static void gtk_selection_retrieval_report       (GtkRetrievalInfo *info,
+static void gtk_selection_init			 (void);
+static gint gtk_selection_incr_timeout		 (GtkIncrInfo *info);
+static gint gtk_selection_retrieval_timeout	 (GtkRetrievalInfo *info);
+static void gtk_selection_retrieval_report	 (GtkRetrievalInfo *info,
 						  GdkAtom type, gint format, 
 						  guchar *buffer, gint length);
-static void gtk_selection_invoke_handler         (GtkWidget        *widget,
+static void gtk_selection_invoke_handler	 (GtkWidget	   *widget,
 						  GtkSelectionData *data);
-static void gtk_selection_default_handler        (GtkWidget       *widget,
+static void gtk_selection_default_handler	 (GtkWidget	  *widget,
 						  GtkSelectionData *data);
 
 /* Local Data */
@@ -256,36 +256,36 @@ gtk_selection_owner_set (GtkWidget *widget,
  *     Add a handler for a specified selection/target pair
  *
  *   arguments:
- *     widget:     The widget the handler applies to
+ *     widget:	   The widget the handler applies to
  *     selection:
  *     target:
- *     format:     Format in which this handler will return data
+ *     format:	   Format in which this handler will return data
  *     function:   Callback function (can be NULL)
- *     marshal:    Callback marshal function
- *     data:       User data for callback
- *     destroy:    Called when handler removed
+ *     marshal:	   Callback marshal function
+ *     data:	   User data for callback
+ *     destroy:	   Called when handler removed
  *
  *   results:
  *************************************************************/
 
 void
-gtk_selection_add_handler (GtkWidget           *widget, 
-			   GdkAtom              selection,
-			   GdkAtom              target,
+gtk_selection_add_handler (GtkWidget	       *widget, 
+			   GdkAtom		selection,
+			   GdkAtom		target,
 			   GtkSelectionFunction function,
-			   gpointer             data)
+			   gpointer		data)
 {
   gtk_selection_add_handler_full (widget, selection, target, function,
 				  NULL, data, NULL);
 }
 
 void 
-gtk_selection_add_handler_full (GtkWidget           *widget, 
-				GdkAtom              selection,
-				GdkAtom              target,
+gtk_selection_add_handler_full (GtkWidget	    *widget, 
+				GdkAtom		     selection,
+				GdkAtom		     target,
 				GtkSelectionFunction function,
 				GtkCallbackMarshal   marshal,
-				gpointer             data,
+				gpointer	     data,
 				GtkDestroyNotify     destroy)
 {
   GList *selection_handlers;
@@ -443,11 +443,11 @@ gtk_selection_remove_all (GtkWidget *widget)
  *     a "selection_received" signal will be generated.
  *
  *   arguments:
- *     widget:     The widget which acts as requestor
+ *     widget:	   The widget which acts as requestor
  *     selection:  Which selection to get
- *     target:     Form of information desired (e.g., STRING)
- *     time:       Time of request (usually of triggering event)
- *                 In emergency, you could use GDK_CURRENT_TIME
+ *     target:	   Form of information desired (e.g., STRING)
+ *     time:	   Time of request (usually of triggering event)
+ *		   In emergency, you could use GDK_CURRENT_TIME
  *
  *   results:
  *     TRUE if requested succeeded. FALSE if we could not process
@@ -457,9 +457,9 @@ gtk_selection_remove_all (GtkWidget *widget)
 
 gint
 gtk_selection_convert (GtkWidget *widget, 
-		       GdkAtom    selection, 
-		       GdkAtom    target,
-		       guint32    time)
+		       GdkAtom	  selection, 
+		       GdkAtom	  target,
+		       guint32	  time)
 {
   GtkRetrievalInfo *info;
   GList *tmp_list;
@@ -547,18 +547,18 @@ gtk_selection_convert (GtkWidget *widget,
  *     Null terminates the stored data.
  *   arguments:
  *     type:	the type of selection data
- *     format:  format (number of bits in a unit)
- *     data:    pointer to the data (will be copied)
- *     length:  length of the data
+ *     format:	format (number of bits in a unit)
+ *     data:	pointer to the data (will be copied)
+ *     length:	length of the data
  *   results:
  *************************************************************/
 
 void 
 gtk_selection_data_set (GtkSelectionData *selection_data,
-			GdkAtom           type,
-			gint              format,
-			guchar           *data,
-			gint              length)
+			GdkAtom		  type,
+			gint		  format,
+			guchar		 *data,
+			gint		  length)
 {
   if (selection_data->data)
     g_free (selection_data->data);
@@ -707,7 +707,7 @@ gtk_selection_request (GtkWidget *widget,
       if (!gdk_property_get (info->requestor, event->property, GDK_SELECTION_TYPE_ATOM,
 			     0, GTK_SELECTION_MAX_SIZE, FALSE,
 			     &type, &format, &length, &mult_atoms) ||
-      	  type != GDK_SELECTION_TYPE_ATOM || format != 8*sizeof(GdkAtom))
+	  type != GDK_SELECTION_TYPE_ATOM || format != 8*sizeof(GdkAtom))
 	{
 	  gdk_selection_send_notify (event->requestor, event->selection,
 				     event->target, GDK_NONE, event->time);
@@ -747,10 +747,10 @@ gtk_selection_request (GtkWidget *widget,
       data.length = -1;
       
 #ifdef DEBUG_SELECTION
-      g_message("Selection %ld, target %ld (%s) requested by 0x%x (property = %ld)\n",
-		event->selection, info->conversions[i].target,
-		gdk_atom_name(info->conversions[i].target),
-		event->requestor, event->property);
+      g_message ("Selection %ld, target %ld (%s) requested by 0x%x (property = %ld)",
+		 event->selection, info->conversions[i].target,
+		 gdk_atom_name(info->conversions[i].target),
+		 event->requestor, event->property);
 #endif
       
       gtk_selection_invoke_handler (widget, &data);
@@ -805,7 +805,7 @@ gtk_selection_request (GtkWidget *widget,
 	 exist */
       
 #ifdef DEBUG_SELECTION
-      g_message("Starting INCR...\n");
+      g_message ("Starting INCR...");
 #endif
       
       gdk_window_set_events (info->requestor,
@@ -847,14 +847,14 @@ gtk_selection_request (GtkWidget *widget,
  *     more data.
  *
  *   arguments:
- *     window:  the requestor window
- *     event:   the property event structure
+ *     window:	the requestor window
+ *     event:	the property event structure
  *
  *   results:
  *************************************************************/
 
 gint
-gtk_selection_incr_event (GdkWindow        *window,
+gtk_selection_incr_event (GdkWindow	   *window,
 			  GdkEventProperty *event)
 {
   GList *tmp_list;
@@ -868,7 +868,7 @@ gtk_selection_incr_event (GdkWindow        *window,
     return FALSE;
   
 #ifdef DEBUG_SELECTION
-  g_message("PropertyDelete, property %ld\n", event->atom);
+  g_message ("PropertyDelete, property %ld", event->atom);
 #endif
   
   /* Now find the appropriate ongoing INCR */
@@ -915,9 +915,9 @@ gtk_selection_incr_event (GdkWindow        *window,
 		info->conversions[i].offset = -2;
 	    }
 #ifdef DEBUG_SELECTION
-	  g_message("INCR: put %d bytes (offset = %d) into window 0x%lx , property %ld\n",
-		    num_bytes, info->conversions[i].offset, 
-		    GDK_WINDOW_XWINDOW(info->requestor), event->atom);
+	  g_message ("INCR: put %d bytes (offset = %d) into window 0x%lx , property %ld",
+		     num_bytes, info->conversions[i].offset, 
+		     GDK_WINDOW_XWINDOW(info->requestor), event->atom);
 #endif
 	  gdk_property_change (info->requestor, event->atom,
 			       info->conversions[i].data.type,
@@ -959,7 +959,7 @@ gtk_selection_incr_event (GdkWindow        *window,
  *     Timeout callback for the sending portion of the INCR
  *     protocol
  *   arguments:
- *     info:    Information about this incr
+ *     info:	Information about this incr
  *   results:
  *************************************************************/
 
@@ -1010,15 +1010,15 @@ gtk_selection_incr_timeout (GtkIncrInfo *info)
  *     where a retrieval is currently in process. The selection
  *     owner has responded to our conversion request.
  *   arguments:
- *     widget:          Widget getting signal
- *     event:           Selection event structure
- *     info:            Information about this retrieval
+ *     widget:		Widget getting signal
+ *     event:		Selection event structure
+ *     info:		Information about this retrieval
  *   results:
  *     was event handled?
  *************************************************************/
 
 gint
-gtk_selection_notify (GtkWidget        *widget,
+gtk_selection_notify (GtkWidget	       *widget,
 		      GdkEventSelection *event)
 {
   GList *tmp_list;
@@ -1026,11 +1026,11 @@ gtk_selection_notify (GtkWidget        *widget,
   guchar  *buffer;
   gint length;
   GdkAtom type;
-  gint    format;
+  gint	  format;
   
 #ifdef DEBUG_SELECTION
-  g_message("Initial receipt of selection %ld, target %ld (property = %ld)\n",
-	    event->selection, event->target, event->property);
+  g_message ("Initial receipt of selection %ld, target %ld (property = %ld)",
+	     event->selection, event->target, event->property);
 #endif
   
   tmp_list = current_retrievals;
@@ -1095,15 +1095,15 @@ gtk_selection_notify (GtkWidget        *widget,
  *     where a retrieval is currently in process. The selection
  *     owner has added more data.
  *   arguments:
- *     widget:          Widget getting signal
- *     event:           Property event structure
- *     info:            Information about this retrieval
+ *     widget:		Widget getting signal
+ *     event:		Property event structure
+ *     info:		Information about this retrieval
  *   results:
  *     was event handled?
  *************************************************************/
 
 gint
-gtk_selection_property_notify (GtkWidget        *widget,
+gtk_selection_property_notify (GtkWidget	*widget,
 			       GdkEventProperty *event)
 {
   GList *tmp_list;
@@ -1111,15 +1111,15 @@ gtk_selection_property_notify (GtkWidget        *widget,
   guchar *new_buffer;
   int length;
   GdkAtom type;
-  gint    format;
+  gint	  format;
   
   if ((event->state != GDK_PROPERTY_NEW_VALUE) ||  /* property was deleted */
       (event->atom != gdk_selection_property)) /* not the right property */
     return FALSE;
   
 #ifdef DEBUG_SELECTION
-  g_message("PropertyNewValue, property %ld\n",
-	    event->atom);
+  g_message ("PropertyNewValue, property %ld",
+	     event->atom);
 #endif
   
   tmp_list = current_retrievals;
@@ -1164,8 +1164,8 @@ gtk_selection_property_notify (GtkWidget        *widget,
       if (!info->buffer)
 	{
 #ifdef DEBUG_SELECTION
-	  g_message("Start - Adding %d bytes at offset 0\n",
-		    length);
+	  g_message ("Start - Adding %d bytes at offset 0",
+		     length);
 #endif
 	  info->buffer = new_buffer;
 	  info->offset = length;
@@ -1174,8 +1174,8 @@ gtk_selection_property_notify (GtkWidget        *widget,
 	{
 	  
 #ifdef DEBUG_SELECTION
-	  g_message("Appending %d bytes at offset %d\n",
-		    length,info->offset);
+	  g_message ("Appending %d bytes at offset %d",
+		     length,info->offset);
 #endif
 	  /* We copy length+1 bytes to preserve guaranteed null termination */
 	  info->buffer = g_realloc (info->buffer, info->offset+length+1);
@@ -1240,8 +1240,8 @@ gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
  * gtk_selection_retrieval_report:
  *     Emits a "selection_received" signal.
  *   arguments:
- *     info:      information about the retrieval that completed
- *     buffer:    buffer containing data (NULL => errror)
+ *     info:	  information about the retrieval that completed
+ *     buffer:	  buffer containing data (NULL => errror)
  *   results:
  *************************************************************/
 
@@ -1271,15 +1271,15 @@ gtk_selection_retrieval_report (GtkRetrievalInfo *info,
  *     gtk_selection_default_handler if none exists.
  *
  *   arguments:
- *     widget:      selection owner
- *     data:        selection data [INOUT]
+ *     widget:	    selection owner
+ *     data:	    selection data [INOUT]
  *     
  *   results:
  *     Number of bytes written to buffer, -1 if error
  *************************************************************/
 
 static void
-gtk_selection_invoke_handler (GtkWidget        *widget,
+gtk_selection_invoke_handler (GtkWidget	       *widget,
 			      GtkSelectionData *data)
 {
   GList *tmp_list;
@@ -1328,13 +1328,13 @@ gtk_selection_invoke_handler (GtkWidget        *widget,
  *     require 1000 selection targets!
  *
  *   arguments:
- *     widget:      selection owner
- *     data:        selection data [INOUT]
+ *     widget:	    selection owner
+ *     data:	    selection data [INOUT]
  *
  *************************************************************/
 
 static void
-gtk_selection_default_handler (GtkWidget        *widget,
+gtk_selection_default_handler (GtkWidget	*widget,
 			       GtkSelectionData *data)
 {
   if (data->target == gtk_selection_atoms[TIMESTAMP])

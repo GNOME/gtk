@@ -29,7 +29,6 @@
 #include	"gtk/gtkcheckmenuitem.h"
 #include	"gtk/gtktearoffmenuitem.h"
 #include	"gtk/gtkaccellabel.h"
-#include	"gdk/gdkprivate.h" /* for gdk_progname */
 #include        "gdk/gdkkeysyms.h"
 #include	<string.h>
 #include	<sys/stat.h>
@@ -785,8 +784,8 @@ gtk_item_factory_dump_rc (const gchar            *file_name,
     return;
 
   fputs ("; ", f_out);
-  if (gdk_progname)
-    fputs (gdk_progname, f_out);
+  if (g_get_prgname ())
+    fputs (g_get_prgname (), f_out);
   fputs (" GtkItemFactory rc-file         -*- scheme -*-\n", f_out);
   fputs ("; this file is an automated menu-path dump\n", f_out);
   fputs (";\n", f_out);

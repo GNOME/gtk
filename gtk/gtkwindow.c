@@ -188,7 +188,7 @@ gtk_window_init (GtkWindow *window)
   gtk_container_set_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
 
   window->title = NULL;
-  window->wmclass_name = g_strdup (gdk_progname);
+  window->wmclass_name = g_strdup (g_get_prgname ());
   window->wmclass_class = g_strdup (gdk_progclass);
   window->type = GTK_WINDOW_TOPLEVEL;
   window->focus_widget = NULL;

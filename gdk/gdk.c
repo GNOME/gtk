@@ -328,9 +328,9 @@ gdk_init (int	 *argc,
 	  
 	  d = strrchr((*argv)[0],'/');
 	  if (d != NULL)
-	    gdk_progname = g_strdup (d + 1);
+	    g_set_prgname (d + 1);
 	  else
-	    gdk_progname = g_strdup ((*argv)[0]);
+	    g_set_prgname ((*argv)[0]);
 	}
       
       for (i = 1; i < *argc;)
@@ -406,7 +406,7 @@ gdk_init (int	 *argc,
 		if ((i + 1) < *argc && (*argv)[i + 1])
 		  {
 		    (*argv)[i++] = NULL;
-		    gdk_progname = (*argv)[i];
+		    g_set_prgname ((*argv)[i]);
 		    (*argv)[i] = NULL;
 		  }
 	      }
@@ -494,10 +494,10 @@ gdk_init (int	 *argc,
     }
   else
     {
-      gdk_progname = "<unknown>";
+      g_set_prgname ("<unknown>");
     }
   
-  GDK_NOTE (MISC, g_message ("progname: \"%s\"", gdk_progname));
+  GDK_NOTE (MISC, g_message ("progname: \"%s\"", g_get_prgname ()));
   
   gdk_display = XOpenDisplay (gdk_display_name);
   if (!gdk_display)
@@ -527,10 +527,10 @@ gdk_init (int	 *argc,
   gdk_leader_window = XCreateSimpleWindow(gdk_display, gdk_root_window,
 					  10, 10, 10, 10, 0, 0 , 0);
   class_hint = XAllocClassHint();
-  class_hint->res_name = gdk_progname;
+  class_hint->res_name = g_get_prgname ();
   if (gdk_progclass == NULL)
     {
-      gdk_progclass = g_strdup (gdk_progname);
+      gdk_progclass = g_strdup (g_get_prgname ());
       gdk_progclass[0] = toupper (gdk_progclass[0]);
     }
   class_hint->res_class = gdk_progclass;
@@ -1824,10 +1824,14 @@ gdk_event_translate (GdkEvent *event,
   
   if (window != NULL)
     gdk_window_ref (window);
-  else if(gdk_null_window_warnings) /* Special purpose programs that
-				       get events for other windows may
-				       want to disable this */
-    g_warning ("%#lx -> NULL\n", xevent->xany.window);
+  else if (gdk_null_window_warnings)
+    {
+      /* Special purpose programs that
+       * get events for other windows may
+       * want to disable this
+       */
+      g_warning ("xwindow(%#lx) lookup reveals NULL", xevent->xany.window);
+    }
   
   /* Check for filters for this window */
   

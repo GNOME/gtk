@@ -403,23 +403,20 @@ void
 gtk_type_describe_heritage (GtkType type)
 {
   GtkTypeNode *node;
-  gboolean first;
+  gchar *is_a = "";
   
   LOOKUP_TYPE_NODE (node, type);
-  first = TRUE;
   
   while (node)
     {
-      if (first)
-	{
-	  first = FALSE;
-	  g_message ("is a ");
-	}
-      
       if (node->type_info.type_name)
-	g_message ("%s\n", node->type_info.type_name);
+	g_message ("%s%s",
+		   is_a,
+		   node->type_info.type_name);
       else
-	g_message ("<unnamed type>\n");
+	g_message ("%s<unnamed type>",
+		   is_a);
+      is_a = "is a ";
       
       LOOKUP_TYPE_NODE (node, node->parent_type);
     }
@@ -439,19 +436,23 @@ gtk_type_describe_tree (GtkType	 type,
       GList *list;
       guint old_indent;
       guint i;
+      GString *gstring;
+
+      gstring = g_string_new ("");
       
       for (i = 0; i < indent; i++)
-	g_message (" ");
+	g_string_append_c (gstring, ' ');
       
       if (node->type_info.type_name)
-	g_message ("%s", node->type_info.type_name);
+	g_string_append (gstring, node->type_info.type_name);
       else
-	g_message ("(no-name)");
+	g_string_append (gstring, "<unnamed type>");
       
       if (show_size)
-	g_message (" ( %d bytes )\n", node->type_info.object_size);
-      else
-	g_message ("\n");
+	g_string_sprintfa (gstring, " (%d bytes)", node->type_info.object_size);
+
+      g_message ("%s", gstring->str);
+      g_string_free (gstring, TRUE);
       
       old_indent = indent;
       indent += 4;

@@ -1,3 +1,24 @@
+Tue Aug 18 17:54:40 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkrc.c (gtk_rc_parse_file): use g_get_current_dir() instead of
+	getcwd().
+
+ 	* gdk/gdkprivate.h:
+	* gdk/gdkglobals.c:
+ 	* gdk/gdkwindow.c:
+	* gdk/gdk.c:
+	* gtk/gtkwindow.c: 
+	* gtk/gtkitemfactory.c: 
+	dropped gdk_progname, use g_get_prgname()/g_set_prgname() instead.
+
+	* gtk/gtkselection.c:
+	* gtk/gtkpreview.c:
+	* gtk/gtkobject.c: 
+	* gtk/gtkmain.c: 
+	* gtk/gtktypeutils.c: indentation fixes due to g_message() use.
+
+	* gdk/gdkrgb.c: exchanged occourances of g_print with g_message.
+
 Tue Aug 18 17:22:22 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_switch_focus_tab): 
@@ -34,8 +55,6 @@ Tue Aug 18 03:54:43 1998  Tim Janik  <timj@gtk.org>
 	G{D|T}K_NOTE() macros, so they are special cased for debugging
 	purposes in a sane way, avoiding all the nasty #ifdef DEBUG_MY_TEDDY
 	things.
-
-	* gdk/gdkrgb.c: left this out currently.
 
 	* gdk/gdkdnd.c: added copyright notice.
 

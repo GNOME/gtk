@@ -248,16 +248,12 @@ gtk_rc_parse_file (const gchar *filename, gboolean reload)
       else
 	{
 	  GString *str;
-	  gchar buffer[MAXPATHLEN];
-	  
-#if defined(sun) && !defined(__SVR4)
-	  if(!getwd(buffer))
-#else
-	  if(!getcwd(buffer, MAXPATHLEN))
-#endif    
-	      return;
+	  gchar *cwd;
 
-	  str = g_string_new (buffer);
+	  cwd = g_get_current_dir ();
+
+	  str = g_string_new (cwd);
+	  g_free (cwd);
 	  g_string_append_c (str, '/');
 	  g_string_append (str, rc_file->name);
 	  
