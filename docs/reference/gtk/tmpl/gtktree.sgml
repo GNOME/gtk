@@ -2,10 +2,17 @@
 GtkTree
 
 <!-- ##### SECTION Short_Description ##### -->
-A treelist widget.
+Deprecated tree widget (use #GtkTreeView instead).
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
+<warning>
+<para>
+#GtkTree is deprecated and unsupported. It is known to be
+buggy. To use it, you must define the symbol %GTK_ENABLE_BROKEN
+prior to including the GTK+ header files. Use #GtkTreeView intead.
+</para>
+</warning>
 The #GtkTree widget is a container that shows users a list of items, in a tree format complete with branches and leafnodes. Branches can be expanded to show their child items, or collapsed to hide them.
 </para>
 

@@ -19,6 +19,15 @@ Drawables to Pixbufs
 @pixbuf: The pixbuf that is losing its last reference.
 @data: User closure data.
 
+<!-- ##### FUNCTION gdk_pixbuf_frame_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@Returns: 
+@frame: 
+
 <!-- ##### SECTION ./tmpl/rendering.sgml:See_Also ##### -->
   <para>
     GdkRGB
@@ -704,6 +713,14 @@ Getting parts of a drawable's image data into a pixbuf.
 <!-- ##### SECTION ./tmpl/xlib-rendering.sgml:Title ##### -->
 Xlib Rendering
 
+
+<!-- ##### FUNCTION gdk_pixbuf_frame_free ##### -->
+<para>
+
+</para>
+
+@frame: 
+@src: 
 
 <!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Title ##### -->
 gdk-pixbuf-io

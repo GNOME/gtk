@@ -85,8 +85,8 @@ types related to the text widget and how they work together.
 @use_align: 
 @xalign: 
 @yalign: 
-@Returns: 
 <!-- # Unused Parameters # -->
+@Returns: 
 @mark_within_margin: 
 
 
@@ -97,6 +97,7 @@ types related to the text widget and how they work together.
 
 @text_view: 
 @mark: 
+<!-- # Unused Parameters # -->
 @Returns: 
 
 

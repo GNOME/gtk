@@ -327,6 +327,13 @@ A structure used to return values from @gtk_type_query.
 @func_data: 
 @args: 
 
+<!-- ##### ARG GtkTextTag:justify ##### -->
+<para>
+A #GtkJustification for the text. This is only used when the tag is
+applied to the first character in a paragraph.
+</para>
+
+
 <!-- ##### USER_FUNCTION GtkSignalMarshal ##### -->
 <para>
 This is currently a hack left in for a scheme wrapper library.
@@ -744,6 +751,15 @@ Deprecated.
 @func_data: 
 @args: 
 
+<!-- ##### FUNCTION gtk_tree_store_getv ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@var_args: 
+
 <!-- ##### FUNCTION gtk_text_buffer_cut ##### -->
 <para>
 
@@ -853,6 +869,17 @@ the number of columns specified.
 @factory: 
 @entries: 
 @nentries: 
+
+<!-- ##### FUNCTION gtk_tree_view_move_to ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@path: 
+@column: 
+@row_align: 
+@col_align: 
 
 <!-- ##### FUNCTION gtk_text_buffer_find_string ##### -->
 <para>
@@ -1326,6 +1353,14 @@ of the widget.
 
 @editable: the object which received the signal.
 
+<!-- ##### FUNCTION gtk_tree_view_column_get_size ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Returns: 
+
 <!-- ##### STRUCT GtkMenuFactory ##### -->
 <para>
 
@@ -1689,6 +1724,14 @@ should have in their prototype (of length nparams).
 @func_data: 
 @args: 
 
+<!-- ##### FUNCTION gtk_tree_view_column_set_header_clickable ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@active: 
+
 <!-- ##### FUNCTION gtk_color_selection_set_opacity ##### -->
 <para>
 Controls whether opacity can be set with the #GtkColorSelection.
@@ -1838,6 +1881,14 @@ The first "flat" (no struct) enumerated type value.
 </para>
 
 @tree_model_sort: 
+
+<!-- ##### FUNCTION gtk_tree_view_column_get_col_type ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_menu_factory_new ##### -->
 <para>
@@ -2234,6 +2285,12 @@ object.
 @pixmap: 
 @mask: 
 
+<!-- ##### ARG GtkTextTag:justify-set ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK_C_CALLBACK ##### -->
 <para>
 
@@ -2394,6 +2451,15 @@ destroyed.
 
 @window: 
 @defaultw: 
+
+<!-- ##### FUNCTION gtk_tree_store_setv ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
+@var_args: 
 
 <!-- ##### SIGNAL GtkTextBuffer::delete-text ##### -->
 <para>
@@ -2702,6 +2768,14 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_CALLBACK
 
 @iter: 
 @Returns: 
+
+<!-- ##### FUNCTION gtk_tree_store_get_root_iter ##### -->
+<para>
+
+</para>
+
+@tree_store: 
+@iter: 
 
 <!-- ##### STRUCT GtkTextBTree ##### -->
 <para>

@@ -26,6 +26,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#define GTK_ENABLE_BROKEN
 #include "gtk.h"
 
 typedef enum {

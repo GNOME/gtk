@@ -25,12 +25,13 @@
  */
 
 #include "gtklabel.h"
-#include "gtktree.h"
-#include "gtktreeitem.h"
 #include "gtkeventbox.h"
 #include "gtkpixmap.h"
 #include "gtkmain.h"
 #include "gtksignal.h"
+#define GTK_ENABLE_BROKEN
+#include "gtktree.h"
+#include "gtktreeitem.h"
 
 #include "tree_plus.xpm"
 #include "tree_minus.xpm"

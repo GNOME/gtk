@@ -269,3 +269,8 @@ when it is shown in %GTK_PROGRESS_DISCRETE style.
 
 </para>
 
+<!-- ##### ARG GtkProgressBar:text ##### -->
+<para>
+
+</para>
+

@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifdef GTK_ENABLE_BROKEN
+
 #ifndef __GTK_TREE_ITEM_H__
 #define __GTK_TREE_ITEM_H__
 
@@ -91,3 +93,5 @@ void       gtk_tree_item_collapse       (GtkTreeItem *tree_item);
 
 
 #endif /* __GTK_TREE_ITEM_H__ */
+
+#endif /* GTK_ENABLE_BROKEN */

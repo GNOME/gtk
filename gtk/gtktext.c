@@ -31,6 +31,7 @@
 #include "gtkmain.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
+#define GTK_ENABLE_BROKEN
 #include "gtktext.h"
 #include "line-wrap.xbm"
 #include "line-arrow.xbm"

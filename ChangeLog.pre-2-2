@@ -1,3 +1,19 @@
+2001-01-30  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktreeitem.h, gtk/gtktree.h, gtk/gtktext.h: bracket in 
+	#ifdef GTK_ENABLE_BROKEN.
+
+	* gtk/gtktreeitem.c, gtk/gtktree.c, gtk/gtktext.c: #define
+	GTK_ENABLE_BROKEN just before including the broken headers.
+	
+	* gtk/gtktypeutils.c: #define GTK_ENABLE_BROKEN, so we can get the
+	deprecated types registered.
+
+	* gtk/testgtk.c, gtk/testselection.c: #define GTK_ENABLE_BROKEN,
+	we have to test the broken stuff.
+
+        * docs/Changes-2.0.txt: explain GTK_ENABLE_BROKEN
+	
 2001-01-30  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkliststore.c (gtk_list_store_insert_before): fix bug in

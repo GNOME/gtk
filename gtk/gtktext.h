@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifdef GTK_ENABLE_BROKEN
+
 #ifndef __GTK_TEXT_H__
 #define __GTK_TEXT_H__
 
@@ -218,3 +220,5 @@ gint       gtk_text_forward_delete  (GtkText       *text,
 
 
 #endif /* __GTK_TEXT_H__ */
+
+#endif /* GTK_ENABLE_BROKEN */

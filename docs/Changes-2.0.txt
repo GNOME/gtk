@@ -287,3 +287,9 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   implementations. The draw method was rarely called in practice
   anyway.
  
+- GtkText and GtkTree are buggy and broken. We don't recommend using
+  them, and changing old code to avoid them is a good idea. The
+  recommended alternatives are GtkTextView and GtkTreeView.  The
+  broken widgets are not declared in the headers by default; to use
+  them, define the symbol GTK_ENABLE_BROKEN during compilation.  In
+  some future release, these widgets will be removed from GTK+.

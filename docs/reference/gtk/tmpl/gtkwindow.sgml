@@ -245,6 +245,15 @@ it's larger
 @Returns: 
 
 
+<!-- ##### SIGNAL GtkWindow::frame-event ##### -->
+<para>
+
+</para>
+
+@window: the object which received the signal.
+@event: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkWindow::set-focus ##### -->
 <para>
 

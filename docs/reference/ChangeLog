@@ -1,3 +1,19 @@
+2001-01-30  Havoc Pennington  <hp@pobox.com>
+
+        Also committed a bunch of automatic changes made by gtk-doc, 
+	after reviewing for correctness.
+	
+	* gtk/tmpl/gtktext.sgml: add warning about deprecation and note
+	about what to use instead
+
+	* gtk/tmpl/gtktree.sgml: ditto
+
+	* gtk/Makefile.am (scan): pass --deprecated-guards option to
+	gtk-doc
+
+	* gtk/gtk-docs.sgml: move GtkText to the deprecated section 
+	instead of the GtkTextView section. Oops.
+
 Tue Jan 30 16:01:54 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtkclist.sgml: Added note explaining how

@@ -33,7 +33,6 @@
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtksignal.h"
-#include "gtktext.h"
 #include "gtktextdisplay.h"
 #include "gtktextview.h"
 #include "gtkimmulticontext.h"

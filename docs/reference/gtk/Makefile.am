@@ -103,7 +103,7 @@ endif
 scan:
 	(cd $(srcdir) \
 	&& CC="$(GTKDOC_CC)" LD="$(GTKDOC_LD)" CFLAGS="$(GTKDOC_CFLAGS)" LDFLAGS="$(GTKDOC_LIBS)" gtkdoc-scangobj --module=$(DOC_MODULE) \
-	&& gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --ignore-headers="$(IGNORE_HFILES)" $(EXTRA_HFILES))
+	&& gtkdoc-scan --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) --deprecated-guards="GTK_ENABLE_BROKEN|GTK_DISABLE_DEPRECATED" --ignore-headers="$(IGNORE_HFILES)" $(EXTRA_HFILES))
 
 templates: 
 	cd $(srcdir) && gtkdoc-mktmpl --module=$(DOC_MODULE)

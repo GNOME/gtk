@@ -261,7 +261,6 @@ An advanced widget set.
         &gtk-TextWidget;
         &gtk-GtkTextIter;
         &gtk-GtkTextMark;
-        &GtkText;
         &GtkTextBuffer;
         &GtkTextTag;
         &GtkTextTagTable;
@@ -393,6 +392,7 @@ An advanced widget set.
         &GtkPreview;
         &GtkProgress;
         &GtkRuler;
+        &GtkText;
         &GtkTipsQuery;
         &GtkTree;
         &GtkTreeItem;

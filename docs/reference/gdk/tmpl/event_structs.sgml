@@ -95,8 +95,6 @@ example, it is these characters which should be added to the input buffer.
 When using <link linkend="gdk-Input-Methods"> Input Methods</link> to support
 internationalized text input, the composed characters appear here after the
 pre-editing has been completed.
-@hardware_keycode: 
-@group: 
 
 <!-- ##### STRUCT GdkEventButton ##### -->
 <para>

@@ -24,11 +24,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "gtktree.h"
-#include "gtktreeitem.h"
 #include "gtkmain.h"
 #include "gtksignal.h"
 #include "gtklist.h"
+
+#define GTK_ENABLE_BROKEN
+#include "gtktree.h"
+#include "gtktreeitem.h"
 
 enum {
   SELECTION_CHANGED,

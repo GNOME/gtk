@@ -29,6 +29,7 @@ GtkTreeViewColumn
 @parent: 
 @tree_view: 
 @button: 
+@child: 
 @window: 
 @justification: 
 @id: 
@@ -150,24 +151,6 @@ GtkTreeViewColumn
 @type: 
 
 
-<!-- ##### FUNCTION gtk_tree_view_column_get_col_type ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_tree_view_column_get_size ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_tree_view_column_set_width ##### -->
 <para>
 
@@ -229,15 +212,6 @@ GtkTreeViewColumn
 
 @tree_column: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_tree_view_column_set_header_clickable ##### -->
-<para>
-
-</para>
-
-@tree_column: 
-@active: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_column_set_widget ##### -->

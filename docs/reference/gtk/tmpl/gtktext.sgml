@@ -2,10 +2,17 @@
 GtkText
 
 <!-- ##### SECTION Short_Description ##### -->
-text widget which allows display and manipulation of arbitrary text
+deprecated text widget, use #GtkTextView instead
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
+<warning>
+<para>
+#GtkText is deprecated and unsupported. It is known to be
+buggy. To use it, you must define the symbol %GTK_ENABLE_BROKEN
+prior to including the GTK+ header files. Use #GtkTextView instead.
+</para>
+</warning>
 A #GtkText widget allows one to display any given text and manipulate it
 by deleting from one point to another, selecting a region, and various
 other functions as outlined below.  It is inherited from #GtkEditable.

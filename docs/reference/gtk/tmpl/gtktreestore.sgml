@@ -84,16 +84,6 @@ GtkTreeStore
 @Varargs: 
 
 
-<!-- ##### FUNCTION gtk_tree_store_setv ##### -->
-<para>
-
-</para>
-
-@tree_store: 
-@iter: 
-@var_args: 
-
-
 <!-- ##### FUNCTION gtk_tree_store_get ##### -->
 <para>
 
@@ -102,16 +92,6 @@ GtkTreeStore
 @tree_store: 
 @iter: 
 @Varargs: 
-
-
-<!-- ##### FUNCTION gtk_tree_store_getv ##### -->
-<para>
-
-</para>
-
-@tree_store: 
-@iter: 
-@var_args: 
 
 
 <!-- ##### FUNCTION gtk_tree_store_remove ##### -->
@@ -174,15 +154,6 @@ GtkTreeStore
 @tree_store: 
 @iter: 
 @parent: 
-
-
-<!-- ##### FUNCTION gtk_tree_store_get_root_iter ##### -->
-<para>
-
-</para>
-
-@tree_store: 
-@iter: 
 
 
 <!-- ##### FUNCTION gtk_tree_store_is_ancestor ##### -->

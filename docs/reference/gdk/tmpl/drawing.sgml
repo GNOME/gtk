@@ -111,24 +111,6 @@ Drawing Primitives
 @height: 
 
 
-<!-- ##### FUNCTION gdk_drawable_get_clip_region ##### -->
-<para>
-
-</para>
-
-@drawable: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_drawable_get_visible_region ##### -->
-<para>
-
-</para>
-
-@drawable: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_draw_point ##### -->
 <para>
 

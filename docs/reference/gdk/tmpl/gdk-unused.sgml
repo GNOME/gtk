@@ -36,6 +36,32 @@ Retrieves the motion history for a given device/window pair.
 </para>
 
 
+<!-- ##### FUNCTION gdk_keymap_translate_keyboard_state ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@hardware_keycode: 
+@state: 
+@group: 
+@keyval: 
+@effective_group: 
+@level: 
+@unused_modifiers: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_keymap_get_entries_for_keyval ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@keyval: 
+@keys: 
+@n_keys: 
+@Returns: 
+
 <!-- ##### SECTION ./tmpl/gdkregion.sgml:Long_Description ##### -->
 <para>
 
@@ -90,9 +116,64 @@ This is all pixels in either of @source1 or @source2.
 @source2: a #GdkRegion.
 @Returns: the union of @source1 and @source2.
 
+<!-- ##### FUNCTION gdk_drawable_get_visible_region ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_colormap_query_color ##### -->
+<para>
+
+</para>
+
+@colormap: 
+@pixel: 
+@result: 
+
+<!-- ##### FUNCTION gdk_event_get_state ##### -->
+<para>
+
+</para>
+
+@event: 
+@state: 
+@Returns: 
+
 <!-- ##### SECTION ./tmpl/gdkregion.sgml:Short_Description ##### -->
 
 
+
+<!-- ##### FUNCTION gdk_window_get_decorations ##### -->
+<para>
+
+</para>
+
+@window: 
+@decorations: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_keymap_get_entries_for_keycode ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@hardware_keycode: 
+@keys: 
+@keyvals: 
+@n_entries: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_drawable_get_clip_region ##### -->
+<para>
+
+</para>
+
+@drawable: 
+@Returns: 
 
 <!-- ##### FUNCTION gdk_input_set_key ##### -->
 <para>
@@ -115,6 +196,13 @@ configuration information.
 @Returns: A #GList of #GdkDeviceInfo structures. This list
           is internal data of GTK+ and should not be modified 
           or freed.
+
+<!-- ##### STRUCT GdkKeymap ##### -->
+<para>
+
+</para>
+
+@parent_instance: 
 
 <!-- ##### SECTION ./tmpl/input_methods.sgml.sgml:See_Also ##### -->
 <para>
@@ -179,6 +267,24 @@ onto the predefined valuator types that GTK+ understands.
 @axes: an array of GdkAxisUse. This length of this array
        must match the number of axes for the device.
 
+<!-- ##### STRUCT GdkSpan ##### -->
+<para>
+
+</para>
+
+@x: 
+@y: 
+@width: 
+
+<!-- ##### STRUCT GdkKeyInfo ##### -->
+<para>
+
+</para>
+
+@keycode: 
+@group: 
+@level: 
+
 <!-- ##### FUNCTION gdk_input_set_source ##### -->
 <para>
 Sets the source type for a device.
@@ -186,6 +292,27 @@ Sets the source type for a device.
 
 @deviceid: the device to configure
 @source: the new source type.
+
+<!-- ##### FUNCTION gdk_region_spans_intersect_foreach ##### -->
+<para>
+Intersects a set of spans with a region and call a user specified
+function for each resulting spanline. This function is a lot more effective
+if the spans are sorted.
+</para>
+
+@region: The region to intersect against.
+@spans: Array of spans to intersect.
+@n_spans: Number of spans.
+@sorted: True if the spans are sorted in increasing y order.
+@function: The function to call for each intersected spanline.
+@data: Opaque user data passed to function.
+
+<!-- ##### FUNCTION gdk_keymap_get_default ##### -->
+<para>
+
+</para>
+
+@Returns: 
 
 <!-- ##### SECTION ./tmpl/gdkregion.sgml:Title ##### -->
 Points, Rectangles and Regions
@@ -200,9 +327,41 @@ Returns the intersection of two regions.
 @source2: a #GdkRegion.
 @Returns: the intersection of @source1 and @source2.
 
+<!-- ##### FUNCTION gdk_keymap_lookup_key ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@key: 
+@Returns: 
+
+<!-- ##### USER_FUNCTION GdkSpanFunc ##### -->
+<para>
+
+</para>
+
+@span: The intersected part of the span.
+@data: Opaque data passed by user.
+
+<!-- ##### STRUCT GdkKeymapClass ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### SECTION ./tmpl/gdkkeys.sgml:Title ##### -->
 Keyboard Handling
 
+
+<!-- ##### STRUCT GdkKeymapKey ##### -->
+<para>
+
+</para>
+
+@keycode: 
+@group: 
+@level: 
 
 <!-- ##### FUNCTION gdk_input_set_mode ##### -->
 <para>

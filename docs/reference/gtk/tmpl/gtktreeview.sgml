@@ -157,6 +157,8 @@ GtkTreeView
 </para>
 
 @tree_view: 
+@setting: 
+<!-- # Unused Parameters # -->
 @active: 
 
 
@@ -201,18 +203,6 @@ GtkTreeView
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_tree_view_move_to ##### -->
-<para>
-
-</para>
-
-@tree_view: 
-@path: 
-@column: 
-@row_align: 
-@col_align: 
-
-
 <!-- ##### FUNCTION gtk_tree_view_get_path_at_pos ##### -->
 <para>
 
@@ -224,6 +214,8 @@ GtkTreeView
 @y: 
 @path: 
 @column: 
+@cell_x: 
+@cell_y: 
 @Returns: 
 
 

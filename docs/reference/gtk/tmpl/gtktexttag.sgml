@@ -41,7 +41,7 @@ types related to the text widget and how they work together.
 @stretch_set: 
 @size_set: 
 @fg_stipple_set: 
-@justify_set: 
+@justification_set: 
 @left_margin_set: 
 @indent_set: 
 @rise_set: 
@@ -82,9 +82,9 @@ types related to the text widget and how they work together.
 Describes a type of line wrapping.
 </para>
 
-@GTK_WRAPMODE_NONE: don't wrap lines; just use scrollbars
-@GTK_WRAPMODE_CHAR: allow line breaks between any two characters
-@GTK_WRAPMODE_WORD: allow line breaks only between words
+@GTK_WRAP_NONE: 
+@GTK_WRAP_CHAR: 
+@GTK_WRAP_WORD: 
 
 <!-- ##### STRUCT GtkTextAttributes ##### -->
 <para>
@@ -93,7 +93,7 @@ Describes a type of line wrapping.
 
 @refcount: 
 @appearance: 
-@justify: 
+@justification: 
 @direction: 
 @font: 
 @left_margin: 
@@ -322,10 +322,9 @@ Font as a #PangoFontDescription.
 
 </para>
 
-<!-- ##### ARG GtkTextTag:justify ##### -->
+<!-- ##### ARG GtkTextTag:justification ##### -->
 <para>
-A #GtkJustification for the text. This is only used when the tag is
-applied to the first character in a paragraph.
+
 </para>
 
 <!-- ##### ARG GtkTextTag:language ##### -->
@@ -468,7 +467,7 @@ applies to the first character in a paragraph.
 
 </para>
 
-<!-- ##### ARG GtkTextTag:justify-set ##### -->
+<!-- ##### ARG GtkTextTag:justification-set ##### -->
 <para>
 
 </para>

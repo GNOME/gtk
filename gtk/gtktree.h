@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifdef GTK_ENABLE_BROKEN
+
 #ifndef __GTK_TREE_H__
 #define __GTK_TREE_H__
 
@@ -132,3 +134,5 @@ void       gtk_tree_remove_item        (GtkTree          *tree,
 
 
 #endif /* __GTK_TREE_H__ */
+
+#endif /* GTK_ENABLE_BROKEN */

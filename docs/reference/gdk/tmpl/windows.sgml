@@ -871,16 +871,6 @@ Windows
 @decorations: 
 
 
-<!-- ##### FUNCTION gdk_window_get_decorations ##### -->
-<para>
-
-</para>
-
-@window: 
-@decorations: 
-@Returns: 
-
-
 <!-- ##### ENUM GdkWMDecoration ##### -->
 <para>
 

@@ -102,6 +102,7 @@ gtk_type_new (GtkType type)
 /* includes for various places
  * with enum definitions
  */
+#define GTK_ENABLE_BROKEN
 #include "makeenums.h"
 /* type variable declarations
  */
