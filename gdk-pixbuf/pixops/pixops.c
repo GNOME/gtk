@@ -672,9 +672,9 @@ scale_pixel (art_u8 *dest, int dest_x, int dest_channels, int dest_has_alpha,
     }
   else
     {
-      dest[0] = r >> 16;
-      dest[1] = g >> 16;
-      dest[2] = b >> 16;
+      dest[0] = (r + 0xffffff) >> 24;
+      dest[1] = (g + 0xffffff) >> 24;
+      dest[2] = (b + 0xffffff) >> 24;
       
       if (dest_has_alpha)
 	dest[3] = 0xff;
@@ -755,9 +755,9 @@ scale_line (int *weights, int n_x, int n_y,
 		}
 	    }
 
-	  dest[0] = r >> 16;
-	  dest[1] = g >> 16;
-	  dest[2] = b >> 16;
+	  dest[0] = (r + 0xffff) >> 16;
+	  dest[1] = (g + 0xffff) >> 16;
+	  dest[2] = (b + 0xffff) >> 16;
 	  
 	  if (dest_has_alpha)
 	    dest[3] = 0xff;

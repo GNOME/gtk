@@ -1,3 +1,8 @@
+2000-02-19  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixbuf/pixops/pixops.c (scale_pixel): Fix error in
+	scale factors for non-alpha case.
+
 2000-02-14  Mark Crichton  <crichton@gimp.org>
 
 	* gdk-pixbuf/io-xpm.c (xpm_extract_color): Added check for "g" color type.
