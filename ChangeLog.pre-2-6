@@ -1,3 +1,8 @@
+Sun Feb 22 20:42:04 1998  Marc Ewing <marc@redhat.com>
+
+	* gtk/gtkclist.c (gtk_clist_insert): Allow inserts
+	on empty clists.
+	
 Sun Feb 22 14:28:43 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkmain.c (gtk_events_pending): Count idle handlers

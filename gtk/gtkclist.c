@@ -1221,26 +1221,31 @@ gtk_clist_insert (GtkCList * clist,
   g_return_if_fail (text != NULL);
 
   /* return if out of bounds */
-  if (row < 0 || row > (clist->rows - 1))
+  if (row < 0 || row > clist->rows)
     return;
 
-  /* create the row */
-  clist_row = row_new (clist);
-
-  /* set the text in the row's columns */
-  if (text)
-    for (i = 0; i < clist->columns; i++)
-      if (text[i])
-	cell_set_text (clist, clist_row, i, text[i]);
-
-  /* reset the row end pointer if we're inserting at the
-   * end of the list */
-  if (row == clist->rows)
-    clist->row_list_end = (g_list_append (clist->row_list_end, clist_row))->next;
+  if (clist->rows == 0)
+    gtk_clist_append (clist, text);
   else
-    clist->row_list = g_list_insert (clist->row_list, clist_row, row);
+    {
+      /* create the row */
+      clist_row = row_new (clist);
 
-  clist->rows++;
+      /* set the text in the row's columns */
+      if (text)
+	for (i = 0; i < clist->columns; i++)
+	  if (text[i])
+	    cell_set_text (clist, clist_row, i, text[i]);
+      
+      /* reset the row end pointer if we're inserting at the
+       * end of the list */
+      if (row == clist->rows)
+	clist->row_list_end = (g_list_append (clist->row_list_end, clist_row))->next;
+      else
+	clist->row_list = g_list_insert (clist->row_list, clist_row, row);
+
+      clist->rows++;
+    }
 
   /* redraw the list if it isn't frozen */
   if (!GTK_CLIST_FROZEN (clist))
