@@ -477,8 +477,7 @@ gtk_layout_map (GtkWidget *widget)
 
       if (GTK_WIDGET_VISIBLE (child->widget))
 	{
-	  if (!GTK_WIDGET_MAPPED (child->widget) && 
-	      !GTK_WIDGET_IS_OFFSCREEN (child->widget))
+	  if (!GTK_WIDGET_MAPPED (child->widget))
 	    gtk_widget_map (child->widget);
 	}
     }
@@ -664,8 +663,6 @@ gtk_layout_remove (GtkContainer *container,
 
   if (tmp_list)
     {
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_IS_OFFSCREEN);
-
       gtk_widget_unparent (widget);
 
       layout->children = g_list_remove_link (layout->children, tmp_list);
