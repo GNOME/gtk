@@ -1,5 +1,8 @@
 2004-10-15  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/tmpl/gtkaboutdialog.sgml: More short description 
+	unification.
+
 	* gtk/tmpl/gtkenums.sgml: Note that GTK_RESIZE_IMMEDIATE 
 	is deprecated.
 

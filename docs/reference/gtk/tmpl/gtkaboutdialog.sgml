@@ -2,7 +2,7 @@
 GtkAboutDialog
 
 <!-- ##### SECTION Short_Description ##### -->
-a widget displaying information about a program
+Display information about an application
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
