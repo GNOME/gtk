@@ -596,7 +596,7 @@ gtk_preview_make_buffer (GtkPreview *preview)
     }
 }
 
-/* This will be useful for implementing gamma. */
+/* This is used for implementing gamma. */
 static void
 gtk_fill_lookup_array (guchar *array)
 {
