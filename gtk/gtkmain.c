@@ -440,14 +440,14 @@ gtk_main_iteration_do (gboolean blocking)
 	    {
 	      gtk_widget_event (grab_widget, event);
 	      if (event_widget == grab_widget)
-		GTK_PRIVATE_SET_FLAGS (event_widget, GTK_LEAVE_PENDING);
+		GTK_PRIVATE_SET_FLAG (event_widget, GTK_LEAVE_PENDING);
 	    }
 	  break;
 
 	case GDK_LEAVE_NOTIFY:
 	  if (event_widget && GTK_WIDGET_LEAVE_PENDING (event_widget))
 	    {
-	      GTK_PRIVATE_UNSET_FLAGS (event_widget, GTK_LEAVE_PENDING);
+	      GTK_PRIVATE_UNSET_FLAG (event_widget, GTK_LEAVE_PENDING);
 	      gtk_widget_event (event_widget, event);
 	    }
 	  else if (grab_widget && GTK_WIDGET_IS_SENSITIVE (grab_widget))

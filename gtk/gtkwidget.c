@@ -1218,7 +1218,7 @@ gtk_widget_hide_all (GtkWidget *widget)
       if (toplevel != widget)
 	GTK_CONTAINER (toplevel)->resize_widgets =
 	  g_slist_remove (GTK_CONTAINER (toplevel)->resize_widgets, widget);
-      GTK_PRIVATE_UNSET_FLAGS (widget, GTK_RESIZE_NEEDED);
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
     }
   
   widget_class = GTK_WIDGET_CLASS(GTK_OBJECT(widget)->klass);
@@ -1386,7 +1386,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
 	  parent = parent->parent;
 	}
       
-      GTK_PRIVATE_SET_FLAGS (widget, GTK_REDRAW_PENDING);
+      GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_PENDING);
       if (gtk_widget_redraw_queue == NULL)
 	gtk_idle_add ((GtkFunction) gtk_widget_idle_draw, NULL);
 
@@ -1432,7 +1432,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
 	{
 	  if (!GTK_CONTAINER_RESIZE_PENDING (toplevel))
 	    {
-	      GTK_PRIVATE_SET_FLAGS (toplevel, GTK_RESIZE_PENDING);
+	      GTK_PRIVATE_SET_FLAG (toplevel, GTK_RESIZE_PENDING);
               if (gtk_widget_resize_queue == NULL)
 		gtk_idle_add ((GtkFunction) gtk_widget_idle_sizer, NULL);
 	      gtk_widget_resize_queue = g_slist_prepend (gtk_widget_resize_queue, toplevel);
@@ -1440,7 +1440,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
 	  
           if (!GTK_WIDGET_RESIZE_NEEDED (widget))
 	    {
-	      GTK_PRIVATE_SET_FLAGS (widget, GTK_RESIZE_NEEDED);
+	      GTK_PRIVATE_SET_FLAG (widget, GTK_RESIZE_NEEDED);
 	      GTK_CONTAINER (toplevel)->resize_widgets =
 		g_slist_prepend (GTK_CONTAINER (toplevel)->resize_widgets, widget);
 	    }
@@ -1871,7 +1871,7 @@ gtk_widget_reparent (GtkWidget *widget,
  	{
 	  /* Set a flag so that gtk_widget_unparent doesn't unrealize widget
 	   */
-	  GTK_PRIVATE_SET_FLAGS (widget, GTK_IN_REPARENT);
+	  GTK_PRIVATE_SET_FLAG (widget, GTK_IN_REPARENT);
 	}
 
       gtk_widget_ref (widget);
@@ -1908,7 +1908,7 @@ gtk_widget_reparent (GtkWidget *widget,
 	  else
 	    gdk_window_reparent (widget->window, gtk_widget_get_parent_window (widget), 0, 0);
 
-	  GTK_PRIVATE_UNSET_FLAGS (widget, GTK_IN_REPARENT);
+	  GTK_PRIVATE_UNSET_FLAG (widget, GTK_IN_REPARENT);
 	}
     }
 }
@@ -2327,7 +2327,7 @@ gtk_widget_set_style (GtkWidget *widget,
 {
   g_return_if_fail (widget != NULL);
   
-  GTK_PRIVATE_SET_FLAGS (widget, GTK_USER_STYLE);
+  GTK_PRIVATE_SET_FLAG (widget, GTK_USER_STYLE);
   gtk_widget_set_style_internal (widget, style);
 }
 
@@ -3065,13 +3065,13 @@ gtk_widget_real_destroy (GtkObject *object)
   if (GTK_WIDGET_REDRAW_PENDING (widget))
     {
       gtk_widget_redraw_queue = g_slist_remove (gtk_widget_redraw_queue, widget);
-      GTK_PRIVATE_UNSET_FLAGS (widget, GTK_REDRAW_PENDING);
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
     }
   
   if (GTK_CONTAINER_RESIZE_PENDING (widget))
     {
       gtk_widget_resize_queue = g_slist_remove (gtk_widget_resize_queue, widget);
-      GTK_PRIVATE_UNSET_FLAGS (widget, GTK_RESIZE_PENDING);
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_PENDING);
     }
 
   if (GTK_WIDGET_RESIZE_NEEDED (widget))
@@ -3081,7 +3081,7 @@ gtk_widget_real_destroy (GtkObject *object)
       toplevel = gtk_widget_get_toplevel (widget);
       GTK_CONTAINER (toplevel)->resize_widgets =
 	g_slist_remove (GTK_CONTAINER (toplevel)->resize_widgets, widget);
-      GTK_PRIVATE_UNSET_FLAGS (widget, GTK_RESIZE_NEEDED);
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
     }
 
   if (GTK_WIDGET_HAS_SHAPE_MASK (widget))
@@ -3361,7 +3361,7 @@ gtk_widget_real_queue_draw (GtkWidget *widget)
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   
-  GTK_PRIVATE_UNSET_FLAGS (widget, GTK_REDRAW_PENDING);
+  GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
   gtk_widget_draw (widget, NULL);
   
   return FALSE;
@@ -3381,7 +3381,7 @@ gtk_widget_real_queue_resize (GtkWidget *widget)
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  GTK_PRIVATE_UNSET_FLAGS (widget, GTK_RESIZE_PENDING);
+  GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_PENDING);
   gtk_container_need_resize (GTK_CONTAINER (widget));
 
   return FALSE;
@@ -3694,7 +3694,7 @@ gtk_widget_shape_combine_mask (GtkWidget *widget,
 
   if (!shape_mask)
     {
-      GTK_PRIVATE_UNSET_FLAGS (widget, GTK_HAS_SHAPE_MASK);
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_HAS_SHAPE_MASK);
       
       shape_info = gtk_object_get_data (GTK_OBJECT (widget), shape_info_key);
       gtk_object_remove_data (GTK_OBJECT (widget), shape_info_key);
@@ -3708,7 +3708,7 @@ gtk_widget_shape_combine_mask (GtkWidget *widget,
     }
   else
     {
-      GTK_PRIVATE_SET_FLAGS (widget, GTK_HAS_SHAPE_MASK);
+      GTK_PRIVATE_SET_FLAG (widget, GTK_HAS_SHAPE_MASK);
 
       shape_info = gtk_object_get_data (GTK_OBJECT (widget), shape_info_key);
       if (!shape_info)

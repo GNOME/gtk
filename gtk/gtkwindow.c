@@ -1085,7 +1085,7 @@ gtk_real_window_move_resize (GtkWindow *window,
 	{
 	  child = (GtkWidget *)node->data;
 
-	  GTK_PRIVATE_UNSET_FLAGS (child, GTK_RESIZE_NEEDED);
+	  GTK_PRIVATE_UNSET_FLAG (child, GTK_RESIZE_NEEDED);
 
 	  widget = child->parent;
 	  while (widget &&
@@ -1094,7 +1094,7 @@ gtk_real_window_move_resize (GtkWindow *window,
 	    widget = widget->parent;
 
 	  if (widget)
-	    GTK_PRIVATE_SET_FLAGS (widget, GTK_RESIZE_NEEDED);
+	    GTK_PRIVATE_SET_FLAG (widget, GTK_RESIZE_NEEDED);
 	}
 
       for (node = resize_widgets; node; node = node->next)
@@ -1115,7 +1115,7 @@ gtk_real_window_move_resize (GtkWindow *window,
 	    {
 	      if (GTK_WIDGET_RESIZE_NEEDED (widget))
 		{
-		  GTK_PRIVATE_UNSET_FLAGS (resize_container, GTK_RESIZE_NEEDED);
+		  GTK_PRIVATE_UNSET_FLAG (resize_container, GTK_RESIZE_NEEDED);
 		  resize_container = widget;
 		}
 	      widget = widget->parent;
@@ -1135,7 +1135,7 @@ gtk_real_window_move_resize (GtkWindow *window,
          widget = tmp_list->data;
          tmp_list = tmp_list->next;
 
-	 GTK_PRIVATE_UNSET_FLAGS (widget, GTK_RESIZE_NEEDED);
+	 GTK_PRIVATE_UNSET_FLAG (widget, GTK_RESIZE_NEEDED);
          gtk_widget_size_allocate (widget, &widget->allocation);
          gtk_widget_queue_draw (widget);
        }

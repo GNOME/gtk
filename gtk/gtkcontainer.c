@@ -224,7 +224,7 @@ gtk_container_destroy (GtkObject *object)
       GtkWidget *child;
       
       child = (GtkWidget*) node->data;
-      GTK_PRIVATE_UNSET_FLAGS (child, GTK_RESIZE_NEEDED);
+      GTK_PRIVATE_UNSET_FLAG (child, GTK_RESIZE_NEEDED);
     }
   g_slist_free (GTK_CONTAINER (object)->resize_widgets);
   GTK_CONTAINER (object)->resize_widgets = NULL;
