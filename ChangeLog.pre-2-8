@@ -1,3 +1,9 @@
+2002-04-12  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_real_remove): relocate the
+	remove_weak_pointer to just before we free the page, to be sure 
+	it doesn't get re-added. #75282
+
 Fri Apr 12 18:32:46 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_set_cursor): add
