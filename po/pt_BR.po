@@ -4,12 +4,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.12\n"
-"POT-Creation-Date: 2003-09-04 18:34+0200\n"
-"PO-Revision-Date: 2003-08-17 01:06-0300\n"
+"Project-Id-Version: gtk+ 2.2.4\n"
+"POT-Creation-Date: 2003-09-30 11:29-0400\n"
+"PO-Revision-Date: 2003-09-30 11:28-0400\n"
 "Last-Translator: Evandro Fernandes Giovanini <evandrofg@ig.com.br>\n"
-"Language-Team: GNOME-BR <evandrofg@listas.cipsga.org.br>, Debian-BR <debian-"
-"l10n-portuguese@lists.debian.org>\n"
+"Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
@@ -2306,7 +2305,7 @@ msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 msgstr ""
-"Se deve-se usar o valor da propriedade snap_edge ou um valor derivado de "
+"Se deve usar-se o valor da propriedade snap_edge ou um valor derivado de "
 "handle_position"
 
 #. Remove this icon source so we don't keep trying to
@@ -2630,8 +2629,8 @@ msgstr "Tempo de espera antes de os submenus aparecerem"
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
-"Tempo mínimo que o ponteiro deve ficar sobre um item de menu antes que o "
-"submenu apareça"
+"Tempo mínimo que o ponteiro deve ficar sobre um item de menu antes de "
+"aparecer o submenu"
 
 #: gtk/gtkmenu.c:393
 msgid "Delay before hiding a submenu"
@@ -2800,8 +2799,8 @@ msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
-"Se VERDADE, primir o botão direito do ratp nas pastas faz surgir um menu de "
-"popup que pode utilizar para ir para uma página"
+"Se VERDADE, pressionar o botão direito do mouse nas pastas faz surgir um "
+"menu de popup que pode utilizar para ir para uma página"
 
 #: gtk/gtknotebook.c:451
 msgid "Whether tabs should have homogeneous sizes"
@@ -2809,11 +2808,11 @@ msgstr "Se os separadores deverão ou não ter um tamanho homogéneo"
 
 #: gtk/gtknotebook.c:458
 msgid "Tab label"
-msgstr "Etiqueta da tab"
+msgstr "Etiqueta da aba"
 
 #: gtk/gtknotebook.c:459
 msgid "The string displayed on the childs tab label"
-msgstr "A string exibida na etiqueta da tab do filho"
+msgstr "A cadeia exibida na etiqueta da aba do filho"
 
 #: gtk/gtknotebook.c:465
 msgid "Menu label"
@@ -2821,27 +2820,27 @@ msgstr "Etiqueta do menu"
 
 #: gtk/gtknotebook.c:466
 msgid "The string displayed in the childs menu entry"
-msgstr "A string exibida na entrada do menu do filho"
+msgstr "A cadeia exibida na entrada do menu do filho"
 
 #: gtk/gtknotebook.c:479
 msgid "Tab expand"
-msgstr "Expandir tab"
+msgstr "Expandir aba"
 
 #: gtk/gtknotebook.c:480
 msgid "Whether to expand the childs tab or not"
-msgstr "Se a tab do filho deve ser expandida"
+msgstr "Se a aba do filho deve ser expandida"
 
 #: gtk/gtknotebook.c:486
 msgid "Tab fill"
-msgstr "Preencher tab"
+msgstr "Preencher aba"
 
 #: gtk/gtknotebook.c:487
 msgid "Wheather the childs tab should fill the allocated area or not"
-msgstr "Se a tab dos filhos deve tomar toda a área alocada"
+msgstr "Se a aba dos filhos deve tomar toda a área alocada"
 
 #: gtk/gtknotebook.c:493
 msgid "Tab pack type"
-msgstr "Tipo de empacotamento da tab"
+msgstr "Tipo de empacotamento da aba"
 
 #: gtk/gtknotebook.c:2471 gtk/gtknotebook.c:4818
 #, c-format
@@ -3025,7 +3024,7 @@ msgstr "Grupo"
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
-msgstr "O botão radio a cujo grupo esse widget pertence."
+msgstr "O botão de rádio a cujo grupo esse widget pertence."
 
 #: gtk/gtkrange.c:281
 msgid "Update policy"
@@ -3097,17 +3096,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Quão longe na direcção y mover a seta quando o botão é solto"
 
-#: gtk/gtkrc.c:2382
+#: gtk/gtkrc.c:2380
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Incapaz de encontrar arquivo include: \"%s\""
 
-#: gtk/gtkrc.c:3025 gtk/gtkrc.c:3028
+#: gtk/gtkrc.c:3023 gtk/gtkrc.c:3026
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Incapaz de encontrar arquivo de imagem na pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3463
+#: gtk/gtkrc.c:3461
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Elemento de caminho pixmap: \"%s\" tem de ser absoluto, %s, linha %d"
@@ -3861,11 +3860,11 @@ msgstr "Se as palavras são ou não quebradas nos extremos do widget"
 
 #: gtk/gtktextbuffer.c:180
 msgid "Tag Table"
-msgstr "Tabela de Tags"
+msgstr "Tabela de marcações"
 
 #: gtk/gtktextbuffer.c:181
 msgid "Text Tag Table"
-msgstr "Tabela de Tag de Texto"
+msgstr "Tabela de marcações de texto"
 
 #: gtk/gtktexttag.c:195
 msgid "Tag name"
@@ -4997,193 +4996,3 @@ msgstr "Estilo de Status IM"
 #: modules/input/gtkimcontextxim.c:331
 msgid "How to draw the input method statusbar"
 msgstr "Como desenhar a barra de ferramentas de método de entrada"
-
-#~ msgid "GIF image contained a frame with height or width 0."
-#~ msgstr "A imagem GIF continha um frame com altura ou largura 0."
-
-#~ msgid ""
-#~ "First frame of GIF image had 'revert to previous' as its disposal mode."
-#~ msgstr ""
-#~ "O primeiro frame da imagem GIF tinha 'reverter ao anterior' como seu modo "
-#~ "de disposição."
-
-#~ msgid ""
-#~ "Whether the arrow keys work, even if the entry contents are not in the "
-#~ "list"
-#~ msgstr ""
-#~ "Se as teclas de setas funcionam sempre ou não, mesmo se o conteudo das "
-#~ "entradas não estiver na lista"
-
-#, fuzzy
-#~ msgid "The leftmost column of the child"
-#~ msgstr "O título da janela"
-
-#, fuzzy
-#~ msgid "The rightmost column of the child"
-#~ msgstr "Alinhamento Y do filho"
-
-#, fuzzy
-#~ msgid "The uppermost row of the child"
-#~ msgstr "O número de linhas na tabela"
-
-#, fuzzy
-#~ msgid "The lowest row of the child"
-#~ msgstr "Alinhamento Y do filho"
-
-#~ msgid "Don't know how to load the animation in file '%s'"
-#~ msgstr "Não sei como carregar a animação do arquio '%s'"
-
-#~ msgid "Don't know how to load the image in file '%s'"
-#~ msgstr "Não sei como carregar a imagem do arquivo '%s'"
-
-#~ msgid "Failure reading ICO: %s"
-#~ msgstr "Falha lendo ICO: %s"
-
-#~ msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr ""
-#~ "O arquivo ICO tinha dados faltando (talvez ele tenha sido truncado de "
-#~ "alguma forma?)"
-
-#~ msgid "Language engine code to use for rendering the text"
-#~ msgstr "Motor de código de idioma a utilizar para mostrar o texto"
-
-#~ msgid "Insufficient memory to load TGA image"
-#~ msgstr "Memória insuficiente para carregar imagem TGA"
-
-#~ msgid "Directories"
-#~ msgstr "Directórios"
-
-#~ msgid "_Directories"
-#~ msgstr "_Directórios"
-
-#~ msgid "Crea_te Dir"
-#~ msgstr "Criar Direc_tório"
-
-#~ msgid ""
-#~ "The directory name \"%s\" contains symbols that are not allowed in "
-#~ "filenames"
-#~ msgstr ""
-#~ "O nome de directório \"%s\" contém símbolos que não são permitidos em "
-#~ "nomes de arquivos"
-
-#~ msgid ""
-#~ "Error creating directory \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Erro ao criar directório \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "Create Directory"
-#~ msgstr "Criar Directório"
-
-#~ msgid "_Directory name:"
-#~ msgstr "Nome _directório:"
-
-#~ msgid "Cancel"
-#~ msgstr "Cancelar"
-
-#~ msgid "Delete"
-#~ msgstr "Apagar"
-
-#~ msgid "OK"
-#~ msgstr "OK"
-
-#~ msgid "Save"
-#~ msgstr "Gravar"
-
-#~ msgid "Close"
-#~ msgstr "Fechar"
-
-#~ msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-#~ msgstr ""
-#~ "Incapaz de encontrar arquivo de imagem na pixmap_path: \"%s\" linha %d"
-
-#~ msgid "He_x Value:"
-#~ msgstr "Valor He_x:"
-
-#~ msgid "Slant:"
-#~ msgstr "Inclinação:"
-
-#~ msgid "Resolution X:"
-#~ msgstr "Resolução X:"
-
-#~ msgid "Resolution Y:"
-#~ msgstr "Resolução Y:"
-
-#~ msgid "Charset:"
-#~ msgstr "Conjunto Caracteres:"
-
-#~ msgid "Requested Value"
-#~ msgstr "Valor Pedido"
-
-#~ msgid "Font:"
-#~ msgstr "Fonte:"
-
-#~ msgid "Reset Filter"
-#~ msgstr "Limpar Filtro"
-
-#~ msgid "Metric:"
-#~ msgstr "Métrica:"
-
-#~ msgid "Pixels"
-#~ msgstr "Pixels"
-
-#~ msgid "Requested Font Name:"
-#~ msgstr "Nome de Fonte Pedido:"
-
-#~ msgid "Actual Font Name:"
-#~ msgstr "Fonte de Nome Real:"
-
-#~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i fontes disponíveis com um total de %i estilos."
-
-#~ msgid "Filter"
-#~ msgstr "Filtro"
-
-#~ msgid "Scaled Bitmap"
-#~ msgstr "Bitmap Escalado"
-
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "regular"
-#~ msgstr "regular"
-
-#~ msgid "oblique"
-#~ msgstr "oblíquo"
-
-#~ msgid "reverse italic"
-#~ msgstr "itálico invertido"
-
-#~ msgid "reverse oblique"
-#~ msgstr "oblíquo invertido"
-
-#~ msgid "[M]"
-#~ msgstr "[M]"
-
-#~ msgid "[C]"
-#~ msgstr "[C]"
-
-#~ msgid "The selected font is not available."
-#~ msgstr "A fonte seleccionada não está disponível."
-
-#~ msgid "The selected font is not a valid font."
-#~ msgstr "A fonte seleccionada não é uma fonte válida."
-
-#~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "Esta é uma fonte de 2 bytes e pode não ser mostrada correctamente."
-
-#~ msgid "roman"
-#~ msgstr "romano"
-
-#~ msgid "proportional"
-#~ msgstr "proporcional"
-
-#~ msgid "monospaced"
-#~ msgstr "monoespaçada"
-
-#~ msgid "Font: (Filter Applied)"
-#~ msgstr "Fonte: (Filtro Aplicado)"
-
-#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "MAX_FONTS foi excedido. Podem faltar algumas fontes."
