@@ -24,6 +24,7 @@ CFLAGS = $(OPTIMIZE) -I . -I .. -I ../.. -I $(WTKIT)/include -I $(GLIB) -DG_ENAB
 
 all: \
 	../../config.h \
+	../gdkconfig.h \
 	libgdk-win32.a \
 	gdk-win32res.o \
 	libwntab32x.a
@@ -51,6 +52,9 @@ gdk_win32_OBJECTS = \
 
 ../../config.h : ../../config.h.win32
 	$(CP) ../../config.h.win32 ../../config.h
+
+../gdkconfig.h : ../gdkconfig.h.win32
+	$(CP) ../gdkconfig.h.win32 ../gdkconfig.h
 
 gdk-win32res.o : rc/gdk.rc
 	windres --include-dir rc rc/gdk.rc gdk-win32res.o

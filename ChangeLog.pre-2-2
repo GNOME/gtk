@@ -1,3 +1,20 @@
+1999-11-21  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdk.c (gdk_keyval_convert_case): Fix typo.
+
+	* gdk/gdkconfig.h.win32: New file.
+
+	* gdk/win32/makefile.cygwin: Build just a static archive here.
+
+	* gdk/makefile.cygwin: New file. Get the win32-specific stuff
+	for the DLL from the static archive built above.
+
+	* gdk/gdk.def: Moved here from the win32 subdirectory.
+
+	* gdk/win32/*: Adapt for the changed private struct organisation.
+
+	* gtk/makefile.{cygwin,msc}: Get gdk library from ../gdk now.
+
 Sun Nov 21 16:44:35 1999  Stefan Jeske  <stefan@gtk.org>
 
         * gtk/gtkspinbutton.c (gtk_spin_button_button_press): Added support 

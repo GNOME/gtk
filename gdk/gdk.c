@@ -507,7 +507,7 @@ gdk_keyval_convert_case (guint symbol,
   guint xlower = symbol;
   guint xupper = symbol;
 
-  switch (sym >> 8)
+  switch (symbol >> 8)
     {
 #if	defined (GDK_A) && defined (GDK_Ooblique)
     case 0: /* Latin 1 */
