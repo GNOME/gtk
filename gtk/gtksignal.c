@@ -282,9 +282,10 @@ gtk_signal_newv (const gchar	     *r_name,
   if (!handler_key_id)
     gtk_signal_init ();
 
+
   name = g_strdup (r_name);
   g_strdelimit (name, NULL, '_');
-  
+
   id = gtk_signal_lookup (name, object_type);
   if (id)
     {
@@ -292,6 +293,14 @@ gtk_signal_newv (const gchar	     *r_name,
 		 r_name,
 		 gtk_type_name (object_type));
       g_free (name);
+      return 0;
+    }
+  
+  if (return_val != GTK_TYPE_NONE &&
+      (run_type & GTK_RUN_BOTH) == GTK_RUN_FIRST)
+    {
+      g_warning ("gtk_signal_newv(): signal \"%s\" with return value `%s' excludes GTK_RUN_LAST",
+		 name, gtk_type_name (return_val));
       return 0;
     }
   

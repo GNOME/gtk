@@ -1,3 +1,15 @@
+Mon May 18 04:01:41 1998  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtkwidget.c (gtk_widget_class_init): changed "proximity-in-event",
+        "drop-data-available-event", "drop-enter-event" and "drop-leave-event"
+        to be of runtype GTK_RUN_LAST.
+
+        * gtk/gtkcontainer.c (gtk_container_class_init): likewise for
+        "need-resize".
+
+        * gtk/gtktipsquery.c (gtk_tips_query_class_init): likewise for
+        "widget-selected".
+
 Sat May 16 09:04:32 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkfilesel.c (gtk_file_selection_key_press): g_strdup() the

@@ -176,7 +176,7 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_TYPE_WIDGET);
   container_signals[NEED_RESIZE] =
     gtk_signal_new ("need_resize",
-                    GTK_RUN_FIRST,
+                    GTK_RUN_LAST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkContainerClass, need_resize),
                     gtk_container_marshal_signal_4,
