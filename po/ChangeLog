@@ -1,3 +1,9 @@
+1999-08-25  Pablo Saratxaga <srtxg@chanae.alphanet.ch>
+
+	* ga.po: Added Gaeilge (irish gaelic) file from
+	Sean V. Kelley <s_oceallaigh@yahoo.com>
+	* sk.po, sl.po: added them from gtk+ 1.2.2
+
 1999-08-24  Karsten Weiss  <karsten@addx.au.s.shuttle.de>
 
 	* de.po: Typo fix.
