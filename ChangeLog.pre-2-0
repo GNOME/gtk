@@ -1,3 +1,15 @@
+2000-12-01    <alexl@redhat.com>
+
+	* gdk/linux-fb/Makefile.am:
+	* modules/linux-fb/Makefile.am:
+	Freetype 2 final uses freetype-config
+
+	* gdk/linux-fb/gdkpango-fb.c:
+	Upgrade to use Freetype 2 final.
+	More flexible support for font aliases, this also fixes a bug with
+	GtkFontSelector, as the aliases must be visible in the font/family list,
+	or GtkFontSelector reads uninitialized memory.
+
 2000-11-30 Hidetoshi Tajima  <tajima@eng.sun.com>
 
 	* modules/input/gtkimcontextxim.c (setup_im): Add NULL argument to
