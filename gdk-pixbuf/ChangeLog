@@ -1,3 +1,7 @@
+2000-04-12  Paolo Molaro <lupus@debian.org>
+
+	* .cvsignore, src/.cvsignore: shut up cvs.
+
 2000-04-11  Federico Mena Quintero  <federico@helixcode.com>
 
 	Most of this patch is based on a patch by Havoc Pennington
