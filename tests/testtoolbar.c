@@ -476,6 +476,18 @@ toolbar_drag_leave (GtkToolbar     *toolbar,
   gtk_toolbar_set_drop_highlight_item (toolbar, NULL, 0);
 }
 
+static gboolean
+timeout_cb (GtkWidget *widget)
+{
+  static gboolean sensitive = TRUE;
+  
+  sensitive = !sensitive;
+  
+  gtk_widget_set_sensitive (widget, sensitive);
+  
+  return TRUE;
+}
+
 gint
 main (gint argc, gchar **argv)
 {
@@ -587,6 +599,7 @@ main (gint argc, gchar **argv)
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), NULL);
   add_item_to_list (store, item, "New");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  g_timeout_add (3000, (GSourceFunc) timeout_cb, item);
   gtk_tool_item_set_expand (item, TRUE);
 
   menu = gtk_menu_new ();
@@ -601,7 +614,7 @@ main (gint argc, gchar **argv)
   gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (item), menu);
   add_item_to_list (store, item, "Open");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-
+ 
   item = gtk_separator_tool_item_new ();
   add_item_to_list (store, item, "-----");    
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);

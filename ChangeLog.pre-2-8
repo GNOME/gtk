@@ -1,3 +1,29 @@
+Wed Dec 22 14:22:19 2004  Søren Sandmann  <sandmann@redhat.com>
+
+	* tests/testtoolbar.c (timeout_cb): Add sensitivity-changing
+	timeout. Written by Christian Persch.
+
+Wed Dec 22 14:14:02 2004  Søren Sandmann  <sandmann@redhat.com>
+
+	Bug #161561
+	
+	* gdk/x11/gdkwindow-x11.c (tmp_{re,un}set_bg): Only set/reset the
+	background for windows that get expose events. 
+
+	* gdk/gdkwindow.c (gdk_window_process_updates_internal): Remove
+	hack to repaint !expose windows.
+
+Wed Dec 22 11:35:41 2004  Søren Sandmann  <sandmann@redhat.com>
+
+	Bug #147497, make menu items activate immediately when you release
+	the button.
+	
+	* gtk/gtkmenu.c (gtk_menu_enter_notify, menu_motion_notify): Make
+	items activate immediately.
+
+	* gtk/gtkmenu.c (definitely_within_item): New function
+	* gtk/gtkmenu.c (check_threshold): New function
+
 2004-12-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_setup_mnemonic): Don't forget to
@@ -26,7 +52,6 @@ Wed Dec 22 01:24:01 2004  Jonathan Blandford  <jrb@redhat.com>
 	* gtk/queryimmodules.c (main): print out the version and binary
 	name in the header comment.  Problem reported by Seth Nickell.
 
->>>>>>> 1.6232
 2004-12-20  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkliststore.c (gtk_list_store_sort_iter_changed): Pass a
@@ -65,6 +90,7 @@ Wed Dec 22 01:24:01 2004  Jonathan Blandford  <jrb@redhat.com>
 	(gtk_about_dialog_init): Add missing initializations.  (#161646,
 	Torsten Schoenfeld)
 
+>>>>>>> 1.6233
 2004-12-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Bump version
