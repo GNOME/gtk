@@ -79,8 +79,6 @@ void           gtk_ui_manager_set_add_tearoffs    (GtkUIManager   *self,
 						   gboolean        add_tearoffs);
 gboolean       gtk_ui_manager_get_add_tearoffs    (GtkUIManager   *self);
 
-/* these two functions will dirty all merge nodes, as they may need to
- * be connected up to different actions */
 void           gtk_ui_manager_insert_action_group (GtkUIManager   *self,
 			 			   GtkActionGroup *action_group,
 						   gint            pos);
@@ -108,5 +106,7 @@ void           gtk_ui_manager_remove_ui           (GtkUIManager   *self,
 						   guint           merge_id);
 
 gchar         *gtk_ui_manager_get_ui              (GtkUIManager   *self);
+
+void           gtk_ui_manager_ensure_update       (GtkUIManager   *self);
 
 #endif /* __GTK_UI_MANAGER_H__ */

@@ -134,7 +134,6 @@ static void  gtk_ui_manager_node_prepend_ui_reference (GtkUIManagerNode *node,
 						       GQuark action_quark);
 static void  gtk_ui_manager_node_remove_ui_reference  (GtkUIManagerNode *node,
 						       guint merge_id);
-static void  gtk_ui_manager_ensure_update  (GtkUIManager *self);
 
 
 enum 
@@ -1794,7 +1793,32 @@ gtk_ui_manager_queue_update (GtkUIManager *self)
   self->private_data->update_tag = g_idle_add ((GSourceFunc)do_updates, self);
 }
 
-static void
+
+/**
+ * gtk_ui_manager_ensure_update:
+ * @self: a #GtkUIManager
+ * 
+ * Makes sure that all pending updates to the UI have been completed.
+ *
+ * This may occasionally be necessary, since #GtkUIManager updates the 
+ * UI in an idle function. A typical example where this function is
+ * useful is to enforce that the menubar and toolbar have been added to 
+ * the main window before showing it:
+ * <informalexample>
+ * <programlisting>
+ * gtk_container_add (GTK_CONTAINER (window), vbox); 
+ * g_signal_connect (merge, "add_widget", 
+ *                   G_CALLBACK (add_widget), vbox);
+ * gtk_ui_manager_add_ui_from_file (merge, "my-menus");
+ * gtk_ui_manager_add_ui_from_file (merge, "my-toolbars");
+ * gtk_ui_manager_ensure_update (merge);  
+ * gtk_widget_show (window);
+ * </programlisting>
+ * </informalexample>
+ *
+ * Since: 2.4
+ **/
+void
 gtk_ui_manager_ensure_update (GtkUIManager *self)
 {
   if (self->private_data->update_tag != 0)

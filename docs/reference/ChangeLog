@@ -1,3 +1,7 @@
+2003-09-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_ui_manager_ensure_update.
+
 2003-08-31  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/Makefile.am (IGNORE_HFILES): Add gtktoggleactionprivate.h

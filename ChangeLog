@@ -1,3 +1,12 @@
+2003-09-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.[ch] (gtk_ui_manager_ensure_update): Make
+	this public again, since it's occasionally useful.  (#121128,
+	Marco Pesenti Gritti)
+
+	* gtk/gtkaction.c: Add an "is_important" property and propagate
+	it to toolitem proxies.  (#121058, Marco Pesenti Gritti)
+
 Mon Sep  1 00:32:30 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* tests/testtoolbar.c (main): connect to "delete_event" so the

@@ -51,10 +51,11 @@ struct _GtkActionPrivate
   gchar *tooltip;
   gchar *stock_id; /* icon */
 
-  guint sensitive : 1;
-  guint visible : 1;
-  guint label_set : 1;       /* these two used so we can set label */
+  guint sensitive       : 1;
+  guint visible         : 1;
+  guint label_set       : 1; /* these two used so we can set label */
   guint short_label_set : 1; /* based on stock id */
+  guint is_important    : 1;
 
   /* accelerator */
   GQuark accel_quark;
@@ -77,6 +78,7 @@ enum
   PROP_SHORT_LABEL,
   PROP_TOOLTIP,
   PROP_STOCK_ID,
+  PROP_IS_IMPORTANT,
   PROP_SENSITIVE,
   PROP_VISIBLE,
 };
@@ -197,13 +199,19 @@ gtk_action_class_init (GtkActionClass *klass)
 							NULL,
 							G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
+				   PROP_IS_IMPORTANT,
+				   g_param_spec_boolean ("is_important",
+							 _("Is important"),
+							 _("Whether the action is considered important. When TRUE, toolitem proxies for this action show text in GTK_TOOLBAR_BOTH_HORIZ mode"),
+							 FALSE,
+							 G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
 				   PROP_SENSITIVE,
 				   g_param_spec_boolean ("sensitive",
 							 _("Sensitive"),
 							 _("Whether the action is enabled."),
 							 TRUE,
 							 G_PARAM_READWRITE));
-
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible",
@@ -211,6 +219,7 @@ gtk_action_class_init (GtkActionClass *klass)
 							 _("Whether the action is visible."),
 							 TRUE,
 							 G_PARAM_READWRITE));
+
 
   /**
    * GtkAction::activate:
@@ -242,6 +251,7 @@ gtk_action_init (GtkAction *action)
   action->private_data->short_label = NULL;
   action->private_data->tooltip = NULL;
   action->private_data->stock_id = NULL;
+  action->private_data->is_important = FALSE;
 
   action->private_data->sensitive = TRUE;
   action->private_data->visible = TRUE;
@@ -348,6 +358,9 @@ gtk_action_set_property (GObject         *object,
 	  g_object_notify (object, "short_label");
 	}
       break;
+    case PROP_IS_IMPORTANT:
+      action->private_data->is_important = g_value_get_boolean (value);
+      break;
     case PROP_SENSITIVE:
       action->private_data->sensitive = g_value_get_boolean (value);
       break;
@@ -386,6 +399,9 @@ gtk_action_get_property (GObject    *object,
       break;
     case PROP_STOCK_ID:
       g_value_set_string (value, action->private_data->stock_id);
+      break;
+    case PROP_IS_IMPORTANT:
+      g_value_set_boolean (value, action->private_data->is_important);
       break;
     case PROP_SENSITIVE:
       g_value_set_boolean (value, action->private_data->sensitive);
@@ -593,18 +609,21 @@ connect_proxy (GtkAction *action,
     {
       /* toolbar button specific synchronisers ... */
 
-      /* synchronise the label */
       g_object_set (G_OBJECT (proxy),
 		    "label", action->private_data->short_label,
 		    "use_underline", TRUE,
+		    "stock_id", action->private_data->stock_id,
+		    "is_important", action->private_data->is_important,
 		    NULL);
       g_signal_connect_object (action, "notify::short_label",
 			       G_CALLBACK (gtk_action_sync_short_label),
-			       proxy, 0);
-      
-      g_object_set (G_OBJECT (proxy), "stock_id", action->private_data->stock_id, NULL);
+			       proxy, 0);      
       g_signal_connect_object (action, "notify::stock_id",
-			G_CALLBACK (gtk_action_sync_property), proxy, 0);
+			       G_CALLBACK (gtk_action_sync_property), 
+			       proxy, 0);
+      g_signal_connect_object (action, "notify::is_important",
+			       G_CALLBACK (gtk_action_sync_property), 
+			       proxy, 0);
 
       g_signal_connect_object (proxy, "create_menu_proxy",
 			       G_CALLBACK (gtk_action_create_menu_proxy),
