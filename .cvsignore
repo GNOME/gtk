@@ -29,6 +29,7 @@ gdk-nanox-2.0.pc
 gdk-x11-2.0.pc
 gdk-pixbuf-2.0.pc
 gdk-pixbuf-2.0-uninstalled.pc
+gtk-zip.sh
 missing
 install-sh
 mkinstalldirs
