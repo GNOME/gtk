@@ -1,3 +1,15 @@
+Mon Nov 30 10:11:29 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/testgtkrc: merged testgtkrc with the pre-themes one, removed
+ 	system specific includes.
+
+	* gtk/gtksignal.c: asured that stop and restart emissions are also
+ 	checked and processed for not connected objects. fixed up restart
+	emission administration. invoke emission hooks after emission, hooks
+	are not supposed to muck around with the current emission, and
+	may also not cause emission restarts. fixed up stop emission
+	administration.
+
 Mon Nov 30 06:20:36 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/testgtk.c: added an event watcher for enter/leave based on
