@@ -307,11 +307,11 @@ gtk_option_menu_size_allocate (GtkWidget     *widget,
 			    GTK_WIDGET (widget)->style->klass->xthickness) + 1;
       child_allocation.y = (GTK_CONTAINER (widget)->border_width +
 			    GTK_WIDGET (widget)->style->klass->ythickness) + 1;
-      child_allocation.width = (allocation->width - child_allocation.x * 2 -
-				OPTION_INDICATOR_WIDTH - OPTION_INDICATOR_SPACING * 5 -
-				CHILD_LEFT_SPACING - CHILD_RIGHT_SPACING) - 2;
-      child_allocation.height = (allocation->height - child_allocation.y * 2 -
-				 CHILD_TOP_SPACING - CHILD_BOTTOM_SPACING) - 2;
+      child_allocation.width = MAX (1, (gint)allocation->width - child_allocation.x * 2 -
+				    OPTION_INDICATOR_WIDTH - OPTION_INDICATOR_SPACING * 5 -
+				    CHILD_LEFT_SPACING - CHILD_RIGHT_SPACING - 2);
+      child_allocation.height = MAX (1, (gint)allocation->height - child_allocation.y * 2 -
+				     CHILD_TOP_SPACING - CHILD_BOTTOM_SPACING - 2);
       child_allocation.x += CHILD_LEFT_SPACING;
       child_allocation.y += CHILD_RIGHT_SPACING;
 
