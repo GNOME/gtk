@@ -2842,12 +2842,63 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
                               gint           root_y,
                               guint32        timestamp)
 {
+  WPARAM winedge;
+  
   g_return_if_fail (GDK_IS_WINDOW (window));
   
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  /* XXX: isn't all this default on win32 ... */  
+  /* Tell Windows to start interactively resizing the window by pretending that
+   * the left pointer button was clicked in the suitable edge or corner. This
+   * will only work if the button is down when this function is called, and
+   * will only work with button 1 (left), since Windows only allows window
+   * dragging using the left mouse button */
+  if (button != 1)
+    return;
+  
+  /* Must break the automatic grab that occured when the button was pressed,
+   * otherwise it won't work */
+  gdk_display_pointer_ungrab (gdk_display_get_default (), 0);
+
+  switch (edge)
+    {
+    case GDK_WINDOW_EDGE_NORTH_WEST:
+      winedge = HTTOPLEFT;
+      break;
+
+    case GDK_WINDOW_EDGE_NORTH:
+      winedge = HTTOP;
+      break;
+
+    case GDK_WINDOW_EDGE_NORTH_EAST:
+      winedge = HTTOPRIGHT;
+      break;
+
+    case GDK_WINDOW_EDGE_WEST:
+      winedge = HTLEFT;
+      break;
+
+    case GDK_WINDOW_EDGE_EAST:
+      winedge = HTRIGHT;
+      break;
+
+    case GDK_WINDOW_EDGE_SOUTH_WEST:
+      winedge = HTBOTTOMLEFT;
+      break;
+
+    case GDK_WINDOW_EDGE_SOUTH:
+      winedge = HTBOTTOM;
+      break;
+
+    case GDK_WINDOW_EDGE_SOUTH_EAST:
+    default:
+      winedge = HTBOTTOMRIGHT;
+      break;
+    }
+
+  DefWindowProc (GDK_WINDOW_HWND (window), WM_NCLBUTTONDOWN, winedge,
+      MAKELPARAM (root_x - _gdk_offset_x, root_y - _gdk_offset_y));
 }
 
 void
@@ -2862,7 +2913,20 @@ gdk_window_begin_move_drag (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  /* XXX: isn't all this default on win32 ... */  
+  /* Tell Windows to start interactively moving the window by pretending that
+   * the left pointer button was clicked in the titlebar. This will only work
+   * if the button is down when this function is called, and will only work
+   * with button 1 (left), since Windows only allows window dragging using the
+   * left mouse button */
+  if (button != 1)
+    return;
+  
+  /* Must break the automatic grab that occured when the button was pressed,
+   * otherwise it won't work */
+  gdk_display_pointer_ungrab (gdk_display_get_default (), 0);
+
+  DefWindowProc (GDK_WINDOW_HWND (window), WM_NCLBUTTONDOWN, HTCAPTION,
+      MAKELPARAM (root_x - _gdk_offset_x, root_y - _gdk_offset_y));
 }
 
 

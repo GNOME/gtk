@@ -1,3 +1,10 @@
+2004-10-29  Robert Ögren  <gtk@roboros.com>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_begin_resize_drag),
+	(gdk_window_begin_move_drag): Implement these on win32, currently
+	only for button 1. Fixes the resize grip of GtkStatusbar on 
+	win32. (#143285)
+
 2004-10-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextbtree.c (_gtk_text_btree_select_range): Redisplay
