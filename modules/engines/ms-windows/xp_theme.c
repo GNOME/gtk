@@ -612,8 +612,8 @@ xp_theme_draw(GdkWindow *win, XpThemeElement element, GtkStyle *style,
     {
       clip.left = area->x - xoff;
       clip.top = area->y - yoff;
-      clip.right = rect.left + area->width;
-      clip.bottom = rect.top + area->height;
+      clip.right = clip.left + area->width;
+      clip.bottom = clip.top + area->height;
 
       pClip = &clip;
     }

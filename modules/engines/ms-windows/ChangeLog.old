@@ -1,8 +1,16 @@
+2003-09-15  Raymond Penners  <raymond@dotsphinx.com>
+
+	* src/wimp_style.c: Fixed typ-o (gtk-double-cliNk-time), adjusted
+	cursor blink time to cope with Windows semantics (GTK+ uses cycle
+	time), fixed clipping area computation.
+	
 2003-09-15  Dom Lachowicz <cinamod@hotmail.com>
 
-	* src/wimp_style.c: Fix a few more console messages, implement caret blinking
-	* src/xp_theme.*: Stub out line drawing. Apparently, documented bits arae missing
-	from MS's implementation. Go figure...
+	* src/wimp_style.c: Fix a few more console messages, implement
+	caret blinking
+	
+	* src/xp_theme.*: Stub out line drawing. Apparently, documented
+	bits are missing from MS's implementation. Go figure...
 	
 2003-09-14  Raymond Penners  <raymond@dotsphinx.com>
 
@@ -10,7 +18,7 @@
 	"default_border".
 	
 	* src/wimp_style.c: Due to a bug lots of console message
-	complaining about "unexpected keyword `fg'" and occured, fixed.
+	complaining about "unexpected keyword `fg'" occured, fixed.
 
 2003-09-11  Dom Lachowicz <cinamod@hotmail.com>
 

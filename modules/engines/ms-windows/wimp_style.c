@@ -223,10 +223,10 @@ setup_system_settings (GtkStyle * style)
   if (cursor_blink_time > 0)
   {
   	g_object_set (G_OBJECT (settings), "gtk-cursor-blink-time",
-					cursor_blink_time, NULL);
+					2*cursor_blink_time, NULL);
   }
 
-  g_object_set (G_OBJECT (settings), "gtk-double-clink-time",
+  g_object_set (G_OBJECT (settings), "gtk-double-click-time",
 		GetDoubleClickTime(), NULL);
   g_object_set (G_OBJECT (settings), "gtk-dnd-drag-threshold",
 		GetSystemMetrics (SM_CXDRAG), NULL);
