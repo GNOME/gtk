@@ -1763,6 +1763,8 @@ gdk_event_translate (GdkEvent *event,
       event->button.time = xevent->xbutton.time;
       event->button.x = xevent->xbutton.x;
       event->button.y = xevent->xbutton.y;
+      event->button.x_root = (gfloat)xevent->xbutton.x_root;
+      event->button.y_root = (gfloat)xevent->xbutton.y_root;
       event->button.pressure = 0.5;
       event->button.xtilt = 0;
       event->button.ytilt = 0;
@@ -1864,8 +1866,8 @@ gdk_event_translate (GdkEvent *event,
       event->button.time = xevent->xbutton.time;
       event->button.x = xevent->xbutton.x;
       event->button.y = xevent->xbutton.y;
-      event->button.x_root = xevent->xbutton.x_root;
-      event->button.y_root = xevent->xbutton.y_root;
+      event->button.x_root = (gfloat)xevent->xbutton.x_root;
+      event->button.y_root = (gfloat)xevent->xbutton.y_root;
       event->button.pressure = 0.5;
       event->button.xtilt = 0;
       event->button.ytilt = 0;
@@ -1936,8 +1938,8 @@ gdk_event_translate (GdkEvent *event,
       event->motion.time = xevent->xmotion.time;
       event->motion.x = xevent->xmotion.x;
       event->motion.y = xevent->xmotion.y;
-      event->motion.x_root = xevent->xmotion.x_root;
-      event->motion.y_root = xevent->xmotion.y_root;
+      event->motion.x_root = (gfloat)xevent->xmotion.x_root;
+      event->motion.y_root = (gfloat)xevent->xmotion.y_root;
       event->motion.pressure = 0.5;
       event->motion.xtilt = 0;
       event->motion.ytilt = 0;

@@ -142,8 +142,8 @@ gtk_handle_box_size_request (GtkWidget      *widget,
 
   bin = GTK_BIN (widget);
 
-  requisition->width = DRAG_HANDLE_SIZE;
-  requisition->height = DRAG_HANDLE_SIZE;
+  requisition->width = DRAG_HANDLE_SIZE + GTK_CONTAINER(widget)->border_width * 2;
+  requisition->height = DRAG_HANDLE_SIZE + GTK_CONTAINER(widget)->border_width * 2;
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
@@ -171,14 +171,14 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 
   child_allocation.x = 0;
   child_allocation.y = 0;
-  child_allocation.width = allocation->width - DRAG_HANDLE_SIZE;
-  child_allocation.height = allocation->height;
+  child_allocation.width = allocation->width - DRAG_HANDLE_SIZE - GTK_CONTAINER(widget)->border_width * 2;
+  child_allocation.height = allocation->height - GTK_CONTAINER(widget)->border_width * 2;
 
   if (GTK_WIDGET_REALIZED (widget))
     {
       gdk_window_move_resize (widget->window,
-			      allocation->x + DRAG_HANDLE_SIZE,
-			      allocation->y,
+			      allocation->x + DRAG_HANDLE_SIZE + GTK_CONTAINER(widget)->border_width,
+			      allocation->y + GTK_CONTAINER(widget)->border_width,
 			      child_allocation.width,
 			      child_allocation.height);
     }
@@ -197,18 +197,26 @@ static void gtk_handle_box_paint(GtkWidget *widget,
   g_print("painting %dx%d+%d+%d\n",
 	  area->x, area->y, area->width, area->height);
 
-  
   startx = 1; endx = DRAG_HANDLE_SIZE;
   if(area->x > startx)
     startx = area->x;
   if((area->x + area->width) < endx)
     endx = area->x + area->width;
   line_y2 = area->y + area->height;
+
   for(x = startx; x < DRAG_HANDLE_SIZE; x += 3)
     gtk_draw_vline(widget->style, widget->window,
 		   GTK_WIDGET_STATE(widget),
 		   area->y, line_y2,
 		   x);
+
+  gtk_draw_shadow(widget->style,
+		  widget->window,
+		  GTK_WIDGET_STATE(widget),
+		  GTK_SHADOW_OUT,
+		  0, 0,
+		  widget->allocation.width - 1,
+		  widget->allocation.height);
 }
 
 static void
