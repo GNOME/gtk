@@ -1,3 +1,8 @@
+2002-03-18  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtkaspectframe.c (gtk_aspect_frame_class_init): set the
+	correct min/max values for the ratio property (fixes #75331)
+
 Mon Mar 18 11:55:03 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimmulticontext.c (gtk_im_multicontext_get_slave):
