@@ -27,6 +27,8 @@
 #ifndef __GDK_I18N_H__
 #define __GDK_I18N_H__
 
+#ifndef GDK_DISABLE_DEPRECATED
+
 /* GDK uses "glib". (And so does GTK).
  */
 #include <glib.h>
@@ -51,5 +53,7 @@
 #  define gdk_iswalnum(c) ((wchar_t)(c) <= 0xFF && isalnum(c))
 #  define gdk_iswspace(c) ((wchar_t)(c) <= 0xFF && isspace(c))
 #endif
+
+#endif /* GDK_DISABLE_DEPRECATED */
 
 #endif /* __GDK_I18N_H__ */
