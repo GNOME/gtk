@@ -607,7 +607,7 @@ xim_text_to_utf8 (GtkIMContextXIM *context, XIMText *xim_text, gchar **text)
 			  -1,
 			  "UTF-8",
 			  context->mb_charset,
-			  NULL, &text_length,  &error);
+			  NULL, NULL, &error);
       
       if (result)
 	{
@@ -622,6 +622,9 @@ xim_text_to_utf8 (GtkIMContextXIM *context, XIMText *xim_text, gchar **text)
 	{
 	  g_warning ("Error converting text from IM to UCS-4: %s", error->message);
 	  g_error_free (error);
+
+	  *text = NULL;
+	  return 0;
 	}
 
       *text = result;

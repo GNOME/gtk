@@ -1,3 +1,12 @@
+Sat Jun 23 10:27:53 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/gtkimcontextxim.c: Fixup some problems with 
+	text length handling in error cases.
+
+	* gtk/gtkwidget.c (gtk_widget_size_allocate): Reorder
+	a bit to make test actually warn on attempt to allocation
+	a negative size. (#56101, Matthias Clasen)
+
 Fri Jun 22 14:06:08 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_collapse_row): Fix bug
