@@ -64,7 +64,7 @@ enum
 
   /* Create a model.  We are using the store model for now, though we
    * could use any other GtkTreeModel */
-  model = gtk_tree_store_new_with_values (N_COLUMNS, G_TYPE_STRING);
+  model = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING);
 
   /* custom function to fill the model with data */
   populate_tree_model (model);
