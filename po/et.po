@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.13\n"
-"POT-Creation-Date: 2002-02-16 16:34+0200\n"
+"POT-Creation-Date: 2002-02-17 21:22-0500\n"
 "PO-Revision-Date: 2002-02-16 18:50+0200\n"
 "Last-Translator: Tõivo Leedjärv <leedjarv@interest.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
@@ -1614,44 +1614,53 @@ msgstr ""
 msgid "_Insert Unicode control character"
 msgstr ""
 
-#: gtk/gtkfilesel.c:518 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:161
 msgid "Filename"
 msgstr "Failinimi"
 
-#: gtk/gtkfilesel.c:519
+#: gtk/gtkfilesel.c:527
 msgid "The currently selected filename."
 msgstr ""
 
-#: gtk/gtkfilesel.c:525
+#: gtk/gtkfilesel.c:533
 msgid "Show file operations"
 msgstr ""
 
-#: gtk/gtkfilesel.c:526
+#: gtk/gtkfilesel.c:534
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr ""
 
-#: gtk/gtkfilesel.c:656
+#: gtk/gtkfilesel.c:541
+#, fuzzy
+msgid "Select multiple"
+msgstr "Vali kõik"
+
+#: gtk/gtkfilesel.c:542
+msgid "Whether to allow multiple files to be selected."
+msgstr ""
+
+#: gtk/gtkfilesel.c:677
 msgid "Folders"
 msgstr "Kataloogid"
 
-#: gtk/gtkfilesel.c:660
+#: gtk/gtkfilesel.c:681
 msgid "Fol_ders"
 msgstr "_Kataloogid"
 
-#: gtk/gtkfilesel.c:688
+#: gtk/gtkfilesel.c:709
 msgid "Files"
 msgstr "Failid"
 
-#: gtk/gtkfilesel.c:692
+#: gtk/gtkfilesel.c:713
 msgid "_Files"
 msgstr "_Failid"
 
-#: gtk/gtkfilesel.c:768 gtk/gtkfilesel.c:2086
+#: gtk/gtkfilesel.c:789 gtk/gtkfilesel.c:2102
 #, fuzzy, c-format
 msgid "Folder unreadable: %s"
 msgstr "Kataloog %s on loetamatu"
 
-#: gtk/gtkfilesel.c:892
+#: gtk/gtkfilesel.c:913
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1659,26 +1668,25 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1022
+#: gtk/gtkfilesel.c:1043
 msgid "_New Folder"
 msgstr "_Uus kataloog"
 
-#: gtk/gtkfilesel.c:1033
+#: gtk/gtkfilesel.c:1054
 msgid "De_lete File"
 msgstr "_Kustuta fail"
 
-#: gtk/gtkfilesel.c:1044
+#: gtk/gtkfilesel.c:1065
 msgid "_Rename File"
 msgstr "_Nimeta ümber"
 
-#: gtk/gtkfilesel.c:1292
+#: gtk/gtkfilesel.c:1325
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Kataloogi \"%s\" nimi sisaldab failinimedes keelatud märke"
+msgstr "Kataloogi \"%s\" nimi sisaldab failinimedes keelatud märke"
 
-#: gtk/gtkfilesel.c:1294
+#: gtk/gtkfilesel.c:1327
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1687,33 +1695,33 @@ msgstr ""
 "Viga kataloogi \"%s\" loomisel: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1295 gtk/gtkfilesel.c:1531
+#: gtk/gtkfilesel.c:1328 gtk/gtkfilesel.c:1564
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Tõenäoliselt kasutasid sa failinimedes keelatud märke."
 
-#: gtk/gtkfilesel.c:1303
+#: gtk/gtkfilesel.c:1336
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Viga kataloogi \"%s\" loomisel: %s\n"
 
-#: gtk/gtkfilesel.c:1337
+#: gtk/gtkfilesel.c:1370
 msgid "New Folder"
 msgstr "Uus kataloog"
 
-#: gtk/gtkfilesel.c:1352
+#: gtk/gtkfilesel.c:1385
 msgid "_Folder name:"
 msgstr "_Kataloogi nimi:"
 
-#: gtk/gtkfilesel.c:1378
+#: gtk/gtkfilesel.c:1411
 msgid "Create"
 msgstr "Loo"
 
-#: gtk/gtkfilesel.c:1419
+#: gtk/gtkfilesel.c:1452
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Failinimi \"%s\" sisaldab failinimedes keelatud märke"
 
-#: gtk/gtkfilesel.c:1422
+#: gtk/gtkfilesel.c:1455
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1722,30 +1730,30 @@ msgstr ""
 "Viga faili \"%s\" kustutamisel: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1424 gtk/gtkfilesel.c:1545
+#: gtk/gtkfilesel.c:1457 gtk/gtkfilesel.c:1578
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Tõenäoliselt sisaldab see failinimedes keelatud märke."
 
-#: gtk/gtkfilesel.c:1433
+#: gtk/gtkfilesel.c:1466
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Viga faili \"%s\" kustutamisel: %s"
 
-#: gtk/gtkfilesel.c:1476
+#: gtk/gtkfilesel.c:1509
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Kas kindlasti kustutada fail \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1481
+#: gtk/gtkfilesel.c:1514
 msgid "Delete File"
 msgstr "Kustuta fail"
 
-#: gtk/gtkfilesel.c:1527 gtk/gtkfilesel.c:1541
+#: gtk/gtkfilesel.c:1560 gtk/gtkfilesel.c:1574
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Failinimi \"%s\" sisaldab failinimedes keelatud märke"
 
-#: gtk/gtkfilesel.c:1529
+#: gtk/gtkfilesel.c:1562
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1754,7 +1762,7 @@ msgstr ""
 "Viga faili ümbernimetamisel \"%s\"-ks: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1543
+#: gtk/gtkfilesel.c:1576
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1763,40 +1771,40 @@ msgstr ""
 "Viga faili \"%s\" ümbernimetamisel: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1553
+#: gtk/gtkfilesel.c:1586
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Viga faili \"%s\" ümbernimetamisel \"%s\"-ks: %s"
 
-#: gtk/gtkfilesel.c:1600
+#: gtk/gtkfilesel.c:1633
 msgid "Rename File"
 msgstr "Nimeta ümber"
 
-#: gtk/gtkfilesel.c:1615
+#: gtk/gtkfilesel.c:1648
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Nimeta fail \"%s\" ümber:"
 
-#: gtk/gtkfilesel.c:1646
+#: gtk/gtkfilesel.c:1679
 msgid "Rename"
 msgstr "Nimeta ümber"
 
-#: gtk/gtkfilesel.c:2065
+#: gtk/gtkfilesel.c:2081
 msgid "Selection: "
 msgstr "Valik: "
 
-#: gtk/gtkfilesel.c:2677
+#: gtk/gtkfilesel.c:2953
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
 "variable G_BROKEN_FILENAMES."
 msgstr ""
 
-#: gtk/gtkfilesel.c:3546
+#: gtk/gtkfilesel.c:3817
 msgid "Name too long"
 msgstr "Nimi on liiga pikk"
 
-#: gtk/gtkfilesel.c:3548
+#: gtk/gtkfilesel.c:3819
 msgid "Couldn't convert filename"
 msgstr ""
 
@@ -2748,11 +2756,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:604 gtk/gtktreeview.c:507
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:604 gtk/gtktreeview.c:508
 msgid "Horizontal Adjustment"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:612 gtk/gtktreeview.c:515
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:612 gtk/gtktreeview.c:516
 msgid "Vertical Adjustment"
 msgstr ""
 
@@ -3649,7 +3657,8 @@ msgstr "Tööriistarea laad"
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
-"Näitab, kas vaikimisi on tööriistaribadel ainult tekst, ainult ikoonid või mõlemad, jne."
+"Näitab, kas vaikimisi on tööriistaribadel ainult tekst, ainult ikoonid või "
+"mõlemad, jne."
 
 #: gtk/gtktoolbar.c:291
 msgid "Toolbar icon size"
@@ -3667,115 +3676,115 @@ msgstr ""
 msgid "The model for the TreeModelSort to sort"
 msgstr ""
 
-#: gtk/gtktreeview.c:499
+#: gtk/gtktreeview.c:500
 msgid "TreeView Model"
 msgstr ""
 
-#: gtk/gtktreeview.c:500
+#: gtk/gtktreeview.c:501
 msgid "The model for the tree view"
 msgstr ""
 
-#: gtk/gtktreeview.c:508
+#: gtk/gtktreeview.c:509
 msgid "Horizontal Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:516
+#: gtk/gtktreeview.c:517
 msgid "Vertical Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:523 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:425
+#: gtk/gtktreeview.c:524 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:425
 msgid "Visible"
 msgstr "Nähtav"
 
-#: gtk/gtktreeview.c:524
+#: gtk/gtktreeview.c:525
 msgid "Show the column header buttons"
 msgstr ""
 
-#: gtk/gtktreeview.c:531
+#: gtk/gtktreeview.c:532
 msgid "Headers Clickable"
 msgstr ""
 
-#: gtk/gtktreeview.c:532
+#: gtk/gtktreeview.c:533
 msgid "Column headers respond to click events"
 msgstr ""
 
-#: gtk/gtktreeview.c:539
+#: gtk/gtktreeview.c:540
 msgid "Expander Column"
 msgstr ""
 
-#: gtk/gtktreeview.c:540
+#: gtk/gtktreeview.c:541
 msgid "Set the column for the expander column"
 msgstr ""
 
-#: gtk/gtktreeview.c:547 gtk/gtktreeviewcolumn.c:270
+#: gtk/gtktreeview.c:548 gtk/gtktreeviewcolumn.c:270
 msgid "Reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:548
+#: gtk/gtktreeview.c:549
 msgid "View is reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:555
+#: gtk/gtktreeview.c:556
 msgid "Rules Hint"
 msgstr ""
 
-#: gtk/gtktreeview.c:556
+#: gtk/gtktreeview.c:557
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 
-#: gtk/gtktreeview.c:563
+#: gtk/gtktreeview.c:564
 msgid "Enable Search"
 msgstr ""
 
-#: gtk/gtktreeview.c:564
+#: gtk/gtktreeview.c:565
 msgid "View allows user to search through columns interactively"
 msgstr ""
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:572
 msgid "Search Column"
 msgstr ""
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:573
 msgid "Model column to search through when searching through code"
 msgstr ""
 
-#: gtk/gtktreeview.c:585
+#: gtk/gtktreeview.c:586
 msgid "Expander Size"
 msgstr ""
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:587
 msgid "Size of the expander arrow."
 msgstr ""
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:595
 msgid "Vertical Separator Width"
 msgstr ""
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:596
 msgid "Vertical space between cells.  Must be an even number."
 msgstr ""
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:604
 msgid "Horizontal Separator Width"
 msgstr ""
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:605
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr ""
 
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:613
 msgid "Allow Rules"
 msgstr ""
 
-#: gtk/gtktreeview.c:613
+#: gtk/gtktreeview.c:614
 msgid "Allow drawing of alternating color rows."
 msgstr ""
 
-#: gtk/gtktreeview.c:619
+#: gtk/gtktreeview.c:620
 msgid "Indent Expanders"
 msgstr ""
 
-#: gtk/gtktreeview.c:620
+#: gtk/gtktreeview.c:621
 msgid "Make the expanders indented."
 msgstr ""
 
@@ -4122,8 +4131,9 @@ msgstr "Modaalne"
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
-msgstr "Kui tõene, siis on see aken modaalne (teisi aknaid ei saa kasutada, kui "
-"see aken on avatud)."
+msgstr ""
+"Kui tõene, siis on see aken modaalne (teisi aknaid ei saa kasutada, kui see "
+"aken on avatud)."
 
 #: gtk/gtkwindow.c:448
 msgid "Window Position"

@@ -12,6 +12,7 @@ gdk-pixbuf/io-png.c
 gdk-pixbuf/io-pnm.c
 gdk-pixbuf/io-tga.c
 gdk-pixbuf/io-tiff.c
+gdk-pixbuf/io-wbmp.c
 gdk-pixbuf/io-xbm.c
 gdk-pixbuf/io-xpm.c
 gdk-pixbuf/gdk-pixdata.c

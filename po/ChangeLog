@@ -1,3 +1,7 @@
+Sun Feb 17 21:24:55 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* POTFILES.in: Add io-wbmp.c.
+
 2002-02-16  Tõivo Leedjärv  <leedjarv@interest.ee>
 
 	* et.po: Updated Estonian translation.

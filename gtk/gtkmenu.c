@@ -259,7 +259,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   gtk_settings_install_property (g_param_spec_boolean ("gtk-can-change-accels",
 						       _("Can change accelerators"),
 						       _("Whether menu accelerators can be changed by pressing a key over the menu item."),
-						       TRUE,
+						       FALSE,
 						       G_PARAM_READWRITE));
 }
 

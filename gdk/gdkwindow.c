@@ -2242,6 +2242,30 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
   gdk_region_destroy (region);
 }
 
+static void
+draw_ugly_color (GdkWindow *window,
+                GdkRegion *region)
+{
+  /* Draw ugly color all over the newly-invalid region */
+  GdkColor ugly_color = { 0, 50000, 10000, 10000 };
+  GdkGC *ugly_gc;
+  GdkRectangle clipbox;
+    
+  ugly_gc = gdk_gc_new (window);
+  gdk_gc_set_rgb_fg_color (ugly_gc, &ugly_color);
+  gdk_gc_set_clip_region (ugly_gc, region);
+
+  gdk_region_get_clipbox (region, &clipbox);
+  
+  gdk_draw_rectangle (window,
+                     ugly_gc,
+                     TRUE,
+                     clipbox.x, clipbox.y,
+                     clipbox.width, clipbox.height);
+  
+  g_object_unref (G_OBJECT (ugly_gc));
+}
+
 /**
  * gdk_window_invalidate_maybe_recurse:
  * @window: a #GdkWindow
@@ -2291,26 +2315,7 @@ gdk_window_invalidate_maybe_recurse (GdkWindow *window,
   if (!gdk_region_empty (visible_region))
     {
       if (debug_updates)
-        {
-          /* Draw ugly color all over the newly-invalid region */
-          GdkRectangle ugly_rect;
-          GdkGC *ugly_gc;
-          GdkColor ugly_color = { 0, 60000, 10000, 10000 };
-          
-          ugly_gc = gdk_gc_new (window);
-
-          gdk_gc_set_rgb_fg_color (ugly_gc, &ugly_color);
-          
-	  gdk_region_get_clipbox (visible_region, &ugly_rect);
-
-          gdk_draw_rectangle (window,
-                              ugly_gc,
-                              TRUE,
-                              ugly_rect.x, ugly_rect.y,
-                              ugly_rect.width, ugly_rect.height);
-          
-          g_object_unref (G_OBJECT (ugly_gc));
-        }
+        draw_ugly_color (window, region);
       
       if (private->update_area)
 	{

@@ -231,7 +231,8 @@ struct _CompletionState
 enum {
   PROP_0,
   PROP_SHOW_FILEOPS,
-  PROP_FILENAME
+  PROP_FILENAME,
+  PROP_SELECT_MULTIPLE
 };
 
 enum {
@@ -534,6 +535,14 @@ gtk_file_selection_class_init (GtkFileSelectionClass *class)
 							 FALSE,
 							 G_PARAM_READABLE |
 							 G_PARAM_WRITABLE));
+  g_object_class_install_property (gobject_class,
+				   PROP_SELECT_MULTIPLE,
+				   g_param_spec_boolean ("select_multiple",
+							 _("Select multiple"),
+							 _("Whether to allow multiple files to be selected."),
+							 FALSE,
+							 G_PARAM_READABLE |
+							 G_PARAM_WRITABLE));
   object_class->destroy = gtk_file_selection_destroy;
   widget_class->map = gtk_file_selection_map;
 }
@@ -553,12 +562,14 @@ static void gtk_file_selection_set_property (GObject         *object,
       gtk_file_selection_set_filename (filesel,
                                        g_value_get_string (value));
       break;
-      
     case PROP_SHOW_FILEOPS:
       if (g_value_get_boolean (value))
 	 gtk_file_selection_show_fileop_buttons (filesel);
       else
 	 gtk_file_selection_hide_fileop_buttons (filesel);
+      break;
+    case PROP_SELECT_MULTIPLE:
+      gtk_file_selection_set_select_multiple (filesel, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -589,6 +600,9 @@ static void gtk_file_selection_get_property (GObject         *object,
       g_value_set_boolean (value, (filesel->fileop_c_dir && 
 				   filesel->fileop_del_file &&
 				   filesel->fileop_ren_file));
+      break;
+    case PROP_SELECT_MULTIPLE:
+      g_value_set_boolean (value, gtk_file_selection_get_select_multiple (filesel));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2115,7 +2129,12 @@ gtk_file_selection_set_select_multiple (GtkFileSelection *filesel,
 
   mode = select_multiple ? GTK_SELECTION_MULTIPLE : GTK_SELECTION_SINGLE;
 
-  gtk_tree_selection_set_mode (sel, mode);
+  if (mode != gtk_tree_selection_get_mode (sel))
+    {
+      gtk_tree_selection_set_mode (sel, mode);
+
+      g_object_notify (G_OBJECT (filesel), "select-multiple");
+    }
 }
 
 /**

@@ -1,3 +1,21 @@
+Sun Feb 17 21:30:49 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* Released 1.3.14
+
+	* configure.in: Version 1.3.14, interface, binary age 0.
+
+	* gdk/gdkregion-generic.c (miSubtractO): Fix out-of-bounds
+	read. (#71619, reported by Morten Welinder)
+
+	* gtk/gtkmenu.c (gtk_menu_class_init): Fix setting default.
+
+	* gtk/gtkfilesel.c (gtk_file_selection_class_init): Add
+	a select_multiple property to go along with thenew 
+	get/set_select_multiple.
+
+	* gdk/gdkwindow.c: Patch from Soeren Sandmann to improve
+	update debugging code. (#71703)
+
 2002-02-17  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkcolor-win32.c (free_colors): Don't set the
