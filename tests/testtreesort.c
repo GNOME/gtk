@@ -51,6 +51,18 @@ enum
   NUM_COLUMNS
 };
 
+gboolean
+select_func (GtkTreeSelection  *selection,
+	     GtkTreeModel      *model,
+	     GtkTreePath       *path,
+	     gboolean           path_currently_selected,
+	     gpointer           data)
+{
+  if (gtk_tree_path_get_depth (path) > 1)
+    return TRUE;
+  return FALSE;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -95,7 +107,7 @@ main (int argc, char *argv[])
   ssmodel = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (smodel));
 */
   tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
-
+  gtk_tree_selection_set_select_function (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)), select_func, NULL, NULL);
   /* 12 iters now, 12 later... */
   for (i = 0; data[i].word_1 != NULL; i++)
     {

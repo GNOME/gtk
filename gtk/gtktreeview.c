@@ -384,7 +384,8 @@ static void gtk_tree_view_real_start_editing (GtkTreeView       *tree_view,
 					      GdkRectangle      *cell_area,
 					      GdkEvent          *event,
 					      guint              flags);
-static void gtk_tree_view_stop_editing                  (GtkTreeView *tree_view);
+static void gtk_tree_view_stop_editing                  (GtkTreeView *tree_view,
+							 gboolean     cancel_editing);
 static void gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view);
 
 
@@ -1032,7 +1033,7 @@ gtk_tree_view_destroy (GtkObject *object)
   GtkWidget *search_dialog;
   GList *list;
 
-  gtk_tree_view_stop_editing (tree_view);
+  gtk_tree_view_stop_editing (tree_view, TRUE);
 
   if (tree_view->priv->columns != NULL)
     {
@@ -1641,7 +1642,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   tree_view = GTK_TREE_VIEW (widget);
-  gtk_tree_view_stop_editing (tree_view);
+  gtk_tree_view_stop_editing (tree_view, FALSE);
   gtk_widget_style_get (widget,
 			"vertical_separator", &vertical_separator,
 			"horizontal_separator", &horizontal_separator,
@@ -3416,6 +3417,9 @@ presize_handler_callback (gpointer data)
 static void
 install_presize_handler (GtkTreeView *tree_view)
 {
+  if (! GTK_WIDGET_REALIZED (tree_view))
+    return;
+
   if (! tree_view->priv->presize_handler_timer)
     {
       tree_view->priv->presize_handler_timer =
@@ -4525,7 +4529,7 @@ gtk_tree_view_focus (GtkWidget        *widget,
 
   focus_child = container->focus_child;
 
-  gtk_tree_view_stop_editing (GTK_TREE_VIEW (widget));
+  gtk_tree_view_stop_editing (GTK_TREE_VIEW (widget), FALSE);
   /* Case 1.  Headers currently have focus. */
   if (focus_child)
     {
@@ -4674,7 +4678,7 @@ gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
 
   if (tree_view->priv->tree == NULL)
     return;
-  gtk_tree_view_stop_editing (tree_view);
+  gtk_tree_view_stop_editing (tree_view, FALSE);
   GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
   gtk_widget_grab_focus (GTK_WIDGET (tree_view));
 
@@ -4781,6 +4785,11 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
   GList *list;
 
   g_return_if_fail (path != NULL || iter != NULL);
+
+  if (!GTK_WIDGET_REALIZED (tree_view))
+    /* We can just ignore ::changed signals if we aren't realized, as we don't care about sizes
+     */
+    return;
 
   gtk_widget_style_get (GTK_WIDGET (data), "vertical_separator", &vertical_separator, NULL);
 
@@ -5030,6 +5039,9 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
 
   /* Ensure we don't have a dangling pointer to a dead node */
   ensure_unprelighted (tree_view);
+
+  /* Cancel editting if we've started */
+  gtk_tree_view_stop_editing (tree_view, TRUE);
 
   /* If we have a node expanded/collapsed timeout, remove it */
   if (tree_view->priv->expand_collapse_timeout != 0)
@@ -6436,7 +6448,7 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view)
 
   /* yes, we point to the entry's private text thing here, a bit evil */
   gtk_object_set_data (GTK_OBJECT (window), "gtk-tree-view-text",
-		       gtk_entry_get_text (GTK_ENTRY (entry)));
+		       (char *) gtk_entry_get_text (GTK_ENTRY (entry)));
   gtk_object_set_data (GTK_OBJECT (tree_view),
 		       GTK_TREE_VIEW_SEARCH_DIALOG_KEY, window);
 
@@ -9544,11 +9556,14 @@ gtk_tree_view_real_start_editing (GtkTreeView       *tree_view,
 }
 
 static void
-gtk_tree_view_stop_editing (GtkTreeView *tree_view)
+gtk_tree_view_stop_editing (GtkTreeView *tree_view,
+			    gboolean     cancel_editing)
 {
   if (tree_view->priv->edited_column == NULL)
     return;
 
-  gtk_cell_editable_editing_done (tree_view->priv->edited_column->editable_widget);
+  if (! cancel_editing)
+    gtk_cell_editable_editing_done (tree_view->priv->edited_column->editable_widget);
+
   gtk_cell_editable_remove_widget (tree_view->priv->edited_column->editable_widget);
 }
