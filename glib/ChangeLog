@@ -1,3 +1,10 @@
+Mon May 11 21:11:54 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gutils.c gmessages.c: Moved g_error, g_warning, g_message and
+	g_print from gutils.c to new file gmessages.c, to avoid having to
+	include <unistd.h> in gutils.c which was causing problems for the
+	g_strsignal implementation on FreeBSD boxes.
+
 Mon May 11 09:53:43 1998  Tim Janik  <timj@gtk.org>
 
 	* configure.in: preserve automake CFLAGS.
