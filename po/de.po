@@ -1,14 +1,15 @@
 # This is the German locale definition for Gtk+.
 # Copyright (C) 1998 Free Software Foundation, Inc.
+# Christian Meyer <cm@ggtt.de>, 2000.
 # Daniel Egger <Daniel.Egger@t-online>, 1998.
 # Karsten Weiss <karsten@addx.au.s.shuttle.de>, 1999.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 2000-05-19 07:11+0200\n"
+"Project-Id-Version: gtk+ 1.2.8\n"
+"POT-Creation-Date: 2000-12-22 21:30+0100\n"
 "PO-Revision-Date: 1999-08-24 17:38+02:00\n"
-"Last-Translator: Karsten Weiss <karsten@addx.au.s.shuttle.de>\n"
+"Last-Translator: Christian Meyer <cm@ggtt.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -450,17 +451,18 @@ msgstr "Seite %u"
 #: gtk/gtkrc.c:1702
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Kann Bilddatei in Pixmap-Pfad: \"%s\" nicht finden. Zeile %d"
+msgstr ""
+"Bilddatei in Pixmap-Pfad: \"%s\" konnte nicht gefunden werden. Zeile %d"
 
 #: gtk/gtkrc.c:1705
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Kann Bilddatei in Pixmap-Pfad: \"%s\" nicht finden"
+msgstr "Bilddatei in Pixmap-Pfad: \"%s\" konnte nicht gefunden werden"
 
 #: gtk/gtkthemes.c:79
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Kann ladbares Modul in Module-Pfad: \"%s\" nicht finden,"
+msgstr "Ladbares Modul in Module-Pfad: \"%s\" kann nicht gefunden werden,"
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
@@ -470,10 +472,10 @@ msgstr "--- Kein Tip ---"
 #~ msgstr "dünn"
 
 #~ msgid "extralight"
-#~ msgstr "extra licht"
+#~ msgstr "extra hell"
 
 #~ msgid "light"
-#~ msgstr "licht"
+#~ msgstr "hell"
 
 #~ msgid "normal"
 #~ msgstr "normal"
