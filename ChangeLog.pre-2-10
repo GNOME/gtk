@@ -1,3 +1,8 @@
+Sat Nov 27 15:18:14 2004  Manish Singh  <yosh@gimp.org>
+
+	* contrib/gdk-pixbuf-xlib/gdk-pixbuf-xlib-drawable.c
+	(rgb565amsb, rgb555msb): make proper casts in big endian cases.
+
 2004-11-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c (gtk_icon_view_set_model): Check column types on the

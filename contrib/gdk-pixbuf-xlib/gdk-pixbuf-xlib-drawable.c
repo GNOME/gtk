@@ -547,7 +547,11 @@ rgb565amsb (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colorma
 	bpl = image->bytes_per_line;
 
 	for (yy = 0; yy < height; yy++) {
+#ifdef LITTLE
 		s = srow;
+#else
+		s = (guint16 *) srow;
+#endif
 		o = (guint32 *) orow;
 		for (xx = 0; xx < width; xx ++) {
 			register guint32 data;
@@ -670,7 +674,11 @@ rgb555msb (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colormap
 	bpl = image->bytes_per_line;
 
 	for (yy = 0; yy < height; yy++) {
+#ifdef LITTLE
 		s = srow;
+#else
+		s = (guint32 *) srow;
+#endif
 		o = (guint16 *) orow;
 		for (xx = 1; xx < width; xx += 2) {
 			register guint32 data;
