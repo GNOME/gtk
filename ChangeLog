@@ -1,3 +1,7 @@
+2001-10-10  Havoc Pennington  <hp@pobox.com>
+
+	* gdk/gdkwindow.c (gdk_window_new): set _NET_WM_PID
+
 2001-09-02  Abel Cheung  <maddog@linux.org.hk>
 
 	* configure.in (ALL_LINGUAS): zh_TW.Big5 -> zh_TW

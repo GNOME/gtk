@@ -28,6 +28,9 @@
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <netinet/in.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 #include "gdk.h"
 #include "config.h"
 #include "gdkinput.h"
@@ -488,6 +491,15 @@ gdk_window_new (GdkWindow     *parent,
       XFree (class_hint);
     }
   
+  {
+    gulong pid = getpid ();
+    
+    XChangeProperty (private->xdisplay, private->xwindow,
+                     gdk_atom_intern ("_NET_WM_PID", FALSE),
+                     XA_CARDINAL, 32,
+                     PropModeReplace,
+                     (guchar *)&pid, 1);
+  }
   
   return window;
 }
