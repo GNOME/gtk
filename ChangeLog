@@ -1,3 +1,9 @@
+Sat Oct 12 15:28:06 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkitemfactory.c: use GTK_IS_RADIO_MENU_ITEM instead
+	of comparing the type directly. This handles possible subclasses
+	too. (Recommended by Tim Janik)
+ 
 Thu Oct 10 14:35:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkscrolledwindow.[ch]: Privately export
