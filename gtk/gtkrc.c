@@ -1665,7 +1665,7 @@ typedef  GdkPixmap * (*GtkImageLoader) (GdkWindow   *window,
 */
 
 void
-gtk_rc_set_loader(GtkImageLoader loader)
+gtk_rc_set_image_loader(GtkImageLoader loader)
 {
 	image_loader = loader;
 }

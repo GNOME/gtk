@@ -46,7 +46,7 @@ typedef  GdkPixmap * (*GtkImageLoader) (GdkWindow   *window,
 					GdkBitmap  **mask,
 					GdkColor    *transparent_color,
 					const gchar *filename);
-void	  gtk_rc_set_loader(GtkImageLoader loader);
+void	  gtk_rc_set_image_loader(GtkImageLoader loader);
 
 
 #ifdef __cplusplus
