@@ -1,12 +1,13 @@
 # GTK+ fordansket.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Birger Langkjer <birger.langkjer@image.dk>, 1999.
+# Kenneth Christiansen <kenneth@ripen.dk>, 1999
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.2.3\n"
-"POT-Creation-Date: 1999-09-20 13:16+0200\n"
-"PO-Revision-Date: 1999-09-15 16:36+0100\n"
+"Project-Id-Version: gtk+ 1.2.4\n"
+"POT-Creation-Date: 1999-09-17 21:17+0200\n"
+"PO-Revision-Date: 1999-09-19 12:08+02:00\n"
 "Last-Translator: Birger Langkjer <birger.langkjer@image.dk>\n"
 "Language-Team: Danish <dltp@lists.wiktor.dk>\n"
 "MIME-Version: 1.0\n"
@@ -172,7 +173,7 @@ msgstr "Bredde:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr "Gennemsnitsbredde:"
+msgstr "Middelbredde:"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
@@ -190,7 +191,7 @@ msgstr "Ønsket værdi"
 
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
-msgstr "Rigtig værdi"
+msgstr "Oprigtig værdi"
 
 #: gtk/gtkfontsel.c:494
 msgid "Font"
@@ -202,7 +203,7 @@ msgstr "Skrifttype:"
 
 #: gtk/gtkfontsel.c:509
 msgid "Font Style:"
-msgstr "Skrifttypestil:"
+msgstr "Skriftstil:"
 
 #: gtk/gtkfontsel.c:514
 msgid "Size:"
@@ -222,7 +223,7 @@ msgstr "Punkter"
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
-msgstr "Pixels"
+msgstr "Pixeler"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
@@ -239,12 +240,12 @@ msgstr "Ønsket skrifttypenavn:"
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
-msgstr "Rigtigt skrifttypenavn:"
+msgstr "Oprigtigt skrifttypenavn:"
 
 #: gtk/gtkfontsel.c:771
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr "%i skrifttyper tilstede med ialt %s stilvarianter."
+msgstr "%i skrifttyper tilstede med ialt %i stilvarianter."
 
 #: gtk/gtkfontsel.c:786
 msgid "Filter"
@@ -252,7 +253,7 @@ msgstr "Filter"
 
 #: gtk/gtkfontsel.c:799
 msgid "Font Types:"
-msgstr "Skrifttype-typer:"
+msgstr "Skrifttyper:"
 
 #: gtk/gtkfontsel.c:807
 msgid "Bitmap"
@@ -366,11 +367,11 @@ msgstr "Gamma-værdi"
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:200
 msgid "Input"
-msgstr "Input"
+msgstr "Inddata"
 
 #: gtk/gtkinputdialog.c:208
 msgid "No input devices"
-msgstr "Ingen inputenheder"
+msgstr "Ingen inddataenheder"
 
 #: gtk/gtkinputdialog.c:237
 msgid "Device:"
@@ -465,29 +466,29 @@ msgstr "Kunne ikke finde modul i module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Ingen hjælp ---"
 
-#~ msgid "thin"
-#~ msgstr "tynd"
-
-#~ msgid "extralight"
-#~ msgstr "ekstralet"
-
-#~ msgid "light"
-#~ msgstr "let"
-
-#~ msgid "normal"
-#~ msgstr "normal"
-
-#~ msgid "medium"
-#~ msgstr "medium"
-
-#~ msgid "demibold"
-#~ msgstr "halvfed"
-
-#~ msgid "bold"
-#~ msgstr "fed"
+#~ msgid "heavy"
+#~ msgstr "tung"
 
 #~ msgid "extrabold"
 #~ msgstr "ekstrafed"
 
-#~ msgid "heavy"
-#~ msgstr "tung"
+#~ msgid "bold"
+#~ msgstr "fed"
+
+#~ msgid "demibold"
+#~ msgstr "halvfed"
+
+#~ msgid "medium"
+#~ msgstr "medium"
+
+#~ msgid "normal"
+#~ msgstr "normal"
+
+#~ msgid "light"
+#~ msgstr "let"
+
+#~ msgid "extralight"
+#~ msgstr "ekstralet"
+
+#~ msgid "thin"
+#~ msgstr "tynd"
