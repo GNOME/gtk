@@ -1,3 +1,10 @@
+Tue Feb 26 17:04:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c (update_color): Emit ::color_changed
+	every time we notify current_color. (Brute force 
+	fix for #72470, Matthias Clasen). Some fixes to improve
+	reentrancy.
+
 Tue Feb 26 15:04:33 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_enter_text): use

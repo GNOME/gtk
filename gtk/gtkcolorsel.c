@@ -1562,10 +1562,16 @@ update_color (GtkColorSelection *colorsel)
   gtk_entry_set_text (GTK_ENTRY (priv->hex_entry), entryval);
   priv->changing = FALSE;
 
+  g_object_ref (colorsel);
+  
+  g_signal_emit (colorsel, color_selection_signals[COLOR_CHANGED], 0);
+  
   g_object_freeze_notify (G_OBJECT (colorsel));
   g_object_notify (G_OBJECT (colorsel), "current_color");
   g_object_notify (G_OBJECT (colorsel), "current_alpha");
   g_object_thaw_notify (G_OBJECT (colorsel));
+  
+  g_object_unref (colorsel);
 }
 
 
@@ -2177,8 +2183,8 @@ gtk_color_selection_set_current_color (GtkColorSelection *colorsel,
       for (i = 0; i < COLORSEL_NUM_CHANNELS; i++)
 	priv->old_color[i] = priv->color[i];
     }
-  update_color (colorsel);
   priv->default_set = TRUE;
+  update_color (colorsel);
 }
 
 /**
@@ -2206,8 +2212,8 @@ gtk_color_selection_set_current_alpha (GtkColorSelection *colorsel,
       for (i = 0; i < COLORSEL_NUM_CHANNELS; i++)
 	priv->old_color[i] = priv->color[i];
     }
-  update_color (colorsel);
   priv->default_alpha_set = TRUE;
+  update_color (colorsel);
 }
 
 /**
@@ -2247,9 +2253,9 @@ gtk_color_selection_set_color (GtkColorSelection    *colorsel,
       for (i = 0; i < COLORSEL_NUM_CHANNELS; i++)
 	priv->old_color[i] = priv->color[i];
     }
-  update_color (colorsel);
   priv->default_set = TRUE;
   priv->default_alpha_set = TRUE;
+  update_color (colorsel);
 }
 
 /**
