@@ -1,6 +1,11 @@
 2002-02-08  Darin Adler  <darin@bentspoon.com>
 
 	* gtk/gtktreeview.c: (gtk_tree_view_map_expanded_rows_helper):
+	Remove a tiny bit more dead code.
+
+2002-02-08  Darin Adler  <darin@bentspoon.com>
+
+	* gtk/gtktreeview.c: (gtk_tree_view_map_expanded_rows_helper):
 	Fix stale pointer bug.
 
 Fri Feb  8 14:30:14 2002  Owen Taylor  <otaylor@redhat.com>

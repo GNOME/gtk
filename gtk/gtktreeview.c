@@ -8103,7 +8103,6 @@ gtk_tree_view_map_expanded_rows_helper (GtkTreeView            *tree_view,
 					gpointer                user_data)
 {
   GtkRBNode *node;
-  gint i = 0;
 
   if (tree == NULL || tree->root == NULL)
     return;
@@ -8122,7 +8121,6 @@ gtk_tree_view_map_expanded_rows_helper (GtkTreeView            *tree_view,
 	  gtk_tree_path_up (path);
 	  (* func) (tree_view, path, user_data);
 	}
-      i++;
       gtk_tree_path_next (path);
       node = _gtk_rbtree_next (tree, node);
     }
