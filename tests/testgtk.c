@@ -3570,7 +3570,8 @@ create_modal_window (void)
 static void
 make_message_dialog (GtkWidget **dialog,
                      GtkMessageType  type,
-                     GtkButtonsType  buttons)
+                     GtkButtonsType  buttons,
+		     guint           default_response)
 {
   if (*dialog)
     {
@@ -3591,7 +3592,9 @@ make_message_dialog (GtkWidget **dialog,
                       "destroy",
                       GTK_SIGNAL_FUNC (gtk_widget_destroyed),
                       dialog);
-  
+
+  gtk_dialog_set_default_response (GTK_DIALOG (*dialog), default_response);
+
   gtk_widget_show (*dialog);
 }
 
@@ -3603,10 +3606,10 @@ create_message_dialog (void)
   static GtkWidget *error = NULL;
   static GtkWidget *question = NULL;
 
-  make_message_dialog (&info, GTK_MESSAGE_INFO, GTK_BUTTONS_OK);
-  make_message_dialog (&warning, GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE);
-  make_message_dialog (&error, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK_CANCEL);
-  make_message_dialog (&question, GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO);
+  make_message_dialog (&info, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, GTK_RESPONSE_OK);
+  make_message_dialog (&warning, GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE, GTK_RESPONSE_OK);
+  make_message_dialog (&error, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK_CANCEL, GTK_RESPONSE_OK);
+  make_message_dialog (&question, GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO, GTK_RESPONSE_YES);
 }
 
 /*
