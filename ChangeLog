@@ -1,3 +1,8 @@
+2002-08-16  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtkdialog.h (struct _GtkDialog): switch vbox and action_area
+	back to the order that 2.0 has
+
 Thu Aug 15 22:46:02 BST 2002  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/gtk-tut.sgml, examples/menu/menu.c:

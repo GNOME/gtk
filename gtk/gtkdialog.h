@@ -98,8 +98,8 @@ struct _GtkDialog
   GtkWindow window;
 
   /*< public >*/
-  GtkWidget *action_area;
   GtkWidget *vbox;
+  GtkWidget *action_area;
 
   /*< private >*/
   GtkWidget *separator;
