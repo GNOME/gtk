@@ -1,3 +1,9 @@
+2004-12-13  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* xdgmimeglob.c: (_xdg_glob_hash_lookup_file_name):
+
+	Resync with upstream again
+
 Fri Dec 10 13:58:38 2004  Manish Singh  <yosh@gimp.org>
 
 	* xdgmime.h: wrap new API in XDG_ENTRY().

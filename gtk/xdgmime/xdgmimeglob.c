@@ -296,24 +296,16 @@ _xdg_glob_hash_lookup_file_name (XdgGlobHash *glob_hash,
     if (strcmp ((const char *)list->data, file_name) == 0)
       return list->mime_type;
 
-  for (ptr = file_name; *ptr != '\000'; ptr = _xdg_utf8_next_char (ptr))
+  ptr = strchr (file_name, '.');
+  if (ptr)
     {
-      if (*ptr == '.')
-	{
-	  mime_type = (_xdg_glob_hash_node_lookup_file_name (glob_hash->simple_node, ptr, FALSE));
-	  if (mime_type != NULL)
-	    return mime_type;
-	}
-    }
+      mime_type = (_xdg_glob_hash_node_lookup_file_name (glob_hash->simple_node, ptr, FALSE));
+      if (mime_type != NULL)
+        return mime_type;
 
-  for (ptr = file_name; *ptr != '\000'; ptr = _xdg_utf8_next_char (ptr))
-    {
-      if (*ptr == '.')
-	{
-	  mime_type = (_xdg_glob_hash_node_lookup_file_name (glob_hash->simple_node, ptr, TRUE));
-	  if (mime_type != NULL)
-	    return mime_type;
-	}
+      mime_type = (_xdg_glob_hash_node_lookup_file_name (glob_hash->simple_node, ptr, TRUE));
+      if (mime_type != NULL)
+        return mime_type;
     }
 
   /* FIXME: Not UTF-8 safe */
