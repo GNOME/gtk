@@ -74,6 +74,8 @@ static void gtk_list_store_set_column_type (GtkListStore *list_store,
 
 
 /* Drag and Drop */
+static gboolean real_gtk_list_store_row_draggable (GtkTreeDragSource *drag_source,
+                                                   GtkTreePath       *path);
 static gboolean gtk_list_store_drag_data_delete   (GtkTreeDragSource *drag_source,
                                                    GtkTreePath       *path);
 static gboolean gtk_list_store_drag_data_get      (GtkTreeDragSource *drag_source,
@@ -228,6 +230,7 @@ gtk_list_store_tree_model_init (GtkTreeModelIface *iface)
 static void
 gtk_list_store_drag_source_init (GtkTreeDragSourceIface *iface)
 {
+  iface->row_draggable = real_gtk_list_store_row_draggable;
   iface->drag_data_delete = gtk_list_store_drag_data_delete;
   iface->drag_data_get = gtk_list_store_drag_data_get;
 }
@@ -1400,6 +1403,12 @@ gtk_list_store_iter_is_valid (GtkListStore *list_store,
   return FALSE;
 }
 
+static gboolean real_gtk_list_store_row_draggable (GtkTreeDragSource *drag_source,
+                                                   GtkTreePath       *path)
+{
+  return TRUE;
+}
+  
 static gboolean
 gtk_list_store_drag_data_delete (GtkTreeDragSource *drag_source,
                                  GtkTreePath       *path)

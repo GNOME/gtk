@@ -1,3 +1,15 @@
+2002-12-29  Murray Cumming  <murrayc@usa.net>
+
+	Fixes #102168.
+
+	* gtk/gtkliststore.c, gtktreednd.c, gtktreestore.c:
+	Actually implement the GtkTreeDragSource::row_draggable virtual 
+	function in GtkListStore and GtkTreeStore instead of just checking 
+	whether it's implemented at all. This means that DnD isn't broken by
+	gtkmm's virtual function wrappers. The alternative would be to
+	hard-code the TRUE return value into gtkmm's wrappers, but that's 
+	part of GTK+'s implementation, not it's API.
+
 Tue Jan 14 23:42:29 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c: fix compiler warning.
