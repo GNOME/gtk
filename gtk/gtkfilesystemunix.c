@@ -769,6 +769,18 @@ gtk_file_system_unix_make_path (GtkFileSystem    *file_system,
   g_return_val_if_fail (base_filename != NULL, NULL);
   g_return_val_if_fail (g_path_is_absolute (base_filename), NULL);
 
+  if (strchr (display_name, G_DIR_SEPARATOR))
+    {
+      g_set_error (error,
+		   GTK_FILE_SYSTEM_ERROR,
+		   GTK_FILE_SYSTEM_ERROR_BAD_FILENAME,
+		   _("The name \"%s\" is not valid because it contains the character \"%s\". "
+		     "Please use a different name."),
+		   display_name,
+		   G_DIR_SEPARATOR_S);
+      return NULL;
+    }
+
   filename = g_filename_from_utf8 (display_name, -1, NULL, NULL, &tmp_error);
   if (!filename)
     {

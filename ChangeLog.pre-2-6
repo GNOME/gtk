@@ -1,5 +1,9 @@
 2004-04-05  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_make_path): Look
+	for G_DIR_SEPARATOR in the display_name, and err out if it is
+	present; use the same error message as Nautilus.  Fixes #136467.
+
 	* gtk/gtkfilechooserdefault.c (file_pane_create): Make the
 	new-folder button say "Create Fo_lder" rather than "Create
 	_Folder", so that the mnemonic doesn't conflict with the "Save in
