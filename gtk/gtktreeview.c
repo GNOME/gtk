@@ -10914,6 +10914,17 @@ unset_reorderable (GtkTreeView *tree_view)
     }
 }
 
+/**
+ * gtk_tree_view_enable_model_drag_source:
+ * @tree_view: a #GtkTreeView
+ * @start_button_mask: Mask of allowed buttons to start drag
+ * @targets: the table of targets that the drag will support
+ * @n_targets: the number of items in @targets
+ * @actions: the bitmask of possible actions for a drag from this
+ *    widget
+ * 
+ * Turns @tree_view into a drag source for automatic DND.
+ **/
 void
 gtk_tree_view_enable_model_drag_source (GtkTreeView              *tree_view,
 					GdkModifierType           start_button_mask,
@@ -10943,6 +10954,16 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView              *tree_view,
   unset_reorderable (tree_view);
 }
 
+/**
+ * gtk_tree_view_enable_model_drag_dest:
+ * @tree_view: a #GtkTreeView
+ * @targets: the table of targets that the drag will support
+ * @n_targets: the number of items in @targets
+ * @actions: the bitmask of possible actions for a drag from this
+ *    widget
+ * 
+ * Turns @tree_view into a drop destination for automatic DND.
+ **/
 void
 gtk_tree_view_enable_model_drag_dest (GtkTreeView              *tree_view,
 				      const GtkTargetEntry     *targets,
@@ -10970,6 +10991,12 @@ gtk_tree_view_enable_model_drag_dest (GtkTreeView              *tree_view,
   unset_reorderable (tree_view);
 }
 
+/**
+ * gtk_tree_view_unset_rows_drag_source:
+ * @tree_view: a #GtkTreeView
+ * 
+ * Undoes the effect of gtk_tree_view_enable_model_drag_source().
+ **/
 void
 gtk_tree_view_unset_rows_drag_source (GtkTreeView *tree_view)
 {
@@ -10983,6 +11010,7 @@ gtk_tree_view_unset_rows_drag_source (GtkTreeView *tree_view)
     {
       if (di->source_set)
         {
+          gtk_drag_source_unset (GTK_WIDGET (tree_view));
           clear_source_info (di);
           di->source_set = FALSE;
         }
@@ -10994,6 +11022,12 @@ gtk_tree_view_unset_rows_drag_source (GtkTreeView *tree_view)
   unset_reorderable (tree_view);
 }
 
+/**
+ * gtk_tree_view_unset_rows_drag_dest:
+ * @tree_view: a #GtkTreeView
+ * 
+ * Undoes the effect of gtk_tree_view_enable_model_drag_dest().
+ **/
 void
 gtk_tree_view_unset_rows_drag_dest (GtkTreeView *tree_view)
 {
@@ -11019,6 +11053,14 @@ gtk_tree_view_unset_rows_drag_dest (GtkTreeView *tree_view)
   unset_reorderable (tree_view);
 }
 
+/**
+ * gtk_tree_view_set_drag_dest_row:
+ * @tree_view: a #GtkTreeView
+ * @path: The path of the row to highlight, or %NULL.
+ * @pos: Specifies whether to drop before, after or into the row
+ * 
+ * Sets the row that is highlighted for feedback.
+ **/
 void
 gtk_tree_view_set_drag_dest_row (GtkTreeView            *tree_view,
                                  GtkTreePath            *path,
@@ -11089,6 +11131,14 @@ gtk_tree_view_set_drag_dest_row (GtkTreeView            *tree_view,
     }
 }
 
+/**
+ * gtk_tree_view_get_drag_dest_row:
+ * @tree_view: a #GtkTreeView
+ * @path: Return location for the path of the highlighted row, or %NULL.
+ * @pos: Return location for the drop position, or %NULL
+ * 
+ * Gets information about the row that is highlighted for feedback.
+ **/
 void
 gtk_tree_view_get_drag_dest_row (GtkTreeView              *tree_view,
                                  GtkTreePath             **path,
@@ -11113,6 +11163,18 @@ gtk_tree_view_get_drag_dest_row (GtkTreeView              *tree_view,
     *pos = tree_view->priv->drag_dest_pos;
 }
 
+/**
+ * gtk_tree_view_get_dest_row_at_pos:
+ * @tree_view: a #GtkTreeView
+ * @drag_x: the position to determine the destination row for
+ * @drag_y: the position to determine the destination row for
+ * @path: Return location for the path of the highlighted row, or %NULL.
+ * @pos: Return location for the drop position, or %NULL
+ * 
+ * Determines the destination row for a given position.
+ * 
+ * Return value: whether there is a row at the given postiion,
+ **/
 gboolean
 gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
                                    gint                     drag_x,

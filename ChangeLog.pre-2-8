@@ -1,3 +1,11 @@
+Sun Feb 15 02:49:45 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreednd.c: 
+	* gtk/gtktreeview.c: Document the tree DND API.
+
+	* gtk/gtktreeview.c (gtk_tree_view_unset_rows_drag_source): 
+	Call gtk_drag_source_unset().  
+	
 Sun Feb 15 00:49:59 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_class_init): 

@@ -186,7 +186,7 @@ gtk_tree_drag_dest_drag_data_received (GtkTreeDragDest  *drag_dest,
 
 
 /**
- * gtk_tree_drag_dest_drop_possible:
+ * gtk_tree_drag_dest_row_drop_possible:
  * @drag_dest: a #GtkTreeDragDest
  * @dest_path: destination row
  * @selection_data: the data being dragged
