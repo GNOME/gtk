@@ -239,7 +239,6 @@ _gtk_key_hash_remove_entry (GtkKeyHash *key_hash,
       g_hash_table_remove (key_hash->reverse_hash, value);
 
       key_hash_free_entry (key_hash, entry);
-      g_free (entry);
     }
 }
 

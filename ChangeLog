@@ -1,3 +1,8 @@
+Tue Feb 26 11:51:56 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkkeyhash.c (_gtk_key_hash_remove_entry): Fix
+	double free.
+
 Tue Feb 26 10:38:14 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkkeyhash.c (_gtk_key_hash_lookup_keyval): Handle
