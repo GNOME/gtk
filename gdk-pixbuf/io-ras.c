@@ -544,5 +544,6 @@ MODULE_ENTRY (ras, fill_info) (GdkPixbufFormat *info)
 	info->mime_types = mime_types;
 	info->extensions = extensions;
 	info->flags = 0;
+	info->license = "LGPL";
 }
 

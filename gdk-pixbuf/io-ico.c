@@ -1203,6 +1203,7 @@ MODULE_ENTRY (ico, fill_info) (GdkPixbufFormat *info)
 	info->mime_types = mime_types;
 	info->extensions = extensions;
 	info->flags = GDK_PIXBUF_FORMAT_WRITABLE;
+	info->license = "LGPL";
 }
 
 

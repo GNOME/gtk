@@ -615,6 +615,10 @@ _gdk_pixbuf_get_named_module (const char *name,
 
 	for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
 		GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
+
+		if (module->info->disabled)
+			continue;
+
 		if (!strcmp (name, module->module_name))
 			return module;
 	}
@@ -641,6 +645,10 @@ _gdk_pixbuf_get_module (guchar *buffer, guint size,
 
 	for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
 		GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
+
+		if (module->info->disabled)
+			continue;
+
 		score = format_check (module, buffer, size);
 		if (score > best) {
 			best = score; 
@@ -1841,6 +1849,67 @@ gdk_pixbuf_format_is_scalable (GdkPixbufFormat *format)
 	g_return_val_if_fail (format != NULL, FALSE);
 
 	return (format->flags & GDK_PIXBUF_FORMAT_SCALABLE) != 0;
+}
+
+/**
+ * gdk_pixbuf_format_is_disabled:
+ * @format: a #GdkPixbufFormat
+ *
+ * Returns whether this image format is disabled. See
+ * gdk_pixbuf_format_set_disabled().
+ * 
+ * Return value: whether this image format is disabled.
+ *
+ * Since: 2.6
+ */
+gboolean   
+gdk_pixbuf_format_is_disabled (GdkPixbufFormat *format)
+{
+	g_return_val_if_fail (format != NULL, FALSE);
+
+	return format->disabled;	
+}
+
+/**
+ * gdk_pixbuf_format_set_disabled:
+ * @format: a #GdkPixbufFormat
+ * @disabled: %TRUE to disable the format @format
+ *
+ * Disables or enables an image format. If a format is disabled, 
+ * gdk-pixbuf won't use the image loader for this format to load 
+ * images. Applications can use this to avoid using image loaders 
+ * with an inappropriate license, see gdk_pixbuf_format_get_license().
+ *
+ * Since: 2.6
+ */
+void 
+gdk_pixbuf_format_set_disabled (GdkPixbufFormat *format,
+				gboolean         disabled)
+{
+	g_return_val_if_fail (format != NULL, FALSE);
+	
+	format->disabled = disabled != FALSE;
+}
+
+/**
+ * gdk_pixbuf_format_get_license:
+ * @format: a #GdkPixbufFormat
+ *
+ * Returns information about the license of the image loader
+ * for the format. The returned string should be a shorthand for 
+ * a wellknown license, e.g. "LGPL", "GPL", "QPL", "GPL/QPL",
+ * or "other" to indicate some other license.  
+ *
+ * Returns: a string describing the license of @format. 
+ *
+ * Since: 2.6
+ */
+gchar*
+gdk_pixbuf_format_get_license (GdkPixbufFormat *format)
+{
+	g_return_val_if_fail (format != NULL, FALSE);
+
+	return g_strdup (format->license);
 }
 
 GdkPixbufFormat *

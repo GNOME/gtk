@@ -1,3 +1,22 @@
+Wed Jul  7 23:53:58 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-io.h: 
+	* gdk-pixbuf-io.c (gdk_pixbuf_format_is_disabled): 
+	* gdk-pixbuf-io.c (gdk_pixbuf_format_set_disabled): 
+	* gdk-pixbuf-io.c (gdk_pixbuf_format_get_license): 
+	New functions to disable/enable individual loaders and to
+	obtain license information about loaders.
+	
+	* gdk-pixbuf-io.h (GdkPixbufFormat): Add disabled and 
+	license fields.
+
+	* gdk-pixbuf-io.c (_gdk_pixbuf_get_module): 
+	* gdk-pixbuf-io.c (_gdk_pixbuf_get_named_module): Skip
+	disabled loaders.
+
+	* io-*.c: Add license information in the fill_info
+	functions.
+	
 2004-07-07  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-features.h.in: Fix the build.
