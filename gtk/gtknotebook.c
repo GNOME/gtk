@@ -418,7 +418,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 				   PROP_SCROLLABLE,
 				   g_param_spec_boolean ("scrollable",
  							 _("Scrollable"),
- 							 _("If TRUE, scroll arrows are added if there are to many tabs to fit"),
+ 							 _("If TRUE, scroll arrows are added if there are too many tabs to fit"),
  							 FALSE,
  							 G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,

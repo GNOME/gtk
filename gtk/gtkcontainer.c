@@ -642,7 +642,7 @@ gtk_container_class_install_child_property (GtkContainerClass *class,
 
   if (g_param_spec_pool_lookup (_gtk_widget_child_property_pool, pspec->name, G_OBJECT_CLASS_TYPE (class), FALSE))
     {
-      g_warning (G_STRLOC ": class `%s' already contains a property named `%s'",
+      g_warning (G_STRLOC ": class `%s' already contains a child property named `%s'",
 		 G_OBJECT_CLASS_NAME (class),
 		 pspec->name);
       return;

@@ -120,7 +120,7 @@ gtk_progress_class_init (GtkProgressClass *class)
                                    PROP_ACTIVITY_MODE,
                                    g_param_spec_boolean ("activity_mode",
 							 _("Activity mode"),
-							 _("If true the GtkProgress is in activity mode, meaning that is signals something is happening, but not how much of the activity is finished. This is used when you're doing something that you don't know how long it will take."),
+							 _("If TRUE the GtkProgress is in activity mode, meaning that it signals something is happening, but not how much of the activity is finished. This is used when you're doing something that you don't know how long it will take."),
 							 FALSE,
 							 G_PARAM_READWRITE));
 
@@ -136,7 +136,7 @@ gtk_progress_class_init (GtkProgressClass *class)
 				   PROP_TEXT_XALIGN,
 				   g_param_spec_float ("text_xalign",
 						       _("Text x alignment"),
-						       _("A number between 0.0 and 1.0 specifying the horizontal alignment of the text in the progresswidget"),
+						       _("A number between 0.0 and 1.0 specifying the horizontal alignment of the text in the progress widget"),
 						       0.0,
 						       1.0,
 						       0.5,

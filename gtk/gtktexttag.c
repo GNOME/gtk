@@ -197,7 +197,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_NAME,
                                    g_param_spec_string ("name",
                                                         _("Tag name"),
-                                                        _("Name used to refer to the text tag"),
+                                                        _("Name used to refer to the text tag. NULL for anonymous tags."),
                                                         NULL,
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
@@ -215,7 +215,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_BACKGROUND_GDK,
                                    g_param_spec_boxed ("background_gdk",
                                                        _("Background color"),
-                                                       _("Background color as a GdkColor"),
+                                                       _("Background color as a (possibly unallocated) GdkColor"),
                                                        GDK_TYPE_COLOR,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
 
@@ -249,7 +249,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_FOREGROUND_GDK,
                                    g_param_spec_boxed ("foreground_gdk",
                                                        _("Foreground color"),
-                                                       _("Foreground color as a GdkColor"),
+                                                       _("Foreground color as a (possibly unallocated) GdkColor"),
                                                        GDK_TYPE_COLOR,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
 
@@ -283,7 +283,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_FONT,
                                    g_param_spec_string ("font",
                                                         _("Font"),
-                                                        _("Font description as a string"),
+                                                        _("Font description as a string, e.g. \"Sans Italic 12\""),
                                                         NULL,
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
 
@@ -308,7 +308,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_STYLE,
                                    g_param_spec_enum ("style",
                                                       _("Font style"),
-                                                      _("Font style"),
+                                                      _("Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC."),
                                                       PANGO_TYPE_STYLE,
                                                       PANGO_STYLE_NORMAL,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
@@ -317,7 +317,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_VARIANT,
                                    g_param_spec_enum ("variant",
                                                      _("Font variant"),
-                                                     _("Font variant"),
+                                                     _("Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS."),
                                                       PANGO_TYPE_VARIANT,
                                                       PANGO_VARIANT_NORMAL,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
@@ -326,7 +326,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_WEIGHT,
                                    g_param_spec_int ("weight",
                                                      _("Font weight"),
-                                                     _("Font weight"),
+                                                     _("Font weight as an integer, see predefined values in PangoWeight; for example, PANGO_WEIGHT_BOLD."),
                                                      0,
                                                      G_MAXINT,
                                                      PANGO_WEIGHT_NORMAL,
@@ -337,7 +337,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_STRETCH,
                                    g_param_spec_enum ("stretch",
                                                       _("Font stretch"),
-                                                      _("Font stretch"),
+                                                      _("Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED."),
                                                       PANGO_TYPE_STRETCH,
                                                       PANGO_STRETCH_NORMAL,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
@@ -346,7 +346,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_SIZE,
                                    g_param_spec_int ("size",
                                                      _("Font size"),
-                                                     _("Font size"),
+                                                     _("Font size in Pango units."),
                                                      0,
                                                      G_MAXINT,
                                                      0,
@@ -356,7 +356,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_SCALE,
                                    g_param_spec_double ("scale",
                                                         _("Font scale"),
-                                                        _("Font scale"),
+                                                        _("Font size as a scale factor relative to the default font size. This properly adapts to theme changes etc. so is recommended. Pango predefines some scales such as PANGO_SCALE_X_LARGE."),
                                                         0.0,
                                                         G_MAXDOUBLE,
                                                         1.0,
@@ -385,7 +385,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_LANGUAGE,
                                    g_param_spec_string ("language",
                                                         _("Language"),
-                                                        _("Language engine code to use for rendering the text"),
+                                                        _("The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If you don't understand this parameter, you probably don't need it."),
                                                         NULL,
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));  
 
@@ -425,7 +425,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_RISE,
                                    g_param_spec_int ("rise",
                                                      _("Rise"),
-                                                     _("Offset of text above the baseline (below the baseline if rise is negative)"),
+                                                     _("Offset of text above the baseline (below the baseline if rise is negative) in pixels"),
 						     G_MININT,
                                                      G_MAXINT,
                                                      0,
@@ -500,7 +500,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_INVISIBLE,
                                    g_param_spec_boolean ("invisible",
                                                          _("Invisible"),
-                                                         _("Whether this text is hidden"),
+                                                         _("Whether this text is hidden. Not implemented in GTK 2.0"),
                                                          FALSE,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
 

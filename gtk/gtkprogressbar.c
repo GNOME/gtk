@@ -137,7 +137,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                    PROP_ORIENTATION,
                                    g_param_spec_enum ("orientation",
 						      _("Orientation"),
-						      _("Orientation and growth of the progress bar"),
+						      _("Orientation and growth direction of the progress bar"),
 						      GTK_TYPE_PROGRESS_BAR_ORIENTATION,
 						      GTK_PROGRESS_LEFT_TO_RIGHT,
 						      G_PARAM_READWRITE));
