@@ -10,6 +10,8 @@
 #include <gtk/gtk.h>
 #include <stdlib.h> /* for exit() */
 
+#include "demo-common.h"
+
 static void easter_egg_callback (GtkWidget *button, gpointer data);
 
 #define gray50_width 2
@@ -151,10 +153,19 @@ insert_text (GtkTextBuffer *buffer)
   GdkPixbuf *pixbuf;
   GdkPixbuf *scaled;
   GtkTextChildAnchor *anchor;
+  char *filename;
 
-  pixbuf = gdk_pixbuf_new_from_file ("./gtk-logo-rgb.gif", NULL);
-  if (pixbuf == NULL)
-    gdk_pixbuf_new_from_file (DEMOCODEDIR"/gtk-logo-rgb.gif", NULL);
+  /* demo_find_file() looks in the the current directory first,
+   * so you can run gtk-demo without installing GTK, then looks
+   * in the location where the file is installed.
+   */
+  pixbuf = NULL;
+  filename = demo_find_file ("gtk-logo-rgb.gif", NULL);
+  if (filename)
+    {
+      pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+      g_free (filename);
+    }
 
   if (pixbuf == NULL)
     {
@@ -412,10 +423,9 @@ attach_widgets (GtkTextView *text_view)
         }
       else if (i == 3)
         {
-          if (g_file_test ("./floppybuddy.gif", G_FILE_TEST_EXISTS))
-            widget = gtk_image_new_from_file ("./floppybuddy.gif");
-          else
-            widget = gtk_image_new_from_file (DEMOCODEDIR"/floppybuddy.gif");
+	  gchar *filename = demo_find_file ("floppybuddy.gif", NULL);
+	  widget = gtk_image_new_from_file (filename);
+	  g_free (filename);
         }
       else if (i == 4)
         {

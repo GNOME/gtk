@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.11\n"
-"POT-Creation-Date: 2001-11-19 16:18-0500\n"
+"POT-Creation-Date: 2001-11-23 15:47-0500\n"
 "PO-Revision-Date: 2001-11-20 07:13+0800\n"
 "Last-Translator: Abel Cheung <maddog@linux.org.hk>\n"
 "Language-Team: traditional Chinese <zh-l10n@linux.org.tw>\n"
@@ -1942,7 +1942,7 @@ msgstr ""
 msgid "The GtkAdjustment for the vertical position."
 msgstr ""
 
-#: gtk/gtklayout.c:612 gtk/gtktreeviewcolumn.c:180
+#: gtk/gtklayout.c:612 gtk/gtktreeviewcolumn.c:189
 msgid "Width"
 msgstr "寬度"
 
@@ -2115,7 +2115,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "標籤的尺寸應否統一"
 
-#: gtk/gtknotebook.c:2238 gtk/gtknotebook.c:4474
+#: gtk/gtknotebook.c:2240 gtk/gtknotebook.c:4470
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 頁"
@@ -2161,17 +2161,17 @@ msgstr ""
 msgid "Width of handle"
 msgstr ""
 
-#: gtk/gtkrc.c:2721
+#: gtk/gtkrc.c:2723
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "無法在 pixmap_path 找到圖像檔：\"%s\" 第 %d 行"
 
-#: gtk/gtkrc.c:2724
+#: gtk/gtkrc.c:2726
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "無法在 pixmap_path 找到圖像檔：\"%s\""
 
-#: gtk/gtkrc.c:3133
+#: gtk/gtkrc.c:3135
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Pixmap 路徑元素：「%s」必須為絕對路徑，%s，第 %d 行"
@@ -2847,7 +2847,7 @@ msgid "_Yes"
 msgstr "是(_Y)"
 
 #: gtk/gtkstock.c:334
-#, no-c-format
+#, c-format
 msgid "Zoom _100%"
 msgstr "縮放 _100%"
 
@@ -3304,7 +3304,7 @@ msgstr ""
 msgid "Vertical Adjustment for the widget"
 msgstr ""
 
-#: gtk/gtktreeview.c:521 gtk/gtktreeviewcolumn.c:172 gtk/gtkwidget.c:427
+#: gtk/gtktreeview.c:521 gtk/gtktreeviewcolumn.c:173 gtk/gtkwidget.c:427
 msgid "Visible"
 msgstr "可見"
 
@@ -3328,7 +3328,7 @@ msgstr ""
 msgid "Set the column for the expander column"
 msgstr ""
 
-#: gtk/gtktreeview.c:545 gtk/gtktreeviewcolumn.c:263
+#: gtk/gtktreeview.c:545 gtk/gtktreeviewcolumn.c:272
 msgid "Reorderable"
 msgstr "可重新排列"
 
@@ -3400,95 +3400,103 @@ msgstr ""
 msgid "Make the expanders indented."
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:173
+#: gtk/gtktreeviewcolumn.c:174
 msgid "Whether to display the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:181
-msgid "Current width of the column"
-msgstr "目前的欄寬"
+#: gtk/gtktreeviewcolumn.c:181 gtk/gtkwindow.c:394
+msgid "Resizable"
+msgstr "可重定尺寸"
 
-#: gtk/gtktreeviewcolumn.c:189
-msgid "Sizing"
+#: gtk/gtktreeviewcolumn.c:182
+msgid "Column is user-resizable"
 msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:190
+msgid "Current width of the column"
+msgstr "目前的欄寬"
+
+#: gtk/gtktreeviewcolumn.c:198
+msgid "Sizing"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:199
 msgid "Resize mode of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:198
+#: gtk/gtktreeviewcolumn.c:207
 msgid "Fixed Width"
 msgstr "固定寬度"
 
-#: gtk/gtktreeviewcolumn.c:199
+#: gtk/gtktreeviewcolumn.c:208
 msgid "Current fixed width of the column"
 msgstr "目前的固定欄寬"
 
-#: gtk/gtktreeviewcolumn.c:208
+#: gtk/gtktreeviewcolumn.c:217
 msgid "Minimum Width"
 msgstr "最小寬度"
 
-#: gtk/gtktreeviewcolumn.c:209
+#: gtk/gtktreeviewcolumn.c:218
 msgid "Minimum allowed width of the column"
 msgstr "可接受的最小欄寬"
 
-#: gtk/gtktreeviewcolumn.c:218
+#: gtk/gtktreeviewcolumn.c:227
 msgid "Maximum Width"
 msgstr "最大寬度"
 
-#: gtk/gtktreeviewcolumn.c:219
+#: gtk/gtktreeviewcolumn.c:228
 msgid "Maximum allowed width of the column"
 msgstr "可接受的最大欄寬"
 
-#: gtk/gtktreeviewcolumn.c:228
+#: gtk/gtktreeviewcolumn.c:237
 msgid "Title"
 msgstr "標題"
 
-#: gtk/gtktreeviewcolumn.c:229
+#: gtk/gtktreeviewcolumn.c:238
 msgid "Title to appear in column header"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:236
+#: gtk/gtktreeviewcolumn.c:245
 msgid "Clickable"
 msgstr "可按下"
 
-#: gtk/gtktreeviewcolumn.c:237
+#: gtk/gtktreeviewcolumn.c:246
 msgid "Whether the header can be clicked"
 msgstr "可否按下標頭"
 
-#: gtk/gtktreeviewcolumn.c:245
+#: gtk/gtktreeviewcolumn.c:254
 msgid "Widget"
 msgstr "視窗元件"
 
-#: gtk/gtktreeviewcolumn.c:246
+#: gtk/gtktreeviewcolumn.c:255
 msgid "Widget to put in column header button instead of column title"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:253
+#: gtk/gtktreeviewcolumn.c:262
 msgid "Alignment"
 msgstr "排列"
 
-#: gtk/gtktreeviewcolumn.c:254
+#: gtk/gtktreeviewcolumn.c:263
 msgid "X Alignment of the column header text or widget"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:273
 msgid "Whether the column can be reordered around the headers"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:271
+#: gtk/gtktreeviewcolumn.c:280
 msgid "Sort indicator"
 msgstr "排序指示器"
 
-#: gtk/gtktreeviewcolumn.c:272
+#: gtk/gtktreeviewcolumn.c:281
 msgid "Whether to show a sort indicator"
 msgstr "是否顯示排序指示器"
 
-#: gtk/gtktreeviewcolumn.c:279
+#: gtk/gtktreeviewcolumn.c:288
 msgid "Sort order"
 msgstr "排列次序"
 
-#: gtk/gtktreeviewcolumn.c:280
+#: gtk/gtktreeviewcolumn.c:289
 msgid "Sort direction the sort indicator should indicate"
 msgstr "排序指示器應顯示的排序方向"
 
@@ -3680,10 +3688,6 @@ msgstr "可擴大"
 #: gtk/gtkwindow.c:387
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr "若設為 TRUE，使用者可以將視窗擴大至超過最小尺寸。"
-
-#: gtk/gtkwindow.c:394
-msgid "Resizable"
-msgstr "可重定尺寸"
 
 #: gtk/gtkwindow.c:395
 msgid "If TRUE, users can resize the window."

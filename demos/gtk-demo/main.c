@@ -13,6 +13,7 @@ static GtkTextBuffer *source_buffer;
 
 static gchar *current_file = NULL;
 
+
 enum {
   TITLE_COLUMN,
   FILENAME_COLUMN,
@@ -27,6 +28,39 @@ struct _CallbackData
   GtkTreeModel *model;
   GtkTreePath *path;
 };
+
+/**
+ * demo_find_file:
+ * @base: base filename
+ * @err:  location to store error, or %NULL.
+ * 
+ * Looks for @base first in the current directory, then in the
+ * location GTK+ where it will be installed on make install,
+ * returns the first file found.
+ * 
+ * Return value: the filename, if found or %NULL
+ **/
+gchar *
+demo_find_file (const char *base,
+		GError    **err)
+{
+  g_return_val_if_fail (err == NULL || *err == NULL, FALSE);
+  
+  if (g_file_test (base, G_FILE_TEST_EXISTS))
+    return g_strdup (base);
+  else
+    {
+      char *filename = g_build_filename (DEMOCODEDIR, base, NULL);
+      if (!g_file_test (filename, G_FILE_TEST_EXISTS))
+	{
+	  g_set_error (err, G_FILE_ERROR, G_FILE_ERROR_NOENT,
+		       "Cannot find demo data file \"%s\"", base);
+	  g_free (filename);
+	  return NULL;
+	}
+      return filename;
+    }
+}
 
 static void
 window_closed_cb (GtkWidget *window, gpointer data)
@@ -364,6 +398,8 @@ load_file (const gchar *filename)
 {
   FILE *file;
   GtkTextIter start, end;
+  char *full_filename;
+  GError *err = NULL;
   GString *buffer = g_string_new (NULL);
   int state = 0;
   gboolean in_para = 0;
@@ -383,25 +419,23 @@ load_file (const gchar *filename)
   gtk_text_buffer_get_bounds (source_buffer, &start, &end);
   gtk_text_buffer_delete (source_buffer, &start, &end);
 
-  file = fopen (filename, "r");
-
-  if (!file)
+  full_filename = demo_find_file (filename, &err);
+  if (!full_filename)
     {
-      char *installed = g_strconcat (DEMOCODEDIR,
-                                     G_DIR_SEPARATOR_S,
-                                     filename,
-                                     NULL);
-
-      file = fopen (installed, "r");
-
-      g_free (installed);
-    }
-  
-  if (!file)
-    {
-      g_warning ("Cannot open %s: %s\n", filename, g_strerror (errno));
+      g_warning ("%s", err->message);
+      g_error_free (err);
       return;
     }
+
+  file = fopen (full_filename, "r");
+
+  if (!file)
+    g_warning ("Cannot open %s: %s\n", full_filename, g_strerror (errno));
+
+  g_free (full_filename);
+
+  if (!file)
+    return;
 
   gtk_text_buffer_get_iter_at_offset (info_buffer, &start, 0);
   while (read_line (file, buffer))
@@ -701,38 +735,36 @@ static void
 setup_default_icon (void)
 {
   GdkPixbuf *pixbuf;
-  
-  /* Try in current directory, in case we haven't yet been installed
-   * (would be wrong in a real app)
-   */
-  pixbuf = gdk_pixbuf_new_from_file ("./gtk-logo-rgb.gif", NULL);
+  char *filename;
+  GError *err;
 
-  if (pixbuf == NULL)
+  err = NULL;
+
+  pixbuf = NULL;
+  filename = demo_find_file ("gtk-logo-rgb.gif", &err);
+  if (filename)
     {
-      GError *err;
+      pixbuf = gdk_pixbuf_new_from_file (filename, &err);
+      g_free (filename);
+    }
 
-      err = NULL;
-      pixbuf = gdk_pixbuf_new_from_file (DEMOCODEDIR"/gtk-logo-rgb.gif",
-                                         &err);
+  /* Ignoring this error (passing NULL instead of &err above)
+   * would probably be reasonable for most apps.  We're just
+   * showing off.
+   */
+  if (err)
+    {
+      GtkWidget *dialog;
+      
+      dialog = gtk_message_dialog_new (NULL, 0,
+				       GTK_MESSAGE_ERROR,
+				       GTK_BUTTONS_CLOSE,
+				       "Failed to read icon file: %s",
+				       err->message);
+      g_error_free (err);
 
-      /* Ignoring this error (passing NULL instead of &err above)
-       * would probably be reasonable for most apps.  We're just
-       * showing off.
-       */
-      if (err)
-        {
-          GtkWidget *dialog;
-          
-          dialog = gtk_message_dialog_new (NULL, 0,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           "Failed to read icon file "DEMOCODEDIR"/gtk-logo-rgb.gif: %s",
-                                           err->message);
-          g_error_free (err);
-
-          g_signal_connect (dialog, "response",
-			    G_CALLBACK (gtk_widget_destroy), NULL);
-        }
+      g_signal_connect (dialog, "response",
+			G_CALLBACK (gtk_widget_destroy), NULL);
     }
 
   if (pixbuf)

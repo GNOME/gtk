@@ -15,6 +15,7 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 #include <errno.h>
+#include "demo-common.h"
 
 static GtkWidget *window = NULL;
 static GdkPixbufLoader *pixbuf_loader = NULL;
@@ -177,14 +178,29 @@ progressive_timeout (gpointer data)
     }
   else
     {
-      const gchar *filename;
+      gchar *filename;
+      gchar *error_message = NULL;
+      GError *error = NULL; 
 
-      if (g_file_test ("./alphatest.png", G_FILE_TEST_EXISTS))
-	filename = "./alphatest.png";
+      /* demo_find_file() looks in the the current directory first,
+       * so you can run gtk-demo without installing GTK, then looks
+       * in the location where the file is installed.
+       */
+      filename = demo_find_file ("alphatest.png", &error);
+      if (error)
+	{
+	  error_message = g_strdup (error->message);
+	  g_error_free (error);
+	}
       else
-	filename = DEMOCODEDIR"/alphatest.png";
-      
-      image_stream = fopen (filename, "r");
+	{
+	  image_stream = fopen (filename, "r");
+	  g_free (filename);
+
+	  if (!image_stream)
+	    error_message = g_strdup_printf ("Unable to open image file 'alphatest.png': %s",
+					     g_strerror (errno));
+	}
 
       if (image_stream == NULL)
 	{
@@ -194,8 +210,8 @@ progressive_timeout (gpointer data)
 					   GTK_DIALOG_DESTROY_WITH_PARENT,
 					   GTK_MESSAGE_ERROR,
 					   GTK_BUTTONS_CLOSE,
-					   "Unable to open image file 'alphatest.png': %s",
-					   g_strerror (errno));
+					   "%s", error_message);
+	  g_free (error_message);
 
 	  g_signal_connect (dialog, "response",
 			    G_CALLBACK (gtk_widget_destroy), NULL);
@@ -272,6 +288,9 @@ do_images (void)
   GtkWidget *image;
   GtkWidget *label;
   GtkWidget *align;
+  GdkPixbuf *pixbuf;
+  GError *error = NULL;
+  char *filename;
   
   if (!window)
     {
@@ -303,10 +322,19 @@ do_images (void)
       gtk_container_add (GTK_CONTAINER (align), frame);
       gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
 
-      /* We look for the image in the current directory first,
-       * so you can run gtk-demo without installing GTK
+      /* demo_find_file() looks in the the current directory first,
+       * so you can run gtk-demo without installing GTK, then looks
+       * in the location where the file is installed.
        */
-      if (g_file_test ("./gtk-logo-rgb.gif", G_FILE_TEST_EXISTS))
+      pixbuf = NULL;
+      filename = demo_find_file ("gtk-logo-rgb.gif", &error);
+      if (filename)
+	{
+	  pixbuf = gdk_pixbuf_new_from_file (filename, &error);
+	  g_free (filename);
+	}
+
+      if (error)
 	{
 	  /* This code shows off error handling. You can just use
 	   * gtk_image_new_from_file() instead if you don't want to report
@@ -314,39 +342,23 @@ do_images (void)
 	   * gtk_image_new_from_file(), a "missing image" icon will
 	   * be displayed instead.
 	   */
-	  GdkPixbuf *pixbuf;
-	  GError *error = NULL;
+	  GtkWidget *dialog;
 	  
-	  pixbuf = gdk_pixbuf_new_from_file ("./gtk-logo-rgb.gif",
-					     &error);
-	  if (error)
-	    {
-	      GtkWidget *dialog;
-
-	      dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-					       GTK_DIALOG_DESTROY_WITH_PARENT,
-					       GTK_MESSAGE_ERROR,
-					       GTK_BUTTONS_CLOSE,
-					       "Unable to open image file 'gtk-logo-rgb.gif': %s",
-					       error->message);
-	      g_error_free (error);
-	      
-	      g_signal_connect (dialog, "response",
-				G_CALLBACK (gtk_widget_destroy), NULL);
-	      
-	      gtk_widget_show (dialog);
-	    }
+	  dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+					   GTK_DIALOG_DESTROY_WITH_PARENT,
+					   GTK_MESSAGE_ERROR,
+					   GTK_BUTTONS_CLOSE,
+					   "Unable to open image file 'gtk-logo-rgb.gif': %s",
+					   error->message);
+	  g_error_free (error);
 	  
-	  image = gtk_image_new_from_pixbuf (pixbuf);
+	  g_signal_connect (dialog, "response",
+			    G_CALLBACK (gtk_widget_destroy), NULL);
+	  
+	  gtk_widget_show (dialog);
 	}
-      else
-	{
-	  /* This is the simpler code, with no error handling.
-	   * Here we're loading the installed gtk-logo-rgb.gif instead
-	   * of the one in the current directory.
-	   */
-	  image = gtk_image_new_from_file (DEMOCODEDIR"/gtk-logo-rgb.gif");
-	}
+	  
+      image = gtk_image_new_from_pixbuf (pixbuf);
 
       gtk_container_add (GTK_CONTAINER (frame), image);
 
@@ -367,13 +379,9 @@ do_images (void)
       gtk_container_add (GTK_CONTAINER (align), frame);
       gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
 
-      /* We look for the image in the current directory first,
-       * so you can run gtk-demo without installing GTK
-       */
-      if (g_file_test ("./floppybuddy.gif", G_FILE_TEST_EXISTS))
-	image = gtk_image_new_from_file ("./floppybuddy.gif");
-      else
-	image = gtk_image_new_from_file (DEMOCODEDIR"/floppybuddy.gif");
+      filename = demo_find_file ("floppybuddy.gif", NULL);
+      image = gtk_image_new_from_file (filename);
+      g_free (filename);
 
       gtk_container_add (GTK_CONTAINER (frame), image);
       

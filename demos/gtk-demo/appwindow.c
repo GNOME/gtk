@@ -4,6 +4,7 @@
  */
 
 #include <gtk/gtk.h>
+#include "demo-common.h"
 
 static GtkWidget *window = NULL;
 
@@ -95,6 +96,7 @@ register_stock_icons (void)
     {
       GdkPixbuf *pixbuf;
       GtkIconFactory *factory;
+      char *filename;
 
       static GtkStockItem items[] = {
         { "demo-gtk-logo",
@@ -111,12 +113,17 @@ register_stock_icons (void)
       factory = gtk_icon_factory_new ();
       gtk_icon_factory_add_default (factory);
 
-      /* Try current directory */
-      pixbuf = gdk_pixbuf_new_from_file ("./gtk-logo-rgb.gif", NULL);
-
-      /* Try install directory */
-      if (pixbuf == NULL)
-        pixbuf = gdk_pixbuf_new_from_file (DEMOCODEDIR"/gtk-logo-rgb.gif", NULL);
+      /* demo_find_file() looks in the the current directory first,
+       * so you can run gtk-demo without installing GTK, then looks
+       * in the location where the file is installed.
+       */
+      pixbuf = NULL;
+      filename = demo_find_file ("gtk-logo-rgb.gif", NULL);
+      if (filename)
+	{
+	  pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+	  g_free (filename);
+	}
 
       /* Register icon to accompany stock item */
       if (pixbuf != NULL)

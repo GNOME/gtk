@@ -1,3 +1,25 @@
+Thu Nov 22 15:01:03 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* Version 1.3.11
+
+	* configure.in (ATK_REQUIRED_VERSION): Require
+	GLib-1.3.11, Pango-0.22, ATK-0.7.
+
+	* tests/prop-editor.c (property_widget): Restore
+	to working as well as it did before.
+
+	* gtk/gtklistitem.h: Mark deprecated since it is
+	an integral part of GtkList.
+
+ 	* demos/gtk-demo/demo-common.h: New header file,
+	for a common functions not important to the meat
+	of the demos.
+	
+	* demos/gtk-demo/main.c (demo_ifind_file): Add a utility
+	function to search for a file used by the demo.
+
+	* demos/*.c: Use demo_find_file.
+
 2001-11-23  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtktextbuffer.c (gtk_text_buffer_create_tag),

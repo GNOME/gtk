@@ -17,12 +17,13 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
+#include "demo-common.h"
+
 #define FRAME_DELAY 50
 
-#define RELATIVE_BACKGROUND_NAME "background.jpg"
-#define INSTALLED_BACKGROUND_NAME DEMOCODEDIR"/background.jpg"
+#define BACKGROUND_NAME "background.jpg"
 
-static const char *relative_image_names[] = {
+static const char *image_names[] = {
   "apple-red.png",
   "gnome-applets.png",
   "gnome-calendar.png",
@@ -33,18 +34,7 @@ static const char *relative_image_names[] = {
   "gnu-keys.png"
 };
 
-static const char *installed_image_names[] = {
-  DEMOCODEDIR"/apple-red.png",
-  DEMOCODEDIR"/gnome-applets.png",
-  DEMOCODEDIR"/gnome-calendar.png",
-  DEMOCODEDIR"/gnome-foot.png",
-  DEMOCODEDIR"/gnome-gmush.png",
-  DEMOCODEDIR"/gnome-gimp.png",
-  DEMOCODEDIR"/gnome-gsame.png",
-  DEMOCODEDIR"/gnu-keys.png"
-};
-
-#define N_IMAGES G_N_ELEMENTS (relative_image_names)
+#define N_IMAGES G_N_ELEMENTS (image_names)
 
 /* demo window */
 static GtkWidget *window = NULL;
@@ -67,30 +57,37 @@ static gboolean
 load_pixbufs (GError **error)
 {
   gint i;
-  const gchar **image_names;
+  char *filename;
 
   if (background)
     return TRUE; /* already loaded earlier */
 
-  background = gdk_pixbuf_new_from_file (RELATIVE_BACKGROUND_NAME, NULL);
-
-  if (!background)
-    background = gdk_pixbuf_new_from_file (INSTALLED_BACKGROUND_NAME, error);
-
-  if (!background)
+  /* demo_find_file() looks in the the current directory first,
+   * so you can run gtk-demo without installing GTK, then looks
+   * in the location where the file is installed.
+   */
+  filename = demo_find_file (BACKGROUND_NAME, error);
+  if (!filename)
     return FALSE; /* note that "error" was filled in and returned */
+
+  background = gdk_pixbuf_new_from_file (filename, error);
+  g_free (filename);
+  
+  if (!background)
+    return FALSE; /* Note that "error" was filled with a GError */
 
   back_width = gdk_pixbuf_get_width (background);
   back_height = gdk_pixbuf_get_height (background);
 
-  if (g_file_test (relative_image_names[0], G_FILE_TEST_EXISTS))
-    image_names = relative_image_names;
-  else
-    image_names = installed_image_names;
-
   for (i = 0; i < N_IMAGES; i++)
     {
-      images[i] = gdk_pixbuf_new_from_file (image_names[i], error);
+      filename = demo_find_file (image_names[i], error);
+      if (!filename)
+	return FALSE; /* Note that "error" was filled with a GError */
+      
+      images[i] = gdk_pixbuf_new_from_file (filename, error);
+      g_free (filename);
+      
       if (!images[i])
 	return FALSE; /* Note that "error" was filled with a GError */
     }

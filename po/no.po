@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.3\n"
-"POT-Creation-Date: 2001-11-11 13:12+0100\n"
+"POT-Creation-Date: 2001-11-23 15:47-0500\n"
 "PO-Revision-Date: 2001-11-11 14:07+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
@@ -102,12 +102,12 @@ msgstr ""
 "Feil under lukking av '%s' under skriving av bilde. Det er ikke sikkert at "
 "alle data er lagret: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:252
+#: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Inkrementell lasting av bildetype '%s' er ikke støttet"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:275 gdk-pixbuf/gdk-pixbuf-loader.c:376
+#: gdk-pixbuf/gdk-pixbuf-loader.c:273 gdk-pixbuf/gdk-pixbuf-loader.c:374
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
@@ -384,35 +384,35 @@ msgstr "Ikke nok minne til å laste XBM-bildefil"
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "Feil under skriving til midlertidig file under lasting av XBM-bilde"
 
-#: gdk-pixbuf/io-xpm.c:1256
+#: gdk-pixbuf/io-xpm.c:1234
 msgid "No XPM header found"
 msgstr "Ingen XPM-header funnet"
 
-#: gdk-pixbuf/io-xpm.c:1264
+#: gdk-pixbuf/io-xpm.c:1242
 msgid "XPM file has image width <= 0"
 msgstr "XPM-filen har en bildebredde <= 0"
 
-#: gdk-pixbuf/io-xpm.c:1272
+#: gdk-pixbuf/io-xpm.c:1250
 msgid "XPM file has image height <= 0"
 msgstr "XPM-filen har en bildehøyde <= 0"
 
-#: gdk-pixbuf/io-xpm.c:1280
+#: gdk-pixbuf/io-xpm.c:1258
 msgid "XPM file has invalid number of colors"
 msgstr "XPM-filen har et ugyldig antall farger"
 
-#: gdk-pixbuf/io-xpm.c:1288
+#: gdk-pixbuf/io-xpm.c:1266
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM har et ugyldig antall tegn per piksel"
 
-#: gdk-pixbuf/io-xpm.c:1306
+#: gdk-pixbuf/io-xpm.c:1284
 msgid "Can't read XPM colormap"
 msgstr "Kan ikke lese fargekart for XPM"
 
-#: gdk-pixbuf/io-xpm.c:1344
+#: gdk-pixbuf/io-xpm.c:1322
 msgid "Can't allocate memory for loading XPM image"
 msgstr "Kan ikke allokere minne for lasting av XPM-bilde"
 
-#: gdk-pixbuf/io-xpm.c:1527
+#: gdk-pixbuf/io-xpm.c:1505
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Feil under skriving til midlertidig fil under lasting av XPM-bilde"
 
@@ -433,12 +433,24 @@ msgstr "Korrupt pikseldata i bilde"
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "kunne ikke allokere buffer for bilde på %u bytes"
 
-#: gtk/gtkaccellabel.c:115
-msgid "Accelerator object"
+#: gtk/gtkaccellabel.c:122
+#, fuzzy
+msgid "Accelerator Closure"
 msgstr "Akselleratorobjekt"
 
-#: gtk/gtkaccellabel.c:116
-msgid "The object monitored by this accelerator label"
+#: gtk/gtkaccellabel.c:123
+#, fuzzy
+msgid "The closure to be monitored for accelerator changes"
+msgstr "Objektet som overvåkes av denne akselleratoretiketten"
+
+#: gtk/gtkaccellabel.c:129
+#, fuzzy
+msgid "Accelerator Widget"
+msgstr "Akselleratorobjekt"
+
+#: gtk/gtkaccellabel.c:130
+#, fuzzy
+msgid "The widget to be monitored for accelerator changes"
 msgstr "Objektet som overvåkes av denne akselleratoretiketten"
 
 #: gtk/gtkalignment.c:102
@@ -589,7 +601,7 @@ msgstr "Mellomrom"
 msgid "The amount of space between children."
 msgstr "Mengde mellomrom mellom barn."
 
-#: gtk/gtkbox.c:135 gtk/gtknotebook.c:396
+#: gtk/gtkbox.c:135 gtk/gtknotebook.c:400
 msgid "Homogeneous"
 msgstr "Homogen"
 
@@ -597,75 +609,75 @@ msgstr "Homogen"
 msgid "Whether the children should all be the same size."
 msgstr "La alle barn være av samme størrelse."
 
-#: gtk/gtkbutton.c:183 gtk/gtkframe.c:125 gtk/gtklabel.c:283
+#: gtk/gtkbutton.c:188 gtk/gtkframe.c:125 gtk/gtklabel.c:282
 msgid "Label"
 msgstr "Etikett"
 
-#: gtk/gtkbutton.c:184
+#: gtk/gtkbutton.c:189
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget."
 msgstr ""
 
-#: gtk/gtkbutton.c:191 gtk/gtklabel.c:304
+#: gtk/gtkbutton.c:196 gtk/gtklabel.c:303
 msgid "Use underline"
 msgstr "Bruk understreking"
 
-#: gtk/gtkbutton.c:192 gtk/gtklabel.c:305
+#: gtk/gtkbutton.c:197 gtk/gtklabel.c:304
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
 
-#: gtk/gtkbutton.c:199
+#: gtk/gtkbutton.c:204
 msgid "Use stock"
 msgstr "Bruk lager"
 
-#: gtk/gtkbutton.c:200
+#: gtk/gtkbutton.c:205
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 
-#: gtk/gtkbutton.c:207
+#: gtk/gtkbutton.c:212
 msgid "Border relief"
 msgstr ""
 
-#: gtk/gtkbutton.c:208
+#: gtk/gtkbutton.c:213
 msgid "The border relief style."
 msgstr ""
 
-#: gtk/gtkbutton.c:259
+#: gtk/gtkbutton.c:264
 msgid "Default Spacing"
 msgstr "Standard avstand"
 
-#: gtk/gtkbutton.c:260
+#: gtk/gtkbutton.c:265
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr ""
 
-#: gtk/gtkbutton.c:266
+#: gtk/gtkbutton.c:271
 msgid "Default Outside Spacing"
 msgstr ""
 
-#: gtk/gtkbutton.c:267
+#: gtk/gtkbutton.c:272
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
 msgstr ""
 
-#: gtk/gtkbutton.c:272
+#: gtk/gtkbutton.c:277
 msgid "Child X Displacement"
 msgstr ""
 
-#: gtk/gtkbutton.c:273
+#: gtk/gtkbutton.c:278
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 
-#: gtk/gtkbutton.c:280
+#: gtk/gtkbutton.c:285
 msgid "Child Y Displacement"
 msgstr ""
 
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:286
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
@@ -758,287 +770,287 @@ msgstr "Pixbuf-objekt"
 msgid "The pixbuf to render."
 msgstr "Pixbuf som skal rendres."
 
-#: gtk/gtkcellrenderertext.c:173 gtk/gtkentry.c:505 gtk/gtkprogressbar.c:207
+#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:506 gtk/gtkprogressbar.c:207
 msgid "Text"
 msgstr "Tekst"
 
-#: gtk/gtkcellrenderertext.c:174
+#: gtk/gtkcellrenderertext.c:175
 msgid "Text to render"
 msgstr "Tekst som skal rendres"
 
-#: gtk/gtkcellrenderertext.c:181
+#: gtk/gtkcellrenderertext.c:182
 msgid "Markup"
 msgstr "Tagging"
 
-#: gtk/gtkcellrenderertext.c:182
+#: gtk/gtkcellrenderertext.c:183
 msgid "Marked up text to render"
 msgstr "Tagget tekst som skal rendres"
 
-#: gtk/gtkcellrenderertext.c:189 gtk/gtklabel.c:290
+#: gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:289
 msgid "Attributes"
 msgstr "Attributter"
 
-#: gtk/gtkcellrenderertext.c:190
+#: gtk/gtkcellrenderertext.c:191
 msgid "A list of style attributes to apply to the text of the renderer."
 msgstr "En liste med stilattributter som skal brukes på teksten som rendres."
 
-#: gtk/gtkcellrenderertext.c:197 gtk/gtktexttag.c:208
+#: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:209
 msgid "Background color name"
 msgstr "Navn på bakgrunnsfarge"
 
-#: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:209
+#: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:210
 msgid "Background color as a string"
 msgstr "Bakgrunnsfarge som en streng"
 
-#: gtk/gtkcellrenderertext.c:205 gtk/gtktexttag.c:216
+#: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:217
 msgid "Background color"
 msgstr "Bakgrunnsfarge"
 
-#: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:217
+#: gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:218
 msgid "Background color as a GdkColor"
 msgstr "Bakgrunnsfarge som en GdkColor"
 
-#: gtk/gtkcellrenderertext.c:213 gtk/gtktexttag.c:242
+#: gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:243
 msgid "Foreground color name"
 msgstr "Navn på forgrunnsfarge"
 
-#: gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:243
+#: gtk/gtkcellrenderertext.c:215 gtk/gtktexttag.c:244
 msgid "Foreground color as a string"
 msgstr "Forgrunnsfarge som en streng"
 
-#: gtk/gtkcellrenderertext.c:221 gtk/gtktexttag.c:250
+#: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:251
 msgid "Foreground color"
 msgstr "Forgrunnsfarge"
 
-#: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:251
+#: gtk/gtkcellrenderertext.c:223 gtk/gtktexttag.c:252
 msgid "Foreground color as a GdkColor"
 msgstr "Forgrunnsfarge som en GdkColor"
 
-#: gtk/gtkcellrenderertext.c:230 gtk/gtkentry.c:437 gtk/gtktexttag.c:276
-#: gtk/gtktextview.c:545
+#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:438 gtk/gtktexttag.c:277
+#: gtk/gtktextview.c:548
 msgid "Editable"
 msgstr "Redigerbar"
 
-#: gtk/gtkcellrenderertext.c:231 gtk/gtktexttag.c:277 gtk/gtktextview.c:546
+#: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:549
 msgid "Whether the text can be modified by the user"
 msgstr "Om teksten kan endres av brukeren"
 
-#: gtk/gtkcellrenderertext.c:238 gtk/gtkcellrenderertext.c:246
-#: gtk/gtkfontsel.c:192 gtk/gtktexttag.c:284 gtk/gtktexttag.c:292
+#: gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
+#: gtk/gtkfontsel.c:192 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
 msgstr "Skrifttype"
 
-#: gtk/gtkcellrenderertext.c:239 gtk/gtktexttag.c:285
+#: gtk/gtkcellrenderertext.c:240 gtk/gtktexttag.c:286
 msgid "Font description as a string"
 msgstr "Beskrivelse av skrifttypen som en streng"
 
-#: gtk/gtkcellrenderertext.c:247 gtk/gtktexttag.c:293
+#: gtk/gtkcellrenderertext.c:248 gtk/gtktexttag.c:294
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Skrifttypebeskrivelse som en PangoFontDescription struct"
 
-#: gtk/gtkcellrenderertext.c:255 gtk/gtktexttag.c:301
+#: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:302
 msgid "Font family"
 msgstr "Skrifttypefamilie"
 
-#: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:302
+#: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:303
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "Navn på skrifttypefamilien, f.eks Sans, Helvetica, Times, Monospace"
 
-#: gtk/gtkcellrenderertext.c:263 gtk/gtkcellrenderertext.c:264
-#: gtk/gtktexttag.c:309 gtk/gtktexttag.c:310
+#: gtk/gtkcellrenderertext.c:264 gtk/gtkcellrenderertext.c:265
+#: gtk/gtktexttag.c:310 gtk/gtktexttag.c:311
 msgid "Font style"
 msgstr "Skrifttypestil"
 
-#: gtk/gtkcellrenderertext.c:272 gtk/gtkcellrenderertext.c:273
-#: gtk/gtktexttag.c:318 gtk/gtktexttag.c:319
+#: gtk/gtkcellrenderertext.c:273 gtk/gtkcellrenderertext.c:274
+#: gtk/gtktexttag.c:319 gtk/gtktexttag.c:320
 msgid "Font variant"
 msgstr "Skrifttypevariant"
 
-#: gtk/gtkcellrenderertext.c:281 gtk/gtkcellrenderertext.c:282
-#: gtk/gtktexttag.c:327 gtk/gtktexttag.c:328
+#: gtk/gtkcellrenderertext.c:282 gtk/gtkcellrenderertext.c:283
+#: gtk/gtktexttag.c:328 gtk/gtktexttag.c:329
 msgid "Font weight"
 msgstr "Skrifttypens vekt"
 
-#: gtk/gtkcellrenderertext.c:291 gtk/gtkcellrenderertext.c:292
-#: gtk/gtktexttag.c:338 gtk/gtktexttag.c:339
+#: gtk/gtkcellrenderertext.c:292 gtk/gtkcellrenderertext.c:293
+#: gtk/gtktexttag.c:339 gtk/gtktexttag.c:340
 msgid "Font stretch"
 msgstr "Skrifttypens \"strekk\""
 
-#: gtk/gtkcellrenderertext.c:300 gtk/gtkcellrenderertext.c:301
-#: gtk/gtktexttag.c:347 gtk/gtktexttag.c:348
+#: gtk/gtkcellrenderertext.c:301 gtk/gtkcellrenderertext.c:302
+#: gtk/gtktexttag.c:348 gtk/gtktexttag.c:349
 msgid "Font size"
 msgstr "Størrelse for skrifttype"
 
-#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:367
+#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:368
 msgid "Font points"
 msgstr "Punkter for skrifttype"
 
-#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:368
+#: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:369
 msgid "Font size in points"
 msgstr "Størrelse for skrifttype i punkter"
 
-#: gtk/gtkcellrenderertext.c:320 gtk/gtktexttag.c:357 gtk/gtktexttag.c:358
+#: gtk/gtkcellrenderertext.c:321 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
 msgid "Font scale"
 msgstr "Skrifttypeskalering"
 
-#: gtk/gtkcellrenderertext.c:321
+#: gtk/gtkcellrenderertext.c:322
 msgid "Font scaling factor"
 msgstr "Skaleringsfaktor for skrifttype"
 
-#: gtk/gtkcellrenderertext.c:330 gtk/gtktexttag.c:426
+#: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:427
 msgid "Rise"
 msgstr "Hev"
 
-#: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:427
+#: gtk/gtkcellrenderertext.c:332 gtk/gtktexttag.c:428
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:341 gtk/gtktexttag.c:466
+#: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:467
 msgid "Strikethrough"
 msgstr "Gjennomstreking"
 
-#: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:467
+#: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:468
 msgid "Whether to strike through the text"
 msgstr "Bruk gjennomstreking av teksten"
 
-#: gtk/gtkcellrenderertext.c:349 gtk/gtktexttag.c:474
+#: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:475
 msgid "Underline"
 msgstr "Understrek"
 
-#: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:475
+#: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:476
 msgid "Style of underline for this text"
 msgstr "Stil for understreking av denne teksten."
 
-#: gtk/gtkcellrenderertext.c:360 gtk/gtktexttag.c:511
+#: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:512
 msgid "Background set"
 msgstr "Bakgrunn satt"
 
-#: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:512
+#: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:513
 msgid "Whether this tag affects the background color"
 msgstr "Om denne merkingen påvirker bakgrunnsfargen"
 
-#: gtk/gtkcellrenderertext.c:364 gtk/gtktexttag.c:523
+#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:524
 msgid "Foreground set"
 msgstr "Forgrunn satt"
 
-#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:524
+#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:525
 msgid "Whether this tag affects the foreground color"
 msgstr "Om denne merkingen påvirker forgrunnsfargen"
 
-#: gtk/gtkcellrenderertext.c:368 gtk/gtktexttag.c:531
+#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:532
 msgid "Editability set"
 msgstr "Redigerbarhet satt"
 
-#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:532
+#: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:533
 msgid "Whether this tag affects text editability"
 msgstr "Om denne merkingen påvirker redigerbarhet for teksten"
 
-#: gtk/gtkcellrenderertext.c:372 gtk/gtktexttag.c:535
+#: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:536
 msgid "Font family set"
 msgstr "Skrifttypefamilie satt"
 
-#: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:536
+#: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font family"
 msgstr "Om denne merkingen påvirker skrifttypefamilien"
 
-#: gtk/gtkcellrenderertext.c:376 gtk/gtktexttag.c:539
+#: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:540
 msgid "Font style set"
 msgstr "Skrifttypestil satt"
 
-#: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:540
+#: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font style"
 msgstr "Om denne merkingen påvirker skrifttypestil"
 
-#: gtk/gtkcellrenderertext.c:380 gtk/gtktexttag.c:543
+#: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:544
 msgid "Font variant set"
 msgstr "Skrifttypevariant satt"
 
-#: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:544
+#: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font variant"
 msgstr "Om denne merkingen påvirker skrifttypevariant"
 
-#: gtk/gtkcellrenderertext.c:384 gtk/gtktexttag.c:547
+#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:548
 msgid "Font weight set"
 msgstr "Skrifttypetyngde satt"
 
-#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:548
+#: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font weight"
 msgstr "Om denne merkingen påvirker skrifttypetyngden"
 
-#: gtk/gtkcellrenderertext.c:388 gtk/gtktexttag.c:551
+#: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:552
 msgid "Font stretch set"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:552
+#: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font stretch"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:392 gtk/gtktexttag.c:555
+#: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:556
 msgid "Font size set"
 msgstr "Skrifttypestørrelse satt"
 
-#: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:556
+#: gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:557
 msgid "Whether this tag affects the font size"
 msgstr "Om denne merkingen påvirker skrifttypestørrelsen"
 
-#: gtk/gtkcellrenderertext.c:396 gtk/gtktexttag.c:559
+#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:560
 msgid "Font scale set"
 msgstr "Skrifttypeskalering satt"
 
-#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:560
+#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:561
 msgid "Whether this tag scales the font size by a factor"
 msgstr "Om denne merkingen skalerer skrifttypestørrelsen med en gitt faktor"
 
-#: gtk/gtkcellrenderertext.c:400 gtk/gtktexttag.c:579
+#: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:580
 msgid "Rise set"
 msgstr "Heving satt"
 
-#: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:580
+#: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:581
 msgid "Whether this tag affects the rise"
 msgstr "Om denne merkingen påvirker heving"
 
-#: gtk/gtkcellrenderertext.c:404 gtk/gtktexttag.c:595
+#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:596
 msgid "Strikethrough set"
 msgstr "Gjennomstreking satt"
 
-#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:596
+#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:597
 msgid "Whether this tag affects strikethrough"
 msgstr "Om denne merkingen påvirker gjennomstreking"
 
-#: gtk/gtkcellrenderertext.c:408 gtk/gtktexttag.c:603
+#: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:604
 msgid "Underline set"
 msgstr "Understreking satt"
 
-#: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:604
+#: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:605
 msgid "Whether this tag affects underlining"
 msgstr "Om denne merkingen påvirker understreking"
 
-#: gtk/gtkcellrenderertoggle.c:129
+#: gtk/gtkcellrenderertoggle.c:130
 msgid "Toggle state"
 msgstr "Knappetilstand"
 
-#: gtk/gtkcellrenderertoggle.c:130
+#: gtk/gtkcellrenderertoggle.c:131
 msgid "The toggle state of the button"
 msgstr "Tilstand for knapp (vending)"
 
-#: gtk/gtkcellrenderertoggle.c:138
+#: gtk/gtkcellrenderertoggle.c:139
 msgid "Activatable"
 msgstr "Aktiverbar"
 
-#: gtk/gtkcellrenderertoggle.c:139
+#: gtk/gtkcellrenderertoggle.c:140
 msgid "The toggle button can be activated"
 msgstr "Venderknappen kan aktiveres"
 
-#: gtk/gtkcellrenderertoggle.c:147
+#: gtk/gtkcellrenderertoggle.c:148
 msgid "Radio state"
 msgstr "Radiotilstand"
 
-#: gtk/gtkcellrenderertoggle.c:148
+#: gtk/gtkcellrenderertoggle.c:149
 msgid "Draw the toggle button as a radio button"
 msgstr "Tegn knapp for vending som en radioknapp"
 
-#: gtk/gtkcheckbutton.c:95 gtk/gtkoptionmenu.c:190
+#: gtk/gtkcheckbutton.c:95 gtk/gtkoptionmenu.c:191
 msgid "Indicator Size"
 msgstr "Indikatorstørrelse"
 
@@ -1046,7 +1058,7 @@ msgstr "Indikatorstørrelse"
 msgid "Size of check or radio indicator"
 msgstr "Størrelse på avkrysnings- eller radioindikator"
 
-#: gtk/gtkcheckbutton.c:103 gtk/gtkoptionmenu.c:196
+#: gtk/gtkcheckbutton.c:103 gtk/gtkoptionmenu.c:197
 msgid "Indicator Spacing"
 msgstr "Mellomrom for indikator"
 
@@ -1054,166 +1066,166 @@ msgstr "Mellomrom for indikator"
 msgid "Spacing around check or radio indicator"
 msgstr "Mellomrom rundt avkrysnings- eller radioindikator"
 
-#: gtk/gtkcheckmenuitem.c:114 gtk/gtktogglebutton.c:142
+#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:132
 msgid "Active"
 msgstr "Aktiv"
 
-#: gtk/gtkcheckmenuitem.c:115
+#: gtk/gtkcheckmenuitem.c:116
 msgid "Whether the menu item is checked."
 msgstr "Om menyoppføringen er avkrysset."
 
-#: gtk/gtkcheckmenuitem.c:122 gtk/gtktogglebutton.c:150
+#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:140
 msgid "Inconsistent"
 msgstr "Inkonsistent"
 
-#: gtk/gtkcheckmenuitem.c:123
+#: gtk/gtkcheckmenuitem.c:124
 msgid "Whether to display an \"inconsistent\" state."
 msgstr "Om \"inkonsistent\" tilstand skal anvises."
 
-#: gtk/gtkcolorsel.c:577
+#: gtk/gtkcolorsel.c:578
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:582
+#: gtk/gtkcolorsel.c:583
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:886
+#: gtk/gtkcolorsel.c:887
 msgid "_Save color here"
 msgstr "_Lagre fargen her"
 
-#: gtk/gtkcolorsel.c:1054
+#: gtk/gtkcolorsel.c:1055
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1673
+#: gtk/gtkcolorsel.c:1674
 msgid "Has Opacity Control"
 msgstr "Har kontroll for ugjennomsiktighet"
 
-#: gtk/gtkcolorsel.c:1674
+#: gtk/gtkcolorsel.c:1675
 msgid "Whether the color selector should allow setting opacity"
 msgstr "La fargevelgeren tillate å sette ugjennomsiktighet"
 
-#: gtk/gtkcolorsel.c:1680
+#: gtk/gtkcolorsel.c:1681
 msgid "Has palette"
 msgstr "Har palett"
 
-#: gtk/gtkcolorsel.c:1681
+#: gtk/gtkcolorsel.c:1682
 msgid "Whether a palette should be used"
 msgstr "Skal en palett brukes"
 
-#: gtk/gtkcolorsel.c:1687
+#: gtk/gtkcolorsel.c:1688
 msgid "Current Color"
 msgstr "Aktiv farge"
 
-#: gtk/gtkcolorsel.c:1688
+#: gtk/gtkcolorsel.c:1689
 msgid "The current color"
 msgstr "Den aktive fargen"
 
-#: gtk/gtkcolorsel.c:1694
+#: gtk/gtkcolorsel.c:1695
 msgid "Current Alpha"
 msgstr "Nåværende alpha"
 
-#: gtk/gtkcolorsel.c:1695
+#: gtk/gtkcolorsel.c:1696
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Nåværende verdi for ugjennomsiktighet (0 helt gjennomsiktig, 65535 helt "
 "ugjennomsiktig)"
 
-#: gtk/gtkcolorsel.c:1708
+#: gtk/gtkcolorsel.c:1709
 msgid "Custom palette"
 msgstr "Egendefinert palett"
 
-#: gtk/gtkcolorsel.c:1709
+#: gtk/gtkcolorsel.c:1710
 msgid "Palette to use in the color selector"
 msgstr "Palett som skal brukes i fargevelgeren"
 
-#: gtk/gtkcolorsel.c:1749
+#: gtk/gtkcolorsel.c:1750
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1777
+#: gtk/gtkcolorsel.c:1778
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1786
+#: gtk/gtkcolorsel.c:1787
 msgid "_Hue:"
 msgstr "_Glød:"
 
-#: gtk/gtkcolorsel.c:1787
+#: gtk/gtkcolorsel.c:1788
 msgid "Position on the color wheel."
 msgstr "Posisjon på fargehjulet."
 
-#: gtk/gtkcolorsel.c:1788
+#: gtk/gtkcolorsel.c:1789
 msgid "_Saturation:"
 msgstr "_Metning:"
 
-#: gtk/gtkcolorsel.c:1789
+#: gtk/gtkcolorsel.c:1790
 msgid "\"Deepness\" of the color."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1790
+#: gtk/gtkcolorsel.c:1791
 msgid "_Value:"
 msgstr "_Verdi:"
 
-#: gtk/gtkcolorsel.c:1791
+#: gtk/gtkcolorsel.c:1792
 msgid "Brightness of the color."
 msgstr "Lysstyrke for fargen."
 
-#: gtk/gtkcolorsel.c:1792
+#: gtk/gtkcolorsel.c:1793
 msgid "_Red:"
 msgstr "_Rød:"
 
-#: gtk/gtkcolorsel.c:1793
+#: gtk/gtkcolorsel.c:1794
 msgid "Amount of red light in the color."
 msgstr "Mende med rødt lys i fargen."
 
-#: gtk/gtkcolorsel.c:1794
+#: gtk/gtkcolorsel.c:1795
 msgid "_Green:"
 msgstr "_Grønn:"
 
-#: gtk/gtkcolorsel.c:1795
+#: gtk/gtkcolorsel.c:1796
 msgid "Amount of green light in the color."
 msgstr "Mengde med grønt lys i fargen."
 
-#: gtk/gtkcolorsel.c:1796
+#: gtk/gtkcolorsel.c:1797
 msgid "_Blue:"
 msgstr "_Blå:"
 
-#: gtk/gtkcolorsel.c:1797
+#: gtk/gtkcolorsel.c:1798
 msgid "Amount of blue light in the color."
 msgstr "Mengde med blått lys i fargen."
 
-#: gtk/gtkcolorsel.c:1800
+#: gtk/gtkcolorsel.c:1801
 msgid "_Opacity:"
 msgstr "_Ugjennomsiktighet:"
 
-#: gtk/gtkcolorsel.c:1808
+#: gtk/gtkcolorsel.c:1809
 msgid "Transparency of the currently-selected color."
 msgstr "Gjennomsiktighet i valgt farge."
 
-#: gtk/gtkcolorsel.c:1823
+#: gtk/gtkcolorsel.c:1824
 msgid "Color _Name:"
 msgstr "Farge_navn:"
 
-#: gtk/gtkcolorsel.c:1835
+#: gtk/gtkcolorsel.c:1836
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1854
+#: gtk/gtkcolorsel.c:1855
 msgid "_Palette"
 msgstr "_Palett"
 
@@ -1258,265 +1270,266 @@ msgstr "Verdi i listen"
 msgid "Whether entered values must already be present in the list"
 msgstr "Verdier som spesifiseres må allerede være i listen"
 
-#: gtk/gtkcontainer.c:202
+#: gtk/gtkcontainer.c:203
 msgid "Resize mode"
 msgstr "Modus for endring av størrelse"
 
-#: gtk/gtkcontainer.c:203
+#: gtk/gtkcontainer.c:204
 msgid "Specify how resize events are handled"
 msgstr ""
 
-#: gtk/gtkcontainer.c:210
+#: gtk/gtkcontainer.c:211
 msgid "Border width"
 msgstr "Kantbredde"
 
-#: gtk/gtkcontainer.c:211
+#: gtk/gtkcontainer.c:212
 msgid "The width of the empty border outside the containers children."
 msgstr "Bredde på den tomme kanten utenfor kontainerens barn."
 
-#: gtk/gtkcontainer.c:219
+#: gtk/gtkcontainer.c:220
 msgid "Child"
 msgstr "Barn"
 
-#: gtk/gtkcontainer.c:220
+#: gtk/gtkcontainer.c:221
 msgid "Can be used to add a new child to the container."
 msgstr ""
 
-#: gtk/gtkcurve.c:120
+#: gtk/gtkcurve.c:121
 msgid "Curve type"
 msgstr "Kurvetype"
 
-#: gtk/gtkcurve.c:121
+#: gtk/gtkcurve.c:122
 msgid "Is this curve linear, spline interpolated, or free-form"
 msgstr ""
 
-#: gtk/gtkcurve.c:129
+#: gtk/gtkcurve.c:130
 msgid "Minimum X"
 msgstr "Minimum X"
 
-#: gtk/gtkcurve.c:130
+#: gtk/gtkcurve.c:131
 msgid "Minimum possible value for X"
 msgstr "Minste mulige verdi for X"
 
-#: gtk/gtkcurve.c:139
+#: gtk/gtkcurve.c:140
 msgid "Maximum X"
 msgstr "Maksimum X"
 
-#: gtk/gtkcurve.c:140
+#: gtk/gtkcurve.c:141
 msgid "Maximum possible X value."
 msgstr "Største mulige verdi for X."
 
-#: gtk/gtkcurve.c:149
+#: gtk/gtkcurve.c:150
 msgid "Minimum Y"
 msgstr "Minimum Y"
 
-#: gtk/gtkcurve.c:150
+#: gtk/gtkcurve.c:151
 msgid "Minimum possible value for Y"
 msgstr "Minste mulige verdi for Y"
 
-#: gtk/gtkcurve.c:159
+#: gtk/gtkcurve.c:160
 msgid "Maximum Y"
 msgstr "Maksimum Y"
 
-#: gtk/gtkcurve.c:160
+#: gtk/gtkcurve.c:161
 msgid "Maximum possible value for Y"
 msgstr "Største mulige verdi for Y"
 
-#: gtk/gtkdialog.c:125
+#: gtk/gtkdialog.c:126
 msgid "Has separator"
 msgstr "Har separator"
 
-#: gtk/gtkdialog.c:126
+#: gtk/gtkdialog.c:127
 msgid "The dialog has a separator bar above its buttons"
 msgstr "Dialogen har en skillelinje over knappene"
 
-#: gtk/gtkdialog.c:149
+#: gtk/gtkdialog.c:150
 msgid "Content area border"
 msgstr ""
 
-#: gtk/gtkdialog.c:150
+#: gtk/gtkdialog.c:151
 msgid "Width of border around the main dialog area"
 msgstr "Bredde på kanten rundt hoveddialogområdet"
 
-#: gtk/gtkdialog.c:157
+#: gtk/gtkdialog.c:158
 msgid "Button spacing"
 msgstr "Knappeavstand"
 
-#: gtk/gtkdialog.c:158
+#: gtk/gtkdialog.c:159
 msgid "Spacing between buttons"
 msgstr "Avstand mellom knapper"
 
-#: gtk/gtkdialog.c:166
+#: gtk/gtkdialog.c:167
 msgid "Action area border"
 msgstr ""
 
-#: gtk/gtkdialog.c:167
+#: gtk/gtkdialog.c:168
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Bredde på kanten rundt knappeområdet nederst i dialogen"
 
-#: gtk/gtkentry.c:417 gtk/gtklabel.c:361
+#: gtk/gtkentry.c:418 gtk/gtklabel.c:360
 msgid "Cursor Position"
 msgstr "Markørposisjon"
 
-#: gtk/gtkentry.c:418 gtk/gtklabel.c:362
+#: gtk/gtkentry.c:419 gtk/gtklabel.c:361
 msgid "The current position of the insertion cursor in chars."
 msgstr "Aktiv posisjon for innsettingsmarkør i tegn."
 
-#: gtk/gtkentry.c:427 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:428 gtk/gtklabel.c:370
 msgid "Selection Bound"
 msgstr "Utvalg bundet"
 
-#: gtk/gtkentry.c:428 gtk/gtklabel.c:372
+#: gtk/gtkentry.c:429 gtk/gtklabel.c:371
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars."
 msgstr "Posisjon for motsatt ende av utvalget fra markøren i tegn."
 
-#: gtk/gtkentry.c:438
+#: gtk/gtkentry.c:439
 msgid "Whether the entry contents can be edited"
 msgstr "Innhold i oppføringen kan redigeres"
 
-#: gtk/gtkentry.c:445
+#: gtk/gtkentry.c:446
 msgid "Maximum length"
 msgstr "Maksimal lengde"
 
-#: gtk/gtkentry.c:446
+#: gtk/gtkentry.c:447
 msgid "Maximum number of characters for this entry"
 msgstr "Maksimalt antall tegn for denne oppføringen"
 
-#: gtk/gtkentry.c:454
+#: gtk/gtkentry.c:455
 msgid "Visibility"
 msgstr "Synlighet"
 
-#: gtk/gtkentry.c:455
+#: gtk/gtkentry.c:456
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr "USANN viser \"usynlig tegn\" i stedet for faktisk tekst (passordmodus)"
 
-#: gtk/gtkentry.c:462
+#: gtk/gtkentry.c:463
 msgid "Has Frame"
 msgstr "Har ramme"
 
-#: gtk/gtkentry.c:463
+#: gtk/gtkentry.c:464
 msgid "FALSE removes outside bevel from entry."
 msgstr "FALSK fjerner ytre kant fra oppføringen."
 
-#: gtk/gtkentry.c:470
+#: gtk/gtkentry.c:471
 msgid "Invisible character"
 msgstr "Usynlig tegn"
 
-#: gtk/gtkentry.c:471
+#: gtk/gtkentry.c:472
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Tegnet som skal brukes når man masker ut innhold i oppføringen (i \"passord "
 "modus\")"
 
-#: gtk/gtkentry.c:478
+#: gtk/gtkentry.c:479
 msgid "Activates default"
 msgstr "Aktiverer forvalg"
 
-#: gtk/gtkentry.c:479
+#: gtk/gtkentry.c:480
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
 msgstr ""
 
-#: gtk/gtkentry.c:485
+#: gtk/gtkentry.c:486
 msgid "Width in chars"
 msgstr "Bredde i tegn"
 
-#: gtk/gtkentry.c:486
+#: gtk/gtkentry.c:487
 msgid "Number of characters to leave space for in the entry."
 msgstr "Antall tegn det skal være plass til i feltet."
 
-#: gtk/gtkentry.c:495
+#: gtk/gtkentry.c:496
 msgid "Scroll offset"
 msgstr "Rulleavstand"
 
-#: gtk/gtkentry.c:496
+#: gtk/gtkentry.c:497
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Antall piksler av oppføringen som rullet ut av skjermen til venstre"
 
-#: gtk/gtkentry.c:506
+#: gtk/gtkentry.c:507
 msgid "The contents of the entry"
 msgstr "Innhold i oppføringen"
 
-#: gtk/gtkentry.c:512 gtk/gtklabel.c:380 gtk/gtktextview.c:621
+#: gtk/gtkentry.c:513 gtk/gtklabel.c:379 gtk/gtktextview.c:624
 msgid "Cursor color"
 msgstr "Markørfarge"
 
-#: gtk/gtkentry.c:513 gtk/gtklabel.c:381 gtk/gtktextview.c:622
+#: gtk/gtkentry.c:514 gtk/gtklabel.c:380 gtk/gtktextview.c:625
 msgid "Color with which to draw insertion cursor"
 msgstr "Farge som markøren skal tegnes med"
 
-#: gtk/gtkentry.c:3829 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3832 gtk/gtklabel.c:3151
 msgid "Select All"
 msgstr "Velg alt"
 
-#: gtk/gtkentry.c:3839 gtk/gtklabel.c:3187 gtk/gtktextview.c:5687
+#: gtk/gtkentry.c:3842 gtk/gtklabel.c:3161 gtk/gtktextview.c:5737
 msgid "Input Methods"
 msgstr "Inndatametode"
 
-#: gtk/gtkfilesel.c:509
+#: gtk/gtkfilesel.c:506
 msgid "Filename"
 msgstr "Filnavn"
 
-#: gtk/gtkfilesel.c:510
+#: gtk/gtkfilesel.c:507
 msgid "The currently selected filename."
 msgstr "Filnavn som er valgt nå."
 
-#: gtk/gtkfilesel.c:516
+#: gtk/gtkfilesel.c:513
 msgid "Show file operations"
 msgstr "Vis filoperasjoner"
 
-#: gtk/gtkfilesel.c:517
+#: gtk/gtkfilesel.c:514
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr "Vis knapper for oppretting/manipulering av filer."
 
 #. The directories clist
-#: gtk/gtkfilesel.c:639
+#: gtk/gtkfilesel.c:636
 msgid "Directories"
 msgstr "Kataloger"
 
 #. The files clist
-#: gtk/gtkfilesel.c:659
+#: gtk/gtkfilesel.c:656
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilesel.c:729 gtk/gtkfilesel.c:2060
+#: gtk/gtkfilesel.c:726 gtk/gtkfilesel.c:2057
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Uleselig katalog: %s"
 
-#: gtk/gtkfilesel.c:851
+#: gtk/gtkfilesel.c:848
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
 "availible to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"Filen \"%s\" er på en annen maskin (med navn %s) og vil kanskje ikke være tilgjengelig for dette programmet.\n"
+"Filen \"%s\" er på en annen maskin (med navn %s) og vil kanskje ikke være "
+"tilgjengelig for dette programmet.\n"
 "Er du sikker på at du ønsker å velge den?"
 
-#: gtk/gtkfilesel.c:981
+#: gtk/gtkfilesel.c:978
 msgid "Create Dir"
 msgstr "Lag katalog"
 
-#: gtk/gtkfilesel.c:992 gtk/gtkfilesel.c:1419
+#: gtk/gtkfilesel.c:989 gtk/gtkfilesel.c:1416
 msgid "Delete File"
 msgstr "Slett fil"
 
-#: gtk/gtkfilesel.c:1003 gtk/gtkfilesel.c:1562
+#: gtk/gtkfilesel.c:1000 gtk/gtkfilesel.c:1559
 msgid "Rename File"
 msgstr "Gi filen nytt navn"
 
-#: gtk/gtkfilesel.c:1240
+#: gtk/gtkfilesel.c:1237
 #, c-format
 msgid ""
 "The directory name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Katalognavnet \"%s\" inneholder symboler som ikke er tillatt i filnavn"
 
-#: gtk/gtkfilesel.c:1242
+#: gtk/gtkfilesel.c:1239
 #, c-format
 msgid ""
 "Error creating directory \"%s\": %s\n"
@@ -1525,39 +1538,39 @@ msgstr ""
 "Feil under oppretting av katalog \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1243 gtk/gtkfilesel.c:1496
+#: gtk/gtkfilesel.c:1240 gtk/gtkfilesel.c:1493
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Du brukte sannsynligvis symboler som ikke er tillatt i filnavn."
 
-#: gtk/gtkfilesel.c:1251
+#: gtk/gtkfilesel.c:1248
 #, c-format
 msgid "Error creating directory \"%s\": %s\n"
 msgstr "Feil under oppretting av katalog \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1285
+#: gtk/gtkfilesel.c:1282
 msgid "Create Directory"
 msgstr "Lag katalog"
 
-#: gtk/gtkfilesel.c:1299
+#: gtk/gtkfilesel.c:1296
 msgid "_Directory name:"
 msgstr "_Katalognavn:"
 
 #. buttons
-#: gtk/gtkfilesel.c:1313 gtk/gtkfilesel.c:1441 gtk/gtkfilesel.c:1595
+#: gtk/gtkfilesel.c:1310 gtk/gtkfilesel.c:1438 gtk/gtkfilesel.c:1592
 #: gtk/gtkgamma.c:417
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: gtk/gtkfilesel.c:1325
+#: gtk/gtkfilesel.c:1322
 msgid "Create"
 msgstr "Lag"
 
-#: gtk/gtkfilesel.c:1359
+#: gtk/gtkfilesel.c:1356
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Filnavnet \"%s\" inneholder ugyldige symboler"
 
-#: gtk/gtkfilesel.c:1362
+#: gtk/gtkfilesel.c:1359
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1566,25 +1579,25 @@ msgstr ""
 "Feil under sletting av fil \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1364 gtk/gtkfilesel.c:1510
+#: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1507
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Det inneholder sannsynligvis symboler som ikke er tillatt i filnavn."
 
-#: gtk/gtkfilesel.c:1373
+#: gtk/gtkfilesel.c:1370
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Feil under sletting av fil \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1451
+#: gtk/gtkfilesel.c:1448
 msgid "Delete"
 msgstr "Slett"
 
-#: gtk/gtkfilesel.c:1492 gtk/gtkfilesel.c:1506
+#: gtk/gtkfilesel.c:1489 gtk/gtkfilesel.c:1503
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Filnavn \"%s\" inneholder symboler som ikke er tillatt i filnavn"
 
-#: gtk/gtkfilesel.c:1494
+#: gtk/gtkfilesel.c:1491
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1593,7 +1606,7 @@ msgstr ""
 "Feil under endring av navn på fil \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1508
+#: gtk/gtkfilesel.c:1505
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1602,31 +1615,31 @@ msgstr ""
 "Feil under endring av navn på fil \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1518
+#: gtk/gtkfilesel.c:1515
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Feil under endring av navn på fil \"%s\" til \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1607
+#: gtk/gtkfilesel.c:1604
 msgid "Rename"
 msgstr "Gi nytt navn"
 
-#: gtk/gtkfilesel.c:2039
+#: gtk/gtkfilesel.c:2036
 msgid "Selection: "
 msgstr "Valg:"
 
-#: gtk/gtkfilesel.c:2649
+#: gtk/gtkfilesel.c:2647
 #, c-format
 msgid ""
 "The filename %s couldn't be converted to UTF-8. Try setting the environment "
 "variable G_BROKEN_FILENAMES."
 msgstr ""
 
-#: gtk/gtkfilesel.c:3517
+#: gtk/gtkfilesel.c:3515
 msgid "Name too long"
 msgstr "Navnet er for langt"
 
-#: gtk/gtkfilesel.c:3519
+#: gtk/gtkfilesel.c:3517
 msgid "Couldn't convert filename"
 msgstr "Kunne ikke konvertere filnavnet"
 
@@ -1691,7 +1704,7 @@ msgstr "Y-justering for etikett"
 msgid "The vertical alignment of the label."
 msgstr "Vertikal justering for etikett."
 
-#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:184
+#: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:185
 msgid "Deprecated property, use shadow_type instead."
 msgstr ""
 
@@ -1723,28 +1736,28 @@ msgstr "_Gammaverdi"
 msgid "OK"
 msgstr "OK"
 
-#: gtk/gtkhandlebox.c:191 gtk/gtkmenubar.c:148 gtk/gtkstatusbar.c:157
-#: gtk/gtktoolbar.c:276 gtk/gtkviewport.c:147
+#: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:148 gtk/gtkstatusbar.c:158
+#: gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
 msgid "Shadow type"
 msgstr "Skyggetype"
 
-#: gtk/gtkhandlebox.c:192
+#: gtk/gtkhandlebox.c:193
 msgid "Appearance of the shadow that surrounds the container."
 msgstr ""
 
-#: gtk/gtkhandlebox.c:200
+#: gtk/gtkhandlebox.c:201
 msgid "Handle position"
 msgstr "Plassering av håndtak"
 
-#: gtk/gtkhandlebox.c:201
+#: gtk/gtkhandlebox.c:202
 msgid "Position of the handle relative to the child widget."
 msgstr ""
 
-#: gtk/gtkhandlebox.c:209
+#: gtk/gtkhandlebox.c:210
 msgid "Snap edge"
 msgstr ""
 
-#: gtk/gtkhandlebox.c:210
+#: gtk/gtkhandlebox.c:211
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox."
@@ -1767,209 +1780,209 @@ msgid "Child widget to appear next to the menu text"
 msgstr ""
 
 #. shell and main vbox
-#: gtk/gtkinputdialog.c:181
+#: gtk/gtkinputdialog.c:182
 msgid "Input"
 msgstr "Inndata"
 
-#: gtk/gtkinputdialog.c:189
+#: gtk/gtkinputdialog.c:190
 msgid "No input devices"
 msgstr "Ingen innenheter"
 
-#: gtk/gtkinputdialog.c:218
+#: gtk/gtkinputdialog.c:219
 msgid "_Device:"
 msgstr "_Enhet:"
 
-#: gtk/gtkinputdialog.c:235
+#: gtk/gtkinputdialog.c:236
 msgid "Disabled"
 msgstr "Slått av"
 
-#: gtk/gtkinputdialog.c:243
+#: gtk/gtkinputdialog.c:244
 msgid "Screen"
 msgstr "Skjerm"
 
-#: gtk/gtkinputdialog.c:251
+#: gtk/gtkinputdialog.c:252
 msgid "Window"
 msgstr "Vindu"
 
-#: gtk/gtkinputdialog.c:259
+#: gtk/gtkinputdialog.c:260
 msgid "_Mode: "
 msgstr "_Modus: "
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:290
+#: gtk/gtkinputdialog.c:291
 msgid "_Axes"
 msgstr "_Akser"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:306
+#: gtk/gtkinputdialog.c:307
 msgid "_Keys"
 msgstr "_Taster"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:327
+#: gtk/gtkinputdialog.c:328
 msgid "Save"
 msgstr "Lagre"
 
-#: gtk/gtkinputdialog.c:336
+#: gtk/gtkinputdialog.c:337
 msgid "Close"
 msgstr "Lukk"
 
-#: gtk/gtkinputdialog.c:469
+#: gtk/gtkinputdialog.c:470
 msgid "X"
 msgstr "X"
 
-#: gtk/gtkinputdialog.c:470
+#: gtk/gtkinputdialog.c:471
 msgid "Y"
 msgstr "Y"
 
-#: gtk/gtkinputdialog.c:471
+#: gtk/gtkinputdialog.c:472
 msgid "Pressure"
 msgstr "Trykk"
 
-#: gtk/gtkinputdialog.c:472
+#: gtk/gtkinputdialog.c:473
 msgid "X Tilt"
 msgstr "X-helling"
 
-#: gtk/gtkinputdialog.c:473
+#: gtk/gtkinputdialog.c:474
 msgid "Y Tilt"
 msgstr "Y-helling"
 
-#: gtk/gtkinputdialog.c:474
+#: gtk/gtkinputdialog.c:475
 msgid "Wheel"
 msgstr "Hjul"
 
-#: gtk/gtkinputdialog.c:514
+#: gtk/gtkinputdialog.c:515
 msgid "none"
 msgstr "ingen"
 
-#: gtk/gtkinputdialog.c:548 gtk/gtkinputdialog.c:584
+#: gtk/gtkinputdialog.c:549 gtk/gtkinputdialog.c:585
 msgid "(disabled)"
 msgstr "(slått av)"
 
-#: gtk/gtkinputdialog.c:577
+#: gtk/gtkinputdialog.c:578
 msgid "(unknown)"
 msgstr "(ukjent)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:662
+#: gtk/gtkinputdialog.c:663
 msgid "clear"
 msgstr "tøm"
 
-#: gtk/gtklabel.c:284
+#: gtk/gtklabel.c:283
 msgid "The text of the label."
 msgstr "Tekst for etikett."
 
-#: gtk/gtklabel.c:291
+#: gtk/gtklabel.c:290
 msgid "A list of style attributes to apply to the text of the label."
 msgstr ""
 
-#: gtk/gtklabel.c:297
+#: gtk/gtklabel.c:296
 msgid "Use markup"
 msgstr "Bruk tagging"
 
-#: gtk/gtklabel.c:298
+#: gtk/gtklabel.c:297
 msgid "The text of the label includes XML markup. See pango_parse_markup()."
 msgstr ""
 
-#: gtk/gtklabel.c:312 gtk/gtktexttag.c:377 gtk/gtktextview.c:562
+#: gtk/gtklabel.c:311 gtk/gtktexttag.c:378 gtk/gtktextview.c:565
 msgid "Justification"
 msgstr "Justering"
 
-#: gtk/gtklabel.c:313
+#: gtk/gtklabel.c:312
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that."
 msgstr ""
 
-#: gtk/gtklabel.c:321
+#: gtk/gtklabel.c:320
 msgid "Pattern"
 msgstr "Mønster"
 
-#: gtk/gtklabel.c:322
+#: gtk/gtklabel.c:321
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline."
 msgstr ""
 
-#: gtk/gtklabel.c:329
+#: gtk/gtklabel.c:328
 msgid "Line wrap"
 msgstr "Linjebryting"
 
-#: gtk/gtklabel.c:330
+#: gtk/gtklabel.c:329
 msgid "If set, wrap lines if the text becomes too wide."
 msgstr ""
 
-#: gtk/gtklabel.c:336
+#: gtk/gtklabel.c:335
 msgid "Selectable"
 msgstr "Velgbar"
 
-#: gtk/gtklabel.c:337
+#: gtk/gtklabel.c:336
 msgid "Whether the label text can be selected with the mouse."
 msgstr ""
 
-#: gtk/gtklabel.c:343
+#: gtk/gtklabel.c:342
 msgid "Mnemonic key"
 msgstr ""
 
-#: gtk/gtklabel.c:344
+#: gtk/gtklabel.c:343
 msgid "The mnemonic accelerator key for this label."
 msgstr ""
 
-#: gtk/gtklabel.c:352
+#: gtk/gtklabel.c:351
 msgid "Mnemonic widget"
 msgstr ""
 
-#: gtk/gtklabel.c:353
+#: gtk/gtklabel.c:352
 msgid "The widget to be activated when the label's mnemonic key is pressed."
 msgstr ""
 
-#: gtk/gtklayout.c:575
+#: gtk/gtklayout.c:576
 msgid "X position"
 msgstr "X-posisjon"
 
-#: gtk/gtklayout.c:576
+#: gtk/gtklayout.c:577
 msgid "X position of child widget"
 msgstr "X-posisjon for underwidgetet"
 
-#: gtk/gtklayout.c:585
+#: gtk/gtklayout.c:586
 msgid "Y position"
 msgstr "Y-posisjon"
 
-#: gtk/gtklayout.c:586
+#: gtk/gtklayout.c:587
 msgid "Y position of child widget"
 msgstr "Y-posisjon for underwidgetet"
 
-#: gtk/gtklayout.c:595 gtk/gtkviewport.c:131
+#: gtk/gtklayout.c:596 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
 msgstr "Horisontal justering"
 
-#: gtk/gtklayout.c:596
+#: gtk/gtklayout.c:597
 msgid "The GtkAdjustment for the horizontal position."
 msgstr ""
 
-#: gtk/gtklayout.c:603 gtk/gtkviewport.c:139
+#: gtk/gtklayout.c:604 gtk/gtkviewport.c:140
 msgid "Vertical adjustment"
 msgstr "Vertikal justering"
 
-#: gtk/gtklayout.c:604
+#: gtk/gtklayout.c:605
 msgid "The GtkAdjustment for the vertical position."
 msgstr ""
 
-#: gtk/gtklayout.c:611 gtk/gtktreeviewcolumn.c:179
+#: gtk/gtklayout.c:612 gtk/gtktreeviewcolumn.c:189
 msgid "Width"
 msgstr "Bredde"
 
-#: gtk/gtklayout.c:612
+#: gtk/gtklayout.c:613
 msgid "The width of the layout."
 msgstr "Bredde på en plasseringen."
 
-#: gtk/gtklayout.c:620
+#: gtk/gtklayout.c:621
 msgid "Height"
 msgstr "Høyde"
 
-#: gtk/gtklayout.c:621
+#: gtk/gtklayout.c:622
 msgid "The height of the layout."
 msgstr "Høyde på plasseringen."
 
@@ -1978,7 +1991,7 @@ msgstr "Høyde på plasseringen."
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:612
+#: gtk/gtkmain.c:613
 msgid "default:LTR"
 msgstr "standard:LTR"
 
@@ -1986,7 +1999,7 @@ msgstr "standard:LTR"
 msgid "Style of bevel around the menubar"
 msgstr ""
 
-#: gtk/gtkmenubar.c:156 gtk/gtktoolbar.c:250
+#: gtk/gtkmenubar.c:156 gtk/gtktoolbar.c:251
 msgid "Internal padding"
 msgstr "Internt fyll"
 
@@ -1994,13 +2007,30 @@ msgstr "Internt fyll"
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr ""
 
-#: gtk/gtkmessagedialog.c:80
+#: gtk/gtkmessagedialog.c:104
 msgid "Image/label border"
 msgstr ""
 
-#: gtk/gtkmessagedialog.c:81
+#: gtk/gtkmessagedialog.c:105
 msgid "Width of border around the label and image in the message dialog"
 msgstr "Bredde på kanten rundt etikett og bilde i meldingsdialogen"
+
+#: gtk/gtkmessagedialog.c:113
+msgid "Message Type"
+msgstr ""
+
+#: gtk/gtkmessagedialog.c:114
+#, fuzzy
+msgid "The type of message"
+msgstr "Tekst for etikett."
+
+#: gtk/gtkmessagedialog.c:121
+msgid "Message Buttons"
+msgstr ""
+
+#: gtk/gtkmessagedialog.c:122
+msgid "The buttons shown in the message dialog"
+msgstr ""
 
 #: gtk/gtkmisc.c:97
 msgid "X align"
@@ -2036,141 +2066,141 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
 
-#: gtk/gtknotebook.c:324
+#: gtk/gtknotebook.c:328
 msgid "Page"
 msgstr "Side"
 
-#: gtk/gtknotebook.c:325
+#: gtk/gtknotebook.c:329
 msgid "The index of the current page"
 msgstr "Indeks for aktiv side"
 
-#: gtk/gtknotebook.c:333
+#: gtk/gtknotebook.c:337
 msgid "Tab Position"
 msgstr "Faneplassering"
 
-#: gtk/gtknotebook.c:334
+#: gtk/gtknotebook.c:338
 msgid "Which side of the notebook holds the tabs"
 msgstr ""
 
-#: gtk/gtknotebook.c:341
+#: gtk/gtknotebook.c:345
 msgid "Tab Border"
 msgstr "Fanekant"
 
-#: gtk/gtknotebook.c:342
+#: gtk/gtknotebook.c:346
 msgid "Width of the border around the tab labels"
 msgstr "Bredde på kanten rundt faneetikettene"
 
-#: gtk/gtknotebook.c:350
+#: gtk/gtknotebook.c:354
 msgid "Horizontal Tab Border"
 msgstr "Horisontal fanekant"
 
-#: gtk/gtknotebook.c:351
+#: gtk/gtknotebook.c:355
 msgid "Width of the horizontal border of tab labels"
 msgstr "Bredde på horisontal kant på faneetikettene"
 
-#: gtk/gtknotebook.c:359
+#: gtk/gtknotebook.c:363
 msgid "Vertical Tab Border"
 msgstr "Vertikal fanekant"
 
-#: gtk/gtknotebook.c:360
+#: gtk/gtknotebook.c:364
 msgid "Width of the vertical border of tab labels"
 msgstr "Bredde på vertikal kant på faneetikettene"
 
-#: gtk/gtknotebook.c:368
+#: gtk/gtknotebook.c:372
 msgid "Show Tabs"
 msgstr "Vis faner"
 
-#: gtk/gtknotebook.c:369
+#: gtk/gtknotebook.c:373
 msgid "Whether tabs should be shown or not"
 msgstr "Vis/Ikke vis faner"
 
-#: gtk/gtknotebook.c:375
+#: gtk/gtknotebook.c:379
 msgid "Show Border"
 msgstr "Vis kant"
 
-#: gtk/gtknotebook.c:376
+#: gtk/gtknotebook.c:380
 msgid "Whether the border should be shown or not"
 msgstr "Vis/ikke vis kant"
 
-#: gtk/gtknotebook.c:382
+#: gtk/gtknotebook.c:386
 msgid "Scrollable"
 msgstr "Rullbar"
 
-#: gtk/gtknotebook.c:383
+#: gtk/gtknotebook.c:387
 msgid "If TRUE, scroll arrows are added if there are to many tabs to fit"
 msgstr ""
 
-#: gtk/gtknotebook.c:389
+#: gtk/gtknotebook.c:393
 msgid "Enable Popup"
 msgstr "Slå på oppsprett"
 
-#: gtk/gtknotebook.c:390
+#: gtk/gtknotebook.c:394
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
 
-#: gtk/gtknotebook.c:397
+#: gtk/gtknotebook.c:401
 msgid "Whether tabs should have homogeneous sizes"
 msgstr ""
 
-#: gtk/gtknotebook.c:2134 gtk/gtknotebook.c:4529
+#: gtk/gtknotebook.c:2240 gtk/gtknotebook.c:4470
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
 
-#: gtk/gtkoptionmenu.c:183
+#: gtk/gtkoptionmenu.c:184
 msgid "Menu"
 msgstr "Meny"
 
-#: gtk/gtkoptionmenu.c:184
+#: gtk/gtkoptionmenu.c:185
 msgid "The menu of options"
 msgstr "Meny med alternativer"
 
-#: gtk/gtkoptionmenu.c:191
+#: gtk/gtkoptionmenu.c:192
 msgid "Size of dropdown indicator"
 msgstr "Størrelse på nedtrekksindikator"
 
-#: gtk/gtkoptionmenu.c:197
+#: gtk/gtkoptionmenu.c:198
 msgid "Spacing around indicator"
 msgstr "Plass rundt indikatoren"
 
-#: gtk/gtkpaned.c:116 gtk/gtkruler.c:138
+#: gtk/gtkpaned.c:120 gtk/gtkruler.c:138
 msgid "Position"
 msgstr "Posisjon"
 
-#: gtk/gtkpaned.c:117
+#: gtk/gtkpaned.c:121
 msgid ""
 "Position of paned separator in pixels(0 means all the way to the left/top)"
 msgstr ""
 
-#: gtk/gtkpaned.c:125
+#: gtk/gtkpaned.c:129
 msgid "Position Set"
 msgstr "Posisjon satt"
 
-#: gtk/gtkpaned.c:126
+#: gtk/gtkpaned.c:130
 msgid "TRUE if the Position property should be used"
 msgstr ""
 
-#: gtk/gtkpaned.c:132
+#: gtk/gtkpaned.c:136
 msgid "Handle Size"
 msgstr "Størrelse på håndtak"
 
-#: gtk/gtkpaned.c:133
+#: gtk/gtkpaned.c:137
 msgid "Width of handle"
 msgstr "Størrelse på håndtak"
 
-#: gtk/gtkrc.c:2721
+#: gtk/gtkrc.c:2723
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kunne ikke finne bildefilen i pixmap_patg: \"%s\" linje %d"
 
-#: gtk/gtkrc.c:2724
+#: gtk/gtkrc.c:2726
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finne bildefil i pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3133
+#: gtk/gtkrc.c:3135
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
@@ -2224,7 +2254,7 @@ msgid ""
 "in the progress widget"
 msgstr ""
 
-#: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:265 gtk/gtkspinbutton.c:213
+#: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:270 gtk/gtkspinbutton.c:214
 msgid "Adjustment"
 msgstr "Justering"
 
@@ -2232,7 +2262,7 @@ msgstr "Justering"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr ""
 
-#: gtk/gtkprogressbar.c:139 gtk/gtktoolbar.c:223
+#: gtk/gtkprogressbar.c:139 gtk/gtktoolbar.c:224
 msgid "Orientation"
 msgstr "Orientering"
 
@@ -2296,55 +2326,55 @@ msgstr ""
 msgid "Text to be displayed in the progress bar"
 msgstr ""
 
-#: gtk/gtkrange.c:256
+#: gtk/gtkrange.c:261
 msgid "Update policy"
 msgstr "Oppdateringspolicy"
 
-#: gtk/gtkrange.c:257
+#: gtk/gtkrange.c:262
 msgid "How the range should be updated on the screen"
 msgstr ""
 
-#: gtk/gtkrange.c:266
+#: gtk/gtkrange.c:271
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 
-#: gtk/gtkrange.c:273
+#: gtk/gtkrange.c:278
 msgid "Inverted"
 msgstr "Invertert"
 
-#: gtk/gtkrange.c:274
+#: gtk/gtkrange.c:279
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 
-#: gtk/gtkrange.c:280
+#: gtk/gtkrange.c:285
 msgid "Slider Width"
 msgstr ""
 
-#: gtk/gtkrange.c:281
+#: gtk/gtkrange.c:286
 msgid "Width of scrollbar or scale thumb"
 msgstr ""
 
-#: gtk/gtkrange.c:288
+#: gtk/gtkrange.c:293
 msgid "Trough Border"
 msgstr "Gjennom kant"
 
-#: gtk/gtkrange.c:289
+#: gtk/gtkrange.c:294
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr ""
 
-#: gtk/gtkrange.c:296
+#: gtk/gtkrange.c:301
 msgid "Stepper Size"
 msgstr ""
 
-#: gtk/gtkrange.c:297
+#: gtk/gtkrange.c:302
 msgid "Length of step buttons at ends"
 msgstr ""
 
-#: gtk/gtkrange.c:304
+#: gtk/gtkrange.c:309
 msgid "Stepper Spacing"
 msgstr ""
 
-#: gtk/gtkrange.c:305
+#: gtk/gtkrange.c:310
 msgid "Spacing between step buttons and thumb"
 msgstr ""
 
@@ -2376,7 +2406,7 @@ msgstr "Maks størrelse"
 msgid "Maximum size of the ruler"
 msgstr "Maksimum størrelse på linjal"
 
-#: gtk/gtkscale.c:148 gtk/gtkspinbutton.c:231
+#: gtk/gtkscale.c:148 gtk/gtkspinbutton.c:232
 msgid "Digits"
 msgstr "Tall"
 
@@ -2526,66 +2556,66 @@ msgstr ""
 msgid "Keybinding to activate the menu bar"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:214
+#: gtk/gtkspinbutton.c:215
 msgid "The adjustment that holds the value of the spinbutton"
 msgstr "Justeringen som innehar verdien for en \"spinbutton\""
 
-#: gtk/gtkspinbutton.c:221
+#: gtk/gtkspinbutton.c:222
 msgid "Climb Rate"
 msgstr "Klatrerate"
 
-#: gtk/gtkspinbutton.c:222
+#: gtk/gtkspinbutton.c:223
 msgid "The acceleration rate when you hold down a button"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:232
+#: gtk/gtkspinbutton.c:233
 msgid "The number of decimal places to display"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:241
+#: gtk/gtkspinbutton.c:242
 msgid "Snap to Ticks"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:242
+#: gtk/gtkspinbutton.c:243
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:249
+#: gtk/gtkspinbutton.c:250
 msgid "Numeric"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:250
+#: gtk/gtkspinbutton.c:251
 msgid "Whether non-numeric characters should be ignored"
 msgstr "Ignorer ikke-numeriske tegn"
 
-#: gtk/gtkspinbutton.c:257
+#: gtk/gtkspinbutton.c:258
 msgid "Wrap"
 msgstr "Bryt"
 
-#: gtk/gtkspinbutton.c:258
+#: gtk/gtkspinbutton.c:259
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:265
+#: gtk/gtkspinbutton.c:266
 msgid "Update Policy"
 msgstr "Oppdateringspolicy"
 
-#: gtk/gtkspinbutton.c:266
+#: gtk/gtkspinbutton.c:267
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 
-#: gtk/gtkspinbutton.c:274
+#: gtk/gtkspinbutton.c:275
 msgid "Value"
 msgstr "Verdi"
 
-#: gtk/gtkspinbutton.c:275
+#: gtk/gtkspinbutton.c:276
 msgid "Reads the current value, or sets a new value"
 msgstr "Leser aktiv verdi eller setter en ny"
 
-#: gtk/gtkstatusbar.c:158
+#: gtk/gtkstatusbar.c:159
 msgid "Style of bevel around the statusbar text"
 msgstr "Stil for kant rundt statuslinjetekst"
 
@@ -2902,302 +2932,302 @@ msgstr "Homogen"
 msgid "If TRUE this means the table cells are all the same width/height"
 msgstr ""
 
-#: gtk/gtktext.c:603 gtk/gtktreeview.c:504
+#: gtk/gtktext.c:604 gtk/gtktreeview.c:505
 msgid "Horizontal Adjustment"
 msgstr "Horisontal justering"
 
-#: gtk/gtktext.c:604
+#: gtk/gtktext.c:605
 msgid "Horizontal adjustment for the text widget"
 msgstr ""
 
-#: gtk/gtktext.c:611 gtk/gtktreeview.c:512
+#: gtk/gtktext.c:612 gtk/gtktreeview.c:513
 msgid "Vertical Adjustment"
 msgstr "Vertikal justering"
 
-#: gtk/gtktext.c:612
+#: gtk/gtktext.c:613
 msgid "Vertical adjustment for the text widget"
 msgstr "Vertikal justering for tekstwidgetet"
 
-#: gtk/gtktext.c:619
+#: gtk/gtktext.c:620
 msgid "Line Wrap"
 msgstr "Linjebryting"
 
-#: gtk/gtktext.c:620
+#: gtk/gtktext.c:621
 msgid "Whether lines are wrapped at widget edges"
 msgstr "Linjer brytes ved widgetets kant"
 
-#: gtk/gtktext.c:627
+#: gtk/gtktext.c:628
 msgid "Word Wrap"
 msgstr "Ordbryting"
 
-#: gtk/gtktext.c:628
+#: gtk/gtktext.c:629
 msgid "Whether words are wrapped at widget edges"
 msgstr ""
 
-#: gtk/gtktexttag.c:198
+#: gtk/gtktexttag.c:199
 msgid "Tag name"
 msgstr "Navn på tag"
 
-#: gtk/gtktexttag.c:199
+#: gtk/gtktexttag.c:200
 msgid "Name used to refer to the text tag"
 msgstr "Navn som brukes ved referanse til tekst-taggen"
 
-#: gtk/gtktexttag.c:224
+#: gtk/gtktexttag.c:225
 msgid "Background full height"
 msgstr "Full høyde for bakgrunnsfarge"
 
-#: gtk/gtktexttag.c:225
+#: gtk/gtktexttag.c:226
 msgid ""
 "Whether the background color fills the entire line height or only the height "
 "of the tagged characters"
 msgstr ""
 
-#: gtk/gtktexttag.c:233
+#: gtk/gtktexttag.c:234
 msgid "Background stipple mask"
 msgstr "Stiplingsmaske for bakgrunnsfarge"
 
-#: gtk/gtktexttag.c:234
+#: gtk/gtktexttag.c:235
 msgid "Bitmap to use as a mask when drawing the text background"
 msgstr ""
 
-#: gtk/gtktexttag.c:259
+#: gtk/gtktexttag.c:260
 msgid "Foreground stipple mask"
 msgstr "Stiplingsmaske for forgrunnsfarge"
 
-#: gtk/gtktexttag.c:260
+#: gtk/gtktexttag.c:261
 msgid "Bitmap to use as a mask when drawing the text foreground"
 msgstr ""
 
-#: gtk/gtktexttag.c:267
+#: gtk/gtktexttag.c:268
 msgid "Text direction"
 msgstr "Tekstretning"
 
-#: gtk/gtktexttag.c:268
+#: gtk/gtktexttag.c:269
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Tekstretning; høyre-til-venstre eller venstre-til-høyre"
 
-#: gtk/gtktexttag.c:378 gtk/gtktextview.c:563
+#: gtk/gtktexttag.c:379 gtk/gtktextview.c:566
 msgid "Left, right, or center justification"
 msgstr "Venstre-, høyre- eller senterjustering"
 
-#: gtk/gtktexttag.c:386
+#: gtk/gtktexttag.c:387
 msgid "Language"
 msgstr "Språk"
 
-#: gtk/gtktexttag.c:387
+#: gtk/gtktexttag.c:388
 msgid "Language engine code to use for rendering the text"
 msgstr "Språkmotor som skal brukes for å rendre teksten"
 
-#: gtk/gtktexttag.c:394
+#: gtk/gtktexttag.c:395
 msgid "Left margin"
 msgstr "Venstre marg"
 
-#: gtk/gtktexttag.c:395 gtk/gtktextview.c:572
+#: gtk/gtktexttag.c:396 gtk/gtktextview.c:575
 msgid "Width of the left margin in pixels"
 msgstr "Bredde på venstre marg i piksler"
 
-#: gtk/gtktexttag.c:404
+#: gtk/gtktexttag.c:405
 msgid "Right margin"
 msgstr "Høyre marg"
 
-#: gtk/gtktexttag.c:405 gtk/gtktextview.c:582
+#: gtk/gtktexttag.c:406 gtk/gtktextview.c:585
 msgid "Width of the right margin in pixels"
 msgstr "Bredde på høyre marg i piksler"
 
-#: gtk/gtktexttag.c:415 gtk/gtktextview.c:591
+#: gtk/gtktexttag.c:416 gtk/gtktextview.c:594
 msgid "Indent"
 msgstr "Rykk inn"
 
-#: gtk/gtktexttag.c:416 gtk/gtktextview.c:592
+#: gtk/gtktexttag.c:417 gtk/gtktextview.c:595
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Innrykksmengde for avsnittet, i piksler"
 
-#: gtk/gtktexttag.c:436
+#: gtk/gtktexttag.c:437
 msgid "Pixels above lines"
 msgstr "Piksler over linjer"
 
-#: gtk/gtktexttag.c:437 gtk/gtktextview.c:516
+#: gtk/gtktexttag.c:438 gtk/gtktextview.c:519
 msgid "Pixels of blank space above paragraphs"
 msgstr ""
 
-#: gtk/gtktexttag.c:446
+#: gtk/gtktexttag.c:447
 msgid "Pixels below lines"
 msgstr "Piksler under linjer"
 
-#: gtk/gtktexttag.c:447 gtk/gtktextview.c:526
+#: gtk/gtktexttag.c:448 gtk/gtktextview.c:529
 msgid "Pixels of blank space below paragraphs"
 msgstr ""
 
-#: gtk/gtktexttag.c:456
+#: gtk/gtktexttag.c:457
 msgid "Pixels inside wrap"
 msgstr ""
 
-#: gtk/gtktexttag.c:457 gtk/gtktextview.c:536
+#: gtk/gtktexttag.c:458 gtk/gtktextview.c:539
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr ""
 
-#: gtk/gtktexttag.c:483
+#: gtk/gtktexttag.c:484
 msgid "Wrap mode"
 msgstr "Brytningsmodus"
 
-#: gtk/gtktexttag.c:484 gtk/gtktextview.c:554
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:557
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
-#: gtk/gtktexttag.c:493 gtk/gtktextview.c:601
+#: gtk/gtktexttag.c:494 gtk/gtktextview.c:604
 msgid "Tabs"
 msgstr "Faner"
 
-#: gtk/gtktexttag.c:494 gtk/gtktextview.c:602
+#: gtk/gtktexttag.c:495 gtk/gtktextview.c:605
 msgid "Custom tabs for this text"
 msgstr ""
 
-#: gtk/gtktexttag.c:501
+#: gtk/gtktexttag.c:502
 msgid "Invisible"
 msgstr "Usynlig"
 
-#: gtk/gtktexttag.c:502
+#: gtk/gtktexttag.c:503
 msgid "Whether this text is hidden"
 msgstr "Teksten er skjult"
 
-#: gtk/gtktexttag.c:515
+#: gtk/gtktexttag.c:516
 msgid "Background full height set"
 msgstr ""
 
-#: gtk/gtktexttag.c:516
+#: gtk/gtktexttag.c:517
 msgid "Whether this tag affects background height"
 msgstr ""
 
-#: gtk/gtktexttag.c:519
+#: gtk/gtktexttag.c:520
 msgid "Background stipple set"
 msgstr ""
 
-#: gtk/gtktexttag.c:520
+#: gtk/gtktexttag.c:521
 msgid "Whether this tag affects the background stipple"
 msgstr ""
 
-#: gtk/gtktexttag.c:527
+#: gtk/gtktexttag.c:528
 msgid "Foreground stipple set"
 msgstr ""
 
-#: gtk/gtktexttag.c:528
+#: gtk/gtktexttag.c:529
 msgid "Whether this tag affects the foreground stipple"
 msgstr ""
 
-#: gtk/gtktexttag.c:563
+#: gtk/gtktexttag.c:564
 msgid "Justification set"
 msgstr ""
 
-#: gtk/gtktexttag.c:564
+#: gtk/gtktexttag.c:565
 msgid "Whether this tag affects paragraph justification"
 msgstr ""
 
-#: gtk/gtktexttag.c:567
+#: gtk/gtktexttag.c:568
 msgid "Language set"
 msgstr ""
 
-#: gtk/gtktexttag.c:568
+#: gtk/gtktexttag.c:569
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr ""
 
-#: gtk/gtktexttag.c:571
+#: gtk/gtktexttag.c:572
 msgid "Left margin set"
 msgstr ""
 
-#: gtk/gtktexttag.c:572
+#: gtk/gtktexttag.c:573
 msgid "Whether this tag affects the left margin"
 msgstr ""
 
-#: gtk/gtktexttag.c:575
+#: gtk/gtktexttag.c:576
 msgid "Indent set"
 msgstr ""
 
-#: gtk/gtktexttag.c:576
+#: gtk/gtktexttag.c:577
 msgid "Whether this tag affects indentation"
 msgstr ""
 
-#: gtk/gtktexttag.c:583
+#: gtk/gtktexttag.c:584
 msgid "Pixels above lines set"
 msgstr ""
 
-#: gtk/gtktexttag.c:584 gtk/gtktexttag.c:588
+#: gtk/gtktexttag.c:585 gtk/gtktexttag.c:589
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr ""
 
-#: gtk/gtktexttag.c:587
+#: gtk/gtktexttag.c:588
 msgid "Pixels below lines set"
 msgstr ""
 
-#: gtk/gtktexttag.c:591
+#: gtk/gtktexttag.c:592
 msgid "Pixels inside wrap set"
 msgstr ""
 
-#: gtk/gtktexttag.c:592
+#: gtk/gtktexttag.c:593
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr ""
 
-#: gtk/gtktexttag.c:599
+#: gtk/gtktexttag.c:600
 msgid "Right margin set"
 msgstr ""
 
-#: gtk/gtktexttag.c:600
+#: gtk/gtktexttag.c:601
 msgid "Whether this tag affects the right margin"
 msgstr ""
 
-#: gtk/gtktexttag.c:607
+#: gtk/gtktexttag.c:608
 msgid "Wrap mode set"
 msgstr ""
 
-#: gtk/gtktexttag.c:608
+#: gtk/gtktexttag.c:609
 msgid "Whether this tag affects line wrap mode"
 msgstr ""
 
-#: gtk/gtktexttag.c:611
+#: gtk/gtktexttag.c:612
 msgid "Tabs set"
 msgstr ""
 
-#: gtk/gtktexttag.c:612
+#: gtk/gtktexttag.c:613
 msgid "Whether this tag affects tabs"
 msgstr ""
 
-#: gtk/gtktexttag.c:615
+#: gtk/gtktexttag.c:616
 msgid "Invisible set"
 msgstr ""
 
-#: gtk/gtktexttag.c:616
+#: gtk/gtktexttag.c:617
 msgid "Whether this tag affects text visibility"
 msgstr ""
 
-#: gtk/gtktextview.c:515
+#: gtk/gtktextview.c:518
 msgid "Pixels Above Lines"
 msgstr "Piksler over linjer"
 
-#: gtk/gtktextview.c:525
+#: gtk/gtktextview.c:528
 msgid "Pixels Below Lines"
 msgstr "Piksler under linjer"
 
-#: gtk/gtktextview.c:535
+#: gtk/gtktextview.c:538
 msgid "Pixels Inside Wrap"
 msgstr ""
 
-#: gtk/gtktextview.c:553
+#: gtk/gtktextview.c:556
 msgid "Wrap Mode"
 msgstr "Brytningsmodus"
 
-#: gtk/gtktextview.c:571
+#: gtk/gtktextview.c:574
 msgid "Left Margin"
 msgstr "Venstre marg"
 
-#: gtk/gtktextview.c:581
+#: gtk/gtktextview.c:584
 msgid "Right Margin"
 msgstr "Høyre marg"
 
-#: gtk/gtktextview.c:609
+#: gtk/gtktextview.c:612
 msgid "Cursor Visible"
 msgstr "Synlig markør"
 
-#: gtk/gtktextview.c:610
+#: gtk/gtktextview.c:613
 msgid "If the insertion cursor is shown"
 msgstr "Vis innsettingsmarkør"
 
@@ -3206,539 +3236,557 @@ msgstr "Vis innsettingsmarkør"
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Kunne ikke finne temamotor i module_path: \"%s\","
 
-#: gtk/gtktipsquery.c:181
+#: gtk/gtktipsquery.c:182
 msgid "--- No Tip ---"
 msgstr "--- Ingen tips ---"
 
-#: gtk/gtktogglebutton.c:143
+#: gtk/gtktogglebutton.c:133
 msgid "If the toggle button should be pressed in or not"
 msgstr ""
 
-#: gtk/gtktogglebutton.c:151
+#: gtk/gtktogglebutton.c:141
 msgid "If the toggle button is in an \"in between\" state."
 msgstr "Hvis knappen er i tilstanden \"midt mellom\"."
 
-#: gtk/gtktogglebutton.c:158
+#: gtk/gtktogglebutton.c:148
 msgid "Draw Indicator"
 msgstr "Tegn indikator"
 
-#: gtk/gtktogglebutton.c:159
+#: gtk/gtktogglebutton.c:149
 msgid "If the toggle part of the button is displayed"
 msgstr "Hvis venderdelen av knappen vises"
 
-#: gtk/gtktoolbar.c:224
+#: gtk/gtktoolbar.c:225
 msgid "The orientation of the toolbar"
 msgstr "Orientering for verktøylinjen"
 
-#: gtk/gtktoolbar.c:232
+#: gtk/gtktoolbar.c:233
 msgid "Toolbar Style"
 msgstr "Stil for verktøylinje"
 
-#: gtk/gtktoolbar.c:233
+#: gtk/gtktoolbar.c:234
 msgid "How to draw the toolbar"
 msgstr "Hvordan tegnes verktøylinjen"
 
-#: gtk/gtktoolbar.c:241
+#: gtk/gtktoolbar.c:242
 msgid "Spacer size"
 msgstr "Størrelse på mellomrom"
 
-#: gtk/gtktoolbar.c:242
+#: gtk/gtktoolbar.c:243
 msgid "Size of spacers"
 msgstr "Størrelse på plassholdere"
 
-#: gtk/gtktoolbar.c:251
+#: gtk/gtktoolbar.c:252
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
 
-#: gtk/gtktoolbar.c:259
+#: gtk/gtktoolbar.c:260
 msgid "Space style"
 msgstr "Stil på mellomrom"
 
-#: gtk/gtktoolbar.c:260
+#: gtk/gtktoolbar.c:261
 msgid "Whether spacers are vertical lines or just blank"
 msgstr ""
 
-#: gtk/gtktoolbar.c:268
+#: gtk/gtktoolbar.c:269
 msgid "Button relief"
 msgstr ""
 
-#: gtk/gtktoolbar.c:269
+#: gtk/gtktoolbar.c:270
 msgid "Type of bevel around toolbar buttons"
 msgstr ""
 
-#: gtk/gtktoolbar.c:277
+#: gtk/gtktoolbar.c:278
 msgid "Style of bevel around the toolbar"
 msgstr ""
 
-#: gtk/gtktoolbar.c:283
+#: gtk/gtktoolbar.c:284
 msgid "Toolbar style"
 msgstr "Verktøylinjestil"
 
-#: gtk/gtktoolbar.c:284
+#: gtk/gtktoolbar.c:285
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 
-#: gtk/gtktoolbar.c:290
+#: gtk/gtktoolbar.c:291
 msgid "Toolbar icon size"
 msgstr "Størrelse på verktøylinjeikon"
 
-#: gtk/gtktoolbar.c:291
+#: gtk/gtktoolbar.c:292
 msgid "Size of icons in default toolbars"
 msgstr ""
 
-#: gtk/gtktreeview.c:496
+#: gtk/gtktreeview.c:497
 msgid "TreeView Model"
 msgstr "TreeView modell"
 
-#: gtk/gtktreeview.c:497
+#: gtk/gtktreeview.c:498
 msgid "The model for the tree view"
 msgstr "Modell for treevisning"
 
-#: gtk/gtktreeview.c:505
+#: gtk/gtktreeview.c:506
 msgid "Horizontal Adjustment for the widget"
 msgstr "Horisontal justering for widget"
 
-#: gtk/gtktreeview.c:513
+#: gtk/gtktreeview.c:514
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertikal justering for widget"
 
-#: gtk/gtktreeview.c:520 gtk/gtktreeviewcolumn.c:171 gtk/gtkwidget.c:424
+#: gtk/gtktreeview.c:521 gtk/gtktreeviewcolumn.c:173 gtk/gtkwidget.c:427
 msgid "Visible"
 msgstr "Synlig"
 
-#: gtk/gtktreeview.c:521
+#: gtk/gtktreeview.c:522
 msgid "Show the column header buttons"
 msgstr ""
 
-#: gtk/gtktreeview.c:528
+#: gtk/gtktreeview.c:529
 msgid "Headers Clickable"
 msgstr "Topptekster kan klikkes"
 
-#: gtk/gtktreeview.c:529
+#: gtk/gtktreeview.c:530
 msgid "Column headers respond to click events"
 msgstr ""
 
-#: gtk/gtktreeview.c:536
+#: gtk/gtktreeview.c:537
 msgid "Expander Column"
 msgstr ""
 
-#: gtk/gtktreeview.c:537
+#: gtk/gtktreeview.c:538
 msgid "Set the column for the expander column"
 msgstr ""
 
-#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:262
+#: gtk/gtktreeview.c:545 gtk/gtktreeviewcolumn.c:272
 msgid "Reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:545
+#: gtk/gtktreeview.c:546
 msgid "View is reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:552
+#: gtk/gtktreeview.c:553
 msgid "Rules Hint"
 msgstr ""
 
-#: gtk/gtktreeview.c:553
+#: gtk/gtktreeview.c:554
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 
-#: gtk/gtktreeview.c:560
+#: gtk/gtktreeview.c:561
 msgid "Enable Search"
 msgstr "Aktiver søk"
 
-#: gtk/gtktreeview.c:561
+#: gtk/gtktreeview.c:562
 msgid "View allows user to search through columns interactively"
 msgstr ""
 
-#: gtk/gtktreeview.c:568
+#: gtk/gtktreeview.c:569
 msgid "Search Column"
 msgstr "Søkekolonne"
 
-#: gtk/gtktreeview.c:569
+#: gtk/gtktreeview.c:570
 msgid "Model column to search through when searching through code"
 msgstr ""
 
-#: gtk/gtktreeview.c:582
+#: gtk/gtktreeview.c:583
 msgid "Expander Size"
 msgstr ""
 
-#: gtk/gtktreeview.c:583
+#: gtk/gtktreeview.c:584
 msgid "Size of the expander arrow."
 msgstr ""
 
-#: gtk/gtktreeview.c:591
+#: gtk/gtktreeview.c:592
 msgid "Vertical Separator Width"
 msgstr "Bredde på vertikal separator"
 
-#: gtk/gtktreeview.c:592
+#: gtk/gtktreeview.c:593
 msgid "Vertical space between cells.  Must be an even number."
 msgstr ""
 
-#: gtk/gtktreeview.c:600
+#: gtk/gtktreeview.c:601
 msgid "Horizontal Separator Width"
 msgstr "Bredde på horisontal separator"
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:602
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr ""
 
-#: gtk/gtktreeview.c:609
+#: gtk/gtktreeview.c:610
 msgid "Allow Rules"
 msgstr ""
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:611
 msgid "Allow drawing of alternating color rows."
 msgstr ""
 
-#: gtk/gtktreeview.c:616
+#: gtk/gtktreeview.c:617
 msgid "Indent Expanders"
 msgstr "Indenter utvidere"
 
-#: gtk/gtktreeview.c:617
+#: gtk/gtktreeview.c:618
 msgid "Make the expanders indented."
 msgstr "Gjør utvidere indentert."
 
-#: gtk/gtktreeviewcolumn.c:172
+#: gtk/gtktreeviewcolumn.c:174
 msgid "Whether to display the column"
 msgstr "Vis kolonnen"
 
-#: gtk/gtktreeviewcolumn.c:180
+#: gtk/gtktreeviewcolumn.c:181 gtk/gtkwindow.c:394
+msgid "Resizable"
+msgstr "Kan endre størrelse"
+
+#: gtk/gtktreeviewcolumn.c:182
+msgid "Column is user-resizable"
+msgstr ""
+
+#: gtk/gtktreeviewcolumn.c:190
 msgid "Current width of the column"
 msgstr "Nåværende bredde på kolonnen"
 
-#: gtk/gtktreeviewcolumn.c:188
+#: gtk/gtktreeviewcolumn.c:198
 msgid "Sizing"
 msgstr "Størrelse"
 
-#: gtk/gtktreeviewcolumn.c:189
+#: gtk/gtktreeviewcolumn.c:199
 msgid "Resize mode of the column"
 msgstr "Modus for endring av størrelse for kolonnen"
 
-#: gtk/gtktreeviewcolumn.c:197
+#: gtk/gtktreeviewcolumn.c:207
 msgid "Fixed Width"
 msgstr "Fast bredde"
 
-#: gtk/gtktreeviewcolumn.c:198
+#: gtk/gtktreeviewcolumn.c:208
 msgid "Current fixed width of the column"
 msgstr "Nåværende fast bredde på kolonnen"
 
-#: gtk/gtktreeviewcolumn.c:207
+#: gtk/gtktreeviewcolumn.c:217
 msgid "Minimum Width"
 msgstr "Minimal bredde"
 
-#: gtk/gtktreeviewcolumn.c:208
+#: gtk/gtktreeviewcolumn.c:218
 msgid "Minimum allowed width of the column"
 msgstr "Minimum tillatt bredde på kolonne"
 
-#: gtk/gtktreeviewcolumn.c:217
+#: gtk/gtktreeviewcolumn.c:227
 msgid "Maximum Width"
 msgstr "Maksimal bredde"
 
-#: gtk/gtktreeviewcolumn.c:218
+#: gtk/gtktreeviewcolumn.c:228
 msgid "Maximum allowed width of the column"
 msgstr "Maksimum tillatt bredde på kolonnen"
 
-#: gtk/gtktreeviewcolumn.c:227
+#: gtk/gtktreeviewcolumn.c:237
 msgid "Title"
 msgstr "Tittel"
 
-#: gtk/gtktreeviewcolumn.c:228
+#: gtk/gtktreeviewcolumn.c:238
 msgid "Title to appear in column header"
 msgstr "Tittel som vises i kolonnetopptekst"
 
-#: gtk/gtktreeviewcolumn.c:235
+#: gtk/gtktreeviewcolumn.c:245
 msgid "Clickable"
 msgstr "Klikkbar"
 
-#: gtk/gtktreeviewcolumn.c:236
+#: gtk/gtktreeviewcolumn.c:246
 msgid "Whether the header can be clicked"
 msgstr "Om toppteksten kan klikkes"
 
-#: gtk/gtktreeviewcolumn.c:244
+#: gtk/gtktreeviewcolumn.c:254
 msgid "Widget"
 msgstr "Widget"
 
-#: gtk/gtktreeviewcolumn.c:245
+#: gtk/gtktreeviewcolumn.c:255
 msgid "Widget to put in column header button instead of column title"
 msgstr ""
 "Widget som skal legges i kappen for kolonneheader i stedet for kolonnens "
 "tittel"
 
-#: gtk/gtktreeviewcolumn.c:252
+#: gtk/gtktreeviewcolumn.c:262
 msgid "Alignment"
 msgstr "Justering"
 
-#: gtk/gtktreeviewcolumn.c:253
+#: gtk/gtktreeviewcolumn.c:263
 msgid "X Alignment of the column header text or widget"
 msgstr "X-justering for kolonneheaders tekst eller widget"
 
-#: gtk/gtktreeviewcolumn.c:263
+#: gtk/gtktreeviewcolumn.c:273
 msgid "Whether the column can be reordered around the headers"
 msgstr "Kolonnen kan omorganiseres etter titler"
 
-#: gtk/gtktreeviewcolumn.c:270
+#: gtk/gtktreeviewcolumn.c:280
 msgid "Sort indicator"
 msgstr "Sorter indikator"
 
-#: gtk/gtktreeviewcolumn.c:271
+#: gtk/gtktreeviewcolumn.c:281
 msgid "Whether to show a sort indicator"
 msgstr "Sorter indikator eller ikke"
 
-#: gtk/gtktreeviewcolumn.c:278
+#: gtk/gtktreeviewcolumn.c:288
 msgid "Sort order"
 msgstr "Sorteringsrekkefølge"
 
-#: gtk/gtktreeviewcolumn.c:279
+#: gtk/gtktreeviewcolumn.c:289
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Sorteringsretning indikert av sorteringsindikator"
 
-#: gtk/gtkviewport.c:132
+#: gtk/gtkviewport.c:133
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport."
-msgstr "GtkAdjustment som bestemmer verdiene for horisontal posisjon for dette visningsområdet."
+msgstr ""
+"GtkAdjustment som bestemmer verdiene for horisontal posisjon for dette "
+"visningsområdet."
 
-#: gtk/gtkviewport.c:140
+#: gtk/gtkviewport.c:141
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport."
-msgstr "GtkAdjustment som bestemmer verdiene for vertikal posisjon for dette visningsområdet."
+msgstr ""
+"GtkAdjustment som bestemmer verdiene for vertikal posisjon for dette "
+"visningsområdet."
 
-#: gtk/gtkviewport.c:148
+#: gtk/gtkviewport.c:149
 msgid "Determines how the shadowed box around the viewport is drawn."
 msgstr "Bestemmer hvordan den skyggelagte boksen rundt visningsområdet tegnes."
 
-#: gtk/gtkwidget.c:391
+#: gtk/gtkwidget.c:394
 msgid "Widget name"
 msgstr "Navn på widget"
 
-#: gtk/gtkwidget.c:392
+#: gtk/gtkwidget.c:395
 msgid "The name of the widget"
 msgstr "Navnet på widgetet"
 
-#: gtk/gtkwidget.c:398
+#: gtk/gtkwidget.c:401
 msgid "Parent widget"
 msgstr "Opphavswidget"
 
-#: gtk/gtkwidget.c:399
+#: gtk/gtkwidget.c:402
 msgid "The parent widget of this widget. Must be a Container widget."
 msgstr "Opphavswidget for dette widgetet. Må være et container-widget."
 
-#: gtk/gtkwidget.c:406
+#: gtk/gtkwidget.c:409
 msgid "Width request"
 msgstr "Breddeforespørsel"
 
-#: gtk/gtkwidget.c:407
+#: gtk/gtkwidget.c:410
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used."
-msgstr "Overstyring for breddeforespørsel for widget, eller -1 hvis naturlig forespørsel skal brukes."
+msgstr ""
+"Overstyring for breddeforespørsel for widget, eller -1 hvis naturlig "
+"forespørsel skal brukes."
 
-#: gtk/gtkwidget.c:415
+#: gtk/gtkwidget.c:418
 msgid "Height request"
 msgstr "Høydeforespørsel"
 
-#: gtk/gtkwidget.c:416
+#: gtk/gtkwidget.c:419
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used."
-msgstr "Overstyring for høydeforespørsel for widget, eller -1 hvis vanlig forespørsel skal brukes."
+msgstr ""
+"Overstyring for høydeforespørsel for widget, eller -1 hvis vanlig "
+"forespørsel skal brukes."
 
-#: gtk/gtkwidget.c:425
+#: gtk/gtkwidget.c:428
 msgid "Whether the widget is visible"
 msgstr "Widgetet er synlig"
 
-#: gtk/gtkwidget.c:431
+#: gtk/gtkwidget.c:434
 msgid "Sensitive"
 msgstr "Følsomt"
 
-#: gtk/gtkwidget.c:432
+#: gtk/gtkwidget.c:435
 msgid "Whether the widget responds to input"
 msgstr "Widgetet tar imot inndata"
 
-#: gtk/gtkwidget.c:438
+#: gtk/gtkwidget.c:441
 msgid "Application paintable"
 msgstr "Tegnbar av applikasjon"
 
-#: gtk/gtkwidget.c:439
+#: gtk/gtkwidget.c:442
 msgid "Whether the application will paint directly on the widget"
 msgstr "Applikasjonen vil tegne direkte på widgetet"
 
-#: gtk/gtkwidget.c:445
+#: gtk/gtkwidget.c:448
 msgid "Can focus"
 msgstr "Kan fokusere"
 
-#: gtk/gtkwidget.c:446
+#: gtk/gtkwidget.c:449
 msgid "Whether the widget can accept the input focus"
 msgstr "Widget kan akseptere inndatafokus"
 
-#: gtk/gtkwidget.c:452
+#: gtk/gtkwidget.c:455
 msgid "Has focus"
 msgstr "Har fokus"
 
-#: gtk/gtkwidget.c:453
+#: gtk/gtkwidget.c:456
 msgid "Whether the widget has the input focus"
 msgstr "Widget har inndatafokus"
 
-#: gtk/gtkwidget.c:459
+#: gtk/gtkwidget.c:462
 msgid "Can default"
 msgstr "Kan være forvalgt"
 
-#: gtk/gtkwidget.c:460
+#: gtk/gtkwidget.c:463
 msgid "Whether the widget can be the default widget"
 msgstr "Om widget kan være forvalgt widget"
 
-#: gtk/gtkwidget.c:466
+#: gtk/gtkwidget.c:469
 msgid "Has default"
 msgstr "Har forvalg"
 
-#: gtk/gtkwidget.c:467
+#: gtk/gtkwidget.c:470
 msgid "Whether the widget is the default widget"
 msgstr "Widget er forvalgt widget"
 
-#: gtk/gtkwidget.c:473
+#: gtk/gtkwidget.c:476
 msgid "Receives default"
 msgstr "Mottar forvalg"
 
-#: gtk/gtkwidget.c:474
+#: gtk/gtkwidget.c:477
 msgid "If TRUE, the widget will receive the default action when it is focused."
 msgstr "Hvis SANN, vil widgetet motta forvalgt handling når det er fokusert."
 
-#: gtk/gtkwidget.c:480
+#: gtk/gtkwidget.c:483
 msgid "Composite child"
 msgstr "Sammensatt barn"
 
-#: gtk/gtkwidget.c:481
+#: gtk/gtkwidget.c:484
 msgid "Whether the widget is composed of other widgets"
 msgstr "Widgetet er satt sammen av andre widget"
 
-#: gtk/gtkwidget.c:487
+#: gtk/gtkwidget.c:490
 msgid "Style"
 msgstr "Stil"
 
-#: gtk/gtkwidget.c:488
+#: gtk/gtkwidget.c:491
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)."
-msgstr "Stil for widgetet. Inneholder informasjon om hvordan det vil se ut (farger etc)."
+msgstr ""
+"Stil for widgetet. Inneholder informasjon om hvordan det vil se ut (farger "
+"etc)."
 
-#: gtk/gtkwidget.c:494
+#: gtk/gtkwidget.c:497
 msgid "Events"
 msgstr "Hendelser"
 
-#: gtk/gtkwidget.c:495
+#: gtk/gtkwidget.c:498
 msgid "The event mask that decides what kind of GdkEvents this widget gets."
-msgstr "Hendelsesmasken som bestemmer hvilke typer GdkEvents dette widgetet mottar."
+msgstr ""
+"Hendelsesmasken som bestemmer hvilke typer GdkEvents dette widgetet mottar."
 
-#: gtk/gtkwidget.c:502
+#: gtk/gtkwidget.c:505
 msgid "Extension events"
 msgstr "Utvidelseshendelser"
 
-#: gtk/gtkwidget.c:503
+#: gtk/gtkwidget.c:506
 msgid "The mask that decides what kind of extension events this widget gets."
-msgstr "Masken som bestemmer hvilken type utvidelseshendelser dette widgetet mottar."
+msgstr ""
+"Masken som bestemmer hvilken type utvidelseshendelser dette widgetet mottar."
 
-#: gtk/gtkwidget.c:1050
+#: gtk/gtkwidget.c:1053
 msgid "Interior Focus"
 msgstr "Internt fokus"
 
-#: gtk/gtkwidget.c:1051
+#: gtk/gtkwidget.c:1054
 msgid "Whether to draw the focus indicator inside widgets."
 msgstr "Om fokusindikator skal tegnes inne i et widget."
 
-#: gtk/gtkwindow.c:353
+#: gtk/gtkwindow.c:359
 msgid "Window Type"
 msgstr "Vindustype"
 
-#: gtk/gtkwindow.c:354
+#: gtk/gtkwindow.c:360
 msgid "The type of the window"
 msgstr "Type vindu"
 
-#: gtk/gtkwindow.c:363
+#: gtk/gtkwindow.c:369
 msgid "Window Title"
 msgstr "Vindustittel"
 
-#: gtk/gtkwindow.c:364
+#: gtk/gtkwindow.c:370
 msgid "The title of the window"
 msgstr "Tittelen på vinduet"
 
-#: gtk/gtkwindow.c:371
+#: gtk/gtkwindow.c:377
 msgid "Allow Shrink"
 msgstr "Tillat krymping"
 
-#: gtk/gtkwindow.c:373
+#: gtk/gtkwindow.c:379
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea."
-msgstr "Hvis SANN får vinduet ingen minimum størrelse. Denne bør ikke settes til SANN 99% av tiden."
+msgstr ""
+"Hvis SANN får vinduet ingen minimum størrelse. Denne bør ikke settes til "
+"SANN 99% av tiden."
 
-#: gtk/gtkwindow.c:380
+#: gtk/gtkwindow.c:386
 msgid "Allow Grow"
 msgstr "Tillat vekst"
 
-#: gtk/gtkwindow.c:381
+#: gtk/gtkwindow.c:387
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr "Brukere kan utvide vinduet utover minste størrelse hvis SANN."
 
-#: gtk/gtkwindow.c:388
-msgid "Resizable"
-msgstr "Kan endre størrelse"
-
-#: gtk/gtkwindow.c:389
+#: gtk/gtkwindow.c:395
 msgid "If TRUE, users can resize the window."
 msgstr "Brukere kan endre størrelse på vinduet hvis SANN."
 
-#: gtk/gtkwindow.c:396
+#: gtk/gtkwindow.c:402
 msgid "Modal"
 msgstr "Modal"
 
-#: gtk/gtkwindow.c:397
+#: gtk/gtkwindow.c:403
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
 msgstr ""
 
-#: gtk/gtkwindow.c:404
+#: gtk/gtkwindow.c:410
 msgid "Window Position"
 msgstr "Vindusplassering"
 
-#: gtk/gtkwindow.c:405
+#: gtk/gtkwindow.c:411
 msgid "The initial position of the window."
 msgstr "Utgangsposisjon for vinduet."
 
-#: gtk/gtkwindow.c:413
+#: gtk/gtkwindow.c:419
 msgid "Default Width"
 msgstr "Standard bredde"
 
-#: gtk/gtkwindow.c:414
+#: gtk/gtkwindow.c:420
 msgid ""
 "The default width of the window, used when initially showing the window."
 msgstr ""
 
-#: gtk/gtkwindow.c:423
+#: gtk/gtkwindow.c:429
 msgid "Default Height"
 msgstr "Standard høyde"
 
-#: gtk/gtkwindow.c:424
+#: gtk/gtkwindow.c:430
 msgid ""
 "The default height of the window, used when initially showing the window."
 msgstr ""
 
-#: gtk/gtkwindow.c:433
+#: gtk/gtkwindow.c:439
 msgid "Destroy with Parent"
 msgstr "Ødelegg med opphav"
 
-#: gtk/gtkwindow.c:434
+#: gtk/gtkwindow.c:440
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Vinduet skal ødelegges når opphavet ødelegges"
 
-#: gtk/gtkwindow.c:441
+#: gtk/gtkwindow.c:447
 msgid "Icon"
 msgstr "Ikon"
 
-#: gtk/gtkwindow.c:442
+#: gtk/gtkwindow.c:448
 msgid "Icon for this window"
 msgstr "Ikon for dette vinduet"
 
