@@ -60,7 +60,7 @@ struct _GtkFileChooserImplDefault
 
   GtkFileChooserAction action;
 
-  gchar *current_folder;
+  GtkFilePath *current_folder;
 
   guint folder_mode : 1;
   guint local_only : 1;
@@ -93,16 +93,17 @@ static void     gtk_file_chooser_impl_default_get_property (GObject             
 							    GValue                *value,
 							    GParamSpec            *pspec);
 
-static void    gtk_file_chooser_impl_default_set_current_folder (GtkFileChooser *chooser,
-								 const char     *uri);
-static char *  gtk_file_chooser_impl_default_get_current_folder (GtkFileChooser *chooser);
-static void    gtk_file_chooser_impl_default_select_uri         (GtkFileChooser *chooser,
-								 const char     *uri);
-static void    gtk_file_chooser_impl_default_unselect_uri       (GtkFileChooser *chooser,
-								 const char     *uri);
-static void    gtk_file_chooser_impl_default_select_all         (GtkFileChooser *chooser);
-static void    gtk_file_chooser_impl_default_unselect_all       (GtkFileChooser *chooser);
-static GSList *gtk_file_chooser_impl_default_get_uris           (GtkFileChooser *chooser);
+static void           gtk_file_chooser_impl_default_set_current_folder (GtkFileChooser    *chooser,
+									const GtkFilePath *path);
+static GtkFilePath *  gtk_file_chooser_impl_default_get_current_folder (GtkFileChooser    *chooser);
+static void           gtk_file_chooser_impl_default_select_path        (GtkFileChooser    *chooser,
+									const GtkFilePath *path);
+static void           gtk_file_chooser_impl_default_unselect_path      (GtkFileChooser    *chooser,
+									const GtkFilePath *path);
+static void           gtk_file_chooser_impl_default_select_all         (GtkFileChooser    *chooser);
+static void           gtk_file_chooser_impl_default_unselect_all       (GtkFileChooser    *chooser);
+static GSList *       gtk_file_chooser_impl_default_get_paths          (GtkFileChooser    *chooser);
+static GtkFileSystem *gtk_file_chooser_impl_default_get_file_system    (GtkFileChooser    *chooser);
 
 static void tree_selection_changed (GtkTreeSelection          *tree_selection,
 				    GtkFileChooserImplDefault *impl);
@@ -182,11 +183,12 @@ gtk_file_chooser_impl_default_class_init (GtkFileChooserImplDefaultClass *class)
 static void
 gtk_file_chooser_impl_default_iface_init (GtkFileChooserIface *iface)
 {
-  iface->select_uri = gtk_file_chooser_impl_default_select_uri;
-  iface->unselect_uri = gtk_file_chooser_impl_default_unselect_uri;
+  iface->select_path = gtk_file_chooser_impl_default_select_path;
+  iface->unselect_path = gtk_file_chooser_impl_default_unselect_path;
   iface->select_all = gtk_file_chooser_impl_default_select_all;
   iface->unselect_all = gtk_file_chooser_impl_default_unselect_all;
-  iface->get_uris = gtk_file_chooser_impl_default_get_uris;
+  iface->get_paths = gtk_file_chooser_impl_default_get_paths;
+  iface->get_file_system = gtk_file_chooser_impl_default_get_file_system;
   iface->set_current_folder = gtk_file_chooser_impl_default_set_current_folder;
   iface->get_current_folder = gtk_file_chooser_impl_default_get_current_folder;
 }
@@ -504,21 +506,21 @@ expand_and_select_func (GtkFileSystemModel *model,
 }
 
 static void
-gtk_file_chooser_impl_default_set_current_folder (GtkFileChooser *chooser,
-						  const char     *uri)
+gtk_file_chooser_impl_default_set_current_folder (GtkFileChooser    *chooser,
+						  const GtkFilePath *path)
 {
   GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (chooser);
 
-  _gtk_file_system_model_uri_do (impl->tree_model, uri,
-				 expand_and_select_func, impl);
+  _gtk_file_system_model_path_do (impl->tree_model, path,
+				  expand_and_select_func, impl);
 }
 
-static char *
+static GtkFilePath *
 gtk_file_chooser_impl_default_get_current_folder (GtkFileChooser *chooser)
 {
   GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (chooser);
 
-  return g_strdup (impl->current_folder);
+  return gtk_file_path_copy (impl->current_folder);
 }
 
 static void
@@ -538,24 +540,24 @@ select_func (GtkFileSystemModel *model,
 }
 
 static void
-gtk_file_chooser_impl_default_select_uri (GtkFileChooser *chooser,
-					  const char     *uri)
+gtk_file_chooser_impl_default_select_path (GtkFileChooser    *chooser,
+					   const GtkFilePath *path)
 {
   GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (chooser);
-  gchar *parent_uri;
+  GtkFilePath *parent_path;
   
-  if (!gtk_file_system_get_parent (impl->file_system, uri, &parent_uri, NULL))	/* NULL-GError */
+  if (!gtk_file_system_get_parent (impl->file_system, path, &parent_path, NULL))	/* NULL-GError */
     return;
 
-  if (!parent_uri)
+  if (!parent_path)
     {
-      gtk_file_chooser_set_current_folder_uri (chooser, uri);
+      _gtk_file_chooser_set_current_folder (chooser, path);
     }
   else
     {
-      gtk_file_chooser_set_current_folder_uri (chooser, parent_uri);
-      g_free (parent_uri);
-      _gtk_file_system_model_uri_do (impl->list_model, uri,
+      _gtk_file_chooser_set_current_folder (chooser, parent_path);
+      gtk_file_path_free (parent_path);
+      _gtk_file_system_model_path_do (impl->list_model, path,
 				     select_func, impl);
     }
 }
@@ -578,12 +580,12 @@ unselect_func (GtkFileSystemModel *model,
 }
 
 static void
-gtk_file_chooser_impl_default_unselect_uri (GtkFileChooser *chooser,
-					    const char     *uri)
+gtk_file_chooser_impl_default_unselect_path (GtkFileChooser    *chooser,
+					     const GtkFilePath *path)
 {
   GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (chooser);
 
-  _gtk_file_system_model_uri_do (impl->list_model, uri,
+  _gtk_file_system_model_path_do (impl->list_model, path,
 				 unselect_func, impl);
 }
 
@@ -608,14 +610,14 @@ gtk_file_chooser_impl_default_unselect_all (GtkFileChooser *chooser)
 }
 
 static void
-get_uris_foreach (GtkTreeModel      *model,
-		  GtkTreePath       *path,
-		  GtkTreeIter       *iter,
-		  gpointer           data)
+get_paths_foreach (GtkTreeModel *model,
+		  GtkTreePath   *path,
+		  GtkTreeIter   *iter,
+		  gpointer       data)
 {
   GtkTreePath *child_path;
   GtkTreeIter child_iter;
-  const gchar *uri;
+  const GtkFilePath *file_path;
   
   struct {
     GSList *result;
@@ -626,12 +628,12 @@ get_uris_foreach (GtkTreeModel      *model,
   gtk_tree_model_get_iter (GTK_TREE_MODEL (info->impl->list_model), &child_iter, child_path);
   gtk_tree_path_free (child_path);
   
-  uri = _gtk_file_system_model_get_uri (info->impl->tree_model, &child_iter);
-  info->result = g_slist_prepend (info->result, g_strdup (uri));
+  file_path = _gtk_file_system_model_get_path (info->impl->tree_model, &child_iter);
+  info->result = g_slist_prepend (info->result, gtk_file_path_copy (file_path));
 }
 
 static GSList *
-gtk_file_chooser_impl_default_get_uris (GtkFileChooser *chooser)
+gtk_file_chooser_impl_default_get_paths (GtkFileChooser *chooser)
 {
   GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (chooser);
   GtkTreeSelection *selection;
@@ -648,8 +650,16 @@ gtk_file_chooser_impl_default_get_uris (GtkFileChooser *chooser)
   
   info.impl = impl;
   gtk_tree_selection_selected_foreach (selection,
-				       get_uris_foreach, &info);
+				       get_paths_foreach, &info);
   return g_slist_reverse (info.result);
+}
+
+static GtkFileSystem *
+gtk_file_chooser_impl_default_get_file_system (GtkFileChooser *chooser)
+{
+  GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (chooser);
+
+  return impl->file_system;
 }
 
 static gint
@@ -763,20 +773,20 @@ tree_selection_changed (GtkTreeSelection          *selection,
 			GtkFileChooserImplDefault *impl)
 {
   GtkTreeIter iter;
-  const gchar *uri;
+  const GtkFilePath *file_path;
   GtkTreePath *path;
 
   if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
     return;
 
-  uri = _gtk_file_system_model_get_uri (impl->tree_model, &iter);
-  if (impl->current_folder && strcmp (uri, impl->current_folder) == 0)
+  file_path = _gtk_file_system_model_get_path (impl->tree_model, &iter);
+  if (impl->current_folder && gtk_file_path_compare (file_path, impl->current_folder) == 0)
     return;
   
   if (impl->current_folder)
-    g_free (impl->current_folder);
-  impl->current_folder = g_strdup (uri);
-  _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->entry), uri);
+    gtk_file_path_free (impl->current_folder);
+  impl->current_folder = gtk_file_path_copy (file_path);
+  _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->entry), file_path);
   
   if (impl->list_model)
     {
@@ -796,10 +806,10 @@ tree_selection_changed (GtkTreeSelection          *selection,
   
   /* Now update the list view to show the new row.
    */
-  uri = _gtk_file_system_model_get_uri (impl->tree_model, &iter);
+  file_path = _gtk_file_system_model_get_path (impl->tree_model, &iter);
   
   impl->list_model = _gtk_file_system_model_new (impl->file_system,
-						 uri, 0,
+						 file_path, 0,
 						 GTK_FILE_INFO_DISPLAY_NAME |
 						 GTK_FILE_INFO_SIZE); 
   _gtk_file_system_model_set_show_folders (impl->list_model, FALSE);
@@ -837,46 +847,46 @@ entry_activate (GtkEntry                  *entry,
 		GtkFileChooserImplDefault *impl)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (entry);
-  const gchar *folder_uri = _gtk_file_chooser_entry_get_current_folder (chooser_entry);
+  const GtkFilePath *folder_path = _gtk_file_chooser_entry_get_current_folder (chooser_entry);
   const gchar *file_part = _gtk_file_chooser_entry_get_file_part (chooser_entry);
-  gchar *new_folder = NULL;
+  GtkFilePath *new_folder = NULL;
 
   /* If the file part is non-empty, we need to figure out if it
    * refers to a folder within folder. We could optimize the case
    * here where the folder is already loaded for one of our tree models.
    */
-  if (file_part[0] == '\0' && strcmp (impl->current_folder, folder_uri) != 0)
-    new_folder = g_strdup (folder_uri);
+  if (file_part[0] == '\0' && gtk_file_path_compare (impl->current_folder, folder_path) != 0)
+    new_folder = gtk_file_path_copy (folder_path);
   else
     {
       GtkFileFolder *folder = NULL;
-      gchar *subfolder_uri = NULL;
+      GtkFilePath *subfolder_path = NULL;
       GtkFileInfo *info = NULL;
       
       folder = gtk_file_system_get_folder (impl->file_system,
-					   folder_uri,
+					   folder_path,
 					   GTK_FILE_INFO_IS_FOLDER,
 					   NULL);	/* NULL-GError */
       
       if (folder)
-	subfolder_uri = gtk_file_system_make_uri (impl->file_system,
-						  folder_uri,
+	subfolder_path = gtk_file_system_make_path (impl->file_system,
+						  folder_path,
 						  file_part,
 						  NULL); /* NULL-GError */
 
-      if (subfolder_uri)
+      if (subfolder_path)
 	info = gtk_file_folder_get_info (folder,
-					 subfolder_uri,
+					 subfolder_path,
 					 NULL); /* NULL-GError */
 
       if (info && gtk_file_info_get_is_folder (info))
-	new_folder = g_strdup (subfolder_uri);
+	new_folder = gtk_file_path_copy (subfolder_path);
 
       if (folder)
 	g_object_unref (folder);
 
-      if (subfolder_uri)
-	g_free (subfolder_uri);
+      if (subfolder_path)
+	gtk_file_path_free (subfolder_path);
 
       if (info)
 	gtk_file_info_free (info);
@@ -886,10 +896,10 @@ entry_activate (GtkEntry                  *entry,
     {
       g_signal_stop_emission_by_name (entry, "activate");
 
-      gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER (impl), new_folder);
+      _gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (impl), new_folder);
       _gtk_file_chooser_entry_set_file_part (chooser_entry, "");
 
-      g_free (new_folder);
+      gtk_file_path_free (new_folder);
     }
 }
 

@@ -34,6 +34,8 @@ typedef struct _GtkFileInfo        GtkFileInfo;
 typedef struct _GtkFileSystem      GtkFileSystem;
 typedef struct _GtkFileSystemIface GtkFileSystemIface;
 
+typedef struct _GtkFilePath        GtkFilePath;
+
 /* Mask of information about a file, for monitoring and
  * gtk_file_system_get_info()
  */
@@ -110,37 +112,46 @@ struct _GtkFileSystemIface
 
   /* Methods
    */
-  GSList *           (*list_roots)     (GtkFileSystem *file_system);
+  GSList *           (*list_roots)     (GtkFileSystem     *file_system);
 
-  GtkFileInfo *      (*get_root_info)  (GtkFileSystem   *file_system,
-					const gchar     *uri,
-					GtkFileInfoType  types,
-				        GError         **error);
+  GtkFileInfo *      (*get_root_info)  (GtkFileSystem     *file_system,
+					const GtkFilePath *path,
+					GtkFileInfoType    types,
+				        GError           **error);
   
-  GtkFileFolder *    (*get_folder)     (GtkFileSystem  *file_system,
-					const gchar    *uri,
-					GtkFileInfoType types,
-				        GError        **error);
-  gboolean           (*create_folder)  (GtkFileSystem  *file_system,
-					const gchar    *uri,
-			                GError        **error);
+  GtkFileFolder *    (*get_folder)     (GtkFileSystem     *file_system,
+					const GtkFilePath *path,
+					GtkFileInfoType    types,
+				        GError           **error);
+  gboolean           (*create_folder)  (GtkFileSystem     *file_system,
+					const GtkFilePath *path,
+			                GError           **error);
 
-  /* URI Manipulation
+  /* Path Manipulation
    */
-  gboolean           (*get_parent)     (GtkFileSystem  *file_system,
-					const gchar    *uri,
-					gchar         **parent,
-				        GError        **error);
-  gchar *            (*make_uri)       (GtkFileSystem  *file_system,
-					const gchar    *base_uri,
-					const gchar    *display_name,
-				        GError        **error);					
-  gboolean           (*parse)          (GtkFileSystem  *file_system,
-					const gchar    *base_uri,
-					const gchar    *str,
-					gchar         **folder,
-					gchar         **file_part,
-				        GError        **error);
+  gboolean      (*get_parent)      (GtkFileSystem      *file_system,
+				    const GtkFilePath  *path,
+				    GtkFilePath       **parent,
+				    GError            **error);
+  GtkFilePath * (*make_path)        (GtkFileSystem     *file_system,
+				     const GtkFilePath *base_path,
+				     const gchar       *display_name,
+				     GError           **error);					
+  gboolean      (*parse)            (GtkFileSystem     *file_system,
+				     const GtkFilePath *base_path,
+				     const gchar       *str,
+				     GtkFilePath      **folder,
+				     gchar            **file_part,
+				     GError           **error);
+  gchar *      (*path_to_uri)      (GtkFileSystem      *file_system,
+				    const GtkFilePath  *path);
+  gchar *      (*path_to_filename) (GtkFileSystem      *file_system,
+				    const GtkFilePath  *path);
+  GtkFilePath *(*uri_to_path)      (GtkFileSystem      *file_system,
+				    const gchar        *uri);
+  GtkFilePath *(*filename_to_path) (GtkFileSystem      *file_system,
+				    const gchar        *path);
+
   /* Signals
    */
   void (*roots_changed) (GtkFileSystem *file_system);
@@ -148,33 +159,43 @@ struct _GtkFileSystemIface
 
 GType             gtk_file_system_get_type       (void);
 
-GSList *          gtk_file_system_list_roots     (GtkFileSystem    *file_system);
-GtkFileInfo *     gtk_file_system_get_root_info  (GtkFileSystem    *file_system,
-						  const gchar      *uri,
-						  GtkFileInfoType   types,
-						  GError          **error);
+GSList *          gtk_file_system_list_roots     (GtkFileSystem     *file_system);
+GtkFileInfo *     gtk_file_system_get_root_info  (GtkFileSystem     *file_system,
+						  const GtkFilePath *path,
+						  GtkFileInfoType    types,
+						  GError           **error);
   
-gboolean          gtk_file_system_get_parent     (GtkFileSystem    *file_system,
-						  const gchar      *uri,
-						  gchar           **parent,
-						  GError          **error);
-GtkFileFolder    *gtk_file_system_get_folder     (GtkFileSystem    *file_system,
-						  const gchar      *uri,
-						  GtkFileInfoType   types,
-						  GError          **error);
-gboolean          gtk_file_system_create_folder  (GtkFileSystem    *file_system,
-						  const gchar      *uri,
-						  GError          **error);
-gchar *           gtk_file_system_make_uri       (GtkFileSystem    *file_system,
-						  const gchar      *base_uri,
-						  const gchar      *display_name,
-						  GError          **error);
-gboolean          gtk_file_system_parse          (GtkFileSystem    *file_system,
-						  const gchar      *base_uri,
-						  const gchar      *str,
-						  gchar           **folder,
-						  gchar           **file_part,
-						  GError          **error);
+gboolean          gtk_file_system_get_parent     (GtkFileSystem     *file_system,
+						  const GtkFilePath *path,
+						  GtkFilePath      **parent,
+						  GError           **error);
+GtkFileFolder    *gtk_file_system_get_folder     (GtkFileSystem     *file_system,
+						  const GtkFilePath *path,
+						  GtkFileInfoType    types,
+						  GError           **error);
+gboolean          gtk_file_system_create_folder  (GtkFileSystem     *file_system,
+						  const GtkFilePath *path,
+						  GError           **error);
+GtkFilePath *     gtk_file_system_make_path      (GtkFileSystem     *file_system,
+						  const GtkFilePath *base_path,
+						  const gchar       *display_name,
+						  GError           **error);
+gboolean          gtk_file_system_parse          (GtkFileSystem     *file_system,
+						  const GtkFilePath *base_path,
+						  const gchar       *str,
+						  GtkFilePath      **folder,
+						  gchar            **file_part,
+						  GError           **error);
+
+gchar *      gtk_file_system_path_to_uri      (GtkFileSystem     *file_system,
+					       const GtkFilePath *path);
+gchar *      gtk_file_system_path_to_filename (GtkFileSystem     *file_system,
+					       const GtkFilePath *path);
+GtkFilePath *gtk_file_system_uri_to_path      (GtkFileSystem     *file_system,
+					       const gchar       *uri);
+GtkFilePath *gtk_file_system_filename_to_path (GtkFileSystem     *file_system,
+					       const gchar       *filename);
+
 /*
  * Detailed information about a particular folder
  */
@@ -189,12 +210,12 @@ struct _GtkFileFolderIface
 
   /* Methods
    */
-  GtkFileInfo *      (*get_info)       (GtkFileFolder  *folder,
-					const gchar    *uri,
-				        GError        **error);
-  gboolean           (*list_children)  (GtkFileFolder  *folder,
-				        GSList        **children,
-				        GError        **error);
+  GtkFileInfo *      (*get_info)       (GtkFileFolder     *folder,
+					const GtkFilePath *path,
+				        GError           **error);
+  gboolean           (*list_children)  (GtkFileFolder     *folder,
+				        GSList           **children,
+				        GError           **error);
 
   /* ??? refresh() ??? */
 
@@ -202,20 +223,43 @@ struct _GtkFileFolderIface
    */
   void (*deleted)       (GtkFileFolder *monitor);
   void (*files_added)   (GtkFileFolder *monitor,
-			 GSList        *uris);
+			 GSList        *paths);
   void (*files_changed) (GtkFileFolder *monitor,
-			 GSList        *uris);
+			 GSList        *paths);
   void (*files_removed) (GtkFileFolder *monitor,
-			 GSList        *uris);
+			 GSList        *paths);
 };
 
 GType        gtk_file_folder_get_type      (void);
-gboolean     gtk_file_folder_list_children (GtkFileFolder    *folder,
-					    GSList          **children,
-					    GError          **error);
-GtkFileInfo *gtk_file_folder_get_info      (GtkFileFolder    *folder,
-					    const gchar      *uri,
-					    GError          **error);
+gboolean     gtk_file_folder_list_children (GtkFileFolder      *folder,
+					    GSList            **children,
+					    GError            **error);
+GtkFileInfo *gtk_file_folder_get_info      (GtkFileFolder      *folder,
+					    const GtkFilePath  *path,
+					    GError            **error);
+
+#ifdef __GNUC__
+#define gtk_file_path_new_dup(str) \
+ ({ const gchar *__s = (str); (GtkFilePath *)g_strdup(__s); })
+#define gtk_file_path_new_steal(str) \
+ ({ gchar *__s = (str); (GtkFilePath *)__s; })
+#define gtk_file_path_get_string(path) \
+ ({ const GtkFilePath *__p = (path); (const gchar *)__p; })
+#define gtk_file_path_free(path) \
+ ({ GtkFilePath *__p = (path); g_free (__p); })
+#else /* __GNUC__ */
+#define gtk_file_path_new_dup(str)     ((GtkFilePath *)g_strdup(str))
+#define gtk_file_path_new_steal(str)   ((GtkFilePath *)(str))
+#define gtk_file_path_get_string(path) ((const gchar *)(str))
+#define gtk_file_path_free(path)       g_free (path)
+#endif/* __GNUC__ */
+
+#define gtk_file_path_copy(path)       gtk_file_path_new_dup (gtk_file_path_get_string(path))
+#define gtk_file_path_compare(path1,path2) strcmp (gtk_file_path_get_string (path1), \
+						   gtk_file_path_get_string (path2))
+
+GSList *gtk_file_paths_sort (GSList *paths);
+void    gtk_file_paths_free (GSList *paths);
 
 G_END_DECLS
 

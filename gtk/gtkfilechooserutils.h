@@ -22,7 +22,7 @@
 #ifndef __GTK_FILE_CHOOSER_UTILS_H__
 #define __GTK_FILE_CHOOSER_UTILS_H__
 
-#include "gtkfilechooser.h"
+#include "gtkfilechooserprivate.h"
 
 G_BEGIN_DECLS
 

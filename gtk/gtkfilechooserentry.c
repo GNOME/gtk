@@ -40,8 +40,8 @@ struct _GtkFileChooserEntry
   GtkEntry parent_instance;
 
   GtkFileSystem *file_system;
-  gchar *base_folder;
-  gchar *current_folder_uri;
+  GtkFilePath *base_folder;
+  GtkFilePath *current_folder_path;
   gchar *file_part;
   GSource *completion_idle;
 
@@ -151,8 +151,8 @@ gtk_file_chooser_entry_finalize (GObject *object)
   if (chooser_entry->file_system)
     g_object_unref (chooser_entry->file_system);
   
-  g_free (chooser_entry->base_folder);
-  g_free (chooser_entry->current_folder_uri);
+  gtk_file_path_free (chooser_entry->base_folder);
+  gtk_file_path_free (chooser_entry->current_folder_path);
   g_free (chooser_entry->file_part);
 
   parent_class->finalize (object);
@@ -162,26 +162,26 @@ static gboolean
 completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 {
   GtkEditable *editable = GTK_EDITABLE (chooser_entry);
-  GSList *child_uris = NULL;
+  GSList *child_paths = NULL;
   GSList *tmp_list;
   gchar *common_prefix = NULL;
-  gchar *unique_uri = NULL;
+  GtkFilePath *unique_path = NULL;
 
   chooser_entry->completion_idle = NULL;
 
   if (!chooser_entry->current_folder &&
       chooser_entry->file_system &&
-      chooser_entry->current_folder_uri)
+      chooser_entry->current_folder_path)
     chooser_entry->current_folder = gtk_file_system_get_folder (chooser_entry->file_system,
-								chooser_entry->current_folder_uri,
+								chooser_entry->current_folder_path,
 								GTK_FILE_INFO_DISPLAY_NAME | GTK_FILE_INFO_IS_FOLDER,
 								NULL); /* NULL-GError */
   if (chooser_entry->current_folder)
     gtk_file_folder_list_children (chooser_entry->current_folder,
-				   &child_uris,
+				   &child_paths,
 				   NULL); /* NULL-GError */
   
-  for (tmp_list = child_uris; tmp_list; tmp_list = tmp_list->next)
+  for (tmp_list = child_paths; tmp_list; tmp_list = tmp_list->next)
     {
       GtkFileInfo *info;
       
@@ -197,7 +197,7 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 	      if (!common_prefix)
 		{
 		  common_prefix = g_strdup (display_name);
-		  unique_uri = g_strdup (tmp_list->data);
+		  unique_path = gtk_file_path_copy (tmp_list->data);
 		}
 	      else
 		{
@@ -212,8 +212,8 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 		  
 		  *p = '\0';
 
-		  g_free (unique_uri);
-		  unique_uri = NULL;
+		  gtk_file_path_free (unique_path);
+		  unique_path = NULL;
 		}
 	    }
 	  
@@ -221,12 +221,12 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 	}
     }
 
-  if (unique_uri)
+  if (unique_path)
     {
       GtkFileInfo *info;
 	    
       info = gtk_file_folder_get_info (chooser_entry->current_folder,
-				       unique_uri,
+				       unique_path,
 				       NULL); /* NULL-GError */
 
       if (info)
@@ -241,11 +241,11 @@ completion_idle_callback (GtkFileChooserEntry *chooser_entry)
 	  gtk_file_info_free (info);
 	}
 
-      g_free (unique_uri);
+      gtk_file_path_free (unique_path);
     }
   
-  g_slist_foreach (child_uris, (GFunc)g_free, NULL);
-  g_slist_free (child_uris);
+  gtk_file_paths_free (child_paths);
+  g_slist_free (child_paths);
 
   if (common_prefix)
     {
@@ -328,7 +328,7 @@ gtk_file_chooser_entry_changed (GtkEditable *editable)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (editable);
   const gchar *text;
-  gchar *folder_uri;
+  GtkFilePath *folder_path;
   gchar *file_part;
 
   text = gtk_entry_get_text (GTK_ENTRY (editable));
@@ -337,25 +337,27 @@ gtk_file_chooser_entry_changed (GtkEditable *editable)
       !chooser_entry->base_folder ||
       !gtk_file_system_parse (chooser_entry->file_system,
 			      chooser_entry->base_folder, text,
-			      &folder_uri, &file_part, NULL)) /* NULL-GError */
+			      &folder_path, &file_part, NULL)) /* NULL-GError */
     {
-      folder_uri = g_strdup (chooser_entry->base_folder);
+      folder_path = gtk_file_path_copy (chooser_entry->base_folder);
       file_part = g_strdup ("");
     }
 
-  if (chooser_entry->current_folder_uri &&
-      strcmp (folder_uri, chooser_entry->current_folder_uri) != 0)
+  if (chooser_entry->current_folder_path)
     {
-      if (chooser_entry->current_folder_uri)
-	g_free (chooser_entry->current_folder_uri);
-      if (chooser_entry->current_folder)
+      if (gtk_file_path_compare (folder_path, chooser_entry->current_folder_path) != 0)
 	{
-	  g_object_unref (chooser_entry->current_folder);
-	  chooser_entry->current_folder = NULL;
+	  if (chooser_entry->current_folder)
+	    {
+	      g_object_unref (chooser_entry->current_folder);
+	      chooser_entry->current_folder = NULL;
+	    }
 	}
+      
+      gtk_file_path_free (chooser_entry->current_folder_path);
     }
   
-  chooser_entry->current_folder_uri = folder_uri;
+  chooser_entry->current_folder_path = folder_path;
 
   if (chooser_entry->file_part)
     g_free (chooser_entry->file_part);
@@ -412,18 +414,18 @@ _gtk_file_chooser_entry_set_file_system (GtkFileChooserEntry *chooser_entry,
 /**
  * _gtk_file_chooser_entry_set_base_folder:
  * @chooser_entry: a #GtkFileChooserEntry
- * @uri: URI of a folder in the chooser entries current file system.
+ * @path: path of a folder in the chooser entries current file system.
  *
  * Sets the folder with respect to which completions occur.
  **/
 void
 _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
-					 const gchar         *uri)
+					 const GtkFilePath   *path)
 {
   if (chooser_entry->base_folder)
-    g_free (chooser_entry->base_folder);
+    gtk_file_path_free (chooser_entry->base_folder);
 
-  chooser_entry->base_folder = g_strdup (uri);
+  chooser_entry->base_folder = gtk_file_path_copy (path);
 }
 
 /**
@@ -438,13 +440,13 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
  * path that doesn't point to a folder in the file system, it will
  * be %NULL.
  * 
- * Return value: the URI of current folder - this value is owned by the
+ * Return value: the path of current folder - this value is owned by the
  *  chooser entry and must not be modified or freed.
  **/
-const gchar *
+const GtkFilePath *
 _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
 {
-  return chooser_entry->current_folder_uri;
+  return chooser_entry->current_folder_path;
 }
 
 /**
@@ -453,7 +455,7 @@ _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
  * 
  * Gets the non-folder portion of whatever the user has entered
  * into the file selector. What is returned is a UTF-8 string,
- * and if a filename URI is needed, gtk_file_system_make_uri()
+ * and if a filename path is needed, gtk_file_system_make_path()
  * must be used
   * 
  * Return value: the entered filename - this value is owned by the

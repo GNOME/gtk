@@ -36,19 +36,18 @@ typedef struct _GtkFileSystemModel      GtkFileSystemModel;
 GType _gtk_file_system_model_get_type (void);
 
 enum {
-  GTK_FILE_SYSTEM_MODEL_URI,
   GTK_FILE_SYSTEM_MODEL_INFO,
   GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME,
   GTK_FILE_SYSTEM_MODEL_N_COLUMNS
 } GtkFileSystemModelColumns;
 
 GtkFileSystemModel *_gtk_file_system_model_new              (GtkFileSystem      *file_system,
-							     const gchar        *root_uri,
+							     const GtkFilePath  *root_path,
 							     gint                max_depth,
 							     GtkFileInfoType     types);
 const GtkFileInfo * _gtk_file_system_model_get_info         (GtkFileSystemModel *model,
 							     GtkTreeIter        *iter);
-const gchar *       _gtk_file_system_model_get_uri          (GtkFileSystemModel *model,
+const GtkFilePath * _gtk_file_system_model_get_path          (GtkFileSystemModel *model,
 							     GtkTreeIter        *iter);
 void                _gtk_file_system_model_set_show_hidden  (GtkFileSystemModel *model,
 							     gboolean            show_hidden);
@@ -58,15 +57,15 @@ void                _gtk_file_system_model_set_show_files   (GtkFileSystemModel 
 							     gboolean            show_files);
 
 
-typedef void (*GtkFileSystemModelURIFunc) (GtkFileSystemModel *model,
-					   GtkTreePath        *path,
-					   GtkTreeIter        *iter,
-					   gpointer            user_data);
+typedef void (*GtkFileSystemModelPathFunc) (GtkFileSystemModel *model,
+					    GtkTreePath        *path,
+					    GtkTreeIter        *iter,
+					    gpointer            user_data);
 				   
-gboolean _gtk_file_system_model_uri_do (GtkFileSystemModel       *model,
-					const gchar              *uri,
-					GtkFileSystemModelURIFunc func,
-					gpointer                  user_data);
+gboolean _gtk_file_system_model_path_do (GtkFileSystemModel        *model,
+					 const GtkFilePath         *path,
+					 GtkFileSystemModelPathFunc func,
+					 gpointer                   user_data);
 
 G_END_DECLS
 

@@ -32,16 +32,16 @@ G_BEGIN_DECLS
 
 typedef struct _GtkFileChooserEntry      GtkFileChooserEntry;
 
-GType        _gtk_file_chooser_entry_get_type           (void);
-GtkWidget *  _gtk_file_chooser_entry_new                (void);
-void         _gtk_file_chooser_entry_set_file_system    (GtkFileChooserEntry *chooser_entry,
-							 GtkFileSystem       *file_system);
-void         _gtk_file_chooser_entry_set_base_folder    (GtkFileChooserEntry *chooser_entry,
-							 const gchar         *uri);
-void         _gtk_file_chooser_entry_set_file_part      (GtkFileChooserEntry *chooser_entry,
-							 const gchar         *file_part);
-const gchar *_gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry);
-const gchar *_gtk_file_chooser_entry_get_file_part      (GtkFileChooserEntry *chooser_entry);
+GType              _gtk_file_chooser_entry_get_type           (void);
+GtkWidget *        _gtk_file_chooser_entry_new                (void);
+void               _gtk_file_chooser_entry_set_file_system    (GtkFileChooserEntry *chooser_entry,
+							       GtkFileSystem       *file_system);
+void               _gtk_file_chooser_entry_set_base_folder    (GtkFileChooserEntry *chooser_entry,
+							       const GtkFilePath   *path);
+void               _gtk_file_chooser_entry_set_file_part      (GtkFileChooserEntry *chooser_entry,
+							       const gchar         *file_part);
+const GtkFilePath *_gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry);
+const gchar *      _gtk_file_chooser_entry_get_file_part      (GtkFileChooserEntry *chooser_entry);
 
 G_END_DECLS
 

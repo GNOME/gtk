@@ -24,21 +24,21 @@
 #include "gtkfilechooserenums.h"
 #include "gtkfilesystem.h"
 
-static void    delegate_set_current_folder (GtkFileChooser *chooser,
-					    const char     *uri);
-static char *  delegate_get_current_folder (GtkFileChooser *chooser);
-static void    delegate_select_uri         (GtkFileChooser *chooser,
-					    const char     *uri);
-static void    delegate_unselect_uri       (GtkFileChooser *chooser,
-					    const char     *uri);
-static void    delegate_select_all         (GtkFileChooser *chooser);
-static void    delegate_unselect_all       (GtkFileChooser *chooser);
-static GSList *delegate_get_uris           (GtkFileChooser *chooser);
-
-static void    delegate_current_folder_changed (GtkFileChooser *chooser,
-						gpointer        data);
-static void    delegate_selection_changed      (GtkFileChooser *chooser,
-						gpointer        data);
+static void           delegate_set_current_folder     (GtkFileChooser    *chooser,
+						       const GtkFilePath *path);
+static GtkFilePath *  delegate_get_current_folder     (GtkFileChooser    *chooser);
+static void           delegate_select_path            (GtkFileChooser    *chooser,
+						       const GtkFilePath *path);
+static void           delegate_unselect_path          (GtkFileChooser    *chooser,
+						       const GtkFilePath *path);
+static void           delegate_select_all             (GtkFileChooser    *chooser);
+static void           delegate_unselect_all           (GtkFileChooser    *chooser);
+static GSList *       delegate_get_paths              (GtkFileChooser    *chooser);
+static GtkFileSystem *delegate_get_file_system        (GtkFileChooser    *chooser);
+static void           delegate_current_folder_changed (GtkFileChooser    *chooser,
+						       gpointer           data);
+static void           delegate_selection_changed      (GtkFileChooser    *chooser,
+						       gpointer           data);
 
 /**
  * _gtk_file_chooser_install_properties:
@@ -112,11 +112,12 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
 {
   iface->set_current_folder = delegate_set_current_folder;
   iface->get_current_folder = delegate_get_current_folder;
-  iface->select_uri = delegate_select_uri;
-  iface->unselect_uri = delegate_unselect_uri;
+  iface->select_path = delegate_select_path;
+  iface->unselect_path = delegate_unselect_path;
   iface->select_all = delegate_select_all;
   iface->unselect_all = delegate_unselect_all;
-  iface->get_uris = delegate_get_uris;
+  iface->get_paths = delegate_get_paths;
+  iface->get_file_system = delegate_get_file_system;
 }
 
 /**
@@ -152,17 +153,17 @@ get_delegate (GtkFileChooser *receiver)
 }
 
 static void
-delegate_select_uri (GtkFileChooser *chooser,
-		     const char     *uri)
+delegate_select_path (GtkFileChooser    *chooser,
+		      const GtkFilePath *path)
 {
-  gtk_file_chooser_select_uri (get_delegate (chooser), uri);
+  _gtk_file_chooser_select_path (get_delegate (chooser), path);
 }
 
 static void
-delegate_unselect_uri (GtkFileChooser *chooser,
-				      const char     *uri)
+delegate_unselect_path (GtkFileChooser    *chooser,
+			const GtkFilePath *path)
 {
-  gtk_file_chooser_unselect_uri (get_delegate (chooser), uri);
+  _gtk_file_chooser_unselect_path (get_delegate (chooser), path);
 }
 
 static void
@@ -178,22 +179,28 @@ delegate_unselect_all (GtkFileChooser *chooser)
 }
 
 static GSList *
-delegate_get_uris (GtkFileChooser *chooser)
+delegate_get_paths (GtkFileChooser *chooser)
 {
-  return gtk_file_chooser_get_uris (get_delegate (chooser));
+  return _gtk_file_chooser_get_paths (get_delegate (chooser));
+}
+
+static GtkFileSystem *
+delegate_get_file_system (GtkFileChooser *chooser)
+{
+  return _gtk_file_chooser_get_file_system (get_delegate (chooser));
 }
 
 static void
-delegate_set_current_folder (GtkFileChooser *chooser,
-			     const char     *uri)
+delegate_set_current_folder (GtkFileChooser    *chooser,
+			     const GtkFilePath *path)
 {
-  gtk_file_chooser_set_current_folder_uri (chooser, uri);
+  _gtk_file_chooser_set_current_folder (chooser, path);
 }
 
-static char *
+static GtkFilePath *
 delegate_get_current_folder (GtkFileChooser *chooser)
 {
-  return gtk_file_chooser_get_current_folder_uri (get_delegate (chooser));
+  return _gtk_file_chooser_get_current_folder (get_delegate (chooser));
 }
 
 static void

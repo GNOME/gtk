@@ -20,6 +20,8 @@
 
 #include "gtkfilesystem.h"
 
+#include <string.h>
+
 struct _GtkFileInfo
 {
   GtkFileTime modification_time;
@@ -326,85 +328,85 @@ gtk_file_system_list_roots (GtkFileSystem  *file_system)
 }
 
 GtkFileInfo *
-gtk_file_system_get_root_info  (GtkFileSystem    *file_system,
-				const gchar      *uri,
-				GtkFileInfoType   types,
-				GError          **error)
+gtk_file_system_get_root_info  (GtkFileSystem     *file_system,
+				const GtkFilePath *path,
+				GtkFileInfoType    types,
+				GError           **error)
 {
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
-  g_return_val_if_fail (uri != NULL, NULL);
+  g_return_val_if_fail (path != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_root_info (file_system, uri, types, error);
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_root_info (file_system, path, types, error);
 }
 
 GtkFileFolder *
-gtk_file_system_get_folder (GtkFileSystem    *file_system,
-			    const gchar      *uri,
-			    GtkFileInfoType   types,
-			    GError          **error)
+gtk_file_system_get_folder (GtkFileSystem     *file_system,
+			    const GtkFilePath *path,
+			    GtkFileInfoType    types,
+			    GError           **error)
 {
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
-  g_return_val_if_fail (uri != NULL, NULL);
+  g_return_val_if_fail (path != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_folder (file_system, uri, types, error);
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_folder (file_system, path, types, error);
 }
 
 gboolean
-gtk_file_system_create_folder(GtkFileSystem    *file_system,
-			      const gchar      *uri,
-			      GError          **error)
+gtk_file_system_create_folder(GtkFileSystem     *file_system,
+			      const GtkFilePath *path,
+			      GError           **error)
 {
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
-  g_return_val_if_fail (uri != NULL, FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->create_folder (file_system, uri, error);
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->create_folder (file_system, path, error);
 }
 
 gboolean
-gtk_file_system_get_parent (GtkFileSystem *file_system,
-			    const gchar   *uri,
-			    gchar         **parent,
-			    GError        **error)
+gtk_file_system_get_parent (GtkFileSystem     *file_system,
+			    const GtkFilePath *path,
+			    GtkFilePath      **parent,
+			    GError           **error)
 {
-  gchar *tmp_parent = NULL;
+  GtkFilePath *tmp_parent = NULL;
   gboolean result;
   
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
-  g_return_val_if_fail (uri != NULL, FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  result = GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_parent (file_system, uri, &tmp_parent, error);
+  result = GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_parent (file_system, path, &tmp_parent, error);
   g_assert (result || tmp_parent == NULL);
 
   if (parent)
     *parent = tmp_parent;
   else
-    g_free (tmp_parent);
+    gtk_file_path_free (tmp_parent);
   
   return result;
 }
 
-gchar *
-gtk_file_system_make_uri (GtkFileSystem    *file_system,
-			  const gchar      *base_uri,
-			  const gchar      *display_name,
-			  GError          **error)
+GtkFilePath *
+gtk_file_system_make_path (GtkFileSystem    *file_system,
+			  const GtkFilePath *base_path,
+			  const gchar       *display_name,
+			  GError           **error)
 {
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
-  g_return_val_if_fail (base_uri != NULL, NULL);
+  g_return_val_if_fail (base_path != NULL, NULL);
   g_return_val_if_fail (display_name != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->make_uri (file_system, base_uri, display_name, error);
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->make_path (file_system, base_path, display_name, error);
 }
 
 /**
  * gtk_file_system_parse:
  * @file_system: a #GtkFileSystem
- * @base_uri: reference folder with respect to which relative
+ * @base_path: reference folder with respect to which relative
  *            paths should be interpreted.
  * @str: the string to parse
  * @folder: location to store folder portion of result, or %NULL
@@ -412,8 +414,8 @@ gtk_file_system_make_uri (GtkFileSystem    *file_system,
  * @error: location to store error, or %NULL
  * 
  * Given a string entered by a user, parse it (possibly using
- * heuristics) into a folder URI and a UTF-8 encoded
- * filename part. (Suitable for passing to gtk_file_system_make_uri())
+ * heuristics) into a folder path and a UTF-8 encoded
+ * filename part. (Suitable for passing to gtk_file_system_make_path())
  *
  * Note that the returned filename point may point to a subfolder
  * of the returned folder. Adding a trailing path separator is needed
@@ -433,31 +435,31 @@ gtk_file_system_make_uri (GtkFileSystem    *file_system,
  * Return value: %TRUE if the parsing succeeds, otherwise, %FALSE.
  **/
 gboolean
-gtk_file_system_parse (GtkFileSystem   *file_system,
-		       const gchar     *base_uri,
-		       const gchar     *str,
-		       gchar          **folder,
-		       gchar          **file_part,
-		       GError         **error)
+gtk_file_system_parse (GtkFileSystem     *file_system,
+		       const GtkFilePath *base_path,
+		       const gchar       *str,
+		       GtkFilePath      **folder,
+		       gchar            **file_part,
+		       GError           **error)
 {
-  gchar *tmp_folder = NULL;
+  GtkFilePath *tmp_folder = NULL;
   gchar *tmp_file_part = NULL;
   gboolean result;
 
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
-  g_return_val_if_fail (base_uri != NULL, FALSE);
+  g_return_val_if_fail (base_path != NULL, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 
-  result = GTK_FILE_SYSTEM_GET_IFACE (file_system)->parse (file_system, base_uri, str,
-							    &tmp_folder, &tmp_file_part,
-							    error);
+  result = GTK_FILE_SYSTEM_GET_IFACE (file_system)->parse (file_system, base_path, str,
+							   &tmp_folder, &tmp_file_part,
+							   error);
   g_assert (result || (tmp_folder == NULL && tmp_file_part == NULL));
 
   if (folder)
     *folder = tmp_folder;
   else
-    g_free (tmp_folder);
+    gtk_file_path_free (tmp_folder);
 
   if (file_part)
     *file_part = tmp_file_part;
@@ -465,6 +467,47 @@ gtk_file_system_parse (GtkFileSystem   *file_system,
     g_free (tmp_file_part);
 
   return result;
+}
+
+
+gchar *
+gtk_file_system_path_to_uri (GtkFileSystem     *file_system,
+			     const GtkFilePath *path)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
+  
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->path_to_uri (file_system, path);
+}
+
+gchar *
+gtk_file_system_path_to_filename (GtkFileSystem     *file_system,
+				  const GtkFilePath *path)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (path != NULL, NULL);
+  
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->path_to_filename (file_system, path);
+}
+
+GtkFilePath *
+gtk_file_system_uri_to_path (GtkFileSystem *file_system,
+			     const gchar    *uri)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (uri != NULL, NULL);
+  
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->uri_to_path (file_system, uri);
+}
+
+GtkFilePath *
+gtk_file_system_filename_to_path (GtkFileSystem *file_system,
+				  const gchar   *filename)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (filename != NULL, NULL);
+
+  return GTK_FILE_SYSTEM_GET_IFACE (file_system)->filename_to_path (file_system, filename);
 }
 
 /*****************************************
@@ -556,22 +599,36 @@ gtk_file_folder_list_children (GtkFileFolder    *folder,
   if (children)
     *children = tmp_children;
   else
-    {
-      g_slist_foreach (tmp_children, (GFunc)g_free, NULL);
-      g_slist_free (tmp_children);
-    }
+    gtk_file_paths_free (tmp_children);
 
   return result;
 }
 
 GtkFileInfo *
-gtk_file_folder_get_info (GtkFileFolder    *folder,
-			  const gchar      *uri,
-			  GError          **error)
+gtk_file_folder_get_info (GtkFileFolder     *folder,
+			  const GtkFilePath *path,
+			  GError           **error)
 {
   g_return_val_if_fail (GTK_IS_FILE_FOLDER (folder), NULL);
-  g_return_val_if_fail (uri != NULL, NULL);
+  g_return_val_if_fail (path != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  return GTK_FILE_FOLDER_GET_IFACE (folder)->get_info (folder, uri, error);
+  return GTK_FILE_FOLDER_GET_IFACE (folder)->get_info (folder, path, error);
+}
+
+GSList *
+gtk_file_paths_sort (GSList *paths)
+{
+  return g_slist_sort (paths, (GCompareFunc)strcmp);
+}
+
+void
+gtk_file_paths_free (GSList *paths)
+{
+  GSList *tmp_list;
+
+  for (tmp_list = paths; tmp_list; tmp_list = tmp_list->next)
+    gtk_file_path_free (tmp_list->data);
+
+  g_slist_free (paths);
 }

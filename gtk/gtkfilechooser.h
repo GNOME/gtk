@@ -28,54 +28,14 @@ G_BEGIN_DECLS
 #define GTK_TYPE_FILE_CHOOSER             (gtk_file_chooser_get_type ())
 #define GTK_FILE_CHOOSER(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FILE_CHOOSER, GtkFileChooser))
 #define GTK_IS_FILE_CHOOSER(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FILE_CHOOSER))
-#define GTK_FILE_CHOOSER_GET_IFACE(inst)  (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GTK_TYPE_FILE_CHOOSER, GtkFileChooserIface))
 
 typedef struct _GtkFileChooser      GtkFileChooser;
-typedef struct _GtkFileChooserIface GtkFileChooserIface;
 
 typedef enum
 {
   GTK_FILE_CHOOSER_ACTION_OPEN,
   GTK_FILE_CHOOSER_ACTION_SAVE
 } GtkFileChooserAction;
-
-struct _GtkFileChooserIface
-{
-  GTypeInterface base_iface;
-
-  /* GtkFileChooser interface has the following properties:
-   *
-   *  action:          GtkFileChooserAction
-   *  folder_mode:     boolean
-   *  select_multiple: boolean
-   *  show_hidden:     boolean
-   *  local_only:      boolean
-   *
-   *  preview_widget:  GtkWidget
-   *  preview_widget_active: boolean
-   */
-
-  /* Methods
-   */
-  void (*set_current_folder)   (GtkFileChooser *chooser,
-			        const char     *uri);
-  char * (*get_current_folder) (GtkFileChooser *chooser);
-  void (*select_uri)           (GtkFileChooser *chooser,
-				const char     *uri);
-  void (*unselect_uri)         (GtkFileChooser *chooser,
-				const char     *uri);
-  void (*select_all)           (GtkFileChooser *chooser);
-  void (*unselect_all)         (GtkFileChooser *chooser);
-  GSList *(*get_uris)          (GtkFileChooser *chooser);
-
-
-  /* Signals
-   */
-  void (*current_folder_changed) (GtkFileChooser *chooser);
-  void (*selection_changed)      (GtkFileChooser *chooser);
-  void (*update_preview)         (GtkFileChooser *chooser,
-				  const char     *uri);
-};
 
 GType gtk_file_chooser_get_type (void);
 
