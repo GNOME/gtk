@@ -1,3 +1,8 @@
+2005-04-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtktooltips.sgml: Mention enter and leave
+	events.  (#167546, Billy Biggs)
+
 2005-04-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkselection.sgml: Move docs inline.

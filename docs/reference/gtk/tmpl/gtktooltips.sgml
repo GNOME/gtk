@@ -19,7 +19,8 @@ To assign a tip to a particular #GtkWidget, gtk_tooltips_set_tip() is used.
 </para>
 <note>
 <para>
-Tooltips can only be set on widgets which have their own X window.
+Tooltips can only be set on widgets which have their own X window and receive
+enter and leave events.
 To check if a widget has its own window use GTK_WIDGET_NO_WINDOW().
 To add a tooltip to a widget that doesn't have its own window, place the
 widget inside a #GtkEventBox and add a tooltip to that instead.
