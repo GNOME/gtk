@@ -1,3 +1,9 @@
+Sun Apr  1 01:02:54 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreestore.c (gtk_tree_store_sort_iter_changed):
+	for (i = 0; i < 100; i ++)
+	  g_print ("I will confirm it compile before committing\n");
+
 Sun Apr  1 00:52:06 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.c: Initial work on implementing the
