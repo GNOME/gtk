@@ -41,12 +41,13 @@ progressive_prepared_callback (GdkPixbufLoader *loader,
   gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
 }
 
-static void progressive_updated_callback (GdkPixbufLoader *loader,
-					  gint		   x,
-					  gint		   y,
-					  gint		   width,
-					  gint		   height,
-					  gpointer	   data)
+static void
+progressive_updated_callback (GdkPixbufLoader *loader,
+                              gint		   x,
+                              gint		   y,
+                              gint		   width,
+                              gint		   height,
+                              gpointer	   data)
 {
   GtkWidget *image;
   
@@ -280,6 +281,31 @@ cleanup_callback (GtkObject *object,
   image_stream = NULL;
 }
 
+static void
+toggle_sensitivity_callback (GtkWidget *togglebutton,
+                             gpointer   user_data)
+{
+  GtkContainer *container = user_data;
+  GList *list;
+  GList *tmp;
+  
+  list = gtk_container_get_children (container);
+
+  tmp = list;
+  while (tmp != NULL)
+    {
+      /* don't disable our toggle */
+      if (GTK_WIDGET (tmp->data) != togglebutton)
+        gtk_widget_set_sensitive (GTK_WIDGET (tmp->data),
+                                  !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (togglebutton)));
+      
+      tmp = tmp->next;
+    }
+
+  g_list_free (list);
+}
+  
+
 GtkWidget *
 do_images (void)
 {
@@ -288,6 +314,7 @@ do_images (void)
   GtkWidget *image;
   GtkWidget *label;
   GtkWidget *align;
+  GtkWidget *button;
   GdkPixbuf *pixbuf;
   GError *error = NULL;
   char *filename;
@@ -410,6 +437,14 @@ do_images (void)
       gtk_container_add (GTK_CONTAINER (frame), image);
 
       start_progressive_loading (image);
+
+      /* Sensitivity control */
+      button = gtk_toggle_button_new_with_mnemonic ("_Insensitive");
+      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+      g_signal_connect (G_OBJECT (button), "toggled",
+                        G_CALLBACK (toggle_sensitivity_callback),
+                        vbox);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

@@ -1197,7 +1197,7 @@ gtk_image_expose (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_IMAGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget) &&
+  if (GTK_WIDGET_MAPPED (widget) &&
       GTK_IMAGE (widget)->storage_type != GTK_IMAGE_EMPTY)
     {
       GtkImage *image;
@@ -1205,11 +1205,17 @@ gtk_image_expose (GtkWidget      *widget,
       GdkRectangle area, image_bound;
       gfloat xalign;
       gint x, y;
-      GdkBitmap *mask = NULL;
-      GdkPixbuf *stock_pixbuf = NULL;
+      GdkBitmap *mask;
+      GdkPixbuf *pixbuf;
+      gboolean needs_state_transform;
       
       image = GTK_IMAGE (widget);
       misc = GTK_MISC (widget);
+
+      area = event->area;
+      
+      if (!gdk_rectangle_intersect (&area, &widget->allocation, &area))
+	return FALSE;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
 	xalign = misc->xalign;
@@ -1225,7 +1231,13 @@ gtk_image_expose (GtkWidget      *widget,
       
       image_bound.x = x;
       image_bound.y = y;      
+      image_bound.width = 0;
+      image_bound.height = 0;      
 
+      mask = NULL;
+      pixbuf = NULL;
+      needs_state_transform = GTK_WIDGET_STATE (widget) != GTK_STATE_NORMAL;
+      
       switch (image->storage_type)
         {
         case GTK_IMAGE_PIXMAP:
@@ -1233,33 +1245,83 @@ gtk_image_expose (GtkWidget      *widget,
           gdk_drawable_get_size (image->data.pixmap.pixmap,
                                  &image_bound.width,
                                  &image_bound.height);
+
+	  if (gdk_rectangle_intersect (&image_bound, &area, &image_bound) &&
+	      needs_state_transform)
+            {
+              pixbuf = gdk_pixbuf_get_from_drawable (NULL,
+                                                     image->data.pixmap.pixmap,
+                                                     gtk_widget_get_colormap (widget),
+                                                     image_bound.x, image_bound.y,
+						     0, 0,
+                                                     image_bound.width,
+                                                     image_bound.height);
+
+	      x = image_bound.x;
+	      y = image_bound.y;
+            }
+	  
           break;
 
         case GTK_IMAGE_IMAGE:
           mask = image->mask;
           image_bound.width = image->data.image.image->width;
           image_bound.height = image->data.image.image->height;
+
+	  if (gdk_rectangle_intersect (&image_bound, &area, &image_bound) &&
+	      needs_state_transform)
+            {
+              pixbuf = gdk_pixbuf_get_from_image (NULL,
+                                                  image->data.image.image,
+                                                  gtk_widget_get_colormap (widget),
+						  image_bound.x - x, image_bound.y - y,
+                                                  0, 0,
+                                                  image_bound.width,
+                                                  image_bound.height);
+
+	      x = image_bound.x;
+	      y = image_bound.y;
+            }
           break;
 
         case GTK_IMAGE_PIXBUF:
           image_bound.width = gdk_pixbuf_get_width (image->data.pixbuf.pixbuf);
-          image_bound.height = gdk_pixbuf_get_height (image->data.pixbuf.pixbuf);
+          image_bound.height = gdk_pixbuf_get_height (image->data.pixbuf.pixbuf);          
+
+	  if (gdk_rectangle_intersect (&image_bound, &area, &image_bound) &&
+	      needs_state_transform)
+	    {
+	      pixbuf = gdk_pixbuf_new_subpixbuf (image->data.pixbuf.pixbuf,
+						 image_bound.x - x, image_bound.y - y,
+						 image_bound.width, image_bound.height);
+
+	      x = image_bound.x;
+	      y = image_bound.y;
+	    }
+	  else
+	    {
+	      pixbuf = image->data.pixbuf.pixbuf;
+	      g_object_ref (G_OBJECT (pixbuf));
+	    }
           break;
 
         case GTK_IMAGE_STOCK:
-          stock_pixbuf = gtk_widget_render_icon (widget,
-                                                 image->data.stock.stock_id,
-                                                 image->icon_size,
-                                                 NULL);
-          if (stock_pixbuf)
+          pixbuf = gtk_widget_render_icon (widget,
+                                           image->data.stock.stock_id,
+                                           image->icon_size,
+                                           NULL);
+          if (pixbuf)
             {              
-              image_bound.width = gdk_pixbuf_get_width (stock_pixbuf);
-              image_bound.height = gdk_pixbuf_get_height (stock_pixbuf);
+              image_bound.width = gdk_pixbuf_get_width (pixbuf);
+              image_bound.height = gdk_pixbuf_get_height (pixbuf);
             }
+
+          /* already done */
+          needs_state_transform = FALSE;
           break;
 
         case GTK_IMAGE_ICON_SET:
-          stock_pixbuf =
+          pixbuf =
             gtk_icon_set_render_icon (image->data.icon_set.icon_set,
                                       widget->style,
                                       gtk_widget_get_direction (widget),
@@ -1268,11 +1330,14 @@ gtk_image_expose (GtkWidget      *widget,
                                       widget,
                                       NULL);
 
-          if (stock_pixbuf)
+          if (pixbuf)
             {
-              image_bound.width = gdk_pixbuf_get_width (stock_pixbuf);
-              image_bound.height = gdk_pixbuf_get_height (stock_pixbuf);
+              image_bound.width = gdk_pixbuf_get_width (pixbuf);
+              image_bound.height = gdk_pixbuf_get_height (pixbuf);
             }
+
+          /* already done */
+          needs_state_transform = FALSE;
           break;
 
         case GTK_IMAGE_ANIMATION:
@@ -1290,10 +1355,18 @@ gtk_image_expose (GtkWidget      *widget,
 
             image_bound.width = gdk_pixbuf_animation_get_width (image->data.anim.anim);
             image_bound.height = gdk_pixbuf_animation_get_height (image->data.anim.anim);
+                  
+            /* don't advance the anim iter here, or we could get frame changes between two
+             * exposes of different areas.
+             */
+            
+            pixbuf = gdk_pixbuf_animation_iter_get_pixbuf (image->data.anim.iter);
+            g_object_ref (G_OBJECT (pixbuf));
           }
           break;
-          
-        default:
+
+        case GTK_IMAGE_EMPTY:
+          g_assert_not_reached ();
           break;
         }
 
@@ -1303,95 +1376,97 @@ gtk_image_expose (GtkWidget      *widget,
 	  gdk_gc_set_clip_origin (widget->style->black_gc, x, y);
 	}
 
-      area = event->area;
-      
-      if (gdk_rectangle_intersect (&area, &widget->allocation, &area) &&
-          gdk_rectangle_intersect (&image_bound, &area, &image_bound))
+      if (gdk_rectangle_intersect (&image_bound, &area, &image_bound))
         {
-          switch (image->storage_type)
+          if (pixbuf)
             {
-            case GTK_IMAGE_PIXMAP:
-              gdk_draw_drawable (widget->window,
-                                 widget->style->black_gc,
-                                 image->data.pixmap.pixmap,
-                                 image_bound.x - x, image_bound.y - y,
-                                 image_bound.x, image_bound.y,
-                                 image_bound.width, image_bound.height);
-              break;
-              
-            case GTK_IMAGE_IMAGE:
-              gdk_draw_image (widget->window,
-                              widget->style->black_gc,
-                              image->data.image.image,
-                              image_bound.x - x, image_bound.y - y,
-                              image_bound.x, image_bound.y,
-                              image_bound.width, image_bound.height);
-              break;
-
-            case GTK_IMAGE_PIXBUF:
-              gdk_pixbuf_render_to_drawable_alpha (image->data.pixbuf.pixbuf,
-                                                   widget->window,
-                                                   image_bound.x - x,
-                                                   image_bound.y - y,
-                                                   image_bound.x,
-                                                   image_bound.y,
-                                                   image_bound.width,
-                                                   image_bound.height,
-                                                   GDK_PIXBUF_ALPHA_FULL,
-                                                   128,
-                                                   GDK_RGB_DITHER_NORMAL,
-                                                   0, 0);
-              break;
-
-            case GTK_IMAGE_STOCK: /* fall thru */
-            case GTK_IMAGE_ICON_SET:
-              if (stock_pixbuf)
+              if (needs_state_transform)
                 {
-                  gdk_pixbuf_render_to_drawable_alpha (stock_pixbuf,
-                                                       widget->window,
-                                                       image_bound.x - x,
-                                                       image_bound.y - y,
-                                                       image_bound.x,
-                                                       image_bound.y,
-                                                       image_bound.width,
-                                                       image_bound.height,
-                                                       GDK_PIXBUF_ALPHA_FULL,
-                                                       128,
-                                                       GDK_RGB_DITHER_NORMAL,
-                                                       0, 0);
-                  
-                  g_object_unref (G_OBJECT (stock_pixbuf));
-                }
-              break;
+                  GtkIconSource *source;
+                  GdkPixbuf *rendered;
 
-            case GTK_IMAGE_ANIMATION:
-              /* don't advance the anim iter here, or we could get frame changes between two
-               * exposes of different areas.
-               */
+                  source = gtk_icon_source_new ();
+                  gtk_icon_source_set_pixbuf (source, pixbuf);
+                  /* The size here is arbitrary; since size isn't
+                   * wildcarded in the souce, it isn't supposed to be
+                   * scaled by the engine function
+                   */
+                  gtk_icon_source_set_size (source,
+                                            GTK_ICON_SIZE_SMALL_TOOLBAR);
+                  gtk_icon_source_set_size_wildcarded (source, FALSE);
+                  
+                  rendered = gtk_style_render_icon (widget->style,
+                                                    source,
+                                                    gtk_widget_get_direction (widget),
+                                                    GTK_WIDGET_STATE (widget),
+                                                    /* arbitrary */
+                                                    GTK_ICON_SIZE_SMALL_TOOLBAR,
+                                                    widget,
+                                                    "gtk-image");
+
+                  gtk_icon_source_free (source);
+
+                  g_object_unref (G_OBJECT (pixbuf));
+                  pixbuf = rendered;
+                }
+
+              if (pixbuf)
+                {
+                  gdk_pixbuf_render_to_drawable (pixbuf,
+						 widget->window,
+						 widget->style->black_gc,						 
+						 image_bound.x - x,
+						 image_bound.y - y,
+						 image_bound.x,
+						 image_bound.y,
+						 image_bound.width,
+						 image_bound.height,
+						 GDK_RGB_DITHER_NORMAL,
+						 0, 0);
+
+                  g_object_unref (G_OBJECT (pixbuf));
+                  pixbuf = NULL;
+                }
+            }
+          else
+            {
+              switch (image->storage_type)
+                {
+                case GTK_IMAGE_PIXMAP:
+                  gdk_draw_drawable (widget->window,
+                                     widget->style->black_gc,
+                                     image->data.pixmap.pixmap,
+                                     image_bound.x - x, image_bound.y - y,
+                                     image_bound.x, image_bound.y,
+                                     image_bound.width, image_bound.height);
+                  break;
               
-              gdk_pixbuf_render_to_drawable_alpha (gdk_pixbuf_animation_iter_get_pixbuf (image->data.anim.iter),
-                                                   widget->window,
-                                                   image_bound.x - x,
-                                                   image_bound.y - y,
-                                                   image_bound.x,
-                                                   image_bound.y,
-                                                   image_bound.width,
-                                                   image_bound.height,
-                                                   GDK_PIXBUF_ALPHA_FULL,
-                                                   128,
-                                                   GDK_RGB_DITHER_NORMAL,
-                                                   0, 0);
-              break;
-              
-            default:
-              break;
+                case GTK_IMAGE_IMAGE:
+                  gdk_draw_image (widget->window,
+                                  widget->style->black_gc,
+                                  image->data.image.image,
+                                  image_bound.x - x, image_bound.y - y,
+                                  image_bound.x, image_bound.y,
+                                  image_bound.width, image_bound.height);
+                  break;
+
+                case GTK_IMAGE_PIXBUF:
+                case GTK_IMAGE_STOCK:
+                case GTK_IMAGE_ICON_SET:
+                case GTK_IMAGE_ANIMATION:
+                case GTK_IMAGE_EMPTY:
+                  g_assert_not_reached ();
+                  break;
+                }
             }
         } /* if rectangle intersects */      
+
       if (mask)
         {
           gdk_gc_set_clip_mask (widget->style->black_gc, NULL);
           gdk_gc_set_clip_origin (widget->style->black_gc, 0, 0);
         }
+      
     } /* if widget is drawable */
 
   return FALSE;

@@ -1,3 +1,16 @@
+Tue Jan 29 18:50:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimage.c (gtk_image_expose): Optimize exposes of
+	partial insensitive images.
+
+2002-01-24  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkimage.c (gtk_image_expose): create insensitive version of
+	the image regardless of storage type, #63305
+
+	* demos/gtk-demo/images.c: add toggle button to demonstrate that
+	GtkImage makes its contents insensitive
+
 Tue Jan 29 17:40:02 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_to_drawable):
