@@ -3648,7 +3648,7 @@ gtk_widget_set_redraw_on_allocate (GtkWidget *widget,
  * Sets the sensitivity of a widget. A widget is sensitive if the user
  * can interact with it. Insensitive widgets are "grayed out" and the
  * user can't interact with them. Insensitive widgets are known as
- * "inactive" in some other toolkits.
+ * "inactive", "disabled", or "ghosted" in some other toolkits.
  * 
  **/
 void

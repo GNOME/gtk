@@ -153,6 +153,17 @@ background of the event box.
 </para></answer>
 </qandaentry>
 
+<qandaentry>
+<question><para>
+How do I disable/ghost/desensitize a widget?
+</para></question>
+
+<answer><para> In GTK+ a disabled widget is termed "insensitive." See
+<link
+linkend="gtk-widget-set-sensitive">gtk_widget_set_sensitive()</link>.
+</para></answer>
+</qandaentry>
+
 </qandadiv>
 
 

@@ -1,3 +1,9 @@
+2002-01-04  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/question_index.sgml: add question to help people find
+	gtk_widget_set_sensitive() if they're used to another term for 
+	that.
+	
 2002-01-03  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/tmpl/gtkdrawingarea.sgml: add mention of

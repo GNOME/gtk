@@ -1,3 +1,7 @@
+2002-01-04  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkwidget.c (gtk_widget_set_sensitive): tiny docs change
+	
 Fri Jan  4 13:05:15 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (gtk_drag_find_widget): At least
