@@ -113,7 +113,6 @@ EXPORTS
 	gdk_draw_line
 	gdk_draw_lines
 	gdk_draw_pixbuf
-	gdk_draw_pixbuf
 	gdk_draw_point
 	gdk_draw_points
 	gdk_draw_polygon
@@ -297,6 +296,9 @@ EXPORTS
 	gdk_pixmap_create_from_xpm_d
 	gdk_pixmap_foreign_new
 	gdk_pixmap_get_type
+	gdk_pixmap_foreign_new_for_display
+	gdk_pixmap_lookup
+	gdk_pixmap_lookup_for_display
 	gdk_pixmap_new
 	gdk_pointer_grab
 	gdk_pointer_grab_info_libgtk_only

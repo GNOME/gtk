@@ -1,5 +1,12 @@
+2003-01-22  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkpixmap-win32.c (gdk_pixmap_foreign_new_for_display,
+	gdk_pixmap_lookup, gdk_pixmap_lookup_for_display): Implement.
+
+	* gdk/gdk.def: Export the above.
+
 Wed Jan 22 14:23:23 2003  Manish Singh  <yosh@gimp.org>
-                                                                                
+
         * gdk/x11/gdkevents-x11.c (translate_key_event): add a "return" at
         the end of the function, so there is a statement following the "out"
         label in all cases (fixes #101961)
