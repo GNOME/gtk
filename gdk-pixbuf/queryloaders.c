@@ -181,7 +181,9 @@ query_module (const char *dir, const char *file)
 #endif	
 		info = g_new0 (GdkPixbufFormat, 1);
 		vtable = g_new0 (GdkPixbufModule, 1);
-		
+
+		vtable->module = module;
+
 		(*fill_info) (info);
 		(*fill_vtable) (vtable);
 		

@@ -734,6 +734,9 @@ gtk_tree_path_prev (GtkTreePath *path)
 {
   g_return_val_if_fail (path != NULL, FALSE);
 
+  if (path->depth == 0)
+    return FALSE;
+
   if (path->indices[path->depth - 1] == 0)
     return FALSE;
 

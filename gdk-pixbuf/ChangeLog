@@ -1,3 +1,9 @@
+2004-11-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* queryloaders.c (query_module): Set vtable->module before
+	calling fill_vtable(), since gdk-pixbuf-io.c does does the
+	same and modules may rely on it.  (#158177, Dan Winship)
+
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-io.c (gdk_pixbuf_io_init): Don't use 
