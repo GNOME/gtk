@@ -6,6 +6,7 @@
 #
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Pablo Saratxaga <srtxg@chanae.alphanet.ch> 1999-2000
+# Lucyin Mahin, 2000
 #
 msgid ""
 msgstr ""
@@ -102,7 +103,7 @@ msgstr "Aroke"
 #. close button
 #: gtk/gtkfilesel.c:845 gtk/gtkinputdialog.c:354
 msgid "Close"
-msgstr "Cloyu"
+msgstr "Clôre"
 
 #: gtk/gtkfilesel.c:920
 msgid "Create Directory"
