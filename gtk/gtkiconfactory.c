@@ -57,9 +57,6 @@ struct _GtkIconSource
   guint any_size : 1;
 };
 
-/* FIXME use a better icon for this */
-#define MISSING_IMAGE_INLINE dialog_error
-
 static gpointer parent_class = NULL;
 
 static void gtk_icon_factory_init       (GtkIconFactory      *icon_factory);
@@ -454,7 +451,7 @@ get_default_icons (GtkIconFactory *factory)
 {
   /* KEEP IN SYNC with gtkstock.c */
 
-  add_unsized (factory, MISSING_IMAGE_INLINE, GTK_STOCK_MISSING_IMAGE);
+  add_unsized (factory, stock_missing_image, GTK_STOCK_MISSING_IMAGE);
   
   add_sized (factory, dialog_error, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_ERROR);
   add_sized (factory, dialog_info, GTK_ICON_SIZE_DIALOG, GTK_STOCK_DIALOG_INFO);
@@ -1094,7 +1091,7 @@ render_fallback_image (GtkStyle          *style,
   static GtkIconSource fallback_source = { NULL, NULL, 0, 0, 0, TRUE, TRUE, TRUE };
 
   if (fallback_source.pixbuf == NULL)
-    fallback_source.pixbuf = gdk_pixbuf_new_from_inline (-1, MISSING_IMAGE_INLINE, FALSE, NULL);
+    fallback_source.pixbuf = gdk_pixbuf_new_from_inline (-1, stock_missing_image, FALSE, NULL);
   
   return gtk_style_render_icon (style,
                                 &fallback_source,

@@ -1,3 +1,9 @@
+Thu Nov  1 19:44:48 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkiconfactory.c gtk/stock-icons/Makefile.am: 
+	Actually add the missing/broken image icon as the
+	image for the "missing image" stock icon.
+
 Thu Nov  1 19:18:34 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* demos/gtk-demo/stock_browser.c (do_stock_browser): 
