@@ -1,3 +1,8 @@
+Tue Jul 28 20:32:03 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gtk/docs/man: new directory
+	* gtk/docs/man/gtk_button.pod: new file, initial gtk_button man page
+
 Tue Jul 28 00:03:20 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_paint): small fix for border drawing
