@@ -45,7 +45,7 @@
 typedef struct {
   gint fd, fd_tag;
 
-  gint x, y;
+  gdouble x, y;
   GdkWindow *prev_window;
   gboolean button1_pressed, button2_pressed, button3_pressed;
   gboolean click_grab;
