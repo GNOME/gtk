@@ -1068,7 +1068,8 @@ button_new (GtkFileChooserDefault *impl,
 
   gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
 
-  widget = gtk_label_new (text);
+  widget = gtk_label_new_with_mnemonic (text);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (widget), GTK_WIDGET (button));
   gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
 
   gtk_widget_set_sensitive (button, sensitive);
@@ -1462,7 +1463,7 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
   /* Add bookmark button */
 
   impl->add_bookmark_button = button_new (impl,
-					  _("Add"),
+					  _("_Add"),
 					  GTK_STOCK_ADD,
 					  FALSE,
 					  TRUE,
@@ -1472,7 +1473,7 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
   /* Remove bookmark button */
 
   impl->remove_bookmark_button = button_new (impl,
-					     _("Remove"),
+					     _("_Remove"),
 					     GTK_STOCK_REMOVE,
 					     FALSE,
 					     TRUE,

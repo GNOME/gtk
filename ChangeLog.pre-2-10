@@ -1,3 +1,8 @@
+Mon Feb 23 21:09:06 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_pane_create): Add
+	mnemonics.  Sorry translators.
+
 Tue Feb 24 02:24:58 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* NEWS: Additions. This should be complete for the main ChangeLog
