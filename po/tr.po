@@ -1,0 +1,468 @@
+# Copyright (C) 2001 Free Software Foundation, Inc.
+# Fatih Demir <kabalak@gtranslator.org>, 2001.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 1.2.9\n"
+"POT-Creation-Date: 2001-03-02 09:10+0100\n"
+"PO-Revision-Date: 2001-03-02 09:12+0100\n"
+"Last-Translator: Fatih Demir <kabalak@gtranslator.org>\n"
+"Language-Team: Turkish <gnome-turk@gnome.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-9\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gtk/gtkcolorsel.c:221
+msgid "Hue:"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:222
+msgid "Saturation:"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:223
+msgid "Value:"
+msgstr "Deðer"
+
+#: gtk/gtkcolorsel.c:224
+msgid "Red:"
+msgstr "Kýrmýzý"
+
+#: gtk/gtkcolorsel.c:225
+msgid "Green:"
+msgstr "Yeþil"
+
+#: gtk/gtkcolorsel.c:226
+msgid "Blue:"
+msgstr "Mavi"
+
+#: gtk/gtkcolorsel.c:227
+msgid "Opacity:"
+msgstr ""
+
+#. The OK button
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:481 gtk/gtkfontsel.c:3501
+#: gtk/gtkgamma.c:416
+msgid "OK"
+msgstr "Tamam"
+
+#. The Cancel button
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:488 gtk/gtkfilesel.c:868
+#: gtk/gtkfilesel.c:968 gtk/gtkfilesel.c:1083 gtk/gtkfontsel.c:3514
+#: gtk/gtkgamma.c:424
+msgid "Cancel"
+msgstr "Iptal"
+
+#: gtk/gtkcolorsel.c:1738
+msgid "Help"
+msgstr "Yardým"
+
+#. The directories clist
+#: gtk/gtkfilesel.c:430
+msgid "Directories"
+msgstr "Dizinler"
+
+#. The files clist
+#: gtk/gtkfilesel.c:449
+msgid "Files"
+msgstr "Dosyalar"
+
+#: gtk/gtkfilesel.c:519 gtk/gtkfilesel.c:1478
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "Dizin okunamýyor: %s"
+
+#: gtk/gtkfilesel.c:551
+msgid "Create Dir"
+msgstr "Dizin yarat"
+
+#: gtk/gtkfilesel.c:562 gtk/gtkfilesel.c:937
+msgid "Delete File"
+msgstr "Dosyayý sil"
+
+#: gtk/gtkfilesel.c:573 gtk/gtkfilesel.c:1041
+msgid "Rename File"
+msgstr "Dosyayý yeniden adlandýr"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:734
+msgid "Error"
+msgstr "Hata"
+
+#. close button
+#: gtk/gtkfilesel.c:757 gtk/gtkinputdialog.c:354
+msgid "Close"
+msgstr "Kapat"
+
+#: gtk/gtkfilesel.c:832
+msgid "Create Directory"
+msgstr "Dizin yarat"
+
+#: gtk/gtkfilesel.c:846
+msgid "Directory name:"
+msgstr "Dizin adý"
+
+#. buttons
+#: gtk/gtkfilesel.c:859
+msgid "Create"
+msgstr "Yarat"
+
+#. buttons
+#: gtk/gtkfilesel.c:959
+msgid "Delete"
+msgstr "Sil"
+
+#. buttons
+#: gtk/gtkfilesel.c:1074
+msgid "Rename"
+msgstr "Yeniden adlandýr"
+
+#: gtk/gtkfilesel.c:1457
+msgid "Selection: "
+msgstr ""
+
+#: gtk/gtkfontsel.c:210
+msgid "Foundry:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:211
+msgid "Family:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:212
+msgid "Weight:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:213
+msgid "Slant:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:214
+msgid "Set Width:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:215
+msgid "Add Style:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:216
+msgid "Pixel Size:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:217
+msgid "Point Size:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:218
+msgid "Resolution X:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:219
+msgid "Resolution Y:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:220
+msgid "Spacing:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:221
+msgid "Average Width:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:222
+msgid "Charset:"
+msgstr "Karakter kümesi:"
+
+#. Number of internationalized titles here must match number
+#. of NULL initializers above
+#: gtk/gtkfontsel.c:459
+msgid "Font Property"
+msgstr ""
+
+#: gtk/gtkfontsel.c:460
+msgid "Requested Value"
+msgstr ""
+
+#: gtk/gtkfontsel.c:461
+msgid "Actual Value"
+msgstr ""
+
+#: gtk/gtkfontsel.c:494
+msgid "Font"
+msgstr "Yazý tipi"
+
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2180 gtk/gtkfontsel.c:2410
+msgid "Font:"
+msgstr "Yazý tipi:"
+
+#: gtk/gtkfontsel.c:509
+msgid "Font Style:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:514
+msgid "Size:"
+msgstr "Boyut:"
+
+#: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
+msgid "Reset Filter"
+msgstr ""
+
+#: gtk/gtkfontsel.c:660
+msgid "Metric:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:664
+msgid "Points"
+msgstr ""
+
+#: gtk/gtkfontsel.c:671
+msgid "Pixels"
+msgstr ""
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:687
+msgid "Preview:"
+msgstr "Önizleme:"
+
+#: gtk/gtkfontsel.c:716
+msgid "Font Information"
+msgstr "Yazý tipi bilgileri"
+
+#: gtk/gtkfontsel.c:749
+msgid "Requested Font Name:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:760
+msgid "Actual Font Name:"
+msgstr ""
+
+#: gtk/gtkfontsel.c:771
+#, c-format
+msgid "%i fonts available with a total of %i styles."
+msgstr ""
+
+#: gtk/gtkfontsel.c:786
+msgid "Filter"
+msgstr "Filtra"
+
+#: gtk/gtkfontsel.c:799
+msgid "Font Types:"
+msgstr "Yazý tipleri"
+
+#: gtk/gtkfontsel.c:807
+msgid "Bitmap"
+msgstr ""
+
+#: gtk/gtkfontsel.c:813
+msgid "Scalable"
+msgstr ""
+
+#: gtk/gtkfontsel.c:819
+msgid "Scaled Bitmap"
+msgstr ""
+
+#: gtk/gtkfontsel.c:890
+msgid "*"
+msgstr "*"
+
+#. Convert '(nil)' weights to 'regular', since it looks nicer.
+#: gtk/gtkfontsel.c:1215
+msgid "(nil)"
+msgstr "(sýfýr)"
+
+#: gtk/gtkfontsel.c:1215
+msgid "regular"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1972
+msgid "italic"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1973
+msgid "oblique"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1974
+msgid "reverse italic"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1975
+msgid "reverse oblique"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1976
+msgid "other"
+msgstr "baþka"
+
+#: gtk/gtkfontsel.c:1231
+msgid "[M]"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1232
+msgid "[C]"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1792
+msgid "The selected font is not available."
+msgstr "Seçili yazý tipi eriþilir deðil."
+
+#: gtk/gtkfontsel.c:1798
+msgid "The selected font is not a valid font."
+msgstr "Seçili yazý tipi geçerli bir yazý tipi deðildir."
+
+#: gtk/gtkfontsel.c:1856
+msgid "This is a 2-byte font and may not be displayed correctly."
+msgstr ""
+"Yazý tipi bir 2 bayt yazý tipidir ve tamamen uygun olarak "
+"gösterilmeyebilir."
+
+#: gtk/gtkfontsel.c:1960 gtk/gtkinputdialog.c:607
+msgid "(unknown)"
+msgstr "(tanýnmýyor)"
+
+#: gtk/gtkfontsel.c:1971
+msgid "roman"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1983
+msgid "proportional"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1984
+msgid "monospaced"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1985
+msgid "char cell"
+msgstr ""
+
+#: gtk/gtkfontsel.c:2185
+msgid "Font: (Filter Applied)"
+msgstr ""
+
+#: gtk/gtkfontsel.c:2661
+msgid "MAX_FONTS exceeded. Some fonts may be missing."
+msgstr "MAX_FONTS deðerine ulaþýldý. Bazi yazý tipleri eksik olabilir."
+
+#: gtk/gtkfontsel.c:3508
+msgid "Apply"
+msgstr "Uygula"
+
+#: gtk/gtkfontsel.c:3530
+msgid "Font Selection"
+msgstr "Yazý tipi seçimi"
+
+#: gtk/gtkgamma.c:396
+msgid "Gamma"
+msgstr "Gamma"
+
+#: gtk/gtkgamma.c:403
+msgid "Gamma value"
+msgstr "Gamma deðeri"
+
+#. shell and main vbox
+#: gtk/gtkinputdialog.c:200
+msgid "Input"
+msgstr "Giriþ"
+
+#: gtk/gtkinputdialog.c:208
+msgid "No input devices"
+msgstr "Giriþ aygýtlarý"
+
+#: gtk/gtkinputdialog.c:237
+msgid "Device:"
+msgstr "Aygýt"
+
+#: gtk/gtkinputdialog.c:253
+msgid "Disabled"
+msgstr "Kapalý"
+
+#: gtk/gtkinputdialog.c:261
+msgid "Screen"
+msgstr "Ekran"
+
+#: gtk/gtkinputdialog.c:269
+msgid "Window"
+msgstr "Pencere"
+
+#: gtk/gtkinputdialog.c:277
+msgid "Mode: "
+msgstr ""
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:307
+msgid "Axes"
+msgstr "Eksenler"
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:323
+msgid "Keys"
+msgstr "Tuþlar"
+
+#. We create the save button in any case, so that clients can
+#. connect to it, without paying attention to whether it exits
+#: gtk/gtkinputdialog.c:345
+msgid "Save"
+msgstr "Kaydet"
+
+#: gtk/gtkinputdialog.c:500
+msgid "X"
+msgstr "X"
+
+#: gtk/gtkinputdialog.c:501
+msgid "Y"
+msgstr "Y"
+
+#: gtk/gtkinputdialog.c:502
+msgid "Pressure"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:503
+msgid "X Tilt"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:504
+msgid "Y Tilt"
+msgstr ""
+
+#: gtk/gtkinputdialog.c:544
+msgid "none"
+msgstr "yok"
+
+#: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
+msgid "(disabled)"
+msgstr "(kapalý)"
+
+#. and clear button
+#: gtk/gtkinputdialog.c:692
+msgid "clear"
+msgstr "temizle"
+
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
+#, c-format
+msgid "Page %u"
+msgstr "Sayfa %u"
+
+#: gtk/gtkrc.c:1702
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr ""
+
+#: gtk/gtkrc.c:1705
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr ""
+
+#: gtk/gtkthemes.c:79
+#, c-format
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr ""
+
+#: gtk/gtktipsquery.c:180
+msgid "--- No Tip ---"
+msgstr "--- Yardým yok ---"
+
