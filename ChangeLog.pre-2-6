@@ -1,3 +1,10 @@
+Thu May 16 12:50:13 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_xsettings_notify_cb):
+	gdk_event_put() copies the event and setting name,
+	so we don't have to strdup() it here. (Fix from
+	Michael Meeks, #81953)
+
 2002-05-16  Ettore Perazzoli  <ettore@ximian.com>
 
 	* gtk/gtkmenu.c (gtk_menu_paint): If the menu is scrolled down or

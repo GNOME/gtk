@@ -2257,7 +2257,7 @@ gdk_xsettings_notify_cb (const char       *name,
   for (i = 0; i < G_N_ELEMENTS (settings_map) ; i++)
     if (strcmp (settings_map[i].xsettings_name, name) == 0)
       {
-	new_event.setting.name = g_strdup (settings_map[i].gdk_name);
+	new_event.setting.name = settings_map[i].gdk_name;
 	break;
       }
 
