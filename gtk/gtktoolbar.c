@@ -158,6 +158,7 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   container_class->add = gtk_toolbar_add;
   container_class->remove = gtk_toolbar_remove;
   container_class->foreach = gtk_toolbar_foreach;
+  container_class->focus = NULL;
 
   class->orientation_changed = gtk_real_toolbar_orientation_changed;
   class->style_changed = gtk_real_toolbar_style_changed;

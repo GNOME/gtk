@@ -1,5 +1,10 @@
 Mon Jan 19 16:21:00 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
 
+	* gtk/gtktoolbar.c (gtk_toolbar_class_init): Set
+	container_class->focus to NULL.  Widgets in the toolbar should not
+	get the focus via the normal key bindings (no toolkit does this,
+	and it makes sense).
+
 	* gtk/testgtk.c (create_toolbar): Removed the GTK_PIXMAP casts to
 	match Eckehard's new prototypes.
 
