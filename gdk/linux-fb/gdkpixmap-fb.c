@@ -112,15 +112,15 @@ _gdk_pixmap_impl_get_type (void)
 }
 
 GdkPixmap*
-gdk_pixmap_new (GdkWindow *window,
-		gint       width,
-		gint       height,
-		gint       depth)
+gdk_pixmap_new (GdkDrawable *window,
+		gint         width,
+		gint         height,
+		gint         depth)
 {
   GdkPixmap *pixmap;
   GdkDrawableFBData *private;
 
-  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (window == NULL || GDK_IS_DRAWABLE (window), NULL);
   g_return_val_if_fail ((window != NULL) || (depth != -1), NULL);
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
   
@@ -148,7 +148,7 @@ gdk_pixmap_new (GdkWindow *window,
 }
 
 GdkPixmap *
-gdk_bitmap_create_from_data (GdkWindow   *window,
+gdk_bitmap_create_from_data (GdkDrawable *window,
 			     const gchar *data,
 			     gint         width,
 			     gint         height)
@@ -157,7 +157,7 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
 
   g_return_val_if_fail (data != NULL, NULL);
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
-  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (window == NULL || GDK_IS_DRAWABLE (window), NULL);
 
   if (!window)
     window = _gdk_parent_root;
@@ -170,7 +170,7 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
 }
 
 GdkPixmap*
-gdk_pixmap_create_from_data (GdkWindow   *window,
+gdk_pixmap_create_from_data (GdkDrawable *window,
 			     const gchar *data,
 			     gint         width,
 			     gint         height,
@@ -180,7 +180,7 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
 {
   GdkPixmap *pixmap;
 
-  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (window == NULL || GDK_IS_DRAWABLE (window), NULL);
   g_return_val_if_fail (data != NULL, NULL);
   g_return_val_if_fail (fg != NULL, NULL);
   g_return_val_if_fail (bg != NULL, NULL);

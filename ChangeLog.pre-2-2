@@ -1,3 +1,23 @@
+Tue Dec 10 00:49:35 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gdk/gdkpixmap.h (gdk_pixmap_new), (gdk_bitmap_create_from_data),
+	(gdk_pixmap_create_from_xpm), (gdk_pixmap_colormap_create_from_xpm),
+	(gdk_pixmap_create_from_xpm_d),
+	(gdk_pixmap_colormap_create_from_xpm_d): update to allow a
+	GdkDrawable instead of a GdkWindow.
+
+	* gdk/gdkpixmap.c (gdk_pixmap_colormap_create_from_xpm),
+	(gdk_pixmap_create_from_xpm), (gdk_pixmap_colormap_create_from_xpm_d),
+	(gdk_pixmap_create_from_xpm_d): update to allow a GdkDrawable
+	instead of a GdkWindow.
+
+	* gdk/linux-fb/gdkpixmap-fb.c (gdk_pixmap_new),
+	(gdk_bitmap_create_from_data), (gdk_pixmap_create_from_data): update
+	to allow a GdkDrawable instead of a GdkWindow.
+
+	* gdk/x11/gdkpixmap-x11.c (gdk_pixmap_new),
+	(gdk_bitmap_create_from_data), (gdk_pixmap_create_from_data): likewise
+
 Mon Dec  9 17:31:06 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkiconfactory.c (icon_size_lookup_intern): Remove

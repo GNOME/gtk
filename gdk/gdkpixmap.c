@@ -551,7 +551,7 @@ gdk_pixmap_colormap_new_from_pixbuf (GdkColormap *colormap,
 }
 
 GdkPixmap*
-gdk_pixmap_colormap_create_from_xpm (GdkWindow   *window,
+gdk_pixmap_colormap_create_from_xpm (GdkDrawable *drawable,
 				     GdkColormap *colormap,
 				     GdkBitmap  **mask,
 				     GdkColor    *transparent_color,
@@ -560,12 +560,12 @@ gdk_pixmap_colormap_create_from_xpm (GdkWindow   *window,
   GdkPixbuf *pixbuf;
   GdkPixmap *pixmap;
 
-  g_return_val_if_fail (window != NULL || colormap != NULL, NULL);
-  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (drawable != NULL || colormap != NULL, NULL);
+  g_return_val_if_fail (drawable == NULL || GDK_IS_DRAWABLE (drawable), NULL);
   g_return_val_if_fail (colormap == NULL || GDK_IS_COLORMAP (colormap), NULL);
 
   if (colormap == NULL)
-    colormap = gdk_drawable_get_colormap (window);
+    colormap = gdk_drawable_get_colormap (drawable);
   
   pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
   if (!pixbuf)
@@ -579,17 +579,17 @@ gdk_pixmap_colormap_create_from_xpm (GdkWindow   *window,
 }
 
 GdkPixmap*
-gdk_pixmap_create_from_xpm (GdkWindow  *window,
-			    GdkBitmap **mask,
-			    GdkColor   *transparent_color,
+gdk_pixmap_create_from_xpm (GdkDrawable *drawable,
+			    GdkBitmap  **mask,
+			    GdkColor    *transparent_color,
 			    const gchar *filename)
 {
-  return gdk_pixmap_colormap_create_from_xpm (window, NULL, mask,
+  return gdk_pixmap_colormap_create_from_xpm (drawable, NULL, mask,
 					      transparent_color, filename);
 }
 
 GdkPixmap*
-gdk_pixmap_colormap_create_from_xpm_d (GdkWindow  *window,
+gdk_pixmap_colormap_create_from_xpm_d (GdkDrawable *drawable,
 				       GdkColormap *colormap,
 				       GdkBitmap **mask,
 				       GdkColor   *transparent_color,
@@ -598,12 +598,12 @@ gdk_pixmap_colormap_create_from_xpm_d (GdkWindow  *window,
   GdkPixbuf *pixbuf;
   GdkPixmap *pixmap;
 
-  g_return_val_if_fail (window != NULL || colormap != NULL, NULL);
-  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (drawable != NULL || colormap != NULL, NULL);
+  g_return_val_if_fail (drawable == NULL || GDK_IS_DRAWABLE (drawable), NULL);
   g_return_val_if_fail (colormap == NULL || GDK_IS_COLORMAP (colormap), NULL);
 
   if (colormap == NULL)
-    colormap = gdk_drawable_get_colormap (window);
+    colormap = gdk_drawable_get_colormap (drawable);
   
   pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **)data);
   if (!pixbuf)
@@ -617,12 +617,12 @@ gdk_pixmap_colormap_create_from_xpm_d (GdkWindow  *window,
 }
 
 GdkPixmap*
-gdk_pixmap_create_from_xpm_d (GdkWindow  *window,
-			      GdkBitmap **mask,
-			      GdkColor   *transparent_color,
-			      gchar     **data)
+gdk_pixmap_create_from_xpm_d (GdkDrawable *drawable,
+			      GdkBitmap  **mask,
+			      GdkColor    *transparent_color,
+			      gchar      **data)
 {
-  return gdk_pixmap_colormap_create_from_xpm_d (window, NULL, mask,
+  return gdk_pixmap_colormap_create_from_xpm_d (drawable, NULL, mask,
 						transparent_color, data);
 }
 
