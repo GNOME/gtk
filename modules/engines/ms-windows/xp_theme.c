@@ -29,7 +29,7 @@
 
 #include <stdio.h>
 
-static LPCWSTR class_descriptors[] =
+static const LPCWSTR class_descriptors[] =
 {
   L"Scrollbar",
   L"Button",
