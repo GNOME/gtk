@@ -1109,7 +1109,9 @@ gtk_tree_view_column_get_cell_info (GtkTreeViewColumn *tree_column,
  * @tree_column: A #GtkTreeViewColumn.
  * @cell: The #GtkCellRenderer. 
  * @expand: %TRUE if @cell is to be given extra space allocated to box.
- * 
+ *
+ * Packs the @cell into the beginning column.  If @expand is %TRUE, then the
+ * @cell is allocated a share of all available space that the @tree_column has.
  **/
 void
 gtk_tree_view_column_pack_start (GtkTreeViewColumn *tree_column,
@@ -1135,6 +1137,15 @@ gtk_tree_view_column_pack_start (GtkTreeViewColumn *tree_column,
   tree_column->cell_list = g_list_append (tree_column->cell_list, cell_info);
 }
 
+/**
+ * gtk_tree_view_column_pack_end:
+ * @tree_column: A #GtkTreeViewColumn.
+ * @cell: The #GtkCellRenderer. 
+ * @expand: %TRUE if @cell is to be given extra space allocated to box.
+ *
+ * Packs the @cell into the column.  If @expand is %TRUE, then the @cell is
+ * allocated a share of all available space that the @tree_column has.
+ **/
 void
 gtk_tree_view_column_pack_end (GtkTreeViewColumn  *tree_column,
 			       GtkCellRenderer    *cell,
@@ -1455,6 +1466,16 @@ gtk_tree_view_column_get_visible (GtkTreeViewColumn *tree_column)
   return tree_column->visible;
 }
 
+/**
+ * gtk_tree_view_column_set_resizable:
+ * @tree_column: A #GtkTreeViewColumn
+ * @resizable: %TRUE, if the column can be resized
+ * 
+ * If @resizable is %TRUE, then the user can explicitly resize the column by
+ * grabbing the outer edge of the column button.  If the sizing mode of the
+ * column is #GTK_TREE_VIEW_COLUMN_AUTOSIZE, then it is changed to
+ * #GTK_TREE_VIEW_COLUMN_GROW_ONLY.
+ **/
 void
 gtk_tree_view_column_set_resizable (GtkTreeViewColumn *tree_column,
 				    gboolean           resizable)
@@ -1476,6 +1497,14 @@ gtk_tree_view_column_set_resizable (GtkTreeViewColumn *tree_column,
   g_object_notify (G_OBJECT (tree_column), "resizable");
 }
 
+/**
+ * gtk_tree_view_column_get_resizable:
+ * @tree_column: A #GtkTreeViewColumn
+ * 
+ * Returns #TRUE if the @tree_column can be resized by the end user.
+ * 
+ * Return value: #TRUE, if the @tree_column can be resized.
+ **/
 gboolean
 gtk_tree_view_column_get_resizable (GtkTreeViewColumn *tree_column)
 {
@@ -1898,6 +1927,14 @@ gtk_tree_view_column_get_alignment (GtkTreeViewColumn *tree_column)
   return tree_column->xalign;
 }
 
+/**
+ * gtk_tree_view_column_set_reorderable:
+ * @tree_column: A #GtkTreeViewColumn
+ * @reorderable: #TRUE, if the column can be reordered.
+ * 
+ * If @reorderable is #TRUE, then the column can be reordered by the end user
+ * dragging the header.
+ **/
 void
 gtk_tree_view_column_set_reorderable (GtkTreeViewColumn *tree_column,
 				      gboolean           reorderable)
@@ -1915,6 +1952,14 @@ gtk_tree_view_column_set_reorderable (GtkTreeViewColumn *tree_column,
   g_object_notify (G_OBJECT (tree_column), "reorderable");
 }
 
+/**
+ * gtk_tree_view_column_get_reorderable:
+ * @tree_column: A #GtkTreeViewColumn
+ * 
+ * Returns #TRUE if the @tree_column can be reordered by the user.
+ * 
+ * Return value: #TRUE if the @tree_column can be reordered by the user.
+ **/
 gboolean
 gtk_tree_view_column_get_reorderable (GtkTreeViewColumn *tree_column)
 {
@@ -2489,6 +2534,16 @@ _gtk_tree_view_column_cell_draw_focus (GtkTreeViewColumn       *tree_column,
     }
 }
 
+/**
+ * gtk_tree_view_column_cell_is_visible:
+ * @tree_column: A #GtkTreeViewColumn
+ * 
+ * Returns #TRUE if any of the cells packed into the @tree_column are visible.
+ * For this to be meaningful, you must first initialize the cells with
+ * gtk_tree_view_column_cell_set_cell_data()
+ * 
+ * Return value: #TRUE, if any of the cells packed into the @tree_column are currently visible
+ **/
 gboolean
 gtk_tree_view_column_cell_is_visible (GtkTreeViewColumn *tree_column)
 {

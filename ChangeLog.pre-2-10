@@ -1,3 +1,9 @@
+Sat Feb 23 00:28:47 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviecolumn.c: Documented undocumented functions.
+
+	* gtk/gtktreemodel.c: Documented undocumented functions.
+
 Sat Feb 23 03:10:20 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_key_press): honor min_width and
