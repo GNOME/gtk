@@ -1,7 +1,7 @@
 /* gtktreeview.c
  * Copyright (C) 2000  Red Hat, Inc.,  Jonathan Blandford <jrb@redhat.com>
  *
- This library is free software; you can redistribute it and/or
+ * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
@@ -945,7 +945,7 @@ gtk_tree_view_get_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_MODEL:
-      g_value_set_object (value, G_OBJECT (tree_view->priv->model));
+      g_value_set_object (value, tree_view->priv->model);
       break;
     case PROP_HADJUSTMENT:
       g_value_set_object (value, G_OBJECT (tree_view->priv->hadjustment));
@@ -957,7 +957,7 @@ gtk_tree_view_get_property (GObject         *object,
       g_value_set_boolean (value, gtk_tree_view_get_headers_visible (tree_view));
       break;
     case PROP_EXPANDER_COLUMN:
-      g_value_set_object (value, G_OBJECT (tree_view->priv->expander_column));
+      g_value_set_object (value, tree_view->priv->expander_column);
       break;
     case PROP_REORDERABLE:
       g_value_set_boolean (value, tree_view->priv->reorderable);

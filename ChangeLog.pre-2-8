@@ -1,3 +1,9 @@
+Sat Oct 20 18:16:04 2001  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtktreeview.c (gtk_treeview_get_property): PROP_MODEL and
+	PROP_EXPANDER_COLUMN can be NULL, so don't do a object case check
+	for those
+
 Sat Oct 20 19:38:16 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* demos/*.c demos/gdk-pixbuf/*.c: Eliminate gtk_signal_*
