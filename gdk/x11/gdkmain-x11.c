@@ -269,7 +269,7 @@ gdk_init (int    *argc,
 
 #ifdef G_ENABLE_DEBUG
   gboolean debug_set = FALSE;
-#endif
+#endif /* G_ENABLE_DEBUG */
 
   argv_orig = malloc ((argc_orig + 1) * sizeof (char*));
   for (i = 0; i < argc_orig; i++)
@@ -447,7 +447,7 @@ gdk_init (int    *argc,
 						gdk_debug_keys,
 			        sizeof(gdk_debug_keys) / sizeof(GDebugKey));
     }
-#endif
+#endif	/* G_ENABLE_DEBUG */
 
   gdk_display = XOpenDisplay (gdk_display_name);
   if (!gdk_display)

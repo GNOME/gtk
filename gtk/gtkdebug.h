@@ -30,7 +30,7 @@ typedef enum {
 
 #define GTK_NOTE(type,action)                G_STMT_START { \
     if (gtk_debug_flags & GTK_DEBUG_##type)                 \
-       action;                               } G_STMT_END
+       { action; };                          } G_STMT_END
 
 #else /* !G_ENABLE_DEBUG */
 

@@ -246,8 +246,8 @@ void	gtk_object_setv		(GtkObject	*object,
 
 /* Allocate a GtkArg array of size nargs that hold the
  * names and types of the args that can be used with
- * gtk_object_set/gtk_object_get. if (*acess_masks!=NULL)
- * the pointer will be set to point to a newly allocated
+ * gtk_object_set/gtk_object_get. if (acess_masks!=NULL),
+ * (*access_mask) will be set to point to a newly allocated
  * guint array that holds the access masks of the args.
  * It is the callers response to do a
  * g_free (returned_args); g_free (*acess_masks).
@@ -300,7 +300,7 @@ void gtk_object_set_user_data (GtkObject *object,
 			       gpointer   data);
 
 /* Get the "user_data" object data field of "object". It should
- *  be noted that this is no different than calling 'gtk_object_data_find'
+ *  be noted that this is no different than calling 'gtk_object_get_data'
  *  with a key of "user_data". It is merely provided as a convenience.
  */
 gpointer gtk_object_get_user_data (GtkObject *object);
@@ -320,7 +320,7 @@ void	gtk_trace_referencing	(gpointer    *object,
 #if G_ENABLE_DEBUG && defined (__GNUC__)
 #  define gtk_object_ref(o)   G_STMT_START{static guint f=0;gtk_trace_referencing((gpointer)o,__PRETTY_FUNCTION__,++f,__LINE__, 1);f--;}G_STMT_END
 #  define gtk_object_unref(o) G_STMT_START{static guint f=0;gtk_trace_referencing((gpointer)o,__PRETTY_FUNCTION__,++f,__LINE__, 0);f--;}G_STMT_END
-#endif	/* GTK_TRACE_OBJECTS && __GNUC__ */
+#endif	/* G_ENABLE_DEBUG && __GNUC__ */
 
 
 

@@ -231,7 +231,7 @@ extern gint              gdk_error_warnings;
 
 #define GDK_NOTE(type,action)                G_STMT_START { \
     if (gdk_debug_flags & GDK_DEBUG_##type)                 \
-       action;                               } G_STMT_END
+       { action; };                          } G_STMT_END
 
 #else /* !G_ENABLE_DEBUG */
 
