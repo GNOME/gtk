@@ -1,3 +1,8 @@
+2004-08-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* pixops/pixops.c: Make scaling and compositing functions handle
+	edge pixels consistently.  (#111922, Brian Cameron)
+
 Sun Aug  1 23:57:06 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* io-pcx.c (pcx_increment_load_data_1): Fix progressive
