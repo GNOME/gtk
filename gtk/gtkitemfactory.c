@@ -968,7 +968,10 @@ gtk_item_factory_parse_path (GtkItemFactory *ifactory,
     translation = str;
 			      
   p = strrchr (translation, '/');
-  p++;
+  if (p)
+    p++;
+  else
+    p = translation;
 
   *item = g_strdup (p);
 

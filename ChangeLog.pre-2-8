@@ -1,3 +1,9 @@
+Tue Nov 16 10:15:54 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_parse_path):
+	If translation does not include a '/', use entire
+	translation instead of crashing.
+
 Mon Nov 15 17:17:51 GMT 1999 Tony Gale  <gale@gtk.org>
 
         * docs/gtkfaq.sgml: s/gtk_main_iteration/g_main_iteration/
@@ -2853,7 +2859,7 @@ Wed Jan 27 20:08:54 1999  Owen Taylor  <otaylor@redhat.com>
 
 Wed Jan 27 20:06:06 1999  Owen Taylor  <otaylor@redhat.com>
 
-	* gtk/gtklayout.c (gtk_layout_adjustment_changed):
+	* gtk/gtklayout .c (gtk_layout_adjustment_changed):
 	Removed some g_print()'s
 
 Wed Jan 27 18:57:57 1999  Owen Taylor  <otaylor@redhat.com>
