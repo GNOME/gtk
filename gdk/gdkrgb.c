@@ -441,7 +441,7 @@ gdk_rgb_score_visual (GdkVisual *visual)
 
   sys = (visual == gdk_visual_get_system ());
 
-  pseudo = (visual->type == GDK_VISUAL_PSEUDO_COLOR);
+  pseudo = (visual->type == GDK_VISUAL_PSEUDO_COLOR || visual->type == GDK_VISUAL_TRUE_COLOR);
 
   if (gdk_rgb_verbose)
     g_print ("Visual 0x%x, type = %s, depth = %d, %x:%x:%x%s; score=%x\n",
@@ -2470,7 +2470,7 @@ gdk_rgb_select_conv (GdkImage *image)
   else if (vtype == GDK_VISUAL_TRUE_COLOR && byte_order == GDK_MSB_FIRST)
     {
       conv = gdk_rgb_convert_truecolor_msb;
-      conv = gdk_rgb_convert_truecolor_msb_d;
+      conv_d = gdk_rgb_convert_truecolor_msb_d;
     }
   else if (bpp == 1 && depth == 8 && (vtype == GDK_VISUAL_PSEUDO_COLOR
 #ifdef ENABLE_GRAYSCALE

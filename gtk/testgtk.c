@@ -7683,6 +7683,8 @@ main (int argc, char *argv[])
 
   gtk_init (&argc, &argv);
 
+  gdk_rgb_init ();
+
   /* bindings test
    */
   binding_set = gtk_binding_set_by_class (gtk_type_class (GTK_TYPE_WIDGET));
