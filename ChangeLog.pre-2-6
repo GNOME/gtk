@@ -1,3 +1,15 @@
+Sat Aug  7 01:26:08 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Make the column drag code a bit more robust (still scary, 
+	though).  (#106992, Christian Biere)
+	
+	* gtk/gtktreeview.c (_gtk_tree_view_column_start_drag): Assert
+	that cur_reorder is NULL here.
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_release_drag_column): 
+	Reset cur_reorder to NULL, and only hide drag_highlight_window 
+	if it exists.  
+
 2004-08-06  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #144232:

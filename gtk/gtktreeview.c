@@ -2559,8 +2559,10 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
   g_list_foreach (tree_view->priv->column_drag_info, (GFunc) g_free, NULL);
   g_list_free (tree_view->priv->column_drag_info);
   tree_view->priv->column_drag_info = NULL;
+  tree_view->priv->cur_reorder = NULL;
 
-  gdk_window_hide (tree_view->priv->drag_highlight_window);
+  if (tree_view->priv->drag_highlight_window)
+    gdk_window_hide (tree_view->priv->drag_highlight_window);
 
   /* Reset our flags */
   tree_view->priv->drag_column_window_state = DRAG_COLUMN_WINDOW_STATE_UNSET;
@@ -8049,6 +8051,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   GdkDisplay *display = gdk_screen_get_display (screen);
 
   g_return_if_fail (tree_view->priv->column_drag_info == NULL);
+  g_return_if_fail (tree_view->priv->cur_reorder == NULL);
 
   gtk_tree_view_set_column_drag_info (tree_view, column);
 
@@ -8141,7 +8144,6 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   gdk_keyboard_grab (tree_view->priv->drag_window,
 		     FALSE,
 		     GDK_CURRENT_TIME);
-
 }
 
 static void
