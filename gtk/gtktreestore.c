@@ -248,7 +248,7 @@ gtk_tree_store_init (GtkTreeStore *tree_store)
     {
       tree_store->stamp = g_random_int ();
     }
-  while (tree_store->stamp != 0);
+  while (tree_store->stamp == 0);
   tree_store->sort_list = NULL;
   tree_store->sort_column_id = -2;
 }

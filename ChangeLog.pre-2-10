@@ -1,3 +1,8 @@
+2001-09-10  Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtktreestore.c:
+	Fix looping in gtk_tree_store_init() waiting for zero random int.
+
 Mon Sep 10 16:55:49 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkalignment.c (gtk_alignment_init): fix xscale and yscale
