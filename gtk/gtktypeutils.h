@@ -126,9 +126,17 @@ typedef struct _GtkTypeObject	GtkTypeObject;
 typedef struct _GtkTypeClass	GtkTypeClass;
 
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
 /* Builtin Types
  */
 #include <gtk/gtktypebuiltins.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 #define		GTK_TYPE_IDENTIFIER		(gtk_identifier_get_type ())
 GtkType		gtk_identifier_get_type		(void);

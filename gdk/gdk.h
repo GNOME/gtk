@@ -998,11 +998,10 @@ void     gdk_threads_leave                (void);
 #  define GDK_THREADS_LEAVE()
 #endif	/* !G_THREADS_ENABLED */
 
-#include <gdk/gdkrgb.h>
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
+#include <gdk/gdkrgb.h>
 
 #endif /* __GDK_H__ */
