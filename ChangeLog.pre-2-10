@@ -18,8 +18,8 @@
 	inspect the contents of a nonexistent floppy will cause errors
 	later that are handled normally, no need to avoid them
 	completely. Keep the drive type in the GtkFileSystemVolume.
-	Support UNC paths. (#161797) Fix error message capitalizations
-	as in gtkfilesystemunix.c.
+	Support UNC paths. (#161797, #137874) Fix error message
+	capitalizations as in gtkfilesystemunix.c.
 
 	(gtk_file_system_win32_init): Start one timeout per
 	GtkFileSystemWin32.
