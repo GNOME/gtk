@@ -3,10 +3,6 @@ For 1.2.0 release:
 	non-functional ones.
 	
 Bugs:
- * Widget redrawing when the window resizes sometimes messes up.
-   GtkLabels sometimes redraw without clearing up the underlying background on
-   window resizes.
-
  * Change bitfields to guints from enums, or vice versa?
 
  * MappingNotify events produce warnings.
@@ -17,39 +13,10 @@ Bugs:
    types seperatedly from derived types, so we don't screw foreign
    fundamental types with an already extensively increased seqno.
  
- * Expose events aren't being generated correctly for DND demo
-
- * delay dnd settings to take effect once a widget is realized, this is
-   to avoid force realizations. i think this goes along with owens dnd
-   changes?
-    -timj
-   The way DND data types are set in GtkWidget really needs to be fixed.
-   This is pretty high on my priority list, and I'll get to it as soon as
-   the column list widget is done.  The correct way dnd data needs to be set
-   is to have a additional keyed data type with GtkWidget, which is applied to
-   the widget's window upon realize.
-   There also needs to be a way to set dnd-data on widget windows which are
-   not the main window (for widgets that create more than one window).
-    -Jay Painter
-   DnD seems to work for me, but yes, there needs to be some sort of
-   gtk_widget layer that makes it easier... Also, adding support for drop
-   zones might be nice.
-    -Elliot
-   This one is reproducabel for me:
-   testgtk --sync
-   popup colorselection
-   drag/drop works
-   start up preview color
-   drag works but not dropping
-   end preview color
-   drag/drop works
-   start up prewiev color
-   segfault in malloc
-    -timj
+ * A filter function which destroys the GDK window it is filtering
+   events on is bad news.
 
 Additions:
- * implement keyboard navigation in menus
-
  * focus handling for GtkOptionMenu (needs the previous)
 
  * GScanner: it might be good to ues stdio and getch() instead of 1-character
@@ -282,9 +249,33 @@ Text/Edit widget:
 
   - Delete IC in editable->unrealize, not editable->finalize?
 
+Themes
+======
+
+ - When a scale gets shown/hidden only queue a redraw on the
+   non-window portion, not the whole area.
+
+ - In various places, to avoid shaping windows excessively,
+   we set parent relative backgrounds. This is an ugly
+   hack and needs a better solution. Plus, I don't think
+   these parent-relative backgrounds always persist to
+   when they are actually needed.
+
+   Such calls exist in: GtkButton, GtkHandeBox, GtkItem,
+   GtkListItem, GtkMenu, GtkMenuItem, GtkMisc, 
+   GtkNoteBook, GtkOptionMenu, GtkPaned, GtkPreview,
+   GtkSpinButton and GtkTreeItem.
+
+ - For menus and for GtkWindow's, the realize() function
+   calls paint(), so that background pixmaps can be set
+   ahead of time, and prevent flashing when the window is
+   shown. This is an ugly hack and needs a better solution.
+
+=======
+
 Calendar Widget:
 
- - The widget should be nicely resizeable vertical to.
+ - The widget should be nicely resizeable vertical too.
 
  - CALENDAR_MARGIN should be removed, uses INNER_BORDER and
    style->class->[xy]thickness insted.
@@ -315,3 +306,4 @@ DND
  - Send synthetic motion events on structure changes so 
    drag_enter/leave get sent properly. (See the popup
    in testdnd)
+

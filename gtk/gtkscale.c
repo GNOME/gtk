@@ -26,6 +26,9 @@
 
 static void gtk_scale_class_init      (GtkScaleClass *klass);
 static void gtk_scale_init            (GtkScale      *scale);
+static void gtk_scale_map             (GtkWidget     *widget);
+static void gtk_scale_unmap           (GtkWidget     *widget);
+
 static void gtk_scale_draw_background (GtkRange      *range);
 
 
@@ -61,12 +64,17 @@ static void
 gtk_scale_class_init (GtkScaleClass *class)
 {
   GtkObjectClass *object_class;
+  GtkWidgetClass *widget_class;
   GtkRangeClass *range_class;
 
   object_class = (GtkObjectClass*) class;
   range_class = (GtkRangeClass*) class;
+  widget_class = (GtkWidgetClass*) class;
 
   parent_class = gtk_type_class (gtk_range_get_type ());
+
+  widget_class->map = gtk_scale_map;
+  widget_class->unmap = gtk_scale_unmap;
 
   range_class->draw_background = gtk_scale_draw_background;
 
@@ -79,9 +87,44 @@ static void
 gtk_scale_init (GtkScale *scale)
 {
   GTK_WIDGET_SET_FLAGS (scale, GTK_CAN_FOCUS);
+  GTK_WIDGET_SET_FLAGS (scale, GTK_NO_WINDOW);
   GTK_RANGE (scale)->digits = 1;
   scale->draw_value = TRUE;
   scale->value_pos = GTK_POS_TOP;
+}
+
+static void
+gtk_scale_map (GtkWidget *widget)
+{
+  GtkRange *range;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_SCALE (widget));
+
+  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+  range = GTK_RANGE (widget);
+
+  if (GTK_WIDGET_NO_WINDOW (widget))
+    gtk_widget_queue_draw (widget);
+
+  gdk_window_show (range->trough);
+}
+
+static void
+gtk_scale_unmap (GtkWidget *widget)
+{
+  GtkRange *range;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_SCALE (widget));
+
+  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+  range = GTK_RANGE (widget);
+
+  if (GTK_WIDGET_NO_WINDOW (widget))
+     gtk_widget_queue_clear (widget);
+
+  gdk_window_hide (range->trough);
 }
 
 void

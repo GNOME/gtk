@@ -27,6 +27,7 @@
 #include "gtkmain.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
+#include "gtkstyle.h"
 #include "gtkprivate.h"
 
 #define MIN_ENTRY_WIDTH  150
@@ -564,8 +565,8 @@ gtk_entry_realize (GtkWidget *widget)
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, entry);
 
-  attributes.x = widget->style->klass->xthickness + INNER_BORDER;
-  attributes.y = widget->style->klass->ythickness + INNER_BORDER;
+  attributes.x = widget->style->klass->xthickness;
+  attributes.y = widget->style->klass->ythickness;
   attributes.width = widget->allocation.width - attributes.x * 2;
   attributes.height = widget->requisition.height - attributes.y * 2;
   attributes.cursor = entry->cursor = gdk_cursor_new (GDK_XTERM);
@@ -700,22 +701,18 @@ gtk_entry_draw_focus (GtkWidget *widget)
 	  width -= 2;
 	  height -= 2;
 	}
-      else
-	{
-	  gdk_draw_rectangle (widget->window, 
-			      widget->style->base_gc[GTK_WIDGET_STATE (widget)],
-			      FALSE, x + 2, y + 2, width - 5, height - 5);
-	}
 
-      gtk_draw_shadow (widget->style, widget->window,
-		       GTK_STATE_NORMAL, GTK_SHADOW_IN,
-		       x, y, width, height);
+      gtk_paint_shadow (widget->style, widget->window,
+			GTK_STATE_NORMAL, GTK_SHADOW_IN,
+			NULL, widget, "entry",
+			x, y, width, height);
 
       if (GTK_WIDGET_HAS_FOCUS (widget))
 	{
-	  gdk_window_get_size (widget->window, &width, &height);
-	  gdk_draw_rectangle (widget->window, widget->style->fg_gc[GTK_STATE_NORMAL],
-			      FALSE, 0, 0, width - 1, height - 1);
+	   gdk_window_get_size (widget->window, &width, &height);
+	   gtk_paint_focus (widget->style, widget->window, 
+			    NULL, widget, "entry",
+			    0, 0, width - 1, height - 1);
 	}
 
       if (GTK_EDITABLE (widget)->editable)
@@ -759,10 +756,10 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 			      allocation->y + (allocation->height - widget->requisition.height) / 2,
 			      allocation->width, widget->requisition.height);
       gdk_window_move_resize (entry->text_area,
-			      widget->style->klass->xthickness + INNER_BORDER,
-			      widget->style->klass->ythickness + INNER_BORDER,
-			      allocation->width - (widget->style->klass->xthickness + INNER_BORDER) * 2,
-			      widget->requisition.height - (widget->style->klass->ythickness + INNER_BORDER) * 2);
+			      widget->style->klass->xthickness,
+			      widget->style->klass->ythickness,
+			      allocation->width - widget->style->klass->xthickness * 2,
+			      widget->requisition.height - widget->style->klass->ythickness * 2);
 
       /* And make sure the cursor is on screen */
       gtk_entry_adjust_scroll (entry);
@@ -1273,7 +1270,11 @@ gtk_entry_draw_text (GtkEntry *entry)
 
       if (!entry->text)
 	{	  
-	  gdk_window_clear (entry->text_area);
+	  gtk_paint_flat_box (widget->style, entry->text_area,
+			      GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
+			      NULL, widget, "entry_bg", 
+			      0, 0, -1, -1);
+
 	  if (editable->editable)
 	    gtk_entry_draw_cursor (entry);
 	  return;
@@ -1289,21 +1290,18 @@ gtk_entry_draw_text (GtkEntry *entry)
       use_backing_pixmap = GTK_WIDGET_HAS_FOCUS (widget) && (entry->text != NULL);
       if (use_backing_pixmap)
 	{
-	  gtk_entry_make_backing_pixmap (entry, width, height);
-	  drawable = entry->backing_pixmap;
-	  gdk_draw_rectangle (drawable,
-			      widget->style->base_gc[GTK_WIDGET_STATE(widget)],
-			      TRUE,
-			      0, 0,
-			      width,
-			      height);
+	   gtk_entry_make_backing_pixmap (entry, width, height);
+	   drawable = entry->backing_pixmap;
 	}
-      else
-	{
-	  drawable = entry->text_area;
-	  gdk_window_clear (entry->text_area);
-	}
- 
+       else
+	 {
+	    drawable = entry->text_area;
+	 }
+       gtk_paint_flat_box (widget->style, drawable, 
+			   GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
+			   NULL, widget, "entry_bg", 
+			   0, 0, width, height);
+
       y = (height - (widget->style->font->ascent + widget->style->font->descent)) / 2;
       y += widget->style->font->ascent;
 
@@ -1358,37 +1356,35 @@ gtk_entry_draw_text (GtkEntry *entry)
       if (selection_start_pos > start_pos)
 	gdk_draw_text (drawable, widget->style->font,
 		       widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-		       start_xoffset, y,
+		       INNER_BORDER + start_xoffset, y,
 		       toprint,
 		       selection_start_pos - start_pos);
       
       if ((selection_end_pos >= start_pos) && 
 	  (selection_start_pos < end_pos) &&
 	  (selection_start_pos != selection_end_pos))
-	{
-	  gdk_draw_rectangle (drawable,
-			      widget->style->bg_gc[selected_state],
-			      TRUE,
-			      selection_start_xoffset,
-			      0,
-			      selection_end_xoffset - selection_start_xoffset,
-			      -1);
-	  
-	  gdk_draw_text (drawable, widget->style->font,
-			 widget->style->fg_gc[selected_state],
-			 selection_start_xoffset, y,
-			 toprint + selection_start_pos - start_pos,
-			 selection_end_pos - selection_start_pos);
-	}	    
-      
-      if (selection_end_pos < end_pos)
-	gdk_draw_text (drawable, widget->style->font,
-		       widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-		       selection_end_xoffset, y,
-		       toprint + selection_end_pos - start_pos,
-		       end_pos - selection_end_pos);
-      
-      /* free the space allocated for the stars if it's neccessary. */
+	 {
+	    gtk_paint_flat_box (widget->style, drawable, 
+				selected_state, GTK_SHADOW_NONE,
+				NULL, widget, "text",
+				INNER_BORDER + selection_start_xoffset,
+				INNER_BORDER,
+				selection_end_xoffset - selection_start_xoffset,
+				height - 2*INNER_BORDER);
+	    gdk_draw_text (drawable, widget->style->font,
+			   widget->style->fg_gc[selected_state],
+			   INNER_BORDER + selection_start_xoffset, y,
+			   toprint + selection_start_pos - start_pos,
+			   selection_end_pos - selection_start_pos);
+	 }	    
+       
+       if (selection_end_pos < end_pos)
+	 gdk_draw_text (drawable, widget->style->font,
+			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			INNER_BORDER + selection_end_xoffset, y,
+			toprint + selection_end_pos - start_pos,
+			end_pos - selection_end_pos);
+       /* free the space allocated for the stars if it's neccessary. */
       if (!entry->visible)
 	g_free (toprint);
 
@@ -1417,7 +1413,6 @@ gtk_entry_draw_cursor_on_drawable (GtkEntry *entry, GdkDrawable *drawable)
 {
   GtkWidget *widget;
   GtkEditable *editable;
-  GdkGC *gc;
   gint xoffset;
   gint text_area_height;
 
@@ -1429,17 +1424,25 @@ gtk_entry_draw_cursor_on_drawable (GtkEntry *entry, GdkDrawable *drawable)
       widget = GTK_WIDGET (entry);
       editable = GTK_EDITABLE (entry);
 
-      xoffset = entry->char_offset[gtk_entry_find_char (entry, editable->current_pos)];
+      xoffset = INNER_BORDER + entry->char_offset[gtk_entry_find_char (entry, editable->current_pos)];
       xoffset -= entry->scroll_offset;
+
+      gdk_window_get_size (entry->text_area, NULL, &text_area_height);
 
       if (GTK_WIDGET_HAS_FOCUS (widget) &&
 	  (editable->selection_start_pos == editable->selection_end_pos))
-	gc = widget->style->fg_gc[GTK_STATE_NORMAL];
+	{
+	  gdk_draw_line (drawable, widget->style->fg_gc[GTK_STATE_NORMAL], 
+			 xoffset, 0, xoffset, text_area_height);
+	}
       else
-	gc = widget->style->base_gc[GTK_WIDGET_STATE(widget)];
+	{
+	  gtk_paint_flat_box (widget->style, drawable,
+			      GTK_WIDGET_STATE(widget), GTK_SHADOW_NONE,
+			      NULL, widget, "entry_bg", 
+			      xoffset, 0, 1, text_area_height);
+	}
 
-      gdk_window_get_size (entry->text_area, NULL, &text_area_height);
-      gdk_draw_line (drawable, gc, xoffset, 0, xoffset, text_area_height);
 #ifdef USE_XIM
       if (gdk_im_ready() && editable->ic && 
 	  gdk_ic_get_style (editable->ic) & GDK_IM_PREEDIT_POSITION)
@@ -2321,7 +2324,7 @@ gtk_entry_style_set	(GtkWidget      *widget,
     }
 
   if (GTK_WIDGET_DRAWABLE (widget))
-    gdk_window_clear (widget->window);
+    gtk_widget_queue_clear(widget);
 }
 
 static void
@@ -2338,5 +2341,5 @@ gtk_entry_state_changed (GtkWidget      *widget,
     }
 
   if (GTK_WIDGET_DRAWABLE (widget))
-    gdk_window_clear (widget->window);
+    gtk_widget_queue_clear(widget);
 }

@@ -182,12 +182,7 @@ gtk_misc_set_alignment (GtkMisc *misc,
           GtkWidget *widget;
 	  
           widget = GTK_WIDGET (misc);
-          gdk_window_clear_area (widget->window,
-                                 widget->allocation.x,
-                                 widget->allocation.y,
-                                 widget->allocation.width,
-                                 widget->allocation.height);
-	  gtk_widget_queue_draw (GTK_WIDGET (misc));
+          gtk_widget_queue_clear (widget);
         }
     }
 }

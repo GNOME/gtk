@@ -67,15 +67,14 @@ gxid_LDADD = \
 	@x_libs@	\
 	-lm
 
-BUILT_SOURCES = gdkcursors.h gdkkeysyms.h
-
-EXTRA_DIST = makecursors.awk makekeysyms.awk
-
-gdkcursors.h:
-	awk -f $(srcdir)/makecursors.awk @x_includes@/X11/cursorfont.h > $@
-
-gdkkeysyms.h:
-	awk -f $(srcdir)/makekeysyms.awk @x_includes@/X11/keysymdef.h > $@
+X-derived-headers:
+	sed -e 's/^#define[ 	]*XC\([^ 	]*\)[ 	]*\([^ 	]*\)[ 	]*.*$$/GDK\1 = \2,/' \
+	    -e 'tb' -e 'd' -e ':b' \
+	    -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/' \
+	    < @x_includes@/X11/cursorfont.h > gdkcursors.h ; \
+	sed -e 's/^#define[ 	]*XK\([^ 	]*\)[ 	]*\([^ 	]*\)[ 	]*.*$$/#define GDK\1 \2/' \
+	    -e 'tb' -e 'd' -e ':b' -e 's/ 0X/ 0x/' \
+	    < @x_includes@/X11/keysymdef.h > gdkkeysyms.h
 
 .PHONY: files
 

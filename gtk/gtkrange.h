@@ -82,7 +82,8 @@ struct _GtkRangeClass
   guint8 step_forw;
   guint8 step_back;
 
-  void (* draw_background) (GtkRange *range);
+  void (* draw_background)  (GtkRange *range);
+  void (* clear_background) (GtkRange *range);
   void (* draw_trough)     (GtkRange *range);
   void (* draw_slider)     (GtkRange *range);
   void (* draw_step_forw)  (GtkRange *range);
@@ -111,6 +112,7 @@ void           gtk_range_set_adjustment         (GtkRange      *range,
 						 GtkAdjustment *adjustment);
 
 void           gtk_range_draw_background        (GtkRange      *range);
+void           gtk_range_clear_background        (GtkRange      *range);
 void           gtk_range_draw_trough            (GtkRange      *range);
 void           gtk_range_draw_slider            (GtkRange      *range);
 void           gtk_range_draw_step_forw         (GtkRange      *range);

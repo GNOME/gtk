@@ -173,7 +173,7 @@ gdk_input_xfree_configure_event (XConfigureEvent *xevent, GdkWindow *window)
 
 static void 
 gdk_input_xfree_enter_event (XCrossingEvent *xevent, 
-				       GdkWindow *window)
+			     GdkWindow      *window)
 {
   GdkInputWindow *input_window;
   gint root_x, root_y;

@@ -134,9 +134,6 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
       menu_item = GTK_MENU_ITEM (widget);
       tearoff_item = GTK_TEAROFF_MENU_ITEM (widget);
 
-      gtk_style_set_background (widget->style, widget->window, widget->state);
-      gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
-
       x = GTK_CONTAINER (menu_item)->border_width;
       y = GTK_CONTAINER (menu_item)->border_width;
       width = widget->allocation.width - x * 2;
@@ -144,11 +141,14 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
       right_max = x + width;
 
       if (widget->state == GTK_STATE_PRELIGHT)
-	gtk_draw_shadow (widget->style,
-			 widget->window,
-			 GTK_STATE_PRELIGHT,
-			 GTK_SHADOW_OUT,
-			 x, y, width, height);
+	gtk_paint_box (widget->style,
+		       widget->window,
+		       GTK_STATE_PRELIGHT,
+		       GTK_SHADOW_OUT,
+		       area, widget, "menuitem",
+		       x, y, width, height);
+       else
+	 gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
 
       if (tearoff_item->torn_off)
 	{

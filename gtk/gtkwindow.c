@@ -89,6 +89,14 @@ static void gtk_window_set_hints          (GtkWidget         *widget,
 
 static void gtk_window_read_rcfiles       (GtkWidget         *widget,
 					   GdkEventClient    *event);
+static void gtk_window_draw           (GtkWidget        *widget,
+				       GdkRectangle     *area);
+static gint gtk_window_expose         (GtkWidget        *widget,
+				       GdkEventExpose   *event);
+static void gtk_window_style_set      (GtkWidget *widget,
+				       GtkStyle  *previous_style);
+
+
 
 
 static GtkBinClass *parent_class = NULL;
@@ -173,7 +181,11 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus_in_event = gtk_window_focus_in_event;
   widget_class->focus_out_event = gtk_window_focus_out_event;
   widget_class->client_event = gtk_window_client_event;
+  widget_class->style_set = gtk_window_style_set;
 
+  widget_class->draw = gtk_window_draw;
+  widget_class->expose_event = gtk_window_expose;
+   
   container_class->check_resize = gtk_window_check_resize;
 
   klass->set_focus = gtk_real_window_set_focus;
@@ -567,13 +579,13 @@ gtk_window_realize (GtkWidget *widget)
   GtkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
-
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WINDOW (widget));
-
+  
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   window = GTK_WINDOW (widget);
-
+  
   switch (window->type)
     {
     case GTK_WINDOW_TOPLEVEL:
@@ -586,7 +598,7 @@ gtk_window_realize (GtkWidget *widget)
       attributes.window_type = GDK_WINDOW_TEMP;
       break;
     }
-
+   
   attributes.title = window->title;
   attributes.wmclass_name = window->wmclass_name;
   attributes.wmclass_class = window->wmclass_class;
@@ -602,16 +614,17 @@ gtk_window_realize (GtkWidget *widget)
 			    GDK_LEAVE_NOTIFY_MASK |
 			    GDK_FOCUS_CHANGE_MASK |
 			    GDK_STRUCTURE_MASK);
-
+   
   attributes_mask = GDK_WA_VISUAL | GDK_WA_COLORMAP;
   attributes_mask |= (window->title ? GDK_WA_TITLE : 0);
   attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
-
+   
   widget->window = gdk_window_new (NULL, &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, window);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+  gtk_window_paint (widget, NULL);
 }
 
 static void
@@ -949,25 +962,49 @@ gtk_window_focus_out_event (GtkWidget     *widget,
   return FALSE;
 }
 
+static GdkAtom atom_rcfiles = GDK_NONE;
+
 static void
 gtk_window_read_rcfiles (GtkWidget *widget,
 			 GdkEventClient *event)
 {
-  GList *toplevels;
-  
+  GList *embedded_windows;
+
+  embedded_windows = gtk_object_get_data (GTK_OBJECT (widget), "gtk-embedded");
+  if (embedded_windows)
+    {
+      GdkEventClient sev;
+      int i;
+      
+      for(i = 0; i < 5; i++)
+	sev.data.l[i] = 0;
+      sev.data_format = 32;
+      sev.message_type = atom_rcfiles;
+      
+      while (embedded_windows)
+	{
+	  guint xid = GPOINTER_TO_UINT (embedded_windows->data);
+	  gdk_event_send_client_message ((GdkEvent *) &sev, xid);
+	  embedded_windows = embedded_windows->next;
+	}
+    }
+
   if (gtk_rc_reparse_all ())
     {
-      toplevels = gdk_window_get_toplevels();
+      /* If the above returned true, some of our RC files are out
+       * of date, so we need to reset all our widgets. Our other
+       * toplevel windows will also get the message, but by
+       * then, the RC file will up to date, so we have to tell
+       * them now.
+       */
+      GList *toplevels;
+      
+      toplevels = gtk_container_get_toplevels();
       while (toplevels)
 	{
-	  gdk_window_get_user_data (toplevels->data, (gpointer*) &widget);
-	  
-	  if (widget)
-	    gtk_widget_reset_rc_styles (widget);
-	  
+	  gtk_widget_reset_rc_styles (toplevels->data);
 	  toplevels = toplevels->next;
 	}
-      g_list_free (toplevels);
     }
 }
 
@@ -975,7 +1012,6 @@ static gint
 gtk_window_client_event (GtkWidget	*widget,
 			 GdkEventClient	*event)
 {
-  static GdkAtom atom_rcfiles = GDK_NONE;
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -1136,7 +1172,7 @@ gtk_window_move_resize (GtkWindow *window)
        * keep track of what changed
        */
       GtkAllocation allocation;
-
+      
       allocation.x = 0;
       allocation.y = 0;
       allocation.width = widget->requisition.width;
@@ -1148,7 +1184,7 @@ gtk_window_move_resize (GtkWindow *window)
     {
       if ((x != -1) && (y != -1))
 	gdk_window_move (widget->window, x, y);
-
+      
       gtk_container_resize_children (GTK_CONTAINER (window));
     }
 }
@@ -1234,4 +1270,60 @@ gtk_window_set_hints (GtkWidget      *widget,
 	  gdk_window_move (widget->window, ux, uy);
 	}
     }
+}
+
+static void
+gtk_window_paint (GtkWidget     *widget,
+		  GdkRectangle *area)
+{
+  gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL, 
+		      GTK_SHADOW_NONE, area, widget, "base", 0, 0, -1, -1);
+}
+
+static gint
+gtk_window_expose (GtkWidget      *widget,
+		   GdkEventExpose *event)
+{
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  gtk_window_paint (widget, &event->area);
+  
+  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
+    return (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+
+  return FALSE;
+}
+
+static void
+gtk_window_draw (GtkWidget    *widget,
+		 GdkRectangle *area)
+{
+  gtk_window_paint (widget, area);
+  
+  if (GTK_WIDGET_CLASS (parent_class)->draw)
+    (* GTK_WIDGET_CLASS (parent_class)->draw) (widget, area);
+}
+
+static void
+gtk_window_style_set (GtkWidget *widget,
+		      GtkStyle  *previous_style)
+{
+   GdkRectangle area;
+   
+   if (GTK_WIDGET_REALIZED (widget) &&
+       !GTK_WIDGET_NO_WINDOW (widget))
+     {
+	gtk_style_set_background (widget->style, widget->window, widget->state);
+
+	area.x = 0;
+	area.y = 0;
+	area.width = widget->allocation.width;
+	area.height = widget->allocation.height;
+	gtk_window_draw(widget, &area);
+
+	if (GTK_WIDGET_DRAWABLE (widget))
+	  gdk_window_clear (widget->window);
+     }
 }

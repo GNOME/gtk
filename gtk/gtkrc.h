@@ -23,25 +23,52 @@
 #include <gtk/gtkstyle.h>
 #include <gtk/gtkwidget.h>
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
+typedef enum {
+  GTK_RC_FG   = 1 << 0,
+  GTK_RC_BG   = 1 << 1,
+  GTK_RC_TEXT = 1 << 2,
+  GTK_RC_BASE = 1 << 3
+} GtkRcFlags;
+
+struct _GtkRcStyle
+{
+  char *name;
+  char *font_name;
+  char *fontset_name;
+  char *bg_pixmap_name[5];
+
+  GtkRcFlags color_flags[5];
+  GdkColor   fg[5];
+  GdkColor   bg[5];
+  GdkColor   text[5];
+  GdkColor   base[5];
+
+  GtkThemeEngine *engine;
+  gpointer        engine_data;
+
+  /* Private */
+  guint ref_count;
+};
 
 void	  gtk_rc_init			(void);
 void	  gtk_rc_parse			(const gchar *filename);
 void	  gtk_rc_parse_string		(const gchar *rc_string);
 gboolean  gtk_rc_reparse_all		(void);
 GtkStyle* gtk_rc_get_style		(GtkWidget   *widget);
-void	  gtk_rc_add_widget_name_style	(GtkStyle    *style,
+void	  gtk_rc_add_widget_name_style	(GtkRcStyle  *rc_style,
 					 const gchar *pattern);
-void	  gtk_rc_add_widget_class_style (GtkStyle    *style,
+void	  gtk_rc_add_widget_class_style (GtkRcStyle  *rc_style,
 					 const gchar *pattern);
-void	  gtk_rc_add_class_style	(GtkStyle    *style,
+void	  gtk_rc_add_class_style	(GtkRcStyle  *rc_style,
 					 const gchar *pattern);
 
-
+GtkRcStyle *gtk_rc_style_new              (void);
+void        gtk_rc_style_ref              (GtkRcStyle  *rc_style);
+void        gtk_rc_style_unref            (GtkRcStyle  *rc_style);
 
 /* Tell gtkrc to use a custom routine to load images specified in rc files instead of
  *   the default xpm-only loader
@@ -53,6 +80,15 @@ typedef	 GdkPixmap * (*GtkImageLoader) (GdkWindow   *window,
 					const gchar *filename);
 void	  gtk_rc_set_image_loader(GtkImageLoader loader);
 
+GdkPixmap *gtk_rc_load_image (GdkColormap *colormap,
+			      GdkColor    *transparent_color,
+			      const gchar *filename);
+gchar      *gtk_rc_find_pixmap_in_path (GScanner *scanner,
+					gchar    *pixmap_file);
+gchar      *gtk_rc_find_module_in_path (GScanner *scanner,
+					gchar    *module_file);
+gchar      *gtk_rc_get_theme_dir(void);
+gchar      *gtk_rc_get_module_dir(void);
 
 /* private functions/definitions */
 typedef enum {
@@ -82,6 +118,8 @@ typedef enum {
   GTK_RC_TOKEN_APPLICATION,
   GTK_RC_TOKEN_RC,
   GTK_RC_TOKEN_HIGHEST,
+  GTK_RC_TOKEN_ENGINE,
+  GTK_RC_TOKEN_MODULE_PATH,
   GTK_RC_TOKEN_LAST
 } GtkRcTokenType;
 

@@ -74,7 +74,6 @@ gtk_pixmap_init (GtkPixmap *pixmap)
 
   pixmap->pixmap = NULL;
   pixmap->mask = NULL;
-  pixmap->needs_clear = FALSE;
 }
 
 GtkWidget*
@@ -82,13 +81,13 @@ gtk_pixmap_new (GdkPixmap *val,
 		GdkBitmap *mask)
 {
   GtkPixmap *pixmap;
-
+   
   g_return_val_if_fail (val != NULL, NULL);
-
+  
   pixmap = gtk_type_new (gtk_pixmap_get_type ());
-
+  
   gtk_pixmap_set (pixmap, val, mask);
-
+  
   return GTK_WIDGET (pixmap);
 }
 
@@ -135,20 +134,11 @@ gtk_pixmap_set (GtkPixmap *pixmap,
 	}
       if (GTK_WIDGET_VISIBLE (pixmap))
 	{
-	  /* If we aren't drawing the entire area, clear first */
-	  if (GTK_WIDGET_DRAWABLE (pixmap) && 
-	      ((mask != NULL) || 
-	       (GTK_WIDGET (pixmap)->requisition.width != oldwidth) ||
-	       (GTK_WIDGET (pixmap)->requisition.height != oldheight)))
-	    {
-	      pixmap->needs_clear = TRUE;
-	    }
-
 	  if ((GTK_WIDGET (pixmap)->requisition.width != oldwidth) ||
 	      (GTK_WIDGET (pixmap)->requisition.height != oldheight))
 	    gtk_widget_queue_resize (GTK_WIDGET (pixmap));
 	  else
-	    gtk_widget_queue_draw (GTK_WIDGET (pixmap));
+	    gtk_widget_queue_clear (GTK_WIDGET (pixmap));
 	}
     }
 
@@ -194,17 +184,6 @@ gtk_pixmap_expose (GtkWidget      *widget,
       pixmap = GTK_PIXMAP (widget);
       misc = GTK_MISC (widget);
 
-      if (pixmap->needs_clear)
-	{
-          gdk_window_clear_area (GTK_WIDGET (pixmap)->window,
-				 GTK_WIDGET (pixmap)->allocation.x,
-				 GTK_WIDGET (pixmap)->allocation.y,
-				 GTK_WIDGET (pixmap)->allocation.width,
-				 GTK_WIDGET (pixmap)->allocation.height);
-	  
-	  pixmap->needs_clear = FALSE;
-	}
-
       x = (widget->allocation.x * (1.0 - misc->xalign) +
 	   (widget->allocation.x + widget->allocation.width
 	    - (widget->requisition.width - misc->xpad * 2)) *
@@ -231,6 +210,5 @@ gtk_pixmap_expose (GtkWidget      *widget,
 	  gdk_gc_set_clip_origin (widget->style->black_gc, 0, 0);
 	}
     }
-
   return FALSE;
 }

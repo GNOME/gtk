@@ -291,11 +291,19 @@ fi
 
 # Threads
 
+CFLAGS="$saved_cflags"
+LDFLAGS="$saved_ldflags"
+
 if test "x$with_threads" = "xposix" || test "x$with_threads" = "xyes"; then
   AC_CHECK_LIB(pthread, pthread_attr_init, 
-    AC_DEFINE(USE_PTHREADS)
+    [AC_DEFINE(USE_PTHREADS)
     x_libs="$x_libs -lpthread"
-    CFLAGS="$CFLAGS -D_REENTRANT") 
+    CFLAGS="$CFLAGS -D_REENTRANT"],
+    # AIX has libpthreads, cause they're special. Special friends (TM)
+    AC_CHECK_LIB(pthreads, pthread_attr_init,
+      [AC_DEFINE(USE_PTHREADS)
+      x_libs="$x_libs -lpthreads"
+      CFLAGS="$CFLAGS -D_REENTRANT -D_THREAD_SAFE"]))
 fi
 
 AC_SUBST(x_cflags)
@@ -303,9 +311,6 @@ AC_SUBST(x_includes)
 AC_SUBST(x_ldflags)
 AC_SUBST(x_libs)
 AC_SUBST(xinput_progs)
-
-CFLAGS="$saved_cflags"
-LDFLAGS="$saved_ldflags"
 
 if test "x$enable_shm" = "xyes"; then
   # Check for shared memory
@@ -407,9 +412,6 @@ AC_HEADER_STDC
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
-
-# Checks for endianness (needed by GdkRgb).
-AC_C_BIGENDIAN
 
 # Checks for library functions.
 AC_TYPE_SIGNAL

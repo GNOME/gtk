@@ -638,20 +638,20 @@ gtk_box_draw (GtkWidget    *widget,
   GtkBoxChild *child;
   GdkRectangle child_area;
   GList *children;
-
+  
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_BOX (widget));
-
+   
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       box = GTK_BOX (widget);
-
+	
       children = box->children;
       while (children)
 	{
 	  child = children->data;
 	  children = children->next;
-
+	     
 	  if (gtk_widget_intersect (child->widget, area, &child_area))
 	    gtk_widget_draw (child->widget, &child_area);
 	}

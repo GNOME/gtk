@@ -538,12 +538,12 @@ gdk_rgb_init (void)
   gint byte_order[1] = { 1 };
 
   /* check endian sanity */
-#ifdef WORDS_BIGENDIAN
+#if G_BYTE_ORDER == G_BIG_ENDIAN
   if (((char *)byte_order)[0] == 1)
-    g_error ("gdk_rgb_init: WORDS_BIGENDIAN is defined, but this is a little endian machine.\n\n");
+    g_error ("gdk_rgb_init: compiled for big endian, but this is a little endian machine.\n\n");
 #else
   if (((char *)byte_order)[0] != 1)
-    g_error ("gdk_rgb_init: WORDS_BIGENDIAN is not defined, but this is a big endian machine.\n\n");
+    g_error ("gdk_rgb_init: compiled for little endian, but this is a big endian machine.\n\n");
 #endif
 
   if (image_info == NULL)
@@ -649,7 +649,7 @@ gdk_rgb_init (void)
 gulong
 gdk_rgb_xpixel_from_rgb (guint32 rgb)
 {
-  gulong pixel;
+  gulong pixel = 0;
 
   if (image_info->bitmap)
     {
@@ -722,7 +722,7 @@ gdk_rgb_gc_set_background (GdkGC *gc, guint32 rgb)
   gdk_gc_set_background (gc, &color);
 }
 
-#ifndef WORDS_BIGENDIAN
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
 #define HAIRY_CONVERT_8
 #endif
 
@@ -1186,7 +1186,7 @@ gdk_rgb_convert_gray8_gray (GdkImage *image,
     }
 }
 
-#ifndef WORDS_BIGENDIAN
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
 #define HAIRY_CONVERT_565
 #endif
 
@@ -1729,7 +1729,7 @@ gdk_rgb_convert_888_msb (GdkImage *image,
 }
 
 /* todo: optimize this */
-#ifndef WORDS_BIGENDIAN
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
 #define HAIRY_CONVERT_888
 #endif
 
@@ -2668,7 +2668,7 @@ gdk_rgb_select_conv (GdkImage *image)
 	     (gint)(((GdkVisualPrivate *)image_info->visual)->xvisual->visualid),
 	     bpp, byte_order == GDK_LSB_FIRST ? "lsb" : "msb");
 
-#ifdef WORDS_BIGENDIAN
+#if G_BYTE_ORDER == G_BIG_ENDIAN
   byterev = (byte_order == GDK_LSB_FIRST);
 #else
   byterev = (byte_order == GDK_MSB_FIRST);
@@ -2733,7 +2733,7 @@ gdk_rgb_select_conv (GdkImage *image)
 	   ((mask_rgb && byte_order == GDK_MSB_FIRST) ||
 	    (mask_bgr && byte_order == GDK_LSB_FIRST)))
     conv = gdk_rgb_convert_888_msb;
-#ifdef WORDS_BIGENDIAN
+#if G_BYTE_ORDER == G_BIG_ENDIAN
   else if (bpp == 32 && depth == 24 && vtype == GDK_VISUAL_TRUE_COLOR &&
 	   (mask_rgb && byte_order == GDK_LSB_FIRST))
     conv = gdk_rgb_convert_0888_br;

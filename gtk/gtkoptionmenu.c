@@ -272,11 +272,11 @@ gtk_option_menu_size_request (GtkWidget      *widget,
 			option_menu->width +
 			OPTION_INDICATOR_WIDTH +
 			OPTION_INDICATOR_SPACING * 5 +
-			CHILD_LEFT_SPACING + CHILD_RIGHT_SPACING);
+			CHILD_LEFT_SPACING + CHILD_RIGHT_SPACING + 2);
   requisition->height = ((GTK_CONTAINER (widget)->border_width +
 			  GTK_WIDGET (widget)->style->klass->ythickness) * 2 +
 			 option_menu->height +
-			 CHILD_TOP_SPACING + CHILD_BOTTOM_SPACING);
+			 CHILD_TOP_SPACING + CHILD_BOTTOM_SPACING + 2);
 
   tmp = (requisition->height - option_menu->height +
 	 OPTION_INDICATOR_HEIGHT + OPTION_INDICATOR_SPACING * 2);
@@ -304,14 +304,14 @@ gtk_option_menu_size_allocate (GtkWidget     *widget,
   if (child && GTK_WIDGET_VISIBLE (child))
     {
       child_allocation.x = (GTK_CONTAINER (widget)->border_width +
-			    GTK_WIDGET (widget)->style->klass->xthickness);
+			    GTK_WIDGET (widget)->style->klass->xthickness) + 1;
       child_allocation.y = (GTK_CONTAINER (widget)->border_width +
-			    GTK_WIDGET (widget)->style->klass->ythickness);
+			    GTK_WIDGET (widget)->style->klass->ythickness) + 1;
       child_allocation.width = (allocation->width - child_allocation.x * 2 -
 				OPTION_INDICATOR_WIDTH - OPTION_INDICATOR_SPACING * 5 -
-				CHILD_LEFT_SPACING - CHILD_RIGHT_SPACING);
+				CHILD_LEFT_SPACING - CHILD_RIGHT_SPACING) - 2;
       child_allocation.height = (allocation->height - child_allocation.y * 2 -
-				 CHILD_TOP_SPACING - CHILD_BOTTOM_SPACING);
+				 CHILD_TOP_SPACING - CHILD_BOTTOM_SPACING) - 2;
       child_allocation.x += CHILD_LEFT_SPACING;
       child_allocation.y += CHILD_RIGHT_SPACING;
 
@@ -323,8 +323,7 @@ static void
 gtk_option_menu_paint (GtkWidget    *widget,
 		       GdkRectangle *area)
 {
-  GdkRectangle restrict_area;
-  GdkRectangle new_area;
+  GdkRectangle button_area;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_OPTION_MENU (widget));
@@ -332,30 +331,39 @@ gtk_option_menu_paint (GtkWidget    *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      restrict_area.x = GTK_CONTAINER (widget)->border_width;
-      restrict_area.y = GTK_CONTAINER (widget)->border_width;
-      restrict_area.width = widget->allocation.width - restrict_area.x * 2;
-      restrict_area.height = widget->allocation.height - restrict_area.y * 2;
+      button_area.x = GTK_CONTAINER (widget)->border_width + 1;
+      button_area.y = GTK_CONTAINER (widget)->border_width + 1;
+      button_area.width = widget->allocation.width - button_area.x * 2;
+      button_area.height = widget->allocation.height - button_area.y * 2;
 
-      if (gdk_rectangle_intersect (area, &restrict_area, &new_area))
-	{
-	  gtk_style_set_background (widget->style, widget->window, GTK_WIDGET_STATE (widget));
-	  gdk_window_clear_area (widget->window,
-				 new_area.x, new_area.y,
-				 new_area.width, new_area.height);
+      /* This is evil, and should be elimated here and in the button
+       * code. The point is to clear the focus, and make it
+       * sort of transparent if it isn't there.
+       */
+      gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+      gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
 
-	  gtk_draw_shadow (widget->style, widget->window,
-			   GTK_WIDGET_STATE (widget), GTK_SHADOW_OUT,
-			   restrict_area.x, restrict_area.y,
-			   restrict_area.width, restrict_area.height);
-
-	  gtk_draw_shadow (widget->style, widget->window,
-			   GTK_WIDGET_STATE (widget), GTK_SHADOW_OUT,
-			   restrict_area.x + restrict_area.width - restrict_area.x -
-			   OPTION_INDICATOR_WIDTH - OPTION_INDICATOR_SPACING * 4,
-			   restrict_area.y + (restrict_area.height - OPTION_INDICATOR_HEIGHT) / 2,
-			   OPTION_INDICATOR_WIDTH, OPTION_INDICATOR_HEIGHT);
-	}
+      gtk_paint_box(widget->style, widget->window,
+		    GTK_WIDGET_STATE (widget), GTK_SHADOW_OUT,
+		    area, widget, "optionmenu",
+		    button_area.x, button_area.y,
+		    button_area.width, button_area.height);
+      
+      gtk_paint_tab (widget->style, widget->window,
+		     GTK_WIDGET_STATE (widget), GTK_SHADOW_OUT,
+		     area, widget, "optionmenutab",
+		     button_area.x + button_area.width - button_area.x -
+		     OPTION_INDICATOR_WIDTH - OPTION_INDICATOR_SPACING * 4,
+		     button_area.y + (button_area.height - OPTION_INDICATOR_HEIGHT) / 2,
+		     OPTION_INDICATOR_WIDTH, OPTION_INDICATOR_HEIGHT);
+      
+      if (GTK_WIDGET_HAS_FOCUS (widget))
+	gtk_paint_focus (widget->style, widget->window,
+			 area, widget, "button",
+			 button_area.x - 1, 
+			 button_area.y - 1, 
+			 button_area.width + 1,
+			 button_area.height + 1);
     }
 }
 
@@ -377,7 +385,6 @@ gtk_option_menu_draw (GtkWidget    *widget,
       child = GTK_BIN (widget)->child;
       if (child && gtk_widget_intersect (child, area, &child_area))
 	gtk_widget_draw (child, &child_area);
-      gtk_widget_draw_focus (widget);
     }
 }
 
@@ -440,7 +447,6 @@ gtk_option_menu_expose (GtkWidget      *widget,
 	gtk_widget_event (child, (GdkEvent*) &child_event);
 
 #endif /* 0 */
-      gtk_widget_draw_focus (widget);
     }
 
   return FALSE;

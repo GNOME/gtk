@@ -676,7 +676,7 @@ gdk_gc_set_clip_rectangle (GdkGC	*gc,
 {
   GdkGCPrivate *private;
   XRectangle xrectangle;
-
+   
   g_return_if_fail (gc != NULL);
 
   private = (GdkGCPrivate*) gc;

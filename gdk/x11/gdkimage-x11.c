@@ -353,7 +353,8 @@ gdk_image_get (GdkWindow *window,
 
   image->mem = private->ximage->data;
   image->bpl = private->ximage->bytes_per_line;
-  image->bpp = 1;
+  image->bpp = private->ximage->bits_per_pixel;
+  image->byte_order = private->ximage->byte_order;
 
   return image;
 }

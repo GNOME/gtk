@@ -142,11 +142,7 @@ gtk_bin_unmap (GtkWidget *widget)
   bin = GTK_BIN (widget);
 
   if (GTK_WIDGET_NO_WINDOW (widget))
-    gdk_window_clear_area (widget->window,
-			   widget->allocation.x,
-			   widget->allocation.y,
-			   widget->allocation.width,
-			   widget->allocation.height);
+     gtk_widget_queue_clear (widget);
   else
     gdk_window_hide (widget->window);
 

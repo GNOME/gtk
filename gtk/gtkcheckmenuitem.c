@@ -244,8 +244,6 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 	   widget->style->klass->xthickness + 2);
       y = (widget->allocation.height - height) / 2;
 
-      gdk_window_clear_area (widget->window, x, y, width, height);
-
       if (check_menu_item->active ||
 	  check_menu_item->always_show_toggle ||
 	  (GTK_WIDGET_STATE (check_menu_item) == GTK_STATE_PRELIGHT))
@@ -266,11 +264,9 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 		shadow_type = GTK_SHADOW_OUT;
 	    }
 	  
-	  gdk_draw_rectangle (widget->window,
-			      widget->style->bg_gc[state_type],
-			      TRUE, x, y, width, height);
-	  gtk_draw_shadow (widget->style, widget->window,
+	  gtk_paint_check (widget->style, widget->window,
 			   state_type, shadow_type,
+			   area, widget, "check",
 			   x, y, width, height);
 	}
     }

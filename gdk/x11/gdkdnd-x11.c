@@ -377,15 +377,17 @@ gdk_window_cache_destroy (GdkWindowCache *cache)
 
 static Window
 get_client_window_at_coords_recurse (Window  win,
-				     gint    x_root,
-				     gint    y_root)
+				     gint    x,
+				     gint    y)
 {
-  Window child;
+  Window root, tmp_parent, *children;
+  unsigned int nchildren;
+  int i;
+  Window child = None;
   Atom type = None;
   int format;
   unsigned long nitems, after;
   unsigned char *data;
-  int dest_x, dest_y;
   
   static Atom wm_state_atom = None;
 
@@ -408,6 +410,8 @@ get_client_window_at_coords_recurse (Window  win,
       return win;
     }
 
+#if 0
+  /* This is beautiful! Damn Enlightenment and click-to-focus */
   XTranslateCoordinates (gdk_display, gdk_root_window, win,
 			 x_root, y_root, &dest_x, &dest_y, &child);
 
@@ -416,18 +420,49 @@ get_client_window_at_coords_recurse (Window  win,
       gdk_error_code = 0;
       return None;
     }
+  
+#else
+  if (XQueryTree(gdk_display, win,
+		 &root, &tmp_parent, &children, &nchildren) == 0)
+    return 0;
+
+  if (gdk_error_code == 0)
+    {
+      for (i = nchildren - 1; (i >= 0) && (child == None); i--)
+	{
+	  XWindowAttributes xwa;
+	  
+	  XGetWindowAttributes (gdk_display, children[i], &xwa);
+	  
+	  if (gdk_error_code != 0)
+	    gdk_error_code = 0;
+	  else if ((xwa.map_state == IsViewable) && (xwa.class == InputOutput) &&
+		   (x >= xwa.x) && (x < xwa.x + (gint)xwa.width) &&
+		   (y >= xwa.y) && (y < xwa.y + (gint)xwa.height))
+	    {
+	      x -= xwa.x;
+	      y -= xwa.y;
+	      child = children[i];
+	    }
+	}
+      
+      XFree (children);
+    }
+  else
+    gdk_error_code = 0;
+#endif  
 
   if (child)
-    return get_client_window_at_coords_recurse (child, x_root, y_root);
+    return get_client_window_at_coords_recurse (child, x, y);
   else
     return None;
 }
 
 Window 
 get_client_window_at_coords (GdkWindowCache *cache,
-			     Window  ignore,
-			     gint    x_root,
-			     gint    y_root)
+			     Window          ignore,
+			     gint            x_root,
+			     gint            y_root)
 {
   GList *tmp_list;
   Window retval = None;
@@ -449,7 +484,8 @@ get_client_window_at_coords (GdkWindowCache *cache,
 	      (y_root >= child->y) && (y_root < child->y + child->height))
 	    {
 	      retval = get_client_window_at_coords_recurse (child->xid,
-							    x_root, y_root);
+							    x_root - child->x, 
+							    y_root - child->y);
 	      if (!retval)
 		retval = child->xid;
 	    }
@@ -532,7 +568,7 @@ get_client_window_at_coords (Window  ignore,
   if (XQueryTree(gdk_display, gdk_root_window, 
 		 &root, &parent, &children, &nchildren) == 0)
     return 0;
-  
+
   for (i = nchildren - 1; (i >= 0) && (retval == None); i--)
     {
       if (children[i] != ignore)
@@ -883,7 +919,12 @@ motif_read_target_table (void)
 	    goto error;
 
 	  n_targets = card16_to_host (*(gushort *)p, header->byte_order);
-	  targets = (guint32 *)(p + sizeof(guint16));
+
+	  /* We need to make a copy of the targets, since it may
+	   * be unaligned
+	   */
+	  targets = g_new (guint32, n_targets);
+	  memcpy (targets, p + sizeof(guint16), sizeof(guint32) * n_targets);
 
 	  p +=  sizeof(guint16) + n_targets * sizeof(guint32);
 	  if (p - target_bytes > nitems)
@@ -894,7 +935,7 @@ motif_read_target_table (void)
 	      g_list_prepend (motif_target_lists[i],
 			      GUINT_TO_POINTER (card32_to_host (targets[j], 
 								header->byte_order)));
-
+	  g_free (targets);
 	  motif_target_lists[i] = g_list_reverse (motif_target_lists[i]);
 	}
 
@@ -1001,7 +1042,6 @@ motif_add_to_target_table (GList *targets)
 	  guchar *data;
 	  guchar *p;
 	  guint16 *p16;
-	  guint32 *p32;
 	  MotifTargetTableHeader *header;
 	  
 	  if (!motif_target_lists)
@@ -1035,20 +1075,27 @@ motif_add_to_target_table (GList *targets)
 
 	  for (i = 0; i < motif_n_target_lists ; i++)
 	    {
-	      guint16 count = 0;
+	      guint16 n_targets = g_list_length (motif_target_lists[i]);
+	      guint32 *targets = g_new (guint32, n_targets);
+	      guint32 *p32 = targets;
 	      
-	      p16 = (guint16 *)p;
-	      p += sizeof(guint16);
-	      p32 = (guint32 *)p;
 	      tmp_list = motif_target_lists[i];
 	      while (tmp_list)
 		{
-		  *p32++ = GPOINTER_TO_UINT (tmp_list->data);
+		  *p32 = GPOINTER_TO_UINT (tmp_list->data);
+		  
 		  tmp_list = tmp_list->next;
-		  count++;
+		  p32++;
 		}
-	      *p16 = count;
-	      p = (guchar *)p32;
+
+	      p16 = (guint16 *)p;
+	      p += sizeof(guint16);
+
+	      memcpy (p, targets, n_targets * sizeof(guint32));
+
+	      *p16 = n_targets;
+	      p += sizeof(guint32) * n_targets;
+	      g_free (targets);
 	    }
 
 	  XChangeProperty (gdk_display, motif_drag_window,

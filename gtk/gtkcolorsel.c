@@ -21,6 +21,7 @@
 #include <math.h>
 #include <gdk/gdk.h>
 #include "gtkcolorsel.h"
+#include "gtkdrawwindow.h"
 #include "gtkhbbox.h"
 #include "gtkdnd.h"
 #include "gtkselection.h"
@@ -861,7 +862,7 @@ gtk_color_selection_drag_begin (GtkWidget      *widget,
   gdouble colors[4];
   GdkColor bg;
 
-  window = gtk_window_new(GTK_WINDOW_POPUP);
+  window = gtk_draw_window_new(GTK_WINDOW_POPUP);
   gtk_widget_set_usize (window, 48, 32);
   gtk_widget_realize (window);
 
@@ -1041,14 +1042,15 @@ gtk_color_selection_value_events (GtkWidget *area,
 
   colorsel = (GtkColorSelection*) gtk_object_get_data (GTK_OBJECT (area), "_GtkColorSelection");
 
+  if (colorsel->value_gc == NULL)
+    colorsel->value_gc = gdk_gc_new (colorsel->value_area->window);
+
   switch (event->type)
     {
     case GDK_MAP:
       gtk_color_selection_draw_value_marker (colorsel);
       break;
     case GDK_EXPOSE:
-      if (colorsel->value_gc == NULL)
-	colorsel->value_gc = gdk_gc_new (colorsel->value_area->window);
       gtk_color_selection_draw_value_marker (colorsel);
       break;
     case GDK_BUTTON_PRESS:
@@ -1128,7 +1130,14 @@ gtk_color_selection_wheel_events (GtkWidget *area,
   gint x, y;
 
   colorsel = (GtkColorSelection*) gtk_object_get_data (GTK_OBJECT (area), "_GtkColorSelection");
-
+  
+  if (colorsel->wheel_gc == NULL)
+    colorsel->wheel_gc = gdk_gc_new (colorsel->wheel_area->window);
+  if (colorsel->sample_gc == NULL)
+    colorsel->sample_gc = gdk_gc_new (colorsel->sample_area->window);
+  if (colorsel->value_gc == NULL)
+    colorsel->value_gc = gdk_gc_new (colorsel->value_area->window);
+  
   switch (event->type)
     {
     case GDK_MAP:
@@ -1137,12 +1146,6 @@ gtk_color_selection_wheel_events (GtkWidget *area,
       gtk_color_selection_draw_sample (colorsel, TRUE);
       break;
     case GDK_EXPOSE:
-      if (colorsel->wheel_gc == NULL)
-	colorsel->wheel_gc = gdk_gc_new (colorsel->wheel_area->window);
-      if (colorsel->sample_gc == NULL)
-	colorsel->sample_gc = gdk_gc_new (colorsel->sample_area->window);
-      if (colorsel->value_gc == NULL)
-	colorsel->value_gc = gdk_gc_new (colorsel->value_area->window);
       gtk_color_selection_draw_wheel_marker (colorsel);
       gtk_color_selection_draw_wheel_frame (colorsel);
       break;
@@ -1247,7 +1250,7 @@ gtk_color_selection_draw_value_bar (GtkColorSelection *colorsel,
       v -= sv;
     }
 
-  gtk_widget_draw (colorsel->value_area, NULL);
+  gtk_widget_queue_draw (colorsel->value_area);
 }
 
 static void
@@ -1320,7 +1323,39 @@ gtk_color_selection_draw_wheel (GtkColorSelection *colorsel,
       gtk_preview_draw_row (GTK_PREVIEW (colorsel->wheel_area), colorsel->wheel_buf, 0, y, wid);
     }
 
-  gtk_widget_draw (colorsel->wheel_area, NULL);
+  if (colorsel->wheel_area->window)
+     {
+	GdkPixmap *pm = NULL;
+	GdkGC     *pmgc = NULL;
+	GdkColor   col;
+	gint w, h;
+	
+	pm = gdk_pixmap_new (colorsel->wheel_area->window, wid, heig, 1);
+	pmgc = gdk_gc_new (pm);
+	
+	col.pixel = 0;
+	gdk_gc_set_foreground(pmgc, &col);
+	gdk_draw_rectangle(pm, pmgc, TRUE, 0, 0, wid, heig);
+	col.pixel = 1;
+	
+	gdk_gc_set_foreground(pmgc, &col);
+	gdk_draw_arc (pm, pmgc, TRUE, 0, 0, wid, heig, 0, 360*64);
+
+	w = colorsel->wheel_area->allocation.width;
+	h = colorsel->wheel_area->allocation.height;
+	
+	gdk_draw_arc (pm, pmgc,
+		      FALSE, 1, 1, w - 1, h - 1, 30 * 64, 180 * 64);
+	gdk_draw_arc (pm, pmgc,
+		      FALSE, 0, 0, w, h, 30 * 64, 180 * 64);
+	gdk_draw_arc (pm, pmgc,
+		      FALSE, 1, 1, w - 1, h - 1, 210 * 64, 180 * 64);
+	gdk_draw_arc (pm, pmgc,
+		      FALSE, 0, 0, w, h, 210 * 64, 180 * 64);
+	gdk_window_shape_combine_mask(colorsel->wheel_area->window, pm, 0, 0);
+	gdk_pixmap_unref(pm);
+	gdk_gc_destroy(pmgc);
+     }
 }
 
 static void
@@ -1385,7 +1420,7 @@ gtk_color_selection_draw_sample (GtkColorSelection *colorsel,
       gtk_preview_draw_row (GTK_PREVIEW (colorsel->sample_area), colorsel->sample_buf, 0, y, wid);
     }
 
-  gtk_widget_draw (colorsel->sample_area, NULL);
+  gtk_widget_queue_draw (colorsel->sample_area);
 }
 
 static gint

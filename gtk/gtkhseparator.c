@@ -83,11 +83,12 @@ gtk_hseparator_expose (GtkWidget      *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   if (GTK_WIDGET_DRAWABLE (widget))
-    gtk_draw_hline (widget->style, widget->window, GTK_STATE_NORMAL,
-		    widget->allocation.x,
-		    widget->allocation.x + widget->allocation.width,
-		    widget->allocation.y + (widget->allocation.height -
-					    widget->style->klass->ythickness) / 2);
+    gtk_paint_hline (widget->style, widget->window, GTK_STATE_NORMAL,
+		     &event->area, widget, "hseparator",
+		     widget->allocation.x,
+		     widget->allocation.x + widget->allocation.width,
+		     widget->allocation.y + (widget->allocation.height -
+					     widget->style->klass->ythickness) / 2);
 
   return FALSE;
 }

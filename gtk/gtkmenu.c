@@ -668,6 +668,7 @@ gtk_menu_realize (GtkWidget *widget)
   
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+  gtk_menu_paint(widget);
 }
 
 static void
@@ -788,13 +789,12 @@ gtk_menu_paint (GtkWidget *widget)
   
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      gtk_draw_shadow (widget->style,
-		       widget->window,
-		       GTK_STATE_NORMAL,
-		       GTK_SHADOW_OUT,
-		       0, 0,
-		       widget->allocation.width,
-		       widget->allocation.height);
+      gtk_paint_box (widget->style,
+		     widget->window,
+		     GTK_STATE_NORMAL,
+		     GTK_SHADOW_OUT,
+		     NULL, widget, "menu",
+		     0, 0, -1, -1);
     }
 }
 
@@ -1086,3 +1086,4 @@ gtk_menu_hide_all (GtkWidget *widget)
   /* Hide children, but not self. */
   gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) gtk_widget_hide_all, NULL);
 }
+

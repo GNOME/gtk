@@ -23,7 +23,7 @@
 #include "gtkinvisible.h"
 #include "gtkmain.h"
 #include "gtksignal.h"
-#include "gtkwindow.h"
+#include "gtkdrawwindow.h"
 
 static GSList *drag_widgets = NULL;
 
@@ -83,6 +83,7 @@ struct _GtkDragDestSite {
   GdkDragAction      actions;
   GdkWindow         *proxy_window;
   GdkDragProtocol    proxy_protocol;
+  gboolean           do_proxy : 1;
   gboolean           proxy_coords : 1;
   gboolean           have_drag : 1;
 };
@@ -128,7 +129,7 @@ struct _GtkDragFindData {
 /* Enumeration for some targets we handle internally */
 
 enum {
-  TARGET_MOTIF_SUCCESS = 0x80000000,
+  TARGET_MOTIF_SUCCESS = 0x40000000,
   TARGET_MOTIF_FAILURE,
   TARGET_DELETE
 };
@@ -694,7 +695,7 @@ gtk_drag_dest_set   (GtkWidget       *widget,
     site->target_list = NULL;
 
   site->actions = actions;
-  site->proxy_window = NULL;
+  site->do_proxy = FALSE;
 
   gtk_object_set_data_full (GTK_OBJECT (widget), "gtk-drag-dest",
 			    site, gtk_drag_dest_site_destroy);
@@ -741,7 +742,9 @@ gtk_drag_dest_set_proxy (GtkWidget      *widget,
   site->target_list = NULL;
   site->actions = 0;
   site->proxy_window = proxy_window;
-  gdk_window_ref (proxy_window);
+  if (proxy_window)
+    gdk_window_ref (proxy_window);
+  site->do_proxy = TRUE;
   site->proxy_protocol = protocol;
   site->proxy_coords = use_coordinates;
 
@@ -1172,7 +1175,7 @@ gtk_drag_dest_leave (GtkWidget      *widget,
   site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
   g_return_if_fail (site != NULL);
 
-  if (site->proxy_window)
+  if (site->do_proxy)
     {
       GtkDragDestInfo *info = g_dataset_get_data (context, "gtk-info");
 
@@ -1183,14 +1186,14 @@ gtk_drag_dest_leave (GtkWidget      *widget,
     }
   else
     {
+      if (site->flags & GTK_DEST_DEFAULT_HIGHLIGHT)
+	gtk_drag_unhighlight (widget);
+
       if (!(site->flags & GTK_DEST_DEFAULT_MOTION) || site->have_drag)
 	gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_leave",
 				 context, time);
       
       site->have_drag = FALSE;
-      
-      if (site->flags & GTK_DEST_DEFAULT_HIGHLIGHT)
-	gtk_drag_unhighlight (widget);
     }
 }
 
@@ -1208,10 +1211,13 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
   site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
   g_return_val_if_fail (site != NULL, FALSE);
 
-  if (site->proxy_window)
+  if (site->do_proxy)
     {
       GdkAtom selection;
       GdkEvent *current_event;
+      GdkWindow *dest_window;
+      GdkDragProtocol proto;
+	
       GtkDragDestInfo *info = g_dataset_get_data (context, "gtk-info");
 
       if (!info->proxy_source)
@@ -1219,9 +1225,22 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
 
       current_event = gtk_get_current_event ();
 
+      if (site->proxy_window)
+	{
+	  dest_window = site->proxy_window;
+	  proto = site->proxy_protocol;
+	}
+      else
+	{
+	  gdk_drag_find_window (info->proxy_source->context,
+				NULL,
+				current_event->dnd.x_root, 
+				current_event->dnd.y_root,
+				&dest_window, &proto);
+	}
+      
       gdk_drag_motion (info->proxy_source->context, 
-		       site->proxy_window,
-		       site->proxy_protocol,
+		       dest_window, proto,
 		       current_event->dnd.x_root, 
 		       current_event->dnd.y_root, 
 		       context->suggested_action, time);
@@ -1298,7 +1317,7 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
   info->drop_x = x;
   info->drop_y = y;
 
-  if (site->proxy_window)
+  if (site->do_proxy)
     {
       if (info->proxy_source || 
 	  (info->context->protocol == GDK_DRAG_PROTO_ROOTWIN))
@@ -1313,6 +1332,8 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
 	  
 	  GdkEvent *current_event;
 	  GdkAtom selection;
+	  GdkWindow *dest_window;
+	  GdkDragProtocol proto;
 	  
 	  gtk_drag_proxy_begin (widget, info);
 	  info->proxy_drop_wait = TRUE;
@@ -1320,9 +1341,22 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
 	  
 	  current_event = gtk_get_current_event ();
 
+	  if (site->proxy_window)
+	    {
+	      dest_window = site->proxy_window;
+	      proto = site->proxy_protocol;
+	    }
+	  else
+	    {
+	      gdk_drag_find_window (info->proxy_source->context,
+				    NULL,
+				    current_event->dnd.x_root, 
+				    current_event->dnd.y_root,
+				    &dest_window, &proto);
+	    }
+	    
 	  gdk_drag_motion (info->proxy_source->context, 
-			   site->proxy_window,
-			   site->proxy_protocol,
+			   dest_window, proto,
 			   current_event->dnd.x_root, 
 			   current_event->dnd.y_root, 
 			   context->suggested_action, time);
@@ -1430,7 +1464,7 @@ gtk_drag_begin (GtkWidget         *widget,
 	    gtk_drag_get_event_action (event, info->button, actions));
 
   gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_begin",
-			   info->context, NULL);
+			   info->context);
   
   /* We use a GTK grab here to override any grabs that the widget
    * we are dragging from might have held
@@ -1499,7 +1533,8 @@ gtk_drag_source_set  (GtkWidget         *widget,
 
   gtk_widget_add_events (widget,
 			 gtk_widget_get_events (widget) |
-			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_MOTION_MASK);
+			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+			 GDK_BUTTON_MOTION_MASK);
 
   if (site)
     {
@@ -1647,7 +1682,7 @@ gtk_drag_set_icon_pixmap  (GdkDragContext    *context,
   gtk_widget_push_visual (gdk_colormap_get_visual(colormap));
   gtk_widget_push_colormap (colormap);
 
-  window = gtk_window_new (GTK_WINDOW_POPUP);
+  window = gtk_draw_window_new (GTK_WINDOW_POPUP);
 
   gtk_widget_pop_visual ();
   gtk_widget_pop_colormap ();
@@ -2007,12 +2042,21 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
     case GDK_BUTTON_PRESS:
       if ((GDK_BUTTON1_MASK << (event->button.button - 1)) & site->start_button_mask)
 	{
+	  site->state |= (GDK_BUTTON1_MASK << (event->button.button - 1));
 	  site->x = event->button.x;
 	  site->y = event->button.y;
 	}
+      break;
+      
+    case GDK_BUTTON_RELEASE:
+      if ((GDK_BUTTON1_MASK << (event->button.button - 1)) & site->start_button_mask)
+	{
+	  site->state &= ~(GDK_BUTTON1_MASK << (event->button.button - 1));
+	}
+      break;
       
     case GDK_MOTION_NOTIFY:
-      if (event->motion.state & site->start_button_mask)
+      if (site->state & event->motion.state & site->start_button_mask)
 	{
 	  /* FIXME: This is really broken and can leave us
 	   * with a stuck grab
@@ -2020,7 +2064,8 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 	  int i;
 	  for (i=1; i<6; i++)
 	    {
-	      if (event->motion.state & GDK_BUTTON1_MASK << (i - 1))
+	      if (site->state & event->motion.state & 
+		  GDK_BUTTON1_MASK << (i - 1))
 		break;
 	    }
 	  
@@ -2030,6 +2075,7 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 	      GtkDragSourceInfo *info;
 	      GdkDragContext *context;
 	      
+	      site->state = 0;
 	      context = gtk_drag_begin (widget, site->target_list,
 					site->actions, 
 					i, event);
@@ -2054,6 +2100,7 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
       break;
       
     default:			/* hit for 2/3BUTTON_PRESS */
+      break;
     }
   return FALSE;
 }
@@ -2182,6 +2229,10 @@ gtk_drag_source_info_destroy (gpointer data)
   GtkDragSourceInfo *info = data;
 
   gtk_drag_remove_icon (data);
+
+  if (!info->proxy_dest)
+    gtk_signal_emit_by_name (GTK_OBJECT (info->widget), "drag_end", 
+			     info->context);
 
   if (info->widget)
     gtk_widget_unref (info->widget);

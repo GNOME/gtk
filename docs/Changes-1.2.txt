@@ -46,4 +46,19 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
 * The old drag and drop API has been completely removed and replaced.
   See the reference documentation for details on the new API.
 
+* Support for Themes has been added. In general, this does
+  not affect application code, however, a few new rules should
+  be observed:
+
+   - To set a shape for a window, you must use 
+     gtk_widget_shape_combine_mask() instead of 
+     gdk_window_shape_combine_mask(), or the shape will be
+     reset when switching themes.
+
+   - It is no longer permissable to draw directly on an arbitrary
+     widget, or to set an arbitrary widget's background pixmap.
+     If you need to do that, use a GtkDrawingArea or (for a 
+     toplevel) the new GtkDrawWindow widget.
+
+
 

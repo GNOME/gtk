@@ -172,14 +172,7 @@ gtk_arrow_set (GtkArrow      *arrow,
       arrow->shadow_type = shadow_type;
 
       if (GTK_WIDGET_DRAWABLE (arrow))
-	{
-	  gdk_window_clear_area (GTK_WIDGET (arrow)->window,
-				 GTK_WIDGET (arrow)->allocation.x,
-				 GTK_WIDGET (arrow)->allocation.y,
-				 GTK_WIDGET (arrow)->allocation.width,
-				 GTK_WIDGET (arrow)->allocation.height);
-	  gtk_widget_queue_draw (GTK_WIDGET (arrow));
-	}
+	gtk_widget_queue_clear (GTK_WIDGET (arrow));
     }
 }
 
@@ -227,9 +220,11 @@ gtk_arrow_expose (GtkWidget      *widget,
             shadow_type = GTK_SHADOW_ETCHED_IN;
 	}
 
-      gtk_draw_arrow (widget->style, widget->window,
-		      widget->state, shadow_type, arrow->arrow_type, TRUE,
-		      x, y, extent, extent);
+      gtk_paint_arrow (widget->style, widget->window,
+		       widget->state, shadow_type,
+		       &event->area, widget, "arrow",
+		       arrow->arrow_type, TRUE,
+		       x, y, extent, extent);
     }
 
   return TRUE;

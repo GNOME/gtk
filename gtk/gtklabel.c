@@ -51,12 +51,7 @@ static void gtk_label_size_request (GtkWidget	   *widget,
 				    GtkRequisition *requisition);
 static gint gtk_label_expose	   (GtkWidget	   *widget,
 				    GdkEventExpose *event);
-static void gtk_label_state_changed (GtkWidget	    *widget,
-				     guint	     previous_state);
-static void gtk_label_style_set	    (GtkWidget	    *widget,
-				     GtkStyle	    *previous_style);
-static void gtk_label_free_rows     (GtkLabel       *label);
-
+static void gtk_label_free_rows    (GtkLabel       *label);
 
 
 static GtkMiscClass *parent_class = NULL;
@@ -109,8 +104,6 @@ gtk_label_class_init (GtkLabelClass *class)
   
   widget_class->size_request = gtk_label_size_request;
   widget_class->expose_event = gtk_label_expose;
-  widget_class->style_set    = gtk_label_style_set;
-  widget_class->state_changed = gtk_label_state_changed;
 }
 
 static void
@@ -173,7 +166,6 @@ gtk_label_init (GtkLabel *label)
   label->row = NULL;
   label->max_width = 0;
   label->jtype = GTK_JUSTIFY_CENTER;
-  label->needs_clear = FALSE;
   label->pattern = NULL;
   
   gtk_label_set (label, "");
@@ -233,12 +225,8 @@ gtk_label_set (GtkLabel	   *label,
   if (GTK_WIDGET_VISIBLE (label))
     {
       if (GTK_WIDGET_MAPPED (label))
-	gdk_window_clear_area (GTK_WIDGET (label)->window,
-			       GTK_WIDGET (label)->allocation.x,
-			       GTK_WIDGET (label)->allocation.y,
-			       GTK_WIDGET (label)->allocation.width,
-			       GTK_WIDGET (label)->allocation.height);
-      
+	gtk_widget_queue_clear (GTK_WIDGET (label));
+
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
 }
@@ -257,11 +245,7 @@ gtk_label_set_pattern (GtkLabel	   *label,
   if (GTK_WIDGET_VISIBLE (label))
     {
       if (GTK_WIDGET_MAPPED (label))
-	gdk_window_clear_area (GTK_WIDGET (label)->window,
-			       GTK_WIDGET (label)->allocation.x,
-			       GTK_WIDGET (label)->allocation.y,
-			       GTK_WIDGET (label)->allocation.width,
-			       GTK_WIDGET (label)->allocation.height);
+	gtk_widget_queue_clear (GTK_WIDGET (label));
       
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
@@ -281,12 +265,8 @@ gtk_label_set_justify (GtkLabel	       *label,
       if (GTK_WIDGET_VISIBLE (label))
 	{
 	  if (GTK_WIDGET_MAPPED (label))
-	    gdk_window_clear_area (GTK_WIDGET (label)->window,
-				   GTK_WIDGET (label)->allocation.x,
-				   GTK_WIDGET (label)->allocation.y,
-				   GTK_WIDGET (label)->allocation.width,
-				   GTK_WIDGET (label)->allocation.height);
-	  
+	    gtk_widget_queue_clear (GTK_WIDGET (label));
+
 	  gtk_widget_queue_resize (GTK_WIDGET (label));
 	}
     }
@@ -322,10 +302,11 @@ gtk_label_finalize (GtkObject *object)
 }
 
 static gint
-gtk_label_process_row (GtkLabel    *label,
-		       GtkLabelRow *row,
-		       gint         x, gint y,
-		       gboolean     draw)
+gtk_label_process_row (GtkLabel     *label,
+		       GtkLabelRow  *row,
+		       gint          x, gint y,
+		       gboolean      draw,
+		       GdkRectangle *area)
 {
   GtkWidget *widget = GTK_WIDGET (label);
   
@@ -382,16 +363,12 @@ gtk_label_process_row (GtkLabel    *label,
 
 	      if (draw)
 		{
-		  if (widget->state == GTK_STATE_INSENSITIVE)
-		    gdk_draw_line (widget->window,
-				   widget->style->white_gc,
-				   offset + x + lbearing, y + descent + 2, 
-				   offset + x + rbearing + 1, y + descent + 2);
-	      
-		  gdk_draw_line (widget->window,
-				 widget->style->fg_gc[widget->state],
-				 offset + x + lbearing - 1, y + descent + 1, 
-				 offset + x + rbearing, y + descent + 1);
+		  gtk_paint_hline (widget->style, widget->window, 
+				   widget->state, area,
+				   widget, "label", 
+				   offset + x + lbearing - 1, 
+				   offset + x + rbearing, 
+				   y + descent + 2);
 		}
 
 	      height = MAX (height, 
@@ -406,16 +383,12 @@ gtk_label_process_row (GtkLabel    *label,
 
 	  if (draw)
 	    {
-	      if (widget->state == GTK_STATE_INSENSITIVE)
-		gdk_draw_text (widget->window, widget->style->font,
-			       widget->style->white_gc,
-			       offset + x + 1, y + 1,
-			       &label->label[row->index+j], i - j);
-	      
-	      gdk_draw_text (widget->window, widget->style->font,
-			     widget->style->fg_gc[widget->state],
-			     offset + x, y, 
-			     &label->label[row->index+j], i - j);
+	      char save = label->label[row->index + i];
+	      label->label[row->index + i] = '\0';
+	      gtk_paint_string(widget->style, widget->window, widget->state,
+			       area, widget, "label", offset + x, y, 
+			       &label->label[row->index+j]);
+	      label->label[row->index + i] = save;
 	    }
 
 		  
@@ -459,7 +432,7 @@ gtk_label_size_request (GtkWidget      *widget,
 				   row->len);
       width = MAX (width, row->width);
 
-      requisition->height += gtk_label_process_row (label, row, 0, 0, FALSE) + 2;
+      requisition->height += gtk_label_process_row (label, row, 0, 0, FALSE, NULL) + 2;
 
       tmp_list = tmp_list->next;
     }
@@ -491,24 +464,7 @@ gtk_label_expose (GtkWidget	 *widget,
        */
       gdk_gc_set_clip_rectangle (widget->style->white_gc, &event->area);
       gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state], &event->area);
-      
-      /* We clear the whole allocation here so that if a partial
-       * expose is triggered we don't just clear part and mess up
-       * when the queued redraw comes along. (There will always
-       * be a complete queued redraw when the needs_clear flag
-       * is set.)
-       */
-      if (label->needs_clear)
-	{
-	  gdk_window_clear_area (widget->window,
-				 widget->allocation.x,
-				 widget->allocation.y,
-				 widget->allocation.width,
-				 widget->allocation.height);
-	  
-	  label->needs_clear = FALSE;
-	}
-      
+
       x = widget->allocation.x + misc->xpad +
 	(widget->allocation.width - (label->max_width + label->misc.xpad * 2))
 	* misc->xalign + 0.5;
@@ -517,7 +473,7 @@ gtk_label_expose (GtkWidget	 *widget,
 	   (widget->allocation.y + widget->allocation.height -
 	    (widget->requisition.height - misc->ypad * 2)) *
 	   misc->yalign + widget->style->font->ascent) + 1.5;
-      
+
       /* 
        * COMMENT: we can avoid gdk_text_width() calls here storing in label->row
        * the widths of the rows calculated in gtk_label_set.
@@ -527,13 +483,12 @@ gtk_label_expose (GtkWidget	 *widget,
       tmp_list = label->row;
       while (tmp_list)
 	{
-	  y += gtk_label_process_row (label, tmp_list->data, x, y, TRUE) + 2;
+	  y += gtk_label_process_row (label, tmp_list->data, x, y, TRUE, &event->area) + 2;
 	  tmp_list = tmp_list->next;
 	}
       
       gdk_gc_set_clip_mask (widget->style->white_gc, NULL);
       gdk_gc_set_clip_mask (widget->style->fg_gc[widget->state], NULL);
-      
     }
   return TRUE;
 }
@@ -551,22 +506,6 @@ gtk_label_free_rows (GtkLabel *label)
     }
   g_slist_free (label->row);
   label->row = NULL;
-}
-
-static void 
-gtk_label_state_changed (GtkWidget	*widget,
-			 guint		 previous_state)
-{
-  if (GTK_WIDGET_DRAWABLE (widget))
-    GTK_LABEL (widget)->needs_clear = TRUE;
-}
-
-static void 
-gtk_label_style_set (GtkWidget	*widget,
-		     GtkStyle	*previous_style)
-{
-  if (GTK_WIDGET_DRAWABLE (widget))
-    GTK_LABEL (widget)->needs_clear = TRUE;
 }
 
 guint      
@@ -631,5 +570,3 @@ gtk_label_parse_uline (GtkLabel         *label,
 
   return accel_key;
 }
-
-

@@ -50,6 +50,9 @@ struct _GtkChildArgInfo
   guint seq_id;
 };
 
+/* The global list of toplevel windows */
+static GList *toplevel_list = NULL;
+
 static void gtk_container_base_class_init   (GtkContainerClass *klass);
 static void gtk_container_class_init        (GtkContainerClass *klass);
 static void gtk_container_init              (GtkContainer      *container);
@@ -1235,6 +1238,10 @@ gtk_container_children (GtkContainer *container)
 void
 gtk_container_register_toplevel (GtkContainer *container)
 {
+  g_return_if_fail (container != NULL);
+  
+  toplevel_list = g_list_prepend (toplevel_list, container);
+  
   gtk_widget_ref (GTK_WIDGET (container));
   gtk_object_sink (GTK_OBJECT (container));
 }
@@ -1242,7 +1249,26 @@ gtk_container_register_toplevel (GtkContainer *container)
 void
 gtk_container_unregister_toplevel (GtkContainer *container)
 {
+  GList *node;
+
+  g_return_if_fail (container != NULL);
+
+  node = g_list_find (toplevel_list, container);
+  g_return_if_fail (node != NULL);
+
+  toplevel_list = g_list_remove_link (toplevel_list, node);
+  g_list_free_1 (node);
+
   gtk_widget_unref (GTK_WIDGET (container));
+}
+
+GList *
+gtk_container_get_toplevels (void)
+{
+  /* XXX: fixme we should ref all these widgets and duplicate
+   * the list.
+   */
+  return toplevel_list;
 }
 
 void

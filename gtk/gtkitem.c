@@ -201,6 +201,7 @@ gtk_item_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
 }
 
 static gint

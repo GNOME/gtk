@@ -48,7 +48,6 @@ struct _GtkLabel
   GSList *row;
   guint	  max_width : 16;
   guint   jtype : 2;
-  guint	  needs_clear : 1;
 };
 
 struct _GtkLabelClass

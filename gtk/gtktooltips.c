@@ -22,7 +22,7 @@
 
 #include "gtkmain.h"
 #include "gtkwidget.h"
-#include "gtkwindow.h"
+#include "gtkdrawwindow.h"
 #include "gtksignal.h"
 #include "gtkstyle.h"
 #include "gtktooltips.h"
@@ -43,6 +43,9 @@ static void gtk_tooltips_widget_remove     (GtkWidget   *widget,
 static void gtk_tooltips_set_active_widget (GtkTooltips *tooltips,
                                             GtkWidget   *widget);
 static gint gtk_tooltips_timeout           (gpointer     data);
+static gint gtk_tooltips_expose            (GtkTooltips    *tooltips, 
+					    GdkEventExpose *event);
+
 static void gtk_tooltips_draw_tips         (GtkTooltips *tooltips);
 
 static GtkDataClass *parent_class;
@@ -171,9 +174,15 @@ gtk_tooltips_force_window (GtkTooltips *tooltips)
 
   if (!tooltips->tip_window)
     {
-      tooltips->tip_window = gtk_window_new (GTK_WINDOW_POPUP);
+      tooltips->tip_window = gtk_draw_window_new (GTK_WINDOW_POPUP);
+      gtk_widget_ref (tooltips->tip_window);
       gtk_window_set_policy (GTK_WINDOW (tooltips->tip_window), FALSE, FALSE, TRUE);
-      gtk_widget_realize (tooltips->tip_window);
+
+      gtk_signal_connect_object (GTK_OBJECT (tooltips->tip_window), 
+				 "expose_event",
+				 GTK_SIGNAL_FUNC (gtk_tooltips_expose), 
+				 GTK_OBJECT (tooltips));
+
       gtk_signal_connect (GTK_OBJECT (tooltips->tip_window),
 			  "destroy",
 			  gtk_widget_destroyed,
@@ -378,6 +387,49 @@ gtk_tooltips_set_colors (GtkTooltips *tooltips,
     tooltips->background = background;
 }
 
+static gint
+gtk_tooltips_expose (GtkTooltips *tooltips, GdkEventExpose *event)
+{
+  GtkStyle *style;
+  gint y, baseline_skip, gap;
+  GtkTooltipsData *data;
+  GList *el;
+
+  style = tooltips->tip_window->style;
+
+  gap = (style->font->ascent + style->font->descent) / 4;
+  if (gap < 2)
+    gap = 2;
+  baseline_skip = style->font->ascent + style->font->descent + gap;
+
+  data = tooltips->active_tips_data;
+  if (!data)
+    return FALSE;
+
+  gtk_paint_flat_box(style, tooltips->tip_window->window,
+		     GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
+		     NULL, GTK_WIDGET(tooltips->tip_window), "tooltip",
+		     0, 0, -1, -1);
+
+  y = style->font->ascent + 4;
+  
+  for (el = data->row; el; el = el->next)
+    {
+      if (el->data)
+	{
+	  gtk_paint_string (style, tooltips->tip_window->window, 
+			    GTK_STATE_NORMAL, 
+			    NULL, GTK_WIDGET(tooltips->tip_window), "tooltip",
+			    4, y, el->data);
+	  y += baseline_skip;
+	}
+      else
+	y += baseline_skip / 2;
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_tooltips_draw_tips (GtkTooltips * tooltips)
 {
@@ -407,6 +459,7 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   if (gap < 2)
     gap = 2;
   baseline_skip = style->font->ascent + style->font->descent + gap;
+
   w = data->width;
   h = 8 - gap;
   for (el = data->row; el; el = el->next)
@@ -432,51 +485,8 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   else
     y = y + widget->allocation.height + 4;
 
-  gtk_widget_set_usize (tooltips->tip_window, w + 1, h + 1);
+  gtk_widget_set_usize (tooltips->tip_window, w, h);
   gtk_widget_popup (tooltips->tip_window, x, y);
-
-  if (tooltips->gc == NULL)
-    tooltips->gc = gdk_gc_new (tooltips->tip_window->window);
-
-  if (tooltips->background != NULL)
-    {
-      gdk_gc_set_foreground (tooltips->gc, tooltips->background);
-      gdk_gc_set_background (tooltips->gc, tooltips->foreground);
-    }
-  else
-    {
-      gdk_gc_set_foreground (tooltips->gc, &style->bg[GTK_STATE_NORMAL]);
-      gdk_gc_set_background (tooltips->gc, &style->fg[GTK_STATE_NORMAL]);
-    }
-
-  gdk_gc_set_font (tooltips->gc, style->font);
-  gdk_draw_rectangle (tooltips->tip_window->window, tooltips->gc, TRUE, 0, 0, w, h);
-
-  if (tooltips->foreground != NULL)
-    {
-      gdk_gc_set_foreground (tooltips->gc, tooltips->foreground);
-      gdk_gc_set_background (tooltips->gc, tooltips->background);
-    }
-  else
-    {
-      gdk_gc_set_foreground (tooltips->gc, &style->fg[GTK_STATE_NORMAL]);
-      gdk_gc_set_background (tooltips->gc, &style->bg[GTK_STATE_NORMAL]);
-    }
-
-  gdk_draw_rectangle (tooltips->tip_window->window, tooltips->gc, FALSE, 0, 0, w, h);
-  y = style->font->ascent + 4;
-
-  for (el = data->row; el; el = el->next)
-    {
-      if (el->data)
-       {
-         gdk_draw_string (tooltips->tip_window->window, style->font,
-			  tooltips->gc, 4, y, el->data);
-         y += baseline_skip;
-       }
-      else
-       y += baseline_skip / 2;
-    }
 }
 
 static gint

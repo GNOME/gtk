@@ -308,6 +308,7 @@ gtk_handle_box_realize (GtkWidget *widget)
   gtk_style_set_background (widget->style, widget->window, GTK_WIDGET_STATE (hb));
   gtk_style_set_background (widget->style, hb->bin_window, GTK_WIDGET_STATE (hb));
   gtk_style_set_background (widget->style, hb->float_window, GTK_WIDGET_STATE (hb));
+  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
 }
 
 static void
@@ -567,77 +568,42 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb)
       width = widget->allocation.width;
       height = DRAG_HANDLE_SIZE;
     }
-  gtk_draw_shadow (widget->style,
-		   widget->window,
-		   GTK_WIDGET_STATE (widget),
-		   GTK_SHADOW_ETCHED_IN,
-		   x,
-		   y,
-		   width,
-		   height);
-  /*
-  if (hb->handle_position == GTK_POS_LEFT ||
-      hb->handle_position == GTK_POS_RIGHT)
-    gtk_draw_hline (widget->style,
+  gtk_paint_shadow (widget->style,
 		    widget->window,
 		    GTK_WIDGET_STATE (widget),
-		    hb->handle_position == GTK_POS_LEFT ? DRAG_HANDLE_SIZE : widget->allocation.width - DRAG_HANDLE_SIZE,
-		    widget->allocation.width - DRAG_HANDLE_SIZE,
-		    widget->allocation.height / 2);
-  else
-    gtk_draw_vline (widget->style,
-		    widget->window,
-		    GTK_WIDGET_STATE (widget),
-		    hb->handle_position == GTK_POS_TOP ? DRAG_HANDLE_SIZE : widget->allocation.height - DRAG_HANDLE_SIZE,
-		    widget->allocation.height - DRAG_HANDLE_SIZE,
-		    widget->allocation.width / 2);
-		    */
+		    GTK_SHADOW_ETCHED_IN,
+		    NULL, widget, "handle",
+		    x,
+		    y,
+		    width,
+		    height);
+   if (hb->handle_position == GTK_POS_LEFT ||
+       hb->handle_position == GTK_POS_RIGHT)
+     gtk_paint_hline (widget->style,
+		      widget->window,
+		      GTK_WIDGET_STATE (widget),
+		      NULL, widget, "handlebox",
+		      hb->handle_position == GTK_POS_LEFT ? DRAG_HANDLE_SIZE : widget->allocation.width - DRAG_HANDLE_SIZE,
+		      widget->allocation.width - DRAG_HANDLE_SIZE,
+		      widget->allocation.height / 2);
+   else
+     gtk_paint_vline (widget->style,
+		      widget->window,
+		      GTK_WIDGET_STATE (widget),
+		      NULL, widget, "handlebox",
+		      hb->handle_position == GTK_POS_TOP ? DRAG_HANDLE_SIZE : widget->allocation.height - DRAG_HANDLE_SIZE,
+		      widget->allocation.height - DRAG_HANDLE_SIZE,
+		      widget->allocation.width / 2);
 }
 
 static void
 draw_textured_frame (GtkWidget *widget, GdkWindow *window, GdkRectangle *rect, GtkShadowType shadow,
 		     GdkRectangle *clip)
 {
-  int x, y;
-  int xthick, ythick;
-  GdkGC *light_gc, *dark_gc;
-  GdkRectangle dest;
-
-  if (gdk_rectangle_intersect (rect, clip, &dest))
-    {
-      gdk_draw_rectangle (window,
-			  widget->style->bg_gc[GTK_STATE_NORMAL],
-			  TRUE,
-			  dest.x, dest.y,
-			  dest.width, dest.height);
-
-      light_gc = widget->style->light_gc[GTK_STATE_NORMAL];
-      dark_gc = widget->style->dark_gc[GTK_STATE_NORMAL];
-
-      xthick = widget->style->klass->xthickness;
-      ythick = widget->style->klass->ythickness;
-
-      gdk_gc_set_clip_rectangle (light_gc, &dest);
-      gdk_gc_set_clip_rectangle (dark_gc, &dest);
-
-      for (y = rect->y + ythick; y < (rect->y + rect->height - ythick); y += 3)
-	for (x = rect->x + xthick; x < (rect->x + rect->width - xthick); x += 6)
-	  {
-	    gdk_draw_point (window, light_gc, x, y);
-	    gdk_draw_point (window, dark_gc, x + 1, y + 1);
-
-	    gdk_draw_point (window, light_gc, x + 3, y + 1);
-	    gdk_draw_point (window, dark_gc, x + 4, y + 2);
-	  }
-	
-      gdk_gc_set_clip_rectangle (light_gc, NULL);
-      gdk_gc_set_clip_rectangle (dark_gc, NULL);
-
-      gtk_draw_shadow (widget->style, window,
-		       GTK_STATE_NORMAL, shadow,
-		       rect->x, rect->y,
-		       rect->width, rect->height);
-    }
+   gtk_paint_handle(widget->style, window, GTK_STATE_NORMAL, shadow,
+		    NULL, widget, "handlebox",
+		    rect->x, rect->y, rect->width, rect->height, 
+		    GTK_ORIENTATION_VERTICAL);
 }
 
 static void
@@ -673,22 +639,29 @@ gtk_handle_box_paint (GtkWidget      *widget,
       width = widget->allocation.width;
       height = widget->allocation.height - DRAG_HANDLE_SIZE;
     }
-  
-  if (!event)
-    gdk_window_clear_area (hb->bin_window,
-			   area->x,
-			   area->y,
-			   area->width,
-			   area->height);
 
-  gtk_draw_shadow (widget->style,
-		   hb->bin_window,
-		   GTK_WIDGET_STATE (widget),
-		   GTK_SHADOW_OUT,
-		   hb->handle_position == GTK_POS_LEFT ? DRAG_HANDLE_SIZE : 0,
-		   hb->handle_position == GTK_POS_TOP ? DRAG_HANDLE_SIZE : 0,
-		   width,
-		   height);
+  if (!event)
+   gtk_paint_box(widget->style,
+		 hb->bin_window,
+		 GTK_WIDGET_STATE (widget),
+		 GTK_SHADOW_OUT,
+		 area, widget, "handlebox_bin",
+		 0, 0, -1, -1);
+  else
+   gtk_paint_box(widget->style,
+		 hb->bin_window,
+		 GTK_WIDGET_STATE (widget),
+		 GTK_SHADOW_OUT,
+		 &event->area, widget, "handlebox_bin",
+		 0, 0, -1, -1);
+
+/* We currently draw the handle _above_ the relief of the handlebox.
+ * it could also be drawn on the same level...
+
+		 hb->handle_position == GTK_POS_LEFT ? DRAG_HANDLE_SIZE : 0,
+		 hb->handle_position == GTK_POS_TOP ? DRAG_HANDLE_SIZE : 0,
+		 width,
+		 height);*/
 
   rect.x = 0;
   rect.y = 0; 

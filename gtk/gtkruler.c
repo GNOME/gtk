@@ -249,26 +249,20 @@ gtk_ruler_expose (GtkWidget      *widget,
     {
       ruler = GTK_RULER (widget);
 
-      gdk_draw_rectangle (ruler->backing_store,
-			  widget->style->bg_gc[GTK_STATE_NORMAL],
-			  TRUE, 0, 0,
-			  widget->allocation.width,
-			  widget->allocation.height);
-
+      gtk_paint_box (widget->style, widget->window,
+		     GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
+		     NULL, widget, "ruler",
+		     0, 0, -1, -1);
+      
       gtk_ruler_draw_ticks (ruler);
-
-      gtk_draw_shadow (widget->style, ruler->backing_store,
-		       GTK_STATE_NORMAL, GTK_SHADOW_OUT, 0, 0,
-		       widget->allocation.width,
-		       widget->allocation.height);
-
+      
       gdk_draw_pixmap (widget->window,
 		       ruler->non_gr_exp_gc,
 		       ruler->backing_store,
 		       0, 0, 0, 0,
 		       widget->allocation.width,
 		       widget->allocation.height);
-
+      
       gtk_ruler_draw_pos (ruler);
     }
 

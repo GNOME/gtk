@@ -1,3 +1,544 @@
+Thu Nov  5 12:06:16 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcheckbutton.c (gtk_check_button_draw_focus): Queue
+	a clear/redraw, not just a redraw, so the focus
+	gets undrawn properly.
+
+	* gtk/gtktogglebutton.c (gtk_toggle_button_unrealize): 
+	Chain to gtk_widget_unrealize() instead of duplicating
+	code.
+
+Wed Nov  4 14:34:51 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c gdk/gdkprivate.h gdk/gdkwindow.c: Removed
+	last vestiges of old DND.
+
+Tue Nov  3 12:27:52 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c: Restored inner border to entries,
+	erase cursors to background image.
+
+Fri Oct 30 12:09:21 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c gtk/gtkstyle.[ch]: removed paint_entry() -
+	it was identical to paint_flat_box().
+
+	* gtk/gtkstyle.c: Coding style fixups.
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): removed useless
+	test.
+
+	* gtk/gtkframe.c gtkstyle.[ch] gtknotebook.c: 
+	Change 'side' for paint_[box/shadow]_gap and paint_extension
+	to be GtkPositionType instead of a random int.
+
+	* gtk/gtkaspectframe.c (gtk_aspect_frame_paint): Use 
+	"frame" as detail - an aspectframe should draw identical
+	to a frame.
+
+Tue Oct 27 09:58:11 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_merge_child_shapes): renamed
+	from combine_child_shapes().
+
+	* gdk/gdkwindow.c: Merge propagate_shapes() and
+	propagate_combine_shapes() to remove code duplication.
+
+Thu Nov  5 14:31:57 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdk.c: sometimes we get a KeyRelease before a KeyPress in
+	gdk_event_translate, and the USE_XIM buffer isn't allocated yet.
+	So allocate some mem if it's not already done.
+
+	* clist scrollbar merges from HEAD
+
+Tue Nov  3 13:16:36 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/Makefile.am: remove explict -ldl, gmodule takes care of that
+
+	* gtk/gtkdnd.c: start TARGET_MOTIF_SUCCESS from 0x40000000 instead
+	of 0x80000000, so we stay within the bounds of a postive signed
+	int (it broke some compilers)
+
+	* gtk/gtkmenushell.c
+	* gtk/gtkoptionmenu.c: merges from HEAD to make option menus work
+	when some of the menuitems are hidden
+
+	* gtk/gtkthemes.h: don't include dlfcn.h explictly, gmodule takes
+	care of that
+
+	* gtk/gtkwidget.c: add a dummy continue after the line label
+	next_rect, since some compilers don't like label: }
+
+Sun Nov  1 20:05:55 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* Okay, so we need the X11R6 keysyms so programs don't have to
+	worry about them. They don't conflict anyway. Reverted the #ifdef
+	changes to gtk/*.c
+
+	* gdk/Makefile.am: remove the BUILT_SOURCES rule, and make a
+	special rule for them (X-derived-headers)
+
+Sun Nov  1 05:30:32 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/Makefile.am: changed the awk scripts to generate gdkcursors.h
+	and gdkkeysyms.h into sed scripts, since the awk scripts weren't
+	portable, and we really shouldn't be using awk anyway.
+
+	* makecursors.awk
+	* makekeysyms.awk: bye bye
+
+	* gtk/gtkaccelgroup.c
+	* gtk/gtkclist.c
+	* gtk/gtknotebook.c
+	* gtk/gtkwindow.c: don't use X11R6 keysyms if they aren't there
+
+Sat Oct 31 15:22:14 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/Makefile.am: do the same built sources trick for gdkcursors.h
+	and gdkkeysyms.h. Remove those files from CVS.
+
+Sat Oct 31 14:44:01 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdk.c: move prototype of gdk_wm_protocols_filter outside
+	of the USE_XIM #ifdef
+
+	* gtk/Makefile.am: cause the built sources to be rebuild when possible,
+        even with --include-deps. Slightly different from timj's fix, to avoid
+	circular dependency with gtkmarshal.c
+
+	* autogen.sh
+	* gtk/gtkclist.[ch]
+	* gtk/gtkctree.c
+	* gtk/gtkfontsel.[ch]
+	* gtk/gtklist.c
+	* gtk/gtklistitem.c
+	* gtk/gtkobject.[ch]
+	* gtk/testgtk.c: merges from HEAD
+
+	* gtk/gtkmenubar.c
+	* gtk/gtkradiomenuitem.c
+	* gtk/gtktreeitem.c: cleanups
+
+Wed Oct 28 23:32:19 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdkrgb.c: Oops. s/BIGENDIAN/BIG_ENDIAN/
+
+Wed Oct 28 19:04:49 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* configure.in: AIX has libpthreads, to make sure you can have
+	more than one thread. Also add -D_THREAD_SAFE, and reorder
+	configure.in so CFLAGS doesn't get clobbered when we actually
+	want to modify it
+
+	* gdk/gdkimage.c: initialize the bpp and byte_order fields properly
+	in gdk_image_get
+
+	* gtk/testdnd.c: removed unused variable "buf"
+
+Mon Oct 26 16:46:15 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcontainer.c (gtk_container_unregister_toplevel): 
+	remove_link(), not remove()
+
+Thu Oct 22 02:27:30 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdkrgb.c: use glib endian stuff
+
+	* configure.in: don't need to check for endianness anymore
+
+	* gtk/gtkstyle.h: removed #pragma }, causing a silly warning
+
+Wed Oct 21 17:44:27 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_read_rcfiles): Reset
+	all toplevel widgets, not toplevel windows. (I.e.,
+	plugs should be reset)
+
+	* gtk/gtkwindow.c (gtk_window_read_rcfiles): Yes, we
+	_do_ need to notify the other toplevels - by the time
+	the get the client messages, the RC file dates will
+	have been updated.
+
+	* gtk/gtkcontainer.h: Added a function call to list
+	every toplevel widget.
+
+	* gdk/gdk.c (gdk_event_send_client_message_to_all_recurse): 
+	Don't send client messages to _every_ window on display!
+	
+Tue Oct 20 16:21:04 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_source_event_cb): Don't start drags 
+	when dragging across widgets, only in drags
+	starting in widget.
+
+Tue Oct 20 15:59:49 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_source_info_destroy): 
+	Emit "drag_end" signal at end of drag.
+
+Tue Oct 20 13:07:54 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_read_rcfiles): Look
+	for "gtk-embedded" data currently set by 
+	GtkSocket, and use that to forward client message
+	on to embedded windows. Only reset our own toplevel -
+	the others will handle themselves. (Now that
+	GtkMenus live in GtkWindows)
+
+Mon Oct 19 16:40:40 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdnd.c (get_client_window_at_coords_recurse): Modify
+	client window finding code so that it works with
+	WM's other than fvwm.
+ 
+Sun Oct 18 22:48:27 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdrawwindow.c (gtk_draw_window_get_type): Added
+	the "GtkDrawWindow" class, which is a descendent
+	of the Window class which leaves its background alone.
+	Essentially, a toplevel drawing area, though it does
+	allow adding a child.
+
+Sat Oct 17 00:40:51 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_style_init): Duplicate bg_pixmap_name when
+	merging RC styles. Report new share/themes path for
+	themes directory. Deref theme engines when appropriate.
+
+	* gtk/gtkclist.c: Set all backgrounds in _style_set().
+	Make sure that pixel for xor_gc is never 0.
+
+	* gtk/gtkctree.c: Choose colors for plus/minus more
+	carefully, in a hopefully style-independent fashion.
+	(Still needs a bit more work)
+
+	* gtk/gtkwidget.c: Don't send expose events to widgets
+	which are about to be resized and redrawn. (Needs a
+	bit more thought.)
+
+	* gtk/gtknotebook.c (gtk_notebook_draw_tab): Avoid
+	drawing on tabs for newly allocated, un-sized
+	pages - we'll get the size wrong.
+
+Thu Oct  1 17:38:07 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_redraw_queue_remove): Fixed
+ 	up stupidities in last commit.
+
+Thu Oct  1 14:25:43 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c: When handling queued resizes, account
+	for handleboxes, where the widget heirarchy is different
+	than the window heirarchy by just queueing a resize on
+	the entire handlebox if the detached child is changed.
+
+	- Remove widgets from the redraw queue when reparenting,
+	even if not unrealizing. We queue a resize/redraw in
+	any case.
+
+Mon Sep 28 21:07:01 EDT 1998 The Rasterman <raster@redhat.com>
+	* gtk/gtkstyle.c: added check to see if the widget has been shaped
+	byt the app via gtk_widget_shape_combine_mask and if it has does
+	not reset the shape on theme change.
+	
+Tue Sep 15 11:30:03 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c: Keep a list of directories in which we never
+	want to stat the entries (like /afs), and assume everything in
+	those directories is a subdirectory.
+
+	- When following a path, try to open components even when
+	we don't find them in their parent's directory to
+	support automounters.
+
+Fri Sep 11 15:36:33 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkinputgxi.h (gdk_input_gxi_grab_pointer): Hopefully
+	now at least compiles again.
+
+	* gdk/gdk.c (gdk_event_translate): Don't pass events
+	on destroyed widgets to the gdk_input layer.
+
+Thu Sep  3 19:45:34 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkthemes.c: Use g_module instead of dlopen()
+
+Thu Sep  3 19:30:11 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.c (gtk_tooltips_expose): Check
+	if we've changed widgets since the expose event
+	was queued.
+
+Mon Aug 31 15:33:13 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.h (struct _GtkStyle): Reordered a bit
+	to restore approximate bin compatibility with the
+	non-themes branch. (This does break bin compat
+	within the themes branch.)
+
+Sun Aug 30 16:48:27 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtklabel.c (gtk_label_set): Eliminate a 
+	gdk_window_clear_area() that snuck in with the
+	menu underlines merge.
+
+Mon Aug 24 23:37:26 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c: Fixed some remaining background drawing,
+	  merges from main branch, cleanups.
+
+Mon Aug 24 10:55:51 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_draw_tab): Don't
+	  dereference NULL focus tab.
+
+	* gtk/gtkscale.c (gtk_scale_[un]map): Add map/unmap
+	  functions since we need to both show/hide and 
+	  queue a redraw. (There's some duplication of drawing here, 
+	  we probably should only be queuing a redraw on the
+	  "value" portion of the scale.)
+
+Fri Aug 21 19:02:30 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.[ch] gtk/gtkhscale.c gtk/gtkvscale.[ch]: Fit scales
+	  into the theme-drawing framework. We do this by making them,
+	  like check/radio-buttons, no-window widgets with subwindows. We
+	  then move the value by calling gtk_widget_queue_clear() and only
+	  redraw the value in our draw() / expose() handler.  A virtual
+	  function clear_background is added which queues a clear on the
+	  "background" portion of the widget.
+
+Fri Aug 21 13:04:27 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c (mark_bg_gc): Make background colors work
+	  again. (We can't always paint the background with a
+	  paint() function - only do that for selected text)
+
+Mon Aug 17 20:31:01 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktearoffmenuitem.c gtk/gtkclist.[ch] gtk/gtkctree.[ch]
+	  gtk/gtklabel.c gtk/gtkmenu.c: Merges from main branch.
+
+	* Makefile.am (SRC_SUBDIRS): Removed themes from SRC_SUBDIRS.
+	  the themes can't be built as part of the same build since
+	  they depend on gdk_imlib.
+
+Fri Aug 14 12:44:30 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkthemes.c (gtk_theme_engine_get): Removed sample engine code
+	  from gtkthemes.c.
+		
+	* configure.in ltconfig.in ltmain.sh gdk/Makefile.am gtk/Makefile.am
+	  gtk/
+
+	  - Upgrade to libtool-1.2b + patch to add shared library dependencies
+	    for Linux. (Needs to be extended to other platforms where they
+	    are safe)
+
+	 - Check for -ldl so this branch should build on all platforms, though
+	   themes will work on all platforms they could work on.
+
+	 - Use -version and -release simultaneously: sonames stay as they are
+	   in the current scheme, but -lgtk-1.1 changes to -lgtk.
+
+	 - Added in extra -l flags to library LDFLAGS so we get shared library
+	   dependencies against X libs and -ldl. (But not libgtk against 
+	   libgdk or libglib yet, since dependencies against uninstalled
+	   libraries aren't portable)
+
+Fri Aug 21 16:10:38 EDT 1998 The Rasterman <raster@redhat.com>
+	* gtkrc.c - added api calls to find module and theme paths from gtk.
+	  nuked gtk_install_prefix global.
+	
+Fri Aug 21 12:36:46 EDT 1998 The Rasterman <raster@redhat.com>
+	* fixed gtk_install_prefix global.
+	  
+Thu Aug 20 19:27:49 EDT 1998 The Rasterman <raster@redhat.com>
+	* added gtk_install_prefix global const variabel to find where gtk is
+	  installed.
+	  
+Thu Aug 20 18:27:29 EDT 1998 The Rasterman <raster@redhat.com>
+	* added ~/.gtk/lib/themes/engines/ to the default searchpath for
+	  gtk theme engines
+	
+Thu Aug 20 18:27:29 EDT 1998 The Rasterman <raster@redhat.com>
+	* made gtkrc scanner append dir that gtkrc is read from to pixmap path.
+
+Mon Aug 10 23:03:55 1998  The Rasterman <raster@redhat.com>
+	* Fixed minor problem in gtkhandlebox.c with drawing, and some
+	  notebook stuff. Also pixmap theme is now "clean" again.
+	  
+Mon Aug 10 23:03:55 1998  Owen Taylor  <otaylor@redhat.com>
+	* gtk/gtkwidget.c (gtk_widget_clip_rect): Fixed up 
+	  queued area resizing once more.
+
+Mon Aug 10 23:09:30 EDT 1998
+	* Added a few drawing fixes for notebook and other widgets. finished
+	  pixmap theme up to the level that can be supported so far. (need to
+	  add path discovery 9ie where is the rc fiel from - add to pixmap 
+	  path so we can get theimages from there too). then we can package 
+	  themes. After that need to add to theme seartch path stuff in users 
+	  home dir.
+	  
+Thu Aug  6 16:49:25 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.c (gtk_tooltips_expose): Draw into a
+	  drawing area, draw in an expose handler.
+
+	* gtk/gtknotebook.c (gtk_notebook_expose): Check for
+	  empty current page.
+
+Wed Aug  5 16:13:15 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_draw_wheel): Moved
+	  creation of GC's so that they will be set before
+	  they are used for map events (why are they used there?)
+
+	* gtk/gtkwidget.c: Fixed mistake that caused widgets to
+	  be queued in multiple times in the queue.
+
+Wed Aug  5 14:23:52 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_default_draw_shadow): Don't set
+	  clip rects (or do anything) for shadow_none.
+
+Wed Aug  5 13:14:57 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbutton.c (gtk_button_paint): Restored paint function.
+	  Yes, it was needed. draw() and expose() are _not_
+	  identical.
+
+Sat Aug  1 17:44:31 EDT 1998 EDT 1998 The Rasterman <raster@redhat.com>
+	* Wheeeeeeeeeeeeeeee fixed radiobittons to work in gimp again.
+
+Fri Jul 31 19:45:12 EDT 1998 The Rasterman <raster@redhat.com>
+	* YES YES YES YES YES clist borders work again! YES! YES YES! gimme 
+	  more baby oooh yeah more more MORE YES YES.
+
+Fri Jul 31 19:45:12 EDT 1998 The Rasterman <raster@redhat.com>
+	* hopefully fixed problem wiht togglebuttons acting like
+          radiobuttons in gtktogglebutton.c
+
+Thu Jul 30 23:36:46 EDT 1998 The Rasterman <raster@redhat.com>
+	* fixed another drawing buglet in the frame drawing code (actually
+	  in the clearing code but anyway in gtkstyle.c)
+
+Thu Jul 30 19:23:48 EDT 1998 The Rasterman <raster@redhat.com>
+	* Fixed warning from colorsel widget...
+
+Thu Jul 30 19:10:42 EDT 1998 The Rasterman <raster@redhat.com>
+	* Fixed defautl drawing code to no longer clobber the original style
+	  pixmap bgs as it did and added a helper funciton og gtkstyle.c to
+	  help with this.
+
+Thu Jul 30 18:09:21 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c gtk/gtkstyle.c: More mm fixups
+
+	* gtk/gtktooltips.c: Pass a widget (the window) to the
+	  drawing function instead of the GtkTooltips.
+
+Thu Jul 30 17:27:10 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c: Abstract out checking for shape
+	  extension into a function.
+
+	* gtk/gtkwindow.c: Fix up gtk_window_expose()/draw().
+	  Remove extra callls to gtk_window_draw().
+
+Thu Jul 30 11:18:43 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c gtk/gtkrc.c: Memory management fixups.
+
+	* themes/th_main.c: Moved messages around so they are
+	  printed before destroying strings.
+
+Wed Jul 29 16:56:07 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c: Fairly simple implementation of expose compression.
+	  (No GraphicsExpose compression yet, always compress
+	  with the equivalent of XtCompressMultiple - no compression
+	  of Expose events across non-Expose events)
+	
+	* gdk/gdk.h gdk/gdkrectangle.c: gdk_rectangle_union()
+	  Find rectangle bounding two rectangles.
+
+	* gtk/gtkstyle.c: Set clip rects for a few extra GC's
+	  in gdk_default_draw_shadow()
+	
+Wed Jul 29 16:03:20 EDT 1998 The Rasterman <raster@redhat.com>
+	* Fixed drawing functions to handle switching themes on the fly 
+	  gracefully and look decent.
+	  
+Tue Jul 28 22:52:10 EDT 1998 The Rasterman <raster@redhat.com>
+	* Added all the theme drawing code to all widgets, fixed up minor
+          nigglies in some widgets when it comes to themes, seem to be
+          running into some funky behavior with clipping rects in GC's. Too
+          many files to list here. (all files that now use gtk_paint_* are
+	  affected).
+
+Tue Jul 28 22:49:16 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* themes/th_main.c themes/th_draw.c gtk/testgtkrc: 
+	  Set up the demo theme so it is loaded from the RC file.
+
+	* themes/th_draw.c: Alleviate the hardcoded paths a wee
+	  bit. (use $HOME/themes/)
+
+	* gtk/gtkthemes.[ch] gtk/gtkmain.c: Load engines specified in 
+	  the RC file via dlopen()
+
+Tue Jul 28 20:30:56 1998  Owen Taylor  <otaylor@redhat.com>
+
+	Internal handling of styles and RC styles pretty much
+	completely reworked for Theme work.
+
+	* gtkthemes.[ch]: 
+	 - Added routines for virtualization of RcStyle and Style handling.
+	 - Temporary "sample" inline theme-engine. (Does nothing
+	   but print out a few messages.
+	
+	* gtkrc.[ch]
+	 - Made GtkRcStyle public, added flags to tell if particular
+	   colors have been set.
+	 - RC Styles are "transparent", and the final style for
+	   a widget is the composition of all matching styles
+	 - Added pointer to GtkThemeEngine, and gpointer engine_data
+	   to RC style and style.
+	 - Parse "engine" keyword, load the appropriate theme engine
+	   and call the engine's parser.
+	
+	*  gtkstyle.[ch]
+	 - Keep a GtkRcStyle * in styles created from Rc Styles.
+	 - Load up images from RC file at style attachment time.
+         - Call ->engine->foo() at appropriate times.
+	 - Don't use a GCache. All incarnations for a style are
+	   just linked together in a list, depend on the RC style 
+	   code to find the existing copy.
+
+Tue Jul 28 14:41:54 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.[ch]: Added the concept of queued redraws
+	  of partial areas. This can be done either relative
+	  to the existing windows (gtk_widget_queue_clear[_area]())
+	  or relative to the future allocation of the widget
+	  (gtk_widget_queue_draw[_area]). 
+
+	  The initial implementation is pretty braindead, but
+	  can be improved.
+
+	* gtk/gtkwidget.[ch]: Removed calls to gdk_window_clear_area()
+	  in favor of gtk_widget_queue_clear().
+	
+	* gtk/gtklabel.[ch] gtk/gtkpixmap.[ch]: Removed needs_clear
+	  flags in favor of gtk_widget_queue_clear()
+	
+Tue Aug  4 19:12:14 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_idle_draw): Fixed up
+	  handling of partially clipped areas.
+
 Thu Nov  5 18:52:35 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.h (struct _GtkCListClass)

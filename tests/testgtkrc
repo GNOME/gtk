@@ -10,96 +10,15 @@
 # widget <widget_set> style <style_name>
 # widget_class <widget_class_set> style <style_name>
 
-# testgtkrc2 sets all the buttons in the main window to blue by default
-include "testgtkrc2"
+include "/opt/themes/share/themes/Metal/gtk/gtkrc"
+#include "/home/otaylor/.themes/Ignorant/gtk/gtkrc"
 
-pixmap_path "."
-
-style "default"
-{
+style "defaultfont" {
+#  font = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*,*"
 #  fontset = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*,*"
-  font = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
 }
 
-style "window"
-{
-#  bg_pixmap[NORMAL] = "warning.xpm"
-}
-
-style "scale"
-{
-  fg[NORMAL] = { 1.0, 0, 0 }
-  bg_pixmap[NORMAL] = "<parent>"
-}
-
-style "button" = "default"
-{
-#  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
-#  bg[PRELIGHT] = { 0, 0, 0.75 }
-#  bg[PRELIGHT] = { 0.75, 0, 0x00 }
-}
-
-style "toggle_button" = "button"
-{
-  fg[NORMAL] = { 1.0, 0, 0 }
-  fg[ACTIVE] = { 1.0, 0, 0 }
-  bg_pixmap[NORMAL] = "<parent>"
-}
-
-style "text"
-{
-  bg_pixmap[NORMAL] = "marble.xpm"
-  text[NORMAL] = { 1.0, 1.0, 1.0 }
-  fg[NORMAL] = { 1.0, 1.0, 1.0 }
-  base[NORMAL] = { 0.0, 0.0, 0.0 }
-}
-
-style "slider"
-{
-  fg[NORMAL] = { 1.0, 1.0, 1.0 }
-  bg[NORMAL] = { 0.0, 0.0, 1.0 }
-  bg[ACTIVE] = { 0.0 ,0.0, 0.5 }
-  bg[PRELIGHT] = { 0.75 ,0.75, 1.0 }
-}
-
-style "ruler"
-{
-  font = '-adobe-helvetica-medium-r-normal--*-80-*-*-*-*-*-*'
-}
-
-style "curve"
-{
-  fg[NORMAL] = { 58000, 0, 0 }			# red
-}
-
-style "red-bar"
-{
-  bg[PRELIGHT] = { 0.95, .55, 0.55 }
-}
-
-# override testgtk2, introduce the green color in the button list
-style 'button_list' = 'button'
-{
-  font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
-  bg[PRELIGHT] = { 0, 0.75, 0x00 }
-}
-widget "main window.*GtkScrolledWindow.*GtkButton*" style "button_list"
-
-# common default
-class "GtkWidget" style "default"
-
-class "GtkScrollbar" style "red-bar"
-
-widget_class "GtkWindow" style "window"
-widget_class "GtkDialog" style "window"
-widget_class "GtkFileSelection" style "window"
-widget_class "*Gtk*Scale" style "scale"
-widget_class "*GtkCheckButton*" style "toggle_button"
-widget_class "*GtkRadioButton*" style "toggle_button"
-widget_class "*GtkButton*" style "button"
-widget_class "*Ruler" style "ruler"
-widget_class "*GtkText" style "text"
-widget "*GtkCurve" style "curve"
+class "GtkWidget" style "defaultfont"
 
 binding "test1"
 {
@@ -120,7 +39,7 @@ binding "test2"
 # lowest
 # gtk         (used by gtk for internal class bindings)
 # application (for hard coded bindings on application basis)
-# rc          (used implicitel by rc files)
+# rc          (used implicitly by rc files)
 # highest
 class "GtkButton" binding "test1"           # implicit : rc
 class "GtkButton" binding : highest "test2" # override "rc" priority
@@ -136,4 +55,3 @@ binding "clist-test"
 }
 
 class "GtkCList" binding "clist-test"
-  

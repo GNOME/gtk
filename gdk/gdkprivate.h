@@ -24,8 +24,6 @@
 #include <X11/Xutil.h>
 #include <gdk/gdktypes.h>
 
-#define DND_PROTOCOL_VERSION 0
-
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
 #define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
@@ -65,20 +63,6 @@ struct _GdkWindowPrivate
   guint8 window_type;
   guint ref_count;
   guint destroyed : 2;
-  guint dnd_drag_enabled : 1,
-    dnd_drag_datashow : 1,
-    dnd_drag_destructive_op : 1,
-    dnd_drag_accepted : 1,
-    dnd_drop_enabled : 1,
-    dnd_drop_destructive_op : 1;
-  GdkAtom dnd_drag_data_type, *dnd_drag_data_typesavail;
-  guint dnd_drag_data_numtypesavail;
-  /* We have to turn on MotionMask/EnterWindowMask/LeaveWindowMask
-     during drags, then set it back to what it was after */
-  glong dnd_drag_savedeventmask, dnd_drag_eventmask;
-  GdkAtom *dnd_drop_data_typesavail;
-  guint dnd_drop_data_numtypesavail;
-  /* need to allow custom drag/drop cursors */
 
   gint extension_events;
 

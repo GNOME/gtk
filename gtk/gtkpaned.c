@@ -31,10 +31,10 @@ static void gtk_paned_add        (GtkContainer   *container,
 				  GtkWidget      *widget);
 static void gtk_paned_remove     (GtkContainer   *container,
 				  GtkWidget      *widget);
-static void gtk_paned_forall   (GtkContainer   *container,
-				gboolean	include_internals,
-			        GtkCallback     callback,
-			        gpointer        callback_data);
+static void gtk_paned_forall     (GtkContainer   *container,
+			   	  gboolean	  include_internals,
+			          GtkCallback     callback,
+			          gpointer        callback_data);
 static GtkType gtk_paned_child_type (GtkContainer *container);
 
 
@@ -167,6 +167,8 @@ gtk_paned_realize (GtkWidget *widget)
   
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
   gtk_style_set_background (widget->style, paned->handle, GTK_STATE_NORMAL);
+
+  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
   
   gdk_window_show (paned->handle);
 }
@@ -252,13 +254,12 @@ gtk_paned_expose (GtkWidget      *widget,
       /* An expose event for the handle */
       if (event->window == paned->handle)
 	{
-	  gdk_window_set_background (paned->handle,
-				     &widget->style->bg[widget->state]);
-	  gdk_window_clear (paned->handle);
-	  gtk_draw_shadow (widget->style, paned->handle,
-			   GTK_WIDGET_STATE(widget),
-			   GTK_SHADOW_OUT, 0, 0,
-			   paned->handle_size, paned->handle_size);
+	   gtk_paint_box (widget->style, paned->handle,
+			  GTK_WIDGET_STATE(widget),
+			  GTK_SHADOW_OUT, 
+			  &event->area, widget, "paned",
+			  0, 0,
+			  paned->handle_size, paned->handle_size);
 	}
       else
 	{

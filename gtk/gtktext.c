@@ -1350,18 +1350,19 @@ gtk_text_draw_focus (GtkWidget *widget)
 	  height -= 2;
 	  xextra -= 1;
 	  yextra -= 1;
-	  
-	  gdk_draw_rectangle (widget->window,
-			      widget->style->fg_gc[GTK_STATE_NORMAL],
-			      FALSE, 0, 0,
-			      widget->allocation.width - 1,
-			      widget->allocation.height - 1);
+
+	  gtk_paint_focus (widget->style, widget->window,
+			   NULL, widget, "text",
+			   0, 0,
+			   widget->allocation.width - 1,
+			   widget->allocation.height - 1);
 	}
-      
-      gtk_draw_shadow (widget->style, widget->window,
-		       GTK_STATE_NORMAL, GTK_SHADOW_IN,
-		       x, y, width, height);
-      
+
+      gtk_paint_shadow (widget->style, widget->window,
+			GTK_STATE_NORMAL, GTK_SHADOW_IN,
+			NULL, widget, "text",
+			x, y, width, height);
+
       x += xthick; 
       y += ythick;
       width -= 2 * xthick;
@@ -1379,14 +1380,6 @@ gtk_text_draw_focus (GtkWidget *widget)
 			    xextra, height - 2 * ythick);
 	  /* bottom rect */
 	  clear_focus_area (text, x, x + height - yextra, width, yextra);
-	}
-      else if (!GTK_WIDGET_HAS_FOCUS (widget))
-	{
-	  gdk_draw_rectangle (widget->window,
-			      widget->style->base_gc[GTK_STATE_NORMAL], FALSE,
-			      x, y,
-			      width - 1,
-			      height - 1);
 	}
     }
   else
@@ -4571,32 +4564,48 @@ expand_scratch_buffer (GtkText* text, guint len)
     }
 }
 
-/* Returns a GC to draw a background for the text at a mark,
- * or NULL, if the mark's background is NULL
- *
- * Side effect: modifies text->gc
+/* Side effect: modifies text->gc
  */
-static GdkGC *
-mark_bg_gc (GtkText* text, const GtkPropertyMark *mark)
+
+static void
+draw_bg_rect (GtkText* text, GtkPropertyMark *mark,
+	      gint x, gint y, gint width, gint height,
+	      gboolean already_cleared)
 {
   GtkEditable *editable = GTK_EDITABLE(text);
-  
+
   if ((mark->index >= MIN(editable->selection_start_pos, editable->selection_end_pos) &&
        mark->index < MAX(editable->selection_start_pos, editable->selection_end_pos)))
     {
-      if (editable->has_selection)
-	return GTK_WIDGET(text)->style->bg_gc[GTK_STATE_SELECTED];
-      else
-	return GTK_WIDGET(text)->style->bg_gc[GTK_STATE_ACTIVE];
+      gtk_paint_flat_box(GTK_WIDGET(text)->style, text->text_area,
+			 editable->has_selection ?
+			    GTK_STATE_SELECTED : GTK_STATE_ACTIVE, 
+			 GTK_SHADOW_NONE,
+			 NULL, GTK_WIDGET(text), "text",
+			 x, y, width, height);
     }
   else if (!gdk_color_equal(MARK_CURRENT_BACK (text, mark),
 			    &GTK_WIDGET(text)->style->base[GTK_STATE_NORMAL]))
-    
     {
       gdk_gc_set_foreground (text->gc, MARK_CURRENT_BACK (text, mark));
-      return text->gc;
+
+      gdk_draw_rectangle (text->text_area,
+			  text->gc,
+			  TRUE, x, y, width, height);
     }
-  return NULL;
+  else if (GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL])
+    {
+      GdkRectangle rect;
+      
+      rect.x = x;
+      rect.y = y;
+      rect.width = width;
+      rect.height = height;
+      
+      clear_area (text, &rect);
+    }
+  else if (!already_cleared)
+    gdk_window_clear_area (text->text_area, x, y, width, height);
 }
 
 static void
@@ -4609,7 +4618,7 @@ draw_line (GtkText* text,
   gint len = 0;
   guint running_offset = lp->tab_cont.pixel_offset;
   guchar* buffer;
-  GdkGC *fg_gc, *bg_gc;
+  GdkGC *fg_gc;
   
   GtkEditable *editable = GTK_EDITABLE(text);
   
@@ -4645,27 +4654,8 @@ draw_line (GtkText* text,
   
   if (running_offset > 0)
     {
-      bg_gc = mark_bg_gc (text, &mark);
-      
-      if (bg_gc)
-	gdk_draw_rectangle (text->text_area,
-			    bg_gc,
-			    TRUE,
-			    0,
-			    pixel_start_height,
-			    running_offset,
-			    LINE_HEIGHT (*lp));
-      else if (GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL])
-	{
-	  GdkRectangle rect;
-	  
-	  rect.x = 0;
-	  rect.y = pixel_start_height;
-	  rect.width = running_offset;
-	  rect.height = LINE_HEIGHT (*lp);
-	  
-	  clear_area (text, &rect);
-	}
+      draw_bg_rect (text, &mark, 0, pixel_start_height, running_offset,
+		    LINE_HEIGHT (*lp), TRUE);
     }
   
   for (; chars > 0; chars -= len, buffer += len, len = 0)
@@ -4697,26 +4687,8 @@ draw_line (GtkText* text,
 	  else
 	    pixel_width = gdk_text_width (font, (gchar*) buffer, len);
 	  
-	  bg_gc = mark_bg_gc (text, &mark);
-	  if (bg_gc)
-	    gdk_draw_rectangle (text->text_area,
-				bg_gc,
-				TRUE,
-				running_offset,
-				pixel_start_height,
-				pixel_width,
-				LINE_HEIGHT(*lp));
-	  else if (GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL])
-	    {
-	      GdkRectangle rect;
-	      
-	      rect.x = running_offset;
-	      rect.y = pixel_start_height;
-	      rect.width = pixel_width;
-	      rect.height = LINE_HEIGHT (*lp);
-	      
-	      clear_area (text, &rect);
-	    }
+	  draw_bg_rect (text, &mark, running_offset, pixel_start_height,
+			pixel_width, LINE_HEIGHT (*lp), TRUE);
 	  
 	  if ((mark.index >= selection_start_pos) && 
 	      (mark.index < selection_end_pos))
@@ -4745,32 +4717,23 @@ draw_line (GtkText* text,
 	}
       else
 	{
+	  gint pixels_remaining;
+	  gint space_width;
+	  gint spaces_avail;
+	      
 	  len = 1;
 	  
-	  bg_gc = mark_bg_gc (text, &mark);
-	  if (bg_gc)
-	    {
-	      gint pixels_remaining;
-	      gint space_width;
-	      gint spaces_avail;
-	      
-	      gdk_window_get_size (text->text_area, &pixels_remaining, NULL);
-	      pixels_remaining -= (LINE_WRAP_ROOM + running_offset);
-
-	      space_width = MARK_CURRENT_TEXT_FONT(text, &mark)->char_widths[' '];
-
-	      spaces_avail = pixels_remaining / space_width;
-	      spaces_avail = MIN (spaces_avail, tab_mark.to_next_tab);
-	      
-	      gdk_draw_rectangle (text->text_area,
-				  bg_gc,
-				  TRUE,
-				  running_offset,
-				  pixel_start_height,
-				  spaces_avail * space_width,
-				  LINE_HEIGHT (*lp));
-	    }
+	  gdk_window_get_size (text->text_area, &pixels_remaining, NULL);
+	  pixels_remaining -= (LINE_WRAP_ROOM + running_offset);
 	  
+	  space_width = MARK_CURRENT_TEXT_FONT(text, &mark)->char_widths[' '];
+	  
+	  spaces_avail = pixels_remaining / space_width;
+	  spaces_avail = MIN (spaces_avail, tab_mark.to_next_tab);
+
+	  draw_bg_rect (text, &mark, running_offset, pixel_start_height,
+			spaces_avail * space_width, LINE_HEIGHT (*lp), TRUE);
+
 	  running_offset += tab_mark.to_next_tab *
 	    MARK_CURRENT_TEXT_FONT(text, &mark)->char_widths[' '];
 
@@ -4833,7 +4796,6 @@ static void
 undraw_cursor (GtkText* text, gint absolute)
 {
   GtkEditable *editable = (GtkEditable *)text;
-  GdkGC *gc;
 
   TDEBUG (("in undraw_cursor\n"));
   
@@ -4849,30 +4811,11 @@ undraw_cursor (GtkText* text, gint absolute)
       g_assert(text->cursor_mark.property);
 
       font = MARK_CURRENT_FONT(text, &text->cursor_mark);
-      gc = mark_bg_gc (text, &text->cursor_mark);
 
-      if (!gc && (GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL]))
-	{
-	  GdkRectangle rect;
-	  
-	  rect.x = text->cursor_pos_x;
-	  rect.y = text->cursor_pos_y - text->cursor_char_offset - font->ascent;
-	  rect.width = 1;
-	  rect.height = font->ascent + 1; /* @@@ I add one here because draw_line is inclusive, right? */
-	  
-	  clear_area (text, &rect);
-	}
-      else
-	{
-	  if (!gc)
-	    {
-	      gdk_gc_set_foreground (text->gc, MARK_CURRENT_BACK (text, &text->cursor_mark));
-	      gc = text->gc;
-	    }
-	  gdk_draw_line (text->text_area, gc, text->cursor_pos_x,
-			 text->cursor_pos_y - text->cursor_char_offset, text->cursor_pos_x,
-			 text->cursor_pos_y - text->cursor_char_offset - font->ascent);
-	}
+      draw_bg_rect (text, &text->cursor_mark, 
+		    text->cursor_pos_x,
+		    text->cursor_pos_y - text->cursor_char_offset - font->ascent,
+		    1, font->ascent + 1, FALSE);
       
       if (text->cursor_char)
 	{

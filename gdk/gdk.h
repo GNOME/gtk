@@ -196,6 +196,23 @@ void gdk_window_shape_combine_mask (GdkWindow	    *window,
 				    GdkBitmap	    *shape_mask,
 				    gint	     offset_x,
 				    gint	     offset_y);
+/*
+ * This routine allows you to quickly take the shapes of all the child windows
+ * of a window and use their shapes as the shape mask for this window - useful
+ * for container windows that dont want to look like a big box
+ * 
+ * - Raster
+ */
+void gdk_window_set_child_shapes (GdkWindow *window);
+
+/*
+ * This routine allows you to merge (ie ADD) child shapes to your
+ * own window's shape keeping its current shape and ADDING the shild
+ * shapes to it.
+ * 
+ * - Raster
+ */
+void gdk_window_merge_child_shapes (GdkWindow *window);
 
 /*
  * The following function adds a global filter for all client
@@ -726,6 +743,9 @@ void	gdk_property_delete (GdkWindow	 *window,
 gint gdk_rectangle_intersect (GdkRectangle *src1,
 			      GdkRectangle *src2,
 			      GdkRectangle *dest);
+void gdk_rectangle_union     (GdkRectangle *src1,
+			      GdkRectangle *src2,
+			      GdkRectangle *dest);
 
 /* XInput support
  */
@@ -894,6 +914,8 @@ void          gdk_threads_wake (void);
 
 /* Miscellaneous */
 void     gdk_event_send_clientmessage_toall (GdkEvent    *event);
+gboolean gdk_event_send_client_message (GdkEvent    *event,
+					guint32      xid);
 
 /* Key values
  */

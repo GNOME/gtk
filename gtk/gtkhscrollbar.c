@@ -259,9 +259,11 @@ gtk_hscrollbar_draw_step_forw (GtkRange *range)
       else
 	shadow_type = GTK_SHADOW_OUT;
 
-      gtk_draw_arrow (GTK_WIDGET (range)->style, range->step_forw,
-		      state_type, shadow_type, GTK_ARROW_RIGHT,
-		      TRUE, 0, 0, -1, -1);
+      gtk_paint_arrow (GTK_WIDGET (range)->style, range->step_forw,
+		       state_type, shadow_type, 
+		       NULL, GTK_WIDGET (range), "hscrollbar",
+		       GTK_ARROW_RIGHT,
+		       TRUE, 0, 0, -1, -1);
     }
 }
 
@@ -291,9 +293,11 @@ gtk_hscrollbar_draw_step_back (GtkRange *range)
       else
 	shadow_type = GTK_SHADOW_OUT;
 
-      gtk_draw_arrow (GTK_WIDGET (range)->style, range->step_back,
-		      state_type, shadow_type, GTK_ARROW_LEFT,
-		      TRUE, 0, 0, -1, -1);
+       gtk_paint_arrow (GTK_WIDGET (range)->style, range->step_back,
+			state_type, shadow_type, 
+			NULL, GTK_WIDGET (range), "hscrollbar",
+			GTK_ARROW_LEFT,
+			TRUE, 0, 0, -1, -1);
     }
 }
 

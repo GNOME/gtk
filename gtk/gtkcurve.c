@@ -239,9 +239,9 @@ gtk_curve_draw (GtkCurve *c, gint width, gint height)
   style = GTK_WIDGET (c)->style;
 
   /* clear the pixmap: */
-  gdk_draw_rectangle (c->pixmap, style->bg_gc[state], TRUE,
+  gtk_paint_flat_box (style, c->pixmap, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+		      NULL, GTK_WIDGET(c), "curve_bg",
 		      0, 0, width + RADIUS * 2, height + RADIUS * 2);
-
   /* draw the grid lines: (XXX make more meaningful) */
   for (i = 0; i < 5; i++)
     {

@@ -415,21 +415,24 @@ gtk_menu_item_paint (GtkWidget    *widget,
       if (!GTK_WIDGET_IS_SENSITIVE (widget))
 	state_type = GTK_STATE_INSENSITIVE;
 
-      gtk_style_set_background (widget->style, widget->window, state_type);
-      gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
-
       x = GTK_CONTAINER (menu_item)->border_width;
       y = GTK_CONTAINER (menu_item)->border_width;
       width = widget->allocation.width - x * 2;
       height = widget->allocation.height - y * 2;
-
+      
       if ((state_type == GTK_STATE_PRELIGHT) &&
 	  (GTK_BIN (menu_item)->child))
-	gtk_draw_shadow (widget->style,
-			 widget->window,
-			 GTK_STATE_PRELIGHT,
-			 GTK_SHADOW_OUT,
-			 x, y, width, height);
+	gtk_paint_box (widget->style,
+		       widget->window,
+		       GTK_STATE_PRELIGHT,
+		       GTK_SHADOW_OUT,
+		       area, widget, "menuitem",
+		       x, y, width, height);
+      else
+	{
+	  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
+	  gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+	}
 
       if (menu_item->submenu && menu_item->show_submenu_indicator)
 	{
@@ -437,14 +440,17 @@ gtk_menu_item_paint (GtkWidget    *widget,
 	  if (state_type == GTK_STATE_PRELIGHT)
 	    shadow_type = GTK_SHADOW_IN;
 
-	  gtk_draw_arrow (widget->style, widget->window,
-			  state_type, shadow_type, GTK_ARROW_RIGHT, FALSE,
-			  x + width - 15, y + height / 2 - 5, 10, 10);
+	  gtk_paint_arrow (widget->style, widget->window,
+			   state_type, shadow_type, 
+			   area, widget, "menuitem", 
+			   GTK_ARROW_RIGHT, TRUE,
+			   x + width - 15, y + height / 2 - 5, 10, 10);
 	}
       else if (!GTK_BIN (menu_item)->child)
 	{
-	  gtk_draw_hline (widget->style, widget->window, GTK_STATE_NORMAL,
-			  0, widget->allocation.width, 0);
+	   gtk_paint_hline (widget->style, widget->window, GTK_STATE_NORMAL,
+			    area, widget, "menuitem",
+			    0, widget->allocation.width, 0);
 	}
     }
 }

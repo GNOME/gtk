@@ -142,6 +142,7 @@ gtk_range_class_init (GtkRangeClass *class)
   class->step_forw = 3;
   class->step_back = 4;
   class->draw_background = NULL;
+  class->clear_background = NULL;
   class->draw_trough = gtk_real_range_draw_trough;
   class->draw_slider = gtk_real_range_draw_slider;
   class->draw_step_forw = NULL;
@@ -242,6 +243,16 @@ gtk_range_draw_background (GtkRange *range)
 
   if (range->trough && RANGE_CLASS (range)->draw_background)
     (* RANGE_CLASS (range)->draw_background) (range);
+}
+
+void
+gtk_range_clear_background (GtkRange *range)
+{
+  g_return_if_fail (range != NULL);
+  g_return_if_fail (GTK_IS_RANGE (range));
+
+  if (range->trough && RANGE_CLASS (range)->clear_background)
+    (* RANGE_CLASS (range)->clear_background) (range);
 }
 
 void
@@ -532,7 +543,7 @@ gtk_range_default_hmotion (GtkRange *range,
       else
 	{
 	  gtk_range_slider_update (range);
-	  gtk_range_draw_background (range);
+	  gtk_range_clear_background (range);
 
 	  if (range->policy == GTK_UPDATE_DELAYED)
 	    {
@@ -597,7 +608,7 @@ gtk_range_default_vmotion (GtkRange *range,
       else
 	{
 	  gtk_range_slider_update (range);
-	  gtk_range_draw_background (range);
+	  gtk_range_clear_background (range);
 
 	  if (range->policy == GTK_UPDATE_DELAYED)
 	    {
@@ -717,7 +728,6 @@ gtk_range_expose (GtkWidget      *widget,
        * trough-drawing handler. (Probably should really pass another
        * argument - the redrawn area to all the drawing functions)
        */
-
       gint xt = widget->style->klass->xthickness;
       gint yt = widget->style->klass->ythickness;
       
@@ -983,7 +993,7 @@ gtk_range_key_press (GtkWidget   *widget,
 				       "value_changed");
 
 	      gtk_range_slider_update (range);
-	      gtk_range_draw_background (range);
+	      gtk_range_clear_background (range);
 	    }
 	}
     }
@@ -1108,23 +1118,16 @@ gtk_real_range_draw_trough (GtkRange *range)
   g_return_if_fail (GTK_IS_RANGE (range));
 
   if (range->trough)
-    {
-      gtk_draw_shadow (GTK_WIDGET (range)->style, range->trough,
-                       GTK_STATE_NORMAL, GTK_SHADOW_IN,
-                       0, 0, -1, -1);
-
-      if (GTK_WIDGET_HAS_FOCUS (range))
-        gdk_draw_rectangle (GTK_WIDGET (range)->window,
-                            GTK_WIDGET (range)->style->black_gc,
-                            FALSE, 0, 0,
-                            GTK_WIDGET (range)->allocation.width - 1,
-                            GTK_WIDGET (range)->allocation.height - 1);
-      else if (range->trough != GTK_WIDGET (range)->window)
-        gdk_draw_rectangle (GTK_WIDGET (range)->window,
-                            GTK_WIDGET (range)->style->bg_gc[GTK_STATE_NORMAL],
-                            FALSE, 0, 0,
-                            GTK_WIDGET (range)->allocation.width - 1,
-                            GTK_WIDGET (range)->allocation.height - 1);
+     {
+	gtk_paint_box (GTK_WIDGET (range)->style, range->trough,
+		       GTK_STATE_ACTIVE, GTK_SHADOW_IN,
+		       NULL, GTK_WIDGET(range), "trough",
+		       0, 0, -1, -1);
+	if (GTK_WIDGET_HAS_FOCUS (range))
+	  gtk_paint_focus (GTK_WIDGET (range)->style,
+			  range->trough,
+			   NULL, GTK_WIDGET(range), "trough",
+			  0, 0, -1, -1);
     }
 }
 
@@ -1132,10 +1135,10 @@ static void
 gtk_real_range_draw_slider (GtkRange *range)
 {
   GtkStateType state_type;
-
+   
   g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
-
+   
   if (range->slider)
     {
       if ((range->in_child == RANGE_CLASS (range)->slider) ||
@@ -1143,13 +1146,10 @@ gtk_real_range_draw_slider (GtkRange *range)
 	state_type = GTK_STATE_PRELIGHT;
       else
 	state_type = GTK_STATE_NORMAL;
-
-      gtk_style_set_background (GTK_WIDGET (range)->style, range->slider, state_type);
-      gdk_window_clear (range->slider);
-
-      gtk_draw_shadow (GTK_WIDGET (range)->style, range->slider,
-		       state_type, GTK_SHADOW_OUT,
-		       0, 0, -1, -1);
+      gtk_paint_box (GTK_WIDGET (range)->style, range->slider,
+		     state_type, GTK_SHADOW_OUT,
+		     NULL, GTK_WIDGET (range), "slider",
+		     0, 0, -1, -1);
     }
 }
 
@@ -1289,7 +1289,7 @@ gtk_range_scroll (GtkRange *range,
       else
 	{
 	  gtk_range_slider_update (range);
-	  gtk_range_draw_background (range);
+	  gtk_range_clear_background (range);
 	}
     }
 
@@ -1356,7 +1356,7 @@ gtk_range_adjustment_changed (GtkAdjustment *adjustment,
       (range->old_page_size != adjustment->page_size))
     {
       gtk_range_slider_update (range);
-      gtk_range_draw_background (range);
+      gtk_range_clear_background (range);
 
       range->old_value = adjustment->value;
       range->old_lower = adjustment->lower;
@@ -1379,7 +1379,7 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
   if (range->old_value != adjustment->value)
     {
       gtk_range_slider_update (range);
-      gtk_range_draw_background (range);
+      gtk_range_clear_background (range);
 
       range->old_value = adjustment->value;
     }
@@ -1474,7 +1474,7 @@ gtk_range_style_set (GtkWidget *widget,
   if (GTK_WIDGET_REALIZED (widget) &&
       !GTK_WIDGET_NO_WINDOW (widget))
     {
-      if (range->trough)
+       if (range->trough)
 	{
 	  gtk_style_set_background (widget->style, range->trough, GTK_STATE_ACTIVE);
 	  if (GTK_WIDGET_DRAWABLE (widget))
@@ -1494,5 +1494,6 @@ gtk_range_style_set (GtkWidget *widget,
 	  if (GTK_WIDGET_DRAWABLE (widget))
 	    gdk_window_clear (range->step_back);
 	}
+       gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
     }
 }

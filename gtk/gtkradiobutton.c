@@ -98,6 +98,7 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 static void
 gtk_radio_button_init (GtkRadioButton *radio_button)
 {
+  GTK_WIDGET_SET_FLAGS (radio_button, GTK_NO_WINDOW);
   radio_button->group = g_slist_prepend (NULL, radio_button);
 }
 
@@ -358,7 +359,6 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   GtkShadowType shadow_type;
   GdkRectangle restrict_area;
   GdkRectangle new_area;
-  GdkPoint pts[4];
   gint width, height;
   gint x, y;
 
@@ -376,43 +376,34 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 	  (state_type != GTK_STATE_PRELIGHT))
 	state_type = GTK_STATE_NORMAL;
 
-      restrict_area.x = GTK_CONTAINER (widget)->border_width;
-      restrict_area.y = restrict_area.x;
-      restrict_area.width = widget->allocation.width - restrict_area.x * 2;
-      restrict_area.height = widget->allocation.height - restrict_area.x * 2;
+      restrict_area.x = widget->allocation.x + GTK_CONTAINER (widget)->border_width;
+      restrict_area.y = widget->allocation.y + GTK_CONTAINER (widget)->border_width;
+      restrict_area.width = widget->allocation.width - ( 2 * GTK_CONTAINER (widget)->border_width);
+      restrict_area.height = widget->allocation.height - ( 2 * GTK_CONTAINER (widget)->border_width);
 
       if (gdk_rectangle_intersect (area, &restrict_area, &new_area))
 	{
-	  gtk_style_set_background (widget->style, widget->window, state_type);
-	  gdk_window_clear_area (widget->window, new_area.x, new_area.y,
-				 new_area.width, new_area.height);
+	   if (state_type != GTK_STATE_NORMAL)
+	     gtk_paint_flat_box(widget->style, widget->window, state_type, 
+				GTK_SHADOW_ETCHED_OUT,
+				area, widget, "radiobutton",
+				new_area.x, new_area.y,
+				new_area.width, new_area.height);
 	}
       
-      x = CHECK_BUTTON_CLASS (widget)->indicator_spacing + GTK_CONTAINER (widget)->border_width;
-      y = (widget->allocation.height - CHECK_BUTTON_CLASS (widget)->indicator_size) / 2;
+      x = widget->allocation.x + CHECK_BUTTON_CLASS (widget)->indicator_spacing + GTK_CONTAINER (widget)->border_width;
+      y = widget->allocation.y + (widget->allocation.height - CHECK_BUTTON_CLASS (widget)->indicator_size) / 2;
       width = CHECK_BUTTON_CLASS (widget)->indicator_size;
       height = CHECK_BUTTON_CLASS (widget)->indicator_size;
-
+      
       if (GTK_TOGGLE_BUTTON (widget)->active)
 	shadow_type = GTK_SHADOW_IN;
       else
 	shadow_type = GTK_SHADOW_OUT;
-
-      pts[0].x = x + width / 2;
-      pts[0].y = y;
-      pts[1].x = x + width;
-      pts[1].y = y + height / 2;
-      pts[2].x = pts[0].x;
-      pts[2].y = y + height;
-      pts[3].x = x;
-      pts[3].y = pts[1].y;
-
-      gdk_draw_polygon (widget->window,
-			widget->style->bg_gc[GTK_WIDGET_STATE (widget)],
-			TRUE, pts, 4);
-      gtk_draw_diamond (widget->style, widget->window,
+      
+      gtk_paint_option (widget->style, widget->window,
 			GTK_WIDGET_STATE (widget), shadow_type,
+			area, widget, "radiobutton",
 			x, y, width, height);
     }
 }
-

@@ -83,11 +83,12 @@ gtk_vseparator_expose (GtkWidget      *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   if (GTK_WIDGET_DRAWABLE (widget))
-    gtk_draw_vline (widget->style, widget->window, GTK_STATE_NORMAL,
-		    widget->allocation.y,
-		    widget->allocation.y + widget->allocation.height,
-		    widget->allocation.x + (widget->allocation.width -
-					    widget->style->klass->xthickness) / 2);
+    gtk_paint_vline (widget->style, widget->window, GTK_STATE_NORMAL,
+		     &event->area, widget, "vseparator",
+		     widget->allocation.y,
+		     widget->allocation.y + widget->allocation.height,
+		     widget->allocation.x + (widget->allocation.width -
+					     widget->style->klass->xthickness) / 2);
 
   return FALSE;
 }

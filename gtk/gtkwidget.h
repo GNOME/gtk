@@ -19,7 +19,6 @@
 #ifndef __GTK_WIDGET_H__
 #define __GTK_WIDGET_H__
 
-
 #include <gdk/gdk.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkobject.h>
@@ -100,7 +99,6 @@ typedef enum
 typedef struct _GtkRequisition	  GtkRequisition;
 typedef struct _GtkAllocation	  GtkAllocation;
 typedef struct _GtkSelectionData GtkSelectionData;
-typedef struct _GtkWidget	  GtkWidget;
 typedef struct _GtkWidgetClass	  GtkWidgetClass;
 typedef struct _GtkWidgetAuxInfo  GtkWidgetAuxInfo;
 typedef struct _GtkWidgetShapeInfo GtkWidgetShapeInfo;
@@ -419,7 +417,22 @@ void	   gtk_widget_map		  (GtkWidget	       *widget);
 void	   gtk_widget_unmap		  (GtkWidget	       *widget);
 void	   gtk_widget_realize		  (GtkWidget	       *widget);
 void	   gtk_widget_unrealize		  (GtkWidget	       *widget);
+
+/* Queuing draws */
 void	   gtk_widget_queue_draw	  (GtkWidget	       *widget);
+void	   gtk_widget_queue_draw_area	  (GtkWidget	       *widget,
+					   gint                 x,
+					   gint                 y,
+					   gint                 width,
+					   gint                 height);
+void	   gtk_widget_queue_clear	  (GtkWidget	       *widget);
+void	   gtk_widget_queue_clear_area	  (GtkWidget	       *widget,
+					   gint                 x,
+					   gint                 y,
+					   gint                 width,
+					   gint                 height);
+
+
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 void	   gtk_widget_draw		  (GtkWidget	       *widget,
 					   GdkRectangle	       *area);
@@ -519,6 +532,9 @@ void	   gtk_widget_set_rc_style	(GtkWidget	*widget);
 void	   gtk_widget_ensure_style	(GtkWidget	*widget);
 GtkStyle*  gtk_widget_get_style		(GtkWidget	*widget);
 void	   gtk_widget_restore_default_style (GtkWidget	*widget);
+
+void       gtk_widget_modify_style      (GtkWidget      *widget,
+					 GtkRcStyle     *style);
 
 /* Descend recursively and set rc-style on all widgets without user styles */
 void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
