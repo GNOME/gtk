@@ -184,7 +184,7 @@ gtk_tree_selection_get_user_data (GtkTreeSelection *selection)
   return selection->user_data;
 }
 
-GtkTreeNode *
+GtkTreeNode
 gtk_tree_selection_get_selected (GtkTreeSelection *selection)
 {
   GtkTreeNode *retval;
@@ -355,7 +355,7 @@ gtk_tree_selection_unselect_path (GtkTreeSelection *selection,
 
 void
 gtk_tree_selection_select_node (GtkTreeSelection *selection,
-				GtkTreeNode      *tree_node)
+				GtkTreeNode       tree_node)
 {
   GtkTreePath *path;
 
@@ -377,7 +377,7 @@ gtk_tree_selection_select_node (GtkTreeSelection *selection,
 
 void
 gtk_tree_selection_unselect_node (GtkTreeSelection *selection,
-				  GtkTreeNode      *tree_node)
+				  GtkTreeNode       tree_node)
 {
   GtkTreePath *path;
 
@@ -404,7 +404,7 @@ struct _TempTuple {
 static void
 select_all_helper (GtkRBTree  *tree,
 		   GtkRBNode  *node,
-		   gpointer  data)
+		   gpointer    data)
 {
   struct _TempTuple *tuple = data;
 
@@ -493,7 +493,7 @@ gtk_tree_selection_select_all (GtkTreeSelection *selection)
 static void
 unselect_all_helper (GtkRBTree  *tree,
 		     GtkRBNode  *node,
-		     gpointer  data)
+		     gpointer    data)
 {
   struct _TempTuple *tuple = data;
 

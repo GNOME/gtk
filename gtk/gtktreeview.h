@@ -52,11 +52,11 @@ struct _GtkTreeViewClass
 {
   GtkContainerClass parent_class;
 
-  void (*set_scroll_adjustments) (GtkTreeView     *tree_view,
+  void (*set_scroll_adjustments) (GtkTreeView   *tree_view,
 				  GtkAdjustment *hadjustment,
 				  GtkAdjustment *vadjustment);
-  gint (*expand_row) (GtkTreeView *tree_view,
-		      GtkTreeNode *node);
+  gint (*expand_row)             (GtkTreeView   *tree_view,
+				  GtkTreeNode    node);
 };
 
 /* Creators */

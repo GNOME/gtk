@@ -307,8 +307,8 @@ gtk_real_model_simple_get_path (GtkTreeModel *tree_model,
 static void
 gtk_real_model_simple_node_get_value (GtkTreeModel *tree_model,
 				      GtkTreeNode   node,
-				      gint        column,
-				      GValue     *value)
+				      gint          column,
+				      GValue       *value)
 {
   gtk_signal_emit (GTK_OBJECT (tree_model), model_simple_signals[NODE_GET_VALUE], node, column, value);
 }
@@ -360,7 +360,7 @@ gtk_real_model_simple_node_n_children (GtkTreeModel *tree_model,
 static GtkTreeNode
 gtk_real_model_simple_node_nth_child (GtkTreeModel *tree_model,
 				      GtkTreeNode   node,
-				      gint        n)
+				      gint          n)
 {
   GtkTreeNode retval = NULL;
 
@@ -383,48 +383,48 @@ gtk_real_model_simple_node_parent (GtkTreeModel *tree_model,
 /* Public functions */
 void
 gtk_model_simple_node_changed (GtkModelSimple *simple,
-			       GtkTreePath      *path,
-			       GtkTreeNode      *tree_node)
+			       GtkTreePath    *path,
+			       GtkTreeNode     node)
 {
   g_return_if_fail (simple != NULL);
   g_return_if_fail (GTK_IS_MODEL_SIMPLE (simple));
   g_return_if_fail (path != NULL);
 
-  gtk_signal_emit_by_name (GTK_OBJECT (simple), "node_changed", path, tree_node);
+  gtk_signal_emit_by_name (GTK_OBJECT (simple), "node_changed", path, node);
 }
 
 void
 gtk_model_simple_node_inserted (GtkModelSimple *simple,
 				GtkTreePath    *path,
-				GtkTreeNode    *tree_node)
+				GtkTreeNode     node)
 {
   g_return_if_fail (simple != NULL);
   g_return_if_fail (GTK_IS_MODEL_SIMPLE (simple));
   g_return_if_fail (path != NULL);
 
-  gtk_signal_emit_by_name (GTK_OBJECT (simple), "node_inserted", path, tree_node);
+  gtk_signal_emit_by_name (GTK_OBJECT (simple), "node_inserted", path, node);
 }
 
 void
 gtk_model_simple_node_child_toggled (GtkModelSimple *simple,
 				     GtkTreePath    *path,
-				     GtkTreeNode    *tree_node)
+				     GtkTreeNode     node)
 {
   g_return_if_fail (simple != NULL);
   g_return_if_fail (GTK_IS_MODEL_SIMPLE (simple));
   g_return_if_fail (path != NULL);
 
-  gtk_signal_emit_by_name (GTK_OBJECT (simple), "node_child_toggled", path, tree_node);
+  gtk_signal_emit_by_name (GTK_OBJECT (simple), "node_child_toggled", path, node);
 }
 
 void
 gtk_model_simple_node_deleted (GtkModelSimple *simple,
 			       GtkTreePath    *path,
-			       GtkTreeNode    *tree_node)
+			       GtkTreeNode     node)
 {
   g_return_if_fail (simple != NULL);
   g_return_if_fail (GTK_IS_MODEL_SIMPLE (simple));
   g_return_if_fail (path != NULL);
 
-  gtk_signal_emit_by_name (GTK_OBJECT (simple), "node_deleted", path, tree_node);
+  gtk_signal_emit_by_name (GTK_OBJECT (simple), "node_deleted", path, node);
 }

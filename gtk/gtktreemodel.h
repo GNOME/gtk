@@ -50,13 +50,13 @@ struct _GtkTreeModelClass
   /* signals */
   void       (* node_changed)         (GtkTreeModel *tree_model,
 				       GtkTreePath  *path,
-				       GtkTreeNode  *node);
+				       GtkTreeNode   node);
   void       (* node_inserted)        (GtkTreeModel *tree_model,
 				       GtkTreePath  *path,
-				       GtkTreeNode  *node);
+				       GtkTreeNode   node);
   void       (* node_child_toggled)   (GtkTreeModel *tree_model,
 				       GtkTreePath  *path,
-				       GtkTreeNode  *node);
+				       GtkTreeNode   node);
   void       (* node_deleted)         (GtkTreeModel *tree_model,
 				       GtkTreePath  *path);
 

@@ -1,3 +1,12 @@
+2000-10-15    <jrb@redhat.com>
+
+	* gtk/gtktreeview.c, gtk/gtktreeview.h, gtk/gtktreestore.h,
+	gtk/gtktreestore.c, gtk/gtkliststore.h, gtk/gtkliststore.c,
+	gtk/gtkmodelsimple.c, gtk/gtkmodelsimple.h, gtk/gtktreedatalist.c,
+	gtk/gtktreemodel.h, gtk/gtktreeselection.c,
+	gtk/gtktreeselection.h: Fix GtkTreeNode *node ->GtkTreeNode node
+	issue.
+
 2000-10-14  Robert Brady  <robert@suse.co.uk>
 
 	* configure.in: Added "fa" (Persian) to ALL_LINGUAS.

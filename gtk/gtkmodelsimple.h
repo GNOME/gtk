@@ -52,16 +52,16 @@ GtkObject *gtk_model_simple_new                (void);
 
 void       gtk_model_simple_node_changed       (GtkModelSimple *simple,
 						GtkTreePath    *path,
-						GtkTreeNode    *tree_node);
+						GtkTreeNode     node);
 void       gtk_model_simple_node_inserted      (GtkModelSimple *simple,
 						GtkTreePath    *path,
-						GtkTreeNode    *tree_node);
+						GtkTreeNode     node);
 void       gtk_model_simple_node_child_toggled (GtkModelSimple *simple,
 						GtkTreePath    *path,
-						GtkTreeNode    *tree_node);
+						GtkTreeNode     node);
 void       gtk_model_simple_node_deleted       (GtkModelSimple *simple,
 						GtkTreePath    *path,
-						GtkTreeNode    *tree_node);
+						GtkTreeNode     node);
 
 
 

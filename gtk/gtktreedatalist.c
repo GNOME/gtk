@@ -19,6 +19,7 @@
 
 #include "gtktreedatalist.h"
 #include "gobject/gvalue.h"
+#include "gobject/gvaluetypes.h"
 
 /* node allocation
  */

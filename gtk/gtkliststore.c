@@ -256,7 +256,7 @@ gtk_list_store_node_next (GtkTreeModel  *tree_model,
   if (node == NULL || *node == NULL)
     return FALSE;
 
-  *node = (GtkTreeNode *) G_SLIST (*node)->next;
+  *node = (GtkTreeNode) G_SLIST (*node)->next;
 
   return (*node != NULL);
 }
@@ -285,7 +285,7 @@ gtk_list_store_node_n_children (GtkTreeModel *tree_model,
 static GtkTreeNode
 gtk_list_store_node_nth_child (GtkTreeModel *tree_model,
 			       GtkTreeNode   node,
-			       gint        n)
+			       gint          n)
 {
   return NULL;
 }
@@ -298,10 +298,10 @@ gtk_list_store_node_parent (GtkTreeModel *tree_model,
 }
 
 /* Public accessors */
-GtkTreeNode *
+GtkTreeNode
 gtk_list_store_node_new (void)
 {
-  GtkTreeNode *retval = (GtkTreeNode *) g_slist_alloc ();
+  GtkTreeNode retval = (GtkTreeNode) g_slist_alloc ();
 
   return retval;
 }
@@ -311,7 +311,7 @@ gtk_list_store_node_new (void)
  */
 void
 gtk_list_store_node_set_cell (GtkListStore *list_store,
-			      GtkTreeNode  *node,
+			      GtkTreeNode   node,
 			      gint          column,
 			      GValue       *value)
 {
@@ -361,15 +361,16 @@ gtk_list_store_node_set_cell (GtkListStore *list_store,
 
 void
 gtk_list_store_node_remove (GtkListStore *list_store,
-			    GtkTreeNode  *node)
+			    GtkTreeNode   node)
 {
-
+  /* FIXME: implement */
+  g_warning ("Remember to implement this function\n");
 }
 
-GtkTreeNode *
+GtkTreeNode
 gtk_list_store_node_insert (GtkListStore *list_store,
 			    gint          position,
-			    GtkTreeNode  *node)
+			    GtkTreeNode   node)
 {
   GSList *list;
 
@@ -396,10 +397,10 @@ gtk_list_store_node_insert (GtkListStore *list_store,
 }
 
 
-GtkTreeNode *
+GtkTreeNode
 gtk_list_store_node_insert_before (GtkListStore *list_store,
-				   GtkTreeNode  *sibling,
-				   GtkTreeNode  *node)
+				   GtkTreeNode   sibling,
+				   GtkTreeNode   node)
 {
   g_return_val_if_fail (list_store != NULL, node);
   g_return_val_if_fail (GTK_IS_LIST_STORE (list_store), node);
@@ -414,9 +415,9 @@ gtk_list_store_node_insert_before (GtkListStore *list_store,
   return node;
 }
 
-GtkTreeNode *
+GtkTreeNode
 gtk_list_store_node_prepend (GtkListStore *list_store,
-			     GtkTreeNode  *node)
+			     GtkTreeNode   node)
 {
   g_return_val_if_fail (list_store != NULL, node);
   g_return_val_if_fail (GTK_IS_LIST_STORE (list_store), node);
@@ -428,9 +429,9 @@ gtk_list_store_node_prepend (GtkListStore *list_store,
   return node;
 }
 
-GtkTreeNode *
+GtkTreeNode
 gtk_list_store_node_append (GtkListStore *list_store,
-			    GtkTreeNode  *node)
+			    GtkTreeNode   node)
 {
   GSList *list;
 
@@ -448,7 +449,7 @@ gtk_list_store_node_append (GtkListStore *list_store,
   return node;
 }
 
-GtkTreeNode *
+GtkTreeNode
 gtk_list_store_node_get_root (GtkListStore *list_store)
 {
   g_return_val_if_fail (list_store != NULL, NULL);
