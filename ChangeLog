@@ -1,3 +1,9 @@
+Wed Mar 20 17:11:51 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c: Patch from Richard Hestilow to fix
+	gtk-font-name changes for widgets that get the actual
+	default style. (#73709)
+
 Wed Mar 20 22:59:23 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkrbtree.[ch]: add _gtk_rbtree_set_fixed_height()

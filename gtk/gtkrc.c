@@ -101,6 +101,7 @@ struct _GtkRcContext
   gchar *pixmap_path[GTK_RC_MAX_PIXMAP_PATHS];
 
   gint default_priority;
+  GtkStyle *default_style;
 };
 
 static GtkRcContext *gtk_rc_context_get              (GtkSettings     *settings);
@@ -534,6 +535,7 @@ gtk_rc_context_get (GtkSettings *settings)
       context->rc_sets_widget_class = NULL;
       context->rc_sets_class = NULL;
       context->rc_files = NULL;
+      context->default_style = NULL;
 
       g_object_get (settings,
 		    "gtk-theme-name", &context->theme_name,
@@ -1285,8 +1287,16 @@ _gtk_rc_context_get_default_font_name (GtkSettings *settings)
 
   if (new_font_name != context->font_name && !(new_font_name && strcmp (context->font_name, new_font_name) == 0))
     {
+      gboolean reset = FALSE;
       g_free (context->font_name);
       context->font_name = g_strdup (new_font_name);
+
+      if (context->default_style)
+        {
+	  g_object_unref (G_OBJECT (context->default_style));
+	  context->default_style = NULL;
+	  reset = TRUE;
+        }
 
       /* Clear out styles that have been looked up already
        */
@@ -1295,9 +1305,11 @@ _gtk_rc_context_get_default_font_name (GtkSettings *settings)
 	  g_hash_table_foreach (realized_style_ht, gtk_rc_clear_realized_style, NULL);
 	  g_hash_table_destroy (realized_style_ht);
 	  realized_style_ht = NULL;
-	  
-	  gtk_rc_reset_widgets (context);
+	  reset = TRUE;
 	}
+
+      if (reset)
+	gtk_rc_reset_widgets (context);
     }
           
   g_free (new_font_name);
@@ -1579,8 +1591,13 @@ gtk_rc_get_style (GtkWidget *widget)
 
   if (rc_styles)
     return gtk_rc_init_style (rc_styles);
+  else
+    {
+      if (!context->default_style)
+        context->default_style = gtk_style_new ();
 
-  return NULL;
+      return context->default_style;
+    }
 }
 
 /**
