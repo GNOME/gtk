@@ -161,6 +161,8 @@ static void gtk_text_view_style_set            (GtkWidget        *widget,
                                                 GtkStyle         *previous_style);
 static void gtk_text_view_direction_changed    (GtkWidget        *widget,
                                                 GtkTextDirection  previous_direction);
+static void gtk_text_view_grab_notify          (GtkWidget        *widget,
+					        gboolean         was_grabbed);
 static void gtk_text_view_state_changed        (GtkWidget        *widget,
 					        GtkStateType      previous_state);
 
@@ -491,6 +493,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->unrealize = gtk_text_view_unrealize;
   widget_class->style_set = gtk_text_view_style_set;
   widget_class->direction_changed = gtk_text_view_direction_changed;
+  widget_class->grab_notify = gtk_text_view_grab_notify;
   widget_class->state_changed = gtk_text_view_state_changed;
   widget_class->size_request = gtk_text_view_size_request;
   widget_class->size_allocate = gtk_text_view_size_allocate;
@@ -3555,6 +3558,30 @@ gtk_text_view_obscure_mouse_cursor (GtkTextView *text_view)
   text_view->mouse_cursor_obscured = TRUE;  
 }
 
+static void
+gtk_text_view_unobscure_mouse_cursor (GtkTextView *text_view)
+{
+  if (text_view->mouse_cursor_obscured)
+    {
+      GdkCursor *cursor;
+      
+      cursor = gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)),
+					   GDK_XTERM);
+      gdk_window_set_cursor (text_view->text_window->bin_window, cursor);
+      gdk_cursor_unref (cursor);
+      text_view->mouse_cursor_obscured = FALSE;
+    }
+}
+
+static void
+gtk_text_view_grab_notify (GtkWidget *widget,
+		 	   gboolean   was_grabbed)
+{
+  if (!was_grabbed)
+    gtk_text_view_unobscure_mouse_cursor (GTK_TEXT_VIEW (widget));
+}
+
+
 /*
  * Events
  */
@@ -3986,16 +4013,7 @@ gtk_text_view_motion_event (GtkWidget *widget, GdkEventMotion *event)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
 
-  if (text_view->mouse_cursor_obscured)
-    {
-      GdkCursor *cursor;
-      
-      cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
-					   GDK_XTERM);
-      gdk_window_set_cursor (text_view->text_window->bin_window, cursor);
-      gdk_cursor_unref (cursor);
-      text_view->mouse_cursor_obscured = FALSE;
-    }
+  gtk_text_view_unobscure_mouse_cursor (text_view);
 
   if (event->window == text_view->text_window->bin_window &&
       text_view->drag_start_x >= 0)
