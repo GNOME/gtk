@@ -193,6 +193,7 @@ gtk_OBJECTS = 					\
 	gtktreeview.obj			\
 	gtktreeviewcolumn.obj			\
 	gtktypeutils.obj			\
+	gtktypebuiltins.obj \
 	gtkvbbox.obj				\
 	gtkvbox.obj				\
 	gtkviewport.obj				\
@@ -349,15 +350,13 @@ gtk_public_h_sources =		\
 # these aren't use here, but listed for reference
 gtk_extra_sources = \
 	gtkversion.h		\
-	maketypes.awk		\
-	makeenums.h		\
 	gtk-boxed.defs		\
 	gtkmarshal.list		\
 
 ..\config.h : ..\config.h.win32
 	copy ..\config.h.win32 ..\config.h
 
-GENERATED = gtk.defs gtktypebuiltins.h gtktypebuiltins_vars.c gtktypebuiltins_ids.c gtktypebuiltins_evals.c gtkmarshal.h gtkmarshal.c gtkmarshalers.h gtkmarshalers.c
+GENERATED = gtk.defs gtktypebuiltins.h gtktypebuiltins.c gtkmarshal.h gtkmarshal.c gtkmarshalers.h gtkmarshalers.c
 
 #
 # Generated source files:
@@ -365,26 +364,38 @@ GENERATED = gtk.defs gtktypebuiltins.h gtktypebuiltins_vars.c gtktypebuiltins_id
 generated : $(GENERATED)
 	$(TOUCH) generated
 
-gtk.defs : makeenums.pl gtk-boxed.defs $(gtk_public_h_sources) makefile.msc
-	$(PERL) makeenums.pl defs $(gtk_public_h_sources) >gd.tmp
-	copy gd.tmp+gtk-boxed.defs gtk.defs
-	@erase gd.tmp
+gtk.defs : gtk-boxed.defs $(gtk_public_h_sources) makefile.msc
+	$(PERL) $(GLIB)\gobject\glib-mkenums \
+		--comments ";; @comment@" \
+		--fprod "; enumerations from \"@filename@\"\n " \
+		--vhead "(define-@type@ @EnumName@" \
+		--vprod "   (@valuenick@ @VALUENAME@)" \
+		--vtail ")" \
+		$(gtk_public_h_sources) > xgen-gdef
+	copy xgen-gdef+gtk-boxed.defs gtk.defs
 
 # generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
-gtktypebuiltins.h: gtk.defs maketypes.awk
-	$(AWK) -f maketypes.awk gtk.defs macros >gtktypebuiltins.h
+# use 'echo' to work around 'command line too long'
+gtktypebuiltins.h: $(gtk_public_h_sources) makefile.msc
+	echo #ifndef __GTK_TYPE_BUILTINS_H__ > gtktypebuiltins.h
+	echo #define __GTK_TYPE_BUILTINS_H__ >> gtktypebuiltins.h
+	echo #include "glib-object.h" >> gtktypebuiltins.h
+	echo G_BEGIN_DECLS >> gtktypebuiltins.h
+	$(PERL) $(GLIB)\gobject\glib-mkenums \
+		--fprod "/* enumerations from \"@filename@\" */\n" \
+		--vhead "GType @enum_name@_get_type (void);\n#define GTK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n" \
+		--ftail "G_END_DECLS\n\n#endif /* __GTK_TYPE_BUILTINS_H__ */" \
+		$(gtk_public_h_sources) >> gtktypebuiltins.h
 
-# generate type identifier variables (GTK_TYPE_WIDGET_FLAGS)
-gtktypebuiltins_vars.c: gtk.defs maketypes.awk
-	$(AWK) -f maketypes.awk gtk.defs variables >gtktypebuiltins_vars.c
-
-# generate type entries for type-id registration
-gtktypebuiltins_ids.c: gtk.defs maketypes.awk
-	$(AWK) -f maketypes.awk gtk.defs entries >gtktypebuiltins_ids.c
-
-# generate enum value arrays
-gtktypebuiltins_evals.c: makeenums.pl gtk.defs
-	$(PERL) makeenums.pl arrays $(gtk_public_h_sources) $(gdk_headers) >gtktypebuiltins_evals.c
+gtktypebuiltins.c: $(gtk_public_h_sources) makefile.msc
+	$(PERL) $(GLIB)\gobject\glib-mkenums \
+		--fhead "#define GTK_ENABLE_BROKEN\n#include \"gtk.h\"\n#include \"gtkprivate.h\"" \
+		--fprod "\n/* enumerations from \"@filename@\" */" \
+		--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" \
+		--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+		--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_@type@_register_static (\"@EnumName@\", values);\n  }\n  return etype;\n}\n" \
+		$(gtk_public_h_sources) > xgen-gtbc
+	copy xgen-gtbc gtktypebuiltins.c
 
 # private marshalers
 gtkmarshalers.h : gtkmarshalers.list

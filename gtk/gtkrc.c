@@ -1249,7 +1249,7 @@ gtk_rc_reset_widgets (GtkRcContext *context)
   g_list_free (toplevels);
 }
 
-void
+static void
 gtk_rc_clear_realized_style (gpointer key,
 			     gpointer value,
 			     gpointer data)

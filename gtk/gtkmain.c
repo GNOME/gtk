@@ -1036,7 +1036,7 @@ rewrite_events_translate (GdkWindow *old_window,
   *y += new_origin_y - old_origin_y;
 }
 
-GdkEvent *
+static GdkEvent *
 rewrite_event_for_window (GdkEvent  *event,
 			  GdkWindow *new_window)
 {

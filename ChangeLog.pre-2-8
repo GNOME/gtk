@@ -1,3 +1,12 @@
+2002-03-03  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkmain.c : make rewrite_event_for_window() static
+	* gtk/gtkrc.c : gtk_rc_clear_realized_style() static
+
+	* gtk/makefile.msc.in : adapt to makeenums build changes
+
+	* gtk.def : sorted alphabetical again
+
 2002-03-03  Sven Neumann  <sven@gimp.org>
 
 	* m4macros/gtk-2.0.m4: lowercase configure --help output.
