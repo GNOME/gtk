@@ -479,7 +479,7 @@ gint
 main (gint argc, gchar **argv)
 {
   GtkWidget *window, *toolbar, *table, *treeview, *scrolled_window;
-  GtkWidget *hbox, *checkbox, *option_menu, *menu;
+  GtkWidget *hbox, *hbox1, *hbox2, *checkbox, *option_menu, *menu;
   gint i;
   static const gchar *toolbar_styles[] = { "icons", "text", "both (vertical)",
 					   "both (horizontal)" };
@@ -504,25 +504,30 @@ main (gint argc, gchar **argv)
   gtk_table_attach (GTK_TABLE (table), toolbar,
 		    0,2, 0,1, GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
 
-  hbox = gtk_hbox_new (FALSE, 5);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-  gtk_table_attach (GTK_TABLE (table), hbox,
+  hbox1 = gtk_hbox_new (FALSE, 3);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox1), 5);
+  gtk_table_attach (GTK_TABLE (table), hbox1,
 		    1,2, 1,2, GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
 
+  hbox2 = gtk_hbox_new (FALSE, 2);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox2), 5);
+  gtk_table_attach (GTK_TABLE (table), hbox2,
+		    1,2, 2,3, GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
+
   checkbox = gtk_check_button_new_with_mnemonic("_Vertical");
-  gtk_box_pack_start (GTK_BOX (hbox), checkbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox1), checkbox, FALSE, FALSE, 0);
   g_signal_connect (checkbox, "toggled",
 		    G_CALLBACK (change_orientation), toolbar);
 
   checkbox = gtk_check_button_new_with_mnemonic("_Show Arrow");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbox), TRUE);
-  gtk_box_pack_start (GTK_BOX (hbox), checkbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox1), checkbox, FALSE, FALSE, 0);
   g_signal_connect (checkbox, "toggled",
 		    G_CALLBACK (change_show_arrow), toolbar);
 
   checkbox = gtk_check_button_new_with_mnemonic("_Set Toolbar Style:");
   g_signal_connect (checkbox, "toggled", G_CALLBACK (set_toolbar_style_toggled), toolbar);
-  gtk_box_pack_start (GTK_BOX (hbox), checkbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox1), checkbox, FALSE, FALSE, 0);
   
   option_menu = gtk_option_menu_new();
   gtk_widget_set_sensitive (option_menu, FALSE);  
@@ -540,13 +545,13 @@ main (gint argc, gchar **argv)
   gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
   gtk_option_menu_set_history (GTK_OPTION_MENU (option_menu),
 			       GTK_TOOLBAR (toolbar)->style);
-  gtk_box_pack_start (GTK_BOX (hbox), option_menu, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox2), option_menu, FALSE, FALSE, 0);
   g_signal_connect (option_menu, "changed",
 		    G_CALLBACK (change_toolbar_style), toolbar);
 
   checkbox = gtk_check_button_new_with_mnemonic("_Set Icon Size:"); 
   g_signal_connect (checkbox, "toggled", G_CALLBACK (set_icon_size_toggled), toolbar);
-  gtk_box_pack_start (GTK_BOX (hbox), checkbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox2), checkbox, FALSE, FALSE, 0);
 
   option_menu = gtk_option_menu_new();
   g_object_set_data (G_OBJECT (checkbox), "option-menu", option_menu);
@@ -563,7 +568,7 @@ main (gint argc, gchar **argv)
   gtk_widget_show (menuitem);
 
   gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
-  gtk_box_pack_start (GTK_BOX (hbox), option_menu, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox2), option_menu, FALSE, FALSE, 0);
   g_signal_connect (option_menu, "changed",
 		    G_CALLBACK (icon_size_history_changed), toolbar);
   
@@ -571,7 +576,7 @@ main (gint argc, gchar **argv)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_table_attach (GTK_TABLE (table), scrolled_window,
-		    1,2, 2,3, GTK_FILL|GTK_EXPAND, GTK_FILL|GTK_EXPAND, 0, 0);
+		    1,2, 3,4, GTK_FILL|GTK_EXPAND, GTK_FILL|GTK_EXPAND, 0, 0);
 
   store = create_items_list (&treeview);
   gtk_container_add (GTK_CONTAINER (scrolled_window), treeview);
@@ -619,6 +624,7 @@ main (gint argc, gchar **argv)
   g_signal_connect (item, "toggled", G_CALLBACK (bold_toggled), NULL);
   add_item_to_list (store, item, "Bold");  
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_widget_set_sensitive (GTK_WIDGET (item), FALSE);
 
   item = gtk_separator_tool_item_new ();
   add_item_to_list (store, item, "-----");  
@@ -652,7 +658,7 @@ main (gint argc, gchar **argv)
   hbox = gtk_hbox_new (FALSE, 5);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_table_attach (GTK_TABLE (table), hbox,
-		    1,2, 3,4, GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
+		    1,2, 4,5, GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
 
   button = gtk_button_new_with_label ("Drag me to the toolbar");
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
