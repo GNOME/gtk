@@ -138,6 +138,15 @@ gtk_hpaned_size_request (GtkWidget      *widget,
 }
 
 static void
+flip_child (GtkWidget *widget, GtkAllocation *child_pos)
+{
+  gint x = widget->allocation.x;
+  gint width = widget->allocation.width;
+
+  child_pos->x = 2 * x + width - child_pos->x - child_pos->width;
+}
+
+static void
 gtk_hpaned_size_allocate (GtkWidget     *widget,
 			  GtkAllocation *allocation)
 {
@@ -171,6 +180,21 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
       paned->handle_pos.y = widget->allocation.y + border_width;
       paned->handle_pos.width = handle_size;
       paned->handle_pos.height = MAX (1, widget->allocation.height - 2 * border_width);
+
+      child1_allocation.height = child2_allocation.height = MAX (1, (gint) allocation->height - border_width * 2);
+      child1_allocation.width = MAX (1, paned->child1_size);
+      child1_allocation.x = widget->allocation.x + border_width;
+      child1_allocation.y = child2_allocation.y = widget->allocation.y + border_width;
+      
+      child2_allocation.x = child1_allocation.x + paned->child1_size + paned->handle_pos.width;
+      child2_allocation.width = MAX (1, widget->allocation.x + widget->allocation.width - child2_allocation.x - border_width);
+
+      if (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL)
+	{
+	  flip_child (widget, &(child2_allocation));
+	  flip_child (widget, &(child1_allocation));
+	  flip_child (widget, &(paned->handle_pos));
+	}
       
       if (GTK_WIDGET_REALIZED (widget))
 	{
@@ -183,14 +207,6 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
 				  paned->handle_pos.height);
 	}
       
-      child1_allocation.height = child2_allocation.height = MAX (1, (gint) allocation->height - border_width * 2);
-      child1_allocation.width = MAX (1, paned->child1_size);
-      child1_allocation.x = widget->allocation.x + border_width;
-      child1_allocation.y = child2_allocation.y = widget->allocation.y + border_width;
-      
-      child2_allocation.x = child1_allocation.x + paned->child1_size + paned->handle_pos.width;
-      child2_allocation.width = MAX (1, widget->allocation.x + widget->allocation.width - child2_allocation.x - border_width);
-
       /* Now allocate the childen, making sure, when resizing not to
        * overlap the windows
        */

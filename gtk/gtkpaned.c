@@ -733,6 +733,18 @@ gtk_paned_expose (GtkWidget      *widget,
   return FALSE;
 }
 
+static gboolean
+is_rtl (GtkPaned *paned)
+{
+  if (paned->orientation == GTK_ORIENTATION_VERTICAL &&
+      gtk_widget_get_direction (GTK_WIDGET (paned)) == GTK_TEXT_DIR_RTL)
+    {
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 update_drag (GtkPaned *paned)
 {
@@ -745,9 +757,23 @@ update_drag (GtkPaned *paned)
   else
     gtk_widget_get_pointer (GTK_WIDGET (paned), &pos, NULL);
 
-  gtk_widget_style_get (GTK_WIDGET (paned), "handle_size", &handle_size, NULL);
+  pos -= paned->drag_pos;
+
+  if (is_rtl (paned))
+    {
+      gtk_widget_style_get (GTK_WIDGET (paned),
+			    "handle_size", &handle_size,
+			    NULL);
+      
+      size = GTK_WIDGET (paned)->allocation.width - pos - handle_size;
+    }
+  else
+    {
+      size = pos;
+    }
+
+  size -= GTK_CONTAINER (paned)->border_width;
   
-  size = pos - GTK_CONTAINER (paned)->border_width - paned->drag_pos;
   size = CLAMP (size, paned->min_position, paned->max_position);
 
   if (size != paned->child1_size)
@@ -1332,7 +1358,7 @@ gtk_paned_cycle_child_focus (GtkPaned *paned,
 {
   GList *cycle_chain = NULL;
   GList *list;
-
+  
   GtkDirectionType direction = reversed? GTK_DIR_TAB_BACKWARD : GTK_DIR_TAB_FORWARD;
 
   /* ignore f6 if the handle is focused */
@@ -1429,38 +1455,40 @@ gtk_paned_move_handle (GtkPaned      *paned,
     {
       gint old_position;
       gint new_position;
+      gint increment;
       
       enum {
 	SINGLE_STEP_SIZE = 1,
 	PAGE_STEP_SIZE   = 75
       };
       
-      old_position = gtk_paned_get_position (paned);
+      new_position = old_position = gtk_paned_get_position (paned);
+      increment = 0;
       
       switch (scroll)
 	{
 	case GTK_SCROLL_STEP_LEFT:
 	case GTK_SCROLL_STEP_UP:
 	case GTK_SCROLL_STEP_BACKWARD:
-	  new_position = old_position - SINGLE_STEP_SIZE;
+	  increment = - SINGLE_STEP_SIZE;
 	  break;
 	  
 	case GTK_SCROLL_STEP_RIGHT:
 	case GTK_SCROLL_STEP_DOWN:
 	case GTK_SCROLL_STEP_FORWARD:
-	  new_position = old_position + SINGLE_STEP_SIZE;
+	  increment = SINGLE_STEP_SIZE;
 	  break;
 	  
 	case GTK_SCROLL_PAGE_LEFT:
 	case GTK_SCROLL_PAGE_UP:
 	case GTK_SCROLL_PAGE_BACKWARD:
-	  new_position = old_position - PAGE_STEP_SIZE;
+	  increment = - PAGE_STEP_SIZE;
 	  break;
 	  
 	case GTK_SCROLL_PAGE_RIGHT:
 	case GTK_SCROLL_PAGE_DOWN:
 	case GTK_SCROLL_PAGE_FORWARD:
-	  new_position = old_position + PAGE_STEP_SIZE;
+	  increment = PAGE_STEP_SIZE;
 	  break;
 	  
 	case GTK_SCROLL_START:
@@ -1470,10 +1498,17 @@ gtk_paned_move_handle (GtkPaned      *paned,
 	case GTK_SCROLL_END:
 	  new_position = paned->max_position;
 	  break;
-	  
+
 	default:
-	  new_position = old_position;
 	  break;
+	}
+
+      if (increment)
+	{
+	  if (is_rtl (paned))
+	    increment = -increment;
+	  
+	  new_position = old_position + increment;
 	}
       
       new_position = CLAMP (new_position, paned->min_position, paned->max_position);

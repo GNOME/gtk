@@ -1,3 +1,8 @@
+Fri Sep 19 18:15:31 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkpaned.c, gtk/gtkhpaned.c: implement RTL flipping
+	(#96632)
+
 Fri Sep 19 13:24:54 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktreeview.c (gtk_tree_view_get_cursor): Improve
