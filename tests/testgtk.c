@@ -624,6 +624,13 @@ set_toolbar_both (GtkWidget *widget,
 }
 
 static void
+set_toolbar_both_horiz (GtkWidget *widget,
+			gpointer   data)
+{
+  gtk_toolbar_set_style (GTK_TOOLBAR (data), GTK_TOOLBAR_BOTH_HORIZ);
+}
+
+static void
 set_toolbar_small_space (GtkWidget *widget,
 			 gpointer   data)
 {
@@ -725,7 +732,13 @@ create_toolbar (void)
 			       "Both", "Show toolbar icons and text", "Toolbar/Both",
 			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_both, toolbar);
-
+      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			       "Both (horizontal)",
+			       "Show toolbar icons and text in a horizontal fashion",
+			       "Toolbar/BothHoriz",
+			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
+			       (GtkSignalFunc) set_toolbar_both_horiz, toolbar);
+			       
       gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
       entry = gtk_entry_new ();

@@ -270,7 +270,8 @@ typedef enum
 {
   GTK_TOOLBAR_ICONS,
   GTK_TOOLBAR_TEXT,
-  GTK_TOOLBAR_BOTH
+  GTK_TOOLBAR_BOTH,
+  GTK_TOOLBAR_BOTH_HORIZ
 } GtkToolbarStyle;
 
 /* Trough types for GtkRange */

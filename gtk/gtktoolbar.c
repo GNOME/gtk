@@ -30,6 +30,7 @@
 #include "gtkradiobutton.h"
 #include "gtklabel.h"
 #include "gtkvbox.h"
+#include "gtkhbox.h"
 #include "gtktoolbar.h"
 
 
@@ -819,7 +820,7 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
 			    gint                 position)
 {
   GtkToolbarChild *child;
-  GtkWidget *vbox;
+  GtkWidget *box;
 
   g_return_val_if_fail (toolbar != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), NULL);
@@ -882,14 +883,17 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
 	gtk_signal_connect (GTK_OBJECT (child->widget), "clicked",
 			    callback, user_data);
 
-      vbox = gtk_vbox_new (FALSE, 0);
-      gtk_container_add (GTK_CONTAINER (child->widget), vbox);
-      gtk_widget_show (vbox);
+      if (toolbar->style == GTK_TOOLBAR_BOTH_HORIZ)
+	  box = gtk_hbox_new (FALSE, 0);
+      else
+	  box = gtk_vbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (child->widget), box);
+      gtk_widget_show (box);
 
       if (text)
 	{
 	  child->label = gtk_label_new (text);
-	  gtk_box_pack_end (GTK_BOX (vbox), child->label, FALSE, FALSE, 0);
+	  gtk_box_pack_end (GTK_BOX (box), child->label, FALSE, FALSE, 0);
 	  if (toolbar->style != GTK_TOOLBAR_ICONS)
 	    gtk_widget_show (child->label);
 	}
@@ -897,7 +901,7 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
       if (icon)
 	{
 	  child->icon = GTK_WIDGET (icon);
-	  gtk_box_pack_end (GTK_BOX (vbox), child->icon, FALSE, FALSE, 0);
+	  gtk_box_pack_end (GTK_BOX (box), child->icon, FALSE, FALSE, 0);
 	  if (toolbar->style != GTK_TOOLBAR_TEXT)
 	    gtk_widget_show (child->icon);
 	}
@@ -1055,6 +1059,7 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 {
   GList *children;
   GtkToolbarChild *child;
+  GtkWidget* box = NULL;
 
   g_return_if_fail (toolbar != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
@@ -1084,7 +1089,7 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 	      case GTK_TOOLBAR_TEXT:
 		if (child->icon && GTK_WIDGET_VISIBLE (child->icon))
 		  gtk_widget_hide (child->icon);
-
+		
 		if (child->label && !GTK_WIDGET_VISIBLE (child->label))
 		  gtk_widget_show (child->label);
 
@@ -1097,6 +1102,86 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 		if (child->label && !GTK_WIDGET_VISIBLE (child->label))
 		  gtk_widget_show (child->label);
 
+		box = (GtkWidget*)gtk_container_children (GTK_CONTAINER (child->widget))->data;
+
+		if (GTK_IS_HBOX (box))
+		{
+		    if (child->icon)
+		    {
+			gtk_object_ref (GTK_OBJECT (child->icon));
+			gtk_container_remove (GTK_CONTAINER (box),
+					      child->icon);
+		    }
+		    if (child->label)
+		    {
+			gtk_object_ref (GTK_OBJECT (child->label));
+			gtk_container_remove (GTK_CONTAINER (box),
+					      child->label);
+		    }
+		    gtk_container_remove (GTK_CONTAINER (child->widget),
+					  box);
+		    
+		    box = gtk_vbox_new (FALSE, 0);
+		    gtk_widget_show (box);
+		    
+		    if (child->label)
+		    {
+			gtk_box_pack_end (GTK_BOX (box), child->label, FALSE, FALSE, 0);
+			gtk_object_unref (GTK_OBJECT (child->label));
+		    }
+		    if (child->icon)
+		    {
+			gtk_box_pack_end (GTK_BOX (box), child->icon, FALSE, FALSE, 0);
+			gtk_object_unref (GTK_OBJECT (child->icon));
+		    }
+		    gtk_container_add (GTK_CONTAINER (child->widget),
+				       box);
+		}
+		
+		break;
+		
+	      case GTK_TOOLBAR_BOTH_HORIZ:
+		if (child->icon && !GTK_WIDGET_VISIBLE (child->icon))
+		  gtk_widget_show (child->icon);
+		if (child->label && !GTK_WIDGET_VISIBLE (child->label))
+		  gtk_widget_show (child->label);
+
+		box = (GtkWidget*)gtk_container_children (GTK_CONTAINER (child->widget))->data;
+		
+		if (GTK_IS_VBOX (box))
+		{
+		    if (child->icon)
+		    {
+			gtk_object_ref (GTK_OBJECT (child->icon));
+			gtk_container_remove (GTK_CONTAINER (box),
+					      child->icon);
+		    }
+		    if (child->label)
+		    {
+			gtk_object_ref (GTK_OBJECT (child->label));
+			gtk_container_remove (GTK_CONTAINER (box),
+					      child->label);
+		    }
+		    gtk_container_remove (GTK_CONTAINER (child->widget),
+					  box);
+
+		    box = gtk_hbox_new (FALSE, 0);
+		    gtk_widget_show (box);
+		    
+		    if (child->label)
+		    {
+			gtk_box_pack_end (GTK_BOX (box), child->label, TRUE, TRUE, 0);
+			gtk_object_unref (GTK_OBJECT (child->label));
+		    }
+		    if (child->icon)
+		    {
+			gtk_box_pack_end (GTK_BOX (box), child->icon, FALSE, FALSE, 0);
+			gtk_object_unref (GTK_OBJECT (child->icon));
+		    }
+		    gtk_container_add (GTK_CONTAINER (child->widget), box);
+		    
+		}
+		
 		break;
 
 	      default:
