@@ -4358,7 +4358,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
                                          GtkStyle           *style)
 {
   values->appearance.bg_color = style->base[GTK_STATE_NORMAL];
-  values->appearance.fg_color = style->fg[GTK_STATE_NORMAL];
+  values->appearance.fg_color = style->text[GTK_STATE_NORMAL];
 
   if (values->font.family_name)
     g_free (values->font.family_name);

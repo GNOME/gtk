@@ -1,3 +1,8 @@
+Wed Jul 18 19:51:45 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_set_attributes_from_style): 
+	Get the foreground color from 'text', nor 'base'. (#57568)
+
 Wed Jul 18 19:28:46 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/*.c: Patch from Matthias Clasen to remove remove
