@@ -1,3 +1,19 @@
+2002-04-27  Anders Carlsson  <andersca@gnu.org>
+
+	* gdk/x11/gdkpixmap-x11.c (gdk_pixmap_foreign_new_for_display): 
+	Use GDK_DISPLAY_XDISPLAY instead of GDK_SCREEN_XDISPLAY since
+	we pass in a GdkDisplay * in the macro.
+
+2002-04-26  Anders Carlsson  <andersca@gnu.org>
+
+	* gdk/gdkdisplay.c: (gdk_set_default_display):
+	Call _gdk_windowing_set_default_display.
+	
+	* gdk/gdkinternals.h:
+	* gdk/x11/gdkmain-x11.c: (_gdk_windowing_set_default_display):
+	New function that sets gdk_display to the default display.
+	Fixes #79965
+	
 Fri Apr 26 21:58:16 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodel.c (gtk_tree_row_ref_deleted_callback): if the

@@ -346,7 +346,7 @@ gdk_pixmap_foreign_new_for_display (GdkDisplay      *display,
 
   /* get information about the Pixmap to fill in the structure for
      the gdk window */
-  if (!XGetGeometry (GDK_SCREEN_XDISPLAY (display),
+  if (!XGetGeometry (GDK_DISPLAY_XDISPLAY (display),
 		     xpixmap, &root_return,
 		     &x_ret, &y_ret, &w_ret, &h_ret, &bw_ret, &depth_ret))
     return NULL;

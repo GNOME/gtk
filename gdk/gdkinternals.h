@@ -231,6 +231,7 @@ void _gdk_cursor_destroy (GdkCursor *cursor);
 
 extern GdkArgDesc _gdk_windowing_args[];
 void         _gdk_windowing_init                   (void);
+void         _gdk_windowing_set_default_display    (GdkDisplay *display);
 
 void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
 						 gint       *x_offset,

@@ -181,6 +181,8 @@ void
 gdk_set_default_display (GdkDisplay *display)
 {
   default_display = display;
+
+  _gdk_windowing_set_default_display (display);
 }
 
 /**

@@ -107,6 +107,12 @@ _gdk_windowing_init (void)
 }
 
 void
+_gdk_windowing_set_default_display (GdkDisplay *display)
+{
+  gdk_display = GDK_DISPLAY_XDISPLAY (display);
+}
+
+void
 gdk_set_use_xshm (gboolean use_xshm)
 {
 }
