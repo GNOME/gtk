@@ -337,12 +337,6 @@ GdkImage *_gdk_win32_copy_to_image      (GdkDrawable *drawable,
 					 gint         width,
 					 gint         height);
 
-GdkPixmap *_gdk_win32_pixmap_new 	(GdkWindow *window,
-				 	 GdkVisual *visual,
-				 	 gint       width,
-				 	 gint       height,
-				 	 gint       depth);
-
 GdkImage *_gdk_win32_setup_pixmap_image (GdkPixmap *pixmap,
 					 GdkWindow *window,
 					 gint       width,
@@ -410,8 +404,10 @@ gchar *_gdk_win32_fill_style_to_string (GdkFill      fill);
 gchar *_gdk_win32_function_to_string   (GdkFunction  function);
 gchar *_gdk_win32_join_style_to_string (GdkJoinStyle join_style);
 gchar *_gdk_win32_line_style_to_string (GdkLineStyle line_style);
+gchar *_gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask);
 gchar *_gdk_win32_drawable_description (GdkDrawable *d);
 
+gchar *_gdk_win32_rop2_to_string       (int          rop2);
 gchar *_gdk_win32_lbstyle_to_string    (UINT         brush_style);
 gchar *_gdk_win32_pstype_to_string     (DWORD        pen_style);
 gchar *_gdk_win32_psstyle_to_string    (DWORD        pen_style);
@@ -445,6 +441,15 @@ void    _gdk_win32_gdi_failed        (const gchar *where,
 #define WIN32_GDI_FAILED(api) _gdk_win32_gdi_failed (__FILE__, __LINE__, api)
 #define OTHER_API_FAILED(api) _gdk_other_api_failed (__FILE__, __LINE__, api)
 #endif
+ 
+/* These two macros call a GDI or other Win32 API and if the return
+ * value is zero or NULL, print a warning message. The majority of GDI
+ * calls return zero or NULL on failure. The value of the macros is nonzero
+ * if the call succeeded, zero otherwise.
+ */
+
+#define GDI_CALL(api, arglist) (api arglist ? 1 : (WIN32_GDI_FAILED (#api), 0))
+#define API_CALL(api, arglist) (api arglist ? 1 : (WIN32_API_FAILED (#api), 0))
  
 extern LRESULT CALLBACK _gdk_win32_window_procedure (HWND, UINT, WPARAM, LPARAM);
 
@@ -484,7 +489,6 @@ extern DWORD		 _windows_version;
 
 /* Options */
 extern gboolean		 _gdk_input_ignore_wintab;
-extern gboolean		 _gdk_event_func_from_window_proc;
 extern gint		 _gdk_max_colors;
 
 #define GDK_WIN32_COLORMAP_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)

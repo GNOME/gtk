@@ -1,3 +1,96 @@
+2002-11-15  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdk.def: Reflect recent renamings and removals of functions. 
+	
+	Merge from stable:
+	
+	Start implementing all fill styles (i.e. tiled, stippled, and
+	opaque stippled in addition to the plain solid style) in the Win32
+	backend in an elegant and generic way. For now only did the
+	draw_rectangle() and draw_glyphs() methods. The rest will
+	follow. Previously some of the drawing methods implemented opaque
+	stippling, but not tiles or non-opaque stippling.
+
+	Seems to work fine, now the check marks show up in check buttons,
+	the stippled background and stippled text in gtk-demo's Text
+	Widget look as they should, and GtkText's line wrap arrow shows
+	correctly instead of an ugly rectangle. [This refers to the stable
+	branch, haven't actually checked HEAD.]
+
+	The implementation does do a lot of pixmap handling and blitting
+	back and forth, especially on Win9x. But performance is hopefully
+	not an issue. I don't think many applications do a lot of tiled or
+	stippled drawing.
+
+	* gdk/win32/gdkprivate-win32.h: Define a new macro, GDI_CALL, that
+	calls a GDI function and prints a warning if it failed. Also
+	API_CALL for non-GDI calls. Cleans all the the if (!BlaBla())
+	WIN32_GDI_FAILED ("BlaBla") snippets, these can now be written
+	GDI_CALL (BlaBla, ()). Declare new functions.
+
+	* gdk/win32/gdkdrawable-win32.c: Use GDI_CALL macro in lots of places.
+
+	(generic_draw): New function that handles all the blitting
+	necessary to implement tiles and stipples. A function that
+	actually draws stuff is passed as a parameter to
+	generic_draw(). If the fill style is solid, it is called
+	directly, to draw on the destination drawable. Otherwise it is
+	called to draw on a temporary mask bitmap, which then is used in
+	blitting operations. The tiles and/or stipples are rendered into
+	another temporary pixmap. If MaskBlt() is available (on NT/2k/XP),
+	it is used, otherwise a sequence of BitBlt() is used to do the
+	final composition onto the destination drawable.
+
+	(draw_tiles_lowlevel, draw_tiles): Some renaming and code
+	reorg. Use BitBlt() to blit each tile, not gdk_draw_drawable().
+
+	(rop2_to_rop3): New function, does binary->ternary rop mapping.
+
+	(blit_from_pixmap, blit_inside_window, blit_from_window): Use
+	rop2_to_rop3(). Previously used SRCCOPY always...
+
+	(draw_rectangle, gdk_win32_draw_rectangle, draw_glyphs,
+	gdk_win32_draw_glyphs): Split functionality into two functions,
+	with generic_draw() doing its magic inbetween.
+
+	* gdk/win32/gdkevents-win32.c: Remove the TrackMouseEvent code, it
+	was ifdeffed out and wouldn't have done anything even if
+	enabled. Remove the GDK_EVENT_FUNC_FROM_WINDOW_PROC code, didn't
+	have any effect any more anyway after all the changes GTK+ has
+	gone through in the last years. Remove some #if 0 code.
+
+	* gdk/win32/gdkgc-win32.c (gdk_gc_copy): Set the copy's hdc field
+	to NULL in case a GC is copied while it has a Windows DC active.
+
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkglobals-win32.c: Remove gdk_event_func_from_window_proc.
+	
+	* gdk/win32/gdkmain-win32.c: Remove -event-func-from-window-proc
+	option. If there is a PRETEND_WIN9X envvar, set windows_version as
+	if on Win9x.
+
+	* gdk/win32/gdkpixmap-win32.c (_gdk_win32_pixmap_new,
+	gdk_pixmap_new): Combine these two, _gdk_win32_pixmap_new() wasn't
+	used or exported. Make a bit more like the X11 version. Hopefully
+	I didn't break the fragile palettized display ("pseudocolor")
+	code.
+
+	* gdk/win32/gdkgc-win32.c: Various debugging output improvements.
+	
+	(predraw_set_foreground): Check whether
+	tile/stipple origins are valid when calling SetBrushOrgEx().
+
+	(gdk_win32_hdc_get): Ifdef out code that tries to handle the
+	stipple by converting it into a region, and combining the clip
+	region with that. A stipple shouldn't work like that, it should
+	replicate in x and y directions. Stipples are now handled by
+	generic_draw() in gdkdrawable-win32.c.
+
+	* gdk/win32/gdkmain-win32.c: (gdk_win32_gcvalues_mask_to_string,
+	gdk_win32_rop2_to_string): New debugging functions.
+
+	(gdk_win32_print_dc): Print also DC's rop2 and text color.
+
 Thu Nov 14 14:58:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_set_icon_name): 

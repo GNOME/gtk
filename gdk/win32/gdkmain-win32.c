@@ -58,9 +58,6 @@ GdkArgDesc _gdk_windowing_args[] = {
 						     (GdkArgFunc) NULL},
   { "ignore-wintab", GDK_ARG_BOOL, &_gdk_input_ignore_wintab,
 						     (GdkArgFunc) NULL},
-  { "event-func-from-window-proc",
-		     GDK_ARG_BOOL, &_gdk_event_func_from_window_proc,
-						     (GdkArgFunc) NULL},
   { "max-colors",    GDK_ARG_INT,  &_gdk_max_colors,  (GdkArgFunc) NULL},
   { NULL }
 };
@@ -85,8 +82,6 @@ _gdk_windowing_init (gint    *argc,
   if (getenv ("GDK_IGNORE_WINTAB") != NULL)
     _gdk_input_ignore_wintab = TRUE;
 #endif
-  if (getenv ("GDK_EVENT_FUNC_FROM_WINDOW_PROC") != NULL)
-    _gdk_event_func_from_window_proc = TRUE;
 
   if (gdk_synchronize)
     GdiSetBatchLimit (1);
@@ -96,12 +91,17 @@ _gdk_windowing_init (gint    *argc,
   _gdk_root_window = GetDesktopWindow ();
   _windows_version = GetVersion ();
 
+  if (getenv ("PRETEND_WIN9X"))
+    _windows_version = 0x80000004;
+
+  GDK_NOTE (MISC, g_print ("Windows version: %08x\n", (guint) _windows_version));
+
   _gdk_input_locale = GetKeyboardLayout (0);
   GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
 		 LOCALE_IDEFAULTANSICODEPAGE,
 		 buf, sizeof (buf));
   _gdk_input_codepage = atoi (buf);
-  GDK_NOTE (EVENTS, g_print ("input_locale: %p, codepage:%d\n",
+  GDK_NOTE (EVENTS, g_print ("input_locale:%p, codepage:%d\n",
 			     _gdk_input_locale, _gdk_input_codepage));
 
   CoInitialize (NULL);
@@ -357,18 +357,21 @@ _gdk_win32_print_dc (HDC hdc)
   g_print ("%p\n", hdc);
   obj = GetCurrentObject (hdc, OBJ_BRUSH);
   GetObject (obj, sizeof (LOGBRUSH), &logbrush);
-  g_print ("brush: style: %s color: %06lx hatch: %#lx\n",
+  g_print ("brush: %s color=%06lx hatch=%p\n",
 	   _gdk_win32_lbstyle_to_string (logbrush.lbStyle),
-	   logbrush.lbColor, logbrush.lbHatch);
+	   logbrush.lbColor, (gpointer) logbrush.lbHatch);
   obj = GetCurrentObject (hdc, OBJ_PEN);
   GetObject (obj, sizeof (EXTLOGPEN), &extlogpen);
-  g_print ("pen: type: %s style: %s endcap: %s join: %s width: %d brush: %s\n",
+  g_print ("pen: %s %s %s %s w=%d %s\n",
 	   _gdk_win32_pstype_to_string (extlogpen.elpPenStyle),
 	   _gdk_win32_psstyle_to_string (extlogpen.elpPenStyle),
 	   _gdk_win32_psendcap_to_string (extlogpen.elpPenStyle),
 	   _gdk_win32_psjoin_to_string (extlogpen.elpPenStyle),
 	   extlogpen.elpWidth,
 	   _gdk_win32_lbstyle_to_string (extlogpen.elpBrushStyle));
+  g_print ("rop2: %s textcolor=%06lx\n",
+	   _gdk_win32_rop2_to_string (GetROP2 (hdc)),
+	   GetTextColor (hdc));
   hrgn = CreateRectRgn (0, 0, 0, 0);
   if ((flag = GetClipRgn (hdc, hrgn)) == -1)
     WIN32_API_FAILED ("GetClipRgn");
@@ -377,11 +380,8 @@ _gdk_win32_print_dc (HDC hdc)
   else if (flag == 1)
     {
       GetRgnBox (hrgn, &rect);
-      g_print ("clip region: %p bbox: %ldx%ld@+%ld+%ld\n",
-	       hrgn,
-	       rect.right - rect.left,
-	       rect.bottom - rect.top,
-	       rect.left, rect.top);
+      g_print ("clip region: %p bbox: %s\n",
+	       hrgn, _gdk_win32_rect_to_string (&rect));
     }
   DeleteObject (hrgn);
 }
@@ -478,6 +478,69 @@ _gdk_win32_line_style_to_string (GdkLineStyle line_style)
     }
   /* NOTREACHED */
   return NULL; 
+}
+
+gchar *
+_gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask)
+{
+  gchar buf[400];
+  gchar *bufp = buf;
+  gchar *s = "";
+
+#define BIT(x) 						\
+  if (mask & GDK_GC_##x) 				\
+    (bufp += sprintf (bufp, "%s" #x, s), s = "|")
+
+  BIT (FOREGROUND);
+  BIT (BACKGROUND);
+  BIT (FONT);
+  BIT (FUNCTION);
+  BIT (FILL);
+  BIT (TILE);
+  BIT (STIPPLE);
+  BIT (CLIP_MASK);
+  BIT (SUBWINDOW);
+  BIT (TS_X_ORIGIN);
+  BIT (TS_Y_ORIGIN);
+  BIT (CLIP_X_ORIGIN);
+  BIT (CLIP_Y_ORIGIN);
+  BIT (EXPOSURES);
+  BIT (LINE_WIDTH);
+  BIT (LINE_STYLE);
+  BIT (CAP_STYLE);
+  BIT (JOIN_STYLE);
+#undef BIT
+
+  return static_printf ("%s", buf);  
+}
+
+gchar *
+_gdk_win32_rop2_to_string (int rop2)
+{
+  switch (rop2)
+    {
+#define CASE(x) case R2_##x: return #x
+      CASE (BLACK);
+      CASE (COPYPEN);
+      CASE (MASKNOTPEN);
+      CASE (MASKPEN);
+      CASE (MASKPENNOT);
+      CASE (MERGENOTPEN);
+      CASE (MERGEPEN);
+      CASE (MERGEPENNOT);
+      CASE (NOP);
+      CASE (NOT);
+      CASE (NOTCOPYPEN);
+      CASE (NOTMASKPEN);
+      CASE (NOTMERGEPEN);
+      CASE (NOTXORPEN);
+      CASE (WHITE);
+      CASE (XORPEN);
+#undef CASE
+    default: return static_printf ("illegal_%x", rop2);
+    }
+  /* NOTREACHED */
+  return NULL;
 }
 
 gchar *

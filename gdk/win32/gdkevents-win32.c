@@ -32,7 +32,6 @@
  * GDK_LEAVE_NOTIFY events, which would help get rid of those pesky
  * tooltips sometimes popping up in the wrong place.
  */
-/* define USE_TRACKMOUSEEVENT */
 
 /* Do use SetCapture, it works now. Thanks to jpe@archaeopteryx.com */
 #define USE_SETCAPTURE 1
@@ -130,9 +129,6 @@ static IActiveIMMApp *active_imm_app = NULL;
 static IActiveIMMMessagePumpOwner *active_imm_msgpump_owner = NULL;
 #endif
 
-typedef BOOL (WINAPI *PFN_TrackMouseEvent) (LPTRACKMOUSEEVENT);
-static PFN_TrackMouseEvent track_mouse_event = NULL;
-
 static gboolean use_ime_composition = FALSE;
 
 static HKL latin_locale = NULL;
@@ -182,32 +178,14 @@ real_window_procedure (HWND   hwnd,
     {
       ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
 
-      /* Philippe Colantoni <colanton@aris.ss.uci.edu> suggests this
-       * in order to handle events while opaque resizing neatly.  I
-       * don't want it as default. Set the
-       * GDK_EVENT_FUNC_FROM_WINDOW_PROC env var to get this
-       * behaviour.
-       */
-      if (_gdk_event_func_from_window_proc && _gdk_event_func)
-	{
-	  GDK_THREADS_ENTER ();
-	  
-	  (*_gdk_event_func) (event, _gdk_event_data);
-	  gdk_event_free (event);
-	  
-	  GDK_THREADS_LEAVE ();
-	}
-      else
-	{
-	  _gdk_event_queue_append (display, event);
+      _gdk_event_queue_append (display, event);
 
-	  if (event->type == GDK_BUTTON_PRESS)
-	    _gdk_event_button_generate (display, event);
+      if (event->type == GDK_BUTTON_PRESS)
+	_gdk_event_button_generate (display, event);
 #if 1
-	  /* Wake up WaitMessage */
-	  PostMessage (NULL, gdk_ping_msg, 0, 0);
+      /* Wake up WaitMessage */
+      PostMessage (NULL, gdk_ping_msg, 0, 0);
 #endif
-	}
       
       if (ret_val_flag)
 	return ret_val;
@@ -258,10 +236,6 @@ _gdk_events_init (void)
   GSource *source;
 #ifdef HAVE_DIMM_H
   HRESULT hres;
-#endif
-#ifdef USE_TRACKMOUSEEVENT
-  HMODULE user32, imm32;
-  HINSTANCE commctrl32;
 #endif
   int i, j, n;
 
@@ -387,17 +361,6 @@ _gdk_events_init (void)
     }
 #endif
 
-#ifdef USE_TRACKMOUSEEVENT
-  user32 = GetModuleHandle ("user32.dll");
-  if ((track_mouse_event = GetProcAddress (user32, "TrackMouseEvent")) == NULL)
-    {
-      if ((commctrl32 = LoadLibrary ("commctrl32.dll")) != NULL)
-	track_mouse_event = (PFN_TrackMouseEvent)
-	  GetProcAddress (commctrl32, "_TrackMouseEvent");
-    }
-  if (track_mouse_event != NULL)
-    GDK_NOTE (EVENTS, g_print ("Using TrackMouseEvent to detect leave events\n"));
-#endif
   if (IS_WIN_NT () && (_windows_version & 0xFF) == 5)
     {
       /* On Win2k (Beta 3, at least) WM_IME_CHAR doesn't seem to work
@@ -461,10 +424,6 @@ gdk_event_get_graphics_expose (GdkWindow *window)
   
   GDK_NOTE (EVENTS, g_print ("gdk_event_get_graphics_expose\n"));
 
-#if 0 /* ??? */
-  /* Some nasty bugs here, just return NULL for now. */
-  return NULL;
-#else
   if (PeekMessage (&msg, GDK_WINDOW_HWND (window), WM_PAINT, WM_PAINT, PM_REMOVE))
     {
       event = gdk_event_new (GDK_NOTHING);
@@ -481,7 +440,6 @@ gdk_event_get_graphics_expose (GdkWindow *window)
   
   GDK_NOTE (EVENTS, g_print ("gdk_event_get_graphics_expose: nope\n"));
   return NULL;	
-#endif
 }
 
 static char *
@@ -2704,8 +2662,7 @@ gdk_event_translate (GdkDisplay *display,
 		g_print ("WM_NCMOUSEMOVE: %p  x,y: %d %d\n",
 			 msg->hwnd,
 			 LOWORD (msg->lParam), HIWORD (msg->lParam)));
-      if (track_mouse_event == NULL
-	  && current_window != NULL
+      if (current_window != NULL
 	  && (GDK_WINDOW_OBJECT (current_window)->event_mask & GDK_LEAVE_NOTIFY_MASK))
 	{
 	  GDK_NOTE (EVENTS, g_print ("...synthesizing LEAVE_NOTIFY event\n"));
@@ -2793,45 +2750,6 @@ gdk_event_translate (GdkDisplay *display,
       
       break;
 
-#ifdef USE_TRACKMOUSEEVENT
-    case WM_MOUSELEAVE:
-      GDK_NOTE (EVENTS, g_print ("WM_MOUSELEAVE: %p\n", msg->hwnd));
-
-      if (!(private->event_mask & GDK_LEAVE_NOTIFY_MASK))
-	break;
-
-      event->crossing.type = GDK_LEAVE_NOTIFY;
-      event->crossing.window = window;
-      event->crossing.subwindow = NULL;
-      event->crossing.time = _gdk_win32_get_next_tick (msg->time);
-      _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
-      event->crossing.x = current_x + xoffset;
-      event->crossing.y = current_y + yoffset;
-      event->crossing.x_root = current_x_root;
-      event->crossing.y_root = current_y_root;
-      event->crossing.mode = GDK_CROSSING_NORMAL;
-      if (current_window
-	  && IsChild (GDK_WINDOW_HWND (current_window), GDK_WINDOW_HWND (window)))
-	event->crossing.detail = GDK_NOTIFY_INFERIOR;
-      else if (current_window
-	       && IsChild (GDK_WINDOW_HWND (window), GDK_WINDOW_HWND (current_window)))
-	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-      else
-	event->crossing.detail = GDK_NOTIFY_NONLINEAR;
-
-      event->crossing.focus = TRUE; /* ??? */
-      event->crossing.state = 0; /* ??? */
-
-      if (current_window)
-	{
-	  gdk_drawable_unref (current_window);
-	  current_window = NULL;
-	}
-
-      return_val = !GDK_WINDOW_DESTROYED (window);
-      break;
-#endif
-	
     case WM_QUERYNEWPALETTE:
       GDK_NOTE (EVENTS_OR_COLORMAP, g_print ("WM_QUERYNEWPALETTE: %p\n",
 					     msg->hwnd));

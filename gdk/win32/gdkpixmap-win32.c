@@ -129,11 +129,10 @@ gdk_pixmap_impl_win32_get_size (GdkDrawable *drawable,
 }
 
 GdkPixmap*
-_gdk_win32_pixmap_new (GdkWindow *window,
-		       GdkVisual *visual,
-		       gint       width,
-		       gint       height,
-		       gint       depth)
+gdk_pixmap_new (GdkWindow *window,
+		gint       width,
+		gint       height,
+		gint       depth)
 {
   struct {
     BITMAPINFOHEADER bmiHeader;
@@ -145,38 +144,33 @@ _gdk_win32_pixmap_new (GdkWindow *window,
   } bmi;
   UINT iUsage;
   HDC hdc;
+  HWND hwnd;
   HPALETTE holdpal = NULL;
   HBITMAP hbitmap;
   GdkPixmap *pixmap;
   GdkDrawableImplWin32 *drawable_impl;
   GdkPixmapImplWin32 *pixmap_impl;
+  GdkColormap *cmap;
   guchar *bits;
   gint i;
+  gint window_depth;
 
-  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (window == NULL || GDK_IS_DRAWABLE (window), NULL);
   g_return_val_if_fail ((window != NULL) || (depth != -1), NULL);
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
 
   if (!window)
     window = _gdk_parent_root;
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_IS_WINDOW (window) && GDK_WINDOW_DESTROYED (window))
     return NULL;
 
-  if (!visual)
-    {
-      if (window)
-	visual = gdk_drawable_get_visual (window);
-      else
-	visual = gdk_visual_get_system ();
-    }
-
+  window_depth = gdk_drawable_get_depth (GDK_DRAWABLE (window));
   if (depth == -1)
-    depth = visual->depth;
+    depth = window_depth;
 
-  GDK_NOTE (PIXMAP, g_print ("_gdk_win32_pixmap_new: %dx%dx%d "
-			     "window=%p visual=%p\n",
-			     width, height, depth, window, visual));
+  GDK_NOTE (PIXMAP, g_print ("gdk_pixmap_new: %dx%dx%d window=%p\n",
+			     width, height, depth, window));
 
   pixmap = g_object_new (gdk_pixmap_get_type (), NULL);
   drawable_impl = GDK_DRAWABLE_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
@@ -188,7 +182,18 @@ _gdk_win32_pixmap_new (GdkWindow *window,
   pixmap_impl->height = height;
   GDK_PIXMAP_OBJECT (pixmap)->depth = depth;
 
-  if ((hdc = GetDC (GDK_WINDOW_HWND (window))) == NULL)
+  if (depth == window_depth)
+    {
+      cmap = gdk_drawable_get_colormap (window);
+      if (cmap)
+        gdk_drawable_set_colormap (pixmap, cmap);
+    }
+  
+  if (GDK_IS_WINDOW (window))
+    hwnd = GDK_WINDOW_HWND (window);
+  else
+    hwnd = GDK_WINDOW_HWND (_gdk_parent_root);
+  if ((hdc = GetDC (hwnd)) == NULL)
     {
       WIN32_GDI_FAILED ("GetDC");
       g_object_unref ((GObject *) pixmap);
@@ -251,21 +256,10 @@ _gdk_win32_pixmap_new (GdkWindow *window,
 	bmi.u.bmiColors[1].rgbGreen =
 	bmi.u.bmiColors[1].rgbRed = 0xFF;
       bmi.u.bmiColors[1].rgbReserved = 0x00;
-      drawable_impl->colormap = NULL;
     }
   else
     {
-      if (depth > 8 && depth != visual->depth)
-	g_warning ("_gdk_win32_pixmap_new: depth %d doesn't match display depth %d",
-		   depth, visual->depth);
-
-      drawable_impl->colormap = GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap;
-
-      if (drawable_impl->colormap == NULL)
-	drawable_impl->colormap = gdk_colormap_get_system ();
-      gdk_colormap_ref (drawable_impl->colormap);
-
-      if (depth <= 8)
+      if (depth <= 8 && drawable_impl->colormap != NULL)
 	{
 	  GdkColormapPrivateWin32 *cmapp =
 	    GDK_WIN32_COLORMAP_DATA (drawable_impl->colormap);
@@ -285,6 +279,8 @@ _gdk_win32_pixmap_new (GdkWindow *window,
 	}
       else if (bmi.bmiHeader.biBitCount == 16)
 	{
+	  GdkVisual *visual = gdk_visual_get_system ();
+
 	  bmi.u.bmiMasks[0] = visual->red_mask;
 	  bmi.u.bmiMasks[1] = visual->green_mask;
 	  bmi.u.bmiMasks[2] = visual->blue_mask;
@@ -296,15 +292,14 @@ _gdk_win32_pixmap_new (GdkWindow *window,
   if (holdpal != NULL)
     SelectPalette (hdc, holdpal, FALSE);
 
-  if (!ReleaseDC (GDK_WINDOW_HWND (window), hdc))
+  if (!ReleaseDC (hwnd, hdc))
     WIN32_GDI_FAILED ("ReleaseDC");
 
-  GDK_NOTE (PIXMAP, g_print ("...=%p bits=%p\n", hbitmap, bits));
+  GDK_NOTE (PIXMAP, g_print ("...=%p bits=%p pixmap=%p\n", hbitmap, bits, pixmap));
 
   if (hbitmap == NULL)
     {
       WIN32_GDI_FAILED ("CreateDIBSection");
-      ReleaseDC (GDK_WINDOW_HWND (window), hdc);
       g_object_unref ((GObject *) pixmap);
       return NULL;
     }
@@ -317,15 +312,6 @@ _gdk_win32_pixmap_new (GdkWindow *window,
   gdk_win32_handle_table_insert (&GDK_PIXMAP_HBITMAP (pixmap), pixmap);
 
   return pixmap;
-}
-
-GdkPixmap*
-gdk_pixmap_new (GdkWindow *window,
-		gint       width,
-		gint       height,
-		gint       depth)
-{
-  return _gdk_win32_pixmap_new (window, NULL, width, height, depth);
 }
 
 static unsigned char mirror[256] = {

@@ -193,7 +193,8 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
     {
       win32_gc->fill_style = values->fill;
       win32_gc->values_mask |= GDK_GC_FILL;
-      GDK_NOTE (GC, (g_print ("%sfill=%d", s, win32_gc->fill_style),
+      GDK_NOTE (GC, (g_print ("%sfill=%s", s,
+			      _gdk_win32_fill_style_to_string (win32_gc->fill_style)),
 		     s = ","));
     }
 
@@ -419,7 +420,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 		     s = ","));
       win32_gc->values_mask |= GDK_GC_JOIN_STYLE;
     }
-  GDK_NOTE (GC, g_print ("}\n"));
+  GDK_NOTE (GC, g_print ("} mask=(%s)", _gdk_win32_gcvalues_mask_to_string (win32_gc->values_mask)));
 }
 
 GdkGC*
@@ -457,13 +458,12 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
 
   win32_gc->values_mask = GDK_GC_FUNCTION | GDK_GC_FILL;
 
-  GDK_NOTE (GC, g_print ("_gdk_win32_gc_new: "));
+  GDK_NOTE (GC, g_print ("_gdk_win32_gc_new: %p: ", win32_gc));
   gdk_win32_gc_values_to_win32values (values, mask, win32_gc);
+  GDK_NOTE (GC, g_print ("\n"));
 
   win32_gc->hdc = NULL;
   win32_gc->hwnd = NULL;
-
-  GDK_NOTE (GC, g_print (" = %p\n", gc));
 
   return gc;
 }
@@ -561,9 +561,9 @@ gdk_win32_gc_set_values (GdkGC           *gc,
 {
   g_return_if_fail (GDK_IS_GC (gc));
 
-  GDK_NOTE (GC, g_print ("gdk_win32_gc_set_values: "));
-
+  GDK_NOTE (GC, g_print ("gdk_win32_gc_set_values: %p: ", GDK_GC_WIN32 (gc)));
   gdk_win32_gc_values_to_win32values (values, mask, GDK_GC_WIN32 (gc));
+  GDK_NOTE (GC, g_print ("\n"));
 }
 
 static void
@@ -607,7 +607,8 @@ gdk_gc_set_clip_rectangle (GdkGC	*gc,
 
   if (rectangle)
     {
-      GDK_NOTE (GC, g_print ("gdk_gc_set_clip_rectangle: %s\n",
+      GDK_NOTE (GC, g_print ("gdk_gc_set_clip_rectangle: %p: %s\n",
+			     win32_gc,
 			     _gdk_win32_gdkrectangle_to_string (rectangle)));
       win32_gc->hcliprgn = CreateRectRgn (rectangle->x, rectangle->y,
 					  rectangle->x + rectangle->width,
@@ -643,7 +644,8 @@ gdk_gc_set_clip_region (GdkGC	  *gc,
 
   if (region)
     {
-      GDK_NOTE (GC, g_print ("gdk_gc_set_clip_region: %s\n",
+      GDK_NOTE (GC, g_print ("gdk_gc_set_clip_region: %p: %s\n",
+			     win32_gc,
 			     _gdk_win32_gdkregion_to_string (region)));
 
       win32_gc->hcliprgn = _gdk_win32_gdkregion_to_hrgn (region, 0, 0);
@@ -676,6 +678,8 @@ gdk_gc_copy (GdkGC *dst_gc,
   dst_win32_gc = GDK_GC_WIN32 (dst_gc);
   src_win32_gc = GDK_GC_WIN32 (src_gc);
 
+  GDK_NOTE (GC, g_print ("gdk_gc_copy: %p := %p\n", dst_win32_gc, src_win32_gc));
+
   if (dst_gc->colormap)
     g_object_unref (G_OBJECT (dst_gc->colormap));
 
@@ -695,6 +699,7 @@ gdk_gc_copy (GdkGC *dst_gc,
     g_free (dst_win32_gc->pen_dashes);
   
   *dst_win32_gc = *src_win32_gc;
+  dst_win32_gc->hdc = NULL;
 
   if (dst_gc->colormap)
     g_object_ref (G_OBJECT (dst_gc->colormap));
@@ -836,8 +841,11 @@ predraw_set_foreground (GdkGC       *gc,
     case GDK_OPAQUE_STIPPLED:
       if (*ok && (hbr = CreatePatternBrush (GDK_PIXMAP_HBITMAP (win32_gc->stipple))) == NULL)
 	WIN32_GDI_FAILED ("CreatePatternBrush"), *ok = FALSE;
-      if (*ok && !SetBrushOrgEx(win32_gc->hdc, gc->ts_x_origin,
-				gc->ts_y_origin, NULL))
+      if (*ok && win32_gc->values_mask & (GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN) &&
+	  !SetBrushOrgEx(win32_gc->hdc,
+			 win32_gc->values_mask & GDK_GC_TS_X_ORIGIN ? gc->ts_x_origin : 0,
+			 win32_gc->values_mask & GDK_GC_TS_Y_ORIGIN ? gc->ts_y_origin : 0,
+			 NULL))
 	WIN32_GDI_FAILED ("SetBrushOrgEx"), *ok = FALSE;
 	
       break;
@@ -848,6 +856,7 @@ predraw_set_foreground (GdkGC       *gc,
 	WIN32_GDI_FAILED ("CreateSolidBrush"), *ok = FALSE;
       break;
   }
+
   if (*ok)
     {
       HBRUSH old_hbr = SelectObject (win32_gc->hdc, hbr);
@@ -945,6 +954,10 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
       if (SelectClipRgn (win32_gc->hdc, win32_gc->hcliprgn) == ERROR)
 	WIN32_API_FAILED ("SelectClipRgn"), ok = FALSE;
 
+#if 0 /* No, this is totally bogus. The stipple should replicate in x
+       * and y directions, not be just one copy of the bitmap. We must
+       * handle stipples elsewhere.
+       */
       /* Combine the fillmode-stipple with the clip region */
       if (ok &&
 	  (win32_gc->values_mask & GDK_GC_STIPPLE) &&
@@ -966,6 +979,7 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
           if (hstipplergn != NULL && !DeleteObject (hstipplergn))
             WIN32_API_FAILED ("DeleteObject");
         }
+#endif
 
       if (ok && win32_gc->values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN) &&
 	  OffsetClipRgn (win32_gc->hdc,
@@ -974,7 +988,8 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
 	WIN32_API_FAILED ("OffsetClipRgn"), ok = FALSE;
     }
 
-  GDK_NOTE (GC, (g_print ("gdk_win32_hdc_get: "),
+  GDK_NOTE (GC, (g_print ("gdk_win32_hdc_get: %p (%s): ",
+			  win32_gc, _gdk_win32_gcvalues_mask_to_string (usage)),
 		 _gdk_win32_print_dc (win32_gc->hdc)));
 
   return win32_gc->hdc;
@@ -990,7 +1005,9 @@ gdk_win32_hdc_release (GdkDrawable    *drawable,
   HGDIOBJ hpen = NULL;
   HGDIOBJ hbr = NULL;
 
-  GDK_NOTE (GC, g_print ("gdk_win32_hdc_release: %p\n", win32_gc->hdc));
+  GDK_NOTE (GC, g_print ("gdk_win32_hdc_release: %p: %p (%s)\n",
+			 win32_gc, win32_gc->hdc,
+			 _gdk_win32_gcvalues_mask_to_string (usage)));
 
   if (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable))
     impl = GDK_DRAWABLE_IMPL_WIN32(drawable);
