@@ -338,8 +338,9 @@ gdk_init (int    *argc,
 		  i += 1;
 		}
 	    }
+	  else 
 #endif /* G_ENABLE_DEBUG */
-	  else if (strcmp ("--display", (*argv)[i]) == 0)
+	    if (strcmp ("--display", (*argv)[i]) == 0)
 	    {
 	      (*argv)[i] = NULL;
 
