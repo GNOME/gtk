@@ -1,3 +1,8 @@
+Thu Sep 23 16:41:03 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (LDADDS): Add GDK_WLIBS to LDADDS 
+	(fixes bug #2144)
+
 Fri Sep 24 00:51:45 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkcontainer.c (gtk_container_queue_resize): check for

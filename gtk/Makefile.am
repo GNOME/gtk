@@ -397,6 +397,7 @@ LDADDS = @STRIP_BEGIN@ \
 	$(top_builddir)/gdk/libgdk.la	\
 	@x_ldflags@			\
 	@x_libs@			\
+	@GDK_WLIBS@			\
 	@GLIB_LIBS@			\
 	-lm				\
 @STRIP_END@
