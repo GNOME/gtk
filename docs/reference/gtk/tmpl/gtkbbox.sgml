@@ -88,6 +88,8 @@ Retrieves the current width and height of all child widgets in a button box.
 @widget: a #GtkButtonBox.
 @min_width: the width of the buttons contained by @widget.
 @min_height: the height of the buttons contained by @widget.
+@Deprecated: Use the style properties
+<literal>"child-min-width/-height"</literal> instead.
 
 
 <!-- ##### FUNCTION gtk_button_box_get_child_ipadding ##### -->
@@ -98,6 +100,8 @@ Gets the default number of pixels that pad the buttons in a given button box.
 @widget: a #GtkButtonBox.
 @ipad_x: the horizontal padding used by buttons in @widget.
 @ipad_y: the vertical padding used by buttons in @widget.
+@Deprecated: Use the style properties
+<literal>"child-internal-pad-x/-y"</literal> instead.
 
 
 <!-- ##### MACRO gtk_button_box_set_spacing ##### -->
@@ -129,7 +133,8 @@ Sets a new default size for the children of a given button box.
 @widget: a #GtkButtonBox.
 @min_width: a default width for buttons in @widget.
 @min_height: a default height for buttons in @widget.
-
+@Deprecated: Use the style properties
+<literal>"child-min-width/-height"</literal> instead.
 
 <!-- ##### FUNCTION gtk_button_box_set_child_ipadding ##### -->
 <para>
@@ -140,7 +145,8 @@ box.
 @widget: a #GtkButtonBox.
 @ipad_x: the horizontal padding that should be used by each button in @widget.
 @ipad_y: the vertical padding that should be used by each button in @widget.
-
+@Deprecated: Use the style properties
+<literal>"child-internal-pad-x/-y"</literal> instead.
 
 <!-- ##### FUNCTION gtk_button_box_set_child_secondary ##### -->
 <para>

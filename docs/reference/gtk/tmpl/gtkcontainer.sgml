@@ -43,6 +43,7 @@ Base class for widgets which contain other widgets
 Does the same as gtk_container_get_border_width().
 </para>
 
+@Deprecated: Use gtk_container_get_border_width() instead.
 
 
 <!-- ##### FUNCTION gtk_container_add ##### -->
@@ -120,6 +121,7 @@ Does the same as gtk_container_get_border_width().
 @marshal: 
 @callback_data: 
 @notify: 
+@Deprecated: Use gtk_container_foreach() instead.
 
 
 <!-- ##### MACRO gtk_container_children ##### -->
@@ -128,9 +130,7 @@ Does the same as gtk_container_get_children().
 </para>
 
 @Returns: 
-<!-- # Unused Parameters # -->
-@container: 
-
+@Deprecated: Use gtk_container_get_children() instead.
 
 <!-- ##### FUNCTION gtk_container_get_children ##### -->
 <para>
