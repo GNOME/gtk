@@ -9,26 +9,26 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.15\n"
-"POT-Creation-Date: 2003-01-07 06:06+0100\n"
-"PO-Revision-Date: 2002-12-17 13:09-0300\n"
+"POT-Creation-Date: 2003-01-15 12:12+0100\n"
+"PO-Revision-Date: 2003-01-15 15:19-0300\n"
 "Last-Translator: Pablo Gonzalo del Campo <pablodc@bigfoot.com>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.9.6\n"
+"X-Generator: KBabel 1.1\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:703
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:736
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "No se ha podido abrir el archivo «%s»: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:157 gdk-pixbuf/gdk-pixbuf-io.c:713
+#: gdk-pixbuf/gdk-pixbuf-animation.c:157 gdk-pixbuf/gdk-pixbuf-io.c:746
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "El archivo de imagen «%s» no contiene datos"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:197 gdk-pixbuf/gdk-pixbuf-io.c:747
+#: gdk-pixbuf/gdk-pixbuf-animation.c:197 gdk-pixbuf/gdk-pixbuf-io.c:780
 #, c-format
 msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
@@ -44,12 +44,12 @@ msgstr ""
 "No se ha podido cargar la animación «%s»: el motivo es desconocido, "
 "probablemente el archivo de la animación este corrupto"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:377
+#: gdk-pixbuf/gdk-pixbuf-io.c:410
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "No es posible cargar el módulo de carga de imágenes: %s:·%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:392
+#: gdk-pixbuf/gdk-pixbuf-io.c:425
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -58,38 +58,38 @@ msgstr ""
 "El módulo de carga de imágenes %s no exporta el interfaz adecuado; ¿puede "
 "que sea de una versión de GTK diferente?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:531 gdk-pixbuf/gdk-pixbuf-io.c:579
+#: gdk-pixbuf/gdk-pixbuf-io.c:564 gdk-pixbuf/gdk-pixbuf-io.c:612
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "El tipo de imagen «%s» no está soportado"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:611
+#: gdk-pixbuf/gdk-pixbuf-io.c:644
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "No se ha podido reconocer el formato del archivo de imagen del archivo «%s»"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:617
+#: gdk-pixbuf/gdk-pixbuf-io.c:650
 msgid "Unrecognized image file format"
 msgstr "El formato del archivo de imagen no es conocido"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:758
+#: gdk-pixbuf/gdk-pixbuf-io.c:791
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "No se ha podido cargar la imagen «%s»: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:866
+#: gdk-pixbuf/gdk-pixbuf-io.c:899
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Esta compilación de gdk-pixbuf no soporta el almacenamiento de imágenes con "
 "el formato: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:971
+#: gdk-pixbuf/gdk-pixbuf-io.c:1004
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "No se ha podido abrir «%s» para escritura: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:992
+#: gdk-pixbuf/gdk-pixbuf-io.c:1025
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -127,7 +127,7 @@ msgstr "Los datos del pixel de la imagen están corrompidos"
 #: gdk-pixbuf/gdk-pixdata.c:402
 #, c-format
 msgid "failed to allocate image buffer of %u bytes"
-msgstr "no se ha podido obtener un buffer para la imagen de %u bytes"
+msgstr "no se ha podido asignar un buffer para la imagen de %u bytes"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -305,7 +305,7 @@ msgstr "Espacio de color JPEG no soportado (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:673 gdk-pixbuf/io-jpeg.c:858
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "No se puede obtener memoria para cargar el archivo JPG"
+msgstr "No se puede asignar memoria para cargar el archivo JPG"
 
 #: gdk-pixbuf/io-jpeg.c:812
 #, c-format
@@ -455,7 +455,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:769
 msgid "Can't allocate memory for loading PNM image"
-msgstr "No puedo obtener memoria para cargar la imagen PNM"
+msgstr "No se puede asignar memoria para cargar la imagen PNM"
 
 #: gdk-pixbuf/io-pnm.c:819
 msgid "Insufficient memory to load PNM context struct"
@@ -495,11 +495,11 @@ msgstr "El formato de imagen Sun raster"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
-msgstr "No se puede obtener memoria para la estructura IOBuffer"
+msgstr "No se puede asignar memoria para la estructura IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:178
 msgid "Can't allocate memory for IOBuffer data"
-msgstr "No se puede obtener memoria para los datos de IOBuffer"
+msgstr "No se puede asignar memoria para los datos de IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:189
 msgid "Can't realloc IOBuffer data"
@@ -507,7 +507,7 @@ msgstr "No se puede volver a reservar memoria para los datos de IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:219
 msgid "Can't allocate temporary IOBuffer data"
-msgstr "No se pueden alojar los datos temporales de IOBuffer"
+msgstr "No se pueden asignar los datos temporales de IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:283
 msgid "fread() failed -- premature end-of-file probably encountered"
@@ -523,15 +523,15 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:326
 msgid "Can't allocate new pixbuf"
-msgstr "No se puede alojar un nuevo pixbuf"
+msgstr "No se puede asignar un nuevo pixbuf"
 
 #: gdk-pixbuf/io-tga.c:639
 msgid "Can't allocate colormap structure"
-msgstr "No se puede alojar la estructura del mapa de colores"
+msgstr "No se puede asignar la estructura del mapa de colores"
 
 #: gdk-pixbuf/io-tga.c:646
 msgid "Can't allocate colormap entries"
-msgstr "No se puede alojar las entradas del mapa de colores"
+msgstr "No se puede asignar las entradas del mapa de colores"
 
 #: gdk-pixbuf/io-tga.c:668
 msgid "Unexpected bitdepth for colormap entries"
@@ -539,7 +539,7 @@ msgstr "Profundidad de color inesperada para las entradas del mapa de color"
 
 #: gdk-pixbuf/io-tga.c:686
 msgid "Can't allocate TGA header memory"
-msgstr "No se puede obtener memoria para la cabecera TGA"
+msgstr "No se puede asignar memoria para la cabecera TGA"
 
 #: gdk-pixbuf/io-tga.c:719
 msgid "TGA image has invalid dimensions"
@@ -556,7 +556,7 @@ msgstr "El tipo de imagen TGA no está implementado"
 
 #: gdk-pixbuf/io-tga.c:816
 msgid "Can't allocate memory for TGA context struct"
-msgstr "No puedo obtener memoria para la estructura context de TGA"
+msgstr "No se puede asignar memoria para la estructura context de TGA"
 
 #: gdk-pixbuf/io-tga.c:880
 msgid "Excess data in file"
@@ -564,7 +564,7 @@ msgstr "Exceso de datos en el archivo"
 
 #: gdk-pixbuf/io-tga.c:926
 msgid "Can't allocate memory for TGA header"
-msgstr "No puedo obtener memoria para la cabecera TGA"
+msgstr "No se puede asignar memoria para la cabecera TGA"
 
 #: gdk-pixbuf/io-tga.c:936
 msgid "Too big value in the infolen field of TGA header."
@@ -572,15 +572,15 @@ msgstr "El valor del campo infolen de la cabecera TGA es muy alto."
 
 #: gdk-pixbuf/io-tga.c:960
 msgid "Can't allocate memory for TGA cmap temporary buffer"
-msgstr "No puedo obtener memoria para el buffer temporal cmap de TGA"
+msgstr "No se puede asignar memoria para el buffer temporal cmap de TGA"
 
 #: gdk-pixbuf/io-tga.c:972
 msgid "Can't allocate memory for TGA colormap struct"
-msgstr "No puedo obtener memoria para la estructura del mapa de color de TGA"
+msgstr "No se puede asignar memoria para la estructura del mapa de color de TGA"
 
 #: gdk-pixbuf/io-tga.c:981
 msgid "Can't allocate memory for TGA colormap entries"
-msgstr "No puedo obtener memoria para las entradas del mapa de color de TGA"
+msgstr "No se puede asignar memoria para las entradas del mapa de color de TGA"
 
 #: gdk-pixbuf/io-tga.c:991
 msgid "Unexpected bitdepth for TGA colormap"
@@ -598,7 +598,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:1053 gdk-pixbuf/io-tga.c:1155 gdk-pixbuf/io-tga.c:1225
 msgid "Can't allocate pixbuf"
-msgstr "No se puede alojar pixbuf"
+msgstr "No se puede asignar el pixbuf"
 
 #: gdk-pixbuf/io-tga.c:1295 gdk-pixbuf/io-tga.c:1324
 msgid "Unsupported TGA image type"
@@ -712,11 +712,11 @@ msgstr "El XPM tiene un número inválido de carácteres por pixel"
 
 #: gdk-pixbuf/io-xpm.c:1279
 msgid "Can't read XPM colormap"
-msgstr "No puedo leer el mapa de color de XPM"
+msgstr "No se puede leer el mapa de color de XPM"
 
 #: gdk-pixbuf/io-xpm.c:1317
 msgid "Can't allocate memory for loading XPM image"
-msgstr "No puedo obtener memoria para cargar la imagen XPM"
+msgstr "No se puede asignar memoria para cargar la imagen XPM"
 
 #: gdk-pixbuf/io-xpm.c:1508
 msgid "Failed to write to temporary file when loading XPM image"
@@ -962,7 +962,7 @@ msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr ""
-"Indica si debe otorgarse espacio extra para que el hijo pueda ser colocado "
+"Indica si debe otorgarse espacio extra para que el hijo pueda ser asignado "
 "en el hijo o usado como relleno"
 
 #: gtk/gtkbox.c:160
@@ -1957,7 +1957,7 @@ msgstr "Seleccionar todo"
 msgid "Input Methods"
 msgstr "Métodos de entrada"
 
-#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6611
+#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6524
 msgid "_Insert Unicode control character"
 msgstr "_Insertar caracter de control unicode"
 
@@ -2608,13 +2608,13 @@ msgstr "La altura de la disposición"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:805
+#: gtk/gtkmain.c:806
 msgid "default:LTR"
 msgstr "default:LTR"
 
 #: gtk/gtkmenu.c:263
 msgid "Tearoff Title"
-msgstr "Título descolgado"
+msgstr "Título del separador"
 
 #: gtk/gtkmenu.c:264
 msgid ""
@@ -2622,7 +2622,7 @@ msgid ""
 "off"
 msgstr ""
 "Un título que debe ser mostrado por el administrador de ventanas cuando este "
-"menú este descolgado"
+"menú se encuentre cerrado"
 
 #: gtk/gtkmenu.c:379
 msgid "Can change accelerators"
@@ -2852,7 +2852,7 @@ msgstr "Relleno de la pestaña"
 
 #: gtk/gtknotebook.c:481
 msgid "Wheather the childs tab should fill the allocated area or not"
-msgstr "Deberían los tabuladores hijos rellenar el área reservada o no"
+msgstr "Indica si los tabuladores hijos deberían rellenar el área asignada o no"
 
 #: gtk/gtknotebook.c:487
 msgid "Tab pack type"
@@ -2905,7 +2905,7 @@ msgstr "Ancho del manejador"
 msgid "Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
 "Indica si el widget de vista previa debe tomar el espacio entero adonde se "
-"encuentra localizado"
+"encuentra asignado"
 
 #: gtk/gtkprogress.c:127
 msgid "Activity mode"
@@ -3244,11 +3244,11 @@ msgstr ""
 "Mostrar un botón secundario de avance en el extremo opuesto de la barra de "
 "desplazamiento"
 
-#: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:525
+#: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:527
 msgid "Horizontal Adjustment"
 msgstr "Ajuste horizontal"
 
-#: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:609 gtk/gtktreeview.c:533
+#: gtk/gtkscrolledwindow.c:242 gtk/gtktext.c:609 gtk/gtktreeview.c:535
 msgid "Vertical Adjustment"
 msgstr "Ajuste vertical"
 
@@ -3901,7 +3901,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:214
 msgid "Background color as a (possibly unallocated) GdkColor"
-msgstr "Color de fondo como un (posiblemente no reservado) GdkColor"
+msgstr "Color de fondo como un (posiblemente no asignado) GdkColor"
 
 #: gtk/gtktexttag.c:221
 msgid "Background full height"
@@ -3925,7 +3925,7 @@ msgstr "Bitmap a utilizar como una máscara cuando se arrastre el fondo del text
 
 #: gtk/gtktexttag.c:248
 msgid "Foreground color as a (possibly unallocated) GdkColor"
-msgstr "Color de frente como un (posiblemente no reservado) GdkColor"
+msgstr "Color de frente como un (posiblemente no asignado) GdkColor"
 
 #: gtk/gtktexttag.c:256
 msgid "Foreground stipple mask"
@@ -4266,7 +4266,7 @@ msgstr "Cursor visible"
 msgid "If the insertion cursor is shown"
 msgstr "Si se muestra el cursor de inserción"
 
-#: gtk/gtktextview.c:6602
+#: gtk/gtktextview.c:6515
 msgid "Input _Methods"
 msgstr "Métodos de entrada"
 
@@ -4367,137 +4367,137 @@ msgstr "Modelo TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "El modelo para el TreeModelSort a ordenar"
 
-#: gtk/gtktreeview.c:517
+#: gtk/gtktreeview.c:519
 msgid "TreeView Model"
 msgstr "Modelo TreeView"
 
-#: gtk/gtktreeview.c:518
+#: gtk/gtktreeview.c:520
 msgid "The model for the tree view"
 msgstr "El modelo para la vista de árbol"
 
-#: gtk/gtktreeview.c:526
+#: gtk/gtktreeview.c:528
 msgid "Horizontal Adjustment for the widget"
 msgstr "Ajuste horizontal para el widget"
 
-#: gtk/gtktreeview.c:534
+#: gtk/gtktreeview.c:536
 msgid "Vertical Adjustment for the widget"
 msgstr "Ajuste vertical para el widget"
 
-#: gtk/gtktreeview.c:541 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:433
+#: gtk/gtktreeview.c:543 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:433
 msgid "Visible"
 msgstr "Visible"
 
-#: gtk/gtktreeview.c:542
+#: gtk/gtktreeview.c:544
 msgid "Show the column header buttons"
 msgstr "Mostrar botones en los encabezados de columna"
 
-#: gtk/gtktreeview.c:549
+#: gtk/gtktreeview.c:551
 msgid "Headers Clickable"
 msgstr "Cabeceras cliqueables"
 
-#: gtk/gtktreeview.c:550
+#: gtk/gtktreeview.c:552
 msgid "Column headers respond to click events"
 msgstr "Las cabeceras de las columnas responden a los eventos de click"
 
-#: gtk/gtktreeview.c:557
+#: gtk/gtktreeview.c:559
 msgid "Expander Column"
 msgstr "Columna extensora"
 
-#: gtk/gtktreeview.c:558
+#: gtk/gtktreeview.c:560
 msgid "Set the column for the expander column"
 msgstr "Define la columna para la columna extensora"
 
-#: gtk/gtktreeview.c:565 gtk/gtktreeviewcolumn.c:284
+#: gtk/gtktreeview.c:567 gtk/gtktreeviewcolumn.c:284
 msgid "Reorderable"
 msgstr "Reordenable"
 
-#: gtk/gtktreeview.c:566
+#: gtk/gtktreeview.c:568
 msgid "View is reorderable"
 msgstr "Vista es reordenable"
 
-#: gtk/gtktreeview.c:573
+#: gtk/gtktreeview.c:575
 msgid "Rules Hint"
 msgstr "Consejo de las reglas"
 
-#: gtk/gtktreeview.c:574
+#: gtk/gtktreeview.c:576
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Define un consejo para el motor del tema para dibujar las filas con colores "
 "alternativos"
 
-#: gtk/gtktreeview.c:581
+#: gtk/gtktreeview.c:583
 msgid "Enable Search"
 msgstr "Habilitar búsqueda"
 
-#: gtk/gtktreeview.c:582
+#: gtk/gtktreeview.c:584
 msgid "View allows user to search through columns interactively"
 msgstr ""
 "La vista permite a los usuarios buscar en forma interactiva a través de las "
 "columnas"
 
-#: gtk/gtktreeview.c:589
+#: gtk/gtktreeview.c:591
 msgid "Search Column"
 msgstr "Columna de búsqueda"
 
-#: gtk/gtktreeview.c:590
+#: gtk/gtktreeview.c:592
 msgid "Model column to search through when searching through code"
 msgstr ""
 "Columna modelo para buscar dentro cuando se esta buscando código por medio "
 "de ella"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:605
 msgid "Expander Size"
 msgstr "Tamaño del extensor"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:606
 msgid "Size of the expander arrow"
 msgstr "Tamaño de la flecha del extensor"
 
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:614
 msgid "Vertical Separator Width"
 msgstr "Ancho del separador vertical"
 
-#: gtk/gtktreeview.c:613
+#: gtk/gtktreeview.c:615
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Espacio vertical entre celdas. Debe ser un número par"
 
-#: gtk/gtktreeview.c:621
+#: gtk/gtktreeview.c:623
 msgid "Horizontal Separator Width"
 msgstr "Ancho del separador horizontal"
 
-#: gtk/gtktreeview.c:622
+#: gtk/gtktreeview.c:624
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Espacio horizontal entre celdas.  Debe ser un número par"
 
-#: gtk/gtktreeview.c:630
+#: gtk/gtktreeview.c:632
 msgid "Allow Rules"
 msgstr "Permitir reglas"
 
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:633
 msgid "Allow drawing of alternating color rows"
 msgstr "Permitir el dibujado de filas con colores alternativos"
 
-#: gtk/gtktreeview.c:637
+#: gtk/gtktreeview.c:639
 msgid "Indent Expanders"
 msgstr "Indentar extensores"
 
-#: gtk/gtktreeview.c:638
+#: gtk/gtktreeview.c:640
 msgid "Make the expanders indented"
 msgstr "Crea los extensores indentados"
 
-#: gtk/gtktreeview.c:644
+#: gtk/gtktreeview.c:646
 msgid "Even Row Color"
 msgstr "Color de la fila par"
 
-#: gtk/gtktreeview.c:645
+#: gtk/gtktreeview.c:647
 msgid "Color to use for even rows"
 msgstr "Color a usar para las filas pares"
 
-#: gtk/gtktreeview.c:651
+#: gtk/gtktreeview.c:653
 msgid "Odd Row Color"
 msgstr "Color de la fila impar"
 
-#: gtk/gtktreeview.c:652
+#: gtk/gtktreeview.c:654
 msgid "Color to use for odd rows"
 msgstr "Color a usar para las filas impares"
 
