@@ -1,3 +1,9 @@
+Wed May 21 13:19:05 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
+
+	* gtk/gtkenums.h (enum GtkIMPreeditStyle, GtkIMStatusStyle): 
+	* modules/input/gtkimcontextxim.c (preedit_style_change, status_style_change):
+	gtk settings for XIMPreeditNone and XIMStatusNone. (#105909)
+
 Wed May 21 12:10:25 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* gtk/gtkimcontextsimple.c: 

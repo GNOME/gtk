@@ -190,6 +190,8 @@ status_style_change (GtkXIMInfo *info)
     info->status_style_setting = XIMStatusCallbacks;
   else if (status_style == GTK_IM_STATUS_NOTHING)
     info->status_style_setting = XIMStatusNothing;
+  else if (status_style == GTK_IM_STATUS_NONE)
+    info->status_style_setting = XIMStatusNone;
   else
     return;
 
@@ -209,6 +211,8 @@ preedit_style_change (GtkXIMInfo *info)
     info->preedit_style_setting = XIMPreeditCallbacks;
   else if (preedit_style == GTK_IM_PREEDIT_NOTHING)
     info->preedit_style_setting = XIMPreeditNothing;
+  else if (preedit_style == GTK_IM_PREEDIT_NONE)
+    info->preedit_style_setting = XIMPreeditNone;
   else
     return;
 

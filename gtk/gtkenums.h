@@ -431,13 +431,15 @@ typedef enum
 typedef enum
 {
   GTK_IM_PREEDIT_NOTHING,
-  GTK_IM_PREEDIT_CALLBACK
+  GTK_IM_PREEDIT_CALLBACK,
+  GTK_IM_PREEDIT_NONE
 } GtkIMPreeditStyle;
 
 typedef enum
 {
   GTK_IM_STATUS_NOTHING,
-  GTK_IM_STATUS_CALLBACK
+  GTK_IM_STATUS_CALLBACK,
+  GTK_IM_STATUS_NONE
 } GtkIMStatusStyle;
 
 #ifdef __cplusplus
