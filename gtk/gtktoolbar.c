@@ -680,12 +680,7 @@ gtk_toolbar_realize (GtkWidget *widget)
   attributes.width = widget->allocation.width - border_width * 2;
   attributes.height = widget->allocation.height - border_width * 2;
   attributes.event_mask = gtk_widget_get_events (widget);
-  /* FIXME: does GDK_EXPOSURE_MASK make sense for an input-only window?
-   * If it doesn't, then it should be removed here and in gtkbutton.c,
-   * gtkmenuitem.c, and maybe other places
-   */
-  attributes.event_mask |= (GDK_EXPOSURE_MASK |
-			    GDK_BUTTON_PRESS_MASK |
+  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK |
 			    GDK_ENTER_NOTIFY_MASK |
 			    GDK_LEAVE_NOTIFY_MASK);

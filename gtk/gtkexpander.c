@@ -358,7 +358,6 @@ gtk_expander_realize (GtkWidget *widget)
   attributes.height = widget->allocation.height - 2 * border_width;
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.event_mask = gtk_widget_get_events (widget)     |
-				GDK_EXPOSURE_MASK            |
 				GDK_BUTTON_PRESS_MASK        |
 				GDK_BUTTON_RELEASE_MASK      |
 				GDK_ENTER_NOTIFY_MASK        |

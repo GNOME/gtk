@@ -1,3 +1,14 @@
+Tue Jul  8 21:10:14 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkbutton.c (gtk_button_realize): remove GDK_EXPOSURE_MASK
+	for INPUT_ONLY window
+	* gtk/gtkmenuitem.c (gtk_menu_item_realize): same
+	* gtk/gtknotebook.c (gtk_notebook_realize): same
+	* gtk/gtkexpander.c (gtk_expander_realize): same
+	* gtk/gtkrange.c (gtk_range_realize): same
+
+	Fix #116303
+
 Tue Jul  8 19:57:14 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkstyle.c (gtk_default_draw_arrow): remove correction on x

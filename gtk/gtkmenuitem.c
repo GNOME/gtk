@@ -606,7 +606,6 @@ gtk_menu_item_realize (GtkWidget *widget)
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.event_mask = (gtk_widget_get_events (widget) |
-			   GDK_EXPOSURE_MASK |
 			   GDK_BUTTON_PRESS_MASK |
 			   GDK_BUTTON_RELEASE_MASK |
 			   GDK_ENTER_NOTIFY_MASK |

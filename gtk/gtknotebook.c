@@ -1116,7 +1116,7 @@ gtk_notebook_realize (GtkWidget *widget)
   attributes.height = event_window_pos.height;
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= (GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK |
+  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK);
 
   attributes_mask = GDK_WA_X | GDK_WA_Y;
