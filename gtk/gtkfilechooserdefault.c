@@ -914,6 +914,23 @@ remove_bookmark_cb (GtkFileChooserDefault *impl, gpointer data)
   gtk_file_path_free (path);
 }
 
+/* Inserts the bookmarks separator node */
+static void
+shortcuts_insert_separator (GtkFileChooserDefault *impl)
+{
+  GtkTreeIter iter;
+
+  gtk_list_store_insert (impl->shortcuts_model, &iter,
+			 shortcuts_get_index (impl, SHORTCUTS_SEPARATOR));
+  gtk_list_store_set (impl->shortcuts_model, &iter,
+		      SHORTCUTS_COL_PIXBUF, NULL,
+		      SHORTCUTS_COL_PIXBUF_VISIBLE, FALSE,
+		      SHORTCUTS_COL_NAME, NULL,
+		      SHORTCUTS_COL_PATH, NULL,
+		      -1);
+}
+
+/* Creates the GtkTreeStore used as the shortcuts model */
 /* Updates the list of bookmarks */
 static void
 shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
@@ -939,23 +956,6 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
     }
 }
 
-/* Inserts the bookmarks separator node */
-static void
-shortcuts_insert_separator (GtkFileChooserDefault *impl)
-{
-  GtkTreeIter iter;
-
-  gtk_list_store_insert (impl->shortcuts_model, &iter,
-			 shortcuts_get_index (impl, SHORTCUTS_SEPARATOR));
-  gtk_list_store_set (impl->shortcuts_model, &iter,
-		      SHORTCUTS_COL_PIXBUF, NULL,
-		      SHORTCUTS_COL_PIXBUF_VISIBLE, FALSE,
-		      SHORTCUTS_COL_NAME, NULL,
-		      SHORTCUTS_COL_PATH, NULL,
-		      -1);
-}
-
-/* Creates the GtkTreeStore used as the shortcuts model */
 static void
 create_shortcuts_model (GtkFileChooserDefault *impl)
 {

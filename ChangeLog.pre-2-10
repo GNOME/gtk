@@ -1,5 +1,10 @@
 2004-02-24  Anders Carlsson  <andersca@gnome.org>
 
+	* gtk/gtkfilechooserdefault.c: (shortcuts_insert_separator):
+	Fix compilation (#135278, Padraig O'Briain).
+	
+2004-02-24  Anders Carlsson  <andersca@gnome.org>
+
 	* gtk/gtkfilechooserdefault.c: (shortcuts_append_desktop):
 	Translate the desktop label.
 	
