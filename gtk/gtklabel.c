@@ -337,6 +337,15 @@ gtk_label_get (GtkLabel *label,
   *str = label->label;
 }
 
+gchar *
+gtk_label_get_text (GtkLabel *label)
+{
+  g_return_val_if_fail (label != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
+
+  return g_strdup (label->label);
+}
+
 static void
 gtk_label_finalize (GtkObject *object)
 {

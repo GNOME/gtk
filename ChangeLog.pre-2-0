@@ -1,3 +1,8 @@
+2000-04-26  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_get_text): Add this function,
+	replacing the broken gtk_label_get ()
+
 2000-04-15  Havoc Pennington  <hp@pobox.com>
 
 	* gdk/gdkdnd.h: clean up enum format, remove extra comma, 
