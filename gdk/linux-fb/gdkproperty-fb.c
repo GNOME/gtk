@@ -54,13 +54,15 @@ gdk_property_delete_2 (GdkWindow *window,
 {
   GdkWindowFBData *fbd = GDK_WINDOW_IMPL_FBDATA(window);
   GdkEvent *event;
+  GdkWindow *event_window;
   
   g_hash_table_remove (fbd->properties, GUINT_TO_POINTER (property));
   g_free (prop);
 
-  event = gdk_event_make (window, GDK_PROPERTY_NOTIFY, TRUE);
-  if (event)
+  event_window = gdk_fb_other_event_window (window, GDK_PROPERTY_NOTIFY);
+  if (event_window)
     {
+      event = gdk_event_make (event_window, GDK_PROPERTY_NOTIFY, TRUE);
       event->property.atom = property;
       event->property.state = GDK_PROPERTY_DELETE;
     }
@@ -147,6 +149,7 @@ gdk_property_change (GdkWindow   *window,
   GdkWindowProperty *prop, *new_prop;
   int new_size = 0;
   GdkEvent *event;
+  GdkWindow *event_window;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -195,9 +198,10 @@ gdk_property_change (GdkWindow   *window,
   g_hash_table_insert (fbd->properties, GUINT_TO_POINTER (property), new_prop);
   g_free (prop);
 
-  event = gdk_event_make (window, GDK_PROPERTY_NOTIFY, TRUE);
-  if (event)
+  event_window = gdk_fb_other_event_window (window, GDK_PROPERTY_NOTIFY);
+  if (event_window)
     {
+      event = gdk_event_make (event_window, GDK_PROPERTY_NOTIFY, TRUE);
       event->property.atom = property;
       event->property.state = GDK_PROPERTY_NEW_VALUE;
     }

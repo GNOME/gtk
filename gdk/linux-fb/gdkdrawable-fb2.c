@@ -1249,9 +1249,9 @@ gdk_shadow_fb_draw_arc (GdkDrawable      *drawable,
       gint extra_width;
   
       minx = x + private->abs_x;
-      miny = x + private->abs_y;
+      miny = y + private->abs_y;
       maxx = x + width + private->abs_x;
-      maxy = y + height + private->abs_x;
+      maxy = y + height + private->abs_y;
       
       if (!filled)
 	{

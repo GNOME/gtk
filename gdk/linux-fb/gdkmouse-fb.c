@@ -73,10 +73,12 @@ handle_mouse_movement(GdkFBMouse *mouse)
   GdkWindow *mousewin;
   GdkEvent *event;
   gint x, y;
-  GdkWindow *win, *grabwin;
+  GdkWindow *old_win, *win, *event_win, *cursor_win;
   guint state;
   GdkDrawableFBData *mousewin_private;
 
+  old_win = gdk_window_at_pointer (NULL, NULL);
+  
   if (_gdk_fb_pointer_grab_confine)
     mousewin = _gdk_fb_pointer_grab_confine;
   else
@@ -95,25 +97,42 @@ handle_mouse_movement(GdkFBMouse *mouse)
     mouse->y = mousewin_private->lim_y - 1;
 
   win = gdk_window_at_pointer (NULL, NULL);
-  if (_gdk_fb_pointer_grab_window_events)
-    grabwin = _gdk_fb_pointer_grab_window_events;
-  else
-    grabwin = win;
-  
-  gdk_fb_cursor_move (mouse->x, mouse->y, grabwin);
-  
-  gdk_window_get_origin (grabwin, &x, &y);
-  x = mouse->x - x;
-  y = mouse->y - y;
 
-  state = (mouse->button_pressed[0]?GDK_BUTTON1_MASK:0) |
-    (mouse->button_pressed[1]?GDK_BUTTON2_MASK:0) |
-    (mouse->button_pressed[2]?GDK_BUTTON3_MASK:0) |
-    gdk_fb_keyboard_modifiers ();
-
-  event = gdk_event_make (grabwin, GDK_MOTION_NOTIFY, TRUE);
-  if (event)
+  cursor_win = win;
+  if (_gdk_fb_pointer_grab_window)
     {
+      GdkWindow *w;
+      
+      cursor_win = _gdk_fb_pointer_grab_window;
+      w = win;
+      while (w != gdk_parent_root)
+	{
+	  if (w == _gdk_fb_pointer_grab_window)
+	    {
+	      cursor_win = win;
+	      break;
+	    }
+	  w = gdk_window_get_parent (w);
+	}
+    }
+  
+  gdk_fb_cursor_move (mouse->x, mouse->y, cursor_win);
+
+  event_win = gdk_fb_pointer_event_window (win, GDK_MOTION_NOTIFY);
+
+  if (event_win && (win == old_win))
+    {
+      /* Only send motion events in the same window */
+      gdk_window_get_origin (event_win, &x, &y);
+      x = mouse->x - x;
+      y = mouse->y - y;
+
+      state = (mouse->button_pressed[0]?GDK_BUTTON1_MASK:0) |
+	(mouse->button_pressed[1]?GDK_BUTTON2_MASK:0) |
+	(mouse->button_pressed[2]?GDK_BUTTON3_MASK:0) |
+	gdk_fb_keyboard_modifiers ();
+
+      event = gdk_event_make (event_win, GDK_MOTION_NOTIFY, TRUE);
       event->motion.x = x;
       event->motion.y = y;
       event->motion.state = state;
@@ -122,8 +141,8 @@ handle_mouse_movement(GdkFBMouse *mouse)
       event->motion.x_root = mouse->x;
       event->motion.y_root = mouse->y;
     }
-
-  gdk_fb_window_send_crossing_events (win, GDK_CROSSING_NORMAL);
+  
+  gdk_fb_window_send_crossing_events (NULL, win, GDK_CROSSING_NORMAL);
 }
 
 static void
@@ -133,19 +152,20 @@ send_button_event (GdkFBMouse *mouse,
 {
   GdkEvent *event;
   gint x, y, i;
-  GdkWindow *window;
+  GdkWindow *mouse_win;
+  GdkWindow *event_win;
   int nbuttons;
 
-  if (_gdk_fb_pointer_grab_window_events)
-    window = _gdk_fb_pointer_grab_window_events;
-  else
-    window = gdk_window_at_pointer(NULL, NULL);
-
-  event = gdk_event_make (window, press_event ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE, FALSE);
-
-  if (event)
+  
+  mouse_win = gdk_window_at_pointer(NULL, NULL);
+  event_win = gdk_fb_pointer_event_window (mouse_win,
+					   press_event ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
+  
+  if (event_win)
     {
-      gdk_window_get_origin (window, &x, &y);
+      event = gdk_event_make (event_win, press_event ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE, FALSE);
+      
+      gdk_window_get_origin (event_win, &x, &y);
       x = mouse->x - x;
       y = mouse->y - y;
       
@@ -176,8 +196,8 @@ send_button_event (GdkFBMouse *mouse,
   /* Handle implicit button grabs: */
   if (press_event && nbuttons == 1)
     {
-      gdk_fb_pointer_grab (window, FALSE,
-			   gdk_window_get_events (window),
+      gdk_fb_pointer_grab (mouse_win, FALSE,
+			   gdk_window_get_events (mouse_win),
 			   NULL, NULL,
 			   GDK_CURRENT_TIME, TRUE);
       mouse->click_grab = TRUE;

@@ -125,14 +125,16 @@ gdk_selection_convert (GdkWindow *requestor,
 {
   GdkEvent *event;
   GdkWindow *owner;
+  GdkWindow *event_window;
   
   owner = gdk_selection_owner_get (selection);
   
   if (owner)
     {
-      event = gdk_event_make (owner, GDK_SELECTION_REQUEST, TRUE);
-      if (event)
+      event_window = gdk_fb_other_event_window (owner, GDK_SELECTION_REQUEST);
+      if (event_window)
 	{
+	  event = gdk_event_make (event_window, GDK_SELECTION_REQUEST, TRUE);
 	  event->selection.requestor = requestor;
 	  event->selection.selection = selection;
 	  event->selection.target = target;
@@ -209,10 +211,12 @@ gdk_selection_send_notify (guint32  requestor,
 			   guint32  time)
 {
   GdkEvent *event;
+  GdkWindow *event_window;
   
-  event = gdk_event_make (gdk_window_lookup (requestor), GDK_SELECTION_NOTIFY, TRUE);
-  if (event)
+  event_window = gdk_fb_other_event_window (gdk_window_lookup (requestor), GDK_SELECTION_NOTIFY);
+  if (event_window)
     {
+      event = gdk_event_make (event_window, GDK_SELECTION_NOTIFY, TRUE);
       event->selection.selection = selection;
       event->selection.target = target;
       event->selection.property = property;

@@ -36,6 +36,7 @@
 
 /* Global variables: */
 static GdkWindow *gdk_fb_window_containing_pointer = NULL;
+static GdkWindow *gdk_fb_focused_window = NULL;
 static gpointer parent_class = NULL;
 
 static void recompute_drawable (GdkDrawable *drawable);
@@ -315,15 +316,19 @@ send_map_events (GdkWindowObject *private, gboolean is_map)
 {
   GList *l;
   GdkWindow *parent = (GdkWindow *)private->parent;
-
+  GdkWindow *event_win;
+  
   g_assert (is_map);
 
   if (!private->mapped)
     return;
 
   if (is_map)
-    gdk_event_make ((GdkWindow *)private, GDK_MAP, TRUE);
-
+    {
+      event_win = gdk_fb_other_event_window ((GdkWindow *)private, GDK_MAP);
+      if (event_win)
+	gdk_event_make (event_win, GDK_MAP, TRUE);
+    }
   if (private->input_only)
     return;
 
@@ -462,20 +467,15 @@ gdk_fb_redraw_all (void)
 
 
 /* Focus follows pointer */
-GdkWindow *
-_gdk_fb_window_find_focus (GdkWindow *window_with_mouse)
+static GdkWindow *
+gdk_fb_window_find_toplevel (GdkWindow *window)
 {
-  if (_gdk_fb_keyboard_grab_window)
-    return _gdk_fb_keyboard_grab_window;
-  else if (window_with_mouse)
+  GdkWindowObject *priv = (GdkWindowObject *)window;
+  while (priv != (GdkWindowObject *)gdk_parent_root)
     {
-      GdkWindowObject *priv = (GdkWindowObject *)window_with_mouse;
-      while (priv != (GdkWindowObject *)gdk_parent_root)
-	{
-	  if ((priv->parent == (GdkWindowObject *)gdk_parent_root) && priv->mapped)
-	    return (GdkWindow *)priv;
-	  priv = priv->parent;
-	}
+      if ((priv->parent == (GdkWindowObject *)gdk_parent_root) && priv->mapped)
+	return (GdkWindow *)priv;
+      priv = priv->parent;
     }
  
   return gdk_parent_root;
@@ -484,28 +484,49 @@ _gdk_fb_window_find_focus (GdkWindow *window_with_mouse)
 GdkWindow *
 gdk_fb_window_find_focus (void)
 {
-  return _gdk_fb_window_find_focus (gdk_fb_window_containing_pointer);
+  if (_gdk_fb_keyboard_grab_window)
+    return _gdk_fb_keyboard_grab_window;
+  
+  if (!gdk_fb_focused_window)
+    gdk_fb_focused_window = gdk_parent_root;
+  
+  return gdk_fb_focused_window;
 }
 
 
 static void
-gdk_fb_send_focus_change (GdkWindow *old_window_containing_pointer,
-			  GdkWindow *new_window_containing_pointer)
+gdk_fb_change_focus (GdkWindow *new_focus_window)
 {
   GdkEventFocus *event;
   GdkWindow *old_win, *new_win;
-  old_win = _gdk_fb_window_find_focus (old_window_containing_pointer);
-  new_win = _gdk_fb_window_find_focus (new_window_containing_pointer);
+  GdkWindow *event_win;
+
+  /* No focus changes while the pointer is grabbed */
+  if (_gdk_fb_pointer_grab_window)
+    return;
+  
+  old_win = gdk_fb_focused_window;
+  new_win = gdk_fb_window_find_toplevel (new_focus_window);
 
   if (old_win != new_win)
     {
-      event = (GdkEventFocus *)gdk_event_make (old_win, GDK_FOCUS_CHANGE, TRUE);
-      if (event)
-	event->in = FALSE;
-      event = (GdkEventFocus *)gdk_event_make (new_win, GDK_FOCUS_CHANGE, TRUE);
-      if (event)
-	event->in = TRUE;
+      if (old_win)
+	{
+	  event_win = gdk_fb_keyboard_event_window (old_win, GDK_FOCUS_CHANGE);
+	  if (event_win)
+	    {
+	      event = (GdkEventFocus *)gdk_event_make (event_win, GDK_FOCUS_CHANGE, TRUE);
+	      event->in = FALSE;
+	    }
+	}
+      event_win = gdk_fb_keyboard_event_window (new_win, GDK_FOCUS_CHANGE);
+      if (event_win)
+	{
+	  event = (GdkEventFocus *)gdk_event_make (event_win, GDK_FOCUS_CHANGE, TRUE);
+	  event->in = TRUE;
+	}
     }
+  gdk_fb_focused_window = new_win;
 }
 
 static GdkWindow *
@@ -545,7 +566,8 @@ gdk_fb_find_common_ancestor (GdkWindow *win1,
 }
 
 void
-gdk_fb_window_send_crossing_events (GdkWindow *dest,
+gdk_fb_window_send_crossing_events (GdkWindow *src,
+				    GdkWindow *dest,
 				    GdkCrossingMode mode)
 {
   GdkWindow *c;
@@ -555,9 +577,9 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
   GdkModifierType my_mask;
   GList *path, *list;
   gboolean non_linear;
-  gboolean only_grabbed_window;
   GdkWindow *a;
   GdkWindow *b;
+  GdkWindow *event_win;
 
   if ((mode == GDK_CROSSING_NORMAL) &&
       (dest == gdk_fb_window_containing_pointer))
@@ -566,18 +588,12 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
   if (gdk_fb_window_containing_pointer == NULL)
     gdk_fb_window_containing_pointer = gdk_window_ref (gdk_parent_root);
 
-  if (mode == GDK_CROSSING_UNGRAB)
-    a = _gdk_fb_pointer_grab_window;
+  if (src)
+    a = src;
   else
     a = gdk_fb_window_containing_pointer;
   b = dest;
 
-  /* When grab in progress only send normal crossing events about
-   * the grabbed window.
-   */
-  only_grabbed_window = (_gdk_fb_pointer_grab_window_events != NULL) &&
-                        (mode == GDK_CROSSING_NORMAL);
-  
   if (a==b)
     return;
 
@@ -587,12 +603,10 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
 
   non_linear = (c != a) && (c != b);
 
-  if (!only_grabbed_window || (a == _gdk_fb_pointer_grab_window))
-    event = gdk_event_make (a, GDK_LEAVE_NOTIFY, TRUE);
-  else
-    event = NULL;
-  if (event)
+  event_win = gdk_fb_pointer_event_window (a, GDK_LEAVE_NOTIFY);
+  if (event_win)
     {
+      event = gdk_event_make (event_win, GDK_LEAVE_NOTIFY, TRUE);
       event->crossing.subwindow = NULL;
       gdk_window_get_root_origin (a, &x_int, &y_int);
       event->crossing.x = x - x_int;
@@ -617,12 +631,10 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
       win = GDK_WINDOW (GDK_WINDOW_OBJECT (a)->parent);
       while (win != c)
 	{
-	  if (!only_grabbed_window || (win == _gdk_fb_pointer_grab_window))
-	    event = gdk_event_make (win, GDK_LEAVE_NOTIFY, TRUE);
-	  else
-	    event = NULL;
-	  if (event)
+	  event_win = gdk_fb_pointer_event_window (win, GDK_LEAVE_NOTIFY);
+	  if (event_win)
 	    {
+	      event = gdk_event_make (event_win, GDK_LEAVE_NOTIFY, TRUE);
 	      event->crossing.subwindow = gdk_window_ref (last);
 	      gdk_window_get_root_origin (win, &x_int, &y_int);
 	      event->crossing.x = x - x_int;
@@ -663,12 +675,10 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
 	  else 
 	    next = b;
 	  
-	  if (!only_grabbed_window || (win == _gdk_fb_pointer_grab_window))
-	    event = gdk_event_make (win, GDK_ENTER_NOTIFY, TRUE);
-	  else
-	    event = NULL;
-	  if (event)
+	  event_win = gdk_fb_pointer_event_window (win, GDK_ENTER_NOTIFY);
+	  if (event_win)
 	    {
+	      event = gdk_event_make (event_win, GDK_ENTER_NOTIFY, TRUE);
 	      event->crossing.subwindow = gdk_window_ref (next);
 	      gdk_window_get_root_origin (win, &x_int, &y_int);
 	      event->crossing.x = x - x_int;
@@ -687,12 +697,10 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
       g_list_free (path);
     }
 
-  if (!only_grabbed_window || (b == _gdk_fb_pointer_grab_window))
-    event = gdk_event_make (b, GDK_ENTER_NOTIFY, TRUE);
-  else
-    event = NULL;
-  if (event)
+  event_win = gdk_fb_pointer_event_window (b, GDK_ENTER_NOTIFY);
+  if (event_win)
     {
+      event = gdk_event_make (event_win, GDK_ENTER_NOTIFY, TRUE);
       event->crossing.subwindow = NULL;
       gdk_window_get_root_origin (b, &x_int, &y_int);
       event->crossing.x = x - x_int;
@@ -710,13 +718,14 @@ gdk_fb_window_send_crossing_events (GdkWindow *dest,
       event->crossing.state = my_mask;
     }
 
-  if ((mode != GDK_CROSSING_GRAB) &&
-      (b != gdk_fb_window_containing_pointer) &&
-      !only_grabbed_window)
+  if (mode != GDK_CROSSING_GRAB)
     {
-      gdk_fb_send_focus_change (gdk_fb_window_containing_pointer, b);
-      gdk_window_unref (gdk_fb_window_containing_pointer);
-      gdk_fb_window_containing_pointer = gdk_window_ref (b);
+      gdk_fb_change_focus (b);
+      if (b != gdk_fb_window_containing_pointer)
+	{
+	  gdk_window_unref (gdk_fb_window_containing_pointer);
+	  gdk_fb_window_containing_pointer = gdk_window_ref (b);
+	}
     }
 }
 
@@ -744,7 +753,8 @@ gdk_window_show (GdkWindow *window)
 	  send_map_events (private, TRUE);
 
 	  mousewin = gdk_window_at_pointer (NULL, NULL);
-	  gdk_fb_window_send_crossing_events (mousewin, 
+	  gdk_fb_window_send_crossing_events (NULL,
+					      mousewin, 
 					      GDK_CROSSING_NORMAL);
 
 	  if (private->input_only)
@@ -764,6 +774,7 @@ gdk_window_hide (GdkWindow *window)
 {
   GdkWindowObject *private;
   GdkWindow *mousewin;
+  GdkWindow *event_win;
   
   g_return_if_fail (window != NULL);
   
@@ -775,7 +786,9 @@ gdk_window_hide (GdkWindow *window)
       GdkRectangle r;
       gboolean do_hide;
 
-      event = gdk_event_make (window, GDK_UNMAP, TRUE);
+      event_win = gdk_fb_other_event_window (window, GDK_UNMAP);
+      if (event_win)
+	event = gdk_event_make (event_win, GDK_UNMAP, TRUE);
 
       r.x = GDK_DRAWABLE_IMPL_FBDATA (window)->llim_x;
       r.y = GDK_DRAWABLE_IMPL_FBDATA (window)->llim_y;
@@ -785,7 +798,8 @@ gdk_window_hide (GdkWindow *window)
       private->mapped = FALSE;
 
       mousewin = gdk_window_at_pointer (NULL, NULL);
-      gdk_fb_window_send_crossing_events (mousewin, 
+      gdk_fb_window_send_crossing_events (NULL,
+					  mousewin, 
 					  GDK_CROSSING_NORMAL);
 
       do_hide = gdk_fb_cursor_need_hide (&r);
@@ -1113,9 +1127,11 @@ gdk_fb_window_move_resize (GdkWindow *window,
 	  /* Send GdkEventConfigure for toplevel windows */
 	  if (private->window_type != GDK_WINDOW_CHILD)
 	    {
-	      event = gdk_event_make (window, GDK_CONFIGURE, TRUE);
-	      if (event) 
+	      GdkWindow *event_win;
+	      event_win = gdk_fb_other_event_window (window, GDK_CONFIGURE);
+	      if (event_win)
 		{
+		  event = gdk_event_make (event_win, GDK_CONFIGURE, TRUE);
 		  event->configure.x = private->x;
 		  event->configure.y = private->y;
 		  event->configure.width = GDK_DRAWABLE_IMPL_FBDATA (private)->width;
@@ -1125,7 +1141,8 @@ gdk_fb_window_move_resize (GdkWindow *window,
 
 	  /* The window the pointer is in might have changed */
 	  mousewin = gdk_window_at_pointer (NULL, NULL);
-	  gdk_fb_window_send_crossing_events (mousewin, 
+	  gdk_fb_window_send_crossing_events (NULL,
+					      mousewin, 
 					      GDK_CROSSING_NORMAL);
 	}
     }
@@ -1682,6 +1699,11 @@ gdk_window_set_events (GdkWindow       *window,
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (event_mask & GDK_BUTTON_MOTION_MASK)
+    event_mask |=
+      GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK |
+      GDK_BUTTON3_MOTION_MASK;
   
   if (!GDK_WINDOW_DESTROYED (window))
     GDK_WINDOW_IMPL_FBDATA (window)->event_mask = event_mask;

@@ -743,21 +743,30 @@ gdk_fb_pointer_grab (GdkWindow *	  window,
       gdk_pointer_ungrab (time);
     }
 
+  gdk_fb_window_send_crossing_events (NULL,
+				      window,
+				      GDK_CROSSING_GRAB);  
+
+  if (event_mask & GDK_BUTTON_MOTION_MASK)
+      event_mask |=
+	GDK_BUTTON1_MOTION_MASK |
+	GDK_BUTTON2_MOTION_MASK |
+	GDK_BUTTON3_MOTION_MASK;
+  
   _gdk_fb_pointer_implicit_grab = implicit_grab;
 
   _gdk_fb_pointer_grab_window = gdk_window_ref (window);
-  _gdk_fb_pointer_grab_window_events = owner_events ? NULL : _gdk_fb_pointer_grab_window;
+  _gdk_fb_pointer_grab_owner_events = owner_events;
 
   _gdk_fb_pointer_grab_confine = confine_to ? gdk_window_ref (confine_to) : NULL;
   _gdk_fb_pointer_grab_events = event_mask;
   _gdk_fb_pointer_grab_cursor = cursor ? gdk_cursor_ref (cursor) : NULL;
 
+
+  
   if (cursor)
     gdk_fb_cursor_reset ();
 
-  gdk_fb_window_send_crossing_events (window,
-				      GDK_CROSSING_GRAB);  
-  
   return GDK_GRAB_SUCCESS;
 }
 
@@ -787,6 +796,7 @@ gdk_fb_pointer_ungrab (guint32 time, gboolean implicit_grab)
 {
   gboolean have_grab_cursor = _gdk_fb_pointer_grab_cursor && 1;
   GdkWindow *mousewin;
+  GdkWindow *old_grab_window;
   
   if (!_gdk_fb_pointer_grab_window)
     return;
@@ -805,16 +815,19 @@ gdk_fb_pointer_ungrab (guint32 time, gboolean implicit_grab)
   if (have_grab_cursor)
     gdk_fb_cursor_reset ();
 
-  mousewin = gdk_window_at_pointer (NULL, NULL);
-  gdk_fb_window_send_crossing_events (mousewin,
-				      GDK_CROSSING_UNGRAB);  
+  old_grab_window = _gdk_fb_pointer_grab_window;
   
-  if (_gdk_fb_pointer_grab_window)
-    gdk_window_unref (_gdk_fb_pointer_grab_window);
   _gdk_fb_pointer_grab_window = NULL;
-  _gdk_fb_pointer_grab_window_events = NULL;
 
   _gdk_fb_pointer_implicit_grab = FALSE;
+
+  mousewin = gdk_window_at_pointer (NULL, NULL);
+  gdk_fb_window_send_crossing_events (old_grab_window,
+				      mousewin,
+				      GDK_CROSSING_UNGRAB);
+  
+  if (old_grab_window)
+    gdk_window_unref (old_grab_window);
 }
 
 /*
@@ -869,8 +882,8 @@ gdk_keyboard_grab (GdkWindow *	   window,
   if (_gdk_fb_pointer_grab_window)
     gdk_keyboard_ungrab (time);
 
-  if (!owner_events)
-    _gdk_fb_keyboard_grab_window = gdk_window_ref (window);
+  _gdk_fb_keyboard_grab_window = gdk_window_ref (window);
+  _gdk_fb_keyboard_grab_owner_events = owner_events;
   
   return GDK_GRAB_SUCCESS;
 }
@@ -1074,148 +1087,257 @@ gdk_beep (void)
 }
 
 /* utils */
+static const guint type_masks[] = {
+  GDK_SUBSTRUCTURE_MASK, /* GDK_DELETE		= 0, */
+  GDK_STRUCTURE_MASK, /* GDK_DESTROY		= 1, */
+  GDK_EXPOSURE_MASK, /* GDK_EXPOSE		= 2, */
+  GDK_POINTER_MOTION_MASK, /* GDK_MOTION_NOTIFY	= 3, */
+  GDK_BUTTON_PRESS_MASK, /* GDK_BUTTON_PRESS	= 4, */
+  GDK_BUTTON_PRESS_MASK, /* GDK_2BUTTON_PRESS	= 5, */
+  GDK_BUTTON_PRESS_MASK, /* GDK_3BUTTON_PRESS	= 6, */
+  GDK_BUTTON_RELEASE_MASK, /* GDK_BUTTON_RELEASE	= 7, */
+  GDK_KEY_PRESS_MASK, /* GDK_KEY_PRESS	= 8, */
+  GDK_KEY_RELEASE_MASK, /* GDK_KEY_RELEASE	= 9, */
+  GDK_ENTER_NOTIFY_MASK, /* GDK_ENTER_NOTIFY	= 10, */
+  GDK_LEAVE_NOTIFY_MASK, /* GDK_LEAVE_NOTIFY	= 11, */
+  GDK_FOCUS_CHANGE_MASK, /* GDK_FOCUS_CHANGE	= 12, */
+  GDK_STRUCTURE_MASK, /* GDK_CONFIGURE		= 13, */
+  GDK_VISIBILITY_NOTIFY_MASK, /* GDK_MAP		= 14, */
+  GDK_VISIBILITY_NOTIFY_MASK, /* GDK_UNMAP		= 15, */
+  GDK_PROPERTY_CHANGE_MASK, /* GDK_PROPERTY_NOTIFY	= 16, */
+  GDK_PROPERTY_CHANGE_MASK, /* GDK_SELECTION_CLEAR	= 17, */
+  GDK_PROPERTY_CHANGE_MASK, /* GDK_SELECTION_REQUEST = 18, */
+  GDK_PROPERTY_CHANGE_MASK, /* GDK_SELECTION_NOTIFY	= 19, */
+  GDK_PROXIMITY_IN_MASK, /* GDK_PROXIMITY_IN	= 20, */
+  GDK_PROXIMITY_OUT_MASK, /* GDK_PROXIMITY_OUT	= 21, */
+  GDK_ALL_EVENTS_MASK, /* GDK_DRAG_ENTER        = 22, */
+  GDK_ALL_EVENTS_MASK, /* GDK_DRAG_LEAVE        = 23, */
+  GDK_ALL_EVENTS_MASK, /* GDK_DRAG_MOTION       = 24, */
+  GDK_ALL_EVENTS_MASK, /* GDK_DRAG_STATUS       = 25, */
+  GDK_ALL_EVENTS_MASK, /* GDK_DROP_START        = 26, */
+  GDK_ALL_EVENTS_MASK, /* GDK_DROP_FINISHED     = 27, */
+  GDK_ALL_EVENTS_MASK, /* GDK_CLIENT_EVENT	= 28, */
+  GDK_VISIBILITY_NOTIFY_MASK, /* GDK_VISIBILITY_NOTIFY = 29, */
+  GDK_EXPOSURE_MASK, /* GDK_NO_EXPOSE		= 30, */
+  GDK_SCROLL_MASK /* GDK_SCROLL            = 31 */
+};
+
+GdkWindow *
+gdk_fb_other_event_window (GdkWindow *window,
+			   GdkEventType type)
+{
+  guint32 evmask;
+  GdkWindow *w;
+
+  w = window;
+  while (w != gdk_parent_root)
+    {
+      /* Huge hack, so that we don't propagate events to GtkWindow->frame */
+      if ((w != window) &&
+	  (GDK_WINDOW_P (w)->window_type != GDK_WINDOW_CHILD) &&
+	  (g_object_get_data (G_OBJECT (w), "gdk-window-child-handler")))
+	  break;
+	  
+      evmask = GDK_WINDOW_IMPL_FBDATA(window)->event_mask;
+
+      if (evmask & type_masks[type])
+	return w;
+      
+      w = gdk_window_get_parent (w);
+    }
+  
+  return NULL;
+}
+
+GdkWindow *
+gdk_fb_pointer_event_window (GdkWindow *window,
+			     GdkEventType type)
+{
+  guint evmask;
+  GdkModifierType mask;
+  GdkWindow *w;
+	  
+  gdk_fb_mouse_get_info (NULL, NULL, &mask);
+  
+  if (_gdk_fb_pointer_grab_window &&
+      !_gdk_fb_pointer_grab_owner_events)
+    {
+      evmask = _gdk_fb_pointer_grab_events;
+
+      if (evmask & (GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK))
+	{
+	  if (((mask & GDK_BUTTON1_MASK) && (evmask & GDK_BUTTON1_MOTION_MASK)) ||
+	      ((mask & GDK_BUTTON2_MASK) && (evmask & GDK_BUTTON2_MOTION_MASK)) ||
+	      ((mask & GDK_BUTTON3_MASK) && (evmask & GDK_BUTTON3_MOTION_MASK)))
+	    evmask |= GDK_POINTER_MOTION_MASK;
+	}
+
+      if (evmask & type_masks[type])
+	return _gdk_fb_pointer_grab_window;
+      else
+	return NULL;
+    }
+
+  w = window;
+  while (w != gdk_parent_root)
+    {
+      /* Huge hack, so that we don't propagate events to GtkWindow->frame */
+      if ((w != window) &&
+	  (GDK_WINDOW_P (w)->window_type != GDK_WINDOW_CHILD) &&
+	  (g_object_get_data (G_OBJECT (w), "gdk-window-child-handler")))
+	  break;
+      
+      evmask = GDK_WINDOW_IMPL_FBDATA(window)->event_mask;
+
+      if (evmask & (GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK))
+	{
+	  if (((mask & GDK_BUTTON1_MASK) && (evmask & GDK_BUTTON1_MOTION_MASK)) ||
+	      ((mask & GDK_BUTTON2_MASK) && (evmask & GDK_BUTTON2_MOTION_MASK)) ||
+	      ((mask & GDK_BUTTON3_MASK) && (evmask & GDK_BUTTON3_MOTION_MASK)))
+	    evmask |= GDK_POINTER_MOTION_MASK;
+	}
+
+      if (evmask & type_masks[type])
+	return w;
+      
+      w = gdk_window_get_parent (w);
+    }
+
+  if (_gdk_fb_pointer_grab_window &&
+      _gdk_fb_pointer_grab_owner_events)
+    {
+      evmask = _gdk_fb_pointer_grab_events;
+      
+      if (evmask & (GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK))
+	{
+	  if (((mask & GDK_BUTTON1_MASK) && (evmask & GDK_BUTTON1_MOTION_MASK)) ||
+	      ((mask & GDK_BUTTON2_MASK) && (evmask & GDK_BUTTON2_MOTION_MASK)) ||
+	      ((mask & GDK_BUTTON3_MASK) && (evmask & GDK_BUTTON3_MOTION_MASK)))
+	    evmask |= GDK_POINTER_MOTION_MASK;
+	}
+      
+      if (evmask & type_masks[type])
+	return _gdk_fb_pointer_grab_window;
+    }
+  
+  return NULL;
+}
+
+GdkWindow *
+gdk_fb_keyboard_event_window (GdkWindow *window,
+			      GdkEventType type)
+{
+  guint32 evmask;
+  GdkWindow *w;
+  
+  if (_gdk_fb_keyboard_grab_window &&
+      !_gdk_fb_keyboard_grab_owner_events)
+    {
+      return _gdk_fb_keyboard_grab_window;
+    }
+  
+  w = window;
+  while (w != gdk_parent_root)
+    {
+      /* Huge hack, so that we don't propagate events to GtkWindow->frame */
+      if ((w != window) &&
+	  (GDK_WINDOW_P (w)->window_type != GDK_WINDOW_CHILD) &&
+	  (g_object_get_data (G_OBJECT (w), "gdk-window-child-handler")))
+	  break;
+	  
+      evmask = GDK_WINDOW_IMPL_FBDATA(window)->event_mask;
+
+      if (evmask & type_masks[type])
+	return w;
+      
+      w = gdk_window_get_parent (w);
+    }
+  
+  if (_gdk_fb_keyboard_grab_window &&
+      _gdk_fb_keyboard_grab_owner_events)
+    {
+      return _gdk_fb_keyboard_grab_window;
+    }
+
+  return NULL;
+}
+
 GdkEvent *
 gdk_event_make (GdkWindow *window,
 		GdkEventType type,
 		gboolean append_to_queue)
 {
-  static const guint type_masks[] = {
-    GDK_SUBSTRUCTURE_MASK, /* GDK_DELETE		= 0, */
-    GDK_STRUCTURE_MASK, /* GDK_DESTROY		= 1, */
-    GDK_EXPOSURE_MASK, /* GDK_EXPOSE		= 2, */
-    GDK_POINTER_MOTION_MASK, /* GDK_MOTION_NOTIFY	= 3, */
-    GDK_BUTTON_PRESS_MASK, /* GDK_BUTTON_PRESS	= 4, */
-    GDK_BUTTON_PRESS_MASK, /* GDK_2BUTTON_PRESS	= 5, */
-    GDK_BUTTON_PRESS_MASK, /* GDK_3BUTTON_PRESS	= 6, */
-    GDK_BUTTON_RELEASE_MASK, /* GDK_BUTTON_RELEASE	= 7, */
-    GDK_KEY_PRESS_MASK, /* GDK_KEY_PRESS	= 8, */
-    GDK_KEY_RELEASE_MASK, /* GDK_KEY_RELEASE	= 9, */
-    GDK_ENTER_NOTIFY_MASK, /* GDK_ENTER_NOTIFY	= 10, */
-    GDK_LEAVE_NOTIFY_MASK, /* GDK_LEAVE_NOTIFY	= 11, */
-    GDK_FOCUS_CHANGE_MASK, /* GDK_FOCUS_CHANGE	= 12, */
-    GDK_STRUCTURE_MASK, /* GDK_CONFIGURE		= 13, */
-    GDK_VISIBILITY_NOTIFY_MASK, /* GDK_MAP		= 14, */
-    GDK_VISIBILITY_NOTIFY_MASK, /* GDK_UNMAP		= 15, */
-    GDK_PROPERTY_CHANGE_MASK, /* GDK_PROPERTY_NOTIFY	= 16, */
-    GDK_PROPERTY_CHANGE_MASK, /* GDK_SELECTION_CLEAR	= 17, */
-    GDK_PROPERTY_CHANGE_MASK, /* GDK_SELECTION_REQUEST = 18, */
-    GDK_PROPERTY_CHANGE_MASK, /* GDK_SELECTION_NOTIFY	= 19, */
-    GDK_PROXIMITY_IN_MASK, /* GDK_PROXIMITY_IN	= 20, */
-    GDK_PROXIMITY_OUT_MASK, /* GDK_PROXIMITY_OUT	= 21, */
-    GDK_ALL_EVENTS_MASK, /* GDK_DRAG_ENTER        = 22, */
-    GDK_ALL_EVENTS_MASK, /* GDK_DRAG_LEAVE        = 23, */
-    GDK_ALL_EVENTS_MASK, /* GDK_DRAG_MOTION       = 24, */
-    GDK_ALL_EVENTS_MASK, /* GDK_DRAG_STATUS       = 25, */
-    GDK_ALL_EVENTS_MASK, /* GDK_DROP_START        = 26, */
-    GDK_ALL_EVENTS_MASK, /* GDK_DROP_FINISHED     = 27, */
-    GDK_ALL_EVENTS_MASK, /* GDK_CLIENT_EVENT	= 28, */
-    GDK_VISIBILITY_NOTIFY_MASK, /* GDK_VISIBILITY_NOTIFY = 29, */
-    GDK_EXPOSURE_MASK, /* GDK_NO_EXPOSE		= 30, */
-    GDK_SCROLL_MASK /* GDK_SCROLL            = 31 */
-  };
-  guint evmask;
-
-  evmask = GDK_WINDOW_IMPL_FBDATA(window)->event_mask;
-
-  /* Bad hack to make sure that things work semi-properly with owner_events */
-  if (_gdk_fb_pointer_grab_window)
-    evmask |= _gdk_fb_pointer_grab_events;
-  if (_gdk_fb_keyboard_grab_window)
-    evmask |= _gdk_fb_keyboard_grab_events;
-
-  if (evmask & GDK_BUTTON_MOTION_MASK)
+  GdkEvent *event = gdk_event_new ();
+  guint32 the_time;
+  
+  the_time = gdk_fb_get_time ();
+  
+  event->any.type = type;
+  event->any.window = gdk_window_ref (window);
+  event->any.send_event = FALSE;
+  switch (type)
     {
-      evmask |= GDK_BUTTON1_MOTION_MASK|GDK_BUTTON2_MOTION_MASK|GDK_BUTTON3_MOTION_MASK;
+    case GDK_MOTION_NOTIFY:
+      event->motion.time = the_time;
+      event->motion.axes = NULL;
+      break;
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      event->button.time = the_time;
+      event->button.axes = NULL;
+      break;
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      event->key.time = the_time;
+      break;
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+      event->crossing.time = the_time;
+      break;
+      
+    case GDK_PROPERTY_NOTIFY:
+      event->property.time = the_time;
+      break;
+      
+    case GDK_SELECTION_CLEAR:
+    case GDK_SELECTION_REQUEST:
+    case GDK_SELECTION_NOTIFY:
+      event->selection.time = the_time;
+      break;
+    case GDK_PROXIMITY_IN:
+    case GDK_PROXIMITY_OUT:
+      event->proximity.time = the_time;
+      break;
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+      event->dnd.time = the_time;
+      break;
+      
+    case GDK_FOCUS_CHANGE:
+    case GDK_CONFIGURE:
+    case GDK_MAP:
+    case GDK_UNMAP:
+    case GDK_CLIENT_EVENT:
+    case GDK_VISIBILITY_NOTIFY:
+    case GDK_NO_EXPOSE:
+    case GDK_SCROLL:
+    case GDK_DELETE:
+    case GDK_DESTROY:
+    case GDK_EXPOSE:
+    default:
+      break;
     }
-
-  if (evmask & (GDK_BUTTON1_MOTION_MASK|GDK_BUTTON2_MOTION_MASK|GDK_BUTTON3_MOTION_MASK))
-    {
-      GdkModifierType mask;
-
-      gdk_fb_mouse_get_info (NULL, NULL, &mask);
-
-      if (((mask & GDK_BUTTON1_MASK) && (evmask & GDK_BUTTON1_MOTION_MASK)) ||
-	  ((mask & GDK_BUTTON2_MASK) && (evmask & GDK_BUTTON2_MOTION_MASK)) ||
-	  ((mask & GDK_BUTTON3_MASK) && (evmask & GDK_BUTTON3_MOTION_MASK)))
-	evmask |= GDK_POINTER_MOTION_MASK;
-    }
-
-  if (evmask & type_masks[type])
-    {
-      GdkEvent *event = gdk_event_new ();
-      guint32 the_time;
-
-      the_time = gdk_fb_get_time ();
-
-      event->any.type = type;
-      event->any.window = gdk_window_ref (window);
-      event->any.send_event = FALSE;
-      switch (type)
-	{
-	case GDK_MOTION_NOTIFY:
-	  event->motion.time = the_time;
-	  event->motion.axes = NULL;
-	  break;
-	case GDK_BUTTON_PRESS:
-	case GDK_2BUTTON_PRESS:
-	case GDK_3BUTTON_PRESS:
-	case GDK_BUTTON_RELEASE:
-	  event->button.time = the_time;
-	  event->button.axes = NULL;
-	  break;
-	case GDK_KEY_PRESS:
-	case GDK_KEY_RELEASE:
-	  event->key.time = the_time;
-	  break;
-	case GDK_ENTER_NOTIFY:
-	case GDK_LEAVE_NOTIFY:
-	  event->crossing.time = the_time;
-	  break;
-
-	case GDK_PROPERTY_NOTIFY:
-	  event->property.time = the_time;
-	  break;
-
-	case GDK_SELECTION_CLEAR:
-	case GDK_SELECTION_REQUEST:
-	case GDK_SELECTION_NOTIFY:
-	  event->selection.time = the_time;
-	  break;
-	case GDK_PROXIMITY_IN:
-	case GDK_PROXIMITY_OUT:
-	  event->proximity.time = the_time;
-	  break;
-	case GDK_DRAG_ENTER:
-	case GDK_DRAG_LEAVE:
-	case GDK_DRAG_MOTION:
-	case GDK_DRAG_STATUS:
-	case GDK_DROP_START:
-	case GDK_DROP_FINISHED:
-	  event->dnd.time = the_time;
-	  break;
-
-	case GDK_FOCUS_CHANGE:
-	case GDK_CONFIGURE:
-	case GDK_MAP:
-	case GDK_UNMAP:
-	case GDK_CLIENT_EVENT:
-	case GDK_VISIBILITY_NOTIFY:
-	case GDK_NO_EXPOSE:
-	case GDK_SCROLL:
-	case GDK_DELETE:
-	case GDK_DESTROY:
-	case GDK_EXPOSE:
-	default:
-	  break;
-	}
-
-      if (append_to_queue)
-	gdk_event_queue_append (event);
-
-      return event;
-    }
-
-  return NULL;
+  
+  if (append_to_queue)
+    gdk_event_queue_append (event);
+  
+  return event;
 }
 
 void

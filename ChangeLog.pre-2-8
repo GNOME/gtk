@@ -1,3 +1,51 @@
+2001-01-17    <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkdrawable-fb2.c (gdk_shadow_fb_draw_arc):
+	Doh! Mixed up x and y.
+
+	* gdk/linux-fb/gdkglobals-fb.c:
+	Removed gdk_fb_pointer_grab_window_events,
+	added _gdk_fb_pointer_grab_owner_events and
+	_gdk_fb_keyboard_grab_owner_events.
+
+	* gdk/linux-fb/gdkmain-fb.c (gdk_fb_pointer_grab):
+	Set all button mask if GDK_BUTTON_MOTION_MASK set. Send
+	crossing events before grabbing. Set _gdk_fb_pointer_grab_owner_events.
+	(gdk_fb_pointer_ungrab): Unset _gdk_fb_pointer_grab_owner_events
+	Send crossing events after ungrab finished.
+	(gdk_keyboard_grab): Set ..._owner_events
+	(type_masks): Move out of function.
+	(gdk_fb_other_event_window, gdk_fb_pointer_event_window,
+	gdk_fb_keyboard_event_window): New functions, return the
+	window an event should be targeted at. Handles grabs and
+	event propagation. Can return NULL.
+	(gdk_event_make): Remove event_mask checking. Now always
+	returns an event.
+		
+	* gdk/linux-fb/gdkkeyboard-fb.c:
+	* gdk/linux-fb/gdkproperty-fb.c:
+	* gdk/linux-fb/gdkselection-fb.c:
+	Use new event_window/gdk_event_make() behaviour.
+	
+	* gdk/linux-fb/gdkmouse-fb.c:
+	Use new event_window/gdk_event_make() behaviour.
+	Only send motion events if in the same window.
+	If grabbed, use cursor from window if sibling of grabbed
+	window, and cursor from grabbed window otherwise.
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	Update gdk_fb_window_send_crossing_events, gdk_event_make
+	and grab varaible declarations. Add gdk_fb_*_event_window().
+
+	* gdk/linux-fb/gdkwindow-fb.c:
+	Use new event_window/gdk_event_make() behaviour.
+	Keep correct track of focus window.
+	(gdk_window_set_events): Set all specific button motion masks
+	if GDK_BUTTON_MOTION_MASK set.
+
+	* gtk/gtkdnd.c (gtk_drag_update):
+	Free info->last_event if gdk_drag_motion returned FALSE.
+
 Tue Jan 16 13:13:13 GMT 2001  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: FAQ update:

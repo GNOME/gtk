@@ -2658,12 +2658,22 @@ gtk_drag_update (GtkDragSourceInfo *info,
 		       possible_actions,
 		       time))
     {
-      if (info->last_event)
-	gdk_event_free ((GdkEvent *)info->last_event);
-      
-      info->last_event = gdk_event_copy ((GdkEvent *)event);
+      if (info->last_event != event) /* Paranoia, should not happen */
+	{
+	  if (info->last_event)
+	    gdk_event_free ((GdkEvent *)info->last_event);
+	  info->last_event = gdk_event_copy ((GdkEvent *)event);
+	}
     }
-
+  else
+    {
+      if (info->last_event)
+	{
+	  gdk_event_free ((GdkEvent *)info->last_event);
+	  info->last_event = NULL;
+	}
+    }
+  
   if (dest_window)
     gdk_window_unref (dest_window);
 

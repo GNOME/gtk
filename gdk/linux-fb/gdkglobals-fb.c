@@ -33,7 +33,9 @@
 const gchar            *gdk_progclass = "none";
 gboolean          gdk_null_window_warnings = TRUE;
 
-GdkWindow *_gdk_fb_pointer_grab_window, *_gdk_fb_pointer_grab_window_events, *_gdk_fb_keyboard_grab_window, *_gdk_fb_pointer_grab_confine = NULL;
+GdkWindow *_gdk_fb_pointer_grab_window, *_gdk_fb_keyboard_grab_window, *_gdk_fb_pointer_grab_confine = NULL;
+gboolean _gdk_fb_pointer_grab_owner_events;
+gboolean _gdk_fb_keyboard_grab_owner_events;
 GdkEventMask _gdk_fb_pointer_grab_events, _gdk_fb_keyboard_grab_events;
 
 GdkFBWindow *gdk_root_window = NULL;

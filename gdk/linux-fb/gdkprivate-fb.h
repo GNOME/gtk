@@ -262,7 +262,8 @@ void       gdk_window_invalidate_region_clear (GdkWindow       *window,
 					       GdkRegion       *region);
 void       gdk_window_invalidate_rect_clear   (GdkWindow       *window,
 					       GdkRectangle    *rect);
-void       gdk_fb_window_send_crossing_events (GdkWindow       *dest,
+void       gdk_fb_window_send_crossing_events (GdkWindow       *src,
+					       GdkWindow       *dest,
 					       GdkCrossingMode  mode);
 void       gdk_fb_window_move_resize          (GdkWindow       *window,
 					       gint             x,
@@ -384,14 +385,29 @@ void       gdk_fb_recompute_all            (void);
 
 extern GdkFBAngle _gdk_fb_screen_angle;
 
-extern GdkWindow *_gdk_fb_pointer_grab_window, *_gdk_fb_pointer_grab_window_events, *_gdk_fb_keyboard_grab_window, *_gdk_fb_pointer_grab_confine;
-extern GdkEventMask _gdk_fb_pointer_grab_events, _gdk_fb_keyboard_grab_events;
+/* Pointer grab info */
+extern GdkWindow *_gdk_fb_pointer_grab_window;
+extern gboolean _gdk_fb_pointer_grab_owner_events;
+extern GdkWindow *_gdk_fb_pointer_grab_confine;
+extern GdkEventMask _gdk_fb_pointer_grab_events;
 extern GdkCursor *_gdk_fb_pointer_grab_cursor;
+/* Keyboard grab info */
+extern GdkWindow *_gdk_fb_keyboard_grab_window;
+extern GdkEventMask _gdk_fb_keyboard_grab_events;
+extern gboolean _gdk_fb_keyboard_grab_owner_events;
+
 extern GdkFBDisplay *gdk_display;
 extern GdkDrawableClass _gdk_fb_drawable_class;
 extern FILE *debug_out;
-GdkEvent *gdk_event_make(GdkWindow *window, GdkEventType type, gboolean append_to_queue);
-GdkEvent *gdk_event_make_2(GdkWindow *window, GdkEventType type, gboolean append_to_queue, gint button_press_num);
+GdkEvent *gdk_event_make(GdkWindow *window,
+			 GdkEventType type,
+			 gboolean append_to_queue);
+GdkWindow * gdk_fb_pointer_event_window (GdkWindow *window,
+					 GdkEventType type);
+GdkWindow *gdk_fb_keyboard_event_window (GdkWindow *window,
+					 GdkEventType type);
+GdkWindow *gdk_fb_other_event_window (GdkWindow *window,
+				      GdkEventType type);
 
 void gdk_fb_get_cursor_rect(GdkRectangle *rect);
 gboolean gdk_fb_cursor_need_hide(GdkRectangle *rect);

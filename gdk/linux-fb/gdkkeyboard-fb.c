@@ -371,12 +371,14 @@ gdk_fb_handle_key (guint hw_keycode,
 	gdk_fb_redraw_all ();
     }
 
-  win = gdk_fb_window_find_focus ();
-  event = gdk_event_make (win,
-			  key_up ? GDK_KEY_RELEASE : GDK_KEY_PRESS,
-			  TRUE);
-  if (event)
+  win = gdk_fb_keyboard_event_window (gdk_fb_window_find_focus (),
+				      key_up ? GDK_KEY_RELEASE : GDK_KEY_PRESS);
+  if (win)
     {
+      event = gdk_event_make (win,
+			      key_up ? GDK_KEY_RELEASE : GDK_KEY_PRESS,
+			      TRUE);
+    
       event->key.state = modifier_state;
       event->key.keyval = keyval;
       event->key.string = string;
