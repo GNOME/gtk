@@ -1,3 +1,9 @@
+2003-03-21  Matthias Clasen  <maclas@gmx.de>
+
+	* io-jpeg.c (gdk_pixbuf__jpeg_image_begin_load): 
+	* io-ico.c (gdk_pixbuf__ico_image_stop_load): Add missing static
+	qualifiers apparently causing problems on some platforms. (#108617)
+
 2003-03-11  Matthias Clasen  <maclas@gmx.de>
 
 	* io-ico.c (DecodeHeader): Calculate LineWidth for 16bpp from

@@ -491,8 +491,9 @@ gdk_pixbuf__ico_image_begin_load(GdkPixbufModuleSizeFunc size_func,
  *
  * free context, unref gdk_pixbuf
  */
-gboolean gdk_pixbuf__ico_image_stop_load(gpointer data,
-                                         GError **error)
+static gboolean 
+gdk_pixbuf__ico_image_stop_load(gpointer data,
+				GError **error)
 {
 	struct ico_progressive_state *context =
 	    (struct ico_progressive_state *) data;

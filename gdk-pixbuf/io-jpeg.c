@@ -449,7 +449,7 @@ skip_input_data (j_decompress_ptr cinfo, long num_bytes)
  * return context (opaque to user)
  */
 
-gpointer
+static gpointer
 gdk_pixbuf__jpeg_image_begin_load (GdkPixbufModuleSizeFunc size_func,
 				   GdkPixbufModulePreparedFunc prepared_func, 
 				   GdkPixbufModuleUpdatedFunc updated_func,
