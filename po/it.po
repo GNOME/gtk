@@ -5,51 +5,77 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.7\n"
-"POT-Creation-Date: 2000-08-17 10:36-0600\n"
-"PO-Revision-Date: 2000-06-23 05:05+02:00\n"
+"POT-Creation-Date: 2000-10-24 15:59+0200\n"
+"PO-Revision-Date: 2000-10-24 16:02+02:00\n"
 "Last-Translator: Christopher R. Gabriel <cgabriel@pluto.linux.it>\n"
 "Language-Team: Italiano <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtk/gtkcolorsel.c:1420
+#: gdk-pixbuf/io-gif.c:426
+msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+msgstr "Il file GIF manca di alcuni dati (forse è stato troncato?)"
+
+#: gdk-pixbuf/io-gif.c:435
+#, c-format
+msgid "Internal error in the GIF loader (%s)"
+msgstr "Errore interno nel caricamento GIF (%s)"
+
+#: gdk-pixbuf/io-gif.c:584
+msgid "Circular table entry in GIF file"
+msgstr "Trovata occorrenza di tabella circolare nel file GIF"
+
+#: gdk-pixbuf/io-gif.c:921
+msgid "File does not appear to be a GIF file"
+msgstr "Il file non è in formato GIF"
+
+#: gdk-pixbuf/io-gif.c:933
+#, c-format
+msgid "Version %s of the GIF file format is not supported"
+msgstr "La versione %s del formato GIF non è supportata"
+
+#: gdk-pixbuf/io-gif.c:985
+msgid "GIF animation contained a frame with an incorrect size"
+msgstr "L'animazione GIF contiene un fotogramma di dimensioni non corrette"
+
+#: gtk/gtkcolorsel.c:1422
 msgid "Hue:"
 msgstr "Tonalità:"
 
-#: gtk/gtkcolorsel.c:1421
+#: gtk/gtkcolorsel.c:1423
 msgid "Saturation:"
 msgstr "Saturazione:"
 
-#: gtk/gtkcolorsel.c:1422
+#: gtk/gtkcolorsel.c:1424
 msgid "Value:"
 msgstr "Valore:"
 
-#: gtk/gtkcolorsel.c:1423
+#: gtk/gtkcolorsel.c:1425
 msgid "Red:"
 msgstr "Rosso:"
 
-#: gtk/gtkcolorsel.c:1424
+#: gtk/gtkcolorsel.c:1426
 msgid "Green:"
 msgstr "Verde:"
 
-#: gtk/gtkcolorsel.c:1425
+#: gtk/gtkcolorsel.c:1427
 msgid "Blue:"
 msgstr "Blu:"
 
-#: gtk/gtkcolorsel.c:1428
+#: gtk/gtkcolorsel.c:1430
 msgid "Opacity:"
 msgstr "Opacità:"
 
-#: gtk/gtkcolorsel.c:1443
+#: gtk/gtkcolorsel.c:1445
 msgid "Hex Value:"
 msgstr "Valore Esadecimale:"
 
-#: gtk/gtkcolorsel.c:1464
+#: gtk/gtkcolorsel.c:1466
 msgid "Custom Palette"
 msgstr "Tavolozza personalizzata"
 
-#: gtk/gtkcolorsel.c:1469
+#: gtk/gtkcolorsel.c:1471
 msgid "Set Color"
 msgstr "Imposta il colore"
 
@@ -257,19 +283,26 @@ msgstr "(sconosciuto)"
 msgid "clear"
 msgstr "cancella"
 
+#. Translate to default:RTL if you want your widgets
+#. * to be RTL, otherwise translate to default:LTR
+#.
+#: gtk/gtkmain.c:417
+msgid "default:LTR"
+msgstr "predefinito:LTR"
+
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
 msgstr "Pagina %u"
 
-#: gtk/gtkrc.c:1872
+#: gtk/gtkrc.c:1978
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "Impossibile trovare il file di immagine nella cartella immagini: \"%s\". "
 "Linea %d"
 
-#: gtk/gtkrc.c:1875
+#: gtk/gtkrc.c:1981
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""
