@@ -2,6 +2,7 @@ Overview of Changes in GTK+ 0.99.7:
 
 * This release is mainly because 0.99.6 did not compile completely
   due to a missing file.
+* Fixes to Gtk's quit handlers.
 
 Overview of Changes in GTK+ 0.99.6:
 
@@ -10,6 +11,9 @@ Overview of Changes in GTK+ 0.99.6:
 * Semantics of GtkWidget::delete_event changed.
 * Documentation updates.
 * Inclusion of Gtk tutorial.
+* Implementation of a new shutdown method for GtkObject's executed prior to
+  actual destruction. WARNING: this breaks binary compatibility, programs using
+  Gtk need to be recompiled.
 * Clean ups due to compiler warnings.
 * Various widget fixes.
 
