@@ -107,7 +107,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                     GTK_RUN_FIRST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkMenuItemClass, activate),
-                    gtk_signal_default_marshaller,
+                    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (object_class, menu_item_signals, LAST_SIGNAL);

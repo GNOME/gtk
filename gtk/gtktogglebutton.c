@@ -103,7 +103,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
                     GTK_RUN_FIRST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkToggleButtonClass, toggled),
-                    gtk_signal_default_marshaller,
+                    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (object_class, toggle_button_signals, LAST_SIGNAL);

@@ -71,14 +71,14 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                     GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkAdjustmentClass, changed),
-                    gtk_signal_default_marshaller,
+                    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   adjustment_signals[VALUE_CHANGED] =
     gtk_signal_new ("value_changed",
                     GTK_RUN_FIRST | GTK_RUN_NO_RECURSE,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkAdjustmentClass, value_changed),
-                    gtk_signal_default_marshaller,
+                    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (object_class, adjustment_signals, LAST_SIGNAL);

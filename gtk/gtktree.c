@@ -29,11 +29,6 @@ enum {
   LAST_SIGNAL
 };
 
-typedef void (*GtkTreeSignal) (GtkObject *object,
-			       gpointer   arg1,
-			       gpointer   data);
-
-
 static void gtk_tree_class_init      (GtkTreeClass   *klass);
 static void gtk_tree_init            (GtkTree        *tree);
 static void gtk_tree_destroy         (GtkObject      *object);
@@ -65,10 +60,6 @@ static void gtk_real_tree_select_child   (GtkTree       *tree,
 static void gtk_real_tree_unselect_child (GtkTree       *tree,
 					  GtkWidget     *child);
 
-static void gtk_tree_marshal_signal (GtkObject      *object,
-				     GtkSignalFunc   func,
-				     gpointer        func_data,
-				     GtkArg         *args);
 static GtkType gtk_tree_child_type  (GtkContainer   *container);
 
 static GtkContainerClass *parent_class = NULL;
@@ -117,14 +108,14 @@ gtk_tree_class_init (GtkTreeClass *class)
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkTreeClass, selection_changed),
-		    gtk_signal_default_marshaller,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   tree_signals[SELECT_CHILD] =
     gtk_signal_new ("select_child",
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkTreeClass, select_child),
-		    gtk_tree_marshal_signal,
+		    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
   tree_signals[UNSELECT_CHILD] =
@@ -132,7 +123,7 @@ gtk_tree_class_init (GtkTreeClass *class)
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkTreeClass, unselect_child),
-		    gtk_tree_marshal_signal,
+		    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
 
@@ -607,19 +598,6 @@ gtk_tree_map (GtkWidget *widget)
 	    gtk_widget_map (child);
 	}
     }
-}
-
-static void
-gtk_tree_marshal_signal (GtkObject      *object,
-			 GtkSignalFunc   func,
-			 gpointer        func_data,
-			 GtkArg         *args)
-{
-  GtkTreeSignal rfunc;
-
-  rfunc = (GtkTreeSignal) func;
-
-  (* rfunc) (object, GTK_VALUE_OBJECT (args[0]), func_data);
 }
 
 static gint

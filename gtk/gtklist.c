@@ -29,12 +29,6 @@ enum {
   LAST_SIGNAL
 };
 
-
-typedef void (*GtkListSignal) (GtkObject *object,
-			       gpointer	  arg1,
-			       gpointer	  data);
-
-
 static void gtk_list_class_init	     (GtkListClass   *klass);
 static void gtk_list_init	     (GtkList	     *list);
 static void gtk_list_shutdown	     (GtkObject	     *object);
@@ -69,10 +63,6 @@ static void gtk_real_list_select_child	 (GtkList	*list,
 static void gtk_real_list_unselect_child (GtkList	*list,
 					  GtkWidget	*child);
 
-static void gtk_list_marshal_signal (GtkObject	    *object,
-				     GtkSignalFunc   func,
-				     gpointer	     func_data,
-				     GtkArg	    *args);
 static GtkType gtk_list_child_type  (GtkContainer   *container);
 
 
@@ -123,14 +113,14 @@ gtk_list_class_init (GtkListClass *class)
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkListClass, selection_changed),
-		    gtk_signal_default_marshaller,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   list_signals[SELECT_CHILD] =
     gtk_signal_new ("select_child",
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkListClass, select_child),
-		    gtk_list_marshal_signal,
+		    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
   list_signals[UNSELECT_CHILD] =
@@ -138,7 +128,7 @@ gtk_list_class_init (GtkListClass *class)
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkListClass, unselect_child),
-		    gtk_list_marshal_signal,
+		    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
 
@@ -1078,18 +1068,4 @@ gtk_real_list_unselect_child (GtkList	*list,
     case GTK_SELECTION_EXTENDED:
       break;
     }
-}
-
-
-static void
-gtk_list_marshal_signal (GtkObject	*object,
-			 GtkSignalFunc	 func,
-			 gpointer	 func_data,
-			 GtkArg		*args)
-{
-  GtkListSignal rfunc;
-
-  rfunc = (GtkListSignal) func;
-
-  (* rfunc) (object, GTK_VALUE_OBJECT (args[0]), func_data);
 }

@@ -45,18 +45,6 @@ enum
   SIGNAL_WIDGET_SELECTED,
   SIGNAL_LAST
 };
-typedef	void	(*SignalWidgetEntered)		(GtkObject	*object,
-						 GtkWidget	*widget,
-						 const gchar	*tip_text,
-						 const gchar	*tip_private,
-						 gpointer	 func_data);
-typedef	gint	(*SignalWidgetSelected)		(GtkObject	*object,
-						 GtkWidget	*widget,
-						 const gchar	*tip_text,
-						 const gchar	*tip_private,
-						 GdkEventButton *event,
-						 gpointer	 func_data);
-
 
 /* --- prototypes --- */
 static void	gtk_tips_query_class_init	(GtkTipsQueryClass	*class);
@@ -110,40 +98,6 @@ gtk_tips_query_get_type (void)
 }
 
 static void
-gtk_tips_query_marshal_widget_entered (GtkObject      *object,
-				       GtkSignalFunc  func,
-				       gpointer	      func_data,
-				       GtkArg	      *args)
-{
-  SignalWidgetEntered sfunc = (SignalWidgetEntered) func;
-
-  (* sfunc) (object,
-	     (GtkWidget*) GTK_VALUE_OBJECT (args[0]),
-	     GTK_VALUE_STRING (args[1]),
-	     GTK_VALUE_STRING (args[2]),
-	     func_data);
-}
-
-static void
-gtk_tips_query_marshal_widget_selected (GtkObject      *object,
-					GtkSignalFunc  func,
-					gpointer       func_data,
-					GtkArg	       *args)
-{
-  gint *return_val;
-
-  SignalWidgetSelected sfunc = (SignalWidgetSelected) func;
-  return_val = GTK_RETLOC_BOOL (args[4]);
-  
-  *return_val = (* sfunc) (object,
-			   (GtkWidget*) GTK_VALUE_OBJECT (args[0]),
-			   GTK_VALUE_STRING (args[1]),
-			   GTK_VALUE_STRING (args[2]),
-			   GTK_VALUE_BOXED (args[3]),
-			   func_data);
-}
-
-static void
 gtk_tips_query_class_init (GtkTipsQueryClass *class)
 {
   GtkObjectClass *object_class;
@@ -164,21 +118,21 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, start_query),
-		    gtk_signal_default_marshaller,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   tips_query_signals[SIGNAL_STOP_QUERY] =
     gtk_signal_new ("stop_query",
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, stop_query),
-		    gtk_signal_default_marshaller,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   tips_query_signals[SIGNAL_WIDGET_ENTERED] =
     gtk_signal_new ("widget_entered",
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, widget_entered),
-		    gtk_tips_query_marshal_widget_entered,
+		    gtk_marshal_NONE__POINTER_STRING_STRING,
 		    GTK_TYPE_NONE, 3,
 		    GTK_TYPE_WIDGET,
 		    GTK_TYPE_STRING,
@@ -188,7 +142,7 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, widget_selected),
-		    gtk_tips_query_marshal_widget_selected,
+		    gtk_marshal_BOOL__POINTER_STRING_STRING_POINTER,
 		    GTK_TYPE_BOOL, 4,
 		    GTK_TYPE_WIDGET,
 		    GTK_TYPE_STRING,

@@ -31,11 +31,6 @@ enum
   SIGNAL_LAST
 };
 
-typedef void    (*SignalTextP)                    (GtkObject          *object,
-						   guint	       context_id,
-					  	   const gchar        *text,
-						   gpointer            func_data);
-
 static void gtk_statusbar_class_init               (GtkStatusbarClass *class);
 static void gtk_statusbar_init                     (GtkStatusbar      *statusbar);
 static void gtk_statusbar_destroy                  (GtkObject         *object);
@@ -73,20 +68,6 @@ gtk_statusbar_get_type (void)
 }
 
 static void
-gtk_statusbar_marshal_text_p (GtkObject      *object,
-			      GtkSignalFunc  func,
-			      gpointer       func_data,
-			      GtkArg         *args)
-{
-  SignalTextP sfunc = (SignalTextP) func;
-
-  (* sfunc) (object,
-	     GTK_VALUE_UINT (args[0]),
-	     GTK_VALUE_STRING (args[1]),
-	     func_data);
-}
-
-static void
 gtk_statusbar_class_init (GtkStatusbarClass *class)
 {
   GtkObjectClass *object_class;
@@ -104,7 +85,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkStatusbarClass, text_pushed),
-		    gtk_statusbar_marshal_text_p,
+		    gtk_marshal_NONE__UINT_STRING,
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_UINT,
 		    GTK_TYPE_STRING);
@@ -113,7 +94,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkStatusbarClass, text_popped),
-		    gtk_statusbar_marshal_text_p,
+		    gtk_marshal_NONE__UINT_STRING,
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_UINT,
 		    GTK_TYPE_STRING);

@@ -1159,6 +1159,16 @@ gtk_signal_handlers_destroy (GtkObject *object)
     }
 }
 
+/* Work around the
+   '#define gtk_signal_default_marshaller gtk_marshal_NONE__NONE'
+   in gtkmarshal.h
+
+   This is here to provide some sort of basic backwards binary
+   compatibility.  It is not listed in gtksignal.h in order to make
+   sure people recompiling things see warnings and make changes as needed.
+   -ECL
+*/
+#undef gtk_signal_default_marshaller
 void
 gtk_signal_default_marshaller (GtkObject      *object,
 			       GtkSignalFunc   func,
@@ -1171,6 +1181,7 @@ gtk_signal_default_marshaller (GtkObject      *object,
   
   (* rfunc) (object, func_data);
 }
+#define gtk_signal_default_marshaller gtk_marshal_NONE__NONE
 
 void
 gtk_signal_set_funcs (GtkSignalMarshal marshal_func,

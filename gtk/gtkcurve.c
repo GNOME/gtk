@@ -87,7 +87,7 @@ gtk_curve_class_init (GtkCurveClass *class)
   curve_type_changed_signal =
     gtk_signal_new ("curve_type_changed", GTK_RUN_FIRST, object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCurveClass, curve_type_changed),
-		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
+		    gtk_marshal_NONE__NONE, GTK_TYPE_NONE, 0);
   gtk_object_class_add_signals (object_class, &curve_type_changed_signal, 1);
 
   object_class->finalize = gtk_curve_finalize;

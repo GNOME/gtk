@@ -41,20 +41,6 @@ enum {
   ARG_WIN_POS
 };
 
-typedef gint (*GtkWindowSignal1) (GtkObject *object,
-				  gpointer   arg1,
-				  gpointer   arg2,
-				  gint       arg3,
-				  gint       arg4,
-				  gpointer   data);
-typedef void (*GtkWindowSignal2) (GtkObject *object,
-				  gpointer   arg1,
-				  gpointer   data);
-
-static void gtk_window_marshal_signal_2 (GtkObject      *object,
-					 GtkSignalFunc   func,
-					 gpointer        func_data,
-					 GtkArg         *args);
 static void gtk_window_class_init         (GtkWindowClass    *klass);
 static void gtk_window_init               (GtkWindow         *window);
 static void gtk_window_set_arg            (GtkObject         *object,
@@ -158,7 +144,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                     GTK_RUN_LAST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkWindowClass, set_focus),
-                    gtk_window_marshal_signal_2,
+                    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_POINTER);
 
@@ -445,19 +431,6 @@ gtk_window_activate_default (GtkWindow      *window)
     }
 
   return FALSE;
-}
-
-static void
-gtk_window_marshal_signal_2 (GtkObject      *object,
-			     GtkSignalFunc   func,
-			     gpointer        func_data,
-			     GtkArg         *args)
-{
-  GtkWindowSignal2 rfunc;
-
-  rfunc = (GtkWindowSignal2) func;
-
-  (* rfunc) (object, GTK_VALUE_POINTER (args[0]), func_data);
 }
 
 static void

@@ -35,16 +35,6 @@ enum {
   LAST_SIGNAL
 };
 
-typedef void (*GtkToolbarSignal1) (GtkObject *object,
-				   gint       arg1,
-				   gpointer   data);
-
-static void gtk_toolbar_marshal_signal_1 (GtkObject     *object,
-					  GtkSignalFunc  func,
-					  gpointer       func_data,
-					  GtkArg        *args);
-
-
 static void gtk_toolbar_class_init               (GtkToolbarClass *class);
 static void gtk_toolbar_init                     (GtkToolbar      *toolbar);
 static void gtk_toolbar_destroy                  (GtkObject       *object);
@@ -119,7 +109,7 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkToolbarClass, orientation_changed),
-		    gtk_toolbar_marshal_signal_1,
+		    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_INT);
   toolbar_signals[STYLE_CHANGED] =
@@ -127,7 +117,7 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkToolbarClass, style_changed),
-		    gtk_toolbar_marshal_signal_1,
+		    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_INT);
 
@@ -918,19 +908,6 @@ gtk_toolbar_get_button_relief (GtkToolbar      *toolbar)
   g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), GTK_RELIEF_NORMAL);
 
   return toolbar->relief;
-}
-
-static void
-gtk_toolbar_marshal_signal_1 (GtkObject     *object,
-			      GtkSignalFunc  func,
-			      gpointer       func_data,
-			      GtkArg        *args)
-{
-  GtkToolbarSignal1 rfunc;
-
-  rfunc = (GtkToolbarSignal1) func;
-
-  (*rfunc) (object, GTK_VALUE_ENUM (args[0]), func_data);
 }
 
 static void

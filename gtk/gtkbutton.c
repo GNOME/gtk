@@ -140,35 +140,35 @@ gtk_button_class_init (GtkButtonClass *klass)
                     GTK_RUN_FIRST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkButtonClass, pressed),
-                    gtk_signal_default_marshaller,
+                    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   button_signals[RELEASED] =
     gtk_signal_new ("released",
                     GTK_RUN_FIRST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkButtonClass, released),
-                    gtk_signal_default_marshaller,
+                    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   button_signals[CLICKED] =
     gtk_signal_new ("clicked",
                     GTK_RUN_FIRST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkButtonClass, clicked),
-                    gtk_signal_default_marshaller,
+                    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   button_signals[ENTER] =
     gtk_signal_new ("enter",
                     GTK_RUN_FIRST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkButtonClass, enter),
-                    gtk_signal_default_marshaller,
+                    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   button_signals[LEAVE] =
     gtk_signal_new ("leave",
                     GTK_RUN_FIRST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkButtonClass, leave),
-                    gtk_signal_default_marshaller,
+                    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (object_class, button_signals, LAST_SIGNAL);

@@ -350,31 +350,6 @@ static void extend_selection (GtkCList      *clist,
 			      gfloat         position,
 			      gboolean       auto_start_selection);
 
-
-/* Signals */
-static void gtk_clist_marshal_signal_1 (GtkObject * object,
-					GtkSignalFunc func,
-					gpointer func_data,
-					GtkArg * args);
-static void gtk_clist_marshal_signal_2 (GtkObject * object,
-					GtkSignalFunc func,
-					gpointer func_data,
-					GtkArg * args);
-static void gtk_clist_marshal_signal_3 (GtkObject * object,
-					GtkSignalFunc func,
-					gpointer func_data,
-					GtkArg * args);
-static void gtk_clist_marshal_signal_4 (GtkObject * object,
-					GtkSignalFunc func,
-					gpointer func_data,
-					GtkArg * args);
-static void gtk_clist_marshal_signal_5 (GtkObject * object,
-					GtkSignalFunc func,
-					gpointer func_data,
-					GtkArg * args);
-
-
-
 /* Fill in data after widget is realized and has style */
 
 static void add_style_data (GtkCList * clist);
@@ -426,21 +401,24 @@ gtk_clist_class_init (GtkCListClass * klass)
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCListClass, select_row),
-		    gtk_clist_marshal_signal_1,
-	    GTK_TYPE_NONE, 3, GTK_TYPE_INT, GTK_TYPE_INT, GTK_TYPE_GDK_EVENT);
+		    gtk_marshal_NONE__INT_INT_POINTER,
+		    GTK_TYPE_NONE, 3,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_GDK_EVENT);
   clist_signals[UNSELECT_ROW] =
     gtk_signal_new ("unselect_row",
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCListClass, unselect_row),
-		    gtk_clist_marshal_signal_1,
+		    gtk_marshal_NONE__INT_INT_POINTER,
 	    GTK_TYPE_NONE, 3, GTK_TYPE_INT, GTK_TYPE_INT, GTK_TYPE_GDK_EVENT);
   clist_signals[CLICK_COLUMN] =
     gtk_signal_new ("click_column",
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCListClass, click_column),
-		    gtk_clist_marshal_signal_3,
+		    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_INT);
 
   clist_signals[TOGGLE_FOCUS_ROW] =
@@ -448,56 +426,56 @@ gtk_clist_class_init (GtkCListClass * klass)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkCListClass, toggle_focus_row),
-                    gtk_clist_marshal_signal_2,
+                    gtk_marshal_NONE__NONE,
                     GTK_TYPE_NONE, 0);
   clist_signals[SELECT_ALL] =
     gtk_signal_new ("select_all",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkCListClass, select_all),
-                    gtk_clist_marshal_signal_2,
+                    gtk_marshal_NONE__NONE,
                     GTK_TYPE_NONE, 0);
   clist_signals[UNSELECT_ALL] =
     gtk_signal_new ("unselect_all",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkCListClass, unselect_all),
-                    gtk_clist_marshal_signal_2,
+                    gtk_marshal_NONE__NONE,
                     GTK_TYPE_NONE, 0);
   clist_signals[UNDO_SELECTION] =
     gtk_signal_new ("undo_selection",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCListClass, undo_selection),
-		    gtk_clist_marshal_signal_2,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   clist_signals[START_SELECTION] =
     gtk_signal_new ("start_selection",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCListClass, start_selection),
-		    gtk_clist_marshal_signal_2,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   clist_signals[END_SELECTION] =
     gtk_signal_new ("end_selection",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCListClass, end_selection),
-		    gtk_clist_marshal_signal_2,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   clist_signals[TOGGLE_ADD_MODE] =
     gtk_signal_new ("toggle_add_mode",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCListClass, toggle_add_mode),
-		    gtk_clist_marshal_signal_2,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   clist_signals[EXTEND_SELECTION] =
     gtk_signal_new ("extend_selection",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkCListClass, extend_selection),
-                    gtk_clist_marshal_signal_5,
+                    gtk_marshal_NONE__ENUM_FLOAT_BOOL,
                     GTK_TYPE_NONE, 3,
 		    GTK_TYPE_ENUM, GTK_TYPE_FLOAT, GTK_TYPE_BOOL);
   clist_signals[SCROLL_VERTICAL] =
@@ -505,21 +483,21 @@ gtk_clist_class_init (GtkCListClass * klass)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkCListClass, scroll_vertical),
-                    gtk_clist_marshal_signal_4,
+                    gtk_marshal_NONE__ENUM_FLOAT,
                     GTK_TYPE_NONE, 2, GTK_TYPE_ENUM, GTK_TYPE_FLOAT);
   clist_signals[SCROLL_HORIZONTAL] =
     gtk_signal_new ("scroll_horizontal",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkCListClass, scroll_horizontal),
-                    gtk_clist_marshal_signal_4,
+                    gtk_marshal_NONE__ENUM_FLOAT,
                     GTK_TYPE_NONE, 2, GTK_TYPE_ENUM, GTK_TYPE_FLOAT);
   clist_signals[ABORT_COLUMN_RESIZE] =
     gtk_signal_new ("abort_column_resize",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkCListClass, abort_column_resize),
-                    gtk_clist_marshal_signal_2,
+                    gtk_marshal_NONE__NONE,
                     GTK_TYPE_NONE, 0);
 
 
@@ -763,76 +741,6 @@ gtk_clist_class_init (GtkCListClass * klass)
 				  "end_selection", 0);
   }
   */
-}
-
-static void
-gtk_clist_marshal_signal_1 (GtkObject * object,
-			    GtkSignalFunc func,
-			    gpointer func_data,
-			    GtkArg * args)
-{
-  GtkCListSignal1 rfunc;
-
-  rfunc = (GtkCListSignal1) func;
-
-  (*rfunc) (object, GTK_VALUE_INT (args[0]),
-	    GTK_VALUE_INT (args[1]),
-	    GTK_VALUE_POINTER (args[2]),
-	    func_data);
-}
-
-static void
-gtk_clist_marshal_signal_2 (GtkObject * object,
-			    GtkSignalFunc func,
-			    gpointer func_data,
-			    GtkArg * args)
-{
-  GtkCListSignal2 rfunc;
-
-  rfunc = (GtkCListSignal2) func;
-
-  (*rfunc) (object, func_data);
-}
-
-static void
-gtk_clist_marshal_signal_3 (GtkObject * object,
-			    GtkSignalFunc func,
-			    gpointer func_data,
-			    GtkArg * args)
-{
-  GtkCListSignal3 rfunc;
-
-  rfunc = (GtkCListSignal3) func;
-
-  (*rfunc) (object, GTK_VALUE_INT (args[0]), func_data);
-}
-
-static void
-gtk_clist_marshal_signal_4 (GtkObject * object,
-			    GtkSignalFunc func,
-			    gpointer func_data,
-			    GtkArg * args)
-{
-  GtkCListSignal4 rfunc;
-
-  rfunc = (GtkCListSignal4) func;
-
-  (*rfunc) (object, GTK_VALUE_INT (args[0]),
-	    GTK_VALUE_FLOAT (args[1]), func_data);
-}
-
-static void
-gtk_clist_marshal_signal_5 (GtkObject * object,
-			    GtkSignalFunc func,
-			    gpointer func_data,
-			    GtkArg * args)
-{
-  GtkCListSignal5 rfunc;
-
-  rfunc = (GtkCListSignal5) func;
-
-  (*rfunc) (object, GTK_VALUE_INT (args[0]), GTK_VALUE_FLOAT (args[1]),
-	    GTK_VALUE_BOOL (args[2]), func_data);
 }
 
 static void

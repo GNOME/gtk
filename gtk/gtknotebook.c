@@ -62,11 +62,6 @@ enum {
   CHILD_ARG_POSITION
 };
 
-typedef void (*GtkNotebookSignal) (GtkObject       *object,
-				   GtkNotebookPage *arg1,
-				   gint             arg2,
-				   gpointer         data);
-
 static void gtk_notebook_class_init          (GtkNotebookClass *klass);
 static void gtk_notebook_init                (GtkNotebook      *notebook);
 static void gtk_notebook_set_arg	     (GtkObject        *object,
@@ -157,10 +152,6 @@ static void gtk_notebook_switch_focus_tab    (GtkNotebook      *notebook,
 static void gtk_real_notebook_switch_page    (GtkNotebook      *notebook,
 					      GtkNotebookPage  *page,
 					      guint             page_num);
-static void gtk_notebook_marshal_signal      (GtkObject        *object,
-					      GtkSignalFunc     func,
-					      gpointer          func_data,
-					      GtkArg           *args);
 static void gtk_notebook_menu_switch_page    (GtkWidget        *widget,
 					      GtkNotebookPage  *page);
 static void gtk_notebook_update_labels       (GtkNotebook      *notebook,
@@ -235,7 +226,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                     GTK_RUN_LAST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkNotebookClass, switch_page),
-                    gtk_notebook_marshal_signal,
+                    gtk_marshal_NONE__POINTER_UINT,
                     GTK_TYPE_NONE, 2,
 		    GTK_TYPE_POINTER,
 		    GTK_TYPE_UINT);
@@ -3068,20 +3059,6 @@ gtk_notebook_switch_page (GtkNotebook     *notebook,
 		   notebook_signals[SWITCH_PAGE], 
 		   page,
 		   page_num);
-}
-
-static void
-gtk_notebook_marshal_signal (GtkObject      *object,
-			     GtkSignalFunc   func,
-			     gpointer        func_data,
-			     GtkArg         *args)
-{
-  GtkNotebookSignal rfunc;
-
-  rfunc = (GtkNotebookSignal) func;
-
-  (* rfunc) (object, GTK_VALUE_POINTER (args[0]), GTK_VALUE_INT (args[1]),
-	     func_data);
 }
 
 static gint

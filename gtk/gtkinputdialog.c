@@ -45,10 +45,6 @@
 #include "gtktable.h"
 #include "gtkvbox.h"
 
-typedef void (*GtkInputDialogSignal1) (GtkObject *object,
-				  int   arg1,
-				  gpointer   data);
-
 typedef struct {
   gint       index;
   GtkWidget *entry;
@@ -71,10 +67,6 @@ enum
 
 /* Forward declarations */
 
-static void gtk_input_dialog_marshal_signal1 (GtkObject      *object,
-					      GtkSignalFunc   func,
-					      gpointer        func_data,
-					      GtkArg *args);
 static void gtk_input_dialog_class_init (GtkInputDialogClass *klass);
 static void gtk_input_dialog_init (GtkInputDialog *inputd);
 static GdkDeviceInfo *gtk_input_dialog_get_device_info(guint32 deviceid);
@@ -100,18 +92,6 @@ static void gtk_input_dialog_fill_keys (GtkInputDialog *inputd,
 
 static GtkObjectClass *parent_class = NULL;
 static guint input_dialog_signals[LAST_SIGNAL] = { 0 };
-
-static void
-gtk_input_dialog_marshal_signal1 (GtkObject      *object,
-				  GtkSignalFunc   func,
-				  gpointer        func_data,
-				  GtkArg *args)
-{
-  GtkInputDialogSignal1 rfunc;
-
-  rfunc = (GtkInputDialogSignal1) func;
-  (* rfunc) (object, GTK_VALUE_INT(args[0]), func_data);
-}
 
 static GdkDeviceInfo *
 gtk_input_dialog_get_device_info(guint32 deviceid)
@@ -167,7 +147,7 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkInputDialogClass, enable_device),
-		    gtk_input_dialog_marshal_signal1,
+		    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_INT);
 
   input_dialog_signals[DISABLE_DEVICE] =
@@ -175,7 +155,7 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkInputDialogClass, disable_device),
-		    gtk_input_dialog_marshal_signal1,
+		    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_INT);
 
   gtk_object_class_add_signals (object_class, input_dialog_signals,

@@ -168,22 +168,6 @@ static void gtk_ctree_unlink            (GtkCTree      *ctree,
 					 gboolean       update_focus_row);
 static GList * gtk_ctree_last_visible    (GtkCTree     *ctree,
 					  GList        *node);
-static void gtk_ctree_marshal_signal_1  (GtkObject     *object,
-					 GtkSignalFunc  func,
-					 gpointer       func_data,
-					 GtkArg        *args);
-static void gtk_ctree_marshal_signal_2  (GtkObject     *object,
-					 GtkSignalFunc  func,
-					 gpointer       func_data,
-					 GtkArg        *args);
-static void gtk_ctree_marshal_signal_3  (GtkObject     *object,
-					 GtkSignalFunc  func,
-					 gpointer       func_data,
-					 GtkArg        *args);
-static void gtk_ctree_marshal_signal_4  (GtkObject     *object,
-					 GtkSignalFunc  func,
-					 gpointer       func_data,
-					 GtkArg        *args);
 static gboolean ctree_is_hot_spot       (GtkCTree      *ctree, 
 					 GList         *node,
 					 gint           row, 
@@ -275,60 +259,6 @@ gtk_ctree_get_type (void)
 }
 
 static void
-gtk_ctree_marshal_signal_1 (GtkObject     *object,
-			    GtkSignalFunc  func,
-			    gpointer       func_data,
-			    GtkArg        *args)
-{
-  GtkCTreeSignal1 rfunc;
-
-  rfunc = (GtkCTreeSignal1) func;
-
-  (*rfunc) (object, GTK_VALUE_POINTER (args[0]), GTK_VALUE_INT (args[1]), 
-	    func_data);
-}
-
-static void
-gtk_ctree_marshal_signal_2 (GtkObject     *object,
-			    GtkSignalFunc  func,
-			    gpointer       func_data,
-			    GtkArg        *args)
-{
-  GtkCTreeSignal2 rfunc;
-
-  rfunc = (GtkCTreeSignal2) func;
-
-  (*rfunc) (object, GTK_VALUE_POINTER (args[0]), GTK_VALUE_POINTER (args[1]),
-	    GTK_VALUE_POINTER (args[2]), func_data);
-}
-
-static void
-gtk_ctree_marshal_signal_3 (GtkObject     *object,
-			    GtkSignalFunc  func,
-			    gpointer       func_data,
-			    GtkArg        *args)
-{
-  GtkCTreeSignal3 rfunc;
-
-  rfunc = (GtkCTreeSignal3) func;
-
-  (*rfunc) (object, GTK_VALUE_POINTER (args[0]), func_data);
-}
-
-static void
-gtk_ctree_marshal_signal_4 (GtkObject     *object,
-			    GtkSignalFunc  func,
-			    gpointer       func_data,
-			    GtkArg        *args)
-{
-  GtkCTreeSignal4 rfunc;
-
-  rfunc = (GtkCTreeSignal4) func;
-
-  (*rfunc) (object, GTK_VALUE_ENUM (args[0]), func_data);
-}
-
-static void
 gtk_ctree_class_init (GtkCTreeClass *klass)
 {
   GtkObjectClass *object_class;
@@ -348,35 +278,35 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_select_row),
-		    gtk_ctree_marshal_signal_1,
+		    gtk_marshal_NONE__POINTER_INT,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_POINTER, GTK_TYPE_INT);
   ctree_signals[TREE_UNSELECT_ROW] =
     gtk_signal_new ("tree_unselect_row",
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_unselect_row),
-		    gtk_ctree_marshal_signal_1,
+		    gtk_marshal_NONE__POINTER_INT,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_POINTER, GTK_TYPE_INT);
   ctree_signals[TREE_EXPAND] =
     gtk_signal_new ("tree_expand",
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_expand),
-		    gtk_ctree_marshal_signal_3,
+		    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
   ctree_signals[TREE_COLLAPSE] =
     gtk_signal_new ("tree_collapse",
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_collapse),
-		    gtk_ctree_marshal_signal_3,
+		    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_POINTER);
   ctree_signals[TREE_MOVE] =
     gtk_signal_new ("tree_move",
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_move),
-		    gtk_ctree_marshal_signal_2,
+		    gtk_marshal_NONE__POINTER_POINTER_POINTER,
 		    GTK_TYPE_NONE, 3, GTK_TYPE_POINTER, GTK_TYPE_POINTER, 
 		    GTK_TYPE_POINTER);
   ctree_signals[CHANGE_FOCUS_ROW_EXPANSION] =
@@ -385,7 +315,7 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass,
 				       change_focus_row_expansion),
-		    gtk_ctree_marshal_signal_4,
+		    gtk_marshal_NONE__ENUM,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_ENUM);
 
   gtk_object_class_add_signals (object_class, ctree_signals, LAST_SIGNAL);

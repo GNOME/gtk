@@ -189,7 +189,7 @@ gtk_object_class_init (GtkObjectClass *class)
                     GTK_RUN_LAST,
                     class->type,
                     GTK_SIGNAL_OFFSET (GtkObjectClass, destroy),
-                    gtk_signal_default_marshaller,
+                    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (class, object_signals, LAST_SIGNAL);

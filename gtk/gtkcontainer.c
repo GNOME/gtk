@@ -51,35 +51,6 @@ struct _GtkChildArgInfo
   guint seq_id;
 };
 
-
-typedef void (*GtkContainerSignal1) (GtkObject *object,
-				     gpointer   arg1,
-				     gpointer   data);
-typedef void (*GtkContainerSignal2) (GtkObject *object,
-				     GtkFunction arg1,
-				     gpointer   arg2,
-				     gpointer   data);
-typedef gint (*GtkContainerSignal3) (GtkObject *object,
-				     gint       arg1,
-				     gpointer   data);
-typedef gint (*GtkContainerSignal4) (GtkObject *object,
-				     gpointer   data);
-
-
-static void gtk_container_marshal_signal_1 (GtkObject      *object,
-					    GtkSignalFunc   func,
-					    gpointer        func_data,
-					    GtkArg         *args);
-static void gtk_container_marshal_signal_2 (GtkObject      *object,
-					    GtkSignalFunc   func,
-					    gpointer        func_data,
-					    GtkArg         *args);
-static void gtk_container_marshal_signal_3 (GtkObject      *object,
-					    GtkSignalFunc   func,
-					    gpointer        func_data,
-					    GtkArg         *args);
-
-
 static void gtk_container_base_class_init   (GtkContainerClass *klass);
 static void gtk_container_class_init        (GtkContainerClass *klass);
 static void gtk_container_init              (GtkContainer      *container);
@@ -189,7 +160,7 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_RUN_FIRST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkContainerClass, add),
-                    gtk_container_marshal_signal_1,
+                    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_WIDGET);
   container_signals[REMOVE] =
@@ -197,7 +168,7 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_RUN_FIRST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkContainerClass, remove),
-                    gtk_container_marshal_signal_1,
+                    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_WIDGET);
   container_signals[CHECK_RESIZE] =
@@ -205,14 +176,14 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_RUN_LAST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkContainerClass, check_resize),
-		    gtk_signal_default_marshaller,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   container_signals[FOREACH] =
     gtk_signal_new ("foreach",
                     GTK_RUN_FIRST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkContainerClass, foreach),
-                    gtk_container_marshal_signal_2,
+                    gtk_marshal_NONE__C_CALLBACK,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_C_CALLBACK);
   container_signals[FOCUS] =
@@ -220,7 +191,7 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_RUN_LAST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkContainerClass, focus),
-                    gtk_container_marshal_signal_3,
+                    gtk_marshal_ENUM__ENUM,
 		    GTK_TYPE_DIRECTION_TYPE, 1,
                     GTK_TYPE_DIRECTION_TYPE);
   container_signals[SET_FOCUS_CHILD] =
@@ -228,7 +199,7 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_RUN_FIRST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkContainerClass, set_focus_child),
-                    gtk_container_marshal_signal_1,
+                    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
                     GTK_TYPE_WIDGET);
   gtk_object_class_add_signals (object_class, container_signals, LAST_SIGNAL);
@@ -1301,50 +1272,6 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
 				   (container->focus_child->allocation.x +
 				    container->focus_child->allocation.width));
     }
-}
-
-static void
-gtk_container_marshal_signal_1 (GtkObject      *object,
-				GtkSignalFunc   func,
-				gpointer        func_data,
-				GtkArg         *args)
-{
-  GtkContainerSignal1 rfunc;
-
-  rfunc = (GtkContainerSignal1) func;
-
-  (* rfunc) (object, GTK_VALUE_OBJECT (args[0]), func_data);
-}
-
-static void
-gtk_container_marshal_signal_2 (GtkObject      *object,
-				GtkSignalFunc   func,
-				gpointer        func_data,
-				GtkArg         *args)
-{
-  GtkContainerSignal2 rfunc;
-
-  rfunc = (GtkContainerSignal2) func;
-
-  (* rfunc) (object,
-	     GTK_VALUE_C_CALLBACK(args[0]).func,
-	     GTK_VALUE_C_CALLBACK(args[0]).func_data,
-	     func_data);
-}
-
-static void
-gtk_container_marshal_signal_3 (GtkObject      *object,
-				GtkSignalFunc   func,
-				gpointer        func_data,
-				GtkArg         *args)
-{
-  GtkContainerSignal3 rfunc;
-  gint *return_val;
-
-  rfunc = (GtkContainerSignal3) func;
-  return_val = GTK_RETLOC_ENUM (args[1]);
-
-  *return_val = (* rfunc) (object, GTK_VALUE_ENUM(args[0]), func_data);
 }
 
 static gint

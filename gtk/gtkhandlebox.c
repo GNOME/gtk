@@ -38,10 +38,6 @@ enum
   SIGNAL_LAST
 };
 
-typedef void    (*SignalChildAttached)          (GtkObject      *object,
-						 GtkWidget      *widget,
-						 gpointer        func_data);
-
 static void gtk_handle_box_class_init     (GtkHandleBoxClass *klass);
 static void gtk_handle_box_init           (GtkHandleBox      *handle_box);
 static void gtk_handle_box_destroy        (GtkObject         *object);
@@ -105,19 +101,6 @@ gtk_handle_box_get_type (void)
 }
 
 static void
-gtk_handle_box_marshal_child_attached (GtkObject      *object,
-				       GtkSignalFunc  func,
-				       gpointer       func_data,
-				       GtkArg         *args)
-{
-  SignalChildAttached sfunc = (SignalChildAttached) func;
-
-  (* sfunc) (object,
-	     (GtkWidget*) GTK_VALUE_OBJECT (args[0]),
-	     func_data);
-}
-
-static void
 gtk_handle_box_class_init (GtkHandleBoxClass *class)
 {
   GtkObjectClass *object_class;
@@ -135,7 +118,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_attached),
-		    gtk_handle_box_marshal_child_attached,
+		    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
   handle_box_signals[SIGNAL_CHILD_DETACHED] =
@@ -143,7 +126,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_detached),
-		    gtk_handle_box_marshal_child_attached,
+		    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
   gtk_object_class_add_signals (object_class, handle_box_signals, SIGNAL_LAST);

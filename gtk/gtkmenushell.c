@@ -107,14 +107,14 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                     GTK_RUN_FIRST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkMenuShellClass, deactivate),
-                    gtk_signal_default_marshaller,
+                    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   menu_shell_signals[SELECTION_DONE] =
     gtk_signal_new ("selection-done",
                     GTK_RUN_FIRST,
                     object_class->type,
                     GTK_SIGNAL_OFFSET (GtkMenuShellClass, selection_done),
-                    gtk_signal_default_marshaller,
+                    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   gtk_object_class_add_signals (object_class, menu_shell_signals, LAST_SIGNAL);
 

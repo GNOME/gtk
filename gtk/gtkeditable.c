@@ -88,40 +88,11 @@ static void gtk_editable_real_paste_clipboard (GtkEditable     *editable);
 static void gtk_editable_real_set_editable    (GtkEditable     *editable,
 					       gboolean         is_editable);
 
-
-static void gtk_editable_marshal_signal_1    (GtkObject * object,
-					      GtkSignalFunc func,
-					      gpointer func_data,
-					      GtkArg * args);
-static void gtk_editable_marshal_signal_2    (GtkObject * object,
-					      GtkSignalFunc func,
-					      gpointer func_data,
-					      GtkArg * args);
-static void gtk_editable_marshal_signal_3    (GtkObject * object,
-					      GtkSignalFunc func,
-					      gpointer func_data,
-					      GtkArg * args);
-
 static GtkWidgetClass *parent_class = NULL;
 static guint editable_signals[LAST_SIGNAL] = { 0 };
 static GdkAtom ctext_atom = GDK_NONE;
 static GdkAtom text_atom = GDK_NONE;
 static GdkAtom clipboard_atom = GDK_NONE;
-
-typedef void (*GtkEditableSignal1) (GtkObject * object,
-				 gchar *arg1,
-				 gint arg2,
-				 gint *arg3,
-				 gpointer data);
-
-typedef void (*GtkEditableSignal2) (GtkObject * object,
-				 gint arg1,
-				 gint arg2,
-				 gpointer data);
-
-typedef void (*GtkEditableSignal3) (GtkObject * object,
-				 gint arg1,
-				 gpointer data);
 
 GtkType
 gtk_editable_get_type (void)
@@ -164,7 +135,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, changed),
-		    gtk_signal_default_marshaller,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
   editable_signals[INSERT_TEXT] =
@@ -172,7 +143,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, insert_text),
-		    gtk_editable_marshal_signal_1,
+		    gtk_marshal_NONE__POINTER_INT_POINTER,
 		    GTK_TYPE_NONE,
 		    3,
 		    GTK_TYPE_STRING,
@@ -184,7 +155,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, delete_text),
-		    gtk_editable_marshal_signal_2,
+		    gtk_marshal_NONE__INT_INT,
 		    GTK_TYPE_NONE,
 		    2,
 		    GTK_TYPE_INT,
@@ -195,7 +166,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, activate),
-		    gtk_signal_default_marshaller,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
   editable_signals[SET_EDITABLE] =
@@ -203,7 +174,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, set_editable),
-		    gtk_editable_marshal_signal_3,
+		    gtk_marshal_NONE__BOOL,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_BOOL);
 
@@ -212,7 +183,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, move_cursor),
-		    gtk_editable_marshal_signal_2,
+		    gtk_marshal_NONE__INT_INT,
 		    GTK_TYPE_NONE, 2, 
 		    GTK_TYPE_INT, 
 		    GTK_TYPE_INT);
@@ -222,7 +193,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, move_word),
-		    gtk_editable_marshal_signal_3,
+		    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1, 
 		    GTK_TYPE_INT);
 
@@ -231,7 +202,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, move_page),
-		    gtk_editable_marshal_signal_2,
+		    gtk_marshal_NONE__INT_INT,
 		    GTK_TYPE_NONE, 2, 
 		    GTK_TYPE_INT, 
 		    GTK_TYPE_INT);
@@ -241,7 +212,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, move_to_row),
-		    gtk_editable_marshal_signal_3,
+		    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1, 
 		    GTK_TYPE_INT);
 
@@ -250,7 +221,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, move_to_column),
-		    gtk_editable_marshal_signal_3,
+		    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1, 
 		    GTK_TYPE_INT);
 
@@ -259,7 +230,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, kill_char),
-		    gtk_editable_marshal_signal_3,
+		    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1, 
 		    GTK_TYPE_INT);
 
@@ -268,7 +239,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, kill_word),
-		    gtk_editable_marshal_signal_3,
+		    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1, 
 		    GTK_TYPE_INT);
 
@@ -277,7 +248,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, kill_line),
-		    gtk_editable_marshal_signal_3,
+		    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1, 
 		    GTK_TYPE_INT);
 
@@ -286,7 +257,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, cut_clipboard),
-		    gtk_signal_default_marshaller,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
   editable_signals[COPY_CLIPBOARD] =
@@ -294,7 +265,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, copy_clipboard),
-		    gtk_signal_default_marshaller,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
   editable_signals[PASTE_CLIPBOARD] =
@@ -302,7 +273,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, paste_clipboard),
-		    gtk_signal_default_marshaller,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (object_class, editable_signals, LAST_SIGNAL);
@@ -973,49 +944,4 @@ gtk_editable_changed (GtkEditable *editable)
   g_return_if_fail (GTK_IS_EDITABLE (editable));
   
   gtk_signal_emit (GTK_OBJECT (editable), editable_signals[CHANGED]);
-}
-
-static void
-gtk_editable_marshal_signal_1 (GtkObject * object,
-			       GtkSignalFunc func,
-			       gpointer func_data,
-			       GtkArg * args)
-{
-  GtkEditableSignal1 rfunc;
-
-  rfunc = (GtkEditableSignal1) func;
-
-  (*rfunc) (object, GTK_VALUE_STRING (args[0]),
-  	            GTK_VALUE_INT (args[1]),
-	            GTK_VALUE_POINTER (args[2]),
-	    func_data);
-}
-
-static void
-gtk_editable_marshal_signal_2 (GtkObject * object,
-			       GtkSignalFunc func,
-			       gpointer func_data,
-			       GtkArg * args)
-{
-  GtkEditableSignal2 rfunc;
-
-  rfunc = (GtkEditableSignal2) func;
-
-  (*rfunc) (object, GTK_VALUE_INT (args[0]),
-	            GTK_VALUE_INT (args[1]),
-	    func_data);
-}
-
-static void
-gtk_editable_marshal_signal_3 (GtkObject * object,
-			       GtkSignalFunc func,
-			       gpointer func_data,
-			       GtkArg * args)
-{
-  GtkEditableSignal3 rfunc;
-
-  rfunc = (GtkEditableSignal3) func;
-
-  (*rfunc) (object, GTK_VALUE_INT (args[0]),
-	    func_data);
 }

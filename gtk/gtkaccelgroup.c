@@ -649,7 +649,7 @@ gtk_accel_group_create_add (GtkType          class_type,
 			 signal_flags,
 			 class_type,
 			 handler_offset,
-			 gtk_accel_group_marshal_add,
+			 gtk_marshal_NONE__UINT_POINTER_UINT_UINT_ENUM,
 			 GTK_TYPE_NONE, 5,
 			 GTK_TYPE_UINT,
 			 GTK_TYPE_ACCEL_GROUP,
@@ -669,47 +669,11 @@ gtk_accel_group_create_remove (GtkType          class_type,
 			 signal_flags,
 			 class_type,
 			 handler_offset,
-			 gtk_accel_group_marshal_remove,
+			 gtk_marshal_NONE__POINTER_UINT_UINT,
 			 GTK_TYPE_NONE, 3,
 			 GTK_TYPE_ACCEL_GROUP,
 			 GTK_TYPE_UINT,
 			 GTK_TYPE_GDK_MODIFIER_TYPE);
-}
-
-void
-gtk_accel_group_marshal_add (GtkObject	    *object,
-			     GtkSignalFunc   func,
-			     gpointer	     func_data,
-			     GtkArg	    *args)
-{
-  GtkSignalAddAccelerator signal_func;
-  
-  signal_func = (GtkSignalAddAccelerator) func;
-  
-  signal_func (object,
-	       GTK_VALUE_UINT (args[0]),
-	       GTK_VALUE_BOXED (args[1]),
-	       GTK_VALUE_UINT (args[2]),
-	       GTK_VALUE_UINT (args[3]),
-	       GTK_VALUE_ENUM (args[4]),
-	       func_data);
-}
-
-void
-gtk_accel_group_marshal_remove (GtkObject	*object,
-				GtkSignalFunc	 func,
-				gpointer	 func_data,
-				GtkArg		*args)
-{
-  GtkSignalRemoveAccelerator signal_func;
-  
-  signal_func = (GtkSignalRemoveAccelerator) func;
-  
-  signal_func (object,
-	       GTK_VALUE_BOXED (args[0]),
-	       GTK_VALUE_UINT (args[1]),
-	       GTK_VALUE_UINT (args[2]),
-	       func_data);
 }
 
 GSList*

@@ -49,10 +49,6 @@ struct _GtkTreePixmaps {
 
 static GList *pixmaps = NULL;
 
-typedef void (*GtkTreeItemSignal) (GtkObject *object,
-				   gpointer   arg1,
-				   gpointer   data);
-
 static void gtk_tree_item_class_init (GtkTreeItemClass *klass);
 static void gtk_tree_item_init       (GtkTreeItem      *tree_item);
 static void gtk_tree_item_realize       (GtkWidget        *widget);
@@ -136,14 +132,14 @@ gtk_tree_item_class_init (GtkTreeItemClass *class)
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkTreeItemClass, expand),
-		    gtk_signal_default_marshaller,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   tree_item_signals[COLLAPSE_TREE] =
     gtk_signal_new ("collapse",
 		    GTK_RUN_FIRST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkTreeItemClass, collapse),
-		    gtk_signal_default_marshaller,
+		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (object_class, tree_item_signals, LAST_SIGNAL);

@@ -236,7 +236,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 	             GTK_RUN_FIRST,
                      object_class->type,
 		     GTK_SIGNAL_OFFSET (GtkColorSelectionClass, color_changed),
-                     gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
+                     gtk_marshal_NONE__NONE, GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (object_class, color_selection_signals, LAST_SIGNAL);
 
