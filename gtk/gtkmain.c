@@ -39,6 +39,7 @@
 #ifdef G_OS_UNIX
 #include <unistd.h>
 #endif
+#include "gdk/gdk.h"
 #include "gtkdnd.h"
 #include "gtkversion.h"
 #include "gtkmain.h"
@@ -53,7 +54,6 @@
 #include "config.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
-#include "gdk/gdkscreen.h"
 #include "gdk/gdkprivate.h"
 
 /* Private type definitions

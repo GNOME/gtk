@@ -67,7 +67,6 @@ void	     gdk_colormap_unref	  (GdkColormap *cmap);
 #ifndef GDK_MULTIHEAD_SAFE
 GdkColormap* gdk_colormap_get_system	   (void);
 #endif
-gint	     gdk_colormap_get_system_size  (void);
 GdkColormap* gdk_colormap_get_system_for_screen (GdkScreen * screen);
 
 void gdk_colormap_change (GdkColormap	*colormap,
@@ -126,6 +125,7 @@ gint gdk_color_alloc	 (GdkColormap	*colormap,
 			  GdkColor	*color);
 gint gdk_color_change	 (GdkColormap	*colormap,
 			  GdkColor	*color);
+gint gdk_colormap_get_system_size  (void);
 #endif /* GDK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus

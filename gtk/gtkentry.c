@@ -28,6 +28,7 @@
 
 #include <pango/pango.h>
 
+#include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtkclipboard.h"
@@ -43,8 +44,6 @@
 #include "gtksettings.h"
 #include "gtksignal.h"
 #include "gtkwindow.h"
-#include "gdk/gdkscreen.h"
-#include "gdk/gdkdisplay.h"
 
 #define MIN_ENTRY_WIDTH  150
 #define DRAW_TIMEOUT     20

@@ -390,7 +390,6 @@ void          gdk_window_set_geometry_hints (GdkWindow        *window,
 					     GdkWindowHints    flags);
 void	      gdk_set_sm_client_id_for_screen (GdkScreen   *screen,
 					       const gchar *sm_client_id);
-void          gdk_set_sm_client_id         (const gchar *sm_client_id);
 
 void	      gdk_window_begin_paint_rect   (GdkWindow    *window,
 					     GdkRectangle *rectangle);
@@ -462,7 +461,10 @@ gboolean      gdk_window_get_decorations (GdkWindow       *window,
 					  GdkWMDecoration *decorations);
 void	      gdk_window_set_functions	 (GdkWindow	  *window,
 					  GdkWMFunction	   functions);
+#ifndef GDK_MULTIHEAD_SAFE
 GList *       gdk_window_get_toplevels   (void);
+void          gdk_set_sm_client_id       (const gchar *sm_client_id);
+#endif
 GList *	      gdk_window_get_toplevels_for_screen (GdkScreen* screen);
 
 void          gdk_window_iconify         (GdkWindow       *window);

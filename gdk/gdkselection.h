@@ -39,18 +39,27 @@ typedef enum
 
 /* Selections
  */
+#ifndef GDK_MULTIHEAD_SAFE
+gboolean   gdk_selection_owner_set (GdkWindow	 *owner,
+				    GdkAtom	  selection,
+				    guint32	  time,
+				    gboolean      send_event);
+GdkWindow* gdk_selection_owner_get (GdkAtom	  selection);
+void	   gdk_selection_send_notify (guint32	    requestor,
+				      GdkAtom	    selection,
+				      GdkAtom	    target,
+				      GdkAtom	    property,
+				      guint32	    time);
+#endif
 gboolean gdk_selection_owner_set_for_display (GdkDisplay *display,
 					      GdkWindow  *owner,
 					      GdkAtom     selection,
 					      guint32     time,
 					      gboolean    send_event);
-gboolean   gdk_selection_owner_set (GdkWindow	 *owner,
-				    GdkAtom	  selection,
-				    guint32	  time,
-				    gboolean      send_event);
+
 GdkWindow *gdk_selection_owner_get_for_display (GdkDisplay *display,
 						GdkAtom     selection);
-GdkWindow* gdk_selection_owner_get (GdkAtom	  selection);
+
 void	   gdk_selection_convert   (GdkWindow	 *requestor,
 				    GdkAtom	  selection,
 				    GdkAtom	  target,
@@ -65,11 +74,6 @@ void       gdk_selection_send_notify_for_display (GdkDisplay *display,
 						  GdkAtom     target,
 						  GdkAtom     property,
 						  guint32     time);
-void	   gdk_selection_send_notify (guint32	    requestor,
-				      GdkAtom	    selection,
-				      GdkAtom	    target,
-				      GdkAtom	    property,
-				      guint32	    time);
 
 #ifdef __cplusplus
 }

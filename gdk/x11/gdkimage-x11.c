@@ -408,7 +408,7 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
       g_assert (visual);
 
       have_grab = TRUE;
-      gdk_x11_grab_server (gdk_screen_get_display (impl->screen));
+      gdk_x11_display_grab (gdk_screen_get_display (impl->screen));
 
       /* Translate screen area into window coordinates */
       XTranslateCoordinates (GDK_SCREEN_XDISPLAY (impl->screen),
@@ -440,7 +440,7 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
                                     &window_rect))
         {
           if (have_grab)
-            gdk_x11_ungrab_server (gdk_screen_get_display (impl->screen));
+            gdk_x11_display_ungrab (gdk_screen_get_display (impl->screen));
           return image = gdk_image_new (GDK_IMAGE_FASTEST,
                                         visual,
                                         width, height);
@@ -468,7 +468,7 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
   if (!gdk_rectangle_intersect (&req, &window_rect, &req) && visual) 
     {      
       if (have_grab)
-	gdk_x11_ungrab_server (gdk_screen_get_display (impl->screen));
+	gdk_x11_display_ungrab (gdk_screen_get_display (impl->screen));
       return image = gdk_image_new (GDK_IMAGE_FASTEST,
                                     visual,
                                     width, height);
@@ -485,7 +485,7 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
       if (image == NULL)
         {
           if (have_grab)
-            gdk_x11_ungrab_server (gdk_screen_get_display (impl->screen));
+            gdk_x11_display_ungrab (gdk_screen_get_display (impl->screen));
           return NULL;
         }
 
@@ -502,7 +502,7 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
 
       if (have_grab)
         {
-          gdk_x11_ungrab_server (gdk_screen_get_display (impl->screen));
+          gdk_x11_display_ungrab (gdk_screen_get_display (impl->screen));
           have_grab = FALSE;
         }
       
@@ -527,7 +527,7 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
 
       if (have_grab)
         {
-          gdk_x11_ungrab_server (gdk_screen_get_display (impl->screen));
+          gdk_x11_display_ungrab (gdk_screen_get_display (impl->screen));
           have_grab = FALSE;
         }      
 

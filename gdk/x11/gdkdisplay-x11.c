@@ -126,14 +126,18 @@ _gdk_x11_display_impl_display_new (gchar * display_name)
 static gchar *
 gdk_x11_display_impl_get_display_name (GdkDisplay * display)
 {
-  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
+  GdkDisplayImplX11 *display_impl;
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);
   return (gchar *) DisplayString (display_impl->xdisplay);
 }
 
 static gint
 gdk_x11_display_impl_get_n_screens (GdkDisplay * display)
 {
-  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
+  GdkDisplayImplX11 *display_impl;  
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);
   return (gint) ScreenCount (display_impl->xdisplay);
 }
 
@@ -144,8 +148,11 @@ gdk_x11_display_impl_get_screen (GdkDisplay * display,
 {
   Screen *desired_screen;
   GSList *tmp_list;
+  GdkDisplayImplX11 *display_impl;
+  
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);
   g_return_val_if_fail (ScreenCount (display_impl->xdisplay) > screen_num, NULL);
 
   tmp_list = display_impl->screen_list;
@@ -173,7 +180,9 @@ gdk_x11_display_impl_get_screen (GdkDisplay * display,
 static GdkScreen *
 gdk_x11_display_impl_get_default_screen (GdkDisplay * display)
 {
-  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
+  GdkDisplayImplX11 *display_impl;
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);
   return display_impl->default_screen;
 }
 
@@ -181,8 +190,10 @@ gboolean
 gdk_x11_display_is_root_window (GdkDisplay *display, 
 				Window      xroot_window)
 {
+  GdkDisplayImplX11 *display_impl;
   GSList *tmp_list;
-  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);
   tmp_list = display_impl->screen_list;
   
   while (tmp_list)
@@ -201,18 +212,21 @@ gdk_x11_display_is_root_window (GdkDisplay *display,
 void
 gdk_display_set_use_xshm (GdkDisplay * display, gboolean use_xshm)
 {
+  g_return_if_fail (GDK_IS_DISPLAY (display));
   GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm = use_xshm;
 }
 
 gboolean
 gdk_display_get_use_xshm (GdkDisplay * display)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
   return GDK_DISPLAY_IMPL_X11 (display)->gdk_use_xshm;
 }
 
 void
 gdk_display_pointer_ungrab (GdkDisplay * display, guint32 time)
 {
+  g_return_if_fail (GDK_IS_DISPLAY (display));
   _gdk_input_ungrab_pointer (time);
 
   XUngrabPointer (GDK_DISPLAY_XDISPLAY (display), time);
@@ -222,30 +236,61 @@ gdk_display_pointer_ungrab (GdkDisplay * display, guint32 time)
 gboolean
 gdk_display_pointer_is_grabbed (GdkDisplay * display)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
   return (GDK_DISPLAY_IMPL_X11 (display)->gdk_xgrab_window != NULL);
 }
 
 void
 gdk_display_keyboard_ungrab (GdkDisplay * display, guint32 time)
 {
+  g_return_if_fail (GDK_IS_DISPLAY (display));
   XUngrabKeyboard (GDK_DISPLAY_XDISPLAY (display), time);
 }
 
 void
 gdk_display_beep (GdkDisplay * display)
 {
+  g_return_if_fail (GDK_IS_DISPLAY (display));
   XBell (GDK_DISPLAY_XDISPLAY (display), 0);
 }
 
 void
 gdk_display_sync (GdkDisplay * display)
 {
+  g_return_if_fail (GDK_IS_DISPLAY (display));
   XSync (GDK_DISPLAY_XDISPLAY (display), False);
 }
 
 GdkAtom   
 gdk_display_get_selection_property (GdkDisplay *display)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), None);
   return gdk_x11_get_virtual_atom (display, 
 				   GDK_DISPLAY_IMPL_X11 (display)->gdk_selection_property);
+}
+
+void
+gdk_x11_display_grab (GdkDisplay *display)
+{ 
+  GdkDisplayImplX11 *display_impl;
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);
+  
+  if (display_impl->grab_count == 0)
+    XGrabServer (display_impl->xdisplay);
+  ++display_impl->grab_count;
+}
+
+void
+gdk_x11_display_ungrab (GdkDisplay *display)
+{
+  GdkDisplayImplX11 *display_impl;
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);;
+  
+  g_return_if_fail (display_impl->grab_count > 0);
+  
+  --display_impl->grab_count;
+  if (display_impl->grab_count == 0)
+    XUngrabServer (display_impl->xdisplay);
 }

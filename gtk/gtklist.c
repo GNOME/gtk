@@ -26,13 +26,12 @@
 
 #include <string.h> /* memset */
 
+#include <gdk/gdk.h>
 #include "gtklist.h"
 #include "gtklistitem.h"
 #include "gtkmain.h"
 #include "gtksignal.h"
 #include "gtklabel.h"
-#include <gdk/gdkscreen.h>
-#include <gdk/gdkdisplay.h>
 
 enum {
   SELECTION_CHANGED,

@@ -27,6 +27,7 @@
 #ifndef __GTK_INVISIBLE_H__
 #define __GTK_INVISIBLE_H__
 
+#include <gdk/gdk.h>
 #include <gtk/gtkwidget.h>
 
 #ifdef __cplusplus
@@ -61,7 +62,9 @@ GtkType gtk_invisible_get_type (void) G_GNUC_CONST;
 
 GtkWidget* gtk_invisible_new            (void);
 GtkWidget* gtk_invisible_new_for_screen (GdkScreen *screen);
-
+void	   gtk_invisible_set_screen	(GtkInvisible *invisible,
+					 GdkScreen    *screen);
+GdkScreen* gtk_invisible_get_screen	(GtkInvisible *invisible);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

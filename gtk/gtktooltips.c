@@ -28,6 +28,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "gdk/gdk.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkwidget.h"
@@ -35,7 +36,6 @@
 #include "gtksignal.h"
 #include "gtkstyle.h"
 #include "gtktooltips.h"
-#include "gdk/gdkscreen.h"
 
 
 #define DEFAULT_DELAY 500           /* Default delay in ms */

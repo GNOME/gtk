@@ -28,6 +28,7 @@
 #include "gtklabel.h"
 #include "gtksignal.h"
 #include "gtkwindow.h"
+#include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkclipboard.h"
 #include "gdk/gdki18n.h"
@@ -35,8 +36,6 @@
 #include "gtkintl.h"
 #include "gtkmenuitem.h"
 #include "gtknotebook.h"
-#include "gdk/gdkscreen.h"
-#include "gdk/gdkdisplay.h"
 
 struct _GtkLabelSelectionInfo
 {

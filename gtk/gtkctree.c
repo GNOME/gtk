@@ -34,8 +34,7 @@
 #include "gtkmain.h"
 #include "gtkdnd.h"
 #include <gdk/gdkkeysyms.h>
-#include <gdk/gdkscreen.h>
-#include <gdk/gdkdisplay.h>
+#include <gdk/gdk.h>
 
 #define PM_SIZE                    8
 #define TAB_SIZE                   (PM_SIZE + 6)

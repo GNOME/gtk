@@ -3541,15 +3541,11 @@ gdk_rgb_colormap_ditherable (GdkColormap *cmap)
   return (image_info->conv != image_info->conv_d);
 }
 
-gboolean 
-gdk_rgb_ditherable_for_screen  (GdkScreen *screen)
-{
-  return gdk_rgb_colormap_ditherable (gdk_rgb_get_colormap_for_screen (screen));
-}
-
 gboolean
 gdk_rgb_ditherable (void)
 {
+  GDK_NOTE (MULTIHEAD, "Multihead Warning gdk_rgb_ditherable(): "
+	    "use gdk_rgb_colormap_ditherable\n");
   return gdk_rgb_colormap_ditherable (gdk_rgb_get_colormap ());
 }
 
@@ -3582,12 +3578,14 @@ gdk_rgb_get_colormap (void)
 GdkColormap *
 gdk_rgb_get_colormap_for_screen (GdkScreen *screen)
 {
-  static GdkColormap *cmap = NULL;
-  
+  GdkColormap *cmap;
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  cmap = g_object_get_data (G_OBJECT (screen), "rgb-colormap"); 
   if (!cmap)
     {
       GdkRgbInfo *image_info = gdk_rgb_create_info (gdk_rgb_choose_visual (screen), NULL);
       cmap = image_info->cmap;
+      g_object_set_data (G_OBJECT (screen), "rgb-colormap", cmap);
     }
 
   return cmap;

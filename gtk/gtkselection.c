@@ -68,8 +68,6 @@
 #include "gtkmain.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
-#include "gdkdisplay.h"
-#include "gdkscreen.h"
 
 /* #define DEBUG_SELECTION */
 

@@ -13,6 +13,7 @@ main (int argc, char *argv[])
   GtkWidget *window;
   GtkWidget *button;
   GdkDisplay *dpy2;
+  GdkScreen *scr2;
 
   gtk_init (&argc, &argv);
   
@@ -22,14 +23,24 @@ main (int argc, char *argv[])
     printf ("impossible to open display aborting\n");
     exit(0);
   }
+  scr2 = gdk_display_get_default_screen (dpy2);
 
-  window = gtk_color_selection_dialog_new("Toto");
-  gtk_window_set_screen (GTK_WINDOW (window),  gdk_display_get_default_screen (dpy2));
-	
+  g_print ("scr2 = %x\n",scr2);
+
+  window = gtk_widget_new (gtk_invisible_get_type (),
+			   "GtkInvisible::screen", scr2,
+			   NULL);
+  if (scr2 != gtk_invisible_get_screen (GTK_INVISIBLE (window)))
+    g_print ("Set property didn't work\n");
+  else
+    g_print ("Set property worked\n");
+     
+  
+      
 	  
-  gtk_widget_show (window);
+/*  gtk_widget_show (window);
 
-  gtk_main ();
+  gtk_main ();*/
 
   return 0;
 }

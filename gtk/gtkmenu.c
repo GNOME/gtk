@@ -26,6 +26,7 @@
 
 #include <ctype.h>
 #include <string.h> /* memset */
+#include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtklabel.h"
@@ -37,7 +38,6 @@
 #include "gtkhbox.h"
 #include "gtkvscrollbar.h"
 #include "gtksettings.h"
-#include "gdk/gdkscreen.h"
 #include "gtkintl.h"
 
 

@@ -26,6 +26,7 @@
 
 #include <string.h>
 
+#include "gdk/gdk.h"
 #include "gtkarrow.h"
 #include "gtklabel.h"
 #include "gtklist.h"
@@ -41,7 +42,6 @@
 #include "gtkcombo.h"
 #include "gtkframe.h"
 #include "gtkintl.h"
-#include "gdk/gdkscreen.h"
 
 const gchar *gtk_combo_string_key = "gtk-combo-string-value";
 

@@ -141,7 +141,6 @@ gboolean gdk_rgb_ditherable  (void);
 GdkVisual *  gdk_rgb_get_visual   (void);
 #endif
 
-gboolean gdk_rgb_ditherable_for_screen  (GdkScreen *screen);
 GdkColormap *gdk_rgb_get_colormap_for_screen (GdkScreen *screen);
 GdkVisual *  gdk_rgb_get_visual_for_screen   (GdkScreen *screen);
 

@@ -181,8 +181,10 @@ gboolean gdk_net_wm_supports            (GdkAtom    property);
 gboolean gdk_net_wm_supports_for_screen (GdkScreen *screen,
 					 GdkAtom    property);
 
-void          gdk_x11_grab_server      (GdkDisplay *display);
-void          gdk_x11_ungrab_server    (GdkDisplay *display);
+#ifndef GDK_MULTIHEAD_SAFE
+void          gdk_x11_grab_server      ();
+void          gdk_x11_ungrab_server    ();
+#endif
 
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))

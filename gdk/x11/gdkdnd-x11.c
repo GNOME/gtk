@@ -1161,7 +1161,7 @@ motif_add_to_target_table (GdkDisplay *display,
        */
       motif_find_drag_window (display, TRUE);
 
-      gdk_x11_grab_server (display);
+      gdk_x11_display_grab (display);
       motif_read_target_table (display);
     
       /* Check again, in case it was added in the meantime */
@@ -1237,7 +1237,7 @@ motif_add_to_target_table (GdkDisplay *display,
 			   8, PropModeReplace,
 			   data, total_size);
 	}
-      gdk_x11_ungrab_server (display);
+      gdk_x11_display_ungrab (display);
     }
 
   g_list_free (sorted);

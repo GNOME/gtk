@@ -24,13 +24,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "gdk/gdk.h"
 #include "gtkintl.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtkoptionmenu.h"
 #include "gtksignal.h"
 #include "gdk/gdkkeysyms.h"
-#include "gdk/gdkscreen.h"
 
 
 #define CHILD_LEFT_SPACING        5

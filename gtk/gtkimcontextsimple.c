@@ -19,11 +19,11 @@
 
 #include <stdlib.h>
 
+#include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
 #include "gtkaccelgroup.h"
 #include "gtksignal.h"
 #include "gtkimcontextsimple.h"
-#include <gdk/gdkdisplay.h>
 
 typedef struct _GtkComposeTable GtkComposeTable;
 

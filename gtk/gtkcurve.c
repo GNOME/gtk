@@ -28,6 +28,7 @@
 #include <string.h>
 #include <math.h>
 
+#include <gdk/gdk.h>
 #include "gtkcurve.h"
 #include "gtkdrawingarea.h"
 #include "gtkmain.h"
@@ -35,7 +36,6 @@
 #include "gtksignal.h"
 #include "gtktable.h"
 #include "gtkintl.h"
-#include <gdk/gdkscreen.h>
 
 #define RADIUS		3	/* radius of the control points */
 #define MIN_DISTANCE	8	/* min distance between control points */

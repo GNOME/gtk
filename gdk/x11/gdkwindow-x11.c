@@ -3503,10 +3503,10 @@ gdk_window_xid_at_coords_for_screen (gint       x,
   root = GDK_WINDOW_XID (window);
   num = g_list_length (excludes);
   
-  gdk_x11_grab_server (gdk_screen_get_display (screen));
+  gdk_x11_display_grab (gdk_screen_get_display (screen));
   if (!XQueryTree (xdisplay, root, &root_win, &parent_win, &list, &num))
     {
-      gdk_x11_ungrab_server (gdk_screen_get_display (screen));
+      gdk_x11_display_ungrab (gdk_screen_get_display (screen));
       return root;
     }
   if (list)
@@ -3532,20 +3532,20 @@ gdk_window_xid_at_coords_for_screen (gint       x,
 	      if (!g_list_find (excludes, (gpointer *) child))
 		{
 		  XFree (list);
-		  gdk_x11_ungrab_server (gdk_screen_get_display (screen));
+		  gdk_x11_display_ungrab (gdk_screen_get_display (screen));
 		  return child;
 		}
 	    }
 	  else
 	    {
 	      XFree (list);
-	      gdk_x11_ungrab_server (gdk_screen_get_display (screen));
+	      gdk_x11_display_ungrab (gdk_screen_get_display (screen));
 	      return child;
 	    }
 	} while (--i > 0);
       XFree (list);
     }
-  gdk_x11_ungrab_server (gdk_screen_get_display (screen));
+  gdk_x11_display_ungrab (gdk_screen_get_display (screen));
   return root;
 }
 

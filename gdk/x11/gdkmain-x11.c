@@ -826,9 +826,9 @@ _gdk_region_get_xrectangles (GdkRegion   *region,
 }
 
 void
-gdk_x11_grab_server (GdkDisplay *display)
+gdk_x11_grab_server ()
 { 
-  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
+  GdkDisplayImplX11 *display_impl = gdk_get_default_display;
   
   if (display_impl->grab_count == 0)
     XGrabServer (display_impl->xdisplay);
@@ -836,9 +836,9 @@ gdk_x11_grab_server (GdkDisplay *display)
 }
 
 void
-gdk_x11_ungrab_server (GdkDisplay *display)
+gdk_x11_ungrab_server ()
 {
-  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (display);
+  GdkDisplayImplX11 *display_impl = gdk_get_default_display;
   
   g_return_if_fail (display_impl->grab_count > 0);
   

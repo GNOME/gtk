@@ -33,8 +33,7 @@
 #include "gtkbindings.h"
 #include "gtkdnd.h"
 #include <gdk/gdkkeysyms.h>
-#include <gdk/gdkscreen.h>
-#include <gdk/gdkdisplay.h>
+#include <gdk/gdk.h>
 
 /* length of button_actions array */
 #define MAX_BUTTON 5

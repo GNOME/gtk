@@ -110,12 +110,12 @@ struct _GdkDisplayImplX11Class
   GdkDisplayClass parent_class;
 };
 
-GType       gdk_x11_display_impl_get_type           (void);
-
-GdkDisplay *_gdk_x11_display_impl_display_new        (gchar                  *display_name);
-
-gboolean    gdk_x11_display_is_root_window (GdkDisplay             *display,
-					    Window                  xroot_window);
+GType       gdk_x11_display_impl_get_type     (void);
+GdkDisplay *_gdk_x11_display_impl_display_new (gchar *display_name);
+gboolean    gdk_x11_display_is_root_window    (GdkDisplay *display,
+					       Window xroot_window);
+void	    gdk_x11_display_grab	      (GdkDisplay *display);
+void	    gdk_x11_display_ungrab	      (GdkDisplay *display);
 
 #define DEFAULT_X_DISPLAY   GDK_DISPLAY_IMPL_X11(gdk_get_default_display())->xdisplay
 #define GDK_DISPLAY_XDISPLAY(display)  (GDK_DISPLAY_IMPL_X11(display)->xdisplay)
