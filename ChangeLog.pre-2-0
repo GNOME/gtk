@@ -1,3 +1,12 @@
+Tue Jun  1 23:30:09 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_style_attach): Get the reference
+	counting right when we have to attach a new style
+	for a different visual. (Chi-Deok Hwang <cdhwang@sr.hei.co.kr>)
+
+	* gtk/gtkstyle.c: Documented the refcounting
+	peculularities of gtk_style_attach.
+
 1999-06-01    <timj@dhcpd7.redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_new): added return if fail for invalid
