@@ -13,7 +13,7 @@ DOC_SOURCE_DIR=../../../gdk-pixbuf
 SCAN_OPTIONS=--source-dir=../../../contrib/gdk-pixbuf-xlib
 
 # Extra options to supply to gtkdoc-mkdb
-MKDB_OPTIONS=--source-dir=../../../contrib/gdk-pixbuf-xlib
+MKDB_OPTIONS=--sgml-mode --source-dir=../../../contrib/gdk-pixbuf-xlib
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=

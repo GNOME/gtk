@@ -1,8 +1,8 @@
 <!-- ##### SECTION Title ##### -->
-file-saving
+File saving
 
 <!-- ##### SECTION Short_Description ##### -->
-
+Saving a pixbuf to a file.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -13,7 +13,7 @@ DOC_SOURCE_DIR=../../../gdk
 SCAN_OPTIONS=--deprecated-guards="GDK_ENABLE_BROKEN|GDK_DISABLE_DEPRECATED"
 
 # Extra options to supply to gtkdoc-mkdb
-MKDB_OPTIONS=
+MKDB_OPTIONS=--sgml-mode
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html
