@@ -4845,6 +4845,8 @@ gtk_window_move_resize (GtkWindow *window)
           
 	  gtk_widget_queue_resize (widget); /* migth recurse for GTK_RESIZE_IMMEDIATE */
 	}
+
+      return;			/* Bail out, we didn't really process the move/resize */
     }
   else if ((configure_request_size_changed || hints_changed) &&
 	   (widget->allocation.width != new_request.width ||
@@ -4899,16 +4901,6 @@ gtk_window_move_resize (GtkWindow *window)
       /* Increment the number of have-not-yet-received-notify requests */
       window->configure_request_count += 1;
 
-      /* We have now sent a request since the last position constraint
-       * change and definitely don't need a an initial size again (not
-       * resetting this here can lead to infinite loops for
-       * GTK_RESIZE_IMMEDIATE containers)
-       */
-      info->position_constraints_changed = FALSE;
-      info->initial_pos_set = FALSE;
-      info->resize_width = -1;
-      info->resize_height = -1;
-
       /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
        * configure event in response to our resizing request.
        * the configure event will cause a new resize with
@@ -4945,14 +4937,22 @@ gtk_window_move_resize (GtkWindow *window)
 	  else
 	    gdk_window_move (widget->window,
 			     new_request.x, new_request.y);
-
-	  info->initial_pos_set = FALSE;
 	}
-      
+
       /* And run the resize queue.
        */
       gtk_container_resize_children (container);
     }
+  
+  /* We have now processed a move/resize since the last position
+   * constraint change, setting of the initial position, or resize.
+   * (Not resetting these flags here can lead to infinite loops for
+   * GTK_RESIZE_IMMEDIATE containers)
+   */
+  info->position_constraints_changed = FALSE;
+  info->initial_pos_set = FALSE;
+  info->resize_width = -1;
+  info->resize_height = -1;
 }
 
 /* Compare two sets of Geometry hints for equality.

@@ -1,3 +1,10 @@
+Mon Oct  7 12:40:39 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Clean
+	up the handling of clearing transient state 
+	settings, fixing bug #95026, reported by Jami
+	Pekannen.
+
 Mon Oct  7 11:45:17 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkkeys-x11.c (update_keymaps): If Mode_switch
