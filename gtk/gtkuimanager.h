@@ -90,9 +90,10 @@ GList         *gtk_ui_manager_get_action_groups   (GtkUIManager   *self);
 GtkAccelGroup *gtk_ui_manager_get_accel_group     (GtkUIManager   *self);
 
 
-
 GtkWidget     *gtk_ui_manager_get_widget          (GtkUIManager   *self,
 		 				   const gchar    *path);
+GtkAction     *gtk_ui_manager_get_action          (GtkUIManager   *self,
+					           const gchar    *path);
 
 /* these two functions are for adding UI elements to the merged user
  * interface */
@@ -107,8 +108,5 @@ void           gtk_ui_manager_remove_ui           (GtkUIManager   *self,
 						   guint           merge_id);
 
 gchar         *gtk_ui_manager_get_ui              (GtkUIManager   *self);
-
-void           gtk_ui_manager_activate            (GtkUIManager   *self,
-					           const gchar    *path);
 
 #endif /* __GTK_UI_MANAGER_H__ */

@@ -47,7 +47,8 @@ IGNORE_HFILES=			\
 	gtktextutil.h		\
 	gtktypebuiltins.h	\
 	gtkxembed.h		\
-	xembed.h
+	xembed.h		\
+	gtktoggleactionprivate.h
 
 # CFLAGS and LDFLAGS for compiling scan program. Only needed
 # if $(DOC_MODULE).types is non-empty.

@@ -1730,11 +1730,11 @@ gtk_ui_manager_remove_action_group
 gtk_ui_manager_get_action_groups
 gtk_ui_manager_get_accel_group
 gtk_ui_manager_get_widget
+gtk_ui_manager_get_action
 gtk_ui_manager_add_ui_from_string
 gtk_ui_manager_add_ui_from_file
 gtk_ui_manager_remove_ui
 gtk_ui_manager_get_ui
-gtk_ui_manager_activate
 <SUBSECTION Standard>
 GTK_TYPE_UI_MANAGER
 GTK_UI_MANAGER

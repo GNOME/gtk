@@ -371,7 +371,12 @@ static void
 activate_path (GtkWidget      *button,
 	       GtkUIManager   *merge)
 {
-  gtk_ui_manager_activate (merge, "/menubar/HelpMenu/About");
+  GtkAction *action = gtk_ui_manager_get_action (merge, 
+						 "/menubar/HelpMenu/About");
+  if (action)
+    gtk_action_activate (action);
+  else 
+    g_message ("no action found");
 }
 
 int

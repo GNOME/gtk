@@ -63,7 +63,7 @@ siblings in the partially constructed tree. If it is "top", the widget is prepen
 otherwise it is appended.
 </para>
 </refsect2>
- 
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
@@ -148,6 +148,16 @@ otherwise it is appended.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_ui_manager_get_action ##### -->
+<para>
+
+</para>
+
+@self: 
+@path: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_ui_manager_add_ui_from_string ##### -->
 <para>
 
@@ -187,15 +197,6 @@ otherwise it is appended.
 
 @self: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_ui_manager_activate ##### -->
-<para>
-
-</para>
-
-@self: 
-@path: 
 
 
 <!-- ##### SIGNAL GtkUIManager::add-widget ##### -->

@@ -388,7 +388,7 @@ gtk_ui_manager_set_add_tearoffs (GtkUIManager *self,
  * gtk_ui_manager_insert_action_group:
  * @self: a #GtkUIManager object
  * @action_group: the action group to be inserted
- * @pos: the position at which the group will be inserted
+ * @pos: the position at which the group will be inserted.
  * 
  * Inserts an action group into the list of action groups associated 
  * with @self.
@@ -511,6 +511,42 @@ gtk_ui_manager_get_widget (GtkUIManager *self,
     return NULL;
 
   return NODE_INFO (node)->proxy;
+}
+
+/**
+ * gtk_ui_manager_get_action:
+ * @self: a #GtkUIManager
+ * @path: a path
+ * 
+ * Looks up an action by following a path. The path consists of the names 
+ * specified in the XML description of the UI. separated by '/'. Elements 
+ * which don't have a name attribute in the XML (e.g. &lt;popup&gt;) can be
+ * addressed by their XML element name (e.g. "popup"). The root element 
+ * (&lt;ui&gt;) can be omitted in the path.
+ * 
+ * Return value: the action whose proxy widget is found by following the path, 
+ *     or %NULL if no widget was found.
+ *
+ * Since: 2.4
+ **/
+GtkAction *           
+gtk_ui_manager_get_action (GtkUIManager   *self,
+			   const gchar    *path)
+{
+  GNode *node;
+
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (self), NULL);
+  
+  /* ensure that there are no pending updates before we get
+   * the action */
+  gtk_ui_manager_ensure_update (self);
+  
+  node = gtk_ui_manager_get_node (self, path, GTK_UI_MANAGER_UNDECIDED, FALSE);
+
+  if (node == NULL)
+    return NULL;
+
+  return NODE_INFO (node)->action;
 }
 
 static GNode *
@@ -1845,31 +1881,3 @@ gtk_ui_manager_get_ui (GtkUIManager   *self)
   return g_string_free (buffer, FALSE);
 }
 
-/**
- * gtk_ui_manager_activate:
- * @self: a #GtkUIManager
- * @path: a path
- * 
- * Activates the action whose proxy is found by following the given path. 
- * 
- * Since: 2.4
- **/
-void           
-gtk_ui_manager_activate (GtkUIManager   *self,
-			 const gchar    *path)
-{
-  GNode *node;
-
-  g_return_if_fail (GTK_IS_UI_MANAGER (self));
-  
-  /* ensure that there are no pending updates before we activate
-   * the action */
-  gtk_ui_manager_ensure_update (self);
-  
-  node = gtk_ui_manager_get_node (self, path, GTK_UI_MANAGER_UNDECIDED, FALSE);
-
-  if (node == NULL || NODE_INFO (node)->action == NULL)
-    return;
-
-  gtk_action_activate (NODE_INFO (node)->action);
-}
