@@ -75,7 +75,7 @@ button_window (GtkWidget *widget,
 }
 
 static void
-create_buttons ()
+create_buttons (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -212,7 +212,7 @@ create_buttons ()
 }
 
 static void
-create_toggle_buttons ()
+create_toggle_buttons (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -284,7 +284,7 @@ create_toggle_buttons ()
 }
 
 static void
-create_check_buttons ()
+create_check_buttons (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -356,7 +356,7 @@ create_check_buttons ()
 }
 
 static void
-create_radio_buttons ()
+create_radio_buttons (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -506,7 +506,7 @@ create_bbox_window (gint  horizontal,
 }
 
 static void
-test_hbbox ()
+test_hbbox (void)
 {
   create_bbox_window (TRUE, "Spread", 50, 40, 85, 28, GTK_BUTTONBOX_SPREAD);
   create_bbox_window (TRUE, "Edge", 200, 40, 85, 25, GTK_BUTTONBOX_EDGE);
@@ -515,7 +515,7 @@ test_hbbox ()
 }
 
 static void
-test_vbbox ()
+test_vbbox (void)
 {
   create_bbox_window (FALSE, "Spread", 50, 40, 85, 25, GTK_BUTTONBOX_SPREAD);
   create_bbox_window (FALSE, "Edge", 250, 40, 85, 28, GTK_BUTTONBOX_EDGE);
@@ -524,7 +524,7 @@ test_vbbox ()
 } 
 
 static void
-create_button_box ()
+create_button_box (void)
 {
   static GtkWidget* window = NULL;
   GtkWidget* bbox;
@@ -878,7 +878,7 @@ statusbar_dump_stack (GtkWidget *button,
 }
 
 static void
-create_statusbar ()
+create_statusbar (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -1489,7 +1489,7 @@ create_tree_mode_window(void)
 /* end of function used by tree demos */
 
 static void
-create_handle_box ()
+create_handle_box (void)
 {
   static GtkWidget* window = NULL;
   GtkWidget *handle_box;
@@ -1616,7 +1616,7 @@ set_parent_signal (GtkWidget *child,
 }
 
 static void
-create_reparent ()
+create_reparent (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -1723,7 +1723,7 @@ create_reparent ()
 }
 
 static void
-create_pixmap ()
+create_pixmap (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -1838,7 +1838,7 @@ tips_query_widget_selected (GtkWidget      *tips_query,
 }
 
 static void
-create_tooltips ()
+create_tooltips (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -2009,7 +2009,7 @@ create_menu (int depth)
 }
 
 static void
-create_menus ()
+create_menus (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -2133,7 +2133,7 @@ scrolled_windows_remove (GtkWidget *widget, GtkWidget *scrollwin)
  * GtkScrolledWindow
  */
 static void
-create_scrolled_windows ()
+create_scrolled_windows (void)
 {
   static GtkWidget *window;
   GtkWidget *scrolled_window;
@@ -2225,7 +2225,7 @@ entry_toggle_editable (GtkWidget *checkbutton,
 }
 
 static void
-create_entry ()
+create_entry (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -2364,7 +2364,7 @@ get_value (GtkWidget *widget, gint data)
 }
 
 static void
-create_spins ()
+create_spins (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *frame;
@@ -2627,7 +2627,7 @@ cursor_event (GtkWidget          *widget,
 }
 
 static void
-create_cursors ()
+create_cursors (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *frame;
@@ -2779,7 +2779,7 @@ list_clear (GtkWidget *widget,
 }
 
 static void
-create_list ()
+create_list (void)
 {
   static GtkWidget *window = NULL;
   static char *list_items[] =
@@ -3166,7 +3166,7 @@ clist_warning_test (GtkWidget *button,
 }
 
 static void
-create_clist ()
+create_clist (void)
 {
   gint i;
   static GtkWidget *window = NULL;
@@ -3840,7 +3840,7 @@ void rebuild_tree (GtkWidget *widget, GtkCTree *ctree)
   after_press (ctree, NULL);
 }
 
-void create_ctree ()
+void create_ctree (void)
 {
   static GtkWidget *window = NULL;
   GtkTooltips *tooltips;
@@ -4229,7 +4229,7 @@ color_selection_changed (GtkWidget *w,
 }
 
 void
-create_color_selection ()
+create_color_selection (void)
 {
   static GtkWidget *window = NULL;
 
@@ -4299,7 +4299,7 @@ file_selection_ok (GtkWidget        *w,
 }
 
 void
-create_file_selection ()
+create_file_selection (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *button;
@@ -4376,7 +4376,7 @@ label_toggle (GtkWidget  *widget,
 }
 
 void
-create_dialog ()
+create_dialog (void)
 {
   static GtkWidget *label;
   GtkWidget *button;
@@ -4422,7 +4422,7 @@ create_dialog ()
  * GtkRange
  */
 void
-create_range_controls ()
+create_range_controls (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -4505,7 +4505,7 @@ create_range_controls ()
  * GtkRulers
  */
 void
-create_rulers ()
+create_rulers (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *table;
@@ -4586,7 +4586,7 @@ text_toggle_word_wrap (GtkWidget *checkbutton,
  * GtkText
  */
 void
-create_text ()
+create_text (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -4923,7 +4923,7 @@ notebook_popup (GtkToggleButton *button,
 }
 
 static void
-create_notebook ()
+create_notebook (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -5061,7 +5061,7 @@ create_notebook ()
  * GtkPanes
  */
 void
-create_panes ()
+create_panes (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *frame;
@@ -5197,7 +5197,7 @@ dnd_drag_request (GtkWidget *button, GdkEvent *event)
 }
 
 void
-create_dnd ()
+create_dnd (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *box1;
@@ -5468,7 +5468,7 @@ shape_create_icon (char     *xpm_file,
 }
 
 void 
-create_shapes ()
+create_shapes (void)
 {
   /* Variables used by the Drag/Drop and Shape Window demos */
   static GtkWidget *modeller = NULL;
@@ -5516,7 +5516,7 @@ create_shapes ()
 }
 
 void
-create_wmhints ()
+create_wmhints (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *label;
@@ -5621,7 +5621,7 @@ destroy_progress (GtkWidget  *widget,
 }
 
 void
-create_progress_bar ()
+create_progress_bar (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *button;
@@ -5725,7 +5725,7 @@ color_preview_destroy (GtkWidget  *widget,
 }
 
 void
-create_color_preview ()
+create_color_preview (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *preview;
@@ -5815,7 +5815,7 @@ gray_preview_destroy (GtkWidget  *widget,
 }
 
 void
-create_gray_preview ()
+create_gray_preview (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *preview;
@@ -5928,7 +5928,7 @@ selection_test_get_targets (GtkWidget *widget, GtkWidget *list)
 }
 
 void
-create_selection_test ()
+create_selection_test (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *button;
@@ -6005,7 +6005,7 @@ create_selection_test ()
  * Gamma Curve
  */
 void
-create_gamma_curve ()
+create_gamma_curve (void)
 {
   static GtkWidget *window = NULL, *curve;
   static int count = 0;
@@ -6166,7 +6166,7 @@ scroll_test_adjustment_changed (GtkAdjustment *adj, GtkWidget *widget)
 
 
 void
-create_scroll_test ()
+create_scroll_test (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *hbox;
@@ -6281,7 +6281,7 @@ destroy_timeout_test (GtkWidget  *widget,
 }
 
 void
-create_timeout_test ()
+create_timeout_test (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *button;
@@ -6388,7 +6388,7 @@ destroy_idle_test (GtkWidget  *widget,
 }
 
 void
-create_idle_test ()
+create_idle_test (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *button;
@@ -6451,25 +6451,25 @@ reload_rc_file (void)
 {
   GList *toplevels;
 
-  gtk_rc_reparse_all ();
-
-  toplevels = gdk_window_get_toplevels();
-  while (toplevels)
+  if (gtk_rc_reparse_all ())
     {
-      GtkWidget *widget;
-      gdk_window_get_user_data (toplevels->data, (gpointer *)&widget);
-      
-      if (widget)
-	gtk_widget_reset_rc_styles (widget);
-
-      toplevels = toplevels->next;
+      toplevels = gdk_window_get_toplevels();
+      while (toplevels)
+	{
+	  GtkWidget *widget;
+	  gdk_window_get_user_data (toplevels->data, (gpointer *)&widget);
+	  
+	  if (widget)
+	    gtk_widget_reset_rc_styles (widget);
+	  
+	  toplevels = toplevels->next;
+	}
+      g_list_free (toplevels);
     }
-
-  g_list_free (toplevels);
 }
 
 void
-create_rc_file ()
+create_rc_file (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *button;
@@ -6523,7 +6523,7 @@ mainloop_destroyed (GtkWidget *w, GtkWidget **window)
 }
 
 void
-create_mainloop ()
+create_mainloop (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *label;
@@ -6584,7 +6584,7 @@ do_exit (GtkWidget *widget, GtkWidget *window)
 }
 
 void
-create_main_window ()
+create_main_window (void)
 {
   struct {
     char *label;

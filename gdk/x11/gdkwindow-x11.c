@@ -20,7 +20,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
-#include <X11/extensions/shape.h>
 #include <netinet/in.h>
 #include "gdk.h"
 #include "../config.h"
@@ -29,6 +28,10 @@
 #include "MwmUtil.h"
 #include <stdlib.h>
 #include <stdio.h>
+
+#ifdef HAVE_SHAPE_EXT
+#include <X11/extensions/shape.h>
+#endif
 
 int nevent_masks = 17;
 int event_mask_table[19] =
@@ -172,7 +175,7 @@ gdk_window_xid_at_coords(gint x, gint y, GList *excludes, gboolean excl_child)
 }
 
 void
-gdk_window_init ()
+gdk_window_init (void)
 {
   XWindowAttributes xattributes;
   unsigned int width;
@@ -192,6 +195,7 @@ gdk_window_init ()
   gdk_root_parent.width = width;
   gdk_root_parent.height = height;
   gdk_root_parent.children = NULL;
+  gdk_root_parent.colormap = NULL;
 }
 
 GdkWindow*
@@ -472,6 +476,7 @@ gdk_window_foreign_new (guint32 anid)
   private->destroyed = FALSE;
   private->extension_events = 0;
 
+  private->colormap = NULL;
 
   private->dnd_drag_data_type = None;
   private->dnd_drag_data_typesavail =
@@ -1195,8 +1200,7 @@ gdk_window_get_visual (GdkWindow *window)
   
   if (window_private && !window_private->destroyed)
     {
-       if ((window_private->window_type == GDK_WINDOW_FOREIGN)||
-	   (window_private->xwindow==DefaultRootWindow(window_private->xdisplay)))
+       if (window_private->colormap == NULL)
 	 {
 	    XGetWindowAttributes (window_private->xdisplay,
 				  window_private->xwindow,
@@ -1222,8 +1226,7 @@ gdk_window_get_colormap (GdkWindow *window)
   g_return_val_if_fail (window_private->window_type != GDK_WINDOW_PIXMAP, NULL);
   if (!window_private->destroyed)
     {
-       if ((window_private->window_type == GDK_WINDOW_FOREIGN)||
-	   (window_private->xwindow==DefaultRootWindow(window_private->xdisplay)))
+       if (window_private->colormap == NULL)
 	{
 	  XGetWindowAttributes (window_private->xdisplay,
 				window_private->xwindow,
@@ -1479,8 +1482,7 @@ gdk_window_add_colormap_windows (GdkWindow *window)
 
 /*
  * This needs the X11 shape extension.
- * If not available, simply remove the call to
- * XShapeCombineMask. Shaped windows will look
+ * If not available, shaped windows will look
  * ugly, but programs still work.    Stefan Wille
  */
 void
@@ -1488,38 +1490,53 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 			       GdkBitmap *mask,
 			       gint x, gint y)
 {
+  enum { UNKNOWN, NO, YES };
+
+  static gint have_shape = UNKNOWN;
+
   GdkWindowPrivate *window_private;
   Pixmap pixmap;
 
   g_return_if_fail (window != NULL);
 
-  /* This is needed, according to raster */
-  gdk_window_set_override_redirect(window, TRUE);
-
-  window_private = (GdkWindowPrivate*) window;
-  if (window_private->destroyed)
-    return;
-
-  if (mask)
+#ifdef HAVE_SHAPE_EXT
+  if (have_shape == UNKNOWN)
     {
-      GdkWindowPrivate *pixmap_private;
-
-      pixmap_private = (GdkWindowPrivate*) mask;
-      pixmap = (Pixmap) pixmap_private->xwindow;
+      int ignore;
+      if (XQueryExtension(gdk_display, "SHAPE", &ignore, &ignore, &ignore))
+	have_shape = YES;
+      else
+	have_shape = NO;
     }
-  else
+  
+  if (have_shape == YES)
     {
-      x = 0;
-      y = 0;
-      pixmap = None;
+      window_private = (GdkWindowPrivate*) window;
+      if (window_private->destroyed)
+	return;
+      
+      if (mask)
+	{
+	  GdkWindowPrivate *pixmap_private;
+	  
+	  pixmap_private = (GdkWindowPrivate*) mask;
+	  pixmap = (Pixmap) pixmap_private->xwindow;
+	}
+      else
+	{
+	  x = 0;
+	  y = 0;
+	  pixmap = None;
+	}
+      
+      XShapeCombineMask  (window_private->xdisplay,
+			  window_private->xwindow,
+			  ShapeBounding,
+			  x, y,
+			  pixmap,
+			  ShapeSet);
     }
-
-  XShapeCombineMask  (window_private->xdisplay,
-		      window_private->xwindow,
-		      ShapeBounding,
-		      x, y,
-		      pixmap,
-		      ShapeSet);
+#endif /* HAVE_SHAPE_EXT */
 }
 
 void

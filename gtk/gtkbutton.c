@@ -41,7 +41,7 @@ enum {
   ARG_0,
   ARG_LABEL
 };
-  
+
 
 
 static void gtk_button_class_init     (GtkButtonClass   *klass);
@@ -94,7 +94,7 @@ static guint button_signals[LAST_SIGNAL] = { 0 };
 
 
 guint
-gtk_button_get_type ()
+gtk_button_get_type (void)
 {
   static guint button_type = 0;
 
@@ -219,16 +219,16 @@ gtk_button_set_arg (GtkButton *button,
     {
     case ARG_LABEL:
       gtk_container_disable_resize (GTK_CONTAINER (button));
-      
+
       if (button->child)
 	{
 	  gtk_widget_unparent (button->child);
 	  button->child = NULL;
 	}
-      
+
       label = gtk_label_new (GTK_VALUE_STRING(*arg));
       gtk_widget_show (label);
-      
+
       gtk_container_add (GTK_CONTAINER (button), label);
       gtk_container_enable_resize (GTK_CONTAINER (button));
       break;
@@ -239,7 +239,7 @@ gtk_button_set_arg (GtkButton *button,
 }
 
 GtkWidget*
-gtk_button_new ()
+gtk_button_new (void)
 {
   return GTK_WIDGET (gtk_type_new (gtk_button_get_type ()));
 }
@@ -433,9 +433,9 @@ gtk_button_size_allocate (GtkWidget     *widget,
 				 DEFAULT_LEFT_POS);
 	  child_allocation.y += (GTK_WIDGET (widget)->style->klass->ythickness +
 				 DEFAULT_TOP_POS);
-	  child_allocation.width =  MAX (1, child_allocation.width - 
+	  child_allocation.width =  MAX (1, child_allocation.width -
 					(GTK_WIDGET (widget)->style->klass->xthickness * 2 + DEFAULT_SPACING));
-	  child_allocation.height = MAX (1, child_allocation.height - 
+	  child_allocation.height = MAX (1, child_allocation.height -
 					 (GTK_WIDGET (widget)->style->klass->xthickness * 2 + DEFAULT_SPACING));
 	}
 
@@ -443,24 +443,59 @@ gtk_button_size_allocate (GtkWidget     *widget,
     }
 }
 
+/*
+ * +------------------------------------------------+
+ * |                   BORDER                       |
+ * |  +------------------------------------------+  |
+ * |  |\\\\\\\\\\\\\\\\DEFAULT\\\\\\\\\\\\\\\\\  |  |
+ * |  |\\+------------------------------------+  |  |
+ * |  |\\| |           SPACING       3      | |  |  |
+ * |  |\\| +--------------------------------+ |  |  |
+ * |  |\\| |########## FOCUS ###############| |  |  |
+ * |  |\\| |#+----------------------------+#| |  |  |
+ * |  |\\| |#|         RELIEF            \|#| |  |  |
+ * |  |\\| |#|  +-----------------------+\|#| |  |  |
+ * |  |\\|1|#|  +     THE TEXT          +\|#|2|  |  |
+ * |  |\\| |#|  +-----------------------+\|#| |  |  |
+ * |  |\\| |#| \\\\\ ythickness \\\\\\\\\\|#| |  |  |
+ * |  |\\| |#+----------------------------+#| |  |  |
+ * |  |\\| |########### 1 ##################| |  |  |
+ * |  |\\| +--------------------------------+ |  |  |
+ * |  |\\| |        default spacing   4     | |  |  |
+ * |  |\\+------------------------------------+  |  |
+ * |  |\            ythickness                   |  |
+ * |  +------------------------------------------+  |
+ * |                border_width                    |
+ * +------------------------------------------------+
+ */
+
 static void
 gtk_button_paint (GtkWidget    *widget,
 		  GdkRectangle *area)
 {
   GdkRectangle restrict_area;
+  GdkRectangle outer_area;
+  GdkRectangle tmp_area;
   GdkRectangle new_area;
+  gint xthickness;
+  gint ythickness;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_BUTTON (widget));
 
+  xthickness = widget->style->klass->xthickness;
+  ythickness = widget->style->klass->ythickness;
+
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      restrict_area.x = GTK_WIDGET (widget)->style->klass->xthickness;
-      restrict_area.y = GTK_WIDGET (widget)->style->klass->ythickness;
-      restrict_area.width = GTK_WIDGET (widget)->allocation.width - 
+      restrict_area.x = xthickness;
+      restrict_area.y = ythickness;
+      restrict_area.width = GTK_WIDGET (widget)->allocation.width -
 	restrict_area.x * 2 - GTK_CONTAINER (widget)->border_width * 2;
-      restrict_area.height = GTK_WIDGET (widget)->allocation.height - 
+      restrict_area.height = GTK_WIDGET (widget)->allocation.height -
 	restrict_area.y * 2 - GTK_CONTAINER (widget)->border_width * 2;
+
+      outer_area = restrict_area;
 
       if (GTK_WIDGET_CAN_DEFAULT (widget))
 	{
@@ -476,6 +511,49 @@ gtk_button_paint (GtkWidget    *widget,
 	  gdk_window_clear_area (widget->window,
 				 new_area.x, new_area.y,
 				 new_area.width, new_area.height);
+	}
+
+      if (GTK_WIDGET_CAN_DEFAULT (widget))
+	{
+	  /* Now fill spacing area between the default border and the button */
+
+ /* 1 */  tmp_area = outer_area;
+       	  tmp_area.width = restrict_area.x - outer_area.x;
+       	  if (gdk_rectangle_intersect (area, &tmp_area, &new_area))
+       	    gdk_draw_rectangle (widget->window,
+       				widget->style->bg_gc[GTK_STATE_NORMAL],
+       				TRUE,
+       				new_area.x, new_area.y,
+       				new_area.width, new_area.height);
+
+  /* 2 */ tmp_area.x = restrict_area.x + restrict_area.width;
+
+	  if (gdk_rectangle_intersect (area, &tmp_area, &new_area))
+	    gdk_draw_rectangle (widget->window,
+	 			widget->style->bg_gc[GTK_STATE_NORMAL],
+	 			TRUE,
+	 			new_area.x, new_area.y,
+	 			new_area.width, new_area.height);
+
+  /* 3 */ tmp_area.width = restrict_area.width;
+	  tmp_area.height = restrict_area.y - outer_area.y;
+	  tmp_area.x = restrict_area.x;
+
+	  if (gdk_rectangle_intersect (area, &tmp_area, &new_area))
+	    gdk_draw_rectangle (widget->window,
+	 			widget->style->bg_gc[GTK_STATE_NORMAL],
+	 			TRUE,
+	 			new_area.x, new_area.y,
+	 			new_area.width, new_area.height);
+
+  /* 4 */ tmp_area.y = restrict_area.y + restrict_area.height;
+
+	  if (gdk_rectangle_intersect (area, &tmp_area, &new_area))
+	    gdk_draw_rectangle (widget->window,
+				widget->style->bg_gc[GTK_STATE_NORMAL],
+				TRUE,
+				new_area.x, new_area.y,
+				new_area.width, new_area.height);
 	}
     }
 }
@@ -790,12 +868,12 @@ gtk_button_add (GtkContainer *container,
 	  if (GTK_WIDGET_REALIZED (widget->parent) &&
 	      !GTK_WIDGET_REALIZED (widget))
 	    gtk_widget_realize (widget);
-	  
+
 	  if (GTK_WIDGET_MAPPED (widget->parent) &&
 	      !GTK_WIDGET_MAPPED (widget))
 	    gtk_widget_map (widget);
 	}
-      
+
       button->child = widget;
 
       if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))

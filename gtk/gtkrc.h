@@ -32,7 +32,7 @@ extern "C" {
 void	  gtk_rc_init			(void);
 void	  gtk_rc_parse			(const gchar *filename);
 void	  gtk_rc_parse_string		(const gchar *rc_string);
-void      gtk_rc_reparse_all            (void);
+gboolean  gtk_rc_reparse_all            (void);
 GtkStyle* gtk_rc_get_style		(GtkWidget   *widget);
 void	  gtk_rc_add_widget_name_style	(GtkStyle    *style,
 					 const gchar *pattern);

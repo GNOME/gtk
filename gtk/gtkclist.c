@@ -281,7 +281,7 @@ static guint clist_signals[LAST_SIGNAL] = {0};
 
 
 GtkType
-gtk_clist_get_type ()
+gtk_clist_get_type (void)
 {
   static GtkType clist_type = 0;
 

@@ -35,7 +35,7 @@ static guint32 current_device = GDK_CORE_POINTER;
 
 /* Check to see if we need to draw a cursor for current device */
 static void
-check_cursor ()
+check_cursor (void)
 {
   GList *tmp_list;
 
@@ -271,7 +271,7 @@ input_dialog_destroy (GtkWidget *w, gpointer data)
 }
 
 void
-create_input_dialog ()
+create_input_dialog (void)
 {
   static GtkWidget *inputd = NULL;
 
@@ -301,7 +301,7 @@ create_input_dialog ()
 }
 
 void
-quit ()
+quit (void)
 {
   gtk_exit (0);
 }

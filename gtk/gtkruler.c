@@ -41,7 +41,7 @@ static GtkRulerMetric ruler_metrics[] =
 
 
 guint
-gtk_ruler_get_type ()
+gtk_ruler_get_type (void)
 {
   static guint ruler_type = 0;
 

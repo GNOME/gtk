@@ -54,6 +54,9 @@ static gint gtk_range_focus_in                 (GtkWidget        *widget,
 						GdkEventFocus    *event);
 static gint gtk_range_focus_out                (GtkWidget        *widget,
 						GdkEventFocus    *event);
+static void gtk_range_style_set                 (GtkWidget       *widget,
+						 GtkStyle        *previous_style);
+
 static void gtk_real_range_draw_trough         (GtkRange         *range);
 static void gtk_real_range_draw_slider         (GtkRange         *range);
 static gint gtk_real_range_timer               (GtkRange         *range);
@@ -79,7 +82,7 @@ static GtkWidgetClass *parent_class = NULL;
 
 
 guint
-gtk_range_get_type ()
+gtk_range_get_type (void)
 {
   static guint range_type = 0;
 
@@ -127,6 +130,7 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->leave_notify_event = gtk_range_leave_notify;
   widget_class->focus_in_event = gtk_range_focus_in;
   widget_class->focus_out_event = gtk_range_focus_out;
+  widget_class->style_set = gtk_range_style_set;
 
   class->slider_width = 11;
   class->stepper_size = 11;
@@ -1455,3 +1459,39 @@ gtk_range_trough_vdims (GtkRange *range,
     *bottom = tbottom;
 }
 
+static void
+gtk_range_style_set (GtkWidget *widget,
+		      GtkStyle  *previous_style)
+{
+  GtkRange *range;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_RANGE (widget));
+
+  range = GTK_RANGE (widget);
+
+  if (GTK_WIDGET_REALIZED (widget) &&
+      !GTK_WIDGET_NO_WINDOW (widget))
+    {
+      if (range->trough)
+	{
+	  gtk_style_set_background (widget->style, range->trough, GTK_STATE_ACTIVE);
+	  if (GTK_WIDGET_DRAWABLE (widget))
+	    gdk_window_clear (range->trough);
+	}
+      /* The draw will take care of the slider */
+
+      if (range->step_forw)
+	{
+	  gtk_style_set_background (widget->style, range->step_forw, GTK_STATE_ACTIVE);
+	  if (GTK_WIDGET_DRAWABLE (widget))
+	    gdk_window_clear (range->step_forw);
+	}
+      if (range->step_back)
+	{
+	  gtk_style_set_background (widget->style, range->step_back, GTK_STATE_ACTIVE);
+	  if (GTK_WIDGET_DRAWABLE (widget))
+	    gdk_window_clear (range->step_back);
+	}
+    }
+}

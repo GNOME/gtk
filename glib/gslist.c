@@ -57,7 +57,7 @@ g_slist_set_allocator (GListAllocator* fallocator)
 
 
 GSList*
-g_slist_alloc ()
+g_slist_alloc (void)
 {
   GSList *new_list;
 

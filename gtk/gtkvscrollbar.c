@@ -41,7 +41,7 @@ static gint gtk_vscrollbar_trough_keys      (GtkRange *range,
 					     GtkTroughType *pos);
 
 guint
-gtk_vscrollbar_get_type ()
+gtk_vscrollbar_get_type (void)
 {
   static guint vscrollbar_type = 0;
 

@@ -116,7 +116,7 @@ static const gchar *hadjustment_key = "gtk-hadjustment";
 static guint        hadjustment_key_id = 0;
 
 GtkType
-gtk_container_get_type ()
+gtk_container_get_type (void)
 {
   static GtkType container_type = 0;
 

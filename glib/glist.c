@@ -33,7 +33,7 @@ static GRealListAllocator *current_allocator = NULL;
 
 
 GListAllocator*
-g_list_allocator_new ()
+g_list_allocator_new (void)
 {
   GRealListAllocator* allocator = g_new (GRealListAllocator, 1);
   
@@ -80,7 +80,7 @@ g_list_set_allocator (GListAllocator* fallocator)
 
 
 GList*
-g_list_alloc ()
+g_list_alloc (void)
 {
   GList *new_list;
   

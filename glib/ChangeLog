@@ -1,3 +1,10 @@
+Fri May  1 16:36:08 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gutils.c: (g_strcasecmp). Check for isupper before
+	taking tolower, and account for macroized tolower.
+
+	* gutils.c (g_error): Check for recursion.
+
 1998-04-27  Elliot Lee  <sopwith@cuc.ml.org>
 
 	* glist.c (g_list_position): New function to find the position of

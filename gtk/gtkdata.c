@@ -33,7 +33,7 @@ static guint data_signals[LAST_SIGNAL] = { 0 };
 
 
 guint
-gtk_data_get_type ()
+gtk_data_get_type (void)
 {
   static guint data_type = 0;
 

@@ -144,7 +144,7 @@ static GtkContainerClass *parent_class = NULL;
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
 
 guint
-gtk_notebook_get_type ()
+gtk_notebook_get_type (void)
 {
   static guint notebook_type = 0;
 
@@ -243,7 +243,7 @@ gtk_notebook_init (GtkNotebook *notebook)
 }
 
 GtkWidget*
-gtk_notebook_new ()
+gtk_notebook_new (void)
 {
   return GTK_WIDGET (gtk_type_new (gtk_notebook_get_type ()));
 }

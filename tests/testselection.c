@@ -102,7 +102,7 @@ GtkWidget *selection_button;
 GString *selection_string = NULL;
 
 static void
-init_atoms ()
+init_atoms (void)
 {
   int i;
 
@@ -356,7 +356,7 @@ paste (GtkWidget *widget, GtkWidget *entry)
 }
 
 void
-quit ()
+quit (void)
 {
   gtk_exit (0);
 }

@@ -43,7 +43,7 @@ static guint item_signals[LAST_SIGNAL] = { 0 };
 
 
 guint
-gtk_item_get_type ()
+gtk_item_get_type (void)
 {
   static guint item_type = 0;
 

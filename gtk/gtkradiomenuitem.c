@@ -28,7 +28,7 @@ static void gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem      *check_men
 
 
 guint
-gtk_radio_menu_item_get_type ()
+gtk_radio_menu_item_get_type (void)
 {
   static guint radio_menu_item_type = 0;
 

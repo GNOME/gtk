@@ -29,7 +29,7 @@ static gint gtk_arrow_expose     (GtkWidget      *widget,
 
 
 guint
-gtk_arrow_get_type ()
+gtk_arrow_get_type (void)
 {
   static guint arrow_type = 0;
 

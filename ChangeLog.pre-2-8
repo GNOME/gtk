@@ -1,7 +1,56 @@
+Sun May  3 13:38:22 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* configure.in acheader.h gdk/gdkwindow.c 
+	Check for Shape extension both on the client and server
+	side. (And, more importantly, check for the shape extension
+	so we may include -lXext even when compiling with --disable-xshm)
+
+	Don't set override_redirect on all shaped windows. It isn't
+	necessary.
+
+	* gdk/gdkwindow.c: Set ->colormap to NULL for root 
+	and foreign windows. Use this to check if we
+	need to get the colormap from X.
+
+Fri May  1 22:32:47 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkbutton.c (gtk_button_paint): Draw the areas
+	between the default and the button always in GTK_STATE_NORMAL.
+
+	* gtk/gtkrange.c (gtk_range_style_set): Added a style_set
+	callback.
+
+Fri May  1 16:40:57 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkpixmap.c (gdk_pixmap_colormap_create_from_xpmp[_d]):
+	  Fix a buffer overflow on pixmaps that claim to have
+	  more than 31 characters per pixel.
+
+	  (gdk_pixmap_read_string): Don't wrap around strings longer
+ 	  than half of address space ;-)
+
+	* gtk/gtk[vh]ruler.c gtk/gtkinputdialog.c: Expand some buffers
+	that were used for printing integers.
+
+	* */* (almost):
+
+	Style: All 
+	  int foo () { ... }
+	changed to
+	  int foo (void) { ... }
+
+	Even where there were proper prototypes elsewhere.
+
+	* gdk/gxid.c (handle_claim_device): Some extra checks.
+	It isn't safe against being fed bad X id's, but at
+	least it should be safe against deleting all your
+	files.
+
 Sun May  3 19:45:09 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkadjustment.c (gtk_adjustment_assimilate_value): new function
 	to set the adjustments value when there is no current emissioin.
+	[ Removed by mutual agreement owt 5/3/1998 ]
 
 	* gtk/gtksignal.c: added new functions to retrive the number of
 	existing emissions for a certain signal.
@@ -50,6 +99,7 @@ Sat May  2 20:19:03 1998  Tim Janik  <timj@gtk.org>
 	(gtk_adjustment_set_value): new function to emit the "value_changed"
 	signal.
 
+>>>>>>> 1.372
 Fri May  1 12:28:35 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkcombo.c: Further changes to the way the window

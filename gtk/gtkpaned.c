@@ -40,7 +40,7 @@ static GtkContainerClass *parent_class = NULL;
 
 
 guint
-gtk_paned_get_type ()
+gtk_paned_get_type (void)
 {
   static guint paned_type = 0;
 

@@ -48,7 +48,7 @@ static GtkContainerClass *parent_class;
 static guint              statusbar_signals[SIGNAL_LAST] = { 0 };
 
 guint      
-gtk_statusbar_get_type ()
+gtk_statusbar_get_type (void)
 {
   static guint statusbar_type = 0;
 
@@ -157,7 +157,7 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
 }
 
 GtkWidget* 
-gtk_statusbar_new ()
+gtk_statusbar_new (void)
 {
   return gtk_type_new (gtk_statusbar_get_type ());
 }

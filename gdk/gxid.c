@@ -61,7 +61,7 @@ handler(int signal)
 }
 
 void
-init_socket()
+init_socket(void)
 {
   struct sockaddr_in sin;
 
@@ -130,7 +130,7 @@ enable_device(GxidDevice *dev)
 /* switch the core pointer from whatever it is now to something else,
    return true on success, false otherwise */
 static int
-switch_core_pointer()
+switch_core_pointer(void)
 {
   GxidDevice *old_pointer = 0;
   GxidDevice *new_pointer = 0;
@@ -222,7 +222,7 @@ init_device(XDeviceInfo *xdevice)
 }
 
 void
-init_xinput()
+init_xinput(void)
 {
   char **extensions;
   XDeviceInfo   *xdevices;
@@ -279,11 +279,21 @@ int
 handle_claim_device(GxidClaimDevice *msg)
 {
   int i,j;
-  XID devid = ntohl(msg->device);
-  XID winid = ntohl(msg->window);
-  int exclusive = ntohl(msg->exclusive);
+  XID devid;
+  XID winid;
+  int exclusive;
   GxidDevice *device = NULL;
   GxidWindow *window = NULL;
+
+  if (msg->length != sizeof(GxidClaimDevice))
+    {
+      fprintf(stderr,"Bad length for ClaimDevice message\n");
+      return GXID_RETURN_ERROR;
+    }
+
+  devid = ntohl(msg->device);
+  winid = ntohl(msg->window);
+  exclusive = ntohl(msg->exclusive);
 
 #ifdef DEBUG_CLIENTS
   fprintf(stderr,"device %ld claimed (window 0x%lx)\n",devid,winid);
@@ -397,10 +407,19 @@ int
 handle_release_device(GxidReleaseDevice *msg)
 {
   int i,j;
-  XID devid = ntohl(msg->device);
-  XID winid = ntohl(msg->window);
+  XID devid;
+  XID winid;
 
   GxidDevice *device = NULL;
+
+  if (msg->length != sizeof(GxidReleaseDevice))
+    {
+      fprintf(stderr,"Bad length for ReleaseDevice message\n");
+      return GXID_RETURN_ERROR;
+    }
+
+  devid = ntohl(msg->device);
+  winid = ntohl(msg->window);
 
 #ifdef DEBUG_CLIENTS
   fprintf(stderr,"device %ld released (window 0x%lx)\n",devid,winid);
@@ -460,11 +479,11 @@ handle_release_device(GxidReleaseDevice *msg)
 }
 
 void
-handle_connection()
+handle_connection (void)
 {
   GxidMessage msg;
   GxidU32 type;
-  int length;
+  GxidU32 length;
   GxidI32 retval;
 
   int conn_fd;
@@ -496,7 +515,7 @@ handle_connection()
 
   /* read rest of message */
 
-  if (length > sizeof(GxidMessage)) 
+  if ((length > sizeof(GxidMessage)) || (length < 2*sizeof(GxidU32)))
     {
       fprintf(stderr,"%s: Bad message length\n",
 	      program_name);
@@ -689,7 +708,7 @@ handle_destroy_notify(XDestroyWindowEvent *event)
 }
 
 void
-handle_xevent()
+handle_xevent(void)
 {
   int i;
   XEvent event;
@@ -743,7 +762,7 @@ handle_xevent()
 }
 
 void 
-usage()
+usage(void)
 {
   fprintf(stderr,"Usage: %s [-d display] [-p --gxid-port port]\n",
 	  program_name);
@@ -833,7 +852,7 @@ main(int argc, char **argv)
 	}
 
       if (FD_ISSET(socket_fd,&readfds))
-	handle_connection(socket_fd);
+	handle_connection();
 	
       while (XPending(dpy))
 	handle_xevent();

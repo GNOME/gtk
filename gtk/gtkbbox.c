@@ -30,7 +30,7 @@ static gint default_child_ipad_y = 0;
 
 
 guint
-gtk_button_box_get_type ()
+gtk_button_box_get_type (void)
 {
   static guint button_box_type = 0;
 

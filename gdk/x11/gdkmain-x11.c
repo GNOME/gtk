@@ -625,7 +625,7 @@ gdk_exit (int errorcode)
  */
 
 gchar*
-gdk_set_locale ()
+gdk_set_locale (void)
 {
   if (!setlocale (LC_ALL,""))
     g_print ("locale not supported by C library\n");
@@ -663,7 +663,7 @@ gdk_set_locale ()
  */
 
 gint
-gdk_events_pending ()
+gdk_events_pending (void)
 {
   gint result;
   GList *tmp_list;
@@ -1023,13 +1023,13 @@ gdk_set_use_xshm (gint use_xshm)
 }
 
 gint
-gdk_get_show_events ()
+gdk_get_show_events (void)
 {
   return gdk_debug_flags & GDK_DEBUG_EVENTS;
 }
 
 gint
-gdk_get_use_xshm ()
+gdk_get_use_xshm (void)
 {
   return gdk_use_xshm;
 }
@@ -1055,7 +1055,7 @@ gdk_get_use_xshm ()
  */
 
 guint32
-gdk_time_get ()
+gdk_time_get (void)
 {
   struct timeval end;
   struct timeval elapsed;
@@ -1094,7 +1094,7 @@ gdk_time_get ()
  */
 
 guint32
-gdk_timer_get ()
+gdk_timer_get (void)
 {
   return timer_val;
 }
@@ -1129,13 +1129,13 @@ gdk_timer_set (guint32 milliseconds)
 }
 
 void
-gdk_timer_enable ()
+gdk_timer_enable (void)
 {
   timerp = &timer;
 }
 
 void
-gdk_timer_disable ()
+gdk_timer_disable (void)
 {
   timerp = NULL;
 }
@@ -1463,7 +1463,7 @@ gdk_keyboard_ungrab (guint32 time)
  */
 
 gint
-gdk_screen_width ()
+gdk_screen_width (void)
 {
   gint return_val;
 
@@ -1488,7 +1488,7 @@ gdk_screen_width ()
  */
 
 gint
-gdk_screen_height ()
+gdk_screen_height (void)
 {
   gint return_val;
 
@@ -1498,13 +1498,13 @@ gdk_screen_height ()
 }
 
 void
-gdk_key_repeat_disable ()
+gdk_key_repeat_disable (void)
 {
   XAutoRepeatOff (gdk_display);
 }
 
 void
-gdk_key_repeat_restore ()
+gdk_key_repeat_restore (void)
 {
   if (autorepeat)
     XAutoRepeatOn (gdk_display);
@@ -1531,14 +1531,14 @@ gdk_key_repeat_restore ()
  *--------------------------------------------------------------
  */
 
-void gdk_flush ()
+void gdk_flush (void)
 {
   XSync (gdk_display, False);
 }
 
 
 void
-gdk_beep ()
+gdk_beep (void)
 {
   XBell(gdk_display, 100);
 }
@@ -1562,7 +1562,7 @@ gdk_beep ()
  */
 
 static gint
-gdk_event_wait ()
+gdk_event_wait (void)
 {
   GList *list;
   GdkInput *input;
@@ -3028,7 +3028,7 @@ gdk_synthesize_click (GdkEvent *event,
  */
 
 static void
-gdk_exit_func ()
+gdk_exit_func (void)
 {
   static gboolean in_gdk_exit_func = FALSE;
 

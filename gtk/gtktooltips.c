@@ -50,7 +50,7 @@ static GtkDataClass *parent_class;
 static const gchar  *tooltips_data_key = "_GtkTooltipsData";
 
 guint
-gtk_tooltips_get_type ()
+gtk_tooltips_get_type (void)
 {
   static guint tooltips_type = 0;
 
@@ -100,7 +100,7 @@ gtk_tooltips_init (GtkTooltips *tooltips)
 }
 
 GtkTooltips *
-gtk_tooltips_new ()
+gtk_tooltips_new (void)
 {
   return gtk_type_new (gtk_tooltips_get_type ());
 }

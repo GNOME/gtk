@@ -118,6 +118,14 @@ if test "x$enable_shm" = "xyes"; then
       $x_libs)
 fi
 
+# Check for shaped window extension
+
+AC_CHECK_LIB(Xext, XShapeCombineMask,
+      if test -z "`echo $x_libs | grep "\-lXext" 2> /dev/null`"; then
+           $x_libs="-lXext $x_libs"
+      fi
+      AC_DEFINE(HAVE_SHAPE_EXT))
+
 x_cflags="$X_CFLAGS"
 x_ldflags="$X_LDFLAGS $X_LIBS"
 

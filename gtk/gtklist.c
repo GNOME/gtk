@@ -80,7 +80,7 @@ static guint list_signals[LAST_SIGNAL] = { 0 };
 
 
 GtkType
-gtk_list_get_type ()
+gtk_list_get_type (void)
 {
   static guint list_type = 0;
 
@@ -179,7 +179,7 @@ gtk_list_init (GtkList *list)
 }
 
 GtkWidget*
-gtk_list_new ()
+gtk_list_new (void)
 {
   return GTK_WIDGET (gtk_type_new (gtk_list_get_type ()));
 }

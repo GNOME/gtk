@@ -42,7 +42,7 @@ static gint gtk_hscrollbar_trough_keys      (GtkRange *range,
 
 
 guint
-gtk_hscrollbar_get_type ()
+gtk_hscrollbar_get_type (void)
 {
   static guint hscrollbar_type = 0;
 

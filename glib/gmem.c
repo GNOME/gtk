@@ -326,7 +326,7 @@ g_free (gpointer mem)
 
 
 void
-g_mem_profile ()
+g_mem_profile (void)
 {
 #ifdef MEM_PROFILE
   gint i;
@@ -749,7 +749,7 @@ g_mem_chunk_print (GMemChunk *mem_chunk)
 }
 
 void
-g_mem_chunk_info ()
+g_mem_chunk_info (void)
 {
   GRealMemChunk *mem_chunk;
   gint count;
@@ -773,7 +773,7 @@ g_mem_chunk_info ()
 }
 
 void
-g_blow_chunks ()
+g_blow_chunks (void)
 {
   GRealMemChunk *mem_chunk;
 

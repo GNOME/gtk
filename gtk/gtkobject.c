@@ -135,7 +135,7 @@ gtk_object_pointer_hash (const gpointer v)
  ****************************************************/
 
 void
-gtk_object_init_type ()
+gtk_object_init_type (void)
 {
   GtkType object_type = 0;
   GtkTypeInfo object_info =
@@ -159,7 +159,7 @@ gtk_object_init_type ()
 }
 
 GtkType
-gtk_object_get_type ()
+gtk_object_get_type (void)
 {
   return GTK_TYPE_OBJECT;
 }
@@ -1171,7 +1171,7 @@ gtk_object_data_destroy (GtkObjectData *odata)
 }
 
 static guint*
-gtk_object_data_id_alloc ()
+gtk_object_data_id_alloc (void)
 {
   static guint next_id = 1;
   guint *ids;

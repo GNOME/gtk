@@ -28,7 +28,7 @@ static void gtk_vbox_size_allocate (GtkWidget      *widget,
 
 
 guint
-gtk_vbox_get_type ()
+gtk_vbox_get_type (void)
 {
   static guint vbox_type = 0;
 

@@ -89,7 +89,7 @@ static GtkWidgetClass *parent_class = NULL;
 
 
 guint
-gtk_spin_button_get_type ()
+gtk_spin_button_get_type (void)
 {
   static guint spin_button_type = 0;
 

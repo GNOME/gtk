@@ -60,7 +60,7 @@ static GdkAtom text_atom = GDK_NONE;
 static GdkAtom clipboard_atom = GDK_NONE;
 
 guint
-gtk_editable_get_type ()
+gtk_editable_get_type (void)
 {
   static guint editable_type = 0;
 

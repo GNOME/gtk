@@ -186,7 +186,7 @@ gtk_style_copy (GtkStyle     *style)
 }
 
 GtkStyle*
-gtk_style_new ()
+gtk_style_new (void)
 {
   GtkStyle *style;
   gint i;
@@ -607,7 +607,7 @@ gtk_style_init (GtkStyle *style)
 }
 
 static void
-gtk_styles_init ()
+gtk_styles_init (void)
 {
   if (initialize)
     {

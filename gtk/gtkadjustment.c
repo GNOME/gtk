@@ -35,7 +35,7 @@ static guint adjustment_signals[LAST_SIGNAL] = { 0 };
 
 
 GtkType
-gtk_adjustment_get_type ()
+gtk_adjustment_get_type (void)
 {
   static GtkType adjustment_type = 0;
 
@@ -134,18 +134,6 @@ gtk_adjustment_set_value (GtkAdjustment        *adjustment,
 
       gtk_adjustment_value_changed (adjustment);
     }
-}
-
-void
-gtk_adjustment_assimilate_value (GtkAdjustment        *adjustment,
-				 gfloat                value)
-{
-  g_return_if_fail (adjustment != NULL);
-  g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-
-  if (gtk_signal_n_emissions (GTK_OBJECT (adjustment),
-			      adjustment_signals[VALUE_CHANGED]) == 0)
-    gtk_adjustment_set_value (adjustment, value);
 }
 
 void

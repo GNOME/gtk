@@ -50,7 +50,7 @@ static GtkMiscClass *parent_class = NULL;
 
 
 guint
-gtk_label_get_type ()
+gtk_label_get_type (void)
 {
   static guint label_type = 0;
 

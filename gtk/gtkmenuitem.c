@@ -70,7 +70,7 @@ static guint menu_item_signals[LAST_SIGNAL] = { 0 };
 
 
 guint
-gtk_menu_item_get_type ()
+gtk_menu_item_get_type (void)
 {
   static guint menu_item_type = 0;
 
@@ -159,7 +159,7 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
 }
 
 GtkWidget*
-gtk_menu_item_new ()
+gtk_menu_item_new (void)
 {
   return GTK_WIDGET (gtk_type_new (gtk_menu_item_get_type ()));
 }

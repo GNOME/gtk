@@ -28,7 +28,7 @@ static void gtk_alignment_size_allocate (GtkWidget         *widget,
 
 
 guint
-gtk_alignment_get_type ()
+gtk_alignment_get_type (void)
 {
   static guint alignment_type = 0;
 

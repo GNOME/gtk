@@ -47,7 +47,7 @@ static GtkToggleButtonClass *parent_class = NULL;
 
 
 guint
-gtk_check_button_get_type ()
+gtk_check_button_get_type (void)
 {
   static guint check_button_type = 0;
 
@@ -96,7 +96,7 @@ gtk_check_button_init (GtkCheckButton *check_button)
 }
 
 GtkWidget*
-gtk_check_button_new ()
+gtk_check_button_new (void)
 {
   return GTK_WIDGET (gtk_type_new (gtk_check_button_get_type ()));
 }

@@ -181,7 +181,7 @@ static GtkTextFunction alt_keys[26] =
 
 
 guint
-gtk_entry_get_type ()
+gtk_entry_get_type (void)
 {
   static guint entry_type = 0;
 
@@ -267,7 +267,7 @@ gtk_entry_init (GtkEntry *entry)
 }
 
 GtkWidget*
-gtk_entry_new ()
+gtk_entry_new (void)
 {
   return GTK_WIDGET (gtk_type_new (gtk_entry_get_type ()));
 }

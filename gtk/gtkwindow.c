@@ -116,7 +116,7 @@ static guint window_signals[LAST_SIGNAL] = { 0 };
 
 
 guint
-gtk_window_get_type ()
+gtk_window_get_type (void)
 {
   static guint window_type = 0;
 

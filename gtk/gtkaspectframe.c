@@ -38,7 +38,7 @@ static void gtk_aspect_frame_size_allocate (GtkWidget         *widget,
 #define MIN_RATIO 0.0001
 
 guint
-gtk_aspect_frame_get_type ()
+gtk_aspect_frame_get_type (void)
 {
   static guint aspect_frame_type = 0;
 

@@ -28,7 +28,7 @@ static void gtk_drawing_area_send_configure (GtkDrawingArea     *darea);
 
 
 guint
-gtk_drawing_area_get_type ()
+gtk_drawing_area_get_type (void)
 {
   static guint drawing_area_type = 0;
 
@@ -72,7 +72,7 @@ gtk_drawing_area_init (GtkDrawingArea *darea)
 
 
 GtkWidget*
-gtk_drawing_area_new ()
+gtk_drawing_area_new (void)
 {
   return GTK_WIDGET (gtk_type_new (gtk_drawing_area_get_type ()));
 }

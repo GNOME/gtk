@@ -44,7 +44,7 @@ static guint        actable_key_id = 0;
 
 
 GtkAcceleratorTable*
-gtk_accelerator_table_new ()
+gtk_accelerator_table_new (void)
 {
   GtkAcceleratorTable *table;
 

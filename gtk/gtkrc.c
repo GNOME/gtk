@@ -18,6 +18,8 @@
  */
 #include <ctype.h>
 #include <unistd.h>
+#include <sys/stat.h>
+#include <sys/param.h>
 #include <fcntl.h>
 #include <string.h>
 #include <stdio.h>
@@ -64,6 +66,7 @@ enum {
 typedef struct _GtkRcStyle  GtkRcStyle;
 typedef struct _GtkRcSet    GtkRcSet;
 typedef struct _GtkRcNode   GtkRcNode;
+typedef struct _GtkRcFile   GtkRcFile;
 
 struct _GtkRcNode
 {
@@ -87,6 +90,13 @@ struct _GtkRcSet
   GtkRcStyle *rc_style;
 };
 
+struct _GtkRcFile
+{
+  time_t mtime;
+  gchar *name;
+  gchar *canonical_name;
+  gboolean reload;
+};
 
 static guint	   gtk_rc_style_hash		   (const char   *name);
 static gint	   gtk_rc_style_compare		   (const char   *a,
@@ -98,6 +108,9 @@ static gint	   gtk_rc_style_match		   (const char   *set,
 						    const char   *path);
 static GtkStyle*   gtk_rc_style_init		   (GtkRcStyle   *rc_style,
 						    GdkColormap  *cmap);
+static void        gtk_rc_parse_file               (const gchar  *filename,
+						    gboolean      reload);
+
 static void	   gtk_rc_parse_any		   (const gchar  *input_name,
 						    gint	  input_fd,
 						    const gchar  *input_string);
@@ -131,6 +144,11 @@ static gint	   gtk_rc_parse_widget_style	   (GScanner	 *scanner);
 static gint	   gtk_rc_parse_widget_class_style (GScanner	 *scanner);
 static char*	   gtk_rc_widget_path		   (GtkWidget *widget);
 static char*	   gtk_rc_widget_class_path	   (GtkWidget *widget);
+static void        gtk_rc_clear_hash_node          (gpointer   key, 
+						    gpointer   data, 
+						    gpointer   user_data);
+static void        gtk_rc_clear_styles             (void);
+
 
 
 static	GScannerConfig	gtk_rc_scanner_config =
@@ -208,10 +226,10 @@ static GSList *widget_class_sets = NULL;
 static gchar *pixmap_path[GTK_RC_MAX_PIXMAP_PATHS];
 
 /* The files we have parsed, to reread later if necessary */
-GSList *rc_files;
+GSList *rc_files = NULL;
 
 void
-gtk_rc_init ()
+gtk_rc_init (void)
 {
   rc_style_ht = g_hash_table_new ((GHashFunc) gtk_rc_style_hash,
 				  (GCompareFunc) gtk_rc_style_compare);
@@ -225,25 +243,88 @@ gtk_rc_parse_string (const gchar *rc_string)
   gtk_rc_parse_any ("-", -1, rc_string);
 }
 
-void
-gtk_rc_parse (const gchar *filename)
+static void
+gtk_rc_parse_file (const gchar *filename, gboolean reload)
 {
-  gint	   fd;
+  GtkRcFile *rc_file = NULL;
+  struct stat statbuf;
+  GSList *tmp_list;
 
   g_return_if_fail (filename != NULL);
 
-  rc_files = g_slist_append (rc_files, g_strdup (filename));
+  tmp_list = rc_files;
+  while (tmp_list)
+    {
+      rc_file = tmp_list->data;
+      if (!strcmp (rc_file->name, filename))
+	break;
+      
+      tmp_list = tmp_list->next;
+    }
 
-  fd = open (filename, O_RDONLY);
-  if (fd < 0)
-    return;
+  if (!tmp_list)
+    {
+      rc_file = g_new (GtkRcFile, 1);
+      rc_file->name = g_strdup (filename);
+      rc_file->canonical_name = NULL;
+      rc_file->mtime = 0;
+      rc_file->reload = reload;
 
-  gtk_rc_parse_any (filename, fd, NULL);
+      rc_files = g_slist_append (rc_files, rc_file);
+    }
 
-  close (fd);
+  if (!rc_file->canonical_name)
+    {
+      /* Get the absolute pathname */
+
+      if (rc_file->name[0] == '/')
+	rc_file->canonical_name = rc_file->name;
+      else
+	{
+	  GString *str;
+	  gchar buffer[MAXPATHLEN];
+	  
+#if defined(sun) && !defined(__SVR4)
+	  if(!getwd(buffer))
+#else
+	  if(!getcwd(buffer, MAXPATHLEN))
+#endif    
+	      return;
+
+	  str = g_string_new (buffer);
+	  g_string_append_c (str, '/');
+	  g_string_append (str, rc_file->name);
+	  
+	  rc_file->canonical_name = str->str;
+	  g_string_free (str, FALSE);
+	}
+    }
+
+  if (!stat (rc_file->canonical_name, &statbuf))
+    {
+      gint fd;
+
+      rc_file->mtime = statbuf.st_mtime;
+
+      fd = open (rc_file->canonical_name, O_RDONLY);
+      if (fd < 0)
+	return;
+
+      gtk_rc_parse_any (filename, fd, NULL);
+
+      close (fd);
+    }
 }
 
 void
+gtk_rc_parse (const gchar *filename)
+{
+  g_return_if_fail (filename != NULL);
+
+  gtk_rc_parse_file (filename, TRUE);
+}
+
+static void
 gtk_rc_clear_hash_node (gpointer key, 
 			gpointer data, 
 			gpointer user_data)
@@ -276,10 +357,10 @@ gtk_rc_clear_hash_node (gpointer key,
   g_free (rc_style);
 }
 
-void
-gtk_rc_reparse_all (void)
+static void
+gtk_rc_clear_styles (void)
 {
-  GSList *tmp_list, *tmp_files;
+  GSList *tmp_list;
   GtkRcSet *rc_set;
 
   /* Clear out all old rc_styles */
@@ -312,22 +393,52 @@ gtk_rc_reparse_all (void)
   g_slist_free (widget_class_sets);
   widget_class_sets = NULL;
 
-  /* Now read the RC's again */
-  
   gtk_rc_init ();
+}
 
-  tmp_files = rc_files;
-  rc_files = NULL;
+gboolean
+gtk_rc_reparse_all (void)
+{
+  GSList *tmp_list;
+  gboolean mtime_modified = FALSE;
+  GtkRcFile *rc_file;
 
-  tmp_list = tmp_files;
+  struct stat statbuf;
+
+  /* Check through and see if any of the RC's have had their
+   * mtime modified. If so, reparse everything.
+   */
+  tmp_list = rc_files;
   while (tmp_list)
     {
-      gtk_rc_parse ((gchar *)tmp_list->data);
-      g_free (tmp_list->data);
+      rc_file = tmp_list->data;
+      
+      if (!stat (rc_file->name, &statbuf) && 
+	  (statbuf.st_mtime > rc_file->mtime))
+	{
+	  mtime_modified = TRUE;
+	  break;
+	}
       
       tmp_list = tmp_list->next;
     }
-  g_slist_free (tmp_files);
+
+  if (mtime_modified)
+    {
+      gtk_rc_clear_styles();
+
+      tmp_list = rc_files;
+      while (tmp_list)
+	{
+	  rc_file = tmp_list->data;
+	  if (rc_file->reload)
+	    gtk_rc_parse_file (rc_file->name, FALSE);
+	  
+	  tmp_list = tmp_list->next;
+	}
+    }
+
+  return mtime_modified;
 }
 
 GtkStyle*
@@ -680,7 +791,7 @@ gtk_rc_parse_statement (GScanner *scanner)
       if (token != G_TOKEN_STRING)
 	return PARSE_ERROR;
 
-      gtk_rc_parse (scanner->value.v_string);
+      gtk_rc_parse_file (scanner->value.v_string, FALSE);
 
       return PARSE_OK;
     }

@@ -126,7 +126,7 @@ static gint install_cmap = FALSE;
 
 
 guint
-gtk_preview_get_type ()
+gtk_preview_get_type (void)
 {
   static guint preview_type = 0;
 
@@ -287,7 +287,7 @@ gtk_preview_init (GtkPreview *preview)
 }
 
 void
-gtk_preview_uninit ()
+gtk_preview_uninit (void)
 {
   GtkPreviewProp *prop;
   GdkAtom property;
@@ -674,7 +674,7 @@ gtk_preview_set_reserved (gint nreserved)
 }
 
 GdkVisual*
-gtk_preview_get_visual ()
+gtk_preview_get_visual (void)
 {
   if (!preview_class)
     preview_class = gtk_type_class (gtk_preview_get_type ());
@@ -683,7 +683,7 @@ gtk_preview_get_visual ()
 }
 
 GdkColormap*
-gtk_preview_get_cmap ()
+gtk_preview_get_cmap (void)
 {
   if (!preview_class)
     preview_class = gtk_type_class (gtk_preview_get_type ());
@@ -692,7 +692,7 @@ gtk_preview_get_cmap ()
 }
 
 GtkPreviewInfo*
-gtk_preview_get_info ()
+gtk_preview_get_info (void)
 {
   if (!preview_class)
     preview_class = gtk_type_class (gtk_preview_get_type ());

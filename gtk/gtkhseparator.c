@@ -26,7 +26,7 @@ static gint gtk_hseparator_expose     (GtkWidget          *widget,
 
 
 guint
-gtk_hseparator_get_type ()
+gtk_hseparator_get_type (void)
 {
   static guint hseparator_type = 0;
 
@@ -67,7 +67,7 @@ gtk_hseparator_init (GtkHSeparator *hseparator)
 }
 
 GtkWidget*
-gtk_hseparator_new ()
+gtk_hseparator_new (void)
 {
   return GTK_WIDGET (gtk_type_new (gtk_hseparator_get_type ()));
 }

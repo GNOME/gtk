@@ -196,7 +196,7 @@ static guint ctree_signals[LAST_SIGNAL] = {0};
 
 
 GtkType
-gtk_ctree_get_type ()
+gtk_ctree_get_type (void)
 {
   static GtkType ctree_type = 0;
 

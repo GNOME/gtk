@@ -55,7 +55,7 @@ static GtkBinClass *parent_class = NULL;
 
 
 guint
-gtk_frame_get_type ()
+gtk_frame_get_type (void)
 {
   static guint frame_type = 0;
 

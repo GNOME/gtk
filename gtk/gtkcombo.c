@@ -671,7 +671,7 @@ gtk_combo_init (GtkCombo * combo)
 }
 
 guint
-gtk_combo_get_type ()
+gtk_combo_get_type (void)
 {
   static guint combo_type = 0;
 
@@ -693,7 +693,7 @@ gtk_combo_get_type ()
 }
 
 GtkWidget *
-gtk_combo_new ()
+gtk_combo_new (void)
 {
   return GTK_WIDGET (gtk_type_new (gtk_combo_get_type ()));
 }

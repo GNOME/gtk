@@ -418,7 +418,7 @@ static GtkTextFunction alt_keys[26] =
 /**********************************************************************/
 
 guint
-gtk_text_get_type ()
+gtk_text_get_type (void)
 {
   static guint text_type = 0;
 

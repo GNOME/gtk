@@ -1026,7 +1026,7 @@ gtk_signal_set_funcs (GtkSignalMarshal marshal_func,
 
 
 static void
-gtk_signal_init ()
+gtk_signal_init (void)
 {
   if (initialize)
     {
@@ -1066,7 +1066,7 @@ gtk_signal_info_compare (GtkSignalInfo *a,
 }
 
 static GtkHandler*
-gtk_signal_handler_new ()
+gtk_signal_handler_new (void)
 {
   GtkHandler *handler;
   
@@ -1371,7 +1371,7 @@ gtk_signal_connect_by_type (GtkObject       *object,
 }
 
 static GtkEmission*
-gtk_emission_new ()
+gtk_emission_new (void)
 {
   GtkEmission *emission;
   

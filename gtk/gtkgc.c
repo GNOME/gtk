@@ -91,7 +91,7 @@ gtk_gc_release (GdkGC *gc)
 
 
 static void
-gtk_gc_init ()
+gtk_gc_init (void)
 {
   initialize = FALSE;
 

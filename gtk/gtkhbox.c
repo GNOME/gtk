@@ -28,7 +28,7 @@ static void gtk_hbox_size_allocate (GtkWidget      *widget,
 
 
 guint
-gtk_hbox_get_type ()
+gtk_hbox_get_type (void)
 {
   static guint hbox_type = 0;
 

@@ -24,7 +24,7 @@ static void gtk_separator_init       (GtkSeparator      *separator);
 
 
 guint
-gtk_separator_get_type ()
+gtk_separator_get_type (void)
 {
   static guint separator_type = 0;
 

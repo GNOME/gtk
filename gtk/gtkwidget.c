@@ -257,7 +257,7 @@ static const gchar *visual_key = "gtk-visual";
  *****************************************/
 
 GtkType
-gtk_widget_get_type ()
+gtk_widget_get_type (void)
 {
   static GtkType widget_type = 0;
   
@@ -2681,7 +2681,7 @@ gtk_widget_set_default_style (GtkStyle *style)
 }
 
 GtkStyle*
-gtk_widget_get_default_style ()
+gtk_widget_get_default_style (void)
 {
   if (!default_style)
     {
@@ -2702,7 +2702,7 @@ gtk_widget_push_style (GtkStyle *style)
 }
 
 static GtkStyle*
-gtk_widget_peek_style ()
+gtk_widget_peek_style (void)
 {
   if (style_stack)
     return (GtkStyle*) style_stack->data;
@@ -2711,7 +2711,7 @@ gtk_widget_peek_style ()
 }
 
 void
-gtk_widget_pop_style ()
+gtk_widget_pop_style (void)
 {
   GSList *tmp;
   
@@ -3209,7 +3209,7 @@ gtk_widget_push_visual (GdkVisual *visual)
  *****************************************/
 
 void
-gtk_widget_pop_colormap ()
+gtk_widget_pop_colormap (void)
 {
   GSList *tmp;
   
@@ -3230,7 +3230,7 @@ gtk_widget_pop_colormap ()
  *****************************************/
 
 void
-gtk_widget_pop_visual ()
+gtk_widget_pop_visual (void)
 {
   GSList *tmp;
   
@@ -3286,7 +3286,7 @@ gtk_widget_set_default_visual (GdkVisual *visual)
  *****************************************/
 
 GdkColormap*
-gtk_widget_get_default_colormap ()
+gtk_widget_get_default_colormap (void)
 {
   if (!default_colormap)
     default_colormap = gdk_colormap_get_system ();
@@ -3303,7 +3303,7 @@ gtk_widget_get_default_colormap ()
  *****************************************/
 
 GdkVisual*
-gtk_widget_get_default_visual ()
+gtk_widget_get_default_visual (void)
 {
   if (!default_visual)
     default_visual = gdk_visual_get_system ();
@@ -3832,7 +3832,7 @@ gtk_widget_real_size_allocate (GtkWidget     *widget,
  *****************************************/
 
 static GdkColormap*
-gtk_widget_peek_colormap ()
+gtk_widget_peek_colormap (void)
 {
   if (colormap_stack)
     return (GdkColormap*) colormap_stack->data;
@@ -3848,7 +3848,7 @@ gtk_widget_peek_colormap ()
  *****************************************/
 
 static GdkVisual*
-gtk_widget_peek_visual ()
+gtk_widget_peek_visual (void)
 {
   if (visual_stack)
     return (GdkVisual*) visual_stack->data;
@@ -3962,7 +3962,7 @@ gtk_widget_draw_children_recurse (GtkWidget *widget,
  *****************************************/
 
 static GtkWidgetAuxInfo*
-gtk_widget_aux_info_new ()
+gtk_widget_aux_info_new (void)
 {
   GtkWidgetAuxInfo *aux_info;
   

@@ -39,7 +39,7 @@ static void gtk_hruler_draw_pos      (GtkRuler       *ruler);
 
 
 guint
-gtk_hruler_get_type ()
+gtk_hruler_get_type (void)
 {
   static guint hruler_type = 0;
 
@@ -89,7 +89,7 @@ gtk_hruler_init (GtkHRuler *hruler)
 
 
 GtkWidget*
-gtk_hruler_new ()
+gtk_hruler_new (void)
 {
   return GTK_WIDGET (gtk_type_new (gtk_hruler_get_type ()));
 }
@@ -136,7 +136,7 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
   gfloat step_incr;
   gfloat increment;
   gfloat start, end, cur;
-  gchar unit_str[12];
+  gchar unit_str[32];
   gint text_height;
   gint digit_height;
   gint pos;

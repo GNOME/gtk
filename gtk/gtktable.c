@@ -54,7 +54,7 @@ static GtkContainerClass *parent_class = NULL;
 
 
 guint
-gtk_table_get_type ()
+gtk_table_get_type (void)
 {
   static guint table_type = 0;
 

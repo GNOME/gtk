@@ -27,7 +27,7 @@ static gint gtk_image_expose     (GtkWidget      *widget,
 
 
 guint
-gtk_image_get_type ()
+gtk_image_get_type (void)
 {
   static guint image_type = 0;
 

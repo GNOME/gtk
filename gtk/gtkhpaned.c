@@ -37,7 +37,7 @@ static gint gtk_hpaned_motion           (GtkWidget *widget,
 					 GdkEventMotion *event);
 
 guint
-gtk_hpaned_get_type ()
+gtk_hpaned_get_type (void)
 {
   static guint hpaned_type = 0;
 
@@ -81,7 +81,7 @@ gtk_hpaned_init (GtkHPaned *hpaned)
 }
 
 GtkWidget*
-gtk_hpaned_new ()
+gtk_hpaned_new (void)
 {
   GtkHPaned *hpaned;
 

@@ -51,7 +51,7 @@ static GtkContainerClass *parent_class = NULL;
 
 
 guint
-gtk_box_get_type ()
+gtk_box_get_type (void)
 {
   static guint box_type = 0;
 

@@ -17,8 +17,8 @@
 /* Other stuff */
 #undef HAVE_IPC_H
 #undef HAVE_SHM_H
-#undef HAVE_XPM
 #undef HAVE_XSHM_H
+#undef HAVE_SHAPE_EXT
 #undef HAVE_SYS_SELECT_H
 
 #undef IPC_RMID_DEFERRED_RELEASE
