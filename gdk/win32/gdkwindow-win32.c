@@ -35,8 +35,40 @@
 #include "gdkprivate-win32.h"
 #include "gdkinput-win32.h"
 
+#ifdef __MINGW32__
+typedef struct { 
+  DWORD        bV5Size; 
+  LONG         bV5Width; 
+  LONG         bV5Height; 
+  WORD         bV5Planes; 
+  WORD         bV5BitCount; 
+  DWORD        bV5Compression; 
+  DWORD        bV5SizeImage; 
+  LONG         bV5XPelsPerMeter; 
+  LONG         bV5YPelsPerMeter; 
+  DWORD        bV5ClrUsed; 
+  DWORD        bV5ClrImportant; 
+  DWORD        bV5RedMask; 
+  DWORD        bV5GreenMask; 
+  DWORD        bV5BlueMask; 
+  DWORD        bV5AlphaMask; 
+  DWORD        bV5CSType; 
+  CIEXYZTRIPLE bV5Endpoints; 
+  DWORD        bV5GammaRed; 
+  DWORD        bV5GammaGreen; 
+  DWORD        bV5GammaBlue; 
+  DWORD        bV5Intent; 
+  DWORD        bV5ProfileData; 
+  DWORD        bV5ProfileSize; 
+  DWORD        bV5Reserved; 
+} BITMAPV5HEADER;
+
+#endif
+
+#if 0
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <stdio.h> /* sprintf */
+#include <stdio.h>
+#endif
 
 static GdkColormap* gdk_window_impl_win32_get_colormap (GdkDrawable *drawable);
 static void         gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,
@@ -92,7 +124,8 @@ gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
   impl->height = 1;
 
   impl->hcursor = NULL;
-  impl->hicon = NULL;
+  impl->hicon_big = NULL;
+  impl->hicon_small = NULL;
   impl->hint_flags = 0;
   impl->extension_events_selected = FALSE;
 }
@@ -142,10 +175,15 @@ gdk_window_impl_win32_finalize (GObject *object)
       GDI_CALL (DestroyCursor, (window_impl->hcursor));
       window_impl->hcursor = NULL;
     }
-  if (window_impl->hicon != NULL)
+  if (window_impl->hicon_big != NULL)
     {
-      GDI_CALL (DestroyIcon, (window_impl->hicon));
-      window_impl->hicon = NULL;
+      GDI_CALL (DestroyIcon, (window_impl->hicon_big));
+      window_impl->hicon_big = NULL;
+    }
+  if (window_impl->hicon_small != NULL)
+    {
+      GDI_CALL (DestroyIcon, (window_impl->hicon_small));
+      window_impl->hicon_small = NULL;
     }
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -2169,20 +2207,272 @@ gdk_window_set_accept_focus (GdkWindow *window,
     private->accept_focus = accept_focus;
 }
 
+static HICON
+pixbuf_to_hicon_alpha_winxp (GdkWindow *window,
+			     GdkPixbuf *pixbuf)
+{
+  /* Based on code from
+   * http://www.dotnet247.com/247reference/msgs/13/66301.aspx
+   */
+  HDC hdc;
+  BITMAPV5HEADER bi;
+  HBITMAP hBitmap, hMonoBitmap;
+  guchar *indata, *inrow;
+  guchar *outdata, *outrow;
+  HICON hAlphaIcon = NULL;
+  ICONINFO ii;
+  gint width, height, i, j, rowstride;
+
+  if (pixbuf == NULL)
+    return NULL;
+
+  width = gdk_pixbuf_get_width (pixbuf); /* width of icon */
+  height = gdk_pixbuf_get_height (pixbuf); /* height of icon */
+
+  ZeroMemory (&bi, sizeof (BITMAPV5HEADER));
+  bi.bV5Size = sizeof (BITMAPV5HEADER);
+  bi.bV5Width = width;
+  bi.bV5Height = height;
+  bi.bV5Planes = 1;
+  bi.bV5BitCount = 32;
+  bi.bV5Compression = BI_BITFIELDS;
+  /* The following mask specification specifies a supported 32 BPP
+   * alpha format for Windows XP (BGRA format).
+   */
+  bi.bV5RedMask   = 0x00FF0000;
+  bi.bV5GreenMask = 0x0000FF00;
+  bi.bV5BlueMask  = 0x000000FF;
+  bi.bV5AlphaMask = 0xFF000000;
+
+  /* Create the DIB section with an alpha channel. */
+  hdc = GetDC (NULL);
+  hBitmap = CreateDIBSection (hdc, (BITMAPINFO *)&bi, DIB_RGB_COLORS,
+			      (void **)&outdata, NULL, (DWORD)0);
+  ReleaseDC (NULL, hdc);
+
+  /* Draw something on the DIB section */
+  indata = gdk_pixbuf_get_pixels (pixbuf);
+  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+  for (j=0; j<height; j++)
+    {
+      outrow = outdata + 4*j*width;
+      inrow  = indata  + (height-j-1)*rowstride;
+      for (i=0; i<width; i++)
+	{
+	  outrow[4*i+0] = inrow[4*i+2];
+	  outrow[4*i+1] = inrow[4*i+1];
+	  outrow[4*i+2] = inrow[4*i+0];
+	  outrow[4*i+3] = inrow[4*i+3];
+	}
+    }
+
+  /* Create an empty mask bitmap */
+  hMonoBitmap = CreateBitmap (width, height, 1, 1, NULL);
+
+  ii.fIcon = TRUE;
+  ii.xHotspot = 0;
+  ii.yHotspot = 0;
+  ii.hbmMask = hMonoBitmap;
+  ii.hbmColor = hBitmap;
+
+  /* Create the alpha cursor with the alpha DIB section */
+  hAlphaIcon = CreateIconIndirect (&ii);
+
+  GDI_CALL (DeleteObject, (hBitmap));
+  GDI_CALL (DeleteObject, (hMonoBitmap));
+
+  return hAlphaIcon;
+}
+
+static HICON
+pixbuf_to_hicon_normal (GdkWindow *window,
+			GdkPixbuf *pixbuf)
+{
+  GdkPixmap *pixmap;
+  GdkBitmap *mask;
+  HBITMAP hbmmask = NULL;
+  ICONINFO ii;
+  HICON hIcon;
+  gint w = 0, h = 0;
+
+  if (pixbuf == NULL)
+    return NULL;
+
+  /* create a normal icon with a bitmap mask */
+  w = gdk_pixbuf_get_width (pixbuf);
+  h = gdk_pixbuf_get_height (pixbuf);
+  gdk_pixbuf_render_pixmap_and_mask_for_colormap (pixbuf, 
+						  gdk_drawable_get_colormap (window),
+						  &pixmap,
+						  &mask,
+						  128);
+
+  /* we need the inverted mask for the XOR op */
+  {
+    HDC hdc1 = CreateCompatibleDC (NULL);
+    HBITMAP hbmold1;
+
+    hbmmask = CreateCompatibleBitmap (hdc1, w, h);
+    hbmold1 = SelectObject (hdc1, hbmmask);
+    if (mask)
+      {
+	HDC hdc2 = CreateCompatibleDC (NULL);
+	HBITMAP hbmold2 = SelectObject (hdc2, GDK_PIXMAP_HBITMAP (mask));
+	GDI_CALL (BitBlt, (hdc1, 0,0,w,h, hdc2, 0,0, NOTSRCCOPY));
+	GDI_CALL (SelectObject, (hdc2, hbmold2));
+	GDI_CALL (DeleteDC, (hdc2));
+      }
+    else
+      {
+	RECT rect;
+	GetClipBox (hdc1, &rect);
+	GDI_CALL (FillRect, (hdc1, &rect, GetStockObject (BLACK_BRUSH)));
+      }
+    GDI_CALL (SelectObject, (hdc1, hbmold1));
+    GDI_CALL (DeleteDC, (hdc1));
+  }
+
+  ii.fIcon = TRUE;
+  ii.xHotspot = ii.yHotspot = 0; /* ignored for icons */
+  ii.hbmMask = hbmmask;
+  ii.hbmColor = GDK_PIXMAP_HBITMAP (pixmap);
+  hIcon = CreateIconIndirect (&ii);
+  if (!hIcon)
+    WIN32_API_FAILED ("CreateIconIndirect");
+  GDI_CALL (DeleteObject, (hbmmask));
+
+#if 0 /* to debug pixmap and mask setting */
+  {
+    static int num = 0;
+    GdkPixbuf* pixbuf = NULL;
+    char name[256];
+
+    pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, NULL, 0, 0, 0, 0, w, h);
+    if (pixbuf)
+      {
+	num = (num + 1) % 999; /* restrict maximim number */
+	sprintf (name, "c:\\temp\\ico%03dpixm.png", num); 
+	gdk_pixbuf_save (pixbuf, name, "png", NULL, NULL);
+	gdk_pixbuf_unref (pixbuf);
+      }
+  }
+#endif
+
+  if (pixmap)
+    g_object_unref (G_OBJECT (pixmap));
+  if (mask)
+    g_object_unref (G_OBJECT (mask));
+
+  return hIcon;
+}
+
+static HICON
+pixbuf_to_hicon (GdkWindow *window,
+		 GdkPixbuf *pixbuf)
+{
+  static gboolean is_win_xp=FALSE, is_win_xp_checked=FALSE;
+
+  if (!is_win_xp_checked)
+    {
+      OSVERSIONINFO version;
+
+      is_win_xp_checked = TRUE;
+      memset (&version, 0, sizeof (version));
+      version.dwOSVersionInfoSize = sizeof (version);
+      is_win_xp = GetVersionEx (&version)
+	&& version.dwPlatformId == VER_PLATFORM_WIN32_NT
+	&& (version.dwMajorVersion > 5
+	    || (version.dwMajorVersion == 5 && version.dwMinorVersion >= 1));
+    }
+
+  if (pixbuf == NULL)
+    return NULL;
+
+  if (is_win_xp && gdk_pixbuf_get_has_alpha (pixbuf))
+    return pixbuf_to_hicon_alpha_winxp (window, pixbuf);
+  else
+    return pixbuf_to_hicon_normal (window, pixbuf);
+}
+
 void          
 gdk_window_set_icon_list (GdkWindow *window,
 			  GList     *pixbufs)
 {
+  GdkPixbuf *pixbuf, *big_pixbuf, *small_pixbuf;
+  gint big_diff, small_diff;
+  gint big_w, big_h, small_w, small_h;
+  gint w, h;
+  gint dw, dh, diff;
+  HICON small_hicon, big_hicon;
+  GdkWindowImplWin32 *impl;
+  gint i, big_i, small_i;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  /* We could convert it to a hIcon and DrawIcon () it when getting
-   * a WM_PAINT with IsIconic, but is it worth it ? Same probably
-   * goes for gdk_window_set_icon (). Patches accepted :-)  --hb
-   * Or do we only need to deliver the Icon on WM_GETICON ?
-   */
+  impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
+
+  /* ideal sizes for small and large icons */
+  big_w = GetSystemMetrics (SM_CXICON);
+  big_h = GetSystemMetrics (SM_CYICON);
+  small_w = GetSystemMetrics (SM_CXSMICON);
+  small_h = GetSystemMetrics (SM_CYSMICON);
+
+  /* find closest sized icons in the list */
+  big_pixbuf = NULL;
+  small_pixbuf = NULL;
+  big_diff = 0;
+  small_diff = 0;
+  i = 0;
+  while (pixbufs)
+    {
+      pixbuf = (GdkPixbuf*) pixbufs->data;
+      w = gdk_pixbuf_get_width (pixbuf);
+      h = gdk_pixbuf_get_height (pixbuf);
+
+      dw = ABS (w - big_w);
+      dh = ABS (h - big_h);
+      diff = dw*dw + dh*dh;
+      if (big_pixbuf == NULL || diff < big_diff)
+	{
+	  big_pixbuf = pixbuf;
+	  big_diff = diff;
+	  big_i = i;
+	}
+
+      dw = ABS(w - small_w);
+      dh = ABS(h - small_h);
+      diff = dw*dw + dh*dh;
+      if (small_pixbuf == NULL || diff < small_diff)
+	{
+	  small_pixbuf = pixbuf;
+	  small_diff = diff;
+	  small_i = i;
+	}
+
+      pixbufs = g_list_next (pixbufs);
+      i++;
+    }
+
+  /* Create the icons */
+  big_hicon = pixbuf_to_hicon (window, big_pixbuf);
+  small_hicon = pixbuf_to_hicon (window, small_pixbuf);
+
+  /* Set the icons */
+  SendMessage (GDK_WINDOW_HWND (window), WM_SETICON, ICON_BIG,
+	       (LPARAM)big_hicon);
+  SendMessage (GDK_WINDOW_HWND (window), WM_SETICON, ICON_SMALL,
+  	       (LPARAM)small_hicon);
+
+  /* Store the icons, destroying any previous icons */
+  if (impl->hicon_big)
+    GDI_CALL (DestroyIcon, (impl->hicon_big));
+  impl->hicon_big = big_hicon;
+  if (impl->hicon_small)
+    GDI_CALL (DestroyIcon, (impl->hicon_small));
+  impl->hicon_small = small_hicon;
 }
 
 void          
@@ -2191,99 +2481,10 @@ gdk_window_set_icon (GdkWindow *window,
 		     GdkPixmap *pixmap,
 		     GdkBitmap *mask)
 {
-  ICONINFO ii;
-  HICON hIcon;
-  gint w = 0, h = 0;
-  GdkWindowImplWin32 *impl;
-
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
-
-  if (pixmap)
-    {
-      static int num = 0;
-      HBITMAP hbmmask = NULL;
-
-      gdk_drawable_get_size (GDK_DRAWABLE(pixmap), &w, &h);
-
-      /* we need the inverted mask for the XOR op */
-      {
-        HDC hdc1 = CreateCompatibleDC (NULL);
-        HBITMAP hbmold1;
-
-        hbmmask = CreateCompatibleBitmap (hdc1, w, h);
-        hbmold1 = SelectObject (hdc1, hbmmask);
-        if (mask)
-          {
-            HDC hdc2 = CreateCompatibleDC (NULL);
-            HBITMAP hbmold2 = SelectObject (hdc2, GDK_PIXMAP_HBITMAP (mask));
-            GDI_CALL (BitBlt, (hdc1, 0,0,w,h, hdc2, 0,0, NOTSRCCOPY));
-            GDI_CALL (SelectObject, (hdc2, hbmold2));
-            GDI_CALL (DeleteDC, (hdc2));
-          }
-        else
-          {
-            RECT rect;
-            GetClipBox (hdc1, &rect);
-            GDI_CALL (FillRect, (hdc1, &rect, GetStockObject (WHITE_BRUSH)));
-          }
-        GDI_CALL (SelectObject, (hdc1, hbmold1));
-        GDI_CALL (DeleteDC, (hdc1));
-      }
-
-      ii.fIcon = TRUE;
-      ii.xHotspot = ii.yHotspot = 0; /* ignored for icons */
-      ii.hbmMask = hbmmask;
-      ii.hbmColor = GDK_PIXMAP_HBITMAP (pixmap); 
-      hIcon = CreateIconIndirect (&ii);
-      if (!hIcon)
-        WIN32_API_FAILED ("CreateIconIndirect");
-      GDI_CALL (DeleteObject, (hbmmask));
-#if 0 /* to debug pixmap and mask setting */
-      {
-        GdkPixbuf* pixbuf = NULL;
-        char name[256];
-
-        pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, NULL, 0, 0, 0, 0, w, h);
-	if (pixbuf)
-          {
-            num = (num + 1) % 999; /* restrict maximim number */
-            sprintf (name, "c:\\temp\\ico%03dpixm.png", num); 
-            gdk_pixbuf_save (pixbuf, name, "png", NULL, NULL);
-            gdk_pixbuf_unref (pixbuf);
-          }
-        pixbuf = !mask ? NULL : gdk_pixbuf_get_from_drawable (NULL, mask, NULL, 0, 0, 0, 0, w, h);
-	if (pixbuf)
-          {
-            sprintf (name, "c:\\temp\\ico%03dmask.png", num); 
-            gdk_pixbuf_save (pixbuf, name, "png", NULL, NULL);
-            gdk_pixbuf_unref (pixbuf);
-          }
-      }
-#endif
-
-      SendMessage (GDK_WINDOW_HWND (window), WM_SETICON, ICON_BIG, (LPARAM)hIcon);
-      if (impl->hicon)
-        GDI_CALL (DestroyIcon, (impl->hicon));
-      impl->hicon = hIcon;
-    }
-  else
-    {
-      /* reseting to default icon */
-      if (impl->hicon)
-        {
-          SendMessage (GDK_WINDOW_HWND (window), WM_SETICON, ICON_BIG, 0);
-          GDI_CALL (DestroyIcon, (impl->hicon));
-          impl->hicon = NULL;
-        }
-    }
-
-  GDK_NOTE (MISC, g_print ("gdk_window_set_icon: %p: %p %dx%d\n", GDK_WINDOW_HWND (window), impl->hicon, w, h));
+  /* do nothing, use gdk_window_set_icon_list instead */
 }
 
 void
