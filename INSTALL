@@ -80,6 +80,7 @@ important ones:
  CC       : The C compiler to use
  CPPFLAGS : Flags for the C preprocesser such as -I and -D
  CFLAGS   : C compiler flags
+ LDFLAGS  : Flags to pass to the linker.
 
 The most important use of this is to set the
 optimization/debugging flags. For instance, to compile with no
@@ -89,7 +90,15 @@ debugging information at all, run configure as:
 
 or,
 
- setenv CFLAGS -O2 ; ./configure  # csh and variants
+ env CFLAGS -O2 ; ./configure  # csh and variants
+
+Another use of these flags is to add extra search locations
+for libraries and header files not in your compiler's default
+search paths. For instance, to enable configure find a library
+installed in /opt, you could run configure as:
+
+  CPPFLAGS=-I/opt/include LDFLAGS=-L/opt/lib ./configure
+
 
 Native-Language Support and gettext()
 =====================================
@@ -110,6 +119,7 @@ However, in rare cases, it may be necessary to disable
 NLS manually to get GTK+ to compile. You can do this
 by specifying the --disable-nls flag when configuring
 GTK+.
+
 
 Using an uninstalled copy of GLIB [ Unsupported ]
 =================================================
