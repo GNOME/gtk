@@ -178,7 +178,6 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   GtkWidget *text_box;
   GtkWidget *table, *label;
 
-  fontsel->context = gtk_widget_create_pango_context (GTK_WIDGET (fontsel));
   fontsel->font_desc = pango_font_description_from_string ("sans 12");
   
   /* Create the table of font, style & size. */
@@ -348,7 +347,6 @@ gtk_font_selection_finalize (GObject *object)
   
   fontsel = GTK_FONT_SELECTION (object);
 
-  g_object_unref (G_OBJECT (fontsel->context));
   pango_font_description_free (fontsel->font_desc);
 
   if (fontsel->font)
@@ -449,7 +447,8 @@ gtk_font_selection_show_available_fonts (GtkFontSelection *fontsel)
   gchar **families;
   int n_families, i;
 
-  pango_context_list_families (fontsel->context, &families, &n_families);
+  pango_context_list_families (gtk_widget_get_pango_context (GTK_WIDGET (fontsel)),
+			       &families, &n_families);
   qsort (families, n_families, sizeof(char *), cmp_strings);
 
   gtk_clist_freeze (GTK_CLIST (fontsel->font_clist));
@@ -562,7 +561,8 @@ gtk_font_selection_show_available_styles (GtkFontSelection *fontsel)
   gint match_row = 0;
   gchar *str;
   
-  pango_context_list_fonts (fontsel->context, fontsel->font_desc->family_name, &descs, &n_descs);
+  pango_context_list_fonts (gtk_widget_get_pango_context (GTK_WIDGET (fontsel)),
+			    fontsel->font_desc->family_name, &descs, &n_descs);
   qsort (descs, n_descs, sizeof(PangoFontDescription *), font_description_sort_func);
 
   gtk_clist_freeze (GTK_CLIST (fontsel->font_style_clist));
@@ -833,7 +833,8 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
 
   /* Check to make sure that this is in the list of allowed fonts */
 
-  pango_context_list_fonts (fontsel->context, new_desc->family_name, &descs, &n_descs);
+  pango_context_list_fonts (gtk_widget_get_pango_context (GTK_WIDGET (fontsel)),
+			    new_desc->family_name, &descs, &n_descs);
 
   for (i=0; i<n_descs; i++)
     {

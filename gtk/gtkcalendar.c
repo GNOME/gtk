@@ -1182,20 +1182,20 @@ gtk_calendar_size_request (GtkWidget	  *widget,
       for (i = 0; i < 12; i++)
 	{
 	  pango_layout_set_text (layout, default_monthname[i], -1);
-	  pango_layout_get_extents (layout, NULL, &logical_rect);
+	  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 	  private_data->max_month_width = MAX (private_data->max_month_width,
-					       logical_rect.width / PANGO_SCALE + 8);
-	  max_header_height = MAX (max_header_height, logical_rect.height / PANGO_SCALE); 
+					       logical_rect.width + 8);
+	  max_header_height = MAX (max_header_height, logical_rect.height); 
 	}
       private_data->max_year_width = 0;
       for (i=0; i<10; i++)
 	{
 	  sprintf (buffer, "%d%d%d%d", i,i,i,i);
 	  pango_layout_set_text (layout, buffer, -1);	  
-	  pango_layout_get_extents (layout, NULL, &logical_rect);
+	  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 	  private_data->max_year_width = MAX (private_data->max_year_width,
-					      logical_rect.width / PANGO_SCALE + 8);
-	  max_header_height = MAX (max_header_height, logical_rect.height / PANGO_SCALE); 
+					      logical_rect.width + 8);
+	  max_header_height = MAX (max_header_height, logical_rect.height); 
 	}
     } 
   else 
@@ -1220,14 +1220,14 @@ gtk_calendar_size_request (GtkWidget	  *widget,
     {
       sprintf (buffer, "%d%d", i, i);
       pango_layout_set_text (layout, buffer, -1);	  
-      pango_layout_get_extents (layout, NULL, &logical_rect);
+      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
       private_data->min_day_width = MAX (private_data->max_day_char_width,
-					 logical_rect.width / PANGO_SCALE);
+					 logical_rect.width);
 
       private_data->max_day_char_ascent = MAX (private_data->max_label_char_ascent,
-					       PANGO_ASCENT (logical_rect) / PANGO_SCALE);
+					       PANGO_ASCENT (logical_rect));
       private_data->max_day_char_descent = MAX (private_data->max_label_char_descent, 
-						PANGO_DESCENT (logical_rect) / PANGO_SCALE);
+						PANGO_DESCENT (logical_rect));
     }
   /* We add one to max_day_char_width to be able to make the marked day "bold" */
   private_data->max_day_char_width = private_data->min_day_width / 2 +1;
@@ -1236,13 +1236,13 @@ gtk_calendar_size_request (GtkWidget	  *widget,
     for (i = 0; i < 7; i++)
       {
 	pango_layout_set_text (layout, default_abbreviated_dayname[i], -1);
-	pango_layout_line_get_extents (pango_layout_get_lines (layout)->data, NULL, &logical_rect);
+	pango_layout_line_get_pixel_extents (pango_layout_get_lines (layout)->data, NULL, &logical_rect);
 
-	private_data->min_day_width = MAX (private_data->min_day_width, logical_rect.width / PANGO_SCALE);
+	private_data->min_day_width = MAX (private_data->min_day_width, logical_rect.width);
 	private_data->max_label_char_ascent = MAX (private_data->max_label_char_ascent,
-						   PANGO_ASCENT (logical_rect) / PANGO_SCALE);
+						   PANGO_ASCENT (logical_rect));
 	private_data->max_label_char_descent = MAX (private_data->max_label_char_descent, 
-						    PANGO_DESCENT (logical_rect) / PANGO_SCALE);
+						    PANGO_DESCENT (logical_rect));
       }
   
   private_data->max_week_char_width = 0;
@@ -1251,9 +1251,9 @@ gtk_calendar_size_request (GtkWidget	  *widget,
       {
 	sprintf (buffer, "%d%d", i, i);
 	pango_layout_set_text (layout, buffer, -1);	  
-	pango_layout_get_extents (layout, NULL, &logical_rect);
+	pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 	private_data->max_week_char_width = MAX (private_data->max_week_char_width,
-						 logical_rect.width / PANGO_SCALE / 2);
+						 logical_rect.width / 2);
       }
   
   main_width = (7 * (private_data->min_day_width + DAY_XPAD * 2) + (DAY_XSEP * 6) + CALENDAR_MARGIN * 2
@@ -1565,19 +1565,19 @@ gtk_calendar_paint_header (GtkWidget *widget)
 
   sprintf (buffer, "%d", calendar->year);
   pango_layout_set_text (layout, buffer, -1);
-  pango_layout_get_extents (layout, NULL, &logical_rect);
+  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   
   /* Draw title */
-  y = (private_data->header_h - logical_rect.height / PANGO_SCALE) / 2;
+  y = (private_data->header_h - logical_rect.height) / 2;
   
   /* Draw year and its arrows */
   
   if (calendar->display_flags & GTK_CALENDAR_NO_MONTH_CHANGE)
     x = header_width - (3 + max_year_width
-			- (max_year_width - logical_rect.width / PANGO_SCALE)/2);
+			- (max_year_width - logical_rect.width)/2);
   else
     x = header_width - (3 + private_data->arrow_width + max_year_width
-			- (max_year_width - logical_rect.width / PANGO_SCALE)/2);
+			- (max_year_width - logical_rect.width)/2);
     
   
   gdk_gc_set_foreground (gc, HEADER_FG_COLOR (GTK_WIDGET (calendar)));
@@ -1586,12 +1586,12 @@ gtk_calendar_paint_header (GtkWidget *widget)
   /* Draw month */
   sprintf (buffer, "%s", default_monthname[calendar->month]);
   pango_layout_set_text (layout, buffer, -1);
-  pango_layout_get_extents (layout, NULL, &logical_rect);
+  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
   if (calendar->display_flags & GTK_CALENDAR_NO_MONTH_CHANGE)
-    x = 3 + (max_month_width - logical_rect.width / PANGO_SCALE) / 2;
+    x = 3 + (max_month_width - logical_rect.width) / 2;
   else
-    x = 3 + private_data->arrow_width + (max_month_width - logical_rect.width / PANGO_SCALE)/2;
+    x = 3 + private_data->arrow_width + (max_month_width - logical_rect.width)/2;
 
   gdk_draw_layout (private_data->header_win, gc, x, y, layout);
   
@@ -1679,14 +1679,14 @@ gtk_calendar_paint_day_names (GtkWidget *widget)
       sprintf (buffer, "%s", default_abbreviated_dayname[day]);
 
       pango_layout_set_text (layout, buffer, -1);
-      pango_layout_get_extents (layout, NULL, &logical_rect);
+      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
       gdk_draw_layout (private_data->day_name_win, gc, 
 		       ((private_data->week_width ? CALENDAR_XSEP : CALENDAR_MARGIN)
 			+ day_wid_sep * i
 			+ private_data->week_width
-			+ (day_width - logical_rect.width / PANGO_SCALE)/2),
-		       CALENDAR_MARGIN + DAY_YPAD + private_data->max_label_char_ascent + logical_rect.y / PANGO_SCALE,
+			+ (day_width - logical_rect.width)/2),
+		       CALENDAR_MARGIN + DAY_YPAD + private_data->max_label_char_ascent + logical_rect.y,
 		       layout);
     }
   
@@ -1768,12 +1768,12 @@ gtk_calendar_paint_week_numbers (GtkWidget *widget)
 
       sprintf (buffer, "%d", week);
       pango_layout_set_text (layout, buffer, -1);
-      pango_layout_get_extents (layout, NULL, &logical_rect);
+      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
-      y_loc = top_y_for_row (calendar, row) + (day_height - logical_rect.height / PANGO_SCALE) / 2;
+      y_loc = top_y_for_row (calendar, row) + (day_height - logical_rect.height) / 2;
 
       x_loc = (private_data->week_width
-	       - logical_rect.width / PANGO_SCALE
+	       - logical_rect.width
 	       - CALENDAR_XSEP - DAY_XPAD);
 
       gdk_draw_layout (private_data->week_win, gc, x_loc, y_loc, layout);
@@ -1904,11 +1904,11 @@ gtk_calendar_paint_day (GtkWidget *widget,
   
   sprintf (buffer, "%d", day);
   pango_layout_set_text (layout, buffer, -1);
-  pango_layout_get_extents (layout, NULL, &logical_rect);
+  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
   
-  x_loc -= logical_rect.width / PANGO_SCALE;
+  x_loc -= logical_rect.width;
 
-  y_loc = y_top + (day_height - logical_rect.height / PANGO_SCALE) / 2;
+  y_loc = y_top + (day_height - logical_rect.height) / 2;
   gdk_draw_layout (private_data->main_win, gc,
 		   x_loc, y_loc, layout);
   if (calendar->marked_date[day-1]

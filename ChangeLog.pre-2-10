@@ -1,3 +1,28 @@
+Sun Jul  2 17:06:40 2000  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtkcalendar.c gtk/gtkclist.c gtk/gtkctree.c gtk/gtkhscale.c
+	gtk/gtkprogressbar.c gtk/gtkscale.c gtk/gtkvscale.c gtk/gtkaccellabel.c: Use
+	pango_layout_get_pixel_extents() to remove a large number of '/ PANGO_SCALE'.
+
+	* gtk/gtk[hv]ruler.c gtk/gtklabel.c: replace some / PANGO_SCALE with
+	PANGO_PIXELS() macro.
+
+Sun Jul  2 15:24:41 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.[ch] (gtk_widget_get_pango_context): Add new function
+	that returns a PangoContext owned by the widget and updated to
+	match future changes in the widget. Also, make 
+	gtk_widget_create_pango_layout() use this context. If we ever
+	add a ::changed signal to PangoContext, this will make things
+	much more convenient. 
+
+	* gtk/gtkentry.c gtk/gtklabel.c: Call pango_layout_context_changed()
+	in the appropriate places instead of destroying the layouts and
+	creating new ones.
+
+	* gtk/gtkfontsel.[ch] gtk/gtkclist.c: Use gtk_widget_get_pango_context()
+	in a few strategic places.
+
 Sun Jul  2 14:37:58 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_size_request): Call 

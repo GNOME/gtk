@@ -576,6 +576,7 @@ void       gtk_widget_modify_style      (GtkWidget      *widget,
 					 GtkRcStyle     *style);
 
 PangoContext *gtk_widget_create_pango_context (GtkWidget *widget);
+PangoContext *gtk_widget_get_pango_context    (GtkWidget *widget);
 PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget *widget);
 
 /* handle composite names for GTK_COMPOSITE_CHILD widgets,

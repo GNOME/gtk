@@ -231,7 +231,7 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
 {
   GtkAccelLabel *accel_label;
   PangoLayout *layout;
-  PangoRectangle logical_rect;
+  gint width;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ACCEL_LABEL (widget));
@@ -244,9 +244,9 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
 
   layout = gtk_widget_create_pango_layout (widget);
   pango_layout_set_text (layout, accel_label->accel_string, -1);
-  pango_layout_get_extents (layout, NULL, &logical_rect);
+  pango_layout_get_pixel_size (layout, &width, NULL);
+  accel_label->accel_string_width = width;
   
-  accel_label->accel_string_width = logical_rect.width / PANGO_SCALE;
   g_object_unref (G_OBJECT (layout));
 }
 

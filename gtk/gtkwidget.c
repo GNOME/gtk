@@ -168,8 +168,9 @@ static void gtk_widget_direction_changed	 (GtkWidget	    *widget,
 						  GtkTextDirection   previous_direction);
 static void gtk_widget_real_grab_focus           (GtkWidget         *focus_widget);
 
-static GdkColormap* gtk_widget_peek_colormap (void);
-static GtkStyle*    gtk_widget_peek_style    (void);
+static GdkColormap*  gtk_widget_peek_colormap      (void);
+static GtkStyle*     gtk_widget_peek_style         (void);
+static PangoContext *gtk_widget_peek_pango_context (GtkWidget *widget);
 
 static void gtk_widget_reparent_container_child  (GtkWidget     *widget,
 						  gpointer       client_data);
@@ -208,6 +209,8 @@ static const gchar *saved_default_style_key = "gtk-saved-default-style";
 static guint        saved_default_style_key_id = 0;
 static const gchar *shape_info_key = "gtk-shape-info";
 static const gchar *colormap_key = "gtk-colormap";
+static const gchar *pango_context_key = "gtk-pango-context";
+static guint        pango_context_key_id = 0;
 
 static const gchar *rc_style_key = "gtk-rc-style";
 static guint        rc_style_key_id = 0;
@@ -3053,19 +3056,19 @@ gtk_widget_modify_style (GtkWidget      *widget,
 }
 
 static void
+gtk_widget_direction_changed (GtkWidget        *widget,
+			      GtkTextDirection  previous_direction)
+{
+  gtk_widget_queue_resize (widget);
+}
+
+static void
 gtk_widget_style_set (GtkWidget *widget,
 		      GtkStyle  *previous_style)
 {
   if (GTK_WIDGET_REALIZED (widget) &&
       !GTK_WIDGET_NO_WINDOW (widget))
     gtk_style_set_background (widget->style, widget->window, widget->state);
-}
-
-static void
-gtk_widget_direction_changed (GtkWidget	       *widget,
-			      GtkTextDirection  previous_direction)
-{
-  gtk_widget_queue_resize (widget);
 }
 
 static void
@@ -3076,6 +3079,13 @@ gtk_widget_set_style_internal (GtkWidget *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (style != NULL);
+
+  if (widget->style != style || initial_emission)
+    {
+      PangoContext *context = gtk_widget_peek_pango_context (widget);
+      if (context)
+	pango_context_set_font_description (context, widget->style->font_desc);
+    }
   
   if (widget->style != style)
     {
@@ -3200,13 +3210,60 @@ gtk_widget_pop_style (void)
     }
 }
 
+static PangoContext *
+gtk_widget_peek_pango_context (GtkWidget *widget)
+{
+  if (!pango_context_key_id)
+    pango_context_key_id = g_quark_from_static_string (pango_context_key);
+
+  return gtk_object_get_data_by_id (GTK_OBJECT (widget), pango_context_key_id);
+}
+
+/**
+ * gtk_widget_get_pango_context:
+ * @widget: a #GtkWidget
+ * 
+ * Get a #PangoContext with the appropriate colormap, font description
+ * and base direction for this widget. Unlike the context returned
+ * by gtk_widget_create_pango_context(), this context is owned by
+ * the widget (it can be used as long as widget exists), and will
+ * be updated to match any changes to the widget's attributes.
+ *
+ * If you create and keep a #PangoLayout using this context, you must
+ * deal with changes to the context by calling pango_layout_context_changed()
+ * on the layout in response to the ::style_set and ::direction_set signals
+ * for the widget.
+ *
+ * Return value: the #PangoContext for the widget.
+ **/
+PangoContext *
+gtk_widget_get_pango_context (GtkWidget *widget)
+{
+  PangoContext *context;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  
+  if (!pango_context_key_id)
+    pango_context_key_id = g_quark_from_static_string (pango_context_key);
+
+  context = gtk_object_get_data_by_id (GTK_OBJECT (widget), pango_context_key_id);
+  if (!context)
+    {
+      context = gtk_widget_create_pango_context (GTK_WIDGET (widget));
+      gtk_object_set_data_by_id_full (GTK_OBJECT (widget), pango_context_key_id, context,
+				      (GDestroyNotify)g_object_unref);
+    }
+
+  return context;
+}
+
 /**
  * gtk_widget_create_pango_context:
  * @widget: a #PangoWidget
  * 
  * Create a new pango context with the appropriate colormap,
  * font description, and base direction for drawing text for
- * this widget.
+ * this widget. See also gtk_widget_get_pango_context()
  * 
  * Return value: the new #PangoContext
  **/
@@ -3240,6 +3297,11 @@ gtk_widget_create_pango_context (GtkWidget *widget)
  * Create a new #PangoLayout with the appropriate colormap,
  * font description, and base direction for drawing text for
  * this widget.
+ *
+ * If you keep a #PangoLayout created in this way around, in order
+ * notify the layout of changes to the base direction or font of this
+ * widget, you must call pango_layout_context_changed() in response to
+ * the ::style_set and ::direction_set signals for the widget.
  * 
  * Return value: the new #PangoLayout
  **/
@@ -3251,9 +3313,8 @@ gtk_widget_create_pango_layout (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  context = gtk_widget_create_pango_context (widget);
+  context = gtk_widget_get_pango_context (widget);
   layout = pango_layout_new (context);
-  g_object_unref (G_OBJECT (context));
 
   return layout;
 }
@@ -3870,6 +3931,20 @@ gtk_widget_get_default_visual (void)
   return gdk_colormap_get_visual (gtk_widget_get_default_colormap ());
 }
 
+static void
+gtk_widget_emit_direction_changed (GtkWidget        *widget,
+				   GtkTextDirection  old_dir)
+{
+  PangoContext *context = gtk_widget_peek_pango_context (widget);
+
+  if (context)
+    pango_context_set_base_dir (context,
+				gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
+				  PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
+  
+  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DIRECTION_CHANGED], old_dir);
+}
+
 /**
  * gtk_widget_set_direction:
  * @widget: a #GtkWidget
@@ -3912,7 +3987,7 @@ gtk_widget_set_direction (GtkWidget        *widget,
     }
 
   if (old_dir != gtk_widget_get_direction (widget))
-    gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DIRECTION_CHANGED], old_dir);
+    gtk_widget_emit_direction_changed (widget, old_dir);
 }
 
 /**
@@ -3944,7 +4019,7 @@ gtk_widget_set_default_direction_recurse (GtkWidget *widget, gpointer data)
   g_object_ref (G_OBJECT (widget));
   
   if (!GTK_WIDGET_DIRECTION_SET (widget))
-    gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DIRECTION_CHANGED], old_dir);      
+    gtk_widget_emit_direction_changed (widget, old_dir);
   
   if (GTK_IS_CONTAINER (widget))
     gtk_container_forall (GTK_CONTAINER (widget),

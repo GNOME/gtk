@@ -1975,10 +1975,7 @@ gtk_entry_style_set	(GtkWidget      *widget,
     }
 
   if (entry->layout)
-    {
-      g_object_unref (G_OBJECT (entry->layout));
-      entry->layout = NULL;
-    }
+    pango_layout_context_changed (entry->layout);
 }
 
 static void 
@@ -1988,10 +1985,7 @@ gtk_entry_direction_changed (GtkWidget        *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
 
   if (entry->layout)
-    {
-      g_object_unref (G_OBJECT (entry->layout));
-      entry->layout = NULL;
-    }
+    pango_layout_context_changed (entry->layout);
 
   GTK_WIDGET_CLASS (parent_class)->direction_changed (widget, previous_dir);
 }

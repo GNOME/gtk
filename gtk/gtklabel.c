@@ -443,7 +443,7 @@ gtk_label_size_request (GtkWidget      *widget,
 	  pango_layout_get_extents (label->layout, NULL, &logical_rect);
 
 	  requisition->width += aux_info->width;
-	  requisition->height += logical_rect.height / PANGO_SCALE;
+	  requisition->height += PANGO_PIXELS (logical_rect.height);
 	}
       else
 	{
@@ -510,8 +510,8 @@ gtk_label_size_request (GtkWidget      *widget,
 	    }
 	  pango_layout_set_width (label->layout, width);
 
-	  requisition->width += real_width / PANGO_SCALE;
-	  requisition->height += height / PANGO_SCALE;
+	  requisition->width += PANGO_PIXELS (real_width);
+	  requisition->height += PANGO_PIXELS (height);
 	}
     }
   else				/* !label->wrap */
@@ -519,8 +519,8 @@ gtk_label_size_request (GtkWidget      *widget,
       pango_layout_set_width (label->layout, -1);
       pango_layout_get_extents (label->layout, NULL, &logical_rect);
 
-      requisition->width += logical_rect.width / PANGO_SCALE;
-      requisition->height += logical_rect.height / PANGO_SCALE;
+      requisition->width += PANGO_PIXELS (logical_rect.width);
+      requisition->height += PANGO_PIXELS (logical_rect.height);
     }
 }
 
@@ -535,10 +535,7 @@ gtk_label_style_set (GtkWidget *widget,
   label = GTK_LABEL (widget);
 
   if (previous_style && label->layout)
-    {
-      g_object_unref (G_OBJECT (label->layout));
-      label->layout = NULL;
-    }
+    pango_layout_context_changed (label->layout);
 }
 
 static void 
@@ -548,10 +545,7 @@ gtk_label_direction_changed (GtkWidget        *widget,
   GtkLabel *label = GTK_LABEL (widget);
 
   if (label->layout)
-    {
-      g_object_unref (G_OBJECT (label->layout));
-      label->layout = NULL;
-    }
+    pango_layout_context_changed (label->layout);
 
   GTK_WIDGET_CLASS (parent_class)->direction_changed (widget, previous_dir);
 }

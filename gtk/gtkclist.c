@@ -2557,10 +2557,10 @@ cell_size_request (GtkCList       *clist,
   layout = _gtk_clist_create_cell_layout (clist, clist_row, column);
   if (layout)
     {
-      pango_layout_get_extents (layout, NULL, &logical_rect);
+      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
       
-      requisition->width = logical_rect.width / PANGO_SCALE;
-      requisition->height = logical_rect.height / PANGO_SCALE;
+      requisition->width = logical_rect.width;
+      requisition->height = logical_rect.height;
       
       g_object_unref (G_OBJECT (layout));
     }
@@ -3019,7 +3019,7 @@ gtk_clist_set_row_height (GtkCList *clist,
 
   if (widget->style->font_desc)
     {
-      PangoContext *context = gtk_widget_create_pango_context (widget);
+      PangoContext *context = gtk_widget_get_pango_context (widget);
       PangoFontMetrics metrics;
       PangoFont *font = pango_context_load_font (context, widget->style->font_desc);
       gchar *lang = pango_context_get_lang (context);
@@ -3028,10 +3028,9 @@ gtk_clist_set_row_height (GtkCList *clist,
       
       g_free (lang);
       g_object_unref (G_OBJECT (font));
-      g_object_unref (G_OBJECT (context));
       
       if (!GTK_CLIST_ROW_HEIGHT_SET(clist))
-	clist->row_height = (metrics.ascent + metrics.descent) / PANGO_SCALE;
+	clist->row_height = PANGO_PIXELS (metrics.ascent + metrics.descent);
     }
       
   CLIST_REFRESH (clist);
@@ -5847,8 +5846,8 @@ draw_row (GtkCList     *clist,
       layout = _gtk_clist_create_cell_layout (clist, clist_row, i);
       if (layout)
 	{
-	  pango_layout_get_extents (layout, NULL, &logical_rect);
-	  width = logical_rect.width / PANGO_SCALE;
+	  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+	  width = logical_rect.width;
 	}
       else
 	width = 0;
@@ -5914,7 +5913,7 @@ draw_row (GtkCList     *clist,
 	case GTK_CELL_TEXT:
 	  if (layout)
 	    {
-	      gint row_center_offset = 1.5 + (clist->row_height - logical_rect.height / PANGO_SCALE - 1) / 2;
+	      gint row_center_offset = 1.5 + (clist->row_height - logical_rect.height - 1) / 2;
 
 	      gdk_gc_set_clip_rectangle (fg_gc, &clip_rectangle);
 	      gdk_draw_layout (clist->clist_window, fg_gc,

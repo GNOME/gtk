@@ -169,14 +169,14 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
   xthickness = widget->style->xthickness;
   ythickness = widget->style->ythickness;
 
-  digit_height = ink_rect.height / PANGO_SCALE + 2;
+  digit_height = PANGO_PIXELS (ink_rect.height) + 2;
   digit_offset = ink_rect.y;
 
   layout = gtk_widget_create_pango_layout (widget);
   pango_layout_set_text (layout, "012456789", -1);
   pango_layout_get_extents (layout, &ink_rect, &logical_rect);
   
-  digit_height = ink_rect.height / PANGO_SCALE + 1;
+  digit_height = PANGO_PIXELS (ink_rect.height) + 1;
   digit_offset = ink_rect.y;
 
   width = widget->allocation.width;
@@ -263,7 +263,7 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
 	      pango_layout_get_extents (layout, &logical_rect, NULL);
 
 	      gdk_draw_layout (ruler->backing_store, gc,
-			       pos + 2, ythickness + (logical_rect.y - digit_offset) / PANGO_SCALE,
+			       pos + 2, ythickness + PANGO_PIXELS (logical_rect.y - digit_offset),
 			       layout);
 	    }
 	}

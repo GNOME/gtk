@@ -365,7 +365,7 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
 
       layout = gtk_widget_create_pango_layout (widget);
       pango_layout_set_text (layout, buf, -1);
-      pango_layout_get_extents (layout, NULL, &logical_rect);
+      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 	  
       g_object_unref (G_OBJECT (layout));
       g_free (buf);
@@ -378,11 +378,11 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
 	{
 	  requisition->width = MAX (MIN_HORIZONTAL_BAR_WIDTH,
 				    2 * widget->style->xthickness + 3 +
-				    logical_rect.width / PANGO_SCALE + 2 * TEXT_SPACING);
+				    logical_rect.width + 2 * TEXT_SPACING);
 
 	  requisition->height = MAX (MIN_HORIZONTAL_BAR_HEIGHT,
 				     2 * widget->style->ythickness + 3 +
-				     logical_rect.height / PANGO_SCALE + 2 * TEXT_SPACING);
+				     logical_rect.height + 2 * TEXT_SPACING);
 	}
       else
 	{
@@ -396,11 +396,11 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
 	{	  
 	  requisition->width = MAX (MIN_VERTICAL_BAR_WIDTH,
 				    2 * widget->style->xthickness + 3 +
-				    logical_rect.width / PANGO_SCALE + 2 * TEXT_SPACING);
+				    logical_rect.width + 2 * TEXT_SPACING);
 
 	  requisition->height = MAX (MIN_VERTICAL_BAR_HEIGHT,
 				     2 * widget->style->ythickness + 3 +
-				     logical_rect.height / PANGO_SCALE + 2 * TEXT_SPACING);
+				     logical_rect.height + 2 * TEXT_SPACING);
 	}
       else
 	{
@@ -712,16 +712,16 @@ gtk_progress_bar_paint (GtkProgress *progress)
 
 	  layout = gtk_widget_create_pango_layout (widget);
 	  pango_layout_set_text (layout, buf, -1);
-	  pango_layout_get_extents (layout, NULL, &logical_rect);
+	  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 	  
 	  x = widget->style->xthickness + 1 + 
 	    (widget->allocation.width - 2 * widget->style->xthickness -
-	     3 - logical_rect.width / PANGO_SCALE)
+	     3 - logical_rect.width)
 	    * progress->x_align; 
 
 	  y = widget->style->ythickness + 1 +
 	    (widget->allocation.height - 2 * widget->style->ythickness -
-	     3 - logical_rect.height / PANGO_SCALE)
+	     3 - logical_rect.height)
 	    * progress->y_align;
 
 	  rect.x = widget->style->xthickness + 1;
