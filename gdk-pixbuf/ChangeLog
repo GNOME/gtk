@@ -1,5 +1,8 @@
 2003-06-22  Matthias Clasen  <matthias@localhost.localdomain>
 
+	* gdk-pixbuf-loader.[hc] (gdk_pixbuf_loader_new_with_mime_type): New function to obtain a loader for a specific mime 
+	type.  (#105324, Dom Lachowicz)
+
 	* io-gif.c (gif_get_extension): Reset block_count to 0 for all application extensions, otherwise the data blocks 
 	of unknown extensions are not propertly skipped. 
 

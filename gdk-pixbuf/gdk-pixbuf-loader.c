@@ -517,6 +517,65 @@ gdk_pixbuf_loader_new_with_type (const char *image_type,
 }
 
 /**
+ * gdk_pixbuf_loader_new_with_mime_type:
+ * @mime_type: the mime type to be loaded 
+ * @error: return location for an allocated #GError, or %NULL to ignore errors
+ *
+ * Creates a new pixbuf loader object that always attempts to parse
+ * image data as if it were an image of mime type @mime_type, instead of
+ * identifying the type automatically. Useful if you want an error if
+ * the image isn't the expected mime type, for loading image formats
+ * that can't be reliably identified by looking at the data, or if
+ * the user manually forces a specific mime type.
+ *
+ * Return value: A newly-created pixbuf loader.
+ * Since: 2.4
+ **/
+GdkPixbufLoader *
+gdk_pixbuf_loader_new_with_mime_type (const char *mime_type,
+                                      GError    **error)
+{
+        const char * image_type = NULL;
+        char ** mimes;
+
+        GdkPixbufLoader *retval;
+        GError *tmp;
+  
+        GSList * formats;
+        GdkPixbufFormat *info;
+        int i, j, length;
+
+        formats = gdk_pixbuf_get_formats ();
+        length = g_slist_length (formats);
+
+        for (i = 0; i < length && image_type == NULL; i++) {
+                info = (GdkPixbufFormat *)g_slist_nth_data (formats, i);
+                mimes = info->mime_types;
+                
+                for (j = 0; mimes[j] != NULL; j++)
+                        if (g_ascii_strcasecmp (mimes[i], mime_type)) {
+                                image_type = info->name;
+                                break;
+                        }
+        }
+
+        g_slist_free (formats);
+
+        retval = g_object_new (GDK_TYPE_PIXBUF_LOADER, NULL);
+
+        tmp = NULL;
+        gdk_pixbuf_loader_load_module(retval, image_type, &tmp);
+        if (tmp != NULL)
+                {
+                        g_propagate_error (error, tmp);
+                        g_object_unref (retval);
+                        return NULL;
+                }
+
+        return retval;
+}
+
+/**
  * gdk_pixbuf_loader_get_pixbuf:
  * @loader: A pixbuf loader.
  *

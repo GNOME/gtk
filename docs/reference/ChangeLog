@@ -1,3 +1,7 @@
+2003-06-22  Matthias Clasen  <matthias@localhost.localdomain>
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add gdk_pixbuf_loader_new_with_mime_type.
+
 2003-06-19  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/question_index.sgml: Add a question about changing

@@ -70,6 +70,8 @@ GType                gdk_pixbuf_loader_get_type      (void) G_GNUC_CONST;
 GdkPixbufLoader *    gdk_pixbuf_loader_new           (void);
 GdkPixbufLoader *    gdk_pixbuf_loader_new_with_type (const char *image_type,
                                                       GError    **error);
+GdkPixbufLoader *    gdk_pixbuf_loader_new_with_mime_type (const char *mime_type,
+							   GError    **error);
 void                 gdk_pixbuf_loader_set_size (GdkPixbufLoader  *loader,
                                                  int               width,
 						 int               height);

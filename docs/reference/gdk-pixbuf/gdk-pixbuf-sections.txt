@@ -150,6 +150,7 @@ gdk_interp_type_get_type
 GdkPixbufLoader
 gdk_pixbuf_loader_new
 gdk_pixbuf_loader_new_with_type
+gdk_pixbuf_loader_new_with_mime_type
 gdk_pixbuf_loader_get_format
 gdk_pixbuf_loader_write
 gdk_pixbuf_loader_set_size
