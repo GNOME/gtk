@@ -287,16 +287,10 @@ are currently:
 
 <!-- ##### FUNCTION gdk_font_load ##### -->
 <para>
-Loads a font.
 </para>
 
-<para>
-The font may be newly loaded or looked up the font in a cache. 
-You should make no assumptions about the initial reference count.
-</para>
-
-@font_name: a XLFD describing the font to load.
-@Returns: a #GdkFont, or %NULL if the font could not be loaded.
+@font_name: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_font_load_for_display ##### -->
@@ -311,16 +305,10 @@ You should make no assumptions about the initial reference count.
 
 <!-- ##### FUNCTION gdk_fontset_load ##### -->
 <para>
-Loads a fontset.
-</para>
-<para>
-The fontset may be newly loaded or looked up in a cache. 
-You should make no assumptions about the initial reference count.
 </para>
 
-@fontset_name: a comma-separated list of XLFDs describing
-   the component fonts of the fontset to load.
-@Returns: a #GdkFont, or %NULL if the fontset could not be loaded.
+@fontset_name: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_fontset_load_for_display ##### -->
@@ -363,225 +351,178 @@ You should make no assumptions about the initial reference count.
 
 <!-- ##### FUNCTION gdk_font_ref ##### -->
 <para>
-Increases the reference count of a font by one.
 </para>
 
-@font: a #GdkFont
-@Returns: @font
+@font: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_font_unref ##### -->
 <para>
-Decreases the reference count of a font by one.
-If the result is zero, destroys the font.
 </para>
 
-@font: a #GdkFont
+@font: 
 
 
 <!-- ##### FUNCTION gdk_font_id ##### -->
 <para>
-Returns the X Font ID for the given font. 
 </para>
 
-@font: a #GdkFont.
-@Returns: the numeric X Font ID
+@font: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_font_equal ##### -->
 <para>
-Compares two fonts for equality. Single fonts compare equal
-if they have the same X font ID. This operation does
-not currently work correctly for fontsets.
 </para>
 
-@fonta: a #GdkFont.
-@fontb: another #GdkFont.
-@Returns: %TRUE if the fonts are equal.
+@fonta: 
+@fontb: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_string_extents ##### -->
 <para>
-Returns the metrics of a nul-terminated string.
 </para>
 
-@font: a #GdkFont.
-@string: the nul-terminated string to measure.
-@lbearing: the left bearing of the string.
-@rbearing: the right bearing of the string.
-@width: the width of the string.
-@ascent: the ascent of the string.
-@descent: the descent of the string.
+@font: 
+@string: 
+@lbearing: 
+@rbearing: 
+@width: 
+@ascent: 
+@descent: 
 
 
 <!-- ##### FUNCTION gdk_text_extents ##### -->
 <para>
-Returns the metrics of a string.
 </para>
 
-@font: a #GdkFont
-@text: the text to measure
-@text_length: the length of the text in bytes. (If the
-  font is a 16-bit font, this is twice the length
-  of the text in characters.)
-@lbearing: the left bearing of the string.
-@rbearing: the right bearing of the string.
-@width: the width of the string.
-@ascent: the ascent of the string.
-@descent: the descent of the string.
+@font: 
+@text: 
+@text_length: 
+@lbearing: 
+@rbearing: 
+@width: 
+@ascent: 
+@descent: 
 
 
 <!-- ##### FUNCTION gdk_text_extents_wc ##### -->
 <para>
-Returns the metrics of a string of wide characters.
 </para>
 
-@font: a #GdkFont
-@text: the text to measure.
-@text_length: the length of the text in character.
-@lbearing: the left bearing of the string.
-@rbearing: the right bearing of the string.
-@width: the width of the string.
-@ascent: the ascent of the string.
-@descent: the descent of the string.
+@font: 
+@text: 
+@text_length: 
+@lbearing: 
+@rbearing: 
+@width: 
+@ascent: 
+@descent: 
 
 
 <!-- ##### FUNCTION gdk_string_width ##### -->
 <para>
-Determines the width of a nul-terminated string.
-(The distance from the origin of the string to the 
-point where the next string in a sequence of strings
-should be drawn)
 </para>
 
-@font: a #GdkFont
-@string: the nul-terminated string to measure
-@Returns: the width of the string in pixels.
+@font:
+@string: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_text_width ##### -->
 <para>
-Determines the width of a given string.
 </para>
 
-@font: a #GdkFont
-@text: the text to measure.
-@text_length: the length of the text in bytes.
-@Returns: the width of the string in pixels.
+@font: 
+@text: 
+@text_length: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_text_width_wc ##### -->
 <para>
-Determines the width of a given wide-character string.
 </para>
 
-@font: a #GdkFont
-@text: the text to measure.
-@text_length: the length of the text in characters.
-@Returns: the width of the string in pixels.
+@font: 
+@text: 
+@text_length: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_char_width ##### -->
 <para>
-Determines the width of a given character.
 </para>
 
-@font: a #GdkFont
-@character: the character to measure.
-@Returns: the width of the character in pixels.
+@font: 
+@character: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_char_width_wc ##### -->
 <para>
-Determines the width of a given wide character. (Encoded
-in the wide-character encoding of the current locale).
 </para>
 
-@font: a #GdkFont
-@character: the character to measure.
-@Returns: the width of the character in pixels.
+@font: 
+@character: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_string_measure ##### -->
 <para>
-Determines the distance from the origin to the rightmost
-portion of a nul-terminated string when drawn. This is not the
-correct value for determining the origin of the next
-portion when drawing text in multiple pieces.
-See gdk_string_width().
 </para>
 
-@font: a #GdkFont
-@string: the nul-terminated string to measure.
-@Returns: the right bearing of the string in pixels.
+@font: 
+@string: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_text_measure ##### -->
 <para>
-Determines the distance from the origin to the rightmost
-portion of a string when drawn. This is not the
-correct value for determining the origin of the next
-portion when drawing text in multiple pieces. 
-See gdk_text_width().
 </para>
 
-@font: a #GdkFont
-@text: the text to measure.
-@text_length: the length of the text in bytes.
-@Returns: the right bearing of the string in pixels.
+@font: 
+@text: 
+@text_length: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_char_measure ##### -->
 <para>
-Determines the distance from the origin to the rightmost
-portion of a character when drawn. This is not the
-correct value for determining the origin of the next
-portion when drawing text in multiple pieces. 
 </para>
 
-@font: a #GdkFont
-@character: the character to measure.
-@Returns: the right bearing of the character in pixels.
+@font: 
+@character: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_string_height ##### -->
 <para>
-Determines the total height of a given nul-terminated
-string. This value is not generally useful, because you
-cannot determine how this total height will be drawn in
-relation to the baseline. See gdk_string_extents().
 </para>
 
-@font: a #GdkFont
-@string: the nul-terminated string to measure.
-@Returns: the height of the string in pixels.
+@font: 
+@string: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_text_height ##### -->
 <para>
-Determines the total height of a given string.
-This value is not generally useful, because you cannot
-determine how this total height will be drawn in
-relation to the baseline. See gdk_text_extents().
 </para>
 
-@font: a #GdkFont
-@text: the text to measure.
-@text_length: the length of the text in bytes.
-@Returns: the height of the string in pixels.
+@font: 
+@text: 
+@text_length: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_char_height ##### -->
 <para>
-Determines the total height of a given character.
-This value is not generally useful, because you cannot
-determine how this total height will be drawn in
-relation to the baseline. See gdk_text_extents().
 </para>
 
-@font: a #GdkFont
-@character: the character to measure.
-@Returns: the height of the character in pixels.
+@font: 
+@character:
+@Returns: 
 
 
 <!-- ##### TYPEDEF GdkWChar ##### -->
@@ -621,28 +562,19 @@ for more detailed information on wide and multi-byte characters.
 
 <!-- ##### FUNCTION gdk_wcstombs ##### -->
 <para>
-Converts a wide character string to a multi-byte string.
-(The function name comes from an acronym of 'Wide Character String TO
-Multi-Byte String').
 </para>
 
-@src: a wide character string.
-@Returns: the multi-byte string corresponding to @src, or %NULL if the
-conversion failed. The returned string should be freed with g_free() when no
-longer needed.
+@src: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_mbstowcs ##### -->
 <para>
-Converts a multi-byte string to a wide character string.
-(The function name comes from an acronym of 'Multi-Byte String TO Wide
-Character String').
 </para>
 
-@dest: the space to place the converted wide character string into.
-@src: the multi-byte string to convert, which must be nul-terminated.
-@dest_max: the maximum number of wide characters to place in @dest.
-@Returns: the number of wide characters written into @dest, or -1 if the
-conversion failed.
+@dest: 
+@src: 
+@dest_max: 
+@Returns: 
 
 

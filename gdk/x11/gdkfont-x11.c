@@ -396,6 +396,18 @@ gdk_fontset_load_for_display (GdkDisplay  *display,
     }
 }
 
+/**
+ * gdk_fontset_load:
+ * @fontset_name: a comma-separated list of XLFDs describing
+ *     the component fonts of the fontset to load.
+ * 
+ * Loads a fontset.
+ *
+ * The fontset may be newly loaded or looked up in a cache. 
+ * You should make no assumptions about the initial reference count.
+ * 
+ * Return value: a #GdkFont, or %NULL if the fontset could not be loaded.
+ **/
 GdkFont*
 gdk_fontset_load (const gchar *fontset_name)
 {
@@ -464,6 +476,14 @@ _gdk_font_strlen (GdkFont     *font,
   return length;
 }
 
+/**
+ * gdk_font_id:
+ * @font: a #GdkFont.
+ * 
+ * Returns the X Font ID for the given font. 
+ * 
+ * Return value: the numeric X Font ID
+ **/
 gint
 gdk_font_id (const GdkFont *font)
 {
@@ -483,6 +503,17 @@ gdk_font_id (const GdkFont *font)
     }
 }
 
+/**
+ * gdk_font_equal:
+ * @fonta: a #GdkFont.
+ * @fontb: another #GdkFont.
+ * 
+ * Compares two fonts for equality. Single fonts compare equal
+ * if they have the same X font ID. This operation does
+ * not currently work correctly for fontsets.
+ * 
+ * Return value: %TRUE if the fonts are equal.
+ **/
 gboolean
 gdk_font_equal (const GdkFont *fonta,
                 const GdkFont *fontb)
@@ -515,6 +546,16 @@ gdk_font_equal (const GdkFont *fonta,
     return 0;
 }
 
+/**
+ * gdk_text_width:
+ * @font: a #GdkFont
+ * @text: the text to measure.
+ * @text_length: the length of the text in bytes.
+ * 
+ * Determines the width of a given string.
+ * 
+ * Return value: the width of the string in pixels.
+ **/
 gint
 gdk_text_width (GdkFont      *font,
 		const gchar  *text,
@@ -553,6 +594,16 @@ gdk_text_width (GdkFont      *font,
   return width;
 }
 
+/**
+ * gdk_text_width_wc:
+ * @font: a #GdkFont
+ * @text: the text to measure.
+ * @text_length: the length of the text in characters.
+ * 
+ * Determines the width of a given wide-character string.
+ * 
+ * Return value: the width of the string in pixels.
+ **/
 gint
 gdk_text_width_wc (GdkFont	  *font,
 		   const GdkWChar *text,
@@ -609,6 +660,21 @@ gdk_text_width_wc (GdkFont	  *font,
   return width;
 }
 
+/**
+ * gdk_text_extents:
+ * @font: a #GdkFont
+ * @text: the text to measure
+ * @text_length: the length of the text in bytes. (If the
+ *    font is a 16-bit font, this is twice the length
+ *    of the text in characters.)
+ * @lbearing: the left bearing of the string.
+ * @rbearing: the right bearing of the string.
+ * @width: the width of the string.
+ * @ascent: the ascent of the string.
+ * @descent: the descent of the string.
+ * 
+ * Returns the metrics of a string.
+ **/
 void
 gdk_text_extents (GdkFont     *font,
                   const gchar *text,
@@ -678,6 +744,19 @@ gdk_text_extents (GdkFont     *font,
 
 }
 
+/**
+ * gdk_text_extents_wc:
+ * @font: a #GdkFont
+ * @text: the text to measure.
+ * @text_length: the length of the text in character.
+ * @lbearing: the left bearing of the string.
+ * @rbearing: the right bearing of the string.
+ * @width: the width of the string.
+ * @ascent: the ascent of the string.
+ * @descent: the descent of the string.
+ * 
+ * Returns the metrics of a string of wide characters.
+ **/
 void
 gdk_text_extents_wc (GdkFont        *font,
 		     const GdkWChar *text,

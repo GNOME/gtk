@@ -1,3 +1,10 @@
+2002-11-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkim-x11.c: 
+	* gdk/gdkfont.c: 
+	* gdk/x11/gdkfont-x11.c: 
+	* gdk/gdkdraw.c: Some docs moved inline.
+
 Thu Oct 31 17:41:12 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktooltips.c (gtk_tooltips_update_screen): Fix

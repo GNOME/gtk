@@ -1,5 +1,8 @@
 2002-11-01  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk/tmpl/fonts.sgml: 
+	* gdk/tmpl/drawing.sgml: More docs moved inline.
+
 	* gtk/tmpl/gtkfilesel.sgml: The label is "Folders" now, not
 	"Directories".  (#97224, Vitaly Tishkov)
 

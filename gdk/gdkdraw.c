@@ -311,6 +311,17 @@ gdk_drawable_unref (GdkDrawable *drawable)
 
 /* Drawing
  */
+
+/**
+ * gdk_draw_point:
+ * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+ * @gc: a #GdkGC.
+ * @x: the x coordinate of the point.
+ * @y: the y coordinate of the point.
+ * 
+ * Draws a point, using the foreground color and other attributes of 
+ * the #GdkGC.
+ **/
 void
 gdk_draw_point (GdkDrawable *drawable,
                 GdkGC       *gc,
@@ -328,6 +339,18 @@ gdk_draw_point (GdkDrawable *drawable,
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_points (drawable, gc, &point, 1);
 }
 
+/**
+ * gdk_draw_line:
+ * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap). 
+ * @gc: a #GdkGC.
+ * @x1: the x coordinate of the start point.
+ * @y1: the y coordinate of the start point.
+ * @x2: the x coordinate of the end point.
+ * @y2: the y coordinate of the end point.
+ * 
+ * Draws a line, using the foreground color and other attributes of 
+ * the #GdkGC.
+ **/
 void
 gdk_draw_line (GdkDrawable *drawable,
 	       GdkGC       *gc,
@@ -350,6 +373,27 @@ gdk_draw_line (GdkDrawable *drawable,
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_segments (drawable, gc, &segment, 1);
 }
 
+/**
+ * gdk_draw_rectangle:
+ * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+ * @gc: a #GdkGC.
+ * @filled: %TRUE if the rectangle should be filled.
+ * @x: the x coordinate of the left edge of the rectangle.
+ * @y: the y coordinate of the top edge of the rectangle.
+ * @width: the width of the rectangle.
+ * @height: the height of the rectangle.
+ * 
+ * Draws a rectangular outline or filled rectangle, using the foreground color
+ * and other attributes of the #GdkGC.
+ *
+ * A rectangle drawn filled is 1 pixel smaller in both dimensions than a 
+ * rectangle outlined. Calling 
+ * <literal>gdk_draw_rectangle (window, gc, TRUE, 0, 0, 20, 20)</literal> 
+ * results in a filled rectangle 20 pixels wide and 20 pixels high. Calling
+ * <literal>gdk_draw_rectangle (window, gc, FALSE, 0, 0, 20, 20)</literal> 
+ * results in an outlined rectangle with corners at (0, 0), (0, 20), (20, 20),
+ * and (20, 0), which makes it 21 pixels wide and 21 pixels high.
+ **/
 void
 gdk_draw_rectangle (GdkDrawable *drawable,
 		    GdkGC       *gc,
@@ -379,6 +423,24 @@ gdk_draw_rectangle (GdkDrawable *drawable,
                                                      width, height);
 }
 
+/**
+ * gdk_draw_arc:
+ * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+ * @gc: a #GdkGC.
+ * @filled: %TRUE if the arc should be filled, producing a 'pie slice'.
+ * @x: the x coordinate of the left edge of the bounding rectangle.
+ * @y: the y coordinate of the top edge of the bounding rectangle.
+ * @width: the width of the bounding rectangle.
+ * @height: the height of the bounding rectangle.
+ * @angle1: the start angle of the arc, relative to the 3 o'clock position,
+ *     counter-clockwise, in 1/64ths of a degree.
+ * @angle2: the end angle of the arc, relative to @angle1, in 1/64ths 
+ *     of a degree.
+ * 
+ * Draws an arc or a filled 'pie slice'. The arc is defined by the bounding
+ * rectangle of the entire ellipse, and the start and end angles of the part 
+ * of the ellipse to be drawn.
+ **/
 void
 gdk_draw_arc (GdkDrawable *drawable,
 	      GdkGC       *gc,
@@ -410,6 +472,19 @@ gdk_draw_arc (GdkDrawable *drawable,
                                                x, y, width, height, angle1, angle2);
 }
 
+/**
+ * gdk_draw_polygon:
+ * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+ * @gc: a #GdkGC.
+ * @filled: %TRUE if the polygon should be filled. The polygon is closed
+ *     automatically, connecting the last point to the first point if 
+ *     necessary.
+ * @points: an array of #GdkPoint structures specifying the points making 
+ *     up the polygon.
+ * @npoints: the number of points.
+ * 
+ * Draws an outlined or filled polygon.
+ **/
 void
 gdk_draw_polygon (GdkDrawable *drawable,
 		  GdkGC       *gc,
@@ -430,6 +505,17 @@ gdk_draw_polygon (GdkDrawable *drawable,
  *
  * Interface changed: add "GdkFont *font" to specify font or fontset explicitely
  */
+/**
+ * gdk_draw_string:
+ * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+ * @font: a #GdkFont.
+ * @gc: a #GdkGC.
+ * @x: the x coordinate of the left edge of the text.
+ * @y: the y coordinate of the baseline of the text.
+ * @string:  the string of characters to draw.
+ * 
+ * Draws a string of characters in the given font or fontset.
+ **/
 void
 gdk_draw_string (GdkDrawable *drawable,
 		 GdkFont     *font,
@@ -447,6 +533,18 @@ gdk_draw_string (GdkDrawable *drawable,
  *
  * Interface changed: add "GdkFont *font" to specify font or fontset explicitely
  */
+/**
+ * gdk_draw_text:
+ * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+ * @font: a #GdkFont.
+ * @gc: a #GdkGC.
+ * @x: the x coordinate of the left edge of the text.
+ * @y: the y coordinate of the baseline of the text.
+ * @text:  the characters to draw.
+ * @text_length: the number of characters of @text to draw.
+ * 
+ * Draws a number of characters in the given font or fontset.
+ **/
 void
 gdk_draw_text (GdkDrawable *drawable,
 	       GdkFont     *font,
@@ -464,6 +562,20 @@ gdk_draw_text (GdkDrawable *drawable,
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_text (drawable, font, gc, x, y, text, text_length);
 }
 
+/**
+ * gdk_draw_text_wc:
+ * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+ * @font: a #GdkFont.
+ * @gc: a #GdkGC.
+ * @x: the x coordinate of the left edge of the text.
+ * @y: the y coordinate of the baseline of the text.
+ * @text: the wide characters to draw.
+ * @text_length: the number of characters to draw.
+ * 
+ * Draws a number of wide characters using the given font of fontset.
+ * If the font is a 1-byte font, the string is converted into 1-byte 
+ * characters (discarding the high bytes) before output.
+ **/
 void
 gdk_draw_text_wc (GdkDrawable	 *drawable,
 		  GdkFont	 *font,
@@ -559,6 +671,23 @@ gdk_draw_drawable (GdkDrawable *drawable,
   g_object_unref (composite);
 }
 
+/**
+ * gdk_draw_image:
+ * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+ * @gc: a #GdkGC.
+ * @image: the #GdkImage to draw.
+ * @xsrc: the left edge of the source rectangle within @image.
+ * @ysrc: the top of the source rectangle within @image.
+ * @xdest: the x coordinate of the destination within @drawable.
+ * @ydest: the y coordinate of the destination within @drawable.
+ * @width: the width of the area to be copied, or -1 to make the area 
+ *     extend to the right edge of @image.
+ * @height: the height of the area to be copied, or -1 to make the area 
+ *     extend to the bottom edge of @image.
+ * 
+ * Draws a #GdkImage onto a drawable.
+ * The depth of the #GdkImage must match the depth of the #GdkDrawable.
+ **/
 void
 gdk_draw_image (GdkDrawable *drawable,
 		GdkGC       *gc,
@@ -634,6 +763,16 @@ gdk_draw_pixbuf (GdkDrawable     *drawable,
 						  dither, x_dither, y_dither);
 }
 
+/**
+ * gdk_draw_points:
+ * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+ * @gc: a #GdkGC.
+ * @points: an array of #GdkPoint structures.
+ * @npoints: the number of points to be drawn.
+ * 
+ * Draws a number of points, using the foreground color and other 
+ * attributes of the #GdkGC.
+ **/
 void
 gdk_draw_points (GdkDrawable *drawable,
 		 GdkGC       *gc,
@@ -651,6 +790,17 @@ gdk_draw_points (GdkDrawable *drawable,
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_points (drawable, gc, points, npoints);
 }
 
+/**
+ * gdk_draw_segments:
+ * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+ * @gc: a #GdkGC.
+ * @segs: an array of #GdkSegment structures specifying the start and 
+ *   end points of the lines to be drawn.
+ * @nsegs: the number of line segments to draw, i.e. the size of the 
+ *   @segs array.
+ * 
+ * Draws a number of unconnected lines.
+ **/
 void
 gdk_draw_segments (GdkDrawable *drawable,
 		   GdkGC       *gc,
@@ -669,13 +819,24 @@ gdk_draw_segments (GdkDrawable *drawable,
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_segments (drawable, gc, segs, nsegs);
 }
 
+/**
+ * gdk_draw_lines:
+ * @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+ * @gc: a #GdkGC.
+ * @points: an array of #GdkPoint structures specifying the endpoints of the
+ * @npoints: the size of the @points array.
+ * 
+ * Draws a series of lines connecting the given points.
+ * The way in which joins between lines are draw is determined by the
+ * #GdkCapStyle value in the #GdkGC. This can be set with
+ * gdk_gc_set_line_attributes().
+ **/
 void
 gdk_draw_lines (GdkDrawable *drawable,
 		GdkGC       *gc,
 		GdkPoint    *points,
 		gint         npoints)
 {
-
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (points != NULL);
   g_return_if_fail (GDK_IS_GC (gc));
