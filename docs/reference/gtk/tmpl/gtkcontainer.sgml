@@ -92,13 +92,14 @@ GtkContainer
 @notify: 
 
 
-<!-- ##### FUNCTION gtk_container_children ##### -->
+<!-- ##### MACRO gtk_container_children ##### -->
 <para>
 
 </para>
 
-@container: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@container: 
 
 
 <!-- ##### FUNCTION gtk_container_set_reallocate_redraws ##### -->

@@ -252,9 +252,10 @@ return %NULL values.
 Creates the new GtkImage using the value and the mask.
 </para>
 
+@Returns: the GtkImage
+<!-- # Unused Parameters # -->
 @val: 
 @mask: a GDKBitmap that indicates which parts of the image should be transparent.
-@Returns: the GtkImage
 
 
 <!-- ##### FUNCTION gtk_image_set ##### -->

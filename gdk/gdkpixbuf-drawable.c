@@ -56,6 +56,116 @@ static guint32 mask_table[] = {
 
 
 /*
+ * convert bitmap data to pixbuf without alpha,
+ * without using a colormap 
+ */
+static void
+bitmap1 (GdkImage    *image,
+         guchar      *pixels,
+         int          rowstride,
+         int          x1,
+         int          y1,
+         int          x2,
+         int          y2)
+{
+  int xx, yy;
+  int bpl;
+  register guint8 data;
+  guint8 *o;
+  guint8 *srow = image->mem, *orow = pixels;
+
+  d (printf ("bitmap, no alpha\n"));
+
+  bpl = image->bpl;
+
+  for (yy = y1; yy < y2; yy++)
+    {
+      o = orow;
+      
+      for (xx = x1; xx < x2; xx ++)
+	{
+          /* top 29 bits of xx (xx >> 3) indicate the byte the bit is inside,
+           * bottom 3 bits (xx & 7) indicate bit inside that byte,
+           * we don't bother to canonicalize data to 1 or 0, just
+           * leave the relevant bit in-place.
+           */
+          data = srow[xx >> 3] & (image->byte_order == GDK_MSB_FIRST ?
+                                  (0x80 >> (xx & 7)) :
+                                  (1 << (xx & 7)));
+
+          if (data)
+            {
+              *o++ = 255;
+              *o++ = 255;
+              *o++ = 255;
+            }
+          else
+            {
+              *o++ = 0;
+              *o++ = 0;
+              *o++ = 0;
+            }
+	}
+      srow += bpl;
+      orow += rowstride;
+    }
+}
+
+/*
+ * convert bitmap data to pixbuf with alpha,
+ * without using a colormap 
+ */
+static void
+bitmap1a (GdkImage    *image,
+          guchar      *pixels,
+          int          rowstride,
+          int          x1,
+          int          y1,
+          int          x2,
+          int          y2)
+{
+  int xx, yy;
+  int bpl;
+  register guint8 data;
+  guint8 *o;
+  guint8 *srow = image->mem, *orow = pixels;
+
+  d (printf ("bitmap, with alpha\n"));
+
+  bpl = image->bpl;
+
+  for (yy = y1; yy < y2; yy++)
+    {
+      o = orow;
+      
+      for (xx = x1; xx < x2; xx ++)
+	{
+          /* see comment in bitmap1() */
+          data = srow[xx >> 3] & (image->byte_order == GDK_MSB_FIRST ?
+                                  (0x80 >> (xx & 7)) :
+                                  (1 << (xx & 7)));
+
+          if (data)
+            {
+              *o++ = 255;
+              *o++ = 255;
+              *o++ = 255;
+              *o++ = 255;
+            }
+          else
+            {
+              *o++ = 0;
+              *o++ = 0;
+              *o++ = 0;
+              *o++ = 0;
+            }
+	}
+      srow += bpl;
+      orow += rowstride;
+    }
+}
+
+/*
  * convert 1 bits-pixel data
  * no alpha
  */
@@ -71,7 +181,6 @@ rgb1 (GdkImage    *image,
 {
   int xx, yy;
   int bpl;
-  guint8 *s;
   register guint8 data;
   guint8 *o;
   guint8 *srow = image->mem, *orow = pixels;
@@ -86,12 +195,15 @@ rgb1 (GdkImage    *image,
 
   for (yy = y1; yy < y2; yy++)
     {
-      s = srow;
       o = orow;
       
       for (xx = x1; xx < x2; xx ++)
 	{
-	  data = srow[xx >> 3] >> (7 - (xx & 7)) & 1;
+          /* see comment in bitmap1() */
+          data = srow[xx >> 3] & (image->byte_order == GDK_MSB_FIRST ?
+                                  (0x80 >> (xx & 7)) :
+                                  (1 << (xx & 7)));
+
 	  *o++ = colormap->colors[data].red;
 	  *o++ = colormap->colors[data].green;
 	  *o++ = colormap->colors[data].blue;
@@ -117,12 +229,10 @@ rgb1a (GdkImage    *image,
 {
   int xx, yy;
   int bpl;
-  guint8 *s;
   register guint8 data;
   guint8 *o;
   guint8 *srow = image->mem, *orow = pixels;
-  guint32 remap[2];
-
+  
   d (printf ("1 bits/pixel\n"));
 
   /* convert upto 8 pixels/time */
@@ -130,30 +240,21 @@ rgb1a (GdkImage    *image,
    * 1 bit displays anymore? */
   bpl = image->bpl;
 
-  for (xx = x1; xx < 2; xx++)
-    {
-#ifdef LITTLE
-      remap[xx] = 0xff000000
-	| colormap->colors[xx].blue << 16
-	| colormap->colors[xx].green << 8
-	| colormap->colors[xx].red;
-#else
-      remap[xx] = 0xff
-	| colormap->colors[xx].red << 24
-	| colormap->colors[xx].green << 16
-	| colormap->colors[xx].blue << 8;
-#endif
-    }
-
   for (yy = y1; yy < y2; yy++)
     {
-      s = srow;
       o = orow;
       
       for (xx = x1; xx < x2; xx ++)
 	{
-	  data = srow[xx >> 3] >> (7 - (xx & 7)) & 1;
-	  *o++ = remap[data];
+          /* see comment in bitmap1() */
+          data = srow[xx >> 3] & (image->byte_order == GDK_MSB_FIRST ?
+                                  (0x80 >> (xx & 7)) :
+                                  (1 << (xx & 7)));
+
+          *o++ = colormap->colors[data].red;
+	  *o++ = colormap->colors[data].green;
+	  *o++ = colormap->colors[data].blue;
+	  *o++ = 255;
 	}
       srow += bpl;
       orow += rowstride;
@@ -192,12 +293,13 @@ rgb8 (GdkImage    *image,
     {
       s = srow;
       o = orow;
-      for (xx = x1; xx < x2; xx++) {
-	data = *s++ & mask;
-	*o++ = colormap->colors[data].red;
-	*o++ = colormap->colors[data].green;
-	*o++ = colormap->colors[data].blue;
-      }
+      for (xx = x1; xx < x2; xx++)
+        {
+          data = *s++ & mask;
+          *o++ = colormap->colors[data].red;
+          *o++ = colormap->colors[data].green;
+          *o++ = colormap->colors[data].blue;
+        }
       srow += bpl;
       orow += rowstride;
     }
@@ -1206,15 +1308,34 @@ rgbconvert (GdkImage    *image,
             int          height,
 	    GdkColormap *cmap)
 {
-  int index = (image->byte_order == GDK_MSB_FIRST) | (alpha != 0) << 1;
-  int bank = 5;		/* default fallback converter */
-  GdkVisual *v = gdk_colormap_get_visual (cmap);
-
-  d(printf("masks = %x:%x:%x\n", v->red_mask, v->green_mask, v->blue_mask));
-  d(printf("image depth = %d, bits per pixel = %d\n", image->depth, image->bits_per_pixel));
+  int index;
+  int bank;
+  GdkVisual *v;
 
   g_assert ((x + width) <= image->width);
   g_assert ((y + height) <= image->height);
+  
+  if (cmap == NULL)
+    {
+      /* Only allowed for bitmaps */
+      g_return_if_fail (image->depth == 1);
+      
+      if (alpha)
+        bitmap1a (image, pixels, rowstride,
+                  x, y, x + width, y + height);
+      else
+        bitmap1 (image, pixels, rowstride,
+                  x, y, x + width, y + height);
+      
+      return;
+    }
+  
+  v = gdk_colormap_get_visual (cmap);
+  bank = 5; /* default fallback converter */
+  index = (image->byte_order == GDK_MSB_FIRST) | (alpha != 0) << 1;
+  
+  d(printf("masks = %x:%x:%x\n", v->red_mask, v->green_mask, v->blue_mask));
+  d(printf("image depth = %d, bits per pixel = %d\n", image->depth, image->bits_per_pixel));
   
   switch (v->type)
     {
@@ -1285,8 +1406,7 @@ rgbconvert (GdkImage    *image,
  * gdk_pixbuf_get_from_drawable:
  * @dest: Destination pixbuf, or %NULL if a new pixbuf should be created.
  * @src: Source drawable.
- * @cmap: A colormap if @src is a pixmap.  If it is a window, this argument will
- * be ignored.
+ * @cmap: A colormap if @src doesn't have one set.
  * @src_x: Source X coordinate within drawable.
  * @src_y: Source Y coordinate within drawable.
  * @dest_x: Destination X coordinate in pixbuf, or 0 if @dest is NULL.
@@ -1298,12 +1418,17 @@ rgbconvert (GdkImage    *image,
  * representation inside a #GdkPixbuf. In other words, copies
  * image data from a server-side drawable to a client-side RGB(A) buffer.
  * This allows you to efficiently read individual pixels on the client side.
- *
- * If the drawable @src is a pixmap, then a suitable colormap must be
- * specified, since pixmaps are just blocks of pixel data without an
- * associated colormap.  If the drawable is a window, the @cmap
- * argument will be ignored and the window's own colormap will be used
- * instead.
+ * 
+ * If the drawable @src has no colormap (gdk_drawable_get_colormap()
+ * returns %NULL), then a suitable colormap must be specified.
+ * Typically a #GdkWindow or a pixmap created by passing a #GdkWindow
+ * to gdk_pixmap_new() will already have a colormap associated with
+ * it.  If the drawable has a colormap, the @cmap argument will be
+ * ignored.  If the drawable is a bitmap (1 bit per pixel pixmap),
+ * then a colormap is not required; pixels with a value of 1 are
+ * assumed to be white, and pixels with a value of 0 are assumed to be
+ * black. For taking screenshots, gdk_colormap_get_system() returns
+ * the correct colormap to use.
  *
  * If the specified destination pixbuf @dest is %NULL, then this
  * function will create an RGB pixbuf with 8 bits per channel and no
@@ -1355,6 +1480,7 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
 {
   int src_width, src_height;
   GdkImage *image;
+  int depth;
   
   /* General sanity checks */
 
@@ -1380,7 +1506,9 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
   if (cmap == NULL)
     cmap = gdk_drawable_get_colormap (src);
 
-  if (cmap == NULL)
+  depth = gdk_drawable_get_depth (src);
+  
+  if (depth != 1 && cmap == NULL)
     {
       g_warning ("%s: Source drawable has no colormap; either pass "
                  "in a colormap, or set the colormap on the drawable "
@@ -1469,8 +1597,8 @@ gdk_pixbuf_get_from_image (GdkPixbuf   *dest,
 
   if (cmap == NULL)
     cmap = gdk_image_get_colormap (src);
-
-  if (cmap == NULL)
+  
+  if (src->depth != 1 && cmap == NULL)
     {
       g_warning ("%s: Source image has no colormap; either pass "
                  "in a colormap, or set the colormap on the image "

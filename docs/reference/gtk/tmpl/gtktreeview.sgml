@@ -211,6 +211,7 @@ GtkTreeView
 @tree_view: 
 @path: 
 @column: 
+@use_align: 
 @row_align: 
 @col_align: 
 

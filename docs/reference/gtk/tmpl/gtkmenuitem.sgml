@@ -87,17 +87,6 @@ This function is useless in usual applications.
 @placement: the submenu placement
 
 
-<!-- ##### FUNCTION gtk_menu_item_configure ##### -->
-<para>
-Sets whether the menu item should show a submenu indicator, which is a right
-arrow.
-</para>
-
-@menu_item: the menu item
-@show_toggle_indicator: unused
-@show_submenu_indicator: whether to show the arrow or not
-
-
 <!-- ##### FUNCTION gtk_menu_item_select ##### -->
 <para>
 Emits the "select" signal on the given item. Behaves exactly like

@@ -3482,6 +3482,15 @@ gtk_window_move_resize (GtkWindow *window)
        widget->allocation.height != new_request.height))
     configure_request_size_changed = TRUE;
 
+  
+  hints_changed = FALSE;
+  
+  if (!gtk_window_compare_hints (&info->last.geometry, info->last.flags,
+				 &new_geometry, new_flags))
+    {
+      hints_changed = TRUE;
+    }
+  
   /* Position Constraints
    * ====================
    * 
@@ -3544,14 +3553,6 @@ gtk_window_move_resize (GtkWindow *window)
         configure_request_pos_changed = TRUE;
       else
         configure_request_pos_changed = FALSE;
-    }
-  
-  hints_changed = FALSE;
-  
-  if (!gtk_window_compare_hints (&info->last.geometry, info->last.flags,
-				 &new_geometry, new_flags))
-    {
-      hints_changed = TRUE;
     }
 
 #if 0
@@ -4791,6 +4792,12 @@ gtk_XParseGeometry (const char   *string,
   int tempX, tempY;
   char *nextCharacter;
 
+  /* These initializations are just to silence gcc */
+  tempWidth = 0;
+  tempHeight = 0;
+  tempX = 0;
+  tempY = 0;
+  
   if ( (string == NULL) || (*string == '\0')) return(mask);
   if (*string == '=')
     string++;  /* ignore possible '=' at beg of geometry spec */

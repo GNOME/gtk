@@ -1,3 +1,31 @@
+2001-08-24  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkcompat.h: remove gtk_menu_* compat defines; 
+	these are already in gtkmenu.h, and the copies
+	here were broken.
+
+	Also, change GTK_DISABLE_COMPAT_H to GTK_DISABLE_DEPRECATED
+
+	* gdk/gdkpixbuf-drawable.c (gdk_pixbuf_get_from_image):
+	special-case bitmaps to allow no colormap
+	(bitmap1): implement no-colormap bitmap-getting
+	(bitmap1a): implement no-colormap bitmap-getting to pixbuf with
+	alpha
+	(rgb8): indentation
+	(rgb1a, rgb1): change the way we read the data out of the image, 
+	old way didn't seem to work quite right.
+
+	I'm pretty sure a lot of the rgbconvert code is still broken.
+	
+	* gtk/gtkwindow.c (gtk_window_move_resize): move hints comparison
+	above position constraint (I really intended to do this before,
+	don't know what's up with that)
+	(gtk_XParseGeometry): shut up gcc
+
+	* gdk/gdkpixbuf-drawable.c (rgb1a): fix bug where "x1" was used
+	and "0" should have been. remove the attempted 4-bytes-at-once
+	optimization, it was totally broken.
+
 Sat Aug 25 19:02:39 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkbutton.[ch] gtk/gtktogglebutton.c: Add optional movement

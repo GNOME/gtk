@@ -28,31 +28,38 @@ Creates the new #GtkMenuBar
 @Returns: the #GtkMenuBar
 
 
-<!-- ##### FUNCTION gtk_menu_bar_append ##### -->
+<!-- ##### MACRO gtk_menu_bar_append ##### -->
 <para>
 Adds a new #GtkMenuItem to the end of the GtkMenuBar
 </para>
 
-@menu_bar: a #GtkMenuBar
+@menu: 
 @child: the #GtkMenuItem to add
+<!-- # Unused Parameters # -->
+@menu_bar: a #GtkMenuBar
 
 
-<!-- ##### FUNCTION gtk_menu_bar_prepend ##### -->
+<!-- ##### MACRO gtk_menu_bar_prepend ##### -->
 <para>
 Adds a new #GtkMenuItem to the beginning of the GtkMenuBar
 </para>
 
+@menu_child: 
+<!-- # Unused Parameters # -->
 @menu_bar: a #GtkMenuBar
 @child: the #GtkMenuItem to add
 
 
-<!-- ##### FUNCTION gtk_menu_bar_insert ##### -->
+<!-- ##### MACRO gtk_menu_bar_insert ##### -->
 <para>
 Adds a new #GtkMenuItem to the GtkMenuBar at the position defined by @position
 </para>
 
-@menu_bar: a #GtkMenuBar
+@menu: 
 @child: the #GtkMenuItem to add
+@pos: 
+<!-- # Unused Parameters # -->
+@menu_bar: a #GtkMenuBar
 @position: the position in the item list where the @child is added.
 
 
