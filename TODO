@@ -6,7 +6,19 @@ Bugs:
  * Widget redrawing when the window resizes sometimes messes up.
    GtkLabels sometimes redraw without clearing up the underlying background on
    window resizes.
+
+ * Change bitfields to guints from enums, or vice versa?
+
+ * MappingNotify events produce warnings.
+
+ * gtk_widget_set_uposition can't handle negative x,y coordinates!
  
+ * the type system (gtktypeutils.c) has to handle creations of fundamental
+   types seperatedly from derived types, so we don't screw foreign
+   fundamental types with an already extensively increased seqno.
+ 
+ * Expose events aren't being generated correctly for DND demo
+
  * delay dnd settings to take effect once a widget is realized, this is
    to avoid force realizations. i think this goes along with owens dnd
    changes?
@@ -34,14 +46,6 @@ Bugs:
    start up prewiev color
    segfault in malloc
     -timj
-
- * Change bitfields to guints from enums, or vice versa?
-
- * Expose events aren't being generated correctly for DND demo
-
- * MappingNotify events produce warnings.
-
- * gtk_widget_set_uposition can't handle negative x,y coordinates!
 
 Additions:
  * implement keyboard navigation in menus

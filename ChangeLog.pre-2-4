@@ -1,3 +1,10 @@
+Sat Oct 10 03:37:50 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktable.c (gtk_table_set_child_arg): take the left, right, top
+ 	and bottom attach arguments as mandatory and readjust the table size
+	and opposing edge accordingly if required. this way the order in which
+ 	the arguments are set doesn't matter.
+
 Thu Oct  8 15:53:59 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktypeutils.c (gtk_type_class_init): Fixed warning

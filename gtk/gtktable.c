@@ -258,24 +258,38 @@ gtk_table_set_child_arg (GtkContainer   *container,
   switch (arg_id)
     {
     case CHILD_ARG_LEFT_ATTACH:
-      if (GTK_VALUE_UINT (*arg) < table_child->right_attach)
-	table_child->left_attach = GTK_VALUE_UINT (*arg);
-      break;
-    case CHILD_ARG_RIGHT_ATTACH:
-      if (GTK_VALUE_UINT (*arg) > table_child->left_attach)
-	table_child->right_attach = GTK_VALUE_UINT (*arg);
+      table_child->left_attach = GTK_VALUE_UINT (*arg);
+      if (table_child->right_attach <= table_child->left_attach)
+	table_child->right_attach = table_child->left_attach + 1;
       if (table_child->right_attach >= table->ncols)
 	gtk_table_resize (table, table->ncols, table_child->right_attach);
       break;
-    case CHILD_ARG_TOP_ATTACH:
-      if (GTK_VALUE_UINT (*arg) < table_child->bottom_attach)
-	table_child->top_attach = GTK_VALUE_UINT (*arg);
+    case CHILD_ARG_RIGHT_ATTACH:
+      if (GTK_VALUE_UINT (*arg) > 0)
+	{
+	  table_child->right_attach = GTK_VALUE_UINT (*arg);
+	  if (table_child->right_attach <= table_child->left_attach)
+	    table_child->left_attach = table_child->right_attach - 1;
+	  if (table_child->right_attach >= table->ncols)
+	    gtk_table_resize (table, table->ncols, table_child->right_attach);
+	}
       break;
-    case CHILD_ARG_BOTTOM_ATTACH:
-      if (GTK_VALUE_UINT (*arg) > table_child->top_attach)
-	table_child->bottom_attach = GTK_VALUE_UINT (*arg);
+    case CHILD_ARG_TOP_ATTACH:
+      table_child->top_attach = GTK_VALUE_UINT (*arg);
+      if (table_child->bottom_attach <= table_child->top_attach)
+	table_child->bottom_attach = table_child->top_attach + 1;
       if (table_child->bottom_attach >= table->nrows)
 	gtk_table_resize (table, table_child->bottom_attach, table->ncols);
+      break;
+    case CHILD_ARG_BOTTOM_ATTACH:
+      if (GTK_VALUE_UINT (*arg) > 0)
+	{
+	  table_child->bottom_attach = GTK_VALUE_UINT (*arg);
+	  if (table_child->bottom_attach <= table_child->top_attach)
+	    table_child->top_attach = table_child->bottom_attach - 1;
+	  if (table_child->bottom_attach >= table->nrows)
+	    gtk_table_resize (table, table_child->bottom_attach, table->ncols);
+	}
       break;
     case CHILD_ARG_X_OPTIONS:
       table_child->xexpand = (GTK_VALUE_FLAGS (*arg) & GTK_EXPAND) != 0;
