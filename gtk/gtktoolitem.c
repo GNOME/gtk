@@ -29,8 +29,6 @@
 
 #include <string.h>
 
-#define MENU_ID "gtk-tool-item-menu-id"
-
 enum {
   CREATE_MENU_PROXY,
   TOOLBAR_RECONFIGURED,
@@ -42,6 +40,7 @@ enum {
   PROP_0,
   PROP_VISIBLE_HORIZONTAL,
   PROP_VISIBLE_VERTICAL,
+  PROP_IS_IMPORTANT
 };
 
 struct _GtkToolItemPrivate
@@ -55,6 +54,7 @@ struct _GtkToolItemPrivate
   guint expand : 1;
   guint pack_end : 1;
   guint use_drag_window : 1;
+  guint is_important : 1;
 
   GdkWindow *drag_window;
   
@@ -161,6 +161,37 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
 							 _("Whether the toolbar item is visible when the toolbar is in a vertical orientation."),
 							 TRUE,
 							 G_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
+ 				   PROP_IS_IMPORTANT,
+ 				   g_param_spec_boolean ("is_important",
+ 							 _("Is important"),
+ 							 _("Whether the toolbar item is considered important. When TRUE, toolbar buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
+
+/**
+ * GtkToolItem::create-menu-proxy:
+ * @toolitem: the object the signal was emitted on
+ *
+ * This signal is emitted when the toolbar is displaying an overflow menu.
+ * In response the tool item should either 
+ * <itemizedlist>
+ * <listitem> call gtk_tool_item_set_proxy_menu_item() with a %NULL
+ * pointer and return %TRUE to indicate that the item should not appear
+ * in the overflow menu
+ * </listitem>
+ * <listitem> call gtk_tool_item_set_proxy_menu_item() with a new menu
+ * item and return TRUE, or 
+ * </listitem>
+ * <listitem> return FALSE to indicate that the signal was not
+ * handled by the item. This means that
+ * the item will not appear in the overflow menu unless a later handler
+ * installs a menu item.
+ * </listitem>
+ * </itemizedlist>
+ * 
+ * Return value: %TRUE if the signal was handled, %FALSE if not
+ **/
   toolitem_signals[CREATE_MENU_PROXY] =
     g_signal_new ("create_menu_proxy",
 		  G_OBJECT_CLASS_TYPE (klass),
@@ -169,6 +200,23 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
+
+/**
+ * GtkToolItem::toolbar-reconfigured:
+ * @toolitem: the object the signal was emitted on
+ *
+ * This signal is emitted when some property of the toolbar that the
+ * item is a child of changes. For custom subclasses of #GtkToolItem,
+ * the default handler of this signal use the functions
+ * <itemizedlist>
+ * <listitem>gtk_toolbar_get_orientation()</listitem>
+ * <listitem>gtk_toolbar_get_style()</listitem>
+ * <listitem>gtk_toolbar_get_icon_size()</listitem>
+ * <listitem>gtk_toolbar_get_relief_style()</listitem>
+ * </itemizedlist>
+ * to find out what the toolbar should look like and change
+ * themselves accordingly.
+ **/
   toolitem_signals[TOOLBAR_RECONFIGURED] =
     g_signal_new ("toolbar_reconfigured",
 		  G_OBJECT_CLASS_TYPE (klass),
@@ -177,6 +225,14 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+/**
+ * GtkToolItem::set-tooltip:
+ * @toolitem: the object the signal was emitted on
+ *
+ * This signal is emitted when the toolitem's tooltip changes.
+ * Application developers can use gtk_tool_item_set_tooltip() to
+ * set the item's tooltip
+ **/
   toolitem_signals[SET_TOOLTIP] =
     g_signal_new ("set_tooltip",
 		  G_OBJECT_CLASS_TYPE (klass),
@@ -240,6 +296,9 @@ gtk_tool_item_set_property (GObject      *object,
     case PROP_VISIBLE_VERTICAL:
       gtk_tool_item_set_visible_horizontal (toolitem, g_value_get_boolean (value));
       break;
+    case PROP_IS_IMPORTANT:
+      gtk_tool_item_set_is_important (toolitem, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -260,6 +319,9 @@ gtk_tool_item_get_property (GObject    *object,
       break;
     case PROP_VISIBLE_VERTICAL:
       g_value_set_boolean (value, toolitem->priv->visible_vertical);
+      break;
+    case PROP_IS_IMPORTANT:
+      g_value_set_boolean (value, toolitem->priv->is_important);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -409,20 +471,18 @@ gtk_tool_item_size_allocate (GtkWidget     *widget,
 static gboolean
 gtk_tool_item_create_menu_proxy (GtkToolItem *item)
 {
-  if (!GTK_BIN (item)->child)
-    {
-      GtkWidget *menu_item = NULL;
-
-      menu_item = gtk_separator_menu_item_new();
-
-      gtk_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
-
-      return TRUE;
-    }
-  
   return FALSE;
 }
 
+/**
+ * gtk_tool_item_new:
+ * 
+ * Creates a new #GtkToolItem
+ * 
+ * Return value: the new #GtkToolItem
+ * 
+ * Since: 2.4
+ **/
 GtkToolItem *
 gtk_tool_item_new (void)
 {
@@ -433,6 +493,18 @@ gtk_tool_item_new (void)
   return item;
 }
 
+/**
+ * gtk_tool_item_get_icon_size:
+ * @tool_item: a #GtkToolItem:
+ * 
+ * Returns the icon size used for @tool_item. Custom subclasses of
+ * #GtkToolItem should call this function to find out what size icons
+ * they should use.
+ * 
+ * Return value: a #GtkIconSize indicating the icon size used for @tool_item
+ * 
+ * Since: 2.4
+ **/
 GtkIconSize
 gtk_tool_item_get_icon_size (GtkToolItem *tool_item)
 {
@@ -447,6 +519,19 @@ gtk_tool_item_get_icon_size (GtkToolItem *tool_item)
   return gtk_toolbar_get_icon_size (GTK_TOOLBAR (parent));
 }
 
+/**
+ * gtk_tool_item_get_orientation:
+ * @tool_item: a #GtkToolItem: 
+ * 
+ * Returns the orientation used for @tool_item. Custom subclasses of
+ * #GtkToolItem should call this function to find out what size icons
+ * they should use.
+ * 
+ * Return value: a #GtkOrientation indicating the orientation
+ * used for @tool_item
+ * 
+ * Since: 2.4
+ **/
 GtkOrientation
 gtk_tool_item_get_orientation (GtkToolItem *tool_item)
 {
@@ -461,6 +546,35 @@ gtk_tool_item_get_orientation (GtkToolItem *tool_item)
   return gtk_toolbar_get_orientation (GTK_TOOLBAR (parent));
 }
 
+/**
+ * gtk_tool_item_get_toolbar_style:
+ * @tool_item: a #GtkToolItem: 
+ * 
+ * Returns the toolbar style used for @tool_item. Custom subclasses of
+ * #GtkToolItem should call this function in the handler of the
+ * GtkToolItem::toolbar_reconfigured signal to find out in what style
+ * the toolbar is displayed and change themselves accordingly 
+ *
+ * Possibilities are:
+ * <itemizedlist>
+ * <listitem> GTK_TOOLBAR_BOTH, meaning the tool item should show
+ * both an icon and a label, stacked vertically </listitem>
+ * <listitem> GTK_TOOLBAR_ICONS, meaning the toolbar shows
+ * only icons </listitem>
+ * <listitem> GTK_TOOLBAR_TEXT, meaning the tool item should only
+ * show text</listitem>
+ * <listitem> GTK_TOOLBAR_BOTH_HORIZ, meaning the tool item should show
+ * both an icon and a label, arranged horizontally (however, note the 
+ * #GtkToolButton::has_text_horizontally that makes tool buttons not
+ * show labels when the toolbar style is GTK_TOOLBAR_BOTH_HORIZ.
+ * </listitem>
+ * </itemizedlist>
+ * 
+ * Return value: A #GtkToolbarStyle indicating the toolbar style used
+ * for @tool_item.
+ * 
+ * Since: 2.4
+ **/
 GtkToolbarStyle
 gtk_tool_item_get_toolbar_style (GtkToolItem *tool_item)
 {
@@ -475,6 +589,20 @@ gtk_tool_item_get_toolbar_style (GtkToolItem *tool_item)
   return gtk_toolbar_get_style (GTK_TOOLBAR (parent));
 }
 
+/**
+ * gtk_tool_item_get_relief_style:
+ * @tool_item: a #GtkToolItem: 
+ * 
+ * Returns the relief style of @tool_item. See gtk_button_set_relief_style().
+ * Custom subclasses of #GtkToolItem should call this function in the handler
+ * of the #GtkToolItem::toolbar_reconfigured signal to find out the
+ * relief style of buttons.
+ * 
+ * Return value: a #GtkReliefStyle indicating the relief style used
+ * for @tool_item.
+ * 
+ * Since: 2.4
+ **/
 GtkReliefStyle 
 gtk_tool_item_get_relief_style (GtkToolItem *tool_item)
 {
@@ -489,6 +617,18 @@ gtk_tool_item_get_relief_style (GtkToolItem *tool_item)
   return gtk_toolbar_get_relief_style (GTK_TOOLBAR (parent));
 }
 
+/**
+ * gtk_tool_item_set_expand:
+ * @tool_item: a #GtkToolItem: 
+ * @expand: Whether @tool_item is allocated extra space
+ * 
+ * Sets whether @tool_item is allocated extra space when there
+ * is more room on the toolbar then needed for the items. The
+ * effect is that the item gets bigger when the toolbar gets bigger
+ * and smaller when the toolbar gets smaller.
+ * 
+ * Since: 2.4
+ **/
 void
 gtk_tool_item_set_expand (GtkToolItem *tool_item,
 			  gboolean     expand)
@@ -505,6 +645,17 @@ gtk_tool_item_set_expand (GtkToolItem *tool_item,
     }
 }
 
+/**
+ * gtk_tool_item_get_expand:
+ * @tool_item: a #GtkToolItem: 
+ * 
+ * Returns whether @tool_item is allocated extra space.
+ * See gtk_tool_item_set_expand().
+ * 
+ * Return value: %TRUE if @tool_item is allocated extra space.
+ * 
+ * Since: 2.4
+ **/
 gboolean
 gtk_tool_item_get_expand (GtkToolItem *tool_item)
 {
@@ -513,6 +664,17 @@ gtk_tool_item_get_expand (GtkToolItem *tool_item)
   return tool_item->priv->expand;
 }
 
+/**
+ * gtk_tool_item_set_pack_end:
+ * @tool_item: a #GtkToolItem: 
+ * @pack_end: whether @tool_item is allocated at the end of the toolbar.
+ * 
+ * Sets whether @tool_item is allocated at the end of the toolbar. This is
+ * useful for #GtkToolItem<!-- -->s that are used as "throbbers" in
+ * web-browser-type applications.
+ * 
+ * Since: 2.4
+ **/
 void
 gtk_tool_item_set_pack_end (GtkToolItem *tool_item,
 			    gboolean     pack_end)
@@ -529,6 +691,17 @@ gtk_tool_item_set_pack_end (GtkToolItem *tool_item,
     }
 }
 
+/**
+ * gtk_tool_item_get_pack_end:
+ * @tool_item: a #GtkToolItem: 
+ * 
+ * Returns whether @tool_item is packed at the end of the toolbar.
+ * See gtk_tool_item_set_pack_end().
+ * 
+ * Return value: %TRUE if @tool_item is packed at the end of the toolbar.
+ * 
+ * Since: 2.4
+ **/
 gboolean
 gtk_tool_item_get_pack_end (GtkToolItem *tool_item)
 {
@@ -537,6 +710,17 @@ gtk_tool_item_get_pack_end (GtkToolItem *tool_item)
   return tool_item->priv->pack_end;
 }
 
+/**
+ * gtk_tool_item_set_homogeneous:
+ * @tool_item: a #GtkToolItem: 
+ * @homogeneous: whether @tool_item is the same size as other homogeneous items
+ * 
+ * Sets whether @tool_item is to be allocated the same size as other
+ * homogeneous items. The effect is that all homogeneous items will have
+ * the same width as the widest of the items.
+ * 
+ * Since: 2.4
+ **/
 void
 gtk_tool_item_set_homogeneous (GtkToolItem *tool_item,
 			       gboolean     homogeneous)
@@ -553,12 +737,73 @@ gtk_tool_item_set_homogeneous (GtkToolItem *tool_item,
     }
 }
 
+/**
+ * gtk_tool_item_get_homogeneous:
+ * @tool_item: a #GtkToolItem: 
+ * 
+ * Returns whether @tool_item is the same size as other homogeneous
+ * items. See gtk_tool_item_set_homogeneous().
+ * 
+ * Return value: %TRUE if the item is the same size as other homogeneous
+ * item.s
+ * 
+ * Since: 2.4
+ **/
 gboolean
 gtk_tool_item_get_homogeneous (GtkToolItem *tool_item)
 {
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), FALSE);
 
   return tool_item->priv->homogeneous;
+}
+
+/**
+ * gtk_tool_item_get_is_important:
+ * @tool_item: a #GtkToolItem
+ * 
+ * Returns whether @tool_item is considered important. See
+ * gtk_tool_item_set_ismportant()
+ * 
+ * Return value: %TRUE if @tool_item is considered important.
+ * 
+ * Since: 2.4
+ **/
+gboolean
+gtk_tool_item_get_is_important (GtkToolItem *tool_item)
+{
+  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), FALSE);
+
+  return tool_item->priv->is_important;
+}
+
+/**
+ * gtk_tool_item_set_is_important:
+ * @tool_item: a #GtkToolItem
+ * @is_imporatnt: whether the tool item should be considered important
+ * 
+ * Sets whether @tool_item should be considered important. The #GtkToolButton
+ * class uses this property to determine whether to show or hide its label
+ * when the toolbar style is %GTK_TOOLBAR_BOTH_HORIZ. The result is that
+ * only tool buttons with the "is_important" property set have labels, and
+ * effect known as "priority text"
+ * 
+ * Since: 2.4
+ **/
+void
+gtk_tool_item_set_is_important (GtkToolItem *tool_item, gboolean is_important)
+{
+  g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
+
+  is_important = is_important != FALSE;
+
+  if (is_important != tool_item->priv->is_important)
+    {
+      tool_item->priv->is_important = is_important;
+
+      gtk_widget_queue_resize (GTK_WIDGET (tool_item));
+
+      g_object_notify (G_OBJECT (tool_item), "is_important");
+    }
 }
 
 static gboolean
@@ -577,6 +822,19 @@ gtk_tool_item_real_set_tooltip (GtkToolItem *tool_item,
   return TRUE;
 }
 
+/**
+ * gtk_tool_item_set_tooltip:
+ * @tool_item: a #GtkToolItem: 
+ * @tooltips: The #GtkTooltips object to be used
+ * @tip_text: text to be used as tooltip text for @tool_item
+ * @tip_private: text to be used as rpivate tooltip text
+ *
+ * Sets the #GtkTooltips object to be used for @tool_item, the
+ * text to be displayed as tooltip on the item and the private text
+ * to be used. See gtk_tooltips_set_tip().
+ * 
+ * Since: 2.4
+ **/
 void
 gtk_tool_item_set_tooltip (GtkToolItem *tool_item,
 			   GtkTooltips *tooltips,
@@ -591,6 +849,18 @@ gtk_tool_item_set_tooltip (GtkToolItem *tool_item,
 		 tooltips, tip_text, tip_private, &retval);
 }
 
+/**
+ * gtk_tool_item_set_use_drag_window:
+ * @toolitem: a #GtkToolItem 
+ * @use_drag_window: Whether @toolitem has a drag window.
+ * 
+ * Sets whether @toolitem has a drag window. When %TRUE the
+ * toolitem can be used as a drag source through gtk_drag_source_set().
+ * When @toolitem has a drag window it will intercept all events,
+ * even those that would otherwise be sent to a child of @toolitem.
+ * 
+ * Since: 2.4
+ **/
 void
 gtk_tool_item_set_use_drag_window (GtkToolItem *toolitem,
 				   gboolean     use_drag_window)
@@ -619,6 +889,17 @@ gtk_tool_item_set_use_drag_window (GtkToolItem *toolitem,
     }
 }
 
+/**
+ * gtk_tool_item_get_use_drag_window:
+ * @toolitem: a #GtkToolItem 
+ * 
+ * Returns whether @toolitem has a drag window. See
+ * gtk_tool_item_set_use_drag_window().
+ * 
+ * Return value: %TRUE if @toolitem uses a drag window.
+ * 
+ * Since: 2.4
+ **/
 gboolean
 gtk_tool_item_get_use_drag_window (GtkToolItem *toolitem)
 {
@@ -627,6 +908,15 @@ gtk_tool_item_get_use_drag_window (GtkToolItem *toolitem)
   return toolitem->priv->use_drag_window;
 }
 
+/**
+ * gtk_tool_item_set_visible_horizontal:
+ * @toolitem: a #GtkToolItem
+ * @visible_horizontal: Whether @toolitem is visible when in horizontal mode
+ * 
+ * Sets whether @toolitem is visible when 
+ * 
+ * Since: 2.4
+ **/
 void
 gtk_tool_item_set_visible_horizontal (GtkToolItem *toolitem,
 				      gboolean     visible_horizontal)
@@ -645,6 +935,18 @@ gtk_tool_item_set_visible_horizontal (GtkToolItem *toolitem,
     }
 }
 
+/**
+ * gtk_tool_item_get_visible_horizontal:
+ * @toolitem: a #GtkToolItem 
+ * 
+ * Returns whether the @toolitem is visible on toolbars that are
+ * docked horizontally
+ * 
+ * Return value: %TRUE if @toolitem is visible on toolbars that are
+ * docked horizontally.
+ * 
+ * Since: 2.4
+ **/
 gboolean
 gtk_tool_item_get_visible_horizontal (GtkToolItem *toolitem)
 {
@@ -653,6 +955,19 @@ gtk_tool_item_get_visible_horizontal (GtkToolItem *toolitem)
   return toolitem->priv->visible_horizontal;
 }
 
+/**
+ * gtk_tool_item_set_visible_vertical:
+ * @toolitem: a #GtkToolItem 
+ * @visible_vertical: whether @toolitem is visible when the toolbar
+ * is in vertical mode
+ *
+ * Sets whether @toolitem is visible when the toolbar is docked
+ * vertically. Some tool items, such as text entries, are too wide to be
+ * useful on a vertically docked toolbar. If @visible_vertical is %FALSE
+ * @toolitem will not appear on toolbars that are docked vertically.
+ * 
+ * Since: 2.4
+ **/
 void
 gtk_tool_item_set_visible_vertical (GtkToolItem *toolitem,
 				    gboolean     visible_vertical)
@@ -671,6 +986,17 @@ gtk_tool_item_set_visible_vertical (GtkToolItem *toolitem,
     }
 }
 
+/**
+ * gtk_tool_item_get_visible_vertical:
+ * @toolitem: a #GtkToolItem 
+ * 
+ * Returns whether @toolitem is visible when the toolbar is docked vertically.
+ * See gtk_tool_item_set_visible_vertical().
+ * 
+ * Return value: Whether @toolitem is visible when the toolbar is docked vertically
+ * 
+ * Since: 2.4
+ **/
 gboolean
 gtk_tool_item_get_visible_vertical (GtkToolItem *toolitem)
 {
@@ -679,6 +1005,19 @@ gtk_tool_item_get_visible_vertical (GtkToolItem *toolitem)
   return toolitem->priv->visible_vertical;
 }
 
+/**
+ * gtk_tool_item_retrieve_proxy_menu_item:
+ * @tool_item: a #GtkToolItem: 
+ * 
+ * Returns the #GtkMenuItem that was last set by
+ * gtk_tool_item_set_proxy_menu_item(), ie. the #GtkMenuItem
+ * that is going to appear in the overflow menu.
+ * 
+ * Return value: The #GtkMenuItem that is going to appear in the
+ * overflow menu for @tool_item.
+ * 
+ * Since: 2.4
+ **/
 GtkWidget *
 gtk_tool_item_retrieve_proxy_menu_item (GtkToolItem *tool_item)
 {
@@ -691,6 +1030,24 @@ gtk_tool_item_retrieve_proxy_menu_item (GtkToolItem *tool_item)
   return tool_item->priv->menu_item;
 }
 
+/**
+ * gtk_tool_item_get_proxy_menu_item:
+ * @tool_item: a #GtkToolItem: 
+ * @menu_item_id: a string used to identify the menu item
+ * 
+ * If @menu_item_id matches the string passed to
+ * gtk_tool_item_set_proxy_menu_item() return the corresponding #GtkMenuItem.
+ *
+ * Custom subclasses of #GtkToolItem should use this function to update
+ * their menu item when the #GtkToolItem changes. That the
+ * @menu_item_id<!-- -->s must match ensures that a #GtkToolItem will not
+ * inadvertently change a menu item that they did not create.
+ * 
+ * Return value: The #GtkMenuItem passed to
+ * gtk_tool_item_set_proxy_menu_item(), if the @menu_item_id<!-- -->s match.
+ * 
+ * Since: 2.4
+ **/
 GtkWidget *
 gtk_tool_item_get_proxy_menu_item (GtkToolItem *tool_item,
 				   const gchar *menu_item_id)
@@ -704,6 +1061,18 @@ gtk_tool_item_get_proxy_menu_item (GtkToolItem *tool_item,
   return NULL;
 }
 
+/**
+ * gtk_tool_item_set_proxy_menu_item:
+ * @tool_item: a #GtkToolItem:
+ * @menu_item_id: a string used to identify @menu_item
+ * @menu_item: a #GtkMenuItem to be used in the overflow menu
+ * 
+ * Sets the #GtkMenuItem used in the toolbar overflow menu. The
+ * @menu_item_id is used to identify the caller of this function and
+ * should also be used with gtk_tool_item_get_proxy_menu_item().
+ * 
+ * Since: 2.4
+ **/
 void
 gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item,
 				   const gchar *menu_item_id,
@@ -733,6 +1102,16 @@ gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item,
     }
 }
 
+/**
+ * _gtk_tool_item_toolbar_reconfigured:
+ * @tool_item: a #GtkToolItem: 
+ * 
+ * Emits the signal #GtkToolItem::toolbar_reconfigured on @tool_item. This
+ * internal function is called by #GtkToolbar when some aspect of its
+ * configuration changes.
+ * 
+ * Since: 2.4
+ **/
 void
 _gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item)
 {

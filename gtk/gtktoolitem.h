@@ -71,7 +71,7 @@ GtkToolItem *gtk_tool_item_new      (void);
 
 void            gtk_tool_item_set_homogeneous          (GtkToolItem *tool_item,
 							gboolean     homogeneous);
-gboolean	gtk_tool_item_get_homogeneous          (GtkToolItem *tool_item);
+gboolean        gtk_tool_item_get_homogeneous          (GtkToolItem *tool_item);
 
 void            gtk_tool_item_set_expand               (GtkToolItem *tool_item,
 							gboolean     expand);
@@ -95,8 +95,12 @@ void            gtk_tool_item_set_visible_horizontal   (GtkToolItem *toolitem,
 gboolean        gtk_tool_item_get_visible_horizontal   (GtkToolItem *toolitem);
 
 void            gtk_tool_item_set_visible_vertical     (GtkToolItem *toolitem,
-							gboolean     visible_horizontal);
+							gboolean     visible_vertical);
 gboolean        gtk_tool_item_get_visible_vertical     (GtkToolItem *toolitem);
+
+gboolean        gtk_tool_item_get_is_important         (GtkToolItem *tool_item);
+void            gtk_tool_item_set_is_important         (GtkToolItem *tool_item,
+							gboolean     is_important);
 
 GtkIconSize     gtk_tool_item_get_icon_size            (GtkToolItem *tool_item);
 GtkOrientation  gtk_tool_item_get_orientation          (GtkToolItem *tool_item);

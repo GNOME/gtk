@@ -1,3 +1,17 @@
+Fri Aug  1 15:26:46 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c, gtk/toolitem.c: add new "is_important"
+	property
+	
+	* gtk/gtkradiotoolbutton.c
+	(gtk_radio_tool_button_new_from_widget): Don't take a stock id
+
+	* gtk/gtkradiotoolbutton.c
+	(gtk_radio_tool_button_new_with_stock_from_widget): make this
+	function take a stock_id.
+
+	* gtk/toolbar: documentation
+
 Mon Aug  4 14:53:46 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkimage-x11.c (_gdk_windowing_image_init): 

@@ -2,21 +2,50 @@
 GtkToolItem
 
 <!-- ##### SECTION Short_Description ##### -->
-
+#GtkToolItem is the base class of widgets that can be added to
+#GtkToolbar.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+#GtkToolItem<!-- -->s are widgets that can appear on a toolbar. To
+create a toolbar item that contain something else than a button, use
+gtk_tool_item_new(). Use gtk_container_add() to add a child
+widget to the tool item.
+</para>
+<para>
+For toolbar items that contain buttons, see the #GtkToolButton,
+#GtkToggleToolButton and #GtkRadioToolButton classes.
+</para>
+See the #GtkToolbar class for a description of the toolbar widget.
+<para>
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
+<varlistentry>
+  <term>#GtkToolbar</term>
+  <listitem><para>The toolbar widget</para></listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>#GtkToolButton</term>
+  <listitem><para>A subclass of #GtkToolItem that displays buttons on
+      the toolbar</para></listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>#GtkSeparatorToolItem</term>
+  <listitem><para>A subclass of #GtkToolItem that separates groups of
+      items on a toolbar</para></listitem>
+</varlistentry>
+
 </para>
 
 <!-- ##### STRUCT GtkToolItem ##### -->
 <para>
-
+The GtkToolItem struct contains only private data. It should only be
+accessed through the functions described below.
 </para>
 
 
@@ -135,7 +164,7 @@ GtkToolItem
 </para>
 
 @toolitem: 
-@visible_horizontal: 
+@visible_vertical: 
 
 
 <!-- ##### FUNCTION gtk_tool_item_get_visible_vertical ##### -->
@@ -228,6 +257,11 @@ GtkToolItem
 </para>
 
 @toolitem: the object which received the signal.
+
+<!-- ##### ARG GtkToolItem:is-important ##### -->
+<para>
+
+</para>
 
 <!-- ##### ARG GtkToolItem:visible-horizontal ##### -->
 <para>

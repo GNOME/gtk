@@ -34,8 +34,12 @@
 #define SPACE_LINE_START    3
 #define SPACE_LINE_END      7
 
+#define MENU_ID "gtk-separator-tool-item-menu-id"
+
 static void                 gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class);
+static gboolean             gtk_separator_tool_item_create_menu_proxy (GtkToolItem *item);
 static void		    gtk_separator_tool_item_size_request (GtkWidget      *widget,
+								  
 								  GtkRequisition *requisition);
 static gboolean             gtk_separator_tool_item_expose     (GtkWidget                 *widget,
 								GdkEventExpose            *event);
@@ -119,7 +123,8 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
 
   widget_class->size_request = gtk_separator_tool_item_size_request;
   widget_class->expose_event = gtk_separator_tool_item_expose;
-  
+  toolitem_class->create_menu_proxy = gtk_separator_tool_item_create_menu_proxy;
+
   container_class->add = gtk_separator_tool_item_add;
 }
 
@@ -128,6 +133,18 @@ gtk_separator_tool_item_add (GtkContainer *container,
 			     GtkWidget    *child)
 {
   g_warning("attempt to add a child to an GtkSeparatorToolItem");
+}
+
+static gboolean
+gtk_separator_tool_item_create_menu_proxy (GtkToolItem *item)
+{
+  GtkWidget *menu_item = NULL;
+  
+  menu_item = gtk_separator_menu_item_new();
+  
+  gtk_tool_item_set_proxy_menu_item (item, MENU_ID, menu_item);
+  
+  return TRUE;
 }
 
 static void
@@ -193,6 +210,15 @@ gtk_separator_tool_item_expose (GtkWidget      *widget,
   return TRUE;
 }
 
+/**
+ * gtk_separator_tool_item_new:
+ * 
+ * Create a new #GtkSeparatorToolItem
+ * 
+ * Return value: the new #GtkSeparatorToolItem
+ * 
+ * Since: 2.4
+ **/
 GtkToolItem *
 gtk_separator_tool_item_new (void)
 {

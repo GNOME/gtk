@@ -58,18 +58,22 @@ void make_toggles (void) {
 <!-- ##### SECTION See_Also ##### -->
 <para>
 <variablelist>
+
 <varlistentry>
-<term>#GtkButton</term>
-<listitem><para>a more general button.</para></listitem>
+  <term>#GtkButton</term>
+  <listitem><para>a more general button.</para></listitem>
 </varlistentry>
+
 <varlistentry>
-<term>#GtkCheckButton</term>
-<listitem><para>another way of presenting a toggle option.</para></listitem>
+  <term>#GtkCheckButton</term>
+  <listitem><para>another way of presenting a toggle option.</para></listitem>
 </varlistentry>
+
 <varlistentry>
-<term>#GtkCheckMenuItem</term>
-<listitem><para>a #GtkToggleButton  as a menu item.</para></listitem>
+  <term>#GtkCheckMenuItem</term>
+  <listitem><para>a #GtkToggleButton  as a menu item.</para></listitem>
 </varlistentry>
+
 </variablelist>
 </para>
 

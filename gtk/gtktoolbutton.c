@@ -62,6 +62,8 @@ static void gtk_tool_button_get_property  (GObject            *object,
 					   guint               prop_id,
 					   GValue             *value,
 					   GParamSpec         *pspec);
+static void gtk_tool_button_property_notify (GObject          *object,
+					     GParamSpec       *pspec);
 static void gtk_tool_button_finalize      (GObject            *object);
 
 static void gtk_tool_button_toolbar_reconfigured (GtkToolItem *tool_item);
@@ -128,6 +130,7 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
   
   object_class->set_property = gtk_tool_button_set_property;
   object_class->get_property = gtk_tool_button_get_property;
+  object_class->notify = gtk_tool_button_property_notify;
   object_class->finalize = gtk_tool_button_finalize;
 
   tool_item_class->create_menu_proxy = gtk_tool_button_create_menu_proxy;
@@ -160,10 +163,12 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
    *                      underscore is followed by another underscore
    *
    *			- an underscore indicates that the next character when
-   *                      used in the overflow menu should be used as a mnemonic.
+   *                      used in the overflow menu should be used as a
+   *                      mnemonic.
    *
    *		In short: use_underline = TRUE means that the label text has
-   *            the form "_Open" and the toolbar should take appropriate action.
+   *            the form "_Open" and the toolbar should take appropriate
+   *            action.
    */
 
   g_object_class_install_property (object_class,
@@ -202,6 +207,13 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 							GTK_TYPE_WIDGET,
 							G_PARAM_READWRITE));
 
+/**
+ * GtkToolButton::clicked:
+ * @toolbutton: the object that emitted the signal
+ *
+ * This signal is emitted when the tool button is clicked with the mouse
+ * or activated with the keyboard.
+ **/
   toolbutton_signals[CLICKED] =
     g_signal_new ("clicked",
 		  G_OBJECT_CLASS_TYPE (klass),
@@ -278,8 +290,20 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
   
   if (style != GTK_TOOLBAR_TEXT)
     need_icon = TRUE;
+
+  if (style != GTK_TOOLBAR_ICONS && style != GTK_TOOLBAR_BOTH_HORIZ)
+    need_label = TRUE;
+
+  if (style == GTK_TOOLBAR_BOTH_HORIZ &&
+      (gtk_tool_item_get_is_important (GTK_TOOL_ITEM (button)) ||
+       gtk_tool_item_get_orientation (GTK_TOOL_ITEM (button)) == GTK_ORIENTATION_VERTICAL))
+    {
+      need_label = TRUE;
+    }
   
-  if (style != GTK_TOOLBAR_ICONS)
+  if (style != GTK_TOOLBAR_ICONS &&
+      ((style != GTK_TOOLBAR_BOTH_HORIZ ||
+	gtk_tool_item_get_is_important (GTK_TOOL_ITEM (button)))))
     need_label = TRUE;
   
   if (need_label)
@@ -361,8 +385,9 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 
     case GTK_TOOLBAR_BOTH_HORIZ:
       box = gtk_hbox_new (FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (box), icon, FALSE, TRUE, 0);
-      gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (box), icon, label? FALSE : TRUE, TRUE, 0);
+      if (label)
+	gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
       gtk_container_add (GTK_CONTAINER (button->priv->button), box);
       break;
 
@@ -408,6 +433,14 @@ gtk_tool_button_set_property (GObject         *object,
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
+}
+
+static void
+gtk_tool_button_property_notify (GObject          *object,
+				 GParamSpec       *pspec)
+{
+  if (strcmp (pspec->name, "is_important"))
+    gtk_tool_button_construct_contents (GTK_TOOL_ITEM (object));
 }
 
 static void
@@ -571,6 +604,20 @@ gtk_tool_button_toolbar_reconfigured (GtkToolItem *tool_item)
   gtk_tool_button_construct_contents (tool_item);
 }
 
+/**
+ * gtk_tool_button_new_from_stock:
+ * @stock_id: the name of the stock item 
+ *
+ * Creates a new #GtkToolButton containing the image and text from a
+ * stock item. Some stock ids have preprocessor macros like #GTK_STOCK_OK
+ * and #GTK_STOCK_APPLY.
+ *
+ * It is an error if @stock_id is not a name of a stock item.
+ * 
+ * Return value: A new #GtkToolButton
+ * 
+ * Since: 2.4
+ **/
 GtkToolItem *
 gtk_tool_button_new_from_stock (const gchar *stock_id)
 {
@@ -585,6 +632,18 @@ gtk_tool_button_new_from_stock (const gchar *stock_id)
   return GTK_TOOL_ITEM (button);
 }
 
+/**
+ * gtk_tool_button_new:
+ * @label: a string that will be used as label, or %NULL
+ * @icon_widget: a widget that will be used as icon widget, or %NULL
+ * 
+ * Creates a new %GtkToolButton using @icon_widget as icon and @label as
+ * label.
+ * 
+ * Return value: A new #GtkToolButton
+ * 
+ * Since: 2.4
+ **/
 GtkToolItem *
 gtk_tool_button_new (GtkWidget	 *icon_widget,
 		     const gchar *label)
@@ -603,6 +662,19 @@ gtk_tool_button_new (GtkWidget	 *icon_widget,
   return GTK_TOOL_ITEM (button);  
 }
 
+/**
+ * gtk_tool_button_set_label:
+ * @button: a #GtkToolButton
+ * @label: a string that will be used as label, or %NULL.
+ * 
+ * Sets @label as the label used for the tool button. The "label" property
+ * only has an effect if not overridden by a non-%NULL "label_widget" property.
+ * If both the "label_widget" and "label" properties are %NULL, the label
+ * is determined by the "stock_id" property. If the "stock_id" property is also
+ * %NULL, @button will not have a label.
+ * 
+ * Since: 2.4
+ **/
 void
 gtk_tool_button_set_label (GtkToolButton *button,
 			   const gchar   *label)
@@ -622,6 +694,18 @@ gtk_tool_button_set_label (GtkToolButton *button,
     g_free (old_label);
 }
 
+/**
+ * gtk_tool_button_get_label:
+ * @button: a #GtkToolButton
+ * 
+ * Returns the label used by the tool button, or %NULL if the tool button
+ * doesn't have a label. or uses a the label from a stock item. The returned
+ * string is owned by GTK+, and must not be modified or freed.
+ * 
+ * Return value: The label, or %NULL
+ * 
+ * Since: 2.4
+ **/
 G_CONST_RETURN gchar *
 gtk_tool_button_get_label (GtkToolButton *button)
 {
@@ -630,6 +714,22 @@ gtk_tool_button_get_label (GtkToolButton *button)
   return button->priv->label_text;
 }
 
+/**
+ * gtk_tool_button_set_use_underline:
+ * @button: a #GtkToolButton
+ * @use_underline: whether the button label has the form "_Open"
+ *
+ * If set, an underline in the label property indicates that the next character
+ * should be used for the mnemonic accelerator key in the overflow menu. For
+ * example, if the label property is "_Open" and @use_underline is %TRUE,
+ * the label on the tool button will be "Open" and the item on the overflow
+ * menu will have an underlined 'O'.
+ * 
+ * Labels shown on tool buttons never have mnemonics on them; this property
+ * only affects the menu item on the overflow menu.
+ * 
+ * Since: 2.4
+ **/
 void
 gtk_tool_button_set_use_underline (GtkToolButton *button,
 				   gboolean       use_underline)
@@ -648,6 +748,18 @@ gtk_tool_button_set_use_underline (GtkToolButton *button,
     }
 }
 
+/**
+ * gtk_tool_button_get_use_underline:
+ * @button: a #GtkToolButton
+ * 
+ * Returns whether underscores in the label property are used as mnemonics
+ * on menu items on the overflow menu. See gtk_tool_button_set_use_underline().
+ * 
+ * Return value: %TRUE if underscores in the label property are used as
+ * mnemonics on menu items on the overflow menu.
+ * 
+ * Since: 2.4
+ **/
 gboolean
 gtk_tool_button_get_use_underline (GtkToolButton *button)
 {
@@ -656,6 +768,17 @@ gtk_tool_button_get_use_underline (GtkToolButton *button)
   return button->priv->use_underline;
 }
 
+/**
+ * gtk_tool_button_set_stock_id:
+ * @button: a #GtkToolButton
+ * @stock_id: a name of a stock item, or %NULL
+ * 
+ * Sets the name of the stock item. See gtk_tool_button_new_from_stock().
+ * The stock_id property only has an effect if not
+ * overridden by non-%NULL "label" and "icon_widget" properties.
+ * 
+ * Since: 2.4
+ **/
 void
 gtk_tool_button_set_stock_id (GtkToolButton *button,
 			      const gchar   *stock_id)
@@ -674,6 +797,17 @@ gtk_tool_button_set_stock_id (GtkToolButton *button,
   g_free (old_stock_id);
 }
 
+/**
+ * gtk_tool_button_get_stock_id:
+ * @button: a #GtkToolButton
+ * 
+ * Returns the name of the stock item. See gtk_tool_button_set_stock_id().
+ * The returned string is owned by GTK+ and must not be freed or modifed.
+ * 
+ * Return value: the name of the stock item for @button.
+ * 
+ * Since: 2.4
+ **/
 G_CONST_RETURN gchar *
 gtk_tool_button_get_stock_id (GtkToolButton *button)
 {
@@ -682,25 +816,36 @@ gtk_tool_button_get_stock_id (GtkToolButton *button)
   return button->priv->stock_id;
 }
 
+/**
+ * gtk_tool_button_set_icon_widget:
+ * @button: a #GtkToolButton
+ * @icon_widget: the widget used as icon, or %NULL
+ * 
+ * Sets @icon as the widget used as icon on @button. If @icon_widget is
+ * %NULL the icon is determined by the "stock_id" property. If the
+ * "stock_id" property is also %NULL, @button will not have an icon.
+ * 
+ * Since: 2.4
+ **/
 void
 gtk_tool_button_set_icon_widget (GtkToolButton *button,
-				 GtkWidget     *icon)
+				 GtkWidget     *icon_widget)
 {
   g_return_if_fail (GTK_IS_TOOL_BUTTON (button));
-  g_return_if_fail (icon == NULL || GTK_IS_WIDGET (icon));
+  g_return_if_fail (icon_widget == NULL || GTK_IS_WIDGET (icon_widget));
 
-  if (icon != button->priv->icon_widget)
+  if (icon_widget != button->priv->icon_widget)
     {
       if (button->priv->icon_widget)
 	g_object_unref (G_OBJECT (button->priv->icon_widget));
 
-      if (icon)
+      if (icon_widget)
 	{
-	  g_object_ref (icon);
-	  gtk_object_sink (GTK_OBJECT (icon));
+	  g_object_ref (icon_widget);
+	  gtk_object_sink (GTK_OBJECT (icon_widget));
 	}
 
-      button->priv->icon_widget = icon;
+      button->priv->icon_widget = icon_widget;
 
       gtk_tool_button_construct_contents (GTK_TOOL_ITEM (button));
       
@@ -708,6 +853,19 @@ gtk_tool_button_set_icon_widget (GtkToolButton *button,
     }
 }
 
+/**
+ * gtk_tool_button_set_label_widget:
+ * @button: a #GtkToolButton
+ * @label_widget: the widget used as label, or %NULL
+ * 
+ * Sets @label_widget as the widget that will be used as the label
+ * for @button. If @label_widget is %NULL the "label" property is used
+ * as label. If "label" is also %NULL, the label in the stock item
+ * determined by the "stock_id" property is used as label. If
+ * "stock_id" is also %NULL, @button does not have a label.
+ * 
+ * Since: 2.4
+ **/
 void
 gtk_tool_button_set_label_widget (GtkToolButton *button,
 				  GtkWidget     *label_widget)
@@ -734,6 +892,17 @@ gtk_tool_button_set_label_widget (GtkToolButton *button,
     }
 }
 
+/**
+ * gtk_tool_button_get_label_widget:
+ * @button: a #GtkToolButton
+ * 
+ * Returns the widget used as label on @button. See
+ * gtk_tool_button_set_label_widget().
+ * 
+ * Return value: The widget used as label on @button, or %NULL.
+ * 
+ * Since: 2.4
+ **/
 GtkWidget *
 gtk_tool_button_get_label_widget (GtkToolButton *button)
 {
@@ -742,6 +911,17 @@ gtk_tool_button_get_label_widget (GtkToolButton *button)
   return button->priv->label_widget;
 }
 
+/**
+ * gtk_tool_button_get_icon_widget:
+ * @button: a #GtkToolButton
+ * 
+ * Return the widget used as icon widget on @button. See
+ * gtk_tool_button_set_icon_widget().
+ * 
+ * Return value: The widget used as icon on @button, or %NULL.
+ * 
+ * Since: 2.4
+ **/
 GtkWidget *
 gtk_tool_button_get_icon_widget (GtkToolButton *button)
 {

@@ -78,7 +78,7 @@ void                  gtk_tool_button_set_stock_id      (GtkToolButton *button,
 							 const gchar   *stock_id);
 G_CONST_RETURN gchar *gtk_tool_button_get_stock_id      (GtkToolButton *button);
 void                  gtk_tool_button_set_icon_widget   (GtkToolButton *button,
-							 GtkWidget     *icon);
+							 GtkWidget     *icon_widget);
 GtkWidget *           gtk_tool_button_get_icon_widget   (GtkToolButton *button);
 void                  gtk_tool_button_set_label_widget  (GtkToolButton *button,
 							 GtkWidget     *label_widget);

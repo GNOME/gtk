@@ -2,21 +2,63 @@
 GtkRadioToolButton
 
 <!-- ##### SECTION Short_Description ##### -->
-
+A toolbar item that contains a radio button.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
+A #GtkRadioToolButton is a #GtkToolItem that contains a radio button,
+that is, a button that is part of a group of toggle buttons where only
+one button can be active at a time.
+</para>
 
+<para>
+Use gtk_radio_tool_button_new() to create a new
+#GtkRadioToolButton. use gtk_radio_tool_button_new_from_widget() to
+create a new #GtkRadioToolButton that is part of the same group as an
+existing #GtkRadioToolButton. Use
+gtk_radio_tool_button_new_from_stock() or
+gtk_radio_tool_button_new_from_widget_with_stock() to create a new
+#GtkRAdioToolButton containing a stock item.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
+<variablelist>
+
+<varlistentry>
+<term>#GtkToolbar</term>
+<listitem><para>The toolbar widget</para></listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>#GtkToolButton</term>
+  <listitem><para>
+      An ancestor class of GtkRadioToolButton. The properties
+      "label_widget", "label", "icon_widget", and "stock_id" on
+      #GtkToolButton determine the label and icon used on a
+      #GtkRadioToolButton.
+  </para></listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>#GtkSeparatorToolItem</term>
+  <listitem>
+    <para>A subclass of #GtkToolItem that separates groups of
+      items on a toolbar. It is usually a good idea to put a separator
+      before and after a group of #GtkRadioToolButtons on a #GtkToolbar.
+    </para>
+  </listitem>
+</varlistentry>
+
+</variablelist>
+
 </para>
 
 <!-- ##### STRUCT GtkRadioToolButton ##### -->
 <para>
-
+  The #GtkRadioToolButton contains only private data and should only
+  be accessed through the functions described below.
 </para>
 
 
@@ -45,7 +87,6 @@ GtkRadioToolButton
 </para>
 
 @group: 
-@stock_id: 
 @Returns: 
 
 
@@ -55,6 +96,7 @@ GtkRadioToolButton
 </para>
 
 @group: 
+@stock_id: 
 @Returns: 
 
 

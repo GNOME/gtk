@@ -310,8 +310,15 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   klass->orientation_changed = gtk_toolbar_real_orientation_changed;
   klass->style_changed = gtk_toolbar_real_style_changed;
   
+/**
+ * GtkToolbar::orientation-changed:
+ * @toolbar: the object which emitted the signal
+ * @orientation: the new #GtkOrientation of the toolbar
+ *
+ * Emitted when the orientation of the toolbar changes.
+ */
   toolbar_signals[ORIENTATION_CHANGED] =
-    g_signal_new ("orientation_changed",
+    g_signal_new ("orientation-changed",
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkToolbarClass, orientation_changed),
@@ -319,8 +326,15 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 		  g_cclosure_marshal_VOID__ENUM,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_ORIENTATION);
+/**
+ * GtkToolbar::style-changed:
+ * @toolbar: The #GtkToolbar which emitted the signal
+ * @style: the new #GtkToolbarStyle of the toolbar
+ *
+ * Emitted when the style of the toolbar changes. 
+ */
   toolbar_signals[STYLE_CHANGED] =
-    g_signal_new ("style_changed",
+    g_signal_new ("style-changed",
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkToolbarClass, style_changed),
@@ -328,6 +342,24 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 		  g_cclosure_marshal_VOID__ENUM,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_TOOLBAR_STYLE);
+/**
+ * GtkToolbar::popup-context-menu:
+ * @toolbar: the #GtkToolbar which emitted the signal
+ * @x: the x coordinate of the point where the menu should appear
+ * @y: the y coordinate of the point where the menu should appear
+ * @button: the mouse button the user pressed, or -1
+ *
+ * Emitted when the user right-clicks the toolbar or uses the
+ * keybinding to display a popup menu.
+ *
+ * Application developers should handle this signal if they want
+ * to display a context menu on the toolbar. The context-menu should
+ * appear at the coordinates given by @x and @y. The mouse button
+ * number is given by the @button parameter. If the menu was popped
+ * up using the keybaord, @button is -1.
+ *
+ * Return value: return %TRUE if the signal was handled, %FALSE if not
+ */
   toolbar_signals[POPUP_CONTEXT_MENU] =
     g_signal_new ("popup_context_menu",
 		  G_OBJECT_CLASS_TYPE (klass),
@@ -338,6 +370,16 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 		  G_TYPE_BOOLEAN, 3,
 		  G_TYPE_INT, G_TYPE_INT,
 		  G_TYPE_INT);
+/**
+ * GtkToolbar::move-focus:
+ * @toolbar: the #GtkToolbar which emitted the signal
+ * @dir: a #GtkDirection
+ *
+ * A keybinding signal used internally by GTK+. This signal can't
+ * be used in application code.
+ *
+ * Return value: %TRUE if the signal was handled, %FALSE if not
+ */
   toolbar_signals[MOVE_FOCUS] =
     _gtk_binding_signal_new ("move_focus",
 			     G_TYPE_FROM_CLASS (klass),
@@ -347,6 +389,16 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 			     _gtk_marshal_BOOLEAN__ENUM,
 			     G_TYPE_BOOLEAN, 1,
 			     GTK_TYPE_DIRECTION_TYPE);
+/**
+ * GtkToolbar::focus-home-or-end:
+ * @toolbar: the #GtkToolbar which emitted the signal
+ * @focus_home: %TRUE if the first item should be focused
+ *
+ * A keybinding signal used internally by GTK+. This signal can't
+ * be used in application code
+ *
+ * Return value: %TRUE if the signal was handled, %FALSE if not
+ */
   toolbar_signals[FOCUS_HOME_OR_END] =
     _gtk_binding_signal_new ("focus_home_or_end",
 			     G_OBJECT_CLASS_TYPE (klass),
@@ -565,9 +617,22 @@ toolbar_item_visible (GtkToolbar  *toolbar,
 }
 
 static gboolean
-toolbar_item_is_homogeneous (GtkToolItem *item)
+toolbar_item_is_homogeneous (GtkToolbar  *toolbar,
+			     GtkToolItem *item)
 {
-  return (gtk_tool_item_get_homogeneous (item) && !GTK_IS_SEPARATOR_TOOL_ITEM (item));
+  gboolean result = FALSE;
+
+  if ((gtk_tool_item_get_homogeneous (item) && !GTK_IS_SEPARATOR_TOOL_ITEM (item)))
+    result = TRUE;
+
+  if (gtk_tool_item_get_is_important (item) &&
+      toolbar->style == GTK_TOOLBAR_BOTH_HORIZ &&
+      toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      result = FALSE;
+    }
+
+  return result;
 }
 
 static void
@@ -799,7 +864,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
       max_child_width = MAX (max_child_width, requisition.width);
       max_child_height = MAX (max_child_height, requisition.height);
 
-      if (toolbar_item_is_homogeneous (item))
+      if (toolbar_item_is_homogeneous (toolbar, item))
 	{
 	  max_homogeneous_child_width = MAX (max_homogeneous_child_width, requisition.width);
 	  max_homogeneous_child_height = MAX (max_homogeneous_child_height, requisition.height);
@@ -821,7 +886,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
       if (!toolbar_item_visible (toolbar, item))
 	continue;
       
-      if (toolbar_item_is_homogeneous (item))
+      if (toolbar_item_is_homogeneous (toolbar, item))
 	{
 	  size = homogeneous_size;
 	}
@@ -924,14 +989,14 @@ get_item_size (GtkToolbar *toolbar,
   
   if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      if (toolbar_item_is_homogeneous (item))
+      if (toolbar_item_is_homogeneous (toolbar, item))
 	return toolbar->button_maxw;
       else
 	return requisition.width;
     }
   else
     {
-      if (toolbar_item_is_homogeneous (item))
+      if (toolbar_item_is_homogeneous (toolbar, item))
 	return toolbar->button_maxh;
       else
 	return requisition.height;
@@ -2162,6 +2227,18 @@ gtk_toolbar_new (void)
   return GTK_WIDGET (toolbar);
 }
 
+/**
+ * gtk_toolbar_insert:
+ * @toolbar: a #GtkToolbar
+ * @item: a #GtkToolItem
+ * @pos: the position of the new item
+ *
+ * Insert a #GtkToolItem into the toolbar at position @pos. If @pos is
+ * 0 the item is prepended to the start of the toolbar. If @pos is
+ * negative, append the item to the end of the toolbar.
+ *
+ * Since: 2.4
+ **/
 void
 gtk_toolbar_insert (GtkToolbar  *toolbar,
 		    GtkToolItem *item,
@@ -2176,6 +2253,18 @@ gtk_toolbar_insert (GtkToolbar  *toolbar,
   gtk_toolbar_insert_tool_item (toolbar, item, pos);
 }
 
+/**
+ * gtk_toolbar_get_item_index:
+ * @toolbar: a #GtkToolbar
+ * @item: a #GtkToolItem that is a child of @toolbar
+ * 
+ * Returns the position of @item on the toolbar, starting from 0.
+ * It is an error if @item is not a child of the toolbar.
+ * 
+ * Return value: the position of item on the toolbar.
+ * 
+ * Since: 2.4
+ **/
 gint
 gtk_toolbar_get_item_index (GtkToolbar  *toolbar,
 			    GtkToolItem *item)
@@ -2331,6 +2420,16 @@ gtk_toolbar_get_tooltips (GtkToolbar *toolbar)
   return toolbar->tooltips->enabled;
 }
 
+/**
+ * gtk_toolbar_get_n_items:
+ * @toolbar: a #GtkToolbar
+ * 
+ * Returns the number of items on the toolbar.
+ * 
+ * Return value: the number of items on the toolbar
+ * 
+ * Since: 2.4
+ **/
 gint
 gtk_toolbar_get_n_items (GtkToolbar *toolbar)
 {
@@ -2346,9 +2445,19 @@ gtk_toolbar_get_n_items (GtkToolbar *toolbar)
   return g_list_length (priv->items);
 }
 
-/*
- * returns NULL if n is out of range
- */
+/**
+ * gtk_toolbar_get_nth_item:
+ * @toolbar: a #GtkToolbar
+ * @n: A position on the toolbar
+ *
+ * Returns the @n<!-- -->'s item on @toolbar, or %NULL if the
+ * toolbar does not contain an @n<!-- -->'th item.
+ * 
+ * Return value: The @n<!-- -->'th #GtkToolItem on @toolbar, or %NULL if there
+ * isn't an @n<!-- -->th item.
+ * 
+ * Since: 2.4
+ **/
 GtkToolItem *
 gtk_toolbar_get_nth_item (GtkToolbar *toolbar,
 			  gint        n)
@@ -2409,6 +2518,17 @@ gtk_toolbar_get_icon_size (GtkToolbar *toolbar)
   return toolbar->icon_size;
 }
 
+/**
+ * gtk_toolbar_get_relief_style:
+ * @toolbar: a #GtkToolbar
+ * 
+ * Returns the relief style of buttons on @toolbar. See
+ * gtk_button_set_relief_style().
+ * 
+ * Return value: The relief style of buttons on @toolbar.
+ * 
+ * Since: 2.4
+ **/
 GtkReliefStyle
 gtk_toolbar_get_relief_style (GtkToolbar *toolbar)
 {
@@ -2451,6 +2571,18 @@ gtk_toolbar_unset_icon_size (GtkToolbar *toolbar)
     }
 }
 
+/**
+ * gtk_toolbar_set_show_arrow:
+ * @toolbar: a #GtkToolbar
+ * @show_arrow: Whether to show an overflow menu
+ * 
+ * Sets whether to show an overflow menu when
+ * @toolbar doesn't have room for all items on it. If %TRUE,
+ * items that there are not room are available through an
+ * overflow menu.
+ * 
+ * Since: 2.4
+ **/
 void
 gtk_toolbar_set_show_arrow (GtkToolbar *toolbar,
 			    gboolean    show_arrow)
@@ -2474,6 +2606,17 @@ gtk_toolbar_set_show_arrow (GtkToolbar *toolbar,
     }
 }
 
+/**
+ * gtk_toolbar_get_show_arrow:
+ * @toolbar: a #GtkToolbar
+ * 
+ * Returns whether the toolbar has an overflow menu.
+ * See gtk_toolbar_set_show_arrow()
+ * 
+ * Return value: 
+ * 
+ * Since: 2.4
+ **/
 gboolean
 gtk_toolbar_get_show_arrow (GtkToolbar *toolbar)
 {
@@ -2489,6 +2632,23 @@ gtk_toolbar_get_show_arrow (GtkToolbar *toolbar)
   return priv->show_arrow;
 }
 
+/**
+ * gtk_toolbar_get_drop_index:
+ * @toolbar: a #GtkToolbar
+ * @x: x coordinate of a point on the toolbar
+ * @y: y coordinate of a point on the toolbar
+ *
+ * Returns the position corresponding to the indicated point on
+ * @toolbar. This is useful when dragging items to the toolbar:
+ * this function returns the position a new item should be
+ * inserted.
+ *
+ * @x and @y are in @toolbar coordinates.
+ * 
+ * Return value: The position corresponding to the point (@x, @y) on the toolbar.
+ * 
+ * Since: 2.4
+ **/
 gint
 gtk_toolbar_get_drop_index (GtkToolbar *toolbar,
 			    gint        x,

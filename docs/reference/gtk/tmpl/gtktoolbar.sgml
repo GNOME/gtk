@@ -2,42 +2,41 @@
 GtkToolbar
 
 <!-- ##### SECTION Short_Description ##### -->
-create bars of buttons and other widgets.
+Create bars of buttons and other widgets.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 A toolbar is created with a call to gtk_toolbar_new().
 </para>
 <para>
-Buttons with text and/or images are added with gtk_toolbar_append_item(), gtk_toolbar_prepend_item(), and gtk_toolbar_insert_item().
+A toolbar can contain instances of a subclass of #GtkToolItem. To add
+a #GtkToolItem to the a toolbar, use gtk_toolbar_insert(). To remove
+an item from the toolbar use gtk_container_remove(). To add a button
+to the toolbar, add an instance of #GtkToolButton. Toolbar items can
+be visually grouped by adding instances of #GtkSeparatorToolItem to
+the toolbar.
 </para>
 <para>
-Any of #GtkToggleButton, #GtkRadioButton, or an arbitrary widget can be added to the toolbar with gtk_toolbar_append_element(), gtk_toolbar_prepend_element(), and gtk_toolbar_insert_element().
-</para>
-<para>
-Widgets can be visibly grouped by adding gaps between widgets using gtk_toolbar_append_space(), gtk_toolbar_prepend_space(), and gtk_toolbar_insert_space().
+Creating a context menu for the toolbar can be done by connecting to
+the #GtkToolbar::popup-context-menu signal.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
 <variablelist>
+
 <varlistentry>
-<term>#GtkToolTips</term>
-<listitem><para>Change the properties of a #GtkToolbar's #GtkTooltips.</para></listitem>
+<term>#GtkToolItem</term>
+<listitem><para>Base class of widgets that can be added to a toolbar.</para></listitem>
 </varlistentry>
-<varlistentry>
-<term>#GtkTipsQuery</term>
-<listitem><para>Make use of the private tips of toolbar elements.</para></listitem>
-</varlistentry>
+
 </variablelist>
 </para>
 
 <!-- ##### STRUCT GtkToolbar ##### -->
 <para>
-<structfield>num_children</structfield> is an integer specifying how many toolbar items the #GtkToolbar contains. <structfield>children</structfield> is a #GList of the child widgets of the toolbar.
-</para>
-<para>
-<structfield>orientation</structfield>
+The #GtkToolbar struct only contains private data and should only be
+accessed through the function described below.
 </para>
 
 
