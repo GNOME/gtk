@@ -22,10 +22,10 @@ VPATH = @srcdir@
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
-datadir = $(prefix)/@DATADIRNAME@
+datadir = @datadir@
 localedir = $(datadir)/locale
-gnulocaledir = $(prefix)/share/locale
-gettextsrcdir = $(prefix)/share/gettext/po
+gnulocaledir = $(datadir)/locale
+gettextsrcdir = $(datadir)/gettext/po
 subdir = po
 
 INSTALL = @INSTALL@
