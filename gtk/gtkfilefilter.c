@@ -354,7 +354,8 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
       switch (rule->type)
 	{
 	case FILTER_RULE_MIME_TYPE:
-	  if (strcmp (rule->u.mime_type, filter_info->mime_type) == 0)
+	  if (filter_info->mime_type != NULL
+	      && strcmp (rule->u.mime_type, filter_info->mime_type) == 0)
 	    return TRUE;
 	  break;
 	case FILTER_RULE_PATTERN:
