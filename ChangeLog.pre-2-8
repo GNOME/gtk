@@ -1,3 +1,17 @@
+Fri Sep 26 23:49:44 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Landing the new ComboBox. Note that only gtkcombobox.h and
+	gtkcomboboxentry.h are public.
+
+	* gtk/gtkcellview.[ch], gtk/gtkcellviewmenuitem.[ch],
+	gtk/gtkcombobox.[ch], gtk/gtkcomboboxentry.[ch]: new files.
+
+	* gtk/Makefile.am, gtk/gtk.h: adding the new files.
+
+	* tests/testcombo.c: and a new test.
+
+	* tests/Makefile.am: adding the new test.
+
 2003-09-25  Tor Lillqvist  <tml@iki.fi>
 
 	* demos/gtk-demo/main.c: Don't use hardcoded DEMOCODEDIR on Windows.

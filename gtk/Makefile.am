@@ -118,6 +118,8 @@ gtk_public_h_sources =          \
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
 	gtkcombo.h		\
+	gtkcombobox.h		\
+	gtkcomboboxentry.h	\
 	gtkcontainer.h		\
 	gtkctree.h		\
 	gtkcurve.h		\
@@ -249,6 +251,8 @@ gtk_public_h_sources =          \
 
 # GTK+ header files that don't get installed
 gtk_private_h_sources =         \
+	gtkcellview.h		\
+	gtkcellviewmenuitem.h	\
 	gtkentryprivate.h	\
 	gtkrbtree.h 		\
 	gtktextbtree.h		\
@@ -290,6 +294,8 @@ gtk_c_sources =                 \
 	gtkcellrendererpixbuf.c	\
 	gtkcellrenderertext.c	\
 	gtkcellrenderertoggle.c	\
+	gtkcellview.c		\
+	gtkcellviewmenuitem.c	\
 	gtkcheckbutton.c	\
 	gtkcheckmenuitem.c	\
 	gtkclipboard.c		\
@@ -298,6 +304,8 @@ gtk_c_sources =                 \
 	gtkcolorsel.c		\
 	gtkcolorseldialog.c	\
 	gtkcombo.c		\
+	gtkcombobox.c		\
+	gtkcomboboxentry.c	\
 	gtkcontainer.c		\
 	gtkctree.c		\
 	gtkcurve.c		\

@@ -58,6 +58,8 @@
 #include <gtk/gtkcolorsel.h>
 #include <gtk/gtkcolorseldialog.h>
 #include <gtk/gtkcombo.h>
+#include <gtk/gtkcombobox.h>
+#include <gtk/gtkcomboboxentry.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkctree.h>
 #include <gtk/gtkcurve.h>
