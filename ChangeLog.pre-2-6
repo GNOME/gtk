@@ -1,3 +1,16 @@
+Thu Feb 26 23:39:07 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Fixes for #135333, analysed by Damon Chaplin:
+	
+	* gtk/gtkcombobox.c (gtk_combo_box_list_button_pressed): Don't
+	grab here.
+	* gtk/gtkcombobox.c (gtk_combo_box_popup): Do the grabs here, 
+	so that we don't forget to grab when the menu is popped via
+	keynav.
+	* gtk/gtkcombobox.c (gtk_combo_box_list_button_released): Don't
+	ungrab here.
+	* gtk/gtkcombobox.c (gtk_combo_box_popdown): Do the ungrabs here.
+
 Thu Feb 26 23:26:00 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkstatusbar.c (set_grip_cursor): New function. Use resize

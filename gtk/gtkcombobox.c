@@ -885,6 +885,15 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
                          FALSE, GDK_CURRENT_TIME);
       gtk_widget_grab_focus (combo_box->priv->tree_view);
     }
+
+  gtk_grab_add (combo_box->priv->popup_window);
+  gdk_pointer_grab (combo_box->priv->popup_window->window, TRUE,
+                    GDK_BUTTON_PRESS_MASK |
+                    GDK_BUTTON_RELEASE_MASK |
+                    GDK_POINTER_MOTION_MASK,
+                    NULL, NULL, GDK_CURRENT_TIME);
+
+  gtk_grab_add (combo_box->priv->tree_view);
 }
 
 /**
@@ -909,6 +918,7 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
       return;
     }
 
+  gtk_combo_box_list_remove_grabs (combo_box);
   gtk_widget_hide_all (combo_box->priv->popup_window);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (combo_box->priv->button),
                                 FALSE);
@@ -1974,15 +1984,6 @@ gtk_combo_box_list_button_pressed (GtkWidget      *widget,
 
   gtk_combo_box_popup (combo_box);
 
-  gtk_grab_add (combo_box->priv->popup_window);
-  gdk_pointer_grab (combo_box->priv->popup_window->window, TRUE,
-                    GDK_BUTTON_PRESS_MASK |
-                    GDK_BUTTON_RELEASE_MASK |
-                    GDK_POINTER_MOTION_MASK,
-                    NULL, NULL, GDK_CURRENT_TIME);
-
-  gtk_grab_add (combo_box->priv->tree_view);
-
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (combo_box->priv->button),
                                 TRUE);
 
@@ -2017,7 +2018,6 @@ gtk_combo_box_list_button_released (GtkWidget      *widget,
           !popup_in_progress &&
           gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (combo_box->priv->button)))
         {
-          gtk_combo_box_list_remove_grabs (combo_box);
           gtk_combo_box_popdown (combo_box);
           return TRUE;
         }
@@ -2025,7 +2025,6 @@ gtk_combo_box_list_button_released (GtkWidget      *widget,
       /* released outside treeview */
       if (ewidget != combo_box->priv->button)
         {
-          gtk_combo_box_list_remove_grabs (combo_box);
           gtk_combo_box_popdown (combo_box);
 
           return TRUE;
@@ -2033,9 +2032,6 @@ gtk_combo_box_list_button_released (GtkWidget      *widget,
 
       return FALSE;
     }
-
-  /* drop grabs */
-  gtk_combo_box_list_remove_grabs (combo_box);
 
   /* select something cool */
   ret = gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget),
@@ -2090,7 +2086,6 @@ gtk_combo_box_list_key_press (GtkWidget   *widget,
         gtk_combo_box_set_active (combo_box,
                                   gtk_combo_box_get_active (combo_box));
 
-      gtk_combo_box_list_remove_grabs (combo_box);
       gtk_combo_box_popdown (combo_box);
 
       return TRUE;
