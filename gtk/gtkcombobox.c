@@ -374,6 +374,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->expose_event = gtk_combo_box_expose_event;
   widget_class->scroll_event = gtk_combo_box_scroll_event;
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
+  widget_class->style_set = gtk_combo_box_style_set;
 
   gtk_object_class = (GtkObjectClass *)klass;
   gtk_object_class->destroy = gtk_combo_box_destroy;
@@ -470,9 +471,6 @@ static void
 gtk_combo_box_init (GtkComboBox *combo_box)
 {
   combo_box->priv = GTK_COMBO_BOX_GET_PRIVATE (combo_box);
-
-  g_signal_connect (combo_box, "style_set",
-                    G_CALLBACK (gtk_combo_box_style_set), NULL);
 
   combo_box->priv->cell_view = gtk_cell_view_new ();
   gtk_container_add (GTK_CONTAINER (combo_box), combo_box->priv->cell_view);
@@ -820,7 +818,7 @@ gtk_combo_box_menu_position (GtkMenu  *menu,
 void
 gtk_combo_box_popup (GtkComboBox *combo_box)
 {
-  gint x, y, width, height;
+  gint x, y, width, height, popup_height;
   GtkWidget *sample;
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
@@ -864,9 +862,10 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
             GTK_WIDGET (combo_box->priv->cell_view_frame)->style->xthickness);
     }
 
-  gtk_widget_set_size_request (combo_box->priv->popup_window,
-                               width, -1);
-
+  gtk_window_get_size (combo_box->priv->popup_window, NULL, &popup_height);
+  gtk_widget_set_size_request (combo_box->priv->popup_window, width, -1);
+  gtk_window_resize (combo_box->priv->popup_window, width, popup_height);
+  
   if (GTK_WIDGET_NO_WINDOW (sample))
     {
       x += sample->allocation.x;
@@ -983,7 +982,7 @@ gtk_combo_box_remeasure (GtkComboBox *combo_box)
       GtkRequisition req;
 
       if (combo_box->priv->cell_view)
-        gtk_cell_view_get_size_of_row (GTK_CELL_VIEW (combo_box->priv->cell_view),
+	gtk_cell_view_get_size_of_row (GTK_CELL_VIEW (combo_box->priv->cell_view), 
                                        path, &req);
       else
         req.width = 0;

@@ -1,3 +1,15 @@
+Sat Feb 28 23:30:36 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_popup): Actually resize the
+	popup window before popping up.  (#135651)
+
+Sat Feb 28 23:29:35 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_class_init): 
+	* gtk/gtkcombobox.c (gtk_combo_box_init): Override the default
+	handler for style_set in class_init instead of connecting to
+	the signal in init. (noticed by Yosh).
+
 Sat Feb 28 14:48:35 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* demos/gtk-demo/main.c (read_line): #ifdef HAVE_FLOCKFILE, 
