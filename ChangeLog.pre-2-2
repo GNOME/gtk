@@ -1,3 +1,12 @@
+Thu Mar 12 18:01:03 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk.m4 gtk-config.in Makefile.am configure.in: 
+	  Added a new mechanism for GTK-dependent programs to
+	  find out about the installed GTK. (Does not remove
+	  any current functionality)
+
+	* gtk+-xconfig.in: Was no longer used for anything.
+
 Thu Mar 12 20:17:47 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkhandlebox.c (gtk_handle_box_delete_float): return TRUE for
