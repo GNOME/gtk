@@ -25,6 +25,7 @@
 #include "gtkmodules.h"
 #include "gtksettings.h"
 #include "gtkdebug.h"
+#include "gtkprivate.h" /* GTK_LIBDIR */
 
 #include <gmodule.h>
 #include <pango/pango-utils.h>	/* For pango_split_file_list */

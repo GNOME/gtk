@@ -103,6 +103,7 @@ gtk_OBJECTS = 					\
 	gtkeventbox.obj				\
 	gtkexpander.obj			\
 	gtkfilechooser.obj			\
+	gtkfilechooserbutton.obj	\
 	gtkfilechooserdefault.obj			\
 	gtkfilechooserdialog.obj			\
 	gtkfilechooserembed.obj		\
@@ -129,9 +130,9 @@ gtk_OBJECTS = 					\
 	gtkhscrollbar.obj			\
 	gtkhseparator.obj			\
 	gtkhsv.obj				\
+	gtkiconcache.obj			\
 	gtkiconfactory.obj			\
 	gtkicontheme.obj			\
-	gtkiconthemeparser.obj			\
 	gtkiconview.obj			\
 	gtkimage.obj				\
 	gtkimagemenuitem.obj	\
@@ -156,8 +157,10 @@ gtk_OBJECTS = 					\
 	gtkmenubar.obj				\
 	gtkmenuitem.obj				\
 	gtkmenushell.obj			\
+	gtkmenutoolbutton.obj	\
 	gtkmessagedialog.obj			\
 	gtkmisc.obj				\
+	gtkmodules.obj	\
 	gtknotebook.obj				\
 	gtkobject.obj				\
 	gtkoldeditable.obj			\
@@ -184,6 +187,7 @@ gtk_OBJECTS = 					\
 	gtkseparator.obj			\
 	gtkseparatormenuitem.obj \
 	gtkseparatortoolitem.obj \
+	gtksequence.obj	\
 	gtksettings.obj \
 	gtksignal.obj				\
 	gtksizegroup.obj \

@@ -369,3 +369,19 @@ gdk_display_request_selection_notification (GdkDisplay *display,
   GDK_NOTE (DND, g_print (" -> %s\n", ret ? "TRUE" : "FALSE"));
   return ret;
 }
+
+gboolean
+gdk_display_supports_clipboard_persistence (GdkDisplay *display)
+{
+  return FALSE;
+}
+
+void
+gdk_display_store_clipboard (GdkDisplay *display,
+			     GdkWindow  *clipboard_window,
+			     guint32     time_,
+			     GdkAtom    *targets,
+			     gint        n_targets)
+{
+  /* XXX: implement it (or maybe not as long as we don't support delayed rendering?) */
+}
