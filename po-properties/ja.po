@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-02 23:58-0500\n"
-"PO-Revision-Date: 2004-11-13 08:13+0900\n"
+"POT-Creation-Date: 2004-12-04 01:04+0900\n"
+"PO-Revision-Date: 2004-12-04 01:02+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -97,9 +97,8 @@ msgid "Screen"
 msgstr "画面"
 
 #: gdk/gdkpango.c:575
-#, fuzzy
 msgid "the GdkScreen for the renderer"
-msgstr "ツリー表示に使用するモデル"
+msgstr "レンダラの GdkScreen です"
 
 #: gtk/gtkaboutdialog.c:195
 msgid "Program name"
@@ -732,9 +731,8 @@ msgid "Image widget"
 msgstr "画像ウィジェット"
 
 #: gtk/gtkbutton.c:307
-#, fuzzy
 msgid "Child widget to appear next to the button text"
-msgstr "メニューのテキストの隣に表示する子ウィジェット"
+msgstr "ボタンのテキストの隣に表示する子ウィジェットです"
 
 #: gtk/gtkbutton.c:373
 msgid "Default Spacing"
@@ -742,7 +740,7 @@ msgstr "デフォルトの間隔"
 
 #: gtk/gtkbutton.c:374
 msgid "Extra space to add for CAN_DEFAULT buttons"
-msgstr "CAN_DEFAULT ボタンに加える余分な空白"
+msgstr "CAN_DEFAULT ボタンに加える余分な空白です"
 
 #: gtk/gtkbutton.c:380
 msgid "Default Outside Spacing"
@@ -752,7 +750,7 @@ msgstr "デフォルトの外部の空白"
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
-msgstr "ボーダーの外に常に描画する CAN_DEFAULT ボタンに加える余分な空白"
+msgstr "ボーダーの外に常に描画する CAN_DEFAULT ボタンに加える余分な空白です"
 
 #: gtk/gtkbutton.c:386
 msgid "Child X Displacement"
@@ -2449,11 +2447,11 @@ msgstr "ラベルが単一行モードにあるかどうか"
 
 #: gtk/gtklabel.c:488
 msgid "Angle"
-msgstr ""
+msgstr "角度"
 
 #: gtk/gtklabel.c:489
 msgid "Angle at which the label is rotated"
-msgstr ""
+msgstr "ラベルを回転させる際の角度です"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
@@ -2461,7 +2459,7 @@ msgstr "水平方向の配置調整"
 
 #: gtk/gtklayout.c:636 gtk/gtkscrolledwindow.c:239
 msgid "The GtkAdjustment for the horizontal position"
-msgstr "水平方向の位置に対する GtkAdjustment"
+msgstr "水平方向の位置に対する GtkAdjustment です"
 
 #: gtk/gtklayout.c:643 gtk/gtkviewport.c:144
 msgid "Vertical adjustment"
@@ -2469,7 +2467,7 @@ msgstr "垂直方向の配置調整"
 
 #: gtk/gtklayout.c:644 gtk/gtkscrolledwindow.c:246
 msgid "The GtkAdjustment for the vertical position"
-msgstr "垂直方向の位置に対する GtkAdjustment"
+msgstr "垂直方向の位置に対する GtkAdjustment です"
 
 #: gtk/gtklayout.c:652
 msgid "The width of the layout"
@@ -4831,6 +4829,3 @@ msgstr "IM ステータスのスタイル"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "入力メソッドのステータスバーの表示方法"
-
-#~ msgid "Whether the browse dialog is visible or not."
-#~ msgstr "ファイル参照ダイアログを表示可能にするかどうか"
