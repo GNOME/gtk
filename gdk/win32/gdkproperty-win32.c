@@ -492,7 +492,7 @@ gdk_property_delete (GdkWindow *window,
   if (property == _gdk_selection_property)
     _gdk_selection_property_delete (window);
   else if (property == _wm_transient_for)
-    gdk_window_set_transient_for (window, _gdk_parent_root);
+    gdk_window_set_transient_for (window, _gdk_root);
   else
     {
       prop_name = gdk_atom_name (property);

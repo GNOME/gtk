@@ -75,6 +75,8 @@ struct _GdkWindowImplWin32
   
   GdkWin32PositionInfo position_info;
 
+  gint8 toplevel_window_type;
+
   HCURSOR hcursor;
   HICON   hicon_big;
   HICON   hicon_small;

@@ -596,7 +596,7 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 
   if (gdkdev->info.mode == GDK_MODE_SCREEN) 
     {
-      root_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_parent_root)->impl);
+      root_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_root)->impl);
       x_scale = root_impl->width / device_width;
       y_scale = root_impl->height / device_height;
 
@@ -756,7 +756,7 @@ _gdk_input_other_event (GdkEvent  *event,
 #if USE_SYSCONTEXT
   window = gdk_window_at_pointer (&x, &y);
   if (window == NULL)
-    window = _gdk_parent_root;
+    window = _gdk_root;
 
   g_object_ref (window);
   display = gdk_drawable_get_display (window);
@@ -794,7 +794,7 @@ _gdk_input_other_event (GdkEvent  *event,
 	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("... ignored when moving/sizing\n"));
 	  return FALSE;
 	}
-      if (window == _gdk_parent_root && x_grab_window == NULL)
+      if (window == _gdk_root && x_grab_window == NULL)
 	{
 	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("... is root\n"));
 	  return FALSE;
@@ -882,7 +882,7 @@ _gdk_input_other_event (GdkEvent  *event,
 	{
 	  GDK_NOTE (EVENTS_OR_INPUT, g_print ("... not selected\n"));
 
-	  if (obj->parent == GDK_WINDOW_OBJECT (_gdk_parent_root))
+	  if (obj->parent == GDK_WINDOW_OBJECT (_gdk_root))
 	    return FALSE;
 
 	  /* It is not good to propagate the extended events up to the parent

@@ -158,7 +158,7 @@ gdk_pixmap_new (GdkDrawable *drawable,
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
 
   if (!drawable)
-    drawable = _gdk_parent_root;
+    drawable = _gdk_root;
 
   if (GDK_IS_WINDOW (drawable) && GDK_WINDOW_DESTROYED (drawable))
     return NULL;
@@ -190,7 +190,7 @@ gdk_pixmap_new (GdkDrawable *drawable,
   if (GDK_IS_WINDOW (drawable))
     hwnd = GDK_WINDOW_HWND (drawable);
   else
-    hwnd = GDK_WINDOW_HWND (_gdk_parent_root);
+    hwnd = GetDesktopWindow ();
   if ((hdc = GetDC (hwnd)) == NULL)
     {
       WIN32_GDI_FAILED ("GetDC");
@@ -360,9 +360,8 @@ gdk_bitmap_create_from_data (GdkDrawable *drawable,
   g_return_val_if_fail (drawable == NULL || GDK_IS_DRAWABLE (drawable), NULL);
 
   if (!drawable)
-    drawable = _gdk_parent_root;
-
-  if (GDK_IS_WINDOW (drawable) && GDK_WINDOW_DESTROYED (drawable))
+    drawable = _gdk_root;
+  else if (GDK_IS_WINDOW (drawable) && GDK_WINDOW_DESTROYED (drawable))
     return NULL;
 
   pixmap = gdk_pixmap_new (drawable, width, height, 1);

@@ -32,7 +32,7 @@ gdk_screen_get_display (GdkScreen *screen)
 GdkWindow *
 gdk_screen_get_root_window (GdkScreen *screen)
 {
-  return _gdk_parent_root;
+  return _gdk_root;
 }
 
 GdkColormap *

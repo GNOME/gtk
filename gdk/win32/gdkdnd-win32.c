@@ -971,7 +971,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       private = GDK_DRAG_CONTEXT_PRIVATE_DATA (context);
       context->protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
       context->is_source = FALSE;
-      context->source_window = _gdk_parent_root;
+      context->source_window = _gdk_root;
       g_object_ref (context->source_window);
       context->dest_window = event->any.window;
       g_object_ref (context->dest_window);

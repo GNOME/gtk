@@ -443,8 +443,7 @@ void    _gdk_win32_gdi_failed        (const gchar *where,
  
 extern LRESULT CALLBACK _gdk_win32_window_procedure (HWND, UINT, WPARAM, LPARAM);
 
-extern HWND		 _gdk_root_window;
-extern GdkWindow        *_gdk_parent_root;
+extern GdkWindow        *_gdk_root;
 
 extern GdkDisplay       *_gdk_display;
 extern GdkScreen        *_gdk_screen;

@@ -97,7 +97,6 @@ _gdk_windowing_init (void)
 
   _gdk_app_hmodule = GetModuleHandle (NULL);
   _gdk_display_hdc = CreateDC ("DISPLAY", NULL, NULL, NULL);
-  _gdk_root_window = GetDesktopWindow ();
   _gdk_input_locale = GetKeyboardLayout (0);
   _gdk_input_locale_is_ime = ImmIsIME (_gdk_input_locale);
   GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
@@ -174,13 +173,13 @@ gdk_get_use_xshm (void)
 gint
 gdk_screen_get_width (GdkScreen *screen)
 {
-  return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_parent_root)->impl)->width;
+  return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_root)->impl)->width;
 }
 
 gint
 gdk_screen_get_height (GdkScreen *screen)
 {
-  return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_parent_root)->impl)->height;
+  return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_root)->impl)->height;
 }
 gint
 gdk_screen_get_width_mm (GdkScreen *screen)

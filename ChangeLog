@@ -15,6 +15,23 @@
 	windows have a GDK window type GDK_WINDOW_FOREIGN, but are still
 	de facto child windows.
 
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/*.c: Drop global variable _gdk_root_window, just call
+	GetDesktopWindow(). Rename the GdkWindow* _gdk_parent_root to
+	_gdk_root.
+
+	* gdk/win32/gdkwindow-win32.h (GdkWindowImplWin32): Add
+	toplevel_window_type field.
+
+	* gdk/win32/gdkwindow-win32.c: As there is only one root window in
+	GDK on Win32, we can compare directly to _gdk_root instead of
+	checking the window type.
+	(gdk_window_reparent): When reparenting a child of the desktop
+	clear out the window decorations. Correspondingly, when
+	reparenting to the desktop, add decorations. As in the X11
+	backend, save the window type of a toplevel window when
+	reparenting, in case it is reparented back to toplevel.
+
 2005-03-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkradioaction.c (gtk_radio_action_get_group): Add an

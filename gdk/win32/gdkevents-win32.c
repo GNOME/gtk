@@ -677,13 +677,13 @@ find_real_window_for_grabbed_mouse_event (GdkWindow* reported_window,
       GetClientRect (hwnd, &rect);
       ScreenToClient (hwnd, &pt);
       if (!PtInRect (&rect, pt))
-	return _gdk_parent_root;
+	return _gdk_root;
 
       other_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
     }
 
   if (other_window == NULL)
-    return _gdk_parent_root;
+    return _gdk_root;
 
   return other_window;
 }
@@ -1678,7 +1678,7 @@ propagate (GdkWindow  **window,
 	{
 	  /* Owner doesn't want it, propagate to parent. */
 	  GdkWindow *parent = gdk_window_get_parent (*window);
-	  if (parent == _gdk_parent_root || parent == NULL)
+	  if (parent == _gdk_root || parent == NULL)
 	    {
 	      /* No parent; check if grabbed */
 	      if (grab_window != NULL)
@@ -1790,7 +1790,7 @@ handle_configure_event (MSG       *msg,
   point.x = client_rect.left; /* always 0 */
   point.y = client_rect.top;
   /* top level windows need screen coords */
-  if (gdk_window_get_parent (window) == _gdk_parent_root)
+  if (gdk_window_get_parent (window) == _gdk_root)
     {
       ClientToScreen (msg->hwnd, &point);
       point.x += _gdk_offset_x;
@@ -2773,7 +2773,7 @@ gdk_event_translate (GdkDisplay *display,
       if (current_window != NULL &&
 	  (((GdkWindowObject *) current_window)->event_mask & GDK_LEAVE_NOTIFY_MASK))
 	{
-	  synthesize_crossing_events (_gdk_parent_root, GDK_CROSSING_NORMAL, msg);
+	  synthesize_crossing_events (_gdk_root, GDK_CROSSING_NORMAL, msg);
 	}
 
       break;
@@ -3055,7 +3055,7 @@ gdk_event_translate (GdkDisplay *display,
 	  point.x = client_rect.left; /* always 0 */
 	  point.y = client_rect.top;
 	  /* top level windows need screen coords */
-	  if (gdk_window_get_parent (window) == _gdk_parent_root)
+	  if (gdk_window_get_parent (window) == _gdk_root)
 	    {
 	      ClientToScreen (msg->hwnd, &point);
 	      point.x += _gdk_offset_x;
@@ -3319,7 +3319,7 @@ gdk_event_translate (GdkDisplay *display,
 
     case WM_DESTROY:
       if (window == current_window)
-	assign_object (&current_window, _gdk_parent_root);
+	assign_object (&current_window, _gdk_root);
 
       if (p_grab_window == window)
 	gdk_pointer_ungrab (msg->time);
@@ -3327,7 +3327,7 @@ gdk_event_translate (GdkDisplay *display,
       if (k_grab_window == window)
 	gdk_keyboard_ungrab (msg->time);
 
-      if ((window != NULL) && (_gdk_root_window != msg->hwnd))
+      if ((window != NULL) && (msg->hwnd != GetDesktopWindow ()))
 	gdk_window_destroy_notify (window);
 
       if (window == NULL || GDK_WINDOW_DESTROYED (window))
