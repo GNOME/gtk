@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-12-23 04:25+0100\n"
-"PO-Revision-Date: 2004-01-01 18:47+0330\n"
+"PO-Revision-Date: 2004-01-01 21:04+0330\n"
 "Last-Translator: Roozbeh Pournader <roozbeh@sharif.edu>\n"
 "Language-Team: Persian <farsi@lists.sharif.edu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:731
 #: gdk-pixbuf/gdk-pixbuf-io.c:864 tests/testfilechooser.c:198
@@ -160,7 +160,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-bmp.c:1076
 msgid "The BMP image format"
-msgstr ""
+msgstr "قالب تصویر BMP"
 
 #: gdk-pixbuf/io-gif.c:220
 #, c-format
@@ -198,9 +198,8 @@ msgid "Not enough memory to load GIF file"
 msgstr "حافظه برای بار کردن پرونده‌ی GIF کافی نیست"
 
 #: gdk-pixbuf/io-gif.c:1095
-#, fuzzy
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr "تصویر GIF خراب است "
+msgstr "تصویر GIF خراب است (فشرده‌سازی LZW غلط)"
 
 #: gdk-pixbuf/io-gif.c:1145
 msgid "File does not appear to be a GIF file"
@@ -256,7 +255,7 @@ msgstr "حافظه برای بار کردن پرونده‌ی ICO کافی نی�
 
 #: gdk-pixbuf/io-ico.c:921
 msgid "Image too large to be saved as ICO"
-msgstr ""
+msgstr "تصویر برای ذخیره شدن به‌عنوان ICO خیلی بزرگ است"
 
 #: gdk-pixbuf/io-ico.c:932
 msgid "Cursor hotspot outside image"
@@ -317,14 +316,12 @@ msgid "Couldn't allocate memory for context buffer"
 msgstr ""
 
 #: gdk-pixbuf/io-pcx.c:606
-#, fuzzy
 msgid "Image has invalid width and/or height"
-msgstr "ارتفاع تصویر صفر است"
+msgstr "ارتفاع و/یا عرض تصویر نامعتبر است"
 
 #: gdk-pixbuf/io-pcx.c:614 gdk-pixbuf/io-pcx.c:675
-#, fuzzy
 msgid "Image has unsupported bpp"
-msgstr "تصویر نوع '%s' پشتیبانی نمی‌شود"
+msgstr ""
 
 #: gdk-pixbuf/io-pcx.c:619 gdk-pixbuf/io-pcx.c:627
 #, c-format
@@ -352,9 +349,8 @@ msgid "No palette found at end of PCX data"
 msgstr ""
 
 #: gdk-pixbuf/io-pcx.c:753
-#, fuzzy
 msgid "The PCX image format"
-msgstr "قالب تصویر ICO"
+msgstr "قالب تصویر PCX"
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
@@ -426,7 +422,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:280
 msgid "PNM file has an incorrect initial byte"
-msgstr ""
+msgstr "بایت ابتدایی پرونده‌ی PNM نادرست است"
 
 #: gdk-pixbuf/io-pnm.c:310
 msgid "PNM file is not in a recognized PNM subformat"
@@ -442,7 +438,7 @@ msgstr "ارتفاع تصویر پرونده‌ی PNM صفر است"
 
 #: gdk-pixbuf/io-pnm.c:379
 msgid "Maximum color value in PNM file is 0"
-msgstr ""
+msgstr "حداکثر مقدار رنگ در پرونده‌ی PNM صفر است"
 
 #: gdk-pixbuf/io-pnm.c:387
 msgid "Maximum color value in PNM file is too large"
@@ -627,7 +623,7 @@ msgstr "حافظه برای بار کردن تصویر کافی نیست"
 
 #: gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
-msgstr ""
+msgstr "نمی‌توان بقیه را ذخیره کرد"
 
 #: gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
@@ -675,7 +671,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-xpm.c:1317
 msgid "Can't allocate memory for loading XPM image"
-msgstr ""
+msgstr "نمی‌توان برای بار کردن تصویر XPM حافظه تخصیص داد"
 
 #: gdk-pixbuf/io-xpm.c:1508
 msgid "Failed to write to temporary file when loading XPM image"
@@ -691,7 +687,7 @@ msgstr "صفحه‌نمایش پیش‌فرض"
 
 #: gdk/gdkdisplaymanager.c:127
 msgid "The default display for GDK"
-msgstr ""
+msgstr "صفحه‌نمایش پیش‌فرض GDK"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -789,7 +785,7 @@ msgstr ""
 
 #: gtk/gtkaction.c:228
 msgid "Hide if empty"
-msgstr ""
+msgstr "اگر خالی بود مخفی شود"
 
 #: gtk/gtkaction.c:229
 msgid "When TRUE, empty menu proxies for this action are hidden."
@@ -862,38 +858,32 @@ msgstr ""
 "آن برای فرزند استفاده شود. ۰٫۰ یعنی هیچ، ۱٫۰ یعنی همه"
 
 #: gtk/gtkalignment.c:162
-#, fuzzy
 msgid "Top Padding"
-msgstr "لایی‌گذاری"
+msgstr ""
 
 #: gtk/gtkalignment.c:163
-#, fuzzy
 msgid "The padding to insert at the top of the widget."
-msgstr "نام ویجت"
+msgstr ""
 
 #: gtk/gtkalignment.c:179
-#, fuzzy
 msgid "Bottom Padding"
-msgstr "لایی‌گذاری"
+msgstr ""
 
 #: gtk/gtkalignment.c:180
 msgid "The padding to insert at the bottom of the widget."
 msgstr ""
 
 #: gtk/gtkalignment.c:196
-#, fuzzy
 msgid "Left Padding"
-msgstr "لایی‌گذاری"
+msgstr ""
 
 #: gtk/gtkalignment.c:197
-#, fuzzy
 msgid "The padding to insert at the left of the widget."
-msgstr "نام ویجت"
+msgstr ""
 
 #: gtk/gtkalignment.c:213
-#, fuzzy
 msgid "Right Padding"
-msgstr "حاشیه‌ی راست"
+msgstr ""
 
 #: gtk/gtkalignment.c:214
 msgid "The padding to insert at the right of the widget."
@@ -1104,14 +1094,12 @@ msgid "The border relief style"
 msgstr ""
 
 #: gtk/gtkbutton.c:253
-#, fuzzy
 msgid "Horizontal alignment for child"
-msgstr "ردیف کردن افقی"
+msgstr ""
 
 #: gtk/gtkbutton.c:272
-#, fuzzy
 msgid "Vertical alignment for child"
-msgstr "ردیف کردن عمودی"
+msgstr ""
 
 #: gtk/gtkbutton.c:340
 msgid "Default Spacing"
@@ -1175,6 +1163,7 @@ msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 msgstr ""
+"روز انتخاب شده (به شکل عددی بین ۱ و ۳۱، یا ۰ برای از انتخاب خارج کردن روز انتخاب‌شده‌ی فعلی)"
 
 #: gtk/gtkcalendar.c:493
 msgid "Show Heading"
@@ -1194,7 +1183,7 @@ msgstr ""
 
 #: gtk/gtkcalendar.c:522
 msgid "No Month Change"
-msgstr ""
+msgstr "ماه تغییر نکند"
 
 #: gtk/gtkcalendar.c:523
 msgid "If TRUE, the selected month can not be changed"
@@ -1372,7 +1361,7 @@ msgstr "اندازه"
 
 #: gtk/gtkcellrendererpixbuf.c:169
 msgid "The size of the rendered icon"
-msgstr ""
+msgstr "اندازه‌ی شمایل کشیده‌شده"
 
 #: gtk/gtkcellrendererpixbuf.c:177
 msgid "Detail"
@@ -1408,7 +1397,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:216
 msgid "Single Paragraph Mode"
-msgstr ""
+msgstr "حالت تک‌بند"
 
 #: gtk/gtkcellrenderertext.c:217
 msgid "Whether or not to keep all text in a single paragraph"
@@ -1476,7 +1465,7 @@ msgstr "خانواده‌ی قلم"
 
 #: gtk/gtkcellrenderertext.c:284 gtk/gtktexttag.c:299
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr ""
+msgstr "نام خانواده‌ی قلم، مثلاً ترافیک، تیتر، نازنین"
 
 #: gtk/gtkcellrenderertext.c:291 gtk/gtkcellrenderertext.c:292
 #: gtk/gtktexttag.c:306
@@ -1553,7 +1542,8 @@ msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
 "probably don't need it"
-msgstr ""
+msgstr "زبانی که این متن به آن زبان است، به شکل کد ISO. پنگو می‌تواند از این مقدار به‌عنوان راهنمایی هنگام نمایش متن استفاده کند. اگر این پارامتر را نمی‌فهمید"
+"احتمالاً لازمش ندارید"
 
 #: gtk/gtkcellrenderertext.c:397 gtk/gtkcellview.c:194 gtk/gtktexttag.c:508
 msgid "Background set"
@@ -1727,7 +1717,7 @@ msgstr ""
 
 #: gtk/gtkcheckmenuitem.c:126 gtk/gtktogglebutton.c:140
 msgid "Inconsistent"
-msgstr ""
+msgstr "ناهماهنگ"
 
 #: gtk/gtkcheckmenuitem.c:127
 msgid "Whether to display an \"inconsistent\" state"
@@ -1743,7 +1733,7 @@ msgstr ""
 
 #: gtk/gtkcolorbutton.c:202
 msgid "Use alpha"
-msgstr ""
+msgstr "استفاده از آلفا"
 
 #: gtk/gtkcolorbutton.c:203
 msgid "Whether or not to give the color an alpha value"
@@ -1755,9 +1745,8 @@ msgid "Title"
 msgstr "عنوان"
 
 #: gtk/gtkcolorbutton.c:218
-#, fuzzy
 msgid "The title of the color selection dialog"
-msgstr "عنوان پنجره"
+msgstr ""
 
 #: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
 msgid "Pick a Color"
@@ -1768,9 +1757,8 @@ msgid "Current Color"
 msgstr "رنگ فعلی"
 
 #: gtk/gtkcolorbutton.c:233
-#, fuzzy
 msgid "The selected color"
-msgstr "رنگ فعلی"
+msgstr "رنگ انتخاب‌شده"
 
 #: gtk/gtkcolorbutton.c:247 gtk/gtkcolorsel.c:1782
 msgid "Current Alpha"
@@ -1799,7 +1787,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:927
 msgid "_Save color here"
-msgstr "ذخیره‌ی رنگ در این‌جا"
+msgstr "_ذخیره‌ی رنگ در این‌جا"
 
 #: gtk/gtkcolorsel.c:1132
 msgid ""
@@ -1861,7 +1849,7 @@ msgstr "جای روی چرخ رنگ."
 
 #: gtk/gtkcolorsel.c:1876
 msgid "_Saturation:"
-msgstr "غلظت:"
+msgstr "_غلظت:"
 
 #: gtk/gtkcolorsel.c:1877
 msgid "\"Deepness\" of the color."
@@ -1869,7 +1857,7 @@ msgstr "«عمق» رنگ."
 
 #: gtk/gtkcolorsel.c:1878
 msgid "_Value:"
-msgstr "روشنایی:"
+msgstr "_روشنایی:"
 
 #: gtk/gtkcolorsel.c:1879
 msgid "Brightness of the color."
@@ -1905,7 +1893,7 @@ msgstr "درجه‌ی _ماتی:"
 
 #: gtk/gtkcolorsel.c:1896 gtk/gtkcolorsel.c:1907
 msgid "Transparency of the color."
-msgstr ""
+msgstr "شفافیت رنگ"
 
 #: gtk/gtkcolorsel.c:1914
 msgid "Color _Name:"
@@ -1922,9 +1910,8 @@ msgid "_Palette"
 msgstr "_تخته‌رنگ"
 
 #: gtk/gtkcolorseldialog.c:115
-#, fuzzy
 msgid "Color Selection"
-msgstr "انتخاب قلم"
+msgstr "انتخاب رنگ"
 
 #: gtk/gtkcombo.c:143
 msgid "Enable arrow keys"
@@ -1971,45 +1958,40 @@ msgid "ComboBox model"
 msgstr ""
 
 #: gtk/gtkcombobox.c:342
-#, fuzzy
 msgid "The model for the combo box"
-msgstr "مدل نمایش درختی"
+msgstr ""
 
 #: gtk/gtkcombobox.c:349
-#, fuzzy
 msgid "Wrap width"
-msgstr "عرض"
+msgstr ""
 
 #: gtk/gtkcombobox.c:350
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 
 #: gtk/gtkcombobox.c:359
-#, fuzzy
 msgid "Row span column"
-msgstr "فاصله‌گذاری سطرها"
+msgstr ""
 
 #: gtk/gtkcombobox.c:360
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
 #: gtk/gtkcombobox.c:369
-#, fuzzy
 msgid "Column span column"
-msgstr "فاصله‌گذاری ستون‌ها"
+msgstr ""
 
 #: gtk/gtkcombobox.c:370
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
 #: gtk/gtkcombobox.c:379
-#, fuzzy
 msgid "Active item"
-msgstr "فعال"
+msgstr "مورد فعال"
 
 #: gtk/gtkcombobox.c:380
 msgid "The item which is currently active"
-msgstr ""
+msgstr "موردی که هم‌اکنون فعال است"
 
 #: gtk/gtkcombobox.c:388
 msgid "ComboBox appareance"
@@ -2020,9 +2002,8 @@ msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr ""
 
 #: gtk/gtkcomboboxentry.c:104
-#, fuzzy
 msgid "Text Column"
-msgstr "ستون جستجو"
+msgstr "ستون متن"
 
 #: gtk/gtkcomboboxentry.c:105
 msgid "A column in the data source model to get the strings from"
@@ -2067,7 +2048,7 @@ msgstr "حداقل X"
 
 #: gtk/gtkcurve.c:131
 msgid "Minimum possible value for X"
-msgstr ""
+msgstr "حداقل مقدار ممکن برای X"
 
 #: gtk/gtkcurve.c:140
 msgid "Maximum X"
@@ -2075,7 +2056,7 @@ msgstr "حداکثر X"
 
 #: gtk/gtkcurve.c:141
 msgid "Maximum possible X value"
-msgstr ""
+msgstr "حداکثر مقدار ممکن برای X"
 
 #: gtk/gtkcurve.c:150
 msgid "Minimum Y"
@@ -2083,7 +2064,7 @@ msgstr "حداقل Y"
 
 #: gtk/gtkcurve.c:151
 msgid "Minimum possible value for Y"
-msgstr ""
+msgstr "حداقل مقدار ممکن برای Y"
 
 #: gtk/gtkcurve.c:160
 msgid "Maximum Y"
@@ -2091,7 +2072,7 @@ msgstr "حداکثر Y"
 
 #: gtk/gtkcurve.c:161
 msgid "Maximum possible value for Y"
-msgstr ""
+msgstr "حداکثر مقدار ممکن برای Y"
 
 #: gtk/gtkdialog.c:136
 msgid "Has separator"
@@ -2166,7 +2147,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:491
 msgid "Has Frame"
-msgstr ""
+msgstr "قاب دارد"
 
 #: gtk/gtkentry.c:492
 msgid "FALSE removes outside bevel from entry"
@@ -2219,41 +2200,36 @@ msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 
 #: gtk/gtkentry.c:4079 gtk/gtktextview.c:6875
-#, fuzzy
 msgid "Select _All"
-msgstr "انتخاب همه"
+msgstr "انتخاب _همه"
 
 #: gtk/gtkentry.c:4089 gtk/gtktextview.c:6885
 msgid "Input _Methods"
 msgstr "شیوه‌های ورودی"
 
 #: gtk/gtkentry.c:4099 gtk/gtktextview.c:6896
-#, fuzzy
 msgid "_Insert Unicode Control Character"
-msgstr "درج نویسه‌ی کنترلی یونی‌کد"
+msgstr "_درج نویسه‌ی کنترلی یونی‌کد"
 
 #: gtk/gtkentrycompletion.c:196
 msgid "Completion Model"
-msgstr ""
+msgstr "مدل کامل‌سازی"
 
 #: gtk/gtkentrycompletion.c:197
-#, fuzzy
 msgid "The model to find matches in"
-msgstr "مدل نمایش درختی"
+msgstr ""
 
 #: gtk/gtkentrycompletion.c:203
-#, fuzzy
 msgid "Minimum Key Length"
-msgstr "طول حداکثر"
+msgstr "حداقل طول کلید"
 
 #: gtk/gtkentrycompletion.c:204
 msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 
 #: gtk/gtkeventbox.c:119
-#, fuzzy
 msgid "Visible Window"
-msgstr "مرئی"
+msgstr "پنجره‌ی مرئی"
 
 #: gtk/gtkeventbox.c:120
 msgid ""
@@ -2272,18 +2248,16 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkexpander.c:194
-#, fuzzy
 msgid "Expanded"
-msgstr "بسط‌یافته است"
+msgstr "بسط‌یافته"
 
 #: gtk/gtkexpander.c:195
 msgid "Whether the expander has been opened to reveal the child widget"
 msgstr ""
 
 #: gtk/gtkexpander.c:203
-#, fuzzy
 msgid "Text of the expander's label"
-msgstr "متن برچسب قاب."
+msgstr ""
 
 #: gtk/gtkexpander.c:218 gtk/gtklabel.c:304
 msgid "Use markup"
@@ -2314,41 +2288,36 @@ msgid "Size of the expander arrow"
 msgstr ""
 
 #: gtk/gtkexpander.c:253
-#, fuzzy
 msgid "Spacing around expander arrow"
 msgstr "فاصله‌گذاری دور ؟؟؟"
 
 #: gtk/gtkfilechooser.c:92
-#, fuzzy
 msgid "Action"
-msgstr "درصد"
+msgstr ""
 
 #: gtk/gtkfilechooser.c:93
 msgid "The type of operation that the file selector is performing"
 msgstr ""
 
 #: gtk/gtkfilechooser.c:99
-#, fuzzy
 msgid "File System"
-msgstr "پرونده‌ها"
+msgstr ""
 
 #: gtk/gtkfilechooser.c:100
 msgid "File system object to use"
 msgstr ""
 
 #: gtk/gtkfilechooser.c:105
-#, fuzzy
 msgid "Filter"
-msgstr "پرونده‌ها"
+msgstr "صافی"
 
 #: gtk/gtkfilechooser.c:106
 msgid "The current filter for selecting which files are displayed"
 msgstr ""
 
 #: gtk/gtkfilechooser.c:111
-#, fuzzy
 msgid "Folder Mode"
-msgstr "نام پوشه:"
+msgstr "حالت پوشه"
 
 #: gtk/gtkfilechooser.c:112
 msgid "Whether to select folders rather than files"
@@ -2356,25 +2325,23 @@ msgstr ""
 
 #: gtk/gtkfilechooser.c:117
 msgid "Local Only"
-msgstr ""
+msgstr "فقط محلی"
 
 #: gtk/gtkfilechooser.c:118
 msgid "Whether the selected file(s) should be limited to local file: URLs"
 msgstr ""
 
 #: gtk/gtkfilechooser.c:123
-#, fuzzy
 msgid "Preview widget"
-msgstr "متن پیش‌نمایش"
+msgstr "ویجت پیش‌نمایش"
 
 #: gtk/gtkfilechooser.c:124
 msgid "Application supplied widget for custom previews."
 msgstr ""
 
 #: gtk/gtkfilechooser.c:129
-#, fuzzy
 msgid "Preview Widget Active"
-msgstr "متن پیش‌نمایش"
+msgstr ""
 
 #: gtk/gtkfilechooser.c:130
 msgid ""
@@ -2382,27 +2349,24 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkfilechooser.c:135
-#, fuzzy
 msgid "Extra widget"
-msgstr "ویجت تصویر"
+msgstr "ویجت اضافی"
 
 #: gtk/gtkfilechooser.c:136
 msgid "Application supplied widget for extra options."
 msgstr ""
 
 #: gtk/gtkfilechooser.c:141
-#, fuzzy
 msgid "Select Multiple"
-msgstr "انتخاب چندگانه"
+msgstr ""
 
 #: gtk/gtkfilechooser.c:142 gtk/gtkfilesel.c:575
 msgid "Whether to allow multiple files to be selected"
 msgstr ""
 
 #: gtk/gtkfilechooser.c:148
-#, fuzzy
 msgid "Show Hidden"
-msgstr "نمایش متن"
+msgstr "نمایش مخفی"
 
 #: gtk/gtkfilechooser.c:149
 msgid "Whether the hidden files and folders should be displayed"
@@ -2410,9 +2374,9 @@ msgstr ""
 
 #: gtk/gtkfilechooser.c:1446 gtk/gtkfilechooser.c:1490
 #: gtk/gtkfilechooser.c:1565 gtk/gtkfilechooser.c:1609
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid filename: %s"
-msgstr "پرونده‌ی XBM نامعتبر"
+msgstr "نام پرونده‌ی نامعتبر: %s"
 
 #: gtk/gtkfilechooserdefault.c:425
 #, c-format
@@ -2429,9 +2393,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:585
-#, fuzzy
 msgid "Home"
-msgstr "خانه"
+msgstr "آغازه"
 
 #. FIXME: What is the Right Way of finding the desktop directory?
 #: gtk/gtkfilechooserdefault.c:601
@@ -2447,10 +2410,9 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:875
 msgid "Files of _type:"
-msgstr ""
+msgstr "پرونده‌های از _نوع:"
 
 #: gtk/gtkfilechooserdefault.c:972 gtk/gtkfilechooserdefault.c:1390
-#, fuzzy
 msgid "File name"
 msgstr "نام پرونده"
 
@@ -2472,9 +2434,8 @@ msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:1294
-#, fuzzy
 msgid "Folder"
-msgstr "پوشه‌ها"
+msgstr "پوشه"
 
 #: gtk/gtkfilechooserdefault.c:1332
 msgid "Add bookmark"
@@ -2495,9 +2456,9 @@ msgstr "پیش‌نمایش"
 
 #. Change the current folder label
 #: gtk/gtkfilechooserdefault.c:2015
-#, fuzzy, c-format
+#, c-format
 msgid "Current folder: %s"
-msgstr "رنگ فعلی"
+msgstr "پوشه‌ی فعلی: %s"
 
 #: gtk/gtkfilechooserdefault.c:2210 gtk/gtkfilechooserdefault.c:2784
 #, c-format
@@ -2514,39 +2475,38 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:2949
 #, c-format
 msgid "%d bytes"
-msgstr ""
+msgstr "%d بایت"
 
 #: gtk/gtkfilechooserdefault.c:2951
 #, c-format
 msgid "%.1f K"
-msgstr ""
+msgstr "%.1f کیلو"
 
 #: gtk/gtkfilechooserdefault.c:2953
 #, c-format
 msgid "%.1f M"
-msgstr ""
+msgstr "%.1f مگا"
 
 #: gtk/gtkfilechooserdefault.c:2955
 #, c-format
 msgid "%.1f G"
-msgstr ""
+msgstr "%.1f گیگا"
 
 #: gtk/gtkfilechooserdefault.c:2995
 msgid "Today"
-msgstr ""
+msgstr "امروز"
 
 #: gtk/gtkfilechooserdefault.c:2997
 msgid "Yesterday"
-msgstr ""
+msgstr "دیروز"
 
 #: gtk/gtkfilechooserdefault.c:3005
 msgid "%d/%b/%Y"
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:3008
-#, fuzzy
 msgid "Unknown"
-msgstr "(نامعلوم)"
+msgstr "نامعلوم"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
@@ -2626,7 +2586,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
 msgid "You probably used symbols not allowed in filenames."
-msgstr ""
+msgstr "احتمالاً از علائمی استفاده کرده‌اید که در نام پرونده‌ها مجاز نیستند"
 
 #: gtk/gtkfilesel.c:1450
 #, c-format
@@ -2671,7 +2631,7 @@ msgstr "خطا در حذف پرونده‌ی \"%s\": %s"
 #: gtk/gtkfilesel.c:1623
 #, c-format
 msgid "Really delete file \"%s\" ?"
-msgstr ""
+msgstr "پرونده‌ی «%s» واقعاً حذف شود؟"
 
 #: gtk/gtkfilesel.c:1628
 msgid "Delete File"
@@ -2730,7 +2690,6 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkfilesel.c:3142
-#, fuzzy
 msgid "Invalid UTF-8"
 msgstr "‏UTF-8 نامعتبر"
 
@@ -2740,25 +2699,24 @@ msgstr "نام خیلی بلند است"
 
 #: gtk/gtkfilesel.c:4021
 msgid "Couldn't convert filename"
-msgstr ""
+msgstr "نمی‌توان نام پرونده را تبدیل کرد"
 
 #: gtk/gtkfilesystemmodel.c:1018
 msgid "(Empty)"
-msgstr ""
+msgstr "(خالی)"
 
 #: gtk/gtkfilesystemunix.c:343 gtk/gtkfilesystemwin32.c:383
-#, fuzzy, c-format
+#, c-format
 msgid "error creating directory '%s': %s"
-msgstr "خطا در ایجاد پوشه‌ی \"%s\": %s\n"
+msgstr "خطا در ایجاد شاخه‌ی '%s': %s"
 
 #: gtk/gtkfilesystemunix.c:386
 msgid "This file system does not support mounting"
 msgstr ""
 
 #: gtk/gtkfilesystemunix.c:394
-#, fuzzy
 msgid "Filesystem"
-msgstr "پرونده‌ها"
+msgstr ""
 
 #: gtk/gtkfilesystemunix.c:656
 msgid "This file system does not support icons"
@@ -2769,9 +2727,9 @@ msgid "This file system does not support bookmarks"
 msgstr ""
 
 #: gtk/gtkfilesystemunix.c:855 gtk/gtkfilesystemwin32.c:1069
-#, fuzzy, c-format
+#, c-format
 msgid "error getting information for '%s': %s"
-msgstr "خطا در ایجاد پوشه‌ی \"%s\": %s\n"
+msgstr "خطا در گرفتن اطلاعات برای '%s': %s"
 
 #: gtk/gtkfilesystemwin32.c:692
 #, c-format
@@ -2799,9 +2757,8 @@ msgid "Y position of child widget"
 msgstr "موقعیت Y ویجت فرزند"
 
 #: gtk/gtkfontbutton.c:176
-#, fuzzy
 msgid "The title of the font selection dialog"
-msgstr "عنوان پنجره"
+msgstr ""
 
 #: gtk/gtkfontbutton.c:177 gtk/gtkfontbutton.c:294
 msgid "Pick a Font"
@@ -2812,9 +2769,8 @@ msgid "Font name"
 msgstr "نام قلم"
 
 #: gtk/gtkfontbutton.c:192
-#, fuzzy
 msgid "The name of the selected font"
-msgstr "نام ویجت"
+msgstr "نام قلم انتخاب‌شده"
 
 #. Initialize fields
 #: gtk/gtkfontbutton.c:193 gtk/gtkfontbutton.c:288
@@ -2838,18 +2794,16 @@ msgid "Whether the label is drawn with the selected font size"
 msgstr ""
 
 #: gtk/gtkfontbutton.c:240
-#, fuzzy
 msgid "Show style"
-msgstr "نمایش متن"
+msgstr "نمایش سبک"
 
 #: gtk/gtkfontbutton.c:241
 msgid "Whether the selected font style is shown in the label"
 msgstr ""
 
 #: gtk/gtkfontbutton.c:256
-#, fuzzy
 msgid "Show size"
-msgstr "نمایش متن"
+msgstr "نمایش اندازه"
 
 #: gtk/gtkfontbutton.c:257
 msgid "Whether selected font size is shown in the label"
@@ -2859,7 +2813,7 @@ msgstr ""
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:68
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr ""
+msgstr "الف‌ب‌ج‌درس‌ص‌ط‌ع‌ف‌ق‌ک‌ل‌م‌ن‌و‌ه‍‌ی"
 
 #: gtk/gtkfontsel.c:211
 msgid "The X string that represents this font"
@@ -2867,7 +2821,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:218
 msgid "The GdkFont that is currently selected"
-msgstr ""
+msgstr "GdkFontی که هم‌اکنون انتخاب شده است"
 
 #: gtk/gtkfontsel.c:224
 msgid "Preview text"
@@ -2879,20 +2833,20 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:332
 msgid "_Family:"
-msgstr "خانواده:"
+msgstr "_خانواده:"
 
 #: gtk/gtkfontsel.c:338
 msgid "_Style:"
-msgstr "سبک:"
+msgstr "_سبک:"
 
 #: gtk/gtkfontsel.c:344
 msgid "Si_ze:"
-msgstr "اندازه:"
+msgstr "_اندازه:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:469
 msgid "_Preview:"
-msgstr "پیش‌نمایش:"
+msgstr "_پیش‌نمایش:"
 
 #: gtk/gtkfontsel.c:1285
 msgid "Font Selection"
@@ -2924,7 +2878,7 @@ msgstr ""
 
 #: gtk/gtkframe.c:160
 msgid "Frame shadow"
-msgstr ""
+msgstr "سایه‌ی قاب"
 
 #: gtk/gtkframe.c:161
 msgid "Appearance of the frame border"
@@ -2940,12 +2894,12 @@ msgstr "گاما"
 
 #: gtk/gtkgamma.c:409
 msgid "_Gamma value"
-msgstr "مقدار گاما"
+msgstr "مقدار _گاما"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
 #: gtk/gtktoolbar.c:516 gtk/gtkviewport.c:150
 msgid "Shadow type"
-msgstr ""
+msgstr "نوع سایه"
 
 #: gtk/gtkhandlebox.c:203
 msgid "Appearance of the shadow that surrounds the container"
@@ -3074,22 +3028,20 @@ msgid "Child widget to appear next to the menu text"
 msgstr ""
 
 #: gtk/gtkimmodule.c:419
-#, fuzzy
 msgid "Default"
-msgstr "عرض پیش‌فرض"
+msgstr "پیش‌فرض"
 
 #: gtk/gtkinputdialog.c:233
 msgid "Input"
 msgstr "ورودی"
 
 #: gtk/gtkinputdialog.c:242
-#, fuzzy
 msgid "No extended input devices"
-msgstr "دستگاه ورودی‌ای نیست"
+msgstr ""
 
 #: gtk/gtkinputdialog.c:254
 msgid "_Device:"
-msgstr "دستگاه:"
+msgstr "_دستگاه:"
 
 #: gtk/gtkinputdialog.c:271
 msgid "Disabled"
@@ -3105,17 +3057,17 @@ msgstr "پنجره"
 
 #: gtk/gtkinputdialog.c:292
 msgid "_Mode: "
-msgstr "حالت: "
+msgstr "_حالت: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:323
 msgid "_Axes"
-msgstr "محورها"
+msgstr "_محورها"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:340
 msgid "_Keys"
-msgstr "کلیدها"
+msgstr "_کلیدها"
 
 #: gtk/gtkinputdialog.c:560
 msgid "X"
@@ -3163,7 +3115,7 @@ msgstr "پاک شود"
 
 #: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:543
 msgid "The screen where this window will be displayed"
-msgstr ""
+msgstr "صفحه‌ای که این پنجره در آن نمایش خواهد یافت"
 
 #: gtk/gtklabel.c:291
 msgid "The text of the label"
@@ -3286,18 +3238,16 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkmenu.c:359
-#, fuzzy
 msgid "Vertical Padding"
-msgstr "ردیف کردن عمودی"
+msgstr ""
 
 #: gtk/gtkmenu.c:360
 msgid "Extra space at the top and bottom of the menu"
 msgstr ""
 
 #: gtk/gtkmenu.c:368
-#, fuzzy
 msgid "Vertical Offset"
-msgstr "مقیاس عمودی"
+msgstr ""
 
 #: gtk/gtkmenu.c:369
 msgid ""
@@ -3306,9 +3256,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkmenu.c:377
-#, fuzzy
 msgid "Horizontal Offset"
-msgstr "مقیاس افقی"
+msgstr ""
 
 #: gtk/gtkmenu.c:378
 msgid ""
@@ -3341,9 +3290,8 @@ msgid "The row number to attach the top of the child to"
 msgstr ""
 
 #: gtk/gtkmenu.c:412
-#, fuzzy
 msgid "Bottom Attach"
-msgstr "پایین"
+msgstr ""
 
 #: gtk/gtkmenu.c:413 gtk/gtktable.c:224
 msgid "The row number to attach the bottom of the child to"
@@ -3462,7 +3410,7 @@ msgstr "صفحه"
 
 #: gtk/gtknotebook.c:397
 msgid "The index of the current page"
-msgstr ""
+msgstr "نمایه‌ی صفحه‌ی فعلی"
 
 #: gtk/gtknotebook.c:405
 msgid "Tab Position"
@@ -3604,9 +3552,9 @@ msgstr ""
 msgid "Display the standard forward arrow button"
 msgstr ""
 
-# paak kardan, rad kardan, tamiz kardan, door rikhtan, rowshan kardan, towzih daadan
 #: gtk/gtknotebook.c:2679 gtk/gtknotebook.c:5052
 #, c-format
+# 
 msgid "Page %u"
 msgstr "صفحه‌ی %u"
 
@@ -3630,7 +3578,7 @@ msgstr "فاصله‌گذاری دور ؟؟؟"
 #: gtk/gtkpaned.c:239
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
-msgstr "موقعیت"
+msgstr ""
 
 #: gtk/gtkpaned.c:247
 msgid "Position Set"
@@ -3649,27 +3597,24 @@ msgid "Width of handle"
 msgstr "عرض دست‌گیره"
 
 #: gtk/gtkpaned.c:271
-#, fuzzy
 msgid "Minimal Position"
-msgstr "موقعیت مقدار"
+msgstr ""
 
 #: gtk/gtkpaned.c:272
 msgid "Smallest possible value for the \"position\" property"
 msgstr ""
 
 #: gtk/gtkpaned.c:289
-#, fuzzy
 msgid "Maximal Position"
-msgstr "موقعیت مقدار"
+msgstr ""
 
 #: gtk/gtkpaned.c:290
 msgid "Largest possible value for the \"position\" property"
 msgstr ""
 
 #: gtk/gtkpaned.c:307
-#, fuzzy
 msgid "Resize"
-msgstr "حالت تغییر اندازه"
+msgstr "تغییر اندازه"
 
 #: gtk/gtkpaned.c:308
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
@@ -3690,7 +3635,7 @@ msgstr ""
 
 #: gtk/gtkprogress.c:129
 msgid "Activity mode"
-msgstr ""
+msgstr "حالت فعالیت"
 
 #: gtk/gtkprogress.c:130
 msgid ""
@@ -3800,9 +3745,8 @@ msgid "Text to be displayed in the progress bar"
 msgstr "متنی که باید در نوار پیش‌رفت نمایش یابد"
 
 #: gtk/gtkradioaction.c:137
-#, fuzzy
 msgid "The value"
-msgstr "نام تم"
+msgstr "مقدار"
 
 #: gtk/gtkradioaction.c:138
 msgid ""
@@ -3925,7 +3869,7 @@ msgstr ""
 
 #: gtk/gtkruler.c:148
 msgid "Max Size"
-msgstr ""
+msgstr "اندازه‌ی حداکثر"
 
 #: gtk/gtkruler.c:149
 msgid "Maximum size of the ruler"
@@ -4031,7 +3975,7 @@ msgstr ""
 
 #: gtk/gtkscrolledwindow.c:274
 msgid "Shadow Type"
-msgstr ""
+msgstr "نوع سایه"
 
 #: gtk/gtkscrolledwindow.c:275
 msgid "Style of bevel around the contents"
@@ -4108,14 +4052,12 @@ msgid "Name of theme RC file to load"
 msgstr "نام پرونده‌ی RC تم برای بار کردن"
 
 #: gtk/gtksettings.c:218
-#, fuzzy
 msgid "Icon Theme Name"
-msgstr "نام تم"
+msgstr "نام تم شمایلی"
 
 #: gtk/gtksettings.c:219
-#, fuzzy
 msgid "Name of icon theme to use"
-msgstr "نام قلم پیش‌فرض برای استفاده"
+msgstr "نام تم شمایلی برای استفاده"
 
 #: gtk/gtksettings.c:226
 msgid "Key Theme Name"
@@ -4336,7 +4278,7 @@ msgstr "آخرین"
 
 #: gtk/gtkstock.c:293
 msgid "_Top"
-msgstr ""
+msgstr "_بالا"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
@@ -4500,7 +4442,7 @@ msgstr "بله"
 
 #: gtk/gtkstock.c:334
 msgid "Zoom _100%"
-msgstr ""
+msgstr "زوم _۱۰۰٪"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
@@ -4755,7 +4697,7 @@ msgstr "تورفتگی"
 
 #: gtk/gtktexttag.c:413 gtk/gtktextview.c:632
 msgid "Amount to indent the paragraph, in pixels"
-msgstr ""
+msgstr "میزان تورفتگی بند، برحسب نقطه"
 
 #: gtk/gtktexttag.c:424
 msgid ""
@@ -4765,7 +4707,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:433
 msgid "Pixels above lines"
-msgstr ""
+msgstr "نقطه‌های بالای خط‌ها"
 
 #: gtk/gtktexttag.c:434 gtk/gtktextview.c:556
 msgid "Pixels of blank space above paragraphs"
@@ -4773,7 +4715,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:443
 msgid "Pixels below lines"
-msgstr ""
+msgstr "نقطه‌های زیر خط‌ها"
 
 #: gtk/gtktexttag.c:444 gtk/gtktextview.c:566
 msgid "Pixels of blank space below paragraphs"
@@ -4966,7 +4908,7 @@ msgstr ""
 
 #: gtk/gtktextview.c:593
 msgid "Wrap Mode"
-msgstr ""
+msgstr "حالت پیچیدن"
 
 #: gtk/gtktextview.c:611
 msgid "Left Margin"
@@ -4993,9 +4935,8 @@ msgid "The buffer which is displayed"
 msgstr ""
 
 #: gtk/gtktextview.c:665
-#, fuzzy
 msgid "Overwrite mode"
-msgstr "حالت تغییر اندازه"
+msgstr "حالت رونویسی"
 
 #: gtk/gtktextview.c:666
 msgid "Whether entered text overwrites existing contents"
@@ -5056,7 +4997,7 @@ msgstr ""
 
 #: gtk/gtktoolbar.c:458
 msgid "Show Arrow"
-msgstr ""
+msgstr "نمایش پیکان"
 
 #: gtk/gtktoolbar.c:459
 msgid "If an arrow should be shown if the toolbar doesn't fit"
@@ -5084,7 +5025,7 @@ msgstr ""
 
 #: gtk/gtktoolbar.c:501
 msgid "Space style"
-msgstr ""
+msgstr "سبک فاصله"
 
 #: gtk/gtktoolbar.c:502
 msgid "Whether spacers are vertical lines or just blank"
@@ -5120,9 +5061,8 @@ msgid "Size of icons in default toolbars"
 msgstr ""
 
 #: gtk/gtktoolbutton.c:180
-#, fuzzy
 msgid "Text to show in the item."
-msgstr "تعداد سطرهای جدول"
+msgstr ""
 
 #: gtk/gtktoolbutton.c:187
 msgid ""
@@ -5139,19 +5079,16 @@ msgid "Stock Id"
 msgstr ""
 
 #: gtk/gtktoolbutton.c:201
-#, fuzzy
 msgid "The stock icon displayed on the item"
-msgstr "متنی که باید در نوار پیش‌رفت نمایش یابد"
+msgstr ""
 
 #: gtk/gtktoolbutton.c:207
-#, fuzzy
 msgid "Icon widget"
-msgstr "مجموعه‌شمایل"
+msgstr ""
 
 #: gtk/gtktoolbutton.c:208
-#, fuzzy
 msgid "Icon widget to display in the item"
-msgstr "مجموعه‌شمایلی که باید نمایش یابد."
+msgstr ""
 
 #: gtk/gtktoolitem.c:154
 msgid "Visible when horizontal"
@@ -5256,9 +5193,8 @@ msgid "Model column to search through when searching through code"
 msgstr ""
 
 #: gtk/gtktreeview.c:609
-#, fuzzy
 msgid "Fixed Height Mode"
-msgstr "ارتفاع ثابت"
+msgstr "حالت ارتفاع ثابت"
 
 #: gtk/gtktreeview.c:610
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
@@ -5270,7 +5206,7 @@ msgstr "عرض جداساز عمودی"
 
 #: gtk/gtktreeview.c:631
 msgid "Vertical space between cells.  Must be an even number"
-msgstr ""
+msgstr "فاصله‌ی عمودی بین خانه‌ها.  باید عدد زوج باشد"
 
 #: gtk/gtktreeview.c:639
 msgid "Horizontal Separator Width"
@@ -5278,7 +5214,7 @@ msgstr "عرض جداساز افقی"
 
 #: gtk/gtktreeview.c:640
 msgid "Horizontal space between cells.  Must be an even number"
-msgstr ""
+msgstr "فاصله‌ی افقی بین خانه‌ها.  باید عدد زوج باشد"
 
 #: gtk/gtktreeview.c:648
 msgid "Allow Rules"
@@ -5445,7 +5381,7 @@ msgstr ""
 
 #: gtk/gtkuimanager.c:1928
 msgid "Empty"
-msgstr ""
+msgstr "خالی"
 
 #: gtk/gtkviewport.c:135
 msgid ""
@@ -5491,7 +5427,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:430
 msgid "Height request"
-msgstr ""
+msgstr "درخواست ارتفاع"
 
 #: gtk/gtkwidget.c:431
 msgid ""
@@ -5680,9 +5616,8 @@ msgid "The title of the window"
 msgstr "عنوان پنجره"
 
 #: gtk/gtkwindow.c:456
-#, fuzzy
 msgid "Window Role"
-msgstr "عنوان پنجره"
+msgstr "نقش پنجره"
 
 #: gtk/gtkwindow.c:457
 msgid "Unique identifier for the window to be used when restoring a session"
@@ -5823,12 +5758,11 @@ msgstr ""
 
 #: gtk/gtkwindow.c:629
 msgid "Gravity"
-msgstr ""
+msgstr "ثقل"
 
 #: gtk/gtkwindow.c:630
-#, fuzzy
 msgid "The window gravity of the window"
-msgstr "نوع این پنجره"
+msgstr "ثقل پنجره"
 
 #: modules/input/gtkimcontextxim.c:325
 msgid "IM Preedit style"
@@ -5854,23 +5788,22 @@ msgstr "امهری (EZ+‎)"
 #. ID
 #: modules/input/imcedilla.c:90
 msgid "Cedilla"
-msgstr ""
+msgstr "سدیلا"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
-#, fuzzy
 msgid "Cyrillic (Transliterated)"
-msgstr "سیریلی (؟؟)"
+msgstr "سیریلی (حرف‌نگاری‌شده)"
 
 #. ID
 #: modules/input/iminuktitut.c:126
 msgid "Inukitut (Transliterated)"
-msgstr "اینوکیتوت (؟؟)"
+msgstr "اینوکیتوت (حرف‌نگاری‌شده)"
 
 #. ID
 #: modules/input/imipa.c:144
 msgid "IPA"
-msgstr "فونتیک"
+msgstr "الفبای فونتیک بین‌المللی"
 
 #. ID
 #: modules/input/imthai-broken.c:177
