@@ -1,5 +1,8 @@
 2005-04-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_set_search_column): Add some
+	more docs on interactive search.
+
 	* NEWS: Updates
 
 2005-04-05  Tor Lillqvist  <tml@novell.com>

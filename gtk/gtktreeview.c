@@ -12133,7 +12133,10 @@ gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,
  * @enable_search: %TRUE, if the user can search interactively
  *
  * If @enable_search is set, then the user can type in text to search through
- * the tree interactively.
+ * the tree interactively (this is sometimes called "typeahead find").
+ * 
+ * Note that even if this is %FALSE, the user can still initiate a search 
+ * using the "start-interactive-search" key binding.
  */
 void
 gtk_tree_view_set_enable_search (GtkTreeView *tree_view,
@@ -12154,7 +12157,8 @@ gtk_tree_view_set_enable_search (GtkTreeView *tree_view,
  * gtk_tree_view_get_enable_search:
  * @tree_view: A #GtkTreeView
  *
- * Returns whether or not the tree allows interactive searching.
+ * Returns whether or not the tree allows to start interactive searching 
+ * by typing in text.
  *
  * Return value: whether or not to let the user search interactively
  */
@@ -12189,8 +12193,13 @@ gtk_tree_view_get_search_column (GtkTreeView *tree_view)
  * @column: the column of the model to search in
  *
  * Sets @column as the column where the interactive search code should
- * search in.  Additionally, turns on interactive searching. Note that
- * @column refers to a column of the model.
+ * search in. 
+ * 
+ * If the sort column is set, users can use the "start-interactive-search"
+ * key binding to bring up search popup. The enable-search property controls
+ * wether simply typing text will also start an interactive search.
+ *
+ * Note that @column refers to a column of the model. 
  */
 void
 gtk_tree_view_set_search_column (GtkTreeView *tree_view,
