@@ -45,13 +45,13 @@ to the main loop and await more user input.
 </para>
 
 <example>
-<title> Typical <function>main</function> function for a GTK application</title>
+<title>Typical <function>main</function> function for a GTK application</title>
 <programlisting>
 int 
 main (int argc, char **argv)
 {
   /* Initialize i18n support */
-  gtk_set_locale ();
+  gtk_set_locale (&empty;);
 
   /* Initialize the widget set */
   gtk_init (&amp;argc, &amp;argv);
@@ -66,7 +66,7 @@ main (int argc, char **argv)
   gtk_widget_show_all (mainwin);
 
   /* Enter the main event loop, and wait for user interaction */
-  gtk_main ();
+  gtk_main (&empty;);
 
   /* The user lost interest */
   return 0;
@@ -131,13 +131,13 @@ instead.
 <function>main</function> function. Changed if any arguments were 
 handled.
 @argv: Address of the <parameter>argv</parameter> parameter of 
-<function>main</function>. Any parameters understood by <function>
-gtk_init</function> are stripped before return.
+<function>main()</function>. Any parameters understood by gtk_init() 
+are stripped before return.
 
 
 <!-- ##### FUNCTION gtk_init_check ##### -->
 <para>
-This function does the same work as <function>gtk_init</function> with only 
+This function does the same work as gtk_init() with only 
 a single change: It does not terminate the program if the GUI can't be 
 initialized. Instead it returns %FALSE on failure.
 </para>
@@ -146,17 +146,17 @@ This way the application can fall back to some other means of communication
 with the user - for example a curses or command line interface.
 </para>
 
-@argc: A reference to the <parameter>argc</parameter> of the <function>main
-</function> function.
-@argv: A reference to the <parameter>argv</parameter> of the <function>main
-</function> function.
-@Returns: %TRUE if the GUI has been successful initialized, 
+@argc: A reference to the <parameter>argc</parameter> of the 
+<function>main()</function> function.
+@argv: A reference to the <parameter>argv</parameter> of the 
+<function>main()</function> function.
+@Returns: %TRUE if the GUI has been successfully initialized, 
 %FALSE otherwise.
 
 
 <!-- ##### FUNCTION gtk_exit ##### -->
 <para>
-Terminate the program and return the given exit code to the caller. 
+Terminates the program and returns the given exit code to the caller. 
 This function will shut down the GUI and free all resources allocated 
 for GTK.
 </para>
@@ -168,17 +168,17 @@ success.
 
 <!-- ##### FUNCTION gtk_events_pending ##### -->
 <para>
-Check if any events are pending. This can be used to update the GUI 
+Checks if any events are pending. This can be used to update the GUI 
 and invoke timeouts etc. while doing some time intensive computation.
 </para>
 
 <example>
-<title> Updating the GUI during a long computation</title>
+<title>Updating the GUI during a long computation</title>
 <programlisting>
 	/* computation going on */
 ...
-        while (gtk_events_pending ())
-	  gtk_main_iteration ();
+        while (gtk_events_pending (&empty;))
+	  gtk_main_iteration (&empty;);
 ...
 	/* computation continued */
 </programlisting>
@@ -190,7 +190,7 @@ and invoke timeouts etc. while doing some time intensive computation.
 <!-- ##### FUNCTION gtk_main ##### -->
 <para>
 Runs the main loop until gtk_main_quit() is called. You can nest calls to
-gtk_main. In that case gtk_main_quit() will make the innerst invocation
+gtk_main(). In that case gtk_main_quit() will make the innermost invocation
 of the main loop return.
 </para>
 
@@ -198,8 +198,8 @@ of the main loop return.
 
 <!-- ##### FUNCTION gtk_main_level ##### -->
 <para>
-Ask for the current nesting level of the main loop. This can be useful
-when calling gtk_quit_add.
+Asks for the current nesting level of the main loop. This can be useful
+when calling gtk_quit_add().
 </para>
 
 @Returns: the nesting level of the current invocation of the main loop.
@@ -217,27 +217,27 @@ control.
 <para>
 Runs a single iteration of the mainloop. If no events are waiting to be
 processed GTK+ will block until the next event is noticed. If you don't
-want to block look at gtk_main_iteration_do or check if any events are
-pending with gtk_events_pending first.
+want to block look at gtk_main_iteration_do() or check if any events are
+pending with gtk_events_pending() first.
 </para>
 
-@Returns: %TRUE if gtk_main_quit has been called for the innermost mainloop.
+@Returns: %TRUE if gtk_main_quit() has been called for the innermost mainloop.
 
 
 <!-- ##### FUNCTION gtk_main_iteration_do ##### -->
 <para>
-Run a single iteration of the mainloop. If no events are available either
-return or block dependend on the value of @blocking. 
+Runs a single iteration of the mainloop. If no events are available either
+return or block dependent on the value of @blocking. 
 </para>
 
 @blocking: %TRUE if you want GTK+ to block if no events are pending.
-@Returns: %TRUE if gtk_main_quit has been called for the innermost mainloop.
+@Returns: %TRUE if gtk_main_quit() has been called for the innermost mainloop.
 
 
 <!-- ##### FUNCTION gtk_main_do_event ##### -->
 <para>
-Process a single GDK event. This is public only to allow filtering of events
-between GDK and GTK. You will not usually need to call this function directly.
+Processes a single GDK event. This is public only to allow filtering of events
+between GDK and GTK+. You will not usually need to call this function directly.
 </para>
 <para>
 While you should not call this function directly, you might want to know
@@ -248,18 +248,18 @@ the event:
 <orderedlist>
 <listitem><para>
   Compress enter/leave notify events. If the event passed build an 
-  enter/leave pair together with the next event (peeked from Gdk)
+  enter/leave pair together with the next event (peeked from GDK)
   both events are thrown away. This is to avoid a backlog of (de-)highlighting
   widgets crossed by the pointer.
 </para></listitem>
 <listitem><para>
   Find the widget which got the event. If the widget can't be determined 
   the event is thrown away unless it belongs to a INCR transaction. In that
-  case it is passed to gtk_selection_incr_event.
+  case it is passed to gtk_selection_incr_event().
 </para></listitem>
 <listitem><para>
   Then the event is passed on a stack so you can query the currently handled
-  event with gtk_get_current_event. 
+  event with gtk_get_current_event(). 
 </para></listitem>
 <listitem><para>
   The event is sent to a widget. If a grab is active all events for 
@@ -294,30 +294,30 @@ the event:
 </para></listitem>
 </orderedlist>
 
-@event: An event to process (normally) passed by Gdk.
+@event: An event to process (normally) passed by GDK.
 
 
 <!-- ##### USER_FUNCTION GtkModuleInitFunc ##### -->
 <para>
-Each GTK+ module must have a function gtk_module_init with this prototype.
-This function is called after loading the module with the argc and argv 
+Each GTK+ module must have a function gtk_module_init() with this prototype.
+This function is called after loading the module with the @argc and @argv 
 cleaned from any arguments that GTK+ handles itself.
 </para>
 
-@argc: Pointer to the number of arguments remaining after gtk_init.
+@argc: Pointer to the number of arguments remaining after gtk_init().
 @argv: Points to the argument vector.
 
 
 <!-- ##### FUNCTION gtk_true ##### -->
 <para>
-All this function does it to return TRUE. This can be useful for example
+All this function does it to return %TRUE. This can be useful for example
 if you want to inhibit the deletion of a window. Of course you should 
 not do this as the user expects a reaction from clicking the close 
 icon of the window...
 </para>
 
 <example>
-<title> A persistent window</title>
+<title>A persistent window</title>
 <programlisting>
 ##include &lt;gtk/gtk.h&gt;
 
@@ -341,7 +341,7 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (win), but);
 
   gtk_widget_show_all (win);
-  gtk_main ();
+  gtk_main (&empty;);
   return 0;
 }
 </programlisting>
@@ -352,7 +352,7 @@ main (int argc, char **argv)
 
 <!-- ##### FUNCTION gtk_false ##### -->
 <para>
-Analogical to <function>gtk_true</function> this function does nothing 
+Analogical to gtk_true() this function does nothing 
 but always returns %FALSE.
 </para>
 
@@ -361,9 +361,9 @@ but always returns %FALSE.
 
 <!-- ##### FUNCTION gtk_grab_add ##### -->
 <para>
-Makes %widget the current grabbed widget. This means that interaction with 
+Makes @widget the current grabbed widget. This means that interaction with 
 other widgets in the same application is blocked and mouse as well as 
-keyboard events are delivered to this %widget.
+keyboard events are delivered to this widget.
 </para>
 
 @widget: The widget that grabs keyboard and pointer events.
@@ -379,8 +379,8 @@ Queries the current grab.
 
 <!-- ##### FUNCTION gtk_grab_remove ##### -->
 <para>
-Remove the grab from the given widget. You have to pair calls to gtk_grab_add
-and gtk_grab_remove.
+Removes the grab from the given widget. You have to pair calls to gtk_grab_add()
+and gtk_grab_remove().
 </para>
 
 @widget: The widget which gives up the grab.
@@ -388,16 +388,16 @@ and gtk_grab_remove.
 
 <!-- ##### FUNCTION gtk_init_add ##### -->
 <para>
-Register a function to be called when the mainloop is started.
+Registers a function to be called when the mainloop is started.
 </para>
 
-@function: Function to invoke when gtk_main is called next.
+@function: Function to invoke when gtk_main() is called next.
 @data: Data to pass to that function.
 
 
 <!-- ##### FUNCTION gtk_quit_add_destroy ##### -->
 <para>
-Trigger destruction of %object in case the mainloop at level %main_level
+Trigger destruction of @object in case the mainloop at level @main_level
 is quit.
 </para>
 
@@ -415,9 +415,9 @@ Registers a function to be called when an instance of the mainloop is left.
  mainloop.
 @function: The function to call. This should return 0 to be removed from the 
  list of quit handlers. Otherwise the function might be called again.
-@data: Pointer to pass when calling %function.
+@data: Pointer to pass when calling @function.
 @Returns: A handle for this quit handler (you need this for gtk_quit_remove())
-  or 0 if you passed a NULL pointer in %function.
+  or 0 if you passed a %NULL pointer in @function.
 
 
 <!-- ##### FUNCTION gtk_quit_add_full ##### -->
@@ -428,8 +428,8 @@ pass a marshaller and a function to be called when the quit handler is freed.
 </para>
 <para>
 The former can be used to run interpreted code instead of a compiled function
-while the latter can be used to free the information stored in %data (while
-you can do this in %function as well)... So this function will mostly be
+while the latter can be used to free the information stored in @data (while
+you can do this in @function as well)... So this function will mostly be
 used by GTK+ wrappers for languages other than C.
 </para>
 
@@ -438,17 +438,17 @@ used by GTK+ wrappers for languages other than C.
  mainloop.
 @function: The function to call. This should return 0 to be removed from the 
  list of quit handlers. Otherwise the function might be called again.
-@marshal: The marshaller to be used. If this is non-NULL, %function is 
+@marshal: The marshaller to be used. If this is non-%NULL, @function is 
  ignored.
-@data: Pointer to pass when calling %function.
-@destroy: Function to call to destruct %data. Gets %data as argument.
+@data: Pointer to pass when calling @function.
+@destroy: Function to call to destruct @data. Gets @data as argument.
 @Returns: A handle for this quit handler (you need this for gtk_quit_remove())
-  or 0 if you passed a NULL pointer in %function.
+  or 0 if you passed a %NULL pointer in @function.
 
 
 <!-- ##### FUNCTION gtk_quit_remove ##### -->
 <para>
-Remove a quit handler by it's identifier.
+Removes a quit handler by it's identifier.
 </para>
 
 @quit_handler_id: Identifier for the handler returned when installing it.
@@ -456,32 +456,32 @@ Remove a quit handler by it's identifier.
 
 <!-- ##### FUNCTION gtk_quit_remove_by_data ##### -->
 <para>
-Remove a quit handler identified by it's %data field.
+Removes a quit handler identified by it's @data field.
 </para>
 
-@data: The pointer passed as %data to gtk_quit_add() or gtk_quit_add_full().
+@data: The pointer passed as @data to gtk_quit_add() or gtk_quit_add_full().
 
 
 <!-- ##### FUNCTION gtk_timeout_add_full ##### -->
 <para>
 Registers a function to be called periodically. The function will be called
-repeatedly after %interval milliseconds until it returns %FALSE at which 
+repeatedly after @interval milliseconds until it returns %FALSE at which 
 point the timeout is destroyed and will not be called again.
 </para>
 
 @interval: The time between calls to the function, in milliseconds 
 	(1/1000ths of a second.)
 @function: The function to call periodically.
-@marshal: The marshaller to use instead of the function (if non-NULL).
+@marshal: The marshaller to use instead of the function (if non-%NULL).
 @data: The data to pass to the function.
-@destroy: Function to call when the timeout is destroyed or NULL.
+@destroy: Function to call when the timeout is destroyed or %NULL.
 @Returns: A unique id for the event source.
 
 
 <!-- ##### FUNCTION gtk_timeout_add ##### -->
 <para>
 Registers a function to be called periodically. The function will be called
-repeatedly after %interval milliseconds until it returns %FALSE at which 
+repeatedly after @interval milliseconds until it returns %FALSE at which 
 point the timeout is destroyed and will not be called again.
 </para>
 
@@ -504,7 +504,7 @@ Removes the given timeout destroying all information about it.
 <para>
 Causes the mainloop to call the given function whenever no events with 
 higher priority are to be processed. The default priority is 
-GTK_PRIORITY_DEFAULT, which is rather low.
+%GTK_PRIORITY_DEFAULT, which is rather low.
 </para>
 
 @function: The function to call.
@@ -516,12 +516,12 @@ GTK_PRIORITY_DEFAULT, which is rather low.
 <para>
 Like gtk_idle_add() this function allows you to have a function called
 when the event loop is idle. The difference is that you can give a 
-priority different from GTK_PRIORITY_DEFAULT to the idle function.
+priority different from %GTK_PRIORITY_DEFAULT to the idle function.
 </para>
 
-@priority: The priority which should not be above G_PRIORITY_HIGH_IDLE.
-Note that you will interfere with GTK if you use a priority above
-GTK_PRIORITY_RESIZE.
+@priority: The priority which should not be above %G_PRIORITY_HIGH_IDLE.
+Note that you will interfere with GTK+ if you use a priority above
+%GTK_PRIORITY_RESIZE.
 @function: The function to call.
 @data: Data to pass to that function.
 @Returns: A unique id for the event source.
@@ -529,15 +529,19 @@ GTK_PRIORITY_RESIZE.
 
 <!-- ##### FUNCTION gtk_idle_add_full ##### -->
 <para>
-
+Like gtk_idle_add() this function allows you to have a function called
+when the event loop is idle. The difference is that you can give a 
+priority different from %GTK_PRIORITY_DEFAULT to the idle function.
 </para>
 
-@priority: 
-@function: 
-@marshal: 
-@data: 
-@destroy: 
-@Returns: 
+@priority: The priority which should not be above %G_PRIORITY_HIGH_IDLE.
+Note that you will interfere with GTK+ if you use a priority above
+%GTK_PRIORITY_RESIZE.
+@function: The function to call.
+@marshal: The marshaller to use instead of the function (if non-%NULL).
+@data: Data to pass to that function.
+@destroy: Function to call when the timeout is destroyed or %NULL.
+@Returns: A unique id for the event source.
 
 
 <!-- ##### FUNCTION gtk_idle_remove ##### -->
@@ -603,7 +607,7 @@ Use this for high priority timeouts. This priority is never used inside
 GTK+ so everything running at this priority will be running before anything
 inside the toolkit.
 <note><para>
-This macro is deprecated. You should use G_PRIORITY_HIGH instead.
+This macro is deprecated. You should use %G_PRIORITY_HIGH instead.
 </para></note>
 </para>
 
@@ -620,7 +624,7 @@ This priority is for GTK+ internal stuff. Don't use it in your applications.
 <para>
 Default priority for idle functions.
 <note><para>
-This macro is deprecated. You should use G_PRIORITY_DEFAULT_IDLE instead.
+This macro is deprecated. You should use %G_PRIORITY_DEFAULT_IDLE instead.
 </para></note>
 </para>
 
@@ -630,7 +634,7 @@ This macro is deprecated. You should use G_PRIORITY_DEFAULT_IDLE instead.
 <para>
 Priority for very unimportant background tasks.
 <note><para>
-This macro is deprecated. You should use G_PRIORITY_LOW instead.
+This macro is deprecated. You should use %G_PRIORITY_LOW instead.
 </para></note>
 </para>
 

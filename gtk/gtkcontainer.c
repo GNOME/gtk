@@ -254,6 +254,17 @@ gtk_container_class_init (GtkContainerClass *class)
                     GTK_TYPE_WIDGET);
 }
 
+/**
+ * gtk_container_child_type: 
+ * @container: a #GtkContainer.
+ *
+ * Returns the type of the children supported by the container.
+ *
+ * Note that this may return %GTK_TYPE_NONE to indicate that no more
+ * children can be added, e.g. for a #GtkPaned which already has two 
+ * children.
+ *
+ * Return value: a #GtkType.
 GtkType
 gtk_container_child_type (GtkContainer *container)
 {
@@ -783,6 +794,8 @@ gtk_container_get_property (GObject         *object,
  * @border_width: amount of blank space to leave <emphasis>outside</emphasis> the container.
  *   Valid values are in the range 0-65535 pixels.
  *
+ * Sets the border width of the container.
+ *
  * The border width of a container is the amount of space to leave
  * around the outside of the container. The only exception to this is
  * #GtkWindow; because toplevel windows can't leave space outside,
@@ -897,6 +910,17 @@ _gtk_container_dequeue_resize_handler (GtkContainer *container)
   GTK_PRIVATE_UNSET_FLAG (container, GTK_RESIZE_PENDING);
 }
 
+/**
+ * gtk_container_set_resize_mode:
+ * @container: a #GtkContainer.
+ * @resize_mode: the new resize mode.
+ * 
+ * Sets the resize mode for the container.
+ *
+ * The resize mode of a container determines whether a resize request 
+ * will be passed to the container's parent, queued for later execution
+ * or executed immediately.
+ **/
 void
 gtk_container_set_resize_mode (GtkContainer  *container,
 			       GtkResizeMode  resize_mode)
@@ -938,6 +962,16 @@ gtk_container_get_resize_mode (GtkContainer *container)
   return container->resize_mode;
 }
 
+/**
+ * gtk_container_set_reallocate_redraws:
+ * @container: a #GtkContainer.
+ * @needs_redraws: the new value for the container's @reallocate_redraws flag.
+ *
+ * Sets the @reallocate_redraws flag of the container to the given value.
+ * 
+ * Containers requesting reallocation redraws get automatically
+ * redrawn if any of their children changed allocation. 
+ **/ 
 void
 gtk_container_set_reallocate_redraws (GtkContainer *container,
 				      gboolean      needs_redraws)
@@ -1246,6 +1280,15 @@ gtk_container_set_focus_child (GtkContainer *container,
   gtk_signal_emit (GTK_OBJECT (container), container_signals[SET_FOCUS_CHILD], widget);
 }
 
+/**
+ * gtk_container_get_children:
+ * @container: a #GtkContainer.
+ * 
+ * Returns the the container's non-internal children. See
+ * gtk_container_forall() for details on what constitutes an "internal" child. 
+ *
+ * Return value: a newly-allocated list of the container's non-internal children.
+ **/
 GList*
 gtk_container_get_children (GtkContainer *container)
 {
@@ -1909,6 +1952,19 @@ chain_widget_destroyed (GtkWidget *widget,
                      chain);  
 }
 
+/**
+ * gtk_container_set_focus_chain: 
+ * @container: a #GtkContainer.
+ * @focusable_widgets: the new focus chain.
+ *
+ * Sets a focus chain, overriding the one computed automatically by GTK+.
+ * 
+ * In principle each widget in the chain should be a descendant of the 
+ * container, but this is not enforced by this method, since it's allowed 
+ * to set the focus chain before you pack the widgets, or have a widget 
+ * in the chain that isn't always packed. The necessary checks are done 
+ * when the focus chain is actually traversed.
+ **/
 void
 gtk_container_set_focus_chain (GtkContainer *container,
                                GList        *focusable_widgets)
@@ -1962,14 +2018,14 @@ gtk_container_set_focus_chain (GtkContainer *container,
  *                     no additional reference count is added to the
  *                     individual widgets in the focus chain.
  * 
- * Retrieve the focus chain of the container, if one has been
- * set explicitely. If no focus chain has been explicitely
+ * Retrieves the focus chain of the container, if one has been
+ * set explicitly. If no focus chain has been explicitly
  * set, GTK+ computes the focus chain based on the positions
  * of the children. In that case, GTK+ stores %NULL in
  * @focusable_widgets and returns %FALSE.
  *
- * Return value: %TRUE if the focus chain of the container,
- *   has been set explicitely.
+ * Return value: %TRUE if the focus chain of the container 
+ * has been set explicitly.
  **/
 gboolean
 gtk_container_get_focus_chain (GtkContainer *container,
@@ -1988,6 +2044,12 @@ gtk_container_get_focus_chain (GtkContainer *container,
   return container->has_focus_chain;
 }
 
+/**
+ * gtk_container_unset_focus_chain:
+ * @container: a #GtkContainer.
+ * 
+ * Removes a focus chain explicitly set with gtk_container_set_focus_chain().
+ **/
 void
 gtk_container_unset_focus_chain (GtkContainer  *container)
 {  
@@ -2210,7 +2272,7 @@ gtk_container_unmap (GtkWidget *widget)
  * @child: a child of @container
  * @event: a expose event sent to container
  *
- *  When a container receives an expose event, it must send synthetic
+ * When a container receives an expose event, it must send synthetic
  * expose events to all children that don't have their own #GdkWindows.
  * This function provides a convenient way of doing this. A container,
  * when it receives an expose event, calls gtk_container_propagate_expose() 
@@ -2222,7 +2284,7 @@ gtk_container_unmap (GtkWidget *widget)
  * 
  * In most cases, a container can simply either simply inherit the
  * ::expose implementation from #GtkContainer, or, do some drawing 
- * and then chain to the ::expose implementation from GtkContainer.
+ * and then chain to the ::expose implementation from #GtkContainer.
  **/
 void
 gtk_container_propagate_expose (GtkContainer   *container,
