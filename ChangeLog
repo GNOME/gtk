@@ -1,3 +1,8 @@
+2005-02-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkkeynames.c: Make the gdk_key array const (#166075,
+	Tommi Komulainen)
+
 2005-02-02  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from gtk-2-6:

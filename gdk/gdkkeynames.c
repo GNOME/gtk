@@ -35,7 +35,7 @@
 
 /* Key handling not part of the keymap */
 
-static struct gdk_key {
+static const struct gdk_key {
   guint keyval;
   const char *name;
 } gdk_keys_by_keyval[] = {
