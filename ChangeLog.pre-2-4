@@ -1,3 +1,20 @@
+2000-09-28  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c: Set up infrastructure to deal with lots of 
+	scrolling child windows, and draw focus rectangle properly.
+	
+	(gtk_text_view_buffer_to_window_coords):
+	Coordinate transformation to deal with all these freaking windows
+	and offsets
+	(gtk_text_view_window_to_buffer_coords): transform the other way
+
+	* gtk/testtext.c (create_buffer): Update to match Pango API change
+
+	* gtk/gtktexttagtable.c (gtk_text_tag_table_foreach): Go over the
+	anonymous tags
+	(foreach_unref): don't emit remove signal from finalize, just
+	set tag's parent to NULL
+
 2000-09-26  Havoc Pennington  <hp@redhat.com>
 
         * gtk/gtkiconfactory.c (gtk_icon_set_clear): remove
@@ -68,10 +85,8 @@
 
 	* gtk/gtkimage.h, gtk/gtkimage.c: Make this into a generic
 	image-display widget.
-	
-2000-09-25  Havoc Pennington  <hp@redhat.com>
 
-	* gtk/gtktextview.c: Draw the focus, and leave space to do so.
+2000-09-25  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktexttypes.c: Remove Latin1 conversion stuff
 

@@ -1239,12 +1239,12 @@ create_buffer (void)
   gtk_object_set (GTK_OBJECT (buffer->found_text_tag),
                   "foreground", "red", NULL);
 
-  tabs = pango_tab_array_new_with_defaults (4,
-                                            TRUE,
-                                            PANGO_TAB_LEFT, 10,
-                                            PANGO_TAB_LEFT, 30,
-                                            PANGO_TAB_LEFT, 60,
-                                            PANGO_TAB_LEFT, 120);
+  tabs = pango_tab_array_new_with_positions (4,
+                                             TRUE,
+                                             PANGO_TAB_LEFT, 10,
+                                             PANGO_TAB_LEFT, 30,
+                                             PANGO_TAB_LEFT, 60,
+                                             PANGO_TAB_LEFT, 120);
   
   buffer->custom_tabs_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
   gtk_object_set (GTK_OBJECT (buffer->custom_tabs_tag),

@@ -128,6 +128,11 @@ gtk_text_tag_table_destroy (GtkObject *object)
 static void
 foreach_unref (GtkTextTag *tag, gpointer data)
 {
+  /* We don't want to emit the remove signal here; so we just unparent
+   * and unref the tag.
+   */
+  
+  tag->table = NULL;
   g_object_unref (G_OBJECT (tag));
 }
 
@@ -140,7 +145,7 @@ gtk_text_tag_table_finalize (GObject *object)
 
   gtk_text_tag_table_foreach (table, foreach_unref, NULL);
   
-  g_hash_table_destroy(table->hash);
+  g_hash_table_destroy (table->hash);
   g_slist_free (table->anonymous);
 
   (* G_OBJECT_CLASS(parent_class)->finalize) (object);
@@ -259,7 +264,19 @@ hash_foreach (gpointer key, gpointer value, gpointer data)
 {
   struct ForeachData *fd = data;
 
+  g_return_if_fail (GTK_IS_TEXT_TAG (value));
+  
   (* fd->func) (value, fd->data);
+}
+
+static void
+list_foreach (gpointer data, gpointer user_data)
+{
+  struct ForeachData *fd = user_data;
+
+  g_return_if_fail (GTK_IS_TEXT_TAG (data));
+  
+  (* fd->func) (data, fd->data);
 }
 
 void
@@ -276,6 +293,7 @@ gtk_text_tag_table_foreach(GtkTextTagTable       *table,
   d.data = data;
   
   g_hash_table_foreach(table->hash, hash_foreach, &d);
+  g_slist_foreach (table->anonymous, list_foreach, &d);
 }
 
 guint

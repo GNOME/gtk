@@ -16,8 +16,21 @@ extern "C" {
 #define GTK_IS_TEXT_VIEW_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_VIEW))
 #define GTK_TEXT_VIEW_GET_CLASS(obj)   (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TEXT_VIEW, GtkTextViewClass))
 
+typedef enum
+{
+  GTK_TEXT_WINDOW_WIDGET,
+  GTK_TEXT_WINDOW_TEXT,
+  GTK_TEXT_WINDOW_LEFT,
+  GTK_TEXT_WINDOW_RIGHT,
+  GTK_TEXT_WINDOW_TOP,
+  GTK_TEXT_WINDOW_BOTTOM
+} GtkTextWindowType;
+
 typedef struct _GtkTextView GtkTextView;
 typedef struct _GtkTextViewClass GtkTextViewClass;
+
+/* Internal private type. */
+typedef struct _GtkTextWindow GtkTextWindow;
 
 struct _GtkTextView {
   GtkContainer parent_instance;
@@ -37,7 +50,12 @@ struct _GtkTextView {
 
   gboolean cursor_visible;
   
-  GdkWindow *bin_window;
+  GtkTextWindow *text_window;
+  GtkTextWindow *left_window;
+  GtkTextWindow *right_window;
+  GtkTextWindow *top_window;
+  GtkTextWindow *bottom_window;
+  
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
 
@@ -99,10 +117,6 @@ GtkWidget *    gtk_text_view_new_with_buffer       (GtkTextBuffer *buffer);
 void           gtk_text_view_set_buffer            (GtkTextView   *text_view,
 						    GtkTextBuffer *buffer);
 GtkTextBuffer *gtk_text_view_get_buffer            (GtkTextView   *text_view);
-void           gtk_text_view_get_iter_at_pixel     (GtkTextView   *text_view,
-						    GtkTextIter   *iter,
-						    gint           x,
-						    gint           y);
 gboolean       gtk_text_view_scroll_to_mark        (GtkTextView   *text_view,
                                                     GtkTextMark   *mark,
 						    gint           mark_within_margin);
@@ -127,6 +141,42 @@ gboolean       gtk_text_view_get_cursor_visible    (GtkTextView   *text_view);
 void           gtk_text_view_get_iter_location     (GtkTextView   *text_view,
                                                     const GtkTextIter *iter,
                                                     GdkRectangle  *location);
+void           gtk_text_view_get_iter_at_location  (GtkTextView   *text_view,
+						    GtkTextIter   *iter,
+						    gint           x,
+						    gint           y);
+
+
+void gtk_text_view_buffer_to_window_coords (GtkTextView       *text_view,
+                                            GtkTextWindowType  win,
+                                            gint               buffer_x,
+                                            gint               buffer_y,
+                                            gint              *window_x,
+                                            gint              *window_y);
+void gtk_text_view_window_to_buffer_coords (GtkTextView       *text_view,
+                                            GtkTextWindowType  win,
+                                            gint               window_x,
+                                            gint               window_y,
+                                            gint              *buffer_x,
+                                            gint              *buffer_y);
+
+GdkWindow*        gtk_text_view_get_window      (GtkTextView       *text_view,
+                                                 GtkTextWindowType  win);
+GtkTextWindowType gtk_text_view_get_window_type (GtkTextView       *text_view,
+                                                 GdkWindow         *window);
+
+void gtk_text_view_set_left_window_width    (GtkTextView *text_view,
+                                             gint         width);
+void gtk_text_view_set_right_window_width   (GtkTextView *text_view,
+                                             gint         width);
+void gtk_text_view_set_top_window_height    (GtkTextView *text_view,
+                                             gint         height);
+void gtk_text_view_set_bottom_window_height (GtkTextView *text_view,
+                                             gint         height);
+
+void gtk_text_view_set_text_window_size     (GtkTextView *text_view,
+                                             gint         width,
+                                             gint         height);
 
 #ifdef __cplusplus
 }
