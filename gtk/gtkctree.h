@@ -37,7 +37,7 @@ extern "C"
   (GTK_CHECK_CLASS_CAST ((klass), gtk_ctree_get_type (), GtkCTreeClass))
 #define GTK_IS_CTREE(obj) \
   (GTK_CHECK_TYPE ((obj), gtk_ctree_get_type ()))
-#define GTK_CTREE_ROW(glist) ((GtkCTreeRow *)((glist)->data))
+#define GTK_CTREE_ROW(_glist_) ((GtkCTreeRow *)((_glist_)->data))
 #define GTK_CTREE_TREE(_ctree_, _glist_) \
   ((GtkCellTree *) &(((GtkCTreeRow *)((_glist_)->data))->cell[(_ctree_)->tree_col]))
 
@@ -57,6 +57,16 @@ typedef enum
   GTK_CTREE_LINES_TABBED,
   GTK_CTREE_LINES_NONE
 } GtkCTreeLineStyle;
+
+typedef enum
+{
+  GTK_CTREE_EXPANSION_EXPAND,
+  GTK_CTREE_EXPANSION_EXPAND_RECURSIVE,
+  GTK_CTREE_EXPANSION_COLLAPSE,
+  GTK_CTREE_EXPANSION_COLLAPSE_RECURSIVE,
+  GTK_CTREE_EXPANSION_TOGGLE,
+  GTK_CTREE_EXPANSION_TOGGLE_RECURSIVE
+} GtkCTreeExpansion;
 
 typedef struct _GtkCTree      GtkCTree;
 typedef struct _GtkCTreeClass GtkCTreeClass;
@@ -82,7 +92,6 @@ struct _GtkCTree
 
   gint tree_indent;
   gint tree_column;
-  GList *selection_last;
   gint drag_row;
   GList *drag_source;
   GList *drag_target;
@@ -115,6 +124,8 @@ struct _GtkCTreeClass
 			     GList    *node,
 			     GList    *new_parent,
 			     GList    *new_sibling);
+  void (*change_focus_row_expansion) (GtkCTree *ctree,
+				      GtkCTreeExpansion action);
 };
 
 struct _GtkCTreeRow
@@ -164,7 +175,6 @@ GList *     gtk_ctree_insert                (GtkCTree     *ctree,
 					     gboolean      expanded);
 void       gtk_ctree_remove                 (GtkCTree     *ctree, 
 					     GList        *node);
-void       gtk_ctree_clear                  (GtkCTree     *ctree);
 
 /***********************************************************
  *  Generic recursive functions, querying / finding tree   *
@@ -214,6 +224,10 @@ void       gtk_ctree_collapse               (GtkCTree     *ctree,
 					     GList        *node);
 void       gtk_ctree_collapse_recursive     (GtkCTree     *ctree,
 					     GList        *node);
+void       gtk_ctree_toggle_expansion       (GtkCTree     *ctree,
+					     GList        *node);
+void       gtk_ctree_toggle_expansion_recursive (GtkCTree *ctree,
+						 GList    *node);
 void       gtk_ctree_select                 (GtkCTree     *ctree, 
 					     GList        *node);
 void       gtk_ctree_select_recursive       (GtkCTree     *ctree, 
@@ -296,8 +310,6 @@ void       gtk_ctree_set_foreground         (GtkCTree     *ctree,
 void       gtk_ctree_set_background         (GtkCTree     *ctree,
 					     GList        *node,
 					     GdkColor     *color);
-void       gtk_ctree_set_selection_mode     (GtkCTree     *ctree,
-					     GtkSelectionMode  mode);
 void       gtk_ctree_set_row_data           (GtkCTree     *ctree,
 					     GList        *node,
 					     gpointer      data);
@@ -307,7 +319,7 @@ void       gtk_ctree_set_row_data_full      (GtkCTree     *ctree,
 					     GtkDestroyNotify destroy);
 gpointer   gtk_ctree_get_row_data           (GtkCTree     *ctree,
 					     GList        *node);
-void       gtk_ctree_scroll_to              (GtkCTree     *ctree,
+void       gtk_ctree_moveto                 (GtkCTree     *ctree,
 					     GList        *node,
 					     gint          column,
 					     gfloat        row_align,

@@ -1,3 +1,18 @@
+Thu Jul 16 01:10:02 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.h :
+	* gtk/gtkctree.c :
+	Added focus handling, horizontal and vertical autoscrolling,
+	extended Selection Mode, key bindings
+	Added gtk_ctree_toggle_expansion & gtk_ctree_toggle_expansion_recursive
+	Changed gtk_ctree_scroll_to to gtk_ctree_moveto.
+	Removed gtk_ctree_clear.
+	
+	* gtk/gtkclist.h :
+	* gtk/gtkclist.c : 
+	Added focus handling, horizontal and vertical autoscrolling,
+	extended Selection Mode, key bindings
+
 Wed Jul 15 12:39:27 1998  Raph Levien  <raph@acm.org>
 
 	* This checkin integrates GdkRgb version 0.0.3 into the Gtk 1.1
@@ -30,6 +45,7 @@ Tue Jul 14 19:12:12 1998  Tim Janik  <timj@gtk.org>
 	* gtk/gtkbutton.c (gtk_button_set_arg): don't destroy a buttons
 	child if it isn't a label.
 
+>>>>>>> 1.520
 Tue Jul 14 11:41:38 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkdialog.h: 

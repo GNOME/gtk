@@ -27,6 +27,7 @@
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkhscrollbar.h>
 #include <gtk/gtkvscrollbar.h>
+#include <gtk/gtkenums.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -38,9 +39,12 @@ enum
 {
   GTK_CLIST_FROZEN          = 1 << 0,                                     
   GTK_CLIST_IN_DRAG         = 1 << 1,                                        
-  GTK_CLIST_ROW_HEIGHT_SET  = 1 << 2,
-  GTK_CLIST_SHOW_TITLES     = 1 << 3,
-  GTK_CLIST_CONSTRUCTED	    = 1 << 4
+  GTK_CLIST_DRAG_SELECTION  = 1 << 2,
+  GTK_CLIST_ROW_HEIGHT_SET  = 1 << 3,
+  GTK_CLIST_SHOW_TITLES     = 1 << 4,
+  GTK_CLIST_CONSTRUCTED	    = 1 << 5,
+  GTK_CLIST_CHILD_HAS_FOCUS = 1 << 6,
+  GTK_CLIST_ADD_MODE        = 1 << 7
 }; 
 
 /* cell types */
@@ -53,11 +57,11 @@ typedef enum
   GTK_CELL_WIDGET
 } GtkCellType;
 
-#define GTK_TYPE_CLIST                  (gtk_clist_get_type ())
-#define GTK_CLIST(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_CLIST, GtkCList))
-#define GTK_CLIST_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CLIST, GtkCListClass))
-#define GTK_IS_CLIST(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_CLIST))
-#define GTK_IS_CLIST_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CLIST))
+#define GTK_TYPE_CLIST                    (gtk_clist_get_type ())
+#define GTK_CLIST(obj)                    (GTK_CHECK_CAST ((obj), gtk_clist_get_type (), GtkCList))
+#define GTK_CLIST_CLASS(klass)            (GTK_CHECK_CLASS_CAST ((klass), gtk_clist_get_type (), GtkCListClass))
+#define GTK_IS_CLIST(obj)                 (GTK_CHECK_TYPE ((obj), gtk_clist_get_type ()))
+#define GTK_IS_CLIST_CLASS(klass)         (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CLIST))
 
 #define GTK_CLIST_FLAGS(clist)            (GTK_CLIST (clist)->flags)
 #define GTK_CLIST_SET_FLAG(clist,flag)    (GTK_CLIST_FLAGS (clist) |= (GTK_ ## flag))
@@ -68,6 +72,11 @@ typedef enum
 #define GTK_CLIST_ROW_HEIGHT_SET(clist)    (GTK_CLIST_FLAGS (clist) & GTK_CLIST_ROW_HEIGHT_SET)
 #define GTK_CLIST_SHOW_TITLES(clist)       (GTK_CLIST_FLAGS (clist) & GTK_CLIST_SHOW_TITLES)
 #define GTK_CLIST_CONSTRUCTED(clist)       (GTK_CLIST_FLAGS (clist) & GTK_CLIST_CONSTRUCTED)
+#define GTK_CLIST_CHILD_HAS_FOCUS(clist)   (GTK_CLIST_FLAGS (clist) & GTK_CLIST_CHILD_HAS_FOCUS)
+#define GTK_CLIST_DRAG_SELECTION(clist)    (GTK_CLIST_FLAGS (clist) & GTK_CLIST_DRAG_SELECTION)
+#define GTK_CLIST_ADD_MODE(clist)          (GTK_CLIST_FLAGS (clist) & GTK_CLIST_ADD_MODE)
+
+#define GTK_CLIST_ROW(_glist_) ((GtkCListRow *)((_glist_)->data))
 
 /* pointer casting for cells */
 #define GTK_CELL_TEXT(cell)     (((GtkCellText *) &(cell)))
@@ -90,7 +99,7 @@ struct _GtkCList
 {
   GtkContainer container;
   
-  guint8 flags;
+  guint16 flags;
 
   /* mem chunks */
   GMemChunk *row_mem_chunk;
@@ -133,6 +142,11 @@ struct _GtkCList
 
   /* list of selected rows */
   GList *selection;
+  GList *selection_end;
+
+  GList *undo_selection;
+  GList *undo_unselection;
+  gint undo_anchor;
 
   /* scrollbars */
   GtkWidget *vscrollbar;
@@ -152,6 +166,16 @@ struct _GtkCList
 
   /* the current x-pixel location of the xor-drag line */
   gint x_drag;
+
+  /* focus handling */
+  gint focus_row;
+
+  /* dragging the selection */
+  gint anchor;
+  GtkStateType anchor_state;
+  gint drag_pos;
+  gint htimer;
+  gint vtimer;
 };
 
 struct _GtkCListClass
@@ -161,17 +185,48 @@ struct _GtkCListClass
   void (*select_row) (GtkCList * clist,
 		      gint row,
 		      gint column,
-		      GdkEventButton * event);
+		      GdkEvent * event);
   void (*unselect_row) (GtkCList * clist,
 			gint row,
 			gint column,
-			GdkEventButton * event);
+			GdkEvent * event);
   void (*click_column) (GtkCList * clist,
 			gint column);
+
+  void (*toggle_focus_row) (GtkCList * clist);
+  void (*select_all) (GtkCList * clist);
+  void (*unselect_all) (GtkCList * clist);
+  void (*undo_selection) (GtkCList * clist);
+  void (*start_selection) (GtkCList * clist);
+  void (*end_selection) (GtkCList * clist);
+  void (*extend_selection) (GtkCList * clist,
+			    GtkScrollType scroll_type,
+			    gfloat position,
+			    gboolean auto_start_selection);
+  void (*scroll_horizontal) (GtkCList * clist,
+			     GtkScrollType scroll_type,
+			     gfloat position);
+  void (*scroll_vertical) (GtkCList * clist,
+			   GtkScrollType scroll_type,
+			   gfloat position);
+  void (*toggle_add_mode) (GtkCList * clist);
+  void (*abort_column_resize) (GtkCList * clist);
+
+  void (*resync_selection) (GtkCList * clist,
+			    GdkEvent * event);
+  GList * (*selection_find) (GtkCList *clist,
+			     gint row_number,
+			     GList *row_list_element);
   void (*draw_row) (GtkCList * clist,
 		    GdkRectangle * area,
 		    gint row,
 		    GtkCListRow * clist_row);
+  void (*clear) (GtkCList * clist);
+  void (*fake_unselect_all) (GtkCList * clist,
+			     gint row);
+	 
+
+
   gint scrollbar_spacing;
 };
 
@@ -364,9 +419,6 @@ void gtk_clist_moveto (GtkCList * clist,
 GtkVisibility gtk_clist_row_is_visible (GtkCList * clist,
 					gint row);
 
-GtkAdjustment* gtk_clist_get_vadjustment (GtkCList * clist);
-GtkAdjustment* gtk_clist_get_hadjustment (GtkCList * clist);
-
 /* returns the cell type */
 GtkCellType gtk_clist_get_cell_type (GtkCList * clist,
 				     gint row,
@@ -480,6 +532,9 @@ void gtk_clist_unselect_row (GtkCList * clist,
 			     gint row,
 			     gint column);
 
+/* undo the last select/unselect operation */
+void gtk_clist_undo_selection (GtkCList *clist);
+
 /* clear the entire list -- this is much faster than removing each item 
  * with gtk_clist_remove */
 void gtk_clist_clear (GtkCList * clist);
@@ -491,10 +546,14 @@ gint gtk_clist_get_selection_info (GtkCList * clist,
 			     	   gint * row,
 			     	   gint * column);
 
+/* in multiple or extended mode, select all rows */
+void gtk_clist_select_all (GtkCList *clist);
+
+/* in all modes except browse mode, deselect all rows */
+void gtk_clist_unselect_all (GtkCList *clist);
+
 /* swap the position of two rows */
 void gtk_clist_swap_rows (GtkCList * clist, gint row1, gint row2);
-
-
 
 #ifdef __cplusplus
 }
