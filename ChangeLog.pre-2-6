@@ -1,3 +1,11 @@
+2001-06-11  Havoc Pennington  <hp@redhat.com>
+
+	* NEWS: Updates
+
+	* configure.in (GTK_MINOR_VERSION): bump version to 1.3.6
+
+	* gtk/Makefile.am: glib_genmarshal already contains top_builddir
+	
 2001-06-13  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkdnd-fb.c (gdk_drag_status):

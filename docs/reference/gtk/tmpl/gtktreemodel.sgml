@@ -76,6 +76,7 @@ gtktreemodel
 </para>
 
 @GTK_TREE_MODEL_ITERS_PERSIST: 
+@GTK_TREE_MODEL_LIST_ONLY: 
 
 <!-- ##### FUNCTION gtk_tree_path_new ##### -->
 <para>

@@ -10,7 +10,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.0\n"
-"POT-Creation-Date: 2001-06-07 16:17+0200\n"
+"POT-Creation-Date: 2001-06-11 17:29-0400\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: walon <linux-wa@chanae.alphanet.ch>\n"
@@ -158,12 +158,12 @@ msgid ""
 "s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:253
+#: gdk-pixbuf/gdk-pixbuf-loader.c:252
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:276 gdk-pixbuf/gdk-pixbuf-loader.c:377
+#: gdk-pixbuf/gdk-pixbuf-loader.c:275 gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
@@ -187,7 +187,7 @@ msgstr ""
 msgid "Failure reading GIF: %s"
 msgstr "Fitchî fwait li: "
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1343 gdk-pixbuf/io-gif.c:1502
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1352 gdk-pixbuf/io-gif.c:1511
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 
@@ -204,39 +204,39 @@ msgstr ""
 msgid "Circular table entry in GIF file"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:746 gdk-pixbuf/io-gif.c:1331 gdk-pixbuf/io-gif.c:1376
-#: gdk-pixbuf/io-gif.c:1490
+#: gdk-pixbuf/io-gif.c:746 gdk-pixbuf/io-gif.c:1340 gdk-pixbuf/io-gif.c:1385
+#: gdk-pixbuf/io-gif.c:1499
 msgid "Not enough memory to load GIF file"
 msgstr "Nén del memwere assez po tcherdjî l' imådje GIF"
 
-#: gdk-pixbuf/io-gif.c:981
+#: gdk-pixbuf/io-gif.c:990
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1031
+#: gdk-pixbuf/io-gif.c:1040
 msgid "File does not appear to be a GIF file"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1043
+#: gdk-pixbuf/io-gif.c:1052
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1118
+#: gdk-pixbuf/io-gif.c:1127
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1134
+#: gdk-pixbuf/io-gif.c:1143
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1169
+#: gdk-pixbuf/io-gif.c:1178
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1398
+#: gdk-pixbuf/io-gif.c:1407
 msgid "GIF image was truncated or incomplete."
 msgstr ""
 
@@ -522,12 +522,12 @@ msgstr "Coleur di dvant"
 msgid "Foreground color as a GdkColor"
 msgstr "Coleur di dvant come valixhance GdkColor"
 
-#: gtk/gtkcellrenderertext.c:200 gtk/gtkentry.c:391 gtk/gtktexttag.c:276
-#: gtk/gtktextview.c:552
+#: gtk/gtkcellrenderertext.c:200 gtk/gtkentry.c:394 gtk/gtktexttag.c:276
+#: gtk/gtktextview.c:553
 msgid "Editable"
 msgstr "Aspougnåve"
 
-#: gtk/gtkcellrenderertext.c:201 gtk/gtktexttag.c:277 gtk/gtktextview.c:553
+#: gtk/gtkcellrenderertext.c:201 gtk/gtktexttag.c:277 gtk/gtktextview.c:554
 msgid "Whether the text can be modified by the user"
 msgstr ""
 
@@ -916,84 +916,93 @@ msgstr ""
 msgid "_Palette"
 msgstr "_Palete"
 
-#: gtk/gtkentry.c:381
+#: gtk/gtkentry.c:384
 msgid "Text Position"
 msgstr "Eplaeçmint do tecse"
 
-#: gtk/gtkentry.c:382
+#: gtk/gtkentry.c:385
 msgid "The current position of the insertion point"
 msgstr ""
 
-#: gtk/gtkentry.c:392
+#: gtk/gtkentry.c:395
 msgid "Whether the entry contents can be edited"
 msgstr ""
 
-#: gtk/gtkentry.c:399
+#: gtk/gtkentry.c:402
 msgid "Maximum length"
 msgstr "Longeu macsimom"
 
-#: gtk/gtkentry.c:400
+#: gtk/gtkentry.c:403
 msgid "Maximum number of characters for this entry"
 msgstr "Li nombe macsimom di caracteres po ciste intréye chal"
 
-#: gtk/gtkentry.c:408
+#: gtk/gtkentry.c:411
 msgid "Visibility"
 msgstr "Veyåvibilité"
 
-#: gtk/gtkentry.c:409
+#: gtk/gtkentry.c:412
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
 
-#: gtk/gtkentry.c:415
+#: gtk/gtkentry.c:418
 msgid "Invisible character"
 msgstr "Caractere nén veyåve"
 
-#: gtk/gtkentry.c:416
+#: gtk/gtkentry.c:419
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 
-#: gtk/gtkentry.c:423
+#: gtk/gtkentry.c:426
 #, fuzzy
 msgid "Activates default"
 msgstr "prémetu"
 
-#: gtk/gtkentry.c:424
+#: gtk/gtkentry.c:427
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
 msgstr ""
 
-#: gtk/gtkentry.c:430
+#: gtk/gtkentry.c:433
 msgid "Width in chars"
 msgstr "Lårdjeu è caracteres"
 
-#: gtk/gtkentry.c:431
+#: gtk/gtkentry.c:434
 msgid "Number of characters to leave space for in the entry."
 msgstr ""
 
-#: gtk/gtkentry.c:440
+#: gtk/gtkentry.c:444
+#, fuzzy
+msgid "Scroll offset"
+msgstr "Vectoriå"
+
+#: gtk/gtkentry.c:445
+msgid "Number of pixels of the entry scrolled off the screen to the left"
+msgstr ""
+
+#: gtk/gtkentry.c:454
 msgid "Cursor color"
 msgstr "Coleur do cursoe"
 
-#: gtk/gtkentry.c:441
+#: gtk/gtkentry.c:455
 msgid "Color with which to draw insertion cursor"
 msgstr "Coleur do cursoe di stitchaedje"
 
-#: gtk/gtkentry.c:3319 gtk/gtktextview.c:5186
+#: gtk/gtkentry.c:3500 gtk/gtktextview.c:5253
 msgid "Cut"
 msgstr "Côper"
 
-#: gtk/gtkentry.c:3321 gtk/gtktextview.c:5188
+#: gtk/gtkentry.c:3502 gtk/gtktextview.c:5255
 msgid "Copy"
 msgstr "Copyî"
 
-#: gtk/gtkentry.c:3323 gtk/gtktextview.c:5191
+#: gtk/gtkentry.c:3504 gtk/gtktextview.c:5258
 msgid "Paste"
 msgstr "Claper"
 
-#: gtk/gtkentry.c:3330 gtk/gtktextview.c:5198
+#: gtk/gtkentry.c:3511 gtk/gtktextview.c:5265
 msgid "Input Methods"
 msgstr "Metôdes d' intréye"
 
@@ -1414,7 +1423,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr ""
 
-#: gtk/gtknotebook.c:2162 gtk/gtknotebook.c:4535
+#: gtk/gtknotebook.c:2145 gtk/gtknotebook.c:4506
 #, c-format
 msgid "Page %u"
 msgstr "Pådje %u"
@@ -1665,11 +1674,11 @@ msgstr "Sinse do tecse"
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Since do tecse, eg del droete al hintche oudobén del hintche al droete"
 
-#: gtk/gtktexttag.c:377 gtk/gtktextview.c:569
+#: gtk/gtktexttag.c:377 gtk/gtktextview.c:570
 msgid "Justification"
 msgstr "Djustifiaedje"
 
-#: gtk/gtktexttag.c:378 gtk/gtktextview.c:570
+#: gtk/gtktexttag.c:378 gtk/gtktextview.c:571
 msgid "Left, right, or center justification"
 msgstr "Djustifiaedje a hintche, a droete oudobén å mitan"
 
@@ -1686,7 +1695,7 @@ msgstr "Moteur di lingaedje a-z eployî pol håynaedje do tecse"
 msgid "Left margin"
 msgstr "Sayî co ene feye"
 
-#: gtk/gtktexttag.c:395 gtk/gtktextview.c:579
+#: gtk/gtktexttag.c:395 gtk/gtktextview.c:580
 msgid "Width of the left margin in pixels"
 msgstr ""
 
@@ -1695,15 +1704,15 @@ msgstr ""
 msgid "Right margin"
 msgstr "tchôde marke"
 
-#: gtk/gtktexttag.c:405 gtk/gtktextview.c:589
+#: gtk/gtktexttag.c:405 gtk/gtktextview.c:590
 msgid "Width of the right margin in pixels"
 msgstr ""
 
-#: gtk/gtktexttag.c:415 gtk/gtktextview.c:598
+#: gtk/gtktexttag.c:415 gtk/gtktextview.c:599
 msgid "Indent"
 msgstr "Ritrait"
 
-#: gtk/gtktexttag.c:416 gtk/gtktextview.c:599
+#: gtk/gtktexttag.c:416 gtk/gtktextview.c:600
 msgid "Amount to indent the paragraph, in pixels"
 msgstr ""
 
@@ -1711,7 +1720,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr ""
 
-#: gtk/gtktexttag.c:437 gtk/gtktextview.c:523
+#: gtk/gtktexttag.c:437 gtk/gtktextview.c:524
 msgid "Pixels of blank space above paragraphs"
 msgstr ""
 
@@ -1719,7 +1728,7 @@ msgstr ""
 msgid "Pixels below lines"
 msgstr ""
 
-#: gtk/gtktexttag.c:447 gtk/gtktextview.c:533
+#: gtk/gtktexttag.c:447 gtk/gtktextview.c:534
 msgid "Pixels of blank space below paragraphs"
 msgstr ""
 
@@ -1727,7 +1736,7 @@ msgstr ""
 msgid "Pixels inside wrap"
 msgstr ""
 
-#: gtk/gtktexttag.c:457 gtk/gtktextview.c:543
+#: gtk/gtktexttag.c:457 gtk/gtktextview.c:544
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr ""
 
@@ -1735,17 +1744,17 @@ msgstr ""
 msgid "Wrap mode"
 msgstr "Môde côpaedje di roye"
 
-#: gtk/gtktexttag.c:484 gtk/gtktextview.c:561
+#: gtk/gtktexttag.c:484 gtk/gtktextview.c:562
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
-#: gtk/gtktexttag.c:493 gtk/gtktextview.c:608
+#: gtk/gtktexttag.c:493 gtk/gtktextview.c:609
 #, fuzzy
 msgid "Tabs"
 msgstr "Batch"
 
-#: gtk/gtktexttag.c:494 gtk/gtktextview.c:609
+#: gtk/gtktexttag.c:494 gtk/gtktextview.c:610
 #, fuzzy
 msgid "Custom tabs for this text"
 msgstr "Imådjete da vosse po dismonté:"
@@ -1878,54 +1887,54 @@ msgstr "veyåve"
 msgid "Whether this tag affects text visibility"
 msgstr ""
 
-#: gtk/gtktextview.c:502
+#: gtk/gtktextview.c:503
 msgid "Line Height"
 msgstr "Hôteu del roye"
 
-#: gtk/gtktextview.c:503
+#: gtk/gtktextview.c:504
 msgid "The height of a line"
 msgstr "Li hôteu des royes"
 
-#: gtk/gtktextview.c:512
+#: gtk/gtktextview.c:513
 msgid "Column Width"
 msgstr "Lårdjeu del colone"
 
-#: gtk/gtktextview.c:513
+#: gtk/gtktextview.c:514
 msgid "The width of a column"
 msgstr "Li lårdjeu des colones"
 
-#: gtk/gtktextview.c:522
+#: gtk/gtktextview.c:523
 msgid "Pixels Above Lines"
 msgstr ""
 
-#: gtk/gtktextview.c:532
+#: gtk/gtktextview.c:533
 msgid "Pixels Below Lines"
 msgstr ""
 
-#: gtk/gtktextview.c:542
+#: gtk/gtktextview.c:543
 msgid "Pixels Inside Wrap"
 msgstr ""
 
-#: gtk/gtktextview.c:560
+#: gtk/gtktextview.c:561
 #, fuzzy
 msgid "Wrap Mode"
 msgstr "Môde côpaedje di roye"
 
-#: gtk/gtktextview.c:578
+#: gtk/gtktextview.c:579
 #, fuzzy
 msgid "Left Margin"
 msgstr "Sayî co ene feye"
 
-#: gtk/gtktextview.c:588
+#: gtk/gtktextview.c:589
 #, fuzzy
 msgid "Right Margin"
 msgstr " &Droete "
 
-#: gtk/gtktextview.c:616
+#: gtk/gtktextview.c:617
 msgid "Cursor Visible"
 msgstr "Cursoe veyåve"
 
-#: gtk/gtktextview.c:617
+#: gtk/gtktextview.c:618
 msgid "If the insertion cursor is shown"
 msgstr ""
 

@@ -430,7 +430,7 @@ gtk.defs gtkmarshal.h gtktypebuiltins.h:          # never add deps here
 # ../configure will supress all autogeneration rules.
 $(srcdir)/stamp-gtk.defs: @REBUILD@ gtk.defs gtk-boxed.defs $(gtk_public_h_sources)
 	case @GLIB_MKENUMS@ in									\
-	   .*) glib_mkenums=`cd $(top_builddir) && pwd`/@GLIB_MKENUMS@ ;;			\
+	   .*) glib_mkenums=`pwd`/@GLIB_MKENUMS@ ;;			\
 	   *) glib_mkenums=@GLIB_MKENUMS@ ;;							\
 	esac;											\
 	$$glib_mkenums --comments ";; @comment@" \
@@ -445,7 +445,7 @@ $(srcdir)/stamp-gtk.defs: @REBUILD@ gtk.defs gtk-boxed.defs $(gtk_public_h_sourc
 	&& echo timestamp > $(@F)
 $(srcdir)/stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.list gtkmarshal.h
 	case @GLIB_GENMARSHAL@ in									\
-	   .*) glib_genmarshal=`cd $(top_builddir) && pwd`/@GLIB_GENMARSHAL@ ;;				\
+	   .*) glib_genmarshal=`pwd`/@GLIB_GENMARSHAL@ ;;				\
 	   *) glib_genmarshal=@GLIB_GENMARSHAL@ ;;							\
 	esac;												\
 	cd $(srcdir) \
@@ -455,7 +455,7 @@ $(srcdir)/stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.list gtkmarshal.h
 	&& echo timestamp > $(@F)
 $(srcdir)/gtkmarshal.c: @REBUILD@ $(srcdir)/stamp-gtkmarshal.h
 	case @GLIB_GENMARSHAL@ in									\
-	   .*) glib_genmarshal=`cd $(top_builddir) && pwd`/@GLIB_GENMARSHAL@ ;;				\
+	   .*) glib_genmarshal=`pwd`/@GLIB_GENMARSHAL@ ;;				\
 	   *) glib_genmarshal=@GLIB_GENMARSHAL@ ;;							\
 	esac;												\
 	cd $(srcdir) \
@@ -480,7 +480,7 @@ $(srcdir)/gtktypebuiltins_ids.c: @REBUILD@ maketypes.awk $(srcdir)/stamp-gtk.def
 	&& rm -f xgen-gtbic
 $(srcdir)/gtktypebuiltins_evals.c: @REBUILD@ $(gtk_public_h_sources)
 	case @GLIB_MKENUMS@ in									\
-	   .*) glib_mkenums=`cd $(top_builddir) && pwd`/@GLIB_MKENUMS@ ;;			\
+	   .*) glib_mkenums=`pwd`/@GLIB_MKENUMS@ ;;			\
 	   *) glib_mkenums=@GLIB_MKENUMS@ ;;							\
 	esac;											\
 	cd $(srcdir) \

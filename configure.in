@@ -34,7 +34,7 @@ AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 #
 GTK_MAJOR_VERSION=1
 GTK_MINOR_VERSION=3
-GTK_MICRO_VERSION=5
+GTK_MICRO_VERSION=6
 GTK_INTERFACE_AGE=0
 GTK_BINARY_AGE=0
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
@@ -655,14 +655,20 @@ if test "x$gdktarget" = "xx11"; then
   x_cflags="`$PKG_CONFIG --cflags $PANGO_PACKAGES`"
   x_extra_libs=
 
-  if $PKG_CONFIG --uninstalled $PANGO_PACKAGES; then
-      :
-  else  
-      # Sanity check for the X11 library
-      AC_CHECK_LIB(X11, XOpenDisplay, :,
+  ## Strip the .la files
+ 
+  x_libs_for_checks=""
+  for I in $x_libs ; do
+    case $I in 
+      *.la) ;;
+      *) x_libs_for_checks="$x_libs_for_checks $I" ;;
+    esac
+  done
+
+  # Sanity check for the X11 library
+  AC_CHECK_LIB(X11, XOpenDisplay, :,
             AC_MSG_ERROR([*** libX11 not found. Check 'config.log' for more details.]),
-            $x_libs)
-  fi
+            $x_libs_for_checks)
 
   if test "x$enable_shm" = "xyes"; then
     # Check for the Xext library (needed for XShm extention)
@@ -676,9 +682,8 @@ if test "x$gdktarget" = "xx11"; then
                x_extra_libs="-lXextSam -lXext"
             else
                x_extra_libs="-lXextSam"
-            fi
-            no_xext_lib=yes, $x_libs),
-        $x_libs)
+            fi, , $x_libs_for_checks),
+        $x_libs_for_checks)
   fi
 
   GDK_PIXBUF_XLIB_EXTRA_CFLAGS="$x_cflags"
@@ -693,21 +698,21 @@ if test "x$gdktarget" = "xx11"; then
       fi
       AC_DEFINE(HAVE_SHAPE_EXT),
       ,
-      $x_libs)
+      $x_libs_for_checks)
 
   # Check for XConvertCase (X11R6 specific)
 
   AC_CHECK_LIB(X11, XConvertCase,
       AC_DEFINE(HAVE_XCONVERTCASE),
       ,
-      $x_libs)
+      $x_libs_for_checks)
 
   # Check for XIM support.
 
   AC_CHECK_LIB(X11, XUnregisterIMInstantiateCallback,
 	    : ,
 	    enable_xim_inst="no",
-	    $x_libs)
+	    $x_libs_for_checks)
 
   # On Solaris, calling XRegisterIMInstantiateCallback seems to
   # cause an immediate segfault, so we disable it, unless
@@ -740,7 +745,7 @@ if test "x$gdktarget" = "xx11"; then
         AC_CHECK_LIB(X11, XkbQueryExtension,
                      AC_DEFINE(HAVE_XKB),
 	             ,
-	             $x_libs)
+	             $x_libs_for_checks)
   else
         AC_MSG_WARN(XKB support explicitly disabled)
   fi

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.2\n"
-"POT-Creation-Date: 2001-06-07 16:17+0200\n"
+"POT-Creation-Date: 2001-06-11 17:29-0400\n"
 "PO-Revision-Date: 2001-06-01 17:43GMT +0200\n"
 "Last-Translator: Vasif İsmayıloğlu MD <azerb_linux@hotmail.com>\n"
 "Language-Team: Azerbaijani Turkish <linuxaz@azerimal.net>\n"
@@ -167,12 +167,12 @@ msgstr ""
 "Rəsm yazılırkən '%s' qapadıla bilinmədi, bütün data qeyd edilməmiş ola bilər:"
 "%s"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:253
+#: gdk-pixbuf/gdk-pixbuf-loader.c:252
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "'%s' rəsm növünün inkremental yüklənməsi dəstəklənmir"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:276 gdk-pixbuf/gdk-pixbuf-loader.c:377
+#: gdk-pixbuf/gdk-pixbuf-loader.c:275 gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
@@ -198,7 +198,7 @@ msgstr "Bitməp rəsm üçün lazımi yaddaş yoxdur"
 msgid "Failure reading GIF: %s"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1343 gdk-pixbuf/io-gif.c:1502
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1352 gdk-pixbuf/io-gif.c:1511
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF faylı datası əksikdir (dəyəsən parçalanıb?)"
 
@@ -215,40 +215,40 @@ msgstr ""
 msgid "Circular table entry in GIF file"
 msgstr "GIF faylında dairəvi cədvəl girişi"
 
-#: gdk-pixbuf/io-gif.c:746 gdk-pixbuf/io-gif.c:1331 gdk-pixbuf/io-gif.c:1376
-#: gdk-pixbuf/io-gif.c:1490
+#: gdk-pixbuf/io-gif.c:746 gdk-pixbuf/io-gif.c:1340 gdk-pixbuf/io-gif.c:1385
+#: gdk-pixbuf/io-gif.c:1499
 #, fuzzy
 msgid "Not enough memory to load GIF file"
 msgstr "Bitməp rəsm üçün lazımi yaddaş yoxdur"
 
-#: gdk-pixbuf/io-gif.c:981
+#: gdk-pixbuf/io-gif.c:990
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1031
+#: gdk-pixbuf/io-gif.c:1040
 msgid "File does not appear to be a GIF file"
 msgstr "Fayl deyəsən GIF faylı deyil"
 
-#: gdk-pixbuf/io-gif.c:1043
+#: gdk-pixbuf/io-gif.c:1052
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF faylının %s buraxılışı hələ dəstəklənmir"
 
-#: gdk-pixbuf/io-gif.c:1118
+#: gdk-pixbuf/io-gif.c:1127
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1134
+#: gdk-pixbuf/io-gif.c:1143
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1169
+#: gdk-pixbuf/io-gif.c:1178
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:1398
+#: gdk-pixbuf/io-gif.c:1407
 msgid "GIF image was truncated or incomplete."
 msgstr ""
 
@@ -529,12 +529,12 @@ msgstr "Ön plan rəngi"
 msgid "Foreground color as a GdkColor"
 msgstr "Ön plan rəng GdkColor olaraq"
 
-#: gtk/gtkcellrenderertext.c:200 gtk/gtkentry.c:391 gtk/gtktexttag.c:276
-#: gtk/gtktextview.c:552
+#: gtk/gtkcellrenderertext.c:200 gtk/gtkentry.c:394 gtk/gtktexttag.c:276
+#: gtk/gtktextview.c:553
 msgid "Editable"
 msgstr "Dəyişdirilə bilən"
 
-#: gtk/gtkcellrenderertext.c:201 gtk/gtktexttag.c:277 gtk/gtktextview.c:553
+#: gtk/gtkcellrenderertext.c:201 gtk/gtktexttag.c:277 gtk/gtktextview.c:554
 msgid "Whether the text can be modified by the user"
 msgstr "Mətn harada istifadəçi tərəfindən dəyişdirilə bilər"
 
@@ -915,49 +915,49 @@ msgstr ""
 msgid "_Palette"
 msgstr "_Palet"
 
-#: gtk/gtkentry.c:381
+#: gtk/gtkentry.c:384
 msgid "Text Position"
 msgstr "Mətn Yeri"
 
-#: gtk/gtkentry.c:382
+#: gtk/gtkentry.c:385
 msgid "The current position of the insertion point"
 msgstr "Daxil etmə nöqtəsinin hazırkı yeri"
 
-#: gtk/gtkentry.c:392
+#: gtk/gtkentry.c:395
 msgid "Whether the entry contents can be edited"
 msgstr "Daxəl edilən xülasənin harda düzəldilə biləcəyi"
 
-#: gtk/gtkentry.c:399
+#: gtk/gtkentry.c:402
 msgid "Maximum length"
 msgstr "Maksimal uzunluq"
 
-#: gtk/gtkentry.c:400
+#: gtk/gtkentry.c:403
 msgid "Maximum number of characters for this entry"
 msgstr "Bu vahid üçün hökmlü maksimal xarakter miqdarı"
 
-#: gtk/gtkentry.c:408
+#: gtk/gtkentry.c:411
 msgid "Visibility"
 msgstr "Görünmə Qabiliyyəti"
 
-#: gtk/gtkentry.c:409
+#: gtk/gtkentry.c:412
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr "SƏHV \"görünməz xarakter\"i həqiqi mətn yerinə göstərər (parol modu)"
 
-#: gtk/gtkentry.c:415
+#: gtk/gtkentry.c:418
 msgid "Invisible character"
 msgstr "Görünməz xarakter"
 
-#: gtk/gtkentry.c:416
+#: gtk/gtkentry.c:419
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "Parol modunda giriləcək mətnin maskalanması üçün işlədiləcək xarakter"
 
-#: gtk/gtkentry.c:423
+#: gtk/gtkentry.c:426
 msgid "Activates default"
 msgstr "Əsasları fəallaşdırar"
 
-#: gtk/gtkentry.c:424
+#: gtk/gtkentry.c:427
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
@@ -965,35 +965,43 @@ msgstr ""
 "Enter basıldığında əsasları pəncərəciyi harda fəallaşdıraq (dialoqdakı əsas "
 "düymə kimi)."
 
-#: gtk/gtkentry.c:430
+#: gtk/gtkentry.c:433
 msgid "Width in chars"
 msgstr "Xarakter olaraq genişlik"
 
-#: gtk/gtkentry.c:431
+#: gtk/gtkentry.c:434
 msgid "Number of characters to leave space for in the entry."
 msgstr "Girişdə hər vahid üçün neçə xarakter boşluq buraxaq."
 
-#: gtk/gtkentry.c:440
+#: gtk/gtkentry.c:444
+msgid "Scroll offset"
+msgstr ""
+
+#: gtk/gtkentry.c:445
+msgid "Number of pixels of the entry scrolled off the screen to the left"
+msgstr ""
+
+#: gtk/gtkentry.c:454
 msgid "Cursor color"
 msgstr "Ox rəngi"
 
-#: gtk/gtkentry.c:441
+#: gtk/gtkentry.c:455
 msgid "Color with which to draw insertion cursor"
 msgstr "Daxil etmə oxunun rəngi"
 
-#: gtk/gtkentry.c:3319 gtk/gtktextview.c:5186
+#: gtk/gtkentry.c:3500 gtk/gtktextview.c:5253
 msgid "Cut"
 msgstr "Kəs"
 
-#: gtk/gtkentry.c:3321 gtk/gtktextview.c:5188
+#: gtk/gtkentry.c:3502 gtk/gtktextview.c:5255
 msgid "Copy"
 msgstr "Köçürt"
 
-#: gtk/gtkentry.c:3323 gtk/gtktextview.c:5191
+#: gtk/gtkentry.c:3504 gtk/gtktextview.c:5258
 msgid "Paste"
 msgstr "Yapışdır"
 
-#: gtk/gtkentry.c:3330 gtk/gtktextview.c:5198
+#: gtk/gtkentry.c:3511 gtk/gtktextview.c:5265
 msgid "Input Methods"
 msgstr "Giriş Metodları"
 
@@ -1417,7 +1425,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr ""
 
-#: gtk/gtknotebook.c:2162 gtk/gtknotebook.c:4535
+#: gtk/gtknotebook.c:2145 gtk/gtknotebook.c:4506
 #, c-format
 msgid "Page %u"
 msgstr "Səhifə %u"
@@ -1677,11 +1685,11 @@ msgstr "Mətn yönü"
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Mətn yönü, sağdan sola ya da soldan sağa kimi"
 
-#: gtk/gtktexttag.c:377 gtk/gtktextview.c:569
+#: gtk/gtktexttag.c:377 gtk/gtktextview.c:570
 msgid "Justification"
 msgstr "Sütunlaşdırma"
 
-#: gtk/gtktexttag.c:378 gtk/gtktextview.c:570
+#: gtk/gtktexttag.c:378 gtk/gtktextview.c:571
 msgid "Left, right, or center justification"
 msgstr "Sol, sağ ya da ortaya sütunlaşdırma"
 
@@ -1697,7 +1705,7 @@ msgstr "Mətn renderi dili"
 msgid "Left margin"
 msgstr "Sol kənar"
 
-#: gtk/gtktexttag.c:395 gtk/gtktextview.c:579
+#: gtk/gtktexttag.c:395 gtk/gtktextview.c:580
 msgid "Width of the left margin in pixels"
 msgstr "Piksel olaraq sol kənar"
 
@@ -1705,15 +1713,15 @@ msgstr "Piksel olaraq sol kənar"
 msgid "Right margin"
 msgstr "Sağ kənar"
 
-#: gtk/gtktexttag.c:405 gtk/gtktextview.c:589
+#: gtk/gtktexttag.c:405 gtk/gtktextview.c:590
 msgid "Width of the right margin in pixels"
 msgstr "Piksel olaraq sağ kənar"
 
-#: gtk/gtktexttag.c:415 gtk/gtktextview.c:598
+#: gtk/gtktexttag.c:415 gtk/gtktextview.c:599
 msgid "Indent"
 msgstr "İçəridən Başlama"
 
-#: gtk/gtktexttag.c:416 gtk/gtktextview.c:599
+#: gtk/gtktexttag.c:416 gtk/gtktextview.c:600
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Paraqrafın piksel olaraq içəridən başlama"
 
@@ -1721,7 +1729,7 @@ msgstr "Paraqrafın piksel olaraq içəridən başlama"
 msgid "Pixels above lines"
 msgstr "Sətirlərin üstündəki piksel"
 
-#: gtk/gtktexttag.c:437 gtk/gtktextview.c:523
+#: gtk/gtktexttag.c:437 gtk/gtktextview.c:524
 msgid "Pixels of blank space above paragraphs"
 msgstr "Parqraf üstündəki boşluğun pikseli"
 
@@ -1729,7 +1737,7 @@ msgstr "Parqraf üstündəki boşluğun pikseli"
 msgid "Pixels below lines"
 msgstr "Sətirlərin altındakı piksel"
 
-#: gtk/gtktexttag.c:447 gtk/gtktextview.c:533
+#: gtk/gtktexttag.c:447 gtk/gtktextview.c:534
 msgid "Pixels of blank space below paragraphs"
 msgstr "Parqraf altındakı boşluğun pikseli"
 
@@ -1737,7 +1745,7 @@ msgstr "Parqraf altındakı boşluğun pikseli"
 msgid "Pixels inside wrap"
 msgstr "Qırma içindəki piksel"
 
-#: gtk/gtktexttag.c:457 gtk/gtktextview.c:543
+#: gtk/gtktexttag.c:457 gtk/gtktextview.c:544
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Parqraf və sətir arasındakı boşluğun pikseli"
 
@@ -1745,16 +1753,16 @@ msgstr "Parqraf və sətir arasındakı boşluğun pikseli"
 msgid "Wrap mode"
 msgstr "Qırma modu"
 
-#: gtk/gtktexttag.c:484 gtk/gtktextview.c:561
+#: gtk/gtktexttag.c:484 gtk/gtktextview.c:562
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Sətirlər kənarlarda mı, yoxsa xarakter kənarlarında mı qırılsın"
 
-#: gtk/gtktexttag.c:493 gtk/gtktextview.c:608
+#: gtk/gtktexttag.c:493 gtk/gtktextview.c:609
 msgid "Tabs"
 msgstr "Səkmələr"
 
-#: gtk/gtktexttag.c:494 gtk/gtktextview.c:609
+#: gtk/gtktexttag.c:494 gtk/gtktextview.c:610
 msgid "Custom tabs for this text"
 msgstr "Bu mətnə xüsuso səkmələr"
 
@@ -1874,61 +1882,61 @@ msgstr "Gizlətmə dəstəsi"
 msgid "Whether this tag affects text visibility"
 msgstr "Bu təqin mətn görünməzliyinə harda tə'sir edəcəyi"
 
-#: gtk/gtktextview.c:502
+#: gtk/gtktextview.c:503
 #, fuzzy
 msgid "Line Height"
 msgstr "Yazı Növü qalınlığı"
 
-#: gtk/gtktextview.c:503
+#: gtk/gtktextview.c:504
 msgid "The height of a line"
 msgstr ""
 
-#: gtk/gtktextview.c:512
+#: gtk/gtktextview.c:513
 #, fuzzy
 msgid "Column Width"
 msgstr "Minimal En"
 
-#: gtk/gtktextview.c:513
+#: gtk/gtktextview.c:514
 #, fuzzy
 msgid "The width of a column"
 msgstr "Sütunun hazırkı eni"
 
-#: gtk/gtktextview.c:522
+#: gtk/gtktextview.c:523
 #, fuzzy
 msgid "Pixels Above Lines"
 msgstr "Sətirlərin üstündəki piksel"
 
-#: gtk/gtktextview.c:532
+#: gtk/gtktextview.c:533
 #, fuzzy
 msgid "Pixels Below Lines"
 msgstr "Sətirlərin altındakı piksel"
 
-#: gtk/gtktextview.c:542
+#: gtk/gtktextview.c:543
 #, fuzzy
 msgid "Pixels Inside Wrap"
 msgstr "Qırma içindəki piksel"
 
-#: gtk/gtktextview.c:560
+#: gtk/gtktextview.c:561
 #, fuzzy
 msgid "Wrap Mode"
 msgstr "Qırma modu"
 
-#: gtk/gtktextview.c:578
+#: gtk/gtktextview.c:579
 #, fuzzy
 msgid "Left Margin"
 msgstr "Sol kənar"
 
-#: gtk/gtktextview.c:588
+#: gtk/gtktextview.c:589
 #, fuzzy
 msgid "Right Margin"
 msgstr "Sağ kənar"
 
-#: gtk/gtktextview.c:616
+#: gtk/gtktextview.c:617
 #, fuzzy
 msgid "Cursor Visible"
 msgstr "Görünən"
 
-#: gtk/gtktextview.c:617
+#: gtk/gtktextview.c:618
 msgid "If the insertion cursor is shown"
 msgstr ""
 

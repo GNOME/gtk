@@ -1,3 +1,8 @@
+2001-06-11  Havoc Pennington  <hp@redhat.com>
+
+	* Makefile.am (stamp-gdk-pixbuf-marshal.c): glib_genmarshal
+	already includes top_builddir
+
 2001-06-08  Havoc Pennington  <hp@redhat.com>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_load_module): remove
