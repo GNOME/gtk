@@ -1,3 +1,9 @@
+2002-03-06  Manish Singh  <yosh@gimp.org>
+
+	* gdk/Makefile.am
+	* gtk/Makefile.am: rework so that only things that really need to be
+	done post install are in the hook
+
 2002-03-06  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkiconfactory.c (get_default_icons): Register 16x16 version
@@ -50,6 +56,7 @@ Tue Mar  5 22:16:58 2002  Owen Taylor  <otaylor@redhat.com>
 	suprious "no" with --disable-modules.
 
 2002-03-06  Tor Lillqvist  <tml@iki.fi>
+
 	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab,
 	gdk_pointer_ungrab): Bypass calls to the grab/ungrab functions in
 	gdkinput-win32.c, as they don't effectively do anything anyway.

@@ -173,19 +173,16 @@ EXTRA_HEADERS =
 configexecincludedir = $(libdir)/gtk-2.0/include
 #configexecinclude_DATA = gdkconfig.h
 
-if DISABLE_EXPLICIT_DEPS
-sanitize-la: 
-	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/$(gdktargetlib)
-else
-sanitize-la: 
-	@true
-endif
-
-install-exec-hook: gdkconfig.h sanitize-la
+install-exec-local: gdkconfig.h
 	$(mkinstalldirs) $(DESTDIR)$(configexecincludedir)
 	file=$(DESTDIR)$(configexecincludedir)/gdkconfig.h; \
 	if test -r $$file && cmp -s gdkconfig.h $$file; then :; \
 	else $(INSTALL_DATA) gdkconfig.h $$file; fi
+
+install-exec-hook:
+if DISABLE_EXPLICIT_DEPS
+	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/$(gdktargetlib)
+endif
 
 #note: not gdkconfig.h
 BUILT_SOURCES = stamp-gc-h @REBUILD@ gdkenumtypes.c gdkenumtypes.h
@@ -205,7 +202,7 @@ stamp-gc-h: ../config.status
 	cd .. && CONFIG_FILES= CONFIG_HEADERS= CONFIG_OTHER=gdk/gdkconfig.h ./config.status
 	echo timestamp > stamp-gc-h
 
-install-data-hook: install-ms-lib install-libtool-import-lib
+install-data-local: install-ms-lib install-libtool-import-lib
 
 uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib
 

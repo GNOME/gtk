@@ -563,7 +563,7 @@ if DISABLE_EXPLICIT_DEPS
 endif
 
 # Install a RC file for the default GTK+ theme, and key themes
-install-data-hook: install-ms-lib install-libtool-import-lib
+install-data-local: install-ms-lib install-libtool-import-lib
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0
 	$(INSTALL) $(srcdir)/gtkrc.default $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0-key
