@@ -1,3 +1,9 @@
+2001-06-08  Alex Larsson  <alexl@redhat.com>
+
+	* gtk/gtkcompat.h.in:
+	Added compat macros for all old GTK_TYPE_GDK_xxx types.
+	Fixes bug #52892
+
 2001-06-08  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkhsv.h (struct _GtkHSVClass): had GtkContainerClass as
@@ -143,6 +149,11 @@ Wed Jun  6 20:01:38 2001  Jonathan Blandford  <jrb@redhat.com>
 	* gtk/gtkscale.c (gtk_scale_class_init): Change Page Up and Page
 	Down to move visually rather than logically, since it confuses 
 	people. Add -/+ and Ctrl--/+ bindings for logical movement.
+
+2001-06-06  Alex Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkmain-fb.c (_gdk_windowing_init_check):
+	Fix up error messages.
 
 Wed Jun  6 10:34:42 2001  Owen Taylor  <otaylor@redhat.com>
 
