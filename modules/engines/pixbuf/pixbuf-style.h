@@ -20,38 +20,30 @@
  * Carsten Haitzler <raster@rasterman.com>
  */
 
-#include "pixbuf.h"
-#include "pixbuf-style.h"
-#include "pixbuf-rc-style.h"
-#include <gmodule.h>
+#include <gtk/gtkstyle.h>
 
-G_MODULE_EXPORT void
-theme_init(GtkThemeEngine * engine)
-{
-  pixbuf_rc_style_register_type (engine);
-  pixbuf_style_register_type (engine);
-}
+typedef struct _PixbufStyle PixbufStyle;
+typedef struct _PixbufStyleClass PixbufStyleClass;
 
-G_MODULE_EXPORT void
-theme_exit(void)
-{
-}
+extern GType pixbuf_type_style;
 
-G_MODULE_EXPORT GtkRcStyle *
-theme_create_rc_style (void)
-{
-  return GTK_RC_STYLE (g_object_new (PIXBUF_TYPE_RC_STYLE, NULL));  
-}
+#define PIXBUF_TYPE_STYLE              pixbuf_type_style
+#define PIXBUF_STYLE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), PIXBUF_TYPE_STYLE, PixbufStyle))
+#define PIXBUF_STYLE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), PIXBUF_TYPE_STYLE, PixbufStyleClass))
+#define PIXBUF_IS_STYLE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), PIXBUF_TYPE_STYLE))
+#define PIXBUF_IS_STYLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), PIXBUF_TYPE_STYLE))
+#define PIXBUF_STYLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), PIXBUF_TYPE_STYLE, PixbufStyleClass))
 
-/* The following function will be called by GTK+ when the module
- * is loaded and checks to see if we are compatible with the
- * version of GTK+ that loads us.
- */
-G_MODULE_EXPORT const gchar* g_module_check_init (GModule *module);
-const gchar*
-g_module_check_init (GModule *module)
+struct _PixbufStyle
 {
-  return gtk_check_version (GTK_MAJOR_VERSION,
-			    GTK_MINOR_VERSION,
-			    GTK_MICRO_VERSION - GTK_INTERFACE_AGE);
-}
+  GtkStyle parent_instance;
+};
+
+struct _PixbufStyleClass
+{
+  GtkStyleClass parent_class;
+};
+
+void pixbuf_style_register_type (GtkThemeEngine *engine);
+
+

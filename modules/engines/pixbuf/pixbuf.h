@@ -119,12 +119,6 @@ typedef enum {
   THEME_MATCH_ARROW_DIRECTION = 1 << 4
 } ThemeMatchFlags;
 
-struct _ThemeData
-{
-  guint refcount;
-  GList *img_list;
-};
-
 struct _ThemePixbuf
 {
   gchar     *filename;

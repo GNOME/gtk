@@ -1,3 +1,18 @@
+Tue Jul 18 12:13:19 2000  Owen Taylor  <otaylor@redhat.com>
+
+        Updates to work with GTK+-2.0 theme engine architecture.
+	It won't even sort of work with GTK+-1.2 any more.
+
+	* configure.in src/Makefile.am: Look for GTK+-2.0, 
+	install engine into GTK+-2.0 location.
+	
+	* src/pixbuf-style.h src/pixbuf-rc-style.[ch]: New
+	files for GtkRcStyle and GtkStyle subclasses. Parsing,
+	etc, moves to pixbuf-rc-style.[ch]
+
+	* src/pixbuf-draw.c: Chain up to parent implementation
+	when images aren't found for a certain element.
+
 Sun Jul  9 18:15:58 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in (ACLOCAL): Add -Wall for gcc.
