@@ -133,12 +133,10 @@ Creates a new file selection dialog box. By default it will contain a #GtkCList 
 
 <!-- ##### FUNCTION gtk_file_selection_set_filename ##### -->
 <para>
-Sets a default path for the file requestor. If @filename includes a directory path, then the requestor will open with that path as its current working directory.
-
 </para>
 
-@filesel: a #GtkFileSelection.
-@filename: a string to set as the default file name.
+@filesel:
+@filename:
 
 
 <!-- ##### FUNCTION gtk_file_selection_get_filename ##### -->
