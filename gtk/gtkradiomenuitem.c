@@ -365,11 +365,18 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
   gobject_class->set_property = gtk_radio_menu_item_set_property;
   gobject_class->get_property = gtk_radio_menu_item_get_property;
 
+  /**
+   * GtkRadioMenuItem:group:
+   * 
+   * The radio menu item whose group this widget belongs to.
+   * 
+   * Since: 2.8
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_GROUP,
 				   g_param_spec_object ("group",
 							P_("Group"),
-							P_("The radio menu item  whose group this widget belongs to."),
+							P_("The radio menu item whose group this widget belongs to."),
 							GTK_TYPE_RADIO_MENU_ITEM,
 							GTK_PARAM_WRITABLE));
 

@@ -1,5 +1,12 @@
 2005-04-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkradiomenuitem.c (gtk_radio_menu_item_class_init): 
+	* gtk/gtkruler.c (gtk_ruler_class_init): Add docs.
+
+	* gtk/gtktoggletoolbutton.c: Add an active property.
+
+2005-04-04  Matthias Clasen  <mclasen@redhat.com>
+
 	Allow completion popups to be wider than the entry. (#131916, 
 	Ross Burton)
 	

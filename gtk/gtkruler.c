@@ -155,6 +155,13 @@ gtk_ruler_class_init (GtkRulerClass *class)
 							G_MAXDOUBLE,
 							0.0,
 							GTK_PARAM_READWRITE));  
+  /**
+   * GtkRuler:metric:
+   *
+   * The metric used for the ruler.
+   *
+   * Since: 2.8
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_METRIC,
                                    g_param_spec_enum ("metric",
