@@ -738,7 +738,7 @@ Parses a color in the <link linkend="color-format">format</link> expected in a R
 
 @scanner: a #GtkScanner
 @color: a pointer to a #GtkColor structure in which to store the result
-@Returns: %G_TOKEN_NONE if parsing suceeded, otherwise the token
+@Returns: %G_TOKEN_NONE if parsing succeeded, otherwise the token
 that was expected but not found.
 
 
@@ -751,7 +751,7 @@ in a RC file.
 @scanner: a #GtkScanner (must be initialized for parsing an RC file)
 @state: A pointer to a #GtkStateType variable in which to
 store the result.
-@Returns: %G_TOKEN_NONE if parsing suceeded, otherwise the token
+@Returns: %G_TOKEN_NONE if parsing succeeded, otherwise the token
 that was expected but not found.
 
 
@@ -764,7 +764,7 @@ in a RC file.
 @scanner: a #GtkScanner (must be initialized for parsing an RC file)
 @priority: A pointer to #GtkPathPriorityType variable in which
 to store the result.
-@Returns: %G_TOKEN_NONE if parsing suceeded, otherwise the token
+@Returns: %G_TOKEN_NONE if parsing succeeded, otherwise the token
 that was expected but not found.
 
 

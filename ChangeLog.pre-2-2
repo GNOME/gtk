@@ -1,5 +1,16 @@
 2002-10-11  Matthias Clasen  <maclas@gmx.de>
 
+	* examples/gtkdial/gtkdial.c (gtk_dial_destroy): 
+	* docs/tutorial/gtk-tut.sgml: Prevent segfault from double destroy.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_new): Typo fix.
+
+	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_new_from_stock):
+	Clarify the docs.
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_set_accel_path): Mention 
+	gtk_menu_set_accel_group in the docs.
+
 	* gdk/x11/gdkwindow-x11.c (gdk_window_set_skip_pager_hint): 
 	* gdk/gdkdisplay.c (gdk_display_set_pointer_hooks): Fix
 	doc comments.

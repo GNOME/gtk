@@ -40,41 +40,10 @@ Functions for reference counting and memory management on pixbufs.
     responsibility to free the pixel array.
   </para>
 
-  <para>
-    As an extension to traditional reference counting, #GdkPixbuf
-    structures support defining a handler for the last unref
-    operation.  If g_object_unref() is called on a #GdkPixbuf
-    structure that has a reference count of 1, i.e. its last
-    reference, then the pixbuf's last unref handler function will be
-    called.  It is up to this function to determine whether to
-    finalize the pixbuf using gdk_pixbuf_finalize() or to just
-    continue execution.  This can be used to implement a pixbuf cache
-    efficiently; please see the programmer's documentation for
-    details.
-  </para>
-
-<!-- FIXME: link the last sentence above to the relevant section of
-     the programmer's docs.
--->
-
 <!-- ##### SECTION See_Also ##### -->
   <para>
     #GdkPixbuf, gdk_pixbuf_new_from_data().
   </para>
-
-<!-- ##### USER_FUNCTION GdkPixbufDestroyNotify ##### -->
-  <para>
-    A function of this type is responsible for freeing the pixel array
-    of a pixbuf.  The gdk_pixbuf_new_from_data() function lets you
-    pass in a pre-allocated pixel array so that a pixbuf can be
-    created from it; in this case you will need to pass in a function
-    of #GdkPixbufDestroyNotify so that the pixel data can be freed
-    when the pixbuf is finalized.
-  </para>
-
-@pixels: The pixel array of the pixbuf that is being finalized.
-@data: User closure data.
-
 
 <!-- ##### FUNCTION gdk_pixbuf_ref ##### -->
   <para>
@@ -91,5 +60,19 @@ Functions for reference counting and memory management on pixbufs.
 </para>
 
 @pixbuf: 
+
+
+<!-- ##### USER_FUNCTION GdkPixbufDestroyNotify ##### -->
+  <para>
+    A function of this type is responsible for freeing the pixel array
+    of a pixbuf.  The gdk_pixbuf_new_from_data() function lets you
+    pass in a pre-allocated pixel array so that a pixbuf can be
+    created from it; in this case you will need to pass in a function
+    of #GdkPixbufDestroyNotify so that the pixel data can be freed
+    when the pixbuf is finalized.
+  </para>
+
+@pixels: The pixel array of the pixbuf that is being finalized.
+@data: User closure data.
 
 

@@ -2,11 +2,15 @@
 GtkImageMenuItem
 
 <!-- ##### SECTION Short_Description ##### -->
-
+a menu item with an icon.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+A GtkImageMenuItem is a menu item which has an icon next to the text label.
+</para>
+<para>
+Note that the user can disable display of menu icons, so make sure to still
+fill in the text label.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

@@ -1,5 +1,16 @@
 2002-10-11  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/tmpl/gtkimagemenuitem.sgml: Add a bit.
+
+	* gtk/tmpl/gtkimage.sgml: Fix example.
+
+	* gtk/tmpl/gtkrc.sgml: Spelling fixes.
+
+	* gdk-pixbuf/tmpl/refcounting.sgml: Remove documentation for
+	non-longer-present last-unref hook.
+
+	* gtk/tmpl/gtkfilesel.sgml: s/GtkCList/GtkTreeView/.
+
 	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add some missing symbols.
 
 	* gdk/gdk-sections.txt: Add some missing symbols.

@@ -40,12 +40,12 @@ on the image, such as button clicks, place the image inside a
 <title>Handling button press events on a 
 <structname>GtkImage</structname>.</title>
 <programlisting>
-  static void
+  static gboolean
   button_press_callback (GtkWidget      *event_box, 
                          GdkEventButton *event,
                          gpointer        data)
   {
-    g_print ("Event box clicked at coordinates &percnt;d,&percnt;d\n", 
+    g_print ("Event box clicked at coordinates &percnt;f,&percnt;f\n", 
              event->x, event->y);
 
     /* Returning TRUE means we handled the event, so the signal 

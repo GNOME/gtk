@@ -341,7 +341,7 @@ set_wm_protocols (GdkWindow *window)
  * @attributes_mask: mask indicating which fields in @attributes are valid
  * 
  * Creates a new #GdkWindow using the attributes from
- * @attributes. Seep #GdkWindowAttr and #GdkWindowAttributesType for
+ * @attributes. See #GdkWindowAttr and #GdkWindowAttributesType for
  * more details.  Note: to use this on displays other than the default
  * display, @parent must be specified.
  * 

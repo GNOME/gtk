@@ -356,11 +356,11 @@ gtk_image_menu_item_new_with_mnemonic (const gchar *label)
  * stock item. Some stock ids have preprocessor macros like #GTK_STOCK_OK 
  * and #GTK_STOCK_APPLY.
  *
- * If you want this menu item to have changeable accelerators, then
- * pass in %NULL for @accel_group call gtk_menu_item_set_accel_path()
- * with an appropriate path for the menu item, then use gtk_stock_lookup()
- * too look up the standard accelerator for the stock item and
- * if one is found, call gtk_accel_map_add_entry() to register it.
+ * If you want this menu item to have changeable accelerators, then pass in
+ * %NULL for accel_group. Next call gtk_menu_item_set_accel_path() with an
+ * appropriate path for the menu item, use gtk_stock_lookup() to look up the
+ * standard accelerator for the stock item, and if one is found, call
+ * gtk_accel_map_add_entry() to register it.
  **/
 GtkWidget*
 gtk_image_menu_item_new_from_stock (const gchar      *stock_id,

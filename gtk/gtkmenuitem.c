@@ -1147,6 +1147,9 @@ _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
  * This function is basically a convenience wrapper that handles calling
  * gtk_widget_set_accel_path() with the appropriate accelerator group for
  * the menu item.
+ *
+ * Note that you do need to set an accelerator on the parent menu with
+ * gtk_menu_set_accel_group() for this to work.
  */
 void
 gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
