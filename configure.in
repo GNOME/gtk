@@ -1099,12 +1099,15 @@ if test "x$gdktarget" = "xx11"; then
           # Check for solaris
 	  use_solaris_xinerama=yes
 	  AC_CHECK_LIB(Xext, XineramaGetInfo,
-			use_solaris_xinerama=yes, use_solaris_xinerama=no)
+			use_solaris_xinerama=yes, 
+			use_solaris_xinerama=no,
+			-lXext $x_libs_for_checks)
 	  if test "x$use_solaris_xinerama" = "xyes"; then
 	      AC_CHECK_HEADER(X11/extensions/xinerama.h,
 	        [GTK_ADD_LIB(x_extra_libs,Xext)
 		AC_DEFINE(HAVE_SOLARIS_XINERAMA)
-		AC_DEFINE(HAVE_XINERAMA)], use_solaris_xinerama=no, -lXext $x_libs_for_checks)
+		AC_DEFINE(HAVE_XINERAMA)], 
+		use_solaris_xinerama=no,[#include <X11/Xlib.h>])
 	  fi	
 	  AC_MSG_CHECKING(for Xinerama support on Solaris)
 	  AC_MSG_RESULT($use_solaris_xinerama);

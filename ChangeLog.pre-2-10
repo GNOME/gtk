@@ -1,3 +1,7 @@
+Sat Sep  4 23:37:56 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* configure.in: Fix the Solaris Xinerama checks.  (#151754)
+
 Sat Sep  4 22:45:49 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentry.c (gtk_entry_backspace): Don't refuse to delete
