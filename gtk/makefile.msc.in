@@ -104,6 +104,7 @@ gtk_OBJECTS = 					\
 	gtkfilechooser.obj			\
 	gtkfilechooserdefault.obj			\
 	gtkfilechooserdialog.obj			\
+	gtkfilechooserembed.obj		\
 	gtkfilechooserentry.obj			\
 	gtkfilechooserutils.obj			\
 	gtkfilechooserwidget.obj			\

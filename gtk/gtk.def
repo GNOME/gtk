@@ -690,7 +690,6 @@ EXPORTS
 	gtk_file_chooser_get_filename
 	gtk_file_chooser_get_filenames
 	gtk_file_chooser_get_filter
-	gtk_file_chooser_get_folder_mode
 	gtk_file_chooser_get_local_only
 	gtk_file_chooser_get_preview_filename
 	gtk_file_chooser_get_preview_uri
@@ -716,7 +715,6 @@ EXPORTS
 	gtk_file_chooser_set_extra_widget
 	gtk_file_chooser_set_filename
 	gtk_file_chooser_set_filter
-	gtk_file_chooser_set_folder_mode
 	gtk_file_chooser_set_local_only
 	gtk_file_chooser_set_preview_widget
 	gtk_file_chooser_set_preview_widget_active
@@ -773,13 +771,13 @@ EXPORTS
 	gtk_file_selection_set_filename
 	gtk_file_selection_set_select_multiple
 	gtk_file_selection_show_fileop_buttons
-	gtk_file_system_add_bookmark
 	gtk_file_system_error_quark
 	gtk_file_system_filename_to_path
 	gtk_file_system_get_folder
 	gtk_file_system_get_parent
 	gtk_file_system_get_type
 	gtk_file_system_get_volume_for_path
+	gtk_file_system_insert_bookmark
 	gtk_file_system_list_bookmarks
 	gtk_file_system_list_volumes
 	gtk_file_system_make_path

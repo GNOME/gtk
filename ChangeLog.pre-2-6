@@ -1,5 +1,14 @@
 2004-02-28  Hans Breuer  <hans@breuer.org>
 
+	* gtk/gtkfilesystemwin32.c : adapt to add -> insert_bookmark
+	change. Also merged some crossplatform code from 
+	gtkfilesystemunix.c
+	* gtk/gtk.def : updated externals
+
+	* gtk/makefile.msc.in : added gtkfilechooserembed.obj
+
+2004-02-28  Hans Breuer  <hans@breuer.org>
+
 	* gdk/win32/gdkdnd-win32.c : set current_dest_drag to NULL
 	when destroying, fixes bug #120007. Also removed the mirrored
 	ref counting for deprecated gdk_drag_context_<ref|unref>()

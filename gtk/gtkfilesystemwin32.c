@@ -145,8 +145,9 @@ static GdkPixbuf *gtk_file_system_win32_render_icon (GtkFileSystem     *file_sys
                                                      gint               pixel_size,
                                                      GError           **error);
 
-static gboolean       gtk_file_system_win32_add_bookmark     (GtkFileSystem            *file_system,
+static gboolean       gtk_file_system_win32_insert_bookmark  (GtkFileSystem            *file_system,
 							      const GtkFilePath        *path,
+							      gint               position,
 							      GError                  **error);
 static gboolean       gtk_file_system_win32_remove_bookmark  (GtkFileSystem            *file_system,
 							      const GtkFilePath        *path,
@@ -266,7 +267,7 @@ gtk_file_system_win32_iface_init (GtkFileSystemIface *iface)
   iface->uri_to_path = gtk_file_system_win32_uri_to_path;
   iface->filename_to_path = gtk_file_system_win32_filename_to_path;
   iface->render_icon = gtk_file_system_win32_render_icon;
-  iface->add_bookmark = gtk_file_system_win32_add_bookmark;
+  iface->insert_bookmark = gtk_file_system_win32_insert_bookmark;
   iface->remove_bookmark = gtk_file_system_win32_remove_bookmark;
   iface->list_bookmarks = gtk_file_system_win32_list_bookmarks;
 }
@@ -507,14 +508,15 @@ gtk_file_system_win32_make_path (GtkFileSystem     *file_system,
 			         const gchar       *display_name,
 			         GError           **error)
 {
-  gchar *base_filename;
+  const char *base_filename;
   gchar *filename;
   gchar *full_filename;
   GError *tmp_error = NULL;
   GtkFilePath *result;
   
-  base_filename = filename_from_path (base_path);
+  base_filename = gtk_file_path_get_string (base_path);
   g_return_val_if_fail (base_filename != NULL, NULL);
+  g_return_val_if_fail (g_path_is_absolute (base_filename), NULL);
 
   filename = g_filename_from_utf8 (display_name, -1, NULL, NULL, &tmp_error);
   if (!filename)
@@ -526,14 +528,12 @@ gtk_file_system_win32_make_path (GtkFileSystem     *file_system,
 		   tmp_error->message);
       
       g_error_free (tmp_error);
-      g_free (base_filename);
 
       return NULL;
     }
     
   full_filename = g_build_filename (base_filename, filename, NULL);
   result = filename_to_path (full_filename);
-  g_free (base_filename);
   g_free (filename);
   g_free (full_filename);
   
@@ -621,12 +621,13 @@ gtk_file_system_win32_parse (GtkFileSystem     *file_system,
 			     gchar            **file_part,
 			     GError           **error)
 {
-  char *base_filename;
+  const char *base_filename;
   gchar *last_slash;
   gboolean result = FALSE;
 
-  base_filename = filename_from_path (base_path);
+  base_filename = gtk_file_path_get_string (base_path);
   g_return_val_if_fail (base_filename != NULL, FALSE);
+  g_return_val_if_fail (g_path_is_absolute (base_filename), FALSE);
   
   last_slash = strrchr (str, G_DIR_SEPARATOR);
   if (!last_slash)
@@ -677,8 +678,6 @@ gtk_file_system_win32_parse (GtkFileSystem     *file_system,
 	}
     }
 
-  g_free (base_filename);
-  
   return result;
 }
 
@@ -718,7 +717,8 @@ static gboolean
 bookmarks_serialize (GSList  **bookmarks,
                      gchar    *uri,
                      gboolean  add,
-		     GError  **error)
+                     gint      position,
+                     GError  **error)
 {
   gchar   *filename;
   gboolean ok = TRUE;
@@ -752,20 +752,35 @@ bookmarks_serialize (GSList  **bookmarks,
 	}
       if (ok && (f = fopen (filename, "wb")) != NULL)
         {
+	  if (add)
+	    {
+	      /* g_slist_insert() and our insert semantics are 
+	       * compatible, but maybe we should check for 
+	       * positon > length ?
+	       * 
+	       */
+	      if (!g_slist_find_custom (list, uri, strcmp))
+                list = g_slist_insert (list, g_strdup (uri), position);
+	      else
+	        {
+		  g_set_error (error,
+			       GTK_FILE_SYSTEM_ERROR,
+			       GTK_FILE_SYSTEM_ERROR_ALREADY_EXISTS,
+			       "%s already exists in the bookmarks list",
+			       uri);
+		  ok = FALSE;
+		}
+	    }
 	  for (entry = list; entry != NULL; entry = entry->next)
 	    {
 	      gchar *line = entry->data;
 
-	      if (strcmp (line, uri) != 0)
+              /* to remove the given uri */
+	      if (!add && strcmp (line, uri) != 0)
 	        {
 	          fputs (line, f);
 		  fputs ("\n", f);
 		}
-	    }
-	  if (add)
-	    {
-	      fputs (uri, f);
-	      fputs ("\n", f);
 	    }
 	  fclose (f);
 	}
@@ -947,12 +962,15 @@ gtk_file_system_win32_render_icon (GtkFileSystem     *file_system,
 static GSList *_bookmarks = NULL;
 
 static gboolean
-gtk_file_system_win32_add_bookmark (GtkFileSystem     *file_system,
+gtk_file_system_win32_insert_bookmark (GtkFileSystem     *file_system,
 				    const GtkFilePath *path,
+				    gint               position,
 				    GError           **error)
 {
   gchar *uri = gtk_file_system_win32_path_to_uri (file_system, path);
-  gboolean ret = bookmarks_serialize (&_bookmarks, uri, TRUE, error);
+  gboolean ret = bookmarks_serialize (&_bookmarks, uri, TRUE, position, error);
+  if (ret)
+    g_signal_emit_by_name (file_system, "bookmarks-changed", 0);
   g_free (uri);
   return ret;
                                
@@ -964,7 +982,9 @@ gtk_file_system_win32_remove_bookmark (GtkFileSystem     *file_system,
 				       GError           **error)
 {
   gchar *uri = gtk_file_system_win32_path_to_uri (file_system, path);
-  gboolean ret = bookmarks_serialize (&_bookmarks, uri, FALSE, error);
+  gboolean ret = bookmarks_serialize (&_bookmarks, uri, FALSE, 0, error);
+  if (ret)
+    g_signal_emit_by_name (file_system, "bookmarks-changed", 0);
   g_free (uri);
   return ret;
 }
@@ -976,7 +996,7 @@ gtk_file_system_win32_list_bookmarks (GtkFileSystem *file_system)
   GSList *entry;
 
 
-  if (bookmarks_serialize (&_bookmarks, "", FALSE, NULL))
+  if (bookmarks_serialize (&_bookmarks, "", FALSE, 0, NULL))
     {
       for (entry = _bookmarks; entry != NULL; entry = entry->next)
         {
