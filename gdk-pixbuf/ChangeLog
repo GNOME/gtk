@@ -1,3 +1,9 @@
+2005-01-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* pixops/pixops.c (bilinear_box_make_weights): Really fix the
+	math to make the vectors sum up to 1, making GDK_INTERP_HYPER
+	work again. (#162703, Dennis Nezic)
+
 2004-12-27  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-animation.c (gdk_pixbuf_animation_new_from_file) 

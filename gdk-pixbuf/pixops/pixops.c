@@ -1313,7 +1313,7 @@ static void
 bilinear_box_make_weights (PixopsFilterDimension *dim,
 			   double                 scale)
 {
-  int n = ceil (1/scale + 2.0);
+  int n = ceil (1/scale + 3.0);
   double *pixel_weights = g_new (double, SUBSAMPLE * n);
   double w;
   int offset, i;
@@ -1330,7 +1330,7 @@ bilinear_box_make_weights (PixopsFilterDimension *dim,
       for (i = 0; i < n; i++)
         {
           w  = linear_box_half (0.5 + i - a, 0.5 + i - x);
-          w += linear_box_half (0.5 + x - i, 0.5 + a - i);
+          w += linear_box_half (1.5 + x - i, 1.5 + a - i);
       
           *(pixel_weights++) = w * scale;
         }
