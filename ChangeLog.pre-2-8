@@ -1,3 +1,33 @@
+Tue Oct 20 14:53:28 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c: Always send "drag_leave" to dests
+	without GTK_DEST_DEFAULT_MOTION. 
+
+Tue Oct 20 11:55:24 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_event_translate): Handle DestroyNotify
+	on destroyed windows so we clear the XID table properly.
+	Finish up restructure of return value handling that
+	was half-done before.
+
+Tue Oct 20 12:57:10 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_send_clientmessage_to_all): Hunt
+	the window tree more comprehensively, so that we find
+	client windows hidden under non-toplevels.
+
+Tue Oct 20 12:43:04 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkselection.c (gtk_selection_data_set): 
+	Maintain the null-termintation guarantee, even when 
+	data = NULL, length = 0. (Warn on data = NULL, 
+	length > 0)
+
+Mon Oct 19 16:41:44 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.h (struct _GtkWidgetClass): Add in coordinates
+	into function prototype for drag_data_received. 
+
 Tue, 20 Oct 1998 11:33:10 +0200 Paolo Molaro <lupus@debian.org>
 
 	* gtk/gtkdnd.h,gtk/gtkdnd.c: delete is a reserved word in c++.

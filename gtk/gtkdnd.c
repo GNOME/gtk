@@ -1181,15 +1181,16 @@ gtk_drag_dest_leave (GtkWidget      *widget,
       
       return;
     }
-  else if (site->have_drag)
+  else
     {
+      if (!(site->flags & GTK_DEST_DEFAULT_MOTION) || site->have_drag)
+	gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_leave",
+				 context, time);
+      
       site->have_drag = FALSE;
       
       if (site->flags & GTK_DEST_DEFAULT_HIGHLIGHT)
 	gtk_drag_unhighlight (widget);
-
-      gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_leave",
-			       context, time);
     }
 }
 
