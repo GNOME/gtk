@@ -151,13 +151,13 @@ void gtk_selection_remove_all      (GtkWidget *widget);
 
 gboolean gtk_selection_clear		  (GtkWidget 	     *widget,
 					   GdkEventSelection *event);
-gboolean gtk_selection_request		  (GtkWidget  	     *widget,
+gboolean _gtk_selection_request		  (GtkWidget  	     *widget,
 					   GdkEventSelection *event);
-gboolean gtk_selection_incr_event	  (GdkWindow         *window,
+gboolean _gtk_selection_incr_event	  (GdkWindow         *window,
 					   GdkEventProperty  *event);
-gboolean gtk_selection_notify		  (GtkWidget         *widget,
+gboolean _gtk_selection_notify		  (GtkWidget         *widget,
 					   GdkEventSelection *event);
-gboolean gtk_selection_property_notify	  (GtkWidget         *widget,
+gboolean _gtk_selection_property_notify	  (GtkWidget         *widget,
 					   GdkEventProperty  *event);
 
 GType             gtk_selection_data_get_type (void);

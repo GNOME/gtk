@@ -1,3 +1,14 @@
+Mon Sep 23 19:49:11 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkselection.[ch] gtk/gtkwidget.c gtk/gtkmain.c:
+	Privatize gtk_selection_request, gtk_selection_incr_event
+	gtk_selection_notify, gtk_selection_property_notify.
+	Add doc note about future deprecation of gtk_selection_clear()
+	which. (#85683)
+
+	* gtk/gtkoldeditable.c (gtk_old_editable_selection_clear):
+	Chain up, rather than calling gtk_selection_clear().
+
 Mon Sep 23 18:53:35 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkprogressbar.c (gtk_progress_bar_set_text): 

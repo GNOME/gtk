@@ -366,10 +366,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->map_event = NULL;
   klass->unmap_event = NULL;
   klass->window_state_event = NULL;
-  klass->property_notify_event = gtk_selection_property_notify;
+  klass->property_notify_event = _gtk_selection_property_notify;
   klass->selection_clear_event = gtk_selection_clear;
-  klass->selection_request_event = gtk_selection_request;
-  klass->selection_notify_event = gtk_selection_notify;
+  klass->selection_request_event = _gtk_selection_request;
+  klass->selection_notify_event = _gtk_selection_notify;
   klass->selection_received = NULL;
   klass->proximity_in_event = NULL;
   klass->proximity_out_event = NULL;

@@ -1008,15 +1008,19 @@ gtk_selection_init (void)
   initialize = FALSE;
 }
 
-/*************************************************************
+/**
  * gtk_selection_clear:
- *     Handler for "selection_clear_event"
- *   arguments:
- *     widget:
- *     event:
- *   results:
- *************************************************************/
-
+ * @widget: a #GtkWidget
+ * @event: the event
+ * 
+ * The default handler for the GtkWidget::selection_clear_event
+ * signal. Instead of calling this function, chain up from
+ * your selection_clear_event handler. Calling this function
+ * from any other context is illegal. This function will
+ * be deprecated in future versions of GTK+.
+ * 
+ * Return value: %TRUE if the event was handled, otherwise false
+ **/
 gboolean
 gtk_selection_clear (GtkWidget         *widget,
 		     GdkEventSelection *event)
@@ -1052,7 +1056,7 @@ gtk_selection_clear (GtkWidget         *widget,
 
 
 /*************************************************************
- * gtk_selection_request:
+ * _gtk_selection_request:
  *     Handler for "selection_request_event" 
  *   arguments:
  *     widget:
@@ -1061,8 +1065,8 @@ gtk_selection_clear (GtkWidget         *widget,
  *************************************************************/
 
 gboolean
-gtk_selection_request (GtkWidget *widget,
-		       GdkEventSelection *event)
+_gtk_selection_request (GtkWidget *widget,
+			GdkEventSelection *event)
 {
   GtkIncrInfo *info;
   GList *tmp_list;
@@ -1275,7 +1279,7 @@ gtk_selection_request (GtkWidget *widget,
 }
 
 /*************************************************************
- * gtk_selection_incr_event:
+ * _gtk_selection_incr_event:
  *     Called whenever an PropertyNotify event occurs for an 
  *     GdkWindow with user_data == NULL. These will be notifications
  *     that a window we are sending the selection to via the
@@ -1290,8 +1294,8 @@ gtk_selection_request (GtkWidget *widget,
  *************************************************************/
 
 gboolean
-gtk_selection_incr_event (GdkWindow	   *window,
-			  GdkEventProperty *event)
+_gtk_selection_incr_event (GdkWindow	   *window,
+			   GdkEventProperty *event)
 {
   GList *tmp_list;
   GtkIncrInfo *info = NULL;
@@ -1451,7 +1455,7 @@ gtk_selection_incr_timeout (GtkIncrInfo *info)
 }
 
 /*************************************************************
- * gtk_selection_notify:
+ * _gtk_selection_notify:
  *     Handler for "selection_notify_event" signals on windows
  *     where a retrieval is currently in process. The selection
  *     owner has responded to our conversion request.
@@ -1464,8 +1468,8 @@ gtk_selection_incr_timeout (GtkIncrInfo *info)
  *************************************************************/
 
 gboolean
-gtk_selection_notify (GtkWidget	       *widget,
-		      GdkEventSelection *event)
+_gtk_selection_notify (GtkWidget	       *widget,
+		       GdkEventSelection *event)
 {
   GList *tmp_list;
   GtkRetrievalInfo *info = NULL;
@@ -1540,7 +1544,7 @@ gtk_selection_notify (GtkWidget	       *widget,
 }
 
 /*************************************************************
- * gtk_selection_property_notify:
+ * _gtk_selection_property_notify:
  *     Handler for "property_notify_event" signals on windows
  *     where a retrieval is currently in process. The selection
  *     owner has added more data.
@@ -1553,8 +1557,8 @@ gtk_selection_notify (GtkWidget	       *widget,
  *************************************************************/
 
 gboolean
-gtk_selection_property_notify (GtkWidget	*widget,
-			       GdkEventProperty *event)
+_gtk_selection_property_notify (GtkWidget	*widget,
+				GdkEventProperty *event)
 {
   GList *tmp_list;
   GtkRetrievalInfo *info = NULL;

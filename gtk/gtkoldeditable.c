@@ -553,7 +553,7 @@ gtk_old_editable_selection_clear (GtkWidget         *widget,
   
   /* Let the selection handling code know that the selection
    * has been changed, since we've overriden the default handler */
-  if (!gtk_selection_clear (widget, event))
+  if (!parent_class->selection_clear_event (widget, event))
     return FALSE;
   
   if (old_editable->has_selection)

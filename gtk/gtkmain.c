@@ -1385,8 +1385,8 @@ gtk_main_do_event (GdkEvent *event)
 	   * them specially
 	   */
       if (event->type == GDK_PROPERTY_NOTIFY)
-	gtk_selection_incr_event (event->any.window,
-				  &event->property);
+	_gtk_selection_incr_event (event->any.window,
+				   &event->property);
       else if (event->type == GDK_SETTING)
 	_gtk_settings_handle_event (&event->setting);
 

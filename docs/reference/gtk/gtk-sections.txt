@@ -4020,12 +4020,12 @@ gtk_selection_data_get_text
 gtk_selection_data_get_targets
 gtk_selection_data_targets_include_text
 gtk_selection_remove_all
+gtk_selection_clear
 gtk_selection_data_copy
 gtk_selection_data_free
 <SUBSECTION Standard>
 GTK_TYPE_SELECTION_DATA
 <SUBSECTION Private>
-gtk_selection_clear
 gtk_selection_incr_event
 gtk_selection_notify
 gtk_selection_property_notify
