@@ -252,12 +252,22 @@ setup_system_settings (GtkStyle * style)
 
   if (!win95) {
     if (SystemParametersInfo (SPI_GETMENUSHOWDELAY, 0, &menu_delay, 0)) {
-      g_object_set (G_OBJECT (settings), "gtk-menu-popup-delay",
-		    0, NULL);
-      g_object_set (G_OBJECT (settings), "gtk-menu-popdown-delay",
-		    menu_delay, NULL);
-      g_object_set (G_OBJECT (settings), "gtk-menu-popup-delay",
-		    menu_delay, NULL);
+	  GObjectClass * klazz = G_OBJECT_GET_CLASS(G_OBJECT(settings));
+
+	  if (klazz) {
+		if (g_object_class_find_property (klazz, "gtk-menu-bar-popup-delay")) {
+	      g_object_set (G_OBJECT (settings), "gtk-menu-bar-popup-delay",
+					    0, NULL);
+		}
+		if (g_object_class_find_property (klazz, "gtk-menu-popup-delay")) {
+	      g_object_set (G_OBJECT (settings), "gtk-menu-popup-delay",
+					    menu_delay, NULL);
+		}
+		if (g_object_class_find_property (klazz, "gtk-menu-popdown-delay")) {
+	      g_object_set (G_OBJECT (settings), "gtk-menu-popdown-delay",
+					    menu_delay, NULL);
+		}
+  	  }
     }
   }
 
@@ -268,6 +278,7 @@ setup_system_settings (GtkStyle * style)
 
   g_object_set (G_OBJECT (settings), "gtk-icon-sizes",
 		"gtk-menu=10,10 : gtk-button=16,16 : gtk-small-toolbar=16,16 : gtk-large-toolbar=16,16 : gtk-dialog=32,32 : gtk-dnd=32,32", NULL);
+
 #endif
 
   /*

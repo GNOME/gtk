@@ -1,3 +1,8 @@
+2003-10-01  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Only set the delays if the param is installed. Silly gtk - 
+	installing those 3 params only in the menus...
+
 2003-09-25  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/wimp_style.c: Set a delay on popdown menus
