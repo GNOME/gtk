@@ -17,10 +17,27 @@
 #include <errno.h>
 #include "demo-common.h"
 
-static GtkWidget *window = NULL;
-static GdkPixbufLoader *pixbuf_loader = NULL;
-static guint load_timeout = 0;
-static FILE* image_stream = NULL;
+
+typedef struct {
+  GdkPixbufLoader *pixbuf_loader;
+  guint load_timeout;
+  FILE* image_stream;
+} ImageVarPerScr;
+
+static ImageVarPerScr * get_image_var (GtkWidget *widget,
+				       gchar	 *key)
+{
+  ImageVarPerScr *tmp = 
+    g_object_get_data (G_OBJECT (gtk_widget_get_screen (widget)),
+		       key);
+  if (tmp)
+    return tmp;
+  
+  tmp = g_new0 (ImageVarPerScr, 1);
+  g_object_set_data (G_OBJECT (gtk_widget_get_screen (widget)),
+		     key, tmp);
+  return tmp;
+}
 
 static void
 progressive_prepared_callback (GdkPixbufLoader *loader,
@@ -66,24 +83,24 @@ static void progressive_updated_callback (GdkPixbufLoader *loader,
 static gint
 progressive_timeout (gpointer data)
 {
-  GtkWidget *image;
+  GtkWidget *image = GTK_WIDGET (data);
+  GtkWidget *window = get_cached_widget (image, "do_images");
+  ImageVarPerScr *i = get_image_var (window, "do_images_var");
 
-  image = GTK_WIDGET (data);
-  
   /* This shows off fully-paranoid error handling, so looks scary.
    * You could factor out the error handling code into a nice separate
    * function to make things nicer.
    */
   
-  if (image_stream)
+  if (i->image_stream)
     {
       size_t bytes_read;
       guchar buf[256];
       GError *error = NULL;
       
-      bytes_read = fread (buf, 1, 256, image_stream);
+      bytes_read = fread (buf, 1, 256, i->image_stream);
 
-      if (ferror (image_stream))
+      if (ferror (i->image_stream))
 	{
 	  GtkWidget *dialog;
 	  
@@ -97,17 +114,17 @@ progressive_timeout (gpointer data)
 	  g_signal_connect (dialog, "response",
 			    G_CALLBACK (gtk_widget_destroy), NULL);
 
-	  fclose (image_stream);
-	  image_stream = NULL;
+	  fclose (i->image_stream);
+	  i->image_stream = NULL;
 
 	  gtk_widget_show (dialog);
 	  
-	  load_timeout = 0;
+	  i->load_timeout = 0;
 
 	  return FALSE; /* uninstall the timeout */
 	}
 
-      if (!gdk_pixbuf_loader_write (pixbuf_loader,
+      if (!gdk_pixbuf_loader_write (i->pixbuf_loader,
 				    buf, bytes_read,
 				    &error))
 	{
@@ -125,27 +142,27 @@ progressive_timeout (gpointer data)
 	  g_signal_connect (dialog, "response",
 			    G_CALLBACK (gtk_widget_destroy), NULL);
 
-	  fclose (image_stream);
-	  image_stream = NULL;
+	  fclose (i->image_stream);
+	  i->image_stream = NULL;
 	  
 	  gtk_widget_show (dialog);
 
-	  load_timeout = 0;
+	  i->load_timeout = 0;
 
 	  return FALSE; /* uninstall the timeout */
 	}
 
-      if (feof (image_stream))
+      if (feof (i->image_stream))
 	{
-	  fclose (image_stream);
-	  image_stream = NULL;
+	  fclose (i->image_stream);
+	  i->image_stream = NULL;
 
 	  /* Errors can happen on close, e.g. if the image
 	   * file was truncated we'll know on close that
 	   * it was incomplete.
 	   */
 	  error = NULL;
-	  if (!gdk_pixbuf_loader_close (pixbuf_loader,
+	  if (!gdk_pixbuf_loader_close (i->pixbuf_loader,
 					&error))
 	    {
 	      GtkWidget *dialog;
@@ -164,16 +181,16 @@ progressive_timeout (gpointer data)
 	      
 	      gtk_widget_show (dialog);
 
-	      g_object_unref (G_OBJECT (pixbuf_loader));
-	      pixbuf_loader = NULL;
+	      g_object_unref (G_OBJECT (i->pixbuf_loader));
+	      i->pixbuf_loader = NULL;
 	      
-	      load_timeout = 0;
+	      i->load_timeout = 0;
 	      
 	      return FALSE; /* uninstall the timeout */
 	    }
 	  
-	  g_object_unref (G_OBJECT (pixbuf_loader));
-	  pixbuf_loader = NULL;
+	  g_object_unref (G_OBJECT (i->pixbuf_loader));
+	  i->pixbuf_loader = NULL;
 	}
     }
   else
@@ -194,15 +211,15 @@ progressive_timeout (gpointer data)
 	}
       else
 	{
-	  image_stream = fopen (filename, "r");
+	  i->image_stream = fopen (filename, "r");
 	  g_free (filename);
 
-	  if (!image_stream)
+	  if (!i->image_stream)
 	    error_message = g_strdup_printf ("Unable to open image file 'alphatest.png': %s",
 					     g_strerror (errno));
 	}
 
-      if (image_stream == NULL)
+      if (i->image_stream == NULL)
 	{
 	  GtkWidget *dialog;
 	  
@@ -218,24 +235,24 @@ progressive_timeout (gpointer data)
 	  
 	  gtk_widget_show (dialog);
 
-	  load_timeout = 0;
+	  i->load_timeout = 0;
 
 	  return FALSE; /* uninstall the timeout */
 	}
 
-      if (pixbuf_loader)
+      if (i->pixbuf_loader)
 	{
-	  gdk_pixbuf_loader_close (pixbuf_loader, NULL);
-	  g_object_unref (G_OBJECT (pixbuf_loader));
-	  pixbuf_loader = NULL;
+	  gdk_pixbuf_loader_close (i->pixbuf_loader, NULL);
+	  g_object_unref (G_OBJECT (i->pixbuf_loader));
+	  i->pixbuf_loader = NULL;
 	}
       
-      pixbuf_loader = gdk_pixbuf_loader_new ();
+      i->pixbuf_loader = gdk_pixbuf_loader_new ();
       
-      g_signal_connect (G_OBJECT (pixbuf_loader), "area_prepared",
+      g_signal_connect (G_OBJECT (i->pixbuf_loader), "area_prepared",
 			G_CALLBACK (progressive_prepared_callback), image);
       
-      g_signal_connect (G_OBJECT (pixbuf_loader), "area_updated",
+      g_signal_connect (G_OBJECT (i->pixbuf_loader), "area_updated",
 			G_CALLBACK (progressive_updated_callback), image);
     }
 
@@ -253,35 +270,42 @@ start_progressive_loading (GtkWidget *image)
    * The timeout simply simulates a slow data source by inserting
    * pauses in the reading process.
    */
-  load_timeout = g_timeout_add (150,
-				progressive_timeout,
-				image);
+  ImageVarPerScr *i = get_image_var (image, "do_images_var");
+  i->load_timeout = g_timeout_add (150,
+				   progressive_timeout,
+				   image);
 }
 
 static void
 cleanup_callback (GtkObject *object,
 		  gpointer   data)
 {
-  if (load_timeout)
+  ImageVarPerScr *i = get_image_var (GTK_WIDGET (object), "do_images_var");
+  g_object_set_data (G_OBJECT (gtk_widget_get_screen (GTK_WIDGET (object))),
+		     "do_images_var", NULL);
+
+  if (i->load_timeout)
     {
-      g_source_remove (load_timeout);
-      load_timeout = 0;
+      g_source_remove (i->load_timeout);
+      i->load_timeout = 0;
     }
   
-  if (pixbuf_loader)
+  if (i->pixbuf_loader)
     {
-      gdk_pixbuf_loader_close (pixbuf_loader, NULL);
-      g_object_unref (G_OBJECT (pixbuf_loader));
-      pixbuf_loader = NULL;
+      gdk_pixbuf_loader_close (i->pixbuf_loader, NULL);
+      g_object_unref (G_OBJECT (i->pixbuf_loader));
+      i->pixbuf_loader = NULL;
     }
 
-  if (image_stream)
-    fclose (image_stream);
-  image_stream = NULL;
+  if (i->image_stream)
+    fclose (i->image_stream);
+  i->image_stream = NULL;
+
+  g_free (i);
 }
 
 GtkWidget *
-do_images (void)
+do_images (GtkWidget *do_widget)
 {
   GtkWidget *frame;
   GtkWidget *vbox;
@@ -291,16 +315,20 @@ do_images (void)
   GdkPixbuf *pixbuf;
   GError *error = NULL;
   char *filename;
-  
+  GtkWidget *window = get_cached_widget (do_widget, "do_images");
+
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window), 
+			     gtk_widget_get_screen (do_widget));
+      cache_widget (window, "do_images");
       gtk_window_set_title (GTK_WINDOW (window), "Images");
 
       g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
-      g_signal_connect (window, "destroy",
 			G_CALLBACK (cleanup_callback), NULL);
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (remove_cached_widget), "do_images");
 
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
@@ -351,7 +379,6 @@ do_images (void)
 					   "Unable to open image file 'gtk-logo-rgb.gif': %s",
 					   error->message);
 	  g_error_free (error);
-	  
 	  g_signal_connect (dialog, "response",
 			    G_CALLBACK (gtk_widget_destroy), NULL);
 	  

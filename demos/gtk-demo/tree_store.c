@@ -9,8 +9,7 @@
  */
 
 #include <gtk/gtk.h>
-
-static GtkWidget *window = NULL;
+#include "demo-common.h"
 
 /* TreeItem structure */
 typedef struct _TreeItem TreeItem;
@@ -385,8 +384,10 @@ add_columns (GtkTreeView *treeview)
 }
 
 GtkWidget *
-do_tree_store (void)
+do_tree_store (GtkWidget *do_widget)
 {
+  GtkWidget *window = get_cached_widget (do_widget, "do_tree_store");
+  
   if (!window)
     {
       GtkWidget *vbox;
@@ -396,9 +397,13 @@ do_tree_store (void)
 
       /* create window, etc */
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window), 
+			     gtk_widget_get_screen (do_widget));
+      cache_widget (window, "do_tree_store");
+      
       gtk_window_set_title (GTK_WINDOW (window), "Card planning sheet");
       g_signal_connect (G_OBJECT (window), "destroy", 
-			G_CALLBACK (gtk_widget_destroyed), &window);
+			G_CALLBACK (remove_cached_widget), "do_tree_store");
 
       vbox = gtk_vbox_new (FALSE, 8);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);

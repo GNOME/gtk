@@ -102,8 +102,8 @@ main (int argc, char *argv[])
   gboolean correct_second_display = FALSE;
 
   gtk_init (&argc, &argv);
-
-  /* Get the second display */
+  
+  /* Get the second display information */
 
   dialog = gtk_dialog_new_with_buttons ("Second Display Selection",
 					NULL,
@@ -164,8 +164,6 @@ main (int argc, char *argv[])
   make_selection_dialog (NULL, entry2, entry);
   /* for selected display */
   make_selection_dialog (scr2, entry, entry2);
-
-
   gtk_main ();
 
   return 0;

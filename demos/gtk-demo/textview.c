@@ -21,7 +21,8 @@ static char gray50_bits[] = {
 };
 
 static void
-create_tags (GtkTextBuffer *buffer)
+create_tags (GdkScreen *screen,
+	     GtkTextBuffer *buffer)
 {
   GdkBitmap *stipple;
 
@@ -74,7 +75,7 @@ create_tags (GtkTextBuffer *buffer)
   gtk_text_buffer_create_tag (buffer, "red_background",
 			      "background", "red", NULL);
 
-  stipple = gdk_bitmap_create_from_data (NULL,
+  stipple = gdk_bitmap_create_from_data (gdk_screen_get_root_window (screen),
 					 gray50_bits, gray50_width,
 					 gray50_height);
   
@@ -448,9 +449,9 @@ attach_widgets (GtkTextView *text_view)
 }
 
 GtkWidget *
-do_textview (void)
+do_textview (GtkWidget *do_widget)
 {
-  static GtkWidget *window = NULL;
+  GtkWidget *window = get_cached_widget (do_widget, "do_textview");
 
   if (!window)
     {
@@ -461,11 +462,16 @@ do_textview (void)
       GtkTextBuffer *buffer;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      
+      gtk_window_set_screen (GTK_WINDOW (window), 
+			     gtk_widget_get_screen (do_widget));
+      cache_widget (window, "do_textview");
+
       gtk_window_set_default_size (GTK_WINDOW (window),
 				   450, 450);
       
       g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
+			G_CALLBACK (remove_cached_widget), "do_textview");
 
       gtk_window_set_title (GTK_WINDOW (window), "TextView");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -499,7 +505,7 @@ do_textview (void)
 
       gtk_container_add (GTK_CONTAINER (sw), view2);
 
-      create_tags (buffer);
+      create_tags (gtk_widget_get_screen (window), buffer);
       insert_text (buffer);
 
       attach_widgets (GTK_TEXT_VIEW (view1));
@@ -580,12 +586,11 @@ easter_egg_callback (GtkWidget *button,
                           "\nDon't do this in real applications, please.\n", -1);
 
   view = gtk_text_view_new_with_buffer (buffer);
-  
-  recursive_attach_view (0, GTK_TEXT_VIEW (view), anchor);
-  
-  g_object_unref (G_OBJECT (buffer));
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_screen (GTK_WINDOW (window), 
+			 gtk_widget_get_screen (button));
+
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC,
@@ -593,6 +598,11 @@ easter_egg_callback (GtkWidget *button,
 
   gtk_container_add (GTK_CONTAINER (window), sw);
   gtk_container_add (GTK_CONTAINER (sw), view);
+  
+  recursive_attach_view (0, GTK_TEXT_VIEW (view), anchor);
+  
+  g_object_unref (G_OBJECT (buffer));
+
 
   g_object_add_weak_pointer (G_OBJECT (window),
                              (gpointer *) &window);

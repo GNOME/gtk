@@ -1611,6 +1611,8 @@ gtk_window_set_transient_for  (GtkWindow *window,
       gtk_signal_connect (GTK_OBJECT (parent), "unrealize",
 			  GTK_SIGNAL_FUNC (gtk_window_transient_parent_unrealized),
 			  window);
+      
+      window->screen = parent->screen;
 
       if (window->destroy_with_parent)
         connect_parent_destroyed (window);
@@ -1913,11 +1915,11 @@ get_pixmap_and_mask (GdkWindow		*window,
       default_icon_pixmap != NULL)
     {
       /* Use shared icon pixmap */
-      if (default_icon_pixmap)
+/*      if (default_icon_pixmap)
         g_object_ref (G_OBJECT (default_icon_pixmap));
       if (default_icon_mask)
         g_object_ref (G_OBJECT (default_icon_mask));
-      
+*/      
       *pmap_return = default_icon_pixmap;
       *mask_return = default_icon_mask;
     }
@@ -2089,6 +2091,12 @@ gtk_window_unrealize_icon (GtkWindow *window)
 {
   GtkWindowIconInfo *info;
   GtkWidget *widget;
+  GdkPixmap *default_icon_pixmap = 
+    g_object_get_data (G_OBJECT (window->screen), 
+		       "gtk-window-default-icon-pixmap");
+  GdkPixmap *default_icon_mask = 
+    g_object_get_data (G_OBJECT (window->screen), 
+		       "gtk-window-default-icon-mask");
 
   widget = GTK_WIDGET (window);
   
@@ -2098,10 +2106,15 @@ gtk_window_unrealize_icon (GtkWindow *window)
     return;
   
   if (info->icon_pixmap)
-    g_object_unref (G_OBJECT (info->icon_pixmap));
-
+    {
+      if (info->icon_pixmap != default_icon_pixmap)
+	g_object_unref (G_OBJECT (info->icon_pixmap));
+    }
   if (info->icon_mask)
-    g_object_unref (G_OBJECT (info->icon_mask));
+    {
+      if (info->icon_mask != default_icon_mask)
+	g_object_unref (G_OBJECT (info->icon_mask));
+    }
 
   info->icon_pixmap = NULL;
   info->icon_mask = NULL;

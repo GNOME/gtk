@@ -11,6 +11,8 @@
 static GtkTextBuffer *info_buffer;
 static GtkTextBuffer *source_buffer;
 
+GtkWidget *notebook;
+
 static gchar *current_file = NULL;
 
 
@@ -61,6 +63,62 @@ demo_find_file (const char *base,
       return filename;
     }
 }
+
+/**
+ * get_cached_widget:
+ * @widget: a widget on the same screen as the demo_widget.
+ * @key: a string representing the cache key.
+ *
+ * Check is the widget is cached on this screen
+ *
+ * Return value: widget is present returns the widget,
+ *		 NULL otherwise
+ */
+
+GtkWidget * get_cached_widget (GtkWidget *widget,
+			       gchar     *key)
+{
+  GdkScreen *screen;
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  screen = gtk_widget_get_screen (widget);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  
+  return g_object_get_data (G_OBJECT (screen), key);
+}
+void  cache_widget (GtkWidget *widget,
+			 gchar     *key)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  g_object_set_data (G_OBJECT (gtk_widget_get_screen (widget)),
+		     key, widget);
+}
+
+gpointer get_cached_pointer (GtkWidget *widget,
+			     gchar     *key)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  
+  return g_object_get_data (G_OBJECT (gtk_widget_get_screen (widget)), key);
+}
+void  cache_pointer (GtkWidget *widget,
+		     gchar     *key,
+		     gpointer  data)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  g_object_set_data (G_OBJECT (gtk_widget_get_screen (widget)),
+		     key, data);
+}
+
+void remove_cached_widget (GtkWidget *widget, gchar *key)
+{
+  g_object_set_data (G_OBJECT (gtk_widget_get_screen (widget)),
+		     key, NULL);
+}
+  
+
+
 
 static void
 window_closed_cb (GtkWidget *window, gpointer data)
@@ -579,7 +637,7 @@ row_activated_cb (GtkTreeView       *tree_view,
 			  &iter,
 			  ITALIC_COLUMN, !italic,
 			  -1);
-      window = (func) ();
+      window = (func) (GTK_WIDGET (tree_view));
       
       if (window != NULL)
 	{
@@ -800,7 +858,6 @@ int
 main (int argc, char **argv)
 {
   GtkWidget *window;
-  GtkWidget *notebook;
   GtkWidget *hbox;
   GtkWidget *tree;
   GtkTextTag *tag;
@@ -846,7 +903,6 @@ main (int argc, char **argv)
   tag = gtk_text_buffer_create_tag (info_buffer, "title",
                                     "font", "Sans 18",
                                     NULL);
-
   tag = gtk_text_buffer_create_tag (source_buffer, "comment",
 				    "foreground", "red",
                                     NULL);

@@ -7,10 +7,8 @@
  */
 
 #include <string.h>
-
 #include <gtk/gtk.h>
-
-static GtkWidget *window = NULL;
+#include "demo-common.h"
 
 typedef struct _StockItemInfo StockItemInfo;
 struct _StockItemInfo
@@ -115,7 +113,7 @@ id_to_macro (const gchar *id)
 }
 
 static GtkTreeModel*
-create_model (void)
+create_model (GtkWidget *window)
 {
   GtkListStore *store;
   GSList *ids;
@@ -420,8 +418,10 @@ label_set_func (GtkTreeViewColumn *tree_column,
 }
 
 GtkWidget *
-do_stock_browser (void)
+do_stock_browser (GtkWidget *do_widget)
 {  
+  GtkWidget *window = get_cached_widget (do_widget, "do_stock_browser");
+  
   if (!window)
     {
       GtkWidget *frame;
@@ -437,10 +437,17 @@ do_stock_browser (void)
       GtkTreeViewColumn *column;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+     
+      gtk_window_set_screen (GTK_WINDOW (window), 
+			     gtk_widget_get_screen (do_widget));
+      cache_widget (window, "do_stock_browser");
+      
       gtk_window_set_title (GTK_WINDOW (window), "Stock Icons and Items");
       gtk_window_set_default_size (GTK_WINDOW (window), -1, 500);
 
-      g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
+      g_signal_connect (window, "destroy", G_CALLBACK (remove_cached_widget), 
+			"do_stock_browser");
+      
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
       hbox = gtk_hbox_new (FALSE, 8);
@@ -452,7 +459,7 @@ do_stock_browser (void)
                                       GTK_POLICY_AUTOMATIC);
       gtk_box_pack_start (GTK_BOX (hbox), sw, FALSE, FALSE, 0);
 
-      model = create_model ();
+      model = create_model (window);
       
       treeview = gtk_tree_view_new_with_model (model);
 

@@ -14,19 +14,19 @@
  */
 
 #include <gtk/gtk.h>
-
-static GtkWidget *window = NULL;
+#include "demo-common.h"
 
 /* Convenience function to create an option menu holding a number of strings
  */
 GtkWidget *
-create_option_menu (const char **strings)
+create_option_menu (GtkWidget *widget, const char **strings)
 {
   GtkWidget *menu;
   GtkWidget *option_menu;
   const char **str;
 
   menu = gtk_menu_new ();
+  gtk_menu_set_screen (GTK_MENU (menu), gtk_widget_get_screen (widget));
   
   for (str = strings; *str; str++)
     {
@@ -59,7 +59,7 @@ add_row (GtkTable     *table,
 		    GTK_EXPAND | GTK_FILL, 0,
 		    0,                     0);
   
-  option_menu = create_option_menu (options);
+  option_menu = create_option_menu (GTK_WIDGET (table), options);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), option_menu);
   gtk_size_group_add_widget (size_group, option_menu);
   gtk_table_attach (GTK_TABLE (table), option_menu,
@@ -87,8 +87,9 @@ toggle_grouping (GtkToggleButton *check_button,
 }
 
 GtkWidget *
-do_sizegroup (void)
+do_sizegroup (GtkWidget *do_widget)
 {
+  GtkWidget *window = get_cached_widget (do_widget, "do_sizegroup");
   GtkWidget *table;
   GtkWidget *frame;
   GtkWidget *vbox;
@@ -114,12 +115,15 @@ do_sizegroup (void)
 					    GTK_STOCK_CLOSE,
 					    GTK_RESPONSE_NONE,
 					    NULL);
+      gtk_window_set_screen (GTK_WINDOW (window), 
+			     gtk_widget_get_screen (do_widget));
+      cache_widget (window, "do_sizegroup");
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
       
       g_signal_connect (window, "response",
 			G_CALLBACK (gtk_widget_destroy), NULL);
       g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
+			G_CALLBACK (remove_cached_widget), "do_sizegroup");
 
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox, TRUE, TRUE, 0);

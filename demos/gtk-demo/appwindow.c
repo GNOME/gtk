@@ -5,9 +5,7 @@
 
 #include <gtk/gtk.h>
 #include "demo-common.h"
-
-static GtkWidget *window = NULL;
-
+#include <stdio.h>
 
 static void
 menuitem_cb (gpointer             callback_data,
@@ -186,8 +184,10 @@ mark_set_callback (GtkTextBuffer     *buffer,
 }
 
 GtkWidget *
-do_appwindow (void)
+do_appwindow (GtkWidget *do_widget)
 {  
+  GtkWidget *window = get_cached_widget (do_widget, "do_appwindow");
+
   if (!window)
     {
       GtkWidget *table;
@@ -205,12 +205,15 @@ do_appwindow (void)
        */
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window), 
+			     gtk_widget_get_screen (do_widget));
+      cache_widget (window, "do_appwindow");
       gtk_window_set_title (GTK_WINDOW (window), "Application Window");
 
       /* NULL window variable when window is closed */
       g_signal_connect (G_OBJECT (window), "destroy",
-                        G_CALLBACK (gtk_widget_destroyed),
-                        &window);
+                        G_CALLBACK (remove_cached_widget),
+                        "do_appwindow");
 
       table = gtk_table_new (1, 4, FALSE);
       

@@ -21,6 +21,10 @@ demos = @STRIP_BEGIN@	\
 	stock_browser.c	\
 	textview.c	\
 	tree_store.c	\
+	multiscreen.c	\
+	multidisplay.c	\
+	virtualscreen.c \
+	movedemo.c      \
 @STRIP_END@
 
 INCLUDES = @STRIP_BEGIN@ \

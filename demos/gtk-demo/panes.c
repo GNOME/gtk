@@ -12,6 +12,7 @@
  */
 
 #include <gtk/gtk.h>
+#include "demo-common.h"
 
 void
 toggle_resize (GtkWidget *widget,
@@ -112,9 +113,9 @@ create_pane_options (GtkPaned	 *paned,
 }
 
 GtkWidget *
-do_panes (void)
+do_panes (GtkWidget *do_widget)
 {
-  static GtkWidget *window = NULL;
+  GtkWidget *window = get_cached_widget (do_widget, "do_panes");
   GtkWidget *frame;
   GtkWidget *hpaned;
   GtkWidget *vpaned;
@@ -124,9 +125,11 @@ do_panes (void)
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
+      gtk_window_set_screen (GTK_WINDOW (window), 
+			     gtk_widget_get_screen (do_widget));
+      cache_widget (window, "do_panes");
       g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
+			G_CALLBACK (remove_cached_widget), "do_panes");
 
       gtk_window_set_title (GTK_WINDOW (window), "Panes");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);

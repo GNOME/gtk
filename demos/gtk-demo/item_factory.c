@@ -5,6 +5,7 @@
  */
 
 #include <gtk/gtk.h>
+#include "demo-common.h"
 
 static void
 gtk_ifactory_cb (gpointer   callback_data,
@@ -43,9 +44,9 @@ static GtkItemFactoryEntry menu_items[] =
 static int nmenu_items = sizeof (menu_items) / sizeof (menu_items[0]);
 
 GtkWidget *
-do_item_factory (void)
+do_item_factory (GtkWidget *do_widget)
 {
-  static GtkWidget *window = NULL;
+  GtkWidget *window = get_cached_widget (do_widget, "do_item_factory");
   
   if (!window)
     {
@@ -58,9 +59,12 @@ do_item_factory (void)
       GtkItemFactory *item_factory;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window), 
+			     gtk_widget_get_screen (do_widget));
+      cache_widget (window, "do_item_factory");
       
       g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
+			G_CALLBACK (remove_cached_widget), "do_item_factory");
       g_signal_connect (window, "delete-event",
 			G_CALLBACK (gtk_true), NULL);
       
@@ -68,7 +72,7 @@ do_item_factory (void)
       item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
       g_object_set_data_full (G_OBJECT (window), "<main>",
 			      item_factory, (GDestroyNotify) g_object_unref);
-      gtk_window_add_accel_group (window, accel_group);
+      gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
       gtk_window_set_title (GTK_WINDOW (window), "Item Factory");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
       gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);

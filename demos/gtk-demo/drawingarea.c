@@ -14,10 +14,7 @@
  */
 
 #include <gtk/gtk.h>
-
-static GtkWidget *window = NULL;
-/* Pixmap for scribble area, to store current scribbles */
-static GdkPixmap *pixmap = NULL;
+#include "demo-common.h"
 
 /* Create a new pixmap of the appropriate size to store our scribbles */
 static gboolean
@@ -25,13 +22,16 @@ scribble_configure_event (GtkWidget	    *widget,
 			  GdkEventConfigure *event,
 			  gpointer	     data)
 {
+  GdkPixmap *pixmap = get_cached_pointer (widget, "do_drawingarea_pixmap");
   if (pixmap)
     g_object_unref (G_OBJECT (pixmap));
 
+ /* Pixmap for scribble area, to store current scribbles */
   pixmap = gdk_pixmap_new (widget->window,
 			   widget->allocation.width,
 			   widget->allocation.height,
 			   -1);
+  cache_pointer (widget, "do_drawingarea_pixmap", pixmap);
 
   /* Initialize the pixmap to white */
   gdk_draw_rectangle (pixmap,
@@ -58,7 +58,7 @@ scribble_expose_event (GtkWidget      *widget,
   
   gdk_draw_drawable (widget->window,
 		     widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-		     pixmap,
+		     get_cached_pointer (widget, "do_drawingarea_pixmap"),
 		     /* Only copy the area that was exposed. */
 		     event->area.x, event->area.y,
 		     event->area.x, event->area.y,
@@ -81,7 +81,7 @@ draw_brush (GtkWidget *widget,
   update_rect.height = 6;
 
   /* Paint to the pixmap, where we store our state */
-  gdk_draw_rectangle (pixmap,
+  gdk_draw_rectangle (get_cached_pointer (widget, "do_drawingarea_pixmap"),
 		      widget->style->black_gc,
 		      TRUE,
 		      update_rect.x, update_rect.y,
@@ -98,7 +98,7 @@ scribble_button_press_event (GtkWidget	    *widget,
 			     GdkEventButton *event,
 			     gpointer	     data)
 {
-  if (pixmap == NULL)
+  if (get_cached_pointer (widget, "do_drawingarea_pixmap") == NULL)
     return FALSE; /* paranoia check, in case we haven't gotten a configure event */
   
   if (event->button == 1)
@@ -116,7 +116,7 @@ scribble_motion_notify_event (GtkWidget	     *widget,
   int x, y;
   GdkModifierType state;
 
-  if (pixmap == NULL)
+  if (get_cached_pointer (widget, "do_drawingarea_pixmap") == NULL)
     return FALSE; /* paranoia check, in case we haven't gotten a configure event */
 
   /* This call is very important; it requests the next motion event.
@@ -219,19 +219,24 @@ checkerboard_expose (GtkWidget	    *da,
 }
 
 GtkWidget *
-do_drawingarea (void)
+do_drawingarea (GtkWidget *do_widget)
 {
   GtkWidget *frame;
   GtkWidget *vbox;
   GtkWidget *da;
   GtkWidget *label;
-  
+  GtkWidget *window = get_cached_widget (do_widget, "do_drawingarea");
+
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Drawing Area");
+      gtk_window_set_screen (GTK_WINDOW (window), 
+			     gtk_widget_get_screen (do_widget));
+      cache_widget (window, "do_drawingarea");
 
-      g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
+      g_signal_connect (window, "destroy", G_CALLBACK (remove_cached_widget),
+			"do_drawingarea");
 
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 

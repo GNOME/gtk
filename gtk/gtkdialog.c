@@ -343,7 +343,7 @@ gtk_dialog_new_empty (const gchar     *title,
     gtk_window_set_title (GTK_WINDOW (dialog), title);
 
   if (parent)
-    gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
+      gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
 
   if (flags & GTK_DIALOG_MODAL)
     gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);

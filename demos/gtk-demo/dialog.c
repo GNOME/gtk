@@ -4,16 +4,14 @@
  */
 
 #include <gtk/gtk.h>
-
-static GtkWidget *window = NULL;
-static GtkWidget *entry1 = NULL;
-static GtkWidget *entry2 = NULL;
+#include "demo-common.h"
 
 static void
 message_dialog_clicked (GtkButton *button,
 			gpointer   user_data)
 {
   GtkWidget *dialog;
+  GtkWidget *window = get_cached_widget (GTK_WIDGET (button), "do_dialog");
   static gint i = 1;
 
   dialog = gtk_message_dialog_new (GTK_WINDOW (window),
@@ -40,6 +38,11 @@ interactive_dialog_clicked (GtkButton *button,
   GtkWidget *local_entry2;
   GtkWidget *label;
   gint response;
+  GtkWidget *window = get_cached_widget (GTK_WIDGET (button), "do_dialog");
+  GtkWidget *entry1 = get_cached_widget (GTK_WIDGET (button),
+					 "do_dialog_entry_1");
+  GtkWidget *entry2 = get_cached_widget (GTK_WIDGET (button), 
+					 "do_dialog_entry_2");
 
   dialog = gtk_dialog_new_with_buttons ("Interactive Dialog",
 					GTK_WINDOW (window),
@@ -49,7 +52,6 @@ interactive_dialog_clicked (GtkButton *button,
                                         "_Non-stock Button",
                                         GTK_RESPONSE_CANCEL,
 					NULL);
-
   hbox = gtk_hbox_new (FALSE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox, FALSE, FALSE, 0);
@@ -93,7 +95,7 @@ interactive_dialog_clicked (GtkButton *button,
 }
 
 GtkWidget *
-do_dialog (void)
+do_dialog (GtkWidget *do_widget)
 {
   GtkWidget *frame;
   GtkWidget *vbox;
@@ -102,13 +104,20 @@ do_dialog (void)
   GtkWidget *button;
   GtkWidget *table;
   GtkWidget *label;
+  GtkWidget *window = get_cached_widget (do_widget, "do_dialog");
+  GtkWidget *entry1;
+  GtkWidget *entry2;
   
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Dialogs");
-
-      g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
+      gtk_window_set_screen (GTK_WINDOW (window), 
+			     gtk_widget_get_screen (do_widget));
+      cache_widget (window, "do_dialog");
+      g_signal_connect (window, "destroy", 
+			G_CALLBACK (remove_cached_widget), 
+			"do_dialog");
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
       frame = gtk_frame_new ("Dialogs");
@@ -152,6 +161,7 @@ do_dialog (void)
       entry1 = gtk_entry_new ();
       gtk_table_attach_defaults (GTK_TABLE (table), entry1, 1, 2, 0, 1);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry1);
+      cache_widget (entry1, "do_dialog_entry_1");
 
       label = gtk_label_new_with_mnemonic ("E_ntry 2");
       
@@ -162,6 +172,7 @@ do_dialog (void)
       entry2 = gtk_entry_new ();
       gtk_table_attach_defaults (GTK_TABLE (table), entry2, 1, 2, 1, 2);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry2);
+      cache_widget (entry2, "do_dialog_entry_2");
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

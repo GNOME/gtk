@@ -36,21 +36,12 @@ static const char *image_names[] = {
 
 #define N_IMAGES G_N_ELEMENTS (image_names)
 
-/* demo window */
-static GtkWidget *window = NULL;
-
-/* Current frame */
-static GdkPixbuf *frame;
-
 /* Background image */
 static GdkPixbuf *background;
 static gint back_width, back_height;
 
 /* Images */
 static GdkPixbuf *images[N_IMAGES];
-
-/* Widgets */
-static GtkWidget *da;
 
 /* Loads the images for the demo and returns whether the operation succeeded */
 static gboolean
@@ -103,7 +94,9 @@ expose_cb (GtkWidget	  *widget,
 {
   guchar *pixels;
   int rowstride;
-
+  GdkPixbuf *frame = get_cached_pointer (gtk_widget_get_toplevel (widget),
+					 "do_pixbufs_frame");
+  g_assert (GDK_IS_PIXBUF (frame));
   rowstride = gdk_pixbuf_get_rowstride (frame);
 
   pixels = gdk_pixbuf_get_pixels (frame) + rowstride * event->area.y + event->area.x * 3;
@@ -131,7 +124,11 @@ timeout (gpointer data)
   int i;
   double xmid, ymid;
   double radius;
-
+  GdkPixbuf *frame = get_cached_pointer (GTK_WIDGET (data),
+					 "do_pixbufs_frame");
+  GtkWidget *da = get_cached_pointer (GTK_WIDGET (data),
+				      "do_pixbufs_da");
+  
   gdk_pixbuf_copy_area (background, 0, 0, back_width, back_height,
 			frame, 0, 0);
 
@@ -205,19 +202,28 @@ cleanup_callback (GtkObject *object,
 }
 
 GtkWidget *
-do_pixbufs (void)
+do_pixbufs (GtkWidget *do_widget)
 {
+  GdkPixbuf *frame;
+  GtkWidget *da;
+  GtkWidget *window = get_cached_widget (do_widget, "do_pixbufs");
+
   if (!window)
     {
       GError *error;
 
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window), 
+			     gtk_widget_get_screen (do_widget));
+      cache_widget (window, "do_pixbufs");
       gtk_window_set_title (GTK_WINDOW (window), "Pixbufs");
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
-      g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
-      g_signal_connect (window, "destroy", G_CALLBACK (cleanup_callback), NULL);
+      g_signal_connect (window, "destroy", 
+			G_CALLBACK (cleanup_callback), NULL);
+      g_signal_connect (window, "destroy", 
+			G_CALLBACK (remove_cached_widget),"do_pixbufs");
 
 
       error = NULL;
@@ -246,13 +252,16 @@ do_pixbufs (void)
 	  frame = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, back_width, back_height);
 
 	  da = gtk_drawing_area_new ();
+	  
+	  cache_pointer (window, "do_pixbufs_frame", frame);
+	  cache_pointer (window, "do_pixbufs_da", da);
 
 	  g_signal_connect (da, "expose_event",
 			    G_CALLBACK (expose_cb), NULL);
 
 	  gtk_container_add (GTK_CONTAINER (window), da);
 
-	  timeout_id = gtk_timeout_add (FRAME_DELAY, timeout, NULL);
+	  timeout_id = gtk_timeout_add (FRAME_DELAY, timeout, window);
 	}
     }
 

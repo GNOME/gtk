@@ -9,8 +9,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include <stdlib.h>
-
-static GtkWidget *window = NULL;
+#include "demo-common.h"
 
 typedef struct
 {
@@ -223,8 +222,10 @@ add_columns (GtkTreeView *treeview)
 }
 
 GtkWidget *
-do_editable_cells (void)
+do_editable_cells (GtkWidget *do_widget)
 {
+  GtkWidget *window = get_cached_widget (do_widget, "do_editable_cells");
+
   if (!window)
     {
       GtkWidget *vbox;
@@ -236,10 +237,14 @@ do_editable_cells (void)
       
       /* create window, etc */
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+     gtk_window_set_screen (GTK_WINDOW (window), 
+			     gtk_widget_get_screen (do_widget));
+      cache_widget (window, "do_editable_cells");
       gtk_window_set_title (GTK_WINDOW (window), "Shopping list");
       gtk_container_set_border_width (GTK_CONTAINER (window), 5);
       g_signal_connect (G_OBJECT (window), "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
+			G_CALLBACK (remove_cached_widget), 
+			"do_editable_cells");
 
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_container_add (GTK_CONTAINER (window), vbox);

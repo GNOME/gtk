@@ -30,8 +30,8 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-
 #include <stdio.h>
+#include "demo-common.h"
 
 static GtkWidget *
 create_menu (gint     depth,
@@ -74,9 +74,9 @@ create_menu (gint     depth,
 }
 
 GtkWidget *
-do_menus (void)
+do_menus (GtkWidget *do_widget)
 {
-  static GtkWidget *window = NULL;
+  GtkWidget *window = get_cached_widget (do_widget, "do_menus");
   GtkWidget *box1;
   GtkWidget *box2;
   GtkWidget *button;
@@ -91,9 +91,11 @@ do_menus (void)
       GtkAccelGroup *accel_group;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      
+      gtk_window_set_screen (GTK_WINDOW (window), 
+			     gtk_widget_get_screen (do_widget));
+      cache_widget (window, "do_menus");
       g_signal_connect (window, "destroy",
-			G_CALLBACK(gtk_widget_destroyed), &window);
+			G_CALLBACK(remove_cached_widget), "do_menus");
       g_signal_connect (window, "delete-event",
 			G_CALLBACK (gtk_true), NULL);
       

@@ -4,6 +4,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <demo-common.h>
 
 static GtkWidget *
 create_bbox (gint  horizontal,
@@ -41,9 +42,9 @@ create_bbox (gint  horizontal,
 }
 
 GtkWidget *
-do_button_box (void)
+do_button_box (GtkWidget *do_widget)
 {
-  static GtkWidget *window = NULL;
+  GtkWidget *window = get_cached_widget (do_widget, "do_button_box");
   GtkWidget *main_vbox;
   GtkWidget *vbox;
   GtkWidget *hbox;
@@ -53,11 +54,14 @@ do_button_box (void)
   if (!window)
   {
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_screen (GTK_WINDOW (window),
+			   gtk_widget_get_screen (do_widget));
+    cache_widget (window, "do_button_box");
     gtk_window_set_title (GTK_WINDOW (window), "Button Boxes");
     
     g_signal_connect (window, "destroy",
-		      G_CALLBACK (gtk_widget_destroyed),
-		      &window);
+		      G_CALLBACK (remove_cached_widget),
+		      "do_button_box");
     
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 

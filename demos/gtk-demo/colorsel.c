@@ -6,10 +6,8 @@
  */
 
 #include <gtk/gtk.h>
+#include <demo-common.h>
 
-static GtkWidget *window = NULL;
-static GtkWidget *da;
-static GdkColor color;
 static GtkWidget *frame;
 
 static void
@@ -19,15 +17,18 @@ change_color_callback (GtkWidget *button,
   GtkWidget *dialog;
   GtkColorSelection *colorsel;
   gint response;
-  
+  GtkWidget *window = get_cached_widget (button, "do_colorsel");
+  GtkWidget *da = get_cached_widget (button, "do_colorsel_da");
+  GdkColor *color = get_cached_pointer (button, "do_colorsel_color");
+
   dialog = gtk_color_selection_dialog_new ("Changing color");
 
   gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
   
   colorsel = GTK_COLOR_SELECTION (GTK_COLOR_SELECTION_DIALOG (dialog)->colorsel);
 
-  gtk_color_selection_set_previous_color (colorsel, &color);
-  gtk_color_selection_set_current_color (colorsel, &color);
+  gtk_color_selection_set_previous_color (colorsel, color);
+  gtk_color_selection_set_current_color (colorsel, color);
   gtk_color_selection_set_has_palette (colorsel, TRUE);
   
   response = gtk_dialog_run (GTK_DIALOG (dialog));
@@ -35,32 +36,42 @@ change_color_callback (GtkWidget *button,
   if (response == GTK_RESPONSE_OK)
     {
       gtk_color_selection_get_current_color (colorsel,
-					     &color);
+					     color);
       
-      gtk_widget_modify_bg (da, GTK_STATE_NORMAL, &color);
+      gtk_widget_modify_bg (da, GTK_STATE_NORMAL, color);
     }
   
+  g_free (color);
   gtk_widget_destroy (dialog);
 }
 
 GtkWidget *
-do_colorsel (void)
+do_colorsel (GtkWidget *do_widget)
 {
   GtkWidget *vbox;
   GtkWidget *button;
   GtkWidget *alignment;
+  GtkWidget *da;
+  GtkWidget *window = get_cached_widget (do_widget, "do_colorsel");
+  GdkColor  *color;
   
   if (!window)
     {
-      color.red = 0;
-      color.blue = 65535;
-      color.green = 0;
+      color = g_new (GdkColor, 1);
+      color->red = 0;
+      color->blue = 65535;
+      color->green = 0;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window), 
+			     gtk_widget_get_screen (do_widget));
+      cache_widget (window, "do_colorsel");
+      cache_pointer (window, "do_colorsel_color", color);
       gtk_window_set_title (GTK_WINDOW (window), "Color Selection");
 
       g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
+			G_CALLBACK (remove_cached_widget), 
+			"do_colorsel");
 
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
@@ -81,9 +92,10 @@ do_colorsel (void)
       /* set a minimum size */
       gtk_widget_set_size_request (da, 200, 200);
       /* set the color */
-      gtk_widget_modify_bg (da, GTK_STATE_NORMAL, &color);
+      gtk_widget_modify_bg (da, GTK_STATE_NORMAL, color);
       
       gtk_container_add (GTK_CONTAINER (frame), da);
+      cache_widget (da, "do_colorsel_da");
 
       alignment = gtk_alignment_new (1.0, 0.5, 0.0, 0.0);
       
