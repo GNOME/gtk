@@ -1,3 +1,10 @@
+1999-11-08  Michael Fulbright  <drmike@redhat.com>
+
+	* src/io-pnm.c pnm_read_ascii_scanline (): Added support for
+	ASCII PNM files. Note I haven't tested loaded ASCII PBM files because
+	I can't seem to find a utility to convert into this format.
+	Next is to add progressive loading support for the PNM format.
+
 1999-11-07  Federico Mena Quintero  <federico@redhat.com>
 
 	* doc/tmpl/gnome-canvas-pixbuf.sgml: Finished detailed explanation

@@ -329,8 +329,6 @@ pnm_read_header (PnmLoaderContext *context)
 		return PNM_FATAL_ERR;
 	}
 	
-	g_print ("File format is %d\n", type);
-
 	context->type = type;
 
 	inbuf->next_byte  += 2;
@@ -349,8 +347,6 @@ pnm_read_header (PnmLoaderContext *context)
 		return PNM_SUSPEND;
 	}
 	
-	g_print ("Dimensions are %d x %d\n", w, h);
-
 	context->width  = w;
 	context->height = h;
 	
@@ -364,8 +360,6 @@ pnm_read_header (PnmLoaderContext *context)
 			inbuf->bytes_left = old_bytes_left;
 			return PNM_SUSPEND;
 		}
-		
-		g_print ("Maximum component value is %d\n", context->maxval);
 		break;
 	default:
 		break;
@@ -454,8 +448,7 @@ pnm_read_raw_scanline (PnmLoaderContext *context)
 static gint
 pnm_read_ascii_scanline (PnmLoaderContext *context)
 {
-	guint  numpix;
-	guint  numbytes, offset;
+	guint  offset;
 	gint   rc;
 	guint  value, numval, i;
 	guchar data;
@@ -473,15 +466,16 @@ pnm_read_ascii_scanline (PnmLoaderContext *context)
 
 	switch (context->type) {
 	case PNM_FORMAT_PBM:
-		mask = 0x80;
-		data = 0;
 		numval = 8;
+		offset = context->output_col/8;
 		break;
 	case PNM_FORMAT_PGM:
 		numval = 1;
+		offset = context->output_col;
 		break;
 	case PNM_FORMAT_PPM:
 		numval = 3;
+		offset = context->output_col*3;
 		break;
 		
 	default:
@@ -489,53 +483,57 @@ pnm_read_ascii_scanline (PnmLoaderContext *context)
 		return PNM_FATAL_ERR;
 	}
 
-	old_next_byte  = inbuf->next_byte;
-	old_bytes_left = inbuf->bytes_left;
-	dptr = context->dptr;
+	dptr = context->dptr + offset;
 
-	for (i=0; i<numval; i++) {
-		if ((rc = read_next_number (inbuf, &value))) {
-			inbuf->next_byte  = old_next_byte;
-			inbuf->bytes_left = old_bytes_left;
-			return PNM_SUSPEND;
+	while (TRUE) {
+		if (context->type == PNM_FORMAT_PBM) {
+			mask = 0x80;
+			data = 0;
 		}
-		printf ("0x%x ", value);
-		fflush (stdout);
 
-		switch (context->type) {
-		case PNM_FORMAT_PBM:
-			if (value)
-				data |= mask;
-			mask >>= 1;
+		old_next_byte  = inbuf->next_byte;
+		old_bytes_left = inbuf->bytes_left;
+		
+		for (i=0; i<numval; i++) {
+			if ((rc = read_next_number (inbuf, &value))) {
+				inbuf->next_byte  = old_next_byte;
+				inbuf->bytes_left = old_bytes_left;
+				return PNM_SUSPEND;
+			}
+			switch (context->type) {
+			case PNM_FORMAT_PBM:
+				if (value)
+					data |= mask;
+				mask >>= 1;
 				
-			break;
-		case PNM_FORMAT_PGM:
-			*dptr++ = (guchar)(255.0*((double)value/(double)context->maxval));
-			break;
-		case PNM_FORMAT_PPM:
-			*dptr++ = (guchar)(255.0*((double)value/(double)context->maxval));
-			break;
-		default:
-			g_warning ("io-pnm.c: Illegal raw pnm type!\n");
+				break;
+			case PNM_FORMAT_PGM:
+				*dptr++ = (guchar)(255.0*((double)value/(double)context->maxval));
+				break;
+			case PNM_FORMAT_PPM:
+				*dptr++ = (guchar)(255.0*((double)value/(double)context->maxval));
+				break;
+			default:
+				g_warning ("io-pnm.c: Illegal raw pnm type!\n");
+				break;
+			}
+		}
+		
+		if (context->type == PNM_FORMAT_PBM)
+			*dptr++ = value;
+		
+		context->output_col++;
+		if (context->output_col == context->width) {
+			if ( context->type == PNM_FORMAT_PBM )
+				explode_bitmap_into_buf(context);
+			else if ( context->type == PNM_FORMAT_PGM )
+				explode_gray_into_buf (context);
+
+			context->output_col = 0;
+			context->output_row++;
 			break;
 		}
-	}
 
-	if (context->type == PNM_FORMAT_PBM)
-		*dptr++ = value;
-
-	context->output_col++;
-	if (context->output_col == context->width) {
-		if ( context->type == PNM_FORMAT_PBM_RAW )
-			explode_bitmap_into_buf(context);
-		else if ( context->type == PNM_FORMAT_PGM_RAW )
-			explode_gray_into_buf (context);
-		
-		context->output_col = 0;
-		context->output_row++;
-		
-	} else {
-		return PNM_SUSPEND;
 	}
 
 	return PNM_OK;
@@ -563,14 +561,10 @@ pnm_read_scanline (PnmLoaderContext *context)
 	case PNM_FORMAT_PBM:
 	case PNM_FORMAT_PGM:
 	case PNM_FORMAT_PPM:
-#if 0
-
 		rc = pnm_read_ascii_scanline (context);
 		if (rc == PNM_SUSPEND)
 			return rc;
 		break;
-#endif
-		
 
 	default:
 		g_print ("Cannot load these image types (yet)\n");
@@ -589,11 +583,6 @@ image_load (FILE *f)
 
 	PnmLoaderContext context;
 	PnmIOBuffer *inbuf;
-
-
-#if 0
-	G_BREAKPOINT();
-#endif
 
 	/* pretend to be doing progressive loading */
 	context.updated_func = context.prepared_func = NULL;
@@ -643,8 +632,6 @@ image_load (FILE *f)
 
 		/* scan until we hit image data */
 		if (!context.did_prescan) {
-			
-			g_print ("doing prescan\n");
 			if (skip_ahead_whitespace (inbuf) == NULL)
 				continue;
 
@@ -656,8 +643,6 @@ image_load (FILE *f)
 					   context.width * 3);
 			if (!context.pixels)
 				return NULL;
-
-			g_print ("prescan complete\n");
 		}
 
 		/* if we got here we're reading image data */
