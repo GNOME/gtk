@@ -1088,8 +1088,6 @@ gtk_list_store_insert (GtkListStore *list_store,
       return;
     }
 
-  new_list = g_slist_alloc ();
-
   list = g_slist_nth (G_SLIST (list_store->root), position - 1);
 
   if (list == NULL)
@@ -1099,6 +1097,8 @@ gtk_list_store_insert (GtkListStore *list_store,
 
       return;
     }
+
+  new_list = g_slist_alloc ();
 
   insert_after (list_store, list, new_list);
 
@@ -1802,7 +1802,7 @@ gtk_list_store_move (GtkListStore *store,
   GtkTreeIter dst_a;
   GSList *i, *a, *prev = NULL, *tmp;
   gint new_pos = 0, old_pos = 0, j = 0, *order;
-  GtkTreePath *path, *pos_path = NULL;
+  GtkTreePath *path = NULL, *pos_path = NULL;
 
   g_return_if_fail (GTK_IS_LIST_STORE (store));
   g_return_if_fail (!GTK_LIST_STORE_IS_SORTED (store));
@@ -1836,6 +1836,7 @@ gtk_list_store_move (GtkListStore *store,
         goto free_paths_and_out;
 
       gtk_tree_path_free (path);
+      path = NULL;
     }
 
   /* getting destination iters */
@@ -1861,6 +1862,23 @@ gtk_list_store_move (GtkListStore *store,
 	a = G_SLIST (position->user_data);
       else
 	a = NULL;
+    }
+
+  /*  don't try to reorder the iter to it's own position  */
+  if (a)
+    {
+      if (a == iter->user_data)
+        goto free_paths_and_out;
+    }
+  else if (before)
+    {
+      if (iter->user_data == store->tail)
+        goto free_paths_and_out;
+    }
+  else
+    {
+      if (iter->user_data == store->root)
+        goto free_paths_and_out;
     }
 
   /* getting the old prev node */
@@ -1967,8 +1985,10 @@ gtk_list_store_move (GtkListStore *store,
   return;
 
 free_paths_and_out:
-  gtk_tree_path_free (path);
-  gtk_tree_path_free (pos_path);
+  if (path)
+    gtk_tree_path_free (path);
+  if (pos_path)
+    gtk_tree_path_free (pos_path);
 }
 
 /**

@@ -1,3 +1,19 @@
+2003-04-14  Michael Natterer  <mitch@gimp.org>
+
+	* gtk/gtkliststore.c (gtk_list_store_move): added checks to ensure
+	that the iter is not reordered to its own position. Prevents model
+	corruption for the case that the store contains only a single item
+	(fixes bug #108387).
+
+	Unrelated:
+
+	* gtk/gtkliststore.c (gtk_list_store_insert): g_list_alloc() the
+	new list element later so we don't leak it if we decide to return
+	early.
+
+	* gtk/gtktreeselection.c (_gtk_tree_selection_internal_select_node):
+	set selection->tree_view->priv->anchor to NULL after freeing it.
+
 2003-04-13  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeviewcolumn.c
