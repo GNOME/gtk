@@ -1180,7 +1180,7 @@ gtk_list_clear_items (GtkList *list,
 	  if (start_list->prev)
 	    new_focus_child = start_list->prev->data;
 	  else if (list->children)
-	    new_focus_child = list->children->prev->data;
+	    new_focus_child = list->children->data;
 
 	  if (GTK_WIDGET_HAS_FOCUS (container->focus_child))
 	    grab_focus = TRUE;
@@ -1193,16 +1193,20 @@ gtk_list_clear_items (GtkList *list,
       widget = tmp_list->data;
       tmp_list = tmp_list->next;
 
+      gtk_widget_ref (widget);
+
       if (widget->state == GTK_STATE_SELECTED)
 	gtk_list_unselect_child (list, widget);
 
+      gtk_signal_disconnect_by_data (GTK_OBJECT (widget), (gpointer) list);
+      gtk_widget_unparent (widget);
+      
       if (widget == list->undo_focus_child)
 	list->undo_focus_child = NULL;
       if (widget == list->last_focus_child)
 	list->last_focus_child = NULL;
 
-      gtk_signal_disconnect_by_data (GTK_OBJECT (widget), (gpointer) list);
-      gtk_widget_unparent (widget);
+      gtk_widget_unref (widget);
     }
 
   g_list_free (start_list);
@@ -1310,6 +1314,7 @@ gtk_list_remove_items_internal (GtkList	 *list,
       widget = tmp_list->data;
       tmp_list = tmp_list->next;
 
+      gtk_widget_ref (widget);
       if (no_unref)
 	gtk_widget_ref (widget);
 
@@ -1328,14 +1333,16 @@ gtk_list_remove_items_internal (GtkList	 *list,
 	    }
 	}
 
+      gtk_signal_disconnect_by_data (GTK_OBJECT (widget), (gpointer) list);
+      list->children = g_list_remove (list->children, widget);
+      gtk_widget_unparent (widget);
+
       if (widget == list->undo_focus_child)
 	list->undo_focus_child = NULL;
       if (widget == list->last_focus_child)
 	list->last_focus_child = NULL;
 
-      gtk_signal_disconnect_by_data (GTK_OBJECT (widget), (gpointer) list);
-      list->children = g_list_remove (list->children, widget);
-      gtk_widget_unparent (widget);
+      gtk_widget_unref (widget);
     }
   
   if (new_focus_child && new_focus_child != old_focus_child)

@@ -16,6 +16,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	-I$(top_srcdir) -I../gdk			\
 	-I$(top_srcdir)/gdk				\
 	-I$(top_srcdir)/gdk-pixbuf -I../gdk-pixbuf	\
+	@GTK_DEBUG_FLAGS@				\
 	@GTK_DEP_CFLAGS@				\
 @STRIP_END@
 
