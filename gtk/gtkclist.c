@@ -4755,7 +4755,7 @@ gtk_clist_draw (GtkWidget    *widget,
 		       (2 * widget->style->klass->ythickness) +
 		       clist->column_title_area.height);
 
-      gdk_window_clear_area (clist->clist_window, 0, 0, -1, -1);
+      gdk_window_clear_area (clist->clist_window, 0, 0, 0, 0);
       draw_rows (clist, NULL);
 
       for (i = 0; i < clist->columns; i++)
@@ -5948,8 +5948,8 @@ draw_rows (GtkCList     *clist,
     }
 
   if (!area)
-    gdk_window_clear_area (clist->clist_window,
-			   0, ROW_TOP_YPIXEL (clist, i), -1, -1);
+    gdk_window_clear_area (clist->clist_window, 0,
+			   ROW_TOP_YPIXEL (clist, i), 0, 0);
 }
 
 static void                          

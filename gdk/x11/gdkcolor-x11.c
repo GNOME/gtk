@@ -70,7 +70,7 @@ gdk_colormap_new (GdkVisual *visual,
   xvisual = ((GdkVisualPrivate*) visual)->xvisual;
 
   colormap->size = visual->colormap_size;
-  colormap->colors = g_new (GdkColor, colormap->size);
+  colormap->colors = NULL;
 
   switch (visual->type)
     {
@@ -117,6 +117,7 @@ gdk_colormap_new (GdkVisual *visual,
       private->private_val = TRUE;
       private->xcolormap = XCreateColormap (private->xdisplay, gdk_root_window,
 					    xvisual, AllocAll);
+      colormap->colors = g_new (GdkColor, colormap->size);
 
       size = 1 << visual->red_prec;
       for (i = 0; i < size; i++)
@@ -698,6 +699,7 @@ gdk_colormap_alloc1 (GdkColormap *colormap,
 	  else
 	    {
 	      colormap->colors[ret->pixel] = *color;
+	      colormap->colors[ret->pixel].pixel = ret->pixel;
 	      private->info[ret->pixel].ref_count = 1;
 
 	      g_hash_table_insert (private->hash,

@@ -486,7 +486,9 @@ gtk_main (void)
 	{
 	  quitf = quit_functions->data;
 
+	  tmp_list = quit_functions;
 	  quit_functions = g_list_remove_link (quit_functions, quit_functions);
+	  g_list_free_1 (tmp_list);
 
 	  if ((quitf->main_level && quitf->main_level != gtk_main_loop_level) ||
 	      gtk_quit_invoke_function (quitf))
@@ -495,7 +497,6 @@ gtk_main (void)
 	    }
 	  else
 	    {
-	      g_list_free (tmp_list);
 	      gtk_quit_destroy (quitf);
 	    }
 	}
