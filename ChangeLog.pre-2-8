@@ -1,3 +1,8 @@
+2005-01-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkimage.c (gtk_image_get_property): Use the correct setter
+	for a string GValue.  (#165203, Damon Chaplin)
+
 2005-01-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/x11/gdkdisplay-x11.c (_gdk_windowing_set_default_display): 
