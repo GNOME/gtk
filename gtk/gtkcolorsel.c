@@ -2353,6 +2353,7 @@ gtk_color_selection_set_previous_color (GtkColorSelection *colorsel,
 		  &priv->old_color[COLORSEL_VALUE]);
   color_sample_draw_samples (colorsel);
   priv->default_set = TRUE;
+  priv->changing = FALSE;
 }
 
 /**
@@ -2376,6 +2377,7 @@ gtk_color_selection_set_previous_alpha (GtkColorSelection *colorsel,
   priv->old_color[COLORSEL_OPACITY] = SCALE (alpha);
   color_sample_draw_samples (colorsel);
   priv->default_alpha_set = TRUE;
+  priv->changing = FALSE;
 }
 
 
