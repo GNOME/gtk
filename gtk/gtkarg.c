@@ -407,7 +407,7 @@ gtk_arg_copy (GtkArg         *src_arg,
   dest_arg->type = src_arg->type;
   dest_arg->d = src_arg->d;
 
-  if (src_arg->type == GTK_TYPE_STRING)
+  if (GTK_FUNDAMENTAL_TYPE (src_arg->type) == GTK_TYPE_STRING)
     GTK_VALUE_STRING (*dest_arg) = g_strdup (GTK_VALUE_STRING (*src_arg));
 
   return dest_arg;

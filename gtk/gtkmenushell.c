@@ -506,7 +506,8 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 
       if ((event->time - menu_shell->activate_time) > MENU_SHELL_TIMEOUT)
 	{
-	  if (menu_item && (menu_shell->active_menu_item == menu_item))
+	  if (menu_item && (menu_shell->active_menu_item == menu_item) &&
+	      GTK_WIDGET_IS_SENSITIVE (menu_item))
 	    {
 	      if (GTK_MENU_ITEM (menu_item)->submenu == NULL)
 		{
@@ -968,6 +969,7 @@ gtk_real_menu_shell_activate_current (GtkMenuShell      *menu_shell,
 				      gboolean           force_hide)
 {
   if (menu_shell->active_menu_item &&
+      GTK_WIDGET_IS_SENSITIVE (menu_shell->active_menu_item) &&
       GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu == NULL)
     {
       gtk_menu_shell_activate_item (menu_shell,

@@ -1,3 +1,13 @@
+Wed Jan 13 20:14:32 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkarg.c (gtk_arg_copy): in comparisions with GTK_TYPE_STRING, use
+	the fundamental type to catch GTK_TYPE_IDENTIFIER as well.
+
+	* gtk/gtkmenushell.c:
+	(gtk_real_menu_shell_activate_current):
+	(gtk_menu_shell_button_release): asure that we only activate sensitive
+	menu items, reported by Dave Cole <dave@dccs.com.au>.
+
 Wed Jan 13 13:28:00 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c: eliminate queue_clears or queue_draws where we know
