@@ -22,11 +22,13 @@ m4_define([gtk_binary_age],
 m4_define([gtk_api_version], [2.0])
 
 # Define a string for the earliest version that this release has
-# forward/backwards binary compatibility with. This is used for module
-# locations. (Should this be backwards-compat instead?)
+# backwards binary compatibility with for all interfaces a module
+# might. Unless we add module-only API with lower stability
+# guarantees, this should be unchanged until we break binary compat
+# for GTK+.
 #
 #GTK_BINARY_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$LT_CURRENT
-m4_define([gtk_binary_version], [2.7.0])
+m4_define([gtk_binary_version], [2.4.0])
 
 # required versions of other packages
 m4_define([glib_required_version], [2.6.0])
