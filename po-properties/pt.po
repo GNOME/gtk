@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.6\n"
 "Report-Msgid-Bugs-To: Duarte Loreto <happyguy_pt@hotmail.com>\n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-02-01 16:55+0000\n"
+"POT-Creation-Date: 2004-02-05 23:01+0000\n"
+"PO-Revision-Date: 2004-02-05 23:05+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -116,7 +116,7 @@ msgid "A unique name for the action."
 msgstr "Um nome único para a acção."
 
 #: gtk/gtkaction.c:201 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
-#: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
+#: gtk/gtkframe.c:125 gtk/gtklabel.c:288 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Etiqueta"
 
@@ -223,8 +223,8 @@ msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
 msgstr ""
-"O GtkActionGroup a que este GtkAction está associado, ou NULL (para utilização "
-"interna)."
+"O GtkActionGroup a que este GtkAction está associado, ou NULL (para "
+"utilização interna)."
 
 #: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
@@ -430,7 +430,7 @@ msgstr "Espaçamento"
 msgid "The amount of space between children"
 msgstr "A quantidade de espaço entre filhos"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:534
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:533
 msgid "Homogeneous"
 msgstr "Homogéneo"
 
@@ -438,7 +438,7 @@ msgstr "Homogéneo"
 msgid "Whether the children should all be the same size"
 msgstr "Se os filhos deverão ou não ter todos o mesmo tamanho"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:526
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:525
 #: gtk/gtktreeviewcolumn.c:294
 msgid "Expand"
 msgstr "Expandir"
@@ -496,12 +496,12 @@ msgstr ""
 "Texto do widget etiqueta dentro do botão, caso o botão contenha um widget "
 "etiqueta"
 
-#: gtk/gtkbutton.c:211 gtk/gtkexpander.c:210 gtk/gtklabel.c:311
+#: gtk/gtkbutton.c:211 gtk/gtkexpander.c:210 gtk/gtklabel.c:309
 #: gtk/gtktoolbutton.c:186
 msgid "Use underline"
 msgstr "Utilizar sublinhado"
 
-#: gtk/gtkbutton.c:212 gtk/gtkexpander.c:211 gtk/gtklabel.c:312
+#: gtk/gtkbutton.c:212 gtk/gtkexpander.c:211 gtk/gtklabel.c:310
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -810,7 +810,7 @@ msgstr "Marcado"
 msgid "Marked up text to render"
 msgstr "Texto marcado a renderizar"
 
-#: gtk/gtkcellrenderertext.c:208 gtk/gtklabel.c:297
+#: gtk/gtkcellrenderertext.c:208 gtk/gtklabel.c:295
 msgid "Attributes"
 msgstr "Atributos"
 
@@ -1263,51 +1263,51 @@ msgstr "Valor na lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Se valores inseridos têm ou não de já existir na lista"
 
-#: gtk/gtkcombobox.c:341
+#: gtk/gtkcombobox.c:344
 msgid "ComboBox model"
 msgstr "Modelo de ComboBox"
 
-#: gtk/gtkcombobox.c:342
+#: gtk/gtkcombobox.c:345
 msgid "The model for the combo box"
 msgstr "O modelo para a caixa de selecção única"
 
-#: gtk/gtkcombobox.c:349
+#: gtk/gtkcombobox.c:352
 msgid "Wrap width"
 msgstr "Largura de quebra"
 
-#: gtk/gtkcombobox.c:350
+#: gtk/gtkcombobox.c:353
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Largura de quebra para dispôr os itens numa grelha"
 
-#: gtk/gtkcombobox.c:359
+#: gtk/gtkcombobox.c:362
 msgid "Row span column"
 msgstr "Coluna de abrangência de linha"
 
-#: gtk/gtkcombobox.c:360
+#: gtk/gtkcombobox.c:363
 msgid "TreeModel column containing the row span values"
 msgstr "Coluna de TreeModel que contém os valores de abrangência de linha"
 
-#: gtk/gtkcombobox.c:369
+#: gtk/gtkcombobox.c:372
 msgid "Column span column"
 msgstr "Coluna de abrangência de coluna"
 
-#: gtk/gtkcombobox.c:370
+#: gtk/gtkcombobox.c:373
 msgid "TreeModel column containing the column span values"
 msgstr "Coluna de TreeModel que contém os valores de abrangência de coluna"
 
-#: gtk/gtkcombobox.c:379
+#: gtk/gtkcombobox.c:382
 msgid "Active item"
 msgstr "Item activo"
 
-#: gtk/gtkcombobox.c:380
+#: gtk/gtkcombobox.c:383
 msgid "The item which is currently active"
 msgstr "O item actualmente activo"
 
-#: gtk/gtkcombobox.c:388
+#: gtk/gtkcombobox.c:391
 msgid "ComboBox appareance"
 msgstr "Aparência da ComboBox"
 
-#: gtk/gtkcombobox.c:389
+#: gtk/gtkcombobox.c:392
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr ""
 "Aparência da caixa de selecção única, onde VERDADEIRO significa estilo-"
@@ -1385,51 +1385,51 @@ msgstr "Y Máximo"
 msgid "Maximum possible value for Y"
 msgstr "Valor máximo possível para Y"
 
-#: gtk/gtkdialog.c:136
+#: gtk/gtkdialog.c:144
 msgid "Has separator"
 msgstr "Tem separador"
 
-#: gtk/gtkdialog.c:137
+#: gtk/gtkdialog.c:145
 msgid "The dialog has a separator bar above its buttons"
 msgstr "O diálogo tem uma barra separadora acima dos seus botões"
 
-#: gtk/gtkdialog.c:162
+#: gtk/gtkdialog.c:170
 msgid "Content area border"
 msgstr "Margem da área de conteúdo"
 
-#: gtk/gtkdialog.c:163
+#: gtk/gtkdialog.c:171
 msgid "Width of border around the main dialog area"
 msgstr "Largura da margem à volta da área principal do diálogo"
 
-#: gtk/gtkdialog.c:170
+#: gtk/gtkdialog.c:178
 msgid "Button spacing"
 msgstr "Espaçamento dos botões"
 
-#: gtk/gtkdialog.c:171
+#: gtk/gtkdialog.c:179
 msgid "Spacing between buttons"
 msgstr "Espaçamento entre os botões"
 
-#: gtk/gtkdialog.c:179
+#: gtk/gtkdialog.c:187
 msgid "Action area border"
 msgstr "Margem da área de acção"
 
-#: gtk/gtkdialog.c:180
+#: gtk/gtkdialog.c:188
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Largura da margem à volta da área de botões no fundo do diálogo"
 
-#: gtk/gtkentry.c:446 gtk/gtklabel.c:368
+#: gtk/gtkentry.c:446 gtk/gtklabel.c:366
 msgid "Cursor Position"
 msgstr "Posição Cursor"
 
-#: gtk/gtkentry.c:447 gtk/gtklabel.c:369
+#: gtk/gtkentry.c:447 gtk/gtklabel.c:367
 msgid "The current position of the insertion cursor in chars"
 msgstr "A posição actual do cursor de inserção, em caracteres"
 
-#: gtk/gtkentry.c:456 gtk/gtklabel.c:378
+#: gtk/gtkentry.c:456 gtk/gtklabel.c:376
 msgid "Selection Bound"
 msgstr "Limite de Selecção"
 
-#: gtk/gtkentry.c:457 gtk/gtklabel.c:379
+#: gtk/gtkentry.c:457 gtk/gtklabel.c:377
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "A posição do lado oposto da selecção a partir do cursor, em caracteres"
@@ -1515,19 +1515,19 @@ msgstr "Seleccionar no foco"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Se seleccionar ou não o conteúdo da entrada quando esta obtém o foco"
 
-#: gtk/gtkentrycompletion.c:196
+#: gtk/gtkentrycompletion.c:197
 msgid "Completion Model"
 msgstr "Modelo de Completar"
 
-#: gtk/gtkentrycompletion.c:197
+#: gtk/gtkentrycompletion.c:198
 msgid "The model to find matches in"
 msgstr "O modelo onde procurar equivalências"
 
-#: gtk/gtkentrycompletion.c:203
+#: gtk/gtkentrycompletion.c:204
 msgid "Minimum Key Length"
 msgstr "Comprimento Mínimo da Chave"
 
-#: gtk/gtkentrycompletion.c:204
+#: gtk/gtkentrycompletion.c:205
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Comprimento mínimo da chave de pesquisa para procurar equivalências"
 
@@ -1567,11 +1567,11 @@ msgstr "Se o expansor foi ou não aberto para revelar o widget filho"
 msgid "Text of the expander's label"
 msgstr "Texto da etiqueta de expansor"
 
-#: gtk/gtkexpander.c:218 gtk/gtklabel.c:304
+#: gtk/gtkexpander.c:218 gtk/gtklabel.c:302
 msgid "Use markup"
 msgstr "Utilizar código"
 
-#: gtk/gtkexpander.c:219 gtk/gtklabel.c:305
+#: gtk/gtkexpander.c:219 gtk/gtklabel.c:303
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "O texto da etiqueta inclui código XML. Consulte pango_parse_markup()"
 
@@ -1821,7 +1821,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "Um widget a apresentar em vez da etiqueta de moldura comum"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:575 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:574 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Tipo de sombra"
 
@@ -1949,19 +1949,19 @@ msgstr "Ecrã"
 msgid "The screen where this window will be displayed"
 msgstr "O ecrã onde esta janela será apresentada"
 
-#: gtk/gtklabel.c:291
+#: gtk/gtklabel.c:289
 msgid "The text of the label"
 msgstr "O texto da etiqueta"
 
-#: gtk/gtklabel.c:298
+#: gtk/gtklabel.c:296
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Uma lista de atributos de estilo a aplicar ao texto da etiqueta"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:602
+#: gtk/gtklabel.c:317 gtk/gtktexttag.c:374 gtk/gtktextview.c:602
 msgid "Justification"
 msgstr "Alinhamento"
 
-#: gtk/gtklabel.c:320
+#: gtk/gtklabel.c:318
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -1971,46 +1971,46 @@ msgstr ""
 "alinhamento da etiqueta dentro da sua alocação. Consulte GtkMisc::xalign "
 "para tal"
 
-#: gtk/gtklabel.c:328
+#: gtk/gtklabel.c:326
 msgid "Pattern"
 msgstr "Padrão"
 
-#: gtk/gtklabel.c:329
+#: gtk/gtklabel.c:327
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr ""
 "Uma expressão com caracteres _ corresponde a caracteres a sublinhar no texto"
 
-#: gtk/gtklabel.c:336
+#: gtk/gtklabel.c:334
 msgid "Line wrap"
 msgstr "Quebra de linha"
 
-#: gtk/gtklabel.c:337
+#: gtk/gtklabel.c:335
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Se definido, quebrar linhas se o texto se tornar demasiado longo"
 
-#: gtk/gtklabel.c:343
+#: gtk/gtklabel.c:341
 msgid "Selectable"
 msgstr "Seleccionável"
 
-#: gtk/gtklabel.c:344
+#: gtk/gtklabel.c:342
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Se o texto da etiqueta pode ou não ser seleccionado com o rato"
 
-#: gtk/gtklabel.c:350
+#: gtk/gtklabel.c:348
 msgid "Mnemonic key"
 msgstr "Chave mnemónica"
 
-#: gtk/gtklabel.c:351
+#: gtk/gtklabel.c:349
 msgid "The mnemonic accelerator key for this label"
 msgstr "A tecla de atalho mnemónica para esta etiqueta"
 
-#: gtk/gtklabel.c:359
+#: gtk/gtklabel.c:357
 msgid "Mnemonic widget"
 msgstr "Widget da mnemónica"
 
-#: gtk/gtklabel.c:360
+#: gtk/gtklabel.c:358
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "O widget a ser activado quando a tecla mnemónica da etiqueta é primida"
 
@@ -2152,7 +2152,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr "Estilo de relevo em torno da barra de menu"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:551
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:550
 msgid "Internal padding"
 msgstr "Espaçamento interno"
 
@@ -2176,19 +2176,29 @@ msgstr "Margem da imagem/etiqueta"
 msgid "Width of border around the label and image in the message dialog"
 msgstr "Largura da margem em torno da etiqueta e imagem no diálogo de mensagem"
 
-#: gtk/gtkmessagedialog.c:115
+#: gtk/gtkmessagedialog.c:122
+msgid "Use separator"
+msgstr "Utilizar separador"
+
+#: gtk/gtkmessagedialog.c:123
+msgid ""
+"Whether to put a separator between the message dialog's text and the buttons"
+msgstr ""
+"Se colocar ou não um separador entre o texto e os botões do diálogo de mensagem"
+
+#: gtk/gtkmessagedialog.c:129
 msgid "Message Type"
 msgstr "Tipo de Mensagem"
 
-#: gtk/gtkmessagedialog.c:116
+#: gtk/gtkmessagedialog.c:130
 msgid "The type of message"
 msgstr "O tipo de mensagem"
 
-#: gtk/gtkmessagedialog.c:123
+#: gtk/gtkmessagedialog.c:137
 msgid "Message Buttons"
 msgstr "Botões de Mensagem"
 
-#: gtk/gtkmessagedialog.c:124
+#: gtk/gtkmessagedialog.c:138
 msgid "The buttons shown in the message dialog"
 msgstr "Os botões apresentados no diálogo de mensagem"
 
@@ -2519,7 +2529,7 @@ msgstr "Ajustamento"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "O GtkAjustment ligado à barra de progresso (Obsoleto)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:500
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:499
 msgid "Orientation"
 msgstr "Orientação"
 
@@ -3547,86 +3557,86 @@ msgstr "Indicador de Desenho"
 msgid "If the toggle part of the button is displayed"
 msgstr "Se a parte de alternar do botão é apresentada"
 
-#: gtk/gtktoolbar.c:501
+#: gtk/gtktoolbar.c:500
 msgid "The orientation of the toolbar"
 msgstr "A orientação da barra de ferramentas"
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:508
 msgid "Toolbar Style"
 msgstr "Estilo da Barra de Ferramentas"
 
-#: gtk/gtktoolbar.c:510
+#: gtk/gtktoolbar.c:509
 msgid "How to draw the toolbar"
 msgstr "Como desenhar a barra de ferramentas"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:516
 msgid "Show Arrow"
 msgstr "Mostrar Seta"
 
-#: gtk/gtktoolbar.c:518
+#: gtk/gtktoolbar.c:517
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 "Se deverá ser apresentada uma seta caso a barra de ferramentas não caiba"
 
-#: gtk/gtktoolbar.c:527
+#: gtk/gtktoolbar.c:526
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Se o item deverá receber espaço extra quando a barra de ferramentas cresce"
 
-#: gtk/gtktoolbar.c:535
+#: gtk/gtktoolbar.c:534
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Se o item deverá ter o mesmo tamanho que outros itens homogéneos"
 
-#: gtk/gtktoolbar.c:542
+#: gtk/gtktoolbar.c:541
 msgid "Spacer size"
 msgstr "Tamanho de separador"
 
-#: gtk/gtktoolbar.c:543
+#: gtk/gtktoolbar.c:542
 msgid "Size of spacers"
 msgstr "Tamanho dos separadores"
 
-#: gtk/gtktoolbar.c:552
+#: gtk/gtktoolbar.c:551
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
 "Quantidade de espaço de margem entre a sombra da barra de ferramentas e os "
 "botões"
 
-#: gtk/gtktoolbar.c:560
+#: gtk/gtktoolbar.c:559
 msgid "Space style"
 msgstr "Estilo de separador"
 
-#: gtk/gtktoolbar.c:561
+#: gtk/gtktoolbar.c:560
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Se os separadores são linhas verticais ou apenas espaço vazio"
 
-#: gtk/gtktoolbar.c:568
+#: gtk/gtktoolbar.c:567
 msgid "Button relief"
 msgstr "Relevo dos botões"
 
-#: gtk/gtktoolbar.c:569
+#: gtk/gtktoolbar.c:568
 msgid "Type of bevel around toolbar buttons"
 msgstr "O tipo de relevo em torno dos botões da barra de ferramentas"
 
-#: gtk/gtktoolbar.c:576
+#: gtk/gtktoolbar.c:575
 msgid "Style of bevel around the toolbar"
 msgstr "Estilo de relevo em torno da barra de ferramentas"
 
-#: gtk/gtktoolbar.c:582
+#: gtk/gtktoolbar.c:581
 msgid "Toolbar style"
 msgstr "Estilo da barra de ferramentas"
 
-#: gtk/gtktoolbar.c:583
+#: gtk/gtktoolbar.c:582
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Se as barra de ferramentas por omissão têm apenas texto, texto e ícones, "
 "apenas ícones, etc."
 
-#: gtk/gtktoolbar.c:589
+#: gtk/gtktoolbar.c:588
 msgid "Toolbar icon size"
 msgstr "Tamanho dos ícones da barra de ferramentas"
 
-#: gtk/gtktoolbar.c:590
+#: gtk/gtktoolbar.c:589
 msgid "Size of icons in default toolbars"
 msgstr "O tamanho dos ícones nas barra de ferramentas por omissão"
 

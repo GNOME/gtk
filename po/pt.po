@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.6\n"
 "Report-Msgid-Bugs-To: Duarte Loreto <happyguy_pt@hotmail.com>\n"
-"POT-Creation-Date: 2004-02-01 16:13+0100\n"
-"PO-Revision-Date: 2004-02-01 16:50+0000\n"
+"POT-Creation-Date: 2004-02-05 22:56+0000\n"
+"PO-Revision-Date: 2004-02-05 23:00+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -1468,11 +1468,11 @@ msgstr "(desconhecido)"
 msgid "clear"
 msgstr "limpar"
 
-#: gtk/gtklabel.c:3225
+#: gtk/gtklabel.c:3217
 msgid "Select All"
 msgstr "Seleccionar Tudo"
 
-#: gtk/gtklabel.c:3235
+#: gtk/gtklabel.c:3227
 msgid "Input Methods"
 msgstr "Métodos de Entrada"
 
@@ -1489,6 +1489,14 @@ msgstr "default:LTR"
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
+
+#: gtk/gtkradiotoolbutton.c:89
+msgid "Group"
+msgstr "Grupo"
+
+#: gtk/gtkradiotoolbutton.c:90
+msgid "The radio tool button whose group this button belongs to."
+msgstr "O grupo de botão de ferramenta exclusivo a que este botão pertence."
 
 #: gtk/gtkrc.c:2380
 #, c-format
