@@ -2614,6 +2614,7 @@ add_to_cache (GtkIconSet      *icon_set,
 
   icon = g_new (CachedIcon, 1);
   icon_set->cache = g_slist_prepend (icon_set->cache, icon);
+  icon_set->cache_size++;
 
   icon->style = style;
   icon->direction = direction;
