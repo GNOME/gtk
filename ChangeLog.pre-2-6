@@ -1,3 +1,8 @@
+Mon Feb  2 22:05:36 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkseparatormenuitem.c (gtk_separator_menu_item_init): The
+	latest in menu separation technology.
+
 Mon Feb  2 19:04:17 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gdk/x11/gdkwindow-x11.c: Assume gravity works. (Anything else

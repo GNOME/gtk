@@ -26,40 +26,17 @@
 
 #include "gtkseparatormenuitem.h"
 
-static void gtk_separator_menu_item_class_init (GtkSeparatorMenuItemClass *class);
-
-GType
-gtk_separator_menu_item_get_type (void)
-{
-  static GType separator_menu_item_type = 0;
-
-  if (!separator_menu_item_type)
-    {
-      static const GTypeInfo separator_menu_item_info =
-      {
-        sizeof (GtkSeparatorMenuItemClass),
-        NULL, /* base_init */
-        NULL, /* base_finalize */
-        (GClassInitFunc) gtk_separator_menu_item_class_init,
-        NULL, /* class_finalize */
-        NULL, /* class_data */
-        sizeof (GtkSeparatorMenuItem),
-        0,    /* n_preallocs */
-        NULL, /* instance_init */
-      };
-
-      separator_menu_item_type =
-	g_type_register_static (GTK_TYPE_MENU_ITEM, "GtkSeparatorMenuItem",
-				&separator_menu_item_info, 0);
-    }
-
-  return separator_menu_item_type;
-}
+G_DEFINE_TYPE(GtkSeparatorMenuItem, gtk_separator_menu_item, GTK_TYPE_MENU_ITEM);
 
 static void
 gtk_separator_menu_item_class_init (GtkSeparatorMenuItemClass *class)
 {
   GTK_CONTAINER_CLASS (class)->child_type = NULL;
+}
+
+static void 
+gtk_separator_menu_item_init (GtkSeparatorMenuItem *item)
+{
 }
 
 GtkWidget *
