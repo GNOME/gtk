@@ -1,3 +1,8 @@
+Tue Jan  8 14:51:19 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkpaned.c (gtk_paned_expose): Don't draw
+	the handle if we aren't showing both children.
+
 Tue Jan  8 14:45:43 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_add_events): Fix
