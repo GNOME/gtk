@@ -147,9 +147,7 @@ typedef struct {
 
 typedef struct {
   GdkFontPrivate base;
-
-  FT_Face face;
-  double size;
+  int size;
 } GdkFontPrivateFB;
 
 void gdk_fb_font_init(void);

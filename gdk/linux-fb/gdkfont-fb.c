@@ -48,8 +48,10 @@ gdk_font_from_description (PangoFontDescription *font_desc)
 
   private = g_new0 (GdkFontPrivateFB, 1);
   font = (GdkFont *)private;
+  font->type = GDK_FONT_FONT;
+  private->size = font_desc->size;
   private->base.ref_count = 1;
-
+  
   return font;
 }
 
@@ -294,7 +296,11 @@ gdk_text_width (GdkFont      *font,
 
   return width;
 #else
-  return 0;
+  GdkFontPrivateFB *private;
+
+  private = (GdkFontPrivateFB*) font;
+  
+  return text_length * private->size / (PANGO_SCALE/2);
 #endif
 }
 
