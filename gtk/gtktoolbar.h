@@ -97,14 +97,14 @@ void       gtk_toolbar_prepend_space   (GtkToolbar      *toolbar);
 void       gtk_toolbar_insert_space    (GtkToolbar      *toolbar,
 					gint             position);
 void       gtk_toolbar_append_widget   (GtkToolbar      *toolbar,
-					const char      *tooltip_text,
-					GtkWidget       *widget);
-void       gtk_toolbar_prepend_widget  (GtkToolbar      *toolbar,
-					const char      *tooltip_text,
-					GtkWidget       *widget);
-void       gtk_toolbar_insert_widget   (GtkToolbar      *toolbar,
-					const char      *tooltip_text,
 					GtkWidget       *widget,
+					const char      *tooltip_text);
+void       gtk_toolbar_prepend_widget  (GtkToolbar      *toolbar,
+					GtkWidget       *widget,
+					const char      *tooltip_text);
+void       gtk_toolbar_insert_widget   (GtkToolbar      *toolbar,
+					GtkWidget       *widget,
+					const char      *tooltip_text,
 					gint             position);
 
 void       gtk_toolbar_set_orientation (GtkToolbar      *toolbar,

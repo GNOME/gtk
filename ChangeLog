@@ -1,3 +1,13 @@
+Mon Jan 19 16:21:00 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
+
+	* gtk/testgtk.c (create_toolbar): Removed the GTK_PIXMAP casts to
+	match Eckehard's new prototypes.
+
+	* gtk/gtktoolbar.h: Switched the order of the tooltip_text and
+	widget parameters to the gtk_toolbar_*_widget() functions, to be
+	friendlier to the C++ bindings.  This is per request of Guillaume
+	Laurent.
+
 Mon Jan 19 09:16:38 1998  Tim Janik  <timj@psynet.net>
 
 	* gtk/gtkmain.c (gtk_grab_add) (gtk_grab_remove): this is a stack

@@ -167,6 +167,7 @@ static void
 gtk_toolbar_init (GtkToolbar *toolbar)
 {
   GTK_WIDGET_SET_FLAGS (toolbar, GTK_NO_WINDOW);
+  GTK_WIDGET_UNSET_FLAGS (toolbar, GTK_CAN_FOCUS);
 
   toolbar->num_children = 0;
   toolbar->children     = NULL;
@@ -507,7 +508,7 @@ gtk_toolbar_add (GtkContainer *container,
   g_return_if_fail (GTK_IS_TOOLBAR (container));
   g_return_if_fail (widget != NULL);
 
-  gtk_toolbar_append_widget (GTK_TOOLBAR (container), NULL, widget);
+  gtk_toolbar_append_widget (GTK_TOOLBAR (container), widget, NULL);
 }
 
 static void
@@ -725,24 +726,24 @@ gtk_toolbar_insert_space (GtkToolbar *toolbar,
 
 void
 gtk_toolbar_append_widget (GtkToolbar *toolbar,
-			   const char *tooltip_text,
-			   GtkWidget  *widget)
+			   GtkWidget  *widget,
+			   const char *tooltip_text)
 {
-  gtk_toolbar_insert_widget (toolbar, tooltip_text, widget, toolbar->num_children);
+  gtk_toolbar_insert_widget (toolbar, widget, tooltip_text, toolbar->num_children);
 }
 
 void
 gtk_toolbar_prepend_widget (GtkToolbar *toolbar,
-			    const char *tooltip_text,
-			    GtkWidget  *widget)
+			    GtkWidget  *widget,
+			    const char *tooltip_text)
 {
-  gtk_toolbar_insert_widget (toolbar, tooltip_text, widget, 0);
+  gtk_toolbar_insert_widget (toolbar, widget, tooltip_text, 0);
 }
 
 void
 gtk_toolbar_insert_widget (GtkToolbar *toolbar,
-			   const char *tooltip_text,
 			   GtkWidget  *widget,
+			   const char *tooltip_text,
 			   gint        position)
 {
   Child *child;

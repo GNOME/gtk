@@ -654,63 +654,54 @@ create_toolbar (void)
 
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			       "Horizontal", "Horizontal toolbar layout",
-			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						       &window->style->bg[GTK_STATE_NORMAL])),
+			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_horizontal, toolbar);
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			       "Vertical", "Vertical toolbar layout",
-			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						       &window->style->bg[GTK_STATE_NORMAL])),
+			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_vertical, toolbar);
 
       gtk_toolbar_append_space (GTK_TOOLBAR(toolbar));
 
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			       "Icons", "Only show toolbar icons",
-			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						       &window->style->bg[GTK_STATE_NORMAL])),
+			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_icons, toolbar);
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			       "Text", "Only show toolbar text",
-			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						       &window->style->bg[GTK_STATE_NORMAL])),
+			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_text, toolbar);
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			       "Both", "Show toolbar icons and text",
-			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						       &window->style->bg[GTK_STATE_NORMAL])),
+			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_both, toolbar);
 
       gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
       entry = gtk_entry_new ();
       gtk_widget_show(entry);
-      gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar), NULL, entry);
+      gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar), entry, NULL);
 
       gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			       "Small", "Use small spaces",
-			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						       &window->style->bg[GTK_STATE_NORMAL])),
+			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_small_space, toolbar);
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			       "Big", "Use big spaces",
-			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						       &window->style->bg[GTK_STATE_NORMAL])),
+			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_big_space, toolbar);
 
       gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			       "Enable", "Enable tooltips",
-			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						       &window->style->bg[GTK_STATE_NORMAL])),
+			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_enable, toolbar);
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			       "Disable", "Disable tooltips",
-			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						       &window->style->bg[GTK_STATE_NORMAL])),
+			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			       (GtkSignalFunc) set_toolbar_disable, toolbar);
 
       gtk_container_add (GTK_CONTAINER (window), toolbar);
@@ -735,57 +726,48 @@ make_toolbar (GtkWidget *window)
 
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			   "Horizontal", "Horizontal toolbar layout",
-			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						   &window->style->bg[GTK_STATE_NORMAL])),
+			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_horizontal, toolbar);
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			   "Vertical", "Vertical toolbar layout",
-			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						   &window->style->bg[GTK_STATE_NORMAL])),
+			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_vertical, toolbar);
 
   gtk_toolbar_append_space (GTK_TOOLBAR(toolbar));
 
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			   "Icons", "Only show toolbar icons",
-			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						   &window->style->bg[GTK_STATE_NORMAL])),
+			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_icons, toolbar);
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			   "Text", "Only show toolbar text",
-			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						   &window->style->bg[GTK_STATE_NORMAL])),
+			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_text, toolbar);
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			   "Both", "Show toolbar icons and text",
-			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						   &window->style->bg[GTK_STATE_NORMAL])),
+			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_both, toolbar);
 
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			   "Small", "Use small spaces",
-			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						   &window->style->bg[GTK_STATE_NORMAL])),
+			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_small_space, toolbar);
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			   "Big", "Use big spaces",
-			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						   &window->style->bg[GTK_STATE_NORMAL])),
+			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_big_space, toolbar);
 
   gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			   "Enable", "Enable tooltips",
-			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						   &window->style->bg[GTK_STATE_NORMAL])),
+			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_enable, toolbar);
   gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 			   "Disable", "Disable tooltips",
-			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
-						   &window->style->bg[GTK_STATE_NORMAL])),
+			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
 			   (GtkSignalFunc) set_toolbar_disable, toolbar);
 
   return toolbar;
