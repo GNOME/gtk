@@ -469,6 +469,8 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 		  return TRUE;
 		}
 	    }
+	  else if (menu_item && !GTK_WIDGET_IS_SENSITIVE (menu_item))
+	    deactivate = FALSE;
 	  else if (menu_shell->parent_menu_shell)
 	    {
 	      menu_shell->active = TRUE;
