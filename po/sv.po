@@ -8,28 +8,28 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2003-11-04 14:08+0100\n"
-"PO-Revision-Date: 2003-11-04 14:09+0100\n"
+"POT-Creation-Date: 2003-11-18 14:57+0100\n"
+"PO-Revision-Date: 2003-11-18 14:57+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:712
-#: gdk-pixbuf/gdk-pixbuf-io.c:845 tests/testfilechooser.c:183
+#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:731
+#: gdk-pixbuf/gdk-pixbuf-io.c:864 tests/testfilechooser.c:198
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Misslyckades med att öppna filen \"%s\": %s"
 
 # SUN CHANGED MESSAGE
-#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:722
+#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:741
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Bildfilen \"%s\" innehåller inga data"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:756
-#: gdk-pixbuf/gdk-pixbuf-io.c:882 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:775
+#: gdk-pixbuf/gdk-pixbuf-io.c:901 tests/testfilechooser.c:237
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -74,22 +74,22 @@ msgstr "Kunde inte känna igen bildfilformatet på filen \"%s\""
 msgid "Unrecognized image file format"
 msgstr "Okänt bildfilformat"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:767
+#: gdk-pixbuf/gdk-pixbuf-io.c:786
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Misslyckades med att läsa in bilden \"%s\": %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:993
+#: gdk-pixbuf/gdk-pixbuf-io.c:1012
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Detta bygge av gdk-pixbuf stöder inte sparande av bildformatet: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1104
+#: gdk-pixbuf/gdk-pixbuf-io.c:1123
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Misslyckades med att öppna \"%s\" för skrivning: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1125
+#: gdk-pixbuf/gdk-pixbuf-io.c:1144
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -341,11 +341,7 @@ msgstr "Bilden har ogiltig bredd och/eller höjd"
 msgid "Image has unsupported bpp"
 msgstr "Bilden har bitdjup som inte stöds"
 
-#: gdk-pixbuf/io-pcx.c:619
-msgid "Image has unsupported number of 1-bit planes"
-msgstr "Bilden har ett antal 1-bitplan som inte stöds"
-
-#: gdk-pixbuf/io-pcx.c:627
+#: gdk-pixbuf/io-pcx.c:619 gdk-pixbuf/io-pcx.c:627
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
 msgstr "Bilden har ett antal %d-bitplan som inte stöds"
@@ -766,7 +762,7 @@ msgstr "Namn"
 msgid "A unique name for the action."
 msgstr "Ett unikt namn för åtgärden."
 
-#: gtk/gtkaction.c:193 gtk/gtkbutton.c:190 gtk/gtkexpander.c:200
+#: gtk/gtkaction.c:193 gtk/gtkbutton.c:190 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Etikett"
@@ -1027,7 +1023,7 @@ msgstr ""
 "Om SANT kommer barnet att visas i en sekundär grupp med barn. Användbart "
 "exempelvis för hjälpknappar"
 
-#: gtk/gtkbox.c:128 gtk/gtkexpander.c:216
+#: gtk/gtkbox.c:128 gtk/gtkexpander.c:226
 msgid "Spacing"
 msgstr "Mellanrum"
 
@@ -1085,7 +1081,7 @@ msgstr ""
 "En GtkPackType som indikerar huruvida barnet packas med avseende på början "
 "eller slutet på föräldern"
 
-#: gtk/gtkbox.c:174 gtk/gtknotebook.c:490 gtk/gtkpaned.c:236
+#: gtk/gtkbox.c:174 gtk/gtknotebook.c:490 gtk/gtkpaned.c:238
 #: gtk/gtkruler.c:138
 msgid "Position"
 msgstr "Position"
@@ -1102,12 +1098,12 @@ msgstr ""
 "Texten på etikettwidgeten inuti knappen, om knappen innehåller en "
 "etikettwidget"
 
-#: gtk/gtkbutton.c:198 gtk/gtkexpander.c:208 gtk/gtklabel.c:311
+#: gtk/gtkbutton.c:198 gtk/gtkexpander.c:210 gtk/gtklabel.c:311
 #: gtk/gtktoolbutton.c:186
 msgid "Use underline"
 msgstr "Använd understrykning"
 
-#: gtk/gtkbutton.c:199 gtk/gtkexpander.c:209 gtk/gtklabel.c:312
+#: gtk/gtkbutton.c:199 gtk/gtkexpander.c:211 gtk/gtklabel.c:312
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1723,7 +1719,7 @@ msgstr "Indikatorstorlek"
 msgid "Size of check or radio indicator"
 msgstr "Storlek på kryss- eller radioindikator"
 
-#: gtk/gtkcheckbutton.c:106 gtk/gtkexpander.c:242 gtk/gtkoptionmenu.c:205
+#: gtk/gtkcheckbutton.c:106 gtk/gtkexpander.c:252 gtk/gtkoptionmenu.c:205
 msgid "Indicator Spacing"
 msgstr "Indikatormellanrum"
 
@@ -1774,10 +1770,10 @@ msgid "The title of the color selection dialog"
 msgstr "Titeln på färgvalsdialogen"
 
 #: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
-msgid "Pick a color"
+msgid "Pick a Color"
 msgstr "Välj en färg"
 
-#: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1770
+#: gtk/gtkcolorbutton.c:232 gtk/gtkcolorsel.c:1775
 msgid "Current Color"
 msgstr "Aktuell färg"
 
@@ -1785,7 +1781,7 @@ msgstr "Aktuell färg"
 msgid "The selected color"
 msgstr "Den markerade färgen"
 
-#: gtk/gtkcolorbutton.c:247 gtk/gtkcolorsel.c:1777
+#: gtk/gtkcolorbutton.c:247 gtk/gtkcolorsel.c:1782
 msgid "Current Alpha"
 msgstr "Aktuellt alfavärde"
 
@@ -1828,39 +1824,39 @@ msgstr ""
 "denna post kan du dra ett färgprov hit eller högerklicka och välja \"Spara "
 "färg här\"."
 
-#: gtk/gtkcolorsel.c:1756
+#: gtk/gtkcolorsel.c:1761
 msgid "Has Opacity Control"
 msgstr "Har opacitetskontoll"
 
-#: gtk/gtkcolorsel.c:1757
+#: gtk/gtkcolorsel.c:1762
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Huruvida färgväljaren ska tillåta inställning av opacitet"
 
-#: gtk/gtkcolorsel.c:1763
+#: gtk/gtkcolorsel.c:1768
 msgid "Has palette"
 msgstr "Har palett"
 
-#: gtk/gtkcolorsel.c:1764
+#: gtk/gtkcolorsel.c:1769
 msgid "Whether a palette should be used"
 msgstr "Huruvida en palett ska användas"
 
-#: gtk/gtkcolorsel.c:1771
+#: gtk/gtkcolorsel.c:1776
 msgid "The current color"
 msgstr "Den aktuella färgen"
 
-#: gtk/gtkcolorsel.c:1778
+#: gtk/gtkcolorsel.c:1783
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr "Aktuellt opacitetsvärde (0 är helt transparent, 65535 helt opakt)"
 
-#: gtk/gtkcolorsel.c:1792
+#: gtk/gtkcolorsel.c:1797
 msgid "Custom palette"
 msgstr "Anpassad palett"
 
-#: gtk/gtkcolorsel.c:1793
+#: gtk/gtkcolorsel.c:1798
 msgid "Palette to use in the color selector"
 msgstr "Palett att använda i färgväljaren"
 
-#: gtk/gtkcolorsel.c:1834
+#: gtk/gtkcolorsel.c:1839
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1868,7 +1864,7 @@ msgstr ""
 "Välj den färg som du vill ha från den yttre ringen. Välj mörkheten eller "
 "ljusheten på den färgen genom att använda den inre triangeln."
 
-#: gtk/gtkcolorsel.c:1859
+#: gtk/gtkcolorsel.c:1864
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1876,67 +1872,67 @@ msgstr ""
 "Klicka på pipetten, och klicka sedan på en färg någonstans på din skärm för "
 "att välja den färgen."
 
-#: gtk/gtkcolorsel.c:1868
+#: gtk/gtkcolorsel.c:1873
 msgid "_Hue:"
 msgstr "_Nyans:"
 
-#: gtk/gtkcolorsel.c:1869
+#: gtk/gtkcolorsel.c:1874
 msgid "Position on the color wheel."
 msgstr "Position på färghjulet."
 
-#: gtk/gtkcolorsel.c:1871
+#: gtk/gtkcolorsel.c:1876
 msgid "_Saturation:"
 msgstr "_Mättnad:"
 
-#: gtk/gtkcolorsel.c:1872
+#: gtk/gtkcolorsel.c:1877
 msgid "\"Deepness\" of the color."
 msgstr "\"Djup\" på färgen."
 
-#: gtk/gtkcolorsel.c:1873
+#: gtk/gtkcolorsel.c:1878
 msgid "_Value:"
 msgstr "_Värde:"
 
-#: gtk/gtkcolorsel.c:1874
+#: gtk/gtkcolorsel.c:1879
 msgid "Brightness of the color."
 msgstr "Ljushet på färgen."
 
-#: gtk/gtkcolorsel.c:1875
+#: gtk/gtkcolorsel.c:1880
 msgid "_Red:"
 msgstr "_Röd:"
 
-#: gtk/gtkcolorsel.c:1876
+#: gtk/gtkcolorsel.c:1881
 msgid "Amount of red light in the color."
 msgstr "Mängd rött ljus i färgen."
 
-#: gtk/gtkcolorsel.c:1877
+#: gtk/gtkcolorsel.c:1882
 msgid "_Green:"
 msgstr "_Grön:"
 
-#: gtk/gtkcolorsel.c:1878
+#: gtk/gtkcolorsel.c:1883
 msgid "Amount of green light in the color."
 msgstr "Mängd grönt ljus i färgen."
 
-#: gtk/gtkcolorsel.c:1879
+#: gtk/gtkcolorsel.c:1884
 msgid "_Blue:"
 msgstr "_Blå:"
 
-#: gtk/gtkcolorsel.c:1880
+#: gtk/gtkcolorsel.c:1885
 msgid "Amount of blue light in the color."
 msgstr "Mängd blått ljus i bilden."
 
-#: gtk/gtkcolorsel.c:1883
+#: gtk/gtkcolorsel.c:1888
 msgid "_Opacity:"
 msgstr "_Opacitet:"
 
-#: gtk/gtkcolorsel.c:1891
-msgid "Transparency of the currently-selected color."
-msgstr "Genomskinlighet på den färg som är vald för tillfället."
+#: gtk/gtkcolorsel.c:1896 gtk/gtkcolorsel.c:1907
+msgid "Transparency of the color."
+msgstr "Genomskinlighet för färgen."
 
-#: gtk/gtkcolorsel.c:1906
+#: gtk/gtkcolorsel.c:1914
 msgid "Color _Name:"
 msgstr "Färg_namn:"
 
-#: gtk/gtkcolorsel.c:1921
+#: gtk/gtkcolorsel.c:1929
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1944,7 +1940,7 @@ msgstr ""
 "Du kan ange ett hexadecimalt färgvärde i HTML-stil, eller helt enkelt ange "
 "ett engelskt namn på färgen som exempelvis \"orange\" i detta fält."
 
-#: gtk/gtkcolorsel.c:1940
+#: gtk/gtkcolorsel.c:1948
 msgid "_Palette"
 msgstr "_Palett"
 
@@ -1992,59 +1988,59 @@ msgstr "Värde i lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Huruvida angivna värden redan måste finnas i listan"
 
-#: gtk/gtkcombobox.c:335
+#: gtk/gtkcombobox.c:340
 msgid "ComboBox model"
 msgstr "ComboBox-modell"
 
-#: gtk/gtkcombobox.c:336
+#: gtk/gtkcombobox.c:341
 msgid "The model for the combo box"
 msgstr "Modellen för comboboxen"
 
-#: gtk/gtkcombobox.c:343
+#: gtk/gtkcombobox.c:348
 msgid "Wrap width"
 msgstr "Radbrytningsbredd"
 
-#: gtk/gtkcombobox.c:344
+#: gtk/gtkcombobox.c:349
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Radbrytningsbredd för utläggning av objekten i ett rutnät"
 
-#: gtk/gtkcombobox.c:353
+#: gtk/gtkcombobox.c:358
 msgid "Row span column"
 msgstr "Radspannskolumn"
 
-#: gtk/gtkcombobox.c:354
+#: gtk/gtkcombobox.c:359
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-kolumn som innehåller radspannsvärden"
 
-#: gtk/gtkcombobox.c:363
+#: gtk/gtkcombobox.c:368
 msgid "Column span column"
 msgstr "Kolumnspannskolumn"
 
-#: gtk/gtkcombobox.c:364
+#: gtk/gtkcombobox.c:369
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-kolumn som innehåller kolumnspannsvärden"
 
-#: gtk/gtkcombobox.c:373
+#: gtk/gtkcombobox.c:378
 msgid "Active item"
 msgstr "Aktivt objekt"
 
-#: gtk/gtkcombobox.c:374
+#: gtk/gtkcombobox.c:379
 msgid "The item which is currently active"
 msgstr "Det objekt som är aktivt för tillfället"
 
-#: gtk/gtkcombobox.c:382
+#: gtk/gtkcombobox.c:387
 msgid "ComboBox appareance"
 msgstr "ComboBox-utseende"
 
-#: gtk/gtkcombobox.c:383
+#: gtk/gtkcombobox.c:388
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "ComboBox-utseende, där SANT betyder av Windows-typ."
 
-#: gtk/gtkcomboboxentry.c:106
+#: gtk/gtkcomboboxentry.c:104
 msgid "Text Column"
 msgstr "Textkolumn"
 
-#: gtk/gtkcomboboxentry.c:107
+#: gtk/gtkcomboboxentry.c:105
 msgid "A column in the data source model to get the strings from"
 msgstr "En kolumn i datakällmodellen att hämta strängar från"
 
@@ -2296,39 +2292,47 @@ msgstr ""
 "Huruvida händelserutans händelsefångande fönster är över barnwidgetens "
 "fönster istället för under det."
 
-#: gtk/gtkexpander.c:192
+#: gtk/gtkexpander.c:194
 msgid "Expanded"
 msgstr "Expanderad"
 
-#: gtk/gtkexpander.c:193
+#: gtk/gtkexpander.c:195
 msgid "Whether the expander has been opened to reveal the child widget"
 msgstr "Huruvida expanderaren har öppnats för att avslöja barnwidgeten"
 
-#: gtk/gtkexpander.c:201
+#: gtk/gtkexpander.c:203
 msgid "Text of the expander's label"
 msgstr "Text på expanderarens etikett"
 
-#: gtk/gtkexpander.c:217
+#: gtk/gtkexpander.c:218 gtk/gtklabel.c:304
+msgid "Use markup"
+msgstr "Använd markup"
+
+#: gtk/gtkexpander.c:219 gtk/gtklabel.c:305
+msgid "The text of the label includes XML markup. See pango_parse_markup()"
+msgstr "Etikettens text innehåller XML-markup. Se pango_parse_markup()"
+
+#: gtk/gtkexpander.c:227
 msgid "Space to put between the label and the child"
 msgstr "Utrymme att placera mellan etiketten och barnet"
 
-#: gtk/gtkexpander.c:226 gtk/gtkframe.c:169 gtk/gtktoolbutton.c:193
+#: gtk/gtkexpander.c:236 gtk/gtkframe.c:169 gtk/gtktoolbutton.c:193
 msgid "Label widget"
 msgstr "Etikettwidget"
 
-#: gtk/gtkexpander.c:227
+#: gtk/gtkexpander.c:237
 msgid "A widget to display in place of the usual expander label"
 msgstr "En widget att visa istället för den vanliga expanderaretiketten"
 
-#: gtk/gtkexpander.c:233 gtk/gtktreeview.c:607
+#: gtk/gtkexpander.c:243 gtk/gtktreeview.c:607
 msgid "Expander Size"
 msgstr "Storlek på expanderare"
 
-#: gtk/gtkexpander.c:234 gtk/gtktreeview.c:608
+#: gtk/gtkexpander.c:244 gtk/gtktreeview.c:608
 msgid "Size of the expander arrow"
 msgstr "Storlek på expanderarpilen"
 
-#: gtk/gtkexpander.c:243
+#: gtk/gtkexpander.c:253
 msgid "Spacing around expander arrow"
 msgstr "Mellanrum runt expanderarpil"
 
@@ -2415,8 +2419,8 @@ msgstr "Visa dolda"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Huruvida de dolda filerna och mapparna ska visas"
 
-#: gtk/gtkfilechooser.c:1442 gtk/gtkfilechooser.c:1486
-#: gtk/gtkfilechooser.c:1561 gtk/gtkfilechooser.c:1605
+#: gtk/gtkfilechooser.c:1446 gtk/gtkfilechooser.c:1490
+#: gtk/gtkfilechooser.c:1565 gtk/gtkfilechooser.c:1609
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "Ogiltigt filnamn: %s"
@@ -2786,8 +2790,8 @@ msgstr "Y-position på barnwidgeten"
 msgid "The title of the font selection dialog"
 msgstr "Titeln på typsnittsväljardialogen"
 
-#: gtk/gtkfontbutton.c:177
-msgid "Pick a font"
+#: gtk/gtkfontbutton.c:177 gtk/gtkfontbutton.c:294
+msgid "Pick a Font"
 msgstr "Välj ett typsnitt"
 
 #: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:210
@@ -2834,10 +2838,6 @@ msgstr "Visa storlek"
 #: gtk/gtkfontbutton.c:257
 msgid "Whether selected font size is shown in the label"
 msgstr "Huruvida den valda typsnittsstorleken visas i etiketten"
-
-#: gtk/gtkfontbutton.c:294
-msgid "Pick a Font"
-msgstr "Välj ett typsnitt"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -2975,7 +2975,7 @@ msgstr ""
 msgid "Error loading icon: %s"
 msgstr "Fel vid inläsning av ikonen: %s"
 
-#: gtk/gtkicontheme.c:1195
+#: gtk/gtkicontheme.c:1217
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikonen \"%s\" finns inte i temat"
@@ -3069,8 +3069,8 @@ msgid "Input"
 msgstr "Inmatning"
 
 #: gtk/gtkinputdialog.c:242
-msgid "No input devices"
-msgstr "Inga inmatningsenheter"
+msgid "No extended input devices"
+msgstr "Inga utökade inmatningsenheter"
 
 #: gtk/gtkinputdialog.c:254
 msgid "_Device:"
@@ -3154,14 +3154,6 @@ msgstr "Texten på etiketten"
 #: gtk/gtklabel.c:298
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "En lista med stilattribut att tillämpa på texten i etiketten"
-
-#: gtk/gtklabel.c:304
-msgid "Use markup"
-msgstr "Använd markup"
-
-#: gtk/gtklabel.c:305
-msgid "The text of the label includes XML markup. See pango_parse_markup()"
-msgstr "Etikettens text innehåller XML-markup. Se pango_parse_markup()"
 
 #: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:602
 msgid "Justification"
@@ -3270,29 +3262,29 @@ msgstr "Höjden på layouten"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:344
+#: gtk/gtkmenu.c:346
 msgid "Tearoff Title"
 msgstr "Löstagbar titel"
 
-#: gtk/gtkmenu.c:345
+#: gtk/gtkmenu.c:347
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "En titel som kan visas av fönsterhanteraren då denna meny tas loss"
 
-#: gtk/gtkmenu.c:351
+#: gtk/gtkmenu.c:353
 msgid "Vertical Padding"
 msgstr "Vertikal utfyllnad"
 
-#: gtk/gtkmenu.c:352
+#: gtk/gtkmenu.c:354
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Extra utrymme överst och nederst i menyn"
 
-#: gtk/gtkmenu.c:360
+#: gtk/gtkmenu.c:362
 msgid "Vertical Offset"
 msgstr "Vertikalt avstånd"
 
-#: gtk/gtkmenu.c:361
+#: gtk/gtkmenu.c:363
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -3300,11 +3292,11 @@ msgstr ""
 "Positionera menyn med vertikalt avstånd i detta antal bildpunkter när den är "
 "en undermeny"
 
-#: gtk/gtkmenu.c:369
+#: gtk/gtkmenu.c:371
 msgid "Horizontal Offset"
 msgstr "Horisontellt avstånd"
 
-#: gtk/gtkmenu.c:370
+#: gtk/gtkmenu.c:372
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -3312,64 +3304,64 @@ msgstr ""
 "Positionera menyn med horisontellt avstånd i detta antal bildpunkter när den "
 "är en undermeny"
 
-#: gtk/gtkmenu.c:380
+#: gtk/gtkmenu.c:382
 msgid "Left Attach"
 msgstr "Vänsterfäste"
 
-#: gtk/gtkmenu.c:381 gtk/gtktable.c:203
+#: gtk/gtkmenu.c:383 gtk/gtktable.c:203
 msgid "The column number to attach the left side of the child to"
 msgstr "Det kolumnnummer som vänster sida av barnet ska fästas vid"
 
-#: gtk/gtkmenu.c:388
+#: gtk/gtkmenu.c:390
 msgid "Right Attach"
 msgstr "Högerfäste"
 
-#: gtk/gtkmenu.c:389
+#: gtk/gtkmenu.c:391
 msgid "The column number to attach the right side of the child to"
 msgstr "Det kolumnnummer som höger sida av barnet ska fästas vid"
 
-#: gtk/gtkmenu.c:396
+#: gtk/gtkmenu.c:398
 msgid "Top Attach"
 msgstr "Övre fäste"
 
-#: gtk/gtkmenu.c:397
+#: gtk/gtkmenu.c:399
 msgid "The row number to attach the top of the child to"
 msgstr "Det radnummer som överkanten på barnet ska fästas vid"
 
-#: gtk/gtkmenu.c:404
+#: gtk/gtkmenu.c:406
 msgid "Bottom Attach"
 msgstr "Nedre fäste"
 
-#: gtk/gtkmenu.c:405 gtk/gtktable.c:224
+#: gtk/gtkmenu.c:407 gtk/gtktable.c:224
 msgid "The row number to attach the bottom of the child to"
 msgstr "Det radnummer som nederkanten på barnet ska fästas vid"
 
-#: gtk/gtkmenu.c:492
+#: gtk/gtkmenu.c:494
 msgid "Can change accelerators"
 msgstr "Kan ändra snabbtangenter"
 
-#: gtk/gtkmenu.c:493
+#: gtk/gtkmenu.c:495
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Huruvida menysnabbtangenter kan ändras genom att en tangent trycks ovanför "
 "menyposten"
 
-#: gtk/gtkmenu.c:498
+#: gtk/gtkmenu.c:500
 msgid "Delay before submenus appear"
 msgstr "Fördröjning innan undermenyer visas"
 
-#: gtk/gtkmenu.c:499
+#: gtk/gtkmenu.c:501
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Minsta tid som pekaren måste stanna över en menypost innan undermenyn visas"
 
-#: gtk/gtkmenu.c:506
+#: gtk/gtkmenu.c:508
 msgid "Delay before hiding a submenu"
 msgstr "Fördröjning innan en undermeny döljs"
 
-#: gtk/gtkmenu.c:507
+#: gtk/gtkmenu.c:509
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3628,42 +3620,58 @@ msgstr "Storlek på nedfällningsindikator"
 msgid "Spacing around indicator"
 msgstr "Mellanrum runt indikator"
 
-#: gtk/gtkpaned.c:237
+#: gtk/gtkpaned.c:239
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "Position på panelseparator i bildpunkter (0 betyder längst till vänster/"
 "överst)"
 
-#: gtk/gtkpaned.c:245
+#: gtk/gtkpaned.c:247
 msgid "Position Set"
 msgstr "Inställd position"
 
-#: gtk/gtkpaned.c:246
+#: gtk/gtkpaned.c:248
 msgid "TRUE if the Position property should be used"
 msgstr "SANT om positionsegenskapen ska användas"
 
-#: gtk/gtkpaned.c:252
+#: gtk/gtkpaned.c:254
 msgid "Handle Size"
 msgstr "Storlek på handtag"
 
-#: gtk/gtkpaned.c:253
+#: gtk/gtkpaned.c:255
 msgid "Width of handle"
 msgstr "Bredd på handtag"
 
-#: gtk/gtkpaned.c:270
+#: gtk/gtkpaned.c:271
+msgid "Minimal Position"
+msgstr "Minimal position"
+
+#: gtk/gtkpaned.c:272
+msgid "Smallest possible value for the \"position\" property"
+msgstr "Minsta möjliga värde för egenskapen \"position\""
+
+#: gtk/gtkpaned.c:289
+msgid "Maximal Position"
+msgstr "Maximal position"
+
+#: gtk/gtkpaned.c:290
+msgid "Largest possible value for the \"position\" property"
+msgstr "Största möjliga värde för egenskapen \"position\""
+
+#: gtk/gtkpaned.c:307
 msgid "Resize"
 msgstr "Ändra storlek"
 
-#: gtk/gtkpaned.c:271
+#: gtk/gtkpaned.c:308
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr "Om SANT expanderar barnet och krymper tillsammans med panelwidgeten"
 
-#: gtk/gtkpaned.c:286
+#: gtk/gtkpaned.c:323
 msgid "Shrink"
 msgstr "Krymp"
 
-#: gtk/gtkpaned.c:287
+#: gtk/gtkpaned.c:324
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Om SANT kan barnet göras mindre än dess begäran"
 
@@ -5483,7 +5491,7 @@ msgstr "Oväntad starttagg \"%s\" på rad %d tecken %d"
 msgid "Unexpected character data on line %d char %d"
 msgstr "Oväntade teckendata på rad %d tecken %d"
 
-#: gtk/gtkuimanager.c:1916
+#: gtk/gtkuimanager.c:1918
 msgid "Empty"
 msgstr "Tom"
 
@@ -5945,10 +5953,28 @@ msgstr "Vietnamesisk (VIQR)"
 msgid "X Input Method"
 msgstr "X-inmatningsmetod"
 
-#: tests/testfilechooser.c:170
+#: tests/testfilechooser.c:185
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Kunde inte hämta information om filen \"%s\": %s"
+
+#~ msgid "Pick a color"
+#~ msgstr "Välj en färg"
+
+#~ msgid "No input devices"
+#~ msgstr "Inga inmatningsenheter"
+
+#~ msgid "Bookmark saving failed (%s)"
+#~ msgstr "Bokmärkessparande misslyckades (%s)"
+
+#~ msgid "Bookmark saving failed"
+#~ msgstr "Bokmärkessparande misslyckades"
+
+#~ msgid "Image has unsupported number of 1-bit planes"
+#~ msgstr "Bilden har ett antal 1-bitplan som inte stöds"
+
+#~ msgid "Pick a font"
+#~ msgstr "Välj ett typsnitt"
 
 #~ msgid "Files of type:"
 #~ msgstr "Filer av typen:"
