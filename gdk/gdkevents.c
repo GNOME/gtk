@@ -560,6 +560,125 @@ gdk_event_get_state (GdkEvent        *event,
 }
 
 /**
+ * gdk_event_get_coords:
+ * @event: a #GdkEvent
+ * @x_root: location to put event window x coordinate
+ * @y_root: location to put event window y coordinate
+ * 
+ * Extract the event window relative x/y coordinates from an event.
+ * 
+ * Return value: %TRUE if the event delivered event window coordinates
+ **/
+gboolean
+gdk_event_get_coords (GdkEvent *event,
+		      gdouble  *x_win,
+		      gdouble  *y_win)
+{
+  gdouble x = 0, y = 0;
+  gboolean fetched = TRUE;
+  
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  switch (event->type)
+    {
+    case GDK_CONFIGURE:
+      x = event->configure.x;
+      y = event->configure.y;
+      break;
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+      x = event->crossing.x;
+      y = event->crossing.y;
+      break;
+    case GDK_SCROLL:
+      x = event->scroll.x;
+      y = event->scroll.y;
+      break;
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      x = event->button.x;
+      y = event->button.y;
+      break;
+    case GDK_MOTION_NOTIFY:
+      x = event->motion.x;
+      y = event->motion.y;
+      break;
+    default:
+      fetched = FALSE;
+      break;
+    }
+
+  if (x_win)
+    *x_win = x;
+  if (y_win)
+    *y_win = x;
+
+  return fetched;
+}
+
+/**
+ * gdk_event_get_root_coords:
+ * @event: a #GdkEvent
+ * @x_root: location to put root window x coordinate
+ * @y_root: location to put root window y coordinate
+ * 
+ * Extract the root window relative x/y coordinates from an event.
+ * 
+ * Return value: %TRUE if the event delivered root window coordinates
+ **/
+gboolean
+gdk_event_get_root_coords (GdkEvent *event,
+			   gdouble  *x_root,
+			   gdouble  *y_root)
+{
+  gdouble x = 0, y = 0;
+  gboolean fetched = TRUE;
+  
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  switch (event->type)
+    {
+    case GDK_MOTION_NOTIFY:
+      x = event->motion.x_root;
+      y = event->motion.y_root;
+      break;
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      x = event->button.x_root;
+      y = event->button.y_root;
+      break;
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+      x = event->crossing.x_root;
+      y = event->crossing.y_root;
+      break;
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+      x = event->dnd.x_root;
+      y = event->dnd.y_root;
+      break;
+    default:
+      fetched = FALSE;
+      break;
+    }
+
+  if (x_root)
+    *x_root = x;
+  if (y_root)
+    *y_root = x;
+
+  return fetched;
+}
+
+/**
  * gdk_event_get_axis:
  * @event: a #GdkEvent
  * @axis_use: the axis use to look for

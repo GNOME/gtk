@@ -74,6 +74,7 @@ enum {
   GRAB_FOCUS,
   FOCUS,
   EVENT,
+  EVENT_AFTER,
   BUTTON_PRESS_EVENT,
   BUTTON_RELEASE_EVENT,
   SCROLL_EVENT,
@@ -664,16 +665,24 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                    GTK_TYPE_DIRECTION_TYPE);
   widget_signals[EVENT] =
     g_signal_newc ("event",
-		   G_TYPE_FROM_CLASS(object_class),
+		   G_TYPE_FROM_CLASS (object_class),
 		   G_SIGNAL_RUN_LAST,
 		   G_STRUCT_OFFSET(GtkWidgetClass, event),
 		   _gtk_boolean_handled_accumulator, NULL,
 		   gtk_marshal_BOOLEAN__BOXED,
 		   G_TYPE_BOOLEAN, 1,
 		   GDK_TYPE_EVENT);
+  widget_signals[EVENT_AFTER] =
+    g_signal_newc ("event-after",
+		   G_TYPE_FROM_CLASS (object_class),
+		   0,
+		   0,
+		   NULL, NULL,
+		   gtk_marshal_VOID__BOXED,
+		   G_TYPE_NONE, 1, GDK_TYPE_EVENT);
   widget_signals[BUTTON_PRESS_EVENT] =
     g_signal_newc ("button_press_event",
-		   G_TYPE_FROM_CLASS(object_class),
+		   G_TYPE_FROM_CLASS (object_class),
 		   G_SIGNAL_RUN_LAST,
 		   G_STRUCT_OFFSET(GtkWidgetClass, button_press_event),
 		   _gtk_boolean_handled_accumulator, NULL,
@@ -1732,7 +1741,7 @@ gtk_widget_hide (GtkWidget *widget)
     {
       gtk_widget_ref (widget);
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[HIDE]);
-      if (!GTK_WIDGET_TOPLEVEL (widget) && !GTK_OBJECT_DESTROYED (widget))
+      if (!GTK_WIDGET_TOPLEVEL (widget) && GTK_WIDGET_REALIZED (widget))
 	gtk_widget_queue_resize (widget);
       g_object_notify (G_OBJECT (widget), "visible");
       gtk_widget_unref (widget);
@@ -2597,8 +2606,8 @@ gboolean
 gtk_widget_event (GtkWidget *widget,
 		  GdkEvent  *event)
 {
-  g_return_val_if_fail (widget != NULL, TRUE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
+  g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), TRUE);
 
   if (event->type == GDK_EXPOSE)
     {
@@ -2634,8 +2643,8 @@ gint
 gtk_widget_send_expose (GtkWidget *widget,
 			GdkEvent  *event)
 {
-  g_return_val_if_fail (widget != NULL, TRUE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
+  g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), TRUE);
   g_return_val_if_fail (event != NULL, TRUE);
   g_return_val_if_fail (event->type == GDK_EXPOSE, TRUE);
 
@@ -2649,115 +2658,111 @@ static gint
 gtk_widget_event_internal (GtkWidget *widget,
 			   GdkEvent  *event)
 {
-  gboolean return_val;
-  gint signal_num;
+  gboolean return_val = FALSE;
 
   gtk_widget_ref (widget);
-  return_val = FALSE;
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EVENT], event,
-		   &return_val);
-  if (return_val || GTK_OBJECT_DESTROYED (widget))
-    goto out;
 
-  switch (event->type)
+  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EVENT], event, &return_val);
+  return_val |= !GTK_WIDGET_REALIZED (widget);
+  if (!return_val)
     {
-    case GDK_NOTHING:
-      signal_num = -1;
-      break;
-    case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
-      signal_num = BUTTON_PRESS_EVENT;
-      break;
-    case GDK_SCROLL:
-      signal_num = SCROLL_EVENT;
-      break;
-    case GDK_BUTTON_RELEASE:
-      signal_num = BUTTON_RELEASE_EVENT;
-      break;
-    case GDK_MOTION_NOTIFY:
-      signal_num = MOTION_NOTIFY_EVENT;
-      break;
-    case GDK_DELETE:
-      signal_num = DELETE_EVENT;
-      break;
-    case GDK_DESTROY:
-      signal_num = DESTROY_EVENT;
-      break;
-    case GDK_KEY_PRESS:
-      signal_num = KEY_PRESS_EVENT;
-      break;
-    case GDK_KEY_RELEASE:
-      signal_num = KEY_RELEASE_EVENT;
-      break;
-    case GDK_ENTER_NOTIFY:
-      signal_num = ENTER_NOTIFY_EVENT;
-      break;
-    case GDK_LEAVE_NOTIFY:
-      signal_num = LEAVE_NOTIFY_EVENT;
-      break;
-    case GDK_FOCUS_CHANGE:
-      if (event->focus_change.in)
-	signal_num = FOCUS_IN_EVENT;
-      else
-	signal_num = FOCUS_OUT_EVENT;
-      break;
-    case GDK_CONFIGURE:
-      signal_num = CONFIGURE_EVENT;
-      break;
-    case GDK_MAP:
-      signal_num = MAP_EVENT;
-      break;
-    case GDK_UNMAP:
-      signal_num = UNMAP_EVENT;
-      break;
-    case GDK_WINDOW_STATE:
-      signal_num = WINDOW_STATE_EVENT;
-      break;
-    case GDK_PROPERTY_NOTIFY:
-      signal_num = PROPERTY_NOTIFY_EVENT;
-      break;
-    case GDK_SELECTION_CLEAR:
-      signal_num = SELECTION_CLEAR_EVENT;
-      break;
-    case GDK_SELECTION_REQUEST:
-      signal_num = SELECTION_REQUEST_EVENT;
-      break;
-    case GDK_SELECTION_NOTIFY:
-      signal_num = SELECTION_NOTIFY_EVENT;
-      break;
-    case GDK_PROXIMITY_IN:
-      signal_num = PROXIMITY_IN_EVENT;
-      break;
-    case GDK_PROXIMITY_OUT:
-      signal_num = PROXIMITY_OUT_EVENT;
-      break;
-    case GDK_NO_EXPOSE:
-      signal_num = NO_EXPOSE_EVENT;
-      break;
-    case GDK_CLIENT_EVENT:
-      signal_num = CLIENT_EVENT;
-      break;
-    case GDK_EXPOSE:
-      if (!event->any.window)	/* Why is this necessary */
-	goto out;
+      gint signal_num;
 
-      signal_num = EXPOSE_EVENT;
-      break;
-    case GDK_VISIBILITY_NOTIFY:
-      signal_num = VISIBILITY_NOTIFY_EVENT;
-      break;
-    default:
-      g_warning ("could not determine signal number for event: %d", event->type);
-      goto out;
+      switch (event->type)
+	{
+	case GDK_NOTHING:
+	  signal_num = -1;
+	  break;
+	case GDK_BUTTON_PRESS:
+	case GDK_2BUTTON_PRESS:
+	case GDK_3BUTTON_PRESS:
+	  signal_num = BUTTON_PRESS_EVENT;
+	  break;
+	case GDK_SCROLL:
+	  signal_num = SCROLL_EVENT;
+	  break;
+	case GDK_BUTTON_RELEASE:
+	  signal_num = BUTTON_RELEASE_EVENT;
+	  break;
+	case GDK_MOTION_NOTIFY:
+	  signal_num = MOTION_NOTIFY_EVENT;
+	  break;
+	case GDK_DELETE:
+	  signal_num = DELETE_EVENT;
+	  break;
+	case GDK_DESTROY:
+	  signal_num = DESTROY_EVENT;
+	  break;
+	case GDK_KEY_PRESS:
+	  signal_num = KEY_PRESS_EVENT;
+	  break;
+	case GDK_KEY_RELEASE:
+	  signal_num = KEY_RELEASE_EVENT;
+	  break;
+	case GDK_ENTER_NOTIFY:
+	  signal_num = ENTER_NOTIFY_EVENT;
+	  break;
+	case GDK_LEAVE_NOTIFY:
+	  signal_num = LEAVE_NOTIFY_EVENT;
+	  break;
+	case GDK_FOCUS_CHANGE:
+	  signal_num = event->focus_change.in ? FOCUS_IN_EVENT : FOCUS_OUT_EVENT;
+	  break;
+	case GDK_CONFIGURE:
+	  signal_num = CONFIGURE_EVENT;
+	  break;
+	case GDK_MAP:
+	  signal_num = MAP_EVENT;
+	  break;
+	case GDK_UNMAP:
+	  signal_num = UNMAP_EVENT;
+	  break;
+	case GDK_WINDOW_STATE:
+	  signal_num = WINDOW_STATE_EVENT;
+	  break;
+	case GDK_PROPERTY_NOTIFY:
+	  signal_num = PROPERTY_NOTIFY_EVENT;
+	  break;
+	case GDK_SELECTION_CLEAR:
+	  signal_num = SELECTION_CLEAR_EVENT;
+	  break;
+	case GDK_SELECTION_REQUEST:
+	  signal_num = SELECTION_REQUEST_EVENT;
+	  break;
+	case GDK_SELECTION_NOTIFY:
+	  signal_num = SELECTION_NOTIFY_EVENT;
+	  break;
+	case GDK_PROXIMITY_IN:
+	  signal_num = PROXIMITY_IN_EVENT;
+	  break;
+	case GDK_PROXIMITY_OUT:
+	  signal_num = PROXIMITY_OUT_EVENT;
+	  break;
+	case GDK_NO_EXPOSE:
+	  signal_num = NO_EXPOSE_EVENT;
+	  break;
+	case GDK_CLIENT_EVENT:
+	  signal_num = CLIENT_EVENT;
+	  break;
+	case GDK_EXPOSE:
+	  signal_num = EXPOSE_EVENT;
+	  break;
+	case GDK_VISIBILITY_NOTIFY:
+	  signal_num = VISIBILITY_NOTIFY_EVENT;
+	  break;
+	default:
+	  g_warning ("gtk_widget_event(): unhandled event type: %d", event->type);
+	  signal_num = -1;
+	  break;
+	}
+      if (signal_num != -1)
+	gtk_signal_emit (GTK_OBJECT (widget), widget_signals[signal_num], event, &return_val);
     }
-  
-  if (signal_num != -1)
-    gtk_signal_emit (GTK_OBJECT (widget), widget_signals[signal_num], event, &return_val);
+  if (GTK_WIDGET_REALIZED (widget))
+    gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EVENT_AFTER], event);
+  else
+    return_val = TRUE;
 
-  return_val |= GTK_OBJECT_DESTROYED (widget);
-
- out:
   gtk_widget_unref (widget);
 
   return return_val;

@@ -1,3 +1,34 @@
+Thu Jun 28 23:53:31 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_hide): !GTK_OBJECT_DESTROYED() ->
+	GTK_WIDGET_REALIZE() for resize queueing.
+
+	* gtk/gtkmain.c (gtk_main_do_event): !GTK_OBJECT_DESTROYED() ->
+	GTK_WIDGET_REALIZE() for post event delivery destruction upon
+	GDK_DESTROY.
+	
+	* gtk/gtkwidget.c: added GtkWidget::event-after notification signal, to
+	sompensate for former (pre-2.0) connect_after() facility.
+	(gtk_widget_send_expose): 
+	(gtk_widget_event): assert the widget is realized, since event delivery
+	to non-realized widgets is essentially a bug. event handlers should
+	be able to unconditionally rely on widget->window (unless they
+	emit events on their own which can trigger widget destruction).
+	(gtk_widget_event_internal): removed old outdated GTK_OBJECT_DESTROYED()
+	logic. event delivery happens as follows:
+	a) emission of GtkWidget::event (RUN_LAST handler). returns was_handled.
+	b) if !was_handled in (a) and the widget is still realized, emit event-
+	   specific signal (RUN_LAST handler). returns was_handled.
+	c) emission of GtkWidget::event-after for notification if the widget is
+	   still realized (regardless of was_handled from previous stages, no
+	   class handler). no return value.
+	d) was_handled gets passed on to caller, to determine further
+	   propagation. if the widget got unrealized meanwhile, was_handled
+	   is returned as TRUE.
+
+	* gdk/gdkevents.[hc]: added gdk_event_get_root_coords() and
+	gdk_event_get_coords().
+
 Thu Jun 28 17:18:41 2001  Tim Janik  <timj@gtk.org>
 
 	* configure.in (GTK_MICRO_VERSION): up version to 1.3.7, interface
