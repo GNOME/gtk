@@ -1,5 +1,8 @@
 2004-10-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenutoolbutton.c (gtk_menu_tool_button_get_menu): Fix
+	doc comment.
+
 	* gtk/gtkactiongroup.h: 
 	* gtk/gtkactiongroup.c: Reinstate the accidentally lost addition 
 	of gtk_action_group_translate_string().

@@ -565,7 +565,6 @@ gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
 /**
  * gtk_menu_tool_button_get_menu:
  * @button: a #GtkMenuToolButton
- * @menu: the #GtkMenu associated with #GtkMenuToolButton
  *
  * Gets the #GtkMenu associated with #GtkMenuToolButton.
  *
