@@ -1,3 +1,14 @@
+Mon Jan 21 01:21:54 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreestore.c: add some more stamp checks (pointed out
+	by Anders Carlsson)
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_insert_value): don't
+	assume _row_changed will insert sort (because _row_changed doesn't
+	need to follow this signal), so apply insert sort here
+	(gtk_tree_model_sort_level_find_insert): header doesn't need to be
+	set here, so use a return instead of g_return_val_if_fail.
+
 Mon Jan 21 18:28:17 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_adjustment_changed): Update

@@ -1581,7 +1581,9 @@ gtk_tree_model_sort_level_find_insert (GtkTreeModelSort *tree_model_sort,
     header = _gtk_tree_data_list_get_header (tree_model_sort->sort_list,
 					     tree_model_sort->sort_column_id);
 
-    g_return_val_if_fail (header != NULL, 0);
+    if (!header)
+      return 0;
+
     g_return_val_if_fail (header->func != NULL, 0);
 
     func = header->func;
@@ -1634,11 +1636,10 @@ gtk_tree_model_sort_insert_value (GtkTreeModelSort *tree_model_sort,
   elt.ref_count = 0;
   elt.children = NULL;
 
-  /* just insert it here, the ::row_changed signal will put the model
-   * back in a nice sort order
-   */
+  index = gtk_tree_model_sort_level_find_insert (tree_model_sort,
+                                                 level, s_iter,
+                                                 FALSE);
 
-  index = gtk_tree_path_get_indices (s_path)[gtk_tree_path_get_depth (s_path)-1];
   g_array_insert_vals (level->array, index, &elt, 1);
 
   /* update all larger offsets */

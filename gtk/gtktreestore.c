@@ -612,6 +612,7 @@ gtk_tree_store_get_value (GtkTreeModel *tree_model,
 
   g_return_if_fail (GTK_IS_TREE_STORE (tree_model));
   g_return_if_fail (iter != NULL);
+  g_return_if_fail (iter->stamp == GTK_TREE_STORE (tree_model)->stamp);
   g_return_if_fail (column < GTK_TREE_STORE (tree_model)->n_columns);
 
   list = G_NODE (iter->user_data)->data;
@@ -636,7 +637,9 @@ static gboolean
 gtk_tree_store_iter_next (GtkTreeModel  *tree_model,
 			  GtkTreeIter   *iter)
 {
+  g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (iter->user_data != NULL, FALSE);
+  g_return_val_if_fail (iter->stamp == GTK_TREE_STORE (tree_model)->stamp, FALSE);
 
   if (G_NODE (iter->user_data)->next)
     {
@@ -655,6 +658,7 @@ gtk_tree_store_iter_children (GtkTreeModel *tree_model,
   GNode *children;
 
   g_return_val_if_fail (parent == NULL || parent->user_data != NULL, FALSE);
+  g_return_val_if_fail (parent->stamp == GTK_TREE_STORE (tree_model)->stamp, FALSE);
 
   if (parent)
     children = G_NODE (parent->user_data)->children;
@@ -743,7 +747,9 @@ gtk_tree_store_iter_parent (GtkTreeModel *tree_model,
   GNode *parent;
 
   g_return_val_if_fail (iter != NULL, FALSE);
-  g_return_val_if_fail (iter->user_data != NULL, FALSE);
+  g_return_val_if_fail (child != NULL, FALSE);
+  g_return_val_if_fail (child->user_data != NULL, FALSE);
+  g_return_val_if_fail (child->stamp == GTK_TREE_STORE (tree_model)->stamp, FALSE);
 
   parent = G_NODE (child->user_data)->parent;
 
@@ -1265,7 +1271,7 @@ gtk_tree_store_prepend (GtkTreeStore *tree_store,
       iter->stamp = tree_store->stamp;
       iter->user_data = g_node_new (NULL);
 
-      g_node_prepend (parent_node, iter->user_data);
+      g_node_prepend (parent_node, G_NODE (iter->user_data));
 
       path = gtk_tree_store_get_path (GTK_TREE_MODEL (tree_store), iter);
       gtk_tree_model_row_inserted (GTK_TREE_MODEL (tree_store), path, iter);
