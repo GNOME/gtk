@@ -1284,6 +1284,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gtk_tree_view_column_cell_get_size (completion->priv->column, NULL,
                                       NULL, NULL, NULL, &height);
 
+  g_print ("item height %d\n", height);
   if (items <= 0)
     gtk_widget_hide (completion->priv->scrolled_window);
   else
@@ -1294,9 +1295,8 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 						  GTK_WIDGET (completion->priv->entry)->window);
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 
-  width = MIN (completion->priv->entry->allocation.width, monitor.width);
-  gtk_widget_set_size_request (completion->priv->tree_view,
-                               width - 2 * x_border, items * height);
+  width = MIN (completion->priv->entry->allocation.width, monitor.width) - 2 * x_border;
+  gtk_widget_set_size_request (completion->priv->tree_view, width, items * height);
 
   /* default on no match */
   completion->priv->current_selected = -1;
@@ -1306,13 +1306,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   if (items)
     {
       gtk_widget_show (completion->priv->action_view);
-
-      gtk_tree_view_column_cell_get_size (gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0),
-                                          NULL, NULL, NULL, NULL,
-                                          &height);
-
-      gtk_widget_set_size_request (completion->priv->action_view,
-                                   width - 2 * x_border, items * height);
+      gtk_widget_set_size_request (completion->priv->action_view, width, -1);
     }
   else
     gtk_widget_hide (completion->priv->action_view);

@@ -1,5 +1,10 @@
 2004-10-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
+	Don't force the height of the action area, we don't scroll 
+	it anyway, and the current way of calculating the height can lead
+	to broken display.  (#156573, Christian Persch)
+
 	* tests/testentrycompletion.c (animation_timer): Don't try to
 	remove stuff from an empty model.  (#156575, Christian Persch)
 
