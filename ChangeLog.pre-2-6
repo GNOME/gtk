@@ -1,3 +1,11 @@
+Sat Aug 15 03:19:30 1998  John Ellis  <johne@bellatlantic.net>
+
+	* gtk/gtkctree.[ch] (gtk_ctree_set_drag_compare_func): New function
+	to set a callback to test if a node in drag can be dropped onto
+	it's currrent location.
+	* gtk/gtkctree.c (set_mouse_cursor),(check_cursor): New functions
+	to change the pointer when a drag destination is not allowed.
+
 Thu Aug 13 21:06:00 1998  Raph Levien  <raph@gtk.org>
 
 	* gdk/gdkrgb.c: committing a patch by Ray Lehtiniemi that
