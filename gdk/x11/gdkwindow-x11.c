@@ -3137,14 +3137,14 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   guchar *data;
   Window *vroots;
   Atom type_return;
-  unsigned int nchildren;
-  unsigned int nvroots;
-  unsigned long nitems_return;
-  unsigned long bytes_after_return;
-  int format_return;
-  int i;
-  unsigned int ww, wh, wb, wd;
-  int wx, wy;
+  guint nchildren;
+  guint nvroots;
+  gulong nitems_return;
+  gulong bytes_after_return;
+  gint format_return;
+  gint i;
+  guint ww, wh, wb, wd;
+  gint wx, wy;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (rect != NULL);
@@ -3174,14 +3174,15 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   
   /* use NETWM_VIRTUAL_ROOTS if available */
   display = gdk_drawable_get_display (window);
-  root = GDK_WINDOW_XID (gdk_screen_get_root_window (GDK_WINDOW_SCREEN (window)));
+  root = GDK_WINDOW_XROOTWIN (window);
+
   nvroots = 0;
   vroots = NULL;
-  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
-			  root,
+
+  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), root,
 			  gdk_x11_get_xatom_by_name_for_display (display, 
 								 "_NET_VIRTUAL_ROOTS"),
-			  0, 0x7fffffff, False, XA_WINDOW, &type_return,
+			  0, G_MAXLONG, False, XA_WINDOW, &type_return,
 			  &format_return, &nitems_return, &bytes_after_return,
 			  &data)
       == Success)
@@ -3194,10 +3195,12 @@ gdk_window_get_frame_extents (GdkWindow    *window,
     }
 
   xparent = GDK_WINDOW_XID (window);
+
   do
     {
       xwindow = xparent;
-      if (!XQueryTree (GDK_DISPLAY_XDISPLAY (window), xwindow,
+
+      if (!XQueryTree (GDK_DISPLAY_XDISPLAY (display), xwindow,
 		       &root, &xparent,
 		       &children, &nchildren))
 	goto fail;
@@ -3217,7 +3220,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
     }
   while (xparent != root);
   
-  if (XGetGeometry (GDK_DISPLAY_XDISPLAY (window), xwindow, 
+  if (XGetGeometry (GDK_DISPLAY_XDISPLAY (display), xwindow, 
 		    &root, &wx, &wy, &ww, &wh, &wb, &wd))
     {
       rect->x = wx;
