@@ -1,3 +1,8 @@
+Fri Feb  1 20:21:56 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkinputdialog.c: use gtk_label_new_with_mnemonic for labels
+	that actually have mnemonics
+
 Fri Feb  1 19:57:59 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Fix use of ! in shell.
