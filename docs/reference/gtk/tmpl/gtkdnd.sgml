@@ -157,7 +157,7 @@ is received or the retrieval fails, GTK+ will emit a
 "drag_data_received" signal. Failure of the retrieval
 is indicated by the length field of the @selection_data
 signal parameter being negative. However, when gtk_drag_get_data() 
-is called implicitely because the %GTK_DRAG_DEFAULT_DROP was set, 
+is called implicitely because the %GTK_DEST_DEFAULT_DROP was set, 
 then the widget will not receive notification of failed
 drops.
 </para>
