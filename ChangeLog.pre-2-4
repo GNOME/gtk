@@ -1,3 +1,7 @@
+Tue Mar  9 01:25:10 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkframe.c (gtk_frame_paint): Fix a typo.
+
 2004-03-08  Federico Mena Quintero  <federico@ximian.com>
 
 	Fixes #136080.

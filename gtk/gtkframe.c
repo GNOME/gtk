@@ -502,7 +502,7 @@ gtk_frame_paint (GtkWidget    *widget,
       frame = GTK_FRAME (widget);
 
       x = frame->child_allocation.x - widget->style->xthickness;
-      y = frame->child_allocation.y; - widget->style->ythickness;
+      y = frame->child_allocation.y - widget->style->ythickness;
       width = frame->child_allocation.width + 2 * widget->style->xthickness;
       height =  frame->child_allocation.height + 2 * widget->style->ythickness;
 
