@@ -1,18 +1,18 @@
 # gtk+-properties ja.po.
-# Copyright (C) 1998,2000-2004 Free Software Foundation, Inc.
+# Copyright (C) 1998,2000-2005 Free Software Foundation, Inc.
 # Yasuhiro SHIRASAKI <yasuhiro@awa.tohoku.ac.jp>, 1998.
 # Yukihiro Nakai <nakai@gnome.gr.jp>, 2000-2001.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2002.
 # Akira TAGOH <tagoh@gnome.gr.jp>, 2002.
-# Takeshi AIHANA <aihana@gnome.gr.jp>, 2003-2004.
+# Takeshi AIHANA <aihana@gnome.gr.jp>, 2003-2005.
 # KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>, 2003.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 02:01-0500\n"
-"PO-Revision-Date: 2004-12-17 10:03+0900\n"
+"POT-Creation-Date: 2005-01-09 11:15+0900\n"
+"PO-Revision-Date: 2005-01-09 11:12+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -4289,10 +4289,9 @@ msgid "Hover Expand"
 msgstr "ホバーの展張"
 
 #: gtk/gtktreeview.c:693
-#, fuzzy
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
-msgstr "マウス・ポインタが行に乗ったら展開/畳むかどうか"
+msgstr "マウス・ポインタが行にのったら展開するか/畳むかどうか"
 
 #: gtk/gtktreeview.c:713
 msgid "Vertical Separator Width"
