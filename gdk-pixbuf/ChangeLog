@@ -1,3 +1,8 @@
+Tue Oct  2 11:29:50 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixdata.c (gdk_pixdata_to_csource): Fix indentation
+	use a macro to make code a bit more readable.
+
 2001-10-02  Sven Neumann  <sven@gimp.org>
 
 	* gdk-pixdata.c: g_string_printfa => g_string_append_printf. 
