@@ -1570,10 +1570,12 @@ gtk_container_focus (GtkWidget        *widget,
 
 static gint
 tab_compare (gconstpointer a,
-	     gconstpointer b)
+	     gconstpointer b,
+	     gpointer      data)
 {
   const GtkWidget *child1 = a;
   const GtkWidget *child2 = b;
+  GtkTextDirection text_direction = GPOINTER_TO_INT (data);
 
   gint y1 = child1->allocation.y + child1->allocation.height / 2;
   gint y2 = child2->allocation.y + child2->allocation.height / 2;
@@ -1583,7 +1585,10 @@ tab_compare (gconstpointer a,
       gint x1 = child1->allocation.x + child1->allocation.width / 2;
       gint x2 = child2->allocation.x + child2->allocation.width / 2;
       
-      return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
+      if (text_direction == GTK_TEXT_DIR_RTL) 
+	return (x1 < x2) ? 1 : ((x1 == x2) ? 0 : -1);
+      else
+	return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
     }
   else
     return (y1 < y2) ? -1 : 1;
@@ -1595,7 +1600,8 @@ gtk_container_focus_sort_tab (GtkContainer     *container,
 			      GtkDirectionType  direction,
 			      GtkWidget        *old_focus)
 {
-  children = g_list_sort (children, tab_compare);
+  GtkTextDirection text_direction = gtk_widget_get_direction (GTK_WIDGET (container));
+  children = g_list_sort_with_data (children, tab_compare, GINT_TO_POINTER (text_direction));
 
   /* if we are going backwards then reverse the order
    *  of the children.

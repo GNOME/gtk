@@ -1,3 +1,8 @@
+2003-07-09  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcontainer.c (gtk_container_focus_sort_tab): Consider the text direction
+	when sorting children.  (#116540, Soeren Sandmann)
+
 Tue Jul  8 17:36:21 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkasync.[ch] gdk/gdkdnd-x11.c: 
