@@ -6,12 +6,27 @@ A text entry field with a dropdown list
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
+A #GtkComboBoxEntry is a widget that allows the user to choose from a
+list of valid choices or enter a different value. It is very similar
+to a #GtkComboBox, but it displays the selected value in an entry to
+allow modifying it.
+</para>
 
+<para>
+In contrast to a #GtkComboBox, the underlying model of a #GtkComboBoxEntry 
+must always have a text column (see gtk_combo_box_entry_set_text_column()),
+and the entry will show the content of the text column in the selected row.
+</para>
+
+<para>
+The convenience API to construct simple text-only #GtkComboBox<!-- -->es can
+also be used with #GtkComboBoxEntry<!-- -->s which have been constructed
+with gtk_combo_box_entry_new_text().
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkComboBox
 </para>
 
 <!-- ##### STRUCT GtkComboBoxEntry ##### -->

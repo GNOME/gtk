@@ -6,12 +6,37 @@ A widget used to choose from a list of items
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
+A #GtkComboBox is a widget that allows the user to choose from a
+list of valid choices.  The #GtkComboBox displays the selected 
+choice.  When activated, the #GtkComboBox displays a popup 
+which allows the user to make a new choice. The style in which 
+the selected value is displayed, and the style of the popup is
+determined by the current theme. It may be similar to a #GtkOptionMenu,
+or similar to a Windows-style combo box.
+</para>
 
+<para>
+Unlike its predecessors #GtkCombo and #GtkOptionMenu, the #GtkComboBox
+uses the model-view pattern; the list of valid choices is specified in the
+form of a tree model, and the display of the choices can be adapted to
+the data in the model by using cell renderers, as you would in a tree view.
+This is possible since #GtkComboBox implements the #GtkCellLayout interface.
+The tree model holding the valid choices is not restricted to a flat list,
+it can be a real tree, and the popup will reflect the tree structure.
+</para>
+
+<para>
+In addition to the model-view API, #GtkComboBox offers a simple API which 
+is suitable for text-only combo boxes, and hides the complexity of managing
+the data in a model. It consists of the functions gtk_combo_box_new_text(), 
+gtk_combo_box_append_text(), gtk_combo_box_insert_text(), 
+gtk_combo_box_prepend_text(), gtk_combo_box_remove_text() and 
+gtk_combo_box_get_active_text().
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkComboBoxEntry, #GtkTreeModel, #GtkCellRenderer
 </para>
 
 <!-- ##### STRUCT GtkComboBox ##### -->

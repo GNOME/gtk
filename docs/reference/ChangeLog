@@ -1,3 +1,8 @@
+2004-12-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkcombobox.sgml: 
+	* gtk/tmpl/gtkcomboboxentry.sgml: Add long descriptions.
+
 2004-12-01  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/tmpl/windows.sgml: Document all window types.  (#160149,
