@@ -1,3 +1,8 @@
+2001-01-12  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gdk/linux-fb/gdkmain-fb.c (gdk_fb_set_rotation):
+	Hide mouse pointer while rotation. Show it afterwards.
+
 2001-01-12  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkdrawable-fb2.c (gdk_fb_clip_region): Take shaped

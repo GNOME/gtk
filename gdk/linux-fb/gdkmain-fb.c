@@ -1229,6 +1229,8 @@ gdk_fb_set_rotation (GdkFBAngle angle)
     {
       gdk_shadow_fb_stop_updates ();
 
+      gdk_fb_cursor_hide ();
+      
       _gdk_fb_screen_angle = angle;
 
       if (angle % 2 == 0)
@@ -1246,6 +1248,8 @@ gdk_fb_set_rotation (GdkFBAngle angle)
       
       gdk_fb_recompute_all();
       gdk_fb_redraw_all ();
+      
+      gdk_fb_cursor_unhide ();
     }
   else
     _gdk_fb_screen_angle = angle;
