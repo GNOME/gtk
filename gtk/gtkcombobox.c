@@ -3065,9 +3065,7 @@ gtk_combo_box_list_auto_scroll (GtkComboBox *combo_box,
 static gboolean
 gtk_combo_box_list_scroll_timeout (GtkComboBox *combo_box)
 {
-  gboolean result;
   gint x, y;
-  GtkWidget *tv;
 
   GDK_THREADS_ENTER ();
 
@@ -4410,4 +4408,31 @@ _gtk_combo_box_editing_canceled (GtkComboBox *combo_box)
   g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), TRUE);
 
   return combo_box->priv->editing_canceled;
+}
+
+/**
+ * gtk_combo_box_get_popup_acceSsible:
+ * @combo_box: a #GtkComboBox
+ * 
+ * Gets the accessible object corresponding to the combo box's popup.
+ *
+ * This function is mostly intended for use by accessibility technologies;
+ * applications should have little use for it.
+ *
+ * Since: 2.6
+ **/
+AtkObject*
+gtk_combo_box_get_popup_accessible (GtkComboBox *combo_box)
+{
+  AtkObject *atk_obj;
+
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
+
+  if (combo_box->priv->popup_widget)
+    {
+      atk_obj = gtk_widget_get_accessible (combo_box->priv->popup_widget);
+      return atk_obj;
+    }
+
+  return NULL;
 }

@@ -1,3 +1,10 @@
+2004-07-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.h: 
+	* gtk/gtkcombobox.c (gtk_combo_box_get_popup_accessible): New 
+	function necessary to make GtkComboBox accessible.  (#132847, 
+	Padraig O'Briain)
+
 Tue Jul 27 02:34:06 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwidget.c (gtk_widget_dispose): Hide parentless
