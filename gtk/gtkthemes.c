@@ -146,6 +146,8 @@ gtk_theme_engine_unref (GtkThemeEngine *engine)
 
   if (private->refcount == 0)
     {
+      private->exit();
+      
       g_hash_table_remove (engine_hash, private->name);
       
       g_module_close (private->library);

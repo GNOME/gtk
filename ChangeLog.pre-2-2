@@ -1,3 +1,31 @@
+Wed Sep  1 20:46:11 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c: deal properly with the fact that RC
+	  style lists may include rc styles more than once.
+
+	* gtk/gtkrc.c (gtk_rc_append_pixmap_path): Removed
+	  unused static function.
+
+	* gtk/gtkrc.c (gtk_rc_find_pixmap_in_path): Keep a
+	  stack of directories of RC files currently being
+	  parsed and implicitely add them to pixmap path.
+	  
+	  This fixes a bug where the directory would get
+	  appended then overwritten by pixmap_path declarations.
+
+	  (bug #1462, from Peter Wainright <prw@wainpr.demon.co.uk>)
+
+	* gtk/gtkthemes.c (gtk_theme_engine_unref): Call
+	  theme's exit function. (Patch from Peter Wainwright,
+	  bug #1454)
+
+	* gtk/gtkradiomenuitem.c (gtk_radio_menu_item_destroy):
+	  Add a destroy() handler to take care of removing
+	  group for menu item. (Fixes bug #1197)
+
+	* gtk/gtkwidget.c (gtk_widget_size_request): Fixed thinko
+	  in warning message.
+
 Wed Sep  1 21:27:42 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c (gtk_window_move_resize): don't require a server

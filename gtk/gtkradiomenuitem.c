@@ -30,10 +30,12 @@
 
 static void gtk_radio_menu_item_class_init     (GtkRadioMenuItemClass *klass);
 static void gtk_radio_menu_item_init           (GtkRadioMenuItem      *radio_menu_item);
+static void gtk_radio_menu_item_destroy        (GtkObject             *object);
 static void gtk_radio_menu_item_activate       (GtkMenuItem           *menu_item);
 static void gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem      *check_menu_item,
 						GdkRectangle          *area);
 
+static GtkCheckMenuItemClass *parent_class = NULL;
 
 GtkType
 gtk_radio_menu_item_get_type (void)
@@ -149,11 +151,17 @@ gtk_radio_menu_item_group (GtkRadioMenuItem *radio_menu_item)
 static void
 gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
 {
+  GtkObjectClass *object_class;
   GtkMenuItemClass *menu_item_class;
   GtkCheckMenuItemClass *check_menu_item_class;
 
+  object_class = (GtkObjectClass*) klass;
   menu_item_class = (GtkMenuItemClass*) klass;
   check_menu_item_class = (GtkCheckMenuItemClass*) klass;
+
+  parent_class = gtk_type_class (gtk_check_menu_item_get_type ());
+
+  object_class->destroy = gtk_radio_menu_item_destroy;
 
   menu_item_class->activate = gtk_radio_menu_item_activate;
 
@@ -164,6 +172,34 @@ static void
 gtk_radio_menu_item_init (GtkRadioMenuItem *radio_menu_item)
 {
   radio_menu_item->group = g_slist_prepend (NULL, radio_menu_item);
+}
+
+static void
+gtk_radio_menu_item_destroy (GtkObject *object)
+{
+  GtkRadioMenuItem *radio_menu_item;
+  GtkRadioMenuItem *tmp_menu_item;
+  GSList *tmp_list;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_RADIO_MENU_ITEM (object));
+
+  radio_menu_item = GTK_RADIO_MENU_ITEM (object);
+
+  radio_menu_item->group = g_slist_remove (radio_menu_item->group,
+					   radio_menu_item);
+  tmp_list = radio_menu_item->group;
+
+  while (tmp_list)
+    {
+      tmp_menu_item = tmp_list->data;
+      tmp_list = tmp_list->next;
+
+      tmp_menu_item->group = radio_menu_item->group;
+    }
+
+  if (GTK_OBJECT_CLASS (parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 static void

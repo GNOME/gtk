@@ -116,7 +116,6 @@ static void        gtk_rc_clear_hash_node          (gpointer   key,
 static void        gtk_rc_clear_styles               (void);
 static void        gtk_rc_append_default_pixmap_path (void);
 static void        gtk_rc_append_default_module_path (void);
-static void        gtk_rc_append_pixmap_path         (gchar *dir);
 static void        gtk_rc_add_initial_default_files  (void);
 
 
@@ -212,6 +211,11 @@ static gchar *pixmap_path[GTK_RC_MAX_PIXMAP_PATHS];
 #define GTK_RC_MAX_MODULE_PATHS 128
 static gchar *module_path[GTK_RC_MAX_MODULE_PATHS];
 
+/* A stack of directories for RC files we are parsing currently.
+ * these are implicitely added to the end of PIXMAP_PATHS
+ */
+GSList *rc_dir_stack = NULL;
+
 /* The files we have parsed, to reread later if necessary */
 GSList *rc_files = NULL;
 
@@ -266,18 +270,6 @@ gtk_rc_append_default_pixmap_path(void)
   pixmap_path[n++] = g_strdup(path);
   pixmap_path[n] = NULL;
   g_free(path);
-}
-
-static void
-gtk_rc_append_pixmap_path(gchar *dir)
-{
-  gint n;
-
-  for (n = 0; pixmap_path[n]; n++) ;
-  if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
-    return;
-  pixmap_path[n++] = g_strdup(dir);
-  pixmap_path[n] = NULL;
 }
 
 static void
@@ -522,6 +514,7 @@ gtk_rc_parse_file (const gchar *filename, gboolean reload)
   if (!lstat (rc_file->canonical_name, &statbuf))
     {
       gint fd;
+      GSList *tmp_list;
 
       rc_file->mtime = statbuf.st_mtime;
 
@@ -529,17 +522,18 @@ gtk_rc_parse_file (const gchar *filename, gboolean reload)
       if (fd < 0)
 	return;
 
-	{
-	  gint i;
-	  gchar *dir;
-	  
-	  dir = g_strdup(rc_file->canonical_name);
-	  for (i = strlen(dir) - 1; (i >= 0) && (dir[i] != '/'); i--)
-	    dir[i] = 0;
-	  gtk_rc_append_pixmap_path(dir);
-	  g_free(dir);
-	}
+      /* Temporarily push directory name for this file on
+       * a stack of directory names while parsing it
+       */
+      rc_dir_stack = g_slist_prepend (rc_dir_stack,
+				      g_dirname (rc_file->canonical_name));
       gtk_rc_parse_any (filename, fd, NULL);
+
+      tmp_list = rc_dir_stack;
+      rc_dir_stack = rc_dir_stack->next;
+
+      g_free (tmp_list->data);
+      g_slist_free_1 (tmp_list);
 
       close (fd);
     }
@@ -572,6 +566,44 @@ gtk_rc_style_ref (GtkRcStyle  *rc_style)
   g_return_if_fail (rc_style != NULL);
 
   ((GtkRcStylePrivate *)rc_style)->ref_count++;
+}
+
+/* Like g_slist_remove, but remove all copies of data */
+GSList*
+gtk_rc_slist_remove_all (GSList   *list,
+			 gpointer  data)
+{
+  GSList *tmp;
+  GSList *prev;
+
+  prev = NULL;
+  tmp = list;
+
+  while (tmp)
+    {
+      if (tmp->data == data)
+	{
+	  if (list == tmp)
+	    list = list->next;
+
+	  if (prev) 
+	    prev->next = tmp->next;
+
+	  g_slist_free_1 (tmp);
+
+	  if (prev)
+	    tmp = prev->next;
+	  else
+	    tmp = list;
+	}
+      else
+	{
+	  prev = tmp;
+	  tmp = tmp->next;
+	}
+    }
+
+  return list;
 }
 
 void      
@@ -625,8 +657,9 @@ gtk_rc_style_unref (GtkRcStyle  *rc_style)
 	      GtkRcStylePrivate *other_style = tmp_list2->data;
 
 	      if (other_style != private)
-		other_style->rc_style_lists = g_slist_remove (other_style->rc_style_lists, rc_styles);
-
+		other_style->rc_style_lists =
+		  gtk_rc_slist_remove_all (other_style->rc_style_lists, rc_styles);
+		  
 	      tmp_list2 = tmp_list2->next;
 	    }
 
@@ -1160,7 +1193,8 @@ gtk_rc_style_init (GSList *rc_styles)
 	  /* Point from each rc_style to the list of styles */
 
 	  rc_style_private = (GtkRcStylePrivate *)rc_style;
-	  rc_style_private->rc_style_lists = g_slist_prepend (rc_style_private->rc_style_lists, rc_styles);
+	  if (!g_slist_find (rc_style_private->rc_style_lists, rc_styles))
+	    rc_style_private->rc_style_lists = g_slist_prepend (rc_style_private->rc_style_lists, rc_styles);
 
 	  tmp_styles = tmp_styles->next;
 	}
@@ -1544,26 +1578,49 @@ gtk_rc_parse_bg_pixmap (GScanner   *scanner,
   return G_TOKEN_NONE;
 }
 
+static gchar*
+gtk_rc_check_pixmap_dir (const gchar *dir, const gchar *pixmap_file)
+{
+  gchar *buf;
+  gint fd;
+
+  buf = g_strdup_printf ("%s%c%s", dir, '/', pixmap_file);
+  
+  fd = open (buf, O_RDONLY);
+  if (fd >= 0)
+    {
+      close (fd);
+      return buf;
+    }
+  
+  g_free (buf);
+
+  return NULL;
+}
+
 gchar*
 gtk_rc_find_pixmap_in_path (GScanner *scanner,
 			    const gchar *pixmap_file)
 {
   gint i;
-  gint fd;
-  gchar *buf;
+  gchar *filename;
+  GSList *tmp_list;
   
   for (i = 0; (i < GTK_RC_MAX_PIXMAP_PATHS) && (pixmap_path[i] != NULL); i++)
     {
-      buf = g_strdup_printf ("%s%c%s", pixmap_path[i], '/', pixmap_file);
+      filename = gtk_rc_check_pixmap_dir (pixmap_path[i], pixmap_file);
+      if (filename)
+	return filename;
+    }
+
+  tmp_list = rc_dir_stack;
+  while (tmp_list)
+    {
+      filename = gtk_rc_check_pixmap_dir (tmp_list->data, pixmap_file);
+      if (filename)
+	return filename;
       
-      fd = open (buf, O_RDONLY);
-      if (fd >= 0)
-	{
-	  close (fd);
-	  return buf;
-	}
-      
-      g_free (buf);
+      tmp_list = tmp_list->next;
     }
 
   if (scanner)
