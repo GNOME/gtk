@@ -1,3 +1,8 @@
+2005-01-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): Document 
+	GtkWidget::style-set.  (#164222, Alex Graveley)
+	
 2005-01-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/gdkdisplay.h (gdk_display_add_client_message_filter_full): 
