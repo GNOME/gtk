@@ -489,6 +489,7 @@ gtk_about_dialog_init (GtkAboutDialog *about)
 
   /* Add the credits button */
   button = gtk_button_new_from_stock (_("C_redits"));
+  gtk_widget_set_no_show_all (button, TRUE);
   gtk_box_pack_end (GTK_BOX (GTK_DIALOG (about)->action_area), 
 		    button, FALSE, TRUE, 0); 
   gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (GTK_DIALOG (about)->action_area), button, TRUE);
@@ -498,6 +499,7 @@ gtk_about_dialog_init (GtkAboutDialog *about)
 
   /* Add the license button */
   button = gtk_button_new_from_stock (_("_License"));
+  gtk_widget_set_no_show_all (button, TRUE);
   gtk_box_pack_end (GTK_BOX (GTK_DIALOG (about)->action_area), 
 		    button, FALSE, TRUE, 0); 
   gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (GTK_DIALOG (about)->action_area), button, TRUE);

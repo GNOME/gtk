@@ -1,5 +1,11 @@
 2005-04-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaboutdialog.c (gtk_about_dialog_init): Protect
+	the license and credits buttons from being affected by 
+	gtk_widget_show_all().  (#172724)
+
+2005-04-05  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkmenushell.c (gtk_menu_shell_activate_item): Keep a 
 	reference to the item.  (#167920, Hazael Maldonado Torres)
 
