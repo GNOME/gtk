@@ -214,4 +214,4 @@ if test $gtk_ok = no; then
 fi
 AC_MSG_RESULT($gtk_ok)
 
-AC_OUTPUT(Makefile)
+AC_OUTPUT([Makefile glib-config],[chmod +x glib-config])

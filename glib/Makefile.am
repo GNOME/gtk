@@ -2,6 +2,8 @@
 
 configincludedir = $(pkglibdir)/include
 
+bin_SCRIPTS=glib-config
+
 lib_LTLIBRARIES = libglib-1.1.la
 
 libglib_1_1_la_SOURCES = \
