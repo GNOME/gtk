@@ -1,3 +1,8 @@
+Mon Jan 31 12:38:50 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixbuf/pixops/pixops.c (scale_line): Fix from Peter
+	Wainwright to fix 4a => 4a scaling.
+
 2000-01-29  Mark Crichton  <crichton@gimp.org>
 
 	* gdk-pixbuf-config: Oh dear, we weren't Telsa/Alan proof...

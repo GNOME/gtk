@@ -711,9 +711,9 @@ scale_line (int *weights, int n_x, int n_y,
 		  unsigned int ta;
 		  
 		  ta = q[3] * line_weights[j];
-		  r = ta * q[0];
-		  g = ta * q[1];
-		  b = ta * q[2];
+		  r += ta * q[0];
+		  g += ta * q[1];
+		  b += ta * q[2];
 		  a += ta;
 		  
 		  q += src_channels;
