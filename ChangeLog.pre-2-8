@@ -1,3 +1,8 @@
+1998-03-23  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkclist.c (gtk_clist_set_row_data_full): Select the row
+	which got its data changed, and not (0, 0).
+
 Mon Mar 23 18:19:42 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkmenu.c gtk/gtkmenushell.c: Instead of making

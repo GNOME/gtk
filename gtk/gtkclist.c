@@ -1481,7 +1481,7 @@ gtk_clist_set_row_data_full (GtkCList * clist,
    * so the application can respond to the new data -- 
    * this could be questionable behavior */
   if (clist_row->state == GTK_STATE_SELECTED)
-    gtk_clist_select_row (clist, 0, 0);
+    gtk_clist_select_row (clist, row, -1);
 }
 
 gpointer
