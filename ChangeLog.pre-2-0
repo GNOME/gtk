@@ -1,7 +1,7 @@
 2000-01-02  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c: Clean up some more leftovers from
-	before Owen's reorganization: Don't have queued_events and
+	before Owen's reorganisation: Don't have queued_events and
 	queued_tail statics in this file, but use gdk_queued_events and
 	gdk_queued_tail. This makes exposure event compression work again.
 
@@ -20,10 +20,12 @@
 	* gdk/win32/gdkprivate-win32.h
 	* gdk/win32/gdkevents-win32.c
 	* gdk/win32/gdkinput-win32.c
+	
 	* gdk/win32/gdkwindow-win32.c: Remove the superfluous
 	extension_events field in the GdkWindowWin32Data struct. Use only
 	the extension_events field in GdkWindowPrivate. Previously one was
-	set, and the other one tested, which broke tablet functionality.
+	set, and the other one tested, which broke tablet
+	functionality. Thanks to Keishi Suenaga for pointing this out.
 
 1999-12-18  Tor Lillqvist  <tml@iki.fi>
 
