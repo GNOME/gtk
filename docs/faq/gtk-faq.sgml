@@ -2499,7 +2499,389 @@ gtk_misc_set_alignment(GTK_MISK(label), 1.0f, 1.0f);
         a GtkLabel widget, you need to change the background color of
         its parent, i.e. the object that you pack it into.</para>
       </sect2> 
+ 
+      <!-- ----------------------------------------------------------------- -->
 
+     <sect2>
+	<title>How do I set the color and font of a GtkLabel using a
+	Resource File?</title>
+
+	<para>The widget name path constructed for a Label consists of
+	the widget names of its object hierarchy as well, e.g.</para>
+
+	<para><literallayout>
+        <literal>window (name: humphrey)</literal>
+	<literal>  hbox</literal>
+        <literal>     label (name: mylabel)</literal>
+        </literallayout></para>
+
+	<para>The widget path your pattern needs to match would be:
+        <literal>humphrey.GtkHBox.mylabel</literal></para>
+
+	<para>The resource file may look something like:</para>
+
+<programlisting role="C">
+style "title"
+{
+      fg[NORMAL] = {1.0, 0.0, 0.0}
+      font = "-adobe-helvetica-bold-r-normal--*-140-*-*-*-*-*-*"
+}
+widget "*mylabel" style "title"
+</programlisting>
+
+	<para>In your program, you would also need to give a name to
+	the Label widget, which can be done using:</para>
+
+<programlisting role="C">
+  label = gtk_label_new("Some Label Text");
+  gtk_widget_set_name(label, "mylabel");
+  gtk_widget_show(label);
+</programlisting>
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I configure Tooltips in a Resource File?</title>
+
+	<para>The tooltip's window is named "gtk-tooltips",
+        GtkTooltips in itself is not a GtkWidget (though a GtkObject)
+        and as such is not attempted to match any widget styles.</para>
+
+	<para>So, you resource file should look something like:</para>
+
+<programlisting role="C">
+style "postie"
+{
+      bg[NORMAL] = {1.0, 1.0, 0.0}
+}
+widget "gtk-tooltips*" style "postie"
+</programlisting>
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>I can't add more than (something like) 2000 chars in a
+	GtkEntry. What's wrong?</title>
+
+	<para>There is now a known problem in the GtkEntry widget. In
+        the <literal>gtk_entry_insert_text()</literal> function, the
+        following lines limit the number of chars in the entry to
+        2047.</para>
+
+<programlisting role="C">
+  /* The algorithms here will work as long as, the text size (a
+   * multiple of 2), fits into a guint16 but we specify a shorter
+   * maximum length so that if the user pastes a very long text, there
+   * is not a long hang from the slow X_LOCALE functions.  */
+
+  if (entry->text_max_length == 0)
+    max_length = 2047;
+  else
+    max_length = MIN (2047, entry->text_max_length);
+</programlisting>
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I make a GtkEntry widget activate on pressing
+	the Return key?</title>
+
+	<para>The Entry widget emits an 'activate' signal when you
+        press return in it. Just attach to the activate signal on the
+        entry and do whatever you want to do. Typical code would
+        be:</para>
+
+<programlisting role="C">
+  entry = gtk_entry_new();
+  gtk_signal_connect (GTK_OBJECT(entry), "activate",
+                      GTK_SIGNAL_FUNC(entry_callback),
+                      NULL);
+</programlisting>
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I validate/limit/filter the input to a
+	GtkEntry?</title>
+
+	<para>If you want to validate the text that a user enters into
+        a GtkEntry widget you can attach to the "insert_text" signal
+        of the entry, and modify the text within the callback
+        function. The example below forces all characters to
+        uppercase, and limits the range of characters to A-Z. Note
+        that the entry is cast to an object of type GtkEditable, from
+        which GtkEntry is derived.</para>
+
+<programlisting role="C">
+#include &lt;ctype.h&gt;
+#include &lt;gtk/gtk.h&gt;
+
+void insert_text_handler (GtkEntry    *entry,
+                          const gchar *text,
+                          gint         length,
+                          gint        *position,
+                          gpointer     data)
+{
+  GtkEditable *editable = GTK_EDITABLE(entry);
+  int i, count=0;
+  gchar *result = g_new (gchar, length);
+
+  for (i=0; i < length; i++) {
+    if (!isalpha(text[i]))
+      continue;
+    result[count++] = islower(text[i]) ? toupper(text[i]) : text[i];
+  }
+  
+  if (count > 0) {
+    gtk_signal_handler_block_by_func (GTK_OBJECT (editable),
+				      GTK_SIGNAL_FUNC (insert_text_handler),
+				      data);
+    gtk_editable_insert_text (editable, result, count, position);
+    gtk_signal_handler_unblock_by_func (GTK_OBJECT (editable),
+					GTK_SIGNAL_FUNC (insert_text_handler),
+					data);
+  }
+  gtk_signal_emit_stop_by_name (GTK_OBJECT (editable), "insert_text");
+  
+  g_free (result);
+}
+
+int main (int   argc,
+          char *argv[])
+{
+  GtkWidget *window;
+  GtkWidget *entry;
+  
+  gtk_init (&amp;argc, &amp;argv);
+  
+  /* create a new window */
+  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title(GTK_WINDOW (window), "GTK Entry");
+  gtk_signal_connect(GTK_OBJECT (window), "delete_event",
+		     (GtkSignalFunc) gtk_exit, NULL);
+  
+  entry = gtk_entry_new();
+  gtk_signal_connect(GTK_OBJECT(entry), "insert_text",
+		     GTK_SIGNAL_FUNC(insert_text_handler),
+		     NULL);
+  gtk_container_add(GTK_CONTAINER (window), entry);
+  gtk_widget_show(entry);
+  
+  gtk_widget_show(window);
+  
+  gtk_main();
+  return(0);
+}
+</programlisting>
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I use horizontal scrollbars with a GtkText
+	widget?</title>
+
+	<para>The short answer is that you can't. The current version
+        of the GtkText widget does not support horizontal
+        scrolling. There is an intention to completely rewrite the
+        GtkText widget, at which time this limitation will be
+        removed.</para>
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I change the font of a GtkText widget?</title>
+
+	<para>There are a couple of ways of doing this. As GTK+ allows
+        the appearance of applications to be changed at run time using
+        resources you can use something like the following in the
+        appropriate file:</para>
+
+<programlisting role="C">
+style "text"
+{
+  font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
+}
+</programlisting>
+
+	<para>Another way to do this is to load a font within your
+        program, and then use this in the functions for adding text to
+        the text widget. You can load a font using, for example:</para>
+
+<programlisting role="C">
+  GdkFont *font;
+  font = gdk_font_load("-adobe-helvetica-medium-r-normal--*-140-*-*-*-*-*-*");
+</programlisting>
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I set the cursor position in a GtkText
+	object?</title>
+
+	<para>Notice that the response is valid for any object that
+	inherits from the GtkEditable class.</para>
+
+	<para>Are you sure that you want to move the cursor position?
+        Most of the time, while the cursor position is good, the
+        insertion point does not match the cursor position. If this
+        apply to what you really want, then you should use the
+        <literal>gtk_text_set_point()</literal> function. If you want
+        to set the insertion point at the current cursor position, use
+        the following:</para>
+
+<programlisting role="C">
+  gtk_text_set_point(GTK_TEXT(text),
+  gtk_editable_get_position(GTK_EDITABLE(text)));
+</programlisting>
+
+	<para>If you want the insertion point to follow the cursor at
+        all time, you should probably catch the button press event,
+        and then move the insertion point. Be careful : you'll have to
+        catch it after the widget has changed the cursor position
+        though. Thomas Mailund Jensen proposed the following
+        code:</para>
+
+<programlisting role="C">
+static void
+insert_bar (GtkWidget *text)
+{
+  /* jump to cursor mark */
+  gtk_text_set_point (GTK_TEXT (text),
+  gtk_editable_get_position (GTK_EDITABLE  (text)));
+
+  gtk_text_insert (GTK_TEXT (text), NULL, NULL, NULL,
+     "bar", strlen ("bar"));
+}
+
+int
+main (int argc, char *argv[])
+{
+  GtkWidget *window, *text;
+
+  gtk_init (&amp;argc, &amp;argv);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  text = gtk_text_new (NULL, NULL);
+  gtk_text_set_editable (GTK_TEXT (text), TRUE);
+  gtk_container_add (GTK_CONTAINER (window), text);
+
+  /* connect after everything else */
+  gtk_signal_connect_after (GTK_OBJECT(text), "button_press_event",
+    GTK_SIGNAL_FUNC (insert_bar), NULL);
+
+  gtk_widget_show_all(window);
+  gtk_main();
+
+  return 0;
+}
+</programlisting>
+
+	<para>Now, if you really want to change the cursor position,
+	you should use the
+	<literal>gtk_editable_set_position()</literal>
+	function.</para>
+
+      </sect2>
+
+    </sect1>
+  </chapter>
+
+  <!-- ***************************************************************** -->
+  <chapter>
+    <title>About GDK</title>
+    <sect1>
+      <title></title>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+      <sect2>
+	<title>What is GDK?</title>
+
+	<para>GDK is basically a wrapper around the standard Xlib
+        function calls. If you are at all familiar with Xlib, a lot of
+        the functions in GDK will require little or no getting used
+        to. All functions are written to provide an way to access Xlib
+        functions in an easier and slightly more intuitive manner. In
+        addition, since GDK uses GLib (see below), it will be more
+        portable and safer to use on multiple platforms.</para>
+
+        <!-- Examples, anybody? I've been mulling some over. NF -->
+
+      </sect2>
+ 
+      <!-- ----------------------------------------------------------------- -->
+
+     <sect2>
+	<title>How do I use color allocation?</title>
+
+	<para>One of the nice things about GDK is that it's based on
+        top of Xlib; this is also a problem, especially in the area of
+        color management. If you want  to use color in your program
+        (drawing a rectangle or such, your code  should look something
+        like this:</para>
+
+<programlisting role="C">
+{
+  GdkColor *color;
+  int width, height;
+  GtkWidget *widget;
+  GdkGC *gc;
+
+  ...
+  
+  /* first, create a GC to draw on */
+  gc = gdk_gc_new(widget->window);
+
+  /* find proper dimensions for rectangle */
+  gdk_window_get_size(widget->window, &amp;width, &amp;height);
+
+  /* the color we want to use */
+  color = (GdkColor *)malloc(sizeof(GdkColor));
+  
+  /* red, green, and blue are passed values, indicating the RGB triple
+   * of the color we want to draw. Note that the values of the RGB components
+   * within the GdkColor are taken from 0 to 65535, not 0 to 255.
+   */
+  color->red = red * (65535/255);
+  color->green = green * (65535/255);
+  color->blue = blue * (65535/255);
+  
+  /* the pixel value indicates the index in the colormap of the color.
+   * it is simply a combination of the RGB values we set earlier
+   */
+  color->pixel = (gulong)(red*65536 + green*256 + blue);
+
+  /* However, the pixel valule is only truly valid on 24-bit (TrueColor)
+   * displays. Therefore, this call is required so that GDK and X can
+   * give us the closest color available in the colormap
+   */
+  gdk_color_alloc(gtk_widget_get_colormap(widget), color);
+
+  /* set the foreground to our color */
+  gdk_gc_set_foreground(gc, color);
+  
+  /* draw the rectangle */
+  gdk_draw_rectangle(widget->window, gc, 1, 0, 0, width, height);
+
+  ...
+}
+</programlisting>
+
+      </sect2>
     </sect1>
   </chapter>
 
