@@ -226,7 +226,6 @@ struct _GtkToolbarPrivate
   gboolean   need_sync;
   gboolean   leaving_dnd;
   gboolean   in_dnd;
-  gint	     n_overflow_items_when_dnd_started;
   GtkToolItem *highlight_tool_item;
   gint	     max_homogeneous_pixels;
 
@@ -1087,7 +1086,6 @@ slide_idle_handler (gpointer data)
     {
       priv->in_dnd = FALSE;
       priv->leaving_dnd = FALSE;
-      priv->n_overflow_items_when_dnd_started = 0;
     }
 
   priv->idle_id = 0;
@@ -1196,7 +1194,6 @@ gtk_toolbar_stop_sliding (GtkToolbar *toolbar)
       priv->is_sliding = FALSE;
       priv->in_dnd = FALSE;
       priv->leaving_dnd = FALSE;
-      priv->n_overflow_items_when_dnd_started = 0;
       
       if (priv->idle_id)
 	{
@@ -1238,7 +1235,6 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   gint n_items;
   gint needed_size;
   GtkRequisition arrow_requisition;
-  gint n_overflowed;
   gboolean overflowing;
   gboolean size_changed;
   gdouble elapsed;
@@ -1319,8 +1315,6 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   else
     size = available_size;
 
-  n_overflowed = 0;
-
   /* calculate widths of items */
   overflowing = FALSE;
   for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
@@ -1344,7 +1338,6 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	}
       else
 	{
-	  ++n_overflowed;
 	  overflowing = TRUE;
 	  new_states[i] = OVERFLOWN;
 	}
@@ -1359,16 +1352,11 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   
   /* expand expandable items */
 
-  /* FIXME, there is a lot of status stuff (like n_overflowed_items_when_dnd_started)
-   * that should be removed. The comment below is obsolete.
+  /* We don't expand when there is an overflow menu, because that leads to
+   * weird jumps when items get moved to the overflow menu and the expanding
+   * items suddenly get a lot of extra space
    */
-  
-  /* We don't expand when dnd causes items to overflow. Doing so would result in
-   * weird jumps as items are overflowed and expandable items suddenly get lots of
-   * extra space. On the other hand we can't disable expanding completely, because
-   * that would cause a weird jump when dnd begins
-   */
-  if (!n_overflowed && !(priv->in_dnd && n_overflowed > priv->n_overflow_items_when_dnd_started))
+  if (!overflowing)
     {
       n_expand_items = 0;
       for (i = 0, list = priv->content; list != NULL; list = list->next, ++i)
@@ -2019,17 +2007,6 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
 			     GTK_WIDGET (toolbar));
     }
 
-  if (!priv->in_dnd)
-    {
-      priv->n_overflow_items_when_dnd_started = 0;
-      for (list = priv->content; list != NULL; list = list->next)
-	{
-	  content = list->data;
-	  if (content->state == OVERFLOWN)
-	    priv->n_overflow_items_when_dnd_started++;
-	}
-    }
-  
   priv->in_dnd = TRUE;
   priv->leaving_dnd = FALSE;
 

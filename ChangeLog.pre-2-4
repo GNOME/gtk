@@ -1,3 +1,8 @@
+Mon Nov 24 02:19:33 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c: remove variable
+	n_overflowed_menu_items_when_dnd_started
+
 Mon Nov 24 01:47:10 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	Rework sliding algorithm.
