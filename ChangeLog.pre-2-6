@@ -1,3 +1,12 @@
+2003-12-07  Murray Cumming  <murrayc@usa.net>
+ 
+ 	* gtk/gtktreemodel.c:
+ 	(row_inserted_marshal, row_deleted_marshal, rows_reorderered_marshal)
+ 	Actually call the default signal handlers instead of calling the
+ 	marshallers themselves in an endless loop. These default signal handler
+ 	callbacks are not actually set so this is only noticed by gtkmm at
+ 	the moment. Bug 123923.
+
 2003-12-16  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilesystem.h (struct _GtkFileSystemIface): Added a
