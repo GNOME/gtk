@@ -219,7 +219,7 @@ struct _GtkTypeInfo
 };
 GtkType		gtk_type_unique	(GtkType	   parent_type,
 				 const GtkTypeInfo *gtkinfo);
-gpointer	gtk_type_class	(GtkType	 type) G_GNUC_CONST;
+gpointer	gtk_type_class	(GtkType	 type);
 gpointer	gtk_type_new	(GtkType	 type);
 
 

@@ -1,3 +1,8 @@
+Fri May 11 01:05:00 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.h: grum, gtk_type_class() is not GNUC_CONST
+	it has the _important_ side effect of initializing a class.
+
 2001-05-10  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkprivate-fb.h:

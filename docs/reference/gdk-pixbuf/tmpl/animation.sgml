@@ -20,6 +20,31 @@ Animated images.
     #GdkPixbufLoader
   </para>
 
+<!-- ##### ENUM GdkPixbufFrameAction ##### -->
+<para>
+
+</para>
+
+@GDK_PIXBUF_FRAME_RETAIN: 
+@GDK_PIXBUF_FRAME_DISPOSE: 
+@GDK_PIXBUF_FRAME_REVERT: 
+
+<!-- ##### STRUCT GdkPixbufFrame ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@x_offset: 
+@y_offset: 
+@delay_time: 
+@elapsed: 
+@action: 
+@need_recomposite: 
+@bg_transparent: 
+@composited: 
+@revert: 
+
 <!-- ##### STRUCT GdkPixbufAnimation ##### -->
   <para>
     This object describes an animation.
