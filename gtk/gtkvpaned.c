@@ -360,7 +360,7 @@ gtk_vpaned_button_press (GtkWidget *widget, GdkEventButton *event)
 			NULL, NULL, event->time);
       paned->child1_size += event->y - paned->handle_size / 2;
       paned->child1_size = CLAMP (paned->child1_size, 0,
-                                  widget->allocation.height - paned->gutter_size
+                                  widget->allocation.height - gutter_size
                                   - 2 * GTK_CONTAINER (paned)->border_width);
       gtk_vpaned_xor_line (paned);
     }

@@ -727,7 +727,6 @@ gtk_editable_selection_received  (GtkWidget         *widget,
 	gchar **list;
 	gint count;
 	gint i;
-	gint sanitized_text_length;
 
 	count = gdk_text_property_to_text_list (selection_data->type,
 						selection_data->format, 

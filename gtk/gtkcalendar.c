@@ -131,6 +131,8 @@ calc_days(N_int year, N_int mm, N_int dd)
   return( year_to_days(--year) + days_in_months[lp][mm] + dd );
 }
 
+#ifndef G_DISABLE_CHECKS
+
 static boolean 
 week_of_year(N_int *week, N_int *year, N_int mm, N_int dd)
 {
@@ -148,6 +150,8 @@ week_of_year(N_int *week, N_int *year, N_int mm, N_int dd)
     }
   return(false);
 }
+
+#endif /* !G_DISABLE_CHECKS */
 
 static Z_long 
 dates_difference(N_int year1, N_int mm1, N_int dd1,

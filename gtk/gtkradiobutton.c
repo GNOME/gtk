@@ -377,7 +377,6 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   GtkShadowType shadow_type;
   GdkRectangle restrict_area;
   GdkRectangle new_area;
-  gint width, height;
   gint x, y;
   gint indicator_size, indicator_spacing;
 

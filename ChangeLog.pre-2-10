@@ -1,3 +1,11 @@
+Thu Mar 15 00:41:47 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcalender.c gtk/gtkcombo.c gtk/gtkeditable.c
+	gtk/gtkplug.c gtk/gtkradiobutton.c gtk/gtkvpaned.c:
+	Patch from Darin Adler to fix unused variables
+	warning. (But use gutter_size variable in 
+	gtk_vpaned_button_press.) (#51835)
+
 Wed Mar 14 23:38:23 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.c (gdk_init_check): Fix missed equal_pos => option

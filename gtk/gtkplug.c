@@ -414,7 +414,6 @@ gtk_plug_set_focus (GtkWindow *window,
 		    GtkWidget *focus)
 {
   GtkPlug *plug;
-  GdkEventFocus event;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_PLUG (window));
