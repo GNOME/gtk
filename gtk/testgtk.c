@@ -4535,6 +4535,7 @@ create_rulers (void)
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_policy (GTK_WINDOW (window), TRUE, TRUE, FALSE);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
@@ -4552,7 +4553,8 @@ create_rulers (void)
       gtk_widget_show (table);
 
       ruler = gtk_hruler_new ();
-      gtk_ruler_set_range (GTK_RULER (ruler), 5, 15, 0, 20);
+      gtk_ruler_set_metric (GTK_RULER (ruler), GTK_CENTIMETERS);
+      gtk_ruler_set_range (GTK_RULER (ruler), 100, 0, 0, 20);
 
       gtk_signal_connect_object (
         GTK_OBJECT (window), 

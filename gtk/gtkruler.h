@@ -38,6 +38,9 @@ typedef struct _GtkRuler        GtkRuler;
 typedef struct _GtkRulerClass   GtkRulerClass;
 typedef struct _GtkRulerMetric  GtkRulerMetric;
 
+/* All distances below are in 1/72nd's of an inch. (According to
+ * Adobe that's a point, but points are really 1/72.27 in.)
+ */
 struct _GtkRuler
 {
   GtkWidget widget;
@@ -48,9 +51,13 @@ struct _GtkRuler
   gint xsrc, ysrc;
   gint slider_size;
 
+  /* The upper limit of the ruler (in points) */
   gfloat lower;
+  /* The lower limit of the ruler */
   gfloat upper;
+  /* The position of the mark on the ruler */
   gfloat position;
+  /* The maximum size of the ruler */
   gfloat max_size;
 };
 
@@ -66,6 +73,8 @@ struct _GtkRulerMetric
 {
   gchar *metric_name;
   gchar *abbrev;
+  /* This should be points_per_unit. This is the size of the unit
+   * in 1/72nd's of an inch and has nothing to do with screen pixels */
   gfloat pixels_per_unit;
   gfloat ruler_scale[10];
   gint subdivide[5];        /* five possible modes of subdivision */

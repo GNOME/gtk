@@ -1,3 +1,17 @@
+Wed May 13 00:53:52 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtktypeutils.c gtk/gtksignal.c: A few more 
+	  GPOINTER_TO_UINT fixes.
+
+	* gtk/gtksignal.c: Include <string.h> for memset.
+
+Tue May 12 23:10:53 1998  Owen Taylor  <otaylor@gtk.org>
+	(Maximilian Bisani <bisani@kawo2.rwth-aachen.de>: gtk-bisani-980320-0)
+
+	* gtk/gtkvruler.c gtk/gtkhruler.c gtk/gtkruler.h: 
+	Cleanups, comments and the ability to have rulers with 
+	a reversed direction.
+
 Tue May 12 19:37:55 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkrc.c (gtk_rc_parse_file): Fixed up a stat()
