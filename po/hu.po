@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2\n"
 "POT-Creation-Date: 1999-08-30 19:01+0200\n"
-"PO-Revision-Date: 1998-12-18 12:15+0100\n"
+"PO-Revision-Date: 1999-11-24 19:15+0100\n"
 "Last-Translator: Shooby Ban <bansz@szif.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -368,7 +368,6 @@ msgid "normal"
 msgstr "normál"
 
 #: gtk/gtkfontsel.c:2694
-#, fuzzy
 msgid "light"
 msgstr "vékony"
 
