@@ -1341,7 +1341,7 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
 	  gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
 			      (GtkSignalFunc) gtk_file_selection_history_callback,
 			      (gpointer) fs);
-	  gtk_menu_append (GTK_MENU (fs->history_menu), menu_item);
+	  gtk_menu_shell_append (GTK_MENU_SHELL (fs->history_menu), menu_item);
 	  gtk_widget_show (menu_item);
 	}
     }

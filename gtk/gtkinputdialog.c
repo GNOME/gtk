@@ -207,8 +207,8 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
 	  {
 	    menuitem = gtk_menu_item_new_with_label(info->name);
 
-	    gtk_menu_append(GTK_MENU(device_menu),menuitem);
-	    gtk_widget_show(menuitem);
+	    gtk_menu_shell_append (GTK_MENU_SHELL (device_menu), menuitem);
+	    gtk_widget_show (menuitem);
 	    gtk_object_set_user_data (GTK_OBJECT (menuitem), inputd);
 	    gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
 				(GtkSignalFunc) gtk_input_dialog_set_device,
@@ -236,25 +236,25 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
       mapping_menu = gtk_menu_new ();
 
       menuitem = gtk_menu_item_new_with_label(_("Disabled"));
-      gtk_menu_append(GTK_MENU(mapping_menu),menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (mapping_menu), menuitem);
       gtk_object_set_user_data (GTK_OBJECT (menuitem), inputd);
-      gtk_widget_show(menuitem);
+      gtk_widget_show (menuitem);
       gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
 			  (GtkSignalFunc) gtk_input_dialog_set_mapping_mode,
 			  GINT_TO_POINTER (GDK_MODE_DISABLED));
 
       menuitem = gtk_menu_item_new_with_label(_("Screen"));
-      gtk_menu_append(GTK_MENU(mapping_menu),menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (mapping_menu), menuitem);
       gtk_object_set_user_data (GTK_OBJECT (menuitem), inputd);
-      gtk_widget_show(menuitem);
+      gtk_widget_show (menuitem);
       gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
 			  (GtkSignalFunc) gtk_input_dialog_set_mapping_mode,
 			  GINT_TO_POINTER (GDK_MODE_SCREEN));
 
       menuitem = gtk_menu_item_new_with_label(_("Window"));
-      gtk_menu_append(GTK_MENU(mapping_menu),menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (mapping_menu), menuitem);
       gtk_object_set_user_data (GTK_OBJECT (menuitem), inputd);
-      gtk_widget_show(menuitem);
+      gtk_widget_show (menuitem);
       gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
 			  (GtkSignalFunc) gtk_input_dialog_set_mapping_mode,
 			  GINT_TO_POINTER (GDK_MODE_WINDOW));
@@ -524,7 +524,7 @@ gtk_input_dialog_fill_axes(GtkInputDialog *inputd, GdkDevice *info)
 			      (GtkSignalFunc) gtk_input_dialog_set_axis,
 			      GINT_TO_POINTER (0x10000 * (j + 1) + i));
 	  gtk_widget_show (menu_item);
-	  gtk_menu_append (GTK_MENU (menu), menu_item);
+	  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 	}
 
       inputd->axis_items[i] = option_menu = gtk_option_menu_new ();

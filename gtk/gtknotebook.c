@@ -3502,8 +3502,8 @@ gtk_notebook_menu_item_create (GtkNotebook *notebook,
   menu_item = gtk_menu_item_new ();
   gtk_widget_lock_accelerators (menu_item);
   gtk_container_add (GTK_CONTAINER (menu_item), page->menu_label);
-  gtk_menu_insert (GTK_MENU (notebook->menu), menu_item,
-		   gtk_notebook_real_page_position (notebook, list));
+  gtk_menu_shell_insert (GTK_MENU_SHELL (notebook->menu), menu_item,
+			 gtk_notebook_real_page_position (notebook, list));
   gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
 		      GTK_SIGNAL_FUNC (gtk_notebook_menu_switch_page), page);
   if (GTK_WIDGET_VISIBLE (page->child))

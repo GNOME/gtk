@@ -65,6 +65,7 @@ static void gtk_option_menu_calc_size       (GtkOptionMenu      *option_menu);
 static void gtk_option_menu_position        (GtkMenu            *menu,
 					     gint               *x,
 					     gint               *y,
+					     gint               *scroll_offet,
 					     gpointer            user_data);
 static void gtk_option_menu_show_all        (GtkWidget          *widget);
 static void gtk_option_menu_hide_all        (GtkWidget          *widget);
@@ -498,6 +499,7 @@ gtk_option_menu_button_press (GtkWidget      *widget,
 			      GdkEventButton *event)
 {
   GtkOptionMenu *option_menu;
+  GtkWidget *menu_item;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_OPTION_MENU (widget), FALSE);
@@ -512,6 +514,9 @@ gtk_option_menu_button_press (GtkWidget      *widget,
       gtk_menu_popup (GTK_MENU (option_menu->menu), NULL, NULL,
 		      gtk_option_menu_position, option_menu,
 		      event->button, event->time);
+      menu_item = gtk_menu_get_active (GTK_MENU (option_menu->menu));
+      if (menu_item)
+	gtk_menu_shell_select_item (GTK_MENU_SHELL (option_menu->menu), menu_item);
       return TRUE;
     }
 
@@ -523,6 +528,7 @@ gtk_option_menu_key_press (GtkWidget   *widget,
 			   GdkEventKey *event)
 {
   GtkOptionMenu *option_menu;
+  GtkWidget *menu_item;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_OPTION_MENU (widget), FALSE);
@@ -537,6 +543,9 @@ gtk_option_menu_key_press (GtkWidget   *widget,
       gtk_menu_popup (GTK_MENU (option_menu->menu), NULL, NULL,
 		      gtk_option_menu_position, option_menu,
 		      0, event->time);
+      menu_item = gtk_menu_get_active (GTK_MENU (option_menu->menu));
+      if (menu_item)
+	gtk_menu_shell_select_item (GTK_MENU_SHELL (option_menu->menu), menu_item);
       return TRUE;
     }
   
@@ -650,6 +659,7 @@ static void
 gtk_option_menu_position (GtkMenu  *menu,
 			  gint     *x,
 			  gint     *y,
+			  gboolean *push_in,
 			  gpointer  user_data)
 {
   GtkOptionMenu *option_menu;
@@ -657,13 +667,10 @@ gtk_option_menu_position (GtkMenu  *menu,
   GtkWidget *child;
   GtkRequisition requisition;
   GList *children;
-  gint shift_menu;
   gint screen_width;
-  gint screen_height;
   gint menu_xpos;
   gint menu_ypos;
-  gint width;
-  gint height;
+  gint menu_width;
 
   g_return_if_fail (user_data != NULL);
   g_return_if_fail (GTK_IS_OPTION_MENU (user_data));
@@ -671,11 +678,9 @@ gtk_option_menu_position (GtkMenu  *menu,
   option_menu = GTK_OPTION_MENU (user_data);
 
   gtk_widget_get_child_requisition (GTK_WIDGET (menu), &requisition);
-  width = requisition.width;
-  height = requisition.height;
+  menu_width = requisition.width;
 
   active = gtk_menu_get_active (GTK_MENU (option_menu->menu));
-  children = GTK_MENU_SHELL (option_menu->menu)->children;
   gdk_window_get_origin (GTK_WIDGET (option_menu)->window, &menu_xpos, &menu_ypos);
 
   menu_ypos += GTK_WIDGET (option_menu)->allocation.height / 2 - 2;
@@ -686,6 +691,7 @@ gtk_option_menu_position (GtkMenu  *menu,
       menu_ypos -= requisition.height / 2;
     }
 
+  children = GTK_MENU_SHELL (option_menu->menu)->children;
   while (children)
     {
       child = children->data;
@@ -703,35 +709,15 @@ gtk_option_menu_position (GtkMenu  *menu,
     }
 
   screen_width = gdk_screen_width ();
-  screen_height = gdk_screen_height ();
-
-  shift_menu = FALSE;
-  if (menu_ypos < 0)
-    {
-      menu_ypos = 0;
-      shift_menu = TRUE;
-    }
-  else if ((menu_ypos + height) > screen_height)
-    {
-      menu_ypos -= ((menu_ypos + height) - screen_height);
-      shift_menu = TRUE;
-    }
-
-  if (shift_menu)
-    {
-      if ((menu_xpos + GTK_WIDGET (option_menu)->allocation.width + width) <= screen_width)
-	menu_xpos += GTK_WIDGET (option_menu)->allocation.width;
-      else
-	menu_xpos -= width;
-    }
-
+  
   if (menu_xpos < 0)
     menu_xpos = 0;
-  else if ((menu_xpos + width) > screen_width)
-    menu_xpos -= ((menu_xpos + width) - screen_width);
+  else if ((menu_xpos + menu_width) > screen_width)
+    menu_xpos -= ((menu_xpos + menu_width) - screen_width);
 
   *x = menu_xpos;
   *y = menu_ypos;
+  *push_in = TRUE;
 }
 
 

@@ -121,7 +121,7 @@ build_option_menu (OptionMenuItem items[],
       menu_item = gtk_menu_item_new_with_label (items[i].name);
       gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
 			  (GtkSignalFunc) items[i].func, data);
-      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
       gtk_widget_show (menu_item);
     }
 
@@ -2659,7 +2659,7 @@ create_image (void)
  */
 
 static GtkWidget*
-create_menu (gint depth, gboolean tearoff)
+create_menu (gint depth, gint length, gboolean tearoff)
 {
   GtkWidget *menu;
   GtkWidget *menuitem;
@@ -2676,23 +2676,24 @@ create_menu (gint depth, gboolean tearoff)
   if (tearoff)
     {
       menuitem = gtk_tearoff_menu_item_new ();
-      gtk_menu_append (GTK_MENU (menu), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
     }
 
-  for (i = 0, j = 1; i < 5; i++, j++)
+  for (i = 0, j = 1; i < length; i++, j++)
     {
       sprintf (buf, "item %2d - %d", depth, j);
       menuitem = gtk_radio_menu_item_new_with_label (group, buf);
       group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menuitem));
       if (depth % 2)
 	gtk_check_menu_item_set_show_toggle (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
-      gtk_menu_append (GTK_MENU (menu), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
       if (i == 3)
 	gtk_widget_set_sensitive (menuitem, FALSE);
 
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (depth - 1, TRUE));
+      if (i < 5)
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (depth - 1, 5,  TRUE));
     }
 
   return menu;
@@ -2739,7 +2740,7 @@ create_menus (void)
       gtk_box_pack_start (GTK_BOX (box1), menubar, FALSE, TRUE, 0);
       gtk_widget_show (menubar);
       
-      menu = create_menu (2, TRUE);
+      menu = create_menu (2, 50, TRUE);
       
       menuitem = gtk_menu_item_new_with_label ("test\nline2");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
@@ -2747,12 +2748,12 @@ create_menus (void)
       gtk_widget_show (menuitem);
       
       menuitem = gtk_menu_item_new_with_label ("foo");
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (3, TRUE));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (3, 5, TRUE));
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
       gtk_widget_show (menuitem);
 
       menuitem = gtk_menu_item_new_with_label ("bar");
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4, TRUE));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4, 5, TRUE));
       gtk_menu_item_right_justify (GTK_MENU_ITEM (menuitem));
       gtk_menu_bar_append (GTK_MENU_BAR (menubar), menuitem);
       gtk_widget_show (menuitem);
@@ -2762,11 +2763,11 @@ create_menus (void)
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
       gtk_widget_show (box2);
       
-      menu = create_menu (1, FALSE);
+      menu = create_menu (1, 5, FALSE);
       gtk_menu_set_accel_group (GTK_MENU (menu), accel_group);
 
       menuitem = gtk_check_menu_item_new_with_label ("Accelerate Me");
-      gtk_menu_append (GTK_MENU (menu), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
       gtk_widget_add_accelerator (menuitem,
 				  "activate",
@@ -2775,7 +2776,7 @@ create_menus (void)
 				  0,
 				  GTK_ACCEL_VISIBLE | GTK_ACCEL_SIGNAL_VISIBLE);
       menuitem = gtk_check_menu_item_new_with_label ("Accelerator Locked");
-      gtk_menu_append (GTK_MENU (menu), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
       gtk_widget_add_accelerator (menuitem,
 				  "activate",
@@ -2784,7 +2785,7 @@ create_menus (void)
 				  0,
 				  GTK_ACCEL_VISIBLE | GTK_ACCEL_LOCKED);
       menuitem = gtk_check_menu_item_new_with_label ("Accelerators Frozen");
-      gtk_menu_append (GTK_MENU (menu), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
       gtk_widget_add_accelerator (menuitem,
 				  "activate",

@@ -28,7 +28,7 @@
 #include "gtkaccellabel.h"
 #include "gtksignal.h"
 
-
+#define CHECK_TOGGLE_SIZE 12
 
 enum {
   TOGGLED,
@@ -36,17 +36,19 @@ enum {
 };
 
 
-static void gtk_check_menu_item_class_init          (GtkCheckMenuItemClass *klass);
-static void gtk_check_menu_item_init                (GtkCheckMenuItem      *check_menu_item);
-static void gtk_check_menu_item_draw                (GtkWidget             *widget,
-						     GdkRectangle          *area);
-static gint gtk_check_menu_item_expose              (GtkWidget             *widget,
-						     GdkEventExpose        *event);
-static void gtk_check_menu_item_activate            (GtkMenuItem           *menu_item);
-static void gtk_check_menu_item_draw_indicator      (GtkCheckMenuItem      *check_menu_item,
-						     GdkRectangle          *area);
-static void gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem      *check_menu_item,
-						     GdkRectangle          *area);
+static void gtk_check_menu_item_class_init           (GtkCheckMenuItemClass *klass);
+static void gtk_check_menu_item_init                 (GtkCheckMenuItem      *check_menu_item);
+static void gtk_check_menu_item_draw                 (GtkWidget             *widget,
+						      GdkRectangle          *area);
+static gint gtk_check_menu_item_expose               (GtkWidget             *widget,
+						      GdkEventExpose        *event);
+static void gtk_check_menu_item_activate             (GtkMenuItem           *menu_item);
+static void gtk_check_menu_item_toggle_size_request  (GtkMenuItem           *menu_item,
+						      guint16               *requisition);
+static void gtk_check_menu_item_draw_indicator       (GtkCheckMenuItem      *check_menu_item,
+						      GdkRectangle          *area);
+static void gtk_real_check_menu_item_draw_indicator  (GtkCheckMenuItem      *check_menu_item,
+						      GdkRectangle          *area);
 
 
 static GtkMenuItemClass *parent_class = NULL;
@@ -95,8 +97,8 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
   widget_class->expose_event = gtk_check_menu_item_expose;
   
   menu_item_class->activate = gtk_check_menu_item_activate;
-  menu_item_class->toggle_size = 12;
   menu_item_class->hide_on_activate = FALSE;
+  menu_item_class->toggle_size_request = gtk_check_menu_item_toggle_size_request;
   
   klass->toggled = NULL;
   klass->draw_indicator = gtk_real_check_menu_item_draw_indicator;
@@ -145,6 +147,16 @@ gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
 
   if (check_menu_item->active != is_active)
     gtk_menu_item_activate (GTK_MENU_ITEM (check_menu_item));
+}
+
+static void
+gtk_check_menu_item_toggle_size_request (GtkMenuItem *menu_item,
+					 guint16     *requisition)
+{
+  g_return_if_fail (menu_item != NULL);
+  g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));
+
+  *requisition = CHECK_TOGGLE_SIZE;
 }
 
 void

@@ -71,6 +71,9 @@ extern "C" {
 #define	gtk_window_position			gtk_window_set_position
 #define	gtk_toggle_button_set_state		gtk_toggle_button_set_active
 #define	gtk_check_menu_item_set_state		gtk_check_menu_item_set_active
+#define gtk_menu_append				gtk_menu_shell_append
+#define gtk_menu_prepend			gtk_menu_shell_prepend
+#define gtk_menu_insert				gtk_menu_shell_insert
 
 
 /* strongly deprecated, very likely to be removed in the future:

@@ -1,3 +1,64 @@
+2000-11-08  Alexander Larsson  <alexl@redhat.com>
+
+	* docs/Changes-2.0.txt: Add note about GtkMenuPositionFunc
+	API changes.
+
+	* gtk/gtkmenu.c: Add support for scrolling menus.
+	Remove gtk_menu_append/prepend/insert, these have been moved to
+	gtkcompat.h as #defines.
+
+	* gtk/gtkcompat.h.in:
+	Add compatibility #defines for gtk_menu_append/prepend/insert
+
+	* gtk/gtkmenu.h: Add data needed for scrolling menus.
+	GtkMenuPositionFunc gets an extra argument push_in.
+	gtk_menu_append/prepend/insert removed.
+	
+	* gtk/gtkmenuitem.c (gtk_menu_item_position_menu): Change menu
+	positioning behaviour to fit to scrolling menus.
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_forall): Don't recurse
+	into menuitem->submeny. That is wrong, and broke torn
+	off submenus of torn off menus, since they were unrealized
+	when the first menu was unrealized.
+
+	* gtk/gtkmenushell.[ch]: Virtualize gtk_menu_shell_insert() and
+	gtk_menu_shell_select_item() since these need to be overridden in
+	GtkMenu.
+
+	* gtk/gtkoptionmenu.c (gtk_opttion_menu_position): Change menu
+	positioning behaviour to fit to scrolling menus.
+	(gtk_option_menu_key_press, gtk_option_menu_button_press): Select
+	the current item so that it is prelighted when the menu pops up.
+	This is a workaround to the fact that the menu doesn't get the
+	initial enter event (due to grabs).
+
+	* gtk/gtkfilesel.c, gtk/gtkinputdialog.c, gtk/testgtk.c:
+	s/gtk_menu_append/gtk_menu_shell_append/
+
+	* gtk/gtknotebook.c:
+	s/gtk_menu_insert/gtk_menu_shell_insert/
+
+	* gtk/testgtk.c (create_menu, create_menus):
+	Create the first menu with 50 items so that menu scrolling
+	can be tested.
+	
+	
+	Patch from Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkmenuitem.[ch] (gtk_menu_item_toggle_size_request): new
+	system to handle size requests.  First, we ask what the size of
+	the toggle is.  Then, when allocating the size, we allocate the
+	toggle_size first.  This way we can have multiple menu-item
+	classes w/o needing a seperate class for each.
+
+	* gtk/gtkmenu.c (gtk_menu_size_request): Actually use the new system.
+	* gtk/gtkmenu.c (gtk_menu_size_allocate): Use the new system.
+
+	* gtk/gtkcheckmenuitem.c
+	(gtk_check_menu_item_toggle_size_request): New function to handle
+	the toggle size-request.
+
 2000-11-07  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextlayout.c (gtk_text_layout_get_iter_location):

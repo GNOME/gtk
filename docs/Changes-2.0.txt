@@ -256,3 +256,14 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 						    GtkProgressBarOrientation orientation);
 
 
+- GtkMenuPositionFunc has a new parameter push_in which controls how
+  menus placed outside the screen is handled. If this is set to true and
+  part of the menu is outside the screen then Gtk+ pushes it into the visible
+  area. Otherwise the menu is cut of at the end of the visible screen area.
+
+  Regardles of what happens to the size of the menu, the result is always
+  that the items are placed in the same place as if the menu was placed
+  outside the screen, using menu scrolling if necessary.
+  
+  
+ 

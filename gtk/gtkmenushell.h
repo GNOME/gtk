@@ -81,6 +81,11 @@ struct _GtkMenuShellClass
   void (*activate_current) (GtkMenuShell *menu_shell,
 			    gboolean      force_hide);
   void (*cancel)           (GtkMenuShell *menu_shell);
+  void (*select_item)      (GtkMenuShell *menu_shell,
+			    GtkWidget    *menu_item);
+  void (*insert)           (GtkMenuShell *menu_shell,
+			    GtkWidget    *child,
+			    gint          position);
 };
 
 

@@ -37,7 +37,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-
 #define GTK_TYPE_MENU			(gtk_menu_get_type ())
 #define GTK_MENU(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_MENU, GtkMenu))
 #define GTK_MENU_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_MENU, GtkMenuClass))
@@ -52,6 +51,7 @@ typedef struct _GtkMenuClass  GtkMenuClass;
 typedef void (*GtkMenuPositionFunc) (GtkMenu   *menu,
 				     gint      *x,
 				     gint      *y,
+				     gboolean  *push_in,
 				     gpointer	user_data);
 typedef void (*GtkMenuDetachFunc)   (GtkWidget *attach_widget,
 				     GtkMenu   *menu);
@@ -62,18 +62,31 @@ struct _GtkMenu
   
   GtkWidget *parent_menu_item;
   GtkWidget *old_active_menu_item;
-  
+
   GtkAccelGroup *accel_group;
   GtkMenuPositionFunc position_func;
   gpointer position_func_data;
 
+  guint toggle_size;
   /* Do _not_ touch these widgets directly. We hide the reference
    * count from the toplevel to the menu, so it must be restored
    * before operating on these widgets
    */
   GtkWidget *toplevel;
+  
   GtkWidget *tearoff_window;
+  GtkWidget *tearoff_hbox;
+  GtkWidget *tearoff_scrollbar;
+  GtkAdjustment *tearoff_adjustment;
 
+  GdkWindow *view_window;
+  GdkWindow *bin_window;
+
+  gint scroll_offset;
+  gint saved_scroll_offset;
+  gint scroll_step;
+  guint timeout_id;
+  
   /* When a submenu of this menu is popped up, motion in this
    * region is ignored
    */
@@ -82,6 +95,17 @@ struct _GtkMenu
 
   guint needs_destruction_ref_count : 1;
   guint torn_off : 1;
+  /* The tearoff is active when it is torn off and the not-torn-off
+   * menu is not popped up.
+   */
+  guint tearoff_active : 1; 
+
+  guint scroll_fast : 1;
+
+  guint upper_arrow_visible : 1;
+  guint lower_arrow_visible : 1;
+  guint upper_arrow_prelight : 1;
+  guint lower_arrow_prelight : 1;
 };
 
 struct _GtkMenuClass
@@ -92,15 +116,6 @@ struct _GtkMenuClass
 
 GtkType	   gtk_menu_get_type		  (void) G_GNUC_CONST;
 GtkWidget* gtk_menu_new			  (void);
-
-/* Wrappers for the Menu Shell operations */
-void	   gtk_menu_append		  (GtkMenu	       *menu,
-					   GtkWidget	       *child);
-void	   gtk_menu_prepend		  (GtkMenu	       *menu,
-					   GtkWidget	       *child);
-void	   gtk_menu_insert		  (GtkMenu	       *menu,
-					   GtkWidget	       *child,
-					   gint			position);
 
 /* Display the menu onscreen */
 void	   gtk_menu_popup		  (GtkMenu	       *menu,
