@@ -4305,6 +4305,14 @@ gtk_window_focus (GtkWidget        *widget,
 
   if (window->focus_widget)
     {
+      if (direction == GTK_DIR_LEFT ||
+	  direction == GTK_DIR_RIGHT ||
+	  direction == GTK_DIR_UP ||
+	  direction == GTK_DIR_DOWN)
+	{
+	  return FALSE;
+	}
+      
       /* Wrapped off the end, clear the focus setting for the toplpevel */
       parent = window->focus_widget->parent;
       while (parent)

@@ -1,3 +1,11 @@
+Wed Apr  2 23:02:26 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkbutton.[ch] (gtk_button_class_init): add property
+	focus_on_click
+
+	* gtk/gtkwindow.c (gtk_window_focus): make arrow keyboard
+	navigation not wrap around.
+
 2003-04-02  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkprogress.c (gtk_progress_get_percentage_from_value):

@@ -61,7 +61,8 @@ enum {
   PROP_LABEL,
   PROP_RELIEF,
   PROP_USE_UNDERLINE,
-  PROP_USE_STOCK
+  PROP_USE_STOCK,
+  PROP_FOCUS_ON_CLICK
 };
 
 static void gtk_button_class_init     (GtkButtonClass   *klass);
@@ -208,6 +209,14 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   
   g_object_class_install_property (gobject_class,
+                                   PROP_FOCUS_ON_CLICK,
+                                   g_param_spec_boolean ("focus_on_click",
+							 _("Focus on click"),
+							 _("Whether the button grabs focus when it is clicked with the mouse"),
+							 TRUE,
+							 G_PARAM_READWRITE));
+  
+  g_object_class_install_property (gobject_class,
                                    PROP_RELIEF,
                                    g_param_spec_enum ("relief",
                                                       _("Border relief"),
@@ -313,6 +322,7 @@ gtk_button_init (GtkButton *button)
   button->use_underline = FALSE;
   button->depressed = FALSE;
   button->depress_on_activate = TRUE;
+  button->focus_on_click = TRUE;
 }
 
 static void
@@ -384,6 +394,9 @@ gtk_button_set_property (GObject         *object,
     case PROP_USE_STOCK:
       gtk_button_set_use_stock (button, g_value_get_boolean (value));
       break;
+    case PROP_FOCUS_ON_CLICK:
+      gtk_button_set_focus_on_click (button, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -413,6 +426,9 @@ gtk_button_get_property (GObject         *object,
       break;
     case PROP_USE_STOCK:
       g_value_set_boolean (value, button->use_stock);
+      break;
+    case PROP_FOCUS_ON_CLICK:
+      g_value_set_boolean (value, button->focus_on_click);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -938,7 +954,7 @@ gtk_button_button_press (GtkWidget      *widget,
     {
       button = GTK_BUTTON (widget);
 
-      if (!GTK_WIDGET_HAS_FOCUS (widget))
+      if (button->focus_on_click && !GTK_WIDGET_HAS_FOCUS (widget))
 	gtk_widget_grab_focus (widget);
 
       if (event->button == 1)
@@ -1235,6 +1251,50 @@ gtk_button_get_use_stock (GtkButton *button)
   g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
   
   return button->use_stock;
+}
+
+/**
+ * gtk_button_set_focus_on_click:
+ * @button: a #GtkButton
+ * @focus_on_click: whether the mouse grabs focus when clicked with the mouse
+ * 
+ * Sets whether the button will grab focus when it is clicked with the mouse.
+ * Making mouse clicks not grab focus is useful in places like toolbars where
+ * you don't want the keyboard focus removed from the main area of the
+ * application.
+ **/
+void
+gtk_button_set_focus_on_click (GtkButton *button,
+			       gboolean   focus_on_click)
+{
+  g_return_if_fail (GTK_IS_BUTTON (button));
+  
+  focus_on_click = focus_on_click != FALSE;
+
+  if (button->focus_on_click != focus_on_click)
+    {
+      button->focus_on_click = focus_on_click;
+      
+      g_object_notify (G_OBJECT (button), "focus_on_click");
+    }
+}
+
+/**
+ * gtk_button_get_focus_on_click:
+ * @button: a #GtkButton
+ * 
+ * Returns whether the button grabs focus when it is clicked with the mouse.
+ * See gtk_button_set_focus_on_click().
+ *
+ * Return value: %TRUE if the button grabs focus when it is clicked with
+ *               the mouse.
+ **/
+gboolean
+gtk_button_get_focus_on_click (GtkButton *button)
+{
+  g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
+  
+  return button->focus_on_click;
 }
 
 /**
