@@ -2951,7 +2951,7 @@ gdk_window_set_keep_above (GdkWindow *window, gboolean setting)
   if (GDK_WINDOW_IS_MAPPED (window))
     {
       if (!SetWindowPos(GDK_WINDOW_HWND (window), setting ? HWND_TOPMOST : HWND_NOTOPMOST,
-                        0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE))
+                        0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE))
          WIN32_API_FAILED ("SetWindowPos");
     }
   else
@@ -2971,7 +2971,7 @@ gdk_window_set_keep_below (GdkWindow *window, gboolean setting)
   if (GDK_WINDOW_IS_MAPPED (window))
     {
       if (!SetWindowPos(GDK_WINDOW_HWND (window), setting ? HWND_BOTTOM : HWND_NOTOPMOST,
-                        0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE))
+                        0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE))
          WIN32_API_FAILED ("SetWindowPos");
     }
   else

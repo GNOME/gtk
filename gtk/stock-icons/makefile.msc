@@ -47,6 +47,8 @@ VARIABLES = \
 	stock_font_24		stock_font_24.png	\
 	stock_help_16		stock_help_16.png	\
 	stock_help_24		stock_help_24.png	\
+	stock_harddisk_16		stock_harddisk_16.png	\
+	stock_harddisk_24		stock_harddisk_24.png	\
 	stock_home_16		stock_home_16.png	\
 	stock_home_24		stock_home_24.png	\
 	stock_index_24		stock_index_24.png	\

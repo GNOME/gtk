@@ -87,6 +87,8 @@ static void           gtk_file_system_win32_class_init       (GtkFileSystemWin32
 static void           gtk_file_system_win32_iface_init       (GtkFileSystemIface       *iface);
 static void           gtk_file_system_win32_init             (GtkFileSystemWin32       *impl);
 static void           gtk_file_system_win32_finalize         (GObject                  *object);
+
+static GSList *       gtk_file_system_win32_list_volumes     (GtkFileSystem      *file_system);
 static GSList *       gtk_file_system_win32_list_roots       (GtkFileSystem            *file_system);
 static GtkFileInfo *  gtk_file_system_win32_get_root_info    (GtkFileSystem            *file_system,
 							      const GtkFilePath        *path,
@@ -99,6 +101,24 @@ static GtkFileFolder *gtk_file_system_win32_get_folder       (GtkFileSystem     
 static gboolean       gtk_file_system_win32_create_folder    (GtkFileSystem            *file_system,
 							      const GtkFilePath        *path,
 							      GError                  **error);
+
+static void         gtk_file_system_win32_volume_free             (GtkFileSystem       *file_system,
+								   GtkFileSystemVolume *volume);
+static GtkFilePath *gtk_file_system_win32_volume_get_base_path    (GtkFileSystem       *file_system,
+								   GtkFileSystemVolume *volume);
+static gboolean     gtk_file_system_win32_volume_get_is_mounted   (GtkFileSystem       *file_system,
+								   GtkFileSystemVolume *volume);
+static gboolean     gtk_file_system_win32_volume_mount            (GtkFileSystem       *file_system,
+								   GtkFileSystemVolume *volume,
+								   GError             **error);
+static gchar *      gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
+								   GtkFileSystemVolume *volume);
+static GdkPixbuf *  gtk_file_system_win32_volume_render_icon      (GtkFileSystem        *file_system,
+								   GtkFileSystemVolume  *volume,
+								   GtkWidget            *widget,
+								   gint                  pixel_size,
+								   GError              **error);
+
 static gboolean       gtk_file_system_win32_get_parent       (GtkFileSystem            *file_system,
 							      const GtkFilePath        *path,
 							      GtkFilePath             **parent,
@@ -145,13 +165,21 @@ static GtkFileInfo *  gtk_file_folder_win32_get_info         (GtkFileFolder     
 static gboolean       gtk_file_folder_win32_list_children    (GtkFileFolder            *folder,
 							      GSList                  **children,
 							      GError                  **error);
+
 static gchar *        filename_from_path                     (const GtkFilePath        *path);
 static GtkFilePath *  filename_to_path                       (const gchar              *filename);
+
 static gboolean       filename_is_root                       (const char               *filename);
 static GtkFileInfo *  filename_get_info                      (const gchar              *filename,
 							      GtkFileInfoType           types,
 							      GError                  **error);
 
+/* some info kept together for volumes */
+struct _GtkFileSystemVolume
+{
+  gchar    *drive;
+  gboolean  is_mounted;
+};
 
 /*
  * GtkFileSystemWin32
@@ -222,10 +250,17 @@ gtk_file_system_win32_class_init (GtkFileSystemWin32Class *class)
 static void
 gtk_file_system_win32_iface_init (GtkFileSystemIface *iface)
 {
+  iface->list_volumes = gtk_file_system_win32_list_volumes;
   iface->list_roots = gtk_file_system_win32_list_roots;
   iface->get_folder = gtk_file_system_win32_get_folder;
   iface->get_root_info = gtk_file_system_win32_get_root_info;
   iface->create_folder = gtk_file_system_win32_create_folder;
+  iface->volume_free = gtk_file_system_win32_volume_free;
+  iface->volume_get_base_path = gtk_file_system_win32_volume_get_base_path;
+  iface->volume_get_is_mounted = gtk_file_system_win32_volume_get_is_mounted;
+  iface->volume_mount = gtk_file_system_win32_volume_mount;
+  iface->volume_get_display_name = gtk_file_system_win32_volume_get_display_name;
+  iface->volume_render_icon = gtk_file_system_win32_volume_render_icon;
   iface->get_parent = gtk_file_system_win32_get_parent;
   iface->make_path = gtk_file_system_win32_make_path;
   iface->parse = gtk_file_system_win32_parse;
@@ -251,7 +286,7 @@ gtk_file_system_win32_finalize (GObject *object)
 }
 
 static GSList *
-gtk_file_system_win32_list_roots (GtkFileSystem *file_system)
+gtk_file_system_win32_list_volumes (GtkFileSystem *file_system)
 {
   gchar   drives[26*4];
   guint   len;
@@ -266,17 +301,40 @@ gtk_file_system_win32_list_roots (GtkFileSystem *file_system)
   p = drives;
   while ((len = strlen(p)) != 0)
     {
-       /* skip floppy */
-       if (p[0] != 'a' && p[0] != 'b')
-         {
-	   /*FIXME: gtk_file_path_compare() is case sensitive, we are not*/
-	   p[0] = toupper (p[0]);
-	   /* needed without the backslash */
-	   p[2] = '\0';
-           list = g_slist_append (list, gtk_file_path_new_dup (p));
-	 }
-       p += len + 1;
+      GtkFileSystemVolume *vol = g_new0 (GtkFileSystemVolume, 1);
+      if (p[0] == 'a' || p[0] == 'b')
+        vol->is_mounted = FALSE; /* skip floppy */
+      else
+        vol->is_mounted = TRUE;
+
+      /*FIXME: gtk_file_path_compare() is case sensitive, we are not*/
+      p[0] = toupper (p[0]);
+      vol->drive = g_strdup (p);
+
+      list = g_slist_append (list, vol);
+
+      p += len + 1;
     }
+  return list;
+}
+
+/* to be removed */
+static GSList *
+gtk_file_system_win32_list_roots (GtkFileSystem *file_system)
+{
+  GSList *volumes, *v;
+  GSList *list = NULL;
+
+  volumes = gtk_file_system_win32_list_volumes (file_system);
+
+  for (v = volumes; v; v = v->next)
+    {
+      GtkFileSystemVolume *vol = v->data;
+
+      if (vol->is_mounted)
+        list = g_slist_append (list, g_strndup (vol->drive, 2));
+    }
+
   return list;
 }
 
@@ -314,30 +372,6 @@ gtk_file_system_win32_get_root_info (GtkFileSystem    *file_system,
         gtk_file_info_set_display_name (info, filename);
     }
 
-#if 0 /* it's dead in GtkFileSystemUnix.c, too */
-  if (GTK_FILE_INFO_ICON & types)
-    {
-      switch (dt)
-        {
-        case DRIVE_REMOVABLE :
-          /*gtk_file_info_set_icon_type (info, GTK_STOCK_FLOPPY);*/
-          break;
-        case DRIVE_CDROM :
-          /*gtk_file_info_set_icon_type (info, GTK_STOCK_CDROM);*/
-          break;
-        case DRIVE_REMOTE :
-          /*FIXME: need a network stock icon*/
-        case DRIVE_FIXED :
-          /*FIXME: need a hard disk stock icon*/
-        case DRIVE_RAMDISK :
-          /*FIXME: need a ram stock icon
-            gtk_file_info_set_icon_type (info, GTK_STOCK_OPEN);*/
-          break;
-        default :
-          g_assert_not_reached ();
-        }
-    }
-#endif
   g_free (filename);
   return info;
 }
@@ -389,6 +423,100 @@ gtk_file_system_win32_create_folder (GtkFileSystem     *file_system,
   g_free (filename);
   
   return result;
+}
+
+static void
+gtk_file_system_win32_volume_free (GtkFileSystem        *file_system,
+				   GtkFileSystemVolume  *volume)
+{
+  g_free (volume->drive);
+  g_free (volume);
+}
+
+static GtkFilePath *
+gtk_file_system_win32_volume_get_base_path (GtkFileSystem        *file_system,
+					    GtkFileSystemVolume  *volume)
+{
+  return (GtkFilePath *) g_strndup (volume->drive, 2);
+}
+
+static gboolean
+gtk_file_system_win32_volume_get_is_mounted (GtkFileSystem        *file_system,
+					     GtkFileSystemVolume  *volume)
+{
+  return volume->is_mounted;
+}
+
+static gboolean
+gtk_file_system_win32_volume_mount (GtkFileSystem        *file_system, 
+				    GtkFileSystemVolume  *volume,
+				    GError              **error)
+{
+  g_set_error (error,
+	       GTK_FILE_SYSTEM_ERROR,
+	       GTK_FILE_SYSTEM_ERROR_FAILED,
+	       _("This file system does not support mounting"));
+  return FALSE;
+}
+
+static gchar *
+gtk_file_system_win32_volume_get_display_name (GtkFileSystem       *file_system,
+					      GtkFileSystemVolume *volume)
+{
+  gchar display_name[80];
+
+  if (GetVolumeInformation (volume->drive, 
+                            display_name, sizeof(display_name),
+                            NULL, /* serial number */
+                            NULL, /* max. component length */
+                            NULL, /* fs flags */
+                            NULL, 0)) /* fs type like FAT, NTFS */
+    {
+      gchar* real_display_name = g_strconcat (display_name, " (", volume->drive, ")", NULL);
+
+      return real_display_name;
+    }
+  else
+    return g_strdup (volume->drive);
+}
+
+static GdkPixbuf *
+gtk_file_system_win32_volume_render_icon (GtkFileSystem        *file_system,
+					 GtkFileSystemVolume  *volume,
+					 GtkWidget            *widget,
+					 gint                  pixel_size,
+					 GError              **error)
+{
+  GtkIconSet *icon_set = NULL;
+  DWORD dt = GetDriveType (volume->drive);
+
+  switch (dt)
+    {
+    case DRIVE_REMOVABLE :
+      icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_FLOPPY);
+      break;
+    case DRIVE_CDROM :
+      icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_CDROM);
+      break;
+    case DRIVE_REMOTE :
+      /*FIXME: need a network stock icon*/
+    case DRIVE_FIXED :
+      icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_HARDDISK);
+      break;
+    case DRIVE_RAMDISK :
+      /*FIXME: need a ram stock icon
+      gtk_file_info_set_icon_type (info, GTK_STOCK_OPEN);*/
+      break;
+    default :
+      g_assert_not_reached ();
+    }
+
+  return gtk_icon_set_render_icon (icon_set, 
+                                   widget->style,
+                                   gtk_widget_get_direction (widget),
+                                   GTK_STATE_NORMAL,
+                                   GTK_ICON_SIZE_BUTTON,
+                                   widget, NULL); 
 }
 
 static gboolean
@@ -816,7 +944,7 @@ gtk_file_system_win32_render_icon (GtkFileSystem     *file_system,
           icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_CDROM);
           break;
         case DRIVE_FIXED : /* need a hard disk icon */
-          icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_CDROM);
+          icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_HARDDISK);
           break;
         default :
           break;

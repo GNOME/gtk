@@ -295,6 +295,7 @@ static const GtkStockItem builtin_items [] =
   { GTK_STOCK_GO_DOWN, N_("_Down"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_GO_FORWARD, N_("_Forward"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_GO_UP, N_("_Up"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_HARDDISK, N_("_Harddisk"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_HELP, N_("_Help"), GDK_CONTROL_MASK, 'h', GETTEXT_PACKAGE },
   { GTK_STOCK_HOME, N_("_Home"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_INDEX, N_("_Index"), 0, 0, GETTEXT_PACKAGE },

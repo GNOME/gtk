@@ -45,6 +45,8 @@ IMAGES = \
 	stock_first_24.png 		\
 	stock_font_16.png		\
 	stock_font_24.png 		\
+	stock_harddisk_16.png	\
+	stock_harddisk_24.png 	\
 	stock_help_16.png		\
 	stock_help_24.png 		\
 	stock_home_16.png		\
@@ -181,6 +183,8 @@ VARIABLES3 = \
 	stock_font_24		$(srcdir)/stock_font_24.png            	\
 	stock_help_16		$(srcdir)/stock_help_16.png		\
 	stock_help_24		$(srcdir)/stock_help_24.png            	\
+	stock_harddisk_16		$(srcdir)/stock_harddisk_16.png	\
+	stock_harddisk_24		$(srcdir)/stock_harddisk_24.png	\
 	stock_home_16		$(srcdir)/stock_home_16.png		\
 	stock_home_24		$(srcdir)/stock_home_24.png		\
 	stock_index_24		$(srcdir)/stock_index_24.png		\

@@ -1,3 +1,21 @@
+2004-01-04  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkwindow-win32.c : use SWP_NOACTIVATE in 
+	gdk_window_set_keep_(above|below) to make DND work again.
+	Thanks to Alif Wahid for noticing.
+
+	* gdk/gdk.def : update externals
+
+	* gtk/gtkfilesystemwin32.c : adapt to GtkFileSystemIFace changes
+
+	* gtk/gtk-stock.[hc] gtk/gtkiconfactory.c 
+	  gtk/stock-icons/Makefile.am gtk/stock-icons/makefile.msc :
+	  gtk/stock-icons/stock_harddisk_16.png 
+	  gtk/stock-icons/stock_harddisk_24.png 
+	Harddisk stock icons for file system implementations. Beside
+	FLOPPY and CDROM there is now HARDDISK, probably some 
+	GTK_STOCK_NETWORK would be useful, but I could not find one.
+
 Sat Jan  3 11:39:42 2004  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkclipboard.c: Update freedesktop.org clipboard doc link.

@@ -534,6 +534,10 @@ get_default_icons (GtkIconFactory *factory)
 	     16, stock_font_16,
 	     24, stock_font_24);
 
+  add_icon2 (factory, GTK_STOCK_HARDDISK,
+	     16, stock_harddisk_16,
+	     24, stock_harddisk_24);
+
   add_icon2 (factory, GTK_STOCK_HELP,
 	     16, stock_help_16,
 	     24, stock_help_24);

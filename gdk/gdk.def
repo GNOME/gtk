@@ -84,6 +84,7 @@ EXPORTS
 	gdk_display_pointer_is_grabbed
 	gdk_display_pointer_ungrab
 	gdk_display_put_event
+	gdk_display_set_double_click_distance
 	gdk_display_set_double_click_time
 	gdk_display_set_pointer_hooks
 	gdk_display_sync
