@@ -1367,9 +1367,6 @@ gtk_clist_column_titles_active (GtkCList *clist)
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
   
-  if (!GTK_CLIST_SHOW_TITLES(clist))
-    return;
-  
   for (i = 0; i < clist->columns; i++)
     gtk_clist_column_title_active (clist, i);
 }
@@ -1381,9 +1378,6 @@ gtk_clist_column_titles_passive (GtkCList *clist)
   
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
-  
-  if (!GTK_CLIST_SHOW_TITLES(clist))
-    return;
   
   for (i = 0; i < clist->columns; i++)
     gtk_clist_column_title_passive (clist, i);
