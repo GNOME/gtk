@@ -1601,6 +1601,9 @@ renderer_edited_cb (GtkCellRendererText   *cell_renderer_text,
 		    const gchar           *new_text,
 		    GtkFileChooserDefault *impl)
 {
+  /* work around bug #154921 */
+  g_object_set (cell_renderer_text, 
+		"mode", GTK_CELL_RENDERER_MODE_INERT, NULL);
   queue_edited_idle (impl, new_text);
 }
 
@@ -1611,6 +1614,9 @@ static void
 renderer_editing_canceled_cb (GtkCellRendererText   *cell_renderer_text,
 			      GtkFileChooserDefault *impl)
 {
+  /* work around bug #154921 */
+  g_object_set (cell_renderer_text, 
+		"mode", GTK_CELL_RENDERER_MODE_INERT, NULL);
   queue_edited_idle (impl, NULL);
 }
 

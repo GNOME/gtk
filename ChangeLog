@@ -1,5 +1,10 @@
 2004-10-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c (renderer_edited_cb): Set the cell 
+	renderer to inert mode to avoid bug #154921.  This fixes a crash
+	which would otherwise occur if the editing is stopped for the second
+	time.  (#154767, Manuel Baena García)
+
 	* NEWS: Updates
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): Set cell data
