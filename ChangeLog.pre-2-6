@@ -1,5 +1,8 @@
 2004-04-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_set_cell_data): 
+	Remove an excessive g_return_if_fail().
+
 	* gdk/x11/gdkevents-x11.c (set_user_time): Make set_user_time()
 	static.
 	* gdk/x11/gdkinput-x11.c (_gdk_input_common_other_event): 

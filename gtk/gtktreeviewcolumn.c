@@ -2493,7 +2493,6 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
   GList *cell_list;
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
-  g_return_if_fail (tree_column->cell_list != NULL);
 
   if (tree_model == NULL)
     return;
