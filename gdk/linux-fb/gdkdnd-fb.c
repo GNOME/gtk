@@ -646,8 +646,11 @@ gdk_drag_status (GdkDragContext   *context,
 
       tmp_event.dnd.time = GDK_CURRENT_TIME; /* FIXME? */
 
+      if (action == GDK_ACTION_DEFAULT)
+	action = 0;
+      
       src_context->action = action;
-
+      
       gdk_event_put (&tmp_event);
     }
 }

@@ -1,5 +1,11 @@
 2001-06-13  Alexander Larsson  <alla@lysator.liu.se>
 
+	* gdk/linux-fb/gdkdnd-fb.c (gdk_drag_status):
+	Don't pass on GDK_ACTION_DEFAULT. The Xdnd code
+	passes zero instead, so do we.
+	
+2001-06-13  Alexander Larsson  <alla@lysator.liu.se>
+
 	* gdk/linux-fb/gdkgc-fb.c (gdk_gc_copy):
 	Deep copy dash_list too.
 	(_gdk_fb_gc_new): Set default cap_style before
