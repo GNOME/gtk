@@ -28,7 +28,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#prgma }
+#pragma }
 #endif /* __cplusplus */
 
 
