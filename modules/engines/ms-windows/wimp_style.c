@@ -151,6 +151,8 @@ get_system_font(SystemFontType type, LOGFONT *out_lf)
 static char *
 sys_font_to_pango_font (SystemFontType type, char * buf)
 {
+  HDC hDC;
+  HWND hwnd;
   LOGFONT lf;
   int pt_size;
   const char * weight;
@@ -194,13 +196,19 @@ sys_font_to_pango_font (SystemFontType type, char * buf)
       else
 	style="";
 
-      pt_size = -MulDiv(lf.lfHeight, 72,
-                        GetDeviceCaps(GetDC(GetDesktopWindow()),
-                                      LOGPIXELSY));
-      sprintf(buf, "%s %s %s %d", lf.lfFaceName, style, weight, pt_size);
+	hwnd = GetDesktopWindow();
+	hDC = GetDC(hwnd);
+	if (hDC) {
+		pt_size = -MulDiv(lf.lfHeight, 72,
+	                      GetDeviceCaps(hDC,LOGPIXELSY));
+		ReleaseDC(hwnd, hDC);
+	} else
+		pt_size = 10;
 
-      return buf;
-    }
+    sprintf(buf, "%s %s %s %d", lf.lfFaceName, style, weight, pt_size);
+
+    return buf;
+   }
 
   return NULL;
 }
