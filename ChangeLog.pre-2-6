@@ -1,3 +1,9 @@
+Wed Aug 25 15:45:46 1999  Tim Janik  <timj@gtk.org>
+
+	* configure.in: evaluate $PERL for the perl version check. added
+	--disable-rebuilds to give the user an option to completely disable
+	any source autogeneration rules.
+
 Mon Aug 23 15:05:17 CDT 1999  Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.2.4

@@ -961,7 +961,7 @@ gtk_container_resize_children (GtkContainer *container)
    * which is not the case if we got another container queued for
    * a resize in our anchestry. also we can skip the whole
    * resize_widgets checks if we are a toplevel and NEED_RESIZE.
-   * this code implies that our allocation is sufficient for our
+   * this code assumes that our allocation is sufficient for our
    * requisition, since otherwise we would NEED_RESIZE.
    */
   resize_container = GTK_WIDGET (container);
