@@ -1,3 +1,8 @@
+1999-04-18  Tomas Ogren  <stric@ing.umu.se>
+
+	* gtk/gtkrc.c: Add a / before the directory name to keep directory
+	names from eachother. (Already fixed in 1.3.x)
+
 Fri Apr 16 20:41:43 PDT 1999 Manish Singh <yosh@gimp.org>
 
 	* gdk/gdk.c: #include "gdkkeysyms.h" for gdk_XConvertCase #defines
