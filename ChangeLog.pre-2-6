@@ -1,3 +1,50 @@
+2004-11-30  James M. Cape  <jcape@ignore-your.tv>
+
+	* gtk/gtkfilechooserbutton.h (gtk_file_chooser_button_get_active)
+	(gtk_file_chooser_button_set_active):
+	* gtk/gtkfilechooserbutton.c (gtk_file_chooser_button_class_init)
+	(gtk_file_chooser_button_get_active)
+	(gtk_file_chooser_button_set_active):
+	* docs/reference/gtk/gtk-sections.txt:
+	* docs/reference/gtk/tmpl/gtkfilechooserbutton.sgml:
+	* gtk/gtk.symbols: removed "GtkFileChooserButton:active" property and
+	getter/setter.
+
+	* gtk/gtkfilechooserbutton.c (struct _GtkFileChooserButtonPrivate)
+	(button_toggled_cb) (dialog_response_cb) (button_notify_active_cb)
+	(gtk_file_chooser_button_init) (button_clicked_cb)
+	(gtk_file_chooser_button_show): Use a GtkButton instead of a
+	GtkToggleButton.
+	(struct _GtkFileChooserButtonPrivate)
+	(gtk_file_chooser_button_destroy) (gtk_file_chooser_button_style_set)
+	(gtk_file_chooser_button_screen_changed): Don't bother with the
+	(remove_settings_signal) (settings_notify_cb) (check_icon_theme):
+	Don't use GtkSettings at all, just call change_icon_theme() directly.
+	(struct _GtkFileChooserButtonPrivate)
+	(gtk_file_chooser_button_init)
+	(gtk_file_chooser_button_drag_data_received)
+	(gtk_file_chooser_button_mnemonic_activate)
+	(gtk_file_chooser_button_set_width_chars)
+	(gtk_file_chooser_button_get_width_chars)
+	(entry_changed_cb) (update_idler) (update_entry) (update_dialog)
+	(dialog_selection_changed_cb) (dialog_response_cb)
+	(entry_size_allocate_cb): Remove all references to the now-defunct
+	entry, store the old path (to support "Cancel") in an instance member.
+	(update_label_and_image) (update_label) (update_image)
+	(gtk_file_chooser_button_init) (dialog_response_cb)
+	(dialog_selection_changed_cb): Merge label/image updates, only display
+	the filename (not the whole path, fixes #157725).
+	(struct _GtkFileChooserButtonPrivate)
+	(dialog_selection_changed_cb)
+	(dialog_selection_changed_proxy_cb): Merge "selection-changed"
+	handlers, block while dialog is visible (fixes #158482).
+
+	* tests/testfilechooserbutton.c (delete_event_cb)
+	(properties_button_clicked_cb) (print_selected_path_clicked_cb)
+	(tests_button_clicked_cb) (main): Add per-chooser "tests" window,
+	don't delete on WM close, update properties_button_clicked_cb()
+	"delete-event" callback.
+
 2004-11-30  Dwayne Bailey  <dwayne@translate.org.za>
 
 	* configure.in: Added "nso" to ALL_LINGUAS.

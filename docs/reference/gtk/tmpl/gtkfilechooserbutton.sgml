@@ -53,11 +53,6 @@ This should not be accessed directly.  Use the accessor functions below.
 </para>
 
 
-<!-- ##### ARG GtkFileChooserButton:active ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkFileChooserButton:dialog ##### -->
 <para>
 
@@ -117,24 +112,6 @@ This should not be accessed directly.  Use the accessor functions below.
 
 @button: 
 @title: 
-
-
-<!-- ##### FUNCTION gtk_file_chooser_button_get_active ##### -->
-<para>
-
-</para>
-
-@button: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_file_chooser_button_set_active ##### -->
-<para>
-
-</para>
-
-@button: 
-@is_active: 
 
 
 <!-- ##### FUNCTION gtk_file_chooser_button_get_width_chars ##### -->

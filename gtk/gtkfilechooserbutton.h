@@ -77,9 +77,6 @@ GtkWidget *           gtk_file_chooser_button_new_with_dialog  (GtkWidget       
 G_CONST_RETURN gchar *gtk_file_chooser_button_get_title        (GtkFileChooserButton *button);
 void                  gtk_file_chooser_button_set_title        (GtkFileChooserButton *button,
 								const gchar          *title);
-gboolean              gtk_file_chooser_button_get_active       (GtkFileChooserButton *button);
-void                  gtk_file_chooser_button_set_active       (GtkFileChooserButton *button,
-								gboolean              is_active);
 gint                  gtk_file_chooser_button_get_width_chars  (GtkFileChooserButton *button);
 void                  gtk_file_chooser_button_set_width_chars  (GtkFileChooserButton *button,
 								gint                  n_chars);
