@@ -1,3 +1,15 @@
+Tue Apr  9 19:01:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+        Fix problems with HandleBox and focusing - #78232
+
+	* gtk/gtkwidget.c (gtk_widget_translate_coordinates): Handle
+	GtkHandleBox / GnomeDock style window heirarchy / widget
+	heirarchy disconnects. :-(. 
+
+	* gtk/gtkcontainer.c: Handle failures from
+	gtk_widget_translate_coordinates (Focusing is not right, but at
+	least it doesn't go into infinite loops.)
+
 Tue Apr  9 18:34:58 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcontainer.c (_gtk_container_queue_resize): Always

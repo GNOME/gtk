@@ -1564,8 +1564,10 @@ up_down_compare (gconstpointer a,
   CompareInfo *compare = data;
   gint y1, y2;
 
-  get_allocation_coords (compare->container, (GtkWidget *)a, &allocation1);
-  get_allocation_coords (compare->container, (GtkWidget *)b, &allocation2);
+  if (!get_allocation_coords (compare->container, (GtkWidget *)a, &allocation1))
+    return 0;
+  if (!get_allocation_coords (compare->container, (GtkWidget *)b, &allocation2))
+    return 0;
 
   y1 = allocation1.y + allocation1.height / 2;
   y2 = allocation2.y + allocation2.height / 2;
@@ -1592,6 +1594,7 @@ gtk_container_focus_sort_up_down (GtkContainer     *container,
 {
   CompareInfo compare;
   GList *tmp_list;
+  GdkRectangle old_allocation;
 
   compare.container = container;
   compare.reverse = (direction == GTK_DIR_UP);
@@ -1599,16 +1602,13 @@ gtk_container_focus_sort_up_down (GtkContainer     *container,
   if (!old_focus)
       old_focus = find_old_focus (container, children);
   
-  if (old_focus)
+  if (old_focus && get_allocation_coords (container, old_focus, &old_allocation))
     {
-      GdkRectangle old_allocation;
       gint compare_x1;
       gint compare_x2;
       gint compare_y;
 
       /* Delete widgets from list that don't match minimum criteria */
-
-      get_allocation_coords (container, old_focus, &old_allocation);
 
       compare_x1 = old_allocation.x;
       compare_x2 = old_allocation.x + old_allocation.width;
@@ -1628,17 +1628,20 @@ gtk_container_focus_sort_up_down (GtkContainer     *container,
 	  
 	  if (child != old_focus)
 	    {
-	      get_allocation_coords (container, child, &child_allocation);
-	      
-	      child_x1 = child_allocation.x;
-	      child_x2 = child_allocation.x + child_allocation.width;
-	      
-	      if ((child_x2 <= compare_x1 || child_x1 >= compare_x2) /* No horizontal overlap */ ||
-		  (direction == GTK_DIR_DOWN && child_allocation.y + child_allocation.height < compare_y) || /* Not below */
-		  (direction == GTK_DIR_UP && child_allocation.y > compare_y)) /* Not above */
+	      if (get_allocation_coords (container, child, &child_allocation))
 		{
-		  children = g_list_delete_link (children, tmp_list);
+		  child_x1 = child_allocation.x;
+		  child_x2 = child_allocation.x + child_allocation.width;
+		  
+		  if ((child_x2 <= compare_x1 || child_x1 >= compare_x2) /* No horizontal overlap */ ||
+		      (direction == GTK_DIR_DOWN && child_allocation.y + child_allocation.height < compare_y) || /* Not below */
+		      (direction == GTK_DIR_UP && child_allocation.y > compare_y)) /* Not above */
+		    {
+		      children = g_list_delete_link (children, tmp_list);
+		    }
 		}
+	      else
+		children = g_list_delete_link (children, tmp_list);
 	    }
 	  
 	  tmp_list = next;
@@ -1690,8 +1693,10 @@ left_right_compare (gconstpointer a,
   CompareInfo *compare = data;
   gint x1, x2;
 
-  get_allocation_coords (compare->container, (GtkWidget *)a, &allocation1);
-  get_allocation_coords (compare->container, (GtkWidget *)b, &allocation2);
+  if (!get_allocation_coords (compare->container, (GtkWidget *)a, &allocation1))
+    return 0;
+  if (!get_allocation_coords (compare->container, (GtkWidget *)b, &allocation2))
+    return 0;
 
   x1 = allocation1.x + allocation1.width / 2;
   x2 = allocation2.x + allocation2.width / 2;
@@ -1718,6 +1723,7 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
 {
   CompareInfo compare;
   GList *tmp_list;
+  GdkRectangle old_allocation;
 
   compare.container = container;
   compare.reverse = (direction == GTK_DIR_LEFT);
@@ -1725,17 +1731,13 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
   if (!old_focus)
     old_focus = find_old_focus (container, children);
   
-  if (old_focus)
+  if (old_focus && get_allocation_coords (container, old_focus, &old_allocation))
     {
-      GdkRectangle old_allocation;
-
       gint compare_y1;
       gint compare_y2;
       gint compare_x;
       
       /* Delete widgets from list that don't match minimum criteria */
-
-      get_allocation_coords (container, old_focus, &old_allocation);
 
       compare_y1 = old_allocation.y;
       compare_y2 = old_allocation.y + old_allocation.height;
@@ -1755,17 +1757,20 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
 	  
 	  if (child != old_focus)
 	    {
-	      get_allocation_coords (container, child, &child_allocation);
-	      
-	      child_y1 = child_allocation.y;
-	      child_y2 = child_allocation.y + child_allocation.height;
-	      
-	      if ((child_y2 <= compare_y1 || child_y1 >= compare_y2) /* No vertical overlap */ ||
-		  (direction == GTK_DIR_RIGHT && child_allocation.x + child_allocation.width < compare_x) || /* Not to left */
-		  (direction == GTK_DIR_LEFT && child_allocation.x > compare_x)) /* Not to right */
+	      if (get_allocation_coords (container, child, &child_allocation))
 		{
-		  children = g_list_delete_link (children, tmp_list);
+		  child_y1 = child_allocation.y;
+		  child_y2 = child_allocation.y + child_allocation.height;
+		  
+		  if ((child_y2 <= compare_y1 || child_y1 >= compare_y2) /* No vertical overlap */ ||
+		      (direction == GTK_DIR_RIGHT && child_allocation.x + child_allocation.width < compare_x) || /* Not to left */
+		      (direction == GTK_DIR_LEFT && child_allocation.x > compare_x)) /* Not to right */
+		    {
+		      children = g_list_delete_link (children, tmp_list);
+		    }
 		}
+	      else
+		children = g_list_delete_link (children, tmp_list);
 	    }
 	  
 	  tmp_list = next;

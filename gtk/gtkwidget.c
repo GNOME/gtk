@@ -2481,6 +2481,9 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
       src_y += dy;
       
       window = gdk_window_get_parent (window);
+
+      if (!window)		/* Handle GtkHandleBox */
+	return FALSE;
     }
 
   /* And back */
@@ -2495,6 +2498,9 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
       src_y -= dy;
       
       window = gdk_window_get_parent (window);
+      
+      if (!window)		/* Handle GtkHandleBox */
+	return FALSE;
     }
 
   /* Translate from window relative to allocation relative */
