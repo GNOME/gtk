@@ -1584,20 +1584,10 @@ gdk_font_from_description (PangoFontDescription *font_desc)
 
   if (font)
     {
-      gint n_subfonts;
-      PangoWin32Subfont *subfont_ids;
-
-      n_subfonts = pango_win32_list_subfonts (font, PANGO_WIN32_U_BASIC_LATIN,
-					      &subfont_ids);
-      if (n_subfonts > 0)
-	{
-	  LOGFONT *lfp =
-	    pango_win32_font_subfont_logfont (font, subfont_ids[0]);
-	  result = gdk_font_from_one_singlefont (gdk_font_load_logfont (lfp));
-	  g_free (lfp);
-	}
-
-      g_free (subfont_ids);
+      LOGFONT *lfp =
+	pango_win32_font_logfont (font);
+      result = gdk_font_from_one_singlefont (gdk_font_load_logfont (lfp));
+      g_free (lfp);
 
       g_object_unref (G_OBJECT (font));
     }

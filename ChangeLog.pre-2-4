@@ -1,3 +1,8 @@
+2001-08-09  Alexander Larsson <alexl@redhat.com>
+
+	* gdk/win32/gdkfont-win32.c:
+	Update to the new pango win32 api.
+
 2001-08-08  HideToshi Tajima  <tajima@eng.sun.com>
 
 	* gtk/gtkclipboard.c (request_text_received_func): ask apps for
