@@ -149,6 +149,7 @@
 <!entity gtk-TreeWidget SYSTEM "tree_widget.sgml">
 <!entity gtk-Compiling SYSTEM "compiling.sgml">
 <!entity gtk-Building SYSTEM "building.sgml">
+<!entity gtk-Running SYSTEM "running.sgml">
 <!entity gtk-Resources SYSTEM "resources.sgml">
 <!entity gtk-Windows SYSTEM "windows.sgml">
 <!entity gtk-Framebuffer SYSTEM "framebuffer.sgml">
@@ -245,6 +246,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
 
     &gtk-Building;
     &gtk-Compiling;
+    &gtk-Running;
     &gtk-Windows;
     &gtk-Framebuffer;
     &gtk-Changes-1-2;
@@ -318,8 +320,8 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <title>Numeric/Text Data Entry</title>
         &GtkEntry;
         &GtkHScale;      
-        &GtkSpinButton;
         &GtkVScale;
+        &GtkSpinButton;
     </sect1>
 
     <sect1 id="TextWidgetObjects">
@@ -383,15 +385,15 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkAlignment;
         &GtkAspectFrame;
         &GtkHBox;
+        &GtkVBox;
         &GtkHButtonBox;
+        &GtkVButtonBox;
         &GtkFixed;
         &GtkHPaned;
+        &GtkVPaned;
         &GtkLayout;
         &GtkNotebook;
         &GtkTable;
-        &GtkVButtonBox;
-        &GtkVBox;
-        &GtkVPaned;
     </sect1>
 
     <sect1 id="Ornaments">
@@ -404,8 +406,8 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <sect1 id="ScrollingWidgets">
       <title>Scrolling</title>
         &GtkHScrollbar;
-        &GtkScrolledWindow;
         &GtkVScrollbar;
+        &GtkScrolledWindow;
     </sect1>
 
     <sect1 id="MiscObjects">
@@ -452,8 +454,8 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <title>Special-purpose features</title>
         &GtkCurve;
         &GtkGammaCurve;
-        &GtkHRuler;
         &GtkRuler;
+        &GtkHRuler;
         &GtkVRuler;
     </sect1>
 

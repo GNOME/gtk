@@ -1,0 +1,352 @@
+<refentry id="gtk-running" revision="10 Jan 2002">
+<refmeta>
+<refentrytitle>Running GTK+ Applications</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GTK Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Running GTK+ Applications</refname>
+<refpurpose>
+How to run and debug your GTK+ application
+</refpurpose>
+</refnamediv>
+
+<refsect1>
+<title>Running and debugging GTK+ Applications</title>
+
+<refsect2>
+<title>Common commandline options</title>
+
+<para>
+All GTK+ applications support a number of standard commandline
+options. These are removed from <literal>argv</literal> by 
+gtk_init(). Modules may parse and remove further options.
+</para>
+
+<formalpara>
+<title><systemitem>--gtk-module <replaceable>module</replaceable></systemitem></title>
+
+<para>
+A list of modules to load in addition to those specified in the 
+<envar>GTK_MODULES</envar> environment variable.
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--g-fatal-warnings</systemitem></title>
+
+<para>
+Make GTK+ abort on all warnings.
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--gtk-debug <replaceable>options</replaceable></systemitem></title>
+
+<para>
+A list of <link linkend="GTK-Debug-Options">debug options</link> 
+to turn on in addition to those specified in the <envar>GTK_DEBUG</envar> 
+environment variable. 
+This option is only available if GTK+ has been configured with
+<option>--enable-debug=yes</option>.
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--gtk-no-debug <replaceable>options</replaceable></systemitem></title>
+
+<para>
+A list of <link linkend="GTK-Debug-Options">debug options</link> 
+to turn off.
+This option is only available if GTK+ has been configured with
+<option>--enable-debug=yes</option>.
+</para>
+</formalpara>
+
+<para>
+The following options are really used by GDK, not by GTK+, but we
+list them here for completeness nevertheless.
+</para>
+
+<formalpara>
+<title><systemitem>--class <replaceable>class</replaceable></systemitem></title>
+
+<para>
+Sets the program class; see gdk_set_program_class(). 
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--name <replaceable>name</replaceable></systemitem></title>
+
+<para>
+Sets the program name.
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--gdk-debug <replaceable>options</replaceable></systemitem></title>
+
+<para>
+A list of <link linkend="GDK-Debug-Options">debug options</link> 
+to turn on in addition to those 
+specified in the <envar>GDK_DEBUG</envar> environment variable. 
+This option is only available if GTK+ has been configured with
+<option>--enable-debug=yes</option>.
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--gdk-no-debug <replaceable>options</replaceable></systemitem></title>
+
+<para>
+A list of <link linkend="GDK-Debug-Options">debug options</link> 
+to turn off.
+This option is only available if GTK+ has been configured with
+<option>--enable-debug=yes</option>.
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--display <replaceable>display</replaceable></systemitem></title>
+
+<para>
+The name of the X display to open instead of the one specified
+in the <envar>DISPLAY</envar>. 
+This option is only available if GTK+ has been configured with
+<option>--gdk-target=x11</option>.
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--sync</systemitem></title>
+
+<para>
+Makes all X requests synchronously. This is a useful option for 
+debugging, but it will slow down the performance considerably.
+This option is only available if GTK+ has been configured with
+<option>--gdk-target=x11</option>.
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--gxid-host <replaceable>host</replaceable></systemitem></title>
+
+<para>
+The host to contact the <application>gxid</application> daemon on; overwrites 
+the <link linkend="GXID"><envar>GXID_HOST</envar></link> environment variable.
+This option is only available if GTK+ has been configured with
+<option>--gdk-target=x11</option>.
+</para>
+</formalpara>
+
+<formalpara>
+<title><systemitem>--gxid-port <replaceable>port</replaceable></systemitem></title>
+
+<para>
+The port for the connection to <application>gxid</application>; overwrites 
+the <link linkend="GXID"><envar>GXID_PORT</envar></link> environment variable.
+This option is only available if GTK+ has been configured with
+<option>--gdk-target=x11</option>.
+</para>
+</formalpara>
+
+</refsect2>
+
+<refsect2>
+<title>Environment variables</title>
+
+<para> 
+GTK+ inspects a number of environment variables in addition to standard
+variables like <envar>LANG</envar>, <envar>PATH</envar>, <envar>HOME</envar> 
+or <envar>DISPLAY</envar>; mostly to determine paths to look for certain files.
+</para>
+
+<formalpara id="GTK-Debug-Options">
+  <title><envar>GTK_DEBUG</envar></title>
+
+  <para>
+  If GTK+ has been configured with <option>--enable-debug=yes</option>,
+  this variable can be set to a list of debug options, which cause GTK+
+  to print out different types of debugging information.
+  <variablelist>
+    <varlistentry>
+      <term>misc</term>
+      <listitem><para>Miscellaneous information</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>text</term>
+      <listitem><para>Information about text widget internals</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>tree</term>
+      <listitem><para>Information about tree widget internals</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>updates</term>
+      <listitem><para>Visual feedback about window updates</para></listitem>
+    </varlistentry>
+  </variablelist>
+  The special value <term>all</term> can be used to turn on all debug options.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GTK_MODULES</envar></title>
+
+  <para>
+    A list of modules to load.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GTK_MODULE_PATH</envar></title>
+
+  <para>
+    A list of directories to search for modules before the default module 
+    directory, which is <filename>&lt;libdir&gt;/gtk-2.0/modules</filename>.
+    (If <envar>GTK_EXE_PREFIX</envar> is defined, &lt;libdir&gt; is 
+    <filename>$GTK_EXE_PREFIX/lib</filename>. Otherwise it is the libdir
+    specified when GTK+ was configured, usually 
+    <filename>/usr/local/lib</libdir>.) 
+    For each directory in the list, GTK+ actually looks first in 
+    a subdirectory named after the version number of GTK+, then in the 
+    directory itself and finally in the system-specific library path.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GTK_IM_MODULE</envar></title>
+
+  <para>
+    Specifies an IM module to use in preference to the one determined
+    from the locale. 
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GTK_IM_MODULE_PATH</envar></title>
+
+  <para>
+    Specifies the path where GTK+ looks for IM modules. This environment 
+    variable overwrites the <literal>im_module_path</literal> specified in the 
+    RC files, which in turn overwrites the default
+    value <filename>$lt;libdir$gt;/gtk-2.0/immodules/&lt;version&gt;</filename>
+    (where &lt;version&gt; is the GTK+ version, and &lt;libdir&gt; is as 
+    explained above).
+  </para>
+</formalpara>
+ 
+<formalpara>
+  <title><envar>GTK_IM_MODULE_FILE</envar></title>
+
+  <para>
+    Specifies the file listing the IM modules to load. This environment
+    variable overwrites the <literal>im_module_file</literal> specified in 
+    the RC files, which in turn overwrites the default value 
+    <filename>&lt;sysconfdir&gt;/gtk-2.0/gtk.immodules</filename>
+    (&lt;sysconfdir&gt; is the sysconfdir specified when GTK+ was configured, 
+     usually <filename>/usr/local/etc</libdir>.)
+  </para>
+<formalpara>
+
+<formalpara>
+  <title><envar>GTK_RC_FILES</envar></title>
+  
+  <para>
+    Specifies a list of RC files to parse instead of the default ones;
+    see <link linkend="gtk-Resource-Files">Resource Files</link>.
+</formalpara>
+
+<formalpara>
+  <title><envar>GTK_EXE_PREFIX</envar></title>
+
+  <para>
+    If set, GTK+ uses <filename>$GTK_EXE_PREFIX/lib</filename> instead of 
+    the libdir configured when GTK+ was compiled.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GTK_DATA_PREFIX</envar></title>
+
+  <para>
+    If set, makes GTK+ use <filename>$GTK_DATA_PREFIX<filename>
+    instead of the prefix configured when GTK+ was compiled.
+  </para>
+</formalpara>
+
+<para>
+The following environment variables are used by GdkPixbuf, GDK or
+Pango, not by GTK+ itself, but we list them here for completeness
+nevertheless.
+</para>
+
+<formalpara>
+  <title><envar>GDK_PIXBUF_MODULEDIR</envar></title>
+
+  <para>
+    Specifies the directory to look for GdkPixbuf loader modules. 
+    By default, GdkPixbuf looks for its loaders in 
+    <filename>&lt;libdir&gt;/gtk-2.0/&lt;version&gt;/loaders</filename>.
+  </para>
+ </formalpara>
+
+<formalpara id="GDK-Debug-Options">
+  <title><envar>GDK_DEBUG</envar></title>
+
+  <para>
+  If GTK+ has been configured with <option>--enable-debug=yes</option>,
+  this variable can be set to a list of debug options, which cause GDK
+  to print out different types of debugging information.
+  <variablelist>
+    <varlistentry>
+      <term>misc</term>
+      <listitem><para>Miscellaneous information</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>events</term>
+      <listitem><para>Show all events received by GDK</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>dnd</term>
+      <listitem><para>Information about drag-and-drop</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>xim</term>
+      <listitem><para>Information about XIM support</para></listitem>
+    </varlistentry>
+  </variablelist>
+  The special value <term>all</term> can be used to turn on all debug options.
+  </para>
+</formalpara>
+
+<formalpara id="GXID">
+  <title><envar>GXID_HOST</envar> and <envar>GXID_PORT</envar></title>
+
+  <para>
+    The host and port to contact the <application>gxid</application> daemon on. 
+    <application>gxid</application> is only necessary on X servers which 
+    don't support using the pointer and extension devices at once, and is
+    only built if GTK+ is configured with <option>--with-xinput=gxi</option>. 
+    The <application>XFree86</application> X servers don't have this 
+    restriction.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GDK_USE_XFT</envar></title>
+
+  <para>
+    If this variable is set to 1, GTK+ will use the Pango Xft backend instead
+    of the X backend when possible (i.e. when the X server supports the XRender
+    extension and Pango has been built with Xft support). 
+  </para>
+</formalpara>
+
+</refsect2>
+
+</refsect1>
+
+</refentry>

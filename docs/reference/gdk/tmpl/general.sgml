@@ -126,7 +126,9 @@ with g_get_prgname()) with the first character converted to uppercase.
 
 <!-- ##### FUNCTION gdk_set_program_class ##### -->
 <para>
-Sets the program class.
+Sets the program class. The X11 backend uses the program class to set
+the class name part of the <literal>WM_CLASS</literal> property on
+toplevel windows; see the ICCCM.
 </para>
 
 @program_class: a string.

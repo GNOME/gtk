@@ -60,11 +60,33 @@ How to compile GTK+ itself
 	    <arg>--with-included-loaders==LOADER1,LOADER2,...</arg>
 	  </group>
 	  <group>
+	    <arg>--enable-debug=[no|minimum|yes]</arg>
+	  </group>
+          <group>
+	    <arg>--disable-shm</arg>
+	    <arg>--enable-shm</arg>
+	  </group>
+          <group>
+	    <arg>--disable-xim</arg>
+	    <arg>--enable-xim</arg>
+	  </group>
+          <group>
+	    <arg>--disable-xim-inst</arg>
+	    <arg>--enable-xim-inst</arg>
+	  </group>
+          <group>
+	    <arg>--disable-xkb</arg>
+	    <arg>--enable-xkb</arg>
+	  </group>
+	  <group>
 	    <arg>--disable-gtk-doc</arg>
 	    <arg>--enable-gtk-doc</arg>
 	  </group>
+          <group>
+            <arg>--with-xinput=[no|gxi|xfree]</arg>
+          </group>
 	  <group>
-	    <arg>--with-gdktarget=[x11|linux-fb]</arg>
+	    <arg>--with-gdktarget=[x11|linux-fb|win32]</arg>
 	  </group>
 	  <group>
 	    <arg>--disable-shadowfb</arg>
@@ -102,6 +124,72 @@ How to compile GTK+ itself
       </formalpara>
 
       <formalpara>
+        <title><systemitem>--enable-debug</systemitem></title>
+          
+        <para>
+         Turns on various amounts of debugging support. Setting this to 'no' 
+	 disables g_assert(), g_return_if_fail(), g_return_val_if_fail() and
+         all cast checks between different object types. Setting it to 'minimum'
+         disables only cast checks. Setting it to 'yes' enables 
+         <link linkend="GTK-Debug-Options">runtime debugging</link>. 
+         The default is 'minimum'.
+         Note that 'no' is fast, but dangerous as it tends to destabilize 
+         even mostly bug-free software by changing the effect of many bugs 
+         from simple warnings into fatal crashes. Thus 
+         <option>--enable-debug=no</option> should <emphasis>not</emphasis> 
+         be used for stable releases of gtk+.
+        </para>
+      </formalpara>
+
+      <formalpara>
+        <title><systemitem>--disable-shm</systemitem> and
+          <systemitem>--enable-shm</systemitem></title>
+ 
+        <para>
+          These options can be used to control whether GTK+ will use shared 
+          memory to communicate with the X server when possible.
+          The default is yes.
+        </para>
+      </formalpara>
+
+      <formalpara>
+        <title><systemitem>--disable-xim</systemitem> and
+          <systemitem>--enable-xim</systemitem></title>
+ 
+        <para>
+          These options can be used to control whether GTK+ will 
+          be compiled with support for XIM. 
+          The default is yes.
+        </para>
+      </formalpara>
+
+      <formalpara>
+        <title><systemitem>--disable-xim-inst</systemitem> and
+          <systemitem>--enable-xim-inst</systemitem></title>
+ 
+        <para>
+          These options determine whether GTK+ will use the 
+	  XIM instantiate callback. 
+          The default is yes, unless the host system is Solaris,
+	  where <function>XRegisterIMInstantiateCallback</function>
+	  seems to cause a segfault.
+        </para>
+      </formalpara>
+
+      <formalpara>
+        <title><systemitem>--disable-xkb</systemitem> and
+          <systemitem>--enable-xkb</systemitem></title>
+ 
+        <para>
+	  By default the <command>configure</command> script will try
+	  to auto-detect whether the XKB extension is supported by
+          the X libraries GTK+ is linked with.
+          These options can be used to explicitly control whether
+	  GTK+ will support the XKB extension. 
+        </para>
+      </formalpara>
+
+      <formalpara>
 	<title><systemitem>--disable-gtk-doc</systemitem> and
 	  <systemitem>--enable-gtk-doc</systemitem></title>
 
@@ -120,11 +208,20 @@ How to compile GTK+ itself
       </formalpara>
 
       <formalpara>
+        <title><systemitem>--with-xinput</systemitem></title>
+
+        <para>
+          
+        </para>
+      </formalpara>
+
+      <formalpara>
 	<title><systemitem>--with-gdktarget</systemitem></title>
 
 	<para>
-          Toggles between the x11 and linux-fb backends for GDK. 
-          The default is x11.
+          Toggles between the supported backends for GDK. 
+          The default is x11, unless the platform is Windows, in which
+	  case the default is win32.
 	</para>
       </formalpara>
 

@@ -122,6 +122,7 @@ HTML_IMAGES = \
 
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
 content_files = 		\
+	running.sgml		\
 	building.sgml		\
 	changes-1.2.sgml	\
 	changes-2.0.sgml	\
