@@ -1,3 +1,11 @@
+Tue May 22 16:25:27 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview*.h: 
+	* gtk/gtkcell*.h:
+	* gtk/gtk*store.h:
+	Added patch from Jeff Franks <jcf@tpg.com.au> to add GET_CLASS
+	macros to all objects.
+
 Tue May 22 15:13:52 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcellrenderertext.c

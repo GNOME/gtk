@@ -32,6 +32,7 @@ extern "C" {
 #define GTK_TREE_SELECTION_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_SELECTION, GtkTreeSelectionClass))
 #define GTK_IS_TREE_SELECTION(obj)         	(GTK_CHECK_TYPE ((obj), GTK_TYPE_TREE_SELECTION))
 #define GTK_IS_TREE_SELECTION_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_TREE_SELECTION))
+#define GTK_TREE_SELECTION_GET_CLASS(obj)       (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TREE_SELECTION, GtkTreeSelectionClass))
 
 typedef enum
 {

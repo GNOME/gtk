@@ -34,10 +34,6 @@ struct _ViewColumnModelClass
   GObjectClass parent_class;
 };
 
-static void view_column_model_class_init (ViewColumnModelClass *model)
-{
-}
-
 static void view_column_model_init (ViewColumnModel *model)
 {
   model->stamp = g_random_int ();
@@ -243,7 +239,7 @@ view_column_model_get_type (void)
 	sizeof (GtkListStoreClass),
 	NULL,		/* base_init */
 	NULL,		/* base_finalize */
-        (GClassInitFunc) view_column_model_class_init,
+        NULL,		/* class_init */
 	NULL,		/* class_finalize */
 	NULL,		/* class_data */
         sizeof (GtkListStore),

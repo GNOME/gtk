@@ -34,6 +34,7 @@ extern "C" {
 #define GTK_TREE_VIEW_COLUMN_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumnClass))
 #define GTK_IS_TREE_VIEW_COLUMN(obj)	     (GTK_CHECK_TYPE ((obj), GTK_TYPE_TREE_VIEW_COLUMN))
 #define GTK_IS_TREE_VIEW_COLUMN_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((obj), GTK_TYPE_TREE_VIEW_COLUMN))
+#define GTK_TREE_VIEW_COLUMN_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumnClass))
 
 typedef enum
 {
@@ -64,7 +65,6 @@ struct _GtkTreeViewColumn
   GdkWindow *window;
   gfloat xalign;
   guint property_changed_signal;
-  guint clickable_signal;
 
   gint width;
   gint requested_width;

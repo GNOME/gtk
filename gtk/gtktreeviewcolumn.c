@@ -296,7 +296,6 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   tree_column->property_changed_signal = 0;
   tree_column->sort_clicked_signal = 0;
   tree_column->sort_column_changed_signal = 0;
-  tree_column->clickable_signal = 0;
   tree_column->sort_column_id = -1;
   tree_column->reorderable = FALSE;
   tree_column->maybe_reordered = FALSE;
