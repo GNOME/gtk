@@ -1,3 +1,11 @@
+Thu Dec 17 10:53:20 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_set_text): Free 
+	previous label->label_wc.
+
+	* gtk/testgtkrc: Leave font, not fontset commented
+	in by default.
+
 1998-12-17  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
 
 	* gdk/gdkim.c: Define gdk_use_mb outside USE_XIM guard. Removed
@@ -29,6 +37,7 @@ Wed Dec 16 22:38:22 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 	* gdk/gdkevents.c: updated call to g_main_add_poll
           instead of g_main_poll_add
 
+>>>>>>> 1.848
 Wed Dec 16 23:32:05 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_expose): Remove 

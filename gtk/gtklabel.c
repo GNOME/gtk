@@ -228,6 +228,9 @@ gtk_label_set_text (GtkLabel *label,
 
   if (label->label)
     g_free (label->label);
+  if (label->label_wc)
+    g_free (label->label_wc);
+
   label->label = g_strdup (str);
 
   /* Convert text to wide characters */
