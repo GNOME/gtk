@@ -1,5 +1,8 @@
 2004-03-17  Morten Welinder  <terra@gnome.org>
 
+	* tests/prop-editor.c (create_prop_editor): Don't leak the tooltip
+	object.
+
 	* gtk/gtkfilechooserdefault.c (check_icon_theme): Do nothing if we
 	have no screen.  Fixes #137260.
 	(shortcuts_add_bookmark_from_path): Simplify using check_is_folder

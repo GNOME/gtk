@@ -772,6 +772,12 @@ properties_from_type (GObject     *object,
   return sw;
 }
 
+static void
+kill_tips (GtkWindow *win, GtkObject *tips)
+{
+  gtk_object_destroy (tips);
+  g_object_unref (tips);
+}
 
 /* Pass zero for type if you want all properties */
 GtkWidget*
@@ -797,10 +803,13 @@ create_prop_editor (GObject   *object,
   if (GTK_IS_WIDGET (object))
     gtk_window_set_screen (GTK_WINDOW (win),
 			   gtk_widget_get_screen (GTK_WIDGET (object)));
-  
+
   tips = gtk_tooltips_new ();
-  g_signal_connect_swapped (win, "destroy",
-			    G_CALLBACK (gtk_object_destroy), tips);
+  g_object_ref (tips);
+  gtk_object_sink (GTK_OBJECT (tips));
+
+  /* Kill the tips when the widget goes away.  */
+  g_signal_connect (G_OBJECT (win), "destroy", G_CALLBACK (kill_tips), tips);
 
   /* hold a weak ref to the object we're editing */
   g_object_set_data_full (G_OBJECT (object), "prop-editor-win", win, model_destroy);
