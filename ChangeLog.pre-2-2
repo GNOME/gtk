@@ -1,3 +1,12 @@
+Mon Apr  2 16:13:58 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkinvisible.c (gtk_invisible_style_set): Avoid
+	chaining up to parent impl, since we have a INPUT_ONLY
+	window.
+
+	* gtk/gtkentry.[ch]: Add a cursor_color property to set the
+	foreground color for the cursor.
+
 Mon Apr  2 15:06:13 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.c (_gtk_style_peek_property_value): Reference 
