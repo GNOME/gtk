@@ -1,7 +1,14 @@
+Thu Oct 30 17:57:53 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (logical_to_physical): Make it work even when
+	item 0 is a placeholder. (#125826)
+	* tests/testtoolbar.c: add an assertion that 
+	gtk_toolbar_get_nth_item (0) != NULL
+
 Thu Oct 30 17:40:26 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (logical_to_physical): Make it work for
-	logical == 0.
+	logical == 0.(#125826)
 
 Thu Oct 30 16:20:58 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 

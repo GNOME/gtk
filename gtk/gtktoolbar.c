@@ -1797,19 +1797,22 @@ logical_to_physical (GtkToolbar *toolbar, gint logical)
   g_assert (logical >= 0);
   
   physical = 0;
-  for (list = priv->content; list && logical > 0; list = list->next)
+  for (list = priv->content; list; list = list->next)
     {
       ToolbarContent *content = list->data;
 
       if (!content->is_placeholder)
-	logical--;
+	{
+	  if (logical == 0)
+	    break;
+	  logical--;
+	}
+      
       physical++;
-
-      if (!content->is_placeholder && logical == 0)
-	break;
     }
-  
+
   g_assert (logical == 0);
+  
   return physical;
 }
 
