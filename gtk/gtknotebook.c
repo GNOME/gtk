@@ -574,11 +574,11 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                 G_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_Page_Up, GDK_CONTROL_MASK|GDK_MOD1_MASK,
+                                GDK_Page_Up, GDK_CONTROL_MASK | GDK_MOD1_MASK,
                                 "change_current_page", 1,
                                 G_TYPE_INT, -1);
   gtk_binding_entry_add_signal (binding_set,
-                                GDK_Page_Down, GDK_CONTROL_MASK|GDK_MOD1_MASK,
+                                GDK_Page_Down, GDK_CONTROL_MASK | GDK_MOD1_MASK,
                                 "change_current_page", 1,
                                 G_TYPE_INT, 1);
 
