@@ -35,6 +35,11 @@
 static GHashTable *stock_hash = NULL;
 static void init_stock_hash (void);
 
+/* We use an unused modifier bit to mark stock items which
+ * must be freed when they are removed from the hash table.
+ */
+#define NON_STATIC_MASK (1 << 29)
+
 static void
 real_add (const GtkStockItem *items,
           guint               n_items,
@@ -52,14 +57,25 @@ real_add (const GtkStockItem *items,
     {
       gpointer old_key, old_value;
       const GtkStockItem *item = &items[i];
+
+      if (item->modifier & NON_STATIC_MASK)
+	{
+	  g_warning ("Bit 29 set in stock accelerator.\n");
+	  copy = TRUE;
+	}
+
       if (copy)
-        item = gtk_stock_item_copy (item);
+	{
+	  item = gtk_stock_item_copy (item);
+	  ((GtkStockItem *)item)->modifier |= NON_STATIC_MASK;
+	}
 
       if (g_hash_table_lookup_extended (stock_hash, item->stock_id,
                                         &old_key, &old_value))
         {
           g_hash_table_remove (stock_hash, old_key);
-          gtk_stock_item_free (old_value);
+	  if (((GtkStockItem *)old_value)->modifier & NON_STATIC_MASK)
+	    gtk_stock_item_free (old_value);
         }
       
       g_hash_table_insert (stock_hash,
@@ -136,6 +152,7 @@ gtk_stock_lookup (const gchar  *stock_id,
   if (found)
     {
       *item = *found;
+      item->modifier &= ~NON_STATIC_MASK;
       if (item->label)
         item->label = dgettext (item->translation_domain, item->label);
     }
