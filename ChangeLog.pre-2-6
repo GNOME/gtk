@@ -1,3 +1,8 @@
+2001-10-29  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_request): Calculate
+	the buttons size request before using it. Fixes #61696.
+
 2001-10-29  Tor Lillqvist  <tml@iki.fi>
 
 	* README.win32: Updates.
@@ -85,6 +90,7 @@
 	file. Install import libraries.
 
 2001-10-29  Anders Carlsson  <andersca@gnu.org>
+>>>>>>> 1.2482
 
 	* gtk/gtkiconfactory.c (get_default_icons): Fix build.
 

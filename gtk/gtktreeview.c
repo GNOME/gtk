@@ -1380,6 +1380,8 @@ gtk_tree_view_size_request (GtkWidget      *widget,
 
   tree_view = GTK_TREE_VIEW (widget);
 
+  gtk_tree_view_size_request_buttons (tree_view);
+
   requisition->width = tree_view->priv->width;
   requisition->height = tree_view->priv->height + tree_view->priv->header_height;
 
@@ -1395,8 +1397,6 @@ gtk_tree_view_size_request (GtkWidget      *widget,
       if (GTK_WIDGET_VISIBLE (child->widget))
         gtk_widget_size_request (child->widget, &child_requisition);
     }
-
-  gtk_tree_view_size_request_buttons (tree_view);
 }
 
 /* GtkWidget::size_allocate helper */
