@@ -1,3 +1,8 @@
+Wed Oct 31 17:27:20 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_render): if
+	the widget is insensitive, draw the text insensitively, #63306
+
 2001-10-31  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkstock.c: Add stock items for most stock icons. (#61757)
