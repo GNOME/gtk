@@ -1013,13 +1013,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  * setting the <literal>success</literal> parameter depending on whether the 
  * data was processed successfully. 
  * 
- * The handler may inspect and modify <literal>context-&gt;action</literal> 
+ * The handler may inspect and modify @drag_context->action 
  * before calling gtk_drag_finish(), e.g. to implement %GTK_ACTION_ASK as 
  * shown in the following example:
  * <informalexample><programlisting>
  * void  
  * drag_data_received (GtkWidget          *widget,
- *                     GdkDragContext     *context,
+ *                     GdkDragContext     *drag_context,
  *                     gint                x,
  *                     gint                y,
  *                     GtkSelectionData   *data,
@@ -1028,7 +1028,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  * {
  *   if ((data->length >= 0) && (data->format == 8))
  *     {
- *       if (context->action == GDK_ACTION_ASK) 
+ *       if (drag_context->action == GDK_ACTION_ASK) 
  *         {
  *           GtkWidget *dialog;
  *           gint response;
@@ -1043,16 +1043,16 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  *           gtk_widget_destroy (dialog);
  *             
  *           if (response == GTK_RESPONSE_YES)
- *             context->action = GDK_ACTION_MOVE;
+ *             drag_context->action = GDK_ACTION_MOVE;
  *           else
- *             context->action = GDK_ACTION_COPY;
+ *             drag_context->action = GDK_ACTION_COPY;
  *          }
  *          
- *       gtk_drag_finish (context, TRUE, FALSE, time);
+ *       gtk_drag_finish (drag_context, TRUE, FALSE, time);
  *       return;
  *     }
  *       
- *    gtk_drag_finish (context, FALSE, FALSE, time);
+ *    gtk_drag_finish (drag_context, FALSE, FALSE, time);
  *  }
  * </programlisting></informalexample>
  */
@@ -2202,7 +2202,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
  * @width: width of region to draw
  * @height: height of region to draw
  * 
- * DEPRECATED. This function is no longer different from
+ * This function is no longer different from
  * gtk_widget_queue_draw_area(), though it once was. Now it just calls
  * gtk_widget_queue_draw_area(). Originally
  * gtk_widget_queue_clear_area() would force a redraw of the
@@ -2210,6 +2210,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
  * gtk_widget_queue_draw_area() would not. Now both functions ensure
  * the background will be redrawn.
  * 
+ * @Deprecated: Use gtk_widget_queue_draw_area() instead.
  **/
 void	   
 gtk_widget_queue_clear_area (GtkWidget *widget,
@@ -2227,7 +2228,9 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
  * gtk_widget_queue_clear:
  * @widget: a #GtkWidget
  * 
- * DEPRECATED. Use gtk_widget_queue_draw() instead.
+ * This function does the same as gtk_widget_queue_draw().
+ *
+ * @Deprecated: Use gtk_widget_queue_draw() instead.
  **/
 void	   
 gtk_widget_queue_clear (GtkWidget *widget)
@@ -2270,7 +2273,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
  * @widget: a #GtkWidget
  * @area: area to draw
  *
- * DEPRECATED. In GTK+ 1.2, this function would immediately render the
+ * In GTK+ 1.2, this function would immediately render the
  * region @area of a widget, by invoking the virtual draw method of a
  * widget. In GTK+ 2.0, the draw method is gone, and instead
  * gtk_widget_draw() simply invalidates the specified region of the
@@ -5192,9 +5195,6 @@ gtk_widget_set_usize_internal (GtkWidget *widget,
  * @width: minimum width, or -1 to unset
  * @height: minimum height, or -1 to unset
  *
- * This function is deprecated; use gtk_widget_set_size_request()
- * instead.
- * 
  * Sets the minimum size of a widget; that is, the widget's size
  * request will be @width by @height. You can use this function to
  * force a widget to be either larger or smaller than it is. The
@@ -5213,6 +5213,7 @@ gtk_widget_set_usize_internal (GtkWidget *widget,
  * basically impossible to hardcode a size that will always be
  * correct.
  * 
+ * @Deprecated: Use gtk_widget_set_size_request() instead.
  **/
 void
 gtk_widget_set_usize (GtkWidget *widget,
