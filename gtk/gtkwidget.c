@@ -2969,32 +2969,8 @@ gtk_widget_reparent (GtkWidget *widget,
 	{
 	  GTK_PRIVATE_UNSET_FLAG (widget, GTK_IN_REPARENT);
 	  
-	  /* OK, now fix up the widget's window. (And that for any
-	   * children, if the widget is NO_WINDOW and a container) 
-	   */
-	  if (GTK_WIDGET_NO_WINDOW (widget))
-    	    {
-	      if (GTK_IS_CONTAINER (widget))
-		gtk_container_forall (GTK_CONTAINER (widget),
-				      gtk_widget_reparent_container_child,
-				      gtk_widget_get_parent_window (widget));
-	      else
-		{
-		  GdkWindow *parent_window;
-		  
-		  parent_window = gtk_widget_get_parent_window (widget);
-		  if (parent_window != widget->window)
-		    {
-		      if (widget->window)
-			gdk_window_unref (widget->window);
-		      widget->window = parent_window;
-		      if (widget->window)
-			gdk_window_ref (widget->window);
-		    }
-		}
-	    }
-	  else
-	    gdk_window_reparent (widget->window, gtk_widget_get_parent_window (widget), 0, 0);
+	  gtk_widget_reparent_container_child (widget,
+					       gtk_widget_get_parent_window (widget));
 	}
     }
 }

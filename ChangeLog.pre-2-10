@@ -1,3 +1,9 @@
+Sat Jan 22 15:44:30 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_reparent): Correctly
+	  fix up widget->window when the widget is a
+	  NO_WINDOW container widget.
+
 Sat Jan 22 12:40:48 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpixmap.c (gdk_pixmap_seek_string): Rewrite
