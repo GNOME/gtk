@@ -173,7 +173,6 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtktreednd.h		\
 	gtktreeitem.h		\
 	gtktreemodel.h		\
-	gtktreemodelsimple.h	\
 	gtktreemodelsort.h	\
 	gtktreemodelmapping.h	\
 	gtktreeselection.h	\
@@ -341,7 +340,6 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtktreedatalist.c	\
 	gtktreednd.c		\
 	gtktreemodel.c		\
-	gtktreemodelsimple.c	\
 	gtktreemodelsort.c	\
 	gtktreemodelmapping.c	\
 	gtktreeselection.c	\
