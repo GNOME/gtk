@@ -24,19 +24,6 @@ fields.
 
 @Since: 2.2
 
-<!-- ##### SIGNAL GdkDisplayManager::display-opened ##### -->
-<para>
-
-</para>
-
-@gdkdisplaymanager: the object which received the signal.
-@arg1: 
-
-<!-- ##### ARG GdkDisplayManager:default-display ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gdk_display_manager_get ##### -->
 <para>
 
@@ -80,4 +67,17 @@ fields.
 @display: 
 @Returns: 
 
+
+<!-- ##### SIGNAL GdkDisplayManager::display-opened ##### -->
+<para>
+
+</para>
+
+@gdkdisplaymanager: the object which received the signal.
+@arg1: 
+
+<!-- ##### ARG GdkDisplayManager:default-display ##### -->
+<para>
+
+</para>
 

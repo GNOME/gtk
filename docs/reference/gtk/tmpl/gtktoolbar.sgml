@@ -51,104 +51,6 @@ accessed through the function described below.
 @icon_size: 
 @tooltips: 
 
-<!-- ##### SIGNAL GtkToolbar::focus-home-or-end ##### -->
-<para>
-
-</para>
-
-@toolbar: the object which received the signal.
-@arg1: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkToolbar::move-focus ##### -->
-<para>
-
-</para>
-
-@toolbar: the object which received the signal.
-@arg1: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkToolbar::orientation-changed ##### -->
-<para>
-
-</para>
-
-@toolbar: the object which received the signal.
-@orientation: the new #GtkOrientation of the toolbar.
-
-<!-- ##### SIGNAL GtkToolbar::popup-context-menu ##### -->
-<para>
-
-</para>
-
-@toolbar: the object which received the signal.
-@Returns: 
-@: 
-@:
-@Returns: 
-@:
-@Returns: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkToolbar::style-changed ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@style: 
-
-<!-- ##### ARG GtkToolbar:orientation ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:show-arrow ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:toolbar-style ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:expand ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:homogeneous ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:button-relief ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:internal-padding ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:shadow-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:space-size ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:space-style ##### -->
-<para>
-
-</para>
-
 <!-- ##### ENUM GtkToolbarChildType ##### -->
 <para>
 #GtkToolbarChildType is used to set the type of new elements that are added 
@@ -545,4 +447,102 @@ to a #GtkToolbar.
 
 @toolbar: 
 
+
+<!-- ##### SIGNAL GtkToolbar::focus-home-or-end ##### -->
+<para>
+
+</para>
+
+@toolbar: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkToolbar::move-focus ##### -->
+<para>
+
+</para>
+
+@toolbar: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkToolbar::orientation-changed ##### -->
+<para>
+
+</para>
+
+@toolbar: the object which received the signal.
+@orientation: the new #GtkOrientation of the toolbar.
+
+<!-- ##### SIGNAL GtkToolbar::popup-context-menu ##### -->
+<para>
+
+</para>
+
+@toolbar: the object which received the signal.
+@Returns: 
+@: 
+@:
+@Returns: 
+@:
+@Returns: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkToolbar::style-changed ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@style: 
+
+<!-- ##### ARG GtkToolbar:orientation ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:show-arrow ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:toolbar-style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:expand ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:homogeneous ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:button-relief ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:internal-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:space-size ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:space-style ##### -->
+<para>
+
+</para>
 

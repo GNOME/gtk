@@ -84,6 +84,35 @@ Creates a new #GtkRadioMenuItem whose child is a simple #GtkLabel.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_radio_menu_item_new_from_widget ##### -->
+<para>
+
+</para>
+
+@group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_menu_item_new_with_label_from_widget ##### -->
+<para>
+
+</para>
+
+@group: 
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_menu_item_new_with_mnemonic_from_widget ##### -->
+<para>
+
+</para>
+
+@group: 
+@label: 
+@Returns: 
+
+
 <!-- ##### MACRO gtk_radio_menu_item_group ##### -->
 <para>
 Deprecated compatibility macro. Use gtk_radio_menu_item_get_group() instead.

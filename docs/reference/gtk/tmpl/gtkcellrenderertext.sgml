@@ -20,6 +20,23 @@ Renders text in a cell
 </para>
 
 
+<!-- ##### FUNCTION gtk_cell_renderer_text_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_text_set_fixed_height_from_font ##### -->
+<para>
+
+</para>
+
+@renderer: 
+@number_of_rows: 
+
+
 <!-- ##### SIGNAL GtkCellRendererText::edited ##### -->
 <para>
 
@@ -213,21 +230,4 @@ Renders text in a cell
 <para>
 
 </para>
-
-<!-- ##### FUNCTION gtk_cell_renderer_text_new ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_cell_renderer_text_set_fixed_height_from_font ##### -->
-<para>
-
-</para>
-
-@renderer: 
-@number_of_rows: 
-
 

@@ -135,41 +135,6 @@ field.</entry>
 @spacing: 
 @homogeneous: 
 
-<!-- ##### ARG GtkBox:homogeneous ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkBox:spacing ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkBox:expand ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkBox:fill ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkBox:pack-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkBox:padding ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkBox:position ##### -->
-<para>
-
-</para>
-
 <!-- ##### STRUCT GtkBoxChild ##### -->
 <para>
 The #GtkBoxChild-struct holds a child widget of GtkBox and describes
@@ -407,4 +372,39 @@ field in #GtkBoxChild-struct.
 @pack_type: the new value of the <structfield>pack</structfield> field
 in #GtkBoxChild-struct.
 
+
+<!-- ##### ARG GtkBox:homogeneous ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkBox:spacing ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkBox:expand ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkBox:fill ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkBox:pack-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkBox:padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkBox:position ##### -->
+<para>
+
+</para>
 

@@ -66,6 +66,92 @@ it cannot be individually modified.
 </para>
 
 
+<!-- ##### FUNCTION gtk_cell_renderer_get_size ##### -->
+<para>
+
+</para>
+
+@cell: 
+@widget: 
+@cell_area: 
+@x_offset: 
+@y_offset: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_render ##### -->
+<para>
+
+</para>
+
+@cell: 
+@window: 
+@widget: 
+@background_area: 
+@cell_area: 
+@expose_area: 
+@flags: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_activate ##### -->
+<para>
+
+</para>
+
+@cell: 
+@event: 
+@widget: 
+@path: 
+@background_area: 
+@cell_area: 
+@flags: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_start_editing ##### -->
+<para>
+
+</para>
+
+@cell: 
+@event: 
+@widget: 
+@path: 
+@background_area: 
+@cell_area: 
+@flags: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_editing_canceled ##### -->
+<para>
+
+</para>
+
+@cell: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_get_fixed_size ##### -->
+<para>
+
+</para>
+
+@cell: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_set_fixed_size ##### -->
+<para>
+
+</para>
+
+@cell: 
+@width: 
+@height: 
+
+
 <!-- ##### SIGNAL GtkCellRenderer::editing-canceled ##### -->
 <para>
 
@@ -137,82 +223,4 @@ it cannot be individually modified.
 <para>
 
 </para>
-
-<!-- ##### FUNCTION gtk_cell_renderer_get_size ##### -->
-<para>
-
-</para>
-
-@cell: 
-@widget: 
-@cell_area: 
-@x_offset: 
-@y_offset: 
-@width: 
-@height: 
-
-
-<!-- ##### FUNCTION gtk_cell_renderer_render ##### -->
-<para>
-
-</para>
-
-@cell: 
-@window: 
-@widget: 
-@background_area: 
-@cell_area: 
-@expose_area: 
-@flags: 
-
-
-<!-- ##### FUNCTION gtk_cell_renderer_activate ##### -->
-<para>
-
-</para>
-
-@cell: 
-@event: 
-@widget: 
-@path: 
-@background_area: 
-@cell_area: 
-@flags: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_cell_renderer_start_editing ##### -->
-<para>
-
-</para>
-
-@cell: 
-@event: 
-@widget: 
-@path: 
-@background_area: 
-@cell_area: 
-@flags: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_cell_renderer_get_fixed_size ##### -->
-<para>
-
-</para>
-
-@cell: 
-@width: 
-@height: 
-
-
-<!-- ##### FUNCTION gtk_cell_renderer_set_fixed_size ##### -->
-<para>
-
-</para>
-
-@cell: 
-@width: 
-@height: 
-
 

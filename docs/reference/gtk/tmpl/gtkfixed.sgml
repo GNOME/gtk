@@ -84,16 +84,6 @@ their positions.</entry>
 </para>
 
 
-<!-- ##### ARG GtkFixed:x ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFixed:y ##### -->
-<para>
-
-</para>
-
 <!-- ##### STRUCT GtkFixedChild ##### -->
 <para>
 The #GtkFixedChild-struct struct contains the following fields.
@@ -175,4 +165,14 @@ Moves a child of a #GtkFixed container to the given position.
 @fixed: 
 @has_window: 
 
+
+<!-- ##### ARG GtkFixed:x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFixed:y ##### -->
+<para>
+
+</para>
 

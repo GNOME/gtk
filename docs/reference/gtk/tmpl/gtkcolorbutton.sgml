@@ -21,33 +21,6 @@ selection dialog to change the color. It is suitable widget for selecting a colo
 </para>
 
 
-<!-- ##### SIGNAL GtkColorButton::color-set ##### -->
-<para>
-
-</para>
-
-@colorbutton: the object which received the signal.
-
-<!-- ##### ARG GtkColorButton:alpha ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkColorButton:color ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkColorButton:title ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkColorButton:use-alpha ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_color_button_new ##### -->
 <para>
 
@@ -136,4 +109,31 @@ selection dialog to change the color. It is suitable widget for selecting a colo
 @color_button: 
 @Returns: 
 
+
+<!-- ##### SIGNAL GtkColorButton::color-set ##### -->
+<para>
+
+</para>
+
+@colorbutton: the object which received the signal.
+
+<!-- ##### ARG GtkColorButton:alpha ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkColorButton:color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkColorButton:title ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkColorButton:use-alpha ##### -->
+<para>
+
+</para>
 

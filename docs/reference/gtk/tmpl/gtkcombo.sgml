@@ -93,31 +93,6 @@ an application.)
 @entry: the text entry field.
 @list: the list shown in the drop-down window.
 
-<!-- ##### ARG GtkCombo:allow-empty ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCombo:case-sensitive ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCombo:enable-arrow-keys ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCombo:enable-arrows-always ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCombo:value-in-list ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_combo_new ##### -->
 <para>
 Creates a new #GtkCombo.
@@ -215,4 +190,29 @@ instead.
 @combo: a #GtkCombo.
 @Deprecated: Use #GtkComboBox instead.
 
+
+<!-- ##### ARG GtkCombo:allow-empty ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCombo:case-sensitive ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCombo:enable-arrow-keys ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCombo:enable-arrows-always ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCombo:value-in-list ##### -->
+<para>
+
+</para>
 

@@ -24,6 +24,33 @@ Base class for text-editing widgets
 @selection_end_pos: 
 @has_selection: 
 
+<!-- ##### USER_FUNCTION GtkTextFunction ##### -->
+<para>
+
+</para>
+
+@editable: 
+@time_: 
+
+
+<!-- ##### FUNCTION gtk_old_editable_claim_selection ##### -->
+<para>
+
+</para>
+
+@old_editable: 
+@claim: 
+@time_: 
+
+
+<!-- ##### FUNCTION gtk_old_editable_changed ##### -->
+<para>
+
+</para>
+
+@old_editable: 
+
+
 <!-- ##### SIGNAL GtkOldEditable::activate ##### -->
 <para>
 
@@ -135,31 +162,4 @@ Base class for text-editing widgets
 <para>
 
 </para>
-
-<!-- ##### USER_FUNCTION GtkTextFunction ##### -->
-<para>
-
-</para>
-
-@editable: 
-@time_: 
-
-
-<!-- ##### FUNCTION gtk_old_editable_claim_selection ##### -->
-<para>
-
-</para>
-
-@old_editable: 
-@claim: 
-@time_: 
-
-
-<!-- ##### FUNCTION gtk_old_editable_changed ##### -->
-<para>
-
-</para>
-
-@old_editable: 
-
 

@@ -24,6 +24,12 @@ File chooser widget that can be embedded in other widgets.
       #GtkFileChooser, #GtkFileChooserDialog
     </para>
 
+<!-- ##### STRUCT GtkFileChooserWidget ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### FUNCTION gtk_file_chooser_widget_new ##### -->
 <para>
 

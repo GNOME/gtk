@@ -34,45 +34,6 @@ area.
 
 @bin_window: 
 
-<!-- ##### SIGNAL GtkLayout::set-scroll-adjustments ##### -->
-<para>
-
-</para>
-
-@layout: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### ARG GtkLayout:hadjustment ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLayout:height ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLayout:vadjustment ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLayout:width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLayout:x ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkLayout:y ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_layout_new ##### -->
 <para>
 
@@ -180,4 +141,43 @@ area.
 @layout: 
 @adjustment: 
 
+
+<!-- ##### SIGNAL GtkLayout::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@layout: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### ARG GtkLayout:hadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLayout:height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLayout:vadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLayout:width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLayout:x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLayout:y ##### -->
+<para>
+
+</para>
 

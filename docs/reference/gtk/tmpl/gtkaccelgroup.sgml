@@ -37,27 +37,6 @@ An object representing and maintaining a group of accelerators.
 </para>
 
 
-<!-- ##### SIGNAL GtkAccelGroup::accel-activate ##### -->
-<para>
-
-</para>
-
-@accelgroup: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-@Returns: 
-
-<!-- ##### SIGNAL GtkAccelGroup::accel-changed ##### -->
-<para>
-
-</para>
-
-@accelgroup: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
 <!-- ##### FUNCTION gtk_accel_group_new ##### -->
 <para>
 
@@ -163,6 +142,19 @@ Deprecated equivalent of g_object_unref().
 @accel_key: 
 @accel_mods: 
 @n_entries: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_accel_group_activate ##### -->
+<para>
+
+</para>
+
+@accel_group: 
+@accel_quark: 
+@acceleratable: 
+@accel_key: 
+@accel_mods: 
 @Returns: 
 
 

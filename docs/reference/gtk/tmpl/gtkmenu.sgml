@@ -83,54 +83,6 @@ should be accessed using the functions below.
 </para>
 
 
-<!-- ##### SIGNAL GtkMenu::move-scroll ##### -->
-<para>
-
-</para>
-
-@menu: the object which received the signal.
-@arg1: 
-
-<!-- ##### ARG GtkMenu:tearoff-title ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenu:bottom-attach ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenu:left-attach ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenu:right-attach ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenu:top-attach ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenu:horizontal-offset ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenu:vertical-offset ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkMenu:vertical-padding ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_menu_new ##### -->
 <para>
 Creates a new #GtkMenu.
@@ -396,4 +348,52 @@ will be called when the menu is later detached from the widget.
 @menu: 
 @monitor_num: 
 
+
+<!-- ##### SIGNAL GtkMenu::move-scroll ##### -->
+<para>
+
+</para>
+
+@menu: the object which received the signal.
+@arg1: 
+
+<!-- ##### ARG GtkMenu:tearoff-title ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:bottom-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:left-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:right-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:top-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:horizontal-offset ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:vertical-offset ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:vertical-padding ##### -->
+<para>
+
+</para>
 

@@ -40,16 +40,6 @@ The GtkTreeModelFilter struct contains only private fields.
 </para>
 
 
-<!-- ##### ARG GtkTreeModelFilter:child-model ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeModelFilter:virtual-root ##### -->
-<para>
-
-</para>
-
 <!-- ##### USER_FUNCTION GtkTreeModelFilterVisibleFunc ##### -->
 <para>
 A function which decides whether the row indicated by @iter is visible.
@@ -72,7 +62,7 @@ row indicated by @iter.
 @iter: a #GtkTreeIter pointing to the row whose display values are determined
 @value: A #GValue which is already initialized for with the correct type for 
   the column @column.
-@column: the column whose display value is determined 
+@column: the column whose display value is determined
 @data: user data given to gtk_tree_model_filter_set_modify_func()
 
 
@@ -185,4 +175,14 @@ row indicated by @iter.
 
 @filter: 
 
+
+<!-- ##### ARG GtkTreeModelFilter:child-model ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeModelFilter:virtual-root ##### -->
+<para>
+
+</para>
 

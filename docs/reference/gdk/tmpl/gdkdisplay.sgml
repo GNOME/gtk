@@ -36,14 +36,6 @@ of an X display. All its fields are private and should not be accessed directly.
 
 @Since: 2.2
 
-<!-- ##### SIGNAL GdkDisplay::closed ##### -->
-<para>
-
-</para>
-
-@gdkdisplay: the object which received the signal.
-@arg1: 
-
 <!-- ##### FUNCTION gdk_display_open ##### -->
 <para>
 
@@ -323,4 +315,12 @@ Applications should never have any reason to use this facility
 @display: 
 @Returns: 
 
+
+<!-- ##### SIGNAL GdkDisplay::closed ##### -->
+<para>
+
+</para>
+
+@gdkdisplay: the object which received the signal.
+@arg1: 
 

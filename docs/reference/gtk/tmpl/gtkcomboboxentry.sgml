@@ -4,7 +4,6 @@ GtkComboBoxEntry
 <!-- ##### SECTION Short_Description ##### -->
 a text entry field with a dropdown list
 
-
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 
@@ -20,11 +19,6 @@ a text entry field with a dropdown list
 
 </para>
 
-
-<!-- ##### ARG GtkComboBoxEntry:text-column ##### -->
-<para>
-
-</para>
 
 <!-- ##### FUNCTION gtk_combo_box_entry_new ##### -->
 <para>
@@ -64,4 +58,9 @@ a text entry field with a dropdown list
 @entry_box: 
 @Returns: 
 
+
+<!-- ##### ARG GtkComboBoxEntry:text-column ##### -->
+<para>
+
+</para>
 

@@ -354,6 +354,13 @@ The "Up" item.
 
 
 
+<!-- ##### MACRO GTK_STOCK_HARDDISK ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### MACRO GTK_STOCK_HELP ##### -->
 <para>
 The "Help" item.
@@ -366,6 +373,13 @@ The "Help" item.
 <para>
 The "Home" item.
 <inlinegraphic fileref="stock_home_24.png" format="PNG"></inlinegraphic>
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_INDENT ##### -->
+<para>
+
 </para>
 
 
@@ -432,6 +446,13 @@ The "Right" item.
 <para>
 The "Missing image" icon.
 <inlinegraphic fileref="stock_broken_image_24.png" format="PNG"></inlinegraphic>
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_NETWORK ##### -->
+<para>
+
 </para>
 
 
@@ -648,6 +669,13 @@ The "Undo" item.
 <inlinegraphic fileref="stock_undo_24.png" format="PNG"></inlinegraphic>
 RTL variant
 <inlinegraphic fileref="stock_undo_rtl_24.png" format="PNG"></inlinegraphic>
+</para>
+
+
+
+<!-- ##### MACRO GTK_STOCK_UNINDENT ##### -->
+<para>
+
 </para>
 
 

@@ -164,3 +164,14 @@ care of this.
 @tooltips: a #GtkToolTips
 
 
+<!-- ##### FUNCTION gtk_tooltips_get_info_from_tip_window ##### -->
+<para>
+
+</para>
+
+@tip_window: 
+@tooltips: 
+@current_widget: 
+@Returns: 
+
+

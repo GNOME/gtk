@@ -365,6 +365,54 @@ XlibRGB
 
 @obj: A GTK+ object.
 
+<!-- ##### ARG GdkPixbuf:bits-per-sample ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GdkPixbuf:colorspace ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GdkPixbuf:has-alpha ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GdkPixbuf:height ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GdkPixbuf:n-channels ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GdkPixbuf:pixels ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GdkPixbuf:rowstride ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GdkPixbuf:width ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### STRUCT GdkPixbufFrame ##### -->
 <para>
  This object describes an individual frame of an animation.

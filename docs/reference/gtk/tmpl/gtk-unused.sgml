@@ -525,6 +525,27 @@ This is a private struct used by GTK+ internally, don't worry about it.
 @object: 
 @signal_id: 
 
+<!-- ##### SIGNAL GtkAccelGroup::accel-activate ##### -->
+<para>
+
+</para>
+
+@accelgroup: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkAccelGroup::accel-changed ##### -->
+<para>
+
+</para>
+
+@accelgroup: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
 <!-- ##### ARG GtkAccelLabel:accel-object ##### -->
 <para>
 
@@ -536,6 +557,16 @@ This is a private struct used by GTK+ internally, don't worry about it.
 
 </para>
 
+
+<!-- ##### SIGNAL GtkAccelMap::changed ##### -->
+<para>
+
+</para>
+
+@accelmap: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
 
 <!-- ##### USER_FUNCTION GtkAccelMapNotify ##### -->
 <para>
@@ -833,6 +864,66 @@ You may not attach these to signals created with the
 </para>
 
 
+<!-- ##### ARG GtkFileChooser:action ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:extra-widget ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:file-system ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:filter ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:folder-mode ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:local-only ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:preview-widget ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:preview-widget-active ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:select-multiple ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileChooser:show-hidden ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ENUM GtkFontFilterType ##### -->
 <para>
 A set of bit flags used to specify the filter being set
@@ -1081,7 +1172,97 @@ after other user handlers and the default handler.
 </para>
 
 
+<!-- ##### ARG GtkSettings:gtk-can-change-accels ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-color-palette ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-cursor-blink ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-cursor-blink-time ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-dnd-drag-threshold ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-double-click-distance ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-double-click-time ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-entry-select-on-focus ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-font-name ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-icon-sizes ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-icon-theme-name ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-key-theme-name ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-menu-bar-accel ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ARG GtkSettings:gtk-menu-bar-popout-delay ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-menu-bar-popup-delay ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-menu-popdown-delay ##### -->
 <para>
 
 </para>
@@ -1093,7 +1274,37 @@ after other user handlers and the default handler.
 </para>
 
 
+<!-- ##### ARG GtkSettings:gtk-menu-popup-delay ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ARG GtkSettings:gtk-menu-submenu-hysteresis ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-split-cursor ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-theme-name ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-toolbar-icon-size ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkSettings:gtk-toolbar-style ##### -->
 <para>
 
 </para>
@@ -1447,16 +1658,6 @@ If the window shrinks automatically when widgets within it shrink.
 
 </para>
 
-
-<!-- ##### FUNCTION gtk_accel_group_activate ##### -->
-<para>
-
-</para>
-
-@accel_group: 
-@accel_key: 
-@accel_mods: 
-@Returns: 
 
 <!-- ##### FUNCTION gtk_accel_group_add ##### -->
 <para>
