@@ -1,3 +1,8 @@
+1998-10-18  Martin Baulig  <martin@home-of-linux.org>
+
+	* gtk/gtktext.c (gtk_text_set_line_wrap): new function to toggle
+	line wrapping like gtk_text_set_word_wrap () toggles word wrapping.
+
 Fri Oct 16 15:59:02 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/testgtk.c (insert_row_clist) (create_clist): change a few cell

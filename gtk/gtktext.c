@@ -626,6 +626,22 @@ gtk_text_set_word_wrap (GtkText *text,
 }
 
 void
+gtk_text_set_line_wrap (GtkText *text,
+			gint     line_wrap)
+{
+  g_return_if_fail (text != NULL);
+  g_return_if_fail (GTK_IS_TEXT (text));
+  
+  text->line_wrap = (line_wrap != FALSE);
+  
+  if (GTK_WIDGET_REALIZED (text))
+    {
+      recompute_geometry (text);
+      gtk_widget_queue_draw (GTK_WIDGET (text));
+    }
+}
+
+void
 gtk_text_set_editable (GtkText *text,
 		       gboolean is_editable)
 {

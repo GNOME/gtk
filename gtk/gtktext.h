@@ -166,6 +166,8 @@ void       gtk_text_set_editable    (GtkText       *text,
 				     gboolean       editable);
 void       gtk_text_set_word_wrap   (GtkText       *text,
 				     gint           word_wrap);
+void       gtk_text_set_line_wrap   (GtkText       *text,
+				     gint           line_wrap);
 void       gtk_text_set_adjustments (GtkText       *text,
 				     GtkAdjustment *hadj,
 				     GtkAdjustment *vadj);
