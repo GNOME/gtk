@@ -1,5 +1,7 @@
 2002-04-24  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/tmpl/gtksocket.sgml: Formatting fix.
+
 	* gdk-pixbuf/tmpl/gdk-pixbuf-loader.sgml: Updates.  (#79001)
 
 2002-04-23  Matthias Clasen  <maclas@gmx.de>

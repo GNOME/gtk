@@ -75,8 +75,6 @@ pre-existing top-level windows using gtk_socket_steal(),
 though the integration when this is done will not be as close
 as between a #GtkPlug and a #GtkSocket.</para>
 
-</para>
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 <variablelist>
