@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.9\n"
-"POT-Creation-Date: 2001-02-28 19:20-0500\n"
-"PO-Revision-Date: 2001-02-05 18:46+0100\n"
+"POT-Creation-Date: 2001-03-01 11:04+0100\n"
+"PO-Revision-Date: 2001-03-01 11:13+0100\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@eikonex.org>\n"
 "Language-Team: GNOME French Team <gnomefr@gnomefr.traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -76,11 +76,11 @@ msgstr "Répertoire illisible : %s"
 
 #: gtk/gtkfilesel.c:551
 msgid "Create Dir"
-msgstr "Créer Rép."
+msgstr "Créer un répertoire"
 
 #: gtk/gtkfilesel.c:562 gtk/gtkfilesel.c:937
 msgid "Delete File"
-msgstr "Effacer le fichier"
+msgstr "Supprimer le fichier"
 
 #: gtk/gtkfilesel.c:573 gtk/gtkfilesel.c:1041
 msgid "Rename File"
@@ -102,7 +102,7 @@ msgstr "Fermer"
 
 #: gtk/gtkfilesel.c:832
 msgid "Create Directory"
-msgstr "Créer un répertoire"
+msgstr "Créez un répertoire"
 
 #: gtk/gtkfilesel.c:846
 msgid "Directory name:"
@@ -125,7 +125,7 @@ msgstr "Renommer"
 
 #: gtk/gtkfilesel.c:1457
 msgid "Selection: "
-msgstr "Sélection :"
+msgstr "Sélection : "
 
 #: gtk/gtkfontsel.c:210
 msgid "Foundry:"
@@ -211,7 +211,7 @@ msgstr "Taille :"
 
 #: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
 msgid "Reset Filter"
-msgstr "R. à Z. du filtre"
+msgstr "R. à z. du filtre"
 
 #: gtk/gtkfontsel.c:660
 msgid "Metric:"
@@ -468,7 +468,7 @@ msgstr ""
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "--- Pas de conseil du jour ---"
+msgstr "--- Pas de conseil ---"
 
 #~ msgid "thin"
 #~ msgstr "fin"
