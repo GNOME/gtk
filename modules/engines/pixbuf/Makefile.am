@@ -11,6 +11,12 @@ INCLUDES = \
 	-DGDK_DISABLE_DEPRECATED			\
 	$(GTK_DEP_CFLAGS)
 
+LDADDS = \
+	$(GTK_DEP_LIBS)					\
+        $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-2.0.la \
+	$(top_builddir)/gdk/$(gdktargetlib)		\
+	$(top_builddir)/gtk/$(gtktargetlib)		
+
 enginedir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/engines
 
 engine_LTLIBRARIES = libpixmap.la
@@ -25,5 +31,5 @@ libpixmap_la_SOURCES = 		\
 	pixbuf.h
 
 libpixmap_la_LDFLAGS =  -avoid-version -module $(no_undefined)
-libpixmap_la_LIBADD = $(GTK_LIBS)
+libpixmap_la_LIBADD = $(LDADDS)
 

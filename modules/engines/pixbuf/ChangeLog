@@ -1,3 +1,8 @@
+2004-11-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* Makefile.am (LDADDS): Add necessary libraries to make
+	it compile with -no-undefined.  (#159713, Robert Ögren)
+
 2004-11-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* pixbuf-render.c: 
