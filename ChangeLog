@@ -1,3 +1,7 @@
+2002-02-16  Manish Singh  <yosh@gimp.org>
+
+	* gdk/linux-fb/miarc.c: use fabs() on a double instead of abs()
+
 2002-02-17  Matthias Clasen  <matthias@YAST_ASK>
 
 	More work on #71430.
@@ -341,7 +345,7 @@ Sun Feb 10 12:32:44 2002  Owen Taylor  <otaylor@redhat.com>
 
 2002-02-10  Kjartan Maraas  <kmaraas@gnome.org>
 
-	* gtk/gtksizegroup.c: Fix a double «The» typo in a string.
+	* gtk/gtksizegroup.c: Fix a double "The" typo in a string.
 	
 2002-02-09  Matthias Clasen  <matthias@local>
 
