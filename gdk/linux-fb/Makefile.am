@@ -82,3 +82,14 @@ gdkfbswitch_sources = gdkfbswitch.c
 gdkfbswitch_LDFLAGS = $(GLIB_LIBS)
 
 EXTRA_DIST=x-cursors.xbm
+
+###########################################
+# Hack to get gdkenumtypes.h built first
+###########################################
+                                       
+$(libgdk_linux_fb_la_OBJECTS): update-enum-types
+
+update-enum-types:
+	@cd $(top_builddir)/gdk && make $(AM_MAKEFLAGS) gdkenumtypes.h
+   
+.PHONY: update-enum-types

@@ -1,3 +1,9 @@
+Fri Nov  8 18:04:16 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/{linux-fb,win32,11}/Makefile.am: Add in a awful
+	hack to force gdkenumtypes.h to be updated before
+	building the subdir. (#86587)
+
 Fri Nov  8 17:49:54 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_check_screen): Access

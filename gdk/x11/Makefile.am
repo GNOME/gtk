@@ -77,3 +77,14 @@ EXTRA_DIST = 			\
 	gdkinput-x11.c		\
 	gdkinput-xfree.c	\
 	gdkinput-none.c
+
+###########################################
+# Hack to get gdkenumtypes.h built first
+###########################################
+                                       
+$(libgdk_x11_la_OBJECTS): update-enum-types
+
+update-enum-types:
+	@cd $(top_builddir)/gdk && make $(AM_MAKEFLAGS) gdkenumtypes.h
+   
+.PHONY: update-enum-types

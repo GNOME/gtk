@@ -82,3 +82,14 @@ libgdkinclude_HEADERS =		\
 	gdkwin32.h
 
 libgdk_win32_la_LIBADD = rc/gdk-win32res.lo
+
+###########################################
+# Hack to get gdkenumtypes.h built first
+###########################################
+                                       
+$(libgdk_win32_la_OBJECTS): update-enum-types
+
+update-enum-types:
+	@cd $(top_builddir)/gdk && make $(AM_MAKEFLAGS) gdkenumtypes.h
+   
+.PHONY: update-enum-types
