@@ -1,5 +1,11 @@
 2000-10-30  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextview.h, gtk/gtktextview.c:
+	Rename delete_at_cursor delete_from_cursor, and 
+	move to move_cursor.
+
+2000-10-30  Havoc Pennington  <hp@redhat.com>
+
 	* gtktextbtree.c, gtktextbtree.h, gtktextbuffer.c,
 	gtktextbuffer.h, gtktextchild.c, gtktextchild.h,
 	gtktextchildprivate.h, gtktextdisplay.c, gtktextdisplay.h,

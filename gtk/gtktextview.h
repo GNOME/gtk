@@ -125,13 +125,19 @@ struct _GtkTextViewClass {
   /* These are all RUN_ACTION signals for keybindings */
 
   /* move insertion point */
-  void (* move)        (GtkTextView *text_view, GtkMovementStep step, gint count, gboolean extend_selection);
+  void (* move_cursor) (GtkTextView    *text_view,
+                        GtkMovementStep step,
+                        gint            count,
+                        gboolean        extend_selection);
   /* move the "anchor" (what Emacs calls the mark) to the cursor position */
-  void (* set_anchor)  (GtkTextView *text_view);
+  void (* set_anchor)  (GtkTextView    *text_view);
 
   /* Edits */
-  void (* insert_at_cursor)      (GtkTextView *text_view, const gchar *str);
-  void (* delete_at_cursor)      (GtkTextView *text_view, GtkDeleteType type, gint count);
+  void (* insert_at_cursor)      (GtkTextView *text_view,
+                                  const gchar *str);
+  void (* delete_from_cursor)    (GtkTextView  *text_view,
+                                  GtkDeleteType type,
+                                  gint          count);
 
   /* cut copy paste */
   void (* cut_clipboard)   (GtkTextView *text_view);
