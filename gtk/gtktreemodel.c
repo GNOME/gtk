@@ -1171,26 +1171,25 @@ gtk_tree_model_foreach_helper (GtkTreeModel            *model,
 			       GtkTreeModelForeachFunc  func,
 			       gpointer                 user_data)
 {
-  gtk_tree_path_append_index (path, 0);
-
   do
     {
       GtkTreeIter child;
 
-      if (gtk_tree_model_iter_children (model, &child, iter))
-	{
-	  if (gtk_tree_model_foreach_helper (model, &child, path, func, user_data))
-	    return TRUE;
-	}
-
       if ((* func) (model, path, iter, user_data))
 	return TRUE;
+
+      if (gtk_tree_model_iter_children (model, &child, iter))
+	{
+	  gtk_tree_path_down (path);
+	  if (gtk_tree_model_foreach_helper (model, &child, path, func, user_data))
+	    return TRUE;
+	  gtk_tree_path_up (path);
+	}
 
       gtk_tree_path_next (path);
     }
   while (gtk_tree_model_iter_next (model, iter));
 
-  gtk_tree_path_up (path);
   return FALSE;
 }
 

@@ -1,3 +1,8 @@
+Mon Mar 11 23:42:11 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.c (gtk_tree_model_foreach): fix totally broken
+	foreach function.
+
 2002-03-11  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_add_foreign): Document
