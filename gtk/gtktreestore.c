@@ -565,15 +565,15 @@ gtk_tree_store_set_cell (GtkTreeStore *tree_store,
   g_return_if_fail (column >= 0 && column < tree_store->n_columns);
   g_return_if_fail (value != NULL);
 
-  if (! g_type_is_a (G_VALUE_TYPE (value), column->type))
+  if (! g_type_is_a (G_VALUE_TYPE (value), tree_store->column_headers[column]))
     {
-      if (! (g_value_type_compatible (G_VALUE_TYPE (value), column->type) &&
-	     g_value_type_compatible (column->type, G_VALUE_TYPE (value))))
+      if (! (g_value_type_compatible (G_VALUE_TYPE (value), tree_store->column_headers[column]) &&
+	     g_value_type_compatible (tree_store->column_headers[column], G_VALUE_TYPE (value))))
 	{
 	  g_warning ("%s: Unable to convert from %s to %s\n",
 		     G_STRLOC,
 		     g_type_name (G_VALUE_TYPE (value)),
-		     g_type_name (column->type));
+		     g_type_name (tree_store->column_headers[column]));
 	  return;
 	}
       if (!g_value_transform (value, &real_value))
@@ -581,7 +581,7 @@ gtk_tree_store_set_cell (GtkTreeStore *tree_store,
 	  g_warning ("%s: Unable to make conversion from %s to %s\n",
 		     G_STRLOC,
 		     g_type_name (G_VALUE_TYPE (value)),
-		     g_type_name (column->type));
+		     g_type_name (tree_store->column_headers[column]));
 	  g_value_unset (&real_value);
 	  return;
 	}
@@ -631,7 +631,7 @@ gtk_tree_store_set_cell (GtkTreeStore *tree_store,
       column --;
     }
   if (converted)
-    _gtk_tree_data_list_value_to_node (list, real_value);
+    _gtk_tree_data_list_value_to_node (list, &real_value);
   else
     _gtk_tree_data_list_value_to_node (list, value);
   gtk_tree_model_changed (GTK_TREE_MODEL (tree_store), path, iter);
