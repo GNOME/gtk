@@ -62,6 +62,16 @@ GtkLayout
 @height: 
 
 
+<!-- ##### FUNCTION gtk_layout_get_size ##### -->
+<para>
+
+</para>
+
+@layout: 
+@width: 
+@height: 
+
+
 <!-- ##### FUNCTION gtk_layout_freeze ##### -->
 <para>
 

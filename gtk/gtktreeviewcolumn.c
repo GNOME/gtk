@@ -1180,12 +1180,16 @@ gtk_tree_view_column_get_cell_renderers (GtkTreeViewColumn *tree_column)
 /**
  * gtk_tree_view_column_add_attribute:
  * @tree_column: A #GtkTreeViewColumn.
- * @attribute: An attribute on the columns cell
+ * @cell_renderer: the #GtkCellRenderer to set attributes on
+ * @attribute: An attribute on the renderer
  * @column: The column position on the model to get the attribute from.
  * 
  * Adds an attribute mapping to the list in @tree_column.  The @column is the
- * column position on the model to get a value from, and the @attribute is the
- * parameter on the @tree_column's cell renderer to set that value to.
+ * column of the model to get a value from, and the @attribute is the
+ * parameter on @cell_renderer to be set from the value. So for example
+ * if column 2 of the model contains strings, you could have the
+ * "text" attribute of a #GtkCellRendererText get its values from
+ * column 2.
  **/
 void
 gtk_tree_view_column_add_attribute (GtkTreeViewColumn *tree_column,
@@ -1230,6 +1234,7 @@ gtk_tree_view_column_set_attributesv (GtkTreeViewColumn *tree_column,
 /**
  * gtk_tree_view_column_set_attributes:
  * @tree_column: A #GtkTreeViewColumn.
+ * @cell_renderer: the #GtkCellRenderer we're setting the attributes of
  * @Varargs: A NULL terminated listing of attributes.
  * 
  * Sets the attributes in the list as the attributes of @tree_column.
@@ -1261,10 +1266,11 @@ gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
  * @func_data: The user data for @func.
  * @destroy: The destroy notification for @func_data
  * 
- * Sets the #GtkTreeViewColumnFunc to use for the column.  This function is used
- * instead of the standard attributes mapping for setting the column value, and
- * should set the value of @tree_column 's cell renderer as appropriate.  @func
- * may be NULL to remove an older one.
+ * Sets the #GtkTreeViewColumnFunc to use for the column.  This
+ * function is used instead of the standard attributes mapping for
+ * setting the column value, and should set the value of @tree_column's
+ * cell renderer as appropriate.  @func may be NULL to remove an
+ * older one.
  **/
 void
 gtk_tree_view_column_set_cell_data_func (GtkTreeViewColumn   *tree_column,

@@ -128,6 +128,33 @@ case GTK+ will try to guess an appropriate value
 in the future.
 
 
+<!-- ##### FUNCTION gtk_handle_box_get_handle_position ##### -->
+<para>
+
+</para>
+
+@handle_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_handle_box_get_shadow_type ##### -->
+<para>
+
+</para>
+
+@handle_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_handle_box_get_snap_edge ##### -->
+<para>
+
+</para>
+
+@handle_box: 
+@Returns: 
+
+
 <!-- ##### SIGNAL GtkHandleBox::child-attached ##### -->
 <para>
 This signal is emitted when the contents of the

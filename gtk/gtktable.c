@@ -685,7 +685,7 @@ gtk_table_set_col_spacing (GtkTable *table,
 /**
  * gtk_table_get_col_spacing:
  * @table: a #GtkTable
- * @col: a column in the table, 0 indicates the first column
+ * @column: a column in the table, 0 indicates the first column
  *
  * Gets the amount of space between column @col, and
  * column @col + 1. See gtk_table_set_col_spacing().

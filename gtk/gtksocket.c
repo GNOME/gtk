@@ -189,7 +189,6 @@ gtk_socket_init (GtkSocket *socket)
 
 /**
  * gtk_socket_new:
- * @void: 
  * 
  * Create a new empty #GtkSocket.
  * 
@@ -208,7 +207,7 @@ gtk_socket_new (void)
 /**
  * gtk_socket_steal:
  * @socket: a #GtkSocket
- * @id: the XID of an existing toplevel window.
+ * @wid: the XID of an existing toplevel window.
  * 
  * Reparents a pre-existing toplevel window into a #GtkSocket. This is
  * meant to embed clients that do not know about embedding into a
@@ -219,7 +218,7 @@ gtk_socket_new (void)
  *  before you can make this call.
  **/
 void           
-gtk_socket_steal (GtkSocket *socket, GdkNativeWindow id)
+gtk_socket_steal (GtkSocket *socket, GdkNativeWindow wid)
 {
   g_return_if_fail (GTK_IS_SOCKET (socket));
   g_return_if_fail (GTK_WIDGET_ANCHORED (socket));
@@ -227,7 +226,7 @@ gtk_socket_steal (GtkSocket *socket, GdkNativeWindow id)
   if (!GTK_WIDGET_REALIZED (socket))
     gtk_widget_realize (GTK_WIDGET (socket));
 
-  gtk_socket_add_window (socket, id, TRUE);
+  gtk_socket_add_window (socket, wid, TRUE);
 }
 
 /**

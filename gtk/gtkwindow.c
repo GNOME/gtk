@@ -2375,7 +2375,7 @@ gtk_window_resize (GtkWindow *window,
  * @height: return location for height, or %NULL
  *
  * Obtains the current size of @window. If @window is not onscreen,
- * returns the size GTK+ will suggest to the window manager for the
+ * it returns the size GTK+ will suggest to the window manager for the
  * initial window size (but this is not reliably the same as the size
  * the window manager will actually select). The size obtained by
  * gtk_window_get_size() is the last size received in a
@@ -2387,19 +2387,19 @@ gtk_window_resize (GtkWindow *window,
  * notification that the size has changed via a configure event, and
  * the size of the window gets updated.
  *
- * Note #1: Nearly any use of this function creates a race condition,
+ * Note 1: Nearly any use of this function creates a race condition,
  * because the size of the window may change between the time that you
  * get the size and the time that you perform some action assuming
  * that size is the current size. To avoid race conditions, connect to
  * "configure_event" on the window and adjust your size-dependent
  * state to match the size delivered in the #GdkEventConfigure.
  *
- * Note #2: The returned size does NOT include the size of the window
+ * Note 2: The returned size does NOT include the size of the window
  * manager decorations (aka the window frame or border). Those
  * are not drawn by GTK+ and GTK+ has no reliable method of
  * determining their size.
  *
- * Note #3: If you are getting a window size in order to position
+ * Note 3: If you are getting a window size in order to position
  * the window onscreen, there may be a better way. The preferred
  * way is to simply set the window's semantic type with
  * gtk_window_set_type_hint(), which allows the window manager to
@@ -2574,9 +2574,9 @@ gtk_window_move (GtkWindow *window,
  * 
  * If you haven't changed the window gravity, its gravity will be
  * #GDK_GRAVITY_NORTH_WEST. This means that gtk_window_get_position()
- * returns the position of the top-left corner of the window
- * manager frame for the window. gtk_window_move() sets the
- * position of this same top-left corner.
+ * gets the position of the top-left corner of the window manager
+ * frame for the window. gtk_window_move() sets the position of this
+ * same top-left corner.
  *
  * gtk_window_get_position() is not 100% reliable because the X Window System
  * does not specify a way to obtain the geometry of the
@@ -4533,7 +4533,7 @@ gtk_window_set_has_frame (GtkWindow *window,
  * gtk_window_get_has_frame:
  * @window: a #GtkWindow
  * 
- * Returns whether the window has a frame window exterior to
+ * Accessor for whether the window has a frame window exterior to
  * widget->window. See gtk_window_set_has_frame ().
  *
  * Return value: %TRUE if a frame has been added to the window

@@ -56,6 +56,24 @@ Creates a new #GtkMenuItem whose child is a #GtkLabel.
 @Returns: the newly created #GtkMenuItem
 
 
+<!-- ##### FUNCTION gtk_menu_item_new_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_set_right_justified ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@right_justified: 
+
+
 <!-- ##### FUNCTION gtk_menu_item_set_submenu ##### -->
 <para>
 Sets the widget submenu, or changes it.
@@ -137,6 +155,24 @@ Sets the menu item to be right-justified. Only useful for menu bars.
 </para>
 
 @menu_item: the menu item
+
+
+<!-- ##### FUNCTION gtk_menu_item_get_right_justified ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_get_submenu ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@Returns: 
 
 
 <!-- ##### SIGNAL GtkMenuItem::activate ##### -->

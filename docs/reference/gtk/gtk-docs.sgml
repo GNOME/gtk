@@ -104,6 +104,7 @@
 <!entity gtk-GtkCellRendererText SYSTEM "sgml/gtkcellrenderertext.sgml">
 <!entity gtk-GtkCellRendererToggle SYSTEM "sgml/gtkcellrenderertoggle.sgml">
 <!entity gtk-GtkListStore SYSTEM "sgml/gtkliststore.sgml">
+<!entity gtk-GtkTreeDND SYSTEM "sgml/gtktreednd.sgml">
 <!entity GtkVButtonBox SYSTEM "sgml/gtkvbbox.sgml">
 <!entity GtkVBox SYSTEM "sgml/gtkvbox.sgml">
 <!entity GtkViewport SYSTEM "sgml/gtkviewport.sgml">
@@ -114,6 +115,7 @@
 <!entity GtkVSeparator SYSTEM "sgml/gtkvseparator.sgml">
 <!entity GtkWidget SYSTEM "sgml/gtkwidget.sgml">
 <!entity GtkWindow SYSTEM "sgml/gtkwindow.sgml">
+<!entity GtkWindowGroup SYSTEM "sgml/gtkwindowgroup.sgml">
 <!entity gtk-General SYSTEM "sgml/gtkmain.sgml">
 <!entity gtk-Feature-Test-Macros SYSTEM "sgml/gtkfeatures.sgml">
 <!entity gtk-Graphics-Contexts SYSTEM "sgml/gtkgc.sgml">
@@ -272,6 +274,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkMessageDialog;
         &GtkPlug;
         &GtkWindow;
+        &GtkWindowGroup;
     </sect1>
 
     <sect1 id="DisplayWidgets">
@@ -318,6 +321,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &gtk-GtkTreeStore;
         &gtk-GtkTreeViewColumn;
         &gtk-GtkTreeView;
+        &gtk-GtkTreeDND;
         &gtk-GtkTreeModelSort;
         &gtk-GtkCellRenderer;
         &gtk-GtkCellRendererPixbuf;

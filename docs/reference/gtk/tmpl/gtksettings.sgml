@@ -34,6 +34,14 @@ GtkSettings
 @origin: 
 @value: 
 
+<!-- ##### FUNCTION gtk_settings_get_default ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_settings_install_property ##### -->
 <para>
 

@@ -187,6 +187,24 @@ is shown as a tearoff menu.
 @title: a string containing the title for the menu.
 
 
+<!-- ##### FUNCTION gtk_menu_get_tearoff_state ##### -->
+<para>
+
+</para>
+
+@menu: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_get_title ##### -->
+<para>
+
+</para>
+
+@menu: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_menu_popdown ##### -->
 <para>
 Removes the menu from the screen.

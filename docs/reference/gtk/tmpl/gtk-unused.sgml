@@ -1621,6 +1621,13 @@ Get the type of GtkIdentifier.
 @image_menu_item: 
 @child: 
 
+<!-- ##### FUNCTION gtk_image_menu_item_get_type ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
 <!-- ##### FUNCTION gtk_label_set_markup_with_accel ##### -->
 <para>
 

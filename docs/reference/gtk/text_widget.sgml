@@ -67,7 +67,7 @@ heap-allocated data. Iterators are not valid indefinitely; whenever the buffer
 is modified in a way that affects the number of characters in the buffer, all
 outstanding iterators become invalid. (Note that deleting 5 characters and then
 reinserting 5 still invalidates iterators, though you end up with the same
-number of characters).
+number of characters you pass through a state with a different number).
 </para>
 
 <para>

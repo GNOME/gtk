@@ -45,14 +45,6 @@ GtkImageMenuItem
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_image_menu_item_get_type ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_image_menu_item_new ##### -->
 <para>
 
@@ -71,6 +63,24 @@ GtkImageMenuItem
 
 @stock_id: 
 @accel_group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_menu_item_new_with_label ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_image_menu_item_new_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@label: 
 @Returns: 
 
 

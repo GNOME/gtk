@@ -70,6 +70,16 @@ Creates a new #GtkRadioMenuItem whose child is a simple #GtkLabel.
 @Returns: a new #GtkRadioMenuItem
 
 
+<!-- ##### FUNCTION gtk_radio_menu_item_new_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@group: 
+@label: 
+@Returns: 
+
+
 <!-- ##### MACRO gtk_radio_menu_item_group ##### -->
 <para>
 Returns the group to which the radio menu item belongs, as a #GList of
@@ -88,5 +98,14 @@ Sets the group of a radio menu item, or changes it.
 
 @radio_menu_item: the radio menu item
 @group: the new group
+
+
+<!-- ##### FUNCTION gtk_radio_menu_item_get_group ##### -->
+<para>
+
+</para>
+
+@radio_menu_item: 
+@Returns: 
 
 

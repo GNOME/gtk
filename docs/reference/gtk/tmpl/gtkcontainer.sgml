@@ -28,6 +28,23 @@ GtkContainer
 @widget: 
 
 
+<!-- ##### MACRO GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID ##### -->
+<para>
+
+</para>
+
+@object: 
+@property_id: 
+@pspec: 
+
+
+<!-- ##### MACRO GTK_HAVE_CONTAINER_FOCUS_ADJUSTMENTS ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### MACRO gtk_container_border_width ##### -->
 <para>
 

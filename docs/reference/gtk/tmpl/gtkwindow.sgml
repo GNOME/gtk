@@ -128,6 +128,24 @@ the child gets a larger allocation than it requests.
 it's larger
 
 
+<!-- ##### FUNCTION gtk_window_set_resizable ##### -->
+<para>
+
+</para>
+
+@window: 
+@resizable: 
+
+
+<!-- ##### FUNCTION gtk_window_get_resizable ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_window_add_accel_group ##### -->
 <para>
 
@@ -421,6 +439,222 @@ it's larger
 
 @window: 
 @hint: 
+
+
+<!-- ##### FUNCTION gtk_window_get_decorated ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_default_icon_list ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_default_size ##### -->
+<para>
+
+</para>
+
+@window: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_window_get_destroy_with_parent ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_frame_dimensions ##### -->
+<para>
+
+</para>
+
+@window: 
+@left: 
+@top: 
+@right: 
+@bottom: 
+
+
+<!-- ##### FUNCTION gtk_window_get_has_frame ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_icon ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_icon_list ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_mnemonic_modifier ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_modal ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_position ##### -->
+<para>
+
+</para>
+
+@window: 
+@root_x: 
+@root_y: 
+<!-- # Unused Parameters # -->
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_window_get_role ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_size ##### -->
+<para>
+
+</para>
+
+@window: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_window_get_title ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_transient_for ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_type_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_move ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_window_parse_geometry ##### -->
+<para>
+
+</para>
+
+@window: 
+@geometry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_reshow_with_initial_size ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gtk_window_resize ##### -->
+<para>
+
+</para>
+
+@window: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_window_set_default_icon_list ##### -->
+<para>
+
+</para>
+
+@list: 
+
+
+<!-- ##### FUNCTION gtk_window_set_icon ##### -->
+<para>
+
+</para>
+
+@window: 
+@icon: 
+
+
+<!-- ##### FUNCTION gtk_window_set_icon_list ##### -->
+<para>
+
+</para>
+
+@window: 
+@list: 
 
 
 <!-- ##### FUNCTION gtk_decorated_window_init ##### -->

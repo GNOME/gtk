@@ -1682,7 +1682,7 @@ gtk_spin_button_set_increments (GtkSpinButton *spin_button,
 
 /**
  * gtk_spin_button_get_increments:
- * @psin_button: a #GtkSpinButton
+ * @spin_button: a #GtkSpinButton
  * @step: location to store step increment, or %NULL
  * @page: location to store page increment, or %NULL
  *

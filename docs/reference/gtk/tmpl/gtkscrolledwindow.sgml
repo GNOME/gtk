@@ -172,6 +172,36 @@ Sets the #GtkAdjustment for the vertical scrollbar.
 @vadjustment: Vertical scroll adjustment.
 
 
+<!-- ##### FUNCTION gtk_scrolled_window_get_placement ##### -->
+<para>
+
+</para>
+
+@scrolled_window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_get_policy ##### -->
+<para>
+
+</para>
+
+@scrolled_window: 
+@hscrollbar_policy: 
+@vscrollbar_policy: 
+<!-- # Unused Parameters # -->
+@vscrollvar_policy: 
+
+
+<!-- ##### FUNCTION gtk_scrolled_window_get_shadow_type ##### -->
+<para>
+
+</para>
+
+@scrolled_window: 
+@Returns: 
+
+
 <!-- ##### ARG GtkScrolledWindow:hadjustment ##### -->
 <para>
 Horizontal adjustment. See gtk_scrolled_window_set_hadjustment(), gtk_scrolled_window_get_hadjustment().

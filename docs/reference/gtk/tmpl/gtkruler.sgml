@@ -69,6 +69,27 @@ This sets the range of the ruler using gfloat lower, gfloat upper, gfloat positi
 @max_size: the maximum size of the ruler
 
 
+<!-- ##### FUNCTION gtk_ruler_get_metric ##### -->
+<para>
+
+</para>
+
+@ruler: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ruler_get_range ##### -->
+<para>
+
+</para>
+
+@ruler: 
+@lower: 
+@upper: 
+@position: 
+@max_size: 
+
+
 <!-- ##### ARG GtkRuler:lower ##### -->
 <para>
 

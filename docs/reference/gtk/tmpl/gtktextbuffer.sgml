@@ -477,6 +477,15 @@ types related to the text widget and how they work together.
 @anchor: 
 
 
+<!-- ##### FUNCTION gtk_text_buffer_get_start_iter ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+
+
 <!-- ##### FUNCTION gtk_text_buffer_get_end_iter ##### -->
 <para>
 
@@ -583,6 +592,24 @@ types related to the text widget and how they work together.
 </para>
 
 @buffer: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_add_selection_clipboard ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@clipboard: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_remove_selection_clipboard ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@clipboard: 
 
 
 <!-- ##### SIGNAL GtkTextBuffer::apply-tag ##### -->

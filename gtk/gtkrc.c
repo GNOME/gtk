@@ -492,13 +492,13 @@ gtk_rc_add_initial_default_files (void)
 
 /**
  * gtk_rc_add_default_file:
- * @file: the pathname to the file.
+ * @filename: the pathname to the file.
  * 
  * Adds a file to the list of files to be parsed at the
  * end of gtk_init().
  **/
 void
-gtk_rc_add_default_file (const gchar *file)
+gtk_rc_add_default_file (const gchar *filename)
 {
   guint n;
   
@@ -508,19 +508,19 @@ gtk_rc_add_default_file (const gchar *file)
   if (n >= GTK_RC_MAX_DEFAULT_FILES - 1)
     return;
   
-  gtk_rc_default_files[n++] = g_strdup (file);
+  gtk_rc_default_files[n++] = g_strdup (filename);
   gtk_rc_default_files[n] = NULL;
 }
 
 /**
  * gtk_rc_set_default_files:
- * @files: A %NULL terminated list of filenames.
+ * @filenames: A %NULL terminated list of filenames.
  * 
  * Sets the list of files that GTK+ will read at the
  * end of gtk_init()
  **/
 void
-gtk_rc_set_default_files (gchar **files)
+gtk_rc_set_default_files (gchar **filenames)
 {
   gint i;
 
@@ -536,16 +536,15 @@ gtk_rc_set_default_files (gchar **files)
   gtk_rc_default_files[0] = NULL;
 
   i = 0;
-  while (files[i] != NULL)
+  while (filenames[i] != NULL)
     {
-      gtk_rc_add_default_file (files[i]);
+      gtk_rc_add_default_file (filenames[i]);
       i++;
     }
 }
 
 /**
  * gtk_rc_get_default_files:
- * @void: 
  * 
  * Retrieves the current list of RC files that will be parsed
  * at the end of gtk_init()
@@ -1454,7 +1453,7 @@ gtk_rc_styles_match (GSList       *rc_styles,
  * created styles, so a new style may not be
  * created.)
  * 
- * @Returns: the resulting style. No refcount is added
+ * Returns: the resulting style. No refcount is added
  *   to the returned style, so if you want to save this
  *   style around, you should add a reference yourself.
  **/

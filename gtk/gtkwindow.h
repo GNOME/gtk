@@ -282,8 +282,8 @@ void     gtk_window_move             (GtkWindow   *window,
                                       gint         x,
                                       gint         y);
 void     gtk_window_get_position     (GtkWindow   *window,
-                                      gint        *x,
-                                      gint        *y);
+                                      gint        *root_x,
+                                      gint        *root_y);
 gboolean gtk_window_parse_geometry   (GtkWindow   *window,
                                       const gchar *geometry);
 

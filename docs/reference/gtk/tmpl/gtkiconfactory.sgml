@@ -255,6 +255,16 @@ looking up the icon to use for a given stock ID.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_icon_set_get_sizes ##### -->
+<para>
+
+</para>
+
+@icon_set: 
+@sizes: 
+@n_sizes: 
+
+
 <!-- ##### FUNCTION gtk_icon_source_get_direction ##### -->
 <para>
 

@@ -234,6 +234,52 @@ to fit.
 @n_chars: 
 
 
+<!-- ##### FUNCTION gtk_entry_get_invisible_char ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_layout ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_layout_offsets ##### -->
+<para>
+
+</para>
+
+@entry: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_max_length ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_visibility ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
 <!-- ##### SIGNAL GtkEntry::activate ##### -->
 <para>
 

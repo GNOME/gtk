@@ -75,6 +75,15 @@ GtkViewport
 @type: 
 
 
+<!-- ##### FUNCTION gtk_viewport_get_shadow_type ##### -->
+<para>
+
+</para>
+
+@viewport: 
+@Returns: 
+
+
 <!-- ##### SIGNAL GtkViewport::set-scroll-adjustments ##### -->
 <para>
 

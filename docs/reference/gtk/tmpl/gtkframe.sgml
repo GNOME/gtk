@@ -87,6 +87,34 @@ Set the shadow type for the Frame widget.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_frame_get_label_align ##### -->
+<para>
+
+</para>
+
+@frame: 
+@xalign: 
+@yalign: 
+
+
+<!-- ##### FUNCTION gtk_frame_get_label_widget ##### -->
+<para>
+
+</para>
+
+@frame: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_frame_get_shadow_type ##### -->
+<para>
+
+</para>
+
+@frame: 
+@Returns: 
+
+
 <!-- ##### ARG GtkFrame:label ##### -->
 <para>
 

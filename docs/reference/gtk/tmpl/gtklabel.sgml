@@ -226,6 +226,116 @@ Gtk+ 1.0.x.
 @string: 
 
 
+<!-- ##### FUNCTION gtk_label_get_attributes ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_justify ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_label ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_layout ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_line_wrap ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_mnemonic_widget ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_selection_bounds ##### -->
+<para>
+
+</para>
+
+@label: 
+@start: 
+@end: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_use_markup ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_get_use_underline ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_set_label ##### -->
+<para>
+
+</para>
+
+@label: 
+@str: 
+
+
+<!-- ##### FUNCTION gtk_label_set_use_markup ##### -->
+<para>
+
+</para>
+
+@label: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_label_set_use_underline ##### -->
+<para>
+
+</para>
+
+@label: 
+@setting: 
+
+
 <!-- ##### ARG GtkLabel:label ##### -->
 <para>
 The actual label text.  Do not write to this pointer, it is not copied.

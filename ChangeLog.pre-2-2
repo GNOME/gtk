@@ -1,3 +1,18 @@
+2001-09-08  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_add_attribute):
+	docs fixes
+
+	* gtk/gtktable.c (gtk_table_get_col_spacing): docs fixes
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_get_increments): docs fixes
+
+	* gtk/gtksocket.c (gtk_socket_steal): docs fixes
+
+	* gtk/gtkscrolledwindow.h: docs fixes
+
+	* gtk/gtkimage.c (gtk_image_new): docs fixes
+
 Sat Sep  8 01:49:22 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkmain-x11.c (_gdk_windowing_init_check): Prevent a 

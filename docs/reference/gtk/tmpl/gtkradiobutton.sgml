@@ -129,6 +129,26 @@ as @group.
 @Returns: a new radio button.
 
 
+<!-- ##### FUNCTION gtk_radio_button_new_with_mnemonic ##### -->
+<para>
+
+</para>
+
+@group: 
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_radio_button_new_with_mnemonic_from_widget ##### -->
+<para>
+
+</para>
+
+@group: 
+@label: 
+@Returns: 
+
+
 <!-- ##### MACRO gtk_radio_button_group ##### -->
 <para>
 Retrieves the group assigned to a radio button.
@@ -151,6 +171,15 @@ changes.
 @radio_button: a #GtkRadioButton.
 @group: an existing radio button group, such as one returned from
 gtk_radio_button_group().
+
+
+<!-- ##### FUNCTION gtk_radio_button_get_group ##### -->
+<para>
+
+</para>
+
+@radio_button: 
+@Returns: 
 
 
 <!-- ##### ARG GtkRadioButton:group ##### -->

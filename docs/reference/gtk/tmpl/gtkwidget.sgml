@@ -1308,6 +1308,139 @@ GtkWidget
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_widget_child_focus ##### -->
+<para>
+
+</para>
+
+@widget: 
+@direction: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_child_notify ##### -->
+<para>
+
+</para>
+
+@widget: 
+@child_property: 
+
+
+<!-- ##### FUNCTION gtk_widget_freeze_child_notify ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_child_visible ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_parent ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_settings ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_size_request ##### -->
+<para>
+
+</para>
+
+@widget: 
+@width: 
+@height: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_usize ##### -->
+<para>
+
+</para>
+
+@widget: 
+@width: 
+@height: 
+
+
+<!-- ##### MACRO gtk_widget_pop_visual ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO gtk_widget_push_visual ##### -->
+<para>
+
+</para>
+
+@visual: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_child_visible ##### -->
+<para>
+
+</para>
+
+@widget: 
+@is_visible: 
+
+
+<!-- ##### MACRO gtk_widget_set_default_visual ##### -->
+<para>
+
+</para>
+
+@visual: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_size_request ##### -->
+<para>
+
+</para>
+
+@widget: 
+@width: 
+@height: 
+
+
+<!-- ##### MACRO gtk_widget_set_visual ##### -->
+<para>
+
+</para>
+
+@widget: 
+@visual: 
+
+
+<!-- ##### FUNCTION gtk_widget_thaw_child_notify ##### -->
+<para>
+
+</para>
+
+@widget: 
+
+
 <!-- ##### FUNCTION gtk_requisition_copy ##### -->
 <para>
 

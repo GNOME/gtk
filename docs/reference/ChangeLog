@@ -1,5 +1,13 @@
 2001-09-08  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gtk-sections.txt: put GtkPacker back in here so it won't be
+	in gtk-unused.txt, but don't put it back in gtk-docs.sgml. 
+
+	Tons of other additions from gtk-unused.txt, but mostly skipping
+	all the tree stuff for now.
+
+2001-09-08  Havoc Pennington  <hp@pobox.com>
+
 	* gtk/gtk-docs.sgml: remove CellRendererTextPixbuf
 
 	* gtk/resources.sgml: add section on mailing lists, bugzilla, etc.
