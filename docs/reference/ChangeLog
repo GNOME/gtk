@@ -1,3 +1,8 @@
+2004-09-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/running.sgml: Mention that modules can also
+	be specified in a setting.
+
 Thu Aug 26 01:31:42 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add 

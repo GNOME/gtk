@@ -32,7 +32,8 @@ some additional commandline options.
 
 <para>
 A list of modules to load in addition to those specified in the 
-<envar>GTK_MODULES</envar> environment variable.
+<envar>GTK_MODULES</envar> environment variable and the 
+<literal>gtk-modules</literal> setting.
 </para>
 </formalpara>
 
