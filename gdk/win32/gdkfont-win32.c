@@ -30,7 +30,7 @@
 #include <ctype.h>
 
 #include "gdkfont.h"
-#include "gdkx.h"
+#include "gdkwin32.h"
 
 static GHashTable *font_name_hash = NULL;
 static GHashTable *fontset_name_hash = NULL;
@@ -40,7 +40,7 @@ gdk_font_hash_insert (GdkFontType  type,
 		      GdkFont     *font,
 		      const gchar *font_name)
 {
-  GdkFontPrivate *private = (GdkFontPrivate *) font;
+  GdkFontPrivateWin32 *private = (GdkFontPrivateWin32 *) font;
   GHashTable **hashp = (type == GDK_FONT_FONT) ?
     &font_name_hash : &fontset_name_hash;
 
@@ -55,7 +55,7 @@ static void
 gdk_font_hash_remove (GdkFontType type,
 		      GdkFont    *font)
 {
-  GdkFontPrivate *private = (GdkFontPrivate *) font;
+  GdkFontPrivateWin32 *private = (GdkFontPrivateWin32 *) font;
   GSList *tmp_list;
   GHashTable *hash = (type == GDK_FONT_FONT) ?
     font_name_hash : fontset_name_hash;
@@ -254,7 +254,7 @@ logfont_to_xlfd (const LOGFONT *lfp,
 gchar *
 gdk_font_xlfd_create (GdkFont *font)
 {
-  GdkFontPrivate *private;
+  GdkFontPrivateWin32 *private;
   GdkWin32SingleFont *singlefont;
   GSList *list;
   GString *string;
@@ -263,7 +263,7 @@ gdk_font_xlfd_create (GdkFont *font)
 
   g_return_val_if_fail (font != NULL, NULL);
 
-  private = (GdkFontPrivate *) font;
+  private = (GdkFontPrivateWin32 *) font;
 
   list = private->fonts;
   string = g_string_new ("");
@@ -351,7 +351,7 @@ pattern_match (const gchar *pattern,
   return FALSE;
 }
 
-int CALLBACK
+static int CALLBACK
 InnerEnumFontFamExProc (const LOGFONT    *lfp,
 			const TEXTMETRIC *metrics,
 			DWORD	          fontType,
@@ -388,7 +388,7 @@ InnerEnumFontFamExProc (const LOGFONT    *lfp,
   return 1;
 }
 
-int CALLBACK
+static int CALLBACK
 EnumFontFamExProc (const LOGFONT    *lfp,
 		   const TEXTMETRIC *metrics,
 		   DWORD             fontType,
@@ -756,7 +756,7 @@ GdkFont*
 gdk_font_load (const gchar *font_name)
 {
   GdkFont *font;
-  GdkFontPrivate *private;
+  GdkFontPrivateWin32 *private;
   GdkWin32SingleFont *singlefont;
   HGDIOBJ oldfont;
   HANDLE *f;
@@ -770,10 +770,10 @@ gdk_font_load (const gchar *font_name)
 
   singlefont = gdk_font_load_internal (font_name);
 
-  private = g_new (GdkFontPrivate, 1);
+  private = g_new (GdkFontPrivateWin32, 1);
   font = (GdkFont*) private;
 
-  private->ref_count = 1;
+  private->base.ref_count = 1;
   private->names = NULL;
   private->fonts = g_slist_append (NULL, singlefont);
 
@@ -805,7 +805,7 @@ GdkFont*
 gdk_fontset_load (gchar *fontset_name)
 {
   GdkFont *font;
-  GdkFontPrivate *private;
+  GdkFontPrivateWin32 *private;
   GdkWin32SingleFont *singlefont;
   HGDIOBJ oldfont;
   HANDLE *f;
@@ -826,10 +826,10 @@ gdk_fontset_load (gchar *fontset_name)
 
   g_return_val_if_fail (*s, NULL);
 
-  private = g_new (GdkFontPrivate, 1);
+  private = g_new (GdkFontPrivateWin32, 1);
   font = (GdkFont*) private;
 
-  private->ref_count = 1;
+  private->base.ref_count = 1;
   private->names = NULL;
   private->fonts = NULL;
 
@@ -883,81 +883,51 @@ gdk_fontset_load (gchar *fontset_name)
   return font;
 }
 
-GdkFont*
-gdk_font_ref (GdkFont *font)
-{
-  GdkFontPrivate *private;
-
-  g_return_val_if_fail (font != NULL, NULL);
-
-  private = (GdkFontPrivate*) font;
-  private->ref_count += 1;
-
-  GDK_NOTE (MISC,
-	    g_print ("gdk_font_ref %#x %d\n",
-		     ((GdkWin32SingleFont *) private->fonts->data)->xfont,
-		     private->ref_count));
-  return font;
-}
-
 void
-gdk_font_unref (GdkFont *font)
+_gdk_font_destroy (GdkFont *font)
 {
-  GdkFontPrivate *private;
+  GdkFontPrivateWin32 *private = (GdkFontPrivateWin32 *) font;
   GdkWin32SingleFont *singlefont;
   GSList *list;
-  private = (GdkFontPrivate*) font;
-
-  g_return_if_fail (font != NULL);
-  g_return_if_fail (private->ref_count > 0);
-
-  private->ref_count -= 1;
 
   singlefont = (GdkWin32SingleFont *) private->fonts->data;
-  GDK_NOTE (MISC, g_print ("gdk_font_unref %#x %d%s\n",
-			   singlefont->xfont, private->ref_count,
-			   (private->ref_count == 0 ? " freeing" : "")));
+  GDK_NOTE (MISC, g_print ("_gdk_font_destroy %#x\n",
+			   singlefont->xfont));
 
-  if (private->ref_count == 0)
+  gdk_font_hash_remove (font->type, font);
+  
+  switch (font->type)
     {
-      gdk_font_hash_remove (font->type, font);
+    case GDK_FONT_FONT:
+      DeleteObject (singlefont->xfont);
+      break;
       
-      switch (font->type)
+    case GDK_FONT_FONTSET:
+      list = private->fonts;
+      while (list)
 	{
-	case GDK_FONT_FONT:
+	  singlefont = (GdkWin32SingleFont *) list->data;
 	  DeleteObject (singlefont->xfont);
-	  break;
-
-	case GDK_FONT_FONTSET:
-	  list = private->fonts;
-	  while (list)
-	    {
-	      singlefont = (GdkWin32SingleFont *) list->data;
-	      DeleteObject (singlefont->xfont);
-
-	      list = list->next;
-	    }
-	  g_slist_free (private->fonts);
-	  break;
-
-	default:
-	  g_assert_not_reached ();
+	  
+	  list = list->next;
 	}
-      g_free (font);
+      g_slist_free (private->fonts);
+      break;
     }
+  g_free (font);
 }
 
 gint
 gdk_font_id (const GdkFont *font)
 {
-  const GdkFontPrivate *font_private;
+  const GdkFontPrivateWin32 *private;
 
   g_return_val_if_fail (font != NULL, 0);
 
-  font_private = (const GdkFontPrivate*) font;
+  private = (const GdkFontPrivateWin32 *) font;
 
   if (font->type == GDK_FONT_FONT)
-    return (gint) ((GdkWin32SingleFont *) font_private->fonts->data)->xfont;
+    return (gint) ((GdkWin32SingleFont *) private->fonts->data)->xfont;
   else
     return 0;
 }
@@ -966,14 +936,14 @@ gint
 gdk_font_equal (const GdkFont *fonta,
                 const GdkFont *fontb)
 {
-  const GdkFontPrivate *privatea;
-  const GdkFontPrivate *privateb;
+  const GdkFontPrivateWin32 *privatea;
+  const GdkFontPrivateWin32 *privateb;
 
   g_return_val_if_fail (fonta != NULL, FALSE);
   g_return_val_if_fail (fontb != NULL, FALSE);
 
-  privatea = (const GdkFontPrivate*) fonta;
-  privateb = (const GdkFontPrivate*) fontb;
+  privatea = (const GdkFontPrivateWin32 *) fonta;
+  privateb = (const GdkFontPrivateWin32 *) fontb;
 
   if (fonta->type == GDK_FONT_FONT && fontb->type == GDK_FONT_FONT)
     return (((GdkWin32SingleFont *) privatea->fonts->data)->xfont
@@ -998,13 +968,6 @@ gdk_font_equal (const GdkFont *fonta,
     }
   else
     return 0;
-}
-
-gint
-gdk_string_width (GdkFont     *font,
-		  const gchar *string)
-{
-  return gdk_text_width (font, string, strlen (string));
 }
 
 /* This table classifies Unicode characters according to the Microsoft
@@ -1126,7 +1089,7 @@ gdk_wchar_text_handle (GdkFont       *font,
 					       void *),
 		       void          *arg)
 {
-  GdkFontPrivate *private;
+  GdkFontPrivateWin32 *private;
   GdkWin32SingleFont *singlefont;
   GSList *list;
   int i, block;
@@ -1134,9 +1097,9 @@ gdk_wchar_text_handle (GdkFont       *font,
 
   wcp = wcstr;
   end = wcp + wclen;
-  private = (GdkFontPrivate *) font;
+  private = (GdkFontPrivateWin32 *) font;
 
-  g_assert (private->ref_count > 0);
+  g_assert (private->base.ref_count > 0);
 
   while (wcp < end)
     {
@@ -1282,36 +1245,6 @@ gdk_text_width_wc (GdkFont	  *font,
   return arg.total.cx;
 }
 
-gint
-gdk_char_width (GdkFont *font,
-		gchar    character)
-{
-  if (((guchar) character) >= 128)
-    {
-      /* gtktext calls us with non-ASCII characters, sigh */
-      GdkWChar wc = (guchar) character;
-      return gdk_text_width_wc (font, &wc, 1);
-    }
-  return gdk_text_width (font, &character, 1);
-}
-
-gint
-gdk_char_width_wc (GdkFont *font,
-		   GdkWChar character)
-{
-  return gdk_text_width_wc (font, &character, 1);
-}
-
-gint
-gdk_string_measure (GdkFont     *font,
-                    const gchar *string)
-{
-  g_return_val_if_fail (font != NULL, -1);
-  g_return_val_if_fail (string != NULL, -1);
-
-  return gdk_text_measure (font, string, strlen (string));
-}
-
 void
 gdk_text_extents (GdkFont     *font,
                   const gchar *text,
@@ -1433,69 +1366,4 @@ gdk_text_extents_wc (GdkFont        *font,
     *ascent = arg.max.cy + 1;
   if (descent)
     *descent = font->descent + 1;
-}
-
-void
-gdk_string_extents (GdkFont     *font,
-		    const gchar *string,
-		    gint        *lbearing,
-		    gint        *rbearing,
-		    gint        *width,
-		    gint        *ascent,
-		    gint        *descent)
-{
-  g_return_if_fail (font != NULL);
-  g_return_if_fail (string != NULL);
-
-  gdk_text_extents (font, string, strlen (string),
-		    lbearing, rbearing, width, ascent, descent);
-}
-
-
-gint
-gdk_text_measure (GdkFont     *font,
-                  const gchar *text,
-                  gint         text_length)
-{
-  return gdk_text_width (font, text, text_length); /* ??? */
-}
-
-gint
-gdk_char_measure (GdkFont *font,
-                  gchar    character)
-{
-  return gdk_text_measure (font, &character, 1);
-}
-
-gint
-gdk_string_height (GdkFont     *font,
-		   const gchar *string)
-{
-  g_return_val_if_fail (font != NULL, -1);
-  g_return_val_if_fail (string != NULL, -1);
-
-  return gdk_text_height (font, string, strlen (string));
-}
-
-gint
-gdk_text_height (GdkFont     *font,
-		 const gchar *text,
-		 gint         text_length)
-{
-  gdk_text_size_arg arg;
-
-  arg.total.cx = arg.total.cy = 0;
-  arg.max.cx = arg.max.cy = 0;
-
-  if (!gdk_text_size (font, text, text_length, &arg))
-    return -1;
-
-  return arg.max.cy;
-}
-
-gint
-gdk_char_height (GdkFont *font,
-		 gchar    character)
-{
-  return gdk_text_height (font, &character, 1);
 }

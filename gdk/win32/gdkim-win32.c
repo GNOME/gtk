@@ -35,7 +35,7 @@
 #include "gdkpixmap.h"
 #include "gdkprivate.h"
 #include "gdki18n.h"
-#include "gdkx.h"
+#include "gdkwin32.h"
 
 /*
  *--------------------------------------------------------------

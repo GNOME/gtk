@@ -144,7 +144,7 @@ struct _GdkGCWin32Data
    * has been selected into it. Thus, we have to release and
    * reallocate a DC each time the GdkGC is used to paint into a new
    * window or pixmap. We thus keep all the necessary values in the
-   * GdkGCPrivate struct.
+   * GdkGCWin32Data struct.
    */
   HDC xgc;
   GdkGCValuesMask values_mask;
@@ -165,7 +165,8 @@ struct _GdkGCWin32Data
   gint pen_width;
   DWORD pen_style;
   HANDLE hwnd;			/* If a DC is allocated, for which window
-				   or what bitmap is selected into it */
+				 * or what bitmap is selected into it
+				 */
   int saved_dc;
 };
 
