@@ -287,7 +287,7 @@ gtk_separator_tool_item_get_draw (GtkSeparatorToolItem *item)
 /**
  * gtk_separator_tool_item_set_draw:
  * @item: a #GtkSeparatorToolItem
- * @draw: whether @separator_tool_item is drawn as a vertical iln
+ * @draw: whether @separator_tool_item is drawn as a vertical line
  * 
  * When @separator_tool_items is drawn as a vertical line, or just blank.
  * Setting this #FALSE along with gtk_tool_item_set_expand() is useful
