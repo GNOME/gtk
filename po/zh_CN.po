@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 02:01-0500\n"
-"PO-Revision-Date: 2005-01-02 00:23+0800\n"
+"POT-Creation-Date: 2005-01-14 12:30+0100\n"
+"PO-Revision-Date: 2005-01-14 23:13+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -184,7 +184,7 @@ msgstr "BMP 图像有伪造的头数据"
 
 #: gdk-pixbuf/io-bmp.c:307
 msgid "Topdown BMP images cannot be compressed"
-msgstr ""
+msgstr "无法压缩自上而下的 BMP 图像"
 
 #: gdk-pixbuf/io-bmp.c:1154
 msgid "The BMP image format"
@@ -1041,7 +1041,6 @@ msgid "Invalid filename: %s"
 msgstr "无效的文件名：%s"
 
 #: gtk/gtkfilechooserbutton.c:65
-#, fuzzy
 msgid "Select A File"
 msgstr "选择文件"
 
@@ -1088,7 +1087,7 @@ msgid "The folder contents could not be displayed"
 msgstr "无法显示文件夹内容"
 
 #: gtk/gtkfilechooserdefault.c:1119
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get information about '%s': %s"
 msgstr "无法获得文件“%s”的信息：%s"
 
@@ -1144,9 +1143,8 @@ msgid "_Add to Shortcuts"
 msgstr "添加到快捷方式(_A)"
 
 #: gtk/gtkfilechooserdefault.c:3007
-#, fuzzy
 msgid "Open _Location"
-msgstr "打开位置"
+msgstr "打开位置(_L)"
 
 #: gtk/gtkfilechooserdefault.c:3019
 msgid "Show _Hidden Files"
@@ -1658,7 +1656,7 @@ msgstr "(未知)"
 msgid "clear"
 msgstr "清除"
 
-#: gtk/gtklabel.c:3930
+#: gtk/gtklabel.c:3931
 msgid "Select All"
 msgstr "全选"
 
@@ -2167,17 +2165,3 @@ msgstr "X 输入法"
 msgid "Could not get information for file '%s': %s"
 msgstr "无法获得文件“%s”的信息：%s"
 
-#~ msgid "%s: %s"
-#~ msgstr "%s: %s"
-
-#~ msgid "error getting information for '%s': %s"
-#~ msgstr "获取“%s”的信息时出错：%s"
-
-#~ msgid "error creating directory '%s': %s"
-#~ msgstr "创建目录“%s”时出错：%s"
-
-#~ msgid "Bookmark saving failed (%s)"
-#~ msgstr "书签保存失败(%s)"
-
-#~ msgid "This file system does not support icons for everything"
-#~ msgstr "此文件系统不支持所有内容的图标"
