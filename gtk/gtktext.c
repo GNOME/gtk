@@ -1255,7 +1255,7 @@ gtk_text_destroy (GtkObject *object)
 
   if (text->timer)
     {
-      gtk_timeout_remove (text->timer);
+      g_source_remove (text->timer);
       text->timer = 0;
     }
   
@@ -1795,7 +1795,7 @@ gtk_text_button_release (GtkWidget      *widget,
   
   if (text->timer)
     {
-      gtk_timeout_remove (text->timer);
+      g_source_remove (text->timer);
       text->timer = 0;
     }
   
@@ -1873,9 +1873,9 @@ gtk_text_motion_notify (GtkWidget      *widget,
     {
       if (text->timer == 0)
 	{
-	  text->timer = gtk_timeout_add (SCROLL_TIME, 
-					 gtk_text_scroll_timeout,
-					 text);
+	  text->timer = g_timeout_add (SCROLL_TIME, 
+				       gtk_text_scroll_timeout,
+				       text);
 	  
 	  if (y < 0)
 	    scroll_int (text, y/2);

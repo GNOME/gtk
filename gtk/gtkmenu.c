@@ -2407,7 +2407,7 @@ gtk_menu_stop_navigating_submenu (GtkMenu *menu)
   
   if (menu->navigation_timeout)
     {
-      gtk_timeout_remove (menu->navigation_timeout);
+      g_source_remove (menu->navigation_timeout);
       menu->navigation_timeout = 0;
     }
 }
@@ -2618,8 +2618,8 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
 		    "gtk-menu-popdown-delay", &popdown_delay,
 		    NULL);
 
-      menu->navigation_timeout = gtk_timeout_add (popdown_delay,
-						  gtk_menu_stop_navigating_submenu_cb, menu);
+      menu->navigation_timeout = g_timeout_add (popdown_delay,
+						gtk_menu_stop_navigating_submenu_cb, menu);
 
 #ifdef DRAW_STAY_UP_TRIANGLE
       draw_stay_up_triangle (gdk_get_default_root_window(),

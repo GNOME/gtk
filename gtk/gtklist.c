@@ -552,7 +552,7 @@ gtk_list_motion_notify (GtkWidget      *widget,
     {
       if (list->htimer == 0)
 	{
-	  list->htimer = gtk_timeout_add
+	  list->htimer = g_timeout_add
 	    (SCROLL_TIME, (GtkFunction) gtk_list_horizontal_timeout, widget);
 	  
 	  if (!((x < adj->value && adj->value <= 0) ||
@@ -600,9 +600,9 @@ gtk_list_motion_notify (GtkWidget      *widget,
 
   if (!((y < 0 && focus_row == 0) ||
 	(y > widget->allocation.height && focus_row >= length - 1)))
-    list->vtimer = gtk_timeout_add (SCROLL_TIME,
-				    (GtkFunction) gtk_list_vertical_timeout,
-				    list);
+    list->vtimer = g_timeout_add (SCROLL_TIME,
+				  (GtkFunction) gtk_list_vertical_timeout,
+				  list);
 
   if (row != focus_row)
     gtk_widget_grab_focus (item);
@@ -1591,12 +1591,12 @@ gtk_list_end_drag_selection (GtkList *list)
 
   if (list->htimer)
     {
-      gtk_timeout_remove (list->htimer);
+      g_source_remove (list->htimer);
       list->htimer = 0;
     }
   if (list->vtimer)
     {
-      gtk_timeout_remove (list->vtimer);
+      g_source_remove (list->vtimer);
       list->vtimer = 0;
     }
 }

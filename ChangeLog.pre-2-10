@@ -1,3 +1,25 @@
+2003-02-06  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkclist.c: 
+	* gtk/gtkctree.c: 
+	* gtk/gtkcontainer.c: 
+	* gtk/gtkdnd.c: 
+	* gtk/gtkentry.c: 
+	* gtk/gtklist.c:
+	* gtk/gtkmenu.c:
+	* gtk/gtkmenuitem.c:
+	* gtk/gtknotebook.c:
+	* gtk/gtkselection.c:
+	* gtk/gtkspinbutton.c:
+	* gtk/gtktext.c:
+	* gtk/gtktextview.c:
+	* gtk/gtktooltips.c:
+	* gtk/gtktreeview.c:
+	* gtk/gtkwindow.c: Replace uses of gtk_timeout_* and gtk_idle_* by
+	their non-deprecated GLib counterparts.
+	
+	* gtk/gtkmain.h: Fully deprecate gtk_timeout_* and gtk_idle_*.
+	
 Sun Feb  2 16:45:57 GMT 2003  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/gtk-tut.sgml: cleanups from

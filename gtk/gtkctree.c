@@ -4777,13 +4777,13 @@ remove_grab (GtkCList *clist)
 
   if (clist->htimer)
     {
-      gtk_timeout_remove (clist->htimer);
+      g_source_remove (clist->htimer);
       clist->htimer = 0;
     }
 
   if (clist->vtimer)
     {
-      gtk_timeout_remove (clist->vtimer);
+      g_source_remove (clist->vtimer);
       clist->vtimer = 0;
     }
 }

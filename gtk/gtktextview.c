@@ -4331,13 +4331,13 @@ blink_cb (gpointer data)
   visible = gtk_text_layout_get_cursor_visible (text_view->layout);
 
   if (visible)
-    text_view->blink_timeout = gtk_timeout_add (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER,
-                                                blink_cb,
-                                                text_view);
+    text_view->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER,
+					      blink_cb,
+					      text_view);
   else
-    text_view->blink_timeout = gtk_timeout_add (get_cursor_time (text_view) * CURSOR_ON_MULTIPLIER,
-                                                blink_cb,
-                                                text_view);
+    text_view->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_ON_MULTIPLIER,
+					      blink_cb,
+					      text_view);
   
   gtk_text_layout_set_cursor_visible (text_view->layout,
                                       !visible);
@@ -4354,7 +4354,7 @@ gtk_text_view_stop_cursor_blink (GtkTextView *text_view)
 {
   if (text_view->blink_timeout)  
     { 
-      gtk_timeout_remove (text_view->blink_timeout);
+      g_source_remove (text_view->blink_timeout);
       text_view->blink_timeout = 0;
     }
 }
@@ -4372,9 +4372,9 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
 	    {
 	      gtk_text_layout_set_cursor_visible (text_view->layout, TRUE);
 	      
-	      text_view->blink_timeout = gtk_timeout_add (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER,
-							  blink_cb,
-							  text_view);
+	      text_view->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER,
+							blink_cb,
+							text_view);
 	    }
 	}
       else
@@ -4396,15 +4396,15 @@ gtk_text_view_pend_cursor_blink(GtkTextView *text_view)
     {
       if (text_view->blink_timeout != 0)
 	{
-	  gtk_timeout_remove (text_view->blink_timeout);
+	  g_source_remove (text_view->blink_timeout);
 	  text_view->blink_timeout = 0;
 	}
       
       gtk_text_layout_set_cursor_visible (text_view->layout, TRUE);
       
-      text_view->blink_timeout = gtk_timeout_add (get_cursor_time (text_view) * CURSOR_PEND_MULTIPLIER,
-						  blink_cb,
-						  text_view);
+      text_view->blink_timeout = g_timeout_add (get_cursor_time (text_view) * CURSOR_PEND_MULTIPLIER,
+						blink_cb,
+						text_view);
     }
 }
 
@@ -5244,10 +5244,10 @@ selection_motion_event_handler (GtkTextView *text_view, GdkEventMotion *event, g
    * and we'll need to scroll again.
    */
   if (text_view->scroll_timeout != 0) /* reset on every motion event */
-    gtk_timeout_remove (text_view->scroll_timeout);
+    g_source_remove (text_view->scroll_timeout);
   
   text_view->scroll_timeout =
-    gtk_timeout_add (50, selection_scan_timeout, text_view);
+    g_timeout_add (50, selection_scan_timeout, text_view);
 
   return TRUE;
 }
@@ -5313,7 +5313,7 @@ gtk_text_view_end_selection_drag (GtkTextView *text_view, GdkEventButton *event)
 
   if (text_view->scroll_timeout != 0)
     {
-      gtk_timeout_remove (text_view->scroll_timeout);
+      g_source_remove (text_view->scroll_timeout);
       text_view->scroll_timeout = 0;
     }
 
@@ -5649,7 +5649,7 @@ gtk_text_view_drag_leave (GtkWidget        *widget,
   gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
   
   if (text_view->scroll_timeout != 0)
-    gtk_timeout_remove (text_view->scroll_timeout);
+    g_source_remove (text_view->scroll_timeout);
 
   text_view->scroll_timeout = 0;
 }
@@ -5748,10 +5748,10 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
                                 DND_SCROLL_MARGIN, FALSE, 0.0, 0.0);
   
   if (text_view->scroll_timeout != 0) /* reset on every motion event */
-    gtk_timeout_remove (text_view->scroll_timeout);
+    g_source_remove (text_view->scroll_timeout);
       
   text_view->scroll_timeout =
-    gtk_timeout_add (50, drag_scan_timeout, text_view);
+    g_timeout_add (50, drag_scan_timeout, text_view);
 
   /* TRUE return means don't propagate the drag motion to parent
    * widgets that may also be drop sites.
@@ -5773,7 +5773,7 @@ gtk_text_view_drag_drop (GtkWidget        *widget,
   text_view = GTK_TEXT_VIEW (widget);
   
   if (text_view->scroll_timeout != 0)
-    gtk_timeout_remove (text_view->scroll_timeout);
+    g_source_remove (text_view->scroll_timeout);
 
   text_view->scroll_timeout = 0;
 

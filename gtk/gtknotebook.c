@@ -573,6 +573,15 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                 "change_current_page", 1,
                                 G_TYPE_INT, 1);
 
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_Page_Up, GDK_CONTROL_MASK|GDK_MOD1_MASK,
+                                "change_current_page", 1,
+                                G_TYPE_INT, -1);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_Page_Down, GDK_CONTROL_MASK|GDK_MOD1_MASK,
+                                "change_current_page", 1,
+                                G_TYPE_INT, 1);
+
   add_arrow_bindings (binding_set, GDK_Up, GTK_DIR_UP);
   add_arrow_bindings (binding_set, GDK_Down, GTK_DIR_DOWN);
   add_arrow_bindings (binding_set, GDK_Left, GTK_DIR_LEFT);
@@ -1537,9 +1546,9 @@ gtk_notebook_arrow_button_press (GtkNotebook    *notebook,
       
       if (!notebook->timer)
 	{
-	  notebook->timer = gtk_timeout_add 
-	    (NOTEBOOK_INIT_SCROLL_DELAY, 
-	     (GtkFunction) gtk_notebook_timer, (gpointer) notebook);
+	  notebook->timer = g_timeout_add (NOTEBOOK_INIT_SCROLL_DELAY, 
+					   (GtkFunction) gtk_notebook_timer, 
+					   (gpointer) notebook);
 	  notebook->need_timer = TRUE;
 	}
     }
@@ -1675,7 +1684,7 @@ gtk_notebook_button_release (GtkWidget      *widget,
 
       if (notebook->timer)
 	{
-	  gtk_timeout_remove (notebook->timer);
+	  g_source_remove (notebook->timer);
 	  notebook->timer = 0;
 	  notebook->need_timer = FALSE;
 	}
@@ -2312,9 +2321,9 @@ gtk_notebook_timer (GtkNotebook *notebook)
       if (notebook->need_timer) 
 	{
 	  notebook->need_timer = FALSE;
-	  notebook->timer = gtk_timeout_add (NOTEBOOK_SCROLL_DELAY,
-					     (GtkFunction) gtk_notebook_timer, 
-					     (gpointer) notebook);
+	  notebook->timer = g_timeout_add (NOTEBOOK_SCROLL_DELAY,
+					   (GtkFunction) gtk_notebook_timer, 
+					   (gpointer) notebook);
 	}
       else
 	retval = TRUE;

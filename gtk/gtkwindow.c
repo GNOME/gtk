@@ -1217,7 +1217,7 @@ handle_keys_changed (gpointer data)
 
   if (window->keys_changed_handler)
     {
-      gtk_idle_remove (window->keys_changed_handler);
+      g_source_remove (window->keys_changed_handler);
       window->keys_changed_handler = 0;
     }
 
@@ -1231,7 +1231,7 @@ static void
 gtk_window_notify_keys_changed (GtkWindow *window)
 {
   if (!window->keys_changed_handler)
-    window->keys_changed_handler = gtk_idle_add (handle_keys_changed, window);
+    window->keys_changed_handler = g_idle_add (handle_keys_changed, window);
 }
 
 /**
@@ -3445,7 +3445,7 @@ gtk_window_finalize (GObject *object)
 
   if (window->keys_changed_handler)
     {
-      gtk_idle_remove (window->keys_changed_handler);
+      g_source_remove (window->keys_changed_handler);
       window->keys_changed_handler = 0;
     }
 

@@ -189,7 +189,7 @@ gtk_tooltips_destroy (GtkObject *object)
 
   if (tooltips->timer_tag)
     {
-      gtk_timeout_remove (tooltips->timer_tag);
+      g_source_remove (tooltips->timer_tag);
       tooltips->timer_tag = 0;
     }
 
@@ -478,7 +478,7 @@ gtk_tooltips_set_active_widget (GtkTooltips *tooltips,
     }
   if (tooltips->timer_tag)
     {
-      gtk_timeout_remove (tooltips->timer_tag);
+      g_source_remove (tooltips->timer_tag);
       tooltips->timer_tag = 0;
     }
   
@@ -607,9 +607,9 @@ gtk_tooltips_start_delay (GtkTooltips *tooltips,
 	delay = STICKY_DELAY;
       else
 	delay = tooltips->delay;
-      tooltips->timer_tag = gtk_timeout_add (delay,
-					     gtk_tooltips_timeout,
-					     (gpointer) tooltips);
+      tooltips->timer_tag = g_timeout_add (delay,
+					   gtk_tooltips_timeout,
+					   (gpointer) tooltips);
     }
 }
 

@@ -744,7 +744,7 @@ gtk_selection_convert (GtkWidget *widget,
   
   current_retrievals = g_list_append (current_retrievals, info);
   gdk_selection_convert (widget->window, selection, target, time);
-  gtk_timeout_add (1000, (GtkFunction) gtk_selection_retrieval_timeout, info);
+  g_timeout_add (1000, (GtkFunction) gtk_selection_retrieval_timeout, info);
   
   return TRUE;
 }
@@ -1249,7 +1249,7 @@ _gtk_selection_request (GtkWidget *widget,
 			     gdk_window_get_events (info->requestor) |
 			     GDK_PROPERTY_CHANGE_MASK);
       current_incrs = g_list_append (current_incrs, info);
-      gtk_timeout_add (1000, (GtkFunction)gtk_selection_incr_timeout, info);
+      g_timeout_add (1000, (GtkFunction)gtk_selection_incr_timeout, info);
     }
   
   /* If it was a MULTIPLE request, set the property to indicate which

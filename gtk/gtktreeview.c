@@ -1370,37 +1370,37 @@ gtk_tree_view_unrealize (GtkWidget *widget)
 
   if (tree_view->priv->scroll_timeout != 0)
     {
-      gtk_timeout_remove (tree_view->priv->scroll_timeout);
+      g_source_remove (tree_view->priv->scroll_timeout);
       tree_view->priv->scroll_timeout = 0;
     }
 
   if (tree_view->priv->open_dest_timeout != 0)
     {
-      gtk_timeout_remove (tree_view->priv->open_dest_timeout);
+      g_source_remove (tree_view->priv->open_dest_timeout);
       tree_view->priv->open_dest_timeout = 0;
     }
 
   if (tree_view->priv->expand_collapse_timeout != 0)
     {
-      gtk_timeout_remove (tree_view->priv->expand_collapse_timeout);
+      g_source_remove (tree_view->priv->expand_collapse_timeout);
       tree_view->priv->expand_collapse_timeout = 0;
     }
   
   if (tree_view->priv->presize_handler_timer != 0)
     {
-      gtk_timeout_remove (tree_view->priv->presize_handler_timer);
+      g_source_remove (tree_view->priv->presize_handler_timer);
       tree_view->priv->presize_handler_timer = 0;
     }
 
   if (tree_view->priv->validate_rows_timer != 0)
     {
-      gtk_timeout_remove (tree_view->priv->validate_rows_timer);
+      g_source_remove (tree_view->priv->validate_rows_timer);
       tree_view->priv->validate_rows_timer = 0;
     }
 
   if (tree_view->priv->scroll_sync_timer != 0)
     {
-      gtk_timeout_remove (tree_view->priv->scroll_sync_timer);
+      g_source_remove (tree_view->priv->scroll_sync_timer);
       tree_view->priv->scroll_sync_timer = 0;
     }
 
@@ -4717,7 +4717,7 @@ remove_scroll_timeout (GtkTreeView *tree_view)
 {
   if (tree_view->priv->scroll_timeout != 0)
     {
-      gtk_timeout_remove (tree_view->priv->scroll_timeout);
+      g_source_remove (tree_view->priv->scroll_timeout);
       tree_view->priv->scroll_timeout = 0;
     }
 }
@@ -4750,7 +4750,7 @@ remove_open_timeout (GtkTreeView *tree_view)
 {
   if (tree_view->priv->open_dest_timeout != 0)
     {
-      gtk_timeout_remove (tree_view->priv->open_dest_timeout);
+      g_source_remove (tree_view->priv->open_dest_timeout);
       tree_view->priv->open_dest_timeout = 0;
     }
 }
@@ -5212,12 +5212,12 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
            pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE))
         {
           tree_view->priv->open_dest_timeout =
-            gtk_timeout_add (500, open_row_timeout, tree_view);
+            g_timeout_add (500, open_row_timeout, tree_view);
         }
       else if (tree_view->priv->scroll_timeout == 0)
         {
 	  tree_view->priv->scroll_timeout =
-	    gtk_timeout_add (150, scroll_row_timeout, tree_view);
+	    g_timeout_add (150, scroll_row_timeout, tree_view);
 	}
 
       if (target == gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
@@ -6250,7 +6250,7 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
   /* If we have a node expanded/collapsed timeout, remove it */
   if (tree_view->priv->expand_collapse_timeout != 0)
     {
-      gtk_timeout_remove (tree_view->priv->expand_collapse_timeout);
+      g_source_remove (tree_view->priv->expand_collapse_timeout);
       tree_view->priv->expand_collapse_timeout = 0;
 
       /* Reset node */
@@ -9175,7 +9175,7 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
 
   if (tree_view->priv->expand_collapse_timeout)
     {
-      gtk_timeout_remove (tree_view->priv->expand_collapse_timeout);
+      g_source_remove (tree_view->priv->expand_collapse_timeout);
       tree_view->priv->expand_collapse_timeout = 0;
     }
 
@@ -9189,7 +9189,7 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
 
   if (animate)
     {
-      tree_view->priv->expand_collapse_timeout = gtk_timeout_add (50, expand_collapse_timeout, tree_view);
+      tree_view->priv->expand_collapse_timeout = g_timeout_add (50, expand_collapse_timeout, tree_view);
       tree_view->priv->expanded_collapsed_node = node;
       tree_view->priv->expanded_collapsed_tree = tree;
 
@@ -9364,7 +9364,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
 
   if (tree_view->priv->expand_collapse_timeout)
     {
-      gtk_timeout_remove (tree_view->priv->expand_collapse_timeout);
+      g_source_remove (tree_view->priv->expand_collapse_timeout);
       tree_view->priv->expand_collapse_timeout = 0;
     }
   
@@ -9378,7 +9378,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
 
   if (animate)
     {
-      tree_view->priv->expand_collapse_timeout = gtk_timeout_add (50, expand_collapse_timeout, tree_view);
+      tree_view->priv->expand_collapse_timeout = g_timeout_add (50, expand_collapse_timeout, tree_view);
       tree_view->priv->expanded_collapsed_node = node;
       tree_view->priv->expanded_collapsed_tree = tree;
 

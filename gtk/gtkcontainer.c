@@ -1143,9 +1143,9 @@ _gtk_container_queue_resize (GtkContainer *container)
 		{
 		  GTK_PRIVATE_SET_FLAG (resize_container, GTK_RESIZE_PENDING);
 		  if (container_resize_queue == NULL)
-		    gtk_idle_add_priority (GTK_PRIORITY_RESIZE,
-					   gtk_container_idle_sizer,
-					   NULL);
+		    g_idle_add_full (GTK_PRIORITY_RESIZE,
+				     gtk_container_idle_sizer,
+				     NULL, NULL);
 		  container_resize_queue = g_slist_prepend (container_resize_queue, resize_container);
 		}
 	      break;

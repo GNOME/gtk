@@ -2749,7 +2749,7 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 	   * to respond really late, we still are OK.
 	   */
 	  gtk_drag_clear_source_info (info->context);
-	  gtk_timeout_add (ANIM_STEP_TIME, gtk_drag_anim_timeout, anim);
+	  g_timeout_add (ANIM_STEP_TIME, gtk_drag_anim_timeout, anim);
 	}
     }
 }
@@ -2823,9 +2823,9 @@ gtk_drag_drop (GtkDragSourceInfo *info,
 	gtk_widget_hide (info->icon_window);
 	
       gdk_drag_drop (info->context, time);
-      info->drop_timeout = gtk_timeout_add (DROP_ABORT_TIME,
-					    gtk_drag_abort_timeout,
-					    info);
+      info->drop_timeout = g_timeout_add (DROP_ABORT_TIME,
+					  gtk_drag_abort_timeout,
+					  info);
     }
 }
 
@@ -3101,7 +3101,7 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
   g_object_unref (info->context);
 
   if (info->drop_timeout)
-    gtk_timeout_remove (info->drop_timeout);
+    g_source_remove (info->drop_timeout);
 
   g_free (info);
 }

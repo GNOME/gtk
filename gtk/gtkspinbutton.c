@@ -996,7 +996,7 @@ gtk_spin_button_stop_spinning (GtkSpinButton *spin)
 {
   if (spin->timer)
     {
-      gtk_timeout_remove (spin->timer);
+      g_source_remove (spin->timer);
       spin->timer = 0;
       spin->timer_calls = 0;
       spin->need_timer = FALSE;
@@ -1022,8 +1022,9 @@ start_spinning (GtkSpinButton *spin,
     {
       spin->timer_step = step;
       spin->need_timer = TRUE;
-      spin->timer = gtk_timeout_add (SPIN_BUTTON_INITIAL_TIMER_DELAY, 
-				     (GtkFunction) gtk_spin_button_timer, (gpointer) spin);
+      spin->timer = g_timeout_add (SPIN_BUTTON_INITIAL_TIMER_DELAY, 
+				   (GtkFunction) gtk_spin_button_timer, 
+				   (gpointer) spin);
     }
 
   spin_button_redraw (spin);
@@ -1175,9 +1176,9 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
       if (spin_button->need_timer)
 	{
 	  spin_button->need_timer = FALSE;
-	  spin_button->timer = gtk_timeout_add 
-	    (SPIN_BUTTON_TIMER_DELAY, (GtkFunction) gtk_spin_button_timer, 
-	     (gpointer) spin_button);
+	  spin_button->timer = g_timeout_add (SPIN_BUTTON_TIMER_DELAY, 
+					      (GtkFunction) gtk_spin_button_timer, 
+					      (gpointer) spin_button);
 	}
       else 
 	{

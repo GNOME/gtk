@@ -4307,16 +4307,16 @@ blink_cb (gpointer data)
   if (entry->cursor_visible)
     {
       hide_cursor (entry);
-      entry->blink_timeout = gtk_timeout_add (get_cursor_time (entry) * CURSOR_OFF_MULTIPLIER,
-					      blink_cb,
-					      entry);
+      entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_OFF_MULTIPLIER,
+					    blink_cb,
+					    entry);
     }
   else
     {
       show_cursor (entry);
-      entry->blink_timeout = gtk_timeout_add (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER,
-					      blink_cb,
-					      entry);
+      entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER,
+					    blink_cb,
+					    entry);
     }
 
   GDK_THREADS_LEAVE ();
@@ -4332,9 +4332,9 @@ gtk_entry_check_cursor_blink (GtkEntry *entry)
     {
       if (!entry->blink_timeout)
 	{
-	  entry->blink_timeout = gtk_timeout_add (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER,
-						  blink_cb,
-						  entry);
+	  entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER,
+						blink_cb,
+						entry);
 	  show_cursor (entry);
 	}
     }
@@ -4342,7 +4342,7 @@ gtk_entry_check_cursor_blink (GtkEntry *entry)
     {
       if (entry->blink_timeout)  
 	{ 
-	  gtk_timeout_remove (entry->blink_timeout);
+	  g_source_remove (entry->blink_timeout);
 	  entry->blink_timeout = 0;
 	}
       
@@ -4357,11 +4357,11 @@ gtk_entry_pend_cursor_blink (GtkEntry *entry)
   if (cursor_blinks (entry))
     {
       if (entry->blink_timeout != 0)
-	gtk_timeout_remove (entry->blink_timeout);
+	g_source_remove (entry->blink_timeout);
       
-      entry->blink_timeout = gtk_timeout_add (get_cursor_time (entry) * CURSOR_PEND_MULTIPLIER,
-					      blink_cb,
-					      entry);
+      entry->blink_timeout = g_timeout_add (get_cursor_time (entry) * CURSOR_PEND_MULTIPLIER,
+					    blink_cb,
+					    entry);
       show_cursor (entry);
     }
 }
