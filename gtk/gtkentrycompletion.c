@@ -303,7 +303,9 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * GtkEntryCompletion:inline-completion:
    * 
    * Determines whether the common prefix of the possible completions 
-   * should be inserted automatically in the entry.
+   * should be inserted automatically in the entry. Note that this
+   * requires text-column to be set, even if you are using a custom
+   * match function.
    *
    * Since: 2.6
    **/
@@ -1412,8 +1414,12 @@ gtk_entry_completion_compute_prefix (GtkEntryCompletion *completion)
   GtkTreeIter iter;
   gchar *prefix = NULL;
   gboolean valid;
+  const gchar *key;
 
-  const gchar *key = gtk_entry_get_text (GTK_ENTRY (completion->priv->entry));
+  if (completion->priv->text_column < 0)
+    return NULL;
+
+  key = gtk_entry_get_text (GTK_ENTRY (completion->priv->entry));
 
   valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (completion->priv->filter_model),
 					 &iter);

@@ -5200,6 +5200,7 @@ check_completion_callback (GtkEntryCompletion *completion)
 {
   completion->priv->check_completion_idle = NULL;
   
+  gtk_entry_completion_complete (completion);
   gtk_entry_completion_insert_prefix (completion);
 
   return FALSE;

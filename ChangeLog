@@ -1,3 +1,15 @@
+2005-03-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_class_init): 
+	Document that inline completion requires text-column to be set.
+	(gtk_entry_completion_compute_prefix): Return NULL if text-column
+	is not set.
+
+	* gtk/gtkentry.c (check_completion_callback): Call 
+	gtk_entry_completion_complete() before inserting the prefix,
+	otherwise the prefix may depend on (random) state of the
+	filter model.  
+
 2005-03-13  Ivan, Wong Yat Cheung  <email@ivanwong.info>
 
 	* gdk/win32/gdkgeometry-win32.c (gdk_window_scroll): A further fix
@@ -30,6 +42,7 @@
 	try to focus the default_widget if there is 
 	none.  (#169881, Thomas Leonard)
 
+>>>>>>> 1.6286.2.112
 2005-03-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaccelgroup.c (substitute_underscores): Remove
