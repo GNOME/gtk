@@ -6467,17 +6467,42 @@ create_color_selection (void)
  */
 
 void
-file_selection_hide_fileops (GtkWidget *widget,
-			     GtkFileSelection *fs)
+show_fileops (GtkWidget        *widget,
+	      GtkFileSelection *fs)
 {
-  gtk_file_selection_hide_fileop_buttons (fs);
+  gboolean show_ops;
+
+  show_ops = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+
+  if (show_ops)
+    gtk_file_selection_show_fileop_buttons (fs);
+  else
+    gtk_file_selection_hide_fileop_buttons (fs);
 }
 
 void
-file_selection_ok (GtkWidget        *w,
-		   GtkFileSelection *fs)
+select_multiple (GtkWidget        *widget,
+		 GtkFileSelection *fs)
 {
-  g_print ("%s\n", gtk_file_selection_get_filename (fs));
+  gboolean select_multiple;
+
+  select_multiple = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+  gtk_file_selection_set_select_multiple (fs, select_multiple);
+}
+
+void
+file_selection_ok (GtkFileSelection *fs)
+{
+  int i;
+  gchar **selections;
+
+  selections = gtk_file_selection_get_selections (fs);
+
+  for (i = 0; selections[i] != NULL; i++)
+    g_print ("%s\n", selections[i]);
+
+  g_strfreev (selections);
+
   gtk_widget_destroy (GTK_WIDGET (fs));
 }
 
@@ -6495,29 +6520,31 @@ create_file_selection (void)
 
       gtk_window_set_position (GTK_WINDOW (window), GTK_WIN_POS_MOUSE);
 
-      gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
-			  &window);
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_widget_destroyed),
+			&window);
 
-      gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (window)->ok_button),
-			  "clicked", GTK_SIGNAL_FUNC(file_selection_ok),
-			  window);
-      gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION (window)->cancel_button),
-				 "clicked", GTK_SIGNAL_FUNC(gtk_widget_destroy),
-				 GTK_OBJECT (window));
+      g_signal_connect_swapped (GTK_FILE_SELECTION (window)->ok_button,
+				"clicked",
+				G_CALLBACK (file_selection_ok),
+				window);
+      g_signal_connect_swapped (GTK_FILE_SELECTION (window)->cancel_button,
+			        "clicked",
+				G_CALLBACK (gtk_widget_destroy),
+				window);
       
-      button = gtk_button_new_with_label ("Hide Fileops");
-      gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			  (GtkSignalFunc) file_selection_hide_fileops, 
-			  (gpointer) window);
+      button = gtk_toggle_button_new_with_label ("Show Fileops");
+      g_signal_connect (button, "toggled",
+			G_CALLBACK (show_fileops),
+			window);
       gtk_box_pack_start (GTK_BOX (GTK_FILE_SELECTION (window)->action_area), 
 			  button, FALSE, FALSE, 0);
       gtk_widget_show (button);
 
-      button = gtk_button_new_with_label ("Show Fileops");
-      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_file_selection_show_fileop_buttons, 
-				 (gpointer) window);
+      button = gtk_toggle_button_new_with_label ("Select Multiple");
+      g_signal_connect (button, "clicked",
+			G_CALLBACK (select_multiple),
+			window);
       gtk_box_pack_start (GTK_BOX (GTK_FILE_SELECTION (window)->action_area), 
 			  button, FALSE, FALSE, 0);
       gtk_widget_show (button);
