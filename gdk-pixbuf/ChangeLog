@@ -1,3 +1,7 @@
+Fri Dec 10 13:57:44 2004  Manish Singh  <yosh@gimp.org>
+
+	* abicheck.sh: filter out PRIVATE.
+
 2004-12-05  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk-pixbuf-animation.c
