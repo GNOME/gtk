@@ -1,6 +1,14 @@
+2003-09-11  Raymond Penners  <raymond@dotsphinx.com>
+
+	* === Released 0.4.0 ===
+	
+	* src/wimp_style.c: Notebook tabs were no longer properly drawn,
+	fixed.
+
 2003-09-08  Dom Lachowicz <cinamod@hotmail.com>
 
-	* src/wimp_style.c: Honor scrollbar sizes, radio/check button sizes, paned sizes
+	* src/wimp_style.c: Honor scrollbar sizes, radio/check button
+	sizes, paned sizes
 	
 2003-09-03  Dom Lachowicz <cinamod@hotmail.com>
 
@@ -8,20 +16,31 @@
 	
 2003-09-02  Dom Lachowicz <cinamod@hotmail.com>
 
-	* src/wimp_style.c: We now honor font preferences being bold or italic
+	* src/wimp_style.c: We now honor font preferences being bold or
+	italic
 	
 2003-08-29  Dom Lachowicz <cinamod@hotmail.com>
 
-	* src/*.c: Theme GTK toolbar arrows to XP chevrons, once my GTK patch is committed.
-	* src/wimp_style.c: Enable proper fonts/sizes for menus, status bars. Tooltips are waiting for my GTK patches, though.
+	* src/*.c: Theme GTK toolbar arrows to XP chevrons, once my GTK
+	patch is committed.
+	
+	* src/wimp_style.c: Enable proper fonts/sizes for menus, status
+	bars. Tooltips are waiting for my GTK patches, though.
 
 2003-08-28  Dom Lachowicz <cinamod@hotmail.com>
 
-	* src/wimp_style.c: Change how we draw handle boxes in the non-XP case. This does not yet apply to GtkHandleBoxes
+	* src/wimp_style.c: Change how we draw handle boxes in the non-XP
+	case. This does not yet apply to GtkHandleBoxes
 	
 2003-08-26  Dom Lachowicz <cinamod@hotmail.com>
 
-	* src/*.c: Tooltips should do XP-style theming. Handle Boxes/Panes do XP style REBAR theming (TODO: non-XP version of the above for handleboxes). Toolbars should draw the REBAR part properly. Preparation for using the Toolbar class. Menubars and Toolbars now are etched-in to mimic Windows' behavior. HandleBoxes' shadow types should also be correct now, compared to OfficeXP applications.
+	* src/*.c: Tooltips should do XP-style theming. Handle Boxes/Panes
+	do XP style REBAR theming (TODO: non-XP version of the above for
+	handleboxes). Toolbars should draw the REBAR part
+	properly. Preparation for using the Toolbar class. Menubars and
+	Toolbars now are etched-in to mimic Windows'
+	behavior. HandleBoxes' shadow types should also be correct now,
+	compared to OfficeXP applications.
 	
 2003-08-26  Raymond Penners <raymond@dotsphinx.com>
 	
