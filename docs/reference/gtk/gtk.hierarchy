@@ -27,9 +27,9 @@ GtkObject
         GtkWindow
           GtkDialog
             GtkColorSelectionDialog
+            GtkFileSelection
+            GtkFontSelectionDialog
             GtkInputDialog
-          GtkFileSelection
-          GtkFontSelectionDialog
           GtkPlug
         GtkEventBox
         GtkHandleBox

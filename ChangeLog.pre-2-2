@@ -1,3 +1,40 @@
+2000-11-02  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkfilesel.h, gtk/gtkfilesel.c: Derive from GtkDialog, and
+	use stock buttons. Should be 100% source compatible, appropriate
+	filesel fields now point to dialog->vbox and dialog->action_area.
+	On the bizarre side, dialog->action_area and filesel->action_area
+	are not the same widget.
+	(gtk_file_selection_init): Put some padding around the selection
+	entry, so it isn't touching the GtkDialog separator.	
+
+	* gtk/gtkfontsel.h, gtk/gtkfontsel.c: Derive from GtkDialog, 
+	use stock buttons, etc. Should also be source compatible.
+	Set the dialog default title in _init not _new().
+	
+	* gtk/gtkcolorseldialog.c (gtk_color_selection_dialog_init): 
+	Use stock buttons; don't put a button box inside the existing
+	dialog button box. Don't bother with push/pop colormap anymore.
+
+	* gtk/gtkdialog.h (GtkResponseType): Add a bunch of more 
+	specific GTK_RESPONSE_* values. This is clearer than ACCEPT/REJECT
+	for message dialog, and necessary for the font selection and color
+	selection with help and apply buttons.
+	
+	* gtk/gtkdialog.c (gtk_dialog_add_button): Return a pointer 
+	to the created button widget. Set GTK_CAN_DEFAULT on the button.
+	(gtk_dialog_init): Default to GTK_BUTTONBOX_END, put less spacing
+	between buttons, put less padding around the action area.
+	(gtk_dialog_run): Exit on unmap rather than on destroy. 
+	This will also exit the loop if the widget is hidden.
+	(gtk_dialog_delete_event_handler): Use GTK_RESPONSE_DELETE_EVENT
+	instead of GTK_RESPONSE_NONE; since we're already adding a bunch
+	of GTK_RESPONSE_* stuff, this seems cleaner, and lets you 
+	special-case delete event.
+
+	* gtk/gtktexttagtable.c, gtk/gtktextview.c: Fix doc comment
+	formatting
+	
 Sun Nov  5 05:32:39 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/testgtk.c (uposition_stop_configure): provide a toggle

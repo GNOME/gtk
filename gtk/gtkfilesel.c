@@ -58,6 +58,7 @@
 #include "gtklistitem.h"
 #include "gtkmain.h"
 #include "gtkscrolledwindow.h"
+#include "gtkstock.h"
 #include "gtksignal.h"
 #include "gtkvbox.h"
 #include "gtkmenu.h"
@@ -443,7 +444,7 @@ gtk_file_selection_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      file_selection_type = gtk_type_unique (GTK_TYPE_WINDOW, &filesel_info);
+      file_selection_type = gtk_type_unique (GTK_TYPE_DIALOG, &filesel_info);
     }
 
   return file_selection_type;
@@ -456,7 +457,7 @@ gtk_file_selection_class_init (GtkFileSelectionClass *class)
 
   object_class = (GtkObjectClass*) class;
 
-  parent_class = gtk_type_class (GTK_TYPE_WINDOW);
+  parent_class = gtk_type_class (GTK_TYPE_DIALOG);
 
   object_class->destroy = gtk_file_selection_destroy;
 }
@@ -470,17 +471,18 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   GtkWidget *confirm_area;
   GtkWidget *pulldown_hbox;
   GtkWidget *scrolled_win;
-
+  GtkDialog *dialog;
+  
   char *dir_title [2];
   char *file_title [2];
+
+  dialog = GTK_DIALOG (filesel);
   
   filesel->cmpl_state = cmpl_init_state ();
 
   /* The dialog-sized vertical box  */
-  filesel->main_vbox = gtk_vbox_new (FALSE, 10);
+  filesel->main_vbox = dialog->vbox;
   gtk_container_set_border_width (GTK_CONTAINER (filesel), 10);
-  gtk_container_add (GTK_CONTAINER (filesel), filesel->main_vbox);
-  gtk_widget_show (filesel->main_vbox);
 
   /* The horizontal box containing create, rename etc. buttons */
   filesel->button_area = gtk_hbutton_box_new ();
@@ -555,28 +557,23 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_show (filesel->action_area);
   
   /*  The OK/Cancel button area */
-  confirm_area = gtk_hbutton_box_new ();
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (confirm_area), GTK_BUTTONBOX_END);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (confirm_area), 5);
-  gtk_box_pack_end (GTK_BOX (filesel->main_vbox), confirm_area, FALSE, FALSE, 0);
-  gtk_widget_show (confirm_area);
+  confirm_area = dialog->action_area;
 
   /*  The OK button  */
-  filesel->ok_button = gtk_button_new_with_label (_("OK"));
-  GTK_WIDGET_SET_FLAGS (filesel->ok_button, GTK_CAN_DEFAULT);
-  gtk_box_pack_start (GTK_BOX (confirm_area), filesel->ok_button, TRUE, TRUE, 0);
+  filesel->ok_button = gtk_dialog_add_button (dialog,
+                                              GTK_STOCK_BUTTON_OK,
+                                              GTK_RESPONSE_OK);
+  
   gtk_widget_grab_default (filesel->ok_button);
-  gtk_widget_show (filesel->ok_button);
 
   /*  The Cancel button  */
-  filesel->cancel_button = gtk_button_new_with_label (_("Cancel"));
-  GTK_WIDGET_SET_FLAGS (filesel->cancel_button, GTK_CAN_DEFAULT);
-  gtk_box_pack_start (GTK_BOX (confirm_area), filesel->cancel_button, TRUE, TRUE, 0);
-  gtk_widget_show (filesel->cancel_button);
+  filesel->cancel_button = gtk_dialog_add_button (dialog,
+                                                  GTK_STOCK_BUTTON_CANCEL,
+                                                  GTK_RESPONSE_CANCEL);
 
   /*  The selection entry widget  */
   entry_vbox = gtk_vbox_new (FALSE, 2);
-  gtk_box_pack_end (GTK_BOX (filesel->main_vbox), entry_vbox, FALSE, FALSE, 0);
+  gtk_box_pack_end (GTK_BOX (filesel->main_vbox), entry_vbox, FALSE, FALSE, 2);
   gtk_widget_show (entry_vbox);
 
   filesel->selection_text = label = gtk_label_new ("");

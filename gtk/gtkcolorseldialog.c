@@ -28,6 +28,7 @@
 #include "gtkframe.h"
 #include "gtkhbbox.h"
 #include "gtkbutton.h"
+#include "gtkstock.h"
 #include "gtkintl.h"
 
 
@@ -79,10 +80,7 @@ gtk_color_selection_dialog_class_init (GtkColorSelectionDialogClass *klass)
 static void
 gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
 {
-  GtkWidget *action_area_button_box, *frame;
-  
-  gtk_widget_set_colormap (GTK_WIDGET (colorseldiag), gdk_rgb_get_cmap ());
-  gtk_widget_push_colormap (gdk_rgb_get_cmap ());
+  GtkWidget *action_area_button_box, *frame;  
   
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
@@ -96,29 +94,21 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
   gtk_container_add (GTK_CONTAINER (frame), colorseldiag->colorsel);
   gtk_widget_show (colorseldiag->colorsel);
   
-  action_area_button_box = gtk_hbutton_box_new ();
-  gtk_button_box_set_layout (GTK_BUTTON_BOX(action_area_button_box), GTK_BUTTONBOX_END);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX(action_area_button_box), 5);
-  gtk_box_pack_end (GTK_BOX (GTK_DIALOG (colorseldiag)->action_area), action_area_button_box, TRUE, TRUE, 0);
-  gtk_widget_show (action_area_button_box);
-  
-  colorseldiag->ok_button = gtk_button_new_with_label (_("OK"));
-  GTK_WIDGET_SET_FLAGS (colorseldiag->ok_button, GTK_CAN_DEFAULT);
-  gtk_box_pack_start (GTK_BOX (action_area_button_box), colorseldiag->ok_button, TRUE, TRUE, 0);
+  action_area_button_box = GTK_DIALOG (colorseldiag)->action_area;
+
+  colorseldiag->ok_button = gtk_dialog_add_button (GTK_DIALOG (colorseldiag),
+                                                   GTK_STOCK_BUTTON_OK,
+                                                   GTK_RESPONSE_OK);
+                                                   
   gtk_widget_grab_default (colorseldiag->ok_button);
-  gtk_widget_show (colorseldiag->ok_button);
   
-  colorseldiag->cancel_button = gtk_button_new_with_label (_("Cancel"));
-  GTK_WIDGET_SET_FLAGS (colorseldiag->cancel_button, GTK_CAN_DEFAULT);
-  gtk_box_pack_start (GTK_BOX (action_area_button_box), colorseldiag->cancel_button, TRUE, TRUE, 0);
-  gtk_widget_show (colorseldiag->cancel_button);
+  colorseldiag->cancel_button = gtk_dialog_add_button (GTK_DIALOG (colorseldiag),
+                                                       GTK_STOCK_BUTTON_CANCEL,
+                                                       GTK_RESPONSE_CANCEL);
   
-  colorseldiag->help_button = gtk_button_new_with_label (_("Help"));
-  GTK_WIDGET_SET_FLAGS (colorseldiag->help_button, GTK_CAN_DEFAULT);
-  gtk_box_pack_start (GTK_BOX (action_area_button_box), colorseldiag->help_button, TRUE, TRUE, 0);
-  gtk_widget_show (colorseldiag->help_button);
-  
-  gtk_widget_pop_colormap ();
+  colorseldiag->help_button = gtk_dialog_add_button (GTK_DIALOG (colorseldiag),
+                                                     GTK_STOCK_HELP,
+                                                     GTK_RESPONSE_HELP);
 }
 
 GtkWidget*

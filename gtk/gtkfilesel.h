@@ -29,7 +29,7 @@
 
 
 #include <gdk/gdk.h>
-#include <gtk/gtkwindow.h>
+#include <gtk/gtkdialog.h>
 
 
 #ifdef __cplusplus
@@ -50,7 +50,7 @@ typedef struct _GtkFileSelectionClass  GtkFileSelectionClass;
 
 struct _GtkFileSelection
 {
-  GtkWindow window;
+  GtkDialog parent_instance;
 
   GtkWidget *dir_list;
   GtkWidget *file_list;
@@ -79,7 +79,7 @@ struct _GtkFileSelection
 
 struct _GtkFileSelectionClass
 {
-  GtkWindowClass parent_class;
+  GtkDialogClass parent_class;
 };
 
 

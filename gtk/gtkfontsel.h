@@ -33,9 +33,8 @@
 
 
 #include <gdk/gdk.h>
-#include <gtk/gtkwindow.h>
+#include <gtk/gtkdialog.h>
 #include <gtk/gtkvbox.h>
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -93,7 +92,7 @@ struct _GtkFontSelectionClass
 
 struct _GtkFontSelectionDialog
 {
-  GtkWindow window;
+  GtkDialog parent_instance;
   
   GtkWidget *fontsel;
   
@@ -111,7 +110,7 @@ struct _GtkFontSelectionDialog
 
 struct _GtkFontSelectionDialogClass
 {
-  GtkWindowClass parent_class;
+  GtkDialogClass parent_class;
 };
 
 

@@ -107,6 +107,7 @@ gtk_text_tag_table_init (GtkTextTagTable *table)
 
 /**
  * gtk_text_tag_table_new:
+ * 
  * Creates a new #GtkTextTagTable. The table contains no tags by
  * default.
  * 

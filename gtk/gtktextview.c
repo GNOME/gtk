@@ -691,6 +691,7 @@ gtk_text_view_init (GtkTextView *text_view)
 
 /**
  * gtk_text_view_new:
+ * 
  * Creates a new #GtkTextView. If you don't call gtk_text_view_set_buffer()
  * before using the text view, an empty default buffer will be created
  * for you. Get the buffer with gtk_text_view_get_buffer(). If you want

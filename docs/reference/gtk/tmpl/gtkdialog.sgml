@@ -153,6 +153,14 @@ gtk_window_set_title(). See the #GtkWindow section for more).
 @GTK_RESPONSE_NONE: 
 @GTK_RESPONSE_REJECT: 
 @GTK_RESPONSE_ACCEPT: 
+@GTK_RESPONSE_DELETE_EVENT: 
+@GTK_RESPONSE_OK: 
+@GTK_RESPONSE_CANCEL: 
+@GTK_RESPONSE_CLOSE: 
+@GTK_RESPONSE_YES: 
+@GTK_RESPONSE_NO: 
+@GTK_RESPONSE_APPLY: 
+@GTK_RESPONSE_HELP: 
 
 <!-- ##### FUNCTION gtk_dialog_new ##### -->
 <para>
@@ -202,6 +210,7 @@ directly, but into the vbox and action_area, as described above.
 @dialog: 
 @button_text: 
 @response_id: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_dialog_add_buttons ##### -->

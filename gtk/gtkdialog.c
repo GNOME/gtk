@@ -129,9 +129,11 @@ gtk_dialog_init (GtkDialog *dialog)
   dialog->action_area = gtk_hbutton_box_new ();
 
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog->action_area),
-                             GTK_BUTTONBOX_SPREAD);
+                             GTK_BUTTONBOX_END);
+
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog->action_area), 5);
   
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 10);
+  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
   gtk_box_pack_end (GTK_BOX (dialog->vbox), dialog->action_area,
                     FALSE, TRUE, 0);
   gtk_widget_show (dialog->action_area);
@@ -147,7 +149,7 @@ gtk_dialog_delete_event_handler (GtkWidget   *widget,
                                  gpointer     user_data)
 {
   /* emit response signal */
-  gtk_dialog_response (GTK_DIALOG (widget), GTK_RESPONSE_NONE);
+  gtk_dialog_response (GTK_DIALOG (widget), GTK_RESPONSE_DELETE_EVENT);
 
   /* Do the destroy by default */
   return FALSE;
@@ -244,7 +246,7 @@ gtk_dialog_new_empty (const gchar     *title,
  *                                                   GTK_STOCK_BUTTON_OK,
  *                                                   GTK_RESPONSE_ACCEPT,
  *                                                   GTK_STOCK_BUTTON_CANCEL,
- *                                                   GTK_RESPONSE_NONE,
+ *                                                   GTK_RESPONSE_REJECT,
  *                                                   NULL);
  * </programlisting>
  * 
@@ -373,10 +375,12 @@ gtk_dialog_add_action_widget  (GtkDialog *dialog,
  * Adds a button with the given text (or a stock button, if @button_text is a
  * stock ID) and sets things up so that clicking the button will emit the
  * "response" signal with the given @response_id. The button is appended to the
- * end of the dialog's action area.
- * 
+ * end of the dialog's action area. The button widget is returned, but usually
+ * you don't need it.
+ *
+ * Return value: the button widget that was added
  **/
-void
+GtkWidget*
 gtk_dialog_add_button (GtkDialog   *dialog,
                        const gchar *button_text,
                        gint         response_id)
@@ -389,11 +393,15 @@ gtk_dialog_add_button (GtkDialog   *dialog,
   button = gtk_button_new_stock (button_text,
                                  gtk_window_get_default_accel_group (GTK_WINDOW (dialog)));
 
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  
   gtk_widget_show (button);
   
   gtk_dialog_add_action_widget (dialog,
                                 button,
                                 response_id);
+
+  return button;
 }
 
 static void
@@ -491,7 +499,7 @@ shutdown_loop (RunInfo *ri)
 }
 
 static void
-run_destroy_handler (GtkDialog *dialog, gpointer data)
+run_unmap_handler (GtkDialog *dialog, gpointer data)
 {
   RunInfo *ri = data;
 
@@ -542,7 +550,7 @@ run_delete_handler (GtkDialog *dialog,
  * During gtk_dialog_run(), the default behavior of "delete_event" is
  * disabled; if the dialog receives "delete_event", it will not be
  * destroyed as windows usually are, and gtk_dialog_run() will return
- * GTK_RESPONSE_NONE. Also, during gtk_dialog_run() the dialog will be
+ * GTK_RESPONSE_DELETE_EVENT. Also, during gtk_dialog_run() the dialog will be
  * modal. You can force gtk_dialog_run() to return at any time by
  * calling gtk_dialog_response() to emit the "response"
  * signal. Destroying the dialog during gtk_dialog_run() is a very bad
@@ -597,8 +605,8 @@ gtk_dialog_run (GtkDialog *dialog)
   
   destroy_handler =
     gtk_signal_connect (GTK_OBJECT (dialog),
-                        "destroy",
-                        GTK_SIGNAL_FUNC (run_destroy_handler),
+                        "unmap",
+                        GTK_SIGNAL_FUNC (run_unmap_handler),
                         &ri);
   
   delete_handler =

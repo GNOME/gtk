@@ -150,11 +150,9 @@ setup_type(GtkMessageDialog *dialog, GtkMessageType type)
  * 
  * Creates a new message dialog, which is a simple dialog with an icon
  * indicating the dialog type (error, warning, etc.) and some text the
- * user may want to see. If the button set you select with the @buttons
- * argument has positive buttons (OK, Yes) they will result in a response ID
- * of GTK_RESPONSE_ACCEPT. If it has negative buttons (Cancel, No) they will
- * result in a response ID of GTK_RESPONSE_REJECT. See #GtkDialog for more
- * details.
+ * user may want to see. When the user clicks a button a "response"
+ * signal is emitted with response IDs from #GtkResponseType. See
+ * #GtkDialog for more details.
  * 
  * Return value: a new #GtkMessageDialog
  **/
@@ -209,37 +207,37 @@ gtk_message_dialog_new (GtkWindow     *parent,
     case GTK_BUTTONS_OK:
       gtk_dialog_add_button (dialog,
                              GTK_STOCK_BUTTON_OK,
-                             GTK_RESPONSE_ACCEPT);
+                             GTK_RESPONSE_OK);
       break;
 
     case GTK_BUTTONS_CLOSE:
       gtk_dialog_add_button (dialog,
                              GTK_STOCK_BUTTON_CLOSE,
-                             GTK_RESPONSE_ACCEPT);
+                             GTK_RESPONSE_CLOSE);
       break;
 
     case GTK_BUTTONS_CANCEL:
       gtk_dialog_add_button (dialog,
                              GTK_STOCK_BUTTON_CANCEL,
-                             GTK_RESPONSE_REJECT);
+                             GTK_RESPONSE_CANCEL);
       break;
 
     case GTK_BUTTONS_YES_NO:
       gtk_dialog_add_button (dialog,
                              GTK_STOCK_BUTTON_YES,
-                             GTK_RESPONSE_ACCEPT);
+                             GTK_RESPONSE_YES);
       gtk_dialog_add_button (dialog,
                              GTK_STOCK_BUTTON_NO,
-                             GTK_RESPONSE_REJECT);
+                             GTK_RESPONSE_NO);
       break;
 
     case GTK_BUTTONS_OK_CANCEL:
       gtk_dialog_add_button (dialog,
                              GTK_STOCK_BUTTON_OK,
-                             GTK_RESPONSE_ACCEPT);
+                             GTK_RESPONSE_OK);
       gtk_dialog_add_button (dialog,
                              GTK_STOCK_BUTTON_CANCEL,
-                             GTK_RESPONSE_REJECT);
+                             GTK_RESPONSE_CANCEL);
       break;
       
     default:

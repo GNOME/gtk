@@ -48,6 +48,7 @@
 #include "gtklabel.h"
 #include "gtkrc.h"
 #include "gtksignal.h"
+#include "gtkstock.h"
 #include "gtktable.h"
 #include "gtkvbox.h"
 #include "gtkscrolledwindow.h"
@@ -900,7 +901,8 @@ gtk_font_selection_dialog_get_type (void)
         (GtkClassInitFunc) NULL,
       };
       
-      font_selection_dialog_type = gtk_type_unique (GTK_TYPE_WINDOW, &fontsel_diag_info);
+      font_selection_dialog_type = gtk_type_unique (GTK_TYPE_DIALOG,
+                                                    &fontsel_diag_info);
     }
   
   return font_selection_dialog_type;
@@ -913,12 +915,16 @@ gtk_font_selection_dialog_class_init (GtkFontSelectionDialogClass *klass)
   
   object_class = (GtkObjectClass*) klass;
   
-  font_selection_dialog_parent_class = gtk_type_class (GTK_TYPE_WINDOW);
+  font_selection_dialog_parent_class = gtk_type_class (GTK_TYPE_DIALOG);
 }
 
 static void
 gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
 {
+  GtkDialog *dialog;
+
+  dialog = GTK_DIALOG (fontseldiag);
+  
   fontseldiag->dialog_width = -1;
   fontseldiag->auto_resize = TRUE;
   
@@ -930,9 +936,7 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
   gtk_container_set_border_width (GTK_CONTAINER (fontseldiag), 4);
   gtk_window_set_policy(GTK_WINDOW(fontseldiag), FALSE, TRUE, TRUE);
   
-  fontseldiag->main_vbox = gtk_vbox_new (FALSE, 4);
-  gtk_widget_show (fontseldiag->main_vbox);
-  gtk_container_add (GTK_CONTAINER (fontseldiag), fontseldiag->main_vbox);
+  fontseldiag->main_vbox = dialog->vbox;
   
   fontseldiag->fontsel = gtk_font_selection_new();
   gtk_container_set_border_width (GTK_CONTAINER (fontseldiag->fontsel), 4);
@@ -941,34 +945,26 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
 		      fontseldiag->fontsel, TRUE, TRUE, 0);
   
   /* Create the action area */
-  fontseldiag->action_area = gtk_hbutton_box_new ();
-  gtk_button_box_set_layout(GTK_BUTTON_BOX(fontseldiag->action_area),
-			    GTK_BUTTONBOX_END);
-  gtk_button_box_set_spacing(GTK_BUTTON_BOX(fontseldiag->action_area), 5);
-  gtk_box_pack_start (GTK_BOX (fontseldiag->main_vbox),
-		      fontseldiag->action_area, FALSE, FALSE, 0);
-  gtk_widget_show (fontseldiag->action_area);
+  fontseldiag->action_area = dialog->action_area;
   
-  fontseldiag->ok_button = gtk_button_new_with_label(_("OK"));
-  GTK_WIDGET_SET_FLAGS (fontseldiag->ok_button, GTK_CAN_DEFAULT);
-  gtk_widget_show(fontseldiag->ok_button);
-  gtk_box_pack_start (GTK_BOX (fontseldiag->action_area),
-		      fontseldiag->ok_button, TRUE, TRUE, 0);
+  fontseldiag->ok_button = gtk_dialog_add_button (dialog,
+                                                  GTK_STOCK_BUTTON_OK,
+                                                  GTK_RESPONSE_OK);
   gtk_widget_grab_default (fontseldiag->ok_button);
   
-  fontseldiag->apply_button = gtk_button_new_with_label(_("Apply"));
-  GTK_WIDGET_SET_FLAGS (fontseldiag->apply_button, GTK_CAN_DEFAULT);
-  /*gtk_widget_show(fontseldiag->apply_button);*/
-  gtk_box_pack_start (GTK_BOX(fontseldiag->action_area),
-		      fontseldiag->apply_button, TRUE, TRUE, 0);
+  fontseldiag->apply_button = gtk_dialog_add_button (dialog,
+                                                     GTK_STOCK_BUTTON_APPLY,
+                                                     GTK_RESPONSE_APPLY);
+  gtk_widget_hide (fontseldiag->apply_button);
+
   
-  fontseldiag->cancel_button = gtk_button_new_with_label(_("Cancel"));
-  GTK_WIDGET_SET_FLAGS (fontseldiag->cancel_button, GTK_CAN_DEFAULT);
-  gtk_widget_show(fontseldiag->cancel_button);
-  gtk_box_pack_start (GTK_BOX(fontseldiag->action_area),
-		      fontseldiag->cancel_button, TRUE, TRUE, 0);
-  
-  
+  fontseldiag->cancel_button = gtk_dialog_add_button (dialog,
+                                                      GTK_STOCK_BUTTON_CANCEL,
+                                                      GTK_RESPONSE_CANCEL);
+
+  gtk_window_set_title (GTK_WINDOW (fontseldiag),
+                        _("Font Selection"));
+
 }
 
 GtkWidget*
@@ -977,8 +973,9 @@ gtk_font_selection_dialog_new	(const gchar	  *title)
   GtkFontSelectionDialog *fontseldiag;
   
   fontseldiag = gtk_type_new (GTK_TYPE_FONT_SELECTION_DIALOG);
-  gtk_window_set_title (GTK_WINDOW (fontseldiag),
-			title ? title : _("Font Selection"));
+
+  if (title)
+    gtk_window_set_title (GTK_WINDOW (fontseldiag), title);
   
   return GTK_WIDGET (fontseldiag);
 }
