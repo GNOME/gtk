@@ -463,7 +463,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  							 FALSE,
  							 G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
-				   PROP_HAS_FOCUS,
+				   PROP_IS_FOCUS,
 				   g_param_spec_boolean ("is_focus",
  							 _("Is focus"),
  							 _("Whether the widget is the focus widget within the toplevel"),
