@@ -232,6 +232,20 @@ struct _GtkCListClass
   void (*clear)               (GtkCList * clist);
   void (*fake_unselect_all)   (GtkCList * clist,
 			       gint row);
+  void (*sort_list)           (GtkCList * clist);
+  gint (*insert_row)          (GtkCList * clist,
+			       gint row,
+			       gchar * text[]);
+  void (*remove_row)          (GtkCList * clist,
+			       gint row);
+  void (*set_cell_contents)   (GtkCList * clist,
+			       GtkCListRow * clist_row,
+			       gint column,
+			       GtkCellType type,
+			       gchar * text,
+			       guint8 spacing,
+			       GdkPixmap * pixmap,
+			       GdkBitmap * mask);
 
   gint scrollbar_spacing;
 };

@@ -1,3 +1,65 @@
+Tue Aug 18 00:29:13 1998  Lars Hamann  <lars@gtk.org>
+
+        * gtk/gtkclist.h:
+        (struct _GtkCListClass): new class methods:
+        (sort_list) (insert_row) (remove_row) (set_cell_contents)
+
+        * gtk/gtkclist.c :
+        (cell_empty) (cell_set_text) (cell_set_pixmap) (cell_set_pixtext):
+        removed and replaced by (set_cell_contents)
+        (set_cell_contents): function for class method set_cell_contents
+        (real_insert_row): function for class method insert_row
+        (real_remoce_row): function for class method remove_row
+        (real_sort_list): function for class method sort_list
+        (default_compare): fix to avoid problems with cell types != CELL_TEXT
+
+        * gtk/gtkctree.h :
+        (gtk_ctree_export_to_gnode): new function to export a ctree as gnode 
+        (gtk_ctree_node_is_visible): new function to return visibility state
+        of a node
+	(gtk_ctree_show_stub): new function to set visibility of root stub
+
+        renamed functions :
+        (gtk_ctree_insert) -> (gtk_ctree_insert_node)
+        (gtk_ctree_remove) -> (gtk_ctree_remove_node)
+        (gtk_ctree_find_glist_ptr) -> (gtk_ctree_find_node_ptr)
+        (gtk_ctree_set_text) -> (gtk_ctree_node_set_text)
+        (gtk_ctree_set_pixmap) -> (gtk_ctree_node_set_pixmap)
+        (gtk_ctree_set_pixtext) -> (gtk_ctree_node_set_pixtext)
+        (gtk_ctree_set_shift) -> (gtk_ctree_node_set_shift)
+        (gtk_ctree_get_cell_type) -> (gtk_ctree_node_get_cell_type)
+        (gtk_ctree_get_text) -> (gtk_ctree_node_get_text)
+        (gtk_ctree_get_pixmap) -> (gtk_ctree_node_get_pixmap)
+        (gtk_ctree_get_pixtext) -> (gtk_ctree_node_get_pixtext)
+        (gtk_ctree_set_foreground) -> (gtk_ctree_node_set_foreground)
+        (gtk_ctree_set_background) -> (gtk_ctree_node_set_background)
+        (gtk_ctree_set_row_data) -> (gtk_ctree_node_set_row_data)
+        (gtk_ctree_set_row_data_full) -> (gtk_ctree_node_set_row_data_full)
+        (gtk_ctree_get_row_data) -> (gtk_ctree_node_get_row_data)
+        (gtk_ctree_moveto) -> (gtk_ctree_node_moveto)
+        (gtk_ctree_sort) -> (gtk_ctree_sort_node)
+	(gtk_ctree_is_visibe) -> (gtk_ctree_is_viewable)
+
+        * gtk/gtkctree.c :
+        (cell_empty) (cell_set_text) (cell_set_pixmap) (cell_set_pixtext):
+        removed and replaced by (set_cell_contents)
+        (set_cell_contents): function for class method set_cell_contents
+        (real_insert_row): function for class method insert_row
+        (real_remoce_row): function for class method remove_row
+        (real_sort_list): function for class method sort_list
+        (default_compare): removed. CTree now also compares two GtkCTreeRows
+        instead of two GtkCTreeNodes.
+        (gtk_ctree_unlink): call gtk_ctree_collapse if parent is empty after
+        unlinking the node
+        (real_tree_expand) (real_tree_collapse): fix for refcounting of
+        node pixmaps
+        (set_node_info): call gtk_ctree_node_set_pixtext instead of
+        manipulating the row itself
+        
+        * gtk/testgtk.c: use renamed functions of GtkCTree.
+        new sample to show gtk_ctree_export_to_gnode and gtk_ctree_insert_gnode
+        at work.
+
 Mon Aug 17 15:31:38 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c: removed gtk_input_add_interp.

@@ -4077,7 +4077,7 @@ void remove_selection (GtkWidget *widget, GtkCTree *ctree)
 	    }
 	}
 
-      gtk_ctree_remove (ctree, work);
+      gtk_ctree_remove_node (ctree, work);
       selection = GTK_CLIST (ctree)->selection;
     }
 
@@ -4091,6 +4091,144 @@ void remove_selection (GtkWidget *widget, GtkCTree *ctree)
 void sort_all (GtkWidget *widget, GtkCTree *ctree)
 {
   gtk_ctree_sort_recursive (ctree, NULL);
+}
+
+struct _ExportStruct {
+  gchar *tree;
+  gchar *info;
+  gboolean is_leaf;
+};
+
+typedef struct _ExportStruct ExportStruct;
+
+gboolean
+gnode2ctree (GtkCTree   *ctree,
+	     guint       depth,
+	     GNode        *gnode,
+	     GtkCTreeNode *cnode,
+	     gpointer    data)
+{
+  ExportStruct *es;
+  GdkPixmap *pixmap_closed;
+  GdkBitmap *mask_closed;
+  GdkPixmap *pixmap_opened;
+  GdkBitmap *mask_opened;
+
+  if (!cnode || !gnode || (!(es = gnode->data)))
+    return FALSE;
+
+  if (es->is_leaf)
+    {
+      pixmap_closed = pixmap3;
+      mask_closed = mask3;
+      pixmap_opened = NULL;
+      mask_opened = NULL;
+    }
+  else
+    {
+      pixmap_closed = pixmap1;
+      mask_closed = mask1;
+      pixmap_opened = pixmap2;
+      mask_opened = mask2;
+    }
+
+  gtk_ctree_set_node_info (ctree, cnode, es->tree, 2, pixmap_closed,
+			   mask_closed, pixmap_opened, mask_opened,
+			   es->is_leaf, (depth < 3));
+  gtk_ctree_node_set_text (ctree, cnode, 1, es->info);
+  g_free (es);
+  gnode->data = NULL;
+
+  return TRUE;
+}
+
+gboolean
+ctree2gnode (GtkCTree   *ctree,
+	     guint       depth,
+	     GNode        *gnode,
+	     GtkCTreeNode *cnode,
+	     gpointer    data)
+{
+  ExportStruct *es;
+
+  if (!cnode || !gnode)
+    return FALSE;
+  
+  es = g_new (ExportStruct, 1);
+  gnode->data = es;
+  es->is_leaf = GTK_CTREE_ROW (cnode)->is_leaf;
+  es->tree = GTK_CELL_PIXTEXT (GTK_CTREE_ROW (cnode)->row.cell[0])->text;
+  es->info = GTK_CELL_PIXTEXT (GTK_CTREE_ROW (cnode)->row.cell[1])->text;
+  return TRUE;
+}
+
+void export_ctree (GtkWidget *widget, GtkCTree *ctree)
+{
+  char *title[] = { "Tree" , "Info" };
+  static GtkWidget *export_window = NULL;
+  static GtkCTree *export_ctree;
+  GtkWidget *vbox;
+  GtkWidget *button;
+  GtkWidget *sep;
+  GNode *gnode;
+  GtkCTreeNode *node;
+
+  if (!export_window)
+    {
+      export_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  
+      gtk_signal_connect (GTK_OBJECT (export_window), "destroy",
+			  GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+			  &export_window);
+
+      gtk_window_set_title (GTK_WINDOW (export_window), "exported ctree");
+      gtk_container_border_width (GTK_CONTAINER (export_window), 5);
+
+      vbox = gtk_vbox_new (FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (export_window), vbox);
+      
+      button = gtk_button_new_with_label ("Close");
+      gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, TRUE, 0);
+
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_OBJECT(export_window));
+
+      sep = gtk_hseparator_new ();
+      gtk_box_pack_end (GTK_BOX (vbox), sep, FALSE, TRUE, 10);
+
+      export_ctree = GTK_CTREE (gtk_ctree_new_with_titles (2, 0, title));
+      gtk_ctree_set_line_style (export_ctree, GTK_CTREE_LINES_DOTTED);
+
+      gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (export_ctree),
+			  TRUE, TRUE, 0);
+      gtk_clist_set_selection_mode (GTK_CLIST (export_ctree),
+				    GTK_SELECTION_EXTENDED);
+      gtk_clist_set_policy (GTK_CLIST (export_ctree), GTK_POLICY_ALWAYS, 
+			    GTK_POLICY_AUTOMATIC);
+      gtk_clist_set_column_width (GTK_CLIST (export_ctree), 0, 200);
+      gtk_clist_set_column_width (GTK_CLIST (export_ctree), 1, 200);
+      gtk_widget_set_usize (GTK_WIDGET (export_ctree), 300, 200);
+    }
+
+  if (!GTK_WIDGET_VISIBLE (export_window))
+    gtk_widget_show_all (export_window);
+      
+  gtk_clist_clear (GTK_CLIST (export_ctree));
+
+  node = GTK_CTREE_NODE (g_list_nth (GTK_CLIST (ctree)->row_list,
+				     GTK_CLIST (ctree)->focus_row));
+  if (!node)
+    return;
+
+  gnode = gtk_ctree_export_to_gnode (ctree, NULL, NULL, node,
+				     ctree2gnode, NULL);
+  if (gnode)
+    {
+      gtk_ctree_insert_gnode (export_ctree, NULL, NULL, gnode,
+			      gnode2ctree, NULL);
+      g_node_destroy (gnode);
+    }
 }
 
 void change_indent (GtkWidget *widget, GtkCTree *ctree)
@@ -4118,15 +4256,16 @@ void set_background (GtkCTree *ctree, GtkCTreeNode *node, gpointer data)
       if (GTK_CTREE_ROW (node)->is_leaf)
 	{
 	  if (GTK_CTREE_ROW (node)->parent)
-	    gtk_ctree_set_background 
+	    gtk_ctree_node_set_background 
 	      (ctree, node,
 	       GTK_CTREE_ROW (GTK_CTREE_ROW (node)->parent)->row.data);
 	}
       else
-       gtk_ctree_set_background (ctree, node, GTK_CTREE_ROW (node)->row.data);
+       gtk_ctree_node_set_background (ctree, node,
+				      GTK_CTREE_ROW (node)->row.data);
     }
   else
-    gtk_ctree_set_background (ctree, node, NULL);
+    gtk_ctree_node_set_background (ctree, node, NULL);
 }
 
 void ctree_toggle_line_style (GtkWidget *widget, GtkCTree *ctree)
@@ -4193,11 +4332,12 @@ void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth,
       pages++;
       sprintf (buf1, "Page %02d", (gint) rand() % 100);
       sprintf (buf2, "Item %d-%d", cur_depth, i);
-      sibling = gtk_ctree_insert (ctree, parent, sibling, text, 5, pixmap3,
-				  mask3, NULL, NULL, TRUE, FALSE);
+      sibling = gtk_ctree_insert_node (ctree, parent, sibling, text, 5,
+				       pixmap3, mask3, NULL, NULL,
+				       TRUE, FALSE);
 
       if (ctree->line_style == GTK_CTREE_LINES_TABBED)
-	gtk_ctree_set_background (ctree, sibling, col_bg);
+	gtk_ctree_node_set_background (ctree, sibling, col_bg);
     }
 
   if (cur_depth == depth)
@@ -4208,8 +4348,9 @@ void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth,
       books++;
       sprintf (buf1, "Book %02d", (gint) rand() % 100);
       sprintf (buf2, "Item %d-%d", cur_depth, i);
-      sibling = gtk_ctree_insert (ctree, parent, sibling, text, 5, pixmap1,
-				  mask1, pixmap2, mask2, FALSE, FALSE);
+      sibling = gtk_ctree_insert_node (ctree, parent, sibling, text, 5,
+				       pixmap1, mask1, pixmap2, mask2,
+				       FALSE, FALSE);
 
       col_bg = g_new (GdkColor, 1);
 
@@ -4233,10 +4374,10 @@ void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth,
 	}
 	
       gdk_color_alloc (gtk_widget_get_colormap (GTK_WIDGET (ctree)), col_bg);
-      gtk_ctree_set_row_data_full (ctree, sibling, col_bg, g_free);
+      gtk_ctree_node_set_row_data_full (ctree, sibling, col_bg, g_free);
 
       if (ctree->line_style == GTK_CTREE_LINES_TABBED)
-	gtk_ctree_set_background (ctree, sibling, col_bg);
+	gtk_ctree_node_set_background (ctree, sibling, col_bg);
 
       build_recursive (ctree, cur_depth + 1, depth, num_books, num_pages,
 		       sibling);
@@ -4272,17 +4413,17 @@ void rebuild_tree (GtkWidget *widget, GtkCTree *ctree)
   books = 1;
   pages = 0;
 
-  parent = gtk_ctree_insert (ctree, NULL, NULL, text, 5, pixmap1,
-			     mask1, pixmap2, mask2, FALSE, TRUE);
+  parent = gtk_ctree_insert_node (ctree, NULL, NULL, text, 5, pixmap1,
+				  mask1, pixmap2, mask2, FALSE, TRUE);
 
   col_bg = g_new (GdkColor, 1);
   col_bg->red   = 0;
   col_bg->green = 45000;
   col_bg->blue  = 55000;
   gdk_color_alloc (gtk_widget_get_colormap (GTK_WIDGET (ctree)), col_bg);
-  gtk_ctree_set_row_data_full (ctree, parent, col_bg, g_free);
+  gtk_ctree_node_set_row_data_full (ctree, parent, col_bg, g_free);
   if (ctree->line_style == GTK_CTREE_LINES_TABBED)
-    gtk_ctree_set_background (ctree, parent, col_bg);
+    gtk_ctree_node_set_background (ctree, parent, col_bg);
 
   build_recursive (ctree, 1, d, b, p, parent);
   gtk_clist_thaw (GTK_CLIST (ctree));
@@ -4460,6 +4601,11 @@ void create_ctree (void)
       button = gtk_button_new_with_label ("Sort tree");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (sort_all), ctree);
+      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+
+      button = gtk_button_new_with_label ("Export tree");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC (export_ctree), ctree);
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
       hbox = gtk_hbox_new (FALSE, 5);

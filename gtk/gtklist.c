@@ -2254,7 +2254,7 @@ gtk_list_focus (GtkContainer     *container,
       !GTK_WIDGET_HAS_FOCUS (container->focus_child))
     {
       if (*GTK_CONTAINER_CLASS (parent_class)->focus)
-	return_val = (*GTK_CONTAINER_CLASS (parent_class)->focus)
+	return_val = GTK_CONTAINER_CLASS (parent_class)->focus
 	  (container, direction);
     }
   

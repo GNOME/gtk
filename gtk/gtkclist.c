@@ -293,25 +293,19 @@ static GtkCListRow *row_new (GtkCList * clist);
 
 static void row_delete (GtkCList * clist,
 			GtkCListRow * clist_row);
-static void cell_empty (GtkCList * clist,
-			GtkCListRow * clist_row,
-			gint column);
-static void cell_set_text (GtkCList * clist,
-			   GtkCListRow * clist_row,
-			   gint column,
-			   gchar * text);
-static void cell_set_pixmap (GtkCList * clist,
-			     GtkCListRow * clist_row,
-			     gint column,
-			     GdkPixmap * pixmap,
-			     GdkBitmap * mask);
-static void cell_set_pixtext (GtkCList * clist,
-			      GtkCListRow * clist_row,
-			      gint column,
-			      gchar * text,
-			      guint8 spacing,
-			      GdkPixmap * pixmap,
-			      GdkBitmap * mask);
+static void set_cell_contents (GtkCList * clist,
+			       GtkCListRow * clist_row,
+			       gint column,
+			       GtkCellType type,
+			       gchar * text,
+			       guint8 spacing,
+			       GdkPixmap * pixmap,
+			       GdkBitmap * mask);
+static gint real_insert_row (GtkCList * clist,
+			     gint row,
+			     gchar * text[]);
+static void real_remove_row (GtkCList * clist,
+			     gint row);
 
 /* Focus handling */
 static void gtk_clist_draw_focus (GtkWidget *widget);
@@ -360,6 +354,7 @@ static GList * gtk_clist_merge (GtkCList *clist,
 static GList * gtk_clist_mergesort (GtkCList *clist,
 				    GList    *list,
 				    gint      num);
+static void real_sort_list (GtkCList *clist);
 
 /* Fill in data after widget is realized and has style */
 
@@ -546,7 +541,10 @@ gtk_clist_class_init (GtkCListClass * klass)
   klass->selection_find = selection_find;
   klass->click_column = NULL;
   klass->draw_row = draw_row;
+  klass->insert_row = real_insert_row;
+  klass->remove_row = real_remove_row;
   klass->clear = real_clear;
+  klass->sort_list = real_sort_list;
   klass->select_all = real_select_all;
   klass->unselect_all = real_unselect_all;
   klass->fake_unselect_all = fake_unselect_all;
@@ -558,6 +556,7 @@ gtk_clist_class_init (GtkCListClass * klass)
   klass->start_selection = start_selection;
   klass->end_selection = end_selection;
   klass->abort_column_resize = abort_column_resize;
+  klass->set_cell_contents = set_cell_contents;
 
   klass->scrollbar_spacing = 5;
 
@@ -1366,10 +1365,8 @@ gtk_clist_set_text (GtkCList * clist,
   clist_row = (g_list_nth (clist->row_list, row))->data;
 
   /* if text is null, then the cell is empty */
-  if (text)
-    cell_set_text (clist, clist_row, column, text);
-  else
-    cell_empty (clist, clist_row, column);
+  GTK_CLIST_CLASS_FW (clist)->set_cell_contents
+    (clist, clist_row, column, GTK_CELL_TEXT, text, 0, NULL, NULL);
 
   /* redraw the list if it's not frozen */
   if (!GTK_CLIST_FROZEN (clist))
@@ -1429,7 +1426,8 @@ gtk_clist_set_pixmap (GtkCList * clist,
   
   if (mask) gdk_pixmap_ref (mask);
   
-  cell_set_pixmap (clist, clist_row, column, pixmap, mask);
+  GTK_CLIST_CLASS_FW (clist)->set_cell_contents
+    (clist, clist_row, column, GTK_CELL_PIXMAP, NULL, 0, pixmap, mask);
 
   /* redraw the list if it's not frozen */
   if (!GTK_CLIST_FROZEN (clist))
@@ -1494,7 +1492,8 @@ gtk_clist_set_pixtext (GtkCList * clist,
   
   gdk_pixmap_ref (pixmap);
   if (mask) gdk_pixmap_ref (mask);
-  cell_set_pixtext (clist, clist_row, column, text, spacing, pixmap, mask);
+  GTK_CLIST_CLASS_FW (clist)->set_cell_contents
+    (clist, clist_row, column, GTK_CELL_PIXTEXT, text, spacing, pixmap, mask);
 
   /* redraw the list if it's not frozen */
   if (!GTK_CLIST_FROZEN (clist))
@@ -1632,13 +1631,21 @@ gtk_clist_append (GtkCList * clist,
   g_return_val_if_fail (GTK_IS_CLIST (clist), -1);
   g_return_val_if_fail (text != NULL, -1);
 
-  return gtk_clist_insert (clist, clist->rows, text);
+  return GTK_CLIST_CLASS_FW (clist)->insert_row (clist, clist->rows, text);
 }
 
 gint
 gtk_clist_insert (GtkCList * clist,
 		  gint row,
 		  gchar * text[])
+{
+  return GTK_CLIST_CLASS_FW (clist)->insert_row (clist, row, text);
+}
+
+static gint
+real_insert_row (GtkCList * clist,
+		 gint row,
+		 gchar * text[])
 {
   gint i;
   GtkCListRow *clist_row;
@@ -1657,7 +1664,8 @@ gtk_clist_insert (GtkCList * clist,
   /* set the text in the row's columns */
   for (i = 0; i < clist->columns; i++)
     if (text[i])
-      cell_set_text (clist, clist_row, i, text[i]);
+      GTK_CLIST_CLASS_FW (clist)->set_cell_contents
+	(clist, clist_row, i, GTK_CELL_TEXT, text[i], 0, NULL ,NULL);
 
   if (!clist->rows)
     {
@@ -1725,6 +1733,13 @@ gtk_clist_insert (GtkCList * clist,
 void
 gtk_clist_remove (GtkCList * clist,
 		  gint row)
+{
+  GTK_CLIST_CLASS_FW (clist)->remove_row (clist, row);
+}
+
+static void
+real_remove_row (GtkCList * clist,
+		 gint row)
 {
   gint was_visible, was_selected;
   GList *list;
@@ -1966,12 +1981,6 @@ gtk_clist_set_row_data_full (GtkCList * clist,
   clist_row = (g_list_nth (clist->row_list, row))->data;
   clist_row->data = data;
   clist_row->destroy = destroy;
-
-  /* re-send the selected signal if data is changed/added
-   * so the application can respond to the new data -- 
-   * this could be questionable behavior */
-  if (clist_row->state == GTK_STATE_SELECTED)
-    select_row (clist, row, -1, NULL);
 }
 
 gpointer
@@ -4631,9 +4640,7 @@ hadjustment_value_changed (GtkAdjustment * adjustment,
  *   columns_delete
  *   row_new
  *   row_delete
- *   cell_empty
- *   cell_set_text
- *   cell_set_pixmap 
+ *   set_cell_contents 
  */
 static GtkCListColumn *
 columns_new (GtkCList * clist)
@@ -4715,7 +4722,8 @@ row_delete (GtkCList * clist,
   gint i;
 
   for (i = 0; i < clist->columns; i++)
-    cell_empty (clist, clist_row, i);
+    GTK_CLIST_CLASS_FW (clist)->set_cell_contents
+      (clist, clist_row, i, GTK_CELL_EMPTY, NULL, 0, NULL, NULL);
 
   if (clist_row->destroy)
     clist_row->destroy (clist_row->data);
@@ -4725,10 +4733,17 @@ row_delete (GtkCList * clist,
 }
 
 static void
-cell_empty (GtkCList * clist,
-	    GtkCListRow * clist_row,
-	    gint column)
+set_cell_contents (GtkCList * clist,
+		   GtkCListRow * clist_row,
+		   gint column,
+		   GtkCellType type,
+		   gchar * text,
+		   guint8 spacing,
+		   GdkPixmap * pixmap,
+		   GdkBitmap * mask)
 {
+  g_return_if_fail (clist_row != NULL);
+
   switch (clist_row->cell[column].type)
     {
     case GTK_CELL_EMPTY:
@@ -4741,14 +4756,14 @@ cell_empty (GtkCList * clist,
     case GTK_CELL_PIXMAP:
       gdk_pixmap_unref (GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap);
       if (GTK_CELL_PIXMAP (clist_row->cell[column])->mask)
-          gdk_bitmap_unref (GTK_CELL_PIXMAP (clist_row->cell[column])->mask);
+	gdk_bitmap_unref (GTK_CELL_PIXMAP (clist_row->cell[column])->mask);
       break;
       
     case GTK_CELL_PIXTEXT:
       g_free (GTK_CELL_PIXTEXT (clist_row->cell[column])->text);
       gdk_pixmap_unref (GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap);
       if (GTK_CELL_PIXTEXT (clist_row->cell[column])->mask)
-          gdk_bitmap_unref (GTK_CELL_PIXTEXT (clist_row->cell[column])->mask);
+	gdk_bitmap_unref (GTK_CELL_PIXTEXT (clist_row->cell[column])->mask);
       break;
 
     case GTK_CELL_WIDGET:
@@ -4760,59 +4775,40 @@ cell_empty (GtkCList * clist,
     }
 
   clist_row->cell[column].type = GTK_CELL_EMPTY;
-}
 
-static void
-cell_set_text (GtkCList * clist,
-	       GtkCListRow * clist_row,
-	       gint column,
-	       gchar * text)
-{
-  cell_empty (clist, clist_row, column);
-
-  if (text)
+  switch (type)
     {
-      clist_row->cell[column].type = GTK_CELL_TEXT;
-      GTK_CELL_TEXT (clist_row->cell[column])->text = g_strdup (text);
-    }
-}
+    case GTK_CELL_TEXT:
+      if (text)
+	{
+	  clist_row->cell[column].type = GTK_CELL_TEXT;
+	  GTK_CELL_TEXT (clist_row->cell[column])->text = g_strdup (text);
+	}
+      break;
 
-static void
-cell_set_pixmap (GtkCList * clist,
-		 GtkCListRow * clist_row,
-		 gint column,
-		 GdkPixmap * pixmap,
-		 GdkBitmap * mask)
-{
-  cell_empty (clist, clist_row, column);
+    case GTK_CELL_PIXMAP:
+      if (pixmap)
+	{
+	  clist_row->cell[column].type = GTK_CELL_PIXMAP;
+	  GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap = pixmap;
+	  /* We set the mask even if it is NULL */
+	  GTK_CELL_PIXMAP (clist_row->cell[column])->mask = mask;
+	}
+      break;
 
-  if (pixmap)
-    {
-      clist_row->cell[column].type = GTK_CELL_PIXMAP;
-      GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap = pixmap;
-      /* We set the mask even if it is NULL */
-      GTK_CELL_PIXMAP (clist_row->cell[column])->mask = mask;
-    }
-}
+    case GTK_CELL_PIXTEXT:
+      if (text && pixmap)
+	{
+	  clist_row->cell[column].type = GTK_CELL_PIXTEXT;
+	  GTK_CELL_PIXTEXT (clist_row->cell[column])->text = g_strdup (text);
+	  GTK_CELL_PIXTEXT (clist_row->cell[column])->spacing = spacing;
+	  GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap = pixmap;
+	  GTK_CELL_PIXTEXT (clist_row->cell[column])->mask = mask;
+	}
+      break;
 
-static void
-cell_set_pixtext (GtkCList * clist,
-		  GtkCListRow * clist_row,
-		  gint column,
-		  gchar * text,
-		  guint8 spacing,
-		  GdkPixmap * pixmap,
-		  GdkBitmap * mask)
-{
-  cell_empty (clist, clist_row, column);
-
-  if (text && pixmap)
-    {
-      clist_row->cell[column].type = GTK_CELL_PIXTEXT;
-      GTK_CELL_PIXTEXT (clist_row->cell[column])->text = g_strdup (text);
-      GTK_CELL_PIXTEXT (clist_row->cell[column])->spacing = spacing;
-      GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap = pixmap;
-      GTK_CELL_PIXTEXT (clist_row->cell[column])->mask = mask;
+    default:
+      break;
     }
 }
 
@@ -6005,14 +6001,42 @@ default_compare (GtkCList     *clist,
 		 gconstpointer ptr1,
 		 gconstpointer ptr2)
 {
+  char *text1 = NULL;
+  char *text2 = NULL;
+
   GtkCListRow *row1 = (GtkCListRow *) ptr1;
   GtkCListRow *row2 = (GtkCListRow *) ptr2;
-  char *text1;
-  char *text2;
-  
-  text1 = GTK_CELL_TEXT (row1->cell[clist->sort_column])->text;
-  text2 = GTK_CELL_TEXT (row2->cell[clist->sort_column])->text;
-  
+
+  switch (row1->cell[clist->sort_column].type)
+    {
+    case GTK_CELL_TEXT:
+      text1 = GTK_CELL_TEXT (row1->cell[clist->sort_column])->text;
+      break;
+    case GTK_CELL_PIXTEXT:
+      text1 = GTK_CELL_PIXTEXT (row1->cell[clist->sort_column])->text;
+      break;
+    default:
+      break;
+    }
+ 
+  switch (row2->cell[clist->sort_column].type)
+    {
+    case GTK_CELL_TEXT:
+      text2 = GTK_CELL_TEXT (row2->cell[clist->sort_column])->text;
+      break;
+    case GTK_CELL_PIXTEXT:
+      text2 = GTK_CELL_PIXTEXT (row2->cell[clist->sort_column])->text;
+      break;
+    default:
+      break;
+    }
+
+  if (!text2)
+    return (text1 != NULL);
+
+  if (!text1)
+    return -1;
+
   return strcmp (text1, text2);
 }
 
@@ -6152,6 +6176,12 @@ gtk_clist_mergesort (GtkCList *clist,
 void
 gtk_clist_sort (GtkCList *clist)
 {
+  GTK_CLIST_CLASS_FW (clist)->sort_list (clist);
+}
+
+static void
+real_sort_list (GtkCList *clist)
+{
   GList *list;
   GList *work;
   gint i;
@@ -6163,7 +6193,7 @@ gtk_clist_sort (GtkCList *clist)
   if (clist->rows <= 1)
     return;
 
-  if (GTK_WIDGET_HAS_GRAB (GTK_WIDGET (clist)))
+  if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist))
     return;
 
   if (clist->anchor != -1 && clist->selection_mode == GTK_SELECTION_EXTENDED)
