@@ -1,3 +1,8 @@
+2001-07-09  Peter Williams  <peterw@ximian.com>
+
+	* gtk/Makefile.am ($(srcdir)/stamp-gtk.defs): Add a cd $(srcdir)
+	for when srcdir != builddir
+
 Mon Jul  9 12:50:51 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c: remove gtk_tree_model_get_first in favor of

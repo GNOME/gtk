@@ -428,7 +428,8 @@ $(srcdir)/stamp-gtk.defs: @REBUILD@ gtk.defs gtk-boxed.defs $(gtk_public_h_sourc
 	   .*) glib_mkenums=`pwd`/@GLIB_MKENUMS@ ;;			\
 	   *) glib_mkenums=@GLIB_MKENUMS@ ;;							\
 	esac;											\
-	$$glib_mkenums --comments ";; @comment@" \
+	cd $(srcdir) \
+	&& $$glib_mkenums --comments ";; @comment@" \
 			--fprod "; enumerations from \"@filename@\"\n " \
 	                --vhead "(define-@type@ @EnumName@" \
 	                --vprod "   (@valuenick@ @VALUENAME@)" \
