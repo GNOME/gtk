@@ -1,3 +1,40 @@
+Wed Mar 17 09:00:00 1999  Tim Janik  <timj@gtk.org>
+
+	* plugging problems reported by "Bruce Mitchener, Jr."
+	<bruce@puremagic.com> due to a purify session.
+
+	* gtk/gtkstyle.c:
+	(gtk_style_ref): 
+	(gtk_style_unref): assert ref_count to be > 0.
+
+	* gtk/gtkclist.c (gtk_clist_set_cell_style): { 0 } initilaize
+	the requisition.
+	(gtk_clist_set_shift): likewise.
+
+	* gtk/gtklayout.c: introduce gtk_layout_finalize() to unref the
+	adjustments.
+
+	* gdk/gdkselection.c (gdk_selection_property_get): first XFree(t),
+	then reset it to NULL.
+
+	* gtk/gtklist.c (gtk_list_horizontal_timeout): zero initialize the
+	event before sending it and set send_event to TRUE (which needs to
+	be done for *all* synthesized events).
+	(gtk_list_vertical_timeout): likewise.
+
+	* gdk/gdkcolor.c:
+	(gdk_colors_free): 
+	(gdk_colormap_free_colors): use colormap->colors[in_pixels[i]] as the
+	key for g_hash_table_remove() in both functions, this prevents us
+	from accessing possibly uninitialized portions of a GdkColor structure
+	where we are only interested in its pixel value.
+
+	* gtk/gtktipsquery.c (gtk_tips_query_destroy): plug small memory
+	leaks.
+
+	* gtk/gtkdrawingarea.c (gtk_drawing_area_send_configure): set send_event
+	to TRUE when synthesizing events.
+
 Wed Mar 17 00:44:23 1999  Tim Janik  <timj@gtk.org>
 
 	* configure.in: bumped version number to Gtk+1.2.1, interface 0,

@@ -2414,7 +2414,7 @@ gtk_clist_set_shift (GtkCList *clist,
 		     gint      vertical,
 		     gint      horizontal)
 {
-  GtkRequisition requisition;
+  GtkRequisition requisition = { 0 };
   GtkCListRow *clist_row;
 
   g_return_if_fail (clist != NULL);
@@ -3234,7 +3234,7 @@ gtk_clist_set_cell_style (GtkCList *clist,
 			  gint      column,
 			  GtkStyle *style)
 {
-  GtkRequisition requisition;
+  GtkRequisition requisition = { 0 };
   GtkCListRow *clist_row;
 
   g_return_if_fail (clist != NULL);

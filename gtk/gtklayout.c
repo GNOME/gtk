@@ -53,6 +53,7 @@ struct _GtkLayoutChild {
 static void     gtk_layout_class_init         (GtkLayoutClass *class);
 static void     gtk_layout_init               (GtkLayout      *layout);
 
+static void     gtk_layout_finalize           (GtkObject      *object);
 static void     gtk_layout_realize            (GtkWidget      *widget);
 static void     gtk_layout_unrealize          (GtkWidget      *widget);
 static void     gtk_layout_map                (GtkWidget      *widget);
@@ -196,6 +197,17 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
 
   if (need_adjust)
     gtk_layout_adjustment_changed (NULL, layout);
+}
+
+static void
+gtk_layout_finalize (GtkObject *object)
+{
+  GtkLayout *layout = GTK_LAYOUT (object);
+
+  gtk_object_unref (GTK_OBJECT (layout->hadjustment));
+  gtk_object_unref (GTK_OBJECT (layout->vadjustment));
+
+  GTK_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 void           
@@ -374,6 +386,8 @@ gtk_layout_class_init (GtkLayoutClass *class)
 
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
+  object_class->finalize = gtk_layout_finalize;
+
   widget_class->realize = gtk_layout_realize;
   widget_class->unrealize = gtk_layout_unrealize;
   widget_class->map = gtk_layout_map;
@@ -382,6 +396,11 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class->draw = gtk_layout_draw;
   widget_class->expose_event = gtk_layout_expose;
 
+  container_class->remove = gtk_layout_remove;
+  container_class->forall = gtk_layout_forall;
+
+  class->set_scroll_adjustments = gtk_layout_set_adjustments;
+
   widget_class->set_scroll_adjustments_signal =
     gtk_signal_new ("set_scroll_adjustments",
 		    GTK_RUN_LAST,
@@ -389,11 +408,6 @@ gtk_layout_class_init (GtkLayoutClass *class)
 		    GTK_SIGNAL_OFFSET (GtkLayoutClass, set_scroll_adjustments),
 		    gtk_marshal_NONE__POINTER_POINTER,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
-
-  container_class->remove = gtk_layout_remove;
-  container_class->forall = gtk_layout_forall;
-
-  class->set_scroll_adjustments = gtk_layout_set_adjustments;
 }
 
 static void

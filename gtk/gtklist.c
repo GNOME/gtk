@@ -2410,7 +2410,7 @@ static gint
 gtk_list_horizontal_timeout (GtkWidget *list)
 {
   gint x, y;
-  GdkEventMotion event;
+  GdkEventMotion event = { 0 };
   GdkModifierType mask;
 
   GDK_THREADS_ENTER ();
@@ -2418,6 +2418,9 @@ gtk_list_horizontal_timeout (GtkWidget *list)
   GTK_LIST (list)->htimer = 0;
   gdk_window_get_pointer (list->window, &x, &y, &mask);
 
+  event.type = GDK_MOTION_NOTIFY;
+  event.send_event = TRUE;
+  event.window = NULL;
   event.is_hint = 0;
   event.x = x;
   event.y = y;
@@ -2435,7 +2438,7 @@ gtk_list_vertical_timeout (GtkWidget *list)
 {
   gint x;
   gint y;
-  GdkEventMotion event;
+  GdkEventMotion event = { 0 };
   GdkModifierType mask;
 
   GDK_THREADS_ENTER ();
@@ -2443,6 +2446,9 @@ gtk_list_vertical_timeout (GtkWidget *list)
   GTK_LIST (list)->vtimer = 0;
   gdk_window_get_pointer (list->window, &x, &y, &mask);
 
+  event.type = GDK_MOTION_NOTIFY;
+  event.send_event = TRUE;
+  event.window = NULL;
   event.is_hint = 0;
   event.x = x;
   event.y = y;

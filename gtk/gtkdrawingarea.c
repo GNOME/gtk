@@ -160,6 +160,7 @@ gtk_drawing_area_send_configure (GtkDrawingArea *darea)
 
   event.type = GDK_CONFIGURE;
   event.window = widget->window;
+  event.send_event = TRUE;
   event.x = widget->allocation.x;
   event.y = widget->allocation.y;
   event.width = widget->allocation.width;

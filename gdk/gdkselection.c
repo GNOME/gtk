@@ -105,7 +105,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
   gulong length;
   GdkAtom prop_type;
   gint prop_format;
-  guchar *t;
+  guchar *t = NULL;
 
   g_return_val_if_fail (requestor != NULL, 0);
 
@@ -133,11 +133,11 @@ gdk_selection_property_get (GdkWindow  *requestor,
       *data = NULL;
       return 0;
     }
-    
+  
   if (t)
     {
-      t = NULL;
       XFree (t);
+      t = NULL;
     }
 
   /* Add on an extra byte to handle null termination.  X guarantees

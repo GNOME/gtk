@@ -4645,7 +4645,7 @@ void create_ctree (void)
   GtkWidget *check;
   GtkAdjustment *adj;
   GtkWidget *spinner;
-  GdkColor transparent;
+  GdkColor transparent = { 0 };
 
   char *title[] = { "Tree" , "Info" };
   char buf[80];
@@ -5130,7 +5130,10 @@ void
 font_selection_ok (GtkWidget              *w,
 		   GtkFontSelectionDialog *fs)
 {
-  g_print ("%s\n", gtk_font_selection_dialog_get_font_name (fs));
+  gchar *s = gtk_font_selection_dialog_get_font_name (fs);
+
+  g_print ("%s\n", s);
+  g_free (s);
   gtk_widget_destroy (GTK_WIDGET (fs));
 }
 

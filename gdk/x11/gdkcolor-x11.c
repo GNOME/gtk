@@ -432,55 +432,6 @@ gdk_colors_alloc (GdkColormap   *colormap,
   return return_val;
 }
 
-/* This is almost identical to gdk_colormap_free_colors.
- * Keep them in sync!
- */
-void
-gdk_colors_free (GdkColormap *colormap,
-		 gulong      *in_pixels,
-		 gint         in_npixels,
-		 gulong       planes)
-{
-  GdkColormapPrivate *private;
-  gulong *pixels;
-  gint npixels = 0;
-  gint i;
-
-  g_return_if_fail (colormap != NULL);
-  g_return_if_fail (in_pixels != NULL);
-
-  private = (GdkColormapPrivate*) colormap;
-
-  if ((private->visual->type != GDK_VISUAL_PSEUDO_COLOR) &&
-      (private->visual->type != GDK_VISUAL_GRAYSCALE))
-    return;
-  
-  pixels = g_new (gulong, in_npixels);
-
-  for (i=0; i<in_npixels; i++)
-    {
-      gulong pixel = in_pixels[i];
-      
-      if (private->info[pixel].ref_count)
-	{
-	  private->info[pixel].ref_count--;
-
-	  if (private->info[pixel].ref_count == 0)
-	    {
-	      pixels[npixels++] = pixel;
-	      if (!(private->info[pixel].flags & GDK_COLOR_WRITEABLE))
-		g_hash_table_remove (private->hash, &colormap->colors[in_pixels[i]]);
-	      private->info[pixel].flags = 0;
-	    }
-	}
-    }
-
-  if (npixels)
-    XFreeColors (private->xdisplay, private->xcolormap,
-		 pixels, npixels, planes);
-  g_free (pixels);
-}
-
 /*
  *--------------------------------------------------------------
  * gdk_color_copy
@@ -607,6 +558,104 @@ gdk_color_parse (const gchar *spec,
     return_val = FALSE;
 
   return return_val;
+}
+
+/* This is almost identical to gdk_colormap_free_colors.
+ * Keep them in sync!
+ */
+void
+gdk_colors_free (GdkColormap *colormap,
+		 gulong      *in_pixels,
+		 gint         in_npixels,
+		 gulong       planes)
+{
+  GdkColormapPrivate *private;
+  gulong *pixels;
+  gint npixels = 0;
+  gint i;
+
+  g_return_if_fail (colormap != NULL);
+  g_return_if_fail (in_pixels != NULL);
+
+  private = (GdkColormapPrivate*) colormap;
+
+  if ((private->visual->type != GDK_VISUAL_PSEUDO_COLOR) &&
+      (private->visual->type != GDK_VISUAL_GRAYSCALE))
+    return;
+  
+  pixels = g_new (gulong, in_npixels);
+
+  for (i=0; i<in_npixels; i++)
+    {
+      gulong pixel = in_pixels[i];
+      
+      if (private->info[pixel].ref_count)
+	{
+	  private->info[pixel].ref_count--;
+
+	  if (private->info[pixel].ref_count == 0)
+	    {
+	      pixels[npixels++] = pixel;
+	      if (!(private->info[pixel].flags & GDK_COLOR_WRITEABLE))
+		g_hash_table_remove (private->hash, &colormap->colors[pixel]);
+	      private->info[pixel].flags = 0;
+	    }
+	}
+    }
+
+  if (npixels)
+    XFreeColors (private->xdisplay, private->xcolormap,
+		 pixels, npixels, planes);
+  g_free (pixels);
+}
+
+/* This is almost identical to gdk_colors_free.
+ * Keep them in sync!
+ */
+void
+gdk_colormap_free_colors (GdkColormap *colormap,
+			  GdkColor    *colors,
+			  gint         ncolors)
+{
+  GdkColormapPrivate *private;
+  gulong *pixels;
+  gint npixels = 0;
+  gint i;
+
+  g_return_if_fail (colormap != NULL);
+  g_return_if_fail (colors != NULL);
+
+  private = (GdkColormapPrivate*) colormap;
+
+  if ((private->visual->type != GDK_VISUAL_PSEUDO_COLOR) &&
+      (private->visual->type != GDK_VISUAL_GRAYSCALE))
+    return;
+
+  pixels = g_new (gulong, ncolors);
+
+  for (i=0; i<ncolors; i++)
+    {
+      gulong pixel = colors[i].pixel;
+      
+      if (private->info[pixel].ref_count)
+	{
+	  private->info[pixel].ref_count--;
+
+	  if (private->info[pixel].ref_count == 0)
+	    {
+	      pixels[npixels++] = pixel;
+	      if (!(private->info[pixel].flags & GDK_COLOR_WRITEABLE))
+		g_hash_table_remove (private->hash, &colormap->colors[pixel]);
+	      private->info[pixel].flags = 0;
+	    }
+	}
+    }
+
+  if (npixels)
+    XFreeColors (private->xdisplay, private->xcolormap,
+		 pixels, npixels, 0);
+
+  g_free (pixels);
 }
 
 /********************
@@ -1024,55 +1073,6 @@ gdk_colormap_alloc_color (GdkColormap *colormap,
 			     &success);
 
   return success;
-}
-
-/* This is almost identical to gdk_colors_free.
- * Keep them in sync!
- */
-void
-gdk_colormap_free_colors (GdkColormap *colormap,
-			  GdkColor    *colors,
-			  gint         ncolors)
-{
-  GdkColormapPrivate *private;
-  gulong *pixels;
-  gint npixels = 0;
-  gint i;
-
-  g_return_if_fail (colormap != NULL);
-  g_return_if_fail (colors != NULL);
-
-  private = (GdkColormapPrivate*) colormap;
-
-  if ((private->visual->type != GDK_VISUAL_PSEUDO_COLOR) &&
-      (private->visual->type != GDK_VISUAL_GRAYSCALE))
-    return;
-
-  pixels = g_new (gulong, ncolors);
-
-  for (i=0; i<ncolors; i++)
-    {
-      gulong pixel = colors[i].pixel;
-      
-      if (private->info[pixel].ref_count)
-	{
-	  private->info[pixel].ref_count--;
-
-	  if (private->info[pixel].ref_count == 0)
-	    {
-	      pixels[npixels++] = pixel;
-	      if (!(private->info[pixel].flags & GDK_COLOR_WRITEABLE))
-		g_hash_table_remove (private->hash, &colors[i]);
-	      private->info[pixel].flags = 0;
-	    }
-	}
-    }
-
-  if (npixels)
-    XFreeColors (private->xdisplay, private->xcolormap,
-		 pixels, npixels, 0);
-
-  g_free (pixels);
 }
 
 gboolean

@@ -563,6 +563,7 @@ GtkStyle*
 gtk_style_ref (GtkStyle *style)
 {
   g_return_val_if_fail (style != NULL, NULL);
+  g_return_val_if_fail (style->ref_count > 0, NULL);
   
   style->ref_count += 1;
   return style;
@@ -572,6 +573,7 @@ void
 gtk_style_unref (GtkStyle *style)
 {
   g_return_if_fail (style != NULL);
+  g_return_if_fail (style->ref_count > 0);
   
   style->ref_count -= 1;
   if (style->ref_count == 0)
