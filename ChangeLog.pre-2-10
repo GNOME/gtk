@@ -1,5 +1,8 @@
 2004-11-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaction.c (_gtk_action_sync_menu_visible): Use 
+	gtk_widget_{hide,show} instead of g_object_set (..."visible"...).
+
 	* tests/testfilechooserbutton.c (main): Disable the SAVE 
 	and CREATE_FOLDER modes.  (#157675, Christian Persch)
 

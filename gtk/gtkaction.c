@@ -665,9 +665,10 @@ _gtk_action_sync_menu_visible (GtkAction *action,
   visible = gtk_action_is_visible (action);
   hide_if_empty = action->private_data->hide_if_empty;
 
-  g_object_set (G_OBJECT (proxy),
-		"visible", visible && !(empty && hide_if_empty),
-		NULL);
+  if (visible && !(empty && hide_if_empty))
+    gtk_widget_show (proxy);
+  else
+    gtk_widget_hide (proxy);
 }
 
 gboolean _gtk_menu_is_empty (GtkWidget *menu);
