@@ -1,3 +1,14 @@
+Thu Jun 20 15:53:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Patch from Erwann Chenede.
+
+	* gdk/x11/gdkdisplay-x11.[ch] gdk/x11/gdkprivate-x11.h:
+	Introduce a yes/no/unknown GdkTristate, use it
+	in a couple of places. (#79962)
+
+	* gdk/x11/gdkwindow-x11.c gdk/x11/gdkdisplay-x11.h: Make 
+	gravity_works per-display. (#79963)
+
 Thu Jun 20 15:36:40 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkselection.c (gtk_selection_owner_set): Get

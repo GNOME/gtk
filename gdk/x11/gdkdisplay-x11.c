@@ -132,8 +132,9 @@ gdk_open_display (const gchar *display_name)
   display_x11->default_screen = display_x11->screens[DefaultScreen (display_x11->xdisplay)];
   display_x11->leader_window = XCreateSimpleWindow (display_x11->xdisplay,
 						    GDK_SCREEN_X11 (display_x11->default_screen)->xroot_window,
-						    10, 10, 10, 10, 0, 0, 0);
-  
+						    10, 10, 10, 10, 0, 0, 0);  
+  display_x11->have_shape = GDK_UNKNOWN;
+  display_x11->gravity_works = GDK_UNKNOWN;
 
   if (_gdk_synchronize)
     XSynchronize (display_x11->xdisplay, True);
@@ -197,6 +198,8 @@ gdk_open_display (const gchar *display_name)
   _gdk_events_init (display);
   _gdk_input_init (display);
   _gdk_dnd_init (display);
+
+  g_signal_emit_by_name (gdk_library_get(), "display_opened", display);
 
   return display;
 }

@@ -44,6 +44,13 @@ typedef struct _GdkDisplayX11Class GdkDisplayX11Class;
 #define GDK_IS_DISPLAY_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DISPLAY_X11))
 #define GDK_DISPLAY_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY_X11, GdkDisplayX11Class))
 
+typedef enum 
+{
+  GDK_UNKNOWN,
+  GDK_NO,
+  GDK_YES
+} GdkTristate;
+
 struct _GdkDisplayX11
 {
   GdkDisplay parent_instance;
@@ -68,7 +75,8 @@ struct _GdkDisplayX11
 
   gboolean use_xshm;
   gboolean have_shm_pixmaps;
-  gint     have_shape;
+  GdkTristate have_shape;
+  GdkTristate gravity_works;
   
   /* Information about current pointer and keyboard grabs held by this
    * client. If gdk_pointer_xgrab_window or gdk_keyboard_xgrab_window

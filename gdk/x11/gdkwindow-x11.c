@@ -2666,23 +2666,22 @@ gdk_window_add_colormap_windows (GdkWindow *window)
 static gboolean
 gdk_window_have_shape_ext (GdkDisplay *display)
 {
-  enum { UNKNOWN, NO, YES };
   GdkDisplayX11 *display_x11;
   
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
   display_x11 = GDK_DISPLAY_X11 (display);
   
-  if (display_x11->have_shape == UNKNOWN)
+  if (display_x11->have_shape == GDK_UNKNOWN)
     {
       int ignore;
       if (XQueryExtension (display_x11->xdisplay, "SHAPE", &ignore, &ignore, &ignore))
-	display_x11->have_shape = YES;
+	display_x11->have_shape = GDK_YES;
       else
-	display_x11->have_shape = NO;
+	display_x11->have_shape = GDK_NO;
     }
   
-  return (display_x11->have_shape == YES);
+  return (display_x11->have_shape == GDK_YES);
 }
 
 #define WARN_SHAPE_TOO_BIG() g_warning ("GdkWindow is too large to allow the use of shape masks or shape regions.")
@@ -3943,11 +3942,9 @@ gdk_window_merge_child_shapes (GdkWindow *window)
 static gboolean
 gdk_window_gravity_works (GdkWindow *window)
 {
-  enum { UNKNOWN, NO, YES };
-  static gint gravity_works = UNKNOWN;
-  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (window);
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_DRAWABLE_DISPLAY (window));
   
-  if (gravity_works == UNKNOWN)
+  if (display_x11->gravity_works == GDK_UNKNOWN)
     {
       GdkWindowAttr attr;
       GdkWindow *parent;
@@ -3957,11 +3954,11 @@ gdk_window_gravity_works (GdkWindow *window)
       /* This particular server apparently has a bug so that the test
        * works but the actual code crashes it
        */
-      if ((!strcmp (XServerVendor (GDK_DISPLAY_XDISPLAY (display)),
+      if ((!strcmp (XServerVendor (display_x11->xdisplay),
 		    "Sun Microsystems, Inc.")) &&
-	  (VendorRelease (GDK_DISPLAY_XDISPLAY (display)) == 3400))
+	  (VendorRelease (display_x11->xdisplay) == 3400))
 	{
-	  gravity_works = NO;
+	  display_x11->gravity_works = GDK_NO;
 	  return FALSE;
 	}
       
@@ -3995,10 +3992,10 @@ gdk_window_gravity_works (GdkWindow *window)
       gdk_window_destroy (parent);
       gdk_window_destroy (child);
       
-      gravity_works = ((y == -20) ? YES : NO);
+      display_x11->gravity_works = ((y == -20) ? GDK_YES : GDK_NO);
     }
   
-  return (gravity_works == YES);
+  return (display_x11->gravity_works == GDK_YES);
 }
 
 static void
