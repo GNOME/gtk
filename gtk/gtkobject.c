@@ -127,7 +127,7 @@ gtk_object_get_type (void)
 static void
 gtk_object_base_class_init (GtkObjectClass *class)
 {
-  /* reset instance specific fields that don't get inhrited */
+  /* reset instance specific fields that don't get inherited */
   class->signals = NULL;
   class->nsignals = 0;
   class->n_args = 0;
@@ -327,19 +327,13 @@ gtk_object_class_add_signals (GtkObjectClass *class,
 			      guint          *signals,
 			      guint           nsignals)
 {
-  guint *new_signals;
-  guint i;
-
-  g_return_if_fail (class != NULL);
-
-  new_signals = g_new (guint, class->nsignals + nsignals);
-  for (i = 0; i < class->nsignals; i++)
-    new_signals[i] = class->signals[i];
-  for (i = 0; i < nsignals; i++)
-    new_signals[class->nsignals + i] = signals[i];
-
-  g_free (class->signals);
-  class->signals = new_signals;
+  g_return_if_fail (GTK_IS_OBJECT_CLASS (class));
+  if (!nsignals)
+    return;
+  g_return_if_fail (signals != NULL);
+  
+  class->signals = g_renew (guint, class->signals, class->nsignals + nsignals);
+  memcpy (class->signals + class->nsignals, signals, nsignals * sizeof (guint));
   class->nsignals += nsignals;
 }
 

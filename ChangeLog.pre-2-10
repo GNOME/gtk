@@ -1,3 +1,9 @@
+Mon Sep 21 07:44:30 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkobject.c (gtk_object_class_add_signals): reallocate
+	the required memory block, rather than allocating it newly from
+	scratch and doing a full-blown block copy on it.
+
 Mon Sep 21 02:30:06 1998  Tim Janik  <timj@gtk.org>
 
         * NEWS file update for upcoming release of Gtk+ version 1.1.2,
