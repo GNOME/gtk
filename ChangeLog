@@ -1,3 +1,7 @@
+2002-06-13  jacob berkman  <jacob@ximian.com>
+
+	* Makefile.am (EXTRA_DIST): remove po/README.tools
+
 Thu Jun 13 11:36:37 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c (_gtk_drag_source_handle_event): Save
