@@ -185,6 +185,10 @@ struct _GtkTextViewClass
   /* overwrite */
   void (* toggle_overwrite) (GtkTextView *text_view);
 
+  /* propagates to GtkWindow move_focus */
+  void (* move_focus)       (GtkTextView     *text_view,
+                             GtkDirectionType direction);
+  
   GtkFunction pad1;
   GtkFunction pad2;
   GtkFunction pad3;

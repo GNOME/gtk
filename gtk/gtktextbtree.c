@@ -1164,6 +1164,7 @@ _gtk_text_btree_insert_child_anchor (GtkTextIter        *iter,
   seg = _gtk_widget_segment_new (anchor);
 
   tree = seg->body.child.tree = _gtk_text_iter_get_btree (iter);
+  seg->body.child.line = _gtk_text_iter_get_text_line (iter);
   
   insert_pixbuf_or_widget_segment (iter, seg);
 

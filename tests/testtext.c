@@ -1378,6 +1378,71 @@ do_add_children (gpointer callback_data,
 }
 
 static void
+do_add_focus_children (gpointer callback_data,
+                       guint callback_action,
+                       GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+  GtkWidget *child;
+  GtkTextChildAnchor *anchor;
+  GtkTextIter iter;
+  GtkTextView *text_view;
+
+  text_view = GTK_TEXT_VIEW (view->text_view);
+  
+  child = gtk_button_new_with_mnemonic ("Button _A in widget->window");
+
+  gtk_text_view_add_child_in_window (text_view,
+                                     child,
+                                     GTK_TEXT_WINDOW_WIDGET,
+                                     200, 200);
+
+  child = gtk_button_new_with_mnemonic ("Button _B in widget->window");
+
+  gtk_text_view_add_child_in_window (text_view,
+                                     child,
+                                     GTK_TEXT_WINDOW_WIDGET,
+                                     350, 300);
+
+  child = gtk_button_new_with_mnemonic ("Button _C in left window");
+
+  gtk_text_view_add_child_in_window (text_view,
+                                     child,
+                                     GTK_TEXT_WINDOW_LEFT,
+                                     0, 0);
+
+  child = gtk_button_new_with_mnemonic ("Button _D in right window");
+  
+  gtk_text_view_add_child_in_window (text_view,
+                                     child,
+                                     GTK_TEXT_WINDOW_RIGHT,
+                                     0, 0);
+
+  gtk_text_buffer_get_start_iter (view->buffer->buffer, &iter);
+  
+  anchor = gtk_text_buffer_create_child_anchor (view->buffer->buffer, &iter);
+
+  child = gtk_button_new_with_mnemonic ("Button _E in buffer");
+  
+  gtk_text_view_add_child_at_anchor (text_view, child, anchor);
+
+  anchor = gtk_text_buffer_create_child_anchor (view->buffer->buffer, &iter);
+
+  child = gtk_button_new_with_mnemonic ("Button _F in buffer");
+  
+  gtk_text_view_add_child_at_anchor (text_view, child, anchor);
+
+  anchor = gtk_text_buffer_create_child_anchor (view->buffer->buffer, &iter);
+
+  child = gtk_button_new_with_mnemonic ("Button _G in buffer");
+  
+  gtk_text_view_add_child_at_anchor (text_view, child, anchor);
+
+  /* show all the buttons */
+  gtk_widget_show_all (view->text_view);
+}
+
+static void
 view_init_menus (View *view)
 {
   GtkTextDirection direction = gtk_widget_get_direction (view->text_view);
@@ -1470,6 +1535,7 @@ static GtkItemFactoryEntry menu_items[] =
   { "/Test/_Example",  	 NULL,         do_example,  0, NULL },
   { "/Test/_Insert and scroll", NULL,         do_insert_and_scroll,  0, NULL },
   { "/Test/_Add fixed children", NULL,         do_add_children,  0, NULL },
+  { "/Test/A_dd focusable children", NULL,    do_add_focus_children,  0, NULL },
 };
 
 static gboolean
@@ -2331,7 +2397,8 @@ line_numbers_expose (GtkWidget      *widget,
   
   g_object_unref (G_OBJECT (layout));
 
-  return TRUE;
+  /* don't stop emission, need to draw children */
+  return FALSE;
 }
 
 static View *

@@ -1,5 +1,20 @@
 2002-01-01  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gtktextview.c (gtk_text_view_expose_event): propagate
+	exposes to no window children not in the buffer window.
+	(gtk_text_view_class_init): add move_focus bindings for Ctrl-Tab
+	- is this the right way to do it?
+	(gtk_text_view_focus): add focus method, just chains up for now, 
+	I'm not sure why the GtkContainer implementation doesn't work
+
+	* gtk/gtktextbtree.c (_gtk_text_btree_insert_child_anchor): fill
+	in the text line for the child anchor segment
+
+	* tests/testtext.c (do_add_focus_children): add another test
+	example (to put focusable buttons into the widget)
+
+2002-01-01  Havoc Pennington  <hp@pobox.com>
+
 	* docs/README.linux-fb: note that this file is obsolete
 
 	* docs/Changes-2.0.txt, docs/Changes-1.2.txt: Add notes to these

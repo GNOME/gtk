@@ -44,6 +44,7 @@
 #include "gtkimmulticontext.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtktextutil.h"
+#include "gtkwindow.h"
 #include <string.h>
 
 /* How scrolling, validation, exposes, etc. work.
@@ -115,6 +116,7 @@ enum
   COPY_CLIPBOARD,
   PASTE_CLIPBOARD,
   TOGGLE_OVERWRITE,
+  MOVE_FOCUS,
   LAST_SIGNAL
 };
 
@@ -177,6 +179,9 @@ static gint gtk_text_view_expose_event         (GtkWidget        *widget,
                                                 GdkEventExpose   *expose);
 static void gtk_text_view_draw_focus           (GtkWidget        *widget);
 static void gtk_text_view_grab_focus           (GtkWidget        *widget);
+static gboolean gtk_text_view_focus            (GtkWidget        *widget,
+                                                GtkDirectionType  direction);
+
 
 /* Source side drag signals */
 static void gtk_text_view_drag_begin       (GtkWidget        *widget,
@@ -234,6 +239,8 @@ static void gtk_text_view_cut_clipboard    (GtkTextView           *text_view);
 static void gtk_text_view_copy_clipboard   (GtkTextView           *text_view);
 static void gtk_text_view_paste_clipboard  (GtkTextView           *text_view);
 static void gtk_text_view_toggle_overwrite (GtkTextView           *text_view);
+static void gtk_text_view_move_focus       (GtkTextView           *text_view,
+                                            GtkDirectionType       direction_type);
 static void gtk_text_view_unselect         (GtkTextView           *text_view);
 
 static void     gtk_text_view_validate_onscreen     (GtkTextView        *text_view);
@@ -482,6 +489,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->motion_notify_event = gtk_text_view_motion_event;
   widget_class->expose_event = gtk_text_view_expose_event;
   widget_class->grab_focus = gtk_text_view_grab_focus;
+  widget_class->focus = gtk_text_view_focus;
   
   widget_class->drag_begin = gtk_text_view_drag_begin;
   widget_class->drag_end = gtk_text_view_drag_end;
@@ -507,6 +515,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   klass->copy_clipboard = gtk_text_view_copy_clipboard;
   klass->paste_clipboard = gtk_text_view_paste_clipboard;
   klass->toggle_overwrite = gtk_text_view_toggle_overwrite;
+  klass->move_focus = gtk_text_view_move_focus;
   klass->set_scroll_adjustments = gtk_text_view_set_scroll_adjustments;
 
   /*
@@ -696,6 +705,14 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                     _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
+  signals[MOVE_FOCUS] =
+    gtk_signal_new ("move_focus",
+                    GTK_RUN_LAST | GTK_RUN_ACTION,
+                    GTK_CLASS_TYPE (object_class),
+                    GTK_SIGNAL_OFFSET (GtkTextViewClass, move_focus),
+                    _gtk_marshal_VOID__ENUM,
+                    GTK_TYPE_NONE, 1, GTK_TYPE_DIRECTION_TYPE);
+  
   signals[SET_SCROLL_ADJUSTMENTS] =
     gtk_signal_new ("set_scroll_adjustments",
                     GTK_RUN_LAST,
@@ -928,6 +945,27 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                 "toggle_overwrite", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Insert, 0,
                                 "toggle_overwrite", 0);
+
+  /* Control-tab focus motion */
+  gtk_binding_entry_add_signal (binding_set, GDK_Tab, GDK_CONTROL_MASK,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, GDK_CONTROL_MASK,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
+  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, GDK_CONTROL_MASK,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_FORWARD);
+  
+  gtk_binding_entry_add_signal (binding_set, GDK_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
+  gtk_binding_entry_add_signal (binding_set, GDK_ISO_Left_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                "move_focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
 }
 
 static void
@@ -3960,7 +3998,9 @@ gtk_text_view_paint (GtkWidget      *widget,
 
 static gint
 gtk_text_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
-{  
+{
+  GSList *tmp_list;
+  
   if (event->window == gtk_text_view_get_window (GTK_TEXT_VIEW (widget),
                                                  GTK_TEXT_WINDOW_TEXT))
     {
@@ -3971,6 +4011,23 @@ gtk_text_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
   if (event->window == widget->window)
     gtk_text_view_draw_focus (widget);
 
+  /* Propagate exposes to all children not in the buffer. */
+  tmp_list = GTK_TEXT_VIEW (widget)->children;
+  while (tmp_list != NULL)
+    {
+      GtkTextViewChild *vc = tmp_list->data;
+
+      /* propagate_expose checks that event->window matches
+       * child->window
+       */
+      if (vc->type != GTK_TEXT_WINDOW_TEXT)
+        gtk_container_propagate_expose (GTK_CONTAINER (widget),
+                                        vc->widget,
+                                        event);
+      
+      tmp_list = tmp_list->next;
+    }
+  
   return FALSE;
 }
 
@@ -4014,6 +4071,19 @@ gtk_text_view_grab_focus (GtkWidget *widget)
     gtk_text_view_scroll_mark_onscreen (text_view,
                                         gtk_text_buffer_get_mark (get_buffer (text_view),
                                                                   "insert"));
+}
+
+static gboolean
+gtk_text_view_focus (GtkWidget        *widget,
+                     GtkDirectionType  direction)
+{
+  GtkTextView *text_view;
+  GtkContainer *container;
+  
+  text_view = GTK_TEXT_VIEW (widget);
+  container = GTK_CONTAINER (widget);  
+  
+  return GTK_WIDGET_CLASS (parent_class)->focus (widget, direction);
 }
 
 /*
@@ -4632,6 +4702,23 @@ static void
 gtk_text_view_toggle_overwrite (GtkTextView *text_view)
 {
   text_view->overwrite_mode = !text_view->overwrite_mode;
+}
+
+static void
+gtk_text_view_move_focus (GtkTextView     *text_view,
+                          GtkDirectionType direction_type)
+{
+  GtkWidget *toplevel;
+
+  toplevel =
+    gtk_widget_get_ancestor (GTK_WIDGET (text_view), GTK_TYPE_WINDOW);
+
+  if (toplevel == NULL)
+    return;
+
+  /* Propagate to toplevel */
+  g_signal_emit_by_name (G_OBJECT (toplevel), "move_focus",
+                         direction_type);
 }
 
 /*

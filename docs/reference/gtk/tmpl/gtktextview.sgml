@@ -639,6 +639,14 @@ types related to the text widget and how they work together.
 @arg2: 
 @arg3: 
 
+<!-- ##### SIGNAL GtkTextView::move-focus ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkTextView::paste-clipboard ##### -->
 <para>
 

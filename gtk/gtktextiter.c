@@ -5134,8 +5134,10 @@ _gtk_text_btree_get_iter_at_child_anchor (GtkTextBTree       *tree,
   g_return_if_fail (iter != NULL);
   g_return_if_fail (tree != NULL);
   g_return_if_fail (GTK_IS_TEXT_CHILD_ANCHOR (anchor));
+  
+  seg = anchor->segment;  
 
-  seg = anchor->segment;
+  g_assert (seg->body.child.line != NULL);
   
   iter_init_from_segment (iter, tree,
                           seg->body.child.line, seg);
