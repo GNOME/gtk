@@ -234,8 +234,8 @@ _gdk_x11_precache_atoms (GdkDisplay          *display,
     insert_atom_pair (display, atoms[i], xatoms[i]);
 
   g_free (xatoms);
+  g_free (xatom_names);
   g_free (atoms);
-  g_free (atom_names);
 }
 
 /**

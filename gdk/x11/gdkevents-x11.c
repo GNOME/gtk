@@ -2095,7 +2095,7 @@ gdk_event_send_client_message_to_all_recurse (GdkDisplay *display,
   gdk_error_trap_push ();
   
   if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xid, 
-			  gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"),
+			  gdk_x11_get_xatom_by_name_for_display (display, "WM_STATE"),
 			  0, 0, False, AnyPropertyType,
 			  &type, &format, &nitems, &after, &data) != Success)
     goto out;

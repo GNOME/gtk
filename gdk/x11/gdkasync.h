@@ -59,6 +59,7 @@ void _gdk_x11_set_input_focus_safe (GdkDisplay            *display,
 gboolean _gdk_x11_get_window_child_info (GdkDisplay       *display,
 					 Window            window,
 					 gboolean          get_wm_state,
+					 gboolean         *win_has_wm_state,
 					 GdkChildInfoX11 **children,
 					 guint            *nchildren);
 

@@ -49,6 +49,7 @@ in this Software without prior written authorization from The Open Group.
 
 typedef struct _ChildInfoChildState ChildInfoChildState;
 typedef struct _ChildInfoState ChildInfoState;
+typedef struct _ListChildrenState ListChildrenState;
 typedef struct _SendEventState SendEventState;
 typedef struct _SetInputFocusState SetInputFocusState;
 
@@ -76,6 +77,14 @@ struct _ChildInfoState
   gint current_request;
   gboolean have_error;
   gboolean child_has_error;
+};
+
+struct _ListChildrenState
+{
+  Display *dpy;
+  gulong get_property_req;
+  gboolean have_error;
+  gboolean has_wm_state;
 };
 
 struct _SendEventState
@@ -316,6 +325,116 @@ _gdk_x11_set_input_focus_safe (GdkDisplay             *display,
   SyncHandle();
 }
 
+static Bool
+list_children_handler (Display *dpy,
+		       xReply  *rep,
+		       char    *buf,
+		       int      len,
+		       XPointer data)
+{
+  ListChildrenState *state = (ListChildrenState *)data;
+
+  if (dpy->last_request_read != state->get_property_req)
+    return False;
+  
+  if (rep->generic.type == X_Error)
+    {
+      state->have_error = TRUE;
+      return False;
+    }
+  else
+    {
+      xGetPropertyReply replbuf;
+      xGetPropertyReply *repl;
+	    
+      repl = (xGetPropertyReply *)
+	_XGetAsyncReply(dpy, (char *)&replbuf, rep, buf, len,
+			(sizeof(xGetPropertyReply) - sizeof(xReply)) >> 2,
+			True);
+
+      state->has_wm_state = repl->propertyType != None;
+      /* Since we called GetProperty with longLength of 0, we don't
+       * have to worry about consuming the property data that would
+       * normally follow after the reply
+       */
+
+      return True;
+    }
+}
+
+static gboolean
+list_children_and_wm_state (Display      *dpy,
+			    Window        w,
+			    Atom          wm_state_atom,
+			    gboolean     *has_wm_state,
+			    Window      **children,
+			    unsigned int *nchildren)
+{
+  ListChildrenState state;
+  _XAsyncHandler async;
+  long nbytes;
+  xQueryTreeReply rep;
+  register xResourceReq *req;
+  xGetPropertyReq *prop_req;
+
+  LockDisplay(dpy);
+
+  *children = NULL;
+  *nchildren = 0;
+  *has_wm_state = FALSE;
+  
+  state.have_error = FALSE;
+  state.has_wm_state = FALSE;
+
+  if (wm_state_atom)
+    {
+      async.next = dpy->async_handlers;
+      async.handler = list_children_handler;
+      async.data = (XPointer) &state;
+      dpy->async_handlers = &async;
+
+      GetReq (GetProperty, prop_req);
+      prop_req->window = w;
+      prop_req->property = wm_state_atom;
+      prop_req->type = AnyPropertyType;
+      prop_req->delete = False;
+      prop_req->longOffset = 0;
+      prop_req->longLength = 0;
+      
+      state.get_property_req = dpy->request;
+    }
+  
+  GetResReq(QueryTree, w, req);
+  if (!_XReply(dpy, (xReply *)&rep, 0, xFalse))
+    {
+      state.have_error = TRUE;
+      goto out;
+    }
+
+  if (rep.nChildren != 0)
+    {
+      nbytes = rep.nChildren << 2;
+      if (state.have_error)
+	{
+	  _XEatData(dpy, (unsigned long) nbytes);
+	  goto out;
+	}
+      *children = g_new (Window, rep.nChildren);
+      _XRead32 (dpy, (long *) *children, nbytes);
+    }
+
+  *nchildren = rep.nChildren;
+  *has_wm_state = state.has_wm_state;
+
+ out:
+  if (wm_state_atom)
+    DeqAsyncHandler(dpy, &async);
+  UnlockDisplay(dpy);
+  SyncHandle();
+  
+  return !state.have_error;
+}
+
 static void
 handle_get_wa_reply (Display                   *dpy,
 		     ChildInfoState            *state,
@@ -454,14 +573,15 @@ gboolean
 _gdk_x11_get_window_child_info (GdkDisplay       *display,
 				Window            window,
 				gboolean          get_wm_state,
+				gboolean         *win_has_wm_state,
 				GdkChildInfoX11 **children,
 				guint            *nchildren)
 {
   Display *dpy;
   _XAsyncHandler async;
   ChildInfoState state;
-  Window root, parent;
   Atom wm_state_atom;
+  gboolean has_wm_state;
   Bool result;
   guint i;
 
@@ -469,14 +589,31 @@ _gdk_x11_get_window_child_info (GdkDisplay       *display,
   *nchildren = 0;
   
   dpy = GDK_DISPLAY_XDISPLAY (display);
-  wm_state_atom = gdk_x11_get_xatom_by_name_for_display (display, "WM_STATE");
+  if (get_wm_state)
+    wm_state_atom = gdk_x11_get_xatom_by_name_for_display (display, "WM_STATE");
+  else
+    wm_state_atom = None;
 
   gdk_error_trap_push ();
-  result = XQueryTree (dpy, window, &root, &parent,
-		       &state.children, &state.nchildren);
+  result = list_children_and_wm_state (dpy, window,
+				       win_has_wm_state ? wm_state_atom : None,
+				       &has_wm_state,
+				       &state.children, &state.nchildren);
   gdk_error_trap_pop ();
   if (!result)
     return FALSE;
+
+  if (has_wm_state)
+    {
+      if (win_has_wm_state)
+	*win_has_wm_state = TRUE;
+      return TRUE;
+    }
+  else
+    {
+      if (win_has_wm_state)
+	*win_has_wm_state = FALSE;
+    }
 
   state.get_wm_state = get_wm_state;
   state.child_info = g_new (GdkChildInfoX11, state.nchildren);
@@ -547,7 +684,7 @@ _gdk_x11_get_window_child_info (GdkDisplay       *display,
       g_free (state.child_info);
     }
 
-  XFree (state.children);
+  g_free (state.children);
   g_free (state.child_states);
   
   DeqAsyncHandler(dpy, &async);

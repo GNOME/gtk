@@ -1,3 +1,51 @@
+Sat Jul  5 09:55:38 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdnd-x11.c (precache_target_list): Lookup
+	all the atoms in the target list at once.
+
+	* gdk/x11/gdkdnd-x11.c (gdk_drag_get_protocol_for_display):
+	Local drag short-circuit.
+
+	* gdk/x11/gdkdnd-x11.c (gdk_drag_motion): For the
+	local case, poke the actions in directly instead of
+	going through xdnd_set_actions.
+
+	* gdk/x11/gdkdnd-x11.c (xdnd_read_actions): Short-circuit
+	the local case.
+
+	* gdk/x11/gdkdnd-x11.c (xdnd_manage_source_filter): Don't
+	XSelectInput()/add a filter if the drag is local.
+
+	* gdk/x11/gdkdnd-x11.c (gdk_drag_get_selection): 
+	Simplify handling of "XdndSelection".
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_send_client_message_to_all_recurse): Somehow, 
+	a WM_STATE => _NET_WM_STATE change hand been made here.
+
+	* gdk/x11/gdkproperty-x11.c (_gdk_x11_precache_atoms): Free
+	xatom_names, not atom_names.
+
+	* tests/testdnd.c (target_drag_motion): Make the trashcan
+	open again. (Got lost in deprecation cleanup.)
+
+Sat Jul  5 00:49:32 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_begin): Move the grabs up
+	earlier, so we don't get a big pile of uncompressed
+	motion events before the grab takes effect.
+
+	* gtk/gtkdnd.c (gtk_drag_update_icon): Call 
+	gdk_window_process_all_updates() so that the area
+	we are dragging over gets a change to redraw.
+
+	* gtk/gtkdnd.c (_gtk_drag_dest_handle_event): Use 
+	gdk_window_get_position(), not gdk_window_get_origin().
+
+	* gdk/x11/gdkwindow-x11.[ch] (gdk_window_have_shape_ext)
+	gdkdisplay-x11.h: use XShapeQueryExtension to 
+	avoid duplicate XQueryExtension when we actually
+	use it. Remove unnecessary caching in GdkDisplayX11.
+
 Fri Jul  4 23:49:22 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkasync.[ch] (_gdk_x11_get_window_child_info): 

@@ -136,6 +136,11 @@ struct _GdkDisplayX11
 
   /* Startup notification */
   gchar *startup_notification_id;
+
+  /* Sets of atoms for DND */
+  guint base_dnd_atoms_precached : 1;
+  guint xdnd_atoms_precached : 1;
+  guint motif_atoms_precached : 1;
 };
 
 struct _GdkDisplayX11Class
