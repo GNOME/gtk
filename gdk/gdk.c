@@ -2529,7 +2529,10 @@ gdk_event_translate (GdkEvent *event,
       while ((XPending (gdk_display) > 0) &&
 	     XCheckTypedWindowEvent(gdk_display, xevent->xany.window,
 				    ConfigureNotify, xevent))
-	/*XSync (gdk_display, 0)*/;
+        GDK_NOTE (EVENTS, 
+	  g_print ("configure notify discarded:\twindow: %ld\n",
+		  xevent->xconfigure.window - base_id));
+	/*XSync (gdk_display, 0);*/
       
       GDK_NOTE (EVENTS,
 	g_print ("configure notify:\twindow: %ld  x,y: %d %d  w,h: %d %d  b-w: %d  above: %ld  ovr: %d\n",
@@ -3059,7 +3062,12 @@ gdk_x_error (Display     *display,
   if (gdk_error_warnings)
     {
       XGetErrorText (display, error->error_code, buf, 63);
-      g_error ("%s", buf);
+      g_error ("%s\n  serial %ld error_code %d request_code %d minor_code %d\n", 
+	       buf, 
+	       error->serial, 
+	       error->error_code, 
+	       error->request_code,
+	       error->minor_code);
     }
 
   gdk_error_code = -1;
