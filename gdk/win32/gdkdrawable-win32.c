@@ -233,6 +233,15 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 			   (filled ? "fill " : ""),
 			   width, height, x, y));
     
+  if (filled 
+      && (gc_private->tile)
+      && (gc_private->values_mask & GDK_GC_TILE)    
+      && (gc_private->values_mask & GDK_GC_FILL))
+    {
+      gdk_win32_draw_tiles (drawable, gc, gc_private->tile, x, y, width, height);
+      return;
+    }
+
   hdc = gdk_win32_hdc_get (drawable, gc, mask);
 
 #if 0
@@ -629,6 +638,7 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
   src_rgn = CreateRectRgn (0, 0, src_width + 1, src_height + 1);
   draw_rgn = CreateRectRgn (xsrc, ysrc, xsrc + width + 1, ysrc + height + 1);
   
+#if 0 /* HB: I dont't see reason to do this ... */
   if (GDK_IS_WINDOW_IMPL_WIN32 (drawable))
     {
       /* If we are drawing on a window, calculate the region that is
@@ -652,6 +662,7 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
       if (!DeleteObject (outside_rgn))
 	WIN32_GDI_FAILED ("DeleteObject");
     }
+#endif
 
 #if 1 /* Don't know if this is necessary  */
   if (CombineRgn (draw_rgn, draw_rgn, src_rgn, RGN_AND) == COMPLEXREGION)
@@ -744,6 +755,44 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 	WIN32_GDI_FAILED ("ReleaseDC");
     }
   gdk_win32_hdc_release (drawable, gc, 0);
+}
+
+void
+gdk_win32_draw_tiles (GdkDrawable *drawable,
+		      GdkGC       *gc,
+		      GdkPixmap   *tile,
+		      gint        x_from,
+		      gint        y_from,
+		      gint        max_width,
+		      gint        max_height)
+{
+  gint x = x_from, y = y_from;
+  gint tile_width, tile_height;
+  gint width, height;
+
+  gdk_drawable_get_size (drawable, &width, &height);
+  gdk_drawable_get_size (tile, &tile_width, &tile_height);
+
+  width  = MIN (width,  max_width);
+  height = MIN (height, max_height);
+
+  tile_width  = MIN (tile_width,  max_width);
+  tile_height = MIN (tile_height, max_height);
+
+  while (y < height)
+    {
+      x = x_from;
+      while (x < width)
+        {
+	  gdk_win32_draw_drawable (drawable, gc, tile,
+				   x % tile_width,  /* xsrc */
+				   y % tile_height, /* ysrc */
+				   x, y, /* dest */
+				   tile_width, tile_height);
+	  x += tile_width;
+	}
+      y += tile_height;
+    }
 }
 
 static void
@@ -893,7 +942,7 @@ gdk_win32_draw_glyphs (GdkDrawable      *drawable,
   if (SetBkMode (hdc, TRANSPARENT) == 0)
     WIN32_GDI_FAILED ("SetBkMode");
 
-  if (GDI_ERROR == SetTextAlign (hdc, TA_LEFT|TA_BOTTOM|TA_NOUPDATECP))
+  if (GDI_ERROR == SetTextAlign (hdc, TA_LEFT|TA_BASELINE|TA_NOUPDATECP))
     WIN32_GDI_FAILED ("SetTextAlign");
 
   pango_win32_render (hdc, font, glyphs, x, y);

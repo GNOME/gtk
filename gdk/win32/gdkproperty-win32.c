@@ -233,3 +233,25 @@ gdk_property_delete (GdkWindow *window,
   else
     g_warning ("gdk_property_delete: General case not implemented");
 }
+
+gboolean
+gdk_setting_get (const gchar *name,
+		 GValue      *value)
+{
+  /*
+   * XXX : if these values get changed through the Windoze UI the
+   *       respective gdk_events are not generated yet.
+   */
+  if (strcmp ("double-click-timeout", name) == 0)
+    {
+      g_value_set_int (value, GetDoubleClickTime ());
+      return TRUE;
+    }
+  else if (strcmp ("drag-threshold", name) == 0)
+    {
+      g_value_set_int (value, MAX(GetSystemMetrics (SM_CXDRAG), GetSystemMetrics (SM_CYDRAG)));
+      return TRUE;
+    }
+  else
+    return FALSE;
+}

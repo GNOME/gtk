@@ -36,6 +36,10 @@ LDFLAGS = /link $(LINKDEBUG)
 GTK_VER=1.3
 GDK_PIXBUF_VER=$(GTK_VER)
 
+!IFNDEF PERL
+PERL = perl
+!ENDIF
+
 CFLAGS = -I . -I .. $(GLIB_CFLAGS) $(PANGO_CFLAGS) -I ../gdk-pixbuf \
 		-DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
 EXTRALIBS = $(WTKIT)\lib\i386\wntab32x.lib $(GLIB_LIBS) \
@@ -44,6 +48,8 @@ EXTRALIBS = $(WTKIT)\lib\i386\wntab32x.lib $(GLIB_LIBS) \
 all: \
 	..\config.h \
 	gdkconfig.h \
+	gdkenumtypes.h \
+	gdkenumtypes.c \
 	gdk-win32-$(GTK_VER).dll \
 	testgdk.exe
 
@@ -52,6 +58,7 @@ gdk_OBJECTS = \
 	gdkcolor.obj \
 	gdkcursor.obj \
 	gdkdraw.obj \
+	gdkenumtypes.obj \
 	gdkevents.obj \
 	gdkfont.obj \
 	gdkgc.obj \
@@ -69,6 +76,38 @@ gdk_OBJECTS = \
 	gdkrgb.obj \
 	gdkwindow.obj
 
+gdk_public_h_sources = \
+	gdk.h		\
+	gdkcolor.h	\
+	gdkcompat.h	\
+	gdkcursor.h     \
+	gdkcursors.h	\
+	gdkdnd.h	\
+	gdkdrawable.h	\
+	gdkevents.h	\
+	gdkfont.h	\
+	gdkgc.h		\
+	gdkkeysyms.h	\
+	gdki18n.h	\
+	gdkimage.h	\
+	gdkinput.h	\
+	gdkkeys.h	\
+	gdkpango.h	\
+	gdkpixbuf.h	\
+	gdkpixmap.h	\
+	gdkproperty.h	\
+	gdkregion.h	\
+	gdkrgb.h	\
+	gdkselection.h	\
+	gdktypes.h	\
+	gdkvisual.h	\
+	gdkwindow.h	\
+
+gdkenumtypes.h: $(gdk_public_h_sources) makeenums.pl
+	$(PERL) makeenums.pl include $(gdk_public_h_sources) > gdkenumtypes.h
+
+gdkenumtypes.c: $(gdk_public_h_sources) makeenums.pl
+	$(PERL) makeenums.pl cfile $(gdk_public_h_sources) > gdkenumtypes.c
 
 ..\config.h : ..\config.h.win32
 	copy ..\config.h.win32 ..\config.h

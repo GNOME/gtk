@@ -1,3 +1,22 @@
+2001-04-14  Hans Breuer  <hans@breuer.org>
+
+	* gdk/gdk.def :
+	* gdk/makefile.msc : updated
+
+	* gdk/win32/gdkdrawable.win32 (gdk_win32_draw_rectangle) : if modus is 
+	"fill with tile" do so with new helper function	gdk_win32_draw_tiles 
+	(the testgtk::text backgound pixmap is drawn again)
+	Changed SetTextAlign before pango_win32_render to TA_BASELINE to reflect 
+	Win32 Pango change
+	* gdk/win32/gdkprivate-win32.h : prototype for gdk_win32_draw_tiles
+
+	* gdk/win32/gdkproperty-win32.c : first implementation of gdk_setting_get
+	Not sure if the returned settings have the right unit, because I couldn't
+	find any docs for the X version ...
+
+	* gtk/gtk.def :
+	* gtk/makefile.msc.in : updated
+
 Thu Apr 12 17:41:17 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk-2.0.m4: Fix up to refer to GTK+, not to GLib; fix some

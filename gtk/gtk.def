@@ -27,19 +27,19 @@ EXPORTS
 	GTK_TYPE_GDK_AXIS_USE
 	GTK_TYPE_GDK_BYTE_ORDER
 	GTK_TYPE_GDK_CAP_STYLE
-	GTK_TYPE_GDK_COLOR
+;	GTK_TYPE_GDK_COLOR
 	GTK_TYPE_GDK_CROSSING_MODE
 	GTK_TYPE_GDK_CURSOR_TYPE
 	GTK_TYPE_GDK_DRAG_ACTION
 	GTK_TYPE_GDK_DRAG_PROTOCOL
-	GTK_TYPE_GDK_EVENT
+;	GTK_TYPE_GDK_EVENT
 	GTK_TYPE_GDK_EVENT_MASK
 	GTK_TYPE_GDK_EVENT_TYPE
 	GTK_TYPE_GDK_EXTENSION_MODE
 	GTK_TYPE_GDK_FILL
 	GTK_TYPE_GDK_FILL_RULE
 	GTK_TYPE_GDK_FILTER_RETURN
-	GTK_TYPE_GDK_FONT
+;	GTK_TYPE_GDK_FONT
 	GTK_TYPE_GDK_FONT_TYPE
 	GTK_TYPE_GDK_FUNCTION
 	GTK_TYPE_GDK_GC_VALUES_MASK
@@ -64,7 +64,7 @@ EXPORTS
 	GTK_TYPE_GDK_SUBWINDOW_MODE
 	GTK_TYPE_GDK_TARGET
 	GTK_TYPE_GDK_VISIBILITY_STATE
-	GTK_TYPE_GDK_VISUAL
+;	GTK_TYPE_GDK_VISUAL
 	GTK_TYPE_GDK_VISUAL_TYPE
 	GTK_TYPE_GDK_WINDOW_ATTRIBUTES_TYPE
 	GTK_TYPE_GDK_WINDOW_CLASS
@@ -779,14 +779,6 @@ EXPORTS
 	gtk_menu_bar_prepend
 	gtk_menu_bar_set_shadow_type
 	gtk_menu_detach
-	gtk_menu_factory_add_entries
-	gtk_menu_factory_add_subfactory
-	gtk_menu_factory_destroy
-	gtk_menu_factory_find
-	gtk_menu_factory_new
-	gtk_menu_factory_remove_entries
-	gtk_menu_factory_remove_paths
-	gtk_menu_factory_remove_subfactory
 	gtk_menu_get_accel_group
 	gtk_menu_get_active
 	gtk_menu_get_attach_widget
@@ -928,13 +920,8 @@ EXPORTS
 	gtk_paned_get_type
 	gtk_paned_pack1
 	gtk_paned_pack2
-	gtk_paned_set_handle_size
+;	gtk_paned_set_handle_size
 	gtk_paned_set_position
-	gtk_pattern_match
-	gtk_pattern_match_simple
-	gtk_pattern_match_string
-	gtk_pattern_spec_free_segs
-	gtk_pattern_spec_init
 	gtk_pixmap_get
 	gtk_pixmap_get_type
 	gtk_pixmap_new
@@ -1503,7 +1490,6 @@ EXPORTS
 	gtk_widget_pop_colormap
 	gtk_widget_pop_composite_child
 	gtk_widget_pop_style
-	gtk_widget_popup
 	gtk_widget_push_colormap
 	gtk_widget_push_composite_child
 	gtk_widget_push_style
@@ -1557,7 +1543,7 @@ EXPORTS
 	gtk_window_add_accel_group
 	gtk_window_add_embedded_xid
 	gtk_window_deiconify
-	gtk_window_get_location
+;	gtk_window_get_location
 	gtk_window_get_type
 	gtk_window_iconify
 	gtk_window_maximize
@@ -1571,11 +1557,11 @@ EXPORTS
 	gtk_window_set_focus
 	gtk_window_set_geometry_hints
 	gtk_window_set_gravity
-	gtk_window_set_location
+;	gtk_window_set_location
 	gtk_window_set_modal
 	gtk_window_set_policy
 	gtk_window_set_position
-	gtk_window_set_size
+;	gtk_window_set_size
 	gtk_window_set_title
 	gtk_window_set_transient_for
 	gtk_window_set_wmclass

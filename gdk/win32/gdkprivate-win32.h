@@ -43,6 +43,15 @@ void _gdk_window_process_expose    (GdkWindow     *window,
                                     gulong         serial,
                                     GdkRectangle  *area);
 
+/* gdkdrawable-win32.c, background draw helper */
+void gdk_win32_draw_tiles (GdkDrawable *drawable,
+                           GdkGC       *gc,
+                           GdkPixmap   *tile,
+                           gint        x, 
+                           gint        y, 
+                           gint        width, 
+                           gint        height);
+
 void gdk_win32_selection_init (void);
 void gdk_win32_dnd_exit (void);
 

@@ -304,17 +304,21 @@ EXPORTS
 	gdk_win32_hdc_release
 	gdk_window_add_filter
 	gdk_window_at_pointer
+	gdk_window_begin_move_drag
 	gdk_window_begin_paint_rect
 	gdk_window_begin_paint_region
+	gdk_window_begin_resize_drag
 	gdk_window_clear
 	gdk_window_clear_area
 	gdk_window_clear_area_e
+	gdk_window_constrain_size
 	gdk_window_destroy
 	gdk_window_end_paint
 	gdk_window_foreign_new
 	gdk_window_get_children
 	gdk_window_get_deskrelative_origin
 	gdk_window_get_events
+	gdk_window_get_frame_extents
 	gdk_window_get_geometry
 	gdk_window_get_origin
 	gdk_window_get_parent
@@ -376,7 +380,11 @@ EXPORTS
 	gdk_window_stick
 	gdk_window_unmaximize
 	gdk_window_unstick
-gdk_window_begin_move_drag
-gdk_window_begin_resize_drag
-gdk_window_constrain_size
-gdk_window_get_frame_extents
+gdk_color_get_type
+gdk_event_get_type
+gdk_event_mask_get_type
+gdk_extension_mode_get_type
+gdk_input_condition_get_type
+gdk_modifier_type_get_type
+gdk_set_double_click_time
+gdk_setting_get
