@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.15\n"
-"POT-Creation-Date: 2000-07-14 14:48-0400\n"
+"POT-Creation-Date: 2000-07-14 16:26-0400\n"
 "PO-Revision-Date: 1999-04-24 22:53+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@adam.kaist.ac.kr>\n"
 "Language-Team: Korean <ko@li.org>\n"
@@ -263,12 +263,12 @@ msgstr "지움"
 msgid "Page %u"
 msgstr "%u쪽"
 
-#: gtk/gtkrc.c:1903
+#: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\" %d번째 줄"
 
-#: gtk/gtkrc.c:1906
+#: gtk/gtkrc.c:1878
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\""

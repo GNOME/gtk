@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2\n"
-"POT-Creation-Date: 2000-07-14 14:48-0400\n"
+"POT-Creation-Date: 2000-07-14 16:26-0400\n"
 "PO-Revision-Date: 2000-05-10 13:52+0100\n"
 "Last-Translator: Szabolcs BAN <shooby@gnome.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -264,12 +264,12 @@ msgstr "töröl"
 msgid "Page %u"
 msgstr "%u. lap"
 
-#: gtk/gtkrc.c:1903
+#: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Nem találom a képet a pixmap_path (%s) útvonalon (%d. sor)"
 
-#: gtk/gtkrc.c:1906
+#: gtk/gtkrc.c:1878
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nem találom a pixmap_path (%s) útvonalon a képet"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2000-07-14 14:48-0400\n"
+"POT-Creation-Date: 2000-07-14 16:26-0400\n"
 "PO-Revision-Date: 1999-09-03 05:00+0200\n"
 "Last-Translator: GNOME PL Team\n"
 "Language-Team: Polish <gnomepl@pandora.info.bielsko.pl>\n"
@@ -260,12 +260,12 @@ msgstr "wyczy¶æ"
 msgid "Page %u"
 msgstr "Strona %u"
 
-#: gtk/gtkrc.c:1903
+#: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Nie mo¿na odnale¼æ pliku z obrazem na ¶cie¿ce: \"%s\" wiersz %d"
 
-#: gtk/gtkrc.c:1906
+#: gtk/gtkrc.c:1878
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nie mo¿na odnale¼æ pliku z obrazem na ¶cie¿ce: \"%s\""

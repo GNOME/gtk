@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.6 \n"
-"POT-Creation-Date: 2000-07-14 14:48-0400\n"
+"POT-Creation-Date: 2000-07-14 16:26-0400\n"
 "PO-Revision-Date: 1999-01-31 19:33+0800\n"
 "Last-Translator: 辛立仁 <hsin@med.cgu.edu.tw>\n"
 "Language-Team: Chinese <zh@li.org>\n"
@@ -319,13 +319,13 @@ msgid "Page %u"
 msgstr "第 %u 頁"
 
 # gtk/gtkrc.c:1801
-#: gtk/gtkrc.c:1903
+#: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "無法由 pixmap_path 找到圖檔: \"%s\" 第 %d 行"
 
 # gtk/gtkrc.c:1804
-#: gtk/gtkrc.c:1906
+#: gtk/gtkrc.c:1878
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "無法由 pixmap_path 找到圖檔: \"%s\""

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.6\n"
-"POT-Creation-Date: 2000-07-14 14:48-0400\n"
+"POT-Creation-Date: 2000-07-14 16:26-0400\n"
 "PO-Revision-Date: 1999-09-26 23:40+0300\n"
 "Last-Translator: Lauris Kaplinski <lauris@ariman.ee>\n"
 "Language-Team: Estonian\n"
@@ -264,12 +264,12 @@ msgstr "kustuta"
 msgid "Page %u"
 msgstr "Lehekülg %u"
 
-#: gtk/gtkrc.c:1903
+#: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Ei leia pildifaili otsingurajalt 'pixmap_path': \"%s\" rida %d"
 
-#: gtk/gtkrc.c:1906
+#: gtk/gtkrc.c:1878
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ei leia pildifaili otsingurajalt 'pixmap_path': \"%s\""

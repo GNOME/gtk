@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 2000-07-14 14:48-0400\n"
+"POT-Creation-Date: 2000-07-14 16:26-0400\n"
 "PO-Revision-Date: 2000-07-12 23:25+02:00\n"
 "Last-Translator: Benedikt Roth <Benedikt.Roth@gmx.net>>\n"
 "Language-Team: German <de@li.org>\n"
@@ -263,12 +263,12 @@ msgstr "gelöscht"
 msgid "Page %u"
 msgstr "Seite %u"
 
-#: gtk/gtkrc.c:1903
+#: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kann Bilddatei in Pixmap-Pfad: \"%s\" nicht finden. Zeile %d"
 
-#: gtk/gtkrc.c:1906
+#: gtk/gtkrc.c:1878
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kann Bilddatei in Pixmap-Pfad: \"%s\" nicht finden"
