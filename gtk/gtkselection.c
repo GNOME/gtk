@@ -17,12 +17,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/* This file implements most of the work of the ICCM selection protocol.
+/* This file implements most of the work of the ICCCM selection protocol.
  * The code was written after an intensive study of the equivalent part
  * of John Ousterhout's Tk toolkit, and does many things in much the 
  * same way.
  *
- * The one thing in the ICCM that isn't fully supported here (or in Tk)
+ * The one thing in the ICCCM that isn't fully supported here (or in Tk)
  * is side effects targets. For these to be handled properly, MULTIPLE
  * targets need to be done in the order specified. This cannot be
  * guaranteed with the way we do things, since if we are doing INCR
@@ -1236,7 +1236,7 @@ _gtk_selection_request (GtkWidget *widget,
       g_message ("Selection %ld, target %ld (%s) requested by 0x%x (property = %ld)",
 		 event->selection, info->conversions[i].target,
 		 gdk_atom_name (info->conversions[i].target),
-		 event->requestor, event->property);
+		 event->requestor, info->conversions[i].property);
 #endif
       
       gtk_selection_invoke_handler (widget, &data, event->time);
@@ -1454,7 +1454,6 @@ _gtk_selection_incr_event (GdkWindow	   *window,
 	      info->conversions[i].offset = -1;
 	    }
 	}
-      break;
     }
   
   /* Check if we're finished with all the targets */

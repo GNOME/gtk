@@ -1,3 +1,10 @@
+u2004-05-03  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkselection.c (_gtk_selection_request): Fix
+	a debug message to show correct information.
+	(_gtk_selection_incr_event): Make INCRemental transfer
+	of MULTIPLE targets work. This was broken since 1997!
+
 2004-05-02  Hans Breuer  <hans@breuer.org>
 
 	* gdk/win32/gdkdrawable-win32.c (draw_segments) : don't
