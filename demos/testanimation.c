@@ -357,6 +357,12 @@ do_image (const char *filename)
   
   start_progressive_loading (image);
 
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (gtk_main_quit), NULL);
+  
+  g_signal_connect (G_OBJECT (window), "delete_event",
+		    G_CALLBACK (gtk_main_quit), NULL);
+
   gtk_widget_show_all (window);
 
   return window;
@@ -405,6 +411,12 @@ do_nonprogressive (const gchar *filename)
   image = gtk_image_new_from_file (filename);
   gtk_container_add (GTK_CONTAINER (frame), image);
 
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (gtk_main_quit), NULL);
+  
+  g_signal_connect (G_OBJECT (window), "delete_event",
+		    G_CALLBACK (gtk_main_quit), NULL);
+
   gtk_widget_show_all (window);
 }
 
@@ -429,5 +441,4 @@ main (int    argc,
   
   return 0;
 }
-
 

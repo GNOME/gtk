@@ -321,16 +321,26 @@ expose_func (GtkWidget *drawing_area, GdkEventExpose *event, gpointer data)
 	pixbuf = (GdkPixbuf *)g_object_get_data (G_OBJECT (drawing_area), "pixbuf");
 
 	if (gdk_pixbuf_get_has_alpha (pixbuf)) {
-		gdk_draw_rgb_32_image (drawing_area->window,
-				       drawing_area->style->black_gc,
-				       event->area.x, event->area.y, 
-				       event->area.width, 
-				       event->area.height,
-				       GDK_RGB_DITHER_MAX, 
-				       gdk_pixbuf_get_pixels (pixbuf)
-				       + (event->area.y * gdk_pixbuf_get_rowstride (pixbuf)) 
-				       + (event->area.x * gdk_pixbuf_get_n_channels (pixbuf)),
-				       gdk_pixbuf_get_rowstride (pixbuf));
+		GdkPixbuf *dest;
+	  
+		gdk_window_set_back_pixmap (drawing_area->window, NULL, FALSE);
+	  
+		dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, event->area.width, event->area.height);
+		
+		gdk_pixbuf_composite_color (pixbuf, dest,
+					    0, 0, event->area.width, event->area.height,
+					    -event->area.x, -event->area.y,
+					    (double) drawing_area->allocation.width / gdk_pixbuf_get_width (pixbuf),
+					    (double) drawing_area->allocation.height / gdk_pixbuf_get_height (pixbuf),
+					    GDK_INTERP_BILINEAR, 255,
+					    event->area.x, event->area.y, 16, 0xaaaaaa, 0x555555);
+		
+		gdk_pixbuf_render_to_drawable (dest, drawing_area->window, drawing_area->style->fg_gc[GTK_STATE_NORMAL],
+					       0, 0, event->area.x, event->area.y,
+					       event->area.width, event->area.height,
+					       GDK_RGB_DITHER_NORMAL, event->area.x, event->area.y);
+		
+		g_object_unref (dest);
 	} else {
 		gdk_draw_rgb_image (drawing_area->window,
 				    drawing_area->style->white_gc,
@@ -351,8 +361,6 @@ config_func (GtkWidget *drawing_area, GdkEventConfigure *event, gpointer data)
 	GdkPixbuf *pixbuf;
     
 	pixbuf = (GdkPixbuf *)g_object_get_data (G_OBJECT (drawing_area), "pixbuf");
-
-	g_print ("X:%d Y:%d\n", event->width, event->height);
 
 #if 0
 	if (((event->width) != gdk_pixbuf_get_width (pixbuf)) ||
@@ -472,6 +480,7 @@ progressive_prepared_callback (GdkPixbufLoader* loader, gpointer data)
         GdkPixbuf* pixbuf;
 
         pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
+
         g_assert (pixbuf != NULL);
 
         g_object_ref (pixbuf); /* for the RGB window */
@@ -487,18 +496,21 @@ progressive_updated_callback (GdkPixbufLoader* loader, guint x, guint y, guint w
 {
         GtkWidget** window_loc = data;
 
-/*  	g_print ("progressive_updated_callback:\n\t%d\t%d\t%d\t%d\n", x, y, width, height); */
-
         if (*window_loc != NULL)
                 gtk_widget_queue_draw_area (*window_loc,
 					   x, y, width, height);
-
         return;
 }
 
 static int readlen = 4096;
 
 extern void pixbuf_init ();
+
+void size_func (GdkPixbufLoader *loader, gint width, gint height, gpointer data)
+{
+  gdk_pixbuf_loader_set_size (loader, width*2, height*2);
+}
+
 
 int
 main (int argc, char **argv)
@@ -587,7 +599,7 @@ main (int argc, char **argv)
 				found_valid = TRUE;
 			}
 		}
-#if 1
+#if 1	
                 {
                         GtkWidget* rgb_window = NULL;
 			ProgressFileStatus   status;
@@ -598,6 +610,10 @@ main (int argc, char **argv)
 			status.rgbwin = &rgb_window;
 
 			status.buf = g_malloc (readlen);
+
+			g_signal_connect (pixbuf_loader, "size_prepared", 
+					  G_CALLBACK (size_func), NULL);
+
                         g_signal_connect (pixbuf_loader, "area_prepared",
 					  G_CALLBACK (progressive_prepared_callback),
 					  &rgb_window);

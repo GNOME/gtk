@@ -1,3 +1,12 @@
+2002-09-04  Matthias Clasen  <maclas@gmx.de>
+
+	* demos/testanimation.c (do_image): 
+	(do_nonprogressive): Quit on destroy.
+
+	* demos/testpixbuf.c (main): test load-at-size.
+	(expose_func): draw transparent pixbufs against a checkerboard 
+	pattern. (#91829)
+
 2002-09-01  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* docs/reference/gtk/tmpl/gtkdialog.sgml
