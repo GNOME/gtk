@@ -281,7 +281,7 @@ enum {
 static GtkTargetEntry target_table[] = {
   { "STRING",     0, TARGET_STRING },
   { "text/plain", 0, TARGET_STRING },
-  { "application/x-rootwin-drop", 0, TARGET_ROOTWIN }
+  { "application/x-rootwindow-drop", 0, TARGET_ROOTWIN }
 };
 
 static guint n_targets = sizeof(target_table) / sizeof(target_table[0]);

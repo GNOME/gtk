@@ -3107,9 +3107,16 @@ gdk_drag_motion (GdkDragContext *context,
 	    case GDK_DRAG_PROTO_ROOTWIN:
 	      {
 		GdkEvent temp_event;
+		/* GTK+ traditionally has used application/x-rootwin-drop,
+		 * but the XDND spec specifies x-rootwindow-drop.
+		 */
+		GdkAtom target1 = gdk_atom_intern ("application/x-rootwindow-drop", FALSE);
+		GdkAtom target2 = gdk_atom_intern ("application/x-rootwin-drop", FALSE);
 
 		if (g_list_find (context->targets,
-				 GDK_ATOM_TO_POINTER (gdk_atom_intern ("application/x-rootwin-drop", FALSE))))
+				 GDK_ATOM_TO_POINTER (target1)) ||
+		    g_list_find (context->targets,
+				 GDK_ATOM_TO_POINTER (target2)))
 		  context->action = context->suggested_action;
 		else
 		  context->action = 0;
