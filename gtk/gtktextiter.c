@@ -3632,7 +3632,9 @@ gtk_text_iter_set_visible_line_index  (GtkTextIter *iter,
  * @iter: a #GtkTextIter
  * @line_number: line number (counted from 0)
  *
- * Moves iterator @iter to the start of the line @line_number.
+ * Moves iterator @iter to the start of the line @line_number.  If
+ * @line_number is negative or larger than the number of lines in the
+ * buffer, moves @iter to the start of the last line in the buffer.
  * 
  **/
 void
@@ -4243,23 +4245,31 @@ strbreakup (const char *string,
  * gtk_text_iter_forward_search:
  * @iter: start of search
  * @str: a search string
- * @visible_only: if %TRUE, search only visible text
- * @slice: if %TRUE, @str contains 0xFFFC when we want to match widgets, pixbufs
+ * @flags: flags affecting how the search is done
  * @match_start: return location for start of match, or %NULL
  * @match_end: return location for end of match, or %NULL
  * @limit: bound for the search, or %NULL for the end of the buffer
  * 
- * Searches forward for @str. Any match is returned as the range @match_start,
- * @match_end. If you specify @visible_only or @slice, the match may have
- * invisible text, pixbufs, or child widgets interspersed in @str.
+ * Searches forward for @str. Any match is returned as the range
+ * @match_start, @match_end. The search will not continue past
+ * @limit. Note that a search is a linear or O(n) operation, so you
+ * may wish to use @limit to avoid locking up your UI on large
+ * buffers.
  * 
+ * If the #GTK_TEXT_SEARCH_VISIBLE_ONLY flag is present, the match may
+ * have invisible text interspersed in @str. i.e. @str will be a
+ * possibly-noncontiguous subsequence of the matched range. similarly,
+ * if you specify #GTK_TEXT_SEARCH_TEXT_ONLY, the match may have
+ * pixbufs or child widgets mixed inside the matched range. If these
+ * flags are not given, the match must be exact; the special 0xFFFC
+ * character in @str will match embedded pixbufs or child widgets.
+ *
  * Return value: whether a match was found
  **/
 gboolean
 gtk_text_iter_forward_search (const GtkTextIter *iter,
                               const gchar       *str,
-                              gboolean           visible_only,
-                              gboolean           slice,
+                              GtkTextSearchFlags flags,
                               GtkTextIter       *match_start,
                               GtkTextIter       *match_end,
                               const GtkTextIter *limit)
@@ -4268,7 +4278,9 @@ gtk_text_iter_forward_search (const GtkTextIter *iter,
   GtkTextIter match;
   gboolean retval = FALSE;
   GtkTextIter search;
-
+  gboolean visible_only;
+  gboolean slice;
+  
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (str != NULL, FALSE);
 
@@ -4297,6 +4309,9 @@ gtk_text_iter_forward_search (const GtkTextIter *iter,
         return FALSE;
     }
 
+  visible_only = (flags & GTK_TEXT_SEARCH_VISIBLE_ONLY) != 0;
+  slice = (flags & GTK_TEXT_SEARCH_TEXT_ONLY) == 0;
+  
   /* locate all lines */
 
   lines = strbreakup (str, "\n", -1);
@@ -4563,8 +4578,7 @@ my_strrstr (const gchar *haystack,
  * gtk_text_iter_backward_search:
  * @iter: a #GtkTextIter where the search begins
  * @str: search string
- * @visible_only: if %TRUE search only visible text
- * @slice: if %TRUE the search string contains 0xFFFC to match pixbufs, widgets
+ * @flags: bitmask of flags affecting the search
  * @match_start: return location for start of match, or %NULL
  * @match_end: return location for end of match, or %NULL
  * @limit: location of last possible @match_start, or %NULL for start of buffer
@@ -4576,8 +4590,7 @@ my_strrstr (const gchar *haystack,
 gboolean
 gtk_text_iter_backward_search (const GtkTextIter *iter,
                                const gchar       *str,
-                               gboolean           visible_only,
-                               gboolean           slice,
+                               GtkTextSearchFlags flags,
                                GtkTextIter       *match_start,
                                GtkTextIter       *match_end,
                                const GtkTextIter *limit)
@@ -4587,7 +4600,9 @@ gtk_text_iter_backward_search (const GtkTextIter *iter,
   gint n_lines;
   LinesWindow win;
   gboolean retval = FALSE;
-
+  gboolean visible_only;
+  gboolean slice;
+  
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (str != NULL, FALSE);
 
@@ -4615,6 +4630,9 @@ gtk_text_iter_backward_search (const GtkTextIter *iter,
         return FALSE;
     }
 
+  visible_only = (flags & GTK_TEXT_SEARCH_VISIBLE_ONLY) != 0;
+  slice = (flags & GTK_TEXT_SEARCH_TEXT_ONLY) == 0;
+  
   /* locate all lines */
 
   lines = strbreakup (str, "\n", -1);

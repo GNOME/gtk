@@ -1,3 +1,11 @@
+2001-10-22  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextiter.c (gtk_text_iter_set_line): Clarify behavior in
+	docs, #61777
+	(gtk_text_iter_forward_search) (gtk_text_iter_backward_search):
+	change the two boolean args to a flags field, so we can extend 
+	to add case insensitive, regexp searches later. #61852
+
 Mon Oct 22 15:07:17 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_iter_depth): update docs to

@@ -1578,7 +1578,9 @@ buffer_search (Buffer     *buffer,
 
       if (forward)
         {
-          while (gtk_text_iter_forward_search (&iter, str, TRUE, FALSE,
+          while (gtk_text_iter_forward_search (&iter, str,
+                                               GTK_TEXT_SEARCH_VISIBLE_ONLY |
+                                               GTK_TEXT_SEARCH_TEXT_ONLY,
                                                &match_start, &match_end,
                                                NULL))
             {
@@ -1591,7 +1593,9 @@ buffer_search (Buffer     *buffer,
         }
       else
         {
-          while (gtk_text_iter_backward_search (&iter, str, TRUE, FALSE,
+          while (gtk_text_iter_backward_search (&iter, str,
+                                                GTK_TEXT_SEARCH_VISIBLE_ONLY |
+                                                GTK_TEXT_SEARCH_TEXT_ONLY,
                                                 &match_start, &match_end,
                                                 NULL))
             {
