@@ -226,15 +226,14 @@ gtk_tree_path_to_string (GtkTreePath *path)
 }
 
 /**
- * gtk_tree_path_new_root:
+ * gtk_tree_path_new_first:
  *
- * Creates a new root #GtkTreePath.  The string representation of this path is
- * "0"
+ * Creates a new #GtkTreePath.  The string representation of this path is "0"
  *
  * Return value: A new #GtkTreePath.
  **/
 GtkTreePath *
-gtk_tree_path_new_root (void)
+gtk_tree_path_new_first (void)
 {
   GtkTreePath *retval;
 
@@ -687,18 +686,18 @@ gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
 
 
 /**
- * gtk_tree_model_get_iter_root:
+ * gtk_tree_model_get_iter_first:
  * @tree_model: A #GtkTreeModel.
  * @iter: The uninitialized #GtkTreeIter.
  * 
- * Initializes @iter with the root iterator in the tree (the one at the root
- * path) and returns %TRUE.   Returns %FALSE if the tree is empty.
+ * Initializes @iter with the first iterator in the tree (the one at the path
+ * "0") and returns %TRUE.  Returns %FALSE if the tree is empty.
  * 
  * Return value: %TRUE, if @iter was set.
  **/
 gboolean
-gtk_tree_model_get_iter_root (GtkTreeModel *tree_model,
-			      GtkTreeIter  *iter)
+gtk_tree_model_get_iter_first (GtkTreeModel *tree_model,
+			       GtkTreeIter  *iter)
 {
   GtkTreePath *path;
   gboolean retval;

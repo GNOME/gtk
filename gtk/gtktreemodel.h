@@ -114,7 +114,8 @@ struct _GtkTreeModelIface
 GtkTreePath *gtk_tree_path_new              (void);
 GtkTreePath *gtk_tree_path_new_from_string  (const gchar       *path);
 gchar       *gtk_tree_path_to_string        (GtkTreePath       *path);
-GtkTreePath *gtk_tree_path_new_root         (void);
+#define gtk_tree_path_new_root gtk_tree_path_new_first
+GtkTreePath *gtk_tree_path_new_first        (void);
 void         gtk_tree_path_append_index     (GtkTreePath       *path,
 					     gint               index);
 void         gtk_tree_path_prepend_index    (GtkTreePath       *path,
@@ -177,7 +178,8 @@ gboolean          gtk_tree_model_get_iter        (GtkTreeModel *tree_model,
 gboolean          gtk_tree_model_get_iter_from_string (GtkTreeModel *tree_model,
 						       GtkTreeIter  *iter,
 						       const gchar  *path_string);
-gboolean          gtk_tree_model_get_iter_root   (GtkTreeModel *tree_model,
+#define gtk_tree_model_get_iter_root(tree_model, iter) gtk_tree_model_get_iter_first(tree_model, iter)
+gboolean          gtk_tree_model_get_iter_first  (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
 GtkTreePath *     gtk_tree_model_get_path        (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);

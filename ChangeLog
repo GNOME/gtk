@@ -1,3 +1,9 @@
+Sat Feb 23 22:10:52 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.c (gtk_tree_path_new_first): change new_root to
+	new_first to avoid confusion.
+	(gtk_tree_model_get_iter_first): ditto.
+
 Sat Feb 23 20:59:05 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.c gtk/gtkrc.[ch]: gtk/gtksettings.c gtk/gtkstyle.c:
