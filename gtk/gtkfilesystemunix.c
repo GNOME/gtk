@@ -190,6 +190,7 @@ static gboolean     filename_is_root  (const char       *filename);
 static GtkFileInfo *filename_get_info (const gchar      *filename,
 				       GtkFileInfoType   types,
 				       GError          **error);
+static char *       get_parent_dir    (const char       *filename);
 
 /*
  * GtkFileSystemUnix
@@ -322,6 +323,19 @@ gtk_file_system_unix_get_volume_for_path (GtkFileSystem     *file_system,
   return get_root_volume ();
 }
 
+static char *
+remove_trailing_slash (const char *filename)
+{
+  int len;
+
+  len = strlen (filename);
+
+  if (len > 1 && filename[len - 1] == '/')
+    return g_strndup (filename, len - 1);
+  else
+    return g_memdup (filename, len + 1);
+}
+
 static GtkFileFolder *
 gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
 				 const GtkFilePath *path,
@@ -349,7 +363,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
     {
       folder_unix = g_object_new (GTK_TYPE_FILE_FOLDER_UNIX, NULL);
       folder_unix->system_unix = system_unix;
-      folder_unix->filename = g_strdup (filename);
+      folder_unix->filename = remove_trailing_slash (filename);
       folder_unix->types = types;
 
       g_hash_table_insert (system_unix->folder_hash, folder_unix->filename, folder_unix);
@@ -366,16 +380,18 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
   GtkFileSystemUnix *system_unix;
   const char *filename;
   gboolean result;
-  char *parent;
-
+  char *parent, *tmp;
+  
   system_unix = GTK_FILE_SYSTEM_UNIX (file_system);
 
   filename = gtk_file_path_get_string (path);
   g_return_val_if_fail (filename != NULL, FALSE);
   g_return_val_if_fail (g_path_is_absolute (filename), FALSE);
 
-  result = mkdir (filename, 0777) == 0;
-
+  tmp = remove_trailing_slash (filename);
+  result = mkdir (tmp, 0777) == 0;
+  g_free (tmp);
+  
   if (!result)
     {
       int save_errno = errno;
@@ -393,7 +409,7 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
   if (filename_is_root (filename))
     return TRUE; /* hmmm, but with no notification */
 
-  parent = g_path_get_dirname (filename);
+  parent = get_parent_dir (filename);
   if (parent)
     {
       GtkFileFolderUnix *folder_unix;
@@ -591,6 +607,29 @@ gtk_file_system_unix_volume_render_icon (GtkFileSystem        *file_system,
   return get_cached_icon (widget, "gnome-fs-blockdev", pixel_size);
 }
 
+static char *
+get_parent_dir (const char *filename)
+{
+  int len;
+
+  len = strlen (filename);
+  
+  /* Ignore trailing slashes */
+  if (filename[len - 1] == '/')
+    {
+      char *tmp, *parent;
+      
+      tmp = g_strndup (filename, len - 1);
+
+      parent = g_path_get_dirname (tmp);
+      g_free (tmp);
+
+      return parent;
+    }
+  else
+    return g_path_get_dirname (filename);
+}
+
 static gboolean
 gtk_file_system_unix_get_parent (GtkFileSystem     *file_system,
 				 const GtkFilePath *path,
@@ -598,7 +637,7 @@ gtk_file_system_unix_get_parent (GtkFileSystem     *file_system,
 				 GError           **error)
 {
   const char *filename;
-
+  
   filename = gtk_file_path_get_string (path);
   g_return_val_if_fail (filename != NULL, FALSE);
   g_return_val_if_fail (g_path_is_absolute (filename), FALSE);
@@ -609,7 +648,7 @@ gtk_file_system_unix_get_parent (GtkFileSystem     *file_system,
     }
   else
     {
-      gchar *parent_filename = g_path_get_dirname (filename);
+      gchar *parent_filename = get_parent_dir (filename);
       *parent = filename_to_path (parent_filename);
       g_free (parent_filename);
     }
@@ -1321,7 +1360,7 @@ gtk_file_folder_unix_get_info (GtkFileFolder  *folder,
   g_return_val_if_fail (filename != NULL, NULL);
   g_return_val_if_fail (g_path_is_absolute (filename), NULL);
 
-  dirname = g_path_get_dirname (filename);
+  dirname = get_parent_dir (filename);
   g_return_val_if_fail (strcmp (dirname, folder_unix->filename) == 0, NULL);
   g_free (dirname);
 

@@ -1,3 +1,11 @@
+2004-03-13  Anders Carlsson  <andersca@gnome.org>
+
+	* gtk/gtkfilesystemunix.c: (remove_trailing_slash),
+	(gtk_file_system_unix_get_folder),
+	(gtk_file_system_unix_create_folder), (get_parent_dir),
+	(gtk_file_system_unix_get_parent), (gtk_file_folder_unix_get_info):
+	Remove trailing slashes in path names.
+	
 Sat Mar 13 12:17:16 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_reparent): Make
