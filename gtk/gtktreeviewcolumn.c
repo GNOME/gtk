@@ -2414,6 +2414,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
   gint focus_line_width;
   gint dx;
   gint special_cells;
+  gboolean cursor_row = FALSE;
 
   min_x = G_MAXINT;
   min_y = G_MAXINT;
@@ -2445,6 +2446,8 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
 	  info->has_focus = TRUE;
 	}
     }
+
+  cursor_row = flags & GTK_CELL_RENDERER_FOCUSED;
 
   gtk_widget_style_get (GTK_WIDGET (tree_column->tree_view),
 			"focus-line-width", &focus_line_width,
@@ -2486,8 +2489,10 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       if (! info->cell->visible)
 	continue;
 
-      if (info->has_focus)
+      if ((info->has_focus || special_cells == 1) && cursor_row)
 	flags |= GTK_CELL_RENDERER_FOCUSED;
+      else
+        flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
       real_background_area.width = info->requested_width +
 	(info->expand?extra_space:0);
@@ -2627,8 +2632,10 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       if (! info->cell->visible)
 	continue;
 
-      if (info->has_focus)
+      if ((info->has_focus || special_cells == 1) && cursor_row)
 	flags |= GTK_CELL_RENDERER_FOCUSED;
+      else
+        flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
       real_background_area.width = info->requested_width +
 	(info->expand?extra_space:0);
