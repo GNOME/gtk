@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.12\n"
-"POT-Creation-Date: 2000-08-10 21:20-0400\n"
+"POT-Creation-Date: 2000-10-19 16:33-0200\n"
 "PO-Revision-Date: 1999-09-29 17:40-03:00\n"
 "Last-Translator: Alex Sandro Queiroz e Silva <asandro@lcg.dc.ufc.br>\n"
 "Language-Team: Brazilian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
@@ -13,56 +13,82 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: gtk/gtkcolorsel.c:1420
+#: gdk-pixbuf/io-gif.c:426
+msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:435
+#, c-format
+msgid "Internal error in the GIF loader (%s)"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:584
+msgid "Circular table entry in GIF file"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:921
+msgid "File does not appear to be a GIF file"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:933
+#, c-format
+msgid "Version %s of the GIF file format is not supported"
+msgstr ""
+
+#: gdk-pixbuf/io-gif.c:985
+msgid "GIF animation contained a frame with an incorrect size"
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1422
 msgid "Hue:"
 msgstr "Brilho:"
 
-#: gtk/gtkcolorsel.c:1421
+#: gtk/gtkcolorsel.c:1423
 msgid "Saturation:"
 msgstr "Saturação:"
 
-#: gtk/gtkcolorsel.c:1422
+#: gtk/gtkcolorsel.c:1424
 msgid "Value:"
 msgstr "Valor:"
 
-#: gtk/gtkcolorsel.c:1423
+#: gtk/gtkcolorsel.c:1425
 msgid "Red:"
 msgstr "Vermelho:"
 
-#: gtk/gtkcolorsel.c:1424
+#: gtk/gtkcolorsel.c:1426
 msgid "Green:"
 msgstr "Verde:"
 
-#: gtk/gtkcolorsel.c:1425
+#: gtk/gtkcolorsel.c:1427
 msgid "Blue:"
 msgstr "Azul:"
 
-#: gtk/gtkcolorsel.c:1428
+#: gtk/gtkcolorsel.c:1430
 msgid "Opacity:"
 msgstr "Opacidade:"
 
-#: gtk/gtkcolorsel.c:1443
+#: gtk/gtkcolorsel.c:1445
 #, fuzzy
 msgid "Hex Value:"
 msgstr "Valor:"
 
-#: gtk/gtkcolorsel.c:1464
+#: gtk/gtkcolorsel.c:1466
 msgid "Custom Palette"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1469
+#: gtk/gtkcolorsel.c:1471
 msgid "Set Color"
 msgstr ""
 
 #. The OK button
-#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
+#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:952
 #: gtk/gtkgamma.c:415
 msgid "OK"
 msgstr "OK"
 
 #. The Cancel button
-#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
-#: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
+#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:968
+#: gtk/gtkfilesel.c:1077 gtk/gtkfilesel.c:1201 gtk/gtkfontsel.c:965
 #: gtk/gtkgamma.c:423
 msgid "Cancel"
 msgstr "Cancelar"
@@ -72,29 +98,29 @@ msgid "Help"
 msgstr "Ajuda"
 
 #. The directories clist
-#: gtk/gtkfilesel.c:514
+#: gtk/gtkfilesel.c:512
 msgid "Directories"
 msgstr "Diretórios"
 
 #. The files clist
-#: gtk/gtkfilesel.c:534
+#: gtk/gtkfilesel.c:532
 msgid "Files"
 msgstr "Arquivos"
 
-#: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
+#: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1639
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Diretório ilegível: %s"
 
-#: gtk/gtkfilesel.c:637
+#: gtk/gtkfilesel.c:635
 msgid "Create Dir"
 msgstr "Criar Diretório"
 
-#: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
+#: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1046
 msgid "Delete File"
 msgstr "Apagar Arquivo"
 
-#: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
+#: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1159
 msgid "Rename File"
 msgstr "Renomear Arquivo"
 
@@ -103,39 +129,39 @@ msgstr "Renomear Arquivo"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:828
+#: gtk/gtkfilesel.c:827
 msgid "Error"
 msgstr "Erro"
 
 #. close button
-#: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
+#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:338
 msgid "Close"
 msgstr "Fechar"
 
-#: gtk/gtkfilesel.c:927
+#: gtk/gtkfilesel.c:932
 msgid "Create Directory"
 msgstr "Criar Diretório"
 
-#: gtk/gtkfilesel.c:941
+#: gtk/gtkfilesel.c:946
 msgid "Directory name:"
 msgstr "Nome do diretório:"
 
 #. buttons
-#: gtk/gtkfilesel.c:954
+#: gtk/gtkfilesel.c:959
 msgid "Create"
 msgstr "Criar"
 
 #. buttons
-#: gtk/gtkfilesel.c:1058
+#: gtk/gtkfilesel.c:1068
 msgid "Delete"
 msgstr "Apagar"
 
 #. buttons
-#: gtk/gtkfilesel.c:1173
+#: gtk/gtkfilesel.c:1192
 msgid "Rename"
 msgstr "Renomear"
 
-#: gtk/gtkfilesel.c:1600
+#: gtk/gtkfilesel.c:1618
 msgid "Selection: "
 msgstr "Seleção: "
 
@@ -264,12 +290,12 @@ msgstr "limpar"
 msgid "Page %u"
 msgstr "Página %u"
 
-#: gtk/gtkrc.c:1872
+#: gtk/gtkrc.c:1978
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Não encontrei arquivo de imagem no pixmap_path: \"%s\" linha %d"
 
-#: gtk/gtkrc.c:1875
+#: gtk/gtkrc.c:1981
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Não encontrei arquivo de imagem no pixmap_path: \"%s\""
