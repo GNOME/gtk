@@ -162,15 +162,15 @@ gtk_radio_tool_button_new_from_widget (GtkRadioToolButton *group)
  * Since: 2.4
  **/
 GtkToolItem *
-gtk_radio_tool_button_new_with_stock_from_widget (GtkWidget   *group,
-						  const gchar *stock_id)
+gtk_radio_tool_button_new_with_stock_from_widget (GtkRadioToolButton *group,
+						  const gchar        *stock_id)
 {
   GSList *list = NULL;
   
   g_return_val_if_fail (GTK_IS_RADIO_TOOL_BUTTON (group), NULL);
 
   if (group)
-    list = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (group));
+    list = gtk_radio_tool_button_get_group (group);
   
   return gtk_radio_tool_button_new_from_stock (list, stock_id);
 }

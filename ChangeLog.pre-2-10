@@ -1,3 +1,9 @@
+Sun Jan  4 15:29:04 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkradiotoolbutton.[ch]
+	(gtk_radio_tool_button_new_with_stock_from_widget): Change API so
+	group is a GtkRadioButton, not a GtkWidget.
+
 2004-01-04  Hans Breuer  <hans@breuer.org>
 
 	* gdk/win32/gdkwindow-win32.c : use SWP_NOACTIVATE in 
