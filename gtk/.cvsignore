@@ -4,10 +4,11 @@ Makefile.in
 .deps
 _libs
 .libs
-libgtk.la
+libgtk-1.1.la
 testgtk
 testinput
 testselection
 simple
 testtree
 gtkfeatures.h
+testthreads

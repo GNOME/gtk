@@ -4,6 +4,6 @@ Makefile.in
 .deps
 _libs
 .libs
-libgdk.la
+libgdk-1.1.la
 gdkcursors.h
 gdkkeysyms.h
