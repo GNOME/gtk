@@ -19,6 +19,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+/* Needed for SEEK_END in SunOS */
+#include <unistd.h>
 #include <X11/Xlib.h>
 
 #include "gdk.h"
