@@ -1,3 +1,14 @@
+2002-03-03  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk-pixbuf.rc.in: Remove.
+
+	* gdk_pixbuf.rc.in: Name like this instead (wrong name used by
+	mistake by Hans).
+
+	* makefile.msc: Corresponding changes.
+
+	* Makefile.am: Use gdk_pixbuf.rc on Win32. Distribute it.
+
 2002-02-28  Matthias Clasen  <maclas@gmx.de>
 
 	* pixops/pixops.c (tile_make_weights): Move the call to

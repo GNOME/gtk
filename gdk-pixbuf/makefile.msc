@@ -89,14 +89,14 @@ all : \
 	gdk-pixbuf-csource.exe \
 	test-gdk-pixbuf.exe
 
-gtk-pixbuf.res : gtk-pixbuf.rc
-	rc -DBUILDNUMBER=0 -r -fo gtk-pixbuf.res gtk-pixbuf.rc
+$(PACKAGE).res : $(PACKAGE).rc
+	rc -DBUILDNUMBER=0 -r -fo $(PACKAGE).res $(PACKAGE).rc
 
 $(PACKAGE)-$(PKG_VER)s.lib : $(OBJECTS)
 	lib /out:$(PACKAGE)-$(PKG_VER)s.lib $(OBJECTS) pixops\pixops.lib
 
-$(PACKAGE)-$(PKG_VER).dll : $(OBJECTS) $(PACKAGE).def gtk-pixbuf.res
-	$(CC) $(CFLAGS) -LD -Fe$(PACKAGE)-$(PKG_VER).dll $(OBJECTS) $(PKG_LINK) user32.lib advapi32.lib wsock32.lib gtk-pixbuf.res $(LDFLAGS) /def:$(PACKAGE).def
+$(PACKAGE)-$(PKG_VER).dll : $(OBJECTS) $(PACKAGE).def $(PACKAGE).res
+	$(CC) $(CFLAGS) -LD -Fe$(PACKAGE)-$(PKG_VER).dll $(OBJECTS) $(PKG_LINK) user32.lib advapi32.lib wsock32.lib $(PACKAGE).res $(LDFLAGS) /def:$(PACKAGE).def
 
 make-inline-pixbuf.exe : make-inline-pixbuf.c
 	$(CC) $(PKG_CFLAGS) -Femake-inline-pixbuf.exe make-inline-pixbuf.c $(PKG_LINK) $(PACKAGE)-$(PKG_VER).lib
