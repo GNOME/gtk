@@ -56,7 +56,7 @@ while test $# -gt 0; do
       echo_exec_prefix=yes
       ;;
     --version)
-      echo @GTK_VERSION@
+      echo @GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.@GTK_MICRO_VERSION@
       ;;
     --cflags)
       echo_cflags=yes

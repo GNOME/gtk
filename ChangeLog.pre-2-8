@@ -1,3 +1,9 @@
+Fri Sep  3 16:04:41 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk-config.in (--version): don't echo @GTK_VERSION@, but
+	@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.@GTK_MICRO_VERSION@, so the
+	AM_PATH_GTK() macros don't get confused by the -pre1.
+
 Fri Sep  3 03:06:30 1999  Tim Janik  <timj@gtk.org>
 
 	* configure.in: changed version number to 1.2.5-pre1,
