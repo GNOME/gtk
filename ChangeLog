@@ -1,3 +1,35 @@
+Sat Jan 17 18:06:35 1998  Owen Taylor  <owt1@cornell.edu>
+	* gdk/gdk.c (gdk_events_pending): Take putback events into
+	  account
+
+	* gdk/gdk.c (gdk_event_free): Handle dropdataavaible memory
+	  allocation correctly. (Incompatible change: client must
+	  _not_ fre event->data and event->data_type.)
+
+	* gdk/gdk.c (gdk_event_translate): Changed DND dragging
+	  so that we don't ungrab pointer when we reenter window
+	  to prevent extra Enter/Leave effects which had bad
+	  effects.
+          Changed drag zone handling to not send uncessary
+	  DragEnter events.
+          Fixed EnterNotify/LeaveNotify handling. (Only pay
+	  attention to events on window, don't specify these
+	  events to XGrabPointer - that isn't valid, and handle
+          reverse the sense of the handling of LeaveNotify.)
+
+	* gdk/gdkwindow.c (gdk_window_remove_filter): Free removed
+	  filter.
+
+	* gtk/gtk.defs (GdkFont): gdk_font_free => gdk_font_unref
+
+	* gtk/gtkmain.{c,h} (gtk_events_pending): new function - apps
+	  should use this instead of gdk_events_pending.
+
+	* gtk/gtkvbbox.h: Fixed a duplication in the headers.
+
+	* gtk/testgtk.c (dnd_drop): Don't free the drop data,
+	  it belongs to the event.
+
 Sat Jan 17 13:26:15 CST 1998 Shawn T. Amundson <amundson@gimp.org>
 
 	* gtk/gtkentry.[ch]:  Applied patch from <lupus@lettere.unipd.it> 
@@ -152,6 +184,10 @@ Wed Jan  7 02:14:30 PST 1998 Manish Singh <yosh@gimp.org>
 	* glib/gslist.c
 	* glib/testglib.c: Added g_[s]list_insert_sorted function
 	and appropriate tests in testglib
+
+Tue Jan  6 17:09:46 1998  Owen Taylor  <owt1@cornell.edu>
+	* gtk/gtknotebook.h gtk/gtknotebook.c
+	   Added "switch_page" signal. (gtk-hamann_jeske-971212-0.patch)
 
 Tue Jan  6 17:07:29 1998  Owen Taylor  <owt1@cornell.edu>
 	* gtk/gtkentry.c gtk/gtkentry.h gtk/testgtk.c : 
