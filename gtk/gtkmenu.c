@@ -652,22 +652,6 @@ gtk_menu_popup (GtkMenu		    *menu,
   gtk_widget_show (GTK_WIDGET (menu));
   gtk_widget_show (menu->toplevel);
 
-  if (current_event)
-    {
-      /* Also, if we're popping up from a key event, select the first
-       * item in the menu. Bad hack, but no better way to do it
-       * in current menu framework.
-       */
-      if (current_event->type == GDK_KEY_PRESS &&
-          GTK_MENU_SHELL (menu)->children)
-        {
-          gtk_menu_shell_select_item (GTK_MENU_SHELL (menu),
-                                      GTK_MENU_SHELL (menu)->children->data);
-        }
-      
-      gdk_event_free (current_event);
-    }
-  
   gtk_menu_scroll_to (menu, menu->scroll_offset);
 
   /* Find the last viewable ancestor, and make an X grab on it

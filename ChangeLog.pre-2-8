@@ -1,3 +1,14 @@
+Sat Feb  2 11:37:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_popup): Remove the 
+	"select first item if popped up from keypress" hack --
+	was causing more problems than it was worth 
+	(#53191, #68483)
+
+	* gtk/gtktextview.c (popup_targets_received): 
+	 gtk/gtkentry.c (popup_targets_received): If activated
+	from keyboard, select first item of popup menu.
+
 Sat Feb  2 18:07:51 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): set upper member

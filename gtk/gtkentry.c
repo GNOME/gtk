@@ -3812,6 +3812,28 @@ unichar_chosen_func (const char *text,
   gtk_entry_enter_text (entry, text);
 }
 
+static void
+menu_select_first_child (GtkMenu *menu)
+{
+  GList *children = gtk_container_get_children (GTK_CONTAINER (menu));
+
+  GList *tmp_list = children;
+  while (tmp_list)
+    {
+      GtkWidget *child = tmp_list->data;
+      
+      if (GTK_WIDGET_VISIBLE (child))
+	{
+	  gtk_menu_shell_select_item (GTK_MENU_SHELL (menu), child);
+	  break;
+	}
+      
+      tmp_list = tmp_list->next;
+    }
+
+  g_list_free (children);
+}
+
 typedef struct
 {
   GtkEntry *entry;
@@ -3892,9 +3914,12 @@ popup_targets_received (GtkClipboard     *clipboard,
 			NULL, NULL,
 			info->button, info->time);
       else
-	gtk_menu_popup (GTK_MENU (entry->popup_menu), NULL, NULL,
-			popup_position_func, entry,
-			info->button, info->time);
+	{
+	  gtk_menu_popup (GTK_MENU (entry->popup_menu), NULL, NULL,
+			  popup_position_func, entry,
+			  info->button, info->time);
+	  menu_select_first_child (GTK_MENU (entry->popup_menu));
+	}
     }
 
   g_object_unref (entry);
