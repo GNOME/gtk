@@ -1,3 +1,8 @@
+2001-10-22  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_set_border_window_size): Fix 
+	#62366
+
 Mon Oct 22 11:47:47 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c: Add cursor-position, selection-bound 

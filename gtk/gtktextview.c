@@ -6227,8 +6227,11 @@ set_window_height (GtkTextView      *text_view,
  *
  * Sets the width of %GTK_TEXT_WINDOW_LEFT or %GTK_TEXT_WINDOW_RIGHT,
  * or the height of %GTK_TEXT_WINDOW_TOP or %GTK_TEXT_WINDOW_BOTTOM.
- * Automatically destroys the corresponding window if the size is set to 0,
- * and creates the window if the size is set to non-zero.
+ * Automatically destroys the corresponding window if the size is set
+ * to 0, and creates the window if the size is set to non-zero.  This
+ * function can only be used for the "border windows," it doesn't work
+ * with #GTK_TEXT_WINDOW_WIDGET, #GTK_TEXT_WINDOW_TEXT, or
+ * #GTK_TEXT_WINDOW_PRIVATE.
  **/
 void
 gtk_text_view_set_border_window_size (GtkTextView      *text_view,
@@ -6238,8 +6241,6 @@ gtk_text_view_set_border_window_size (GtkTextView      *text_view,
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (size >= 0);
-  g_return_if_fail (type != GTK_TEXT_WINDOW_WIDGET);
-  g_return_if_fail (type != GTK_TEXT_WINDOW_TEXT);
 
   switch (type)
     {
@@ -6264,7 +6265,7 @@ gtk_text_view_set_border_window_size (GtkTextView      *text_view,
       break;
 
     default:
-      g_warning ("Can only set size of left/right/top/bottom border windows with gtk_text_view_set_border_window_size in %s\n", G_STRLOC);
+      g_warning ("Can only set size of left/right/top/bottom border windows with gtk_text_view_set_border_window_size()");
       break;
     }
 }
