@@ -1,8 +1,9 @@
 2004-07-06  Tor Lillqvist  <tml@iki.fi>
 
-	* gdk-pixbuf-features.h.in: Mark the version variables for proper
-	import and export from Windows DLLs. Thanks to Laurent Sansonetti
-	for reporting the problem.
+	* gdk-pixbuf-features.h.in
+	* gdk-pixbuf.c: Mark the version variables for proper import and
+	export from Windows DLLs. Thanks to Laurent Sansonetti for
+	reporting the problem.
 
 Sat Jul  3 00:41:44 2004  Matthias Clasen  <maclas@gmx.de>
 
