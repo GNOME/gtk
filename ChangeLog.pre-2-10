@@ -1,3 +1,10 @@
+Mon Dec 16 22:12:01 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Don't use AC_CHECK_LIB() when
+	checking for FreeType, Pango, Atk since that get
+	the ordering wrong. Instead, set LIBS ourself
+	and call AC_TRY_LINK_FUNC(). (#98406)
+
 Mon Dec 16 21:39:28 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_enter_text): Call

@@ -945,8 +945,10 @@ if test "x$gdktarget" = "xlinux-fb" || test "x$gdktarget" = "xx11" ; then
     FREETYPE_CFLAGS=`$FREETYPE_CONFIG --cflags`
     FREETYPE_LIBS=`$FREETYPE_CONFIG --libs`
 
-    AC_CHECK_LIB(freetype, FT_New_Face, have_freetype=true
-	         ,:,$FREETYPE_LIBS)
+    gtk_save_LIBS="$LIBS"
+    LIBS="$FREETYPE_LIBS $LIBS"
+    AC_TRY_LINK_FUNC(FT_New_Face, have_freetype=true,:)
+    LIBS="$gtk_save_LIBS"
 
     if $have_freetype ; then
       gtk_save_cppflags="$CPPFLAGS"
@@ -1352,9 +1354,12 @@ CFLAGS="$CFLAGS $PANGO_CFLAGS"
 if $PKG_CONFIG --uninstalled $PANGO_PACKAGES; then
         :
 else
-        AC_CHECK_LIB(pango-1.0, pango_context_new, :, AC_MSG_ERROR([
+	gtk_save_LIBS="$LIBS"
+        LIBS="$PANGO_LIBS $LIBS"
+        AC_TRY_LINK_FUNC(pango_context_new, :, AC_MSG_ERROR([
 *** Can't link to Pango. Pango is required to build
-*** GTK+. For more information see http://www.pango.org]), $PANGO_LIBS)
+*** GTK+. For more information see http://www.pango.org]))
+        LIBS="$gtk_save_LIBS"
 fi
 
 CFLAGS="$saved_cflags"
@@ -1400,9 +1405,12 @@ fi
 if $PKG_CONFIG --uninstalled $ATK_PACKAGES; then
         :
 else
-        AC_CHECK_LIB(atk-1.0, atk_object_get_type, : , AC_MSG_ERROR([
+	gtk_save_LIBS="$LIBS"
+        LIBS="$ATK_LIBS $LIBS"
+        AC_TRY_LINK_FUNC(atk_object_get_type, : , AC_MSG_ERROR([
                 *** Cannot link to Accessibility Toolkit. Accessibility Toolkit is required
-                *** to build GTK+]), $ATK_LIBS $GLIB_LIBS)
+                *** to build GTK+]))
+        LIBS="$gtk_save_LIBS"
 fi
 
 GTK_PACKAGES=atk
