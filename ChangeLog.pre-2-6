@@ -1,3 +1,8 @@
+Tue Nov 13 19:51:43 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c (handle_accels_changed): protect idle handle
+	with gdk threads macro.
+
 Mon Nov 12 23:08:37 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/maketypes.awk: fix type utils generation on unix.

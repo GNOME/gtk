@@ -1015,7 +1015,10 @@ gtk_window_set_policy (GtkWindow *window,
 static gboolean
 handle_accels_changed (gpointer data)
 {
-  GtkWindow *window = GTK_WINDOW (data);
+  GtkWindow *window;
+
+  GDK_THREADS_ENTER ();
+  window = GTK_WINDOW (data);
 
   if (window->accels_changed_handler)
     {
@@ -1024,7 +1027,8 @@ handle_accels_changed (gpointer data)
     }
 
   g_signal_emit (window, window_signals[ACCELS_CHANGED], 0);
-
+  GDK_THREADS_LEAVE ();
+  
   return FALSE;
 }
 
