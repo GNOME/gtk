@@ -1651,6 +1651,8 @@ gtk_clist_set_column_visibility (GtkCList *clist,
       else
 	gtk_widget_hide (clist->column[column].button);
     }
+  
+  gtk_widget_queue_resize (GTK_WIDGET(clist));
 }
 
 void
@@ -4611,11 +4613,13 @@ gtk_clist_map (GtkWidget *widget)
 	    !GTK_WIDGET_MAPPED (clist->column[i].button))
 	  gtk_widget_map (clist->column[i].button);
       
-      /* map resize windows AFTER column buttons (above) */
       for (i = 0; i < clist->columns; i++)
 	if (clist->column[i].window && clist->column[i].button)
-	  gdk_window_show (clist->column[i].window);
-       
+	  {
+	    gdk_window_raise (clist->column[i].window);
+	    gdk_window_show (clist->column[i].window);
+	  }
+
       gdk_window_show (clist->title_window);
       gdk_window_show (clist->clist_window);
       gdk_window_show (widget->window);
@@ -4998,6 +5002,8 @@ gtk_clist_button_press (GtkWidget      *widget,
     if (clist->column[i].resizeable && clist->column[i].window &&
 	event->window == clist->column[i].window)
       {
+	gpointer drag_data;
+
 	gdk_pointer_grab (clist->column[i].window, FALSE,
 			  GDK_POINTER_MOTION_HINT_MASK |
 			  GDK_BUTTON1_MOTION_MASK |
@@ -5005,6 +5011,11 @@ gtk_clist_button_press (GtkWidget      *widget,
 			  NULL, NULL, event->time);
 	gtk_grab_add (widget);
 	GTK_CLIST_SET_FLAG (clist, CLIST_IN_DRAG);
+
+	/* block attached dnd signal handler */
+	drag_data = gtk_object_get_data (GTK_OBJECT (clist), "gtk-site-data");
+	if (drag_data)
+	  gtk_signal_handler_block_by_data (GTK_OBJECT (clist), drag_data);
 
 	if (!GTK_WIDGET_HAS_FOCUS(widget))
 	  gtk_widget_grab_focus (widget);
@@ -5040,12 +5051,18 @@ gtk_clist_button_release (GtkWidget      *widget,
   /* release on resize windows */
   if (GTK_CLIST_IN_DRAG(clist))
     {
+      gpointer drag_data;
       gint width;
       gint x;
       gint i;
 
       i = clist->drag_pos;
       clist->drag_pos = -1;
+
+      /* unblock attached dnd signal handler */
+      drag_data = gtk_object_get_data (GTK_OBJECT (clist), "gtk-site-data");
+      if (drag_data)
+	gtk_signal_handler_unblock_by_data (GTK_OBJECT (clist), drag_data);
 
       GTK_CLIST_UNSET_FLAG (clist, CLIST_IN_DRAG);
       gtk_widget_get_pointer (widget, &x, NULL);

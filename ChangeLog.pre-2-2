@@ -1,3 +1,11 @@
+Mon Jan 18 00:22:54 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_button_press) (gtk_clist_button_release):
+	block drag source signal handler during column resizes.
+	(gtk_clist_set_column_visibility): resize clist if needed.
+	(gtk_clist_map): raise resize windows to make resize
+ 	cursor visible again.
+
 Sun Jan 17 22:47:15 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.[hc]: 
