@@ -1,3 +1,9 @@
+2002-10-20  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf/Makefile.am (SCANOBJ_FILES): 
+	* gtk/Makefile.am (SCANOBJ_FILES): 
+	* gdk/Makefile.am (SCANOBJ_FILES): Add $(DOC_MODULE).prerequisites.
+
 Fri Oct 18 15:13:24 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/tmpl/event_structs.sgml: Update the docs for

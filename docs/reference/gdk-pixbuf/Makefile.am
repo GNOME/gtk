@@ -107,6 +107,7 @@ SCANOBJ_FILES = 		 \
 	$(DOC_MODULE).args 	 \
 	$(DOC_MODULE).hierarchy  \
 	$(DOC_MODULE).interfaces \
+	$(DOC_MODULE).prerequisites \
 	$(DOC_MODULE).signals
 
 if ENABLE_GTK_DOC
@@ -200,10 +201,10 @@ endif
 
 dist-hook: dist-check-gtkdoc dist-hook-local
 	mkdir $(distdir)/tmpl
-	mkdir $(distdir)/sgml
+	mkdir $(distdir)/xml
 	mkdir $(distdir)/html
 	-cp $(srcdir)/tmpl/*.sgml $(distdir)/tmpl
-	-cp $(srcdir)/sgml/*.sgml $(distdir)/sgml
+	-cp $(srcdir)/xml/*.xml $(distdir)/xml
 	-cp $(srcdir)/html/* $(distdir)/html
 
 .PHONY : dist-hook-local
