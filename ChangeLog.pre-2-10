@@ -1,3 +1,8 @@
+Wed Mar  7 20:07:22 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am: Remove gtk-config-2.0 again.
+	(Grrrr, pkg-config. And stops make loops.)
+
 Thu Mar  8 00:18:29 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.[hc]: removed old emission hook API.
