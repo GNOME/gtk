@@ -160,6 +160,7 @@ Deprecated equivalent of g_object_unref().
 </para>
 
 
+
 <!-- ##### STRUCT GdkBitmap ##### -->
 <para>
 An opaque structure representing an offscreen drawable of depth
@@ -182,5 +183,6 @@ Deprecated equivalent of g_object_ref().
 <para>
 Deprecated equivalent of g_object_unref().
 </para>
+
 
 
