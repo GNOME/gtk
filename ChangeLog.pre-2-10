@@ -1,3 +1,16 @@
+2005-02-16  Matthias Clasen  <mclasen@redhat.com>
+
+	Fixes for #143829, Tommi Komulainen, Christian Persch:
+	
+	* gtk/gtktreeview.c (gtk_tree_view_destroy): Remove the
+	typeselect_flush_timeout when destroying the widgets
+	it is operating on.  
+	(gtk_tree_view_ensure_interactive_directory): Add the 
+	popup to the window group of the toplevel it belongs to.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_popup_widget) 
+	(gtk_combo_box_popup): Do the same here. 
+
 2005-02-14  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Kill --enable-ansi  (#164394)

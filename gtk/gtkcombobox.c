@@ -1136,7 +1136,15 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
     {
       if (!combo_box->priv->popup_window)
         {
+	  GtkWidget *toplevel;
+	  
           combo_box->priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
+
+	  toplevel = gtk_widget_get_toplevel (combo_box);
+	  if (GTK_IS_WINDOW (toplevel))
+	    gtk_window_group_add_window (_gtk_window_get_group (GTK_WINDOW (toplevel)), 
+					 GTK_WINDOW (combo_box->priv->popup_window));
+
 	  gtk_window_set_resizable (GTK_WINDOW (combo_box->priv->popup_window), FALSE);
           gtk_window_set_screen (GTK_WINDOW (combo_box->priv->popup_window),
                                  gtk_widget_get_screen (GTK_WIDGET (combo_box)));
@@ -1580,7 +1588,8 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
 {
   gint x, y, width, height;
   GtkTreePath *path, *ppath;
-  
+  GtkWidget *toplevel;
+
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
   if (GTK_WIDGET_MAPPED (combo_box->priv->popup_widget))
@@ -1591,6 +1600,11 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
       gtk_combo_box_menu_popup (combo_box, 0, 0);
       return;
     }
+
+  toplevel = gtk_widget_get_toplevel (combo_box);
+  if (GTK_IS_WINDOW (toplevel))
+    gtk_window_group_add_window (_gtk_window_get_group (GTK_WINDOW (toplevel)), 
+				 GTK_WINDOW (combo_box->priv->popup_window));
 
   gtk_widget_show_all (combo_box->priv->popup_frame);
   gtk_combo_box_list_position (combo_box, &x, &y, &width, &height);
