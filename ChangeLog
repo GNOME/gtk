@@ -1,3 +1,10 @@
+2004-06-07  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): Revert the patch
+	from 2003/Sep/12.  This kept DnD in tree views within modal
+	dialogs from working, which is especially bad for the file
+	chooser.  Fixes #135168.
+
 Sun Jun  6 23:57:21 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Make the entry context menu work in editable text cells. The changes are
