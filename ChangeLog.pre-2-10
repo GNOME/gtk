@@ -1,3 +1,9 @@
+2004-12-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_button_state_changed): 
+	Transfer state from the button to the cell view to get
+	prelighting right.  (#156327, Ricardo Veguilla)
+
 Wed Dec 22 14:22:19 2004  Søren Sandmann  <sandmann@redhat.com>
 
 	* tests/testtoolbar.c (timeout_cb): Add sensitivity-changing
