@@ -42,7 +42,7 @@ typedef struct _GtkIMContextClass  GtkIMContextClass;
 
 struct _GtkIMContext
 {
-  GtkObject object;
+  GObject parent_instance;
 };
 
 struct _GtkIMContextClass

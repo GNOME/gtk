@@ -1,3 +1,9 @@
+Sun Oct 28 09:15:39 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontext.h (struct _GtkIMContext): Fixed
+	structure to have GObject not GtkObject as
+	parent_instance. (Jeff Franks.)
+
 2001-10-27  Matthias Clasen  <matthiasc@poet.de>
 
 	* gdk/x11/gdkinput.c: Typo fix.
