@@ -121,7 +121,8 @@ static void gtk_notebook_expose_tabs         (GtkNotebook      *notebook);
 static void gtk_notebook_switch_focus_tab    (GtkNotebook      *notebook, 
                                               GList            *new_child);
 static void gtk_real_notebook_switch_page    (GtkNotebook      *notebook,
-					      GtkNotebookPage  *page);
+					      GtkNotebookPage  *page,
+					      gint              page_num);
 static void gtk_notebook_marshal_signal      (GtkObject        *object,
 					      GtkSignalFunc     func,
 					      gpointer          func_data,
@@ -1803,7 +1804,8 @@ gtk_notebook_draw_arrow (GtkNotebook *notebook, guint arrow)
 
 static void
 gtk_real_notebook_switch_page (GtkNotebook     *notebook,
-			       GtkNotebookPage *page)
+			       GtkNotebookPage *page,
+			       gint             switch_page)
 {
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
