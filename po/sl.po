@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 1.4.0\n"
-"POT-Creation-Date: 2002-03-05 22:16-0500\n"
+"POT-Creation-Date: 2002-03-07 12:30+0100\n"
 "PO-Revision-Date: 2002-02-26 00:23+0100\n"
 "Last-Translator: Andra¾ Tori <andraz.tori1@guest.arnes.si>\n"
 "Language-Team: slovenian <sl@li.org>\n"
@@ -1692,15 +1692,15 @@ msgstr "Izbira fokusa"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Ali naj se izbere vsebina vnosa, ko je fokusiran"
 
-#: gtk/gtkentry.c:3838 gtk/gtklabel.c:3164
+#: gtk/gtkentry.c:3843 gtk/gtklabel.c:3164
 msgid "Select All"
 msgstr "Izberi vse"
 
-#: gtk/gtkentry.c:3848 gtk/gtklabel.c:3174
+#: gtk/gtkentry.c:3853 gtk/gtklabel.c:3174
 msgid "Input Methods"
 msgstr "Naèini vnosa"
 
-#: gtk/gtkentry.c:3858 gtk/gtktextview.c:6344
+#: gtk/gtkentry.c:3863 gtk/gtktextview.c:6344
 msgid "_Insert Unicode control character"
 msgstr "_Vstavi kontrolni znak Unicode"
 
@@ -2045,7 +2045,7 @@ msgstr "Stran ¹katle z roèico, ki je poravnana z toèko doka."
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1303
+#: gtk/gtkiconfactory.c:1308
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Napaka ob nalaganju ikone: %s"
@@ -3115,7 +3115,7 @@ msgstr "_Cd rom"
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
-msgstr "P_oèisti"
+msgstr "_Poèisti"
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
@@ -3123,7 +3123,7 @@ msgstr "_Zapri"
 
 #: gtk/gtkstock.c:282
 msgid "_Convert"
-msgstr "_Pretvori"
+msgstr "P_retvori"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
@@ -3131,7 +3131,7 @@ msgstr "_Kopiraj"
 
 #: gtk/gtkstock.c:284
 msgid "C_ut"
-msgstr "_Izre¾i"
+msgstr "Izr_e¾i"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
@@ -3143,7 +3143,7 @@ msgstr "_Izvedi"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
-msgstr "_Poi¹èi"
+msgstr "Po_i¹èi"
 
 #: gtk/gtkstock.c:288
 msgid "Find and _Replace"
@@ -3243,7 +3243,7 @@ msgstr "_Prilepi"
 
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
-msgstr "_Nastavitve"
+msgstr "Nas_tavitve"
 
 #: gtk/gtkstock.c:313
 msgid "_Print"
@@ -3263,7 +3263,7 @@ msgstr "Konèa_j"
 
 #: gtk/gtkstock.c:317
 msgid "_Redo"
-msgstr "O_bnovi"
+msgstr "_Obnovi"
 
 #: gtk/gtkstock.c:318
 msgid "_Refresh"
@@ -3271,7 +3271,7 @@ msgstr "O_sve¾i"
 
 #: gtk/gtkstock.c:319
 msgid "_Remove"
-msgstr "_Odstrani"
+msgstr "Od_strani"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
@@ -3315,7 +3315,7 @@ msgstr "Preèr_tano"
 
 #: gtk/gtkstock.c:330
 msgid "_Undelete"
-msgstr "_Odbri¹i"
+msgstr "O_dbri¹i"
 
 #: gtk/gtkstock.c:331
 msgid "_Underline"
@@ -4229,15 +4229,15 @@ msgid "Color with which to draw insertion cursor"
 msgstr "Barva s katero naj se ri¹e vnosni kazalec"
 
 #: gtk/gtkwidget.c:1083
-#, fuzzy
 msgid "Secondary cursor color"
-msgstr "Barva kazalca"
+msgstr "Barva drugotnega kazalca"
 
 #: gtk/gtkwidget.c:1084
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
 msgstr ""
+"Barva s katero se nari¹e drugotni kazalec vstavljanja, kadar se ureja me¹ano besedilo - skupaj desno-proti-levi in levo-proti desni."
 
 #: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"
