@@ -1,3 +1,7 @@
+Tue Sep 30 23:12:34 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelfilter.c: Add "Since: 2.4" to all API doc comments.
+
 Tue Sep 30 22:59:58 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeviewcolumn.c: Some API doc comment fixes.
