@@ -27,8 +27,7 @@ domain.
 @GDK_PIXBUF_ERROR_UNKNOWN_FORMAT: 
 @GDK_PIXBUF_ERROR_CORRUPT_IMAGE: An image file was broken somehow.
 @GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY: Not enough memory.
-@GDK_PIXBUF_ERROR_BAD_OPTION_VALUE: An option passed to
-gdk_pixbuf_save() had a bad value.
+@GDK_PIXBUF_ERROR_BAD_OPTION: A bad option was passed to a pixbuf save module.
 @GDK_PIXBUF_ERROR_UNKNOWN_TYPE: Unknown image type.
 @GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION: Don't know how to perform the
 given operation on the type of image at hand.

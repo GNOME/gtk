@@ -731,8 +731,8 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
  * @Varargs: list of key-value save options
  *
  * Saves pixbuf to a file in @type, which is currently "jpeg" or
- * "png".  If @error is set, FALSE will be returned. Possible errors include those
- * in the #GDK_PIXBUF_ERROR domain and those in the #G_FILE_ERROR domain.
+ * "png".  If @error is set, FALSE will be returned. Possible errors include 
+ * those in the #GDK_PIXBUF_ERROR domain and those in the #G_FILE_ERROR domain.
  *
  * The variable argument list should be NULL-terminated; if not empty,
  * it should contain pairs of strings that modify the save
@@ -743,8 +743,13 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
  *                  "quality", "100", NULL);
  * </programlisting>
  *
- * The only save parameter that currently exists is the "quality" field
- * for JPEG images; its value should be in the range [0,100].
+ * Currently only few parameters exist. JPEG images can be saved with a 
+ * "quality" parameter; its value should be in the range [0,100]. 
+ * Text chunks can be attached to PNG images by specifying parameters of
+ * the form "tEXt::key", where key is an ASCII string of length 1-79.
+ * The values are UTF-8 encoded strings. Note however that PNG text
+ * chunks are stored in ISO-8859-1 encoding, so you can only set texts
+ * that can be represented in this encoding.
  *
  * Return value: whether an error was set
  **/

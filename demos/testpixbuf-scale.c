@@ -63,6 +63,7 @@ main(int argc, char **argv)
 	GtkWidget *hbox, *label, *hscale;
 	GtkAdjustment *adjustment;
 	GtkRequisition scratch_requisition;
+        const gchar *creator;
         GError *error;
         
 	pixbuf_init ();
@@ -82,6 +83,10 @@ main(int argc, char **argv)
                 g_error_free (error);
 		exit(1);
 	}
+
+        creator = gdk_pixbuf_get_option (pixbuf, "tEXt::Software");
+        if (creator)
+                g_print ("%s was created by '%s'\n", argv[1], creator);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_signal_connect (GTK_OBJECT (window), "destroy",

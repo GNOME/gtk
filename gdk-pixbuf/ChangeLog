@@ -1,3 +1,16 @@
+2001-10-05  Sven Neumann  <sven@gimp.org>
+
+	* gdk-pixbuf/gdk-pixbuf-io.c
+	* gdk-pixbuf/gdk-pixbuf-private.h
+	* gdk-pixbuf/gdk-pixbuf.c
+	* gdk-pixbuf/gdk-pixbuf.h
+	* gdk-pixbuf/io-jpeg.c
+	* gdk-pixbuf/io-png.c: changed GDK_PIXBUF_ERROR_BAD_OPTION_VALUE to
+	GDK_PIXBUF_ERROR_BAD_OPTION to we can use it for bad keys too. Added
+	new public API gdk_pixbuf_get_option() to retrieve key/value pairs
+	set by an image loader. Added support for saving and reading PNG tEXt 
+	chunks in PNG images.
+
 Tue Oct  2 11:29:50 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixdata.c (gdk_pixdata_to_csource): Fix indentation

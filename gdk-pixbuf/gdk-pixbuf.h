@@ -85,8 +85,8 @@ typedef enum {
         GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
         /* no mem to load image */
         GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-        /* bad option value passed to save routine */
-        GDK_PIXBUF_ERROR_BAD_OPTION_VALUE,
+        /* bad option passed to save routine */
+        GDK_PIXBUF_ERROR_BAD_OPTION,
         /* unsupported image type (sort of an ENOSYS) */
         GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
         /* unsupported operation (load, save) for image type */
@@ -286,6 +286,12 @@ gboolean                gdk_pixbuf_animation_iter_advance                    (Gd
                                                                               const GTimeVal         *current_time);
 
 
+
+
+G_CONST_RETURN gchar * gdk_pixbuf_get_option (GdkPixbuf   *pixbuf,
+                                              const gchar *key);
+
+
  
 #include <gdk-pixbuf/gdk-pixbuf-loader.h>
 #include <gdk-pixbuf/gdk-pixbuf-enum-types.h>

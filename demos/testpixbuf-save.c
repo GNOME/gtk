@@ -35,7 +35,10 @@ keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
                         return;
                 }
 
-                if (!gdk_pixbuf_save (pixbuf, "foo.png", "png", &err, NULL)) {
+                if (!gdk_pixbuf_save (pixbuf, "foo.png", "png", 
+                                      &err,
+                                      "tEXt::Software", "testpixbuf-save",
+                                      NULL)) {
                         fprintf (stderr, "%s", err->message);
                         g_error_free (err);
                 }

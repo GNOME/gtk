@@ -1,3 +1,8 @@
+2001-10-05  Sven Neumann  <sven@gimp.org>
+
+	* gdk-pixbuf/tmpl/gdk-pixbuf.sgml: adapt to changes in GDK_PIXBUF_ERROR
+	enum.
+
 2001-10-04  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/tmpl/gtkimage.sgml: fix GtkImage overview

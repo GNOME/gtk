@@ -1,3 +1,9 @@
+2001-10-05  Sven Neumann  <sven@gimp.org>
+
+	* demos/testpixbuf-save.c
+	* demos/testpixbuf-scale.c: simple tests for the new PNG tEXt chunk 
+	feature.
+
 Fri Oct  5 19:06:07 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtktreeview.c (gtk_tree_view_leave_notify): should

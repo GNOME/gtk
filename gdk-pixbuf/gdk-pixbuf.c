@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 8 -*- */
 /* GdkPixbuf library - Basic memory management
  *
  * Copyright (C) 1999 The Free Software Foundation
@@ -479,6 +480,93 @@ gdk_pixbuf_fill (GdkPixbuf *pixbuf,
         }
 }
 
+
+
+/**
+ * gdk_pixbuf_get_option:
+ * @pixbuf: a #GdkPixbuf
+ * @key: a nul-terminated string.
+ * 
+ * Looks up @key in the list of options that may have been attached to the
+ * @pixbuf when it was loaded. 
+ * 
+ * Return value: the value associated with @key. This is a nul-terminated 
+ * string that should not be freed or %NULL if @key was not found.
+ **/
+G_CONST_RETURN gchar *
+gdk_pixbuf_get_option (GdkPixbuf   *pixbuf,
+                       const gchar *key)
+{
+        gchar **options;
+        gint i;
+
+        g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
+        g_return_val_if_fail (key != NULL, NULL);
+  
+        options = g_object_get_qdata (G_OBJECT (pixbuf), 
+                                      g_quark_from_static_string ("gdk_pixbuf_options"));
+        if (options) {
+                for (i = 0; options[2*i]; i++) {
+                        if (strcmp (options[2*i], key) == 0)
+                                return options[2*i+1];
+                }
+        }
+        
+        return NULL;
+}
+
+/**
+ * gdk_pixbuf_set_option:
+ * @pixbuf: a #GdkPixbuf
+ * @key: a nul-terminated string.
+ * @value: a nul-terminated string.
+ * 
+ * Attaches a key/value pair as an option to a #GdkPixbuf. If %key already
+ * exists in the list of options attached to @pixbuf, the new value is 
+ * ignored and %FALSE is returned.
+ *
+ * Return value: %TRUE on success.
+ **/
+gboolean
+gdk_pixbuf_set_option (GdkPixbuf   *pixbuf,
+                       const gchar *key,
+                       const gchar *value)
+{
+        GQuark  quark;
+        gchar **options;
+        gint n = 0;
+ 
+        g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), FALSE);
+        g_return_val_if_fail (key != NULL, FALSE);
+        g_return_val_if_fail (value != NULL, FALSE);
+
+        quark = g_quark_from_static_string ("gdk_pixbuf_options");
+
+        options = g_object_get_qdata (G_OBJECT (pixbuf), quark);
+
+        if (options) {
+                for (n = 0; options[2*n]; n++) {
+                        if (strcmp (options[2*n], key) == 0)
+                                return FALSE;
+                }
+
+                g_object_steal_qdata (G_OBJECT (pixbuf), quark);
+                options = g_renew (gchar *, options, 2*(n+1) + 1);
+        } else {
+                options = g_new (gchar *, 3);
+        }
+        
+        options[2*n]   = g_strdup (key);
+        options[2*n+1] = g_strdup (value);
+        options[2*n+2] = NULL;
+
+        g_object_set_qdata_full (G_OBJECT (pixbuf), quark,
+                                 options, (GDestroyNotify) g_strfreev);
+        
+        return TRUE;
+}
+
+
 
 /* Include the marshallers */
 #include <glib-object.h>
