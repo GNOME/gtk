@@ -101,6 +101,12 @@ gboolean   gtk_file_chooser_get_preview_widget_active (GtkFileChooser *chooser);
 char *gtk_file_chooser_get_preview_filename (GtkFileChooser *file_chooser);
 char *gtk_file_chooser_get_preview_uri      (GtkFileChooser *file_chooser);
 
+/* Extra widget
+ */
+void       gtk_file_chooser_set_extra_widget (GtkFileChooser *chooser,
+					      GtkWidget      *extra_widget);
+GtkWidget *gtk_file_chooser_get_extra_widget (GtkFileChooser *chooser);
+
 /* List of user selectable filters
  */
 void    gtk_file_chooser_add_filter    (GtkFileChooser *chooser,

@@ -103,6 +103,11 @@ _gtk_file_chooser_install_properties (GObjectClass *klass)
 							  G_TYPE_BOOLEAN,
 							  G_PARAM_READWRITE));
   g_object_class_install_property (klass,
+				   GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET,
+				   g_param_spec_override ("extra-widget",
+							  GTK_TYPE_WIDGET,
+							  G_PARAM_READWRITE));
+  g_object_class_install_property (klass,
 				   GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE,
 				   g_param_spec_override ("select-multiple",
 							  G_TYPE_BOOLEAN,

@@ -89,6 +89,7 @@ struct _GtkFileChooserImplDefault
   GtkWidget *list;
   GtkWidget *entry;
   GtkWidget *preview_widget;
+  GtkWidget *extra_widget;
 };
 
 static void gtk_file_chooser_impl_default_class_init   (GtkFileChooserImplDefaultClass *class);
@@ -277,20 +278,12 @@ set_preview_widget (GtkFileChooserImplDefault *impl,
     return;
 
   if (impl->preview_widget)
-    {
-      g_object_unref (impl->preview_widget);
-      impl->preview_widget = NULL;
-
-      gtk_container_remove (GTK_CONTAINER (impl->preview_frame),
-			    impl->preview_widget);
-    }
+    gtk_container_remove (GTK_CONTAINER (impl->preview_frame),
+			  impl->preview_widget);
 
   impl->preview_widget = preview_widget;
   if (impl->preview_widget)
     {
-      g_object_ref (impl->preview_widget);
-      gtk_object_sink (GTK_OBJECT (impl->preview_widget));
-      
       gtk_widget_show (impl->preview_widget);
       gtk_container_add (GTK_CONTAINER (impl->preview_frame),
 			 impl->preview_widget);
@@ -485,6 +478,25 @@ gtk_file_chooser_impl_default_constructor (GType                  type,
   return object;
 }
 
+/* Sets the extra_widget by packing it in the appropriate place */
+static void
+set_extra_widget (GtkFileChooserImplDefault *impl,
+		  GtkWidget                 *extra_widget)
+{
+  if (extra_widget == impl->extra_widget)
+    return;
+
+  if (impl->extra_widget)
+    gtk_container_remove (GTK_CONTAINER (impl), impl->extra_widget);
+
+  impl->extra_widget = extra_widget;
+  if (impl->extra_widget)
+    {
+      gtk_widget_show (impl->extra_widget);
+      gtk_box_pack_end (GTK_BOX (impl), impl->extra_widget, FALSE, FALSE, 0);
+    }
+}
+
 static void
 gtk_file_chooser_impl_default_set_property (GObject         *object,
 					    guint            prop_id,
@@ -537,6 +549,9 @@ gtk_file_chooser_impl_default_set_property (GObject         *object,
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE:
       impl->preview_widget_active = g_value_get_boolean (value);
       update_preview_widget_visibility (impl);
+      break;
+    case GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET:
+      set_extra_widget (impl, g_value_get_object (value));
       break;
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
       {
@@ -598,6 +613,9 @@ gtk_file_chooser_impl_default_get_property (GObject         *object,
       break;
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET_ACTIVE:
       g_value_set_boolean (value, impl->preview_widget_active);
+      break;
+    case GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET:
+      g_value_set_object (value, impl->extra_widget);
       break;
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
       g_value_set_boolean (value, impl->select_multiple);

@@ -128,6 +128,12 @@ gtk_file_chooser_base_init (gpointer g_iface)
 								 TRUE,
 								 G_PARAM_READWRITE));
       g_object_interface_install_property (g_iface,
+					   g_param_spec_object ("extra-widget",
+								_("Extra widget"),
+								_("Application supplied widget for extra options."),
+								GTK_TYPE_WIDGET,
+								G_PARAM_READWRITE));
+      g_object_interface_install_property (g_iface,
 					   g_param_spec_boolean ("select-multiple",
 								 _("Select Multiple"),
 								 _("Whether to allow multiple files to be selected"),
@@ -1076,6 +1082,50 @@ gtk_file_chooser_get_preview_uri (GtkFileChooser *chooser)
     }
 
   return result;
+}
+
+/**
+ * gtk_file_chooser_set_extra_widget:
+ * @chooser: a #GtkFileChooser
+ * @extra_widget: widget for extra options
+ * 
+ * Sets an application-supplied widget to provide extra options to the user.
+ **/
+void
+gtk_file_chooser_set_extra_widget (GtkFileChooser *chooser,
+				   GtkWidget      *extra_widget)
+{
+  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+
+  g_object_set (chooser, "extra-widget", extra_widget, NULL);
+}
+
+/**
+ * gtk_file_chooser_get_extra_widget:
+ * @chooser: a #GtkFileChooser
+ * 
+ * Gets the current preview widget; see
+ * gtk_file_chooser_set_extra_widget().
+ * 
+ * Return value: the current extra widget, or %NULL
+ **/
+GtkWidget *
+gtk_file_chooser_get_extra_widget (GtkFileChooser *chooser)
+{
+  GtkWidget *extra_widget;
+  
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
+
+  g_object_get (chooser, "extra-widget", &extra_widget, NULL);
+  
+  /* Horrid hack; g_object_get() refs returned objects but
+   * that contradicts the memory management conventions
+   * for accessors.
+   */
+  if (extra_widget)
+    g_object_unref (extra_widget);
+
+  return extra_widget;
 }
 
 /**

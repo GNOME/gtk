@@ -264,6 +264,7 @@ main (int argc, char **argv)
   GtkFileSystem *file_system;
   GtkFileFilter *filter;
   GtkWidget *preview_vbox;
+  GtkWidget *extra;
   
   gtk_init (&argc, &argv);
 
@@ -329,6 +330,10 @@ main (int argc, char **argv)
   update_preview_cb (GTK_FILE_CHOOSER (dialog));
   g_signal_connect (dialog, "update-preview",
 		    G_CALLBACK (update_preview_cb), NULL);
+
+  /* Extra widget */
+  extra = gtk_check_button_new_with_mnemonic ("_Frobnicate the file");
+  gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), extra);
   
   gtk_window_set_default_size (GTK_WINDOW (dialog), 600, 400);
   /* show_all() to reveal bugs in composite widget handling */
