@@ -1,3 +1,9 @@
+Fri Jan  9 22:23:45 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c: Introduce a new parser state for 
+	accelerator elements to avoid misparsing files containing 
+	such elements.  (#131035, Morten Welinder)
+
 Fri Jan  9 11:58:47 2004  Manish Singh  <yosh@gimp.org>
 
 	* gdk-pixbuf/gdk-pixbuf-io.c: #include <unistd.h> for unlink()
