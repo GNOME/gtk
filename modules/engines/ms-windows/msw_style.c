@@ -556,150 +556,6 @@ get_system_metric(XpThemeClass klazz, int id)
   return rval;
 }
 
-#if 0
-static void
-setup_default_style (void)
-{
-	GdkColor btnface;
-	GdkColor highlight;
-	GdkColor window;
-	GdkColor windowtext;
-	GdkColor highlighttext;
-	GdkColor graytext;
-	GdkColor btntext;
-	GdkColor dark;
-	GdkColor light;
-	GdkColor mid;
-	GdkColor text_aa[5];
-
-	char buf[2048];
-
-	sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNFACE,       &btnface);
-	sys_color_to_gtk_color(XP_THEME_CLASS_TEXT,    COLOR_HIGHLIGHT,     &highlight);
-	sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW,  COLOR_WINDOW,        &window);
-	sys_color_to_gtk_color(XP_THEME_CLASS_WINDOW,  COLOR_WINDOWTEXT,    &windowtext);
-	sys_color_to_gtk_color(XP_THEME_CLASS_TEXT,    COLOR_HIGHLIGHTTEXT, &highlighttext);
-	sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_GRAYTEXT,      &graytext);
-	sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_BTNTEXT,       &btntext);
-	sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_3DSHADOW,      &dark);
-	sys_color_to_gtk_color(XP_THEME_CLASS_BUTTON,  COLOR_3DHILIGHT,     &light);
-
-	mid.red = (light.red + dark.red) / 2;
-	mid.green = (light.green + dark.green) / 2;
-	mid.blue = (light.blue + dark.blue) / 2;
-
-	text_aa[0].red = (windowtext.red + window.red) / 2;
-	text_aa[0].green = (windowtext.green + window.green) / 2;
-	text_aa[0].blue = (windowtext.blue + window.blue) / 2;
-	text_aa[1].red = (highlighttext.red + highlight.red) / 2;
-	text_aa[1].green = (highlighttext.green + highlight.green) / 2;
-	text_aa[1].blue = (highlighttext.blue + highlight.blue) / 2;
-
-	text_aa[2].red = (graytext.red + btnface.red) / 2;
-	text_aa[2].green = (graytext.green + btnface.green) / 2;
-	text_aa[2].blue = (graytext.blue + btnface.blue) / 2;
-
-	text_aa[3].red = (btntext.red + btnface.red) / 2;
-	text_aa[3].green = (btntext.green + btnface.green) / 2;
-	text_aa[3].blue = (btntext.blue + btnface.blue) / 2;
-
-	text_aa[4].red = (windowtext.red + window.red) / 2;
-	text_aa[4].green = (windowtext.green + window.green) / 2;
-	text_aa[4].blue = (windowtext.blue + window.blue) / 2;
-
-  	g_snprintf(buf, sizeof (buf),
-  		  "style \"msw-base\" = \"msw-default\"\n"
-		  "{\n"
-		  "bg[NORMAL] = { %d, %d, %d }\n"
-		  "bg[SELECTED] = { %d, %d, %d }\n"
-		  "bg[INSENSITIVE] = { %d, %d, %d }\n"
-		  "bg[ACTIVE] = { %d, %d, %d }\n"
-		  "bg[PRELIGHT] = { %d, %d, %d }\n"
-		  "base[NORMAL] = { %d, %d, %d }\n"
-		  "base[SELECTED] = { %d, %d, %d }\n"
-		  "base[INSENSITIVE] = { %d, %d, %d }\n"
-		  "base[ACTIVE] = { %d, %d, %d }\n"
-		  "base[PRELIGHT] = { %d, %d, %d }\n"
-  		  "text[NORMAL] = { %d, %d, %d }\n"
-  		  "text[SELECTED] = { %d, %d, %d }\n"
-  		  "text[INSENSITIVE] = { %d, %d, %d }\n"
-  		  "text[ACTIVE] = { %d, %d, %d }\n"
-  		  "text[PRELIGHT] = { %d, %d, %d }\n"
-		  "fg[NORMAL] = { %d, %d, %d }\n"
-		  "fg[SELECTED] = { %d, %d, %d }\n"
-		  "fg[INSENSITIVE] = { %d, %d, %d }\n"
-		  "fg[ACTIVE] = { %d, %d, %d }\n"
-		  "fg[PRELIGHT] = { %d, %d, %d }\n"
-		  "dark[NORMAL] = { %d, %d, %d }\n"
-		  "dark[SELECTED] = { %d, %d, %d }\n"
-		  "dark[INSENSITIVE] = { %d, %d, %d }\n"
-		  "dark[ACTIVE] = { %d, %d, %d }\n"
-		  "dark[PRELIGHT] = { %d, %d, %d }\n"
-		  "light[NORMAL] = { %d, %d, %d }\n"
-		  "light[SELECTED] = { %d, %d, %d }\n"
-		  "light[INSENSITIVE] = { %d, %d, %d }\n"
-		  "light[ACTIVE] = { %d, %d, %d }\n"
-		  "light[PRELIGHT] = { %d, %d, %d }\n"
-		  "text_aa[NORMAL] = { %d, %d, %d }\n"
-		  "text_aa[SELECTED] = { %d, %d, %d }\n"
-		  "text_aa[INSENSITIVE] = { %d, %d, %d }\n"
-		  "text_aa[ACTIVE] = { %d, %d, %d }\n"
-		  "text_aa[PRELIGHT] = { %d, %d, %d }\n"
-		  "}widget_class \"*\" style \"msw-base\"\n",
-
-		  /* bg */
-		  btnface.red, btnface.green, btnface.blue,
-		  highlight.red, highlight.green, highlight.blue,
-		  btnface.red, btnface.green, btnface.blue,
-		  btnface.red, btnface.green, btnface.blue,
-		  btnface.red, btnface.green, btnface.blue,
-
-		  /* base */
-		  window.red, window.green, window.blue,
-		  highlight.red, highlight.green, highlight.blue,
-		  btnface.red, btnface.green, btnface.blue,
-		  btnface.red, btnface.green, btnface.blue,
-		  window.red, window.green, window.blue,
-
-		  /* text */
-		  windowtext.red, windowtext.green, windowtext.blue,
-		  highlighttext.red, highlighttext.green, highlighttext.blue,
-		  graytext.red, graytext.green, graytext.blue,
-		  btntext.red, btntext.green, btntext.blue,
-		  windowtext.red, windowtext.green, windowtext.blue,
-
-		  /* fg */
-		  btntext.red, btntext.green, btntext.blue,
-		  highlighttext.red, highlighttext.green, highlighttext.blue,
-		  graytext.red, graytext.green, graytext.blue,
-		  btntext.red, btntext.green, btntext.blue,
-		  windowtext.red, windowtext.green, windowtext.blue,
-
-		  /* dark */
-		  dark.red, dark.green, dark.blue,
-		  dark.red, dark.green, dark.blue,
-		  dark.red, dark.green, dark.blue,
-		  dark.red, dark.green, dark.blue,
-		  dark.red, dark.green, dark.blue,
-
-		  /* light */
-		  light.red, light.green, light.blue,
-		  light.red, light.green, light.blue,
-		  light.red, light.green, light.blue,
-		  light.red, light.green, light.blue,
-		  light.red, light.green, light.blue,
-
-		  /* text_aa */
-		  text_aa[0].red, text_aa[0].green, text_aa[0].blue,
-		  text_aa[1].red, text_aa[1].green, text_aa[1].blue,
-		  text_aa[2].red, text_aa[2].green, text_aa[2].blue,
-		  text_aa[3].red, text_aa[3].green, text_aa[3].blue,
-		  text_aa[4].red, text_aa[4].green, text_aa[4].blue
-		  );
-		  gtk_rc_parse_string(buf);
-}
-#endif
-
 static void
 setup_msw_rc_style(void)
 {
@@ -781,7 +637,6 @@ setup_msw_rc_style(void)
   gtk_rc_parse_string(buf);
 
   /* Enable coloring for menu bars. */
-  font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_MENU, XP_THEME_FONT_MENU,font_buf, sizeof (font_buf));
   g_snprintf(buf, sizeof (buf),
 	     "style \"msw-menu-bar\" = \"msw-menu\"\n"
 	     "{\n"
@@ -1276,14 +1131,6 @@ draw_harrow (GdkWindow     *window,
       x_increment = -1;
     }
 
-#if 0
-  for (i = 0; i < extra; i++)
-    {
-      gdk_draw_line (window, gc,
-		     x_start + i * x_increment, y,
-		     x_start + i * x_increment, y + height - 1);
-    }
-#endif
   for (i = extra; i < width; i++)
     {
       gdk_draw_line (window, gc,
