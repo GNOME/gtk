@@ -95,7 +95,7 @@ static void     files_added_cb            (GtkFileSystem       *file_system,
 static void     files_deleted_cb          (GtkFileSystem       *file_system,
 					   GSList              *deleted_uris,
 					   GtkFileChooserEntry *chooser_entry);
-static char    *maybe_append_seperator_to_path (GtkFileChooserEntry *chooser_entry,
+static char    *maybe_append_separator_to_path (GtkFileChooserEntry *chooser_entry,
 						GtkFilePath         *path,
 						gchar               *display_name);
 
@@ -253,7 +253,7 @@ match_selected_callback (GtkEntryCompletion  *completion,
       return FALSE;
     }
 
-  display_name = maybe_append_seperator_to_path (chooser_entry, path, display_name);
+  display_name = maybe_append_separator_to_path (chooser_entry, path, display_name);
 
   /* We have to jump through hoops to figure out where to append this to */
   text = gtk_entry_get_text (GTK_ENTRY (chooser_entry));
@@ -361,16 +361,16 @@ completion_match_func (GtkEntryCompletion *comp,
 }
 
 /* This function will append a '/' character to paths to display_name iff the
- * path associated with it is a directory.  maybe_append_seperator_to_path will
+ * path associated with it is a directory.  maybe_append_separator_to_path will
  * g_free the display_name and return a new one if needed.  Otherwise, it will
  * return the old one.  You should be safe calling
  *
- * display_name = maybe_append_seperator_to_path (entry, path, display_name);
+ * display_name = maybe_append_separator_to_path (entry, path, display_name);
  * ...
  * g_free (display_name);
  */
 static char *
-maybe_append_seperator_to_path (GtkFileChooserEntry *chooser_entry,
+maybe_append_separator_to_path (GtkFileChooserEntry *chooser_entry,
 				GtkFilePath         *path,
 				gchar               *display_name)
 {
@@ -462,7 +462,7 @@ check_completion_callback (GtkFileChooserEntry *chooser_entry)
 
   if (unique_path)
     {
-      common_prefix = maybe_append_seperator_to_path (chooser_entry,
+      common_prefix = maybe_append_separator_to_path (chooser_entry,
 						      unique_path,
 						      common_prefix);
       gtk_file_path_free (unique_path);

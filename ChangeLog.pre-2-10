@@ -1,3 +1,7 @@
+Mon Mar 15 10:47:18 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilechooserentry.c: s/seperator/separator/.
+
 Mon Mar 15 09:54:36 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_focus): Check for 
