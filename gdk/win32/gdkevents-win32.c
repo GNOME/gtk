@@ -754,6 +754,21 @@ build_key_event_state (GdkEvent *event,
   if (key_state[VK_CAPITAL] & 0x01)
     event->key.state |= GDK_LOCK_MASK;
 
+  /* Win9x doesn't distinguish between left and right Control and Alt
+   * in the keyboard state as returned by GetKeyboardState(), so we
+   * have to punt, and accept either Control + either Alt to be AltGr.
+   *
+   * Alternatively, we could have some state saved when the Control
+   * and Alt keys messages come in, as the KF_EXTENDED bit in lParam
+   * does indicate correctly whether it is the right Control or Alt
+   * key. But that would be a bit messy.
+   */
+  if (!IS_WIN_NT () &&
+      _gdk_keyboard_has_altgr &&
+      key_state[VK_CONTROL] & 0x80 &&
+      key_state[VK_MENU] & 0x80)
+    key_state[VK_LCONTROL] = key_state[VK_RMENU] = 0x80;
+
   if (_gdk_keyboard_has_altgr &&
       (key_state[VK_LCONTROL] & 0x80) &&
       (key_state[VK_RMENU] & 0x80))
@@ -2071,7 +2086,7 @@ gdk_event_translate (GdkDisplay *display,
 
       API_CALL (GetKeyboardState, (key_state));
 
-      /* g_print ("ctrl:%#x lctrl:%#x rctrl:%#x alt:%#x lalt:%#x ralt:%#x\n", key_state[VK_CONTROL], key_state[VK_LCONTROL], key_state[VK_RCONTROL], key_state[VK_MENU], key_state[VK_LMENU], key_state[VK_RMENU]); */
+      /* g_print ("ctrl:%02x lctrl:%02x rctrl:%02x alt:%02x lalt:%02x ralt:%02x\n", key_state[VK_CONTROL], key_state[VK_LCONTROL], key_state[VK_RCONTROL], key_state[VK_MENU], key_state[VK_LMENU], key_state[VK_RMENU]); */
       
       build_key_event_state (event, key_state);
 

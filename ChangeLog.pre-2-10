@@ -1,10 +1,21 @@
+2003-07-27  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (build_key_event_state): On Win9x,
+	the keyboard state returned by GetKeyboardState() doesn't
+	distinguish between the left and right Control and Alt keys. Thus
+	we cannot detect AltGr (which is supposed to be left Control +
+	right Alt) the same way as on NT-based systems, but have to accept
+	either Control + either Alt as AltGr.
+
 2003-07-27  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtktreeselection.c (gtk_tree_selection_selected_foreach): Fix function name in 
-	warning message.  (#118156, Tim-Philipp Müller)
+	* gtk/gtktreeselection.c (gtk_tree_selection_selected_foreach):
+	Fix function name in warning message.  (#118156, Tim-Philipp
+	Müller)
 
-	* gtk/gtkcellrenderer.c (gtk_cell_renderer_get_property): is-expander and is-expanded are 
-	boolean properties, not ints.  (#118359, Josh Parsons)
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_get_property):
+	is-expander and is-expanded are boolean properties, not ints.
+	(#118359, Josh Parsons)
 
 Sat Jul 26 15:21:27 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
