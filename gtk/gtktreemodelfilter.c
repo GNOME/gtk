@@ -1719,7 +1719,10 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
     }
 
   if (level->array->len < 1)
-    return;
+    {
+      gtk_tree_path_free (path);
+      return;
+    }
 
   /* NOTE: we do not bail out here if level->array->len < 2 like
    * GtkTreeModelSort does. This because we do some special tricky
