@@ -170,9 +170,9 @@ fi
 if test x$with_glib = x ; then 
   # Look for separately installed glib
 
-  AM_PATH_GLIB(1.1.3,,
+  AM_PATH_GLIB(1.1.4,,
     AC_MSG_ERROR([
-*** GLIB 1.1.3 or better is required. The latest version of GLIB
+*** GLIB 1.1.4 or better is required. The latest version of GLIB
 *** is always available from ftp://ftp.gtk.org.]),
     gmodule)
 
