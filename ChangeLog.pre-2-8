@@ -1,3 +1,8 @@
+2002-10-17  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_compute_configure_request): fix
+	compiler warnings
+
 Thu Oct 17 22:37:57 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkwindow.c (get_center_monitor_of_window): fix typo to make

@@ -4490,7 +4490,7 @@ clamp_window_to_rectangle (gint               *x,
   if (outside_w > 0)
     *x -= outside_w;
 
-  outside_h = (y + h) - (rect->y + rect->height);
+  outside_h = (*y + h) - (rect->y + rect->height);
   if (outside_h > 0)
     *y -= outside_h; 
 
@@ -4561,7 +4561,6 @@ gtk_window_compute_configure_request (GtkWindow    *window,
           {
             gint monitor_num;
             GdkRectangle monitor;
-            gint offscreen_w, offscreen_h;
             gint ox, oy;
             
             g_assert (GTK_WIDGET_MAPPED (parent_widget)); /* established earlier */
@@ -4596,7 +4595,6 @@ gtk_window_compute_configure_request (GtkWindow    *window,
             gint screen_height = gdk_screen_get_height (window->screen);
 	    gint monitor_num;
 	    GdkRectangle monitor;
-            gint offscreen_w, offscreen_h;
             GdkScreen *pointer_screen;
             gint px, py;
             
