@@ -4260,7 +4260,7 @@ gdk_event_translate (GdkEvent *event,
 
     default:
       GDK_NOTE (EVENTS, g_print ("%s: %#x %#x %#x\n",
-				 gdk_win32_msgname (xevent->message),
+				 gdk_win32_message_name (xevent->message),
 				 xevent->hwnd,
 				 xevent->wParam, xevent->lParam));
     }
