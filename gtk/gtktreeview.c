@@ -7040,6 +7040,7 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
   gboolean free_path = FALSE;
   gint vertical_separator;
   GList *list;
+  GtkTreePath *cursor_path;
 
   g_return_if_fail (path != NULL || iter != NULL);
 
@@ -7048,8 +7049,17 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
      */
     return;
 
-  if (tree_view->priv->edited_column)
+  if (tree_view->priv->cursor != NULL)
+    cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
+  else
+    cursor_path = NULL;
+
+  if (tree_view->priv->edited_column &&
+      (cursor_path == NULL || gtk_tree_path_compare (cursor_path, path) == 0))
     gtk_tree_view_stop_editing (tree_view, TRUE);
+
+  if (cursor_path != NULL)
+    gtk_tree_path_free (cursor_path);
 
   gtk_widget_style_get (GTK_WIDGET (data), "vertical_separator", &vertical_separator, NULL);
 
