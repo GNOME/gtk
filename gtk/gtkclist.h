@@ -293,6 +293,16 @@ void gtk_clist_thaw (GtkCList * clist);
 void gtk_clist_column_titles_show (GtkCList * clist);
 void gtk_clist_column_titles_hide (GtkCList * clist);
 
+/* set the column title to be a active title (responds to button presses, 
+ * prelights, and grabs keyboard focus), or passive where it acts as just
+ * a title */
+void gtk_clist_column_title_active (GtkCList * clist,
+				     gint column);
+void gtk_clist_column_title_passive (GtkCList * clist,
+				     gint column);
+void gtk_clist_column_titles_active (GtkCList * clist);
+void gtk_clist_column_titles_passive (GtkCList * clist);
+
 /* set the title in the column title button */
 void gtk_clist_set_column_title (GtkCList * clist,
 				 gint column,
