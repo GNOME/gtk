@@ -578,7 +578,9 @@ gtk_tree_motion_notify (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_TREE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
+#ifdef TREE_DEBUG
   g_print("gtk_tree_motion_notify\n");
+#endif /* TREE_DEBUG */
 
   return FALSE;
 }
@@ -635,6 +637,20 @@ gtk_tree_remove_item (GtkTree *container,
   g_list_free (item_list);
 }
 
+/* used by gtk_tree_remove_items to make the function independant of
+   order in list of items to remove.
+   Sort item bu depth in tree */
+static gint 
+gtk_tree_sort_item_by_depth(GtkWidget* a, GtkWidget* b)
+{
+  if((GTK_TREE(a->parent)->level) < (GTK_TREE(b->parent)->level))
+    return 1;
+  if((GTK_TREE(a->parent)->level) > (GTK_TREE(b->parent)->level))
+    return -1;
+
+  return 0;
+}
+
 void
 gtk_tree_remove_items (GtkTree *tree,
 		       GList   *items)
@@ -642,40 +658,96 @@ gtk_tree_remove_items (GtkTree *tree,
   GtkWidget *widget;
   GList *selected_widgets;
   GList *tmp_list;
-  GtkTree *real_tree, *root_tree;
+  GList *sorted_list;
+  GtkTree *real_tree;
+  GtkTree *root_tree;
 
   g_return_if_fail (tree != NULL);
   g_return_if_fail (GTK_IS_TREE (tree));
 
+#ifdef TREE_DEBUG
+  g_print("+ gtk_tree_remove_items [ tree %#x items list %#x ]\n", (int)tree, (int)items);
+#endif /* TREE_DEBUG */
+
   root_tree = GTK_TREE(GTK_TREE_ROOT_TREE(tree));
   tmp_list = items;
   selected_widgets = NULL;
+  sorted_list = NULL;
   widget = NULL;
 
+#ifdef TREE_DEBUG
+  g_print("* sort list by depth\n");
+#endif /* TREE_DEBUG */
+  while(tmp_list)
+    {
+#ifdef TREE_DEBUG
+      g_print("* item [%#x] depth [%d]\n", 
+	      (int)tmp_list->data,
+	      (int)GTK_TREE(GTK_WIDGET(tmp_list->data)->parent)->level);
+#endif /* TREE_DEBUG */
+
+      sorted_list = g_list_insert_sorted(sorted_list,
+					 tmp_list->data,
+					 (GCompareFunc)gtk_tree_sort_item_by_depth);
+      tmp_list = g_list_next(tmp_list);
+    }
+
+#ifdef TREE_DEBUG
+  /* print sorted list */
+  g_print("* sorted list result\n");
+  tmp_list = sorted_list;
+  while(tmp_list)
+    {
+      g_print("* item [%#x] depth [%d]\n", 
+	      (int)tmp_list->data,
+	      (int)GTK_TREE(GTK_WIDGET(tmp_list->data)->parent)->level);
+      tmp_list = g_list_next(tmp_list);
+    }
+#endif /* TREE_DEBUG */
+
+#ifdef TREE_DEBUG
+  g_print("* scan sorted list\n");
+#endif /* TREE_DEBUG */
+  tmp_list = sorted_list;
   while (tmp_list)
     {
       widget = tmp_list->data;
       tmp_list = tmp_list->next;
 
+#ifdef TREE_DEBUG
+      g_print("* item [%#x] subtree [%#x]\n", 
+	      (int)widget, (int)GTK_TREE_ITEM_SUBTREE(widget));
+#endif /* TREE_DEBUG */
+
       /* get real owner of this widget */
       real_tree = GTK_TREE(widget->parent);
+#ifdef TREE_DEBUG
+      g_print("* subtree having this widget [%#x]\n", (int)real_tree);
+#endif /* TREE_DEBUG */
+
       
       if (widget->state == GTK_STATE_SELECTED)
-	selected_widgets = g_list_prepend (selected_widgets, widget);
+	{
+	  selected_widgets = g_list_prepend (selected_widgets, widget);
+#ifdef TREE_DEBUG
+	  g_print("* selected widget - adding it in selected list [%#x]\n",
+		  (int)selected_widgets);
+#endif /* TREE_DEBUG */
+	}
 
       /* remove this item of his real parent */
+#ifdef TREE_DEBUG
+      g_print("* remove widget of his owner tree\n");
+#endif /* TREE_DEBUG */
       real_tree->children = g_list_remove (real_tree->children, widget);
-
-      /* delete subtree if there is no children in it */
-      if(real_tree->children == NULL && 
-	 real_tree != root_tree)
-	{
-	  gtk_tree_item_remove_subtree(GTK_TREE_ITEM(real_tree->tree_owner));
-	}
 
       /* remove subtree associate at this item if it exist */      
       if(GTK_TREE_ITEM(widget)->subtree) 
 	{
+#ifdef TREE_DEBUG
+	  g_print("* remove subtree associate at this item [%#x]\n",
+		  (int) GTK_TREE_ITEM(widget)->subtree);
+#endif /* TREE_DEBUG */
 	  if (GTK_WIDGET_MAPPED (GTK_TREE_ITEM(widget)->subtree))
 	    gtk_widget_unmap (GTK_TREE_ITEM(widget)->subtree);
 
@@ -683,36 +755,81 @@ gtk_tree_remove_items (GtkTree *tree,
 	  GTK_TREE_ITEM(widget)->subtree = NULL;
 	}
 
-      /* remove really widget for this item */
+      /* really remove widget for this item */
+#ifdef TREE_DEBUG
+      g_print("* unmap and unparent widget [%#x]\n", (int)widget);
+#endif /* TREE_DEBUG */
       if (GTK_WIDGET_MAPPED (widget))
 	gtk_widget_unmap (widget);
 
       gtk_widget_unparent (widget);
+
+      /* delete subtree if there is no children in it */
+      if(real_tree->children == NULL && 
+	 real_tree != root_tree)
+	{
+#ifdef TREE_DEBUG
+	  g_print("* owner tree don't have children ... destroy it\n");
+#endif /* TREE_DEBUG */
+	  gtk_tree_item_remove_subtree(GTK_TREE_ITEM(real_tree->tree_owner));
+	}
+
+#ifdef TREE_DEBUG
+      g_print("* next item in list\n");
+#endif /* TREE_DEBUG */
     }
 
   if (selected_widgets)
     {
+#ifdef TREE_DEBUG
+      g_print("* scan selected item list\n");
+#endif /* TREE_DEBUG */
       tmp_list = selected_widgets;
       while (tmp_list)
 	{
 	  widget = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  gtk_tree_unselect_child (tree, widget);
+#ifdef TREE_DEBUG
+	  g_print("* widget [%#x] subtree [%#x]\n", 
+		  (int)widget, (int)GTK_TREE_ITEM_SUBTREE(widget));
+#endif /* TREE_DEBUG */
+	  
+	  /* remove widget of selection */
+	  root_tree->selection = g_list_remove (root_tree->selection, widget);
+
+	  /* unref it to authorize is destruction */
+	  gtk_widget_unref (widget);
 	}
+
+      /* emit only one selection_changed signal */
+      gtk_signal_emit (GTK_OBJECT (root_tree), 
+		       tree_signals[SELECTION_CHANGED]);
     }
 
+#ifdef TREE_DEBUG
+  g_print("* free selected_widgets list\n");
+#endif /* TREE_DEBUG */
   g_list_free (selected_widgets);
+  g_list_free (sorted_list);
 
   if (root_tree->children && !root_tree->selection &&
       (root_tree->selection_mode == GTK_SELECTION_BROWSE))
     {
+#ifdef TREE_DEBUG
+      g_print("* BROWSE mode, select another item\n");
+#endif /* TREE_DEBUG */
       widget = root_tree->children->data;
       gtk_tree_select_child (root_tree, widget);
     }
 
   if (GTK_WIDGET_VISIBLE (root_tree))
-    gtk_widget_queue_resize (GTK_WIDGET (root_tree));
+    {
+#ifdef TREE_DEBUG
+      g_print("* query queue resizing for root_tree\n");
+#endif /* TREE_DEBUG */      
+      gtk_widget_queue_resize (GTK_WIDGET (root_tree));
+    }
 }
  
 void

@@ -220,7 +220,7 @@ EXTRA_DIST = \
 
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/glib @x_cflags@ 
 
-noinst_PROGRAMS = testgtk testinput testselection simple testtree
+noinst_PROGRAMS = testgtk testinput testselection simple 
 testgtk_LDADD = \
 	libgtk.la				\
 	$(top_builddir)/gdk/libgdk.la		\
@@ -253,14 +253,6 @@ simple_LDADD = \
 	$(top_builddir)/glib/libglib.la		\
 	-lm
 
-testtree_LDADD = \
-	libgtk.la				\
-	$(top_builddir)/gdk/libgdk.la		\
-	@x_ldflags@				\
-	@x_libs@				\
-	$(top_builddir)/glib/libglib.la		\
-	-lm
-
 DEPS = \
 	$(top_builddir)/gtk/libgtk.la		\
 	$(top_builddir)/gdk/libgdk.la		\
@@ -270,7 +262,6 @@ testgtk_DEPENDENCIES = $(DEPS)
 testinput_DEPENDENCIES = $(DEPS)
 testselection_DEPENDENCIES = $(DEPS)
 simple_DEPENDENCIES = $(DEPS)
-testtree_DEPENDENCIES = $(DEPS)
 
 .PHONY: files
 

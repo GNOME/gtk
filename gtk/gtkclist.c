@@ -986,7 +986,9 @@ gtk_clist_set_pixmap (GtkCList * clist,
   clist_row = (g_list_nth (clist->row_list, row))->data;
   
   gdk_pixmap_ref (pixmap);
-  gdk_pixmap_ref (mask);
+  
+  if (mask) gdk_pixmap_ref (mask);
+  
   cell_set_pixmap (clist, clist_row, column, pixmap, mask);
 
   /* redraw the list if it's not frozen */
@@ -1019,9 +1021,11 @@ gtk_clist_get_pixmap (GtkCList * clist,
     return 0;
 
   if (pixmap)
+  {
     *pixmap = GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap;
-  if (mask)
+    // mask can be NULL
     *mask = GTK_CELL_PIXMAP (clist_row->cell[column])->mask;
+  }
 
   return 1;
 }
@@ -1047,7 +1051,7 @@ gtk_clist_set_pixtext (GtkCList * clist,
   clist_row = (g_list_nth (clist->row_list, row))->data;
   
   gdk_pixmap_ref (pixmap);
-  gdk_pixmap_ref (mask);
+  if (mask) gdk_pixmap_ref (mask);
   cell_set_pixtext (clist, clist_row, column, text, spacing, pixmap, mask);
 
   /* redraw the list if it's not frozen */
@@ -1087,8 +1091,9 @@ gtk_clist_get_pixtext (GtkCList * clist,
     *spacing = GTK_CELL_PIXTEXT (clist_row->cell[column])->spacing;
   if (pixmap)
     *pixmap = GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap;
-  if (mask)
-    *mask = GTK_CELL_PIXTEXT (clist_row->cell[column])->mask;
+
+  // mask can be NULL
+  *mask = GTK_CELL_PIXTEXT (clist_row->cell[column])->mask;
 
   return 1;
 }
@@ -2536,9 +2541,11 @@ draw_row (GtkCList * clist,
 	  ydest = (clip_rectangle.y + (clip_rectangle.height / 2)) - height / 2 +
 	    clist_row->cell[i].vertical;
 
-	  gdk_gc_set_clip_mask (fg_gc, GTK_CELL_PIXMAP (clist_row->cell[i])->mask);
-	  gdk_gc_set_clip_origin (fg_gc, xdest, ydest);
-
+          if (GTK_CELL_PIXMAP (clist_row->cell[i])->mask)
+          {
+              gdk_gc_set_clip_mask (fg_gc, GTK_CELL_PIXMAP (clist_row->cell[i])->mask);
+              gdk_gc_set_clip_origin (fg_gc, xdest, ydest);
+          }
 	  gdk_draw_pixmap (clist->clist_window,
 			   fg_gc,
 			   GTK_CELL_PIXMAP (clist_row->cell[i])->pixmap,
@@ -2547,8 +2554,11 @@ draw_row (GtkCList * clist,
 			   ydest,
 			   pixmap_width, height);
 
-	  gdk_gc_set_clip_origin (fg_gc, 0, 0);
-	  gdk_gc_set_clip_mask (fg_gc, NULL);
+          if (GTK_CELL_PIXMAP (clist_row->cell[i])->mask)
+          {
+              gdk_gc_set_clip_origin (fg_gc, 0, 0);
+              gdk_gc_set_clip_mask (fg_gc, NULL);
+          }
 	  break;
 
 	case GTK_CELL_PIXTEXT:
@@ -2559,9 +2569,12 @@ draw_row (GtkCList * clist,
 	  ydest = (clip_rectangle.y + (clip_rectangle.height / 2)) - height / 2 +
 	    clist_row->cell[i].vertical;
 
-	  gdk_gc_set_clip_mask (fg_gc, GTK_CELL_PIXTEXT (clist_row->cell[i])->mask);
-	  gdk_gc_set_clip_origin (fg_gc, xdest, ydest);
-
+          if (GTK_CELL_PIXTEXT (clist_row->cell[i])->mask)
+          {
+              gdk_gc_set_clip_mask (fg_gc, GTK_CELL_PIXTEXT (clist_row->cell[i])->mask);
+              gdk_gc_set_clip_origin (fg_gc, xdest, ydest);
+          }
+              
 	  gdk_draw_pixmap (clist->clist_window,
 			   fg_gc,
 			   GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap,
@@ -3495,13 +3508,15 @@ cell_empty (GtkCList * clist,
       
     case GTK_CELL_PIXMAP:
       gdk_pixmap_unref (GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap);
-      gdk_bitmap_unref (GTK_CELL_PIXMAP (clist_row->cell[column])->mask);
+      if (GTK_CELL_PIXMAP (clist_row->cell[column])->mask)
+          gdk_bitmap_unref (GTK_CELL_PIXMAP (clist_row->cell[column])->mask);
       break;
       
     case GTK_CELL_PIXTEXT:
       g_free (GTK_CELL_PIXTEXT (clist_row->cell[column])->text);
       gdk_pixmap_unref (GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap);
-      gdk_bitmap_unref (GTK_CELL_PIXTEXT (clist_row->cell[column])->mask);
+      if (GTK_CELL_PIXTEXT (clist_row->cell[column])->mask)
+          gdk_bitmap_unref (GTK_CELL_PIXTEXT (clist_row->cell[column])->mask);
       break;
 
     case GTK_CELL_WIDGET:
@@ -3539,10 +3554,11 @@ cell_set_pixmap (GtkCList * clist,
 {
   cell_empty (clist, clist_row, column);
 
-  if (pixmap && mask)
+  if (pixmap)
     {
       clist_row->cell[column].type = GTK_CELL_PIXMAP;
       GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap = pixmap;
+      // We set the mask even if it is NULL
       GTK_CELL_PIXMAP (clist_row->cell[column])->mask = mask;
     }
 }
@@ -3558,7 +3574,7 @@ cell_set_pixtext (GtkCList * clist,
 {
   cell_empty (clist, clist_row, column);
 
-  if (text && pixmap && mask)
+  if (text && pixmap)
     {
       clist_row->cell[column].type = GTK_CELL_PIXTEXT;
       GTK_CELL_PIXTEXT (clist_row->cell[column])->text = g_strdup (text);

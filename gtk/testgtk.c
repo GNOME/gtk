@@ -29,6 +29,30 @@ static GtkWidget *sheets = NULL;
 static GtkWidget *rings = NULL;
 void create_shapes(void);
 
+
+/* macro, structure and variables used by tree window demos */
+#define DEFAULT_NUMBER_OF_ITEM  3
+#define DEFAULT_RECURSION_LEVEL 3
+
+struct {
+  GSList* selection_mode_group;
+  GtkWidget* single_button;
+  GtkWidget* browse_button;
+  GtkWidget* multiple_button;
+  GtkWidget* draw_line_button;
+  GtkWidget* view_line_button;
+  GtkWidget* no_root_item_button;
+  GtkWidget* nb_item_spinner;
+  GtkWidget* recursion_spinner;
+} sTreeSampleSelection;
+
+typedef struct sTreeButtons {
+  guint nb_item_add;
+  GtkWidget* add_button;
+  GtkWidget* remove_button;
+} sTreeButtons;
+/* end of tree section */
+
 void
 destroy_window (GtkWidget  *widget,
 		GtkWidget **window)
@@ -991,6 +1015,481 @@ handle_box_child_signal (GtkHandleBox *hb,
 	  gtk_type_name (GTK_OBJECT_TYPE (child)),
 	  action);
 }
+
+/* funtions used by tree window demos */
+static guint
+cb_tree_delete_event(GtkWidget* w)
+{
+  return TRUE;
+}
+
+static void
+cb_tree_destroy_event(GtkWidget* w)
+{
+  sTreeButtons* tree_buttons;
+
+  /* free buttons structure associate at this tree */
+  tree_buttons = gtk_object_get_user_data(GTK_OBJECT(w));
+  free(tree_buttons);
+}
+static void
+cb_add_new_item(GtkWidget* w, GtkTree* tree)
+{
+  sTreeButtons* tree_buttons;
+  GList* selected_list;
+  GtkWidget* selected_item;
+  GtkWidget* subtree;
+  GtkWidget* item_new;
+  char buffer[255];
+
+  tree_buttons = gtk_object_get_user_data(GTK_OBJECT(tree));
+
+  selected_list = GTK_TREE_SELECTION(tree);
+
+  if(selected_list == NULL)
+    {
+      /* there is no item in tree */
+      subtree = GTK_WIDGET(tree);
+    }
+  else
+    {
+      /* list can have only one element */
+      selected_item = GTK_WIDGET(selected_list->data);
+      
+      subtree = GTK_TREE_ITEM_SUBTREE(selected_item);
+
+      if(subtree == NULL)
+	{
+	  /* current selected item have not subtree ... create it */
+	  subtree = gtk_tree_new();
+	  gtk_tree_item_set_subtree(GTK_TREE_ITEM(selected_item), 
+				    subtree);
+	}
+    }
+
+  /* at this point, we know which subtree will be used to add new item */
+  /* create a new item */
+  sprintf(buffer, "item add %d", tree_buttons->nb_item_add);
+  item_new = gtk_tree_item_new_with_label(buffer);
+  gtk_tree_append(GTK_TREE(subtree), item_new);
+  gtk_widget_show(item_new);
+
+  tree_buttons->nb_item_add++;
+}
+
+static void
+cb_remove_item(GtkWidget*w, GtkTree* tree)
+{
+  GList* selected_list;
+  GList* clear_list;
+  
+  selected_list = GTK_TREE_SELECTION(tree);
+
+  clear_list = NULL;
+    
+  while (selected_list) 
+    {
+      clear_list = g_list_prepend (clear_list, selected_list->data);
+      selected_list = selected_list->next;
+    }
+  
+  clear_list = g_list_reverse (clear_list);
+  gtk_tree_remove_items(tree, clear_list);
+
+  g_list_free (clear_list);
+}
+
+static void
+cb_tree_changed(GtkTree* tree)
+{
+  sTreeButtons* tree_buttons;
+  GList* selected_list;
+  guint nb_selected;
+
+  tree_buttons = gtk_object_get_user_data(GTK_OBJECT(tree));
+
+  selected_list = GTK_TREE_SELECTION(tree);
+  nb_selected = g_list_length(selected_list);
+
+  if(nb_selected == 0) 
+    {
+      if(tree->children == NULL)
+	gtk_widget_set_sensitive(tree_buttons->add_button, TRUE);
+      else
+	gtk_widget_set_sensitive(tree_buttons->add_button, FALSE);
+      gtk_widget_set_sensitive(tree_buttons->remove_button, FALSE);
+    } 
+  else 
+    {
+      gtk_widget_set_sensitive(tree_buttons->remove_button, TRUE);
+      gtk_widget_set_sensitive(tree_buttons->add_button, (nb_selected == 1));
+    }  
+}
+
+static void 
+create_subtree(GtkWidget* item, guint level, guint nb_item_max, guint recursion_level_max)
+{
+  GtkWidget* item_subtree;
+  GtkWidget* item_new;
+  guint nb_item;
+  char buffer[255];
+  int no_root_item;
+
+  if(level == recursion_level_max) return;
+
+  if(level == -1)
+    {
+      /* query with no root item */
+      level = 0;
+      item_subtree = item;
+      no_root_item = 1;
+    }
+  else
+    {
+      /* query with no root item */
+      /* create subtree and associate it with current item */
+      item_subtree = gtk_tree_new();
+      no_root_item = 0;
+    }
+  
+  for(nb_item = 0; nb_item < nb_item_max; nb_item++)
+    {
+      sprintf(buffer, "item %d-%d", level, nb_item);
+      item_new = gtk_tree_item_new_with_label(buffer);
+      gtk_tree_append(GTK_TREE(item_subtree), item_new);
+      create_subtree(item_new, level+1, nb_item_max, recursion_level_max);
+      gtk_widget_show(item_new);
+    }
+
+  if(!no_root_item)
+    gtk_tree_item_set_subtree(GTK_TREE_ITEM(item), item_subtree);
+}
+
+static void
+create_tree_sample(guint selection_mode, 
+		   guint draw_line, guint view_line, guint no_root_item,
+		   guint nb_item_max, guint recursion_level_max) 
+{
+  GtkWidget* window;
+  GtkWidget* box1;
+  GtkWidget* box2;
+  GtkWidget* separator;
+  GtkWidget* button;
+  GtkWidget* scrolled_win;
+  GtkWidget* root_tree;
+  GtkWidget* root_item;
+  sTreeButtons* tree_buttons;
+
+  /* create tree buttons struct */
+  if((tree_buttons = g_malloc(sizeof(sTreeButtons))) == NULL)
+    {
+      g_error("can't allocate memory for tree structure !\n");
+      return;
+    }
+  tree_buttons->nb_item_add = 0;
+
+  /* create top level window */
+  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title(GTK_WINDOW(window), "Tree Sample");
+  gtk_signal_connect(GTK_OBJECT (window), "delete_event",
+		     (GtkSignalFunc) cb_tree_delete_event, NULL);
+  gtk_signal_connect(GTK_OBJECT(window), "destroy",
+		     (GtkSignalFunc) cb_tree_destroy_event, NULL);
+  gtk_object_set_user_data(GTK_OBJECT(window), tree_buttons);
+
+  box1 = gtk_vbox_new(FALSE, 0);
+  gtk_container_add(GTK_CONTAINER(window), box1);
+  gtk_widget_show(box1);
+
+  /* create tree box */
+  box2 = gtk_vbox_new(FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(box1), box2, TRUE, TRUE, 0);
+  gtk_container_border_width(GTK_CONTAINER(box2), 5);
+  gtk_widget_show(box2);
+
+  /* create scrolled window */
+  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
+				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_box_pack_start (GTK_BOX (box2), scrolled_win, TRUE, TRUE, 0);
+  gtk_widget_set_usize (scrolled_win, 200, 200);
+  gtk_widget_show (scrolled_win);
+  
+  /* create root tree widget */
+  root_tree = gtk_tree_new();
+  gtk_signal_connect(GTK_OBJECT(root_tree), "selection_changed",
+		     (GtkSignalFunc)cb_tree_changed,
+		     (gpointer)NULL);
+  gtk_object_set_user_data(GTK_OBJECT(root_tree), tree_buttons);
+  gtk_container_add(GTK_CONTAINER(scrolled_win), root_tree);
+  gtk_tree_set_selection_mode(GTK_TREE(root_tree), selection_mode);
+  gtk_tree_set_view_lines(GTK_TREE(root_tree), draw_line);
+  gtk_tree_set_view_mode(GTK_TREE(root_tree), !view_line);
+  gtk_widget_show(root_tree);
+
+  if ( no_root_item )
+    {
+      /* set root tree to subtree function with root item variable */
+      root_item = GTK_WIDGET(root_tree);
+    }
+  else
+    {
+      /* create root tree item widget */
+      root_item = gtk_tree_item_new_with_label("root item");
+      gtk_tree_append(GTK_TREE(root_tree), root_item);
+      gtk_widget_show(root_item);
+     }
+  create_subtree(root_item, -no_root_item, nb_item_max, recursion_level_max);
+
+  box2 = gtk_vbox_new(FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(box1), box2, FALSE, FALSE, 0);
+  gtk_container_border_width(GTK_CONTAINER(box2), 5);
+  gtk_widget_show(box2);
+
+  button = gtk_button_new_with_label("Add Item");
+  gtk_widget_set_sensitive(button, FALSE);
+  gtk_signal_connect(GTK_OBJECT (button), "clicked",
+		     (GtkSignalFunc) cb_add_new_item, 
+		     (gpointer)root_tree);
+  gtk_box_pack_start(GTK_BOX(box2), button, TRUE, TRUE, 0);
+  gtk_widget_show(button);
+  tree_buttons->add_button = button;
+
+  button = gtk_button_new_with_label("Remove Item(s)");
+  gtk_widget_set_sensitive(button, FALSE);
+  gtk_signal_connect(GTK_OBJECT (button), "clicked",
+		     (GtkSignalFunc) cb_remove_item, 
+		     (gpointer)root_tree);
+  gtk_box_pack_start(GTK_BOX(box2), button, TRUE, TRUE, 0);
+  gtk_widget_show(button);
+  tree_buttons->remove_button = button;
+
+  /* create separator */
+  separator = gtk_hseparator_new();
+  gtk_box_pack_start(GTK_BOX(box1), separator, FALSE, FALSE, 0);
+  gtk_widget_show(separator);
+
+  /* create button box */
+  box2 = gtk_vbox_new(FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(box1), box2, FALSE, FALSE, 0);
+  gtk_container_border_width(GTK_CONTAINER(box2), 5);
+  gtk_widget_show(box2);
+
+  button = gtk_button_new_with_label("Close");
+  gtk_box_pack_start(GTK_BOX(box2), button, TRUE, TRUE, 0);
+  gtk_signal_connect_object(GTK_OBJECT (button), "clicked",
+			    (GtkSignalFunc) gtk_widget_destroy, 
+			    GTK_OBJECT(window));
+  gtk_widget_show(button);
+
+  gtk_widget_show(window);
+}
+
+static void
+cb_create_tree(GtkWidget* w)
+{
+  guint selection_mode;
+  guint view_line;
+  guint draw_line;
+  guint no_root_item;
+  guint nb_item;
+  guint recursion_level;
+
+  /* get selection mode choice */
+  if(GTK_TOGGLE_BUTTON(sTreeSampleSelection.single_button)->active)
+    selection_mode = GTK_SELECTION_SINGLE;
+  else
+    if(GTK_TOGGLE_BUTTON(sTreeSampleSelection.browse_button)->active)
+      selection_mode = GTK_SELECTION_BROWSE;
+    else
+      if(GTK_TOGGLE_BUTTON(sTreeSampleSelection.multiple_button)->active)
+	selection_mode = GTK_SELECTION_MULTIPLE;
+
+  /* get options choice */
+  draw_line = GTK_TOGGLE_BUTTON(sTreeSampleSelection.draw_line_button)->active;
+  view_line = GTK_TOGGLE_BUTTON(sTreeSampleSelection.view_line_button)->active;
+  no_root_item = GTK_TOGGLE_BUTTON(sTreeSampleSelection.no_root_item_button)->active;
+    
+  /* get levels */
+  nb_item = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sTreeSampleSelection.nb_item_spinner));
+  recursion_level = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(sTreeSampleSelection.recursion_spinner));
+
+  create_tree_sample(selection_mode, draw_line, view_line, no_root_item, nb_item, recursion_level);
+}
+
+void 
+create_tree_mode_window(void)
+{
+  static GtkWidget* window;
+  GtkWidget* box1;
+  GtkWidget* box2;
+  GtkWidget* box3;
+  GtkWidget* box4;
+  GtkWidget* box5;
+  GtkWidget* button;
+  GtkWidget* frame;
+  GtkWidget* separator;
+  GtkWidget* label;
+  GtkWidget* spinner;
+  GtkAdjustment *adj;
+
+  if (!window)
+    {
+      /* create toplevel window  */
+      window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_title(GTK_WINDOW(window), "Tree Mode Selection Window");
+      gtk_signal_connect(GTK_OBJECT (window), "delete_event",
+			 (GtkSignalFunc) gtk_main_quit, NULL);
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(destroy_window), &window);
+      box1 = gtk_vbox_new(FALSE, 0);
+      gtk_container_add(GTK_CONTAINER(window), box1);
+      gtk_widget_show(box1);
+
+  /* create upper box - selection box */
+      box2 = gtk_vbox_new(FALSE, 5);
+      gtk_box_pack_start(GTK_BOX(box1), box2, TRUE, TRUE, 0);
+      gtk_container_border_width(GTK_CONTAINER(box2), 5);
+      gtk_widget_show(box2);
+
+      box3 = gtk_hbox_new(FALSE, 5);
+      gtk_box_pack_start(GTK_BOX(box2), box3, TRUE, TRUE, 0);
+      gtk_widget_show(box3);
+
+      /* create selection mode frame */
+      frame = gtk_frame_new("Selection Mode");
+      gtk_box_pack_start(GTK_BOX(box3), frame, TRUE, TRUE, 0);
+      gtk_widget_show(frame);
+
+      box4 = gtk_vbox_new(FALSE, 0);
+      gtk_container_add(GTK_CONTAINER(frame), box4);
+      gtk_container_border_width(GTK_CONTAINER(box4), 5);
+      gtk_widget_show(box4);
+
+      /* create radio button */  
+      button = gtk_radio_button_new_with_label(NULL, "SINGLE");
+      gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
+      gtk_widget_show(button);
+      sTreeSampleSelection.single_button = button;
+
+      button = gtk_radio_button_new_with_label(gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
+					       "BROWSE");
+      gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
+      gtk_widget_show(button);
+      sTreeSampleSelection.browse_button = button;
+
+      button = gtk_radio_button_new_with_label(gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
+					       "MULTIPLE");
+      gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
+      gtk_widget_show(button);
+      sTreeSampleSelection.multiple_button = button;
+
+      sTreeSampleSelection.selection_mode_group = gtk_radio_button_group (GTK_RADIO_BUTTON (button));
+
+      /* create option mode frame */
+      frame = gtk_frame_new("Options");
+      gtk_box_pack_start(GTK_BOX(box3), frame, TRUE, TRUE, 0);
+      gtk_widget_show(frame);
+
+      box4 = gtk_vbox_new(FALSE, 0);
+      gtk_container_add(GTK_CONTAINER(frame), box4);
+      gtk_container_border_width(GTK_CONTAINER(box4), 5);
+      gtk_widget_show(box4);
+
+      /* create check button */
+      button = gtk_check_button_new_with_label("Draw line");
+      gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
+      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button), TRUE);
+      gtk_widget_show(button);
+      sTreeSampleSelection.draw_line_button = button;
+  
+      button = gtk_check_button_new_with_label("View Line mode");
+      gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
+      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button), TRUE);
+      gtk_widget_show(button);
+      sTreeSampleSelection.view_line_button = button;
+  
+      button = gtk_check_button_new_with_label("Without Root item");
+      gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
+      gtk_widget_show(button);
+      sTreeSampleSelection.no_root_item_button = button;
+
+      /* create recursion parameter */
+      frame = gtk_frame_new("Size Parameters");
+      gtk_box_pack_start(GTK_BOX(box2), frame, TRUE, TRUE, 0);
+      gtk_widget_show(frame);
+
+      box4 = gtk_hbox_new(FALSE, 5);
+      gtk_container_add(GTK_CONTAINER(frame), box4);
+      gtk_container_border_width(GTK_CONTAINER(box4), 5);
+      gtk_widget_show(box4);
+
+      /* create number of item spin button */
+      box5 = gtk_hbox_new(FALSE, 5);
+      gtk_box_pack_start(GTK_BOX(box4), box5, FALSE, FALSE, 0);
+      gtk_widget_show(box5);
+
+      label = gtk_label_new("Number of Item");
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_box_pack_start (GTK_BOX (box5), label, FALSE, TRUE, 0);
+      gtk_widget_show(label);
+
+      adj = (GtkAdjustment *) gtk_adjustment_new ((gfloat)DEFAULT_NUMBER_OF_ITEM, 1.0, 255.0, 1.0,
+						  5.0, 0.0);
+      spinner = gtk_spin_button_new (adj, 0, 0);
+      gtk_box_pack_start (GTK_BOX (box5), spinner, FALSE, TRUE, 0);
+      gtk_widget_show(spinner);
+      sTreeSampleSelection.nb_item_spinner = spinner;
+  
+      /* create recursion level spin button */
+      box5 = gtk_hbox_new(FALSE, 5);
+      gtk_box_pack_start(GTK_BOX(box4), box5, FALSE, FALSE, 0);
+      gtk_widget_show(box5);
+
+      label = gtk_label_new("Depth Level");
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_box_pack_start (GTK_BOX (box5), label, FALSE, TRUE, 0);
+      gtk_widget_show(label);
+
+      adj = (GtkAdjustment *) gtk_adjustment_new ((gfloat)DEFAULT_RECURSION_LEVEL, 0.0, 255.0, 1.0,
+						  5.0, 0.0);
+      spinner = gtk_spin_button_new (adj, 0, 0);
+      gtk_box_pack_start (GTK_BOX (box5), spinner, FALSE, TRUE, 0);
+      gtk_widget_show(spinner);
+      sTreeSampleSelection.recursion_spinner = spinner;
+  
+      /* create horizontal separator */
+      separator = gtk_hseparator_new();
+      gtk_box_pack_start(GTK_BOX(box1), separator, FALSE, FALSE, 0);
+      gtk_widget_show(separator);
+
+      /* create bottom button box */
+      box2 = gtk_hbox_new(FALSE, 0);
+      gtk_box_pack_start(GTK_BOX(box1), box2, FALSE, FALSE, 0);
+      gtk_container_border_width(GTK_CONTAINER(box2), 5);
+      gtk_widget_show(box2);
+
+      button = gtk_button_new_with_label("Create Tree Sample");
+      gtk_box_pack_start(GTK_BOX(box2), button, TRUE, TRUE, 0);
+      gtk_signal_connect(GTK_OBJECT (button), "clicked",
+			 (GtkSignalFunc) cb_create_tree, NULL);
+      gtk_widget_show(button);
+
+      button = gtk_button_new_with_label("Close");
+      gtk_box_pack_start(GTK_BOX(box2), button, TRUE, TRUE, 0);
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+                                 GTK_SIGNAL_FUNC(gtk_widget_destroy),
+                                 GTK_OBJECT (window));
+      gtk_widget_show(button);
+  
+    }
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
+
+/* end of function used by tree demos */
 
 static void
 create_handle_box ()
@@ -4703,6 +5202,7 @@ create_main_window ()
       { "spinbutton", create_spins },
       { "list", create_list },
       { "clist", create_clist},
+      { "tree", create_tree_mode_window},
       { "color selection", create_color_selection },
       { "file selection", create_file_selection },
       { "dialog", create_dialog },

@@ -696,6 +696,60 @@ uses glib (see below), it will be more portable and safer to use on multiple pla
 
 <!-- Examples, anybody? I've been mulling some over. NF -->
    
+<sect1>How do I use color allocation?
+<p>
+One of the nice things about GDK is that it's based on top of Xlib; this is also
+a problem, especially in the area of color management. If you want to use color
+in your program (drawing a rectangle or such, your code should look something like
+this:
+<tscreen>
+<verb>
+{
+  GdkColor *color;
+  int width, height;
+  GtkWidget *widget;
+
+  ...
+  
+  /* first, create a GC to draw on */
+  gc = gdk_gc_new(widget->window);
+
+  /* find proper dimensions for rectangle */
+  gdk_window_get_size(widget->window, &width, &height);
+
+  /* the color we want to use */
+  color = (GdkColor *)malloc(sizeof(GdkColor));
+  
+  /* red, green, and blue are passed values, indicating the RGB triple
+   * of the color we want to draw. Note that the values of the RGB components
+   * within the GdkColor are taken from 0 to 65535, not  0 to 255.
+   */
+  color->red = red * (65535/255);
+  color->green = green * (65535/255);
+  color->blue = blue * (65535/255);
+  
+  /* the pixel value indicates the index in the colormap of the color.
+   * it is simply a combination of the RGB values we set earlier
+   */
+  color->pixel = (gulong)(red*65536 + green*256 + blue);
+
+  /* However, the pixel valule is only truly valid on 24-bit (TrueColor)
+   * displays. Therefore, this call is required so that GDK and X can
+   * give us the closest color available in the colormap
+   */
+  gdk_color_alloc(gtk_widget_get_colormap(widget), color);
+
+  /* set the foreground to our color */
+  gdk_gc_set_foreground(gc, color);
+  
+  /* draw the rectangle */
+  gdk_draw_rectangle(widget->window, gc, 1, 0, 0, width, height);
+
+  ...
+}
+</verb>
+</tscreen>
+
 <!-- ***************************************************************** -->
 <sect>About glib
 <!-- ***************************************************************** -->

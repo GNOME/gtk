@@ -32,7 +32,7 @@ extern "C" {
 #define GTK_TREE_ITEM_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_tree_item_get_type (), GtkTreeItemClass)
 #define GTK_IS_TREE_ITEM(obj)       GTK_CHECK_TYPE (obj, gtk_tree_item_get_type ())
 
-#define GTK_TREE_ITEM_SUBTREE(obj)  GTK_TREE_ITEM(obj)->subtree;
+#define GTK_TREE_ITEM_SUBTREE(obj)  GTK_TREE_ITEM(obj)->subtree
 
 typedef struct _GtkTreeItem       GtkTreeItem;
 typedef struct _GtkTreeItemClass  GtkTreeItemClass;

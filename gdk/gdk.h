@@ -563,6 +563,12 @@ void gdk_draw_segments	 (GdkDrawable  *drawable,
 			  GdkGC	       *gc,
 			  GdkSegment   *segs,
 			  gint		nsegs);
+void gdk_draw_lines      (GdkDrawable  *drawable,
+                          GdkGC        *gc,
+                          GdkPoint     *points,
+                          gint          npoints);
+ 
+
 
 
 /* Selections

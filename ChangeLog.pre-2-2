@@ -1,3 +1,17 @@
+Sun Mar  1 15:18:38 PST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+        * Required changes for version change to 0.99.4
+
+        * gtk/gtktree.[ch]: patch from J. Bolliet to correct some bugs
+        * gtk/testgtk.c: added test here from J. Bolliet, removed testtree
+
+        * gtk/clist: gtk-abilleira-981602-0, allows gtk_clist_set_pixmap 
+          and gtk_clist_set_pixtext to not require a mask
+        
+        * gdk/gdkdraw.c,gdk.h: gtk-trow-980217-0
+          adds gdk_draw_lines and fixes some things about 
+          gdk_draw_polygon         
+
 Sun Mar  1 17:40:58 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gdk/gdkpixmap.c: Make sure either the window or

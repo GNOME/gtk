@@ -142,6 +142,9 @@ gdk_draw_polygon (GdkDrawable *drawable,
 {
   GdkWindowPrivate *drawable_private;
   GdkGCPrivate *gc_private;
+  GdkPoint *local_points = points;
+  gint local_npoints = npoints;
+  gint local_alloc = 0;
 
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (gc != NULL);
@@ -158,14 +161,24 @@ gdk_draw_polygon (GdkDrawable *drawable,
     }
   else
     {
-      XDrawLines (drawable_private->xdisplay, drawable_private->xwindow,
-		  gc_private->xgc, (XPoint*) points, npoints, CoordModeOrigin);
-
       if ((points[0].x != points[npoints-1].x) ||
-	  (points[0].y != points[npoints-1].y))
-	XDrawLine (drawable_private->xdisplay, drawable_private->xwindow,
-		   gc_private->xgc, points[npoints-1].x, points[npoints-1].y,
-		   points[0].x, points[0].y);
+        (points[0].y != points[npoints-1].y)) 
+        {
+          local_alloc = 1;
+          ++local_npoints;
+          local_points = (GdkPoint*) g_malloc (local_npoints * sizeof(GdkPoint));
+          memcpy (local_points, points, npoints * sizeof(GdkPoint));
+          local_points[npoints].x = points[0].x;
+          local_points[npoints].y = points[0].y;
+      }
+
+      XDrawLines (drawable_private->xdisplay, drawable_private->xwindow,
+                 gc_private->xgc,
+                 (XPoint*) local_points, local_npoints,
+                 CoordModeOrigin);
+  
+       if (local_alloc)
+       g_free (local_points);
     }
 }
 
@@ -400,4 +413,31 @@ gdk_draw_segments (GdkDrawable *drawable,
 		 gc_private->xgc,
 		 (XSegment *) segs,
 		 nsegs);
+}
+
+void
+gdk_draw_lines (GdkDrawable *drawable,
+              GdkGC       *gc,
+              GdkPoint    *points,
+              gint         npoints)
+{
+  GdkWindowPrivate *drawable_private;
+  GdkGCPrivate *gc_private;
+
+  if (npoints <= 0)
+    return;
+
+  g_return_if_fail (drawable != NULL);
+  g_return_if_fail (points != NULL);
+  g_return_if_fail (gc != NULL);
+
+  drawable_private = (GdkWindowPrivate*) drawable;
+  gc_private = (GdkGCPrivate*) gc;
+
+  XDrawLines (drawable_private->xdisplay,
+            drawable_private->xwindow,
+            gc_private->xgc,
+            (XPoint *) points,
+            npoints,
+            CoordModeOrigin);
 }
