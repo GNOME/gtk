@@ -131,11 +131,6 @@ void gdk_display_add_client_message_filter (GdkDisplay   *display,
 					    GdkAtom       message_type,
 					    GdkFilterFunc func,
 					    gpointer      data);
-void gdk_display_add_client_message_filter_full (GdkDisplay    *display,
-						 GdkAtom        message_type,
-						 GdkFilterFunc  func,
-						 gpointer       data,
-						 GDestroyNotify destroy);
 
 void gdk_display_set_double_click_time     (GdkDisplay   *display,
 					    guint         msec);
