@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-14 18:02+0100\n"
+"POT-Creation-Date: 2004-01-24 00:31+0100\n"
+"PO-Revision-Date: 2004-01-24 00:36+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -24,6 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "serrador@hispalinux.es>\n"
 "X-Generator: KBabel 1.0.2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:736
 #: gdk-pixbuf/gdk-pixbuf-io.c:869 tests/testfilechooser.c:198
@@ -967,7 +968,7 @@ msgstr ""
 "No se pudo añadir marcador para %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2917
+#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2937
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -995,12 +996,12 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:925
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not create folder %s:\n"
 "%s"
 msgstr ""
-"No se pudo ir a la carpeta madre de %s:\n"
+"No se pudo crear la carpeta %s:\n"
 "%s"
 
 #: gtk/gtkfilechooserdefault.c:1001
@@ -1062,55 +1063,55 @@ msgid "Preview"
 msgstr "Vista preliminar"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2118
+#: gtk/gtkfilechooserdefault.c:2130
 #, c-format
 msgid "Current folder: %s"
 msgstr "Carpeta actual: %s"
 
-#: gtk/gtkfilechooserdefault.c:2521
+#: gtk/gtkfilechooserdefault.c:2533
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "el enlace %s no existe"
 
-#: gtk/gtkfilechooserdefault.c:3063
+#: gtk/gtkfilechooserdefault.c:3083
 msgid "Type name of new folder"
-msgstr ""
+msgstr "Nombre del tipo de la carpeta nueva"
 
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3110
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:3092
+#: gtk/gtkfilechooserdefault.c:3112
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3094
+#: gtk/gtkfilechooserdefault.c:3114
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3096
+#: gtk/gtkfilechooserdefault.c:3116
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3141
+#: gtk/gtkfilechooserdefault.c:3161
 msgid "Today"
 msgstr "Hoy"
 
-#: gtk/gtkfilechooserdefault.c:3143
+#: gtk/gtkfilechooserdefault.c:3163
 msgid "Yesterday"
 msgstr "Ayer"
 
-#: gtk/gtkfilechooserdefault.c:3151
+#: gtk/gtkfilechooserdefault.c:3171
 msgid "%d/%b/%Y"
 msgstr "%d/%b/%Y"
 
-#: gtk/gtkfilechooserdefault.c:3154
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "Unknown"
 msgstr "Desconocido"
 
@@ -1404,6 +1405,10 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
+"No se pudo encontrar el icono «%s». el tema «%s»\n"
+"no se encontró o quizá nocesite instalarlo.\n"
+"Puede obtener una copia desde:\n"
+"\t%s"
 
 #: gtk/gtkicontheme.c:1247
 #, c-format
@@ -1660,11 +1665,11 @@ msgstr "_Inicio"
 
 #: gtk/gtkstock.c:301
 msgid "Increase Indent"
-msgstr ""
+msgstr "Aumentar sangría"
 
 #: gtk/gtkstock.c:302
 msgid "Decrease Indent"
-msgstr ""
+msgstr "Disminuir sangría"
 
 #: gtk/gtkstock.c:303
 msgid "_Index"
@@ -1706,9 +1711,6 @@ msgstr "_No"
 msgid "_OK"
 msgstr "_Aceptar"
 
-# #-#-#-#-#  memoria.po (memoria 1.0)  #-#-#-#-#
-# #-#-#-#-#  nautilus-es.po (Nautilus)  #-#-#-#-#
-# src/file-manager/fm-directory-view.c:2114
 #: gtk/gtkstock.c:313
 msgid "_Open"
 msgstr "_Abrir"
@@ -1717,8 +1719,6 @@ msgstr "_Abrir"
 msgid "_Paste"
 msgstr "_Pegar"
 
-# #-#-#-#-#  memoria.po (memoria 1.0)  #-#-#-#-#
-# src/nautilus-first-time-druid.c:272
 #: gtk/gtkstock.c:315
 msgid "_Preferences"
 msgstr "_Preferencias"
