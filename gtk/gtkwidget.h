@@ -57,7 +57,11 @@ enum
   GTK_HAS_SHAPE_MASK	= 1 << 22,
   GTK_LEAVE_PENDING	= 1 << 23,
   GTK_TOPLEVEL		= 1 << 24,
-  GTK_TOPLEVEL_ONSCREEN	= 1 << 25
+  GTK_TOPLEVEL_ONSCREEN	= 1 << 25,
+  /* Private flag. If set, don't unrealize a widget when it is removed
+   * from its parent. Used by gtk_widget_reparent().
+   */
+  GTK_IN_REPARENT       = 1 << 26
 };
 
 
@@ -102,6 +106,7 @@ enum
 #define GTK_WIDGET_LEAVE_PENDING(obj)	  (GTK_OBJECT_FLAGS (obj) & GTK_LEAVE_PENDING)
 #define GTK_WIDGET_TOPLEVEL(obj)          (GTK_OBJECT_FLAGS (obj) & GTK_TOPLEVEL)
 #define GTK_WIDGET_TOPLEVEL_ONSCREEN(obj) (GTK_OBJECT_FLAGS (obj) & GTK_TOPLEVEL_ONSCREEN)
+#define GTK_WIDGET_IN_REPARENT(obj)       (GTK_OBJECT_FLAGS (obj) & GTK_IN_REPARENT)
       
 #define GTK_TYPE_WIDGET			  (gtk_widget_get_type ())
 

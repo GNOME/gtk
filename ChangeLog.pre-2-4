@@ -1,3 +1,11 @@
+Sat Jan 31 21:26:27 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwidget.c: Added a new GTK_IN_REPARENT flag and revised
+	  gtk_widget_reparent so that the child would not be unrealized
+	  unnecessarily. Changed gtk_widget_unrealize () to recursively
+	  unrealize the children (since the child windows will be 
+	  destroyed too.)
+
 Sat Jan 31 00:05:34 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk/gtkcombo.c: changed to use g_strcasecmp

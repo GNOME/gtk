@@ -1102,8 +1102,10 @@ gtk_widget_unparent (GtkWidget *widget)
 			   widget->allocation.y,
 			   widget->allocation.width,
 			   widget->allocation.height);
+
+  if (GTK_WIDGET_REALIZED (widget) && !GTK_WIDGET_IN_REPARENT (widget))
+    gtk_widget_unrealize (widget);
   
-  gtk_widget_unrealize (widget);
   widget->parent = NULL;
   
   gtk_widget_unref (widget);
@@ -1871,50 +1873,51 @@ gtk_widget_reparent (GtkWidget *widget,
   
   if (widget->parent != new_parent)
     {
+      /* First try to see if we can get away without unrealizing
+       * the widget as we reparent it 
+       */
+
+      if (GTK_WIDGET_REALIZED (widget) && GTK_WIDGET_REALIZED (new_parent))
+ 	{
+	  /* Set a flag so that gtk_widget_unparent doesn't unrealize widget
+	   */
+	  GTK_WIDGET_SET_FLAGS (widget, GTK_IN_REPARENT);
+	}
+
       gtk_widget_ref (widget);
       gtk_container_remove (GTK_CONTAINER (widget->parent), widget);
       gtk_container_add (GTK_CONTAINER (new_parent), widget);
       gtk_widget_unref (widget);
       
-      if (GTK_WIDGET_REALIZED (widget))
+      if (GTK_WIDGET_IN_REPARENT (widget))
 	{
-	  if (GTK_WIDGET_REALIZED (new_parent))
-	    {
-	      if (GTK_WIDGET_NO_WINDOW (widget))
+	  /* OK, now fix up the widget's window. (And that for any
+	   * children, if the widget is NO_WINDOW and a container) 
+	   */
+	  if (GTK_WIDGET_NO_WINDOW (widget))
+    	    {
+	      if (GTK_IS_CONTAINER (widget))
+		gtk_container_foreach (GTK_CONTAINER(widget),
+				       gtk_widget_reparent_container_child,
+				       gtk_widget_get_parent_window (widget));
+	      else
 		{
-		  if (GTK_IS_CONTAINER (widget))
-		    gtk_container_foreach (GTK_CONTAINER(widget),
-					   gtk_widget_reparent_container_child,
-					   gtk_widget_get_parent_window (widget));
-		  else
+		  GdkWindow *parent_window;
+		  
+		  parent_window = gtk_widget_get_parent_window (widget);
+		  if (parent_window != widget->window)
 		    {
-		      GdkWindow *parent_window;
-		      
-		      parent_window = gtk_widget_get_parent_window (widget);
-		      if (parent_window != widget->window)
-			{
-			  if (widget->window)
-			    gdk_window_unref (widget->window);
-			  widget->window = parent_window;
-			  if (widget->window)
-			    gdk_window_ref (widget->window);
-			}
+		      if (widget->window)
+			gdk_window_unref (widget->window);
+		      widget->window = parent_window;
+		      if (widget->window)
+			gdk_window_ref (widget->window);
 		    }
 		}
-	      else
-		gdk_window_reparent (widget->window, gtk_widget_get_parent_window (widget), 0, 0);
 	    }
 	  else
-	    gtk_widget_unrealize (widget);
+	    gdk_window_reparent (widget->window, gtk_widget_get_parent_window (widget), 0, 0);
 	}
-      
-      if (!GTK_WIDGET_REALIZED (widget) && GTK_WIDGET_REALIZED (new_parent))
-	gtk_widget_realize (widget);
-      if (GTK_WIDGET_VISIBLE (widget) &&
-	  !GTK_WIDGET_MAPPED (widget) && GTK_WIDGET_MAPPED (new_parent))
-	gtk_widget_map (widget);
-      
-      gtk_widget_queue_resize (widget);
     }
 }
 
@@ -3317,6 +3320,11 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
   /* printf ("unrealizing %s\n", gtk_type_name (GTK_OBJECT(widget)->klass->type));
    */
+
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_foreach (GTK_CONTAINER (widget),
+			   (GtkCallback)gtk_widget_unrealize,
+			   NULL);
 
   gtk_style_detach (widget->style);
   if (!GTK_WIDGET_NO_WINDOW (widget))
