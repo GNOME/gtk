@@ -1,3 +1,16 @@
+Thu May 29 09:34:05 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
+
+	* gtk/gtkimmodule.c (_gtk_im_module_list): make "Default"
+	label of default input method localizable.
+	* gtk/gtkimmulticontext.c (gtk_im_multicontext_append_menuitems): 
+	use translations of input method context names
+	* modules/input/imam-et.c, modules/input/imcyrillic-translit.c,
+	  modules/input/iminuktitut.c, modules/input/imthai-broken.c,
+	  modules/input/imti-er.c, modules/input/imti-et.c
+	  modules/input/imviqr.c, modules/input/imxim.c
+	use GETTEXT_PACKAGE instead of "gtk+" for domain name.
+	(#113850).
+
 Thu May 29 18:23:01 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.

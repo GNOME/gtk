@@ -241,7 +241,7 @@ viqr_init (GtkIMContextSimple *im_context)
 static const GtkIMContextInfo viqr_info = { 
   "viqr",		   /* ID */
   N_("Vietnamese (VIQR)"), /* Human readable name */
-  "gtk+",		   /* Translation domain */
+  GETTEXT_PACKAGE,	   /* Translation domain */
    GTK_LOCALEDIR,	   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
   "vi"			   /* Languages for which this module is the default */
 };

@@ -1,3 +1,7 @@
+ Thu May 29 09:46:26 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
+ 
+ 	* POTFILES.in: add gtk/gtkimmodule.c (#113850)
+ 
 2003-05-19 Arafat Medini <lumina@silverpen.de>
 
 	* ar.po: Added Arabic translation by Arabeyes. 

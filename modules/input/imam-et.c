@@ -450,8 +450,8 @@ am_et_init (GtkIMContextSimple *im_context)
 
 static const GtkIMContextInfo am_et_info = { 
   "am_et",		   /* ID */
-  N_("Amharic (EZ+)"),         /* Human readable name */
-  "gtk+",		   /* Translation domain */
+  N_("Amharic (EZ+)"),     /* Human readable name */
+  GETTEXT_PACKAGE,	   /* Translation domain */
    GTK_LOCALEDIR,	   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
   "am"			   /* Languages for which this module is the default */
 };

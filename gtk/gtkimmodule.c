@@ -416,7 +416,7 @@ _gtk_im_module_list (const GtkIMContextInfo ***contexts,
 
   static const GtkIMContextInfo simple_context_info = {
     SIMPLE_ID,
-    "Default",
+    N_("Default"),
     "gtk+",
     NULL,
     ""
