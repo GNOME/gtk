@@ -215,6 +215,8 @@ gchar * _gtk_find_module     (const gchar *name,
 			      const gchar *type);
 gchar **_gtk_get_module_path (const gchar *type);
 
+gchar *_gtk_get_lc_ctype (void);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

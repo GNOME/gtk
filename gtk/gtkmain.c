@@ -989,13 +989,78 @@ gtk_exit (gint errorcode)
  * <literal>setlocale (LC_ALL, "")</literal> but also takes care of the 
  * locale specific setup of the windowing system used by GDK.
  * 
- * Return value: a string corresponding to the locale set, as with the
- * C library function <function>setlocale()</function>.
+ * Return: a string corresponding to the locale set, typically in the
+ * form lang_COUNTRY, where lang is an ISO-639 language code, and
+ * COUNTRY is an ISO-3166 country code. On Unix, this form matches the
+ * result of the <function>setlocale()</function>; it is also used on
+ * other machines, such as Windows, where the C library returns a
+ * different result. The string is owned by GTK+ and should not be
+ * modified or freed.
  **/
 gchar *
 gtk_set_locale (void)
 {
   return gdk_set_locale ();
+}
+
+/**
+ * _gtk_get_lc_ctype:
+ *
+ * Return the Unix-style locale string for the language currently in
+ * effect. On Unix systems, this is the return value from
+ * <literal>setlocale(LC_CTYPE, NULL)</literal>, and the user can
+ * affect this through the environment variables LC_ALL, LC_CTYPE or
+ * LANG (checked in that order). The locale strings typically is in
+ * the form lang_COUNTRY, where lang is an ISO-639 language code, and
+ * COUNTRY is an ISO-3166 country code. For instance, sv_FI for
+ * Swedish as written in Finland or pt_BR for Portuguese as written in
+ * Brazil.
+ * 
+ * On Windows, the C library doesn't use any such environment
+ * variables, and setting them won't affect the behaviour of functions
+ * like <function>ctime()</function>. The user sets the locale through
+ * the Regional Options in the Control Panel. The C library (in the
+ * <function>setlocale()</function> function) does not use country and
+ * language codes, but country and language names spelled out in
+ * English. However, this function does check the above environment
+ * variables, and does return a Unix-style locale string based on
+ * either said environment variables or the thread's current locale.
+ *
+ * Return value: a dynamically allocated string, free with g_free().
+ */
+
+gchar *
+_gtk_get_lc_ctype (void)
+{
+  gchar *p;
+
+#ifdef G_OS_WIN32
+  /* Somebody might try to set the locale for this process using the
+   * LANG or LC_ environment variables. The Microsoft C library
+   * doesn't know anything about them. You set the locale in the
+   * Control Panel. Setting these env vars won't have any affect on
+   * locale-dependent C library functions like ctime(). But just for
+   * kicks, do obey LC_ALL, LC_CTYPE and LANG in GTK. (This also makes
+   * it easier to test GTK and Pango in various default languages, you
+   * don't have to clickety-click in the Control Panel, you can simply
+   * start the program with LC_ALL=something on the command line.)
+   */
+  p = getenv ("LC_ALL");
+  if (p != NULL)
+    return g_strdup (p);
+
+  p = getenv ("LC_CTYPE");
+  if (p != NULL)
+    return g_strdup (p);
+
+  p = getenv ("LANG");
+  if (p != NULL)
+    return g_strdup (p);
+
+  return g_win32_getlocale ();
+#else
+  return g_strdup (setlocale (LC_CTYPE, NULL));
+#endif
 }
 
 /**
@@ -1005,7 +1070,8 @@ gtk_set_locale (void)
  * effect. (Note that this can change over the life of an
  * application.)  The default language is derived from the current
  * locale. It determines, for example, whether GTK+ uses the
- * right-to-left or left-to-right text direction.
+ * right-to-left or left-to-right text direction. See
+ * _gtk_get_lc_ctype for notes on behaviour on Windows.
  * 
  * Return value: the default language as a #PangoLanguage, must not be
  * freed
@@ -1017,37 +1083,7 @@ gtk_get_default_language (void)
   PangoLanguage *result;
   gchar *p;
   
-#ifdef G_OS_WIN32
-  /* Somebody might try to set the locale for this process using the
-   * LANG or LC_ environment variables. The Microsoft C library
-   * doesn't know anything about them. You set the locale in the
-   * Control Panel. Setting these env vars won't have any affect on
-   * locale-dependent C library functions like ctime. But just for
-   * kicks, do obey LC_ALL, LANG and LC_CTYPE in GTK. (This also makes
-   * it easier to test GTK and Pango in various default languages, you
-   * don't have to clickety-click in the Control Panel, you can simply
-   * start the program with LC_ALL=something on the command line.)
-   */
-  p = getenv ("LC_ALL");
-  if (p != NULL)
-    lang = g_strdup (p);
-  else
-    {
-      p = getenv ("LANG");
-      if (p != NULL)
-	lang = g_strdup (p);
-      else
-	{
-	  p = getenv ("LC_CTYPE");
-	  if (p != NULL)
-	    lang = g_strdup (p);
-	  else
-	    lang = g_win32_getlocale ();
-	}
-    }
-#else
-  lang = g_strdup (setlocale (LC_CTYPE, NULL));
-#endif
+  lang = _gtk_get_lc_ctype ();
   p = strchr (lang, '.');
   if (p)
     *p = '\0';

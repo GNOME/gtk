@@ -1,3 +1,20 @@
+2003-09-20  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk-zip.sh.in: Don't use zip -r on the etc directory, to avoid
+	including editor backup files. List files we want explicitly.
+
+	* gtk/gtkmain.c (_gtk_get_lc_ctype): New function. On Unix, just
+	calls setlocale (LC_CTYPE, NULL). On Windows, looks for the
+	LC_ALL, LC_CTYPE and LANG environment variables, than calls
+	g_win32_getlocale().
+
+	(gtk_get_default_language): Code snippet moved to above function,
+	call it.
+
+	* gtk/gtkimmulticontext.c (gtk_im_multicontext_get_slave)
+	* gtk/gtkrc.c (gtk_rc_context_parse_file): Call
+	_gtk_get_lc_ctype() instead of setlocale().
+
 Fri Sep 19 18:15:31 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkpaned.c, gtk/gtkhpaned.c: implement RTL flipping

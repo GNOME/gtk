@@ -24,6 +24,7 @@
 
 #include "gtkimmulticontext.h"
 #include "gtkimmodule.h"
+#include "gtkmain.h"
 #include "gtkradiomenuitem.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -254,11 +255,9 @@ gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
 
       if (!global_context_id)
 	{
-	  const char *locale;
-	  
-	  locale = setlocale (LC_CTYPE, NULL);
-
+	  gchar *locale = _gtk_get_lc_ctype ();
 	  global_context_id = _gtk_im_module_get_default_context_id (locale);
+	  g_free (locale);
 	}
 	
       slave = _gtk_im_module_create (global_context_id);
