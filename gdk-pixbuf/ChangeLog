@@ -1,3 +1,11 @@
+2000-10-07  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk_pixbuf.def
+	* pixbufloader_jpeg.def
+	* pixbufloader_png.def: Add new entry points.
+
+	* makefile.mingw.in: Use libintl.
+
 2000-10-06  Havoc Pennington  <hp@redhat.com>
 
 	* gdk-pixbuf-io.c (gdk_pixbuf_save): s/format/type/g to be

@@ -3,3 +3,5 @@ EXPORTS
 	gdk_pixbuf__jpeg_image_begin_load
 	gdk_pixbuf__jpeg_image_stop_load
 	gdk_pixbuf__jpeg_image_load_increment
+	gdk_pixbuf__jpeg_image_save
+

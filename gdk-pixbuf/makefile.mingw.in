@@ -11,7 +11,7 @@ GDK_PIXBUF_VER = @GDK_PIXBUF_MAJOR@.@GDK_PIXBUF_MINOR@
 OPTIMIZE = -g
 
 INCLUDES = -I . -I .. 
-DEPCFLAGS = $(GLIB_CFLAGS)
+DEPCFLAGS = $(GLIB_CFLAGS) $(INTL_CFLAGS)
 
 all :						\
 	../config.h				\
@@ -42,7 +42,7 @@ gdk_pixbuf_OBJECTS =				\
 	cp $< $@
 
 gdk_pixbuf-$(GDK_PIXBUF_VER).dll : $(gdk_pixbuf_OBJECTS) gdk_pixbuf.def
-	$(GLIB)/build-dll gdk_pixbuf $(GDK_PIXBUF_VER) gdk_pixbuf.def $(gdk_pixbuf_OBJECTS) -L ../gdk -lgdk-$(GTK_VER) $(GLIB_LIBS)
+	$(GLIB)/build-dll gdk_pixbuf $(GDK_PIXBUF_VER) gdk_pixbuf.def $(gdk_pixbuf_OBJECTS) -L ../gdk -lgdk-$(GTK_VER) $(GLIB_LIBS) $(INTL_LIBS)
 
 pixops/libpixops.a :
 	cd pixops && $(MAKE) -f makefile.mingw libpixops.a
@@ -50,17 +50,17 @@ pixops/libpixops.a :
 pixbufloader_bmp_OBJECTS = io-bmp.o
 
 pixbufloader-bmp.dll : $(pixbufloader_bmp_OBJECTS) pixbufloader_bmp.def
-	$(GLIB)/build-dll pixbufloader-bmp - pixbufloader_bmp.def $(pixbufloader_bmp_OBJECTS) -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS)
+	$(GLIB)/build-dll pixbufloader-bmp - pixbufloader_bmp.def $(pixbufloader_bmp_OBJECTS) -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS) $(INTL_LIBS)
 
 pixbufloader_gif_OBJECTS = io-gif.o
 
 pixbufloader-gif.dll : $(pixbufloader_gif_OBJECTS) pixbufloader_gif.def
-	$(GLIB)/build-dll pixbufloader-gif - pixbufloader_gif.def $(pixbufloader_gif_OBJECTS) -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS)
+	$(GLIB)/build-dll pixbufloader-gif - pixbufloader_gif.def $(pixbufloader_gif_OBJECTS) -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS) $(INTL_LIBS)
 
 pixbufloader_ico_OBJECTS = io-ico.o
 
 pixbufloader-ico.dll : $(pixbufloader_ico_OBJECTS) pixbufloader_ico.def
-	$(GLIB)/build-dll pixbufloader-ico - pixbufloader_ico.def $(pixbufloader_ico_OBJECTS) -L  . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS)
+	$(GLIB)/build-dll pixbufloader-ico - pixbufloader_ico.def $(pixbufloader_ico_OBJECTS) -L  . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS) $(INTL_LIBS)
 
 pixbufloader_jpeg_OBJECTS = io-jpeg.o
 
@@ -68,7 +68,7 @@ io-jpeg.o : io-jpeg.c
 	$(CC) $(CFLAGS) $(JPEG_CFLAGS) -c $<
 
 pixbufloader-jpeg.dll : $(pixbufloader_jpeg_OBJECTS) pixbufloader_jpeg.def
-	$(GLIB)/build-dll pixbufloader-jpeg - pixbufloader_jpeg.def $(pixbufloader_jpeg_OBJECTS) -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS) $(JPEG_LIBS)
+	$(GLIB)/build-dll pixbufloader-jpeg - pixbufloader_jpeg.def $(pixbufloader_jpeg_OBJECTS) -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS) $(JPEG_LIBS) $(INTL_LIBS)
 
 pixbufloader_png_OBJECTS = io-png.o
 
@@ -76,22 +76,22 @@ io-png.o : io-png.c
 	$(CC) $(CFLAGS) $(PNG_CFLAGS) -c $<
 
 pixbufloader-png.dll : $(pixbufloader_png_OBJECTS) pixbufloader_png.def
-	$(GLIB)/build-dll pixbufloader-png - pixbufloader_png.def $(pixbufloader_png_OBJECTS) -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS) $(PNG_LIBS)
+	$(GLIB)/build-dll pixbufloader-png - pixbufloader_png.def $(pixbufloader_png_OBJECTS) -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS) $(PNG_LIBS) $(INTL_LIBS)
 
 pixbufloader_pnm_OBJECTS = io-pnm.o
 
 pixbufloader-pnm.dll : $(pixbufloader_pnm_OBJECTS) pixbufloader_pnm.def
-	$(GLIB)/build-dll pixbufloader-pnm - pixbufloader_pnm.def $(pixbufloader_pnm_OBJECTS) -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS)
+	$(GLIB)/build-dll pixbufloader-pnm - pixbufloader_pnm.def $(pixbufloader_pnm_OBJECTS) -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS) $(INTL_LIBS)
 
 pixbufloader_ras_OBJECTS = io-ras.o
 
 pixbufloader-ras.dll : $(pixbufloader_ras_OBJECTS) pixbufloader_ras.def
-	$(GLIB)/build-dll pixbufloader-ras - pixbufloader_ras.def $(pixbufloader_ras_OBJECTS) -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS)
+	$(GLIB)/build-dll pixbufloader-ras - pixbufloader_ras.def $(pixbufloader_ras_OBJECTS) -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS) $(INTL_LIBS)
 
 pixbufloader_tiff_OBJECTS = io-tiff.o
 
 pixbufloader-tiff.dll : $(pixbufloader_tiff_OBJECTS) pixbufloader_tiff.def
-	$(GLIB)/build-dll pixbufloader-tiff - pixbufloader_tiff.def $(pixbufloader_tiff_OBJECTS) -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS) $(TIFF_LIBS) $(JPEG_LIBS) $(ZLIB_LIBS)
+	$(GLIB)/build-dll pixbufloader-tiff - pixbufloader_tiff.def $(pixbufloader_tiff_OBJECTS) -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS) $(TIFF_LIBS) $(JPEG_LIBS) $(ZLIB_LIBS) $(INTL_LIBS)
 
 io-tiff.o : io-tiff.c
 	$(CC) $(CFLAGS) $(TIFF_CFLAGS) -c $<
@@ -99,12 +99,12 @@ io-tiff.o : io-tiff.c
 pixbufloader_wbmp_OBJECTS = io-wbmp.o
 
 pixbufloader-wbmp.dll : $(pixbufloader_wbmp_OBJECTS) pixbufloader_wbmp.def
-	$(GLIB)/build-dll pixbufloader-wbmp - pixbufloader_wbmp.def $(pixbufloader_wbmp_OBJECTS) -L  . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS)
+	$(GLIB)/build-dll pixbufloader-wbmp - pixbufloader_wbmp.def $(pixbufloader_wbmp_OBJECTS) -L  . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS) $(INTL_LIBS)
 
 pixbufloader_xpm_OBJECTS = io-xpm.o
 
 pixbufloader-xpm.dll : $(pixbufloader_xpm_OBJECTS) pixbufloader_xpm.def
-	$(GLIB)/build-dll pixbufloader-xpm - pixbufloader_xpm.def $(pixbufloader_xpm_OBJECTS) -L  . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS)
+	$(GLIB)/build-dll pixbufloader-xpm - pixbufloader_xpm.def $(pixbufloader_xpm_OBJECTS) -L  . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS) $(INTL_LIBS)
 
 make-inline-pixbuf.exe : make-inline-pixbuf.o gdk_pixbuf-$(GDK_PIXBUF_VER).dll
 	$(CC) $(CFLAGS) -o $@ make-inline-pixbuf.o -L . -lgdk_pixbuf-$(GDK_PIXBUF_VER) $(GLIB_LIBS)
