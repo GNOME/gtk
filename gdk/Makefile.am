@@ -1,6 +1,6 @@
 ## Makefile.am for gtk+/gdk
 
-SUBDIRS=x11 win32
+SUBDIRS=x11 win32 nanox linux-fb
 
 EXTRA_DIST =	\
 	gdkconfig.h.win32 \
@@ -8,7 +8,7 @@ EXTRA_DIST =	\
 	makefile.cygwin \
 	makefile.msc
 
-INCLUDES = @STRIP_BEGIN@ \
+common_includes = @STRIP_BEGIN@ \
 	-DG_LOG_DOMAIN=\"Gdk\"	\
 	-I$(top_srcdir)		\
 	-I$(top_builddir)/gdk	\
@@ -17,29 +17,26 @@ INCLUDES = @STRIP_BEGIN@ \
 	@GTK_LOCALE_FLAGS@	\
 	@PANGO_CFLAGS@		\
 	@GLIB_CFLAGS@		\
-	@x_cflags@ 		\
+	@more_cflags@ 		\
 @STRIP_END@
 
-#
-# libraries to compile and install
-#
-lib_LTLIBRARIES = libgdk.la
+INCLUDES = $(common_includes)
+gtarget=@gdktarget@
 
 # libtool stuff: set version and export symbols for resolving
-libgdkincludedir = $(includedir)/gdk
-libgdk_la_LDFLAGS = @STRIP_BEGIN@ \
+# since automake doesn't support conditionalized libsomething_la_LDFLAGS
+# we use the general approach here
+LDFLAGS = @STRIP_BEGIN@ \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
 	-release $(LT_RELEASE) \
 	-export-dynamic \
+	-rpath @prefix@/lib \
 	@PANGO_LIBS@	\
 	@GLIB_DEPLIBS@	\
-	@x_ldflags@	\
-	@x_libs@	\
+	@more_ldflags@	\
+	@more_libs@	\
 	-lm		\
 @STRIP_END@
-
-libgdk_la_LIBADD = \
-	x11/libgdk-x11.la	
 
 #
 # setup source file variables
@@ -90,16 +87,55 @@ gdk_c_sources = @STRIP_BEGIN@ \
 	gdkimage.c	\
 	gdkinternals.h  \
 	gdkpango.c	\
+	gdkpoly-generic.h	\
+	gdkpolyreg-generic.c	\
 	gdkrgb.c	\
 	gdkrectangle.c	\
+	gdkregion-generic.c	\
+	gdkregion-generic.h	\
 	gdkwindow.c	\
 @STRIP_END@
 
 #
 # setup GDK sources and their dependancies
 #
-libgdkinclude_HEADERS = $(gdk_public_h_sources)
-libgdk_la_SOURCES = $(gdk_c_sources)
+extra = @gdktargetlib@
+
+if USE_X11
+libgdk_x11_includedir = $(includedir)/gdk
+
+libgdk_x11_la_LIBADD = \
+	$(gtarget)/libgdk-$(gtarget).la	
+
+libgdk_x11_include_HEADERS = $(gdk_public_h_sources)
+libgdk_x11_la_SOURCES = $(gdk_c_sources)
+endif
+
+if USE_NANOX
+libgdk_nanox_includedir = $(includedir)/gdk
+
+libgdk_nanox_la_LIBADD = \
+	$(gtarget)/libgdk-$(gtarget).la	
+
+libgdk_nanox_include_HEADERS = $(gdk_public_h_sources)
+libgdk_nanox_la_SOURCES = $(gdk_c_sources)
+endif
+
+if USE_LINUX_FB
+libgdk_linux_fb_includedir = $(includedir)/gdk
+
+libgdk_linux_fb_la_LIBADD = \
+	$(gtarget)/libgdk-$(gtarget).la	
+
+libgdk_linux_fb_include_HEADERS = $(gdk_public_h_sources)
+libgdk_linux_fb_la_SOURCES = $(gdk_c_sources)
+endif
+
+# now define the real one to workaround automake's mishandling
+lib_LTLIBRARIES = $(extra)
+
+EXTRA_LTLIBRARIES = libgdk-x11.la libgdk-nanox.la libgdk-linux-fb.la
+
 MAINTAINERCLEANFILES +=
 EXTRA_HEADERS +=
 EXTRA_DIST +=

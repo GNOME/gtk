@@ -1,3 +1,16 @@
+Mon Jun  5 19:32:53 CEST 2000 Paolo Molaro <lupus@linuxcare.com>
+
+	* configure.in, gtk-config.in, gdk/Makefile.am, gdk/*/Makefile.am,
+	gtk/Makefile.am: make it possible to configure gtk for different
+	targets on the same platform. The library name is now 
+	libgtk-$target-$version.so. gtk-config accepts a --target x11|nanox|linux-fb
+	flag. Only the x11 target compiles right now.
+	* gdk/gdkregion-generic.h, gdk/gdkregion-generic.c, gdk/gdkpoly-generic.h,
+	gdk/gdkpolyreg-generic.c: move generic region code in the main GDK dir.
+	* gdk/nanox/gdk*generic*: delete generic region code.
+	* gdk/linux-fb/gdk*generic*: delete generic region code.
+	* README.nanox: update information.
+
 Tue Jun  6 10:53:59 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_prepend_widget): Fix to

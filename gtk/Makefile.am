@@ -15,25 +15,24 @@ INCLUDES = @STRIP_BEGIN@ \
 	@GTK_LOCALE_FLAGS@				\
 	@PANGO_CFLAGS@					\
 	@GLIB_CFLAGS@					\
-	@x_cflags@					\
+	@more_cflags@					\
 @STRIP_END@
 
-
-#
-# libraries to compile and install
-#
-lib_LTLIBRARIES = libgtk.la
+gtarget=@gdktarget@
 
 # libtool stuff: set version and export symbols for resolving
+# since automake doesn't support conditionalized libsomething_la_LDFLAGS
+# we use the general approach here
 libgtkincludedir = $(includedir)/gtk
-libgtk_la_LDFLAGS = @STRIP_BEGIN@ \
+LDFLAGS = @STRIP_BEGIN@ \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)	\
 	-release $(LT_RELEASE) 					\
 	-export-dynamic						\
+	-rpath @prefix@/lib
 	@PANGO_LIBS@						\
 	@GLIB_DEPLIBS@ 						\
-	@x_ldflags@						\
-	@x_libs@ 						\
+	@more_ldflags@						\
+	@more_libs@ 						\
 	-lm							\
 @STRIP_END@
 #	$(top_builddir)/gdk/libgdk.la
@@ -382,8 +381,33 @@ gdk_headers = @STRIP_BEGIN@ 	\
 #
 # setup GTK+ sources and their dependancies
 #
-libgtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semipublic_h_sources) $(gtk_built_public_sources)
-libgtk_la_SOURCES = $(gtk_c_sources)
+all_headers = $(gtk_public_h_sources) $(gtk_semipublic_h_sources) $(gtk_built_public_sources)
+all_sources = $(gtk_c_sources)
+
+extra = @gtktargetlib@
+if USE_X11
+libgtk_x11_includedir = $(includedir)/gtk
+libgtk_x11_include_HEADERS = $(all_headers)
+libgtk_x11_la_SOURCES = $(all_sources)
+endif
+
+if USE_NANOX
+libgtk_nanox_includedir = $(includedir)/gtk
+libgtk_nanox_include_HEADERS = $(all_headers)
+libgtk_nanox_la_SOURCES = $(all_sources)
+endif
+
+if USE_LINUX_FB
+libgtk_linux_fb_includedir = $(includedir)/gtk
+libgtk_linux_fb_include_HEADERS = $(all_headers)
+libgtk_linux_fb_la_SOURCES = $(all_sources)
+endif
+
+# now define the real one to workaround automake's mishandling
+lib_LTLIBRARIES = $(extra)
+
+EXTRA_LTLIBRARIES = libgtk-x11.la libgtk-nanox.la libgtk-linux-fb.la
+
 MAINTAINERCLEANFILES += $(gtk_built_public_sources) $(gtk_built_sources)
 EXTRA_HEADERS +=
 EXTRA_DIST += $(gtk_private_h_sources)

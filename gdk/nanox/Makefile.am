@@ -8,15 +8,17 @@ INCLUDES = @STRIP_BEGIN@ 	\
 	@GTK_XIM_FLAGS@		\
 	@GTK_LOCALE_FLAGS@	\
 	@GLIB_CFLAGS@		\
-	@x_cflags@ 		\
+	@more_cflags@ 		\
 @STRIP_END@
 
 LDADDS = @STRIP_BEGIN@ 	\
-	@x_ldflags@	\
-	@x_libs@	\
+	@more_ldflags@	\
+	@more_libs@	\
 	@GLIB_LIBS@	\
 	-lm		\
 @STRIP_END@
+
+if USE_NANOX
 
 noinst_LTLIBRARIES = libgdk-nanox.la
 
@@ -38,14 +40,14 @@ libgdk_nanox_la_SOURCES =    \
 	gdkinput.c	   \
 	gdkmain-nanox.c	   \
 	gdkpixmap-nanox.c	   \
-	gdkpolyreg-generic.c	\
 	gdkproperty-nanox.c  \
-	gdkregion-generic.c	   \
 	gdkselection-nanox.c \
 	gdkvisual-nanox.c	   \
 	gdkwindow-nanox.c    \
-	gdknanox.h		   \
 	gdkprivate-nanox.h   \
 	gdkinput-none.c
 
+else
+noinst_LTLIBRARIES =
+endif
 

@@ -100,6 +100,18 @@ AC_ARG_WITH(locale, [  --with-locale=LOCALE    locale name you want to use ])
 
 AC_ARG_WITH(xinput, [  --with-xinput=[no/gxi/xfree] support XInput ])
 
+gdktarget=x11
+gdktargetlib=libgdk-x11.la
+gtktargetlib=libgtk-x11.la
+AC_ARG_WITH(gdktarget, [  --with-gdktarget=[x11/nanox/linux-fb] select GDK target [default=x11] ],
+	gdktarget=$with_gdktarget)
+
+AC_SUBST(gdktarget)
+case $gdktarget in
+  x11|nanox|linux-fb) ;;
+  *) AC_MSG_ERROR([Invalid target for GDK: use x11, nanox or linux-fb.]);;
+esac
+
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
   GTK_DEBUG_FLAGS="-DG_ENABLE_DEBUG"
@@ -311,47 +323,47 @@ AC_CHECK_HEADERS(dirent.h, AC_DEFINE(HAVE_DIRENT_H))
 AC_CHECK_HEADERS(pwd.h, AC_DEFINE(HAVE_PWD_H))
 AC_CHECK_HEADERS(sys/time.h, AC_DEFINE(HAVE_SYS_TIME_H))
 
+if test "x$gdktarget" = "xx11"; then
+  # Find the X11 include and library directories
+  AC_PATH_X
+  AC_PATH_XTRA
 
-# Find the X11 include and library directories
-AC_PATH_X
-AC_PATH_XTRA
+  if test "x$x_includes" = "x"; then
+    x_includes="/usr/include"
+  fi
 
-if test "x$x_includes" = "x"; then
-  x_includes="/usr/include"
-fi
+  saved_cflags="$CFLAGS"
+  saved_ldflags="$LDFLAGS"
 
-saved_cflags="$CFLAGS"
-saved_ldflags="$LDFLAGS"
+  CFLAGS="$CFLAGS $X_CFLAGS"
+  LDFLAGS="$LDFLAGS $X_LDFLAGS $X_LIBS"
 
-CFLAGS="$CFLAGS $X_CFLAGS"
-LDFLAGS="$LDFLAGS $X_LDFLAGS $X_LIBS"
-
-if test "x$no_x" = "xyes"; then 
-  AC_MSG_ERROR([
+  if test "x$no_x" = "xyes"; then 
+    AC_MSG_ERROR([
 *** X libraries or include files not found. Check 'config.log' for 
 *** more details.])
-fi
+  fi
 
-# Checks for libraries.
-# Check for the X11 library
-AC_CHECK_LIB(X11, XOpenDisplay, x_libs="-lX11 $X_EXTRA_LIBS", 
-  AC_MSG_ERROR([*** libX11 not found. Check 'config.log' for more details.]),
-  $X_EXTRA_LIBS)
+  # Checks for libraries.
+  # Check for the X11 library
+  AC_CHECK_LIB(X11, XOpenDisplay, x_libs="-lX11 $X_EXTRA_LIBS", 
+    AC_MSG_ERROR([*** libX11 not found. Check 'config.log' for more details.]),
+    $X_EXTRA_LIBS)
 
-if test "x$enable_shm" = "xyes"; then
-  # Check for the Xext library (needed for XShm extention)
-  AC_CHECK_LIB(Xext, XShmAttach, 
-      x_libs="-lXext $x_libs", 
-      # On AIX, it is in XextSam instead, but we still need -lXext
-      AC_CHECK_LIB(XextSam, XShmAttach, 
-          x_libs="-lXextSam -lXext $x_libs", 
-          no_xext_lib=yes, $x_libs),
-      $x_libs)
-fi
+  if test "x$enable_shm" = "xyes"; then
+    # Check for the Xext library (needed for XShm extention)
+    AC_CHECK_LIB(Xext, XShmAttach, 
+        x_libs="-lXext $x_libs", 
+        # On AIX, it is in XextSam instead, but we still need -lXext
+        AC_CHECK_LIB(XextSam, XShmAttach, 
+            x_libs="-lXextSam -lXext $x_libs", 
+            no_xext_lib=yes, $x_libs),
+        $x_libs)
+  fi
 
-# Check for shaped window extension
+  # Check for shaped window extension
 
-AC_CHECK_LIB(Xext, XShapeCombineMask,
+  AC_CHECK_LIB(Xext, XShapeCombineMask,
       if test -z "`echo $x_libs | grep "\-lXext" 2> /dev/null`"; then
            x_libs="-lXext $x_libs"
       fi
@@ -359,44 +371,134 @@ AC_CHECK_LIB(Xext, XShapeCombineMask,
       ,
       $x_libs)
 
-# Check for XConvertCase (X11R6 specific)
+  # Check for XConvertCase (X11R6 specific)
 
-AC_CHECK_LIB(X11, XConvertCase,
+  AC_CHECK_LIB(X11, XConvertCase,
       AC_DEFINE(HAVE_XCONVERTCASE),
       ,
       $x_libs)
 
-# Check for XIM support.
+  # Check for XIM support.
 
-AC_CHECK_LIB(X11, XUnregisterIMInstantiateCallback,
+  AC_CHECK_LIB(X11, XUnregisterIMInstantiateCallback,
 	    : ,
 	    enable_xim_inst="no",
 	    $x_libs)
 
-# On Solaris, calling XRegisterIMInstantiateCallback seems to
-# cause an immediate segfault, so we disable it, unless
-# the user specifically forces it to be on.
+  # On Solaris, calling XRegisterIMInstantiateCallback seems to
+  # cause an immediate segfault, so we disable it, unless
+  # the user specifically forces it to be on.
 
-if test x$enable_xim_inst = xmaybe ; then
-  case host in
-	*-*-solaris*)
+  if test x$enable_xim_inst = xmaybe ; then
+    case host in
+	  *-*-solaris*)
             enable_xim_inst="no"
             ;;
-	*)
+	  *)
 	    enable_xim_inst="yes"
 	    ;;
-  esac
-fi
-
-if test "x$enable_xim" = "xyes"; then
-  GTK_XIM_FLAGS="-DUSE_XIM"
-  if test "x$enable_xim_inst" = "xyes"; then
-    AC_DEFINE(USE_X11R6_XIM)
+    esac
   fi
+
+  if test "x$enable_xim" = "xyes"; then
+    GTK_XIM_FLAGS="-DUSE_XIM"
+    if test "x$enable_xim_inst" = "xyes"; then
+      AC_DEFINE(USE_X11R6_XIM)
+    fi
+  fi
+
+  x_cflags="$X_CFLAGS"
+  x_ldflags="$X_LDFLAGS $X_LIBS"
+
+  # set up things for XInput
+
+  if test "x$with_xinput" = "xgxi" || test "x$with_xinput" = "xyes"; then
+    AC_DEFINE(XINPUT_GXI)
+    xinput_progs=gxid
+    x_libs="-lXi $x_libs"
+  elif test "x$with_xinput" = "xxfree"; then
+    AC_DEFINE(XINPUT_XFREE)
+    x_libs="-lXi $x_libs"
+  else
+    AC_DEFINE(XINPUT_NONE)
+  fi
+
+  AM_CONDITIONAL(XINPUT_GXI, test x$with_xinput = xgxi)
+  AM_CONDITIONAL(XINPUT_XFREE, test x$with_xinput = xxfree)
+
+  if test "x$enable_shm" = "xyes"; then
+    # Check for shared memory
+    AC_CHECK_HEADER(sys/ipc.h, AC_DEFINE(HAVE_IPC_H), no_sys_ipc=yes)
+    AC_CHECK_HEADER(sys/shm.h, AC_DEFINE(HAVE_SHM_H), no_sys_shm=yes)
+
+    # Check for the X shared memory extension header file
+    AC_MSG_CHECKING(X11/extensions/XShm.h)
+    if test "x$no_xext_lib" = "xyes"; then
+      AC_MSG_RESULT(no)
+      no_xshm=yes
+    else
+      if test -f "$x_includes/X11/extensions/XShm.h"; then
+        AC_MSG_RESULT(yes)
+        AC_DEFINE(HAVE_XSHM_H)
+      else
+        AC_MSG_RESULT(no)
+        no_xshm=yes
+      fi
+    fi
+  fi
+
+  more_cflags="$x_cflags"
+  more_ldflags="$x_ldflags"
+  more_libs="$x_libs"
+  more_includes="$x_includes"
+
+  # these are already defined above
+  #gdktargetlib = "libgdk-x11.la"
+  #gtktargetlib = "libgtk-x11.la"
+
+  AM_CONDITIONAL(USE_X11, true)
 fi
 
-x_cflags="$X_CFLAGS"
-x_ldflags="$X_LDFLAGS $X_LIBS"
+if test "x$gdktarget" = "xnanox"; then
+  AC_CHECK_LIB(nano-X, GrOpen,,AC_MSG_ERROR([nano-X libraries not found.]))
+  # nano-X may require additional libraries
+  more_cflags=
+  more_ldflags=
+  more_libs="-lnano-X"
+  more_includes=
+
+  gdktargetlib = "libgdk-nanox.la"
+  gtktargetlib = "libgtk-nanox.la"
+
+  with_xinput=no
+  AC_DEFINE(XINPUT_NONE)
+  x_cflags=
+  x_includes=
+  x_ldflags=
+  x_libs=
+  xinput_progs=
+  AM_CONDITIONAL(USE_NANOX, true)
+fi
+
+if test "x$gdktarget" = "xlinux-fb"; then
+  more_cflags=
+  more_ldflags=
+  more_libs=
+  more_includes=
+
+  gdktargetlib = "libgdk-linux-fb.la"
+  gtktargetlib = "libgtk-linux-fb.la"
+
+  with_xinput=no
+  AC_DEFINE(XINPUT_NONE)
+  x_cflags=
+  x_includes=
+  x_ldflags=
+  x_libs=
+  xinput_progs=
+  
+  AM_CONDITIONAL(USE_LINUX_FB, true)
+fi
 
 #
 # Check for Pango
@@ -415,23 +517,6 @@ AC_CHECK_LIB(pango, pango_context_new, :, AC_MSG_ERROR([
 *** Pango not found. Pango is required to build
 *** GTK+. For more information see http://www.pango.org]), $PANGO_LIBS $x_ldflags $x_libs)
 
-
-# set up things for XInput
-
-if test "x$with_xinput" = "xgxi" || test "x$with_xinput" = "xyes"; then
-  AC_DEFINE(XINPUT_GXI)
-  xinput_progs=gxid
-  x_libs="-lXi $x_libs"
-elif test "x$with_xinput" = "xxfree"; then
-  AC_DEFINE(XINPUT_XFREE)
-  x_libs="-lXi $x_libs"
-else
-  AC_DEFINE(XINPUT_NONE)
-fi
-
-AM_CONDITIONAL(XINPUT_GXI, test x$with_xinput = xgxi)
-AM_CONDITIONAL(XINPUT_XFREE, test x$with_xinput = xxfree)
-
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 
@@ -441,26 +526,13 @@ AC_SUBST(x_ldflags)
 AC_SUBST(x_libs)
 AC_SUBST(xinput_progs)
 
-if test "x$enable_shm" = "xyes"; then
-  # Check for shared memory
-  AC_CHECK_HEADER(sys/ipc.h, AC_DEFINE(HAVE_IPC_H), no_sys_ipc=yes)
-  AC_CHECK_HEADER(sys/shm.h, AC_DEFINE(HAVE_SHM_H), no_sys_shm=yes)
+AC_SUBST(more_cflags)
+AC_SUBST(more_includes)
+AC_SUBST(more_ldflags)
+AC_SUBST(more_libs)
+AC_SUBST(gdktargetlib)
+AC_SUBST(gtktargetlib)
 
-  # Check for the X shared memory extension header file
-  AC_MSG_CHECKING(X11/extensions/XShm.h)
-  if test "x$no_xext_lib" = "xyes"; then
-    AC_MSG_RESULT(no)
-    no_xshm=yes
-  else
-    if test -f "$x_includes/X11/extensions/XShm.h"; then
-      AC_MSG_RESULT(yes)
-      AC_DEFINE(HAVE_XSHM_H)
-    else
-      AC_MSG_RESULT(no)
-      no_xshm=yes
-    fi
-  fi
-fi
 
 # Check if X_LOCALE definition is necessary
 
@@ -621,8 +693,17 @@ _______EOF
 esac
 ],[
 # Currently we always use X11 on those systems where we run configure...
-gdk_windowing='
+if test "x$gdktarget" = "xx11" ; then
+  gdk_windowing='
 #define GDK_WINDOWING_X11'
+elif test "x$gdktarget" = "xnanox" ; then
+  gdk_windowing='
+#define GDK_WINDOWING_NANOX'
+elif test "x$gdktarget" = "xlinux-fb" ; then
+  gdk_windowing='
+#define GDK_WINDOWING_FB'
+fi
+
 if test x$gdk_wchar_h = xyes; then
   gdk_wc='
 #define GDK_HAVE_WCHAR_H 1'
@@ -652,6 +733,8 @@ docs/Makefile
 gdk/Makefile
 gdk/x11/Makefile
 gdk/win32/Makefile
+gdk/nanox/Makefile
+gdk/linux-fb/Makefile
 gtk/Makefile
 gtk/gtkfeatures.h
 gtk/gtkcompat.h

@@ -18,6 +18,8 @@ LDFLAGS = @STRIP_BEGIN@ \
 	-lm		\
 @STRIP_END@
 
+if USE_LINUX_FB
+
 lib_LTLIBRARIES = libgdk-fb.la
 noinst_PROGRAMS=test-fb
 
@@ -38,12 +40,9 @@ libgdk_fb_la_SOURCES =    	\
 	gdkmain-fb.c	   	\
 	gdkpixmap-fb.c	   	\
 	gdkproperty-fb.c  	\
-	gdkpolyreg-generic.c 	\
-	gdkregion-generic.c 	\
 	gdkselection-fb.c 	\
 	gdkvisual-fb.c	   	\
 	gdkwindow-fb.c    	\
-	gdkx.h		   	\
 	gdkprivate-fb.h   	\
 	gdkinputprivate.h	\
 	gdkinput-ps2.c		\
@@ -59,3 +58,9 @@ libgdk_fb_la_SOURCES =    	\
 	mizerclip.c		\
 	mizerline.c		\
 	mispans.c
+else
+lib_LTLIBRARIES =
+noinst_PROGRAMS=
+
+endif
+
