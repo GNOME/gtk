@@ -8,11 +8,6 @@ GTK_MAJOR_VERSION=1
 GTK_MINOR_VERSION=0
 GTK_MICRO_VERSION=2
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
-AC_SUBST(GTK_MAJOR_VERSION)
-AC_SUBST(GTK_MINOR_VERSION)
-AC_SUBST(GTK_MICRO_VERSION)
-AC_SUBST(GTK_VERSION)
-
 
 # For automake.
 VERSION=$GTK_VERSION
@@ -21,11 +16,16 @@ PACKAGE=gtk+
 # Configure glib
 AC_CONFIG_SUBDIRS(glib)
 
-# Save this value here, since automake will set cflags later
-cflags_set=${CFLAGS+set}
-
 dnl Initialize automake stuff
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
+
+AC_SUBST(GTK_MAJOR_VERSION)
+AC_SUBST(GTK_MINOR_VERSION)
+AC_SUBST(GTK_MICRO_VERSION)
+AC_SUBST(GTK_VERSION)
+
+# Save this value here, since automake will set cflags later
+cflags_set=${CFLAGS+set}
 
 # Specify a configuration file
 AM_CONFIG_HEADER(config.h)

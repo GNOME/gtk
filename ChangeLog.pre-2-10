@@ -1,3 +1,7 @@
+Fri May 15 21:20:40 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.0.2
+
 Fri May 15 12:31:27 1998  rodo  <doulik@karlin.mff.cuni.cz>
 
 	* gdk/gdk.c: include gdkkeysyms.h always
