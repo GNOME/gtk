@@ -280,7 +280,7 @@ void	      gdk_window_set_hints	 (GdkWindow	  *window,
 void          gdk_window_set_geometry_hints (GdkWindow        *window,
 					     GdkGeometry      *geometry,
 					     GdkWindowHints    flags);
-void          gdk_set_sm_client_id         (const gchar     *id);
+void          gdk_set_sm_client_id         (const gchar *sm_client_id);
 
 
 void	      gdk_window_set_title	   (GdkWindow	  *window,
