@@ -1079,7 +1079,7 @@ xpm_extract_color (const gchar *buffer)
 	gint key = 0;
 	gint current_key = 1;
 	gint space = 128;
-	gchar word[128], color[128], current_color[128];
+	gchar word[129], color[129], current_color[129];
 	gchar *r; 
 	
 	word[0] = '\0';
@@ -1121,8 +1121,8 @@ xpm_extract_color (const gchar *buffer)
 				return NULL;
 			/* accumulate color name */
 			if (color[0] != '\0') {
-				strcat (color, " ");
-				space--;
+				strncat (color, " ", space);
+				space -= MIN (space, 1);
 			}
 			strncat (color, word, space);
 			space -= MIN (space, strlen (word));
@@ -1246,14 +1246,6 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 		return NULL;
 
 	}
-	if (n_col <= 0) {
-                g_set_error (error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("XPM file has invalid number of colors"));
-		return NULL;
-
-	}
 	if (cpp <= 0 || cpp >= 32) {
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
@@ -1261,12 +1253,36 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
                              _("XPM has invalid number of chars per pixel"));
 		return NULL;
 	}
+	if (n_col <= 0 || n_col >= G_MAXINT / (cpp + 1)) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("XPM file has invalid number of colors"));
+		return NULL;
+	}
 
 	/* The hash is used for fast lookups of color from chars */
 	color_hash = g_hash_table_new (g_str_hash, g_str_equal);
 
-	name_buf = g_new (gchar, n_col * (cpp + 1));
-	colors = g_new (XPMColor, n_col);
+	name_buf = g_try_malloc (n_col * (cpp + 1));
+	if (!name_buf) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                             _("Cannot allocate memory for loading XPM image"));
+		g_hash_table_destroy (color_hash);
+		return NULL;
+	}
+	colors = (XPMColor *) g_try_malloc (sizeof (XPMColor) * n_col);
+	if (!colors) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                             _("Cannot allocate memory for loading XPM image"));
+		g_hash_table_destroy (color_hash);
+		g_free (name_buf);
+		return NULL;
+	}
 
 	for (cnt = 0; cnt < n_col; cnt++) {
 		gchar *color_name;
